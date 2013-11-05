@@ -59,27 +59,64 @@ RE02HadronPhysics::~RE02HadronPhysics()
 
 #include "G4ProcessManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void RE02HadronPhysics::ConstructProcess()
 {
-   G4ProcessManager * pManager = 0;
+  G4ProcessManager* pManager = 0;
 
+  // Set up models
+  G4HadronElastic* elasticModel = new G4HadronElastic;
+  G4CascadeInterface* bertini = new G4CascadeInterface;
+  bertini->SetMinEnergy(0);
+  bertini->SetMaxEnergy(9*GeV);
+
+  // FTF for high energy
+  G4TheoFSGenerator* theTheoModel = new G4TheoFSGenerator;
+  G4FTFModel* theFTFModel = new G4FTFModel;
+  G4ExcitedStringDecay* stringDecay =
+                       new G4ExcitedStringDecay(new G4LundStringFragmentation);
+  theFTFModel->SetFragmentationModel(stringDecay);
+
+  G4GeneratorPrecompoundInterface* precoCascade =
+                                           new G4GeneratorPrecompoundInterface;
+  G4PreCompoundModel* preEquilib =
+                               new G4PreCompoundModel(new G4ExcitationHandler);
+  precoCascade->SetDeExcitation(preEquilib);
+  theTheoModel->SetTransport(precoCascade);
+  theTheoModel->SetHighEnergyGenerator(theFTFModel);
+  theTheoModel->SetMinEnergy(6*GeV);
+  theTheoModel->SetMaxEnergy(20*TeV);
+
+  // FTF for anti-baryons at all energies
+  G4TheoFSGenerator* antiBHighEnergyModel = new G4TheoFSGenerator("ANTI-FTFP");
+  G4FTFModel* antiBStringModel = new G4FTFModel;
+  G4ExcitedStringDecay* stringDecayforAntiB =
+                       new G4ExcitedStringDecay(new G4LundStringFragmentation);
+  antiBStringModel->SetFragmentationModel(stringDecayforAntiB);
+
+  G4GeneratorPrecompoundInterface* antiBCascade =
+                                           new G4GeneratorPrecompoundInterface;
+  G4PreCompoundModel* preEquilibforAntiB =
+                               new G4PreCompoundModel(new G4ExcitationHandler);
+  antiBCascade->SetDeExcitation(preEquilibforAntiB);
+  antiBHighEnergyModel->SetTransport(antiBCascade);
+  antiBHighEnergyModel->SetHighEnergyGenerator(antiBStringModel);
+  antiBHighEnergyModel->SetMinEnergy(0.0);
+  antiBHighEnergyModel->SetMaxEnergy(20*TeV);
+
+   
    // Pi+ Physics
    pManager = G4PionPlus::PionPlus()->GetProcessManager();
 
    // add processes
    G4HadronElasticProcess* theppElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* theppElasticModel = new G4LElastic();
-   theppElasticProcess->RegisterMe(theppElasticModel);
+   theppElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(theppElasticProcess);
  
    G4PionPlusInelasticProcess* thePionPlusInelasticProcess =
-     new G4PionPlusInelasticProcess(); 
-
-   G4LEPionPlusInelastic* thePionPlusLEPModel = new G4LEPionPlusInelastic();
-   G4HEPionPlusInelastic* thePionPlusHEPModel = new G4HEPionPlusInelastic();
-   thePionPlusInelasticProcess->RegisterMe(thePionPlusLEPModel);
-   thePionPlusInelasticProcess->RegisterMe(thePionPlusHEPModel);
+                                             new G4PionPlusInelasticProcess(); 
+   thePionPlusInelasticProcess->RegisterMe(bertini);
+   thePionPlusInelasticProcess->RegisterMe(theTheoModel);
    pManager->AddDiscreteProcess(thePionPlusInelasticProcess);
 
    G4VProcess* theppMultipleScattering = new G4hMultipleScattering();
@@ -100,17 +137,13 @@ void RE02HadronPhysics::ConstructProcess()
    pManager = G4PionMinus::PionMinus()->GetProcessManager();
 
    G4HadronElasticProcess* thepmElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* thepmElasticModel = new G4LElastic();
-   thepmElasticProcess->RegisterMe(thepmElasticModel);
+   thepmElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(thepmElasticProcess);
 
    G4PionMinusInelasticProcess* thePionMinusInelasticProcess =
-     new G4PionMinusInelasticProcess(); 
-
-   G4LEPionMinusInelastic* thePionMinusLEPModel = new G4LEPionMinusInelastic();
-   G4HEPionMinusInelastic* thePionMinusHEPModel = new G4HEPionMinusInelastic();
-   thePionMinusInelasticProcess->RegisterMe(thePionMinusLEPModel);
-   thePionMinusInelasticProcess->RegisterMe(thePionMinusHEPModel);
+                                            new G4PionMinusInelasticProcess(); 
+   thePionMinusInelasticProcess->RegisterMe(bertini);
+   thePionMinusInelasticProcess->RegisterMe(theTheoModel);
    pManager->AddDiscreteProcess(thePionMinusInelasticProcess);
 
    G4VProcess* thepmMultipleScattering = new G4hMultipleScattering();
@@ -132,17 +165,13 @@ void RE02HadronPhysics::ConstructProcess()
    pManager = G4KaonPlus::KaonPlus()->GetProcessManager();
 
    G4HadronElasticProcess* thekpElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* thekpElasticModel = new G4LElastic();
-   thekpElasticProcess->RegisterMe(thekpElasticModel);
+   thekpElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(thekpElasticProcess);
 
    G4KaonPlusInelasticProcess* theKaonPlusInelasticProcess =
-     new G4KaonPlusInelasticProcess(); 
-
-   G4LEKaonPlusInelastic* theKaonPlusLEPModel = new G4LEKaonPlusInelastic();
-   G4HEKaonPlusInelastic* theKaonPlusHEPModel = new G4HEKaonPlusInelastic();
-   theKaonPlusInelasticProcess->RegisterMe(theKaonPlusLEPModel);
-   theKaonPlusInelasticProcess->RegisterMe(theKaonPlusHEPModel);
+                                             new G4KaonPlusInelasticProcess(); 
+   theKaonPlusInelasticProcess->RegisterMe(bertini);
+   theKaonPlusInelasticProcess->RegisterMe(theTheoModel);
    pManager->AddDiscreteProcess(theKaonPlusInelasticProcess);
 
    G4VProcess* thekpMultipleScattering = new G4hMultipleScattering();
@@ -165,17 +194,13 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add processes
    G4HadronElasticProcess* thekmElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* thekmElasticModel = new G4LElastic();
-   thekmElasticProcess->RegisterMe(thekmElasticModel);
+   thekmElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(thekmElasticProcess);
 
    G4KaonMinusInelasticProcess* theKaonMinusInelasticProcess =
-     new G4KaonMinusInelasticProcess(); 
-
-   G4LEKaonMinusInelastic* theKaonMinusLEPModel = new G4LEKaonMinusInelastic();
-   G4HEKaonMinusInelastic* theKaonMinusHEPModel = new G4HEKaonMinusInelastic();
-   theKaonMinusInelasticProcess->RegisterMe(theKaonMinusLEPModel);
-   theKaonMinusInelasticProcess->RegisterMe(theKaonMinusHEPModel);
+                                            new G4KaonMinusInelasticProcess(); 
+   theKaonMinusInelasticProcess->RegisterMe(bertini);
+   theKaonMinusInelasticProcess->RegisterMe(theTheoModel);
    pManager->AddDiscreteProcess(theKaonMinusInelasticProcess);
 
    G4VProcess* thekmMultipleScattering = new G4hMultipleScattering();
@@ -196,34 +221,26 @@ void RE02HadronPhysics::ConstructProcess()
    pManager = G4KaonZeroLong::KaonZeroLong()->GetProcessManager();
 
    G4HadronElasticProcess* thek0lElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* thek0lElasticModel = new G4LElastic();
-   thek0lElasticProcess->RegisterMe(thek0lElasticModel);
+   thek0lElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(thek0lElasticProcess);
 
    G4KaonZeroLInelasticProcess* theKaonZeroLInelasticProcess =
-     new G4KaonZeroLInelasticProcess(); 
-
-   G4LEKaonZeroLInelastic* theKaonZeroLLEPModel = new G4LEKaonZeroLInelastic();
-   G4HEKaonZeroInelastic* theKaonZerolHEPModel = new G4HEKaonZeroInelastic();
-   theKaonZeroLInelasticProcess->RegisterMe(theKaonZeroLLEPModel);
-   theKaonZeroLInelasticProcess->RegisterMe(theKaonZerolHEPModel);
+                                             new G4KaonZeroLInelasticProcess(); 
+   theKaonZeroLInelasticProcess->RegisterMe(bertini);
+   theKaonZeroLInelasticProcess->RegisterMe(theTheoModel);
    pManager->AddDiscreteProcess(theKaonZeroLInelasticProcess);
 
    // Kaon0S Physics
    pManager = G4KaonZeroShort::KaonZeroShort()->GetProcessManager();
 
    G4HadronElasticProcess* thek0sElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* thek0sElasticModel = new G4LElastic();
-   thek0sElasticProcess->RegisterMe(thek0sElasticModel);
+   thek0sElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(thek0sElasticProcess);
 
    G4KaonZeroSInelasticProcess* theKaonZeroSInelasticProcess =
-     new G4KaonZeroSInelasticProcess(); 
-
-   G4LEKaonZeroSInelastic* theKaonZeroSLEPModel = new G4LEKaonZeroSInelastic();
-   G4HEKaonZeroInelastic* theKaonZerosHEPModel = new G4HEKaonZeroInelastic();
-   theKaonZeroSInelasticProcess->RegisterMe(theKaonZeroSLEPModel);
-   theKaonZeroSInelasticProcess->RegisterMe(theKaonZerosHEPModel);
+                                             new G4KaonZeroSInelasticProcess(); 
+   theKaonZeroSInelasticProcess->RegisterMe(bertini);
+   theKaonZeroSInelasticProcess->RegisterMe(theTheoModel);
    pManager->AddDiscreteProcess(theKaonZeroSInelasticProcess);
 
    // Proton Physics
@@ -231,21 +248,16 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add process
    G4HadronElasticProcess* thepElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* thepElasticModel = new G4LElastic();
-   thepElasticProcess->RegisterMe(thepElasticModel);
+   thepElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(thepElasticProcess);
 
    G4ProtonInelasticProcess* theProtonInelasticProcess =
      new G4ProtonInelasticProcess(); 
 
    G4BinaryCascade* theProtonBCModel = new G4BinaryCascade();
-   theProtonBCModel->SetMaxEnergy(6.*GeV);
-   G4LEProtonInelastic* theProtonLEPModel = new G4LEProtonInelastic();
-   theProtonLEPModel->SetMinEnergy(4.*GeV); 
-   G4HEProtonInelastic* theProtonHEPModel = new G4HEProtonInelastic();
+   theProtonBCModel->SetMaxEnergy(7.*GeV);
    theProtonInelasticProcess->RegisterMe(theProtonBCModel);
-   theProtonInelasticProcess->RegisterMe(theProtonLEPModel);
-   theProtonInelasticProcess->RegisterMe(theProtonHEPModel);
+   theProtonInelasticProcess->RegisterMe(theTheoModel);
    pManager->AddDiscreteProcess(theProtonInelasticProcess);
 
    G4VProcess* thepMultipleScattering = new G4hMultipleScattering();
@@ -267,19 +279,12 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add process
    G4HadronElasticProcess* theapElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* theapElasticModel = new G4LElastic();
-   theapElasticProcess->RegisterMe(theapElasticModel);
+   theapElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(theapElasticProcess);
 
    G4AntiProtonInelasticProcess* theAntiProtonInelasticProcess =
-     new G4AntiProtonInelasticProcess(); 
-
-   G4LEAntiProtonInelastic* theAntiProtonLEPModel =
-     new G4LEAntiProtonInelastic();
-   G4HEAntiProtonInelastic* theAntiProtonHEPModel =
-     new G4HEAntiProtonInelastic();
-   theAntiProtonInelasticProcess->RegisterMe(theAntiProtonLEPModel);
-   theAntiProtonInelasticProcess->RegisterMe(theAntiProtonHEPModel);
+                                           new G4AntiProtonInelasticProcess(); 
+   theAntiProtonInelasticProcess->RegisterMe(antiBHighEnergyModel);
    pManager->AddDiscreteProcess(theAntiProtonInelasticProcess);
 
    G4AntiProtonAbsorptionFritiof* theAntiProtonAnnihilation =
@@ -305,21 +310,16 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add process
    G4HadronElasticProcess* thenElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* thenElasticModel = new G4LElastic();
-   thenElasticProcess->RegisterMe(thenElasticModel);
+   thenElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(thenElasticProcess);
 
    G4NeutronInelasticProcess* theNeutronInelasticProcess =
      new G4NeutronInelasticProcess(); 
 
    G4BinaryCascade* theNeutronBCModel = new G4BinaryCascade();
-   theNeutronBCModel->SetMaxEnergy(6.*GeV);
-   G4LENeutronInelastic* theNeutronLEPModel = new G4LENeutronInelastic();
-   theNeutronLEPModel->SetMinEnergy(4.*GeV);
-   G4HENeutronInelastic* theNeutronHEPModel = new G4HENeutronInelastic();
+   theNeutronBCModel->SetMaxEnergy(7.*GeV);
    theNeutronInelasticProcess->RegisterMe(theNeutronBCModel);
-   theNeutronInelasticProcess->RegisterMe(theNeutronLEPModel);
-   theNeutronInelasticProcess->RegisterMe(theNeutronHEPModel);
+   theNeutronInelasticProcess->RegisterMe(theTheoModel);
    pManager->AddDiscreteProcess(theNeutronInelasticProcess);
 
    G4HadronFissionProcess* thenFission = new G4HadronFissionProcess();
@@ -328,8 +328,10 @@ void RE02HadronPhysics::ConstructProcess()
    pManager->AddDiscreteProcess(thenFission);
 
    G4HadronCaptureProcess* thenCapture = new G4HadronCaptureProcess();
-   G4LCapture* thenCaptureModel = new G4LCapture();
+   G4NeutronRadCapture* thenCaptureModel = new G4NeutronRadCapture();
    thenCapture->RegisterMe(thenCaptureModel);
+   G4NeutronCaptureXS* thencapXS = new G4NeutronCaptureXS;
+   thenCapture->AddDataSet(thencapXS);
    pManager->AddDiscreteProcess(thenCapture);
 
    // anti-neutron Physics
@@ -337,19 +339,12 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add process
    G4HadronElasticProcess* theanElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* theanElasticModel = new G4LElastic();
-   theanElasticProcess->RegisterMe(theanElasticModel);
+   theanElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(theanElasticProcess);
 
    G4AntiNeutronInelasticProcess* theAntiNeutronInelasticProcess =
-     new G4AntiNeutronInelasticProcess(); 
-
-   G4LEAntiNeutronInelastic* theAntiNeutronLEPModel =
-     new G4LEAntiNeutronInelastic();
-   G4HEAntiNeutronInelastic* theAntiNeutronHEPModel =
-     new G4HEAntiNeutronInelastic();
-   theAntiNeutronInelasticProcess->RegisterMe(theAntiNeutronLEPModel);
-   theAntiNeutronInelasticProcess->RegisterMe(theAntiNeutronHEPModel);
+                                          new G4AntiNeutronInelasticProcess(); 
+   theAntiNeutronInelasticProcess->RegisterMe(antiBHighEnergyModel);
    pManager->AddDiscreteProcess(theAntiNeutronInelasticProcess);
 
    G4AntiNeutronAnnihilationAtRest* theAntiNeutronAnnihilation =
@@ -361,37 +356,26 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add process
    G4HadronElasticProcess* thel0ElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* thel0ElasticModel = new G4LElastic();
-   thel0ElasticProcess->RegisterMe(thel0ElasticModel);
+   thel0ElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(thel0ElasticProcess);
 
    G4LambdaInelasticProcess* theLambdaInelasticProcess =
-     new G4LambdaInelasticProcess(); 
-
-   G4LELambdaInelastic* theLambdaLEPModel = new G4LELambdaInelastic();
-   G4HELambdaInelastic* theLambdaHEPModel = new G4HELambdaInelastic();
-   theLambdaInelasticProcess->RegisterMe(theLambdaLEPModel);
-   theLambdaInelasticProcess->RegisterMe(theLambdaHEPModel);
+                                               new G4LambdaInelasticProcess(); 
+   theLambdaInelasticProcess->RegisterMe(bertini);
+   theLambdaInelasticProcess->RegisterMe(theTheoModel);
    pManager->AddDiscreteProcess(theLambdaInelasticProcess);
 
-   // Anti-Labda Physics
+   // Anti-Lambda Physics
    pManager = G4AntiLambda::AntiLambda()->GetProcessManager();
 
    // add process
    G4HadronElasticProcess* theal0ElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* theal0ElasticModel = new G4LElastic();
-   theal0ElasticProcess->RegisterMe(theal0ElasticModel);
+   theal0ElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(theal0ElasticProcess);
 
    G4AntiLambdaInelasticProcess* theAntiLambdaInelasticProcess =
-     new G4AntiLambdaInelasticProcess(); 
-
-   G4LEAntiLambdaInelastic* theAntiLambdaLEPModel =
-     new G4LEAntiLambdaInelastic();
-   G4HEAntiLambdaInelastic* theAntiLambdaHEPModel =
-     new G4HEAntiLambdaInelastic();
-   theAntiLambdaInelasticProcess->RegisterMe(theAntiLambdaLEPModel);
-   theAntiLambdaInelasticProcess->RegisterMe(theAntiLambdaHEPModel);
+                                            new G4AntiLambdaInelasticProcess(); 
+   theAntiLambdaInelasticProcess->RegisterMe(antiBHighEnergyModel);
    pManager->AddDiscreteProcess(theAntiLambdaInelasticProcess);
 
    // Sigma+ Physics
@@ -399,17 +383,13 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add process
    G4HadronElasticProcess* thespElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* thespElasticModel = new G4LElastic();
-   thespElasticProcess->RegisterMe(thespElasticModel);
+   thespElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(thespElasticProcess);
 
    G4SigmaPlusInelasticProcess* theSigmaPlusInelasticProcess =
-     new G4SigmaPlusInelasticProcess(); 
-
-   G4LESigmaPlusInelastic* theSigmaPlusLEPModel = new G4LESigmaPlusInelastic();
-   G4HESigmaPlusInelastic* theSigmaPlusHEPModel = new G4HESigmaPlusInelastic();
-   theSigmaPlusInelasticProcess->RegisterMe(theSigmaPlusLEPModel);
-   theSigmaPlusInelasticProcess->RegisterMe(theSigmaPlusHEPModel);
+                                            new G4SigmaPlusInelasticProcess(); 
+   theSigmaPlusInelasticProcess->RegisterMe(bertini);
+   theSigmaPlusInelasticProcess->RegisterMe(theTheoModel);
    pManager->AddDiscreteProcess(theSigmaPlusInelasticProcess);
 
    G4VProcess* thespMultipleScattering = new G4hMultipleScattering();
@@ -431,19 +411,12 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add process
    G4HadronElasticProcess* theaspElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* theaspElasticModel = new G4LElastic();
-   theaspElasticProcess->RegisterMe(theaspElasticModel);
+   theaspElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(theaspElasticProcess);
 
    G4AntiSigmaPlusInelasticProcess* theAntiSigmaPlusInelasticProcess =
-     new G4AntiSigmaPlusInelasticProcess(); 
-
-   G4LEAntiSigmaPlusInelastic* theAntiSigmaPlusLEPModel =
-     new G4LEAntiSigmaPlusInelastic();
-   G4HEAntiSigmaPlusInelastic* theAntiSigmaPlusHEPModel =
-     new G4HEAntiSigmaPlusInelastic();
-   theAntiSigmaPlusInelasticProcess->RegisterMe(theAntiSigmaPlusLEPModel);
-   theAntiSigmaPlusInelasticProcess->RegisterMe(theAntiSigmaPlusHEPModel);
+                                         new G4AntiSigmaPlusInelasticProcess(); 
+   theAntiSigmaPlusInelasticProcess->RegisterMe(antiBHighEnergyModel);
    pManager->AddDiscreteProcess(theAntiSigmaPlusInelasticProcess);
 
    G4VProcess* theaspMultipleScattering = new G4hMultipleScattering();
@@ -465,19 +438,13 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add process
    G4HadronElasticProcess* thesmElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* thesmElasticModel = new G4LElastic();
-   thesmElasticProcess->RegisterMe(thesmElasticModel);
+   thesmElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(thesmElasticProcess);
 
    G4SigmaMinusInelasticProcess* theSigmaMinusInelasticProcess =
-     new G4SigmaMinusInelasticProcess(); 
-
-   G4LESigmaMinusInelastic* theSigmaMinusLEPModel =
-     new G4LESigmaMinusInelastic();
-   G4HESigmaMinusInelastic* theSigmaMinusHEPModel =
-     new G4HESigmaMinusInelastic();
-   theSigmaMinusInelasticProcess->RegisterMe(theSigmaMinusLEPModel);
-   theSigmaMinusInelasticProcess->RegisterMe(theSigmaMinusHEPModel);
+                                           new G4SigmaMinusInelasticProcess(); 
+   theSigmaMinusInelasticProcess->RegisterMe(bertini);
+   theSigmaMinusInelasticProcess->RegisterMe(theTheoModel);
    pManager->AddDiscreteProcess(theSigmaMinusInelasticProcess);
 
    G4VProcess* thesmMultipleScattering = new G4hMultipleScattering();
@@ -499,19 +466,12 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add process
    G4HadronElasticProcess* theasmElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* theasmElasticModel = new G4LElastic();
-   theasmElasticProcess->RegisterMe(theasmElasticModel);
+   theasmElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(theasmElasticProcess);
 
    G4AntiSigmaMinusInelasticProcess* theAntiSigmaMinusInelasticProcess =
      new G4AntiSigmaMinusInelasticProcess(); 
-
-   G4LEAntiSigmaMinusInelastic* theAntiSigmaMinusLEPModel =
-     new G4LEAntiSigmaMinusInelastic();
-   G4HEAntiSigmaMinusInelastic* theAntiSigmaMinusHEPModel =
-     new G4HEAntiSigmaMinusInelastic();
-   theAntiSigmaMinusInelasticProcess->RegisterMe(theAntiSigmaMinusLEPModel);
-   theAntiSigmaMinusInelasticProcess->RegisterMe(theAntiSigmaMinusHEPModel);
+   theAntiSigmaMinusInelasticProcess->RegisterMe(antiBHighEnergyModel);
    pManager->AddDiscreteProcess(theAntiSigmaMinusInelasticProcess);
 
    G4VProcess* theasmMultipleScattering = new G4hMultipleScattering();
@@ -533,17 +493,13 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add process
    G4HadronElasticProcess* thex0ElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* thex0ElasticModel = new G4LElastic();
-   thex0ElasticProcess->RegisterMe(thex0ElasticModel);
+   thex0ElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(thex0ElasticProcess);
 
    G4XiZeroInelasticProcess* theXiZeroInelasticProcess =
-     new G4XiZeroInelasticProcess(); 
-
-   G4LEXiZeroInelastic* theXiZeroLEPModel = new G4LEXiZeroInelastic();
-   G4HEXiZeroInelastic* theXiZeroHEPModel = new G4HEXiZeroInelastic();
-   theXiZeroInelasticProcess->RegisterMe(theXiZeroLEPModel);
-   theXiZeroInelasticProcess->RegisterMe(theXiZeroHEPModel);
+                                               new G4XiZeroInelasticProcess(); 
+   theXiZeroInelasticProcess->RegisterMe(bertini);
+   theXiZeroInelasticProcess->RegisterMe(theTheoModel);
    pManager->AddDiscreteProcess(theXiZeroInelasticProcess);
 
    // Anti-Xi0 Physics
@@ -551,19 +507,12 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add process
    G4HadronElasticProcess* theax0ElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* theax0ElasticModel = new G4LElastic();
-   theax0ElasticProcess->RegisterMe(theax0ElasticModel);
+   theax0ElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(theax0ElasticProcess);
 
    G4AntiXiZeroInelasticProcess* theAntiXiZeroInelasticProcess =
      new G4AntiXiZeroInelasticProcess(); 
-
-   G4LEAntiXiZeroInelastic* theAntiXiZeroLEPModel =
-     new G4LEAntiXiZeroInelastic();
-   G4HEAntiXiZeroInelastic* theAntiXiZeroHEPModel =
-     new G4HEAntiXiZeroInelastic();
-   theAntiXiZeroInelasticProcess->RegisterMe(theAntiXiZeroLEPModel);
-   theAntiXiZeroInelasticProcess->RegisterMe(theAntiXiZeroHEPModel);
+   theAntiXiZeroInelasticProcess->RegisterMe(antiBHighEnergyModel);
    pManager->AddDiscreteProcess(theAntiXiZeroInelasticProcess);
 
    // Xi- Physics
@@ -571,17 +520,13 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add process
    G4HadronElasticProcess* thexmElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* thexmElasticModel = new G4LElastic();
-   thexmElasticProcess->RegisterMe(thexmElasticModel);
+   thexmElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(thexmElasticProcess);
 
    G4XiMinusInelasticProcess* theXiMinusInelasticProcess =
-     new G4XiMinusInelasticProcess(); 
-
-   G4LEXiMinusInelastic* theXiMinusLEPModel = new G4LEXiMinusInelastic();
-   G4HEXiMinusInelastic* theXiMinusHEPModel = new G4HEXiMinusInelastic();
-   theXiMinusInelasticProcess->RegisterMe(theXiMinusLEPModel);
-   theXiMinusInelasticProcess->RegisterMe(theXiMinusHEPModel);
+                                              new G4XiMinusInelasticProcess(); 
+   theXiMinusInelasticProcess->RegisterMe(bertini);
+   theXiMinusInelasticProcess->RegisterMe(theTheoModel);
    pManager->AddDiscreteProcess(theXiMinusInelasticProcess);
 
    G4VProcess* thexmMultipleScattering = new G4hMultipleScattering();
@@ -603,19 +548,12 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add process
    G4HadronElasticProcess* theaxmElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* theaxmElasticModel = new G4LElastic();
-   theaxmElasticProcess->RegisterMe(theaxmElasticModel);
+   theaxmElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(theaxmElasticProcess);
 
    G4AntiXiMinusInelasticProcess* theAntiXiMinusInelasticProcess =
-     new G4AntiXiMinusInelasticProcess(); 
-
-   G4LEAntiXiMinusInelastic* theAntiXiMinusLEPModel =
-     new G4LEAntiXiMinusInelastic();
-   G4HEAntiXiMinusInelastic* theAntiXiMinusHEPModel =
-     new G4HEAntiXiMinusInelastic();
-   theAntiXiMinusInelasticProcess->RegisterMe(theAntiXiMinusLEPModel);
-   theAntiXiMinusInelasticProcess->RegisterMe(theAntiXiMinusHEPModel);
+                                           new G4AntiXiMinusInelasticProcess(); 
+   theAntiXiMinusInelasticProcess->RegisterMe(antiBHighEnergyModel);
    pManager->AddDiscreteProcess(theAntiXiMinusInelasticProcess);
 
    G4VProcess* theaxmMultipleScattering = new G4hMultipleScattering();
@@ -637,19 +575,13 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add process
    G4HadronElasticProcess* theomElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* theomElasticModel = new G4LElastic();
-   theomElasticProcess->RegisterMe(theomElasticModel);
+   theomElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(theomElasticProcess);
 
    G4OmegaMinusInelasticProcess* theOmegaMinusInelasticProcess =
-     new G4OmegaMinusInelasticProcess(); 
-
-   G4LEOmegaMinusInelastic* theOmegaMinusLEPModel =
-     new G4LEOmegaMinusInelastic();
-   G4HEOmegaMinusInelastic* theOmegaMinusHEPModel =
-     new G4HEOmegaMinusInelastic();
-   theOmegaMinusInelasticProcess->RegisterMe(theOmegaMinusLEPModel);
-   theOmegaMinusInelasticProcess->RegisterMe(theOmegaMinusHEPModel);
+                                           new G4OmegaMinusInelasticProcess(); 
+   theOmegaMinusInelasticProcess->RegisterMe(bertini);
+   theOmegaMinusInelasticProcess->RegisterMe(theTheoModel);
    pManager->AddDiscreteProcess(theOmegaMinusInelasticProcess);
 
    G4VProcess* theomMultipleScattering = new G4hMultipleScattering();
@@ -671,19 +603,12 @@ void RE02HadronPhysics::ConstructProcess()
 
    // add process
    G4HadronElasticProcess* theaomElasticProcess = new G4HadronElasticProcess();
-   G4LElastic* theaomElasticModel = new G4LElastic();
-   theaomElasticProcess->RegisterMe(theaomElasticModel);
+   theaomElasticProcess->RegisterMe(elasticModel);
    pManager->AddDiscreteProcess(theaomElasticProcess);
 
    G4AntiOmegaMinusInelasticProcess* theAntiOmegaMinusInelasticProcess =
-     new G4AntiOmegaMinusInelasticProcess(); 
-
-   G4LEAntiOmegaMinusInelastic* theAntiOmegaMinusLEPModel =
-     new G4LEAntiOmegaMinusInelastic();
-   G4HEAntiOmegaMinusInelastic* theAntiOmegaMinusHEPModel =
-     new G4HEAntiOmegaMinusInelastic();
-   theAntiOmegaMinusInelasticProcess->RegisterMe(theAntiOmegaMinusLEPModel);
-   theAntiOmegaMinusInelasticProcess->RegisterMe(theAntiOmegaMinusHEPModel);
+                                        new G4AntiOmegaMinusInelasticProcess(); 
+   theAntiOmegaMinusInelasticProcess->RegisterMe(antiBHighEnergyModel);
    pManager->AddDiscreteProcess(theAntiOmegaMinusInelasticProcess);
 
    G4VProcess* theaomMultipleScattering = new G4hMultipleScattering();

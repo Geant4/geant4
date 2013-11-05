@@ -116,8 +116,9 @@ public:
   virtual ~RE02DetectorConstruction();
 
 public:
-  // virtual method from G4VUserDetectorCOnstruction.
+  // virtual method from G4VUserDetectorConstruction.
   virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
 
 public:
   // Get/Set Access methods for data members
@@ -138,6 +139,7 @@ private:
   G4ThreeVector fPhantomSize;   // Size of Water Phantom
   G4int         fNx,fNy,fNz;    // Number of segmentation of water phantom.
   G4bool        fInsertLead;    // Flag for inserting lead plate in water phantom
+  G4LogicalVolume* fLVPhantomSens;
 
 };
 #endif

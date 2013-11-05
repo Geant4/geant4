@@ -40,20 +40,16 @@
 #include "G4VPhysicsConstructor.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4LElastic.hh"
 
 #include "G4BinaryLightIonReaction.hh"
+#include "G4QMDReaction.hh"
 #include "G4TripathiCrossSection.hh"
 #include "G4IonsShenCrossSection.hh"
+#include "G4TripathiLightCrossSection.hh"
 
 #include "G4DeuteronInelasticProcess.hh"
-#include "G4LEDeuteronInelastic.hh"
-
 #include "G4TritonInelasticProcess.hh"
-#include "G4LETritonInelastic.hh"
-
 #include "G4AlphaInelasticProcess.hh"
-#include "G4LEAlphaInelastic.hh"
 
 #include "G4hIonisation.hh"
 #include "G4ionIonisation.hh"
@@ -75,15 +71,15 @@
 ///       G4hMultipleScattering and G4ionIonisation
 ///     deuteron :
 ///       G4HadronElasticProcess with G4HadronElastic,
-///       G4DeuteronInelasticProcess with G4LEDeuteronInelastic,
+///       G4DeuteronInelasticProcess with G4BinaryLightIonReaction and QMD,
 ///       G4hMultipleScattering and G4hIonisation
 ///     triton :
 ///       G4HadronElasticProcess with G4HadronElastic,
-///       G4TritonInelasticProcess with G4LETritonInelastic,
+///       G4TritonInelasticProcess with G4BinaryLightIonReaction and QMD,
 ///       G4hMultipleScattering and G4hIonisation
 ///     alpha :
 ///       G4HadronElasticProcess with G4HadronElastic,
-///       G4AlphaInelasticProcess with G4LEAlphaInelastic,
+///       G4AlphaInelasticProcess with G4BinaryLightIonReaction and QMD,
 ///       G4hMultipleScattering and G4hIonisation
 ///     He3 :
 ///       G4hMultipleScattering and G4hIonisation

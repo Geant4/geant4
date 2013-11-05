@@ -87,6 +87,8 @@ void RE02RunAction::BeginOfRunAction(const G4Run* aRun)
 //== 
 void RE02RunAction::EndOfRunAction(const G4Run* aRun)
 {
+  if(!IsMaster()) return;
+
   //- RE02Run object.
   RE02Run* re02Run = (RE02Run*)aRun;
   //--- Dump all socred quantities involved in RE02Run.

@@ -38,6 +38,7 @@
 #include "RE02IonPhysics.hh"
 
 #include "globals.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4ios.hh"
 #include <iomanip>
 
@@ -84,6 +85,19 @@ void RE02IonPhysics::ConstructProcess()
    G4BinaryLightIonReaction* thegionBCModel = new G4BinaryLightIonReaction;
    thegionInelastic->RegisterMe(thegionBCModel);
 
+   // Inelastic for light ions
+   G4BinaryLightIonReaction* binaryCascade = new G4BinaryLightIonReaction;
+   binaryCascade->SetMinEnergy(0.0);
+   binaryCascade->SetMaxEnergy(110*MeV);
+
+   G4QMDReaction* qmd = new G4QMDReaction;
+   qmd->SetMinEnergy(100*MeV);
+   qmd->SetMaxEnergy(10*GeV);
+
+   G4IonsShenCrossSection* shenXS = new G4IonsShenCrossSection;
+   G4TripathiCrossSection* tripXS = new G4TripathiCrossSection;
+   G4TripathiLightCrossSection* tripLightXS = new G4TripathiLightCrossSection;
+
    //
    pManager->AddProcess(thegionIonisation);
    pManager->AddProcess(thegionMultipleScattering);
@@ -105,11 +119,13 @@ void RE02IonPhysics::ConstructProcess()
    thedueElasticProcess->RegisterMe(new G4HadronElastic());
    pManager->AddDiscreteProcess(thedueElasticProcess);
 
-   G4DeuteronInelasticProcess* theDeuteronInelasticProcess =
-     new G4DeuteronInelasticProcess();
-
-   G4LEDeuteronInelastic* theDeuteronLEPModel = new G4LEDeuteronInelastic();
-   theDeuteronInelasticProcess->RegisterMe(theDeuteronLEPModel);
+   G4DeuteronInelasticProcess* theDeuteronInelasticProcess
+                                            = new G4DeuteronInelasticProcess();
+   theDeuteronInelasticProcess->RegisterMe(binaryCascade);
+   theDeuteronInelasticProcess->RegisterMe(qmd);
+   theDeuteronInelasticProcess->AddDataSet(shenXS);
+   theDeuteronInelasticProcess->AddDataSet(tripXS);
+   theDeuteronInelasticProcess->AddDataSet(tripLightXS);
    pManager->AddDiscreteProcess(theDeuteronInelasticProcess);
 
    G4VProcess* thedueMultipleScattering = new G4hMultipleScattering();
@@ -135,10 +151,12 @@ void RE02IonPhysics::ConstructProcess()
    pManager->AddDiscreteProcess(thetriElasticProcess);
 
    G4TritonInelasticProcess* theTritonInelasticProcess =
-     new G4TritonInelasticProcess();
-
-   G4LETritonInelastic* theTritonLEPModel = new G4LETritonInelastic();
-   theTritonInelasticProcess->RegisterMe(theTritonLEPModel);
+                                                new G4TritonInelasticProcess();
+   theTritonInelasticProcess->RegisterMe(binaryCascade);
+   theTritonInelasticProcess->RegisterMe(qmd);
+   theTritonInelasticProcess->AddDataSet(shenXS);
+   theTritonInelasticProcess->AddDataSet(tripXS);
+   theTritonInelasticProcess->AddDataSet(tripLightXS);
    pManager->AddDiscreteProcess(theTritonInelasticProcess);
 
    G4VProcess* thetriMultipleScattering = new G4hMultipleScattering();
@@ -164,10 +182,12 @@ void RE02IonPhysics::ConstructProcess()
    pManager->AddDiscreteProcess(thealElasticProcess);
 
    G4AlphaInelasticProcess* theAlphaInelasticProcess =
-     new G4AlphaInelasticProcess();
-
-   G4LEAlphaInelastic* theAlphaLEPModel = new G4LEAlphaInelastic();
-   theAlphaInelasticProcess->RegisterMe(theAlphaLEPModel);
+                                                new G4AlphaInelasticProcess();
+   theAlphaInelasticProcess->RegisterMe(binaryCascade);
+   theAlphaInelasticProcess->RegisterMe(qmd);
+   theAlphaInelasticProcess->AddDataSet(shenXS);
+   theAlphaInelasticProcess->AddDataSet(tripXS);
+   theAlphaInelasticProcess->AddDataSet(tripLightXS);
    pManager->AddDiscreteProcess(theAlphaInelasticProcess);
 
    G4VProcess* thealpMultipleScattering = new G4hMultipleScattering();

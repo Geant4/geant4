@@ -160,6 +160,25 @@ void RE02Run::RecordEvent(const G4Event* aEvent)
   }
 }
 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void RE02Run::Merge(const G4Run * aRun) {
+  const RE02Run * localRun = static_cast<const RE02Run *>(aRun);
+  
+  //=======================================================
+  // Merge HitsMap of working threads
+  //=======================================================
+  G4int nCol = localRun->fCollID.size();
+  for ( G4int i = 0; i < nCol ; i++ ){  // Loop over HitsCollection
+    G4THitsMap<G4double>* evtMap=0;
+    if ( localRun->fCollID[i] >= 0 ){
+      *fRunMap[i] += *localRun->fRunMap[i];
+    }
+  }
+  
+  G4Run::Merge(aRun);
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //
 //  Access method for HitsMap of the RUN

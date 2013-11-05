@@ -84,6 +84,7 @@ public:
   // virtual method from G4Run. 
   // The method is overriden in this class for scoring.
   virtual void RecordEvent(const G4Event*);
+  virtual void Merge(const G4Run*);
 
   // Access methods for scoring information.
   // - Number of HitsMap for this RUN. 

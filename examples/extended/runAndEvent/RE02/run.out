@@ -1,10 +1,6 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
+ Geant4 version Name: geant4-09-06-ref-10 [MT]   (31-October-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -32,14 +28,7 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
-  OpenGLImmediateQt (OGLI, OGLIQt)
-  OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
-  OpenGLStoredQt (OGL, OGLS, OGLSQt)
-  OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
   RayTracer (RayTracer)
-  RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
@@ -152,7 +141,7 @@ gamma
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 /run/verbose 2
 #/event/verbose 0
-/tracking/verbose 1
+#/tracking/verbose 1
 #
 #
 #/vis/scene/create
@@ -181,13 +170,13 @@ gamma
 #
 # Kinetic Energy.
 #/gun/energy 35. keV
-#/gun/energy  60. keV
-/gun/energy 356. keV
+/gun/energy 60. keV
+#/gun/energy  356. keV
 #
 /gun/position 0 0 -100. cm
 /gun/direction 0 0 1
 #
-/run/beamOn 10
+/run/beamOn 10000
 
 phot:   for  gamma, applyCuts: 1     SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -229,7 +218,7 @@ eBrem:   for  e-    SubType= 3
 
 CoulombScat:   for  e-, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
 
@@ -260,7 +249,7 @@ annihil:   for  e+, applyCuts: 1     SubType= 5
 
 CoulombScat:   for  e+, applyCuts: 1     SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=      100 MeV   Emax=       10 TeV
 
@@ -286,7 +275,7 @@ hBrems:   for  proton    SubType= 3
 hPairProd:   for  proton    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      Sampling table 13x1001; from 7.50618 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -339,7 +328,7 @@ hBrems:   for  anti_proton    SubType= 3
 hPairProd:   for  anti_proton    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 13x1001 from 7.50618 GeV to 10 TeV 
+      Sampling table 13x1001; from 7.50618 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -365,7 +354,7 @@ hBrems:   for  kaon+    SubType= 3
 hPairProd:   for  kaon+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      Sampling table 14x1001; from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -391,7 +380,7 @@ hBrems:   for  kaon-    SubType= 3
 hPairProd:   for  kaon-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
+      Sampling table 14x1001; from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -418,13 +407,13 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      Sampling table 17x1001; from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 43 bins, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -451,13 +440,13 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      Sampling table 17x1001; from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
 CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
       Lambda table from 100 eV  to 10 TeV in 43 bins, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      180 < Theta(degree) < 180; pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
   eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
@@ -483,7 +472,7 @@ hBrems:   for  pi+    SubType= 3
 hPairProd:   for  pi+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      Sampling table 16x1001; from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -509,7 +498,7 @@ hBrems:   for  pi-    SubType= 3
 hPairProd:   for  pi-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 16x1001 from 1.11656 GeV to 10 TeV 
+      Sampling table 16x1001; from 1.11656 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -790,135 +779,280 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ++ PhantomSD/gammaSurfCurr003 id 9
 ### Run 0 starts.
 ### Run 0 start.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.14    -1.34   -1e+03     0.356        0        0         0       World initStep
-    1    -2.14    -1.34     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -2.14    -1.34     -198     0.356        0        2       802 PhantomSens Transportation
-    3    -2.14    -1.34     -196     0.356        0        2       804 PhantomSens Transportation
-    4    -2.14    -1.34     -194     0.356        0        2       806 PhantomSens Transportation
-    5    -2.14    -1.34     -192         0    0.356      1.7       808 PhantomSens phot
 >>> Event 0
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.524    -2.77   -1e+03     0.356        0        0         0       World initStep
-    1    0.524    -2.77     -200     0.356        0      800       800 PhantomSens Transportation
-    2    0.524    -2.77     -198     0.356        0        2       802 PhantomSens Transportation
-    3    0.524    -2.77     -196     0.356        0        2       804 PhantomSens Transportation
-    4    0.524    -2.77     -194     0.356        0        2       806 PhantomSens Transportation
-    5    0.524    -2.77     -193     0.182    0.174     1.07       807 PhantomSens compt
-    6        0    -3.21     -193     0.182        0    0.737       808 PhantomSens Transportation
-    7   -0.372    -3.52     -193         0    0.182    0.523       808 PhantomSens phot
 >>> Event 1
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     2.86    -4.13   -1e+03     0.356        0        0         0       World initStep
-    1     2.86    -4.13     -200     0.356        0      800       800 PhantomSens Transportation
-    2     2.86    -4.13     -200         0    0.356   0.0855       800 PhantomSens phot
 >>> Event 2
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -4.45    -2.05   -1e+03     0.356        0        0         0       World initStep
-    1    -4.45    -2.05     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -4.45    -2.05     -199         0    0.356      1.4       801 PhantomSens phot
 >>> Event 3
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.882     1.88   -1e+03     0.356        0        0         0       World initStep
-    1    0.882     1.88     -200     0.356        0      800       800 PhantomSens Transportation
-    2    0.882     1.88     -198     0.356        0        2       802 PhantomSens Transportation
-    3    0.882     1.88     -198         0    0.356    0.244       802 PhantomSens phot
 >>> Event 4
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -1.62     1.93   -1e+03     0.356        0        0         0       World initStep
-    1    -1.62     1.93     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -1.62     1.93     -198     0.356        0        2       802 PhantomSens Transportation
-    3    -1.62     1.93     -196     0.356        0        2       804 PhantomSens Transportation
-    4    -1.62     1.93     -194     0.356        0        2       806 PhantomSens Transportation
-    5    -1.62     1.93     -192     0.356        0        2       808 PhantomSens Transportation
-    6    -1.62     1.93     -192         0    0.356    0.403       808 PhantomSens phot
 >>> Event 5
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.25    0.605   -1e+03     0.356        0        0         0       World initStep
-    1     1.25    0.605     -200     0.356        0      800       800 PhantomSens Transportation
-    2     1.25    0.605     -198     0.356        0        2       802 PhantomSens Transportation
-    3     1.25    0.605     -198         0    0.356    0.186       802 PhantomSens phot
 >>> Event 6
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      3.5    -4.21   -1e+03     0.356        0        0         0       World initStep
-    1      3.5    -4.21     -200     0.356        0      800       800 PhantomSens Transportation
-    2      3.5    -4.21     -200         0    0.356   0.0168       800 PhantomSens phot
 >>> Event 7
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -2.9   -0.794   -1e+03     0.356        0        0         0       World initStep
-    1     -2.9   -0.794     -200     0.356        0      800       800 PhantomSens Transportation
-    2     -2.9   -0.794     -198         0    0.356     1.87       802 PhantomSens phot
 >>> Event 8
-
-*********************************************************************************************************
-* G4Track Information:   Particle = gamma,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.198     2.83   -1e+03     0.356        0        0         0       World initStep
-    1    0.198     2.83     -200     0.356        0      800       800 PhantomSens Transportation
-    2    0.198     2.83     -198         0    0.356     1.79       802 PhantomSens phot
 >>> Event 9
+>>> Event 10
+>>> Event 11
+>>> Event 12
+>>> Event 13
+>>> Event 14
+>>> Event 15
+>>> Event 16
+>>> Event 17
+>>> Event 18
+>>> Event 19
+>>> Event 20
+>>> Event 21
+>>> Event 22
+>>> Event 23
+>>> Event 24
+>>> Event 25
+>>> Event 26
+>>> Event 27
+>>> Event 28
+>>> Event 29
+>>> Event 30
+>>> Event 31
+>>> Event 32
+>>> Event 33
+>>> Event 34
+>>> Event 35
+>>> Event 36
+>>> Event 37
+>>> Event 38
+>>> Event 39
+>>> Event 40
+>>> Event 41
+>>> Event 42
+>>> Event 43
+>>> Event 44
+>>> Event 45
+>>> Event 46
+>>> Event 47
+>>> Event 48
+>>> Event 49
+>>> Event 50
+>>> Event 51
+>>> Event 52
+>>> Event 53
+>>> Event 54
+>>> Event 55
+>>> Event 56
+>>> Event 57
+>>> Event 58
+>>> Event 59
+>>> Event 60
+>>> Event 61
+>>> Event 62
+>>> Event 63
+>>> Event 64
+>>> Event 65
+>>> Event 66
+>>> Event 67
+>>> Event 68
+>>> Event 69
+>>> Event 70
+>>> Event 71
+>>> Event 72
+>>> Event 73
+>>> Event 74
+>>> Event 75
+>>> Event 76
+>>> Event 77
+>>> Event 78
+>>> Event 79
+>>> Event 80
+>>> Event 81
+>>> Event 82
+>>> Event 83
+>>> Event 84
+>>> Event 85
+>>> Event 86
+>>> Event 87
+>>> Event 88
+>>> Event 89
+>>> Event 90
+>>> Event 91
+>>> Event 92
+>>> Event 93
+>>> Event 94
+>>> Event 95
+>>> Event 96
+>>> Event 97
+>>> Event 98
+>>> Event 99
+>>> Event 100
+>>> Event 200
+>>> Event 300
+>>> Event 400
+>>> Event 500
+>>> Event 600
+>>> Event 700
+>>> Event 800
+>>> Event 900
+>>> Event 1000
+>>> Event 1100
+>>> Event 1200
+>>> Event 1300
+>>> Event 1400
+>>> Event 1500
+>>> Event 1600
+>>> Event 1700
+>>> Event 1800
+>>> Event 1900
+>>> Event 2000
+>>> Event 2100
+>>> Event 2200
+>>> Event 2300
+>>> Event 2400
+>>> Event 2500
+>>> Event 2600
+>>> Event 2700
+>>> Event 2800
+>>> Event 2900
+>>> Event 3000
+>>> Event 3100
+>>> Event 3200
+>>> Event 3300
+>>> Event 3400
+>>> Event 3500
+>>> Event 3600
+>>> Event 3700
+>>> Event 3800
+>>> Event 3900
+>>> Event 4000
+>>> Event 4100
+>>> Event 4200
+>>> Event 4300
+>>> Event 4400
+>>> Event 4500
+>>> Event 4600
+>>> Event 4700
+>>> Event 4800
+>>> Event 4900
+>>> Event 5000
+>>> Event 5100
+>>> Event 5200
+>>> Event 5300
+>>> Event 5400
+>>> Event 5500
+>>> Event 5600
+>>> Event 5700
+>>> Event 5800
+>>> Event 5900
+>>> Event 6000
+>>> Event 6100
+>>> Event 6200
+>>> Event 6300
+>>> Event 6400
+>>> Event 6500
+>>> Event 6600
+>>> Event 6700
+>>> Event 6800
+>>> Event 6900
+>>> Event 7000
+>>> Event 7100
+>>> Event 7200
+>>> Event 7300
+>>> Event 7400
+>>> Event 7500
+>>> Event 7600
+>>> Event 7700
+>>> Event 7800
+>>> Event 7900
+>>> Event 8000
+>>> Event 8100
+>>> Event 8200
+>>> Event 8300
+>>> Event 8400
+>>> Event 8500
+>>> Event 8600
+>>> Event 8700
+>>> Event 8800
+>>> Event 8900
+>>> Event 9000
+>>> Event 9100
+>>> Event 9200
+>>> Event 9300
+>>> Event 9400
+>>> Event 9500
+>>> Event 9600
+>>> Event 9700
+>>> Event 9800
+>>> Event 9900
 Run terminated.
 Run Summary
-  Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  Number of events processed : 10000
+  User=0.26s Real=0.28s Sys=0s
  PrimitiveScorer RUN PhantomSD,totalEDep
- Number of entries 9
-  copy no.: 950200  Run Value : 0.712
-  copy no.: 969400  Run Value : 0.356
-  copy no.: 969803  Run Value : 0.1823923773418966
-  copy no.: 970003  Run Value : 0.1736076226581034
-  copy no.: 989600  Run Value : 0.356
-  copy no.: 989603  Run Value : 0.356
-  copy no.: 1009804  Run Value : 0.356
-  copy no.: 1010001  Run Value : 0.712
-  copy no.: 1030000  Run Value : 0.356
+ Number of entries 69
+  copy no.: 9400  Run Value : 0.0596239
+  copy no.: 493400  Run Value : 0.0585047
+  copy no.: 510200  Run Value : 0.0596479
+  copy no.: 830400  Run Value : 0.0599927
+  copy no.: 949400  Run Value : 6.84737
+  copy no.: 949600  Run Value : 11.1737
+  copy no.: 949601  Run Value : 0.0569112
+  copy no.: 949800  Run Value : 10.2545
+  copy no.: 950000  Run Value : 12.7296
+  copy no.: 950200  Run Value : 12.3
+  copy no.: 950400  Run Value : 5.9313
+  copy no.: 969400  Run Value : 10.843
+  copy no.: 969401  Run Value : 0.0583322
+  copy no.: 969600  Run Value : 0.120891
+  copy no.: 969601  Run Value : 23.1701
+  copy no.: 969800  Run Value : 23.2741
+  copy no.: 970000  Run Value : 0.0501367
+  copy no.: 970001  Run Value : 22.7954
+  copy no.: 970200  Run Value : 23.4036
+  copy no.: 970400  Run Value : 0.0759274
+  copy no.: 970401  Run Value : 11.2163
+  copy no.: 970403  Run Value : 0.06
+  copy no.: 970600  Run Value : 0.0564701
+  copy no.: 989400  Run Value : 12.0587
+  copy no.: 989600  Run Value : 22.4783
+  copy no.: 989800  Run Value : 23.7105
+  copy no.: 990000  Run Value : 23.234
+  copy no.: 990001  Run Value : 0.0491628
+  copy no.: 990200  Run Value : 26.3916
+  copy no.: 990400  Run Value : 12.18
+  copy no.: 1009400  Run Value : 11.386
+  copy no.: 1009600  Run Value : 0.107695
+  copy no.: 1009601  Run Value : 23.3498
+  copy no.: 1009800  Run Value : 22.1539
+  copy no.: 1009801  Run Value : 0.117569
+  copy no.: 1010000  Run Value : 0.29466
+  copy no.: 1010001  Run Value : 23.5858
+  copy no.: 1010200  Run Value : 24.3112
+  copy no.: 1010201  Run Value : 0.0576914
+  copy no.: 1010400  Run Value : 0.0627638
+  copy no.: 1010401  Run Value : 9.95532
+  copy no.: 1010600  Run Value : 0.103895
+  copy no.: 1026400  Run Value : 0.0585399
+  copy no.: 1028200  Run Value : 0.0592586
+  copy no.: 1029400  Run Value : 10.5699
+  copy no.: 1029600  Run Value : 25.2517
+  copy no.: 1029800  Run Value : 23.889
+  copy no.: 1030000  Run Value : 24.5903
+  copy no.: 1030001  Run Value : 0.0577106
+  copy no.: 1030200  Run Value : 20.6837
+  copy no.: 1030400  Run Value : 12.1048
+  copy no.: 1049400  Run Value : 6.47601
+  copy no.: 1049600  Run Value : 0.0382616
+  copy no.: 1049601  Run Value : 11.813
+  copy no.: 1049800  Run Value : 11.7618
+  copy no.: 1050000  Run Value : 0.0867421
+  copy no.: 1050001  Run Value : 10.14
+  copy no.: 1050200  Run Value : 14.76
+  copy no.: 1050400  Run Value : 0.0116206
+  copy no.: 1050401  Run Value : 6.47815
+  copy no.: 1050600  Run Value : 0.0594814
+  copy no.: 1050801  Run Value : 0.0596979
+  copy no.: 1069400  Run Value : 0.0599975
+  copy no.: 1069600  Run Value : 0.050139
+  copy no.: 1070000  Run Value : 0.0521179
+  copy no.: 1150000  Run Value : 0.059059
+  copy no.: 1533800  Run Value : 0.0581195
+  copy no.: 1708200  Run Value : 0.0593848
+  copy no.: 1989000  Run Value : 0.0591115
  PrimitiveScorer RUN PhantomSD,protonEDep
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,protonNStep
@@ -932,35 +1066,80 @@ Run Summary
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr000
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr001
- Number of entries 0
- PrimitiveScorer RUN PhantomSD,gammaSurfCurr002
- Number of entries 18
-  copy no.: 950200  Run Value : 0.5
-  copy no.: 969400  Run Value : 0.25
-  copy no.: 970000  Run Value : 0.25
-  copy no.: 970001  Run Value : 0.25
-  copy no.: 970002  Run Value : 0.25
-  copy no.: 970003  Run Value : 0.25
-  copy no.: 989600  Run Value : 0.5
-  copy no.: 989601  Run Value : 0.25
-  copy no.: 989602  Run Value : 0.25
-  copy no.: 989603  Run Value : 0.25
-  copy no.: 1009800  Run Value : 0.25
+ Number of entries 63
+  copy no.: 9400  Run Value : 0.25
+  copy no.: 493400  Run Value : 0.25
+  copy no.: 510200  Run Value : 0.25
+  copy no.: 830400  Run Value : 0.25
+  copy no.: 949400  Run Value : 28.75
+  copy no.: 949600  Run Value : 47.25
+  copy no.: 949800  Run Value : 42.25
+  copy no.: 950000  Run Value : 53.5
+  copy no.: 950200  Run Value : 51.25
+  copy no.: 950400  Run Value : 24.25
+  copy no.: 969400  Run Value : 44.75
+  copy no.: 969600  Run Value : 100.25
+  copy no.: 969601  Run Value : 97.5
+  copy no.: 969800  Run Value : 96.75
+  copy no.: 970000  Run Value : 97.5
+  copy no.: 970001  Run Value : 95
+  copy no.: 970200  Run Value : 97.25
+  copy no.: 970400  Run Value : 48
+  copy no.: 970401  Run Value : 47
+  copy no.: 970402  Run Value : 0.25
+  copy no.: 970403  Run Value : 0.25
+  copy no.: 989400  Run Value : 50
+  copy no.: 989600  Run Value : 93
+  copy no.: 989800  Run Value : 99.25
+  copy no.: 990000  Run Value : 97.5
+  copy no.: 990200  Run Value : 110
+  copy no.: 990400  Run Value : 50.75
+  copy no.: 1009400  Run Value : 47
+  copy no.: 1009600  Run Value : 100.25
+  copy no.: 1009601  Run Value : 98
+  copy no.: 1009800  Run Value : 93.5
   copy no.: 1009801  Run Value : 0.25
-  copy no.: 1009802  Run Value : 0.25
-  copy no.: 1009803  Run Value : 0.25
-  copy no.: 1009804  Run Value : 0.25
-  copy no.: 1010000  Run Value : 0.5
-  copy no.: 1010001  Run Value : 0.5
-  copy no.: 1030000  Run Value : 0.25
+  copy no.: 1010000  Run Value : 101.5
+  copy no.: 1010001  Run Value : 98.75
+  copy no.: 1010200  Run Value : 102
+  copy no.: 1010400  Run Value : 43.75
+  copy no.: 1010401  Run Value : 41.5
+  copy no.: 1026600  Run Value : 0.25
+  copy no.: 1028200  Run Value : 0.25
+  copy no.: 1029400  Run Value : 44.5
+  copy no.: 1029600  Run Value : 105
+  copy no.: 1029800  Run Value : 100
+  copy no.: 1030000  Run Value : 102.25
+  copy no.: 1030001  Run Value : 0.25
+  copy no.: 1030200  Run Value : 85.25
+  copy no.: 1030400  Run Value : 50.25
+  copy no.: 1049400  Run Value : 26.5
+  copy no.: 1049600  Run Value : 50.75
+  copy no.: 1049601  Run Value : 49.25
+  copy no.: 1049800  Run Value : 49
+  copy no.: 1050000  Run Value : 44.25
+  copy no.: 1050001  Run Value : 42.25
+  copy no.: 1050200  Run Value : 61.5
+  copy no.: 1050400  Run Value : 27.25
+  copy no.: 1050401  Run Value : 27
+  copy no.: 1050600  Run Value : 0.25
+  copy no.: 1050800  Run Value : 0.25
+  copy no.: 1050801  Run Value : 0.25
+  copy no.: 1069400  Run Value : 0.25
+  copy no.: 1130000  Run Value : 0.25
+  copy no.: 1533800  Run Value : 0.25
+  copy no.: 1708200  Run Value : 0.25
+  copy no.: 1989000  Run Value : 0.25
+ PrimitiveScorer RUN PhantomSD,gammaSurfCurr002
+ Number of entries 0
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr003
  Number of entries 0
 =============================================================
- Number of event processed : 10
+ Number of event processed : 10000
 =============================================================
 #Z Cell#       totalEDep      protonEDep protonNStep  chargedPassCellFlux     chargedCellFlux     chargedSurfFlux    gammaSurfCurr000    gammaSurfCurr001    gammaSurfCurr002    gammaSurfCurr003
-     0             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2              0 /cm2
-     1           712 keV           0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2             50 /cm2              0 /cm2
+     0        294.66 keV           0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2          10150 /cm2              0 /cm2              0 /cm2
+     1       23.5858 MeV           0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2           9875 /cm2              0 /cm2              0 /cm2
      2             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
      3             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
      4             0 eV            0 eV            0               0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2              0 /cm2
@@ -1173,7 +1352,7 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 13 of which, static: 0
+Number of memory pools allocated: 13; of which, static: 0
 Dynamic pools deleted: 13 / Total memory freed: 1.5 Mb
 ============================================================
 G4Allocator objects are deleted.
