@@ -81,10 +81,10 @@ fRefGammaNumber = 29;         // The number of gamma for creation of
 
 // Local class constants
 
-const G4double G4PAIxSection::fDelta = 0.0005; // 0.005 energy shift from interval border
+const G4double G4PAIxSection::fDelta = 0.005; // 0.005 energy shift from interval border
 const G4double G4PAIxSection::fError = 0.005; // 0.005 error in lin-log approximation
 
-const G4int G4PAIxSection::fMaxSplineSize = 500;  // Max size of output spline
+const G4int G4PAIxSection::fMaxSplineSize = 1000;  // Max size of output spline
                                                     // arrays
 //////////////////////////////////////////////////////////////////
 //
@@ -98,21 +98,21 @@ G4PAIxSection::G4PAIxSection()
   fIntervalNumber = fSplineNumber = 0;
   fVerbose = 0;
     
-  fSplineEnergy          = G4DataVector(500,0.0);
-  fRePartDielectricConst = G4DataVector(500,0.0);
-  fImPartDielectricConst = G4DataVector(500,0.0);
-  fIntegralTerm          = G4DataVector(500,0.0);
-  fDifPAIxSection        = G4DataVector(500,0.0);
-  fdNdxCerenkov          = G4DataVector(500,0.0);
-  fdNdxPlasmon           = G4DataVector(500,0.0);
-  fdNdxMM                = G4DataVector(500,0.0);
-  fdNdxResonance         = G4DataVector(500,0.0);
-  fIntegralPAIxSection   = G4DataVector(500,0.0);
-  fIntegralPAIdEdx       = G4DataVector(500,0.0);
-  fIntegralCerenkov      = G4DataVector(500,0.0);
-  fIntegralPlasmon       = G4DataVector(500,0.0);
-  fIntegralMM            = G4DataVector(500,0.0);
-  fIntegralResonance     = G4DataVector(500,0.0);
+  fSplineEnergy          = G4DataVector(fMaxSplineSize,0.0);
+  fRePartDielectricConst = G4DataVector(fMaxSplineSize,0.0);
+  fImPartDielectricConst = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralTerm          = G4DataVector(fMaxSplineSize,0.0);
+  fDifPAIxSection        = G4DataVector(fMaxSplineSize,0.0);
+  fdNdxCerenkov          = G4DataVector(fMaxSplineSize,0.0);
+  fdNdxPlasmon           = G4DataVector(fMaxSplineSize,0.0);
+  fdNdxMM                = G4DataVector(fMaxSplineSize,0.0);
+  fdNdxResonance         = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralPAIxSection   = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralPAIdEdx       = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralCerenkov      = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralPlasmon       = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralMM            = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralResonance     = G4DataVector(fMaxSplineSize,0.0);
 
   for( G4int i = 0; i < 500; ++i ) 
   {
@@ -870,6 +870,9 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 {
   G4int i, j;
 
+  if(fVerbose>0) G4cout<<"      G4PAIxSection::NormShift call "<<G4endl;
+
+
   for( i = 1; i <= fIntervalNumber-1; i++ )
   {
     for( j = 1; j <= 2; j++ )
@@ -878,8 +881,7 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 
       if( j == 1 ) fSplineEnergy[fSplineNumber] = fEnergyInterval[i  ]*(1+fDelta);
       else         fSplineEnergy[fSplineNumber] = fEnergyInterval[i+1]*(1-fDelta); 
-      //    G4cout<<"cn = "<<fSplineNumber<<"; "<<"energy = "
-      //  <<fSplineEnergy[fSplineNumber]<<G4endl;
+      if(fVerbose>0) G4cout<<"cn = "<<fSplineNumber<<"; "<<"w = "<<fSplineEnergy[fSplineNumber]/keV<<" keV"<<G4endl;
     }
   }
   fIntegralTerm[1]=RutherfordIntegral(1,fEnergyInterval[1],fSplineEnergy[1]);
@@ -888,7 +890,7 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 
   for( i = 2; i <= fSplineNumber; i++ )
   {
-    if(fSplineEnergy[i]<fEnergyInterval[j+1])
+    if( fSplineEnergy[i]<fEnergyInterval[j+1] )
     {
          fIntegralTerm[i] = fIntegralTerm[i-1] + 
 	                    RutherfordIntegral(j,fSplineEnergy[i-1],
@@ -903,7 +905,7 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 	                    RutherfordIntegral(j,fEnergyInterval[j],
                                                  fSplineEnergy[i]    );
     }
-    // G4cout<<i<<"\t"<<fSplineEnergy[i]<<"\t"<<fIntegralTerm[i]<<"\n"<<G4endl;
+   if(fVerbose>0)  G4cout<<i<<"  Shift: w = "<<fSplineEnergy[i]/keV<<" keV \t"<<fIntegralTerm[i]<<"\n"<<G4endl;
   } 
   fNormalizationCof = 2*pi*pi*hbarc*hbarc*fine_structure_const/electron_mass_c2;
   fNormalizationCof *= fElectronDensity/fIntegralTerm[fSplineNumber];
@@ -929,6 +931,7 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
          fdNdxMM[i]   = PAIdNdxMM(i,betaGammaSq);
          fdNdxPlasmon[i]    = PAIdNdxPlasmon(i,betaGammaSq);
          fdNdxResonance[i]    = PAIdNdxResonance(i,betaGammaSq);
+   if(fVerbose>0)  G4cout<<i<<"  Shift: w = "<<fSplineEnergy[i]/keV<<" keV, xsc = "<<fDifPAIxSection[i]<<"\n"<<G4endl;
       }
    }
 
@@ -942,23 +945,28 @@ void G4PAIxSection::NormShift(G4double betaGammaSq)
 
 void G4PAIxSection::SplainPAI(G4double betaGammaSq)
 {
-   G4int k = 1;
-   G4int i = 1;
+  G4int j, k = 1, i = 1;
 
-   while ( (i < fSplineNumber) && (fSplineNumber < fMaxSplineSize-1) )
-   {
-      if(fSplineEnergy[i+1] > fEnergyInterval[k+1])
-      {
+  if(fVerbose>0) G4cout<<"                   G4PAIxSection::SplainPAI call "<<G4endl;
+
+  while ( (i < fSplineNumber) && (fSplineNumber < fMaxSplineSize-1) )
+  {
+     // if( std::abs(fSplineEnergy[i+1]-fEnergyInterval[k+1]) > (fSplineEnergy[i+1]+fEnergyInterval[k+1])*5.e-7 )
+     if( fSplineEnergy[i+1] > fEnergyInterval[k+1] )
+     {
           k++;   // Here next energy point is in next energy interval
 	  i++;
+	  if(fVerbose>0) G4cout<<"                     in if: i = "<<i<<"; k = "<<k<<G4endl;
           continue;
-      }
+     }
+     if(fVerbose>0) G4cout<<"       out if: i = "<<i<<"; k = "<<k<<G4endl;
+
  	               // Shifting of arrayes for inserting the geometrical 
 		       // average of 'i' and 'i+1' energy points to 'i+1' place
-      fSplineNumber++;
+     fSplineNumber++;
 
-      for(G4int j = fSplineNumber; j >= i+2; j-- )
-      {
+     for( j = fSplineNumber; j >= i+2; j-- )
+     {
          fSplineEnergy[j]          = fSplineEnergy[j-1];
          fImPartDielectricConst[j] = fImPartDielectricConst[j-1];
 	 fRePartDielectricConst[j] = fRePartDielectricConst[j-1];
@@ -969,13 +977,19 @@ void G4PAIxSection::SplainPAI(G4double betaGammaSq)
          fdNdxMM[j]         = fdNdxMM[j-1];
          fdNdxPlasmon[j]    = fdNdxPlasmon[j-1];
          fdNdxResonance[j]  = fdNdxResonance[j-1];
-      }
+     }
       G4double x1  = fSplineEnergy[i];
       G4double x2  = fSplineEnergy[i+1];
       G4double yy1 = fDifPAIxSection[i];
       G4double y2  = fDifPAIxSection[i+1];
 
+      if(fVerbose>0) G4cout<<"Spline: x1 = "<<x1<<"; x2 = "<<x2<<", yy1 = "<<yy1<<"; y2 = "<<y2<<G4endl;
+
+
       G4double en1 = sqrt(x1*x2);
+      // G4double    en1 = 0.5*(x1 + x2);
+
+
       fSplineEnergy[i+1] = en1;
 
 		 // Calculation of logarithmic linear approximation
@@ -984,6 +998,7 @@ void G4PAIxSection::SplainPAI(G4double betaGammaSq)
       G4double a = log10(y2/yy1)/log10(x2/x1);
       G4double b = log10(yy1) - a*log10(x1);
       G4double y = a*log10(en1) + b;
+
       y = pow(10.,y);
 
 		 // Calculation of the PAI dif. cross-section at this point
@@ -1003,21 +1018,26 @@ void G4PAIxSection::SplainPAI(G4double betaGammaSq)
       fdNdxResonance[i+1]  = PAIdNdxResonance(i+1,betaGammaSq);
 
 		  // Condition for next division of this segment or to pass
+
+    if(fVerbose>0) G4cout<<"Spline, a = "<<a<<"; b = "<<b<<"; new xsc = "<<y<<"; compxsc = "<<fDifPAIxSection[i+1]<<G4endl;
+
 		  // to higher energies
 
       G4double x = 2*(fDifPAIxSection[i+1] - y)/(fDifPAIxSection[i+1] + y);
+
+      G4double delta = 2.*(fSplineEnergy[i+1]-fSplineEnergy[i])/(fSplineEnergy[i+1]+fSplineEnergy[i]);
 
       if( x < 0 ) 
       {
 	 x = -x;
       }
-      if( x > fError && fSplineNumber < fMaxSplineSize-1 )
+      if( x > fError && fSplineNumber < fMaxSplineSize-1 && delta > 2.*fDelta )
       {
 	 continue;  // next division
       }
       i += 2;  // pass to next segment
 
-   }   // close 'while'
+  }   // close 'while'
 
 }  // end of SplainPAI 
 

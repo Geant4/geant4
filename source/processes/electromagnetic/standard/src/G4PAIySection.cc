@@ -83,17 +83,17 @@ G4PAIySection::G4PAIySection()
   fIntervalNumber = fSplineNumber = 0;
   fVerbose = 0;
     
-  fSplineEnergy          = G4DataVector(500,0.0);
-  fRePartDielectricConst = G4DataVector(500,0.0);
-  fImPartDielectricConst = G4DataVector(500,0.0);
-  fIntegralTerm          = G4DataVector(500,0.0);
-  fDifPAIySection        = G4DataVector(500,0.0);
-  fdNdxCerenkov          = G4DataVector(500,0.0);
-  fdNdxPlasmon           = G4DataVector(500,0.0);
-  fIntegralPAIySection   = G4DataVector(500,0.0);
-  fIntegralPAIdEdx       = G4DataVector(500,0.0);
-  fIntegralCerenkov      = G4DataVector(500,0.0);
-  fIntegralPlasmon       = G4DataVector(500,0.0);
+  fSplineEnergy          = G4DataVector(fMaxSplineSize,0.0);
+  fRePartDielectricConst = G4DataVector(fMaxSplineSize,0.0);
+  fImPartDielectricConst = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralTerm          = G4DataVector(fMaxSplineSize,0.0);
+  fDifPAIySection        = G4DataVector(fMaxSplineSize,0.0);
+  fdNdxCerenkov          = G4DataVector(fMaxSplineSize,0.0);
+  fdNdxPlasmon           = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralPAIySection   = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralPAIdEdx       = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralCerenkov      = G4DataVector(fMaxSplineSize,0.0);
+  fIntegralPlasmon       = G4DataVector(fMaxSplineSize,0.0);
 
   for( G4int i = 0; i < 500; ++i ) 
   {
@@ -455,11 +455,13 @@ void G4PAIySection::SplainPAI(G4double betaGammaSq)
 
       G4double x = 2*(fDifPAIySection[i+1] - y)/(fDifPAIySection[i+1] + y);
 
+      G4double delta = 2.*(fSplineEnergy[i+1]-fSplineEnergy[i])/(fSplineEnergy[i+1]+fSplineEnergy[i]);
+
       if( x < 0 ) 
       {
 	 x = -x;
       }
-      if( x > fError && fSplineNumber < fMaxSplineSize-1 )
+      if( x > fError && fSplineNumber < fMaxSplineSize-1 && delta > 2.*fDelta  )
       {
 	 continue;  // next division
       }

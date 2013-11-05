@@ -18,6 +18,10 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+05 November 13: V.Ivanchenko (emstand-V09-06-74)
+- G4PAIxSection, G4PAIySection - V.Grichine completly understand
+    and fix problem of division by zero when PAI modls are initialized
+
 01 November 13: V.Ivanchenko (emstand-V09-06-73)
 - G4PAIxSection, G4PAIySection - V.Grichine fixed problem of division
     by zero
