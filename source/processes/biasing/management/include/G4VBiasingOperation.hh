@@ -210,8 +210,9 @@ public:
 
   
 private:
-  const G4String                   fName;
-  const std::size_t            fUniqueID;
+  const G4String             fName;
+  // -- better would be to have fUniqueID const, but pb on windows with constructor.
+  std::size_t            fUniqueID;
 };
 
 #endif

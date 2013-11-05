@@ -182,7 +182,7 @@ void G4VBiasingOperator::RememberSecondaries( const G4BiasingProcessInterface*  
 void G4VBiasingOperator::ForgetTrack( const G4Track* track )
 {
   G4BiasingTrackData* biasingData = G4BiasingTrackDataStore::GetInstance()->GetBiasingTrackData(track);
-  if ( biasingData != 0 ) return delete biasingData;
+  if ( biasingData != 0 ) delete biasingData;
 }
 
 

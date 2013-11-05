@@ -68,6 +68,11 @@ public:
   G4bool     IsLastPostStepGPILInterface(G4bool physOnly = true) const;
   G4bool    IsFirstPostStepDoItInterface(G4bool physOnly = true) const;
   G4bool     IsLastPostStepDoItInterface(G4bool physOnly = true) const;
+  // -- Information about wrapped process:
+  G4bool GetWrappedProcessIsAtRest() const { return fWrappedProcessIsAtRest; }
+  G4bool  GetWrappedProcessIsAlong() const { return  fWrappedProcessIsAlong; }
+  G4bool   GetWrappedProcessIsPost() const { return   fWrappedProcessIsPost; }
+  
  
   // -- Information methods:
   G4double         GetPreviousStepSize()             const { return fPreviousStepSize;}
