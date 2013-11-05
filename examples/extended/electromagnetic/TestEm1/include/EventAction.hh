@@ -38,8 +38,6 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class EventActionMessenger;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
@@ -54,16 +52,10 @@ class EventAction : public G4UserEventAction
     
     void AddEdep(G4double Edep)    {fTotalEnergyDeposit += Edep;};      
     G4double GetEnergyDeposit()    {return fTotalEnergyDeposit;};    
-    void SetDrawFlag(G4String val) {fDrawFlag = val;};
-    void SetPrintModulo(G4int val) {fPrintModulo = val;};
             
     
   private:
-    G4double               fTotalEnergyDeposit;   
-    G4String               fDrawFlag;
-    G4int                  fPrintModulo;
-    
-    EventActionMessenger*  fEventMessenger;
+    G4double fTotalEnergyDeposit;   
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

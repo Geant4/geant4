@@ -23,67 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm1/src/EventActionMessenger.cc
-/// \brief Implementation of the EventActionMessenger class
+/// \file electromagnetic/TestEm11/include/Run.hh
+/// \brief Definition of the Run class
 //
-// $Id$
+// $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "EventActionMessenger.hh"
+#ifndef Run_h
+#define Run_h 1
 
-#include "EventAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
+#include "G4Run.hh"
+#include "globals.hh"
+#include <map>
+
+class DetectorConstruction;
+class PrimaryGeneratorAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventActionMessenger::EventActionMessenger(EventAction* EvAct)
-:G4UImessenger(),fEventAction(EvAct),
- fEventDir(0),   
- fDrawCmd(0),
- fPrintCmd(0)    
+class Run : public G4Run
 {
-  fEventDir = new G4UIdirectory("/testem/event/");
-  fEventDir->SetGuidance("event control");
- 
-  fDrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
-  fDrawCmd->SetGuidance("Draw the tracks in the event");
-  fDrawCmd->SetGuidance("  Choice : none,charged, all");
-  fDrawCmd->SetParameterName("choice",true);
-  fDrawCmd->SetDefaultValue("all");
-  fDrawCmd->SetCandidates("none charged all");
-  fDrawCmd->AvailableForStates(G4State_Idle);
-  
-  fPrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
-  fPrintCmd->SetGuidance("Print events modulo n");
-  fPrintCmd->SetParameterName("EventNb",false);
-  fPrintCmd->SetRange("EventNb>0");
-  fPrintCmd->AvailableForStates(G4State_Idle);      
-}
+  public:
+    Run(DetectorConstruction*, PrimaryGeneratorAction*);
+   ~Run();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventActionMessenger::~EventActionMessenger()
-{
-  delete fDrawCmd;
-  delete fPrintCmd;
-  delete fEventDir;   
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventActionMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{ 
-  if(command == fDrawCmd)
-    {fEventAction->SetDrawFlag(newValue);}
+  public:
+    void CountTraks0(G4int nt) { fNbOfTraks0 += nt;}
+    void CountTraks1(G4int nt) { fNbOfTraks1 += nt;}
+    void CountSteps0(G4int ns) { fNbOfSteps0 += ns;}
+    void CountSteps1(G4int ns) { fNbOfSteps1 += ns;}
+    void CountProcesses(G4String procName) { fProcCounter[procName]++;};
     
-  if(command == fPrintCmd)
-    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}           
-   
-}
+    void AddEdep(G4double val)     { fEdep += val;}
+    void AddTrueRange (G4double l) { fTrueRange += l; fTrueRange2 += l*l;};
+    void AddProjRange (G4double x) { fProjRange += x; fProjRange2 += x*x;};
+    void AddTransvDev (G4double y) { fTransvDev += y; fTransvDev2 += y*y;};   
+      
+    void ComputeStatistics(); 
+            
+    virtual void Merge(const G4Run*);
+
+  private:
+    DetectorConstruction*   fDetector;
+    PrimaryGeneratorAction* fPrimary;
+                           
+    G4int           fNbOfTraks0, fNbOfTraks1;
+    G4int           fNbOfSteps0, fNbOfSteps1;
+    G4double        fEdep;
+    G4double        fTrueRange, fTrueRange2;             
+    G4double        fProjRange, fProjRange2;
+    G4double        fTransvDev, fTransvDev2;
+    std::map<G4String,G4int>    fProcCounter;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+

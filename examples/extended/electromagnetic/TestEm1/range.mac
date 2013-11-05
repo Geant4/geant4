@@ -34,6 +34,6 @@
 /analysis/setFileName range
 /analysis/h1/set 1 150 70 85 mm	# csda range
 #	 
-/testem/event/printModulo 4000
+/run/printProgress 4000
 #
 /run/beamOn 40000

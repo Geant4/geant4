@@ -30,14 +30,13 @@
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
 #else
 #include "G4RunManager.hh"
 #endif
-
 
 #include "G4UImanager.hh"
 #include "Randomize.hh"
@@ -46,7 +45,6 @@
 #include "PhysicsList.hh"
 #include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
-
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -67,17 +65,18 @@ int main(int argc,char** argv) {
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
     
   // Construct the default run manager
-  #ifdef G4MULTITHREADED
+#ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
-    runManager->SetNumberOfThreads(2);
-  #else
+#else
     G4RunManager* runManager = new G4RunManager;
-  #endif
+#endif
 
   // set mandatory initialization classes
-  DetectorConstruction* det;
-  runManager->SetUserInitialization(det = new DetectorConstruction);
-  runManager->SetUserInitialization(new PhysicsList(det));
+  DetectorConstruction* det = new DetectorConstruction;
+  runManager->SetUserInitialization(det);
+  
+  PhysicsList* phys = new PhysicsList(det);  
+  runManager->SetUserInitialization(phys);
       
   // set user action classes
   runManager->SetUserInitialization(new ActionInitialization(det));
@@ -117,4 +116,4 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
