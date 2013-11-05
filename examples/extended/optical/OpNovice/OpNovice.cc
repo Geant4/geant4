@@ -120,9 +120,10 @@ int main(int argc,char** argv)
   if ( nThreads > 0 ) runManager->SetNumberOfThreads(nThreads);
 #else
   G4RunManager * runManager = new G4RunManager;
+#endif
+
   // Seed the random number generator manually
   G4Random::setTheSeed(myseed);
-#endif
 
   // Set mandatory initialization classes
   //

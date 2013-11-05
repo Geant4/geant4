@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 2, 2013 P. Gumplinger (OpNovice-V09-06-10)
+- place G4Random::setTheSeed(myseed) so that it is executed for both
+  sequential and MT mode
+
+October 31, 2013 P. Gumplinger (OpNovice-V09-06-09)
+- to work with ctests-V09-06-19
+
 October 29, 2013 P. Gumplinger (OpNovice-V09-06-08)
 - remove all reference to LXeWorkerInitialization and remove SetNumberOfThreads
 
