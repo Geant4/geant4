@@ -28,7 +28,6 @@
 /// \file radioactivedecay/rdecay02/src/exrdmPhysListHadron.cc
 /// \brief Implementation of the exrdmPhysListHadron class
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "exrdmPhysListHadron.hh"
 
@@ -47,9 +46,10 @@
 #include "G4QGSMFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 
-#include "G4LElastic.hh"
+#include "G4HadronElastic.hh"
 #include "G4LFission.hh"
-#include "G4LCapture.hh"
+#include "G4NeutronRadCapture.hh"
+#include "G4NeutronCaptureXS.hh"
 
 #include "G4CascadeInterface.hh"
 
@@ -111,7 +111,8 @@ void exrdmPhysListHadron::ConstructProcess()
   G4PreCompoundModel * thePreEquilib = new G4PreCompoundModel(theHandler);
 
   // a no-cascade generator-precompound interaface
-  G4GeneratorPrecompoundInterface * theCascade = new G4GeneratorPrecompoundInterface;
+  G4GeneratorPrecompoundInterface * theCascade =
+                                      new G4GeneratorPrecompoundInterface;
   theCascade->SetDeExcitation(thePreEquilib);  
         
   // here come the high energy parts
@@ -125,12 +126,13 @@ void exrdmPhysListHadron::ConstructProcess()
   theTheoModel->SetMaxEnergy(100*TeV);
   
   G4VLongitudinalStringDecay * theFragmentation = new G4QGSMFragmentation;
-  G4ExcitedStringDecay * theStringDecay = new G4ExcitedStringDecay(theFragmentation);
+  G4ExcitedStringDecay * theStringDecay =
+                               new G4ExcitedStringDecay(theFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
   
   // Elastic Process
   
-  fTheElasticProcess.RegisterMe(new G4LElastic());
+  fTheElasticProcess.RegisterMe(new G4HadronElastic());
 
   // ---------------------------------------------------------------------------
   // Hadron elastic process
@@ -142,8 +144,9 @@ void exrdmPhysListHadron::ConstructProcess()
     G4String particleName = particle->GetParticleName();
     if (particleName != "neutron") {  
       pManager = particle->GetProcessManager();
-      if (particle->GetPDGMass() > 110.*MeV && fTheElasticProcess.IsApplicable(*particle)
-          && !particle->IsShortLived()) { 
+      if (particle->GetPDGMass() > 110.*MeV &&
+          fTheElasticProcess.IsApplicable(*particle) &&
+          !particle->IsShortLived()) { 
         pManager->AddDiscreteProcess(&fTheElasticProcess);
         //
         //        G4cout << "### Elastic model are registered for " 
@@ -162,7 +165,8 @@ void exrdmPhysListHadron::ConstructProcess()
   // Higher energy
   fTheProtonInelastic.RegisterMe(theTheoModel);
   // now the cross-sections.
-  G4ProtonInelasticCrossSection * theProtonData = new G4ProtonInelasticCrossSection;
+  G4ProtonInelasticCrossSection * theProtonData =
+                                            new G4ProtonInelasticCrossSection;
   fTheProtonInelastic.AddDataSet(theProtonData);
   pManager->AddDiscreteProcess(&fTheProtonInelastic);
   //
@@ -173,7 +177,7 @@ void exrdmPhysListHadron::ConstructProcess()
   // elastic scattering
   fTheNeutronElasticProcess = 
     new G4HadronElasticProcess();
-  G4LElastic* theElasticModel1 = new G4LElastic;
+  G4HadronElastic* theElasticModel1 = new G4HadronElastic;
   G4NeutronHPElastic * theElasticNeutron = new G4NeutronHPElastic;
   fTheNeutronElasticProcess->RegisterMe(theElasticModel1);
   theElasticModel1->SetMinEnergy(19.*MeV);
@@ -198,21 +202,24 @@ void exrdmPhysListHadron::ConstructProcess()
   // higher energy
   fTheNeutronInelastic.RegisterMe(theTheoModel);  
   // now the cross-sections.
-  G4NeutronInelasticCrossSection * theNeutronData2 = new G4NeutronInelasticCrossSection;
+  G4NeutronInelasticCrossSection * theNeutronData2 =
+                                         new G4NeutronInelasticCrossSection;
   fTheNeutronInelastic.AddDataSet(theNeutronData2);
   pManager->AddDiscreteProcess(&fTheNeutronInelastic);
+
   // fission
-  fTheFissionProcess =
-    new G4HadronFissionProcess;
+  fTheFissionProcess = new G4HadronFissionProcess;
   G4LFission* theFissionModel = new G4LFission;
   fTheFissionProcess->RegisterMe(theFissionModel);
   pManager->AddDiscreteProcess(fTheFissionProcess);
+
   //capture  
-  fTheCaptureProcess =
-    new G4HadronCaptureProcess;
-  G4LCapture* theCaptureModel = new G4LCapture;
-  fTheCaptureProcess->RegisterMe(theCaptureModel);
+  fTheCaptureProcess = new G4HadronCaptureProcess;
+  G4NeutronRadCapture* theCaptureModel = new G4NeutronRadCapture;
   theCaptureModel->SetMinEnergy(19.*MeV);
+  fTheCaptureProcess->RegisterMe(theCaptureModel);
+  fTheCaptureProcess->AddDataSet(new G4NeutronCaptureXS);
+
   G4NeutronHPCapture * theHPNeutronCaptureModel = new G4NeutronHPCapture;
   fTheCaptureProcess->RegisterMe(theHPNeutronCaptureModel);
   G4NeutronHPCaptureData * theNeutronData3 = new G4NeutronHPCaptureData;
@@ -231,9 +238,6 @@ void exrdmPhysListHadron::ConstructProcess()
   pManager = G4Deuteron::Deuteron()->GetProcessManager();
   fTheDeuteronInelasticProcess = 
     new G4DeuteronInelasticProcess("inelastic");
-  //  G4LEDeuteronInelastic* theDeuteronInelasticModel = 
-  //   new G4LEDeuteronInelastic;
-  // theDeuteronInelasticModel->SetMaxEnergy(100*MeV);
   fTheDeuteronInelasticProcess->AddDataSet(TripathiCrossSection);
   fTheDeuteronInelasticProcess->AddDataSet(aShen);
   //  fTheDeuteronInelasticProcess->RegisterMe(theDeuteronInelasticModel);
@@ -244,9 +248,6 @@ void exrdmPhysListHadron::ConstructProcess()
   pManager = G4Triton::Triton()->GetProcessManager();
   fTheTritonInelasticProcess = 
     new G4TritonInelasticProcess("inelastic");
-  //  G4LETritonInelastic* theTritonInelasticModel = 
-  //  new G4LETritonInelastic;
-  //theTritonInelasticModel->SetMaxEnergy(100*MeV);
   fTheTritonInelasticProcess->AddDataSet(TripathiCrossSection);
   fTheTritonInelasticProcess->AddDataSet(aShen);
   //  fTheTritonInelasticProcess->RegisterMe(theTritonInelasticModel);
@@ -257,9 +258,6 @@ void exrdmPhysListHadron::ConstructProcess()
   pManager = G4Alpha::Alpha()->GetProcessManager();
   fTheAlphaInelasticProcess = 
     new G4AlphaInelasticProcess("inelastic");
-  // G4LEAlphaInelastic* theAlphaInelasticModel = 
-  //  new G4LEAlphaInelastic;
-  //theAlphaInelasticModel->SetMaxEnergy(100*MeV);
   fTheAlphaInelasticProcess->AddDataSet(TripathiCrossSection);
   fTheAlphaInelasticProcess->AddDataSet(aShen);
   //  fTheAlphaInelasticProcess->RegisterMe(theAlphaInelasticModel);
