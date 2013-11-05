@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-Nov-2013, Tatsumi Koi    		(phys-ctor-helastic-V09-06-06)
+- Create G4IonElasticPhysics Elastic Scattering for GenericIon
+
 22-Aug-2013, Vladimir Ivanchenko        (phys-ctor-helastic-V09-06-05)
 - G4HadronDElasticPhysics - DiffuseElastic model active above 10 MeV,
     LHEP model - below 10.1 MeV 

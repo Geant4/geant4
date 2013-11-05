@@ -68,6 +68,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_helastic
         G4HadronElasticPhysicsLEND.hh
         G4HadronElasticPhysicsXS.hh
         G4HadronHElasticPhysics.hh
+        G4IonElasticPhysics.hh
     SOURCES
         G4ChargeExchangePhysics.cc
         G4HadronDElasticPhysics.cc
@@ -76,6 +77,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_helastic
         G4HadronElasticPhysicsLEND.cc
         G4HadronElasticPhysicsXS.cc
         G4HadronHElasticPhysics.cc
+        G4IonElasticPhysics.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
