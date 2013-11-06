@@ -31,6 +31,7 @@ GEANT4_DEFINE_MODULE(NAME G4intercoms
     HEADERS
         G4UIaliasList.hh
         G4UIbatch.hh
+        G4UIbridge.hh
         G4UIcmdWith3Vector.hh
         G4UIcmdWith3VectorAndUnit.hh
         G4UIcmdWithABool.hh
@@ -59,6 +60,7 @@ GEANT4_DEFINE_MODULE(NAME G4intercoms
     SOURCES
         G4UIaliasList.cc
         G4UIbatch.cc
+        G4UIbridge.cc
         G4UIcmdWith3Vector.cc
         G4UIcmdWith3VectorAndUnit.cc
         G4UIcmdWithABool.cc

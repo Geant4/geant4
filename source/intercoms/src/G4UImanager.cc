@@ -43,12 +43,14 @@
 #include "G4UIaliasList.hh"
 #include "G4Tokenizer.hh"
 #include "G4MTcoutDestination.hh"
+#include "G4UIbridge.hh"
 
 #include <sstream>
 #include <fstream>
 
 G4ThreadLocal G4UImanager * G4UImanager::fUImanager = 0;
 G4ThreadLocal G4bool G4UImanager::fUImanagerHasBeenKilled = false;
+G4UImanager * G4UImanager::fMasterUImanager = 0;
 
 G4int G4UImanager::igThreadID = -1;
 
@@ -65,9 +67,13 @@ G4UImanager * G4UImanager::GetUIpointer()
   return fUImanager;
 }
 
+G4UImanager * G4UImanager::GetMasterUIpointer()
+{ return fMasterUImanager; }
+
 G4UImanager::G4UImanager()
   : G4VStateDependent(true),
     UImessenger(0), UnitsMessenger(0), CoutMessenger(0),
+    isMaster(false),bridges(0),
     ignoreCmdNotFound(false), stackCommandsForBroadcast(false),
     threadID(-1), threadCout(0) 
 {
@@ -97,6 +103,13 @@ void G4UImanager::CreateMessenger()
 
 G4UImanager::~G4UImanager()
 {
+  if(bridges)
+  {
+    std::vector<G4UIbridge*>::iterator itr = bridges->begin();
+    for(;itr!=bridges->end();itr++)
+    { delete *itr; }
+    delete bridges;
+  }
   SetCoutDestination(NULL);
   histVec.clear();
   if(saveHistory) historyFile.close();
@@ -428,6 +441,16 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
     { ll++; }
   }
 
+  if(isMaster&&bridges)
+  {
+    std::vector<G4UIbridge*>::iterator itr = bridges->begin();
+    for(;itr!=bridges->end();itr++)
+    {
+      G4int leng = (*itr)->DirLength();
+      if(commandString(0,leng)==(*itr)->DirName())
+      { return (*itr)->LocalUI()->ApplyCommand(commandString+" "+commandParameter); }
+    }
+  }
 
   G4UIcommand * targetCommand = treeTop->FindPath( commandString );
   if( targetCommand == NULL )

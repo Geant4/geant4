@@ -44,6 +44,7 @@ class G4UnitsMessenger;
 class G4LocalThreadCoutMessenger;
 class G4UIaliasList;
 class G4MTcoutDestination;
+class G4UIbridge;
 
 // class description:
 //
@@ -56,6 +57,7 @@ class G4UImanager : public G4VStateDependent
 {
   public: // with description
       static G4UImanager * GetUIpointer();
+      static G4UImanager * GetMasterUIpointer();
       //  A static method to get the pointer to the only existing object
       // of this class.
 
@@ -142,6 +144,7 @@ class G4UImanager : public G4VStateDependent
   private:
       static G4ThreadLocal G4UImanager * fUImanager;
       static G4ThreadLocal G4bool fUImanagerHasBeenKilled;
+      static G4UImanager * fMasterUImanager;
       G4UIcommandTree * treeTop;
       G4UIsession * session;
       G4UIsession * g4UIWindow;
@@ -242,6 +245,8 @@ class G4UImanager : public G4VStateDependent
       G4String FindMacroPath(const G4String& fname) const;
 
   private:
+      G4bool isMaster;
+      std::vector<G4UIbridge*>* bridges; 
       G4bool ignoreCmdNotFound;
       G4bool stackCommandsForBroadcast;
       std::vector<G4String>* commandStack;
@@ -249,10 +254,21 @@ class G4UImanager : public G4VStateDependent
   public:
       inline void SetMasterUIManager(G4bool val)
       {
+        isMaster = val;
         ignoreCmdNotFound = val;
         stackCommandsForBroadcast = val;
+        if(val&&!bridges)
+        {
+           bridges = new std::vector<G4UIbridge*>;
+           fMasterUImanager = this;
+        }
       }
+      inline void SetIgnoreCmdNotFound(G4bool val)
+      { ignoreCmdNotFound = val; }
       std::vector<G4String>* GetCommandStack();
+
+      inline void RegisterBridge(G4UIbridge* brg)
+      { bridges->push_back(brg); }
 
   public: 
       void SetUpForAThread(G4int tId);
