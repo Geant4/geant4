@@ -128,11 +128,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4INCLXXPiKBuilder.hh
         G4INCLXXProtonBuilder.hh
         G4KaonBuilder.hh
-        G4LEPNeutronBuilder.hh
-        G4LEPPiKBuilder.hh
-        G4LEPPionBuilder.hh
-        G4LEPProtonBuilder.hh
-        G4MiscBuilder.hh
         G4NeutronBuilder.hh
         G4NeutronCrossSectionXS.hh
         G4NeutronHPBuilder.hh
@@ -188,11 +183,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4INCLXXPiKBuilder.cc
         G4INCLXXProtonBuilder.cc
         G4KaonBuilder.cc
-        G4LEPNeutronBuilder.cc
-        G4LEPPiKBuilder.cc
-        G4LEPPionBuilder.cc
-        G4LEPProtonBuilder.cc
-        G4MiscBuilder.cc
         G4NeutronBuilder.cc
         G4NeutronCrossSectionXS.cc
         G4NeutronHPBuilder.cc

@@ -14,6 +14,13 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-Nov-2013, Michael Kelsey		(phys-builders-V09-06-12)
+- Retagged after previous tag was rejected.  No changes required.
+
+05-Nov-2013, Alberto Ribon              (phys-builders-V09-06-11)
+- Removed G4LEPPiKBuilder, G4LEPPionBuilder, G4LEPNeutronBuilder,
+  G4LEPProtonBuilder, and G4MiscBuilder.
+
 30-Oct-2013, Alberto Ribon              (phys-builders-V09-06-10)
 - Coverity fixes (removed variables that are not needed) in the
   following classes: G4QGSBuilder, G4QGSPPiKBuilder, 
