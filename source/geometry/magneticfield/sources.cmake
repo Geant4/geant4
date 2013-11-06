@@ -79,6 +79,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4MagneticField.hh
         G4NystromRK4.hh
         G4QuadrupoleMagField.hh
+        G4RepleteEofM.hh
         G4RKG3_Stepper.hh
         G4SimpleHeum.hh
         G4SimpleRunge.hh
@@ -130,6 +131,7 @@ GEANT4_DEFINE_MODULE(NAME G4magneticfield
         G4MonopoleEq.cc
         G4NystromRK4.cc
         G4QuadrupoleMagField.cc
+        G4RepleteEofM.cc
         G4RKG3_Stepper.cc
         G4SimpleHeum.cc
         G4SimpleRunge.cc

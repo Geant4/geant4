@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 05, 2013 P.Gumplinger                 - field-V09-06-11
+- remove writing out-of-bounds dydx[8] = 0. in G4RepleteEofM.cc
+
+Nov 04, 2013 P.Gumplinger                 - field-V09-06-10
+- add G4RepleteEofM to sources.cmake
+
                                             field-V09-06-09 - same as
 Nov 01st, 2013 P.Gumplinger               - field-V09-06-08
 - add G4RepleteEofM: EofM that includes force due to B, E, and gravity field

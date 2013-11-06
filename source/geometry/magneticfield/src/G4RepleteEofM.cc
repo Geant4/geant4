@@ -128,7 +128,7 @@ G4RepleteEofM::EvaluateRhsGivenB(const G4double y[],
    dydx[4] = 0.;
    dydx[5] = 0.;
 
-   G4double field[24] = {0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.};
+   G4double field[18] = {0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.,0.};
 
    field[0] = Field[0];
    field[1] = Field[1];
@@ -232,7 +232,7 @@ G4RepleteEofM::EvaluateRhsGivenB(const G4double y[],
       }
    }
 
-   dydx[6] = dydx[8] = 0.;//not used
+   dydx[6] = 0.; //not used
 
    // Lab Time of flight
    dydx[7] = inverse_velocity;
