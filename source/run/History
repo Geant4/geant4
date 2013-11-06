@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 5th, 2013, A.Dotti  (run-V09-06-115)
+- Added G4MTRunManager::CreateAndStartWorkers virtual protected method
+- All barriers are now virtual methods. Derived classes can re-implement
+  synchronization of threads.
+- Added G4WorkerRunManager::MergePartialResults() re-factor 
+  reduction of local results into global. Derived class cen re-implement
+  reduction
+
 Nov 4th, 2013, A Dotti  (run-V09-06-114)
 - Transform G4MTRunManager::TerminateWorkers to a protected
   virtual method (from private non-virtual)

@@ -65,6 +65,9 @@ public:
 protected:
     virtual void ConstructScoringWorlds();
     virtual void StoreRNGStatus(const G4String& filenamePrefix );
+    virtual void MergePartialResults();
+    //This method will merge (reduce) the results of this run into the
+    //global run
 public:
     //! Sets the worker context
         void SetWorkerThread( G4WorkerThread* wc ) { workerContext = wc; }

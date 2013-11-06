@@ -231,6 +231,27 @@ std::vector<G4String> G4MTRunManager::GetCommandStack()
     return uiCmdsForWorkers;
 }
 
+void G4MTRunManager::CreateAndStartWorkers()
+{
+    //Now loop on requested number of workers
+    //This will also start the workers
+    //Currently we do not allow to change the
+    //number of threads: threads area created once
+    if ( threads.size() == 0 ) {
+        for ( G4int nw = 0 ; nw<nworkers; ++nw) {
+            //Create a new worker and remember it
+            G4WorkerThread* context = new G4WorkerThread;
+            context->SetNumberThreads(nworkers);
+            context->SetThreadId(nw);
+            G4Thread* thread = userWorkerThreadInitialization->CreateAndStartWorker(context);
+            threads.push_back(thread);
+        }
+    }
+    //Signal to threads they can start a new run
+    NewActionRequest(NEXTITERATION);
+}
+
+
 void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile, G4int n_select)
 {
     MTkernel->SetUpDecayChannels();
@@ -291,22 +312,9 @@ void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile, G
     
     //Prepare UI commands for threads
     PrepareCommandsStack();
-    //Now loop on requested number of workers
-    //This will also start the workers
-    //Currently we do not allow to change the
-    //number of threads: threads area created once
-    if ( threads.size() == 0 ) {
-      for ( G4int nw = 0 ; nw<nworkers; ++nw) {
-        //Create a new worker and remember it
-        G4WorkerThread* context = new G4WorkerThread;
-        context->SetNumberThreads(nworkers);
-        context->SetThreadId(nw);
-        G4Thread* thread = userWorkerThreadInitialization->CreateAndStartWorker(context);
-        threads.push_back(thread);
-      }
-    }
-    //Signal to threads they can start a new run
-    NewActionRequest(NEXTITERATION);
+
+    //Start worker threads
+    CreateAndStartWorkers();
     
     // We need a barrier here. Wait for workers to start event loop.
     //This will return only when all workers have started processing events.

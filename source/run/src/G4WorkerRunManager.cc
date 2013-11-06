@@ -306,14 +306,19 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
   return anEvent;
 }
 
-void G4WorkerRunManager::RunTermination()
+void G4WorkerRunManager::MergePartialResults()
 {
     //Merge partial results into global run
     G4MTRunManager* mtRM = G4MTRunManager::GetMasterRunManager();
     G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
     if(ScM) mtRM->MergeScores(ScM);
     mtRM->MergeRun(currentRun);
+}
 
+void G4WorkerRunManager::RunTermination()
+{
+    MergePartialResults();
+    
     //Call a user hook: note this is before the next barrier
     //so threads execute this method asyncrhonouzly
     //(TerminateRun allows for synch via G4RunAction::EndOfRun)

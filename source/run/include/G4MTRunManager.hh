@@ -79,7 +79,7 @@ public:
     // If zero is returned no more event needs to be processed, and worker thread 
     // must delete that G4Event.
     virtual G4int SetUpNEvents(G4Event*, G4SeedsQueue* seedsQueue);
-
+    
     //Method called by Initialize() method
 protected:
     //Initialize the seeds list, if derived class does not implement this method
@@ -89,6 +89,8 @@ protected:
     //Adds one seed to the list of seeds
     virtual void PrepareCommandsStack();
     virtual void StoreRNGStatus(const G4String& filenamePrefix );
+    virtual void CreateAndStartWorkers();
+    //Creates worker threads and signal to start
 public:
     std::vector<G4String> GetCommandStack();
     //This method is invoked just before spawning the threads to
@@ -109,13 +111,14 @@ private:
     //List of UI commands for workers.
     CLHEP::HepRandomEngine* masterRNGEngine;
     //Pointer to the mastet thread random engine
-    void WaitForReadyWorkers();
+protected:
+    virtual void WaitForReadyWorkers();
     //Master thread barrier:
     //Call this function to block master thread and
     //wait workers to be ready to process work.
     //This function will return only when all
     //workers are ready to perform event loop.
-    void WaitForEndEventLoopWorkers();
+    virtual void WaitForEndEventLoopWorkers();
     //Master thread barrier:
     //Call this function to block master thread and
     //wait workers have finished current event loop.
@@ -127,7 +130,7 @@ protected:
     //Empty the workersList
 
 public:
-    void ThisWorkerReady();
+    virtual void ThisWorkerReady();
     //Worker threads barrier:
     //This method should be called by each
     //worker when ready to start thread event-loop
@@ -137,7 +140,7 @@ public:
     //Worker threads barrier:
     //This static method should be called by each
     //worker when finish to process events
-    void ThisWorkerEndEventLoop();
+    virtual void ThisWorkerEndEventLoop();
     //Worker threads barrier:
     //This method should be called by each
     //worker when worker event loop is terminated.
@@ -186,15 +189,15 @@ public:
         ENDWORKER          // Terminate thread, work finished
     };
         
-    WorkerActionRequest ThisWorkerWaitForNextAction();
+    virtual WorkerActionRequest ThisWorkerWaitForNextAction();
     //Worker thread barrier
     //This method should be used by workers' run manager to wait,
     //after an event loop for the next action to be performed
     // (for example execute a new run)
     //This returns the action to be performed
-private:
+protected:
     WorkerActionRequest nextActionRequest;
-    void NewActionRequest( WorkerActionRequest newRequest );
+    virtual void NewActionRequest( WorkerActionRequest newRequest );
 
 protected:
     G4int eventModuloDef;
