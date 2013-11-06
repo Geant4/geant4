@@ -17,15 +17,15 @@
 #
 # function geant4_export_datasets([BUILD|INSTALL] <output variable>)
 #          Set output variable to list of dataset tuples for export to
-#          Geant4Config.cmake
+#          configuration scripts
 #          A tuple has the format:
-#            NAME/ENVVAR/PATH
+#            NAME/ENVVAR/PATH/FILENAME/MD5SUM
 #          BUILD will set the PATH entry to the path to the dataset used
 #          for the build of Geant4.
 #
 #          INSTALL will set the PATH entry to the path to the dataset used
 #          by an install of Geant4.
-#          
+#
 # function geant4_add_dataset(NAME      <id>
 #                             VERSION   <ver>
 #                             FILENAME  <file>
@@ -152,7 +152,7 @@ function(geant4_tupleize_datasets _output)
     string(REPLACE ";" "/" _tuple "${_tuple}")
     list(APPEND _tmplist "${_tuple}")
   endforeach()
-  
+
   set(${_output} ${_tmplist} PARENT_SCOPE)
 endfunction()
 
@@ -161,7 +161,7 @@ endfunction()
 #          Set output variable to list of dataset tuples for export to
 #          Geant4Config.cmake
 #          A tuple has the format:
-#            NAME/ENVVAR/PATH
+#            NAME/ENVVAR/PATH/FILENAME/MD5SUM
 #          BUILD will set the PATH entry to the path to the dataset used
 #          for the build of Geant4.
 #
@@ -184,14 +184,22 @@ function(geant4_export_datasets _type _output)
     else()
       message(FATAL_ERROR "incorrect argument to geant4_export_datasets")
     endif()
-
     list(APPEND _tuple ${_tmpprop})
+
+    get_property(_fname GLOBAL PROPERTY ${_ds}_FILENAME)
+    get_property(_fvers GLOBAL PROPERTY ${_ds}_VERSION)
+    get_property(_fextn GLOBAL PROPERTY ${_ds}_EXTENSION)
+    list(APPEND _tuple "${_fname}.${_fvers}.${_fextn}")
+
+    get_property(_tmpprop GLOBAL PROPERTY ${_ds}_MD5SUM)
+    list(APPEND _tuple ${_tmpprop})
+
     # Because we have paths, use tuple separator that should not
     # appear in a path.
     string(REPLACE ";" "|" _tuple "${_tuple}")
     list(APPEND _tmplist "${_tuple}")
   endforeach()
-  
+
   set(${_output} ${_tmplist} PARENT_SCOPE)
 endfunction()
 
@@ -230,12 +238,12 @@ function(geant4_add_dataset)
 
   # Derived properties...
   # FILE : the full filename of the packed dataset
-  set_property(GLOBAL PROPERTY ${_G4ADDDATA_NAME}_FILE 
+  set_property(GLOBAL PROPERTY ${_G4ADDDATA_NAME}_FILE
     "${_G4ADDDATA_FILENAME}.${_G4ADDDATA_VERSION}.${_G4ADDDATA_EXTENSION}"
     )
   # DIRECTORY : the name of the directory that results from unpacking
   #             the packed dataset file.
-  set_property(GLOBAL PROPERTY ${_G4ADDDATA_NAME}_DIRECTORY 
+  set_property(GLOBAL PROPERTY ${_G4ADDDATA_NAME}_DIRECTORY
     "${_G4ADDDATA_NAME}${_G4ADDDATA_VERSION}"
     )
   # URL : remote and full URL to the packed dataset file
@@ -310,7 +318,7 @@ function(geant4_configure_datasets)
   foreach(_ds ${_dsnames})
     geant4_dataset_isinstalled(${_ds} "${_G4CFGDSS_DESTINATION}" _installed)
     if(NOT _installed AND _G4CFGDSS_DOWNLOAD)
-      geant4_install_dataset(${_ds} "${_G4CFGDSS_DESTINATION}" ${_G4CFGDSS_TIMEOUT}) 
+      geant4_install_dataset(${_ds} "${_G4CFGDSS_DESTINATION}" ${_G4CFGDSS_TIMEOUT})
     else()
       geant4_reuse_dataset(${_ds} "${_G4CFGDSS_DESTINATION}" ${_installed})
       if(NOT _installed)
@@ -405,7 +413,7 @@ function(geant4_install_dataset _name _destination _timeout)
   geant4_get_dataset_property(${_name} MD5SUM _ds_md5sum)
 
   message(STATUS "Configuring download of missing dataset ${_name} (${_ds_version})")
- 
+
   # - Dispatch to ExternalProject or our own implementation.
   # Use of URL_MD5 *and* TIMEOUT require CMake 2.8.2 or higher.
   if(${CMAKE_VERSION} VERSION_GREATER "2.8.1")
@@ -566,7 +574,7 @@ function(_geant4_dataproject _name)
   endforeach()
 
   # - Add the main target which will run all the above steps
-  add_custom_target(${_name} ALL 
+  add_custom_target(${_name} ALL
     COMMENT "Completed ${_name}"
     DEPENDS ${PROJECT_BINARY_DIR}/${_G4DATA_PREFIX}/${_name}-${_last_step}.stamp
     VERBATIM

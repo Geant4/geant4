@@ -274,6 +274,9 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
   _g4tc_setenv_command(GEANT4_TC_G4SYSTEM ${SHELL_FAMILY} G4SYSTEM ${G4SYSTEM})
   _g4tc_setenv_command(GEANT4_TC_G4INSTALL ${SHELL_FAMILY} G4INSTALL ${G4INSTALL})
   _g4tc_setenv_command(GEANT4_TC_G4INCLUDE ${SHELL_FAMILY} G4INCLUDE ${G4INCLUDE})
+
+  _g4tc_prepend_path(GEANT4_TC_G4BIN_PATH_SETUP ${SHELL_FAMILY} PATH ${G4BIN_DIR})
+
   _g4tc_setenv_command(GEANT4_TC_G4LIB ${SHELL_FAMILY} G4LIB ${G4LIB})
 
   if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
@@ -298,6 +301,10 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
     _g4tc_setenv_command(GEANT4_TC_G4LIB_BUILD_STATIC ${SHELL_FAMILY} G4LIB_BUILD_STATIC 1)
   endif()
 
+  # - Multithreading
+  if(GEANT4_BUILD_MULTITHREADED)
+    _g4tc_setenv_command(GEANT4_TC_G4MULTITHREADED ${SHELL_FAMILY} G4MULTITHREADED 1)
+  endif()
 
   # - Resource file paths
   set(GEANT4_TC_DATASETS )
@@ -515,6 +522,7 @@ endmacro()
 set(G4SYSTEM  "${GEANT4_SYSTEM}-${GEANT4_COMPILER}")
 set(G4INSTALL ${PROJECT_SOURCE_DIR})
 set(G4INCLUDE ${PROJECT_SOURCE_DIR}/this_is_a_deliberate_dummy_path)
+set(G4BIN_DIR ${PROJECT_BINARY_DIR})
 set(G4LIB ${PROJECT_BINARY_DIR}/outputs/library)
 set(G4LIB_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 set(G4WORKDIR_DEFAULT "\$HOME/geant4_workdir")
@@ -549,7 +557,7 @@ _g4tc_configure_build_tree_scripts(geant4make)
 set(G4SYSTEM  "${GEANT4_SYSTEM}-${GEANT4_COMPILER}")
 set(G4INSTALL "\"\$geant4make_root\"")
 
-# - Now need relative paths between 'G4INSTALL' and include/lib dirs
+# - Now need relative paths between 'G4INSTALL' and include/bin/lib dirs
 # - Include dir
 file(RELATIVE_PATH
   G4MAKE_TO_INCLUDEDIR
@@ -557,6 +565,14 @@ file(RELATIVE_PATH
   ${CMAKE_INSTALL_FULL_INCLUDEDIR}/${PROJECT_NAME}
   )
 set(G4INCLUDE "\"`cd \$geant4make_root/${G4MAKE_TO_INCLUDEDIR} > /dev/null \; pwd`\"")
+
+# - Bin dir
+file(RELATIVE_PATH
+  G4MAKE_TO_BINDIR
+  ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
+  ${CMAKE_INSTALL_FULL_BINDIR}
+  )
+set(G4INCLUDE "\"`cd \$geant4make_root/${G4MAKE_TO_BINDIR} > /dev/null \; pwd`\"")
 
 # - Lib dir
 file(RELATIVE_PATH

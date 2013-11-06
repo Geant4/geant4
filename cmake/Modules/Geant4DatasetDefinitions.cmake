@@ -85,3 +85,13 @@ geant4_add_dataset(
   MD5SUM    d88a31218fdf28455e5c5a3609f7216f
   )
 
+# - ABLA
+geant4_add_dataset(
+  NAME      G4ABLA
+  VERSION   3.0
+  FILENAME  G4ABLA
+  EXTENSION tar.gz
+  ENVVAR    G4ABLADATA
+  MD5SUM    d7049166ef74a592cb97df0ed4b757bd
+  )
+

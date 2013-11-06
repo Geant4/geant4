@@ -30,6 +30,30 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+6th November 2013 - Ben Morgan (cmake-V09-06-35 internal)
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Add support
+  for export of multithreading and application PATH variables.
+- Templates/geant4make-skeleton.in : Export G4MULTITHREADED variable,
+  and prepend binary directory to PATH to provide direct access to
+  geant4-config.
+- Modules/Geant4ConfigureConfigScript.cmake : Add support for export
+  of multithreading variables.
+- Templates/geant4-config.in :
+   Bug fixes : add core compiler flags to cflags
+             : add support for multithreading (NB default is to supply
+               cflags for multithreading if Geant4 built in MT)
+   New feature : Implement post install of datasets. Supplying the
+                 --install-data flag will perform a download and
+                 install of all datasets to the configured data directory
+                 of Geant4.
+- Modules/Geant4InstallData.cmake : Append filename and md5 to tuples
+  exported by geant4_export_datasets. This is used by geant4-config to
+  set up the post-install of datasets.
+
+6th November 2013 - Ben Morgan (cmake-V09-06-34 internal)
+- Modules/Geant4DatasetDefinitions.cmake : Add definition for ABLA
+dataset.
+
 28th October 2013 - Ben Morgan (cmake-V09-06-33)
 - Modules/Geant4InterfaceOptions.cmake : BUGFIX : add Wt_HTTP_LIBRARY to
 list of libraries required by Wt interface.
