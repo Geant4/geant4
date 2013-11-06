@@ -33,95 +33,44 @@
 
 #include "globals.hh"
 
-#ifndef G4AblaVirtualData_hh
-#define G4AblaVirtualData_hh 1
+#ifndef G4AblaInterface_hh
+#define G4AblaInterface_hh 1
 
 #ifdef ABLAXX_IN_GEANT4_MODE
-#include "globals.hh"
-#else
-#include "G4INCLGeant4Compat.hh"
-#include "G4INCLConfig.hh"
-#endif
 
+#include "G4VPreCompoundModel.hh"
+#include "G4ReactionProduct.hh"
+#include "G4Fragment.hh"
+#include "G4HadFinalState.hh"
+#include "G4HadProjectile.hh"
+#include "G4Nucleus.hh"
+#include "G4Abla.hh"
 
-/**
- * An interface to data used by ABLA. This interface allows
- * us to abstract the actual source of data. Currently the data is
- * read from datafiles by using class G4AblaDataFile.  @see
- * G4AblaDataFile
- */
-
-class G4AblaVirtualData {
-protected:
-
-  /**
-   * Constructor, destructor
-   */
-#ifdef ABLAXX_IN_GEANT4_MODE
-  G4AblaVirtualData();
-#else
-  G4AblaVirtualData(G4INCL::Config *);
-#endif
-  virtual ~G4AblaVirtualData();
-
+class G4AblaInterface : public G4VPreCompoundModel {
 public:
-  /**
-   * Set the value of Alpha.
-   */
-  G4bool setAlpha(G4int A, G4int Z, G4double value);
+  G4AblaInterface();
+  virtual ~G4AblaInterface();
 
-  /**
-   * Set the value of Ecnz.
-   */
-  G4bool setEcnz(G4int A, G4int Z, G4double value);
+  virtual G4ReactionProductVector *DeExcite(G4Fragment &aFragment);
 
-  /**
-   * Set the value of Vgsld.
-   */
-  G4bool setVgsld(G4int A, G4int Z, G4double value);
+  virtual G4HadFinalState *ApplyYourself(G4HadProjectile const &, G4Nucleus &) {
+    return NULL;
+  }
 
-  /**
-   * Set the value of Pace2.
-   */
-  G4bool setPace2(G4int A, G4int Z, G4double value);
-
-  G4double getAlpha(G4int A, G4int Z);
-
-  /**
-   * Get the value of Alpha.
-   */
-  G4double getEcnz(G4int A, G4int Z);
-
-  /**
-   * Get the value of Vgsld.
-   */
-  G4double getVgsld(G4int A, G4int Z);
-
-  /**
-   * Get the value of Pace2.
-   */
-  G4double getPace2(G4int A, G4int Z);
-
-  G4int getAlphaRows();
-  G4int getAlphaCols();
-
-  G4int getPaceRows();
-  G4int getPaceCols();
-
-  virtual G4bool readData() = 0;
-	
 private:
+  G4VarNtp *ablaResult;
+  G4Volant *volant;
+  G4Abla *theABLAModel;
+  G4long eventNumber;
 
-  static const G4int alphaRows = 154;
-  static const G4int alphaCols = 99;
+  /// \brief Convert an Abla particle to a G4ReactionProduct
+  G4ReactionProduct *toG4Particle(G4int A, G4int Z , G4double kinE, G4double px, G4double py, G4double pz) const;
 
-  static const G4int paceRows = 500;
-  static const G4int paceCols = 500;
+  /// \brief Convert A and Z to a G4ParticleDefinition
+  G4ParticleDefinition *toG4ParticleDefinition (G4int A, G4int Z) const;
 
-  G4double alpha[alphaRows][alphaCols];
-  G4double ecnz[alphaRows][alphaCols];
-  G4double vgsld[alphaRows][alphaCols];
-  G4double pace2[paceRows][paceCols];
 };
+
+#endif // ABLAXX_IN_GEANT4_MODE
 
 #endif

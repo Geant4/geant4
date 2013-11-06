@@ -33,95 +33,24 @@
 
 #include "globals.hh"
 
-#ifndef G4AblaVirtualData_hh
-#define G4AblaVirtualData_hh 1
+#include "G4AblaRandom.hh"
 
 #ifdef ABLAXX_IN_GEANT4_MODE
 #include "globals.hh"
+#include "Randomize.hh"
 #else
-#include "G4INCLGeant4Compat.hh"
-#include "G4INCLConfig.hh"
-#endif
+#include "G4INCLRandom.hh"
+#endif // ABLAXX_IN_GEANT4_MODE
 
+namespace G4AblaRandom {
 
-/**
- * An interface to data used by ABLA. This interface allows
- * us to abstract the actual source of data. Currently the data is
- * read from datafiles by using class G4AblaDataFile.  @see
- * G4AblaDataFile
- */
-
-class G4AblaVirtualData {
-protected:
-
-  /**
-   * Constructor, destructor
-   */
+  double flat() {
 #ifdef ABLAXX_IN_GEANT4_MODE
-  G4AblaVirtualData();
+    return G4UniformRand();
 #else
-  G4AblaVirtualData(G4INCL::Config *);
+    return G4INCL::Random::shoot();
 #endif
-  virtual ~G4AblaVirtualData();
+  }
 
-public:
-  /**
-   * Set the value of Alpha.
-   */
-  G4bool setAlpha(G4int A, G4int Z, G4double value);
+}
 
-  /**
-   * Set the value of Ecnz.
-   */
-  G4bool setEcnz(G4int A, G4int Z, G4double value);
-
-  /**
-   * Set the value of Vgsld.
-   */
-  G4bool setVgsld(G4int A, G4int Z, G4double value);
-
-  /**
-   * Set the value of Pace2.
-   */
-  G4bool setPace2(G4int A, G4int Z, G4double value);
-
-  G4double getAlpha(G4int A, G4int Z);
-
-  /**
-   * Get the value of Alpha.
-   */
-  G4double getEcnz(G4int A, G4int Z);
-
-  /**
-   * Get the value of Vgsld.
-   */
-  G4double getVgsld(G4int A, G4int Z);
-
-  /**
-   * Get the value of Pace2.
-   */
-  G4double getPace2(G4int A, G4int Z);
-
-  G4int getAlphaRows();
-  G4int getAlphaCols();
-
-  G4int getPaceRows();
-  G4int getPaceCols();
-
-  virtual G4bool readData() = 0;
-	
-private:
-
-  static const G4int alphaRows = 154;
-  static const G4int alphaCols = 99;
-
-  static const G4int paceRows = 500;
-  static const G4int paceCols = 500;
-
-  G4double alpha[alphaRows][alphaCols];
-  G4double ecnz[alphaRows][alphaCols];
-  G4double vgsld[alphaRows][alphaCols];
-  G4double pace2[paceRows][paceCols];
-};
-
-#endif

@@ -23,17 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$ 
-// Translation of INCL4.2/ABLA V3 
+// ABLAXX statistical de-excitation model
 // Pekka Kaitaniemi, HIP (translation)
 // Christelle Schmidt, IPNL (fission code)
-// Alain Boudard, CEA (contact person INCL/ABLA)
+// Davide Mancusi, CEA (contact person INCL/ABLA)
 // Aatos Heikkinen, HIP (project coordination)
+//
+#define ABLAXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
 
+#ifndef G4Abla_hh
+#define G4Abla_hh 1
+
+#ifdef ABLAXX_IN_GEANT4_MODE
+#include "globals.hh"
+#else
+#include "G4INCLGeant4Compat.hh"
+#include "G4INCLConfig.hh"
+#endif
+
+#include "G4AblaRandom.hh"
 #include "G4AblaDataDefs.hh"
-#include "G4InclDataDefs.hh"
+#include "G4AblaFissionBase.hh"
 
 /**
  *  Class containing ABLA de-excitation code.
@@ -43,25 +55,17 @@ class G4Abla {
 
 public:
   /**
-   * Basic constructor.
-   */
-  G4Abla();
-
-  /**
    * This constructor is used by standalone test driver and the Geant4 interface.
    *
    * @param aHazard random seeds
    * @param aVolant data structure for ABLA output
    * @param aVarNtp data structure for transfering ABLA output to Geant4 interface
    */
-  G4Abla(G4Hazard *aHazard, G4Volant *aVolant, G4VarNtp *aVarntp);
-
-  /**
-   * Constructor that is to be used only for testing purposes.
-   * @param aHazard random seeds
-   * @param aVolant data structure for ABLA output   
-   */
-  G4Abla(G4Hazard *hazard, G4Volant *volant);
+#ifdef ABLAXX_IN_GEANT4_MODE
+  G4Abla(G4Volant *aVolant, G4VarNtp *aVarntp);
+#else
+  G4Abla(G4INCL::Config *config, G4Volant *aVolant, G4VarNtp *aVarntp);
+#endif
 
   /**
    * Basic destructor.
@@ -72,6 +76,13 @@ public:
    * Set verbosity level.
    */
   void setVerboseLevel(G4int level);
+
+  /**
+   * Get the internal output data structure pointer.
+   */
+  G4Volant* getVolant() {
+    return volant;
+  }
 
   /**
    * Main interface to the de-excitation code.
@@ -87,7 +98,7 @@ public:
    * @param momZ momentum z-component
    * @param eventnumber number of the event
    */
-  void breakItUp(G4double nucleusA, G4double nucleusZ, G4double nucleusMass, G4double excitationEnergy,
+  void breakItUp(G4int nucleusA, G4int nucleusZ, G4double nucleusMass, G4double excitationEnergy,
 		 G4double angularMomentum, G4double recoilEnergy, G4double momX, G4double momY, G4double momZ,
 		 G4int eventnumber);
 
@@ -127,17 +138,17 @@ public:
   /**
    *
    */
-  //  G4double spdef(G4int a, G4int z, G4int optxfis);
+  G4double spdef(G4int a, G4int z, G4int optxfis);
 
   /**
    * Calculation of fissility parameter
    */
-  //  G4double fissility(int a,int z, int optxfis);
+  G4double fissility(int a,int z, int optxfis);
 
   /**
    * Main evaporation routine.
    */
-  void evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf, 
+  void evapora(G4double zprf, G4double aprf, G4double *ee_par, G4double jprf, 
 	       G4double *zf_par, G4double *af_par, G4double *mtota_par,
 	       G4double *pleva_par, G4double *pxeva_par, G4double *pyeva_par,
 	       G4int *ff_par, G4int *inttype_par, G4int *inum_par);
@@ -148,7 +159,7 @@ public:
   void direct(G4double zprf,G4double a, G4double ee, G4double jprf, 
 	      G4double *probp_par, G4double *probn_par, G4double *proba_par, 
 	      G4double *probf_par, G4double *ptotl_par, G4double *sn_par, G4double *sbp_par, G4double *sba_par, G4double *ecn_par, 
-	      G4double *ecp_par,G4double *eca_par, G4double *bp_par, G4double *ba_par, G4int inttype, G4int inum, G4int itest);
+	      G4double *ecp_par,G4double *eca_par, G4double *bp_par, G4double *ba_par, G4int, G4int inum, G4int itest);
 
   /**
    * Level density parameters.
@@ -224,6 +235,12 @@ public:
   void barfit(G4int iz, G4int ia, G4int il, G4double *sbfis, G4double *segs, G4double *selmax);
 
   /**
+   * Random numbers.
+   */
+  G4double haz(G4int k);
+  void standardRandom(G4double *rndm, G4long *seed);
+
+  /**
    * TIRAGE ALEATOIRE DANS UNE EXPONENTIELLLE : Y=EXP(-X/T)
    */ 
   G4double expohaz(G4int k, G4double T);
@@ -252,38 +269,6 @@ public:
    *
    */
   void guet(G4double *x_par, G4double *z_par, G4double *find_par);
-
-  // Fission
-public:
-  /**
-   *
-   */
-  G4double spdef(G4int a, G4int z, G4int optxfis);
-
-  /**
-   *
-   */
-  G4double fissility(G4int a, G4int z, G4int optxfis);
-
-//   void evapora(G4double zprf, G4double aprf, G4double ee, G4double jprf,
-// 	       G4double *zf_par, G4double *af_par, G4double *mtota_par,
-// 	       G4double *pleva_par, G4double *pxeva_par);
-//  G4double bfms67(G4double zms, G4double ams);
-  //  void lpoly(G4double x, G4int n, G4double pl[]);
-  //  G4double expohaz(G4int k, G4double T);
-  //  G4double fd(G4double E);
-  //  G4double f(G4double E);
-  //  G4double fmaxhaz(G4double k, G4double T);
-  void even_odd(G4double r_origin,G4double r_even_odd,G4int &i_out);
-  G4double umass(G4double z,G4double n,G4double beta);
-  G4double ecoul(G4double z1,G4double n1,G4double beta1,G4double z2,G4double n2,G4double beta2,G4double d);
-  void fissionDistri(G4double &a,G4double &z,G4double &e,
-		     G4double &a1,G4double &z1,G4double &e1,G4double &v1,
-		     G4double &a2,G4double &z2,G4double &e2,G4double &v2);
-  void standardRandom(G4double *rndm, G4long *seed);
-  G4double haz(G4int k);
-  G4double gausshaz(int k, double xmoy, double sig);
-
     
 public:
   // Coordinate system transformations:
@@ -312,16 +297,17 @@ public:
   G4int idnint(G4double value);
   G4double utilabs(G4double a);
   G4double dmin1(G4double a, G4double b, G4double c);
+  G4Ec2sub* getFrldmTable() {
+    return ec2sub;
+  }
 
 private:
   G4int verboseLevel;
   G4int ilast;
 
+  G4AblaFissionBase *fissionModel;
   G4Pace *pace;
-  G4Hazard *hazard;
   G4Ald *ald;
-  G4Ablamain *ablamain;
-  G4Emdpar *emdpar;
   G4Eenuc *eenuc;
   G4Ec2sub *ec2sub;
   G4Ecld *ecld; 
@@ -330,4 +316,9 @@ private:
   G4Opt *opt;
   G4Volant *volant;
   G4VarNtp *varntp;  
+#ifndef ABLAXX_IN_GEANT4_MODE
+  G4INCL::Config *theConfig;
+#endif
 };
+
+#endif

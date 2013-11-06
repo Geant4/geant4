@@ -23,82 +23,55 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
-// Defines an interface to evaporation models of Bertini cascase (BERT)
-// based on INUCL code.
+// ABLAXX statistical de-excitation model
+// Pekka Kaitaniemi, HIP (translation)
+// Christelle Schmidt, IPNL (fission code)
+// Davide Mancusi, CEA (contact person INCL/ABLA)
+// Aatos Heikkinen, HIP (project coordination)
 //
-#ifndef G4ABLAEVAPORATION_h
-#define G4ABLAEVAPORATION_h 1
+#define ABLAXX_IN_GEANT4_MODE 1
 
 #include "globals.hh"
-#include "G4VEvaporation.hh"
-#include "G4Fragment.hh"
-#include "G4DynamicParticle.hh"
 
-#include "G4Abla.hh"
+#ifndef G4AblaFissionBase_hh
+#define G4AblaFissionBase_hh 1
 
-//#include "G4VCoulombBarrier.hh"
+#ifdef ABLAXX_IN_GEANT4_MODE
+#include "globals.hh"
+#else
+#include "G4INCLGeant4Compat.hh"
+#endif
+//#include "G4InclUtils.hh"
 
-//#define DEBUG
-
-/**
- * Geant4 interface to the ABLA evaporation code.
+/*
+ * Abstract interface to fission models.
  */
 
-class G4AblaEvaporation : public G4VEvaporation {
-public:
-  /**
-   * Constructor.
-   */
-  G4AblaEvaporation();
-
-  /**
-   * Destructor.
-   */
-  ~G4AblaEvaporation();
-
-private:
-  G4AblaEvaporation(const G4AblaEvaporation &right);
-
-  const G4AblaEvaporation & operator=(const G4AblaEvaporation &right);
-  G4bool operator==(const G4AblaEvaporation &right) const;
-  G4bool operator!=(const G4AblaEvaporation &right) const;
-  void fillResult( std::vector<G4DynamicParticle *> secondaryParticleVector,
-		   G4FragmentVector * aResult );
+class G4AblaFissionBase {
 
 public:
+  G4AblaFissionBase();
+  virtual ~G4AblaFissionBase();
 
-  /**
-   * The method for calling
-   */
-  G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
-       
-  void setVerboseLevel( const G4int verbose );
+  virtual void doFission(G4double &A, G4double &Z, G4double &E,
+			 G4double &A1, G4double &Z1, G4double &E1, G4double &K1,
+			 G4double &A2, G4double &Z2, G4double &E2, G4double &K2) = 0;
+
+  void setVerboseLevel(G4int level) {
+    verboseLevel = level;
+  }
+
+  void about() {
+    //    G4cout << ";; " << aboutModel << G4endl;
+  }
+
+  void setAboutString(G4String anAbout) {
+    aboutModel = anAbout;
+  }
 
 private:
-  /**
-   * Seeds for the random number generator.
-   */
-  G4Hazard *hazard; 
-
-  /**
-   * The verbosity of the interface class.
-   */
   G4int verboseLevel;
-
-  /**
-   * Event number used in the ABLA code.
-   */
-  G4int eventNumber;
-  
-  // For Coulomb Barrier calculation
-  //  G4VCoulombBarrier * theCoulombBarrierPtr;
-  G4double CoulombBarrier;
-
-#ifdef DEBUG
-
-#endif
-
+  G4String aboutModel;
 };
 
 #endif
