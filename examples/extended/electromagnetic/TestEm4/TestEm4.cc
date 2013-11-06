@@ -29,11 +29,8 @@
 //
 // $Id$
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
-
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
@@ -59,7 +56,7 @@
 #include "G4UIExecutive.hh"
 #endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv) {
  
@@ -72,7 +69,6 @@ int main(int argc,char** argv) {
   // Construct the default run manager
   #ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
-    runManager->SetNumberOfThreads(1);
   #else
     G4RunManager* runManager = new G4RunManager;
   #endif
@@ -121,5 +117,5 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo..... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

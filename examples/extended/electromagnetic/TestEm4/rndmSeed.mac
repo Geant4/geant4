@@ -6,7 +6,7 @@
 #
 /random/setSavingFlag 1
 #
-/testem/event/printModulo 1
+/run/printProgress 1
 #
 # run 0
 #

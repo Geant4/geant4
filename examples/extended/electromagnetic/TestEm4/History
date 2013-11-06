@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+06-11-13 mma (testem4-V09-06-10)
+- rm EventActionMessenger
 
 30-09-13 I.Hrivnacova (testem4-V09-06-09) 
 - Updated for changes in analysis:

@@ -45,7 +45,9 @@ RunAction::RunAction()
  : G4UserRunAction()
 {
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  analysisManager->SetFirstHistoId(1);  
+  analysisManager->SetVerboseLevel(1);  
+  analysisManager->SetFirstHistoId(1);
+    
   // Creating histograms
   //
   analysisManager->CreateH1("1","energy (MeV) deposited in C6F6",100,0.,10.);
@@ -61,10 +63,8 @@ RunAction::~RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
-void RunAction::BeginOfRunAction(const G4Run* aRun)
+void RunAction::BeginOfRunAction(const G4Run*)
 {
-  G4cout << "\n ### Run " << aRun->GetRunID() << " start." << G4endl;
-
   // save Rndm status
   //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   G4Random::showEngineStatus();
@@ -77,19 +77,12 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //
   G4String fileName = "testem4";
   analysisManager->OpenFile(fileName);    
-  G4String extension = analysisManager->GetFileType();
-  fileName = fileName + "." + extension;
-    
-  
-  G4cout << "\n----> Histogram file is opened in " << fileName << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run* aRun)
-{
-  G4cout << "\n ### Run " << aRun->GetRunID() << " ended." << G4endl;
-  
+void RunAction::EndOfRunAction(const G4Run*)
+{  
   // show Rndm status
   G4Random::showEngineStatus();         
 

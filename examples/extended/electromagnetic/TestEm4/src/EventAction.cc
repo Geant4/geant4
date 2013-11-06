@@ -32,8 +32,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
-
-#include "EventActionMessenger.hh"
 #include "Analysis.hh"
 
 #include "G4Event.hh"
@@ -44,30 +42,19 @@
 
 EventAction::EventAction()
 :G4UserEventAction(),
- fTotalEnergyDeposit(0.),fDrawFlag("none"),fPrintModulo(10000),
- fEventMessenger(NULL)
-{
-  fEventMessenger = new EventActionMessenger(this);
-}
+ fTotalEnergyDeposit(0.)
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
-{
-  delete fEventMessenger;
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction( const G4Event* evt)
-{
- G4int evtNb = evt->GetEventID();
-
- //printing survey
- if (evtNb%fPrintModulo == 0) 
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;  
- 
- //additional initializations   
+void EventAction::BeginOfEventAction( const G4Event*)
+{ 
+ //initializations   
  fTotalEnergyDeposit = 0.;
 }
 
@@ -75,10 +62,6 @@ void EventAction::BeginOfEventAction( const G4Event* evt)
 
 void EventAction::EndOfEventAction( const G4Event*)
 {                          
-  if (fDrawFlag != "none") 
-    G4cout << " Energy deposit: " 
-           << G4BestUnit(fTotalEnergyDeposit,"Energy") << G4endl;
-
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->FillH1(1, fTotalEnergyDeposit/MeV);
 }
