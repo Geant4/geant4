@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-Nov-2013, Marc Verderi (exgflash-V09-06-03)
+- Fix event action destructor in case fNevent == 0
+- change /gps/centre 0 0 0 to /gps/pos/centre 0 0 0 to
+  clear gps deprecating command message in test.mac .
+
 30-Jul-2013, Peter Gumplinger (exgflash-V09-06-02)
 - fix MAC/clang32 compilation warnings
  

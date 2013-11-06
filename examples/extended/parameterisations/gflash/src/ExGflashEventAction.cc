@@ -53,7 +53,7 @@ fNevent(0),fDtime(0.0),fCalorimeterCollectionId(-1)
 
 ExGflashEventAction::~ExGflashEventAction()
 {
-  G4cout << "Internal Real Elapsed Time /event is: "<< fDtime /fNevent<< G4endl;
+  if ( fNevent > 0 ) G4cout << "Internal Real Elapsed Time /event is: "<< fDtime /fNevent<< G4endl;
 }
 
 
