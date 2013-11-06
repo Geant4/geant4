@@ -2203,7 +2203,7 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
   ecr=10.0;
 
   // level density parameter                                               
-  if((ald->optafan == 1)) {
+  if(ald->optafan == 1) {
     pa = (ald->av)*a + (ald->as)*std::pow(a,(2.e0/3.e0)) + (ald->ak)*std::pow(a,(1.e0/3.e0));
   }
   else {
@@ -2252,8 +2252,6 @@ void G4Abla::densniv(G4double a, G4double z, G4double ee, G4double esous, G4doub
 	parite(z,&parz);
 	if (parz > 0.e0) {
 	  e = e - 2.0*delta0/std::sqrt(a);
-	} else {
-	  e = e;
 	}
       }
     } else {                                                          

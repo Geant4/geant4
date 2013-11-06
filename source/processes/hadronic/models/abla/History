@@ -16,6 +16,10 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+6 November 2013 - Davide Mancusi (hadr-abla-V09-06-02)
+--------------------------------------------------
+- Fix clang warnings.
+
 6 November 2013 - Davide Mancusi (hadr-abla-V09-06-01)
 --------------------------------------------------
 - Remove some old unused source files.
