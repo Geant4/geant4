@@ -23,69 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm1/src/TrackingAction.cc
-/// \brief Implementation of the TrackingAction class
+/// \file electromagnetic/TestEm1/include/EventActionMessenger.hh
+/// \brief Definition of the EventActionMessenger class
 //
 // $Id$
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "TrackingAction.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "HistoManager.hh"
+#ifndef EventActionMessenger_h
+#define EventActionMessenger_h 1
 
-#include "G4Track.hh"
+#include "G4UImessenger.hh"
+#include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-TrackingAction::TrackingAction(PrimaryGeneratorAction* prim, RunAction* run)
-:G4UserTrackingAction(),fPrimary(prim), fRunAction(run)
-{ }
+class EventAction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrackingAction::PreUserTrackingAction(const G4Track*)
+class EventActionMessenger: public G4UImessenger
 {
-  //  G4cout << "ID= " << aTrack->GetTrackID() << "  e(MeV)= " 
-  //         << aTrack->GetDynamicParticle()->GetKineticEnergy()/MeV << "  "
-  //         << aTrack->GetDynamicParticle()->GetDefinition()->GetParticleName()
-  //         << G4endl;    
-}
+  public:
+    EventActionMessenger(EventAction*);
+   ~EventActionMessenger();
+    
+    virtual void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    EventAction*          fEventAction;
+    
+    G4UIdirectory*        fEventDir;   
+    G4UIcmdWithAString*   fDrawCmd;
+    G4UIcmdWithAnInteger* fPrintCmd;    
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
-{  
-  //increase nb of processed tracks 
-  //count nb of steps of this track
-  G4int   nbSteps = aTrack->GetCurrentStepNumber();
-  G4double Trleng = aTrack->GetTrackLength();
-    
-  if (aTrack->GetDefinition()->GetPDGCharge() == 0.) {
-    fRunAction->CountTraks0(1); 
-    fRunAction->CountSteps0(nbSteps);
-  
-  } else {
-    fRunAction->CountTraks1(1); 
-    fRunAction->CountSteps1(nbSteps);
-  }
-  
-  //true and projected ranges for primary particle
-  if (aTrack->GetTrackID() == 1) {
-    fRunAction->AddTrueRange(Trleng);
-    G4ThreeVector vertex = fPrimary->GetParticleGun()->GetParticlePosition();    
-    G4ThreeVector position = aTrack->GetPosition() - vertex;      
-    fRunAction->AddProjRange(position.x());
-    fRunAction->AddTransvDev(position.y());
-    fRunAction->AddTransvDev(position.z());
-    
-    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-    analysisManager->FillH1(1,Trleng);
-    analysisManager->FillH1(2,(float)nbSteps);        
-  }        
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+#endif

@@ -45,10 +45,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction( DetectorConstruction* det)
+PrimaryGeneratorAction::PrimaryGeneratorAction(
+                                               DetectorConstruction* DC)
 :G4VUserPrimaryGeneratorAction(),
  fParticleGun(0),
- fDetector(det),
+ fDetector(DC),
  fRndmBeam(0),       
  fGunMessenger(0)     
                                               

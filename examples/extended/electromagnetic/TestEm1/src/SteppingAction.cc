@@ -32,34 +32,31 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "Run.hh"
+#include "RunAction.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
 
-#include "G4RunManager.hh"
 #include "G4SteppingManager.hh"
 #include "G4VProcess.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(EventAction* event)
-:G4UserSteppingAction(), fEventAction(event)
+SteppingAction::SteppingAction(RunAction* run, EventAction* event)
+:G4UserSteppingAction(),fRunAction(run), fEventAction(event)
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-  Run* run = static_cast<Run*>(
-             G4RunManager::GetRunManager()->GetNonConstCurrentRun()); 
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
    
   G4double EdepStep = aStep->GetTotalEnergyDeposit();
-  if (EdepStep > 0.) {         run->AddEdep(EdepStep);
+  if (EdepStep > 0.) {  fRunAction->AddEdep(EdepStep);
                       fEventAction->AddEdep(EdepStep);
   }
- const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
-  if (process) run->CountProcesses(process->GetProcessName());
+  const G4VProcess* process = aStep->GetPostStepPoint()->GetProcessDefinedStep();
+  if (process) fRunAction->CountProcesses(process->GetProcessName());
 
   // step length of primary particle
   G4int ID         = aStep->GetTrack()->GetTrackID();
