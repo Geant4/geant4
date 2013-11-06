@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6th November 2013   Gabriele Cosmo   (config-V09-06-09)
+- binmake.gmk: added new include paths for processes/phonon and
+  processes/hadronic/models/abla.
+
 1st November 2013   Gabriele Cosmo   (config-V09-06-08)
 - binmake.gmk: added new include paths for geometry/solids/usolids module.
 - Removed obsolete compilation options in Darwin-g++ and Darwin-clang scripts.

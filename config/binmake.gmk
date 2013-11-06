@@ -80,13 +80,13 @@ ifndef INCFLAGS
               -I$(G4BASE)/physics_lists/util/include \
               -I$(G4BASE)/processes/management/include \
               -I$(G4BASE)/processes/cuts/include \
-              -I$(G4BASE)/processes/biasing/include \
               -I$(G4BASE)/processes/biasing/generic/include \
               -I$(G4BASE)/processes/biasing/importance/include \
               -I$(G4BASE)/processes/biasing/management/include \
               -I$(G4BASE)/processes/scoring/include \
               -I$(G4BASE)/processes/decay/include \
               -I$(G4BASE)/processes/optical/include \
+              -I$(G4BASE)/processes/phonon/include \
               -I$(G4BASE)/processes/transportation/include \
               -I$(G4BASE)/processes/parameterisation/include \
               -I$(G4BASE)/processes/electromagnetic/adjoint/include \
@@ -106,6 +106,7 @@ ifndef INCFLAGS
               -I$(G4BASE)/processes/electromagnetic/polarisation/include \
               -I$(G4BASE)/processes/hadronic/cross_sections/include \
               -I$(G4BASE)/processes/hadronic/management/include \
+              -I$(G4BASE)/processes/hadronic/models/abla/include \
               -I$(G4BASE)/processes/hadronic/models/abrasion/include \
               -I$(G4BASE)/processes/hadronic/models/binary_cascade/include \
               -I$(G4BASE)/processes/hadronic/models/cascade/cascade/include \
