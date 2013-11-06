@@ -26,6 +26,7 @@ add_subdirectory(electromagnetic)
 add_subdirectory(hadronic)
 add_subdirectory(management)
 add_subdirectory(optical)
+add_subdirectory(phonon)
 add_subdirectory(parameterisation)
 add_subdirectory(scoring)
 add_subdirectory(transportation)
@@ -34,7 +35,9 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
     include(Geant4MacroLibraryTargets)
     GEANT4_GLOBAL_LIBRARY_TARGET(NAME G4processes
         COMPONENTS
-            biasing/sources.cmake
+            biasing/management/sources.cmake
+            biasing/generic/sources.cmake
+            biasing/importance/sources.cmake
             cuts/sources.cmake
             decay/sources.cmake
             electromagnetic/adjoint/sources.cmake
@@ -54,6 +57,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             electromagnetic/xrays/sources.cmake
             hadronic/cross_sections/sources.cmake
             hadronic/management/sources.cmake
+            hadronic/models/abla/sources.cmake
             hadronic/models/abrasion/sources.cmake
             hadronic/models/binary_cascade/sources.cmake
             hadronic/models/cascade/cascade/sources.cmake
@@ -96,6 +100,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/util/sources.cmake
             management/sources.cmake
             optical/sources.cmake
+	    phonon/sources.cmake
             parameterisation/sources.cmake
             scoring/sources.cmake
             transportation/sources.cmake
