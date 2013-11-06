@@ -50,13 +50,9 @@ class Run : public G4Run
    ~Run();
 
   public:
-    void CountProcesses(const G4VProcess* process) 
-                  {fProcCounter[process]++;};                  
-                  
+    void CountProcesses(const G4VProcess* process);                  
     void ParticleCount(G4String, G4double);
-    
     void SumTrackLength (G4int,G4int,G4double,G4double,G4double,G4double);
-      
     void ComputeStatistics(); 
             
     virtual void Merge(const G4Run*);
@@ -65,10 +61,19 @@ class Run : public G4Run
     DetectorConstruction* fDetector;
     
     std::map<const G4VProcess*,G4int> fProcCounter;        
-    std::map<G4String,G4int>    fParticleCount;
-    std::map<G4String,G4double> fEmean;
-    std::map<G4String,G4double> fEmin;
-    std::map<G4String,G4double> fEmax;
+
+    struct ParticleData {
+     ParticleData()
+       : fCount(0), fEmean(0.), fEmin(0.), fEmax(0.) {}
+     ParticleData(G4int count, G4double ekin, G4double emin, G4double emax)
+       : fCount(count), fEmean(ekin), fEmin(emin), fEmax(emax) {}
+     G4int     fCount;
+     G4double  fEmean;
+     G4double  fEmin;
+     G4double  fEmax;
+    }; 
+    
+    std::map<G4String,ParticleData>  fParticleDataMap;
         
     G4int fNbStep1, fNbStep2;
     G4double fTrackLen1, fTrackLen2;

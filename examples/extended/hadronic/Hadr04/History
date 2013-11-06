@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-11-13 I. Hrivnacova (exhadr04-V09-06-04)
+- Improved Run class:  define just one map of struct ParticleData
+  instead of four maps of G4int/G4double.
+
 04-11-13 I. Hrivnacova (exhadr04-V09-06-03)
 - Added merging for maps, fixed endOfRunAction,
   use G4Random instead of CLHEP::Random

@@ -53,14 +53,35 @@ Run::~Run()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void Run::CountProcesses(const G4VProcess* process) 
+{
+  std::map<const G4VProcess*,G4int>::iterator it = fProcCounter.find(process);
+  if ( it == fProcCounter.end()) {
+    fProcCounter[process] = 1;
+  }
+  else {
+    fProcCounter[process]++; 
+  }
+}                 
+                  
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Run::ParticleCount(G4String name, G4double Ekin)
 {
-  fParticleCount[name]++;
-  fEmean[name] += Ekin;
-  //update min max
-  if (fParticleCount[name] == 1) fEmin[name] = fEmax[name] = Ekin;
-  if (Ekin < fEmin[name]) fEmin[name] = Ekin;
-  if (Ekin > fEmax[name]) fEmax[name] = Ekin;  
+  std::map<G4String, ParticleData>::iterator it = fParticleDataMap.find(name);
+  if ( it == fParticleDataMap.end()) {
+    fParticleDataMap[name] = ParticleData(1, Ekin, Ekin, Ekin);
+  }
+  else {
+    ParticleData& data = it->second;
+    data.fCount++;
+    data.fEmean += Ekin;
+    //update min max
+    G4double emin = data.fEmin;
+    if (Ekin < emin) data.fEmin = Ekin;
+    G4double emax = data.fEmax;
+    if (Ekin > emax) data.fEmax = Ekin; 
+  }   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -134,12 +155,14 @@ void Run::ComputeStatistics()
  //
  G4cout << "\n List of generated particles:" << G4endl;
      
- std::map<G4String,G4int>::iterator ip;               
- for (ip = fParticleCount.begin(); ip != fParticleCount.end(); ip++) { 
-    G4String name = ip->first;
-    G4int count   = ip->second;
-    G4double eMean = fEmean[name]/count;
-    G4double eMin = fEmin[name], eMax = fEmax[name];    
+ std::map<G4String,ParticleData>::iterator itn;               
+ for (itn = fParticleDataMap.begin(); itn != fParticleDataMap.end(); itn++) { 
+    G4String name = itn->first;
+    ParticleData data = itn->second;
+    G4int count = data.fCount;
+    G4double eMean = data.fEmean/count;
+    G4double eMin = data.fEmin;
+    G4double eMax = data.fEmax;    
          
     G4cout << "  " << std::setw(13) << name << ": " << std::setw(7) << count
            << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
@@ -153,9 +176,8 @@ void Run::ComputeStatistics()
            
   // remove all contents in fProcCounter 
   fProcCounter.clear();
-  // remove all contents in fParticleCount
-  fParticleCount.clear(); 
-  fEmean.clear();  fEmin.clear(); fEmax.clear();  
+  // remove all contents in fCount
+  fParticleDataMap.clear(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -177,39 +199,41 @@ void Run::Merge(const G4Run* run)
   std::map<const G4VProcess*,G4int>::const_iterator itp;
   for ( itp = localRun->fProcCounter.begin();
         itp != localRun->fProcCounter.end(); ++itp ) {
-      fProcCounter[itp->first] += itp->second;
+
+    const G4VProcess* process = itp->first;
+    G4int localCount = itp->second;
+    if ( fProcCounter.find(process) == fProcCounter.end()) {
+      fProcCounter[process] = localCount;
+    }
+    else {
+      fProcCounter[process] += localCount;
+    }  
   }    
        
-  std::map<G4String,G4int>::const_iterator itn;
-  for (itn = localRun->fParticleCount.begin(); 
-       itn != localRun->fParticleCount.end(); ++itn) {
-     fParticleCount[itn->first] += itn->second;
+  std::map<G4String,ParticleData>::const_iterator itn;
+  for (itn = localRun->fParticleDataMap.begin(); 
+       itn != localRun->fParticleDataMap.end(); ++itn) {
+    
+    G4String name = itn->first;
+    const ParticleData& localData = itn->second;   
+    if ( fParticleDataMap.find(name) == fParticleDataMap.end()) {
+      fParticleDataMap[name]
+       = ParticleData(localData.fCount, 
+                      localData.fEmean, 
+                      localData.fEmin, 
+                      localData.fEmax);
+    }
+    else {
+      ParticleData& data = fParticleDataMap[name];   
+      data.fCount += localData.fCount;
+      data.fEmean += localData.fEmean;
+      G4double emin = localData.fEmin;
+      if (emin < data.fEmin) data.fEmin = emin;
+      G4double emax = localData.fEmax;
+      if (emax > data.fEmax) data.fEmax = emax; 
+    }   
   }
 
-  std::map<G4String,G4double>::const_iterator itd;
-  for (itd = localRun->fEmean.begin(); 
-       itd != localRun->fEmean.end(); ++itd) {
-     fEmean[itd->first] += itd->second;
-  }   
-
-  for (itd = localRun->fEmin.begin(); 
-       itd != localRun->fEmin.end(); ++itd) {
-     G4double eminl = itd->second;
-     if ( fEmin.find(itd->first) == fEmin.end() ||
-          eminl < fEmin[itd->first] ) {
-       fEmin[itd->first] = eminl;
-     }
-  }
-
-  for (itd = localRun->fEmax.begin(); 
-       itd != localRun->fEmax.end(); ++itd) {
-     G4double emaxl = itd->second;
-     if ( fEmax.find(itd->first) == fEmax.end() ||
-          emaxl > fEmin[itd->first] ) {
-       fEmax[itd->first] = emaxl;
-     }
-  }
-  
   G4Run::Merge(run); 
 } 
 
