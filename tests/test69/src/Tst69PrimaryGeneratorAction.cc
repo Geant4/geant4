@@ -46,11 +46,11 @@ Tst69PrimaryGeneratorAction::Tst69PrimaryGeneratorAction()
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
   G4ParticleDefinition* particle 
-    = particleTable->FindParticle(particleName="e-");
+    = particleTable->FindParticle(particleName="proton");
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
   particleGun->SetParticleEnergy(1.*GeV);
-  particleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,0.*cm));
+  particleGun->SetParticlePosition(G4ThreeVector(-100.*cm,0.*cm,0.*cm));
 
 }
 

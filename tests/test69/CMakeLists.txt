@@ -1,25 +1,60 @@
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 project(test69)
-find_package(Geant4 REQUIRED)
+find_package(Geant4 REQUIRED ui_all vis_all)
 include(${Geant4_USE_FILE})
+
+# write the location of the macros in the Tst69MacroLocation.hh header
+configure_file(${PROJECT_SOURCE_DIR}/include/Tst69MacroLocation.hh.in
+               ${PROJECT_BINARY_DIR}/include/Tst69MacroLocation.hh)
+include_directories(BEFORE ${PROJECT_BINARY_DIR}/include)
 
 GEANT4_EXECUTABLE(test69 test69.cc src/*.cc)
 
-file(GLOB _MACRO_FILES ${CMAKE_CURRENT_SOURCE_DIR}/macros/*.in)
+#----------------------------------------------------------------------------
+# Copy all macros to the build directory, i.e. the directory in which we
+# build test69. This is so that we can run the executable directly because it
+# relies on these scripts being in the current working directory.
+#
+set(TEST69_MACROS
+  p_40GeV_mix.in
+  C12_12GeV_mix.in
+  )
+
+set(TEST69_AUXILIARY_MACROS
+  vis.mac
+  )
+
+foreach(_macro ${TEST69_MACROS} ${TEST69_AUXILIARY_MACROS})
+  configure_file(
+    ${PROJECT_SOURCE_DIR}/macros/${_macro}
+    ${PROJECT_BINARY_DIR}/macros/${_macro}
+    COPYONLY
+    )
+endforeach()
+
+set(TEST69_PHYSLISTS
+  QGSP_INCLXX
+  QGSP_INCLXX_HP
+  FTFP_INCLXX
+  FTFP_INCLXX_HP
+  )
 
 #---Test definitions----------------------------------------------------------------------------------
 # We define a test69-build test that only builds the executable.
 # We also define a normal test for each existing .in file.
 GEANT4_ADD_TEST(test69-build BUILD test69 LABELS Nightly Continuous) 
 
-foreach(_macro_file ${_MACRO_FILES})
-  get_filename_component(_test_extension ${_macro_file} NAME_WE)
+foreach(_macro ${TEST69_MACROS})
+  get_filename_component(_macro_name ${_macro} NAME_WE)
 
-  GEANT4_ADD_TEST(test69-${_test_extension}
-                   COMMAND test69 ${_macro_file}
-                   DEPENDS test69-build
-                   LABELS Nightly Continuous
-                   ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+  foreach(_list ${TEST69_PHYSLISTS})
 
-endforeach(_macro_file _MACRO_FILES)
+    GEANT4_ADD_TEST(test69-${_macro_name}-${_list}
+                    COMMAND test69 ${PROJECT_BINARY_DIR}/macros/${_macro}
+                    DEPENDS test69-build
+                    LABELS Nightly Continuous
+                    ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} "TEST69_PHYSLIST=${_list}")
+
+  endforeach(_list ${TEST69_PHYSLISTS})
+endforeach(_macro TEST69_MACROS)
 

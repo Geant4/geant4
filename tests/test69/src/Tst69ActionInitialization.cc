@@ -42,8 +42,8 @@ Tst69ActionInitialization::~Tst69ActionInitialization()
 }
 
 void Tst69ActionInitialization::Build() const {
+  SetUserAction(new Tst69RunAction);
   SetUserAction(new Tst69PrimaryGeneratorAction);
-  SetUserAction(new Tst69StackingAction);
 }
 
 void Tst69ActionInitialization::BuildForMaster() const {

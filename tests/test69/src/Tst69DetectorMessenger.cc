@@ -46,13 +46,13 @@ Tst69DetectorMessenger::Tst69DetectorMessenger(Tst69DetectorConstruction * myDC)
 
   selMatCmd = new G4UIcmdWithAString("/mydet/SelectMaterial",this);
   selMatCmd->SetGuidance("Select Material of the SimpleBox.");
-  selMatCmd->SetGuidance("  Choice : H, Li, C, Si, Cu, Pb (default), U, Th");
+  selMatCmd->SetGuidance("  Choice : H, Li, C, Si, Cu, Pb (default), U, Th, mix");
   selMatCmd->SetParameterName("choice",true);
-  selMatCmd->SetDefaultValue("Pb");
-  selMatCmd->SetCandidates("H Li C Si Cu Pb U Th");
+  selMatCmd->SetDefaultValue("mix");
+  selMatCmd->SetCandidates("H Li C Si Cu Pb U Th mix");
   selMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  myDetector->SelectMaterial(defParam="Pb");
+  myDetector->SelectMaterial(defParam="mix");
 }
 
 void Tst69DetectorMessenger::SetNewValue(G4UIcommand * command,G4String newValues)

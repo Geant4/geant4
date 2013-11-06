@@ -42,12 +42,13 @@
 #include "G4PVPlacement.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
+#include "G4Pow.hh"
 
 Tst69DetectorConstruction::Tst69DetectorConstruction()
-  :simpleBoxLog(0),selectedMaterial(0),theH(0),theLi(0),theC(0),theSi(0),theCu(0),thePb(0),theU(0),theTh(0)
+  :simpleBoxLog(0),selectedMaterial(0),theH(0),theLi(0),theC(0),theSi(0),theCu(0),thePb(0),theU(0),theTh(0),theMix(0)
 {
   detectorMessenger = new Tst69DetectorMessenger(this);
-  materialChoice = "Pb";
+  materialChoice = "mix";
 }
 
 Tst69DetectorConstruction::~Tst69DetectorConstruction()
@@ -129,22 +130,62 @@ void Tst69DetectorConstruction::SelectMaterialPointer()
     theTh = new G4Material(name="Thorium", z=90., a, density);
   }
 
+  if(!theMix) {
+    // A fictitious mixed material with element abundances roughly inversely
+    // proportional to the cross section seen by a high-energy proton
+    G4Pow *g4pow = G4Pow::GetInstance();
+    G4Element* elH  = new G4Element("Hydrogen", "H", 1., 1.*g/mole);
+    G4double weightH = 0.5/g4pow->A23(elH->GetA());
+    G4Element* elHe = new G4Element("Helium", "He", 2., 4.*g/mole);
+    G4double weightHe = 1./g4pow->A23(elHe->GetA());
+    G4Element* elC  = new G4Element("Carbon", "C", 6., 12.*g/mole);
+    G4double weightC = 1./g4pow->A23(elC->GetA());
+    G4Element* elSi  = new G4Element("Silicon", "Si", 14., 28.*g/mole);
+    G4double weightSi = 1./g4pow->A23(elSi->GetA());
+    G4Element* elCu  = new G4Element("Copper", "Cu", 29., 63.*g/mole);
+    G4double weightCu = 1./g4pow->A23(elCu->GetA());
+    G4Element* elPb  = new G4Element("Lead", "Pb", 82., 208.*g/mole);
+    G4double weightPb = 1./g4pow->A23(elPb->GetA());
+    G4Element* elU  = new G4Element("Uranium", "U", 92., 238.*g/mole);
+    G4double weightU = 1./g4pow->A23(elU->GetA());
+
+    const G4double totalWeight = weightH + weightHe + weightC + weightSi + weightCu + weightPb + weightU;
+    weightH /= totalWeight;
+    weightHe /= totalWeight;
+    weightC /= totalWeight;
+    weightSi /= totalWeight;
+    weightCu /= totalWeight;
+    weightPb /= totalWeight;
+    weightU /= totalWeight;
+
+    theMix = new G4Material("mix", 4.*g/cm3, 7);
+    theMix->AddElement(elH, weightH);
+    theMix->AddElement(elHe, weightHe);
+    theMix->AddElement(elC, weightC);  
+    theMix->AddElement(elSi, weightSi);  
+    theMix->AddElement(elCu, weightCu);  
+    theMix->AddElement(elPb, weightPb);  
+    theMix->AddElement(elU, weightU);  
+  }
+
   if(materialChoice=="H")
-  { selectedMaterial = theH; }
+    selectedMaterial = theH;
   else if(materialChoice=="Li")
-  { selectedMaterial = theLi; }
+    selectedMaterial = theLi;
   else if(materialChoice=="C")
-  { selectedMaterial = theC; }
+    selectedMaterial = theC;
   else if(materialChoice=="Si")
-  { selectedMaterial = theSi; }
+    selectedMaterial = theSi;
   else if(materialChoice=="Cu")
-  { selectedMaterial = theCu; }
+    selectedMaterial = theCu;
   else if(materialChoice=="U")
-    {selectedMaterial = theU; }
+    selectedMaterial = theU;
   else if(materialChoice=="Th")
-    {selectedMaterial = theTh; }
+    selectedMaterial = theTh;
+  else if(materialChoice=="mix")
+    selectedMaterial = theMix;
   else
-  { selectedMaterial = thePb; }
+    selectedMaterial = thePb;
 
   if(simpleBoxLog)
   { simpleBoxLog->SetMaterial(selectedMaterial); }

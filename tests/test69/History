@@ -12,6 +12,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6 November 2013, Davide Mancusi (test69-V09-06-03)
+- Overhaul of test69.
+- Add "mix" material, which should help with exercising different sectors of
+  the physics list.
+- Reduce the number of test cases to 2:
+  o 40-GeV p + mix
+  o 12-GeV C12 + mix
+- Add the possibility to test different physics lists via an envvar.
+- Define unit tests for all the INCLXX-based physics lists.
+- Add visualisation and UIExecutive in interactive mode.
+
 21 May 2013, Davide Mancusi (test69-V09-06-01,test69-V09-06-02)
 - Fix: test69 was actually NOT testing the reactions due to particles being
   prematurely killed.

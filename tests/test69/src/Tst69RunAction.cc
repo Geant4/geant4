@@ -33,6 +33,15 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 
+#include "G4HadronicInteraction.hh"
+#include "G4HadronicInteractionRegistry.hh"
+
+#include "G4INCLXXInterface.hh"
+#include "G4INCLXXInterfaceStore.hh"
+
+//#include "G4AblaInterface.hh"
+#include "Randomize.hh"
+
 Tst69RunAction::Tst69RunAction()
 {
 }
@@ -43,6 +52,17 @@ Tst69RunAction::~Tst69RunAction()
 
 void Tst69RunAction::BeginOfRunAction(const G4Run* )
 {
+/*  G4HadronicInteraction *interaction = G4HadronicInteractionRegistry::Instance()
+    ->FindModel(G4INCLXXInterfaceStore::GetInstance()->getINCLXXVersionName());
+  G4INCLXXInterface *theINCLInterface = static_cast<G4INCLXXInterface*>(interaction);
+  if(theINCLInterface) {
+    interaction = G4HadronicInteractionRegistry::Instance()->FindModel("ABLA");
+    G4AblaInterface *theAblaInterface = static_cast<G4AblaInterface*>(interaction);
+    if(!theAblaInterface)
+      theAblaInterface = new G4AblaInterface;
+    G4cout << "Coupling INCLXX to ABLA" << G4endl;
+    theINCLInterface->SetDeExcitation(theAblaInterface);
+  }*/
 }
 
 void Tst69RunAction::EndOfRunAction(const G4Run*)
