@@ -11,6 +11,7 @@
 #
 #------------------------------------------------------------------------------
 
+add_subdirectory(abla)
 add_subdirectory(abrasion)
 add_subdirectory(binary_cascade)
 add_subdirectory(cascade)
