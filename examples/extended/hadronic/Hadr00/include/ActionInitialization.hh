@@ -23,62 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr00/include/DetectorMessenger.hh
-/// \brief Definition of the DetectorMessenger class
 //
-// $Id$
+// $Id: ActionInitialization.hh 66241 2012-12-13 18:34:42Z gunter $
 //
-//
-/////////////////////////////////////////////////////////////////////////
-//
-// DetectorMessenger
-//
-// Created: 20.06.08 V.Ivanchenko
-//
-// Modified:
-//
-////////////////////////////////////////////////////////////////////////
-//
+// 
 
-#ifndef DetectorMessenger_h
-#define DetectorMessenger_h 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-class DetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithABool;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+#include "G4VUserActionInitialization.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class RunAction;
+
+class ActionInitialization : public G4VUserActionInitialization
 {
 public:
+  
+  ActionInitialization();
 
-  DetectorMessenger(DetectorConstruction* );
-  virtual ~DetectorMessenger();
+  virtual ~ActionInitialization();
 
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  virtual void Build() const;
+
+  virtual void BuildForMaster() const;
 
 private:
 
-  DetectorConstruction* fDetector;
-
-  G4UIdirectory*             ftestDir;
-  G4UIcmdWithAString*        fmatCmd;
-  G4UIcmdWithAString*        fmat1Cmd;
-  G4UIcmdWithADoubleAndUnit* frCmd;
-  G4UIcmdWithADoubleAndUnit* flCmd;
-  G4UIcmdWithoutParameter*   fupdateCmd;
-
+  RunAction* masterRunAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

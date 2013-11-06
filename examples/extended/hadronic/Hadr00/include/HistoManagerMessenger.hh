@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr00/include/DetectorMessenger.hh
-/// \brief Definition of the DetectorMessenger class
+/// \file hadronic/Hadr00/include/HistoManagerMessenger.hh
+/// \brief Definition of the HistoManagerMessenger class
 //
-// $Id$
+// $Id: HistoManagerMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 //
 /////////////////////////////////////////////////////////////////////////
 //
-// DetectorMessenger
+// HistoManagerMessenger
 //
 // Created: 20.06.08 V.Ivanchenko
 //
@@ -40,13 +40,13 @@
 ////////////////////////////////////////////////////////////////////////
 //
 
-#ifndef DetectorMessenger_h
-#define DetectorMessenger_h 1
+#ifndef HistoManagerMessenger_h
+#define HistoManagerMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
 
-class DetectorConstruction;
+class HistoManager;
 class G4UIdirectory;
 class G4UIcmdWithABool;
 class G4UIcmdWithAString;
@@ -56,26 +56,29 @@ class G4UIcmdWithoutParameter;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class HistoManagerMessenger: public G4UImessenger
 {
 public:
 
-  DetectorMessenger(DetectorConstruction* );
-  virtual ~DetectorMessenger();
+  HistoManagerMessenger(HistoManager* );
+  virtual ~HistoManagerMessenger();
 
   virtual void SetNewValue(G4UIcommand*, G4String);
 
 private:
 
-  DetectorConstruction* fDetector;
+  HistoManager*              fHisto;
 
-  G4UIdirectory*             ftestDir;
-  G4UIcmdWithAString*        fmatCmd;
-  G4UIcmdWithAString*        fmat1Cmd;
-  G4UIcmdWithADoubleAndUnit* frCmd;
-  G4UIcmdWithADoubleAndUnit* flCmd;
-  G4UIcmdWithoutParameter*   fupdateCmd;
-
+  G4UIcmdWithAnInteger*      fbinCmd;
+  G4UIcmdWithAnInteger*      fnOfAbsCmd;
+  G4UIcmdWithAnInteger*      fverbCmd;
+  G4UIcmdWithAString*        fcsCmd;
+  G4UIcmdWithAString*        fpartCmd;
+  G4UIcmdWithADoubleAndUnit* fe1Cmd;
+  G4UIcmdWithADoubleAndUnit* fe2Cmd;
+  G4UIcmdWithADoubleAndUnit* fp1Cmd;
+  G4UIcmdWithADoubleAndUnit* fp2Cmd;
+  G4UIcmdWithAString*        fFCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

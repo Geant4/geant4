@@ -15,6 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-11-13  V.Ivanchenko (exhadr00-V09-06-04)
+- Fixed for MT
+
+05-11-13  V.Ivanchenko (exhadr00-V09-06-03)
+- Fixed for sequential
+
+05-11-13  V.Ivanchenko (exhadr00-V09-06-02)
+- Appling review recommendations, migration to MT, simplified access 
+    to histograms
+
 05-06-13  I. Hrivnacova (exhadr00-V09-06-01)
 - Applied coding guidelines (data members names and initialization, 
   tabulations, separators)

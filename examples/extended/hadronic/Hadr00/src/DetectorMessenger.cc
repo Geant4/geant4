@@ -56,22 +56,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:G4UImessenger(), fDetector(Det),
- ftestDir(0),
- fmatCmd(0),
- fmat1Cmd(0),
- frCmd(0),
- flCmd(0),
- fbinCmd(0),
- fnOfAbsCmd(0),
- fverbCmd(0),
- fcsCmd(0),
- fpartCmd(0),
- fe1Cmd(0),
- fe2Cmd(0),
- fp1Cmd(0),
- fp2Cmd(0),
- fupdateCmd(0)
+:G4UImessenger(), fDetector(Det)
 {
   ftestDir = new G4UIdirectory("/testhadr/");
   ftestDir->SetGuidance(" Hadronic Extended Example.");
@@ -100,60 +85,12 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   flCmd->SetRange("length>0");
   flCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fbinCmd = new G4UIcmdWithAnInteger("/testhadr/nBinsE",this);
-  fbinCmd->SetGuidance("Set number of bins for energy");
-  fbinCmd->SetParameterName("NEbins",false);
-  fbinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fnOfAbsCmd = new G4UIcmdWithAnInteger("/testhadr/nBinsP",this);
-  fnOfAbsCmd->SetGuidance("Set number of bins for momentum");
-  fnOfAbsCmd->SetParameterName("NPbins",false);
-  fnOfAbsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
   fupdateCmd = new G4UIcmdWithoutParameter("/testhadr/update",this);
   fupdateCmd->SetGuidance("Update geometry.");
   fupdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
   fupdateCmd->SetGuidance("if you changed geometrical value(s)");
   fupdateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fpartCmd = new G4UIcmdWithAString("/testhadr/particle",this);
-  fpartCmd->SetGuidance("Set particle name");
-  fpartCmd->SetParameterName("Particle",false);
-  fpartCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fcsCmd = new G4UIcmdWithAString("/testhadr/targetElm",this);
-  fcsCmd->SetGuidance("Set element name");
-  fcsCmd->SetParameterName("Elm",false);
-  fcsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fe1Cmd = new G4UIcmdWithADoubleAndUnit("/testhadr/minEnergy",this);
-  fe1Cmd->SetGuidance("Set min kinetic energy");
-  fe1Cmd->SetParameterName("eMin",false);
-  fe1Cmd->SetUnitCategory("Energy");
-  fe1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fe2Cmd = new G4UIcmdWithADoubleAndUnit("/testhadr/maxEnergy",this);
-  fe2Cmd->SetGuidance("Set max kinetic energy");
-  fe2Cmd->SetParameterName("eMax",false);
-  fe2Cmd->SetUnitCategory("Energy");
-  fe2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fp1Cmd = new G4UIcmdWithADoubleAndUnit("/testhadr/minMomentum",this);
-  fp1Cmd->SetGuidance("Set min momentum");
-  fp1Cmd->SetParameterName("pMin",false);
-  fp1Cmd->SetUnitCategory("Energy");
-  fp1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fp2Cmd = new G4UIcmdWithADoubleAndUnit("/testhadr/maxMomentum",this);
-  fp2Cmd->SetGuidance("Set max momentum");
-  fp2Cmd->SetParameterName("pMax",false);
-  fp2Cmd->SetUnitCategory("Energy");
-  fp2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fverbCmd = new G4UIcmdWithAnInteger("/testhadr/verbose",this);
-  fverbCmd->SetGuidance("Set verbose for ");
-  fverbCmd->SetParameterName("verb",false);
-  fverbCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -164,23 +101,14 @@ DetectorMessenger::~DetectorMessenger()
   delete fmat1Cmd;
   delete frCmd;
   delete flCmd;
-  delete fnOfAbsCmd;
   delete fupdateCmd;
   delete ftestDir;
-  delete fpartCmd;
-  delete fcsCmd;
-  delete fe1Cmd;
-  delete fe2Cmd;
-  delete fp1Cmd;
-  delete fp2Cmd;
-  delete fverbCmd;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 {
-  HistoManager* histo = HistoManager::GetPointer();
   if( command == fmatCmd ) {
     fDetector->SetTargetMaterial(newValue);
   } else if( command == fmat1Cmd ) {
@@ -191,24 +119,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fDetector->SetTargetLength(flCmd->GetNewDoubleValue(newValue));
   } else if( command == fupdateCmd ) {
     fDetector->UpdateGeometry();
-  } else if( command == fbinCmd ) {
-    histo->SetNumberOfBinsE(fbinCmd->GetNewIntValue(newValue));
-  } else if( command == fnOfAbsCmd ) { 
-    histo->SetNumberOfBinsP(fnOfAbsCmd->GetNewIntValue(newValue));
-  } else if( command == fverbCmd ) {
-    histo->SetVerbose(fverbCmd->GetNewIntValue(newValue));
-  } else if( command == fpartCmd ) {
-    histo->SetParticleName(newValue);
-  } else if( command == fcsCmd ) {
-    histo->SetElementName(newValue);
-  } else if( command == fe1Cmd ) { 
-    histo->SetMinKinEnergy(fe1Cmd->GetNewDoubleValue(newValue));
-  } else if( command == fe2Cmd ) { 
-    histo->SetMaxKinEnergy(fe2Cmd->GetNewDoubleValue(newValue));
-  } else if( command == fp1Cmd ) { 
-    histo->SetMinMomentum(fp1Cmd->GetNewDoubleValue(newValue));
-  } else if( command == fp2Cmd ) { 
-    histo->SetMaxMomentum(fp2Cmd->GetNewDoubleValue(newValue));
   }
 }
 

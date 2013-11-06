@@ -43,25 +43,36 @@
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Threading.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction() 
-: G4UserRunAction()
-{}
+{
+  fHisto = new HistoManager();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{}
+{
+  delete fHisto;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  G4int id = aRun->GetRunID();
-  G4cout << "### Run " << id << " start" << G4endl;
-  (HistoManager::GetPointer())->BeginOfRun();
+  G4bool show = true;
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread() == true) { show = false; }
+#endif
+
+  if(show) {
+    G4int id = aRun->GetRunID();
+    G4cout << "### Run " << id << " start" << G4endl;
+    fHisto->BeginOfRun();
+  }
 
 #ifdef G4VIS_USE
   G4UImanager* UI = G4UImanager::GetUIpointer();
@@ -80,13 +91,18 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-
-  G4cout << "RunAction: End of run actions are started" << G4endl;
-  (HistoManager::GetPointer())->EndOfRun();
-
+  G4bool show = true;
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsWorkerThread() == true) { show = false; }
+#endif
+  if(show) {
+    G4cout << "RunAction: End of run actions are started" << G4endl;
+    fHisto->EndOfRun();
+  }
 #ifdef G4VIS_USE
-  if (G4VVisManager::GetConcreteInstance())
+  if (G4VVisManager::GetConcreteInstance()) {
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
+  }
 #endif
 
 }

@@ -59,30 +59,17 @@
 #include "G4StableIsotopes.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "Histo.hh"
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-HistoManager* HistoManager::fManager = 0;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-HistoManager* HistoManager::GetPointer()
-{
-  if(!fManager) {
-    static HistoManager manager;
-    fManager = &manager;
-  }
-  return fManager;
-}
+#include "HistoManagerMessenger.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::HistoManager()
- : fHisto(0), fNeutron(0)
 {
-  fHisto     = new Histo();
+  fAnalysisManager = 0;
+  fHistoName = "hadr00";
+
   fNeutron   = G4Neutron::Neutron();
+  fMessenger = new HistoManagerMessenger(this);
   fVerbose   = 1;
 
   fParticleName  = "proton";
@@ -95,17 +82,13 @@ HistoManager::HistoManager()
 
   fBinsE    = 800;
   fBinsP    = 700;
-
-  fHisto->SetVerbose(fVerbose);
-
-  fIsInitialised = false;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoManager::~HistoManager()
 {
-  delete fHisto;
+  delete fMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -119,45 +102,34 @@ void HistoManager::BeginOfRun()
 
   //G4cout<<"e1= "<<e1<<" e2= "<<e2<<" p1= "<<p1<<" p2= "<<p2<<G4endl;
 
-  if(fIsInitialised) {
-    fHisto->SetHisto1D(0,fBinsP,p1,p2,1.0);
-    fHisto->SetHisto1D(1,fBinsE,e1,e2,1.0);
-    fHisto->SetHisto1D(2,fBinsP,p1,p2,1.0);
-    fHisto->SetHisto1D(3,fBinsE,e1,e2,1.0);
-    fHisto->SetHisto1D(4,fBinsE,e1,e2,1.0);
-    fHisto->SetHisto1D(5,fBinsE,e1,e2,1.0);
-    fHisto->SetHisto1D(6,fBinsE,e1,e2,1.0);
-    fHisto->SetHisto1D(7,fBinsE,e1,e2,1.0);
+  fAnalysisManager = G4AnalysisManager::Instance();
+  fAnalysisManager->OpenFile(fHistoName+".root"); 
+  fAnalysisManager->SetFirstHistoId(1);
 
-  } else {
-    fHisto->Add1D("h1",
-     "Elastic cross section (barn,1.0) as a functions of log10(p/GeV)",
-                  fBinsP,p1,p2,1.0);
-    fHisto->Add1D("h2",
+  fAnalysisManager->CreateH1("h1",
+     "Elastic cross section (barn) as a functions of log10(p/GeV)",
+                  fBinsP,p1,p2);
+  fAnalysisManager->CreateH1("h2",
      "Elastic cross section (barn) as a functions of log10(E/MeV)",
-                  fBinsE,e1,e2,1.0);
-    fHisto->Add1D("h3",
+                  fBinsE,e1,e2);
+  fAnalysisManager->CreateH1("h3",
      "Inelastic cross section (barn) as a functions of log10(p/GeV)",
-                  fBinsP,p1,p2,1.0);
-    fHisto->Add1D("h4",
+                  fBinsP,p1,p2);
+  fAnalysisManager->CreateH1("h4",
      "Inelastic cross section (barn) as a functions of log10(E/MeV)",
-                  fBinsE,e1,e2,1.0);
-    fHisto->Add1D("h5",
+                  fBinsE,e1,e2);
+  fAnalysisManager->CreateH1("h5",
      "Capture cross section (barn) as a functions of log10(E/MeV)",
-                  fBinsE,e1,e2,1.0);
-    fHisto->Add1D("h6",
+                  fBinsE,e1,e2);
+  fAnalysisManager->CreateH1("h6",
      "Fission cross section (barn) as a functions of log10(E/MeV)",
-                  fBinsE,e1,e2,1.0);
-    fHisto->Add1D("h7",
+                  fBinsE,e1,e2);
+  fAnalysisManager->CreateH1("h7",
      "Charge exchange cross section (barn) as a functions of log10(E/MeV)",
-                  fBinsE,e1,e2,1.0);
-    fHisto->Add1D("h8",
+                  fBinsE,e1,e2);
+  fAnalysisManager->CreateH1("h8",
      "Total cross section (barn) as a functions of log10(E/MeV)",
-                  fBinsE,e1,e2,1.0);
-  }
-
-  fIsInitialised = true;
-  fHisto->Book();  
+                  fBinsE,e1,e2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -217,25 +189,25 @@ void HistoManager::EndOfRun()
     xs = store->GetElasticCrossSectionPerAtom(particle,e,elm,mat);
     xtot = xs;
     if(fVerbose>0) G4cout << std::setw(12) << xs/barn;  
-    fHisto->Fill(1, x, xs/barn);    
+    fAnalysisManager->FillH1(2, x, xs/barn);    
     xs = store->GetInelasticCrossSectionPerAtom(particle,e,elm,mat);
     xtot += xs;
     if(fVerbose>0) G4cout << " " << std::setw(12) << xs/barn;  
-    fHisto->Fill(3, x, xs/barn);    
+    fAnalysisManager->FillH1(4, x, xs/barn);    
     if(particle == fNeutron) {
       xs = store->GetCaptureCrossSectionPerAtom(particle,e,elm,mat);
       xtot += xs;
       if(fVerbose>0) G4cout << " " << std::setw(12) << xs/barn;  
-      fHisto->Fill(4, x, xs/barn);    
+      fAnalysisManager->FillH1(5, x, xs/barn);    
       xs = store->GetFissionCrossSectionPerAtom(particle,e,elm,mat);
       xtot += xs;
       if(fVerbose>0) G4cout << " " << std::setw(12) << xs/barn;  
-      fHisto->Fill(5, x, xs/barn);    
+      fAnalysisManager->FillH1(6, x, xs/barn);    
     }
     xs = store->GetChargeExchangeCrossSectionPerAtom(particle,e,elm,mat);
     if(fVerbose>0) G4cout << " " << std::setw(12) << xtot/barn << G4endl;   
-    fHisto->Fill(6, x, xs/barn);    
-    fHisto->Fill(7, x, xtot/barn);    
+    fAnalysisManager->FillH1(7, x, xs/barn);    
+    fAnalysisManager->FillH1(8, x, xtot/barn);    
   }
 
   x = p1 - dp*0.5; 
@@ -244,16 +216,19 @@ void HistoManager::EndOfRun()
     p  = std::pow(10.,x)*GeV;
     e  = std::sqrt(p*p + mass*mass) - mass;
     xs = store->GetElasticCrossSectionPerAtom(particle,e,elm,mat);
-    fHisto->Fill(0, x, xs/barn);    
+    fAnalysisManager->FillH1(1, x, xs/barn);    
     xs = store->GetInelasticCrossSectionPerAtom(particle,e,elm,mat);
-    fHisto->Fill(2, x, xs/barn); 
+    fAnalysisManager->FillH1(3, x, xs/barn); 
   }
   if(fVerbose > 0) {
     G4cout << "-------------------------------------------------------------" 
            << G4endl;
   }
   G4cout.precision(prec);
-  fHisto->Save();
+  fAnalysisManager->Write();
+  fAnalysisManager->CloseFile();
+
+  delete fAnalysisManager;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -261,7 +236,6 @@ void HistoManager::EndOfRun()
 void HistoManager::SetVerbose(G4int val)        
 {
   fVerbose = val; 
-  fHisto->SetVerbose(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
