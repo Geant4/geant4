@@ -1,0 +1,32 @@
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+5 November 2013  Michael Kelsey
+-------------------------------
+NEW PACKAGE for Release 10, containing processes for phonon propagation
+and interaction in materials:
+
+	README
+	G4LatticeManager.hh,.cc
+	G4LatticeReader.hh,.cc
+	G4PhononDownconversion.hh,.cc
+	G4PhononPolarization.hh,.cc
+	G4PhononReflection.hh,.cc
+	G4PhononScattering.hh,.cc
+	G4PhononTrackMap.hh,.cc
+	G4VPhononProcess.hh,.cc
