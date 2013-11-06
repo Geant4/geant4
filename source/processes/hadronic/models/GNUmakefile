@@ -5,7 +5,8 @@
 
 name := G4hadronic_models
 
-SUBDIRS  = abrasion
+SUBDIRS  = abla
+SUBDIRS += abrasion
 SUBDIRS += binary_cascade
 SUBDIRS += cascade/cascade
 SUBDIRS += coherent_elastic
@@ -44,7 +45,8 @@ SUBDIRS += qmd
 SUBDIRS += theo_high_energy
 SUBDIRS += util
 
-SUBLIBS  =  G4hadronic_abrasion
+SUBLIBS  =  G4hadronic_abla_abla
+SUBLIBS +=  G4hadronic_abrasion
 SUBLIBS +=  G4hadronic_binary
 SUBLIBS +=  G4hadronic_coherent_elastic
 SUBLIBS +=  G4hadronic_HE

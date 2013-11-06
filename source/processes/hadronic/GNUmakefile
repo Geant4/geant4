@@ -12,6 +12,7 @@ SUBDIRS += cross_sections
 SUBDIRS += stopping
 
 
+SUBDIRS += models/abla
 SUBDIRS += models/abrasion
 SUBDIRS += models/binary_cascade
 SUBDIRS += models/cascade/cascade
@@ -50,7 +51,8 @@ SUBDIRS += models/qmd
 SUBDIRS += models/theo_high_energy
 SUBDIRS += models/util
 
-SUBLIBS  =  G4hadronic_abrasion
+SUBLIBS  =  G4hadronic_abla_abla
+SUBLIBS +=  G4hadronic_abrasion
 SUBLIBS +=  G4hadronic_xsect 
 SUBLIBS +=  G4hadronic_mgt
 SUBLIBS +=  G4hadronic_proc
