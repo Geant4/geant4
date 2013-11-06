@@ -2,7 +2,7 @@
 #
 # export G4INSTALL=/home-cluck/syjun/g4p/work/g4.9.6.b01/geant4.9.6.b01
 # export G4INSTALL=/home/yarba_j/work/test-geant4.9.6.p02/geant4.9.6.p02
-export G4INSTALL=/home/yarba_j/work/test-geant4.9.6-ref08/geant4
+export G4INSTALL=/home/yarba_j/work/test-geant4.9.6-ref10/geant4
 export G4SYSTEM=Linux-g++
 export G4SRC=${G4INSTALL}/source
 export G4LIB=${G4INSTALL}/lib64

@@ -56,7 +56,7 @@
 #include "G4NeutronBuilder.hh"
 #include "G4BertiniNeutronBuilder.hh"
 #include "G4FTFPNeutronBuilder.hh"
-#include "G4LEPNeutronBuilder.hh"
+// #include "G4LEPNeutronBuilder.hh"
 
 #include "G4HyperonFTFPBuilder.hh"
 #include "G4AntiBarionBuilder.hh"
@@ -79,7 +79,7 @@ class HadronPhysicsNuBeam : public G4VPhysicsConstructor
     G4NeutronBuilder * theNeutrons;
     G4BertiniNeutronBuilder * theBertiniNeutron;
     G4FTFPNeutronBuilder * theFTFPNeutron;
-    G4LEPNeutronBuilder * theLEPNeutron;        //needed for capture&fission
+    // G4LEPNeutronBuilder * theLEPNeutron;        //needed for capture&fission
  
     G4PiKBuilder * thePiK;
     G4BertiniPiKBuilder * theBertiniPiK;
@@ -100,8 +100,9 @@ class HadronPhysicsNuBeam : public G4VPhysicsConstructor
     G4VCrossSectionDataSet * ChipsKaonMinus;
     G4VCrossSectionDataSet * ChipsKaonPlus;
     G4VCrossSectionDataSet * ChipsKaonZero;
-    G4VCrossSectionDataSet * BGGProton;
-    G4VCrossSectionDataSet * BGGNeutron;
+    // G4VCrossSectionDataSet * BGGProton;
+    // G4VCrossSectionDataSet * BGGNeutron;
+    G4VCrossSectionDataSet * xsNeutronCaptureXS;
     
 };
 

@@ -38,6 +38,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5 November 2013  Julia Yarba (test23-V09-06-05)
+- Remove LEP from NuBeam
+- update Root macros, as the 1st attempt to factor out common-use pieces of Root macros
+
 25 October 2013  Julia Yarba (test23-V09-06-04)
 - Remove CommonSW/CMakeList.txt (as the 1st step towards removing the whole subdir)
 

@@ -31,6 +31,10 @@
 #include "G4ChipsKaonZeroInelasticXS.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 
+#include "G4HadronCaptureProcess.hh"
+#include "G4NeutronRadCapture.hh"
+#include "G4NeutronCaptureXS.hh"
+
 #include "G4PhysListUtil.hh"
 
 // factory
@@ -43,7 +47,7 @@ HadronPhysicsNuBeam::HadronPhysicsNuBeam(G4int)
     , theNeutrons(0)
     , theBertiniNeutron(0)
     , theFTFPNeutron(0)
-    , theLEPNeutron(0)
+//    , theLEPNeutron(0)
     , thePiK(0)
     , theBertiniPiK(0)
     , theFTFPPiK(0)
@@ -58,6 +62,7 @@ HadronPhysicsNuBeam::HadronPhysicsNuBeam(G4int)
     , ChipsKaonMinus(0)
     , ChipsKaonPlus(0)
     , ChipsKaonZero(0)
+    , xsNeutronCaptureXS(0)
 {}
 
 HadronPhysicsNuBeam::HadronPhysicsNuBeam(const G4String& name, G4bool quasiElastic)
@@ -65,7 +70,7 @@ HadronPhysicsNuBeam::HadronPhysicsNuBeam(const G4String& name, G4bool quasiElast
     , theNeutrons(0)
     , theBertiniNeutron(0)
     , theFTFPNeutron(0)
-    , theLEPNeutron(0)
+//    , theLEPNeutron(0)
     , thePiK(0)
     , theBertiniPiK(0)
     , theFTFPPiK(0)
@@ -80,6 +85,7 @@ HadronPhysicsNuBeam::HadronPhysicsNuBeam(const G4String& name, G4bool quasiElast
     , ChipsKaonMinus(0)
     , ChipsKaonPlus(0)
     , ChipsKaonZero(0)
+    , xsNeutronCaptureXS(0)
 {}
 
 void HadronPhysicsNuBeam::CreateModels()
@@ -93,9 +99,9 @@ void HadronPhysicsNuBeam::CreateModels()
   theNeutrons->RegisterMe(theBertiniNeutron=new G4BertiniNeutronBuilder);
   theBertiniNeutron->SetMinEnergy(0.0*GeV);
   theBertiniNeutron->SetMaxEnergy(5*GeV);
-  theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
-  theLEPNeutron->SetMinInelasticEnergy(0.0*eV);   // no inelastic from LEP
-  theLEPNeutron->SetMaxInelasticEnergy(0.0*eV);  
+//  theNeutrons->RegisterMe(theLEPNeutron=new G4LEPNeutronBuilder);
+//  theLEPNeutron->SetMinInelasticEnergy(0.0*eV);   // no inelastic from LEP
+//  theLEPNeutron->SetMaxInelasticEnergy(0.0*eV);  
 
   // this block has quite a few modifications,
   // incl. energy ranges that are different from FTFP_BERT
@@ -145,7 +151,7 @@ HadronPhysicsNuBeam::~HadronPhysicsNuBeam()
   delete theNeutrons;
   delete theBertiniNeutron;
   delete theFTFPNeutron;
-  delete theLEPNeutron;    
+  // delete theLEPNeutron;    
 
   delete thePiK;
   delete theBertiniPiK;
@@ -159,6 +165,7 @@ HadronPhysicsNuBeam::~HadronPhysicsNuBeam()
   delete theHyperon;
   delete theAntiBaryon;
   delete theFTFPAntiBaryon;
+  delete xsNeutronCaptureXS;
 }
 
 void HadronPhysicsNuBeam::ConstructParticle()
@@ -194,5 +201,25 @@ void HadronPhysicsNuBeam::ConstructProcess()
     
   theHyperon->Build();
   theAntiBaryon->Build();
+
+  // --- Neutrons ---
+  G4HadronicProcess* capture = 0;
+  G4ProcessManager* pmanager = G4Neutron::Neutron()->GetProcessManager();
+  G4ProcessVector*  pv = pmanager->GetProcessList();
+  for ( size_t i=0; i < static_cast<size_t>(pv->size()); ++i ) 
+  {
+    if ( fCapture == ((*pv)[i])->GetProcessSubType() ) 
+    {
+      capture = static_cast<G4HadronicProcess*>((*pv)[i]);
+    }
+  }
+  if ( ! capture ) {
+    capture = new G4HadronCaptureProcess("nCapture");
+    pmanager->AddDiscreteProcess(capture);
+  }
+  xsNeutronCaptureXS = new G4NeutronCaptureXS();
+  capture->AddDataSet(xsNeutronCaptureXS);
+  capture->RegisterMe(new G4NeutronRadCapture());
+
 }
 
