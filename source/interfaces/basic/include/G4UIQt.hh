@@ -78,15 +78,22 @@ class QToolBar;
 class G4QTabWidget : public QTabWidget {
 public :
   G4QTabWidget();
-  G4QTabWidget(QSplitter*&);
+  G4QTabWidget(QSplitter*&, int sizeX, int sizeY);
   void paintEvent  ( QPaintEvent * event );
-  inline void setTabSelected(bool a) { tabSelected = a; };
-  inline void setLastTabCreated(int a) { lastCreated = a; };
-  inline bool isTabSelected() { return tabSelected; };
-  bool tabSelected;
-  int lastCreated;
-  int incTabPaint;
-
+  inline void setTabSelected(bool a) { fTabSelected = a; };
+  inline void setLastTabCreated(int a) { fLastCreated = a; };
+  inline bool isTabSelected() { return fTabSelected; };
+  bool fTabSelected;
+  int fLastCreated;
+  int fPreferedSizeX;
+  int fPreferedSizeY;
+  inline void setPreferredSize(QSize s) {
+    fPreferedSizeX = s.width() + 6; // tab label height + margin left+right
+    fPreferedSizeY = s.height() + 58; // margin left+right
+  }
+  inline QSize sizeHint () const {
+    return QSize(fPreferedSizeX, fPreferedSizeY);
+  }
 };
 
 class G4UIQt : public QObject, public G4VBasicShell, public G4VInteractiveSession {

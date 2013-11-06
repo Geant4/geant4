@@ -156,7 +156,7 @@ G4UIWt::G4UIWt (
   fMainSplitterWidgetLayout->setColumnResizable	(1,true,Wt::WLength(30,Wt::WLength::Percentage));
   
   // create vis tab widget
-  Wt::WTabWidget* tabWidget = new Wt::WTabWidget();
+//  Wt::WTabWidget* tabWidget = new Wt::WTabWidget();
   
 
   fMainSplitterWidget->setLayout(fMainSplitterWidgetLayout);
@@ -248,7 +248,7 @@ Wt::WWidget* G4UIWt::CreateHelpTBWidget(
   // Create Help tree
   FillHelpTree();
   
-  fHelpArea = new Wt::WTextArea();
+  fHelpArea = new Wt::WTextArea(fHelpVSplitter);
   fHelpArea->setReadOnly(true);
   
   // Set layouts
@@ -289,7 +289,7 @@ Wt::WWidget* G4UIWt::CreateCoutTBWidget(
   
   // Could have been created if any err ou cout *before* sessionStart()
   if (!fCoutTBTextArea) {
-    fCoutTBTextArea = new Wt::WTextArea();
+    fCoutTBTextArea = new Wt::WTextArea(myContainer);
   }
   fCoutFilter = new Wt::WLineEdit();
   Wt::WLabel* coutFilterLabel = new Wt::WLabel("Filter : ");
@@ -455,7 +455,7 @@ bool G4UIWt::AddTabWidget(
   }
 */
   if (!fViewerTabWidget->isVisible() ) {
-    if ( fRightSplitterWidget->isVisible() != -1) {
+    if ( fRightSplitterWidget->isVisible()) {
       fRightSplitterWidget->setHidden(true);
       fEmptyViewerTabLabel->setHidden(true);
     }
@@ -745,7 +745,7 @@ void G4UIWt::AddButton (
 /**
  special case for the "open" icon. It will open a file selector and map the return file to the given command.
  */
-void G4UIWt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCommand, const char* aFileName){
+void G4UIWt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCommand, const char* /* aFileName */ ){
   if(aLabel==NULL) return; // TO KEEP
   // special case, aCommand could be NULL if aIconFile is not user_icon
   if (aCommand==NULL) {
@@ -1918,8 +1918,8 @@ bool G4UIWt::CreateCommandWidget(G4UIcommand* aCommand, Wt::WContainerWidget* aP
  @param event Kind of event
  */
 bool G4UIWt::eventFilter( // Should stay with a minuscule eventFilter because of Wt
-                         Wt::WObject *aObj
-                         ,Wt::WEvent *aEvent
+                         Wt::WObject* /* aObj */
+                         ,Wt::WEvent* /* aEvent */
                          )
 {
   bool res= false;
@@ -2095,6 +2095,7 @@ G4int G4UIWt::ReceiveG4cout (
   }
  */
   if (!fCoutTBTextArea) {
+    printf("*** G4UIWt::ReceiveG4cout, create a new fCoutTBTextArea \n");
     fCoutTBTextArea = new Wt::WTextArea();
     fCoutTBTextArea->setText("");
   }
@@ -2184,7 +2185,7 @@ void G4UIWt::CommandEditedCallback(const Wt::WString &)
 
 
 void G4UIWt::CoutFilterCallback(
-                                const Wt::WString & text) {
+                                const Wt::WString & /* text */) {
   printf("*** G4UIWt::CoutFilterCallbackt, missing filtering\n");
   
 /*  QStringList result = fG4cout.filter(text);
@@ -2228,10 +2229,10 @@ void G4UIWt::AddMenu (
  If depthLevel is 2 or more : create GroupBox
  */
 bool G4UIWt::CreateVisCommandGroupAndToolBox(
-                                             G4UIcommand* aCommand
-                                             ,Wt::WWidget* aParent
-                                             ,int aDepthLevel
-                                             ,bool isDialog
+                                             G4UIcommand* /* aCommand */
+                                             ,Wt::WWidget* /* aParent */
+                                             ,int /* aDepthLevel */
+                                             ,bool /* isDialog */
                                              )
 {
   printf("*** G4UIWt::CreateVisCommandGroupAndToolBox, missing \n");
@@ -2451,7 +2452,7 @@ void G4UIWt::CommandHistoryCallback(
 
 
 void G4UIWt::OpenHelpTreeOnCommand(
-                                   const Wt::WString & searchText
+                                   const Wt::WString & /* searchText */
                                    )
 {
   printf("*** G4UIWt::OpenHelpTreeOnCommand, missing \n");
@@ -2628,7 +2629,7 @@ void G4UIWt::ChangeColorCallback(Wt::WContainerWidget* widget) {
 */
 }
 
-void G4UIWt::ChangeCursorStyle(const Wt::WString& action) {
+void G4UIWt::ChangeCursorStyle(const Wt::WString& /* action */) {
   
   // Theses actions should be in the app toolbar
   
@@ -2673,7 +2674,7 @@ void G4UIWt::ChangeCursorStyle(const Wt::WString& action) {
  FIXME : Should be a feedback when changing viewer !
  
  */
-void G4UIWt::ChangeSurfaceStyle(const Wt::WString& action) {
+void G4UIWt::ChangeSurfaceStyle(const Wt::WString& /* action */) {
   
   // Theses actions should be in the app toolbar
   
@@ -2714,7 +2715,7 @@ void G4UIWt::ChangeSurfaceStyle(const Wt::WString& action) {
 */
 }
 
-void G4UIWt::OpenIconCallback(const Wt::WString& aParam) {
+void G4UIWt::OpenIconCallback(const Wt::WString& /* aParam */) {
   
   printf("*** G4UIWt::OpenIconCallback, missing \n");
 /*
@@ -2731,7 +2732,7 @@ void G4UIWt::OpenIconCallback(const Wt::WString& aParam) {
 }
 
 
-void G4UIWt::SaveIconCallback(const Wt::WString& aParam) {
+void G4UIWt::SaveIconCallback(const Wt::WString& /* aParam */) {
   
   printf("*** G4UIWt::SaveIconCallback, missing \n");
 
@@ -2749,7 +2750,7 @@ void G4UIWt::SaveIconCallback(const Wt::WString& aParam) {
 }
 
 
-void G4UIWt::ChangePerspectiveOrthoCallback(const Wt::WString& action) {
+void G4UIWt::ChangePerspectiveOrthoCallback(const Wt::WString& /* action */) {
   
   // Theses actions should be in the app toolbar
   
@@ -3264,7 +3265,7 @@ Wt::WTreeNode* G4UIWt::FindTreeItem(
     return aParent;
   
   Wt::WTreeNode * tmp = NULL;
-  for (int a=0;a<aParent->childNodes().size();a++) {
+  for (unsigned int a=0;a<aParent->childNodes().size();a++) {
     if (!tmp)
       tmp = FindTreeItem(aParent->childNodes().at(a),myCommand);
   }
@@ -3568,7 +3569,7 @@ Wt::WString G4UIWt::GetLongCommandPath(
 
 
 G4WTabWidget::G4WTabWidget(
- Wt::WContainerWidget*& split
+ Wt::WContainerWidget*& /* split */
 ):
  Wt::WTabWidget()
 ,tabSelected(false)

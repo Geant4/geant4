@@ -75,6 +75,7 @@
 #include <qcolordialog.h>
 #include <qtoolbar.h>
 #include <qfiledialog.h>
+#include <qdesktopwidget.h>
 
 
 
@@ -128,6 +129,7 @@ G4UIQt::G4UIQt (
 ,fEmptyViewerTabLabel(NULL)
 ,fMainSplitterWidget(NULL)
 ,fRightSplitterWidget(NULL)
+,fLeftSplitterWidget(NULL)
 ,fHelpVSplitter(NULL)
 ,fToolbarApp(NULL)
 ,fToolbarUser(NULL)
@@ -173,20 +175,17 @@ G4UIQt::G4UIQt (
   }
   fMainWindow = new QMainWindow();
 
-  // resize to a big size in order to gave space for the viewer
-  fMainWindow->resize(500,500);
-
   // the splitter
   fMainSplitterWidget = new QSplitter(Qt::Horizontal);
 
   fMainSplitterWidget->addWidget(CreateLeftSplitterWidget());
   fMainSplitterWidget->addWidget(CreateRightSplitterWidget());
   
-  QSizePolicy policy = QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
-  policy.setHorizontalStretch(5);
+  QSizePolicy policy = QSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+  policy.setHorizontalStretch(2);
   fRightSplitterWidget->setSizePolicy(policy);
   
-  policy = fLeftSplitterWidget->sizePolicy();
+  policy = QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
   policy.setHorizontalStretch(1);
   fLeftSplitterWidget->setSizePolicy(policy);
   
@@ -197,6 +196,12 @@ G4UIQt::G4UIQt (
   fMainWindow->setWindowTitle(QFileInfo( QCoreApplication::applicationFilePath() ).fileName()); 
   fMainWindow->move(QPoint(50,50));
 
+  // force the size at be correct at the beggining
+  // because the widget is not realized yet, the size of the main window is not up to date. But
+  // we need it in order to add some viewer inside
+  fMainWindow->resize(fLeftSplitterWidget->width()+fRightSplitterWidget->width()+20,
+                      fLeftSplitterWidget->height()+fRightSplitterWidget->height()+20);
+  
   // Set not visible until session start
  #if QT_VERSION < 0x040200
   fMainWindow->hide();
@@ -290,7 +295,7 @@ QWidget* G4UIQt::CreateCoutTBWidget(
 
   QVBoxLayout *layoutCoutTB = new QVBoxLayout();
 
-  fCoutTBTextArea = new QTextEdit();
+  fCoutTBTextArea = new QTextEdit(fCoutTBWidget);
 
   // set font familly and size
   fCoutTBTextArea->setFontFamily("Courier");
@@ -321,11 +326,8 @@ QWidget* G4UIQt::CreateCoutTBWidget(
 
   fCoutTBWidget->setLayout(layoutCoutTB);
 
-  QSizePolicy policy = QSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
-  policy.setVerticalStretch(1);
-  fCoutTBTextArea->setSizePolicy(policy);
-  fCoutTBTextArea->setMinimumSize(50,50);
-    
+  fCoutTBTextArea->setMinimumSize(100,100);
+  
   return fCoutTBWidget;
 }
 
@@ -379,8 +381,8 @@ QWidget* G4UIQt::CreateLeftSplitterWidget(){
   fLeftSplitterWidget->setLayout(layoutLeftSplitterWidget);
 
   layoutLeftSplitterWidget->addWidget(CreateUITabWidget());
+  fLeftSplitterWidget->resize(200,200);
 
-  fLeftSplitterWidget->resize(100,100);
   return fLeftSplitterWidget;
 }
 
@@ -411,7 +413,7 @@ QWidget* G4UIQt::CreateRightSplitterWidget(){
   layoutCommandLine->addWidget(fCommandArea);
 
 
-  fEmptyViewerTabLabel = new QLabel("         If you want to have a Viewer, please use /vis/open commands. ");
+  fEmptyViewerTabLabel = new QLabel("If you want to have a Viewer, please use /vis/open commands.");
 
 
 
@@ -428,24 +430,15 @@ QWidget* G4UIQt::CreateRightSplitterWidget(){
   fRightSplitterWidget->addWidget(CreateCoutTBWidget());
   fRightSplitterWidget->addWidget(commandLineWidget);
 
-  QSizePolicy policy = QSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
-  policy.setVerticalStretch(100);
-  handleWidget->setMinimumSize(50,50);
-  handleWidget->setSizePolicy(policy);
+  handleWidget->setMinimumSize(40,40);
   
-  policy = QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
-  policy.setVerticalStretch(1);
-  fCoutTBWidget->setSizePolicy(policy);
-
-  policy = QSizePolicy(QSizePolicy::Ignored,QSizePolicy::Ignored);
-  policy.setVerticalStretch(1);
   commandLineWidget->setMinimumSize(50,50);
-  commandLineWidget->setSizePolicy(policy);
 
   // Connect signal
   connect(fCommandArea, SIGNAL(returnPressed()), SLOT(CommandEnteredCallback()));
   connect(fCommandArea, SIGNAL(textEdited(const QString &)), SLOT(CommandEditedCallback(const QString &)));
 
+  fRightSplitterWidget->resize(200,200);
   return fRightSplitterWidget;
 }
 
@@ -465,14 +458,14 @@ QTabWidget* G4UIQt::GetSceneTreeComponentsTBWidget(
 bool G4UIQt::AddTabWidget(
  QWidget* aWidget
 ,QString name
-,int
-,int
+,int sizeX
+,int sizeY
 )
 {
-
+  
   if (fViewerTabWidget == NULL) {
-    fViewerTabWidget = new G4QTabWidget(fRightSplitterWidget);
-#if QT_VERSION < 0x040500
+    fViewerTabWidget = new G4QTabWidget(fRightSplitterWidget, sizeX, sizeY);
+    #if QT_VERSION < 0x040500
 #else
     fViewerTabWidget->setTabsClosable (true); 
 #endif
@@ -508,8 +501,6 @@ bool G4UIQt::AddTabWidget(
     }
   }
 
-  // Problems with resize. The widgets are not realy drawn at this step,
-  // then we have to force them on order to check the size
 
   fViewerTabWidget->addTab(aWidget,name);
 
@@ -522,6 +513,31 @@ bool G4UIQt::AddTabWidget(
    fViewerTabWidget->setLastTabCreated(fViewerTabWidget->currentIndex());
  #endif
 
+  // Problems with resize. The widgets are not realy drawn at this step,
+  // then we have to force them on order to check the size.
+  // try to computer new size in order not to go out of the screen
+  
+  // size of current tab
+  QSize s = QSize(sizeX,sizeY);
+  
+  QRect screen = QApplication::desktop()->screenGeometry();
+  
+  if (fMainWindow->width()-fViewerTabWidget->width()+sizeX > screen.width()) {
+    s.setWidth(screen.width()-fMainWindow->width()+fViewerTabWidget->width());
+  }
+  if (fMainWindow->height()-fViewerTabWidget->height()+sizeY > screen.height()-24) { // 24 is the menuBar height on mac
+    s.setHeight(screen.height()-fMainWindow->height()+fViewerTabWidget->height()-24);
+  }
+  int winWidth = fMainWindow->width();
+  int winHeight = fMainWindow->height();
+  int oldTabWidth = fViewerTabWidget->width();
+  int oldTabHeight = fViewerTabWidget->height();
+  int newTabWidth = fViewerTabWidget->sizeHint().width();
+  int newTabHeight = fViewerTabWidget->sizeHint().height();
+
+  fViewerTabWidget->setPreferredSize(s);
+  fMainWindow->resize(winWidth-oldTabWidth+newTabWidth,
+                      winHeight-oldTabHeight+newTabHeight);
   return true;
 }
 
@@ -550,8 +566,10 @@ void G4UIQt::UpdateTabWidget(int tabNumber) {
 /** Send resize event to all tabs
  */
 void G4UIQt::ResizeTabWidget( QResizeEvent* e) {
-  for (G4int a=0;a<fViewerTabWidget->count() ;a++) {
-    fViewerTabWidget->widget(a)->resize(e->size());
+  if ( fViewerTabWidget) {
+    for (G4int a=0;a<fViewerTabWidget->count() ;a++) {
+      fViewerTabWidget->widget(a)->resize(e->size());
+    }
   }
 }
 
@@ -1908,7 +1926,6 @@ bool G4UIQt::CreateVisCommandGroupAndToolBox(
     // Not found ? create it
     if (!found) {
       newParentWidget = new QGroupBox();
-      //        newParentWidget->setSizePolicy (QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
       newParentWidget->setLayout(new QVBoxLayout());
       if (currentParent != 0){
         currentParent->addItem(newParentWidget,commandSection);
@@ -1933,7 +1950,6 @@ bool G4UIQt::CreateVisCommandGroupAndToolBox(
       QScrollArea* sc = dynamic_cast<QScrollArea*>(newParentWidget->parent()->parent());
       if (sc != 0) {
         sc->ensureWidgetVisible(newParentWidget);
-        //          sc->setSizePolicy (QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum));
         
       }
     }
@@ -2615,9 +2631,6 @@ void G4UIQt::VisParameterCallback(QWidget* widget){
 #else
   QWidget* name = grid->itemAtPosition(grid->rowCount()-1,0)->widget();
 #endif
-  if (widget == NULL) {
-    return;
-  }
   if (dynamic_cast<QLabel*>(name) == 0) {
     return;
   }
@@ -2735,7 +2748,11 @@ void G4UIQt::HelpTreeClicCallback (
   G4UIcommandTree * treeTop = UI->GetTree();
 
   std::string itemText = GetLongCommandPath(item).toStdString();
-  
+
+  // check if it is a command path
+  if (item->childCount() > 0) {
+    itemText +="/";
+  }
   G4UIcommand* command = treeTop->FindPath(itemText.c_str());
 
   if (command) {
@@ -3449,17 +3466,26 @@ void G4UIQt::SetIconOrthoSelected() {
 
 
 G4QTabWidget::G4QTabWidget(
-QSplitter*& split
+QSplitter*& split,
+int sizeX,
+int sizeY
 ):QTabWidget(split)
- ,tabSelected(false)
- ,lastCreated(-1)
+ ,fTabSelected(false)
+ ,fLastCreated(-1)
+,fPreferedSizeX(sizeX+6)  // margin left+right
+,fPreferedSizeY(sizeY+58)  // tab label height + margin left+right
 {
+  setMinimumSize(100,100);
+  QSizePolicy policy = QSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+  setSizePolicy(policy);
 }
 
 G4QTabWidget::G4QTabWidget(
 ):QTabWidget()
- ,tabSelected(false)
- ,lastCreated(-1)
+ ,fTabSelected(false)
+ ,fLastCreated(-1)
+,fPreferedSizeX(0)
+,fPreferedSizeY(0)
 {
 }
 
@@ -3472,6 +3498,8 @@ void G4UIQt::TabCloseCallback(int a){
 #endif
 #if QT_VERSION < 0x040500
 #else
+  if (fViewerTabWidget == NULL) return;
+  
   QWidget* temp = fViewerTabWidget->widget(a);
   fViewerTabWidget->removeTab (a);
 
@@ -3479,7 +3507,7 @@ void G4UIQt::TabCloseCallback(int a){
 
   if (fViewerTabWidget->count() == 0) {
     if (fEmptyViewerTabLabel == NULL) {
-      fEmptyViewerTabLabel = new QLabel("         If you want to have a Viewer, please use /vis/open commands. ");
+      fEmptyViewerTabLabel = new QLabel("If you want to have a Viewer, please use /vis/open commands.");
     }
 
   fRightSplitterWidget->widget(0)->layout()->removeWidget(fViewerTabWidget);
@@ -3522,14 +3550,14 @@ QPaintEvent *
 
       QString text = tabText (currentIndex());
 
-      if (lastCreated == -1) {
+      if (fLastCreated == -1) {
         QString paramSelect = QString("/vis/viewer/select ")+text;
         G4UImanager* UI = G4UImanager::GetUIpointer();
         if(UI != NULL)  {
           UI->ApplyCommand(paramSelect.toStdString().c_str());
         }
       } else {
-        lastCreated = -1;
+        fLastCreated = -1;
       }
       setTabSelected(false);
     }

@@ -17,6 +17,30 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6th October 2013  Laurent Garnier (interfaces-V09-06-10)
+- G4UIQt : Fix compilation error on X11.
+
+5th October 2013  Laurent Garnier (interfaces-V09-06-09)
+- G4UIQt : Fix some resizing problems.
+- G4UIWt : Fix some warnings
+
+5th October 2013  Laurent Garnier
+- G4UIQt :
+  o Fix a problem on Linux reported by Ivana : Impossible to change
+    the size of the OpenGL viewer
+  o Fix the size of the OpenGL viewer to be the same as send in parameters
+    (for ex: 600x600)
+
+31th October 2013  Laurent Garnier
+- G4UIQt : Fix JIRA issue DEV-93 about "Directory descriptions does not 
+  appear at the place they should be."
+
+24th October 2013  Laurent Garnier
+- G4UIQt : Fix coverity
+  o 23063 Uninitialized pointer field
+  o 47057 Logically dead code 
+  o 53243 Uninitialized scalar field 
+
 23th October 2013  Laurent Garnier (interfaces-V09-06-08 need cmake-V09-06-29)
 - sources.cmake : Remove Qt5 configuration, it is now include in cmake.
 
