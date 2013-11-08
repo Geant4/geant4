@@ -11,8 +11,8 @@ endif()
 
 find_package(TBB QUIET)
 if(TBB_FOUND)
-  add_subdirectory(ParN02tbb)
+  add_subdirectory(TBB)
 else()  
-  message(STATUS "G4 Examples: TBB not installed --> ParN02tbb example disabled")  
+  message(STATUS "G4 Examples: TBB not installed --> TBB example disabled")  
 endif()
 
