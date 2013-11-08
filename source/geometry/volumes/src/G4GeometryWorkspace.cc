@@ -213,17 +213,13 @@ G4bool G4GeometryWorkspace::CloneParameterisedSolids( G4PVParameterised *paramVo
       numDifferent++;
     }
   }
-  if( param->IsNested() || (numDifferent>0) )
+  if( numDifferent>0 )
   {
     G4ExceptionDescription ed;
-    if( param->IsNested() )
-      ed << " Parameterisation is Nested. " << G4endl;
-    if( numDifferent > 0)
-    {
-      ed << " Parameterisation is implemented using several instances of Solids "
-      << " - potentially to support different types of solids. " << G4endl;
-    }
-    ed << "  The current implementation does not support "
+
+    ed << " Parameterisation is implemented using several instances of Solids "
+       << " - potentially to support different types of solids. " << G4endl;
+    ed << "  The current implementation of Geant4-MT does not support "
     << " this type of Parameterisation" << G4endl;
     G4Exception("G4GeometryWorkspace::CloneParameterisedVolume", "GeometryNotSupportedInMT-01",
                 FatalException, ed);

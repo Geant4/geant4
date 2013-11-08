@@ -16,8 +16,15 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+November 7th, 2013 J.Apostolakis          - geomvol-V09-06-18
+- Restored the ability to 'clone' Nested Parameterisations.
+   This allows the use of Nested Parameterizations with MT.
+   This precaution is not needed - 'good' user code will cope with 
+   the changing of target solid in each thread.
+  Note: The restriction on parameterizations which use multiple types
+   of solids remains. 
 
-November 1st, 2013 G.Cosmo - geomvol-V09-06-17
+November 1st, 2013 G.Cosmo                - geomvol-V09-06-17
 - Restored use of G4EnhancedVecAllocator in G4NavigationHistory for
   sequential mode.
 
