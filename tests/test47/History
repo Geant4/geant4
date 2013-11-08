@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 8, 2013 - Alberto Ribon (test47-V09-06-06)
+- Removed forgotten G4LElastic from Test30Physics. 
+
 October 25, 2013 - Julia Yarba (test47-V09-06-05)
 - Cleanup compilation warnings from src/HistoEPTest47.cc
 

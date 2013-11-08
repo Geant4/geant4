@@ -68,7 +68,6 @@
 #include "HsQGSBInterface.hh"
 #include "G4INCLXXInterface.hh"
 
-#include "G4LElastic.hh"
 #include "G4HadronElastic.hh"
 
 #include "G4TheoFSGenerator.hh"
