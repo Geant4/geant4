@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8th November 2013   Gabriele Cosmo   (config-V09-06-13)
+- binmake.gmk: removed 'high_energy' and 'low_energy' hadronic modules;
+  replaced 'lll_fission' with 'fission'.
+
 8th November 2013   Gabriele Cosmo   (config-V09-06-12)
 - Removed non necessary LD flag in Darwin configurations.
 
