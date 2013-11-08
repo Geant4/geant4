@@ -1,0 +1,110 @@
+.... Not yet finished .....
+
+Status at Nov. 6th:
+- Needs tag run-V09-06-115, for virtual keyword dded to barriers and new methods in base classes:
+  	G4WorkerRunManager::MergePartialResults() re-factor reduction of local resutls into global
+	GMTRunManager::CreateAndStartWorkers()    re-factor calls to create a worker threads.
+- Tag is not yet in SVN, need some testing of the the above changes.
+- With the above changes we reduce a lot the code differences in tbb examples
+- Missing: reductions of run and scorers
+- First macro tbb.mac created
+
+========
+Issues to be worked on that differentiate TBB from MT:
+- SOLVED w/ run-V09-06-115: Barrier mechanism and synchornization of threads has no sense in TBB
+- "Output" (run and scorer) cannot be anymore "thread-private". tbb::task should register (or reuse in 
+   future version) output "containers" for master to use
+- /run/beamOn command will create the list of tasks, but how to start them? From main?
+- How to make more than one run? Maybe a new command /tbb/beamOn ???
+- One RM per thread. In TBB master thread is "reused" and so crash because more than one RM is created on same thread.
+  Poor man solution: start work on a separate thread (e.g. explicit invokation of G4THREADCREATE for 
+  tbb::task::spawn_root_and_wait
+
+========
+Bugs:
+- Strangely it seems that two runs are exec, it appeared "Run 1 start" at the end of the job with no events processed
+- No delete of objects...
+
+==========
+General design:
+
+The experience of N02tbb of propototype showed that better design was needed with MT kernel classes.
+The 10.beta design of relevant MT classes took into account this experience. The final goal is to have
+only few classes that implement the TBB specific parallel execution model. These classes should be
+independentent of both G4 kernel and of the specific example.
+
+==========
+Details:
+
+I think We need only four TBB specific classes:
+tbbTask (implements tbb::task)
+  : it's function is basically to replicate G4MTRunManagerKernel::StartThread, adding check if thread is 
+  already intialized. Some issues are still present. See comments in text
+
+tbbWorkerRunManager (implements G4WorkerRunManager)
+  : worker model, re-implements base class methods in order to:
+    - disable barrier mechanism
+    - different way of proceeding for RunTermination since there is no guarantee this is executed in thread
+      where it was started
+tbbMasterRunManager (implements G4MTRunManager)
+  : master model, re-implements base class methods in order to:
+    - disable barrier mechanism
+    - instead of starting threads as in MT, created tbbTask objects, configure them (if needed) and creates
+      a tbb list of tasks
+    - Need to understnad how to reduce output from tasks
+tbbUserWorkerInitialization (implements G4USerWorkerInitialization)
+  : used by tbbMaster it has the only responsibility to "new" a tbbWorkerRunManager
+    (the idea being to decouple master and worker, as in MT, so a user can re-implement only one of the two)
+
+===========
+Even more details:
+
+List of virtual methods (and motivation) that are needed to implement for TBB:
+
+tbbMasterRunManager::CreateAndStartWorkers         => Create tbb::task instead of pthread. Actual creation of tasks is in ::CreateTask, 
+					              this method only calculates number of tasks.
+tbbMasterRunManager::TerminateWorkers              => Empty in TBB instead of joining pthreads
+tbbMasterRunManager::All barriers                  => are empty in TBB.
+
+tbbWorkerRunManager::ConstructScoringWolds         => is protected in base class, but in tbb is called by tbb::execute, implement proxy here
+tbbWorkerRunManager::MergePartialResults           => in MT it's done by worker thread at the end of job, "pushing" to master. Needs to implement
+                                                      the opposite in TBB 
+
+tbbUserWorkerInitialization::CrateWorkerRunManager => Needs to instantiate tbbWorkerRunManager
+
+tbbTask::execute()                                 => TBB specific method, MT "equivalent" is G4MTRunManagerKernel::StarThread, with the difference that
+                    				      the same thread can execute more than one events and thus must re-use the "thread" private variables.
+                    				      For the first example we assume all threads are used for simulation (e.g. no re-use of workspace).
+						      If we get the design right, it will be enough to change this method to re-use workspaces (CMS requirement)
+
+============
+Some comments/notes:
+
+1- We could change MT kernel design to make barriers optional, no need to re-implmente tbbWorkerRunManager::RunInitialization
+2- tbb::task starts and it can be in a never used thread. In such a case setups the environment. In particular a G4Run object
+   is created (and scorers). We need to register these objects somewhere so the master can get them at the end and perform
+   reduction. Note these object cannot contain TLS variables because they will be reduced in a different thread (the master).
+   Anyway should be noted that since G4Run and scorers are thread private they should NEVER contain TLS variables. If they do
+   to me is a design flow.
+3- How to "delete" stuff that is created in tbb::task? The problem is that in MT StarThread has scope of life-time of thread
+   so just before returning we can cleanup. tbb::task::execute has not such a concept.
+   Can we add a "callback" to threads that are executed at exit? (a thread "atexit" function?). Maybe could be useful.
+   Otherwise we need the master to clean up everything. In MT master has a list of worker run managers, but "delete" is done
+   in threads to correctly clean up "TLS" stuff.
+   Alternatively G4AutoDelete can help on that.
+4- List of minor things: vector or workers and mutex to manipulate it are private data members in MT ; ConstructScoringWorld
+   is protected; G4UserWorkerThreadInitialization contains explicitly the word "Thread" , not a big deal but it gives the 
+   wrong impression
+5- If in G4MTRunManager we refactor the lines that start threads in a new virtual method in TBB we could re-implement only this
+   provided that barriers can be disabled
+ 
+============
+Current Status (Nov. 1, 2013):
+
+CMakeLists.txt : prepared, application compiles if TBB is installed in the system
+tbbTask : prototype done
+tbbWorkerRunManager : prototype done
+tbbUserWorkerInitialization : prototype done
+tbbMasterRunManager : prototype done
+
+See "TBB" string in comments in code.
