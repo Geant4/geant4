@@ -37,5 +37,5 @@ GEANT4_ADD_TEST(example-ext-exoticphysics-phonons
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/phonon
                 BUILD XGeBox PROJECT dmc
                 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
-                            CRYSTALMAPS=${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/CrystalMaps
+                            G4LATTICEDATA=${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/CrystalMaps
 		)

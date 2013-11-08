@@ -1,4 +1,4 @@
-$Id: $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -15,7 +15,47 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13 June 1202: A. Dotti (phononExample-V09-06-03)
+7 November 2013:  M. Kelsey (phononExamples-V09-06-04)
+- REMOVED particles, lattice classes, and processes.  Now all in GEANT4
+  toolkit for Release 10.  Eliminated use of G4VUserTrackInfo, creating a
+  singleton (thread-local) map between tracks and wavevectors, for use by
+  the stacking action and by processes (the map is also in the toolkit).
+
+	XLPhonon	-> source/particles/*/G4PhononLong
+	XTPhononFast	-> source/particles/*/G4PhononTransFast
+	XTPhononSlow	-> source/particles/*/G4PhononTransSlow
+
+	XLogicalLattice	-> source/materials/*/G4LatticeLogical
+	XPhysicalLattice-> source/materials/*/G4LatticePhysical
+
+	XLatticeManager3-> source/processes/phonon/*/G4LatticeManager
+	XPhononDownconversionProcess
+			-> source/processes/phonon/*/G4PhononDownconversion
+	XPhononReflectionProcess
+			-> source/processes/phonon/*/G4PhononReflection
+	XPhononScatteringProcess
+			-> source/processes/phonon/*/G4PhononScattering
+
+	XPhononTrackInformation	-> DELETED
+
+- Renaming of classes, objects, and member functions in above code affected
+  several other classes.  Also cleaned up #includes in both .hh and .cc files:
+
+	XDetectorConstruction.hh,.cc
+	XPhysicsList.cc
+	XPhononStackingAction.cc
+	XPrimaryGeneratorAction.cc
+
+- Internal "CRYSTALMAPS" envvar replaced with "G4LATTICEDATA" used in
+  source/processes/phonon/*/G4LatticeReader.
+
+	CrystalMaps/Ge/ subdirectory added with config file for numerical
+	constants.  Lookup tables moved into subdirectory.
+
+- Updated caustic.out, timing.out to reflect minor numerical differences due
+  to use of h_Planck.  Updated run.out to reflect reduced message output.
+
+13 June 2013: A. Dotti (phononExample-V09-06-03)
 - Adding reference files for MT mode, adding CTestDefinitions.txt 
   file containing new ctest with OS/Mode reference files
 

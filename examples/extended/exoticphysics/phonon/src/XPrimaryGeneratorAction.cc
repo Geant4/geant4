@@ -35,9 +35,9 @@
 #include "G4ParticleGun.hh"
 #include "G4RandomDirection.hh"
 
-#include "XTPhononFast.hh"
-#include "XTPhononSlow.hh"
-#include "XLPhonon.hh"
+#include "G4PhononTransFast.hh"
+#include "G4PhononTransSlow.hh"
+#include "G4PhononLong.hh"
 
 #include "G4SystemOfUnits.hh"
 
@@ -49,7 +49,7 @@ XPrimaryGeneratorAction::XPrimaryGeneratorAction()
   fParticleGun  = new G4ParticleGun(n_particle);   
 
   // default particle kinematic
-  fParticleGun->SetParticleDefinition(XLPhonon::PhononDefinition());
+  fParticleGun->SetParticleDefinition(G4PhononLong::PhononDefinition());
   fParticleGun->SetParticleMomentumDirection(G4RandomDirection());
   fParticleGun->SetParticlePosition(G4ThreeVector(0.0,0.0,0.0));
   fParticleGun->SetParticleEnergy(1e-4*eV);  
@@ -73,13 +73,13 @@ void XPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   G4double selector = G4UniformRand();
   if(selector<0.53539) {
-         fParticleGun->SetParticleDefinition(XTPhononSlow::PhononDefinition()); 
+         fParticleGun->SetParticleDefinition(G4PhononTransSlow::PhononDefinition()); 
        }
        else if(selector<0.90217) {
-         fParticleGun->SetParticleDefinition(XTPhononFast::PhononDefinition());
+         fParticleGun->SetParticleDefinition(G4PhononTransFast::PhononDefinition());
        }
        else {
-         fParticleGun->SetParticleDefinition(XLPhonon::PhononDefinition());
+         fParticleGun->SetParticleDefinition(G4PhononLong::PhononDefinition());
   }
 
   //Set phonon energy.

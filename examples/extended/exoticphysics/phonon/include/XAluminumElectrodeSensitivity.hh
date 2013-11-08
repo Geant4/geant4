@@ -23,56 +23,51 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phonon/include/XPhononScatteringProcess.hh
-/// \brief Definition of the XPhononScatteringProcess class
+/// \file exoticphysics/phonon/include/XAluminumElectrodeSensitivity.hh
+/// \brief Definition of the XAluminumElectrodeSensitivity class
 //
 // $Id$
 //
-#ifndef XPhononScatteringProcess_h
-#define XPhononScatteringProcess_h 1
-#define LON 0
+#ifndef XAluminumElectrodeSensitivity_h
+#define XAluminumElectrodeSensitivity_h 1
 
-#include "G4ios.hh"
-#include "globals.hh"
-#include "G4VDiscreteProcess.hh"
-#include "XLatticeManager3.hh"
+#include "G4VSensitiveDetector.hh"
+#include "XAluminumElectrodeHit.hh"
 
-class XPhononScatteringProcess : public G4VDiscreteProcess 
+#include <iostream>
+#include <fstream>
+
+class G4Step;
+class G4HCofThisEvent;
+class G4TouchableHistory;
+
+using namespace std;
+
+
+class XAluminumElectrodeSensitivity : public G4VSensitiveDetector
 {
+
   public:
+      XAluminumElectrodeSensitivity(G4String);
+      virtual ~XAluminumElectrodeSensitivity();
 
+      virtual void Initialize(G4HCofThisEvent*);
+      virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
+      virtual void EndOfEvent(G4HCofThisEvent*);
 
-     XPhononScatteringProcess(const G4String& processName ="XPhononScattering" );
-
-     virtual ~XPhononScatteringProcess();
-
-     virtual G4VParticleChange* PostStepDoIt(
-                const G4Track&, const G4Step& );
- 
-     virtual G4bool IsApplicable(const G4ParticleDefinition&);
-                           
-  protected:
-
-     virtual G4double GetMeanFreePath(
-                const G4Track&, G4double, G4ForceCondition* );
+  XAluminumElectrodeHitsCollection* GetHitsCollection();
+  static XAluminumElectrodeHitsCollection* fHitsCollection;
 
   private:
-  
-  // hide assignment operator as private 
-     XPhononScatteringProcess(XPhononScatteringProcess&);
-     XPhononScatteringProcess& operator=(const XPhononScatteringProcess& right);
+  //XAluminumElectrodeHitsCollection * hitsCollection;
+  ofstream fWriter; //writing hit posn to file. Temporary fix.
+  ofstream fWriter2; //writing timing information to file. Temporary fix.
 
-
+      G4int fHCID;
 };
 
+
+
+
 #endif
-
-
-
-
-
-
-
-
-
 

@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phonon/src/XAlminumElectrodeSensitivity.cc
-/// \brief Implementation of the XAlminumElectrodeSensitivity class
+/// \file exoticphysics/phonon/src/XAluminumElectrodeSensitivity.cc
+/// \brief Implementation of the XAluminumElectrodeSensitivity class
 //
 // $Id$
 //
-#include "XAlminumElectrodeSensitivity.hh"
+#include "XAluminumElectrodeSensitivity.hh"
 
-#include "XAlminumElectrodeHit.hh"
+#include "XAluminumElectrodeHit.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
 #include "G4Track.hh"
@@ -43,56 +43,59 @@
 
 using namespace std;
 
-XAlminumElectrodeHitsCollection* XAlminumElectrodeSensitivity::fHitsCollection = NULL;
+XAluminumElectrodeHitsCollection* 
+XAluminumElectrodeSensitivity::fHitsCollection = NULL;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XAlminumElectrodeSensitivity::XAlminumElectrodeSensitivity(G4String name)
+XAluminumElectrodeSensitivity::XAluminumElectrodeSensitivity(G4String name)
 :G4VSensitiveDetector(name)
 {
   G4String HCname;
-  collectionName.insert(HCname="XAlminumElectrodeHit");
+  collectionName.insert(HCname="XAluminumElectrodeHit");
   fHCID = -1;
   fWriter.open("caustic.ssv", fstream::out | fstream::ate);
   fWriter2.open("timing.ssv", fstream::out | fstream::ate);
 
   if(!fWriter.is_open()){
-    G4cout<<"\nXAlminumElectrodeSensitivity::Constructor:";
+    G4cout<<"\nXAluminumElectrodeSensitivity::Constructor:";
     G4cout<<"\n\tFailed to open caustic.ssv for appending data.";
-    G4cout<<"\n\tCreating caustic.ssv";
+    G4cout<<"\n\tCreating caustic.ssv" << G4endl;
     fWriter.open("caustic.ssv");
   }
 
   if(!fWriter2.is_open()){
-    G4cout<<"\nXAlminumElectrodeSensitivity::Constructor: ";
+    G4cout<<"\nXAluminumElectrodeSensitivity::Constructor: ";
     G4cout<<"\n\tFailed to open timing.ssv for appending data.";
-    G4cout<<"\n\tCreating timing.ssv.";
+    G4cout<<"\n\tCreating timing.ssv." << G4endl;
     fWriter2.open("timing.ssv");
   }
 
   if(!(fWriter.is_open() && fWriter2.is_open())){
-    G4cout<<"\nXAlminumElectrodeSensitivity::Constructor: ERROR: COULD NOT CREATE OUTPUT FILES FOR WRITING";
+    G4cout<<"\nXAluminumElectrodeSensitivity::Constructor: "
+          <<"\nERROR: COULD NOT CREATE OUTPUT FILES FOR WRITING" << G4endl;
   }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XAlminumElectrodeSensitivity::~XAlminumElectrodeSensitivity(){
+XAluminumElectrodeSensitivity::~XAluminumElectrodeSensitivity(){
   fWriter.close();
   fWriter2.close();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XAlminumElectrodeHitsCollection* XAlminumElectrodeSensitivity::GetHitsCollection(){
+XAluminumElectrodeHitsCollection* 
+XAluminumElectrodeSensitivity::GetHitsCollection(){
   return fHitsCollection;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XAlminumElectrodeSensitivity::Initialize(G4HCofThisEvent*HCE)
+void XAluminumElectrodeSensitivity::Initialize(G4HCofThisEvent*HCE)
 {
-  fHitsCollection = new XAlminumElectrodeHitsCollection
+  fHitsCollection = new XAluminumElectrodeHitsCollection
                    (SensitiveDetectorName,collectionName[0]);
   if(fHCID<0)
   { fHCID = G4SDManager::GetSDMpointer()->GetCollectionID(fHitsCollection); }
@@ -101,7 +104,8 @@ void XAlminumElectrodeSensitivity::Initialize(G4HCofThisEvent*HCE)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4bool XAlminumElectrodeSensitivity::ProcessHits(G4Step* aStep,G4TouchableHistory* /*ROhist*/)
+G4bool XAluminumElectrodeSensitivity::ProcessHits(G4Step* aStep,
+                                                  G4TouchableHistory* /*ROhist*/)
 {
   //if(aStep->GetTrack()->GetDefinition()!=Phonon::PhononDefinition()) return true;
   G4double edp = aStep->GetNonIonizingEnergyDeposit();
@@ -115,7 +119,7 @@ G4bool XAlminumElectrodeSensitivity::ProcessHits(G4Step* aStep,G4TouchableHistor
   G4ThreeVector fLocalPos
     = theTouchable->GetHistory()->GetTopTransform().TransformPoint(fWorldPos);
 
-  XAlminumElectrodeHit* aHit = new XAlminumElectrodeHit();
+  XAluminumElectrodeHit* aHit = new XAluminumElectrodeHit();
   aHit->SetTime(postStepPoint->GetGlobalTime());
   aHit->SetEDep(edp);
   aHit->SetWorldPos(fWorldPos);
@@ -135,6 +139,6 @@ G4bool XAlminumElectrodeSensitivity::ProcessHits(G4Step* aStep,G4TouchableHistor
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void XAlminumElectrodeSensitivity::EndOfEvent(G4HCofThisEvent* /*HCE*/)
+void XAluminumElectrodeSensitivity::EndOfEvent(G4HCofThisEvent* /*HCE*/)
 {;}
 

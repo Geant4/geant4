@@ -1,0 +1,13 @@
+#beta -0.732 gamma -0.708 lambda 0.376 mu 0.561
+dyn -0.732 -0.708 0.376 0.561
+scat 3.67e-41
+decay 1.6456e-54
+LDOS 0.097834
+STDOS 0.53539
+FTDOS 0.36677
+VDir LVec.ssv  L  161 321
+VDir STVec.ssv ST 161 321
+VDir FTVec.ssv FT 161 321
+VG L.ssv  L 161 321
+VG ST.ssv ST 161 321
+VG FT.ssv FT 161 321
