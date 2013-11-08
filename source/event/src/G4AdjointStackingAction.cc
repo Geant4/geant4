@@ -51,8 +51,7 @@ G4AdjointStackingAction::~G4AdjointStackingAction()
 ////////////////////////////////////////////////////////////////////////////////
 //
 G4ClassificationOfNewTrack  G4AdjointStackingAction::ClassifyNewTrack(const G4Track * aTrack)
-{  
-   G4ClassificationOfNewTrack classification = fUrgent;
+{  G4ClassificationOfNewTrack classification = fUrgent;
    if ( kill_tracks) classification=fKill;
    else if (!adjoint_mode && theFwdStackingAction)   classification =  theFwdStackingAction->ClassifyNewTrack(aTrack); 
    else if (adjoint_mode && theUserAdjointStackingAction)   classification =  theUserAdjointStackingAction->ClassifyNewTrack(aTrack);

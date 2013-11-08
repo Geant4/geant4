@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 7th, 2013  L.Desorgher (event-V09-06-21)
+- Modification of adjoint classes to migrate to the new RMC schema where reverse
+ and forward trackings of  equivalent adjoint and forward primaries are processed
+ in the same events. This in preparation for the migration to the G4MT mode. 
+
 September 9th, 2013  M.Asai (event-V09-06-20)
 - Change the warning message in G4StackManager on missing process
   manager to be issued only when the verbose level is greater than 0.

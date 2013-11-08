@@ -60,16 +60,15 @@ class G4SingleParticleSource;
 class G4ParticleDefinition;
 /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
-class G4AdjointPrimaryGenerator 
-{
-  public: //constructor, destructor
-
+class G4AdjointPrimaryGenerator
+{ public:
     G4AdjointPrimaryGenerator();    
    ~G4AdjointPrimaryGenerator();
 
   public: //public methods
     
     void GenerateAdjointPrimaryVertex(G4Event* anEvt,G4ParticleDefinition* adj_part,G4double E1,G4double E2);
+    void GenerateFwdPrimaryVertex(G4Event* anEvt,G4ParticleDefinition* adj_part,G4double E1,G4double E2);
     void SetSphericalAdjointPrimarySource(G4double radius, G4ThreeVector pos);
     void SetAdjointPrimarySourceOnAnExtSurfaceOfAVolume(const G4String& volume_name);
 
