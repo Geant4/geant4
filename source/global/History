@@ -16,6 +16,16 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+October 30, 2013 G.Cosmo       (global-V09-06-80)
+- Moved G4Poisson to inline on suggestion by K.Genser.
+- Updated dates and tag-ID for release 10.0.
+
+October 30, 2013 A.Dotti       (global-V09-06-79)
+- Corrected compilation warning for non-used parameter in
+  G4ThreadLocalSingleton class.
+- Fix for WIN32/VC9 compilation errors for G4Cache.
+
 Octover 29, 2013 A.Dotti       (global-V09-06-78)
 - Adding G4ThreadPrivateSingleton class for thread-private singleton
   handling and G4AutoDelete namespace with utility function for 

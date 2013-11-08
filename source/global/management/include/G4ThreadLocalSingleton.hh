@@ -154,7 +154,7 @@ T* G4ThreadLocalSingleton<T>::Instance() const {
   }
 
 template<class T>
-G4ThreadLocalSingleton<T>::G4ThreadLocalSingleton( G4ThreadLocalSingleton& rhs) {}
+G4ThreadLocalSingleton<T>::G4ThreadLocalSingleton( G4ThreadLocalSingleton&) {}
 template<class T>
 void G4ThreadLocalSingleton<T>::Register(T* i) const {
   G4AutoLock l(&listm);

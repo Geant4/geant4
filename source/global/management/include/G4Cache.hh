@@ -132,7 +132,7 @@ class G4VectorCache : public G4Cache< std::vector<VALTYPE> > {
 public:
     //Some useful defintions
     typedef VALTYPE value_type;
-    typedef std::vector<value_type> vector_type;
+    typedef typename std::vector<value_type> vector_type;
     typedef typename vector_type::size_type size_type;
     typedef typename vector_type::iterator iterator;
     typedef typename vector_type::const_iterator const_iterator;
@@ -156,7 +156,7 @@ public:
     inline iterator Begin();
     inline iterator End();
     inline void Clear();
-    inline size_type Size();
+    inline size_type Size() { return G4Cache<vector_type>::Get().size(); } //Needs to be here for a VC9 compilation problem
 };
 
 
@@ -170,7 +170,7 @@ public:
     //Some useful definitions
     typedef KEYTYPE key_type;
     typedef VALTYPE value_type;
-    typedef std::map<key_type,value_type> map_type;
+    typedef typename std::map<key_type,value_type> map_type;
     typedef typename map_type::size_type size_type;
     typedef typename map_type::iterator iterator;
     typedef typename map_type::const_iterator const_iterator;
@@ -183,13 +183,13 @@ public:
     
     // Interface with functionalities of similar name of std::map
     inline std::pair<iterator,G4bool> Insert( const key_type& k , const value_type& v );
-    inline size_type Size();
     inline iterator Begin();
     inline iterator End();
     inline iterator Find(const key_type& k );
     inline value_type& Get(const key_type& k );
     inline size_type Erase(const key_type& k );
     inline value_type& operator[](const key_type& k);
+    inline size_type Size() { return G4Cache<map_type>::Get().size(); } //Needs to be here for a VC9 compilation problem
 };
 
 
@@ -223,7 +223,7 @@ G4Cache<V>::G4Cache()
 }
 
 template<class V>
-G4Cache<V>::G4Cache(const G4Cache<V>::value_type & v)
+G4Cache<V>::G4Cache(const V& v)
 {
     G4AutoLock l(&gMutex);
     id = instancesctr++;
@@ -250,16 +250,16 @@ G4Cache<V>::~G4Cache()
 }
 
 template<class V>
-typename G4Cache<V>::value_type & G4Cache<V>::Get() const
+V& G4Cache<V>::Get() const
 { return GetCache(); }
 
 template<class V>
-void G4Cache<V>::Put( const value_type& val ) const
+void G4Cache<V>::Put( const V& val ) const
 { GetCache() = val; }
 
 //Should here remove from cache element?
 template<class V>
-typename G4Cache<V>::value_type G4Cache<V>::Pop()
+V G4Cache<V>::Pop()
 { return GetCache(); }
 
 template<class V>
@@ -293,7 +293,7 @@ G4VectorCache<V>::G4VectorCache(G4int nElems ) {
 }
 
 template<class V>
-G4VectorCache<V>::G4VectorCache(G4int nElems , value_type* vals ) {
+G4VectorCache<V>::G4VectorCache(G4int nElems , V* vals ) {
     vector_type& cc = G4Cache<vector_type>::Get();
     cc.resize(nElems);
     for ( G4int idx = 0 ; idx < nElems ; ++idx )
@@ -301,13 +301,13 @@ G4VectorCache<V>::G4VectorCache(G4int nElems , value_type* vals ) {
 }
 
 template<class V>
-void G4VectorCache<V>::Push_back( const G4VectorCache<V>::value_type& val )
+void G4VectorCache<V>::Push_back( const V& val )
 {
     G4Cache<vector_type>::Get().push_back( val );
 }
 
 template<class V>
-typename G4VectorCache<V>::value_type G4VectorCache<V>::Pop_back()
+V G4VectorCache<V>::Pop_back()
 {
     vector_type& cc = G4Cache<vector_type>::Get();
     value_type val = cc[cc.size()-1];
@@ -316,7 +316,7 @@ typename G4VectorCache<V>::value_type G4VectorCache<V>::Pop_back()
 }
 
 template<class V>
-typename G4VectorCache<V>::value_type & G4VectorCache<V>::operator[](const G4int& idx)
+V& G4VectorCache<V>::operator[](const G4int& idx)
 {
     vector_type& cc = G4Cache<vector_type>::Get();
     return cc[idx];
@@ -340,11 +340,11 @@ void G4VectorCache<V>::Clear()
     G4Cache<vector_type>::Get().clear();
 }
 
-template<class V>
-typename G4VectorCache<V>::size_type G4VectorCache<V>::Size()
-{
-    return G4Cache<vector_type>::Get().size();
-}
+//template<class V>
+//typename G4VectorCache<V>::size_type G4VectorCache<V>::Size()
+//{
+//    return G4Cache<vector_type>::Get().size();
+//}
 
 //======== Implementation: G4MapType<K,V>
 template<class K, class V>
@@ -360,18 +360,18 @@ G4MapCache<K,V>::~G4MapCache()
 
 template<class K, class V>
 std::pair<typename G4MapCache<K,V>::iterator,G4bool> G4MapCache<K,V>::Insert(
-                                            const G4MapCache<K,V>::key_type& k ,
-                                            const G4MapCache<K,V>::value_type& v
-                                            )
+                                                                            const K& k,
+                                                                            const V& v
+                                                                             )
 {
     return G4Cache<map_type>::Get().insert( std::pair<key_type,value_type>(k,v) );
 }
 
-template<class K, class V>
-typename G4MapCache<K,V>::size_type G4MapCache<K,V>::Size()
-{
-    return G4Cache<map_type>::Get().size();
-}
+//template<class K, class V>
+//typename G4MapCache<K,V>::size_type G4MapCache<K,V>::Size()
+//{
+//    return G4Cache<map_type>::Get().size();
+//}
 
 template<class K, class V>
 typename G4MapCache<K,V>::iterator G4MapCache<K,V>::Begin()
@@ -385,31 +385,31 @@ typename G4MapCache<K,V>::iterator G4MapCache<K,V>::End()
 }
 
 template<class K, class V>
-typename G4MapCache<K,V>::iterator G4MapCache<K,V>::Find(const G4MapCache<K,V>::key_type& k )
+typename G4MapCache<K,V>::iterator G4MapCache<K,V>::Find(const K& k )
 {
     return G4Cache<map_type>::Get().find(k);
 }
 
 template<class K, class V>
-G4bool G4MapCache<K,V>::Has(const G4MapCache<K,V>::key_type& k )
+G4bool G4MapCache<K,V>::Has(const K& k )
 {
     return ( Find(k) != End() );
 }
 
 template<class K, class V>
-typename G4MapCache<K,V>::value_type& G4MapCache<K,V>::Get(const G4MapCache<K,V>::key_type& k )
+V& G4MapCache<K,V>::Get(const K& k )
 {
     return Find(k)->second;
 }
 
 template<class K, class V>
-typename G4MapCache<K,V>::size_type G4MapCache<K,V>::Erase(const G4MapCache<K,V>::key_type& k )
+typename G4MapCache<K,V>::size_type G4MapCache<K,V>::Erase(const K& k )
 {
     return G4Cache<map_type>::Get().erase(k);
 }
 
 template<class K, class V>
-typename G4MapCache<K,V>::value_type& G4MapCache<K,V>::operator[](const G4MapCache<K,V>::key_type& k)
+V& G4MapCache<K,V>::operator[](const K& k)
 {
     return (G4Cache<map_type>::Get())[k];
 }
