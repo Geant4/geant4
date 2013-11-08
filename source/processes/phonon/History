@@ -1,3 +1,4 @@
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -9,15 +10,20 @@
 This file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
 and keep track of all category-tags.
-It DOES NOT substitute the  CVS log-message one should put at every
-committal in the CVS repository !
+It DOES NOT substitute the  SVN log-message one should put at every
+committal in the SVN repository !
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-5 November 2013  Michael Kelsey
--------------------------------
+6 November 2013  Michael Kelsey (prophonon-V09-06-01)
+-----------------------------------------------------
+- G4LatticeReader.cc:  Fix compiler warning about implicit cast of string
+  literal to char*, by casting getenv() to (const char*).
+
+5 November 2013  Michael Kelsey (prophonon-V09-06-00)
+-----------------------------------------------------
 NEW PACKAGE for Release 10, containing processes for phonon propagation
 and interaction in materials:
 

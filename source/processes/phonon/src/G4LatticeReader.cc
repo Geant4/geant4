@@ -30,6 +30,7 @@
 //	  materials/ after the 10.0 release (and this comment removed).
 // $Id$
 //
+// 20131106  M.Kelsey -- Add const to getenv() to avoid compiler warning.
 
 #include "G4LatticeReader.hh"
 #include "G4LatticeLogical.hh"
@@ -42,7 +43,7 @@
 // Default path to lattice files, for use with filenames below
 
 const G4String G4LatticeReader::fDataDir =
-  getenv("G4LATTICEDATA") ? getenv("G4LATTICEDATA") : "./CrystalMaps";
+  getenv("G4LATTICEDATA") ? (const char*)getenv("G4LATTICEDATA") : "./CrystalMaps";
 
 
 // Main drivers to read configuration from file or stream
