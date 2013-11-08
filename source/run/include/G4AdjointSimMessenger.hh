@@ -117,6 +117,11 @@ class G4UIcmdWithABool;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithADouble;
+/*
+#ifdef G4MULTITHREADED
+class G4MTAdjointSimManager;
+#endif
+*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -124,12 +129,23 @@ class G4AdjointSimMessenger: public G4UImessenger
 {
   public:
     G4AdjointSimMessenger(G4AdjointSimManager* );
+/*
+#ifdef G4MULTITHREADED
+    G4AdjointSimMessenger(G4MTAdjointSimManager* );
+#endif
+*/
+
    ~G4AdjointSimMessenger();
     
     void SetNewValue(G4UIcommand*, G4String);
     
   private:
     G4AdjointSimManager* theAdjointRunManager;
+/*
+#ifdef G4MULTITHREADED
+    G4MTAdjointSimManager* theMTAdjointRunManager;
+#endif
+*/
     
     G4UIdirectory*             AdjointSimDir;
     G4UIcommand *               beamOnCmd;

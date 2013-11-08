@@ -88,7 +88,7 @@ G4RunManager::G4RunManager()
  numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
  storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
  currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
- numberOfEventProcessed(0)
+ numberOfEventProcessed(0),selectMacro("")
 {
   if(fRunManager)
   {
@@ -127,7 +127,7 @@ G4RunManager::G4RunManager( RMType rmType )
  numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
  storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
  currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
- numberOfEventProcessed(0)
+ numberOfEventProcessed(0),selectMacro("")
 {
   //This version of the constructor should never be called in sequential mode!
 #ifndef G4MULTITHREADED
@@ -366,9 +366,13 @@ void G4RunManager::InitializeEventLoop(G4int n_event,const char* macroFile,G4int
     if(n_select_msg<0) n_select_msg = n_event;
     msgText = "/control/execute ";
     msgText += macroFile;
+    selectMacro = macroFile;
   }
   else
-  { n_select_msg = -1; }
+  {
+      n_select_msg = -1;
+      selectMacro = "";
+  }
 }
 
 void G4RunManager::ProcessOneEvent(G4int i_event)

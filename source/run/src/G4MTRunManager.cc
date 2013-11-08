@@ -270,9 +270,13 @@ void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile, G
         if(n_select_msg<0) n_select_msg = n_event;
         msgText = "/control/execute ";
         msgText += macroFile;
+        selectMacro = macroFile;
     }
     else
-    { n_select_msg = -1; }
+    {
+        n_select_msg = -1;
+        selectMacro = "";
+    }
 
     //initialize seeds
     //If user did not implement InitializeSeeds,

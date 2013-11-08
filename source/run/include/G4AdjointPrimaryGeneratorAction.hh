@@ -126,7 +126,7 @@ class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
 
     size_t index_particle;
-    G4bool last_generated_part_was_adjoint;
+    //G4bool last_generated_part_was_adjoint;
     G4ThreeVector  pos,  direction, p; 
    
     G4String type_of_adjoint_source; //Spherical ExtSurfaceOfAVolume

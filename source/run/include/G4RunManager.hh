@@ -321,7 +321,7 @@ public: // with description
     G4String msgText;
     G4int n_select_msg;
     G4int numberOfEventProcessed;
-
+    G4String selectMacro;
   public:
     virtual void rndmSaveThisRun();
     virtual void rndmSaveThisEvent();
@@ -526,6 +526,12 @@ public: // with description
     { return nParallelWorlds; }
     inline void SetNumberOfEventsToBeProcessed(G4int val)
     { numberOfEventToBeProcessed = val; }
+    inline G4int GetNumberOfEventsToBeProcessed() const
+    { return numberOfEventToBeProcessed; }
+    inline G4int GetNumberOfSelectEvents() const
+    { return n_select_msg; }
+    inline G4String GetSelectMacro() const
+    { return selectMacro; }
     inline void SetDCtable(G4DCtable* DCtbl)
     { DCtable = DCtbl; }
 

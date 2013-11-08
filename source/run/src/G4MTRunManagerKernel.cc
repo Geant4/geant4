@@ -139,7 +139,10 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   if(masterRM->GetUserWorkerInitialization())
   { masterRM->GetUserWorkerInitialization()->WorkerInitialize(); }
   if(masterRM->GetUserActionInitialization())
-  { masterRM->GetUserActionInitialization()->InitializeSteppingVerbose(); }
+  {
+      G4VSteppingVerbose* sv = masterRM->GetUserActionInitialization()->InitializeSteppingVerbose();
+      if ( sv ) { G4VSteppingVerbose::SetInstance(sv); }
+  }
   //Now initialize worker part of shared objects (geometry/physics)
   wThreadContext->BuildGeometryAndPhysicsVector();
   G4WorkerRunManager* wrm
@@ -168,7 +171,7 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   wrm->Initialize();
 
   //================================
-  //Step5: Loop overorders from the master thread 
+  //Step5: Loop over requests from the master thread 
   //================================
   G4MTRunManager::WorkerActionRequest nextAction = masterRM->ThisWorkerWaitForNextAction();
   while( nextAction != G4MTRunManager::ENDWORKER )
@@ -194,6 +197,18 @@ void* G4MTRunManagerKernel::StartThread(void* context)
       std::vector<G4String>::const_iterator it = cmds.begin();
       for(;it!=cmds.end();it++)
       { uimgr->ApplyCommand(*it); }
+      //Start this run
+      G4int numevents = masterRM->GetNumberOfEventsToBeProcessed();
+      G4String macroFile = masterRM->GetSelectMacro();
+      G4int numSelect = masterRM->GetNumberOfSelectEvents();
+      if ( macroFile == "" || macroFile == " " )
+      {
+        wrm->BeamOn(numevents,0,numSelect);
+      }
+      else
+      {
+        wrm->BeamOn(numevents,macroFile,numSelect);
+      }
     }
     else
     {

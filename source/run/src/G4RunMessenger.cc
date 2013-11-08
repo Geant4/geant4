@@ -69,6 +69,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   beamOnCmd->SetGuidance("macro file will be executed only for the first");
   beamOnCmd->SetGuidance("nSelect events.");
   beamOnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  beamOnCmd->SetToBeBroadcasted(false);
   G4UIparameter* p1 = new G4UIparameter("numberOfEvent",'i',true);
   p1->SetDefaultValue(1);
   p1->SetParameterRange("numberOfEvent >= 0");

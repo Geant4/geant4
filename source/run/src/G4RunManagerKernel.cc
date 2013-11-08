@@ -335,10 +335,10 @@ void G4RunManagerKernel::WorkerDefineWorldVolume(G4VPhysicalVolume* worldVol,
       }
       transM->SetWorldForTracking((*itrMW).second);
     }
-    else
-    {
-      transM->RegisterWorld((*itrMW).second);
-    }
+    ////else
+    ////{
+    ////  transM->RegisterWorld((*itrMW).second);
+    ////}
   }
 
   if(topologyIsChanged) geometryNeedsToBeClosed = true;

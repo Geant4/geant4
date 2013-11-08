@@ -333,6 +333,8 @@ void G4WorkerRunManager::RunTermination()
 
 }
 
+#include "G4AutoLock.hh"
+namespace { G4Mutex ConstructScoringWorldsMutex = G4MUTEX_INITIALIZER; }
 void G4WorkerRunManager::ConstructScoringWorlds()
 {
     // Do the correct stuff ...
@@ -344,17 +346,41 @@ void G4WorkerRunManager::ConstructScoringWorlds()
     G4ScoringManager* masterScM = G4MTRunManager::GetMasterScoringManager();
     assert( masterScM != NULL );
     
-    G4ParticleTable::G4PTblDicIterator* particleIterator = G4ParticleTable::GetParticleTable()->GetIterator();
+    G4ParticleTable::G4PTblDicIterator* particleIterator
+     = G4ParticleTable::GetParticleTable()->GetIterator();
     
     for(G4int iw=0;iw<nPar;iw++)
     {
-        G4VScoringMesh* mesh = ScM->GetMesh(iw);
+      G4VScoringMesh* mesh = ScM->GetMesh(iw);
+      G4VPhysicalVolume* pWorld
+       = G4TransportationManager::GetTransportationManager()
+         ->IsWorldExisting(ScM->GetWorldName(iw));
+      if(!pWorld)
+      {
+        G4AutoLock l(&ConstructScoringWorldsMutex);
+        G4MTRunManager* mRM = G4MTRunManager::GetMasterRunManager();
+        G4MTRunManager::masterWorlds_t masterWorlds= mRM->GetMasterWorlds();
+        G4MTRunManager::masterWorlds_t::iterator itrMW = masterWorlds.begin();
+        for(;itrMW!=masterWorlds.end();itrMW++)
+        {
+          if((*itrMW).second->GetName()==ScM->GetWorldName(iw))
+          {
+            pWorld = (*itrMW).second;
+            G4TransportationManager::GetTransportationManager()->RegisterWorld(pWorld);
+            break;
+          }
+        }
+        if(!pWorld)
+        {
+          G4ExceptionDescription ed;
+          ed<<"Mesh name <"<<ScM->GetWorldName(iw)<<"> is not found in the masther thread.";
+          G4Exception("G4WorkerRunManager::ConstructScoringWorlds()","RUN79001",
+                      FatalException,ed);
+        }
         G4VScoringMesh* masterMesh = masterScM->GetMesh(iw);
         mesh->SetMeshElementLogical(masterMesh->GetMeshElementLogical());
+        l.unlock();
         
-        G4VPhysicalVolume* pWorld
-          = G4TransportationManager::GetTransportationManager()
-            ->GetParallelWorld(ScM->GetWorldName(iw));
         G4ParallelWorldProcess* theParallelWorldProcess
           = new G4ParallelWorldProcess(ScM->GetWorldName(iw));
         theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw));
@@ -372,7 +398,8 @@ void G4WorkerRunManager::ConstructScoringWorlds()
             pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9999);
           } //if(pmanager)
         }//while
-        mesh->WorkerConstruct(pWorld);
+      }
+      mesh->WorkerConstruct(pWorld);
     }
 }
 
