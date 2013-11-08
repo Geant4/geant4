@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyLet.hh,v 1.0, Dec 2009;
 
 #ifndef HadrontherapyLet_h
 #define HadrontherapyLet_h 1
@@ -60,7 +59,7 @@ class HadrontherapyDetectorConstruction;
 class HadrontherapyLet
 {
     private:
-	HadrontherapyLet(HadrontherapyDetectorConstruction*); // Ahh, yes another singleton like H.Matrix
+	HadrontherapyLet(HadrontherapyDetectorConstruction*); 
 
     public:
 	~HadrontherapyLet();

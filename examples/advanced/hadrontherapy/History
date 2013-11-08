@@ -8,6 +8,12 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+07.11.2013 L.Pandola;      Tag: hadrontherapy-V09-06-06
+           - Fix additional left-over dependency on LEP
+
+06.11.2013 F.Romano;       Tag: hadrontherapy-V09-06-05
+           - Fixing dependencies on LEP package
+
 05.11.2013 F.Romano;       Tag: hadrontherapy-V09-06-04
            - Fixing compilation warning in HadrontherapyLet class
 

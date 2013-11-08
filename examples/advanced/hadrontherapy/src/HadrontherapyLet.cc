@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: HadrontherapyLet.cc,v 1.0, Dec 2009
 
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyLet.hh"
@@ -53,7 +52,6 @@ HadrontherapyLet* HadrontherapyLet::GetInstance()
 HadrontherapyLet::HadrontherapyLet(HadrontherapyDetectorConstruction* pDet)
 	:filename("Let.out") // Default output filename
 {
-    //  letMessenger = new HadrontherapyLetMessenger(this);
 
     matrix = HadrontherapyMatrix::GetInstance();
 
@@ -110,8 +108,7 @@ void  HadrontherapyLet::FillEnergySpectrum(G4int trackID,
 	if (DE <= 0. || DX <=0.) return;
 	if (!doCalculation) return;
 	G4int Z = particleDef -> GetAtomicNumber();
-	// Kinetic energy cut
-	//if (kinEnergy<=250.*keV && Z>=1) {G4cout << kinEnergy/keV << " keV" << "\t" << particleDef -> GetParticleName() << '\t' << trackID << '\n'; G4cout << std::flush; return;}
+
 
 	G4int PDGencoding = particleDef -> GetPDGEncoding();
 	PDGencoding -= PDGencoding%10;
@@ -165,9 +162,7 @@ void  HadrontherapyLet::FillEnergySpectrum(G4int trackID,
 
 
 
-// Numeric calculation to get LET Track & LET Dose (keV/um)   
-// Med. Phys. 30(5), May 2003. Equations (13) and (14)
-// This must be called at endOfRunAction!
+
 void HadrontherapyLet::LetOutput()
 {
 	for(G4int v=0; v < nVoxels; v++) if (DtotalLetD[v]>0.) totalLetD[v] = totalLetD[v]/DtotalLetD[v];
