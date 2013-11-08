@@ -16,6 +16,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8th November 2013   Gabriele Cosmo   (config-V09-06-12)
+- Removed non necessary LD flag in Darwin configurations.
+
+8th November 2013   Gabriele Cosmo   (config-V09-06-11)
+- Added "-stdlib=libstdc++" compilation flag in Darwin-g++ and
+  Darwin-clang, allowing for resolving compilation issues on
+  MacOS 10.9 Mavericks.
+
+7th November 2013   Gabriele Cosmo   (config-V09-06-10)
+- Added geomconf.gmk script including geometry configuration flags for
+  enabling use of the USolids optional module.
+
 6th November 2013   Gabriele Cosmo   (config-V09-06-09)
 - binmake.gmk: added new include paths for processes/phonon and
   processes/hadronic/models/abla.

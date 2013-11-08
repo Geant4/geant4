@@ -12,7 +12,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   CXXFLAGS  := -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long
 # CXXFLAGS  += -Wunused-parameter -Winline -Wunreachable-code
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
-  CXXFLAGS  += -Wno-variadic-macros -Wshadow
+  CXXFLAGS  += -Wno-variadic-macros -Wshadow -stdlib=libstdc++
   ifdef G4OPTIMISE
     CXXFLAGS  += -O2
     FCFLAGS   := -O2
@@ -39,7 +39,7 @@ ifeq ($(G4SYSTEM),Darwin-g++)
   LDFLAGS += -bind_at_load
   FCLIBS := -lg2c -lnsl
   SHEXT   := dylib
-  LOADLIBS += -lm -lstdc++
+  LOADLIBS += -lm
   ifndef X11FLAGS
     X11FLAGS  := -I/usr/X11R6/include -I/usr/X11R6/include/X11/extensions -I/usr/X11R6/include/X11
   endif

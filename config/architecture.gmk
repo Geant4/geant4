@@ -347,6 +347,10 @@ SORT := sort
 #
 TOUCH := touch
 
+# Include geometry specific setup...
+#
+include $(G4INSTALL)/config/geomconf.gmk
+
 # Include architecture dependent setups...
 #
 include $(G4INSTALL)/config/sys/$(G4SYSTEM).gmk

@@ -1,0 +1,43 @@
+# $Id:$
+# ----------------------------------------------------------------------------
+# Gabriele Cosmo, 11th October 2013
+#
+# Configuration switches for use of USolids wrappers in geometry
+#
+
+ifdef G4GEOM_USE_USOLIDS
+  CPPFLAGS += -DG4GEOM_USE_USOLIDS
+endif
+
+ifdef G4GEOM_USE_UBOX
+  CPPFLAGS += -DG4GEOM_USE_UBOX
+endif
+ifdef G4GEOM_USE_UCONS
+  CPPFLAGS += -DG4GEOM_USE_UCONS
+endif
+ifdef G4GEOM_USE_UORB
+  CPPFLAGS += -DG4GEOM_USE_UORB
+endif
+ifdef G4GEOM_USE_USPHERE
+  CPPFLAGS += -DG4GEOM_USE_USPHERE
+endif
+ifdef G4GEOM_USE_UTRD
+  CPPFLAGS += -DG4GEOM_USE_UTRD
+endif
+ifdef G4GEOM_USE_UTUBS
+  CPPFLAGS += -DG4GEOM_USE_UTUBS
+endif
+ifdef G4GEOM_USE_UGENERICPOLYCONE
+  CPPFLAGS += -DG4GEOM_USE_UGENERICPOLYCONE
+endif
+ifdef G4GEOM_USE_UPOLYCONE
+  CPPFLAGS += -DG4GEOM_USE_UPOLYCONE
+endif
+ifdef G4GEOM_USE_UPOLYHEDRA
+  CPPFLAGS += -DG4GEOM_USE_UPOLYHEDRA
+endif
+ifdef G4GEOM_USE_UTET
+  CPPFLAGS += -DG4GEOM_USE_UTET
+endif
+
+CPPFLAGS += -I$(G4BASE)/geometry/solids/usolids/include
