@@ -159,30 +159,12 @@ G4IonParametrisedLossModel::G4IonParametrisedLossModel(
 
 G4IonParametrisedLossModel::~G4IonParametrisedLossModel() {
 
-  // Range vs energy table objects are deleted and the container is cleared
-  RangeEnergyTable::iterator iterRange = r.begin();
-  RangeEnergyTable::iterator iterRange_end = r.end();
-
-  for(;iterRange != iterRange_end; iterRange++) delete iterRange -> second;
-  r.clear();
-
-  // Energy vs range table objects are deleted and the container is cleared
-  EnergyRangeTable::iterator iterEnergy = E.begin();
-  EnergyRangeTable::iterator iterEnergy_end = E.end();
-
-  for(;iterEnergy != iterEnergy_end; iterEnergy++) delete iterEnergy -> second;
-  E.clear();
-
   // dE/dx table objects are deleted and the container is cleared
   LossTableList::iterator iterTables = lossTableList.begin();
   LossTableList::iterator iterTables_end = lossTableList.end();
 
   for(;iterTables != iterTables_end; iterTables++) delete *iterTables;
   lossTableList.clear();
-
-  // The Bragg ion and Bethe Bloch objects are deleted
-  delete betheBlochModel;
-  delete braggIonModel;
 }
 
 // #########################################################################

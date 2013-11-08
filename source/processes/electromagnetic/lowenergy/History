@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08.11.2013  V. Ivanchenko, tag emlowen-V09-06-44
+            G4IonParametrisedLossModel - fixed destructor
+
 08.11.2013  V. Ivanchenko, tag emlowen-V09-06-43
             G4IonDEDXHandler, G4LivermoreComptonModel,
             G4LivermoreGammaConversionModel, 
