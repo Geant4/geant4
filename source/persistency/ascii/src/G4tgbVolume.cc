@@ -1199,7 +1199,8 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid, EAxis axis 
     solid = new G4Tubs( GetName(), psolid->GetInnerRadius()*redf,
                                    psolid->GetOuterRadius()*redf,
                                    psolid->GetZHalfLength()*redf,
-                                   psolid->GetSPhi(), psolid->GetDPhi());
+                                   psolid->GetStartPhiAngle(),
+                                   psolid->GetDeltaPhiAngle());
   } 
   else if ( parentSolid->GetEntityType() == "G4Cons" )
   {
@@ -1209,7 +1210,8 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid, EAxis axis 
                                    psolid->GetInnerRadiusPlusZ()*redf,
                                    psolid->GetOuterRadiusPlusZ()*redf,
                                    psolid->GetZHalfLength()*redf,
-                                   psolid->GetSPhi(), psolid->GetDPhi());
+                                   psolid->GetStartPhiAngle(),
+                                   psolid->GetDeltaPhiAngle());
   } 
   else if ( parentSolid->GetEntityType() == "G4Trd" )
   {

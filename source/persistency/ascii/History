@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7 November 2013 - G.Cosmo (ascii-V09-06-05)
+- Replaced deprecated calls to solids accessor methods.
+
 27 July 2013 - P.Arce (ascii-V09-06-04)
 - Corrected typo in G4tgrPlaceParameterisation::operator<<().
   Addressing problem report #1504.
