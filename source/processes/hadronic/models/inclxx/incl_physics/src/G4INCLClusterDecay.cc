@@ -410,7 +410,7 @@ namespace G4INCL {
         if(theZ<ParticleTable::clusterTableZSize && theA<ParticleTable::clusterTableASize) {
           finalDaughterZ=theZ;
           finalDaughterA=theA;
-          while(clusterDecayMode[finalDaughterZ][finalDaughterA]==theDecayMode) {
+          while(finalDaughterA>0 && clusterDecayMode[finalDaughterZ][finalDaughterA]==theDecayMode) {
             finalDaughterA--;
             finalDaughterZ -= theZStep;
           }

@@ -463,20 +463,23 @@ namespace G4INCL {
     ParticleList const &inside = theStore->getParticles();
     for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i) {
       if((*i)->isPion()) {
-        (*i)->setEmissionTime(theStore->getBook().getCurrentTime());
+        Particle * const thePion = *i;
+        INCL_DEBUG("Forcing emission of the following particle: "
+                   << thePion->print() << std::endl);
+        thePion->setEmissionTime(theStore->getBook().getCurrentTime());
         // Correction for real masses
-        const G4double theQValueCorrection = (*i)->getEmissionQValueCorrection(theA,theZ);
-        const G4double kineticEnergyOutside = (*i)->getKineticEnergy() - (*i)->getPotentialEnergy() + theQValueCorrection;
-        (*i)->setTableMass();
+        const G4double theQValueCorrection = thePion->getEmissionQValueCorrection(theA,theZ);
+        const G4double kineticEnergyOutside = thePion->getKineticEnergy() - thePion->getPotentialEnergy() + theQValueCorrection;
+        thePion->setTableMass();
         if(kineticEnergyOutside > 0.0)
-          (*i)->setEnergy((*i)->getMass()+kineticEnergyOutside);
+          thePion->setEnergy(thePion->getMass()+kineticEnergyOutside);
         else
-          (*i)->setEnergy((*i)->getMass()+tinyPionEnergy);
-        (*i)->adjustMomentumFromEnergy();
-        (*i)->setPotentialEnergy(0.);
-        theZ -= (*i)->getZ();
-        theStore->particleHasBeenEjected(*i);
-        theStore->addToOutgoing(*i);
+          thePion->setEnergy(thePion->getMass()+tinyPionEnergy);
+        thePion->adjustMomentumFromEnergy();
+        thePion->setPotentialEnergy(0.);
+        theZ -= thePion->getZ();
+        theStore->particleHasBeenEjected(thePion);
+        theStore->addToOutgoing(thePion);
       }
     }
   }

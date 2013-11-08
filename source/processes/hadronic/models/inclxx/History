@@ -16,6 +16,13 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+6 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-36)
+---------------------------------------------------------------
+- INCL++ v5.1.14
+  o Silence a compilation warning.
+  o Fix a bug affecting very light targets.
+  o Tag as v5.1.14.
+
 2 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-35)
 ---------------------------------------------------------------
 - INCL++ v5.1.14_rc18
