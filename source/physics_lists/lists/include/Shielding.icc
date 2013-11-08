@@ -37,6 +37,9 @@
 // 16.08.2010 H.Kurashige: Remove inclusion of G4ParticleWithCuts 
 // 26.04.2011 T.Koi: Add G4RadioactiveDecayPhysics
 // 16.10.2012 A.Ribon: Use new default stopping
+// 07.11.2013 T.Koi: Add IonElasticPhysics, Set proton cut to 0 to generate
+//                   low energy recoils and activate production of fission
+//                   fragments 
 //
 //----------------------------------------------------------------------------
 //
@@ -139,6 +142,11 @@ template<class T> TShielding<T>::TShielding( G4int verbose, G4String LEN_model )
   this->RegisterPhysics( hps );
   //this->RegisterPhysics( new G4HadronPhysicsShielding(verbose,lend));
 
+  if ( LEN_model == "HP" ) {
+     //Activate prodcuton of fission fragments in neutronHP
+     char env_ff[]="G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS=1";
+     putenv(env_ff);
+  }
 
   // Stopping Physics
   this->RegisterPhysics( new G4StoppingPhysics(verbose) );

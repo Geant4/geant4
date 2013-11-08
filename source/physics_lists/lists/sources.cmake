@@ -75,7 +75,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_exci
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/multifragmentation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/photon_evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/util/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/high_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/im_r_matrix/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/incl_physics/include)
@@ -83,7 +82,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/isotope_production/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lepto_nuclear/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/low_energy/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/neutron_hp/include)
@@ -173,8 +171,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         G4had_string_frag
         G4had_string_man
         G4had_theo_max
-        G4hadronic_HE
-        G4hadronic_LE
         G4hadronic_bert_cascade
         G4hadronic_binary
         G4hadronic_coherent_elastic
