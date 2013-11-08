@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7th November 2013 Laurent Garnier (opengl-V09-06-09)
+- Better solution for JIRA-Dev28 problem, also fix text justification in Qt
+
+7th November 2013 Laurent Garnier
+- Fix the JIRA-Dev28 problem : Text displays in wrong position in Qt
+
 31th October 2013  Laurent Garnier (opengl-V09-06-08)
 - Cleanup in the code, in particular Wt driver
 
