@@ -81,7 +81,7 @@ ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()
     description << "      " 
       << "G4HbookAnalysisManager is not supported in multi-threading mode."; 
     G4Exception("ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()",
-                "Analysis_F001", FatalException, description);
+                "Analysis_F002", FatalException, description);
   }              
 
   if ( fgInstance ) {
@@ -159,10 +159,10 @@ G4bool ExG4HbookAnalysisManager::OpenFileImpl(const G4String& fileName)
   finalResult = finalResult && result;
 
   // Create h1 histrograms 
-  fH1Manager->CreateH1FromBooking();
+  fH1Manager->CreateH1sFromBooking();
 
   // Create h2 histrograms if any is booked
-  fH2Manager->CreateH2FromBooking();
+  fH2Manager->CreateH2sFromBooking();
 
   // Create ntuples if they are booked
   fNtupleManager->CreateNtuplesFromBooking();

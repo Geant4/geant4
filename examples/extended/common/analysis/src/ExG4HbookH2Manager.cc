@@ -36,9 +36,11 @@
 #include "ExG4HbookFileManager.hh"
 #include "G4HnManager.hh"
 #include "G4AnalysisManagerState.hh"
-#include "G4UnitsTable.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include <iostream>
+
+using namespace G4Analysis;
 
 const G4int ExG4HbookH2Manager::fgkDefaultH2HbookIdOffset = 100;
 
@@ -91,7 +93,7 @@ void ExG4HbookH2Manager::SetH2HbookIdOffset()
 }  
 
 //_____________________________________________________________________________
-void ExG4HbookH2Manager::CreateH2FromBooking()
+void ExG4HbookH2Manager::CreateH2sFromBooking()
 {
 // Create h2 from h2_booking.
 
@@ -225,8 +227,21 @@ G4int ExG4HbookH2Manager::CreateH2(const G4String& name, const G4String& title,
                                G4int nxbins, G4double xmin, G4double xmax,
                                G4int nybins, G4double ymin, G4double ymax,
                                const G4String& xunitName, const G4String& yunitName,
-                               const G4String& xfcnName, const G4String& yfcnName)
+                               const G4String& xfcnName, const G4String& yfcnName,
+                               const G4String& xbinSchemeName,
+                               const G4String& ybinSchemeName)
+                               
 {
+  // HBook does not support user defined binning for H2
+  if ( xbinSchemeName != "linear" || ybinSchemeName != "linear" ) {
+    G4ExceptionDescription description;
+    description 
+      << "      " 
+      << "Logarithimc binning is not supported for H2.";
+    G4Exception("ExG4HbookH2Manager::CreateH2",
+                "Analysis_F015", FatalException, description);
+  }              
+
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
     fState.GetVerboseL4()->Message("create", "H2", name);
@@ -238,6 +253,8 @@ G4int ExG4HbookH2Manager::CreateH2(const G4String& name, const G4String& title,
   G4double yunit = GetUnitValue(yunitName);
   G4Fcn xfcn = GetFunction(xfcnName);
   G4Fcn yfcn = GetFunction(yfcnName);
+  G4BinScheme xbinScheme = GetBinScheme(xbinSchemeName);
+  G4BinScheme ybinScheme = GetBinScheme(ybinSchemeName);
   G4String newTitle(title);
   UpdateTitle(newTitle, xunitName, xfcnName);  
   UpdateTitle(newTitle, yunitName, yfcnName);  
@@ -247,8 +264,9 @@ G4int ExG4HbookH2Manager::CreateH2(const G4String& name, const G4String& title,
            // h2_booking object is deleted in destructor
   h2Booking->fTitle = newTitle;
   fH2BookingVector.push_back(h2Booking);
-  fHnManager->AddH2Information(name, xunitName, yunitName, xfcnName, yfcnName, 
-                               xunit, yunit, xfcn, yfcn);
+  fHnManager
+    ->AddH2Information(name, xunitName, yunitName, xfcnName, yfcnName, 
+                       xunit, yunit, xfcn, yfcn, xbinScheme, ybinScheme);
   
   // Set fH1HbookIdOffset if needed
   SetH2HbookIdOffset();
@@ -294,12 +312,40 @@ G4int ExG4HbookH2Manager::CreateH2(const G4String& name, const G4String& title,
 }                                         
 
 //_____________________________________________________________________________
+G4int ExG4HbookH2Manager::CreateH2(const G4String& /*name*/,  const G4String& /*title*/,
+                          const std::vector<G4double>& /*xedges*/,
+                          const std::vector<G4double>& /*yedges*/,
+                          const G4String& /*xunitName*/, const G4String& /*yunitName*/,
+                          const G4String& /*xfcnName*/, const G4String& /*yfcnName*/)
+{                          
+  // HBook does not support user defined binning for H2
+  G4ExceptionDescription description;
+  description 
+    << "      " 
+    << "User defined binning is not supported for H2.";
+  G4Exception("ExG4HbookH2Manager::CreateH2",
+              "Analysis_F015", FatalException, description);
+  return 0;              
+}              
+                               
+//_____________________________________________________________________________
 G4bool ExG4HbookH2Manager::SetH2(G4int id,
                                 G4int nxbins, G4double xmin, G4double xmax, 
                                 G4int nybins, G4double ymin, G4double ymax,
                                 const G4String& xunitName, const G4String& yunitName,
-                                const G4String& xfcnName, const G4String& yfcnName)
+                                const G4String& xfcnName, const G4String& yfcnName,
+                                const G4String& xbinScheme, const G4String& ybinScheme)
 {                                
+  // HBook does not support user defined binning for H2
+  if ( xbinScheme != "linear" || ybinScheme != "linear" ) {
+    G4ExceptionDescription description;
+    description 
+      << "      " 
+      << "Logarithimc binning is not supported for H2.";
+    G4Exception("ExG4HbookH2Manager::CreateH2",
+                "Analysis_F015", FatalException, description);
+  }              
+
   h2_booking* h2Booking = GetH2Booking(id, false);
   if ( ! h2Booking ) {
     G4ExceptionDescription description;
@@ -353,6 +399,24 @@ G4bool ExG4HbookH2Manager::SetH2(G4int id,
   return true;
 }
                                   
+//_____________________________________________________________________________
+G4bool ExG4HbookH2Manager::SetH2(G4int /*id*/,
+                            const std::vector<G4double>& /*xedges*/,
+                            const std::vector<G4double>& /*yedges*/,
+                            const G4String& /*xunitName*/, const G4String& /*yunitName*/,
+                            const G4String& /*xfcnName*/, const G4String& /*yfcnName*/)
+{                          
+  // HBook does not support user defined binning for H2
+  G4ExceptionDescription description;
+  description 
+    << "      " 
+    << "User defined binning is not supported for H2.";
+  G4Exception("ExG4HbookH2Manager::CreateH2",
+              "Analysis_F015", FatalException, description);
+
+  return false;              
+}              
+                            
 //_____________________________________________________________________________
 G4bool ExG4HbookH2Manager::ScaleH2(G4int id, G4double factor)
 {

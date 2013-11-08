@@ -16,7 +16,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-July 11, 2013 I.Hrivnacova (excommon-analysis-V09-06-03)
+07/11/2013 I. Hrivnacova (excommon-analysis-V09-06-04)
+- Implemented functions for user defined/logarithmic binning for H1 
+  and H2; in case of H2 an exception is (not available in HBOOK) 
+
+11/07/2013 I. Hrivnacova (excommon-analysis-V09-06-03)
 - Refactoring ExG4Hnook manager class following changes
   in analysis (analysis-V09-06-11)
 

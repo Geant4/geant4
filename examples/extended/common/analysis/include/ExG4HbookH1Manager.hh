@@ -36,7 +36,7 @@
 #define ExG4HbookH1Manager_h 1
 
 #include "G4VH1Manager.hh"
-#include "G4HnManager.hh"
+#include "G4HnInformation.hh"
 #include "globals.hh"
 
 #include <tools/hbook/h1>
@@ -51,11 +51,21 @@ struct h1_booking {
     : fTitle(""),
       fNbins(nbins), 
       fXmin(xmin), 
-      fXmax(xmax) {}
+      fXmax(xmax),
+      fEdges() {}
+  h1_booking(const std::vector<G4double>& edges)
+    : fTitle(""),
+      fNbins(0), 
+      fXmin(0), 
+      fXmax(0),
+      fEdges() {
+    for (G4int i=0; i<=G4int(edges.size()); ++i) fEdges.push_back(edges[i]);
+  }
   G4String fTitle;    
   G4int fNbins;
   G4double fXmin;
   G4double fXmax;
+  std::vector<G4double> fEdges;
 };  
   
 /// Manager class for HBook H1 histograms
@@ -101,10 +111,20 @@ class ExG4HbookH1Manager : public G4VH1Manager
     virtual G4int CreateH1(const G4String& name, const G4String& title,
                            G4int nbins, G4double xmin, G4double xmax,
                            const G4String& unitName = "none",
+                           const G4String& fcnName = "none",
+                           const G4String& binSchemeName = "linear");
+    virtual G4int CreateH1(const G4String& name, const G4String& title,
+                           const std::vector<G4double>& edges,
+                           const G4String& unitName = "none",
                            const G4String& fcnName = "none");
 
     virtual G4bool SetH1(G4int id,
                            G4int nbins, G4double xmin, G4double xmax,
+                           const G4String& unitName = "none",
+                           const G4String& fcnName = "none",
+                           const G4String& binSchemeName = "linear");
+    virtual G4bool SetH1(G4int id,
+                           const std::vector<G4double>& edges,
                            const G4String& unitName = "none",
                            const G4String& fcnName = "none");
                            
@@ -141,8 +161,30 @@ class ExG4HbookH1Manager : public G4VH1Manager
     // methods
     //
     void SetH1HbookIdOffset();
-    void CreateH1FromBooking();
+    void AddH1Information(const G4String& name,  
+                          const G4String& unitName, 
+                          const G4String& fcnName,
+                          G4BinScheme binScheme) const;
+    
+    G4int CreateH1FromBooking(h1_booking* h1Booking, 
+                          G4bool chDir = true);
+    G4int RegisterH1Booking(const G4String& name, 
+                          h1_booking* h1Booking);
 
+    void  BeginCreateH1(const G4String& name);
+    G4int FinishCreateH1(const G4String& name, h1_booking* h1Booking,
+                         const G4String& unitName, const G4String& fcnName,
+                         G4BinScheme binScheme);
+    
+    G4bool BeginSetH1(G4int id,
+                         h1_booking* h1Booking,
+                         G4HnInformation* info);
+    G4bool FinishSetH1(G4int id,
+                         G4HnInformation* info,
+                         const G4String& unitName, const G4String& fcnName,
+                         G4BinScheme binScheme);
+
+    void CreateH1sFromBooking();
     void Reset();
     virtual h1_booking* GetH1Booking(G4int id, G4bool warn = true) const;
 

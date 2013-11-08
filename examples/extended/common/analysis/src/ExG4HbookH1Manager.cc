@@ -36,8 +36,11 @@
 #include "ExG4HbookFileManager.hh"
 #include "G4HnManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include <fstream>
+
+using namespace G4Analysis;
 
 //_____________________________________________________________________________
 ExG4HbookH1Manager::ExG4HbookH1Manager(const G4AnalysisManagerState& state)
@@ -61,6 +64,203 @@ ExG4HbookH1Manager::~ExG4HbookH1Manager()
   for ( it = fH1BookingVector.begin(); it != fH1BookingVector.end(); it++ ) {
     delete *it;
   }  
+}
+
+//
+// utility functions
+//
+
+namespace {
+
+//_____________________________________________________________________________
+void ConvertToFloat(const std::vector<G4double>& doubleVector,
+                    std::vector<float>& floatVector)
+{
+  for (G4int i=0; i<G4int(doubleVector.size()); ++i) 
+    floatVector.push_back((float)doubleVector[i]);
+}                        
+
+//_____________________________________________________________________________
+void UpdateH1Information(G4HnInformation* information,
+                          const G4String& unitName, 
+                          const G4String& fcnName,
+                          G4BinScheme binScheme)
+{
+  G4double unit = GetUnitValue(unitName);
+  G4Fcn fcn = GetFunction(fcnName);
+  information->fXUnitName = unitName;
+  information->fYUnitName = unitName;
+  information->fXFcnName = fcnName;
+  information->fYFcnName = fcnName;
+  information->fXUnit = unit;
+  information->fYUnit = unit;
+  information->fXFcn = fcn;
+  information->fYFcn = fcn;
+  information->fXBinScheme = binScheme;
+  information->fYBinScheme = binScheme;
+}  
+
+//_____________________________________________________________________________
+h1_booking* CreateH1Booking(const G4String& title,
+                   G4int nbins, G4double xmin, G4double xmax,
+                   const G4String& unitName,
+                   const G4String& fcnName,
+                   G4BinScheme binScheme)
+{
+  G4Fcn fcn = GetFunction(fcnName);
+
+  h1_booking* h1Booking = 0; 
+  if ( binScheme != kLogBinScheme ) {
+    if ( binScheme == kUserBinScheme ) {
+      // This should never happen, but let's make sure about it
+      // by issuing a warning
+      G4ExceptionDescription description;
+      description 
+        << "    User binning scheme setting was ignored." << G4endl
+        << "    Linear binning will be applied with given (nbins, xmin, xmax) values";
+      G4Exception("ExG4HbookH1Manager::CreateH1",
+                "Analysis_W013", JustWarning, description);
+    }              
+    h1Booking = new h1_booking(nbins, fcn(xmin), fcn(xmax)); 
+                    // h1_booking object is deleted in destructor
+  }
+  else {
+    // Compute edges
+    G4cout << " 1x1" << G4endl;
+    std::vector<G4double> edges;
+    G4cout << " 1x2" << G4endl;
+    ComputeEdges(nbins, xmin, xmax, fcn, binScheme, edges);
+    G4cout << " 1x2" << G4endl;
+    h1Booking = new h1_booking(edges); 
+                    // h1_booking object is deleted in destructor
+  }
+
+  h1Booking->fTitle = title;
+  UpdateTitle(h1Booking->fTitle, unitName, fcnName);  
+
+  return h1Booking;
+}
+
+//_____________________________________________________________________________
+h1_booking* CreateH1Booking(const G4String& title,
+                   const std::vector<G4double>& edges,
+                   const G4String& unitName,
+                   const G4String& fcnName)
+{
+  G4Fcn fcn = GetFunction(fcnName);
+
+  // Apply function
+  std::vector<G4double> newEdges;
+  ComputeEdges(edges, fcn, newEdges);
+  
+  G4cout << " 11" << G4endl;
+  h1_booking* h1Booking = new h1_booking(newEdges); 
+  G4cout << " 12" << G4endl;
+                    // h1_booking object is deleted in destructor
+
+  h1Booking->fTitle = title;
+  UpdateTitle(h1Booking->fTitle, unitName, fcnName);  
+  
+  return h1Booking;
+}
+
+//_____________________________________________________________________________
+void UpdateH1Booking(h1_booking* h1Booking,
+                     G4int nbins, G4double xmin, G4double xmax,  
+                     const G4String& unitName,
+                     const G4String& fcnName,
+                     const G4String& binSchemeName)
+{
+  G4Fcn fcn = GetFunction(fcnName);
+  G4BinScheme binScheme = GetBinScheme(binSchemeName);
+
+  if ( binScheme != kLogBinScheme ) {
+    if ( binScheme == kUserBinScheme ) {
+      // This should never happen, but let's make sure about it
+      // by issuing a warning
+      G4ExceptionDescription description;
+      description 
+        << "    User binning scheme setting was ignored." << G4endl
+        << "    Linear binning will be applied with given (nbins, xmin, xmax) values";
+      G4Exception("ExG4HbookH1Manager::SetH1",
+                "Analysis_W013", JustWarning, description);
+    }              
+    h1Booking->fNbins = nbins;
+    h1Booking->fXmin = fcn(xmin);
+    h1Booking->fXmax = fcn(xmax);
+  }
+  else {
+    // Compute edges
+    ComputeEdges(nbins, xmin, xmax, fcn, binScheme, h1Booking->fEdges);
+  }
+
+  UpdateTitle(h1Booking->fTitle, unitName, fcnName);  
+}     
+
+//_____________________________________________________________________________
+void UpdateH1Booking(h1_booking* h1Booking,
+                     const std::vector<G4double>& edges,
+                     const G4String& unitName,
+                     const G4String& fcnName)
+{
+  G4Fcn fcn = GetFunction(fcnName);
+
+  // Apply function
+  ComputeEdges(edges, fcn, h1Booking->fEdges);
+
+  UpdateTitle(h1Booking->fTitle, unitName, fcnName);  
+}     
+
+//_____________________________________________________________________________
+void ConfigureHbookH1(tools::hbook::h1* h1,
+                      G4int nbins, G4double xmin, G4double xmax,  
+                      const G4String& fcnName,
+                      G4BinScheme binScheme)
+{
+  G4Fcn fcn = GetFunction(fcnName);
+
+  if ( binScheme != kLogBinScheme ) {
+    if ( binScheme == kUserBinScheme ) {
+      // This should never happen, but let's make sure about it
+      // by issuing a warning
+      G4ExceptionDescription description;
+      description 
+        << "    User binning scheme setting was ignored." << G4endl
+        << "    Linear binning will be applied with given (nbins, xmin, xmax) values";
+      G4Exception("ExG4HbookH1Manager::SetH1",
+                "Analysis_W013", JustWarning, description);
+    }              
+    h1->configure(nbins, fcn(xmin), fcn(xmax));
+  }
+  else {
+    // Compute bins
+    std::vector<G4double> edges;
+    ComputeEdges(nbins, xmin, xmax, fcn, binScheme, edges);
+    // Convert to float
+    std::vector<float> fedges;
+    ConvertToFloat(edges, fedges); 
+
+    h1->configure(fedges);
+  }
+}     
+
+//_____________________________________________________________________________
+void ConfigureHbookH1(tools::hbook::h1* h1,
+                      const std::vector<G4double>& edges,
+                      const G4String& fcnName)
+{
+  // Apply function to edges
+  G4Fcn fcn = GetFunction(fcnName);
+  std::vector<G4double> newEdges;
+  ComputeEdges(edges, fcn, newEdges);
+  
+  // Convert to float
+  std::vector<float> newFEdges;
+  ConvertToFloat(newEdges, newFEdges); 
+
+  h1->configure(newFEdges);
+}
+
 }
 
 // 
@@ -88,9 +288,180 @@ void ExG4HbookH1Manager::SetH1HbookIdOffset()
 }  
 
 //_____________________________________________________________________________
-void ExG4HbookH1Manager::CreateH1FromBooking()
+void ExG4HbookH1Manager::AddH1Information(const G4String& name,  
+                                          const G4String& unitName, 
+                                          const G4String& fcnName,
+                                          G4BinScheme binScheme) const
+{
+  G4double unit = GetUnitValue(unitName);
+  G4Fcn fcn = GetFunction(fcnName);
+  fHnManager->AddH1Information(name, unitName, fcnName, unit, fcn, binScheme);
+}  
+
+//_____________________________________________________________________________
+G4int ExG4HbookH1Manager::CreateH1FromBooking(h1_booking* h1Booking, 
+                                              G4bool chDir)
 {
 // Create h1 from h1_booking.
+
+  if ( chDir ) {
+    // Go to histograms directory if defined
+    if ( fFileManager->GetHistoDirectoryName() != "" ) {
+      G4String histoPath = "//PAWC/LUN1/";
+      histoPath.append(fFileManager->GetHistoDirectoryName().data());
+      tools::hbook::CHCDIR(histoPath.data()," ");
+    }
+  }    
+
+  G4int index = fH1Vector.size();
+  G4int id = index + fFirstId;    
+  G4HnInformation* 
+    info = fHnManager->GetHnInformation(id, "CreateH1FromBooking");
+  // Hbook index
+  G4int hbookIndex = fH1HbookIdOffset + index + fFirstId;
+  
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) 
+    fState.GetVerboseL4()->Message("create from booking", "h1", info->fName);
+#endif
+
+  // Create h1
+  tools::hbook::h1* h1 = 0; 
+  if ( ! h1Booking->fEdges.size() ) {
+    h1 = new tools::hbook::h1(
+               hbookIndex, h1Booking->fTitle, 
+               h1Booking->fNbins, h1Booking->fXmin, h1Booking->fXmax);
+  }
+  else {               
+    // Convert to float
+    std::vector<float> newEdges;
+    ConvertToFloat(h1Booking->fEdges, newEdges); 
+
+    h1 = new tools::hbook::h1(hbookIndex, h1Booking->fTitle, newEdges);
+  }
+                           
+  fH1Vector.push_back(h1);
+  
+  if ( chDir ) {
+    if ( fFileManager->GetHistoDirectoryName() != "" ) {
+      // Return to //PAWC/LUN1 :
+      tools::hbook::CHCDIR("//PAWC/LUN1"," ");
+    }  
+  }
+  
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL3() ) { 
+    G4ExceptionDescription description;
+    description << " name : " << info->fName << " hbook index : " << hbookIndex; 
+    fState.GetVerboseL3()->Message("create from booking", "h1", description);
+  }  
+#endif
+  
+  return id;
+}  
+
+//_____________________________________________________________________________
+G4int ExG4HbookH1Manager::RegisterH1Booking(const G4String& name, 
+                                            h1_booking* h1Booking)
+{
+  // Register h1
+  G4int index = fH1BookingVector.size();  
+  fH1BookingVector.push_back(h1Booking);
+  fH1NameIdMap[name] = index + fFirstId;
+
+  // Lock id
+  fLockFirstId = true;
+
+  return index + fFirstId;
+}  
+
+//_____________________________________________________________________________
+void ExG4HbookH1Manager::BeginCreateH1(const G4String& name)
+{
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) 
+    fState.GetVerboseL4()->Message("create", "H1", name);
+#endif
+
+  // Set  fH1HbookIdOffset if needed
+  SetH1HbookIdOffset();
+}
+
+//_____________________________________________________________________________
+G4int ExG4HbookH1Manager::FinishCreateH1(
+                               const G4String& name, h1_booking* h1Booking,
+                               const G4String& unitName, const G4String& fcnName,
+                               G4BinScheme binScheme)
+{
+  // Register h1 booking
+  G4int id = RegisterH1Booking(name, h1Booking);
+  
+  // Save H1 information
+  AddH1Information(name, unitName, fcnName, binScheme);
+
+  // Create h1 if the file is open
+  if ( fFileManager->IsFile() ) {
+    CreateH1FromBooking(h1Booking);
+  }
+
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL2() ) { 
+    G4int hbookIndex = fH1HbookIdOffset + id;
+    G4ExceptionDescription description;
+    description << " name : " << name << " hbook index : " << hbookIndex; 
+    fState.GetVerboseL2()->Message("create", "H1", description);
+  }  
+#endif
+
+  return id;
+}                                         
+
+//_____________________________________________________________________________
+G4bool ExG4HbookH1Manager::BeginSetH1(
+                               G4int id,
+                               h1_booking* h1Booking,
+                               G4HnInformation* info)
+{                                
+  h1Booking = GetH1Booking(id, false);
+  if ( ! h1Booking ) {
+    G4ExceptionDescription description;
+    description << "      " << "histogram " << id << " does not exist.";
+    G4Exception("G4HbookAnalysisManager::SetH1()",
+                "Analysis_W007", JustWarning, description);
+    return false;
+  }
+
+  info = fHnManager->GetHnInformation(id,"SetH1");
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) 
+    fState.GetVerboseL4()->Message("configure", "H1", info->fName);
+#endif
+
+  return true;
+}
+  
+//_____________________________________________________________________________
+G4bool ExG4HbookH1Manager::FinishSetH1(
+                               G4int id,
+                               G4HnInformation* info,
+                               const G4String& unitName, 
+                               const G4String& fcnName,
+                               G4BinScheme binScheme)
+{                                
+  // Update information
+  UpdateH1Information(info, unitName, fcnName, binScheme);
+
+  // Set activation
+  fHnManager->SetActivation(id, true); 
+  
+  return true;
+}
+  
+                                        
+//_____________________________________________________________________________
+void ExG4HbookH1Manager::CreateH1sFromBooking()
+{
+// Create all h1 from h1_booking.
 
   // Do nothing if any h1 histogram already exists
   // or no h1 histograms are booked
@@ -104,36 +475,12 @@ void ExG4HbookH1Manager::CreateH1FromBooking()
   }  
 
   // Create histograms
-  G4int index = 0;
   std::vector<h1_booking*>::const_iterator it;
   for ( it = fH1BookingVector.begin(); it != fH1BookingVector.end(); ++it) {
-    // Get information
-    G4int id = index + fFirstId;    
-    G4HnInformation* info = fHnManager->GetHnInformation(id, "CreateH1FromBooking");
-    // Hbook index
-    G4int hbookIndex = fH1HbookIdOffset + index + fFirstId;
-    ++index;
-
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL4() ) 
-      fState.GetVerboseL4()->Message("create from booking", "h1", info->fName);
-#endif
-
-    // Create h1
-    tools::hbook::h1* h1 
-      = new tools::hbook::h1(hbookIndex, (*it)->fTitle, 
-                             (*it)->fNbins, (*it)->fXmin, (*it)->fXmax);
-    fH1Vector.push_back(h1);
-
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL3() ) { 
-      G4ExceptionDescription description;
-      description << " name : " << info->fName << " hbook index : " << hbookIndex; 
-      fState.GetVerboseL3()->Message("create from booking", "h1", description);
-    }  
-#endif
-  } 
+    CreateH1FromBooking(*it, false);
+  }  
   
+  // Return backi from histograms directory if defined
   if ( fFileManager->GetHistoDirectoryName() != "" ) {
     // Return to //PAWC/LUN1 :
     tools::hbook::CHCDIR("//PAWC/LUN1"," ");
@@ -241,117 +588,89 @@ tools::hbook::h1*  ExG4HbookH1Manager::GetH1InFunction(G4int id,
 //
 
 //_____________________________________________________________________________
-G4int ExG4HbookH1Manager::CreateH1(const G4String& name, const G4String& title,
+G4int ExG4HbookH1Manager::CreateH1(
+                               const G4String& name, const G4String& title,
                                G4int nbins, G4double xmin, G4double xmax,
-                               const G4String& unitName, const G4String& fcnName)
+                               const G4String& unitName, const G4String& fcnName,
+                               const G4String& binSchemeName)
 {
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("create", "H1", name);
-#endif
+  BeginCreateH1(name);
 
-  // Create h1 booking & information
-  G4int index = fH1BookingVector.size();
-  G4double unit = GetUnitValue(unitName);
-  G4Fcn fcn = GetFunction(fcnName);
-  G4String newTitle(title);
-  UpdateTitle(newTitle, unitName, fcnName);  
-  h1_booking* h1Booking = new h1_booking(nbins, fcn(xmin), fcn(xmax)); 
-           // h1_booking object is deleted in destructor
-  h1Booking->fTitle = newTitle;
-  fH1BookingVector.push_back(h1Booking);
-  fHnManager->AddH1Information(name, unitName, fcnName, unit, fcn);
-  
-  // Set  fH1HbookIdOffset if needed
-  SetH1HbookIdOffset();
-  
-  // Hbook index
-  G4int hbookIndex = fH1HbookIdOffset + index + fFirstId;
+  G4BinScheme binScheme = GetBinScheme(binSchemeName);
 
-  // Create h1 if the file is open
-  if ( fFileManager->IsFile() ) {
-    // Go to histograms directory
-    G4String histoPath = "//PAWC/LUN1/";
-    if ( fFileManager->GetHistoDirectoryName() != "" ) {
-      histoPath.append(fFileManager->GetHistoDirectoryName().data());
-      tools::hbook::CHCDIR(histoPath.data()," ");
-    }  
-    tools::hbook::CHCDIR(histoPath.data()," ");
+  // Create h1 booking
+  h1_booking* h1Booking 
+    = CreateH1Booking(title, nbins, xmin, xmax, unitName, fcnName, binScheme);
     
-    // Create histogram    
-    tools::hbook::h1* h1 
-      = new tools::hbook::h1(hbookIndex, newTitle, nbins, fcn(xmin), fcn(xmax));
-            // h1 objects are deleted when closing a file.
-    fH1Vector.push_back(h1);
- 
-    if ( fFileManager->GetHistoDirectoryName() != "" ) {
-      // Return to //PAWC/LUN1 :
-      tools::hbook::CHCDIR("//PAWC/LUN1"," ");
-    }
-  }
-  
-  fLockFirstId = true;
-
-#ifdef G4VERBOSE
-    if ( fState.GetVerboseL2() ) { 
-      G4ExceptionDescription description;
-      description << " name : " << name << " hbook index : " << hbookIndex; 
-      fState.GetVerboseL2()->Message("create", "H1", description);
-    }  
-#endif
-
-  fH1NameIdMap[name] = index + fFirstId;
-  return index + fFirstId;
+  return FinishCreateH1(name, h1Booking, unitName, fcnName, binScheme); 
 }                                         
 
 //_____________________________________________________________________________
+G4int ExG4HbookH1Manager::CreateH1(
+                               const G4String& name, const G4String& title,
+                               const std::vector<G4double>& edges,
+                               const G4String& unitName,
+                               const G4String& fcnName)
+{                       
+  BeginCreateH1(name);
+
+  // Create h1 booking
+  h1_booking* h1Booking 
+    = CreateH1Booking(title, edges, unitName, fcnName);
+    
+  return FinishCreateH1(name, h1Booking, unitName, fcnName, kUserBinScheme); 
+}                                         
+
+
+//_____________________________________________________________________________
 G4bool ExG4HbookH1Manager::SetH1(G4int id,
-                                   G4int nbins, G4double xmin, G4double xmax,
-                                   const G4String& unitName, 
-                                   const G4String& fcnName)
+                               G4int nbins, G4double xmin, G4double xmax,
+                               const G4String& unitName, 
+                               const G4String& fcnName,
+                               const G4String& binSchemeName)
 {                                
-  h1_booking* h1Booking = GetH1Booking(id, false);
-  if ( ! h1Booking ) {
-    G4ExceptionDescription description;
-    description << "      " << "histogram " << id << " does not exist.";
-    G4Exception("G4HbookAnalysisManager::SetH1()",
-                "Analysis_W007", JustWarning, description);
-    return false;
-  }
+  h1_booking* h1Booking = 0;
+  G4HnInformation* info = 0;
 
-  G4HnInformation* info = fHnManager->GetHnInformation(id,"SetH1");
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("configure", "H1", info->fName);
-#endif
+  if ( ! BeginSetH1(id, h1Booking, info) ) return false; 
 
-  // Keep new parameters in booking & information
-  G4double unit = GetUnitValue(unitName);
-  G4Fcn fcn = GetFunction(fcnName);
-  h1Booking->fNbins = nbins;
-  h1Booking->fXmin = fcn(xmin);
-  h1Booking->fXmax = fcn(xmax);
-  info->fXUnitName = unitName;
-  info->fYUnitName = unitName;
-  info->fXFcnName = fcnName;
-  info->fYFcnName = fcnName;
-  info->fXUnit = unit;
-  info->fYUnit = unit;
-  info->fXFcn = fcn;
-  info->fYFcn = fcn;
-  fHnManager->SetActivation(id, true); 
+  G4BinScheme binScheme = GetBinScheme(binSchemeName);
 
-  G4String newTitle(h1Booking->fTitle);
-  UpdateTitle(newTitle, unitName, fcnName);  
-  h1Booking->fTitle = newTitle;  
-  
+  // Update H1 booking
+  UpdateH1Booking(h1Booking, 
+                  nbins, xmin, xmax, unitName, fcnName, binScheme);
+
   // Re-configure histogram if it was already defined
   if ( fH1Vector.size() ) {
     tools::hbook::h1* h1 = GetH1(id);
-    h1->configure(nbins, fcn(xmin), fcn(xmax));
+    ConfigureHbookH1(h1, nbins, xmin, xmax, fcnName, binScheme);
   }  
   
-  return true;
+  return FinishSetH1(id, info, unitName, fcnName, binScheme);
+}
+  
+//_____________________________________________________________________________
+G4bool ExG4HbookH1Manager::SetH1(G4int id,
+                               const std::vector<G4double>& edges,
+                               const G4String& unitName, 
+                               const G4String& fcnName)
+{                                
+  h1_booking* h1Booking = 0;
+  G4HnInformation* info = 0;
+
+  if ( ! BeginSetH1(id, h1Booking, info) ) return false; 
+
+  // Update H1 booking
+  UpdateH1Booking(h1Booking, edges, unitName, fcnName);
+
+  // Re-configure histogram if it was already defined
+  if ( fH1Vector.size() ) {
+    tools::hbook::h1* h1 = GetH1(id);
+    ConfigureHbookH1(h1, edges, fcnName);
+  }  
+  
+  return 
+    FinishSetH1(id, info, unitName, fcnName, kUserBinScheme);
 }
   
 //_____________________________________________________________________________

@@ -105,6 +105,16 @@ class ExG4HbookH2Manager : public G4VH2Manager
                            const G4String& xunitName = "none", 
                            const G4String& yunitName = "none",
                            const G4String& xfcnName = "none", 
+                           const G4String& yfcnName = "none",
+                           const G4String& xbinScheme = "linear",
+                           const G4String& ybinScheme = "linear");
+
+    virtual G4int CreateH2(const G4String& name, const G4String& title,
+                           const std::vector<G4double>& xedges,
+                           const std::vector<G4double>& yedges,
+                           const G4String& xunitName = "none", 
+                           const G4String& yunitName = "none",
+                           const G4String& xfcnName = "none", 
                            const G4String& yfcnName = "none");
 
     virtual G4bool SetH2(G4int id,
@@ -113,8 +123,18 @@ class ExG4HbookH2Manager : public G4VH2Manager
                            const G4String& xunitName = "none", 
                            const G4String& yunitName = "none",
                            const G4String& xfcnName = "none", 
+                           const G4String& yfcnName = "none",
+                           const G4String& xbinScheme = "linear",
+                           const G4String& ybinScheme = "linear");
+                          
+    virtual G4bool SetH2(G4int id,
+                           const std::vector<G4double>& xedges,
+                           const std::vector<G4double>& yedges,
+                           const G4String& xunitName = "none", 
+                           const G4String& yunitName = "none",
+                           const G4String& xfcnName = "none", 
                            const G4String& yfcnName = "none");
-                           
+
     virtual G4bool ScaleH2(G4int id, G4double factor);
                            
     // Methods to fill histogrammes, ntuples
@@ -157,7 +177,7 @@ class ExG4HbookH2Manager : public G4VH2Manager
     // methods
     //
     void SetH2HbookIdOffset();
-    void CreateH2FromBooking();
+    void CreateH2sFromBooking();
 
     void Reset();
     virtual h2_booking* GetH2Booking(G4int id, G4bool warn = true) const;
