@@ -16,6 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+07-November, 2013  L.Desorgher     (ReverseMC01-V09-06-04)
+- Migration to the use of G4histos
+- Remove old histogram classes 
+- Slight modifications into the main in order to migrate to the new RMC tracking schema
+  where reverse tracking and forward tracking of adjoint and forward 
+  equivalent particles are processed  in the same events.This for preparing for 
+  the migration to the G4MT mode of the ReverseMC
 
 29-July, 2013  P.Gumplinger    (ReverseMC01-V09-06-03)
 - fix clang32 compilation warnings

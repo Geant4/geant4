@@ -102,7 +102,8 @@ int main(int argc,char** argv) {
   //                                        the adjoint tracking phase
   
   theAdjointSimManager->SetAdjointRunAction(theRunAction);
-  theAdjointSimManager->SetAdjointEventAction(new RMC01AdjointEventAction);
+  //theAdjointSimManager->SetAdjointEventAction(new RMC01AdjointEventAction);
+  theAdjointSimManager->SetAdjointEventAction(new RMC01EventAction);
   
 #ifdef G4VIS_USE
   // visualization manager
