@@ -99,7 +99,8 @@ G4ReactionProductVector *G4AblaInterface::DeExcite(G4Fragment &aFragment) {
                                               ablaResult->plab[j]*std::sin(ablaResult->tetlab[j]*pi/180.0)*std::cos(ablaResult->philab[j]*pi/180.0),
                                               ablaResult->plab[j]*std::sin(ablaResult->tetlab[j]*pi/180.0)*std::sin(ablaResult->philab[j]*pi/180.0),
                                               ablaResult->plab[j]*std::cos(ablaResult->tetlab[j]*pi/180.0));
-    result->push_back(product);
+    if(product)
+      result->push_back(product);
   }
   return result;
 }
@@ -114,9 +115,10 @@ G4ParticleDefinition *G4AblaInterface::toG4ParticleDefinition(G4int A, G4int Z) 
   else if(A == 3 && Z == 1)  return G4Triton::Triton();
   else if(A == 3 && Z == 2)  return G4He3::He3();
   else if(A == 4 && Z == 2)  return G4Alpha::Alpha();
-  else if(A > 0 && Z > 0 && A > Z) { // Returns ground state ion definition
+  else if(A > 0 && Z > 0 && A >= Z) { // Returns ground state ion definition
     return G4IonTable::GetIonTable()->GetIon(Z, A, 0);
   } else { // Error, unrecognized particle
+    G4cout << "Can't convert particle with A=" << A << ", Z=" << Z << " to G4ParticleDefinition, trouble ahead" << G4endl;
     return 0;
   }
 }
