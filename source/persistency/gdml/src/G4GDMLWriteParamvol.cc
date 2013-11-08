@@ -43,6 +43,7 @@
 #include "G4Sphere.hh"
 #include "G4Orb.hh"
 #include "G4Torus.hh"
+#include "G4Ellipsoid.hh"
 #include "G4Para.hh"
 #include "G4Hype.hh"
 #include "G4LogicalVolume.hh"
@@ -193,7 +194,7 @@ Sphere_dimensionsWrite(xercesc::DOMElement* parametersElement,
    xercesc::DOMElement* sphere_dimensionsElement =
                         NewElement("sphere_dimensions");
    sphere_dimensionsElement->setAttributeNode(NewAttribute("rmin",
-                             sphere->GetInsideRadius()/mm));
+                             sphere->GetInnerRadius()/mm));
    sphere_dimensionsElement->setAttributeNode(NewAttribute("rmax",
                              sphere->GetOuterRadius()/mm));
    sphere_dimensionsElement->setAttributeNode(NewAttribute("startphi",
@@ -241,6 +242,27 @@ Torus_dimensionsWrite(xercesc::DOMElement* parametersElement,
    torus_dimensionsElement->
      setAttributeNode(NewAttribute("lunit","mm"));
    parametersElement->appendChild(torus_dimensionsElement);
+}
+
+void G4GDMLWriteParamvol::
+Ellipsoid_dimensionsWrite(xercesc::DOMElement* parametersElement,
+                      const G4Ellipsoid* const ellipsoid)
+{
+   xercesc::DOMElement* ellipsoid_dimensionsElement =
+                        NewElement("ellipsoid_dimensions");
+   ellipsoid_dimensionsElement->
+     setAttributeNode(NewAttribute("ax",ellipsoid->GetSemiAxisMax(0)/mm));
+   ellipsoid_dimensionsElement->
+     setAttributeNode(NewAttribute("by",ellipsoid->GetSemiAxisMax(1)/mm));
+   ellipsoid_dimensionsElement->
+     setAttributeNode(NewAttribute("cz",ellipsoid->GetSemiAxisMax(2)/mm));
+   ellipsoid_dimensionsElement->
+     setAttributeNode(NewAttribute("zcut1",ellipsoid->GetZBottomCut()/mm));
+   ellipsoid_dimensionsElement->
+     setAttributeNode(NewAttribute("zcut2",ellipsoid->GetZTopCut()/mm));
+   ellipsoid_dimensionsElement->
+     setAttributeNode(NewAttribute("lunit","mm"));
+   parametersElement->appendChild(ellipsoid_dimensionsElement);
 }
 
 void G4GDMLWriteParamvol::
@@ -370,6 +392,12 @@ ParametersWrite(xercesc::DOMElement* paramvolElement,
       paramvol->GetParameterisation()->ComputeDimensions(*torus,index,
                 const_cast<G4VPhysicalVolume*>(paramvol));
       Torus_dimensionsWrite(parametersElement,torus);
+   } else
+   if (G4Ellipsoid* ellipsoid = dynamic_cast<G4Ellipsoid*>(solid))
+   {
+      paramvol->GetParameterisation()->ComputeDimensions(*ellipsoid,index,
+                const_cast<G4VPhysicalVolume*>(paramvol));
+      Ellipsoid_dimensionsWrite(parametersElement,ellipsoid);
    } else
    if (G4Para* para = dynamic_cast<G4Para*>(solid))
    {

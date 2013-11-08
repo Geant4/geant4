@@ -53,7 +53,8 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
 {
    enum BooleanOp {UNION,SUBTRACTION,INTERSECTION};
    typedef struct { G4double rmin,rmax,z; } zplaneType;
-
+   typedef struct { G4double r,z; } rzPointType;
+  
  public:
 
    G4VSolid* GetSolid(const G4String&) const;
@@ -78,7 +79,9 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    void ParaRead(const xercesc::DOMElement* const);
    void ParaboloidRead(const xercesc::DOMElement* const);
    void PolyconeRead(const xercesc::DOMElement* const);
+   void GenericPolyconeRead(const xercesc::DOMElement* const);
    void PolyhedraRead(const xercesc::DOMElement* const);
+   void GenericPolyhedraRead(const xercesc::DOMElement* const);
    G4QuadrangularFacet* QuadrangularRead(const xercesc::DOMElement* const);
    void ReflectedSolidRead(const xercesc::DOMElement* const);
    G4ExtrudedSolid::ZSection SectionRead(const xercesc::DOMElement* const,G4double);
@@ -98,7 +101,9 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    G4TriangularFacet* TriangularRead(const xercesc::DOMElement* const);
    G4TwoVector TwoDimVertexRead(const xercesc::DOMElement* const,G4double);
    zplaneType ZplaneRead(const xercesc::DOMElement* const);
+   rzPointType RZPointRead(const xercesc::DOMElement* const);
    void OpticalSurfaceRead(const xercesc::DOMElement* const);
+  
 };
 
 #endif

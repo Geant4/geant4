@@ -167,6 +167,24 @@
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <xs:element name="torus_dimensions" substitutionGroup="Dimensions" type="TorusDimensionsType"/>
    <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:complexType name="EllipsoidDimensionsType">
+    <xs:annotation>
+      <xs:documentation>Dimensions for parametrised Ellipsoid. </xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="DimensionsType">
+	<xs:attribute default="1.0" name="ax"       type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="by"       type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="cz"       type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="-1000000.0" name="zcut1"   type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1000000.0" name="zcut2"   type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="mm"  name="lunit"      type="xs:string"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
+  </xs:complexType>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="ellipsoid_dimensions" substitutionGroup="Dimensions" type="EllipsoidDimensionsType"/>
+   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <xs:complexType name="ParaDimensionsType">
     <xs:annotation>
       <xs:documentation>Dimensions for parametrised Paras. </xs:documentation>

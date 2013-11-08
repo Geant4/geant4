@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7 November 2013 Gabriele Cosmo (gdml-V09-06-06)
+- Replaced deprecated calls to G4Sphere accessor methods.
+
+29 October 2013 Tatiana Nikitina
+- Added 'generic' Polycone and Polyhedra to GDML Reader and Writer.
+  Splitted definition of Polycone to ordinary and generic.
+- Added parameterisation for Ellipsoid to readear/writer and schema.
+- Added MultiUnion solid and 'generic' Polycone and Polyhedra to the schema
+  GDML schema updated to version 3.1.0.
+- Fix in G4GDMLReadParamvol::ParametersRead() for reading parameterised
+  Sphere, Orb, Torus and Para.
+
 27 August 2013 Gabriele Cosmo (gdml-V09-06-05, gdml-V09-06-04)
 - Added G4Ellipsoid among solids enabled for parameterisation in
   G4GDMLParameterisation.

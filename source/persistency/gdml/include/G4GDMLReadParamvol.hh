@@ -75,6 +75,8 @@ class G4GDMLReadParamvol : public G4GDMLReadSetup
                                  G4GDMLParameterisation::PARAMETER&);
    void Torus_dimensionsRead(const xercesc::DOMElement* const,
                                  G4GDMLParameterisation::PARAMETER&);
+   void Ellipsoid_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
    void Para_dimensionsRead(const xercesc::DOMElement* const,
                                  G4GDMLParameterisation::PARAMETER&);
    void Hype_dimensionsRead(const xercesc::DOMElement* const,
