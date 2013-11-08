@@ -4,7 +4,7 @@
   // Draw histos filled by Geant4 simulation 
   //   
   ////TFile f = TFile("Hadr04.root");
-  TFile f = TFile("Graphite_on.root");      
+  TFile f = TFile("Water_nothermal.root");      
   TCanvas* c1 = new TCanvas("c1", "  ");
   c1->SetLogy(0);
   c1->cd();

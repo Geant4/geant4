@@ -73,10 +73,8 @@ G4Run* RunAction::GenerateRun()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run* aRun)
-{  
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  
+void RunAction::BeginOfRunAction(const G4Run*)
+{    
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   G4Random::showEngineStatus();
@@ -107,7 +105,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
                             fPrimary->GetParticleGun()->GetParticleDefinition();
     G4String Particle = particle->GetParticleName();    
     G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
-    G4cout << "\n The run consists of " << nbOfEvents << " "<< Particle << " of "
+    G4cout << "\n The run is of " << nbOfEvents << " "<< Particle << " of "
            << G4BestUnit(energy,"Energy") << " through " 
            << G4BestUnit(fDetector->GetSize(),"Length") << " of "
            << material->GetName() << " (density: " 
