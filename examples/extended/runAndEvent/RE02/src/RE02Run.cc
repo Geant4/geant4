@@ -95,7 +95,8 @@ RE02Run::RE02Run(const std::vector<G4String> mfdName) : G4Run()
         G4int    collectionID = pSDman->GetCollectionID(fullCollectionName);
         //
         if ( collectionID >= 0 ){
-          G4cout << "++ "<<fullCollectionName<< " id " << collectionID << G4endl;
+          G4cout << "++ "<<fullCollectionName<< " id " << collectionID
+                 << G4endl;
           // Store obtained HitsCollection information into data members.
           // And, creates new G4THitsMap for accumulating quantities during RUN.
           fCollName.push_back(fullCollectionName);
@@ -170,7 +171,6 @@ void RE02Run::Merge(const G4Run * aRun) {
   //=======================================================
   G4int nCol = localRun->fCollID.size();
   for ( G4int i = 0; i < nCol ; i++ ){  // Loop over HitsCollection
-    G4THitsMap<G4double>* evtMap=0;
     if ( localRun->fCollID[i] >= 0 ){
       *fRunMap[i] += *localRun->fRunMap[i];
     }

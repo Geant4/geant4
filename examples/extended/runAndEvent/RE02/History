@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 6, 2013  A. Kimura (exampleRE02-V09-06-08)
+- modified RE02.cc and removed RE02EMPhysics.{cc,hh}, 
+  RE02GeneralPhysics.{cc,hh}, RE02HadronPhysics.{cc,hh},
+  RE02IonPhysics.{cc,hh}, RE02MuonPhysics.{cc,hh} and
+  RE02PhysicsList.{cc,hh} for MT migration 
+- fixed a warning in RE02Run.cc
+
 November 4, 2013  D.H. Wright (exampleRE02-V09-06-07)
 - replaced LEP/HEP models with Bertini, FTF
 - replaced G4LCapture with G4NeutronRadCature
