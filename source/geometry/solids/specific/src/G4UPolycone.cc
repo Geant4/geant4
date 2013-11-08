@@ -29,8 +29,8 @@
 // Implementation of G4UPolycone wrapper class
 // --------------------------------------------------------------------
 
-#include "G4UPolycone.hh"
 #include "G4Polycone.hh"
+#include "G4UPolycone.hh"
 #include "G4VPVParameterisation.hh"
 #include "G4Polyhedron.hh"
 
@@ -119,7 +119,7 @@ void G4UPolycone::ComputeDimensions(G4VPVParameterisation* p,
                                     const G4int n,
                                     const G4VPhysicalVolume* pRep)
 {
-  p->ComputeDimensions(*(G4Polycone*)fShape,n,pRep);
+  p->ComputeDimensions(*(G4Polycone*)this,n,pRep);
 }
 
 ////////////////////////////////////////////////////////////////////////

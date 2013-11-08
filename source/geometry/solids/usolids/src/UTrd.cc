@@ -32,6 +32,13 @@ UTrd::UTrd(const std::string& pName,
            double pdz)
   : VUSolid(pName), fCubicVolume(0), fSurfaceArea(0)
 {
+  CheckAndSetAllParameters (pdx1, pdx2, pdy1, pdy2, pdz);
+}
+
+void UTrd::CheckAndSetAllParameters ( double pdx1,  double pdx2,
+                                      double pdy1,  double pdy2,
+                                      double pdz ) 
+{
   if (pdx1 > 0 && pdx2 > 0 && pdy1 > 0 && pdy2 > 0 && pdz > 0)
   {
     fDx1 = pdx1;
@@ -56,17 +63,22 @@ UTrd::UTrd(const std::string& pName,
     }
     else
     {
-      std::cout << "ERROR - G4Trd()::CheckAndSetAllParameters(): " << GetName()
+      std::cout << "ERROR - UTrd()::CheckAndSetAllParameters(): " << GetName()
                 << std::endl
                 << "        Invalid dimensions, some are < 0 !" << std::endl
                 << "          X - " << pdx1 << ", " << pdx2 << std::endl
                 << "          Y - " << pdy1 << ", " << pdy2 << std::endl
                 << "          Z - " << pdz << std::endl;
-      UUtils::Exception("G4Trd::CheckAndSetAllParameters()", "InvalidSetup", FatalErrorInArguments, 1, "Invalid parameters.");
+      UUtils::Exception("UTrd::CheckAndSetAllParameters()", "InvalidSetup", FatalErrorInArguments, 1, "Invalid parameters.");
     }
   }
 }
 
+void UTrd::SetAllParameters ( double pdx1, double pdx2, double pdy1, 
+                              double pdy2, double pdz ) 
+{
+  CheckAndSetAllParameters (pdx1, pdx2, pdy1, pdy2, pdz);
+}
 
 double UTrd::SafetyFromInside(const UVector3& p, bool aAccurate) const
 {

@@ -76,7 +76,7 @@ class G4UTet : public G4USolid
     G4UTet& operator=(const G4UTet& rhs); 
       // Copy constructor and assignment operator.
 
-    std::vector<G4ThreeVector> GetVertices() const;
+    inline std::vector<G4ThreeVector> GetVertices() const;
       // Return the four vertices of the shape.
 };
 
@@ -89,7 +89,7 @@ inline UTet* G4UTet::GetShape() const
   return (UTet*) fShape;
 }
 
-std::vector<G4ThreeVector> G4UTet::GetVertices() const
+inline std::vector<G4ThreeVector> G4UTet::GetVertices() const
 {
   std::vector<UVector3> vec = GetShape()->GetVertices();
   std::vector<G4ThreeVector> vertices;

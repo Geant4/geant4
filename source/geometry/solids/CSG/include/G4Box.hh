@@ -49,6 +49,15 @@
 #ifndef G4BOX_HH
 #define G4BOX_HH
 
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UBOX 1
+#endif
+
+#if defined(G4GEOM_USE_UBOX)
+  #define G4UBox G4Box
+  #include "G4UBox.hh"
+#else
+
 #include "G4CSGSolid.hh"
 
 class G4Box : public G4CSGSolid 
@@ -143,5 +152,7 @@ class G4Box : public G4CSGSolid
 };
 
 #include "G4Box.icc"
+
+#endif
 
 #endif

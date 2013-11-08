@@ -27,32 +27,32 @@
 // $Id:$
 //
 // 
-// Implementation for G4UBox wrapper class
+// Implementation for G4UTubs wrapper class
 // --------------------------------------------------------------------
 
-#include "G4UBox.hh"
-#include "G4Box.hh"
+#include "G4Tubs.hh"
+#include "G4UTubs.hh"
 #include "G4VPVParameterisation.hh"
 
-////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 //
-// Constructor - check & set half widths
+// Constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
+//             - note if pdphi>2PI then reset to 2PI
 
-
-G4UBox::G4UBox(const G4String& pName,
-                   G4double pX,
-                   G4double pY,
-                   G4double pZ)
-  : G4USolid("Box", new UBox(pName, pX, pY, pZ))
+G4UTubs::G4UTubs( const G4String& pName,
+                        G4double pRMin, G4double pRMax,
+                        G4double pDz,
+                        G4double pSPhi, G4double pDPhi )
+  : G4USolid("Tubs", new UTubs(pName, pRMin, pRMax, pDz, pSPhi, pDPhi))
 {
 }
 
-//////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 //
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
-
-G4UBox::G4UBox( __void__& a )
+//
+G4UTubs::G4UTubs( __void__& a )
   : G4USolid(a)
 {
 }
@@ -61,7 +61,7 @@ G4UBox::G4UBox( __void__& a )
 //
 // Destructor
 
-G4UBox::~G4UBox()
+G4UTubs::~G4UTubs()
 {
 }
 
@@ -69,7 +69,7 @@ G4UBox::~G4UBox()
 //
 // Copy constructor
 
-G4UBox::G4UBox(const G4UBox& rhs)
+G4UTubs::G4UTubs(const G4UTubs& rhs)
   : G4USolid(rhs)
 {
 }
@@ -78,7 +78,7 @@ G4UBox::G4UBox(const G4UBox& rhs)
 //
 // Assignment operator
 
-G4UBox& G4UBox::operator = (const G4UBox& rhs) 
+G4UTubs& G4UTubs::operator = (const G4UTubs& rhs) 
 {
    // Check assignment to self
    //
@@ -91,15 +91,14 @@ G4UBox& G4UBox::operator = (const G4UBox& rhs)
    return *this;
 }
 
-////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 //
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
-void G4UBox::ComputeDimensions(G4VPVParameterisation* p,
-                               const G4int n,
-                               const G4VPhysicalVolume* pRep)
+void G4UTubs::ComputeDimensions(      G4VPVParameterisation* p,
+                                const G4int n,
+                                const G4VPhysicalVolume* pRep )
 {
-  p->ComputeDimensions(*(G4Box*)fShape,n,pRep);
+  p->ComputeDimensions(*(G4Tubs*)this,n,pRep) ;
 }
-

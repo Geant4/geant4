@@ -41,6 +41,8 @@
 
 #include "G4Box.hh"
 
+#if !defined(G4GEOM_USE_UBOX)
+
 #include "G4SystemOfUnits.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -1047,3 +1049,4 @@ G4Polyhedron* G4Box::CreatePolyhedron () const
 {
   return new G4PolyhedronBox (fDx, fDy, fDz);
 }
+#endif

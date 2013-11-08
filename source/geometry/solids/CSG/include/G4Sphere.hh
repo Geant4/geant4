@@ -69,6 +69,15 @@
 #ifndef G4Sphere_HH
 #define G4Sphere_HH
 
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_USPHERE 1
+#endif
+
+#if defined(G4GEOM_USE_USPHERE)
+  #define G4USphere G4Sphere
+  #include "G4USphere.hh"
+#else
+
 #include <CLHEP/Units/PhysicalConstants.h>
 #include "G4CSGSolid.hh"
 
@@ -245,5 +254,7 @@ class G4Sphere : public G4CSGSolid
 };
 
 #include "G4Sphere.icc"
+
+#endif
 
 #endif

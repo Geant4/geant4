@@ -21,6 +21,7 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/usolids/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
@@ -35,7 +36,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4specsolids
     HEADERS
-        G4SurfBits.hh
         G4ClippablePolygon.hh
         G4ClippablePolygon.icc
         G4Ellipsoid.hh
@@ -73,6 +73,7 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4SolidsWorkspacePool.hh
         G4SurfaceVoxelizer.hh
         G4SurfaceVoxelizer.icc
+        G4SurfBits.hh
         G4TessellatedGeometryAlgorithms.hh
         G4TessellatedSolid.hh
         G4Tet.hh
@@ -88,6 +89,10 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4TwistedTrap.hh
         G4TwistedTrd.hh
         G4TwistedTubs.hh
+        G4UGenericPolycone.hh
+        G4UPolycone.hh
+        G4UPolyhedra.hh
+        G4UTet.hh
         G4VCSGface.hh
         G4VCSGfaceted.hh
         G4VFacet.hh
@@ -95,7 +100,6 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4VTwistSurface.icc
         G4VTwistedFaceted.hh
     SOURCES
-        G4SurfBits.cc
         G4ClippablePolygon.cc
         G4Ellipsoid.cc
         G4EllipticalCone.cc
@@ -120,6 +124,7 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4SolidsWorkspace.cc
         G4SolidsWorkspacePool.cc
         G4SurfaceVoxelizer.cc
+        G4SurfBits.cc
         G4TessellatedGeometryAlgorithms.cc
         G4TessellatedSolid.cc
         G4Tet.cc
@@ -135,6 +140,10 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4TwistedTrap.cc
         G4TwistedTrd.cc
         G4TwistedTubs.cc
+        G4UGenericPolycone.cc
+        G4UPolycone.cc
+        G4UPolyhedra.cc
+        G4UTet.cc
         G4VCSGfaceted.cc
         G4VFacet.cc
         G4VTwistSurface.cc
@@ -147,6 +156,7 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4hepnumerics
         G4intercoms
         G4volumes
+        G4GeomUSolids
     GLOBAL_DEPENDENCIES
         G4global
         G4graphics_reps

@@ -29,8 +29,8 @@
 // Implementation of G4UPolycone wrapper class
 // --------------------------------------------------------------------
 
-#include "G4UPolyhedra.hh"
 #include "G4Polyhedra.hh"
+#include "G4UPolyhedra.hh"
 #include "G4Polyhedron.hh"
 #include "G4VPVParameterisation.hh"
 
@@ -126,7 +126,7 @@ void G4UPolyhedra::ComputeDimensions(G4VPVParameterisation* p,
                                      const G4int n,
                                      const G4VPhysicalVolume* pRep)
 {
-  p->ComputeDimensions(*(G4Polyhedra*)fShape,n,pRep);
+  p->ComputeDimensions(*(G4Polyhedra*)this,n,pRep);
 }
 
 

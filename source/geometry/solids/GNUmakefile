@@ -9,7 +9,7 @@ ifndef G4INSTALL
 endif
 
 include $(G4INSTALL)/config/architecture.gmk
-SUBDIRS = CSG specific Boolean
+SUBDIRS = CSG specific usolids Boolean
 
 all:
 	@for dir in $(SUBDIRS); do (cd $$dir; $(MAKE)); done

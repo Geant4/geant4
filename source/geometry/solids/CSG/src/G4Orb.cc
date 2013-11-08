@@ -37,9 +37,9 @@
 //
 //////////////////////////////////////////////////////////////
 
-#include <assert.h>
-
 #include "G4Orb.hh"
+
+#if !defined(G4GEOM_USE_UORB)
 
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -720,3 +720,5 @@ G4Polyhedron* G4Orb::CreatePolyhedron () const
 {
   return new G4PolyhedronSphere (0., fRmax, 0., 2*pi, 0., pi);
 }
+
+#endif

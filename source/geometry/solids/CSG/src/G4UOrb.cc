@@ -23,29 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id:$
 //
 // 
-// Implementation for G4UTubs wrapper class
+// Implementation for G4UOrb wrapper class
 // --------------------------------------------------------------------
 
-#include "G4UTubs.hh"
-#include "G4Tubs.hh"
+#include "G4Orb.hh"
+#include "G4UOrb.hh"
 #include "G4VPVParameterisation.hh"
 
-using namespace CLHEP;
-
-/////////////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////////////
 //
-// Constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
-//             - note if pdphi>2PI then reset to 2PI
+// constructor - check positive radius
+//             
 
-G4UTubs::G4UTubs( const G4String& pName,
-                        G4double pRMin, G4double pRMax,
-                        G4double pDz,
-                        G4double pSPhi, G4double pDPhi )
-  : G4USolid("Tubs", new UTubs(pName, pRMin, pRMax, pDz, pSPhi, pDPhi))
+G4UOrb::G4UOrb( const G4String& pName, G4double pRmax )
+  : G4USolid("Orb", new UOrb(pName, pRmax))
 {
 }
 
@@ -54,16 +48,16 @@ G4UTubs::G4UTubs( const G4String& pName,
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
-G4UTubs::G4UTubs( __void__& a )
+G4UOrb::G4UOrb( __void__& a )
   : G4USolid(a)
 {
 }
 
-//////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 //
 // Destructor
 
-G4UTubs::~G4UTubs()
+G4UOrb::~G4UOrb()
 {
 }
 
@@ -71,7 +65,7 @@ G4UTubs::~G4UTubs()
 //
 // Copy constructor
 
-G4UTubs::G4UTubs(const G4UTubs& rhs)
+G4UOrb::G4UOrb(const G4UOrb& rhs)
   : G4USolid(rhs)
 {
 }
@@ -80,7 +74,7 @@ G4UTubs::G4UTubs(const G4UTubs& rhs)
 //
 // Assignment operator
 
-G4UTubs& G4UTubs::operator = (const G4UTubs& rhs) 
+G4UOrb& G4UOrb::operator = (const G4UOrb& rhs) 
 {
    // Check assignment to self
    //
@@ -93,14 +87,14 @@ G4UTubs& G4UTubs::operator = (const G4UTubs& rhs)
    return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
-void G4UTubs::ComputeDimensions(      G4VPVParameterisation* p,
-                                const G4int n,
-                                const G4VPhysicalVolume* pRep )
+void G4UOrb::ComputeDimensions(       G4VPVParameterisation* p,
+                               const G4int n,
+                               const G4VPhysicalVolume* pRep )
 {
-  p->ComputeDimensions(*(G4Tubs*)fShape,n,pRep) ;
+  p->ComputeDimensions(*(G4Orb*)this,n,pRep);
 }

@@ -44,6 +44,15 @@
 #ifndef G4Orb_HH
 #define G4Orb_HH
 
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UORB 1
+#endif
+
+#if defined(G4GEOM_USE_UORB)
+  #define G4UOrb G4Orb
+  #include "G4UOrb.hh"
+#else
+
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4CSGSolid.hh"
@@ -136,5 +145,7 @@ class G4Orb : public G4CSGSolid
 };
 
 #include "G4Orb.icc"
+
+#endif
 
 #endif

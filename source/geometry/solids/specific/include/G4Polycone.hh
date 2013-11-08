@@ -58,9 +58,17 @@
 // Author: 
 //   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-
 #ifndef G4Polycone_hh
 #define G4Polycone_hh
+
+#if defined(G4GEOM_USE_UPOLYCONE)
+#define G4GEOM_USE_UPOLYCONE 1
+#endif
+
+#if defined(G4GEOM_USE_UPOLYCONE)
+  #define G4UPolycone G4Polycone
+  #include "G4UPolycone.hh"
+#else
 
 #include "G4VCSGfaceted.hh"
 #include "G4PolyconeSide.hh"
@@ -185,5 +193,7 @@ class G4Polycone : public G4VCSGfaceted
 };
 
 #include "G4Polycone.icc"
+
+#endif
 
 #endif

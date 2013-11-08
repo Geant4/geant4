@@ -24,77 +24,41 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id:$
 //
 // 
 // --------------------------------------------------------------------
 // GEANT 4 class header file
 //
 // 
-// G4Tubs
+// G4OTubs
 //
 // Class description:
 //
-//   A tube or tube segment with curved sides parallel to
-//   the z-axis. The tube has a specified half-length along
-//   the z-axis, about which it is centered, and a given
-//   minimum and maximum radius. A minimum radius of 0
-//   corresponds to filled tube /cylinder. The tube segment is
-//   specified by starting and delta angles for phi, with 0
-//   being the +x axis, PI/2 the +y axis.
-//   A delta angle of 2PI signifies a complete, unsegmented
-//   tube/cylinder.
-//
-//   Member Data:
-//
-//   fRMin  Inner radius
-//   fRMax  Outer radius
-//   fDz  half length in z
-//
-//   fSPhi  The starting phi angle in radians,
-//          adjusted such that fSPhi+fDPhi<=2PI, fSPhi>-2PI
-//
-//   fDPhi  Delta angle of the segment.
-//
-//   fPhiFullTube   Boolean variable used for indicate the Phi Section
+//   Temporary copy of original G4Tubs code for use by G4CutTubs.
 
-// History:
-// 10.08.95 P.Kent: General cleanup, use G4VSolid extent helper functions
-//                  to CalculateExtent()
-// 23.01.94 P.Kent: Converted to `tolerant' geometry
-// 19.07.96 J.Allison: G4GraphicsScene - see G4Box
-// 22.07.96 J.Allison: Changed SendPolyhedronTo to CreatePolyhedron
 // --------------------------------------------------------------------
-#ifndef G4TUBS_HH
-#define G4TUBS_HH
-
-#if defined(G4GEOM_USE_USOLIDS)
-#define G4GEOM_USE_UTUBS 1
-#endif
-
-#if defined(G4GEOM_USE_UTUBS)
-  #define G4UTubs G4Tubs
-  #include "G4UTubs.hh"
-#else
+#ifndef G4OTUBS_HH
+#define G4OTUBS_HH
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4CSGSolid.hh"
 
-class G4Tubs : public G4CSGSolid
+class G4OTubs : public G4CSGSolid
 {
   public:  // with description
 
-    G4Tubs( const G4String& pName,
-                  G4double pRMin,
-                  G4double pRMax,
-                  G4double pDz,
-                  G4double pSPhi,
-                  G4double pDPhi );
+    G4OTubs( const G4String& pName,
+                   G4double pRMin,
+                   G4double pRMax,
+                   G4double pDz,
+                   G4double pSPhi,
+                   G4double pDPhi );
       //
       // Constructs a tubs with the given name and dimensions
 
-    virtual ~G4Tubs();
+    virtual ~G4OTubs();
       //
       // Destructor
 
@@ -118,10 +82,6 @@ class G4Tubs : public G4CSGSolid
 
     inline G4double GetCubicVolume();
     inline G4double GetSurfaceArea();
-
-    void ComputeDimensions(       G4VPVParameterisation* p,
-                            const G4int n,
-                            const G4VPhysicalVolume* pRep );
 
     G4bool CalculateExtent( const EAxis pAxis,
                             const G4VoxelLimits& pVoxelLimit,
@@ -154,14 +114,14 @@ class G4Tubs : public G4CSGSolid
 
   public:  // without description
 
-    G4Tubs(__void__&);
+    G4OTubs(__void__&);
       //
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
-    G4Tubs(const G4Tubs& rhs);
-    G4Tubs& operator=(const G4Tubs& rhs); 
+    G4OTubs(const G4OTubs& rhs);
+    G4OTubs& operator=(const G4OTubs& rhs); 
       // Copy constructor and assignment operator.
 
     //  Older names for access functions
@@ -231,8 +191,6 @@ class G4Tubs : public G4CSGSolid
       // Cached half tolerance values
 };
 
-#include "G4Tubs.icc"
-
-#endif
+#include "G4OTubs.icc"
 
 #endif

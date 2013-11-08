@@ -58,9 +58,17 @@
 // Author: 
 //   David C. Williams (davidw@scipp.ucsc.edu)
 // --------------------------------------------------------------------
-
 #ifndef G4Polyhedra_hh
 #define G4Polyhedra_hh
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UPOLYHEDRA 1
+#endif
+
+#if defined(G4GEOM_USE_UPOLYHEDRA)
+  #define G4UPolyhedra G4Polyhedra
+  #include "G4UPolyhedra.hh"
+#else
 
 #include "G4VCSGfaceted.hh"
 #include "G4PolyhedraSide.hh"
@@ -182,5 +190,7 @@ class G4Polyhedra : public G4VCSGfaceted
 };
 
 #include "G4Polyhedra.icc"
+
+#endif
 
 #endif

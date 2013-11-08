@@ -56,6 +56,8 @@
 
 #include "G4Polyhedra.hh"
 
+#if !defined(G4GEOM_USE_UPOLYHEDRA)
+
 #include "G4PolyhedraSide.hh"
 #include "G4PolyPhiFace.hh"
 
@@ -1359,3 +1361,5 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
   }
   //return isConvertible;
 }
+
+#endif

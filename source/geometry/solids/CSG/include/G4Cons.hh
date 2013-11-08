@@ -63,9 +63,17 @@
 // 19.3.94 P.Kent: Old C++ code converted to tolerant geometry
 // 13.9.96 V.Grichine: Final modifications to commit
 // --------------------------------------------------------------------
-
 #ifndef G4Cons_HH
 #define G4Cons_HH
+
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UCONS 1
+#endif
+
+#if defined(G4GEOM_USE_UCONS)
+  #define G4UCons G4Cons
+  #include "G4UCons.hh"
+#else
 
 #include <CLHEP/Units/PhysicalConstants.h>
 
@@ -227,5 +235,7 @@ class G4Cons : public G4CSGSolid
 };
 
 #include "G4Cons.icc"
+
+#endif
 
 #endif

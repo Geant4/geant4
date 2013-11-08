@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-Nov-2013  G.Cosmo (geom-specific-V09-06-26)
+- Moved wrappers from usolids module.
+  Fixed internal dispatcher method for parameterisation in all wrappers.
+- Added switching mechanism for G4GenericPolycone, G4Polycone, G4Polyhedra
+  and G4Tet.
+
+06-Nov-2013  G.Cosmo (geom-specific-V09-06-25)
+- Added switch mechanism for USolids (G4GenericPolycone, G4Polycone,
+  G4Polyhedra, G4Tet). Renamed related G4 types to 'G4O'.
+- Moved wrappers from USolids module.
+
 01-Nov-2013  G.Cosmo (geom-specific-V09-06-24)
 - Corrected CMake script.
 

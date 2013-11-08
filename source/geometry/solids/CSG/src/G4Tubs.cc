@@ -61,6 +61,8 @@
 
 #include "G4Tubs.hh"
 
+#if !defined(G4GEOM_USE_UTUBS)
+
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4GeometryTolerance.hh"
@@ -1920,3 +1922,4 @@ G4Polyhedron* G4Tubs::CreatePolyhedron () const
 {
   return new G4PolyhedronTubs (fRMin, fRMax, fDz, fSPhi, fDPhi) ;
 }
+#endif

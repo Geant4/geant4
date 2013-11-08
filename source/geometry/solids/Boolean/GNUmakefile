@@ -18,6 +18,7 @@ CPPFLAGS += -I$(G4BASE)/intercoms/include \
             -I$(G4BASE)/global/HEPRandom/include \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/geometry/volumes/include \
+            -I$(G4BASE)/geometry/solids/usolids/include \
             -I$(G4BASE)/geometry/management/include
 
 ifdef G4BOOLDEBUG

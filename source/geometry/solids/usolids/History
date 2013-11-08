@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 7, 2013  G.Cosmo                 geom-usolids-V09-06-04
+- Moved wrappers to associated modules.
+- Added missing accessor method to UTrd.
+
 November 5, 2013  G.Cosmo                 geom-usolids-V09-06-03
 - Code cleanup and added banners to USolids files.
 

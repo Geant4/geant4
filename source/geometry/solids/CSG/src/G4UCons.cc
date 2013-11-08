@@ -23,23 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
 // $Id:$
 //
-// 
-// Implementation for G4UOrb wrapper class
+//
+// Implementation for G4UCons wrapper class
 // --------------------------------------------------------------------
 
-#include "G4UOrb.hh"
-#include "G4Orb.hh"
+#include "G4Cons.hh"
+#include "G4UCons.hh"
 #include "G4VPVParameterisation.hh"
-
-////////////////////////////////////////////////////////////////////////
+ 
+//////////////////////////////////////////////////////////////////////////
 //
-// constructor - check positive radius
-//             
+// constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
+//               - note if pDPhi>2PI then reset to 2PI
 
-G4UOrb::G4UOrb( const G4String& pName, G4double pRmax )
-  : G4USolid("Orb", new UOrb(pName, pRmax))
+G4UCons::G4UCons( const G4String& pName,
+                        G4double  pRmin1, G4double pRmax1,
+                        G4double  pRmin2, G4double pRmax2,
+                        G4double pDz,
+                        G4double pSPhi, G4double pDPhi)
+  : G4USolid("Cons", new UCons(pName, pRmin1, pRmin2, pRmax1, pRmax2,
+                                      pDz, pSPhi, pDPhi))
 {
 }
 
@@ -48,16 +54,16 @@ G4UOrb::G4UOrb( const G4String& pName, G4double pRmax )
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
-G4UOrb::G4UOrb( __void__& a )
+G4UCons::G4UCons( __void__& a )
   : G4USolid(a)
 {
 }
 
-/////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////
 //
 // Destructor
 
-G4UOrb::~G4UOrb()
+G4UCons::~G4UCons()
 {
 }
 
@@ -65,7 +71,7 @@ G4UOrb::~G4UOrb()
 //
 // Copy constructor
 
-G4UOrb::G4UOrb(const G4UOrb& rhs)
+G4UCons::G4UCons(const G4UCons& rhs)
   : G4USolid(rhs)
 {
 }
@@ -74,7 +80,7 @@ G4UOrb::G4UOrb(const G4UOrb& rhs)
 //
 // Assignment operator
 
-G4UOrb& G4UOrb::operator = (const G4UOrb& rhs) 
+G4UCons& G4UCons::operator = (const G4UCons& rhs) 
 {
    // Check assignment to self
    //
@@ -87,14 +93,14 @@ G4UOrb& G4UOrb::operator = (const G4UOrb& rhs)
    return *this;
 }
 
-//////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////
 //
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
-void G4UOrb::ComputeDimensions(       G4VPVParameterisation* p,
-                               const G4int n,
-                               const G4VPhysicalVolume* pRep )
+void G4UCons::ComputeDimensions(      G4VPVParameterisation* p,
+                                const G4int                  n,
+                                const G4VPhysicalVolume*     pRep    )
 {
-  p->ComputeDimensions(*(G4Orb*)fShape,n,pRep);
+  p->ComputeDimensions(*(G4Cons*)this,n,pRep);
 }

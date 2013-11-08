@@ -56,6 +56,8 @@
 
 #include "G4Sphere.hh"
 
+#if !defined(G4GEOM_USE_USPHERE)
+
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4GeometryTolerance.hh"
@@ -3182,3 +3184,5 @@ G4Polyhedron* G4Sphere::CreatePolyhedron () const
 {
   return new G4PolyhedronSphere (fRmin, fRmax, fSPhi, fDPhi, fSTheta, fDTheta);
 }
+
+#endif

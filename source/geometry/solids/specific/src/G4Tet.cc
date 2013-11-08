@@ -56,6 +56,8 @@
 
 #include "G4Tet.hh"
 
+#if !defined(G4GEOM_USE_UTET)
+
 const char G4Tet::CVSVers[]="$Id$";
 
 #include "G4VoxelLimits.hh"
@@ -858,3 +860,5 @@ G4Polyhedron* G4Tet::GetPolyhedron () const
     }
   return fpPolyhedron;
 }
+
+#endif

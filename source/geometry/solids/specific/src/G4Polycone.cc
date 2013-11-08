@@ -38,6 +38,9 @@
 // --------------------------------------------------------------------
 
 #include "G4Polycone.hh"
+
+#if !defined(G4GEOM_USE_UPOLYCONE)
+
 #include "G4PolyconeSide.hh"
 #include "G4PolyPhiFace.hh"
 
@@ -1105,3 +1108,5 @@ G4bool  G4Polycone::SetOriginalParameters(G4ReduciblePolygon *rz)
   }
   return isConvertible;
 }
+
+#endif

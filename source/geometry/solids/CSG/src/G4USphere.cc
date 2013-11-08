@@ -26,26 +26,25 @@
 //
 // $Id:$
 //
-//
-// Implementation for G4UCons wrapper class
+// 
+// Implementation for G4USphere wrapper class
 // --------------------------------------------------------------------
 
-#include "G4UCons.hh"
-#include "G4Cons.hh"
+#include "G4Sphere.hh"
+#include "G4USphere.hh"
 #include "G4VPVParameterisation.hh"
- 
-//////////////////////////////////////////////////////////////////////////
+
+////////////////////////////////////////////////////////////////////////
 //
 // constructor - check parameters, convert angles so 0<sphi+dpshi<=2_PI
-//               - note if pDPhi>2PI then reset to 2PI
+//             - note if pDPhi>2PI then reset to 2PI
 
-G4UCons::G4UCons( const G4String& pName,
-                        G4double  pRmin1, G4double pRmax1,
-                        G4double  pRmin2, G4double pRmax2,
-                        G4double pDz,
-                        G4double pSPhi, G4double pDPhi)
-  : G4USolid("Cons", new UCons(pName, pRmin1, pRmin2, pRmax1, pRmax2,
-                                      pDz, pSPhi, pDPhi))
+G4USphere::G4USphere( const G4String& pName,
+                          G4double pRmin, G4double pRmax,
+                          G4double pSPhi, G4double pDPhi,
+                          G4double pSTheta, G4double pDTheta )
+  : G4USolid("Sphere", new USphere(pName, pRmin, pRmax, pSPhi, pDPhi,
+                                   pSTheta, pDTheta))
 {
 }
 
@@ -54,16 +53,16 @@ G4UCons::G4UCons( const G4String& pName,
 // Fake default constructor - sets only member data and allocates memory
 //                            for usage restricted to object persistency.
 //
-G4UCons::G4UCons( __void__& a )
+G4USphere::G4USphere( __void__& a )
   : G4USolid(a)
 {
 }
 
-///////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////
 //
 // Destructor
 
-G4UCons::~G4UCons()
+G4USphere::~G4USphere()
 {
 }
 
@@ -71,7 +70,7 @@ G4UCons::~G4UCons()
 //
 // Copy constructor
 
-G4UCons::G4UCons(const G4UCons& rhs)
+G4USphere::G4USphere(const G4USphere& rhs)
   : G4USolid(rhs)
 {
 }
@@ -80,7 +79,7 @@ G4UCons::G4UCons(const G4UCons& rhs)
 //
 // Assignment operator
 
-G4UCons& G4UCons::operator = (const G4UCons& rhs) 
+G4USphere& G4USphere::operator = (const G4USphere& rhs) 
 {
    // Check assignment to self
    //
@@ -93,14 +92,14 @@ G4UCons& G4UCons::operator = (const G4UCons& rhs)
    return *this;
 }
 
-/////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////
 //
 // Dispatch to parameterisation for replication mechanism dimension
 // computation & modification.
 
-void G4UCons::ComputeDimensions(      G4VPVParameterisation* p,
-                                const G4int                  n,
-                                const G4VPhysicalVolume*     pRep    )
+void G4USphere::ComputeDimensions(      G4VPVParameterisation* p,
+                                  const G4int n,
+                                  const G4VPhysicalVolume* pRep)
 {
-  p->ComputeDimensions(*(G4Cons*)fShape,n,pRep);
+  p->ComputeDimensions(*(G4Sphere*)this,n,pRep);
 }

@@ -26,78 +26,24 @@
 //
 // $Id:$
 //
-// 
-// Implementation for G4UTrd wrapper class
 // --------------------------------------------------------------------
+// GEANT 4 class header file
+//
+// 
+// G4MultiUnion
+//
+// Class description:
+//
+//   Typedef for UMultiUnion from USolids module.
 
-#include "G4UTrd.hh"
-#include "G4Trd.hh"
-#include "G4VPVParameterisation.hh"
+// History:
+// 13.11.13 G.Cosmo, CERN/PH
+// --------------------------------------------------------------------
+#ifndef G4MULTIUNION_HH
+#define G4MULTIUNION_HH
 
-/////////////////////////////////////////////////////////////////////////
-//
-// Constructor - check & set half widths
-//
-G4UTrd::G4UTrd(const G4String& pName,
-                     G4double pdx1,  G4double pdx2,
-                     G4double pdy1,  G4double pdy2,
-                     G4double pdz)
-  : G4USolid("Trd", new UTrd(pName, pdx1, pdx2, pdy1, pdy2, pdz))
-{
-}
+#include "G4UMultiUnion.hh"
 
-///////////////////////////////////////////////////////////////////////
-//
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-//
-G4UTrd::G4UTrd( __void__& a )
-  : G4USolid(a)
-{
-}
+typedef G4UMultiUnion G4MultiUnion;
 
-//////////////////////////////////////////////////////////////////////////
-//
-// Destructor
-//
-G4UTrd::~G4UTrd()
-{
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Copy constructor
-//
-G4UTrd::G4UTrd(const G4UTrd& rhs)
-  : G4USolid(rhs)
-{
-}
-
-//////////////////////////////////////////////////////////////////////////
-//
-// Assignment operator
-//
-G4UTrd& G4UTrd::operator = (const G4UTrd& rhs) 
-{
-   // Check assignment to self
-   //
-   if (this == &rhs)  { return *this; }
-
-   // Copy base class data
-   //
-   G4USolid::operator=(rhs);
-
-   return *this;
-}
-
-/////////////////////////////////////////////////////////////////////////
-//
-// Dispatch to parameterisation for replication mechanism dimension
-// computation & modification.
-//
-void G4UTrd::ComputeDimensions(      G4VPVParameterisation* p,
-                               const G4int n,
-                               const G4VPhysicalVolume* pRep)
-{
-  p->ComputeDimensions(*(G4Trd*)fShape,n,pRep);
-}
+#endif

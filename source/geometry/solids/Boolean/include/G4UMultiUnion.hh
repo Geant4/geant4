@@ -30,116 +30,100 @@
 // --------------------------------------------------------------------
 // GEANT 4 class header file
 //
-// 
-// G4UTubs
+//
+// G4UMultiUnion
 //
 // Class description:
 //
-//   Wrapper class for UTubs to make use of UTubs from USolids module.
+//   Wrapper class for G4UMultiUnion to make use of it from USolids module.
 
 // History:
-// 30.10.13 G.Cosmo, CERN/PH
+// 30.10.13 G.Cosmo, T.Nikitina, CERN/PH
 // --------------------------------------------------------------------
+#ifndef G4UMULTIUNION_HH
+#define G4UMULTIUNION_HH
 
-#ifndef G4UTUBS_HH
-#define G4UTUBS_HH
+#include <CLHEP/Vector/Rotation.h>
 
 #include "G4USolid.hh"
-#include "UTubs.hh"
+#include "UMultiUnion.hh"
+#include "G4Transform3D.hh"
+#include "G4RotationMatrix.hh"
+#include "HepPolyhedronProcessor.h"
 
-class G4UTubs : public G4USolid
+class G4UMultiUnion : public G4USolid 
 {
   public:  // with description
 
-    G4UTubs( const G4String& pName,
-                   G4double pRMin,
-                   G4double pRMax,
-                   G4double pDz,
-                   G4double pSPhi,
-                   G4double pDPhi );
-      // Constructs a tubs with the given name and dimensions
+    G4UMultiUnion(const G4String& name);
+   ~G4UMultiUnion();
 
-   ~G4UTubs();
+    inline UMultiUnion* GetShape() const;
 
-    void ComputeDimensions(       G4VPVParameterisation* p,
-                            const G4int n,
-                            const G4VPhysicalVolume* pRep );
-
-    inline UTubs* GetShape() const;
-
-    inline G4double GetInnerRadius   () const;
-    inline G4double GetOuterRadius   () const;
-    inline G4double GetZHalfLength   () const;
-    inline G4double GetStartPhiAngle () const;
-    inline G4double GetDeltaPhiAngle () const;
-
-    inline void SetInnerRadius   (G4double newRMin);
-    inline void SetOuterRadius   (G4double newRMax);
-    inline void SetZHalfLength   (G4double newDz);
-    inline void SetStartPhiAngle (G4double newSPhi, G4bool trig=true);
-    inline void SetDeltaPhiAngle (G4double newDPhi);
-    
+    inline void AddNode(G4VSolid& solid, G4Transform3D& trans);
+      // Build the multiple union by adding nodes
+    inline G4Transform3D* GetTransformation(G4int index) const;
+    inline G4VSolid* GetSolid(G4int index) const;
+    inline int GetNumberOfSolids()const;
+  
   public:  // without description
 
-    G4UTubs(__void__&);
+    G4UMultiUnion(__void__&);
       // Fake default constructor for usage restricted to direct object
       // persistency for clients requiring preallocation of memory for
       // persistifiable objects.
 
-    G4UTubs(const G4UTubs& rhs);
-    G4UTubs& operator=(const G4UTubs& rhs); 
+    G4UMultiUnion( const G4UMultiUnion& source );
+    const G4UMultiUnion &operator=(const G4UMultiUnion& source);
       // Copy constructor and assignment operator.
+
+    G4Polyhedron* CreatePolyhedron() const;
+      // Called by visualization engine
 };
 
 // --------------------------------------------------------------------
 // Inline methods
 // --------------------------------------------------------------------
 
-inline UTubs* G4UTubs::GetShape() const
+inline UMultiUnion* G4UMultiUnion::GetShape() const
 {
-  return (UTubs*) fShape;
+  return (UMultiUnion*) fShape;
 }
 
-inline G4double G4UTubs::GetInnerRadius() const
+inline void G4UMultiUnion::AddNode(G4VSolid& solid, G4Transform3D& trans)
 {
-  return GetShape()->GetInnerRadius();
-}
-inline G4double G4UTubs::GetOuterRadius() const
-{
-  return GetShape()->GetOuterRadius();
-}
-inline G4double G4UTubs::GetZHalfLength() const
-{
-  return GetShape()->GetZHalfLength();
-}
-inline G4double G4UTubs::GetStartPhiAngle() const
-{
-  return GetShape()->GetStartPhiAngle();
-}
-inline G4double G4UTubs::GetDeltaPhiAngle() const
-{
-  return GetShape()->GetDeltaPhiAngle();
+  G4RotationMatrix rot = trans.getRotation();
+  G4ThreeVector transl = trans.getTranslation();
+  UTransform3D tr;
+  tr.fRot[0] = rot.xx(); tr.fRot[1] = rot.xy(); tr.fRot[2] = rot.xz();
+  tr.fRot[3] = rot.yx(); tr.fRot[4] = rot.yy(); tr.fRot[5] = rot.yz();
+  tr.fRot[6] = rot.zx(); tr.fRot[7] = rot.zy(); tr.fRot[8] = rot.zz();
+  tr.fTr = UVector3(transl.x(), transl.y(), transl.z());
+
+  GetShape()->AddNode(*(static_cast<G4USolid&>(solid).GetSolid()), tr);
 }
 
-inline void G4UTubs::SetInnerRadius(G4double newRMin)
+inline G4Transform3D* G4UMultiUnion::GetTransformation(G4int index) const
 {
-  return GetShape()->SetInnerRadius(newRMin);
+  UTransform3D* tr = GetShape()->GetTransformation(index);
+  G4RotationMatrix
+    rot(CLHEP::HepRep3x3((*tr).fRot[0], (*tr).fRot[1], (*tr).fRot[2],
+                         (*tr).fRot[3], (*tr).fRot[4], (*tr).fRot[5],
+                         (*tr).fRot[6], (*tr).fRot[7], (*tr).fRot[8]));
+  G4ThreeVector transl((*tr).fTr.x, (*tr).fTr.y, (*tr).fTr.z);
+  
+  return new G4Transform3D(rot, transl);
 }
-inline void G4UTubs::SetOuterRadius(G4double newRMax)
+
+inline G4VSolid* G4UMultiUnion::GetSolid(G4int index) const
 {
-  return GetShape()->SetOuterRadius(newRMax);
+  VUSolid* solid = GetShape()->GetSolid(index);
+  return new G4USolid(solid->GetName(), solid);
 }
-inline void G4UTubs::SetZHalfLength(G4double newDz)
+
+inline int  G4UMultiUnion::GetNumberOfSolids()const
 {
-  return GetShape()->SetZHalfLength(newDz);
-}
-inline void G4UTubs::SetStartPhiAngle(G4double newSPhi, G4bool trig)
-{
-  return GetShape()->SetStartPhiAngle(newSPhi, trig);
-}
-inline void G4UTubs::SetDeltaPhiAngle(G4double newDPhi)
-{
-  return GetShape()->SetDeltaPhiAngle(newDPhi);
+  return GetShape()->GetNumberOfSolids();
 }
 
 #endif

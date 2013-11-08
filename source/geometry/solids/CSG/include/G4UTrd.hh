@@ -75,6 +75,10 @@ class G4UTrd : public G4USolid
     inline void SetYHalfLength2(G4double val);
     inline void SetZHalfLength(G4double val);
 
+    inline void SetAllParameters(G4double pdx1, G4double pdx2,
+                                 G4double pdy1, G4double pdy2,
+                                 G4double pdz);
+
   public:  // without description
 
     G4UTrd(__void__&);
@@ -136,6 +140,12 @@ inline void G4UTrd::SetYHalfLength2(G4double val)
 inline void G4UTrd::SetZHalfLength(G4double val)
 {
   GetShape()->SetZHalfLength(val);
+}
+inline void G4UTrd::SetAllParameters(G4double pdx1, G4double pdx2,
+                                     G4double pdy1, G4double pdy2,
+                                     G4double pdz)
+{
+  GetShape()->SetAllParameters(pdx1, pdx2, pdy1, pdy2, pdz);
 }
 
 #endif

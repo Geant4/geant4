@@ -21,8 +21,6 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/graphics_reps/include)
@@ -34,15 +32,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4geomUSolids
     HEADERS
-        G4UBox.hh
-        G4UGenericPolycone.hh
-        G4UMultiUnion.hh
-        G4UPolyhedra.hh
         G4USolid.hh
-        G4USphere.hh
-        G4UTet.hh
-        G4UTrd.hh
-        G4UTubs.hh
         UBits.hh
         UBox.hh
         UCons.hh
@@ -66,6 +56,7 @@ GEANT4_DEFINE_MODULE(NAME G4geomUSolids
         UTet.hh
         UTransform3D.hh
         UTrd.hh
+        UTrd.icc
         UTubs.hh
         UTubs.icc
         UTypes.hh
@@ -79,15 +70,7 @@ GEANT4_DEFINE_MODULE(NAME G4geomUSolids
         VUFacet.hh
         VUSolid.hh
     SOURCES
-        G4UBox.cc
-        G4UGenericPolycone.cc
-        G4UMultiUnion.cc
-        G4UPolyhedra.cc
         G4USolid.cc
-        G4USphere.cc
-        G4UTet.cc
-        G4UTrd.cc
-        G4UTubs.cc
         UBits.cc
         UBox.cc
         UCons.cc
@@ -119,8 +102,6 @@ GEANT4_DEFINE_MODULE(NAME G4geomUSolids
         G4globman
         G4graphics_reps
         G4intercoms
-        G4csg
-        G4specsolids
         G4volumes
     GLOBAL_DEPENDENCIES
         G4global

@@ -46,9 +46,9 @@
 #ifndef G4CUTTUBS_HH
 #define G4CUTTUBS_HH
 
-#include "G4Tubs.hh"
+#include "G4OTubs.hh"
 
-class G4CutTubs : public G4Tubs
+class G4CutTubs : public G4OTubs
 {
   public:  // with description
 

@@ -44,6 +44,8 @@
 
 #include "G4Cons.hh"
 
+#if !defined(G4GEOM_USE_UCONS)
+
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
 #include "G4GeometryTolerance.hh"
@@ -2381,3 +2383,5 @@ G4Polyhedron* G4Cons::CreatePolyhedron () const
 {
   return new G4PolyhedronCons(fRmin1,fRmax1,fRmin2,fRmax2,fDz,fSPhi,fDPhi);
 }
+
+#endif

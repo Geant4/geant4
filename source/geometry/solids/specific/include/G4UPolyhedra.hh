@@ -90,6 +90,8 @@ class G4UPolyhedra : public G4USolid
     inline G4PolyhedraHistorical* GetOriginalParameters() const;
     inline void SetOriginalParameters(G4PolyhedraHistorical* pars);
 
+    inline G4bool Reset();
+
   public:  // without description
 
     G4UPolyhedra(__void__&);
@@ -171,6 +173,10 @@ inline void G4UPolyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
     pdata->Rmin[i] = pars->Rmin[i];
     pdata->Rmax[i] = pars->Rmax[i];
   }
+}
+inline G4bool G4UPolyhedra::Reset()
+{
+  return GetShape()->Reset();
 }
 
 #endif

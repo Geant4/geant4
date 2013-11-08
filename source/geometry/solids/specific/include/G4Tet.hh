@@ -51,6 +51,15 @@
 #ifndef G4TET_HH
 #define G4TET_HH
 
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UTET 1
+#endif
+
+#if defined(G4GEOM_USE_UTET)
+  #define G4UTet G4Tet
+  #include "G4UTet.hh"
+#else
+
 #include "G4VSolid.hh"
 
 class G4Tet : public G4VSolid
@@ -161,5 +170,7 @@ class G4Tet : public G4VSolid
     G4double fXMin, fXMax, fYMin, fYMax, fZMin, fZMax;
     G4double fDx, fDy, fDz, fTol, fMaxSize;
 };
+
+#endif
 
 #endif

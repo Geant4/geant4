@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 7, 2013   Gabriele Cosmo                geometry-V09-06-03
+----------------------------
+- Groups tags geom-usolids-V09-06-04, geom-specific-V09-06-26,
+  geom-csg-V09-06-06 and geom-bool-V09-06-03 on top of geometry-V09-06-02.
+
 Nov 1, 2013   Gabriele Cosmo                geometry-V09-06-02
 ----------------------------
 - Groups tags geom-usolids-V09-06-01, geom-specific-V09-06-24,

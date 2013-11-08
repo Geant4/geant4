@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 7, 2013  G.Cosmo                geom-csg-V09-06-06
+- Moved wrappers from usolids module.
+  Fixed internal dispatcher method for parameterisation in all wrappers.
+- Added switching mechanism for G4Box, G4Cons, G4Orb, G4Sphere, G4Trd
+  and G4Tubs.
+- Defined temporary class G4OTubs to be used internally by G4CutTubs,
+  in provision to have UCutTubs in the USolids library.
+
+November 6, 2013  G.Cosmo                geom-csg-V09-06-05
+- Added switch mechanism for USolids (box, cons, orb, sphere, trd, tubs).
+  Renamed related G4 types to 'G4O'.
+- Moved wrappers from USolids module.
+
 October 2, 2013  G.Cosmo                 geom-csg-V09-06-04
 - Correctly initialise fSPhi to zero in G4Sphere constructor.
 

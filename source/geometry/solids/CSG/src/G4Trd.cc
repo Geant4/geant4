@@ -41,6 +41,8 @@
 
 #include "G4Trd.hh"
 
+#if !defined(G4GEOM_USE_UTRD)
+
 #include "G4VPVParameterisation.hh"
 #include "G4VoxelLimits.hh"
 #include "G4AffineTransform.hh"
@@ -1470,3 +1472,5 @@ G4Polyhedron* G4Trd::CreatePolyhedron () const
 {
   return new G4PolyhedronTrd2 (fDx1, fDx2, fDy1, fDy2, fDz);
 }
+
+#endif

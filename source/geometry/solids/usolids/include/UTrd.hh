@@ -78,6 +78,14 @@ class UTrd : public VUSolid
 
     virtual bool Normal(const UVector3& aPoint, UVector3& aNormal) const;
 
+    void CheckAndSetAllParameters ( double pdx1, double pdx2,
+                                    double pdy1, double pdy2,
+                                    double pdz );
+
+    void SetAllParameters ( double pdx1, double pdx2,
+                            double pdy1, double pdy2,
+                            double pdz );
+
 //  virtual void Extent ( EAxisType aAxis, double &aMin, double &aMax ) const;
     void Extent(UVector3& aMin, UVector3& aMax) const;
     virtual double Capacity();
