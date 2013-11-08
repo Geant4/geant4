@@ -1,0 +1,124 @@
+
+     =========================================================
+ 		      Geant4 - Radioprotection example
+     =========================================================
+
+                             README
+                      ---------------------
+
+
+The radioprotection example is developed and mantained by Susanna Guatelli and Jeremy Davis,
+Centre For Medical Radiation Physics (CMRP), University of Wollongong, NSW, Australia.
+
+------------------------------------------------------------------------
+
+Contact: susanna@uow.edu.au
+	 jad028@uowmail.edu.au
+         geant4-advanced-examples@cern.ch
+        
+------------------------------------------------------------------------
+
+List of authors: 
+S. Guatelli and J. Davis.
+
+-----------------------------------------------------------------
+----> Introduction.                                                     
+                                                                       
+Radioprotection example models a simplified diamond microdosimeter, developed by 
+Prof. Anatoly Rosenfeld and his team at the Centre For Medical Radiation Physics, 
+CMRP, University of Wollongong, NSW, Australia. The design of the device is documented in
+J. Davis, et al., "Characterisation of a novel diamond-based microdosimeter prototype 
+for radioprotection applications in space environments",IEEE Transactions on Nuclear Science, 
+Vol. 59, pp. 3110-3116, 2012.
+
+The diamond microdosimeter is set in a vacuum. An isotropic field of Galactic Cosmic Rays (GCR) protons
+is incident on the device. 
+The energy deposition is calculated in one of the sensitive detectors. 
+ 
+In particular in this example it is shown how to:
+- model a realistic isotropic field of GCRs by means of the General Particle Source   
+- model a realistic detector in Geant4
+- retrieve the information of secondary particles originated in the SV
+- define the physics by means of a Geant4 Modular Physics List
+- characterise the response of a realistic detector.
+- save results in an analysis ROOT file using the Geant4 analysis component.               
+
+The example can be executed in multithreading mode
+
+------------------------------------------------------------------------
+----> 1.Experimental set-up.                                            
+
+The diamond microdosimeter is set in the center of the world. The world is a box with size 1 m, filled with vacuum.
+
+Four SV structures are modelled, but only one has been made active (SV_phys1)
+
+The primary radiation field is defined by means of the GeneralParticleSource in the file
+primary.mac
+                           
+-------------------------------------------------------------------------
+----> 2.SET-UP 
+                                          
+A standard Geant4 example CMakeLists.txt is provided.                   
+
+Setup for analysis:
+By default, the example has no analysis component. 
+
+To compile and use the application with the analysis on, build the example with the following command:
+cmake -DWITH_ANALYSIS_USE=ON -DGeant4_DIR=/path/to/Geant4_installation /path/to/radioprotection example                                                   
+          
+plot.C is provided to plot the results of the simulation, contained
+in the radioprotection.root file. If the user intends to use this macro, ROOT must be installed 
+(http://root.cern.ch/drupal/).
+------------------------------------------------------------------------
+----> 3.How to run the example.                                         
+
+- Batch mode:
+  ./radioprotection run.mac
+                                                                       
+- Interative mode:                                                      
+  ./radioprotection
+   vis.mac is the default macro, executed in interactive mode.         
+                                                                         
+---------------------------------------------------------------------------------
+----> 4. Primary radiation Field
+
+The radiation field is defined with the General Particle Source.
+Look at the macro primary.mac .
+
+NOTE: To maximise efficiency the field has been modelled with a limiting angle to reduce redundant events.
+                                                                       
+------------------------------------------------------------------------
+----> 5. Simulation output                                               
+
+**** SEQUENTIAL MODE
+The output is radioprotection.root, containing 
+  - an ntuple with the A, Z, and energy of the secondary particles originated in the diamond microdosimeters.                  
+  - an ntuple withe the energy spectrum (in MeV) of primary particles.
+  - an ntuple with the energy deposition per event(in keV)  in the SV.                                                          
+
+**** MULTITHREAD mode
+output files:
+radioprotection.root_t0
+..
+..
+radioprotection.root_t#
+
+where # is the number of threads
+
+type: source MergeFiles to merge the output of each thread in a single one
+-------------------------------------------------------------------------------
+----> 6.Visualisation                                                     
+
+a macro is provided ad example of visualisation:  vis.mac 
+
+For any problem or question please contact Susanna Guatelli, susanna@uow.edu.au
+
+------------------------------------------------------------------------------
+-----> Future developments
+
+1) The code will be refined. 
+2) A silicon microdosimeter will be modelled as well in the next future.
+
+
+
+

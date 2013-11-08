@@ -1,0 +1,8 @@
+# Definition of the physics processes and models
+# Define the physics models
+/physic/addPhysics LowE_Livermore                      # Electromagnetic model
+/physic/addPhysics HPElastic                           # Hadronic elastic model with HP
+/physic/addPhysics binary                              # Hadronic inelastic model
+/physic/addPhysics binary_ion                          # Hadronic inelastic model for ions
+/physic/addPhysics radioactive_decay                   # Radioactive decay
+
