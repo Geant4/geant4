@@ -178,6 +178,274 @@ void plotMuMinusNNeutEKin( std::string target )
 
 }
 
+void plotMuMinNMultForTalk()
+{
+
+   readNeutMultSinger();
+   
+   TCanvas* myc1 = new TCanvas("myc1","",800,800);
+   myc1->Divide(2,2);
+
+   myc1->cd(1);
+   //gPad->SetLogy();
+   drawMuMinNMultForTalk("Al");
+
+   myc1->cd(2);
+   // gPad->SetLogy();
+   drawMuMinNMultForTalk("Si");
+   // drawMuMinusNeutMult("Si");
+
+   myc1->cd(3);
+   //gPad->SetLogy();
+   drawMuMinNMultForTalk("Ca");
+   // drawMuMinusNeutMult("Ca");
+
+   myc1->cd(4);
+   //gPad->SetLogy();
+   drawMuMinNMultForTalk("Fe");
+   // drawMuMinusNeutMult("Fe");
+
+   TCanvas* myc2 = new TCanvas("myc2","",800,800);
+   myc2->Divide(2,2);
+
+   myc2->cd(1);
+   //gPad->SetLogy();
+   drawMuMinNMultForTalk("Ag");
+   // drawMuMinusNeutMult("Ag");
+
+   myc2->cd(2);
+   //gPad->SetLogy();
+   drawMuMinNMultForTalk("I");
+   // drawMuMinusNeutMult("I");
+
+   myc2->cd(3);
+   //gPad->SetLogy();
+   drawMuMinNMultForTalk("Au");
+   // drawMuMinusNeutMult("Au");
+
+   myc2->cd(4);
+   //gPad->SetLogy();
+   drawMuMinNMultForTalk("Pb");
+   // drawMuMinusNeutMult("Pb");
+
+   return;
+
+}
+
+void plotMuMinNRateEKinForTalk()
+{
+
+   readNNeutEKin();
+   
+   TCanvas* myc = new TCanvas("myc","",1200,600);
+   myc->Divide(3,1);
+   
+   myc->cd(1);
+   gPad->SetLogy();
+   drawMuMinNRateEKinForTalk( "Si" );
+
+   myc->cd(2);
+   gPad->SetLogy();
+   drawMuMinNRateEKinForTalk( "S" );
+
+   myc->cd(3);
+   gPad->SetLogy();
+   drawMuMinNRateEKinForTalk( "Ca" );
+     
+   return;
+
+}
+
+void drawMuMinNMultForTalk( std::string target )
+{
+
+   int TargetID = findTargetSingerExp( target );
+         
+   if ( TargetID == -1 || TargetID >= NTargetsSingerExp )
+   {
+      std::cout << " Invalid Target: " << target << std::endl;
+      return;
+   }
+   
+   int TargetIDTheo = findTargetSingerTheo( target ); // if exists...
+   
+   TH1F* hi[3];
+
+   //double ymin = 10000.; // something big... don't know if I can use FLT_MAX
+   //double ymax = -1. ;
+
+   for ( int m=0; m<3; m++ )
+   {
+      
+      std::string histofile ="";
+      if ( m == 0 || m == 1 )
+      {
+         histofile = "9.6.p02/";
+      }
+      else if ( m == 2 )
+      {
+         histofile = "9.6.ref08/";
+      }
+      
+      histofile += "muminus" +  TargetsSingerExp[TargetID];
+      
+      if ( m == 0 )
+      {
+         histofile += "stopping";
+      }
+      else
+      {
+         histofile += "captureUpdate";
+      }
+      
+      histofile += ".root";
+      
+      TFile* f = new TFile( histofile.c_str() );
+      hi[m] = (TH1F*)f->Get("NNeutrons");
+      // turn off the stats pad; use this space to draw color codes, etc.
+      hi[m]->SetStats(0);
+      hi[m]->SetLineColor(ColorModel[m]);
+      hi[m]->SetLineWidth(2);
+      if ( m == 1 ) hi[m]->SetLineWidth(5);
+      hi[m]->GetXaxis()->Set( 10, 0., 10.);
+      hi[m]->GetYaxis()->SetRangeUser( 0., 1. );
+      hi[m]->GetXaxis()->SetTitle("Number of secondary neutrons per mu- capture");
+      hi[m]->GetYaxis()->SetTitle("Normalized yield");
+      hi[m]->GetYaxis()->SetTitleOffset(1.5);
+/*
+      int nx = hi[m]->GetNbinsX();
+      for (int k=1; k <= nx; k++) {
+	double yy = hi[m]->GetBinContent(k);
+	if ( yy > ymax ) ymax = yy;
+	if ( yy < ymin && yy > 0. ) ymin = yy;
+      }
+*/
+      if ( m == 0 ) hi[m]->Draw();
+      else hi[m]->Draw("same");
+   }
+      
+   TLegend* leg = new TLegend(0.3, 0.5, 0.9, 0.9);
+
+   leg->AddEntry( "", "CaptureAtRest:", "" );
+   leg->AddEntry( hi[0], "9.5.p02 - equivalent", "L" );
+   leg->AddEntry( "", "CaptureAtRest - Restructured:", "" );
+   leg->AddEntry( hi[1], "9.6.p02", "L" );
+   leg->AddEntry( hi[2], "9.6.ref08", "L" );
+
+   TGraph*  gr1 = new TGraphErrors(NPointsNeutMultSinger,NeutMult,ValueExp[TargetID],0,ErrorExp[TargetID]);
+   gr1->SetMarkerColor(4);  gr1->SetMarkerStyle(22);
+   gr1->SetMarkerSize(1.8);
+   gr1->Draw("psame");
+   
+   leg->AddEntry( gr1, "exp.data (P.Singer)", "p");
+   
+   if ( TargetIDTheo != -1 )
+   {
+      TGraph*  gr2 = new TGraphErrors(NPointsNeutMultSinger,NeutMultTheo,ValueTheo[TargetIDTheo],0,0);
+      gr2->SetMarkerColor(7); // 7 = light blue (turquoise) 
+      gr2->SetMarkerStyle(21);
+      gr2->SetMarkerSize(1.8);
+      gr2->Draw("psame");     
+      leg->AddEntry( gr2, "theory (P.Singer)", "p");
+ 
+   }
+   
+   leg->Draw();
+   leg->SetFillColor(kWhite);
+
+   return;
+
+} 
+
+
+
+void drawMuMinNRateEKinForTalk( std::string target )
+{
+
+   int TargetID = findTargetSundelin( target );
+   
+   if ( TargetID == -1 ||  TargetID >= NTargetsSundelin ) return;
+      
+   TH1F* hi[3];
+
+   double ymin = 10000.; // something big... don't know if I can use FLT_MAX
+   double ymax = -1. ;
+
+   for ( int m=0; m<3; m++ )
+   {
+      
+      std::string histofile ="";
+      if ( m == 0 || m == 1 )
+      {
+         histofile = "9.6.p02/";
+      }
+      else if ( m == 2 )
+      {
+         histofile = "9.6.ref08/";
+      }
+      
+      histofile += "muminus" +  TargetsSundelin[TargetID];
+      
+      if ( m == 0 )
+      {
+         histofile += "stopping";
+      }
+      else
+      {
+         histofile += "captureUpdate";
+      }
+      
+      histofile += ".root";
+      
+      TFile* f = new TFile( histofile.c_str() );
+
+      hi[m] = (TH1F*)f->Get("NeutronKineticEnergy");
+      hi[m]->SetStats(0);
+      hi[m]->SetLineColor(ColorModel[m]);
+      hi[m]->SetLineWidth(2);
+      if ( m == 1 ) hi[m]->SetLineWidth(5);
+      // -> hi[m]->GetXaxis()->Set( 10, 0., 10.);
+      hi[m]->GetYaxis()->SetRangeUser( 0.0000001, 1. );
+      hi[m]->GetXaxis()->SetTitle("Ekin of secondary neutron (MeV)");
+      hi[m]->GetYaxis()->SetTitle("Number of neutrons per capture per MeV");
+
+      hi[m]->GetYaxis()->SetTitleOffset(1.5);
+/*      
+      int nx = hi[m]->GetNbinsX();
+      for (int k=1; k <= nx; k++) {
+	double yy = hi[m]->GetBinContent(k);
+	if ( yy > ymax ) ymax = yy;
+	if ( yy < ymin && yy > 0. ) ymin = yy;
+      }
+*/
+      if ( m == 0 ) hi[m]->Draw();
+      else hi[m]->Draw("same");
+   }
+      
+   TLegend* leg = new TLegend(0.4, 0.6, 0.9, 0.9);
+   leg->SetTextSize(0.035);
+
+   leg->AddEntry( "", "CaptureAtRest", "" );
+   leg->AddEntry( hi[0], "9.5.p02 - equivalent", "L" );
+   leg->AddEntry( "", "CaptureAtRest-Restruct.", "" );
+   leg->AddEntry( hi[1], "9.6.p02", "L" );
+   leg->AddEntry( hi[2], "9.6.ref08", "L" );
+
+   TGraph*  gr1 = new TGraphErrors(NPointsSundelin,EKin,NNeut[TargetID],0,ErNeut[TargetID]);
+   // TGraph*  gr1 = new TGraphErrors(NPointsNeutMultSinger,NeutMult,ValueExp[TargetID],0,ErrorExp[TargetID]);
+   gr1->SetMarkerColor(4);  gr1->SetMarkerStyle(22);
+   gr1->SetMarkerSize(1.8);
+   gr1->Draw("psame");
+   
+   leg->AddEntry( gr1, "exp.data (R.M.Sundelin)", "p");
+
+   leg->Draw();
+   leg->SetFillColor(kWhite);
+
+   return;
+
+} 
+
 void drawMuMinusNeutMult( std::string target )
 {
       
@@ -208,6 +476,7 @@ void drawMuMinusNeutMult( std::string target )
       hi[m]->SetStats(0);
       hi[m]->SetLineColor(ColorModel[m]);
       hi[m]->SetLineWidth(2);
+      hi[m]->GetXaxis()->SetLimits(0.,10.);
       hi[m]->GetXaxis()->SetTitle("Number of secondary neutrons per mu- capture");
       hi[m]->GetYaxis()->SetTitle("Normalized yield");
       hi[m]->GetYaxis()->SetTitleOffset(1.5);
