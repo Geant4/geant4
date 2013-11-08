@@ -23,45 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: GammaKnifeActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
+//
+/// \file GammaKnifeActionInitialization.hh
+/// \brief Definition of the GammaKnifeActionInitialization class
 
-#ifndef GammaKnifeRunAction_h
-#define GammaKnifeRunAction_h 1
+#ifndef GammaKnifeActionInitialization_h
+#define GammaKnifeActionInitialization_h 1
 
-#include "G4UserRunAction.hh"
-#include "G4RunManager.hh"
-#include "globals.hh"
+#include "G4VUserActionInitialization.hh"
 
-class G4Timer;
+/// Action initialization class.
+///
 
-class G4Run;
-class GammaKnifeAnalysisManager;
-class GammaKnifeDetectorConstruction;
-class GammaKnifeRunMessenger;
-class GammaKnifeFactory;
-class GammaKnifeFactoryIr;
-class GammaKnifeFactoryI;
-
-
-
-class GammaKnifeRunAction : public G4UserRunAction
+class GammaKnifeActionInitialization : public G4VUserActionInitialization
 {
-public:
-  GammaKnifeRunAction(G4bool isOnMaster);
-  ~GammaKnifeRunAction();
+  public:
+    GammaKnifeActionInitialization();
+    virtual ~GammaKnifeActionInitialization();
 
-public:
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run* );
-  void SelectEnergy(G4int); 
-
-private: 
-
-  G4Timer* timer;
-  G4double sum_real;
-  G4double sum_user;
-
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 };
+
 #endif
 
-
-
+    

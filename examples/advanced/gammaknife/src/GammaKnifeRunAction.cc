@@ -33,32 +33,39 @@
 #include "GammaKnifeDetectorConstruction.hh"
 #include "G4SDManager.hh"
 #include "G4ScoringManager.hh"
+#include <ctime>
 #include "G4SystemOfUnits.hh"
+
 
 #include "GammaKnifeRunAction.hh"
 
- G4double sum_real = 0;
- G4double sum_user = 0;
-GammaKnifeRunAction::GammaKnifeRunAction()
+////////////////////////////////////////////////////////////////////////
+
+GammaKnifeRunAction::GammaKnifeRunAction(G4bool /*isOnMaster*/)
 {
+  sum_real = 0;
+  sum_user = 0;
   timer = new G4Timer;
 }
+
+////////////////////////////////////////////////////////////////////////
 
 GammaKnifeRunAction::~GammaKnifeRunAction()
 { 
   delete timer;
 }
 
+////////////////////////////////////////////////////////////////////////
+
 void GammaKnifeRunAction::BeginOfRunAction(const G4Run* aRun)
 { 	
    G4RunManager::GetRunManager()->SetRandomNumberStore(true);
    G4cout << "Run " << aRun -> GetRunID() << " starts ..." << G4endl;
 
-   timer->Start();
-
-   electromagnetic = 0;
-   hadronic = 0;
+   timer->Start();  
 }
+
+////////////////////////////////////////////////////////////////////////
 
 void GammaKnifeRunAction::EndOfRunAction(const G4Run* aRun)
 {

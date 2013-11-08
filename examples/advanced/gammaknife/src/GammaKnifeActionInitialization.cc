@@ -23,45 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: GammaKnifeActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
+//
+/// \file GammaKnifeActionInitialization.cc
+/// \brief Implementation of the GammaKnifeActionInitialization class
 
-#ifndef GammaKnifeRunAction_h
-#define GammaKnifeRunAction_h 1
-
-#include "G4UserRunAction.hh"
-#include "G4RunManager.hh"
-#include "globals.hh"
-
-class G4Timer;
-
-class G4Run;
-class GammaKnifeAnalysisManager;
-class GammaKnifeDetectorConstruction;
-class GammaKnifeRunMessenger;
-class GammaKnifeFactory;
-class GammaKnifeFactoryIr;
-class GammaKnifeFactoryI;
+#include "GammaKnifeActionInitialization.hh"
+#include "GammaKnifePrimaryGeneratorAction.hh"
+#include "GammaKnifeRunAction.hh"
 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class GammaKnifeRunAction : public G4UserRunAction
+GammaKnifeActionInitialization::GammaKnifeActionInitialization()
+ : G4VUserActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+GammaKnifeActionInitialization::~GammaKnifeActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void GammaKnifeActionInitialization::BuildForMaster() const
 {
-public:
-  GammaKnifeRunAction(G4bool isOnMaster);
-  ~GammaKnifeRunAction();
+  SetUserAction(new GammaKnifeRunAction(true));
+}
 
-public:
-  void BeginOfRunAction(const G4Run*);
-  void EndOfRunAction(const G4Run* );
-  void SelectEnergy(G4int); 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-private: 
+void GammaKnifeActionInitialization::Build() const
+{
+  SetUserAction(new GammaKnifePrimaryGeneratorAction);
+  SetUserAction(new GammaKnifeRunAction(false));
 
-  G4Timer* timer;
-  G4double sum_real;
-  G4double sum_user;
+}  
 
-};
-#endif
-
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

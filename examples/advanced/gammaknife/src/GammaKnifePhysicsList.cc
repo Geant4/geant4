@@ -48,16 +48,11 @@
 #include "G4EmExtraPhysics.hh"
 
 #include "G4DecayPhysics.hh"
-
 #include "G4RadioactiveDecayPhysics.hh"
 
 #include "G4LossTableManager.hh"
 
-
-#include <fstream>
-
-GammaKnifePhysicsList::GammaKnifePhysicsList(): G4VModularPhysicsList(),
-						machinechanged(false)
+GammaKnifePhysicsList::GammaKnifePhysicsList(): G4VModularPhysicsList()
 {
   G4LossTableManager::Instance();
   defaultCutValue = 1.*mm;
@@ -71,7 +66,7 @@ GammaKnifePhysicsList::GammaKnifePhysicsList(): G4VModularPhysicsList(),
   messenger = new GammaKnifePhysicsListMessenger(this);
   SetVerboseLevel(1);
 
-// EM physics
+  // EM physics
   emPhysicsList = new G4EmStandardPhysics_option3(1);
   emName = G4String("emstandard_opt3");
 
@@ -84,12 +79,14 @@ GammaKnifePhysicsList::~GammaKnifePhysicsList()
   delete messenger;
   delete emPhysicsList;
   delete decPhysicsList;
-  // for(size_t i=0; i<hadronPhys.size(); i++) {delete hadronPhys[i];
+  for(size_t i=0; i<hadronPhys.size(); i++) 
+    delete hadronPhys[i];
 }
 
 void GammaKnifePhysicsList::ConstructParticle()
 {
   decPhysicsList->ConstructParticle();
+  emPhysicsList->ConstructParticle();
 }
 
 void GammaKnifePhysicsList::ConstructProcess()
@@ -99,8 +96,7 @@ void GammaKnifePhysicsList::ConstructProcess()
 
   // electromagnetic physics list
   emPhysicsList->ConstructProcess();
-  em_config.AddModels();
-
+  
   // decay physics list
   decPhysicsList->ConstructProcess();
 

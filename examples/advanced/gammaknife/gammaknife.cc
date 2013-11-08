@@ -42,20 +42,29 @@
 // *Corresponding author, email to francesco.romano@lns.infn.it
 // ----------------------------------------------------------------------------
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
+
 #ifdef G4VIS_USE
-#include "G4VisExecutive.hh"
+	#include "G4VisExecutive.hh"
 #endif
 #ifdef G4UI_USE
-#include "G4UIExecutive.hh"
+	#include "G4UIExecutive.hh"
 #endif
+
 #include "GammaKnifeDetectorConstruction.hh"
 #include "GammaKnifePhysicsList.hh"
 #include "GammaKnifePrimaryGeneratorAction.hh"
 #include "GammaKnifeRunAction.hh"
+#include "GammaKnifeActionInitialization.hh"
+
 #include "Randomize.hh"  
 #include "G4RunManager.hh"
 #include "G4UImessenger.hh"
@@ -69,18 +78,22 @@
 int main(int argc ,char ** argv)
 {
   
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
   G4int seconds =  time(NULL);
-  CLHEP::HepRandom::setTheSeed(seconds);
+  G4Random::setTheSeed(seconds);
   
-  G4RunManager* runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager * runManager = new G4MTRunManager;
+#else
+  G4RunManager * runManager = new G4RunManager;
+#endif
+
   G4ScoringManager::GetScoringManager(); // This enables scoring
 
   // Initialize the geometry
   GammaKnifeDetectorConstruction* detector = new GammaKnifeDetectorConstruction();
   runManager -> SetUserInitialization(detector);
- 
-	
+ 	
   // Initialize the physics 
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys = 0;
@@ -99,15 +112,12 @@ int main(int argc ,char ** argv)
 
   runManager->SetUserInitialization(phys);
 
-  // Initialize the primary particles  
-  runManager -> SetUserAction(new GammaKnifePrimaryGeneratorAction());
+
+  GammaKnifeActionInitialization* actionInitialization= new GammaKnifeActionInitialization();
+  runManager->SetUserInitialization(actionInitialization);
 
   GammaKnifeController* controller = new GammaKnifeController( detector );
   controller->ReadFile("MachineAngle.in"); // pre-load default
-
-  // Optional UserActions: run, event, stepping
-  GammaKnifeRunAction* pRunAction = new GammaKnifeRunAction();
-  runManager -> SetUserAction(pRunAction);
 
   // Initialize G4 kernel
   //

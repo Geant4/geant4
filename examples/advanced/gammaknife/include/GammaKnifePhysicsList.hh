@@ -29,8 +29,6 @@
 
 #include "G4VModularPhysicsList.hh"
 #include "globals.hh"
-#include "G4EmConfigurator.hh"
-
 
 class GammaKnifePhysicsListMessenger;
 class G4VPhysicsConstructor;
@@ -52,9 +50,6 @@ public:
   void ConstructProcess();
 
 private:
-
-  G4EmConfigurator em_config;
-
   G4bool radioactiveDecayIsRegistered;
 
   G4double cutForGamma;
@@ -65,14 +60,6 @@ private:
   G4VPhysicsConstructor*               emPhysicsList;
   G4VPhysicsConstructor*               decPhysicsList;
   std::vector<G4VPhysicsConstructor*>  hadronPhys;
-
-
-	G4String numEvent;
-	G4String machinefile;
-	int curr;
-	G4String linea;
-	G4bool machinechanged;
-	
 
   GammaKnifePhysicsListMessenger* messenger;
 };
