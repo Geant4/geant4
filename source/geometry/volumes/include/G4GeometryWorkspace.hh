@@ -66,6 +66,9 @@ class G4GeometryWorkspace
 
      void InitialiseWorkspace();
       // To be called at start of each run (especially 2nd and further runs)
+
+     void   SetVerbose(G4bool v) { fVerbose=v; } 
+     G4bool GetVerbose()  { return fVerbose;   } 
   
  protected:  // Implementation methods
       void   InitialisePhysicalVolumes();
@@ -87,6 +90,7 @@ class G4GeometryWorkspace
      G4ReplicaData *fReplicaOffset;       
      G4RegionData  *fRegionOffset;        
 
+     G4bool         fVerbose;
 };
 
 #endif //G4GEOMETRYWORKSPACE_HH

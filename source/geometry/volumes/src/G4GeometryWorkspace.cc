@@ -75,7 +75,8 @@ G4GeometryWorkspace::~G4GeometryWorkspace()
 void
 G4GeometryWorkspace::UseWorkspace()
 {
-  G4cout << "G4GeometryWorkspace::UseWorkspace: start " << G4endl;
+  if( fVerbose ) 
+     G4cout << "G4GeometryWorkspace::UseWorkspace: Start " << G4endl;
 
   // Implementation copied from  G4WorkerThread::BuildGeometryAndPhysicsVector()
   //  and improved for G4PVParamaterised
@@ -92,6 +93,9 @@ G4GeometryWorkspace::UseWorkspace()
   //   - it must be a lightweight operation, to reuse a valid work area
   //   - so it must NOT Initialise anything!
   // Do not call InitialisePhysicalVolumes();
+
+  if( fVerbose ) 
+     G4cout << "G4GeometryWorkspace::UseWorkspace:  End " << G4endl;
 }
 
 
@@ -148,8 +152,9 @@ void G4GeometryWorkspace::InitialisePhysicalVolumes()
             }
         }
     }
-    G4cout << "G4GeometryWorkspace::InitialisePhysicalVolumes: "
-           << "Copying geometry - Done!" << G4endl;
+    if( fVerbose )
+       G4cout << "G4GeometryWorkspace::InitialisePhysicalVolumes: "
+              << "Copying geometry - Done!" << G4endl;
 }
 
 
@@ -253,7 +258,8 @@ G4bool G4GeometryWorkspace::CloneParameterisedSolids( G4PVParameterised *paramVo
 void
 G4GeometryWorkspace::InitialiseWorkspace()
 {
-  G4cout << "G4GeometryWorkspace::InitialiseWorkspace: Copying geometry - Start " << G4endl;
+  if( fVerbose ) 
+     G4cout << "G4GeometryWorkspace::InitialiseWorkspace: Copying geometry - Start " << G4endl;
   
   // Implementation copied from  G4WorkerThread::BuildGeometryAndPhysicsVector()
   //  and improved for G4PVParamaterised
@@ -269,8 +275,9 @@ G4GeometryWorkspace::InitialiseWorkspace()
 
   InitialisePhysicalVolumes();
   
-  G4cout << "G4GeometryWorkspace::InitialiseWorkspace: "
-  << "Copying geometry - Done!" << G4endl;
+  if( fVerbose ) 
+     G4cout << "G4GeometryWorkspace::InitialiseWorkspace: "
+            << "Copying geometry - Done!" << G4endl;
 }
 
 void G4GeometryWorkspace::DestroyWorkspace()
