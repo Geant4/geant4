@@ -23,64 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/field01/src/F01CalorHit.cc
-/// \brief Implementation of the F01CalorHit class
+//
+/// \file F01ActionInitialization.hh
+/// \brief Definition of the F01ActionInitialization class
 //
 //
-// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "F01CalorHit.hh"
+#ifndef F01ActionInitialization_h
+#define F01ActionInitialization_h 1
 
-G4ThreadLocal G4Allocator<F01CalorHit>* F01CalorHitAllocator=0;
+#include "G4VUserActionInitialization.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F01CalorHit::F01CalorHit()
- : G4VHit(),
-   fEdepAbs(0.),
-   fTrackLengthAbs(0.),
-   fEdepGap(0.),
-   fTrackLengthGap(0.)
-{;}
+class F01DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F01CalorHit::~F01CalorHit()
-{;}
+/// Action initialization class.
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F01CalorHit::F01CalorHit(const F01CalorHit& right)
-  : G4VHit(),
-    fEdepAbs(right.fEdepAbs),
-    fTrackLengthAbs(right.fTrackLengthAbs),
-    fEdepGap(right.fEdepGap),
-    fTrackLengthGap(right.fTrackLengthGap)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-const F01CalorHit& F01CalorHit::operator=(const F01CalorHit& right)
+class F01ActionInitialization : public G4VUserActionInitialization
 {
-  fEdepAbs = right.fEdepAbs; fTrackLengthAbs = right.fTrackLengthAbs;
-  fEdepGap = right.fEdepGap; fTrackLengthGap = right.fTrackLengthGap;
-  return *this;
-}
+  public:
+    F01ActionInitialization(F01DetectorConstruction*);
+    virtual ~F01ActionInitialization();
+
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+
+  private:
+    F01DetectorConstruction* fDetConstruction;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int F01CalorHit::operator==(const F01CalorHit& right) const
-{
-  return (this==&right) ? 1 : 0;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void F01CalorHit::Print()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif

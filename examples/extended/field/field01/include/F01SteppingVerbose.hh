@@ -29,14 +29,14 @@
 //
 // $Id$
 //
-//  
+//
 //---------------------------------------------------------------
 //
 // F01SteppingVerbose.hh
 //
 // Description:
-//   This class manages the vervose outputs in G4SteppingManager. 
-//   
+//   This class manages the vervose outputs in G4SteppingManager.
+//
 //
 // Contact:
 //   Questions and comments to this code should be sent to
@@ -44,22 +44,27 @@
 //     Takashi Sasaki (e-mail: Takashi.Sasaki@kek.jp)
 //
 //---------------------------------------------------------------
+//
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F01SteppingVerbose_h
 #define F01SteppingVerbose_h 1
 
 #include "G4SteppingVerbose.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 class F01SteppingVerbose : public G4SteppingVerbose 
 {
-  public:   
+  public:
 
     F01SteppingVerbose();
-   ~F01SteppingVerbose();
-      // Constructor/Destructor
+    virtual ~F01SteppingVerbose();
 
-    void StepInfo();
-    void TrackingStarted();
+    virtual void StepInfo();
+    virtual void TrackingStarted();
 
 };
 

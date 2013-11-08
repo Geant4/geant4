@@ -29,33 +29,31 @@
 //
 // $Id$
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F01PrimaryGeneratorMessenger_h
 #define F01PrimaryGeneratorMessenger_h 1
 
 #include "G4UImessenger.hh"
-#include "globals.hh"
 
 class F01PrimaryGeneratorAction;
 class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F01PrimaryGeneratorMessenger: public G4UImessenger
 {
   public:
     F01PrimaryGeneratorMessenger(F01PrimaryGeneratorAction*);
-    ~F01PrimaryGeneratorMessenger();
-    
+    virtual ~F01PrimaryGeneratorMessenger();
+ 
     virtual void SetNewValue(G4UIcommand*, G4String);
-    
+
   private:
-    F01PrimaryGeneratorAction* fAction; 
+    F01PrimaryGeneratorAction* fAction;
     G4UIcmdWithAString*        fRndmCmd;
     G4UIcmdWithADoubleAndUnit* fSetXVertexCmd;
     G4UIcmdWithADoubleAndUnit* fSetYVertexCmd;
@@ -63,4 +61,3 @@ class F01PrimaryGeneratorMessenger: public G4UImessenger
 };
 
 #endif
-

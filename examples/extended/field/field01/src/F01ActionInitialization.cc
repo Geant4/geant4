@@ -23,64 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/field01/src/F01CalorHit.cc
-/// \brief Implementation of the F01CalorHit class
 //
-//
-// $Id$
-//
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file F01ActionInitialization.cc
+/// \brief Implementation of the F01ActionInitialization class
 
-#include "F01CalorHit.hh"
+#include "F01ActionInitialization.hh"
+#include "F01PrimaryGeneratorAction.hh"
+#include "F01RunAction.hh"
+#include "F01EventAction.hh"
+#include "F01SteppingVerbose.hh"
 
-G4ThreadLocal G4Allocator<F01CalorHit>* F01CalorHitAllocator=0;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F01CalorHit::F01CalorHit()
- : G4VHit(),
-   fEdepAbs(0.),
-   fTrackLengthAbs(0.),
-   fEdepGap(0.),
-   fTrackLengthGap(0.)
-{;}
+#include "F01DetectorConstruction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F01CalorHit::~F01CalorHit()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F01CalorHit::F01CalorHit(const F01CalorHit& right)
-  : G4VHit(),
-    fEdepAbs(right.fEdepAbs),
-    fTrackLengthAbs(right.fTrackLengthAbs),
-    fEdepGap(right.fEdepGap),
-    fTrackLengthGap(right.fTrackLengthGap)
+F01ActionInitialization::F01ActionInitialization
+                            (F01DetectorConstruction* detConstruction)
+ : G4VUserActionInitialization(),
+   fDetConstruction(detConstruction)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const F01CalorHit& F01CalorHit::operator=(const F01CalorHit& right)
+F01ActionInitialization::~F01ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F01ActionInitialization::BuildForMaster() const
 {
-  fEdepAbs = right.fEdepAbs; fTrackLengthAbs = right.fTrackLengthAbs;
-  fEdepGap = right.fEdepGap; fTrackLengthGap = right.fTrackLengthGap;
-  return *this;
+  SetUserAction(new F01RunAction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4int F01CalorHit::operator==(const F01CalorHit& right) const
+void F01ActionInitialization::Build() const
 {
-  return (this==&right) ? 1 : 0;
+  SetUserAction(new F01PrimaryGeneratorAction(fDetConstruction));
+
+  F01RunAction* runAction = new F01RunAction();
+  SetUserAction(runAction);
+  F01EventAction* eventAction = new F01EventAction(runAction);
+  SetUserAction(eventAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F01CalorHit::Print()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4VSteppingVerbose* F01ActionInitialization::InitializeSteppingVerbose() const
+{
+  return new F01SteppingVerbose();
+}

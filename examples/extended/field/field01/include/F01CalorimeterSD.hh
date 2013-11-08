@@ -29,15 +29,13 @@
 //
 // $Id$
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F01CalorimeterSD_h
 #define F01CalorimeterSD_h 1
 
-#include "globals.hh"
 #include "G4VSensitiveDetector.hh"
 #include "F01CalorHit.hh"
 
@@ -45,27 +43,24 @@ class F01DetectorConstruction;
 class G4HCofThisEvent;
 class G4Step;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F01CalorimeterSD : public G4VSensitiveDetector
 {
   public:
-  
+
       F01CalorimeterSD(G4String, F01DetectorConstruction* );
-      ~F01CalorimeterSD();
+      virtual ~F01CalorimeterSD();
 
       virtual void Initialize(G4HCofThisEvent*);
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
       virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
-      virtual void PrintAll();
 
   private:
-  
-      F01CalorHitsCollection*  fCalCollection;      
+
+      F01CalorHitsCollection*  fCalCollection;
       F01DetectorConstruction* fDetector;
       G4int*                   fHitID;
 };
 
 #endif
-

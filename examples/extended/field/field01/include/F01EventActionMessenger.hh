@@ -29,33 +29,31 @@
 //
 // $Id$
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F01EventActionMessenger_h
 #define F01EventActionMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
 
 class F01EventAction;
 class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F01EventActionMessenger: public G4UImessenger
 {
   public:
     F01EventActionMessenger(F01EventAction*);
-   ~F01EventActionMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
+    virtual ~F01EventActionMessenger();
+
+    virtual void SetNewValue(G4UIcommand*, G4String);
+
   private:
-    F01EventAction* fEventAction;   
+    F01EventAction* fEventAction;
+
     G4UIcmdWithAnInteger* fSetVerboseCmd;
     G4UIcmdWithAnInteger* fPrintCmd;
 };
