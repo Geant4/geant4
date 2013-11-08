@@ -81,6 +81,7 @@
 #include <vector>
 #include "globals.hh"
 #include "G4VEnergyLossProcess.hh"
+#include "G4ThreadLocalSingleton.hh"
 
 class G4PhysicsTable;
 class G4MaterialCutsCouple;
@@ -98,6 +99,8 @@ class G4Region;
 
 class G4LossTableManager
 {
+
+friend class G4ThreadLocalSingleton<G4LossTableManager>;
 
 public:
 
@@ -308,7 +311,7 @@ private:
   G4LossTableManager(G4LossTableManager &);
   G4LossTableManager & operator=(const G4LossTableManager &right);
 
-  static G4ThreadLocal G4LossTableManager* theInstance;
+  //static G4ThreadLocal G4LossTableManager* theInstance;
 
   typedef const G4ParticleDefinition* PD;
 

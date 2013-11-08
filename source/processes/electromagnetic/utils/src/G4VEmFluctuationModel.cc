@@ -55,12 +55,13 @@
 G4VEmFluctuationModel::G4VEmFluctuationModel(const G4String& nam)
   : name(nam) 
 {
-  G4LossTableManager::Instance()->Register(this);
+  fManager = G4LossTableManager::Instance();
+  fManager->Register(this);
 }
 
 G4VEmFluctuationModel::~G4VEmFluctuationModel() 
 {
-  G4LossTableManager::Instance()->DeRegister(this);
+  fManager->DeRegister(this);
 }
 
 void G4VEmFluctuationModel::InitialiseMe(const G4ParticleDefinition*)

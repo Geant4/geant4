@@ -155,18 +155,14 @@ G4VEmProcess::~G4VEmProcess()
     G4cout << "G4VEmProcess destruct " << GetProcessName() 
 	   << "  " << this << "  " <<  theLambdaTable <<G4endl;
   }
-  Clear();
-  if(theLambdaTable) {
-    theLambdaTable->clearAndDestroy();
+  if(lManager->IsMaster()) {
     delete theLambdaTable;
-  }
-  if(theLambdaTablePrim) {
-    theLambdaTablePrim->clearAndDestroy();
     delete theLambdaTablePrim;
   }
   delete modelManager;
   delete biasManager;
   lManager->DeRegister(this);
+  //G4cout << "G4VEmProcess removed " << G4endl; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

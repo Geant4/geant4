@@ -102,10 +102,10 @@ G4EmCorrections::G4EmCorrections()
 
 G4EmCorrections::~G4EmCorrections()
 {
-  for(G4int i=0; i<nIons; ++i) {delete stopData[i];}
-  delete BarkasCorr;
-  delete ThetaK;
-  delete ThetaL;
+  //  for(G4int i=0; i<nIons; ++i) {delete stopData[i];}
+  // delete BarkasCorr;
+  // delete ThetaK;
+  // delete ThetaL;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -115,6 +115,7 @@ class G4Region;
 class G4SafetyHelper;
 class G4VAtomDeexcitation;
 class G4EmBiasingManager;
+class G4LossTableManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -467,6 +468,7 @@ private:
 
   // ======== Parameters of the class fixed at construction =========
 
+  G4LossTableManager*         lManager;
   G4EmModelManager*           modelManager;
   G4EmBiasingManager*         biasManager;
   G4SafetyHelper*             safetyHelper;
@@ -554,6 +556,7 @@ private:
   G4bool   useDeexcitation;
   G4bool   biasFlag;
   G4bool   weightFlag;
+  G4bool   isMaster;
 
 protected:
 

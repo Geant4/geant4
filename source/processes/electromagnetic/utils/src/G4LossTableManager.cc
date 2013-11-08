@@ -104,22 +104,27 @@
 #include "G4Region.hh"
 #include "G4PhysicalConstants.hh"
 
-G4ThreadLocal G4LossTableManager* G4LossTableManager::theInstance = 0;
+//G4ThreadLocal G4LossTableManager* G4LossTableManager::theInstance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4LossTableManager* G4LossTableManager::Instance()
 {
+  /*
   if(!theInstance) {
     theInstance = new G4LossTableManager;
   }
   return theInstance;
+  */
+  static G4ThreadLocalSingleton<G4LossTableManager> instance;
+  return instance.Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4LossTableManager::~G4LossTableManager()
 {
+  //G4cout << "### G4LossTableManager::~G4LossTableManager()" << G4endl;
   for (G4int i=0; i<n_loss; ++i) {
     if( loss_vector[i] ) { delete loss_vector[i]; }
   }

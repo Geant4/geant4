@@ -79,14 +79,14 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   useAngularGenerator = false;
   idxTable = 0;
 
-  G4LossTableManager::Instance()->Register(this);
+  fManager = G4LossTableManager::Instance();
+  fManager->Register(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VEmModel::~G4VEmModel()
 {
-  G4LossTableManager::Instance()->DeRegister(this);
   if(localElmSelectors) { 
     if(nSelectors > 0) {
       for(G4int i=0; i<nSelectors; ++i) { 
@@ -96,10 +96,10 @@ G4VEmModel::~G4VEmModel()
     delete elmSelectors; 
   }
   delete anglModel;
-  if(localTable && xSectionTable) { 
-    xSectionTable->clearAndDestroy(); 
-    delete xSectionTable;
-  }
+  
+  if(localTable) { delete xSectionTable; }
+  
+  fManager->DeRegister(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -135,13 +135,10 @@ G4ParticleChangeForGamma* G4VEmModel::GetParticleChangeForGamma()
 void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part, 
 					    const G4DataVector& cuts)
 {
-  // initialise before run
-  G4LossTableManager* man = G4LossTableManager::Instance();
-
   // using spline for element selectors should be investigated in details
   // because small number of points may provide biased results
   // large number of points requires significant increase of memory
-  //G4bool spline = man->SplineFlag();
+  //G4bool spline = fManager->SplineFlag();
   G4bool spline = false;
   
   //G4cout << "IES: for " << GetName() << " Emin(MeV)= " << lowLimit/MeV 
@@ -185,7 +182,7 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part,
       G4double emin = std::max(lowLimit, 
 			       MinPrimaryEnergy(material, part, cuts[i]));
       G4double emax = std::max(highLimit, 10*emin);
-      G4int nbins = G4int(man->GetNumberOfBinsPerDecade()
+      G4int nbins = G4int(fManager->GetNumberOfBinsPerDecade()
 			  *G4Log(emax/emin)/log106);
       if(nbins < 3) { nbins = 3; }
 

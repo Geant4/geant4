@@ -239,13 +239,15 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   aGPILSelection = CandidateForSelection;
 
   // initialise model
-  (G4LossTableManager::Instance())->Register(this);
+  lManager = G4LossTableManager::Instance();
+  lManager->Register(this);
   fluctModel = 0;
   atomDeexcitation = 0;
 
   biasManager  = 0;
   biasFlag     = false; 
   weightFlag   = false; 
+  isMaster     = true;
   lastIdx      = 0;
 
   idxDEDX = idxDEDXSub = idxDEDXunRestricted = idxIonisation =
@@ -262,57 +264,48 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 
 G4VEnergyLossProcess::~G4VEnergyLossProcess()
 {
+  /*
+  G4cout << "** G4VEnergyLossProcess::~G4VEnergyLossProcess() for " 
+	 << GetProcessName() 
+	 << " isMaster: " << isMaster << G4endl;
+  */
   Clean();
 
-  if ( !baseParticle && G4LossTableManager::Instance()->IsMaster() ) {
+  if ( !baseParticle && isMaster ) {
+    //G4cout << " isIonisation " << isIonisation << "  " 
+    //   << theDEDXTable << G4endl;
+    
     if(theDEDXTable) {
       if(theIonisationTable == theDEDXTable) { theIonisationTable = 0; }
-      theDEDXTable->clearAndDestroy();
       delete theDEDXTable;
       if(theDEDXSubTable) {
 	if(theIonisationSubTable == theDEDXSubTable) 
-	  theIonisationSubTable = 0;
-	theDEDXSubTable->clearAndDestroy();
+	  { theIonisationSubTable = 0; }
         delete theDEDXSubTable;
       }
     }
-    if(theIonisationTable) {
-      theIonisationTable->clearAndDestroy(); 
-      delete theIonisationTable;
+    delete theIonisationTable;
+    delete theIonisationSubTable;
+    if(theDEDXunRestrictedTable && isIonisation) {
+      delete theDEDXunRestrictedTable;
     }
-    if(theIonisationSubTable) {
-      theIonisationSubTable->clearAndDestroy(); 
-      delete theIonisationSubTable;
-    }
-    if(theDEDXunRestrictedTable && theCSDARangeTable) {
-       theDEDXunRestrictedTable->clearAndDestroy();
-       delete theDEDXunRestrictedTable;
-    }
-    if(theCSDARangeTable) {
-      theCSDARangeTable->clearAndDestroy();
+    if(theCSDARangeTable && isIonisation) {
       delete theCSDARangeTable;
     }
-    if(theRangeTableForLoss) {
-      theRangeTableForLoss->clearAndDestroy();
+    if(theRangeTableForLoss && isIonisation) {
       delete theRangeTableForLoss;
     }
-    if(theInverseRangeTable) {
-      theInverseRangeTable->clearAndDestroy();
+    if(theInverseRangeTable && isIonisation) {
       delete theInverseRangeTable;
     }
-    if(theLambdaTable) {
-      theLambdaTable->clearAndDestroy();
-      delete theLambdaTable;
-    }
-    if(theSubLambdaTable) {
-      theSubLambdaTable->clearAndDestroy();
-      delete theSubLambdaTable;
-    }
+    delete theLambdaTable;
+    delete theSubLambdaTable;
   }
-
+ 
   delete modelManager;
   delete biasManager;
-  (G4LossTableManager::Instance())->DeRegister(this);
+  lManager->DeRegister(this);
+  //G4cout << "** all removed" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -407,8 +400,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 	   << "  " << this << G4endl;
   }
 
-  G4bool master = true;
-  if(GetMasterProcess() != this) { master = false; }
+  if(GetMasterProcess() != this) { isMaster = false; }
 
   currentCouple = 0;
   preStepLambda = 0.0;
@@ -421,8 +413,6 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   reduceFactor = 1.0;
   fFactor = 1.0;
   lastIdx = 0;
-
-  G4LossTableManager* lManager = G4LossTableManager::Instance();
 
   // Are particle defined?
   if( !particle ) { particle = &part; }
@@ -468,7 +458,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   }
 
   Clean();
-  lManager->PreparePhysicsTable(&part, this, master);
+  lManager->PreparePhysicsTable(&part, this, isMaster);
   G4LossTableBuilder* bld = lManager->GetTableBuilder();
 
   // Base particle and set of models can be defined here
@@ -484,7 +474,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   theCrossSectionMax.resize(n, DBL_MAX);
 
   // Tables preparation
-  if (master && !baseParticle) {
+  if (isMaster && !baseParticle) {
 
     if(theDEDXTable && isIonisation) {
       if(theIonisationTable && theDEDXTable != theIonisationTable) {
@@ -548,7 +538,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   }
 
   // defined ID of secondary particles
-  if(master) {
+  if(isMaster) {
     G4String nam1 = GetProcessName();
     G4String nam4 = nam1 + "_split";
     G4String nam5 = nam1 + "_subcut";
@@ -561,7 +551,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   G4int nmod = modelManager->NumberOfModels();
   for(G4int i=0; i<nmod; ++i) {
     G4VEmModel* mod = modelManager->GetModel(i);
-    mod->SetMasterThread(master);
+    mod->SetMasterThread(isMaster);
     if(mod->HighEnergyLimit() > maxKinEnergy) {
       mod->SetHighEnergyLimit(maxKinEnergy);
     }
@@ -636,7 +626,6 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   if(&part == particle) {
 
     // define density factors for worker thread
-    G4LossTableManager* lManager = G4LossTableManager::Instance();
     G4LossTableBuilder* bld = lManager->GetTableBuilder();
     if(!master) { bld->InitialiseBaseMaterials(masterProcess->DEDXTable()); }
     theDensityFactor = bld->GetDensityFactors();
@@ -695,7 +684,7 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   // identify deexcitation flag
   if(isIonisation) { 
     fParticleChange.SetLowEnergyLimit(lowestKinEnergy); 
-    atomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
+    atomDeexcitation = lManager->AtomDeexcitation();
     if(atomDeexcitation) { 
       if(atomDeexcitation->IsPIXEActive()) { useDeexcitation = true; } 
     }
@@ -755,9 +744,8 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
   }
   if(!table) { return table; }
 
-  G4LossTableBuilder* bld = 
-    (G4LossTableManager::Instance())->GetTableBuilder();
-  G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
+  G4LossTableBuilder* bld = lManager->GetTableBuilder();
+  G4bool splineFlag = lManager->SplineFlag();
   G4PhysicsLogVector* aVector = 0;
   G4PhysicsLogVector* bVector = 0;
 
@@ -832,9 +820,8 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
         G4ProductionCutsTable::GetProductionCutsTable();
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
-  G4LossTableBuilder* bld = 
-    (G4LossTableManager::Instance())->GetTableBuilder();
-  G4bool splineFlag = (G4LossTableManager::Instance())->SplineFlag();
+  G4LossTableBuilder* bld = lManager->GetTableBuilder();
+  G4bool splineFlag = lManager->SplineFlag();
   G4PhysicsLogVector* aVector = 0;
   G4double scale = std::log(maxKinEnergy/minKinEnergy);
 
@@ -889,7 +876,7 @@ G4VEnergyLossProcess::PrintInfoDefinition(const G4ParticleDefinition& part)
            << "      Lambda tables from threshold to "
            << G4BestUnit(maxKinEnergy,"Energy")
            << " in " << nBins << " bins, spline: " 
-	   << (G4LossTableManager::Instance())->SplineFlag()
+	   << lManager->SplineFlag()
            << G4endl;
     if(theRangeTableForLoss && isIonisation) {
       G4cout << "      finalRange(mm)= " << finalRange/mm
@@ -1812,7 +1799,7 @@ G4VEnergyLossProcess::RetrieveTable(const G4ParticleDefinition* part,
     if(aTable->ExistPhysicsTable(filename)) {
       if(G4PhysicsTableHelper::RetrievePhysicsTable(aTable,filename,ascii)) {
 	isRetrieved = true;
-	if((G4LossTableManager::Instance())->SplineFlag()) {
+	if(lManager->SplineFlag()) {
 	  size_t n = aTable->length();
 	  for(size_t i=0; i<n; ++i) {
 	    if((*aTable)[i]) { (*aTable)[i]->SetSpline(true); }
@@ -1927,7 +1914,7 @@ G4VEnergyLossProcess::LambdaPhysicsVector(const G4MaterialCutsCouple*,
 {
   G4PhysicsVector* v = 
     new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nBins);
-  v->SetSpline((G4LossTableManager::Instance())->SplineFlag());
+  v->SetSpline(lManager->SplineFlag());
   return v;
 }
 
@@ -1963,7 +1950,6 @@ void
 G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
 {
   G4bool verb = false;
-  G4LossTableManager* lManager = G4LossTableManager::Instance();
   if(fTotal == tType) {
     theDEDXunRestrictedTable = p;
     if(p) {
@@ -1995,7 +1981,7 @@ G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
 	    << particle->GetParticleName()
             << " oldTable " << theDEDXTable << " newTable " << p 
             << " ion " << theIonisationTable 
-	    << " IsMaster " << lManager->IsMaster() 
+	    << " IsMaster " << isMaster 
 	    << " " << GetProcessName() << G4endl;
       G4cout << (*p) << G4endl;
     }
@@ -2008,7 +1994,7 @@ G4VEnergyLossProcess::SetDEDXTable(G4PhysicsTable* p, G4EmTableType tType)
 	    << particle->GetParticleName()
             << " oldTable " << theDEDXTable << " newTable " << p 
             << " ion " << theIonisationTable 
-	    << " IsMaster " << lManager->IsMaster() 
+	    << " IsMaster " << isMaster 
 	    << " " << GetProcessName() << G4endl;
     }
     theIonisationTable = p;

@@ -75,7 +75,7 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
       xSections.push_back(v);
     }
   }
-  /*
+  /*  
   G4cout << "G4EmElementSelector for " << mat->GetName() << " n= " << n
 	 << " nbins= " << nbins << "  Emin= " << lowEnergy 
 	 << " Emax= " << highEnergy << G4endl;
@@ -85,20 +85,15 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmElementSelector::~G4EmElementSelector()
-{
-  if(nElmMinusOne > 0) {
-    for(G4int i=0; i<=nElmMinusOne; ++i) {
-      delete xSections[i];
-    }
-  }
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4EmElementSelector::Initialise(const G4ParticleDefinition* part, 
 				     G4double cut)
 {
-  //G4cout << "G4EmElementSelector initialise for " << material->GetName()<< G4endl;
+  //G4cout << "G4EmElementSelector initialise for " << material->GetName()
+  //  << G4endl;
   if(0 == nElmMinusOne || cut == cutEnergy) { return; }
 
   cutEnergy = cut;
@@ -144,7 +139,8 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
       }
     }
   }
-  //G4cout << "======== G4EmElementSelector for the " << model->GetName();
+  //G4cout << "======== G4EmElementSelector for the " << model->GetName() 
+  //    << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

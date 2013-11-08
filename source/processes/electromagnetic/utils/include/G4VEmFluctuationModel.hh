@@ -63,6 +63,7 @@ class G4ParticleDefinition;
 class G4DynamicParticle;
 class G4Material;
 class G4MaterialCutsCouple;
+class G4LossTableManager;
 
 class G4VEmFluctuationModel 
 {
@@ -108,7 +109,8 @@ private:
   G4VEmFluctuationModel & operator=(const  G4VEmFluctuationModel &right);
   G4VEmFluctuationModel(const  G4VEmFluctuationModel&);
 
-  const G4String   name;
+  const G4String      name;
+  G4LossTableManager* fManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

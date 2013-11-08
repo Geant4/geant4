@@ -98,6 +98,7 @@ class G4VParticleChange;
 class G4ParticleChangeForLoss;
 class G4ParticleChangeForGamma;
 class G4Track;
+class G4LossTableManager;
 
 class G4VEmModel
 {
@@ -404,6 +405,7 @@ protected:
 
 private:
 
+  G4LossTableManager*         fManager;
   const G4MaterialCutsCouple* fCurrentCouple;
   const G4Element*            fCurrentElement;
 
