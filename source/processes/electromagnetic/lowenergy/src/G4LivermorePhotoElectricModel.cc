@@ -94,8 +94,6 @@ G4LivermorePhotoElectricModel::~G4LivermorePhotoElectricModel()
   if(IsMaster()) {
     delete fShellCrossSection;
     for(G4int i=0; i<maxZ; ++i) { 
-      delete fCrossSection[i]; 
-      delete fCrossSectionLE[i]; 
       delete fParam[i];
     }
   }
@@ -533,6 +531,7 @@ void G4LivermorePhotoElectricModel::InitialiseForElement(
   //  G4cout << "G4LivermorePhotoElectricModel::InitialiseForElement Z= " 
   //   << Z << G4endl;
   if(!fCrossSection[Z]) { ReadData(Z); }
+  l.unlock();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

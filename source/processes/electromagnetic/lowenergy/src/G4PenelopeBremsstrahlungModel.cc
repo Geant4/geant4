@@ -461,10 +461,10 @@ void G4PenelopeBremsstrahlungModel::ClearTables()
       delete XSTablePositron;
       XSTablePositron = 0;
     } 
-
+  /*
   if (energyGrid)
     delete energyGrid;
-
+  */
   if (fPenelopeFSHelper)
     fPenelopeFSHelper->ClearTables(IsMaster()); 
 

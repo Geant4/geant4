@@ -105,10 +105,10 @@ G4IonDEDXHandler::~G4IonDEDXHandler() {
   // All stopping power vectors built according to Bragg's addivitiy rule
   // are deleted. All other stopping power vectors are expected to be
   // deleted by their creator class (sub-class of G4VIonDEDXTable). 
-  DEDXTableBraggRule::iterator iter = stoppingPowerTableBragg.begin();
-  DEDXTableBraggRule::iterator iter_end = stoppingPowerTableBragg.end();
+  // DEDXTableBraggRule::iterator iter = stoppingPowerTableBragg.begin();
+  // DEDXTableBraggRule::iterator iter_end = stoppingPowerTableBragg.end();
 
-  for(;iter != iter_end; iter++) delete iter -> second;
+  //  for(;iter != iter_end; iter++) delete iter -> second;
   stoppingPowerTableBragg.clear();
 
   stoppingPowerTable.clear();

@@ -59,6 +59,8 @@ public:
   virtual void InitialiseLocal(const G4ParticleDefinition*,
 			       G4VEmModel* masterModel);
 
+  virtual void InitialiseForElement(const G4ParticleDefinition*, G4int Z);
+
   virtual G4double ComputeCrossSectionPerAtom( const G4ParticleDefinition*,
                                                G4double kinEnergy, 
                                                G4double Z, 

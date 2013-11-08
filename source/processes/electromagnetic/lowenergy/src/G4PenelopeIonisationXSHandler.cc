@@ -95,15 +95,17 @@ G4PenelopeIonisationXSHandler::~G4PenelopeIonisationXSHandler()
   std::map<const G4Material*,G4PhysicsFreeVector*>::iterator k;
   if (theDeltaTable)
     {
+      /*
       for (k=theDeltaTable->begin();k!=theDeltaTable->end();k++)	
 	delete k->second;
       delete theDeltaTable;
+      */
       theDeltaTable = 0;
     }
-    
+  /*
   if (energyGrid)
     delete energyGrid;
-
+  */
   if (verboseLevel > 2)
     G4cout << "G4PenelopeIonisationXSHandler. Tables have been cleared" 
 	   << G4endl;

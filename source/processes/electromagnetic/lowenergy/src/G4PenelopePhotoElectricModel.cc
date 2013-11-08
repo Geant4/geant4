@@ -102,7 +102,7 @@ G4PenelopePhotoElectricModel::~G4PenelopePhotoElectricModel()
 	  for (i=logAtomicShellXS->begin();i != logAtomicShellXS->end();i++)
 	    {
 	      G4PhysicsTable* tab = i->second;
-	      tab->clearAndDestroy();
+	      //tab->clearAndDestroy();
 	      delete tab;
 	    }
 	}

@@ -99,22 +99,22 @@ G4PenelopeCrossSection::~G4PenelopeCrossSection()
   //clean up tables
   if (shellCrossSections)
     {
-      shellCrossSections->clearAndDestroy();
+      //shellCrossSections->clearAndDestroy();
       delete shellCrossSections;	  
     }
   if (shellNormalizedCrossSections)
     {
-      shellNormalizedCrossSections->clearAndDestroy();
+      //shellNormalizedCrossSections->clearAndDestroy();
       delete shellNormalizedCrossSections;
     }
   if (softCrossSections)
     {
-      softCrossSections->clearAndDestroy();
+      //softCrossSections->clearAndDestroy();
       delete softCrossSections;
     }
   if (hardCrossSections)
     {
-      hardCrossSections->clearAndDestroy();
+      //hardCrossSections->clearAndDestroy();
       delete hardCrossSections;
     }
 }

@@ -91,7 +91,7 @@ void G4PenelopeBremsstrahlungAngular::ClearTables()
       for (j=theLorentzTables1->begin(); j != theLorentzTables1->end(); j++)
         {
 	  G4PhysicsTable* tab = j->second;
-          tab->clearAndDestroy();
+          //tab->clearAndDestroy();
           delete tab;
         }
       delete theLorentzTables1;
@@ -103,7 +103,7 @@ void G4PenelopeBremsstrahlungAngular::ClearTables()
       for (j=theLorentzTables2->begin(); j != theLorentzTables2->end(); j++)
         {
 	  G4PhysicsTable* tab = j->second;
-          tab->clearAndDestroy();
+          //tab->clearAndDestroy();
           delete tab;
         }
       delete theLorentzTables2;

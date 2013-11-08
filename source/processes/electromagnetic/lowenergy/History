@@ -17,6 +17,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08.11.2013  V. Ivanchenko, tag emlowen-V09-06-43
+            G4IonDEDXHandler, G4LivermoreComptonModel,
+            G4LivermoreGammaConversionModel, 
+            G4LivermorePhotoElectricModel, G4LivermoreRayleighModel,
+            G4LivermoreBremsstrahlungModel - cleanup
+
+07.11.2013  V. Ivanchenko, tag emlowen-V09-06-42
+            G4PenelopeBremsstrahlungAngular, 
+            G4PenelopeBremsstrahlungFS, G4PenelopeBremsstrahlungModel,
+            G4PenelopeIonisationXSHandler - do not delete
+            G4PhysicsVector at destruction
+
+07.11.2013  V. Ivanchenko, tag emlowen-V09-06-41
+            G4IonDEDXHandler, G4LivermoreComptonModel,
+            G4LivermoreGammaConversionModel, 
+            G4LivermorePhotoElectricModel, G4LivermoreRayleighModel,
+            G4PenelopeCrossSection, G4PenelopeGammaConversionModel,
+            G4PenelopePhotoElectricModel, G4PenelopeRayleighModel
+              - do not delete G4PhysicsVector at destruction 
+
 05.11.2013  V. Ivanchenko, tag emlowen-V09-06-40
             G4LivermoreComptonModel - fixed compillation problem
             and problem of spectra due to which previous tag was

@@ -108,7 +108,7 @@ void G4PenelopeBremsstrahlungFS::ClearTables(G4bool isMaster)
       for (j=theReducedXSTable->begin(); j != theReducedXSTable->end(); j++)
 	{
 	  G4PhysicsTable* tab = j->second;
-	  tab->clearAndDestroy();
+	  //tab->clearAndDestroy();
           delete tab;
 	}
       delete theReducedXSTable;
@@ -120,7 +120,7 @@ void G4PenelopeBremsstrahlungFS::ClearTables(G4bool isMaster)
       for (j=theSamplingTable->begin(); j != theSamplingTable->end(); j++)
 	{
 	  G4PhysicsTable* tab = j->second;
-	  tab->clearAndDestroy();
+	  // tab->clearAndDestroy();
           delete tab;
 	}
       delete theSamplingTable;
@@ -130,8 +130,10 @@ void G4PenelopeBremsstrahlungFS::ClearTables(G4bool isMaster)
   std::map< std::pair<const G4Material*,G4double> ,G4PhysicsFreeVector*>::iterator kk;
   if (thePBcut)
     {
+      /*
       for (kk=thePBcut->begin(); kk != thePBcut->end(); kk++)	
 	delete kk->second;
+      */
       delete thePBcut;
       thePBcut = 0;      
     }

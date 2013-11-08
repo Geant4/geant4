@@ -100,8 +100,10 @@ G4PenelopeRayleighModel::~G4PenelopeRayleighModel()
       std::map <G4int,G4PhysicsFreeVector*>::iterator i;
       if (logAtomicCrossSection)
 	{
+	  /*
 	  for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
 	    if (i->second) delete i->second;
+	  */
 	  delete logAtomicCrossSection;
 	}
     }
@@ -110,8 +112,10 @@ G4PenelopeRayleighModel::~G4PenelopeRayleighModel()
       std::map <G4int,G4PhysicsFreeVector*>::iterator i;
       if (atomicFormFactor)
 	{
+	  /*
 	  for (i=atomicFormFactor->begin();i != atomicFormFactor->end();i++)
 	    if (i->second) delete i->second;
+	  */
 	  delete atomicFormFactor;
 	}
       
@@ -131,16 +135,20 @@ void G4PenelopeRayleighModel::ClearTables()
  
    if (logFormFactorTable)
      {
+       /*
        for (i=logFormFactorTable->begin(); i != logFormFactorTable->end(); i++)
 	 if (i->second) delete i->second;
+       */
        delete logFormFactorTable;
        logFormFactorTable = 0; //zero explicitely
      }
 
    if (pMaxTable)
      {
+       /*
        for (i=pMaxTable->begin(); i != pMaxTable->end(); i++)
 	 if (i->second) delete i->second;
+       */
        delete pMaxTable;
        pMaxTable = 0; //zero explicitely
      }
@@ -148,8 +156,10 @@ void G4PenelopeRayleighModel::ClearTables()
    std::map<const G4Material*,G4PenelopeSamplingData*>::iterator ii;
    if (samplingTable)
      {
+       /*
        for (ii=samplingTable->begin(); ii != samplingTable->end(); ii++)
 	 if (ii->second) delete ii->second;
+       */
        delete samplingTable;
        samplingTable = 0; //zero explicitely
      }     

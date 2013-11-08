@@ -371,14 +371,15 @@ G4LivermoreBremsstrahlungModel::SampleSecondaries(
 
 #include "G4AutoLock.hh"
 namespace { G4Mutex LivermoreBremsstrahlungModelMutex = G4MUTEX_INITIALIZER; }
-void 
-G4LivermoreBremsstrahlungModel::InitialiseForElement(const G4ParticleDefinition*, 
-						     G4int Z)
+void G4LivermoreBremsstrahlungModel::InitialiseForElement(
+                                     const G4ParticleDefinition*, 
+				     G4int Z)
 {
   G4AutoLock l(&LivermoreBremsstrahlungModelMutex);
   //G4cout << "G4LivermoreBremsstrahlungModel::InitialiseForElement Z= " 
   //<< Z << G4endl;
   if(!dataSB[Z]) { ReadData(Z); }
+  l.unlock();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

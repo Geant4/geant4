@@ -64,9 +64,7 @@ G4LivermoreRayleighModel::G4LivermoreRayleighModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermoreRayleighModel::~G4LivermoreRayleighModel()
-{  
-  if(IsMaster()) { for(G4int i=0; i<=maxZ; ++i) { delete dataCS[i]; } }
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -286,6 +284,7 @@ G4LivermoreRayleighModel::InitialiseForElement(const G4ParticleDefinition*,
   //  G4cout << "G4LivermoreRayleighModel::InitialiseForElement Z= " 
   //   << Z << G4endl;
   if(!dataCS[Z]) { ReadData(Z); }
+  l.unlock();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

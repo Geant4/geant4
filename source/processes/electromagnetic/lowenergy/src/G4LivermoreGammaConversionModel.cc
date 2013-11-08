@@ -66,9 +66,7 @@ G4LivermoreGammaConversionModel::G4LivermoreGammaConversionModel
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LivermoreGammaConversionModel::~G4LivermoreGammaConversionModel()
-{  
-  if(IsMaster()) { for(G4int i=0; i<=maxZ; ++i) { delete data[i]; } }
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -274,8 +272,10 @@ void G4LivermoreGammaConversionModel::SampleSecondaries(
 // pair creation in both nuclear and atomic electron fields. However triplet
 // prodution is not generated.
 
-  if (verboseLevel > 1)
-    G4cout << "Calling SampleSecondaries() of G4LivermoreGammaConversionModel" << G4endl;
+  if (verboseLevel > 1) {
+    G4cout << "Calling SampleSecondaries() of G4LivermoreGammaConversionModel" 
+	   << G4endl;
+  }
 
   G4double photonEnergy = aDynamicGamma->GetKineticEnergy();
   G4ParticleMomentum photonDirection = aDynamicGamma->GetMomentumDirection();
@@ -473,6 +473,7 @@ void G4LivermoreGammaConversionModel::InitialiseForElement(
   //  G4cout << "G4LivermoreGammaConversionModel::InitialiseForElement Z= " 
   //   << Z << G4endl;
   if(!data[Z]) { ReadData(Z); }
+  l.unlock();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -96,10 +96,6 @@ G4LivermoreComptonModel::G4LivermoreComptonModel(const G4ParticleDefinition*,
 G4LivermoreComptonModel::~G4LivermoreComptonModel()
 {  
   if(IsMaster()) {
-    for(G4int i=0; i<=maxZ; ++i) { 
-      delete data[i];
-      data[i] = 0;
-    }
     delete shellData;
     shellData = 0;
     delete profileData;
@@ -542,6 +538,24 @@ G4LivermoreComptonModel::ComputeScatteringFunction(G4double x, G4int Z)
   }
   return value;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4AutoLock.hh"
+namespace { G4Mutex LivermoreComptonModelMutex = G4MUTEX_INITIALIZER; }
+
+void 
+G4LivermoreComptonModel::InitialiseForElement(const G4ParticleDefinition*, 
+					      G4int Z)
+{
+  G4AutoLock l(&LivermoreComptonModelMutex);
+  //  G4cout << "G4LivermoreComptonModel::InitialiseForElement Z= " 
+  //   << Z << G4endl;
+  if(!data[Z]) { ReadData(Z); }
+  l.unlock();
+}
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 //Fitting data to compute scattering function 

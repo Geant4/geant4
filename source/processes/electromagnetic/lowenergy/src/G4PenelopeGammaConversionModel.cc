@@ -88,11 +88,13 @@ G4PenelopeGammaConversionModel::~G4PenelopeGammaConversionModel()
   //Delete shared tables, they exist only in the master model
   if (IsMaster() || fLocalTable)
     {
-      std::map <G4int,G4PhysicsFreeVector*>::iterator i;
+      //std::map <G4int,G4PhysicsFreeVector*>::iterator i;
       if (logAtomicCrossSection)
 	{
+	  /*
 	  for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
-	    if (i->second) delete i->second;
+	     if (i->second) delete i->second;
+	  */
 	  delete logAtomicCrossSection;
 	}
       if (fEffectiveCharge)
