@@ -9,6 +9,10 @@ $Id$
                       Category History file
                       ---------------------
 
+07.11.2013 - L. Pandola (DMX-V09-06-08)
+	     Remove dependency from the deprecated LEP and HEP 	
+	     models from Geisha
+
 30.07.2013 - A. Dotti (DMX-V09-06-07)
              Fixing compilation warnings for clang32:
              unused private data members
