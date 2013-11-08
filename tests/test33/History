@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 7th, 2013 A. Ribon  - test33-V09-06-03
+- Added forgotten final-state method for neutron capture process.
+
+November 7th, 2013 A. Ribon  - test33-V09-06-02
+- Removed LEP and HEP models.
+
 July 29th, 2013 A. Howard  - test33-V09-06-01
 - Removed unused variable FieldName from Tst33RunAction.
 
