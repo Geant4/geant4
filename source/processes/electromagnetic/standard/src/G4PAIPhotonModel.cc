@@ -126,24 +126,20 @@ G4PAIPhotonModel::G4PAIPhotonModel(const G4ParticleDefinition* p, const G4String
 
 G4PAIPhotonModel::~G4PAIPhotonModel()
 {
-  if(fProtonEnergyVector) delete fProtonEnergyVector;
-  if(fdEdxVector)         delete fdEdxVector;
-  if ( fLambdaVector)     delete fLambdaVector;
-  if ( fdNdxCutVector)    delete fdNdxCutVector;
+  //  if(fdEdxVector)         delete fdEdxVector;
+  //  if ( fLambdaVector)     delete fLambdaVector;
+  // if ( fdNdxCutVector)    delete fdNdxCutVector;
 
   if( fPAItransferTable )
   {
-        fPAItransferTable->clearAndDestroy();
         delete fPAItransferTable;
   }
   if( fPAIphotonTable )
   {
-        fPAIphotonTable->clearAndDestroy();
         delete fPAIphotonTable;
   }
   if( fPAIplasmonTable )
   {
-        fPAIplasmonTable->clearAndDestroy();
         delete fPAIplasmonTable;
   }
 }

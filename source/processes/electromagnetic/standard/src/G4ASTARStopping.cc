@@ -71,7 +71,7 @@ G4ASTARStopping::G4ASTARStopping()
 
 G4ASTARStopping::~G4ASTARStopping()
 {
-  for(size_t i=0; i<74; ++i) { delete sdata[i]; }
+  //for(size_t i=0; i<74; ++i) { delete sdata[i]; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

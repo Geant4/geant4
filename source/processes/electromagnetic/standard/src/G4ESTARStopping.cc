@@ -71,7 +71,7 @@ G4ESTARStopping::G4ESTARStopping(const G4String& datatype)
 
 G4ESTARStopping::~G4ESTARStopping()
 {
-  for(size_t i=1; i<280; ++i) { delete sdata[i]; }
+  //for(size_t i=1; i<280; ++i) { delete sdata[i]; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

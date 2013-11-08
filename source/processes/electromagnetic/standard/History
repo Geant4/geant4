@@ -18,6 +18,16 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+08 November 13: V.Ivanchenko (emstand-V09-06-77)
+- G4PAIPhotonModel - do not delete PhysVectors 
+
+07 November 13: V.Ivanchenko (emstand-V09-06-76)
+- G4PAIModelData, G4PAIPhotData - do not delete PhysVectors 
+
+06 November 13: V.Ivanchenko (emstand-V09-06-75)
+- G4ASTARStopping, G4ESTARStopping, G4PSTARStopping, G4PAIModelData,
+  G4PAIPhotData - do not delete PhysVectors 
+
 05 November 13: V.Ivanchenko (emstand-V09-06-74)
 - G4PAIxSection, G4PAIySection - V.Grichine completly understand
     and fix problem of division by zero when PAI modls are initialized

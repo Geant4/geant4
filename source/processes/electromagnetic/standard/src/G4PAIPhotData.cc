@@ -93,7 +93,7 @@ G4PAIPhotData::G4PAIPhotData(G4double tmin, G4double tmax, G4int ver)
 
 G4PAIPhotData::~G4PAIPhotData()
 {
-  delete fParticleEnergyVector;
+  //delete fParticleEnergyVector;
 
   size_t n = fPAIxscBank.size();
   if(0 < n) 
@@ -102,16 +102,16 @@ G4PAIPhotData::~G4PAIPhotData()
     {
       if(fPAIxscBank[i]) 
       {
-	  fPAIxscBank[i]->clearAndDestroy();
+	// fPAIxscBank[i]->clearAndDestroy();
 	  delete fPAIxscBank[i];
       }
       if(fPAIdEdxBank[i]) 
       {
-	fPAIdEdxBank[i]->clearAndDestroy();
+	//fPAIdEdxBank[i]->clearAndDestroy();
 	delete fPAIdEdxBank[i];
       }
-      delete fdEdxTable[i];
-      delete fdNdxCutTable[i];
+      //delete fdEdxTable[i];
+      //delete fdNdxCutTable[i];
     }
   }
 }

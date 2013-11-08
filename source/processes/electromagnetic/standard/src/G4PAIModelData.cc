@@ -88,21 +88,15 @@ G4PAIModelData::G4PAIModelData(G4double tmin, G4double tmax, G4int ver)
 
 G4PAIModelData::~G4PAIModelData()
 {
-  delete fParticleEnergyVector;
-
   size_t n = fPAIxscBank.size();
   if(0 < n) {
     for(size_t i=0; i<n; ++i) {
       if(fPAIxscBank[i]) {
-	  fPAIxscBank[i]->clearAndDestroy();
-	  delete fPAIxscBank[i];
+	delete fPAIxscBank[i];
       }
       if(fPAIdEdxBank[i]) {
-	fPAIdEdxBank[i]->clearAndDestroy();
 	delete fPAIdEdxBank[i];
       }
-      delete fdEdxTable[i];
-      delete fdNdxCutTable[i];
     }
   }
 }
