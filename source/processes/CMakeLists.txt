@@ -73,15 +73,13 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/de_excitation/photon_evaporation/sources.cmake
             hadronic/models/de_excitation/util/sources.cmake
             hadronic/models/em_dissociation/sources.cmake
-            hadronic/models/high_energy/sources.cmake
+            hadronic/models/fission/sources.cmake
             hadronic/models/im_r_matrix/sources.cmake
             hadronic/models/inclxx/utils/sources.cmake
             hadronic/models/inclxx/incl_physics/sources.cmake
             hadronic/models/inclxx/interface/sources.cmake
             hadronic/models/lend/sources.cmake
             hadronic/models/lepto_nuclear/sources.cmake
-            hadronic/models/lll_fission/sources.cmake
-            hadronic/models/low_energy/sources.cmake
             hadronic/models/management/sources.cmake
             hadronic/models/neutron_hp/sources.cmake
             hadronic/models/parton_string/diffraction/sources.cmake
