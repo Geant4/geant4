@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 8, 2013 G.Cosmo (hadr-V09-06-00)
+- Including tags on top of tag "geant4-09-06-ref-10":
+  hadr-gmk-V09-06-04, hadr-proc-mod-cmk-V09-06-00, hadr-proc-mod-gmk-V09-06-00,
+  hadr-abla-V09-06-03, hadr-deex-V09-06-25, hadr-fission-V09-06-00,
+  hadr-inclxx-V09-06-36, hadr-hpn-V09-06-18, hadr-stopping-V09-06-11.
+- Removed modules 'high_energy', 'lll_fission' and 'low_energy'.
+  New module 'fission' replaces 'lll_fission'.
+
 October 4, 2012 G.Cosmo (hadr-V09-05-00)
 - Removed "photolepton_hadron" module and replaced with "lepto_nuclear".
 
