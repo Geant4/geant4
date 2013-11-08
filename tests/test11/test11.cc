@@ -49,14 +49,12 @@ int main(int argc,char** argv) {
   CLHEP::RanecuEngine defaultEngine;
   G4Random::setTheEngine(&defaultEngine);
 
-  G4cout<<"Warning: forcing G4FORCENUMBEROFTHREADS=4"<<G4endl;
-  char env[]="G4FORCENUMBEROFTHREADS=4";
-  putenv(env);
 
-  //A. Dotti (2 Oct 2013): disable MT.
-  // HP model is using too much memory causing issues in CDash
   // Run manager
   #ifdef G4MULTITHREADED
+    G4cout<<"Warning: forcing G4FORCENUMBEROFTHREADS=4"<<G4endl;
+    char env[]="G4FORCENUMBEROFTHREADS=4";
+    putenv(env);
     G4MTRunManager* runManager = new G4MTRunManager;
     runManager->SetNumberOfThreads(4);
   #else
@@ -67,6 +65,10 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new Tst11DetectorConstruction);
   runManager->SetUserInitialization(new Tst11PhysicsList);
   runManager->SetUserInitialization(new Tst11ActionInitialization);
+
+  //Activate prodcuton of fission fragments in neutronHP
+  char env_ff[]="G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS=1";
+  putenv(env_ff);
 
   if(argc==1)
   {
