@@ -27,44 +27,38 @@
 /// \brief Definition of the F02CalorimeterSD class
 //
 // $Id$
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F02CalorimeterSD_h
 #define F02CalorimeterSD_h 1
 
 #include "G4VSensitiveDetector.hh"
-
 #include "F02CalorHit.hh"
-#include "globals.hh"
 
 class F02DetectorConstruction;
 class G4HCofThisEvent;
 class G4Step;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F02CalorimeterSD : public G4VSensitiveDetector
 {
   public:
-  
+
       F02CalorimeterSD(G4String, F02DetectorConstruction* );
-      ~F02CalorimeterSD();
+      virtual ~F02CalorimeterSD();
 
       virtual void Initialize(G4HCofThisEvent*);
       virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
       virtual void EndOfEvent(G4HCofThisEvent*);
-      virtual void clear();
-      virtual void PrintAll();
 
   private:
-  
-      F02CalorHitsCollection*  fCalCollection;      
+
+      F02CalorHitsCollection*  fCalCollection;
       F02DetectorConstruction* fDetector;
       G4int*                   fHitID;
 };
 
 #endif
-

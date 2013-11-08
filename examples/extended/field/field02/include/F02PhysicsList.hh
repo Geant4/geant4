@@ -26,53 +26,48 @@
 /// \file field/field02/include/F02PhysicsList.hh
 /// \brief Definition of the F02PhysicsList class
 //
+//
 // $Id$
 //
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F02PhysicsList_h
 #define F02PhysicsList_h 1
 
 #include "G4VUserPhysicsList.hh"
-#include "globals.hh"
 
 class G4PhotoElectricEffect;
 class G4ComptonScattering;
 class G4GammaConversion;
 
-class G4PAIonisation ;
-class G4ForwardXrayTR ;
 class G4eIonisation;
 class G4eBremsstrahlung;
 class G4eplusAnnihilation;
-
-class G4MuIonisation;
-class G4MuBremsstrahlung;
-class G4MuPairProduction;
-
-class G4hIonisation;
-class G4hIonisationPlus;
 
 class F02StepCut;
 
 class F02DetectorConstruction;
 class F02PhysicsListMessenger;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F02PhysicsList: public G4VUserPhysicsList
 {
   public:
     F02PhysicsList( F02DetectorConstruction*);
-   ~F02PhysicsList();
+    virtual ~F02PhysicsList();
 
   protected:
     // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
  
     void SetCuts();
 
   protected:
-    // these methods Construct particles 
+    // these methods construct particles
     void ConstructBosons();
     void ConstructLeptons();
     void ConstructMesons();
@@ -80,9 +75,8 @@ class F02PhysicsList: public G4VUserPhysicsList
 
   protected:
 
-    // these methods Construct physics processes and register them
+    // these methods construct physics processes and register them
 
-    // void AddParameterisation();
     void ConstructGeneral();
     void ConstructEM();
 
@@ -93,33 +87,30 @@ class F02PhysicsList: public G4VUserPhysicsList
 
     void SetMaxStep(G4double);
 
-  public:   
+  public:
 
-    G4double MaxChargedStep;
+    G4double fMaxChargedStep;
 
   private:
 
-    G4PhotoElectricEffect* thePhotoElectricEffect;
-    G4ComptonScattering*   theComptonScattering;
-    G4GammaConversion*     theGammaConversion;
-    
-    G4eIonisation*         theeminusIonisation;
-    G4eBremsstrahlung*     theeminusBremsstrahlung;
+    G4PhotoElectricEffect* fPhotoElectricEffect;
+    G4ComptonScattering*   fComptonScattering;
+    G4GammaConversion*     fGammaConversion;
 
-    G4eIonisation*         theeplusIonisation;
-    G4eBremsstrahlung*     theeplusBremsstrahlung;
+    G4eIonisation*         feminusIonisation;
+    G4eBremsstrahlung*     feminusBremsstrahlung;
 
-    F02StepCut* theeminusStepCut ;
-    F02StepCut* theeplusStepCut ;
+    G4eIonisation*         feplusIonisation;
+    G4eBremsstrahlung*     feplusBremsstrahlung;
 
-    G4double cutForGamma;
-    G4double cutForElectron;
+    F02StepCut* feminusStepCut;
+    F02StepCut* feplusStepCut;
 
-    F02DetectorConstruction* pDet;
-    F02PhysicsListMessenger* physicsListMessenger;
+    G4double fCutForGamma;
+    G4double fCutForElectron;
+
+    F02DetectorConstruction* fDet;
+    F02PhysicsListMessenger* fPhysicsListMessenger;
 };
 
 #endif
-
-
-

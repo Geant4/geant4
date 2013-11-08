@@ -1,8 +1,4 @@
 
-        ############################################
-        !!! WARNING - FPE detection is activated !!!
-        ############################################
-
 *************************************************************
  Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
                       Copyright : Geant4 Collaboration
@@ -10,8 +6,6 @@
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-G4ClassicalRK4 (default) is called
-The minimal step is equal to 0.01 mm
 
 ***** Table : Nb of materials = 11 *****
 
@@ -121,7 +115,7 @@ The minimal step is equal to 0.01 mm
          --->  Isotope:   128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
          --->  Isotope:   129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
          --->  Isotope:   130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
-         --->  Isotope:   131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
+         --->  Isotope:   131   Z = 54   N = 131   A = 130.91 g/mole   abundance:  21.18 %
          --->  Isotope:   132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
          --->  Isotope:   134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
          --->  Isotope:   136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
@@ -152,7 +146,7 @@ The minimal step is equal to 0.01 mm
          --->  Isotope:   128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
          --->  Isotope:   129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
          --->  Isotope:   130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
-         --->  Isotope:   131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
+         --->  Isotope:   131   Z = 54   N = 131   A = 130.91 g/mole   abundance:  21.18 %
          --->  Isotope:   132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
          --->  Isotope:   134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
          --->  Isotope:   136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
@@ -195,13 +189,13 @@ The minimal step is equal to 0.01 mm
 
 
 
-G4ClassicalRK4 (default) is called
-The minimal step is equal to 0.01 mm
 
  The  WORLD   is made of 800mm of Air, the transverse size (R) of the world is 200 mm. 
  The ABSORBER is made of 40mm of Kr20CO2, the transverse size (R) is 100 mm. 
  Z position of the (middle of the) absorber 360  mm.
 
+G4ClassicalRK4 (default) is called
+The minimal step is equal to 0.01 mm
 F02PhysicsList::SetCuts:CutLength : 1 mm 
 
 total time(SetCuts)=0 s 
@@ -215,14 +209,11 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
-  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
-  OpenGLStoredQt (OGL, OGLS, OGLSQt)
+  OpenGLImmediateXm (OGLI, OGLIXm)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
+  OpenGLStoredXm (OGL, OGLS, OGLSXm)
   RayTracer (RayTracer)
-  RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
@@ -364,7 +355,7 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      Sampling table 17x1001; from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -391,7 +382,7 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001 from 1 GeV to 10 TeV 
+      Sampling table 17x1001; from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -525,9 +516,8 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0  -1.86 um  -17.8 cm   2.16 cm   2.45 keV     0 eV      0 fm      0 fm      World   initStep
     1  -1.59 um  -17.8 cm   2.16 cm   2.28 MeV  2.45 keV   210 um    210 um      World     eIoni
-    2  -1.31 um  -18.2 cm   2.16 cm   37.6 MeV   450 eV   3.54 mm   3.75 mm      WorldTransportation
-    3  -1.31 um  -18.2 cm   2.16 cm   37.6 MeV7.53e-14 eV 0.000395 fm   3.75 mm      World     eIoni
-    4  -1.12 um    -20 cm   2.16 cm    221 MeV  3.61 keV  1.84 cm   2.21 cm OutOfWorldTransportation
+    2  -1.31 um  -18.2 cm   2.16 cm   37.6 MeV   450 eV   3.54 mm   3.75 mm      World     eIoni
+    3  -1.12 um    -20 cm   2.16 cm    221 MeV  3.61 keV  1.84 cm   2.21 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
@@ -1918,8 +1908,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
     0   5.43 um  -5.29 cm   1.58 cm   6.51 keV     0 eV      0 fm      0 fm      World   initStep
     1   4.76 um   -5.4 cm   1.58 cm     12 MeV  5.34 keV  1.13 mm   1.13 mm      World     eIoni
     2   4.63 um   -5.6 cm   1.58 cm   31.9 MeV   215 eV   1.99 mm   3.12 mm      World     eIoni
-    3   4.12 um  -17.3 cm   1.57 cm    1.2 GeV  23.2 keV  11.7 cm     12 cm      World     eIoni
-    4   4.72 um    -20 cm   1.57 cm   1.47 GeV  5.41 keV  2.68 cm   14.7 cm OutOfWorldTransportation
+    3   4.12 um  -17.3 cm   1.57 cm    1.2 GeV  23.2 keV  11.7 cm     12 cm      WorldTransportation
+    4   4.12 um  -17.3 cm   1.57 cm    1.2 GeV3.33e-12 eV 0.0158 fm     12 cm      World     eIoni
+    5   4.72 um    -20 cm   1.57 cm   1.47 GeV  5.41 keV  2.68 cm   14.7 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 6,   Parent ID = 3
@@ -4836,13 +4827,13 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.04s Real=0.06s Sys=0.01s
+  User=0.15s Real=0.18s Sys=0.03s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 13 of which, static: 1
-Dynamic pools deleted: 12 / Total memory freed: 0.087 Mb
+Number of memory pools allocated: 12; of which, static: 0
+Dynamic pools deleted: 12 / Total memory freed: 0.059 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

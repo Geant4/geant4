@@ -26,17 +26,16 @@
 /// \file field/field02/include/F02PhysicsListMessenger.hh
 /// \brief Definition of the F02PhysicsListMessenger class
 //
+//
 // $Id$
 //
-// 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef F02PhysicsListMessenger_h
 #define F02PhysicsListMessenger_h 1
 
-#include "globals.hh"
 #include "G4UImessenger.hh"
 
 class F02PhysicsList;
@@ -44,25 +43,23 @@ class G4UIcmdWithoutParameter;
 class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class F02PhysicsListMessenger: public G4UImessenger
 {
   public:
     F02PhysicsListMessenger(F02PhysicsList*);
-   ~F02PhysicsListMessenger();
-    
-    void SetNewValue(G4UIcommand*, G4String);
-    
+    virtual ~F02PhysicsListMessenger();
+
+    virtual void SetNewValue(G4UIcommand*, G4String);
+
   private:
-    F02PhysicsList*          F02List;
+    F02PhysicsList*          fF02List;
 
-    G4UIcmdWithADoubleAndUnit* setMaxStepCmd;
+    G4UIcmdWithADoubleAndUnit* fSetMaxStepCmd;
 
-    G4UIcmdWithADoubleAndUnit* cutGCmd;
-    G4UIcmdWithADoubleAndUnit* cutECmd;
-    G4UIcmdWithADoubleAndUnit* eCmd;
- 
+    G4UIcmdWithADoubleAndUnit* fCutGCmd;
+    G4UIcmdWithADoubleAndUnit* fCutECmd;
 };
 
 #endif

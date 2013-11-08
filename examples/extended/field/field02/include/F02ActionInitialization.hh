@@ -23,66 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/field02/src/F02PhysicsListMessenger.cc
-/// \brief Implementation of the F02PhysicsListMessenger class
+//
+/// \file F02ActionInitialization.hh
+/// \brief Definition of the F02ActionInitialization class
 //
 //
-// $Id$
 //
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "F02PhysicsListMessenger.hh"
+#ifndef F02ActionInitialization_h
+#define F02ActionInitialization_h 1
 
-#include "F02PhysicsList.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4VUserActionInitialization.hh"
+
+class F02DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F02PhysicsListMessenger::F02PhysicsListMessenger(F02PhysicsList * List)
-  : fF02List(List)
+/// Action initialization class.
+
+class F02ActionInitialization : public G4VUserActionInitialization
 {
-  fCutGCmd = new G4UIcmdWithADoubleAndUnit("/calor/cutG",this);
-  fCutGCmd->SetGuidance("Set cut values by RANGE for Gamma.");
-  fCutGCmd->SetParameterName("range",true);
-  fCutGCmd->SetDefaultValue(1.);
-  fCutGCmd->SetDefaultUnit("mm");
-  fCutGCmd->AvailableForStates(G4State_Idle);
+  public:
+    F02ActionInitialization(F02DetectorConstruction*);
+    virtual ~F02ActionInitialization();
 
-  fCutECmd = new G4UIcmdWithADoubleAndUnit("/calor/cutE",this);
-  fCutECmd->SetGuidance("Set cut values by RANGE for e- e+.");
-  fCutECmd->SetParameterName("range",true);
-  fCutECmd->SetDefaultValue(1.);
-  fCutECmd->SetDefaultUnit("mm");
-  fCutECmd->AvailableForStates(G4State_Idle);
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 
-  fSetMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/step/setMaxStep",this);
-  fSetMaxStepCmd->SetGuidance("Set max. step length in the detector");
-  fSetMaxStepCmd->SetParameterName("mxStep",true);
-  fSetMaxStepCmd->SetDefaultUnit("mm");
-}
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+
+  private:
+    F02DetectorConstruction* fDetConstruction;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F02PhysicsListMessenger::~F02PhysicsListMessenger()
-{
-  delete fSetMaxStepCmd;
-  delete fCutGCmd;
-  delete fCutECmd;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void F02PhysicsListMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{
-  if(command == fCutGCmd)
-    {fF02List->SetGammaCut(fCutGCmd->GetNewDoubleValue(newValue));}
-  if(command == fCutECmd)
-    {fF02List->SetElectronCut(fCutECmd->GetNewDoubleValue(newValue));}
-  if(command == fSetMaxStepCmd)
-    {fF02List->SetMaxStep(fSetMaxStepCmd->GetNewDoubleValue(newValue));}
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif
