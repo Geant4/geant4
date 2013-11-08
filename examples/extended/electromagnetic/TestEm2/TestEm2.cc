@@ -35,16 +35,13 @@
 #include "G4RunManager.hh"
 #include "G4MTRunManager.hh"
 #include "G4UImanager.hh"
+#include "G4UIcommand.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "EventAction.hh"
-#include "TrackingAction.hh"
-#include "SteppingAction.hh"
 #include "ActionInitialization.hh"
+#include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -72,6 +69,7 @@ int main(int argc,char** argv) {
   G4cout << "##### TestEm2 started for " << runManager->GetNumberOfThreads() 
          << " threads" << " #####" << G4endl;
 #else
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
   G4RunManager * runManager = new G4RunManager(); 
   G4cout << "##### TestEm2 started in sequential mode" 
          << " #####" << G4endl;

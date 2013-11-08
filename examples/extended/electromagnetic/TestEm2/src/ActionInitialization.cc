@@ -41,10 +41,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ActionInitialization::ActionInitialization(DetectorConstruction* det)
-  : detector(det)
-{
-  masterRunAction = new RunAction(det, new PrimaryGeneratorAction(detector));
-}
+  : fDetector(det)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,26 +54,21 @@ ActionInitialization::~ActionInitialization()
 void ActionInitialization::Build() const
 {
 
-#ifdef G4MULTITHREADED
-  RunAction* run = new RunAction(detector, 
-                                 new PrimaryGeneratorAction(detector));
-  masterRunAction->AddWorkerRunAction(run);
-#else
-  RunAction* run = masterRunAction;
-#endif
+  PrimaryGeneratorAction* kin = new PrimaryGeneratorAction(fDetector);
+  SetUserAction(kin);
 
-  SetUserAction(run);
-  SetUserAction(new EventAction(run));
-  SetUserAction(new TrackingAction(run));
-  SetUserAction(new SteppingAction(detector, run));
-  SetUserAction(new PrimaryGeneratorAction(detector));
+  SetUserAction(new RunAction(fDetector, kin));
+  SetUserAction(new EventAction());
+  SetUserAction(new TrackingAction());
+  SetUserAction(new SteppingAction(fDetector));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::BuildForMaster() const
 {
-  SetUserAction(masterRunAction);
+  SetUserAction(
+    new RunAction(fDetector, new PrimaryGeneratorAction(fDetector)));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

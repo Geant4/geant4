@@ -23,57 +23,116 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm2/src/EventActionMessenger.cc
-/// \brief Implementation of the EventActionMessenger class
+/// \file electromagnetic/TestEm2/include/Run.hh
+/// \brief Definition of the Run class
 //
+// $Id: Run.hh 75565 2013-11-04 11:24:11Z vnivanch $
 //
-// $Id$
-//
-// 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "EventActionMessenger.hh"
+#ifndef Run_h
+#define Run_h 1
 
-#include "EventAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh" 
-#include "G4UIcmdWithAnInteger.hh"
+#include "G4Run.hh"
+
+#include "G4ParticleDefinition.hh"
+#include "G4ThreeVector.hh"
+#include "globals.hh"
+
+#include "g4root.hh"
+
+#include <vector>
+typedef std::vector<G4double> MyVector;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventActionMessenger::EventActionMessenger(EventAction* EvAct)
-:G4UImessenger(),fEventAction(EvAct),
- fEventDir(0),          
- fPrintCmd(0)
+class DetectorConstruction;
+class PrimaryGeneratorAction;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class Run : public G4Run
 {
-  fEventDir = new G4UIdirectory("/testem/event/");
-  fEventDir->SetGuidance("event control");
-  
-  fPrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
-  fPrintCmd->SetGuidance("Print events modulo n");
-  fPrintCmd->SetParameterName("EventNb",false);
-  fPrintCmd->SetRange("EventNb>0");
-  fPrintCmd->AvailableForStates(G4State_Idle);  
-}
+public:
+
+  Run(DetectorConstruction*, PrimaryGeneratorAction*);
+  virtual ~Run();
+
+  virtual void Merge(const G4Run*);
+
+  void InitializePerEvent();
+  void FillPerEvent();
+
+  inline void FillPerTrack(G4double,G4double);
+  inline void FillPerStep (G4double,G4int,G4int);
+
+  inline void AddStep(G4double q);
+
+  void ComputeStatistics(G4double edep, G4double rms, G4double& limit); 
+
+  inline void SetVerbose(G4int val)  {fVerbose = val;};
+     
+private:
+  void Reset();
+
+  DetectorConstruction*   fDet;
+  PrimaryGeneratorAction* fKin;
+    
+  G4int f_nLbin;
+  MyVector f_dEdL;
+  MyVector fSumELongit;
+  MyVector fSumE2Longit;
+  MyVector fSumELongitCumul;
+  MyVector fSumE2LongitCumul;
+
+  G4int f_nRbin;
+  MyVector f_dEdR;
+  MyVector fSumERadial;
+  MyVector fSumE2Radial;
+  MyVector fSumERadialCumul;
+  MyVector fSumE2RadialCumul;
+
+  G4double fChargTrLength;
+  G4double fSumChargTrLength;
+  G4double fSum2ChargTrLength;
+
+  G4double fNeutrTrLength;
+  G4double fSumNeutrTrLength;
+  G4double fSum2NeutrTrLength;
+
+  G4double fChargedStep;
+  G4double fNeutralStep;    
+
+  G4int    fVerbose;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventActionMessenger::~EventActionMessenger()
+inline
+void Run::FillPerTrack(G4double charge, G4double trkLength)
 {
-  delete fPrintCmd;
-  delete fEventDir;     
+  if (charge != 0.) fChargTrLength += trkLength;
+  else              fNeutrTrLength += trkLength;   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventActionMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{ 
-  if(command == fPrintCmd)
-    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}    
-   
+inline
+void Run::FillPerStep(G4double dEstep, G4int Lbin, G4int Rbin)
+{
+  f_dEdL[Lbin] += dEstep; f_dEdR[Rbin] += dEstep;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void Run::AddStep(G4double q)
+{
+  if (q == 0.0) { fNeutralStep += 1.0; }
+  else          { fChargedStep += 1.0; }  
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+

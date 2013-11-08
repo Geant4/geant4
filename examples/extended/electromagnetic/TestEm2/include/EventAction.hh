@@ -37,7 +37,6 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class RunAction;
 class EventActionMessenger;
 
 class G4Event;
@@ -48,19 +47,16 @@ class EventAction : public G4UserEventAction
 {
 public:
   
-  EventAction(RunAction*);
+  EventAction();
   virtual ~EventAction();
 
   virtual void BeginOfEventAction(const G4Event*);
   virtual void   EndOfEventAction(const G4Event*);
     
-  void SetDrawFlag   (G4String val)  {fDrawFlag    = val;};
   void SetPrintModulo(G4int    val)  {fPrintModulo = val;};
     
 private:
   
-  RunAction*             fRun;
-  G4String               fDrawFlag;
   G4int                  fPrintModulo;          
   EventActionMessenger*  fEventMessenger;
 };

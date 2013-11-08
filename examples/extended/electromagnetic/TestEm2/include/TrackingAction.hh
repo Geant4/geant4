@@ -36,21 +36,15 @@
 
 #include "G4UserTrackingAction.hh"
 
-class RunAction;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
 public:
-  TrackingAction(RunAction*);
+  TrackingAction();
   virtual ~TrackingAction() {};
 
   virtual void PostUserTrackingAction(const G4Track*);
-
-private:
-   RunAction* fRun;
-    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

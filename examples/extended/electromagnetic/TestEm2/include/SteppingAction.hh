@@ -37,21 +37,19 @@
 #include "G4UserSteppingAction.hh"
 
 class DetectorConstruction;
-class RunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SteppingAction : public G4UserSteppingAction
 {
 public:
-  SteppingAction(DetectorConstruction*,RunAction*);
+  SteppingAction(DetectorConstruction*);
   virtual ~SteppingAction();
 
   virtual void UserSteppingAction(const G4Step*);
   
 private:
   DetectorConstruction* fDetector;
-  RunAction*            fRun;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

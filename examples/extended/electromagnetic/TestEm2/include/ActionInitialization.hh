@@ -36,10 +36,9 @@
 
 #include "G4VUserActionInitialization.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class RunAction;
 class DetectorConstruction;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class ActionInitialization : public G4VUserActionInitialization
 {
@@ -57,8 +56,7 @@ public:
 
 private:
 
-  RunAction* masterRunAction;
-  DetectorConstruction* detector;
+  DetectorConstruction* fDetector;
 
 };
 

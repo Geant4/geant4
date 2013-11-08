@@ -56,7 +56,6 @@ private:
   EventAction*          fEventAction;
     
   G4UIdirectory*        fEventDir;          
-  G4UIcmdWithAString*   fDrawCmd;
   G4UIcmdWithAnInteger* fPrintCmd;
 };
 
