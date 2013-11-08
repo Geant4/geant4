@@ -116,12 +116,12 @@ G4SandiaTable::~G4SandiaTable()
 { 
   if(fMatSandiaMatrix) 
   {
-    fMatSandiaMatrix->clearAndDestroy();
+    //fMatSandiaMatrix->clearAndDestroy();
     delete fMatSandiaMatrix;
   }
   if(fMatSandiaMatrixPAI) 
   {
-    fMatSandiaMatrixPAI->clearAndDestroy();
+    //fMatSandiaMatrixPAI->clearAndDestroy();
     delete fMatSandiaMatrixPAI;
   }
   if(fPhotoAbsorptionCof)

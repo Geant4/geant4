@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-11-13 V.Ivanchenko (materials-V09-06-27)
+- G4IonStoppingData - do not delete G4PhysicsVectors
+
+06-11-13 V.Ivanchenko (materials-V09-06-26)
+- G4SandiaTable, G4ElementData - do not delete G4PhysicsVectors
+
 30-10-13 V.Ivanchenko (materials-V09-06-25)
 - G4SandiaTable, G4StaticSandiaData - V.Grichine added data for water
 

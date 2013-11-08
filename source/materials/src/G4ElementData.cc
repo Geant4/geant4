@@ -60,13 +60,15 @@ G4ElementData::G4ElementData()
 G4ElementData::~G4ElementData()
 {
   for(G4int i=0; i<maxNumElements; ++i) {
-    delete elmData[i];
+    //delete elmData[i];
     delete elm2Data[i];
+    /*
     if(compLength[i] > 0) {
       for(size_t j=0; j<compLength[i]; ++j) {
         delete (compData[i])[j];
       }
     }
+    */
   }
 }
 
