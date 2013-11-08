@@ -56,7 +56,7 @@ target_link_libraries(phantom ${Geant4_LIBRARIES} ${GDML_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(human_phantom_SCRIPTS
-    adultHead.mac adultMIRDFemale.mac adultMIRDMale.mac adultMIXFemale.mac adultORNLFemale.mac adultORNLMale.mac batch.mac dawnVis.mac default.mac openGLVis.mac vrmlVis.mac primary.mac macro.C
+    adultHead.mac adultMIRDFemale.mac adultMIRDMale.mac adultMIXFemale.mac adultORNLFemale.mac adultORNLMale.mac batch.mac dawnVis.mac default.mac openGLVis.mac vrmlVis.mac primary.mac macro.C 
   )
 
 foreach(_script ${human_phantom_SCRIPTS})

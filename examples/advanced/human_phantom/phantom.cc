@@ -36,7 +36,6 @@
 
 #include "globals.hh"
 
-#include "G4RunManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIsession.hh"
 #include "G4TransportationManager.hh"
@@ -51,44 +50,38 @@
 
 #include "G4HumanPhantomConstruction.hh"
 #include "G4HumanPhantomPhysicsList.hh"
-#include "G4HumanPhantomPrimaryGeneratorAction.hh"
-#include "G4HumanPhantomSteppingAction.hh"
-#include "G4HumanPhantomEventAction.hh"
-#include "G4HumanPhantomRunAction.hh"
-#include "G4HumanPhantomAnalysisManager.hh"
+#include "G4HumanPhantomActionInitialization.hh"
+
+#ifdef G4MULTITHREADED
+  #include "G4MTRunManager.hh"
+#else
+  #include "G4RunManager.hh"
+#endif
 
 int main(int argc,char** argv)
 {
-  G4RunManager* runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(4); // Is equal to 2 by default
+#else
+ G4RunManager* runManager = new G4RunManager;
+#endif
+  
  // Set mandatory initialization classes
   G4HumanPhantomConstruction* userPhantom = new G4HumanPhantomConstruction();
   runManager->SetUserInitialization(userPhantom);
 
   runManager->SetUserInitialization(new G4HumanPhantomPhysicsList);
 
-  runManager->SetUserAction(new G4HumanPhantomPrimaryGeneratorAction);
-
-
 #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
  
-// Instantiate the analysis manager
-  G4HumanPhantomAnalysisManager* analysis = new G4HumanPhantomAnalysisManager();
 
-#ifdef ANALYSIS_USE
-  // Create ROOT file, histograms and ntuple
-  analysis -> book();
-#endif  
-  
-  runManager->SetUserAction(new G4HumanPhantomRunAction(analysis));
+  G4HumanPhantomActionInitialization* actions = new G4HumanPhantomActionInitialization();
+  runManager->SetUserInitialization(actions);
 
-  
-  G4HumanPhantomEventAction* eventAction = new G4HumanPhantomEventAction();
-  runManager->SetUserAction(eventAction);
-
-  runManager->SetUserAction(new G4HumanPhantomSteppingAction()); 
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
@@ -113,13 +106,6 @@ int main(int argc,char** argv)
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-
-#ifdef ANALYSIS_USE
-// Close the output ROOT file with the results
-   analysis -> save(); 
-#endif
-
-delete analysis;
 
 delete runManager;
 

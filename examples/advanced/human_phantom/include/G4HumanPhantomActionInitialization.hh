@@ -23,54 +23,26 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
-// 
+// Author: S. Guatelli, susanna@uow.edu.au
+//
+#ifndef G4HumanPhantomActionInitialization_h
+#define G4HumanPhantomActionInitialization_h 1
 
-#include "G4VoxelRightBreastSD.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4Step.hh"
-#include "G4ThreeVector.hh"
-#include "G4SDManager.hh"
-#include "G4ios.hh"
-#include "G4SystemOfUnits.hh"
+#include "G4VUserActionInitialization.hh"
+#include "G4HumanPhantomAnalysisManager.hh"
 
-G4VoxelRightBreastSD::G4VoxelRightBreastSD(G4String name)
-:G4VSensitiveDetector(name)
+class G4HumanPhantomAnalysisManager;
+
+class G4HumanPhantomActionInitialization: public G4VUserActionInitialization
 {
-}
+  public:
+    G4HumanPhantomActionInitialization();
+    virtual ~G4HumanPhantomActionInitialization();
 
-G4VoxelRightBreastSD::~G4VoxelRightBreastSD()
-{;}
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+};
 
-void G4VoxelRightBreastSD::Initialize(G4HCofThisEvent*)
-{}
+#endif
 
-G4bool G4VoxelRightBreastSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
-{
-  if(!ROhist) return false;
-   
-    // Check the volume
-  if(aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
-     GetName() != "RightBreast")
-
-    return false;
-
-  G4double edep = aStep->GetTotalEnergyDeposit();
-  if(edep==0.) return false;
-
- if(edep != 0)                       
-	    { 
-         
- if (aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> GetName() == "RightBreast")
-  {
-    G4int sector = ROhist -> GetReplicaNumber();
-     G4int slice = ROhist -> GetReplicaNumber(1);  
-     G4cout << "RightBreast:" << "slice: " << slice << ",sector: "<< sector << " "<< edep/MeV << G4endl;  
-   }
-
-    }
-  return true;
-}
-
-void G4VoxelRightBreastSD::EndOfEvent(G4HCofThisEvent*)
-{}
+    

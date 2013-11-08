@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -31,23 +31,23 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#ifndef G4VoxelRightBreastSD_h
-#define G4VoxelRightBreastSD_h 1
+#ifndef G4MIRDMaleGenitalia_h
+#define G4MIRDMaleGenitalia_h 1
 
-#include "G4VSensitiveDetector.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VOrgan.hh"
 
-//class G4Step;
-//class G4HCofThisEvent;
+class G4VPhysicalVolume;
 
-class G4VoxelRightBreastSD : public G4VSensitiveDetector
+class G4MIRDMaleGenitalia: public G4VOrgan
 {
-  public:
-      G4VoxelRightBreastSD(G4String);
-     ~G4VoxelRightBreastSD();
+public:
 
-      void Initialize(G4HCofThisEvent*);
-      G4bool ProcessHits(G4Step*, G4TouchableHistory*);
-      void EndOfEvent(G4HCofThisEvent*);
+  G4MIRDMaleGenitalia();
+  ~G4MIRDMaleGenitalia();
+  G4VPhysicalVolume* Construct(const G4String&, G4VPhysicalVolume*,
+				    const G4String&, G4bool, G4bool);
+
+private:
 };
 #endif
-

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -31,20 +31,23 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
+#ifndef G4MIRDLeftTeste_h
+#define G4MIRDLeftTeste_h 1
 
-#ifndef G4VoxelRightBreastROGeometry_h
-#define G4VoxelRightBreastROGeometry_h 
+#include "G4VPhysicalVolume.hh"
+#include "G4VOrgan.hh"
 
-#include "G4VReadOutGeometry.hh"
+class G4VPhysicalVolume;
 
-class G4VoxelRightBreastROGeometry : public G4VReadOutGeometry
+class G4MIRDLeftTeste: public G4VOrgan
 {
 public:
-  G4VoxelRightBreastROGeometry(G4String aString);
-  ~G4VoxelRightBreastROGeometry();
+
+  G4MIRDLeftTeste();
+  ~G4MIRDLeftTeste();
+  G4VPhysicalVolume* Construct(const G4String&, G4VPhysicalVolume*,
+				    const G4String&, G4bool, G4bool);
 
 private:
-  G4VPhysicalVolume* Build();
-  G4VPhysicalVolume* ROvoxel_phys;
 };
 #endif

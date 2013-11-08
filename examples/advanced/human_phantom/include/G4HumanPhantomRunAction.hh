@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 //
 
@@ -49,9 +49,9 @@ private:
     void totalRunEnergyDeposit();
     std::map<std::string,G4double> energyTotal;
     G4String bodypartName;
-#ifdef ANALYSIS_USE
+
     G4HumanPhantomAnalysisManager* analysisMan;
-#endif
+
 };
 #endif
 

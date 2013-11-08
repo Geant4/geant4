@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova  and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -56,19 +56,20 @@ G4MIRDBrain::~G4MIRDBrain()
 
 }
 
+
 G4VPhysicalVolume* G4MIRDBrain::Construct(const G4String& volumeName,G4VPhysicalVolume* mother,  
-					       const G4String& colourName, G4bool wireFrame,G4bool sensitivity)
+					  const G4String& colourName, G4bool wireFrame,G4bool)
 {
-  G4cout << "Construct " << volumeName << G4endl;
- G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
- G4Material* soft = material -> GetMaterial("soft_tissue");
- delete material;
+  G4cout << "Construct " << volumeName <<" with mother "<<mother->GetName()<<G4endl;
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  G4Material* soft = material -> GetMaterial("soft_tissue");
+  delete material;
 
- G4double ax = 6. * cm;
- G4double by= 9. * cm;
- G4double cz = 6.5 * cm;
+  G4double ax = 6. * cm;
+  G4double by= 9. * cm;
+  G4double cz = 6.5 * cm;
 
- G4Ellipsoid* brain = new G4Ellipsoid("Brain", ax, by, cz);
+  G4Ellipsoid* brain = new G4Ellipsoid("Brain", ax, by, cz);
  
 
   G4LogicalVolume* logicBrain =  new G4LogicalVolume(brain, soft, 
@@ -83,14 +84,7 @@ G4VPhysicalVolume* G4MIRDBrain::Construct(const G4String& volumeName,G4VPhysical
 						   mother,
 						   false,
 						   0, true);
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicBrain->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
-
-
+  
   // Visualization Attributes
   // G4VisAttributes* BrainVisAtt = new G4VisAttributes(G4Colour(0.41,0.41,0.41));
   G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();

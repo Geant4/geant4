@@ -2,9 +2,9 @@
 # or ...
 #/control/execute adultHead.mac
 # or ...
-#/control/execute adultMIRDMale.mac
+/control/execute adultMIRDMale.mac
 # or ...
-/control/execute adultMIRDFemale.mac
+#/control/execute adultMIRDFemale.mac
 # or ...
 #/control/execute adultORNLMale.mac
 # or...
@@ -13,4 +13,4 @@
 # Primary radiation field
 /control/execute primary.mac
 #
-/run/beamOn 1000
+/run/beamOn 100

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -31,55 +31,22 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#include "G4VoxelLeftBreastSD.hh"
-#include "G4HCofThisEvent.hh"
-#include "G4Step.hh"
-#include "G4ThreeVector.hh"
-#include "G4SDManager.hh"
-#include "G4ios.hh"
-#include "G4HumanPhantomAnalysis.hh"
+#ifndef G4MIRDLeftClavicle_h
+#define G4MIRDLeftClavicle_h 1
 
-G4VoxelLeftBreastSD::G4VoxelLeftBreastSD(G4String name)
-:G4VSensitiveDetector(name)
+#include "G4VPhysicalVolume.hh"
+#include "G4VOrgan.hh"
+class G4VPhysicalVolume;
+class G4LogicalVolume;
+
+class G4MIRDLeftClavicle:public G4VOrgan
 {
-}
+public:
 
-G4VoxelLeftBreastSD::~G4VoxelLeftBreastSD()
-{;}
-
-void G4VoxelLeftBreastSD::Initialize(G4HCofThisEvent*)
-{}
-
-G4bool G4VoxelLeftBreastSD::ProcessHits(G4Step* aStep,G4TouchableHistory* ROhist)
-{
-  if(!ROhist) return false;
-   
-    // Check the volume
-  if(aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
-     GetName() != "LeftBreast") 
-    return false;
-
-  G4double edep = aStep->GetTotalEnergyDeposit();
-  if(edep==0.) return false;
-
- if(edep != 0)                       
-	    { 
- 
-// Get analysis manager
- /* G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-
- if (aStep -> GetPreStepPoint() -> GetPhysicalVolume() -> 
-     GetName() == "LeftBreast")
-   {
-     G4int sector = ROhist -> GetReplicaNumber();
-     G4int slice = ROhist -> GetReplicaNumber(1);	             
-     analysisManager -> FillH2(1,slice, sector,edep/MeV);    
-     //     G4cout << "LeftBreast:" << "slice: " << slice << ",sector: "<< sector << " "<< edep/MeV << G4endl;           
-   }
-*/
-    }
-  return true;
-}
-
-void G4VoxelLeftBreastSD::EndOfEvent(G4HCofThisEvent*)
-{}
+  G4MIRDLeftClavicle();
+  ~G4MIRDLeftClavicle();
+  G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,
+				    const G4String&, G4bool, G4bool);
+private:
+};
+#endif

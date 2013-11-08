@@ -34,6 +34,7 @@
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
 #include "G4ThreeVector.hh"
+#include "tls.hh" // FOR MT
 
 class G4HumanPhantomHit : public G4VHit
 {
@@ -65,18 +66,18 @@ private:
 
 typedef G4THitsCollection<G4HumanPhantomHit> G4HumanPhantomHitsCollection;
 
-extern G4Allocator<G4HumanPhantomHit> G4HumanPhantomHitAllocator;
+extern G4ThreadLocal G4Allocator<G4HumanPhantomHit>* G4HumanPhantomHitAllocator;
 
 inline void* G4HumanPhantomHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) G4HumanPhantomHitAllocator.MallocSingle();
-  return aHit;
+  if(!G4HumanPhantomHitAllocator)
+      G4HumanPhantomHitAllocator = new G4Allocator<G4HumanPhantomHit>;
+  return (void *) G4HumanPhantomHitAllocator->MallocSingle();
 }
 
 inline void G4HumanPhantomHit::operator delete(void *aHit)
 {
-  G4HumanPhantomHitAllocator.FreeSingle((G4HumanPhantomHit*) aHit);
+  G4HumanPhantomHitAllocator -> FreeSingle((G4HumanPhantomHit*) aHit);
 }
 
 #endif

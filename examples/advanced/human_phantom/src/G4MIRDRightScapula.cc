@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -57,11 +57,13 @@ G4MIRDRightScapula::~G4MIRDRightScapula()
 {
 }
 
+
 G4VPhysicalVolume* G4MIRDRightScapula::Construct(const G4String& volumeName, G4VPhysicalVolume* mother, 
-						 const G4String& colourName, G4bool wireFrame,G4bool sensitivity)
+						 const G4String& colourName, G4bool wireFrame,G4bool)
 {
  
-  G4cout << "Construct"<< volumeName << G4endl;
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
+
 
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
   G4Material* skeleton = material -> GetMaterial("skeleton");
@@ -90,10 +92,10 @@ G4VPhysicalVolume* G4MIRDRightScapula::Construct(const G4String& volumeName, G4V
  
 
   G4SubtractionSolid* scapula_first =  new G4SubtractionSolid("Scapula_first",
-  						      outer_scapula,
-  						      subtraction,
-  						      rm, 
-  					              G4ThreeVector(xx, yy, 0. *cm));
+							      outer_scapula,
+							      subtraction,
+							      rm, 
+							      G4ThreeVector(xx, yy, 0. *cm));
 
   G4double xx2 = ax_out * 0.62470 ; //(cos 51.34deg)
   G4double yy2 = ax_out * 0.78087; // (sin 51.34 deg)
@@ -102,35 +104,29 @@ G4VPhysicalVolume* G4MIRDRightScapula::Construct(const G4String& volumeName, G4V
   rm2 -> rotateZ(38.6598* degree);
 
 
- G4SubtractionSolid* scapula_bone =  new G4SubtractionSolid("Scapula",
-  						      scapula_first,
-  						subtraction,
-  						rm2, 
-  					       G4ThreeVector(xx2, yy2, 0. *cm));
+  G4SubtractionSolid* scapula_bone =  new G4SubtractionSolid("Scapula",
+							     scapula_first,
+							     subtraction,
+							     rm2, 
+							     G4ThreeVector(xx2, yy2, 0. *cm));
 
- G4SubtractionSolid* scapula =  new G4SubtractionSolid("Scapula",
-						      scapula_bone,
-						      inner_scapula);
+  G4SubtractionSolid* scapula =  new G4SubtractionSolid("Scapula",
+							scapula_bone,
+							inner_scapula);
 
- G4LogicalVolume* logicRightScapula = new G4LogicalVolume(scapula,
-						   skeleton,
-						   "logical" + volumeName,
-						    0, 0, 0);
+  G4LogicalVolume* logicRightScapula = new G4LogicalVolume(scapula,
+							   skeleton,
+							   "logical" + volumeName,
+							   0, 0, 0);
 
   G4VPhysicalVolume* physRightScapula = new G4PVPlacement(0,
-                                
-				G4ThreeVector(0. * cm, 0. * cm, 24.1 *cm),
-      			       "physicalRightScapula",
-  			       logicRightScapula,
-			       mother,
-			       false,
-			       0, true);
+							  G4ThreeVector(0. * cm, 0. * cm, 24.1 *cm),
+							  "physicalRightScapula",
+							  logicRightScapula,
+							  mother,
+							  false,
+							  0, true);
 
-   if (sensitivity == true)
-  { 
-     G4SDManager* SDman = G4SDManager::GetSDMpointer();
-     logicRightScapula->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-   }
 
   // Visualization Attributes
   //G4VisAttributes* RightScapulaVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));

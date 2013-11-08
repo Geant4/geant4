@@ -34,8 +34,9 @@
 #include "G4Colour.hh"
 #include "G4VisAttributes.hh"
 
-G4Allocator<G4HumanPhantomHit> G4HumanPhantomHitAllocator;
 
+// THIS IS NECESSARY FOR MT MODE
+G4ThreadLocal G4Allocator<G4HumanPhantomHit>* G4HumanPhantomHitAllocator=0;
 
 G4HumanPhantomHit::G4HumanPhantomHit() {}
 
@@ -66,7 +67,7 @@ void G4HumanPhantomHit::Draw()
 
 void G4HumanPhantomHit::Print()
 {
-    G4cout << "Energy deposit: " << G4BestUnit(edep,"Energy")
+  G4cout << "Energy deposit: " << G4BestUnit(edep,"Energy")
 	 << "BodyPartID: " << bodyPartID << G4endl;
 }
 

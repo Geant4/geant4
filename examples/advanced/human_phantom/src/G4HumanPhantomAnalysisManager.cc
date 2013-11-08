@@ -72,6 +72,7 @@ void G4HumanPhantomAnalysisManager::book()
   }
 
   //creating a ntuple, containg 3D energy deposition in the phantom
+  AnalysisManager->SetFirstNtupleId(1);
   AnalysisManager -> CreateNtuple("1", "3Dedep");
   fNtColId[0] = AnalysisManager->CreateNtupleDColumn("organID");
   fNtColId[1] = AnalysisManager->CreateNtupleDColumn("edep");
@@ -84,11 +85,15 @@ void G4HumanPhantomAnalysisManager::book()
  
 void G4HumanPhantomAnalysisManager::FillNtupleWithEnergyDeposition(G4int organ,G4double energyDep)
 {
+  if (energyDep !=0)
+ {
   G4AnalysisManager* AnalysisManager = G4AnalysisManager::Instance();
-  AnalysisManager->FillNtupleDColumn(fNtColId[0], organ);
-  AnalysisManager->FillNtupleDColumn(fNtColId[1], energyDep);
-  AnalysisManager->AddNtupleRow();  
+  AnalysisManager->FillNtupleDColumn(1, fNtColId[0], organ);
+  AnalysisManager->FillNtupleDColumn(1, fNtColId[1], energyDep);
+  AnalysisManager->AddNtupleRow(1);  
+  G4cout << "Analysis: organ " << organ << " edep: "<< energyDep << G4endl;  
 }
+ }
 
 void G4HumanPhantomAnalysisManager::save() 
 {  

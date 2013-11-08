@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -60,55 +60,51 @@ G4MIRDRightKidney::~G4MIRDRightKidney()
 {
 }
 
+
 G4VPhysicalVolume* G4MIRDRightKidney::Construct(const G4String& volumeName,
-						     G4VPhysicalVolume* mother, 
-						     const G4String& colourName,
-						     G4bool wireFrame,G4bool sensitivity)
+						G4VPhysicalVolume* mother, 
+						const G4String& colourName,
+						G4bool wireFrame,G4bool )
 {
-  G4cout << "Construct " << volumeName << G4endl;
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
  
- G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
- G4Material* soft = material -> GetMaterial("soft_tissue");
- delete material;
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  G4Material* soft = material -> GetMaterial("soft_tissue");
+  delete material;
  
- G4double ax= 4.5 *cm; //a
- G4double by= 1.5 *cm; //b
- G4double cz= 5.5 *cm; //c
+  G4double ax= 4.5 *cm; //a
+  G4double by= 1.5 *cm; //b
+  G4double cz= 5.5 *cm; //c
  
- G4VSolid* oneRightKidney = new G4Ellipsoid("OneRightKidney",ax, by, cz); 
+  G4VSolid* oneRightKidney = new G4Ellipsoid("OneRightKidney",ax, by, cz); 
  
- G4double xx = 6. * cm; 
- G4double yy = 12.00*cm; 
- G4double zz = 12.00*cm;
- G4VSolid* subtrRightKidney = new G4Box("SubtrRightKidney",xx/2., yy/2., zz/2.);
+  G4double xx = 6. * cm; 
+  G4double yy = 12.00*cm; 
+  G4double zz = 12.00*cm;
+  G4VSolid* subtrRightKidney = new G4Box("SubtrRightKidney",xx/2., yy/2., zz/2.);
  
- G4SubtractionSolid* kidney = new G4SubtractionSolid("RightKidney",
-						     oneRightKidney,
-						     subtrRightKidney,
-						     0, 
-						     G4ThreeVector(6. *cm, // x0
-								   0.0 *cm,
-								   0.0 * cm));
+  G4SubtractionSolid* kidney = new G4SubtractionSolid("RightKidney",
+						      oneRightKidney,
+						      subtrRightKidney,
+						      0, 
+						      G4ThreeVector(6. *cm, // x0
+								    0.0 *cm,
+								    0.0 * cm));
 
   G4LogicalVolume* logicRightKidney = new G4LogicalVolume(kidney,
-						     soft,
-						     "logical" + volumeName,
-						     0, 0, 0);
+							  soft,
+							  "logical" + volumeName,
+							  0, 0, 0);
 
   G4VPhysicalVolume* physRightKidney = new G4PVPlacement(0 ,G4ThreeVector(-6.*cm,  // xo
-								     6. *cm, //yo
-								     -2.50 *cm),//zo
-  			       "physicalRightKidney", logicRightKidney,
-			       mother,
-			       false,
-			       0, true);
+									  6. *cm, //yo
+									  -2.50 *cm),//zo
+							 "physicalRightKidney", logicRightKidney,
+							 mother,
+							 false,
+							 0, true);
 
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicRightKidney->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
+ 
 
   // Visualization Attributes
   //G4VisAttributes* RightKidneyVisAtt = new G4VisAttributes(G4Colour(0.72,0.52,0.04));

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -66,7 +66,8 @@ public:
   void BuildRightScapula(const G4String&,G4bool,G4bool);
   void BuildLeftAdrenal(const G4String&,G4bool,G4bool);  
   void BuildRightAdrenal(const G4String&,G4bool,G4bool); 
-//  void BuildClavicles(G4bool);
+  void BuildLeftClavicle(const G4String&,G4bool,G4bool); 
+  void BuildRightClavicle(const G4String&,G4bool,G4bool); 
 
   void BuildBrain(const G4String&,G4bool,G4bool);
 
@@ -76,19 +77,19 @@ public:
   void BuildRightLung(const G4String&,G4bool,G4bool);
 
   void BuildStomach(const G4String&,G4bool,G4bool);
+  void BuildSmallIntestine(const G4String&,G4bool,G4bool);
   void BuildUpperLargeIntestine(const G4String&,G4bool,G4bool);
   void BuildLowerLargeIntestine(const G4String&,G4bool,G4bool);
- // void BuildEsophagus(G4bool);
 
   void BuildLeftKidney(const G4String&,G4bool,G4bool);
   void BuildRightKidney(const G4String&,G4bool,G4bool);
- // void BuildAdrenal(G4bool);
   void BuildLiver(const G4String&,G4bool,G4bool);
   void BuildPancreas(const G4String&,G4bool,G4bool);
   void BuildSpleen(const G4String&,G4bool,G4bool);
   void BuildUrinaryBladder(const G4String&,G4bool,G4bool);
 
   void BuildThyroid(const G4String&,G4bool,G4bool);
+  void BuildThymus(const G4String&,G4bool,G4bool);
 
   void SetModel(G4String);
   void SetMotherVolume(G4VPhysicalVolume*);

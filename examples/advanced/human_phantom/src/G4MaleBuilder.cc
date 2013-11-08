@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova  and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -32,9 +32,9 @@
 // design and code review.
 //
 #include"G4MaleBuilder.hh"
-#include "G4MIRDBodyFactory.hh"
-#include "G4ORNLMaleBodyFactory.hh"
-
+//#include "G4MIRDBodyFactory.hh"
+//#include "G4ORNLMaleBodyFactory.hh"
+#include "G4VBodyFactory.hh"
 G4MaleBuilder::G4MaleBuilder()
 {  
 }
@@ -44,22 +44,39 @@ G4MaleBuilder::~G4MaleBuilder()
   delete body;
 } 
 
-void G4MaleBuilder::BuildMaleGenitalia(G4bool /*sensitivity*/)
+void G4MaleBuilder::BuildMaleGenitalia(const G4String& colourName, G4bool solidVis, G4bool sensitivity)
 {
- G4cout<< "Male Genitalia not available !!! "<< G4endl;
+
+if(motherVolume == 0)
+    G4Exception("G4PhantomBuilder::BuildMaleGenitalia()", "human_phantom0048", FatalException, "The world volume is missing !!!!!");
+  
+  G4cout <<"MotherVolume: " <<  motherVolume -> GetName()<< G4endl;
+  G4cout << "sensitivity : "<< sensitivity << G4endl; 
+
+  maleGenitaliaVolume = body -> CreateOrgan("MaleGenitalia", motherVolume, colourName, solidVis, sensitivity); 
+
 }
 
-void G4MaleBuilder::BuildTestes(G4bool /*sensitivity*/)
+void G4MaleBuilder::BuildLeftTeste(const G4String& colourName, G4bool solidVis, G4bool sensitivity )
 { 
- G4cout << "Male testes are not available !!!" << G4endl;
-}
-/*
-void G4MaleBuilder::SetModel(G4String modelFlag)
-{
-  model = modelFlag;
+  if (maleGenitaliaVolume == 0)
+    G4Exception("G4FemaleBuilder::BuildLeftTeste()", "human_phantom0049", FatalException, "The maleGenitaliaVolume volume is missing !!!!!");
 
-  if(model=="MIRD") body = new G4MIRDBodyFactory();
-  if(model=="ORNLMale") body = new G4ORNLMaleBodyFactory();
-  G4cout << "SetModel in G4PhantomBuilder: "<< body << G4endl;
+  G4cout <<"MotherVolume: " <<  motherVolume -> GetName()<< G4endl;
+  G4cout << "sensitivity : "<< sensitivity << G4endl; 
+  
+  body -> CreateOrgan("LeftTeste",maleGenitaliaVolume, colourName,solidVis, sensitivity); 
 }
-*/
+
+void G4MaleBuilder::BuildRightTeste(const G4String& colourName, G4bool solidVis, G4bool sensitivity )
+{ 
+  if (maleGenitaliaVolume == 0)
+    G4Exception("G4FemaleBuilder::BuildRightTeste()", "human_phantom0050", FatalException, "The maleGenitaliaVolume volume is missing !!!!!");
+
+  G4cout <<"MotherVolume: " <<  motherVolume -> GetName()<< G4endl;
+  G4cout << "sensitivity : "<< sensitivity << G4endl; 
+  
+  body -> CreateOrgan("RightTeste",maleGenitaliaVolume, colourName,solidVis, sensitivity); 
+}
+
+

@@ -24,7 +24,7 @@
 // ********************************************************************
 //
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -49,7 +49,8 @@ public:
  ~G4MIRDBodyFactory();
   G4VPhysicalVolume* CreateOrgan(const G4String&, G4VPhysicalVolume*, 
 				 const G4String&,G4bool,G4bool);
- 
+
+
 private:
   std::map<std::string,G4VOrgan*> organ; 
 };

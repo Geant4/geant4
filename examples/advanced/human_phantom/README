@@ -8,14 +8,13 @@ $Id$
                                  README
                           -----------------------
 
-Authors: S. Guatelli (susanna@uow.edu.au), University of Wollongong, Australia, and M. G. Pia (pia@ge.infn.it),
-         INFN Genova, Italy.
+Authors: S. Guatelli (susanna@uow.edu.au), University of Wollongong, Australia,  M. G. Pia (pia@ge.infn.it),
+         INFN Genova, Italy and F. Ambroglini (filippo.ambroglini@pg.infn.it), INFN Perugia, Italy.
 
 This example is currently maintained by S. Guatelli, University of Wollongong, Australia 
 and L. Pandola, LNGS, INFN, Italy.
 
-The example is based on code developed by the undergraduate student
-G. Guerrieri, University of Genova, Italy.
+The example is based on code developed by G. Guerrieri, University of Genova, Italy.
 
 ------> Introduction
 
@@ -74,9 +73,8 @@ Macro primary.mac contains the definition of the primary radiation field.
 The energy deposit is calculated in the organs of the phantom.
 At the end of the execution of the simulation  the summary of the total energy deposit in 
 each organ is print out.
-The user can set the sensitivity of each organ interactively through the UI command:
-/bodypart/addBodyPart organName yes
-(see adultFemale.mac as example)
+
+Currently for ORNL model the energy deposition is calculated in the head only.
 
 If the sensitivity is not set ( /bodypart/addBodyPart organName no ), 
 the energy deposit is not calculated in the specific organ.
@@ -88,8 +86,23 @@ To activate the analysis, the application must be built with the option
 WITH_ANALYSIS_USE=ON :
 make -DCMAKE_INSTALL_PREFIX=/path/to/geant4-installation -DWITH_ANALYSIS_USE=ON /path/to/human_phantom/
 
+**** SEQUENTIAL MODE *************
 output file: g4humanphantom.root containing
 an ntuple with the Energy Deposit in each Body Part.
+macro.C is provided to print the content of the ntuple in a ROOT
+interactive analysis session.
+
+**** MULTITHREAD MODE
+output files:
+human_phantom.root_t0
+..
+..
+human_phantom.root_t#
+
+where # is the number of threads
+
+type: source MergeFiles to merge the output of each thread in a single one
+called human_phantom.root
 macro.C is provided to print the content of the ntuple in a ROOT
 interactive analysis session.
 

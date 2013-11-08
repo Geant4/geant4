@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -45,8 +45,9 @@ public:
   G4MaleBuilder();
   ~G4MaleBuilder();
 
-  void BuildMaleGenitalia(G4bool);
-  void BuildTestes(G4bool);
+  void BuildMaleGenitalia(const G4String& colourName, G4bool solidVis, G4bool sensitivity);
+  void BuildLeftTeste(const G4String& colourName, G4bool solidVis, G4bool sensitivity);
+  void BuildRightTeste(const G4String& colourName, G4bool solidVis, G4bool sensitivity);
   // void SetModel(G4String);
 };
 #endif

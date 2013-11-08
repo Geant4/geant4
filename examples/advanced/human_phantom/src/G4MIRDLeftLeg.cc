@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -56,11 +56,12 @@ G4MIRDLeftLeg::~G4MIRDLeftLeg()
 {
 }
 
+
 G4VPhysicalVolume* G4MIRDLeftLeg::Construct(const G4String& volumeName, G4VPhysicalVolume* mother, 
-						 const G4String& colourName, G4bool wireFrame,G4bool sensitivity)
+					    const G4String& colourName, G4bool wireFrame,G4bool)
 {
  
-  G4cout << "Construct"<< volumeName << G4endl;
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
 
   G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
   G4Material* soft = material -> GetMaterial("soft_tissue");
@@ -74,34 +75,28 @@ G4VPhysicalVolume* G4MIRDLeftLeg::Construct(const G4String& volumeName, G4VPhysi
   G4double deltaphi= 360. * degree;
 
   G4Cons* leg1 = new G4Cons("Leg1",  
-			   rmin1, rmax1, 
-			   rmin2, rmax2, dz/2., 
-			   startphi, deltaphi);
+			    rmin1, rmax1, 
+			    rmin2, rmax2, dz/2., 
+			    startphi, deltaphi);
   
   G4LogicalVolume* logicLeftLeg = new G4LogicalVolume(leg1,
-						   soft,
-						   "logical" + volumeName,
-						    0, 0, 0);
+						      soft,
+						      "logical" + volumeName,
+						      0, 0, 0);
 						   
   G4RotationMatrix* rm = new G4RotationMatrix();
-  rm -> rotateX(90.* degree);
-
+  rm->rotateX(180.*degree); 
+  rm->rotateY(180.*degree);
   G4VPhysicalVolume* physLeftLeg = new G4PVPlacement(rm,
-                                
-				G4ThreeVector(10. * cm, -40. * cm, 0. *cm),
-      			       "physicalLeftLeg",
-  			       logicLeftLeg,
-			       mother,
-			       false,
-			       0, true);
+						     //G4ThreeVector(10. * cm, 0. * cm, -47. *cm), //FA
+						     G4ThreeVector(10. * cm, 0. * cm, -40. *cm),
+						     "physicalLeftLeg",
+						     logicLeftLeg,
+						     mother,
+						     false,
+						     0, true);
 
-  // Sensitive Body Part
-  if (sensitivity == true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicLeftLeg->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
-
+ 
   // Visualization Attributes
   //G4VisAttributes* LeftLegVisAtt = new G4VisAttributes(G4Colour(0.94,0.5,0.5));
   G4HumanPhantomColour* colourPointer = new G4HumanPhantomColour();

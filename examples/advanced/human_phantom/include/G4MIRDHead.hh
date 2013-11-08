@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -39,7 +39,7 @@
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
-class G4HumanPhantomMaterial;
+class MarsMaterial;
 
 class G4MIRDHead: public G4VOrgan
 {
@@ -49,8 +49,5 @@ public:
   ~G4MIRDHead();
   G4VPhysicalVolume* Construct(const G4String&, G4VPhysicalVolume*, const G4String&, 
 				    G4bool, G4bool); 
-private:
-
-  G4HumanPhantomMaterial* material;
 };
 #endif

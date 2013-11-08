@@ -2,8 +2,8 @@
 <gdml xmlns:gdml="http://cern.ch/2001/Schemas/GDML" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd" >
  <define> 
   <position name="HeadRelativePos" unit="cm" x="0" y="0" z="10.025" />
-  <position name="OrganPos" unit="cm" x="0" y="73.125" z="0" />
-  <rotation name="OrganRot" unit="degree" x="90." y="0." z="0." />
+  <position name="OrganPos" unit="cm" x="0" y="0." z="73.125" />
+  <rotation name="OrganRot" unit="degree" x="180." y="180." z="0." />
  </define> 
 
  <materials>

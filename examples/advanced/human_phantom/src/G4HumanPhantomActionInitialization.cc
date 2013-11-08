@@ -23,29 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
-// 
-// Based on code developed by the undergraduate student G. Guerrieri 
-// Note: this is a preliminary beta-version of the code; an improved 
-// version will be distributed in the next Geant4 public release, compliant
-// with the design in a forthcoming publication, and subject to a 
-// design and code review.
+// Author: S. Guatelli, susanna@uow.edu.au
 //
-#ifndef G4MIRDTestes_h
-#define G4MIRDTestes_h 1
+#include "G4HumanPhantomActionInitialization.hh"
+#include "G4HumanPhantomPrimaryGeneratorAction.hh"
+#include "G4HumanPhantomSteppingAction.hh"
+#include "G4RunManager.hh"
+#include "G4HumanPhantomRunAction.hh"
+#include "G4HumanPhantomEventAction.hh"
 
-#include "G4VPhysicalVolume.hh"
-
-class G4VPhysicalVolume;
-class G4LogicalVolume;
-
-class G4MIRDTestes
+G4HumanPhantomActionInitialization::G4HumanPhantomActionInitialization():
+G4VUserActionInitialization()
 {
-public:
+}
 
-  G4MIRDTestes();
-  ~G4MIRDTestes();
-  G4VPhysicalVolume* ConstructTestes(G4VPhysicalVolume*, G4String, G4bool);
 
-};
-#endif
+G4HumanPhantomActionInitialization::~G4HumanPhantomActionInitialization()
+{}
+
+void G4HumanPhantomActionInitialization::BuildForMaster() const
+{
+	
+}
+
+
+void G4HumanPhantomActionInitialization::Build() const
+{   
+// Instantiate the analysis manager
+G4HumanPhantomAnalysisManager* analysis = new G4HumanPhantomAnalysisManager();
+ 
+SetUserAction(new G4HumanPhantomPrimaryGeneratorAction);
+
+
+SetUserAction(new G4HumanPhantomRunAction(analysis));
+
+  
+G4HumanPhantomEventAction* eventAction = new G4HumanPhantomEventAction();
+SetUserAction(eventAction);
+
+SetUserAction(new G4HumanPhantomSteppingAction()); 
+	
+}  
+

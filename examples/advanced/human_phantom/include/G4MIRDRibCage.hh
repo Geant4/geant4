@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -50,17 +50,17 @@ public:
 				    const G4String&, G4bool, G4bool);
 
 private:
-G4VPhysicalVolume* physRib1;
-G4VPhysicalVolume* physRib2;
-G4VPhysicalVolume* physRib3;
-G4VPhysicalVolume* physRib4;
-G4VPhysicalVolume* physRib5;
-G4VPhysicalVolume* physRib6;
-G4VPhysicalVolume* physRib7;
-G4VPhysicalVolume* physRib8;
-G4VPhysicalVolume* physRib9;
-G4VPhysicalVolume* physRib10;
-G4VPhysicalVolume* physRib11;
-G4VPhysicalVolume* physRib12;
+  G4VPhysicalVolume* physRib1;
+  G4VPhysicalVolume* physRib2;
+  G4VPhysicalVolume* physRib3;
+  G4VPhysicalVolume* physRib4;
+  G4VPhysicalVolume* physRib5;
+  G4VPhysicalVolume* physRib6;
+  G4VPhysicalVolume* physRib7;
+  G4VPhysicalVolume* physRib8;
+  G4VPhysicalVolume* physRib9;
+  G4VPhysicalVolume* physRib10;
+  G4VPhysicalVolume* physRib11;
+  G4VPhysicalVolume* physRib12;
 };
 #endif

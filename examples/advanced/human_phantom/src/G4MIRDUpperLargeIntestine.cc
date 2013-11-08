@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -55,20 +55,21 @@ G4MIRDUpperLargeIntestine::~G4MIRDUpperLargeIntestine()
 {
 }
 
-G4VPhysicalVolume* G4MIRDUpperLargeIntestine::Construct(const G4String& volumeName,
-							     G4VPhysicalVolume* mother,
-							     const G4String& colourName
-							     , G4bool wireFrame,G4bool sensitivity)
-{
-  G4cout << "Construct " << volumeName<< G4endl;
- 
- G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
- G4Material* soft = material -> GetMaterial("soft_tissue");
- delete material;
 
- G4double dx = 2.5 * cm; // aU
- G4double dy = 2.5* cm; //bU
- G4double dz = 4.775 * cm; //dzU
+G4VPhysicalVolume* G4MIRDUpperLargeIntestine::Construct(const G4String& volumeName,
+							G4VPhysicalVolume* mother,
+							const G4String& colourName
+							, G4bool wireFrame,G4bool)
+{
+  G4cout<<"Construct "<<volumeName<<" with mother volume "<<mother->GetName()<<G4endl;
+ 
+  G4HumanPhantomMaterial* material = new G4HumanPhantomMaterial();
+  G4Material* soft = material -> GetMaterial("soft_tissue");
+  delete material;
+
+  G4double dx = 2.5 * cm; // aU
+  G4double dy = 2.5* cm; //bU
+  G4double dz = 4.775 * cm; //dzU
 
   G4VSolid* AscendingColonUpperLargeIntestine = new G4EllipticalTube("AscendingColon",dx, dy, dz);
  
@@ -83,10 +84,10 @@ G4VPhysicalVolume* G4MIRDUpperLargeIntestine::Construct(const G4String& volumeNa
   relative_rm -> rotateZ(0. * degree);
   relative_rm -> rotateY(90. * degree);
   G4UnionSolid* upperLargeIntestine = new G4UnionSolid("UpperLargeIntestine",
-						      AscendingColonUpperLargeIntestine,
-						      TraverseColonUpperLargeIntestine,
-						      relative_rm, 
-						       G4ThreeVector(8.50 *cm, 0.0,6.275 * cm)); //,0,dzU + ct transverse
+						       AscendingColonUpperLargeIntestine,
+						       TraverseColonUpperLargeIntestine,
+						       relative_rm, 
+						       G4ThreeVector(8.0 *cm, 0.0,6.275 * cm)); //,0,dzU + ct transverse
   
 
   G4LogicalVolume* logicUpperLargeIntestine = new G4LogicalVolume(upperLargeIntestine, soft,
@@ -94,19 +95,14 @@ G4VPhysicalVolume* G4MIRDUpperLargeIntestine::Construct(const G4String& volumeNa
 								  0, 0, 0);
  
   G4VPhysicalVolume* physUpperLargeIntestine = new G4PVPlacement(0,
-								 G4ThreeVector(-8.50 * cm, -2.36 *cm,-15.775 *cm),
+								 G4ThreeVector(-8.0 * cm, -2.36 *cm,-15.775 *cm),
 								 "physicalUpperLargeIntestine",                 //xo, yo, zo ascending colon
-  			       logicUpperLargeIntestine,
-			       mother,
-			       false,
-			       0, true);
+								 logicUpperLargeIntestine,
+								 mother,
+								 false,
+								 0, true);
 
-  // Sensitive Body Part
-  if (sensitivity==true)
-  { 
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    logicUpperLargeIntestine->SetSensitiveDetector( SDman->FindSensitiveDetector("BodyPartSD") );
-  }
+  
 
   // Visualization Attributes
   //  G4VisAttributes* UpperLargeIntestineVisAtt = new G4VisAttributes(G4Colour(1.0,1.0,0.0));

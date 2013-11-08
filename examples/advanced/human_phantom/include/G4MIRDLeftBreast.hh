@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -48,5 +48,6 @@ public:
   ~G4MIRDLeftBreast();
   G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,
 				    const G4String&, G4bool, G4bool);
+private:
 };
 #endif

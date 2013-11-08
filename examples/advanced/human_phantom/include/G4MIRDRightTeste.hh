@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Authors: S. Guatelli and M. G. Pia, INFN Genova, Italy
+// Authors: S. Guatelli , M. G. Pia, INFN Genova and F. Ambroglini INFN Perugia, Italy
 // 
 // Based on code developed by the undergraduate student G. Guerrieri 
 // Note: this is a preliminary beta-version of the code; an improved 
@@ -31,26 +31,24 @@
 // with the design in a forthcoming publication, and subject to a 
 // design and code review.
 //
-#include "G4MIRDTestes.hh"
+#ifndef G4MIRDRightTeste_h
+#define G4MIRDRightTeste_h 1
 
-#include "globals.hh"
-#include "G4SDManager.hh"
-#include "G4VisAttributes.hh"
-#include "G4PVPlacement.hh"
+#include "G4VPhysicalVolume.hh"
+#include "G4VOrgan.hh"
 
-G4MIRDTestes::G4MIRDTestes()
+class G4VPhysicalVolume;
+class G4LogicalVolume;
+
+class G4MIRDRightTeste: public G4VOrgan
 {
-}
+public:
 
-G4MIRDTestes::~G4MIRDTestes()
-{
-}
+  G4MIRDRightTeste();
+  ~G4MIRDRightTeste();
+  G4VPhysicalVolume* Construct(const G4String&,G4VPhysicalVolume*,  
+				    const G4String&,G4bool, G4bool);
 
-G4VPhysicalVolume* G4MIRDTestes::ConstructTestes(G4VPhysicalVolume*, G4String, G4bool)
-{
- 
-
-  G4cout << "MIRD Testes still to be created !!!!!!" << G4endl;
-  
-  return 0;
-}
+private:
+};
+#endif
