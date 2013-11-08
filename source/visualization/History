@@ -24,6 +24,13 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+7th November 2013  John Allison  (vis-V09-06-35)
+- visman-V09-06-23: Fix compilation error.
+
+6th November 2013  John Allison  (vis-V09-06-34)
+- modeling-V09-06-21: Tidying.
+- visman-V09-06-22: Further improvements to parameter guidance.
+
 4th November 2013  John Allison  (vis-V09-06-33)
 - visman-V09-06-21:
   o Fixes event keeping for MT mode when end-of-event-action is "refresh".

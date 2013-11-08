@@ -2352,8 +2352,6 @@ void G4OpenGLQtViewer::DrawText(const G4Text& g4text)
     const G4String& textString = g4text.GetText();
     const char* textCString = textString.c_str();
   
-    glRasterPos3d(position.x(),position.y(),position.z());
-
     // Calculate move for centre and right adjustment
     QFontMetrics* f = new QFontMetrics (font);
     G4double span = f->width(textCString);
@@ -3148,35 +3146,6 @@ void G4OpenGLQtViewer::changeColorAndTransparency(QTreeWidgetItem* item,int) {
 #endif
   
   if (color.isValid()) {
-
-    // change vis attributes to set new colour
-    G4int iPO = item->data(0,Qt::UserRole).toInt();
-    if (iPO >= 0 && fTreeItemModels.find(iPO) != fTreeItemModels.end()) {
-      const PVPath& fullPath = fTreeItemModels[iPO];
-      // If a physical volume
-      if (fullPath.size()) {
-      
-        // Instantiate a working copy of a G4VisAttributes object...
-        G4VisAttributes workingVisAtts;
-        // and set the colour.
-        G4Colour g4c(((G4double)color.red())/255,
-                     ((G4double)color.green())/255,
-                     ((G4double)color.blue())/255,
-                     ((G4double)color.alpha())/255);
-        workingVisAtts.SetColour(g4c);
-        
-        // Add a vis atts modifier to the view parameters...
-        fVP.AddVisAttributesModifier
-        (G4ModelingParameters::VisAttributesModifier
-         (workingVisAtts,
-          G4ModelingParameters::VASColour,
-          fullPath));
-        // G4ModelingParameters::VASColour tells G4PhysicalVolumeModel that it is
-        // the colour that should be picked out and merged with the touchable's
-        // normal vis attributes.
-      }
-    }
-    
     // set scene tree parameters
     changeQColorForTreeWidgetItem(item,color);
   }

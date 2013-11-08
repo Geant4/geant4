@@ -26,6 +26,13 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+7th November 2013  John Allison  (visman-V09-06-23)
+- G4VisCommandsSceneAdd.cc: Fix compilation error.
+
+6th November 2013  John Allison  (visman-V09-06-22)
+- G4VisCommandsTouchableSet.cc and G4VisCommandsSceneAdd.cc:
+  o Further improvements to parameter guidance.
+
 4th November 2013  John Allison  (visman-V09-06-21)
 - G4VisManager:
   o Keep events for MT-refresh mode.

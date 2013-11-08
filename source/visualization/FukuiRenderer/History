@@ -20,9 +20,6 @@ committal in the CVS repository !
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
 
-7th November 2013  Gabriele Cosmo  (DAWN-V09-06-05, DAWN-V09-06-04)
-- Replaced deprecated calls to solids accessor methods.
-
 29th January 2013  John Allison  (DAWN-V09-06-03)
 - Revert to DAWN-V09-06-00.
 

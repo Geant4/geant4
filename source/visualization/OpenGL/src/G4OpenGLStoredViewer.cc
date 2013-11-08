@@ -202,19 +202,11 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
 	      glMatrixMode (GL_MODELVIEW);
 	      glPushMatrix();
 	      glLoadIdentity();
-        G4OpenGLTransform3D oglt (po.fTransform);
-        glMultMatrixd (oglt.GetGLMatrix ());
-        fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
+	    }
+	    G4OpenGLTransform3D oglt (po.fTransform);
+	    glMultMatrixd (oglt.GetGLMatrix ());
+	    fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
 	      (po.fpG4TextPlus->fG4Text);
-	    } else {
-        glPushMatrix();
-        G4OpenGLTransform3D oglt (po.fTransform);
-        glMultMatrixd (oglt.GetGLMatrix ());
-        fOpenGLSceneHandler.G4OpenGLSceneHandler::AddPrimitive
-	      (po.fpG4TextPlus->fG4Text);
-        glPopMatrix();
-      }
-      
 	    if (po.fpG4TextPlus->fProcessing2D) {
 	      glMatrixMode (GL_PROJECTION);
 	      glPopMatrix();

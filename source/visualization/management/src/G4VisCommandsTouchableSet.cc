@@ -79,8 +79,7 @@ G4VisCommandsTouchableSet::G4VisCommandsTouchableSet()
   fpCommandSetForceAuxEdgeVisible = new G4UIcmdWithABool
   ("/vis/touchable/set/forceAuxEdgeVisible", this);
   fpCommandSetForceAuxEdgeVisible->SetGuidance
-    ("Force auxiliary (soft) edges of current touchable to be visible:"); /*
-									    " true/false."); */
+    ("Force auxiliary (soft) edges of current touchable to be visible: true/false.");
   fpCommandSetForceAuxEdgeVisible->SetGuidance
   ("Use \"/vis/set/touchable\" to set current touchable.");
   fpCommandSetForceAuxEdgeVisible->SetParameterName("forceAuxEdgeVisible", omitable = true);

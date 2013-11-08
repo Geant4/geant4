@@ -360,6 +360,9 @@ G4VisCommandSceneAddDate::G4VisCommandSceneAddDate () {
   G4bool omitable;
   fpCommand = new G4UIcommand ("/vis/scene/add/date", this);
   fpCommand -> SetGuidance ("Adds date to current scene.");
+  fpCommand -> SetGuidance
+  ("If \"date\"is omitted, the current date and time is drawn."
+   "\nOtherwise, the string, including the rest of the line, is drawn.");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("size", 'i', omitable = true);
   parameter -> SetGuidance ("Screen size of text in pixels.");
@@ -378,10 +381,6 @@ G4VisCommandSceneAddDate::G4VisCommandSceneAddDate () {
   parameter -> SetDefaultValue ("left");  // Would prefer right.
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("date", 's', omitable = true);
-  parameter -> SetGuidance
-    ("The date you want to appear on the view of the scene (this includes the");/*
-   "\nrest of the line, including spaces).  The default, \'-\', writes the"
-   "\ndate and time of the moment of drawing.");*/
   parameter -> SetDefaultValue ("-");
   fpCommand -> SetParameter (parameter);
 }
