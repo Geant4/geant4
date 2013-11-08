@@ -1,0 +1,119 @@
+-------------------------------------------------------------------
+
+      ==========================================================
+      Geant4 - an Object-Oriented Toolkit for Phyiscs Simulation
+      ==========================================================
+
+     History file for Lawrence Livermore Laboratory Fission Model
+     ------------------------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+    ---------------------------------------------------------------
+    * Please list in reverse chronological order (last date on top)
+    ---------------------------------------------------------------
+
+8 November 2013  Alberto Ribon (hadr-fission-V09-06-00)
+-------------------------------------------------------
+- Created a new directory under models, fission/ , which is now
+  identically to the lll_fission/ directory, but with in addition
+  the LEP fission class, G4LFission .
+  This allows to remove the low_energy (and high_energy) directories,
+  and future new fission models will go in fission/ 
+  (the previous lll_fission directory is removed).
+
+4 April 2013  Dennis Wright (hadr-lllfis-V09-06-01)
+---------------------------------------------------
+- remove G4ThreadLocal since no static variables change within a
+  run.  Files affected:
+    G4fissionEvent.hh, G4SmpNuDistDataU233_235_MC.cc
+    G4fissionEvent.cc, G4SmpSpNuDistData.cc, G4SmpSpNubarData.cc,
+    G4SmpNuDistDataPu239_241_MC.cc, G4SmpNuDistDataU232_234_236_238_MC.cc,
+    G4SmpSpNugDistData.cc, G4LLNLFission.cc, G4SmpNugDist.cc, G4SmpWatt.cc
+
+12 March 2013  Dennis Wright (hadr-lllfis-V09-06-00)
+----------------------------------------------------
+- G4SmpWatt.cc : fix MacOS Clang compiler warning for appending int to string
+
+14 November 2012  Dennis Wright (hadr-lllfis-V09-05-02)
+-------------------------------------------------------
+- G4FissLib.cc : fix coverity bug #15660: uninitialized variable xSec
+- G4FissionLibrary.cc : fix coverity bug #15252: uninitialized variables
+    targetMass and theIsotope
+- G4SmpSpNuDistData.cc : fix coverity bug #14686: overrun of array sfnu
+- G4SmpSpNugDistData.cc : fix coverity bug #14687: overrun of array Cf252spdist
+- G4fissionEvent.cc : fix coverity bug #15174: uninitialized array pointers
+
+26 September 2012 Gabriele Cosmo (hadr-lllfis-V09-05-01)
+--------------------------------------------------------
+- Explicitly use inclusion of headers for system of units and physical
+  constants, in plan to remove implicit inclusion from globals.hh.
+
+12 June 2012 Dennis Wright (hadr-lllfis-V09-05-00)
+--------------------------------------------------
+- Replaced shadowed variable "index" with "imat" in G4FissLib.cc.
+- Replaced shadowed variables "g" and "erg" in G4SmpNEngCf252.cc.
+
+17 October 2011 Tatsumi Koi (hadr-lllfis-V09-04-00)
+---------------------------------------------------
+- Interface change along with "hadr-hpn-V09-04-28"
+- Enable to handle excited isomer nuclie as targets 
+	include/G4FissionLibrary.hh
+	src/G4FissionLibrary.cc.
+
+09 July 2008 Dennis Wright (hadr-lllfis-V09-01-00)
+--------------------------------------------------
+- Replace exit() with G4Exception() in G4fissionerr.
+
+27 June 2007 Gabriele Cosmo (hadr-lllfis-V08-03-07)
+---------------------------------------------------
+- Replace NeutronHPCrossSections with G4NEUTRONHPDATA variable.
+
+1 June 2007 Dennis Wright (hadr-lllfis-V08-03-06)
+-------------------------------------------------
+- Fix un-initialized variable in G4SmpNuDistDataPu239.cc
+
+1 June 2007 Gabriele Cosmo (hadr-lllfis-V08-03-05)
+--------------------------------------------------
+- Use <cmath> and std:: in front of mathematical functions.
+- Get rid of templated wrapper for random generator. Not necessary ?
+  Resolves compilation problems on Windows.
+
+31 May 2007 Dennis Wright (hadr-lllfis-V08-03-04)
+-------------------------------------------------
+- G4FissionLibrary.hh, .cc : moved constructor to .cc and instantiated base
+    class in it (to fix VC++ compiler error)
+- G4RNGWrapper.cc : added <class T> after "template" (VC++ compiler)
+- G4SmpIsoDir.cc : replace 2*M_PI with twopi
+- G4SmpNugDist.cc : made arguments of pow and sqrt G4double (VC++ compiler)
+- G4rngc.cc : replace function pointers with G4UniformRand  (VC++ compiler)
+
+30 May 2007 Dennis Wright (hadr-lllfis-V08-03-03)
+-------------------------------------------------
+- fixed compiler warnings: 
+  control reaches end of function:
+    G4SmpGEng.cc, G4SmpNEngCf252.cc, G4SmpNuDistDataU235.cc, 
+    G4SmpNugDist.cc
+  unused parameter: G4SmpPVel.cc
+  un-initialized array: G4SmpNuDistDataU235.cc, G4SmpNuDistDataU238.cc
+  missing braces in array initialization: G4SmpSpNuDistData.cc,
+    G4SmpWatt.cc
+
+29 May 2007 Dennis Wright (hadr-lllfis-V08-03-02)
+-------------------------------------------------
+- Changed all file names to start with G4, changed int, float
+  and double to G4int, G4float and G4double,
+  removed extern C statements
+
+29 May 2007 Gabriele Cosmo (hadr-lllfis-V08-03-01)
+--------------------------------------------------
+- Fixed compilation errors on gcc-4.1.2 for extra ';' in the code.
+  Affected files: fissionEvent.cc, G4LLNLFission.cc.
+
+21 May 2007 Dennis Wright (hadr-lllfis-V08-03-00)
+-------------------------------------------------
+- new directory created for LLNL spontaneous fission model.
+  Livermore code given Geant4 license headers and .h files were 
+  converted to .hh
+
