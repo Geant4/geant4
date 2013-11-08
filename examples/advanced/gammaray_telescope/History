@@ -9,6 +9,16 @@ $Id$
                           History file
                           ------------
 
+07.11.2013   L.Pandola, Tag: gammaraytel-V09-06-06
+	     Edit physics list according to A. Ribon's suggestions.
+             (1) Remove inelastic models for hyperons and anti-hyperons (only 
+             EM and decay left); (2) use FTFP model down to zero energy for 
+             anti-p and anti-n (Bertini cascade not available); (3) use 
+             FTFP+BERT for d,t and alphas.
+
+07.11.2013   L.Pandola, Tag: gammaraytel-V09-06-05
+	     Removed dependency from HEP and LEP models
+
 04.04.2013   F.Longo and L.Pandola, Tag: gammaraytel-V09-06-04
 	     Migrated analysis from AIDA-based to the g4tools
 	     README and CMakeLists.txt updated accondingly. No 
