@@ -14,7 +14,13 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07-11-13 I.Hrivnacova (testem11-V09-06-15)
+- Added setting SteppingVerbose in main in sequential mode
 
+07-11-13 mma (testem11-V09-06-14)
+- Removed RunAction::AddEdep()
+  
 24-10-13 I.Hrivnacova (testem11-V09-06-13)
 - Fixed normalization of histograms 1,8
 - Removed EventActionMessenger and migration to new 

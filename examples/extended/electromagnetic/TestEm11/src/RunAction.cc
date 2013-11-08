@@ -110,7 +110,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
     G4int nbOfAbsor = fDetector->GetNbOfAbsor();
     for (G4int i=1; i<= nbOfAbsor; i++) {
       G4Material* material = fDetector->GetAbsorMaterial(i);
-      G4double newCsdaRange = emCalculator.GetCSDARange(energy,particle,material);
+      G4double newCsdaRange 
+                   = emCalculator.GetCSDARange(energy,particle,material);
       fRun->SetCsdaRange(i, newCsdaRange);
       if (analysisManager->GetH1Activation(ih))
         stepMax = std::min(stepMax, width*newCsdaRange);
@@ -142,12 +143,12 @@ void RunAction::EndOfRunAction(const G4Run* run)
     //     
     G4ParticleDefinition* particle = fKinematic->GetParticleGun()
                                           ->GetParticleDefinition();
-    G4String partName = particle->GetParticleName();                             
+    G4String partName = particle->GetParticleName();
     G4double energy = fKinematic->GetParticleGun()->GetParticleEnergy();
   
     G4int nbOfAbsor = fDetector->GetNbOfAbsor();
   
-    G4cout << "\n ======================== run summary ======================\n";
+    G4cout << "\n ======================== run summary =====================\n";
   
     G4cout 
       << "\n The run consists of " << nbofEvents << " "<< partName << " of "
@@ -161,7 +162,7 @@ void RunAction::EndOfRunAction(const G4Run* run)
               << material->GetName() << " (density: " 
               << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
     }         
-    G4cout << "\n ============================================================\n";
+    G4cout << "\n ==========================================================\n";
   }
   
   //compute and print total energy deposit
@@ -197,12 +198,5 @@ void RunAction::EndOfRunAction(const G4Run* run)
   // show Rndm status
   G4Random::showEngineStatus();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::AddEdep(G4double edep)        
-{ 
-  if ( fRun) fRun->AddEdep(edep);
-}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

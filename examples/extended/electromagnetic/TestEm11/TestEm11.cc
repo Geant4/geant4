@@ -43,6 +43,7 @@
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "ActionInitialization.hh"
+#include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
  #include "G4VisExecutive.hh"
@@ -63,6 +64,7 @@ int main(int argc,char** argv) {
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
 #else
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
   G4RunManager* runManager = new G4RunManager;
 #endif
 

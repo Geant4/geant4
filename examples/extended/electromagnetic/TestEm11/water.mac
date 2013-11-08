@@ -13,12 +13,12 @@
 #
 /run/initialize
 #
-/testem/phys/setCuts 10 um
+/testem/phys/setCuts 100 um
 #
 /gun/particle e-
 /gun/energy 4 MeV
 #
-/analysis/setFileName water.1um
+/analysis/setFileName water_100um
 /analysis/h1/set 1 120 0.  24. mm		#edep profile
 /analysis/h1/set 3 100 0.  24. mm		#track length primary
 /analysis/h1/set 4 100 0.  2.  mm		#step length primary
