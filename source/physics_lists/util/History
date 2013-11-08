@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-Nov-2013, Alberto Ribon              (phys-util-V09-06-01)
+- Removed low_energy and high_energy from sources.cmake
+
 10-Jan-2013, Gunter Folger              (phys-util-V09-06-00)
 - new directory structure introduced. 
    util directory keeps utility classes
