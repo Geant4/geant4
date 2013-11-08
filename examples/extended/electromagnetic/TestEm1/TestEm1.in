@@ -13,6 +13,7 @@
 #
 /testem/phys/addPhysics  emstandard_opt0
 ###/testem/phys/addPhysics  local
+/testem/phys/setCuts 1 mm
 #
 /run/initialize
 #
@@ -20,5 +21,6 @@
 /gun/particle e-
 /gun/energy 100 MeV
 #
-/testem/phys/setCuts 1 mm
+/run/printProgress 200
+#
 /run/beamOn 2000

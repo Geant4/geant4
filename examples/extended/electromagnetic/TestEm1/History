@@ -14,6 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+06-11-13 mma (testem1-V09-06-13)
+- Fix for MT: keep primary particle information in Run to make it
+  available on master where PrimaryGenerator is not defined.
+     
+05-11-13 mma (testem1-V09-06-12)
+- Run::Merge() : add map fProcCounter
+     
+04-11-13 mma (testem1-V09-06-11)
+- MT: RunAction + Run
+- rm EventActionManager
      
 18-10-13 mma (testem1-V09-06-10)
 - PhysicsList::AddDecay() : use G4PhysicsListHelper
