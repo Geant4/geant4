@@ -89,7 +89,6 @@ G4PolarizedCompton::G4PolarizedCompton(const G4String& processName,
 G4PolarizedCompton::~G4PolarizedCompton()
 {
   if (theAsymmetryTable) {
-    theAsymmetryTable->clearAndDestroy();
     delete theAsymmetryTable;
   }
 }
