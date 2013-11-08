@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+08-11-13 mma (testem4-V09-06-11)     
+- Setting SteppingVerbose in main only in sequential mode.
+- remove hbook tools
+     
 06-11-13 mma (testem4-V09-06-10)
 - rm EventActionMessenger
 
