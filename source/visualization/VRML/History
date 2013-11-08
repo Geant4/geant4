@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/VRML sub-category
 ------------------------------------------------
 
+7th November 2013  Gabriele Cosmo  (VRML-V09-06-04)
+- Replaced deprecated calls to solids accessor methods.
+
 29th January 2013  John Allison  (VRML-V09-06-03)
 - Revert to VRML-V09-06-00.
 
