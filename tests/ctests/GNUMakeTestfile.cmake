@@ -193,6 +193,9 @@ foreach(_i 01 02 03 04 05)
                   COMMAND ${BINDIR}/field${_i} ${SRCDIR}/extended/field/field${_i}/field${_i}.in
                   BUILD ${SRCDIR}/extended/field/field${_i}) 
 endforeach()
+  GEANT4_ADD_TEST(example-ext-field-field06
+                  COMMAND ${BINDIR}/field06 -m ${SRCDIR}/extended/field/field06/field06.in
+                  BUILD ${SRCDIR}/extended/field/field06)
 #if(GEANT4_USE_G3TOG4)
 #  GEANT4_ADD_TEST(example-ext-g3tog4-clgeometry 
 #                  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/g3tog4/clGeometry/clGeometry
@@ -217,6 +220,9 @@ GEANT4_ADD_TEST(example-ext-medical-dicom
 #                BUILD ${SRCDIR}/extended/medical/electronScattering
 #                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/medical/electronScattering
 #                BUILD electronScattering ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-ext-medical-electronScattering2
+                COMMAND ${BINDIR}/electronScattering2 ${SRCDIR}/extended/medical/electronScattering2/electronScattering2.in
+                BUILD ${SRCDIR}/extended/medical/electronScattering2)
 GEANT4_ADD_TEST(example-ext-medical-fanoCavity 
                 COMMAND ${BINDIR}/fanoCavity ${SRCDIR}/extended/medical/fanoCavity/fanoCavity.in
                 BUILD ${SRCDIR}/extended/medical/fanoCavity)
@@ -228,7 +234,7 @@ GEANT4_ADD_TEST(example-ext-medical-GammaTherapy
                 COMMAND ${BINDIR}/GammaTherapy ${SRCDIR}/extended/medical/GammaTherapy/GammaTherapy.in
                 BUILD ${SRCDIR}/extended/medical/GammaTherapy)
 GEANT4_ADD_TEST(example-ext-optical-opnovice 
-                COMMAND ${BINDIR}/OpNovice ${SRCDIR}/extended/optical/OpNovice/OpNovice.in
+                COMMAND ${BINDIR}/OpNovice -m ${SRCDIR}/extended/optical/OpNovice/OpNovice.in
                 BUILD ${SRCDIR}/extended/optical/OpNovice)
 GEANT4_ADD_TEST(example-ext-optical-lxe 
                 COMMAND ${BINDIR}/LXe ${SRCDIR}/extended/optical/LXe/LXe.in

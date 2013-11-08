@@ -17,6 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-06-22 7 November 2013 Ivana Hrivnacova
+- Fixed directory name in added electroScattering2 test
+
+ctests-V09-06-21 6 November 2013 Ivana Hrivnacova
+- Added extended example electroScattering2
+
+ctests-V09-06-20 3 Movember 2013 Pere Mato
+- Fixed example-ext-polarisation-pol01 adding the ENVIRONMENT
+
+ctests-V09-06-19 31 October 2013 Peter Gumplinger
+- Fixed OpNovice and field06 test in CMake and GNUMakeTestfile
+
+ctests-V09-06-18 31 October 2013 Luciano Pandola
+- revert to ctests-V09-06-16
+
+ctests-V09-06-17 30 October 2013 Luciano Pandola
+- fix problem in ctests-V09-06-16 which caused failure 
+ of Nightlies on Windows
+
 ctests-V09-06-16 29 October 2013 Luciano Pandola
 - added advanced example example-adv-microelectronics
 

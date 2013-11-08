@@ -175,7 +175,7 @@ GEANT4_ADD_TEST(example-ext-exoticphysics-monopole
                 BUILD monopole ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
 		)
 include( ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/CTestDefinitions.txt)
-foreach(_i 01 02 03 04 05 06)
+foreach(_i 01 02 03 04 05)
   GEANT4_ADD_TEST(example-ext-field-field${_i} 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/field/field${_i}/field${_i} 
                           ${CMAKE_SOURCE_DIR}/examples/extended/field/field${_i}/field${_i}.in
@@ -183,6 +183,12 @@ foreach(_i 01 02 03 04 05 06)
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/field/field${_i} 
                   BUILD field${_i} ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 endforeach()
+  GEANT4_ADD_TEST(example-ext-field-field06
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/field/field06/field06
+                          -m ${CMAKE_SOURCE_DIR}/examples/extended/field/field06/field06.in
+                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/field/field06
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/field/field06
+                  BUILD field06 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 if(GEANT4_USE_G3TOG4)
   GEANT4_ADD_TEST(example-ext-g3tog4-clgeometry 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/g3tog4/clGeometry/clGeometry
@@ -219,6 +225,12 @@ GEANT4_ADD_TEST(example-ext-medical-electronScattering
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/medical/electronScattering
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/medical/electronScattering
                 BUILD electronScattering ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-ext-medical-electronScattering2 
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/medical/electronScattering2/electronScattering2
+                        ${CMAKE_SOURCE_DIR}/examples/extended/medical/electronScattering2/electronScattering2.in
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/medical/electronScattering2
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/medical/electronScattering2
+                BUILD electronScattering2 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-medical-fanoCavity 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/medical/fanoCavity/fanoCavity
                         ${CMAKE_SOURCE_DIR}/examples/extended/medical/fanoCavity/fanoCavity.in
@@ -239,7 +251,7 @@ GEANT4_ADD_TEST(example-ext-medical-GammaTherapy
                 BUILD GammaTherapy ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-optical-opnovice
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/optical/OpNovice/OpNovice 
-                        ${CMAKE_SOURCE_DIR}/examples/extended/optical/OpNovice/OpNovice.in
+                        -m ${CMAKE_SOURCE_DIR}/examples/extended/optical/OpNovice/OpNovice.in
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/optical/OpNovice
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/optical/OpNovice
                 BUILD OpNovice ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
@@ -313,7 +325,7 @@ GEANT4_ADD_TEST(example-ext-polarisation-pol01
                         ${CMAKE_SOURCE_DIR}/examples/extended/polarisation/Pol01/pol01.in
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/polarisation/Pol01
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/polarisation/Pol01
-                BUILD Pol01 )
+                BUILD Pol01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 foreach(_i 01 02)
   GEANT4_ADD_TEST(example-ext-radioactivedecay-rdecay${_i} 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/radioactivedecay/rdecay${_i}/rdecay${_i}
