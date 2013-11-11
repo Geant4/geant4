@@ -2,6 +2,11 @@
 
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 
+find_package(Geant4)
+include(${Geant4_USE_FILE})
+
+#----------------------------------------------------------------------------
+
 find_package(MPI QUIET)
 if(MPI_CXX_FOUND)
   add_subdirectory(MPI)

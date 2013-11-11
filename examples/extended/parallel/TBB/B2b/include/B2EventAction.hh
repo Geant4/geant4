@@ -45,19 +45,8 @@ class B2EventAction : public G4UserEventAction
 
     virtual void  BeginOfEventAction(const G4Event* );
     virtual void    EndOfEventAction(const G4Event* );
-
-    // Set methods
-    void SetPrintModulo(G4int value);
-
-  private:
-    G4int  fPrintModulo;
 };
 
-// inline functions
-
-inline void B2EventAction::SetPrintModulo(G4int value) {
-  fPrintModulo = value;
-} 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

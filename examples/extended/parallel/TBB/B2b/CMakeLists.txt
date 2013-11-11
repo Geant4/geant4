@@ -18,14 +18,20 @@ else()
   find_package(Geant4 REQUIRED multithreaded)
 endif()
 
-#This example needs TBB installed on the system
+#----------------------------------------------------------------------------
+# Setup Geant4 include directories and compile definitions
+#
+include(${Geant4_USE_FILE})
+
+#----------------------------------------------------------------------------
+# Find TBB (required package)
+#
 find_package(TBB REQUIRED)
 
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
 # Setup include directory for this project
 #
-include(${Geant4_USE_FILE})
 include_directories(${PROJECT_SOURCE_DIR}/include ${TBB_INCLUDE_DIRS})
 
 #----------------------------------------------------------------------------

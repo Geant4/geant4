@@ -9,6 +9,10 @@
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+10 November 2013, I. Hrivnacova (exparallel-V09-06-03)
+- Fixed README and CMake files 
+
 08 November 2013, I. Hrivnacova (exparallel-V09-06-02)
 - Moved ParN02, ParN04 and info in a new TopC directory,
   and removed ParN02tbb (its is still kept in the branch 
