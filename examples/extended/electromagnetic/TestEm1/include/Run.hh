@@ -61,7 +61,7 @@ class Run : public G4Run
     void AddProjRange (G4double x) { fProjRange += x; fProjRange2 += x*x;}
     void AddTransvDev (G4double y) { fTransvDev += y; fTransvDev2 += y*y;}  
     
-    void SetPrimary(G4ParticleDefinition* primary, G4double energy);
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
       
     void PrintSummary() const;
     void ComputeStatistics(); 
@@ -70,8 +70,8 @@ class Run : public G4Run
 
   private:
     DetectorConstruction*  fDetector;
-    G4ParticleDefinition*  fPrimary;
-    G4double  fEnergy;
+    G4ParticleDefinition*  fParticle;
+    G4double  fEkin;
                            
     G4int           fNbOfTraks0, fNbOfTraks1;
     G4int           fNbOfSteps0, fNbOfSteps1;

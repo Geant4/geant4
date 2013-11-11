@@ -46,7 +46,7 @@
 Run::Run(DetectorConstruction* det)
 : G4Run(),
   fDetector(det), 
-  fPrimary(0), fEnergy(0.),
+  fParticle(0), fEkin(0.),
   fNbOfTraks0(0), fNbOfTraks1(0),
   fNbOfSteps0(0), fNbOfSteps1(0),
   fEdep(0),
@@ -62,26 +62,27 @@ Run::~Run()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::SetPrimary(G4ParticleDefinition* primary, G4double energy)
+void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
 { 
-  fPrimary = primary;
-  fEnergy = energy;
+  fParticle = particle;
+  fEkin = energy;
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Run::PrintSummary() const
 {
-  G4int prec = G4cout.precision(5);    
-  G4int nbOfEvents = GetNumberOfEvent();
-  G4String partName = fPrimary->GetParticleName();    
+  G4int prec = G4cout.precision(5);
+      
+  G4int nbOfEvents     = GetNumberOfEvent();
+  G4String partName    = fParticle->GetParticleName();    
   G4double length      = fDetector->GetSize();    
   G4Material* material = fDetector->GetMaterial();
   G4double density     = material->GetDensity();
      
   G4cout << "\n ======================== run summary ======================\n";
   G4cout << "\n The run was: " << nbOfEvents << " " << partName << " of "
-         << G4BestUnit(fEnergy,"Energy") << " through " 
+         << G4BestUnit(fEkin,"Energy") << " through " 
          << G4BestUnit(length,"Length") << " of "
          << material->GetName() << " (density: " 
          << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;           
@@ -144,8 +145,8 @@ void Run::ComputeStatistics()
   //  
   G4EmCalculator emCalculator;
   G4double rangeTable = 0.;
-  if (fPrimary->GetPDGCharge() != 0.)
-    rangeTable = emCalculator.GetCSDARange(fEnergy,fPrimary,material);
+  if (fParticle->GetPDGCharge() != 0.)
+    rangeTable = emCalculator.GetCSDARange(fEkin,fParticle,material);
         
   G4cout << "\n---------------------------------------------------------\n";
   G4cout << " Primary particle : " ;
@@ -181,8 +182,8 @@ void Run::Merge(const G4Run* run)
   const Run* localRun = static_cast<const Run*>(run);
 
   // pass information about primary particle
-  fPrimary = localRun->fPrimary;
-  fEnergy = localRun->fEnergy;
+  fParticle = localRun->fParticle;
+  fEkin     = localRun->fEkin;
 
   // accumulate sums
   //
