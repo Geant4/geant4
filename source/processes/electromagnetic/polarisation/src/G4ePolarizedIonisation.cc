@@ -89,12 +89,8 @@ G4ePolarizedIonisation::G4ePolarizedIonisation(const G4String& name)
 
 G4ePolarizedIonisation::~G4ePolarizedIonisation()
 {
-  if (theAsymmetryTable) {
-    delete theAsymmetryTable;
-  }
-  if (theTransverseAsymmetryTable) {
-    delete theTransverseAsymmetryTable;
-  }
+  delete theAsymmetryTable;
+  delete theTransverseAsymmetryTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

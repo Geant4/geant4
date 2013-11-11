@@ -86,14 +86,8 @@ G4eplusPolarizedAnnihilation::G4eplusPolarizedAnnihilation(const G4String& name)
 
 G4eplusPolarizedAnnihilation::~G4eplusPolarizedAnnihilation()
 {
-  if (theAsymmetryTable) {
-    theAsymmetryTable->clearAndDestroy();
-    delete theAsymmetryTable;
-  }
-  if (theTransverseAsymmetryTable) {
-    theTransverseAsymmetryTable->clearAndDestroy();
-    delete theTransverseAsymmetryTable;
-  }
+  delete theAsymmetryTable;
+  delete theTransverseAsymmetryTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
