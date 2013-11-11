@@ -10,6 +10,25 @@
  *  @{
  */
 
+/** @defgroup extended_optical_OpNovice OpNovice
+ *  Optical example OpNovice
+ *  @ingroup extended_optical
+ *  @{
+ */
+ 
+  class OpNoviceActionInitialization {};
+  class OpNoviceDetectorConstruction {};
+  class OpNovicePhysicsList {};
+  class OpNovicePhysicsListMessenger {};
+  class OpNovicePrimaryGeneratorAction {};
+  class OpNovicePrimaryGeneratorMessenger {};
+  class OpNoviceRunAction {};
+  class OpNoviceStackingAction {};
+  class OpNoviceSteppingVerbose {}; 
+
+/** @} */
+
+
 /** @defgroup extended_optical_LXe LXe
  *  Optical example LXe 
  *  @ingroup extended_optical
@@ -51,6 +70,7 @@
  *  @{
  */
 
+  class WLSActionInitialization {};
   class WLSDetectorConstruction {};
   class WLSDetectorMessenger {};
   class WLSEventAction {};
