@@ -82,12 +82,6 @@ GEANT4_ADD_TEST(example-bas-b5
 #-------------------------------------------------------------------------------------------------
 #---Extended-----------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------
-GEANT4_ADD_TEST(example-ext-analysis-a01 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/analysis/A01/A01app 
-                        ${CMAKE_SOURCE_DIR}/examples/extended/analysis/A01/test.in
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/analysis/A01
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/analysis/A01
-                BUILD A01app PROJECT A01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-analysis-anaex01 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/analysis/AnaEx01/AnaEx01 
                         ${CMAKE_SOURCE_DIR}/examples/extended/analysis/AnaEx01/AnaEx01.in

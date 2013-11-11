@@ -137,8 +137,6 @@ GEANT4_ADD_TEST(example-bas-b4d COMMAND ${BINDIR}/exampleB4d -m ${SRCDIR}/basic/
 GEANT4_ADD_TEST(example-bas-b5  COMMAND ${BINDIR}/exampleB5 ${SRCDIR}/basic/B5/exampleB5.in
                                 BUILD ${SRCDIR}/basic/B5)
 
-GEANT4_ADD_TEST(example-ext-analysis-a01 COMMAND ${BINDIR}/A01app ${SRCDIR}/extended/analysis/A01/test.in
-                                BUILD ${SRCDIR}/extended/analysis/A01)
 foreach(_i 01 03) 
   GEANT4_ADD_TEST(example-ext-analysis-anaex${_i}-setup COMMAND make -C ${SRCDIR}/extended/analysis/AnaEx${_i} setup)
   GEANT4_ADD_TEST(example-ext-analysis-anaex${_i}-build COMMAND make -C ${SRCDIR}/extended/analysis/AnaEx${_i} DEPENDS example-ext-analysis-anaex${_i}-setup)
