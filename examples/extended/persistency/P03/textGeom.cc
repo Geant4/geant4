@@ -36,9 +36,14 @@
 #include "ExTGDetectorConstructionWithCuts.hh"
 #include "ExTGPhysicsList.hh"
 #include "ExTGPrimaryGeneratorAction.hh"
-#include "ExTGRunAction.hh"
+#include "ExTGActionInitialization.hh"
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 
 #ifdef G4VIS_USE
@@ -55,7 +60,12 @@ int main(int argc,char** argv)
 {
   // Run manager
   //
-  G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(1);
+#else
+  G4RunManager* runManager = new G4RunManager;
+#endif
 
   // User Initialization classes (mandatory)
   //
@@ -63,13 +73,15 @@ int main(int argc,char** argv)
 
   //
   runManager->SetUserInitialization(new ExTGPhysicsList);
-   
+
   // User Action classes
   //
-  runManager->SetUserAction(new ExTGPrimaryGeneratorAction);
+  //MT  runManager->SetUserAction(new ExTGPrimaryGeneratorAction);
 
+  runManager->SetUserInitialization(new ExTGActionInitialization);
+   
   // Run action that dumps GEANT4 in-memory geometry to text file
-  runManager->SetUserAction(new ExTGRunAction);
+  //MT  runManager->SetUserAction(new ExTGRunAction);
 
   // Initialize G4 kernel
   //

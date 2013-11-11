@@ -23,34 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P03/include/ExTGDetectorConstructionWithSD.hh
-/// \brief Definition of the ExTGDetectorConstructionWithSD class
+// $Id: ExTGActionInitialization.cc 74184 2013-09-30 14:05:02Z ihrivnac $
 //
-// $Id$
+/// \file ExTGActionInitialization.cc
+/// \brief Implementation of the ExTGActionInitialization class
 
-#ifndef ExTGDetectorConstructionWithSD_h
-#define ExTGDetectorConstructionWithSD_h 1
+#include "ExTGActionInitialization.hh"
+#include "ExTGRunAction.hh"
+#include "ExTGPrimaryGeneratorAction.hh"
 
-#include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4tgrMessenger;
+ExTGActionInitialization::ExTGActionInitialization()
+ : G4VUserActionInitialization()
+{}
 
-/// Detector construction class using text geometry file and using a sensitive detector
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class ExTGDetectorConstructionWithSD : public G4VUserDetectorConstruction
+ExTGActionInitialization::~ExTGActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExTGActionInitialization::BuildForMaster() const
 {
-  public:
-  
-     ExTGDetectorConstructionWithSD();
-    ~ExTGDetectorConstructionWithSD();
+ SetUserAction(new ExTGRunAction);
+}
 
-     G4VPhysicalVolume* Construct();
-     void ConstructSDandField();
 
-  private:
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-     G4tgrMessenger* fMessenger;
-};
+void ExTGActionInitialization::Build() const
+{
+  SetUserAction(new ExTGRunAction);
+  SetUserAction(new ExTGPrimaryGeneratorAction);
+}  
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

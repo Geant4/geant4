@@ -76,22 +76,22 @@ class ExTGTrackerHit : public G4VHit
 
 typedef G4THitsCollection<ExTGTrackerHit> ExTGTrackerHitsCollection;
 
-extern G4Allocator<ExTGTrackerHit> ExTGTrackerHitAllocator;
+extern G4ThreadLocal G4Allocator<ExTGTrackerHit>* ExTGTrackerHitAllocator;
 
 // ---------------------------------------------------------------------------
 
 inline void* ExTGTrackerHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) ExTGTrackerHitAllocator.MallocSingle();
-  return aHit;
+  if(!ExTGTrackerHitAllocator)
+      ExTGTrackerHitAllocator = new G4Allocator<ExTGTrackerHit>;
+  return (void *) ExTGTrackerHitAllocator->MallocSingle();
 }
 
 // ---------------------------------------------------------------------------
 
-inline void ExTGTrackerHit::operator delete(void *aHit)
+inline void ExTGTrackerHit::operator delete(void *hit)
 {
-  ExTGTrackerHitAllocator.FreeSingle((ExTGTrackerHit*) aHit);
+  ExTGTrackerHitAllocator->FreeSingle((ExTGTrackerHit*) hit);
 }
 
 // ---------------------------------------------------------------------------

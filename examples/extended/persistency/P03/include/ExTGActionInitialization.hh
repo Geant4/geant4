@@ -23,34 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file persistency/P03/include/ExTGDetectorConstructionWithSD.hh
-/// \brief Definition of the ExTGDetectorConstructionWithSD class
+// $Id: ActionInitialization.hh 70266 2013-05-28 12:57:34Z jjacquem $
 //
-// $Id$
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
-#ifndef ExTGDetectorConstructionWithSD_h
-#define ExTGDetectorConstructionWithSD_h 1
+#ifndef ExTGActionInitialization_h
+#define ExTGActionInitialization_h 1
 
-#include "globals.hh"
-#include "G4VUserDetectorConstruction.hh"
+#include "G4VUserActionInitialization.hh"
 
-class G4tgrMessenger;
+/// Action initialization class.
+///
 
-/// Detector construction class using text geometry file and using a sensitive detector
-
-class ExTGDetectorConstructionWithSD : public G4VUserDetectorConstruction
+class ExTGActionInitialization : public G4VUserActionInitialization
 {
   public:
-  
-     ExTGDetectorConstructionWithSD();
-    ~ExTGDetectorConstructionWithSD();
+    ExTGActionInitialization();
+    virtual ~ExTGActionInitialization();
 
-     G4VPhysicalVolume* Construct();
-     void ConstructSDandField();
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 
-  private:
-
-     G4tgrMessenger* fMessenger;
 };
 
 #endif
+
+    
