@@ -24,6 +24,6 @@
 #
 /testem/phys/setGCut 1 um
 #
-/testem/event/printModulo 100000
+/run/printProgress 100000
 # 
 /run/beamOn 5000000

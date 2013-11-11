@@ -37,7 +37,6 @@
 #include "G4UserStackingAction.hh"
 #include "globals.hh"
 
-class RunAction;
 class EventAction;
 class StackingMessenger;
 
@@ -46,7 +45,7 @@ class StackingMessenger;
 class StackingAction : public G4UserStackingAction
 {
   public:
-    StackingAction(RunAction*,EventAction*);
+    StackingAction(EventAction*);
    ~StackingAction();
    
     void SetKillStatus(G4int value) { fKillSecondary = value;};
@@ -54,7 +53,6 @@ class StackingAction : public G4UserStackingAction
     virtual G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track*);
     
   private:
-    RunAction*          fRunAction;
     EventAction*        fEventAction;    
     
     G4int               fKillSecondary;

@@ -292,7 +292,11 @@ void PhysicsList::SetCuts()
     G4cout << "PhysicsList::SetCuts:";
     G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
   }
-
+  
+  // fixe lower limit for cut
+  ///G4ProductionCutsTable::GetProductionCutsTable()
+  ///                                      ->SetEnergyRange(10*eV, 1*GeV);
+  
   // set cut values for gamma at first and for e- second and next for e+,
   // because some processes for e+/e- need cut values for gamma
   SetCutValue(fCutForGamma, "gamma");

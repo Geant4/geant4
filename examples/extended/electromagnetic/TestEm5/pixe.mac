@@ -35,6 +35,6 @@
 /analysis/h1/set 20 100 0 100 keV	#gamma: energy at exit
 /analysis/h1/set 40 100 0 100 keV	#gamma: energy at back
 #
-/testem/event/printModulo 10000
+/run/printProgress 10000
 # 
 /run/beamOn 10000

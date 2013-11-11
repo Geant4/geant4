@@ -30,6 +30,6 @@
 /analysis/setFileName hanson/19um.local
 /analysis/h1/set 12  120 0 30 deg		#space angle    
 #
-/testem/event/printModulo 100000
+/run/printProgress 100000
 # 
 /run/beamOn 1000000

@@ -23,42 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm5/include/EventMessenger.hh
-/// \brief Definition of the EventMessenger class
+// $Id: ActionInitialization.hh 76346 2013-11-08 15:48:19Z maire $
 //
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
-#ifndef EventMessenger_h
-#define EventMessenger_h 1
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
+#include "G4VUserActionInitialization.hh"
 
-class EventAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+class DetectorConstruction;
+class G4VSteppingVerbose;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Action initialization class.
+///
 
-class EventMessenger: public G4UImessenger
+class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    EventMessenger(EventAction*);
-   ~EventMessenger();
+    ActionInitialization(DetectorConstruction*);
+    virtual ~ActionInitialization();
+
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
     
   private:
-    EventAction*          fEventAction;
-    G4UIdirectory*        fEventDir;          
-    G4UIcmdWithAString*   fDrawCmd;
-    G4UIcmdWithAnInteger* fPrintCmd;
+    DetectorConstruction* fDetector;
+
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
+
+    

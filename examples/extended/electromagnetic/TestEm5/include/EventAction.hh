@@ -37,15 +37,12 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class RunAction;
-class EventMessenger;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
   public:
-    EventAction(RunAction*);
+    EventAction();
    ~EventAction();
 
   public:
@@ -64,21 +61,12 @@ class EventAction : public G4UserEventAction
     void SetReflectFlag  (G4int flag) 
                            {if (flag > fReflectFlag)   fReflectFlag = flag;};
                                              
-    void SetDrawFlag(G4String val)  {fDrawFlag = val;};
-    void SetPrintModulo(G4int val)  {fPrintModulo = val;};
         
   private:
-    RunAction*    fRunAction;
-    
     G4double fEnergyDeposit;
     G4double fTrakLenCharged, fTrakLenNeutral;
     G4int    fNbStepsCharged, fNbStepsNeutral;
-    G4int    fTransmitFlag,   fReflectFlag; 
-    
-    G4String fDrawFlag;
-    G4int    fPrintModulo;
-    
-    EventMessenger* fEventMessenger;                    
+    G4int    fTransmitFlag,   fReflectFlag;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

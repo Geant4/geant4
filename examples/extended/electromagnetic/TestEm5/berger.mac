@@ -31,6 +31,6 @@
 /analysis/setFileName berger/local
 /analysis/h1/set 1 105  0  1.05 MeV	#energy deposit  
 #
-/testem/event/printModulo 100000
+/run/printProgress 100000
 # 
 /run/beamOn 1000000

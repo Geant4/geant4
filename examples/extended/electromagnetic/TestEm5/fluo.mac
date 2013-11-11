@@ -30,6 +30,6 @@
 /analysis/h1/set  2 100 0 1000 keV #e-: energy at vertex
 /analysis/h1/set  3 100 1 1000 keV #gamma: energy at vertex
 #
-/testem/event/printModulo 10000
+/run/printProgress 10000
 # 
 /run/beamOn 100000

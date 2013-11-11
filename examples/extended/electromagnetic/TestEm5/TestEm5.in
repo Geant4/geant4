@@ -19,6 +19,8 @@
 /gun/particle pi+ 
 /gun/energy 5 GeV
 #
+/run/printProgress 10000
+#
 /run/beamOn 100000
 #
 /testem/det/setAbsMat Gold
