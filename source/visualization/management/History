@@ -26,6 +26,24 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+9th November 2013  John Allison  (visman-V09-06-25)
+- G4VisCommandsViewerSet.cc:
+  o /vis/viewer/set/style: Add single letter option to parameter candidate
+    list - "w wireframe s surface".
+  o /vis/viewer/set/projection: Improve guidance.
+- G4VisCommandsViewerDefault.cc:
+  o /vis/viewer/default/style: Add parameter candidates,
+    "w wireframe s surface".
+
+8th November 2013  Laurent Garnier
+- G4VisCommandsViewerSet.cc: Add candidate parameter for /vis/viewer/set/style.
+  This will be useful for fixing JIRA DEV-10 bug (but not required)
+
+7th November 2013  John Allison  (visman-V09-06-24)
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/date:
+  o Position at top-right corner of view, right-justified.
+  o (It was top-centre, left justified.)
+
 7th November 2013  John Allison  (visman-V09-06-23)
 - G4VisCommandsSceneAdd.cc: Fix compilation error.
 

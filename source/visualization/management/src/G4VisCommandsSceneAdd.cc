@@ -370,7 +370,7 @@ G4VisCommandSceneAddDate::G4VisCommandSceneAddDate () {
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("x-position", 'd', omitable = true);
   parameter -> SetGuidance ("x screen position in range -1 < x < 1.");
-  parameter -> SetDefaultValue (0.0);  // Would prefer 0.95 right.
+  parameter -> SetDefaultValue (0.95);
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("y-position", 'd', omitable = true);
   parameter -> SetGuidance ("y screen position in range -1 < y < 1.");
@@ -378,7 +378,7 @@ G4VisCommandSceneAddDate::G4VisCommandSceneAddDate () {
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("layout", 's', omitable = true);
   parameter -> SetGuidance ("Layout, i.e., adjustment: left|centre|right.");
-  parameter -> SetDefaultValue ("left");  // Would prefer right.
+  parameter -> SetDefaultValue ("right");
   fpCommand -> SetParameter (parameter);
   parameter = new G4UIparameter ("date", 's', omitable = true);
   parameter -> SetDefaultValue ("-");

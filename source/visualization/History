@@ -24,6 +24,17 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+9th November 2013  Joseph Perl  (vis-V09-06-36)
+- visman-V09-06-25 Command parameter updates
+- DAWN-V09-06-05 Replaced deprecated calls to solids accessor methods- VRML-V09-06-04 Replaced deprecated calls to solids accessor methods
+
+7th November 2013 Laurent Garnier
+- opengl-V09-06-09:
+  o Fix the JIRA-Dev28 problem : Text displays in wrong position in Qt
+
+7th November 2013  John Allison
+- visman-V09-06-24: /vis/scene/add/date: Change positioning.
+
 7th November 2013  John Allison  (vis-V09-06-35)
 - visman-V09-06-23: Fix compilation error.
 

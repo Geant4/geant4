@@ -308,7 +308,8 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
 
   fpCommandProjection = new G4UIcommand("/vis/viewer/set/projection",this);
   fpCommandProjection->SetGuidance
-    ("Orthogonal or perspective projection.");
+    ("Set projection style - o[rthogonal] or p[erspective]."
+     "\nIf p[erspective], also set field half angle.");
   parameter = new G4UIparameter("projection",'s',omitable = true);
   parameter->SetParameterCandidates("o orthogonal p perspective");
   parameter->SetDefaultValue("orthogonal");
@@ -378,6 +379,7 @@ G4VisCommandsViewerSet::G4VisCommandsViewerSet ():
   fpCommandStyle->SetGuidance 
     ("(Hidden line drawing is controlled by \"/vis/viewer/set/hiddenEdge\".)");
   fpCommandStyle->SetParameterName ("style",omitable = false);
+  fpCommandStyle->SetCandidates("w wireframe s surface");
 
   fpCommandTargetPoint = new G4UIcmdWith3VectorAndUnit
     ("/vis/viewer/set/targetPoint", this);

@@ -114,6 +114,7 @@ G4VisCommandViewerDefaultStyle::G4VisCommandViewerDefaultStyle()
   fpCommand->SetGuidance 
     ("(Default hidden line drawing is controlled by \"/vis/viewer/default/hiddenEdge\".)");
   fpCommand->SetParameterName ("style",omitable = false);
+  fpCommand->SetCandidates("w wireframe s surface");
 }
 
 G4VisCommandViewerDefaultStyle::~G4VisCommandViewerDefaultStyle()
