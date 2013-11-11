@@ -9,6 +9,9 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09th November 2013 I. Hrivnacova (analysisExample-V09-06-05)
+- Removed A01, as it was transformed in basic/B5
+
 22th October 2013 I. Hrivnacova (analysisExample-V09-06-04)
 - N03Con replaced with B1Con 
 - Adding README files on AIDA and OpenScientist form A01 

@@ -7,7 +7,6 @@ include(${Geant4_USE_FILE})
 
 #----------------------------------------------------------------------------
 
-add_subdirectory(A01)
 add_subdirectory(AnaEx01)
 add_subdirectory(B1Con)
 

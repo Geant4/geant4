@@ -1,5 +1,0 @@
-#
-# Setup for Windows
-#
-
-export G4ANALYSIS_USE=1
