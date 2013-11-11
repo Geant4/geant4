@@ -21,20 +21,10 @@ endif()
 include(${Geant4_USE_FILE})
 
 #----------------------------------------------------------------------------
-# Find AIDA (optional package)
-#
-find_package(AIDA QUIET)
-if(AIDA_FOUND)
-  message(STATUS "G4 Examples: AIDA found. --> exgps example with AIDA enabled.") 
-  add_definitions(-DG4ANALYSIS_USE)   
-endif()
-
-#----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${Geant4_INCLUDE_DIR}
-                    ${AIDA_INCLUDE_DIR})
+                    ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
@@ -50,7 +40,7 @@ target_link_libraries(exgps ${Geant4_LIBRARIES} ${AIDA_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(exgps_SCRIPTS
-    exgps_batch.in exgps.in macros/display.mac
+    exgps_batch.in exgps.in exgps_MT.in macros/display.mac
   )
 
 foreach(_script ${exgps_SCRIPTS})

@@ -23,57 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: exGPSActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file eventgenerator/exgps/include/exGPSAnalysisMessenger.hh
-/// \brief Definition of the exGPSAnalysisMessenger class
-//
+/// \file exGPSActionInitialization.cc
+/// \brief Implementation of the exGPSActionInitialization class
 
-#ifndef exGPSAnalysisMessenger_h
-#define exGPSAnalysisMessenger_h 1
+#include "exGPSActionInitialization.hh"
+#include "exGPSHistoManager.hh"
+#include "exGPSPrimaryGeneratorAction.hh"
+#include "exGPSRunAction.hh"
+#include "exGPSEventAction.hh"
+#include "exGPSGeometryConstruction.hh"
 
-#ifdef G4ANALYSIS_USE
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+exGPSActionInitialization::exGPSActionInitialization()
+ : G4VUserActionInitialization()
+{}
 
-class exGPSAnalysisManager;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithADoubleAndUnit;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+exGPSActionInitialization::~exGPSActionInitialization()
+{}
 
-class exGPSAnalysisMessenger: public G4UImessenger
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void exGPSActionInitialization::BuildForMaster() const
 {
-public:
-  exGPSAnalysisMessenger(exGPSAnalysisManager* );
-  virtual ~exGPSAnalysisMessenger();
+  // Histo manager
+  exGPSHistoManager*  histo = new exGPSHistoManager();
   
-  virtual void SetNewValue(G4UIcommand*, G4String);
+  // Actions
+  SetUserAction(new exGPSRunAction(histo));
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void exGPSActionInitialization::Build() const
+{
+  // Histo manager
+  exGPSHistoManager*  histo = new exGPSHistoManager();
   
-private:
-  exGPSAnalysisManager* fExGPSAnalysis;
-  G4UIdirectory*        fExGPSAnalysisDir;
+  // Actions
+  //
+  SetUserAction(new exGPSPrimaryGeneratorAction());
   
-  G4UIcmdWithAString*         fFileNameCmd;
-  G4UIcmdWithAString*         fFileTypeCmd;
-  G4UIcmdWithADoubleAndUnit*  fMaxEngCmd;
-  G4UIcmdWithADoubleAndUnit*  fMinEngCmd;
-  G4UIcmdWithADoubleAndUnit*  fMaxPosCmd;
-  G4UIcmdWithADoubleAndUnit*  fMinPosCmd;
-};
-
-#endif // G4ANALYSIS_USE
-
-#endif
+  exGPSRunAction* runAction = new exGPSRunAction(histo);
+  SetUserAction(runAction);
+  
+  exGPSEventAction* eventAction = new exGPSEventAction(histo);
+  SetUserAction(eventAction);
 
 
+}  
 
-
-
-
-
-
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

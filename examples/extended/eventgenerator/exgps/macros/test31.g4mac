@@ -55,8 +55,7 @@
 /gps/ene/sigma 50. MeV
 #
 #
-/analysis/filetype root
-/analysis/filename test31.root
+/analysis/filename test31
 /analysis/maxeng 800 MeV
 /analysis/mineng 200 MeV
 /analysis/maxpos 5 mm 

@@ -13,8 +13,7 @@
 
 # commands below are independent of gps
 #
-/analysis/filetype root
-/analysis/filename test37a.root
+/analysis/filename test37a
 /analysis/maxeng 100 MeV
 /analysis/mineng 0.01 MeV
 /analysis/maxpos 8 cm 
@@ -23,7 +22,7 @@
 #/control/execute display.mac
 /run/beamOn 100000
 
-/analysis/filename test37b.root
+/analysis/filename test37b
 /gps/ene/biasAlpha -1.
 /run/beamOn 100000
 

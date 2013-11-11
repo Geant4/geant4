@@ -36,13 +36,14 @@
 #include "globals.hh"
 
 class exGPSEventActionMessenger;
+class exGPSHistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class exGPSEventAction : public G4UserEventAction
 {
   public:
-    exGPSEventAction() ;
+    exGPSEventAction(exGPSHistoManager* histoManager) ;
     virtual ~exGPSEventAction();
 
     virtual void   BeginOfEventAction(const G4Event*);
@@ -55,6 +56,7 @@ class exGPSEventAction : public G4UserEventAction
     G4String                    fDrawFlag;
     G4int                       fPrintModulo;                         
     exGPSEventActionMessenger*  fEventMessenger;
+    exGPSHistoManager* fexGPSHistoManager;
 };
 
 #endif

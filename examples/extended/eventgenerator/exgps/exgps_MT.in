@@ -1,3 +1,6 @@
+
+/run/numberOfThreads 3
+
 # focused beam
 #
 /gps/verbose 0
@@ -25,7 +28,7 @@
 #
 # commands below are independent of gps
 #
-/analysis/filename test33
+/analysis/filename exgps
 /analysis/maxeng 800 MeV
 /analysis/mineng 200 MeV
 /analysis/maxpos 10 cm 
@@ -33,7 +36,6 @@
 /event/printModulo 1000
 #/tracking/verbose 1
 #
-/control/execute display.mac
 #
-/run/beamOn 20
+/run/beamOn 2000
 

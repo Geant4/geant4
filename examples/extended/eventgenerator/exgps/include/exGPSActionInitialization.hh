@@ -23,37 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: exGPSActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file eventgenerator/exgps/include/exGPSRunAction.hh
-/// \brief Definition of the exGPSRunAction class
-//
+/// \file exGPSActionInitialization.hh
+/// \brief Definition of the exGPSActionInitialization class
 
-#ifndef exGPSRunAction_h
-#define exGPSRunAction_h 1
+#ifndef exGPSActionInitialization_h
+#define exGPSActionInitialization_h 1
 
-#include "G4UserRunAction.hh"
-#include "globals.hh"
+#include "G4VUserActionInitialization.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+class exGPSGeometryConstruction;
 
-class G4Run;
-class exGPSHistoManager;
+/// Action initialization class.
+///
 
-class exGPSRunAction : public G4UserRunAction
+class exGPSActionInitialization : public G4VUserActionInitialization
 {
   public:
-   exGPSRunAction(exGPSHistoManager* histo);
-   virtual ~exGPSRunAction();
+    exGPSActionInitialization();
+    virtual ~exGPSActionInitialization();
 
-   virtual void BeginOfRunAction(const G4Run*);
-   virtual void EndOfRunAction(const G4Run*);
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 
-  private:
-   exGPSHistoManager* fexGPSHistoManager;
 };
 
 #endif
 
-
-
+    

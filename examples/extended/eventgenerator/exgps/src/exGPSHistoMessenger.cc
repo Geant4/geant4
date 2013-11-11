@@ -23,16 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: exGPSHistoMessenger.cc 70972 2013-06-07 16:12:12Z gcosmo $
 //
-/// \file eventgenerator/exgps/src/exGPSAnalysisMessenger.cc
-/// \brief Implementation of the exGPSAnalysisMessenger class
+/// \file eventgenerator/exgps/src/exGPSHistoMessenger.cc
+/// \brief Implementation of the exGPSHistoMessenger class
 //
 
-#ifdef G4ANALYSIS_USE
 
-#include "exGPSAnalysisMessenger.hh"
-#include "exGPSAnalysisManager.hh"
+
+#include "exGPSHistoMessenger.hh"
+#include "exGPSHistoManager.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
@@ -40,31 +40,25 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-exGPSAnalysisMessenger::exGPSAnalysisMessenger
-                (exGPSAnalysisManager* analysisManager)
+exGPSHistoMessenger::exGPSHistoMessenger
+                (exGPSHistoManager* histoManager)
   :G4UImessenger(),
-   fExGPSAnalysis(analysisManager),
+   fExGPSHisto(histoManager),
    fFileNameCmd(0),
-   fFileTypeCmd(0),
    fMaxEngCmd(0),
    fMinEngCmd(0),
    fMaxPosCmd(0),
    fMinPosCmd(0)
 
 { 
-  fExGPSAnalysisDir = new G4UIdirectory("/analysis/");
-  fExGPSAnalysisDir->SetGuidance("exGPS analysis control.");
+  fExGPSHistoDir = new G4UIdirectory("/analysis/");
+  fExGPSHistoDir->SetGuidance("exGPS analysis control.");
   
   fFileNameCmd = new G4UIcmdWithAString("/analysis/filename",this);
-  fFileNameCmd->SetGuidance("Input the name for the AIDA output file.");
+  fFileNameCmd->SetGuidance("Input the name for the ROOT output file.");
   fFileNameCmd->SetParameterName("filename",true,true);
-  fFileNameCmd->SetDefaultValue("exgps.aida");
+  fFileNameCmd->SetDefaultValue("exgps");
 
-  fFileTypeCmd = new G4UIcmdWithAString("/analysis/filetype",this);
-  fFileTypeCmd->SetGuidance(
-            "Input the type (xml/hbook/root) for the AIDA output file.");
-  fFileTypeCmd->SetParameterName("filetype",true,true);
-  fFileTypeCmd->SetDefaultValue("xml");
 
   fMaxEngCmd = new G4UIcmdWithADoubleAndUnit("/analysis/maxeng",this);
   fMaxEngCmd->SetGuidance("Sets the maximum energy of histo");
@@ -94,10 +88,9 @@ exGPSAnalysisMessenger::exGPSAnalysisMessenger
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-exGPSAnalysisMessenger::~exGPSAnalysisMessenger()
+exGPSHistoMessenger::~exGPSHistoMessenger()
 {
   delete fFileNameCmd; 
-  delete fFileTypeCmd; 
   delete fMaxEngCmd;
   delete fMinEngCmd;
   delete fMaxPosCmd;
@@ -106,7 +99,7 @@ exGPSAnalysisMessenger::~exGPSAnalysisMessenger()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void exGPSAnalysisMessenger::SetNewValue(G4UIcommand* command,
+void exGPSHistoMessenger::SetNewValue(G4UIcommand* command,
                                                           G4String newValue)
 { 
 
@@ -114,31 +107,26 @@ void exGPSAnalysisMessenger::SetNewValue(G4UIcommand* command,
 
   if( command == fFileNameCmd )
     { 
-      fExGPSAnalysis->SetFileName(newValue);
-    }
-  else if ( command == fFileTypeCmd )
-    { 
-      fExGPSAnalysis->SetFileType(newValue);
+      fExGPSHisto->SetFileName(newValue);
     }
   else if( command == fMaxPosCmd)
     { 
-      fExGPSAnalysis->SetPosMax(fMaxPosCmd->GetNewDoubleValue(newValue)); 
+      fExGPSHisto->SetPosMax(fMaxPosCmd->GetNewDoubleValue(newValue));
     }
   else if( command == fMinPosCmd)
     { 
-      fExGPSAnalysis->SetPosMin(fMinPosCmd->GetNewDoubleValue(newValue)); 
+      fExGPSHisto->SetPosMin(fMinPosCmd->GetNewDoubleValue(newValue));
     }
   else if( command == fMaxEngCmd)
     { 
-      fExGPSAnalysis->SetEngMax(fMaxEngCmd->GetNewDoubleValue(newValue)); 
+      fExGPSHisto->SetEMax(fMaxEngCmd->GetNewDoubleValue(newValue));
     }
   else if( command == fMinEngCmd)
     { 
-      fExGPSAnalysis->SetEngMin(fMinEngCmd->GetNewDoubleValue(newValue)); 
+      fExGPSHisto->SetEMin(fMinEngCmd->GetNewDoubleValue(newValue));
     }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
-#endif // G4ANALYSIS_USE

@@ -23,37 +23,65 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+/// \file analysis/AnaEx01/include/exGPSHistoManager.hh
+/// \brief Definition of the exGPSHistoManager class
 //
-/// \file eventgenerator/exgps/include/exGPSRunAction.hh
-/// \brief Definition of the exGPSRunAction class
 //
+// $Id: exGPSHistoManager.hh 74272 2013-10-02 14:48:50Z gcosmo $
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
 
-#ifndef exGPSRunAction_h
-#define exGPSRunAction_h 1
+#ifndef exGPSHistoManager_h
+#define exGPSHistoManager_h 1
 
-#include "G4UserRunAction.hh"
 #include "globals.hh"
+#include "g4root.hh"
+////#include "g4xml.hh"
+////#include "g4hbook.hh"
+class exGPSHistoMessenger;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4Run;
-class exGPSHistoManager;
 
-class exGPSRunAction : public G4UserRunAction
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class exGPSHistoManager
 {
   public:
-   exGPSRunAction(exGPSHistoManager* histo);
-   virtual ~exGPSRunAction();
 
-   virtual void BeginOfRunAction(const G4Run*);
-   virtual void EndOfRunAction(const G4Run*);
+    exGPSHistoManager();
+   ~exGPSHistoManager();
+
+    void book();
+    void save();
+    
+    void Fill(G4int PDGid, G4double e,
+                                    G4double x, G4double y, G4double z,
+                                    G4double t, G4double p, G4double w);
+
+    void PrintStatistic();        
 
   private:
-   exGPSHistoManager* fexGPSHistoManager;
+
+    G4String      fFileName[2];
+    G4bool        fFactoryOn;
+    G4double fMinpos,fMaxpos,fMineng,fMaxeng;
+    G4AnaH1 *fEnerHisto;
+    G4AnaH2 *fPosiXY, *fPosiZX, *fPosiYZ, *fAnglCTP, *fAnglTP;
+    exGPSHistoMessenger* fMessenger;
+
+  public:
+    inline void SetEMin(G4double emin) {fMineng = emin;}
+    inline void SetEMax(G4double emax) {fMaxeng = emax;}
+    inline void SetPosMin(G4double posmin) {fMinpos = posmin;}
+    inline void SetPosMax(G4double posmax) {fMaxpos = posmax;}
+    inline void SetFileName(G4String name) {fFileName[0] = name;}
+
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-
 

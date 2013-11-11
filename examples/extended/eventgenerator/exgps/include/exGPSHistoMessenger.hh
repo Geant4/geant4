@@ -23,89 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: exGPSHistoMessenger.hh 71234 2013-06-12 13:19:12Z gcosmo $
 //
-/// \file eventgenerator/exgps/include/exGPSAnalysisManager.hh
-/// \brief Definition of the exGPSAnalysisManager class
+/// \file eventgenerator/exgps/include/exGPSHistoMessenger.hh
+/// \brief Definition of the exGPSHistoMessenger class
 //
 
-#ifndef exGPSAnalysisManager_h
-#define exGPSAnalysisManager_h 1
+#ifndef exGPSHistoMessenger_h
+#define exGPSHistoMessenger_h 1
 
-#ifdef G4ANALYSIS_USE
+
 
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-namespace AIDA {
-
-class IAnalysisFactory;
-class ITree;
-class IPlotter;
-class IHistogram1D;
-class IHistogram2D;
-class ITuple;
-}
-
-class exGPSAnalysisMessenger;
+class exGPSHistoManager;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class exGPSAnalysisManager
+class exGPSHistoMessenger: public G4UImessenger
 {
-
-private:
-  exGPSAnalysisManager ();
-  virtual ~exGPSAnalysisManager ();
-
 public:
-  static exGPSAnalysisManager* GetInstance ();
-  static void Dispose();
-
-public:
-  void BeginOfRun();
-  void EndOfRun();
-
-  void SetFileName(G4String filename) {fIleName = filename;};
-  void SetFileType(G4String filetype) {fIleType = filetype;};
-
-  void SetPosMax(G4double pmax) {fMaxpos = pmax;};
-  void SetPosMin(G4double pmin) {fMinpos = pmin;};
-  void SetEngMax(G4double emax) {fMaxeng = emax;};
-  void SetEngMin(G4double emin) {fMineng = emin;};
+  exGPSHistoMessenger(exGPSHistoManager* );
+  virtual ~exGPSHistoMessenger();
   
-  void Fill(G4String, G4double, G4double, G4double, G4double, G4double,
-                                                          G4double, G4double);
-
+  virtual void SetNewValue(G4UIcommand*, G4String);
+  
 private:
-
-  static exGPSAnalysisManager* fInstance;
-
-  G4String fIleName;
-  G4String fIleType;
-
-  AIDA::IAnalysisFactory* fAnalysisFactory;
-  AIDA::ITree* fTree;
-  AIDA::IPlotter* fPlotter;
-
-  G4double fMinpos, fMaxpos;
-  G4double fMineng, fMaxeng;
-
-  AIDA::IHistogram1D* fEnerHisto;
-  AIDA::IHistogram2D* fPosiXY;
-  AIDA::IHistogram2D* fPosiXZ;
-  AIDA::IHistogram2D* fPosiYZ;
-  AIDA::IHistogram2D* fAnglCTP;
-  AIDA::IHistogram2D* fAnglTP;
-  AIDA::ITuple* fTuple;
-
-  exGPSAnalysisMessenger* fAnalysisMessenger;
-
+  exGPSHistoManager* fExGPSHisto;
+  G4UIdirectory*        fExGPSHistoDir;
+  
+  G4UIcmdWithAString*         fFileNameCmd;
+  G4UIcmdWithADoubleAndUnit*  fMaxEngCmd;
+  G4UIcmdWithADoubleAndUnit*  fMinEngCmd;
+  G4UIcmdWithADoubleAndUnit*  fMaxPosCmd;
+  G4UIcmdWithADoubleAndUnit*  fMinPosCmd;
 };
 
-#endif // G4ANALYSIS_USE
 
 #endif
-
 
 
 
