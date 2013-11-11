@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+11-November, 2013  L.Desorgher     (ReverseMC01-V09-06-05)
+- Change in RMC01AnalysisManager to avoid compilation error on some platforms.
+  The histogramming was modified following the histrogramming used in the 
+  example AnaEx01.
+
 07-November, 2013  L.Desorgher     (ReverseMC01-V09-06-04)
 - Migration to the use of G4histos
 - Remove old histogram classes 

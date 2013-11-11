@@ -63,10 +63,7 @@
 #include"G4ThreeVector.hh"
 #include"G4Event.hh"
 #include"G4Run.hh"
-#include "tools/histo/h1d"
-#include "tools/histo/h2d"
-typedef tools::histo::h1d  G4AnaH1;
-typedef tools::histo::h2d  G4AnaH2;
+#include "g4root.hh"
 
 class G4Timer;
 class RMC01AnalysisManagerMessenger;
@@ -100,6 +97,10 @@ public:
    inline void SetPrecision(G4double precision){
                                    fPrecision_to_reach =precision/100.;};
 
+   //Booking and saving of histograms
+   void book();
+   void save(G4double scaling_factor);
+
 private:
 
   static RMC01AnalysisManager* fInstance;
@@ -109,11 +110,12 @@ private:
   void EndOfEventForForwardSimulation(const G4Event* anEvent);
   void EndOfEventForAdjointSimulation(const G4Event* anEvent);
   G4double PrimDiffAndDirFluxForAdjointSim(G4double prim_energy);
+  /*
   void WriteHisto(G4AnaH1* anHisto, G4double scaling_factor,
                                 G4String fileName, G4String header_lines);
   void WriteHisto(G4AnaH2* anHisto, G4double scaling_factor,
                                 G4String fileName, G4String header_lines);
-  void ResetHistograms();
+  */
   void ComputeMeanEdepAndError(const G4Event* anEvent,
                                 G4double& mean,G4double& error);
   
@@ -144,7 +146,7 @@ private:
   G4int fNb_evt_modulo_for_convergence_test;
   
   
-  //Histos for adjoint simulation
+  //Histos for forward and adjoint simulation
   //-----------------------------
   G4AnaH1* fEdep_rmatrix_vs_electron_prim_energy;
   G4AnaH2* fElectron_current_rmatrix_vs_electron_prim_energy;
@@ -159,6 +161,9 @@ private:
   G4AnaH2* fProton_current_rmatrix_vs_proton_prim_energy;
   G4AnaH2* fGamma_current_rmatrix_vs_proton_prim_energy;
   
+  G4String      fFileName[2];
+  G4bool        fFactoryOn;
+
   
   //Prim spectrum to which the adjoint simulation will be normalised
   //Answer matrices will be also registered for post processing

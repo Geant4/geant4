@@ -52,7 +52,7 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "RMC01AnalysisManagerMessenger.hh"
-#include "g4root.hh"
+
 
 RMC01AnalysisManager* RMC01AnalysisManager::fInstance = 0;
 
@@ -63,6 +63,17 @@ RMC01AnalysisManager::RMC01AnalysisManager()
   fError_mean_edep(0.), fRelative_error(0.), fElapsed_time(0.),
   fPrecision_to_reach(0.),fStop_run_if_precision_reached(true),
   fNb_evt_modulo_for_convergence_test(5000),
+  fEdep_rmatrix_vs_electron_prim_energy(0),
+  fElectron_current_rmatrix_vs_electron_prim_energy(0),
+  fGamma_current_rmatrix_vs_electron_prim_energy(0),
+  fEdep_rmatrix_vs_gamma_prim_energy(0),
+  fElectron_current_rmatrix_vs_gamma_prim_energy(0),
+  fGamma_current_rmatrix_vs_gamma_prim_energy(0),
+  fEdep_rmatrix_vs_proton_prim_energy(0),
+  fElectron_current_rmatrix_vs_proton_prim_energy(0),
+  fProton_current_rmatrix_vs_proton_prim_energy(0),
+  fGamma_current_rmatrix_vs_proton_prim_energy(0),
+  fFactoryOn(false),
   fPrimSpectrumType(EXPO),
   fAlpha_or_E0(.5*MeV),fAmplitude_prim_spectrum (1.),
   fEmin_prim_spectrum(1.*keV),fEmax_prim_spectrum (20.*MeV),
@@ -70,155 +81,7 @@ RMC01AnalysisManager::RMC01AnalysisManager()
 { 
   
   fMsg = new RMC01AnalysisManagerMessenger(this);
-  
-  //----------------------
-  //Creation of histograms
-  //----------------------
-  
-  //Energy binning of the histograms : 60 log bins over [1keV-1GeV]
-  
-  std::vector<G4double> bins;
-  bins.clear();
-  size_t nbin=60;
-  G4double emin=1.*keV;
-  G4double emax=1.*GeV;
-  for ( size_t i=0; i <= nbin; i++) {
-     G4double val_bin;
-     val_bin=emin * std::pow(10., i * std::log10(emax/emin)/nbin);
-     G4double exp_10=4.-int(std::log10(val_bin));
-     G4double factor =std::pow(10., exp_10);
-     val_bin=int(factor*val_bin)/factor;
-     bins.push_back(val_bin);
-  
-  }
 
-
-   //Histo manager
-   G4AnalysisManager* theHistoManager = G4AnalysisManager::Instance();
-
-
-
-
-
-  
-  //Histograms for :
-  //        1)the forward simulation results 
-  //        2)the Reverse MC  simulation results normalised to a user spectrum
-  //------------------------------------------------------------------------
-
-  fEdep_vs_prim_ekin = new G4AnaH1("Edep_vs_prim_ekin",bins);
-  fElectron_current  = new G4AnaH1("Electron_current",bins);
-  fProton_current= new G4AnaH1("Proton_current",bins);
-  fGamma_current= new G4AnaH1("Gamma_current",bins);
-  
-  //Response matrices for the adjoint simulation only
-  //-----------------------------------------------
-  
-  //Response matrices for external isotropic e- source
-  //--------------------------------------------------
-  
-  G4int idHisto =
-   theHistoManager->CreateH1(G4String("Edep_rmatrix_vs_electron_prim_energy"),
-   G4String("electron RM vs e- primary energy"),60,emin,emax,
-   "none","none",G4String("log"));
-  fEdep_rmatrix_vs_electron_prim_energy = theHistoManager->GetH1(idHisto);
-
-
-
-  idHisto =
-      theHistoManager->
-         CreateH2(G4String("Electron_current_rmatrix_vs_electron_prim_energy"),
-         G4String("electron current  RM vs e- primary energy"),
-         60,emin,emax,60,emin,emax,
-         "none","none","none","none",G4String("log"),G4String("log"));
-          
-  fElectron_current_rmatrix_vs_electron_prim_energy =
-                                             theHistoManager->GetH2(idHisto);
-
-  idHisto =
-        theHistoManager->
-           CreateH2(G4String("Gamma_current_rmatrix_vs_electron_prim_energy"),
-           G4String("gamma current  RM vs e- primary energy"),
-           60,emin,emax,60,emin,emax,
-           "none","none","none","none",G4String("log"),G4String("log"));
-
-
-          
-  fGamma_current_rmatrix_vs_electron_prim_energy =
-                                           theHistoManager->GetH2(idHisto);
-          
-  
-  //Response matrices for external isotropic gamma source
-  
-  idHisto =
-   theHistoManager->CreateH1(G4String("Edep_rmatrix_vs_gamma_prim_energy"),
-  G4String("electron RM vs gamma primary energy"),60,emin,emax,
-  "none","none",G4String("log"));
-  fEdep_rmatrix_vs_gamma_prim_energy = theHistoManager->GetH1(idHisto);
-
-
-
-  idHisto =
-        theHistoManager->
-          CreateH2(G4String("Electron_current_rmatrix_vs_gamma_prim_energy"),
-          G4String("electron current  RM vs gamma primary energy"),
-          60,emin,emax,60,emin,emax,
-        "none","none","none","none",G4String("log"),G4String("log"));
-
-    fElectron_current_rmatrix_vs_gamma_prim_energy =
-                                               theHistoManager->GetH2(idHisto);
-
-  idHisto =
-          theHistoManager->
-             CreateH2(G4String("Gamma_current_rmatrix_vs_gamma_prim_energy"),
-             G4String("gamma current  RM vs gamma primary energy"),
-             60,emin,emax,60,emin,emax,
-             "none","none","none","none",G4String("log"),G4String("log"));
-
-  fGamma_current_rmatrix_vs_gamma_prim_energy =
-                                             theHistoManager->GetH2(idHisto);
-
-
-          
-  //Response matrices for external isotropic proton source
-  idHisto =
-    theHistoManager->CreateH1(G4String("Edep_rmatrix_vs_proton_prim_energy"),
-   G4String("electron RM vs proton primary energy"),60,emin,emax,
-   "none","none",G4String("log"));
-   fEdep_rmatrix_vs_proton_prim_energy = theHistoManager->GetH1(idHisto);
-
-
-
-   idHisto =
-         theHistoManager->
-           CreateH2(G4String("Electron_current_rmatrix_vs_proton_prim_energy"),
-           G4String("electron current  RM vs proton primary energy"),
-           60,emin,emax,60,emin,emax,
-         "none","none","none","none",G4String("log"),G4String("log"));
-
-     fElectron_current_rmatrix_vs_proton_prim_energy =
-                                                theHistoManager->GetH2(idHisto);
-   G4cout<<"Here"<<std::endl;
-   idHisto =
-           theHistoManager->
-              CreateH2(G4String("Gamma_current_rmatrix_vs_proton_prim_energy"),
-              G4String("gamma current  RM vs proton primary energy"),
-              60,emin,emax,60,emin,emax,
-              "none","none","none","none",G4String("log"),G4String("log"));
-  
-   fGamma_current_rmatrix_vs_proton_prim_energy =
-                                              theHistoManager->GetH2(idHisto);
-
-   idHisto =
-              theHistoManager->
-              CreateH2(G4String("Proton_current_rmatrix_vs_proton_prim_energy"),
-               G4String("proton current  RM vs proton primary energy"),
-               60,emin,emax,60,emin,emax,
-               "none","none","none","none",G4String("log"),G4String("log"));
-
-      fProton_current_rmatrix_vs_proton_prim_energy =
-                                                theHistoManager->GetH2(idHisto);
-  
   //-------------
   //Timer for convergence vector
   //-------------
@@ -231,29 +94,14 @@ RMC01AnalysisManager::RMC01AnalysisManager()
   
   fPrimPDG_ID = G4Electron::Electron()->GetPDGEncoding();
   
+  fFileName[0] = "sim";
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RMC01AnalysisManager::~RMC01AnalysisManager() 
-{ 
-  delete fEdep_vs_prim_ekin;
-  delete fElectron_current;
-  delete fProton_current;
-  delete fGamma_current;
-  
-  delete fEdep_rmatrix_vs_electron_prim_energy;
-  delete fElectron_current_rmatrix_vs_electron_prim_energy;
-  delete fGamma_current_rmatrix_vs_electron_prim_energy;
-  
-  delete fEdep_rmatrix_vs_gamma_prim_energy;
-  delete fElectron_current_rmatrix_vs_gamma_prim_energy;
-  delete fGamma_current_rmatrix_vs_gamma_prim_energy;
-  
-  delete fEdep_rmatrix_vs_proton_prim_energy;
-  delete fElectron_current_rmatrix_vs_proton_prim_energy;
-  delete fProton_current_rmatrix_vs_proton_prim_energy;
-  delete fGamma_current_rmatrix_vs_proton_prim_energy;
+{;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -267,13 +115,15 @@ RMC01AnalysisManager* RMC01AnalysisManager::GetInstance()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RMC01AnalysisManager::BeginOfRun(const G4Run* aRun)
-{  fAccumulated_edep =0.;
+{
+
+
+   fAccumulated_edep =0.;
    fAccumulated_edep2 =0.;
    fRelative_error=1.;
    fMean_edep=0.;
    fError_mean_edep=0.;
    fAdjoint_sim_mode =G4AdjointSimManager::GetInstance()->GetAdjointSimMode();
-   G4cout<<fAdjoint_sim_mode <<G4endl;
 
    if (fAdjoint_sim_mode){
            fNb_evt_per_adj_evt=aRun->GetNumberOfEventToBeProcessed()/
@@ -292,101 +142,33 @@ void RMC01AnalysisManager::BeginOfRun(const G4Run* aRun)
    }
    fConvergenceFileOutput.setf(std::ios::scientific);
    fConvergenceFileOutput.precision(6);         
-   ResetHistograms();
+
    fTimer->Start();
    fElapsed_time=0.;
+
+   book();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RMC01AnalysisManager::EndOfRun(const G4Run* aRun)
 { fTimer->Stop();
- 
+  G4int nb_evt=aRun->GetNumberOfEvent();
+  G4double factor =1./ nb_evt;
   if (!fAdjoint_sim_mode){
    G4cout<<"Results of forward simulation!"<<std::endl;
    G4cout<<"edep per event [MeV] = "<<fMean_edep<<std::endl;
    G4cout<<"error[MeV] = "<<fError_mean_edep<<std::endl;
-   G4int nb_evt=aRun->GetNumberOfEvent();
-   WriteHisto(fEdep_vs_prim_ekin,1./nb_evt,G4String("Fwd_Edep_vs_EkinPrim.txt"),
-                 G4String("E1[MeV]\t\tE2[MeV]\t\tEdep[MeV]\terr_Edep[MeV]\n"));
-   WriteHisto(fElectron_current,1./nb_evt, G4String("Fwd_ElectronCurrent.txt"),
-               G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering electron\terr\n"));
-   WriteHisto(fProton_current,1./nb_evt, G4String("Fwd_ProtonCurrent.txt"),
-               G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering proton\terr[]\n"));
-   WriteHisto(fGamma_current,1./nb_evt, G4String("Fwd_GammaCurrent.txt"),
-                G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering gamma\terr[]\n"));
   }
   
   else {
    G4cout<<"Results of reverse/adjoint simulation!"<<std::endl;
    G4cout<<"normalised edep [MeV] = "<<fMean_edep<<std::endl;
    G4cout<<"error[MeV] = "<<fError_mean_edep<<std::endl;
-
-        
-   G4double factor=1.*G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun()
+   factor=1.*G4AdjointSimManager::GetInstance()->GetNbEvtOfLastRun()
                                  *fNb_evt_per_adj_evt/aRun->GetNumberOfEvent();
-                
-   WriteHisto(fEdep_vs_prim_ekin,factor, G4String("Adj_Edep_vs_EkinPrim.txt"),
-                G4String("E1[MeV]\t\tE2[MeV]\t\tEdep[MeV]\terr_Edep[MeV]\n"));
-   WriteHisto(fElectron_current,factor, G4String("Adj_ElectronCurrent.txt"),
-              G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering electron\terr\n"));
-   WriteHisto(fProton_current,factor, G4String("Adj_ProtonCurrent.txt"),
-               G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering proton\terr[]\n"));
-   WriteHisto(fGamma_current,factor, G4String("Adj_GammaCurrent.txt"),
-                G4String("E1[MeV]\t\tE2[MeV]\t\tnb entering gamma\terr[]\n"));
-  
-   WriteHisto(fEdep_rmatrix_vs_electron_prim_energy,factor,
-                  G4String("Adj_Edep_vs_EkinPrimElectron_Answer.txt"),
-    G4String("E1[MeV]\t\tE2[MeV]\t\tEdep Efficiency[MeV*cm2*MeV*str]")+
-    G4String("\terr_Edep[MeV*cm2*MeV*str]\n"));
-         
-   WriteHisto(fElectron_current_rmatrix_vs_electron_prim_energy,factor,
-    G4String("Adj_ElectronCurrent_vs_EkinPrimElectron_Answer.txt"),
-    G4String("Eprim1[MeV]\t\tEprim2[MeV]\t\tEsec1[MeV]\t\tEsec2[MeV]")+
-    G4String("\t Current Efficiency[cm2*MeV*str]\terr[cm2*MeV*str]\n"));
-         
-   WriteHisto(fGamma_current_rmatrix_vs_electron_prim_energy,factor,
-    G4String("Adj_GammaCurrent_vs_EkinPrimElectron_Answer.txt"),
-    G4String("Eprim1[MeV]\t\tEprim2[MeV]\t\tEsec1[MeV]\t\tEsec2[MeV]\t")+
-    G4String("Current Efficiency[cm2*MeV*str]\terr[cm2*MeV*str]\n"));
-        
-   WriteHisto(fEdep_rmatrix_vs_gamma_prim_energy,factor,
-    G4String("Adj_Edep_vs_EkinPrimGamma_Answer.txt"),
-    G4String("E1[MeV]\t\tE2[MeV]\t\tEdep Efficiency[MeV*cm2*MeV*str]\t")+
-    G4String("err_Edep[MeV*cm2*MeV*str]\n"));
-         
-   WriteHisto(fElectron_current_rmatrix_vs_gamma_prim_energy,factor,
-     G4String("Adj_ElectronCurrent_vs_EkinPrimGamma_Answer.txt"),
-     G4String("Eprim1[MeV]\t\tEprim2[MeV]\t\tEsec1[MeV]\t\tEsec2[MeV]\t")+
-     G4String("Current Efficiency[cm2*MeV*str]\terr[cm2*MeV*str]\n"));
-         
-   WriteHisto(fGamma_current_rmatrix_vs_gamma_prim_energy,factor,
-     G4String("Adj_GammaCurrent_vs_EkinPrimGamma_Answer.txt"),
-     G4String("Eprim1[MeV]\t\tEprim2[MeV]\t\tEsec1[MeV]\t\tEsec2[MeV]\t")+
-     G4String("Current Efficiency[cm2*MeV*str]\terr[cm2*MeV*str]\n"));
-         
-        
-        
-   WriteHisto(fEdep_rmatrix_vs_proton_prim_energy,factor,
-     G4String("Adj_Edep_vs_EkinPrimProton_Answer.txt"),
-     G4String("E1[MeV]\t\tE2[MeV]\t\tEdep Efficiency[MeV*cm2*MeV*str]\t")+
-     G4String("err_Edep[MeV*cm2*MeV*str]\n"));
-         
-   WriteHisto(fElectron_current_rmatrix_vs_proton_prim_energy,factor,
-     G4String("Adj_ElectronCurrent_vs_EkinPrimProton_Answer.txt"),
-     G4String("Eprim1[MeV]\t\tEprim2[MeV]\t\tEsec1[MeV]\t\tEsec2[MeV]\t")+
-     G4String("Current Efficiency[cm2*MeV*str]\terr[cm2*MeV*str]\n"));
-         
-   WriteHisto(fGamma_current_rmatrix_vs_proton_prim_energy,factor,
-     G4String("Adj_GammaCurrent_vs_EkinPrimProton_Answer.txt"),
-     G4String("Eprim1[MeV]\t\tEprim2[MeV]\t\tEsec1[MeV]\t\tEsec2[MeV]\t")+
-     G4String("Current Efficiency[cm2*MeV*str]\terr[cm2*MeV*str]\n"));
-         
-   WriteHisto(fProton_current_rmatrix_vs_proton_prim_energy,factor,
-     G4String("Adj_ProtonCurrent_vs_EkinPrimProton_Answer.txt"),
-     G4String("Eprim1[MeV]\t\tEprim2[MeV]\t\tEsec1[MeV]\t\tEsec2[MeV]\t")+
-     G4String("Current Efficiency[cm2*MeV*str]\terr[cm2*MeV*str]\n"));
   }
+  save(factor);
   fConvergenceFileOutput.close();
 }
 
@@ -670,7 +452,7 @@ G4double RMC01AnalysisManager::PrimDiffAndDirFluxForAdjointSim(
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+/*
 void  RMC01AnalysisManager::WriteHisto(G4AnaH1* anHisto,
             G4double scaling_factor, G4String fileName, G4String header_lines)
 { std::fstream FileOutput(fileName, std::ios::out);
@@ -708,32 +490,7 @@ void  RMC01AnalysisManager::WriteHisto(G4AnaH2* anHisto,
         }
   }
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RMC01AnalysisManager::ResetHistograms()
-{ G4cout<<"RMC01AnalysisManager::ResetHistograms() 0"<<std::endl;
-  fEdep_vs_prim_ekin->reset();
-  fElectron_current->reset();
-  fProton_current->reset();
-  fGamma_current->reset();
-  G4cout<<"RMC01AnalysisManager::ResetHistograms() 1"<<std::endl;
-  fEdep_rmatrix_vs_electron_prim_energy->reset();
-  fElectron_current_rmatrix_vs_electron_prim_energy->reset();
-  fGamma_current_rmatrix_vs_electron_prim_energy->reset();
-  
-  fEdep_rmatrix_vs_gamma_prim_energy->reset();
-  fElectron_current_rmatrix_vs_gamma_prim_energy->reset();
-  fGamma_current_rmatrix_vs_gamma_prim_energy->reset();
-  
-  G4cout<<"RMC01AnalysisManager::ResetHistograms() 2"<<std::endl;
-  fEdep_rmatrix_vs_proton_prim_energy->reset();
-  fElectron_current_rmatrix_vs_proton_prim_energy->reset();
-  fProton_current_rmatrix_vs_proton_prim_energy->reset();
-  fGamma_current_rmatrix_vs_proton_prim_energy->reset();
-  G4cout<<"RMC01AnalysisManager::ResetHistograms() 3"<<std::endl;
-}
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void RMC01AnalysisManager::ComputeMeanEdepAndError(
@@ -820,3 +577,192 @@ void RMC01AnalysisManager::SetPrimaryPowerLawSpectrumForAdjointSim(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void RMC01AnalysisManager::book()
+{
+  //----------------------
+  //Creation of histograms
+  //----------------------
+
+  //Energy binning of the histograms : 60 log bins over [1keV-1GeV]
+
+  G4double emin=1.*keV;
+  G4double emax=1.*GeV;
+
+  //file_name
+  fFileName[0]="forward_sim";
+  if (fAdjoint_sim_mode) fFileName[0]="adjoint_sim";
+
+  //Histo manager
+   G4AnalysisManager* theHistoManager = G4AnalysisManager::Instance();
+   G4String extension = theHistoManager->GetFileType();
+   fFileName[1] = fFileName[0] + "." + extension;
+   theHistoManager->SetFirstHistoId(1);
+
+   G4bool fileOpen = theHistoManager->OpenFile(fFileName[0]);
+   if (!fileOpen) {
+       G4cout << "\n---> RMC01AnalysisManager::book(): cannot open " << fFileName[1]
+              << G4endl;
+       return;
+   }
+
+    // Create directories
+   theHistoManager->SetHistoDirectoryName("histo");
+
+  //Histograms for :
+  //        1)the forward simulation results
+  //        2)the Reverse MC  simulation results normalised to a user spectrum
+  //------------------------------------------------------------------------
+
+
+   G4int idHisto =
+      theHistoManager->CreateH1(G4String("Edep_vs_prim_ekin"),
+      G4String("edep vs e- primary energy"),60,emin,emax,
+      "none","none",G4String("log"));
+  fEdep_vs_prim_ekin = theHistoManager->GetH1(idHisto);
+
+  idHisto = theHistoManager->CreateH1(G4String("elecron_current"),
+        G4String("electron"),60,emin,emax,
+        "none","none",G4String("log"));
+
+  fElectron_current  =  theHistoManager->GetH1(idHisto);
+
+  idHisto= theHistoManager->CreateH1(G4String("proton_current"),
+        G4String("proton"),60,emin,emax,
+        "none","none",G4String("log"));
+  fProton_current=theHistoManager->GetH1(idHisto);
+
+
+  idHisto= theHistoManager->CreateH1(G4String("gamma_current"),
+          G4String("gamma"),60,emin,emax,
+          "none","none",G4String("log"));
+  fGamma_current=theHistoManager->GetH1(idHisto);
+
+
+  //Response matrices for the adjoint simulation only
+  //-----------------------------------------------
+  if (fAdjoint_sim_mode){
+  //Response matrices for external isotropic e- source
+  //--------------------------------------------------
+
+   idHisto =
+    theHistoManager->CreateH1(G4String("Edep_rmatrix_vs_electron_prim_energy"),
+    G4String("electron RM vs e- primary energy"),60,emin,emax,
+    "none","none",G4String("log"));
+   fEdep_rmatrix_vs_electron_prim_energy = theHistoManager->GetH1(idHisto);
+
+   idHisto =
+      theHistoManager->
+         CreateH2(G4String("Electron_current_rmatrix_vs_electron_prim_energy"),
+         G4String("electron current  RM vs e- primary energy"),
+         60,emin,emax,60,emin,emax,
+         "none","none","none","none",G4String("log"),G4String("log"));
+
+   fElectron_current_rmatrix_vs_electron_prim_energy =
+                                             theHistoManager->GetH2(idHisto);
+
+   idHisto =
+        theHistoManager->
+           CreateH2(G4String("Gamma_current_rmatrix_vs_electron_prim_energy"),
+           G4String("gamma current  RM vs e- primary energy"),
+           60,emin,emax,60,emin,emax,
+           "none","none","none","none",G4String("log"),G4String("log"));
+
+
+   fGamma_current_rmatrix_vs_electron_prim_energy =
+                                           theHistoManager->GetH2(idHisto);
+
+
+  //Response matrices for external isotropic gamma source
+
+   idHisto =
+    theHistoManager->CreateH1(G4String("Edep_rmatrix_vs_gamma_prim_energy"),
+         G4String("electron RM vs gamma primary energy"),60,emin,emax,
+        "none","none",G4String("log"));
+   fEdep_rmatrix_vs_gamma_prim_energy = theHistoManager->GetH1(idHisto);
+
+   idHisto =
+        theHistoManager->
+          CreateH2(G4String("Electron_current_rmatrix_vs_gamma_prim_energy"),
+          G4String("electron current  RM vs gamma primary energy"),
+          60,emin,emax,60,emin,emax,
+        "none","none","none","none",G4String("log"),G4String("log"));
+
+   fElectron_current_rmatrix_vs_gamma_prim_energy =
+                                               theHistoManager->GetH2(idHisto);
+
+   idHisto =
+          theHistoManager->
+             CreateH2(G4String("Gamma_current_rmatrix_vs_gamma_prim_energy"),
+             G4String("gamma current  RM vs gamma primary energy"),
+             60,emin,emax,60,emin,emax,
+             "none","none","none","none",G4String("log"),G4String("log"));
+
+   fGamma_current_rmatrix_vs_gamma_prim_energy =
+                                             theHistoManager->GetH2(idHisto);
+
+
+
+  //Response matrices for external isotropic proton source
+   idHisto =
+     theHistoManager->CreateH1(G4String("Edep_rmatrix_vs_proton_prim_energy"),
+         G4String("electron RM vs proton primary energy"),60,emin,emax,
+         "none","none",G4String("log"));
+   fEdep_rmatrix_vs_proton_prim_energy = theHistoManager->GetH1(idHisto);
+
+   idHisto =
+         theHistoManager->
+           CreateH2(G4String("Electron_current_rmatrix_vs_proton_prim_energy"),
+           G4String("electron current  RM vs proton primary energy"),
+           60,emin,emax,60,emin,emax,
+         "none","none","none","none",G4String("log"),G4String("log"));
+
+    fElectron_current_rmatrix_vs_proton_prim_energy =
+                                                theHistoManager->GetH2(idHisto);
+
+   idHisto =
+           theHistoManager->
+              CreateH2(G4String("Gamma_current_rmatrix_vs_proton_prim_energy"),
+              G4String("gamma current  RM vs proton primary energy"),
+              60,emin,emax,60,emin,emax,
+              "none","none","none","none",G4String("log"),G4String("log"));
+
+   fGamma_current_rmatrix_vs_proton_prim_energy =
+                                              theHistoManager->GetH2(idHisto);
+
+   idHisto =
+              theHistoManager->
+              CreateH2(G4String("Proton_current_rmatrix_vs_proton_prim_energy"),
+               G4String("proton current  RM vs proton primary energy"),
+               60,emin,emax,60,emin,emax,
+               "none","none","none","none",G4String("log"),G4String("log"));
+
+      fProton_current_rmatrix_vs_proton_prim_energy =
+                                                theHistoManager->GetH2(idHisto);
+  }
+  fFactoryOn = true;
+  G4cout << "\n----> Histogram Tree is opened in " << fFileName[1] << G4endl;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RMC01AnalysisManager::save(G4double scaling_factor)
+{ if (fFactoryOn) {
+    G4AnalysisManager* theHistoManager = G4AnalysisManager::Instance();
+    //scaling of results
+    //-----------------
+
+    for (int ind=1; ind<=theHistoManager->GetNofH1s();ind++){
+       theHistoManager->SetH1Ascii(ind,true);
+       theHistoManager->ScaleH1(ind,scaling_factor);
+    }
+    for (int ind=1; ind<=theHistoManager->GetNofH2s();ind++)
+                        theHistoManager->ScaleH2(ind,scaling_factor);
+
+    theHistoManager->Write();
+    theHistoManager->CloseFile();
+    G4cout << "\n----> Histogram Tree is saved in " << fFileName[1] << G4endl;
+
+    delete G4AnalysisManager::Instance();
+    fFactoryOn = false;
+  }
+}
