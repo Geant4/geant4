@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+9th November 2013   Andrea Dotti     (config-V09-06-14)
+- remove changes introduced in tag config-V09-05-11 because give
+  errors in Mac OS X 10.7 for option --stdlib=libstdc++ (unknown
+  option)
+
 8th November 2013   Gabriele Cosmo   (config-V09-06-13)
 - binmake.gmk: removed 'high_energy' and 'low_energy' hadronic modules;
   replaced 'lll_fission' with 'fission'.
