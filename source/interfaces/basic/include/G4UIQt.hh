@@ -78,7 +78,7 @@ class QToolBar;
 class G4QTabWidget : public QTabWidget {
 public :
   G4QTabWidget();
-  G4QTabWidget(QSplitter*&, int sizeX, int sizeY);
+  G4QTabWidget(QWidget*&, int sizeX, int sizeY);
   void paintEvent  ( QPaintEvent * event );
   inline void setTabSelected(bool a) { fTabSelected = a; };
   inline void setLastTabCreated(int a) { fLastCreated = a; };
@@ -229,6 +229,7 @@ private:
   QSplitter* fRightSplitterWidget;
   QWidget* fLeftSplitterWidget;
   QSplitter * fHelpVSplitter;
+  QWidget* fViewerTabHandleWidget;
 
   QToolBar *fToolbarApp;
   QToolBar *fToolbarUser;

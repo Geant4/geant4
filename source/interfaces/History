@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+9th October 2013  Laurent Garnier (interfaces-V09-06-13)
+- G4UIQt : Fix a shadowing variable
+
+8th October 2013  Laurent Garnier (interfaces-V09-06-12)
+- G4UIQt :
+ o Fix JIRA issue DEV-10 : "When adding a button with "/vis/viewer/set/style",
+   the parameters are not proposed."
+
+8th October 2013  Laurent Garnier (interfaces-V09-06-11)
+- G4UIQt :
+ o Fix JIRA issue DEV-67 : remove warning when adding a new command button
+ o Fix a possible problem on widgets parent.
+
+7th October 2013  Laurent Garnier
+- G4UIQt : Fix JIRA issue DEV-94 : Crash when closing the last tab
+
 6th October 2013  Laurent Garnier (interfaces-V09-06-10)
 - G4UIQt : Fix compilation error on X11.
 

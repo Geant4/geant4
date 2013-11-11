@@ -131,6 +131,7 @@ G4UIQt::G4UIQt (
 ,fRightSplitterWidget(NULL)
 ,fLeftSplitterWidget(NULL)
 ,fHelpVSplitter(NULL)
+,fViewerTabHandleWidget(NULL)
 ,fToolbarApp(NULL)
 ,fToolbarUser(NULL)
 ,fStringSeparator("__$$$@%%###__")
@@ -421,16 +422,16 @@ QWidget* G4UIQt::CreateRightSplitterWidget(){
   // fill right splitter
     
   //  Create an widget to handle OGL widget and label
-  QWidget* handleWidget = new QWidget();
-  handleWidget->setLayout(new QVBoxLayout());
+  fViewerTabHandleWidget = new QWidget();
+  fViewerTabHandleWidget->setLayout(new QVBoxLayout());
 
-  handleWidget->layout()->addWidget(fEmptyViewerTabLabel);
+  fViewerTabHandleWidget->layout()->addWidget(fEmptyViewerTabLabel);
 
-  fRightSplitterWidget->addWidget(handleWidget);
+  fRightSplitterWidget->addWidget(fViewerTabHandleWidget);
   fRightSplitterWidget->addWidget(CreateCoutTBWidget());
   fRightSplitterWidget->addWidget(commandLineWidget);
 
-  handleWidget->setMinimumSize(40,40);
+  fViewerTabHandleWidget->setMinimumSize(40,40);
   
   commandLineWidget->setMinimumSize(50,50);
 
@@ -464,7 +465,7 @@ bool G4UIQt::AddTabWidget(
 {
   
   if (fViewerTabWidget == NULL) {
-    fViewerTabWidget = new G4QTabWidget(fRightSplitterWidget, sizeX, sizeY);
+    fViewerTabWidget = new G4QTabWidget(fViewerTabHandleWidget, sizeX, sizeY);
     #if QT_VERSION < 0x040500
 #else
     fViewerTabWidget->setTabsClosable (true); 
@@ -491,13 +492,14 @@ bool G4UIQt::AddTabWidget(
   // L.Garnier 26/05/2010 : not exactly the same in qt3. Could cause some
   // troubles
   if (fEmptyViewerTabLabel != NULL) {
-    int index = fRightSplitterWidget->widget(0)->layout()->indexOf(fEmptyViewerTabLabel);
+    int index = -1;
+    index = fViewerTabHandleWidget->layout()->indexOf(fEmptyViewerTabLabel);
     if ( index != -1) {
-      fRightSplitterWidget->widget(0)->layout()->removeWidget(fEmptyViewerTabLabel);
+      fViewerTabHandleWidget->layout()->removeWidget(fEmptyViewerTabLabel);
       delete fEmptyViewerTabLabel;
       fEmptyViewerTabLabel = NULL;
       
-      fRightSplitterWidget->widget(0)->layout()->addWidget(fViewerTabWidget);
+      fViewerTabHandleWidget->layout()->addWidget(fViewerTabWidget);
     }
   }
 
@@ -805,12 +807,12 @@ void G4UIQt::AddButton (
     cmd.erase(cmdEndPos);
   }
   
-  if(treeTop->FindPath(aCommand) == NULL) {
+  if(treeTop->FindPath(cmd) == NULL) {
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
     G4int verbose = UImanager->GetVerboseLevel();
     
     if (verbose >= 2) {
-      G4cout << "Warning: command '"<< aCommand <<"' does not exist, please define it before using it."<< G4endl;
+      G4cout << "Warning: command '"<< cmd <<"' does not exist, please define it before using it."<< G4endl;
     }
   }
 
@@ -2411,7 +2413,7 @@ G4bool G4UIQt::IsGUICommand(
       if (QString(QChar(param->GetParameterType())) == "i") {
         return true;
       }
-      if (QString(QChar(param->GetParameterType())) == "s" && (!param->GetParameterCandidates().isNull())) {
+      if (QString(QChar(param->GetParameterType())) == "s") {
         return true;
       }
     }
@@ -3466,10 +3468,10 @@ void G4UIQt::SetIconOrthoSelected() {
 
 
 G4QTabWidget::G4QTabWidget(
-QSplitter*& split,
+QWidget*& aParent,
 int sizeX,
 int sizeY
-):QTabWidget(split)
+):QTabWidget(aParent)
  ,fTabSelected(false)
  ,fLastCreated(-1)
 ,fPreferedSizeX(sizeX+6)  // margin left+right
@@ -3500,22 +3502,24 @@ void G4UIQt::TabCloseCallback(int a){
 #else
   if (fViewerTabWidget == NULL) return;
   
+  // get the address of the widget
   QWidget* temp = fViewerTabWidget->widget(a);
+  // remove the tab
   fViewerTabWidget->removeTab (a);
 
+  // delete the widget
   delete temp;
 
+  // if there is no more tab inside the tab widget
   if (fViewerTabWidget->count() == 0) {
     if (fEmptyViewerTabLabel == NULL) {
       fEmptyViewerTabLabel = new QLabel("If you want to have a Viewer, please use /vis/open commands.");
     }
-
-  fRightSplitterWidget->widget(0)->layout()->removeWidget(fViewerTabWidget);
-  delete fViewerTabWidget;
-  fViewerTabWidget = NULL;
-      
-  fRightSplitterWidget->widget(0)->layout()->addWidget(fEmptyViewerTabLabel);
-
+    
+    fViewerTabHandleWidget->layout()->removeWidget(fViewerTabWidget);
+    
+    fViewerTabHandleWidget->layout()->addWidget(fEmptyViewerTabLabel);
+    
     fEmptyViewerTabLabel->show();
   }
 #endif
