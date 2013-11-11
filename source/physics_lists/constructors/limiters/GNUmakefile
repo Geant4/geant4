@@ -46,6 +46,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/decay/include \
 	    -I$(G4BASE)/processes/electromagnetic/utils/include \
             -I$(G4BASE)/processes/cuts/include \
+            -I$(G4BASE)/processes/biasing/generic/include \
             -I$(G4BASE)/processes/hadronic/cross_sections/include \
             -I$(G4BASE)/processes/hadronic/stopping/include \
             -I$(G4BASE)/processes/hadronic/management/include \
