@@ -39,12 +39,15 @@
 #include "G4ios.hh"
 #include "G4Run.hh"
 
-
-G4HumanPhantomRunAction::G4HumanPhantomRunAction(G4HumanPhantomAnalysisManager* analysis)
-:analysisMan(analysis)
-{ 
- 
-}
+#ifdef ANALYSIS_USE
+  G4HumanPhantomRunAction::G4HumanPhantomRunAction(G4HumanPhantomAnalysisManager* analysis)
+  :analysisMan(analysis)
+  { 
+  }
+#else 
+ G4HumanPhantomRunAction::G4HumanPhantomRunAction(G4HumanPhantomAnalysisManager*)
+ {}
+#endif 
 
 G4HumanPhantomRunAction::~G4HumanPhantomRunAction()
 {

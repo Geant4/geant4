@@ -50,8 +50,9 @@ private:
     std::map<std::string,G4double> energyTotal;
     G4String bodypartName;
 
+#ifdef ANALYSIS_USE
     G4HumanPhantomAnalysisManager* analysisMan;
-
+#endif
 };
 #endif
 
