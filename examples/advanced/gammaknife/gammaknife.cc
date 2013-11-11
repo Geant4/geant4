@@ -27,16 +27,15 @@
 //                 GEANT4 - GAMMAKNIFE example
 // ----------------------------------------------------------------------------
 // AUTHORS:
-// G. Cuttone (a), J. Pipek (b) F.Romano* (a,c), M.G.Sabini (d)
+// G. Cuttone (a), J. Pipek (b) F.Romano* (a), M.G.Sabini (c)
 // 
 // PAST AUTHORS:
-// G.A.P. Cirrone (a), G.Russo (e), M.Russo (a)
+// G.A.P. Cirrone (a), G.Russo (d), M.Russo (a)
 //
 // (a) Laboratori Nazionali del Sud - INFN, Catania, Italy
 // (b) Faculty of Nuclear Sciences and Physical Engineering, Czech Technical University, Czech Republic
-// (c) Centro Studi e Ricerche e Museo Storico della Fisica E.Fermi, Roma, Italy
-// (d) Dipartimento di Immagini, Ospedale Cannizzaro, Catania, Italy
-// (e) Fondazione Istituto San Raffaele G.Giglio, Cefalù (Palermo), Italy
+// (c) Dipartimento di Immagini, Ospedale Cannizzaro, Catania, Italy
+// (d) Fondazione Istituto San Raffaele G.Giglio, Cefalù (Palermo), Italy
 //
 //
 // *Corresponding author, email to francesco.romano@lns.infn.it

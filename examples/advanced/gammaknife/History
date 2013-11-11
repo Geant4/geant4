@@ -7,6 +7,9 @@ francesco.romano@lns.infn.it
              History file of the GammaKnife application
          ====================================================
 
+10.11.2013 F.Romano       Tag: gammaknife-V09-06-03
+	   - Revised README file
+
 08.11.2013 L.Pandola       Tag: gammaknife-V09-06-02
 	   - Restored G4RunManager::GetRunManager()->BeamOn(n_event) 
              after the fix from the run category.

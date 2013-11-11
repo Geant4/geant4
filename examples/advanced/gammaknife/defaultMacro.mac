@@ -51,6 +51,9 @@
 #/gammaknife/loadAngles MachineAngle.in
 #/gammaknife/beamOn 10
 
+# To change the number of threads in multi-threading mode
+#/run/numberOfThreads <nThread>
+
 /run/beamOn 100
 
 /score/dumpQuantityToFile boxMesh_1 eDep eDep_scorer.out

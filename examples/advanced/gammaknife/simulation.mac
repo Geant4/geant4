@@ -32,6 +32,9 @@
 
 /run/setCut 0.1 mm
 
+# To change the number of threads in multi-threading mode
+#/run/numberOfThreads <nThread>
+
 /calorimeter/helmetSize 14
 
 /gammaknife/loadAngles MachineAngle.in
