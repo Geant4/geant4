@@ -167,6 +167,26 @@ GEANT4_DEFINE_MODULE(NAME G4had_neu_hp
     G4NeutronHPBGGNucleonInelasticXS.hh
     G4NeutronHPManager.hh
     G4NeutronHPReactionWhiteBoard.hh
+### Fission Fragment Generator - start
+	G4ArrayOps.hh
+	G4ENDFTapeRead.hh
+	G4ENDFYieldDataContainer.hh
+	G4FFGDebuggingMacros.hh
+	G4FFGDefaultValues.hh
+	G4FFGEnumerations.hh
+	G4FFGVerboseMacros.hh
+	G4FissionFragmentGenerator.hh
+	G4FissionProductYieldDist.hh
+	G4FPYBiasedLightFragmentDist.hh
+	G4FPYNormalFragmentDist.hh
+	G4FPYNubarValues.hh
+	G4FPYSamplingOps.hh
+	G4FPYTreeStructures.hh
+	G4ShiftedGaussian.hh
+	G4TableTemplate.hh
+	G4WendtFissionFragmentGenerator.hh
+	G4WattFissionSpectrumValues.hh
+### FissionFragment Generator - end
   SOURCES
     G4NeutronHPIsoData.cc
     G4InterpolationManager.cc
@@ -272,7 +292,20 @@ GEANT4_DEFINE_MODULE(NAME G4had_neu_hp
     G4NeutronHPWattSpectrum.cc
     G4NeutronHPBGGNucleonInelasticXS.cc
     G4NeutronHPManager.cc
-    G4NeutronHPReasctionWhiteBoard.cc
+    G4NeutronHPReactionWhiteBoard.cc
+### Fission Fragment Generator - start
+	G4ENDFTapeRead.cc
+	G4ENDFYieldDataContainer.cc
+	G4FFGDebuggingMacros.cc
+	G4FFGVerboseMacros.cc
+	G4FissionFragmentGenerator.cc
+	G4FissionProductYieldDist.cc
+	G4FPYBiasedLightFragmentDist.cc
+	G4FPYNormalFragmentDist.cc
+	G4FPYSamplingOps.cc
+	G4ShiftedGaussian.cc
+	G4WendtFissionFragmentGenerator.cc
+### Fission Fragment Generator - end
   GRANULAR_DEPENDENCIES
     G4baryons
     G4bosons

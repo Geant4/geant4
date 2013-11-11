@@ -35,7 +35,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/particles/hadrons/mesons/include \
             -I$(G4BASE)/particles/hadrons/barions/include \
             -I$(G4BASE)/particles/hadrons/ions/include \
-            -I$(G4BASE)/materials/include
+            -I$(G4BASE)/materials/include \
+            -I$(G4BASE)/intercoms/include 
            
 include $(G4INSTALL)/config/common.gmk
 

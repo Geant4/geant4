@@ -41,6 +41,7 @@
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
+#include "G4NeutronHPManager.hh"
 
 G4NeutronHPInelasticData::G4NeutronHPInelasticData()
 :G4VCrossSectionDataSet("NeutronHPInelasticXS")

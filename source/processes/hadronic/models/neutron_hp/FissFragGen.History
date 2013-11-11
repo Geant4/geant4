@@ -1,0 +1,963 @@
+
+	 ---------------- g4svn ---------------- 
+
+Command: svn copy --non-interactive . svn+ssh://bwendt@svn.cern.ch/reps/geant4/branches/geant4/source/processes/hadronic/models/neutron_hp/_symbols/FissFragGen -m "This message was manufactured by g4svn to create branch FissFragGen"
+
+Committed revision 69414.
+
+Branch created.
+
+===========
+May 6, 2013
+===========
+(69493) Moved Fission Fragment Generator files into include/ and src/ directories.
+Ran command: svn merge -r 69414:HEAD svn+ssh://svn.cern.ch/reps/geant4/trunk/geant4/source/processes/hadronic/models/neutron_hp .
+    No changes made, revision 69414 remains the most recent copy from trunk.
+
+============
+May 16, 2013
+============
+Ran command: svn merge -r 69414:HEAD svn+ssh://bwendt@svn.cern.ch/reps/geant4/trunk/geant4/source/processes/hadronic/models/neutron_hp .
+Committed changes:
+	svn commit -m "Comming results of merge from trunk"
+	Sending        .
+	Sending        FissFragGen.History
+	Deleting       FissFragGen.History~
+	Sending        History
+	Sending        include/G4NeutronHPCapture.hh
+	Sending        include/G4NeutronHPCaptureData.hh
+	Sending        include/G4NeutronHPElastic.hh
+	Sending        include/G4NeutronHPElasticData.hh
+	Sending        include/G4NeutronHPFission.hh
+	Sending        include/G4NeutronHPFissionData.hh
+	Sending        include/G4NeutronHPInelastic.hh
+	Sending        include/G4NeutronHPInelasticData.hh
+	Sending        src/G4NeutronHPCapture.cc
+	Sending        src/G4NeutronHPCaptureData.cc
+	Sending        src/G4NeutronHPElastic.cc
+	Sending        src/G4NeutronHPElasticData.cc
+	Sending        src/G4NeutronHPFission.cc
+	Sending        src/G4NeutronHPFissionData.cc
+	Sending        src/G4NeutronHPInelastic.cc
+	Sending        src/G4NeutronHPInelasticData.cc
+	Transmitting file data ..................
+	Committed revision 69884.
+	
+============
+May 17, 2013
+============
+Compile errors in neutron_hp revolved around non-existant "int GetVerbosity(void)" and "void SetVerbosity(int)" in "G4NeutronHPManager.hh"
+	Resolved:	Added missing methods to "G4HPNeutronManager.hh"
+				Added "G4HPNeutronManager.hh" include to:
+					G4NeutronHPInelasticData.cc
+					G4NeutronHPElasticData.cc
+					G4NeutronHPCaptureData.cc
+					G4NeutronHPFissionData.cc
+
+============
+May 21, 2013
+============
+Removed G4FissionFragment, will be replaced by pre-existing G4DynamicParticle
+Removed G4FissionContainer, will be replaced by pre-existing G4HadFinalState
+	Affected classes: G4FissionFragmentGenerator, G4FissionProductYieldDist
+
+============
+May 22, 2013
+============
+Altered intent to use G4DynamicParticleVector instead of G4HadFinalState
+Completed migration to existing Geant4 data types
+Resolved compile errors in G4HPNeutronManager class
+Committed changes:
+	svn ci -m "Finished migration to existing data types. Comitting results of merge from trunk"
+	Sending        .
+	Sending        FissFragGen.History
+	Sending        History
+	Sending        include/G4ArrayOps.hh
+	Sending        include/G4FFGDebuggingMacros.hh
+	Sending        include/G4FFGDefaultValues.hh
+	Deleting       include/G4FissionContainer.hh
+	Deleting       include/G4FissionFragment.hh
+	Sending        include/G4FissionFragmentGenerator.hh
+	Sending        include/G4FissionProductYieldDist.hh
+	Sending        include/G4NeutronHPManager.hh
+	Sending        sources.cmake
+	Sending        src/G4FFGUserPrimaryGeneratorAction.cc
+	Sending        src/G4FPYSamplingOps.cc
+	Deleting       src/G4FissionContainer.cc
+	Deleting       src/G4FissionFragment.cc
+	Sending        src/G4FissionFragmentGenerator.cc
+	Sending        src/G4FissionProductYieldDist.cc
+	Sending        src/G4NeutronHPCaptureData.cc
+	Sending        src/G4NeutronHPElasticData.cc
+	Sending        src/G4NeutronHPFissionData.cc
+	Sending        src/G4NeutronHPInelasticData.cc
+	Sending        src/G4NeutronHPManager.cc
+	Sending        src/G4ShiftedGaussian.cc
+	Transmitting file data ...................
+	Committed revision 70063.
+	
+============
+June 21, 2013
+============
+Ran command: svn merge -r 70063:HEAD svn+ssh://bwendt@svn.cern.ch/reps/geant4/trunk/geant4/source/processes/hadronic/models/neutron_hp .
+Committed changes:
+    svn ci -m "Committing results of merge from trunk"
+    Sending        .
+    Sending        CMakeLists.txt
+    Sending        GNUmakefile
+    Sending        History
+    Sending        include
+    Sending        include/G4ArrayOps.hh
+    Sending        include/G4ENDFTapeRead.hh
+    Sending        include/G4FFGDebuggingMacros.hh
+    Sending        include/G4FFGDefaultValues.hh
+    Sending        include/G4FFGEnumerations.hh
+    Sending        include/G4FFGUPGAMessenger.hh
+    Sending        include/G4FFGUserPrimaryGeneratorAction.hh
+    Sending        include/G4FFGVerboseMacros.hh
+    Sending        include/G4FPYBiasedLightFragmentDist.hh
+    Sending        include/G4FPYNormalFragmentDist.hh
+    Sending        include/G4FPYNubarValues.hh
+    Sending        include/G4FPYSamplingOps.hh
+    Sending        include/G4FPYTreeStructures.hh
+    Sending        include/G4FissionFragmentGenerator.hh
+    Sending        include/G4FissionProductYieldDist.hh
+    Sending        include/G4InterpolationIterator.hh
+    Sending        include/G4InterpolationManager.hh
+    Sending        include/G4InterpolationScheme.hh
+    Sending        include/G4NeutronHP2AInelasticFS.hh
+    Sending        include/G4NeutronHP2N2AInelasticFS.hh
+    Sending        include/G4NeutronHP2NAInelasticFS.hh
+    Sending        include/G4NeutronHP2NDInelasticFS.hh
+    Sending        include/G4NeutronHP2NInelasticFS.hh
+    Sending        include/G4NeutronHP2NPInelasticFS.hh
+    Sending        include/G4NeutronHP2PInelasticFS.hh
+    Sending        include/G4NeutronHP3AInelasticFS.hh
+    Sending        include/G4NeutronHP3NAInelasticFS.hh
+    Sending        include/G4NeutronHP3NInelasticFS.hh
+    Sending        include/G4NeutronHP3NPInelasticFS.hh
+    Sending        include/G4NeutronHP4NInelasticFS.hh
+    Sending        include/G4NeutronHPAInelasticFS.hh
+    Sending        include/G4NeutronHPAngular.hh
+    Sending        include/G4NeutronHPAngularP.hh
+    Sending        include/G4NeutronHPArbitaryTab.hh
+    Sending        include/G4NeutronHPBGGNucleonInelasticXS.hh
+    Sending        include/G4NeutronHPCapture.hh
+    Sending        include/G4NeutronHPCaptureData.hh
+    Sending        include/G4NeutronHPCaptureFS.hh
+    Sending        include/G4NeutronHPChannel.hh
+    Sending        include/G4NeutronHPChannelList.hh
+    Sending        include/G4NeutronHPContAngularPar.hh
+    Sending        include/G4NeutronHPContEnergyAngular.hh
+    Sending        include/G4NeutronHPD2AInelasticFS.hh
+    Sending        include/G4NeutronHPDAInelasticFS.hh
+    Sending        include/G4NeutronHPDInelasticFS.hh
+    Sending        include/G4NeutronHPData.hh
+    Sending        include/G4NeutronHPDataPoint.hh
+    Sending        include/G4NeutronHPDataUsed.hh
+    Sending        include/G4NeutronHPDeExGammas.hh
+    Sending        include/G4NeutronHPDiscreteTwoBody.hh
+    Sending        include/G4NeutronHPElastic.hh
+    Sending        include/G4NeutronHPElasticData.hh
+    Sending        include/G4NeutronHPElasticFS.hh
+    Sending        include/G4NeutronHPElementData.hh
+    Sending        include/G4NeutronHPEnAngCorrelation.hh
+    Sending        include/G4NeutronHPEnergyDistribution.hh
+    Sending        include/G4NeutronHPEvapSpectrum.hh
+    Sending        include/G4NeutronHPFCFissionFS.hh
+    Sending        include/G4NeutronHPFFFissionFS.hh
+    Sending        include/G4NeutronHPFSFissionFS.hh
+    Sending        include/G4NeutronHPFastLegendre.hh
+    Sending        include/G4NeutronHPField.hh
+    Sending        include/G4NeutronHPFieldPoint.hh
+    Sending        include/G4NeutronHPFinalState.hh
+    Sending        include/G4NeutronHPFission.hh
+    Sending        include/G4NeutronHPFissionBaseFS.hh
+    Sending        include/G4NeutronHPFissionData.hh
+    Sending        include/G4NeutronHPFissionERelease.hh
+    Sending        include/G4NeutronHPFissionFS.hh
+    Sending        include/G4NeutronHPFissionSpectrum.hh
+    Sending        include/G4NeutronHPGamma.hh
+    Sending        include/G4NeutronHPHash.hh
+    Sending        include/G4NeutronHPHe3InelasticFS.hh
+    Sending        include/G4NeutronHPInelastic.hh
+    Sending        include/G4NeutronHPInelasticBaseFS.hh
+    Sending        include/G4NeutronHPInelasticCompFS.hh
+    Sending        include/G4NeutronHPInelasticData.hh
+    Sending        include/G4NeutronHPInterpolator.hh
+    Sending        include/G4NeutronHPIsoData.hh
+    Sending        include/G4NeutronHPIsotropic.hh
+    Sending        include/G4NeutronHPJENDLHEData.hh
+    Sending        include/G4NeutronHPJENDLHEElasticData.hh
+    Sending        include/G4NeutronHPJENDLHEInelasticData.hh
+    Sending        include/G4NeutronHPKallbachMannSyst.hh
+    Sending        include/G4NeutronHPLCFissionFS.hh
+    Sending        include/G4NeutronHPLabAngularEnergy.hh
+    Sending        include/G4NeutronHPLegendreStore.hh
+    Sending        include/G4NeutronHPLegendreTable.hh
+    Sending        include/G4NeutronHPLevel.hh
+    Sending        include/G4NeutronHPList.hh
+    Sending        include/G4NeutronHPMadlandNixSpectrum.hh
+    Sending        include/G4NeutronHPManager.hh
+    Sending        include/G4NeutronHPN2AInelasticFS.hh
+    Sending        include/G4NeutronHPN2PInelasticFS.hh
+    Sending        include/G4NeutronHPN3AInelasticFS.hh
+    Sending        include/G4NeutronHPNAInelasticFS.hh
+    Sending        include/G4NeutronHPNBodyPhaseSpace.hh
+    Sending        include/G4NeutronHPND2AInelasticFS.hh
+    Sending        include/G4NeutronHPNDInelasticFS.hh
+	Sending        include/G4NeutronHPNHe3InelasticFS.hh
+	Sending        include/G4NeutronHPNInelasticFS.hh
+	Sending        include/G4NeutronHPNPAInelasticFS.hh
+	Sending        include/G4NeutronHPNPInelasticFS.hh
+	Sending        include/G4NeutronHPNT2AInelasticFS.hh
+	Sending        include/G4NeutronHPNTInelasticFS.hh
+	Sending        include/G4NeutronHPNXInelasticFS.hh
+	Sending        include/G4NeutronHPNames.hh
+	Sending        include/G4NeutronHPNeutronYield.hh
+	Sending        include/G4NeutronHPPAInelasticFS.hh
+	Sending        include/G4NeutronHPPDInelasticFS.hh
+	Sending        include/G4NeutronHPPInelasticFS.hh
+	Sending        include/G4NeutronHPPTInelasticFS.hh
+	Sending        include/G4NeutronHPPartial.hh
+	Sending        include/G4NeutronHPPhotonDist.hh
+	Sending        include/G4NeutronHPPhotonXSection.hh
+	Sending        include/G4NeutronHPPolynomExpansion.hh
+	Sending        include/G4NeutronHPProduct.hh
+	Sending        include/G4NeutronHPReactionWhiteBoard.hh
+	Sending        include/G4NeutronHPSCFissionFS.hh
+	Sending        include/G4NeutronHPSimpleEvapSpectrum.hh
+	Sending        include/G4NeutronHPT2AInelasticFS.hh
+	Sending        include/G4NeutronHPTCFissionFS.hh
+	Sending        include/G4NeutronHPTInelasticFS.hh
+	Sending        include/G4NeutronHPThermalBoost.hh
+	Sending        include/G4NeutronHPThermalScattering.hh
+	Sending        include/G4NeutronHPThermalScatteringData.hh
+	Sending        include/G4NeutronHPThermalScatteringNames.hh
+	Sending        include/G4NeutronHPVector.hh
+	Sending        include/G4NeutronHPWattSpectrum.hh
+	Sending        include/G4ShiftedGaussian.hh
+	Sending        include/G4TableTemplate.hh
+	Sending        include/G4VNeutronHPEDis.hh
+	Sending        include/G4VNeutronHPEnergyAngular.hh
+	Sending        include/G4WattFissionSpectrumValues.hh
+	Sending        sources.cmake
+	Sending        src
+	Sending        src/G4NeutronHPCaptureFS.cc
+	Sending        src/G4NeutronHPFFFissionFS.cc
+	Sending        src/G4NeutronHPThermalScattering.cc
+	Sending        src/G4NeutronHPThermalScatteringData.cc
+	Sending        src/G4NeutronHPThermalScatteringNames.cc
+	Sending        test
+	Transmitting file data ..........
+	Committed revision 71740.
+
+Created hook in G4NeutronHPChannel
+Added class: G4WendtFissionFragmentGenerator
+Committed changes:
+    svn ci -m "Added hook into G4NeutronHPChannel"
+    Sending        FissFragGen.History
+    Sending        include/G4ENDFYieldDataContainer.hh
+    Sending        include/G4FissionFragmentGenerator.hh
+    Adding         include/G4WendtFissionFragmentGenerator.hh
+    Sending        sources.cmake
+    Sending        src/G4FissionFragmentGenerator.cc
+    Sending        src/G4NeutronHPChannel.cc
+    Adding         src/G4WendtFissionFragmentGenerator.cc
+    Transmitting file data ........
+    Committed revision 71768.
+    
+============
+June 28, 2013
+============
+Ran command: svn merge -r 71740:HEAD svn+ssh://bwendt@svn.cern.ch/reps/geant4/trunk/geant4/source/processes/hadronic/models/neutron_hp .
+Committed changes:
+    svn ci -m "Committing results of merge from trunk"
+    Sending        .
+    Sending        CMakeLists.txt
+    Sending        FissFragGen.History
+    Sending        GNUmakefile
+    Sending        History
+    Sending        include
+    Sending        include/G4ArrayOps.hh
+    Sending        include/G4ENDFTapeRead.hh
+    Sending        include/G4FFGDebuggingMacros.hh
+    Sending        include/G4FFGDefaultValues.hh
+    Sending        include/G4FFGEnumerations.hh
+    Sending        include/G4FFGUPGAMessenger.hh
+    Sending        include/G4FFGUserPrimaryGeneratorAction.hh
+    Sending        include/G4FFGVerboseMacros.hh
+    Sending        include/G4FPYBiasedLightFragmentDist.hh
+    Sending        include/G4FPYNormalFragmentDist.hh
+    Sending        include/G4FPYNubarValues.hh
+    Sending        include/G4FPYSamplingOps.hh
+    Sending        include/G4FPYTreeStructures.hh
+    Sending        include/G4FissionFragmentGenerator.hh
+    Sending        include/G4FissionProductYieldDist.hh
+    Sending        include/G4InterpolationIterator.hh
+    Sending        include/G4InterpolationManager.hh
+    Sending        include/G4InterpolationScheme.hh
+    Sending        include/G4NeutronHP2AInelasticFS.hh
+    Sending        include/G4NeutronHP2N2AInelasticFS.hh
+    Sending        include/G4NeutronHP2NAInelasticFS.hh
+    Sending        include/G4NeutronHP2NDInelasticFS.hh
+    Sending        include/G4NeutronHP2NInelasticFS.hh
+    Sending        include/G4NeutronHP2NPInelasticFS.hh
+    Sending        include/G4NeutronHP2PInelasticFS.hh
+    Sending        include/G4NeutronHP3AInelasticFS.hh
+    Sending        include/G4NeutronHP3NAInelasticFS.hh
+    Sending        include/G4NeutronHP3NInelasticFS.hh
+    Sending        include/G4NeutronHP3NPInelasticFS.hh
+    Sending        include/G4NeutronHP4NInelasticFS.hh
+    Sending        include/G4NeutronHPAInelasticFS.hh
+    Sending        include/G4NeutronHPAngular.hh
+    Sending        include/G4NeutronHPAngularP.hh
+    Sending        include/G4NeutronHPArbitaryTab.hh
+    Sending        include/G4NeutronHPBGGNucleonInelasticXS.hh
+    Sending        include/G4NeutronHPCapture.hh
+    Sending        include/G4NeutronHPCaptureData.hh
+    Sending        include/G4NeutronHPCaptureFS.hh
+    Sending        include/G4NeutronHPChannel.hh
+    Sending        include/G4NeutronHPChannelList.hh
+    Sending        include/G4NeutronHPContAngularPar.hh
+    Sending        include/G4NeutronHPContEnergyAngular.hh
+    Sending        include/G4NeutronHPD2AInelasticFS.hh
+    Sending        include/G4NeutronHPDAInelasticFS.hh
+    Sending        include/G4NeutronHPDInelasticFS.hh
+    Sending        include/G4NeutronHPData.hh
+    Sending        include/G4NeutronHPDataPoint.hh
+    Sending        include/G4NeutronHPDataUsed.hh
+    Sending        include/G4NeutronHPDeExGammas.hh
+    Sending        include/G4NeutronHPDiscreteTwoBody.hh
+    Sending        include/G4NeutronHPElastic.hh
+    Sending        include/G4NeutronHPElasticData.hh
+    Sending        include/G4NeutronHPElasticFS.hh
+    Sending        include/G4NeutronHPElementData.hh
+    Sending        include/G4NeutronHPEnAngCorrelation.hh
+    Sending        include/G4NeutronHPEnergyDistribution.hh
+    Sending        include/G4NeutronHPEvapSpectrum.hh
+    Sending        include/G4NeutronHPFCFissionFS.hh
+    Sending        include/G4NeutronHPFFFissionFS.hh
+    Sending        include/G4NeutronHPFSFissionFS.hh
+    Sending        include/G4NeutronHPFastLegendre.hh
+    Sending        include/G4NeutronHPField.hh
+    Sending        include/G4NeutronHPFieldPoint.hh
+    Sending        include/G4NeutronHPFinalState.hh
+    Sending        include/G4NeutronHPFission.hh
+    Sending        include/G4NeutronHPFissionBaseFS.hh
+    Sending        include/G4NeutronHPFissionData.hh
+    Sending        include/G4NeutronHPFissionERelease.hh
+    Sending        include/G4NeutronHPFissionFS.hh
+    Sending        include/G4NeutronHPFissionSpectrum.hh
+    Sending        include/G4NeutronHPGamma.hh
+    Sending        include/G4NeutronHPHash.hh
+    Sending        include/G4NeutronHPHe3InelasticFS.hh
+    Sending        include/G4NeutronHPInelastic.hh
+    Sending        include/G4NeutronHPInelasticBaseFS.hh
+    Sending        include/G4NeutronHPInelasticCompFS.hh
+    Sending        include/G4NeutronHPInelasticData.hh
+    Sending        include/G4NeutronHPInterpolator.hh
+    Sending        include/G4NeutronHPIsoData.hh
+    Sending        include/G4NeutronHPIsotropic.hh
+    Sending        include/G4NeutronHPJENDLHEData.hh
+    Sending        include/G4NeutronHPJENDLHEElasticData.hh
+    Sending        include/G4NeutronHPJENDLHEInelasticData.hh
+    Sending        include/G4NeutronHPKallbachMannSyst.hh
+    Sending        include/G4NeutronHPLCFissionFS.hh
+    Sending        include/G4NeutronHPLabAngularEnergy.hh
+    Sending        include/G4NeutronHPLegendreStore.hh
+    Sending        include/G4NeutronHPLegendreTable.hh
+    Sending        include/G4NeutronHPLevel.hh
+    Sending        include/G4NeutronHPList.hh
+    Sending        include/G4NeutronHPMadlandNixSpectrum.hh
+    Sending        include/G4NeutronHPManager.hh
+    Sending        include/G4NeutronHPN2AInelasticFS.hh
+    Sending        include/G4NeutronHPN2PInelasticFS.hh
+    Sending        include/G4NeutronHPN3AInelasticFS.hh
+    Sending        include/G4NeutronHPNAInelasticFS.hh
+    Sending        include/G4NeutronHPNBodyPhaseSpace.hh
+    Sending        include/G4NeutronHPND2AInelasticFS.hh
+    Sending        include/G4NeutronHPNDInelasticFS.hh
+    Sending        include/G4NeutronHPNHe3InelasticFS.hh
+    Sending        include/G4NeutronHPNInelasticFS.hh
+    Sending        include/G4NeutronHPNPAInelasticFS.hh
+    Sending        include/G4NeutronHPNPInelasticFS.hh
+    Sending        include/G4NeutronHPNT2AInelasticFS.hh
+    Sending        include/G4NeutronHPNTInelasticFS.hh
+    Sending        include/G4NeutronHPNXInelasticFS.hh
+    Sending        include/G4NeutronHPNames.hh
+    Sending        include/G4NeutronHPNeutronYield.hh
+    Sending        include/G4NeutronHPPAInelasticFS.hh
+    Sending        include/G4NeutronHPPDInelasticFS.hh
+    Sending        include/G4NeutronHPPInelasticFS.hh
+    Sending        include/G4NeutronHPPTInelasticFS.hh
+    Sending        include/G4NeutronHPPartial.hh
+    Sending        include/G4NeutronHPPhotonDist.hh
+    Sending        include/G4NeutronHPPhotonXSection.hh
+    Sending        include/G4NeutronHPPolynomExpansion.hh
+    Sending        include/G4NeutronHPProduct.hh
+    Sending        include/G4NeutronHPReactionWhiteBoard.hh
+    Sending        include/G4NeutronHPSCFissionFS.hh
+    Sending        include/G4NeutronHPSimpleEvapSpectrum.hh
+    Sending        include/G4NeutronHPT2AInelasticFS.hh
+    Sending        include/G4NeutronHPTCFissionFS.hh
+    Sending        include/G4NeutronHPTInelasticFS.hh
+    Sending        include/G4NeutronHPThermalBoost.hh
+    Sending        include/G4NeutronHPThermalScattering.hh
+    Sending        include/G4NeutronHPThermalScatteringData.hh
+    Sending        include/G4NeutronHPThermalScatteringNames.hh
+    Sending        include/G4NeutronHPVector.hh
+    Sending        include/G4NeutronHPWattSpectrum.hh
+    Sending        include/G4ShiftedGaussian.hh
+    Sending        include/G4TableTemplate.hh
+    Sending        include/G4VNeutronHPEDis.hh
+    Sending        include/G4VNeutronHPEnergyAngular.hh
+    Sending        include/G4WattFissionSpectrumValues.hh
+    Sending        include/G4WendtFissionFragmentGenerator.hh
+    Sending        sources.cmake
+    Sending        src
+    Sending        src/G4NeutronHPChannel.cc
+    Sending        src/G4NeutronHPThermalScatteringData.cc
+    Sending        src/G4WendtFissionFragmentGenerator.cc
+    Sending        test
+    Transmitting file data .....
+    Committed revision 71944.
+    
+============
+July 11, 2013
+============
+Ran command: svn merge -r 71944:HEAD svn+ssh://bwendt@svn.cern.ch/reps/geant4/trunk/geant4/source/processes/hadronic/models/neutron_hp .
+Committed changes:
+    svn ci -m "Committing current status of the G4FissFragGen Branch"
+    Sending        .
+    Sending        CMakeLists.txt
+    Sending        FissFragGen.History
+    Sending        GNUmakefile
+    Sending        History
+    Sending        include
+    Sending        include/G4ArrayOps.hh
+    Sending        include/G4ENDFTapeRead.hh
+    Sending        include/G4ENDFYieldDataContainer.hh
+    Sending        include/G4FFGDebuggingMacros.hh
+    Sending        include/G4FFGDefaultValues.hh
+    Sending        include/G4FFGEnumerations.hh
+    Sending        include/G4FFGUPGAMessenger.hh
+    Sending        include/G4FFGUserPrimaryGeneratorAction.hh
+    Sending        include/G4FFGVerboseMacros.hh
+    Sending        include/G4FPYBiasedLightFragmentDist.hh
+    Sending        include/G4FPYNormalFragmentDist.hh
+    Sending        include/G4FPYNubarValues.hh
+    Sending        include/G4FPYSamplingOps.hh
+    Sending        include/G4FPYTreeStructures.hh
+    Sending        include/G4FissionFragmentGenerator.hh
+    Sending        include/G4FissionProductYieldDist.hh
+    Sending        include/G4InterpolationIterator.hh
+    Sending        include/G4InterpolationManager.hh
+    Sending        include/G4InterpolationScheme.hh
+    Sending        include/G4NeutronHP2AInelasticFS.hh
+    Sending        include/G4NeutronHP2N2AInelasticFS.hh
+    Sending        include/G4NeutronHP2NAInelasticFS.hh
+    Sending        include/G4NeutronHP2NDInelasticFS.hh
+    Sending        include/G4NeutronHP2NInelasticFS.hh
+    Sending        include/G4NeutronHP2NPInelasticFS.hh
+    Sending        include/G4NeutronHP2PInelasticFS.hh
+    Sending        include/G4NeutronHP3AInelasticFS.hh
+    Sending        include/G4NeutronHP3NAInelasticFS.hh
+    Sending        include/G4NeutronHP3NInelasticFS.hh
+    Sending        include/G4NeutronHP3NPInelasticFS.hh
+    Sending        include/G4NeutronHP4NInelasticFS.hh
+    Sending        include/G4NeutronHPAInelasticFS.hh
+    Sending        include/G4NeutronHPAngular.hh
+    Sending        include/G4NeutronHPAngularP.hh
+    Sending        include/G4NeutronHPArbitaryTab.hh
+    Sending        include/G4NeutronHPBGGNucleonInelasticXS.hh
+    Sending        include/G4NeutronHPCapture.hh
+    Sending        include/G4NeutronHPCaptureData.hh
+    Sending        include/G4NeutronHPCaptureFS.hh
+    Sending        include/G4NeutronHPChannel.hh
+    Sending        include/G4NeutronHPChannelList.hh
+    Sending        include/G4NeutronHPContAngularPar.hh
+    Sending        include/G4NeutronHPContEnergyAngular.hh
+    Sending        include/G4NeutronHPD2AInelasticFS.hh
+    Sending        include/G4NeutronHPDAInelasticFS.hh
+    Sending        include/G4NeutronHPDInelasticFS.hh
+    Sending        include/G4NeutronHPData.hh
+    Sending        include/G4NeutronHPDataPoint.hh
+    Sending        include/G4NeutronHPDataUsed.hh
+    Sending        include/G4NeutronHPDeExGammas.hh
+    Sending        include/G4NeutronHPDiscreteTwoBody.hh
+    Sending        include/G4NeutronHPElastic.hh
+    Sending        include/G4NeutronHPElasticData.hh
+    Sending        include/G4NeutronHPElasticFS.hh
+    Sending        include/G4NeutronHPElementData.hh
+    Sending        include/G4NeutronHPEnAngCorrelation.hh
+    Sending        include/G4NeutronHPEnergyDistribution.hh
+    Sending        include/G4NeutronHPEvapSpectrum.hh
+    Sending        include/G4NeutronHPFCFissionFS.hh
+    Sending        include/G4NeutronHPFFFissionFS.hh
+    Sending        include/G4NeutronHPFSFissionFS.hh
+    Sending        include/G4NeutronHPFastLegendre.hh
+    Sending        include/G4NeutronHPField.hh
+    Sending        include/G4NeutronHPFieldPoint.hh
+    Sending        include/G4NeutronHPFinalState.hh
+    Sending        include/G4NeutronHPFission.hh
+    Sending        include/G4NeutronHPFissionBaseFS.hh
+    Sending        include/G4NeutronHPFissionData.hh
+    Sending        include/G4NeutronHPFissionERelease.hh
+    Sending        include/G4NeutronHPFissionFS.hh
+    Sending        include/G4NeutronHPFissionSpectrum.hh
+    Sending        include/G4NeutronHPGamma.hh
+    Sending        include/G4NeutronHPHash.hh
+    Sending        include/G4NeutronHPHe3InelasticFS.hh
+    Sending        include/G4NeutronHPInelastic.hh
+    Sending        include/G4NeutronHPInelasticBaseFS.hh
+    Sending        include/G4NeutronHPInelasticCompFS.hh
+    Sending        include/G4NeutronHPInelasticData.hh
+    Sending        include/G4NeutronHPInterpolator.hh
+    Sending        include/G4NeutronHPIsoData.hh
+    Sending        include/G4NeutronHPIsotropic.hh
+    Sending        include/G4NeutronHPJENDLHEData.hh
+    Sending        include/G4NeutronHPJENDLHEElasticData.hh
+    Sending        include/G4NeutronHPJENDLHEInelasticData.hh
+    Sending        include/G4NeutronHPKallbachMannSyst.hh
+    Sending        include/G4NeutronHPLCFissionFS.hh
+    Sending        include/G4NeutronHPLabAngularEnergy.hh
+    Sending        include/G4NeutronHPLegendreStore.hh
+    Sending        include/G4NeutronHPLegendreTable.hh
+    Sending        include/G4NeutronHPLevel.hh
+    Sending        include/G4NeutronHPList.hh
+    Sending        include/G4NeutronHPMadlandNixSpectrum.hh
+    Sending        include/G4NeutronHPManager.hh
+    Sending        include/G4NeutronHPN2AInelasticFS.hh
+    Sending        include/G4NeutronHPN2PInelasticFS.hh
+    Sending        include/G4NeutronHPN3AInelasticFS.hh
+    Sending        include/G4NeutronHPNAInelasticFS.hh
+    Sending        include/G4NeutronHPNBodyPhaseSpace.hh
+    Sending        include/G4NeutronHPND2AInelasticFS.hh
+    Sending        include/G4NeutronHPNDInelasticFS.hh
+    Sending        include/G4NeutronHPNHe3InelasticFS.hh
+    Sending        include/G4NeutronHPNInelasticFS.hh
+    Sending        include/G4NeutronHPNPAInelasticFS.hh
+    Sending        include/G4NeutronHPNPInelasticFS.hh
+    Sending        include/G4NeutronHPNT2AInelasticFS.hh
+    Sending        include/G4NeutronHPNTInelasticFS.hh
+    Sending        include/G4NeutronHPNXInelasticFS.hh
+    Sending        include/G4NeutronHPNames.hh
+    Sending        include/G4NeutronHPNeutronYield.hh
+    Sending        include/G4NeutronHPPAInelasticFS.hh
+    Sending        include/G4NeutronHPPDInelasticFS.hh
+    Sending        include/G4NeutronHPPInelasticFS.hh
+    Sending        include/G4NeutronHPPTInelasticFS.hh
+    Sending        include/G4NeutronHPPartial.hh
+    Sending        include/G4NeutronHPPhotonDist.hh
+    Sending        include/G4NeutronHPPhotonXSection.hh
+    Sending        include/G4NeutronHPPolynomExpansion.hh
+    Sending        include/G4NeutronHPProduct.hh
+    Sending        include/G4NeutronHPReactionWhiteBoard.hh
+    Sending        include/G4NeutronHPSCFissionFS.hh
+    Sending        include/G4NeutronHPSimpleEvapSpectrum.hh
+    Sending        include/G4NeutronHPT2AInelasticFS.hh
+    Sending        include/G4NeutronHPTCFissionFS.hh
+    Sending        include/G4NeutronHPTInelasticFS.hh
+    Sending        include/G4NeutronHPThermalBoost.hh
+    Sending        include/G4NeutronHPThermalScattering.hh
+    Sending        include/G4NeutronHPThermalScatteringData.hh
+    Sending        include/G4NeutronHPThermalScatteringNames.hh
+    Sending        include/G4NeutronHPVector.hh
+    Sending        include/G4NeutronHPWattSpectrum.hh
+    Sending        include/G4ShiftedGaussian.hh
+    Sending        include/G4TableTemplate.hh
+    Sending        include/G4VNeutronHPEDis.hh
+    Sending        include/G4VNeutronHPEnergyAngular.hh
+    Sending        include/G4WattFissionSpectrumValues.hh
+    Sending        include/G4WendtFissionFragmentGenerator.hh
+    Sending        sources.cmake
+    Sending        src
+    Sending        src/G4NeutronHPChannel.cc
+    Sending        src/G4WendtFissionFragmentGenerator.cc
+    Sending        test
+    Transmitting file data .....
+    Committed revision 72217.
+    
+============
+October 28, 2013
+============
+Ran command: svn merge -r 72217:HEAD svn+ssh://bwendt@svn.cern.ch/reps/geant4/trunk/geant4/source/processes/hadronic/models/neutron_hp .
+Committed changes:
+    svn ci -m "Committing current status of the G4FissFragGen Branch"
+    Sending        .
+    Sending        CMakeLists.txt
+    Sending        FissFragGen.History
+    Sending        GNUmakefile
+    Sending        History
+    Sending        include
+    Sending        include/G4ArrayOps.hh
+    Sending        include/G4ENDFTapeRead.hh
+    Sending        include/G4ENDFYieldDataContainer.hh
+    Sending        include/G4FFGDebuggingMacros.hh
+    Sending        include/G4FFGDefaultValues.hh
+    Sending        include/G4FFGEnumerations.hh
+    Sending        include/G4FFGUPGAMessenger.hh
+    Sending        include/G4FFGUserPrimaryGeneratorAction.hh
+    Sending        include/G4FFGVerboseMacros.hh
+    Sending        include/G4FPYBiasedLightFragmentDist.hh
+    Sending        include/G4FPYNormalFragmentDist.hh
+    Sending        include/G4FPYNubarValues.hh
+    Sending        include/G4FPYSamplingOps.hh
+    Sending        include/G4FPYTreeStructures.hh
+    Sending        include/G4FissionFragmentGenerator.hh
+    Sending        include/G4FissionProductYieldDist.hh
+    Sending        include/G4InterpolationIterator.hh
+    Sending        include/G4InterpolationManager.hh
+    Sending        include/G4InterpolationScheme.hh
+    Sending        include/G4NeutronHP2AInelasticFS.hh
+    Sending        include/G4NeutronHP2N2AInelasticFS.hh
+    Sending        include/G4NeutronHP2NAInelasticFS.hh
+    Sending        include/G4NeutronHP2NDInelasticFS.hh
+    Sending        include/G4NeutronHP2NInelasticFS.hh
+    Sending        include/G4NeutronHP2NPInelasticFS.hh
+    Sending        include/G4NeutronHP2PInelasticFS.hh
+    Sending        include/G4NeutronHP3AInelasticFS.hh
+    Sending        include/G4NeutronHP3NAInelasticFS.hh
+    Sending        include/G4NeutronHP3NInelasticFS.hh
+    Sending        include/G4NeutronHP3NPInelasticFS.hh
+    Sending        include/G4NeutronHP4NInelasticFS.hh
+    Sending        include/G4NeutronHPAInelasticFS.hh
+    Sending        include/G4NeutronHPAngular.hh
+    Sending        include/G4NeutronHPAngularP.hh
+    Sending        include/G4NeutronHPArbitaryTab.hh
+    Sending        include/G4NeutronHPBGGNucleonInelasticXS.hh
+    Sending        include/G4NeutronHPCapture.hh
+    Sending        include/G4NeutronHPCaptureData.hh
+    Sending        include/G4NeutronHPCaptureFS.hh
+    Sending        include/G4NeutronHPChannel.hh
+    Sending        include/G4NeutronHPChannelList.hh
+    Sending        include/G4NeutronHPContAngularPar.hh
+    Sending        include/G4NeutronHPContEnergyAngular.hh
+    Sending        include/G4NeutronHPD2AInelasticFS.hh
+    Sending        include/G4NeutronHPDAInelasticFS.hh
+    Sending        include/G4NeutronHPDInelasticFS.hh
+    Sending        include/G4NeutronHPData.hh
+    Sending        include/G4NeutronHPDataPoint.hh
+    Sending        include/G4NeutronHPDataUsed.hh
+    Sending        include/G4NeutronHPDeExGammas.hh
+    Sending        include/G4NeutronHPDiscreteTwoBody.hh
+    Sending        include/G4NeutronHPElastic.hh
+    Sending        include/G4NeutronHPElasticData.hh
+    Sending        include/G4NeutronHPElasticFS.hh
+    Sending        include/G4NeutronHPElementData.hh
+    Sending        include/G4NeutronHPEnAngCorrelation.hh
+    Sending        include/G4NeutronHPEnergyDistribution.hh
+    Sending        include/G4NeutronHPEvapSpectrum.hh
+    Sending        include/G4NeutronHPFCFissionFS.hh
+    Sending        include/G4NeutronHPFFFissionFS.hh
+    Sending        include/G4NeutronHPFSFissionFS.hh
+    Sending        include/G4NeutronHPFastLegendre.hh
+    Sending        include/G4NeutronHPField.hh
+    Sending        include/G4NeutronHPFieldPoint.hh
+    Sending        include/G4NeutronHPFinalState.hh
+    Sending        include/G4NeutronHPFission.hh
+    Sending        include/G4NeutronHPFissionBaseFS.hh
+    Sending        include/G4NeutronHPFissionData.hh
+    Sending        include/G4NeutronHPFissionERelease.hh
+    Sending        include/G4NeutronHPFissionFS.hh
+    Sending        include/G4NeutronHPFissionSpectrum.hh
+    Sending        include/G4NeutronHPGamma.hh
+    Sending        include/G4NeutronHPHash.hh
+    Sending        include/G4NeutronHPHe3InelasticFS.hh
+    Sending        include/G4NeutronHPInelastic.hh
+    Sending        include/G4NeutronHPInelasticBaseFS.hh
+    Sending        include/G4NeutronHPInelasticCompFS.hh
+    Sending        include/G4NeutronHPInelasticData.hh
+    Sending        include/G4NeutronHPInterpolator.hh
+    Sending        include/G4NeutronHPIsoData.hh
+    Sending        include/G4NeutronHPIsotropic.hh
+    Sending        include/G4NeutronHPJENDLHEData.hh
+    Sending        include/G4NeutronHPJENDLHEElasticData.hh
+    Sending        include/G4NeutronHPJENDLHEInelasticData.hh
+    Sending        include/G4NeutronHPKallbachMannSyst.hh
+    Sending        include/G4NeutronHPLCFissionFS.hh
+    Sending        include/G4NeutronHPLabAngularEnergy.hh
+    Sending        include/G4NeutronHPLegendreStore.hh
+    Sending        include/G4NeutronHPLegendreTable.hh
+    Sending        include/G4NeutronHPLevel.hh
+    Sending        include/G4NeutronHPList.hh
+    Sending        include/G4NeutronHPMadlandNixSpectrum.hh
+    Sending        include/G4NeutronHPManager.hh
+    Sending        include/G4NeutronHPN2AInelasticFS.hh
+    Sending        include/G4NeutronHPN2PInelasticFS.hh
+    Sending        include/G4NeutronHPN3AInelasticFS.hh
+    Sending        include/G4NeutronHPNAInelasticFS.hh
+    Sending        include/G4NeutronHPNBodyPhaseSpace.hh
+    Sending        include/G4NeutronHPND2AInelasticFS.hh
+    Sending        include/G4NeutronHPNDInelasticFS.hh
+    Sending        include/G4NeutronHPNHe3InelasticFS.hh
+    Sending        include/G4NeutronHPNInelasticFS.hh
+    Sending        include/G4NeutronHPNPAInelasticFS.hh
+    Sending        include/G4NeutronHPNPInelasticFS.hh
+    Sending        include/G4NeutronHPNT2AInelasticFS.hh
+    Sending        include/G4NeutronHPNTInelasticFS.hh
+    Sending        include/G4NeutronHPNXInelasticFS.hh
+    Sending        include/G4NeutronHPNames.hh
+    Sending        include/G4NeutronHPNeutronYield.hh
+    Sending        include/G4NeutronHPPAInelasticFS.hh
+    Sending        include/G4NeutronHPPDInelasticFS.hh
+    Sending        include/G4NeutronHPPInelasticFS.hh
+    Sending        include/G4NeutronHPPTInelasticFS.hh
+    Sending        include/G4NeutronHPPartial.hh
+    Sending        include/G4NeutronHPPhotonDist.hh
+    Sending        include/G4NeutronHPPhotonXSection.hh
+    Sending        include/G4NeutronHPPolynomExpansion.hh
+    Sending        include/G4NeutronHPProduct.hh
+    Sending        include/G4NeutronHPReactionWhiteBoard.hh
+    Sending        include/G4NeutronHPSCFissionFS.hh
+    Sending        include/G4NeutronHPSimpleEvapSpectrum.hh
+    Sending        include/G4NeutronHPT2AInelasticFS.hh
+    Sending        include/G4NeutronHPTCFissionFS.hh
+    Sending        include/G4NeutronHPTInelasticFS.hh
+    Sending        include/G4NeutronHPThermalBoost.hh
+    Sending        include/G4NeutronHPThermalScattering.hh
+    Sending        include/G4NeutronHPThermalScatteringData.hh
+    Sending        include/G4NeutronHPThermalScatteringNames.hh
+    Sending        include/G4NeutronHPVector.hh
+    Sending        include/G4NeutronHPWattSpectrum.hh
+    Sending        include/G4ShiftedGaussian.hh
+    Sending        include/G4TableTemplate.hh
+    Sending        include/G4VNeutronHPEDis.hh
+    Sending        include/G4VNeutronHPEnergyAngular.hh
+    Sending        include/G4WattFissionSpectrumValues.hh
+    Sending        include/G4WendtFissionFragmentGenerator.hh
+    Sending        sources.cmake
+    Sending        src
+    Sending        src/G4NeutronHPCaptureFS.cc
+    Sending        src/G4NeutronHPChannel.cc
+    Sending        src/G4NeutronHPChannelList.cc
+    Sending        src/G4NeutronHPContAngularPar.cc
+    Sending        src/G4NeutronHPElasticFS.cc
+    Sending        src/G4NeutronHPFinalState.cc
+    Sending        src/G4NeutronHPFissionFS.cc
+    Sending        src/G4NeutronHPInelasticBaseFS.cc
+    Sending        src/G4NeutronHPInelasticCompFS.cc
+    Sending        src/G4NeutronHPIsotropic.cc
+    Sending        src/G4WendtFissionFragmentGenerator.cc
+    Sending        test
+    Transmitting file data ...............
+    Committed revision 75136.
+
+Started all over - checked out trunk, switched to tag hadr-hpn-V09-06-17, switched to branch FissFragGen 
+
+============
+October 30, 2013
+============
+FissionFragmentGenerator::GenerateFission(int, const G4HadProjectile&) now verifies the projectile is a neutron
+
+============
+October 31 - November 04, 2013
+============
+Converted ENDFTapeRead to read in the Geant4 ENDL data files
+Finished singleton object G4WendtFissionFragmentGenerator than manages the creation of isotope specific G4FissionFragmentGenerator/G4FissionProductYieldDist paired classes
+Completed integration into Neutron_HP model - TODO comments left in areas identified as needing future work
+
+============
+November 5, 2013
+============
+Ran command: svn merge -r 75136:HEAD svn+ssh://bwendt@svn.cern.ch/reps/geant4/trunk/geant4/source/processes/hadronic/models/neutron_hp .
+
+
+============
+November 6, 2013
+============
+Tatsumi KOI
+Merging r67926 through r69414 into working copy
+by command 
+svn merge -r 1:75649 svn+ssh://svn.cern.ch/reps/geant4/trunk/geant4/source/processes/hadronic/models/neutron_hp
+Solve all 21 conflictions by hands 
+ svn ci 
+Sending        .
+Sending        CMakeLists.txt
+Sending        FissFragGen.History
+Sending        GNUmakefile
+Sending        History
+Sending        include
+Sending        include/G4ArrayOps.hh
+Sending        include/G4ENDFTapeRead.hh
+Sending        include/G4ENDFYieldDataContainer.hh
+Sending        include/G4FFGDebuggingMacros.hh
+Sending        include/G4FFGDefaultValues.hh
+Sending        include/G4FFGEnumerations.hh
+Sending        include/G4FFGUPGAMessenger.hh
+Sending        include/G4FFGUserPrimaryGeneratorAction.hh
+Sending        include/G4FFGVerboseMacros.hh
+Sending        include/G4FPYBiasedLightFragmentDist.hh
+Sending        include/G4FPYNormalFragmentDist.hh
+Sending        include/G4FPYNubarValues.hh
+Sending        include/G4FPYSamplingOps.hh
+Sending        include/G4FPYTreeStructures.hh
+Sending        include/G4FissionFragmentGenerator.hh
+Sending        include/G4FissionProductYieldDist.hh
+Sending        include/G4InterpolationIterator.hh
+Sending        include/G4InterpolationManager.hh
+Sending        include/G4InterpolationScheme.hh
+Sending        include/G4NeutronHP2AInelasticFS.hh
+Sending        include/G4NeutronHP2N2AInelasticFS.hh
+Sending        include/G4NeutronHP2NAInelasticFS.hh
+Sending        include/G4NeutronHP2NDInelasticFS.hh
+Sending        include/G4NeutronHP2NInelasticFS.hh
+Sending        include/G4NeutronHP2NPInelasticFS.hh
+Sending        include/G4NeutronHP2PInelasticFS.hh
+Sending        include/G4NeutronHP3AInelasticFS.hh
+Sending        include/G4NeutronHP3NAInelasticFS.hh
+Sending        include/G4NeutronHP3NInelasticFS.hh
+Sending        include/G4NeutronHP3NPInelasticFS.hh
+Sending        include/G4NeutronHP4NInelasticFS.hh
+Sending        include/G4NeutronHPAInelasticFS.hh
+Sending        include/G4NeutronHPAngular.hh
+Sending        include/G4NeutronHPAngularP.hh
+Sending        include/G4NeutronHPArbitaryTab.hh
+Sending        include/G4NeutronHPBGGNucleonInelasticXS.hh
+Sending        include/G4NeutronHPCapture.hh
+Sending        include/G4NeutronHPCaptureData.hh
+Sending        include/G4NeutronHPCaptureFS.hh
+Sending        include/G4NeutronHPChannel.hh
+Sending        include/G4NeutronHPChannelList.hh
+Sending        include/G4NeutronHPContAngularPar.hh
+Sending        include/G4NeutronHPContEnergyAngular.hh
+Sending        include/G4NeutronHPD2AInelasticFS.hh
+Sending        include/G4NeutronHPDAInelasticFS.hh
+Sending        include/G4NeutronHPDInelasticFS.hh
+Sending        include/G4NeutronHPData.hh
+Sending        include/G4NeutronHPDataPoint.hh
+Sending        include/G4NeutronHPDataUsed.hh
+Sending        include/G4NeutronHPDeExGammas.hh
+Sending        include/G4NeutronHPDiscreteTwoBody.hh
+Sending        include/G4NeutronHPElastic.hh
+Sending        include/G4NeutronHPElasticData.hh
+Sending        include/G4NeutronHPElasticFS.hh
+Sending        include/G4NeutronHPElementData.hh
+Sending        include/G4NeutronHPEnAngCorrelation.hh
+Sending        include/G4NeutronHPEnergyDistribution.hh
+Sending        include/G4NeutronHPEvapSpectrum.hh
+Sending        include/G4NeutronHPFCFissionFS.hh
+Sending        include/G4NeutronHPFFFissionFS.hh
+Sending        include/G4NeutronHPFSFissionFS.hh
+Sending        include/G4NeutronHPFastLegendre.hh
+Sending        include/G4NeutronHPField.hh
+Sending        include/G4NeutronHPFieldPoint.hh
+Sending        include/G4NeutronHPFinalState.hh
+Sending        include/G4NeutronHPFission.hh
+Sending        include/G4NeutronHPFissionBaseFS.hh
+Sending        include/G4NeutronHPFissionData.hh
+Sending        include/G4NeutronHPFissionERelease.hh
+Sending        include/G4NeutronHPFissionFS.hh
+Sending        include/G4NeutronHPFissionSpectrum.hh
+Sending        include/G4NeutronHPGamma.hh
+Sending        include/G4NeutronHPHash.hh
+Sending        include/G4NeutronHPHe3InelasticFS.hh
+Sending        include/G4NeutronHPInelastic.hh
+Sending        include/G4NeutronHPInelasticBaseFS.hh
+Sending        include/G4NeutronHPInelasticCompFS.hh
+Sending        include/G4NeutronHPInelasticData.hh
+Sending        include/G4NeutronHPInterpolator.hh
+Sending        include/G4NeutronHPIsoData.hh
+Sending        include/G4NeutronHPIsotropic.hh
+Sending        include/G4NeutronHPJENDLHEData.hh
+Sending        include/G4NeutronHPJENDLHEElasticData.hh
+Sending        include/G4NeutronHPJENDLHEInelasticData.hh
+Sending        include/G4NeutronHPKallbachMannSyst.hh
+Sending        include/G4NeutronHPLCFissionFS.hh
+Sending        include/G4NeutronHPLabAngularEnergy.hh
+Sending        include/G4NeutronHPLegendreStore.hh
+Sending        include/G4NeutronHPLegendreTable.hh
+Sending        include/G4NeutronHPLevel.hh
+Sending        include/G4NeutronHPList.hh
+Sending        include/G4NeutronHPMadlandNixSpectrum.hh
+Sending        include/G4NeutronHPManager.hh
+Sending        include/G4NeutronHPN2AInelasticFS.hh
+Sending        include/G4NeutronHPN2PInelasticFS.hh
+Sending        include/G4NeutronHPN3AInelasticFS.hh
+Sending        include/G4NeutronHPNAInelasticFS.hh
+Sending        include/G4NeutronHPNBodyPhaseSpace.hh
+Sending        include/G4NeutronHPND2AInelasticFS.hh
+Sending        include/G4NeutronHPNDInelasticFS.hh
+Sending        include/G4NeutronHPNHe3InelasticFS.hh
+Sending        include/G4NeutronHPNInelasticFS.hh
+Sending        include/G4NeutronHPNPAInelasticFS.hh
+Sending        include/G4NeutronHPNPInelasticFS.hh
+Sending        include/G4NeutronHPNT2AInelasticFS.hh
+Sending        include/G4NeutronHPNTInelasticFS.hh
+Sending        include/G4NeutronHPNXInelasticFS.hh
+Sending        include/G4NeutronHPNames.hh
+Sending        include/G4NeutronHPNeutronYield.hh
+Sending        include/G4NeutronHPPAInelasticFS.hh
+Sending        include/G4NeutronHPPDInelasticFS.hh
+Sending        include/G4NeutronHPPInelasticFS.hh
+Sending        include/G4NeutronHPPTInelasticFS.hh
+Sending        include/G4NeutronHPPartial.hh
+Sending        include/G4NeutronHPPhotonDist.hh
+Sending        include/G4NeutronHPPhotonXSection.hh
+Sending        include/G4NeutronHPPolynomExpansion.hh
+Sending        include/G4NeutronHPProduct.hh
+Sending        include/G4NeutronHPReactionWhiteBoard.hh
+Sending        include/G4NeutronHPSCFissionFS.hh
+Sending        include/G4NeutronHPSimpleEvapSpectrum.hh
+Sending        include/G4NeutronHPT2AInelasticFS.hh
+Sending        include/G4NeutronHPTCFissionFS.hh
+Sending        include/G4NeutronHPTInelasticFS.hh
+Sending        include/G4NeutronHPThermalBoost.hh
+Sending        include/G4NeutronHPThermalScattering.hh
+Sending        include/G4NeutronHPThermalScatteringData.hh
+Sending        include/G4NeutronHPThermalScatteringNames.hh
+Sending        include/G4NeutronHPVector.hh
+Sending        include/G4NeutronHPWattSpectrum.hh
+Sending        include/G4ShiftedGaussian.hh
+Sending        include/G4TableTemplate.hh
+Sending        include/G4VNeutronHPEDis.hh
+Sending        include/G4VNeutronHPEnergyAngular.hh
+Sending        include/G4WattFissionSpectrumValues.hh
+Sending        sources.cmake
+Sending        src
+Sending        src/G4NeutronHPAngular.cc
+Sending        src/G4NeutronHPCapture.cc
+Sending        src/G4NeutronHPCaptureData.cc
+Sending        src/G4NeutronHPCaptureFS.cc
+Sending        src/G4NeutronHPContAngularPar.cc
+Sending        src/G4NeutronHPDeExGammas.cc
+Sending        src/G4NeutronHPElasticData.cc
+Sending        src/G4NeutronHPElasticFS.cc
+Sending        src/G4NeutronHPElementData.cc
+Sending        src/G4NeutronHPFFFissionFS.cc
+Sending        src/G4NeutronHPFSFissionFS.cc
+Sending        src/G4NeutronHPFissionBaseFS.cc
+Sending        src/G4NeutronHPFissionData.cc
+Sending        src/G4NeutronHPGamma.cc
+Sending        src/G4NeutronHPInelasticBaseFS.cc
+Sending        src/G4NeutronHPInelasticCompFS.cc
+Sending        src/G4NeutronHPInelasticData.cc
+Sending        src/G4NeutronHPIsoData.cc
+Sending        src/G4NeutronHPIsotropic.cc
+Sending        src/G4NeutronHPLabAngularEnergy.cc
+Sending        src/G4NeutronHPList.cc
+Sending        src/G4NeutronHPManager.cc
+Sending        src/G4NeutronHPNames.cc
+Sending        src/G4NeutronHPPhotonDist.cc
+Sending        src/G4NeutronHPThermalScattering.cc
+Sending        test
+Transmitting file data ................................................................
+Committed revision 75909.
+
+============
+November 7, 2013
+============
+Tatsumi KOI
+Fix compilation errors on Windows platform
+ending        FissFragGen.History
+Sending        src/G4ENDFYieldDataContainer.cc
+Sending        src/G4FPYSamplingOps.cc
+Sending        src/G4FissionProductYieldDist.cc
+Transmitting file data ....
+Committed revision 76060.
+
+Brycen Wendt
+    Fixed data reading
+    Still Seg Fault in G4FissionProductYieldDist::SampleNeutronEnergies() when running test11
+

@@ -89,7 +89,7 @@ void G4NeutronHPFFFissionFS::Init (G4double A, G4double Z, G4int M, G4String & d
          G4double Ei;
          G4int jmax;
          G4int ip;
-         //        energy of incidnece neutron 
+         //        energy of incidence neutron
          theData >> Ei;
          //        Number of data set followings 
          theData >> jmax;
@@ -165,7 +165,7 @@ void G4NeutronHPFFFissionFS::GetAFissionFragment( G4double energy , G4int& fragZ
    std::map<G4int,G4double>* mFSPYieldData = (*mEnergyFSPData)[key_energy];
 
    G4int ifrag=0;
-   G4double ceilling = mFSPYieldData->rbegin()->second; // Becaseu of numerical accuracy, this is not always 2 
+   G4double ceilling = mFSPYieldData->rbegin()->second; // Because of numerical accuracy, this is not always 2
    for ( std::map<G4int,G4double>::iterator it = mFSPYieldData->begin() ; it != mFSPYieldData->end() ; it++ )
    {
       //if ( ( rand - it->second/ceilling ) < 1.0e-6 ) std::cout << rand - it->second/ceilling << std::endl;

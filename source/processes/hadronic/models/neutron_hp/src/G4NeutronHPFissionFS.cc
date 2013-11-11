@@ -49,7 +49,7 @@
     theFF.Init(A, Z, M, dirName, aFSType);
     if ( getenv("G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS") && theFF.HasFSData() ) 
     {
-       G4cout << "Activate Fission Fragments Prodcution for the target isotope of " 
+       G4cout << "Activate Fission Fragments Production for the target isotope of " 
        << "Z = " << (G4int)Z
        << ", A = " << (G4int)A
        //<< "M = " << M

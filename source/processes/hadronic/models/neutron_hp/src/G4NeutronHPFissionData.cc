@@ -39,6 +39,7 @@
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
+#include "G4NeutronHPManager.hh"
 
 G4NeutronHPFissionData::G4NeutronHPFissionData()
 :G4VCrossSectionDataSet("NeutronHPFissionXS")

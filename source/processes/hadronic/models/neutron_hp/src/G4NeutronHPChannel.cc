@@ -31,6 +31,8 @@
 // 071031 bug fix T. Koi on behalf of A. Howard 
 // 081203 bug fix in Register method by T. Koi
 //
+#include <stdlib.h>
+
 #include "G4NeutronHPChannel.hh"
 #include "globals.hh"
 #include "G4SystemOfUnits.hh"
@@ -70,7 +72,7 @@
   
   G4bool G4NeutronHPChannel::Register(G4NeutronHPFinalState *theFS)
   {
-    registerCount++;
+	registerCount++;
     G4int Z = G4lrint(theElement->GetZ());
 
     Z = Z-registerCount;
@@ -141,8 +143,13 @@
   //void G4NeutronHPChannel::UpdateData(G4int A, G4int Z, G4int index, G4double abundance)
   void G4NeutronHPChannel::UpdateData(G4int A, G4int Z, G4int M, G4int index, G4double abundance)
   {
-    //theFinalStates[index]->Init(A, Z, theDir, theFSType);
-    theFinalStates[index]->Init(A, Z, M, theDir, theFSType);
+    // Initialze the G4FissionFragment generator for this isomer if needed
+	if(wendtFissionGenerator)
+	{
+	  wendtFissionGenerator->InitializeANucleus(A, Z, M, theDir);
+	}
+
+	theFinalStates[index]->Init(A, Z, M, theDir, theFSType);
     if(!theFinalStates[index]->HasAnyData()) return; // nothing there for exactly this isotope.
 
     // the above has put the X-sec into the FS
@@ -211,7 +218,7 @@
   ApplyYourself(const G4HadProjectile & theTrack, G4int anIsotope)
   {
 //    G4cout << "G4NeutronHPChannel::ApplyYourself+"<<niso<<G4endl;
-    if ( anIsotope != -1 ) 
+    if ( anIsotope != -1 && anIsotope != -2 ) 
     {
        //Inelastic Case
        //G4cout << "G4NeutronHPChannel Inelastic Case" 
@@ -267,16 +274,33 @@
     }
     delete [] xsec;
     G4HadFinalState * theFinalState=0;
-    while(theFinalState==0)
+    const G4int A = (G4int)this->GetN(it);
+    const G4int Z = (G4int)this->GetZ(it);
+    const G4int M = (G4int)this->GetM(it);
+
+                                       //-2:Marker for Fission
+    if(wendtFissionGenerator&&anIsotope==-2)
     {
-//    G4cout << "TESTHP 24 it="<<it<<G4endl;
-      theFinalState = theFinalStates[it]->ApplyYourself(theTrack);
+    	theFinalState = wendtFissionGenerator->ApplyYourself(theTrack, Z, A);
     }
-//    G4cout <<"THE IMPORTANT RETURN"<<G4endl;
-      //G4cout << "TK G4NeutronHPChannel Elastic, Capture and Fission Cases " 
-      //<< " Z= " << this->GetZ(it) << " A = " << this->GetN(it) << G4endl;
-    G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargA( (G4int)this->GetN(it) ); 
-    G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargZ( (G4int)this->GetZ(it) ); 
+
+    // Use the standard procedure if the G4FissionFragmentGenerator model fails
+    if (!theFinalState)
+    {
+       while(theFinalState==0)
+       {
+//	      G4cout << "TESTHP 24 it="<<it<<G4endl;
+          theFinalState = theFinalStates[it]->ApplyYourself(theTrack);
+       }
+    }
+
+    //G4cout <<"THE IMPORTANT RETURN"<<G4endl;
+    //G4cout << "TK G4NeutronHPChannel Elastic, Capture and Fission Cases "
+    //<< " Z= " << this->GetZ(it) << " A = " << this->GetN(it) << G4endl;
+    G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargA( A );
+    G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargZ( Z );
+    G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->SetTargM( M );
+
     return theFinalState;
   }
 

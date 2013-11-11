@@ -64,5 +64,4 @@ class G4NeutronHPManager
 
       G4int verboseLevel;
 };
-
 #endif

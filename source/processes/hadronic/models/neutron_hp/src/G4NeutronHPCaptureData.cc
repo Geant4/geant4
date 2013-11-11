@@ -41,6 +41,7 @@
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
+#include "G4NeutronHPManager.hh"
 
 G4NeutronHPCaptureData::G4NeutronHPCaptureData()
 :G4VCrossSectionDataSet("NeutronHPCaptureXS")
