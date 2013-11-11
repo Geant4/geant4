@@ -17,6 +17,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09/11/13 I. Hrivnacova (exbasic-V09-06-01)
+- Added B5 in Cmake, GNUmake and README files;
+  fixed B2/README
+
 28/02/13 I. Hrivnacova (exbasic-V09-06-00)
 - When building materials with NistManager
   do not set fromIsotopes argument (which was set to false), 

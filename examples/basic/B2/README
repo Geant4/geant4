@@ -60,13 +60,13 @@ $Id$
    
    While in sequential mode the action classes are instatiated just once,
    via invoking the method:
-      B2[a,b]ActionInitialization::Build() 
+      B2ActionInitialization::Build() 
    in multi-threading mode the same method is invoked for each thread worker
    and so all user action classes are defined thread-local.
 
    A run action class is instantiated both thread-local 
    and global that's why its instance has is created also in the method
-      B2[a,b]ActionInitialization::BuildForMaster() 
+      B2ActionInitialization::BuildForMaster() 
    which is invoked only in multi-threading mode.
 
  4- PRIMARY GENERATOR

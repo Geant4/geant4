@@ -60,16 +60,13 @@ This example simulates a simplified fixed target experiment.
    
    While in sequential mode the action classes are instatiated just once,
    via invoking the method:
-     B2aActionInitialization::Build(), (see also 
-    \link B2bActionInitialization B4b)
+     B2ActionInitialization::Build()
    in multi-threading mode the same method is invoked for each thread worker
    and so all user action classes are defined thread-local.
 
    A run action class is instantiated both thread-local 
    and global that's why its instance has is created also in the method
-      B2aActionInitialization::BuildForMaster() 
-   (see also 
-    \link B2bActionInitialization::BuildForMaster() B4b \endlink)
+      B2ActionInitialization::BuildForMaster()
    which is invoked only in multi-threading mode.
 
 \section B2_s4 PRIMARY GENERATOR
@@ -202,7 +199,7 @@ This example simulates a simplified fixed target experiment.
    in the main () function in exampleB2a.cc 
    The selection of the user command interface is then done automatically 
    according to the Geant4 configuration or it can be done explicitly via 
-   the third argument of the G4UIExecutive constructor (see exampleB4a.cc). 
+   the third argument of the G4UIExecutive constructor (see exampleB2a.cc). 
  
 \section B2_C HOW TO RUN
  
