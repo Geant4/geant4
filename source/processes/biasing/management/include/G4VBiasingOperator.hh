@@ -11,6 +11,7 @@ class G4VParticleChange;
 #include <map>
 #include <vector>
 #include "G4BiasingAppliedCase.hh"
+#include "G4Cache.hh"
 
 class G4VBiasingOperator {
 public:
@@ -104,7 +105,7 @@ public:
   static G4VBiasingOperator*             GetBiasingOperator( const G4LogicalVolume* ); // -- might go to a manager ; or moved to volume
   G4BiasingAppliedCase        GetPreviousBiasingAppliedCase() const {return fPreviousBiasingAppliedCase;}
   // -- all operators (might got to a manager):
-  static const std::vector < G4VBiasingOperator* >& GetBiasingOperators() {return fOperators;}
+    static const std::vector < G4VBiasingOperator* >& GetBiasingOperators() {return fOperators.Get();}
   
   
   // -- used by biasing process interface, or used by an other operator (not expected to be invoked differently than with these two cases):
@@ -129,10 +130,12 @@ public:
   
 private:
   const G4String fName;
-  // -- shared, non-thread local:
-  static std::map< const G4LogicalVolume*, G4VBiasingOperator* > fLogicalToSetupMap;
   // -- thread local:
-  static std::vector < G4VBiasingOperator* > fOperators;
+  //  static std::map< const G4LogicalVolume*, G4VBiasingOperator* > fLogicalToSetupMap;
+  static G4MapCache< const G4LogicalVolume*, G4VBiasingOperator* > fLogicalToSetupMap;
+  // -- thread local:
+  static G4VectorCache<G4VBiasingOperator* > fOperators;
+  // static std::vector < G4VBiasingOperator* > fOperators;
 
 
   // -- For this operator:

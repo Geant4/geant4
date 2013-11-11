@@ -5,14 +5,14 @@
 #include "G4BiasingTrackDataStore.hh"
 
 
-std::map< const G4LogicalVolume*, G4VBiasingOperator* > G4VBiasingOperator::fLogicalToSetupMap;
-std::vector < G4VBiasingOperator* > G4VBiasingOperator::fOperators;
+G4MapCache< const G4LogicalVolume*, G4VBiasingOperator* > G4VBiasingOperator::fLogicalToSetupMap;
+G4VectorCache< G4VBiasingOperator* > G4VBiasingOperator::fOperators;
 
 
 G4VBiasingOperator::G4VBiasingOperator(G4String name)
   : fName(name)
 {
-  fOperators.push_back(this);
+  fOperators.Push_back(this);
 }
 
 G4VBiasingOperator::~G4VBiasingOperator()
@@ -21,18 +21,18 @@ G4VBiasingOperator::~G4VBiasingOperator()
 
 void G4VBiasingOperator::AttachTo(const G4LogicalVolume* logical)
 {
-  std::map< const G4LogicalVolume*, G4VBiasingOperator* >::iterator it;
-  it = fLogicalToSetupMap.find(logical);
-  if ( it == fLogicalToSetupMap.end() ) fLogicalToSetupMap[logical] = this;
+  G4MapCache< const G4LogicalVolume*, G4VBiasingOperator* >::iterator it;
+  it = fLogicalToSetupMap.Find(logical);
+  if ( it == fLogicalToSetupMap.End() ) fLogicalToSetupMap[logical] = this;
   else if ( (*it).second != this ) G4cout << "G4VBiasingOperator::AttachTo() : logical volume already used." << G4endl;
 }
 
 
 G4VBiasingOperator* G4VBiasingOperator::GetBiasingOperator(const G4LogicalVolume* logical)
 {
-  std::map< const G4LogicalVolume*, G4VBiasingOperator* >::iterator it;
-  it = fLogicalToSetupMap.find(logical);
-  if ( it == fLogicalToSetupMap.end() ) return 0;
+  G4MapCache< const G4LogicalVolume*, G4VBiasingOperator* >::iterator it;
+  it = fLogicalToSetupMap.Find(logical);
+  if ( it == fLogicalToSetupMap.End() ) return 0;
   else return (*it).second;
 }
 

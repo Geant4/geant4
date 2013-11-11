@@ -44,13 +44,31 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4biasing_gen
     HEADERS
+        G4BiasingHelper.hh
         G4BiasingProcessInterface.hh
-	G4InteractionLawPhysical.hh
+        G4BOptnChangeCrossSection.hh
+        G4BOptnCloning.hh
+        G4BOptnForceCommonTruncatedExp.hh
+        G4BOptnForceFreeFlight.hh
+        G4BOptrForceCollision.hh
+        G4ILawCommonTruncatedExp.hh
+        G4ILawForceFreeFlight.hh
+        G4ILawTruncatedExp.hh
+        G4InteractionLawPhysical.hh
         G4ParticleChangeForNothing.hh
         G4ParticleChangeForOccurenceBiasing.hh
     SOURCES
+        G4BiasingHelper.cc
         G4BiasingProcessInterface.cc
-	G4InteractionLawPhysical.cc
+        G4BOptnChangeCrossSection.cc
+        G4BOptnCloning.cc
+        G4BOptnForceCommonTruncatedExp.cc
+        G4BOptnForceFreeFlight.cc
+        G4BOptrForceCollision.cc
+        G4ILawCommonTruncatedExp.cc
+        G4ILawForceFreeFlight.cc
+        G4ILawTruncatedExp.cc
+        G4InteractionLawPhysical.cc
         G4ParticleChangeForOccurenceBiasing.cc
     GRANULAR_DEPENDENCIES
         G4cuts

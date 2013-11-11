@@ -6,8 +6,9 @@
 class G4BiasingTrackData;
 class G4Track;
 #include <map>
-
+#include "G4ThreadLocalSingleton.hh"
 class G4BiasingTrackDataStore {
+  friend class G4ThreadLocalSingleton<G4BiasingTrackDataStore>;
 public:
   static G4BiasingTrackDataStore* GetInstance();
   ~G4BiasingTrackDataStore();
@@ -21,7 +22,7 @@ public:
 
 private:
   G4BiasingTrackDataStore();
-  static G4BiasingTrackDataStore* fInstance;
+  //static G4BiasingTrackDataStore* fInstance;
   std::map < const G4Track*, G4BiasingTrackData* > fTrackDataStore;
 };
 

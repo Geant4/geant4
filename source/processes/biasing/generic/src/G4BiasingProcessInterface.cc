@@ -11,10 +11,10 @@
 #include "G4BiasingTrackDataStore.hh"
 #include "G4BiasingAppliedCase.hh"
 
-G4bool                     G4BiasingProcessInterface::fResetInteractionLaws = true;
-G4bool                     G4BiasingProcessInterface::fCommonStart          = true;
-G4bool                     G4BiasingProcessInterface::fCommonEnd            = true;
-std::map < const G4ProcessManager*, std::vector< G4BiasingProcessInterface* > > G4BiasingProcessInterface::fManagerInterfaceMap;
+G4Cache<G4bool>                     G4BiasingProcessInterface::fResetInteractionLaws;// = true;
+G4Cache<G4bool>                     G4BiasingProcessInterface::fCommonStart;//          = true;
+G4Cache<G4bool>                     G4BiasingProcessInterface::fCommonEnd;//            = true;
+G4MapCache< const G4ProcessManager*, std::vector< G4BiasingProcessInterface* > > G4BiasingProcessInterface::fManagerInterfaceMap;
 
 
 G4BiasingProcessInterface::G4BiasingProcessInterface(G4String name)
@@ -33,6 +33,9 @@ G4BiasingProcessInterface::G4BiasingProcessInterface(G4String name)
      fIamFirstGPIL          ( false )
 {
   for (G4int i = 0 ; i < 8 ; i++)  fFirstLastFlags[i] = false;
+    fResetInteractionLaws.Put( true );
+    fCommonStart.Put(true);
+    fCommonEnd.Put(true);
 }
 
 
@@ -97,10 +100,10 @@ void G4BiasingProcessInterface::StartTracking(G4Track* track)
   
   fResetWrappedProcessInteractionLength = false;
   
-  if ( fCommonStart )
+  if ( fCommonStart.Get() )
     {
-      fCommonStart = false;
-      fCommonEnd   = true;
+        fCommonStart.Put( false );// = false;
+        fCommonEnd.Put(true);//   = true;
       
       for ( size_t optr = 0 ; optr < ( G4VBiasingOperator::GetBiasingOperators() ).size() ; optr ++)
 	( G4VBiasingOperator::GetBiasingOperators() )[optr]->StartTracking( fCurrentTrack );
@@ -120,10 +123,10 @@ void G4BiasingProcessInterface::EndTracking()
   // -- !! this part might have to be improved : could be time consuming
   // -- !! and assumes all tracks are killed during tracking, which is
   // -- !! not true : stacking operations may kill tracks
-  if ( fCommonEnd )
+  if ( fCommonEnd.Get() )
     {
-      fCommonEnd   = false;
-      fCommonStart = true;
+        fCommonEnd.Put( false );//   = false;
+        fCommonStart.Put( true );//  = true;
       
       for ( size_t optr = 0 ; optr < ( G4VBiasingOperator::GetBiasingOperators() ).size() ; optr ++)
 	( G4VBiasingOperator::GetBiasingOperators() )[optr]->EndTracking( );
@@ -262,8 +265,6 @@ G4double G4BiasingProcessInterface::PostStepGetPhysicalInteractionLength(const G
   // -- (note that condition was set above):
   if ( fOccurenceBiasingOperation == 0 ) return fWrappedProcessPostStepGPIL;
 
-  //  G4cout << " >>>>>>>> fOccurenceBiasingOperation " << fOccurenceBiasingOperation->GetName() << G4endl;
-
   // -- A valid GPIL biasing operation has been proposed:
   // -- 0) remember wrapped process will need to be reset on biasing exit, if particle survives:
   fResetWrappedProcessInteractionLength = true;
@@ -322,13 +323,11 @@ G4VParticleChange* G4BiasingProcessInterface::PostStepDoIt(const G4Track& track,
       G4double proposedTrackWeight = track.GetWeight();
       if ( fOccurenceBiasingOperation->DenyProcessPostStepDoIt( this, &track, &step, proposedTrackWeight ) )
 	{
-	  //	  G4cout << " ----- " << GetProcessName() << " denying interaction " << fOccurenceBiasingOperation->GetName() << G4endl;
 	  fParticleChange->Initialize( track ); // **??** <= might  use a light version for particle change here
 	  fParticleChange->ProposeParentWeight( proposedTrackWeight );
 	  fCurrentBiasingOperator->ReportOperationApplied( this, BAC_DenyInteraction, fOccurenceBiasingOperation, fParticleChange );
 	  return fParticleChange;
 	}
-      //      G4cout << " ----- " << GetProcessName() << " NOT denying interaction " << fOccurenceBiasingOperation->GetName() << G4endl;
     }
 
   
@@ -350,7 +349,6 @@ G4VParticleChange* G4BiasingProcessInterface::PostStepDoIt(const G4Track& track,
   if ( fOccurenceBiasingOperation == 0 )
     {
       fCurrentBiasingOperator->ReportOperationApplied( this, BAC, fFinalStateBiasingOperation, finalStateParticleChange );
-      //      G4cout << " ******* " << GetProcessName() << " " << track.GetKineticEnergy() << " " << track.GetCreatorProcess()->GetProcessName() << G4endl;
       return finalStateParticleChange;
     }
   
@@ -369,12 +367,6 @@ G4VParticleChange* G4BiasingProcessInterface::PostStepDoIt(const G4Track& track,
       // -- distribution, weight can only be partly calculated
     }
   
-  
-  // G4cout << " ****** PostStepDoIt :  Track weight : " << track.GetWeight() << " " << " Effective XS : " <<
-  //   fPhysicalInteractionLaw->ComputeEffectiveCrossSectionAt(step.GetStepLength()) << " / " <<
-  //   fBiasingInteractionLaw ->ComputeEffectiveCrossSectionAt(step.GetStepLength()) << " = " <<
-  //   fPhysicalInteractionLaw->ComputeEffectiveCrossSectionAt(step.GetStepLength()) /
-  //   fBiasingInteractionLaw ->ComputeEffectiveCrossSectionAt(step.GetStepLength()) << G4endl;
   
   if ( weightForInteraction <= 0. ) G4cout << " (process) !!!!!! negative weight PostStep : " <<  weightForInteraction <<
 				      " " << fPhysicalInteractionLaw->ComputeEffectiveCrossSectionAt(step.GetStepLength()) <<
@@ -563,7 +555,6 @@ void       G4BiasingProcessInterface::SetMasterProcess(G4VProcess* masterP)
 }
 void      G4BiasingProcessInterface::BuildPhysicsTable(const G4ParticleDefinition& pd)
 {
-  G4cout << " ************ G4BiasingProcessInterface::BuildPhysicsTable() " << GetProcessName() << G4endl;
   // -- Inform existing operators about start of the run.
   // -- IMPORTANT : as PreparePhysicsTable(...) has been called first for all processes,
   // -- the first/last flags and G4BiasingProcessInterface vector of processes have
@@ -583,7 +574,6 @@ void    G4BiasingProcessInterface::PreparePhysicsTable(const G4ParticleDefinitio
 {
   // -- Let process finding its first/last position in the process manager:
   SetUpFirstLastFlags();
-  G4cout << " ************ G4BiasingProcessInterface::PreparePhysicsTable()  " << GetProcessName() << G4endl;
   if ( fWrappedProcess != 0 )
     {
        fWrappedProcess->PreparePhysicsTable(pd);
@@ -616,7 +606,16 @@ const G4ProcessManager* G4BiasingProcessInterface::GetProcessManager()
 }
 void G4BiasingProcessInterface::BuildWorkerPhysicsTable(const G4ParticleDefinition& pd)
 {
-  G4cout << " ********** G4BiasingProcessInterface::BuildWorkerPhysicsTable() " << GetProcessName() << G4endl;
+  // -- Inform existing operators about start of the run.
+  // -- IMPORTANT : as PreparePhysicsTable(...) has been called first for all processes,
+  // -- the first/last flags and G4BiasingProcessInterface vector of processes have
+  // -- been properly setup.
+  if ( fIamFirstGPIL )
+    {
+      for ( size_t optr = 0 ; optr < ( G4VBiasingOperator::GetBiasingOperators() ).size() ; optr ++)
+   	( G4VBiasingOperator::GetBiasingOperators() )[optr]->StartRun( );
+    }
+
   if ( fWrappedProcess != 0 )
     {
       fWrappedProcess->BuildWorkerPhysicsTable(pd);
@@ -624,7 +623,8 @@ void G4BiasingProcessInterface::BuildWorkerPhysicsTable(const G4ParticleDefiniti
 }
 void G4BiasingProcessInterface::PrepareWorkerPhysicsTable(const G4ParticleDefinition& pd)
 {
-  G4cout << " ********** G4BiasingProcessInterface::PrepareWorkerPhysicsTable() " << GetProcessName() << G4endl;
+ // -- Let process finding its first/last position in the process manager:
+  SetUpFirstLastFlags();
   if ( fWrappedProcess != 0 )
     {
       fWrappedProcess->PrepareWorkerPhysicsTable(pd);
@@ -749,7 +749,6 @@ G4bool G4BiasingProcessInterface::IsLastPostStepDoItInterface(G4bool physOnly) c
 
 void G4BiasingProcessInterface::SetUpFirstLastFlags()
 {
-  //  G4cout << " *************** G4BiasingProcessInterface::SetUpFirstLastFlags() *********** " << G4endl;
   for ( G4int iPhys = 0; iPhys < 2; iPhys++ )
     {
       G4bool physOnly = ( iPhys == 1 );

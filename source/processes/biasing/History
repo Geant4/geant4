@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 9th, 2013 Andrea Dotti (probiasing-V09-06-07)
+    - Bug fixing for unused data members identified by clang 3.2
+
+Nov 8th, 2013 Marc Verderi (probiasing-V09-06-06)
+    - Migration to MT
+    - Adding force collision operator G4BOptrForceCollision and related classes
+
+Nov 6th, 2013 Marc Verderi (probiasing-V09-06-05)
+    - Introduce physics list configuration helper G4BiasingHelper
+    - Introduce cross section change operation G4BOptnChangeCrossSection
+
 Nov 5th, 2013 Marc Verderi (probiasing-V09-06-04)
     - fix compilation warnings in G4BiasingProcessInterface.hh
       for unused fWrappedProcessIsAtRest and fWrappedProcessIsPost

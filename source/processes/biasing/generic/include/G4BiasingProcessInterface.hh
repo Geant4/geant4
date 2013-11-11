@@ -1,9 +1,61 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: $
+//
+//--------------------------------------------------------------------
+//
+// G4BiasingProcessInterface
+//
+// Class Description:
+//        A wrapper process making the interface between the tracking
+//    and the G4VBiasingOperator objects attached to volumes.
+//        If this process holds a physics process, it forwards
+//    tracking calls to this process in volume where not biasing
+//    occurs. In volumes with biasing (with a G4VBiasingOperator
+//    attached) the process gets what to do messaging the biasing
+//    operator :
+//        - at the PostStepGPIL level, for getting an occurence biasing
+//          operation. If such an operation is returned to the process
+//          this operation will be messaged at several places.
+//        - at the PostStepDoIt level, to get a possible final state
+//          biasing operation
+//        If the process does not hold a physics process, it is meant
+//    as handling "non physics" biasing operations: pure splitting
+//    or pure kiling for example (ie not brem splitting).
+//
+//--------------------------------------------------------------------
+//   Initial version                         Sep. 2013 M. Verderi
+
 #ifndef G4BiasingProcessInterface_h
 #define G4BiasingProcessInterface_h
 
 #include "globals.hh"
 #include "G4VProcess.hh"
-//#include <map>
+#include "G4Cache.hh"
 
 class G4VBiasingInteractionLaw;
 class G4InteractionLawPhysical;
@@ -197,18 +249,18 @@ private:
 
 
   // -- MUST be **thread local**:
-  static G4bool                                     fResetInteractionLaws;
-  static G4bool                                              fCommonStart;
-  static G4bool                                                fCommonEnd;
+  static G4Cache<G4bool>                                     fResetInteractionLaws;
+  static G4Cache<G4bool>                                              fCommonStart;
+  static G4Cache<G4bool>                                                fCommonEnd;
   
   // -- Maintain lists of interfaces attached to a same particle (ie
   // -- to a same G4ProcessManager ).
   // -- This is used when biasing operations in different processes need to
   // -- cooperate (like for knowing the total cross-section for example).
   std::vector< G4BiasingProcessInterface* >*             fCoInterfaces;
-  // -- can be thread global:
-  static std::map < const G4ProcessManager*, 
-		    std::vector< G4BiasingProcessInterface* > > fManagerInterfaceMap;
+  // -- thread local:
+  static G4MapCache< const G4ProcessManager*, 
+		     std::vector< G4BiasingProcessInterface* > > fManagerInterfaceMap;
   const G4ProcessManager* fProcessManager;
   
 };

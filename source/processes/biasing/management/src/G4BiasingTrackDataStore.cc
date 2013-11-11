@@ -2,12 +2,12 @@
 #include "G4BiasingTrackData.hh"
 
 
-G4BiasingTrackDataStore* G4BiasingTrackDataStore::fInstance = 0;
+//G4BiasingTrackDataStore* G4BiasingTrackDataStore::fInstance = 0;
 
 G4BiasingTrackDataStore* G4BiasingTrackDataStore::GetInstance()
 {
-  if ( fInstance == 0 ) fInstance = new G4BiasingTrackDataStore();
-  return fInstance;
+    static G4ThreadLocalSingleton<G4BiasingTrackDataStore> instance;
+    return instance.Instance();
 }
 
 void G4BiasingTrackDataStore::Register(G4BiasingTrackData* data)
