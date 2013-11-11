@@ -57,7 +57,7 @@
 class G4SolidsWorkspace
 {
   public: 
-      G4SolidsWorkspace();
+      G4SolidsWorkspace(G4bool verbose=false);
      ~G4SolidsWorkspace();
 
      void UseWorkspace();     //Take ownership
@@ -66,6 +66,9 @@ class G4SolidsWorkspace
 
      void InitialiseWorkspace();
       // To be called at start of each run (especially 2nd and further runs)
+
+     void   SetVerbose(G4bool v) { fVerbose=v; } 
+     G4bool GetVerbose()  { return fVerbose;   } 
   
  protected:  // Implementation methods
       void   InitialiseSolids();
@@ -81,6 +84,7 @@ class G4SolidsWorkspace
      G4PlSideData  *fPolyconeSideOffset;
      G4PhSideData  *fPolyhedraSideOffset;
 
+     G4bool         fVerbose;
 };
 
 #endif //G4SOLIDSWORKSPACE_HH

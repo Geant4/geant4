@@ -33,7 +33,8 @@
 
 #include "G4AutoLock.hh"
 
-G4SolidsWorkspace::G4SolidsWorkspace()
+G4SolidsWorkspace::G4SolidsWorkspace(G4bool verbose)
+   : fVerbose(verbose)
 {
   // G4PlSideManager *fPolyconeSideSIM; // (G4PlSideManager::GetSubInstanceManager())
   
@@ -61,7 +62,8 @@ G4SolidsWorkspace::~G4SolidsWorkspace()
 void
 G4SolidsWorkspace::UseWorkspace()
 {
-  G4cout << "G4SolidsWorkspace::UseWorkspace: Copying geometry - Start " << G4endl;
+  if( fVerbose ) 
+     G4cout << "G4SolidsWorkspace::UseWorkspace: Copying geometry - Start " << G4endl;
 
   // Implementation copied from  G4WorkerThread::BuildGeometryAndPhysicsVector()
   
@@ -86,8 +88,9 @@ void G4SolidsWorkspace::InitialiseSolids()
 void
 G4SolidsWorkspace::InitialiseWorkspace()
 {
-  G4cout << "G4SolidsWorkspace::InitialiseWorkspace: "
-         << "Copying geometry - Start " << G4endl;
+  if( fVerbose ) 
+     G4cout << "G4SolidsWorkspace::InitialiseWorkspace: "
+            << "Copying geometry - Start " << G4endl;
     
   //Geometry related, split classes mechanism:
   //   Do *NOT* instantiate sub-instance for this thread,
@@ -99,8 +102,9 @@ G4SolidsWorkspace::InitialiseWorkspace()
   // Additional initialization if needed - beyond copying memory
   InitialiseSolids();
   
-  G4cout << "G4SolidsWorkspace::CreateAndUseWorkspace: "
-         << "Copying geometry - Done!" << G4endl;
+  if( fVerbose ) 
+     G4cout << "G4SolidsWorkspace::CreateAndUseWorkspace: "
+            << "Copying geometry - Done!" << G4endl;
 }
 
 void G4SolidsWorkspace::DestroyWorkspace()

@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+     
+08-Nov-2013  J.Apostolakis         (geom-specific-V09-06-27)
+- G4SolidsWorkspace: cleanup of verbosity.
+    Reduced verbosity by making it optional.  
+    Added Set/Get Verbose methods to toggle and view it.
+    Added parameter to constructor for verbosity (default=off)
+
 07-Nov-2013  G.Cosmo (geom-specific-V09-06-26)
 - Moved wrappers from usolids module.
   Fixed internal dispatcher method for parameterisation in all wrappers.
