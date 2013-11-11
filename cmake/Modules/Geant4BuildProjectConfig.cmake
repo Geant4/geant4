@@ -37,7 +37,7 @@ if(GEANT4_BUILD_VERBOSE_CODE)
   list(APPEND GEANT4_CORE_DEFINITIONS -DG4VERBOSE)
 endif()
 
-# - We do actually need G4LIB_BUILD_DLL on Windows, even for user 
+# - We do actually need G4LIB_BUILD_DLL on Windows, even for user
 # applications...
 if(WIN32)
   list(APPEND GEANT4_CORE_DEFINITIONS -DG4LIB_BUILD_DLL)
@@ -45,7 +45,7 @@ endif()
 
 # - Stuff from Geant4OptionalComponents.cmake
 # - CLHEP
-# If it's internal, add it to the externals list, if it's external, add the 
+# If it's internal, add it to the externals list, if it's external, add the
 # include directories to the list of third party header paths
 if(GEANT4_USE_SYSTEM_CLHEP)
   list(APPEND GEANT4_THIRD_PARTY_INCLUDES ${CLHEP_INCLUDE_DIRS})
@@ -73,16 +73,22 @@ if(GEANT4_USE_GDML)
   list(APPEND GEANT4_THIRD_PARTY_INCLUDES ${XERCESC_INCLUDE_DIRS})
 endif()
 
+# - USolids
+# Simple compile definition
+if(GEANT4_USE_USOLIDS)
+  list(APPEND GEANT4_CORE_DEFINITIONS -DG4GEOM_USE_USOLIDS)
+endif()
+
 # - Stuff from Geant4InterfaceOptions.cmake
 if(GEANT4_USE_QT)
-  list(APPEND GEANT4_THIRD_PARTY_INCLUDES 
+  list(APPEND GEANT4_THIRD_PARTY_INCLUDES
     ${QT_INCLUDE_DIR}
     ${QT_QTCORE_INCLUDE_DIR}
     ${QT_QTGUI_INCLUDE_DIR}
     ${QT_QTOPENGL_INCLUDE_DIR}
     )
 
-  # On WIN32, re-import the Qt targets.    
+  # On WIN32, re-import the Qt targets.
   if(WIN32)
     set(GEANT4_THIRD_PARTY_IMPORT_SETUP "${GEANT4_THIRD_PARTY_IMPORT_SETUP}
 # Qt reimport on WIN32
@@ -99,12 +105,12 @@ endif()
 # Set needed variables for the build tree
 set(GEANT4_CMAKE_DIR "${PROJECT_BINARY_DIR}")
 
-# Set include path for build tree. This is always an absolute path, or 
-# rather paths. We extract the paths from the global 
-# GEANT4_BUILDTREE_INCLUDE_DIRS property and use this to create the 
+# Set include path for build tree. This is always an absolute path, or
+# rather paths. We extract the paths from the global
+# GEANT4_BUILDTREE_INCLUDE_DIRS property and use this to create the
 # header setup
 #
-get_property(__geant4_buildtree_include_dirs GLOBAL PROPERTY 
+get_property(__geant4_buildtree_include_dirs GLOBAL PROPERTY
   GEANT4_BUILDTREE_INCLUDE_DIRS
   )
 
@@ -126,7 +132,7 @@ geant4_export_datasets(BUILD GEANT4_DATASET_DESCRIPTIONS)
 #
 get_property(__geant4_exported_targets GLOBAL PROPERTY GEANT4_EXPORTED_TARGETS)
 
-export(TARGETS ${__geant4_exported_targets} 
+export(TARGETS ${__geant4_exported_targets}
   FILE ${PROJECT_BINARY_DIR}/Geant4LibraryDepends.cmake
   )
 
@@ -206,7 +212,7 @@ geant4_export_datasets(INSTALL GEANT4_DATASET_DESCRIPTIONS)
 
 # Install exported targets file for the install tree - we just install
 # the named export
-install(EXPORT Geant4LibraryDepends 
+install(EXPORT Geant4LibraryDepends
   DESTINATION ${GEANT4_CMAKE_DIR}
   COMPONENT Development
   )

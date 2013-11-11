@@ -30,6 +30,16 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+8th November 2013 - Ben Morgan (cmake-V09-06-36)
+- Modules/Geant4ConfigureConfigScript.cmake : Add support for export
+  of existence of USolids support to geant4-config.
+- Templates/geant4-config.in : Add usolids as a new feature. If present,
+  ensure G4GEOM_USE_USOLIDS compile definition is prepended to the cflags.
+- Modules/Geant4BuildProjectConfig.cmake : Export required 
+  G4GEOM_USE_USOLIDS to core definitions if USolids support enabled.
+- Modules/Geant4OptionalComponents.cmake : Add option to enable support
+  for USolids classes. Marked as advanced.
+
 6th November 2013 - Ben Morgan (cmake-V09-06-35 internal)
 - Modules/Geant4ToolchainBackwardCompatibility.cmake : Add support
   for export of multithreading and application PATH variables.

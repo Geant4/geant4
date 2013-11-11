@@ -1,6 +1,6 @@
 # - Setup of general build options for Geant4 Libraries
 #
-# In addition to the core compiler/linker flags (configured in the 
+# In addition to the core compiler/linker flags (configured in the
 # Geant4MakeRules_<LANG>.cmake files) for Geant4, the build may require
 # further configuration. This module performs this task whicj includes:
 #
@@ -70,8 +70,8 @@ geant4_add_feature(GEANT4_BUILD_TPMALLOC "Build multithread optimized malloc lib
 # for visualization to work fully. Mark as advanced because most users
 # should not need to worry about it.
 # FIXES : Bug #1208
-option(GEANT4_BUILD_STORE_TRAJECTORY 
-  "Store trajectories in event processing. Switch off for improved performance but note that visualization of trajectories will not be possible" 
+option(GEANT4_BUILD_STORE_TRAJECTORY
+  "Store trajectories in event processing. Switch off for improved performance but note that visualization of trajectories will not be possible"
   ON)
 mark_as_advanced(GEANT4_BUILD_STORE_TRAJECTORY)
 
@@ -80,10 +80,10 @@ if(GEANT4_BUILD_STORE_TRAJECTORY)
 endif()
 
 # - G4VERBOSE
-# ON by default, switching off can improve performance, but at the cost 
-# of fewer informational or warning messages. Mark as advanced because 
+# ON by default, switching off can improve performance, but at the cost
+# of fewer informational or warning messages. Mark as advanced because
 # most users should not need to worry about it.
-option(GEANT4_BUILD_VERBOSE_CODE 
+option(GEANT4_BUILD_VERBOSE_CODE
   "Enable verbose output from Geant4 code. Switch off for better performance at the cost of fewer informational messages or warnings"
   ON)
 mark_as_advanced(GEANT4_BUILD_VERBOSE_CODE)
@@ -99,7 +99,7 @@ endif()
 # Choose C++ Standard to build against, if supported.
 # Mark as advanced because most users will not need it.
 if(CXXSTD_IS_AVAILABLE)
-  enum_option(GEANT4_BUILD_CXXSTD 
+  enum_option(GEANT4_BUILD_CXXSTD
     DOC "C++ Standard to compile against"
     VALUES ${CXXSTD_IS_AVAILABLE}
     CASE_INSENSITIVE
@@ -120,7 +120,7 @@ endif()
 
 #-----------------------------------------------------------------------
 # Setup Shared and/or Static Library builds
-# We name these options without a 'GEANT4_' prefix because they are 
+# We name these options without a 'GEANT4_' prefix because they are
 # really higher level CMake options.
 # Default to building shared libraries, mark options as advanced because
 # most user should not have to touch them.
@@ -142,7 +142,7 @@ if(MSVC)
     message(WARNING " Building shared AND static libraries on VS2010 may result in link errors.
  You are welcome to try building both, but please be aware of this warning.
  Problems can be reported to the Geant4 Bugzilla system:
- 
+
  http://bugzilla-geant4.kek.jp
     ")
   endif()
@@ -179,17 +179,17 @@ endif()
 
 # On WIN32, we need to build the genwindef application to create export
 # def files for building DLLs.
-# We only use it as a helper application at the moment so we exclude it from 
+# We only use it as a helper application at the moment so we exclude it from
 # the ALL target.
 # TODO: We could move this section into the Geant4MacroLibraryTargets.cmake
 # if it can be protected so that the genwindef target wouldn't be defined
 # more than once... Put it here for now...
 if(WIN32)
   add_definitions(-DG4LIB_BUILD_DLL)
-  # Assume the sources are co-located 
+  # Assume the sources are co-located
   get_filename_component(_genwindef_src_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
-  add_executable(genwindef EXCLUDE_FROM_ALL 
-    ${_genwindef_src_dir}/genwindef/genwindef.cpp 
+  add_executable(genwindef EXCLUDE_FROM_ALL
+    ${_genwindef_src_dir}/genwindef/genwindef.cpp
     ${_genwindef_src_dir}/genwindef/LibSymbolInfo.h
     ${_genwindef_src_dir}/genwindef/LibSymbolInfo.cpp)
 endif()
@@ -197,8 +197,8 @@ endif()
 
 #------------------------------------------------------------------------
 # Setup Locations for Build Outputs
-# Because of the highly nested structure of Geant4, targets will be 
-# distributed throughout this tree, potentially making usage and debugging 
+# Because of the highly nested structure of Geant4, targets will be
+# distributed throughout this tree, potentially making usage and debugging
 # difficult (especially if developers use non-CMake tools).
 #
 # We therefore set the output directory of runtime, library and archive
@@ -209,8 +209,8 @@ endif()
 # built against the targets in the build tree.
 #
 # Note that for multi-configuration generators like VS and Xcode, these
-# directories will have the configuration type (e.g. Debug) appended to 
-# them, so are not backward compatible with the old Make toolchain in 
+# directories will have the configuration type (e.g. Debug) appended to
+# them, so are not backward compatible with the old Make toolchain in
 # these cases.
 #
 # Also, we only do this on UNIX because we want to avoid mixing static and

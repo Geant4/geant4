@@ -143,6 +143,13 @@ if test "x${have_gdml}" = "xyes" ; then
   cflags="${cflags} @G4_XERCESC_CFLAGS@"
 fi
 
+# - USolids
+have_usolids="@G4_BUILTWITH_USOLIDS@"
+feature_list="${feature_list} usolids[${have_usolids}]"
+if test "x${have_usolids}" = "xyes" ; then
+  cflags="-DG4GEOM_USE_USOLIDS ${cflags}"
+fi
+
 # - G3toG4
 have_g3tog4="@G4_BUILTWITH_G3TOG4@"
 feature_list="${feature_list} g3tog4[${have_g3tog4}]"
@@ -509,6 +516,9 @@ while test $# -gt 0 ; do
           ;;
         gdml)
           echo ${have_gdml}
+          ;;
+        usolids)
+          echo ${have_usolids}
           ;;
         qt)
           echo ${have_qt}

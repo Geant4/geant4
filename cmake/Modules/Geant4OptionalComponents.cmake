@@ -8,16 +8,17 @@
 # own Module.
 #
 # Options configured here:
-#  CLHEP  - Control use of internal G4clhep, or locate external CLHEP
-#  EXPAT  - Control use of internal G4expat, or locate external EXPAT.
-#  ZLIB   - Control use of internal G4zlib, or locate external ZLIB
-#  GDML   - Requires external XercesC
-#  G3TOG4 - UNIX only
+#  CLHEP   - Control use of internal G4clhep, or locate external CLHEP
+#  EXPAT   - Control use of internal G4expat, or locate external EXPAT.
+#  ZLIB    - Control use of internal G4zlib, or locate external ZLIB
+#  GDML    - Requires external XercesC
+#  G3TOG4  - UNIX only
+#  USOLIDS - Allow use of USolids classes in geometry
 
 #-----------------------------------------------------------------------
 # Find required CLHEP package
 # We prefer to use our internal CLHEP library, but provide an option
-# to allow an external CLHEP to be used should the user require this. 
+# to allow an external CLHEP to be used should the user require this.
 # We also allow that it can be automatically enabled by providing
 # the CLHEP_ROOT_DIR option (which FindCLHEP will recognize)
 #
@@ -52,8 +53,8 @@ GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_CLHEP "Using system CLHEP library")
 # Find required EXPAT package
 # We always use the internal G4expat on WIN32.
 # On other platforms, we default to use the system library.
-# If we use the internal G4expat, fix the EXPAT_XXX variables to point 
-# to the internal location of expat headers and library target so Geant4 
+# If we use the internal G4expat, fix the EXPAT_XXX variables to point
+# to the internal location of expat headers and library target so Geant4
 # clients of expat have a consistent interface.
 #
 # KNOWNISSUE : For internal expat, how to deal with static and shared?
@@ -132,7 +133,7 @@ GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Building Geant4 with GDML support")
 # Optional support for G3TOG4 convertion interface.
 # We do not build the rztog4 application.
 # -- OLDER NOTES --
-# The G3toG4 *library* should always be built, but the rztog4 application 
+# The G3toG4 *library* should always be built, but the rztog4 application
 # requires a Fortran compiler AND CERNLIB, so is optional.
 # Only on *NIX because converter requires CERNLIB, and Windows support for
 # this is an unknown quantity at present (can always change later).
@@ -141,5 +142,20 @@ GEANT4_ADD_FEATURE(GEANT4_USE_GDML "Building Geant4 with GDML support")
 if(UNIX)
   option(GEANT4_USE_G3TOG4 "Build Geant3 ASCII call list reader library" OFF)
   GEANT4_ADD_FEATURE(GEANT4_USE_G3TOG4 "Building Geant3 ASCII call list reader library")
+endif()
+
+#-----------------------------------------------------------------------
+# Optional support for use of USolids classes for geometry
+# - Advanced option only
+# - If enabled, require
+#   1) Global Compile definition G4GEOM_USE_USOLIDS (also exported)
+#   2) Global add of geometry/solids/usolids/include to include path
+option(GEANT4_USE_USOLIDS "Allow use of USolids geometry classes" OFF)
+mark_as_advanced(GEANT4_USE_USOLIDS)
+
+if(GEANT4_USE_USOLIDS)
+  add_definitions(-DG4GEOM_USE_USOLIDS)
+  include_directories(${PROJECT_SOURCE_DIR}/source/geometry/usolids/include)
+  GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Building support for USolids geometry classes")
 endif()
 
