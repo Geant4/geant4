@@ -32,9 +32,6 @@
 // Institute in the framework of the MC-INFN Group
 //
 
-//#include <CLHEP/Units/SystemOfUnits.h>
-#include "G4SystemOfUnits.hh"
-
 #include "G4SteppingManager.hh"
 #include "G4TrackVector.hh"
 #include "HadrontherapySteppingAction.hh"
@@ -50,9 +47,9 @@
 #include "G4UserEventAction.hh"
 #include "G4TransportationManager.hh"
 #include "G4VSensitiveDetector.hh"
-#include "HadrontherapyAnalysisManager.hh"
-
 #include "HadrontherapyRunAction.hh"
+#include "HadrontherapyAnalysisManager.hh"
+#include "G4SystemOfUnits.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapySteppingAction::HadrontherapySteppingAction( HadrontherapyRunAction *run)

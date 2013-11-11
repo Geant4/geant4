@@ -3,8 +3,8 @@
                      Text version of the Hadrontherapy README file
              =========================================================
 
-Last revsion: F.Romano, 3 November 2013;
-Released with the Geant4 9.10 version (December 2013)
+Last revsion: F.Romano, 7 November 2013;
+Released with the Geant4 10.0 version (December 2013)
 
 ------------------------------------------------------------------------------------------------
 ADVERTISEMENT: this is the text version of the README file of the 'basic' hadrontherapy, 
@@ -22,21 +22,19 @@ Institute in the framework of the MC-INFN Group
              =========================================================
 
  Code developed by:
- R. Calcagno(a), G.A.P. Cirrone(a)*, G.Cuttone(a), F.Romano(a,b)*, A.Varisano(a)
+ R. Calcagno(a), G.A.P. Cirrone(a)*, G.Cuttone(a), L. Pandola(a), F.Romano(a)*, A.Varisano(a)
  
  Past authors:
- F.Di Rosa(a), S.Guatelli(d), A.Lechner(e), S.E.Mazzaglia(a),  M.G.Pia(c), G.Russo(a), M.Russo(a)
+ F.Di Rosa(a), S.Guatelli(c), A.Lechner(d), S.E.Mazzaglia(a),  M.G.Pia(b), G.Russo(a), M.Russo(a)
 
  (a) Laboratori Nazionali del Sud 
      of the INFN, Catania, Italy
 
- (b) Centro Studi e Ricerche e Museo Storico della Fisica E.Fermi, Roma, Italy
-
- (c) INFN Section of Genova, Italy
+ (b) INFN Section of Genova, Italy
  
- (d) University of Wallongong, Australia
+ (c) University of Wallongong, Australia
 
- (e) CERN, (CH)
+ (d) CERN, (CH)
 
   *Corresponding authors, email to: cirrone@lns.infn.it, francesco.romano@lns.infn.it
 -------------------------------------------------------------------------------------------------
@@ -291,6 +289,26 @@ GEANT4 GENERAL PARTICLE SOURCE
 The General Particle Source (GPS, G4 class name: G4GeneralParticleSource) is used since this versione of Hadrontherapy: it enables the user to use standard energy, angular and spatial distributions. The GPS includes also methods to bias the sampling distribution.
 
 The G4GeneralParticleSource can be utilised by typing commands from the /gps command directory, or include the /gps commands in a g4macro file.
+
+
+LET calculation
+
+Hadrontherapy application simulates and calculates the averaged dose LET.
+At run time, data needed to calculate LET are collected. At the end of simulation, LET mean values are calculated and stored into a file.
+
+The Let.out file will be produced at the end of a run, where you can
+find the dose average LET for each tracked particles (both primary and
+secondary ones) and the total mean LET. 
+The file is structured as follows:
+	- The first three columns contains the voxel indexes (first index "i" refers to the beam direction);
+	- The fourth and fifth columns contain respectively total mean dose LET and primary mean dose LET;
+	- The rest of columns contain LET Dose for each single ion (whose name is in the top row of the file).
+
+To activate the LET computation (HadrontherapyLet.cc), you have to execute
+the following command:
+
+/analysis/computeLet
+
 
 
 SIMULATION OUTPUT

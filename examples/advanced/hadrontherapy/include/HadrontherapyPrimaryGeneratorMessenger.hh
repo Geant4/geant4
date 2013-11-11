@@ -48,15 +48,7 @@ class HadrontherapyPrimaryGeneratorMessenger: public G4UImessenger
 public:
   HadrontherapyPrimaryGeneratorMessenger(HadrontherapyPrimaryGeneratorAction*);
   ~HadrontherapyPrimaryGeneratorMessenger();
-    
-  //void SetNewValue(G4UIcommand*, G4String);
-
-private:
-  HadrontherapyPrimaryGeneratorAction* HadrontherapyAction; 
-  G4UIdirectory*                    beamParametersDir;
-  G4UIdirectory*                    EnergyDir;
-  G4UIdirectory*                    particlePositionDir;
-  G4UIdirectory*                    MomentumDir;
+  HadrontherapyPrimaryGeneratorAction* HadrontherapyAction;
   G4UIcmdWithADoubleAndUnit*        meanKineticEnergyCmd;    
   G4UIcmdWithADoubleAndUnit*        sigmaEnergyCmd;  
   G4UIcmdWithADoubleAndUnit*        XpositionCmd;   
@@ -66,6 +58,14 @@ private:
   G4UIcmdWithADoubleAndUnit*        sigmaZCmd; 
   G4UIcmdWithADouble*        sigmaMomentumYCmd; 
   G4UIcmdWithADouble*        sigmaMomentumZCmd; 
+    
+  //void SetNewValue(G4UIcommand*, G4String);
+
+private:
+  G4UIdirectory*                    beamParametersDir;
+  G4UIdirectory*                    EnergyDir;
+  G4UIdirectory*                    particlePositionDir;
+  G4UIdirectory*                    MomentumDir;
 
 
 };

@@ -61,6 +61,8 @@ public:
 static HadrontherapyDetectorConstruction* GetInstance();
   void InitializeDetectorROGeometry(HadrontherapyDetectorROGeometry*,
 				    G4ThreeVector detectorToWorldPosition);
+  G4VPhysicalVolume* motherPhys;
+  HadrontherapyDetectorSD*         detectorSD; // Pointer to sensitive detector
 
 private: 
 
@@ -168,9 +170,6 @@ private:
   G4VisAttributes* skyBlue;
   G4VisAttributes* red;
 
-  G4VPhysicalVolume* motherPhys;
-
-  HadrontherapyDetectorSD*         detectorSD; // Pointer to sensitive detector
   HadrontherapyDetectorROGeometry* detectorROGeometry; // Pointer to ROGeometry 
   HadrontherapyMatrix*             matrix;
   HadrontherapyLet*                let;

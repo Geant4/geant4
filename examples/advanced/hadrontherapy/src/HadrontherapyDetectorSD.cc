@@ -32,11 +32,8 @@
 // Institute in the framework of the MC-INFN Group
 //
 
-//#include <CLHEP/Units/SystemOfUnits.h>
-#include "G4SystemOfUnits.hh"
 
 #include "HadrontherapyDetectorSD.hh"
-#include "HadrontherapyAnalysisManager.hh"
 #include "HadrontherapyDetectorHit.hh"
 #include "G4Step.hh"
 #include "G4VTouchable.hh"
@@ -45,7 +42,8 @@
 #include "HadrontherapyMatrix.hh"
 #include "HadrontherapyLet.hh"
 #include "G4Track.hh"
-
+#include "HadrontherapyAnalysisManager.hh"
+#include "G4SystemOfUnits.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorSD::HadrontherapyDetectorSD(G4String name):

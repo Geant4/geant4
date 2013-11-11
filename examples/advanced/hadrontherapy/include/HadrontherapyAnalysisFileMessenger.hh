@@ -65,9 +65,9 @@ public:
    * @return is void   
    */     
   void SetNewValue(G4UIcommand* command, G4String newValue);
+  HadrontherapyAnalysisManager* AnalysisManager; ///< handle to AnalysisManager
     
 private:
-  HadrontherapyAnalysisManager* AnalysisManager; ///< handle to AnalysisManager
 
   /**   
    * G4 user interface command (that takes a string argument) object

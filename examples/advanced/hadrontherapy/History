@@ -8,6 +8,12 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+11.11.2013 F.Romano;      Tag: hadrontherapy-V09-06-08
+           - Fixing compilation warnings for shadowing of variable
+
+08.11.2013 F.Romano;      Tag: hadrontherapy-V09-06-07
+           - README file revised
+
 07.11.2013 L.Pandola;      Tag: hadrontherapy-V09-06-06
            - Fix additional left-over dependency on LEP
 

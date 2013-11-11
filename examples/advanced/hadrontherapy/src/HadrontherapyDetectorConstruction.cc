@@ -32,10 +32,7 @@
 // Institute in the framework of the MC-INFN Group
 //
 
-//#include <CLHEP/Units/SystemOfUnits.h>
 
-
-#include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
@@ -62,8 +59,9 @@
 #include "HadrontherapyDetectorSD.hh"
 #include "HadrontherapyMatrix.hh"
 #include "HadrontherapyLet.hh"
-#include "HadrontherapyAnalysisManager.hh"
 #include "PassiveProtonBeamLine.hh"
+#include "HadrontherapyAnalysisManager.hh"
+#include "G4SystemOfUnits.hh"
 
 #include <cmath>
 
