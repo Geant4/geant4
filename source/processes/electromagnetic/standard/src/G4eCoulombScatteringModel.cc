@@ -281,15 +281,14 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4double mom2 = wokvi->GetMomentumSquare();
   G4double trec = mom2*(1.0 - cost)
     /(targetMass + (mass + kinEnergy)*(1.0 - cost));
+
+  // the check likely not needed
+  if(trec > kinEnergy) { trec = kinEnergy; }
   G4double finalT = kinEnergy - trec; 
+  G4double edep = 0.0;
   //G4cout<<"G4eCoulombScatteringModel: finalT= "<<finalT<<" Trec= "
   //	<<trec << " Z= " << iz << " A= " << ia<<G4endl;
-  if(finalT <= lowEnergyThreshold) { 
-    trec = kinEnergy;  
-    finalT = 0.0;
-  } 
 
-  fParticleChange->SetProposedKineticEnergy(finalT);
   G4double tcut = recoilThreshold;
   if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); }
 
@@ -300,11 +299,19 @@ void G4eCoulombScatteringModel::SampleSecondaries(
     G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, trec);
     fvect->push_back(newdp);
   } else {
-    fParticleChange->ProposeLocalEnergyDeposit(trec);
-    fParticleChange->ProposeNonIonizingEnergyDeposit(trec);
+    edep = trec;
+    fParticleChange->ProposeNonIonizingEnergyDeposit(edep);
   }
- 
-  return;
+
+  // finelize primary energy and energy balance
+  // this threshold may be applied only because for low-enegry
+  // e+e- msc model is applied
+  if(finalT <= lowEnergyThreshold) { 
+    edep += finalT;  
+    finalT = 0.0;
+  } 
+  fParticleChange->SetProposedKineticEnergy(finalT);
+  fParticleChange->ProposeLocalEnergyDeposit(edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

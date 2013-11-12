@@ -177,8 +177,7 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
 
 	G4double cross= Mottcross->GetTotalCross();
 
-
-	if(cross == 0.0)return;
+	if(cross == 0.0) { return; }
     		
   	G4ThreeVector dir = dp->GetMomentumDirection(); //old direction
 	G4ThreeVector newDirection=Mottcross->GetNewDirection();//new direction
@@ -188,42 +187,42 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
   
 	//Recoil energy
 	G4double trec= Mottcross->GetTrec();
-	//Energy after scattering	
-        G4double finalT = kinEnergy - trec;
 
+  //Energy after scattering	
+  if(trec > kinEnergy) { trec = kinEnergy; }
+  G4double finalT = kinEnergy - trec;
+  G4double edep = 0.0;
 
-  	if(finalT <= lowEnergyLimit) { 
-    		trec = kinEnergy;  
-    		finalT = 0.0;
-  		} 
-    
-  	fParticleChange->SetProposedKineticEnergy(finalT);
+  G4double tcut = recoilThreshold;
+  if(pCuts) { 
+    tcut= std::min(tcut,(*pCuts)[currentMaterialIndex]); 
+  }
 
-  	G4double tcut = recoilThreshold;
-        if(pCuts) { tcut= std::min(tcut,(*pCuts)[currentMaterialIndex]); 
-		}
- 
+  if(trec > tcut) {
 
-  	if(trec > tcut) {
+    //cout<<"Trec "<<trec/eV<<endl;
+    G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
 
-		//cout<<"Trec "<<trec/eV<<endl;
-    		G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
+    //incident before scattering
+    G4double ptot=sqrt(Mottcross->GetMom2Lab());
+    //incident after scattering
+    G4double plab = sqrt(finalT*(finalT + 2.0*mass));
+    G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
+    //secondary particle
+    G4DynamicParticle* newdp  = new G4DynamicParticle(ion, p2, trec);
+    fvect->push_back(newdp);
+  } else if(trec > 0.0) {
+    edep = trec;
+    fParticleChange->ProposeNonIonizingEnergyDeposit(trec);
+  }
 
-		//incident before scattering
-		G4double ptot=sqrt(Mottcross->GetMom2Lab());
-		//incident after scattering
-    		G4double plab = sqrt(finalT*(finalT + 2.0*mass));
-    		G4ThreeVector p2 = (ptot*dir - plab*newDirection).unit();
-		//secondary particle
-    		G4DynamicParticle* newdp  = new G4DynamicParticle(ion, p2, trec);
-    			fvect->push_back(newdp);
-  			}
-
-	else if(trec > 0.0) {
-                fParticleChange->ProposeNonIonizingEnergyDeposit(trec);
-   		if(trec< tcut) fParticleChange->ProposeLocalEnergyDeposit(trec);
-  		}
-
+  // finelize primary energy and energy balance
+  if(finalT <= lowEnergyLimit) { 
+    edep += finalT;  
+    finalT = 0.0;
+  } 
+  fParticleChange->SetProposedKineticEnergy(finalT);
+  fParticleChange->ProposeLocalEnergyDeposit(edep);
 
 }
 

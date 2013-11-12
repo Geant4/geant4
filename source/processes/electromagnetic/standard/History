@@ -18,6 +18,13 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+12 November 13: V.Ivanchenko (emstand-V09-06-78)
+- G4IonCoulombScatteringModel, G4eCoulombScatteringModel,
+  G4eSingleCoulombScatteringModel, G4hCoulombScatteringModel
+    if primary particle is below low-energy threshold and is
+    killed add its energy to energy deposition and not to recoil 
+    energy; no effect on ordinary simulation
+
 08 November 13: V.Ivanchenko (emstand-V09-06-77)
 - G4PAIPhotonModel - do not delete PhysVectors 
 
