@@ -572,7 +572,7 @@ file(RELATIVE_PATH
   ${CMAKE_INSTALL_FULL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
   ${CMAKE_INSTALL_FULL_BINDIR}
   )
-set(G4INCLUDE "\"`cd \$geant4make_root/${G4MAKE_TO_BINDIR} > /dev/null \; pwd`\"")
+set(G4BIN_DIR "\"`cd \$geant4make_root/${G4MAKE_TO_BINDIR} > /dev/null \; pwd`\"")
 
 # - Lib dir
 file(RELATIVE_PATH

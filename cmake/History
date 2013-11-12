@@ -30,6 +30,11 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+12th November 2013 - Ben Morgan (cmake-V09-06-37)
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Fix mistake in
+  configuration of binary directory PATH which resulted in G4INCLUDE
+  being overwritten.
+
 8th November 2013 - Ben Morgan (cmake-V09-06-36)
 - Modules/Geant4ConfigureConfigScript.cmake : Add support for export
   of existence of USolids support to geant4-config.
