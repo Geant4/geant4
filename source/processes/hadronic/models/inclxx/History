@@ -16,6 +16,10 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+12 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-38)
+---------------------------------------------------------------
+- Fix run-time crash in test69 on Windows.
+
 12 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-37)
 ---------------------------------------------------------------
 - Fix compile error on VC9 -- might be related with some Win crashes in test69?

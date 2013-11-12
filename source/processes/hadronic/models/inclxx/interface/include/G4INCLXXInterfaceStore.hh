@@ -63,80 +63,25 @@ class G4INCLXXInterfaceStore {
   public:
 
     /// \brief Get the singleton instance
-    static G4INCLXXInterfaceStore *GetInstance() {
-      if(!theInstance)
-        theInstance = new G4INCLXXInterfaceStore;
-      return theInstance;
-    }
+    static G4INCLXXInterfaceStore *GetInstance();
 
     /// \brief Delete the singleton instance
-    static void DeleteInstance() {
-      delete theInstance;
-      theInstance = NULL;
-    }
+    static void DeleteInstance();
 
     /// \brief Get the cached INCL model engine
-    G4INCL::INCL *GetINCLModel() {
-      if(!theINCLModel) {
-        G4INCL::Config *theConfig = new G4INCL::Config;
-        theConfig->setClusterMaxMass(theMaxClusterMass);
-        theINCLModel = new G4INCL::INCL(theConfig);
-        // ownership of the Config object is taken over by the INCL model engine
-      }
-      return theINCLModel;
-    }
+    G4INCL::INCL *GetINCLModel();
 
-    void constructINCLXXVersionName() {
-      const std::string versionID = G4INCL_VERSION_ID;
-      const size_t lastDash = versionID.find_last_of("-");
-      versionName = "INCL++ " + versionID.substr(0,lastDash);
-    }
+    void constructINCLXXVersionName();
 
-    const std::string &getINCLXXVersionName() {
-      return versionName;
-    }
+    const std::string &getINCLXXVersionName();
 
 
 
     /// \brief Setter for accurateProjectile
-    void SetAccurateProjectile(const G4bool b) {
-      if(accurateProjectile!=b) {
-        // Parameter is changed, emit a big warning message
-        std::stringstream ss;
-        ss << "Switching from "
-          << (accurateProjectile ? "\"accurate projectile\" mode to \"accurate target\"" : "\"accurate target\" mode to \"accurate projectile\"")
-          << " mode."
-          << G4endl
-          << "Do this ONLY if you fully understand what it does!";
-        EmitBigWarning(ss.str());
-      }
-
-      // No need to delete the model for this parameter
-
-      accurateProjectile=b;
-    }
+    void SetAccurateProjectile(const G4bool b);
 
     /// \brief Setter for theMaxClusterMass
-    void SetMaxClusterMass(const G4int aMass) {
-      if(theMaxClusterMass!=aMass) {
-        // Parameter is changed, emit a big warning message
-        std::stringstream ss;
-        ss << "Changing maximum cluster mass from "
-          << theMaxClusterMass
-          << " to "
-          << aMass
-          << "."
-          << G4endl
-          << "Do this ONLY if you fully understand what this setting does!";
-        EmitBigWarning(ss.str());
-      }
-
-      // We must delete the model object to make sure that we use the new
-      // parameter
-      DeleteModel();
-
-      theMaxClusterMass=aMass;
-    }
+    void SetMaxClusterMass(const G4int aMass);
 
     /// \brief Setter for cascadeMinEnergyPerNucleon
     void SetCascadeMinEnergyPerNucleon(const G4double anEnergy);
@@ -149,27 +94,27 @@ class G4INCLXXInterfaceStore {
      * The \see{G4INCLXXInterfaceMessenger} class provides a UI command to set
      * this parameter.
      */
-    G4bool GetAccurateProjectile() const { return accurateProjectile; }
+    G4bool GetAccurateProjectile() const;
 
     /** \brief Getter for cascadeMinEnergyPerNucleon
      *
      * The \see{G4INCLXXInterfaceMessenger} class provides a UI command to set
      * this parameter.
      */
-    G4double GetCascadeMinEnergyPerNucleon() const { return cascadeMinEnergyPerNucleon; }
+    G4double GetCascadeMinEnergyPerNucleon() const;
 
     /** \brief Getter for ClusterMaxMass
      *
      * The \see{G4INCLXXInterfaceMessenger} class provides a UI command to set
      * this parameter.
      */
-    G4int GetMaxClusterMass() const { return theMaxClusterMass; }
+    G4int GetMaxClusterMass() const;
 
 
 
 
     /// \brief Getter for theMaxProjMassINCL
-    G4int GetMaxProjMassINCL() const { return theMaxProjMassINCL; }
+    G4int GetMaxProjMassINCL() const;
 
 
 
