@@ -70,6 +70,12 @@ void XPhysicsList::ConstructProcess() {
   G4VProcess* phRefl = new G4PhononReflection;
   G4VProcess* phDown = new G4PhononDownconversion;
 
+  //***** TEMPORARY -- SET VERBOSITY FOR PROCESSES
+  phScat->SetVerboseLevel(2);
+  phRefl->SetVerboseLevel(2);
+  phDown->SetVerboseLevel(2);
+  //***** TEMPORARY
+
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();

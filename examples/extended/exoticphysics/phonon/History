@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 November 2013:  M. Kelsey (phononExample-V09-06-06)
+- run.in:  Remove temporary tracking verbosity.  Windows jobs crash in the
+  very first track.
+
+- XPhysicsList.cc:  *TEMPORARY*  Set verbosity on phonon processes.
+
 9 November 2013:  M. Kelsey (phononExample-V09-06-05)
 - CTestDefinitions.txt:  Fix variable setting for comparing timing.out on MT
   jobs (_causticRef was set twice).
