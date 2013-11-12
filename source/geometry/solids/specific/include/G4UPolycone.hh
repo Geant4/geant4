@@ -84,6 +84,8 @@ class G4UPolycone : public G4USolid
     inline G4PolyconeHistorical* GetOriginalParameters() const;
     inline void SetOriginalParameters(G4PolyconeHistorical* pars);
 
+    inline G4bool Reset();
+
   public:  // without description
 
     G4UPolycone(__void__&);
@@ -156,6 +158,10 @@ inline void G4UPolycone::SetOriginalParameters(G4PolyconeHistorical* pars)
     pdata->Rmin[i] = pars->Rmin[i];
     pdata->Rmax[i] = pars->Rmax[i];
   }
+}
+inline G4bool G4UPolycone::Reset()
+{
+  return 0;  // Missing method in UPolycone !!!
 }
 
 #endif

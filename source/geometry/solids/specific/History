@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-Nov-2013  G.Cosmo               (geom-specific-V09-06-29)
+- Added dummy method G4UPolycone::Reset().
+  NOTE: Required related implementation (currently missing!) in UPolycone.
+
 12-Nov-2013  G.Cosmo               (geom-specific-V09-06-28)
 - Correction to USolids switch mechanism for G4Polycone.
     
