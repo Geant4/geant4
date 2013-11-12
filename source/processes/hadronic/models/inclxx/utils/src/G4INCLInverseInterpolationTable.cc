@@ -116,8 +116,9 @@ namespace G4INCL {
 
   G4double InverseInterpolationTable::operator()(const G4double x) const {
     // Find the relevant interpolation bin
+    InterpolationNode xNode(x,0.,0.);
     std::vector<InterpolationNode>::const_iterator iter =
-      std::lower_bound(nodes.begin(), nodes.end(), x);
+      std::lower_bound(nodes.begin(), nodes.end(), xNode);
 
     if(iter==nodes.begin())
       return nodes.front().getY();

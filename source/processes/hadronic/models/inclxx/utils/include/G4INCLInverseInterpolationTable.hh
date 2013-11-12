@@ -81,11 +81,6 @@ namespace G4INCL {
         return (x >= rhs.x);
       }
 
-      /// \brief Overloaded comparison operator for STL algorithms
-      friend G4bool operator<(const InterpolationNode &lhs, const G4double rhs) {
-        return lhs.x < rhs;
-      }
-
       G4double getX() const { return x; }
       G4double getY() const { return y; }
       G4double getYPrime() const { return yPrime; }
