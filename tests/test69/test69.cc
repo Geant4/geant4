@@ -64,6 +64,9 @@ int main(int argc,char** argv) {
 
   // Run manager
 #ifdef G4MULTITHREADED
+  char env[]="G4FORCENUMBEROFTHREADS=4";
+  putenv(env);
+
   G4MTRunManager* runManager = new G4MTRunManager;
 #else
   G4RunManager* runManager = new G4RunManager;

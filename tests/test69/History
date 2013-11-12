@@ -12,6 +12,25 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 November 2013, Davide Mancusi (test69-V09-06-09)
+- Quick-and-dirty fix for Windows crash.
+
+7 November 2013, Davide Mancusi (test69-V09-06-08)
+- Limit number of threads for HP-based tests.
+
+6 November 2013, Davide Mancusi (test69-V09-06-07)
+- Fix the path to the macro for the INCLXX/ABLA test
+
+6 November 2013, Davide Mancusi (test69-V09-06-06)
+- Activate the INCLXX/ABLA test.
+
+6 November 2013, Davide Mancusi (test69-V09-06-05)
+- Shorten tests with NeutronHP-based physics lists.
+- Add a test for INCLXX/ABLA.
+
+6 November 2013, Davide Mancusi (test69-V09-06-04)
+- Nothing new, just resubmit the tag.
+
 6 November 2013, Davide Mancusi (test69-V09-06-03)
 - Overhaul of test69.
 - Add "mix" material, which should help with exercising different sectors of

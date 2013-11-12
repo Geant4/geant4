@@ -1,0 +1,11 @@
+/control/verbose 2
+/run/verbose 2
+/run/setCut 1 m
+/run/initialize
+#
+# 40-GeV proton on mixed material
+#
+/gun/particle proton
+/gun/energy 40 GeV
+/mydet/SelectMaterial mix
+/run/beamOn 20

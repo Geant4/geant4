@@ -1,0 +1,12 @@
+/control/verbose 2
+/run/verbose 2
+/run/setCut 1 m
+/run/initialize
+#
+# 12-GeV C12 on mixed material
+#
+/gun/particle ion
+/gun/ion 6 12
+/gun/energy 12 GeV
+/mydet/SelectMaterial mix
+/run/beamOn 20

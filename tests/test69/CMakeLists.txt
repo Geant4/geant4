@@ -20,11 +20,16 @@ set(TEST69_MACROS
   C12_12GeV_mix.in
   )
 
+set(TEST69_SHORT_MACROS
+  p_40GeV_mix_short.in
+  C12_12GeV_mix_short.in
+  )
+
 set(TEST69_AUXILIARY_MACROS
   vis.mac
   )
 
-foreach(_macro ${TEST69_MACROS} ${TEST69_AUXILIARY_MACROS})
+foreach(_macro ${TEST69_MACROS} ${TEST69_SHORT_MACROS} ${TEST69_AUXILIARY_MACROS})
   configure_file(
     ${PROJECT_SOURCE_DIR}/macros/${_macro}
     ${PROJECT_BINARY_DIR}/macros/${_macro}
@@ -34,8 +39,11 @@ endforeach()
 
 set(TEST69_PHYSLISTS
   QGSP_INCLXX
-  QGSP_INCLXX_HP
   FTFP_INCLXX
+  )
+
+set(TEST69_HP_PHYSLISTS
+  QGSP_INCLXX_HP
   FTFP_INCLXX_HP
   )
 
@@ -55,6 +63,32 @@ foreach(_macro ${TEST69_MACROS})
                     LABELS Nightly Continuous
                     ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} "TEST69_PHYSLIST=${_list}")
 
-  endforeach(_list ${TEST69_PHYSLISTS})
-endforeach(_macro TEST69_MACROS)
+  endforeach()
+endforeach()
+
+foreach(_macro ${TEST69_SHORT_MACROS})
+  get_filename_component(_macro_name ${_macro} NAME_WE)
+
+  foreach(_list ${TEST69_HP_PHYSLISTS})
+
+    GEANT4_ADD_TEST(test69-${_macro_name}-${_list}
+                    COMMAND test69 ${PROJECT_BINARY_DIR}/macros/${_macro}
+                    DEPENDS test69-build
+                    LABELS Nightly Continuous
+                    ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} "TEST69_PHYSLIST=${_list}")
+
+  endforeach()
+endforeach()
+
+# I think I need to fix something concerning exporting the
+# G4INCLXXInterfaceStore symbols from the G4processes DLL, but I can't figure
+# out the correct way to do this. As a quick-and-dirty fix, let's just suppress
+# this test on Windows.
+if(NOT WIN32)
+  GEANT4_ADD_TEST(test69-p_40GeV_mix-FTFP_INCLXX_ABLA
+    COMMAND test69 ${PROJECT_BINARY_DIR}/macros/p_40GeV_mix.in
+    DEPENDS test69-build
+    LABELS Nightly Continuous
+    ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} "TEST69_PHYSLIST=FTFP_INCLXX" "TEST69_USE_ABLA=1")
+endif(NOT WIN32)
 
