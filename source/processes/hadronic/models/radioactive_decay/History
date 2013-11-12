@@ -14,6 +14,23 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+11 November 2013  Dennis Wright radioactive_decay-V09-06-19
+-----------------------------------------------------------
+- fixed bugs causing decay chains to stop prematurely
+- G4NuclearDecayChannel::DecayIt:
+    in the case of IT, get excitation energy from parent nucleus, not daughter 
+            (const G4Ions*)(G4MT_parent))->GetExcitationEnergy()
+    remove subtraction of gamma energy from variable daughterExcitation
+
+- G4RadioactiveDecay::GetDecayTable: search internal library of decay tables
+    using name of ion, not integer key - this fixes the "level 9" problem
+ 
+7 November 2013  Dennis Wright radioactive_decay-V09-06-18
+----------------------------------------------------------
+- G4NuclearDecayChannel::DecayIt: allow explicit decay of IT channels
+  and send residual nucleus to final state for tracking
+- G4RadioactiveDecay: clean up
+
 21 October 2013  Dennis Wright radioactive_decay-V09-06-17
 ----------------------------------------------------------
 - G4NuclearDecayChannel::DecayIt: in loop to search for isomer levels, add

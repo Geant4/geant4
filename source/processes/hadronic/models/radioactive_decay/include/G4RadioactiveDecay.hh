@@ -76,7 +76,7 @@ class G4RadioactiveDecaymessenger;
 
 typedef std::vector<G4RadioactiveDecayRateVector> G4RadioactiveDecayRateTable;
 typedef std::vector<G4RadioactiveDecayRate> G4RadioactiveDecayRates;
-typedef std::map<G4int, G4DecayTable*> DecayTableMap;
+typedef std::map<G4String, G4DecayTable*> DecayTableMap;
 
 
 class G4RadioactiveDecay : public G4VRestDiscreteProcess 
