@@ -80,15 +80,9 @@ foreach(_macro ${TEST69_SHORT_MACROS})
   endforeach()
 endforeach()
 
-# I think I need to fix something concerning exporting the
-# G4INCLXXInterfaceStore symbols from the G4processes DLL, but I can't figure
-# out the correct way to do this. As a quick-and-dirty fix, let's just suppress
-# this test on Windows.
-if(NOT WIN32)
-  GEANT4_ADD_TEST(test69-p_40GeV_mix-FTFP_INCLXX_ABLA
-    COMMAND test69 ${PROJECT_BINARY_DIR}/macros/p_40GeV_mix.in
-    DEPENDS test69-build
-    LABELS Nightly Continuous
-    ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} "TEST69_PHYSLIST=FTFP_INCLXX" "TEST69_USE_ABLA=1")
-endif(NOT WIN32)
+GEANT4_ADD_TEST(test69-p_40GeV_mix-FTFP_INCLXX_ABLA
+  COMMAND test69 ${PROJECT_BINARY_DIR}/macros/p_40GeV_mix.in
+  DEPENDS test69-build
+  LABELS Nightly Continuous
+  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} "TEST69_PHYSLIST=FTFP_INCLXX" "TEST69_USE_ABLA=1")
 

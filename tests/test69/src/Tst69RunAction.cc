@@ -54,7 +54,6 @@ Tst69RunAction::~Tst69RunAction()
 
 void Tst69RunAction::BeginOfRunAction(const G4Run* )
 {
-#ifndef WIN32 // this snippet is suppressed on Windows -- see comment in CMakeLists.txt
   if(getenv("TEST69_USE_ABLA") != NULL) {
     G4HadronicInteraction *interaction = G4HadronicInteractionRegistry::Instance()
       ->FindModel(G4INCLXXInterfaceStore::GetInstance()->getINCLXXVersionName());
@@ -68,7 +67,6 @@ void Tst69RunAction::BeginOfRunAction(const G4Run* )
       theINCLInterface->SetDeExcitation(theAblaInterface);
     }
   }
-#endif
 }
 
 void Tst69RunAction::EndOfRunAction(const G4Run*)
