@@ -28,6 +28,7 @@
 //
 // $Id$
 //
+// 20131111  Move Clear() function to .cc file
 
 #include "G4PhononTrackMap.hh"
 #include "G4ThreeVector.hh"
@@ -47,6 +48,11 @@ G4PhononTrackMap* G4PhononTrackMap::GetPhononTrackMap() {
   if (!theTrackMap) theTrackMap = new G4PhononTrackMap;
   return theTrackMap;
 }
+
+void G4PhononTrackMap::Clear() {
+  theMap.clear();			// Remove all entries from map
+}
+
 
 
 // Check if specified track is already loaded

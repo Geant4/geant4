@@ -17,6 +17,12 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 November 2013  Michael Kelsey (prophonon-V09-06-02)
+------------------------------------------------------
+- G4PhononTrackMap:  Move implementation of Clear() to .cc file.  Called
+  from constructor to try to ensure that map data member isn't wonky on
+  Windows.
+
 6 November 2013  Michael Kelsey (prophonon-V09-06-01)
 -----------------------------------------------------
 - G4LatticeReader.cc:  Fix compiler warning about implicit cast of string

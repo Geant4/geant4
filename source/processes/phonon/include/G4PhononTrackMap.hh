@@ -28,6 +28,8 @@
 //
 // $Id$
 //
+// 20131111  Move implementation of Clear() to .cc file
+
 #ifndef G4PhononTrackMap_h
 #define G4PhononTrackMap_h 1
 
@@ -60,7 +62,7 @@ public:
   // Remove specified track from map (used by EndTracking)
   void RemoveTrack(const G4Track* track);
 
-  void Clear() { theMap.clear(); }		// Remove all entries from map
+  void Clear();			// Remove all entries from map
 
 private:
   TrkIDKmap theMap;		// Associate track ID numbers with vectors
