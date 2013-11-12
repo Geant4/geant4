@@ -318,7 +318,7 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     else if ( rmType==G4RunManager::sequentialRM )
     {
       G4cout<<"*** /run/numberOfThreads command is issued in sequential mode."
-            <<"\nCommand is ignored.";
+            <<"\nCommand is ignored."<<G4endl;
     }
     else
     {
@@ -336,7 +336,7 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     else if ( rmType==G4RunManager::sequentialRM )
     {
       G4cout<<"*** /run/eventModulo command is issued in sequential mode."
-            <<"\nCommand is ignored.";
+            <<"\nCommand is ignored."<<G4endl;
     }
     else
     {

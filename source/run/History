@@ -16,14 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+Nov 12th, 2013, M. Asai (run-V09-06-123)
+- Add missing G4endl.
+
 Nov 8th, 2013, L. Desorgher (run-V09-06-122)
--Remove non used  field 'last_generated_part_was_adjoint' in 
- G4AdjointPrimaryGeneratorAction.hh to avoid compilation warning.
+- Remove non used  field 'last_generated_part_was_adjoint' in 
+  G4AdjointPrimaryGeneratorAction.hh to avoid compilation warning.
  
 Nov 7th, 2013, L. Desorgher (run-V09-06-121)
--Modification of adjoint classes to migrate to the new RMC schema where reverse
- and forward trackings of  equivalent adjoint and forward primaries are processed
- in the same events. This in preparation for the migration to the G4MT mode. 
+- Modification of adjoint classes to migrate to the new RMC schema where reverse
+  and forward trackings of  equivalent adjoint and forward primaries are processed
+  in the same events. This in preparation for the migration to the G4MT mode. 
 
 Nov 7th, 2013, A.Dotti (run-V09-06-120)
 - Fix correct use of G4VUserWorkerInitialization::InitializeSteppingVerbose()
