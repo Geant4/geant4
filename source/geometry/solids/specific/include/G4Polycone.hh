@@ -61,7 +61,7 @@
 #ifndef G4Polycone_hh
 #define G4Polycone_hh
 
-#if defined(G4GEOM_USE_UPOLYCONE)
+#if defined(G4GEOM_USE_USOLIDS)
 #define G4GEOM_USE_UPOLYCONE 1
 #endif
 
