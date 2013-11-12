@@ -117,7 +117,7 @@ G4double G4USolid::DistanceToIn(const G4ThreeVector& pt) const
 
 G4double G4USolid::DistanceToOut(const G4ThreeVector& pt,
                                  const G4ThreeVector& d,
-                                 const G4bool /*calcNorm*/,
+                                 const G4bool calcNorm,
                                  G4bool* validNorm,
                                  G4ThreeVector* norm) const
 {
@@ -130,11 +130,19 @@ G4double G4USolid::DistanceToOut(const G4ThreeVector& pt,
   v.y = d.y();
   v.z = d.z(); // better assign at construction
   UVector3 n;
-
-  G4double dist = fShape->DistanceToOut(p, v, n, *validNorm); // should use local variable
-  norm->setX(n.x);
-  norm->setY(n.y);
-  norm->setZ(n.z); // *norm = n, but only after calcNorm check
+  bool valid;
+  //G4double dist = fShape->DistanceToOut(p, v, n, *validNorm); // should use local variable
+  G4double dist = fShape->DistanceToOut(p, v, n,valid); // should use local variable
+  if(calcNorm)
+  {
+    if(valid){ *validNorm = true;}
+    else {* validNorm =false;}
+    if(*validNorm)
+    { norm->setX(n.x);
+      norm->setY(n.y);
+      norm->setZ(n.z);
+    } // *norm = n, but only after calcNorm check
+  }
   if (dist > kInfinity) dist = kInfinity;
   return dist;
 }

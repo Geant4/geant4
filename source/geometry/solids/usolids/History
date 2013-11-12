@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 12, 2013  T.Nikitina             geom-usolids-V09-06-05
+- Corrected passing of parameters for normal in G4USolid::DistanceToOut(p,v).
+
 November 7, 2013  G.Cosmo                 geom-usolids-V09-06-04
 - Moved wrappers to associated modules.
 - Added missing accessor method to UTrd.

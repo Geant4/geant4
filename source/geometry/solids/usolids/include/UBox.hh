@@ -15,7 +15,7 @@
 //  A simple box defined by half-lengths on the three axis.
 //  The center of the box matches the origin of the local reference frame.
 //
-// 19.10.12 Marek Gayer
+// 10.06.11 J.Apostolakis, G.Cosmo, A.Gheata
 //          Created from original implementation in Geant4 and ROOT
 // --------------------------------------------------------------------
 
