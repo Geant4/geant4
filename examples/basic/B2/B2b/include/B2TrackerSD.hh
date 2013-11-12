@@ -45,7 +45,7 @@ class G4HCofThisEvent;
 /// B2Tracker sensitive detector class
 ///
 /// The hits are accounted in hits in ProcessHits() function which is called
-/// by Geant4 kernel at each step. A hit is created with each step with non zero 
+/// by Geant4 kernel at each step. A hit is created with each step with non zero
 /// energy deposit.
 
 class B2TrackerSD : public G4VSensitiveDetector

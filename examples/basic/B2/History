@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12/11/13 I. Hrivnacova (exampleB2-V09-06-10)
+- Avoid long lines 
+
 29/10/13 I. Hrivnacova (exampleB2-V09-06-09)
 - Using G4RunManager::SetPrintProgress()
 - Removed SetNumberOfThreads(4) from main (use Geant4 default)
