@@ -20,6 +20,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ November 13, 2013  G.Cosmo              geom-bool-V09-06-04
+ - Removed G4MultiUnion and related wrapper, as not yet ready for release.
+   Returning to tag "geom-bool-V09-06-02".
+
  November 07, 2013  G.Cosmo              geom-bool-V09-06-03
  - Moved G4UMultiUnion wrapper from usolids module. Added G4MultiUnion typedef.
 
