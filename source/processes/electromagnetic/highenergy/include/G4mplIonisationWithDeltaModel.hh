@@ -51,6 +51,7 @@
 
 #include "G4VEmModel.hh"
 #include "G4VEmFluctuationModel.hh"
+#include <vector>
 
 class G4ParticleChangeForLoss;
 
@@ -132,6 +133,9 @@ private:
   G4double dedxlim;
   G4int    nmpl;
   G4double pi_hbarc2_over_mc2;
+
+  static std::vector<G4double>* dedx0;
+
 };
 
 #endif

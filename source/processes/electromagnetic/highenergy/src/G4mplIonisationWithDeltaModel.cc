@@ -61,10 +61,15 @@
 #include "G4ParticleChangeForLoss.hh"
 #include "G4Electron.hh"
 #include "G4DynamicParticle.hh"
+#include "G4ProductionCutsTable.hh"
+#include "G4MaterialCutsCouple.hh"
+#include "G4Log.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 using namespace std;
+
+std::vector<G4double>* G4mplIonisationWithDeltaModel::dedx0 = 0;
 
 G4mplIonisationWithDeltaModel::G4mplIonisationWithDeltaModel(G4double mCharge,
 							     const G4String& nam)
@@ -93,7 +98,9 @@ G4mplIonisationWithDeltaModel::G4mplIonisationWithDeltaModel(G4double mCharge,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4mplIonisationWithDeltaModel::~G4mplIonisationWithDeltaModel()
-{}
+{
+  if(IsMaster()) { delete dedx0; }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -117,6 +124,25 @@ G4mplIonisationWithDeltaModel::Initialise(const G4ParticleDefinition* p,
 {
   if(!monopole) { SetParticle(p); }
   if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+  if(IsMaster()) {
+    if(!dedx0) { dedx0 = new std::vector<G4double>; }
+    G4ProductionCutsTable* theCoupleTable=
+      G4ProductionCutsTable::GetProductionCutsTable();
+    G4int numOfCouples = theCoupleTable->GetTableSize();
+    G4int n = dedx0->size();
+    if(n < numOfCouples) { dedx0->resize(numOfCouples); }
+
+    // initialise vector
+    for(G4int i=0; i<numOfCouples; ++i) {
+
+      const G4Material* material = 
+	theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial();
+      G4double eDensity = material->GetElectronDensity();
+      G4double vF = electron_Compton_length*pow(3*pi*pi*eDensity,0.3333333333);
+      (*dedx0)[i] = pi_hbarc2_over_mc2*eDensity*nmpl*nmpl*
+	(G4Log(2*vF/fine_structure_const) - 0.5)/vF;
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -138,7 +164,8 @@ G4mplIonisationWithDeltaModel::ComputeDEDXPerVolume(const G4Material* material,
   G4double beta  = sqrt(beta2);
 
   // low-energy asymptotic formula
-  G4double dedx  = dedxlim*beta*material->GetDensity();
+  //G4double dedx  = dedxlim*beta*material->GetDensity();
+  G4double dedx = (*dedx0)[CurrentCouple()->GetIndex()]*beta;
 
   // above asymptotic
   if(beta > betalow) {
@@ -149,7 +176,8 @@ G4mplIonisationWithDeltaModel::ComputeDEDXPerVolume(const G4Material* material,
 
     } else {
 
-      G4double dedx1 = dedxlim*betalow*material->GetDensity();
+      //G4double dedx1 = dedxlim*betalow*material->GetDensity();
+      G4double dedx1 = (*dedx0)[CurrentCouple()->GetIndex()]*betalow;
       G4double dedx2 = ComputeDEDXAhlen(material, bg2lim, cutEnergy);
 
       // extrapolation between two formula 
@@ -185,7 +213,7 @@ G4mplIonisationWithDeltaModel::ComputeDEDXAhlen(const G4Material* material,
   dedx += 0.5 * k - B[nmpl];
 
   // density effect correction
-  G4double x = log(bg2)/twoln10;
+  G4double x = G4Log(bg2)/twoln10;
   dedx -= material->GetIonisation()->DensityCorrection(x);
 
   // now compute the total ionization loss

@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 November 2013: V.Ivant (emhighenergy-V09-06-09)
+- G4mplIonisationModel - fixed compillation problem of the previous tag
+
+12 November 2013: V.Ivant (emhighenergy-V09-06-08)
+- G4mplIonisationModel, G4mplIonisationWithDeltaModel - fixed electron
+    gas ionisation part of a model (problem is identified by Zukai Wang 
+    <zw4vm@virginia.edu>); before model was working correctly for 
+    very heavy monopoles in Silicon and not accurate for other media
+
 19 August 2013: V.Ivant (emhighenergy-V09-06-07)
 - G4hPairProductionModel - do not call obsolete SetElement() method;
     use G4Log and G4Exp
