@@ -23,49 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file field/field03/src/F03StepCut.cc
-/// \brief Implementation of the F03StepCut class
+//
+/// \file F03ActionInitialization.hh
+/// \brief Definition of the F03ActionInitialization class
 //
 //
-// $Id$
+//
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "F03StepCut.hh"
+#ifndef F03ActionInitialization_h
+#define F03ActionInitialization_h 1
 
-#include "G4Step.hh"
-#include "G4UserLimits.hh"
-#include "G4VParticleChange.hh"
-#include "G4EnergyLossTables.hh"
+#include "G4VUserActionInitialization.hh"
+
+class F03DetectorConstruction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F03StepCut::F03StepCut(const G4String& aName)
- : G4VDiscreteProcess(aName),
-   fMaxChargedStep(DBL_MAX)
+/// Action initialization class.
+
+class F03ActionInitialization : public G4VUserActionInitialization
 {
-   if (verboseLevel>0) {
-     G4cout << GetProcessName() << " is created "<< G4endl;
-   }
-}
+  public:
+    F03ActionInitialization(F03DetectorConstruction*);
+    virtual ~F03ActionInitialization();
+
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+
+  private:
+    F03DetectorConstruction* fDetConstruction;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F03StepCut::~F03StepCut()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-F03StepCut::F03StepCut(F03StepCut& right)
- : G4VDiscreteProcess(right)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void F03StepCut::SetMaxStep(G4double step)
-{
-  fMaxChargedStep = step;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif
