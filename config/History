@@ -16,17 +16,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11th November 2013   Gabriele Cosmo  (config-V09-06-15)
+- Updated Darwin-g++ and Darwin-clang configurations for Qt to allow for
+  correct detection of Qt5 directory structure.
+  Removed '-ansi -pedantic' compilation options, now obsolete.
+  Corrected include paths for X11FLAGS, to resolve compilation errors on
+  MacOSX 10.9 Mavericks.
+- Added paths for Qt5 to Linux-g++ configuration.
+- Removed obsolete Linux-egcs configuration script.
+
 9th November 2013   Andrea Dotti     (config-V09-06-14)
-- remove changes introduced in tag config-V09-05-11 because give
-  errors in Mac OS X 10.7 for option --stdlib=libstdc++ (unknown
-  option)
+- Removed compilation option "--stdlib=libstdc++" introduced in previous tags
+  for Darwin-g++, as giving errors in MacOSX 10.7 for unknown option.
 
 8th November 2013   Gabriele Cosmo   (config-V09-06-13)
 - binmake.gmk: removed 'high_energy' and 'low_energy' hadronic modules;
   replaced 'lll_fission' with 'fission'.
 
 8th November 2013   Gabriele Cosmo   (config-V09-06-12)
-- Removed non necessary LD flag in Darwin configurations.
+- Removed not necessary LD flag in Darwin configurations.
 
 8th November 2013   Gabriele Cosmo   (config-V09-06-11)
 - Added "-stdlib=libstdc++" compilation flag in Darwin-g++ and

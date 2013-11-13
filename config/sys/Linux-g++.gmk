@@ -90,11 +90,22 @@ ifeq ($(G4SYSTEM),Linux-g++)
 
   QT_VERSION := $(shell $(QTMOC) 2>&1 -v | sed 's/.* .Qt \([0-9]\)\..*/\1/' )
 
-  ifndef QTFLAGS
-    QTFLAGS   := -I$(QTHOME)/include -I$(QTHOME)/include/Qt
-    QTFLAGS   += -I$(QTHOME)/include/QtCore 
-    QTFLAGS   += -I$(QTHOME)/include/QtGui 
-    QTFLAGS   += -I$(QTHOME)/include/QtOpenGL 
+  ifeq ($(QT_VERSION),5)
+    ifndef QTFLAGS              # Qt5
+      QTFLAGS   := -I $(QTHOME)/include -I$(QTHOME)/include/Qt
+      QTFLAGS   += -I $(QTHOME)/include/QtCore
+      QTFLAGS   += -I $(QTHOME)/include/QtGui
+      QTFLAGS   += -I $(QTHOME)/include/QtWidgets
+      QTFLAGS   += -I $(QTHOME)/include/QtOpenGL
+      QTFLAGS   += -I $(QTHOME)/include/QtPrintSupport
+    endif
+  else                          # Qt4
+    ifndef QTFLAGS
+      QTFLAGS   := -I$(QTHOME)/include -I$(QTHOME)/include/Qt
+      QTFLAGS   += -I$(QTHOME)/include/QtCore 
+      QTFLAGS   += -I$(QTHOME)/include/QtGui 
+      QTFLAGS   += -I$(QTHOME)/include/QtOpenGL 
+    endif
   endif
   ifndef QTLIBPATH
     QTLIBPATH := $(QTHOME)/lib
@@ -103,11 +114,20 @@ ifeq ($(G4SYSTEM),Linux-g++)
       QTLIBPATH := $(QTHOME)/lib/qt$(QT_VERSION)
     endif
   endif
-  ifndef QTLIBS
-    QTLIBS   := -L$(QTLIBPATH) -lQtCore -lQtGui
-  endif
-  ifndef GLQTLIBS
-    GLQTLIBS := -L$(QTLIBPATH) -lQtCore -lQtGui -lQtOpenGL
+  ifeq ($(QT_VERSION),5)
+    ifndef QTLIBS              # Qt5
+      QTLIBS   := -L$(QTLIBPATH) -lQtCore -lQtGui -lQtWidgets -lQtPrintSupport
+    endif
+    ifndef GLQTLIBS
+      GLQTLIBS := -L$(QTLIBPATH) -lQtCore -lQtGui -lQtWidgets  -lQtOpenGL -lQtPrintSupport
+    endif
+  else                         # Qt4
+    ifndef QTLIBS
+      QTLIBS   := -L$(QTLIBPATH) -lQtCore -lQtGui
+    endif
+    ifndef GLQTLIBS
+      GLQTLIBS := -L$(QTLIBPATH) -lQtCore -lQtGui -lQtOpenGL
+    endif
   endif
 
 #----------------------------------------------------------------------------
