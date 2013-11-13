@@ -38,16 +38,13 @@ GEANT4_DEFINE_MODULE(NAME G4geomBoolean
         G4BooleanSolid.icc
         G4DisplacedSolid.hh
         G4IntersectionSolid.hh
-        G4MultiUnion.hh
         G4SubtractionSolid.hh
-        G4UMultiUnion.hh
         G4UnionSolid.hh
     SOURCES
         G4BooleanSolid.cc
         G4DisplacedSolid.cc
         G4IntersectionSolid.cc
         G4SubtractionSolid.cc
-        G4UMultiUnion.cc
         G4UnionSolid.cc
     GRANULAR_DEPENDENCIES
         G4geometrymng
