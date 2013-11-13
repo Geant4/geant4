@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 13, 2013  G.Cosmo                geom-usolids-V09-06-06
+- Leave out UMultiUnion, as not yet ready for release.
+
 November 12, 2013  T.Nikitina             geom-usolids-V09-06-05
 - Corrected passing of parameters for normal in G4USolid::DistanceToOut(p,v).
 
