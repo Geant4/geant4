@@ -40,7 +40,6 @@
 
 #include "VUSolid.hh"
 
-#include "UMultiUnion.hh"
 #include "UPolyconeSide.hh"
 #include "UVCSGfaceted.hh"
 #include "UVoxelizer.hh"

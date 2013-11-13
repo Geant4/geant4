@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 13, 2013  G.Cosmo                geom-usolids-V09-06-07
+- Removed useless dependency on UMultiUnion in UPolycone.
+
 November 13, 2013  G.Cosmo                geom-usolids-V09-06-06
 - Leave out UMultiUnion, as not yet ready for release.
 
