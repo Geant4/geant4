@@ -30,6 +30,7 @@
 // Implementation of G4UGenericPolycone wrapper class
 // --------------------------------------------------------------------
 
+#include "G4GenericPolycone.hh"
 #include "G4UGenericPolycone.hh"
 #include "G4Polyhedron.hh"
 

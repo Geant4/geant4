@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-Nov-2013  G.Cosmo               (geom-specific-V09-06-30)
+- Correction to G4UTet and G4UGenericPolycone to explicitly include
+  symbols re-definitions from G4Tet and G4GenericPolycone respectively.
+
 12-Nov-2013  G.Cosmo               (geom-specific-V09-06-29)
 - Added dummy method G4UPolycone::Reset().
   NOTE: Required related implementation (currently missing!) in UPolycone.
