@@ -23,8 +23,8 @@ G4ENDFTapeRead::
 G4ENDFTapeRead( G4String FileLocation,
                 G4String FileName,
                 G4FFGEnumerations::YieldType WhichYield,
-                G4FFGEnumerations::FissionCause WhichCause )
-:   Cause_(WhichCause),
+                G4FFGEnumerations::FissionCause /*WhichCause*/ )
+:   /* Cause_(WhichCause),*/
     Verbosity_(G4FFGDefaultValues::Verbosity),
     YieldType_(WhichYield)
 {
@@ -36,9 +36,9 @@ G4ENDFTapeRead::
 G4ENDFTapeRead( G4String FileLocation,
                 G4String FileName,
                 G4FFGEnumerations::YieldType WhichYield,
-                G4FFGEnumerations::FissionCause WhichCause,
+                G4FFGEnumerations::FissionCause /*WhichCause*/,
                 G4int Verbosity )
-:   Cause_(WhichCause),
+:   /*Cause_(WhichCause),*/
     Verbosity_(Verbosity),
     YieldType_(WhichYield)
 {
@@ -49,9 +49,9 @@ G4ENDFTapeRead( G4String FileLocation,
 G4ENDFTapeRead::
 G4ENDFTapeRead( std::istringstream& dataStream,
                 G4FFGEnumerations::YieldType WhichYield,
-                G4FFGEnumerations::FissionCause WhichCause,
+                G4FFGEnumerations::FissionCause /*WhichCause*/,
                 G4int Verbosity )
-:   Cause_(WhichCause),
+:   /*Cause_(WhichCause),*/
     Verbosity_(Verbosity),
     YieldType_(WhichYield)
 {

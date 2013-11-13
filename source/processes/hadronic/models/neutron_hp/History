@@ -14,6 +14,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 November 2013 Tatsumi Koi (hadr-hpn-V09-06-23)
+Fix compiler warnings: 
+       include/G4ENDFTapeRead.hh
+       src/G4WendtFissionFragmentGenerator.cc
+       src/G4ENDFTapeRead.cc
+
+
 10 November 2013 Tatsumi Koi (hadr-hpn-V09-06-22)
 Fix compiler warnings: 
        src/G4WendtFissionFragmentGenerator.cc

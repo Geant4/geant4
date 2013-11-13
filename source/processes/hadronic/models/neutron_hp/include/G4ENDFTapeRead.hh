@@ -128,7 +128,7 @@ private:
 
 // Data members
     /** Stores the number corresponding to the fission cause that will be extracted */
-    const G4FFGEnumerations::FissionCause Cause_;
+    //const G4FFGEnumerations::FissionCause Cause_;
     /** Counter for the number of energy groups that were extracted */
     G4int EnergyGroups_;
     /** Array containing the values of the extracted energy groups */

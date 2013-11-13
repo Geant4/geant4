@@ -101,7 +101,7 @@ InitializeANucleus(const G4int A, const G4int Z, const G4int M, const G4String& 
 
         // Check the data file parameters
         if(!flag
-           || (Z < 2.5 && ((G4double)abs(dataFile.GetZ() - Z) > 0.001 || (G4double)abs(dataFile.GetA() - A) > 0.0001)))
+           || ( Z < 2.5 && ( (G4double)abs( dataFile.GetZ() - Z ) > 0.001 || (G4double)abs( (G4int)dataFile.GetA() - A ) > 0.0001 ) ) )
         {
             //G4cerr << "*** Something wrong with the data request.\tFlag :" << flag << G4endl;
             //G4FFG_FUNCTIONLEAVE__
