@@ -30,6 +30,11 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+13th November 2013 - Ben Morgan (cmake-V09-06-38)
+- Modules/Geant4BuildProjectConfig.cmake : Add FindTBB to exported modules.
+- Modules/Geant4OptionalComponents.cmake : Correct usolids include path.
+  Document option and feature report as "EXPERIMENTAL".
+
 12th November 2013 - Ben Morgan (cmake-V09-06-37)
 - Modules/Geant4ToolchainBackwardCompatibility.cmake : Fix mistake in
   configuration of binary directory PATH which resulted in G4INCLUDE

@@ -157,7 +157,7 @@ configure_file(
   COPYONLY
   )
 
-foreach(_mod AIDA HepMC Pythia6 ROOT StatTest)
+foreach(_mod AIDA HepMC Pythia6 ROOT StatTest TBB)
   configure_file(
     ${PROJECT_SOURCE_DIR}/cmake/Modules/Find${_mod}.cmake
     ${PROJECT_BINARY_DIR}/Modules/Find${_mod}.cmake

@@ -150,12 +150,12 @@ endif()
 # - If enabled, require
 #   1) Global Compile definition G4GEOM_USE_USOLIDS (also exported)
 #   2) Global add of geometry/solids/usolids/include to include path
-option(GEANT4_USE_USOLIDS "Allow use of USolids geometry classes" OFF)
+option(GEANT4_USE_USOLIDS "EXPERIMENTAL: Allow use of USolids geometry classes" OFF)
 mark_as_advanced(GEANT4_USE_USOLIDS)
 
 if(GEANT4_USE_USOLIDS)
   add_definitions(-DG4GEOM_USE_USOLIDS)
-  include_directories(${PROJECT_SOURCE_DIR}/source/geometry/usolids/include)
-  GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Building support for USolids geometry classes")
+  include_directories(${PROJECT_SOURCE_DIR}/source/geometry/solids/usolids/include)
+  GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Building support for USolids geometry classes (EXPERIMENTAL)")
 endif()
 
