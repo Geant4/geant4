@@ -461,6 +461,7 @@ namespace G4INCL {
 
     // Push out the emitted pions
     ParticleList const &inside = theStore->getParticles();
+    ParticleList toEject;
     for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i) {
       if((*i)->isPion()) {
         Particle * const thePion = *i;
@@ -478,9 +479,12 @@ namespace G4INCL {
         thePion->adjustMomentumFromEnergy();
         thePion->setPotentialEnergy(0.);
         theZ -= thePion->getZ();
-        theStore->particleHasBeenEjected(thePion);
-        theStore->addToOutgoing(thePion);
+        toEject.push_back(thePion);
       }
+    }
+    for(ParticleIter i=toEject.begin(), e=toEject.end(); i!=e; ++i) {
+      theStore->particleHasBeenEjected(*i);
+      theStore->addToOutgoing(*i);
     }
   }
 
