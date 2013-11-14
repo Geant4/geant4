@@ -9,6 +9,10 @@ $Id$
 
                       ---------------------
 
+13.11.2014 - Jonathan Mdsen (DICOM-V09-06-07)
+           - Updated README and .README
+           - Fixed some comments
+
 04.11.2013 - Dennis Wright  (DICOM-V09-06-06)
            - replaced LEP model for alphas by extending Binary cascade to
              zero energy

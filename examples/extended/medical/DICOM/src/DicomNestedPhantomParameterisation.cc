@@ -81,7 +81,8 @@ void DicomNestedPhantomParameterisation::ReadColourData()
         fin >> mateName >> cred >> cgreen >> cblue >> copacity;
         G4Colour colour( cred, cgreen, cblue, copacity );
         G4VisAttributes* visAtt = (copacity > 0.) ?
-        (new G4VisAttributes( colour )) : (new G4VisAttributes(G4VisAttributes::Invisible));
+        (new G4VisAttributes( colour )) : 
+        (new G4VisAttributes(G4VisAttributes::Invisible));
         //visAtt->SetForceSolid(true);
         fColours[mateName] = visAtt;
     }*/
@@ -127,12 +128,10 @@ ComputeMaterial(G4VPhysicalVolume* physVol, const G4int iz,
     if(parentTouch==0) return fMaterials[0];
 
     // Copy number of voxels.
-    // Copy number of Y and Z are obtained from replication number.
-    // Copy nymber of X is the copy number of current voxel.
+    // Copy number of X and Y are obtained from replication number.
+    // Copy nymber of Z is the copy number of current voxel.
     G4int ix = parentTouch->GetReplicaNumber(0);
     G4int iy = parentTouch->GetReplicaNumber(1);
-    //G4int iy = parentTouch->GetReplicaNumber(0);
-    //G4int iz = parentTouch->GetReplicaNumber(1);
 
     G4int copyID = ix + fnX*iy + fnX*fnY*iz;
 
@@ -149,9 +148,11 @@ ComputeMaterial(G4VPhysicalVolume* physVol, const G4int iz,
         }
 
         if(0 < fColours.count(mateName)) {
-            physVol->GetLogicalVolume()->SetVisAttributes(fColours.find(mateName)->second);
+            physVol->GetLogicalVolume()->
+            SetVisAttributes(fColours.find(mateName)->second);
         } else {
-            physVol->GetLogicalVolume()->SetVisAttributes(fColours.begin()->second);
+            physVol->GetLogicalVolume()->
+            SetVisAttributes(fColours.begin()->second);
         }
     }
     
@@ -193,14 +194,10 @@ void DicomNestedPhantomParameterisation::
 ComputeTransformation(const G4int copyNo, G4VPhysicalVolume* physVol) const
 {
     // Position of voxels.
-    // y and z positions are already defined in DetectorConstruction by using
-    // replicated volume. Here only we need to define is x positions of voxels.
-    physVol->SetTranslation(G4ThreeVector(0.,0., (2.*static_cast<double>(copyNo)+1.)*fdZ -
-                      fdZ*fnZ));
-    //physVol->SetTranslation(G4ThreeVector((2.*static_cast<double>(copyNo)+1.)*fdX - 
-    //fdX*fnX, 0., 0.));
-    //physVol->SetTranslation(G4ThreeVector(0., (2.*static_cast<double>(copyNo)+1.)*fdY - 
-    //fdY*fnY, 0.));
+    // x and y positions are already defined in DetectorConstruction by using
+    // replicated volume. Here only we need to define is z positions of voxels.
+    physVol->SetTranslation(G4ThreeVector(0.,0.,(2.*static_cast<double>(copyNo)
+                                                +1.)*fdZ - fdZ*fnZ));
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
