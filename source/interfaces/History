@@ -17,7 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-9th October 2013  Laurent Garnier (interfaces-V09-06-13)
+13th October 2013  Laurent Garnier (interfaces-V09-06-14)
+- G4UIQt :
+ o Add a fix for JIRA DEV-98. Qt5 driver is broken with Qt5.0.1 version, the only fix we could
+   do, is to warn users that there will not be any Store/Immediate viewer support for Qt5.0. We
+   advice them to update to Qt5.1. Few users will have this configuration since we are already
+   in Qt5.2
+
+13th October 2013  Laurent Garnier
+- G4UIQt :
+ o Remove QWidget unuseful argument for G4QtTabWidget
+ o Better layouts management (does not fix anything)
+
+9th October 2013  Laurent Garnie (interfaces-V09-06-13)
 - G4UIQt : Fix a shadowing variable
 
 8th October 2013  Laurent Garnier (interfaces-V09-06-12)

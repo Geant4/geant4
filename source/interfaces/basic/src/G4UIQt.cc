@@ -76,7 +76,7 @@
 #include <qtoolbar.h>
 #include <qfiledialog.h>
 #include <qdesktopwidget.h>
-
+#include <qmessagebox.h>
 
 
 #include <stdlib.h>
@@ -259,7 +259,7 @@ QWidget* G4UIQt::CreateHelpTBWidget(
   QHBoxLayout *helpLayout = new QHBoxLayout();
   QVBoxLayout *vLayout = new QVBoxLayout();
   fHelpVSplitter = new QSplitter(Qt::Horizontal);
-  fHelpLine = new QLineEdit(fHelpTBWidget);
+  fHelpLine = new QLineEdit();
   helpLayout->addWidget(new QLabel("Search :"));
   helpLayout->addWidget(fHelpLine);
   connect( fHelpLine, SIGNAL( editingFinished () ), this, SLOT( LookForHelpStringCallback() ) );
@@ -296,28 +296,29 @@ QWidget* G4UIQt::CreateCoutTBWidget(
 
   QVBoxLayout *layoutCoutTB = new QVBoxLayout();
 
-  fCoutTBTextArea = new QTextEdit(fCoutTBWidget);
+  fCoutTBTextArea = new QTextEdit();
 
   // set font familly and size
   fCoutTBTextArea->setFontFamily("Courier");
   fCoutTBTextArea->setFontPointSize(12);
 
-  fCoutFilter = new QLineEdit(fCoutTBWidget);
-  QLabel* coutFilterLabel = new QLabel("Filter : ",fCoutTBWidget);
+  fCoutFilter = new QLineEdit();
+  QLabel* coutFilterLabel = new QLabel("Filter : ");
   coutFilterLabel->setToolTip("filter output by...");
 
-  QPushButton *coutTBClearButton = new QPushButton("clear output",fCoutTBWidget);
+  QPushButton *coutTBClearButton = new QPushButton("clear output");
   coutTBClearButton->setToolTip("clear output");
   connect(coutTBClearButton, SIGNAL(clicked()), SLOT(ClearButtonCallback()));
   connect(fCoutFilter, SIGNAL(textEdited ( const QString &)), SLOT(CoutFilterCallback( const QString &)));
 
   fCoutTBTextArea->setReadOnly(true);
 
-  QWidget* coutButtonWidget = new QWidget(fCoutTBWidget);
-  QHBoxLayout* layoutCoutTBButtons = new QHBoxLayout(coutButtonWidget);
+  QWidget* coutButtonWidget = new QWidget();
+  QHBoxLayout* layoutCoutTBButtons = new QHBoxLayout();
   layoutCoutTBButtons->addWidget(coutTBClearButton);
   layoutCoutTBButtons->addWidget(coutFilterLabel);
   layoutCoutTBButtons->addWidget(fCoutFilter);
+  coutButtonWidget->setLayout(layoutCoutTBButtons);
 
   // reduce margins
   layoutCoutTBButtons->setContentsMargins(3,3,3,0);
@@ -379,9 +380,10 @@ QWidget* G4UIQt::CreateLeftSplitterWidget(){
 
   fLeftSplitterWidget = new QWidget();
   QVBoxLayout * layoutLeftSplitterWidget = new QVBoxLayout();
+  layoutLeftSplitterWidget->addWidget(CreateUITabWidget());
+
   fLeftSplitterWidget->setLayout(layoutLeftSplitterWidget);
 
-  layoutLeftSplitterWidget->addWidget(CreateUITabWidget());
   fLeftSplitterWidget->resize(200,200);
 
   return fLeftSplitterWidget;
@@ -395,13 +397,12 @@ QWidget* G4UIQt::CreateRightSplitterWidget(){
   // Set layouts
   QWidget* commandLineWidget = new QWidget();
   QHBoxLayout *layoutCommandLine = new QHBoxLayout();
-  commandLineWidget->setLayout(layoutCommandLine);
 
   // fill them
 
-  fCommandLabel = new QLabel("",commandLineWidget);
+  fCommandLabel = new QLabel("");
 
-  fCommandArea = new QLineEdit(commandLineWidget);
+  fCommandArea = new QLineEdit();
   fCommandArea->installEventFilter(this);
   fCommandArea->activateWindow();
 
@@ -413,6 +414,7 @@ QWidget* G4UIQt::CreateRightSplitterWidget(){
   layoutCommandLine->addWidget(fCommandLabel);
   layoutCommandLine->addWidget(fCommandArea);
 
+  commandLineWidget->setLayout(layoutCommandLine);
 
   fEmptyViewerTabLabel = new QLabel("If you want to have a Viewer, please use /vis/open commands.");
 
@@ -423,9 +425,10 @@ QWidget* G4UIQt::CreateRightSplitterWidget(){
     
   //  Create an widget to handle OGL widget and label
   fViewerTabHandleWidget = new QWidget();
-  fViewerTabHandleWidget->setLayout(new QVBoxLayout());
+  QVBoxLayout * viewerTabHandleLayout = new QVBoxLayout();
+  viewerTabHandleLayout->addWidget(fEmptyViewerTabLabel);
+  fViewerTabHandleWidget->setLayout(viewerTabHandleLayout);
 
-  fViewerTabHandleWidget->layout()->addWidget(fEmptyViewerTabLabel);
 
   fRightSplitterWidget->addWidget(fViewerTabHandleWidget);
   fRightSplitterWidget->addWidget(CreateCoutTBWidget());
@@ -463,9 +466,30 @@ bool G4UIQt::AddTabWidget(
 ,int sizeY
 )
 {
+  // Special case for Qt version between 5.0 and 5.1 on Mac OSX
+  // Due to a bug in this Qt version, we can't put a OpenGL Widget inside the QTabWidget.
+  // A work around is to put it outside. Returning false will fore the wiewer to put the QGLWidget
+  // inside a new QWindow.
+
+#ifdef Q_OS_MAC
+  #if QT_VERSION < 0x050100
+   #if QT_VERSION >= 0x050000
+  QString message = QString(
+                            "This Qt version [")+qVersion ()+"] has some issues with the OpenGL viewer.\n"+
+  "To prevent problems, you are not allowed to open a Store nor Immediate viewer.\n" +
+  "\n" +
+  "Please upgrade to Qt version >= 5.1\n";
+  
+  QMessageBox::warning(fMainWindow, tr("Warning"),
+                       tr(message.toStdString().c_str()),
+                       QMessageBox::Ok);
+  return false;
+  #endif
+  #endif
+#endif
   
   if (fViewerTabWidget == NULL) {
-    fViewerTabWidget = new G4QTabWidget(fViewerTabHandleWidget, sizeX, sizeY);
+    fViewerTabWidget = new G4QTabWidget(sizeX, sizeY);
     #if QT_VERSION < 0x040500
 #else
     fViewerTabWidget->setTabsClosable (true); 
@@ -486,8 +510,10 @@ bool G4UIQt::AddTabWidget(
   if (!aWidget) {
     return false;
   }
+// Has to be added before we put it into the fViewerTabHandleWidget widget
+  fViewerTabWidget->addTab(aWidget,name);
 
-  // Remove QLabel 
+  // Remove QLabel
 
   // L.Garnier 26/05/2010 : not exactly the same in qt3. Could cause some
   // troubles
@@ -504,7 +530,6 @@ bool G4UIQt::AddTabWidget(
   }
 
 
-  fViewerTabWidget->addTab(aWidget,name);
 
   fViewerTabWidget->setCurrentIndex(fViewerTabWidget->count()-1);
 
@@ -761,7 +786,7 @@ void G4UIQt::AddMenu (
   if (aName == NULL) return;
   if (aLabel == NULL) return;
 
-  QMenu *fileMenu = new QMenu(aLabel);
+  QMenu *fileMenu = new QMenu();
   fMainWindow->menuBar()->addMenu(fileMenu); 
 
   AddInteractor (aName,(G4Interactor)fileMenu);
@@ -1821,8 +1846,9 @@ void G4UIQt::FillHelpTree()
 
     if (newItem == NULL) {
       
-      newItem = new QTreeWidgetItem(fHelpTreeWidget);
+      newItem = new QTreeWidgetItem();
       newItem->setText(0,GetShortCommandPath(commandText));
+      fHelpTreeWidget->addTopLevelItem(newItem);
     }
 
     // look for childs
@@ -1858,8 +1884,9 @@ void G4UIQt::CreateHelpTree(
     // if already exist, don't create it !
     newItem = FindTreeItem(aParent,commandText);
     if (newItem == NULL) {
-      newItem = new QTreeWidgetItem(aParent);
+      newItem = new QTreeWidgetItem();
       newItem->setText(0,GetShortCommandPath(commandText));
+      aParent->addChild(newItem);
     }
     CreateHelpTree(newItem,aCommandTree->GetTree(a+1));
   }
@@ -1874,8 +1901,9 @@ void G4UIQt::CreateHelpTree(
     // if already exist, don't create it !
     newItem = FindTreeItem(aParent,commandText);
     if (newItem == NULL) {
-      newItem = new QTreeWidgetItem(aParent);
+      newItem = new QTreeWidgetItem();
       newItem->setText(0,GetShortCommandPath(commandText));
+      aParent->addChild(newItem);
 
 #if QT_VERSION < 0x040202
       fHelpTreeWidget->setItemExpanded(newItem,false); 
@@ -1982,7 +2010,7 @@ bool G4UIQt::CreateVisCommandGroupAndToolBox(
     
     // Not found ? create it
     if (!found) {
-      newParentWidget = new QGroupBox(commandSection);
+      newParentWidget = new QGroupBox();
       newParentWidget->setLayout(new QVBoxLayout());
       if (!aParent->layout()) {
         aParent->setLayout(new QVBoxLayout());
@@ -2033,8 +2061,9 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
       
     // Re-implementation of G4UIparameter.cc
     QWidget* paramWidget = new QWidget();
-    QGridLayout* gridLayout = new QGridLayout(paramWidget);
-      
+    QGridLayout* gridLayout = new QGridLayout();
+    paramWidget->setLayout(gridLayout);
+    
     // Special case for colour, try to display a color chooser if we found red/green/blue parameter
     unsigned int nbColorParameter = 0;
     bool isStillColorParameter = false;
@@ -2090,8 +2119,9 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
 
       } else if (QString(QChar(param->GetParameterType())) == "b") {
         input = new QWidget();
-        QHBoxLayout* layout = new QHBoxLayout(input);
-
+        QHBoxLayout* layout = new QHBoxLayout();
+        input->setLayout(layout);
+        
         QButtonGroup* buttons = new QButtonGroup();
         QRadioButton* radioOff = new QRadioButton("0");
         QRadioButton* radioOn = new QRadioButton("1");
@@ -2128,7 +2158,8 @@ bool G4UIQt::CreateCommandWidget(G4UIcommand* aCommand, QWidget* aParent, bool i
 
       } else if ((QString(QChar(param->GetParameterType())) == "c")) {  // on/off
         input = new QWidget();
-        QHBoxLayout* layout = new QHBoxLayout(input);
+        QHBoxLayout* layout = new QHBoxLayout();
+        input->setLayout(layout);
 
         QButtonGroup* buttons = new QButtonGroup();
         QRadioButton* radioOff = new QRadioButton("off");
@@ -2937,7 +2968,7 @@ void G4UIQt::OpenHelpTreeOnCommand(
     for(int a=0;a<int(i.key()*multValue);a++) {
       progressStr += progressChar;
     }
-    newItem = new QTreeWidgetItem(fHelpTreeWidget);
+    newItem = new QTreeWidgetItem();
     QString commandStr = i.value().trimmed();
 
     if (commandStr.indexOf("/") == 0) {
@@ -2946,7 +2977,7 @@ void G4UIQt::OpenHelpTreeOnCommand(
       
     newItem->setText(0,commandStr);
     newItem->setText(1,progressStr);
-    
+    fHelpTreeWidget->addTopLevelItem(newItem);
 #if QT_VERSION < 0x040200
 #else
     newItem->setForeground ( 1, QBrush(Qt::blue) );
@@ -3468,10 +3499,9 @@ void G4UIQt::SetIconOrthoSelected() {
 
 
 G4QTabWidget::G4QTabWidget(
-QWidget*& aParent,
 int sizeX,
 int sizeY
-):QTabWidget(aParent)
+):QTabWidget()
  ,fTabSelected(false)
  ,fLastCreated(-1)
 ,fPreferedSizeX(sizeX+6)  // margin left+right
