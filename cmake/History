@@ -30,6 +30,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+14th November 2013 - Gunter Folger (cmake-V09-06-39)
+- use G4RadioactiveDecay.4.0
+- use G4PhotonEvaporation.3.0
+
 13th November 2013 - Ben Morgan (cmake-V09-06-38)
 - Modules/Geant4BuildProjectConfig.cmake : Add FindTBB to exported modules.
 - Modules/Geant4OptionalComponents.cmake : Correct usolids include path.

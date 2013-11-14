@@ -28,21 +28,21 @@ geant4_add_dataset(
 # - Photon evaporation
 geant4_add_dataset(
   NAME      PhotonEvaporation
-  VERSION   2.3
+  VERSION   3.0
   FILENAME  G4PhotonEvaporation
   EXTENSION tar.gz
   ENVVAR    G4LEVELGAMMADATA
-  MD5SUM    08848ebdd536280a0629d802040b70be
+  MD5SUM    f72d6d694f608fe10cc2126a0ac1f2a6
   )
 
 # - Radioisotopes
 geant4_add_dataset(
   NAME      RadioactiveDecay
-  VERSION   3.7
+  VERSION   4.0
   FILENAME  G4RadioactiveDecay
   EXTENSION tar.gz
   ENVVAR    G4RADIOACTIVEDATA
-  MD5SUM    039e5f64b0e451eb5c095bf81552cb42
+  MD5SUM    44a43b8f62c9f9cd4c3cb31c2b2bb7c3
   )
 
 # - Neutron XS
