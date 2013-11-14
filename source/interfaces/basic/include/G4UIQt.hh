@@ -78,7 +78,7 @@ class QToolBar;
 class G4QTabWidget : public QTabWidget {
 public :
   G4QTabWidget();
-  G4QTabWidget(int sizeX, int sizeY);
+  G4QTabWidget(QWidget* aParent, int sizeX, int sizeY);
   void paintEvent  ( QPaintEvent * event );
   inline void setTabSelected(bool a) { fTabSelected = a; };
   inline void setLastTabCreated(int a) { fLastCreated = a; };

@@ -17,42 +17,45 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13th October 2013  Laurent Garnier (interfaces-V09-06-14)
+14th November 2013  Laurent Garnier (interfaces-V09-06-15)
+- G4UIQt : Fix a bug introduce the 13th November 2013 : JIRA DEV-101
+
+13th November 2013  Laurent Garnier (interfaces-V09-06-14)
 - G4UIQt :
  o Add a fix for JIRA DEV-98. Qt5 driver is broken with Qt5.0.1 version, the only fix we could
    do, is to warn users that there will not be any Store/Immediate viewer support for Qt5.0. We
    advice them to update to Qt5.1. Few users will have this configuration since we are already
    in Qt5.2
 
-13th October 2013  Laurent Garnier
+13th November 2013  Laurent Garnier
 - G4UIQt :
  o Remove QWidget unuseful argument for G4QtTabWidget
  o Better layouts management (does not fix anything)
 
-9th October 2013  Laurent Garnie (interfaces-V09-06-13)
+9th November 2013  Laurent Garnie (interfaces-V09-06-13)
 - G4UIQt : Fix a shadowing variable
 
-8th October 2013  Laurent Garnier (interfaces-V09-06-12)
+8th November 2013  Laurent Garnier (interfaces-V09-06-12)
 - G4UIQt :
  o Fix JIRA issue DEV-10 : "When adding a button with "/vis/viewer/set/style",
    the parameters are not proposed."
 
-8th October 2013  Laurent Garnier (interfaces-V09-06-11)
+8th November 2013  Laurent Garnier (interfaces-V09-06-11)
 - G4UIQt :
  o Fix JIRA issue DEV-67 : remove warning when adding a new command button
  o Fix a possible problem on widgets parent.
 
-7th October 2013  Laurent Garnier
+7th November 2013  Laurent Garnier
 - G4UIQt : Fix JIRA issue DEV-94 : Crash when closing the last tab
 
-6th October 2013  Laurent Garnier (interfaces-V09-06-10)
+6th November 2013  Laurent Garnier (interfaces-V09-06-10)
 - G4UIQt : Fix compilation error on X11.
 
-5th October 2013  Laurent Garnier (interfaces-V09-06-09)
+5th November 2013  Laurent Garnier (interfaces-V09-06-09)
 - G4UIQt : Fix some resizing problems.
 - G4UIWt : Fix some warnings
 
-5th October 2013  Laurent Garnier
+5th November 2013  Laurent Garnier
 - G4UIQt :
   o Fix a problem on Linux reported by Ivana : Impossible to change
     the size of the OpenGL viewer

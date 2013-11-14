@@ -489,7 +489,7 @@ bool G4UIQt::AddTabWidget(
 #endif
   
   if (fViewerTabWidget == NULL) {
-    fViewerTabWidget = new G4QTabWidget(sizeX, sizeY);
+    fViewerTabWidget = new G4QTabWidget(fViewerTabHandleWidget, sizeX, sizeY);
     #if QT_VERSION < 0x040500
 #else
     fViewerTabWidget->setTabsClosable (true); 
@@ -524,8 +524,10 @@ bool G4UIQt::AddTabWidget(
       fViewerTabHandleWidget->layout()->removeWidget(fEmptyViewerTabLabel);
       delete fEmptyViewerTabLabel;
       fEmptyViewerTabLabel = NULL;
+      printf("fViewerTabHandleWidget :%d %d\n",fViewerTabHandleWidget->width(), fViewerTabHandleWidget->height());
       
       fViewerTabHandleWidget->layout()->addWidget(fViewerTabWidget);
+      printf("fViewerTabHandleWidget :%d %d\n",fViewerTabHandleWidget->width(), fViewerTabHandleWidget->height());
     }
   }
 
@@ -3499,9 +3501,10 @@ void G4UIQt::SetIconOrthoSelected() {
 
 
 G4QTabWidget::G4QTabWidget(
+QWidget* aParent,
 int sizeX,
 int sizeY
-):QTabWidget()
+):QTabWidget(aParent)
  ,fTabSelected(false)
  ,fLastCreated(-1)
 ,fPreferedSizeX(sizeX+6)  // margin left+right
