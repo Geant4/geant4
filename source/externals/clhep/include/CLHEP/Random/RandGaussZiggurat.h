@@ -25,7 +25,6 @@ for generating random variables", Journ. Statistical Software.
 #define RandGaussZiggurat_h 1
 
 #include "cmath"
-#include "CLHEP/Random/defs.h"
 #include "CLHEP/Random/RandGauss.h"
 
 namespace CLHEP {

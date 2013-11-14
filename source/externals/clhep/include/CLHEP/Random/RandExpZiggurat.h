@@ -23,7 +23,6 @@ for generating random variables", Journ. Statistical Software.
 #ifndef RandExpZiggurat_h
 #define RandExpZiggurat_h 1
 
-#include "CLHEP/Random/defs.h"
 #include "CLHEP/Random/Random.h"
 
 namespace CLHEP {
