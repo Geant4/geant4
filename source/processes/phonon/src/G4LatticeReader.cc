@@ -31,8 +31,10 @@
 // $Id$
 //
 // 20131106  M.Kelsey -- Add const to getenv() to avoid compiler warning.
+// 20131112  Throw exception if input file fails.
 
 #include "G4LatticeReader.hh"
+#include "G4ExceptionSeverity.hh"
 #include "G4LatticeLogical.hh"
 #include "G4SystemOfUnits.hh"
 #include <fstream>
@@ -52,7 +54,10 @@ G4LatticeLogical* G4LatticeReader::MakeLattice(const G4String& filename) {
   if (verboseLevel) G4cout << "G4LatticeReader " << filename << G4endl;
 
   if (!OpenFile(filename)) {
-    G4cerr << "G4LatticeReader error opening " << filename << G4endl;
+    G4ExceptionDescription msg;
+    msg << "Unable to open " << filename;
+    G4Exception("G4LatticeReader::MakeLattice", "Lattice001",
+		FatalException, msg);
     return 0;
   }
 
@@ -65,7 +70,10 @@ G4LatticeLogical* G4LatticeReader::MakeLattice(const G4String& filename) {
   CloseFile();
 
   if (!goodLattice) {
-    G4cerr << "ERROR reading lattice from " << filename << G4endl;
+    G4ExceptionDescription msg;
+    msg << "Error reading lattice from " << filename;
+    G4Exception("G4LatticeReader::MakeLattice", "Lattice002",
+		FatalException, msg);
     delete pLattice;
     pLattice = 0;
   }

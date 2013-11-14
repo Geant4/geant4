@@ -28,6 +28,7 @@
 //
 // $Id$
 //
+// 20131111  Add verbosity to report creating secondaries
 
 #include "G4VPhononProcess.hh"
 #include "G4DynamicParticle.hh"
@@ -53,13 +54,7 @@ namespace {
 G4VPhononProcess::G4VPhononProcess(const G4String& processName)
   : G4VDiscreteProcess(processName, fPhonon),
     trackKmap(G4PhononTrackMap::GetInstance()), theLattice(0),
-    currentTrack(0) {
-#ifdef G4VERBOSE
-  if (verboseLevel) {
-    G4cout << GetProcessName() << " is created " << G4endl;
-  }
-#endif
-}
+    currentTrack(0) {}
 
 G4VPhononProcess::~G4VPhononProcess() {;}
 
@@ -125,15 +120,20 @@ G4int G4VPhononProcess::ChoosePolarization(G4double Ldos, G4double STdos,
 G4Track* G4VPhononProcess::CreateSecondary(G4int polarization,
 					   const G4ThreeVector& waveVec,
 					   G4double energy) const {
-#ifdef G4VERBOSE
-  if (verboseLevel) {
+  if (verboseLevel>1) {
     G4cout << GetProcessName() << " CreateSecondary pol " << polarization
 	   << " K " << waveVec << " E " << energy << G4endl;
   }
-#endif
 
   G4ThreeVector vgroup = theLattice->MapKtoVDir(polarization, waveVec);
   vgroup = theLattice->RotateToGlobal(vgroup);
+
+  if (verboseLevel && std::fabs(vgroup.mag()-1.) > 0.01) {
+    G4cout << "WARNING: " << GetProcessName() << " vgroup not a unit vector: "
+	   << vgroup << G4endl;
+  } else if (verboseLevel>1) {
+    G4cout << GetProcessName() << " vgroup " << vgroup << G4endl;
+  }
 
   G4ParticleDefinition* thePhonon = G4PhononPolarization::Get(polarization);
 
@@ -144,6 +144,11 @@ G4Track* G4VPhononProcess::CreateSecondary(G4int polarization,
 
   // Store wavevector in lookup table for future tracking
   trackKmap->SetK(sec, theLattice->RotateToGlobal(waveVec));
+
+  if (verboseLevel>1) {
+    G4cout << GetProcessName() << " secondary K rotated to "
+	   << trackKmap->GetK(sec) << G4endl;
+  }
 
   sec->SetVelocity(theLattice->MapKtoV(polarization, waveVec));    
   sec->UseGivenVelocity(true);

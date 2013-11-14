@@ -28,6 +28,7 @@
 //
 // $Id$
 //
+// 20131111  Add verbose output for MFP calculation
 
 #include "G4PhononScattering.hh"
 #include "G4LatticePhysical.hh"
@@ -60,6 +61,9 @@ G4double G4PhononScattering::GetMeanFreePath(const G4Track& aTrack,
 
   //Calculate mean free path
   G4double mfp = aTrack.GetVelocity()/(Eoverh*Eoverh*Eoverh*Eoverh*B);
+
+  if (verboseLevel > 1)
+    G4cout << "G4PhononScattering::GetMeanFreePath = " << mfp << G4endl;
 
   *condition = NotForced;
  

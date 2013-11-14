@@ -28,12 +28,15 @@
 //
 // $Id$
 //
+// 20131113  Add registry to carry unique lattice pointers, for EOJ deletion
+
 #ifndef G4LatticeManager_h
 #define G4LatticeManager_h 1
 
 
 #include "G4ThreeVector.hh"
 #include <map>
+#include <set>
 
 class G4LatticeLogical;
 class G4LatticePhysical;
@@ -49,6 +52,8 @@ public:
   static G4LatticeManager* GetLatticeManager(); 
 
   void SetVerboseLevel(G4int vb) { verboseLevel = vb; }
+
+  void Reset();		// Remove and delete all registered lattices
 
   // Users may register physical or logical lattices with volumes
   G4bool RegisterLattice(G4VPhysicalVolume*, G4LatticePhysical*);
@@ -75,14 +80,22 @@ public:
 			   const G4ThreeVector&) const;
 
 protected:
+  void Clear();		// Remove entries from lookup tables w/o deletion
+
+protected:
   G4int verboseLevel;		// Allow users to enable diagnostic messages
 
-  typedef std::map<G4VPhysicalVolume*, G4LatticePhysical*> LatticeVolMap;
   typedef std::map<G4Material*, G4LatticeLogical*> LatticeMatMap;
+  typedef std::set<G4LatticeLogical*> LatticeLogReg;
 
+  LatticeLogReg fLLattices;	// Registry of unique lattice pointers
   LatticeMatMap fLLatticeList;
   int fTotalLLattices;		// == fLLatticeList.size(), for convenience
 
+  typedef std::map<G4VPhysicalVolume*, G4LatticePhysical*> LatticeVolMap;
+  typedef std::set<G4LatticePhysical*> LatticePhyReg;
+
+  LatticePhyReg fPLattices;	// Registry of unique lattice pointers
   LatticeVolMap fPLatticeList; 
   int fTotalPLattices;		// == fPLatticeList.size(), for convenience
 

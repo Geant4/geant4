@@ -17,6 +17,25 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 November 2013  Michael Kelsey (prophonon-V09-06-05)
+------------------------------------------------------
+- G4LatticeManager:  Avoid double-delete at end of job by registering unique
+  lattice pointers into std::set<>, and deleting those instead of std::map
+  entries.  Supporting non-virtual utility functions for use in ctor/dtor.
+
+12 November 2013  Michael Kelsey (prophonon-V09-06-04)
+------------------------------------------------------
+- G4LatticeReader.cc:  Per G.Folger, errors processing input file should
+  throw fatal exception, not return null pointer.
+
+12 November 2013  Michael Kelsey (prophonon-V09-06-03)
+------------------------------------------------------
+- G4VPhononProcess.cc:  Add verboseLevel-controlled output to show
+  generation of secondaries.
+
+- G4PhononDownConversion.cc, G4PhononScattering.cc:  Add verboseLevel output
+  to show MFP.
+
 11 November 2013  Michael Kelsey (prophonon-V09-06-02)
 ------------------------------------------------------
 - G4PhononTrackMap:  Move implementation of Clear() to .cc file.  Called

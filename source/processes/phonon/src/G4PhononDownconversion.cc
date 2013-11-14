@@ -28,6 +28,7 @@
 //
 // $Id$
 //
+// 20131111  Add verbose output for MFP calculation
 
 #include "G4PhononDownconversion.hh"
 #include "G4LatticePhysical.hh"
@@ -62,6 +63,9 @@ G4double G4PhononDownconversion::GetMeanFreePath(const G4Track& aTrack,
   
   //Calculate mean free path for anh. decay
   G4double mfp = aTrack.GetVelocity()/(Eoverh*Eoverh*Eoverh*Eoverh*Eoverh*A);
+
+  if (verboseLevel > 1)
+    G4cout << "G4PhononDownconversion::GetMeanFreePath = " << mfp << G4endl;
   
   *condition = NotForced;
   return mfp;
