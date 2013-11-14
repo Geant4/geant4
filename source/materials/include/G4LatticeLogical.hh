@@ -33,6 +33,7 @@
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
+#include <iosfwd>
 
 
 class G4LatticeLogical {
@@ -48,6 +49,11 @@ public:
 
   // Get group velocity direction (unit vector) for input polarization and K
   virtual G4ThreeVector MapKtoVDir(G4int, const G4ThreeVector& ) const;
+
+  // Dump structure in format compatible with reading back
+  void Dump(std::ostream& os) const;
+  void DumpMap(std::ostream& os, G4int pol, const G4String& name) const;
+  void Dump_NMap(std::ostream& os, G4int pol, const G4String& name) const;
 
 public:
   void SetDynamicalConstants(G4double Beta, G4double Gamma,
@@ -88,5 +94,13 @@ private:
   G4double fFTDOS;   //Density of states for FT-phonons
   G4double fBeta, fGamma, fLambda, fMu; //dynamical constants for material
 };
+
+// Write lattice structure to output stream
+
+inline std::ostream& 
+operator<<(std::ostream& os, const G4LatticeLogical& lattice) {
+  lattice.Dump(os);
+  return os;
+}
 
 #endif

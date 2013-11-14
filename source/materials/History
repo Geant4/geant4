@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-11-13 M.Kelsey (materials-V09-06-28)
+- G4LatticeLogical: Add dumping of data, to try to debug problems with phonon
+  example on Windows.  This tag may be left out of Release 10.0 since it is
+  past the deadline.
+
 07-11-13 V.Ivanchenko (materials-V09-06-27)
 - G4IonStoppingData - do not delete G4PhysicsVectors
 

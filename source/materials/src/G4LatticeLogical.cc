@@ -171,3 +171,48 @@ G4ThreeVector G4LatticeLogical::MapKtoVDir(G4int polarizationState,
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+// Dump structure in format compatible with reading back
+
+void G4LatticeLogical::Dump(std::ostream& os) const {
+  os << "dyn " << fBeta << " " << fGamma << " " << fLambda << " " << fMu
+     << "\nscat " << fB << " decay " << fA
+     << "\nLDOS " << fLDOS << " STDOS " << fSTDOS << " FTDOS " << fFTDOS
+     << std::endl;
+
+  Dump_NMap(os, 0, "LVec.ssv");
+  Dump_NMap(os, 1, "FTVec.ssv");
+  Dump_NMap(os, 2, "STVec.ssv");
+
+  DumpMap(os, 0, "L.ssv");
+  DumpMap(os, 1, "FT.ssv");
+  DumpMap(os, 2, "ST.ssv");
+}
+
+void G4LatticeLogical::DumpMap(std::ostream& os, G4int pol,
+			       const G4String& name) const {
+  os << "VG " << name << " " << (pol==0?"L":pol==1?"FT":pol==2?"ST":"??")
+     << " " << fVresTheta << " " << fVresPhi << std::endl;
+
+  for (G4int iTheta=0; iTheta<fVresTheta; iTheta++) {
+    for (G4int iPhi=0; iPhi<fVresPhi; iPhi++) {
+      os << fMap[pol][iTheta][iPhi] << std::endl;
+    }
+  }
+}
+
+void G4LatticeLogical::Dump_NMap(std::ostream& os, G4int pol,
+				 const G4String& name) const {
+  os << "VDir " << name << " " << (pol==0?"L":pol==1?"FT":pol==2?"ST":"??")
+     << " " << fDresTheta << " " << fDresPhi << std::endl;
+
+  for (G4int iTheta=0; iTheta<fDresTheta; iTheta++) {
+    for (G4int iPhi=0; iPhi<fDresPhi; iPhi++) {
+      os << fN_map[pol][iTheta][iPhi].x()
+	 << " " << fN_map[pol][iTheta][iPhi].y()
+	 << " " << fN_map[pol][iTheta][iPhi].z()
+	 << std::endl;
+    }
+  }
+}
+
