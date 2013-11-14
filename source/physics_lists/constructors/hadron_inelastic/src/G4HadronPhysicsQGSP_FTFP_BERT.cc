@@ -51,6 +51,7 @@
 
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
+#include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
 
 #include "G4PhysListUtil.hh"
@@ -80,6 +81,7 @@ G4HadronPhysicsQGSP_FTFP_BERT::G4HadronPhysicsQGSP_FTFP_BERT(G4int)
     , theHyperon(0)
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0)
+    , xsNeutronInelasticXS(0)
     , xsNeutronCaptureXS(0)*/
     , QuasiElastic(true)
 {
@@ -103,6 +105,7 @@ G4HadronPhysicsQGSP_FTFP_BERT::G4HadronPhysicsQGSP_FTFP_BERT(const G4String&,
     , theHyperon(0)
     , theAntiBaryon(0)
     , theFTFPAntiBaryon(0)
+    , xsNeutronInelasticXS(0)
     , xsNeutronCaptureXS(0)*/
     , QuasiElastic(quasiElastic)
 {
@@ -187,6 +190,7 @@ G4HadronPhysicsQGSP_FTFP_BERT::~G4HadronPhysicsQGSP_FTFP_BERT()
    delete tpdata->theAntiBaryon;
    delete tpdata->theFTFPAntiBaryon;
 
+   delete tpdata->xsNeutronInelasticXS;
    delete tpdata->xsNeutronCaptureXS; 
    
    delete tpdata; tpdata = 0;
@@ -219,6 +223,9 @@ void G4HadronPhysicsQGSP_FTFP_BERT::ConstructProcess()
   tpdata->theAntiBaryon->Build(); 
 
   // --- Neutrons ---
+  tpdata->xsNeutronInelasticXS = new G4NeutronInelasticXS();  
+  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(tpdata->xsNeutronInelasticXS);
+
   G4HadronicProcess* capture = 0;
   G4ProcessManager* pmanager = G4Neutron::Neutron()->GetProcessManager();
   G4ProcessVector*  pv = pmanager->GetProcessList();

@@ -57,6 +57,7 @@
 
 #include "G4HadronCaptureProcess.hh"
 #include "G4NeutronRadCapture.hh"
+#include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
 
 #include "G4PhysListUtil.hh"
@@ -86,6 +87,7 @@ G4HadronPhysicsFTFP_BERT::G4HadronPhysicsFTFP_BERT(G4int)
   /*    , ChipsKaonMinus(0)
     , ChipsKaonPlus(0)
     , ChipsKaonZero(0)
+    , xsNeutronInelasticXS(0)
     , xsNeutronCaptureXS(0)*/
 {}
 
@@ -107,6 +109,7 @@ G4HadronPhysicsFTFP_BERT::G4HadronPhysicsFTFP_BERT(const G4String& name, G4bool 
   /*    , ChipsKaonMinus(0)
     , ChipsKaonPlus(0)
     , ChipsKaonZero(0)
+    , xsNeutronInelasticXS(0)
     , xsNeutronCaptureXS(0)*/
 {}
 
@@ -156,6 +159,7 @@ G4HadronPhysicsFTFP_BERT::~G4HadronPhysicsFTFP_BERT()
   delete tpdata->theAntiBaryon;
   delete tpdata->theFTFPAntiBaryon;
  
+  delete tpdata->xsNeutronInelasticXS;
   delete tpdata->xsNeutronCaptureXS; 
  
   //Note that here we need to set to 0 the pointer
@@ -199,6 +203,9 @@ void G4HadronPhysicsFTFP_BERT::ConstructProcess()
   tpdata->theAntiBaryon->Build();
 
   // --- Neutrons ---
+  tpdata->xsNeutronInelasticXS = new G4NeutronInelasticXS();  
+  G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(tpdata->xsNeutronInelasticXS);
+
   G4HadronicProcess* capture = 0;
   G4ProcessManager* pmanager = G4Neutron::Neutron()->GetProcessManager();
   G4ProcessVector*  pv = pmanager->GetProcessList();
