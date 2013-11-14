@@ -66,7 +66,7 @@ class F04ElementField
     void Construct();
 
     ///  Destructor.
-    virtual ~F04ElementField() { if (fNavigator) delete fNavigator; }
+    virtual ~F04ElementField() {}
 
     /// SetMaxStep(G4double) sets the max. step size
     void SetMaxStep(G4double stp)

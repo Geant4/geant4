@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 13, 2013 P.Gumplinger - (fieldex04-V09-06-05)
+- migration to MT
+
 August 26, 2013 P.Gumplinger - (fieldex04-V09-06-04)
 - do not execute vis.mac in main
 

@@ -130,8 +130,8 @@ See field04.cc.
 \verbatim
 /field04/SetCaptureR 0.6 m 
 /field04/SetCaptureZ 4.0 m
-/field04/SetCaptureB1 2.5 tesla 
-/field04/SetCaptureB2 5.0 tesla
+/field/SetCaptureB1 2.5 tesla 
+/field/SetCaptureB2 5.0 tesla
 \endverbatim
 
  The "TransferMgnt" is a solenoid (vacuum cylinder) with a 
@@ -149,7 +149,7 @@ See field04.cc.
 \verbatim
 /field04/SetTransferR  0.3 m
 /field04/SetTransferZ 15.0 m
-/field04/SetTransferB 5.0 tesla
+/field/SetTransferB 5.0 tesla
 /field04/SetTransferP 0.0 m
 \endverbatim
  The default geometry is constructed in F04DetectorConstruction class,

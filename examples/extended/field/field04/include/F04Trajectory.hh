@@ -75,7 +75,7 @@ class F04Trajectory : public G4VTrajectory
      inline G4String GetParticleName() const { return fParticleName; }
      inline G4double GetCharge() const { return fPDGCharge; }
      inline G4int GetPDGEncoding() const { return fPDGEncoding; }
-     inline G4ThreeVector GetInitialMomentum() const { return fInitialMomentum; }
+     inline G4ThreeVector GetInitialMomentum() const {return fInitialMomentum;}
 
 // Other member functions
 
@@ -111,15 +111,16 @@ class F04Trajectory : public G4VTrajectory
 
 };
 
-extern G4Allocator<F04Trajectory> myTrajectoryAllocator;
+extern G4ThreadLocal G4Allocator<F04Trajectory>* F04TrajectoryAllocator;
 
 inline void* F04Trajectory::operator new(size_t) {
-    void* aTrajectory = (void*) myTrajectoryAllocator.MallocSingle();
-    return aTrajectory;
+    if(!F04TrajectoryAllocator)
+      F04TrajectoryAllocator = new G4Allocator<F04Trajectory>;
+    return (void*) F04TrajectoryAllocator->MallocSingle();
 }
 
 inline void F04Trajectory::operator delete(void* aTrajectory) {
-    myTrajectoryAllocator.FreeSingle((F04Trajectory*)aTrajectory);
+    F04TrajectoryAllocator->FreeSingle((F04Trajectory*)aTrajectory);
 }
 
 #endif

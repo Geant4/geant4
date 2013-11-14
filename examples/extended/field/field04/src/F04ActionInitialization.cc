@@ -23,72 +23,59 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
-/// \file field/field04/src/F04RunAction.cc
-/// \brief Implementation of the F04RunAction class
-//
+/// \file F04ActionInitialization.cc
+/// \brief Implementation of the F04ActionInitialization class
 
+#include "F04ActionInitialization.hh"
+#include "F04PrimaryGeneratorAction.hh"
 #include "F04RunAction.hh"
-#include "F04RunActionMessenger.hh"
+#include "F04EventAction.hh"
+#include "F04TrackingAction.hh"
+#include "F04StackingAction.hh"
+#include "F04SteppingAction.hh"
+#include "F04SteppingVerbose.hh"
 
-#include "G4Run.hh"
-#include "G4RunManager.hh"
-
-#include "Randomize.hh"
-
-#include <ctime>
+#include "F04DetectorConstruction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04RunAction::F04RunAction()
-  : fSaveRndm(0), fAutoSeed(false)
+F04ActionInitialization::F04ActionInitialization
+                            (F04DetectorConstruction* detConstruction)
+ : G4VUserActionInitialization(),
+   fDetConstruction(detConstruction)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+F04ActionInitialization::~F04ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void F04ActionInitialization::BuildForMaster() const
 {
-  fRunMessenger = new F04RunActionMessenger(this);
+  SetUserAction(new F04RunAction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F04RunAction::~F04RunAction()
+void F04ActionInitialization::Build() const
 {
-  delete fRunMessenger;
+  SetUserAction(new F04PrimaryGeneratorAction(fDetConstruction));
+
+  F04RunAction* runAction = new F04RunAction();
+  SetUserAction(runAction);
+  F04EventAction* eventAction = new F04EventAction(runAction);
+  SetUserAction(eventAction);
+  SetUserAction(new F04TrackingAction());
+  SetUserAction(new F04StackingAction());
+  SetUserAction(new F04SteppingAction());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F04RunAction::BeginOfRunAction(const G4Run* aRun)
+G4VSteppingVerbose* F04ActionInitialization::InitializeSteppingVerbose() const
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  G4RunManager::GetRunManager()->SetRandomNumberStoreDir("random/");
-
-  if (fAutoSeed) {
-     // automatic (time-based) random seeds for each run
-     G4cout << "*******************" << G4endl;
-     G4cout << "*** AUTOSEED ON ***" << G4endl;
-     G4cout << "*******************" << G4endl;
-     long seeds[2];
-     time_t systime = time(NULL);
-     seeds[0] = (long) systime;
-     seeds[1] = (long) (systime*G4UniformRand());
-     G4Random::setTheSeeds(seeds);
-     G4Random::showEngineStatus();
-  } else {
-     G4Random::showEngineStatus();
-  }
-
-  if (fSaveRndm > 0) G4Random::saveEngineStatus("BeginOfRun.rndm");
+  return new F04SteppingVerbose();
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void F04RunAction::EndOfRunAction(const G4Run*)
-{
-  if (fSaveRndm == 1) {
-     G4Random::showEngineStatus();
-     G4Random::saveEngineStatus("endOfRun.rndm");
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -97,12 +97,12 @@ void F04EventAction::EndOfEventAction(const G4Event* evt)
 
   if (fRunaction->GetRndmFreq() == 2)
     {
-     CLHEP::HepRandom::saveEngineStatus("endOfEvent.rndm");
+     G4Random::saveEngineStatus("endOfEvent.rndm");
      G4int evtNb = evt->GetEventID();
      if (evtNb%fPrintModulo == 0)
        {
         G4cout << "\n---> End of Event: " << evtNb << G4endl;
-        CLHEP::HepRandom::showEngineStatus();
+        G4Random::showEngineStatus();
        }
     }
 }

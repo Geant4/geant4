@@ -47,7 +47,7 @@
 #include "G4AttCheck.hh"
 #endif
 
-G4Allocator<F04TrajectoryPoint> aTrajPointAllocator;
+G4ThreadLocal G4Allocator<F04TrajectoryPoint>* F04TrajPointAllocator=0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

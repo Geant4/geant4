@@ -45,7 +45,7 @@
 #include "G4AttCheck.hh"
 #endif
 
-G4Allocator<F04Trajectory> myTrajectoryAllocator;
+G4ThreadLocal G4Allocator<F04Trajectory>* F04TrajectoryAllocator=0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -23,55 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
-/// \file field/field04/include/F04FieldMessenger.hh
-/// \brief Definition of the F04FieldMessenger class
-//
+/// \file F04ActionInitialization.hh
+/// \brief Definition of the F04ActionInitialization class
 
-#ifndef F04FieldMessenger_h
-#define F04FieldMessenger_h 1
+#ifndef F04ActionInitialization_h
+#define F04ActionInitialization_h 1
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
-
-class F04GlobalField;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+#include "G4VUserActionInitialization.hh"
 
 class F04DetectorConstruction;
 
-class F04FieldMessenger: public G4UImessenger
+/// Action initialization class.
+
+class F04ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    F04FieldMessenger(F04GlobalField*, F04DetectorConstruction* );
-    virtual ~F04FieldMessenger();
+    F04ActionInitialization(F04DetectorConstruction*);
+    virtual ~F04ActionInitialization();
 
-    virtual void SetNewValue(G4UIcommand*, G4String);
- 
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+
   private:
-
-    F04GlobalField*            fGlobalField;
- 
-    G4UIdirectory*             fDetDir;
-
-    G4UIcmdWithADoubleAndUnit* fCaptureB1Cmd;
-    G4UIcmdWithADoubleAndUnit* fCaptureB2Cmd;
-    G4UIcmdWithADoubleAndUnit* fTransferBCmd;
-
-    G4UIcmdWithAnInteger*      fStepperCMD;
-    G4UIcmdWithADoubleAndUnit* fMinStepCMD;
-    G4UIcmdWithADoubleAndUnit* fDeltaChordCMD;
-    G4UIcmdWithADoubleAndUnit* fDeltaOneStepCMD;
-    G4UIcmdWithADoubleAndUnit* fDeltaIntersectionCMD;
-    G4UIcmdWithADoubleAndUnit* fEpsMinCMD;
-    G4UIcmdWithADoubleAndUnit* fEpsMaxCMD;
-    G4UIcmdWithoutParameter*   fUpdateCMD;
-
-    F04DetectorConstruction*   fDetector;
+    F04DetectorConstruction* fDetConstruction;
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif

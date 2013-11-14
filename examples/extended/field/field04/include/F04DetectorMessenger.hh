@@ -64,12 +64,9 @@ class F04DetectorMessenger : public G4UImessenger
 
     G4UIcmdWithADoubleAndUnit* fCaptureRCmd;
     G4UIcmdWithADoubleAndUnit* fCaptureZCmd;
-    G4UIcmdWithADoubleAndUnit* fCaptureB1Cmd;
-    G4UIcmdWithADoubleAndUnit* fCaptureB2Cmd;
 
     G4UIcmdWithADoubleAndUnit* fTransferRCmd;
     G4UIcmdWithADoubleAndUnit* fTransferZCmd;
-    G4UIcmdWithADoubleAndUnit* fTransferBCmd;
     G4UIcmdWithADoubleAndUnit* fTransferPCmd;
 
     G4UIcmdWithAString*        fTgtMaterCmd;

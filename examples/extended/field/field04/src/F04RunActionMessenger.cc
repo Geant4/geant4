@@ -91,8 +91,8 @@ void F04RunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if (command == fRndmReadCmd)
   {  G4cout << "\n---> rndm status restored from file: " << newValue << G4endl;
-     CLHEP::HepRandom::restoreEngineStatus(newValue);
-     CLHEP::HepRandom::showEngineStatus();
+     G4Random::restoreEngineStatus(newValue);
+     G4Random::showEngineStatus();
   }
 
   if(command == fSetAutoSeedCmd)
