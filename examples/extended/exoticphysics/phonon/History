@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 November 2013:  M. Kelsey (phononExample-V09-06-07)
+- XDetectorConstruction.cc:  *TEMPORARY* Turn on LatticeManager verbosity
+  and dump generated lattice to output.  Requires materials-V09-06-28.
+
 12 November 2013:  M. Kelsey (phononExample-V09-06-06)
 - run.in:  Remove temporary tracking verbosity.  Windows jobs crash in the
   very first track.
