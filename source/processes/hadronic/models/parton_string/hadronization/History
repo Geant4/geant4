@@ -15,6 +15,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14-Nov-2013, A.Ribon       (had-hadronization-V09-06-02)
+- Fixed two mistakes in the index manipulation of the BaryonWeight
+  4-dimensional vector in G4LundStringFragmentation.cc .
+
 29-July-2013, H.Kurashige  (had-hadronization-V09-06-01)
 - Remove inclusion of G4ShortLivedTable.hh (G4VLongitudinalStringDecay.cc) 
 
