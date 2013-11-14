@@ -143,4 +143,8 @@ This present example, electronScattering2, was the Geant4 code used for this pub
   and then set the desired number of threads by inserting the /run/numberOfThreads command
   into your macro file just before /run/initialize, as in:
   /run/numberOfThreads 8
-  Output from the multiple worker threads is merged by the Merge method that at the end of ElectronRun.cc
+  You may also find the output more readable if you use the following command to make output from
+  each thread be collected together:
+  /control/cout/useBuffer
+  The visualization macro, /macros/vis.mac demonstrates use of the above two commands.
+  Output from the multiple worker threads is merged by the Merge method at the end of ElectronRun.cc

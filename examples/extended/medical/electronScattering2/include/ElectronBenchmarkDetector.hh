@@ -34,9 +34,11 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
 #include "G4ThreeVector.hh"
+#include "G4Cache.hh"
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
+class G4MultiFunctionalDetector;
 class G4Material;
 class G4VisAttributes;
 class ElectronBenchmarkDetectorMessenger;
@@ -109,6 +111,11 @@ private:
     
     // World volume
     G4LogicalVolume* fLogWorld;
+    
+    // SensitiveDetector
+    // G4Cache mechanism is necessary for multi-threaded operation
+    // as it allows us to store separate detector pointer per thread
+    const G4Cache<G4MultiFunctionalDetector*> fSensitiveDetectorCache;
     
     // Messenger
     ElectronBenchmarkDetectorMessenger* fMessenger;
