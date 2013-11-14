@@ -232,7 +232,7 @@ double UBox::DistanceToOut(const UVector3&  aPoint, const UVector3& aDirection,
   // Check always the "away" surface along direction on axis. This responds
   // corectly even for points outside the solid (no need for tolerance check)
   if (aDirection.x != 0.0)
-  {
+    { 
     signDir = UUtils::Sign(1.0, aDirection.x);
     aNormal.Set(signDir, 0., 0.);
     snxt = (-aPoint.x + signDir * fDx) / aDirection.x;
@@ -241,7 +241,7 @@ double UBox::DistanceToOut(const UVector3&  aPoint, const UVector3& aDirection,
   }
 
   if (aDirection.y != 0.0)
-  {
+    { 
     signDir = UUtils::Sign(1.0, aDirection.y);
     snxt = (-aPoint.y + signDir * fDy) / aDirection.y;
     if (snxt <= 0)
@@ -257,7 +257,7 @@ double UBox::DistanceToOut(const UVector3&  aPoint, const UVector3& aDirection,
   }
 
   if (aDirection.z != 0.0)
-  {
+    { 
     signDir = UUtils::Sign(1.0, aDirection.z);
     snxt = (-aPoint.z + signDir * fDz) / aDirection.z;
     if (snxt <= 0)
@@ -269,7 +269,7 @@ double UBox::DistanceToOut(const UVector3&  aPoint, const UVector3& aDirection,
     {
       smin = snxt;
       aNormal.Set(0., 0., signDir);
-    }
+     }
   }
   if (smin < 0.5 * VUSolid::fgTolerance) smin = 0.;
   return smin;
@@ -544,3 +544,8 @@ void UBox::SetZHalfLength(double dz)
   fSurfaceArea = 0.;
 
 }
+UGeometryType UBox::GetEntityType() const
+{
+   return "Box";
+}
+

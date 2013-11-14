@@ -2070,7 +2070,7 @@ double UCons::SafetyFromInside(const UVector3& p, bool) const
 
 UGeometryType UCons::GetEntityType() const
 {
-  return std::string("UCons");
+  return std::string("Cons");
 }
 
 //////////////////////////////////////////////////////////////////////////

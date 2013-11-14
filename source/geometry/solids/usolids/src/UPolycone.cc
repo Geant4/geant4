@@ -1257,7 +1257,16 @@ void UPolycone::CopyStuff(const UPolycone& source)
   //
   enclosingCylinder = new UEnclosingCylinder(*source.enclosingCylinder);
 }
-
+//
+// Get Entity Type
+//
+UGeometryType UPolycone::GetEntityType() const
+{
+      return "Polycone";
+}
+//
+// Set Original Parameters
+//
 bool  UPolycone::SetOriginalParameters(UReduciblePolygon* rz)
 {
   int numPlanes = (int)numCorner;
@@ -1465,4 +1474,35 @@ bool  UPolycone::SetOriginalParameters(UReduciblePolygon* rz)
     fOriginalParameters->fNumZPlanes = numPlanes;
   }
   return isConvertible;
+}
+//
+// Reset 
+//
+void UPolycone::Reset()
+{
+   //
+   // Clear old setup
+   //
+   delete enclosingCylinder;
+ 
+  fCubicVolume = 0;
+  fSurfaceArea = 0;
+  double phiStart=fOriginalParameters->fStartAngle;
+  double* Z, *R1, *R2;
+  int num = fOriginalParameters->fNumZPlanes;
+    Z = new double[num];
+    R1 = new double[num];
+    R2 = new double[num];
+    for (int i = 0; i < num; i++)
+    {
+      Z[i] = fOriginalParameters->fZValues[i];
+      R1[i] = fOriginalParameters->Rmin[i];
+      R2[i] = fOriginalParameters->Rmax[i];
+    }
+
+   Init(phiStart, phiStart+ fOriginalParameters->fOpeningAngle, num, Z, R1, R2);
+    delete [] R1;
+    delete [] Z;
+    delete [] R2;
+ 
 }

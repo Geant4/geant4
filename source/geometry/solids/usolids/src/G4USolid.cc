@@ -131,7 +131,6 @@ G4double G4USolid::DistanceToOut(const G4ThreeVector& pt,
   v.z = d.z(); // better assign at construction
   UVector3 n;
   bool valid;
-  //G4double dist = fShape->DistanceToOut(p, v, n, *validNorm); // should use local variable
   G4double dist = fShape->DistanceToOut(p, v, n,valid); // should use local variable
   if(calcNorm)
   {
@@ -168,10 +167,6 @@ G4double G4USolid::GetSurfaceArea()
 
 G4ThreeVector G4USolid::GetPointOnSurface() const
 {
-  /* UVector3 *p=0;
-  fShape->SamplePointsOnSurface(1,p);
-  return G4ThreeVector((*p).x, (*p).y, (*p).z);
-  */
   UVector3 p;
   p = fShape->GetPointOnSurface();
   return G4ThreeVector(p.x, p.y, p.z);
@@ -478,7 +473,7 @@ G4Polyhedron* G4USolid::CreatePolyhedron() const
     xyz[3][1] = array[10];
     xyz[3][2] = array[11];
 
-    ph->createPolyhedron(4, 4, xyz, faces);
+    ph->createPolyhedron(4, 4, xyz, faces);    
     return ph;
   }
   if (fShape->GetEntityType() == "Trd")
@@ -538,6 +533,11 @@ G4Polyhedron* G4USolid::GetPolyhedron() const
   return fPolyhedron;
 }
 
+void G4USolid::ResetPolyhedron() const
+{
+   if (fPolyhedron) delete fPolyhedron;
+   fPolyhedron = 0;
+}
 G4VisExtent G4USolid:: GetExtent() const
 {
   G4VisExtent extent;

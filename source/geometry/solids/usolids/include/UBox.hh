@@ -86,10 +86,8 @@ class UBox : public VUSolid
     {
       return new UBox(GetName(), fDx, fDy, fDz);
     }
-    UGeometryType GetEntityType() const
-    {
-      return "Box";
-    }
+    UGeometryType GetEntityType() const;
+   
     void    ComputeBBox(UBBox* /*aBox*/, bool /*aStore = false*/) {}
 
     //G4Visualisation

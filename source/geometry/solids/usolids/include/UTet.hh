@@ -61,18 +61,12 @@ class UTet : public VUSolid
                          double aPstep = UUtils::kInfinity) const;
 
     void Extent(UVector3& aMin, UVector3& aMax) const;
-    double Capacity()
-    {
-      return fCubicVolume;
-    }
-    double SurfaceArea()
-    {
-      return fSurfaceArea;
-    }
-    UGeometryType GetEntityType() const
-    {
-      return "Tet";
-    }
+    
+    double Capacity();
+    double SurfaceArea();
+    
+    UGeometryType GetEntityType() const;
+  
     void ComputeBBox(UBBox* /*aBox*/, bool /*aStore = false*/) {}
 
     //G4Visualisation

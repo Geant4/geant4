@@ -375,7 +375,7 @@ double UGenericPolycone::DistanceToIn(const UVector3& p,
 //
 UGeometryType UGenericPolycone::GetEntityType() const
 {
-  return std::string("UGenericPolycone");
+  return std::string("GenericPolycone");
 }
 
 //

@@ -101,6 +101,8 @@ class UPolycone : public VUSolid
 
     virtual ~UPolycone();
 
+    void Reset();
+
 //  inline void SetOriginalParameters(UPolyconeHistorical* pars);
 
 //  inline void SetOriginalParameters();
@@ -127,10 +129,8 @@ class UPolycone : public VUSolid
     void Extent(UVector3& aMin, UVector3& aMax) const;
     double Capacity();
     double SurfaceArea();
-    UGeometryType GetEntityType() const
-    {
-      return "Polycone";
-    }
+    UGeometryType GetEntityType() const;
+
     void ComputeBBox(UBBox* /*aBox*/, bool /*aStore = false*/) {}
 
     //G4Visualisation

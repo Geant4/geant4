@@ -1613,7 +1613,7 @@ double UTubs::SafetyFromInside(const UVector3& p, bool) const
 
 UGeometryType UTubs::GetEntityType() const
 {
-  return std::string("UTubs");
+  return std::string("Tubs");
 }
 
 //////////////////////////////////////////////////////////////////////////

@@ -3070,7 +3070,7 @@ USphere::CreateRotatedVertices(const UAffineTransform& pTransform,
 
 UGeometryType USphere::GetEntityType() const
 {
-  return std::string("USphere");
+  return std::string("Sphere");
 }
 
 //////////////////////////////////////////////////////////////////////////

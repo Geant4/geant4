@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 14, 2013  T.Mikitina             geom-usolids-V09-06-08
+- Corrected visualization methods in bridge G4USolid.
+- Corrected returned type string from USolids and added Reset()
+  method to UPolycone.
+
 November 13, 2013  G.Cosmo                geom-usolids-V09-06-07
 - Removed useless dependency on UMultiUnion in UPolycone.
 

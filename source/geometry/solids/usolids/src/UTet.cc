@@ -622,6 +622,7 @@ void UTet::Extent(UVector3& aMin, UVector3& aMax) const
   aMin.z = -fDz;
   aMax.z = fDz;
 }
+//______________________________________________________________________________
 void UTet::GetParametersList(int, double* aArray) const
 {
   aArray[0] = fAnchor.x;
@@ -637,7 +638,18 @@ void UTet::GetParametersList(int, double* aArray) const
   aArray[10] = fP4.y;
   aArray[11] = fP4.z;
 }
-
-
-
-
+//______________________________________________________________________________
+UGeometryType UTet::GetEntityType() const
+{
+  return "Tet";
+}
+//______________________________________________________________________________
+double UTet::Capacity()
+{
+   return fCubicVolume;
+}
+//______________________________________________________________________________
+double UTet::SurfaceArea()
+{
+   return fSurfaceArea;
+}

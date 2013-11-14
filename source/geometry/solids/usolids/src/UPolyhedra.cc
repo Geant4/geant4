@@ -531,7 +531,7 @@ double UPolyhedra::SafetyFromOutside(const UVector3& aPoint, bool aAccurate) con
 //
 UGeometryType UPolyhedra::GetEntityType() const
 {
-  return std::string("UPolyhedra");
+  return std::string("Polyhedra");
 }
 
 

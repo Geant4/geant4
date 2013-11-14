@@ -1269,6 +1269,9 @@ UTrd& UTrd::operator = (const UTrd& rhs)
   return *this;
 
 }
+//////////////////////////////////////////////////////////////////////////
+//
+// Get Parameters List for Visualisation
 
 void UTrd::GetParametersList(int, double* aArray) const
 {
@@ -1278,5 +1281,11 @@ void UTrd::GetParametersList(int, double* aArray) const
   aArray[3] = GetYHalfLength2();
   aArray[4] = GetZHalfLength();
 }
+//////////////////////////////////////////////////////////////////////////
+//
+// Get Entity Type
 
-
+UGeometryType UTrd::GetEntityType() const
+{
+   return "Trd";
+}

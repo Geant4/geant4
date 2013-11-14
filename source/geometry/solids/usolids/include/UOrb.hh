@@ -62,10 +62,8 @@ class UOrb : public VUSolid
     void Extent(UVector3& aMin, UVector3& aMax) const;
     inline double Capacity();
     inline double SurfaceArea();
-    UGeometryType GetEntityType() const
-    {
-      return "Orb";
-    }
+    UGeometryType GetEntityType() const;
+   
     void ComputeBBox(UBBox* /*aBox*/, bool /*aStore = false*/) {}
 
     //G4Visualisation

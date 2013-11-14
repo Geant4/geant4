@@ -523,7 +523,19 @@ UOrb& UOrb::operator = (const UOrb& rhs)
   fSurfaceArea = rhs.fSurfaceArea;
   return *this;
 }
+//////////////////////////////////////////////////////////////////////////
+//
+// Get Parameters List for visualisation
+
 void UOrb::GetParametersList(int, double* aArray)const
 {
   aArray[0] = GetRadius();
+}
+//////////////////////////////////////////////////////////////////////////
+//
+// Get Entity Type
+
+UGeometryType UOrb::GetEntityType() const
+{
+   return "Orb";
 }
