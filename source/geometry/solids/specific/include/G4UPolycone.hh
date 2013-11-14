@@ -158,10 +158,12 @@ inline void G4UPolycone::SetOriginalParameters(G4PolyconeHistorical* pars)
     pdata->Rmin[i] = pars->Rmin[i];
     pdata->Rmax[i] = pars->Rmax[i];
   }
+  ResetPolyhedron();
 }
 inline G4bool G4UPolycone::Reset()
 {
-  return 0;  // Missing method in UPolycone !!!
+  GetShape()->Reset();
+  return 0;
 }
 
 #endif

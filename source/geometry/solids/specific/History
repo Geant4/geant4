@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-Nov-2013  G.Cosmo               (geom-specific-V09-06-32, 31)
+- Enabled use of Reset() in G4UPolycone.
+- Corrections to G4UPolycone and G4UPolyhedra to allow for visualization
+  of parameterisations on these solids.
+
 13-Nov-2013  G.Cosmo               (geom-specific-V09-06-30)
 - Correction to G4UTet and G4UGenericPolycone to explicitly include
   symbols re-definitions from G4Tet and G4GenericPolycone respectively.
