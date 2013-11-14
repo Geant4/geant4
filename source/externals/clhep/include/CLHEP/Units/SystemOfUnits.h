@@ -252,6 +252,18 @@ namespace CLHEP {
   //
   static const double becquerel = 1./second ;
   static const double curie = 3.7e+10 * becquerel;
+  static const double kilobecquerel = 1.e+3*becquerel;
+  static const double megabecquerel = 1.e+6*becquerel;
+  static const double gigabecquerel = 1.e+9*becquerel;
+  static const double millicurie = 1.e-3*curie;
+  static const double microcurie = 1.e-6*curie;
+  static const double Bq = becquerel;
+  static const double kBq = kilobecquerel;
+  static const double MBq = megabecquerel;
+  static const double GBq = gigabecquerel;
+  static const double Ci = curie;
+  static const double mCi = millicurie;
+  static const double uCi = microcurie;
 
   //
   // Absorbed dose [L^2][T^-2]

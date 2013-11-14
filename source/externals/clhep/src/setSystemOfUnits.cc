@@ -210,17 +210,30 @@ void Evaluator::setSystemOfUnits(double meter,
   const double Bq = 1./s;
   setVariable("becquerel", Bq);
   setVariable("Bq",        Bq);
+  setVariable("kilobecquerel",  kilo_ * Bq);
+  setVariable("kBq",            kilo_ * Bq);
+  setVariable("megabecquerel",  mega_ * Bq);
+  setVariable("MBq",            mega_ * Bq);
+  setVariable("gigabecquerel",  giga_ * Bq);
+  setVariable("GBq",            giga_ * Bq);
 
   // ---  honors Pierre Curie (1859-1906) of France
   //      and Marie Sklodowska Curie (1867-1934) of Poland
   setVariable("curie", 3.7e+10 * Bq);
   setVariable("Ci",    3.7e+10 * Bq);
+  setVariable("millicurie", milli_ * 3.7e+10 * Bq);
+  setVariable("mCi",        milli_ * 3.7e+10 * Bq);
+  setVariable("microcurie", micro_ * 3.7e+10 * Bq);
+  setVariable("uCi",        micro_ * 3.7e+10 * Bq);
 
   // Specific energy
   // ---  honors Louis Harold Gray, F.R.S. (1905-1965) of England
   const double Gy = J / kg;
   setVariable("gray", Gy);
   setVariable("Gy",   Gy);
+  setVariable("kilogray",   kilo_ * Gy);
+  setVariable("milligray", milli_ * Gy);
+  setVariable("microgray", micro_ * Gy);
 
   // Dose equivalent
   const double Sv = J / kg;

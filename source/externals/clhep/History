@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 November 2013 - G.Cosmo
+- Updated to CLHEP-2.1.4.0:
+  * Random (L.Garren <garren@fnal.gov>):
+    o Added RandGaussZiggurat and RandExpZiggurat distributions
+      contributed by ATLAS.
+  * Units (L.Garren <garren@fnal.gov>):
+    o Added new units for Radioactivity:
+      kilo/mega/gigabecquerel, milli/microcurie.
+
 20 August 2013 - G.Cosmo
 - Corrected CMakeLists.txt script to have missing .icc and .cdat files
   explicitly listed.
