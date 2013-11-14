@@ -89,6 +89,7 @@ class G4UTubs : public G4USolid
     G4UTubs(const G4UTubs& rhs);
     G4UTubs& operator=(const G4UTubs& rhs); 
       // Copy constructor and assignment operator.
+ 
 };
 
 // --------------------------------------------------------------------
@@ -124,22 +125,27 @@ inline G4double G4UTubs::GetDeltaPhiAngle() const
 inline void G4UTubs::SetInnerRadius(G4double newRMin)
 {
   GetShape()->SetInnerRadius(newRMin);
+  ResetPolyhedron(); 
 }
 inline void G4UTubs::SetOuterRadius(G4double newRMax)
 {
   GetShape()->SetOuterRadius(newRMax);
+  ResetPolyhedron();
 }
 inline void G4UTubs::SetZHalfLength(G4double newDz)
 {
   GetShape()->SetZHalfLength(newDz);
+  ResetPolyhedron();
 }
 inline void G4UTubs::SetStartPhiAngle(G4double newSPhi, G4bool trig)
 {
   GetShape()->SetStartPhiAngle(newSPhi, trig);
+  ResetPolyhedron();
 }
 inline void G4UTubs::SetDeltaPhiAngle(G4double newDPhi)
 {
   GetShape()->SetDeltaPhiAngle(newDPhi);
+  ResetPolyhedron();
 }
 
 #endif

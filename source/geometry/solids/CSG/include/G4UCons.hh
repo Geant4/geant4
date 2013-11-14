@@ -134,30 +134,37 @@ inline G4double G4UCons::GetDeltaPhiAngle() const
 inline void G4UCons::SetInnerRadiusMinusZ(G4double Rmin1)
 {
   GetShape()->SetInnerRadiusMinusZ(Rmin1);
+  ResetPolyhedron();
 }
 inline void G4UCons::SetOuterRadiusMinusZ(G4double Rmax1)
 {
   GetShape()->SetOuterRadiusMinusZ(Rmax1);
+  ResetPolyhedron();
 }
 inline void G4UCons::SetInnerRadiusPlusZ(G4double Rmin2)
 {
   GetShape()->SetInnerRadiusPlusZ(Rmin2);
+  ResetPolyhedron();
 }
 inline void G4UCons::SetOuterRadiusPlusZ(G4double Rmax2)
 {
   GetShape()->SetOuterRadiusPlusZ(Rmax2);
+  ResetPolyhedron();
 }
 inline void G4UCons::SetZHalfLength(G4double newDz)
 {
   GetShape()->SetZHalfLength(newDz);
+  ResetPolyhedron();
 }
 inline void G4UCons::SetStartPhiAngle(G4double newSPhi, G4bool trig)
 {
   GetShape()->SetStartPhiAngle(newSPhi, trig);
+  ResetPolyhedron();
 }
 inline void G4UCons::SetDeltaPhiAngle(G4double newDPhi)
 {
   GetShape()->SetDeltaPhiAngle(newDPhi);
+  ResetPolyhedron();
 }
 
 #endif

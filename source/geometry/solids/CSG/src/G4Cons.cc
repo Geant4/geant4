@@ -2044,7 +2044,7 @@ G4double G4Cons::DistanceToOut( const G4ThreeVector& p,
                 << "p.z() = "   << p.z()/mm << " mm" << G4endl << G4endl
                 << "pho at z = "   << std::sqrt( p.x()*p.x()+p.y()*p.y() )/mm
                 << " mm" << G4endl << G4endl ;
-        if( p.x() != 0. || p.x() != 0.)
+        if( p.x() != 0. || p.y() != 0.)
         {
            message << "point phi = "   << std::atan2(p.y(),p.x())/degree
                    << " degree" << G4endl << G4endl ; 

@@ -105,14 +105,18 @@ inline G4double G4UBox::GetZHalfLength() const
 inline void G4UBox::SetXHalfLength(G4double dx)
 {
   GetShape()->SetXHalfLength(dx);
+  ResetPolyhedron();
+  
 }
 inline void G4UBox::SetYHalfLength(G4double dy)
 {
   GetShape()->SetYHalfLength(dy);
+  ResetPolyhedron();
 }
 inline void G4UBox::SetZHalfLength(G4double dz)
 {
   GetShape()->SetZHalfLength(dz);
+  ResetPolyhedron();
 }
 
 #endif

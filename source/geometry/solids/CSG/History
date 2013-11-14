@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 14, 2013  T.Nikitina            geom-csg-V09-06-07
+- Corrections to G4U* wrappers to allow for visualization of parameterisations.
+
 November 7, 2013  G.Cosmo                geom-csg-V09-06-06
 - Moved wrappers from usolids module.
   Fixed internal dispatcher method for parameterisation in all wrappers.
