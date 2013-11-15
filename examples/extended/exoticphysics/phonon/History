@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 November 2013:  M. Kelsey (phononExample-V09-06-08)
+- XDetectorConstruction.cc:  *TEMPORARY* Remove lattice dump, keep LM
+  verbosity, add lattice verbosity.  Requires materials-V09-06-29.
+
+NOTE:  XPhysicsList.cc still has process verbosity.
+
 13 November 2013:  M. Kelsey (phononExample-V09-06-07)
 - XDetectorConstruction.cc:  *TEMPORARY* Turn on LatticeManager verbosity
   and dump generated lattice to output.  Requires materials-V09-06-28.
