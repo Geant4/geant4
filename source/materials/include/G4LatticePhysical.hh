@@ -28,6 +28,8 @@
 //
 // $Id$
 //
+// 20131114  Add verbosity for diagnostic output
+
 #ifndef G4LatticePhysical_h
 #define G4LatticePhysical_h 1
 
@@ -42,6 +44,8 @@ public:
   G4LatticePhysical(const G4LatticeLogical* Lat=0,
 		    const G4RotationMatrix* Rot=0);	// Use FRAME rotation
   virtual ~G4LatticePhysical();
+
+  void SetVerboseLevel(G4int vb) { verboseLevel = vb; }
 
   // NOTE:  Pass by value to allow in-situ rotations
   G4double MapKtoV(G4int, G4ThreeVector) const;
@@ -70,8 +74,10 @@ public:
   G4ThreeVector RotateToLocal(const G4ThreeVector& dir) const;
 
 private:
+  G4int verboseLevel;			// Enable diagnostic output
+
   G4double fTheta, fPhi;		// Lattice orientation within object
-  const G4LatticeLogical* fLattice;
+  const G4LatticeLogical* fLattice;	// Underlying lattice parameters
 
   G4Transform3D fLocalToGlobal;
   G4Transform3D fGlobalToLocal;

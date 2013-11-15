@@ -28,6 +28,8 @@
 //
 // $Id$
 //
+// 20131114  Add verbosity for diagnostic output
+
 #ifndef G4LatticeLogical_h
 #define G4LatticeLogical_h
 
@@ -40,6 +42,8 @@ class G4LatticeLogical {
 public:
   G4LatticeLogical();
   virtual ~G4LatticeLogical();
+
+  void SetVerboseLevel(G4int vb) { verboseLevel = vb; }
 
   G4bool LoadMap(G4int, G4int, G4int, G4String);
   G4bool Load_NMap(G4int, G4int, G4int, G4String);
@@ -78,6 +82,8 @@ public:
   G4double GetFTDOS() const { return fFTDOS; }
   
 private:
+  G4int verboseLevel;			    // Enable diagnostic output
+
   enum { MAXRES=322 };			    // Maximum map resolution (bins)
   G4double fMap[3][MAXRES][MAXRES];	    // map for group velocity scalars
   G4ThreeVector fN_map[3][MAXRES][MAXRES];  // map for direction vectors

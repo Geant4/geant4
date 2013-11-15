@@ -38,9 +38,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4LatticeLogical::G4LatticeLogical()
-: fVresTheta(0), fVresPhi(0), fDresTheta(0), fDresPhi(0),
-  fA(0), fB(0), fLDOS(0), fSTDOS(0), fFTDOS(0),
-  fBeta(0), fGamma(0), fLambda(0), fMu(0) {
+  : verboseLevel(0), fVresTheta(0), fVresPhi(0), fDresTheta(0), fDresPhi(0),
+    fA(0), fB(0), fLDOS(0), fSTDOS(0), fFTDOS(0),
+    fBeta(0), fGamma(0), fLambda(0), fMu(0) {
   for (G4int i=0; i<3; i++) {
     for (G4int j=0; j<MAXRES; j++) {
       for (G4int k=0; k<MAXRES; k++) {
@@ -78,7 +78,12 @@ G4bool G4LatticeLogical::LoadMap(G4int tRes, G4int pRes,
     }
   }
 
-  G4cout << "\nG4LatticeLogical::LoadMap() successful (Vg scalars).\n";
+  if (verboseLevel) {
+    G4cout << "\nG4LatticeLogical::LoadMap(" << map << ") successful"
+	   << " (Vg scalars " << tRes << " x " << pRes << " for polarization "
+	   << polarizationState << ")." << G4endl;
+  }
+
   fVresTheta=tRes; //store map dimensions
   fVresPhi=pRes;
   return true;
@@ -111,7 +116,12 @@ G4bool G4LatticeLogical::Load_NMap(G4int tRes, G4int pRes,
     }
   }
 
-  G4cout<<"\nG4LatticeLogical::Load_NMap() successful\n";
+  if (verboseLevel) {
+    G4cout << "\nG4LatticeLogical::Load_NMap(" << map << ") successful"
+	   << " (Vdir " << tRes << " x " << pRes << " for polarization "
+	   << polarizationState << ")." << G4endl;
+  }
+
   fDresTheta=tRes; //store map dimensions
   fDresPhi=pRes;
   return true;
@@ -135,13 +145,22 @@ G4double G4LatticeLogical::MapKtoV(G4int polarizationState,
 
   if(phi<0) phi = phi + twopi;
   if(theta>pi) theta=theta-pi;
-  //phi=[0 to 2 pi] in accordance with DMC //if(phi>pi/2) phi=phi-pi/2;
-  if(fMap[polarizationState][int(theta/tRes)][int(phi/pRes)]==0){
+
+  G4double Vg = fMap[polarizationState][int(theta/tRes)][int(phi/pRes)];
+
+  if(Vg == 0){
       G4cout<<"\nFound v=0 for polarization "<<polarizationState
             <<" theta "<<theta<<" phi "<<phi<< " translating to map coords "
             <<"theta "<< int(theta/tRes) << " phi " << int(phi/pRes)<<G4endl;
   }
-  return fMap[polarizationState][int(theta/tRes)][int(phi/pRes)];  
+
+  if (verboseLevel>1) {
+    G4cout << "G4LatticeLogical::MapKtoV theta,phi=" << theta << " " << phi
+	   << " : ith,iph " << int(theta/tRes) << " " << int(phi/pRes)
+	   << " : V " << Vg << G4endl;
+  }
+
+  return Vg;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -166,6 +185,12 @@ G4ThreeVector G4LatticeLogical::MapKtoVDir(G4int polarizationState,
 
   G4int iTheta = int(theta/tRes+0.5);
   G4int iPhi = int(phi/pRes+0.5);
+
+  if (verboseLevel>1) {
+    G4cout << "G4LatticeLogical::MapKtoVDir theta,phi=" << theta << " " << phi
+	   << " : ith,iph " << iTheta << " " << iPhi
+	   << " : dir " << fN_map[polarizationState][iTheta][iPhi] << G4endl;
+  }
 
   return fN_map[polarizationState][iTheta][iPhi];
 }

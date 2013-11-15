@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-11-13 M.Kelsey (materials-V09-06-29)
+- G4LatticeLogical, G4LatticePhysical: Add verboseLevel data member with Set
+  function.  Add diagnostic output controlled by verbosity.  This tag may be
+  left out of Release 10.0 since it is past the deadline.
+
 13-11-13 M.Kelsey (materials-V09-06-28)
 - G4LatticeLogical: Add dumping of data, to try to debug problems with phonon
   example on Windows.  This tag may be left out of Release 10.0 since it is

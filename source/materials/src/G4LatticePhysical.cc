@@ -48,7 +48,7 @@ namespace {
 
 G4LatticePhysical::G4LatticePhysical(const G4LatticeLogical* Lat,
 				     const G4RotationMatrix* Rot)
-  : fTheta(0), fPhi(0), fLattice(Lat) {
+  : verboseLevel(0), fTheta(0), fPhi(0), fLattice(Lat) {
   SetPhysicalOrientation(Rot);
 }
 
@@ -71,6 +71,10 @@ void G4LatticePhysical::SetPhysicalOrientation(const G4RotationMatrix* Rot) {
 void G4LatticePhysical::SetLatticeOrientation(G4double t_rot, G4double p_rot) {
   fTheta = t_rot;
   fPhi = p_rot;
+
+  if (verboseLevel) 
+    G4cout << "G4LatticePhysical::SetLatticeOrientation " << fTheta << " "
+	   << fPhi << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -78,6 +82,10 @@ void G4LatticePhysical::SetLatticeOrientation(G4double t_rot, G4double p_rot) {
 void G4LatticePhysical::SetMillerOrientation(G4int l, G4int k, G4int n) {
   fTheta = halfpi - std::atan2(n+0.000001,l+0.000001);
   fPhi = halfpi - std::atan2(l+0.000001,k+0.000001);
+
+  if (verboseLevel) 
+    G4cout << "G4LatticePhysical::SetMillerOrientation(" << l << k << n 
+	   << " : " << fTheta << " " << fPhi << G4endl;
 }
 
 
@@ -88,6 +96,8 @@ void G4LatticePhysical::SetMillerOrientation(G4int l, G4int k, G4int n) {
 /////////////////////////////
 G4double G4LatticePhysical::MapKtoV(G4int polarizationState,
 				    G4ThreeVector k) const {
+  if (verboseLevel>1) G4cout << "G4LatticePhysical::MapKtoV " << k << G4endl;
+
   k.rotate(yhat,fTheta).rotate(zhat, fPhi);
   return fLattice->MapKtoV(polarizationState, k);
 }
@@ -97,6 +107,8 @@ G4double G4LatticePhysical::MapKtoV(G4int polarizationState,
 ///////////////////////////////
 G4ThreeVector G4LatticePhysical::MapKtoVDir(G4int polarizationState,
 					    G4ThreeVector k) const {
+  if (verboseLevel>1) G4cout << "G4LatticePhysical::MapKtoVDir " << k << G4endl;
+
   k.rotate(yhat,fTheta).rotate(zhat,fPhi);
 
   G4ThreeVector VG = fLattice->MapKtoVDir(polarizationState, k);  
