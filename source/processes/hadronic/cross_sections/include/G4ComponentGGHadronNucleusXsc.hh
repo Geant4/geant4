@@ -74,7 +74,16 @@ virtual
 					   G4int Z, G4int A);
 
 virtual
+  G4double GetProductionIsotopeCrossSection(const G4ParticleDefinition* aParticle,
+					   G4double kinEnergy, 
+					   G4int Z, G4int A);
+
+virtual
   G4double GetInelasticElementCrossSection(const G4ParticleDefinition* aParticle,
+					   G4double kinEnergy, 
+					   G4int Z, G4double A);
+virtual
+  G4double GetProductionElementCrossSection(const G4ParticleDefinition* aParticle,
 					   G4double kinEnergy, 
 					   G4int Z, G4double A);
 

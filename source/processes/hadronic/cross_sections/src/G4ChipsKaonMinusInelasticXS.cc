@@ -47,6 +47,20 @@
 //
 G4_DECLARE_XS_FACTORY(G4ChipsKaonMinusInelasticXS);
 
+namespace {
+    const G4double THmin=27.;     // default minimum Momentum (MeV/c) Threshold
+    const G4double THmiG=THmin*.001; // minimum Momentum (GeV/c) Threshold
+    const G4double dP=10.;        // step for the LEN (Low ENergy) table MeV/c
+    const G4double dPG=dP*.001;   // step for the LEN (Low ENergy) table GeV/c
+    const G4int    nL=105;        // A#of LEN points in E (step 10 MeV/c)
+    const G4double Pmin=THmin+(nL-1)*dP; // minP for the HighE part with safety
+    const G4double Pmax=227000.;  // maxP for the HEN (High ENergy) part 227 GeV
+    const G4int    nH=224;        // A#of HEN points in lnE
+    const G4double milP=std::log(Pmin);// Low logarithm energy for the HEN part
+    const G4double malP=std::log(Pmax);// High logarithm energy (each 2.75 percent)
+    const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HEN part
+    const G4double milPG=std::log(.001*Pmin);// Low logarithmEnergy for HEN part GeV/c
+}
 // Initialization of the
 
 G4ChipsKaonMinusInelasticXS::G4ChipsKaonMinusInelasticXS():G4VCrossSectionDataSet(Default_Name())
@@ -180,18 +194,6 @@ G4double G4ChipsKaonMinusInelasticXS::GetChipsCrossSection(G4double pMom, G4int 
 G4double G4ChipsKaonMinusInelasticXS::CalculateCrossSection(G4int F, G4int I,
                                         G4int, G4int targZ, G4int targN, G4double Momentum)
 {
-  static const G4double THmin=27.;     // default minimum Momentum (MeV/c) Threshold
-  static const G4double THmiG=THmin*.001; // minimum Momentum (GeV/c) Threshold
-  static const G4double dP=10.;        // step for the LEN (Low ENergy) table MeV/c
-  static const G4double dPG=dP*.001;   // step for the LEN (Low ENergy) table GeV/c
-  static const G4int    nL=105;        // A#of LEN points in E (step 10 MeV/c)
-  static const G4double Pmin=THmin+(nL-1)*dP; // minP for the HighE part with safety
-  static const G4double Pmax=227000.;  // maxP for the HEN (High ENergy) part 227 GeV
-  static const G4int    nH=224;        // A#of HEN points in lnE
-  static const G4double milP=std::log(Pmin);// Low logarithm energy for the HEN part
-  static const G4double malP=std::log(Pmax);// High logarithm energy (each 2.75 percent)
-  static const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HEN part
-  static const G4double milPG=std::log(.001*Pmin);// Low logarithmEnergy for HEN part GeV/c
   G4double sigma=0.;
   if(F&&I) sigma=0.;                   // @@ *!* Fake line *!* to use F & I !!!Temporary!!!
   //G4double A=targN+targZ;              // A of the target

@@ -46,14 +46,39 @@
 #include "G4ParticleTable.hh"
 #include "G4NucleiProperties.hh"
 #include "G4IonTable.hh"
+#include "G4AutoLock.hh"
 
 // factory
 #include "G4CrossSectionFactory.hh"
 //
 G4_DECLARE_XS_FACTORY(G4ChipsKaonMinusElasticXS);
 
+
+namespace {
+    G4double mK;//= G4KaonMinus::KaonMinus()->GetPDGMass()*.001; // MeV to GeV//Cannot initialize here, needs particles
+    G4double mK2;//= mK*mK;
+    G4Mutex initM = G4MUTEX_INITIALIZER;
+    const G4double GeVSQ=gigaelectronvolt*gigaelectronvolt;
+    const G4double third=1./3.;
+    const G4double fifth=1./5.;
+    const G4double sevth=1./7.;
+    const G4double pwd=2727;
+    const G4int n_kmpel=36;                // #of parameters for pp-elastic ( < nPoints=128)
+    //                        -0-   -1- -2-  -3- -4- -5-  -6- -7-   -8-   -9--10- -11--12-
+    const G4double kmp_el[n_kmpel]={5.2,.0557,3.5,2.23,.7,.075,.004,.39,.000156,.15,1.,.0156,5.,
+        74.,3.,3.4,.2,.17,.001,8.,.055,3.64,5.e-5,4000.,1500.,.46,
+        1.2e6,3.5e6,5.e-5,1.e10,8.5e8,1.e10,1.1,3.4e6,6.8e6,0.};
+    //                        -13-14--15-16--17--18--19- -20- -21- -22-  -23- -24- -25-
+    //                        -26-  -27-   -28-  -29-  -30- -31-  -32- -33- -34- -35-
+    const G4double HGeVSQ=gigaelectronvolt*gigaelectronvolt/2.;
+}
+
 G4ChipsKaonMinusElasticXS::G4ChipsKaonMinusElasticXS():G4VCrossSectionDataSet(Default_Name()), nPoints(128), nLast(nPoints-1)
 {
+  G4AutoLock l(&initM);
+  mK = G4KaonMinus::KaonMinus()->GetPDGMass()*.001;
+  mK2 = mK*mK;
+  l.unlock();
   lPMin=-8.;  //Min tabulatedLogarithmMomentum/D
   lPMax= 8.;  //Max tabulatedLogarithmMomentum/D
   dlnP=(lPMax-lPMin)/nLast;// LogStep inTable /D
@@ -358,14 +383,6 @@ G4double G4ChipsKaonMinusElasticXS::GetPTables(G4double LP,G4double ILP, G4int P
                                                        G4int tgZ, G4int tgN)
 {
   // @@ At present all nA==pA ---------> Each neucleus can have not more than 51 parameters
-  static const G4double pwd=2727;
-  const G4int n_kmpel=36;                // #of parameters for pp-elastic ( < nPoints=128)
-  //                        -0-   -1- -2-  -3- -4- -5-  -6- -7-   -8-   -9--10- -11--12-
-  G4double kmp_el[n_kmpel]={5.2,.0557,3.5,2.23,.7,.075,.004,.39,.000156,.15,1.,.0156,5.,
-                            74.,3.,3.4,.2,.17,.001,8.,.055,3.64,5.e-5,4000.,1500.,.46,
-                            1.2e6,3.5e6,5.e-5,1.e10,8.5e8,1.e10,1.1,3.4e6,6.8e6,0.};
-  //                        -13-14--15-16--17--18--19- -20- -21- -22-  -23- -24- -25-
-  //                        -26-  -27-   -28-  -29-  -30- -31-  -32- -33- -34- -35-
   if(PDG == -321)
   {
     // -- Total pp elastic cross section cs & s1/b1 (main), s2/b2 (tail1), s3/b3 (tail2) --
@@ -601,10 +618,6 @@ G4double G4ChipsKaonMinusElasticXS::GetPTables(G4double LP,G4double ILP, G4int P
 // Returns Q2=-t in independent units (MeV^2) (all internal calculations are in GeV)
 G4double G4ChipsKaonMinusElasticXS::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG)
 {
-  static const G4double GeVSQ=gigaelectronvolt*gigaelectronvolt;
-  static const G4double third=1./3.;
-  static const G4double fifth=1./5.;
-  static const G4double sevth=1./7.;
   if(PDG==310 || PDG==130) PDG=-321;
   if(PDG!=-321)G4cout<<"*Warning*G4ChipsKaonMinusElasticXS::GetET:PDG="<<PDG<<G4endl;
   if(onlyCS) G4cout<<"*Warning*G4ChipsKaonMinusElasticXS::GetExT: onlyCS=1"<<G4endl;
@@ -710,7 +723,6 @@ G4double G4ChipsKaonMinusElasticXS::GetExchangeT(G4int tgZ, G4int tgN, G4int PDG
 // Returns B in independent units (MeV^-2) (all internal calculations are in GeV) see ExT
 G4double G4ChipsKaonMinusElasticXS::GetSlope(G4int tgZ, G4int tgN, G4int PDG)
 {
-  static const G4double GeVSQ=gigaelectronvolt*gigaelectronvolt;
   if(onlyCS)G4cout<<"*Warning*G4ChipsKaonMinusElasticXS::GetSl:onlCS=true"<<G4endl;
   if(lastLP<-4.3) return 0.;          // S-wave for p<14 MeV/c (kinE<.1MeV)
   if(PDG != -321)
@@ -730,7 +742,6 @@ G4double G4ChipsKaonMinusElasticXS::GetSlope(G4int tgZ, G4int tgN, G4int PDG)
 // Returns half max(Q2=-t) in independent units (MeV^2)
 G4double G4ChipsKaonMinusElasticXS::GetHMaxT()
 {
-  static const G4double HGeVSQ=gigaelectronvolt*gigaelectronvolt/2.;
   return lastTM*HGeVSQ;
 }
 
@@ -831,10 +842,6 @@ G4double G4ChipsKaonMinusElasticXS::GetTabValues(G4double lp, G4int PDG, G4int t
 G4double G4ChipsKaonMinusElasticXS::GetQ2max(G4int PDG, G4int tgZ, G4int tgN,
                                                     G4double pP)
 {
-  static const G4double mK= G4KaonMinus::KaonMinus()->GetPDGMass()*.001; // MeV to GeV
-
-  static const G4double mK2= mK*mK;
-
   G4double pP2=pP*pP;                                 // squared momentum of the projectile
   if(tgZ || tgN>-1)                                   // ---> pipA
   {

@@ -93,15 +93,22 @@ public:
   void BuildPhysicsTable(const G4ParticleDefinition&);
 
   virtual void CrossSectionDescription(std::ostream&) const;
+
+  inline void SetLowestCrossSection(G4double val);
   
 private:
+
+  G4double CoulombFactor(G4double kinEnergy, G4int Z);
 
   G4BGGNucleonElasticXS & operator=(const G4BGGNucleonElasticXS &right);
   G4BGGNucleonElasticXS(const G4BGGNucleonElasticXS&);
 
   G4double fGlauberEnergy;  
+  G4double fPDGEnergy;  
   G4double fLowEnergy;  
+  G4double fSAIDLowEnergyLimit;
   G4double fSAIDHighEnergyLimit;
+  G4double fLowestXSection;
   G4double theGlauberFac[93];
   G4double theCoulombFac[93];
   G4int    theA[93];
@@ -115,5 +122,10 @@ private:
   G4bool                          isProton;
   G4bool                          isInitialized;
 };
+
+inline void G4BGGNucleonElasticXS::SetLowestCrossSection(G4double val)
+{
+  fLowestXSection = val;
+}
 
 #endif

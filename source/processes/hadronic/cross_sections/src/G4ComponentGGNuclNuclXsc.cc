@@ -43,7 +43,10 @@ G4ComponentGGNuclNuclXsc::G4ComponentGGNuclNuclXsc()
    fLowerLimit(0.1*MeV),
    fRadiusConst(1.08*fermi),  // 1.1, 1.3 ?
    fTotalXsc(0.0), fElasticXsc(0.0), fInelasticXsc(0.0), fProductionXsc(0.0),
-   fDiffractionXsc(0.0)
+   fDiffractionXsc(0.0),
+    cacheDP(G4Proton::Proton(),G4ParticleMomentum(1.,0,0),0),
+    dProton(G4Proton::Proton(),G4ParticleMomentum(1.,0,0),0),
+    dNeutron(G4Neutron::Neutron(),G4ParticleMomentum(1.,0,0),0)
 // , fHadronNucleonXsc(0.0)
 {
   theProton   = G4Proton::Proton();
@@ -63,11 +66,9 @@ G4double G4ComponentGGNuclNuclXsc::GetTotalIsotopeCrossSection(const G4ParticleD
 				       G4double kinEnergy,
 				       G4int Z, G4int A)
 {
-  G4DynamicParticle* aDP = new G4DynamicParticle(aParticle,G4ParticleMomentum(1.,0.,0.), 
-                                                kinEnergy);
-  fInelasticXsc = GetZandACrossSection(aDP, Z, A);
-  delete aDP;
-
+  cacheDP.SetDefinition(aParticle);
+  cacheDP.SetKineticEnergy(kinEnergy);
+  fInelasticXsc = GetZandACrossSection(&cacheDP, Z, A);
   return fTotalXsc;
 }
 
@@ -77,11 +78,9 @@ G4double G4ComponentGGNuclNuclXsc::GetTotalElementCrossSection(const G4ParticleD
 				       G4double kinEnergy, 
 				       G4int Z, G4double A)
 {
-  G4DynamicParticle* aDP = new G4DynamicParticle(aParticle,G4ParticleMomentum(1.,0.,0.), 
-                                                kinEnergy);
-  fInelasticXsc = GetZandACrossSection(aDP, Z, G4int(A));
-  delete aDP;
-
+  cacheDP.SetDefinition(aParticle);
+  cacheDP.SetKineticEnergy(kinEnergy);
+  fInelasticXsc = GetZandACrossSection(&cacheDP, Z, G4int(A));
   return fTotalXsc;
 }
 
@@ -91,11 +90,9 @@ G4double G4ComponentGGNuclNuclXsc::GetInelasticIsotopeCrossSection(const G4Parti
 					   G4double kinEnergy, 
 					   G4int Z, G4int A)
 {
-  G4DynamicParticle* aDP = new G4DynamicParticle(aParticle,G4ParticleMomentum(1.,0.,0.), 
-                                                kinEnergy);
-  fInelasticXsc = GetZandACrossSection(aDP, Z, A);
-  delete aDP;
-
+  cacheDP.SetDefinition(aParticle);
+  cacheDP.SetKineticEnergy(kinEnergy);
+  fInelasticXsc = GetZandACrossSection(&cacheDP, Z, A);
   return fInelasticXsc;
 }
 
@@ -105,11 +102,9 @@ G4double G4ComponentGGNuclNuclXsc::GetInelasticElementCrossSection(const G4Parti
 					   G4double kinEnergy, 
 					   G4int Z, G4double A)
 {
-  G4DynamicParticle* aDP = new G4DynamicParticle(aParticle,G4ParticleMomentum(1.,0.,0.), 
-                                                kinEnergy);
-  fInelasticXsc = GetZandACrossSection(aDP, Z, G4int(A));
-  delete aDP;
-
+  cacheDP.SetDefinition(aParticle);
+  cacheDP.SetKineticEnergy(kinEnergy);
+  fInelasticXsc = GetZandACrossSection(&cacheDP, Z, G4int(A));
   return fInelasticXsc;
 }
 
@@ -119,11 +114,9 @@ G4double G4ComponentGGNuclNuclXsc::GetElasticElementCrossSection(const G4Particl
 					 G4double kinEnergy, 
 					 G4int Z, G4double A)
 {
-  G4DynamicParticle* aDP = new G4DynamicParticle(aParticle,G4ParticleMomentum(1.,0.,0.), 
-                                                kinEnergy);
-  fInelasticXsc = GetZandACrossSection(aDP, Z, G4int(A));
-  delete aDP;
-
+  cacheDP.SetDefinition(aParticle);
+  cacheDP.SetKineticEnergy(kinEnergy);
+  fInelasticXsc = GetZandACrossSection(&cacheDP, Z, G4int(A));
   return fElasticXsc;
 }
 
@@ -133,11 +126,9 @@ G4double G4ComponentGGNuclNuclXsc::GetElasticIsotopeCrossSection(const G4Particl
 					 G4double kinEnergy, 
 					 G4int Z, G4int A)
 {
-  G4DynamicParticle* aDP = new G4DynamicParticle(aParticle,G4ParticleMomentum(1.,0.,0.), 
-                                                kinEnergy);
-  fInelasticXsc = GetZandACrossSection(aDP, Z, A);
-  delete aDP;
-
+  cacheDP.SetDefinition(aParticle);
+  cacheDP.SetKineticEnergy(kinEnergy);
+  fInelasticXsc = GetZandACrossSection(&cacheDP, Z, A);
   return fElasticXsc;
 }
 
@@ -147,10 +138,9 @@ G4double G4ComponentGGNuclNuclXsc::ComputeQuasiElasticRatio(const G4ParticleDefi
 					 G4double kinEnergy, 
 					 G4int Z, G4int A)
 {
-  G4DynamicParticle* aDP = new G4DynamicParticle(aParticle,G4ParticleMomentum(1.,0.,0.), 
-                                                kinEnergy);
-  fInelasticXsc = GetZandACrossSection(aDP, Z, A);
-  delete aDP;
+  cacheDP.SetDefinition(aParticle);
+  cacheDP.SetKineticEnergy(kinEnergy);
+  fInelasticXsc = GetZandACrossSection(&cacheDP, Z, A);
   G4double ratio = 0.;
 
   if(fInelasticXsc > 0.)
@@ -241,24 +231,16 @@ GetZandACrossSection(const G4DynamicParticle* aParticle,
 
   if ( cB > 0. ) 
   {
-    G4DynamicParticle* dProton = new G4DynamicParticle(theProton,
-                                              G4ParticleMomentum(1.,0.,0.), 
-                                              pTkin);
+    dProton.SetKineticEnergy(pTkin);
+    dNeutron.SetKineticEnergy(pTkin);
 
-    G4DynamicParticle* dNeutron = new G4DynamicParticle(theNeutron,
-                                              G4ParticleMomentum(1.,0.,0.), 
-                                              pTkin);
-
-    sigma = (pZ*tZ+pN*tN)*hnXsc->GetHadronNucleonXscNS(dProton, theProton);
+    sigma = (pZ*tZ+pN*tN)*hnXsc->GetHadronNucleonXscNS(&dProton, theProton);
 
     G4double ppInXsc = hnXsc->GetInelasticHadronNucleonXsc();
 
-    sigma += (pZ*tN+pN*tZ)*hnXsc->GetHadronNucleonXscNS(dNeutron, theProton);
+    sigma += (pZ*tN+pN*tZ)*hnXsc->GetHadronNucleonXscNS(&dNeutron, theProton);
 
     G4double npInXsc = hnXsc->GetInelasticHadronNucleonXsc();
-
-    delete dProton;
-    delete dNeutron;
 
     // G4cout<<"ppInXsc = "<<ppInXsc/millibarn<<"; npInXsc = "<<npInXsc/millibarn<<G4endl;
     // G4cout<<"npTotXsc = "<<hnXsc->GetTotalHadronNucleonXsc()/millibarn<<"; npElXsc = "

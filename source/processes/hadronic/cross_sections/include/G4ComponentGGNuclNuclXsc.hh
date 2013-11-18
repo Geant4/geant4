@@ -162,6 +162,11 @@ private:
   G4ParticleDefinition* theProton;
   G4ParticleDefinition* theNeutron;
   G4HadronNucleonXsc* hnXsc;
+    
+  //Used internally as cache to reduce memory churn
+  G4DynamicParticle cacheDP;
+  G4DynamicParticle dProton;
+  G4DynamicParticle dNeutron;
 };
 
 ////////////////////////////////////////////////////////////////

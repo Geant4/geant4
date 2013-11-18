@@ -58,6 +58,7 @@ G4ComponentSAIDTotalXS::G4ComponentSAIDTotalXS()
 
 G4ComponentSAIDTotalXS::~G4ComponentSAIDTotalXS()
 {
+  /*
   for(G4int i=0; i<numberOfSaidXS; ++i) {
     if(elastdata[i]) {
       delete elastdata[i];
@@ -68,6 +69,7 @@ G4ComponentSAIDTotalXS::~G4ComponentSAIDTotalXS()
       inelastdata[i] = 0;
     }
   }
+  */
 }
 
 G4double 

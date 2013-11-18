@@ -44,15 +44,42 @@
 #include "G4KaonPlus.hh"
 #include "G4Proton.hh"
 #include "G4PionPlus.hh"
+#include "G4AutoLock.hh"
 
 // factory
 #include "G4CrossSectionFactory.hh"
 //
 G4_DECLARE_XS_FACTORY(G4ChipsKaonPlusInelasticXS);
 
+namespace {
+    const G4double THmin=27.;     // default minimum Momentum (MeV/c) Threshold
+    const G4double THmiG=THmin*.001; // minimum Momentum (GeV/c) Threshold
+    const G4double dP=10.;        // step for the LEN (Low ENergy) table MeV/c
+    const G4double dPG=dP*.001;   // step for the LEN (Low ENergy) table GeV/c
+    const G4int    nL=105;        // A#of LEN points in E (step 10 MeV/c)
+    const G4double Pmin=THmin+(nL-1)*dP; // minP for the HighE part with safety
+    const G4double Pmax=227000.;  // maxP for the HEN (High ENergy) part 227 GeV
+    const G4int    nH=224;        // A#of HEN points in lnE
+    const G4double milP=std::log(Pmin);// Low logarithm energy for the HEN part
+    const G4double malP=std::log(Pmax);// High logarithm energy (each 2.75 percent)
+    const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HEN part
+    const G4double milPG=std::log(.001*Pmin);// Low logarithmEnergy for HEN part GeV/c
+    const G4double third=1./3.;
+    G4Mutex initM = G4MUTEX_INITIALIZER;
+    G4double prM;// = G4Proton::Proton()->GetPDGMass(); // Proton mass in MeV
+    G4double piM;// = G4PionPlus::PionPlus()->GetPDGMass()+.1; // Pion mass in MeV+Safety (WP)??
+    G4double pM;// =  G4KaonPlus::KaonPlus()->GetPDGMass(); // Projectile mass in MeV
+    G4double tpM;//= pM+pM;   // Doubled projectile mass (MeV)
+}
 
 G4ChipsKaonPlusInelasticXS::G4ChipsKaonPlusInelasticXS():G4VCrossSectionDataSet(Default_Name())
 {
+  G4AutoLock l(&initM);
+  prM = G4Proton::Proton()->GetPDGMass(); // Proton mass in MeV
+  piM = G4PionPlus::PionPlus()->GetPDGMass()+.1; // Pion mass in MeV+Safety (WP)??
+  pM  = G4KaonPlus::KaonPlus()->GetPDGMass(); // Projectile mass in MeV
+  tpM = pM+pM;   // Doubled projectile mass (MeV)
+  l.unlock();
   // Initialization of the
   lastLEN=0; // Pointer to the lastArray of LowEn CS
   lastHEN=0; // Pointer to the lastArray of HighEn CS
@@ -186,19 +213,6 @@ G4double G4ChipsKaonPlusInelasticXS::GetChipsCrossSection(G4double pMom, G4int t
 G4double G4ChipsKaonPlusInelasticXS::CalculateCrossSection(G4int F, G4int I,
                                         G4int, G4int targZ, G4int targN, G4double Momentum)
 {
-  static const G4double THmin=27.;     // default minimum Momentum (MeV/c) Threshold
-  static const G4double THmiG=THmin*.001; // minimum Momentum (GeV/c) Threshold
-  static const G4double dP=10.;        // step for the LEN (Low ENergy) table MeV/c
-  static const G4double dPG=dP*.001;   // step for the LEN (Low ENergy) table GeV/c
-  static const G4int    nL=105;        // A#of LEN points in E (step 10 MeV/c)
-  static const G4double Pmin=THmin+(nL-1)*dP; // minP for the HighE part with safety
-  static const G4double Pmax=227000.;  // maxP for the HEN (High ENergy) part 227 GeV
-  static const G4int    nH=224;        // A#of HEN points in lnE
-  static const G4double milP=std::log(Pmin);// Low logarithm energy for the HEN part
-  static const G4double malP=std::log(Pmax);// High logarithm energy (each 2.75 percent)
-  static const G4double dlP=(malP-milP)/(nH-1); // Step in log energy in the HEN part
-  static const G4double milPG=std::log(.001*Pmin);// Low logarithmEnergy for HEN part GeV/c
-
   G4double sigma=0.;
   if(F&&I) sigma=0.;                   // @@ *!* Fake line *!* to use F & I !!!Temporary!!!
   G4double A=targN+targZ;              // A of the target
@@ -267,11 +281,6 @@ G4double G4ChipsKaonPlusInelasticXS::CalculateCrossSection(G4int F, G4int I,
 // Electromagnetic momentum-threshold (in MeV/c) 
 G4double G4ChipsKaonPlusInelasticXS::ThresholdMomentum(G4int tZ, G4int tN)
 {
-  static const G4double third=1./3.;
-  static const G4double prM = G4Proton::Proton()->GetPDGMass(); // Proton mass in MeV
-  static const G4double piM = G4PionPlus::PionPlus()->GetPDGMass()+.1; // Pion mass in MeV+Safety (WP)??
-  static const G4double pM =  G4KaonPlus::KaonPlus()->GetPDGMass(); // Projectile mass in MeV
-  static const G4double tpM= pM+pM;   // Doubled projectile mass (MeV)
   G4double tA=tZ+tN;
   if(tZ<.99 || tN<0.) return 0.;
   G4double tM=931.5*tA;

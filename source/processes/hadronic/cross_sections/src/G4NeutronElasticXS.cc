@@ -74,9 +74,11 @@ G4NeutronElasticXS::G4NeutronElasticXS()
 G4NeutronElasticXS::~G4NeutronElasticXS()
 {
   delete fNucleon;
+  /*
   for(G4int i=0; i<=maxZ; ++i) {
     delete data[i];
   }
+  */
 }
 
 void G4NeutronElasticXS::CrossSectionDescription(std::ostream& outFile) const
