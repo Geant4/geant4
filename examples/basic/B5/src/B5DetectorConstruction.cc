@@ -137,12 +137,10 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
     
     G4VSolid* magneticSolid 
       = new G4Tubs("magneticTubs",0.,1.*m,1.*m,0.,360.*deg);
-    G4NistManager* man = G4NistManager::Instance();
-    G4Material* G4_Galactic = man->FindOrBuildMaterial("G4_Galactic");
-    
+
     fMagneticLogical
-      = new G4LogicalVolume(magneticSolid,G4_Galactic,"magneticLogical");
-    
+      = new G4LogicalVolume(magneticSolid, air, "magneticLogical");
+
     // placement of Tube
     
     G4RotationMatrix* fieldRot = new G4RotationMatrix();
@@ -441,6 +439,15 @@ void B5DetectorConstruction::ConstructMaterials()
     // Lead
     nistManager->FindOrBuildMaterial("G4_Pb");
     
+    // Vacuum "Galactic"
+    // nistManager->FindOrBuildMaterial("G4_Galactic");
+
+    // Vacuum "Air with low density"
+    // G4Material* air = G4Material::GetMaterial("G4_AIR");
+    // G4double density = 1.0e-5*air->GetDensity();
+    // nistManager
+    //   ->BuildMaterialWithNewDensity("Air_lowDensity", "G4_AIR", density);
+
     G4cout << G4endl << "The materials defined are : " << G4endl << G4endl;
     G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }

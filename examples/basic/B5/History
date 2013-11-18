@@ -11,6 +11,11 @@ $Id$
 
 ---------------------------------------------------------------------------  
 
+15 November 2013 Ivana Hrivnacova (exampleB5-V09-06-07)
+- Changed magnetic tube material to G4_Air (was G4_Galactic)
+  Resolves issue of low-energy electrons spinning forever in vacuum.
+  (By John Apostolakis.)
+
 02 November 2013 Ivana Hrivnacova (exampleB5-V09-06-06)
 - New tag for testing, no changes in the example
 
