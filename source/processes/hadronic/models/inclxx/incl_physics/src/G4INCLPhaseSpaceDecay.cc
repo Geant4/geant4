@@ -84,12 +84,12 @@ namespace G4INCL {
 
       G4int k=N-1;
       for (ParticleList::reverse_iterator p=particles.rbegin(); k>0; ++p, --k) {
-        const G4double mu = sumMasses.at(k-1);
+        const G4double mu = sumMasses[k-1];
         T *= (k>1) ? betaKopylov(k) : 0.;
 
         const G4double restMass = mu + T;
 
-        PFragMagCM = KinematicsUtils::momentumInCM(restParticle->getMass(), masses.at(k), restMass);
+        PFragMagCM = KinematicsUtils::momentumInCM(restParticle->getMass(), masses[k], restMass);
         PFragCM = Random::normVector(PFragMagCM);
         (*p)->setMomentum(PFragCM);
         (*p)->adjustEnergyFromMomentum();
@@ -101,9 +101,9 @@ namespace G4INCL {
         (*p)->boost(theBoostVector);
         restParticle->boost(boostV);
 
-        boostV = restParticle->boostVector();
+        boostV = -restParticle->boostVector();
       }
-      restParticle->setMass(masses.at(0));
+      restParticle->setMass(masses[0]);
       restParticle->adjustEnergyFromMomentum();
       restParticle->boost(theBoostVector);
     }
