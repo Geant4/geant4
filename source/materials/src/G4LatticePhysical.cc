@@ -28,13 +28,14 @@
 //
 // $Id$
 //
+// 20131115  Save rotation results in local variable, report verbosely
+// 20131116  Replace G4Transform3D with G4RotationMatrix
+
 #include "G4LatticePhysical.hh"
 #include "G4LatticeLogical.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4RotationMatrix.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4Transform3D.hh"
-#include "G4Vector3D.hh"
 
 
 // Unit vectors defined for convenience (avoid memory churn)
@@ -59,10 +60,17 @@ G4LatticePhysical::~G4LatticePhysical() {;}
 
 void G4LatticePhysical::SetPhysicalOrientation(const G4RotationMatrix* Rot) {
   if (!Rot) {					// No orientation specified
-    fLocalToGlobal = fGlobalToLocal = G4Transform3D::Identity;
+    fLocalToGlobal = fGlobalToLocal = G4RotationMatrix::IDENTITY;
   } else {
-    fLocalToGlobal = G4Rotate3D(*Rot);		// Frame rotation
-    fGlobalToLocal = fGlobalToLocal.inverse();
+    fLocalToGlobal = fGlobalToLocal = *Rot;		// Frame rotation
+    fGlobalToLocal.invert();
+  }
+
+  if (verboseLevel) {
+    G4cout << "G4LatticePhysical::SetPhysicalOrientation " << *Rot
+	   << "\nfLocalToGlobal: " << fLocalToGlobal
+	   << "\nfGlobalToLocal: " << fGlobalToLocal
+	   << G4endl;
   }
 }
 
@@ -85,7 +93,7 @@ void G4LatticePhysical::SetMillerOrientation(G4int l, G4int k, G4int n) {
 
   if (verboseLevel) 
     G4cout << "G4LatticePhysical::SetMillerOrientation(" << l << k << n 
-	   << " : " << fTheta << " " << fPhi << G4endl;
+	   << ") : " << fTheta << " " << fPhi << G4endl;
 }
 
 
@@ -122,10 +130,28 @@ G4ThreeVector G4LatticePhysical::MapKtoVDir(G4int polarizationState,
 
 G4ThreeVector 
 G4LatticePhysical::RotateToGlobal(const G4ThreeVector& dir) const {
-  return G4ThreeVector(fLocalToGlobal*G4Vector3D(dir));
+  if (verboseLevel>1) {
+    G4cout << "G4LatticePhysical::RotateToGlobal " << dir
+	   << "\nusing fLocalToGlobal " << fLocalToGlobal
+	   << G4endl;
+  }
+
+  G4ThreeVector result = fLocalToGlobal*dir;
+  if (verboseLevel>1) G4cout << " result " << result << G4endl;
+
+  return result;
 }
 
 G4ThreeVector 
 G4LatticePhysical::RotateToLocal(const G4ThreeVector& dir) const {
-  return G4ThreeVector(fGlobalToLocal*G4Vector3D(dir));
+  if (verboseLevel>1) {
+    G4cout << "G4LatticePhysical::RotateToLocal " << dir
+	   << "\nusing fGlobalToLocal " << fGlobalToLocal
+	   << G4endl;
+  }
+
+  G4ThreeVector result = fGlobalToLocal*dir;
+  if (verboseLevel>1) G4cout << " result " << result << G4endl;
+
+  return result;
 }

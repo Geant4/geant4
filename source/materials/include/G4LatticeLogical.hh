@@ -29,6 +29,7 @@
 // $Id$
 //
 // 20131114  Add verbosity for diagnostic output
+// 20131115  Expose maximum array dimensions for use by LatticeReader
 
 #ifndef G4LatticeLogical_h
 #define G4LatticeLogical_h
@@ -80,11 +81,13 @@ public:
   G4double GetLDOS() const { return fLDOS; }
   G4double GetSTDOS() const { return fSTDOS; }
   G4double GetFTDOS() const { return fFTDOS; }
+
+public:
+  enum { MAXRES=322 };			    // Maximum map resolution (bins)
   
 private:
   G4int verboseLevel;			    // Enable diagnostic output
 
-  enum { MAXRES=322 };			    // Maximum map resolution (bins)
   G4double fMap[3][MAXRES][MAXRES];	    // map for group velocity scalars
   G4ThreeVector fN_map[3][MAXRES][MAXRES];  // map for direction vectors
 

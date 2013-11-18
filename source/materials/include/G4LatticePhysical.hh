@@ -29,6 +29,7 @@
 // $Id$
 //
 // 20131114  Add verbosity for diagnostic output
+// 20131116  Replace G4Transform3D with G4RotationMatrix
 
 #ifndef G4LatticePhysical_h
 #define G4LatticePhysical_h 1
@@ -36,7 +37,6 @@
 #include "G4LatticeLogical.hh"
 #include "G4RotationMatrix.hh"
 #include "G4ThreeVector.hh"
-#include "G4Transform3D.hh"
 
 
 class G4LatticePhysical {
@@ -79,8 +79,8 @@ private:
   G4double fTheta, fPhi;		// Lattice orientation within object
   const G4LatticeLogical* fLattice;	// Underlying lattice parameters
 
-  G4Transform3D fLocalToGlobal;
-  G4Transform3D fGlobalToLocal;
+  G4RotationMatrix fLocalToGlobal;
+  G4RotationMatrix fGlobalToLocal;
 };
 
 #endif
