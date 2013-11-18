@@ -113,6 +113,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
       new G4HadSecondary(new G4DynamicParticle(G4Gamma::Gamma(), lv2));
     news->SetTime(time);
     theParticleChange.AddSecondary(*news);
+    delete news;
 
     G4ParticleDefinition* theDef = 0;
 
@@ -131,6 +132,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
       news = new G4HadSecondary(new G4DynamicParticle(theDef, lv1));
       news->SetTime(time);
       theParticleChange.AddSecondary(*news);
+      delete news;
     }
  
   // Use photon evaporation  
@@ -232,6 +234,7 @@ G4HadFinalState* G4NeutronRadCapture::ApplyYourself(
         if(timeF < 0.0) { timeF = 0.0; }
 	news->SetTime(time + timeF);
 	theParticleChange.AddSecondary(*news);
+	delete news;
       }
       delete f;
     }

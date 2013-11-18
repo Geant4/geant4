@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+15 November 2013 Vladimir Ivanchenko (hadr-deex-V09-06-26)
+----------------------------------------------------------
+- G4NuclearLevelManager - fixed trivial Coverity warning
+- G4NeutronRadcapture - fixed run time memory leak
+
 28 October 2013 Vladimir Ivanchenko (hadr-deex-V09-06-25)
 ----------------------------------------------------------
 - G4LevelReader, G4NuclearLevelManager - attempt to fix compillation 
