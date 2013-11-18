@@ -156,7 +156,7 @@ int main(int argc,char** argv)
      }
   }
 #else  // Simple UI for Windows runs, no possibility of additional arguments
-  if (argc!=1))   // batch mode
+  if (argc!=1)   // batch mode
   {
      G4String command = "/control/execute ";
      G4String fileName = argv[1];
