@@ -434,9 +434,11 @@ G4LivermorePhotoElectricModel::ReadData(G4int Z, const char* path)
     }
     fin1 >> n1;
     if(fin1.fail()) { return; }
+    if(0 > n1) { n1 = 0; }
 
     fin1 >> n2;
     if(fin1.fail()) { return; }
+    if(0 > n2) { n2 = 0; }
 
     fin1 >> x;
     if(fin1.fail()) { return; }

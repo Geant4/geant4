@@ -97,9 +97,9 @@ G4PenelopeIonisationXSHandler::~G4PenelopeIonisationXSHandler()
     {
       /*
       for (k=theDeltaTable->begin();k!=theDeltaTable->end();k++)	
-	delete k->second;
+ 	delete k->second;
+      */ 
       delete theDeltaTable;
-      */
       theDeltaTable = 0;
     }
   /*
