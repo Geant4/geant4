@@ -49,19 +49,20 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4LogicalVolume {
 
-void(G4LogicalVolume::*f1_SetVisAttributes)(const G4VisAttributes*) 
+void(G4LogicalVolume::*f1_SetVisAttributes)(const G4VisAttributes*)
   = &G4LogicalVolume::SetVisAttributes;
 
-void(G4LogicalVolume::*f2_SetVisAttributes)(const G4VisAttributes&) 
+void(G4LogicalVolume::*f2_SetVisAttributes)(const G4VisAttributes&)
   = &G4LogicalVolume::SetVisAttributes;
 
-#if G4VERSION_NUMBER <= 701
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetMass, GetMass, 0, 2);
-#elif G4VERSION_NUMBER >=710
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetMass, GetMass, 0, 3);
-#endif
+G4VSolid*(G4LogicalVolume::*f1_GetSolid)() const = &G4LogicalVolume::GetSolid;
 
-};
+void(G4LogicalVolume::*f1_SetSolid)(G4VSolid*)
+  = &G4LogicalVolume::SetSolid;
+
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetMass, GetMass, 0, 3)
+
+}
 
 using namespace pyG4LogicalVolume;
 
@@ -98,9 +99,9 @@ void export_G4LogicalVolume()
     .def("ClearDaughters",  &G4LogicalVolume::ClearDaughters)
     .def("TotalVolumeEntities", &G4LogicalVolume::TotalVolumeEntities)
     // ----
-    .def("GetSolid",        &G4LogicalVolume::GetSolid,
-	 return_internal_reference<>())
-    .def("SetSolid",        &G4LogicalVolume::SetSolid)
+    .def("GetSolid",        f1_GetSolid,
+     return_internal_reference<>())
+    .def("SetSolid",        f1_SetSolid)
     .def("GetMaterial",     &G4LogicalVolume::GetMaterial,
 	 return_internal_reference<>())
     .def("SetMaterial",     &G4LogicalVolume::SetMaterial)
@@ -140,13 +141,7 @@ void export_G4LogicalVolume()
     .def("SetVisAttributes", f1_SetVisAttributes)
     .def("SetVisAttributes", f2_SetVisAttributes)
     // ---
-#if G4VERSION_NUMBER >= 700 && G4VERSION_NUMBER <= 711 
-    .def("BecomeEnvelopeForFastSimulation", 
-	 &G4LogicalVolume::BecomeEnvelopeForFastSimulation)
-    .def("ClearEnvelopeForFastSimulation", 
-	 &G4LogicalVolume::ClearEnvelopeForFastSimulation)
-#endif
-    .def("GetFastSimulationManager", 
+    .def("GetFastSimulationManager",
 	 &G4LogicalVolume::GetFastSimulationManager,
 	 return_internal_reference<>())
     // ---

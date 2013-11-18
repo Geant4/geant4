@@ -39,7 +39,7 @@ namespace pyG4ProcVector {
 
 typedef std::vector<G4VProcess*> G4ProcVector;
 
-};
+}
 
 using namespace pyG4ProcVector;
 

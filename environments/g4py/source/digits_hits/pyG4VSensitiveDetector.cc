@@ -45,7 +45,7 @@ class  CB_G4VSensitiveDetector :
 
 public:
   CB_G4VSensitiveDetector() : G4VSensitiveDetector("") { }
-  CB_G4VSensitiveDetector(const G4String& name) 
+  CB_G4VSensitiveDetector(const G4String& name)
     : G4VSensitiveDetector(name) { }
   ~CB_G4VSensitiveDetector() { }
 
@@ -54,7 +54,7 @@ public:
   }
 };
 
-};
+}
 
 using namespace pyG4VSensitiveDetector;
 
@@ -77,7 +77,7 @@ void export_G4VSensitiveDetector()
     .def("ProcessHits", pure_virtual(&CB_G4VSensitiveDetector::ProcessHits))
     // ---
     .def("SetROgeometry",   &G4VSensitiveDetector::SetROgeometry)
-    .def("GetNumberOfCollections", 
+    .def("GetNumberOfCollections",
 	 &G4VSensitiveDetector::GetNumberOfCollections)
     .def("GetCollectionName", &G4VSensitiveDetector::GetCollectionName)
     .def("SetVerboseLevel", &G4VSensitiveDetector::SetVerboseLevel)

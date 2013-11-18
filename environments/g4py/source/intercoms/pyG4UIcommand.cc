@@ -46,16 +46,16 @@ list f_GetStateList(G4UIcommand* acommand)
   list pyStateList;
   std::vector<G4ApplicationState>* stateList= acommand->GetStateList();
 
-  for(G4int i=0; i< stateList->size(); i++) {
+  for( size_t i=0; i< stateList->size(); i++) {
     pyStateList.append(&(*stateList)[i]);
   }
 
   return pyStateList;
 }
 
-};                                                                              
+}
 
-using namespace pyG4UIcommand;                                                  
+using namespace pyG4UIcommand;
 
 // ====================================================================
 // module definition
@@ -85,4 +85,3 @@ void export_G4UIcommand()
     .def("GetTitle",            &G4UIcommand::GetTitle)
     ;
 }
-

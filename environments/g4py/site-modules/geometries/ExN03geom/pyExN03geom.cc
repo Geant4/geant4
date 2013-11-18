@@ -53,7 +53,7 @@ void Construct()
   runMgr-> SetUserInitialization(new ExN03DetectorConstruction);
 }
 
-};
+}
 
 using namespace pyExN03geom;
 
@@ -83,7 +83,7 @@ BOOST_PYTHON_MODULE(ExN03geom) {
 	 return_value_policy<reference_existing_object>())
     .def("GetAbsorberThickness",  &XXX::GetAbsorberThickness)
     .def("GetGapMaterial",        &XXX::GetGapMaterial,
-	 return_value_policy<reference_existing_object>())    
+	 return_value_policy<reference_existing_object>())
     .def("GetGapThickness",       &XXX::GetGapThickness)
     .def("GetphysiWorld",         &XXX::GetphysiWorld,
 	 return_value_policy<reference_existing_object>())

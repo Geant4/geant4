@@ -59,7 +59,7 @@ const G4ParticleGun& G4ParticleGun::operator=(const G4ParticleGun &right)
    particle_momentum_direction= right.particle_momentum_direction;
    particle_energy= right.particle_energy;
    particle_charge= right.particle_charge;
-   particle_polarization= right.particle_polarization; 
+   particle_polarization= right.particle_polarization;
 
    return *this;
 }
@@ -104,7 +104,7 @@ void SetParticleByName(G4ParticleGun* gun, const std::string& pname)
   if (pd != 0) {
     gun-> SetParticleDefinition(pd);
   } else {
-    G4cout << "*** \"" << pname << "\" is not registered " 
+    G4cout << "*** \"" << pname << "\" is not registered "
 	   << "in available particle list" << G4endl;
   }
 }
@@ -117,7 +117,7 @@ std::string GetParticleByName(G4ParticleGun* gun)
   return (pd-> GetParticleName()).c_str();
 }
 
-};
+}
 
 using namespace pyG4ParticleGun;
 
@@ -147,9 +147,9 @@ void export_G4ParticleGun()
 #else
     .def("SetParticleMomentum",   &G4ParticleGun::SetParticleMomentum)
 #endif
-    .def("SetParticleMomentumDirection", 
+    .def("SetParticleMomentumDirection",
 	 &G4ParticleGun::SetParticleMomentumDirection)
-    .def("GetParticleMomentumDirection", 
+    .def("GetParticleMomentumDirection",
 	 &G4ParticleGun::GetParticleMomentumDirection)
     .def("SetParticleEnergy",     &G4ParticleGun::SetParticleEnergy)
     .def("GetParticleEnergy",     &G4ParticleGun::GetParticleEnergy)

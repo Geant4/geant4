@@ -85,11 +85,11 @@ XXX&(XXX::*f3_rotate)(const HepAxisAngle&)= &XXX::rotate;
 XXX&(XXX::*f4_rotate)(const HepEulerAngles&)= &XXX::rotate;
 XXX&(XXX::*f5_rotate)(G4double, G4double, G4double)= &XXX::rotate;
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isNear, isNear, 1, 2);
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isParallel, isParallel, 1, 2);
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isOrthogonal, isOrthogonal, 1, 2);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isNear, isNear, 1, 2)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isParallel, isParallel, 1, 2)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isOrthogonal, isOrthogonal, 1, 2)
 
-};
+}
 
 using namespace pyG4ThreeVector;
 
@@ -104,12 +104,12 @@ void export_G4ThreeVector()
     .def(init<G4double, G4double>())
     .def(init<G4double, G4double, G4double>())
     .def(init<const XXX&>())
-    
+
     // property
     .add_property("x", &XXX::x, &XXX::setX)
     .add_property("y", &XXX::y, &XXX::setY)
     .add_property("z", &XXX::z, &XXX::setZ)
-  
+
     // methods
     .def("set",      &XXX::set)
     .def("phi",      &XXX::phi)
@@ -182,11 +182,11 @@ void export_G4ThreeVector()
     .def("polarAngle",f2_polarAngle)
     .def("azimAngle", f1_azimAngle)
     .def("azimAngle", f2_azimAngle)
-    .def("rotateX",   &XXX::rotateX, 
+    .def("rotateX",   &XXX::rotateX,
 	 return_value_policy<reference_existing_object>())
-    .def("rotateY",   &XXX::rotateY, 
+    .def("rotateY",   &XXX::rotateY,
 	 return_value_policy<reference_existing_object>())
-    .def("rotateZ",   &XXX::rotateZ, 
+    .def("rotateZ",   &XXX::rotateZ,
 	 return_value_policy<reference_existing_object>())
     .def("rotateUz", &XXX::rotateUz,
 	 return_value_policy<reference_existing_object>())

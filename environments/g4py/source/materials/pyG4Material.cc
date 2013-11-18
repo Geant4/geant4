@@ -46,12 +46,10 @@ void (G4Material::*f1_AddElement)(G4Element*, G4int)
 void (G4Material::*f2_AddElement)(G4Element*, G4double)
   = &G4Material::AddElement;
 
-#if G4VERSION_NUMBER >= 800
-BOOST_PYTHON_FUNCTION_OVERLOADS(f_GetMaterial, G4Material::GetMaterial, 1, 2);
-#endif
+BOOST_PYTHON_FUNCTION_OVERLOADS(f_GetMaterial, G4Material::GetMaterial, 1, 2)
 
 // raw pointer -> Python list conversion
-list f_GetFractionVector(const G4Material* material) 
+list f_GetFractionVector(const G4Material* material)
 {
   list fracList;
   const G4double* fracVec= material-> GetFractionVector();
@@ -118,16 +116,11 @@ void export_G4Material()
     .def("AddElement",          f1_AddElement)
     .def("AddElement",          f2_AddElement)
     .def("AddMaterial",         &G4Material::AddMaterial)
-#if G4VERSION_NUMBER >= 920
     .def("GetName",             &G4Material::GetName,
          return_value_policy<reference_existing_object>())
     .def("GetChemicalFormula",  &G4Material::GetChemicalFormula,
          return_value_policy<reference_existing_object>())
     .def("SetName",             &G4Material::SetName)
-#else
-    .def("GetName",             &G4Material::GetName)
-    .def("GetChemicalFormula",  &G4Material::GetChemicalFormula)
-#endif
     .def("SetChemicalFormula",  &G4Material::SetChemicalFormula)
     .def("GetDensity",          &G4Material::GetDensity)
     .def("GetState",            &G4Material::GetState)
@@ -164,14 +157,9 @@ void export_G4Material()
     .def("GetNumberOfMaterials",  &G4Material::GetNumberOfMaterials)
     .staticmethod("GetNumberOfMaterials")
     .def("GetIndex",              &G4Material::GetIndex)
-#if G4VERSION_NUMBER >= 800
     .def("GetMaterial",           &G4Material::GetMaterial,
-	 f_GetMaterial()
-	 [return_value_policy<reference_existing_object>()])
-#else
-    .def("GetMaterial",           &G4Material::GetMaterial,
-         return_value_policy<reference_existing_object>())
-#endif
+      f_GetMaterial()
+      [return_value_policy<reference_existing_object>()])
     .staticmethod("GetMaterial")
     // ---
     //.def(self_ns::str(self))

@@ -48,7 +48,7 @@ struct CB_G4VUserDetectorConstruction :
   }
 };
 
-};
+}
 
 using namespace pyG4VUserDetectorConstruction;
 

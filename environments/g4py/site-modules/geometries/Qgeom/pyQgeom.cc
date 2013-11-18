@@ -51,7 +51,7 @@ void Construct()
   runMgr-> SetUserInitialization(new QDetectorConstruction);
 }
 
-};
+}
 
 using namespace pyQgeom;
 

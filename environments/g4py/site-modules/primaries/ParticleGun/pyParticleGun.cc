@@ -52,11 +52,11 @@ G4ParticleGun* Construct()
 
   ParticleGunAction* pga= new ParticleGunAction;
   runMgr-> SetUserAction(pga);
-  
+
   return pga-> GetParticleGun();
 }
 
-};
+}
 
 using namespace pyParticleGun;
 
@@ -73,7 +73,7 @@ BOOST_PYTHON_MODULE(ParticleGun) {
     ;
 
   // ---
-  def("Construct", Construct, 
+  def("Construct", Construct,
       return_value_policy<reference_existing_object>());
 
 }

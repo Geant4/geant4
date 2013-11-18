@@ -39,7 +39,7 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4RunManagerKernel {
 
-};
+}
 
 using namespace pyG4RunManagerKernel;
 
@@ -62,9 +62,9 @@ void export_G4RunManagerKernel()
     //.def("UpdateRegion", &G4RunManagerKernel::UpdateRegion)
     //.def("DumpRegion", &G4RunManagerKernel::DumpRegion)
     //.def("DumpRegion", &G4RunManagerKernel::DumpRegion)
-    //.def("GeometryHasBeenModified", 
+    //.def("GeometryHasBeenModified",
     //&G4RunManagerKernel::GeometryHasBeenModified)
-    //.def("PhysicsHasBeenModified", 
+    //.def("PhysicsHasBeenModified",
     //&G4RunManagerKernel::PhysicsHasBeenModified)
     //.def("GetEventManager", &G4RunManagerKernel::GetEventManager,
     //...)
@@ -77,7 +77,7 @@ void export_G4RunManagerKernel()
     //...)
     //.def("GetVersionString", &G4RunManagerKernel::GetVersionString)
     //.def("SetVerboseLevel", &G4RunManagerKernel::SetVerboseLevel)
-    //.def("SetGeometryToBeOptimized", 
+    //.def("SetGeometryToBeOptimized",
     //&G4RunManagerKernel::SetGeometryToBeOptimized)
     ;
 }

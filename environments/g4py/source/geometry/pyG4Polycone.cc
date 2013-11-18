@@ -60,11 +60,11 @@ G4Polycone* f1_CreatePolycone(const G4String& name, G4double phiStart,
   return new G4Polycone(name, phiStart, phiTotal, numZPlanes,
                         zlist, r0list, r1list);
 }
-  
+
 
 G4Polycone* f2_CreatePolycone(const G4String& name, G4double phiStart,
                               G4double phiTotal, G4int numRZ,
-                              const std::vector<G4double>& r, 
+                              const std::vector<G4double>& r,
                               const std::vector<G4double>& z)
 {
   G4double zlist[numRZ];

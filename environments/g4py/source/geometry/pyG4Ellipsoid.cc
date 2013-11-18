@@ -50,7 +50,7 @@ G4Ellipsoid* CreateEllipsoid(const G4String& name,
                          pzBottomCut, pzTopCut);
 }
 
-BOOST_PYTHON_FUNCTION_OVERLOADS(f_CreateEllipsoid, CreateEllipsoid, 4,6); 
+BOOST_PYTHON_FUNCTION_OVERLOADS(f_CreateEllipsoid, CreateEllipsoid, 4,6)
 
 }
 
@@ -66,7 +66,7 @@ void export_G4Ellipsoid()
     // constructors
     .def(init<const G4String&, G4double, G4double, G4double>())
     .def(init<const G4String&, G4double, G4double, G4double, G4double>())
-    .def(init<const G4String&, G4double, G4double, G4double, G4double, 
+    .def(init<const G4String&, G4double, G4double, G4double, G4double,
                                G4double>())
     // ---
     .def("GetSemiAxisMax", &G4Ellipsoid::GetSemiAxisMax)
@@ -77,7 +77,7 @@ void export_G4Ellipsoid()
     // operators
     .def(self_ns::str(self))
     ;
-  
+
     // Create solid
     def("CreateEllipsoid", CreateEllipsoid,
         f_CreateEllipsoid()[return_value_policy<manage_new_object>()]);

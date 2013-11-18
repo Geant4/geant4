@@ -1,5 +1,4 @@
 # $Id$
-# $Name: not supported by cvs2svn $
 # ===========================================================
 #   Makefile for building Geant4Py site-modules
 # ===========================================================

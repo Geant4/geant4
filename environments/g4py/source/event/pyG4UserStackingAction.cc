@@ -42,7 +42,7 @@ namespace pyG4UserStackingAction {
 
 struct CB_G4UserStackingAction : G4UserStackingAction,
 				 wrapper<G4UserStackingAction> {
-  
+
   // ClassifyNewTrack
   G4ClassificationOfNewTrack ClassifyNewTrack(const G4Track* aTrack) {
     if(const override& f= get_override("ClassifyNewTrack")) {
@@ -69,7 +69,7 @@ struct CB_G4UserStackingAction : G4UserStackingAction,
 
 };
 
-};
+}
 
 using namespace pyG4UserStackingAction;
 

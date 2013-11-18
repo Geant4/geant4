@@ -55,7 +55,7 @@ ExN01PhysicsList* Construct()
   return pl;
 }
 
-};
+}
 
 using namespace pyExN01pl;
 
@@ -72,5 +72,5 @@ BOOST_PYTHON_MODULE(ExN01pl) {
   // ---
   def("Construct", Construct,
       return_value_policy<reference_existing_object>());
-  
+
 }

@@ -40,9 +40,9 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4ChordFinder {
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_SetVerbose, SetVerbose, 0, 1);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_SetVerbose, SetVerbose, 0, 1)
 
-};
+}
 
 using namespace pyG4ChordFinder;
 

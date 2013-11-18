@@ -11,6 +11,11 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 November 2013 K.Murakami
+ - add support for CMake build
+ - updated for 10.0 release
+ - suppress warnings
+
 8 November 2012 K.Murakami
  - configure script is updated for CMake build
  - updated Geant4 interface for the latest

@@ -45,7 +45,7 @@ G4VProcess*(G4ProcessTable::*f1_FindProcess)
   (const G4String&, const G4String&) const = &G4ProcessTable::FindProcess;
 
 G4VProcess*(G4ProcessTable::*f2_FindProcess)
-  (const G4String&, const G4ParticleDefinition*) const 
+  (const G4String&, const G4ParticleDefinition*) const
   = &G4ProcessTable::FindProcess;
 
 G4VProcess*(G4ProcessTable::*f3_FindProcess)
@@ -63,7 +63,7 @@ list f1_FindProcesses(G4ProcessTable* procTable)
     procList.append(&(*procVec)[i]);
   }
   return procList;
-}  
+}
 
 list f2_FindProcesses(G4ProcessTable* procTable,
 		      const G4ProcessManager* procManager)
@@ -75,7 +75,7 @@ list f2_FindProcesses(G4ProcessTable* procTable,
     procList.append(&(*procVec)[i]);
   }
   return procList;
-}  
+}
 
 list f3_FindProcesses(G4ProcessTable* procTable,
 		      const G4String& pname)
@@ -87,7 +87,7 @@ list f3_FindProcesses(G4ProcessTable* procTable,
     procList.append(&(*procVec)[i]);
   }
   return procList;
-}  
+}
 
 list f4_FindProcesses(G4ProcessTable* procTable,
 		      G4ProcessType ptype)
@@ -99,7 +99,7 @@ list f4_FindProcesses(G4ProcessTable* procTable,
     procList.append(&(*procVec)[i]);
   }
   return procList;
-}  
+}
 
 // SetProcessActivation
 void(G4ProcessTable::*f1_SetProcessActivation)
@@ -132,9 +132,9 @@ void(G4ProcessTable::*f8_SetProcessActivation)
   (G4ProcessType, G4ProcessManager*, G4bool)
   = &G4ProcessTable::SetProcessActivation;
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_DumpInfo, DumpInfo, 1, 2);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_DumpInfo, DumpInfo, 1, 2)
 
-};
+}
 
 using namespace pyG4ProcessTable;
 

@@ -48,14 +48,14 @@ namespace pyEMSTDpl {
 PhysicsListEMstd* Construct()
 {
   PhysicsListEMstd* pl= new PhysicsListEMstd;
-  
+
   G4RunManager* runMgr= G4RunManager::GetRunManager();
   runMgr-> SetUserInitialization(pl);
 
   return pl;
 }
 
-};
+}
 
 using namespace pyEMSTDpl;
 
@@ -70,7 +70,7 @@ BOOST_PYTHON_MODULE(EMSTDpl) {
     ;
 
   // ---
-  def("Construct", Construct, 
+  def("Construct", Construct,
       return_value_policy<reference_existing_object>());
 
 }

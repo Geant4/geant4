@@ -39,9 +39,9 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4Event {
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetPrimaryVertex, 
-				       GetPrimaryVertex, 0, 1);
-};
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetPrimaryVertex,
+				                               GetPrimaryVertex, 0, 1)
+}
 
 using namespace pyG4Event;
 

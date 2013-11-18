@@ -51,7 +51,7 @@ void Construct()
   runMgr-> SetUserInitialization(new ExN01DetectorConstruction);
 }
 
-};
+}
 
 using namespace pyExN03geom;
 

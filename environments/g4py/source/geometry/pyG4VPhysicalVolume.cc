@@ -48,7 +48,7 @@ const G4RotationMatrix*(G4VPhysicalVolume::*f1_GetRotation)() const
 G4RotationMatrix*(G4VPhysicalVolume::*f2_GetRotation)()
   = &G4VPhysicalVolume::GetRotation;
 
-};
+}
 
 using namespace pyG4VPhysicalVolume;
 

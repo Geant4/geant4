@@ -68,7 +68,7 @@ typedef std::vector<G4ThreeVector> G4ThreeVectorVector;
 #if G4VERSION_NUMBER >= 830
 typedef std::vector<G4TwoVector> G4TwoVectorVector;
 #endif
-};
+}
 
 using namespace pyglobals;
 

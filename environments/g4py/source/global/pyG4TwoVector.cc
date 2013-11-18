@@ -44,12 +44,12 @@ typedef G4TwoVector XXX; // ...
 // thin wrappers
 // ====================================================================
 namespace pyG4TwoVector {
-  
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isNear, isNear, 1, 2);
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isParallel, isParallel, 1, 2);
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isOrthogonal, isOrthogonal, 1, 2);
 
-};
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isNear, isNear, 1, 2)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isParallel, isParallel, 1, 2)
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_isOrthogonal, isOrthogonal, 1, 2)
+
+}
 
 using namespace pyG4TwoVector;
 

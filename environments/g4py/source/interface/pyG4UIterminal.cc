@@ -30,7 +30,6 @@
 //                                         2005 Q
 // ====================================================================
 #include <boost/python.hpp>
-#include "G4Version.hh"
 #include "G4UIterminal.hh"
 #include "G4UItcsh.hh"
 
@@ -48,7 +47,7 @@ void StartUISession()
 /////////////////////
 {
   if (session == 0 ) {
-    G4UItcsh* tcsh= new 
+    G4UItcsh* tcsh= new
       G4UItcsh("[40;01;33mg4py[40;31m(%s)[40;36m[%/][00;30m:");
 
 #if G4VERSION_NUMBER >= 900
@@ -62,7 +61,7 @@ void StartUISession()
   session-> SessionStart();
 }
 
-};
+}
 
 using namespace pyG4UIterminal;
 

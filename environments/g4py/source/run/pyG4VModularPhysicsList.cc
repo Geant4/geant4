@@ -49,10 +49,10 @@ struct CB_G4VModularPhysicsList :
 };
 
 // GetPhysics()
-const G4VPhysicsConstructor* 
+const G4VPhysicsConstructor*
       (G4VModularPhysicsList::*f1_GetPhysics)(G4int) const
   = &G4VModularPhysicsList::GetPhysics;
-const G4VPhysicsConstructor* 
+const G4VPhysicsConstructor*
       (G4VModularPhysicsList::*f2_GetPhysics)(const G4String&) const
   = &G4VModularPhysicsList::GetPhysics;
 

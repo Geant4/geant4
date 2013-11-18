@@ -103,7 +103,7 @@ list f_GetFieldXY(MedicalBeam* beam)
   return listFieldXY;
 }
 
-};
+}
 
 using namespace pyMedicalBeam;
 
@@ -120,7 +120,7 @@ BOOST_PYTHON_MODULE(MedicalBeam) {
     .def("SetParticleByName", SetParticleByName)
     .def("GetParticleByName", GetParticleByName)
     // ---
-    .add_property("kineticE", &MedicalBeam::GetKineticE, 
+    .add_property("kineticE", &MedicalBeam::GetKineticE,
 		              &MedicalBeam::SetKineticE)
     .def("SetKineticE",       &MedicalBeam::SetKineticE)
     .def("GetKineticE",       &MedicalBeam::GetKineticE)
@@ -149,13 +149,13 @@ BOOST_PYTHON_MODULE(MedicalBeam) {
     .def("SetFieldR",       &MedicalBeam::SetFieldR)
     .def("GetFieldR",       &MedicalBeam::GetFieldR)
     ;
- 
+
   // enums...
   enum_<MedicalBeam::FieldShape>("FieldShape")
     .value("SQUARE", MedicalBeam::SQUARE)
     .value("CIRCLE", MedicalBeam::CIRCLE)
     ;
-  
+
   // ---
   def("Construct",  Construct,
       return_value_policy<reference_existing_object>());

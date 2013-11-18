@@ -1,5 +1,4 @@
 # $Id$
-# $Name: not supported by cvs2svn $
 # ===========================================================
 #   Makefile for building Geant4Py modules
 # ===========================================================
@@ -14,7 +13,7 @@ ifeq ($(Q_WITH_PYTHON3), 0)
 
 else
 
-.PHONY: all install clean 
+.PHONY: all install clean
 
 all:
 	@cd python3 && $(MAKE)

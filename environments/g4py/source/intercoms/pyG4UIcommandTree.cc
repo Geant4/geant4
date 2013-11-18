@@ -40,12 +40,12 @@ using namespace boost::python;
 namespace pyG4UIcommandTree {
 
 // GetTree
-G4UIcommandTree*(G4UIcommandTree::*f1_GetTree)(G4int)= 
+G4UIcommandTree*(G4UIcommandTree::*f1_GetTree)(G4int)=
   &G4UIcommandTree::GetTree;
-G4UIcommandTree*(G4UIcommandTree::*f2_GetTree)(const char*)= 
+G4UIcommandTree*(G4UIcommandTree::*f2_GetTree)(const char*)=
   &G4UIcommandTree::GetTree;
 
-};
+}
 
 using namespace pyG4UIcommandTree;
 

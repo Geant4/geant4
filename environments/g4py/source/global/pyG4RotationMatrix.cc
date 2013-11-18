@@ -44,7 +44,7 @@ namespace pyG4RotationMatrix {
 XXX&(XXX::*f1_rotate)(G4double, const G4ThreeVector&)= &XXX::rotate;
 XXX&(XXX::*f2_rotate)(G4double, const G4ThreeVector*)= &XXX::rotate;
 
-};
+}
 
 using namespace pyG4RotationMatrix;
 

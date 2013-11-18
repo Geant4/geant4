@@ -40,7 +40,7 @@ from array import array
 def plot_range(xmin, xmax, xmargin=0.):
   xmaxlog= 10
   xminlog= -10
-  
+
   if(xmax!=0.):
     xmaxlog= log10(xmax)
 
@@ -78,9 +78,9 @@ def init_root():
 
   return canvas
 
-# ------------------------------------------------------------------ 
+# ------------------------------------------------------------------
 #   do a plot
-# ------------------------------------------------------------------ 
+# ------------------------------------------------------------------
 def make_plot(xlist, user_title, axis_titile, q_super_impose=0):
 
   ekin_array, y_array = array('d'), array('d')
@@ -88,12 +88,12 @@ def make_plot(xlist, user_title, axis_titile, q_super_impose=0):
   for x in xlist:
     ekin_array.append(x[0])
     y_array.append(x[1])
-    
+
   # plot range
   xmin= min(ekin_array)
   xmax= max(ekin_array)
   xrange= plot_range(xmin, xmax)
-  
+
   ymin= min(y_array)
   ymax= max(y_array)
   yrange= plot_range(ymin, ymax, 2)

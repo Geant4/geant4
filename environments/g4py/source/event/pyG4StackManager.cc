@@ -41,11 +41,11 @@ using namespace boost::python;
 namespace pyG4StackManager {
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_ClearWaitingStack,
-                                       ClearWaitingStack, 0, 1);
+                                       ClearWaitingStack, 0, 1)
 
 BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetNWaitingTrack,
-                                       GetNWaitingTrack, 0, 1);
-};
+                                       GetNWaitingTrack, 0, 1)
+}
 
 using namespace pyG4StackManager;
 

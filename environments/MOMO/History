@@ -18,6 +18,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2013 November Hajime Yoshida
+  - MOMO.jar updated (GPE disactivated, EnvPanel update)
+  - momo-src.jar updated
+  - On-line Help document updated
+
 2010 December 1 Koichi Murakami
  - MOMO.jar updated (use QGSP_BERT physics list instead of GPE)
  - JAVA source codes are included. (momo-src.jar)

@@ -41,7 +41,7 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4Isotope {
 
-BOOST_PYTHON_FUNCTION_OVERLOADS(f_GetIsotope, G4Isotope::GetIsotope, 1, 2);
+BOOST_PYTHON_FUNCTION_OVERLOADS(f_GetIsotope, G4Isotope::GetIsotope, 1, 2)
 
 // copy constructor is private, so ...
 void Print(G4Isotope& iso)
@@ -49,7 +49,7 @@ void Print(G4Isotope& iso)
   G4cout << iso;
 }
 
-};
+}
 
 using namespace pyG4Isotope;
 
@@ -64,17 +64,12 @@ void export_G4Isotope()
     .def(init<const G4String&, G4int, G4int>())
     .def(init<const G4String&, G4int, G4int, G4double>())
     // ---
-#if G4VERSION_NUMBER >= 920
     .def("GetName",             &G4Isotope::GetName,
          return_value_policy<reference_existing_object>())
     .def("SetName",             &G4Isotope::SetName)
-#else
-    .def("GetName",             &G4Isotope::GetName)
-#endif
     .def("GetZ",                &G4Isotope::GetZ)
     .def("GetN",                &G4Isotope::GetN)
     .def("GetA",                &G4Isotope::GetA)
-    .def("GetCountUse",         &G4Isotope::GetCountUse)
     .def("GetIsotope",          &G4Isotope::GetIsotope,
          f_GetIsotope()
          [return_value_policy<reference_existing_object>()])
@@ -98,4 +93,3 @@ void export_G4Isotope()
     .def(self_ns::str(self))
     ;
 }
-

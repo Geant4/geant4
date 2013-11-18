@@ -42,13 +42,13 @@ namespace pyG4VUserPrimaryGeneratorAction {
 
 struct CB_G4VUserPrimaryGeneratorAction :
   G4VUserPrimaryGeneratorAction, wrapper<G4VUserPrimaryGeneratorAction> {
-  
+
   void GeneratePrimaries(G4Event* anEvent) {
     get_override("GeneratePrimaries")(boost::ref(anEvent));
   }
 };
 
-};
+}
 
 using namespace pyG4VUserPrimaryGeneratorAction;
 
@@ -58,11 +58,11 @@ using namespace pyG4VUserPrimaryGeneratorAction;
 void export_G4VUserPrimaryGeneratorAction()
 {
   class_<CB_G4VUserPrimaryGeneratorAction, CB_G4VUserPrimaryGeneratorAction*,
-    boost::noncopyable> 
-    ("G4VUserPrimaryGeneratorAction", 
+    boost::noncopyable>
+    ("G4VUserPrimaryGeneratorAction",
      "base class of user primary generator action")
 
-    .def("GeneratePrimaries", 
+    .def("GeneratePrimaries",
 	 pure_virtual(&G4VUserPrimaryGeneratorAction::GeneratePrimaries))
     ;
 }

@@ -57,10 +57,10 @@ namespace pyG4FieldManager {
 
 G4ChordFinder*(G4FieldManager::*f1_GetChordFinder)()
   = &G4FieldManager::GetChordFinder;
-const G4ChordFinder*(G4FieldManager::*f2_GetChordFinder)() const 
+const G4ChordFinder*(G4FieldManager::*f2_GetChordFinder)() const
   = &G4FieldManager::GetChordFinder;
 
-};
+}
 
 using namespace pyG4FieldManager;
 
@@ -91,7 +91,7 @@ void export_G4FieldManager()
     .def("ConfigureForTrack",     &G4FieldManager::ConfigureForTrack)
     .def("GetDeltaIntersection",  &G4FieldManager::GetDeltaIntersection)
     .def("GetDeltaOneStep",       &G4FieldManager::GetDeltaOneStep)
-    .def("SetAccuraciesWithDeltaOneStep", 
+    .def("SetAccuraciesWithDeltaOneStep",
 	 &G4FieldManager::SetAccuraciesWithDeltaOneStep)
     .def("SetDeltaOneStep",       &G4FieldManager::SetDeltaOneStep)
     .def("SetDeltaIntersection",  &G4FieldManager::SetDeltaIntersection)

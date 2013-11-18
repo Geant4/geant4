@@ -39,9 +39,9 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4PrimaryVertex {
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetPrimary, GetPrimary, 0, 1);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_GetPrimary, GetPrimary, 0, 1)
 
-};
+}
 
 using namespace pyG4PrimaryVertex;
 
@@ -59,7 +59,7 @@ void export_G4PrimaryVertex()
     .add_property("T0", &G4PrimaryVertex::GetT0)
     // ---
     .def("GetPosition", &G4PrimaryVertex::GetPosition,
-         return_value_policy<return_by_value>())	
+         return_value_policy<return_by_value>())
     .def("GetX0",       &G4PrimaryVertex::GetX0)
     .def("GetY0",       &G4PrimaryVertex::GetY0)
     .def("GetZ0",       &G4PrimaryVertex::GetZ0)

@@ -41,7 +41,8 @@ using namespace boost::python;
 // ====================================================================
 void export_G4Navigator()
 {
-  class_<G4Navigator, G4Navigator*>("G4Navigator", "navigator")
+  class_<G4Navigator, G4Navigator*, boost::noncopyable>
+    ("G4Navigator", "navigator")
     // ---
     .def("GetWorldVolume",        &G4Navigator::GetWorldVolume,
          return_value_policy<reference_existing_object>())

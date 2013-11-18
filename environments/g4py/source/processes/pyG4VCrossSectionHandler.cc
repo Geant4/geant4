@@ -42,7 +42,7 @@ using namespace boost::python;
 // ====================================================================
 namespace pyG4VCrossSectionHandler {
 
-BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_Initialise, Initialise, 0, 8);
+BOOST_PYTHON_MEMBER_FUNCTION_OVERLOADS(f_Initialise, Initialise, 0, 8)
 
 // FindValue
 G4double (G4VCrossSectionHandler::*f1_FindValue)(G4int, G4double) const
@@ -51,7 +51,7 @@ G4double (G4VCrossSectionHandler::*f1_FindValue)(G4int, G4double) const
 G4double (G4VCrossSectionHandler::*f2_FindValue)(G4int, G4double, G4int) const
   = &G4VCrossSectionHandler::FindValue;
 
-};
+}
 
 using namespace pyG4VCrossSectionHandler;
 
@@ -66,7 +66,7 @@ void export_G4VCrossSectionHandler()
     .def("Initialise",           &G4VCrossSectionHandler::Initialise,
          f_Initialise())
     .def("SelectRandomElement",  &G4VCrossSectionHandler::SelectRandomElement,
-         return_value_policy<reference_existing_object>())         
+         return_value_policy<reference_existing_object>())
     .def("SelectRandomShell",    &G4VCrossSectionHandler::SelectRandomShell)
     .def("FindValue",            f1_FindValue)
     .def("FindValue",            f2_FindValue)
