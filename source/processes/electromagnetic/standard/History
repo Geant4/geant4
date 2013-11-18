@@ -18,6 +18,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+18 November 13: V.Ivanchenko (emstand-V09-06-79)
+- G4PAIPhotonModel, G4PAIxSection - fixed Coverity reports
+
 12 November 13: V.Ivanchenko (emstand-V09-06-78)
 - G4IonCoulombScatteringModel, G4eCoulombScatteringModel,
   G4eSingleCoulombScatteringModel, G4hCoulombScatteringModel

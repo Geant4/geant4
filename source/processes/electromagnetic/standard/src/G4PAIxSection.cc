@@ -131,6 +131,7 @@ G4PAIxSection::G4PAIxSection(G4MaterialCutsCouple* matCC)
   G4int matIndex = matCC->GetMaterial()->GetIndex();
   fMaterialIndex = matIndex;   
   fSandia        = new G4SandiaTable(matIndex);
+  fVerbose = 0;
 
   G4int i, j; 
   fMatSandiaMatrix = new G4OrderedTable();
@@ -159,6 +160,7 @@ G4PAIxSection::G4PAIxSection(G4int materialIndex,
 {
    fSandia = 0;
    fMatSandiaMatrix = 0;
+  fVerbose = 0;
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
    G4int i, j;   
 
@@ -433,6 +435,7 @@ G4PAIxSection::G4PAIxSection( G4int materialIndex,
 {
    fSandia = 0;
    fMatSandiaMatrix = 0;
+  fVerbose = 0;
    const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
    G4int i, j, numberOfElements;   
@@ -799,6 +802,8 @@ void G4PAIxSection::ComputeLowEnergyCof()
   }
   fLowEnergyCof = sumCof;
   // G4cout<<"fLowEnergyCof = "<<fLowEnergyCof<<G4endl;
+  delete [] thisMaterialZ;
+  delete [] thisMaterialCof;
 }
 
 /////////////////////////////////////////////////////////////////////////

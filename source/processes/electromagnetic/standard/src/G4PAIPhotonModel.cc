@@ -113,6 +113,8 @@ G4PAIPhotonModel::G4PAIPhotonModel(const G4ParticleDefinition* p, const G4String
 
   fSandiaIntervalNumber = 0;
   fMatIndex = 0;
+  fCutCouple = 0;
+  fMaterial = 0;
 
   fParticleChange = 0;
 
@@ -240,21 +242,24 @@ void G4PAIPhotonModel::InitTest(const G4ParticleDefinition* p, G4MaterialCutsCou
   if(isInitialised) { return; }
   isInitialised = true;
 
-  if(!fParticle) SetParticle(p);
+  if( !fParticle ) SetParticle(p);
 
   fParticleChange = GetParticleChangeForLoss();
 
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+
   size_t jMat, numOfMat   = G4Material::GetNumberOfMaterials();
 
-  const G4Material* material = couple->GetMaterial();
+
   // const G4MaterialCutsCouple* couple = new G4MaterialCutsCouple(material,cuts);
 
-  if(couple) 
+  if( couple ) 
   {
+    const G4Material* material = couple->GetMaterial();
+
     fMaterialCutsCoupleVector.push_back(couple);
 
-    for(jMat = 0; jMat < numOfMat; ++jMat) // material loop
+    for( jMat = 0; jMat < numOfMat; ++jMat ) // material loop
     {
       if( material->GetName() == (*theMaterialTable)[jMat]->GetName() ) break;
     }
@@ -1051,7 +1056,7 @@ void G4PAIPhotonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
  
   G4double ratio;
   if (dNdxCut > 0.) ratio = dNdxPhotonCut/dNdxCut;
-  else              ratio = 0.;
+  else              return; // ratio = 0.;
 
   if(ratio < G4UniformRand() ) // secondary e-
   {
@@ -1066,6 +1071,11 @@ void G4PAIPhotonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     }
     if( deltaTkin <= 0.) return;
 
+    if( deltaTkin >= kineticEnergy ) // stop primary
+    {
+      deltaTkin = kineticEnergy;
+      kineticEnergy = 0.0;
+    }
     G4double deltaTotalMomentum = sqrt(deltaTkin*(deltaTkin + 2. * electron_mass_c2 ));
     G4double totalMomentum      = sqrt(pSquare);
     G4double costheta           = deltaTkin*(totalEnergy + electron_mass_c2)
@@ -1084,14 +1094,21 @@ void G4PAIPhotonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     G4ThreeVector deltaDirection(dirx,diry,dirz);
     deltaDirection.rotateUz(direction);
 
-    // primary change
+    if( kineticEnergy > 0.) // primary change
+    {
+      kineticEnergy -= deltaTkin;
+      G4ThreeVector dir = totalMomentum*direction - deltaTotalMomentum*deltaDirection;
+      direction = dir.unit();
+      fParticleChange->SetProposedKineticEnergy(kineticEnergy);
+      fParticleChange->SetProposedMomentumDirection(direction);
+    }
+    else // stop primary
+    {
+      fParticleChange->ProposeTrackStatus(fStopAndKill);
+      fParticleChange->SetProposedKineticEnergy(0.0);
+    }
 
-    kineticEnergy -= deltaTkin;
-    G4ThreeVector dir = totalMomentum*direction - deltaTotalMomentum*deltaDirection;
-    direction = dir.unit();
-    fParticleChange->SetProposedMomentumDirection(direction);
-
-    // create G4DynamicParticle object for e- delta ray
+   // create G4DynamicParticle object for e- delta ray
  
     G4DynamicParticle* deltaRay = new G4DynamicParticle;
     deltaRay->SetDefinition(G4Electron::Electron());
@@ -1113,6 +1130,11 @@ void G4PAIPhotonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     }
     if( deltaTkin <= 0.) return;
 
+    if( deltaTkin >= kineticEnergy ) // stop primary
+    {
+      deltaTkin = kineticEnergy;
+      kineticEnergy = 0.0;
+    }
     G4double costheta = 0.; // G4UniformRand(); // VG: ??? for start only
     G4double sintheta = sqrt((1.+costheta)*(1.-costheta));
 
@@ -1123,9 +1145,16 @@ void G4PAIPhotonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
     G4ThreeVector deltaDirection(dirx,diry,dirz);
     deltaDirection.rotateUz(direction);
 
-    // primary change
-    kineticEnergy -= deltaTkin;
-
+    if( kineticEnergy > 0.) // primary change
+    {
+      kineticEnergy -= deltaTkin;
+      fParticleChange->SetProposedKineticEnergy(kineticEnergy);
+    }
+    else // stop primary
+    {
+      fParticleChange->ProposeTrackStatus(fStopAndKill);
+      fParticleChange->SetProposedKineticEnergy(0.0);
+    }
     // create G4DynamicParticle object for photon ray
  
     G4DynamicParticle* photonRay = new G4DynamicParticle;
@@ -1135,8 +1164,6 @@ void G4PAIPhotonModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
 
     vdp->push_back(photonRay);
   }
-
-  fParticleChange->SetProposedKineticEnergy(kineticEnergy);
 }
 
 ///////////////////////////////////////////////////////////////////////////////
