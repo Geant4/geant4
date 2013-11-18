@@ -30,6 +30,8 @@
 //	  materials/ after the 10.0 release (and this comment removed).
 // $Id$
 //
+// 20131115  Move ctor, dtor implementations to .cc file.
+
 #ifndef G4LatticeReader_h
 #define G4LatticeReader_h 1
 
@@ -40,11 +42,8 @@ class G4LatticeLogical;
 
 class G4LatticeReader {
 public:
-  G4LatticeReader(G4int vb=0)
-    : verboseLevel(vb), psLatfile(0), pLattice(0), fMapPath(""),
-      fToken(""), fValue(0.), fMap(""), fsPol(""), fPol(-1), fNX(0), fNY(0) {;}
-
-  ~G4LatticeReader() {;}
+  G4LatticeReader(G4int vb=0);
+  ~G4LatticeReader();
 
   void SetVerboseLevel(G4int vb) { verboseLevel = vb; }
 
@@ -64,7 +63,7 @@ protected:
 private:
   G4int verboseLevel;		// For reporting progress, also use G4VERBOSE
 
-  std::ifstream* psLatfile;	// Configuration file being read (not owned)
+  std::ifstream* psLatfile;	// Configuration file being read
   G4LatticeLogical* pLattice;	// Lattice under construction (not owned)
 
   G4String fMapPath;		// Path to config file to find velocity maps

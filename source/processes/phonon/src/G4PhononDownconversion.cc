@@ -29,6 +29,7 @@
 // $Id$
 //
 // 20131111  Add verbose output for MFP calculation
+// 20131115  Initialize data buffers in ctor
 
 #include "G4PhononDownconversion.hh"
 #include "G4LatticePhysical.hh"
@@ -48,7 +49,7 @@
 
 
 G4PhononDownconversion::G4PhononDownconversion(const G4String& aName)
-  : G4VPhononProcess(aName) {;}
+  : G4VPhononProcess(aName), fBeta(0.), fGamma(0.), fLambda(0.), fMu(0.) {;}
 
 G4PhononDownconversion::~G4PhononDownconversion() {;}
 

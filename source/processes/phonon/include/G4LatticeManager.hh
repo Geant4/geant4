@@ -29,6 +29,7 @@
 // $Id$
 //
 // 20131113  Add registry to carry unique lattice pointers, for EOJ deletion
+// 20131115  Drop lattice counters, not used anywhere
 
 #ifndef G4LatticeManager_h
 #define G4LatticeManager_h 1
@@ -90,14 +91,12 @@ protected:
 
   LatticeLogReg fLLattices;	// Registry of unique lattice pointers
   LatticeMatMap fLLatticeList;
-  int fTotalLLattices;		// == fLLatticeList.size(), for convenience
 
   typedef std::map<G4VPhysicalVolume*, G4LatticePhysical*> LatticeVolMap;
   typedef std::set<G4LatticePhysical*> LatticePhyReg;
 
   LatticePhyReg fPLattices;	// Registry of unique lattice pointers
   LatticeVolMap fPLatticeList; 
-  int fTotalPLattices;		// == fPLatticeList.size(), for convenience
 
 private:
   G4LatticeManager();

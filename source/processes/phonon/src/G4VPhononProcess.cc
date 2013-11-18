@@ -126,13 +126,14 @@ G4Track* G4VPhononProcess::CreateSecondary(G4int polarization,
   }
 
   G4ThreeVector vgroup = theLattice->MapKtoVDir(polarization, waveVec);
+  if (verboseLevel>1) G4cout << " MapKtoVDir returned " << vgroup << G4endl;
+
   vgroup = theLattice->RotateToGlobal(vgroup);
+  if (verboseLevel>1) G4cout << " RotateToGlobal returned " << vgroup << G4endl;
 
   if (verboseLevel && std::fabs(vgroup.mag()-1.) > 0.01) {
     G4cout << "WARNING: " << GetProcessName() << " vgroup not a unit vector: "
 	   << vgroup << G4endl;
-  } else if (verboseLevel>1) {
-    G4cout << GetProcessName() << " vgroup " << vgroup << G4endl;
   }
 
   G4ParticleDefinition* thePhonon = G4PhononPolarization::Get(polarization);

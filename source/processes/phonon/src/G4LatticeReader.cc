@@ -32,6 +32,8 @@
 //
 // 20131106  M.Kelsey -- Add const to getenv() to avoid compiler warning.
 // 20131112  Throw exception if input file fails.
+// 20131115  Check file input arguments for maps for validity before use;
+//		move ctor, dtor here; check stream pointer before closing.
 
 #include "G4LatticeReader.hh"
 #include "G4ExceptionSeverity.hh"
@@ -46,6 +48,17 @@
 
 const G4String G4LatticeReader::fDataDir =
   getenv("G4LATTICEDATA") ? (const char*)getenv("G4LATTICEDATA") : "./CrystalMaps";
+
+
+// Constructor and destructor
+
+G4LatticeReader::G4LatticeReader(G4int vb)
+  : verboseLevel(vb), psLatfile(0), pLattice(0), fMapPath(""),
+    fToken(""), fValue(0.), fMap(""), fsPol(""), fPol(-1), fNX(0), fNY(0) {;}
+
+G4LatticeReader::~G4LatticeReader() {
+  delete psLatfile; psLatfile = 0;
+}
 
 
 // Main drivers to read configuration from file or stream
@@ -111,7 +124,7 @@ G4bool G4LatticeReader::OpenFile(const G4String& filename) {
 // Close and delete input stream
 
 void G4LatticeReader::CloseFile() {
-  psLatfile->close();
+  if (psLatfile) psLatfile->close();
   delete psLatfile;
   psLatfile = 0;
 }
@@ -187,6 +200,16 @@ G4bool G4LatticeReader::ReadMapInfo() {
   if (verboseLevel>1)
     G4cout << " ReadMapInfo " << fMap << " " << fsPol
 	   << " " << fNX << " " << fNY << G4endl;
+
+  if (fNX < 0 || fNX >= G4LatticeLogical::MAXRES) {
+    G4cerr << "G4LatticeReader: Invalid map theta dimension " << fNX << G4endl;
+    return false;
+  }
+
+  if (fNY < 0 || fNY >= G4LatticeLogical::MAXRES) {
+    G4cerr << "G4LatticeReader: Invalid map phi dimension " << fNY << G4endl;
+    return false;
+  }
 
   // Prepend path to data files to map filename
   fMap = fMapPath + "/" + fMap;

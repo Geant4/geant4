@@ -34,8 +34,10 @@
 //  
 // $Id$
 //
+// 20131115  Throw exception if track's polarization state is invalid.
 
 #include "G4PhononReflection.hh"
+#include "G4ExceptionSeverity.hh"
 #include "G4GeometryTolerance.hh"
 #include "G4LatticePhysical.hh"
 #include "G4PhononLong.hh"
@@ -84,6 +86,11 @@ G4VParticleChange* G4PhononReflection::PostStepDoIt(const G4Track& aTrack,
   if (postStepPoint->GetStepStatus()!=fGeomBoundary) {
     //make sure that correct phonon velocity is used after the step
     int pol = GetPolarization(aTrack);
+    if (pol < 0 || pol > 2) {
+      G4Exception("G4PhononReflection::PostStepDoIt","Phonon001",
+		  EventMustBeAborted, "Track is not a phonon");
+      return &aParticleChange;		// NOTE: Will never get here
+    }
 
     // FIXME:  This should be using wave-vector, shouldn't it?
     G4double vg = theLattice->MapKtoV(pol, aTrack.GetMomentumDirection());
