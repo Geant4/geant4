@@ -877,7 +877,7 @@ G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
                   modeFirstRecord[2] = false;
                   modeTotalBR[2] = b;
                 } else {
-                  e0 = c*MeV/0.511 - 2.;
+                  e0 = c*MeV/0.510999 - 2.;
                   // Need to test e0 for nuclei which have Q < 2Me in their
                   // data files (e.g. z67.a162)
                   if (e0 > 0.) {
@@ -890,7 +890,7 @@ G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
                     G4double e;   // Total positron energy in units of electron mass
                     G4double p;   // Positron momentum in units of electron mass
                     G4double f;   // Spectral shape function value
-		    for (G4int ptn = 0; ptn < npti; ptn++) {
+                    for (G4int ptn = 0; ptn < npti; ptn++) {
                       // Calculate simple phase space spectrum
                       e = 1. + e0*(ptn+0.5)/100.;
                       p = std::sqrt(e*e - 1.);
@@ -902,16 +902,18 @@ G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
                       // Apply shape factor for forbidden transitions
                       f *= corrections.ShapeFactor(betaType, p, e0-e+1.);
                       pdf[ptn] = f;
-		    }
-		    G4RandGeneral* aRandomEnergy = new G4RandGeneral( pdf, npti);  
-		    G4BetaPlusDecayChannel *aBetaPlusChannel = new 
-		    G4BetaPlusDecayChannel(GetVerboseLevel(), &theParentNucleus,
-                                           b, c*MeV, a*MeV, 0, FBeta, aRandomEnergy);
-		    aBetaPlusChannel->SetICM(applyICM);
-		    aBetaPlusChannel->SetARM(applyARM);
-		    aBetaPlusChannel->SetHLThreshold(halflifethreshold);
-		    theDecayTable->Insert(aBetaPlusChannel);
-		    modeSumBR[2] += b;
+                    }
+                    G4RandGeneral* aRandomEnergy = new G4RandGeneral(pdf, npti);  
+                    G4BetaPlusDecayChannel* aBetaPlusChannel = new 
+                        G4BetaPlusDecayChannel(GetVerboseLevel(),
+                                               &theParentNucleus, b,
+                                               (c-1.021998)*MeV, a*MeV, 0,
+                                               FBeta, aRandomEnergy);
+                    aBetaPlusChannel->SetICM(applyICM);
+                    aBetaPlusChannel->SetARM(applyARM);
+                    aBetaPlusChannel->SetHLThreshold(halflifethreshold);
+                    theDecayTable->Insert(aBetaPlusChannel);
+                    modeSumBR[2] += b;
                     delete[] pdf;
                   } // if e0 > 0
                 } // if not first record
