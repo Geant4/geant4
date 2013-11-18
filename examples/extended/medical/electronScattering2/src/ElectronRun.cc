@@ -63,8 +63,6 @@ ElectronRun::~ElectronRun()
 
 void ElectronRun::RecordEvent(const G4Event* anEvent)
 {
-    numberOfEvent++;
-    
     // Get the hits collection
     G4HCofThisEvent* eventHitCollection = anEvent->GetHCofThisEvent();
     
@@ -88,6 +86,8 @@ void ElectronRun::RecordEvent(const G4Event* anEvent)
         
         iter++;
     }
+    
+    G4Run::RecordEvent(event);      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

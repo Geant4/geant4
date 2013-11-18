@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 November 2013  Ivana Hrivnacova (exampleES2-V09-06-10)
+- Propagated changes from README in .README
+- In ElectronRun::RecordEvent: call base class to increment numberOfEvent
+
+17 November 2013  Joseph Perl (exampleES2-V09-06-09)
+- Improve README.
+
 12 November 2013  Joseph Perl (exampleES2-V09-06-08)
 - Adjust creation of scorers to fix problem in sequential mode.
 - Also apply some general cleanup.

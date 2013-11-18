@@ -93,6 +93,15 @@ This present example, electronScattering2, was the Geant4 code used for this pub
  Flux is corrected for ring area just before output (as PSCellFlux assumes the area is the complete
  area of the face of the cylinder, not the area of the one ring).
 
+ Because the geometry may need to be updated after various /primfoil commands,
+ ElectronBenchmarkDetector is written in such a way that the sensitive detector can have its scorer ring
+ logical volume updated after geometry changes. After any geometry change, ConstructSDandField is again
+ called, setting the sensitive detector to use the logical volume of the updated scorer ring.
+ The same sensitive detector is reused, but the manner in which the sensitive detector pointer
+ is stored for this reuse is complicated by the fact that this example may be run in multi-threaded mode
+ (in which each worker thread has its own sensitive detector).
+ We therefore store the sensitive detector pointer in a G4Cache rather than in a direct pointer.
+
 
  6- MACROS
 
