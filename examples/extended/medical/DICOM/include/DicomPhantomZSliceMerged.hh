@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file medical/DICOM/src/DicomPhantomZSliceMerged.hh
+/// \file medical/DICOM/include/DicomPhantomZSliceMerged.hh
 /// \brief Definition of the DicomPhantomZSliceMerged class
 //
 //
