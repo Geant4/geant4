@@ -349,10 +349,12 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
       if(theLambdaTable) {
 	bld->InitialiseBaseMaterials(theLambdaTable);
-	FindLambdaMax();
       } else if(theLambdaTablePrim) {
 	bld->InitialiseBaseMaterials(theLambdaTablePrim);
       }
+      theDensityFactor = bld->GetDensityFactors();
+      theDensityIdx = bld->GetCoupleIndexes();
+      if(theLambdaTable) { FindLambdaMax(); }
 
       // local initialisation of models
       G4bool printing = true;
@@ -363,11 +365,13 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 	mod->InitialiseLocal(particle, mod0);
       }
     // master thread
-    } else if(buildLambdaTable || minKinEnergyPrim < maxKinEnergy) {
-      BuildLambdaTable();
+    } else {
+      theDensityFactor = bld->GetDensityFactors();
+      theDensityIdx = bld->GetCoupleIndexes();
+      if(buildLambdaTable || minKinEnergyPrim < maxKinEnergy) {
+	BuildLambdaTable();
+      }
     }
-    theDensityFactor = bld->GetDensityFactors();
-    theDensityIdx = bld->GetCoupleIndexes();
   }
 
   // explicitly defined printout by particle name
@@ -410,16 +414,12 @@ void G4VEmProcess::BuildLambdaTable()
   G4LossTableBuilder* bld = lManager->GetTableBuilder();
 
   G4PhysicsLogVector* aVector = 0;
-  G4PhysicsLogVector* bVector = 0;
   G4PhysicsLogVector* aVectorPrim = 0;
   G4PhysicsLogVector* bVectorPrim = 0;
 
-  G4double scale = 1.0;
+  G4double scale = G4Log(maxKinEnergy/minKinEnergy); 
   G4double emax1 = maxKinEnergy;
-  if(startFromNull || minKinEnergyPrim < maxKinEnergy ) { 
-    scale = std::log(maxKinEnergy/minKinEnergy); 
-    if(minKinEnergyPrim < maxKinEnergy) { emax1 = minKinEnergyPrim; }
-  }
+  if(minKinEnergyPrim < maxKinEnergy) { emax1 = minKinEnergyPrim; }
     
   for(size_t i=0; i<numOfCouples; ++i) {
 
@@ -432,31 +432,22 @@ void G4VEmProcess::BuildLambdaTable()
       // build main table
       if(buildLambdaTable) {
 	delete (*theLambdaTable)[i];
-	(*theLambdaTable)[i] = 0;
 
-        G4bool startNull = startFromNull;
 	// if start from zero then change the scale
-	if(startFromNull || minKinEnergyPrim < maxKinEnergy) {
-	  G4double emin = MinPrimaryEnergy(particle,couple->GetMaterial());
-          if(emin < minKinEnergy) {
-	    emin = minKinEnergy;
-	    startNull = false;
+	G4double emin = minKinEnergy;
+	G4bool startNull = false;
+	if(startFromNull) {
+	  G4double e = MinPrimaryEnergy(particle,couple->GetMaterial());
+          if(e >= emin) {
+	    emin = e;
+	    startNull = true;
 	  }
-	  G4double emax = emax1;
-	  if(emax <= emin) { emax = 2*emin; }
-	  G4int bin = 
-	    G4lrint(nLambdaBins*std::log(emax/emin)/scale);
-	  if(bin < 3) { bin = 3; }
-	  aVector = new G4PhysicsLogVector(emin, emax, bin);
-
-	  // start not from zero
-	} else if(!bVector) {
-	  aVector = 
-	    new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nLambdaBins);
-	  bVector = aVector;
-	} else {
-	  aVector = new G4PhysicsLogVector(*bVector);
 	}
+	G4double emax = emax1;
+	if(emax <= emin) { emax = 2*emin; }
+	G4int bin = G4lrint(nLambdaBins*G4Log(emax/emin)/scale);
+	if(bin < 3) { bin = 3; }
+	aVector = new G4PhysicsLogVector(emin, emax, bin);
 	aVector->SetSpline(splineFlag);
 	modelManager->FillLambdaVector(aVector, couple, startNull);
 	if(splineFlag) { aVector->FillSecondDerivatives(); }
@@ -469,7 +460,7 @@ void G4VEmProcess::BuildLambdaTable()
 	// start not from zero
 	if(!bVectorPrim) {
 	  G4int bin = 
-	    G4lrint(nLambdaBins*std::log(maxKinEnergy/minKinEnergyPrim)/scale);
+	    G4lrint(nLambdaBins*G4Log(maxKinEnergy/minKinEnergyPrim)/scale);
 	  if(bin < 3) { bin = 3; }
 	  aVectorPrim = 
 	    new G4PhysicsLogVector(minKinEnergyPrim, maxKinEnergy, bin);
@@ -488,7 +479,7 @@ void G4VEmProcess::BuildLambdaTable()
     }
   }
 
-  if(theLambdaTable) { FindLambdaMax(); }
+  if(buildLambdaTable) { FindLambdaMax(); }
 
   if(1 < verboseLevel) {
     G4cout << "Lambda table is built for "
@@ -1001,7 +992,7 @@ void G4VEmProcess::FindLambdaMax()
   if(1 < verboseLevel) {
     G4cout << "### G4VEmProcess::FindLambdaMax: " 
 	   << particle->GetParticleName() 
-           << " and process " << GetProcessName() << G4endl; 
+           << " and process " << GetProcessName() << "  " << G4endl; 
   }
   size_t n = theLambdaTable->length();
   G4PhysicsVector* pv;

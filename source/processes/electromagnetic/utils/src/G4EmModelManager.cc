@@ -657,8 +657,8 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
     G4cout << "G4EmModelManager::FillLambdaVector() for "
            << particle->GetParticleName()
            << " in " << couple->GetMaterial()->GetName()
-	   << " Ecut(MeV)= " << cut
-	   << " Emax(MeV)= " << tmax
+	   << " Emin(MeV)= " << aVector->Energy(0)
+	   << " Emax(MeV)= " << aVector->GetMaxEnergy()
 	   << " Type " << tType   
 	   << " nmod= " << nmod
            << G4endl;

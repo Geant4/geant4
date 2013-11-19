@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 November 13: V.Ivant (emutils-V09-06-66)
+- G4VEmProcess, G4VEnergyLossProcess - complete fix for base 
+    materials for the case of positrons
+
+18 November 13: V.Ivant (emutils-V09-06-65)
+- G4VEmProcess, G4VEnergyLossProcess - fixed bug seen in B5 example
+    when based materail approach was used
+- G4EmModelMananger - improved debug printout 
+
 14 November 13: V.Ivant (emutils-V09-06-64)
 - G4EmBiasingManager - fixed bug reported by Andrey Karpov
     (<karpov@viva64.com>) static code analysis

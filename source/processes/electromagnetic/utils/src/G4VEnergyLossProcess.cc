@@ -504,7 +504,6 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     }
 
     theLambdaTable = G4PhysicsTableHelper::PreparePhysicsTable(theLambdaTable);
-    bld->InitialiseBaseMaterials(theLambdaTable);  
 
     if(isIonisation) {
       theRangeTableForLoss = 
@@ -625,16 +624,18 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 
   if(&part == particle) {
 
-    // define density factors for worker thread
     G4LossTableBuilder* bld = lManager->GetTableBuilder();
-    if(!master) { bld->InitialiseBaseMaterials(masterProcess->DEDXTable()); }
-    theDensityFactor = bld->GetDensityFactors();
-    theDensityIdx = bld->GetCoupleIndexes();
-
     if(master) {
+      theDensityFactor = bld->GetDensityFactors();
+      theDensityIdx = bld->GetCoupleIndexes();
       lManager->BuildPhysicsTable(particle, this);
 
     } else {
+
+      // define density factors for worker thread
+      bld->InitialiseBaseMaterials(masterProcess->DEDXTable()); 
+      theDensityFactor = bld->GetDensityFactors();
+      theDensityIdx = bld->GetCoupleIndexes();
 
       // copy table pointers from master thread
       SetDEDXTable(masterProcess->DEDXTable(),fRestricted);
@@ -821,9 +822,12 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
   size_t numOfCouples = theCoupleTable->GetTableSize();
 
   G4LossTableBuilder* bld = lManager->GetTableBuilder();
+  theDensityFactor = bld->GetDensityFactors();
+  theDensityIdx = bld->GetCoupleIndexes();
+
   G4bool splineFlag = lManager->SplineFlag();
   G4PhysicsLogVector* aVector = 0;
-  G4double scale = std::log(maxKinEnergy/minKinEnergy);
+  G4double scale = G4Log(maxKinEnergy/minKinEnergy);
 
   for(size_t i=0; i<numOfCouples; ++i) {
 
@@ -833,16 +837,23 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(i);
       delete (*table)[i];
+
+      G4bool startNull = true;
       G4double emin = 
 	MinPrimaryEnergy(particle,couple->GetMaterial(),(*theCuts)[i]);
-      if(0.0 >= emin) { emin = eV; }
-      else if(maxKinEnergy <= emin) { emin = 0.5*maxKinEnergy; }
-      G4int bin = G4int(nBins*std::log(maxKinEnergy/emin)/scale + 0.5);
+      if(minKinEnergy > emin) { 
+	emin = minKinEnergy; 
+	startNull = false;
+      }
+
+      G4double emax = maxKinEnergy;
+      if(emax <= emin) { emax = 2*emin; }
+      G4int bin = G4lrint(nBins*G4Log(emax/emin)/scale);
       if(bin < 3) { bin = 3; }
-      aVector = new G4PhysicsLogVector(emin, maxKinEnergy, bin);
+      aVector = new G4PhysicsLogVector(emin, emax, bin);
       aVector->SetSpline(splineFlag);
 
-      modelManager->FillLambdaVector(aVector, couple, true, tType);
+      modelManager->FillLambdaVector(aVector, couple, startNull, tType);
       if(splineFlag) { aVector->FillSecondDerivatives(); }
 
       // Insert vector for this material into the table
@@ -2076,6 +2087,10 @@ void G4VEnergyLossProcess::SetLambdaTable(G4PhysicsTable* p)
   }
   theLambdaTable = p; 
   tablesAreBuilt = true;
+
+  G4LossTableBuilder* bld = lManager->GetTableBuilder();
+  theDensityFactor = bld->GetDensityFactors();
+  theDensityIdx = bld->GetCoupleIndexes();
 
   if(theLambdaTable) {
     size_t n = theLambdaTable->length();
