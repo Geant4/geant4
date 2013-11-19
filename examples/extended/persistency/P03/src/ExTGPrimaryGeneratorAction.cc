@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file ExTGPrimaryGeneratorAction.cc
+/// \file persistency/P03/src/ExTGPrimaryGeneratorAction.cc
 /// \brief Implementation of the ExTGPrimaryGeneratorAction class
 
 #include "ExTGPrimaryGeneratorAction.hh"

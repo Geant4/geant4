@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 November 2013 I. Hrivnacova (exampleP03-V09-06-01)
+-------------------------- 
+- Fixed files description  (only comment lines modified)
+
 8 November 2013 P. Arce (exampleP03-V09-06-00)
 -------------------------- 
 - Porting to MT

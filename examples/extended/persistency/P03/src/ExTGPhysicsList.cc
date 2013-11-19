@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file ExTGPhysicsList.cc
+/// \file persistency/P03/src/ExTGPhysicsList.cc
 /// \brief Implementation of the ExTGPhysicsList class
 
 #include "ExTGPhysicsList.hh"

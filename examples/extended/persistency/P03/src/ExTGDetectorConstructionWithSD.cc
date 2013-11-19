@@ -26,7 +26,7 @@
 //
 // $Id$
 //
-/// \file ExTGDetectorConstructionWithSD.cc
+/// \file persistency/P03/src/ExTGDetectorConstructionWithSD.cc
 /// \brief Implementation of the ExTGDetectorConstructionWithSD class
 
  

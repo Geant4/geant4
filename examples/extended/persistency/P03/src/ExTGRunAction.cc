@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file ExTGRunAction.cc
+/// \file persistency/P03/src/ExTGRunAction.cc
 /// \brief Implementation of the ExTGRunAction class
 
 #include "ExTGRunAction.hh"

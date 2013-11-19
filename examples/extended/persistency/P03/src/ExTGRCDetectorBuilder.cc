@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file ExTGRCDetectorBuilder.cc
+/// \file persistency/P03/src/ExTGRCDetectorBuilder.cc
 /// \brief Implementation of the ExTGRCDetectorBuilder class
 
 #include "ExTGRCDetectorBuilder.hh"

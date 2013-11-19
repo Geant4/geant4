@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file ExTGDetectorConstruction.cc
+/// \file persistency/P03/src/ExTGDetectorConstruction.cc
 /// \brief Implementation of the ExTGDetectorConstruction class
 
 #include "G4tgbVolumeMgr.hh"

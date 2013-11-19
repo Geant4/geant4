@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file ExTGRCRegionData.cc
+/// \file persistency/P03/src/ExTGRCRegionData.cc
 /// \brief Implementation of the ExTGRCRegionData class
 
 

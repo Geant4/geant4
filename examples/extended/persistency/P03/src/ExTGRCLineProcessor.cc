@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file ExTGRCLineProcessor.cc
+/// \file persistency/P03/src/ExTGRCLineProcessor.cc
 /// \brief Implementation of the ExTGRCLineProcessor class
 
 #include "ExTGRCLineProcessor.hh"

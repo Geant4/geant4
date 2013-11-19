@@ -26,7 +26,7 @@
 //
 // $Id$
 //
-/// \file ExTGTrackerHit.cc
+/// \file persistency/P03/src/ExTGTrackerHit.cc
 /// \brief Implementation of the ExTGTrackerHit class
 
 #include "ExTGTrackerHit.hh"

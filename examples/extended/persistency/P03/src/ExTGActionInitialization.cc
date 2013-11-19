@@ -25,7 +25,7 @@
 //
 // $Id: ExTGActionInitialization.cc 74184 2013-09-30 14:05:02Z ihrivnac $
 //
-/// \file ExTGActionInitialization.cc
+/// \file persistency/P03/src/ExTGActionInitialization.cc
 /// \brief Implementation of the ExTGActionInitialization class
 
 #include "ExTGActionInitialization.hh"

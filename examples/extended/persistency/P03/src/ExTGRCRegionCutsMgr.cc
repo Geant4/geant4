@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file ExTGRCRegionCutsMgr.cc
+/// \file persistency/P03/src/ExTGRCRegionCutsMgr.cc
 /// \brief Implementation of the ExTGRCRegionCutsMgr class
 
 #include "ExTGRCRegionCutsMgr.hh"

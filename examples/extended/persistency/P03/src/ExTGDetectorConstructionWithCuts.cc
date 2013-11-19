@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file ExTGDetectorConstructionWithCuts.cc
+/// \file persistency/P03/src/ExTGDetectorConstructionWithCuts.cc
 /// \brief Implementation of the ExTGDetectorConstructionWithCuts class
 
 #include "ExTGDetectorConstructionWithCuts.hh"

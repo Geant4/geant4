@@ -25,7 +25,7 @@
 //
 // $Id: ActionInitialization.hh 70266 2013-05-28 12:57:34Z jjacquem $
 //
-/// \file ActionInitialization.hh
+/// \file persistency/P03/include/ExTGActionInitialization.hh
 /// \brief Definition of the ActionInitialization class
 
 #ifndef ExTGActionInitialization_h
