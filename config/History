@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19th November 2013   Gabriele Cosmo  (config-V09-06-16)
+- Minor correction to Darwin scripts for Qt setup.
+
 11th November 2013   Gabriele Cosmo  (config-V09-06-15)
 - Updated Darwin-g++ and Darwin-clang configurations for Qt to allow for
   correct detection of Qt5 directory structure.

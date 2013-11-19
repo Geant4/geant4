@@ -125,6 +125,7 @@ ifeq ($(G4SYSTEM),Darwin-clang)
       QTFLAGS   += -I $(QTLPATH)/QtWidgets.framework/Headers
       QTFLAGS   += -I $(QTLPATH)/QtOpenGL.framework/Headers
       QTFLAGS   += -I $(QTLPATH)/QtPrintSupport.framework/Headers
+      QTFLAGS   += -I $(QTHOME)/include/Qt -I$(QTHOME)/include
     endif
     ifndef QTLIBS
        QTLIBS    := -F$(QTLPATH) -framework QtCore -framework QtGui
