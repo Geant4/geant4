@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18/11/2013  Ivana Hrivnacova (rdecay02-V09-06-06)
+- Fixed .README
+
 04/11/2013  Dennis Wright (rdecay02-V09-06-05)
 - exrdmPhysicsList - replace G4LElastic and G4LCapture with G4HadronElastic
   and G4NeutronRadCapture

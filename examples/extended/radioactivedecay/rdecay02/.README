@@ -55,24 +55,22 @@
     - Decay
 
     - Radioactive Decay
-       By default it is applied through out the geometry. The user can limit it to just the target by 
-       commands
-\verbatim     
+       By default it is applied through out the geometry. The user can limit it to just the target by commands
+    - \verbatim     
 /grdm/noVolumes
 /grdm/selectVolume Target
-\endverbatim     
-
-   - Hadronic processes:
-      Hadronic processes are not invoked by default. They can be activated by the user at the "PreIni" 
-      state via the command
-\verbatim     
+      \endverbatim 
+      
+    - Hadronic processes:
+      Hadronic processes are not invoked by default. They can be activated by the user at the "PreInit" state via the command
+    - \verbatim     
 /exrdm/phys/SelectPhysics
-\endverbatim     
+      \endverbatim     
 
   The options are:
  
    - "Hadron" - Physicslist comsists of Binary_Cascade, HP_Neutron, QGSP, and LHEP, or
-   the standdard hadron physics list avaible in the G4 distribution, i.e. 
+   - the standdard hadron physics list avaible in the G4 distribution, i.e. 
    "QGSP_BERT", "QGSP_BIC", "QGSP_HP", "LHEP_BERT", "LHEP_BERT_HP", "LHEP_BIC",
    "LHEP_BIC_HP".
 
