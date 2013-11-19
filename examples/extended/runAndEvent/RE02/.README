@@ -128,7 +128,7 @@
    A primitive scorer can score one kind of physical quantity, and
    creates one hits collection per event. The quantity is collected in
    G4THitsMap with the copy number of geometry. Here collection name is 
-   given as <MultiFunctionalDetector Name>/<PrimitiveScorer Name>.
+   given as "MultiFunctionalDetector Name"/"PrimitiveScorer Name".
    A primitive scorer can have one filter (SDFilter) for selecting hits 
    to be used for the quantity.
 
