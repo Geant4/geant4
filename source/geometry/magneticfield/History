@@ -17,12 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 18, 2013 P.Gumplinger                 - field-V09-06-13
+                                            field-V09-06-13 - same as
+Nov 18, 2013 P.Gumplinger                 - field-V09-06-12
 -------------------------
 - fix Coverity warning in G4RepleteEofM
 
-
-Nov 17, 2013 J.Apostolakis                - field-V09-06-12
+Nov 17, 2013 J.Apostolakis                
 --------------------------
 - Fixed and improved HelixMixed Stepper:
     Corrected the default stepper for small steps to be ClassicalRK4.
