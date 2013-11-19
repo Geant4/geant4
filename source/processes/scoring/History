@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 18, 2013, M.Asai (procscore-V09-06-03)
+- Remove unnecessary G4cout.
+
 May 28, 2013, M.Asai (procscore-V09-06-02)
 - Tests migrated to multi-thread.
 
