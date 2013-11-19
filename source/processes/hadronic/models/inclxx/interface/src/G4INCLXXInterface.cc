@@ -378,6 +378,9 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
           << " inelastic reaction, in " << (inverseKinematics ? "inverse" : "direct") << " kinematics. Will resample.";
         theInterfaceStore->EmitWarning(ss.str());
         eventIsOK = false;
+        const G4int nSecondaries = theResult.GetNumberOfSecondaries();
+        for(G4int j=0; j<nSecondaries; ++j)
+          delete theResult.GetSecondary(j)->GetParticle();
         theResult.Clear();
         theResult.SetStatusChange(stopAndKill);
         remnants.clear();
@@ -389,6 +392,9 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
           << " inelastic reaction, in " << (inverseKinematics ? "inverse" : "direct") << " kinematics. Will resample.";
         theInterfaceStore->EmitWarning(ss.str());
         eventIsOK = false;
+        const G4int nSecondaries = theResult.GetNumberOfSecondaries();
+        for(G4int j=0; j<nSecondaries; ++j)
+          delete theResult.GetSecondary(j)->GetParticle();
         theResult.Clear();
         theResult.SetStatusChange(stopAndKill);
         remnants.clear();
