@@ -17,14 +17,30 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 18, 2013 P.Gumplinger                 - field-V09-06-13
+-------------------------
+- fix Coverity warning in G4RepleteEofM
+
+
+Nov 17, 2013 J.Apostolakis                - field-V09-06-12
+--------------------------
+- Fixed and improved HelixMixed Stepper:
+    Corrected the default stepper for small steps to be ClassicalRK4.
+    Added Angle-threshold parameter. (Default remains 0.33 radians.)
+    Added more Steppers, including G4NystromRK4.
+    Revised Id numbers of Steppers, to make the best more visible.
+    More comments in Stepper().
+
 Nov 05, 2013 P.Gumplinger                 - field-V09-06-11
+-------------------------
 - remove writing out-of-bounds dydx[8] = 0. in G4RepleteEofM.cc
 
 Nov 04, 2013 P.Gumplinger                 - field-V09-06-10
+-------------------------
 - add G4RepleteEofM to sources.cmake
-
                                             field-V09-06-09 - same as
 Nov 01st, 2013 P.Gumplinger               - field-V09-06-08
+---------------------------
 - add G4RepleteEofM: EofM that includes force due to B, E, and gravity field
   as well as mu*grad(B) and spin tracking.
 

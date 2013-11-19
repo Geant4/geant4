@@ -44,7 +44,10 @@
 G4RepleteEofM::G4RepleteEofM( G4Field* field )
           : G4EquationOfMotion( field ),
             fBfield(false), fEfield(false), fGfield(false), 
-            fgradB(false), fSpin(false)
+            fgradB(false), fSpin(false),
+            charge(0.), mass(0.), magMoment(0.), spin(0.),
+            ElectroMagCof(0.), omegac(0.), anomaly(0.),
+            beta(0.), gamma(0.)
 {
    fGfield = field->IsGravityActive();
 }
