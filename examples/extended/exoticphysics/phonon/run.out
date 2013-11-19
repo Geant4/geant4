@@ -1,17 +1,11 @@
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
+ Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-
-
-XPhysicsList::constructor: running
-
-
-XPhysicsList::constructor: ran
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -57,17 +51,5 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
-
-G4LatticeLogical::Load_NMap() successful
-
-G4LatticeLogical::Load_NMap() successful
-
-G4LatticeLogical::Load_NMap() successful
-
-G4LatticeLogical::LoadMap() successful (Vg scalars).
-
-G4LatticeLogical::LoadMap() successful (Vg scalars).
-
-G4LatticeLogical::LoadMap() successful (Vg scalars).
 Graphics systems deleted.
 Visualization Manager deleting...

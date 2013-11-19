@@ -56,6 +56,8 @@
 #include "G4ios.hh"
 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 XDetectorConstruction::XDetectorConstruction()
  : fConstructed(false), fIfField(true) {
   fLiquidHelium = NULL;
@@ -67,9 +69,7 @@ XDetectorConstruction::XDetectorConstruction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XDetectorConstruction::~XDetectorConstruction()
-{;}
-
+XDetectorConstruction::~XDetectorConstruction() {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -127,14 +127,11 @@ void XDetectorConstruction::SetupGeometry()
 
   // G4LatticeManager gives physics processes access to lattices by volume
   G4LatticeManager* LM = G4LatticeManager::GetLatticeManager();
-  LM->SetVerboseLevel(2);                // *TEMPORARY* to debug Windows crashes
   G4LatticeLogical* GeLogical = LM->LoadLattice(fGermanium, "Ge");
-  GeLogical->SetVerboseLevel(2);        // *TEMPORARY* to debug Windows crashes
 
   // G4LatticePhysical assigns G4LatticeLogical a physical orientation
   G4LatticePhysical* GePhysical =
     new G4LatticePhysical(GeLogical, GePhys->GetFrameRotation());
-  GePhysical->SetVerboseLevel(2);        // *TEMPORARY* to debug Windows crashes
   LM->RegisterLattice(GePhys, GePhysical);
 
   // NOTE:  Above registration can also be done in single step:
@@ -171,7 +168,4 @@ void XDetectorConstruction::SetupGeometry()
   simpleBoxVisAtt->SetVisibility(true);
   fGermaniumLogical->SetVisAttributes(simpleBoxVisAtt);
   fAluminumLogical->SetVisAttributes(simpleBoxVisAtt);
-
 }
-
-

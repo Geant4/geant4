@@ -43,12 +43,16 @@
 #include "G4SystemOfUnits.hh"
 
 
-XPhysicsList::XPhysicsList() : G4VUserPhysicsList() {
-  G4cout<<"\n\nXPhysicsList::constructor: running"<<G4endl;
-  defaultCutValue = 100*mm;
-  SetVerboseLevel(1);
-  G4cout<<"\n\nXPhysicsList::constructor: ran"<<G4endl;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+XPhysicsList::XPhysicsList(G4int verbose) : G4VUserPhysicsList() {
+  if (verbose) G4cout << "XPhysicsList::constructor" << G4endl;
+
+  SetVerboseLevel(verbose);
+  SetDefaultCutValue(100*mm);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XPhysicsList::~XPhysicsList() {;}
 
@@ -70,11 +74,10 @@ void XPhysicsList::ConstructProcess() {
   G4VProcess* phRefl = new G4PhononReflection;
   G4VProcess* phDown = new G4PhononDownconversion;
 
-  //***** TEMPORARY -- SET VERBOSITY FOR PROCESSES
-  phScat->SetVerboseLevel(2);
-  phRefl->SetVerboseLevel(2);
-  phDown->SetVerboseLevel(2);
-  //***** TEMPORARY
+  // Set process verbosity to match physics list, for diagnostics
+  phScat->SetVerboseLevel(verboseLevel);
+  phRefl->SetVerboseLevel(verboseLevel);
+  phDown->SetVerboseLevel(verboseLevel);
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
