@@ -209,8 +209,14 @@ namespace G4INCL {
 
   G4bool INCL::prepareReaction(const ParticleSpecies &projectileSpecies, const G4double kineticEnergy, const G4int A, const G4int Z) {
     if(A < 0 || A > 300 || Z < 1 || Z > 200) {
-      INCL_ERROR("Unsupported target: A = " << A << " Z = " << Z << std::endl);
-      INCL_ERROR("Target configuration rejected." << std::endl);
+      INCL_ERROR("Unsupported target: A = " << A << " Z = " << Z << std::endl
+                 << "Target configuration rejected." << std::endl);
+      return false;
+    }
+    if(projectileSpecies.theType==Composite &&
+       (projectileSpecies.theZ==projectileSpecies.theA || projectileSpecies.theZ==0)) {
+      INCL_ERROR("Unsupported projectile: A = " << projectileSpecies.theA << " Z = " << projectileSpecies.theZ << std::endl
+                 << "Projectile configuration rejected." << std::endl);
       return false;
     }
 
