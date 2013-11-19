@@ -86,6 +86,9 @@ class G4INCLXXInterfaceStore {
     /// \brief Setter for cascadeMinEnergyPerNucleon
     void SetCascadeMinEnergyPerNucleon(const G4double anEnergy);
 
+    /// \brief Setter for conservationTolerance
+    void SetConservationTolerance(const G4double aTolerance);
+
 
 
 
@@ -116,6 +119,11 @@ class G4INCLXXInterfaceStore {
     /// \brief Getter for theMaxProjMassINCL
     G4int GetMaxProjMassINCL() const;
 
+
+
+
+    /// \brief Getter for conservationTolerance
+    G4double GetConservationTolerance() const;
 
 
 
@@ -160,6 +168,7 @@ class G4INCLXXInterfaceStore {
     G4int theMaxClusterMass;
     const G4int theMaxProjMassINCL;
     G4double cascadeMinEnergyPerNucleon;
+    G4double conservationTolerance;
 
     G4INCLXXInterfaceMessenger *theINCLXXInterfaceMessenger;
 

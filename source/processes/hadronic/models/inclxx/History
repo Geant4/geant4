@@ -16,6 +16,10 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+19 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-44)
+---------------------------------------------------------------
+- Resample interaction if four-momentum conservation is violated.
+
 18 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-42, -43)
 ---------------------------------------------------------------
 - Don't panic on reactions induced by di-protons.

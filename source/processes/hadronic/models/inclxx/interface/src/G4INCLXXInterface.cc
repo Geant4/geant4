@@ -182,7 +182,13 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
     return thePreCompoundModel->ApplyYourself(aTrack, theNucleus);
   }
 
-  const G4int maxTries = 200;
+  // Calculate the total four-momentum in the entrance channel
+  G4LorentzVector const &track4Momentum = aTrack.Get4Momentum();
+  G4LorentzVector fourMomentumIn = track4Momentum;
+  const G4int nucleusA = theNucleus.GetA_asInt();
+  const G4int nucleusZ = theNucleus.GetZ_asInt();
+  const G4double theNucleusMass = theIonTable->GetIonMass(nucleusZ, nucleusA);
+  fourMomentumIn.setE(fourMomentumIn.e() + theNucleusMass);
 
   // Check if inverse kinematics should be used
   const G4bool inverseKinematics = AccurateProjectile(aTrack, theNucleus);
@@ -193,9 +199,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   G4HadProjectile const *aProjectileTrack = &aTrack;
   G4Nucleus *theTargetNucleus = &theNucleus;
   if(inverseKinematics) {
-    const G4int oldTargetA = theNucleus.GetA_asInt();
-    const G4int oldTargetZ = theNucleus.GetZ_asInt();
-    G4ParticleDefinition *oldTargetDef = theIonTable->GetIon(oldTargetZ, oldTargetA, 0);
+    G4ParticleDefinition *oldTargetDef = theIonTable->GetIon(nucleusZ, nucleusA, 0);
     const G4ParticleDefinition *oldProjectileDef = aTrack.GetDefinition();
 
     if(oldProjectileDef != 0 && oldTargetDef != 0) {
@@ -205,9 +209,8 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
       if(newTargetA > 0 && newTargetZ > 0) {
         // This should give us the same energy per nucleon
         theTargetNucleus = new G4Nucleus(newTargetA, newTargetZ);
-        const G4double theProjectileMass = theIonTable->GetIonMass(oldTargetZ, oldTargetA);
-        toInverseKinematics = new G4LorentzRotation(aTrack.Get4Momentum().boostVector());
-        G4LorentzVector theProjectile4Momentum(0.0, 0.0, 0.0, theProjectileMass);
+        toInverseKinematics = new G4LorentzRotation(track4Momentum.boostVector());
+        G4LorentzVector theProjectile4Momentum(0.0, 0.0, 0.0, theNucleusMass);
         G4DynamicParticle swappedProjectileParticle(oldTargetDef, (*toInverseKinematics) * theProjectile4Momentum);
         aProjectileTrack = new G4HadProjectile(swappedProjectileParticle);
       } else {
@@ -254,6 +257,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
   std::list<G4Fragment> remnants;
 
+  const G4int maxTries = 200;
   G4int nTries = 0;
   // INCL can generate transparent events. However, this is meaningful
   // only in the standalone code. In Geant4 we must "force" INCL to
@@ -277,6 +281,8 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
         toDirectKinematics = new G4LorentzRotation(toInverseKinematics->inverse());
       }
 
+      G4LorentzVector fourMomentumOut;
+
       for(G4int i = 0; i < eventInfo.nParticles; i++) {
 	G4int A = eventInfo.A[i];
 	G4int Z = eventInfo.Z[i];
@@ -299,6 +305,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
 	  // Set the four-momentum of the reaction products
 	  p->Set4Momentum(momentum);
+          fourMomentumOut += momentum;
 	  theResult.AddSecondary(p);
 
 	} else {
@@ -350,12 +357,41 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
           fourMomentum.setVect(-fourMomentum.vect());
         }
 
+        fourMomentumOut += fourMomentum;
 	G4Fragment remnant(A, Z, fourMomentum);
         remnant.SetAngularMomentum(spin);
         if(dumpRemnantInfo) {
           G4cerr << "G4INCLXX_DUMP_REMNANT: " << remnant << "  spin: " << spin << G4endl;
         }
 	remnants.push_back(remnant);
+      }
+
+      // Check four-momentum conservation
+      const G4LorentzVector violation4Momentum = fourMomentumOut - fourMomentumIn;
+      const G4double energyViolation = std::abs(violation4Momentum.e());
+      const G4double momentumViolation = violation4Momentum.rho();
+      if(energyViolation > G4INCLXXInterfaceStore::GetInstance()->GetConservationTolerance()) {
+        std::stringstream ss;
+        ss << "energy conservation violated by " << energyViolation/MeV << " MeV in "
+          << aTrack.GetKineticEnergy()/MeV << "-MeV " << aTrack.GetDefinition()->GetParticleName()
+          << " + " << theIonTable->GetIonName(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0)
+          << " inelastic reaction, in " << (inverseKinematics ? "inverse" : "direct") << " kinematics. Will resample.";
+        theInterfaceStore->EmitWarning(ss.str());
+        eventIsOK = false;
+        theResult.Clear();
+        theResult.SetStatusChange(stopAndKill);
+        remnants.clear();
+      } else if(momentumViolation > G4INCLXXInterfaceStore::GetInstance()->GetConservationTolerance()) {
+        std::stringstream ss;
+        ss << "momentum conservation violated by " << momentumViolation/MeV << " MeV in "
+          << aTrack.GetKineticEnergy()/MeV << "-MeV " << aTrack.GetDefinition()->GetParticleName()
+          << " + " << theIonTable->GetIonName(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0)
+          << " inelastic reaction, in " << (inverseKinematics ? "inverse" : "direct") << " kinematics. Will resample.";
+        theInterfaceStore->EmitWarning(ss.str());
+        eventIsOK = false;
+        theResult.Clear();
+        theResult.SetStatusChange(stopAndKill);
+        remnants.clear();
       }
     }
     nTries++;

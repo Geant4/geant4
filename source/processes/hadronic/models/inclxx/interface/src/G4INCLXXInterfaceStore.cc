@@ -52,6 +52,7 @@ G4INCLXXInterfaceStore::G4INCLXXInterfaceStore() :
   theMaxClusterMass(theMaxClusterMassDefault),
   theMaxProjMassINCL(18),
   cascadeMinEnergyPerNucleon(1.*MeV),
+  conservationTolerance(5*MeV),
   theINCLModel(NULL),
   nWarnings(0),
   maxWarnings(50)
@@ -145,6 +146,8 @@ G4double G4INCLXXInterfaceStore::GetCascadeMinEnergyPerNucleon() const { return 
 
 G4int G4INCLXXInterfaceStore::GetMaxClusterMass() const { return theMaxClusterMass; }
 
+G4double G4INCLXXInterfaceStore::GetConservationTolerance() const { return conservationTolerance; }
+
 
 
 
@@ -173,7 +176,6 @@ void G4INCLXXInterfaceStore::EmitBigWarning(const G4String &message) const {
     << G4endl;
 }
 
-/// \brief Setter for cascadeMinEnergyPerNucleon
 void G4INCLXXInterfaceStore::SetCascadeMinEnergyPerNucleon(const G4double anEnergy) {
   if(cascadeMinEnergyPerNucleon!=anEnergy) {
     // Parameter is changed, emit a big warning message
@@ -191,5 +193,9 @@ void G4INCLXXInterfaceStore::SetCascadeMinEnergyPerNucleon(const G4double anEner
   // No need to delete the model object
 
   cascadeMinEnergyPerNucleon=anEnergy;
+}
+
+void G4INCLXXInterfaceStore::SetConservationTolerance(const G4double aTolerance) {
+  conservationTolerance = aTolerance;
 }
 
