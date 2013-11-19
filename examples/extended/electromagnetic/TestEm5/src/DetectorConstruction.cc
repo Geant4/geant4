@@ -141,12 +141,14 @@ void DetectorConstruction::DefineMaterials()
   // define a material from elements.   case 1: chemical molecule
   //
 
-  G4Material* H2O = new G4Material("Water", density= 1.000*g/cm3, ncomponents=2);
+  G4Material* H2O = 
+    new G4Material("Water", density= 1.000*g/cm3, ncomponents=2);
   H2O->AddElement(H, natoms=2);
   H2O->AddElement(O, natoms=1);
   H2O->GetIonisation()->SetMeanExcitationEnergy(78*eV);
 
-  G4Material* CH = new G4Material("Plastic", density= 1.04*g/cm3, ncomponents=2);
+  G4Material* CH = 
+    new G4Material("Plastic", density= 1.04*g/cm3, ncomponents=2);
   CH->AddElement(C, natoms=1);
   CH->AddElement(H, natoms=1);
 
@@ -224,7 +226,8 @@ void DetectorConstruction::DefineMaterials()
   ArCH4->AddElement (H,  natoms=28);
 
   G4Material* XeCH = 
-    new G4Material("XenonMethanePropane", density= 4.9196*mg/cm3, ncomponents=3,
+    new G4Material("XenonMethanePropane", density= 4.9196*mg/cm3, 
+                   ncomponents=3,
                    kStateGas, 293.15*kelvin, 1*atmosphere);
   XeCH->AddElement (Xe, natoms=875);
   XeCH->AddElement (C,  natoms=225);
@@ -282,22 +285,22 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                                    fWorldMaterial,        //its material
                                    "World");                //its name
                                    
-  fPhysiWorld = new G4PVPlacement(0,                        //no rotation
-                                   G4ThreeVector(),        //at (0,0,0)
-                                 fLogicWorld,                //its logical volume
-                                 "World",                //its name
-                                 0,                        //its mother  volume
-                                 false,                        //no boolean operation
-                                 0);                        //copy number
+  fPhysiWorld = new G4PVPlacement(0,                  //no rotation
+                                  G4ThreeVector(),    //at (0,0,0)
+                                 fLogicWorld,         //its logical volume
+                                 "World",             //its name
+                                 0,                   //its mother  volume
+                                 false,               //no boolean operation
+                                 0);                  //copy number
                                  
   // Absorber
   // 
-  fSolidAbsorber = new G4Box("Absorber",        
-                      fAbsorberThickness/2,fAbsorberSizeYZ/2,fAbsorberSizeYZ/2); 
+  fSolidAbsorber = new G4Box("Absorber",
+                   fAbsorberThickness/2,fAbsorberSizeYZ/2,fAbsorberSizeYZ/2); 
                           
   fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber,    //its solid
-                                            fAbsorberMaterial, //its material
-                                          "Absorber");       //its name
+                                       fAbsorberMaterial, //its material
+                                       "Absorber");       //its name
                                                 
   fPhysiAbsorber = new G4PVPlacement(0,                   //no rotation
                         G4ThreeVector(fXposAbs,0.,0.),    //its position
@@ -418,9 +421,10 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
   G4FieldManager* fieldMgr 
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
     
-  if(fMagField) delete fMagField;                //delete the existing magn field
+  if(fMagField) delete fMagField;   
+             //delete the existing magn field
   
-  if(fieldValue!=0.)                        // create a new one if non nul
+  if(fieldValue!=0.)            // create a new one if non nul
   { fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
     fieldMgr->SetDetectorField(fMagField);
     fieldMgr->CreateChordFinder(fMagField);
@@ -434,8 +438,7 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
 
 void DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
