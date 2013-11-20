@@ -255,6 +255,7 @@ inline UVector2::~UVector2() {}
 
 inline UVector2& UVector2::operator = (const UVector2& p)
 {
+  if (this == &p)  { return *this; }
   x = p.x;
   y = p.y;
   return *this;

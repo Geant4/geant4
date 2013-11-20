@@ -37,7 +37,7 @@ bool UPolycone::IsOpen() const
 inline
 bool UPolycone::IsGeneric() const
 {
-  return genericPcon;
+  return false;
 }
 
 inline

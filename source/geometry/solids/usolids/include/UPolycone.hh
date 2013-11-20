@@ -138,7 +138,7 @@ class UPolycone : public VUSolid
     VUSolid* Clone() const;
 
     UPolycone(const UPolycone& source);
-    const UPolycone& operator=(const UPolycone& source);
+    UPolycone& operator=(const UPolycone& source);
     // Copy constructor and assignment operator.
     void CopyStuff(const UPolycone& source);
     UVector3 GetPointOnSurface() const;
@@ -180,7 +180,7 @@ class UPolycone : public VUSolid
 
     inline bool IsGeneric() const
     {
-      return genericPcon;
+      return false;
     }
 
     inline int GetNumRZCorner() const
@@ -215,7 +215,6 @@ class UPolycone : public VUSolid
     double startPhi;    // Starting phi value (0 < phiStart < 2pi)
     double endPhi;      // end phi value (0 < endPhi-phiStart < 2pi)
     bool   phiIsOpen;  // true if there is a phi segment
-    bool   genericPcon; // true if created through the 2nd generic constructor
     int  numCorner;   // number RZ points
     UPolyconeSideRZ* corners; // corner r,z points
     UPolyconeHistorical* fOriginalParameters; // original input parameters

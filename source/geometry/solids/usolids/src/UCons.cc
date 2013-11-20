@@ -48,7 +48,6 @@ UCons::UCons(const std::string& pName,
 {
   kRadTolerance = frTolerance;
   kAngTolerance = faTolerance;
-
   // Check z-len
   //
   if (pDz < 0)
@@ -2225,5 +2224,5 @@ void UCons::GetParametersList(int, double* aArray) const
   aArray[4] = GetZHalfLength();
   aArray[5] = GetStartPhiAngle();
   aArray[6] = GetDeltaPhiAngle();
-
+ 
 }

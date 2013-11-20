@@ -32,7 +32,6 @@
 #include "VUSolid.hh"
 #include "UUtils.hh"
 #include "UTransform3D.hh"
-#include "UVoxelizer.hh"
 
 struct UVoxelBox
 {

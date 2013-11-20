@@ -174,6 +174,7 @@ void UVoxelizer::DisplayVoxelLimits()
 {
   // "DisplayVoxelLimits" displays the dX, dY, dZ, pX, pY and pZ for each node
   int numNodes = fBoxes.size();
+  int oldprc = cout.precision();
   for (int i = 0; i < numNodes; ++i)
   {
     cout << setw(10) << setiosflags(ios::fixed) << setprecision(16) <<
@@ -181,6 +182,7 @@ void UVoxelizer::DisplayVoxelLimits()
          "\t * [x,y,z] = " << fBoxes[i].hlen <<
          "\t * [x,y,z] = " << fBoxes[i].pos << "\n";
   }
+  cout.precision(oldprc) ;
 }
 
 //______________________________________________________________________________
@@ -281,6 +283,7 @@ void UVoxelizer::DisplayBoundaries(vector<double>& boundaries)
   // Prints the positions of the boundaries of the slices on the three axis:
 
   int count = boundaries.size();
+  int oldprc = cout.precision();
   for (int i = 0; i < count; ++i)
   {
     cout << setw(10) << setiosflags(ios::fixed) << setprecision(16) << boundaries[i];
@@ -289,6 +292,7 @@ void UVoxelizer::DisplayBoundaries(vector<double>& boundaries)
     if (i != count - 1) cout << "-> ";
   }
   cout << "|" << endl << "Number of boundaries: " << count << endl;
+  cout.precision(oldprc) ;
 }
 
 void UVoxelizer::BuildBitmasks(std::vector<double> boundaries[], UBits bitmasks[])

@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 20, 2013  T.Mikitina             geom-usolids-V09-06-09
+- Fixed Coverity defects.
+
 November 14, 2013  T.Mikitina             geom-usolids-V09-06-08
 - Corrected visualization methods in bridge G4USolid.
 - Corrected returned type string from USolids and added Reset()

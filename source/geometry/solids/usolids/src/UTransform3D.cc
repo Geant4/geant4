@@ -53,11 +53,10 @@ UTransform3D::UTransform3D(double tx, double ty, double tz,
 UTransform3D::UTransform3D(const UTransform3D& other)
 {
   // Copy constructor.
-  if (&other != this)
-  {
+ 
     fTr = other.fTr;
     std::memcpy(fRot, other.fRot, sizeof(kIdRot));
-  }
+ 
 }
 
 //______________________________________________________________________________

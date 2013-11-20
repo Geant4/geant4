@@ -35,7 +35,8 @@ USphere::USphere(const std::string& pName,
                  double pRmin, double pRmax,
                  double pSPhi, double pDPhi,
                  double pSTheta, double pDTheta)
-  : VUSolid(pName), fEpsilon(2.e-11),
+  : VUSolid(pName), fCubicVolume(0.),
+    fSurfaceArea(0.),fEpsilon(2.e-11),
     fFullPhiSphere(true), fFullThetaSphere(true)
 {
   kAngTolerance = faTolerance;
@@ -62,26 +63,6 @@ USphere::USphere(const std::string& pName,
   CheckThetaAngles(pSTheta, pDTheta);
 }
 
-///////////////////////////////////////////////////////////////////////
-//
-// Fake default constructor - sets only member data and allocates memory
-//                            for usage restricted to object persistency.
-//
-
-/*
-USphere::USphere( __void__& a)
-  : VUSolid(a), fRminTolerance(0.), kTolerance(0.),
-    kAngTolerance(0.), kRadTolerance(0.), fEpsilon(0.),
-    fRmin(0.), fRmax(0.), fSPhi(0.), fDPhi(0.), fSTheta(0.),
-    fDTheta(0.), sinCPhi(0.), cosCPhi(0.), cosHDPhiOT(0.), cosHDPhiIT(0.),
-    sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.), hDPhi(0.), cPhi(0.),
-    ePhi(0.), sinSTheta(0.), cosSTheta(0.), sinETheta(0.), cosETheta(0.),
-    tanSTheta(0.), tanSTheta2(0.), tanETheta(0.), tanETheta2(0.), eTheta(0.),
-    fFullPhiSphere(false), fFullThetaSphere(false), fFullSphere(true)
-{
-}
-*/
-
 /////////////////////////////////////////////////////////////////////
 //
 // Destructor
@@ -95,7 +76,8 @@ USphere::~USphere()
 // Copy constructor
 
 USphere::USphere(const USphere& rhs)
-  : VUSolid(rhs), fRminTolerance(rhs.fRminTolerance),
+  : VUSolid(rhs), fCubicVolume(0.),fSurfaceArea(0.),
+    fRminTolerance(rhs.fRminTolerance),
     kTolerance(rhs.kTolerance), kAngTolerance(rhs.kAngTolerance),
     kRadTolerance(rhs.kRadTolerance), fEpsilon(rhs.fEpsilon),
     fRmin(rhs.fRmin), fRmax(rhs.fRmax), fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
@@ -133,6 +115,8 @@ USphere& USphere::operator = (const USphere& rhs)
 
   // Copy data
   //
+  fCubicVolume = rhs.fCubicVolume;
+  fSurfaceArea = rhs.fSurfaceArea;
   fRminTolerance = rhs.fRminTolerance;
   kTolerance = rhs.kTolerance;
   kAngTolerance = rhs.kAngTolerance;
@@ -170,265 +154,6 @@ USphere& USphere::operator = (const USphere& rhs)
 
   return *this;
 }
-
-/*
-//////////////////////////////////////////////////////////////////////////
-//
-// Dispatch to parameterisation for replication mechanism dimension
-// computation & modification.
-
-void USphere::ComputeDimensions(       UVPVParameterisation* p,
-                                  const int n,
-                                  const UVPhysicalVolume* pRep)
-{
-  p->ComputeDimensions(*this,n,pRep);
-}
-*/
-
-////////////////////////////////////////////////////////////////////////////
-//
-// Calculate extent under transform and specified limit
-
-/*
-bool USphere::CalculateExtent(const EAxisType pAxis,
-                                  const UVoxelLimits& pVoxelLimit,
-                                  const UAffineTransform& pTransform,
-                                        double& pMin, double& pMax) const
-{
-  if (fFullSphere)
-  {
-    // Special case handling for solid spheres-shells
-    // (rotation doesn't influence).
-    // Compute x/y/z mins and maxs for bounding box respecting limits,
-    // with early returns if outside limits. Then switch() on pAxis,
-    // and compute exact x and y limit for x/y case
-
-    double xoffset,xMin,xMax;
-    double yoffset,yMin,yMax;
-    double zoffset,zMin,zMax;
-
-    double diff1,diff2,delta,maxDiff,newMin,newMax;
-    double xoff1,xoff2,yoff1,yoff2;
-
-    xoffset=pTransform.NetTranslation().x;
-    xMin=xoffset-fRmax;
-    xMax=xoffset+fRmax;
-    if (pVoxelLimit.IsXLimited())
-    {
-      if ((xMin>pVoxelLimit.GetMaxXExtent()+VUSolid::Tolerance())
-        || (xMax<pVoxelLimit.GetMinXExtent()-VUSolid::Tolerance()))
-      {
-        return false;
-      }
-      else
-      {
-        if (xMin<pVoxelLimit.GetMinXExtent())
-        {
-          xMin=pVoxelLimit.GetMinXExtent();
-        }
-        if (xMax>pVoxelLimit.GetMaxXExtent())
-        {
-          xMax=pVoxelLimit.GetMaxXExtent();
-        }
-      }
-    }
-
-    yoffset=pTransform.NetTranslation().y;
-    yMin=yoffset-fRmax;
-    yMax=yoffset+fRmax;
-    if (pVoxelLimit.IsYLimited())
-    {
-      if ((yMin>pVoxelLimit.GetMaxYExtent()+VUSolid::Tolerance())
-        || (yMax<pVoxelLimit.GetMinYExtent()-VUSolid::Tolerance()))
-      {
-        return false;
-      }
-      else
-      {
-        if (yMin<pVoxelLimit.GetMinYExtent())
-        {
-          yMin=pVoxelLimit.GetMinYExtent();
-        }
-        if (yMax>pVoxelLimit.GetMaxYExtent())
-        {
-          yMax=pVoxelLimit.GetMaxYExtent();
-        }
-      }
-    }
-
-    zoffset=pTransform.NetTranslation().z;
-    zMin=zoffset-fRmax;
-    zMax=zoffset+fRmax;
-    if (pVoxelLimit.IsZLimited())
-    {
-      if ((zMin>pVoxelLimit.GetMaxZExtent()+VUSolid::Tolerance())
-        || (zMax<pVoxelLimit.GetMinZExtent()-VUSolid::Tolerance()))
-      {
-        return false;
-      }
-      else
-      {
-        if (zMin<pVoxelLimit.GetMinZExtent())
-        {
-          zMin=pVoxelLimit.GetMinZExtent();
-        }
-        if (zMax>pVoxelLimit.GetMaxZExtent())
-        {
-          zMax=pVoxelLimit.GetMaxZExtent();
-        }
-      }
-    }
-
-    // Known to cut sphere
-
-    switch (pAxis)
-    {
-      case eXaxis:
-        yoff1=yoffset-yMin;
-        yoff2=yMax-yoffset;
-        if ((yoff1>=0) && (yoff2>=0))
-        {
-          // Y limits Cross max/min x => no change
-          //
-          pMin=xMin;
-          pMax=xMax;
-        }
-        else
-        {
-          // Y limits don't Cross max/min x => compute max delta x,
-          // hence new mins/maxs
-          //
-          delta=fRmax*fRmax-yoff1*yoff1;
-          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
-          delta=fRmax*fRmax-yoff2*yoff2;
-          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
-          maxDiff=(diff1>diff2) ? diff1:diff2;
-          newMin=xoffset-maxDiff;
-          newMax=xoffset+maxDiff;
-          pMin=(newMin<xMin) ? xMin : newMin;
-          pMax=(newMax>xMax) ? xMax : newMax;
-        }
-        break;
-      case eYaxis:
-        xoff1=xoffset-xMin;
-        xoff2=xMax-xoffset;
-        if ((xoff1>=0) && (xoff2>=0))
-        {
-          // X limits Cross max/min y => no change
-          //
-          pMin=yMin;
-          pMax=yMax;
-        }
-        else
-        {
-          // X limits don't Cross max/min y => compute max delta y,
-          // hence new mins/maxs
-          //
-          delta=fRmax*fRmax-xoff1*xoff1;
-          diff1=(delta>0.) ? std::sqrt(delta) : 0.;
-          delta=fRmax*fRmax-xoff2*xoff2;
-          diff2=(delta>0.) ? std::sqrt(delta) : 0.;
-          maxDiff=(diff1>diff2) ? diff1:diff2;
-          newMin=yoffset-maxDiff;
-          newMax=yoffset+maxDiff;
-          pMin=(newMin<yMin) ? yMin : newMin;
-          pMax=(newMax>yMax) ? yMax : newMax;
-        }
-        break;
-      case eZaxis:
-        pMin=zMin;
-        pMax=zMax;
-        break;
-      default:
-        break;
-    }
-    pMin-=VUSolid::Tolerance();
-    pMax+=VUSolid::Tolerance();
-
-    return true;
-  }
-  else       // Transformed cutted sphere
-  {
-    int i,j,noEntries,noBetweenSections;
-    bool existsAfterClip=false;
-
-    // Calculate rotated vertex coordinates
-
-    UVector3List* vertices;
-    int noPolygonVertices;
-    vertices=CreateRotatedVertices(pTransform,noPolygonVertices);
-
-    pMin=+UUtils::Infinity();
-    pMax=-UUtils::Infinity();
-
-    noEntries=vertices->size(); // noPolygonVertices*noPhiCrossSections
-    noBetweenSections=noEntries-noPolygonVertices;
-
-    UVector3List ThetaPolygon;
-    for (i=0;i<noEntries;i+=noPolygonVertices)
-    {
-      for(j=0;j<(noPolygonVertices/2)-1;j++)
-      {
-        ThetaPolygon.push_back((*vertices)[i+j]);
-        ThetaPolygon.push_back((*vertices)[i+j+1]);
-        ThetaPolygon.push_back((*vertices)[i+noPolygonVertices-2-j]);
-        ThetaPolygon.push_back((*vertices)[i+noPolygonVertices-1-j]);
-        CalculateClippedPolygonExtent(ThetaPolygon,pVoxelLimit,pAxis,pMin,pMax);
-        ThetaPolygon.clear();
-      }
-    }
-    for (i=0;i<noBetweenSections;i+=noPolygonVertices)
-    {
-      for(j=0;j<noPolygonVertices-1;j++)
-      {
-        ThetaPolygon.push_back((*vertices)[i+j]);
-        ThetaPolygon.push_back((*vertices)[i+j+1]);
-        ThetaPolygon.push_back((*vertices)[i+noPolygonVertices+j+1]);
-        ThetaPolygon.push_back((*vertices)[i+noPolygonVertices+j]);
-        CalculateClippedPolygonExtent(ThetaPolygon,pVoxelLimit,pAxis,pMin,pMax);
-        ThetaPolygon.clear();
-      }
-      ThetaPolygon.push_back((*vertices)[i+noPolygonVertices-1]);
-      ThetaPolygon.push_back((*vertices)[i]);
-      ThetaPolygon.push_back((*vertices)[i+noPolygonVertices]);
-      ThetaPolygon.push_back((*vertices)[i+2*noPolygonVertices-1]);
-      CalculateClippedPolygonExtent(ThetaPolygon,pVoxelLimit,pAxis,pMin,pMax);
-      ThetaPolygon.clear();
-    }
-
-    if ((pMin!=UUtils::Infinity()) || (pMax!=-UUtils::Infinity()))
-    {
-      existsAfterClip=true;
-
-      // Add 2*tolerance to avoid precision troubles
-      //
-      pMin-=VUSolid::Tolerance();
-      pMax+=VUSolid::Tolerance();
-    }
-    else
-    {
-      // Check for case where completely enveloUUtils::kPing clipUUtils::kPing volume
-      // If point inside then we are confident that the solid completely
-      // envelopes the clipUUtils::kPing volume. Hence Set min/max extents according
-      // to clipUUtils::kPing volume extents along the specified axis.
-
-      UVector3 clipCentre(
-          (pVoxelLimit.GetMinXExtent()+pVoxelLimit.GetMaxXExtent())*0.5,
-          (pVoxelLimit.GetMinYExtent()+pVoxelLimit.GetMaxYExtent())*0.5,
-          (pVoxelLimit.GetMinZExtent()+pVoxelLimit.GetMaxZExtent())*0.5);
-
-      if (Inside(pTransform.Inverse().TransformPoint(clipCentre))!=eOutside)
-      {
-        existsAfterClip=true;
-        pMin=pVoxelLimit.GetMinExtent(pAxis);
-        pMax=pVoxelLimit.GetMaxExtent(pAxis);
-      }
-    }
-    delete vertices;
-    return existsAfterClip;
-  }
-}
-*/
 
 ///////////////////////////////////////////////////////////////////////////
 //

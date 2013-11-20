@@ -38,7 +38,7 @@ class UVCSGfaceted : public VUSolid
     virtual ~UVCSGfaceted();
 
     UVCSGfaceted(const UVCSGfaceted& source);
-    const UVCSGfaceted& operator=(const UVCSGfaceted& source);
+    UVCSGfaceted& operator=(const UVCSGfaceted& source);
 
 
     VUSolid::EnumInside InsideNoVoxels(const UVector3& p) const;

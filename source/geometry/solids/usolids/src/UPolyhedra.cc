@@ -401,7 +401,7 @@ UPolyhedra::UPolyhedra(const UPolyhedra& source)
 //
 // Assignment operator
 //
-const UPolyhedra& UPolyhedra::operator=(const UPolyhedra& source)
+UPolyhedra& UPolyhedra::operator=(const UPolyhedra& source)
 {
   if (this == &source) return *this;
 

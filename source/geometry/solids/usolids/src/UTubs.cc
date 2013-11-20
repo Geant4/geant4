@@ -33,7 +33,8 @@ UTubs::UTubs(const std::string& pName,
              double pSPhi, double pDPhi)
   : VUSolid(pName.c_str()), fRMin(pRMin), fRMax(pRMax), fDz(pDz), fSPhi(0), fDPhi(0)
 {
-
+  fCubicVolume=0.;
+  fSurfaceArea=0.;
   kRadTolerance = frTolerance;
   kAngTolerance = faTolerance;
 
@@ -63,7 +64,8 @@ UTubs::UTubs(const std::string& pName,
 //                            for usage restricted to object persistency.
 //
 UTubs::UTubs()
-  : VUSolid(""), kRadTolerance(0.), kAngTolerance(0.),
+  : VUSolid(""), fCubicVolume(0.), fSurfaceArea(0.),
+    kRadTolerance(0.), kAngTolerance(0.),
     fRMin(0.), fRMax(0.), fDz(0.), fSPhi(0.), fDPhi(0.),
     fSinCPhi(0.), fCosCPhi(0.), fCosHDPhiOT(0.), fCosHDPhiIT(0.),
     fSinSPhi(0.), fCosSPhi(0.), fSinEPhi(0.), fCosEPhi(0.),
@@ -86,6 +88,7 @@ UTubs::~UTubs()
 
 UTubs::UTubs(const UTubs& rhs)
   : VUSolid(rhs),
+    fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
     kRadTolerance(rhs.kRadTolerance), kAngTolerance(rhs.kAngTolerance),
     fRMin(rhs.fRMin), fRMax(rhs.fRMax), fDz(rhs.fDz),
     fSPhi(rhs.fSPhi), fDPhi(rhs.fDPhi),
@@ -117,6 +120,8 @@ UTubs& UTubs::operator = (const UTubs& rhs)
 
   // Copy data
   //
+  fCubicVolume = rhs.fCubicVolume;
+  fSurfaceArea = rhs.fSurfaceArea;
   kRadTolerance = rhs.kRadTolerance;
   kAngTolerance = rhs.kAngTolerance;
   fRMin = rhs.fRMin;

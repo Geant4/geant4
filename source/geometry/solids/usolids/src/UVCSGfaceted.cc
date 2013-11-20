@@ -31,7 +31,7 @@ using namespace std;
 UVCSGfaceted::UVCSGfaceted(const std::string& name)
   : VUSolid(name),
     numFace(0), faces(0), fCubicVolume(0.), fSurfaceArea(0.),
-    fNoVoxels(true), fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.)
+    fMaxSection(0.),fBoxShift(0.), fNoVoxels(true),fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.)
 {
 }
 
@@ -60,7 +60,7 @@ UVCSGfaceted::UVCSGfaceted(const UVCSGfaceted& source)
 //
 // Assignment operator
 //
-const UVCSGfaceted& UVCSGfaceted::operator=(const UVCSGfaceted& source)
+UVCSGfaceted& UVCSGfaceted::operator=(const UVCSGfaceted& source)
 {
   if (&source == this)
   {
@@ -77,7 +77,6 @@ const UVCSGfaceted& UVCSGfaceted::operator=(const UVCSGfaceted& source)
   fCubVolEpsilon = source.fCubVolEpsilon;
   fAreaAccuracy = source.fAreaAccuracy;
 
-  DeleteStuff();
   CopyStuff(source);
 
   return *this;
@@ -694,7 +693,7 @@ double UVCSGfaceted::DistanceToIn(const UVector3& p, const UVector3& v, double /
 
   double distance = UUtils::kInfinity;
   double distFromSurface = UUtils::kInfinity;
-  UVCSGface* bestFace = NULL;
+  UVCSGface* bestFace = 0;
   UBits bits(numFace);
   UVector3 faceNormal;
 
@@ -766,7 +765,7 @@ double UVCSGfaceted::DistanceToOut(const UVector3& p, const UVector3&  v, UVecto
   UVector3 normal, faceNormal;
   double shift;
 
-  UVCSGface* bestFace = NULL;
+  UVCSGface* bestFace = 0;
   UBits bits(numFace);
 
   do

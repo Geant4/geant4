@@ -68,7 +68,7 @@ UPolycone::UPolycone(const std::string& name,
     std::ostringstream message;
     message << "Polycone " << GetName() << "cannot be converted" << std::endl
             << "to Polycone with (Rmin,Rmaz,Z) parameters! Use GenericPolycone" ;
-    UUtils::Exception("G4Polycone::G4Polycone()", "GeomSolids0002",
+    UUtils::Exception("UPolycone::UPolycone()", "GeomSolids0002",
                       FatalError, 1, message.str().c_str());
     // JustWarning, message, "Use G4GenericPolycone instead!");
 
@@ -111,11 +111,30 @@ void UPolycone::Init(double phiStart,
                      const double rInner[],
                      const double rOuter[])
 {
-  //
+  //Convertion for angles
+  
+  if (phiTotal <= 0 || phiTotal > UUtils::kTwoPi-1E-10)
+   {
+     phiIsOpen=false;
+     startPhi = 0;
+     endPhi = UUtils::kTwoPi;
+   }
+   else
+   {
+     //
+     // Convert phi into our convention
+     //
+     phiIsOpen=true;
+     startPhi = phiStart;
+     while( startPhi < 0 ) startPhi += UUtils::kTwoPi;
+     
+     endPhi = phiStart+phiTotal;
+     while( endPhi < startPhi ) endPhi += UUtils::kTwoPi;
+  }
+ // Set Parameters
   fOriginalParameters = new UPolyconeHistorical();
-
-  fOriginalParameters->fStartAngle = phiStart;
-  fOriginalParameters->fOpeningAngle = phiTotal;
+  fOriginalParameters->fStartAngle = startPhi;
+  fOriginalParameters->fOpeningAngle = endPhi-startPhi;
   fOriginalParameters->fNumZPlanes = numZPlanes;
   fOriginalParameters->fZValues.resize(numZPlanes);
   fOriginalParameters->Rmin.resize(numZPlanes);
@@ -147,6 +166,8 @@ void UPolycone::Init(double phiStart,
                           FatalErrorInArguments, 1, message.str().c_str());
       }
     }
+
+
 
     double rMin = rInner[i];
     double rMax = rOuter[i];
@@ -234,8 +255,20 @@ void UPolycone::Init(double phiStart,
 //  double alfa = UUtils::kPi / fNumSides;
 
   double r = rz->Amax();
-
-  /*
+//
+// Perform checks of rz values
+//
+  if (rz->Amin() < 0.0)
+  {
+     std::ostringstream message;
+     message << "Illegal input parameters - " << GetName() << std::endl
+             << "        All R values must be >= 0 !";
+     UUtils::Exception("UPolycone::Init()", "GeomSolids0002",
+		       FatalErrorInArguments,1, message.str().c_str());
+  }
+    
+  
+   /*
   if (fNumSides != 0)
   {
     // mxy *= std::sqrt(2.0); // this is old and wrong, works only for n = 4
@@ -249,10 +282,6 @@ void UPolycone::Init(double phiStart,
   mxy += fgTolerance;
 
   box.Set(mxy, mxy, (rz->Bmax() - rz->Bmin()) / 2);
-
-  phiIsOpen = (phiTotal > 0 && phiTotal <= 2 * UUtils::kPi - 1E-10);
-  startPhi = phiStart;
-  endPhi = phiTotal;
 
   //
   // Make enclosingCylinder
@@ -314,9 +343,7 @@ std::ostream& UPolycone::StreamInfo(std::ostream& os) const
      << "		starting phi angle : " << startPhi / (UUtils::kPi / 180.0) << " degrees \n"
      << "		ending phi angle	 : " << endPhi / (UUtils::kPi / 180.0) << " degrees \n";
   int i = 0;
-  if (!genericPcon)
-  {
-    int numPlanes = fOriginalParameters->fNumZPlanes;
+  int numPlanes = fOriginalParameters->fNumZPlanes;
     os << "		number of Z planes: " << numPlanes << "\n"
        << "							Z values: \n";
     for (i = 0; i < numPlanes; i++)
@@ -336,14 +363,6 @@ std::ostream& UPolycone::StreamInfo(std::ostream& os) const
       os << "							Z plane " << i << ": "
          << fOriginalParameters->Rmax[i] << "\n";
     }
-  }
-  os << "		number of RZ points: " << numCorner << "\n"
-     << "							RZ values (corners): \n";
-  for (i = 0; i < numCorner; i++)
-  {
-    os << "												 "
-       << corners[i].r << ", " << corners[i].z << "\n";
-  }
   os << "-----------------------------------------------------------\n";
   os.precision(oldprc);
 
@@ -392,7 +411,7 @@ VUSolid::EnumInside UPolycone::InsideSection(int index, const UVector3& p) const
   if (r2 < rMinMinus * rMinMinus || r2 > rMaxPlus * rMaxPlus) return eOutside;
   if (r2 < rMinPlus * rMinPlus || r2 > rMaxMinus * rMaxMinus) return eSurface;
 
-  if (endPhi == UUtils::kTwoPi)
+  if (! phiIsOpen )
   {
     if (ps.z < -dz + halfTolerance || ps.z > dz - halfTolerance)
       return eSurface;
@@ -415,14 +434,7 @@ VUSolid::EnumInside UPolycone::InsideSection(int index, const UVector3& p) const
     return eInside;
   }
   return eOutside;
-
-  // old code:
-  EnumInside res = section.solid->Inside(ps);
-
-  // this two lines make no difference
-  //    EnumInside res = section.tubular ? ((UTubs *) section.solid)->Inside(ps) : ((UCons *) section.solid)->Inside(ps);
-
-  return res;
+ 
 }
 
 
@@ -1219,7 +1231,7 @@ UPolycone::UPolycone(const UPolycone& source): VUSolid(source)
 //
 // Assignment operator
 //
-const UPolycone& UPolycone::operator=(const UPolycone& source)
+UPolycone& UPolycone::operator=(const UPolycone& source)
 {
   if (this == &source) return *this;
 
@@ -1245,7 +1257,6 @@ void UPolycone::CopyStuff(const UPolycone& source)
   startPhi  = source.startPhi;
   endPhi    = source.endPhi;
   phiIsOpen = source.phiIsOpen;
-  genericPcon     = source.genericPcon;
   fCubicVolume    = source.fCubicVolume;
   fSurfaceArea    = source.fSurfaceArea;
   //

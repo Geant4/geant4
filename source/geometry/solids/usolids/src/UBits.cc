@@ -39,12 +39,14 @@ UBits::UBits(const UBits& original) : fNBits(original.fNBits),
 
 }
 
-/*
+
 //______________________________________________________________________________
 UBits& UBits::operator=(const UBits& rhs)
 {
   // UBits assignment operator
-  if (this != &rhs) {
+   // Check assignment to self    
+ if (this == &rhs)  { return *this; }
+
     //      TObject::operator=(rhs);
     fNBits   = rhs.fNBits;
     fNBytes  = rhs.fNBytes;
@@ -55,10 +57,8 @@ UBits& UBits::operator=(const UBits& rhs)
     } else {
       fAllBits = 0;
     }
-  }
   return *this;
 }
-*/
 
 //______________________________________________________________________________
 UBits::~UBits()

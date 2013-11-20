@@ -147,7 +147,7 @@ class UPolyhedra : public UVCSGfaceted
                         const UVector3& v, double aPstep = UUtils::kInfinity) const;
 
     UPolyhedra(const UPolyhedra& source);
-    const UPolyhedra& operator=(const UPolyhedra& source);
+    UPolyhedra& operator=(const UPolyhedra& source);
     // Copy constructor and assignment operator.
 
   protected:  // without description

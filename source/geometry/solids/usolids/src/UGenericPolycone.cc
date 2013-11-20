@@ -264,7 +264,7 @@ UGenericPolycone::UGenericPolycone(const UGenericPolycone& source)
 //
 // Assignment operator
 //
-const UGenericPolycone& UGenericPolycone::operator=(const UGenericPolycone& source)
+UGenericPolycone& UGenericPolycone::operator=(const UGenericPolycone& source)
 {
   if (this == &source) return *this;
 

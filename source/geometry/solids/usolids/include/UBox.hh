@@ -34,7 +34,7 @@ class UBox : public VUSolid
 {
 
   public:
-    UBox() : VUSolid(), fDx(0), fDy(0), fDz(0) {}
+  UBox() : VUSolid(), fDx(0), fDy(0), fDz(0),fCubicVolume(0.), fSurfaceArea(0.) {}
     UBox(const std::string& name, double dx, double dy, double dz);
     virtual ~UBox();
 

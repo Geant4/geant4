@@ -165,7 +165,6 @@ UPolyconeSide::~UPolyconeSide()
 UPolyconeSide::UPolyconeSide(const UPolyconeSide& source)
   : UVCSGface(), ncorners(0), corners(0)
 {
-//  g4polyconeSideInstanceID = g4polyconeSideSubInstanceManager.CreateSubInstance();
 
   CopyStuff(source);
 }

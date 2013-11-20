@@ -128,12 +128,6 @@ class USphere : public VUSolid
 
     virtual void    ComputeBBox(UBBox* /*aBox*/, bool /*aStore = false*/) {}
 
-//    USphere(__void__&);
-    //
-    // Fake default constructor for usage restricted to direct object
-    // persistency for clients requiring preallocation of memory for
-    // persistifiable objects.
-
     USphere(const USphere& rhs);
     USphere& operator=(const USphere& rhs);
     // Copy constructor and assignment operator.

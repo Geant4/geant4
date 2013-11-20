@@ -57,8 +57,6 @@ class UPolyconeSide : public UVCSGface
 {
   public:
 
-    int g4polyconeSideInstanceID;
-
     UPolyconeSide(const UPolyconeSideRZ* prevRZ,
                   const UPolyconeSideRZ* tail,
                   const UPolyconeSideRZ* head,

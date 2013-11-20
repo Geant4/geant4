@@ -167,6 +167,7 @@ inline UVector3& UVector3::MultiplyByComponents(const UVector3& p)
 inline UVector3& UVector3::operator = (const UVector3& p)
 {
   // Assignment of a UVector3
+  if (this == &p)  { return *this; }
   x = p.x;
   y = p.y;
   z = p.z;
