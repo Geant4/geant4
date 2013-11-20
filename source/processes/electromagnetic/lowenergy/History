@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20.11.2013  L. Pandola, tag emlowen-V09-06-47
+	    Fix double-deletion problem reported by Gabriele 
+	    and some cosmetics (G4PenelopeBremsstrahlungFS)
+
+19.11.2013  V. Ivanchenko, tag emlowen-V09-06-46
+            G4LivermoreComptonModel - fixed form-factor parameterisation
+              by increasing number of digits in form-factor table
+
 17.11.2013  V. Ivanchenko, L. Pandola, tag emlowen-V09-06-45
             G4LivermorePhotoElectricModel and G4PenelopeIonisationXSHandler,
              - fixed Coverity defect.

@@ -38,16 +38,13 @@
 //
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
- 
-#include "G4PhysicalConstants.hh"
-#include "G4SystemOfUnits.hh"
 #include "G4PenelopeBremsstrahlungFS.hh"
 #include "G4PhysicsFreeVector.hh"
-#include "G4PhysicsLogVector.hh" 
 #include "G4PhysicsTable.hh"
 #include "G4Material.hh"
-#include "G4AutoDelete.hh"
 #include "Randomize.hh"
+#include "G4PhysicalConstants.hh"
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -77,14 +74,15 @@ G4PenelopeBremsstrahlungFS::~G4PenelopeBremsstrahlungFS()
 {
   ClearTables(); 
   
-  //Content of fCache is cleaned up automatically via G4AutoDelete
+  //The G4Physics*Vector pointers contained in the fCache are automatically deleted by 
+  //the G4Allocator, so there is no need to take care of them manually 
 
-  //Clear manually theElementData
-  std::map<G4int,G4DataVector*>::iterator i;
+  //Clear manually theElementData  
   if (theElementData)
-    {
+    {      
+      std::map<G4int,G4DataVector*>::iterator i;
       for (i=theElementData->begin(); i != theElementData->end(); i++)        
-	delete i->second;        
+	delete i->second;              
       delete theElementData;
       theElementData = 0;
     }
@@ -125,13 +123,12 @@ void G4PenelopeBremsstrahlungFS::ClearTables(G4bool isMaster)
 	}
       delete theSamplingTable;
       theSamplingTable = 0;
-    }
-
-  std::map< std::pair<const G4Material*,G4double> ,G4PhysicsFreeVector*>::iterator kk;
+    }  
   if (thePBcut)
     {
       /*
-      for (kk=thePBcut->begin(); kk != thePBcut->end(); kk++)	
+	std::map< std::pair<const G4Material*,G4double> ,G4PhysicsFreeVector*>::iterator kk;
+	for (kk=thePBcut->begin(); kk != thePBcut->end(); kk++)	
 	delete kk->second;
       */
       delete thePBcut;
@@ -669,8 +666,8 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
   if (!theTempVec) //First time this thread gets the cache
     {
       theTempVec = new G4PhysicsFreeVector(nBinsX);
-      //Register the pointer for auto-clean up at the end
-      G4AutoDelete::Register(theTempVec);
+      //The G4Physics*Vector pointers are automatically deleted by the G4Allocator,
+      //so there is no need to take care of it manually  
       fCache.Put(theTempVec);
       if (fVerbosity > 4)
 	G4cout << "Creating new instance of G4PhysicsFreeVector() on the worker" << G4endl;
@@ -781,10 +778,20 @@ G4double G4PenelopeBremsstrahlungFS::SampleGammaEnergy(G4double energy,const G4M
 	w1 = wbcut;
       if (w2 < w1)
 	{
-	  G4cout << "Warning in G4PenelopeBremsstrahlungFS::SampleX()" << G4endl;
-	  G4cout << "Conflicting end-point values: w1=" << w1 << "; w2 = " << w2 << G4endl;
-	  G4cout << "wbcut = " << wbcut << " energy= " << energy/keV << " keV" << G4endl;
-	  G4cout << "cut = " << cut/keV << " keV" << G4endl;
+	  //This configuration can happen if initially wbcut > w2 > w1. Due to the previous 
+	  //statement, (w1 = wbcut), it becomes wbcut = w1 > w2. In this case, it is not a 
+	  //real problem. It becomes a problem if w2 < w1 before the w1 = wbcut statement. Issue 
+	  //a warning only in this specific case.
+	  if (w2 > wbcut)
+	    {
+	      G4ExceptionDescription ed;
+	      ed << "Warning in G4PenelopeBremsstrahlungFS::SampleX()" << G4endl;
+	      ed << "Conflicting end-point values: w1=" << w1 << "; w2 = " << w2 << G4endl;
+	      ed << "wbcut = " << wbcut << " energy= " << energy/keV << " keV" << G4endl;
+	      ed << "cut = " << cut/keV << " keV" << G4endl;
+	      G4Exception("G4PenelopeBremsstrahlungFS::SampleGammaEnergy()","em2015",
+			  JustWarning,ed);
+	    }
 	  return w1*energy;
 	}
   

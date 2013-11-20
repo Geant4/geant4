@@ -55,7 +55,6 @@ class G4ParticleDefinition;
 class G4DynamicParticle;
 class G4MaterialCutsCouple;
 class G4Material;
-class G4PhysicsTable;
 class G4PenelopeOscillatorManager;
 class G4PenelopeCrossSection;
 class G4PenelopeBremsstrahlungFS;
