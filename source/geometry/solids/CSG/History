@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 20, 2013  T.Mikitina            geom-csg-V09-06-08
+- Fixed Coverity defects to USolids wrappers.
+
 November 14, 2013  T.Nikitina            geom-csg-V09-06-07
 - Corrections to G4U* wrappers to allow for visualization of parameterisations.
 

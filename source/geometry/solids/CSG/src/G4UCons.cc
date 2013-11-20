@@ -44,7 +44,7 @@ G4UCons::G4UCons( const G4String& pName,
                         G4double  pRmin2, G4double pRmax2,
                         G4double pDz,
                         G4double pSPhi, G4double pDPhi)
-  : G4USolid("Cons", new UCons(pName, pRmin1, pRmin2, pRmax1, pRmax2,
+  : G4USolid("Cons", new UCons(pName, pRmin1, pRmax1, pRmin2, pRmax2,
                                       pDz, pSPhi, pDPhi))
 {
 }
