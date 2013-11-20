@@ -303,10 +303,12 @@ private:
   QSignalMapper *signalMapperSurface;
 
   // quick map index to find next item
-  std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskFor;
+  std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskForIterator;
+  std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskForIteratorEnd;
 
   // quick map index to find next item
-  std::map <int, QTreeWidgetItem*>::const_iterator fOldLastSceneTreeWidgetAskFor;
+  std::map <int, QTreeWidgetItem*>::const_iterator fOldLastSceneTreeWidgetAskForIterator;
+  std::map <int, QTreeWidgetItem*>::const_iterator fOldLastSceneTreeWidgetAskForIteratorEnd;
 
 
 public Q_SLOTS :

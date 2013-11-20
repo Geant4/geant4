@@ -145,7 +145,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
     if (myParent != NULL) {
       glWidget->setParent(myParent);  
     }
-    QHBoxLayout *mainLayout = new QHBoxLayout(fGLWindow);
+    QHBoxLayout *mainLayout = new QHBoxLayout();
     
     mainLayout->setMargin(0);
     mainLayout->setSpacing(0);   
@@ -187,7 +187,8 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
 )
   :G4VViewer (scene, -1)
   ,G4OpenGLViewer (scene)
-  ,fWindow(0)
+  ,fWindow(NULL)
+  ,fGLWindow(NULL)
   ,fRecordFrameNumber(0)
   ,fContextMenu(0)
   ,fDeltaDepth(0.01)
@@ -2252,7 +2253,7 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
 
   QWidget* depthWidget = new QWidget();
   QGroupBox *groupBox = new QGroupBox(tr("Touchables slider"),depthWidget);
-  QHBoxLayout *groupBoxLayout = new QHBoxLayout(groupBox);
+  QHBoxLayout *groupBoxLayout = new QHBoxLayout();
 
   // reduce margins
   groupBoxLayout->setContentsMargins(5,5,5,5);
@@ -2261,7 +2262,7 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   zero->setText("Show all");          
   QLabel *one = new QLabel();
   one->setText("Hide all");
-  fSceneTreeDepthSlider = new QSlider ( Qt::Horizontal, groupBox);
+  fSceneTreeDepthSlider = new QSlider ( Qt::Horizontal);
   fSceneTreeDepthSlider->setMaximum (1000);
   fSceneTreeDepthSlider->setMinimum (0);
   fSceneTreeDepthSlider->setTickPosition(QSlider::TicksAbove);
@@ -2458,9 +2459,11 @@ QTreeWidgetItem* G4OpenGLQtViewer::createTreeWidgetItem(
   }
   QTreeWidgetItem * newItem = NULL;
   if (parentTreeNode == NULL) {
-    newItem = new QTreeWidgetItem(fSceneTreeComponentTreeWidget);
+    newItem = new QTreeWidgetItem();
+    fSceneTreeComponentTreeWidget->addTopLevelItem(newItem);
   } else {
     newItem = new QTreeWidgetItem(parentTreeNode);
+    fSceneTreeComponentTreeWidget->addTopLevelItem(parentTreeNode);
   }
 
 
@@ -2965,8 +2968,10 @@ bool G4OpenGLQtViewer::isTouchableVisible(int POindex){
   }
   
   // should be the next one
-  fLastSceneTreeWidgetAskFor++;
-
+  // Prevent to get out the std::map
+  if (fLastSceneTreeWidgetAskForIterator != fLastSceneTreeWidgetAskForIteratorEnd) {
+    fLastSceneTreeWidgetAskForIterator++;
+  }
   QTreeWidgetItem* item = getTreeWidgetItem(POindex);
   
   if (item != NULL) {
@@ -3011,7 +3016,6 @@ std::string G4OpenGLQtViewer::parseSceneTreeAndSaveState(){
     "/vis/viewer/set/autoRefresh true\n" +
     "/vis/verbose confirmations\n";
   }
-  printf("%s",commandLine.c_str());
   return commandLine;
 }
 
@@ -3435,7 +3439,8 @@ void G4OpenGLQtViewer::clearTreeWidget(){
       fPositivePoIndexSceneTreeWidgetQuickMap.clear();
 
       // put correct value in paramaters
-      fOldLastSceneTreeWidgetAskFor = fOldPositivePoIndexSceneTreeWidgetQuickMap.begin();
+      fOldLastSceneTreeWidgetAskForIterator = fOldPositivePoIndexSceneTreeWidgetQuickMap.begin();
+      fOldLastSceneTreeWidgetAskForIteratorEnd = fOldPositivePoIndexSceneTreeWidgetQuickMap.end();
       fSceneTreeDepth = 1;
       fModelShortNameItem = NULL;
       fMaxPOindexInserted = -1;
@@ -3508,7 +3513,8 @@ void G4OpenGLQtViewer::cloneSceneTree(
 
    if (i == fPositivePoIndexSceneTreeWidgetQuickMap.end()) {
      fPositivePoIndexSceneTreeWidgetQuickMap.insert(std::pair <int, QTreeWidgetItem*> (POindex,item) );
-     fLastSceneTreeWidgetAskFor = fPositivePoIndexSceneTreeWidgetQuickMap.end();
+     fLastSceneTreeWidgetAskForIterator = fPositivePoIndexSceneTreeWidgetQuickMap.end();
+     fLastSceneTreeWidgetAskForIteratorEnd = fPositivePoIndexSceneTreeWidgetQuickMap.end();
    } else {
      i->second = item;
    }
@@ -3552,17 +3558,18 @@ QTreeWidgetItem* G4OpenGLQtViewer::getTreeWidgetItem(int POindex){
     return NULL;
   }
 
-  if (POindex == fLastSceneTreeWidgetAskFor->first) {
-    if (fLastSceneTreeWidgetAskFor->second != NULL) {
-      return fLastSceneTreeWidgetAskFor->second;
+  if (POindex == fLastSceneTreeWidgetAskForIterator->first) {
+    if (fLastSceneTreeWidgetAskForIterator->second != NULL) {
+      return fLastSceneTreeWidgetAskForIterator->second;
     }
   }
   
   // if not, use the "find" algorithm
-  fLastSceneTreeWidgetAskFor = fPositivePoIndexSceneTreeWidgetQuickMap.find(POindex);
+  fLastSceneTreeWidgetAskForIterator = fPositivePoIndexSceneTreeWidgetQuickMap.find(POindex);
+  fLastSceneTreeWidgetAskForIteratorEnd = fPositivePoIndexSceneTreeWidgetQuickMap.end();
   
-  if (fLastSceneTreeWidgetAskFor != fPositivePoIndexSceneTreeWidgetQuickMap.end()) {
-    return fLastSceneTreeWidgetAskFor->second;
+  if (fLastSceneTreeWidgetAskForIterator != fPositivePoIndexSceneTreeWidgetQuickMap.end()) {
+    return fLastSceneTreeWidgetAskForIterator->second;
   }
   return NULL;
 }
@@ -3584,21 +3591,25 @@ QTreeWidgetItem* G4OpenGLQtViewer::getOldTreeWidgetItem(int POindex){
   }
 
   // Should be call only once by item addition
-  fOldLastSceneTreeWidgetAskFor++;
-
-  if (POindex == fOldLastSceneTreeWidgetAskFor->first) {
-    if (fOldLastSceneTreeWidgetAskFor->second != NULL) {
-      if (fOldLastSceneTreeWidgetAskFor != fOldPositivePoIndexSceneTreeWidgetQuickMap.end()) {
-        return fOldLastSceneTreeWidgetAskFor->second;
+  // Prevent to get out the std::map
+  if (fOldLastSceneTreeWidgetAskForIterator != fOldLastSceneTreeWidgetAskForIteratorEnd) {
+    fOldLastSceneTreeWidgetAskForIterator++;
+  }
+  
+  if (fOldLastSceneTreeWidgetAskForIterator != fOldPositivePoIndexSceneTreeWidgetQuickMap.end()) {
+    if (POindex == fOldLastSceneTreeWidgetAskForIterator->first) {
+      if (fOldLastSceneTreeWidgetAskForIterator->second != NULL) {
+        return fOldLastSceneTreeWidgetAskForIterator->second;
       }
     }
   }
   
   // if not, use the "find" algorithm
-  fOldLastSceneTreeWidgetAskFor = fOldPositivePoIndexSceneTreeWidgetQuickMap.find(POindex);
+  fOldLastSceneTreeWidgetAskForIterator = fOldPositivePoIndexSceneTreeWidgetQuickMap.find(POindex);
+  fOldLastSceneTreeWidgetAskForIteratorEnd = fOldPositivePoIndexSceneTreeWidgetQuickMap.end();
   
-  if (fOldLastSceneTreeWidgetAskFor != fOldPositivePoIndexSceneTreeWidgetQuickMap.end()) {
-    return fOldLastSceneTreeWidgetAskFor->second;
+  if (fOldLastSceneTreeWidgetAskForIterator != fOldPositivePoIndexSceneTreeWidgetQuickMap.end()) {
+    return fOldLastSceneTreeWidgetAskForIterator->second;
   }
   return NULL;
 }

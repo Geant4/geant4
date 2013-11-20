@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19th November 2013 Laurent Garnier (opengl-V09-06-10)
+- G4OpenGLQtViewer : 
+  o Best fix for JIRA DEV-62, thanks John.
+
+19th November 2013 Laurent Garnier
+- G4OpenGLQtViewer : 
+  o Remove a printf without #ifdef
+  o Fix a bug in the sceneTree viewer (probably JIRA DEV-62). A std::map iterator
+    was incremented without checking if it going outside the std::map or not.
+
+13th November 2013 Laurent Garnier
+- G4OpenGLQtViewer : Better solution implementation for layouts management (does not fix any problems)
+
 7th November 2013 Laurent Garnier (opengl-V09-06-09)
 - Better solution for JIRA-Dev28 problem, also fix text justification in Qt
 
