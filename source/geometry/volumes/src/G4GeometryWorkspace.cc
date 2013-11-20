@@ -41,8 +41,8 @@
 
 
 G4GeometryWorkspace::G4GeometryWorkspace()
+  : fVerbose(false)
 {
-  
   fpLogicalVolumeSIM=
       &const_cast<G4LVManager&>(G4LogicalVolume::GetSubInstanceManager());
   fpPhysicalVolumeSIM=

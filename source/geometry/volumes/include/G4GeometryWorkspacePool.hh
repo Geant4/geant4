@@ -71,13 +71,13 @@ class G4GeometryWorkspacePool
      ~G4GeometryWorkspacePool();
 
  private: 
-     G4GeometryWorkspacePool* thePool; 
+     static G4GeometryWorkspacePool* thePool;
 
      //void* fWarehouse;
      // G4GeometryWarehouse* fWarehouse;
      // This is "void" to hide the actual container type for workspaces
-     // Likely to be a simple STL contaier for MT or something better for tbb
-     // Likely to be template parameter with portable default
+     // Implementations: a simple STL contaier for MT or something better for tbb
+     // Further development: template parameter with portable default
 
      static G4ThreadLocal G4GeometryWorkspace*    fMyWorkspace;
      // The thread's workspace - if assigned.

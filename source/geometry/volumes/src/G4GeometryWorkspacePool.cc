@@ -35,11 +35,11 @@ namespace {
 }
 G4ThreadLocal G4GeometryWorkspace* G4GeometryWorkspacePool::fMyWorkspace=0;
 
-// static
+G4GeometryWorkspacePool* G4GeometryWorkspacePool::thePool=0;
+
 G4GeometryWorkspacePool* G4GeometryWorkspacePool::GetInstance()
 {
-    G4AutoLock l(&singletonM);
-   static G4GeometryWorkspacePool* thePool=0;
+   G4AutoLock l(&singletonM);
    if( !thePool ) thePool= new G4GeometryWorkspacePool();
    return thePool;
 }
@@ -117,7 +117,7 @@ void G4GeometryWorkspacePool::CleanUpAndDestroyAllWorkspaces()
 
 G4GeometryWorkspacePool::G4GeometryWorkspacePool()
 {
-//  fWarehouse=0;
+  //  fWarehouse=0;
 }
 
 G4GeometryWorkspacePool::~G4GeometryWorkspacePool()

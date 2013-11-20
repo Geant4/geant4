@@ -16,12 +16,17 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-November 8th, 2013 J.Apostolakis          - geomvol-V09-06-19
+November 19th, 2013 J.Apostolakis         - geomvol-V09-06-20
+- Fix(es) for issues identified by Coverity:
+   G4GeometryWorkspace: initialisation of data member.
+   G4GeometryWorkspacePool: fixed implementation of singleton.
+
+November  8th, 2013 J.Apostolakis         - geomvol-V09-06-19
 - Cleanup: reduced verbosity of G4GeometryWorkspace by making
    it optional.  
   Added Set/Get Verbose methods to toggle and view it.
 
-November 7th, 2013 J.Apostolakis          - geomvol-V09-06-18
+November  7th, 2013 J.Apostolakis         - geomvol-V09-06-18
 - Restored the ability to 'clone' Nested Parameterisations.
    This allows the use of Nested Parameterizations with MT.
    This precaution is not needed - 'good' user code will cope with 
@@ -29,7 +34,7 @@ November 7th, 2013 J.Apostolakis          - geomvol-V09-06-18
   Note: The restriction on parameterizations which use multiple types
    of solids remains. 
 
-November 1st, 2013 G.Cosmo                - geomvol-V09-06-17
+November  1st, 2013 G.Cosmo               - geomvol-V09-06-17
 - Restored use of G4EnhancedVecAllocator in G4NavigationHistory for
   sequential mode.
 
