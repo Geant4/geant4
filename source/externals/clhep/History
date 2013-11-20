@@ -18,7 +18,7 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 14 November 2013 - G.Cosmo
-- Updated to CLHEP-2.1.4.0:
+- Updated to CLHEP-2.1.4.1:
   * Random (L.Garren <garren@fnal.gov>):
     o Added RandGaussZiggurat and RandExpZiggurat distributions
       contributed by ATLAS.
