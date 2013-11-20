@@ -361,8 +361,10 @@ void G4MTRunManager::ConstructScoringWorlds()
     std::vector<G4VPhysicalVolume*>::iterator itrW
                    = G4TransportationManager::GetTransportationManager()->GetWorldsIterator();
     for(size_t iWorld=0;iWorld<nWorlds;iWorld++)
-    { addWorld(iWorld,*itrW); itrW++; }
-
+    {
+      addWorld(iWorld,*itrW); 
+      itrW++;
+    }
 }
 
 void G4MTRunManager::SetUserInitialization(G4UserWorkerInitialization* userInit)

@@ -96,6 +96,7 @@ class G4RunMessenger: public G4UImessenger
     G4UIcmdWithoutParameter *   abortEventCmd;
     G4UIcmdWithoutParameter *   initCmd;
     G4UIcmdWithoutParameter *   geomCmd;
+    G4UIcmdWithoutParameter *   geomRebCmd;
     G4UIcmdWithoutParameter *   physCmd;
     G4UIcmdWithAnInteger *      randEvtCmd;
 

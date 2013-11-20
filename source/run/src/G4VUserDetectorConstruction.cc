@@ -92,28 +92,20 @@ G4VUserParallelWorld* G4VUserDetectorConstruction::GetParallelWorld(G4int i) con
 
 void G4VUserDetectorConstruction::ConstructSDandField()
 {
-   G4RunManager::RMType rmtype = G4RunManager::GetRunManager()->GetRunManagerType();
-   if(rmtype != G4RunManager::sequentialRM)
-   {
-    G4cout 
-    << "User-derived detector construction class does not implement \n"
-    << "ConstructSDandFiled method: i.e. workers will not have SD and fields!\n"
-//    << "If user defined SD and Field classes implement cloning, you can\n"
-//    << "re-implement this method as:\n"
-//    << "void UserDerivedClass::ConstructSDandField() { CloneSD(); CloneF(); }\n"
-    << "The user can safely ignore this message if (s)he has no sensitive\n"
-    << "detector or field in her/his application." << G4endl;
-   }
+//   G4RunManager::RMType rmtype = G4RunManager::GetRunManager()->GetRunManagerType();
+//   if(rmtype != G4RunManager::sequentialRM)
+//   {
+//    G4cout 
+//    << "User-derived detector construction class does not implement \n"
+//    << "ConstructSDandFiled method: i.e. workers will not have SD and fields!\n"
+//    << "The user can safely ignore this message if (s)he has no sensitive\n"
+//    << "detector or field in her/his application." << G4endl;
+//   }
 }
 
 #include <map>
-//TODO: Evaluate if we want to delegate this functionality of cloning to the correc class (the G4FieldManager and/or G4LogicalVolume
-//      The issue is that it is G4LogicalVolume class that knows what are the data memebers that need to be cloned/prepared
 void G4VUserDetectorConstruction::CloneF()
 {
-    //TODO: For moment G4FieldManager is per thread variable (i.e. belongs to the splitted part
-    //of G4LogivalVolume. However we may want to review this and share G4FieldManager and have
-    //Thread private only the Field itself and the mutable parts
     typedef std::map<G4FieldManager*,G4FieldManager*> FMtoFMmap;
     typedef std::pair<G4FieldManager*,G4FieldManager*> FMpair;
     FMtoFMmap masterToWorker;
@@ -123,8 +115,6 @@ void G4VUserDetectorConstruction::CloneF()
     {
         G4LogicalVolume *g4LogicalVolume = *it;
         //Use shadow of master to get instance of FM
-        //TODO: understand logic with Xin
-        //TODO: use getter when available
         G4FieldManager* masterFM = 0;//g4LogicalVolume->fFieldManager;
         G4FieldManager* clonedFM = 0;
         if ( masterFM )
@@ -174,8 +164,6 @@ void G4VUserDetectorConstruction::CloneSD()
     {
         G4LogicalVolume *g4LogicalVolume = *it;
         //Use shadow of master to get the instance of SD
-        //TODO: understand logic with Xin
-        //TODO: use getter when available
         G4VSensitiveDetector* masterSD = 0;//g4LogicalVolume->fSensitiveDetector;
         G4VSensitiveDetector* clonedSD = 0;
         if ( masterSD )

@@ -118,6 +118,9 @@ class G4RunManagerKernel
     //  Set the application state to G4State_Idle so that the user can modify
     // physics/geometry.
 
+  public:
+    void WorkerUpdateWorldVolume();
+
   protected:
     void SetupDefaultRegion();
     //Called by DefineWorldVolume

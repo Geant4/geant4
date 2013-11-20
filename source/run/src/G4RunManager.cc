@@ -679,7 +679,6 @@ void G4RunManager::ConstructScoringWorlds()
     G4VPhysicalVolume* pWorld
        = G4TransportationManager::GetTransportationManager()
          ->IsWorldExisting(ScM->GetWorldName(iw));
-
     if(!pWorld)
     {
       pWorld = G4TransportationManager::GetTransportationManager()
@@ -819,5 +818,24 @@ void G4RunManager::SetUserAction(G4UserSteppingAction* userAction)
 {
   eventManager->SetUserAction(userAction);
   userSteppingAction = userAction;
+}
+
+void G4RunManager::GeometryHasBeenModified(G4bool prop)
+{
+  if(prop)
+  { G4UImanager::GetUIpointer()->ApplyCommand("/run/geometryModified"); }
+  else
+  { kernel->GeometryHasBeenModified(); }
+}
+
+void G4RunManager::GeometryNeedToBeRebuilt(G4bool prop)
+{
+  if(prop)
+  { G4UImanager::GetUIpointer()->ApplyCommand("/run/geometryNeedRebuild"); }
+  else
+  {
+    kernel->GeometryHasBeenModified();
+    geometryInitialized = false;
+  }
 }
 

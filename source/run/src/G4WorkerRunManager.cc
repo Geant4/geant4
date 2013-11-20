@@ -337,12 +337,15 @@ void G4WorkerRunManager::RunTermination()
 namespace { G4Mutex ConstructScoringWorldsMutex = G4MUTEX_INITIALIZER; }
 void G4WorkerRunManager::ConstructScoringWorlds()
 {
-    // Do the correct stuff ...
+    // Return if unnecessary
     G4ScoringManager* ScM = G4ScoringManager::GetScoringManagerIfExist();
     if(!ScM) return;
     G4int nPar = ScM->GetNumberOfMesh();
     if(nPar<1) return;
-    
+
+    // Update thread-local G4TransportationManager of all the world volumes
+    kernel->WorkerUpdateWorldVolume();
+
     G4ScoringManager* masterScM = G4MTRunManager::GetMasterScoringManager();
     assert( masterScM != NULL );
     
@@ -357,26 +360,14 @@ void G4WorkerRunManager::ConstructScoringWorlds()
          ->IsWorldExisting(ScM->GetWorldName(iw));
       if(!pWorld)
       {
-        G4AutoLock l(&ConstructScoringWorldsMutex);
-        G4MTRunManager* mRM = G4MTRunManager::GetMasterRunManager();
-        G4MTRunManager::masterWorlds_t masterWorlds= mRM->GetMasterWorlds();
-        G4MTRunManager::masterWorlds_t::iterator itrMW = masterWorlds.begin();
-        for(;itrMW!=masterWorlds.end();itrMW++)
-        {
-          if((*itrMW).second->GetName()==ScM->GetWorldName(iw))
-          {
-            pWorld = (*itrMW).second;
-            G4TransportationManager::GetTransportationManager()->RegisterWorld(pWorld);
-            break;
-          }
-        }
-        if(!pWorld)
-        {
-          G4ExceptionDescription ed;
-          ed<<"Mesh name <"<<ScM->GetWorldName(iw)<<"> is not found in the masther thread.";
-          G4Exception("G4WorkerRunManager::ConstructScoringWorlds()","RUN79001",
+        G4ExceptionDescription ed;
+        ed<<"Mesh name <"<<ScM->GetWorldName(iw)<<"> is not found in the masther thread.";
+        G4Exception("G4WorkerRunManager::ConstructScoringWorlds()","RUN79001",
                       FatalException,ed);
-        }
+      }
+      if(!(mesh->GetMeshElementLogical()))
+      {
+        G4AutoLock l(&ConstructScoringWorldsMutex);
         G4VScoringMesh* masterMesh = masterScM->GetMesh(iw);
         mesh->SetMeshElementLogical(masterMesh->GetMeshElementLogical());
         l.unlock();

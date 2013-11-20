@@ -77,21 +77,53 @@ namespace {
     G4Mutex rngCreateMutex = G4MUTEX_INITIALIZER;
 }
 
+#include "globals.hh"
+
 void G4UserWorkerThreadInitialization::SetupRNGEngine(const CLHEP::HepRandomEngine* aNewRNG) const
 {
     //No default available, let's create the instance of random stuff
     //A Call to this just forces the creation to defaults
     G4Random::getTheEngine();
     //Poor man's solution to check which RNG Engine is used in master thread
+    CLHEP::HepRandomEngine* retRNG= 0;
+
     // Need to make these calls thread safe
     G4AutoLock l(&rngCreateMutex);
-    if ( dynamic_cast<const CLHEP::HepJamesRandom*>(aNewRNG) ) { G4Random::setTheEngine(new CLHEP::HepJamesRandom); return; }
-    if ( dynamic_cast<const CLHEP::RanecuEngine*>(aNewRNG) ) { G4Random::setTheEngine(new CLHEP::RanecuEngine); return; }
-    if ( dynamic_cast<const CLHEP::Ranlux64Engine*>(aNewRNG) ) { G4Random::setTheEngine(new CLHEP::Ranlux64Engine); return; }
-    if ( dynamic_cast<const CLHEP::MTwistEngine*>(aNewRNG) ) { G4Random::setTheEngine(new CLHEP::MTwistEngine); return; }
-    if ( dynamic_cast<const CLHEP::DualRand*>(aNewRNG) ) { G4Random::setTheEngine(new CLHEP::DualRand); return; }
-    if ( dynamic_cast<const CLHEP::RanluxEngine*>(aNewRNG) ) { G4Random::setTheEngine(new CLHEP::RanluxEngine); return;}
-    if ( dynamic_cast<const CLHEP::RanshiEngine*>(aNewRNG) ) { G4Random::setTheEngine(new CLHEP::RanshiEngine); return; }
+    if ( dynamic_cast<const CLHEP::HepJamesRandom*>(aNewRNG) ) {
+       retRNG= new CLHEP::HepJamesRandom;
+    }
+    if ( dynamic_cast<const CLHEP::RanecuEngine*>(aNewRNG) ) {
+       retRNG= new CLHEP::RanecuEngine;
+    }
+    if ( dynamic_cast<const CLHEP::Ranlux64Engine*>(aNewRNG) ) {
+       retRNG= new CLHEP::Ranlux64Engine;
+    }
+    if ( dynamic_cast<const CLHEP::MTwistEngine*>(aNewRNG) ) {
+       retRNG= new CLHEP::MTwistEngine;
+    }
+    if ( dynamic_cast<const CLHEP::DualRand*>(aNewRNG) ) {
+       retRNG= new CLHEP::DualRand;
+    }
+    if ( dynamic_cast<const CLHEP::RanluxEngine*>(aNewRNG) ) {
+       retRNG= new CLHEP::RanluxEngine;
+    }
+    if ( dynamic_cast<const CLHEP::RanshiEngine*>(aNewRNG) ) {
+       retRNG= new CLHEP::RanshiEngine;
+    }
+  
+    if( retRNG != 0 ) {
+       G4Random::setTheEngine( retRNG );
+    }else{
+        // Does a new method, such as aNewRng->newEngine() exist to clone it ?
+        G4ExceptionDescription msg;
+        msg<< " Unknown type of RNG Engine - " << G4endl
+           << " Can cope only with HepJamesRandom, Ranecu, Ranlux64, MTwistEngine, DualRand, Ranlux or Ranshi."
+           << G4endl
+           << " Cannot clone this type of RNG engine, as required for this thread" << G4endl
+           << " Aborting " << G4endl;
+        G4Exception("G4UserWorkerInitializition::SetupRNGEngine()",
+                    "Run10099",FatalException,msg);
+    }
 }
 
 G4WorkerRunManager* G4UserWorkerThreadInitialization::CreateWorkerRunManager() const

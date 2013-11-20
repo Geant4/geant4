@@ -303,6 +303,23 @@ G4RunManagerKernel::~G4RunManagerKernel()
   fRunManagerKernel = 0;
 }
 
+void G4RunManagerKernel::WorkerUpdateWorldVolume()
+{
+  G4MTRunManager* masterRM = G4MTRunManager::GetMasterRunManager();
+  G4TransportationManager* transM = G4TransportationManager::GetTransportationManager();
+  G4MTRunManager::masterWorlds_t masterWorlds= masterRM->GetMasterWorlds();
+  G4MTRunManager::masterWorlds_t::iterator itrMW = masterWorlds.begin();
+  for(;itrMW!=masterWorlds.end();itrMW++)
+  {
+    G4VPhysicalVolume* wv = (*itrMW).second;
+    G4VPhysicalVolume* pWorld
+       = G4TransportationManager::GetTransportationManager()
+         ->IsWorldExisting(wv->GetName());
+    if(!pWorld)
+    { transM->RegisterWorld(wv); }
+  }
+}
+
 void G4RunManagerKernel::WorkerDefineWorldVolume(G4VPhysicalVolume* worldVol,
                                      G4bool topologyIsChanged)
 {
@@ -335,10 +352,10 @@ void G4RunManagerKernel::WorkerDefineWorldVolume(G4VPhysicalVolume* worldVol,
       }
       transM->SetWorldForTracking((*itrMW).second);
     }
-    ////else
-    ////{
-    ////  transM->RegisterWorld((*itrMW).second);
-    ////}
+    else
+    {
+      transM->RegisterWorld((*itrMW).second);
+    }
   }
 
   if(topologyIsChanged) geometryNeedsToBeClosed = true;
@@ -352,7 +369,7 @@ void G4RunManagerKernel::WorkerDefineWorldVolume(G4VPhysicalVolume* worldVol,
 
   geometryInitialized = true;
   if(physicsInitialized && currentState!=G4State_Idle)
-    { stateManager->SetNewState(G4State_Idle); }
+  { stateManager->SetNewState(G4State_Idle); }
 }
 
 void G4RunManagerKernel::DefineWorldVolume(G4VPhysicalVolume* worldVol,

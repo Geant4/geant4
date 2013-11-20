@@ -434,12 +434,18 @@ public: // with description
     inline G4bool GetRandomNumberStorePerEvent() const
     { return rngStatusEventsFlag; }
   public: // with description
-    inline void GeometryHasBeenModified()
-    { kernel->GeometryHasBeenModified(); }
+    void GeometryHasBeenModified(G4bool prop=true);
     //  This method must be invoked (or equivalent UI command can be used)
     // in case the user changes his/her detector geometry after
-    // Initialize() metho has been invoked. Then, at the begining of the next BeamOn(),
-    // all necessary re-initialization will be done.
+    // Initialize() method has been invoked. Then, at the begining of the next BeamOn(),
+    // all necessary re-voxelization will be done.
+    //  The parameter "prop" has to be true if this C++ method is directly invoked.
+
+    void GeometryNeedToBeRebuilt(G4bool prop=true);
+    //  This method must be invoked (or equivalent UI command can be used)
+    // in case the user needs his/her detector construction has to be
+    // re-invoked. Re-voxelization will be also done.
+    //  The parameter "prop" has to be true if this C++ method is directly invoked.
 
     inline void PhysicsHasBeenModified()
     { kernel->PhysicsHasBeenModified(); }
