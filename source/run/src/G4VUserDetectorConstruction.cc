@@ -179,8 +179,11 @@ void G4VUserDetectorConstruction::CloneSD()
                     catch (...)
                     {
                         G4ExceptionDescription msg;
-                        msg << "Cloning of G4VSensitiveDetector requested for:"<<masterSD->GetName()<<" (full path name: "<<masterSD->GetFullPathName()<<")."
-                        << " But derived class does not implement cloning. Cannot continue.";
+                        msg << "Cloning of G4VSensitiveDetector requested for:" << masterSD->GetName() << "\n"
+#ifndef WIN32
+						    << " (full path name: " << masterSD->GetFullPathName() << ").\n"
+#endif
+                            << " But derived class does not implement cloning. Cannot continue.";
                         G4Exception("G4VUserDetectorConstruction::CloneSD", "Run0053", FatalException,msg);
                     }
 

@@ -45,7 +45,11 @@ G4Thread* G4UserWorkerThreadInitialization::CreateAndStartWorker(G4WorkerThread*
     //Note: this method is called by G4MTRunManager, here we are still sequential
     //Create a new thread/worker structure
     G4Thread* worker = new G4Thread;
-    G4THREADCREATE(worker,&G4MTRunManagerKernel::StartThread , wTC );
+#ifdef WIN32
+    G4THREADCREATE(worker, (LPTHREAD_START_ROUTINE)&G4MTRunManagerKernel::StartThread , wTC );
+#else
+    G4THREADCREATE(worker, &G4MTRunManagerKernel::StartThread , wTC );
+#endif
     return worker;
 }
 #else

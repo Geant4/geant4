@@ -663,10 +663,13 @@ void G4MTRunManager::WaitForReadyWorkers()
             break;
         }
         //Wait for the number of workers to be changed
+#ifdef WIN32
+        G4CONDITIONWAIT(&numWorkersBeginEventLoopChangeCondition,
+                        &cs1);
+        LeaveCriticalSection( &cs1 );
+#else
         G4CONDITIONWAIT(&numWorkersBeginEventLoopChangeCondition,
                         &numberOfReadyWorkersMutex);
-#ifdef WIN32
-        LeaveCriticalSection( &cs1 );
 #endif
     }
     //Now number of workers is as expected.
@@ -711,9 +714,11 @@ void G4MTRunManager::ThisWorkerReady()
     //Signal the number of workers has changed
     G4CONDTIONBROADCAST(&numWorkersBeginEventLoopChangeCondition);
     //Wait for condition to start eventloop
-    G4CONDITIONWAIT(&beginEventLoopCondition,&numberOfReadyWorkersMutex);
 #ifdef WIN32
+    G4CONDITIONWAIT(&beginEventLoopCondition,&cs1);
     LeaveCriticalSection( &cs1 );
+#else
+    G4CONDITIONWAIT(&beginEventLoopCondition,&numberOfReadyWorkersMutex);
 #endif
     //Protects access to shared resource, guarantees we do not call this method
     //while someone else is modifying its content (e.g. creating a new particle)
@@ -741,10 +746,13 @@ void G4MTRunManager::WaitForEndEventLoopWorkers()
         {
             break;
         }
+#ifdef WIN32
+        G4CONDITIONWAIT(&numWorkersEndEventLoopChangedCondition,
+                        &cs2);
+        LeaveCriticalSection( &cs2 );
+#else
         G4CONDITIONWAIT(&numWorkersEndEventLoopChangedCondition,
                         &numberOfEndOfEventLoopWorkersMutex);
-#ifdef WIN32
-        LeaveCriticalSection( &cs2 );
 #endif
     }
     //Now number of workers that reached end of event loop is as expected
@@ -768,9 +776,11 @@ void G4MTRunManager::ThisWorkerEndEventLoop()
     //Signale this number has changed
     G4CONDTIONBROADCAST(&numWorkersEndEventLoopChangedCondition);
     //Wait for condition to exit eventloop
-    G4CONDITIONWAIT(&endEventLoopCondition,&numberOfEndOfEventLoopWorkersMutex);
 #ifdef WIN32
+    G4CONDITIONWAIT(&endEventLoopCondition,&cs2);
     LeaveCriticalSection( &cs2 );
+#else
+    G4CONDITIONWAIT(&endEventLoopCondition,&numberOfEndOfEventLoopWorkersMutex);
 #endif
 }
 
@@ -792,10 +802,13 @@ void G4MTRunManager::NewActionRequest(G4MTRunManager::WorkerActionRequest newReq
 	break;
     }
     //Wait for the number of workers ready for new action to change
+#ifdef WIN32
+    G4CONDITIONWAIT(&numberOfReadyWorkersForNewActionChangedCondition,
+		    &cs3);
+    LeaveCriticalSection( &cs3 );
+#else
     G4CONDITIONWAIT(&numberOfReadyWorkersForNewActionChangedCondition,
 		    &numberOfReadyWorkersForNewActionMutex);
-#ifdef WIN32
-    LeaveCriticalSection( &cs3 );
 #endif 
   }
   //Now set the new action to the shared resource
@@ -825,9 +838,11 @@ G4MTRunManager::WorkerActionRequest G4MTRunManager::ThisWorkerWaitForNextAction(
   //Singal the sahred resource has changed to the master
   G4CONDTIONBROADCAST(&numberOfReadyWorkersForNewActionChangedCondition);
   //Wait for condition that a new aciton is ready
-  G4CONDITIONWAIT(&requestChangeActionForWorker,&numberOfReadyWorkersForNewActionMutex);
 #ifdef WIN32
+  G4CONDITIONWAIT(&requestChangeActionForWorker,&cs3);
   LeaveCriticalSection( &cs3 );
+#else
+  G4CONDITIONWAIT(&requestChangeActionForWorker,&numberOfReadyWorkersForNewActionMutex);
 #endif 
   //Ok, if I am here it means that a new action has been requested by the master
   //reads it value that is now read-only, so no mutex is needed, but you never know...
