@@ -68,6 +68,7 @@ G4NuclearLevelManager::G4NuclearLevelManager(G4int Z, G4int A,
     throw G4HadronicException(__FILE__, __LINE__, 
 			      "==== G4NuclearLevelManager ==== (Z,A) <0, or Z>A");
   }
+  for(G4int i=0; i<30; ++i) { buffer[i] = 0; }
   MakeLevels();
 }
 
@@ -188,8 +189,14 @@ G4bool G4NuclearLevelManager::ReadDataLine(std::ifstream& dataFile) {
 G4bool 
 G4NuclearLevelManager::ReadDataItem(std::istream& dataFile, G4double& x) 
 {
-  dataFile >> x;  
-  return !dataFile.fail();
+  // G4bool okay = (dataFile >> buffer) != 0;		// Get next token
+  // if (okay) x = strtod(buffer, NULL);
+  G4bool okay = true;
+  dataFile >> buffer;
+  if(dataFile.fail()) { okay = false; }
+  else { x = strtod(buffer, NULL); }
+
+  return okay;
 }
 
 void G4NuclearLevelManager::ProcessDataLine() 

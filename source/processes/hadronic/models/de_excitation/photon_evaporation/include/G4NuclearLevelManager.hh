@@ -116,6 +116,7 @@ private:
   G4PtrLevelVector* _levels;
 
   // Buffers for reading data file
+  char buffer[30];		// For doubles in scientific notation
   G4double _levelEnergy;
   G4double _gammaEnergy;
   G4double _probability;

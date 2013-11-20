@@ -132,12 +132,14 @@ G4bool G4LevelReader::Read(std::ifstream& dataFile)
 G4bool 
 G4LevelReader::ReadDataItem(std::istream& dataFile, G4double& x) 
 {
-  dataFile >> x;		
-  // G4bool okay = (dataFile >> buffer) !=0;		// Get next token
+  // G4bool okay = (dataFile >> buffer) != 0;		// Get next token
   // if (okay) x = strtod(buffer, NULL);
+  G4bool okay = true;
+  dataFile >> buffer;
+  if(dataFile.fail()) { okay = false; }
+  else { x = strtod(buffer, NULL); }
 
-  // return okay;
-  return !dataFile.fail();
+  return okay;
 }
 
 void G4LevelReader::MakeNewLevel(std::vector<G4NucLevel*>* levels)
