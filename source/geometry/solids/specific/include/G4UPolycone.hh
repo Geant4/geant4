@@ -94,7 +94,7 @@ class G4UPolycone : public G4USolid
       // persistifiable objects.
 
     G4UPolycone( const G4UPolycone &source );
-    const G4UPolycone &operator=( const G4UPolycone &source );
+    G4UPolycone &operator=( const G4UPolycone &source );
       // Copy constructor and assignment operator.
     G4Polyhedron* CreatePolyhedron() const;
     

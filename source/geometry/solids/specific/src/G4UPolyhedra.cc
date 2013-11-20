@@ -107,7 +107,7 @@ G4UPolyhedra::G4UPolyhedra( const G4UPolyhedra &source )
 //
 // Assignment operator
 //
-const G4UPolyhedra& G4UPolyhedra::operator=( const G4UPolyhedra &source )
+G4UPolyhedra& G4UPolyhedra::operator=( const G4UPolyhedra &source )
 {
   if (this == &source) return *this;
 

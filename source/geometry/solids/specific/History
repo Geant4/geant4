@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-Nov-2013  T.Mikitina            (geom-specific-V09-06-33)
+- Fixed Coverity defects to USolids wrappers.
+
 14-Nov-2013  G.Cosmo               (geom-specific-V09-06-32, 31)
 - Enabled use of Reset() in G4UPolycone.
 - Corrections to G4UPolycone and G4UPolyhedra to allow for visualization

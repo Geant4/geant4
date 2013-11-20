@@ -76,7 +76,7 @@ class G4UGenericPolycone : public G4USolid
       // persistifiable objects.
 
     G4UGenericPolycone( const G4UGenericPolycone& source );
-    const G4UGenericPolycone &operator=(const G4UGenericPolycone& source);
+    G4UGenericPolycone &operator=(const G4UGenericPolycone& source);
       // Copy constructor and assignment operator.
     G4Polyhedron* CreatePolyhedron() const;
 };

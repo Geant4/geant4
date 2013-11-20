@@ -100,7 +100,7 @@ G4UPolycone::G4UPolycone( const G4UPolycone &source )
 //
 // Assignment operator
 //
-const G4UPolycone &G4UPolycone::operator=( const G4UPolycone &source )
+G4UPolycone &G4UPolycone::operator=( const G4UPolycone &source )
 {
   if (this == &source) return *this;
   

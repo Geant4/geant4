@@ -86,7 +86,7 @@ G4UGenericPolycone::G4UGenericPolycone(const G4UGenericPolycone &source)
 //
 // Assignment operator
 //
-const G4UGenericPolycone&
+G4UGenericPolycone&
 G4UGenericPolycone::operator=(const G4UGenericPolycone &source)
 {
   if (this == &source) return *this;

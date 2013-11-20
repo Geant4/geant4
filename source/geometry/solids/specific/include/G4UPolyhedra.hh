@@ -100,7 +100,7 @@ class G4UPolyhedra : public G4USolid
       // persistifiable objects.
 
     G4UPolyhedra( const G4UPolyhedra &source );
-    const G4UPolyhedra &operator=( const G4UPolyhedra &source );
+    G4UPolyhedra &operator=( const G4UPolyhedra &source );
       // Copy constructor and assignment operator.
     G4Polyhedron* CreatePolyhedron() const;
 };
