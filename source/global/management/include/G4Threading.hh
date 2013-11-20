@@ -119,7 +119,9 @@
     DWORD /*WINAPI*/ G4WaitForSingleObjectInf( __in G4Mutex m );
     #define G4MUTEXLOCK G4WaitForSingleObjectInf
 
-    #define G4MUTEXINIT(mutex) InitializeCriticalSection( &mutex );
+    // #define G4MUTEXINIT(mutex) InitializeCriticalSection( &mutex );
+    #define G4MUTEXINIT(mutex);
+
     // Not clear why following two lines are needed...
     //
     BOOL G4ReleaseMutex( __in G4Mutex m);

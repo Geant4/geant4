@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 20, 2013 G.Cosmo      (global-V09-06-81)
+- Patched definition of G4MUTEXINIT() for Windows in G4Threading.hh
+  to allow for compilation.
+
 October 30, 2013 G.Cosmo       (global-V09-06-80)
 - Moved G4Poisson to inline on suggestion by K.Genser.
 - Updated dates and tag-ID for release 10.0.
