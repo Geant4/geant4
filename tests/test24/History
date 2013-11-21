@@ -12,6 +12,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 November 2013 Gunter Folger  (test24-V09-06-04)
+--------------------------------------------------
+- set initial material to G4_Pb, Pb is not defined.
+
 22 October 2013  Dennis Wright  (test24-V09-06-03)
 --------------------------------------------------
 - remove unused LEP header

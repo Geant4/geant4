@@ -46,7 +46,7 @@ Tst24DetectorConstruction::Tst24DetectorConstruction()
 :simpleBoxLog(0),selectedMaterial(0),theH(0),theSi(0),theCu(0),theU(0)
 {
   detectorMessenger = new Tst24DetectorMessenger(this);
-  materialChoice = "Pb";
+  materialChoice = "G4_Pb";
 }
 
 Tst24DetectorConstruction::~Tst24DetectorConstruction()
