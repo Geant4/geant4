@@ -43,15 +43,8 @@
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
-#include "G4UniformMagField.hh"
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
 #include "G4RunManager.hh"
-
-#include "G4GeometryManager.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4LogicalVolumeStore.hh"
-#include "G4SolidStore.hh"
+#include "G4AutoDelete.hh"
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -60,9 +53,9 @@
 
 F02DetectorConstruction::F02DetectorConstruction()
  : G4VUserDetectorConstruction(),
+   fDetectorMessenger(0),
    fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0),
    fSolidAbsorber(0),fLogicAbsorber(0), fPhysiAbsorber(0),
-   fDetectorMessenger(0), fCalorimeterSD(0),
    fAbsorberMaterial(0), fAbsorberThickness(0.), fAbsorberRadius(0.),
    fWorldChanged(false), fZAbsorber(0.), fZStartAbs(0.), fZEndAbs(0.),
    fWorldMaterial(0), fWorldSizeR(0.), fWorldSizeZ(0.)
@@ -92,7 +85,6 @@ F02DetectorConstruction::F02DetectorConstruction()
 F02DetectorConstruction::~F02DetectorConstruction()
 {
   delete fDetectorMessenger;
-  if (fEmFieldSetup) delete fEmFieldSetup;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -227,16 +219,6 @@ G4VPhysicalVolume* F02DetectorConstruction::ConstructCalorimeter()
   ComputeCalorParameters();
   PrintCalorParameters();
  
-  // Cleanup old geometry
-
-  if (fPhysiWorld)
-  {
-    G4GeometryManager::GetInstance()->OpenGeometry();
-    G4PhysicalVolumeStore::GetInstance()->Clean();
-    G4LogicalVolumeStore::GetInstance()->Clean();
-    G4SolidStore::GetInstance()->Clean();
-  }
-
   // World
 
   fSolidWorld = new G4Tubs("World",                        // its name
@@ -310,6 +292,7 @@ void F02DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
         {
           fAbsorberMaterial = material;
           fLogicAbsorber->SetMaterial(material);
+          G4RunManager::GetRunManager()->PhysicsHasBeenModified();
         }
    }
 }
@@ -329,6 +312,7 @@ void F02DetectorConstruction::SetWorldMaterial(G4String materialChoice)
         {
           fWorldMaterial = material;
           fLogicWorld->SetMaterial(material);
+          G4RunManager::GetRunManager()->PhysicsHasBeenModified();
         }
    }
 }
@@ -340,6 +324,7 @@ void F02DetectorConstruction::SetAbsorberThickness(G4double val)
   // change Absorber thickness and recompute the calorimeter parameters
   fAbsorberThickness = val;
   ComputeCalorParameters();
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -349,6 +334,7 @@ void F02DetectorConstruction::SetAbsorberRadius(G4double val)
   // change the transverse size and recompute the calorimeter parameters
   fAbsorberRadius = val;
   ComputeCalorParameters();
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -358,6 +344,7 @@ void F02DetectorConstruction::SetWorldSizeZ(G4double val)
   fWorldChanged = true;
   fWorldSizeZ = val;
   ComputeCalorParameters();
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -367,6 +354,7 @@ void F02DetectorConstruction::SetWorldSizeR(G4double val)
   fWorldChanged = true;
   fWorldSizeR = val;
   ComputeCalorParameters();
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -375,29 +363,28 @@ void F02DetectorConstruction::SetAbsorberZpos(G4double val)
 {
   fZAbsorber = val;
   ComputeCalorParameters();
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4ThreadLocal F02ElectricFieldSetup* F02DetectorConstruction::fEmFieldSetup = 0;
 
 void F02DetectorConstruction::ConstructSDandField()
 {
   // Sensitive Detectors: Absorber
 
-  fCalorimeterSD = new F02CalorimeterSD("CalorSD",this);
-  SetSensitiveDetector(fLogicAbsorber, fCalorimeterSD);
+  if (!fCalorimeterSD.Get()) {
+    F02CalorimeterSD* calorimeterSD = new F02CalorimeterSD("CalorSD",this);
+    SetSensitiveDetector(fLogicAbsorber, calorimeterSD);
+    fCalorimeterSD.Put(calorimeterSD);
+  }  
 
   // Construct the field creator - this will register the field it creates
 
-  if (!fEmFieldSetup) fEmFieldSetup = new F02ElectricFieldSetup();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-  
-void F02DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
+  if (!fEmFieldSetup.Get()) { 
+    F02ElectricFieldSetup* fieldSetup = new F02ElectricFieldSetup();
+    G4AutoDelete::Register(fieldSetup); //Kernel will delete the messenger
+    fEmFieldSetup.Put(fieldSetup);
+  }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

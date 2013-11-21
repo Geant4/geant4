@@ -114,10 +114,11 @@ F02ElectricFieldSetup::F02ElectricFieldSetup(G4ThreeVector fieldVector)
 
 F02ElectricFieldSetup::~F02ElectricFieldSetup()
 {
-  if (fChordFinder) delete fChordFinder;
-  if (fStepper)     delete fStepper;
-  if (fEquation)    delete fEquation;
-  if (fEMfield)     delete fEMfield;
+  delete fChordFinder;
+  delete fStepper;
+  delete fEquation;
+  delete fEMfield;
+  delete fFieldMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
