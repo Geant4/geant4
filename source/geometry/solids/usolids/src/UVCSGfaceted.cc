@@ -31,7 +31,7 @@ using namespace std;
 UVCSGfaceted::UVCSGfaceted(const std::string& name)
   : VUSolid(name),
     numFace(0), faces(0), fCubicVolume(0.), fSurfaceArea(0.),
-    fMaxSection(0.),fBoxShift(0.), fNoVoxels(true),fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.)
+    fMaxSection(0),fBoxShift(0.), fNoVoxels(true),fStatistics(1000000), fCubVolEpsilon(0.001), fAreaAccuracy(-1.)
 {
 }
 
