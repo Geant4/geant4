@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 20th, 2013, M. Asai (run-V09-06-128)
+- Rename G4RunManager::GeometryNeedToBeRebuilt() to
+  G4RunManager::ReinitializeGeometry() to avoid confusion.
+
 Nov 20th, 2013, G. Cosmo (run-V09-06-127)
 - Fixes to G4MTRunManger, G4UserWorkerThreadInitialisation and
   G4VUserDetectorConstruction to allow for compilation on Windows

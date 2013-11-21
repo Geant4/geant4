@@ -171,17 +171,16 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   abortEventCmd->AvailableForStates(G4State_EventProc);
 
   geomCmd = new G4UIcmdWithoutParameter("/run/geometryModified",this);
-  geomCmd->SetGuidance("Force geometry to be closed again.");
-  geomCmd->SetGuidance("This command must be applied");
-  geomCmd->SetGuidance(" if geometry has been modified after the");
-  geomCmd->SetGuidance(" first initialization (or BeamOn).");
+  geomCmd->SetGuidance("Force geometry to be closed (re-voxellized) again.");
+  geomCmd->SetGuidance("This command must be applied if geometry has been modified");
+  geomCmd->SetGuidance(" after the first initialization (or BeamOn).");
   geomCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  geomRebCmd = new G4UIcmdWithoutParameter("/run/geometryNeedRebuild",this);
-  geomRebCmd->SetGuidance("Force geometry to be rebuilt again.");
-  geomRebCmd->SetGuidance("This command must be applied");
-  geomRebCmd->SetGuidance(" if the user needs his/her detector construction");
-  geomRebCmd->SetGuidance(" to be reinvoked.");
+  geomRebCmd = new G4UIcmdWithoutParameter("/run/reinitializeGeometry",this);
+  geomRebCmd->SetGuidance("Force geometry to be rebuilt once again.");
+  geomRebCmd->SetGuidance("This command must be applied if the user needs his/her");
+  geomRebCmd->SetGuidance(" detector construction to be reinvoked.");
+  geomRebCmd->SetGuidance("/run/geometryModified is automatically issued with this command.");
   geomRebCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   physCmd = new G4UIcmdWithoutParameter("/run/physicsModified",this);
@@ -378,10 +377,9 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   else if( command==geomCmd )
   { runManager->GeometryHasBeenModified(false); }
   else if( command==geomRebCmd )
-  { runManager->GeometryNeedToBeRebuilt(false); }
+  { runManager->ReinitializeGeometry(false); }
   else if( command==physCmd )
   { runManager->PhysicsHasBeenModified(); }
- 
   else if( command==seedCmd )
   {
     G4Tokenizer next(newValue);

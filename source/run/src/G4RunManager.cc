@@ -828,10 +828,10 @@ void G4RunManager::GeometryHasBeenModified(G4bool prop)
   { kernel->GeometryHasBeenModified(); }
 }
 
-void G4RunManager::GeometryNeedToBeRebuilt(G4bool prop)
+void G4RunManager::ReinitializeGeometry(G4bool prop)
 {
   if(prop)
-  { G4UImanager::GetUIpointer()->ApplyCommand("/run/geometryNeedRebuild"); }
+  { G4UImanager::GetUIpointer()->ApplyCommand("/run/reinitializeGeometry"); }
   else
   {
     kernel->GeometryHasBeenModified();
