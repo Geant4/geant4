@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-05-13 V.Ivant (testem8-V09-06-03)
+- PhysicsList - substituted obsolete G4PAIPhotonMOdel by G4PAIPhotModel 
+
 08-05-13 V.Ivant (testem8-V09-06-02)
 - PhysicsList - fixed typo in PhysicsList::SetCutForProton
 

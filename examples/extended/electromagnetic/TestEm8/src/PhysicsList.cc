@@ -55,7 +55,7 @@
 #include "G4DecayPhysics.hh"
 
 #include "G4PAIModel.hh"
-#include "G4PAIPhotonModel.hh"
+#include "G4PAIPhotModel.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -129,7 +129,8 @@ void PhysicsList::ConstructProcess()
   AddTransportation();
   fEmPhysicsList->ConstructProcess();
   fDecayPhysicsList->ConstructProcess();
-  for(size_t i=0; i<fHadronPhys.size(); ++i) { fHadronPhys[i]->ConstructProcess(); }
+  for(size_t i=0; i<fHadronPhys.size(); ++i) { 
+    fHadronPhys[i]->ConstructProcess(); }
   AddStepMax();
 }
 
@@ -307,7 +308,7 @@ void PhysicsList::NewPAIModel(const G4ParticleDefinition* part,
     fConfig->SetExtraEmModel(partname,procname,pai,"GasDetector",
                               0.0,100.*TeV,pai);
   } else if(modname == "pai_photon") {
-    G4PAIPhotonModel* pai = new G4PAIPhotonModel(part,"PAIPhotModel");
+    G4PAIPhotModel* pai = new G4PAIPhotModel(part,"PAIPhotModel");
     fConfig->SetExtraEmModel(partname,procname,pai,"GasDetector",
                               0.0,100.*TeV,pai);
   }
