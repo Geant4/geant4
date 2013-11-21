@@ -37,6 +37,7 @@
 #define F01DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
+#include "G4Cache.hh"
 
 class G4Box;
 class G4Tubs;
@@ -74,8 +75,6 @@ class F01DetectorConstruction : public G4VUserDetectorConstruction
      virtual G4VPhysicalVolume* Construct();
      virtual void ConstructSDandField();
 
-     void UpdateGeometry();
-
   public:
 
      void PrintCalorParameters();
@@ -97,6 +96,10 @@ class F01DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume* GetLogicalAbsorber()    {return fLogicAbsorber;}
 
   private:
+     F01DetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
+     G4Cache<F01CalorimeterSD*> fCalorimeterSD; // pointer to the sensitive detector
+     G4Cache<F01FieldSetup*>    fEmFieldSetup;
+
 
      G4Tubs*            fSolidWorld;     // pointer to the solid World
      G4LogicalVolume*   fLogicWorld;     // pointer to the logical World
@@ -106,13 +109,9 @@ class F01DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume*   fLogicAbsorber;  // pointer to the logical Absorber
      G4VPhysicalVolume* fPhysiAbsorber;  // pointer to the physical Absorber
  
-     F01DetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
-     F01CalorimeterSD*  fCalorimeterSD;   // pointer to the sensitive detector
-
      G4Material*        fAbsorberMaterial;
      G4double           fAbsorberThickness;
      G4double           fAbsorberRadius;
-     G4bool             fWorldChanged;
 
      G4double           fZAbsorber;
      G4double           fZStartAbs, fZEndAbs;
@@ -120,8 +119,6 @@ class F01DetectorConstruction : public G4VUserDetectorConstruction
      G4Material*        fWorldMaterial;
      G4double           fWorldSizeR;
      G4double           fWorldSizeZ;
-
-     static G4ThreadLocal F01FieldSetup* fEmFieldSetup;
 
   private:
  

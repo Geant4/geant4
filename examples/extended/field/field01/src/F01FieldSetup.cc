@@ -117,9 +117,10 @@ void F01FieldSetup::InitialiseAll()
 
 F01FieldSetup::~F01FieldSetup()
 {
-  if (fMagneticField) delete fMagneticField;
-  if (fChordFinder)   delete fChordFinder;
-  if (fStepper)       delete fStepper;
+  delete fMagneticField;
+  delete fChordFinder;
+  delete fStepper;
+  delete fFieldMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -138,8 +139,6 @@ void F01FieldSetup::CreateStepperAndChordFinder()
   fChordFinder = new G4ChordFinder( fMagneticField, fMinStep,fStepper );
 
   fFieldManager->SetChordFinder( fChordFinder );
-
-  return;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -194,7 +193,6 @@ void F01FieldSetup::SetStepper()
       break;
     default: fStepper = 0;
   }
-  return;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

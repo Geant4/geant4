@@ -15,6 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 21, 2013 - I.Hrivnacova - fieldex01-V09-06-04
+- Use new G4RunManager::ReinitializeGeometry to trigger geometry rebuild 
+  when geometry changes
+- Remove DetectorConstruction::Update and corresponding UI command that
+  is not needed anymore
+- Set "ToBeBroadcasted == false" for UI commands that modify detector 
+  since these should be executed only by master     
+- Fixed main (do not call gui.mac which does not exist)
+- Code cleanup in F01FieldSetup.*
+
 November 7, 2013 - P.Gumplinger - fieldex01-V09-06-02 and -03
 - migration to MT and code cleanup
 

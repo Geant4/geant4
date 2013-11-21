@@ -73,8 +73,6 @@ class F01DetectorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* fWorldZCmd;
     G4UIcmdWithADoubleAndUnit* fWorldRCmd;
 
-    G4UIcmdWithoutParameter*   fUpdateCmd;
-
 };
 
 #endif

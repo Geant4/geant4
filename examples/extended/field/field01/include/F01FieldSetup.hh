@@ -79,7 +79,7 @@ protected:
 
   // Find the global Field Manager
 
-  G4FieldManager*         GetGlobalFieldManager() ;   // static
+  G4FieldManager*         GetGlobalFieldManager();
 
   G4FieldManager*         fFieldManager;
   G4ChordFinder*          fChordFinder;
