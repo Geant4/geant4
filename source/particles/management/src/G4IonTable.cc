@@ -999,7 +999,6 @@ const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4int lvl) const
   if ( ! os ) {
     os = new std::ostringstream();
     os->setf(std::ios::fixed);
-    os->precision(1);
   }
 
   if ( (0< Z) && (Z <=numberOfElements) ) {

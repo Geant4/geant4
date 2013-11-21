@@ -427,6 +427,7 @@ void G4VDecayChannel::FillParent()
     G4Exception("G4VDecayChannel::FillParent()",
 		"PART012", FatalException,
 		"Can not fill parent: parent name is not defined yet");    
+    return;
   }
   // search parent particle in the particle table
   G4MT_parent = particletable->FindParticle(*parent_name);
@@ -440,7 +441,8 @@ void G4VDecayChannel::FillParent()
 #endif
     G4Exception("G4VDecayChannel::FillParent()",
 		"PART012", FatalException,
-		"Can not fill parent: parent does not exist");    
+		"Can not fill parent: parent does not exist");
+    return;
   }
   G4MT_parent_mass = G4MT_parent->GetPDGMass();
 }

@@ -447,7 +447,7 @@ G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
     // remove from EncodingDictionary
     G4int code = particle->GetPDGEncoding();
     if (code !=0 ) {
-      fEncodingDictionaryShadow->erase(fEncodingDictionary->find(code)); 
+      fEncodingDictionaryShadow->erase(fEncodingDictionaryShadow->find(code)); 
     }
   } else {
     return 0;

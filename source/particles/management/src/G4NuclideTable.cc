@@ -119,23 +119,22 @@ G4IsotopeProperty* G4NuclideTable::GetIsotope(G4int Z, G4int A, G4double E)
    //Note: isomer level is properly set only for pre_load_list.
    if ( map_pre_load_list.find( ionCode ) !=  map_pre_load_list.end() ) {
 
-      std::multimap< G4double , G4IsotopeProperty* >::iterator lower_bound_itr = 
-      map_pre_load_list.find( ionCode ) -> second.lower_bound ( E - levelTolerance/2 );
-
-      //std::multimap< G4double , G4IsotopeProperty* >::iterator upper_bound_itr = 
-      //map_pre_load_list.find( ionCode ) -> second.upper_bound ( E );
-
-      G4double levelE = DBL_MAX;
-      if ( lower_bound_itr !=  map_pre_load_list.find( ionCode ) -> second.end() ) {
-         levelE = lower_bound_itr->first;
-      }
-      
-      if ( levelE - levelTolerance/2 <= E && E < levelE + levelTolerance/2 ) {
+     std::multimap< G4double , G4IsotopeProperty* >::iterator lower_bound_itr = 
+       map_pre_load_list.find( ionCode ) -> second.lower_bound ( E - levelTolerance/2 );
+     
+     //std::multimap< G4double , G4IsotopeProperty* >::iterator upper_bound_itr = 
+     //map_pre_load_list.find( ionCode ) -> second.upper_bound ( E );
+     
+     G4double levelE = DBL_MAX;
+     if ( lower_bound_itr !=  map_pre_load_list.find( ionCode ) -> second.end() ) {
+       levelE = lower_bound_itr->first;
+       if ( levelE - levelTolerance/2 <= E && E < levelE + levelTolerance/2 ) {
          return lower_bound_itr->second; // found
-      }
+       } 
+     }
    }
-
-   //Serching hard-code
+     
+   //Searching hard-code
    if ( map_hard_code_list.find( ionCode ) !=  map_hard_code_list.end() ) {
       std::multimap< G4double , G4IsotopeProperty* >::iterator lower_bound_itr = 
       map_hard_code_list.find( ionCode ) -> second.lower_bound ( E - levelTolerance/2 );
@@ -146,10 +145,9 @@ G4IsotopeProperty* G4NuclideTable::GetIsotope(G4int Z, G4int A, G4double E)
       G4double levelE = DBL_MAX;
       if ( lower_bound_itr !=  map_hard_code_list.find( ionCode ) -> second.end() ) {
          levelE = lower_bound_itr->first;
-      }
-
-      if ( levelE - levelTolerance/2 <= E && E < levelE + levelTolerance/2 ) {
-         return lower_bound_itr->second; // found
+	 if ( levelE - levelTolerance/2 <= E && E < levelE + levelTolerance/2 ) {
+	   return lower_bound_itr->second; // found
+	 }
       }
    }
 
@@ -227,10 +225,9 @@ G4IsotopeProperty* G4NuclideTable::GetIsotope(G4int Z, G4int A, G4double E)
       G4double levelE = DBL_MAX;
       if ( lower_bound_itr !=  map_full_list.find( ionCode ) -> second.end() ) {
          levelE = lower_bound_itr->first;
-      }
-      
-      if ( levelE - levelTolerance/2 < E && E < levelE + levelTolerance/2 ) {
-         return lower_bound_itr->second; // found
+	 if ( levelE - levelTolerance/2 < E && E < levelE + levelTolerance/2 ) {
+	   return lower_bound_itr->second; // found
+	 }
       }
    }
 

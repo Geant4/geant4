@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 21. Nov. 2013  Hisaya Kurash(particles-V09-06-63)
+- Fix defects by Coverity
+   G4NuclideTable.cc G4ParticleTable.cc G4VDecayChannel.cc 
+   G4IonTable.cc G4IsomerTable.cc
+   
 - 5. Nov. 2013  Hisaya Kurash(particles-V09-06-62)
 - Fix G4NeutronBetaDecayChannel (Bug #1532)
 

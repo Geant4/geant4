@@ -116,6 +116,7 @@ G4IsomerTable::G4IsomerTable(const  G4IsomerTable & right)
 ///////////////////////////////////////////////////////////////////////////////
 G4IsomerTable & G4IsomerTable::operator= (const  G4IsomerTable &)
 {
+  FillIsotopeList();
   return *this;
 }
 
