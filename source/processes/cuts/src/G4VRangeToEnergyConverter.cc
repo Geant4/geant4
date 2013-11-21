@@ -55,6 +55,11 @@ G4VRangeToEnergyConverter::G4VRangeToEnergyConverter():
 G4VRangeToEnergyConverter::G4VRangeToEnergyConverter(const G4VRangeToEnergyConverter& right) :  theParticle(right.theParticle), theLossTable(0), TotBin(right.TotBin)
 {
   fMaxEnergyCut = 0.;
+  if (theLossTable) {
+    theLossTable->clearAndDestroy();
+    delete theLossTable;
+    theLossTable=0;
+  }
   *this = right;
 }
 
