@@ -18,6 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- Nov. 21, 2013 H.Kurashige (track-V09-06-04)
+- Fix Coverity deficts in G4Track constructors
+
 - September 26, 2013 M.Asai (track-V09-06-03)
 - Fix compilation warning caused by the previous tag.
 
