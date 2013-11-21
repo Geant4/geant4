@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19-Nov-2013  J.Apostolakis         (geom-specific-V09-06-34)
+- Fix for issue identified by Coverity:
+   G4SolidsWorkspacePool: fixed implementation of singleton.
+
 20-Nov-2013  T.Mikitina            (geom-specific-V09-06-33)
 - Fixed Coverity defects to USolids wrappers.
 

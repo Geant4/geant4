@@ -31,16 +31,17 @@
 
 #include "G4AutoLock.hh"
 namespace {
-    G4Mutex singletonM = G4MUTEX_INITIALIZER;
+    G4Mutex singletonMutexSWP = G4MUTEX_INITIALIZER;
 }
 
 G4ThreadLocal G4SolidsWorkspace* G4SolidsWorkspacePool::fMyWorkspace=0;
 
+G4SolidsWorkspacePool* G4SolidsWorkspacePool::thePool=0;
+
 // static
 G4SolidsWorkspacePool* G4SolidsWorkspacePool::GetInstance()
 {
-    G4AutoLock l(&singletonM);
-   static G4SolidsWorkspacePool* thePool=0; 
+   G4AutoLock l(&singletonMutexSWP);
    if( !thePool ) thePool= new G4SolidsWorkspacePool();
    return thePool;
 }

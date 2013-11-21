@@ -71,17 +71,10 @@ class G4SolidsWorkspacePool
      ~G4SolidsWorkspacePool();
 
  private: 
-     G4SolidsWorkspacePool* thePool; 
-
-     //void* fWarehouse;
-     // G4GeometryWarehouse* fWarehouse;
-     // This is "void" to hide the actual container type for workspaces
-     // Likely to be a simple STL contaier for MT or something better for tbb
-     // Likely to be template parameter with portable default
+     static G4SolidsWorkspacePool* thePool;
 
      static G4ThreadLocal G4SolidsWorkspace*    fMyWorkspace;
      // The thread's workspace - if assigned.
-     //  --> Can we do without this ?  It is dirty!!
 };
 
 #endif //G4GEOMETRYWORKSPACEPOOL_HH
