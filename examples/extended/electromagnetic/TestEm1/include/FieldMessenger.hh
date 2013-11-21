@@ -23,45 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm1/include/DetectorMessenger.hh
-/// \brief Definition of the DetectorMessenger class
+/// \file electromagnetic/TestEm1/include/FieldMessenger.hh
+/// \brief Definition of the FieldMessenger class
 //
-// $Id$
+// $Id: FieldMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef DetectorMessenger_h
-#define DetectorMessenger_h 1
+#ifndef FieldMessenger_h
+#define FieldMessenger_h 1
 
 #include "G4UImessenger.hh"
-#include "globals.hh"
+#include "G4Types.hh"
 
 class DetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
 class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class DetectorMessenger: public G4UImessenger
+class FieldMessenger: public G4UImessenger
 {
   public:
-  
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
+    FieldMessenger(DetectorConstruction* );
+   ~FieldMessenger();
     
     virtual void SetNewValue(G4UIcommand*, G4String);
     
   private:
-  
-    DetectorConstruction*      fDetector;
-    
-    G4UIdirectory*             fTestemDir;
-    G4UIdirectory*             fDetDir;
-    G4UIcmdWithAString*        fMaterCmd;
-    G4UIcmdWithADoubleAndUnit* fSizeCmd;
+    G4UIcmdWithADoubleAndUnit* fMagFieldCmd;
+    DetectorConstruction* fDetector;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

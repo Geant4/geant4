@@ -50,6 +50,7 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "G4RunManager.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
@@ -227,9 +228,27 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 void DetectorConstruction::SetSize(G4double value)
 {
   fBoxSize = value;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+#include "FieldMessenger.hh"
+#include "G4AutoDelete.hh"
+
+void DetectorConstruction::ConstructSDandField()
+{
+    //Create a thread-private field messenger
+    //only once per-thread
+    if ( fFieldMessenger.Get() == 0 )
+    {
+        FieldMessenger* fm = new FieldMessenger(this);
+        G4AutoDelete::Register( fm ); //Kernel will delete the messenger
+        fFieldMessenger.Put( fm );
+    }
+}
+
 
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
@@ -240,28 +259,19 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
   G4FieldManager* fieldMgr
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
-  if (fMagField) delete fMagField;        //delete the existing magn field
+  if (fMagField.Get()) delete fMagField.Get(); //delete the existing magn field
 
   if (fieldValue!=0.)                        // create a new one if non nul
     {
-      fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
-      fieldMgr->SetDetectorField(fMagField);
-      fieldMgr->CreateChordFinder(fMagField);
+      fMagField.Put(new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue)));
+      fieldMgr->SetDetectorField(fMagField.Get());
+      fieldMgr->CreateChordFinder(fMagField.Get());
     }
    else
     {
-      fMagField = 0;
-      fieldMgr->SetDetectorField(fMagField);
+      fMagField.Put(0);
+      fieldMgr->SetDetectorField(fMagField.Get());
     }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4RunManager.hh"
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
