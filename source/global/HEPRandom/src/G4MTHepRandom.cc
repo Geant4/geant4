@@ -115,21 +115,25 @@ std::istream & G4MTHepRandom::get(std::istream & is)
 
 void G4MTHepRandom::setTheSeed(G4long seed, G4int lux)
 {
+  createInstance();
   theEngine->setSeed(seed,lux);
 }
 
 G4long G4MTHepRandom::getTheSeed()
 {
+  createInstance();
   return theEngine->getSeed();
 }
 
 void G4MTHepRandom::setTheSeeds(const G4long* seeds, G4int aux)
 {
+  createInstance();
   theEngine->setSeeds(seeds,aux);
 }
 
 const G4long* G4MTHepRandom::getTheSeeds ()
 {
+  createInstance();
   return theEngine->getSeeds();
 }
 
@@ -152,11 +156,13 @@ void G4MTHepRandom::setTheEngine (CLHEP::HepRandomEngine* theNewEngine)
 
 void G4MTHepRandom::saveEngineStatus( const char filename[] )
 {
+  createInstance();
   theEngine->saveStatus( filename );
 }  
 
 void G4MTHepRandom::restoreEngineStatus( const char filename[] )
 {
+  createInstance();
   theEngine->restoreStatus( filename );
 }  
 
@@ -184,6 +190,7 @@ std::istream& G4MTHepRandom::restoreStaticRandomStates ( std::istream & is )
 
 void G4MTHepRandom::showEngineStatus()
 {
+  createInstance();
   theEngine->showStatus();
 }  
 

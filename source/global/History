@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 20, 2013 A.Dotti      (global-V09-06-82)
+- Patched G4HepRandom to create default engine if G4Random::setTheSeed
+  is called at beginning of job (allowed in SEQ).
+
 November 20, 2013 G.Cosmo      (global-V09-06-81)
 - Patched definition of G4MUTEXINIT() for Windows in G4Threading.hh
   to allow for compilation.
