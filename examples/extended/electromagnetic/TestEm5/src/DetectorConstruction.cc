@@ -370,16 +370,16 @@ void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 void DetectorConstruction::SetAbsorberThickness(G4double val)
 {
   fAbsorberThickness = val;
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
-}  
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetAbsorberSizeYZ(G4double val)
 {
   fAbsorberSizeYZ = val;
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
-}  
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -387,8 +387,8 @@ void DetectorConstruction::SetWorldSizeX(G4double val)
 {
   fWorldSizeX = val;
   fDefaultWorld = false;
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
-}  
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -396,18 +396,33 @@ void DetectorConstruction::SetWorldSizeYZ(G4double val)
 {
   fWorldSizeYZ = val;
   fDefaultWorld = false;
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
-}  
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetAbsorberXpos(G4double val)
 {
   fXposAbs  = val;
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+#include "FieldMessenger.hh"
+#include "G4AutoDelete.hh"
+
+void DetectorConstruction::ConstructSDandField()
+{
+    //Create a thread-private field messenger
+    //only once per-thread
+    if ( fFieldMessenger.Get() == 0 )
+    {
+        FieldMessenger* fm = new FieldMessenger(this);
+        G4AutoDelete::Register( fm ); //Kernel will delete the messenger
+        fFieldMessenger.Put( fm );
+    }
+}
 
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
@@ -418,24 +433,16 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
   G4FieldManager* fieldMgr 
    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
     
-  if(fMagField) delete fMagField;            //delete the existing magn field
+  if(fMagField.Get()) delete fMagField.Get();//delete the existing magn field
   
   if(fieldValue!=0.)                        // create a new one if non nul
-  { fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));        
-    fieldMgr->SetDetectorField(fMagField);
-    fieldMgr->CreateChordFinder(fMagField);
+  { fMagField.Put( new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue)) );
+    fieldMgr->SetDetectorField(fMagField.Get());
+    fieldMgr->CreateChordFinder(fMagField.Get());
   } else {
-    fMagField = NULL;
-    fieldMgr->SetDetectorField(fMagField);
+    fMagField.Put(NULL);
+    fieldMgr->SetDetectorField(fMagField.Get());
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

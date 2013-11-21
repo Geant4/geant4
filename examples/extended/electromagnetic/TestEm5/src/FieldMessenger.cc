@@ -23,56 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm5/include/DetectorMessenger.hh
-/// \brief Definition of the DetectorMessenger class
+/// \file electromagnetic/TestEm5/src/FieldMessenger.cc
+/// \brief Implementation of the FieldMessenger class
 //
-// $Id$
+// $Id: FieldMessenger.cc $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef DetectorMessenger_h
-#define DetectorMessenger_h 1
-
-#include "G4UImessenger.hh"
-#include "globals.hh"
-
-class DetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class DetectorMessenger: public G4UImessenger
+#include "DetectorConstruction.hh"
+#include "FieldMessenger.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
+FieldMessenger::FieldMessenger(DetectorConstruction* Det)
+  :G4UImessenger(),
+   fMagFieldCmd(0),
+   fDetector(Det)
 {
-  public:
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
-    
-    virtual void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    DetectorConstruction*      fDetector;
-    
-    G4UIdirectory*             fTestemDir;
-    G4UIdirectory*             fDetDir;
+  fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);
+  fMagFieldCmd->SetGuidance("Define magnetic field.");
+  fMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
+  fMagFieldCmd->SetParameterName("Bz",false);
+  fMagFieldCmd->SetUnitCategory("Magnetic flux density");
+    //fMagFieldCmd->SetDefaultUnit("tesla");
+  fMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+} 
 
-    G4UIcmdWithAString*        fAbsMaterCmd;
-    G4UIcmdWithADoubleAndUnit* fAbsThickCmd;
-    G4UIcmdWithADoubleAndUnit* fAbsSizYZCmd;
+FieldMessenger::~FieldMessenger()
+{
+  delete fMagFieldCmd;
+}
 
-    G4UIcmdWithADoubleAndUnit* fAbsXposCmd;
-
-    G4UIcmdWithAString*        fWorldMaterCmd;
-    G4UIcmdWithADoubleAndUnit* fWorldXCmd;
-    G4UIcmdWithADoubleAndUnit* fWorldYZCmd;
-
-};
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#endif
-
+void FieldMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+{
+  if ( command == fMagFieldCmd )
+    { fDetector->SetMagField(fMagFieldCmd->GetNewDoubleValue(newValue)); }
+}

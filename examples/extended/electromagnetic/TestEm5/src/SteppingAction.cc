@@ -58,7 +58,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
  if (aStep->GetPreStepPoint()->GetTouchableHandle()->GetVolume() 
      != fDetector->GetAbsorber()) return;
-
+    
  fEventAction->AddEnergy (aStep->GetTotalEnergyDeposit());
    
  G4double charge = aStep->GetTrack()->GetDefinition()->GetPDGCharge();

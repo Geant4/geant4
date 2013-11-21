@@ -37,6 +37,7 @@
 #include "G4VUserDetectorConstruction.hh"
 #include "G4LogicalVolume.hh"
 #include "globals.hh"
+#include "G4Cache.hh"
 
 class G4Box;
 class G4VPhysicalVolume;
@@ -44,6 +45,7 @@ class G4Material;
 class G4MaterialCutsCouple;
 class G4UniformMagField;
 class DetectorMessenger;
+class FieldMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -69,8 +71,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetMagField(G4double);
 
      virtual G4VPhysicalVolume* Construct();
-
-     void UpdateGeometry();
+     virtual void ConstructSDandField();
 
   public:
 
@@ -115,9 +116,11 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume*   fLogicAbsorber;
      G4VPhysicalVolume* fPhysiAbsorber;
 
-     G4UniformMagField* fMagField;
+     G4Cache<G4UniformMagField*> fMagField;
      
      DetectorMessenger* fDetectorMessenger;
+     G4Cache<FieldMessenger*> fFieldMessenger;
+    
       
   private:
     

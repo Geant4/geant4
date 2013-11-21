@@ -491,7 +491,6 @@ Run Summary
 /testem/det/setAbsMat Gold
 /testem/det/setAbsThick 9.658 um
 /testem/det/setAbsYZ 1 mm
-/testem/det/update
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -949,7 +948,6 @@ Run Summary
 /testem/det/setAbsMat G4_POLYETHYLENE
 /testem/det/setAbsThick 4.74 mm
 /testem/det/setAbsYZ 50 mm
-/testem/det/update
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -1419,7 +1417,6 @@ Run Summary
 #
 /testem/det/setAbsMat Aluminium
 /testem/det/setAbsThick 8.004 mm
-/testem/det/update
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -1884,7 +1881,6 @@ Run Summary
 #
 /testem/det/setAbsMat Iron
 /testem/det/setAbsThick 1 m
-/testem/det/update
 
  Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
    --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole

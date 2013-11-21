@@ -14,7 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+20-11-13 Andrea Dotti (testem5-V09-06-13)
+- Introduced new messenger FieldMessenger (thread-private)
+- Use new G4RunManager::ReinitializeGeometry (requires run-V09-06-128)
+  to trigger geometry rebuild when geometry changes
+- Remove DetectorConstruction::Update and corresponding UI command that
+  is not needed anymore
+- Set "ToBeBroadcasted == false" for UI commands that modify physics lsit
+  and detector since these should be executed only by master     
+
 19-11-13 mma (testem5-V09-06-12)
 - reverted to tag 10
  
