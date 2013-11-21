@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-11-13 V.Ivanchenko (testem12-V09-06-11)
+- PhysListEmStandardWVI and PhysListEmStandardSS - reduced low-energy 
+    threashold for the single scattering model to 10 eV 
+
 28-07-13 P.Gumplinger (testem12-V09-06-10)
 - fix clang32 compilation warning
 

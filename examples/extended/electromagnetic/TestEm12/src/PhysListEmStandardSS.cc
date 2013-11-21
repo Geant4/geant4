@@ -29,7 +29,7 @@
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandardSS.hh"
 
@@ -97,8 +97,7 @@ void PhysListEmStandardSS::ConstructProcess()
       G4eCoulombScatteringModel* model = 
         new G4eCoulombScatteringModel();
       model->SetLowEnergyThreshold(10*eV);
-      model->SetPolarAngleLimit(0.0);
-      cs->AddEmModel(0, model);
+      cs->SetEmModel(model, 1);
       pmanager->AddDiscreteProcess(cs);            
             
     } else if (particleName == "e+") {
