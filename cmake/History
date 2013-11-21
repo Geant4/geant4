@@ -30,6 +30,11 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+21st November 2013 - Ben Morgan (cmake-V09-06-41)
+- Modules/Geant4InterfaceOptions.cmake : Fix bug in checking of status
+  of Xmu include path and library variables that resulted in no error
+  being emitted if these were not found.
+
 19th November 2013 - Ben Morgan (cmake-V09-06-40)
 - Modules/Geant4ConfigureConfigScript.cmake : Fix bug in list manipulation
   of non-existant list backported in by accident by previous tag. This

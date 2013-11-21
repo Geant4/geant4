@@ -214,7 +214,7 @@ if(UNIX)
 
     find_path(X11_Xmu_INCLUDE_PATH X11/Xmu/Xmu.h ${X11_INC_SEARCH_PATH})
     find_library(X11_Xmu_LIBRARY Xmu ${X11_SEARCH_PATH})
-    if(X11_Xmu_LIBRARY-NOTFOUND OR X11_Xmu_INCLUDE_PATH-NOTFOUND)
+    if(NOT X11_Xmu_LIBRARY OR NOT X11_Xmu_INCLUDE_PATH)
       message(FATAL_ERROR "could not find X11 Xmu library and/or headers")
     endif()
 
