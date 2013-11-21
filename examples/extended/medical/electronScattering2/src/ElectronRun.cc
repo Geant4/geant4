@@ -87,7 +87,7 @@ void ElectronRun::RecordEvent(const G4Event* anEvent)
         iter++;
     }
     
-    G4Run::RecordEvent(event);      
+    G4Run::RecordEvent(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
