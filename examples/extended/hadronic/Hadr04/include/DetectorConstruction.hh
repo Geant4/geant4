@@ -61,8 +61,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void SetSize     (G4double);              
     void SetMaterial (G4String);            
 
-    void UpdateGeometry();
-     
   public:
   
      const

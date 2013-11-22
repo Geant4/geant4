@@ -14,6 +14,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-11-13 A.Dotti       (exhadr04-V09-06-07)
+- Use G4RunManager::ReinitializeGeometry() to trigger geometry
+  rebuild
+- Remove ui command to Update geometry and corresponding method
+  in DetectorConstruction
+
 07-11-13 I. Hrivnacova (exhadr04-V09-06-06)
 - Setting SteppingVerbose in main only in seguential mode.
      

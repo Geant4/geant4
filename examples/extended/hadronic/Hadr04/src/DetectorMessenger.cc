@@ -46,12 +46,13 @@
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 :G4UImessenger(), 
  fDetector(Det), fTestemDir(0), fDetDir(0), fMaterCmd(0), fSizeCmd(0),
- fUpdateCmd(0), fIsotopeCmd(0)
+ fIsotopeCmd(0)
 { 
   fTestemDir = new G4UIdirectory("/testhadr/");
   fTestemDir->SetGuidance("commands specific to this example");
   
-  fDetDir = new G4UIdirectory("/testhadr/det/");
+  G4bool broadcast = false;
+  fDetDir = new G4UIdirectory("/testhadr/det/",broadcast);
   fDetDir->SetGuidance("detector construction commands");
         
   fMaterCmd = new G4UIcmdWithAString("/testhadr/det/setMat",this);
@@ -65,13 +66,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fSizeCmd->SetRange("Size>0.");
   fSizeCmd->SetUnitCategory("Length");
   fSizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-    
-  fUpdateCmd = new G4UIcmdWithoutParameter("/testhadr/det/update",this);
-  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
-  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  fUpdateCmd->AvailableForStates(G4State_Idle);
-   
+       
   fIsotopeCmd = new G4UIcommand("/testhadr/det/setIsotopeMat",this);
   fIsotopeCmd->SetGuidance("Build and select a material with single isotope");
   fIsotopeCmd->SetGuidance("  symbol of isotope, Z, A, density of material");
@@ -109,8 +104,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 DetectorMessenger::~DetectorMessenger()
 {
   delete fMaterCmd;
-  delete fSizeCmd; 
-  delete fUpdateCmd;
+  delete fSizeCmd;
   delete fIsotopeCmd;
   delete fDetDir;
   delete fTestemDir;
@@ -126,9 +120,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   if( command == fSizeCmd )
    { fDetector->SetSize(fSizeCmd->GetNewDoubleValue(newValue));}
      
-  if( command == fUpdateCmd )
-   { fDetector->UpdateGeometry(); }
-   
   if (command == fIsotopeCmd)
    {
      G4int Z; G4int A; G4double dens;
