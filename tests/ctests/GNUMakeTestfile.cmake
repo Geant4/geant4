@@ -204,7 +204,7 @@ endforeach()
 #                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/g3tog4/clGeometry
 #                  BUILD clGeometry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 #endif()
-foreach(_i 00 01 02)
+foreach(_i 00 01 02 03 04)
   GEANT4_ADD_TEST(example-ext-hadronic-hadr${_i} 
                   COMMAND ${BINDIR}/Hadr${_i} ${SRCDIR}/extended/hadronic/Hadr${_i}/hadr${_i}.in
                   BUILD ${SRCDIR}/extended/hadronic/Hadr${_i})

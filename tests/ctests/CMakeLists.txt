@@ -198,7 +198,7 @@ GEANT4_ADD_TEST(example-ext-geometry-transforms
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/geometry/transforms
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/geometry/transforms
                 BUILD transforms )
-foreach(_i 00 01 02 03)
+foreach(_i 00 01 02 03 04)
   GEANT4_ADD_TEST(example-ext-hadronic-hadr${_i} 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/hadronic/Hadr${_i}/Hadr${_i}
                           ${CMAKE_SOURCE_DIR}/examples/extended/hadronic/Hadr${_i}/hadr${_i}.in
