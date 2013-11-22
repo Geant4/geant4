@@ -39,11 +39,13 @@
 #include "G4Material.hh"
 #include "G4VPhysicalVolume.hh"
 #include "globals.hh"
+#include "G4Cache.hh"
 
 class G4Tubs;
 class G4LogicalVolume;
 class G4UniformMagField;
 class DetectorMessenger;
+class G4GlobalMagFieldMessenger;
 
 const G4int MaxBin = 500;
 
@@ -61,7 +63,6 @@ public:
   void SetMaterial(const G4String&);
   void SetLBining (G4ThreeVector);
   void SetRBining (G4ThreeVector);
-  void SetMagField(G4double);
 
   virtual G4VPhysicalVolume* Construct();
 
@@ -91,9 +92,7 @@ private:
   G4double fDLlength, fDRlength;    // bin thickness (in length unit)
 
   G4Material* fMaterial;            //pointer to the material
-   
-  static G4ThreadLocal G4UniformMagField* fMagField;  
-   
+    
   G4double fEcalLength;             //full length of the Calorimeter
   G4double fEcalRadius;             //radius  of the Calorimeter
 
@@ -103,7 +102,8 @@ private:
 
   DetectorMessenger* fDetectorMessenger;  //pointer to the Messenger
 
-  G4double           fieldValue;
+  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
+    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

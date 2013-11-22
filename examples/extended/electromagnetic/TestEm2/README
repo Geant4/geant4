@@ -32,7 +32,7 @@ $Id$
      (MaxBin = 500 in both directions)	 
 
      An uniform magnetic field along the cylinder axis can be set.
-     eg: /testem/det/setField 5 tesla 
+     eg: /globalField/setValue 0 0 5 tesla 
      
  2- PHYSICS LISTS
  
