@@ -39,7 +39,7 @@
 //             
 
 G4UOrb::G4UOrb( const G4String& pName, G4double pRmax )
-  : G4USolid("Orb", new UOrb(pName, pRmax))
+  : G4USolid(pName, new UOrb(pName, pRmax))
 {
 }
 

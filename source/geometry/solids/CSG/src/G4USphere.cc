@@ -43,7 +43,7 @@ G4USphere::G4USphere( const G4String& pName,
                           G4double pRmin, G4double pRmax,
                           G4double pSPhi, G4double pDPhi,
                           G4double pSTheta, G4double pDTheta )
-  : G4USolid("Sphere", new USphere(pName, pRmin, pRmax, pSPhi, pDPhi,
+  : G4USolid(pName, new USphere(pName, pRmin, pRmax, pSPhi, pDPhi,
                                    pSTheta, pDTheta))
 {
 }

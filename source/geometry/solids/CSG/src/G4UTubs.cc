@@ -43,7 +43,7 @@ G4UTubs::G4UTubs( const G4String& pName,
                         G4double pRMin, G4double pRMax,
                         G4double pDz,
                         G4double pSPhi, G4double pDPhi )
-  : G4USolid("Tubs", new UTubs(pName, pRMin, pRMax, pDz, pSPhi, pDPhi))
+  : G4USolid(pName, new UTubs(pName, pRMin, pRMax, pDz, pSPhi, pDPhi))
 {
 }
 

@@ -42,7 +42,7 @@ G4UTrd::G4UTrd(const G4String& pName,
                      G4double pdx1,  G4double pdx2,
                      G4double pdy1,  G4double pdy2,
                      G4double pdz)
-  : G4USolid("Trd", new UTrd(pName, pdx1, pdx2, pdy1, pdy2, pdz))
+  : G4USolid(pName, new UTrd(pName, pdx1, pdx2, pdy1, pdy2, pdz))
 {
 }
 

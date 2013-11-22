@@ -43,7 +43,7 @@ G4UBox::G4UBox(const G4String& pName,
                    G4double pX,
                    G4double pY,
                    G4double pZ)
-  : G4USolid("Box", new UBox(pName, pX, pY, pZ))
+  : G4USolid(pName, new UBox(pName, pX, pY, pZ))
 {
 }
 
