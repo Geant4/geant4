@@ -501,8 +501,8 @@ void DetectorConstruction::SetMagField(G4double fieldValue)
 
 void DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+//  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
