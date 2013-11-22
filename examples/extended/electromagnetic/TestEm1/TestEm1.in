@@ -16,7 +16,7 @@
 /testem/phys/setCuts 1 mm
 #
 /run/initialize
-##/testem/det/setField 1 tesla
+##/globalField/setValue 0 0 5 tesla
 #
 /testem/gun/setDefault 
 /gun/particle e-

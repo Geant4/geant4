@@ -54,7 +54,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:G4VUserDetectorConstruction(),fPBox(0), fLBox(0), fMaterial(0), fMagField(0)
+:G4VUserDetectorConstruction(),fPBox(0), fLBox(0), fMaterial(0)
 {
   fBoxSize = 10*m;
   DefineMaterials();
@@ -216,11 +216,14 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
   G4Material* pttoMaterial = 
      G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
   
-  if (pttoMaterial) { fMaterial = pttoMaterial;
+  if (pttoMaterial) {
+      fMaterial = pttoMaterial;
+      if ( fLBox ) fLBox->SetMaterial(fMaterial);
     } else {
     G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
            << materialChoice << " not found" << G4endl;
-  }              
+  }
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -234,43 +237,22 @@ void DetectorConstruction::SetSize(G4double value)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
-#include "FieldMessenger.hh"
+#include "G4GlobalMagFieldMessenger.hh"
 #include "G4AutoDelete.hh"
 
 void DetectorConstruction::ConstructSDandField()
 {
-    //Create a thread-private field messenger
-    //only once per-thread
-    if ( fFieldMessenger.Get() == 0 )
-    {
-        FieldMessenger* fm = new FieldMessenger(this);
-        G4AutoDelete::Register( fm ); //Kernel will delete the messenger
-        fFieldMessenger.Put( fm );
-    }
-}
-
-
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-
-void DetectorConstruction::SetMagField(G4double fieldValue)
-{
-  //apply a global uniform magnetic field along Z axis
-  G4FieldManager* fieldMgr
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  if (fMagField.Get()) delete fMagField.Get(); //delete the existing magn field
-
-  if (fieldValue!=0.)                        // create a new one if non nul
-    {
-      fMagField.Put(new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue)));
-      fieldMgr->SetDetectorField(fMagField.Get());
-      fieldMgr->CreateChordFinder(fMagField.Get());
-    }
-   else
-    {
-      fMagField.Put(0);
-      fieldMgr->SetDetectorField(fMagField.Get());
+    if ( fFieldMessenger.Get() == 0 ) {
+        // Create global magnetic field messenger.
+        // Uniform magnetic field is then created automatically if
+        // the field value is not zero.
+        G4ThreeVector fieldValue = G4ThreeVector();
+        G4GlobalMagFieldMessenger* msg =
+        new G4GlobalMagFieldMessenger(fieldValue);
+        //msg->SetVerboseLevel(1);
+        G4AutoDelete::Register(msg);
+        fFieldMessenger.Put( msg );
+        
     }
 }
 

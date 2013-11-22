@@ -44,6 +44,7 @@ class G4Material;
 class G4UniformMagField;
 class DetectorMessenger;
 class FieldMessenger;
+class G4GlobalMagFieldMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -60,8 +61,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      virtual void ConstructSDandField();
      
      void SetSize     (G4double);              
-     void SetMaterial (G4String);            
-     void SetMagField (G4double);
+     void SetMaterial (G4String);
 
   public:
   
@@ -79,11 +79,10 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume*      fLBox;
      
      G4double              fBoxSize;
-     G4Material*           fMaterial;     
-     G4Cache<G4UniformMagField*>    fMagField;
-     
+     G4Material*           fMaterial;
+
      DetectorMessenger* fDetectorMessenger;
-    G4Cache<FieldMessenger*> fFieldMessenger;
+     G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
 
   private:
     
