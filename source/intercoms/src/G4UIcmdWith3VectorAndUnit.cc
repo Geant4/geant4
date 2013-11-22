@@ -31,7 +31,6 @@
 #include "G4UIcmdWith3VectorAndUnit.hh"
 #include "G4Tokenizer.hh"
 #include "G4UnitsTable.hh"
-#include "G4UIcommandStatus.hh"
 #include <sstream>
 
 G4UIcmdWith3VectorAndUnit::G4UIcmdWith3VectorAndUnit
@@ -62,8 +61,6 @@ G4int G4UIcmdWith3VectorAndUnit::DoIt(G4String parameterList)
   G4String converted_parameter;
   G4String default_unit = GetParameter(3)-> GetDefaultValue();
   if (default_unit != "" && token_vector.size() >= 4) {
-    if(CategoryOf(token_vector[3])!=CategoryOf(default_unit))
-    { return fParameterOutOfCandidates+3; }
     G4double value_given = ValueOf(token_vector[3]);
     G4double value_default = ValueOf(default_unit);
     G4double x = ConvertToDouble(token_vector[0]) * value_given / value_default;
