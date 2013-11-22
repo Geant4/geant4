@@ -128,6 +128,11 @@ G4ElectroVDNuclearModel::ApplyYourself(const G4HadProjectile& aTrack,
     // Set up sanity checks for real photon production
     G4DynamicParticle lepton(aTrack.GetDefinition(), aTrack.Get4Momentum() );
     
+    // Need to call GetElementCrossSection before calling GetEquivalentPhotonEnergy.
+    G4Material* mat = 0;
+    G4int targZ = targetNucleus.GetZ_asInt();
+    electroXS->GetElementCrossSection(&lepton, targZ, mat);
+    
     photonEnergy = electroXS->GetEquivalentPhotonEnergy();
     // Photon energy cannot exceed lepton energy
     if (photonEnergy < leptonKE) {
