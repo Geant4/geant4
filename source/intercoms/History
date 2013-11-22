@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 November, 2013 M. Asai (intercoms-V09-06-13)
+- Fix G4UIcmdWith3VectorAndUnit and G4UIcmdWithADoubleAndUnit.
+  Since version 9.3, they do not check and reject incorrect unit 
+  but instead misinterpret and accept with wrong value.
+
 5 November, 2013 M. Asai (intercoms-V09-06-12)
 - Fix the way of forwarding a UI command to a thread immediately.
 
