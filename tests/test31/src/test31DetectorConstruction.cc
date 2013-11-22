@@ -378,7 +378,7 @@ void test31DetectorConstruction::UpdateGeometry()
 
 void test31DetectorConstruction::GeometryIsChanged()
 {
-  (G4RunManager::GetRunManager())->GeometryHasBeenModified();
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
