@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21.11.2013  V. Ivanchenko, tag emlowen-V09-06-48
+            G4QAOLowEnergyLoss, G4hICRU49He, G4hICRU49p, 
+	    G4hParametrisedLossModel  - removed G4ThreadLocal
+
 20.11.2013  L. Pandola, tag emlowen-V09-06-47
 	    Fix double-deletion problem reported by Gabriele 
 	    and some cosmetics (G4PenelopeBremsstrahlungFS)

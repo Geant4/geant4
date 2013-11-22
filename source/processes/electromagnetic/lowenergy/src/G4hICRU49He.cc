@@ -87,13 +87,13 @@ G4bool G4hICRU49He::HasMaterial(const G4Material* material)
 
   // ICRU Report N49, 1993. Power's model for He.
   const size_t numberOfMolecula = 30 ;    
-  static G4ThreadLocal G4String *name = 0 ; if (!name) {name = new  G4String [numberOfMolecula]  ; name[0]=
-    "H_2";name[1]= "Be-Solid";name[2]= "C-Solid";name[3]= "Graphite";name[4]= "N_2";name[5]=
-    "O_2";name[6]= "Al-Solid";name[7]= "Si-Solid";name[8]= "Ar-Solid";name[9]= "Cu-Solid";name[10]=
-    "Ge";name[11]= "W-Solid";name[12]= "Au-Solid";name[13]= "Pb-Solid";name[14]= "C_2H_2";name[15]=
-    "CO_2";name[16]= "Cellulose-Nitrat";name[17]= "C_2H_4";name[18]= "LiF";name[19]=
-    "CH_4";name[20]= "Nylon";name[21]= "Polycarbonate";name[22]= "(CH_2)_N-Polyetilene";name[23]= "PMMA";name[24]=
-    "(C_8H_8)_N";name[25]= "SiO_2";name[26]= "CsI";name[27]= "H_2O";name[28]= "H_2O-Gas";} ;      
+  static const G4String name[numberOfMolecula] = {
+    "H_2", "Be-Solid", "C-Solid", "Graphite", "N_2",
+    "O_2", "Al-Solid", "Si-Solid", "Ar-Solid", "Cu-Solid",
+    "Ge", "W-Solid", "Au-Solid", "Pb-Solid", "C_2H_2",
+    "CO_2", "Cellulose-Nitrat", "C_2H_4", "LiF",
+    "CH_4", "Nylon", "Polycarbonate", "(CH_2)_N-Polyetilene", "PMMA",
+    "(C_8H_8)_N", "SiO_2", "CsI", "H_2O", "H_2O-Gas"};      
   
   // Special treatment for water in gas state
   

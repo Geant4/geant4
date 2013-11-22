@@ -85,11 +85,11 @@ G4bool G4hICRU49p::HasMaterial(const G4Material* material)
 
   // ICRU Report N49, 1993. Power's model for He.
   const size_t numberOfMolecula = 11 ;    
-  static G4ThreadLocal G4String *name = 0 ; if (!name) {name = new  G4String [numberOfMolecula]  ; name[0]=
-    "Al_2O_3";name[1]=                 "CO_2";name[2]=                      "CH_4";name[3]=  
-    "(C_2H_4)_N-Polyethylene";name[4]= "(C_2H_4)_N-Polypropylene";name[5]=  "(C_8H_8)_N";name[6]=  
-    "C_3H_8";name[7]=                  "SiO_2";name[8]=                     "H_2O";name[9]=
-    "H_2O-Gas";name[10]=                "Graphite" ;} ;      
+  static const G4String name[numberOfMolecula] = {
+    "Al_2O_3",                 "CO_2",            "CH_4",  
+    "(C_2H_4)_N-Polyethylene", "(C_2H_4)_N-Polypropylene",  "(C_8H_8)_N",  
+    "C_3H_8",          "SiO_2",                  "H_2O",
+    "H_2O-Gas",                "Graphite"};      
   
   // Special treatment for water in gas state
   const G4State theState = material->GetState() ;
