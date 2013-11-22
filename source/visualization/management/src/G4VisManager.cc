@@ -938,7 +938,7 @@ void G4VisManager::Draw (const G4VPhysicalVolume& physicalVol,
   Draw (*pSol, attribs, objectTransform);
 }
 
-void G4VisManager::CreateSceneHandler (G4String name) {
+void G4VisManager::CreateSceneHandler (const G4String& name) {
   if (!fInitialised) Initialise ();
   if (fpGraphicsSystem) {
     G4VSceneHandler* pSceneHandler =
@@ -959,7 +959,9 @@ void G4VisManager::CreateSceneHandler (G4String name) {
   else PrintInvalidPointers ();
 }
 
-void G4VisManager::CreateViewer (G4String name,G4String XGeometry) {
+void G4VisManager::CreateViewer
+(const G4String& name, const G4String& XGeometry)
+{
 
   if (!fInitialised) Initialise ();
 
@@ -1543,32 +1545,17 @@ namespace {
 void G4VisManager::BeginOfRun ()
 {
   if (fIgnoreStateChanges) return;
-//  G4AutoLock al(&visBeginOfRunMutex);
-//  G4cout << "G4VisManager::BeginOfRun" << G4endl;
-//  G4int ev_thread_id = G4Threading::G4GetThreadId();
-//  if (G4Threading::IsWorkerThread()) {
-//    G4cout << "Worker";
-//  } else {
-//    G4cout << "Master";
-//  }
-//  G4cout << " thread ID: " << ev_thread_id << G4endl;
   if (G4Threading::IsWorkerThread()) return;
   fNKeepRequests = 0;
+  fKeptLastEvent = false;
   fEventKeepingSuspended = false;
+  fTransientsDrawnThisRun = false;
+  if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisRun(false);
 }
 
 void G4VisManager::BeginOfEvent ()
 {
   if (fIgnoreStateChanges) return;
-//  G4AutoLock al(&visBeginOfEventMutex);
-//  G4cout << "G4VisManager::BeginOfEvent" << G4endl;
-//  G4int ev_thread_id = G4Threading::G4GetThreadId();
-//  if (G4Threading::IsWorkerThread()) {
-//    G4cout << "Worker";
-//  } else {
-//    G4cout << "Master";
-//  }
-//  G4cout << " thread ID: " << ev_thread_id << G4endl;
 }
 
 void G4VisManager::EndOfEvent ()
@@ -1582,15 +1569,6 @@ void G4VisManager::EndOfEvent ()
   // not instantiated a scene handler, e.g., in batch mode.
   G4bool valid = fpSceneHandler && IsValidView();
   if (!valid) return;
-
-  //  G4cout << "G4VisManager::EndOfEvent" << G4endl;
-  //  G4int ev_thread_id = G4Threading::G4GetThreadId();
-  //  if (G4Threading::IsWorkerThread()) {
-  //    G4cout << "Worker";
-  //  } else {
-  //    G4cout << "Master";
-  //  }
-  //  G4cout << " thread ID: " << ev_thread_id << G4endl;
 
   G4AutoLock al(&visEndOfEventMutex);
 
@@ -1606,7 +1584,7 @@ void G4VisManager::EndOfEvent ()
 //
 //    const std::vector<const G4Event*>*
 //    eventsFromThreads = currentRun->GetEventVector();
-//    G4int nKeptEvents = eventsFromThreads->size();
+//    G4int nKeptEvents = eventsFromThreads ? eventsFromThreads->size() : 0;
 
     G4int maxNumberOfKeptEvents = fpScene->GetMaxNumberOfKeptEvents();
     if (maxNumberOfKeptEvents > 0 && fNKeepRequests >= maxNumberOfKeptEvents) {
@@ -1635,15 +1613,6 @@ void G4VisManager::EndOfRun ()
 {
   if (fIgnoreStateChanges) return;
 
-//  G4cout << "G4VisManager::EndOfRun" << G4endl;
-//  G4int ev_thread_id = G4Threading::G4GetThreadId();
-//  if (G4Threading::IsWorkerThread()) {
-//    G4cout << "Worker";
-//  } else {
-//    G4cout << "Master";
-//  }
-//  G4cout << " thread ID: " << ev_thread_id << G4endl;
-
   if (G4Threading::IsWorkerThread()) return;
 
   // Don't call IsValidView unless there is a scene handler.  This
@@ -1660,7 +1629,7 @@ void G4VisManager::EndOfRun ()
 
   const std::vector<const G4Event*>*
   eventsFromThreads = currentRun->GetEventVector();
-  G4int nKeptEvents = eventsFromThreads->size();
+  G4int nKeptEvents = eventsFromThreads ? eventsFromThreads->size() : 0;
   if (nKeptEvents) {
     if (fVerbosity >= warnings) {
       G4cout << "WARNING: " << nKeptEvents;
@@ -1701,23 +1670,91 @@ void G4VisManager::EndOfRun ()
         if (fVerbosity >= confirmations) {
           G4cout << "Drawing event " << (*i)->GetEventID() << G4endl;
         }
-        fpSceneHandler->ClearTransientStore();
+
+        // We are about to draw the event (trajectories, etc.), but first we
+        // have to clear the previous event(s) if necessary.  If this event
+        // needs to be drawn afresh, e.g., the first event or any event when
+        // "accumulate" is not requested, the old event has to be cleared.
+        // We have postponed this so that, for normal viewers like OGL, the
+        // previous event(s) stay on screen until this new event comes
+        // along.  For a file-writing viewer the geometry has to be drawn.
+        // See, for example, G4HepRepFileSceneHandler::ClearTransientStore.
+        // But, for this stop-gap solution...
+        // Deactivate end-of-event and end-of-run models...
+        G4Scene* scene = fpSceneHandler->GetScene();
+        std::vector<G4Scene::Model>& eoeModels = scene->SetEndOfEventModelList();
+        std::vector<G4Scene::Model> tmpEoeModels = eoeModels;
+        std::vector<G4Scene::Model>::iterator iEoe;
+        for (iEoe = eoeModels.begin(); iEoe != eoeModels.end(); ++iEoe) {
+          iEoe->fActive = false;
+        }
+        std::vector<G4Scene::Model>& eorModels = scene->SetEndOfRunModelList();
+        std::vector<G4Scene::Model> tmpEorModels = eorModels;
+        std::vector<G4Scene::Model>::iterator iEor;
+        for (iEor = eoeModels.begin(); iEor != eoeModels.end(); ++iEor) {
+          iEor->fActive = false;
+        }
+        ClearTransientStoreIfMarked();
+        // ...and restore...
+        eoeModels = tmpEoeModels;
+        eorModels = tmpEorModels;
+
+        fTransientsDrawnThisEvent = false;
+        if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
         fpSceneHandler->DrawEvent(*i);
         // ShowView guarantees the view comes to the screen.  No action
         // is taken for passive viewers like OGL*X, but it passes control to
         // interactive viewers, such OGL*Xm and allows file-writing
         // viewers to close the file.
         fpViewer->ShowView();
+        fpSceneHandler->SetMarkForClearingTransientStore(true);
       }
+
     } else {  // Accumulate events.
-      fpSceneHandler->ClearTransientStore();
+
+      // We are about to draw the event (trajectories, etc.), but first we
+      // have to clear the previous event(s) if necessary.  If this event
+      // needs to be drawn afresh, e.g., the first event or any event when
+      // "accumulate" is not requested, the old event has to be cleared.
+      // We have postponed this so that, for normal viewers like OGL, the
+      // previous event(s) stay on screen until this new event comes
+      // along.  For a file-writing viewer the geometry has to be drawn.
+      // See, for example, G4HepRepFileSceneHandler::ClearTransientStore.
+      // But, for this stop-gap solution...
+      // Deactivate end-of-event and end-of-run models...
+      G4Scene* scene = fpSceneHandler->GetScene();
+      std::vector<G4Scene::Model>& eoeModels = scene->SetEndOfEventModelList();
+      std::vector<G4Scene::Model> tmpEoeModels = eoeModels;
+      std::vector<G4Scene::Model>::iterator iEoe;
+      for (iEoe = eoeModels.begin(); iEoe != eoeModels.end(); ++iEoe) {
+        iEoe->fActive = false;
+      }
+      std::vector<G4Scene::Model>& eorModels = scene->SetEndOfRunModelList();
+      std::vector<G4Scene::Model> tmpEorModels = eorModels;
+      std::vector<G4Scene::Model>::iterator iEor;
+      for (iEor = eoeModels.begin(); iEor != eoeModels.end(); ++iEor) {
+        iEor->fActive = false;
+      }
+      ClearTransientStoreIfMarked();
+      // ...and restore...
+      eoeModels = tmpEoeModels;
+      eorModels = tmpEorModels;
+
+      fTransientsDrawnThisEvent = false;
+      if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
       for (i = eventsFromThreads->begin(); i != eventsFromThreads->end(); ++i) {
         if (fVerbosity >= confirmations) {
           G4cout << "Drawing event " << (*i)->GetEventID() << G4endl;
         }
         fpSceneHandler->DrawEvent(*i);
       }
+      fpSceneHandler->DrawEndOfRunModels();
       fpViewer->ShowView();
+      // An extra refresh for auto-refresh viewers
+      if (fpViewer->GetViewParameters().IsAutoRefresh()) {
+        fpViewer->RefreshView();
+      }
+      fpSceneHandler->SetMarkForClearingTransientStore(true);
     }
   }
 }

@@ -1396,8 +1396,6 @@ void G4VisCommandViewerSave::SetNewValue (G4UIcommand*, G4String newValue) {
   
   G4ViewParameters vp = currentViewer->GetViewParameters();
   // Concatenate any private vis attributes modifiers...
-  const std::vector<G4ModelingParameters::VisAttributesModifier>
-    currentVAMs = vp.GetVisAttributesModifiers();
   const std::vector<G4ModelingParameters::VisAttributesModifier>*
     privateVAMs = currentViewer->GetPrivateVisAttributesModifiers();
   if (privateVAMs) {

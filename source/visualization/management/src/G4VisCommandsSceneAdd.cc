@@ -62,9 +62,9 @@
 #include "G4StateManager.hh"
 #include "G4Run.hh"
 #include "G4Event.hh"
-#include "G4IdentityTrajectoryFilter.hh"
-#include "G4TransportationManager.hh"
-#include "G4PropagatorInField.hh"
+////#include "G4IdentityTrajectoryFilter.hh"
+////#include "G4TransportationManager.hh"
+////#include "G4PropagatorInField.hh"
 #include "G4Trajectory.hh"
 #include "G4TrajectoryPoint.hh"
 #include "G4RichTrajectory.hh"
@@ -2285,19 +2285,20 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
   G4int keepVerbose = UImanager->GetVerboseLevel();
   G4int newVerbose = 2;
   UImanager->SetVerboseLevel(newVerbose);
-  G4PropagatorInField* propagatorInField =
-    G4TransportationManager::GetTransportationManager()->
-    GetPropagatorInField();
-  propagatorInField->SetTrajectoryFilter(0); // Switch off smooth trajectories.
-  static G4IdentityTrajectoryFilter auxiliaryPointsFilter;
+  ////G4PropagatorInField* propagatorInField =
+  ////  G4TransportationManager::GetTransportationManager()->
+  ////  GetPropagatorInField();
+  ////propagatorInField->SetTrajectoryFilter(0); // Switch off smooth trajectories.
+  ////static G4IdentityTrajectoryFilter auxiliaryPointsFilter;
   G4String defaultTrajectoryType;
   if (smooth && rich) {
-    UImanager->ApplyCommand("/tracking/storeTrajectory 3");
-    propagatorInField->SetTrajectoryFilter(&auxiliaryPointsFilter);
+    UImanager->ApplyCommand("/tracking/storeTrajectory 4");
+  ////  UImanager->ApplyCommand("/tracking/storeTrajectory 3");
+  ////  propagatorInField->SetTrajectoryFilter(&auxiliaryPointsFilter);
     defaultTrajectoryType = "G4RichTrajectory configured for smooth steps";
   } else if (smooth) {
     UImanager->ApplyCommand("/tracking/storeTrajectory 2");
-    propagatorInField->SetTrajectoryFilter(&auxiliaryPointsFilter);
+  ////  propagatorInField->SetTrajectoryFilter(&auxiliaryPointsFilter);
     defaultTrajectoryType = "G4SmoothTrajectory";
   } else if (rich) {
     UImanager->ApplyCommand("/tracking/storeTrajectory 3");

@@ -338,10 +338,10 @@ public: // With description
   ////////////////////////////////////////////////////////////////////////
   // Administration routines.
 
-  void CreateSceneHandler (G4String name = "");
+  void CreateSceneHandler (const G4String& name = "");
   // Creates scene handler for the current system.
 
-  void CreateViewer  (G4String name = "",G4String XGeometry = "");
+  void CreateViewer (const G4String& name = "", const G4String& XGeometry = "");
   // Creates viewer for the current scene handler.
 
 private:
