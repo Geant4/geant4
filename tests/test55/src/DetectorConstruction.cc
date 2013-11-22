@@ -334,8 +334,8 @@ void DetectorConstruction::SetTallyPosition(G4ThreeVector value)
  
 void DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
+ // G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
