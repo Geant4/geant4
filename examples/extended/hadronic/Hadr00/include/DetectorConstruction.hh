@@ -66,8 +66,6 @@ public:
   void SetTargetRadius(G4double val);
   void SetTargetLength(G4double val);
 
-  void UpdateGeometry();
-
 private:
 
   DetectorConstruction & operator=(const DetectorConstruction &right);

@@ -74,8 +74,6 @@ private:
   G4UIcmdWithAString*        fmat1Cmd;
   G4UIcmdWithADoubleAndUnit* frCmd;
   G4UIcmdWithADoubleAndUnit* flCmd;
-  G4UIcmdWithoutParameter*   fupdateCmd;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

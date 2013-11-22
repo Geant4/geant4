@@ -65,11 +65,13 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fmatCmd->SetGuidance("Select Material for the target");
   fmatCmd->SetParameterName("tMaterial",false);
   fmatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fmatCmd->SetToBeBroadcasted(false);
 
   fmat1Cmd = new G4UIcmdWithAString("/testhadr/WorldMat",this);
   fmat1Cmd->SetGuidance("Select Material for world");
   fmat1Cmd->SetParameterName("wMaterial",false);
   fmat1Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fmat1Cmd->SetToBeBroadcasted(false);
 
   frCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/TargetRadius",this);
   frCmd->SetGuidance("Set radius of the target");
@@ -77,6 +79,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   frCmd->SetUnitCategory("Length");
   frCmd->SetRange("radius>0");
   frCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  frCmd->SetToBeBroadcasted(false);
 
   flCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/TargetLength",this);
   flCmd->SetGuidance("Set length of the target");
@@ -84,12 +87,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   flCmd->SetUnitCategory("Length");
   flCmd->SetRange("length>0");
   flCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fupdateCmd = new G4UIcmdWithoutParameter("/testhadr/update",this);
-  fupdateCmd->SetGuidance("Update geometry.");
-  fupdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fupdateCmd->SetGuidance("if you changed geometrical value(s)");
-  fupdateCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  flCmd->SetToBeBroadcasted(false);
 
 }
 
@@ -101,7 +99,6 @@ DetectorMessenger::~DetectorMessenger()
   delete fmat1Cmd;
   delete frCmd;
   delete flCmd;
-  delete fupdateCmd;
   delete ftestDir;
 }
 
@@ -117,8 +114,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
     fDetector->SetTargetRadius(frCmd->GetNewDoubleValue(newValue));
   } else if( command == flCmd ) { 
     fDetector->SetTargetLength(flCmd->GetNewDoubleValue(newValue));
-  } else if( command == fupdateCmd ) {
-    fDetector->UpdateGeometry();
   }
 }
 

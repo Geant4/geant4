@@ -10,45 +10,45 @@
 /testhadr/targetElm        Al
 /testhadr/TargetRadius     1  cm
 /testhadr/TargetLength     10 cm
-/testhadr/PrintModulo      10
+/run/printProgress         10
 #
 /run/initialize
 /process/em/workerVerbose 0
 #
 /gun/particle proton
 /gun/energy 100. MeV
-/testhadr/histo/fileName  p_al
+##/testhadr/histo/fileName  p_al
 /testhadr/verbose 0
 /process/eLoss/verbose 0
 /run/beamOn 0
 #
 /testhadr/targetElm  Pb
-/testhadr/histo/fileName  p_pb
+##/testhadr/histo/fileName  p_pb
 /run/beamOn 0
 /testhadr/targetElm  Fe
-/testhadr/histo/fileName  p_fe
+##/testhadr/histo/fileName  p_fe
 /run/beamOn 0
 /testhadr/targetElm  C
-/testhadr/histo/fileName  p_c
+##/testhadr/histo/fileName  p_c
 /run/beamOn 0
 /testhadr/targetElm  H
-/testhadr/histo/fileName  p_h
+##/testhadr/histo/fileName  p_h
 /run/beamOn 0
 #
 /testhadr/particle   neutron
-/testhadr/histo/fileName  n_h
+##/testhadr/histo/fileName  n_h
 /run/beamOn 0
 /testhadr/targetElm  Pb
-/testhadr/histo/fileName  n_pb
+##/testhadr/histo/fileName  n_pb
 /run/beamOn 0
 /testhadr/targetElm  Fe
-/testhadr/histo/fileName  n_fe
+##/testhadr/histo/fileName  n_fe
 /run/beamOn 0
 /testhadr/targetElm  C
-/testhadr/histo/fileName  n_c
+##/testhadr/histo/fileName  n_c
 /run/beamOn 0
 /testhadr/verbose 0
 /testhadr/targetElm  Al
-/testhadr/histo/fileName  n_al
+##/testhadr/histo/fileName  n_al
 /run/beamOn 0
 #

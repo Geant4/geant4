@@ -164,20 +164,11 @@ void DetectorConstruction::SetWorldMaterial(const G4String& mat)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void DetectorConstruction::SetTargetRadius(G4double val)  
 {
   if(val > 0.0 && val != fRadius) {
     fRadius = val;
-    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+      G4RunManager::GetRunManager()->ReinitializeGeometry();
   } 
 }
 
@@ -187,7 +178,7 @@ void DetectorConstruction::SetTargetLength(G4double val)
 {
   if(val > 0.0 && val != fLength) {
     fLength = val;
-    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+      G4RunManager::GetRunManager()->ReinitializeGeometry();
   } 
 }
 

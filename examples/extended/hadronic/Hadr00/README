@@ -22,11 +22,6 @@ UI commands are available to modify the geometry:
 /testhadr/TargetRadius  10 mm
 /testhadr/TargetLength  20 cm
 
-If geometry was changed between two runs, then the following command need to
-be executed:
-
-/testhadr/update
-
 By default beam direction coincides with the target axis and is Z axis 
 in the global coordinate system. The beam starts in the middle of the target.
 G4ParticleGun is used as a primary generator. The energy and the type of 

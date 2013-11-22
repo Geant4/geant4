@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-11-13  A. Dotti      (exhadr00-V09-06-05)
+- USe G4RunManager::ReinitializeGeometry() to trigger geometry
+  rebuilds. 
+- Remove ui command /testhadr/Update and corresponding
+  DetectorConstruction::Update method
+- Mark UI command to change detector as ToBeBroadcasted(false)
+- Update README file for change in ui command 
+
 06-11-13  V.Ivanchenko (exhadr00-V09-06-04)
 - Fixed for MT
 
