@@ -39,11 +39,13 @@
 #include "G4Material.hh"
 #include "G4VPhysicalVolume.hh"
 #include "globals.hh"
+#include "G4Cache.hh"
 
 class G4Tubs;
 class G4LogicalVolume;
 class G4UniformMagField;
 class DetectorMessenger;
+class G4GlobalMagFieldMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -58,13 +60,10 @@ public:
   void SetWorldMaterial(const G4String&);
   void SetLBining (G4ThreeVector);
   void SetRBining (G4ThreeVector);
-  void SetMagField(G4double);
 
   virtual G4VPhysicalVolume* Construct();
 
   virtual void ConstructSDandField();
-
-  void UpdateGeometry();
 
   inline const
   G4VPhysicalVolume* GetEcal() const {return physiEcal;};
@@ -113,8 +112,7 @@ private:
   G4VPhysicalVolume* physiRing;    //pointer to the physical R-slide
 
   DetectorMessenger* detectorMessenger;  //pointer to the Messenger
-
-  G4double           fieldValue;
+  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger; //Magnetic field
 
   G4double           edeptrue;
   G4double           rmstrue;

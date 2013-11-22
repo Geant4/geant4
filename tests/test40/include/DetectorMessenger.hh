@@ -62,8 +62,6 @@ private:
   G4UIcmdWith3Vector*        LBinCmd;
   G4UIcmdWith3Vector*        RBinCmd;
   G4UIcmdWith3Vector*        accCmd;
-  G4UIcmdWithADoubleAndUnit* FieldCmd;
-  G4UIcmdWithoutParameter*   UpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

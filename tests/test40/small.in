@@ -26,6 +26,7 @@
 /gun/energy 5 GeV
 /run/beamOn  100
 
-/testem/det/setField  10 gauss
+/globalField/verbose 1
+/globalField/setValue 0 0 10 gauss
 /run/beamOn  100
 

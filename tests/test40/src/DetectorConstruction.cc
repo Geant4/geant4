@@ -50,6 +50,8 @@
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4RunManager.hh"
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,7 +63,7 @@ DetectorConstruction::DetectorConstruction()
  EcalLength(0.),EcalRadius(0.)    ,
  solidEcal(0) ,logicEcal(0) ,physiEcal(0),
  solidSlice(0),logicSlice(0),physiSlice(0),
- solidRing(0) ,logicRing(0) ,physiRing(0),fieldValue(0.0)
+ solidRing(0) ,logicRing(0) ,physiRing(0)
 {
   DefineMaterials();
   detectorMessenger = new DetectorMessenger(this);
@@ -259,20 +261,24 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
 void DetectorConstruction::SetMaterial(const G4String& materialChoice)
 {
-  // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
-  if (pttoMaterial) myMaterial = pttoMaterial;
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    // search the material by its name
+    G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
+    if (pttoMaterial) {
+        myMaterial = pttoMaterial;
+        G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::SetWorldMaterial(const G4String& materialChoice)
 {
-  // search the material by its name
-  G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
-  if (pttoMaterial) worldMaterial = pttoMaterial;
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    // search the material by its name
+    G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
+    if (pttoMaterial) {
+        worldMaterial = pttoMaterial;
+        G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -281,7 +287,7 @@ void DetectorConstruction::SetLBining(G4ThreeVector Value)
 {
   nLtot = (G4int)Value(0);
   dLradl = Value(1);
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -290,7 +296,7 @@ void DetectorConstruction::SetRBining(G4ThreeVector Value)
 {
   nRtot = (G4int)Value(0);
   dRradl = Value(1);
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -300,51 +306,32 @@ void DetectorConstruction::SetEdepAndRMS(G4ThreeVector Value)
   edeptrue = Value(0);
   rmstrue  = Value(1);
   limittrue= Value(2);
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DetectorConstruction::ConstructSDandField()
 {
-  if(!magField && 0.0 != fieldValue) {
-    G4FieldManager* fieldMgr
-      = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-    magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
-    fieldMgr->SetDetectorField(magField);
-    fieldMgr->CreateChordFinder(magField);
-  }   
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::SetMagField(G4double value)
-{
-  //apply a global uniform magnetic field along Z axis
-  G4FieldManager* fieldMgr
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  if(0.0 == value) {
-    fieldValue = 0.0;
-    delete magField;
-    magField = 0;
-
-  } else if(fieldValue != value) {
-
-    if(magField) {
-      delete magField; 
-      magField = 0;
-      fieldMgr->SetDetectorField(magField);
+    if ( fFieldMessenger.Get() == 0 ) {
+        // Create global magnetic field messenger.
+        // Uniform magnetic field is then created automatically if
+        // the field value is not zero.
+        G4ThreeVector fieldValue = G4ThreeVector();
+        G4GlobalMagFieldMessenger* msg =
+        new G4GlobalMagFieldMessenger(fieldValue);
+        //msg->SetVerboseLevel(1);
+        G4AutoDelete::Register(msg);
+        fFieldMessenger.Put( msg );
+        
     }
-    fieldValue = value;
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
+//
+//  if(!magField && 0.0 != fieldValue) {
+//    G4FieldManager* fieldMgr
+//      = G4TransportationManager::GetTransportationManager()->GetFieldManager();
+//    magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
+//    fieldMgr->SetDetectorField(magField);
+//    fieldMgr->CreateChordFinder(magField);
+//  }   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

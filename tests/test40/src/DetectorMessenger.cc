@@ -52,6 +52,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   MaterCmd->SetGuidance("Select Material.");
   MaterCmd->SetParameterName("material",false);
   MaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  MaterCmd->SetToBeBroadcasted(false);
 
   LBinCmd = new G4UIcmdWith3Vector("/testem/det/setLbin",this);
   LBinCmd->SetGuidance("set longitudinal bining");
@@ -59,34 +60,23 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   LBinCmd->SetParameterName("nLtot","dLradl"," ",true);
   LBinCmd->SetRange("nLtot>=1 && dLradl>0");
   LBinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  LBinCmd->SetToBeBroadcasted(false);
+    
   RBinCmd = new G4UIcmdWith3Vector("/testem/det/setRbin",this);
   RBinCmd->SetGuidance("set radial bining");
   RBinCmd->SetGuidance("nb of bins; bin thickness (in radl)");
   RBinCmd->SetParameterName("nRtot","dRradl"," ",true);
   RBinCmd->SetRange("nRtot>=1 && dRradl>0");
   RBinCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  RBinCmd->SetToBeBroadcasted(false);
+    
   accCmd = new G4UIcmdWith3Vector("/testem/det/acceptance",this);
   accCmd->SetGuidance("set Edep and RMS");
   accCmd->SetGuidance("acceptance values");
   accCmd->SetParameterName("edep","rms","limit",true);
   accCmd->SetRange("edep>0 && edep<1 && rms>0");
   accCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  FieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);
-  FieldCmd->SetGuidance("Define magnetic field.");
-  FieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  FieldCmd->SetParameterName("Bz",false);
-  FieldCmd->SetUnitCategory("Magnetic flux density");
-  FieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  UpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
-  UpdateCmd->SetGuidance("Update geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_Idle);
-
+  accCmd->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -97,8 +87,6 @@ DetectorMessenger::~DetectorMessenger()
   delete LBinCmd;
   delete RBinCmd;
   delete accCmd;
-  delete FieldCmd;
-  delete UpdateCmd;
   delete testemDir;
 }
 
@@ -117,12 +105,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
 
   if( command == accCmd )
    { Detector->SetEdepAndRMS(accCmd->GetNew3VectorValue(newValue));}
-
-  if( command == FieldCmd )
-   { Detector->SetMagField(FieldCmd->GetNewDoubleValue(newValue));}
-
-  if( command == UpdateCmd )
-   { Detector->UpdateGeometry();}
 
 }
 
