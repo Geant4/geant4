@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 November 2013, A. Dotti   (test17-V09-06-04)
+	     Use of G4RunManager::ReinitializeGeomtry() method
+             requires run-V09-06-128
+
 21 August 2013, V.Ivanchenko (test17-V09-06-03)
              Removed G4UrbanMscModel93
 

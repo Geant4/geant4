@@ -386,7 +386,7 @@ void Test17DetectorConstruction::SetMagField(G4double fieldValue)
 
 void Test17DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
