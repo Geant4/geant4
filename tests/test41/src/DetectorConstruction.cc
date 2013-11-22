@@ -125,5 +125,5 @@ void DetectorConstruction::SetAbsorberWidth(G4double d)
  
 void DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
