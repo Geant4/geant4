@@ -62,13 +62,12 @@ public:
   virtual ~DetectorConstruction();
 
   virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
 
   void SetWorldMaterial(const G4String&);
   void SetTargetMaterial(const G4String&);
 
   void SetTargetRadius(G4double val);
-
-  void UpdateGeometry();
 
 private:
 
@@ -79,9 +78,6 @@ private:
 
   G4Material*  fTargetMaterial;
   G4Material*  fWorldMaterial;
-
-  CheckVolumeSD*   fCheckSD;
-  TargetSD*        fTargetSD;
 
   G4LogicalVolume* fLogicTarget;
   G4LogicalVolume* fLogicCheck;

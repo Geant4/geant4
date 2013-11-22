@@ -80,8 +80,6 @@ private:
   G4UIcmdWithAnInteger*      fNOfAbsCmd;
   G4UIcmdWithAnInteger*      fVerbCmd;
   G4UIcmdWithABool*          fBeamCmd;
-  G4UIcmdWithoutParameter*   fUpdateCmd;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
