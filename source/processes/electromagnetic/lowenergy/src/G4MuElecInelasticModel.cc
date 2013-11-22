@@ -71,10 +71,7 @@ G4MuElecInelasticModel::G4MuElecInelasticModel(const G4ParticleDefinition*,
    G4cout << "*******************************************************************************" << G4endl;
    G4cout << G4endl;
    
-   nistSi = G4Material::GetMaterial("G4_Si");
-  
-   G4Exception("G4MuElecInelasticModel::G4MuElecInelasticModel",
-                "NOT_IN_SI",FatalException,"No G4_SI material was declared.");
+  nistSi = G4NistManager::Instance()->FindOrBuildMaterial("G4_Si");
 
   verboseLevel= 0;
   // Verbosity scale:
