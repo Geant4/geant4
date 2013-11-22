@@ -13,6 +13,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
+
+21-11-2013  V.I.         tag emdna-V09-06-22
+            - G4ITStepProcessor2 - removed obsolete unused header
+
 01-11-2013  M.K          tag emdna-V09-06-21
             - Correct incorrect singleton check introduced in previous tag
 

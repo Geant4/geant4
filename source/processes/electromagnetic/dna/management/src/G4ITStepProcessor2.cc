@@ -35,7 +35,6 @@
 
 #include "G4ITStepProcessor.hh"
 #include "G4LossTableManager.hh"
-#include "G4EnergyLossTables.hh"
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4VITProcess.hh"
