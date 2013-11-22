@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-11-13 A. Dotti    (test53-V09-06-02)
+- Use G4RunManager::ReinitializeGeometry() 
+
 30-07-2013 A.Dotti   (test53-V09-06-01)
   Bug fixing for compilation warnings for unused varialbes (clang32) 
 
