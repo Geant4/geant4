@@ -239,6 +239,6 @@ G4VPhysicalVolume* BeamTestDetectorConstruction::Construct()
 
 void BeamTestDetectorConstruction::UpdateGeometry()
 {
-    G4RunManager::GetRunManager()->DefineWorldVolume( Construct() );
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
