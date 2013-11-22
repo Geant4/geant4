@@ -1266,7 +1266,7 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid, EAxis axis 
   else if ( parentSolid->GetEntityType() == "G4GenericPolycone" )
   {
     G4GenericPolycone* psolid = (G4GenericPolycone*)(parentSolid);
-    G4int numRZ = psolid->GetNumRZCorner();
+    const G4int numRZ = psolid->GetNumRZCorner();
     G4double r[numRZ], z[numRZ];
     for( G4int ii = 0; ii < numRZ; ii++ )
     {
