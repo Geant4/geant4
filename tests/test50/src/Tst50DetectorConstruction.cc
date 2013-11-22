@@ -501,7 +501,7 @@ void Tst50DetectorConstruction::SetTargetY(G4double valY)
 
 void Tst50DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructWorld());
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 void  Tst50DetectorConstruction::SetMaxStepInTarget(G4double value)
