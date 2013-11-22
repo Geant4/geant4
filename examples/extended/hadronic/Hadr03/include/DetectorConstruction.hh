@@ -63,8 +63,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
     void SetMaterial (G4String);            
     void SetMagField (G4double);
 
-    void UpdateGeometry();
-     
   public:
   
      const
