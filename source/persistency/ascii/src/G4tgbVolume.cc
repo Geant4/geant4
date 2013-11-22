@@ -77,6 +77,7 @@
 #include "G4Torus.hh"
 #include "G4Hype.hh"
 #include "G4Polycone.hh"
+#include "G4GenericPolycone.hh"
 #include "G4Polyhedra.hh"
 #include "G4EllipticalTube.hh"
 #include "G4Ellipsoid.hh"
@@ -350,11 +351,11 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
     G4bool genericPoly = false;
     if( solParam.size() == 3+nplanes*3 )
     { 
-      genericPoly = true;
+      genericPoly = false;
     }
     else if( solParam.size() == 3+nplanes*2 )
     { 
-      genericPoly = false;
+      genericPoly = true;
     }
     else
     {
@@ -371,7 +372,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       return 0;
     }
 
-    if( genericPoly )
+    if( !genericPoly )
     {
       std::vector<G4double>* z_p = new std::vector<G4double>;
       std::vector<G4double>* rmin_p = new std::vector<G4double>;
@@ -399,7 +400,8 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       }
       G4double phiTotal = solParam[1];
       if( std::fabs(phiTotal - twopi) < angularTolerance ) { phiTotal = twopi; }
-      solid = new G4Polycone( sname, solParam[0], phiTotal, // start,delta-phi
+      solid = new G4GenericPolycone( sname,
+                              solParam[0], phiTotal, // start,delta-phi
                               nplanes, // sections
                               &((*R_c)[0]), &((*Z_c)[0]));
     }
@@ -432,7 +434,7 @@ G4VSolid* G4tgbVolume::FindOrConstructG4Solid( const G4tgrSolid* sol )
       return 0;
     }
     
-    if( genericPoly )
+    if( !genericPoly )
     {
       std::vector<G4double>* z_p = new std::vector<G4double>;
       std::vector<G4double>* rmin_p = new std::vector<G4double>;
@@ -1259,6 +1261,21 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid, EAxis axis 
                                        psolid->GetEndPhi(),
                             origParam.Num_z_planes, origParam.Z_values,
                             origParam.Rmin, origParam.Rmax);
+
+  } 
+  else if ( parentSolid->GetEntityType() == "G4GenericPolycone" )
+  {
+    G4GenericPolycone* psolid = (G4GenericPolycone*)(parentSolid);
+    G4int numRZ = psolid->GetNumRZCorner();
+    G4double r[numRZ], z[numRZ];
+    for( G4int ii = 0; ii < numRZ; ii++ )
+    {
+      r[ii] = psolid->GetCorner(ii).r;
+      z[ii] = psolid->GetCorner(ii).z;
+    }
+    solid = new G4GenericPolycone( GetName(), psolid->GetStartPhi(),
+                                   psolid->GetEndPhi() - psolid->GetStartPhi(),
+                                   numRZ, r, z);
 
   } 
   else if ( parentSolid->GetEntityType() == "G4Polyhedra" )

@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 November 2013 - G.Cosmo (ascii-V09-06-07)
+- Added support for G4GenericPolycone.
+
 14 November 2013 - G.Cosmo (ascii-V09-06-06)
 - Corrected typo in G4tgrUtils::WordIsUnit().
 
