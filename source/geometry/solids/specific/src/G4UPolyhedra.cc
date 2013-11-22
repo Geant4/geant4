@@ -50,8 +50,8 @@ G4UPolyhedra::G4UPolyhedra(const G4String& name,
                            const G4double zPlane[],
                            const G4double rInner[],
                            const G4double rOuter[]  )
-  : G4USolid("Polyhedra", new UPolyhedra(name,phiStart, phiTotal, numSide,
-                                         numZPlanes, zPlane, rInner, rOuter))
+  : G4USolid(name, new UPolyhedra(name,phiStart, phiTotal, numSide,
+                                  numZPlanes, zPlane, rInner, rOuter))
 {
 }
 
@@ -67,8 +67,8 @@ G4UPolyhedra::G4UPolyhedra(const G4String& name,
                                  G4int    numRZ,
                            const G4double r[],
                            const G4double z[]   )
-  : G4USolid("Polyhedra", new UPolyhedra(name, phiStart, phiTotal, numSide,
-                                         numRZ, r, z))
+  : G4USolid(name, new UPolyhedra(name, phiStart, phiTotal, numSide,
+                                  numRZ, r, z))
 { 
 }
 

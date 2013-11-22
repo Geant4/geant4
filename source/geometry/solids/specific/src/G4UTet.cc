@@ -50,12 +50,12 @@ G4UTet::G4UTet(const G4String& pName,
                      G4ThreeVector p2,
                      G4ThreeVector p3,
                      G4ThreeVector p4, G4bool* degeneracyFlag)
-  : G4USolid("Tetrahedron", new UTet(pName,
-                                     UVector3(anchor.x(),anchor.y(),anchor.z()),
-                                     UVector3(p2.x(), p2.y(), p2.z()),
-                                     UVector3(p3.x(), p3.y(), p3.z()),
-                                     UVector3(p4.x(), p4.y(), p4.z()),
-                                     degeneracyFlag))
+  : G4USolid(pName, new UTet(pName,
+                             UVector3(anchor.x(),anchor.y(),anchor.z()),
+                             UVector3(p2.x(), p2.y(), p2.z()),
+                             UVector3(p3.x(), p3.y(), p3.z()),
+                             UVector3(p4.x(), p4.y(), p4.z()),
+                             degeneracyFlag))
 {
 }
 

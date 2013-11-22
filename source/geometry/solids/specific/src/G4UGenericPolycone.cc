@@ -46,8 +46,7 @@ G4UGenericPolycone::G4UGenericPolycone(const G4String& name,
                                              G4int    numRZ,
                                        const G4double r[],
                                        const G4double z[]   )
-  : G4USolid("GenericPolycone",
-             new UGenericPolycone(name, phiStart, phiTotal, numRZ, r, z))
+  : G4USolid(name, new UGenericPolycone(name, phiStart, phiTotal, numRZ, r, z))
 { 
 }
 

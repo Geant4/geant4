@@ -17,9 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-Nov-2013  G.Cosmo               (geom-specific-V09-06-35)
+- Correction to USolids wrappers for proper setting of name to base class.
+
 19-Nov-2013  J.Apostolakis         (geom-specific-V09-06-34)
-- Fix for issue identified by Coverity:
-   G4SolidsWorkspacePool: fixed implementation of singleton.
+- Fix for issue identified by Coverity: fixed implementation of
+  G4SolidsWorkspacePool singleton.
 
 20-Nov-2013  T.Mikitina            (geom-specific-V09-06-33)
 - Fixed Coverity defects to USolids wrappers.

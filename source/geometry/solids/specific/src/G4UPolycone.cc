@@ -45,8 +45,8 @@ G4UPolycone::G4UPolycone( const G4String& name,
                         const G4double zPlane[],
                         const G4double rInner[],
                         const G4double rOuter[]  )
-  : G4USolid("Polycone",  new UPolycone(name, phiStart, phiTotal,
-                                        numZPlanes, zPlane, rInner, rOuter))
+  : G4USolid(name,  new UPolycone(name, phiStart, phiTotal,
+                                  numZPlanes, zPlane, rInner, rOuter))
 {
 }
 
@@ -61,7 +61,7 @@ G4UPolycone::G4UPolycone(const G4String& name,
                                G4int    numRZ,
                          const G4double r[],
                          const G4double z[]   )
-  : G4USolid("Polycone", new UPolycone(name, phiStart, phiTotal, numRZ, r, z))
+  : G4USolid(name, new UPolycone(name, phiStart, phiTotal, numRZ, r, z))
 { 
 }
 
