@@ -55,11 +55,7 @@
 #include "Tst64ActionInitialization.hh"
 #include "G4SystemOfUnits.hh"
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
 #include "G4RunManager.hh"
-#endif
 
 #include "G4DecayPhysics.hh"
 #include "G4ParticleTable.hh"
@@ -103,23 +99,19 @@ int main( int argc, char** argv ) {
   G4cout << " Initial seed = " << seed << G4endl; 
   //G4Random::getTheEngine()->restoreStatus( "start.rndm" );
 
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads(4);
-#else 
   G4RunManager* runManager = new G4RunManager;
-#endif
 
   runManager->SetUserInitialization( new Tst64DetectorConstruction );
   runManager->SetUserInitialization( new Tst64PhysicsList );
   runManager->SetUserInitialization(new Tst64ActionInitialization);
-  runManager->Initialize();
+
+  G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
+  partTable->SetReadiness();
 
   G4DecayPhysics decays;
   decays.ConstructParticle();
 
-  G4ParticleTable* partTable = G4ParticleTable::GetParticleTable();
-  partTable->SetReadiness();
+  runManager->Initialize();
 
   G4NistManager* nistManager = G4NistManager::Instance();
 

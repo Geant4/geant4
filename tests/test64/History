@@ -13,6 +13,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 November 2013  Makoto Asai            test64-V09-06-02
+---------------------------------------------------------
+- test64.cc : roll back to G4RunManager. Initialize() is invoked
+  after G4DecayPhysics.ConstructParticle();
+
 13 June 2013  Dennis Wright              test64-V09-06-01
 ---------------------------------------------------------
 - test64.cc : migrated CLHEP::HepRandom to G4Random
