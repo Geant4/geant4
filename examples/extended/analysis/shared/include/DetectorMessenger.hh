@@ -68,7 +68,6 @@ class DetectorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* fGapThickCmd;
     G4UIcmdWithADoubleAndUnit* fSizeYZCmd;
     G4UIcmdWithAnInteger*      fNbLayersCmd;    
-    G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

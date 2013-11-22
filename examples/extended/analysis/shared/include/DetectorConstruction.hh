@@ -68,8 +68,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      
      virtual G4VPhysicalVolume* Construct();
 
-     void UpdateGeometry();
-     
   public:
   
      void PrintCalorParameters(); 

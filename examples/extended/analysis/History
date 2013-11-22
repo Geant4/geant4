@@ -9,6 +9,13 @@ $Id$
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21th November 2013 A. Dotti      (analysisExample-V09-06-06)
+- Removing Update method and UI command in shared
+  DetectorConstruction
+- Adding G4RunManager::ReinitializeGeoemtry in set methods
+  that change geometry
+- Mark /N03/det commands as not to be broadcasted
+
 09th November 2013 I. Hrivnacova (analysisExample-V09-06-05)
 - Removed A01, as it was transformed in basic/B5
 

@@ -55,13 +55,13 @@ DetectorMessenger::DetectorMessenger( DetectorConstruction* Det)
  fAbsThickCmd(0),
  fGapThickCmd(0),
  fSizeYZCmd(0),
- fNbLayersCmd(0),    
- fUpdateCmd(0)
+ fNbLayersCmd(0)    
 { 
   fN03Dir = new G4UIdirectory("/N03/");
   fN03Dir->SetGuidance("UI commands of this example");
   
-  fDetDir = new G4UIdirectory("/N03/det/");
+  G4bool broadcast = false;
+  fDetDir = new G4UIdirectory("/N03/det/",broadcast);
   fDetDir->SetGuidance("detector control");
        
   fAbsMaterCmd = new G4UIcmdWithAString("/N03/det/setAbsMat",this);
@@ -101,11 +101,6 @@ DetectorMessenger::DetectorMessenger( DetectorConstruction* Det)
   fNbLayersCmd->SetRange("NbLayers>0 && NbLayers<500");
   fNbLayersCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fUpdateCmd = new G4UIcmdWithoutParameter("/N03/det/update",this);
-  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
-  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  fUpdateCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,7 +110,7 @@ DetectorMessenger::~DetectorMessenger()
   delete fNbLayersCmd;
   delete fAbsMaterCmd; delete fGapMaterCmd;
   delete fAbsThickCmd; delete fGapThickCmd;
-  delete fSizeYZCmd;   delete fUpdateCmd;
+  delete fSizeYZCmd;   
   delete fDetDir;
   delete fN03Dir;  
 }
@@ -142,9 +137,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    
   if( command == fNbLayersCmd )
    { fDetector->SetNbOfLayers(fNbLayersCmd->GetNewIntValue(newValue));}
-  
-  if( command == fUpdateCmd )
-   { fDetector->UpdateGeometry(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
