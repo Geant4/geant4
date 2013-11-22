@@ -25,6 +25,7 @@ $Id$
     - the number of divisions of each absorber (NbOfDivisions)
 	 	
  In addition a transverse uniform magnetic field can be applied.
+     eg: /globalField/setValue 0 0 5 tesla
  	
  The default geometry is constructed in DetectorConstruction class,
  but all of the above parameters can be changed interactively via

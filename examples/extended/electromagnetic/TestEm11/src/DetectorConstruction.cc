@@ -51,12 +51,15 @@
 #include "G4UnitsTable.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
+#include "G4RunManager.hh"
 #include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
-:G4VUserDetectorConstruction(),fDefaultMaterial(0),fPhysiWorld(0),fMagField(0),
+:G4VUserDetectorConstruction(),fDefaultMaterial(0),fPhysiWorld(0),
  fDetectorMessenger(0)
 {
   // default parameter values of the absorbers
@@ -264,6 +267,7 @@ void DetectorConstruction::SetNbOfAbsor(G4int ival)
       return;
     }
   fNbOfAbsor = ival;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -280,7 +284,10 @@ void DetectorConstruction::SetAbsorMaterial(G4int iabs,const G4String& material)
 
   G4Material* pttoMaterial = 
     G4NistManager::Instance()->FindOrBuildMaterial(material);
-  if (pttoMaterial) fAbsorMaterial[iabs] = pttoMaterial;
+  if (pttoMaterial) {
+      fAbsorMaterial[iabs] = pttoMaterial;
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -300,6 +307,7 @@ void DetectorConstruction::SetAbsorThickness(G4int iabs,G4double val)
       return;
     }
   fAbsorThickness[iabs] = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -314,6 +322,7 @@ void DetectorConstruction::SetAbsorSizeYZ(G4double val)
       return;
     }
   fAbsorSizeYZ = val;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -334,39 +343,26 @@ void DetectorConstruction::SetNbOfDivisions(G4int iabs, G4int ival)
       return;
     }
   fNbOfDivisions[iabs] = ival;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-
-void DetectorConstruction::SetMagField(G4double fieldValue)
+void DetectorConstruction::ConstructSDandField()
 {
-  //apply a global uniform magnetic field along Z axis
-  //
-  G4FieldManager* fieldMgr
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  if(fMagField) delete fMagField;              //delete the existing magn field
-
-  if(fieldValue!=0.)                        // create a new one if non nul
-  { fMagField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
-    fieldMgr->SetDetectorField(fMagField);
-    fieldMgr->CreateChordFinder(fMagField);
-  } else {
-    fMagField = 0;
-    fieldMgr->SetDetectorField(fMagField);
-  }
+    if ( fFieldMessenger.Get() == 0 ) {
+        // Create global magnetic field messenger.
+        // Uniform magnetic field is then created automatically if
+        // the field value is not zero.
+        G4ThreeVector fieldValue = G4ThreeVector();
+        G4GlobalMagFieldMessenger* msg =
+        new G4GlobalMagFieldMessenger(fieldValue);
+        //msg->SetVerboseLevel(1);
+        G4AutoDelete::Register(msg);
+        fFieldMessenger.Put( msg );
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4RunManager.hh"
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -52,9 +52,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
  fNbAbsorCmd(0),           
  fAbsorCmd(0),
  fNdivCmd(0),    
- fSizeYZCmd(0),    
- fMagFieldCmd(0),    
- fUpdateCmd(0)
+ fSizeYZCmd(0)
 { 
   fTestemDir = new G4UIdirectory("/testem/");
   fTestemDir->SetGuidance(" detector control.");
@@ -67,6 +65,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fNbAbsorCmd->SetParameterName("NbAbsor",false);
   fNbAbsorCmd->SetRange("NbAbsor>0");
   fNbAbsorCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNbAbsorCmd->SetToBeBroadcasted(false);
    
   fAbsorCmd = new G4UIcommand("/testem/det/setAbsor",this);
   fAbsorCmd->SetGuidance("Set the absor nb, the material, the thickness.");
@@ -95,6 +94,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fAbsorCmd->SetParameter(unitPrm);
   //
   fAbsorCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fAbsorCmd->SetToBeBroadcasted(false);
   
   fNdivCmd = new G4UIcommand("/testem/det/nDivAbsor",this);
   fNdivCmd->SetGuidance("Divide the absor nb : number of divisions");
@@ -112,6 +112,7 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fNdivCmd->SetParameter(NdivPrm);
   //
   fNdivCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fNdivCmd->SetToBeBroadcasted(false);
       
   fSizeYZCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSizeYZ",this);
   fSizeYZCmd->SetGuidance("Set sizeYZ of the absorber");
@@ -119,19 +120,8 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fSizeYZCmd->SetRange("SizeYZ>0.");
   fSizeYZCmd->SetUnitCategory("Length");
   fSizeYZCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fSizeYZCmd->SetToBeBroadcasted(false);
             
-  fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);  
-  fMagFieldCmd->SetGuidance("Define magnetic field.");
-  fMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  fMagFieldCmd->SetParameterName("Bz",false);
-  fMagFieldCmd->SetUnitCategory("Magnetic flux density");
-  fMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-      
-  fUpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
-  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
-  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  fUpdateCmd->AvailableForStates(G4State_Idle);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -141,9 +131,7 @@ DetectorMessenger::~DetectorMessenger()
   delete fNbAbsorCmd;
   delete fAbsorCmd;
   delete fNdivCmd;    
-  delete fSizeYZCmd;       
-  delete fMagFieldCmd;
-  delete fUpdateCmd;
+  delete fSizeYZCmd;
   delete fDetDir;  
   delete fTestemDir;
 }
@@ -177,12 +165,7 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
       
   if( command == fSizeYZCmd )
    { fDetector->SetAbsorSizeYZ(fSizeYZCmd->GetNewDoubleValue(newValue));}   
-               
-  if( command == fMagFieldCmd )
-   { fDetector->SetMagField(fMagFieldCmd->GetNewDoubleValue(newValue));}
-              
-  if( command == fUpdateCmd )
-   { fDetector->UpdateGeometry();}
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
