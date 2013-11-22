@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 November 13: V.Ivant (emutils-V09-06-67)
+- G4EnergyLossTables - removed G4ThreadLocal (this class is obsolete)
+
 19 November 13: V.Ivant (emutils-V09-06-66)
 - G4VEmProcess, G4VEnergyLossProcess - complete fix for base 
     materials for the case of positrons

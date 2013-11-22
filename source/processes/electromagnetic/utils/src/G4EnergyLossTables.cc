@@ -49,7 +49,7 @@
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+/*
 G4ThreadLocal G4EnergyLossTablesHelper *G4EnergyLossTables::t = 0;
 G4ThreadLocal G4EnergyLossTablesHelper *G4EnergyLossTables::null_loss = 0;
 G4ThreadLocal G4ParticleDefinition* G4EnergyLossTables::lastParticle = 0;
@@ -64,6 +64,21 @@ G4ThreadLocal G4int    G4EnergyLossTables::let_max_num_warnings = 100;
 G4ThreadLocal G4bool   G4EnergyLossTables::first_loss = true;
 
 G4ThreadLocal G4EnergyLossTables::helper_map *G4EnergyLossTables::dict = 0;
+*/
+G4EnergyLossTablesHelper *G4EnergyLossTables::t = 0;
+G4EnergyLossTablesHelper *G4EnergyLossTables::null_loss = 0;
+G4ParticleDefinition* G4EnergyLossTables::lastParticle = 0;
+G4double G4EnergyLossTables::QQPositron = 1.0; // e_squared
+G4double G4EnergyLossTables::Chargesquare ;
+G4int    G4EnergyLossTables::oldIndex = -1 ;
+G4double G4EnergyLossTables::rmin = 0. ;
+G4double G4EnergyLossTables::rmax = 0. ;
+G4double G4EnergyLossTables::Thigh = 0. ;
+G4int    G4EnergyLossTables::let_counter = 0;
+G4int    G4EnergyLossTables::let_max_num_warnings = 100;
+G4bool   G4EnergyLossTables::first_loss = true;
+
+G4EnergyLossTables::helper_map *G4EnergyLossTables::dict = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
