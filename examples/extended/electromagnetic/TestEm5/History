@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21-11-13 Andrea Dotti (testem5-V09-06-14)
+- Use G4GlobalMagFieldMessenger instead of local one
+
 20-11-13 Andrea Dotti (testem5-V09-06-13)
 - Introduced new messenger FieldMessenger (thread-private)
 - Use new G4RunManager::ReinitializeGeometry (requires run-V09-06-128)

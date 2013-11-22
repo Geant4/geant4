@@ -52,6 +52,10 @@
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::DetectorConstruction()
@@ -59,7 +63,7 @@ DetectorConstruction::DetectorConstruction()
  fAbsorberMaterial(0),fWorldMaterial(0),fDefaultWorld(true),
  fSolidWorld(0),fLogicWorld(0),fPhysiWorld(0),
  fSolidAbsorber(0),fLogicAbsorber(0),fPhysiAbsorber(0),
- fMagField(0),fDetectorMessenger(0)
+ fDetectorMessenger(0)
 {
   // default parameter values of the calorimeter
   fAbsorberThickness = 1.*cm;
@@ -409,40 +413,21 @@ void DetectorConstruction::SetAbsorberXpos(G4double val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-#include "FieldMessenger.hh"
-#include "G4AutoDelete.hh"
 
 void DetectorConstruction::ConstructSDandField()
 {
-    //Create a thread-private field messenger
-    //only once per-thread
-    if ( fFieldMessenger.Get() == 0 )
-    {
-        FieldMessenger* fm = new FieldMessenger(this);
-        G4AutoDelete::Register( fm ); //Kernel will delete the messenger
-        fFieldMessenger.Put( fm );
+    if ( fFieldMessenger.Get() == 0 ) {
+        // Create global magnetic field messenger.
+        // Uniform magnetic field is then created automatically if
+        // the field value is not zero.
+        G4ThreeVector fieldValue = G4ThreeVector();
+        G4GlobalMagFieldMessenger* msg =
+        new G4GlobalMagFieldMessenger(fieldValue);
+        //msg->SetVerboseLevel(1);
+        G4AutoDelete::Register(msg);
+        fFieldMessenger.Put( msg );
+        
     }
-}
-
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
-
-void DetectorConstruction::SetMagField(G4double fieldValue)
-{
-  //apply a global uniform magnetic field along Z axis
-  G4FieldManager* fieldMgr 
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-    
-  if(fMagField.Get()) delete fMagField.Get();//delete the existing magn field
-  
-  if(fieldValue!=0.)                        // create a new one if non nul
-  { fMagField.Put( new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue)) );
-    fieldMgr->SetDetectorField(fMagField.Get());
-    fieldMgr->CreateChordFinder(fMagField.Get());
-  } else {
-    fMagField.Put(NULL);
-    fieldMgr->SetDetectorField(fMagField.Get());
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

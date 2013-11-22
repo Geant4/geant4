@@ -45,7 +45,7 @@ class G4Material;
 class G4MaterialCutsCouple;
 class G4UniformMagField;
 class DetectorMessenger;
-class FieldMessenger;
+class G4GlobalMagFieldMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -115,11 +115,9 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4Box*             fSolidAbsorber;
      G4LogicalVolume*   fLogicAbsorber;
      G4VPhysicalVolume* fPhysiAbsorber;
-
-     G4Cache<G4UniformMagField*> fMagField;
      
      DetectorMessenger* fDetectorMessenger;
-     G4Cache<FieldMessenger*> fFieldMessenger;
+     G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
     
       
   private:
