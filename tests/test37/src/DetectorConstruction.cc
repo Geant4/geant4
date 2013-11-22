@@ -243,7 +243,7 @@ void DetectorConstruction::SetNbOfLayersOfMedium3(G4int val)
  
 void DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 
