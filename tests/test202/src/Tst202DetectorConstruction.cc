@@ -46,6 +46,7 @@
 #include "G4EllipticalTube.hh"
 #include "G4EllipticalCone.hh"
 #include "G4Polyhedra.hh"
+#include "G4GenericPolycone.hh"
 #include "G4Polycone.hh"
 #include "G4Tet.hh"
 #include "G4TwistedTubs.hh"
@@ -516,7 +517,7 @@ G4VPhysicalVolume* Tst202DetectorConstruction::Construct()
   //-------------------------------------------- Sphere
 
   if (volumeSelection["Sphere"]) {
-    G4Sphere* PD_vol_crystal
+     G4Sphere* PD_vol_crystal
       = new G4Sphere("Test_Sphere",
                      100.*cm,           // inner radius
                      200.*cm,           // outer radius
@@ -574,8 +575,7 @@ G4VPhysicalVolume* Tst202DetectorConstruction::Construct()
 		      experimentalHall_phys,false,0);
   }
 
-  if (volumeSelection["Polycone"]) {
-
+ if (volumeSelection["Polycone"]) {
     const G4int numRZ1 = 10;
     G4double polycone_r[] = {1,5,3,4,9,9,3,3,2,1};
     G4double polycone_z[] = {0,1,2,3,0,5,4,3,2,1};
@@ -584,8 +584,8 @@ G4VPhysicalVolume* Tst202DetectorConstruction::Construct()
       polycone_z[i] *= 10.*cm;
     }
 
-    G4Polycone* polycone_solid
-      = new G4Polycone("Polycone_Test",
+    G4GenericPolycone* polycone_solid
+      = new G4GenericPolycone("Polycone_Test",
 		       0.*deg,270.*deg,numRZ1,polycone_r,polycone_z);
     //0.,twopi,numRZ,polycone_r,polycone_z);
     if (verbosity)

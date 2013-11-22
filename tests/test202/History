@@ -4,6 +4,9 @@ $Id:$
 History file for test/test202 subdirectory
 ------------------------------------------------
 
+22nd November 2013 Tatiana Nikitina (test202-V09-06-05)
+- Use G4GenericPolycone for polycone shape with decreasing Z-section.
+
 30th August 2013 Gunter Folger (test202-V09-06-04)
 - Enable to run test202, if fake X server Xvfb is installed in system.
 
