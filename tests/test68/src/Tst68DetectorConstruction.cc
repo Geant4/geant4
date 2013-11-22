@@ -639,8 +639,7 @@ void Tst68DetectorConstruction::UpdateGeometry() {
 
   //G4cout << " BEGIN  Tst68DetectorConstruction::UpdateGeometry" << G4endl;
 
-  G4RunManager::GetRunManager()->DefineWorldVolume( ConstructCalorimeter() );
-
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
   PrintParameters();
 
   //G4cout << " END  Tst68DetectorConstruction::UpdateGeometry" << G4endl;
