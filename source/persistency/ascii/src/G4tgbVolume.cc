@@ -1267,7 +1267,8 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid, EAxis axis 
   {
     G4GenericPolycone* psolid = (G4GenericPolycone*)(parentSolid);
     const G4int numRZ = psolid->GetNumRZCorner();
-    G4double r[numRZ], z[numRZ];
+    G4double* r = new G4double[numRZ];
+    G4double* z = new G4double[numRZ];
     for( G4int ii = 0; ii < numRZ; ii++ )
     {
       r[ii] = psolid->GetCorner(ii).r;
@@ -1276,6 +1277,7 @@ G4VSolid* G4tgbVolume::BuildSolidForDivision( G4VSolid* parentSolid, EAxis axis 
     solid = new G4GenericPolycone( GetName(), psolid->GetStartPhi(),
                                    psolid->GetEndPhi() - psolid->GetStartPhi(),
                                    numRZ, r, z);
+    delete [] r; delete [] z;
 
   } 
   else if ( parentSolid->GetEntityType() == "G4Polyhedra" )
