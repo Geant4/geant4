@@ -61,7 +61,10 @@ G4MicroElecInelasticModel::G4MicroElecInelasticModel(const G4ParticleDefinition*
                                              const G4String& nam)
 :G4VEmModel(nam),fAtomDeexcitation(0),isInitialised(false)
 {
-  nistSi = G4NistManager::Instance()->FindOrBuildMaterial("G4_Si");
+  nistSi = G4Material::GetMaterial("G4_Si");
+  
+  G4Exception("G4MicroElecInelasticModel::G4MicroElecInelasticModel",
+                "NOT_IN_SI",FatalException,"No G4_SI material was declared.");
 
   verboseLevel= 0;
   // Verbosity scale:

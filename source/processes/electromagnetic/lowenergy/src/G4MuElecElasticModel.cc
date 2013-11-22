@@ -59,7 +59,10 @@ G4MuElecElasticModel::G4MuElecElasticModel(const G4ParticleDefinition*,
    G4cout << "*******************************************************************************" << G4endl;
    G4cout << G4endl;
    
-  nistSi = G4NistManager::Instance()->FindOrBuildMaterial("G4_Si");
+  nistSi = G4Material::GetMaterial("G4_Si");
+  
+  G4Exception("G4MuElecElasticModel::G4MuElecElasticModel",
+                "NOT_IN_SI",FatalException,"No G4_SI material was declared.");
 
   killBelowEnergy = 16.7 * eV; // Minimum e- energy for energy loss by excitation
   lowEnergyLimit = 0 * eV; 

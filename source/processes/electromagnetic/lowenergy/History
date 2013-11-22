@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22.11.2013  M. Karamitros, tag emlowen-V09-06-49
+	    Remove creation of material in G4MuElect* 
+	    and G4MicroElec* models
+
 21.11.2013  V. Ivanchenko, tag emlowen-V09-06-48
             G4QAOLowEnergyLoss, G4hICRU49He, G4hICRU49p, 
 	    G4hParametrisedLossModel  - removed G4ThreadLocal
