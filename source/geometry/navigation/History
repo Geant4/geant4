@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 22nd, 2013 - I.Hrivnacova  (geomnav-V09-06-19)
+-----------------------------
+- Fixed compiler warning intruduced with previous update
+
 November 22nd, 2013 - I.Hrivnacova  (geomnav-V09-06-18)
 -----------------------------
 - Removed checks for existence of G4TransportationManager
