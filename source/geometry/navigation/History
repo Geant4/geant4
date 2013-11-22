@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 22nd, 2013 - I.Hrivnacova  (geomnav-V09-06-18)
+-----------------------------
+- Removed checks for existence of G4TransportationManager
+  from G4GlobalMagFieldMessenger as they do not work as expected
+
 September 9th, 2013 - G.Cosmo  (geomnav-V09-06-17)
 -----------------------------
 - Relaxed condition for reported move in G4PathFinder::Locate() to exclude

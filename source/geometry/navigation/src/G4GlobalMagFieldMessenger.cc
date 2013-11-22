@@ -83,11 +83,6 @@ G4GlobalMagFieldMessenger::G4GlobalMagFieldMessenger(const G4ThreeVector& value)
 
 G4GlobalMagFieldMessenger::~G4GlobalMagFieldMessenger()
 {
-  // Inactive field if G4TransportationManager is still alive
-  if ( G4TransportationManager::GetTransportationManager() ) {
-    SetField(G4ThreeVector(), 
-             "G4GlobalMagFieldMessenger::~G4GlobalMagFieldMessenger");
-  }           
   delete fMagField;
   delete fSetValueCmd;
   delete fSetVerboseCmd;
@@ -99,14 +94,7 @@ G4GlobalMagFieldMessenger::~G4GlobalMagFieldMessenger()
 void G4GlobalMagFieldMessenger::SetField(const G4ThreeVector& value,
                                          const G4String& inFunction)
 {
-  // Check if G4TransportationManager is available
-  if ( !  G4TransportationManager::GetTransportationManager() ) {
-    G4ExceptionDescription description;
-    description << "G4TransportationManager instance does not exist.";
-    G4Exception(inFunction, "GeomField004", FatalException, description);
-  }
-
-  // Get field manager
+  // Get field manager (or create it if it does not yet exist)
   G4FieldManager* fieldManager
     = G4TransportationManager::GetTransportationManager()->GetFieldManager();
 
