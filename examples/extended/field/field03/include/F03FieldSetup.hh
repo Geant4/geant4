@@ -56,9 +56,7 @@ class F03FieldMessenger;
 class F03FieldSetup
 {
 public:
-  F03FieldSetup(G4ThreeVector);  //  The value of the field
-  F03FieldSetup();               //  A zero field
-
+  F03FieldSetup();           //  A zero field
   virtual ~F03FieldSetup();
 
   void SetStepperType( G4int i ) { fStepperType = i; }
@@ -79,10 +77,10 @@ protected:
 
   // Find the global Field Manager
 
-  G4FieldManager*         GetGlobalFieldManager() ;   // static
+  G4FieldManager*         GetGlobalFieldManager() ;
 
-                       G4FieldManager* fFieldManager;
-  static G4ThreadLocal G4FieldManager* fLocalFieldManager;
+  G4FieldManager*         fFieldManager;
+  G4FieldManager*         fLocalFieldManager;
   G4ChordFinder*          fChordFinder;
   G4ChordFinder*          fLocalChordFinder;
   G4Mag_UsualEqRhs*       fEquation;

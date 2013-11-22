@@ -63,16 +63,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4ThreadLocal G4FieldManager* F03FieldSetup::fLocalFieldManager = 0;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-//  Constructors:
-
 F03FieldSetup::F03FieldSetup()
- : fChordFinder(0),
+ : fFieldManager(0),
+   fLocalFieldManager(0),
+   fChordFinder(0),
    fLocalChordFinder(0),
-   fStepper(0)
+   fEquation(0),
+   fLocalEquation(0),
+   fMagneticField(0),
+   fLocalMagneticField(0),
+   fStepper(0),
+   fLocalStepper(0),
+   fFieldMessenger(0)
 {
   fMagneticField = new G4UniformMagField(G4ThreeVector(3.3*tesla,
                                                        0.0, // 0.5*tesla,
@@ -97,19 +99,12 @@ F03FieldSetup::F03FieldSetup()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-F03FieldSetup::F03FieldSetup(G4ThreeVector fieldVector)
-{
-  fMagneticField = new G4UniformMagField(fieldVector);
-  GetGlobalFieldManager()->CreateChordFinder(fMagneticField);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 F03FieldSetup::~F03FieldSetup()
 {
-  if (fMagneticField) delete fMagneticField;
-  if (fChordFinder)   delete fChordFinder;
-  if (fStepper)       delete fStepper;
+  delete fMagneticField;
+  delete fChordFinder;
+  delete fStepper;
+  delete fFieldMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -200,7 +195,7 @@ void F03FieldSetup::SetStepper()
 void F03FieldSetup::SetFieldValue(G4double fieldStrength)
 {
   G4ThreeVector fieldSetVec(0.0, 0.0, fieldStrength);
-  this->SetFieldValue( fieldSetVec );
+  SetFieldValue( fieldSetVec );
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

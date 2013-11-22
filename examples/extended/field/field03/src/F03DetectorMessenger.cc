@@ -52,8 +52,7 @@ F03DetectorMessenger::F03DetectorMessenger(F03DetectorConstruction* det)
    fAbsZposCmd(0),
    fWorldMaterCmd(0),
    fWorldZCmd(0),
-   fWorldRCmd(0),
-   fUpdateCmd(0)
+   fWorldRCmd(0)
 {
   fDetDir = new G4UIdirectory("/calor/");
   fDetDir->SetGuidance("F03 detector control.");
@@ -63,12 +62,14 @@ F03DetectorMessenger::F03DetectorMessenger(F03DetectorConstruction* det)
   fAbsMaterCmd->SetParameterName("choice",true);
   fAbsMaterCmd->SetDefaultValue("Lead");
   fAbsMaterCmd->AvailableForStates(G4State_Idle);
+  fAbsMaterCmd->SetToBeBroadcasted(false);
 
   fWorldMaterCmd = new G4UIcmdWithAString("/calor/setWorldMat",this);
   fWorldMaterCmd->SetGuidance("Select Material of the World.");
   fWorldMaterCmd->SetParameterName("wchoice",true);
   fWorldMaterCmd->SetDefaultValue("Air");
   fWorldMaterCmd->AvailableForStates(G4State_Idle);
+  fWorldMaterCmd->SetToBeBroadcasted(false);
 
   fAbsThickCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsThick",this);
   fAbsThickCmd->SetGuidance("Set Thickness of the Absorber");
@@ -76,6 +77,7 @@ F03DetectorMessenger::F03DetectorMessenger(F03DetectorConstruction* det)
   fAbsThickCmd->SetDefaultUnit("mm");
   fAbsThickCmd->SetRange("SizeZ>0.");
   fAbsThickCmd->AvailableForStates(G4State_Idle);
+  fAbsThickCmd->SetToBeBroadcasted(false);
 
   fAbsRadCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsRad",this);
   fAbsRadCmd->SetGuidance("Set radius of the Absorber");
@@ -83,12 +85,14 @@ F03DetectorMessenger::F03DetectorMessenger(F03DetectorConstruction* det)
   fAbsRadCmd->SetDefaultUnit("mm");
   fAbsRadCmd->SetRange("SizeR>0.");
   fAbsRadCmd->AvailableForStates(G4State_Idle);
+  fAbsRadCmd->SetToBeBroadcasted(false);
 
   fAbsZposCmd = new G4UIcmdWithADoubleAndUnit("/calor/setAbsZpos",this);
   fAbsZposCmd->SetGuidance("Set Z pos. of the Absorber");
   fAbsZposCmd->SetParameterName("Zpos",false,false);
   fAbsZposCmd->SetDefaultUnit("mm");
   fAbsZposCmd->AvailableForStates(G4State_Idle);
+  fAbsZposCmd->SetToBeBroadcasted(false);
 
   fWorldZCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldZ",this);
   fWorldZCmd->SetGuidance("Set Z size of the World");
@@ -96,6 +100,7 @@ F03DetectorMessenger::F03DetectorMessenger(F03DetectorConstruction* det)
   fWorldZCmd->SetDefaultUnit("mm");
   fWorldZCmd->SetRange("WSizeZ>0.");
   fWorldZCmd->AvailableForStates(G4State_Idle);
+  fWorldZCmd->SetToBeBroadcasted(false);
 
   fWorldRCmd = new G4UIcmdWithADoubleAndUnit("/calor/setWorldR",this);
   fWorldRCmd->SetGuidance("Set R size of the World");
@@ -103,13 +108,7 @@ F03DetectorMessenger::F03DetectorMessenger(F03DetectorConstruction* det)
   fWorldRCmd->SetDefaultUnit("mm");
   fWorldRCmd->SetRange("WSizeR>0.");
   fWorldRCmd->AvailableForStates(G4State_Idle);
-
-  fUpdateCmd = new G4UIcmdWithoutParameter("/calor/update",this);
-  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
-  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  fUpdateCmd->AvailableForStates(G4State_Idle);
-
+  fWorldRCmd->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -123,7 +122,6 @@ F03DetectorMessenger::~F03DetectorMessenger()
   delete fWorldMaterCmd;
   delete fWorldZCmd;
   delete fWorldRCmd;
-  delete fUpdateCmd;
   delete fDetDir;
 }
 
@@ -151,9 +149,6 @@ void F03DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
  
   if( command == fWorldRCmd )
    { fDetector->SetWorldSizeR(fWorldRCmd->GetNewDoubleValue(newValue));}
- 
-  if( command == fUpdateCmd )
-   { fDetector->UpdateGeometry(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
