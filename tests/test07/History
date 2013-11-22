@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 21st, 2013, Andrea Dotti  (test07-V09-06-00)
+- Add call to G4RunManager::ReinitializeGeometry()
+
 Oct 9th, 2012, Gabriele Cosmo (test07-V09-05-00)
 - Explicit inclusion of units and constants headers.
 

@@ -380,7 +380,8 @@ void T07DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
      {AbsorberMaterial = pttoMaterial;
       logicAbsorber->SetMaterial(pttoMaterial); 
       PrintCalorParameters();
-     }             
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+     }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -393,7 +394,8 @@ void T07DetectorConstruction::SetGapMaterial(G4String materialChoice)
      {GapMaterial = pttoMaterial;
       logicGap->SetMaterial(pttoMaterial); 
       PrintCalorParameters();
-     }             
+      G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+     }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -459,7 +461,7 @@ void T07DetectorConstruction::SetMagField(G4double fieldValue)
   
 void T07DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
