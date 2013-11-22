@@ -17,7 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-3th November2013 L.Desorgher (tracking-V09-06-06)
+21st November2013 J.Perl (tracking-V09-06-08)
+- G4TrackingManager : Add handling for StoreTrajectory new case 4
+
+21st November2013 M.Asai (tracking-V09-06-07)
+- G4TrackingMessenger : Move invokation with G4TransportationManager 
+  in G4VisCommandsSceneAdd.cc to this G4TrakingMessenger. 
+  Since G4TransportationManager is thread-local,
+  G4VisCommandsSceneAdd.cc cannot access to G4TransportationManager.
+
+3rd November2013 L.Desorgher (tracking-V09-06-06)
 -G4AdjointTrackingAction. Change order of initialization in constructor to 
   avoid compilation warning.
 

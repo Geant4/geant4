@@ -102,6 +102,7 @@ void G4TrackingManager::ProcessOneTrack(G4Track* apValueG4Track)
     case 1: fpTrajectory = new G4Trajectory(fpTrack); break;
     case 2: fpTrajectory = new G4SmoothTrajectory(fpTrack); break;
     case 3: fpTrajectory = new G4RichTrajectory(fpTrack); break;
+    case 4: fpTrajectory = new G4RichTrajectory(fpTrack); break;
     }
   }
 #endif
