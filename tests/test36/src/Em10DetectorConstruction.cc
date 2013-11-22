@@ -1770,7 +1770,7 @@ void Em10DetectorConstruction::SetMagField(G4double)
   
 void Em10DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructDetectorXTR());
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //
