@@ -63,7 +63,7 @@ void RE04ParallelWorldConstruction::Construct()
   //
   // material defined in the mass world
   //
-  G4Material* water = G4Material::GetMaterial("Water");
+  G4Material* water = G4Material::GetMaterial("G4_WATER");
 
   //
   // parallel world placement box
