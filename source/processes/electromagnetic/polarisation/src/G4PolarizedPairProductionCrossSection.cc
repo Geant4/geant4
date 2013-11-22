@@ -40,8 +40,8 @@
 #include "G4PolarizedPairProductionCrossSection.hh"
 #include "G4PhysicalConstants.hh"
 
-G4ThreadLocal G4bool G4PolarizedPairProductionCrossSection::scrnInitialized=false;
-G4ThreadLocal G4double G4PolarizedPairProductionCrossSection::SCRN [3][20];  
+G4bool G4PolarizedPairProductionCrossSection::scrnInitialized=false;
+G4double G4PolarizedPairProductionCrossSection::SCRN [3][20];  
 // screening function lookup table;
 
 void G4PolarizedPairProductionCrossSection::InitializeMe()

@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 November 13: V.Ivanchenko (empolar-V09-06-08)
+- G4PolarizedPairProductionCrossSection, G4PolarizedBremsstrahlungCrossSection
+    removed G4ThreadLocal
+
 09 November 13: V.Ivanchenko (empolar-V09-06-07)
 - G4eplusPolarizedAnnihilation - correct destruction
 

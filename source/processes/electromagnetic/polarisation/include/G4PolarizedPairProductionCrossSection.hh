@@ -71,8 +71,8 @@ class G4PolarizedPairProductionCrossSection : public G4VPolarizedCrossSection
 
   void InitializeMe();
 
-  static G4ThreadLocal G4bool scrnInitialized;
-  static G4ThreadLocal G4double SCRN [3][20];  // screening function lookup table;
+  static G4bool scrnInitialized;
+  static G4double SCRN [3][20];  // screening function lookup table;
 };
 
 #endif
