@@ -33,6 +33,7 @@
 // --------------------------------------------------------------------
 
 #include "G4GDMLWriteParamvol.hh"
+#include "G4GDMLWriteSolids.hh"
 
 #include "G4SystemOfUnits.hh"
 #include "G4Box.hh"
@@ -46,6 +47,8 @@
 #include "G4Ellipsoid.hh"
 #include "G4Para.hh"
 #include "G4Hype.hh"
+#include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
 #include "G4LogicalVolume.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4PVParameterised.hh"
@@ -270,6 +273,7 @@ Para_dimensionsWrite(xercesc::DOMElement* parametersElement,
                      const G4Para* const para)
 {
    const G4ThreeVector simaxis = para->GetSymAxis();
+
    const G4double alpha = std::atan(para->GetTanAlpha());
    const G4double theta = std::acos(simaxis.z());
    const G4double phi = (simaxis.z() != 1.0)
@@ -315,6 +319,70 @@ Hype_dimensionsWrite(xercesc::DOMElement* parametersElement,
    hype_dimensionsElement->
      setAttributeNode(NewAttribute("lunit","mm"));
    parametersElement->appendChild(hype_dimensionsElement);
+}
+
+void G4GDMLWriteParamvol::
+Polycone_dimensionsWrite(xercesc::DOMElement* parametersElement,
+                     const G4Polycone* const pcone)
+{
+   xercesc::DOMElement* pcone_dimensionsElement = NewElement("polycone_dimensions");
+
+   pcone_dimensionsElement->
+     setAttributeNode(NewAttribute("numRZ",pcone->GetOriginalParameters()->Num_z_planes));
+     pcone_dimensionsElement->
+       setAttributeNode(NewAttribute("startPhi",pcone->GetOriginalParameters()->Start_angle/degree));
+   pcone_dimensionsElement->
+     setAttributeNode(NewAttribute("openPhi", pcone->GetOriginalParameters()->Opening_angle/degree));
+   pcone_dimensionsElement->
+     setAttributeNode(NewAttribute("aunit","deg"));
+   pcone_dimensionsElement->
+     setAttributeNode(NewAttribute("lunit","mm"));
+
+    parametersElement->appendChild(pcone_dimensionsElement);
+    const size_t num_zplanes = pcone->GetOriginalParameters()->Num_z_planes;
+    const G4double* z_array = pcone->GetOriginalParameters()->Z_values;
+    const G4double* rmin_array = pcone->GetOriginalParameters()->Rmin;
+    const G4double* rmax_array = pcone->GetOriginalParameters()->Rmax;
+
+    for (size_t i=0; i<num_zplanes; i++)
+    {
+     ZplaneWrite(pcone_dimensionsElement,z_array[i],rmin_array[i],rmax_array[i]);
+    }
+
+    // parametersElement->appendChild(pcone_dimensionsElement);
+}
+
+void G4GDMLWriteParamvol:: 
+Polyhedra_dimensionsWrite(xercesc::DOMElement* parametersElement,
+                     const G4Polyhedra* const polyhedra)
+{
+   xercesc::DOMElement* polyhedra_dimensionsElement = NewElement("polyhedra_dimensions");
+
+   polyhedra_dimensionsElement->
+     setAttributeNode(NewAttribute("numRZ",polyhedra->GetOriginalParameters()->Num_z_planes));
+   polyhedra_dimensionsElement->
+     setAttributeNode(NewAttribute("numSide",polyhedra->GetOriginalParameters()->numSide));
+   polyhedra_dimensionsElement->
+       setAttributeNode(NewAttribute("startPhi",polyhedra->GetOriginalParameters()->Start_angle/degree));
+   polyhedra_dimensionsElement->
+     setAttributeNode(NewAttribute("openPhi", polyhedra->GetOriginalParameters()->Opening_angle/degree));
+   polyhedra_dimensionsElement->
+     setAttributeNode(NewAttribute("aunit","deg"));
+   polyhedra_dimensionsElement->
+     setAttributeNode(NewAttribute("lunit","mm"));
+
+    const size_t num_zplanes = polyhedra->GetOriginalParameters()->Num_z_planes;
+    const G4double* z_array = polyhedra->GetOriginalParameters()->Z_values;
+    const G4double* rmin_array = polyhedra->GetOriginalParameters()->Rmin;
+    const G4double* rmax_array = polyhedra->GetOriginalParameters()->Rmax;
+
+    for (size_t i=0; i<num_zplanes; i++)
+    {
+      ZplaneWrite(polyhedra_dimensionsElement,z_array[i],rmin_array[i],rmax_array[i]);
+    }
+
+   parametersElement->appendChild(polyhedra_dimensionsElement);
+  
 }
 
 void G4GDMLWriteParamvol::
@@ -410,6 +478,18 @@ ParametersWrite(xercesc::DOMElement* paramvolElement,
       paramvol->GetParameterisation()->ComputeDimensions(*hype,index,
                 const_cast<G4VPhysicalVolume*>(paramvol));
       Hype_dimensionsWrite(parametersElement,hype);
+   }else
+   if (G4Polycone* pcone = dynamic_cast<G4Polycone*>(solid))
+   {
+      paramvol->GetParameterisation()->ComputeDimensions(*pcone,index,
+                const_cast<G4VPhysicalVolume*>(paramvol));
+      Polycone_dimensionsWrite(parametersElement,pcone);
+   }else
+   if (G4Polyhedra* polyhedra = dynamic_cast<G4Polyhedra*>(solid))
+   {
+      paramvol->GetParameterisation()->ComputeDimensions(*polyhedra,index,
+                const_cast<G4VPhysicalVolume*>(paramvol));
+      Polyhedra_dimensionsWrite(parametersElement,polyhedra);
    }
    else
    {

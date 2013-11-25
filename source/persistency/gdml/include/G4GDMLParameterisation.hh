@@ -50,6 +50,8 @@
 #include "G4Sphere.hh"
 #include "G4Orb.hh"
 #include "G4Ellipsoid.hh"
+#include "G4Polycone.hh"
+#include "G4Polyhedra.hh"
 #include "G4Torus.hh"
 #include "G4Para.hh"
 #include "G4Hype.hh"

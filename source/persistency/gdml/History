@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 November 2013 Tatiana Nikitina (gdml-V09-06-07)
+- Added support for parameterisation of polycone and polyhedra in GDML schema.
+  Extended related classes accordingly in reader and writer.
+- Added warning in reader for multi-union structure not yet supported.
+
 7 November 2013 Gabriele Cosmo (gdml-V09-06-06)
 - Replaced deprecated calls to G4Sphere accessor methods.
 

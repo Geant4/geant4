@@ -81,7 +81,10 @@ class G4GDMLReadParamvol : public G4GDMLReadSetup
                                  G4GDMLParameterisation::PARAMETER&);
    void Hype_dimensionsRead(const xercesc::DOMElement* const,
                                  G4GDMLParameterisation::PARAMETER&);
-
+   void Polycone_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
+   void Polyhedra_dimensionsRead(const xercesc::DOMElement* const,
+                                 G4GDMLParameterisation::PARAMETER&);
    void ParameterisedRead(const xercesc::DOMElement* const);
 
    void ParametersRead(const xercesc::DOMElement* const);

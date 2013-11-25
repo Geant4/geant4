@@ -535,6 +535,13 @@ void G4GDMLReadSolids::HypeRead(const xercesc::DOMElement* const hypeElement)
    new G4Hype(name,rmin,rmax,inst,outst,z);
 }
 
+void G4GDMLReadSolids::MultiUnionRead(const xercesc::DOMElement* const)
+{
+   G4Exception("G4GDMLReadSolids::MultiUnionRead()",
+               "InvalidSetup", JustWarning,
+               "MultiUnion is not supported yet. Sorry!");
+}
+
 void G4GDMLReadSolids::OrbRead(const xercesc::DOMElement* const orbElement)
 {
    G4String name;
@@ -2197,6 +2204,7 @@ void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement
       if (tag=="xtru") { XtruRead(child); } else
       if (tag=="hype") { HypeRead(child); } else
       if (tag=="intersection") { BooleanRead(child,INTERSECTION); } else
+      if (tag=="multiunion") { MultiUnionRead(child); } else
       if (tag=="orb") { OrbRead(child); } else
       if (tag=="para") { ParaRead(child); } else
       if (tag=="paraboloid") { ParaboloidRead(child); } else

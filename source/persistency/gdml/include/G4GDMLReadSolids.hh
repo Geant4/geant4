@@ -52,7 +52,7 @@ class G4SurfaceProperty;
 class G4GDMLReadSolids : public G4GDMLReadMaterials
 {
    enum BooleanOp {UNION,SUBTRACTION,INTERSECTION};
-   typedef struct { G4double rmin,rmax,z; } zplaneType;
+  // typedef struct { G4double rmin,rmax,z; } zplaneType;
    typedef struct { G4double r,z; } rzPointType;
   
  public:
@@ -63,7 +63,7 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    virtual void SolidsRead(const xercesc::DOMElement* const);
 
  protected:
-
+   typedef struct { G4double rmin,rmax,z; } zplaneType;
    G4GDMLReadSolids();
    virtual ~G4GDMLReadSolids();
 
@@ -75,6 +75,7 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    void EltubeRead(const xercesc::DOMElement* const);
    void XtruRead(const xercesc::DOMElement* const);
    void HypeRead(const xercesc::DOMElement* const);
+   void MultiUnionRead(const xercesc::DOMElement* const);
    void OrbRead(const xercesc::DOMElement* const);
    void ParaRead(const xercesc::DOMElement* const);
    void ParaboloidRead(const xercesc::DOMElement* const);

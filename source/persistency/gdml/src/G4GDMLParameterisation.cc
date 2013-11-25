@@ -32,6 +32,8 @@
 // -------------------------------------------------------------------------
 
 #include "G4GDMLParameterisation.hh"
+#include "G4PolyconeHistorical.hh"
+#include "G4PolyhedraHistorical.hh"
 
 G4int G4GDMLParameterisation::GetSize() const
 {
@@ -165,17 +167,46 @@ ComputeDimensions(G4Hype& hype,const G4int index,const G4VPhysicalVolume*) const
 }
 
 void G4GDMLParameterisation::
-ComputeDimensions(G4Polycone&,const G4int,const G4VPhysicalVolume*) const
+ComputeDimensions(G4Polycone& pcone,const G4int index,const G4VPhysicalVolume*) const
 {
-   G4Exception("G4GDMLParameterisation::ComputeDimensions()",
-               "InvalidSetup", FatalException,
-               "Parameterisation of G4Polycone not implemented yet. Sorry!");
+ 
+   G4PolyconeHistorical origparam( *(pcone.GetOriginalParameters()) );
+   origparam.Start_angle = parameterList[index].dimension[0];
+   origparam.Opening_angle = parameterList[index].dimension[1];
+   origparam.Num_z_planes = parameterList[index].dimension[2];
+   G4int nZplanes = origparam.Num_z_planes;
+ 
+   for( G4int ii = 0; ii < nZplanes; ii++ )
+   {
+     origparam.Rmin[ii] = parameterList[index].dimension[3+ii*3] ;
+     origparam.Rmax[ii] = parameterList[index].dimension[4+ii*3] ;
+     origparam.Z_values[ii] = parameterList[index].dimension[5+ii*3] ;
+   }
+
+   pcone.SetOriginalParameters(&origparam);  // copy values & transfer pointers
+   pcone.Reset();                            // reset to new solid parameters
+ 
 }
 
 void G4GDMLParameterisation::
-ComputeDimensions(G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const
+ComputeDimensions(G4Polyhedra& polyhedra,const G4int index,const G4VPhysicalVolume*) const
 {
-   G4Exception("G4GDMLParameterisation::ComputeDimensions()",
-               "InvalidSetup", FatalException,
-               "Parameterisation of G4Polyhedra not implemented yet. Sorry!");
+   G4PolyhedraHistorical origparam( *(polyhedra.GetOriginalParameters()) );
+   origparam.Start_angle = parameterList[index].dimension[0];
+   origparam.Opening_angle = parameterList[index].dimension[1];
+   origparam.Num_z_planes = parameterList[index].dimension[2];
+   origparam.numSide = parameterList[index].dimension[3];
+   
+   G4int nZplanes = origparam.Num_z_planes;
+   
+   for( G4int ii = 0; ii < nZplanes; ii++ )
+   {
+    
+     origparam.Rmin[ii] = parameterList[index].dimension[4+ii*3] ;
+     origparam.Rmax[ii] = parameterList[index].dimension[5+ii*3] ;
+     origparam.Z_values[ii] = parameterList[index].dimension[6+ii*3] ;
+   
+  }
+  polyhedra.SetOriginalParameters(&origparam);  // copy values & transfer pointers
+  polyhedra.Reset();                            // reset to new solid parameters
 }
