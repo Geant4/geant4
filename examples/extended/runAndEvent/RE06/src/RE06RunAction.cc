@@ -155,7 +155,7 @@ void RE06RunAction::EndOfRunAction(const G4Run* aRun)
     }
   } else {
   
-    G4cout << "CPU Time spent by each region" << G4cout;
+    G4cout << "CPU Time spent by each region" << G4endl;
     RE06SteppingVerbose* sv
     = (RE06SteppingVerbose*)(G4VSteppingVerbose::GetInstance());
     sv->Report();
