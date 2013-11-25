@@ -134,8 +134,6 @@ class F03DetectorConstruction : public G4VUserDetectorConstruction
 
      G4int              fFoilNumber;
 
-     G4bool             fWorldChanged;
-
   private:
 
      void DefineMaterials();

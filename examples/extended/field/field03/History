@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 22, 2013 - P.Gumplinger - fieldex03-V09-06-03
+- add gui.mac back in and removed fWorldChanged
+
 November 21, 2013 - I.Hrivnacova - fieldex03-V09-06-02
 - Use new G4RunManager::ReinitializeGeometry to trigger geometry rebuild 
   when geometry changes
