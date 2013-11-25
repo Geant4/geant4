@@ -149,8 +149,8 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
                       "magneticPhysical",worldLogical,
                       false,0,checkOverlaps);
     
-    // set "user limits" for drawing smooth curve
-    G4UserLimits* userLimits = new G4UserLimits(5.0*cm);
+    // set step limit in tube with magnetic field  
+    G4UserLimits* userLimits = new G4UserLimits(1*m);
     fMagneticLogical->SetUserLimits(userLimits);
     
     // first arm

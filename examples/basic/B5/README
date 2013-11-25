@@ -43,6 +43,10 @@ $Id$
                  into cells of lead, with a layer of 
                  plastic scintillator placed at the center 
                  of each cell
+     
+     The maximum step limit in the magnetic field region is also set 
+     via the G4UserLimits class in a similar way as in Example B2.
+                    
 
   2. PHYSICS
 
@@ -120,6 +124,21 @@ $Id$
            cell column ID and row ID, position and rotation
              (see B5HadCalorimeterSD, B5HadCalorimeterHit classes)  
 
+     The hit classes include methods GetAttDefs and CreateAttValues to define
+     and then fill extra "HepRep-style" Attributes that the visualization system
+     can use to present extra information about the hits.
+     For example, if you pick a B5HadCalorimeterHit in OpenGL or a HepRep viewer,
+     you will be shown the hit's "Hit Type", "Column ID", "Row ID",
+     "Energy Deposited" and "Position".
+     These attributes are essentially arbitrary extra pieces of information
+     (integers, doubles or strings) that are carried through the visualization.      
+     Each attribute is defined once in G4AttDef object and then is filled for
+     each hit in a G4AttValue object.
+     These attributes can also be used by commands to filter which hits are drawn:
+     /vis/filtering/hits/drawByAttribute
+     Detector Geometry and trajectories also carry HepRep-style attributes,
+     but these are filled automatically in the base classes.
+     HepRep is further described at: http://www.slac.stanford.edu/~perl/heprep/
 
   5. ANALYSIS:
 
@@ -181,13 +200,11 @@ $Id$
    (since they require no external libraries), but the OGL driver requires
    that the Geant4 libraries have been built with the OpenGL option.
 
-   From Release 9.6 the vis.mac macro in example B5 has additional commands
-   that demonstrate additional functionality of the vis system, such as
-   displaying text, axes, scales, date, logo and shows how to change
-   viewpoint and style.  Consider copying these to other examples or
-   your application.  To see even more commands use help or
-   ls or browse the available UI commands in the Application
-   Developers Guide, Section 7.1.
+   vis.mac has additional commands that demonstrate additional functionality
+   of the vis system, such as displaying text, axes, scales, date, logo and
+   shows how to change viewpoint and style.
+   To see even more commands use help or ls or browse the available UI commands
+   in the Application Developers Guide.
 
    For more information on visualization, including information on how to
    install and run DAWN, OpenGL and HepRApp, see the visualization tutorials,
