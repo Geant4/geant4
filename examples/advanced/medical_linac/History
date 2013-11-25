@@ -15,6 +15,9 @@ and keep track of all category-tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25.11.2013    G. Folger, tag medical_linac-V09-06-03
+              fix MS VC 18 compilation error in ML2PrimaryGenerationAction.cc
+				  
 22.11.2013    G. Folger, tag medical_linac-V09-06-02
               fix MS VC 18 compilation error in ML2ExpVoxels.cc
 

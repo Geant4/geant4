@@ -200,7 +200,7 @@ void CML2PrimaryGenerationAction::fillParticlesContainer()
 	int startDataFilePosition;
 	std::ifstream in;
 	in.open(calculatedPhaseSpaceFileIN, std::ios::in);
-	if (in==0)
+	if (in)
 	{
 		std::cout <<"ERROR phase space file: "<< calculatedPhaseSpaceFileIN << " NOT found. Run abort "<< G4endl;
 		G4RunManager::GetRunManager()->AbortRun(true);
