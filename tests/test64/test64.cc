@@ -86,7 +86,7 @@ int main( int argc, char** argv ) {
 
   std::ifstream inputFile( inputFileName.c_str() );
   if ( ! inputFile ) {
-    std::cerr << " Can't open input file: " << inputFile << std::endl;
+    std::cerr << " Can't open input file: " << inputFileName << std::endl;
     return 2;
   }
 

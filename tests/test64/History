@@ -13,6 +13,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25 November 2013  Gunter Folger          test64-V09-06-03
+---------------------------------------------------------
+- test64.cc : MS VC18 compilation fix.
+
 21 November 2013  Makoto Asai            test64-V09-06-02
 ---------------------------------------------------------
 - test64.cc : roll back to G4RunManager. Initialize() is invoked
