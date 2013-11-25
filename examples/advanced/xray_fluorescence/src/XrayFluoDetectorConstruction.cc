@@ -244,7 +244,7 @@ void XrayFluoDetectorConstruction::SetOhmicPosThickness(G4double val)
     
   }
   else{
-    G4cout << "Not available in this configuration" << G4cout;
+    G4cout << "Not available in this configuration" << G4endl;
   }
   
 }
