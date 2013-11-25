@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-06-26 22 November 2013 Ivana Hrivnacova
+- Added new extended biasing/B03 example in tests;
+  re-activated biasing/B02 in GNUmake text
+
 ctests-V09-06-25 22 November 2013 Ivana Hrivnacova
 - Added extended Hadr03 and Hadr04 examples in tests
 

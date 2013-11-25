@@ -151,8 +151,14 @@ GEANT4_ADD_TEST(example-ext-analysis-b1con COMMAND ${BINDIR}/exampleB1Con ${SRCD
 
 GEANT4_ADD_TEST(example-ext-biasing-b01 COMMAND ${BINDIR}/exampleB01 
                                         BUILD ${SRCDIR}/extended/biasing/B01)
-#GEANT4_ADD_TEST(example-ext-biasing-b02 COMMAND ${BINDIR}/exampleB02 
-#                                        BUILD ${SRCDIR}/extended/biasing/B02)
+GEANT4_ADD_TEST(example-ext-biasing-b02 COMMAND ${BINDIR}/exampleB02 
+                                        BUILD ${SRCDIR}/extended/biasing/B02)
+GEANT4_ADD_TEST(example-ext-biasing-b03 COMMAND ${BINDIR}/exampleB03 
+                                        BUILD ${SRCDIR}/extended/biasing/B03)
+#GEANT4_ADD_TEST(example-ext-biasing-gb01 COMMAND ${BINDIR}/exampleGB01 
+#                                        BUILD ${SRCDIR}/extended/biasing/GB01)
+#GEANT4_ADD_TEST(example-ext-biasing-gb02 COMMAND ${BINDIR}/exampleGB02 
+#                                        BUILD ${SRCDIR}/extended/biasing/GB02)
 GEANT4_ADD_TEST(example-ext-biasing-reversemc01 COMMAND ${BINDIR}/exampleRMC01 ${SRCDIR}/extended/biasing/ReverseMC01/run_adjoint_simulation_electron.g4mac  
                                         BUILD ${SRCDIR}/extended/biasing/ReverseMC01)
 foreach(_i 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18)

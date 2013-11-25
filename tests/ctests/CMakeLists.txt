@@ -120,6 +120,21 @@ GEANT4_ADD_TEST(example-ext-biasing-b02
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/B02
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/B02
                 BUILD exampleB02 PROJECT B02)
+GEANT4_ADD_TEST(example-ext-biasing-b03 
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/B03/exampleB03
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/B03
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/B03
+                BUILD exampleB03 PROJECT B03)
+#GEANT4_ADD_TEST(example-ext-biasing-gb01 
+#                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB01/exampleGB01
+#                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/GB01
+#                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB01
+#                BUILD exampleGB01 PROJECT GB01project ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+#GEANT4_ADD_TEST(example-ext-biasing-gb02 
+#                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB02/exampleGB02
+#                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/GB02
+#                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB02
+#                BUILD exampleGB02 PROJECT GB02project ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-biasing-reversemc01 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/ReverseMC01/exampleRMC01
                         ${CMAKE_SOURCE_DIR}/examples/extended/biasing/ReverseMC01/run_adjoint_simulation_electron.mac
