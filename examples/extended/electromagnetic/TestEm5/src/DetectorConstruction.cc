@@ -40,6 +40,11 @@
 #include "G4PVPlacement.hh"
 #include "G4UniformMagField.hh"
 
+#include "G4GeometryManager.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
+
 #include "G4UnitsTable.hh"
 #include "G4NistManager.hh"
 #include "G4RunManager.hh"
@@ -262,6 +267,13 @@ void DetectorConstruction::ComputeCalorParameters()
   
 G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 { 
+  // Cleanup old geometry
+  //
+  G4GeometryManager::GetInstance()->OpenGeometry();
+  G4PhysicalVolumeStore::GetInstance()->Clean();
+  G4LogicalVolumeStore::GetInstance()->Clean();
+  G4SolidStore::GetInstance()->Clean();
+  
   // World
   //
   fSolidWorld = new G4Box("World",                                //its name
