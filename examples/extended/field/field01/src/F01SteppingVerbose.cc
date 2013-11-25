@@ -97,7 +97,7 @@ void F01SteppingVerbose::StepInfo()
 
     if(fStep->GetPostStepPoint()->GetProcessDefinedStep() != 0){
       G4cout << "  "
-             << std::setw(10) 
+             << std::setw(10)
              << fStep->GetPostStepPoint()->GetProcessDefinedStep()
                                          ->GetProcessName();
     } else {

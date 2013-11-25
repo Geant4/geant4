@@ -96,8 +96,8 @@ class F01DetectorConstruction : public G4VUserDetectorConstruction
      G4LogicalVolume* GetLogicalAbsorber()    {return fLogicAbsorber;}
 
   private:
-     F01DetectorMessenger* fDetectorMessenger;  // pointer to the Messenger
-     G4Cache<F01CalorimeterSD*> fCalorimeterSD; // pointer to the sensitive detector
+     F01DetectorMessenger* fDetectorMessenger;  // pointer -> Messenger
+     G4Cache<F01CalorimeterSD*> fCalorimeterSD; // pointer -> sensitive detector
      G4Cache<F01FieldSetup*>    fEmFieldSetup;
 
 

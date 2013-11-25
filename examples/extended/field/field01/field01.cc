@@ -112,6 +112,8 @@ int main(int argc,char** argv)
     {  // interactive mode : define UI session
 #ifdef G4UI_USE
      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+     if (ui->IsGUI())
+        UImanager->ApplyCommand("/control/execute gui.mac");
      ui->SessionStart();
      delete ui;
 #endif

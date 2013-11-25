@@ -55,7 +55,7 @@ F01DetectorConstruction::F01DetectorConstruction()
  : G4VUserDetectorConstruction(),
    fDetectorMessenger(0),
    fSolidWorld(0), fLogicWorld(0), fPhysiWorld(0),
-   fSolidAbsorber(0),fLogicAbsorber(0), fPhysiAbsorber(0),
+   fSolidAbsorber(0), fLogicAbsorber(0), fPhysiAbsorber(0),
    fAbsorberMaterial(0), fAbsorberThickness(0.), fAbsorberRadius(0.),
    fZAbsorber(0.), fZStartAbs(0.), fZEndAbs(0.),
    fWorldMaterial(0), fWorldSizeR(0.), fWorldSizeZ(0.)
@@ -382,7 +382,7 @@ void F01DetectorConstruction::ConstructSDandField()
   if (!fEmFieldSetup.Get()) { 
     F01FieldSetup* fieldSetup 
       = new F01FieldSetup(G4ThreeVector( 3.3*tesla, 0.0, 0.0 ) );
-    G4AutoDelete::Register(fieldSetup); //Kernel will delete the messenger
+    G4AutoDelete::Register(fieldSetup); // Kernel will delete the F01FieldSetup
     fEmFieldSetup.Put(fieldSetup);
   }  
 }
