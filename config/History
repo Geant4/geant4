@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25th November 2013   Gabriele Cosmo  (config-V09-06-17)
+- Corrected settings for Linux-g++ and Linux-icc in the use of -fPIC in
+  multi-threaded mode.
+
 19th November 2013   Gabriele Cosmo  (config-V09-06-16)
 - Minor correction to Darwin scripts for Qt setup.
 
