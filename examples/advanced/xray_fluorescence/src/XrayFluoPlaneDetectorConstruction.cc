@@ -628,7 +628,7 @@ void XrayFluoPlaneDetectorConstruction::SetPlaneMaterial(G4String newMaterial)
 {
 
 
-    G4cout << "Material!!!!" << newMaterial << G4cout;
+    G4cout << "Material!!!!" << newMaterial << G4endl;
     logicPlane->SetMaterial(materials->GetMaterial(newMaterial));
     PrintApparateParameters();
   

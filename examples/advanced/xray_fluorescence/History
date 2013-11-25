@@ -19,6 +19,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-11-2013 G.Folger Tag: XrayFluo-V09-06-02
+- Fix  one more typo in XrayFluoDetectorConstruction.cc: G4cout replaced by G4endl; 
+
 22-11-2013 G.Folger Tag: XrayFluo-V09-06-01
 - Fix typo in XrayFluoDetectorConstruction.cc: G4cout replaced by G4endl; 
  
