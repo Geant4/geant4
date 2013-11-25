@@ -47,7 +47,7 @@ public:
   G4int    GetVerbosity() const {return fVerbosity;}
   G4String GetOutFileName () const {return fOutFileName;}
   void SetVerbosity    (G4int verbosity) {fVerbosity = verbosity;}
-  void SetOutFileName (G4String name)  {fOutFileName = name;}
+  void SetOutFileName (const G4String& name)  {fOutFileName = name;}
 protected:
   G4int fVerbosity;
   G4ASCIITreeMessenger* fpMessenger;

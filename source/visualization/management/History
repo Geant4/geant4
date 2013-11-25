@@ -26,6 +26,10 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+22nd November 2013  John Allison (visman-V09-06-27)
+- G4VisManager.cc: Fix for end-of-run action "accumulate".
+- G4VisCommandsSceneAdd.cc: Tidied.
+
 21st November 2013  Makoto Asai (visman-V09-06-26)
 - Move invokation with G4TransportationManager in G4VisCommandsSceneAdd.cc
   to G4TrakingMessenger. G4TransportationManager is thread-local. 

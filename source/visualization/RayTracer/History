@@ -24,6 +24,10 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+15th November 2013  John Allison (raytracer-V09-06-07)
+- Some changes as suggested by PVS.
+- Fixes for Coverity.
+
 20th September 2013 Gabriele Cosmo (raytracer-V09-06-06)
 - Fixed GNUmakefile. Added dependency on "run" category...
 

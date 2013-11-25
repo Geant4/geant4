@@ -46,7 +46,7 @@ class G4VFigureFileMaker
     virtual ~G4VFigureFileMaker() {;}
 
   public:
-    virtual void CreateFigureFile(G4String fileName,
+    virtual void CreateFigureFile(const G4String& fileName,
               int nColumn,int nRow,
               unsigned char* colorR, unsigned char* colorG, 
               unsigned char* colorB) = 0;

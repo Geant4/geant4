@@ -70,7 +70,7 @@ class G4RayTrajectoryPoint :public G4VTrajectoryPoint
     inline const G4VisAttributes* GetPreStepAtt() const { return preStepAtt; }
     inline void SetPostStepAtt(const G4VisAttributes* val) { postStepAtt = val; }
     inline const G4VisAttributes* GetPostStepAtt() const { return postStepAtt; }
-    inline void SetSurfaceNormal(G4ThreeVector val) { surfaceNormal = val; }
+    inline void SetSurfaceNormal(const G4ThreeVector& val) { surfaceNormal = val; }
     inline G4ThreeVector GetSurfaceNormal() const { return surfaceNormal; }
     inline void SetStepLength(G4double val) { stepLength = val; }
     inline G4double GetStepLength() const { return stepLength; }

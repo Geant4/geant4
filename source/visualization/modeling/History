@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+15th November 2013  John Allison  (modeling-V09-06-22)
+- Some changes as suggested by PVS.
+
 6th November 2013  John Allison  (modeling-V09-06-21)
 - G4ArrowModel.cc: Tidied.
 

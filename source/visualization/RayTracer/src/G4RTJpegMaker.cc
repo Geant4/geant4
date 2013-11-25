@@ -40,7 +40,7 @@ G4RTJpegMaker::G4RTJpegMaker()
 G4RTJpegMaker::~G4RTJpegMaker()
 {;}
 
-void G4RTJpegMaker::CreateFigureFile(G4String fileName,
+void G4RTJpegMaker::CreateFigureFile(const G4String& fileName,
               int nColumn, int nRow,
               u_char* colorR,
               u_char* colorG,

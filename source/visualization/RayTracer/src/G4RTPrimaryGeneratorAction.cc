@@ -56,6 +56,7 @@ G4RTPrimaryGeneratorAction::G4RTPrimaryGeneratorAction()
   eyePosition = zero;
   eyeDirection = zero;
   up = G4ThreeVector(0,1,0);
+  headAngle = 0.0;
   viewSpan = 0.0;
   stepAngle = 0.0;
   viewSpanX = 0.0;

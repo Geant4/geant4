@@ -24,6 +24,9 @@ committal in the CVS repository !
 History file for visualization/Tree sub-category
 ------------------------------------------------
 
+15th November 2013  John Allison  (vistree-V09-06-01)
+- Some changes as suggested by PVS.
+
 2nd December 2012  John Allison  (vistree-V09-06-00)
   o Removed NURBS.
 

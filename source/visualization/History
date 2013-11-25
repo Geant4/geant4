@@ -24,9 +24,21 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+23rd November 2013  Joseph Perl  (vis-V09-06-37)
+- opengl-V09-06-11: Fixes for Qt
+- opengl-V09-06-10: Fixes for Qt
+- VRML-V09-06-05: Some changes as suggested by PVS
+- raytracer-V09-06-07: Some changes as suggested by PVS and Coverity
+- modeling-V09-06-22: Some changes as suggested by PVS
+- vistree-V09-06-01: Some changes as suggested by PVS
+- DAWN-V09-06-06: Some changes as suggested by PVS
+- visman-V09-06-27: Fix for end-of-run action accumulate
+- visman-V09-06-26: Fix for smooth trajectories in MT mode
+
 9th November 2013  Joseph Perl  (vis-V09-06-36)
 - visman-V09-06-25 Command parameter updates
-- DAWN-V09-06-05 Replaced deprecated calls to solids accessor methods- VRML-V09-06-04 Replaced deprecated calls to solids accessor methods
+- DAWN-V09-06-05 Replaced deprecated calls to solids accessor methods
+- VRML-V09-06-04 Replaced deprecated calls to solids accessor methods
 
 7th November 2013 Laurent Garnier
 - opengl-V09-06-09:

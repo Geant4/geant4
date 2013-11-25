@@ -945,11 +945,12 @@ G4FRSCENEHANDLER::SendVisAttributes ( const G4VisAttributes*  pAV )
   } else {
         // Send attributes. Status is "success".
     status = true ;
+    const G4Color& color = pAV->GetColor();
     SendStrDouble3( FR_COLOR_RGB, 
-		    pAV->GetColor().GetRed  (), 
-		    pAV->GetColor().GetGreen(), 
-		    pAV->GetColor().GetBlue () ); 
-    if ( pAV->GetColor().GetAlpha() < ALPHA_MIN ) {
+		    color.GetRed  (), 
+		    color.GetGreen(), 
+		    color.GetBlue () ); 
+    if ( color.GetAlpha() < ALPHA_MIN ) {
       SendStr( FR_FORCE_WIREFRAME_ON ) ;
     } 
     else if ( pAV->IsForceDrawingStyle () &&

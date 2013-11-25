@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20th November 2013 Laurent Garnier  (opengl-V09-06-11)
+- G4OpenGLQtViewer : 
+  o When saving file in Qt the extention was always append. Now it is done only when it is
+    not present
+  o Add a variable to remember last used settings for image type and target directory
+  o Make PNG the default export format instead of BPM.
+  o Add another protection against iterator outside of std::map
+
 19th November 2013 Laurent Garnier (opengl-V09-06-10)
 - G4OpenGLQtViewer : 
   o Best fix for JIRA DEV-62, thanks John.

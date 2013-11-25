@@ -57,7 +57,9 @@ G4TheMTRayTracer::G4TheMTRayTracer(G4VFigureFileMaker* figMaker,
   else
   { G4Exception("G4TheMTRayTracer::G4TheMTRayTracer","VisRayTracer00100",
          FatalException,"G4TheMTRayTracer has to be a singleton.");}
+  theUserWorkerInitialization = 0;
   theRTWorkerInitialization = 0;
+  theUserRunAction = 0;
   theRTRunAction = 0;
 }
 
@@ -75,7 +77,7 @@ G4TheMTRayTracer::~G4TheMTRayTracer()
   }
 }
 
-void G4TheMTRayTracer::Trace(G4String fileName)
+void G4TheMTRayTracer::Trace(const G4String& fileName)
 {
   G4StateManager* theStateMan = G4StateManager::GetStateManager();
   G4ApplicationState currentState = theStateMan->GetCurrentState();

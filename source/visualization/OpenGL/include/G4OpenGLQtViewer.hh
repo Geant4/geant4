@@ -273,8 +273,9 @@ private:
   QWidget* fSceneTreeWidget;
   bool fPVRootNodeCreate;
   QLineEdit* fHelpLine;
-
-
+  QString fFileSavePath;
+  QString fDefaultSaveFileFormat;
+  
   int fNbRotation ;
   int fTimeRotation;
   QString fTouchableVolumes;

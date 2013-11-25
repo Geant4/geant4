@@ -49,7 +49,7 @@ class G4RTJpegMaker : public G4VFigureFileMaker
 	virtual ~G4RTJpegMaker();
 
   public:
-    virtual void CreateFigureFile(G4String fileName,
+    virtual void CreateFigureFile(const G4String& fileName,
 	          int nColumn,int nRow,
 		  u_char* colorR, u_char* colorG,
 		  u_char* colorB);

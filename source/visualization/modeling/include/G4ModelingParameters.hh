@@ -165,7 +165,7 @@ public: // With description
   void SetSectionSolid         (G4VSolid* pSectionSolid);
   void SetCutawaySolid         (G4VSolid* pCutawaySolid);
   void SetEvent                (const G4Event* pEvent);
-  void SetVisAttributesModifiers(const std::vector<VisAttributesModifier>);
+  void SetVisAttributesModifiers(const std::vector<VisAttributesModifier>&);
 
   friend std::ostream& operator <<
   (std::ostream& os, const G4ModelingParameters&);

@@ -1748,13 +1748,15 @@ void G4VisManager::EndOfRun ()
         }
         fpSceneHandler->DrawEvent(*i);
       }
-      fpSceneHandler->DrawEndOfRunModels();
-      fpViewer->ShowView();
-      // An extra refresh for auto-refresh viewers
-      if (fpViewer->GetViewParameters().IsAutoRefresh()) {
-        fpViewer->RefreshView();
+      if (fpScene->GetRefreshAtEndOfRun()) {
+        fpSceneHandler->DrawEndOfRunModels();
+        fpViewer->ShowView();
+        // An extra refresh for auto-refresh viewers
+        if (fpViewer->GetViewParameters().IsAutoRefresh()) {
+          fpViewer->RefreshView();
+        }
+        fpSceneHandler->SetMarkForClearingTransientStore(true);
       }
-      fpSceneHandler->SetMarkForClearingTransientStore(true);
     }
   }
 }

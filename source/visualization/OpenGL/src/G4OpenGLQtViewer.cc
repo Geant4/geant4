@@ -249,6 +249,10 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   signalMapperMouse = new QSignalMapper(this);
   signalMapperSurface = new QSignalMapper(this);
 
+  // Set default path and format
+  fFileSavePath = QDir::currentPath();
+  fDefaultSaveFileFormat = "png";
+
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLQtViewer::G4OpenGLQtViewer END\n");
 #endif
@@ -790,19 +794,33 @@ void G4OpenGLQtViewer::actionSaveImage() {
   filters += "eps;;";
   filters += "ps;;";
   filters += "pdf";
-  QString* selectedFormat = new QString();
-  std::string name;
-  name =  QFileDialog::getSaveFileName ( fGLWindow,
+
+  QString* selectedFormat = new QString(fDefaultSaveFileFormat);
+  QString qFilename;
+  qFilename =  QFileDialog::getSaveFileName ( fGLWindow,
                                          tr("Save as ..."),
                                          ".",
                                          filters,
-                                         selectedFormat ).toStdString().c_str(); 
+                                         selectedFormat );
+
+  
+  std::string name = qFilename.toStdString().c_str();
+
   // bmp jpg jpeg png ppm xbm xpm
   if (name.empty()) {
     return;
   }
-  name += "." + selectedFormat->toStdString();
+
+  fFileSavePath = QFileInfo(qFilename).path();
+  if (! qFilename.endsWith(selectedFormat,Qt::CaseInsensitive)) {
+    name += "." + selectedFormat->toStdString();
+  }
+  
   QString format = selectedFormat->toLower();
+  
+  // set the default format to current
+  fDefaultSaveFileFormat = format;
+  
   setPrintFilename(name.c_str(),0);
   G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(fGLWindow,format,fWindow->height(),fWindow->width());
   if(  exportDialog->exec()) {
@@ -3558,9 +3576,11 @@ QTreeWidgetItem* G4OpenGLQtViewer::getTreeWidgetItem(int POindex){
     return NULL;
   }
 
-  if (POindex == fLastSceneTreeWidgetAskForIterator->first) {
-    if (fLastSceneTreeWidgetAskForIterator->second != NULL) {
-      return fLastSceneTreeWidgetAskForIterator->second;
+  if (fLastSceneTreeWidgetAskForIterator != fLastSceneTreeWidgetAskForIteratorEnd) {
+    if (POindex == fLastSceneTreeWidgetAskForIterator->first) {
+      if (fLastSceneTreeWidgetAskForIterator->second != NULL) {
+        return fLastSceneTreeWidgetAskForIterator->second;
+      }
     }
   }
   

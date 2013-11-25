@@ -93,7 +93,7 @@ class G4TheMTRayTracer : public G4TheRayTracer
     virtual ~G4TheMTRayTracer();
 
   public: // with description
-    virtual void Trace(G4String fileName);
+    virtual void Trace(const G4String& fileName);
     // The main entry point which triggers ray tracing. "fileName" is output
     // file name, and it must contain extention (e.g. myFigure.jpg). This
     // method is available only if Geant4 is at Idle state.
