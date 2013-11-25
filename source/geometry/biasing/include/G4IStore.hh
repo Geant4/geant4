@@ -128,7 +128,7 @@ private:
  
   const G4VPhysicalVolume* fWorldVolume;
   //  const G4VPhysicalVolume* fParallelWorldVolume;
-  G4bool fParaFlag;
+  //  G4bool fParaFlag;
   G4GeometryCellImportance fGeometryCelli;
 
   mutable G4GeometryCellImportance::const_iterator fCurrentIterator;

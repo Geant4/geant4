@@ -115,7 +115,7 @@ private:
 private:
 
   const G4VPhysicalVolume* fWorldVolume;  
-  G4bool fParaFlag;
+  //  G4bool fParaFlag;
 
   std::set<G4double, std::less<G4double> > fGeneralUpperEnergyBounds;
   G4GeometryCellWeight fCellToUpEnBoundLoWePairsMap;

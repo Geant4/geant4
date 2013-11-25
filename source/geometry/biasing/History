@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 25th, 2013 A.Howard (geombias-V09-06-07)
+- Removed unused data member: fParaFlag from G4IStore and G4WeigthWindowStore
+
 November 22nd, 2013 A.Howard (geombias-V09-06-06)
 - Retagging to be co-working with:
   	    phys-ctor-limiters-V09-06-013, 

@@ -47,11 +47,11 @@
 G4IStore* G4IStore::fInstance = 0;
 
 G4IStore::G4IStore() :
-fWorldVolume(G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume()),fParaFlag(false)
+fWorldVolume(G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume())
 {}
 
 G4IStore::G4IStore(G4String ParallelWorldName) :
-fWorldVolume(G4TransportationManager::GetTransportationManager()->GetParallelWorld(ParallelWorldName)),fParaFlag(true)
+fWorldVolume(G4TransportationManager::GetTransportationManager()->GetParallelWorld(ParallelWorldName))
 {
   G4cout << " G4IStore:: ParallelWorldName = " << ParallelWorldName << G4endl;
   G4cout << " G4IStore:: fParallelWorldVolume = " << fWorldVolume->GetName() << G4endl;  

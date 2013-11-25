@@ -50,7 +50,7 @@ G4WeightWindowStore* G4WeightWindowStore::fInstance = 0;
 
 G4WeightWindowStore::
 G4WeightWindowStore() :
-fWorldVolume(G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume()),fParaFlag(false),
+fWorldVolume(G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume()),
   fGeneralUpperEnergyBounds(),
   fCellToUpEnBoundLoWePairsMap(),
   fCurrentIterator(fCellToUpEnBoundLoWePairsMap.end())
@@ -58,7 +58,7 @@ fWorldVolume(G4TransportationManager::GetTransportationManager()->GetNavigatorFo
 
 G4WeightWindowStore::
 G4WeightWindowStore(G4String ParallelWorldName) :
-fWorldVolume(G4TransportationManager::GetTransportationManager()->GetParallelWorld(ParallelWorldName)),fParaFlag(true),
+fWorldVolume(G4TransportationManager::GetTransportationManager()->GetParallelWorld(ParallelWorldName)),
   fGeneralUpperEnergyBounds(),
   fCellToUpEnBoundLoWePairsMap(),
   fCurrentIterator(fCellToUpEnBoundLoWePairsMap.end())
