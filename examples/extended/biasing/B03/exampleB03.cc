@@ -95,7 +95,7 @@ int main(int , char **)
   G4MTRunManager * runManager = new G4MTRunManager;
   G4cout << " Number of cores: " << G4Threading::G4GetNumberOfCores() << G4endl;
   G4cout << " but using only two! " << G4endl;
-  runManager->SetNumberOfThreads(2);
+  runManager->SetNumberOfThreads(1);
   //  runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
 #else
   G4RunManager * runManager = new G4RunManager;
@@ -157,12 +157,12 @@ int main(int , char **)
   }
 
   // creating the geometry cell and add both to the store
-  G4GeometryCell gCell = pdet->GetGeometryCell(18);
+  //  G4GeometryCell gCell = pdet->GetGeometryCell(18);
 
 
   // create importance geometry cell pair for the "rest"cell
   // with the same importance as the last concrete cell 
-  gCell = pdet->GetGeometryCell(19);
+  G4GeometryCell gCell = pdet->GetGeometryCell(19);
   //  G4double imp = std::pow(2.0,18); 
   G4double imp = std::pow(2.0,17); 
   aIstore->AddImportanceGeometryCell(imp, gCell.GetPhysicalVolume(), 19);

@@ -96,14 +96,14 @@ void B03ImportanceDetectorConstruction::Construct()
 
   G4double innerRadiusShield = 0*cm;
   G4double outerRadiusShield = 100*cm;
-  G4double hightShield       = 5*cm;
+  G4double heightShield       = 5*cm;
   G4double startAngleShield  = 0*deg;
   G4double spanningAngleShield    = 360*deg;
 
   G4Tubs *aShield = new G4Tubs("aShield",
                                innerRadiusShield,
                                outerRadiusShield,
-                               hightShield,
+                               heightShield,
                                startAngleShield,
                                spanningAngleShield);
   
@@ -124,7 +124,7 @@ void B03ImportanceDetectorConstruction::Construct()
     
     G4double pos_x = 0*cm;
     G4double pos_y = 0*cm;
-    G4double pos_z = startz + (i-1) * (2*hightShield);
+    G4double pos_z = startz + (i-1) * (2*heightShield);
     G4VPhysicalVolume *pvol = 
       new G4PVPlacement(0, 
                         G4ThreeVector(pos_x, pos_y, pos_z),
@@ -144,16 +144,16 @@ void B03ImportanceDetectorConstruction::Construct()
   // last slob
   innerRadiusShield = 0*cm;
   //  outerRadiusShield = 110*cm; exceeds world volume!!!!
-  outerRadiusShield = 101*cm;
-  //  hightShield       = 10*cm;
-  hightShield       = 5*cm;
+  outerRadiusShield = 100*cm;
+  //  heightShield       = 10*cm;
+  heightShield       = 5*cm;
   startAngleShield  = 0*deg;
   spanningAngleShield    = 360*deg;
 
   G4Tubs *aRest = new G4Tubs("Rest",
                              innerRadiusShield,
                              outerRadiusShield,
-                             hightShield,
+                             heightShield,
                              startAngleShield,
                              spanningAngleShield);
   

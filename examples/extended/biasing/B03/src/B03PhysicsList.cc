@@ -690,7 +690,7 @@ void B03PhysicsList::AddBiasingProcess(){
   }
 
 #ifdef G4MULTITHREADED 
-  fGeomSampler->AddProcess();
+    fGeomSampler->AddProcess();
 #else
   G4cout << " Running in singlethreaded mode!!! " << G4endl;
 #endif

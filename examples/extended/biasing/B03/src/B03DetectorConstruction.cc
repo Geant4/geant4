@@ -157,14 +157,15 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
   G4double innerRadiusCylinder = 0*cm;
   G4double outerRadiusCylinder = 101*cm; // dont't have scoring
                    // cells coinside eith world volume boundary
-  G4double hightCylinder       = 105*cm;
+  //  G4double heightCylinder       = 105*cm;
+  G4double heightCylinder       = 100*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
 
   G4Tubs *worldCylinder = new G4Tubs("worldCylinder",
                                      innerRadiusCylinder,
                                      outerRadiusCylinder,
-                                     hightCylinder,
+                                     heightCylinder,
                                      startAngleCylinder,
                                      spanningAngleCylinder);
 
@@ -182,14 +183,14 @@ G4VPhysicalVolume* B03DetectorConstruction::Construct()
 
   G4double innerRadiusShield = 0*cm;
   G4double outerRadiusShield = 100*cm;
-  G4double hightShield       = 90*cm;
+  G4double heightShield       = 90*cm;
   G4double startAngleShield  = 0*deg;
   G4double spanningAngleShield    = 360*deg;
 
   G4Tubs *aShield = new G4Tubs("aShield",
                                innerRadiusShield,
                                outerRadiusShield,
-                               hightShield,
+                               heightShield,
                                startAngleShield,
                                spanningAngleShield);
   
