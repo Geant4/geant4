@@ -72,7 +72,6 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4ParticleChangeForRadDecay.hh"
 #include "G4IonTable.hh"
-#include "G4HadTmpUtil.hh"
 
 #include "G4BetaFermiFunction.hh"
 #include "G4PhotonEvaporation.hh"
@@ -300,7 +299,6 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
     // Need to hold the shell idex after ICM
     G4int shellIndex = -1;
     if (daughterExcitation > 0.0) {
-   
       // Pop the daughter nucleus off the product vector to get its 4-momentum
       dynamicDaughter = products->PopProducts();
       G4LorentzVector daughterMomentum = dynamicDaughter->Get4Momentum();
@@ -349,8 +347,8 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
         // electrons.  The last element is the residual nucleus.
         G4FragmentVector* gammas = deexcitation->BreakUp(nucleus);  // Evaporate only one photon
         G4int nGammas = gammas->size() - 1;
-        G4double finalDaughterExcitation = gammas->operator[](nGammas)->GetExcitationEnergy();
-
+        G4double finalDaughterExcitation = 
+                             gammas->operator[](nGammas)->GetExcitationEnergy();
         // Go through each gamma/e- and add it to the decay product.  The
         // angular distribution of the gammas is isotropic, and the residual
         // nucleus is assumed not to have suffered any recoil as a result of
@@ -470,7 +468,7 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
       //this to avoid a warning from transitionManager(otherwise the output is the same)
       //Correction to Bug 1662. L Desorgher (04/02/2011)
       if (eShell >= transitionManager->NumberOfShells(aZ)){
-      	  eShell=transitionManager->NumberOfShells(aZ)-1;
+        eShell=transitionManager->NumberOfShells(aZ)-1;
       }
 
       const G4AtomicShell* shell = transitionManager->Shell(aZ, eShell);

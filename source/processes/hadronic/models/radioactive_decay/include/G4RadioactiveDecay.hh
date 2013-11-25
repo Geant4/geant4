@@ -269,8 +269,6 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
 
     G4NucleusLimits theNucleusLimits;
 
-    G4double HighestValue;
-
     G4bool isInitialised;
     G4bool AnalogueMC;
     G4bool BRBias;

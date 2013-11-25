@@ -14,6 +14,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+24 November 2013  Dennis Wright radioactive_decay-V09-06-21
+-----------------------------------------------------------
+- G4RadioactiveDecay::GetMeanFreePath: currently GetPDGStable() returns stable
+    for isomers.  This prevented isomers from decaying in flight.  Fix by
+    replacing GetPDGStable() with lifetime == -1 as test for nuclide stability.
+    Also clean up calculation of pathlength.
+
+- G4NuclearDecayChannel: clean out unused print-outs
+
 13 November 2013  Dennis Wright radioactive_decay-V09-06-20
 -----------------------------------------------------------
 - G4RadioactiveDecay::LoadDecayTable: fix endpoint energy loaded into decay
