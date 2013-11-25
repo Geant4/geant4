@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 24th, 2013  A.Howard
+- Fixed segmentation fault at the end of an MT run
+- caused by deleting fGhostStep in the destructor
+- removed RemoveProcess from the destructor (ClearSampling) of the configurators
+- also caused an out of range index with MT
+
+November 22nd, 2013  A.Howard
+- Migrated to MT - changed design to physics list orientation
+- kept backward compatability for single threaded use, except for singleton
+- Moved G4VProcessPlacer and G4ProcessPlacer to management
+
 October 10th, 2013  A.Howard
 - Subdirectory and history file created.
 

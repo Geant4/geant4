@@ -53,7 +53,7 @@ class G4WeightCutOffConfigurator : public G4VSamplerConfigurator
 
 public:  // with description
 
-  G4WeightCutOffConfigurator(G4VPhysicalVolume* worldvolume,
+  G4WeightCutOffConfigurator(const G4VPhysicalVolume* worldvolume,
 				const G4String &particlename,
                              G4double wsurvival,
                              G4double wlimit,
@@ -71,7 +71,7 @@ private:
   G4WeightCutOffConfigurator(const G4WeightCutOffConfigurator&);
   G4WeightCutOffConfigurator &
   operator=(const G4WeightCutOffConfigurator&);
-  G4VPhysicalVolume* fWorld;
+  const G4VPhysicalVolume* fWorld;
   G4ProcessPlacer fPlacer;
   G4WeightCutOffProcess *fWeightCutOffProcess;
   G4bool fPlaced;

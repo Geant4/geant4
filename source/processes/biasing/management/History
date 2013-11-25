@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 22nd, 2013  A.Howard
+- Moved G4VProcessPlacer and G4ProcessPlacer from importance
+
 October 10th, 2013  A.Howard
 - Subdirectory and history file created.
 

@@ -17,25 +17,45 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 9th, 2013 Andrea Dotti (probiasing-V09-06-07)
+Nov 24th, 2013 Alex Howard (procbiasing-V09-06-12)
+    - Fixed segmentation fault in mass only case (deleted non-existent objects)
+
+Nov 24th, 2013 Alex Howard (procbiasing-V09-06-11)
+    - Fixed segmentation fault at the end of an MT run
+    - caused by deleting fGhostStep in the destructor
+    - removed RemoveProcess from the destructor (ClearSampling) of configurators
+    - also caused an out of range index with MT
+
+Nov 22nd, 2013 Alex Howard (procbiasing-V09-06-10)
+    - Included guard for single threaded backward compatability
+    - except for singleton instantiation
+
+Nov 22nd, 2013 Alex Howard (procbiasing-V09-06-09)
+    - Migration of WeightWindow importance biasing to MT
+
+Nov 22nd, 2013 Alex Howard (procbiasing-V09-06-08)
+    - Migration of geometrical importance biasing to MT
+    - moved G4VProcessPlacer and G4ProcessPlacer to management (from importance)
+
+Nov 9th, 2013 Andrea Dotti (procbiasing-V09-06-07)
     - Bug fixing for unused data members identified by clang 3.2
 
-Nov 8th, 2013 Marc Verderi (probiasing-V09-06-06)
+Nov 8th, 2013 Marc Verderi (procbiasing-V09-06-06)
     - Migration to MT
     - Adding force collision operator G4BOptrForceCollision and related classes
 
-Nov 6th, 2013 Marc Verderi (probiasing-V09-06-05)
+Nov 6th, 2013 Marc Verderi (procbiasing-V09-06-05)
     - Introduce physics list configuration helper G4BiasingHelper
     - Introduce cross section change operation G4BOptnChangeCrossSection
 
-Nov 5th, 2013 Marc Verderi (probiasing-V09-06-04)
+Nov 5th, 2013 Marc Verderi (procbiasing-V09-06-04)
     - fix compilation warnings in G4BiasingProcessInterface.hh
       for unused fWrappedProcessIsAtRest and fWrappedProcessIsPost
     - fix warning on windows in G4VBiasingOperation.cc constructor
     - fix error on void G4VBiasingOperator::ForgetTrack which
       was returning a value.
 
-Nov 5th, 2013 Marc Verderi (probiasing-V09-06-03)
+Nov 5th, 2013 Marc Verderi (procbiasing-V09-06-03)
 - add classes to generic and management to unblock other dev in process:
   - generic:
 	G4BiasingProcessInterface

@@ -36,7 +36,7 @@
 #include "G4WeightCutOffProcess.hh"
 
 G4WeightCutOffConfigurator::
-G4WeightCutOffConfigurator(G4VPhysicalVolume* worldvolume,
+G4WeightCutOffConfigurator(const G4VPhysicalVolume* worldvolume,
 			      const G4String &particlename,
                                  G4double wsurvival,
                                  G4double wlimit,
@@ -64,7 +64,7 @@ G4WeightCutOffConfigurator::~G4WeightCutOffConfigurator()
 {
   if (fPlaced)
   {
-    fPlacer.RemoveProcess(fWeightCutOffProcess);
+    //    fPlacer.RemoveProcess(fWeightCutOffProcess);
     delete fWeightCutOffProcess;
   }
 }
@@ -73,7 +73,7 @@ void G4WeightCutOffConfigurator::Configure(G4VSamplerConfigurator *)
 {
   G4cout << " entering new weight window configure " << G4endl;
 
-  if(paraflag) fWeightCutOffProcess->SetParallelWorld(fWorld);
+  if(paraflag) fWeightCutOffProcess->SetParallelWorld(fWorld->GetName());
 
   fPlacer.AddProcessAsLastDoIt(fWeightCutOffProcess); 
   fPlaced = true;

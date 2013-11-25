@@ -44,6 +44,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4biasing_mgt
     HEADERS
+        G4VProcessPlacer.hh
+        G4ProcessPlacer.hh
         G4BiasingAppliedCase.hh
         G4BiasingOperationManager.hh
 	G4BiasingTrackData.hh
@@ -52,6 +54,8 @@ GEANT4_DEFINE_MODULE(NAME G4biasing_mgt
         G4VBiasingOperation.hh
         G4VBiasingOperator.hh
     SOURCES
+        G4VProcessPlacer.cc
+        G4ProcessPlacer.cc
         G4BiasingOperationManager.cc
 	G4BiasingTrackData.cc
 	G4BiasingTrackDataStore.cc

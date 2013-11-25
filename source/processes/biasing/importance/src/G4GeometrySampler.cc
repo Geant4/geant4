@@ -49,7 +49,7 @@
  G4GeometrySampler::
  G4GeometrySampler(G4VPhysicalVolume *parallelworld, const G4String &particlename)
   : fParticleName(particlename),
-    fWorld(parallelworld),
+   fWorld(parallelworld),
     fImportanceConfigurator(0),
     //    fScoreConfigurator(0),
     //    fGCellFinder(0),
@@ -60,6 +60,24 @@
     fIsConfigured(false)
 {
   paraflag = false;
+  //  G4cout << "G4GeometrySampler:: Making geometry sampler with world: " << fWorld->GetName() << G4endl;
+}
+
+ G4GeometrySampler::
+ G4GeometrySampler(G4String parallelworldName, const G4String &particlename)
+  : fParticleName(particlename),
+   fWorldName(parallelworldName),
+    fImportanceConfigurator(0),
+    //    fScoreConfigurator(0),
+    //    fGCellFinder(0),
+    fWeightCutOffConfigurator(0),
+    fIStore(0),
+    fWeightWindowConfigurator(0),
+    fWWStore(0),
+    fIsConfigured(false)
+{
+  paraflag = false;
+  //  G4cout << "G4GeometrySampler:: Making geometry sampler with world: " << fWorld->GetName() << G4endl;
 }
 
 G4GeometrySampler::~G4GeometrySampler()
@@ -133,17 +151,17 @@ G4bool G4GeometrySampler::IsConfigured() const
 // }
 
 void
-G4GeometrySampler::PrepareImportanceSampling(G4VIStore *istore,
+G4GeometrySampler::PrepareImportanceSampling(G4VIStore* istore,
                                            const G4VImportanceAlgorithm  *ialg)
 {
-  G4cout << " preparing importance sampling " << G4endl;
+  G4cout << "G4GeometrySampler:: preparing importance sampling WorldName is " << fWorldName << G4endl;
   fIStore = istore;
-  G4cout << " creating istore " << G4endl;
+  //  G4cout << "G4GeometrySampler:: creating istore, worldVolume: " << fWorld->GetName() << G4endl;
 
   fImportanceConfigurator =
-    new G4ImportanceConfigurator(fWorld, fParticleName, *fIStore, ialg, paraflag);
-
-  G4cout << " creating importance configurator " << G4endl;
+    new G4ImportanceConfigurator(&istore->GetWorldVolume(), fParticleName, *fIStore, ialg, paraflag);
+  //    new G4ImportanceConfigurator(fWorld, fParticleName, *fIStore, ialg, paraflag);
+  fImportanceConfigurator->SetWorldName(fWorldName);
 
   if (!fImportanceConfigurator)
   {
@@ -159,7 +177,7 @@ G4GeometrySampler::PrepareWeightRoulett(G4double wsurvive,
                                             G4double isource)
 {
   //  fGCellFinder = new G4GCellFinder(fWorld);
-  G4cout << " preparing weight roulette" << G4endl;
+  G4cout << "G4GeometrySampler:: preparing weight roulette" << G4endl;
   //  fGCellFinder = new G4GCellFinder();
 //   if (!fGCellFinder)
 //   {
@@ -190,20 +208,26 @@ G4GeometrySampler::PrepareWeightWindow(G4VWeightWindowStore *wwstore,
                                            G4PlaceOfAction placeOfAction)
 {
 
-  G4cout << " preparing weight window" << G4endl;
+  G4cout << "G4GeometrySampler:: preparing weight window" << G4endl;
 
   fWWStore = wwstore;
   
   fWeightWindowConfigurator =
-    new G4WeightWindowConfigurator(fWorld, fParticleName,
+    new G4WeightWindowConfigurator(&wwstore->GetWorldVolume(), fParticleName,
                                     *fWWStore,
                                     wwAlg,
                                     placeOfAction, paraflag);
+
+  // fWeightWindowConfigurator =
+  //   new G4WeightWindowConfigurator(fWorld, fParticleName,
+  //                                   *fWWStore,
+  //                                   wwAlg,
+  //                                   placeOfAction, paraflag);
+
 }
 
 void G4GeometrySampler::Configure()
 {
-  G4cout << " entering configure " << G4endl;
   if (!IsConfigured())
   {
     fIsConfigured = true;
@@ -216,44 +240,73 @@ void G4GeometrySampler::Configure()
 //     }
     if (fImportanceConfigurator)
     {
-      G4cout << " importance configurator push_back " << G4endl;
       fConfigurators.push_back(fImportanceConfigurator);
-      G4cout << " pushed " << G4endl;
     }
     if (fWeightWindowConfigurator)
     {
-      G4cout << " weight window configurator push_back " << G4endl;
       fConfigurators.push_back(fWeightWindowConfigurator);
-      G4cout << " pushed " << G4endl;
     }
     
-    G4cout << " vsampler configurator loop " << G4endl;
-    G4VSamplerConfigurator *preConf = 0;
-    G4int i = 0;
-    for (G4Configurators::iterator it = fConfigurators.begin();
-         it != fConfigurators.end(); it++)
+    // G4cout << " vsampler configurator loop " << G4endl;
+    // G4VSamplerConfigurator *preConf = 0;
+    // G4int i = 0;
+    // for (G4Configurators::iterator it = fConfigurators.begin();
+    //      it != fConfigurators.end(); it++)
+    // {
+    //   i++;
+    //   G4cout << " looping " << i << G4endl;
+    //   G4VSamplerConfigurator *currConf =*it;
+    //   G4cout << " sampler configurator " << G4endl;
+    //   currConf->Configure(preConf);
+    //   G4cout << " configure preconf " << G4endl;
+    //   preConf = *it;
+    // }
+    // if (fWeightCutOffConfigurator)
+    // {
+    //   G4cout << " NEW weight window configure " << G4endl;
+    //   fWeightCutOffConfigurator->Configure(0);
+    //   G4cout << " configured " << G4endl;
+    // }
+  }
+
+#ifdef G4MULTITHREADED
+  G4cout << " make sure AddProcess() is invoked for biasing!!! " << G4endl;
+#else
+  AddProcess();
+#endif
+
+  return;
+}
+
+void G4GeometrySampler::AddProcess()
+{
+
+  G4VSamplerConfigurator *preConf = 0;
+  G4int i = 0;
+  for (G4Configurators::iterator it = fConfigurators.begin();
+       it != fConfigurators.end(); it++)
     {
       i++;
-      G4cout << " looping " << i << G4endl;
       G4VSamplerConfigurator *currConf =*it;
-      G4cout << " sampler configurator " << G4endl;
       currConf->Configure(preConf);
-      G4cout << " configure preconf " << G4endl;
       preConf = *it;
     }
-    if (fWeightCutOffConfigurator)
+  if (fWeightCutOffConfigurator)
     {
-      G4cout << " NEW weight window configure " << G4endl;
       fWeightCutOffConfigurator->Configure(0);
-      G4cout << " configured " << G4endl;
     }
-  }
+
   return;
 }
 
 void G4GeometrySampler::SetParallel(G4bool para)
 {
   paraflag = para;
+}
+
+void G4GeometrySampler::SetWorld(const G4VPhysicalVolume* World)
+{
+  fWorld = World;
 }
 
 void G4GeometrySampler::SetParticle(const G4String &particlename)

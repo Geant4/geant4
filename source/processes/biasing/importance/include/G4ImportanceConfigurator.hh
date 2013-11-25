@@ -54,7 +54,13 @@ class G4ImportanceConfigurator : public G4VSamplerConfigurator
 
 public:  // with description
 
-  G4ImportanceConfigurator(G4VPhysicalVolume* worldvolume, 
+  G4ImportanceConfigurator(const G4VPhysicalVolume* worldvolume, 
+			   const G4String &particlename,
+                            G4VIStore &istore,
+                            const G4VImportanceAlgorithm *ialg,
+			   G4bool paraflag);
+
+  G4ImportanceConfigurator(const G4String worldvolumeName, 
 			   const G4String &particlename,
                             G4VIStore &istore,
                             const G4VImportanceAlgorithm *ialg,
@@ -64,13 +70,16 @@ public:  // with description
   virtual void Configure(G4VSamplerConfigurator *preConf);
   virtual const G4VTrackTerminator *GetTrackTerminator() const;
 
+  void SetWorldName(G4String Name);
+
 private:
 
   G4ImportanceConfigurator(const G4ImportanceConfigurator &);
   G4ImportanceConfigurator &
   operator=(const G4ImportanceConfigurator &);
 
-  G4VPhysicalVolume* fWorld;
+  const G4VPhysicalVolume* fWorld;
+  G4String fWorldName;
   G4ProcessPlacer fPlacer;
   G4VIStore &fIStore;
   G4bool fDeleteIalg;

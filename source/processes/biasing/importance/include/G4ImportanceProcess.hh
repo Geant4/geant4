@@ -78,7 +78,7 @@ public:  // with description
   //--------------------------------------------------------------
 
   void SetParallelWorld(G4String parallelWorldName);
-  void SetParallelWorld(G4VPhysicalVolume* parallelWorld);
+  //  void SetParallelWorld(const G4VPhysicalVolume* parallelWorld);
 
   //--------------------------------------------------------------
   //     Process interface

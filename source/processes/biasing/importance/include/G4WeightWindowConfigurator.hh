@@ -53,7 +53,7 @@ class G4WeightWindowConfigurator : public G4VSamplerConfigurator
 
 public:  // with description
 
-  G4WeightWindowConfigurator(G4VPhysicalVolume* worldvolume,
+  G4WeightWindowConfigurator(const G4VPhysicalVolume* worldvolume,
 			     const G4String &particlename,
                               G4VWeightWindowStore &wwstore,
                               const G4VWeightWindowAlgorithm *wwAlg,
@@ -70,7 +70,7 @@ private:
   G4WeightWindowConfigurator &
   operator=(const G4WeightWindowConfigurator &);
 
-  G4VPhysicalVolume* fWorld;
+  const G4VPhysicalVolume* fWorld;
   G4ProcessPlacer fPlacer;
   G4VWeightWindowStore &fWeightWindowStore;
   G4bool fDeleteWWalg;

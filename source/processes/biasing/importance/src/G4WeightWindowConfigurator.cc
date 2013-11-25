@@ -37,7 +37,7 @@
 #include "G4WeightWindowProcess.hh"
 
 G4WeightWindowConfigurator::
-G4WeightWindowConfigurator(G4VPhysicalVolume* worldvolume,
+G4WeightWindowConfigurator(const G4VPhysicalVolume* worldvolume,
 			   const G4String &particlename,
                             G4VWeightWindowStore &wwstore,
                             const G4VWeightWindowAlgorithm *wwAlg,
@@ -58,7 +58,7 @@ G4WeightWindowConfigurator::~G4WeightWindowConfigurator()
 {  
   if (fWeightWindowProcess)
   {
-    fPlacer.RemoveProcess(fWeightWindowProcess);
+    //    fPlacer.RemoveProcess(fWeightWindowProcess);
     delete fWeightWindowProcess;
   }
   if (fDeleteWWalg)
@@ -83,7 +83,7 @@ G4WeightWindowConfigurator::Configure(G4VSamplerConfigurator *preConf)
                                   terminator,
                                   fPlaceOfAction,"WeightWindowProcess",paraflag);
 
-  if(paraflag) fWeightWindowProcess->SetParallelWorld(fWorld);
+  if(paraflag) fWeightWindowProcess->SetParallelWorld(fWorld->GetName());
 
   fPlacer.AddProcessAsSecondDoIt(fWeightWindowProcess);
 }

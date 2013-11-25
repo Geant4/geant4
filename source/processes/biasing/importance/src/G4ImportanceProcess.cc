@@ -65,6 +65,8 @@ G4ImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
    paraflag(para)
   
 {
+  G4cout << G4endl << G4endl << G4endl;
+  G4cout << "G4ImportanceProcess:: Creating " << G4endl;
   if (TrackTerminator)
   {
     fPostStepAction = new G4SamplingPostStepAction(*TrackTerminator);
@@ -94,7 +96,7 @@ G4ImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
     G4cout << GetProcessName() << " is created " << G4endl;
   }
 
-  G4cout << " importance process paraflag is: " << paraflag << G4endl;
+  G4cout << "G4ImportanceProcess:: importance process paraflag is: " << paraflag << G4endl;
 
 }
 
@@ -103,7 +105,9 @@ G4ImportanceProcess::~G4ImportanceProcess()
 
   delete fPostStepAction;
   delete fParticleChange;
-  delete fGhostStep;
+  //  delete fGhostStep;
+  // delete fGhostWorld;
+  // delete fGhostNavigator;
 
 }
 
@@ -117,6 +121,8 @@ G4ImportanceProcess::~G4ImportanceProcess()
 void G4ImportanceProcess::
 SetParallelWorld(G4String parallelWorldName)
 {
+  G4cout << G4endl << G4endl << G4endl;
+  G4cout << "G4ImportanceProcess:: SetParallelWorld name = " << parallelWorldName << G4endl;
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 // Get pointers of the parallel world and its navigator
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -126,17 +132,21 @@ SetParallelWorld(G4String parallelWorldName)
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 }
 
-void G4ImportanceProcess::
-SetParallelWorld(G4VPhysicalVolume* parallelWorld)
-{
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-// Get pointer of navigator
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-  fGhostWorldName = parallelWorld->GetName();
-  fGhostWorld = parallelWorld;
-  fGhostNavigator = fTransportationManager->GetNavigator(fGhostWorld);
-//++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
-}
+// void G4ImportanceProcess::
+// SetParallelWorld(const G4VPhysicalVolume* parallelWorld)
+// {
+// //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// // Get pointer of navigator
+// //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+//   // G4cout << " G4ImportanceProcess:: Got here 1 " << G4endl;
+//   // fGhostWorldName = parallelWorld->GetName();
+//   // G4cout << " G4ImportanceProcess:: Got here 2 ghostName:" << fGhostWorldName << G4endl;
+//   fGhostWorld = parallelWorld;
+//   G4cout << " G4ImportanceProcess:: Got here 3 " << G4endl;
+//   fGhostNavigator = fTransportationManager->GetNavigator(parallelWorld);
+//   G4cout << " G4ImportanceProcess:: Got here 4 " << G4endl;
+// //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+// }
 
 //------------------------------------------------------
 //

@@ -39,7 +39,7 @@
 #include "G4ImportanceAlgorithm.hh"
 
 G4ImportanceConfigurator::
-G4ImportanceConfigurator(G4VPhysicalVolume* worldvolume, 
+G4ImportanceConfigurator(const G4VPhysicalVolume* worldvolume, 
 			 const G4String &particlename,
                           G4VIStore &istore,
                           const G4VImportanceAlgorithm *ialg, G4bool para)
@@ -54,11 +54,27 @@ G4ImportanceConfigurator(G4VPhysicalVolume* worldvolume,
 {
 }
 
+G4ImportanceConfigurator::
+G4ImportanceConfigurator(G4String worldvolumeName, 
+			 const G4String &particlename,
+                          G4VIStore &istore,
+                          const G4VImportanceAlgorithm *ialg, G4bool para)
+  : fWorldName(worldvolumeName),
+    fPlacer(particlename),
+    fIStore(istore),
+    fDeleteIalg( ( ! ialg) ),
+    fIalgorithm(( (fDeleteIalg) ? 
+                  new G4ImportanceAlgorithm : ialg)),
+    fImportanceProcess(0),
+    paraflag(para)
+{
+}
+
 G4ImportanceConfigurator::~G4ImportanceConfigurator()
 {
   if (fImportanceProcess)
   {
-    fPlacer.RemoveProcess(fImportanceProcess);
+    //    fPlacer.RemoveProcess(fImportanceProcess);
     delete fImportanceProcess;
   }
   if (fDeleteIalg)
@@ -70,14 +86,13 @@ G4ImportanceConfigurator::~G4ImportanceConfigurator()
 void  
 G4ImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf)
 {
-  G4cout << " entering importance configure, paraflag " << paraflag << G4endl;
+  G4cout << "G4ImportanceConfigurator:: entering importance configure, paraflag " << paraflag << G4endl;
   const G4VTrackTerminator *terminator = 0;
   if (preConf)
   {
     terminator = preConf->GetTrackTerminator();
   };
 
-  G4cout << " creating importance process, paraflag is: " << paraflag << G4endl;
   fImportanceProcess = 
     new G4ImportanceProcess(*fIalgorithm, 
                                 fIStore, 
@@ -89,7 +104,11 @@ G4ImportanceConfigurator::Configure(G4VSamplerConfigurator *preConf)
                 "Failed allocation of G4ImportanceProcess !");
   }
   
-  if(paraflag) fImportanceProcess->SetParallelWorld(fWorld);
+  // G4cout << "G4ImportanceConfigurator:: setting parallel World " << paraflag << G4endl;
+  if(paraflag) fImportanceProcess->SetParallelWorld(fWorld->GetName());
+  //  if(paraflag) fImportanceProcess->SetParallelWorld(fWorldName);
+  // G4cout << "G4ImportanceConfigurator:: set " << paraflag << " name: " << fWorld->GetName() << G4endl;
+  // getchar();
 
   fPlacer.AddProcessAsSecondDoIt(fImportanceProcess);
 }
@@ -98,4 +117,9 @@ const G4VTrackTerminator *G4ImportanceConfigurator::
 GetTrackTerminator() const
 {
   return fImportanceProcess;
+}
+
+void G4ImportanceConfigurator::SetWorldName(G4String name)
+{
+  fWorldName = name;
 }

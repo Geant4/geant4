@@ -56,10 +56,11 @@ class G4GeometrySampler : public G4VSampler
 public:  // with description
  
   explicit G4GeometrySampler(G4VPhysicalVolume *worldvolume, const G4String &particlename);
+  explicit G4GeometrySampler(G4String worldvolumeName, const G4String &particlename);
   virtual ~G4GeometrySampler();
 
   //  virtual void PrepareScoring(G4VScorer *Scorer);
-  virtual void PrepareImportanceSampling(G4VIStore *istore,
+  virtual void PrepareImportanceSampling(G4VIStore* istore,
                                          const G4VImportanceAlgorithm 
                                          *ialg);
   virtual void PrepareWeightRoulett(G4double wsurvive, 
@@ -71,12 +72,16 @@ public:  // with description
                                    G4PlaceOfAction placeOfAction);
 
   virtual void Configure();
+  virtual void AddProcess();
 
   virtual void ClearSampling();
   virtual G4bool IsConfigured() const;
 
   void SetParallel(G4bool paraflag);
+  void SetWorld(const G4VPhysicalVolume* world);
   void SetParticle(const G4String &particlename);
+
+  inline G4String GetParticleName(){return fParticleName;};
   
 private:
 
@@ -87,12 +92,13 @@ private:
 private:
 
   G4String fParticleName;
-  G4VPhysicalVolume* fWorld;
+  const G4VPhysicalVolume* fWorld;
+  G4String fWorldName;
   G4ImportanceConfigurator *fImportanceConfigurator;
   //  G4ScoreConfigurator *fScoreConfigurator;
   //  G4VGCellFinder *fGCellFinder;
   G4WeightCutOffConfigurator *fWeightCutOffConfigurator;
-  G4VIStore *fIStore;
+  G4VIStore* fIStore;
   G4WeightWindowConfigurator *fWeightWindowConfigurator;
   G4VWeightWindowStore *fWWStore;
   G4bool fIsConfigured;

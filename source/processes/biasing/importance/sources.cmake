@@ -49,10 +49,8 @@ GEANT4_DEFINE_MODULE(NAME G4biasing_imp
         G4ImportanceConfigurator.hh
         G4ImportanceProcess.hh
         G4PlaceOfAction.hh
-        G4ProcessPlacer.hh
         G4SamplingPostStepAction.hh
         G4TrackTerminator.hh
-        G4VProcessPlacer.hh
         G4VSampler.hh
         G4VSamplerConfigurator.hh
         G4WeightCutOffConfigurator.hh
@@ -63,9 +61,7 @@ GEANT4_DEFINE_MODULE(NAME G4biasing_imp
         G4GeometrySampler.cc
         G4ImportanceConfigurator.cc
         G4ImportanceProcess.cc
-        G4ProcessPlacer.cc
         G4SamplingPostStepAction.cc
-        G4VProcessPlacer.cc
         G4VSampler.cc
         G4VSamplerConfigurator.cc
         G4WeightCutOffConfigurator.cc
