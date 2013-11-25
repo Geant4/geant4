@@ -17,6 +17,7 @@
   <position name="pos21"  x="-125" y=" 125"/>
   <position name="pos31"  x=" 125" y=" 125"/>
   <position name="pos41"  x=" 250" y=" 125"/>
+  <position name="pos412"  x=" 250" y=" 225"/>
   <position name="pos51"  x=" 550" y=" 125"/>
   <position name="pos61"  x=" 550" y="-125"/>
   <position name="pos71"  x=" 550" y=" 0"/>
@@ -27,6 +28,7 @@
   <position name="pos301"  x=" 750" y=" 125"/>
   <position name="pos401"  x=" 750" y="-125"/>
   <position name="pos501"  x="-750" y="-125"/>
+  <position name="pos502"  x="-750" y="-225"/>
   <position name="pos601"  x="-750" y=" 125"/>
   <position name="pos701"  x="-750" y=" 0"/>
   <position name="pos801"  x="950"  y=" 125"/>
@@ -110,6 +112,12 @@
     <zplane z="100.0" rmin="10.0" rmax="30.0"/>
   </polycone>
 
+  <genericPolycone aunit="degree" name="testgenpoly" deltaphi="360.0" startphi="0.0">
+    <rzpoint r="0.0" z="10.0" />
+    <rzpoint r="5.0" z="20.0" />
+    <rzpoint r="0.0" z="30.0" />
+  </genericPolycone>
+
   <tessellated  aunit="degree" lunit="mm" name="testtessel">
      <triangular vertex1="v0" vertex2="v1" vertex3="v2"/> 
      <triangular vertex1="v1" vertex2="v3" vertex3="v2"/> 
@@ -125,6 +133,11 @@
      <zplane z="10.0" rmin="1.0" rmax="5.0"/>
      <zplane z="100.0" rmin="10.0" rmax="30.0"/>
   </polyhedra> 
+  <genericPolyhedra aunit="degree" deltaphi="90." lunit="mm" name="testgenph" numsides="3" startphi="0." >
+    <rzpoint r="0.0" z="10.0" />
+    <rzpoint r="5.0" z="20.0" />
+    <rzpoint r="0.0" z="30.0" />
+  </genericPolyhedra> 
 
   <hype name="testhype" rmin="10.0" rmax="30.0" inst="10.0" outst="20.0" z="50.0"/>
 
@@ -186,6 +199,11 @@
    <solidref ref="testpoly"/>
   </volume>
 
+  <volume name="vol412">
+   <materialref ref="Water"/>
+   <solidref ref="testgenpoly"/>
+  </volume>
+
    <volume name="vol51">
    <materialref ref="Water"/>
    <solidref ref="testellipsoid"/>
@@ -231,6 +249,10 @@
    <materialref ref="Water"/>
    <solidref ref="testph"/>
   </volume>
+  <volume name="vol502">
+   <materialref ref="Water"/>
+   <solidref ref="testgenph"/>
+   </volume>
   <volume name="vol601">
    <materialref ref="Water"/>
    <solidref ref="testhype"/>
@@ -308,6 +330,12 @@
      <positionref ref="pos41"/>
      <rotationref ref="identity"/>
    </physvol> 
+   
+  <physvol>
+     <volumeref ref="vol412"/>
+     <positionref ref="pos412"/>
+     <rotationref ref="identity"/>
+   </physvol> 
 
     <physvol>
      <volumeref ref="vol51"/>
@@ -363,6 +391,12 @@
     <physvol>
      <volumeref ref="vol501"/>
      <positionref ref="pos501"/>
+     <rotationref ref="identity"/>
+   </physvol>
+
+   <physvol>
+     <volumeref ref="vol502"/>
+     <positionref ref="pos502"/>
      <rotationref ref="identity"/>
    </physvol> 
 
