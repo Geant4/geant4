@@ -4,6 +4,9 @@ $Id:$
 History file for test/test202 subdirectory
 ------------------------------------------------
 
+25th November 2013 Gunter Folger    (test202-V09-06-06)
+- fix for VC18, use DumpInfo in place of StreamInfo construct.
+
 22nd November 2013 Tatiana Nikitina (test202-V09-06-05)
 - Use G4GenericPolycone for polycone shape with decreasing Z-section.
 

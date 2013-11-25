@@ -559,7 +559,7 @@ G4VPhysicalVolume* Tst202DetectorConstruction::Construct()
 			0.,270.*deg,6,numRZ,polyhedra_r,polyhedra_z);
     //0.,twopi,6,numRZ,polyhedra_r,polyhedra_z);
     if (verbosity)
-      G4cout << polyhedra_solid->StreamInfo(G4cout) << G4endl;
+      polyhedra_solid->DumpInfo();
 
     G4LogicalVolume* polyhedra_log
       = new G4LogicalVolume(polyhedra_solid,Ar,"Polyhedra_Test");
@@ -589,7 +589,7 @@ G4VPhysicalVolume* Tst202DetectorConstruction::Construct()
 		       0.*deg,270.*deg,numRZ1,polycone_r,polycone_z);
     //0.,twopi,numRZ,polycone_r,polycone_z);
     if (verbosity)
-      G4cout << polycone_solid->StreamInfo(G4cout) << G4endl;
+      polycone_solid->DumpInfo();
 
     G4LogicalVolume* polycone_log
       = new G4LogicalVolume(polycone_solid,Ar,"Polycone_Test");
