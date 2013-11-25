@@ -75,6 +75,8 @@ public:
   //   This method calls G4THisMap::PrintAll() for individual HitsMap.
   void DumpAllScorer();
 
+  virtual void Merge(const G4Run*);
+
 private:
   std::vector<G4String> fCollName;
   std::vector<G4int> fCollID;

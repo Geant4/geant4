@@ -23,47 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/include/B02PVolumeStore.hh
-/// \brief Definition of the B02PVolumeStore class
+/// \file runAndEvent/B02/src/B02ActionInitialization.cc
+/// \brief Implementation of the B02ActionInitialization class
 //
 //
-// $Id$
-// GEANT4 tag 
+// $Id: B02ActionInitialization.cc 66780 2013-01-12 14:56:35Z gcosmo $
 //
-// ----------------------------------------------------------------------
-// Class B02PVolumeStore
-//
-// Class description:
-//
-// ...
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
-// ----------------------------------------------------------------------
+#include "B02ActionInitialization.hh"
+#include "B02PrimaryGeneratorAction.hh"
+#include "B02RunAction.hh"
 
-#ifndef B02PVolumeStore_hh
-#define B02PVolumeStore_hh B02PVolumeStore_hh
-
-#include "globals.hh"
-#include <set>
-#include "G4GeometryCell.hh"
-#include "G4GeometryCellComp.hh"
-
-typedef std::set< G4GeometryCell, G4GeometryCellComp > B02SetGeometryCell;
-
-class B02PVolumeStore {
-public:
-  B02PVolumeStore();
-  ~B02PVolumeStore();
-  
-  void AddPVolume(const G4GeometryCell &cell);
-  const G4VPhysicalVolume *GetPVolume(const G4String &name) const;
-  G4int Size();
-  G4String GetPNames() const;
-
-private:
-  B02SetGeometryCell fSetGeometryCell;
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 
+B02ActionInitialization::B02ActionInitialization()
+{;} 
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B02ActionInitialization::~B02ActionInitialization()
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B02ActionInitialization::BuildForMaster() const
+{
+  SetUserAction(new B02RunAction);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B02ActionInitialization::Build() const
+{
+
+  SetUserAction(new B02PrimaryGeneratorAction);
+  SetUserAction(new B02RunAction);
+
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

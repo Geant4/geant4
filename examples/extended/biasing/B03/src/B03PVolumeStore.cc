@@ -23,21 +23,21 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/src/B02PVolumeStore.cc
-/// \brief Implementation of the B02PVolumeStore class
+/// \file biasing/B03/src/B03PVolumeStore.cc
+/// \brief Implementation of the B03PVolumeStore class
 //
 //
-// $Id$
+// $Id: B03PVolumeStore.cc 70074 2013-05-22 21:01:50Z ahoward $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
 // GEANT 4 class source file
 //
-// B02PVolumeStore.cc
+// B03PVolumeStore.cc
 //
 // ----------------------------------------------------------------------
 
-#include "B02PVolumeStore.hh"
+#include "B03PVolumeStore.hh"
 #include <sstream>
 
 
@@ -45,20 +45,20 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B02PVolumeStore::B02PVolumeStore(){}
+B03PVolumeStore::B03PVolumeStore(){}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B02PVolumeStore::~B02PVolumeStore(){}
+B03PVolumeStore::~B03PVolumeStore(){}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
-void B02PVolumeStore::AddPVolume(const G4GeometryCell &cell){
+void B03PVolumeStore::AddPVolume(const G4GeometryCell &cell){
 
-  B02SetGeometryCell::iterator it = 
+  B03SetGeometryCell::iterator it = 
     fSetGeometryCell.find(cell);
   if (it != fSetGeometryCell.end()) {
-    G4cout << "B02PVolumeStore::AddPVolume: cell already stored" 
+    G4cout << "B03PVolumeStore::AddPVolume: cell already stored" 
            << G4endl;
     return;
   }
@@ -70,10 +70,10 @@ void B02PVolumeStore::AddPVolume(const G4GeometryCell &cell){
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-const G4VPhysicalVolume *B02PVolumeStore::
+const G4VPhysicalVolume *B03PVolumeStore::
 GetPVolume(const G4String &name) const {
   const G4VPhysicalVolume *pvol = 0;
-  for (B02SetGeometryCell::const_iterator it = fSetGeometryCell.begin();
+  for (B03SetGeometryCell::const_iterator it = fSetGeometryCell.begin();
        it != fSetGeometryCell.end(); ++it) {
     const G4VPhysicalVolume &vol = it->GetPhysicalVolume();
     if (vol.GetName() == name) {
@@ -81,7 +81,7 @@ GetPVolume(const G4String &name) const {
     } 
   }
   if (!pvol) {
-    G4cout << "B02PVolumeStore::GetPVolume: no physical volume named: " 
+    G4cout << "B03PVolumeStore::GetPVolume: no physical volume named: " 
            << name << ", found" << G4endl;
   }
   return pvol;
@@ -89,9 +89,9 @@ GetPVolume(const G4String &name) const {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4String B02PVolumeStore::GetPNames() const {
+G4String B03PVolumeStore::GetPNames() const {
   G4String NameString;
-  for (B02SetGeometryCell::const_iterator it = fSetGeometryCell.begin();
+  for (B03SetGeometryCell::const_iterator it = fSetGeometryCell.begin();
        it != fSetGeometryCell.end(); ++it) {
     const G4VPhysicalVolume &vol = it->GetPhysicalVolume();
     std::ostringstream os;
@@ -108,9 +108,4 @@ G4String B02PVolumeStore::GetPNames() const {
   return NameString;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4int B02PVolumeStore::Size() {
-  return fSetGeometryCell.size();
-}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

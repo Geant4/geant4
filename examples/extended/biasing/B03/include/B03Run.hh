@@ -23,23 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/include/B02Run.hh
-/// \brief Definition of the B02Run class
+/// \file biasing/B03/include/B03Run.hh
+/// \brief Definition of the B03Run class
 //
 //
-// $Id$
+// $Id: B03Run.hh 70093 2013-05-23 09:03:57Z gcosmo $
 // 
 //---------------------------------------------------------------------
 // (Purpose) 
 //    Example implementation for multi-functional-detector and 
 //   primitive scorer.
-//    This B02Run class has collections which accumulate
+//    This B03Run class has collections which accumulate
 //   a event information into a run information.
 //
 //---------------------------------------------------------------------
 
-#ifndef B02Run_h
-#define B02Run_h 1
+#ifndef B03Run_h
+#define B03Run_h 1
 
 #include "G4Run.hh"
 #include "G4Event.hh"
@@ -47,13 +47,13 @@
 #include "G4THitsMap.hh"
 #include <vector>
 //
-class B02Run : public G4Run {
+class B03Run : public G4Run {
 
 public:
   // constructor and destructor.
   //  vector of multifunctionaldetector name has to given to constructor.
-  B02Run(const std::vector<G4String> mfdName);
-  virtual ~B02Run();
+  B03Run(const std::vector<G4String> mfdName);
+  virtual ~B03Run();
 
 public:
   // virtual method from G4Run. 

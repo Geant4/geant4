@@ -152,14 +152,14 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 
   G4double innerRadiusCylinder = 0*cm;
   G4double outerRadiusCylinder = 100*cm; 
-  G4double hightCylinder       = 100*cm;
+  G4double heightCylinder       = 100*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
 
   G4Tubs *worldCylinder = new G4Tubs("worldCylinder",
                                      innerRadiusCylinder,
                                      outerRadiusCylinder,
-                                     hightCylinder,
+                                     heightCylinder,
                                      startAngleCylinder,
                                      spanningAngleCylinder);
 
@@ -181,14 +181,14 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 
   G4double innerRadiusShield = 0*cm;
   G4double outerRadiusShield = 100*cm;
-  G4double hightShield       = 5*cm;
+  G4double heightShield       = 5*cm;
   G4double startAngleShield  = 0*deg;
   G4double spanningAngleShield    = 360*deg;
 
   G4Tubs *aShield = new G4Tubs("aShield",
                                innerRadiusShield,
                                outerRadiusShield,
-                               hightShield,
+                               heightShield,
                                startAngleShield,
                                spanningAngleShield);
   
@@ -211,7 +211,7 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
     name = GetCellName(i);
     pos_x = 0*cm;
     pos_y = 0*cm;
-    pos_z = startz + (i-1) * (2*hightShield);
+    pos_z = startz + (i-1) * (2*heightShield);
     G4VPhysicalVolume *pvol = 
       new G4PVPlacement(0, 
                         G4ThreeVector(pos_x, pos_y, pos_z),
@@ -229,14 +229,14 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
   //
   innerRadiusShield = 0*cm;
   outerRadiusShield = 100*cm;
-  hightShield       = 5*cm;
+  heightShield       = 5*cm;
   startAngleShield  = 0*deg;
   spanningAngleShield    = 360*deg;
 
   G4Tubs *aRest = new G4Tubs("Rest",
                              innerRadiusShield,
                              outerRadiusShield,
-                             hightShield,
+                             heightShield,
                              startAngleShield,
                              spanningAngleShield);
   
@@ -265,8 +265,9 @@ G4VPhysicalVolume* B01DetectorConstruction::Construct()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VIStore *B01DetectorConstruction::CreateImportanceStore()
+G4VIStore* B01DetectorConstruction::CreateImportanceStore()
 {
+  G4cout << " B01DetectorConstruction:: Creating Importance Store " << G4endl;
   if (!fPhysicalVolumeVector.size())
   {
     G4Exception("B01DetectorConstruction::CreateImportanceStore"
@@ -278,7 +279,7 @@ G4VIStore *B01DetectorConstruction::CreateImportanceStore()
 
   // creating and filling the importance store
   
-  G4IStore *istore = new G4IStore(*fWorldVolume);
+  G4IStore *istore = G4IStore::GetInstance();
 
   G4int n = 0;
   G4double imp =1;
@@ -320,7 +321,7 @@ G4VWeightWindowStore *B01DetectorConstruction::CreateWeightWindowStore()
 
   // creating and filling the weight window store
   
-  G4WeightWindowStore *wwstore = new G4WeightWindowStore(*fWorldVolume);
+  G4WeightWindowStore *wwstore = G4WeightWindowStore::GetInstance();
   
   // create one energy region covering the energies of the problem
   //
@@ -399,14 +400,17 @@ void B01DetectorConstruction::SetSensitive(){
   //   8       ConcreteSD/SLWE_V
   //  -------------------------------------------------
 
+  // moved to ConstructSDandField() for MT compliance
 
-  //================================================
-  // Sensitive detectors : MultiFunctionalDetector
-  //================================================
-  //
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B01DetectorConstruction::ConstructSDandField()
+{
+
   //  Sensitive Detector Manager.
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
-  //
   // Sensitive Detector Name
   G4String concreteSDname = "ConcreteSD";
 
@@ -430,7 +434,8 @@ void B01DetectorConstruction::SetSensitive(){
   for (std::vector<G4LogicalVolume *>::iterator it = 
                                                 fLogicalVolumeVector.begin();
        it != fLogicalVolumeVector.end(); it++){
-      (*it)->SetSensitiveDetector(MFDet);
+    //      (*it)->SetSensitiveDetector(MFDet);
+      SetSensitiveDetector((*it)->GetName(), MFDet);
   }
 
   G4String psName;

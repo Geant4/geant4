@@ -89,7 +89,7 @@ void B01RunAction::EndOfRunAction(const G4Run* aRun)
 {
     G4cout << " ###### EndOfRunAction  " <<G4endl;
   //- B01Run object.
-  B01Run* re02Run = (B01Run*)aRun;
+  B01Run* b01Run = (B01Run*)aRun;
   //--- Dump all socred quantities involved in B01Run.
   // re02Run->DumpAllScorer();
   //---
@@ -116,24 +116,39 @@ void B01RunAction::EndOfRunAction(const G4Run* aRun)
     //      8       ConcreteSD/SLWE_V
     //---------------------------------------------
     G4THitsMap<G4double>* Collisions = 
-                          re02Run->GetHitsMap(fSDName[i]+"/Collisions");
+                          b01Run->GetHitsMap(fSDName[i]+"/Collisions");
     G4THitsMap<G4double>* CollWeight = 
-                          re02Run->GetHitsMap(fSDName[i]+"/CollWeight");
+                          b01Run->GetHitsMap(fSDName[i]+"/CollWeight");
     G4THitsMap<G4double>* Population = 
-                          re02Run->GetHitsMap(fSDName[i]+"/Population");
+                          b01Run->GetHitsMap(fSDName[i]+"/Population");
     G4THitsMap<G4double>* TrackEnter = 
-                          re02Run->GetHitsMap(fSDName[i]+"/TrackEnter");
-    G4THitsMap<G4double>* SL = re02Run->GetHitsMap(fSDName[i]+"/SL");
-    G4THitsMap<G4double>* SLW = re02Run->GetHitsMap(fSDName[i]+"/SLW");
-    G4THitsMap<G4double>* SLWE = re02Run->GetHitsMap(fSDName[i]+"/SLWE");
-    G4THitsMap<G4double>* SLW_V = re02Run->GetHitsMap(fSDName[i]+"/SLW_V");
-    G4THitsMap<G4double>* SLWE_V = re02Run->GetHitsMap(fSDName[i]+"/SLWE_V");
+                          b01Run->GetHitsMap(fSDName[i]+"/TrackEnter");
+    G4THitsMap<G4double>* SL = b01Run->GetHitsMap(fSDName[i]+"/SL");
+    G4THitsMap<G4double>* SLW = b01Run->GetHitsMap(fSDName[i]+"/SLW");
+    G4THitsMap<G4double>* SLWE = b01Run->GetHitsMap(fSDName[i]+"/SLWE");
+    G4THitsMap<G4double>* SLW_V = b01Run->GetHitsMap(fSDName[i]+"/SLW_V");
+    G4THitsMap<G4double>* SLWE_V = b01Run->GetHitsMap(fSDName[i]+"/SLWE_V");
 
 
+    if (IsMaster())
+      {
+        G4cout <<
+          "\n--------------------End of Global Run-----------------------" <<
+        G4endl;
+        G4cout << 
+          " Number of event processed : "<< aRun->GetNumberOfEvent() << G4endl;
+      }
+    else
+      {
+        G4cout <<
+          "\n--------------------End of Local Run------------------------" <<
+        G4endl;
+        G4cout << 
+          " Number of event processed : "<< aRun->GetNumberOfEvent() << G4endl;
+      }     
+    
     G4cout << "=============================================================" 
            <<G4endl;
-    G4cout << " Number of event processed : "<< aRun->GetNumberOfEvent() 
-           << G4endl;
     G4cout << "=============================================================" 
            <<G4endl;
 

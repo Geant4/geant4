@@ -23,17 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/src/B02PhysicsList.cc
-/// \brief Implementation of the B02PhysicsList class
+/// \file biasing/B03/src/B03PhysicsList.cc
+/// \brief Implementation of the B03PhysicsList class
 //
 //
-// $Id$
+// $Id: B03PhysicsList.cc 75089 2013-10-25 23:25:21Z dwright $
 //
 
 #include "globals.hh"
 #include <iomanip>                
 
-#include "B02PhysicsList.hh"
+#include "B03PhysicsList.hh"
 
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleWithCuts.hh"
@@ -53,7 +53,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B02PhysicsList::B02PhysicsList():  G4VUserPhysicsList()
+B03PhysicsList::B03PhysicsList():  G4VUserPhysicsList()
 {
   fParaWorldName.clear();
   SetVerboseLevel(1);  
@@ -61,14 +61,14 @@ B02PhysicsList::B02PhysicsList():  G4VUserPhysicsList()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B02PhysicsList::~B02PhysicsList()
+B03PhysicsList::~B03PhysicsList()
 {
   fParaWorldName.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B02PhysicsList::ConstructParticle()
+void B03PhysicsList::ConstructParticle()
 {
   // In this method, static member functions should be called
   // for all particles which you want to use.
@@ -85,7 +85,7 @@ void B02PhysicsList::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B02PhysicsList::ConstructAllBosons()
+void B03PhysicsList::ConstructAllBosons()
 {
   // Construct all bosons
   G4BosonConstructor pConstructor;
@@ -94,7 +94,7 @@ void B02PhysicsList::ConstructAllBosons()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B02PhysicsList::ConstructAllLeptons()
+void B03PhysicsList::ConstructAllLeptons()
 {
   // Construct all leptons
   G4LeptonConstructor pConstructor;
@@ -103,7 +103,7 @@ void B02PhysicsList::ConstructAllLeptons()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B02PhysicsList::ConstructAllMesons()
+void B03PhysicsList::ConstructAllMesons()
 {
   //  Construct all mesons
   G4MesonConstructor pConstructor;
@@ -112,7 +112,7 @@ void B02PhysicsList::ConstructAllMesons()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B02PhysicsList::ConstructAllBaryons()
+void B03PhysicsList::ConstructAllBaryons()
 {
   //  Construct all barions
   G4BaryonConstructor pConstructor;
@@ -121,7 +121,7 @@ void B02PhysicsList::ConstructAllBaryons()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B02PhysicsList::ConstructAllIons()
+void B03PhysicsList::ConstructAllIons()
 {
   //  Construct light ions
   G4IonConstructor pConstructor;
@@ -130,7 +130,7 @@ void B02PhysicsList::ConstructAllIons()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B02PhysicsList::ConstructAllShortLiveds()
+void B03PhysicsList::ConstructAllShortLiveds()
 {
   //  Construct  resonaces and quarks
   G4ShortLivedConstructor pConstructor;
@@ -139,10 +139,11 @@ void B02PhysicsList::ConstructAllShortLiveds()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B02PhysicsList::ConstructProcess()
+void B03PhysicsList::ConstructProcess()
 {
   AddTransportation();
   AddScoringProcess();
+  AddBiasingProcess();
   ConstructEM();
   ConstructLeptHad();
   ConstructHad();
@@ -169,7 +170,7 @@ void B02PhysicsList::ConstructProcess()
 
 #include "G4hIonisation.hh"
 
-void B02PhysicsList::ConstructEM()
+void B03PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -296,7 +297,7 @@ void B02PhysicsList::ConstructEM()
 // Fission (for neutron only), and Capture (neutron).
 //
 
-void B02PhysicsList::ConstructHad()
+void B03PhysicsList::ConstructHad()
 {
   // this will be the model class for high energies
   G4TheoFSGenerator* theTheoModel = new G4TheoFSGenerator;
@@ -343,11 +344,14 @@ void B02PhysicsList::ConstructHad()
   // high energy model for anti-baryons
   antiBHighEnergyModel = new G4TheoFSGenerator("ANTI-FTFP");
   G4FTFModel* antiBStringModel = new G4FTFModel;
-  G4ExcitedStringDecay* stringDecay = new G4ExcitedStringDecay(new G4LundStringFragmentation);
+  G4ExcitedStringDecay* stringDecay = 
+                    new G4ExcitedStringDecay(new G4LundStringFragmentation);
   antiBStringModel->SetFragmentationModel(stringDecay);
 
-  G4GeneratorPrecompoundInterface* antiBCascade = new G4GeneratorPrecompoundInterface;
-  G4PreCompoundModel* preEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
+  G4GeneratorPrecompoundInterface* antiBCascade = 
+                               new G4GeneratorPrecompoundInterface;
+  G4PreCompoundModel* preEquilib = 
+                  new G4PreCompoundModel(new G4ExcitationHandler);
   antiBCascade->SetDeExcitation(preEquilib);
 
   antiBHighEnergyModel->SetTransport(antiBCascade);
@@ -596,13 +600,15 @@ void B02PhysicsList::ConstructHad()
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B02PhysicsList::ConstructLeptHad()
+void B03PhysicsList::ConstructLeptHad()
 {;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4Decay.hh"
-void B02PhysicsList::ConstructGeneral()
+void B03PhysicsList::ConstructGeneral()
 {
   G4Decay* theDecayProcess = new G4Decay();
   theParticleIterator->reset();
@@ -619,11 +625,11 @@ void B02PhysicsList::ConstructGeneral()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B02PhysicsList::SetCuts()
+void B03PhysicsList::SetCuts()
 {
   if (verboseLevel >0)
   {
-    G4cout << "B02PhysicsList::SetCuts:";
+    G4cout << "B03PhysicsList::SetCuts:";
     G4cout << "CutLength : " << defaultCutValue/mm << " (mm)" << G4endl;
   }  
   //   "G4VUserPhysicsList::SetCutsWithDefault" method sets 
@@ -634,7 +640,7 @@ void B02PhysicsList::SetCuts()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ParallelWorldScoringProcess.hh"
-void B02PhysicsList::AddScoringProcess(){
+void B03PhysicsList::AddScoringProcess(){
 
   G4int npw = fParaWorldName.size();
   for ( G4int i = 0; i < npw; i++){
@@ -657,6 +663,37 @@ void B02PhysicsList::AddScoringProcess(){
       }
     }
   }
+
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4ImportanceProcess.hh"
+#include "G4IStore.hh"
+void B03PhysicsList::AddBiasingProcess(){
+
+  
+  G4cout << " Preparing Importance Sampling with GhostWorld " 
+         << fBiasWorldName << G4endl;
+  fGeomSampler->SetParallel(true); // parallelworld
+  G4IStore* iStore = G4IStore::GetInstance(fBiasWorldName);
+  fGeomSampler->SetWorld(iStore->GetParallelWorldVolumePointer());
+  //  fGeomSampler->PrepareImportanceSampling(G4IStore::
+  //                              GetInstance(fBiasWorldName), 0);
+  static G4bool first = true;
+  if(first) {
+    fGeomSampler->PrepareImportanceSampling(iStore, 0);
+
+    fGeomSampler->Configure();
+    G4cout << " GeomSampler Configured!!! " << G4endl;
+    first = false;
+  }
+
+#ifdef G4MULTITHREADED 
+  fGeomSampler->AddProcess();
+#else
+  G4cout << " Running in singlethreaded mode!!! " << G4endl;
+#endif
 
 }
 

@@ -23,47 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/include/B02PVolumeStore.hh
-/// \brief Definition of the B02PVolumeStore class
+/// \file biasing/B03/include/B03RunAction.hh
+/// \brief Definition of the B03RunAction class
 //
 //
-// $Id$
-// GEANT4 tag 
-//
-// ----------------------------------------------------------------------
-// Class B02PVolumeStore
-//
-// Class description:
-//
-// ...
+// $Id: B03RunAction.hh 72862 2013-08-05 08:26:38Z ahoward $
+// 
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
-// ----------------------------------------------------------------------
+#ifndef B03RunAction_h
+#define B03RunAction_h 1
 
-#ifndef B02PVolumeStore_hh
-#define B02PVolumeStore_hh B02PVolumeStore_hh
-
+#include "G4UserRunAction.hh"
 #include "globals.hh"
-#include <set>
-#include "G4GeometryCell.hh"
-#include "G4GeometryCellComp.hh"
+#include <vector>
 
-typedef std::set< G4GeometryCell, G4GeometryCellComp > B02SetGeometryCell;
+class G4Run;
 
-class B02PVolumeStore {
+//=======================================================================
+// B03RunAction
+//   
+//
+//
+//=======================================================================
+//
+class B03RunAction : public G4UserRunAction
+{
 public:
-  B02PVolumeStore();
-  ~B02PVolumeStore();
-  
-  void AddPVolume(const G4GeometryCell &cell);
-  const G4VPhysicalVolume *GetPVolume(const G4String &name) const;
-  G4int Size();
-  G4String GetPNames() const;
+  // constructor and destructor
+  B03RunAction();
+  virtual ~B03RunAction();
+
+public:
+  // virtual method from G4UserRunAction.
+  virtual G4Run* GenerateRun();
+  virtual void BeginOfRunAction(const G4Run*);
+  virtual void EndOfRunAction(const G4Run*);
+
+public:
+  void PrintHeader(std::ostream *out);
+  std::string FillString(const std::string &name, char c, G4int n, 
+                         G4bool back=true);
 
 private:
-  B02SetGeometryCell fSetGeometryCell;
+  // Data member 
+  // - vector of MultiFunctionalDetecor names.
+  std::vector<G4String> fSDName;  
+  //  G4int fFieldName;
+  G4int fFieldValue;
+
+
 };
 
-
+//
 
 #endif

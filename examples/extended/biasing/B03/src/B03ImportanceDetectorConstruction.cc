@@ -23,17 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/src/B02PSScoringDetectorConstruction.cc
-/// \brief Implementation of the B02PSScoringDetectorConstruction class
+/// \file biasing/B03/src/B03ImportanceDetectorConstruction.cc
+/// \brief Implementation of the B03ImportanceDetectorConstruction class
 //
 //
-// $Id$
+// $Id: B03ImportanceDetectorConstruction.cc 70093 2013-05-23 09:03:57Z gcosmo $
 //
 
 #include "globals.hh"
 #include <sstream>
 
-#include "B02PSScoringDetectorConstruction.hh"
+#include "B03ImportanceDetectorConstruction.hh"
 
 #include "G4Material.hh"
 #include "G4Tubs.hh"
@@ -55,46 +55,39 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B02PSScoringDetectorConstruction::B02PSScoringDetectorConstruction(G4String worldName)
-  :G4VUserParallelWorld(worldName),fLogicalVolumeVector()
+B03ImportanceDetectorConstruction::
+B03ImportanceDetectorConstruction(G4String worldName) 
+:G4VUserParallelWorld(worldName),fLogicalVolumeVector()
 {
   //  Construct();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B02PSScoringDetectorConstruction::~B02PSScoringDetectorConstruction()
+B03ImportanceDetectorConstruction::~B03ImportanceDetectorConstruction()
 {
   fLogicalVolumeVector.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B02PSScoringDetectorConstruction::Construct()
+void B03ImportanceDetectorConstruction::Construct()
 {  
-
   G4cout << " constructing parallel world " << G4endl;
+
+  G4Material* dummyMat  = 0;
 
   //GetWorld methods create a clone of the mass world to the parallel world (!)
   // via the transportation manager
   fGhostWorld = GetWorld();
+  G4cout << " B03ImportanceDetectorConstruction:: ghostWorldName = " 
+         << fGhostWorld->GetName() << G4endl;
   G4LogicalVolume* worldLogical = fGhostWorld->GetLogicalVolume();
   fLogicalVolumeVector.push_back(worldLogical);
 
   G4String name("none");
-  G4double density(universe_mean_density), temperature(0), pressure(0);
-
-  name = "Galactic";
-  density     = universe_mean_density;            //from PhysicalConstants.h
-  pressure    = 3.e-18*pascal;
-  temperature = 2.73*kelvin;
-  G4cout << density << " " << kStateGas << G4endl;
-  G4Material *Galactic = 
-    new G4Material(name, 1., 1.01*g/mole, density,
-                   kStateGas,temperature,pressure);
-
-
-  //fPVolumeStore.AddPVolume(G4GeometryCell(*fGhostWorld, 0));
+  //  fPVolumeStore.AddPVolume(G4GeometryCell(*pWorldVolume, 0));
+  fPVolumeStore.AddPVolume(G4GeometryCell(*fGhostWorld, 0));
 
 
 
@@ -116,38 +109,44 @@ void B02PSScoringDetectorConstruction::Construct()
   
   // logical parallel cells
 
-  G4LogicalVolume *aShield_log = 
-    new G4LogicalVolume(aShield, Galactic, "aShield_log");
-  fLogicalVolumeVector.push_back(aShield_log);
+  G4LogicalVolume *aShield_log_imp = 
+    new G4LogicalVolume(aShield, dummyMat, "aShield_log_imp");
+  fLogicalVolumeVector.push_back(aShield_log_imp);
 
   // physical parallel cells
 
   G4int i = 1;
   G4double startz = -85*cm; 
-  for (i=1; i<=18; ++i) {
+  //  for (i=1; i<=18; ++i) {
+  for (i=1; i<=18; i++) {
    
     name = GetCellName(i);
     
     G4double pos_x = 0*cm;
     G4double pos_y = 0*cm;
     G4double pos_z = startz + (i-1) * (2*hightShield);
-    new G4PVPlacement(0, 
-                     G4ThreeVector(pos_x, pos_y, pos_z),
-                     aShield_log, 
-                     name, 
-                     worldLogical, 
-                     false, 
-                     i);
-    //G4GeometryCell cell(*pvol, i);
-    //fPVolumeStore.AddPVolume(cell);
+    G4VPhysicalVolume *pvol = 
+      new G4PVPlacement(0, 
+                        G4ThreeVector(pos_x, pos_y, pos_z),
+                        aShield_log_imp, 
+                        name, 
+                        worldLogical, 
+                        false, 
+                        i);
+    //                        0);
+    G4GeometryCell cell(*pvol, i);
+    //    G4GeometryCell cell(*pvol, 0);
+    fPVolumeStore.AddPVolume(cell);
   }
 
   // filling the rest of the world volumr behind the concrete with
   // another slob which should get the same importance value as the 
   // last slob
   innerRadiusShield = 0*cm;
-  outerRadiusShield = 100*cm;
-  hightShield       = 5*cm;   
+  //  outerRadiusShield = 110*cm; exceeds world volume!!!!
+  outerRadiusShield = 101*cm;
+  //  hightShield       = 10*cm;
+  hightShield       = 5*cm;
   startAngleShield  = 0*deg;
   spanningAngleShield    = 360*deg;
 
@@ -159,22 +158,28 @@ void B02PSScoringDetectorConstruction::Construct()
                              spanningAngleShield);
   
   G4LogicalVolume *aRest_log = 
-    new G4LogicalVolume(aRest, Galactic, "aRest_log");
-  name = GetCellName(19);
+    new G4LogicalVolume(aRest, dummyMat, "aRest_log");
+
   fLogicalVolumeVector.push_back(aRest_log);
+
+  name = GetCellName(19);
     
   G4double pos_x = 0*cm;
   G4double pos_y = 0*cm;
+  //  G4double pos_z = 100*cm;
   G4double pos_z = 95*cm;
-  new G4PVPlacement(0, 
-                    G4ThreeVector(pos_x, pos_y, pos_z),
-                    aRest_log, 
-                    name, 
-                    worldLogical, 
-                    false, 
-                    19); // i = 19
-  //G4GeometryCell cell(*pvol, i);
-  //fPVolumeStore.AddPVolume(cell);
+  G4VPhysicalVolume *pvol = 
+    new G4PVPlacement(0, 
+                      G4ThreeVector(pos_x, pos_y, pos_z),
+                      aRest_log, 
+                      name, 
+                      worldLogical, 
+                      false, 
+                      19);
+  //                      0);
+  G4GeometryCell cell(*pvol, 19);
+  //  G4GeometryCell cell(*pvol, 0);
+  fPVolumeStore.AddPVolume(cell);
 
   SetSensitive();
 
@@ -182,7 +187,21 @@ void B02PSScoringDetectorConstruction::Construct()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4String B02PSScoringDetectorConstruction::GetCellName(G4int i) {
+const G4VPhysicalVolume &B03ImportanceDetectorConstruction::
+GetPhysicalVolumeByName(const G4String& name) const {
+  return *fPVolumeStore.GetPVolume(name);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4String B03ImportanceDetectorConstruction::ListPhysNamesAsG4String(){
+  G4String names(fPVolumeStore.GetPNames());
+  return names;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4String B03ImportanceDetectorConstruction::GetCellName(G4int i) {
   std::ostringstream os;
   os << "cell_";
   if (i<10) {
@@ -195,19 +214,36 @@ G4String B02PSScoringDetectorConstruction::GetCellName(G4int i) {
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VPhysicalVolume *B02PSScoringDetectorConstruction::GetWorldVolume() {
-   return fGhostWorld;
+G4GeometryCell B03ImportanceDetectorConstruction::GetGeometryCell(G4int i){
+  G4String name(GetCellName(i));
+  const G4VPhysicalVolume *p=0;
+  p = fPVolumeStore.GetPVolume(name);
+  if (p) {
+    return G4GeometryCell(*p,0);
+  }
+  else {
+    G4cout << "B03ImportanceDetectorConstruction::GetGeometryCell: " << G4endl
+           << " couldn't get G4GeometryCell" << G4endl;
+    return G4GeometryCell(*fGhostWorld,-2);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VPhysicalVolume &B02PSScoringDetectorConstruction::GetWorldVolumeAddress() const{
-  return *fGhostWorld;
+G4VPhysicalVolume &B03ImportanceDetectorConstruction::
+GetWorldVolumeAddress() const{
+   return *fGhostWorld;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B02PSScoringDetectorConstruction::SetSensitive(){
+G4VPhysicalVolume *B03ImportanceDetectorConstruction::GetWorldVolume() {
+  return fGhostWorld;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B03ImportanceDetectorConstruction::SetSensitive(){
 
   //  -------------------------------------------------
   //   The collection names of defined Primitives are
@@ -222,12 +258,14 @@ void B02PSScoringDetectorConstruction::SetSensitive(){
   //   8       ConcreteSD/SLWE_V
   //  -------------------------------------------------
 
+  //now moved to ConstructSD()
 
-  //================================================
-  // Sensitive detectors : MultiFunctionalDetector
-  //================================================
-  //
-  //  Sensitive Detector Manager.
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void B03ImportanceDetectorConstruction::ConstructSD()
+{
+
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   //
   // Sensitive Detector Name
@@ -238,7 +276,8 @@ void B02PSScoringDetectorConstruction::SetSensitive(){
   //------------------------
   //
   // Define MultiFunctionalDetector with name.
-  G4MultiFunctionalDetector* MFDet = new G4MultiFunctionalDetector(concreteSDname);
+  G4MultiFunctionalDetector* MFDet = 
+                         new G4MultiFunctionalDetector(concreteSDname);
   SDman->AddNewDetector( MFDet );                 // Register SD to SDManager
 
 
@@ -249,9 +288,11 @@ void B02PSScoringDetectorConstruction::SetSensitive(){
   MFDet->SetFilter(neutronFilter);
 
 
-  for (std::vector<G4LogicalVolume *>::iterator it =  fLogicalVolumeVector.begin();
+  for (std::vector<G4LogicalVolume *>::iterator it =  
+                                                fLogicalVolumeVector.begin();
        it != fLogicalVolumeVector.end(); it++){
-      (*it)->SetSensitiveDetector(MFDet);
+    //      (*it)->SetSensitiveDetector(MFDet);
+    SetSensitiveDetector((*it)->GetName(), MFDet);
   }
 
   G4String psName;
@@ -267,7 +308,8 @@ void B02PSScoringDetectorConstruction::SetSensitive(){
   G4PSPopulation*   scorer2 = new G4PSPopulation(psName="Population");  
   MFDet->RegisterPrimitive(scorer2);
 
-  G4PSTrackCounter* scorer3 = new G4PSTrackCounter(psName="TrackEnter",fCurrent_In);  
+  G4PSTrackCounter* scorer3 = 
+                new G4PSTrackCounter(psName="TrackEnter",fCurrent_In);  
   MFDet->RegisterPrimitive(scorer3);
 
   G4PSTrackLength* scorer4 = new G4PSTrackLength(psName="SL");  
@@ -292,7 +334,6 @@ void B02PSScoringDetectorConstruction::SetSensitive(){
   scorer8->MultiplyKineticEnergy(true);
   scorer8->DivideByVelocity(true);
   MFDet->RegisterPrimitive(scorer8);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,28 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/include/B02ScoringDetectorConstruction.hh
-/// \brief Definition of the B02ScoringDetectorConstruction class
+/// \file runAndEvent/B03/src/B03ActionInitialization.cc
+/// \brief Implementation of the B03ActionInitialization class
 //
 //
-// $Id$
+// $Id: B03ActionInitialization.cc 66780 2013-01-12 14:56:35Z gcosmo $
 //
 
-#ifndef B02ScoringDetectorConstruction_hh 
-#define B02ScoringDetectorConstruction_hh  B02ScoringDetectorConstruction_hh 
+#include "B03ActionInitialization.hh"
+#include "B03PrimaryGeneratorAction.hh"
+#include "B03RunAction.hh"
 
-#include "G4VUserDetectorConstruction.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4VPhysicalVolume; 
 
-class B02ScoringDetectorConstruction : public G4VUserDetectorConstruction
+B03ActionInitialization::B03ActionInitialization()
+{;} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B03ActionInitialization::~B03ActionInitialization()
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B03ActionInitialization::BuildForMaster() const
 {
-public:
-  B02ScoringDetectorConstruction(){}
-  ~B02ScoringDetectorConstruction(){}
+  SetUserAction(new B03RunAction);
+}
 
-  virtual G4VPhysicalVolume* Construct();
-  
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void B03ActionInitialization::Build() const
+{
+
+  SetUserAction(new B03PrimaryGeneratorAction);
+  SetUserAction(new B03RunAction);
+
+}
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+

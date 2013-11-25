@@ -35,9 +35,11 @@
 
 #include "globals.hh"
 #include "G4VUserDetectorConstruction.hh"
-
+#include <vector>
 class G4VPhysicalVolume;
-class G4IStore;
+class G4LogicalVolume;
+class G4VIStore;
+class G4VWeightWindowStore;
 
 class B02DetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -47,17 +49,28 @@ public:
   
   virtual G4VPhysicalVolume* Construct();
 
-  G4VPhysicalVolume* GetWorldVolume();
-  G4VPhysicalVolume& GetWorldVolumeAddress() const;
+  G4VIStore* CreateImportanceStore();
+    // create an importance store, caller is responsible for deleting it
 
-  //  G4String GetCellName(G4int i);
+  G4VWeightWindowStore *CreateWeightWindowStore();
+    // create an weight window  store, caller is responsible for 
+    // deleting it
+
+  G4VPhysicalVolume* GetWorldVolume();
 
   void SetSensitive();
 
+  //  virtual void ConstructSDandField();
+
+  inline G4VIStore* GetGeomStore(){return aIstore;};
+
 private:
+  std::vector< G4LogicalVolume * > fLogicalVolumeVector;
+  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
 
   G4VPhysicalVolume* fWorldVolume;
 
+  G4VIStore *aIstore;
 
 };
 

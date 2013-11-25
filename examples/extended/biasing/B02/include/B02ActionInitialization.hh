@@ -23,62 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/include/B02PhysicsList.hh
-/// \brief Definition of the B02PhysicsList class
+/// \file runAndEvent/B02/include/B02ActionInitialization.hh
+/// \brief Definition of the B02ActionInitialization class
 //
 //
-#ifndef B02PhysicsList_h
-#define B02PhysicsList_h 1
+// $Id: B02ActionInitialization.hh 66780 2013-01-12 14:56:35Z gcosmo $
+//
 
-#include "G4VUserPhysicsList.hh"
-#include "globals.hh"
+#ifndef B02ActionInitialization_h
+#define B02ActionInitialization_h 1
 
-#include <vector>
+#include "G4VUserActionInitialization.hh"
 
-// taken from Tst12PhysicsList
-
-class B02PhysicsList: public G4VUserPhysicsList
+class B02ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    B02PhysicsList();
-    virtual ~B02PhysicsList();
+    B02ActionInitialization();    
+    virtual ~B02ActionInitialization();
 
-  public: 
-    void AddParallelWorldName(G4String& pname)
-         {fParaWorldName.push_back(pname);}
-
-  protected:
-    // Construct particle and physics
-    virtual void ConstructParticle();
-    virtual void ConstructProcess();
-
-    // 
-    virtual void SetCuts();
-    
-  protected:
-  // these methods Construct physics processes and register them
-    virtual void ConstructGeneral();
-    virtual void ConstructEM();
-    virtual void ConstructHad();
-    virtual void ConstructLeptHad();
-
-    void AddScoringProcess(); 
-
- //
-    void  ConstructAllBosons();
-    void  ConstructAllLeptons();
-    void  ConstructAllMesons();
-    void  ConstructAllBaryons();
-    void  ConstructAllIons();
-    void  ConstructAllShortLiveds();
-
-  private:
-    std::vector<G4String>  fParaWorldName; 
-
-
+  public:
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+ 
 };
 
 #endif
-
 
 

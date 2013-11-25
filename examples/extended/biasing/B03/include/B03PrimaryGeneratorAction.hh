@@ -23,47 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/include/B02PVolumeStore.hh
-/// \brief Definition of the B02PVolumeStore class
+/// \file biasing/B03/include/B03PrimaryGeneratorAction.hh
+/// \brief Definition of the B03PrimaryGeneratorAction class
 //
 //
-// $Id$
-// GEANT4 tag 
-//
-// ----------------------------------------------------------------------
-// Class B02PVolumeStore
-//
-// Class description:
-//
-// ...
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
-// ----------------------------------------------------------------------
+#ifndef B03PrimaryGeneratorAction_hh
+#define B03PrimaryGeneratorAction_hh B03PrimaryGeneratorAction_hh 
 
-#ifndef B02PVolumeStore_hh
-#define B02PVolumeStore_hh B02PVolumeStore_hh
+#include "G4VUserPrimaryGeneratorAction.hh"
 
-#include "globals.hh"
-#include <set>
-#include "G4GeometryCell.hh"
-#include "G4GeometryCellComp.hh"
+class G4ParticleGun;
+class G4Event;
 
-typedef std::set< G4GeometryCell, G4GeometryCellComp > B02SetGeometryCell;
+class B03PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+{
+  public:
+    B03PrimaryGeneratorAction();
+    ~B03PrimaryGeneratorAction();
 
-class B02PVolumeStore {
-public:
-  B02PVolumeStore();
-  ~B02PVolumeStore();
-  
-  void AddPVolume(const G4GeometryCell &cell);
-  const G4VPhysicalVolume *GetPVolume(const G4String &name) const;
-  G4int Size();
-  G4String GetPNames() const;
+  public:
+    virtual void GeneratePrimaries(G4Event* anEvent);
 
-private:
-  B02SetGeometryCell fSetGeometryCell;
+  private:
+    G4ParticleGun* fParticleGun;
 };
 
-
-
 #endif
+
+

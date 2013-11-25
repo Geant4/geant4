@@ -23,16 +23,16 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/src/B02DetectorConstruction.cc
-/// \brief Implementation of the B02DetectorConstruction class
+/// \file biasing/B03/src/B03DetectorConstruction.cc
+/// \brief Implementation of the B03DetectorConstruction class
 //
 //
-// $Id$
+// $Id: B03DetectorConstruction.cc 70238 2013-05-27 11:59:40Z gcosmo $
 //
 #include "G4Types.hh"
 #include "globals.hh"
 
-#include "B02DetectorConstruction.hh"
+#include "B03DetectorConstruction.hh"
 
 #include "G4Material.hh"
 #include "G4Box.hh"
@@ -59,18 +59,18 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B02DetectorConstruction::B02DetectorConstruction()
+B03DetectorConstruction::B03DetectorConstruction()
  : G4VUserDetectorConstruction()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-B02DetectorConstruction::~B02DetectorConstruction()
+B03DetectorConstruction::~B03DetectorConstruction()
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VPhysicalVolume* B02DetectorConstruction::Construct()
+G4VPhysicalVolume* B03DetectorConstruction::Construct()
 {
   G4double pos_x;
   G4double pos_y;
@@ -155,18 +155,16 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
   // world solid
 
   G4double innerRadiusCylinder = 0*cm;
-  //  G4double outerRadiusCylinder = 101*cm; // dont't have scoring
-  G4double outerRadiusCylinder = 100*cm; // dont't have scoring
+  G4double outerRadiusCylinder = 101*cm; // dont't have scoring
                    // cells coinside eith world volume boundary
-  //  G4double heightCylinder       = 105*cm;
-  G4double heightCylinder       = 100*cm;
+  G4double hightCylinder       = 105*cm;
   G4double startAngleCylinder  = 0*deg;
   G4double spanningAngleCylinder    = 360*deg;
 
   G4Tubs *worldCylinder = new G4Tubs("worldCylinder",
                                      innerRadiusCylinder,
                                      outerRadiusCylinder,
-                                     heightCylinder,
+                                     hightCylinder,
                                      startAngleCylinder,
                                      spanningAngleCylinder);
 
@@ -184,14 +182,14 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
 
   G4double innerRadiusShield = 0*cm;
   G4double outerRadiusShield = 100*cm;
-  G4double heightShield       = 90*cm;
+  G4double hightShield       = 90*cm;
   G4double startAngleShield  = 0*deg;
   G4double spanningAngleShield    = 360*deg;
 
   G4Tubs *aShield = new G4Tubs("aShield",
                                innerRadiusShield,
                                outerRadiusShield,
-                               heightShield,
+                               hightShield,
                                startAngleShield,
                                spanningAngleShield);
   
@@ -227,8 +225,21 @@ G4VPhysicalVolume* B02DetectorConstruction::Construct()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4VPhysicalVolume *B02DetectorConstruction::GetWorldVolume() {
+// void B03DetectorConstruction::ConstructSDandField()
+// {
+//   ;
+// }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VPhysicalVolume *B03DetectorConstruction::GetWorldVolume() {
    return fWorldVolume;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VPhysicalVolume &B03DetectorConstruction::GetWorldVolumeAddress() const{
+  return *fWorldVolume;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/include/B02PVolumeStore.hh
-/// \brief Definition of the B02PVolumeStore class
+/// \file biasing/B03/include/B03PVolumeStore.hh
+/// \brief Definition of the B03PVolumeStore class
 //
 //
-// $Id$
+// $Id: B03PVolumeStore.hh 66359 2012-12-18 09:08:26Z gcosmo $
 // GEANT4 tag 
 //
 // ----------------------------------------------------------------------
-// Class B02PVolumeStore
+// Class B03PVolumeStore
 //
 // Class description:
 //
@@ -40,28 +40,27 @@
 // Author: Michael Dressel (Michael.Dressel@cern.ch)
 // ----------------------------------------------------------------------
 
-#ifndef B02PVolumeStore_hh
-#define B02PVolumeStore_hh B02PVolumeStore_hh
+#ifndef B03PVolumeStore_hh
+#define B03PVolumeStore_hh B03PVolumeStore_hh
 
 #include "globals.hh"
 #include <set>
 #include "G4GeometryCell.hh"
 #include "G4GeometryCellComp.hh"
 
-typedef std::set< G4GeometryCell, G4GeometryCellComp > B02SetGeometryCell;
+typedef std::set< G4GeometryCell, G4GeometryCellComp > B03SetGeometryCell;
 
-class B02PVolumeStore {
+class B03PVolumeStore {
 public:
-  B02PVolumeStore();
-  ~B02PVolumeStore();
+  B03PVolumeStore();
+  ~B03PVolumeStore();
   
   void AddPVolume(const G4GeometryCell &cell);
   const G4VPhysicalVolume *GetPVolume(const G4String &name) const;
-  G4int Size();
   G4String GetPNames() const;
 
 private:
-  B02SetGeometryCell fSetGeometryCell;
+  B03SetGeometryCell fSetGeometryCell;
 };
 
 

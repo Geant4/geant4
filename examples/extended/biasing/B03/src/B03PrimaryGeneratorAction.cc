@@ -23,47 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/include/B02PVolumeStore.hh
-/// \brief Definition of the B02PVolumeStore class
+/// \file biasing/B03/src/B03PrimaryGeneratorAction.cc
+/// \brief Implementation of the B03PrimaryGeneratorAction class
 //
 //
-// $Id$
-// GEANT4 tag 
+// $Id: B03PrimaryGeneratorAction.cc 70222 2013-05-27 10:07:27Z ihrivnac $
 //
-// ----------------------------------------------------------------------
-// Class B02PVolumeStore
-//
-// Class description:
-//
-// ...
-
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
-// ----------------------------------------------------------------------
-
-#ifndef B02PVolumeStore_hh
-#define B02PVolumeStore_hh B02PVolumeStore_hh
 
 #include "globals.hh"
-#include <set>
-#include "G4GeometryCell.hh"
-#include "G4GeometryCellComp.hh"
 
-typedef std::set< G4GeometryCell, G4GeometryCellComp > B02SetGeometryCell;
+#include "B03PrimaryGeneratorAction.hh"
 
-class B02PVolumeStore {
-public:
-  B02PVolumeStore();
-  ~B02PVolumeStore();
-  
-  void AddPVolume(const G4GeometryCell &cell);
-  const G4VPhysicalVolume *GetPVolume(const G4String &name) const;
-  G4int Size();
-  G4String GetPNames() const;
+#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+#include "G4Neutron.hh"
+#include "G4ThreeVector.hh"
+#include "G4SystemOfUnits.hh"
 
-private:
-  B02SetGeometryCell fSetGeometryCell;
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+B03PrimaryGeneratorAction::B03PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(), fParticleGun(0)
+{
+  G4int n_particle = 1;
+  fParticleGun = new G4ParticleGun(n_particle);
+  fParticleGun->SetParticleDefinition(G4Neutron::NeutronDefinition());
+  fParticleGun->SetParticleEnergy(10.0*MeV);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.0, 0.0, -90.0005*cm));
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.0, 0.0, 1.0));
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+B03PrimaryGeneratorAction::~B03PrimaryGeneratorAction()
+{
+  delete fParticleGun;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B03PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+{
+  fParticleGun->GeneratePrimaryVertex(anEvent);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,47 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/include/B02PVolumeStore.hh
-/// \brief Definition of the B02PVolumeStore class
+/// \file biasing/B03/include/B03ImportanceDetectorConstruction.hh
+/// \brief Definition of the B03ImportanceDetectorConstruction class
 //
 //
-// $Id$
-// GEANT4 tag 
+// $Id: B03ImportanceDetectorConstruction.hh 70238 2013-05-27 11:59:40Z gcosmo $
 //
-// ----------------------------------------------------------------------
-// Class B02PVolumeStore
-//
-// Class description:
-//
-// ...
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
-// ----------------------------------------------------------------------
-
-#ifndef B02PVolumeStore_hh
-#define B02PVolumeStore_hh B02PVolumeStore_hh
+#ifndef B03ImportanceDetectorConstruction_hh 
+#define B03ImportanceDetectorConstruction_hh  B03ImportanceDetectorConstruction_hh 
 
 #include "globals.hh"
-#include <set>
+#include <map>
+#include <vector>
 #include "G4GeometryCell.hh"
-#include "G4GeometryCellComp.hh"
+#include "B03PVolumeStore.hh"
 
-typedef std::set< G4GeometryCell, G4GeometryCellComp > B02SetGeometryCell;
+#include "G4VUserParallelWorld.hh"
 
-class B02PVolumeStore {
+class G4VPhysicalVolume;
+class G4LogicalVolume;
+
+
+
+class B03ImportanceDetectorConstruction : public G4VUserParallelWorld
+{
 public:
-  B02PVolumeStore();
-  ~B02PVolumeStore();
-  
-  void AddPVolume(const G4GeometryCell &cell);
-  const G4VPhysicalVolume *GetPVolume(const G4String &name) const;
-  G4int Size();
-  G4String GetPNames() const;
+  B03ImportanceDetectorConstruction(G4String worldName);
+  ~B03ImportanceDetectorConstruction();
+
+  const G4VPhysicalVolume &GetPhysicalVolumeByName(const G4String& name) const;
+  G4VPhysicalVolume &GetWorldVolumeAddress() const;
+  G4String ListPhysNamesAsG4String();
+  G4String GetCellName(G4int i);
+  G4GeometryCell GetGeometryCell(G4int i);
+
+  G4VPhysicalVolume* GetWorldVolume();
+
+  void SetSensitive();
+
+  virtual void ConstructSD();
 
 private:
-  B02SetGeometryCell fSetGeometryCell;
+  virtual void Construct();
+  B03PVolumeStore fPVolumeStore;
+
+  //  std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
+  std::vector< G4LogicalVolume * > fLogicalVolumeVector;
+
+  //  G4VPhysicalVolume *fWorldVolume;
+
+  G4VPhysicalVolume* fGhostWorld;
+
 };
-
-
 
 #endif

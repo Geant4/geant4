@@ -23,30 +23,30 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B01/src/B01Run.cc
-/// \brief Implementation of the B01Run class
+/// \file biasing/B03/src/B03Run.cc
+/// \brief Implementation of the B03Run class
 //
 //
-// $Id$
+// $Id: B03Run.cc 70528 2013-05-31 16:50:36Z gcosmo $
 //
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//=====================================================================
 //
 //  (Description)
-//    B01Run Class is for accumulating scored quantities which is 
+//    B03Run Class is for accumulating scored quantities which is 
 //  scored using G4MutiFunctionalDetector and G4VPrimitiveScorer.
 //  Accumulation is done using G4THitsMap object.
 //
-//    The constructor B01Run(const std::vector<G4String> mfdName)
+//    The constructor B03Run(const std::vector<G4String> mfdName)
 //  needs a vector filled with MultiFunctionalDetector names which
 //  was assigned at instantiation of MultiFunctionalDetector(MFD).
-//  Then B01Run constructor automatically scans primitive scorers
+//  Then B03Run constructor automatically scans primitive scorers
 //  in the MFD, and obtains collectionIDs of all collections associated
 //  to those primitive scorers. Futhermore, the G4THitsMap objects 
 //  for accumulating during a RUN are automatically created too.
 //  (*) Collection Name is same as primitive scorer name.
 // 
-//    The resultant information is kept inside B01Run objects as
+//    The resultant information is kept inside B03Run objects as
 //  data members.
 //  std::vector<G4String> fCollName;            // Collection Name,
 //  std::vector<G4int> fCollID;                 // Collection ID,
@@ -55,19 +55,19 @@
 //  The resualtant HitsMap objects are obtain using access method,
 //  GetHitsMap(..).
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//=====================================================================
 
-#include "B01Run.hh"
+#include "B03Run.hh"
 #include "G4SDManager.hh"
 
 #include "G4MultiFunctionalDetector.hh"
 #include "G4VPrimitiveScorer.hh"
 
-//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 //  Constructor. 
 //   (The vector of MultiFunctionalDetector name has to given.)
-B01Run::B01Run(const std::vector<G4String> mfdName): G4Run()
+B03Run::B03Run(const std::vector<G4String> mfdName): G4Run()
 {
   G4SDManager* SDman = G4SDManager::GetSDMpointer();
   //=================================================
@@ -82,22 +82,22 @@ B01Run::B01Run(const std::vector<G4String> mfdName): G4Run()
       (G4MultiFunctionalDetector*)(SDman->FindSensitiveDetector(detName));
     //
     if ( mfd ){
-    //--- Loop over the registered primitive scorers.
+        //--- Loop over the registered primitive scorers.
         for (G4int icol = 0; icol < mfd->GetNumberOfPrimitives(); icol++){
-    // Get Primitive Scorer object.
+            // Get Primitive Scorer object.
             G4VPrimitiveScorer* scorer=mfd->GetPrimitive(icol);
-    // collection name and collectionID for HitsCollection,
-    // where type of HitsCollection is G4THitsMap in case of primitive scorer.
-    // The collection name is given by <MFD name>/<Primitive Scorer name>.
+      // collection name and collectionID for HitsCollection,
+      // where type of HitsCollection is G4THitsMap in case of primitive scorer.
+      // The collection name is given by <MFD name>/<Primitive Scorer name>.
             G4String collectionName = scorer->GetName();
             G4String fullCollectionName = detName+"/"+collectionName;
             G4int    collectionID = SDman->GetCollectionID(fullCollectionName);
-
+            //
             if ( collectionID >= 0 ){
-                G4cout << "++ "<<fullCollectionName<< " id " << collectionID 
-                       << G4endl;
-    // Store obtained HitsCollection information into data members.
-    // And, creates new G4THitsMap for accumulating quantities during RUN.
+                G4cout << "++ "<<fullCollectionName<< " id " 
+                       << collectionID << G4endl;
+          // Store obtained HitsCollection information into data members.
+          // And, creates new G4THitsMap for accumulating quantities during RUN.
                 fCollName.push_back(fullCollectionName);
                 fCollID.push_back(collectionID);
                 fRunMap.push_back(new G4THitsMap<G4double>(detName
@@ -115,7 +115,7 @@ B01Run::B01Run(const std::vector<G4String> mfdName): G4Run()
 
 // Destructor
 //    clear all data members.
-B01Run::~B01Run()
+B03Run::~B03Run()
 {
   //--- Clear HitsMap for RUN
   G4int Nmap = fRunMap.size();
@@ -132,7 +132,7 @@ B01Run::~B01Run()
 //  RecordEvent is called at end of event.
 //  For scoring purpose, the resultant quantity in a event,
 //  is accumulated during a Run.
-void B01Run::RecordEvent(const G4Event* aEvent)
+void B03Run::RecordEvent(const G4Event* aEvent)
 {
   numberOfEvent++;  // This is an original line.
 
@@ -141,7 +141,6 @@ void B01Run::RecordEvent(const G4Event* aEvent)
   //============================
   G4HCofThisEvent* HCE = aEvent->GetHCofThisEvent();
   if (!HCE) return;
-
   //=======================================================
   // Sum up HitsMap of this Event  into HitsMap of this RUN
   //=======================================================
@@ -163,24 +162,27 @@ void B01Run::RecordEvent(const G4Event* aEvent)
   
 }
 
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//
+
 //  Access method for HitsMap of the RUN
 //
-//-----
 // Access HitsMap.
 //  By  MultiFunctionalDetector name and Collection Name.
-G4THitsMap<G4double>* B01Run::GetHitsMap(const G4String& detName,
+G4THitsMap<G4double>* B03Run::GetHitsMap(const G4String& detName,
                                          const G4String& colName){
     G4String fullName = detName+"/"+colName;
+    G4cout << " getting hits map " << fullName << G4endl;
     return GetHitsMap(fullName);
 }
 
-//-----
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 // Access HitsMap.
 //  By full description of collection name, that is
 //    <MultiFunctional Detector Name>/<Primitive Scorer Name>
-G4THitsMap<G4double>* B01Run::GetHitsMap(const G4String& fullName){
+G4THitsMap<G4double>* B03Run::GetHitsMap(const G4String& fullName){
+    G4cout << " getting hits map " << fullName << G4endl;
     G4int Ncol = fCollName.size();
     for ( G4int i = 0; i < Ncol; i++){
         if ( fCollName[i] == fullName ){
@@ -194,7 +196,7 @@ G4THitsMap<G4double>* B01Run::GetHitsMap(const G4String& fullName){
 
 // - Dump All HitsMap of this RUN. (for debuging and monitoring of quantity).
 //   This method calls G4THisMap::PrintAll() for individual HitsMap.
-void B01Run::DumpAllScorer(){
+void B03Run::DumpAllScorer(){
 
   // - Number of HitsMap in this RUN.
   G4int n = GetNumberOfHitsMap();
@@ -215,12 +217,11 @@ void B01Run::DumpAllScorer(){
   }
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void B01Run::Merge(const G4Run* aRun)
+void B03Run::Merge(const G4Run* aRun)
 {
-  const B01Run * localRun = static_cast<const B01Run *>(aRun);
+  const B03Run * localRun = static_cast<const B03Run *>(aRun);
   //=======================================================
   // Merge HitsMap of working threads
   //=======================================================
@@ -235,4 +236,3 @@ void B01Run::Merge(const G4Run* aRun)
 } 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

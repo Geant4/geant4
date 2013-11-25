@@ -23,53 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/include/B02PSScoringDetectorConstruction.hh
-/// \brief Definition of the B02PSScoringDetectorConstruction class
+/// \file biasing/B03/include/B03DetectorConstruction.hh
+/// \brief Definition of the B03DetectorConstruction class
 //
 //
-// $Id$
+// $Id: B03DetectorConstruction.hh 70238 2013-05-27 11:59:40Z gcosmo $
 //
 
-#ifndef B02PSScoringDetectorConstruction_hh 
-#define B02PSScoringDetectorConstruction_hh  B02PSScoringDetectorConstruction_hh 
+#ifndef B03DetectorConstruction_hh
+#define B03DetectorConstruction_hh B03DetectorConstruction_hh
 
 #include "globals.hh"
-#include <map>
-//#include "G4GeometryCell.hh"
-//#include "B02PVolumeStore.hh"
+#include "G4VUserDetectorConstruction.hh"
 
-#include "G4VUserParallelWorld.hh"
-
-#include <vector> 
 class G4VPhysicalVolume;
-class G4LogicalVolume;
+class G4IStore;
 
-
-class B02PSScoringDetectorConstruction: public G4VUserParallelWorld
+class B03DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
-  B02PSScoringDetectorConstruction(G4String worldName);
-  ~B02PSScoringDetectorConstruction();
-
-  //const G4VPhysicalVolume &GetPhysicalVolumeByName(const G4String& name) const;
-  //  G4VPhysicalVolume *GetWorldVolume() const;
-  //G4String ListPhysNamesAsG4String();
-  G4String GetCellName(G4int i);
-  //G4GeometryCell GetGeometryCell(G4int i);
+  B03DetectorConstruction();
+  ~B03DetectorConstruction();
+  
+  virtual G4VPhysicalVolume* Construct();
 
   G4VPhysicalVolume* GetWorldVolume();
   G4VPhysicalVolume& GetWorldVolumeAddress() const;
 
+  //  G4String GetCellName(G4int i);
+
   void SetSensitive();
 
+  //  virtual void ConstructSDandField();
+
 private:
-  virtual void Construct();
-  //B02PVolumeStore fPVolumeStore;
-  G4VPhysicalVolume *fWorldVolume;
 
-  G4VPhysicalVolume* fGhostWorld;
+  G4VPhysicalVolume* fWorldVolume;
 
-  std::vector< G4LogicalVolume* > fLogicalVolumeVector;
 
 };
 

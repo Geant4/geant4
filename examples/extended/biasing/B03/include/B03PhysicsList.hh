@@ -23,47 +23,68 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file biasing/B02/include/B02PVolumeStore.hh
-/// \brief Definition of the B02PVolumeStore class
+/// \file biasing/B03/include/B03PhysicsList.hh
+/// \brief Definition of the B03PhysicsList class
 //
 //
-// $Id$
-// GEANT4 tag 
-//
-// ----------------------------------------------------------------------
-// Class B02PVolumeStore
-//
-// Class description:
-//
-// ...
+#ifndef B03PhysicsList_h
+#define B03PhysicsList_h 1
 
-// Author: Michael Dressel (Michael.Dressel@cern.ch)
-// ----------------------------------------------------------------------
-
-#ifndef B02PVolumeStore_hh
-#define B02PVolumeStore_hh B02PVolumeStore_hh
-
+#include "G4VUserPhysicsList.hh"
 #include "globals.hh"
-#include <set>
-#include "G4GeometryCell.hh"
-#include "G4GeometryCellComp.hh"
+#include "G4GeometrySampler.hh"
 
-typedef std::set< G4GeometryCell, G4GeometryCellComp > B02SetGeometryCell;
+#include <vector>
 
-class B02PVolumeStore {
-public:
-  B02PVolumeStore();
-  ~B02PVolumeStore();
-  
-  void AddPVolume(const G4GeometryCell &cell);
-  const G4VPhysicalVolume *GetPVolume(const G4String &name) const;
-  G4int Size();
-  G4String GetPNames() const;
+// taken from Tst12PhysicsList
 
-private:
-  B02SetGeometryCell fSetGeometryCell;
+class B03PhysicsList: public G4VUserPhysicsList
+{
+  public:
+    B03PhysicsList();
+    virtual ~B03PhysicsList();
+
+  public: 
+    void AddParallelWorldName(G4String& pname)
+         {fParaWorldName.push_back(pname);}
+
+    void AddBiasing(G4GeometrySampler *mgs, G4String& pname) 
+         {fGeomSampler = mgs; fBiasWorldName = pname;}
+
+  protected:
+    // Construct particle and physics
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
+
+    // 
+    virtual void SetCuts();
+    
+  protected:
+  // these methods Construct physics processes and register them
+    virtual void ConstructGeneral();
+    virtual void ConstructEM();
+    virtual void ConstructHad();
+    virtual void ConstructLeptHad();
+
+    void AddScoringProcess(); 
+    void AddBiasingProcess(); 
+
+ //
+    void  ConstructAllBosons();
+    void  ConstructAllLeptons();
+    void  ConstructAllMesons();
+    void  ConstructAllBaryons();
+    void  ConstructAllIons();
+    void  ConstructAllShortLiveds();
+
+  private:
+    std::vector<G4String>  fParaWorldName; 
+    G4String fBiasWorldName;
+    G4GeometrySampler* fGeomSampler;
+
 };
 
-
-
 #endif
+
+
+

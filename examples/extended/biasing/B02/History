@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 22nd, 2013 A.Howard - B02-V09-06-10
+- Removed non-english variable names!
+
+Nov 22nd, 2013 A.Howard - B02-V09-06-09
+- Migrated to new MT compliant interface with modular physicslist
+- co-working with 
+  	     	  geombias-V09-06-05
+  	     	  phys-ctor-limiters-V09-06-012
+  	     	  procbiasing-V09-06-09
+
 Oct 25th, 2013 D.H. Wright - B02-V09-06-08
 - B02PhysicsList: replace LEP models with newer ones
 

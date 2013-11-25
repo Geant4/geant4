@@ -62,6 +62,8 @@ public:
 
   void SetSensitive();
 
+  virtual void ConstructSDandField();
+
 private:
   std::vector< G4LogicalVolume * > fLogicalVolumeVector;
   std::vector< G4VPhysicalVolume * > fPhysicalVolumeVector;
