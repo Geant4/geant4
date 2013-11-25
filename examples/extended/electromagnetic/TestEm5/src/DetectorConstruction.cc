@@ -40,11 +40,6 @@
 #include "G4PVPlacement.hh"
 #include "G4UniformMagField.hh"
 
-#include "G4GeometryManager.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4LogicalVolumeStore.hh"
-#include "G4SolidStore.hh"
-
 #include "G4UnitsTable.hh"
 #include "G4NistManager.hh"
 #include "G4RunManager.hh"
@@ -267,16 +262,6 @@ void DetectorConstruction::ComputeCalorParameters()
   
 G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 { 
-  // Cleanup old geometry
-  //
-  G4GeometryManager::GetInstance()->OpenGeometry();
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
-  
-  // complete the Calor parameters definition 
-  ComputeCalorParameters();
-        
   // World
   //
   fSolidWorld = new G4Box("World",                                //its name
@@ -374,6 +359,7 @@ void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 void DetectorConstruction::SetAbsorberThickness(G4double val)
 {
   fAbsorberThickness = val;
+  ComputeCalorParameters();
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
@@ -382,6 +368,7 @@ void DetectorConstruction::SetAbsorberThickness(G4double val)
 void DetectorConstruction::SetAbsorberSizeYZ(G4double val)
 {
   fAbsorberSizeYZ = val;
+  ComputeCalorParameters();
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
@@ -391,6 +378,7 @@ void DetectorConstruction::SetWorldSizeX(G4double val)
 {
   fWorldSizeX = val;
   fDefaultWorld = false;
+  ComputeCalorParameters();
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
@@ -400,6 +388,7 @@ void DetectorConstruction::SetWorldSizeYZ(G4double val)
 {
   fWorldSizeYZ = val;
   fDefaultWorld = false;
+  ComputeCalorParameters();
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
@@ -408,6 +397,7 @@ void DetectorConstruction::SetWorldSizeYZ(G4double val)
 void DetectorConstruction::SetAbsorberXpos(G4double val)
 {
   fXposAbs  = val;
+  ComputeCalorParameters();
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }  
 
