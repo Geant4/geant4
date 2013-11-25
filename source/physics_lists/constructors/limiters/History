@@ -14,6 +14,17 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-Nov-2013, Alex Howard 	        (phys-ctor-limiters-V09-06-13)
+- G4WeightWindowBiasing and G4ImportanceBiasing modified:
+- Added guard so that AddProcess only occurs for multithreaded builds
+- Makes the singlethreaded backward compatable/minimum interface change
+
+22-Nov-2013, Alex Howard 	        (phys-ctor-limiters-V09-06-12)
+- Added G4WeightWindowBiasing
+
+21-Nov-2013, Alex Howard 	        (phys-ctor-limiters-V09-06-11)
+- Added G4ImportanceBiasing
+
 09-Nov-2013, Andrea Dotti 	        (phys-ctor-limiters-V09-06-10)
 - Bug fix for gnumake builds: add processes/biasing/generic/include in
   list of includes.

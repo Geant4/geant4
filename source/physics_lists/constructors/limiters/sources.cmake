@@ -27,6 +27,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/magneticfield/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/biasing/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/intercoms/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/particles/shortlived/include)
@@ -47,6 +48,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/electromagnetic/utils/i
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/cuts/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/scoring/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/biasing/generic/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/biasing/importance/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/cross_sections/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/stopping/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/management/include)
@@ -88,6 +90,8 @@ include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_ctor_limiters
     HEADERS
+        G4ImportanceBiasing.hh
+        G4WeightWindowBiasing.hh
         G4GenericBiasingPhysics.hh
         G4MaxTimeCuts.hh
         G4MinEkineCuts.hh
@@ -96,6 +100,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_limiters
         G4StepLimiterPhysics.hh
         G4ParallelWorldPhysics.hh
     SOURCES
+        G4ImportanceBiasing.cc
+        G4WeightWindowBiasing.cc
         G4GenericBiasingPhysics.cc
         G4MaxTimeCuts.cc
         G4MinEkineCuts.cc
@@ -108,6 +114,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_limiters
         G4bosons
         G4cuts
         G4scoring
+	G4biasing
         G4decay
         G4digits
         G4emhighenergy
