@@ -29,17 +29,14 @@
 /// \brief Implementation of the LXeMainVolume class
 //
 //
-#include "LXeMainVolume.hh"
 #include "globals.hh"
-#include "G4SDManager.hh"
+
+#include "LXeMainVolume.hh"
+
 #include "G4LogicalSkinSurface.hh"
 #include "G4LogicalBorderSurface.hh"
-#include "LXePMTSD.hh"
-#include "LXeScintSD.hh"
-#include "G4SystemOfUnits.hh"
 
-G4ThreadLocal LXeScintSD* LXeMainVolume::fScint_SD=NULL;
-G4ThreadLocal   LXePMTSD* LXeMainVolume::fPmt_SD=NULL;
+#include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -158,51 +155,11 @@ LXeMainVolume::LXeMainVolume(G4RotationMatrix *pRot,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeMainVolume::ConstructSDandField()
-{
-    // PMT SD
-
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
-  if(!fPmt_SD){
-    G4cout << "Construction /LXeDet/pmtSD" << G4endl;
-    fPmt_SD = new LXePMTSD("/LXeDet/pmtSD");
-    SDman->AddNewDetector(fPmt_SD);
-    //Created here so it exists as pmts are being placed
-  }
-  fPmt_SD->InitPMTs((fNx*fNy+fNx*fNz+fNy*fNz)*2); //let pmtSD know # of pmts
-  fPmt_SD->SetPmtPositions(fPmtPositions);
-
-  //sensitive detector is not actually on the photocathode.
-  //processHits gets done manually by the stepping action.
-  //It is used to detect when photons hit and get absorbed&detected at the
-  //boundary to the photocathode (which doesnt get done by attaching it to a
-  //logical volume.
-  //It does however need to be attached to something or else it doesnt get
-  //reset at the begining of events
-  fPhotocath_log->SetSensitiveDetector(fPmt_SD);
-
-  // Scint SD
-
-  if(!fScint_SD){//determine if it has already been created
-    G4cout << "Construction /LXeDet/scintSD" << G4endl;
-    fScint_SD = new LXeScintSD("/LXeDet/scintSD");
-    SDman->AddNewDetector(fScint_SD);
-  }
-  fScint_log->SetSensitiveDetector(fScint_SD);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void LXeMainVolume::CopyValues(){
-  fUpdated=fConstructor->GetUpdated();
-
   fScint_x=fConstructor->GetScintX();
   fScint_y=fConstructor->GetScintY();
   fScint_z=fConstructor->GetScintZ();
   fD_mtl=fConstructor->GetHousingThickness();
-  fNx=fConstructor->GetNX();
-  fNy=fConstructor->GetNY();
-  fNz=fConstructor->GetNZ();
   fOuterRadius_pmt=fConstructor->GetPMTRadius();
   fSphereOn=fConstructor->GetSphereOn();
   fRefl=fConstructor->GetHousingReflectivity();

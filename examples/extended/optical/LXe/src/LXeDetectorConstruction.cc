@@ -51,10 +51,6 @@
 #include "G4ThreeVector.hh"
 #include "G4PVPlacement.hh"
 #include "globals.hh"
-#include "G4SolidStore.hh"
-#include "G4LogicalVolumeStore.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4GeometryManager.hh"
 #include "G4UImanager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -74,8 +70,6 @@ LXeDetectorConstruction::LXeDetectorConstruction()
   fPstyrene = fPMMA = fPethylene1 = fPethylene2 = NULL;
 
   fN = fO = fC = fH = NULL;
-
-  fUpdated = false;
 
   SetDefaults();
 
@@ -291,58 +285,90 @@ G4VPhysicalVolume* LXeDetectorConstruction::ConstructDetector()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeDetectorConstruction::ConstructSDandField()
-{
-  if (fMainVolume) fMainVolume->ConstructSDandField();
+void LXeDetectorConstruction::ConstructSDandField() {
+
+  if (!fMainVolume) return;
+
+  // PMT SD
+
+  if (!fPmt_SD.Get()) {
+    //Created here so it exists as pmts are being placed
+    G4cout << "Construction /LXeDet/pmtSD" << G4endl;
+    LXePMTSD* pmt_SD = new LXePMTSD("/LXeDet/pmtSD");
+
+    //sensitive detector is not actually on the photocathode.
+    //processHits gets done manually by the stepping action.
+    //It is used to detect when photons hit and get absorbed&detected at the
+    //boundary to the photocathode (which doesnt get done by attaching it to a
+    //logical volume.
+    //It does however need to be attached to something or else it doesnt get
+    //reset at the begining of events
+
+    SetSensitiveDetector(fMainVolume->GetLogPhotoCath(), pmt_SD);
+    fPmt_SD.Put(pmt_SD);
+
+    pmt_SD->InitPMTs((fNx*fNy+fNx*fNz+fNy*fNz)*2); //let pmtSD know # of pmts
+    pmt_SD->SetPmtPositions(fMainVolume->GetPmtPositions());
+  }
+
+  // Scint SD
+
+  if (!fScint_SD.Get()) {
+    G4cout << "Construction /LXeDet/scintSD" << G4endl;
+    LXeScintSD* scint_SD = new LXeScintSD("/LXeDet/scintSD");
+    SetSensitiveDetector(fMainVolume->GetLogScint(), scint_SD);
+    fScint_SD.Put(scint_SD);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeDetectorConstruction::SetDimensions(G4ThreeVector dims){
+void LXeDetectorConstruction::SetDimensions(G4ThreeVector dims) {
   this->fScint_x=dims[0];
   this->fScint_y=dims[1];
   this->fScint_z=dims[2];
-  fUpdated=true;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeDetectorConstruction::SetHousingThickness(G4double d_mtl){
+void LXeDetectorConstruction::SetHousingThickness(G4double d_mtl) {
   this->fD_mtl=d_mtl;
-  fUpdated=true;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeDetectorConstruction::SetNX(G4int nx){
+void LXeDetectorConstruction::SetNX(G4int nx) {
   this->fNx=nx;
-  fUpdated=true;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeDetectorConstruction::SetNY(G4int ny){
+void LXeDetectorConstruction::SetNY(G4int ny) {
   this->fNy=ny;
-  fUpdated=true;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeDetectorConstruction::SetNZ(G4int nz){
+void LXeDetectorConstruction::SetNZ(G4int nz) {
   this->fNz=nz;
-  fUpdated=true;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeDetectorConstruction::SetPMTRadius(G4double outerRadius_pmt){
+void LXeDetectorConstruction::SetPMTRadius(G4double outerRadius_pmt) {
   this->fOuterRadius_pmt=outerRadius_pmt;
-  fUpdated=true;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeDetectorConstruction::SetDefaults(){
+void LXeDetectorConstruction::SetDefaults() {
+
   //Resets to default values
   fD_mtl=0.0635*cm;
 
@@ -371,38 +397,52 @@ void LXeDetectorConstruction::SetDefaults(){
   if(fLXe_mt)fLXe_mt->AddConstProperty("SCINTILLATIONYIELD",12000./MeV);
   if(fMPTPStyrene)fMPTPStyrene->AddConstProperty("SCINTILLATIONYIELD",10./keV);
 
-  fUpdated=true;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeDetectorConstruction::UpdateGeometry(){
-
-  // clean-up previous geometry
-  G4GeometryManager::GetInstance()->OpenGeometry();
-
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
-  G4LogicalSkinSurface::CleanSurfaceTable();
-  G4LogicalBorderSurface::CleanSurfaceTable();
-  G4SurfaceProperty::CleanSurfacePropertyTable();
-
-  //define new one
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructDetector());
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
-
-  fUpdated=false;
+void LXeDetectorConstruction::SetSphereOn(G4bool b) {
+  fSphereOn=b;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void LXeDetectorConstruction::SetMainScintYield(G4double y){
+void LXeDetectorConstruction::SetHousingReflectivity(G4double r) {
+  fRefl=r;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXeDetectorConstruction::SetWLSSlabOn(G4bool b) {
+  fWLSslab=b;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXeDetectorConstruction::SetMainVolumeOn(G4bool b) {
+  fMainVolumeOn=b;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXeDetectorConstruction::SetNFibers(G4int n) {
+  fNfibers=n;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void LXeDetectorConstruction::SetMainScintYield(G4double y) {
   fLXe_mt->AddConstProperty("SCINTILLATIONYIELD",y/MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
-void LXeDetectorConstruction::SetWLSScintYield(G4double y){
+void LXeDetectorConstruction::SetWLSScintYield(G4double y) {
   fMPTPStyrene->AddConstProperty("SCINTILLATIONYIELD",y/MeV);
 }

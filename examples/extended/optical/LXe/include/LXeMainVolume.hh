@@ -52,7 +52,10 @@ class LXeMainVolume : public G4PVPlacement
                  G4int pCopyNo,
                  LXeDetectorConstruction* c);
 
-    void ConstructSDandField();
+    G4LogicalVolume* GetLogPhotoCath() {return fPhotocath_log;}
+    G4LogicalVolume* GetLogScint()     {return fScint_log;}
+
+    std::vector<G4ThreeVector> GetPmtPositions() {return fPmtPositions;}
 
   private:
 
@@ -68,8 +71,6 @@ class LXeMainVolume : public G4PVPlacement
 
     void CopyValues();
 
-    G4bool fUpdated;
-  
     LXeDetectorConstruction* fConstructor;
 
     G4double fScint_x;
@@ -102,9 +103,6 @@ class LXeMainVolume : public G4PVPlacement
     // Sensitive Detectors positions
     std::vector<G4ThreeVector> fPmtPositions;
 
-    //Sensitive Detectors
-    static G4ThreadLocal LXeScintSD* fScint_SD;
-    static G4ThreadLocal LXePMTSD* fPmt_SD;
 };
 
 #endif

@@ -69,10 +69,9 @@ class LXeDetectorMessenger: public G4UImessenger
     G4UIcmdWithABool*            fWlsCmd;
     G4UIcmdWithABool*            fLxeCmd;
     G4UIcmdWithAnInteger*        fNFibersCmd;
-    G4UIcommand*                 fUpdateCmd;
     G4UIcommand*                 fDefaultsCmd;
-    G4UIcmdWithADouble*        fMainScintYield;
-    G4UIcmdWithADouble*        fWLSScintYield;
+    G4UIcmdWithADouble*          fMainScintYield;
+    G4UIcmdWithADouble*          fWLSScintYield;
 };
 
 #endif
