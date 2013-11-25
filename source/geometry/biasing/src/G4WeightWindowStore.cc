@@ -38,11 +38,27 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
 #include "G4GeometryCellStepStream.hh"
+#include "G4TransportationManager.hh"
+
+// ***************************************************************************
+// Static class variable: ptr to single instance of class
+// ***************************************************************************
+//G4ThreadLocal 
+G4WeightWindowStore* G4WeightWindowStore::fInstance = 0;
+
 
 
 G4WeightWindowStore::
-G4WeightWindowStore(const G4VPhysicalVolume &worldvolume) :
-  fWorldVolume(worldvolume),
+G4WeightWindowStore() :
+fWorldVolume(G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume()),fParaFlag(false),
+  fGeneralUpperEnergyBounds(),
+  fCellToUpEnBoundLoWePairsMap(),
+  fCurrentIterator(fCellToUpEnBoundLoWePairsMap.end())
+{}
+
+G4WeightWindowStore::
+G4WeightWindowStore(G4String ParallelWorldName) :
+fWorldVolume(G4TransportationManager::GetTransportationManager()->GetParallelWorld(ParallelWorldName)),fParaFlag(true),
   fGeneralUpperEnergyBounds(),
   fCellToUpEnBoundLoWePairsMap(),
   fCurrentIterator(fCellToUpEnBoundLoWePairsMap.end())
@@ -94,8 +110,8 @@ G4bool G4WeightWindowStore::
 IsInWorld(const G4VPhysicalVolume &aVolume) const
 {
   G4bool isIn(true);
-  if (!(aVolume == fWorldVolume)) {
-    isIn = fWorldVolume.GetLogicalVolume()->IsAncestor(&aVolume);
+  if (!(aVolume == *fWorldVolume)) {
+    isIn = fWorldVolume->GetLogicalVolume()->IsAncestor(&aVolume);
   }
   return isIn;
 }
@@ -115,8 +131,14 @@ G4bool G4WeightWindowStore::IsKnown(const G4GeometryCell &gCell) const
 
 const G4VPhysicalVolume &G4WeightWindowStore::GetWorldVolume() const
 {
+  return *fWorldVolume;
+}
+
+const G4VPhysicalVolume* G4WeightWindowStore::GetParallelWorldVolumePointer() const
+{
   return fWorldVolume;
 }
+
 
 
 void G4WeightWindowStore::
@@ -181,3 +203,34 @@ void G4WeightWindowStore::Error(const G4String &msg) const
   G4Exception("G4WeightWindowStore::Error()",
               "GeomBias0002", FatalException, msg);
 }
+
+
+// ***************************************************************************
+// Returns the instance of the singleton.
+// Creates it in case it's called for the first time.
+// ***************************************************************************
+//
+G4WeightWindowStore* G4WeightWindowStore::GetInstance()
+{
+  if (!fInstance)
+  {
+    fInstance = new G4WeightWindowStore();
+  }
+  return fInstance;    
+}
+
+// ***************************************************************************
+// Returns the instance of the singleton.
+// Creates it in case it's called for the first time.
+// ***************************************************************************
+//
+G4WeightWindowStore* G4WeightWindowStore::GetInstance(G4String ParallelWorldName)
+{
+  if (!fInstance)
+  {
+    G4cout << "G4IStore:: Creating new Parallel IStore " << ParallelWorldName << G4endl;
+    fInstance = new G4WeightWindowStore(ParallelWorldName);
+  }
+  return fInstance;    
+}
+

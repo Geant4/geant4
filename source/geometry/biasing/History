@@ -17,6 +17,33 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 22nd, 2013 A.Howard (geombias-V09-06-06)
+- Retagging to be co-working with:
+  	    phys-ctor-limiters-V09-06-013, 
+	    procbiasing-V09-06-10 
+	    B01-V09-06-12
+	    B02-V09-06-10
+	    B03-V09-06-01
+	    test33-V09-06-04
+	    exbiasing-V09-06-03
+
+
+November 22nd, 2013 A.Howard (geombias-V09-06-05)
+- Added missing getinstance method from G4WeightWindowStore.cc
+
+November 22nd, 2013 A.Howard (geombias-V09-06-04)
+- Fixed typo in G4WeightWindowStore.cc
+
+November 22nd, 2013 A.Howard (geombias-V09-06-03)
+- Added missing method from G4WeightWindowStore.cc
+
+November 22nd, 2013 A.Howard (geombias-V09-06-02)
+- Migrated missing parts of G4WeightWindowStore to MT compliance
+
+November 21st, 2013 A.Howard (geombias-V09-06-01)
+- Changed design to migrate to multi-threading. G4IStore and G4WeightWindowStore
+  now a shared singleton.
+
 December 3rd, 2012 M.Asai (geombias-V09-06-00)
 - Removed obsolete classes G4VCellScorer and G4VCellScorerStore.
 
