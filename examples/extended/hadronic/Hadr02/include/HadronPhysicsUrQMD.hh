@@ -52,7 +52,6 @@
 
 #include "G4NeutronBuilder.hh"
 #include "UrQMDNeutronBuilder.hh"
-#include "G4LEPNeutronBuilder.hh"
 
 #include "G4HyperonFTFPBuilder.hh"
 
@@ -76,7 +75,6 @@ private:
     
   G4NeutronBuilder * fNeutrons;
   UrQMDNeutronBuilder * fUrQMDNeutron;
-  G4LEPNeutronBuilder * fLEPNeutron;        //needed for capture&fission
  
   G4PiKBuilder * fPiK;
   UrQMDPiKBuilder * fUrQMDPiK;

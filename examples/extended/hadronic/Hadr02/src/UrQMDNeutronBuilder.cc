@@ -52,6 +52,8 @@ UrQMDNeutronBuilder::UrQMDNeutronBuilder()
   fMin = 0*MeV;
   fMax = 100*TeV;
   fModel = new G4UrQMD1_3Model();
+  captureModel = new G4NeutronRadCapture();
+  fissionModel = new G4LFission();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -73,10 +75,16 @@ UrQMDNeutronBuilder::~UrQMDNeutronBuilder()
 void UrQMDNeutronBuilder::Build(G4HadronElasticProcess * )
 {}
 
-void UrQMDNeutronBuilder::Build(G4HadronFissionProcess * )
-{}
+void UrQMDNeutronBuilder::Build(G4HadronFissionProcess* aP)
+{
+  fissionModel->SetMinEnergy(0.0);
+  fissionModel->SetMaxEnergy(20.0*TeV);
+  aP->RegisterMe(fissionModel);
+}
 
-void UrQMDNeutronBuilder::Build(G4HadronCaptureProcess * )
-{}
+void UrQMDNeutronBuilder::Build(G4HadronCaptureProcess* aP)
+{
+  aP->RegisterMe(captureModel);
+}
 
 #endif //G4_USE_URQMD

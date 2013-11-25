@@ -23,30 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/src/IonDPMJETPhysics.cc
-/// \brief Implementation of the IonDPMJETPhysics class
+/// \file hadronic/Hadr02/src/IonHIJINGPhysics.cc
+/// \brief Implementation of the IonHIJINGPhysics class
 //
-// $Id: IonABPhysics.cc,v 1.1 2006/10/28 16:00:25 vnivanch Exp $
-// GRAS tag Name: gras-02-05-02
+// $Id: IonHIJINGPhysics.cc,v 1.1 2006/10/28 16:00:25 vnivanch Exp $
+// GEANT4 tag $Name: $
 //
 //---------------------------------------------------------------------------
 //
-// Class:    IonDPMJETPhysics
+// Class:    IonHIJINGPhysics
 //
-// Author:      A.Ivanchenko 26.08.2010
-//
-// This class was designed under ESA contracts
-// 
-// Customer:     
-// Contract:            
+// Author:   2012 Andrea Dotti
 //
 //
 // Modified:
 //
 // ------------------------------------------------------------
 // 
-
-#include "IonDPMJETPhysics.hh"
+#ifdef G4_USE_HIJING
+#include "IonHIJINGPhysics.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ProcessManager.hh"
 #include "G4Deuteron.hh"
@@ -54,67 +49,69 @@
 #include "G4He3.hh"
 #include "G4Alpha.hh"
 #include "G4GenericIon.hh"
-
-#include "G4HadronInelasticProcess.hh"
-#include "G4BinaryLightIonReaction.hh"
-#include "G4TripathiCrossSection.hh"
-#include "G4TripathiLightCrossSection.hh"
-#include "G4IonsShenCrossSection.hh"
-#include "G4IonProtonCrossSection.hh"
-
-#include "G4BuilderType.hh"
-
-#ifdef G4_USE_DPMJET
-#include "G4DPMJET2_5Model.hh"
-#include "G4DPMJET2_5Interface.hh"
-#include "G4DPMJET2_5CrossSection.hh"
-#endif
-
 #include "G4SystemOfUnits.hh"
+#include "G4HadronInelasticProcess.hh"
 
+#include "G4HIJING_Model.hh"
+#include "G4BinaryLightIonReaction.hh"
+#include "G4ComponentGGNuclNuclXsc.hh"
+#include "G4CrossSectionInelastic.hh"
+
+#include "G4PreCompoundModel.hh"
+#include "G4ExcitationHandler.hh"
+#include "G4FTFBuilder.hh"
+#include "G4HadronicInteraction.hh"
+#include "G4BuilderType.hh"
 using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-IonDPMJETPhysics::IonDPMJETPhysics(G4bool val)
-  : G4VHadronPhysics("ionInelasticDPMJET"),fIonBC(0),fDPM(0),
-    fUseDPMJETXS(val)
+IonHIJINGPhysics::IonHIJINGPhysics(G4int ver)
+  : G4VHadronPhysics("ionInelasticHIJING"),fVerbose(ver),
+    fWasActivated(false)
 {
-  fTripathi = fTripathiLight = fShen = fIonH = 0;
+  fModel = 0;
   SetPhysicsType(bIons);
+  if(fVerbose > 1) { G4cout << "### IonHIJINGPhysics" << G4endl; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-IonDPMJETPhysics::~IonDPMJETPhysics()
+IonHIJINGPhysics::~IonHIJINGPhysics()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void IonDPMJETPhysics::ConstructProcess()
+void IonHIJINGPhysics::ConstructProcess()
 {
-  G4double emax = 1000.*TeV;
+  if(fWasActivated) { return; }
+  fWasActivated = true;
 
-  fIonBC = new G4BinaryLightIonReaction();
-  fIonBC->SetMinEnergy(0.0);
-  fIonBC->SetMaxEnergy(6*GeV);
+  G4double emin = 0.*MeV;
+  G4double emaxFTF = 25.*GeV;
+  G4double eminHIJ = 12.*GeV;
+  G4double emaxHIJ = 100.*TeV;
 
-  fShen = new G4IonsShenCrossSection();
-  fTripathi = new G4TripathiCrossSection();
-  fTripathiLight = new G4TripathiLightCrossSection();
-  fIonH = new G4IonProtonCrossSection();
+  G4ExcitationHandler* handler = new G4ExcitationHandler();
+  G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(handler);
 
-  fShen->SetMaxKinEnergy(emax);
-  fTripathi->SetMaxKinEnergy(emax);
-  fTripathiLight->SetMaxKinEnergy(emax);
-  fIonH->SetMaxKinEnergy(emax);    
+  // Binary Cascade
+  theIonBC = new G4BinaryLightIonReaction(thePreCompound);
+  theIonBC->SetMinEnergy(0.0);
+  theIonBC->SetMaxEnergy(4*GeV); //4
 
-#ifdef G4_USE_DPMJET
-  fDPM = new G4DPMJET2_5Model();
-  fDPM->SetMinEnergy(5*GeV);
-  fDPM->SetMaxEnergy(emax);
-  if(fUseDPMJETXS) { fDpmXS = new G4DPMJET2_5CrossSection; }
-#endif
+  // FTFP
+  theBuilder = new G4FTFBuilder("FTFP",thePreCompound);
+  theFTFP = theBuilder->GetModel();
+  theFTFP->SetMinEnergy(2*GeV);
+  theFTFP->SetMaxEnergy(emaxFTF);
+  
+  //HIJING
+  fModel = new G4HIJING_Model();
+  fModel->SetMinEnergy( eminHIJ );
+  fModel->SetMaxEnergy( emaxHIJ );
+
+  theNuclNuclData = 
+    new G4CrossSectionInelastic( new G4ComponentGGNuclNuclXsc() );
 
   AddProcess("dInelastic", G4Deuteron::Deuteron(),false);
   AddProcess("tInelastic",G4Triton::Triton(),false);
@@ -122,28 +119,25 @@ void IonDPMJETPhysics::ConstructProcess()
   AddProcess("alphaInelastic", G4Alpha::Alpha(),true);
   AddProcess("ionInelastic",G4GenericIon::GenericIon(),true);
 
-  G4cout << "IonDPMJETPhysics::ConstructProcess done! " << G4endl;
-}
-
-void IonDPMJETPhysics::AddProcess(const G4String& name,
-                                  G4ParticleDefinition* part,
-                                  G4bool isIon)
-{
-  G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, part);
-  G4ProcessManager* pManager = part->GetProcessManager();
-  pManager->AddDiscreteProcess(hadi);
-  hadi->AddDataSet(fShen);
-  //hadi->AddDataSet(fTripathi);
-  //hadi->AddDataSet(fTripathiLight);
-  if(isIon) { hadi->AddDataSet(fIonH); }
-  hadi->RegisterMe(fIonBC);
-#ifdef G4_USE_DPMJET
-  hadi->RegisterMe(fDPM); 
-  if(fUseDPMJETXS) { hadi->AddDataSet(fDpmXS); }
-#endif
+  if(fVerbose > 1) {
+    G4cout << "IonHIJINGPhysics::ConstructProcess done! " 
+   << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void IonHIJINGPhysics::AddProcess(const G4String& name, 
+                                  G4ParticleDefinition* part,  G4bool isIon)
+{
+  G4HadronInelasticProcess* hadi = new G4HadronInelasticProcess(name, part);
+  G4ProcessManager* pManager = part->GetProcessManager();
+  pManager->AddDiscreteProcess(hadi);
+  hadi->AddDataSet(theNuclNuclData);
+  hadi->RegisterMe( theIonBC );
+  hadi->RegisterMe( theFTFP );
+  hadi->RegisterMe( fModel );
+}
 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif //HIJING

@@ -23,69 +23,71 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/include/IonDPMJETPhysics.hh
-/// \brief Definition of the IonDPMJETPhysics class
+/// \file hadronic/Hadr02/include/IonHIJINGPhysics.hh
+/// \brief Definition of the IonHIJINGPhysics class
 //
-// $Id$
-// GRAS tag Name: gras-02-05-02
+// $Id: G4IonHIJINGPhysics.hh,v 1.0 2010/08/26 10:51:25 antoni Exp $
+// GRAS tag $Name: $
 //
 //---------------------------------------------------------------------------
 //
-// Header:    IonDPMJETPhysics
+// Header:    G4IonHIJINGPhysics
 //
-// Author:    copy from P.Truscott manuel DPMJET2.5 
+// Author:    2012 Andrea Dotti
 //
 // 
-// Customer:          
-// Contract:          
 //
-// Modifications are provided according to
-//
-// Organisation:        
-// Customer:            
-// Contract:            
-//
-// Modified:     26.08.2010
+// Modified:     
 //
 // ------------------------------------------------------------
 //
 
-#ifndef IonDPMJETPhysics_h
-#define IonDPMJETPhysics_h 1
+#ifndef G4IonHIJINGPhysics_h
+#define G4IonHIJINGPhysics_h 1
 
 #include "G4VHadronPhysics.hh"
 #include "globals.hh"
 
-class G4BinaryLightIonReaction;
-class G4DPMJET2_5Model;
-class G4DPMJET2_5CrossSection;
+class G4HadronicInteraction;
 class G4VCrossSectionDataSet;
+class G4HIJING_Model;
+class G4FTFBuilder;
+class G4BinaryLightIonReaction;
+class G4HadronicInteraction;
 
-class IonDPMJETPhysics : public G4VHadronPhysics
+class IonHIJINGPhysics : public G4VHadronPhysics
 {
 public:
 
-  IonDPMJETPhysics(G4bool val);
-  virtual ~IonDPMJETPhysics();
+  IonHIJINGPhysics(G4int ver = 0);
+  virtual ~IonHIJINGPhysics();
 
   // This method will be invoked in the Construct() method.
   // each physics process will be instantiated and
   // registered to the process manager of each particle type
-  virtual void ConstructProcess();
+  void ConstructProcess();
 
 private:
 
-  void AddProcess(const G4String& name, G4ParticleDefinition* part,
-                  G4bool isIon);
+  void AddProcess(const G4String&, G4ParticleDefinition*, G4bool isIon);
 
-  G4VCrossSectionDataSet* fTripathi;
-  G4VCrossSectionDataSet* fTripathiLight;
-  G4VCrossSectionDataSet* fShen;
-  G4VCrossSectionDataSet* fIonH;
-  G4BinaryLightIonReaction*  fIonBC;
-  G4DPMJET2_5Model*          fDPM;
-  G4DPMJET2_5CrossSection*   fDpmXS;
-  G4bool                  fUseDPMJETXS;
+  G4VCrossSectionDataSet* theNuclNuclData;
+  
+  G4HIJING_Model * fModel;
+  G4BinaryLightIonReaction* theIonBC;
+  G4FTFBuilder* theBuilder;
+  G4HadronicInteraction* theFTFP;
+  G4int  fVerbose;
+  G4bool fWasActivated;
 };
 
+
 #endif
+
+
+
+
+
+
+
+

@@ -23,69 +23,48 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/include/IonDPMJETPhysics.hh
-/// \brief Definition of the IonDPMJETPhysics class
+/// \file hadronic/Hadr02/include/HIJINGProtonBuilder.hh
+/// \brief Definition of the HIJINGProtonBuilder class
 //
-// $Id$
-// GRAS tag Name: gras-02-05-02
+// $Id: HIJINGProtonBuilder.hh,v 1.2 2009-03-31 18:38:33 vnivanch Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// Header:    IonDPMJETPhysics
-//
-// Author:    copy from P.Truscott manuel DPMJET2.5 
-//
-// 
-// Customer:          
-// Contract:          
-//
-// Modifications are provided according to
-//
-// Organisation:        
-// Customer:            
-// Contract:            
-//
-// Modified:     26.08.2010
-//
-// ------------------------------------------------------------
-//
 
-#ifndef IonDPMJETPhysics_h
-#define IonDPMJETPhysics_h 1
+#ifndef HIJINGProtonBuilder_h
+#define HIJINGProtonBuilder_h 
 
-#include "G4VHadronPhysics.hh"
 #include "globals.hh"
 
-class G4BinaryLightIonReaction;
-class G4DPMJET2_5Model;
-class G4DPMJET2_5CrossSection;
-class G4VCrossSectionDataSet;
+#include "G4HadronElasticProcess.hh"
+#include "G4HadronFissionProcess.hh"
+#include "G4HadronCaptureProcess.hh"
+#include "G4ProtonInelasticProcess.hh"
+#include "G4VProtonBuilder.hh"
 
-class IonDPMJETPhysics : public G4VHadronPhysics
+#include "G4HIJING_Model.hh"
+
+class HIJINGProtonBuilder : public G4VProtonBuilder
 {
-public:
+public: 
 
-  IonDPMJETPhysics(G4bool val);
-  virtual ~IonDPMJETPhysics();
+  HIJINGProtonBuilder();
+  virtual ~HIJINGProtonBuilder();
 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  virtual void ConstructProcess();
+  virtual void Build(G4HadronElasticProcess * aP);
+  virtual void Build(G4ProtonInelasticProcess * aP);
+    
+  inline void SetMinEnergy(G4double aM) {fMin = aM;}
+  inline void SetMaxEnergy(G4double aM) {fMax = aM;}
 
 private:
 
-  void AddProcess(const G4String& name, G4ParticleDefinition* part,
-                  G4bool isIon);
+  G4HIJING_Model * fModel;    
+  G4double fMin;
+  G4double fMax;
 
-  G4VCrossSectionDataSet* fTripathi;
-  G4VCrossSectionDataSet* fTripathiLight;
-  G4VCrossSectionDataSet* fShen;
-  G4VCrossSectionDataSet* fIonH;
-  G4BinaryLightIonReaction*  fIonBC;
-  G4DPMJET2_5Model*          fDPM;
-  G4DPMJET2_5CrossSection*   fDpmXS;
-  G4bool                  fUseDPMJETXS;
 };
 
 #endif
+

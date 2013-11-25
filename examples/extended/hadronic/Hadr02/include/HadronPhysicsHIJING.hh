@@ -23,69 +23,76 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/include/IonDPMJETPhysics.hh
-/// \brief Definition of the IonDPMJETPhysics class
+/// \file hadronic/Hadr02/include/HadronPhysicsHIJING.hh
+/// \brief Definition of the HadronPhysicsHIJING class
 //
-// $Id$
-// GRAS tag Name: gras-02-05-02
+// $Id: HadronPhysicsHIJING.hh,v 1.5 2010-06-03 10:42:44 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// Header:    IonDPMJETPhysics
+// ClassName:   
 //
-// Author:    copy from P.Truscott manuel DPMJET2.5 
+// Author: 2012 Andrea Dotti
+//   created from HadronPhysicsFTFP_BERT
+// Modified:
+// 07.02.2012 A. Dotti: First version
+//----------------------------------------------------------------------------
 //
-// 
-// Customer:          
-// Contract:          
-//
-// Modifications are provided according to
-//
-// Organisation:        
-// Customer:            
-// Contract:            
-//
-// Modified:     26.08.2010
-//
-// ------------------------------------------------------------
-//
+#ifndef HadronPhysicsHIJING_h
+#define HadronPhysicsHIJING_h 1
 
-#ifndef IonDPMJETPhysics_h
-#define IonDPMJETPhysics_h 1
-
-#include "G4VHadronPhysics.hh"
 #include "globals.hh"
+#include "G4ios.hh"
 
-class G4BinaryLightIonReaction;
-class G4DPMJET2_5Model;
-class G4DPMJET2_5CrossSection;
-class G4VCrossSectionDataSet;
+#include "G4VPhysicsConstructor.hh"
 
-class IonDPMJETPhysics : public G4VHadronPhysics
+#include "G4PiKBuilder.hh"
+#include "HIJINGPiKBuilder.hh"
+
+#include "G4ProtonBuilder.hh"
+#include "HIJINGProtonBuilder.hh"
+
+#include "G4NeutronBuilder.hh"
+#include "HIJINGNeutronBuilder.hh"
+
+#include "G4HyperonFTFPBuilder.hh"
+
+#include "G4AntiBarionBuilder.hh"
+#include "HIJINGAntiBarionBuilder.hh"
+
+class HadronPhysicsHIJING : public G4VPhysicsConstructor
 {
-public:
+  public: 
 
-  IonDPMJETPhysics(G4bool val);
-  virtual ~IonDPMJETPhysics();
+    HadronPhysicsHIJING(G4int verbose =1);
+    virtual ~HadronPhysicsHIJING();
 
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  virtual void ConstructProcess();
+  public: 
+    virtual void ConstructParticle();
+    virtual void ConstructProcess();
 
-private:
+  private:
 
-  void AddProcess(const G4String& name, G4ParticleDefinition* part,
-                  G4bool isIon);
+    void CreateModels();
+    G4HadronicProcess* FindInelasticProcess(const G4ParticleDefinition*);
+    
+    G4NeutronBuilder * fNeutrons;
+    HIJINGNeutronBuilder * fHIJINGNeutron;
+ 
+    G4PiKBuilder * fPiK;
+    HIJINGPiKBuilder * fHIJINGPiK;
+    
+    G4ProtonBuilder * fPro;
+    HIJINGProtonBuilder * fHIJINGPro;    
+    
+    G4HyperonFTFPBuilder * fHyperon;
+    
+    G4AntiBarionBuilder * fAntiBaryon;
+    HIJINGAntiBarionBuilder * fHIJINGAntiBaryon;
 
-  G4VCrossSectionDataSet* fTripathi;
-  G4VCrossSectionDataSet* fTripathiLight;
-  G4VCrossSectionDataSet* fShen;
-  G4VCrossSectionDataSet* fIonH;
-  G4BinaryLightIonReaction*  fIonBC;
-  G4DPMJET2_5Model*          fDPM;
-  G4DPMJET2_5CrossSection*   fDpmXS;
-  G4bool                  fUseDPMJETXS;
+    G4VCrossSectionDataSet * fCHIPSInelastic;
 };
 
 #endif
+

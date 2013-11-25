@@ -23,69 +23,64 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr02/include/IonDPMJETPhysics.hh
-/// \brief Definition of the IonDPMJETPhysics class
+/// \file hadronic/Hadr02/include/HIJING.hh
+/// \brief Definition of the HIJING class
 //
-// $Id$
-// GRAS tag Name: gras-02-05-02
+// $Id: HIJING.hh,v 1.1 2007-10-19 15:35:08 gunter Exp $
+// GEANT4 tag $Name: not supported by cvs2svn $
 //
 //---------------------------------------------------------------------------
 //
-// Header:    IonDPMJETPhysics
+// ClassName:   
 //
-// Author:    copy from P.Truscott manuel DPMJET2.5 
+// Author: 2012  Andrea Dotti
+//   created from FTFP_BERT
 //
-// 
-// Customer:          
-// Contract:          
+// Modified:
 //
-// Modifications are provided according to
+//----------------------------------------------------------------------------
 //
-// Organisation:        
-// Customer:            
-// Contract:            
-//
-// Modified:     26.08.2010
-//
-// ------------------------------------------------------------
-//
+#ifndef THIJING_h
+#define THIJING_h 1
 
-#ifndef IonDPMJETPhysics_h
-#define IonDPMJETPhysics_h 1
-
-#include "G4VHadronPhysics.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
+#include "CompileTimeConstraints.hh"
 
-class G4BinaryLightIonReaction;
-class G4DPMJET2_5Model;
-class G4DPMJET2_5CrossSection;
-class G4VCrossSectionDataSet;
-
-class IonDPMJETPhysics : public G4VHadronPhysics
+template<class T>
+class THIJING: public T
 {
 public:
-
-  IonDPMJETPhysics(G4bool val);
-  virtual ~IonDPMJETPhysics();
-
-  // This method will be invoked in the Construct() method.
-  // each physics process will be instantiated and
-  // registered to the process manager of each particle type
-  virtual void ConstructProcess();
+  THIJING(G4int ver = 1);
+  virtual ~THIJING();
+  
+public:
+  // SetCuts() 
+  virtual void SetCuts();
 
 private:
-
-  void AddProcess(const G4String& name, G4ParticleDefinition* part,
-                  G4bool isIon);
-
-  G4VCrossSectionDataSet* fTripathi;
-  G4VCrossSectionDataSet* fTripathiLight;
-  G4VCrossSectionDataSet* fShen;
-  G4VCrossSectionDataSet* fIonH;
-  G4BinaryLightIonReaction*  fIonBC;
-  G4DPMJET2_5Model*          fDPM;
-  G4DPMJET2_5CrossSection*   fDpmXS;
-  G4bool                  fUseDPMJETXS;
+  enum {ok = CompileTimeConstraints::IsA<T, G4VModularPhysicsList>::ok };
 };
+#ifdef G4_USE_HIJING
+#include "HIJING.icc"
+#else
+template<class T>
+THIJING<T>::THIJING(G4int) : T()
+{
+  G4ExceptionDescription de;
+  de<<"Support for HIJING not enabled"<<G4endl;
+  G4Exception(__FILE__,"HIJING-01",FatalException,de,
+  "Code should be compiled with G4_USE_HIJING environment variable set.");
+}
 
+template<class T>
+THIJING<T>::~THIJING() { }
+template<class T>
+void THIJING<T>::SetCuts() { }
 #endif
+
+typedef THIJING<G4VModularPhysicsList> HIJING;
+
+#endif //THIJING_h
+
+

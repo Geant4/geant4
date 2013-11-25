@@ -1,0 +1,118 @@
+                                 HIJING interface
+                                 ----------------
+
+                                Khaled Abdel-Waged
+                               --------------------
+
+                              version 0.0, 1-11-2012
+                              ----------------------
+
+>Installation requirements
+--------------------------
+
+The Geant4 interface to HIJING uses the following software tools and packages:
+
+1. HIJING  (available at fttp://nta0.lbl.gov/pub/xnwang/hijing)
+2. The following Geant4 versions:
+    − ver.9.5 or above
+
+The interface and original HIJING code have been compiled and tested using:
+• gcc 4.1.2 with gfortran (FORTRAN95) and GNUmake)
+
+Operating systems used for this test is:
+Red Hat Linux 4.1.2-64
+
+
+>Changes in the Fortran code
+----------------------------
+
+1) The main subroutines
+SUBROUTINE HIJSET(EFRM, FRAME, PROJ, TARG, IAP, IZP, IAT, IZT)
+is replaced with
+                            SUBROUTINE HIJSET(EFRM)
+
+SUBROUTINE HIJING (FRAME, BMIN, BMAX)
+is replaced with
+                            SUBROUTINE HIJING (BMIN, BMAX)
+
+
+The input variables are directly inserted into the following common block:
+
+COMMON/HIPARNT/HIPR1(100),IHPR2(50),HINT1(100),IHNT2(50)
+Projectile:
+      IHNT2(1)=IAP    // Nucleus mass number
+or  IHNT2(1)=1      //Hadron 
+IHNT2(2)=IZP      //charge
+IHNT2(5)=0        //id code 
+                              Target:
+                               IHNT2(3)=IAT  
+                               IHNT2(4)=IZT
+                               IHNT2(6)=0     //id Target (Fixed)
+                                                             Rest Mass:
+                                                             HINT1(8)=    //projectile
+                                                             HINT1(9)=   //Target
+
+2) In subroutines HIJSET and HIJING,
+ 
+Since Geant4 hadronic cascade models always works in the LABoratory frame
+
+the statement Frame=”LAB” is inserted.
+
+
+3)Random number generator
+
+The two random generator functions become one! 
+
+This is done by replacing
+RAN(NSEED) with RLU(0) in hijing1.383.f
+
+
+>Consequences of conversion from f77 (g77) to gfortran
+------------------------------------------------------
+
+When running HIJING code in gfortran directly, the execution is blocked.
+This problem is solved by the following changes
+
+1) You have to add in the GNUmake file, the line
+
+   FFLAGS=-fno-automatic
+
+This treats each program unit as if the SAVE statement were specified
+for every local variable and array referenced in it. 
+
+
+2) Problem related to the function ROMG(x) in hijing1.383.f:
+
+	FUNCTION ROMG(X)
+C        This gives the eikonal function from a table
+C	calculated in the first call
+	DIMENSION FR(0:1000)
+	DATA I0/0/
+
+           COMMON/EIKONAL/FR     !New->Khaled
+
+	IF(I0.NE.0) GO TO 100
+	DO 50 I=1,1001
+	XR=(I-1)*0.01
+	FR(I-1)=OMG0(XR)
+50	CONTINUE
+100	I0=1
+	IF(X.GE.10.0) THEN
+		ROMG=0.0
+		RETURN
+	ENDIF
+	IX=INT(X*100)
+	ROMG=(FR(IX)*((IX+1)*0.01-X)+FR(IX+1)*(X-IX*0.01))/0.01
+	RETURN
+	END
+
+Our analysis shows that the array FR() is not saved in the subsequent calls of the function ROMG().
+Therefore, the statement “COMMON/EIKONAL/FR”  is inserted, as shown above.
+
+
+>Interface design
+-----------------
+
+The use of HIJING physics in Geant4 has resulted in the introduction of a new event model (G4HIJING_Model).
+The  G4HIJING_Model class is derived from G4HadronicInteraction, and is defined within the Geant4 user physics
+list if access to HIJING physics is required.  It controls initialisation of  HIJING through common block variables.

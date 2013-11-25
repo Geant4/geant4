@@ -51,6 +51,9 @@
 #include "G4VNeutronBuilder.hh"
 
 #include "G4UrQMD1_3Model.hh"
+#include "G4NeutronRadCapture.hh"
+#include "G4LFission.hh"
+
 
 class UrQMDNeutronBuilder : public G4VNeutronBuilder
 {
@@ -69,10 +72,12 @@ public:
 
 private:
 
-  G4UrQMD1_3Model * fModel;    
   G4double fMin;
   G4double fMax;
 
+  G4UrQMD1_3Model* fModel;    
+  G4NeutronRadCapture* captureModel;
+  G4LFission* fissionModel;
 };
 
 
