@@ -55,6 +55,7 @@ class WLSDetectorMessenger;
 class WLSPhotonDetSD;
 
 #include "G4VUserDetectorConstruction.hh"
+#include "G4Cache.hh"
 
 class WLSDetectorConstruction : public G4VUserDetectorConstruction
 {
@@ -68,8 +69,6 @@ class WLSDetectorConstruction : public G4VUserDetectorConstruction
 
     virtual void ConstructSDandField();
 
-    void UpdateGeometry();
- 
     // Set Material Commands for World and WLSfiber
     void SetWorldMaterial         (G4String);
     void SetWLSFiberMaterial      (G4String);
@@ -208,6 +207,7 @@ class WLSDetectorConstruction : public G4VUserDetectorConstruction
      void UpdateGeometryParameters();
 
      WLSDetectorMessenger* fDetectorMessenger;
+     G4Cache<WLSPhotonDetSD*> fmppcSD;
 
 };
 

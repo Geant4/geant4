@@ -46,12 +46,6 @@
 #include "G4NistManager.hh"
 
 #include "G4GeometryManager.hh"
-#include "G4SDManager.hh"
-
-#include "G4SolidStore.hh"
-#include "G4RegionStore.hh"
-#include "G4LogicalVolumeStore.hh"
-#include "G4PhysicalVolumeStore.hh"
 
 #include "G4RunManager.hh"
 
@@ -107,8 +101,6 @@ WLSDetectorConstruction::WLSDetectorConstruction()
   fHoleLength       = fBarLength;
   fCoatingThickness = 0.25*mm;
   fCoatingRadius    = 1.875*mm;
-
-  UpdateGeometryParameters();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -124,6 +116,8 @@ WLSDetectorConstruction::~WLSDetectorConstruction()
 G4VPhysicalVolume* WLSDetectorConstruction::Construct()
 {
   fMaterials = WLSMaterials::GetInstance();
+
+  UpdateGeometryParameters();
 
   return ConstructDetector();
 }
@@ -670,37 +664,13 @@ void WLSDetectorConstruction::ConstructFiber()
 
 void WLSDetectorConstruction::ConstructSDandField()
 {
-  G4String mppcSDName = "WLS/PhotonDet";
-  WLSPhotonDetSD* mppcSD = new WLSPhotonDetSD(mppcSDName);
-
-  SetSensitiveDetector("PhotonDet_LV", mppcSD, true);
+  if (!fmppcSD.Get()) {
+     G4String mppcSDName = "WLS/PhotonDet";
+     WLSPhotonDetSD* mppcSD = new WLSPhotonDetSD(mppcSDName);
+     SetSensitiveDetector("PhotonDet_LV", mppcSD, true);
+     fmppcSD.Put(mppcSD);
+  }
 }
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void WLSDetectorConstruction::UpdateGeometry()
-{
-  if (!fPhysiWorld) return;
-
-  // clean-up previous geometry
-  G4GeometryManager::GetInstance()->OpenGeometry();
-
-  G4PhysicalVolumeStore::GetInstance()->Clean();
-  G4LogicalVolumeStore::GetInstance()->Clean();
-  G4SolidStore::GetInstance()->Clean();
-  G4LogicalSkinSurface::CleanSurfaceTable();
-  G4LogicalBorderSurface::CleanSurfaceTable();
-
-  //define new one
-  UpdateGeometryParameters();
- 
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructDetector());
-
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-
-  G4RegionStore::GetInstance()->UpdateMaterialList(fPhysiWorld);
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSDetectorConstruction::UpdateGeometryParameters()
@@ -794,6 +764,7 @@ void WLSDetectorConstruction::SetPhotonDetGeometry (G4String shape)
 // Pre:  shape must be either "Circle" and "Square"
 {
   if (shape == "Circle" || shape == "Square" ) fMPPCShape = shape;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -803,6 +774,7 @@ void WLSDetectorConstruction::SetNumberOfCladding(G4int num)
 // Pre: 0 <= num <= 2
 {
   fNumOfCladLayers = num;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -811,6 +783,7 @@ void WLSDetectorConstruction::SetWLSLength (G4double length)
 // Set the TOTAL length of the WLS fiber
 {
   fWLSfiberZ = length;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -819,6 +792,7 @@ void WLSDetectorConstruction::SetWLSRadius (G4double radius)
 // Set the Y radius of WLS fiber
 {
   fWLSfiberRY = radius;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -827,6 +801,7 @@ void WLSDetectorConstruction::SetClad1Radius (G4double radius)
 // Set the Y radius of Cladding 1
 {
   fClad1RY = radius;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -835,6 +810,7 @@ void WLSDetectorConstruction::SetClad2Radius (G4double radius)
 // Set the Y radius of Cladding 2
 {
   fClad2RY = radius;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -844,6 +820,7 @@ void WLSDetectorConstruction::SetPhotonDetHalfLength(G4double halfL)
 // The half length will be the radius if PhotonDet is circular
 {
   fMPPCHalfL = halfL;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -852,6 +829,7 @@ void WLSDetectorConstruction::SetGap (G4double gap)
 // Set the distance between fiber end and PhotonDet
 { 
   fMPPCDist = gap;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -863,6 +841,7 @@ void WLSDetectorConstruction::SetPhotonDetAlignment(G4double theta)
 // facing towards the center of the fiber
 {
   fMPPCTheta = theta;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -872,6 +851,7 @@ void WLSDetectorConstruction::SetSurfaceRoughness(G4double roughness)
 // Pre: 0 < roughness <= 1
 {
   fSurfaceRoughness = roughness;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -881,6 +861,7 @@ void WLSDetectorConstruction::SetMirrorPolish(G4double polish)
 // Pre: 0 < polish <= 1
 {
   fMirrorPolish = polish;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -890,6 +871,7 @@ void WLSDetectorConstruction::SetMirrorReflectivity(G4double reflectivity)
 // Pre: 0 < reflectivity <= 1
 {
   fMirrorReflectivity = reflectivity;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -899,6 +881,7 @@ void WLSDetectorConstruction::SetPhotonDetPolish(G4double polish)
 // Pre: 0 < polish <= 1
 {
   fMPPCPolish = polish;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -908,6 +891,7 @@ void WLSDetectorConstruction::SetPhotonDetReflectivity(G4double reflectivity)
 // Pre: 0 < reflectivity <= 1
 {
   fMPPCReflectivity = reflectivity;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -917,6 +901,7 @@ void WLSDetectorConstruction::SetMirror(G4bool flag)
 // True means place the mirror, false means otherwise
 {
   fMirrorToggle = flag;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -926,6 +911,7 @@ void WLSDetectorConstruction::SetXYRatio(G4double r)
 // a ratio of 1 would produce a circle
 {
   fXYRatio = r;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 
@@ -935,6 +921,7 @@ void WLSDetectorConstruction::SetBarLength (G4double length)
 // Set the length of the scintillator bar
 {
   fBarLength = length;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -943,6 +930,7 @@ void WLSDetectorConstruction::SetBarBase (G4double side)
 // Set the side of the scintillator bar
 {
   fBarBase = side;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -951,6 +939,7 @@ void WLSDetectorConstruction::SetHoleRadius (G4double radius)
 // Set the radius of the fiber hole
 {
   fHoleRadius = radius;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -959,6 +948,7 @@ void WLSDetectorConstruction::SetCoatingThickness (G4double thick)
 // Set thickness of the coating on the bars
 {
   fCoatingThickness = thick;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -967,6 +957,7 @@ void WLSDetectorConstruction::SetCoatingRadius (G4double radius)
 // Set inner radius of the corner bar coating
 {
   fCoatingRadius = radius;
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

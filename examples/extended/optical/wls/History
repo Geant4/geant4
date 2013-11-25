@@ -16,6 +16,9 @@ track of all tags.
  
      ----------------------------------------------------------
 
+November 22, 2013 P. Gumplinger (WLS-V09-06-10)
+- replace UpdateGeometry with ReinitializeGeometry
+
 October 29, 2013 P. Gumplinger (WLS-V09-06-09)
 - make sure only one SteppingVerbose is activated, remove SetNumberOfThreads
 

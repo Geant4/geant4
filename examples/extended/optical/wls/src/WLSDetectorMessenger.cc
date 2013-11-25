@@ -47,12 +47,6 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   fDetDir = new G4UIdirectory("/WLS/");
   fDetDir->SetGuidance(" Geometry Setup ");
 
-  fUpdateCmd = new G4UIcmdWithoutParameter("/WLS/Update",this);
-  fUpdateCmd->SetGuidance("Update musr geometry");
-  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  fUpdateCmd->AvailableForStates(G4State_Idle);
-
   SetPhotonDetGeometryCmd =
                       new G4UIcmdWithAString("/WLS/setPhotonDetGeometry",this);
   SetPhotonDetGeometryCmd->
@@ -60,6 +54,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetPhotonDetGeometryCmd->SetGuidance("Only Accepts 'Circle' and 'Square'");
   SetPhotonDetGeometryCmd->SetCandidates("Circle Square");
   SetPhotonDetGeometryCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetPhotonDetGeometryCmd->SetToBeBroadcasted(false);
  
   SetNumOfCladLayersCmd = new G4UIcmdWithAnInteger("/WLS/setNumOfLayers", this);
   SetNumOfCladLayersCmd->SetGuidance("Select the number of cladding layers");
@@ -67,6 +62,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetNumOfCladLayersCmd->SetParameterName("numberOfLayers",false);
   SetNumOfCladLayersCmd->SetRange("numberOfLayers>=0 && numberOfLayers<=2");
   SetNumOfCladLayersCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetNumOfCladLayersCmd->SetToBeBroadcasted(false);
 
   SetSurfaceRoughnessCmd =
                       new G4UIcmdWithADouble("/WLS/setSurfaceRoughness", this);
@@ -75,18 +71,21 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetSurfaceRoughnessCmd->SetParameterName("roughness",false);
   SetSurfaceRoughnessCmd->SetRange("roughness>0 && roughness<=1");
   SetSurfaceRoughnessCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetSurfaceRoughnessCmd->SetToBeBroadcasted(false);
 
   SetXYRatioCmd = new G4UIcmdWithADouble("/WLS/setXYRatio", this);
   SetXYRatioCmd->SetGuidance("Set the ratio between x and y axis (x/y)");
   SetXYRatioCmd->SetParameterName("ratio",false);
   SetXYRatioCmd->SetRange("ratio>0 && ratio<=1");
   SetXYRatioCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetXYRatioCmd->SetToBeBroadcasted(false);
 
   SetMirrorPolishCmd = new G4UIcmdWithADouble("/WLS/setMirrorPolish", this);
   SetMirrorPolishCmd->SetGuidance("Set the polish of the mirror");
   SetMirrorPolishCmd->SetParameterName("polish",false);
   SetMirrorPolishCmd->SetRange("polish>0 && polish<=1");
   SetMirrorPolishCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetMirrorPolishCmd->SetToBeBroadcasted(false);
 
   SetMirrorReflectivityCmd =
                     new G4UIcmdWithADouble("/WLS/setMirrorReflectivity", this);
@@ -94,6 +93,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetMirrorReflectivityCmd->SetParameterName("reflectivity",false);
   SetMirrorReflectivityCmd->SetRange("reflectivity>=0 && reflectivity<=1");
   SetMirrorReflectivityCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetMirrorReflectivityCmd->SetToBeBroadcasted(false);
 
   SetPhotonDetPolishCmd =
                        new G4UIcmdWithADouble("/WLS/setPhotonDetPolish", this);
@@ -101,6 +101,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetPhotonDetPolishCmd->SetParameterName("polish",false);
   SetPhotonDetPolishCmd->SetRange("polish>0 && polish<=1");
   SetPhotonDetPolishCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetPhotonDetPolishCmd->SetToBeBroadcasted(false);
 
   SetPhotonDetReflectivityCmd =
                  new G4UIcmdWithADouble("/WLS/setPhotonDetReflectivity", this);
@@ -109,6 +110,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetPhotonDetReflectivityCmd->SetParameterName("reflectivity",false);
   SetPhotonDetReflectivityCmd->SetRange("reflectivity>=0 && reflectivity<=1");
   SetPhotonDetReflectivityCmd->AvailableForStates(G4State_PreInit);
+  SetPhotonDetReflectivityCmd->SetToBeBroadcasted(false);
 
   SetWLSLengthCmd = new G4UIcmdWithADoubleAndUnit("/WLS/setWLSLength",this);
   SetWLSLengthCmd->SetGuidance("Set the half length of the WLS fiber");
@@ -117,6 +119,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetWLSLengthCmd->SetUnitCategory("Length");
   SetWLSLengthCmd->SetDefaultUnit("mm");
   SetWLSLengthCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetWLSLengthCmd->SetToBeBroadcasted(false);
 
   SetWLSRadiusCmd = new G4UIcmdWithADoubleAndUnit("/WLS/setWLSRadius",this);
   SetWLSRadiusCmd->SetGuidance("Set the radius of the WLS fiber");
@@ -125,6 +128,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetWLSRadiusCmd->SetUnitCategory("Length");
   SetWLSRadiusCmd->SetDefaultUnit("mm");
   SetWLSRadiusCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetWLSRadiusCmd->SetToBeBroadcasted(false);
 
   SetClad1RadiusCmd = new G4UIcmdWithADoubleAndUnit("/WLS/setClad1Radius",this);
   SetClad1RadiusCmd->SetGuidance("Set the radius of Cladding 1");
@@ -133,6 +137,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetClad1RadiusCmd->SetUnitCategory("Length");
   SetClad1RadiusCmd->SetDefaultUnit("mm");
   SetClad1RadiusCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetClad1RadiusCmd->SetToBeBroadcasted(false);
 
   SetClad2RadiusCmd = new G4UIcmdWithADoubleAndUnit("/WLS/setClad2Radius",this);
   SetClad2RadiusCmd->SetGuidance("Set the radius of Cladding 2");
@@ -141,6 +146,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetClad2RadiusCmd->SetUnitCategory("Length");
   SetClad2RadiusCmd->SetDefaultUnit("mm");
   SetClad2RadiusCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetClad2RadiusCmd->SetToBeBroadcasted(false);
 
   SetPhotonDetHalfLengthCmd =
              new G4UIcmdWithADoubleAndUnit("/WLS/setPhotonDetHalfLength",this);
@@ -151,6 +157,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetPhotonDetHalfLengthCmd->SetUnitCategory("Length");
   SetPhotonDetHalfLengthCmd->SetDefaultUnit("mm");
   SetPhotonDetHalfLengthCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetPhotonDetHalfLengthCmd->SetToBeBroadcasted(false);
 
   SetGapCmd = new G4UIcmdWithADoubleAndUnit("/WLS/setGap",this);
   SetGapCmd->SetGuidance("Set the distance between PhotonDet and fiber end");
@@ -159,6 +166,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetGapCmd->SetDefaultUnit("mm");
   SetGapCmd->SetRange("theta>=0.");
   SetGapCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetGapCmd->SetToBeBroadcasted(false);
 
   SetPhotonDetAlignmentCmd =
                        new G4UIcmdWithADoubleAndUnit("/WLS/setAlignment",this);
@@ -169,10 +177,12 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetPhotonDetAlignmentCmd->SetDefaultUnit("deg");
   SetPhotonDetAlignmentCmd->SetRange("theta>-90. && theta<90.");
   SetPhotonDetAlignmentCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetPhotonDetAlignmentCmd->SetToBeBroadcasted(false);
 
   SetMirrorCmd = new G4UIcmdWithABool("/WLS/setMirror", this);
   SetMirrorCmd->SetGuidance("Place a mirror at the end of the fiber");
   SetMirrorCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetMirrorCmd->SetToBeBroadcasted(false);
 
   SetBarLengthCmd = new G4UIcmdWithADoubleAndUnit("/WLS/setBarLength",this);
   SetBarLengthCmd->SetGuidance("Set the length of the scintillator bar");
@@ -181,6 +191,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetBarLengthCmd->SetUnitCategory("Length");
   SetBarLengthCmd->SetDefaultUnit("mm");
   SetBarLengthCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetBarLengthCmd->SetToBeBroadcasted(false);
 
   SetBarBaseCmd = new G4UIcmdWithADoubleAndUnit("/WLS/setBarBase",this);
   SetBarBaseCmd->SetGuidance("Set the side length of the scintillator bar");
@@ -189,6 +200,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetBarBaseCmd->SetUnitCategory("Length");
   SetBarBaseCmd->SetDefaultUnit("mm");
   SetBarBaseCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetBarBaseCmd->SetToBeBroadcasted(false);
 
   SetHoleRadiusCmd = new G4UIcmdWithADoubleAndUnit("/WLS/setHoleRadius",this);
   SetHoleRadiusCmd->SetGuidance("Set the radius of the fiber hole");
@@ -197,6 +209,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetHoleRadiusCmd->SetUnitCategory("Length");
   SetHoleRadiusCmd->SetDefaultUnit("mm");
   SetHoleRadiusCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetHoleRadiusCmd->SetToBeBroadcasted(false);
 
   SetCoatingThicknessCmd =
                new G4UIcmdWithADoubleAndUnit("/WLS/setCoatingThickness",this);
@@ -207,6 +220,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetCoatingThicknessCmd->SetDefaultUnit("mm");
   SetCoatingThicknessCmd->SetRange("thick>=0.");
   SetCoatingThicknessCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  SetCoatingThicknessCmd->SetToBeBroadcasted(false);
 
   SetCoatingRadiusCmd =
                 new G4UIcmdWithADoubleAndUnit("/WLS/setCoatingRadius",this);
@@ -217,7 +231,7 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
   SetCoatingRadiusCmd->SetDefaultUnit("mm");
   SetCoatingRadiusCmd->SetRange("cradius>=0.");
   SetCoatingRadiusCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  SetCoatingRadiusCmd->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -225,8 +239,6 @@ WLSDetectorMessenger::WLSDetectorMessenger(WLSDetectorConstruction * det)
 WLSDetectorMessenger::~WLSDetectorMessenger()
 {
   delete fDetDir;
-
-  delete fUpdateCmd;
 
   delete SetPhotonDetGeometryCmd;
   delete SetNumOfCladLayersCmd;
@@ -253,12 +265,7 @@ WLSDetectorMessenger::~WLSDetectorMessenger()
 
 void WLSDetectorMessenger::SetNewValue(G4UIcommand* command,G4String val)
 {
-  if( command == fUpdateCmd ) {
-
-    fDetector->UpdateGeometry();
-
-  }
-  else if( command == SetPhotonDetGeometryCmd ) {
+  if( command == SetPhotonDetGeometryCmd ) {
  
     fDetector->SetPhotonDetGeometry(val);
   }

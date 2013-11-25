@@ -64,8 +64,6 @@ class WLSDetectorMessenger : public G4UImessenger
  
     G4UIdirectory*             fDetDir;
 
-    G4UIcmdWithoutParameter*   fUpdateCmd;
-
     G4UIcmdWithAString*        SetPhotonDetGeometryCmd;
     G4UIcmdWithAnInteger*      SetNumOfCladLayersCmd;
     G4UIcmdWithADoubleAndUnit* SetWLSLengthCmd;
