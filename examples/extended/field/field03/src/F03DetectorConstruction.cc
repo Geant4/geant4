@@ -39,6 +39,11 @@
 #include "F03CalorimeterSD.hh"
 #include "F03FieldSetup.hh"
 
+#include "G4GeometryManager.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
+
 #include "G4Material.hh"
 #include "G4Tubs.hh"
 #include "G4LogicalVolume.hh"
@@ -216,6 +221,16 @@ void F03DetectorConstruction::DefineMaterials()
   
 G4VPhysicalVolume* F03DetectorConstruction::ConstructCalorimeter()
 {
+  // Cleanup old geometry
+
+  if (fPhysiWorld)
+  {
+    G4GeometryManager::GetInstance()->OpenGeometry();
+    G4PhysicalVolumeStore::GetInstance()->Clean();
+    G4LogicalVolumeStore::GetInstance()->Clean();
+    G4SolidStore::GetInstance()->Clean();
+  }
+
   // complete the Calor parameters definition and Print
 
   ComputeCalorParameters();
