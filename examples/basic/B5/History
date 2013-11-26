@@ -11,6 +11,10 @@ $Id$
 
 ---------------------------------------------------------------------------  
 
+26 November 2013 Ivana Hrivnacova (exampleB5-V09-06-09)
+- Fixed deleting magnetic field and its manager with use of G4AutoDelete 
+  utility
+
 22 November 2013 Joseph Perl (exampleB5-V09-06-08)
 - Added paragraph about HepRep attributes in README  
 

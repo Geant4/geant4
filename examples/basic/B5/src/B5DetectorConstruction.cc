@@ -39,6 +39,7 @@
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4Mag_UsualEqRhs.hh"
+#include "G4AutoDelete.hh"
 
 #include "G4Material.hh"
 #include "G4Element.hh"
@@ -96,8 +97,6 @@ B5DetectorConstruction::B5DetectorConstruction()
 B5DetectorConstruction::~B5DetectorConstruction()
 {
     delete fArmRotation;
-    delete fMagneticField;
-    delete fFieldMgr;
     delete fMessenger;
     
     for (G4int i=0; i<G4int(fVisAttributes.size()); ++i) 
@@ -115,7 +114,8 @@ G4VPhysicalVolume* B5DetectorConstruction::Construct()
     G4Material* air = G4Material::GetMaterial("G4_AIR");
     //G4Material* argonGas = G4Material::GetMaterial("B5_Ar");
     G4Material* argonGas = G4Material::GetMaterial("G4_Ar");
-    G4Material* scintillator = G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
+    G4Material* scintillator 
+      = G4Material::GetMaterial("G4_PLASTIC_SC_VINYLTOLUENE");
     G4Material* csI = G4Material::GetMaterial("G4_CESIUM_IODIDE");
     G4Material* lead = G4Material::GetMaterial("G4_Pb");
     
@@ -403,14 +403,16 @@ void B5DetectorConstruction::ConstructSDandField()
     fHadCalScintiLogical->SetSensitiveDetector(hadCalorimeter);
 
     // magnetic field ----------------------------------------------------------
-    if (!fMagneticField) {
-      fMagneticField = new B5MagneticField();
-      fFieldMgr = new G4FieldManager();
-      fFieldMgr->SetDetectorField(fMagneticField);
-      fFieldMgr->CreateChordFinder(fMagneticField);
-      G4bool forceToAllDaughters = true;
-      fMagneticLogical->SetFieldManager(fFieldMgr, forceToAllDaughters);
-    }  
+    fMagneticField = new B5MagneticField();
+    fFieldMgr = new G4FieldManager();
+    fFieldMgr->SetDetectorField(fMagneticField);
+    fFieldMgr->CreateChordFinder(fMagneticField);
+    G4bool forceToAllDaughters = true;
+    fMagneticLogical->SetFieldManager(fFieldMgr, forceToAllDaughters);
+
+    // Register the field and its manager for deleting
+    G4AutoDelete::Register(fMagneticField);
+    G4AutoDelete::Register(fFieldMgr);
 }    
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -488,7 +490,7 @@ void B5DetectorConstruction::DefineCommands()
                                   &B5DetectorConstruction::SetArmAngle, 
                                   "Set rotation angle of the second arm.");
     armAngleCmd.SetParameterName("angle", true);
-    armAngleCmd.SetRange("angle>=0. && angle<180.");                                
+    armAngleCmd.SetRange("angle>=0. && angle<180.");
     armAngleCmd.SetDefaultValue("30.");
     armAngleCmd.SetDefaultUnit("deg");
 }
