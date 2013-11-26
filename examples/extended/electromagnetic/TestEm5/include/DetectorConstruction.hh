@@ -77,7 +77,7 @@ class DetectorConstruction : public G4VUserDetectorConstruction
 
      void PrintCalorParameters();
 
-     G4Material* GetAbsorberMaterial()  {return fAbsorberMaterial;};             
+     G4Material* GetAbsorberMaterial()  {return fAbsorberMaterial;};
      G4double    GetAbsorberThickness() {return fAbsorberThickness;};
      G4double    GetAbsorberSizeYZ()    {return fAbsorberSizeYZ;};
 
@@ -118,13 +118,12 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      
      DetectorMessenger* fDetectorMessenger;
      G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
-    
-      
+          
   private:
     
      void DefineMaterials();
-     void ComputeCalorParameters();
-     G4VPhysicalVolume* ConstructCalorimeter();     
+     void ComputeGeomParameters();
+     void DefineGunPosition();
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

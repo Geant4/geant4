@@ -48,6 +48,7 @@
 #include "G4UnitsTable.hh"
 #include "G4NistManager.hh"
 #include "G4RunManager.hh"
+#include "G4UImanager.hh"
 
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -69,7 +70,7 @@ DetectorConstruction::DetectorConstruction()
   fAbsorberThickness = 1.*cm;
   fAbsorberSizeYZ    = 2.*cm;
   fXposAbs           = 0.*cm;
-  ComputeCalorParameters();
+  ComputeGeomParameters();
   
   // materials  
   DefineMaterials();
@@ -85,13 +86,6 @@ DetectorConstruction::DetectorConstruction()
 DetectorConstruction::~DetectorConstruction()
 { 
   delete fDetectorMessenger;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4VPhysicalVolume* DetectorConstruction::Construct()
-{
-  return ConstructCalorimeter();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -252,21 +246,37 @@ void DetectorConstruction::DefineMaterials()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorConstruction::ComputeCalorParameters()
+void DetectorConstruction::ComputeGeomParameters()
 {
   // Compute derived parameters of the calorimeter
   fXstartAbs = fXposAbs-0.5*fAbsorberThickness; 
   fXendAbs   = fXposAbs+0.5*fAbsorberThickness;
      
   if (fDefaultWorld) {
-     fWorldSizeX = 1.5*fAbsorberThickness; fWorldSizeYZ= 1.2*fAbsorberSizeYZ;
+    fWorldSizeX = 1.5*fAbsorberThickness; 
+    fWorldSizeYZ= 1.2*fAbsorberSizeYZ;
   }         
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DetectorConstruction::DefineGunPosition()
+{
+  G4double xgun = -fWorldSizeX/2;
+  G4String ss = G4UIcommand::ConvertToString(xgun); 
+  (G4UImanager::GetUIpointer())->ApplyCommand("/gun/position " + ss + " 0 0");
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
   
-G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
+G4VPhysicalVolume* DetectorConstruction::Construct()
 { 
+  // recompute derived parameters
+  ComputeGeomParameters();
+
+  // not the first run - new geometry
+  //if(fPhysiWorld) { DefineGunPosition(); }
+
   // Cleanup old geometry
   //
   G4GeometryManager::GetInstance()->OpenGeometry();
@@ -371,7 +381,6 @@ void DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 void DetectorConstruction::SetAbsorberThickness(G4double val)
 {
   fAbsorberThickness = val;
-  ComputeCalorParameters();
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
@@ -380,7 +389,6 @@ void DetectorConstruction::SetAbsorberThickness(G4double val)
 void DetectorConstruction::SetAbsorberSizeYZ(G4double val)
 {
   fAbsorberSizeYZ = val;
-  ComputeCalorParameters();
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
@@ -390,7 +398,6 @@ void DetectorConstruction::SetWorldSizeX(G4double val)
 {
   fWorldSizeX = val;
   fDefaultWorld = false;
-  ComputeCalorParameters();
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
@@ -400,7 +407,6 @@ void DetectorConstruction::SetWorldSizeYZ(G4double val)
 {
   fWorldSizeYZ = val;
   fDefaultWorld = false;
-  ComputeCalorParameters();
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
@@ -409,27 +415,26 @@ void DetectorConstruction::SetWorldSizeYZ(G4double val)
 void DetectorConstruction::SetAbsorberXpos(G4double val)
 {
   fXposAbs  = val;
-  ComputeCalorParameters();
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-
 void DetectorConstruction::ConstructSDandField()
 {
-    if ( fFieldMessenger.Get() == 0 ) {
-        // Create global magnetic field messenger.
-        // Uniform magnetic field is then created automatically if
-        // the field value is not zero.
-        G4ThreeVector fieldValue = G4ThreeVector();
-        G4GlobalMagFieldMessenger* msg =
-        new G4GlobalMagFieldMessenger(fieldValue);
-        //msg->SetVerboseLevel(1);
-        G4AutoDelete::Register(msg);
-        fFieldMessenger.Put( msg );
-        
-    }
+  //G4cout << "### DetectorConstruction::ConstructSDandField" << G4endl; 
+  DefineGunPosition();
+  if ( fFieldMessenger.Get() == 0 ) {
+    // Create global magnetic field messenger.
+    // Uniform magnetic field is then created automatically if
+    // the field value is not zero.
+    G4ThreeVector fieldValue = G4ThreeVector();
+    G4GlobalMagFieldMessenger* msg =
+      new G4GlobalMagFieldMessenger(fieldValue);
+    //msg->SetVerboseLevel(1);
+    G4AutoDelete::Register(msg);
+    fFieldMessenger.Put( msg );  
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

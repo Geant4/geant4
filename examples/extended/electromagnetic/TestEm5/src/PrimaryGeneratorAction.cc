@@ -44,8 +44,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(
-                                            DetectorConstruction* DC)
+PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
 :G4VUserPrimaryGeneratorAction(),
  fParticleGun(0),fDetector(DC),fRndmBeam(0),fGunMessenger(0)
 {
@@ -78,7 +77,7 @@ void PrimaryGeneratorAction::SetDefaultKinematic()
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(1.,0.,0.));
   fParticleGun->SetParticleEnergy(30.*MeV);
   G4double x0 = -0.5*(fDetector->GetWorldSizeX());
-  fParticleGun->SetParticlePosition(G4ThreeVector(x0, 0*cm, 0*cm));  
+  fParticleGun->SetParticlePosition(G4ThreeVector(x0, 0.0, 0.0));  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
