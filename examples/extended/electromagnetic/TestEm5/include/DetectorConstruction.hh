@@ -118,12 +118,13 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      
      DetectorMessenger* fDetectorMessenger;
      G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
-          
+    
+      
   private:
     
      void DefineMaterials();
-     void ComputeGeomParameters();
-     void DefineGunPosition();
+     void ComputeCalorParameters();
+     G4VPhysicalVolume* ConstructCalorimeter();     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

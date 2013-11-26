@@ -13,7 +13,7 @@
 /testem/det/setAbsThick 3 m  
 /testem/det/setAbsYZ    3 m
 #
-###/testem/phys/addPhysics emstandard_opt0
+###/testem/phys/addPhysics emstandard_opt3
 /testem/phys/addPhysics local
 #
 /testem/phys/setCuts 1 mm
