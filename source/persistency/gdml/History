@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23 November 2013 Gabriele Cosmo (gdml-V09-06-08)
+- Fixed compilation warnings on SLC5/gcc-4.1.
+
 22 November 2013 Tatiana Nikitina (gdml-V09-06-07)
 - Added support for parameterisation of polycone and polyhedra in GDML schema.
   Extended related classes accordingly in reader and writer.

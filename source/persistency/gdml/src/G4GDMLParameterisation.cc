@@ -173,7 +173,7 @@ ComputeDimensions(G4Polycone& pcone,const G4int index,const G4VPhysicalVolume*) 
    G4PolyconeHistorical origparam( *(pcone.GetOriginalParameters()) );
    origparam.Start_angle = parameterList[index].dimension[0];
    origparam.Opening_angle = parameterList[index].dimension[1];
-   origparam.Num_z_planes = parameterList[index].dimension[2];
+   origparam.Num_z_planes = (G4int) parameterList[index].dimension[2];
    G4int nZplanes = origparam.Num_z_planes;
  
    for( G4int ii = 0; ii < nZplanes; ii++ )
@@ -194,8 +194,8 @@ ComputeDimensions(G4Polyhedra& polyhedra,const G4int index,const G4VPhysicalVolu
    G4PolyhedraHistorical origparam( *(polyhedra.GetOriginalParameters()) );
    origparam.Start_angle = parameterList[index].dimension[0];
    origparam.Opening_angle = parameterList[index].dimension[1];
-   origparam.Num_z_planes = parameterList[index].dimension[2];
-   origparam.numSide = parameterList[index].dimension[3];
+   origparam.Num_z_planes = (G4int) parameterList[index].dimension[2];
+   origparam.numSide = (G4int) parameterList[index].dimension[3];
    
    G4int nZplanes = origparam.Num_z_planes;
    
