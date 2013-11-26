@@ -78,6 +78,7 @@ class G4UImanager : public G4VStateDependent
       // returned if the given command is not defined or the command does
       // not support the GetCurrentValues() method.
       void AddNewCommand(G4UIcommand * newCommand);
+      void AddWorkerCommand(G4UIcommand * newCommand);
       //  This method register a new command.
       void RemoveCommand(G4UIcommand * aCommand);
       //  This command remove the registered command. After invokation of this
@@ -255,7 +256,7 @@ class G4UImanager : public G4VStateDependent
       inline void SetMasterUIManager(G4bool val)
       {
         isMaster = val;
-        ignoreCmdNotFound = val;
+        //ignoreCmdNotFound = val;
         stackCommandsForBroadcast = val;
         if(val&&!bridges)
         {
@@ -265,10 +266,9 @@ class G4UImanager : public G4VStateDependent
       }
       inline void SetIgnoreCmdNotFound(G4bool val)
       { ignoreCmdNotFound = val; }
-      std::vector<G4String>* GetCommandStack();
 
-      inline void RegisterBridge(G4UIbridge* brg)
-      { bridges->push_back(brg); }
+      std::vector<G4String>* GetCommandStack();
+      void RegisterBridge(G4UIbridge* brg);
 
   public: 
       void SetUpForAThread(G4int tId);

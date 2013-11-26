@@ -44,6 +44,7 @@
 #include "G4Tokenizer.hh"
 #include "G4MTcoutDestination.hh"
 #include "G4UIbridge.hh"
+#include "G4Threading.hh"
 
 #include <sstream>
 #include <fstream>
@@ -253,6 +254,13 @@ G4int parameterNumber, G4bool reGet)
 void G4UImanager::AddNewCommand(G4UIcommand * newCommand)
 {
   treeTop->AddNewCommand( newCommand );
+  if(fMasterUImanager!=0&&G4Threading::G4GetThreadId()==0)
+  { fMasterUImanager->AddWorkerCommand(newCommand); }
+}
+
+void G4UImanager::AddWorkerCommand(G4UIcommand * newCommand)
+{
+  treeTop->AddNewCommand( newCommand, true );
 }
 
 void G4UImanager::RemoveCommand(G4UIcommand * aCommand)
@@ -399,6 +407,8 @@ G4int G4UImanager::ApplyCommand(const G4String& aCmd)
   return ApplyCommand(aCmd.data());
 }
 
+#include "G4Threading.hh"
+
 G4int G4UImanager::ApplyCommand(const char * aCmd)
 {
   G4String aCommand = SolveAlias(aCmd);
@@ -458,7 +468,7 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
     if(ignoreCmdNotFound)
     {
       if(stackCommandsForBroadcast)
-         commandStack->push_back(commandString+" "+commandParameter);
+      { commandStack->push_back(commandString+" "+commandParameter); }
       return fCommandSucceeded;
     }
     else
@@ -475,6 +485,7 @@ G4int G4UImanager::ApplyCommand(const char * aCmd)
   if( G4int(histVec.size()) >= maxHistSize )
   { histVec.erase(histVec.begin()); }
   histVec.push_back(aCommand);
+
   return targetCommand->DoIt( commandParameter );
 }
 
@@ -666,6 +677,17 @@ std::vector<G4String>* G4UImanager::GetCommandStack()
   std::vector<G4String>* returnValue = commandStack;
   commandStack = new std::vector<G4String>;
   return returnValue;
+}
+
+void G4UImanager::RegisterBridge(G4UIbridge* brg)
+{
+  if(brg->LocalUI()==this)
+  {
+    G4Exception("G4UImanager::RegisterBridge()","UI7002",FatalException,
+      "G4UIBridge cannot bridge between same object.");
+  }
+  else
+  { bridges->push_back(brg); }
 }
 
 void G4UImanager::SetUpForAThread(G4int tId)

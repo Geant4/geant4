@@ -60,15 +60,19 @@ G4int G4UIcommandTree::operator!=(const G4UIcommandTree &right) const
   return ( pathName != right.GetPathName() );
 }
 
-void G4UIcommandTree::AddNewCommand(G4UIcommand *newCommand)
+void G4UIcommandTree::AddNewCommand(G4UIcommand *newCommand, G4bool workerThreadOnly)
 {
   G4String commandPath = newCommand->GetCommandPath();
   G4String remainingPath = commandPath;
   remainingPath.remove(0,pathName.length());
   if( remainingPath.isNull() )
   {
-    guidance = newCommand;
-    if(!(newCommand->ToBeBroadcasted())) broadcastCommands = false;
+    if(!guidance)
+    {
+      guidance = newCommand;
+      if(!(newCommand->ToBeBroadcasted())) broadcastCommands = false;
+      if(workerThreadOnly) newCommand->SetWorkerThreadOnly();
+    }
     return;
   }
   G4int i = remainingPath.first('/');
@@ -82,6 +86,7 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand *newCommand)
       { return; }
     }
     if(!broadcastCommands) newCommand->SetToBeBroadcasted(false);
+    if(workerThreadOnly) newCommand->SetWorkerThreadOnly();
     command.push_back( newCommand );
     return;
   }
@@ -96,14 +101,14 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand *newCommand)
       if( nextPath == tree[i_thTree]->GetPathName() )
       { 
         if(!broadcastCommands) newCommand->SetToBeBroadcasted(false);
-	tree[i_thTree]->AddNewCommand( newCommand );
+	tree[i_thTree]->AddNewCommand( newCommand, workerThreadOnly );
 	return; 
       }
     }
     G4UIcommandTree * newTree = new G4UIcommandTree( nextPath );
     tree.push_back( newTree );
     if(!broadcastCommands) newCommand->SetToBeBroadcasted(false);
-    newTree->AddNewCommand( newCommand );
+    newTree->AddNewCommand( newCommand, workerThreadOnly );
     return;
   }
 }
@@ -336,16 +341,25 @@ void G4UIcommandTree::ListCurrent() const
   G4cout << " Sub-directories : " << G4endl;
   G4int n_treeEntry = tree.size();
   for( G4int i_thTree = 0; i_thTree < n_treeEntry; i_thTree++ )
-  {
-    G4cout << "   " << tree[i_thTree]->GetPathName() 
-	 << "   " << tree[i_thTree]->GetTitle() << G4endl;
+  { 
+    G4cout << "   " << tree[i_thTree]->GetPathName();
+    if(tree[i_thTree]->GetGuidance() &&
+       tree[i_thTree]->GetGuidance()->IsWorkerThreadOnly())
+    { G4cout << " @ "; }
+    else
+    { G4cout << "   "; }
+    G4cout << tree[i_thTree]->GetTitle() << G4endl;
   }
   G4cout << " Commands : " << G4endl;
   G4int n_commandEntry = command.size();
   for( G4int i_thCommand = 0; i_thCommand < n_commandEntry; i_thCommand++ )
   {
-    G4cout << "   " << command[i_thCommand]->GetCommandName() 
-	 << " * " << command[i_thCommand]->GetTitle() << G4endl;
+    G4cout << "   " << command[i_thCommand]->GetCommandName();
+    if(command[i_thCommand]->IsWorkerThreadOnly())
+    { G4cout << " @ "; }
+    else
+    { G4cout << " * "; }
+    G4cout << command[i_thCommand]->GetTitle() << G4endl;
   }
 }
 

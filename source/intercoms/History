@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 November, 2013 M. Asai (intercoms-V09-06-15)
+- G4UIcommandTree : add a protection against a G4UIcommandTree object
+  that does not have any guidance.
+
+20 November, 2013 M. Asai (intercoms-V09-06-14)
+- Modify G4UImanager, G4UIcommandTree and G4UIcommand classes to make
+  all UI commands defined in the worker thread are visible by the
+  G4UImanager of the master thread so that undefined command, wrong
+  parameters, etc are correctly detected.
+
 20 November, 2013 M. Asai (intercoms-V09-06-13)
 - Fix G4UIcmdWith3VectorAndUnit and G4UIcmdWithADoubleAndUnit.
   Since version 9.3, they do not check and reject incorrect unit 

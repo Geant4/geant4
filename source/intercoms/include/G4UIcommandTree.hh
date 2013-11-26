@@ -51,7 +51,7 @@ class G4UIcommandTree
       G4int operator!=(const G4UIcommandTree &right) const;
 
   public:
-      void AddNewCommand(G4UIcommand * newCommand);
+      void AddNewCommand(G4UIcommand * newCommand, G4bool workerThreadOnly=false);
       void RemoveCommand(G4UIcommand * aCommand);
       G4UIcommand* FindPath(const char* commandPath) const;
       G4UIcommandTree* FindCommandTree(const char* commandPath);

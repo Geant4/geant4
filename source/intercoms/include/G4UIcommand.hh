@@ -178,6 +178,7 @@ class G4UIcommand
   protected:
     G4bool toBeBroadcasted;
     G4bool toBeFlushed;
+    G4bool workerThreadOnly;
 
   public:
     inline void SetToBeBroadcasted(G4bool val)
@@ -188,6 +189,10 @@ class G4UIcommand
     { toBeFlushed = val; }
     inline G4bool ToBeFlushed() const
     { return toBeFlushed; }
+    inline void SetWorkerThreadOnly(G4bool val=true)
+    { workerThreadOnly = val; }
+    inline G4bool IsWorkerThreadOnly() const
+    { return workerThreadOnly; }
 
   protected:
     G4int CheckNewValue(const char* newValue);
