@@ -812,7 +812,7 @@ void G4OpenGLQtViewer::actionSaveImage() {
   }
 
   fFileSavePath = QFileInfo(qFilename).path();
-  if (! qFilename.endsWith(selectedFormat,Qt::CaseInsensitive)) {
+  if (! qFilename.endsWith(QString(selectedFormat->toStdString().c_str()),Qt::CaseInsensitive)) {
     name += "." + selectedFormat->toStdString();
   }
   

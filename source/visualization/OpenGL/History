@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20th November 2013 Laurent Garnier  (opengl-V09-06-12)
+- G4OpenGLQtViewer : Fix a bug with endsWith that I have introduce in last revision
+
 20th November 2013 Laurent Garnier  (opengl-V09-06-11)
 - G4OpenGLQtViewer : 
   o When saving file in Qt the extention was always append. Now it is done only when it is
