@@ -42,6 +42,7 @@
 #include "G4PVPlacement.hh"
 #include "G4PVParameterised.hh"
 #include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
 
 #include "G4GeometryTolerance.hh"
 #include "G4GeometryManager.hh"
@@ -52,8 +53,6 @@
 #include "G4Colour.hh"
 
 #include "G4SystemOfUnits.hh"
-
-//#include "G4ios.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -76,8 +75,6 @@ B2bDetectorConstruction::~B2bDetectorConstruction()
 {
   delete fStepLimit;
   delete fMessenger;
-  delete fMagFieldMessenger;
-  fMagFieldMessenger = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -292,6 +289,9 @@ void B2bDetectorConstruction::ConstructSDandField()
   G4ThreeVector fieldValue = G4ThreeVector();
   fMagFieldMessenger = new G4GlobalMagFieldMessenger(fieldValue);
   fMagFieldMessenger->SetVerboseLevel(1);
+  
+  // Register the field messenger for deleting
+  G4AutoDelete::Register(fMagFieldMessenger);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
