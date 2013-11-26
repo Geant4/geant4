@@ -30,6 +30,12 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+26th November 2013 - Ben Morgan (cmake-V09-06-42)
+- Modules/Geant4LibraryBuildOptions.cmake : Mark GEANT4_BUILD_MULTITHREADED
+  as advanced on Win32, and emit a warning on Win32 if it is activated.
+  This allows developers to keep working whilst warning users about the
+  non-support.
+
 21st November 2013 - Ben Morgan (cmake-V09-06-41)
 - Modules/Geant4InterfaceOptions.cmake : Fix bug in checking of status
   of Xmu include path and library variables that resulted in no error

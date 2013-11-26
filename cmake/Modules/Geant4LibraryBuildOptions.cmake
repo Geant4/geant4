@@ -38,6 +38,10 @@ endif()
 # compiler flags to CMAKE_CXX_FLAGS
 option(GEANT4_BUILD_MULTITHREADED "Enable multithreading in Geant4" OFF)
 
+if(WIN32)
+  mark_as_advanced(GEANT4_BUILD_MULTITHREADED)
+endif()
+
 if(GEANT4_BUILD_MULTITHREADED)
   # - Need Thread Local Storage support (POSIX)
   if(UNIX)
@@ -45,6 +49,12 @@ if(GEANT4_BUILD_MULTITHREADED)
     if(NOT HAVE_TLS)
       message(FATAL_ERROR "Configured compiler ${CMAKE_CXX_COMPILER} does not support thread local storage")
     endif()
+  endif()
+
+  # - Emit warning on Windows - message will format oddly on CMake prior
+  # to 2.8, but still print
+  if(WIN32)
+    message(WARNING "GEANT4_BUILD_MULTITHREADED IS NOT SUPPORTED on Win32. This option should only be activated by developers")
   endif()
 
   add_definitions(-DG4MULTITHREADED)
