@@ -108,7 +108,7 @@ LXeMainVolume::LXeMainVolume(G4RotationMatrix *pRot,
                                     fPmt_log,false,0);
  
   //***********Arrange pmts around the outside of housing**********
- 
+
   G4double dx = fScint_x/fNx;
   G4double dy = fScint_y/fNy;
   G4double dz = fScint_z/fNz;
@@ -160,6 +160,9 @@ void LXeMainVolume::CopyValues(){
   fScint_y=fConstructor->GetScintY();
   fScint_z=fConstructor->GetScintZ();
   fD_mtl=fConstructor->GetHousingThickness();
+  fNx=fConstructor->GetNX();
+  fNy=fConstructor->GetNY();
+  fNz=fConstructor->GetNZ();
   fOuterRadius_pmt=fConstructor->GetPMTRadius();
   fSphereOn=fConstructor->GetSphereOn();
   fRefl=fConstructor->GetHousingReflectivity();
