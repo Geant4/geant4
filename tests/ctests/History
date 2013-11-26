@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-06-27 26 November 2013 Pere Mato
+- fixed example-ext-biasing-b03 by adding the ENVIRONMENT
+
 ctests-V09-06-26 22 November 2013 Ivana Hrivnacova
 - Added new extended biasing/B03 example in tests;
   re-activated biasing/B02 in GNUmake text

@@ -124,7 +124,7 @@ GEANT4_ADD_TEST(example-ext-biasing-b03
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/B03/exampleB03
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/B03
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/B03
-                BUILD exampleB03 PROJECT B03)
+                BUILD exampleB03 PROJECT B03 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 #GEANT4_ADD_TEST(example-ext-biasing-gb01 
 #                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB01/exampleGB01
 #                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/GB01
