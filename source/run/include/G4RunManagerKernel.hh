@@ -110,7 +110,7 @@ class G4RunManagerKernel
     //  This method must be invoked at least once by the user to build physics
     // processes.
 
-    G4bool RunInitialization();
+    G4bool RunInitialization(G4bool fakeRun=false);
     //  Trigger geometry closing and physics table constructions.
     // It returns TRUE if all procedures went well.
 

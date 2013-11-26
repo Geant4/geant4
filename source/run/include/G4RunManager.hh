@@ -322,6 +322,8 @@ public: // with description
     G4int n_select_msg;
     G4int numberOfEventProcessed;
     G4String selectMacro;
+    G4bool fakeRun;
+
   public:
     virtual void rndmSaveThisRun();
     virtual void rndmSaveThisEvent();
@@ -557,7 +559,7 @@ public: // with description
     virtual void DeleteUserInitializations();
     //Called by destructor to delete user detector. Note: the userdetector is shared by threads
     //Thus this should be re-implemented to empty in derived classes that implement the worker model
-private:
+  private:
     //disable assignment and copy constructors
     G4RunManager(const G4RunManager&) {}
     G4RunManager& operator=(const G4RunManager&) { return *this; }

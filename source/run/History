@@ -17,6 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 25th, 2013, M. Asai (run-V09-06-131)
+- Fix how G4Region split class is re-initialized for the second run.
+- Recover necessary procedures in RunInitialization() that were removed
+  in the previous tag.
+- Region information is displayed only for the master thread.
+
+Nov 21st, 2013, M. Asai (run-V09-06-130)
+- Remove unnecessary BeamOn procedures for the empty run.
+
+Nov 20th, 2013, M. Asai (run-V09-06-129)
+- Execute an empty run at the very end of G4MTRunManager::Initialize()
+  so that all workers are properly set up before the first BeamOn().
+  This is a temporal work-around until we split Initialization() and
+  BeamOn() of worker thread.
+
 Nov 20th, 2013, M. Asai (run-V09-06-128)
 - Rename G4RunManager::GeometryNeedToBeRebuilt() to
   G4RunManager::ReinitializeGeometry() to avoid confusion.

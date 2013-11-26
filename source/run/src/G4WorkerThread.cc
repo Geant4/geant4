@@ -57,6 +57,7 @@ G4int G4WorkerThread::GetNumberThreads() const
 #include "G4PhysicsVector.hh"
 /////@@#include "G4VDecayChannel.hh"
 #include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
 #include "G4MaterialTable.hh"
 #include "G4PolyconeSide.hh"
 #include "G4PolyhedraSide.hh"
@@ -224,6 +225,9 @@ void G4WorkerThread::DestroyGeometryAndPhysicsVector()
     const_cast<G4VMPLManager&>(G4VModularPhysicsList::GetSubInstanceManager()).FreeSlave();
 }
 
+#include "G4Region.hh"
+#include "G4RegionStore.hh"
+
 void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
 {
     //=================================================
@@ -234,17 +238,34 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
     // (note that all the stuff after this will reset SD and Field
     typedef std::map<G4LogicalVolume*,std::pair<G4VSensitiveDetector*,G4FieldManager*> > LV2SDFM;
     LV2SDFM lvmap;
-    G4PhysicalVolumeStore* mphysVolStore = G4PhysicalVolumeStore::GetInstance();
-    for(size_t ip=0; ip<mphysVolStore->size(); ip++)
+    typedef std::map<G4LogicalVolume*,std::pair<G4Region*,G4bool> > LV2Region;
+    LV2Region lv2rmap;
+    typedef std::map<G4Region*,std::pair<G4FastSimulationManager*,G4UserSteppingAction*> > R2FSM;
+    R2FSM rgnmap;
+    ////@@@G4PhysicalVolumeStore* mphysVolStore = G4PhysicalVolumeStore::GetInstance();
+    ////@@@for(size_t ip=0; ip<mphysVolStore->size(); ip++)
+    G4LogicalVolumeStore* mLogVolStore = G4LogicalVolumeStore::GetInstance();
+    for(size_t ip=0; ip<mLogVolStore->size(); ip++)
     {
-        G4VPhysicalVolume* pv = (*mphysVolStore)[ip];
-        G4LogicalVolume *lv = pv->GetLogicalVolume();
+        ////@@@G4VPhysicalVolume* pv = (*mphysVolStore)[ip];
+        ////@@@G4LogicalVolume *lv = pv->GetLogicalVolume();
+        G4LogicalVolume *lv = (*mLogVolStore)[ip];
         G4VSensitiveDetector* sd = lv->GetSensitiveDetector();
         G4FieldManager* fm = lv->GetFieldManager();
-        if ( sd || fm )
-            lvmap[lv] = std::make_pair(sd,fm);
+        if ( sd || fm ) lvmap[lv] = std::make_pair(sd,fm);
+        G4Region* rgn = lv->GetRegion();
+        G4bool isRoot = lv->IsRootRegion();
+        if ( rgn || isRoot ) lv2rmap[lv] = std::make_pair(rgn,isRoot);
     }
-    
+    G4RegionStore* mRegStore = G4RegionStore::GetInstance();
+    for(size_t ir=0; ir<mRegStore->size(); ir++)
+    {
+        G4Region* reg = (*mRegStore)[ir];
+        G4FastSimulationManager* fsm = reg->GetFastSimulationManager();
+        G4UserSteppingAction* usa = reg->GetRegionalSteppingAction();
+        if ( reg || usa ) rgnmap[reg] = std::make_pair(fsm,usa);
+    }
+
     //===========================
     //Step-1: Clean the workspace
     //===========================
@@ -278,6 +299,22 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
         G4FieldManager* fm       = (it->second).second;
         lv->SetFieldManager(fm, false); //What should be the second parameter? We use always false for MT mode
         lv->SetSensitiveDetector(sd);
+    }
+    for ( LV2Region::const_iterator it2 = lv2rmap.begin() ; it2 != lv2rmap.end() ; it2++ )
+    {
+        G4LogicalVolume* lv2 = it2->first;
+        G4Region* rgn = (it2->second).first;
+        if(rgn) lv2->SetRegion(rgn);
+        G4bool isRoot = (it2->second).second;
+        lv2->SetRegionRootFlag(isRoot);
+    }
+    for ( R2FSM::const_iterator it3 = rgnmap.begin() ; it3 != rgnmap.end() ; it3++ )
+    {
+        G4Region* reg = it3->first;
+        G4FastSimulationManager* fsm = (it3->second).first;
+        if(fsm) reg->SetFastSimulationManager(fsm);
+        G4UserSteppingAction* usa = (it3->second).second;
+        if(usa) reg->SetRegionalSteppingAction(usa);
     }
 }
 

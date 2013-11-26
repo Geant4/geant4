@@ -55,7 +55,9 @@ public:
     void SetNumberOfThreads( G4int n );
     G4int GetNumberOfThreads() const { return nworkers; }
 public:
+
     //Inherited methods to re-implement for MT case
+    virtual void Initialize();
     virtual void InitializeEventLoop(G4int n_event, const char* macroFile=0, G4int n_select=-1);
 
     //The following do not do anything for this runmanager

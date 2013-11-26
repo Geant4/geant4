@@ -69,6 +69,8 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM) {
     nevModulo = -1;
     currEvID = -1;
 
+    G4UImanager::GetUIpointer()->SetIgnoreCmdNotFound(true);
+
 #ifdef G4MULTITHREADED
     G4VVisManager* pVVis = G4VVisManager::GetConcreteInstance();
     if(pVVis) pVVis->SetUpForAThread();
@@ -115,7 +117,7 @@ void G4WorkerRunManager::InitializeGeometry() {
 
 void G4WorkerRunManager::RunInitialization()
 {
-  if(!(kernel->RunInitialization())) return;
+  if(!(kernel->RunInitialization(fakeRun))) return;
   if(currentRun) delete currentRun;
   currentRun = 0;
 
@@ -124,6 +126,8 @@ void G4WorkerRunManager::RunInitialization()
   G4MTRunManager::GetMasterRunManager()->ThisWorkerReady();
   const G4UserWorkerInitialization* uwi
        = G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
+  if(fakeRun) return;
+
   //Call a user hook: this is guaranteed all threads are "synchronized"
   if(uwi) uwi->WorkerRunStart();
 
@@ -331,6 +335,18 @@ void G4WorkerRunManager::RunTermination()
     //Note this will return only whan all threads reach this point
     G4MTRunManager::GetMasterRunManager()->ThisWorkerEndEventLoop();
 
+}
+
+void G4WorkerRunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
+{
+  if(n_event>0) 
+  { G4RunManager::BeamOn(n_event,macroFile,n_select); }
+  else
+  {
+    // fake BeamOn.
+    G4MTRunManager::GetMasterRunManager()->ThisWorkerReady();
+    G4MTRunManager::GetMasterRunManager()->ThisWorkerEndEventLoop();
+  }
 }
 
 #include "G4AutoLock.hh"

@@ -88,7 +88,7 @@ G4RunManager::G4RunManager()
  numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
  storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
  currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
- numberOfEventProcessed(0),selectMacro("")
+ numberOfEventProcessed(0),selectMacro(""),fakeRun(false)
 {
   if(fRunManager)
   {
@@ -127,7 +127,7 @@ G4RunManager::G4RunManager( RMType rmType )
  numberOfEventToBeProcessed(0),storeRandomNumberStatus(false),
  storeRandomNumberStatusToG4Event(0),rngStatusEventsFlag(false),
  currentWorld(0),nParallelWorlds(0),msgText(" "),n_select_msg(-1),
- numberOfEventProcessed(0),selectMacro("")
+ numberOfEventProcessed(0),selectMacro(""),fakeRun(false)
 {
   //This version of the constructor should never be called in sequential mode!
 #ifndef G4MULTITHREADED
@@ -253,15 +253,18 @@ void G4RunManager::DeleteUserInitializations()
 
 void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
 {
+  if(n_event<=0) { fakeRun = true; }
+  else { fakeRun = false; }
   G4bool cond = ConfirmBeamOnCondition();
   if(cond)
   {
     numberOfEventToBeProcessed = n_event;
     ConstructScoringWorlds();
     RunInitialization();
-    if(n_event>0) DoEventLoop(n_event,macroFile,n_select);
+    DoEventLoop(n_event,macroFile,n_select);
     RunTermination();
   }
+  fakeRun = false;
 }
 
 G4bool G4RunManager::ConfirmBeamOnCondition()
@@ -298,7 +301,9 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
 
 void G4RunManager::RunInitialization()
 {
-  if(!(kernel->RunInitialization())) return;
+  if(!(kernel->RunInitialization(fakeRun))) return;
+  if(fakeRun) return;
+
   if(currentRun) delete currentRun;
   currentRun = 0;
 
@@ -457,20 +462,23 @@ void G4RunManager::AnalyzeEvent(G4Event* anEvent)
 
 void G4RunManager::RunTermination()
 {
-  for(size_t itr=0;itr<previousEvents->size();itr++)
+  if(!fakeRun)
   {
-    G4Event* prevEv =  (*previousEvents)[itr];
-    if((prevEv) && !(prevEv->ToBeKept())) delete prevEv;
+    for(size_t itr=0;itr<previousEvents->size();itr++)
+    {
+      G4Event* prevEv =  (*previousEvents)[itr];
+      if((prevEv) && !(prevEv->ToBeKept())) delete prevEv;
+    }
+    previousEvents->clear();
+    for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
+    { previousEvents->push_back((G4Event*)0); }
+
+    if(userRunAction) userRunAction->EndOfRunAction(currentRun);
+
+    G4VPersistencyManager* fPersM = G4VPersistencyManager::GetPersistencyManager();
+    if(fPersM) fPersM->Store(currentRun);
+    runIDCounter++;
   }
-  previousEvents->clear();
-  for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
-  { previousEvents->push_back((G4Event*)0); }
-
-  if(userRunAction) userRunAction->EndOfRunAction(currentRun);
-
-  G4VPersistencyManager* fPersM = G4VPersistencyManager::GetPersistencyManager();
-  if(fPersM) fPersM->Store(currentRun);
-  runIDCounter++;
 
   kernel->RunTermination();
 }

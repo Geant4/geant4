@@ -556,7 +556,7 @@ void G4RunManagerKernel::InitializePhysics()
   { stateManager->SetNewState(G4State_Idle); }
 }
 
-G4bool G4RunManagerKernel::RunInitialization()
+G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
 {
   G4StateManager*    stateManager = G4StateManager::GetStateManager();
   G4ApplicationState currentState = stateManager->GetCurrentState();
@@ -592,7 +592,7 @@ G4bool G4RunManagerKernel::RunInitialization()
 
   SetupShadowProcess();
   UpdateRegion();
-  BuildPhysicsTables();
+  if(!fakeRun) BuildPhysicsTables();
 
   if(geometryNeedsToBeClosed)
   {
@@ -759,6 +759,7 @@ void G4RunManagerKernel::DumpRegion(G4Region* region) const
   }
   else
   {
+    if(G4Threading::IsWorkerThread()) return;
     G4cout << G4endl;
     G4cout << "Region <" << region->GetName() << "> -- ";
     if(region->GetWorldPhysical())

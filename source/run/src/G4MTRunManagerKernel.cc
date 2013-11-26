@@ -203,11 +203,11 @@ void* G4MTRunManagerKernel::StartThread(void* context)
       G4int numSelect = masterRM->GetNumberOfSelectEvents();
       if ( macroFile == "" || macroFile == " " )
       {
-        wrm->BeamOn(numevents,0,numSelect);
+          wrm->BeamOn(numevents,0,numSelect);
       }
       else
       {
-        wrm->BeamOn(numevents,macroFile,numSelect);
+          wrm->BeamOn(numevents,macroFile,numSelect);
       }
     }
     else

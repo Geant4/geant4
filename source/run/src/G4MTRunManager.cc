@@ -201,6 +201,15 @@ void G4MTRunManager::SetNumberOfThreads(G4int n )
     }
 }
 
+void G4MTRunManager::Initialize()
+{
+    G4RunManager::Initialize();
+
+    // make sure all worker threads are set up.
+    BeamOn(0);
+    SetRunIDCounter(0);
+}
+
 void G4MTRunManager::TerminateEventLoop()
 {
     //Nothing to do
@@ -254,8 +263,10 @@ void G4MTRunManager::CreateAndStartWorkers()
 
 void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile, G4int n_select)
 {
-    MTkernel->SetUpDecayChannels();
+  MTkernel->SetUpDecayChannels();
 
+  if(n_event>0)
+  {
     numberOfEventToBeProcessed = n_event;
     numberOfEventProcessed = 0;
     nSeedsUsed = 0;
@@ -300,7 +311,7 @@ void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile, G
       eventModulo = int(std::sqrt(double(numberOfEventToBeProcessed/nworkers)));
       if(eventModulo<1) eventModulo =1;
     }
-    if ( InitializeSeeds(n_event) == false )
+    if ( InitializeSeeds(n_event) == false && n_event>0 )
     {
         G4RNGHelper* helper = G4RNGHelper::GetInstance();
         nSeedsFilled = n_event;
@@ -309,20 +320,21 @@ void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile, G
         masterRNGEngine->flatArray(nSeedsPerEvent*nSeedsFilled,randDbl); 
         helper->Fill(randDbl,nSeedsFilled,n_event,nSeedsPerEvent);
     }
+  }
+  
+  //Now initialize workers. Check if user defined a WorkerThreadInitialization
+  if ( userWorkerThreadInitialization == 0 )
+  { userWorkerThreadInitialization = new G4UserWorkerThreadInitialization(); }
     
-    //Now initialize workers. Check if user defined a WorkerThreadInitialization
-    if ( userWorkerThreadInitialization == 0 )
-    { userWorkerThreadInitialization = new G4UserWorkerThreadInitialization(); }
-    
-    //Prepare UI commands for threads
-    PrepareCommandsStack();
+  //Prepare UI commands for threads
+  PrepareCommandsStack();
 
-    //Start worker threads
-    CreateAndStartWorkers();
+  //Start worker threads
+  CreateAndStartWorkers();
     
-    // We need a barrier here. Wait for workers to start event loop.
-    //This will return only when all workers have started processing events.
-    WaitForReadyWorkers();
+  // We need a barrier here. Wait for workers to start event loop.
+  //This will return only when all workers have started processing events.
+  WaitForReadyWorkers();
 }
 
 void G4MTRunManager::RefillSeeds()
@@ -339,14 +351,14 @@ void G4MTRunManager::RefillSeeds()
     
 void G4MTRunManager::RunTermination()
 {
-    //Wait for all worker threads to have finished the run
-    //i.e. wait for them to return from RunTermination()
-    //This guarantee that userrunaction for workers has been called
+  //Wait for all worker threads to have finished the run
+  //i.e. wait for them to return from RunTermination()
+  //This guarantee that userrunaction for workers has been called
 
-    // Wait now for all threads to finish event-loop
-    WaitForEndEventLoopWorkers();
-    //Now call base-class methof
-    G4RunManager::RunTermination();
+  // Wait now for all threads to finish event-loop
+  WaitForEndEventLoopWorkers();
+  //Now call base-class methof
+  G4RunManager::RunTermination();
 }
 
 
