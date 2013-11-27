@@ -266,6 +266,13 @@ void G4UImanager::AddWorkerCommand(G4UIcommand * newCommand)
 void G4UImanager::RemoveCommand(G4UIcommand * aCommand)
 {
   treeTop->RemoveCommand( aCommand );
+  if(fMasterUImanager!=0&&G4Threading::G4GetThreadId()==0)
+  { fMasterUImanager->RemoveWorkerCommand(aCommand); }
+}
+
+void G4UImanager::RemoveWorkerCommand(G4UIcommand * aCommand)
+{
+  treeTop->RemoveCommand( aCommand, true );
 }
 
 void G4UImanager::ExecuteMacroFile(const char * fileName)

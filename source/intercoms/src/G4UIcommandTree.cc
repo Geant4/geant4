@@ -113,8 +113,9 @@ void G4UIcommandTree::AddNewCommand(G4UIcommand *newCommand, G4bool workerThread
   }
 }
 
-void G4UIcommandTree::RemoveCommand(G4UIcommand *aCommand)
+void G4UIcommandTree::RemoveCommand(G4UIcommand *aCommand, G4bool workerThreadOnly)
 {
+  if(workerThreadOnly && !(aCommand->IsWorkerThreadOnly())) return;
   G4String commandPath = aCommand->GetCommandPath();
   G4String remainingPath = commandPath;
   remainingPath.remove(0,pathName.length());

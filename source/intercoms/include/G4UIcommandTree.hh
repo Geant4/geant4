@@ -52,7 +52,7 @@ class G4UIcommandTree
 
   public:
       void AddNewCommand(G4UIcommand * newCommand, G4bool workerThreadOnly=false);
-      void RemoveCommand(G4UIcommand * aCommand);
+      void RemoveCommand(G4UIcommand * aCommand, G4bool workerThreadOnly=false);
       G4UIcommand* FindPath(const char* commandPath) const;
       G4UIcommandTree* FindCommandTree(const char* commandPath);
       G4String CompleteCommandPath(const G4String& commandPath);

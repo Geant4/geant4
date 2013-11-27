@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 November, 2013 M. Asai (intercoms-V09-06-16)
+- G4GenericMessenger : introducing two methods for declaring a method
+  that has a unit. This solves the issue of G4GenericMessenger in
+  multi-threaded mode.
+
 21 November, 2013 M. Asai (intercoms-V09-06-15)
 - G4UIcommandTree : add a protection against a G4UIcommandTree object
   that does not have any guidance.

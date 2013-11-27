@@ -78,7 +78,6 @@ class G4UImanager : public G4VStateDependent
       // returned if the given command is not defined or the command does
       // not support the GetCurrentValues() method.
       void AddNewCommand(G4UIcommand * newCommand);
-      void AddWorkerCommand(G4UIcommand * newCommand);
       //  This method register a new command.
       void RemoveCommand(G4UIcommand * aCommand);
       //  This command remove the registered command. After invokation of this
@@ -123,6 +122,9 @@ class G4UImanager : public G4VStateDependent
       void CreateHTML(const char* dir = "/");
       //  Generate HTML files for defined UI commands
 
+  private:
+      void AddWorkerCommand(G4UIcommand * newCommand);
+      void RemoveWorkerCommand(G4UIcommand * aCommand);
 
   public:
       void LoopS(const char* valueList);
