@@ -703,7 +703,7 @@ Interpolate(G4int Z1, G4int Z2, G4int Z, G4double x1, G4double x2)
 { 
 //   Nucleon numbers obtained from G4NistManager G4 8.0
 
-  static G4ThreadLocal G4double alpha = 2./3.;
+  static const G4double alpha = 2./3.;
 
   static const G4double A[92] = 
   {
