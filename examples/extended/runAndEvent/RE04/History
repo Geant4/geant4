@@ -13,6 +13,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 26, 2013 M. Asai (exampleRE04-V09-06-06)
+- Remove old local physics list and use FTFP_BERT and physics
+  constructor for G4ParallelWOrldProcess.
+
 Nov 21, 2013 M. Asai (exampleRE04-V09-06-05)
 - Fix incorrect material names used in the parallel world.
 

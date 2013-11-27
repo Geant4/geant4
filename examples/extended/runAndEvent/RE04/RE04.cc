@@ -47,8 +47,9 @@
 #include "RE04ActionInitialization.hh"
 #include "RE04DetectorConstruction.hh"
 #include "RE04ParallelWorldConstruction.hh"
-#include "RE04PhysicsList.hh"
 
+#include "FTFP_BERT.hh"
+#include "G4ParallelWorldPhysics.hh"
 
 int main(int argc,char** argv)
 {
@@ -73,12 +74,14 @@ int main(int argc,char** argv)
  realWorld->RegisterParallelWorld(parallelWorld);
  runManager->SetUserInitialization(realWorld);
  //
- G4VUserPhysicsList* physics = new RE04PhysicsList(paraWorldName);
- runManager->SetUserInitialization(physics);
+ G4VModularPhysicsList* physicsList = new FTFP_BERT;
+ physicsList->RegisterPhysics
+       (new G4ParallelWorldPhysics(paraWorldName,true));
+ runManager->SetUserInitialization(physicsList);
     
  // Set user action classes
  //
-  runManager->SetUserInitialization(new RE04ActionInitialization);
+ runManager->SetUserInitialization(new RE04ActionInitialization);
   
 #ifdef G4VIS_USE
  // Visualization manager
