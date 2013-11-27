@@ -47,6 +47,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
 
+#include "G4RegionStore.hh"
+
 Par01DetectorConstruction::Par01DetectorConstruction()
 {;}
 
@@ -133,12 +135,12 @@ G4VPhysicalVolume* Par01DetectorConstruction::Construct()
   // -- and placements inside the calorimeter:
   G4int copyNo=0;
   G4double xTlate, yTlate;
-  G4int nX = 48;
-  G4int nY = 48;
-  for (G4int j = 0; j < nY; j++)
+  fnX = 48;
+  fnY = 48;
+  for (G4int j = 0; j < fnY; j++)
     {
       yTlate = -detectSize + 3*CrystalY + j*2*CrystalY;
-      for (G4int i = 0; i < nX; i++)
+      for (G4int i = 0; i < fnX; i++)
         {
           xTlate = -detectSize + 3*CrystalX + i*2*CrystalX;
           new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
@@ -181,12 +183,12 @@ G4VPhysicalVolume* Par01DetectorConstruction::Construct()
   
   // -- and placements inside the calorimeter:
   copyNo=0;
-  G4int nXhad = 23;
-  G4int nYhad = 23;
-  for (G4int jj = 0; jj < nYhad; jj++)
+  fnXhad = 23;
+  fnYhad = 23;
+  for (G4int jj = 0; jj < fnYhad; jj++)
     {
       yTlate = -detectSize + 3*TowerY + jj*2*TowerY;
-      for (G4int i = 0; i < nXhad; i++)
+      for (G4int i = 0; i < fnXhad; i++)
          {
           xTlate = -detectSize + 3*TowerX + i*2*TowerX;
            new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0*cm),
@@ -197,23 +199,8 @@ G4VPhysicalVolume* Par01DetectorConstruction::Construct()
     }
   
   
-  //--------- Sensitive detector -------------------------------------
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
-  G4String calorimeterSDname = "Par01/Calorimeter";
-  Par01CalorimeterSD* CalorimeterSD = new Par01CalorimeterSD( calorimeterSDname,
-                                                              nX*nY,
-                                                              "CalCollection" );
-  SDman->AddNewDetector( CalorimeterSD );
-  fCrystalLog->SetSensitiveDetector(CalorimeterSD); 
-
-   G4String hadCalorimeterSDname = "Par01/HadronCalorimeter";
-   Par01CalorimeterSD* HadCalorimeterSD = new Par01CalorimeterSD( hadCalorimeterSDname,
-                                                                  nXhad*nYhad,
-                                                                  "HadCollection" );
-   SDman->AddNewDetector( HadCalorimeterSD );
-   fTowerLog->SetSensitiveDetector(HadCalorimeterSD); 
+ 
   
-  //------------------ Parameterisation Models --------------------------
   // -- Makes the calorimeterLog volume becoming a G4Region: 
    G4Region* caloRegion = new G4Region("EM_calo_region");
    caloRegion->AddRootLogicalVolume(calorimeterLog);
@@ -221,12 +208,8 @@ G4VPhysicalVolume* Par01DetectorConstruction::Construct()
    cuts.push_back(1.0*mm);cuts.push_back(1.0*mm);cuts.push_back(1.0*mm);cuts.push_back(1.0*mm);
    caloRegion->SetProductionCuts(new G4ProductionCuts());
    caloRegion->GetProductionCuts()->SetProductionCuts(cuts);
-  // builds a model and sets it to the envelope of the calorimeter:
-   new Par01EMShowerModel("emShowerModel",caloRegion);
-   // -- to fix : uncomment for seeing warning message with /param/showSetup command
-   // -- new Par01PiModel(caloRegion);
 
-   // ---------------- Makes had. calo a region too ------------------
+   //  Makes had. calo a region to:
    G4Region* hadRegion = new G4Region("HAD_calo_region");
    hadRegion->AddRootLogicalVolume(hadCaloLog);
    cuts.clear();
@@ -272,3 +255,28 @@ G4VPhysicalVolume* Par01DetectorConstruction::Construct()
   return WorldPhys;
 }
 
+void Par01DetectorConstruction::ConstructSDandField()
+{
+  //--------- Sensitive detector -------------------------------------
+  G4SDManager* SDman = G4SDManager::GetSDMpointer();
+  G4String calorimeterSDname = "Par01/Calorimeter";
+  Par01CalorimeterSD* CalorimeterSD = new Par01CalorimeterSD( calorimeterSDname,
+                                                              fnX*fnY,
+                                                              "CalCollection" );
+  SDman->AddNewDetector( CalorimeterSD );
+  fCrystalLog->SetSensitiveDetector(CalorimeterSD); 
+  
+  G4String hadCalorimeterSDname = "Par01/HadronCalorimeter";
+  Par01CalorimeterSD* HadCalorimeterSD = new Par01CalorimeterSD( hadCalorimeterSDname,
+                                                                 fnXhad*fnYhad,
+                                                                 "HadCollection" );
+  SDman->AddNewDetector( HadCalorimeterSD );
+  fTowerLog->SetSensitiveDetector(HadCalorimeterSD); 
+  
+  // --------------- fast simulation ----------------------------
+  G4RegionStore* regionStore = G4RegionStore::GetInstance();
+  
+  G4Region* caloRegion = regionStore->GetRegion("EM_calo_region");
+  // builds a model and sets it to the envelope of the calorimeter:
+  new Par01EMShowerModel("emShowerModel",caloRegion);
+}

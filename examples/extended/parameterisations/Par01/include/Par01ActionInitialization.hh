@@ -23,32 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: Par01ActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-// $Id$
-//
+/// \file Par01ActionInitialization.hh
+/// \brief Definition of the Par01ActionInitialization class
 
-#ifndef Par01SteppingActionMessenger_h
-#define Par01SteppingActionMessenger_h 1
+#ifndef Par01ActionInitialization_h
+#define Par01ActionInitialization_h 1
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
-#include "G4UIcommand.hh"
+#include "G4VUserActionInitialization.hh"
 
-class Par01SteppingAction;
-class G4UIdirectory;
-class G4UIcmdWithABool;
+/// Action initialization class.
+///
 
-
-class Par01SteppingActionMessenger: public G4UImessenger
+class Par01ActionInitialization : public G4VUserActionInitialization
 {
-public:
-  Par01SteppingActionMessenger(Par01SteppingAction *SA);
-  virtual void SetNewValue(G4UIcommand* command, G4String newValues);
-private:
-  Par01SteppingAction* fSteppingAction;
-  G4UIdirectory*       fStepDirectory;
-  G4UIcmdWithABool*    fDrawStepCmd;
+  public:
+    Par01ActionInitialization();
+    virtual ~Par01ActionInitialization();
+
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 };
 
 #endif
 
+    

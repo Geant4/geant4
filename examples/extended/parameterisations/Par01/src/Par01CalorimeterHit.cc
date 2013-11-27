@@ -35,7 +35,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4ios.hh"
 
-G4Allocator<Par01CalorimeterHit> Par01CalorimeterHitAllocator;
+G4ThreadLocal G4Allocator<Par01CalorimeterHit>* Par01CalorimeterHitAllocator=0;
 
 Par01CalorimeterHit::Par01CalorimeterHit()
 {fLogV=NULL;}

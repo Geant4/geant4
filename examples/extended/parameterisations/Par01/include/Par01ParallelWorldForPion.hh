@@ -38,6 +38,8 @@ public:
   
 private:
   virtual void Construct();
+  virtual void ConstructSD();
+
 };
 
 #endif

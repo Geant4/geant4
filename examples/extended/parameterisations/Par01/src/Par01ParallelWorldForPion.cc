@@ -36,6 +36,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
 
+#include "G4RegionStore.hh"
+
 Par01ParallelWorldForPion::Par01ParallelWorldForPion(G4String worldName)
   : G4VUserParallelWorld(worldName)
 {;}
@@ -89,6 +91,14 @@ void Par01ParallelWorldForPion::Construct()
   ghostRegion->AddRootLogicalVolume(ghostLogical);
   G4cout << "... succes.\n" << G4endl;
   
+}
+
+
+void Par01ParallelWorldForPion::ConstructSD()
+{
+  G4RegionStore* regionStore = G4RegionStore::GetInstance();
+  
+  G4Region* ghostRegion = regionStore->GetRegion("GhostCalorimeterRegion");
   // -- Attach fast simulation model (create the G4FastSimulationManager if needed):
   new Par01PionShowerModel("ghostPionShowerModel",ghostRegion);
   

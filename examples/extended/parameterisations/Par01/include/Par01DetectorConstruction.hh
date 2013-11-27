@@ -39,14 +39,17 @@ class Par01DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
   Par01DetectorConstruction();
-  ~Par01DetectorConstruction();
+  virtual ~Par01DetectorConstruction();
   
 public:
   virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
 
 private:
   G4LogicalVolume* fCrystalLog;
-  G4LogicalVolume* fTowerLog;
+  G4LogicalVolume*   fTowerLog;
+  G4int    fnX,    fnY;
+  G4int fnXhad, fnYhad;
 };
 
 

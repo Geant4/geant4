@@ -23,38 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: Par01ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-// $Id$
-//
+/// \file Par01ActionInitialization.cc
+/// \brief Implementation of the Par01ActionInitialization class
 
-// Make this appear first!
-#include "G4Timer.hh"
+#include "Par01ActionInitialization.hh"
+#include "Par01PrimaryGeneratorAction.hh"
 
-#include "Par01RunAction.hh"
-#include "G4Run.hh"
-#include "G4UImanager.hh"
-#include "G4ios.hh"
 
-Par01RunAction::Par01RunAction()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+Par01ActionInitialization::Par01ActionInitialization()
+ : G4VUserActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+Par01ActionInitialization::~Par01ActionInitialization()
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Par01ActionInitialization::BuildForMaster() const
 {
-  fTimer = new G4Timer;
 }
 
-Par01RunAction::~Par01RunAction()
-{
-  delete fTimer;
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Par01RunAction::BeginOfRunAction(const G4Run* aRun)
+void Par01ActionInitialization::Build() const
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  //  timer->Start();
-}
+  SetUserAction(new Par01PrimaryGeneratorAction);
+}  
 
-void Par01RunAction::EndOfRunAction(const G4Run* aRun)
-{
-  fTimer->Stop();
-  G4cout << "number of event = " << aRun->GetNumberOfEvent() << G4endl;
-  //       << " " << *timer << G4endl;
-}
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

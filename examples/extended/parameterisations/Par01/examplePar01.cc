@@ -36,13 +36,10 @@
 // i.e. "Fast Simulation"
 //-------------------------------------------------------------------
 
-//------------------------------
-// Run, Generator etc.. actions:
-//------------------------------
-#include "Par01RunAction.hh"
+//-------------------
+// Generator action:
+//-------------------
 #include "Par01PrimaryGeneratorAction.hh"
-#include "Par01EventAction.hh"
-#include "Par01SteppingAction.hh"
 
 //---------------------------
 // Parameterisation manager:
@@ -62,8 +59,12 @@
 #include "Par01PhysicsList.hh"
 
 #include "G4UImanager.hh"
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
-#include "G4RunManagerKernel.hh"
+#endif
+#include "Par01ActionInitialization.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -78,8 +79,18 @@ int main(int argc, char** argv)
   //-------------------------------
   // Initialization of Run manager
   //-------------------------------
-  G4cout << "RunManager construction starting...." << G4endl;
+#ifdef G4MULTITHREADED
+  G4MTRunManager * runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(4);
+  G4cout<<"+-------------------------------------------------------+"<<G4endl;
+  G4cout<<"|              Constructing MT run manager              |"<<G4endl;
+  G4cout<<"+-------------------------------------------------------+"<<G4endl;
+#else
   G4RunManager * runManager = new G4RunManager;
+  G4cout<<"+-------------------------------------------------------+"<<G4endl;
+  G4cout<<"|        Constructing sequential run manager            |"<<G4endl;
+  G4cout<<"+-------------------------------------------------------+"<<G4endl;
+#endif
 
   // Detector/mass geometry and parallel geometry(ies):
   G4VUserDetectorConstruction* detector = new Par01DetectorConstruction();
@@ -96,17 +107,7 @@ int main(int argc, char** argv)
   //-------------------------------
   // UserAction classes
   //-------------------------------
-  G4UserRunAction* run_action = new Par01RunAction;
-  runManager->SetUserAction(run_action);
-  //
-  G4VUserPrimaryGeneratorAction* gen_action = new Par01PrimaryGeneratorAction;
-  runManager->SetUserAction(gen_action);
-  //
-  G4UserEventAction* event_action = new Par01EventAction;
-  runManager->SetUserAction(event_action);
-  //
-  G4UserSteppingAction* stepping_action = new Par01SteppingAction;
-  runManager->SetUserAction(stepping_action);
+  runManager->SetUserInitialization( new Par01ActionInitialization );
 
   // Initialize Run manager
   runManager->Initialize();
@@ -120,24 +121,13 @@ int main(int argc, char** argv)
   visManager -> Initialize ();
 #endif
 
-  // Setup commands
-  //
-  G4UImanager * UImanager = G4UImanager::GetUIpointer();
-  UImanager->ApplyCommand("/Step/Verbose 0");
-  UImanager->ApplyCommand("/tracking/Verbose 1");
-  UImanager->ApplyCommand("/gun/particle e-");
-  UImanager->ApplyCommand("/gun/energy 100 MeV");
-  UImanager->ApplyCommand("/gun/direction 0 0 1");
-  UImanager->ApplyCommand("/gun/position 0 0 0");
-  UImanager->ApplyCommand("/gun/direction 0 .3 1.");
-
   if(argc==1)
   {
     //--------------------------
     // Define (G)UI
     //--------------------------
 #ifdef G4UI_USE
-    G4UIExecutive * ui = new G4UIExecutive(argc,argv);
+    G4UIExecutive * ui = new G4UIExecutive(argc, argv);
     ui->SessionStart();
     delete ui;
 #endif
@@ -146,6 +136,7 @@ int main(int argc, char** argv)
   {
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
+    G4UImanager * UImanager = G4UImanager::GetUIpointer();
     UImanager->ApplyCommand(command+fileName);
   }
 
