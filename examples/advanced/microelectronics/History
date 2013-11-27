@@ -9,6 +9,9 @@ $Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
                        Package History file
                        --------------------
 
+27 November 2013 - G. Folger - microelectronics-V09-06-02
+    remove setting number of threads from macro files
+
 31 October 2013 - L. Pandola - microelectronics-V09-06-01
 	 Edited CMakeLists.txt to make the test work on 
 	 Windows

@@ -3,7 +3,6 @@
 /process/eLoss/verbose 1
 /gun/particle proton
 /gun/energy 50 MeV
-/run/numberOfThreads 2
 /run/initialize
 /run/beamOn 1
 /gun/particle alpha
