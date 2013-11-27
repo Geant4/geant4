@@ -254,25 +254,22 @@ G4VPhysicalVolume* F01DetectorConstruction::ConstructCalorimeter()
                                   0);                      // copy number
   // Absorber
 
-  if (fAbsorberThickness > 0.)
-  {
-      fSolidAbsorber = new G4Tubs("Absorber", 1.0*mm,
-                                  fAbsorberRadius,
-                                  fAbsorberThickness/2.,
-                                  0.0,twopi);
+  fSolidAbsorber = new G4Tubs("Absorber", 1.0*mm,
+                              fAbsorberRadius,
+                              fAbsorberThickness/2.,
+                              0.0,twopi);
 
-      fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber,
-                                           fAbsorberMaterial,
-                                           "Absorber");
+  fLogicAbsorber = new G4LogicalVolume(fSolidAbsorber,
+                                       fAbsorberMaterial,
+                                       "Absorber");
 
-      fPhysiAbsorber = new G4PVPlacement(0,
-                                         G4ThreeVector(0.,0.,fZAbsorber),
-                                         "Absorber",
-                                         fLogicAbsorber,
-                                         fPhysiWorld,
-                                         false,
+  fPhysiAbsorber = new G4PVPlacement(0,
+                                     G4ThreeVector(0.,0.,fZAbsorber),
+                                     "Absorber",
+                                     fLogicAbsorber,
+                                     fPhysiWorld,
+                                     false,
                                          0);
-  }
 
   return fPhysiWorld;
 }
@@ -389,9 +386,9 @@ void F01DetectorConstruction::ConstructSDandField()
 
   if (!fCalorimeterSD.Get()) {
     F01CalorimeterSD* calorimeterSD = new F01CalorimeterSD("CalorSD",this);
-    SetSensitiveDetector(fLogicAbsorber, calorimeterSD);
     fCalorimeterSD.Put(calorimeterSD);
   }  
+  SetSensitiveDetector(fLogicAbsorber, fCalorimeterSD.Get());
 
   // Construct the field creator - this will register the field it creates
   if (!fEmFieldSetup.Get()) { 
