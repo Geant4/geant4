@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 26, 2013 - I.Hrivnacova - fieldex03-V09-06-05
+- Fixed ConstructSDandField():
+  Moved setting the SD and field manager to logical volume outside the tests
+- Do not test (fAbsorberThickness > 0.) in ConstructCalorimeter()
+  as setting 0 is not allowed in set command  
+
 November 25, 2013 - I.Hrivnacova - fieldex03-V09-06-04
 - Put back cleaning volumes and solid stores in ConstructGeometry()
 
