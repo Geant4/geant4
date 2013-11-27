@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 27, 2013, M. Verderi -  biasingGB01-V09-06-01
+- improve GB01BOptrMultiParticleChangeCrossSection operator,
+  showing how to apply biasing under some conditions.
+  And save some random number shooting.
+- add test.
+
 Nov 8, 2013 M. Verderi - biasingGB01-V09-06-00
 - Creation
 

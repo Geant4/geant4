@@ -105,6 +105,10 @@ private:
              GB01BOptrChangeCrossSection* >    fBOptrForParticle;
   std::vector < const G4ParticleDefinition* >   fParticlesToBias;
   GB01BOptrChangeCrossSection*                  fCurrentOperator;
+
+  // -- count number of biased interations for current track:
+  G4int fnInteractions;
+  const G4Track* fTrack;
 };
 
 #endif

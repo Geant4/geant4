@@ -16,9 +16,16 @@ GB01BOptrChangeCrossSection::GB01BOptrChangeCrossSection(G4String particleName,
     fSetup(true)
 {
   fParticleToBias = G4ParticleTable::GetParticleTable()->FindParticle(particleName);
-  // --> put a G4Exception
-  if ( fParticleToBias == 0 ) G4cout << " ********* particle not found ****** " << G4endl;
   
+  if ( fParticleToBias == 0 )
+    {
+      G4ExceptionDescription ed;
+      ed << "Particle `" << particleName << "' not found !" << G4endl;
+      G4Exception("GB01BOptrChangeCrossSection(...)",
+                  "exGB01.01",
+                  JustWarning,
+                  ed);
+    }
 }
 
 GB01BOptrChangeCrossSection::~GB01BOptrChangeCrossSection()
@@ -31,19 +38,18 @@ GB01BOptrChangeCrossSection::~GB01BOptrChangeCrossSection()
 
 G4VBiasingOperation* 
 GB01BOptrChangeCrossSection::ProposeOccurenceBiasingOperation(const G4Track*            track, 
-                                                                 const G4BiasingProcessInterface*
-                                                                                  callingProcess)
+                                                              const G4BiasingProcessInterface*
+                                                                               callingProcess)
 {
 
   // -- Check if current particle type is the one to bias:
   if ( track->GetDefinition() != fParticleToBias ) return 0;
 
-  // ---------------
-  // -- Setup stage:
-  // ---------------
-  // -- ( Might consider moving this in a less called method. )
-  // -- Start by remembering processes under biasing, create needed biasing operations
-  // -- and assocation operations to processes:
+  // -----------------------------------------------------------------------
+  // -- Setup stage ( Might consider moving this in a less called method. ):
+  // -----------------------------------------------------------------------
+  // -- Start by collecting processes under biasing, create needed biasing operations
+  // -- and assocation operations to these processes:
   if ( fSetup )
     {
       if ( ( fFirstProcess == 0 ) && 
@@ -63,9 +69,13 @@ GB01BOptrChangeCrossSection::ProposeOccurenceBiasingOperation(const G4Track*    
     }
 
 
-  // -- Check if the analog cross-section undefined : this is for example the case of conversion
-  // -- when a gamma is below e+e- creation threshold. Does nothing (ie, let analog
-  // -- process to deal with the case)
+
+  // ---------------------------------------------------------------------
+  // -- select and setup the biasing operation for current callingProcess:
+  // ---------------------------------------------------------------------
+  // -- Check if the analog cross-section well defined : for example, the conversion
+  // -- process for a gamma below e+e- creation threshold has an DBL_MAX interaction
+  // -- length. Nothing is done in this case (ie, let analog process to deal with the case)
   G4double analogInteractionLength =  
     callingProcess->GetWrappedProcess()->GetCurrentInteractionLength();
   if ( analogInteractionLength > DBL_MAX/10. ) return 0;
@@ -74,30 +84,58 @@ GB01BOptrChangeCrossSection::ProposeOccurenceBiasingOperation(const G4Track*    
   G4double analogXS = 1./analogInteractionLength;
 
   // -- Choose a constant cross-section bias. But at this level, this factor can be made
-  // -- direction dependent, like in the exponential transform MCNP case.
+  // -- direction dependent, like in the exponential transform MCNP case, or it
+  // -- can be chosen differently, depending on the process, etc.
   G4double XStransformation = 2.0 ;
   
-  G4BOptnChangeCrossSection* operation = fChangeCrossSectionOperations[callingProcess];
-  // if ( ( callingProcess->GetPreviousOccurenceBiasingOperation() == operation ) &&
-  //      ! operation->GetInteractionOccured() )
-  //   {
-  //     // -- operation proposed in previous step, but interaction did not occur
-  //     // -- Update #int length for this step, and set new XS value:
-  //     operation->UpdateForStep( callingProcess->GetPreviousStepSize() );
-  //     operation->SetBiasedCrossSection( XStransformation * analogXS );
-  //   }
-  // else
-  //   {
-  //     // -- operation is new or interaction occured : we (re)sample:
-  //     operation->SetBiasedCrossSection( XStransformation * analogXS );
-  //     operation->Sample();
-  //   }
+  // -- fetch the operation associated to this callingProcess:
+  G4BOptnChangeCrossSection*   operation = fChangeCrossSectionOperations[callingProcess];
+  // -- get the operation that was proposed to the process in the previous step:
+  G4VBiasingOperation* previousOperation = callingProcess->GetPreviousOccurenceBiasingOperation();
   
-  operation->SetBiasedCrossSection( XStransformation * analogXS );
-  operation->Sample();
-
-  // G4cout << callingProcess->GetProcessName() << " returning operation " << 
-  // operation->GetName() << G4endl;
+  // -- now setup the operation to be returned to the process: this
+  // -- consists in setting the biased cross-section, and in asking
+  // -- the operation to sample its exponential interaction law.
+  // -- To do this, to first order, the two lines:
+  //        operation->SetBiasedCrossSection( XStransformation * analogXS );
+  //        operation->Sample();
+  // -- are correct and sufficient.
+  // -- But, to avoid having to shoot a random number each time, we sample
+  // -- only on the first time the operation is proposed, or if the interaction
+  // -- occured. If the interaction did not occur for the process in the previous,
+  // -- we update the number of interaction length instead of resampling.
+  if ( previousOperation == 0 )
+    {
+      operation->SetBiasedCrossSection( XStransformation * analogXS );
+      operation->Sample();
+    }
+  else
+    {
+      if (  previousOperation != operation )
+        {
+          // -- should not happen !
+          G4ExceptionDescription ed;
+          ed << " Logic problem in operation handling !" << G4endl;
+          G4Exception("GB01BOptrChangeCrossSection::ProposeOccurenceBiasingOperation(...)",
+                      "exGB01.02",
+                      JustWarning,
+                      ed);
+          return 0;
+        }
+      if ( operation->GetInteractionOccured() )
+        {
+          operation->SetBiasedCrossSection( XStransformation * analogXS );
+          operation->Sample();
+        }
+      else
+        {
+          operation->UpdateForStep( callingProcess->GetPreviousStepSize() );
+          operation->SetBiasedCrossSection( XStransformation * analogXS );
+        }
+    }
+  
+  //  operation->SetBiasedCrossSection( XStransformation * analogXS );
+  //  operation->Sample();
 
   return operation;
   
