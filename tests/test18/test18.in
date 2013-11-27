@@ -17,12 +17,10 @@
 #
 /control/verbose 2
 /run/verbose 1
-/run/numberOfThreads 1
 /event/verbose 0
 /tracking/verbose 0
 /process/verbose 1
 /grdm/verbose 0
-/particle/createAllIsomer
 /gun/energy 1 MeV
 /gun/particle ion
 #
