@@ -16,6 +16,11 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+27 November 2013 - Gabriele Cosmo (hadr-inclxx-V09-06-46)
+---------------------------------------------------------------
+- Fix in G4INCLBinaryCollisionAvatar for compilation error in MT mode
+  on the icc compiler.
+
 19 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-44, -45)
 ---------------------------------------------------------------
 - Resample interaction if four-momentum conservation is violated.
