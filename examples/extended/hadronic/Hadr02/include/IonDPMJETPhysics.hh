@@ -83,9 +83,11 @@ private:
   G4VCrossSectionDataSet* fShen;
   G4VCrossSectionDataSet* fIonH;
   G4BinaryLightIonReaction*  fIonBC;
+#ifdef G4_USE_DPMJET
   G4DPMJET2_5Model*          fDPM;
   G4DPMJET2_5CrossSection*   fDpmXS;
   G4bool                  fUseDPMJETXS;
+#endif
 };
 
 #endif
