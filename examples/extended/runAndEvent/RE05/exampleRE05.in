@@ -3,10 +3,12 @@
 /mydet/reqmuon 1
 /mydet/isomuon 1
 #
-/run/numberOfThreads 1
-/control/verbose  1
-/event/verbose 0
-/tracking/verbose 0
-/run/beamOn 1
+/particle/createAllIon
+/control/verbose 2
+/run/verbose 2
+/event/verbose 1
+/tracking/verbose 1
+/run/beamOn 100
+###/run/beamOn 40
 #
 

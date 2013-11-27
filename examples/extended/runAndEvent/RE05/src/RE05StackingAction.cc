@@ -145,12 +145,12 @@ void RE05StackingAction::NewStage()
     { G4cerr << "muonCollection NOT FOUND" << G4endl;
       return; }
     nhits = muonHits->entries();
-    G4cout << "Stage 0->1 : " << nhits << " hits found in the muon chamber."
-         << G4endl;
+////    G4cout << "Stage 0->1 : " << nhits << " hits found in the muon chamber."
+////         << G4endl;
     if(nhits<reqMuon)
     { 
       stackManager->clear();
-      G4cout << "++++++++ event aborted" << G4endl;
+////      G4cout << "++++++++ event aborted" << G4endl;
       return;
     }
     stackManager->ReClassify();
@@ -184,11 +184,11 @@ void RE05StackingAction::NewStage()
       }
       if(nhitIn<=reqIso) isoMuon++;
     }
-    G4cout << "Stage 1->2 : " << isoMuon << " isolated muon found." << G4endl;
+////    G4cout << "Stage 1->2 : " << isoMuon << " isolated muon found." << G4endl;
     if(isoMuon<reqIsoMuon)
     {
       stackManager->clear();
-      G4cout << "++++++++ event aborted" << G4endl;
+////      G4cout << "++++++++ event aborted" << G4endl;
       return;
     }
     stackManager->ReClassify();
