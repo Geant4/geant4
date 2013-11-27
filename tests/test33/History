@@ -15,6 +15,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 22nd, 2013 A. Howard  - test33-V09-06-06
+- Added missing header to Tst33IStoreBuilder.hh
+
+November 22nd, 2013 A. Howard  - test33-V09-06-05
+- Reduced to one configuration whilst trying to figure out singleton issues
+  with G4IStore
+
+November 22nd, 2013 A. Howard  - test33-V09-06-04
+- Migrated to new IStore and WeightWindowStore singleton instantiation
+  (required for MT interface compliance)
+
 November 7th, 2013 A. Ribon  - test33-V09-06-03
 - Added forgotten final-state method for neutron capture process.
 

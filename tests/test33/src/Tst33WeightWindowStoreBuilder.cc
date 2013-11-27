@@ -54,7 +54,7 @@ G4VWeightWindowStore *Tst33WeightWindowStoreBuilder::CreateWeightWindowStore(Tst
   const G4VPhysicalVolume &pworld = samplegeo->GetWorldVolumeAddress();
   G4cout << " weight window store name: " << pworld.GetName() << G4endl;
   G4WeightWindowStore *wwstore=0;
-  wwstore = new G4WeightWindowStore(pworld);
+  wwstore = G4WeightWindowStore::GetInstance(pworld.GetName());
 
 
   // weights for the world volume, general energy bounds

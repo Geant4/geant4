@@ -257,7 +257,7 @@ G4bool Tst33AppStarter::CheckCreateWeightWindowStore() {
 void Tst33AppStarter::CreateIStore() {
   if (CheckCreateIStore()) {
     Tst33IStoreBuilder ib;
-    fIStore = ib.CreateIStore(fSampleGeometry);
+    fIStore = ib.CreateIStore(fSampleGeometry,parallel_geometry);
     fSampler->PrepareImportanceSampling(fIStore);
   }
 }

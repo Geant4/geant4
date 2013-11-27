@@ -48,22 +48,28 @@ Tst33IStoreBuilder::Tst33IStoreBuilder()
 Tst33IStoreBuilder::~Tst33IStoreBuilder()
 {}
 
-G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo) {
+G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo, G4bool paraGeom) {
   // create an importance store and fill it with the importance
   // per cell values
 
   //  Tst33CellScorerStore tst33store;
-
   const G4VPhysicalVolume &pworld = samplegeo->GetWorldVolumeAddress();
   G4IStore *istore=0;
-  istore = new G4IStore(pworld);
+  if(paraGeom) {
+    istore = G4IStore::GetInstance(pworld.GetName());
+  } else {
+    istore = G4IStore::GetInstance();
+  }
   if (!istore) {
     G4Exception("Tst33IStoreBuilder::CreateIStore()", "TST33-04", 
                    FatalException, " new failed to create G4IStore!");
     }
   // adding GeometryCell for world volume. ReplicaNumer = 0, since  "geomvol-V05-00-01 !
   G4GeometryCell gWorldCell(pworld, 0);
+  G4cout << " got here 1" << G4endl;
+  G4cout << " pworld" << pworld.GetName() << G4endl;
   istore->AddImportanceGeometryCell(1, gWorldCell);
+  G4cout << " got here 2" << G4endl;
 
   //  tst33store.AddG4CellScorer(gWorldCell);
   
