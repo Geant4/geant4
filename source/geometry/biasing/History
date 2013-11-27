@@ -17,7 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 25th, 2013 A.Howard (geombias-V09-06-08)
+November 27th, 2013 A.Howard (geombias-V09-06-09)
+- Added SetWorldVolume and SetParallelWorldVolume methods to G4WeightWindowStore
+
+November 27th, 2013 A.Howard (geombias-V09-06-08)
 - Added SetWorldVolume and SetParallelWorldVolume methods to G4IStore
 
 November 25th, 2013 A.Howard (geombias-V09-06-07)

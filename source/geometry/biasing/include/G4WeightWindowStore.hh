@@ -87,12 +87,20 @@ public:  // with description
     // returns true if the gCell is in the store, else false 
 
 
+  void SetWorldVolume();
+    // set a pointer to the world volume of the 
+    // weightwindow geometry
+  void SetParallelWorldVolume(G4String paraName);
+    // set a pointer to the parallel world volume of the 
+    // weightwindow geometry
+
+
   virtual const G4VPhysicalVolume &GetWorldVolume() const;
-    // return a reference to the wolrd volume of the 
-    // geometry
+    // return a reference to the world volume of the 
+    // weightwindow geometry
   virtual const G4VPhysicalVolume* GetParallelWorldVolumePointer() const;
-    // return a pointer to the world volume of the 
-    // "importance" geometry
+    // return a pointer to the parallel world volume of the 
+    // weightwindow geometry
 
   void AddLowerWeights(const G4GeometryCell &gCell,
 		       const std::vector<G4double> &lowerWeights);
