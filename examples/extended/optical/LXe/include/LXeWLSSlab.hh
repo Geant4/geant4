@@ -58,8 +58,6 @@ class LXeWLSSlab : public G4PVPlacement
 
     LXeDetectorConstruction* fConstructor;
 
-    G4bool fUpdated;
-
     static G4LogicalVolume* fScintSlab_log;
 
     G4int fNfibers;

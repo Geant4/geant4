@@ -58,8 +58,6 @@ class LXeWLSFiber : public G4PVPlacement
 
     static G4LogicalVolume* fClad2_log;
 
-    G4bool fUpdated; //does the fiber need to be rebuilt
- 
     G4double fFiber_rmin;
     G4double fFiber_rmax;
     G4double fFiber_z;
