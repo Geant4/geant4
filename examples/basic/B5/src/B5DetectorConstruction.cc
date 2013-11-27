@@ -486,13 +486,12 @@ void B5DetectorConstruction::DefineCommands()
 
     // armAngle command
     G4GenericMessenger::Command& armAngleCmd
-      = fMessenger->DeclareMethod("armAngle", 
+      = fMessenger->DeclareMethodWithUnit("armAngle","deg",
                                   &B5DetectorConstruction::SetArmAngle, 
                                   "Set rotation angle of the second arm.");
     armAngleCmd.SetParameterName("angle", true);
     armAngleCmd.SetRange("angle>=0. && angle<180.");
     armAngleCmd.SetDefaultValue("30.");
-    armAngleCmd.SetDefaultUnit("deg");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -68,12 +68,11 @@ void B5MagneticField::DefineCommands()
 
     // fieldValue command 
     G4GenericMessenger::Command& valueCmd
-      = fMessenger->DeclareMethod("value", 
+      = fMessenger->DeclareMethodWithUnit("value","tesla",
                                   &B5MagneticField::SetField, 
                                   "Set field strength.");
     valueCmd.SetParameterName("field", true);
     valueCmd.SetDefaultValue("1.");
-    valueCmd.SetDefaultUnit("tesla");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

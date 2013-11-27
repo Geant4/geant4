@@ -135,39 +135,38 @@ void B5PrimaryGeneratorAction::DefineCommands()
               
     // momentum command
     G4GenericMessenger::Command& momentumCmd
-      = fMessenger->DeclareProperty("momentum", fMomentum, 
+      = fMessenger->DeclarePropertyWithUnit("momentum", "GeV", fMomentum, 
                                     "Mean momentum of primaries.");
     momentumCmd.SetParameterName("p", true);
     momentumCmd.SetRange("p>=0.");                                
     momentumCmd.SetDefaultValue("1.");
-    momentumCmd.SetDefaultUnit("GeV");
     // ok
     //momentumCmd.SetParameterName("p", true);
     //momentumCmd.SetRange("p>=0.");                                
     
     // sigmaMomentum command
     G4GenericMessenger::Command& sigmaMomentumCmd
-      = fMessenger->DeclareProperty("sigmaMomentum", fSigmaMomentum, 
-                                    "Sigma momentum of primaries.");
+      = fMessenger->DeclarePropertyWithUnit("sigmaMomentum",
+          "MeV", fSigmaMomentum, "Sigma momentum of primaries.");
     sigmaMomentumCmd.SetParameterName("sp", true);
     sigmaMomentumCmd.SetRange("sp>=0.");                                
     sigmaMomentumCmd.SetDefaultValue("50.");
-    sigmaMomentumCmd.SetDefaultUnit("MeV");
 
     // sigmaAngle command
     G4GenericMessenger::Command& sigmaAngleCmd
-      = fMessenger->DeclareProperty("sigmaAngle", fSigmaAngle, 
+      = fMessenger->DeclarePropertyWithUnit("sigmaAngle", "deg", fSigmaAngle, 
                                     "Sigma angle divergence of primaries.");
     sigmaAngleCmd.SetParameterName("t", true);
     sigmaAngleCmd.SetRange("t>=0.");                                
     sigmaAngleCmd.SetDefaultValue("2.");
-    sigmaAngleCmd.SetDefaultUnit("deg");
 
     // randomizePrimary command
     G4GenericMessenger::Command& randomCmd
       = fMessenger->DeclareProperty("randomizePrimary", fRandomizePrimary);
-    G4String guidance = "Boolean flag for randomizing primary particle types.\n";   
-    guidance += "In case this flag is false, you can select the primary particle\n";
+    G4String guidance
+       = "Boolean flag for randomizing primary particle types.\n";   
+    guidance
+       += "In case this flag is false, you can select the primary particle\n";
     guidance += "  with /gun/particle command.";                               
     randomCmd.SetGuidance(guidance);
     randomCmd.SetParameterName("flg", true);
