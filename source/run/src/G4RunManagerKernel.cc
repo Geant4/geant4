@@ -592,7 +592,7 @@ G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
 
   SetupShadowProcess();
   UpdateRegion();
-  if(!fakeRun) BuildPhysicsTables();
+  BuildPhysicsTables(fakeRun);
 
   if(geometryNeedsToBeClosed)
   {
@@ -613,7 +613,10 @@ G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
 }
 
 void G4RunManagerKernel::RunTermination()
-{ G4StateManager::GetStateManager()->SetNewState(G4State_Idle); }
+{
+  G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
+  G4StateManager::GetStateManager()->SetNewState(G4State_Idle); 
+}
 
 void G4RunManagerKernel::ResetNavigator()
 {
@@ -656,7 +659,7 @@ void G4RunManagerKernel::UpdateRegion()
   G4ProductionCutsTable::GetProductionCutsTable()->UpdateCoupleTable(currentWorld);
 }
 
-void G4RunManagerKernel::BuildPhysicsTables()
+void G4RunManagerKernel::BuildPhysicsTables(G4bool fakeRun)
 {
   if( G4ProductionCutsTable::GetProductionCutsTable()->IsModified()
   || physicsNeedsToBeReBuilt)
@@ -666,9 +669,9 @@ void G4RunManagerKernel::BuildPhysicsTables()
     physicsNeedsToBeReBuilt = false;
   }
 
-  if(verboseLevel>1) DumpRegion();
-  if(verboseLevel>0) physicsList->DumpCutValuesTable();
-  physicsList->DumpCutValuesTableIfRequested();
+  if(!fakeRun && verboseLevel>1) DumpRegion();
+  if(!fakeRun && verboseLevel>0) physicsList->DumpCutValuesTable();
+  if(!fakeRun) physicsList->DumpCutValuesTableIfRequested();
 }
 
 void G4RunManagerKernel::CheckRegions()

@@ -321,6 +321,8 @@ void G4WorkerRunManager::MergePartialResults()
 
 void G4WorkerRunManager::RunTermination()
 {
+  if(!fakeRun)
+  {
     MergePartialResults();
     
     //Call a user hook: note this is before the next barrier
@@ -329,16 +331,18 @@ void G4WorkerRunManager::RunTermination()
     const G4UserWorkerInitialization* uwi
        = G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
     if(uwi) uwi->WorkerRunEnd();
+  }
 
-    G4RunManager::RunTermination();
-    //Signal this thread has finished envent-loop.
-    //Note this will return only whan all threads reach this point
-    G4MTRunManager::GetMasterRunManager()->ThisWorkerEndEventLoop();
+  G4RunManager::RunTermination();
+  //Signal this thread has finished envent-loop.
+  //Note this will return only whan all threads reach this point
+  G4MTRunManager::GetMasterRunManager()->ThisWorkerEndEventLoop();
 
 }
 
+/****************************
 void G4WorkerRunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
-{
+{ 
   if(n_event>0) 
   { G4RunManager::BeamOn(n_event,macroFile,n_select); }
   else
@@ -348,6 +352,7 @@ void G4WorkerRunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_sele
     G4MTRunManager::GetMasterRunManager()->ThisWorkerEndEventLoop();
   }
 }
+******************************/
 
 #include "G4AutoLock.hh"
 namespace { G4Mutex ConstructScoringWorldsMutex = G4MUTEX_INITIALIZER; }

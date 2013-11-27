@@ -176,11 +176,13 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   geomCmd->SetGuidance(" after the first initialization (or BeamOn).");
   geomCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  geomRebCmd = new G4UIcmdWithoutParameter("/run/reinitializeGeometry",this);
+  geomRebCmd = new G4UIcmdWithABool("/run/reinitializeGeometry",this);
   geomRebCmd->SetGuidance("Force geometry to be rebuilt once again.");
   geomRebCmd->SetGuidance("This command must be applied if the user needs his/her");
   geomRebCmd->SetGuidance(" detector construction to be reinvoked.");
   geomRebCmd->SetGuidance("/run/geometryModified is automatically issued with this command.");
+  geomRebCmd->SetParameterName("destroyFirst",true);
+  geomRebCmd->SetDefaultValue(false);
   geomRebCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
   physCmd = new G4UIcmdWithoutParameter("/run/physicsModified",this);
@@ -377,7 +379,7 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   else if( command==geomCmd )
   { runManager->GeometryHasBeenModified(false); }
   else if( command==geomRebCmd )
-  { runManager->ReinitializeGeometry(false); }
+  { runManager->ReinitializeGeometry(geomRebCmd->GetNewBoolValue(newValue),false); }
   else if( command==physCmd )
   { runManager->PhysicsHasBeenModified(); }
   else if( command==seedCmd )

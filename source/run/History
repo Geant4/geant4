@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 26th, 2013, M. Asai (run-V09-06-134)
+- Protect G4WorkerRunManager::MergePartialResults() from a fake run.
+
+Nov 26th, 2013, M. Asai (run-V09-06-133)
+- Remove unnecessary overwriting BeamOn in G4WorkerRunManager.
+
+Nov 25th, 2013, M. Asai (run-V09-06-132)
+- BuildPhysicsTables() is now invoked even for a run with zero event.
+- ReinitializeGeometry(true) now wipes out G4PhysicalVolumeStore,
+  G4LogicalVolumeStore and G4SolidStore.
+
 Nov 25th, 2013, M. Asai (run-V09-06-131)
 - Fix how G4Region split class is re-initialized for the second run.
 - Recover necessary procedures in RunInitialization() that were removed

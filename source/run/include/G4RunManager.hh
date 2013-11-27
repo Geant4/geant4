@@ -444,11 +444,15 @@ public: // with description
     //  The parameter "prop" has to be true if this C++ method is directly
     // invoked.
 
-    void ReinitializeGeometry(G4bool prop=true);
+    void ReinitializeGeometry(G4bool destroyFirst=false, G4bool prop=true);
     //  This method must be invoked (or equivalent UI command can be used)
     // in case the user needs his/her detector construction has to be
     // re-invoked. Re-voxelization will be also done.
-    //  The parameter "prop" has to be true if this C++ method is directly
+    //  If the first parameter "destroyFirst" is true, G4SolidStore,
+    // G4LogicalVolumeStore and G4PhysicalVolumeStore are cleaned up, and
+    // thus all solids, logical volumes and physical volumes previously defined
+    // are deleted.
+    //  The second parameter "prop" has to be true if this C++ method is directly
     // invoked.
 
     inline void PhysicsHasBeenModified()

@@ -409,7 +409,7 @@ void G4RunManager::TerminateEventLoop()
     { G4cout << "  Number of events processed : " << numberOfEventProcessed << G4endl; }
     G4cout << "  "  << *timer << G4endl;
   }
-    G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
+  ////////////////  G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
 }
 
 G4Event* G4RunManager::GenerateEvent(G4int i_event)
@@ -836,8 +836,27 @@ void G4RunManager::GeometryHasBeenModified(G4bool prop)
   { kernel->GeometryHasBeenModified(); }
 }
 
-void G4RunManager::ReinitializeGeometry(G4bool prop)
+#include "G4GeometryManager.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
+
+void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
 {
+  if(destroyFirst && !(G4Threading::IsWorkerThread()))
+  {
+    if(verboseLevel>0)
+    { 
+      G4cout<<"#### G4PhysicalVolumeStore, G4LogicalVolumeStore and G4SolidStore\n"
+            <<"#### are wiped out. Command-based scorer, layerd mass geometry,\n"
+            <<"#### biasing with parallel world, etc. are not functioning any longer."
+            <<G4endl;
+    }
+    G4GeometryManager::GetInstance()->OpenGeometry();
+    G4PhysicalVolumeStore::GetInstance()->Clean();
+    G4LogicalVolumeStore::GetInstance()->Clean();
+    G4SolidStore::GetInstance()->Clean();
+  }
   if(prop)
   { G4UImanager::GetUIpointer()->ApplyCommand("/run/reinitializeGeometry"); }
   else

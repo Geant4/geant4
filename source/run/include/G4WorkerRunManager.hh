@@ -51,7 +51,7 @@ public:
     G4WorkerRunManager();
     ~G4WorkerRunManager();
     //Modified for worker behavior
-    virtual void BeamOn(G4int n_event,const char* macroFile=0,G4int n_select=-1);
+    ////////virtual void BeamOn(G4int n_event,const char* macroFile=0,G4int n_select=-1);
     virtual void InitializeGeometry();
     virtual void RunInitialization();
     virtual void DoEventLoop(G4int n_event,const char* macroFile=0,G4int n_select=-1);

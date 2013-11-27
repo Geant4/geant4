@@ -125,9 +125,8 @@ class G4RunManagerKernel
     void SetupDefaultRegion();
     //Called by DefineWorldVolume
     void SetupPhysics();
-  private:
     void ResetNavigator();
-    void BuildPhysicsTables();
+    void BuildPhysicsTables(G4bool fakeRun);
     void CheckRegions();
 
   public: // with description
