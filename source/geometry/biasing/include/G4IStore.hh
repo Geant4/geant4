@@ -90,6 +90,14 @@ public:  // with description
   virtual G4bool IsKnown(const G4GeometryCell &gCell) const;
     // returns true if the gCell is in the store, else false 
 
+  virtual void SetWorldVolume();
+    // set a reference to the world volume of the 
+    // "importance" geometry
+
+  virtual void SetParallelWorldVolume(G4String paraName);
+    // set a reference to the parallel world volume of the 
+    // "importance" geometry
+
   virtual const G4VPhysicalVolume& GetWorldVolume() const;
     // return a reference to the world volume of the 
     // "importance" geometry

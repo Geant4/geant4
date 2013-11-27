@@ -61,6 +61,20 @@ G4IStore::~G4IStore()
 {}
 
 
+void G4IStore::SetWorldVolume()
+{
+  G4cout << " G4IStore:: SetWorldVolume " << G4endl;
+  fWorldVolume = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
+  G4cout << " World volume is: " << fWorldVolume->GetName() << G4endl;
+  //  fGeometryCelli = new G4GeometryCellImportance;
+}
+
+void G4IStore::SetParallelWorldVolume(G4String paraName)
+{
+  fWorldVolume = G4TransportationManager::GetTransportationManager()->GetParallelWorld(paraName);
+    //  fGeometryCelli = new G4GeometryCellImportance;
+}
+
 const G4VPhysicalVolume& G4IStore::GetWorldVolume() const
 {
   return *fWorldVolume;

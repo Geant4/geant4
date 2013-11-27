@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 25th, 2013 A.Howard (geombias-V09-06-08)
+- Added SetWorldVolume and SetParallelWorldVolume methods to G4IStore
+
 November 25th, 2013 A.Howard (geombias-V09-06-07)
 - Removed unused data member: fParaFlag from G4IStore and G4WeigthWindowStore
 
