@@ -1,0 +1,12 @@
+/PhysicsList/defaultCutValue  0.7
+/PhysicsList/SetVerboseLevel 1
+
+/PhysicsList/RegisterPhysics G4EmStandardPhysics
+/PhysicsList/RegisterPhysics G4EmExtraPhysics
+/PhysicsList/RegisterPhysics G4DecayPhysics
+/PhysicsList/RegisterPhysics G4HadronElasticPhysics
+/PhysicsList/RegisterPhysics G4HadronPhysicsFTFP_BERT
+/PhysicsList/RegisterPhysics G4StoppingPhysics
+/PhysicsList/RegisterPhysics G4IonPhysics
+/PhysicsList/RegisterPhysics G4NeutronTrackingCut
+
