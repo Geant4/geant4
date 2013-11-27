@@ -103,6 +103,7 @@ fScorerVisAtt(0)
     fRadDelta       =   0.1*cm;
 
     fMessenger = new ElectronBenchmarkDetectorMessenger(this);
+    DefineMaterials();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -125,8 +126,6 @@ ElectronBenchmarkDetector::~ElectronBenchmarkDetector()
 
 G4VPhysicalVolume* ElectronBenchmarkDetector::Construct()
 {
-    DefineMaterials();
-    
     return CreateGeometry();
 }
 
@@ -211,7 +210,7 @@ G4VPhysicalVolume* ElectronBenchmarkDetector::CreateGeometry(){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ElectronBenchmarkDetector::UpdateGeometry(){
-    G4RunManager::GetRunManager()->DefineWorldVolume(CreateGeometry());
+    G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

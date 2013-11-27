@@ -54,13 +54,15 @@ ElectronBenchmarkDetectorMessenger::ElectronBenchmarkDetectorMessenger(
     fPrimFoilMatCmd->SetGuidance("Material of primary foil");
     fPrimFoilMatCmd->SetParameterName("primFoilMat",false);
     fPrimFoilMatCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+    fPrimFoilMatCmd->SetToBeBroadcasted(false);
     
     // Foil Thickness
-    fPrimFoilThickCmd = new G4UIcmdWithADoubleAndUnit("/primFoil/thickness",this);
+    fPrimFoilThickCmd=new G4UIcmdWithADoubleAndUnit("/primFoil/thickness",this);
     fPrimFoilThickCmd->SetGuidance("Thickness of primary foil");
     fPrimFoilThickCmd->SetParameterName("thickness",false);
     fPrimFoilThickCmd->SetDefaultUnit("cm");
     fPrimFoilThickCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+    fPrimFoilThickCmd->SetToBeBroadcasted(false);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
