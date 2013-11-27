@@ -52,14 +52,14 @@
 #include "Tst33VisRunAction.hh"
 #include "Tst33VisEventAction.hh"
 #include "Tst33TimedEventAction.hh"
-#include "G4VIStore.hh"
+#include "G4IStore.hh"
 #include "Tst33TimedApplication.hh"
 #include "Tst33VisApplication.hh"
 #include "G4ProcessPlacer.hh"
 #include "Tst33WeightChangeProcess.hh"
 #include "G4PlaceOfAction.hh"
 #include "G4WeightWindowAlgorithm.hh"
-#include "G4VWeightWindowStore.hh"
+#include "G4WeightWindowStore.hh"
 
 
 
@@ -258,7 +258,7 @@ void Tst33AppStarter::CreateIStore() {
   if (CheckCreateIStore()) {
     Tst33IStoreBuilder ib;
     fIStore = ib.CreateIStore(fSampleGeometry,parallel_geometry);
-    fSampler->PrepareImportanceSampling(fIStore);
+    fSampler->PrepareImportanceSampling(G4IStore::GetInstance(),0);
   }
 }
 
@@ -269,7 +269,7 @@ void Tst33AppStarter::CreateWeightWindowStore(G4PlaceOfAction poa,
     
     Tst33WeightWindowStoreBuilder wb;
     G4cout << " Weight window store creator 2 " << G4endl;
-    fWWStore = wb.CreateWeightWindowStore(fSampleGeometry);
+    fWWStore = wb.CreateWeightWindowStore(fSampleGeometry,parallel_geometry);
     G4cout << " Weight window store creator 3 " << G4endl;
     if (zeroWindow) {
       fWWAlg = new G4WeightWindowAlgorithm(1,1,100);
@@ -279,7 +279,7 @@ void Tst33AppStarter::CreateWeightWindowStore(G4PlaceOfAction poa,
     }
     G4cout << " Weight window store creator 4 " << poa << G4endl;
     if(!fSampler) G4cout << " fSampler doesn't exist - why? " << G4endl; 
-    fSampler->PrepareWeightWindow(fWWStore,
+    fSampler->PrepareWeightWindow(G4WeightWindowStore::GetInstance(),
 				  fWWAlg,
 				  poa);
     //				  onBoundary);
@@ -320,7 +320,11 @@ void Tst33AppStarter::CreateWeightRoulette(G4int mode) {
     }
     else {
       // apply default weight eoulette:  see G4VSampler.hh
-      fSampler->PrepareWeightRoulett();
+  //     fSampler->PrepareWeightRoulett();
+  // fSampler->PrepareWeightRoulett(G4double wsurvive = 0.5, 
+  //                                   G4double wlimit = 0.25,
+  //                                   G4double isource = 1) = 0;
+      fSampler->PrepareWeightRoulett(0.5, 0.25,1);
     }
   }
 }
@@ -447,6 +451,9 @@ void Tst33AppStarter::ConfigureSampling(){
     else {
       fConfigured = true;
       fSampler->Configure();
+#ifdef G4MULTITHREADED
+      fSampler->AddProcess();
+#endif
     }
   }
   else {

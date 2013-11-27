@@ -51,15 +51,15 @@ class Tst33PhysicsList;
 class Tst33DetectorConstruction;
 class Tst33VGeometry;
 class Tst33ParallelGeometry;
-class G4VSampler;
-//class G4GeometrySampler;
-class G4VIStore;
-class G4VWeightWindowStore;
+//class G4VSampler;
+class G4GeometrySampler;
+class G4IStore;
+class G4WeightWindowStore;
 class G4UserRunAction;
 class Tst33VEventAction;
 class G4ProcessPlacer;
 class Tst33WeightChangeProcess;
-class G4VWeightWindowAlgorithm;
+class G4WeightWindowAlgorithm;
 
 class Tst33AppStarter {
 public:
@@ -104,10 +104,10 @@ private:
   Tst33ParallelGeometry *fParallelGeometry;
   Tst33VApplication *fApp;
   Tst33DetectorConstruction *fDetectorConstruction;
-  G4VSampler *fSampler;
-  //  G4GeometrySampler *fSampler;
-  G4VIStore *fIStore;
-  G4VWeightWindowStore *fWWStore;
+  //  G4VSampler *fSampler;
+  G4GeometrySampler *fSampler;
+  G4IStore *fIStore;
+  G4WeightWindowStore *fWWStore;
   Tst33VEventAction *fEventAction;
   G4UserRunAction *fRunAction;
   G4bool fConfigured;
@@ -115,7 +115,7 @@ private:
   G4int fTime;
   G4ProcessPlacer *fChangeWeightPlacer;
   Tst33WeightChangeProcess *fWeightChangeProcess;
-  G4VWeightWindowAlgorithm *fWWAlg;
+  G4WeightWindowAlgorithm *fWWAlg;
 
   Tst33PhysicsList * physlist;
 

@@ -48,7 +48,7 @@ Tst33IStoreBuilder::Tst33IStoreBuilder()
 Tst33IStoreBuilder::~Tst33IStoreBuilder()
 {}
 
-G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo, G4bool paraGeom) {
+G4IStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo, G4bool paraGeom) {
   // create an importance store and fill it with the importance
   // per cell values
 
@@ -57,8 +57,10 @@ G4VIStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo, G4bool pa
   G4IStore *istore=0;
   if(paraGeom) {
     istore = G4IStore::GetInstance(pworld.GetName());
+    istore->SetParallelWorldVolume(pworld.GetName());
   } else {
     istore = G4IStore::GetInstance();
+    istore->SetWorldVolume();
   }
   if (!istore) {
     G4Exception("Tst33IStoreBuilder::CreateIStore()", "TST33-04", 

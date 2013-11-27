@@ -48,13 +48,19 @@ Tst33WeightWindowStoreBuilder::Tst33WeightWindowStoreBuilder()
 Tst33WeightWindowStoreBuilder::~Tst33WeightWindowStoreBuilder()
 {}
 
-G4VWeightWindowStore *Tst33WeightWindowStoreBuilder::CreateWeightWindowStore(Tst33VGeometry *samplegeo) {
+G4WeightWindowStore *Tst33WeightWindowStoreBuilder::CreateWeightWindowStore(Tst33VGeometry *samplegeo, G4bool paraFlag) {
   // create an importance store and fill it with the importance
   // per cell values
   const G4VPhysicalVolume &pworld = samplegeo->GetWorldVolumeAddress();
   G4cout << " weight window store name: " << pworld.GetName() << G4endl;
   G4WeightWindowStore *wwstore=0;
-  wwstore = G4WeightWindowStore::GetInstance(pworld.GetName());
+  if(paraFlag) {
+    wwstore = G4WeightWindowStore::GetInstance(pworld.GetName());
+    wwstore->SetParallelWorldVolume(pworld.GetName());
+  } else {
+    wwstore = G4WeightWindowStore::GetInstance(pworld.GetName());
+    wwstore->SetWorldVolume();
+  }
 
 
   // weights for the world volume, general energy bounds

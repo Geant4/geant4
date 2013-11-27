@@ -43,14 +43,14 @@
 
 #include "globals.hh"
 
-class G4VIStore;
+class G4IStore;
 class Tst33VGeometry;
 
 class Tst33IStoreBuilder {
 public:
   Tst33IStoreBuilder();
   ~Tst33IStoreBuilder();
-  G4VIStore *CreateIStore(Tst33VGeometry *samplegeo, G4bool paraGeom);  
+  G4IStore *CreateIStore(Tst33VGeometry *samplegeo, G4bool paraGeom);  
 };
 
 

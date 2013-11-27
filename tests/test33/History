@@ -15,10 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 22nd, 2013 A. Howard  - test33-V09-06-06
+November 27th, 2013 A. Howard  - test33-V09-06-07
+- Moved to concrete samplers and included AddProcess() for MT build
+  (still with sequential RunManager)
+
+November 27th, 2013 A. Howard  - test33-V09-06-06
 - Added missing header to Tst33IStoreBuilder.hh
 
-November 22nd, 2013 A. Howard  - test33-V09-06-05
+November 27th, 2013 A. Howard  - test33-V09-06-05
 - Reduced to one configuration whilst trying to figure out singleton issues
   with G4IStore
 

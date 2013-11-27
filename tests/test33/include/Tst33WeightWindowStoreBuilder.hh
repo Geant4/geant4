@@ -41,14 +41,16 @@
 #ifndef Tst33WeightWindowStoreBuilder_hh
 #define Tst33WeightWindowStoreBuilder_hh Tst33WeightWindowStoreBuilder_hh
 
-class G4VWeightWindowStore;
+#include "globals.hh"
+
+class G4WeightWindowStore;
 class Tst33VGeometry;
 
 class Tst33WeightWindowStoreBuilder {
 public:
   Tst33WeightWindowStoreBuilder();
   ~Tst33WeightWindowStoreBuilder();
-  G4VWeightWindowStore *CreateWeightWindowStore(Tst33VGeometry *samplegeo);  
+  G4WeightWindowStore *CreateWeightWindowStore(Tst33VGeometry *samplegeo, G4bool paraFlag);  
 };
 
 
