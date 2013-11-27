@@ -17,12 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- 21. Nov. 2013  Hisaya Kurash(particles-V09-06-63)
+- 27. Nov. 2013  Gabriele Cosmo (particles-V09-06-64)
+- Correction in G4PDefSplitter::FreeSlave() to use free() instead of
+  delete for releasing offset.
+- Fix in G4ExcitedBaryonConstructor::GetCharge() and in
+  G4ExcitedMesonConstructor::GetCharge() to replace G4ThreadLocal
+  specification with 'static const' for local variable; also fixing
+  compilation error in MT mode on the icc compiler.
+
+- 21. Nov. 2013  Hisaya Kurashige (particles-V09-06-63)
 - Fix defects by Coverity
    G4NuclideTable.cc G4ParticleTable.cc G4VDecayChannel.cc 
    G4IonTable.cc G4IsomerTable.cc
    
-- 5. Nov. 2013  Hisaya Kurash(particles-V09-06-62)
+- 5. Nov. 2013  Hisaya Kurashige (particles-V09-06-62)
 - Fix G4NeutronBetaDecayChannel (Bug #1532)
 
 - 30. Oct. 2013  Makoto Asai (particles-V09-06-61)

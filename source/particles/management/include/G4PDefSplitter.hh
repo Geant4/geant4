@@ -91,7 +91,7 @@ class G4PDefSplitter
       // Invoked by all threads to free the subinstance array.
     {
       if (!offset)  { return; }
-      delete offset;
+      free(offset);
       offset = 0;
     }
 
