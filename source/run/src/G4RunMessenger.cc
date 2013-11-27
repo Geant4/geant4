@@ -103,12 +103,13 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   nThreadsCmd = new G4UIcmdWithAnInteger("/run/numberOfThreads",this);
   nThreadsCmd->SetGuidance("Set the number of threads to be used.");
   nThreadsCmd->SetGuidance("This command is valid only for multi-threaded mode.");
+  nThreadsCmd->SetGuidance("This command works only in PreInit state.");
   nThreadsCmd->SetGuidance("The command is ignored if it is issued in sequential mode.");
   nThreadsCmd->SetParameterName("nThreads",true);
   nThreadsCmd->SetDefaultValue(2);
   nThreadsCmd->SetRange("nThreads >0");
   nThreadsCmd->SetToBeBroadcasted(false);
-  nThreadsCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  nThreadsCmd->AvailableForStates(G4State_PreInit);
 
   evModCmd = new G4UIcmdWithAnInteger("/run/eventModulo",this);
   evModCmd->SetGuidance("Set the event modulo for dispatching events to worker threads"); 
