@@ -12,90 +12,128 @@ $Id$
   enabled, as well as event display and analysis.
 
 
-  1. GEOMETRY
+  1- GEOMETRY
 
-     The spectrometer consists of two detector arms 
-     (see B5DetectorConstruction).  One arm provides 
-     position and timing information of the incident particle while the 
-     other collects position, timing and energy information of the particle
-     after it has been deflected by a magnetic field centered at the 
-     spectrometer pivot point.
+   The spectrometer consists of two detector arms 
+   (see B5DetectorConstruction).  One arm provides 
+   position and timing information of the incident particle while the 
+   other collects position, timing and energy information of the particle
+   after it has been deflected by a magnetic field centered at the 
+   spectrometer pivot point.
  
-       - First arm:  box filled with air, also containing:
+     - First arm:  box filled with air, also containing:
 
-           1 hodoscope (15 vertical strips of plastic scintillator)
-           1 drift chamber (5 horizontal argon gas layers with a 
-                            "virtual wire" at the center of each layer)
+         1 hodoscope (15 vertical strips of plastic scintillator)
+         1 drift chamber (5 horizontal argon gas layers with a 
+                          "virtual wire" at the center of each layer)
 
-       - Magnetic field region: air-filled cylinder which contains
-                                the field
+     - Second arm:  box filled with air, also containing:
 
-       - Second arm:  box filled with air, also containing:
+         1 hodoscope (25 vertical strips of plastic scintillator)
+         1 drift chamber (5 horizontal argon gas layers with a 
+                          "virtual wire" at the center of each layer)
+         1 electromagnetic calorimeter: 
+               a box sub-divided along x,y and z
+               axes into cells of CsI 
+         1 hadronic calorimeter: 
+               a box sub-divided along x,y, and z axes
+               into cells of lead, with a layer of 
+               plastic scintillator placed at the center 
+               of each cell
+         
+      - Magnetic field region: air-filled cylinder which contains
+                              the field (see B5MagneticField)
 
-           1 hodoscope (25 vertical strips of plastic scintillator)
-           1 drift chamber (5 horizontal argon gas layers with a 
-                            "virtual wire" at the center of each layer)
-           1 electromagnetic calorimeter: 
-                 a box sub-divided along x,y and z
-                 axes into cells of CsI 
-           1 hadronic calorimeter: 
-                 a box sub-divided along x,y, and z axes
-                 into cells of lead, with a layer of 
-                 plastic scintillator placed at the center 
-                 of each cell
-     
-     The maximum step limit in the magnetic field region is also set 
-     via the G4UserLimits class in a similar way as in Example B2.
-                    
+           The maximum step limit in the magnetic field region is also set 
+           via the G4UserLimits class in a similar way as in Example B2.
+           
+   The rotation angle of the second arm and the magnetic field value
+   can be set via the interactive command defined using the G4GenericMessenger 
+   class.                      
 
-  2. PHYSICS
+  2- PHYSICS
 
-     This example uses the reference hadronic physics list, FTFP_BERT,
-     and also adds the G4StepLimiter process.
+   This example uses the reference hadronic physics list, FTFP_BERT,
+   and also adds the G4StepLimiter process.
 
 
-  3. EVENT:
+  3- ACTION INITALIZATION
 
-     An event consists of the generation of a single particle which is 
-     transported through the first spectrometer arm.  Here, a scintillator 
-     hodoscope records the reference time of the particle before it passes
-     through a drift chamber where the particle position is measured. 
-     Momentum analysis is performed as the particle passes through a magnetic
-     field at the spectrometer pivot and then into the second spectrometer 
-     arm.  In the second arm, the particle passes through another hodoscope
-     and drift chamber before interacting in the electromagnetic calorimeter.
-     Here it is likely that particles will induce electromagnetic showers.  
-     The shower energy is recorded in a three-dimensional array of CsI 
-     crystals.  Secondary particles from the shower, as well as primary 
-     particles which do not interact in the CsI crystals, pass into the 
-     hadronic calorimeter.  Here, the remaining energy is collected in a 
-     three-dimensional array of scintillator-lead sandwiches.
+   B5ActionInitialization class
+   instantiates and registers to Geant4 kernel all user action classes.
+   
+   While in sequential mode the action classes are instatiated just once,
+   via invoking the method:
+      B5ActionInitialization::Build() 
+   in multi-threading mode the same method is invoked for each thread worker
+   and so all user action classes are defined thread-local.
 
-     Several aspects of the event may be changed interactively by the user:
-       - angle of the second spectrometer arm
-       - strength of magnetic field
-       - initial particle type
-       - initial momentum and angle
-       - momentum and angle spreads
-       - type of initial particle may be randomized
-     
-     The initial particle type can be changed using the G4ParticleGun command:
-       /gun/particle particleName
+   A run action class is instantiated both thread-local 
+   and global that's why its instance has is created also in the method
+      B5ActionInitialization::BuildForMaster() 
+   which is invoked only in multi-threading mode.
+
+  4- PRIMARY GENERATOR
+
+   The primary generator action class employs the G4ParticleGun. 
+   The primary kinematics consists of a single particle which is 
+   is sent in the direction of the first spectrometer arm. 
+
+   The type of the particle and its several properties can be changed 
+   via the  G4 built-in commands of  the G4ParticleGun class or
+   this example command defined using the G4GenericMessenger class.
        
-     The UI commands specific to this example are available in /B5 command 
-     directory:
-       /B5/detector/armAngle angle unit
-       /B5/field/value field unit
-       /B5/generator/momentum  value unit
-       /B5/generator/sigmaMomentum value unit
-       /B5/generator/sigmaAngle value unit
-       /B5/generator/randomizePrimary [true|false]
-       
-     They are implemented in 
-       B5DetectorConstruction::DefineCommands(), 
-       B5MagneticField::DefineCommands() and 
-       B5PrimaryGeneratorAction::DefineCommands() methods 
-     using G4GenericMessenger class.
+  
+  5- EVENT
+
+   An event consists of the generation of a single particle which is 
+   transported through the first spectrometer arm.  Here, a scintillator 
+   hodoscope records the reference time of the particle before it passes
+   through a drift chamber where the particle position is measured. 
+   Momentum analysis is performed as the particle passes through a magnetic
+   field at the spectrometer pivot and then into the second spectrometer 
+   arm.  In the second arm, the particle passes through another hodoscope
+   and drift chamber before interacting in the electromagnetic calorimeter.
+   Here it is likely that particles will induce electromagnetic showers.  
+   The shower energy is recorded in a three-dimensional array of CsI 
+   crystals.  Secondary particles from the shower, as well as primary 
+   particles which do not interact in the CsI crystals, pass into the 
+   hadronic calorimeter.  Here, the remaining energy is collected in a 
+   three-dimensional array of scintillator-lead sandwiches.
+
+   Several aspects of the event may be changed interactively by the user:
+     - angle of the second spectrometer arm
+     - strength of magnetic field
+     - initial particle type
+     - initial momentum and angle
+     - momentum and angle spreads
+     - type of initial particle may be randomized
+   
+   The initial particle type can be changed using the G4ParticleGun command:
+     /gun/particle particleName
+     
+   The UI commands specific to this example are available in /B5 command 
+   directory:
+     /B5/detector/armAngle angle unit
+     /B5/field/value field unit
+     /B5/generator/momentum  value unit
+     /B5/generator/sigmaMomentum value unit
+     /B5/generator/sigmaAngle value unit
+     /B5/generator/randomizePrimary [true|false]
+     
+   They are implemented in 
+     B5DetectorConstruction::DefineCommands(), 
+     B5MagneticField::DefineCommands() and 
+     B5PrimaryGeneratorAction::DefineCommands() methods 
+   using G4GenericMessenger class.
+
+   In first execution of BeginOfEventAction() 
+   the hits collections identifiers are saved in data members of the class
+   and used in EndOfEventAction() for accessing
+   the hists collections and filling the accounted information in defined
+   histograms and ntuples and printing its summary in a log file.
+   The frequency of printing can be tuned with the built-in command
+     /run/printProgress  frequency
 
   4. DETECTOR RESPONSE:
 

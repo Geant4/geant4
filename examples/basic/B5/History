@@ -11,7 +11,12 @@ $Id$
 
 ---------------------------------------------------------------------------  
 
-26 November 2013 Ivana Hrivnacova (exampleB5-V09-06-10)
+28 November 2013 Ivana Hrivnacova (exampleB5-V09-06-11)
+- Added macros for GUI
+- Fixed range for selection rundomnly particle type
+- Improved documentation
+
+26 November 2013 Makoto Asai (exampleB5-V09-06-10)
 - Changed the way G4GenericMessenger declares UI commands that take units.
 
 26 November 2013 Ivana Hrivnacova (exampleB5-V09-06-09)

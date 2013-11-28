@@ -42,7 +42,16 @@ target_link_libraries(exampleB5 ${Geant4_LIBRARIES})
 # relies on these scripts being in the current working directory.
 #
 set(B5_SCRIPTS
-    init.mac init_vis.mac run1.mac run2.mac exampleB5.in exampleB5.out vis.mac
+  exampleB5.in 
+  exampleB5.out 
+  icons.mac
+  gui.mac
+  run.png
+  init.mac 
+  init_vis.mac 
+  run1.mac 
+  run2.mac 
+  vis.mac
   )
 
 foreach(_script ${B5_SCRIPTS})

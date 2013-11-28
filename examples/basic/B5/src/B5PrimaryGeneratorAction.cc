@@ -84,8 +84,7 @@ void B5PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
     
     if (fRandomizePrimary)
     {
-        // G4int i = (int)(5.*G4UniformRand());
-        G4int i = (int)(2.*G4UniformRand());
+        G4int i = (int)(5.*G4UniformRand());
         switch(i)
         {
             case 0:

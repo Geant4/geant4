@@ -24,9 +24,6 @@
          - 1 drift chamber (5 horizontal argon gas layers with a 
                           "virtual wire" at the center of each layer)
 
-     - Magnetic field region: air-filled cylinder which contains
-                              the field
-
      - Second arm:  box filled with air, also containing:
          - 1 hodoscope (25 vertical strips of plastic scintillator)
          - 1 drift chamber (5 horizontal argon gas layers with a 
@@ -40,16 +37,50 @@
                plastic scintillator placed at the center 
                of each cell
      
+     - Magnetic field region: air-filled cylinder which contains
+                              the field (see B5MagneticField)
+
    The maximum step limit in the magnetic field region is also set 
    via the G4UserLimits class in a similar way as in Example B2
    (see \ref B2_s6 in B2 example documentation).
+
+   The rotation angle of the second arm and the magnetic field value
+   can be set via the interactive commands defined using the G4GenericMessenger 
+   class.                      
 
 \section B5_s2 PHYSICS
 
    This example uses the reference hadronic physics list, FTFP_BERT,
    and also adds the G4StepLimiter process.
 
-\section B5_s3 EVENT
+\section B5_s3 ACTION INITALIZATION
+
+   B5ActionInitialization class
+   instantiates and registers to Geant4 kernel all user action classes.
+   
+   While in sequential mode the action classes are instatiated just once,
+   via invoking the method:
+      B5ActionInitialization::Build() 
+   in multi-threading mode the same method is invoked for each thread worker
+   and so all user action classes are defined thread-local.
+
+   A run action class is instantiated both thread-local 
+   and global that's why its instance has is created also in the method
+      B5ActionInitialization::BuildForMaster() 
+   which is invoked only in multi-threading mode.
+
+\section B5_s4 PRIMARY GENERATOR
+
+   The primary generator action class employs the G4ParticleGun. 
+   The primary kinematics consists of a single particle which is 
+   is sent in the direction of the first spectrometer arm. 
+
+   The type of the particle and its several properties can be changed 
+   via the  G4 built-in commands of  the G4ParticleGun class or
+   this example command defined using the G4GenericMessenger class.
+       
+  
+\section B5_s5 EVENT
 
    An event consists of the generation of a single particle which is 
    transported through the first spectrometer arm.  Here, a scintillator 
@@ -69,6 +100,7 @@
    Several aspects of the event may be changed interactively by the user:
      - angle of the second spectrometer arm
      - strength of magnetic field
+     - initial particle type
      - initial momentum and angle
      - momentum and angle spreads
      - type of initial particle may be randomized
@@ -95,7 +127,17 @@
     - B5PrimaryGeneratorAction::DefineCommands() methods 
    using G4GenericMessenger class.
 
-\section B5_s4 DETECTOR RESPONSE
+   In first execution of B5EventAction::BeginOfEventAction()
+   the hits collections identifiers are saved in data members of the class
+   and used in B5EventAction::EndOfEventAction() for accessing
+   the hists collections and filling the accounted information in defined
+   histograms and ntuples and printing its summary in a log file.
+   The frequency of printing can be tuned with the built-in command
+\verbatim
+/run/printProgress  frequency
+\endverbatim
+
+\section B5_s6 DETECTOR RESPONSE
 
   All the information required to simulate and analyze an event is 
   recorded in hits.  This information is recorded in the following 
@@ -139,7 +181,7 @@
      HepRep is further described at the 
      <a href="http://www.slac.stanford.edu/~perl/heprep/"> HepRep Home Page </a>
 
-\section B5_s5 ANALYSIS
+\section B5_s7 ANALYSIS
 
    The analysis tools are used to accumulate statistics.
    Histograms and an ntuple are created in B5RunAction::B5RunAction() 
