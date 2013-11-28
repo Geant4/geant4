@@ -51,12 +51,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F02PhysicsList::F02PhysicsList(F02DetectorConstruction* p)
-:  G4VUserPhysicsList(), fMaxChargedStep(DBL_MAX),
-   fPhotoElectricEffect(0), fComptonScattering(0),
-   fGammaConversion(0), feminusIonisation(0),
-   feminusBremsstrahlung(0), feplusIonisation(0),
-   feplusBremsstrahlung(0),
-   feminusStepCut(0), feplusStepCut(0)
+:  G4VUserPhysicsList(), fMaxChargedStep(DBL_MAX)
 {
   fDet = p;
 
@@ -193,9 +188,9 @@ void F02PhysicsList::ConstructEM()
     {
       // Construct processes for gamma
 
-      fPhotoElectricEffect = new G4PhotoElectricEffect();
-      fComptonScattering   = new G4ComptonScattering();
-      fGammaConversion     = new G4GammaConversion();
+      G4PhotoElectricEffect* fPhotoElectricEffect = new G4PhotoElectricEffect();
+      G4ComptonScattering* fComptonScattering   = new G4ComptonScattering();
+      G4GammaConversion* fGammaConversion     = new G4GammaConversion();
 
       pmanager->AddDiscreteProcess(fPhotoElectricEffect);
       pmanager->AddDiscreteProcess(fComptonScattering);
@@ -205,9 +200,9 @@ void F02PhysicsList::ConstructEM()
     {
       // Construct processes for electron
 
-      feminusIonisation = new G4eIonisation();
-      feminusBremsstrahlung = new G4eBremsstrahlung();
-      feminusStepCut = new F02StepCut();
+      G4eIonisation* feminusIonisation = new G4eIonisation();
+      G4eBremsstrahlung* feminusBremsstrahlung = new G4eBremsstrahlung();
+      F02StepCut* feminusStepCut = new F02StepCut();
       feminusStepCut->SetMaxStep(fMaxChargedStep);
 
       pmanager->AddProcess(feminusIonisation,-1,2,2);
@@ -218,9 +213,9 @@ void F02PhysicsList::ConstructEM()
     {
       // Construct processes for positron
 
-      feplusIonisation = new G4eIonisation();
-      feplusBremsstrahlung = new G4eBremsstrahlung();
-      feplusStepCut = new F02StepCut();
+      G4eIonisation* feplusIonisation = new G4eIonisation();
+      G4eBremsstrahlung* feplusBremsstrahlung = new G4eBremsstrahlung();
+      F02StepCut* feplusStepCut = new F02StepCut();
       feplusStepCut->SetMaxStep(fMaxChargedStep);
 
       pmanager->AddProcess(feplusIonisation,-1,2,2);

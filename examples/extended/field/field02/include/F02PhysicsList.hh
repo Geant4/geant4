@@ -38,16 +38,6 @@
 
 #include "G4VUserPhysicsList.hh"
 
-class G4PhotoElectricEffect;
-class G4ComptonScattering;
-class G4GammaConversion;
-
-class G4eIonisation;
-class G4eBremsstrahlung;
-class G4eplusAnnihilation;
-
-class F02StepCut;
-
 class F02DetectorConstruction;
 class F02PhysicsListMessenger;
 
@@ -92,19 +82,6 @@ class F02PhysicsList: public G4VUserPhysicsList
     G4double fMaxChargedStep;
 
   private:
-
-    G4PhotoElectricEffect* fPhotoElectricEffect;
-    G4ComptonScattering*   fComptonScattering;
-    G4GammaConversion*     fGammaConversion;
-
-    G4eIonisation*         feminusIonisation;
-    G4eBremsstrahlung*     feminusBremsstrahlung;
-
-    G4eIonisation*         feplusIonisation;
-    G4eBremsstrahlung*     feplusBremsstrahlung;
-
-    F02StepCut* feminusStepCut;
-    F02StepCut* feplusStepCut;
 
     G4double fCutForGamma;
     G4double fCutForElectron;
