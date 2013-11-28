@@ -39,27 +39,22 @@ class G4UIcmdWithADoubleAndUnit;
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class ExN04StackingActionMessenger: public G4UImessenger
-{
-  public:
-    ExN04StackingActionMessenger(ExN04StackingAction* msa);
-    ~ExN04StackingActionMessenger();
-    
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
+class ExN04StackingActionMessenger: public G4UImessenger {
+public:
+  ExN04StackingActionMessenger(ExN04StackingAction* msa);
+  ~ExN04StackingActionMessenger();
 
-  private:
-    ExN04StackingAction * myAction;
-    
-  private: //commands
-    G4UIcmdWithAnInteger * muonCmd;
-    G4UIcmdWithAnInteger * isomuonCmd;
-    G4UIcmdWithAnInteger * isoCmd;
-    G4UIcmdWithADoubleAndUnit * roiCmd;
-    
+  void SetNewValue(G4UIcommand * command,G4String newValues);
+  G4String GetCurrentValue(G4UIcommand * command);
+
+private:
+  ExN04StackingAction * myAction;
+
+  G4UIcmdWithAnInteger * muonCmd;
+  G4UIcmdWithAnInteger * isomuonCmd;
+  G4UIcmdWithAnInteger * isoCmd;
+  G4UIcmdWithADoubleAndUnit * roiCmd;
+
 };
 
 #endif
-
-

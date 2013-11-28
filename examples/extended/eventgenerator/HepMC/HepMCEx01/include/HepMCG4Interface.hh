@@ -47,7 +47,7 @@ protected:
 
   // We  have to take care for the position of primaries because
   // primary vertices outside the world voulme give rise to G4Execption.
-  // If the default implementation is not adequate, an alternative 
+  // If the default implementation is not adequate, an alternative
   // can be implemented in your own class.
   virtual G4bool CheckVertexInsideWorld(const G4ThreeVector& pos) const;
 
@@ -58,7 +58,7 @@ protected:
   // An empty event will be created in default.
   virtual HepMC::GenEvent* GenerateHepMCEvent();
 
-public: 
+public:
   HepMCG4Interface();
   virtual ~HepMCG4Interface();
 
@@ -70,13 +70,10 @@ public:
   virtual void GeneratePrimaryVertex(G4Event* anEvent);
 };
 
-// ====================================================================
-// inline functions
-// ====================================================================
-
-inline HepMC::GenEvent* HepMCG4Interface::GetHepMCGenEvent() const 
-{ 
-  return hepmcEvent; 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+inline HepMC::GenEvent* HepMCG4Interface::GetHepMCGenEvent() const
+{
+  return hepmcEvent;
 }
 
 #endif

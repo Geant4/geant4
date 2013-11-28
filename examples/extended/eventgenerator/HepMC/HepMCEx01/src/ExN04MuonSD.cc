@@ -29,35 +29,39 @@
 // $Id$
 //
 
-#include "ExN04MuonSD.hh"
-#include "ExN04MuonHit.hh"
 #include "G4HCofThisEvent.hh"
-#include "G4TouchableHistory.hh"
-#include "G4Track.hh"
+#include "G4ios.hh"
 #include "G4Step.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4ios.hh"
+#include "G4TouchableHistory.hh"
+#include "G4Track.hh"
+#include "ExN04MuonSD.hh"
+#include "ExN04MuonHit.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04MuonSD::ExN04MuonSD(G4String name)
-:G4VSensitiveDetector(name)
+  : G4VSensitiveDetector(name)
 {
   G4String HCname;
   collectionName.insert(HCname="muonCollection");
   positionResolution = 5*cm;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04MuonSD::~ExN04MuonSD(){;}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04MuonSD::Initialize(G4HCofThisEvent*HCE)
 {
   static int HCID = -1;
   muonCollection = new ExN04MuonHitsCollection
-                   (SensitiveDetectorName,collectionName[0]); 
+                   (SensitiveDetectorName,collectionName[0]);
   if(HCID<0)
   { HCID = GetCollectionID(0); }
   HCE->AddHitsCollection(HCID,muonCollection);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4bool ExN04MuonSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
@@ -67,8 +71,7 @@ G4bool ExN04MuonSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
   ExN04MuonHit* aHit;
   int nHit = muonCollection->entries();
   G4ThreeVector hitpos = aStep->GetPreStepPoint()->GetPosition();
-  for(int i=0;i<nHit;i++)
-  {
+  for(int i=0;i<nHit;i++) {
     aHit = (*muonCollection)[i];
     G4ThreeVector pos = aHit->GetPos();
     G4double dist2 = sqr(pos.x()-hitpos.x())
@@ -86,18 +89,22 @@ G4bool ExN04MuonSD::ProcessHits(G4Step*aStep,G4TouchableHistory*)
   return true;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04MuonSD::EndOfEvent(G4HCofThisEvent*)
-{;}
+{
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04MuonSD::clear()
 {
-} 
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04MuonSD::DrawAll()
 {
-} 
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04MuonSD::PrintAll()
 {
-} 
-
+}

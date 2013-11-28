@@ -26,12 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx02/include/H02SteppingAction.hh
 /// \brief Definition of the H02SteppingAction class
 //
-// ====================================================================
-//
-//   H02SteppingAction.hh
 //   $Id$
 //
-// ====================================================================
 #ifndef H02_STEPPING_ACTION_H
 #define H02_STEPPING_ACTION_H
 
@@ -41,7 +37,7 @@ class H02SteppingAction : public G4UserSteppingAction {
 public:
   H02SteppingAction();
   virtual ~H02SteppingAction();
-  
+
   virtual void UserSteppingAction(const G4Step* astep);
 };
 

@@ -35,8 +35,10 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4ios.hh"
 
-ExN04StackingActionMessenger::ExN04StackingActionMessenger(ExN04StackingAction * msa)
-:myAction(msa)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ExN04StackingActionMessenger::ExN04StackingActionMessenger
+  (ExN04StackingAction * msa)
+  : myAction(msa)
 {
   muonCmd = new G4UIcmdWithAnInteger("/mydet/reqmuon",this);
   muonCmd->SetGuidance("Number of muon for the trigger.");
@@ -63,6 +65,7 @@ ExN04StackingActionMessenger::ExN04StackingActionMessenger(ExN04StackingAction *
   roiCmd->SetDefaultUnit("deg");
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04StackingActionMessenger::~ExN04StackingActionMessenger()
 {
   delete muonCmd;
@@ -71,7 +74,9 @@ ExN04StackingActionMessenger::~ExN04StackingActionMessenger()
   delete roiCmd;
 }
 
-void ExN04StackingActionMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void ExN04StackingActionMessenger::SetNewValue
+  (G4UIcommand * command,G4String newValue)
 {
   if( command==muonCmd )
   { myAction->SetNRequestMuon(muonCmd->GetNewIntValue(newValue)); }
@@ -83,10 +88,11 @@ void ExN04StackingActionMessenger::SetNewValue(G4UIcommand * command,G4String ne
   { myAction->SetRoIAngle(roiCmd->GetNewDoubleValue(newValue)); }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4String ExN04StackingActionMessenger::GetCurrentValue(G4UIcommand * command)
 {
   G4String cv;
-  
+
   if( command==muonCmd )
   { cv = muonCmd->ConvertToString(myAction->GetNRequestMuon()); }
   else if( command==isomuonCmd )
@@ -95,7 +101,6 @@ G4String ExN04StackingActionMessenger::GetCurrentValue(G4UIcommand * command)
   { cv = isoCmd->ConvertToString(myAction->GetNIsolation()); }
   else if( command==roiCmd )
   { cv = roiCmd->ConvertToString(myAction->GetRoIAngle(),"deg"); }
-  
+
   return cv;
 }
-

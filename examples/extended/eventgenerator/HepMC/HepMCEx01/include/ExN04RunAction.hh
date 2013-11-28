@@ -27,7 +27,7 @@
 /// \brief Definition of the ExN04RunAction class
 //
 // $Id$
-// 
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -37,25 +37,14 @@
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 class G4Run;
 
-class ExN04RunAction : public G4UserRunAction
-{
-  public:
-    ExN04RunAction();
-   ~ExN04RunAction();
+class ExN04RunAction : public G4UserRunAction {
+public:
+  ExN04RunAction();
+  ~ExN04RunAction();
 
-  public:
-    void BeginOfRunAction(const G4Run*);
+  void BeginOfRunAction(const G4Run*);
 };
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
-
-
-
-
-

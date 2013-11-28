@@ -38,37 +38,44 @@
 
 G4Allocator<ExN04MuonHit> ExN04MuonHitAllocator;
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04MuonHit::ExN04MuonHit()
-{;}
+{
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04MuonHit::~ExN04MuonHit()
-{;}
+{
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04MuonHit::ExN04MuonHit(const ExN04MuonHit &right)
   : G4VHit()
 {
-  edep = right.edep;
-  pos = right.pos;
+  fedep = right.fedep;
+  fpos = right.fpos;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 const ExN04MuonHit& ExN04MuonHit::operator=(const ExN04MuonHit &right)
 {
-  edep = right.edep;
-  pos = right.pos;
+  fedep = right.fedep;
+  fpos = right.fpos;
   return *this;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4int ExN04MuonHit::operator==(const ExN04MuonHit &right) const
 {
   return (this==&right) ? 1 : 0;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04MuonHit::Draw()
 {
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-  if(pVVisManager)
-  {
-    G4Circle circle(pos);
+  if(pVVisManager) {
+    G4Circle circle(fpos);
     circle.SetScreenSize(0.04);
     circle.SetFillStyle(G4Circle::filled);
     G4Colour colour(1.,0.,0.);
@@ -78,7 +85,7 @@ void ExN04MuonHit::Draw()
   }
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04MuonHit::Print()
-{;}
-
-
+{
+}

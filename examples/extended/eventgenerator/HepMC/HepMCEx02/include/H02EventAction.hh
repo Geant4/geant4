@@ -26,12 +26,8 @@
 /// \file eventgenerator/HepMC/HepMCEx02/include/H02EventAction.hh
 /// \brief Definition of the H02EventAction class
 //
-// ====================================================================
-//
-//   H02EventAction.hh
 //   $Id$
 //
-// ====================================================================
 #ifndef H02_EVENT_ACTION_H
 #define H02_EVENT_ACTION_H
 

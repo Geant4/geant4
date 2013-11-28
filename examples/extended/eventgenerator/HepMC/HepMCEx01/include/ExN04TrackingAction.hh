@@ -34,15 +34,12 @@
 
 #include "G4UserTrackingAction.hh"
 
-
 class ExN04TrackingAction : public G4UserTrackingAction {
+public:
+  ExN04TrackingAction(){};
+  virtual ~ExN04TrackingAction(){};
 
-  public:
-    ExN04TrackingAction(){};
-    virtual ~ExN04TrackingAction(){};
-   
-    virtual void PreUserTrackingAction(const G4Track*);
-
+  virtual void PreUserTrackingAction(const G4Track*);
 };
 
 #endif

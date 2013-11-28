@@ -56,7 +56,7 @@ private:
   G4UIcommand*             cpyrget;
   G4UIcommand*             cpyrset;
   G4UIcmdWithAString*      printRandomStatus;
-  
+
 public:
   HepMCG4PythiaMessenger(HepMCG4PythiaInterface* agen);
   ~HepMCG4PythiaMessenger();

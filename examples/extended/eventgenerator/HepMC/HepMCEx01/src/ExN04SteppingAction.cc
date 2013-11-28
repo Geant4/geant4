@@ -29,7 +29,6 @@
 // $Id$
 //
 
-#include "ExN04SteppingAction.hh"
 #include "G4SteppingManager.hh"
 #include "G4Track.hh"
 #include "G4Step.hh"
@@ -38,16 +37,22 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTypes.hh"
+#include "ExN04SteppingAction.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04SteppingAction::ExN04SteppingAction()
-{;}
+{
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 ExN04SteppingAction::~ExN04SteppingAction()
-{;}
+{
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void ExN04SteppingAction::UserSteppingAction(const G4Step * theStep)
 {
-  G4Track * theTrack = theStep->GetTrack();
+  G4Track* theTrack = theStep->GetTrack();
 
   // check if it is alive
   if(theTrack->GetTrackStatus()!=fAlive) { return; }
@@ -74,5 +79,3 @@ void ExN04SteppingAction::UserSteppingAction(const G4Step * theStep)
   // then suspend the track
   theTrack->SetTrackStatus(fSuspend);
 }
-
-
