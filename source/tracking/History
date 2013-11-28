@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28th November2013 M.Asai (tracking-V09-06-09)
+- G4SteppingManager::fTouchableHistory data member is cleared in the
+  destructor to avoid double-deletion in MT mode.
+
 21st November2013 J.Perl (tracking-V09-06-08)
 - G4TrackingManager : Add handling for StoreTrajectory new case 4
 

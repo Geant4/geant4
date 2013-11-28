@@ -97,7 +97,7 @@ G4SteppingManager::G4SteppingManager()
 G4SteppingManager::~G4SteppingManager()
 ///////////////////////////////////////
 {
-
+   fTouchableHandle = 0;
 // Destruct simple 'has-a' objects
    fStep->DeleteSecondaryVector();
 ///////////////////////////   delete fSecondary;
