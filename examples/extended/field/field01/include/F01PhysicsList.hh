@@ -93,19 +93,6 @@ class F01PhysicsList: public G4VUserPhysicsList
 
   private:
 
-    G4PhotoElectricEffect* fPhotoElectricEffect;
-    G4ComptonScattering*   fComptonScattering;
-    G4GammaConversion*     fGammaConversion;
-
-    G4eIonisation*         feminusIonisation;
-    G4eBremsstrahlung*     feminusBremsstrahlung;
-
-    G4eIonisation*         feplusIonisation;
-    G4eBremsstrahlung*     feplusBremsstrahlung;
-
-    F01StepCut* feminusStepCut;
-    F01StepCut* feplusStepCut;
-
     G4double fCutForGamma;
     G4double fCutForElectron;
 
