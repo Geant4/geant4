@@ -95,3 +95,13 @@ geant4_add_dataset(
   MD5SUM    d7049166ef74a592cb97df0ed4b757bd
   )
 
+# - ENSDFSTATE
+geant4_add_dataset(
+  NAME      G4ENSDFSTATE
+  VERSION   1.0
+  FILENAME  G4ENSDFSTATE
+  EXTENSION tar.gz
+  ENVVAR    G4ENSDFSTATEDATA
+  MD5SUM    0c153d96c74e3856288b450436a5e4db
+  )
+
