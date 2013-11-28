@@ -16,6 +16,12 @@ track of all tags.
  
      ----------------------------------------------------------
 
+November 27, 2013 P. Gumplinger (WLS-V09-06-11)
+- Fixed ConstructSDandField():
+  Moved setting the SD and field manager to logical volume outside the tests
+- Put back cleaning volumes and solid stores in Construct()
+- add gui.mac
+
 November 22, 2013 P. Gumplinger (WLS-V09-06-10)
 - replace UpdateGeometry with ReinitializeGeometry
 

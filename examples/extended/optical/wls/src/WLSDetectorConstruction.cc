@@ -40,12 +40,16 @@
 #include "G4PVPlacement.hh"
 
 #include "G4OpBoundaryProcess.hh"
+#include "G4LogicalSkinSurface.hh"
 #include "G4LogicalBorderSurface.hh"
 
 #include "G4Material.hh"
 #include "G4NistManager.hh"
 
 #include "G4GeometryManager.hh"
+#include "G4SolidStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4PhysicalVolumeStore.hh"
 
 #include "G4RunManager.hh"
 
@@ -115,6 +119,15 @@ WLSDetectorConstruction::~WLSDetectorConstruction()
 
 G4VPhysicalVolume* WLSDetectorConstruction::Construct()
 {
+  if (fPhysiWorld) {
+     G4GeometryManager::GetInstance()->OpenGeometry();
+     G4SolidStore::GetInstance()->Clean();
+     G4LogicalVolumeStore::GetInstance()->Clean();
+     G4PhysicalVolumeStore::GetInstance()->Clean();
+     G4LogicalSkinSurface::CleanSurfaceTable();
+     G4LogicalBorderSurface::CleanSurfaceTable();
+  }
+
   fMaterials = WLSMaterials::GetInstance();
 
   UpdateGeometryParameters();
@@ -667,9 +680,10 @@ void WLSDetectorConstruction::ConstructSDandField()
   if (!fmppcSD.Get()) {
      G4String mppcSDName = "WLS/PhotonDet";
      WLSPhotonDetSD* mppcSD = new WLSPhotonDetSD(mppcSDName);
-     SetSensitiveDetector("PhotonDet_LV", mppcSD, true);
      fmppcSD.Put(mppcSD);
   }
+  SetSensitiveDetector("PhotonDet_LV", fmppcSD.Get(), true);
+  
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

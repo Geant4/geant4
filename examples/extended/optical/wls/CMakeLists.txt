@@ -40,7 +40,7 @@ target_link_libraries(wls ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(wls_SCRIPTS
-    init.in Sr90.mac vis.mac wls.in wls.out
+    init.in Sr90.mac vis.mac wls.in gui.mac
   )
 
 foreach(_script ${wls_SCRIPTS})
