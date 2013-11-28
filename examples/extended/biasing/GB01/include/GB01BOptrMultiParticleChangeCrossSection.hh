@@ -108,7 +108,6 @@ private:
 
   // -- count number of biased interations for current track:
   G4int fnInteractions;
-  const G4Track* fTrack;
 };
 
 #endif

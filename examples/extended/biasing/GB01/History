@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 28, 2013, G. Cosmo -  GB01-V09-06-03, GB01-V09-06-02
+- Removed unused data member in GB01BOptrMultiParticleChangeCrossSection.
+
 Nov 27, 2013, M. Verderi -  biasingGB01-V09-06-01
 - improve GB01BOptrMultiParticleChangeCrossSection operator,
   showing how to apply biasing under some conditions.
