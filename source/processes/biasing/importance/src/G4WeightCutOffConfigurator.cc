@@ -64,7 +64,7 @@ G4WeightCutOffConfigurator::~G4WeightCutOffConfigurator()
 {
   if (fPlaced)
   {
-    //    fPlacer.RemoveProcess(fWeightCutOffProcess);
+    fPlacer.RemoveProcess(fWeightCutOffProcess);
     delete fWeightCutOffProcess;
   }
 }

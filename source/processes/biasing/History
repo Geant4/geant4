@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 28th, 2013 Alex Howard (procbiasing-V09-06-14)
+    - Put back RemoveProcess for G4WeightCutOffConfigurator since it is not
+      associated with a store singleton.
+
 Nov 26th, 2013 Alex Howard (procbiasing-V09-06-13)
     - Fixing history file for actual tag names - which have probiasing instead
       of procbiasing!!
