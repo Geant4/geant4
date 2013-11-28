@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 27, 2013 P. Gumplinger (LXe-V09-06-15 and 16)
+- Fixed ConstructSDandField():
+  Moved setting the SD and field manager to logical volume outside the tests
+- Put back cleaning volumes and solid stores in Construct()
+- add gui.mac
+
 November 25, 2013 P. Gumplinger (LXe-V09-06-14)
 - Fixed compilation warnings for data not used in LXeWLSFiber.hh and
   LXeWLSSlab.hh.

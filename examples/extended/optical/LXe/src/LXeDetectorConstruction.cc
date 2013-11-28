@@ -38,8 +38,14 @@
 
 #include "G4SDManager.hh"
 #include "G4RunManager.hh"
+
+#include "G4GeometryManager.hh"
+#include "G4SolidStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalBorderSurface.hh"
 #include "G4LogicalSkinSurface.hh"
+
 #include "G4OpticalSurface.hh"
 #include "G4MaterialTable.hh"
 #include "G4VisAttributes.hh"
@@ -219,6 +225,16 @@ void LXeDetectorConstruction::DefineMaterials(){
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4VPhysicalVolume* LXeDetectorConstruction::Construct(){
+
+  if (fExperimentalHall_phys) {
+     G4GeometryManager::GetInstance()->OpenGeometry();
+     G4SolidStore::GetInstance()->Clean();
+     G4LogicalVolumeStore::GetInstance()->Clean();
+     G4PhysicalVolumeStore::GetInstance()->Clean();
+     G4LogicalSkinSurface::CleanSurfaceTable();
+     G4LogicalBorderSurface::CleanSurfaceTable();
+  }
+
   DefineMaterials();
   return ConstructDetector();
 }
@@ -295,30 +311,30 @@ void LXeDetectorConstruction::ConstructSDandField() {
     //Created here so it exists as pmts are being placed
     G4cout << "Construction /LXeDet/pmtSD" << G4endl;
     LXePMTSD* pmt_SD = new LXePMTSD("/LXeDet/pmtSD");
-
-    //sensitive detector is not actually on the photocathode.
-    //processHits gets done manually by the stepping action.
-    //It is used to detect when photons hit and get absorbed&detected at the
-    //boundary to the photocathode (which doesnt get done by attaching it to a
-    //logical volume.
-    //It does however need to be attached to something or else it doesnt get
-    //reset at the begining of events
-
-    SetSensitiveDetector(fMainVolume->GetLogPhotoCath(), pmt_SD);
     fPmt_SD.Put(pmt_SD);
 
     pmt_SD->InitPMTs((fNx*fNy+fNx*fNz+fNy*fNz)*2); //let pmtSD know # of pmts
     pmt_SD->SetPmtPositions(fMainVolume->GetPmtPositions());
   }
 
+  //sensitive detector is not actually on the photocathode.
+  //processHits gets done manually by the stepping action.
+  //It is used to detect when photons hit and get absorbed&detected at the
+  //boundary to the photocathode (which doesnt get done by attaching it to a
+  //logical volume.
+  //It does however need to be attached to something or else it doesnt get
+  //reset at the begining of events
+
+  SetSensitiveDetector(fMainVolume->GetLogPhotoCath(), fPmt_SD.Get());
+
   // Scint SD
 
   if (!fScint_SD.Get()) {
     G4cout << "Construction /LXeDet/scintSD" << G4endl;
     LXeScintSD* scint_SD = new LXeScintSD("/LXeDet/scintSD");
-    SetSensitiveDetector(fMainVolume->GetLogScint(), scint_SD);
     fScint_SD.Put(scint_SD);
   }
+  SetSensitiveDetector(fMainVolume->GetLogScint(), fScint_SD.Get());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
