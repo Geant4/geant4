@@ -86,6 +86,7 @@ public:  // with description
   virtual G4bool IsKnown(const G4GeometryCell &gCell) const;
     // returns true if the gCell is in the store, else false 
 
+  void Clear();
 
   void SetWorldVolume();
     // set a pointer to the world volume of the 

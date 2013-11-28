@@ -60,6 +60,10 @@ fWorldVolume(G4TransportationManager::GetTransportationManager()->GetParallelWor
 G4IStore::~G4IStore()
 {}
 
+void G4IStore::Clear()
+{
+  fGeometryCelli.clear();
+}
 
 void G4IStore::SetWorldVolume()
 {
@@ -71,7 +75,9 @@ void G4IStore::SetWorldVolume()
 
 void G4IStore::SetParallelWorldVolume(G4String paraName)
 {
+  G4cout << " G4IStore:: SetParallelWorldVolume " << G4endl;
   fWorldVolume = G4TransportationManager::GetTransportationManager()->GetParallelWorld(paraName);
+  G4cout << " ParallelWorld volume is: " << fWorldVolume->GetName() << G4endl;
     //  fGeometryCelli = new G4GeometryCellImportance;
 }
 

@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 27th, 2013 A.Howard (geombias-V09-06-10)
+- Added Clear() method to G4IStore and G4WeightWindowStore to allow changes to
+  the store within a run, if required.
+
 November 27th, 2013 A.Howard (geombias-V09-06-09)
 - Added SetWorldVolume and SetParallelWorldVolume methods to G4WeightWindowStore
 

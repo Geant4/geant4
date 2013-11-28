@@ -128,6 +128,11 @@ G4bool G4WeightWindowStore::IsKnown(const G4GeometryCell &gCell) const
   return inWorldKnown;
 }
 
+void G4WeightWindowStore::Clear()
+{
+  fCellToUpEnBoundLoWePairsMap.clear();
+}
+
 void G4WeightWindowStore::SetWorldVolume()
 {
   G4cout << " G4IStore:: SetWorldVolume " << G4endl;
