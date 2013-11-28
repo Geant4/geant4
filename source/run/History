@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+Nov 27th, 2013, G. Folger (run-V09-06-137)
+- G4MTRunManager.cc: Correctly delete randDbl using delete [] 
+
 Nov 27th, 2013, G. Folger (run-V09-06-136)
 - Correct deletion of memory: using free() for memory obtained with malloc()
 

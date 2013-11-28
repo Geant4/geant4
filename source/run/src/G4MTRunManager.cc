@@ -166,7 +166,7 @@ G4MTRunManager::~G4MTRunManager()
     //G4ProcessTable::DeleteMessenger from ~G4RunManager
     //G4cout<<"Destroy MTRunManager"<<G4endl;//ANDREA
     TerminateWorkers();
-    delete randDbl;
+    delete [] randDbl;
 }
 
 void G4MTRunManager::StoreRNGStatus(const G4String& fn )
