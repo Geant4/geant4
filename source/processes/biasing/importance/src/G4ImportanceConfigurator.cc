@@ -74,7 +74,7 @@ G4ImportanceConfigurator::~G4ImportanceConfigurator()
 {
   if (fImportanceProcess)
   {
-    //    fPlacer.RemoveProcess(fImportanceProcess);
+    fPlacer.RemoveProcess(fImportanceProcess);
     delete fImportanceProcess;
   }
   if (fDeleteIalg)

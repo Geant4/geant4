@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 29th, 2013 Alex Howard (procbiasing-V09-06-16)
+    - Put back RemoveProcess for both G4WeightWindowConfigurator and 
+      G4ImportanceConfigurator - makes test33 work.
 
 Nov 28th, 2013 Marc Verderi (procbiasing-V09-06-15)
     - include license/disclaimer in headers in generic and management

@@ -58,7 +58,7 @@ G4WeightWindowConfigurator::~G4WeightWindowConfigurator()
 {  
   if (fWeightWindowProcess)
   {
-    //    fPlacer.RemoveProcess(fWeightWindowProcess);
+    fPlacer.RemoveProcess(fWeightWindowProcess);
     delete fWeightWindowProcess;
   }
   if (fDeleteWWalg)
