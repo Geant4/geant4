@@ -158,9 +158,9 @@ GEANT4_ADD_TEST(example-ext-biasing-b03 COMMAND ${BINDIR}/exampleB03
 GEANT4_ADD_TEST(example-ext-biasing-gb01 
                 COMMAND ${BINDIR}/exampleGB01 ${SRCDIR}/extended/biasing/GB01/exampleGB01.in
                 BUILD ${SRCDIR}/extended/biasing/GB01)
-#GEANT4_ADD_TEST(example-ext-biasing-gb02 
-#                COMMAND ${BINDIR}/exampleGB02 ${SRCDIR}/extended/biasing/GB02/exampleGB02.in 
-#                BUILD ${SRCDIR}/extended/biasing/GB02)
+GEANT4_ADD_TEST(example-ext-biasing-gb02 
+                COMMAND ${BINDIR}/exampleGB02 ${SRCDIR}/extended/biasing/GB02/exampleGB02.in 
+                BUILD ${SRCDIR}/extended/biasing/GB02)
 GEANT4_ADD_TEST(example-ext-biasing-reversemc01 COMMAND ${BINDIR}/exampleRMC01 ${SRCDIR}/extended/biasing/ReverseMC01/run_adjoint_simulation_electron.g4mac  
                                         BUILD ${SRCDIR}/extended/biasing/ReverseMC01)
 foreach(_i 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18)
@@ -212,7 +212,7 @@ endforeach()
 #                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/g3tog4/clGeometry
 #                  BUILD clGeometry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 #endif()
-foreach(_i 00 01 02 03 04)
+foreach(_i 00 01 02 03 04 05)
   GEANT4_ADD_TEST(example-ext-hadronic-hadr${_i} 
                   COMMAND ${BINDIR}/Hadr${_i} ${SRCDIR}/extended/hadronic/Hadr${_i}/hadr${_i}.in
                   BUILD ${SRCDIR}/extended/hadronic/Hadr${_i})

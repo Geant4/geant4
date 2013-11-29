@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V09-06-30 28 November 2013 Ivana Hrivnacova
+- Added new extended biasing/GB02 example in tests
+
+ctests-V09-06-29 28 November 2013 Ivana Hrivnacova
+- Added new extended hadronic/Hadr05 example in tests
+
 ctests-V09-06-28 27 November 2013 Ivana Hrivnacova
 - Added new extended biasing/GB01 example in tests
 

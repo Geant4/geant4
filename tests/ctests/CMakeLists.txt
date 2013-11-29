@@ -131,12 +131,12 @@ GEANT4_ADD_TEST(example-ext-biasing-gb01
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/GB01
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB01
                 BUILD exampleGB01 PROJECT GB01project ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-#GEANT4_ADD_TEST(example-ext-biasing-gb02 
-#                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB02/exampleGB02
-#                        ${CMAKE_SOURCE_DIR}/examples/extended/biasing/GB02/exampleGB02.in
-#                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/GB02
-#                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB02
-#                BUILD exampleGB02 PROJECT GB02project ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-ext-biasing-gb02 
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB02/exampleGB02
+                        ${CMAKE_SOURCE_DIR}/examples/extended/biasing/GB02/exampleGB02.in
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/GB02
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB02
+                BUILD exampleGB02 PROJECT GB02project ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-biasing-reversemc01 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/ReverseMC01/exampleRMC01
                         ${CMAKE_SOURCE_DIR}/examples/extended/biasing/ReverseMC01/run_adjoint_simulation_electron.mac
@@ -215,7 +215,7 @@ GEANT4_ADD_TEST(example-ext-geometry-transforms
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/geometry/transforms
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/geometry/transforms
                 BUILD transforms )
-foreach(_i 00 01 02 03 04)
+foreach(_i 00 01 02 03 04 05)
   GEANT4_ADD_TEST(example-ext-hadronic-hadr${_i} 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/hadronic/Hadr${_i}/Hadr${_i}
                           ${CMAKE_SOURCE_DIR}/examples/extended/hadronic/Hadr${_i}/hadr${_i}.in
