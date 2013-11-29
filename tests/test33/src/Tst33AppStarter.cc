@@ -234,10 +234,10 @@ G4bool Tst33AppStarter::CheckCreateIStore() {
     G4cout << "Tst33AppStarter::CheckCreateIStore: !IsGeo_n_App()!" << G4endl;
     createistore = false;
   }  
-  if (fIStore) {
-    G4cout << "Tst33AppStarter::CheckCreateIStore: an importance store already exists!" << G4endl;
-    createistore = false;
-  }
+  // if (fIStore) {
+  //   G4cout << "Tst33AppStarter::CheckCreateIStore: an importance store already exists!" << G4endl;
+  //   createistore = false;
+  // }
   return createistore;
 }
 
@@ -247,10 +247,10 @@ G4bool Tst33AppStarter::CheckCreateWeightWindowStore() {
     G4cout << "Tst33AppStarter::CheckCreateWeightWindowStore: !IsGeo_n_App()!" << G4endl;
     createWWstore = false;
   }  
-  if (fWWStore) {
-    G4cout << "Tst33AppStarter::CheckCreateWeightWindowStore: an weight window store already exists!" << G4endl;
-    createWWstore = false;
-  }
+  // if (fWWStore) {
+  //   G4cout << "Tst33AppStarter::CheckCreateWeightWindowStore: an weight window store already exists!" << G4endl;
+  //   createWWstore = false;
+  // }
   return createWWstore;
 }
 
@@ -411,10 +411,11 @@ void Tst33AppStarter::ClearSampling() {
   }
   else {
     fSampler->ClearSampling();
-    if (fIStore) {
-      delete fIStore;
-      fIStore = 0;
-    }
+    G4IStore::GetInstance()->Clear();
+    // if (fIStore) {
+    //   delete fIStore;
+    //   fIStore = 0;
+    // }
     fEventAction->Clear();
     if (fWeightroulette) {
       fChangeWeightPlacer->RemoveProcess(fWeightChangeProcess);
@@ -430,10 +431,11 @@ void Tst33AppStarter::ClearSampling() {
       delete fChangeWeightPlacer;
       fChangeWeightPlacer = 0;
     }
-    if (fWWStore) {
-      delete fWWStore;
-      fWWStore = 0;
-    }
+    G4WeightWindowStore::GetInstance()->Clear();
+    // if (fWWStore) {
+    //   delete fWWStore;
+    //   fWWStore = 0;
+    // }
     if (fWWAlg) {
       delete fWWAlg;
       fWWAlg = 0;

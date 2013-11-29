@@ -68,10 +68,10 @@ G4IStore *Tst33IStoreBuilder::CreateIStore(Tst33VGeometry *samplegeo, G4bool par
     }
   // adding GeometryCell for world volume. ReplicaNumer = 0, since  "geomvol-V05-00-01 !
   G4GeometryCell gWorldCell(pworld, 0);
-  G4cout << " got here 1" << G4endl;
-  G4cout << " pworld" << pworld.GetName() << G4endl;
+  G4cout << "Tst33IStoreBuilder::CreateIStore got here 1" << G4endl;
+  G4cout << "Tst33IStoreBuilder::CreateIStore pworld" << pworld.GetName() << G4endl;
   istore->AddImportanceGeometryCell(1, gWorldCell);
-  G4cout << " got here 2" << G4endl;
+  G4cout << "Tst33IStoreBuilder::CreateIStore got here 2" << G4endl;
 
   //  tst33store.AddG4CellScorer(gWorldCell);
   
