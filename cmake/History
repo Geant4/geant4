@@ -30,6 +30,18 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+28th November 2013 - Ben Morgan (cmake-V09-06-45)
+- Modules/Geant4CTest.cmake : Remove G4ENSDFSTATE dataset from list
+  exported to the testing environment, as it should not be used by
+  default.
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Remove G4ENSDFSTATE
+  from datasets exported to the environment. This is because this dataset
+  should not be set in the environment by default.
+- Modules/Geant4InstallData.cmake : Remove G4ENSDFSTATE dataset from
+  export definitions. The ENSDF data is not intended to be used by 
+  default, and any setting of its environment variable changes the
+  behaviour of Geant4 (i.e. it's an active rather than passive variable).
+
 27th November 2013 - Gunter Folger (cmake-V09-06-44)
 - Modules/Geant4DatasetDefinitions.cmake: Add ENSDFSTATE data
 

@@ -9,12 +9,13 @@ if(GEANT4_ENABLE_TESTING)
   enable_testing()
   include(CTest)
 
-  # - Geant4_DIR is needed to locate GeantConfig.cmake file required 
+  # - Geant4_DIR is needed to locate GeantConfig.cmake file required
   # by tests and examples
   set(Geant4_DIR ${CMAKE_BINARY_DIR} CACHE PATH "Current build directory")
 
   # - Add datasets to testing environment
   geant4_get_datasetnames(_dslist)
+  list(REMOVE_ITEM _dslist "G4ENSDFSTATE")
   foreach(_ds ${_dslist})
     geant4_get_dataset_property(${_ds} ENVVAR _dsenvvar)
     geant4_get_dataset_property(${_ds} BUILD_DIR _dspath)

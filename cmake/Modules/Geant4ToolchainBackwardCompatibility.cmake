@@ -529,6 +529,7 @@ set(G4WORKDIR_DEFAULT "\$HOME/geant4_workdir")
 
 # - Data
 geant4_get_datasetnames(GEANT4_EXPORTED_DATASETS)
+list(REMOVE_ITEM GEANT4_EXPORTED_DATASETS "G4ENSDFSTATE")
 foreach(_ds ${GEANT4_EXPORTED_DATASETS})
   geant4_get_dataset_property(${_ds} ENVVAR ${_ds}_ENVVAR)
   geant4_get_dataset_property(${_ds} BUILD_DIR ${_ds}_PATH)
@@ -587,6 +588,7 @@ set(G4WORKDIR_DEFAULT "\$HOME/geant4_workdir")
 
 # - Data
 geant4_get_datasetnames(GEANT4_EXPORTED_DATASETS)
+list(REMOVE_ITEM GEANT4_EXPORTED_DATASETS "G4ENSDFSTATE")
 foreach(_ds ${GEANT4_EXPORTED_DATASETS})
   geant4_get_dataset_property(${_ds} ENVVAR ${_ds}_ENVVAR)
   geant4_get_dataset_property(${_ds} INSTALL_DIR ${_ds}_PATH)
@@ -648,6 +650,7 @@ file(RELATIVE_PATH
 
 # - Data
 geant4_get_datasetnames(GEANT4_EXPORTED_DATASETS)
+list(REMOVE_ITEM GEANT4_EXPORTED_DATASETS "G4ENSDFSTATE")
 foreach(_ds ${GEANT4_EXPORTED_DATASETS})
   geant4_get_dataset_property(${_ds} ENVVAR ${_ds}_ENVVAR)
   geant4_get_dataset_property(${_ds} INSTALL_DIR ${_ds}_PATH)
