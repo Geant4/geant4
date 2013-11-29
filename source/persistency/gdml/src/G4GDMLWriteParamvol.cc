@@ -323,66 +323,62 @@ Hype_dimensionsWrite(xercesc::DOMElement* parametersElement,
 
 void G4GDMLWriteParamvol::
 Polycone_dimensionsWrite(xercesc::DOMElement* parametersElement,
-                     const G4Polycone* const pcone)
+                         const G4Polycone* const pcone)
 {
-   xercesc::DOMElement* pcone_dimensionsElement = NewElement("polycone_dimensions");
+   xercesc::DOMElement* pcone_dimensionsElement
+     = NewElement("polycone_dimensions");
 
-   pcone_dimensionsElement->
-     setAttributeNode(NewAttribute("numRZ",pcone->GetOriginalParameters()->Num_z_planes));
-     pcone_dimensionsElement->
-       setAttributeNode(NewAttribute("startPhi",pcone->GetOriginalParameters()->Start_angle/degree));
-   pcone_dimensionsElement->
-     setAttributeNode(NewAttribute("openPhi", pcone->GetOriginalParameters()->Opening_angle/degree));
-   pcone_dimensionsElement->
-     setAttributeNode(NewAttribute("aunit","deg"));
-   pcone_dimensionsElement->
-     setAttributeNode(NewAttribute("lunit","mm"));
+   pcone_dimensionsElement->setAttributeNode(NewAttribute("numRZ",
+                      pcone->GetOriginalParameters()->Num_z_planes));
+   pcone_dimensionsElement->setAttributeNode(NewAttribute("startPhi",
+                      pcone->GetOriginalParameters()->Start_angle/degree));
+   pcone_dimensionsElement->setAttributeNode(NewAttribute("openPhi",
+                      pcone->GetOriginalParameters()->Opening_angle/degree));
+   pcone_dimensionsElement->setAttributeNode(NewAttribute("aunit","deg"));
+   pcone_dimensionsElement->setAttributeNode(NewAttribute("lunit","mm"));
 
-    parametersElement->appendChild(pcone_dimensionsElement);
-    const size_t num_zplanes = pcone->GetOriginalParameters()->Num_z_planes;
-    const G4double* z_array = pcone->GetOriginalParameters()->Z_values;
-    const G4double* rmin_array = pcone->GetOriginalParameters()->Rmin;
-    const G4double* rmax_array = pcone->GetOriginalParameters()->Rmax;
+   parametersElement->appendChild(pcone_dimensionsElement);
+   const size_t num_zplanes = pcone->GetOriginalParameters()->Num_z_planes;
+   const G4double* z_array = pcone->GetOriginalParameters()->Z_values;
+   const G4double* rmin_array = pcone->GetOriginalParameters()->Rmin;
+   const G4double* rmax_array = pcone->GetOriginalParameters()->Rmax;
 
-    for (size_t i=0; i<num_zplanes; i++)
-    {
-     ZplaneWrite(pcone_dimensionsElement,z_array[i],rmin_array[i],rmax_array[i]);
-    }
-
-    // parametersElement->appendChild(pcone_dimensionsElement);
+   for (size_t i=0; i<num_zplanes; i++)
+   {
+     ZplaneWrite(pcone_dimensionsElement,z_array[i],
+                 rmin_array[i],rmax_array[i]);
+   }
 }
 
 void G4GDMLWriteParamvol:: 
 Polyhedra_dimensionsWrite(xercesc::DOMElement* parametersElement,
-                     const G4Polyhedra* const polyhedra)
+                          const G4Polyhedra* const polyhedra)
 {
-   xercesc::DOMElement* polyhedra_dimensionsElement = NewElement("polyhedra_dimensions");
+   xercesc::DOMElement* polyhedra_dimensionsElement
+     = NewElement("polyhedra_dimensions");
 
-   polyhedra_dimensionsElement->
-     setAttributeNode(NewAttribute("numRZ",polyhedra->GetOriginalParameters()->Num_z_planes));
-   polyhedra_dimensionsElement->
-     setAttributeNode(NewAttribute("numSide",polyhedra->GetOriginalParameters()->numSide));
-   polyhedra_dimensionsElement->
-       setAttributeNode(NewAttribute("startPhi",polyhedra->GetOriginalParameters()->Start_angle/degree));
-   polyhedra_dimensionsElement->
-     setAttributeNode(NewAttribute("openPhi", polyhedra->GetOriginalParameters()->Opening_angle/degree));
-   polyhedra_dimensionsElement->
-     setAttributeNode(NewAttribute("aunit","deg"));
-   polyhedra_dimensionsElement->
-     setAttributeNode(NewAttribute("lunit","mm"));
-
-    const size_t num_zplanes = polyhedra->GetOriginalParameters()->Num_z_planes;
-    const G4double* z_array = polyhedra->GetOriginalParameters()->Z_values;
-    const G4double* rmin_array = polyhedra->GetOriginalParameters()->Rmin;
-    const G4double* rmax_array = polyhedra->GetOriginalParameters()->Rmax;
-
-    for (size_t i=0; i<num_zplanes; i++)
-    {
-      ZplaneWrite(polyhedra_dimensionsElement,z_array[i],rmin_array[i],rmax_array[i]);
-    }
+   polyhedra_dimensionsElement->setAttributeNode(NewAttribute("numRZ",
+                  polyhedra->GetOriginalParameters()->Num_z_planes));
+   polyhedra_dimensionsElement->setAttributeNode(NewAttribute("numSide",
+                  polyhedra->GetOriginalParameters()->numSide));
+   polyhedra_dimensionsElement->setAttributeNode(NewAttribute("startPhi",
+                  polyhedra->GetOriginalParameters()->Start_angle/degree));
+   polyhedra_dimensionsElement->setAttributeNode(NewAttribute("openPhi",
+                  polyhedra->GetOriginalParameters()->Opening_angle/degree));
+   polyhedra_dimensionsElement->setAttributeNode(NewAttribute("aunit","deg"));
+   polyhedra_dimensionsElement->setAttributeNode(NewAttribute("lunit","mm"));
 
    parametersElement->appendChild(polyhedra_dimensionsElement);
-  
+   const size_t num_zplanes = polyhedra->GetOriginalParameters()->Num_z_planes;
+   const G4double* z_array = polyhedra->GetOriginalParameters()->Z_values;
+   const G4double* rmin_array = polyhedra->GetOriginalParameters()->Rmin;
+   const G4double* rmax_array = polyhedra->GetOriginalParameters()->Rmax;
+
+   for (size_t i=0; i<num_zplanes; i++)
+   {
+     ZplaneWrite(polyhedra_dimensionsElement,z_array[i],
+                 rmin_array[i],rmax_array[i]);
+   }
 }
 
 void G4GDMLWriteParamvol::

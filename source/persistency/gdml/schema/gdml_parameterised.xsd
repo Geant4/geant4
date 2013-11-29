@@ -211,51 +211,52 @@
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="DimensionsType">
-	<xs:attribute default="1.0" name="numRZ"        type="ExpressionOrIDREFType"></xs:attribute>
-	<xs:attribute default="0.0" name="startPhi"        type="ExpressionOrIDREFType"></xs:attribute>
-	<xs:attribute default="1.0" name="openPhi"        type="ExpressionOrIDREFType"></xs:attribute>
         <xs:sequence>
-	    <xs:element name="zplane" minOccurs="1" maxOccurs="unbounded" type="ZPlaneType"/>	
+	  <xs:element name="zplane" minOccurs="1" maxOccurs="unbounded" type="ZPlaneType"/>	
         </xs:sequence>
-	<xs:attribute default="mm"  name="lunit"    type="xs:string"></xs:attribute>
-	<xs:attribute default="radian" name="aunit" type="xs:string"></xs:attribute>
+       	<xs:attribute default="1.0" name="numRZ"        type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="0.0" name="startPhi"     type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="openPhi"      type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="mm"  name="lunit"        type="xs:string"></xs:attribute>
+	<xs:attribute default="radian" name="aunit"     type="xs:string"></xs:attribute>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-  <xs:element name="polycone_dimensions" substitutionGroup="Dimensions" type="ParaDimensionsType"/>
-   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+  <xs:element name="polycone_dimensions" substitutionGroup="Dimensions" type="PolyconeDimensionsType"/>
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <xs:complexType name="PolyhedraDimensionsType">
     <xs:annotation>
       <xs:documentation>Dimensions for parametrised Polyhedra. </xs:documentation>
     </xs:annotation>
     <xs:complexContent>
       <xs:extension base="DimensionsType">
-	<xs:attribute default="1.0" name="numRZ"        type="ExpressionOrIDREFType"></xs:attribute>
-	<xs:attribute default="1.0" name="numSide"        type="ExpressionOrIDREFType"></xs:attribute>
-	<xs:attribute default="1.0" name="startPhi"        type="ExpressionOrIDREFType"></xs:attribute>
-	<xs:attribute default="1.0" name="openPhi"    type="ExpressionOrIDREFType"></xs:attribute>
         <xs:sequence>
-	    <xs:element name="zplane" minOccurs="1" maxOccurs="unbounded" type="ZPlaneType"/>	
+	  <xs:element name="zplane" minOccurs="1" maxOccurs="unbounded" type="ZPlaneParamType"/>	
         </xs:sequence>
-	<xs:attribute default="mm"  name="lunit"    type="xs:string"></xs:attribute>
-	<xs:attribute default="radian" name="aunit" type="xs:string"></xs:attribute>
+       	<xs:attribute default="1.0" name="numRZ"         type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="numSide"       type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="startPhi"      type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="1.0" name="openPhi"       type="ExpressionOrIDREFType"></xs:attribute>
+	<xs:attribute default="mm"  name="lunit"         type="xs:string"></xs:attribute>
+	<xs:attribute default="radian" name="aunit"      type="xs:string"></xs:attribute>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
 
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-  <xs:element name="polyhedra_dimensions" substitutionGroup="Dimensions" type="ParaDimensionsType"/>
+  <xs:element name="polyhedra_dimensions" substitutionGroup="Dimensions" type="PolyhedraDimensionsType"/>
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-  <xs:complexType name="ZPlaneType">
-  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
-    <xs:attribute name="z" type="ExpressionOrIDREFType" use="required"></xs:attribute>
-    <xs:attribute default="0.0" name="rmin" type="ExpressionOrIDREFType"></xs:attribute>
-    <xs:attribute name="rmax" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+  <xs:complexType name="ZPlaneParamType">
+     <xs:attribute default="0.0" name="z"    type="ExpressionOrIDREFType" ></xs:attribute>
+     <xs:attribute default="0.0" name="rmin" type="ExpressionOrIDREFType"></xs:attribute>
+     <xs:attribute default="1.0" name="rmax" type="ExpressionOrIDREFType" ></xs:attribute>
   </xs:complexType>
  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   <xs:complexType name="HypeDimensionsType">
+ <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
     <xs:annotation>
       <xs:documentation>Dimensions for parametrised Hypes. </xs:documentation>
     </xs:annotation>

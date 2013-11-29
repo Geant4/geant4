@@ -54,27 +54,36 @@
     </xs:complexContent>
   </xs:complexType>
 
- <!-- +++++++++++++ -->
+  <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
+
   <xs:complexType name="multiUnionNode">
-    <xs:attribute name="solid" type="ReferenceType" use="required"></xs:attribute>
-     <xs:choice minOccurs="0">
-     <xs:element name="position" type="positionType"></xs:element>
-     <xs:element name="positionref" type="ReferenceType"></xs:element>
-    </xs:choice>
-    <xs:choice minOccurs="0">
-     <xs:element name="rotation" type="rotationType"></xs:element>
-     <xs:element name="rotationref" type="ReferenceType"></xs:element>
-   </xs:choice>
+    <xs:annotation>
+      <xs:documentation>Base node for Multi-Union structure</xs:documentation>
+    </xs:annotation>
+    <xs:complexContent>
+      <xs:extension base="SolidType">
+	<xs:sequence>
+          <xs:choice minOccurs="0">
+            <xs:element name="position" type="positionType"></xs:element>
+            <xs:element name="positionref" type="ReferenceType"></xs:element>
+          </xs:choice>
+          <xs:choice minOccurs="0">
+            <xs:element name="rotation" type="rotationType"></xs:element>
+            <xs:element name="rotationref" type="ReferenceType"></xs:element>
+          </xs:choice>
+	</xs:sequence>
+        <xs:attribute name="solid" type="ExpressionOrIDREFType" use="required"></xs:attribute>
+      </xs:extension>
+    </xs:complexContent>
   </xs:complexType>
 
   <!-- ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++ -->
   
   <xs:element name="multiUnion" substitutionGroup="Solid">
     <xs:annotation>
-      <xs:documentation> multiUnion is a Solid created by Union of many Solids.
-       This Solid is constructed by multiUnionNodes, 
+      <xs:documentation>MultiUnion is a Solid created by Union of many Solids.
+       This Solid is constructed by multiUnionNodes;
        each Node is described by solid with its position and rotation.
-
       </xs:documentation>
     </xs:annotation>
     <xs:complexType>

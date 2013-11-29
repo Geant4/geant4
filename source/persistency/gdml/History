@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 November 2013 Tatiana Nikitina (gdml-V09-06-09)
+- Fixed GDML schema for spurious validation errors on last changes introduced
+  for parameterisation of polycone and polyhedra and multi-union.
+- Fixed typo in G4GDMLReadParamvol and some code cleanup.
+
 23 November 2013 Gabriele Cosmo (gdml-V09-06-08)
 - Fixed compilation warnings on SLC5/gcc-4.1.
 
