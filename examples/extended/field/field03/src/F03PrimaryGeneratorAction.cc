@@ -49,7 +49,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
- G4String F03PrimaryGeneratorAction::fgPrimaryParticleName = "e-"; 
+G4ParticleDefinition*  F03PrimaryGeneratorAction::fgPrimaryParticle = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -79,7 +79,7 @@ F03PrimaryGeneratorAction::F03PrimaryGeneratorAction(
     = particleTable->FindParticle(particleName="e-");
   fParticleGun->SetParticleDefinition(particle);
 
-  fgPrimaryParticleName = particle->GetParticleName();
+  fgPrimaryParticle = particle;
 
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,-1.));
   fParticleGun->SetParticleEnergy(1.*GeV);
@@ -103,8 +103,7 @@ void F03PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   // this function is called at the begining of event
   //
-  fgPrimaryParticleName
-    = fParticleGun->GetParticleDefinition()->GetParticleName();
+  fgPrimaryParticle = fParticleGun->GetParticleDefinition();
 
   G4double x0,y0,z0;
   if (fVertexDefined)
@@ -137,7 +136,7 @@ void F03PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 G4String F03PrimaryGeneratorAction::GetPrimaryName()
 {
-   return fgPrimaryParticleName;
+   return fgPrimaryParticle->GetParticleName();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
