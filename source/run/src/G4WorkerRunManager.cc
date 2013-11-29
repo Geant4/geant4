@@ -73,7 +73,13 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM) {
 
 #ifdef G4MULTITHREADED
     G4VVisManager* pVVis = G4VVisManager::GetConcreteInstance();
-    if(pVVis) pVVis->SetUpForAThread();
+    if(pVVis)
+    {
+      pVVis->SetUpForAThread();
+      visIsSetUp = true;
+    }
+    else
+    { visIsSetUp = false; }
 #endif
 }
 
@@ -117,6 +123,18 @@ void G4WorkerRunManager::InitializeGeometry() {
 
 void G4WorkerRunManager::RunInitialization()
 {
+#ifdef G4MULTITHREADED
+  if(!visIsSetUp)
+  {
+    G4VVisManager* pVVis = G4VVisManager::GetConcreteInstance();
+    if(pVVis)
+    {
+      pVVis->SetUpForAThread();
+      visIsSetUp = true;
+    }
+  }
+#endif
+
   if(!(kernel->RunInitialization(fakeRun))) return;
   if(currentRun) delete currentRun;
   currentRun = 0;

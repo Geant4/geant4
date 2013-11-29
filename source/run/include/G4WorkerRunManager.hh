@@ -94,6 +94,11 @@ protected:
     G4int nevModulo;
     G4int currEvID;
     G4SeedsQueue seedsQueue;
+
+#ifdef G4MULTITHREADED
+private:
+    G4bool visIsSetUp;
+#endif
 };
 
 #endif //G4WorkerRunManager_h

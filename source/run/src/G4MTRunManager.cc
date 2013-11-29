@@ -208,6 +208,7 @@ void G4MTRunManager::Initialize()
     // make sure all worker threads are set up.
     BeamOn(0);
     SetRunIDCounter(0);
+    ///G4UImanager::GetUIpointer()->SetIgnoreCmdNotFound(true);
 }
 
 void G4MTRunManager::TerminateEventLoop()

@@ -18,6 +18,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 
+Nov 29th, 2013, M. Asai (run-V09-06-138, run-V09-06-139)
+- Vis manager is now registered to the worker threads at the first
+  run after vis manager is instantiated.
+
 Nov 27th, 2013, G. Folger (run-V09-06-137)
 - G4MTRunManager.cc: Correctly delete randDbl using delete [] 
 
