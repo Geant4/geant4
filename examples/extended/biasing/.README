@@ -5,9 +5,9 @@
 
 /*! \page Examples_biasing Category "biasing"
 
-\section biasing_s1 B01 and B02
+\section biasing_s1 B01, B02 and B03
 
-B01 and B02 applications demonstrate the usage of different variance
+B01, B02 and B03 applications demonstrate the usage of different variance
 reduction techniques supported in Geant4, or possible from the user
 applications.
 
@@ -84,8 +84,22 @@ This demonstrates a customised "flat" physics implementation with the addition
 of biasing. Complementary approach to the modular physics lists of B01 and B02
 
 
+\section biasing_s2 Generic biasing examples GB01, GB02
 
-\section biasing_s2 Reverse MonteCarlo Technique example
+These examples illustrate the usage of a biasing scheme implemented since
+version Geant4 10.0.
+The scheme is meant to be extensible, not limited to these two examples.
+
+\link ExampleGB01 Example GB01  \endlink
+
+This example illustrates how to bias process cross-sections in this scheme.
+
+\link ExampleGB02 Example GB02  \endlink
+
+Illustrates a force collision scheme similar to the MCNP one.
+
+
+\section biasing_s3 Reverse MonteCarlo Technique example
 
 \link ExampleReverseMC01 Example ReverseMC01 \endlink
 

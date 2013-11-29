@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 29, 2013, I. Hrivnacova
+- Added GNUmakefile, .README
+
 Nov 28, 2013, M. Verderi -  GB01-V09-06-05
 - correct README
 

@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 29, 2013 I.Hrivnacova - exbiasing-V09-06-05
+- Fixed documentation for Doxygen,
+  added missing GNUmakefile in GB01, GB02
+
 Nov 23, 2013 A. Howard - exbiasing-V09-06-04
 - Fixed single threaded problem with B03 (double bias process)
 

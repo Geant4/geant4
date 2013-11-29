@@ -83,6 +83,27 @@ This demonstrates a customised "flat" physics implementation with the addition
 of biasing. Complementary approach to the modular physics lists of B01 and B02
 
 
+ ___________________________________________________________________________
+
+
+            Generic biasing examples GB01, GB02
+            ------------------------------------
+
+These examples illustrate the usage of a biasing scheme implemented since
+version Geant4 10.0.
+The scheme is meant to be extensible, not limited to these two examples.
+
+Example GB01:
+=============
+
+This example illustrates how to bias process cross-sections in this scheme.
+
+
+Example GB02:
+=============
+
+Illustrates a force collision scheme similar to the MCNP one.
+
 
  ___________________________________________________________________________
 
