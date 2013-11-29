@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 28, 2013 P. Gumplinger (OpNovice-V09-06-11)
+- add gui.mac, icons.mac and run.png
+
 November 2, 2013 P. Gumplinger (OpNovice-V09-06-10)
 - place G4Random::setTheSeed(myseed) so that it is executed for both
   sequential and MT mode

@@ -61,10 +61,6 @@
 #include "G4UIExecutive.hh"
 #endif
 
-#ifdef G4UI_USE
-#include "G4UIExecutive.hh"
-#endif
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 namespace {
   void PrintUsage() {

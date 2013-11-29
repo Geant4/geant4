@@ -40,7 +40,13 @@ target_link_libraries(OpNovice ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(OpNovice_SCRIPTS
-    OpNovice.in OpNovice.out optPhoton.mac vis.mac
+    OpNovice.out
+    OpNovice.in
+    optPhoton.mac
+    gui.mac
+    icons.mac
+    run.png
+    vis.mac
   )
 
 foreach(_script ${OpNovice_SCRIPTS})
