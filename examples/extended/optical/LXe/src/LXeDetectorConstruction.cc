@@ -228,9 +228,9 @@ G4VPhysicalVolume* LXeDetectorConstruction::Construct(){
 
   if (fExperimentalHall_phys) {
      G4GeometryManager::GetInstance()->OpenGeometry();
-     G4SolidStore::GetInstance()->Clean();
-     G4LogicalVolumeStore::GetInstance()->Clean();
      G4PhysicalVolumeStore::GetInstance()->Clean();
+     G4LogicalVolumeStore::GetInstance()->Clean();
+     G4SolidStore::GetInstance()->Clean();
      G4LogicalSkinSurface::CleanSurfaceTable();
      G4LogicalBorderSurface::CleanSurfaceTable();
   }

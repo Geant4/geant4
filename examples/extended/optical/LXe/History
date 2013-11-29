@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 28, 2013 P. Gumplinger (LXe-V09-06-17)
+- add icons.mac run.png
+
 November 27, 2013 P. Gumplinger (LXe-V09-06-15 and 16)
 - Fixed ConstructSDandField():
   Moved setting the SD and field manager to logical volume outside the tests
