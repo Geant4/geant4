@@ -3,7 +3,7 @@
 # GNUmakefile for geometry/usolids library.  Gabriele Cosmo, 16/11/96.
 # --------------------------------------------------------------------
 
-name := G4GeomUSolids
+name := G4geomUSolids
 
 ifndef G4INSTALL
   G4INSTALL = ../../../..
