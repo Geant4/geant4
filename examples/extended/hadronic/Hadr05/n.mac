@@ -1,5 +1,5 @@
 #================================================
-#     Macro file for Hadr05
+#     Macro file for Hadr00
 #     14.04.2009 Ivanchneko
 #================================================
 /control/verbose 1
@@ -8,7 +8,7 @@
 /testhadr/TargetMat        G4_C
 /testhadr/TargetRadius     1  cm
 /testhadr/TargetLength     10 cm
-/testhadr/PrintModulo      10
+/run/printProgress      10
 #/testhadr/HistoPrint       3
 #
 /run/initialize
@@ -16,7 +16,7 @@
 #
 /gun/particle  neutron
 /gun/energy 100. MeV
-/testhadr/histo/fileName  nC
+###/testhadr/histo/fileName  nC
 /testhadr/particle   neutron
 /testhadr/verbose 1
 /process/eLoss/verbose 0

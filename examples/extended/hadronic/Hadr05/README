@@ -11,10 +11,10 @@
 
 
 This example demonstrates the usage of G4GenericPhysicsList to build 
-the concrente physics list at the run time. The code is a copy of
+the concrete physics list at the run time. The code is a copy of
 example Hadr00 with the only exception of the main file, where the
 physics list is handled using the G4GenericPhysicsList
-mechanism. Please refere to Hadr00 documentation for any other
+mechanism. Please refer to Hadr00 documentation for any other
 functionality. 
 
 The G4GenericPhysicsList class allows to build the physics list at the run

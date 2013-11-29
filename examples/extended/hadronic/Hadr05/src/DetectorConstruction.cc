@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr00/src/DetectorConstruction.cc
 /// \brief Implementation of the DetectorConstruction class
 //
-// $Id: DetectorConstruction.cc 70747 2013-06-05 11:56:02Z ihrivnac $
+// $Id: DetectorConstruction.cc 77210 2013-11-22 01:58:38Z adotti $
 //
 /////////////////////////////////////////////////////////////////////////
 //
@@ -164,20 +164,11 @@ void DetectorConstruction::SetWorldMaterial(const G4String& mat)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->DefineWorldVolume(Construct());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void DetectorConstruction::SetTargetRadius(G4double val)  
 {
   if(val > 0.0 && val != fRadius) {
     fRadius = val;
-    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+      G4RunManager::GetRunManager()->ReinitializeGeometry();
   } 
 }
 
@@ -187,7 +178,7 @@ void DetectorConstruction::SetTargetLength(G4double val)
 {
   if(val > 0.0 && val != fLength) {
     fLength = val;
-    G4RunManager::GetRunManager()->GeometryHasBeenModified();
+      G4RunManager::GetRunManager()->ReinitializeGeometry();
   } 
 }
 

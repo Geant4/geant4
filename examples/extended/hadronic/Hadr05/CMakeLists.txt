@@ -40,7 +40,7 @@ target_link_libraries(Hadr05 ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(Hadr05_SCRIPTS
-    hadr05_all_hp.in hadr05_all.in hadr05.in hadr05.out n.mac pi.mac pn.mac vis.mac
+    FTFP_BERT.mac  hadr05.in  n.mac  pi.mac  pn.mac  vis.mac
   )
 
 foreach(_script ${Hadr05_SCRIPTS})

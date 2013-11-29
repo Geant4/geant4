@@ -26,7 +26,7 @@
 /// \file hadronic/Hadr00/include/DetectorMessenger.hh
 /// \brief Definition of the DetectorMessenger class
 //
-// $Id: DetectorMessenger.hh 75731 2013-11-05 17:46:30Z vnivanch $
+// $Id: DetectorMessenger.hh 77210 2013-11-22 01:58:38Z adotti $
 //
 //
 /////////////////////////////////////////////////////////////////////////
@@ -74,8 +74,6 @@ private:
   G4UIcmdWithAString*        fmat1Cmd;
   G4UIcmdWithADoubleAndUnit* frCmd;
   G4UIcmdWithADoubleAndUnit* flCmd;
-  G4UIcmdWithoutParameter*   fupdateCmd;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

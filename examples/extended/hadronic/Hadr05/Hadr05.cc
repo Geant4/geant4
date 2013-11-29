@@ -26,20 +26,7 @@
 /// \file hadronic/Hadr05/Hadr05.cc
 /// \brief Main program of the hadronic/Hadr05 example
 //
-//
-// $Id: Hadr05.cc 75731 2013-11-05 17:46:30Z vnivanch $
-//
-// -------------------------------------------------------------
-//      GEANT4 Hadr05
-//
-//  Application demonstrating Geant4 hadronic cross sections
-//
-//  Author: V.Ivanchenko 20 June 2008
-//
-//  Modified: 
-//
-// -------------------------------------------------------------
-//
+// $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -104,18 +91,18 @@ int main(int argc,char** argv) {
   else
     {
 
-  std::vector<G4String>* MyConstr = new std::vector<G4String>;
+      std::vector<G4String>* MyConstr = new std::vector<G4String>;
 
-  MyConstr->push_back("G4EmStandardPhysics");
-  MyConstr->push_back("G4EmExtraPhysics");
-  MyConstr->push_back("G4DecayPhysics");
-  MyConstr->push_back("G4HadronElasticPhysics");
-  MyConstr->push_back("G4HadronPhysicsFTFP_BERT");
-  MyConstr->push_back("G4StoppingPhysics");
-  MyConstr->push_back("G4IonPhysics");
-  MyConstr->push_back("G4NeutronTrackingCut");
+      MyConstr->push_back("G4EmStandardPhysics");
+      MyConstr->push_back("G4EmExtraPhysics");
+      MyConstr->push_back("G4DecayPhysics");
+      MyConstr->push_back("G4HadronElasticPhysics");
+      MyConstr->push_back("G4HadronPhysicsFTFP_BERT");
+      MyConstr->push_back("G4StoppingPhysics");
+      MyConstr->push_back("G4IonPhysics");
+      MyConstr->push_back("G4NeutronTrackingCut");
 
-  phys = new G4GenericPhysicsList(MyConstr);
+      phys = new G4GenericPhysicsList(MyConstr);
     }
 
   runManager->SetUserInitialization(phys);
