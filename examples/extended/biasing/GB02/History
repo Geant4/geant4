@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 28, 2013, M. Verderi -  biasingGB02-V09-06-03
+- remove gui
+- add README
+
+Nov 28, 2013, M. Verderi -  biasingGB02-V09-06-02
+- Code cleanup and introduction of test files.
+
 Nov 8, 2013 M. Verderi - biasingGB02-V09-06-00
 - Creation
 

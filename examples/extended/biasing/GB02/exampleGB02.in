@@ -1,0 +1,23 @@
+#
+/tracking/verbose 1
+#
+/gun/direction 0 0 1
+#
+/gun/particle gamma
+#
+/gun/energy 1 MeV
+/run/beamOn 10
+#
+/gun/energy 100 MeV
+/run/beamOn 10
+#
+/gun/particle neutron
+#
+/gun/energy 1 MeV
+/run/beamOn 10
+#
+/gun/energy 100 MeV
+/run/beamOn 10
+#
+
+

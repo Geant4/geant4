@@ -12,13 +12,20 @@ GB02BOptrMultiParticleForceCollision::GB02BOptrMultiParticleForceCollision()
 
 void GB02BOptrMultiParticleForceCollision::AddParticle(G4String particleName)
 {
-  const G4ParticleDefinition* particle = 
+  const G4ParticleDefinition* particle =
     G4ParticleTable::GetParticleTable()->FindParticle( particleName );
-  if ( particle == 0 ) 
+  
+  if ( particle == 0 )
     {
-      G4cout << " ************* particle not found !!! : `" << particleName << "'" << G4endl;
+      G4ExceptionDescription ed;
+      ed << "Particle `" << particleName << "' not found !" << G4endl;
+      G4Exception("GB02BOptrMultiParticleForceCollision::AddParticle(...)",
+                  "exGB02.01",
+                  JustWarning,
+                  ed);
       return;
     }
+  
   G4BOptrForceCollision* optr = new G4BOptrForceCollision(particleName);
   fParticlesToBias.push_back( particle );
   fBOptrForParticle[ particle ] = optr;

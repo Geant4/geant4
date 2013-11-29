@@ -37,8 +37,6 @@
 
 #include "GB02DetectorConstruction.hh"
 #include "GB02PrimaryGeneratorAction.hh"
-//#include "SteppingAction.hh"
-//#include "RunAction.hh"
 
 #include "FTFP_BERT.hh"
 #include "G4GenericBiasingPhysics.hh"
@@ -57,10 +55,10 @@
 namespace {
   void PrintUsage() {
     G4cerr << " Usage: " << G4endl;
-    G4cerr << " biasing [-m macro ] "
+    G4cerr << " ./exampleGB02 [-m macro ] "
            << " [-b biasing {'on','off'}]"
-           << " [-o output {if 'xxx', this creates 'xxx.root', default = 'output'}]"
- << G4endl;
+           << "\n or\n ./exampleGB02 [macro.mac]"
+           << G4endl;
   }
 }
 
@@ -71,26 +69,30 @@ int main(int argc,char** argv)
 {
   // Evaluate arguments
   //
-  if ( argc > 7 ) {
+  if ( argc > 5 ) {
     PrintUsage();
     return 1;
   }
   
   G4String macro("");
   G4String onOffBiasing("");
-  G4String output("");
-  for ( G4int i=1; i<argc; i=i+2 ) {
-    if      ( G4String(argv[i]) == "-m" ) macro        = argv[i+1];
-    else if ( G4String(argv[i]) == "-b" ) onOffBiasing = argv[i+1];
-    else if ( G4String(argv[i]) == "-o" ) output       = argv[i+1];
-    else {
-      PrintUsage();
-      return 1;
+  if ( argc == 2 ) macro = argv[1];
+  else
+    {
+      for ( G4int i=1; i<argc; i=i+2 )
+        {
+          if      ( G4String(argv[i]) == "-m" ) macro        = argv[i+1];
+          else if ( G4String(argv[i]) == "-b" ) onOffBiasing = argv[i+1];
+          else
+            {
+              PrintUsage();
+              return 1;
+            }
+        }
     }
-  }  
-
-  if ( onOffBiasing == "" ) onOffBiasing = "on";
   
+  if ( onOffBiasing == "" ) onOffBiasing = "on";
+
   // -- Construct the run manager : MT or sequential one
 #ifdef G4MULTITHREADED
   G4MTRunManager * runManager = new G4MTRunManager;
@@ -142,7 +144,6 @@ int main(int argc,char** argv)
   // Initialize visualization
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
-  // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
 #endif
 
@@ -161,8 +162,8 @@ int main(int argc,char** argv)
 #ifdef G4VIS_USE
       //      UImanager->ApplyCommand("/control/execute vis.mac"); 
 #endif
-      if (ui->IsGUI())
-        UImanager->ApplyCommand("/control/execute gui.mac");
+      //      if (ui->IsGUI())
+      //        UImanager->ApplyCommand("/control/execute gui.mac");
       ui->SessionStart();
       delete ui;
 #endif

@@ -40,7 +40,8 @@ target_link_libraries(exampleGB02 ${Geant4_LIBRARIES} )
 # because it relies on these scripts being in the current working directory.
 #
 set(GB02project_SCRIPTS
-#    test.mac vis.mac
+  exampleGB02.in
+  exampleGB02.out
   )
 
 foreach(_script ${GB02project_SCRIPTS})
