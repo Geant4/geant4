@@ -1,6 +1,6 @@
 #------------------------------------------------------------------------------
 # sources.cmake
-# Module : G4geomBoolean
+# Module : G4geomUSolids
 # Package: Geant4.src.G4geometry.G4geomUSolids
 #
 # Sources description for a library.
