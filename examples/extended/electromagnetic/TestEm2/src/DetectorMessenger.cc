@@ -82,7 +82,6 @@ DetectorMessenger::~DetectorMessenger()
   delete fMaterCmd;
   delete fLBinCmd;
   delete fRBinCmd;
-  delete fFieldCmd;
   delete fDetDir;
   delete fTestemDir;
 }
