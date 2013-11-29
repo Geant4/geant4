@@ -50,7 +50,8 @@
 #include "G4RunManager.hh"
 #endif
 
-#include "F04PhysicsList.hh"
+#include "FTFP_BERT.hh"
+///////////////////////////////////#include "F04PhysicsList.hh"
 #include "F04DetectorConstruction.hh"
 
 #include "F04ActionInitialization.hh"
@@ -121,7 +122,8 @@ int main(int argc,char** argv)
   F04DetectorConstruction* detector = new F04DetectorConstruction();
   runManager->SetUserInitialization(detector);
   // Physics list
-  runManager->SetUserInitialization(new F04PhysicsList(physicsList));
+  ////////runManager->SetUserInitialization(new F04PhysicsList(physicsList));
+  runManager->SetUserInitialization(new FTFP_BERT);
   // User action initialization
   runManager->SetUserInitialization(new F04ActionInitialization(detector));
 

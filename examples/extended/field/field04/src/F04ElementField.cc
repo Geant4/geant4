@@ -37,7 +37,7 @@
 
 #include "G4SystemOfUnits.hh"
 
-G4Navigator* F04ElementField::fNavigator;
+G4ThreadLocal G4Navigator* F04ElementField::fNavigator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -71,24 +71,17 @@ F04ElementField::F04ElementField(G4ThreeVector c, G4LogicalVolume* lv)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void F04ElementField::Construct()
+void F04ElementField::Construct(G4VPhysicalVolume* currentWorld)
 {
-  G4Navigator* theNavigator =
-                    G4TransportationManager::GetTransportationManager()->
-                                                 GetNavigatorForTracking();
+  if (!fNavigator) { fNavigator = new G4Navigator(); }
+  UpdateWorld(currentWorld);
+}
 
-  if (!fNavigator) {
-     fNavigator = new G4Navigator();
-     if ( theNavigator->GetWorldVolume() )
-               fNavigator->SetWorldVolume(theNavigator->GetWorldVolume());
-   }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
-
-  if (!geomManager->IsGeometryClosed()) {
-     geomManager->OpenGeometry();
-     geomManager->CloseGeometry(true);
-  }
+void F04ElementField::UpdateWorld(G4VPhysicalVolume* currentWorld)
+{
+  fNavigator->SetWorldVolume(currentWorld);
 
   fNavigator->LocateGlobalPointAndSetup(fCenter,0,false);
 

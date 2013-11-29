@@ -46,13 +46,11 @@
 #include "F04DetectorConstruction.hh"
 #include "F04PrimaryGeneratorMessenger.hh"
 
-G4bool F04PrimaryGeneratorAction::fFirst = false;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 F04PrimaryGeneratorAction::
        F04PrimaryGeneratorAction(F04DetectorConstruction* detectorConstruction)
-  : fDetector(detectorConstruction), fRndmFlag("off"),
+  : fDetector(detectorConstruction), fRndmFlag("off"), fFirst(false),
     fXvertex(0.), fYvertex(0.), fZvertex(0.),
     fVertexdefined(false)
 {

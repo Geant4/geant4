@@ -107,6 +107,7 @@ class F04DetectorConstruction : public G4VUserDetectorConstruction
      G4Material* GetWorldMaterial()    {return fWorldMaterial;}
      G4double GetWorldSizeZ()          {return fWorldSizeZ;}
      G4double GetWorldSizeR()          {return fWorldSizeR;}
+     G4VPhysicalVolume* GetWorld()     {return fPhysiWorld;}
 
      G4LogicalVolume* GetCaptureMgnt()     {return fLogicCaptureMgnt;}
      G4double GetCaptureMgntRadius()       {return fCaptureMgntRadius;}

@@ -251,11 +251,12 @@ void F04GlobalField::UpdateField()
 
   fFieldManager->SetChordFinder(fChordFinder);
 
+  G4VPhysicalVolume* currentWorld = fDetectorConstruction->GetWorld();
   if (fFields) {
      if (fFields->size()>0) {
         FieldList::iterator i;
         for (i=fFields->begin(); i!=fFields->end(); ++i){
-            (*i)->Construct();
+            (*i)->Construct(currentWorld);
         }
      }
   }

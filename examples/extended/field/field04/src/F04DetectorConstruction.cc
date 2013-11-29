@@ -465,32 +465,48 @@ void F04DetectorConstruction::SetDegraderPos(G4double val)
 void F04DetectorConstruction::ConstructSDandField()
 {
   // ensure the global field is initialized
-  if (!fField) fField = F04GlobalField::GetObject(this);
+  if (!fField)
+  {
+    fField = F04GlobalField::GetObject(this);
 
-  G4double l = 0.0;
-  G4double B1 = GetCaptureMgntB1();
-  G4double B2 = GetCaptureMgntB2();
+    G4double l = 0.0;
+    G4double B1 = GetCaptureMgntB1();
+    G4double B2 = GetCaptureMgntB2();
 
-  F04FocusSolenoid* focusSolenoid =
+    F04FocusSolenoid* focusSolenoid =
          new F04FocusSolenoid(B1, B2, l, fLogicCaptureMgnt,fCaptureMgntCenter);
-  focusSolenoid -> SetHalf(true);
+    focusSolenoid -> SetHalf(true);
 
-  G4double B = GetTransferMgntB();
+    G4double B = GetTransferMgntB();
 
-  F04SimpleSolenoid* simpleSolenoid = 
+    F04SimpleSolenoid* simpleSolenoid = 
             new F04SimpleSolenoid(B, l,fLogicTransferMgnt,fTransferMgntCenter);
-  simpleSolenoid->SetColor("1,0,1");
-  simpleSolenoid->SetColor("0,1,1");
-  simpleSolenoid->SetMaxStep(1.5*mm);
-  simpleSolenoid->SetMaxStep(2.5*mm);
+    simpleSolenoid->SetColor("1,0,1");
+    simpleSolenoid->SetColor("0,1,1");
+    simpleSolenoid->SetMaxStep(1.5*mm);
+    simpleSolenoid->SetMaxStep(2.5*mm);
 
-  FieldList* fields = fField->GetFields();
+    FieldList* fields = fField->GetFields();
 
-  if (fields) {
-     if (fields->size()>0) {
-        FieldList::iterator i;
-        for (i=fields->begin(); i!=fields->end(); ++i) (*i)->Construct();
-     }
+    if (fields) {
+       if (fields->size()>0) {
+          FieldList::iterator i;
+          for (i=fields->begin(); i!=fields->end(); ++i)
+          { (*i)->Construct(fPhysiWorld); }
+       }
+    }
+  }
+  else
+  {
+    FieldList* fields = fField->GetFields();
+
+    if (fields) {
+       if (fields->size()>0) {
+          FieldList::iterator i;
+          for (i=fields->begin(); i!=fields->end(); ++i)
+          { (*i)->UpdateWorld(fPhysiWorld); }
+       }
+    }
   }
 }
 
@@ -508,9 +524,8 @@ void F04DetectorConstruction::UpdateGeometry()
   G4SolidStore::GetInstance()->Clean();
 
   //define new one
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructDetector());
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 
-  G4RunManager::GetRunManager()->GeometryHasBeenModified();
   G4RunManager::GetRunManager()->PhysicsHasBeenModified();
 
   G4RegionStore::GetInstance()->UpdateMaterialList(fPhysiWorld);

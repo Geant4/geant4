@@ -71,7 +71,7 @@ class F04PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
     G4String fRndmFlag;                      // flag for random impact point
 
-    static G4bool fFirst;
+    G4bool fFirst;
 
     G4AffineTransform fGlobal2local;
 

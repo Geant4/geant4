@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 28, 2013 M.Asai - (fieldex04-V09-06-07)
+- fix thread-safety issues.
+
 November 15, 2013 P.Gumplinger - (fieldex04-V09-06-06)
 - fix compile warning of Windows code in field04.cc
 
