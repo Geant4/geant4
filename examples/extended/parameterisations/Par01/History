@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29-11-2013 M. Verderi (expar01-V09-06-02)
+- fix of src/Par01EMShowerModel.cc of spurious remaing CLHEP:: :
+  bt = CLHEP::RandGamma::shoot(a,1.0); -> bt = G4RandGamma::shoot(a,1.0);
+  which made random crashes in MT mode.
+- thanks to Gabriele, and apologies to Makoto...
+
 26-11-2013 M. Verderi (expar01-V09-06-01)
 - migration to MT.
 - required bug fix in region handling in MT, as fast simulation

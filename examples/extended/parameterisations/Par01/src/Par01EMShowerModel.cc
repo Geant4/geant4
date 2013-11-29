@@ -149,7 +149,7 @@ void Par01EMShowerModel::Explode(const G4FastTrack& fastTrack)
     {
       // Longitudinal profile:
       // -- shoot z according to Gamma distribution:
-      bt = CLHEP::RandGamma::shoot(a,1.0);
+      bt = G4RandGamma::shoot(a,1.0);
       t  = bt/b;
       z  = t*X0;
       
