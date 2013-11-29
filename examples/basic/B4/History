@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28/11/13 I. Hrivnacova (exampleB4-V09-06-18)
+- Clean-up macros (fixed obsolete comments)
+
 26/11/13 I. Hrivnacova (exampleB4-V09-06-17)
 - Fixed deleting fMagFieldMessenger with use of G4AutoDelete utility
 
