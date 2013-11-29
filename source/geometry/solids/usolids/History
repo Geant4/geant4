@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 29, 2013  G.Cosmo                geom-usolids-V09-06-11
+- Corrected library name in GNUmakefile and fixed comment in sources.cmake.
+
 November 21, 2013  G.Cosmo                geom-usolids-V09-06-10
 - Fixed compilation warning for type conversion in UVCSGfaceted
   constructor.
