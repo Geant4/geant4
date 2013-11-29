@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-8th Nnvember 2012  Ivana Hrivnacova (BlineTracer-V09-05-03)
+29th November 2012  Ivana Hrivnacova (BlineTracer-V09-06-00)
+- Fixed shadowed declarations
+
+8th November 2012  Ivana Hrivnacova (BlineTracer-V09-05-03)
 - Fixed testBlineTracer: 
   now a physics list has to be instatiated first. 
 

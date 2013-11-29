@@ -94,7 +94,7 @@ class G4BlineTracer : public G4UserRunAction
      G4double fMaxTrackingStep;
      G4bool fWas_ResetChordFinders_already_called;
  
-     G4VUserPrimaryGeneratorAction* fUserPrimaryAction;
+     //G4VUserPrimaryGeneratorAction* fUserPrimaryAction;
        // User defined primary generator action
 
      std::vector<G4ChordFinder* > fVecChordFinders;
