@@ -387,16 +387,16 @@ void F01DetectorConstruction::ConstructSDandField()
   if (!fCalorimeterSD.Get()) {
     F01CalorimeterSD* calorimeterSD = new F01CalorimeterSD("CalorSD",this);
     fCalorimeterSD.Put(calorimeterSD);
-  }  
+  }
   SetSensitiveDetector(fLogicAbsorber, fCalorimeterSD.Get());
 
   // Construct the field creator - this will register the field it creates
-  if (!fEmFieldSetup.Get()) { 
-    F01FieldSetup* fieldSetup 
+  if (!fEmFieldSetup.Get()) {
+    F01FieldSetup* fieldSetup
       = new F01FieldSetup(G4ThreeVector( 3.3*tesla, 0.0, 0.0 ) );
     G4AutoDelete::Register(fieldSetup); // Kernel will delete the F01FieldSetup
     fEmFieldSetup.Put(fieldSetup);
-  }  
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

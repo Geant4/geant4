@@ -38,16 +38,6 @@
 
 #include "G4VUserPhysicsList.hh"
 
-class G4PhotoElectricEffect;
-class G4ComptonScattering;
-class G4GammaConversion;
-
-class G4eIonisation;
-class G4eBremsstrahlung;
-class G4eplusAnnihilation;
-
-class F01StepCut;
-
 class F01DetectorConstruction;
 class F01PhysicsListMessenger;
 
