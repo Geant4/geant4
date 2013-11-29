@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 24th, 2013 A. Howard - B03-V09-06-04
+- Set default number of MT cores back to two
+
 Nov 24th, 2013 A. Howard - B03-V09-06-03
 - Synchronised geometry with B01 and B02
 - Corrected english mistakes in variable names
