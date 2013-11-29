@@ -65,9 +65,9 @@ if  ( (step->GetTrack()->GetDynamicParticle()->GetDefinition() ==
     && (step->GetPostStepPoint()->GetPosition().z()/mm>249.99999)
          && (step->GetPostStepPoint()->GetPosition().z()/mm<250.00001) 
          && (step->GetPreStepPoint()->GetTouchableHandle()->GetVolume()->
-                   GetLogicalVolume()  == fDetector->GetLogicalVol())
+                   GetLogicalVolume()->GetName()  == fDetector->GetLogicalVol()->GetName())
          && (step->GetPostStepPoint()->GetTouchableHandle()->GetVolume()->
-                  GetLogicalVolume() == fDetector->GetLogicalWorld())
+                  GetLogicalVolume()->GetName() == fDetector->GetLogicalWorld()->GetName())
      )
       
      {
@@ -114,9 +114,9 @@ if (fDetector->GetProfile()==1)
        (step->GetTrack()->GetDynamicParticle()->GetDefinition()
              == G4Proton::ProtonDefinition())
          && (step->GetPreStepPoint()->GetTouchableHandle()
-             ->GetVolume()->GetLogicalVolume()  == fDetector->GetLogicalVol())
+             ->GetVolume()->GetLogicalVolume()->GetName()  == fDetector->GetLogicalVol()->GetName())
          && (step->GetPostStepPoint()->GetTouchableHandle()
-            ->GetVolume()->GetLogicalVolume() == fDetector->GetLogicalVol()) )
+            ->GetVolume()->GetLogicalVolume()->GetName() == fDetector->GetLogicalVol()->GetName()) )
    {
          fXIn = step->GetPostStepPoint()->GetPosition().x();
          fYIn = step->GetPostStepPoint()->GetPosition().y();
@@ -137,9 +137,9 @@ if (fDetector->GetGrid()==1)
        (step->GetTrack()->GetDynamicParticle()->GetDefinition()
              == G4Proton::ProtonDefinition())
          && (step->GetPreStepPoint()->GetTouchableHandle()
-             ->GetVolume()->GetLogicalVolume()  == fDetector->GetLogicalGrid())
+             ->GetVolume()->GetLogicalVolume()->GetName()  == fDetector->GetLogicalGrid()->GetName())
          && (step->GetPostStepPoint()->GetTouchableHandle()
-             ->GetVolume()->GetLogicalVolume() == fDetector->GetLogicalWorld()) )
+             ->GetVolume()->GetLogicalVolume()->GetName() == fDetector->GetLogicalWorld()->GetName()) )
    {
          fXIn = step->GetPostStepPoint()->GetPosition().x();
          fYIn = step->GetPostStepPoint()->GetPosition().y();
