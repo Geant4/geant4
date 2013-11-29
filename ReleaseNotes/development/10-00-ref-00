@@ -129,7 +129,7 @@ geometry/solids/specific                         geom-specific-V09-06-35
   optional; added Set/Get Verbose methods to toggle and view it.
   Added parameter to constructor for verbosity (default=off).
 
-geometry/solids/usolids                          geom-usolids-V09-06-10
+geometry/solids/usolids                          geom-usolids-V09-06-11
 -----------------------
 - Imported classes from the AIDA Unified Solids Library
   (see https://aidasoft.web.cern.ch/USolids). Enabled by adopying
@@ -269,7 +269,7 @@ persistency/gdml                                 gdml-V09-06-08
   Added support for parameterisation of 'genericPolyone' and 'genericPolyhedra'.
 - Replaced deprecated calls to G4Sphere accessor methods.
 
-processes/biasing                                probiasing-V09-06-14
+processes/biasing                                probiasing-V09-06-16
 -----------------
 - New directory structure to introduce generic biasing framework classes:
   G4BiasingAppliedCase, G4BiasingOperationManager, G4BiasingTrackData,
@@ -448,7 +448,7 @@ processes/scoring                                procscore-V09-06-03
 -----------------
 - Removed unnecessary printout.
 
-run                                              run-V09-06-137
+run                                              run-V09-06-139
 ---
 - Fixed the logic of defining parallel scoring worlds and their corresponding
   G4ParallelWorldProcess objects for the worker threads.
@@ -478,6 +478,8 @@ run                                              run-V09-06-137
   synchronization of threads.
 - Fix correct use of G4VUserWorkerInitialization::InitializeSteppingVerbose()
   method in G4MTRunManagerKernel::StartThread().
+- Visualization manager is now registered to the worker threads at the first
+  run after it is instantiated.
 - Corrected deletion of memory: using free() for memory obtained with malloc()
   in G4VUPLSplitter.
   Correctly delete 'randDbl' in G4MTRunManager using delete [].
