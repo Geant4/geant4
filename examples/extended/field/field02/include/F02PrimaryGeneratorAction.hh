@@ -43,6 +43,7 @@ class G4ParticleGun;
 class G4Event;
 class F02DetectorConstruction;
 class F02PrimaryGeneratorMessenger;
+class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -68,7 +69,7 @@ class F02PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     F02PrimaryGeneratorMessenger* fGunMessenger; //messenger of this class
     G4String                      fRndmFlag;     //flag for random impact point
 
-    static G4String fgPrimaryParticleName;
+    static G4ParticleDefinition* fgPrimaryParticle;
     G4double fXVertex, fYVertex, fZVertex;
     G4bool fVertexDefined;
 

@@ -49,7 +49,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
- G4String F02PrimaryGeneratorAction::fgPrimaryParticleName = "proton"; 
+ G4ParticleDefinition* F02PrimaryGeneratorAction::fgPrimaryParticle = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -79,7 +79,7 @@ F02PrimaryGeneratorAction::F02PrimaryGeneratorAction(
     = particleTable->FindParticle(particleName="proton");
   fParticleGun->SetParticleDefinition(particle);
 
-  fgPrimaryParticleName = particle->GetParticleName();
+  fgPrimaryParticle = particle;
 
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   fParticleGun->SetParticleEnergy(100.*GeV);
@@ -103,8 +103,7 @@ void F02PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   // this function is called at the begining of event
   //
-  fgPrimaryParticleName
-    = fParticleGun->GetParticleDefinition()->GetParticleName();
+  fgPrimaryParticle = fParticleGun->GetParticleDefinition();
 
   G4double x0,y0,z0;
   if (fVertexDefined)
@@ -137,7 +136,7 @@ void F02PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
 G4String F02PrimaryGeneratorAction::GetPrimaryName()
 {
-   return fgPrimaryParticleName;
+   return fgPrimaryParticle->GetParticleName();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

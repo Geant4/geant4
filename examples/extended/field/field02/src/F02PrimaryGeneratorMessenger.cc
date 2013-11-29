@@ -63,16 +63,19 @@ F02PrimaryGeneratorMessenger::F02PrimaryGeneratorMessenger(
   fSetXVertexCmd->SetGuidance(" Set x coord. of the primary vertex.");
   fSetXVertexCmd->SetParameterName("xv",true);
   fSetXVertexCmd->SetDefaultValue(0.0*mm);
+  fSetXVertexCmd->SetDefaultUnit("mm");
 
   fSetYVertexCmd = new G4UIcmdWithADoubleAndUnit("/gun/yvertex",this);
   fSetYVertexCmd->SetGuidance(" Set y coord. of the primary vertex.");
   fSetYVertexCmd->SetParameterName("yv",true);
   fSetYVertexCmd->SetDefaultValue(0.0*mm);
+  fSetYVertexCmd->SetDefaultUnit("mm");
 
   fSetZVertexCmd = new G4UIcmdWithADoubleAndUnit("/gun/zvertex",this);
   fSetZVertexCmd->SetGuidance(" Set z coord. of the primary vertex.");
   fSetZVertexCmd->SetParameterName("zv",true);
   fSetZVertexCmd->SetDefaultValue(0.0*mm);
+  fSetZVertexCmd->SetDefaultUnit("mm");
 
 }
 
