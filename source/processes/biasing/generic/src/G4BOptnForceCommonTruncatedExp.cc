@@ -40,7 +40,7 @@ G4GPILSelection   G4BOptnForceCommonTruncatedExp::ProposeGPILSelection( const G4
 }
 
 G4bool G4BOptnForceCommonTruncatedExp::DenyProcessPostStepDoIt( const G4BiasingProcessInterface* callingProcess,
-									const G4Track*, const G4Step* step, G4double& )
+								const G4Track*, const G4Step* step, G4double& )
 {
   G4double processGPIL = callingProcess->GetPostStepGPIL() < callingProcess->GetAlongStepGPIL() ?
     callingProcess->GetPostStepGPIL() : callingProcess->GetAlongStepGPIL() ;

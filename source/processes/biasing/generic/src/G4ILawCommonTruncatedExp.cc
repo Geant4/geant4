@@ -31,10 +31,12 @@ G4double G4ILawCommonTruncatedExp::ComputeNonInteractionProbabilityAt(G4double d
     }
   else
     {
-      G4Exception("G4ILawCommonTruncatedExp::ComputeNonInteractionProbabilityAt(...)",
-		  "Negative probability found !",
+      G4ExceptionDescription ed;
+      ed << " Negative probability for `" << GetName() << "' p = " << niProba << " distance = " << distance <<  " !!! " << G4endl;
+      G4Exception(" G4ILawCommonTruncatedExp::ComputeNonInteractionProbabilityAt(...)",
+		  "BIAS.GEN.08",
 		  JustWarning,
-		  "Might crash (tmp message).");
+		  ed);
       return niProba;
     }
 }

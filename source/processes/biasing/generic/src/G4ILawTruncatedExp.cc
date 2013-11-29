@@ -20,9 +20,9 @@ void G4ILawTruncatedExp::SetForceCrossSection(G4double crossSection)
   if (crossSection < 0.0)
     {
       G4Exception("G4ILawTruncatedExp::SetForceCrossSection(..)",
-		  "NEGATIVE_XS",
+		  "BIAS.GEN.09",
 		  JustWarning,
-		  "Cross-section value passed is negative. It is set to zero.");
+		  "Cross-section value passed is negative. It is set to zero !");
       fIsSingular  = true;
       crossSection = 0.0;
     }
@@ -36,9 +36,9 @@ G4double G4ILawTruncatedExp::ComputeEffectiveCrossSectionAt(G4double distance) c
   if ( !fCrossSectionDefined )
     {
       G4Exception("G4ILawTruncatedExp::ComputeEffectiveCrossSection(..)",
-		  "UNDEFINED_XS",
+		  "BIAS.GEN.10",
 		  JustWarning,
-		  "Cross-section value requested, but has not been defined yet. Assumes 0.");
+		  "Cross-section value requested, but has not been defined yet. Assumes 0 !");
       // -- zero cross-section, returns the limit form of the effective cross-section:
       return 1.0 / ( fMaximumDistance - distance );
     }
@@ -51,9 +51,9 @@ G4double G4ILawTruncatedExp::ComputeNonInteractionProbabilityAt(G4double distanc
   if (!fCrossSectionDefined)
     {
       G4Exception("G4ILawTruncatedExp::ComputeNonInteractionProbability(..)",
-		  "UNDEFINED_XS",
+		  "BIAS.GEN.11",
 		  JustWarning,
-		  "Non interaction probabitlity value requested, but cross section has not been defined yet. Assumes it to be 0.");
+		  "Non interaction probability value requested, but cross section has not been defined yet. Assumes it to be 0 !");
       // -- return limit case of null cross-section:
       return 1.0 - distance / fMaximumDistance;
     }
@@ -67,9 +67,9 @@ G4double G4ILawTruncatedExp::SampleInteractionLength()
   if ( !fCrossSectionDefined )
     {
       G4Exception("G4ILawTruncatedExp::Sample(..)",
-		  "UNDEFINED_XS",
+		  "BIAS.GEN.12",
 		  JustWarning,
-		  "Trying to sample while cross-section is not defined, assuming 0.");
+		  "Trying to sample while cross-section is not defined, assuming 0 !");
       fInteractionDistance = G4UniformRand() * fMaximumDistance;
       return fInteractionDistance;
     }
@@ -82,9 +82,17 @@ G4double G4ILawTruncatedExp::UpdateInteractionLengthForStep(G4double       trueP
 {
   fInteractionDistance -= truePathLength;
   fMaximumDistance     -= truePathLength;
-
-  if ( fInteractionDistance < 0 )  G4cout << GetName() << " 1 " <<
-				     " NEGATIVE # of int length !!!!!!!!!!!!!!! MESSAGE TO BE CHANGED !!!!!!!!!!!!! " 
-					  << fInteractionDistance << G4endl;
+  
+  if ( fInteractionDistance < 0 )
+    {
+      G4ExceptionDescription ed;
+      ed << " Negative number of interaction length for `" << GetName() << "' " << fInteractionDistance << ", set it to zero !" << G4endl; 
+      G4Exception("G4ILawTruncatedExp::UpdateInteractionLengthForStep(...)",
+		  "BIAS.GEN.13",
+		  JustWarning,
+		  "Trying to sample while cross-section is not defined, assuming 0 !");
+      fInteractionDistance = 0.;
+    }
+  
   return  fInteractionDistance;
 }

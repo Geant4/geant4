@@ -1,3 +1,178 @@
+//
+// ********************************************************************
+// * License and Disclaimer                                           *
+// *                                                                  *
+// * The  Geant4 software  is  copyright of the Copyright Holders  of *
+// * the Geant4 Collaboration.  It is provided  under  the terms  and *
+// * conditions of the Geant4 Software License,  included in the file *
+// * LICENSE and available at  http://cern.ch/geant4/license .  These *
+// * include a list of copyright holders.                             *
+// *                                                                  *
+// * Neither the authors of this software system, nor their employing *
+// * institutes,nor the agencies providing financial support for this *
+// * work  make  any representation or  warranty, express or implied, *
+// * regarding  this  software system or assume any liability for its *
+// * use.  Please see the license in the file  LICENSE  and URL above *
+// * for the full disclaimer and the limitation of liability.         *
+// *                                                                  *
+// * This  code  implementation is the result of  the  scientific and *
+// * technical work of the GEANT4 collaboration.                      *
+// * By using,  copying,  modifying or  distributing the software (or *
+// * any work based  on the software)  you  agree  to acknowledge its *
+// * use  in  resulting  scientific  publications,  and indicate your *
+// * acceptance of all terms of the Geant4 Software license.          *
+// ********************************************************************
+//
+//
+// $Id: $
+//
+// --------------------------------------------------------------------
+// GEANT 4 class header file 
+//
+// Class Description:
+//
+//     An abstract class to pilot the biasing in a logical volume. This
+// class is for *making decisions* on biasing operations to be applied.
+// These ones are represented by the G4VBiasingOperation class.
+// The volume in which biasing is applied is specified by the
+// AttachTo(const G4LogicalVolume *) method. This has to be specified
+// at detector construction time in the method ConstructSDandField() of
+// G4VUsedDetectorConstruction.
+//
+//     At tracking time the biasing operator is messaged by each
+// G4BiasingProcessInterface object attached to the current track. For
+// example, if three physics processes are under biasing, and if an
+// additional G4BiasingProcessInterface is present to handle non-physics
+// based biasing (splitting, killing), the operator will be messaged by
+// these four G4BiasingProcessInterface objects.
+//     The idendity of the calling G4BiasingProcessInterface is known
+// to the G4VBiasingOperator by passing this process pointer to the
+// operator.
+//
+// ** Mandatory methods: **
+//
+// Three types of biasing are to be decided by the G4VBiasingOperator:
+//
+//   1) non-physics-based biasing:
+//   -----------------------------
+//   Meant for pure killing/splitting/etc. biasing operations, not 
+//   associated to a physics process:
+//
+//   virtual G4VBiasingOperation* ProposeNonPhysicsBiasingOperation( const G4Track* track,
+//                                                                   const G4BiasingProcessInterface* callingProcess ) = 0;
+//
+//   Arguments are the current track, and the G4BiasingProcessInterface
+//   pointer making the call to the operator. In this case, this process
+//   does not wrap a physics process and 
+//                callingProcess->GetWrappedProcess() == 0.
+//
+//   The G4VBiasingOperation pointer returned is the operation to be
+//   applied. Zero can be returned. This operation will limit the
+//   step and propose a final state.
+//   
+//   This method is the first operator method called, it is called at the
+//   by the PostStepGetPhysicalInterationLenght(...) method of the
+//   G4BiasingProcessInterface.
+//
+//   2) physics-based biasing:
+//   -------------------------
+//   Physics-based biasing operations are of two types:
+//     - biasing of the physics process occurence interaction law
+//     - biasing of the physics process final state production
+//
+//   a) The biasing of the occurence interaction law is proposed by:
+//
+//   virtual G4VBiasingOperation*  ProposeOccurenceBiasingOperation( const G4Track* track, 
+//                                                                   const G4BiasingProcessInterface* callingProcess ) = 0;
+//   The current G4Track pointer and the G4BiasingProcessInterface
+//   pointer of the process calling the operator are passed. The
+//   G4BiasingProcessInterface process wraps an actual physics process
+//   which pointer can be obtained with
+//                callingProcess->GetWrappedProcess() .
+//
+//   The biasing operation returned will be asked for its biasing
+//   interaction by the calling process, which will be a const object
+//   for the process. All setup and sampling regarding this law should be done
+//   in the operator before returning the related operation to the process.
+//
+//   This method is the second operator one called in a step, it is called by
+//   the PostStepGetPhysicalInterationLenght(...) method of the
+//   G4BiasingProcessInterface.
+//
+//   b) The biasing of the physics process final state is proposed by:
+//
+//   virtual G4VBiasingOperation* ProposeFinalStateBiasingOperation( const G4Track* track,
+//                                                                   const G4BiasingProcessInterface* callingProcess ) = 0;
+//
+//   The operator can propose a biasing operation that will handle the
+//   physic procsse final state biasing. As in previous case a) the
+//   G4BiasingProcessInterface process wraps an actual physics process
+//   which pointer can be obtained with:
+//                callingProcess->GetWrappedProcess() .
+//
+//   Cases a) and b) are handled independently, and one or two of these
+//   biasing types can be provided in the same step.
+//
+//   This method is the last operator one called in a step, it is called
+//   by the PostStepDoIt(...) method of the G4BiasingProcessInterface.
+//
+//
+// ** Optional methods: **
+//
+//     At the end of the step, the operator is messaged by the G4BiasingProcessInterface
+// for operation(s) which have been applied during the step. One of the two following
+// methods is called:
+//
+// - In case of at most a single biasing operation was applied by the process, report in cases of:
+//    - a non-physics biasing operation applied, biasingCase == BAC_NonPhysics ;
+//    - physics-based biasing:
+//      - the operator requested no occurence, nor final state biasing, and did let the
+//        physics process go : biasingCase ==  BAC_None;
+//      - an occurence biasing, where operation denied the application of the PostStepDoIt(..)
+//        of the physics process (proposing a weight for this),
+//      biasingCase == BAC_DenyInteraction ;
+//    -
+//
+// virtual void OperationApplied( const G4BiasingProcessInterface*                callingProcess,
+//                                G4BiasingAppliedCase                               biasingCase,
+// 				  G4VBiasingOperation*                          operationApplied,
+//                                const G4VParticleChange*                particleChangeProduced );
+// At most a single biasing operation was applied by the process:
+//    - a non-physics biasing operation was applied, biasingCase == BAC_NonPhysics ;
+//    - physics-based biasing:
+//      - the operator requested no biasing operations, and did let the physics
+//        process go : biasingCase ==  BAC_None;
+//      - an occurence biasing was proposed, which operation purpose was to deny the
+//        application of the PostStepDoIt(..) of the physics process (proposing a
+//        weight for this) : biasingCase == BAC_DenyInteraction ;
+//      - a single final state biasing was proposed, with no concomittant occurence:
+//        biasingCase ==  BAC_FinalState;
+// The operation applied and final state passed to the tracking (particleChangeProduced) are
+// passed as information to the operator.
+// 
+// virtual void OperationApplied( const G4BiasingProcessInterface*                callingProcess,
+//                                G4BiasingAppliedCase                               biasingCase,
+//				  G4VBiasingOperation*                 occurenceOperationApplied,
+//                                G4double                         weightForOccurenceInteraction,
+//				  G4VBiasingOperation*                finalStateOperationApplied,
+//                                const G4VParticleChange*                particleChangeProduced );
+// This method is called in case an occurence biasing operation has been applied during the step.
+// Depending on if the occurence operation was applied alone and together with a final state
+// operation, the biasingCase will take values:
+//     - occurence biasing alone : biasingCase == BAC_None ;
+//       in which case finalStateOperationApplied == 0;
+//     - occurence biasing + final state biasing : biasingCase ==  BAC_FinalState;
+// The particleChangeProduced is the one *before* application of the weight for occurence : hence
+// either the particle change of the physics process, or the physics process one, biased the final
+// state biasing operation.
+//
+//   
+//      ----------------G4VBiasingOperation ----------------
+//
+// Author: M.Verderi (LLR), November 2013
+//
+// --------------------------------------------------------------------
+
 #ifndef G4VBiasingOperator_hh
 #define G4VBiasingOperator_hh 1
 
@@ -101,11 +276,13 @@ public:
 public:
   const G4String                                    GetName() const {return fName;}
   void                                             AttachTo( const G4LogicalVolume* ); // -- attach to single volume 
-  void                                         AttachToTree( const G4LogicalVolume* ); // -- attach to mother and full descending tree
-  static G4VBiasingOperator*             GetBiasingOperator( const G4LogicalVolume* ); // -- might go to a manager ; or moved to volume
+
   G4BiasingAppliedCase        GetPreviousBiasingAppliedCase() const {return fPreviousBiasingAppliedCase;}
   // -- all operators (might got to a manager):
-    static const std::vector < G4VBiasingOperator* >& GetBiasingOperators() {return fOperators.Get();}
+  static const std::vector < G4VBiasingOperator* >& GetBiasingOperators() {return fOperators.Get();}
+  // -- get operator associated to a logical volume:
+  static G4VBiasingOperator*             GetBiasingOperator( const G4LogicalVolume* ); // -- might go to a manager ; or moved to volume
+
   
   
   // -- used by biasing process interface, or used by an other operator (not expected to be invoked differently than with these two cases):

@@ -361,19 +361,35 @@ G4VParticleChange* G4BiasingProcessInterface::PostStepDoIt(const G4Track& track,
     {
       // -- at this point effective XS can only be infinite, if not, there is a logic problem
       if ( !fBiasingInteractionLaw->IsEffectiveCrossSectionInfinite() )
-	G4cout << " ------------- SOMETHING WRONG ------------- " << G4endl;
-      // -- if XS is infinite, weight is zero (and will stay zero), but we'll do differently.
-      // -- Should foresee in addition something to remember that in case of singular
-      // -- distribution, weight can only be partly calculated
+	{
+	  G4ExceptionDescription ed;
+	  ed << "Internal inconsistency in cross-section handling. Please report !" << G4endl;
+	  G4Exception(" G4BiasingProcessInterface::PostStepDoIt(...)",
+		      "BIAS.GEN.02",
+		      JustWarning,
+		      ed);
+	  // -- if XS is infinite, weight is zero (and will stay zero), but we'll do differently.
+	  // -- Should foresee in addition something to remember that in case of singular
+	  // -- distribution, weight can only be partly calculated
+	}
     }
   
-  
-  if ( weightForInteraction <= 0. ) G4cout << " (process) !!!!!! negative weight PostStep : " <<  weightForInteraction <<
-				      " " << fPhysicalInteractionLaw->ComputeEffectiveCrossSectionAt(step.GetStepLength()) <<
-				      " " << fBiasingInteractionLaw ->ComputeEffectiveCrossSectionAt(step.GetStepLength()) <<
-				      " " << fBiasingPostStepGPIL <<
-				      " " << step.GetStepLength() <<
-				      G4endl;
+  if ( weightForInteraction <= 0. )
+    {
+      G4ExceptionDescription ed;
+      ed << " Negative interaction weight : w_I = "
+	 <<  weightForInteraction <<
+	" XS_I(phys) = " << fBiasingInteractionLaw ->ComputeEffectiveCrossSectionAt(step.GetStepLength()) <<
+	" XS_I(bias) = " << fPhysicalInteractionLaw->ComputeEffectiveCrossSectionAt(step.GetStepLength()) <<
+	" step length = " << step.GetStepLength() <<
+	" Interaction law = `" << fBiasingInteractionLaw << "'" <<
+	G4endl;
+      G4Exception(" G4BiasingProcessInterface::PostStepDoIt(...)",
+		  "BIAS.GEN.03",
+		  JustWarning,
+		  ed);
+      
+    }
   
   fCurrentBiasingOperator->ReportOperationApplied( this,                        BAC,
 						   fOccurenceBiasingOperation,  weightForInteraction,
@@ -503,13 +519,19 @@ G4VParticleChange* G4BiasingProcessInterface::AlongStepDoIt(const G4Track& track
       
       fOccurenceBiasingOperation->AlongMoveBy( this, &step, weightForNonInteraction );
 
-      if ( weightForNonInteraction <= 0. ) G4cout << " (process " << GetProcessName() << " ) !!!!!!! negative weight, Along : w = " << weightForNonInteraction <<
-					     " phy-NI = " <<  fPhysicalInteractionLaw->ComputeNonInteractionProbabilityAt(step.GetStepLength()) <<
-					     " bia-NI = " <<  fBiasingInteractionLaw ->ComputeNonInteractionProbabilityAt(step.GetStepLength()) <<
-					     " InterL = " <<  fBiasingPostStepGPIL <<
-					     " StepL = "  <<  step.GetStepLength() <<
-					     " ana-intL = " << fWrappedProcessInteractionLength <<
-					     " " <<     GetProcessName() << G4endl;
+      if ( weightForNonInteraction <= 0. )
+	{
+	  G4ExceptionDescription ed;
+	  ed << " Negative non interaction weight : w_NI = " << weightForNonInteraction <<
+	    " p_NI(phys) = " <<  fPhysicalInteractionLaw->ComputeNonInteractionProbabilityAt(step.GetStepLength()) <<
+	    " p_NI(bias) = " <<  fBiasingInteractionLaw ->ComputeNonInteractionProbabilityAt(step.GetStepLength()) <<
+	    " step length = "  <<  step.GetStepLength() <<
+	    " biasing interaction law = `" << fBiasingInteractionLaw->GetName() << "'" << G4endl;
+	  G4Exception(" G4BiasingProcessInterface::AlongStepDoIt(...)",
+		      "BIAS.GEN.04",
+		      JustWarning,
+		      ed);
+	}
       
     }
   

@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+Nov 28th, 2013 Marc Verderi (procbiasing-V09-06-15)
+    - include license/disclaimer in headers in generic and management
+    - include comments and description
+    - change G4cout in G4Exception when appropriate
+
 Nov 28th, 2013 Alex Howard (procbiasing-V09-06-14)
     - Put back RemoveProcess for G4WeightCutOffConfigurator since it is not
       associated with a store singleton.

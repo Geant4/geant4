@@ -40,7 +40,15 @@ G4bool G4BiasingHelper::ActivatePhysicsBiasing(G4ProcessManager* pmanager,
 
   // -- now remove the physic process, that will be replaced by a wrapped version:
   G4VProcess* removed = pmanager->RemoveProcess(physicsProcess);
-  if ( removed != physicsProcess ) G4cout << " !!!!!! FATAL EXCEPTION !!!!!! " << G4endl;
+  if ( removed != physicsProcess )
+    {
+      G4ExceptionDescription ed;
+      ed << "Internal inconsistency in processes handling. Please report !" << G4endl;
+      G4Exception("G4BiasingHelper::ActivatePhysicsBiasing(...)",
+		  "BIAS.GEN.01",
+		  FatalException,
+		  ed);
+    }
   
   G4BiasingProcessInterface* biasingWrapper = new G4BiasingProcessInterface( physicsProcess,
 									     atRestIndex    != ordInActive,

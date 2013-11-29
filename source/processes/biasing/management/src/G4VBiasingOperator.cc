@@ -24,7 +24,17 @@ void G4VBiasingOperator::AttachTo(const G4LogicalVolume* logical)
   G4MapCache< const G4LogicalVolume*, G4VBiasingOperator* >::iterator it;
   it = fLogicalToSetupMap.Find(logical);
   if ( it == fLogicalToSetupMap.End() ) fLogicalToSetupMap[logical] = this;
-  else if ( (*it).second != this ) G4cout << "G4VBiasingOperator::AttachTo() : logical volume already used." << G4endl;
+  else if ( (*it).second != this )
+    {
+      G4ExceptionDescription ed;
+      ed << "Biasing operator `" << GetName() 
+	 << "' can not be attached to Logical volume `"
+	 << logical->GetName() << "' which is already used by an other operator !" << G4endl;
+      G4Exception("G4VBiasingOperator::AttachTo(...)",
+		  "BIAS.MNG.01",
+		  JustWarning,
+		  ed);
+    }
 }
 
 
@@ -117,10 +127,16 @@ void G4VBiasingOperator::ReportOperationApplied( const G4BiasingProcessInterface
       fPreviousAppliedFinalStateBiasingOperation = operationApplied;
       break;
     case BAC_Occurence:
-      G4cout << " !!!! Logic problem !!!! " << G4endl;
+      G4Exception("G4VBiasingOperator::ReportOperationApplied(...)",
+      		  "BIAS.MNG.02",
+      		  JustWarning,
+		  "Internal logic error, please report !");
       break;
     default:
-      G4cout << " !!!! serious logic problem !!! " << G4endl;
+      G4Exception("G4VBiasingOperator::ReportOperationApplied(...)",
+		  "BIAS.MNG.03",
+		  JustWarning,
+		  "Internal logic error, please report !");
     }
   OperationApplied( callingProcess, biasingCase, operationApplied, particleChangeProduced );
 }

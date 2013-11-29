@@ -48,7 +48,7 @@
 //
 // Author: M.Verderi (LLR), November 2013
 // - 05/11/13 : First Implementation
-// ------------------------------------------------------------
+// --------------------------------------------------------------------
 
 
 #ifndef G4VBiasingInteractionLaw_hh
@@ -57,7 +57,6 @@
 #include "globals.hh"
 #include <vector>
 
-class G4Track;
 class G4BiasingProcessInterface;
 
 class G4VBiasingInteractionLaw {
@@ -71,9 +70,6 @@ public:
   // ----------------------------
   // -- Interface to sub-classes:
   // ----------------------------
-  // // // public:
-  // // //   // -- Define starting point:
-  // // //   virtual void                     DefineInitialPoint(const G4Track*          track) = 0;
 protected:
   // -- Sample the distribution for point like interaction (PostStep ones)
   virtual G4double            SampleInteractionLength()                              = 0;

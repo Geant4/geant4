@@ -23,8 +23,16 @@ G4BOptrForceCollision::G4BOptrForceCollision(G4String particleName, G4String nam
   fSharedForceInteractionOperation = new G4BOptnForceCommonTruncatedExp("SharedForceInteraction");
   fCloningOperation                = new G4BOptnCloning("Cloning");
   fParticle = G4ParticleTable::GetParticleTable()->FindParticle(particleName);
-  // --> put a G4Exception
-  if ( fParticle == 0 ) G4cout << " ********* particle not found ****** " << G4endl;
+  
+  if ( fParticle == 0 )
+    {
+      G4ExceptionDescription ed;
+      ed << " Particle `" << particleName << "' not found !" << G4endl;
+      G4Exception(" G4BOptrForceCollision::G4BOptrForceCollision(...)",
+		  "BIAS.GEN.07",
+		  JustWarning,
+		  ed);
+    }
 }
 
 G4BOptrForceCollision::G4BOptrForceCollision(const G4ParticleDefinition* particle, G4String name)
@@ -170,7 +178,7 @@ G4VBiasingOperation* G4BOptrForceCollision::ProposeOccurenceBiasingOperation(con
 
 
 G4VBiasingOperation* G4BOptrForceCollision::ProposeNonPhysicsBiasingOperation(const G4Track* track,
-										      const G4BiasingProcessInterface*)
+									      const G4BiasingProcessInterface*)
 {
   if ( track->GetDefinition() != fParticle ) return 0;
   
@@ -182,7 +190,6 @@ G4VBiasingOperation* G4BOptrForceCollision::ProposeNonPhysicsBiasingOperation(co
   if ( track->GetStep()->GetPreStepPoint()->GetStepStatus() == fGeomBoundary )
     {
       fSharedForceInteractionOperation->SetInteractionOccured( false );
-      fTrackToForce       = 0;
       fInitialTrackWeight = track->GetWeight();
       fCloningOperation->SetCloneWeights(0.0, fInitialTrackWeight);
       return fCloningOperation;
@@ -208,13 +215,9 @@ void G4BOptrForceCollision::ExitBiasing( const G4Track* track, const G4BiasingPr
 
 
 void G4BOptrForceCollision::OperationApplied( const G4BiasingProcessInterface*   callingProcess, G4BiasingAppliedCase,
-						      G4VBiasingOperation*             operationApplied, const G4VParticleChange* particleChangeProduced )
+					      G4VBiasingOperation*             operationApplied, const G4VParticleChange* particleChangeProduced )
 {
   fPreviousOperationApplied = operationApplied;
   if ( operationApplied == fCloningOperation )
-    {
-      RememberSecondaries( callingProcess, operationApplied, particleChangeProduced );
-      fTrackToForce = particleChangeProduced->GetSecondary(0);
-    }
-  
+    RememberSecondaries( callingProcess, operationApplied, particleChangeProduced );
 }
