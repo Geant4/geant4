@@ -46,4 +46,21 @@
 
 /** @} */
 
+/** @defgroup extended_hadronic_Hadr04 Hadr04
+ *  The shared hadronic classes have their
+ *  <a href="../html_Hadr04/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_hadronic_Hadr05 Hadr05
+ *  The shared hadronic classes have their
+ *  <a href="../html_Hadr05/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+/** @} */
 /** @} */

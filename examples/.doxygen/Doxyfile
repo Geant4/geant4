@@ -757,6 +757,7 @@ INPUT                  = Doxymain.h \
                          Doxymodules_visualization.h \
                          .README.HowToNavigate \
                          ../.README.HowToRun \
+                         ../.README.HowToRunMT \
                          ../basic/.README \
                          ../basic/B1 \
                          ../basic/B2 \
@@ -815,6 +816,8 @@ INPUT                  = Doxymain.h \
                          ../extended/hadronic/Hadr01/.README \
                          ../extended/hadronic/Hadr02/.README \
                          ../extended/hadronic/Hadr03/.README \
+                         ../extended/hadronic/Hadr04/.README \
+                         ../extended/hadronic/Hadr05/.README \
                          ../extended/medical/.README \
                          ../extended/medical/DICOM \
                          ../extended/medical/electronScattering/.README \
@@ -827,6 +830,7 @@ INPUT                  = Doxymain.h \
                          ../extended/parallel/MPI/.README \
                          ../extended/parallel/MPI/examples/exMPI01/.README \
                          ../extended/parallel/MPI/examples/exMPI02/.README \
+                         ../extended/parallel/TBB \
                          ../extended/parallel/TopC/ParN02/.README \
                          ../extended/parallel/TopC/ParN04/.README \
                          ../extended/parameterisations \
@@ -938,6 +942,24 @@ EXCLUDE                = ../basic/B2/B2b/include/B2ActionInitialization.hh \
                          ../extended/eventgenerator/HepMC/MCTruth/src/DetectorConstruction.cc \
                          ../extended/eventgenerator/HepMC/MCTruth/src/PhysicsList.cc \
                          ../extended/eventgenerator/HepMC/MCTruth/src/PrimaryGeneratorAction.cc \
+                         ../extended/parallel/TBB/B2b/include/B2ActionInitialization.hh \
+                         ../extended/parallel/TBB/B2b/include/B2bChamberParameterisation.hh \
+                         ../extended/parallel/TBB/B2b/include/B2bDetectorConstruction.hh \
+                         ../extended/parallel/TBB/B2b/include/B2bDetectorMessenger.hh \
+                         ../extended/parallel/TBB/B2b/include/B2EventAction.hh \
+                         ../extended/parallel/TBB/B2b/include/B2PrimaryGeneratorAction.hh \
+                         ../extended/parallel/TBB/B2b/include/B2RunAction.hh \
+                         ../extended/parallel/TBB/B2b/include/B2TrackerHit.hh \
+                         ../extended/parallel/TBB/B2b/include/B2TrackerSD.hh \
+                         ../extended/parallel/TBB/B2b/src/B2ActionInitialization.cc \
+                         ../extended/parallel/TBB/B2b/src/B2bChamberParameterisation.cc \
+                         ../extended/parallel/TBB/B2b/src/B2bDetectorConstruction.cc \
+                         ../extended/parallel/TBB/B2b/src/B2bDetectorMessenger.cc \
+                         ../extended/parallel/TBB/B2b/src/B2EventAction.cc \
+                         ../extended/parallel/TBB/B2b/src/B2PrimaryGeneratorAction.cc \
+                         ../extended/parallel/TBB/B2b/src/B2RunAction.cc \
+                         ../extended/parallel/TBB/B2b/src/B2TrackerHit.cc \
+                         ../extended/parallel/TBB/B2b/src/B2TrackerSD.cc \                      
                          ../extended/visualization/userVisAction/include/B1DetectorConstruction.hh \
                          ../extended/visualization/userVisAction/include/B1EventAction.hh \
                          ../extended/visualization/userVisAction/include/B1PrimaryGeneratorAction.hh \

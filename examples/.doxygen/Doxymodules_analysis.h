@@ -90,7 +90,6 @@
   class B1ConRun{};
   class B1DetectorConstruction{};
   class B1EventAction{};
-  class B1EventInformation{};
   class B1PrimaryGeneratorAction{};
   class B1Run{};
   class B1SteppingAction{};

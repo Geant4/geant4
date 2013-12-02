@@ -15,21 +15,17 @@
  *  @{
  */
 
+class Par01ActionInitialization {};
 class Par01CalorimeterHit {};
 class Par01CalorimeterSD {};
 class Par01DetectorConstruction {};
 class Par01EMShowerModel {};
 class Par01EnergySpot {};
-class Par01EventAction {};
-class Par01EventActionMessenger {};
 class Par01ParallelWorldForPion {};
 class Par01PhysicsList {};
 class Par01PiModel {};
 class Par01PionShowerModel {};
 class Par01PrimaryGeneratorAction {};
-class Par01RunAction {};
-class Par01SteppingAction {};
-class Par01SteppingActionMessenger {};
 
 
 /** @} */

@@ -43,6 +43,7 @@ The information about the original set of these examples can be found at
 
 And more on what is common for all examples:
 - \ref README_HowToRun 
+- \ref README_HowToRunMT 
 - \ref README_HowToNavigate
 
 
