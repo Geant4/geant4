@@ -93,7 +93,7 @@
    and so all user action classes are defined thread-local.
 
     A run action class is instantiated both thread-local 
-   and global that's why its instance has is created also in the method
+   and global that's why its instance is created also in the method
       B4aActionInitialization::BuildForMaster() 
    (see also 
     \link B4bActionInitialization::BuildForMaster() B4b \endlink, 

@@ -21,7 +21,7 @@ $Id$
 
      In addition, a global, uniform, and transverse magnetic field can be 
      applied using G4GlobalMagFieldMessenger, instantiated in 
-     B2bDetectorConstruction::ConstructSDandField with a non zero field value,
+     B2[a,b]DetectorConstruction::ConstructSDandField with a non zero field value,
      or via interactive commands. 
      For example:
 

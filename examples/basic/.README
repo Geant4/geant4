@@ -28,7 +28,6 @@ development.
    - Geometry with simple placements with rotation (G4PVPlacement)
    - Radioactive source 
    - Scoring within Crystals via G4 scorers
-   - Histograms (1D) and ntuple saved in the output file
    - Modular physics list built via builders provided in Geant4
 
 - \ref ExampleB4

@@ -17,6 +17,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30/11/13 I. Hrivnacova (exbasic-V09-06-02)
+- Fixes in documentation 
+- Fixed B2a/gui.mac and obsolete comments in a few more macros
+
 09/11/13 I. Hrivnacova (exbasic-V09-06-01)
 - Added B5 in Cmake, GNUmake and README files;
   fixed B2/README
