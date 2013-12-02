@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29th November2013 M.Asai (tracking-V09-06-10)
+- G4VTrajectory::ShowTrajectory() : add missing \\n.
+
 28th November2013 M.Asai (tracking-V09-06-09)
 - G4SteppingManager::fTouchableHistory data member is cleared in the
   destructor to avoid double-deletion in MT mode.

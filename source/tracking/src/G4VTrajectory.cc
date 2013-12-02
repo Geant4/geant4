@@ -109,6 +109,7 @@ void G4VTrajectory::ShowTrajectory(std::ostream& os) const
 
     delete attValues;  // AttValues must be deleted after use.
   }
+  os << "\n";
 }
 
 void G4VTrajectory::DrawTrajectory() const
