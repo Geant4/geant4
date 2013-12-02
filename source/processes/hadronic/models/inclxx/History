@@ -16,6 +16,11 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+29 November 2013 - Gabriele Cosmo (hadr-inclxx-V09-06-47)
+---------------------------------------------------------------
+- Fix: energy conservation systematically fails because the G4HadProjectile
+  mass is wrong. Work around this.
+
 27 November 2013 - Gabriele Cosmo (hadr-inclxx-V09-06-46)
 ---------------------------------------------------------------
 - Fix in G4INCLBinaryCollisionAvatar for compilation error in MT mode

@@ -63,7 +63,7 @@ namespace G4INCL {
   // WARNING: if you update the default cutNN value, make sure you update the
   // cutNNSquared variable, too.
   G4ThreadLocal G4double BinaryCollisionAvatar::cutNN = 1910.0;
-  G4ThreadLocal G4double BinaryCollisionAvatar::cutNNSquared = 3648100.0;
+  G4ThreadLocal G4double BinaryCollisionAvatar::cutNNSquared = 3648100.0; // 1910.0 * 1910.0
 
   BinaryCollisionAvatar::BinaryCollisionAvatar(G4double time, G4double crossSection,
       G4INCL::Nucleus *n, G4INCL::Particle *p1, G4INCL::Particle *p2)
