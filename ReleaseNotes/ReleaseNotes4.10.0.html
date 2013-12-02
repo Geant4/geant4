@@ -1187,11 +1187,22 @@ please refer to the corresponding History files provided in most packages):
     <LI>Fixed access to ions via the G4IonTable class and GetIon() method.</LI>
     <LI>G4BGGNucleonInelasticXS: reduced number of operation in the 
         CoulombFactor method. Use G4Pow to compute Coulomb correction factor
-        (some CPU improvement).</LI>
+        (some CPU improvement). Added threashold of 1 millibarn; if 
+        cross-section is less, it is set to zero.</LI>
+    <LI>G4BGGNucleonElasticXS: added threashold of 1 millibarn, added Coulomb 
+        barrier for protons (as in G4BGGNucleonInelasticXS); for Hydrogen target
+        added linear approximation between SAID data and PDG data: SAID upper
+        energy 3.3 GeV, PDG low energy 5 GeV.</LI>
     <LI>Made verbose level modifiers in G4VCrossSectionDataSet into virtual
         functions.</LI>
     <LI>Use G4Exception instead of G4HadronicException for flagging incorrect
         use/setting of SAID data set.</LI>
+    <LI>Major clean up and restructuring in G4ElectroNuclearCrossSection
+        and G4PhotoNuclearCrossSection. Calculation is now done for average N.
+        Replacing 'per isotope' methods by 'per element'.
+        Adopting cross-section factory.</LI>
+    <LI>G4ComponentSAIDTotalXS, G4NeutronElasticXS, G4UPiNuclearCrossSection:
+        avoid deletion of physics-vectors at destruction.</LI>
     <LI>Fixed Coverity defects.</LI>
     </UL></LI>
 <LI><B>Management</B>
@@ -1227,6 +1238,12 @@ please refer to the corresponding History files provided in most packages):
         interface, with algorithm selection handled via constructor argument.</LI>
     <LI>Protect LorentzContraction for at Rest nucleus.</LI>
     <LI>Fixed warning in G4NuclearShellModelDensity.</LI>
+    </UL></LI>
+<LI><B>ABLA</B>
+    <UL>
+    <LI>Restored ABLA model to work in conjuction with INCL++.
+        Fixed case of segmentation-fault on the production of exotic fragments.</LI>
+    <LI>Requires G4ABLA-3.0 data set, controlled by G4ABLADATA flag for path.</LI>
     </UL></LI>
 <LI><B>Binary Cascade</B>
     <UL>

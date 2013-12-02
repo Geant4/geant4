@@ -369,6 +369,7 @@ processes/electromagnetic/utils                  emutils-V09-06-67
 processes/hadronic                               hadr-V09-06-00
 ------------------
 - Removed obsolete 'low_energy' and 'high_energy' modules.
+- Renamed model 'lll_fission' to 'fission'.
 - cross_sections (hadr-cross-V09-06-37)
   o G4BGGNucleonInelasticXS: added threashold of 1 millibarn; if 
     cross-section is less, it is set to zero.
