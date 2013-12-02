@@ -183,7 +183,6 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   }
 
   // Calculate the total four-momentum in the entrance channel
-  G4LorentzVector fourMomentumIn;
   const G4int nucleusA = theNucleus.GetA_asInt();
   const G4int nucleusZ = theNucleus.GetZ_asInt();
   const G4double theNucleusMass = theIonTable->GetIonMass(nucleusZ, nucleusA);
@@ -192,6 +191,9 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   const G4double theTrackMomentumAbs2 = theTrackEnergy*theTrackEnergy - theTrackMass*theTrackMass;
   const G4double theTrackMomentumAbs = ((theTrackMomentumAbs2>0.0) ? std::sqrt(theTrackMomentumAbs2) : 0.0);
   const G4ThreeVector theTrackMomentum = aTrack.Get4Momentum().getV().unit() * theTrackMomentumAbs;
+
+  G4LorentzVector goodTrack4Momentum(theTrackMomentum, theTrackEnergy);
+  G4LorentzVector fourMomentumIn;
   fourMomentumIn.setE(theTrackEnergy + theNucleusMass);
   fourMomentumIn.setVect(theTrackMomentum);
 
@@ -214,7 +216,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
       if(newTargetA > 0 && newTargetZ > 0) {
         // This should give us the same energy per nucleon
         theTargetNucleus = new G4Nucleus(newTargetA, newTargetZ);
-        toInverseKinematics = new G4LorentzRotation(fourMomentumIn.boostVector());
+        toInverseKinematics = new G4LorentzRotation(goodTrack4Momentum.boostVector());
         G4LorentzVector theProjectile4Momentum(0.0, 0.0, 0.0, theNucleusMass);
         G4DynamicParticle swappedProjectileParticle(oldTargetDef, (*toInverseKinematics) * theProjectile4Momentum);
         aProjectileTrack = new G4HadProjectile(swappedProjectileParticle);
