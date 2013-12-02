@@ -32,7 +32,6 @@
 #define P6DPhysicsList_h 1
 
 #include "G4VUserPhysicsList.hh"
-#include "globals.hh"
 
 /// The physics list class with Pythia6 decayer
 
