@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 29, 2013, M.Asai (digits_hits-V09-06-12)
+- Remove self-deletion in G4ScoringManager::~G4Scoringmanager().
+
 Nov 7, 2013, G.Cosmo (digits_hits-V09-06-11)
 - Replaced deprecated calls to G4Sphere accessor methods in scorer classes.
 

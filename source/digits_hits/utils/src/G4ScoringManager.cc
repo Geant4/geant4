@@ -72,7 +72,7 @@ G4ScoringManager::~G4ScoringManager()
   delete fColorMapDict;
   delete fQuantityMessenger;
   delete fMessenger;
-  delete fSManager;
+  fSManager = 0;
 }
 
 void G4ScoringManager::SetReplicaLevel(G4int lvl)
