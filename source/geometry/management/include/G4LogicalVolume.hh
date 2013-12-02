@@ -138,7 +138,7 @@ class G4LVData
   // G4LogicalVolume that may not be read-only. 
 
   public:
-
+    G4LVData();
     void initialize() {}
 
   public:

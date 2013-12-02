@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 30, 2013 M.Asai                  geommng-V09-06-15
+- Explicitely initialize data members of G4LVData.
+
 November 27, 2013 J.Apostolakis           geommng-V09-06-14
 - Fix in G4GeomSplitter::FreeSlave(): use free() to delete memory 
    which was allocated with malloc().

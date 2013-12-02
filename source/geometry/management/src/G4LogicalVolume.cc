@@ -60,6 +60,11 @@
 template <class G4LVData> G4ThreadLocal
 G4LVData* G4GeomSplitter<G4LVData>::offset = 0;      
 
+G4LVData::G4LVData()
+: fSolid(0),fSensitiveDetector(0),fFieldManager(0),
+  fMaterial(0),fMass(0.),fCutsCouple(0)
+{;}
+
 // This new field helps to use the class G4LVManager
 //
 G4LVManager G4LogicalVolume::subInstanceManager;
@@ -147,7 +152,10 @@ G4LogicalVolume::G4LogicalVolume( G4VSolid* pSolid,
   fFieldManager = pFieldMgr;
 
   instanceID = subInstanceManager.CreateSubInstance();
-
+////G4cout<<"@@@@@ G4LogicalVolume::G4LogicalVolume("<<name<<") : ID="<<instanceID<<" "<<this<<G4endl;
+////G4int xxx;
+////std::cin>>xxx;
+////if(xxx<0) G4Exception("XXX","XXX",FatalException,name);
   AssignFieldManager(pFieldMgr); // G4MT_fmanager = pFieldMgr;
   
   // fMasterFieldMgr= pFieldMgr;
