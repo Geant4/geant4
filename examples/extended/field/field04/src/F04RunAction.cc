@@ -55,6 +55,7 @@ F04RunAction::~F04RunAction()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4Threading.hh"
 
 void F04RunAction::BeginOfRunAction(const G4Run* aRun)
 {
@@ -78,7 +79,12 @@ void F04RunAction::BeginOfRunAction(const G4Run* aRun)
      G4Random::showEngineStatus();
   }
 
-  if (fSaveRndm > 0) G4Random::saveEngineStatus("BeginOfRun.rndm");
+  if (fSaveRndm > 0)
+  {
+     std::ostringstream os;
+     os<<"beginOfRun_"<<G4Threading::G4GetThreadId()<<".rndm";
+     G4Random::saveEngineStatus(os.str().c_str());
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -87,7 +93,9 @@ void F04RunAction::EndOfRunAction(const G4Run*)
 {
   if (fSaveRndm == 1) {
      G4Random::showEngineStatus();
-     G4Random::saveEngineStatus("endOfRun.rndm");
+     std::ostringstream os;
+     os<<"endOfRun_"<<G4Threading::G4GetThreadId()<<".rndm";
+     G4Random::saveEngineStatus(os.str().c_str());
   }
 }
 

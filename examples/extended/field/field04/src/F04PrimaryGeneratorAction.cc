@@ -88,34 +88,30 @@ void F04PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   if (!fFirst) {
 
      fFirst = true;
+     G4ThreeVector direction(0.0,0.0,1.0);
 
      G4Navigator* theNavigator =
                     G4TransportationManager::GetTransportationManager()->
                                                  GetNavigatorForTracking();
-     G4Navigator* aNavigator = new G4Navigator();
      if ( theNavigator->GetWorldVolume() )
-               aNavigator->SetWorldVolume(theNavigator->GetWorldVolume());
+     {
+       G4Navigator* aNavigator = new G4Navigator();
+       aNavigator->SetWorldVolume(theNavigator->GetWorldVolume());
 
-     G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
+       G4ThreeVector center(0.,0.,0.);
+       aNavigator->LocateGlobalPointAndSetup(center,0,false);
 
-     if (!geomManager->IsGeometryClosed()) {
-        geomManager->OpenGeometry();
-        geomManager->CloseGeometry(true);
-     }
-
-     G4ThreeVector center(0.,0.,0.);
-     aNavigator->LocateGlobalPointAndSetup(center,0,false);
-
-     G4TouchableHistoryHandle touchable = aNavigator->
+       G4TouchableHistoryHandle touchable = aNavigator->
                                           CreateTouchableHistoryHandle();
 
-    // set Global2local transform
-    fGlobal2local = touchable->GetHistory()->GetTopTransform();
+       // set Global2local transform
+       fGlobal2local = touchable->GetHistory()->GetTopTransform();
 
-    G4ThreeVector direction(0.0,0.0,1.0);
-    direction = fGlobal2local.Inverse().TransformAxis(direction);
+       direction = fGlobal2local.Inverse().TransformAxis(direction);
+       delete aNavigator;
+     }
 
-    fParticleGun->SetParticleMomentumDirection(direction);
+     fParticleGun->SetParticleMomentumDirection(direction);
   }
 
   G4double x0,y0,z0 ;

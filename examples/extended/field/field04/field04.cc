@@ -50,8 +50,7 @@
 #include "G4RunManager.hh"
 #endif
 
-#include "FTFP_BERT.hh"
-///////////////////////////////////#include "F04PhysicsList.hh"
+#include "F04PhysicsList.hh"
 #include "F04DetectorConstruction.hh"
 
 #include "F04ActionInitialization.hh"
@@ -95,7 +94,7 @@ int main(int argc,char** argv)
 
   G4Random::setTheSeed(myseed);
 
-  G4String physicsList = "QGSP_BERT_EMV";
+  G4String physicsList = "QGSP_BERT_HP";
 
 #ifndef WIN32
   G4int c = 0;
@@ -122,8 +121,7 @@ int main(int argc,char** argv)
   F04DetectorConstruction* detector = new F04DetectorConstruction();
   runManager->SetUserInitialization(detector);
   // Physics list
-  ////////runManager->SetUserInitialization(new F04PhysicsList(physicsList));
-  runManager->SetUserInitialization(new FTFP_BERT);
+  runManager->SetUserInitialization(new F04PhysicsList(physicsList));
   // User action initialization
   runManager->SetUserInitialization(new F04ActionInitialization(detector));
 

@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 30, 2013 M.Asai - (fieldex04-V09-06-08)
+- fix additional thread-safety issues.
+
+November 29, 2013 - I. Hrivnacova
+- Fixed gui.mac (commented out command specific to B2 example)
+
 November 28, 2013 M.Asai - (fieldex04-V09-06-07)
 - fix thread-safety issues.
 
