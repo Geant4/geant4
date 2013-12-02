@@ -877,7 +877,15 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Management</B>
     <UL>
+    <LI>Added shadow master-thread pointer to G4VProcess and modifiers methods.
+        required for new design of sharing of tables (EM & HAD) for
+        multi-threading.
+        Added worker initialization virtual method for multi-threading.</LI>
+    <LI>Remove unused and obsolete intermediate layer classes
+        G4IVContinuousDiscreteProcess and G4IVRestDiscreteProcess.</LI>
+    <LI>Now G4VProcess::SubtractNumberOfInteractionLengthLeft() is inlined.</LI>
     <LI>Corrected name for G4Upsilon meson.</LI>
+    <LI>Added process type for phonon processes to G4ProcessType.</LI>
     </UL></LI>
 <LI><B>Optical</B>
     <UL>
@@ -890,17 +898,31 @@ please refer to the corresponding History files provided in most packages):
         absorbed/shifted. Addressing report from G4Hypernews Forum #509.</LI>
     <LI>G4OpWLS and G4OpRayleigh: added BuildPhysicsTable() method which is
         doing as before but at the moment when material list is fully defined.</LI>
+    <LI>Fixes in made G4OpBoundaryProcess to work properly with parallel worlds.
+    <LI>G4OpBoundaryProcess now invokes the ProcessHit() method of the sensitive
+        detector associated with the PostStepPoint volume when optical photons are
+        detected at the entrance boundary.</LI>
+    <LI>Fixed assignment of status for Dichroic.</LI>
     <LI>Fixed Coverity defects in G4OpBoundaryProcess.</LI>
+    </UL></LI>
+</LI>Phonon</B>
+    <UL>
+    <LI>New module containing processes for phonon propagation and interaction
+        in materials: G4LatticeManager, G4LatticeReader, G4PhononDownconversion,
+         G4PhononPolarization, G4PhononReflection, G4PhononScattering,
+         G4PhononTrackMap, G4VPhononProcess.</LI>
     </UL></LI>
 <LI><B>Scoring</B>
     <UL>
-    <LI></LI>
+    <LI>Removed unnecessary printout.</LI>
     </UL></LI>
 <LI><B>Transportation</B>
     <UL>
     <LI>Adapted G4Transportation and G4CoupledTransportation to use
         G4ChargeState for charge/spin/magnetic moment, and to message the
         equation of motion directly with it.</LI>
+    <LI>Initialize missing data members in G4CoupledTransportation constructor 
+        Addresses issue identified by Coverity.</LI>
     </UL></LI>
 </UL>
 
@@ -1220,14 +1242,11 @@ please refer to the corresponding History files provided in most packages):
         <LI></LI>
         </UL></LI>
     </UL></LI>
-<LI><B>Processes</B>
-    <UL>
-    <LI></LI>
-    </UL></LI>
 <LI><B>Stopping</B>
     <UL>
     <LI>G4MuonMinusCaptureAtRest: fix to access ions via G4IonTable class
         and GetIon() method.</LI>
+    <LI>Replaced native PreCompound model with Bertini in G4MuonMinusCapture.</LI>
     <LI>Removed deprecated stopping classes.</LI>
     <LI>Fixed Coverity defects.</LI>
     </UL></LI>
@@ -1244,19 +1263,6 @@ please refer to the corresponding History files provided in most packages):
     <LI>Restored ABLA model to work in conjuction with INCL++.
         Fixed case of segmentation-fault on the production of exotic fragments.</LI>
     <LI>Requires G4ABLA-3.0 data set, controlled by G4ABLADATA flag for path.</LI>
-    </UL></LI>
-<LI><B>Binary Cascade</B>
-    <UL>
-    <LI>Implemented interface to Precompound model for nucleus-nucleus 
-        interactions at high (> 2GeV/N).</LI>
-    <LI>Use of simplified G4GeneratorPrecompoundInterface::Propagate() for
-        hadron-nucleus interactions and adoption of PropagateNuclNucl() for
-        simulation of nucleus-nucleus interactions.</LI>
-    <LI>G4RKFieldIntegrator: make static array in fuction a const array.</LI>
-    <LI>Revised signature of method SetChargeMomentumMass() for fields in
-        G4KM_NucleonEqRhs and G4KM_OpticalEqRhs). Made these virtual methods
-        non-inline.</LI>
-    <LI>Added cloning of Dummy Field, required for multi-threading.</LI>
     </UL></LI>
 <LI><B>Bertini Cascade</B>
     <UL>
@@ -1293,7 +1299,63 @@ please refer to the corresponding History files provided in most packages):
         nucleus.  Fixed rare cases of non-reproducibility in
         generateParticleFate().  Fixed access to ions via the G4IonTable
         class.</LI>
+    <LI>Reorganised de-excitation modules to use G4Fragment throughout process.
+        Only final ground-state nucleus will be instantiated as a G4InuclNuclei
+        object. This should substantially reduce the load on G4IonTable in multi-
+        thread operations.</LI>
+    <LI>G4CascadeDeexciteBase: new concrete subclass of G4VCascadeDeexcitation.
+        Takes over "operational" support from G4CascadeColliderBase, including
+        explosion() functions, local copy of G4CascadeCheckBalance, and
+        conservation checking functions.  Provides utilities to extract common
+        data from input G4Fragment for all modules, and to construct a G4Fragment.</LI>
+    <LI>Improved encapsulation of pion and muon absorption through dibaryons.</LI>
+    <LI>G4CascadeCheckBalance: added interface to take G4Fragment initial state.
+        G4InuclCollider: use G4Fragment interface to de-excitation modules.</LI>
+    <LI>G4CascadeParameters: added new flag to perform internal conservation checks.
+        Use such run-time flag in G4CascadeColliderBase to conditionally instantiate
+        CheckBalance. G4EquilibriumEvaporator: removed turning-off of conservation
+        checks after fission.</LI>
+    <LI>G4CascadeParameters, G4CascadeParamMessenger: added new environment
+        variable, G4CASCADE_USE_PHASESPACE, and associated functions, to switch
+        between multiparameter and Kopylov N-body generators.
+        G4CascadeFinalStateAlgorithm: added Kopylov N-body phase space generation,
+        with function code copied from G4HadPhaseSpaceKopylov.</LI>
+    <LI>Added use of "Id" and "Name" keywords where missing.
+    <LI>Moved local statics to file scope to avoid thread collisions.
+        Fixes for thread safety in G4InuclSpecialFunctions,
+        G4*EquilibriumEvaporator and paraMaker.</LI>
+    <LI>G4InuclParticleNames: provide particle identification functions,
+        equivalent to those in G4InuclElementaryParticle, for direct use of
+        type codes.
+        G4InuclElementaryParticle: replaced identification functions with calls
+        through to new G4InuclParticleNames functions.</LI>
+    <LI>G4CascadeInterface: replacing "Z=1" with "Z==1" in Boolean ternary
+        operation. Addressing problem report
+        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1513">#1513</A>.</LI>
+    <LI>Replaced usage of std::log, std::exp, and std::pow with G4Log, G4Exp
+        and G4Pow functions with faster polynomial implementations respectively.</LI>
+    <LI>G4EquilibriumEvaporator, G4NucleiModel: fixed to avoid race condition
+        in MT mode.</LI>
     <LI>Removed obsolete directories 'evaporation' and 'utils'.</LI>
+    <LI>Fixes for coverity defects.</LI>
+    </UL></LI>
+<LI><B>Binary Cascade</B>
+    <UL>
+    <LI>Implemented interface to Precompound model for nucleus-nucleus 
+        interactions at high (> 2GeV/N).</LI>
+    <LI>Use of simplified G4GeneratorPrecompoundInterface::Propagate() for
+        hadron-nucleus interactions and adoption of PropagateNuclNucl() for
+        simulation of nucleus-nucleus interactions.</LI>
+    <LI>G4RKFieldIntegrator: make static array in fuction a const array.</LI>
+    <LI>Revised signature of method SetChargeMomentumMass() for fields in
+        G4KM_NucleonEqRhs and G4KM_OpticalEqRhs). Made these virtual methods
+        non-inline.</LI>
+    <LI>Added cloning of Dummy Field, required for multi-threading.</LI>
+    <LI>G4BinaryCascade, G4BinaryLightIonCascade: fixed infinite exception
+        output by removing G4Fragment.SetParticleDefinition() for ions.
+        Ion definition is not used inside G4Fragment class.</LI>
+    <LI>G4BinaryCascade: fixed typo. Addressing problem report
+        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1511">#1511</A>.</LI>
     </UL></LI>
 <LI><B>De-excitation</B>
     <UL>
@@ -1317,6 +1379,18 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4ExcitationHandler: fixed typo in SetMaxAForFermiBreakUp() method.</LI>
     <LI>G4WilsonAblationModel: fixed typo and added warning that the model
         is not well validated.</LI>
+    <LI>G4ContinuumGammaTransition: use G4UniformRand and a simple algorithm 
+        to sample continuous gamma transition instead of G4RandGeneralTmp;
+        changed number of bins for sampling to 100 instead of 200
+        Deleted redundant class G4RandGeneralTmp.</LI>
+    <LI>G4NeutronRadCapture: added isomere production according to the updated 
+        MT interface; added time propagation (correct time for delaied capture).</LI>
+    <LI>Use G4Log and G4Exp instead of standard math functions.</LI>
+    <LI>Fixes for compilation issues detected on Windows/VC18 
+        from Visual-Studio 12.</LI>
+    <LI>G4NeutronRadCapture, G4ExcitationHandler: changed max isomer level 
+        number to 8 (before was 9) due to limitations of PDG encoding.</LI>
+    <LI>Fixes for Coverity defects.</LI>
     </UL></LI>
 <LI><B>Elastic scattering</B>
     <UL>
@@ -1330,7 +1404,8 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Fission</B>
     <UL>
-    <LI></LI>
+    <LI>New module directory copy of 'lll_fission' with addition of the LEP
+        fission class, G4LFission.</LI>
     </UL></LI>
 <LI><B>High Energy Theoretical</B>
     <UL>
@@ -1341,11 +1416,13 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Im_r_matrix</B>
     <UL>
-    <LI></LI>
+    <LI>Fixes for multi-threading: make static arrays const to avoid having
+        these thread-local.</LI>
+    <LI>Fixes for coverity defects.</LI>
     </UL></LI>
 <LI><B>INCLXX</B>
     <UL>
-    <LI>Updated to INCL++ v5.1.13.2: relies on pre-compound for reactions below
+    <LI>Updated to INCL++ v5.1.14: relies on pre-compound for reactions below
         1 MeV (configurable via the G4INCLXXInterfaceMessenger);
         use pre-compound only for incident nucleons.</LI>
     <LI>Several adjustments in the nucleus-nucleus sector.
@@ -1359,10 +1436,16 @@ please refer to the corresponding History files provided in most packages):
         clashes with specific macros defined in Windows system.
         Adapted code accordingly.</LI>
     <LI>Adapted some of the MT modifications  and some code refactoring.</LI>
-    </UL></LI>
-<LI><B>Isotope Production</B>
-    <UL>
-    <LI></LI>
+    <LI>Fixed crash in very low-energy (~1 MeV) p+He4 reactions and in
+        light-ion-induced reactions.</LI>
+    <LI>Largely reduced memory churn. Get rid of calls to
+        G4ParticleTable::GetIonTable() and GetIon().</LI>
+    <LI>Prepare the G4INCLXXInterface to handle different de-excitation models
+        through the SetDeExcitation() method.</LI>
+    <LI>Resample interaction if four-momentum conservation is violated.</LI>
+    <LI>Fixed bug in forced pion emission at the end of cascade and in
+        phase-space decay of exotic clusters.</LI>
+    <LI>Several other minor fixes and code refactoring.</LI>
     </UL></LI>
 <LI><B>Lend</B>
     <UL>
@@ -1373,7 +1456,10 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>Lepto-nuclear</B>
     <UL>
-    <LI></LI>
+    <LI>Adapted to use GetElementCrossSection() from
+        G4PhotoNuclearCrossSection.</LI>
+    <LI>Removed redundant check for cross-section greater than zero.
+        Removed unused variables.</LI>
     </UL></LI>
 <LI><B>Neutron High Precision</B>
     <UL>
@@ -1390,8 +1476,14 @@ please refer to the corresponding History files provided in most packages):
         classes.</LI>
     <LI>Added capability to register user prepared thermal scattering file.</LI>
     <LI>Enable use of single temperature data file.</LI>
+    <LI>New implementation of fission fragments generator.</LI>
+    <LI>Fixed problem on Wendt model and various compilation warnings.</LI>
+    <LI>Fixed problem on Windows platform to echo environment variable.</LI>
+    <LI>Made data arrays 'const' in place of thread-local in
+        G4NeutronHPFastLegendre and its source files.</LI>
     <LI>Fix for extrapolation problem.</LI>
-    <LI>Fixed Coverity defects in G4NeutronHPElementData.</LI>
+    <LI>Change call to G4ParticleTable::GetParticleTable()->GetIon() to
+        G4IonTable::GetIonTable()->GetIon(), according to recent intrerface.</LI>
     <LI>Requires new data set G4NDL-4.4.</LI>
     </UL></LI>
 <LI><B>Parton-String</B>
@@ -1405,6 +1497,14 @@ please refer to the corresponding History files provided in most packages):
     <LI>Fixed bug in Reggeon cascading.</LI>
     <LI>Fixed cases of division by zero in G4FTFAnnihilation and
         G4FTFParameters.</LI>
+    <LI>New parameterizations of FTF process cross-sections.
+        Returning 10% of Delta-isobar probability.
+        Reaching better description of experimental data on hP, hA interactions.
+        Results of FTF become close to QGSM, especially for heavy targets.</LI>
+    <LI>Replaced use of CLHEP::RandFlat with G4RandFlat in G4DiffractiveExcitation.</LI>
+    <LI>Fixed two bugs in the index manipulation of the BaryonWeight
+        4-dimensional vector in G4LundStringFragmentation.</LI>
+    <LI>Code clean-up and formatting.</LI>
     </UL></LI>
 <LI><B>Pre-equilibrium</B>
     <UL>
@@ -1413,14 +1513,15 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4PreCompoundParameters: make it as a normal class not singleton.</LI>
     <LI>G4GNASHTransitions: more accurate definition of static data.</LI>
     <LI>G4PreCompoundModel: fixed logic of "soft-cutoff" option.</LI>
+    <LI>Use G4Log and G4Exp instead of standard math functions in
+        G4PreCompoundModel, G4PreCompoundEmission and G4PreCompoundProton.</LI>
     </UL></LI>
 <LI><B>QMD Reaction</B>
     <UL>
+    <LI>Change call to G4ParticleTable::GetParticleTable()->GetIon() to
+        G4IonTable::GetIonTable()->GetIon(), according to recent intrerface.</LI>
+    <LI>Fixed double deletion problem on G4QMDCollision.</LI>
     <LI>Fixed most Coverity defects.</LI>
-    </UL></LI>
-<LI><B>Quasi Elastic</B>
-    <UL>
-    <LI></LI>
     </UL></LI>
 <LI><B>Radioactive Decay</B>
     <UL>
@@ -1429,7 +1530,32 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4RadioactiveDecay: moved initialisation of Isotope table from
         constructor to BuildPhysicsTable() method.
         Initialise Isotope table only for master.
-        Fixed memory leak by adding deletion of the IsotopeTable to destructor.</LI>
+        Fixed memory leak by adding deletion of the IsotopeTable to destructor.
+        Removed setting of nuclear decay tables to G4ParticleDefinition and
+        replaced with local decay table map to fix issues with multi-threading.
+        Remove IsLoaded() method and data member, now redundant.
+        Move registry of isotope table from BuildPhysicsTable()
+        to constructor (fixing problem of missing secondaries for MT).
+        Fix in LoadDecayTable() to read data file only once in MT mode.
+        Search internal library of decay tables in GetDecayTable(), using name
+        of ion, not integer key (fixing "level 9" problem).
+        Fix end-point energy loaded into decay channel for beta+ decay in
+        LoadDecayTable(); subtract 2 electron masses.
+        Fix in GetMeanFreePath() for a problem preventing isomers from decaying
+        in flight, replacing GetPDGStable() with lifetime == -1 as test for
+        nuclide stability. Also cleaned up calculation of pathlength.</LI>
+    <LI>G4NuclearDecayChannel: use integer metastable state levels instead of
+        energy values. Where only energy is known search for nearest integer level. 
+        Added protection in DecayIt() in loop to search for isomer levels.
+        Issue fatal exception for zero pointers when daughter ions are not found.
+        Added an electron mass to the parent nucleus in case of electron capture.
+        This fixes the G4GeneralPhaseSpaceDecay::Pmx() mass deficit warning.
+        Allow explicit decay of IT channels in DecayIt() and send residual
+        nucleus to final state for tracking.
+        In the case of IT, get excitation energy from parent nucleus, not daughter; 
+        remove subtraction of gamma energy from variable 'daughterExcitation'.
+        Cleaned out unused print-outs.</LI>
+    <LI>Fixed bugs causing decay chains to stop prematurely.</LI>
     <LI>Requiring new data set RadioactiveDecay.4.0.</LI>
     </UL></LI>
 </UL>
@@ -1735,6 +1861,8 @@ please refer to the corresponding History files provided in most packages):
 <UL>
   <LI>Introducing G4MTRunManager and G4WorkerRunManager for multi-threading
       mode. Enabled MT mode for multiple runs in a job.</LI>
+  <LI>Introducing G4MTRunManagerKernel class for better symmetry of run manager
+      and run manager kernel.</LI>
   <LI>Updated APIs for users: implemented changes in class
       G4UserWorkerInitialization; introduced and enabled class
       G4VUserActionInitialization.</LI>
@@ -1757,9 +1885,18 @@ please refer to the corresponding History files provided in most packages):
   <LI>Random engine is "cloned" in worker threads from master thread one.
       This functionality is at the moment implemented in RunManager classes,
       but will eventually be moved elsewhere in the final version.</LI>
+  <LI>Introduced G4RNGHelper container class for random engine seeds.</LI>
+  <LI>Number of events processed on each thread varies based on the
+      availability of each thread; the array of random number seeds and
+      event-ID are centrally managed by G4MTRunManager.</LI>
   <LI>New UI command /random/saveEachEventFlag: if true save random seed for
       each event in a file with unique name: runXXXevtYYY.rndm.
       Workers write out random files in files with G4WorkerXX postfix.</LI>
+  <LI>Introducing G4MTRunManager::SetEventModulo() and correspondng
+      /run/eventModulo command to specify the number of events to be sent to a
+      worker thread at one time and set the random number seeds.</LI>
+  <LI>In MT mode, random number seeds are created for all events regardless
+      of eventModulo in G4MTRunManager.</LI>
   <LI>G4VUSerPhysicsList is now shared between threads and is a split-class.</LI>
   <LI>Added 'isMaster' Boolean flag to G4UserRunAction. It is set to true
       for the user run action object assigned to G4MTRunManager.</LI>
@@ -1770,13 +1907,80 @@ please refer to the corresponding History files provided in most packages):
   <LI>Fixed bug in PhysicsListHelper for DNABrownianTransportation.</LI>
   <LI>Removed obsolete UI commands, including obsolete UI commands for
       random number handling.</LI>
+  <LI>Process manager objects of all threads are now cleanly deleted.</LI>
+  <LI>Activating new interfaces for worker thread G4VProcess initialization 
+      in G4VUserPhysicsList for [Prepare,Build]PhysicsTable().</LI>
+  <LI>G4WorkerRunManager now invokes G4VVisManager::SetUpForAThread() method
+      so that G4VisManager will get noticed at the end of event of each
+      worker thread.</LI>
+  <LI>Fixed timing of setting process shadow pointer to make sure parallel
+      world process is properly included for worker thread.
+      Fixed timing of CheckRegularGeometry() so that ScoreSplitterProcess
+      is properly set to the worker process manager.</LI>
+  <LI>G4IonTable::InitializeLightIons() is invoked for both MT and sequential
+      mode. G4IonConstructor::ConstructParticle() is invoked to ensure all
+      light ions are properly constructed when GenericIon is constructed.</LI>
+  <LI>All generic ions share the object ID with GenericIon so that TLS
+      pointers to G4ProcessManager are not created for them.</LI>
+  <LI>G4ParticleTable::GetParticleTable()->SetReadiness(); is invoked for the
+      worker threads as well to make sure ions could be created during event loop.
+      Ions are created only if G4GenericIon is defined in the physics-list.
+      Set up decay channels before starting event loop.</LI>
+  <LI>Modified G4PhysicsListHelper::AddTransportation() 
+      that would prevent to add the G4Transportation to 'Molecules'.</LI>
+  <LI>Activated use of Workspace mechanism for geometry split classes.</LI>
+  <LI>Enabling possibility for user to alternate G4UserRunAction objects.</LI>
+  <LI>Introduced G4VUserActionInitialization::InitializeSteppingVerbose() for
+      easier use of user-specific SteppingVerbose.</LI>
+  <LI>Added lock protection for registration and de-registration of worker
+      threads and re-initialisation of geometry.</LI>
+  <LI>Introduced G4FORCENUMBEROFTHREADS shell variable to force the number
+      of threads regardless of G4MTRunManager::SetNumberOfThreads() or
+      corresponding UI command.</LI>
+  <LI>Introducing /run/printProgress command. Changed print-out for
+      /run/printProgress command.Fixed guidance text in G4RunMessenger.</LI>
+  <LI>Fixed the logic of defining parallel scoring worlds and their
+      corresponding G4ParallelWorldProcess objects for the worker threads.
+      Fixed behavior in MT mode when the entire geometry is rebuilt
+      from scratch.
+      Fixed behavior in MT mode when a new scoring mesh is created after
+      the first run.
+      BuildPhysicsTables() is invoked also for a run with zero event.</LI>
+  <LI>Added new method G4RunManager::ReinitializeGeometry() to correctly handle
+      rebuild of geometry from scratch in users code for MT. Can optionally wipe
+      out solids and volumes geometry stores.</LI>
+  <LI>Command '/run/beamOn' is not broadcasted to workers.
+      Workers use explicitly ::RunBeamOn() method in
+      G4MTRunManagerKernel::StartThread().
+      UI command '/run/numberOfThreads' works only at 'PreInit' state.</LI>
+  <LI>Add methods: G4RunManager::GetNumberOfEventsToBeProcessed(),
+      	           G4RunManager::GetNumberOfSelectEvents(),
+	           G4RunManager::GetSelectMacro()
+      which return the parameters used in G4RunManager::BeamOn().</LI>
+  <LI>Added G4WorkerRunManager::MergePartialResults() re-factor reduction of
+      local results into global. Derived class cen re-implement reduction.</LI>
+  <LI>Modified adjoint classes to migrate to the new RMC schema where reverse
+      and forward trackings of equivalent adjoint and forward primaries are
+      processed in same events. This in preparation for the migration to MT mode.</LI>
 </UL>
 
 <A NAME="track-notes">
 <H3><I>Track & Tracking</I></H3></A>
 <UL>
-<LI>Moved constructor and destructor of G4VelocityTable singleton to private.</LI>
-<LI>Removed 'i_mode' parameter from DrawTrajectory().</LI>
+  <LI>Added protection against null pointer for the process manager of
+      secondaries in case secondaries are generated at zero kinetic energy.</LI>
+  <LI>New class G4AdjointTrackingAction and modified G4AdjointSteppingAction
+      in order to treat the reverse tracking of an adjoint particle and tracking
+      of its equivalent forward particle in the same event. This is required
+      for the migration of ReverseMC to MT mode.</LI>
+  <LI>G4TrackingMessenger: moved invokation with G4TransportationManager 
+      from G4VisCommandsSceneAdd to this messenger; G4TransportationManager is
+      now thread-local, and G4VisCommandsSceneAdd cannot access to it.</LI>
+  <LI>G4SteppingManager: 'fTouchableHistory' data member is rest to zero in the
+      destructor to avoid cases of double-deletion in MT mode.</LI>
+  <LI>G4TrackingManager: added handling for StoreTrajectory().</LI>
+  <LI>Moved constructor and destructor of G4VelocityTable singleton to private.</LI>
+  <LI>Removed 'i_mode' parameter from DrawTrajectory().</LI>
 </UL>
 
 <A NAME="vis-notes">
@@ -1785,25 +1989,61 @@ please refer to the corresponding History files provided in most packages):
 <LI><B>General:</B>
     <UL>
     <LI>Removed NURBS code and references to i_mode.</LI>
-    <LI>Fixed for several defects reported by Coverity tool.</LI>
+    <LI>Fixed for several defects reported by Coverity and PVS tools.</LI>
     </UL></LI>
 <LI><B>Management</B>
     <UL>
+    <LI>First implementation of multithreading visualisation:
+        <UL>
+        <LI>Drawing from user code is explicitly ignored.</LI>
+        <LI>Events are kept until end of run, then drawn: to avoid potential huge
+            consumption of memory added "/vis/disable" command.</LI>
+        <LI>Implemented maxNumberOfKeptEvents.</LI>
+        <LI>Vis commands are *not* be broadcast to threads.</LI>
+        <LI>New method SetUpForAThread() in G4VisManager to be invoked by
+            G4WorkerRunManager so that G4VisManager will get noticed at the
+            end of event of each worker thread.</LI>
+        <LI>Implemented IgnoreStateChanges() to be invoked from RayTracer and
+            other utilities that have their own event loop.</LI>
+        <LI>Introducing G4VisManager::SetUpForAThread(), method invoked by
+            G4WorkerRunManager so that G4VisManager will get noticed at the
+            end of event of each worker thread.</LI>
+        </UL></LI>
     <LI>G4VViewer: added new virtual function GetPrivateVisAttributesModifiers()
         so that privately accumulated vis attributes modifiers may be
         concatenated with the standard vis attributes modifiers for commands
         such as /vis/viewer/set/all and /vis/viewer/save.</LI>
     <LI>Improved safety, spelling and guidance.</LI>
     <LI>Fixed bug in command /vis/scene/add/trajectories.</LI>
+    <LI>Added command /vis/scene/add/magneticField.</LI>
+    <LI>Removed G4FlavoredParallelWorldModel.</LI>
+    <LI>G4VisManager: added missing push_back for /vis/touchable/;
+        addressing problem report
+        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1503">#1503</A>.</LI>
+    <LI>Removed check on fpSceneHandler->GetModel() in method DispatchToModel()
+        of G4VisManager; addressing problem report
+        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1499">#1499</A>.</LI>
+    <LI>Implemented IgnoreStateChanges.</LI>
+    <LI>/vis/reviewKeptEvents: keep enabled state.</LI>
+    <LI>Printing brought under control of verbosity flag.</LI>
+    <LI>In /vis/touchable/set/colour and several other commands parameter
+        guidance may be called only once. So instances of multiple calls to
+        parameter guidance have been eliminated.
+        Any extended information that was in parameter guidance has been moved
+        to command guidance. This fixes a problem whereby guidance information
+        was being lost and fixes a crash in the GAG interface.</LI>
+    <LI>Moved invocation of G4TransportationManager in G4VisCommandsSceneAdd
+        to G4TrakingMessenger.</LI>
+    <LI>/vis/scene/add/date: changed positioning.</LI>
+    <LI>Command parameters updates.</LI>
     </UL></LI>
 <LI><B>Modeling</B>
     <UL>
     <LI>G4ModelingParameters: bug fix for vis attribute modifying (VAM).</LI>
     <LI>Improved G4Exception messages.</LI>
-    </UL></LI>
-<LI><B>Fukui Rendeder (DAWN)</B>
-    <UL>
-    <LI></LI>
+    <LI>Added skeleton G4MagneticFieldModel.
+        Allow G4MagneticFieldModel for scene with extent not necessarily
+        equal in x, y and z.</LI>
     </UL></LI>
 <LI><B>HepRep</B>
     <UL>
@@ -1817,15 +2057,20 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4OpenGLQtExportDialog: changed "TRUE" by "true".</LI>
     <LI>G4OpenGLViewer: added 'const' on getWin...(); removed bad printf()
         statement.</LI>
-    <LI>Improvements for Wt and Qt5.</LI>
-    </UL></LI>
-<LI><B>OpenInventor</B>
-    <UL>
-    <LI></LI>
+    <LI>Fixes to enable support for Wt.</LI>
+    <LI>Fixed bug in the G4OpenGLQtViewer allowing for visualization on Qt-5.</LI>
+    <LI>Fixed text position in Qt.</LI>
     </UL></LI>
 <LI><B>RayTracer</B>
     <UL>
     <LI>Make G4RayTrajectory and G4RayTrajectoryPoint classes thread safe.</LI>
+    <LI>Move data member of G4RTSteppingAction static. Preparation towards
+        making G4TheRayTracer class multi-threaded.</LI>
+    <LI>Updated to work in MT mode.</LI>
+    </UL></LI>
+<LI><B>VRML</B>
+    <UL>
+    <LI>Replaced deprecated calls to solids accessor methods.</LI>
     </UL></LI>
 <LI><B>Externals</B>
     <UL>
@@ -1855,12 +2100,17 @@ please refer to the corresponding History files provided in most packages):
     <UL>
     <LI>Added cumulated diff cross-section files for Born ionisation.</LI>
     <LI>Corrected UNIX file permissions.</LI>
+    <LI>Updated data for Compton cross-section and Livermore Bremsstrahlung.</LI>
+    <LI>Added ESTAR data for electron stopping and ranges.</LI>
+    <LI>Updated data for MicroElec processes.</LI>
     </UL></LI>
 <LI>New neutron data set with thermal cross sections, G4NDL.4.4:
     <UL>
     <LI>Providing compressed data for Elastic, Inelastic, Capture, Fission
         and ThermalScattering.</LI>
     <LI>Thermal-neutron data is distributed together with standard data.</LI>
+    <LI>Corrected 74W182 and 90Th232, for inconsistency of inelastic
+        cross-sections with final state data.</LI>
     </UL></LI>
 <LI>New data set G4NEUTRONXS-1.4 for evaluated neutron cross section data
     on natural composition of elements:
@@ -1876,10 +2126,27 @@ please refer to the corresponding History files provided in most packages):
     <LI>Corrected BetaMinus level 73.92 to 78.92 for z90.a234.</LI>
     <LI>Recomputed from latest ENSDF: z41.a100.</LI>
     <LI>Removed BetaPlus and added Alpha decays in z100.a250.</LI>
+    <LI>Update to ENSDF 2012 version.</LI>
     </UL></LI>
 <LI>New data set PhotonEvaporation.3.0 for nuclear de-excitation data:
     <UL>
-    <LI></LI>
+    <LI>Update to August-2012 version of ENSDF.</LI>
+    <LI>Correction to README.</LI>
+    </UL></LI>
+<LI>New data set G4ABLA-3.0:
+    <UL>
+    <LI>Data set for INCL/ABLA hadroni models, including:
+        <UL>
+        <LI>flalpha.dat - alpha ground state deformation</LI>
+        <LI>frldm.dat - ground state shell corr. frldm for a spherical g.s.</LI>
+        <LI>vgsld.dat - difference between deformed g.s. and ldm value</LI>
+        <LI>pace2.dat - default mass for A, Z nucleus.</LI>
+        </UL></LI>
+    </UL></LI>
+<LI>New data set G4ENSDFSTATE-1.0:
+    <UL>
+    <LI>New optional data set for properties of nuclei state from
+        Evaluated Nuclear Structure Data File.</LI>
     </UL></LI>
 </UL></LI>
 

@@ -395,7 +395,6 @@ processes/hadronic                               hadr-V09-06-00
 - models/fission (hadr-fission-V09-06-00)
   o New module directory copy of 'lll_fission' with addition of the LEP
     fission class, G4LFission.
-  (the previous lll_fission directory is removed).
 - models/inclxx (hadr-inclxx-V09-06-48)
   o Updated to INCL++ v5.1.14:
     + Prepare the G4INCLXXInterface to handle different de-excitation models
@@ -439,7 +438,7 @@ processes/hadronic                               hadr-V09-06-00
 
 processes/management                             procman-V09-06-07
 --------------------
-- Add process typ gor phonon processes to G4ProcessType.
+- Added process type for phonon processes to G4ProcessType.
 
 processes/phonon                                 prophonon-V09-06-07
 ----------------
