@@ -69,8 +69,7 @@
  G4GeometrySampler::
  G4GeometrySampler(G4String worldName, const G4String &particlename)
   : fParticleName(particlename),
-   fWorld(G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume()),
-   fWorldName(worldName),
+    fWorldName(worldName),
     fImportanceConfigurator(0),
     //    fScoreConfigurator(0),
     //    fGCellFinder(0),
@@ -81,6 +80,7 @@
     fIsConfigured(false)
 {
   paraflag = false;
+  fWorld = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
   //  fWorld = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
   //  G4cout << "G4GeometrySampler:: Making geometry sampler with world: " << fWorld->GetName() << G4endl;
   //G4TransportationManager::GetTransportationManager()->GetParallelWorld(parallelworldName)

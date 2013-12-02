@@ -17,8 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 30th, 2013 Alex Howard (procbiasing-V09-06-18)
+    - Moved static methods in the initialiser to the body for G4GeometrySampler
+      and G4ImportanceConfigurator
+
 Nov 30th, 2013 Alex Howard (procbiasing-V09-06-17)
-    - Fixed coverity errors (unintialised variables), 
+    - Fixed coverity errors (uninitialised variables), 
       EXCEPT for fGhostStep in G4ImportanceProcess, G4WeightWindowProcess
       and G4WeightCutOffProcess
 

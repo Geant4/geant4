@@ -61,8 +61,7 @@ G4ImportanceConfigurator(G4String worldvolumeName,
 			 const G4String &particlename,
                           G4VIStore &istore,
                           const G4VImportanceAlgorithm *ialg, G4bool para)
-: fWorld(G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume()),
-  fWorldName(worldvolumeName),
+: fWorldName(worldvolumeName),
   fPlacer(particlename),
   fIStore(istore),
   fDeleteIalg( ( ! ialg) ),
@@ -71,7 +70,8 @@ G4ImportanceConfigurator(G4String worldvolumeName,
   fImportanceProcess(0),
   paraflag(para)
 {
-  if(paraflag) fWorld = G4TransportationManager::GetTransportationManager()->GetParallelWorld(fWorldName);
+  fWorld = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
+    if(paraflag) fWorld = G4TransportationManager::GetTransportationManager()->GetParallelWorld(fWorldName);
 }
 
 G4ImportanceConfigurator::~G4ImportanceConfigurator()
