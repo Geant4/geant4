@@ -59,9 +59,10 @@ environments                                     envs-V09-06-00
 - MOMO: updated MOMO.jar (GPE disactivated, EnvPanel update) and sources.
   Updated on-line Help document.
 
-digits_hits                                      digits_hits-V09-06-11
+digits_hits                                      digits_hits-V09-06-12
 -----------
 - Replaced deprecated calls to G4Sphere accessor methods in scorer classes.
+- Fixed self-deletion of G4ScoringManager.
 
 event                                            event-V09-06-21
 -----
@@ -97,10 +98,11 @@ geometry/magneticfield                           field-V09-06-13
   remains 0.33 radians). Added more Steppers, including G4NystromRK4.
   Revised Id numbers of steppers, to make the best more visible.
 
-geometry/management                              geommng-V09-06-14
+geometry/management                              geommng-V09-06-15
 -------------------
 - Fix in G4GeomSplitter::FreeSlave() yo use 'free()' to delete offset 
   instead of 'delete', as being allocated with 'malloc()'.
+- Explicitely initialize data members of G4LVData.
 
 geometry/navigation                              geomnav-V09-06-19
 -------------------
@@ -178,7 +180,7 @@ intercoms                                        intercoms-V09-06-16
   to have G4GenericMessenger working in MT mode.
 - Fix the way of forwarding a UI command to a thread immediately.
 
-interfaces                                       interfaces-V09-06-15
+interfaces                                       interfaces-V09-06-16
 ----------
 - G4UIQt: removed QWidget unuseful argument for G4QtTabWidget
   Fixes for support of Qt5.
@@ -214,6 +216,25 @@ particles                                        particles-V09-06-64
   must create them explicitly.
 - Fixed Coverity defects.
 
+persistency/ascii                                ascii-V09-06-09
+-----------------
+- Added support for G4GenericPolycone.
+- Replaced deprecated calls to solids accessor methods.
+- Corrected typo in G4tgrUtils::WordIsUnit().
+
+persistency/gdml                                 gdml-V09-06-08
+----------------
+- Added 'generic' Polycone and Polyhedra to GDML Reader and Writer.
+  Splitted definition of Polycone to ordinary and generic.
+- Added parameterisation for Ellipsoid to readear/writer and schema.
+- Added MultiUnion solid and 'generic' Polycone and Polyhedra to the schema.
+  Added support for parameterisation of 'genericPolyone' and 'genericPolyhedra'.
+  GDML schema updated to version 3.1.0.
+- Fix in G4GDMLReadParamvol::ParametersRead() for reading parameterised
+  Sphere, Orb, Torus and Para.
+  Added support for parameterisation of 'genericPolyone' and 'genericPolyhedra'.
+- Replaced deprecated calls to G4Sphere accessor methods.
+
 physics_lists
 -------------
 - builders (phys-builders-V09-06-13)
@@ -235,7 +256,7 @@ physics_lists
   o Removed dependency from low_energy and high_energy packages. Added fission.
 - constructors/ions (phys-ctor-ions-V09-06-05)
   o Removed dependency from low_energy and high_energy packages.
-- constructors/limiters (phys-ctor-limiters-V09-06-13)
+- constructors/limiters (phys-ctor-limiters-V09-06-14)
   o Added G4GenericBiasingPhysics, G4ImportanceBiasing and
     G4WeightWindowBiasing constructors.
   o Removed dependency from low_energy and high_energy packages.
@@ -250,26 +271,7 @@ physics_lists
 - util (phys-util-V09-06-01)
   o Removed dependency from low_energy and high_energy packages.
 
-persistency/ascii                                ascii-V09-06-09
------------------
-- Added support for G4GenericPolycone.
-- Replaced deprecated calls to solids accessor methods.
-- Corrected typo in G4tgrUtils::WordIsUnit().
-
-persistency/gdml                                 gdml-V09-06-08
-----------------
-- Added 'generic' Polycone and Polyhedra to GDML Reader and Writer.
-  Splitted definition of Polycone to ordinary and generic.
-- Added parameterisation for Ellipsoid to readear/writer and schema.
-- Added MultiUnion solid and 'generic' Polycone and Polyhedra to the schema.
-  Added support for parameterisation of 'genericPolyone' and 'genericPolyhedra'.
-  GDML schema updated to version 3.1.0.
-- Fix in G4GDMLReadParamvol::ParametersRead() for reading parameterised
-  Sphere, Orb, Torus and Para.
-  Added support for parameterisation of 'genericPolyone' and 'genericPolyhedra'.
-- Replaced deprecated calls to G4Sphere accessor methods.
-
-processes/biasing                                probiasing-V09-06-16
+processes/biasing                                probiasing-V09-06-18
 -----------------
 - New directory structure to introduce generic biasing framework classes:
   G4BiasingAppliedCase, G4BiasingOperationManager, G4BiasingTrackData,
@@ -393,7 +395,7 @@ processes/hadronic                               hadr-V09-06-00
   o New module directory copy of 'lll_fission' with addition of the LEP
     fission class, G4LFission.
   (the previous lll_fission directory is removed).
-- models/inclxx (hadr-inclxx-V09-06-46)
+- models/inclxx (hadr-inclxx-V09-06-48)
   o Updated to INCL++ v5.1.14:
     + Prepare the G4INCLXXInterface to handle different de-excitation models
       through the SetDeExcitation() method.
@@ -402,6 +404,7 @@ processes/hadronic                               hadr-V09-06-00
     + Fixed bug in forced pion emission at the end of cascade and in
       phase-space decay of exotic clusters.
     + Several other minor fixes and code refactoring.
+    + Fix for energy conservation.
 - models/lepto_nuclear (hadr-lepnuc-V09-06-04)
   o Added a dummy call to GetCrossSection(), to initialize the cache 
     in order to avoid event non-reproducibility.
@@ -496,7 +499,7 @@ track                                            track-V09-06-04
 -----
 - Fixed Coverity deficts in G4Track constructors.
 
-tracking                                         tracking-V09-06-09
+tracking                                         tracking-V09-06-10
 --------
 - New class G4AdjointTrackingAction and modified G4AdjointSteppingAction
   in order to treat the reverse tracking of an adjoint particle and tracking
