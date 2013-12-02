@@ -58,17 +58,15 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4WeightWindowBiasing);
 // //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4WeightWindowBiasing::G4WeightWindowBiasing(const G4String& name)
-:  G4VPhysicsConstructor(name), paraFlag(false)
+:  G4VPhysicsConstructor(name), fGeomSampler(0), paraFlag(false)
 {;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4WeightWindowBiasing::G4WeightWindowBiasing(G4GeometrySampler* mgs, G4VWeightWindowAlgorithm* wwAlg, G4PlaceOfAction placeOfAction, const G4String& name)
-:  G4VPhysicsConstructor(name), fGeomSampler(mgs), fWWalg(wwAlg), fPlaceOfAction(placeOfAction)
+:  G4VPhysicsConstructor(name), fGeomSampler(mgs), fWWalg(wwAlg), fPlaceOfAction(placeOfAction), paraFlag(false), paraName(name)
 {
-  if(name == "NoParallelWP") {
-    paraFlag = false;
-  } else {
+  if(name != "NoParallelWP") {
     paraFlag = true;
     paraName = name;
   }

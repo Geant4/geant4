@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-Nov-2013, Alex Howard 	        (phys-ctor-limiters-V09-06-14)
+- Fixed coverity errors (uninitialised variables)
+
 22-Nov-2013, Alex Howard 	        (phys-ctor-limiters-V09-06-13)
 - G4WeightWindowBiasing and G4ImportanceBiasing modified:
 - Added guard so that AddProcess only occurs for multithreaded builds

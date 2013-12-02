@@ -70,8 +70,6 @@ private:
   G4bool paraFlag;
   G4String paraName;
 
-  G4VPhysicalVolume* fparaWorld;
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
