@@ -62,10 +62,11 @@ G4WeightCutOffProcess(G4double wsurvival,
     fParticleChange(new G4ParticleChange),
     fWeightSurvival(wsurvival),
     fWeightLimit(wlimit),
-    fSourceImportance(isource),
+    fSourceImportance(isource), 
     fIStore(istore),
     //    fGCellFinder(aGCellFinder),
-   fGhostNavigator(0), fNavigatorID(-1), fFieldTrack('0')
+    fGhostWorldName("NoParallelWorld"), fGhostWorld(0),
+    fGhostNavigator(0), fNavigatorID(-1), fFieldTrack('0')
 {
   if (!fParticleChange)
   {
@@ -95,7 +96,7 @@ G4WeightCutOffProcess(G4double wsurvival,
 G4WeightCutOffProcess::~G4WeightCutOffProcess()
 {
   delete fParticleChange;
-  delete fGhostStep;
+  //  delete fGhostStep;
 }
 
 

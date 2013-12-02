@@ -64,6 +64,7 @@ G4WeightWindowProcess::G4WeightWindowProcess(
    fWeightWindowStore(aWWStore),
    fPostStepAction(0),
    fPlaceOfAction(placeOfAction),
+   fGhostWorldName("NoParallelWorld"),fGhostWorld(0),
    fGhostNavigator(0), fNavigatorID(-1), fFieldTrack('0')
 {
   if (TrackTerminator)
@@ -103,7 +104,7 @@ G4WeightWindowProcess::~G4WeightWindowProcess()
 
   delete fPostStepAction;
   delete fParticleChange;
-  delete fGhostStep;
+  //  delete fGhostStep;
 
 }
 

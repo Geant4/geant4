@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 30th, 2013  A.Howard
+- Fixed coverity errors (unintialised variables)
+
 November 24th, 2013  A.Howard
 - Fixed segmentation fault at the end of an MT run
 - caused by deleting fGhostStep in the destructor

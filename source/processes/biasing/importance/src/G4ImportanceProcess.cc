@@ -61,6 +61,7 @@ G4ImportanceProcess(const G4VImportanceAlgorithm &aImportanceAlgorithm,
    fImportanceAlgorithm(aImportanceAlgorithm),
    fIStore(aIstore),
    fPostStepAction(0),
+   fGhostWorldName("NoParallelWorld"),fGhostWorld(0),
    fGhostNavigator(0), fNavigatorID(-1), fFieldTrack('0'),
    paraflag(para)
   

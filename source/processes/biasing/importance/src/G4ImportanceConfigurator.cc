@@ -38,12 +38,15 @@
 #include "G4ProcessPlacer.hh"
 #include "G4ImportanceAlgorithm.hh"
 
+#include "G4TransportationManager.hh"
+
 G4ImportanceConfigurator::
 G4ImportanceConfigurator(const G4VPhysicalVolume* worldvolume, 
 			 const G4String &particlename,
                           G4VIStore &istore,
                           const G4VImportanceAlgorithm *ialg, G4bool para)
   : fWorld(worldvolume),
+    fWorldName(worldvolume->GetName()),
     fPlacer(particlename),
     fIStore(istore),
     fDeleteIalg( ( ! ialg) ),
@@ -51,23 +54,24 @@ G4ImportanceConfigurator(const G4VPhysicalVolume* worldvolume,
                   new G4ImportanceAlgorithm : ialg)),
     fImportanceProcess(0),
     paraflag(para)
-{
-}
+{;}
 
 G4ImportanceConfigurator::
 G4ImportanceConfigurator(G4String worldvolumeName, 
 			 const G4String &particlename,
                           G4VIStore &istore,
                           const G4VImportanceAlgorithm *ialg, G4bool para)
-  : fWorldName(worldvolumeName),
-    fPlacer(particlename),
-    fIStore(istore),
-    fDeleteIalg( ( ! ialg) ),
-    fIalgorithm(( (fDeleteIalg) ? 
-                  new G4ImportanceAlgorithm : ialg)),
-    fImportanceProcess(0),
-    paraflag(para)
+: fWorld(G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume()),
+  fWorldName(worldvolumeName),
+  fPlacer(particlename),
+  fIStore(istore),
+  fDeleteIalg( ( ! ialg) ),
+  fIalgorithm(( (fDeleteIalg) ? 
+		new G4ImportanceAlgorithm : ialg)),
+  fImportanceProcess(0),
+  paraflag(para)
 {
+  if(paraflag) fWorld = G4TransportationManager::GetTransportationManager()->GetParallelWorld(fWorldName);
 }
 
 G4ImportanceConfigurator::~G4ImportanceConfigurator()

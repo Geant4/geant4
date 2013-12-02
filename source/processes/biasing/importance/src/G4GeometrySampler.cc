@@ -45,11 +45,12 @@
 #include "G4WeightWindowConfigurator.hh"
 #include "G4WeightCutOffConfigurator.hh"
 //#include "G4GCellFinder.hh"
+#include "G4TransportationManager.hh"
 
  G4GeometrySampler::
- G4GeometrySampler(G4VPhysicalVolume *parallelworld, const G4String &particlename)
+ G4GeometrySampler(G4VPhysicalVolume *world, const G4String &particlename)
   : fParticleName(particlename),
-   fWorld(parallelworld),
+    fWorld(world),
     fImportanceConfigurator(0),
     //    fScoreConfigurator(0),
     //    fGCellFinder(0),
@@ -60,13 +61,16 @@
     fIsConfigured(false)
 {
   paraflag = false;
+  //  fWorldName = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume()->GetName();
+  //  if(fWorld == G4TransportationManager::GetTransportationManager()->GetParallelWorld(fWorld->GetName())) paraflag = true;
   //  G4cout << "G4GeometrySampler:: Making geometry sampler with world: " << fWorld->GetName() << G4endl;
 }
 
  G4GeometrySampler::
- G4GeometrySampler(G4String parallelworldName, const G4String &particlename)
+ G4GeometrySampler(G4String worldName, const G4String &particlename)
   : fParticleName(particlename),
-   fWorldName(parallelworldName),
+   fWorld(G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume()),
+   fWorldName(worldName),
     fImportanceConfigurator(0),
     //    fScoreConfigurator(0),
     //    fGCellFinder(0),
@@ -77,7 +81,9 @@
     fIsConfigured(false)
 {
   paraflag = false;
+  //  fWorld = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume();
   //  G4cout << "G4GeometrySampler:: Making geometry sampler with world: " << fWorld->GetName() << G4endl;
+  //G4TransportationManager::GetTransportationManager()->GetParallelWorld(parallelworldName)
 }
 
 G4GeometrySampler::~G4GeometrySampler()

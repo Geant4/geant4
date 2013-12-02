@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 30th, 2013 Alex Howard (procbiasing-V09-06-17)
+    - Fixed coverity errors (unintialised variables), 
+      EXCEPT for fGhostStep in G4ImportanceProcess, G4WeightWindowProcess
+      and G4WeightCutOffProcess
+
 Nov 29th, 2013 Alex Howard (procbiasing-V09-06-16)
     - Put back RemoveProcess for both G4WeightWindowConfigurator and 
       G4ImportanceConfigurator - makes test33 work.
