@@ -788,7 +788,7 @@ void G4UIQt::AddMenu (
   if (aName == NULL) return;
   if (aLabel == NULL) return;
 
-  QMenu *fileMenu = new QMenu();
+  QMenu *fileMenu = new QMenu(aName);
   fMainWindow->menuBar()->addMenu(fileMenu); 
 
   AddInteractor (aName,(G4Interactor)fileMenu);

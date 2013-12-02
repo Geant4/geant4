@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29th November 2013  Laurent Garnier (interfaces-V09-06-16)
+- G4UIQt : Fix a bug introduce the 13th November 2013. Menu name was blank, I had 
+  remove the name parameter by mistake.
+
 14th November 2013  Laurent Garnier (interfaces-V09-06-15)
 - G4UIQt : Fix a bug introduce the 13th November 2013 : JIRA DEV-101
 
