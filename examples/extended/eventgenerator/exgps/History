@@ -11,6 +11,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+3/12/2013  I.Hrivnacova (exgps-V09-06-04)
+- Updated README for removing AIDA
+
 9/11/2013  L.Desorgher (exgps-V09-06-03)
 - Migration to g4tools
 - Migration to G4MT
