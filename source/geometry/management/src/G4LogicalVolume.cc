@@ -152,10 +152,6 @@ G4LogicalVolume::G4LogicalVolume( G4VSolid* pSolid,
   fFieldManager = pFieldMgr;
 
   instanceID = subInstanceManager.CreateSubInstance();
-////G4cout<<"@@@@@ G4LogicalVolume::G4LogicalVolume("<<name<<") : ID="<<instanceID<<" "<<this<<G4endl;
-////G4int xxx;
-////std::cin>>xxx;
-////if(xxx<0) G4Exception("XXX","XXX",FatalException,name);
   AssignFieldManager(pFieldMgr); // G4MT_fmanager = pFieldMgr;
   
   // fMasterFieldMgr= pFieldMgr;

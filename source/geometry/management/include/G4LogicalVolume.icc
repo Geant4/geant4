@@ -50,6 +50,7 @@
 #define G4MT_ccouple   ((subInstanceManager.offset[instanceID]).fCutsCouple)
 #define G4MT_instance  (subInstanceManager.offset[instanceID])
 
+#include "G4Threading.hh"
 // ********************************************************************
 // GetName
 // ********************************************************************
@@ -93,6 +94,7 @@ G4FieldManager* G4LogicalVolume::GetFieldManager() const
 inline void G4LogicalVolume::AssignFieldManager( G4FieldManager *fldMgr)
 {
   G4MT_fmanager= fldMgr;
+  if(!G4Threading::IsWorkerThread()) fFieldManager = fldMgr;
 }
 
 
@@ -379,6 +381,7 @@ inline
 void G4LogicalVolume::SetSensitiveDetector(G4VSensitiveDetector* pSDetector)
 {
   G4MT_sdetector = pSDetector;
+  if(!G4Threading::IsWorkerThread()) fSensitiveDetector = pSDetector;
 }
 
 // ********************************************************************

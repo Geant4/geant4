@@ -65,7 +65,10 @@ class G4PVData
   //  and must have a per-thread state.
 
   public:
-    void initialize() {}
+    void initialize() {
+      frot = 0;
+      ftrans = G4ThreeVector(0,0,0);
+    }
 
     G4RotationMatrix *frot;
     G4ThreeVector ftrans;

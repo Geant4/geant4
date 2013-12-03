@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 2, 2013 A.Dotti                   geommng-V09-06-17
+- Correctly initialize shadow pointers in G4PhysicalVolume.
+
+December 2, 2013 M.Asai                   geommng-V09-06-16
+- Correctly initialize shadow pointers in G4LogicalVolume.
+
 November 30, 2013 M.Asai                  geommng-V09-06-15
 - Explicitely initialize data members of G4LVData.
 

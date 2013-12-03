@@ -139,7 +139,14 @@ class G4LVData
 
   public:
     G4LVData();
-    void initialize() {}
+    void initialize() {
+     fSolid = 0;
+     fSensitiveDetector = 0;
+     fFieldManager = 0;
+     fMaterial = 0;
+     fMass = 0.0;
+     fCutsCouple = 0;
+    }
 
   public:
 
