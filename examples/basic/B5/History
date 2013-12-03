@@ -2,14 +2,22 @@ $Id$
 -------------------------------------------------------------------
 
      =========================================================
-     B5 History File
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
+
+                    Example B5 History file
+                    ------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
 
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
----------------------------------------------------------------------------  
+02 December 2013 Ivana Hrivnacova 
+- Fixed gui.mac:
+  corrected wireframe parameter, removed run2.mac from gui 
 
 28 November 2013 Ivana Hrivnacova (exampleB5-V09-06-11)
 - Added macros for GUI
