@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02-12-13  I.Hrivnacova (exhadr03-V09-06-23)
+- Updated .README for changes in README
+
 22-11-13  A.Dotti      (exhadr03-V09-06-22)
 - Use G4RunManager::ReinitializeGeometry() to trigger geo
  rebuild. Remove UI command to update geometry.

@@ -75,7 +75,7 @@
 
 \section Hadr03_s5 HISTOGRAMS
          
-   The test contains 11 built-in 1D histograms, which are managed by
+   The test contains 12 built-in 1D histograms, which are managed by
    G4AnalysisManager and its Messenger. The histos can be individually 
    activated with the command :
    /analysis/h1/set id nbBins  valMin valMax unit 
@@ -93,6 +93,7 @@
    - 9   : "kinetic energy of all others mesons"
    - 10  : "kinetic energy of all others baryons"
    - 11  : "Q = Ekin out - Ekin in"              
+   - 12  : "Pbalance = mag(P_out - P_in)"		
       
    The histograms are managed by the HistoManager class and its Messenger. 
    The histos can be individually activated with the command :
