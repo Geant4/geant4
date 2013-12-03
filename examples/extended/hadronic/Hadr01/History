@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02-12-13  A. Dotti      (exhadr01-V09-06-07)
+- Updated .README for changes in README
+
 21-11-13  A. Dotti      (exhadr01-V09-06-06)
 - USe G4RunManager::ReinitializeGeometry() to trigger geometry
   rebuilds. 
