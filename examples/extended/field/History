@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+02nd Dec 2013 Ivana Hrivnacova (fieldex-V09-06-02)
+- Fixed gui.mac macros in field01-06
+
 1st Apr 2013 A.Dotti (fieldex-V09-06-01)
 - Grouping single ex tags for new API of PhysicsList needed for MT
 

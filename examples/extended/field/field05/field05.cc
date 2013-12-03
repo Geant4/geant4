@@ -41,6 +41,7 @@
 #ifdef G4MULTITHREADED
 #include "G4MTRunManager.hh"
 #else
+#include "F05SteppingVerbose.hh"
 #include "G4RunManager.hh"
 #endif
 
@@ -77,6 +78,7 @@ int main(int argc,char** argv)
 #ifdef G4MULTITHREADED
   G4MTRunManager * runManager = new G4MTRunManager;
 #else
+  G4VSteppingVerbose::SetInstance(new F05SteppingVerbose);
   G4RunManager * runManager = new G4RunManager;
 #endif
 

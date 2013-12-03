@@ -15,6 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 02, 2013
+- More fixes in gui.mac:
+  Let execute vis.mac first to make the command in added menus available;
+  corrected wireframe parameter
+
+November 29, 2013 - I. Hrivnacova P.Gumplinger
+- Fixed gui.mac (commented out command specific to B2 example)
+- updated CMakeLists.txt
+
 Nov 18, 2013 Ivana Hrivnacova - fieldex05-V09-06-05
 - Minor fix in .README
 

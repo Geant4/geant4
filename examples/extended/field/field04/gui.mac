@@ -38,7 +38,7 @@
 # Viewer menu :
 /gui/addMenu viewer Viewer
 /gui/addButton viewer "Set style surface" "/vis/viewer/set/style surface"
-/gui/addButton viewer "Set style wireframe" "/vis/viewer/set/style wire"
+/gui/addButton viewer "Set style wireframe" "/vis/viewer/set/style wireframe"
 /gui/addButton viewer "Refresh viewer" "/vis/viewer/refresh"
 /gui/addButton viewer "Update viewer (interaction or end-of-file)" "/vis/viewer/update"
 /gui/addButton viewer "Flush viewer (= refresh + update)" "/vis/viewer/flush"
