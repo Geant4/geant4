@@ -16,6 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ctests-V09-06-32 2  December 2013 Andrea Dotti
+- Temporary enable RE04 in Continous for debugging
 
 ctests-V09-06-31 29 November 2013 Gunter Folger
 - Build and run hadronic/Hadr05 example only with shared libs

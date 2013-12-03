@@ -388,7 +388,8 @@ GEANT4_ADD_TEST(example-ext-runandevent-re04
                 POSTCMD ${CMAKE_COMMAND} -E compare_files score.err score.ref
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE04
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE04
-                BUILD RE04 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD RE04 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+                LABELS Nightly Continuous)
 GEANT4_ADD_TEST(example-ext-runandevent-re05
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE05/exampleRE05
                         ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE05/exampleRE05.in
