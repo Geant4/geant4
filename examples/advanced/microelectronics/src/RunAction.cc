@@ -117,9 +117,7 @@ void RunAction::BeginWorker(const G4Run* run)
   if(!fInitialized)	
     InitializeWorker(run);
   
-  //Histograms to be created only at the first run 
-  if (!run->GetRunID()) 
-    CreateHistogram();
+  CreateHistogram();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
