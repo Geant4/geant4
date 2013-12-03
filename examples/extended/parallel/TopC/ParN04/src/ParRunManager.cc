@@ -89,9 +89,8 @@ TOPC_ACTION ParRunManager::MyCheckEventResult( void * input_buf, void *buf ) {
 }
 
 
-static void trace_event_input( void *input ) { 
+static void trace_event_input( void */*input*/ ) { 
   //G4cout << "Event " << *(G4int *)input << G4endl; 
-  input = NULL; // Stop C++ from complaining about unused parameter
 }
 
 /*
@@ -144,8 +143,7 @@ void ParRunManager::DoEventLoop( G4int n_event, const char* macroFile, G4int n_s
   // Setup random seeds for each slave
   g_Seeds = (long*)calloc(n_event, sizeof(long));
 
-  G4int i_event;
-  for( i_event=0; i_event<n_event; i_event++ )
+  for( G4int i_event=0; i_event<n_event; i_event++ )
     {
       g_Seeds[i_event] = (long) (100000000L * HepRandom::getTheGenerator()->flat());
     }
@@ -154,13 +152,12 @@ void ParRunManager::DoEventLoop( G4int n_event, const char* macroFile, G4int n_s
   TOPC_raw_begin_master_slave(MyDoEvent, MyCheckEventResult, NULL);
 
   if(TOPC_is_master()){
-    G4int i_event;
-    for( i_event=0; i_event<n_event; i_event++ )
+    for(G4int i_event=0; i_event<n_event; i_event++ )
       {
-		TOPC_raw_submit_task_input(TOPC_MSG( &i_event, sizeof(G4int)));
-		if (runAborted) break;
-      }	
-  }	
+                TOPC_raw_submit_task_input(TOPC_MSG( &i_event, sizeof(G4int)));
+                if (runAborted) break;
+      }        
+  }        
   TOPC_raw_end_master_slave();
 
   free(g_Seeds);
@@ -170,10 +167,10 @@ void ParRunManager::DoEventLoop( G4int n_event, const char* macroFile, G4int n_s
     G4cout << "Run terminated." << G4endl;
     G4cout << "Run Summary" << G4endl;
     if ( runAborted ) { 
-	  G4cout << "  Run Aborted." << G4endl; 
-	} else { 
-	  G4cout << "  Number of events processed : " << n_event << G4endl; 
-	}
+          G4cout << "  Run Aborted." << G4endl; 
+        } else { 
+          G4cout << "  Number of events processed : " << n_event << G4endl; 
+        }
     G4cout << "  "  << *timer << G4endl;
   }
 }

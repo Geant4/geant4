@@ -30,6 +30,7 @@
 //
 
 #include "ExN04Field.hh"
+#include "G4SystemOfUnits.hh"
 
 ExN04Field::ExN04Field()
 {

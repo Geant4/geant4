@@ -50,8 +50,8 @@ MarshaledG4HitsCollection(G4HitsCollection* objptr) : MarshaledObj() {
     marshal1();
 }
 
-MarshaledG4HitsCollection(void *buf, char isUnmarshaling = 'u')
-: MarshaledObj(buf, isUnmarshaling) {
+MarshaledG4HitsCollection(void *buf, char chIsUnmarshaling = 'u')
+: MarshaledObj(buf, chIsUnmarshaling) {
     msh_isUnmarshalDone = false;
 }
 
@@ -69,8 +69,8 @@ G4HitsCollection* unmarshal() {
         return NULL;
     } else {
         {
-	param = new G4HitsCollection();
-	}
+        param = new G4HitsCollection();
+        }
         this->Shadowed_param = (ShadowedMarshaledG4HitsCollection*)this->param;
         this->msh_isUnmarshalDone = true;
         unmarshal1();
@@ -104,8 +104,11 @@ void marshal1() {
     }
 
     //Increase the size of buffer if needed
-    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); // 4 bytes for the total size of field, 4 bytes for the number of elements in the array (in the case of array marshaling)
-    //Mark the beginning position for this field, will write the total size of this field here later
+    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); 
+       // 4 bytes for the total size of field, 4 bytes for the number of
+       // elements in the array (in the case of array marshaling)
+    //Mark the beginning position for this field, will write the total size
+    //of this field here later
     msh_field_begin = msh_cursor;
 
     //Advance cursor of distance = sizeof(int)
@@ -113,9 +116,9 @@ void marshal1() {
 
     //Now just copy "get" functions here
     {
-	int copy_off = 0;
-	int elementNum;
-	 
+        int copy_off = 0;
+        int elementNum;
+         
      if(dynamic_cast<G4THitsCollection<ExN04CalorimeterHit>*>(param)!=NULL)
         elementNum = ((G4THitsCollection<ExN04CalorimeterHit>*)param)->entries(); 
      else if(dynamic_cast<G4THitsCollection<ExN04MuonHit>*>(param)!=NULL)
@@ -123,13 +126,13 @@ void marshal1() {
      else
         elementNum = ((G4THitsCollection<ExN04TrackerHit>*)param)->entries(); 
     
-	memcpy( msh_cursor+copy_off, &elementNum,sizeof(int));
-	copy_off += sizeof(int);
-	for(int index=0;index<elementNum;index++){
-		if(0){}
-		else if((dynamic_cast<G4THitsCollection<ExN04CalorimeterHit>*>(param)!=NULL) ){
-			void* anElement;
-			 
+        memcpy( msh_cursor+copy_off, &elementNum,sizeof(int));
+        copy_off += sizeof(int);
+        for(int index=0;index<elementNum;index++){
+                if(0){}
+                else if((dynamic_cast<G4THitsCollection<ExN04CalorimeterHit>*>(param)!=NULL) ){
+                        void* anElement;
+                         
      if(dynamic_cast<G4THitsCollection<ExN04CalorimeterHit>*>(param)!=NULL)
         anElement = (*((G4THitsCollection<ExN04CalorimeterHit>*)param))[index]; 
      else if(dynamic_cast<G4THitsCollection<ExN04MuonHit>*>(param)!=NULL)
@@ -137,14 +140,14 @@ void marshal1() {
      else
         anElement = (*((G4THitsCollection<ExN04TrackerHit>*)param))[index]; 
     
-			MarshaledExN04CalorimeterHit  marEle((ExN04CalorimeterHit* )anElement);
-			EXTEND_BUFFER(marEle.getBufferSize());
-			memcpy(msh_cursor+copy_off, marEle.getBuffer(), marEle.getBufferSize());
-			copy_off += marEle.getBufferSize();
-		}
-		else if( (dynamic_cast<G4THitsCollection<ExN04MuonHit>*>(param)!=NULL) ){
-			void* anElement;
-			 
+                        MarshaledExN04CalorimeterHit  marEle((ExN04CalorimeterHit* )anElement);
+                        EXTEND_BUFFER(marEle.getBufferSize());
+                        memcpy(msh_cursor+copy_off, marEle.getBuffer(), marEle.getBufferSize());
+                        copy_off += marEle.getBufferSize();
+                }
+                else if( (dynamic_cast<G4THitsCollection<ExN04MuonHit>*>(param)!=NULL) ){
+                        void* anElement;
+                         
      if(dynamic_cast<G4THitsCollection<ExN04CalorimeterHit>*>(param)!=NULL)
         anElement = (*((G4THitsCollection<ExN04CalorimeterHit>*)param))[index]; 
      else if(dynamic_cast<G4THitsCollection<ExN04MuonHit>*>(param)!=NULL)
@@ -152,14 +155,14 @@ void marshal1() {
      else
         anElement = (*((G4THitsCollection<ExN04TrackerHit>*)param))[index]; 
     
-			MarshaledExN04MuonHit  marEle((ExN04MuonHit* )anElement);
-			EXTEND_BUFFER(marEle.getBufferSize());
-			memcpy(msh_cursor+copy_off, marEle.getBuffer(), marEle.getBufferSize());
-			copy_off += marEle.getBufferSize();
-		}
-		else if( true ){
-			void* anElement;
-			 
+                        MarshaledExN04MuonHit  marEle((ExN04MuonHit* )anElement);
+                        EXTEND_BUFFER(marEle.getBufferSize());
+                        memcpy(msh_cursor+copy_off, marEle.getBuffer(), marEle.getBufferSize());
+                        copy_off += marEle.getBufferSize();
+                }
+                else if( true ){
+                        void* anElement;
+                         
      if(dynamic_cast<G4THitsCollection<ExN04CalorimeterHit>*>(param)!=NULL)
         anElement = (*((G4THitsCollection<ExN04CalorimeterHit>*)param))[index]; 
      else if(dynamic_cast<G4THitsCollection<ExN04MuonHit>*>(param)!=NULL)
@@ -167,13 +170,13 @@ void marshal1() {
      else
         anElement = (*((G4THitsCollection<ExN04TrackerHit>*)param))[index]; 
     
-			MarshaledExN04TrackerHit marEle((ExN04TrackerHit*)anElement);
-			EXTEND_BUFFER(marEle.getBufferSize());
-			memcpy(msh_cursor+copy_off, marEle.getBuffer(), marEle.getBufferSize());
-			copy_off += marEle.getBufferSize();
-		}
-	}
-	msh_currentSize = copy_off;
+                        MarshaledExN04TrackerHit marEle((ExN04TrackerHit*)anElement);
+                        EXTEND_BUFFER(marEle.getBufferSize());
+                        memcpy(msh_cursor+copy_off, marEle.getBuffer(), marEle.getBufferSize());
+                        copy_off += marEle.getBufferSize();
+                }
+        }
+        msh_currentSize = copy_off;
 
     }
     //Now advance the cursor
@@ -196,17 +199,17 @@ void unmarshal1() {
     msh_cursor += sizeof(int);
     //Now copy the setspec here
     {
-	if(0){}
-	else if((dynamic_cast<G4THitsCollection<ExN04CalorimeterHit>*>(param)!=NULL) ){
-		int copy_off = 0;
-		int elementNum;
-		memcpy(&elementNum, msh_cursor+copy_off, sizeof(int));
-		copy_off += sizeof(int);
-		for(int index=0;index<elementNum;index++){
-			MarshaledExN04CalorimeterHit  marEle(msh_cursor+copy_off);
-			ExN04CalorimeterHit*  anElement = (ExN04CalorimeterHit* )marEle.unmarshal();
-			copy_off += marEle.getBufferSize();
-			
+        if(0){}
+        else if((dynamic_cast<G4THitsCollection<ExN04CalorimeterHit>*>(param)!=NULL) ){
+                int copy_off = 0;
+                int elementNum;
+                memcpy(&elementNum, msh_cursor+copy_off, sizeof(int));
+                copy_off += sizeof(int);
+                for(int index=0;index<elementNum;index++){
+                        MarshaledExN04CalorimeterHit  marEle(msh_cursor+copy_off);
+                        ExN04CalorimeterHit*  anElement = (ExN04CalorimeterHit* )marEle.unmarshal();
+                        copy_off += marEle.getBufferSize();
+                        
      if(dynamic_cast<G4THitsCollection<ExN04CalorimeterHit>*>(param)!=NULL)
         ((G4THitsCollection<ExN04CalorimeterHit>*)param)->insert((ExN04CalorimeterHit*)anElement); 
      else if(dynamic_cast<G4THitsCollection<ExN04MuonHit>*>(param)!=NULL)
@@ -214,18 +217,18 @@ void unmarshal1() {
      else
         ((G4THitsCollection<ExN04TrackerHit>*)param)->insert((ExN04TrackerHit*)anElement); 
     
-		}
-	}
-	else if( (dynamic_cast<G4THitsCollection<ExN04MuonHit>*>(param)!=NULL) ){
-		int copy_off = 0;
-		int elementNum;
-		memcpy(&elementNum, msh_cursor+copy_off, sizeof(int));
-		copy_off += sizeof(int);
-		for(int index=0;index<elementNum;index++){
-			MarshaledExN04MuonHit  marEle(msh_cursor+copy_off);
-			ExN04MuonHit*  anElement = (ExN04MuonHit* )marEle.unmarshal();
-			copy_off += marEle.getBufferSize();
-			
+                }
+        }
+        else if( (dynamic_cast<G4THitsCollection<ExN04MuonHit>*>(param)!=NULL) ){
+                int copy_off = 0;
+                int elementNum;
+                memcpy(&elementNum, msh_cursor+copy_off, sizeof(int));
+                copy_off += sizeof(int);
+                for(int index=0;index<elementNum;index++){
+                        MarshaledExN04MuonHit  marEle(msh_cursor+copy_off);
+                        ExN04MuonHit*  anElement = (ExN04MuonHit* )marEle.unmarshal();
+                        copy_off += marEle.getBufferSize();
+                        
      if(dynamic_cast<G4THitsCollection<ExN04CalorimeterHit>*>(param)!=NULL)
         ((G4THitsCollection<ExN04CalorimeterHit>*)param)->insert((ExN04CalorimeterHit*)anElement); 
      else if(dynamic_cast<G4THitsCollection<ExN04MuonHit>*>(param)!=NULL)
@@ -233,18 +236,18 @@ void unmarshal1() {
      else
         ((G4THitsCollection<ExN04TrackerHit>*)param)->insert((ExN04TrackerHit*)anElement); 
     
-		}
-	}
-	else if( true ){
-		int copy_off = 0;
-		int elementNum;
-		memcpy(&elementNum, msh_cursor+copy_off, sizeof(int));
-		copy_off += sizeof(int);
-		for(int index=0;index<elementNum;index++){
-			MarshaledExN04TrackerHit marEle(msh_cursor+copy_off);
-			ExN04TrackerHit* anElement = (ExN04TrackerHit*)marEle.unmarshal();
-			copy_off += marEle.getBufferSize();
-			
+                }
+        }
+        else if( true ){
+                int copy_off = 0;
+                int elementNum;
+                memcpy(&elementNum, msh_cursor+copy_off, sizeof(int));
+                copy_off += sizeof(int);
+                for(int index=0;index<elementNum;index++){
+                        MarshaledExN04TrackerHit marEle(msh_cursor+copy_off);
+                        ExN04TrackerHit* anElement = (ExN04TrackerHit*)marEle.unmarshal();
+                        copy_off += marEle.getBufferSize();
+                        
      if(dynamic_cast<G4THitsCollection<ExN04CalorimeterHit>*>(param)!=NULL)
         ((G4THitsCollection<ExN04CalorimeterHit>*)param)->insert((ExN04CalorimeterHit*)anElement); 
      else if(dynamic_cast<G4THitsCollection<ExN04MuonHit>*>(param)!=NULL)
@@ -252,8 +255,8 @@ void unmarshal1() {
      else
         ((G4THitsCollection<ExN04TrackerHit>*)param)->insert((ExN04TrackerHit*)anElement); 
     
-		}
-	}
+                }
+        }
 
     }
     msh_cursor += msh_currentSize;
@@ -279,8 +282,8 @@ MarshaledG4THitsCollection(G4THitsCollection<T>* objptr) : MarshaledObj() {
     marshal1();
 }
 
-MarshaledG4THitsCollection(void *buf, char isUnmarshaling = 'u')
-: MarshaledObj(buf, isUnmarshaling) {
+MarshaledG4THitsCollection(void *buf, char chIsUnmarshaling = 'u')
+: MarshaledObj(buf, chIsUnmarshaling) {
     msh_isUnmarshalDone = false;
 }
 
@@ -298,8 +301,8 @@ G4THitsCollection<T>* unmarshal() {
         return NULL;
     } else {
         {
-	param = new G4THitsCollection<T>();
-	}
+        param = new G4THitsCollection<T>();
+        }
         this->Shadowed_param = (ShadowedMarshaledG4THitsCollection<T>*)this->param;
         this->msh_isUnmarshalDone = true;
         unmarshal1();
@@ -329,13 +332,17 @@ void marshal1() {
 
     //Copy the sizespec into msh_currentSize here:
     {
-		//code for size, just dummy code because the size will be set correctly at the end of marshaling code
+        //code for size, just dummy code because the size will be set correctly
+        // at the end of marshaling code
 
     }
 
     //Increase the size of buffer if needed
-    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); // 4 bytes for the total size of field, 4 bytes for the number of elements in the array (in the case of array marshaling)
-    //Mark the beginning position for this field, will write the total size of this field here later
+    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); 
+       // 4 bytes for the total size of field, 4 bytes for the number of
+       // elements in the array (in the case of array marshaling)
+    //Mark the beginning position for this field, will write the total size
+    //of this field here later
     msh_field_begin = msh_cursor;
 
     //Advance cursor of distance = sizeof(int)
@@ -343,10 +350,10 @@ void marshal1() {
 
     //Now just copy "get" functions here
     {
-		MarshaledG4HitsCollection marParent(param);
-		EXTEND_BUFFER(marParent.getBufferSize());
-		memcpy(msh_cursor,marParent.getBuffer(), marParent.getBufferSize());
-		msh_currentSize = marParent.getBufferSize();
+        MarshaledG4HitsCollection marParent(param);
+        EXTEND_BUFFER(marParent.getBufferSize());
+        memcpy(msh_cursor,marParent.getBuffer(), marParent.getBufferSize());
+        msh_currentSize = marParent.getBufferSize();
 
     }
     //Now advance the cursor
@@ -369,8 +376,8 @@ void unmarshal1() {
     msh_cursor += sizeof(int);
     //Now copy the setspec here
     {
-		MarshaledG4HitsCollection marObj(msh_cursor);
-		marObj.unmarshalTo(param);
+       MarshaledG4HitsCollection marObj(msh_cursor);
+       marObj.unmarshalTo(param);
 
     }
     msh_cursor += msh_currentSize;

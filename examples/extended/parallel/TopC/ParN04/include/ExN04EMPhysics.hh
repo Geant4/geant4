@@ -31,12 +31,12 @@
 //
 // 
 // ------------------------------------------------------------
-//	GEANT 4 class header file 
+//        GEANT 4 class header file 
 // Class Description:
 //      This class is an derived class of G4VPhysicsConstructor
 //
 // ------------------------------------------- 
-//	History
+//        History
 //        first version                   12 Nov. 2000 by H.Kurashige 
 // ------------------------------------------------------------
 #ifndef ExN04EMPhysics_h

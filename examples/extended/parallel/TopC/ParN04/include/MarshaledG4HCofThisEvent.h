@@ -43,8 +43,8 @@ MarshaledG4HCofThisEvent(G4HCofThisEvent* objptr) : MarshaledObj() {
     marshal1();
 }
 
-MarshaledG4HCofThisEvent(void *buf, char isUnmarshaling = 'u')
-: MarshaledObj(buf, isUnmarshaling) {
+MarshaledG4HCofThisEvent(void *buf, char chIsUnmarshaling = 'u')
+: MarshaledObj(buf, chIsUnmarshaling) {
     msh_isUnmarshalDone = false;
 }
 
@@ -62,8 +62,8 @@ G4HCofThisEvent* unmarshal() {
         return NULL;
     } else {
         {
-	param = new G4HCofThisEvent();
-	}
+        param = new G4HCofThisEvent();
+        }
         this->Shadowed_param = (ShadowedMarshaledG4HCofThisEvent*)this->param;
         this->msh_isUnmarshalDone = true;
         unmarshal1();
@@ -97,8 +97,11 @@ void marshal1() {
     }
 
     //Increase the size of buffer if needed
-    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); // 4 bytes for the total size of field, 4 bytes for the number of elements in the array (in the case of array marshaling)
-    //Mark the beginning position for this field, will write the total size of this field here later
+    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); 
+       // 4 bytes for the total size of field, 4 bytes for the number of
+       // elements in the array (in the case of array marshaling)
+    //Mark the beginning position for this field, will write the total size
+    //of this field here later
     msh_field_begin = msh_cursor;
 
     //Advance cursor of distance = sizeof(int)
@@ -106,20 +109,20 @@ void marshal1() {
 
     //Now just copy "get" functions here
     {
-	int copy_off = 0;
-	int elementNum;
-	 elementNum = param->GetNumberOfCollections(); 
-	memcpy( msh_cursor+copy_off, &elementNum,sizeof(int));
-	copy_off += sizeof(int);
-	for(int index=0;index<elementNum;index++){
-			G4VHitsCollection* anElement;
-			 anElement = param->GetHC(index); 
-			MarshaledG4VHitsCollection marEle(anElement);
-			EXTEND_BUFFER(marEle.getBufferSize());
-			memcpy(msh_cursor+copy_off, marEle.getBuffer(), marEle.getBufferSize());
-			copy_off += marEle.getBufferSize();
-		}
-	msh_currentSize = copy_off;
+        int copy_off = 0;
+        int elementNum;
+         elementNum = param->GetNumberOfCollections(); 
+        memcpy( msh_cursor+copy_off, &elementNum,sizeof(int));
+        copy_off += sizeof(int);
+        for(int index=0;index<elementNum;index++){
+            G4VHitsCollection* anElement;
+             anElement = param->GetHC(index); 
+            MarshaledG4VHitsCollection marEle(anElement);
+            EXTEND_BUFFER(marEle.getBufferSize());
+            memcpy(msh_cursor+copy_off, marEle.getBuffer(), marEle.getBufferSize());
+            copy_off += marEle.getBufferSize();
+        }
+        msh_currentSize = copy_off;
 
     }
     //Now advance the cursor
@@ -142,16 +145,16 @@ void unmarshal1() {
     msh_cursor += sizeof(int);
     //Now copy the setspec here
     {
-		int copy_off = 0;
-		int elementNum;
-		memcpy(&elementNum, msh_cursor+copy_off, sizeof(int));
-		copy_off += sizeof(int);
-		for(int index=0;index<elementNum;index++){
-			MarshaledG4VHitsCollection marEle(msh_cursor+copy_off);
-			G4VHitsCollection* anElement = (G4VHitsCollection*)marEle.unmarshal();
-			copy_off += marEle.getBufferSize();
-			 param->AddHitsCollection(index, anElement); 
-		}
+        int copy_off = 0;
+        int elementNum;
+        memcpy(&elementNum, msh_cursor+copy_off, sizeof(int));
+        copy_off += sizeof(int);
+        for(int index=0;index<elementNum;index++){
+                MarshaledG4VHitsCollection marEle(msh_cursor+copy_off);
+                G4VHitsCollection* anElement = (G4VHitsCollection*)marEle.unmarshal();
+                copy_off += marEle.getBufferSize();
+                 param->AddHitsCollection(index, anElement); 
+        }
 
     }
     msh_cursor += msh_currentSize;

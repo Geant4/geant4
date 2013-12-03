@@ -101,7 +101,7 @@ void ExN02TrackerHit::Print()
 {
   G4cout << "  trackID: " << trackID << "  chamberNb: " << chamberNb
          << "  energy deposit: " << G4BestUnit(edep,"Energy")
-	 << "  position: " << G4BestUnit(pos,"Length") << G4endl;
+         << "  position: " << G4BestUnit(pos,"Length") << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

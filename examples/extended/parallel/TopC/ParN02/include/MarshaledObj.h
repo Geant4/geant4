@@ -30,68 +30,68 @@ class MarshaledObj {
     static const int WORD_SIZE = sizeof(long);
   public:
     static  int ROUND_UP( int x ){
-		return (((x)+(WORD_SIZE-1)) / WORD_SIZE) * WORD_SIZE;
-	}
+                return (((x)+(WORD_SIZE-1)) / WORD_SIZE) * WORD_SIZE;
+        }
 
   public:
-	// Constructs an empty MarshaledObj, 
-	MarshaledObj(){
-		msh_extent = 128;
-		msh_size = MSH_HEADER_SIZE;
-		msh_isUnmarshalDone = false;
+        // Constructs an empty MarshaledObj, 
+        MarshaledObj(){
+                msh_extent = 128;
+                msh_size = MSH_HEADER_SIZE;
+                msh_isUnmarshalDone = false;
 
-		msh_buffer = (char *)malloc(msh_extent);
-		MSH_ASSERT(msh_buffer);
+                msh_buffer = (char *)malloc(msh_extent);
+                MSH_ASSERT(msh_buffer);
 
-		msh_cursor = msh_buffer + MSH_HEADER_SIZE;
-		msh_field_begin = msh_cursor;
+                msh_cursor = msh_buffer + MSH_HEADER_SIZE;
+                msh_field_begin = msh_cursor;
 
-		msh_typechoice = 0;
-		int totalsize = msh_cursor-msh_buffer;
+                msh_typechoice = 0;
+                int totalsize = msh_cursor-msh_buffer;
 
-		MSH_SET_TYPECHOICE(msh_typechoice);
-		MSH_SET_TOTALSIZE(totalsize);
-	}
+                MSH_SET_TYPECHOICE(msh_typechoice);
+                MSH_SET_TOTALSIZE(totalsize);
+        }
 
     //MarshaledObj(void *buf);
-	// This constructs a MarshledObj from a buffer (of type char*) for unmarshaling.
-	// buf is obtain from an already marshaled object.
-	// The first field of buf must be an int that contains the size of the buf
-	// NOT including itself.
-	// isUnmarshaling must be 'u' (for unmarshaling) .
-    MarshaledObj(void *buf, char isUnmarshaling) {
-		msh_isUnmarshalDone = false;
+        // This constructs a MarshledObj from a buffer (of type char*) for unmarshaling.
+        // buf is obtain from an already marshaled object.
+        // The first field of buf must be an int that contains the size of the buf
+        // NOT including itself.
+        // isUnmarshaling must be 'u' (for unmarshaling) .
+    MarshaledObj(void *buf, char chIsUnmarshaling) {
+                msh_isUnmarshalDone = false;
 
-		if(isUnmarshaling != 'u') {
-			printf("MarshaledObj(void*, char): wrong argument\n");
-			return;
-		}
+                if(chIsUnmarshaling != 'u') {
+                        printf("MarshaledObj(void*, char): wrong argument\n");
+                        return;
+                }
 
-		//msh_extent = ROUND_UP(*(int *)buf + sizeof(int));
-		MSH_GET_TYPECHOICE(msh_typechoice,buf);
-					
-		MSH_GET_TOTALSIZE(msh_size,buf);
-		msh_extent = ROUND_UP(msh_size);
+                //msh_extent = ROUND_UP(*(int *)buf + sizeof(int));
+                MSH_GET_TYPECHOICE(msh_typechoice,buf);
+                                        
+                MSH_GET_TOTALSIZE(msh_size,buf);
+                msh_extent = ROUND_UP(msh_size);
 
-		msh_buffer = (char *)malloc(msh_extent);
-		MSH_ASSERT(msh_buffer);
+                msh_buffer = (char *)malloc(msh_extent);
+                MSH_ASSERT(msh_buffer);
 
-		memcpy(msh_buffer, (char *)buf, msh_extent);
-		msh_cursor = msh_buffer + MSH_HEADER_SIZE;
-		msh_field_begin = msh_cursor;
+                memcpy(msh_buffer, (char *)buf, msh_extent);
+                msh_cursor = msh_buffer + MSH_HEADER_SIZE;
+                msh_field_begin = msh_cursor;
 
-		//MSH_SET_TYPECHOICE(msh_typechoice);
+                //MSH_SET_TYPECHOICE(msh_typechoice);
 
-	}
+        }
 
     ~MarshaledObj() {
-		if ( ! isUnmarshaling() )
-			free(msh_buffer);
-	}
+                if ( ! isUnmarshaling() )
+                        free(msh_buffer);
+        }
 
     inline  bool isUnmarshaling() {
-		return (msh_extent <= 0);
-	}
+                return (msh_extent <= 0);
+        }
 
   private:
     // Dont use copy constructor
@@ -100,7 +100,7 @@ class MarshaledObj {
   protected:
     int msh_typechoice;  // alias of $TYPE_CHOICE
 
-    // points to the buffer (header+body)				
+    // points to the buffer (header+body)                                
     char *msh_buffer;
 
     // msh_field_begin points to the size of the current field being marshaled
@@ -120,25 +120,25 @@ class MarshaledObj {
 
   public:
     inline void EXTEND_BUFFER(int size){
-		msh_size += size;
-		if(msh_size > msh_extent){
-			resizeBuffer(msh_size);
-		}
+                msh_size += size;
+                if(msh_size > msh_extent){
+                        resizeBuffer(msh_size);
+                }
     }
 
-	void resizeBuffer(size_t new_size ) {
-		int msh_displacement = msh_cursor - msh_buffer;
-		int field_displacement = msh_field_begin - msh_buffer;
+        void resizeBuffer(size_t new_size ) {
+                int msh_displacement = msh_cursor - msh_buffer;
+                int field_displacement = msh_field_begin - msh_buffer;
 
-		while(new_size > msh_extent)
-			msh_extent *= 2;
+                while(new_size > msh_extent)
+                        msh_extent *= 2;
 
-		msh_buffer = (char *)realloc( msh_buffer, msh_extent);
-		MSH_ASSERT(msh_buffer);
+                msh_buffer = (char *)realloc( msh_buffer, msh_extent);
+                MSH_ASSERT(msh_buffer);
 
-		msh_cursor = msh_buffer + msh_displacement;
-		msh_field_begin = msh_buffer + field_displacement;
-	}
+                msh_cursor = msh_buffer + msh_displacement;
+                msh_field_begin = msh_buffer + field_displacement;
+        }
 
   public:
     // Returns the total size of buffer
@@ -152,31 +152,31 @@ class MarshaledObj {
 
     /* p: pointer to the data field, size: size of that primitive data field */
     void marshalPrimitive(void* p, int size) {
-		int msh_currentSize;
-		if (isUnmarshaling())
-			throw "Tried to marshal in object marked isUnmarshaling = true";
-		msh_currentSize =  size;
-		EXTEND_BUFFER(msh_currentSize + sizeof(int));
+                int msh_currentSize;
+                if (isUnmarshaling())
+                        throw "Tried to marshal in object marked isUnmarshaling = true";
+                msh_currentSize =  size;
+                EXTEND_BUFFER(msh_currentSize + sizeof(int));
 
-		// *(int *)msh_cursor = msh_currentSize;
-		memcpy(msh_cursor, &msh_currentSize, sizeof(int));
-		msh_cursor += sizeof(int);
-		memcpy(msh_cursor, p, size);
-		msh_cursor += msh_currentSize;
-		msh_size = msh_cursor - msh_buffer;
+                // *(int *)msh_cursor = msh_currentSize;
+                memcpy(msh_cursor, &msh_currentSize, sizeof(int));
+                msh_cursor += sizeof(int);
+                memcpy(msh_cursor, p, size);
+                msh_cursor += msh_currentSize;
+                msh_size = msh_cursor - msh_buffer;
 
-		MSH_SET_TOTALSIZE(msh_size);
+                MSH_SET_TOTALSIZE(msh_size);
     }
 
     void unmarshalPrimitive(void* p, int size) {
-		int msh_currentSize;
-		//memcpy(&msh_currentSize, msh_cursor, sizeof(int));
-		/* in case *msh_cursor is invalid, use "size" not to crash the memory */
-		msh_currentSize = size;
-		msh_cursor += sizeof(int);
-		memcpy(p, msh_cursor, msh_currentSize);
-		msh_cursor += msh_currentSize;
-		//msh_size = msh_cursor - msh_buffer;
+                int msh_currentSize;
+                //memcpy(&msh_currentSize, msh_cursor, sizeof(int));
+                /* in case *msh_cursor is invalid, use "size" not to crash the memory */
+                msh_currentSize = size;
+                msh_cursor += sizeof(int);
+                memcpy(p, msh_cursor, msh_currentSize);
+                msh_cursor += msh_currentSize;
+                //msh_size = msh_cursor - msh_buffer;
     }
 };
 

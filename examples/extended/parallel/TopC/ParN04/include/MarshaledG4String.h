@@ -36,8 +36,8 @@ MarshaledG4String(G4String* objptr) : MarshaledObj() {
     marshal1();
 }
 
-MarshaledG4String(void *buf, char isUnmarshaling = 'u')
-: MarshaledObj(buf, isUnmarshaling) {
+MarshaledG4String(void *buf, char chIsUnmarshaling = 'u')
+: MarshaledObj(buf, chIsUnmarshaling) {
     msh_isUnmarshalDone = false;
 }
 
@@ -55,8 +55,8 @@ G4String* unmarshal() {
         return NULL;
     } else {
         {
-	param = new G4String();
-	}
+        param = new G4String();
+        }
         this->Shadowed_param = (ShadowedMarshaledG4String*)this->param;
         this->msh_isUnmarshalDone = true;
         unmarshal1();
@@ -92,8 +92,11 @@ void marshal1() {
     }
 
     //Increase the size of buffer if needed
-    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); // 4 bytes for the total size of field, 4 bytes for the number of elements in the array (in the case of array marshaling)
-    //Mark the beginning position for this field, will write the total size of this field here later
+    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); 
+       // 4 bytes for the total size of field, 4 bytes for the number of
+       // elements in the array (in the case of array marshaling)
+    //Mark the beginning position for this field, will write the total size
+    //of this field here later
     msh_field_begin = msh_cursor;
 
     //Advance cursor of distance = sizeof(int)
@@ -125,8 +128,8 @@ void unmarshal1() {
     msh_cursor += sizeof(int);
     //Now copy the setspec here
     {
- G4String* s = new G4String(msh_cursor);
-       memcpy(param, s, sizeof(G4String));
+ G4String* sc = new G4String(msh_cursor);
+       memcpy(param, sc, sizeof(G4String));
      
     }
     msh_cursor += msh_currentSize;

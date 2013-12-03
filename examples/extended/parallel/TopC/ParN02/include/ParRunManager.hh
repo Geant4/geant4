@@ -66,11 +66,9 @@ class ParRunManager : public G4RunManager
     static G4int n_select;
     static G4String msg;
 
-    G4int i_event;  // Used in lieu of i_event in RunManager::DoEventLoop()
-
     inline void ImportDoEventLoopLocals(
-	 G4StateManager* stateManager, G4int n_event,
-	 G4int n_select, G4String msg )
+         G4StateManager* stateManager, G4int n_event,
+         G4int n_select, G4String msg )
       {
         ParRunManager::stateManager = stateManager;
         ParRunManager::n_event = n_event;

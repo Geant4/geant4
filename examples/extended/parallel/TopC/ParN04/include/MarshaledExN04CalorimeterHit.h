@@ -41,8 +41,8 @@ MarshaledExN04CalorimeterHit(ExN04CalorimeterHit* objptr) : MarshaledObj() {
     marshal4();
 }
 
-MarshaledExN04CalorimeterHit(void *buf, char isUnmarshaling = 'u')
-: MarshaledObj(buf, isUnmarshaling) {
+MarshaledExN04CalorimeterHit(void *buf, char chIsUnmarshaling = 'u')
+: MarshaledObj(buf, chIsUnmarshaling) {
     msh_isUnmarshalDone = false;
 }
 
@@ -60,8 +60,8 @@ ExN04CalorimeterHit* unmarshal() {
         return NULL;
     } else {
         {
-	param = new ExN04CalorimeterHit();
-	}
+        param = new ExN04CalorimeterHit();
+        }
         this->Shadowed_param = (ShadowedMarshaledExN04CalorimeterHit*)this->param;
         this->msh_isUnmarshalDone = true;
         unmarshal1();
@@ -97,13 +97,16 @@ void marshal1() {
 
     //Copy the sizespec into msh_currentSize here:
     {
-	msh_currentSize = sizeof(G4int);
+        msh_currentSize = sizeof(G4int);
 
     }
 
     //Increase the size of buffer if needed
-    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); // 4 bytes for the total size of field, 4 bytes for the number of elements in the array (in the case of array marshaling)
-    //Mark the beginning position for this field, will write the total size of this field here later
+    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); 
+       // 4 bytes for the total size of field, 4 bytes for the number 
+       // of elements in the array (in the case of array marshaling)
+    //Mark the beginning position for this field, will write the total
+    // size of this field here later
     msh_field_begin = msh_cursor;
 
     //Advance cursor of distance = sizeof(int)
@@ -111,9 +114,9 @@ void marshal1() {
 
     //Now just copy "get" functions here
     {
-	G4int anElement;
-	 anElement = param->GetZ(); 
-	memcpy(msh_cursor, &anElement, sizeof(G4int));
+        G4int anElement;
+         anElement = param->GetZ(); 
+        memcpy(msh_cursor, &anElement, sizeof(G4int));
     }
     //Now advance the cursor
     msh_cursor += msh_currentSize;
@@ -135,9 +138,9 @@ void unmarshal1() {
     msh_cursor += sizeof(int);
     //Now copy the setspec here
     {
-	G4int anElement;
-	memcpy(&anElement, msh_cursor, sizeof(G4int));
-	 param->SetCellID(anElement, param->GetPhi()); 
+        G4int anElement;
+        memcpy(&anElement, msh_cursor, sizeof(G4int));
+         param->SetCellID(anElement, param->GetPhi()); 
 
     }
     msh_cursor += msh_currentSize;
@@ -151,13 +154,16 @@ void marshal2() {
 
     //Copy the sizespec into msh_currentSize here:
     {
-	msh_currentSize = sizeof(G4int);
+        msh_currentSize = sizeof(G4int);
 
     }
 
     //Increase the size of buffer if needed
-    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); // 4 bytes for the total size of field, 4 bytes for the number of elements in the array (in the case of array marshaling)
-    //Mark the beginning position for this field, will write the total size of this field here later
+    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); 
+       // 4 bytes for the total size of field, 4 bytes for the number of 
+       // elements in the array (in the case of array marshaling)
+    //Mark the beginning position for this field, will write the total 
+    //size of this field here later
     msh_field_begin = msh_cursor;
 
     //Advance cursor of distance = sizeof(int)
@@ -165,9 +171,9 @@ void marshal2() {
 
     //Now just copy "get" functions here
     {
-	G4int anElement;
-	 anElement = param->GetPhi(); 
-	memcpy(msh_cursor, &anElement, sizeof(G4int));
+        G4int anElement;
+         anElement = param->GetPhi(); 
+        memcpy(msh_cursor, &anElement, sizeof(G4int));
     }
     //Now advance the cursor
     msh_cursor += msh_currentSize;
@@ -189,9 +195,9 @@ void unmarshal2() {
     msh_cursor += sizeof(int);
     //Now copy the setspec here
     {
-	G4int anElement;
-	memcpy(&anElement, msh_cursor, sizeof(G4int));
-	 param->SetCellID(param->GetZ(), anElement); 
+        G4int anElement;
+        memcpy(&anElement, msh_cursor, sizeof(G4int));
+         param->SetCellID(param->GetZ(), anElement); 
 
     }
     msh_cursor += msh_currentSize;
@@ -205,13 +211,16 @@ void marshal3() {
 
     //Copy the sizespec into msh_currentSize here:
     {
-	msh_currentSize = sizeof(G4double);
+        msh_currentSize = sizeof(G4double);
 
     }
 
     //Increase the size of buffer if needed
-    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); // 4 bytes for the total size of field, 4 bytes for the number of elements in the array (in the case of array marshaling)
-    //Mark the beginning position for this field, will write the total size of this field here later
+    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); 
+       // 4 bytes for the total size of field, 4 bytes for the number of 
+       // elements in the array (in the case of array marshaling)
+    //Mark the beginning position for this field, will write the total size
+    // of this field here later
     msh_field_begin = msh_cursor;
 
     //Advance cursor of distance = sizeof(int)
@@ -219,9 +228,9 @@ void marshal3() {
 
     //Now just copy "get" functions here
     {
-	G4double anElement;
-	 anElement = param->GetEdep(); 
-	memcpy(msh_cursor, &anElement, sizeof(G4double));
+        G4double anElement;
+         anElement = param->GetEdep(); 
+        memcpy(msh_cursor, &anElement, sizeof(G4double));
     }
     //Now advance the cursor
     msh_cursor += msh_currentSize;
@@ -243,9 +252,9 @@ void unmarshal3() {
     msh_cursor += sizeof(int);
     //Now copy the setspec here
     {
-	G4double anElement;
-	memcpy(&anElement, msh_cursor, sizeof(G4double));
-	 param->SetEdep(anElement); 
+        G4double anElement;
+        memcpy(&anElement, msh_cursor, sizeof(G4double));
+         param->SetEdep(anElement); 
 
     }
     msh_cursor += msh_currentSize;
@@ -259,13 +268,16 @@ void marshal4() {
 
     //Copy the sizespec into msh_currentSize here:
     {
-	msh_currentSize = sizeof(G4ThreeVector);
+        msh_currentSize = sizeof(G4ThreeVector);
 
     }
 
     //Increase the size of buffer if needed
-    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); // 4 bytes for the total size of field, 4 bytes for the number of elements in the array (in the case of array marshaling)
-    //Mark the beginning position for this field, will write the total size of this field here later
+    EXTEND_BUFFER(msh_currentSize + sizeof(int) + sizeof(int)); 
+       // 4 bytes for the total size of field, 4 bytes for the number of
+       // elements in the array (in the case of array marshaling)
+    //Mark the beginning position for this field, will write the total size
+    //of this field here later
     msh_field_begin = msh_cursor;
 
     //Advance cursor of distance = sizeof(int)
@@ -273,9 +285,9 @@ void marshal4() {
 
     //Now just copy "get" functions here
     {
-	G4ThreeVector anElement;
-	 anElement = param->GetPos(); 
-	memcpy(msh_cursor, &anElement, sizeof(G4ThreeVector));
+        G4ThreeVector anElement;
+         anElement = param->GetPos(); 
+        memcpy(msh_cursor, &anElement, sizeof(G4ThreeVector));
     }
     //Now advance the cursor
     msh_cursor += msh_currentSize;
@@ -297,9 +309,9 @@ void unmarshal4() {
     msh_cursor += sizeof(int);
     //Now copy the setspec here
     {
-	G4ThreeVector anElement;
-	memcpy(&anElement, msh_cursor, sizeof(G4ThreeVector));
-	 param->SetPos(anElement); 
+        G4ThreeVector anElement;
+        memcpy(&anElement, msh_cursor, sizeof(G4ThreeVector));
+         param->SetPos(anElement); 
 
     }
     msh_cursor += msh_currentSize;
