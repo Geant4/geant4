@@ -637,7 +637,7 @@ examples                                         examples-V10-00-00
     Added G4RunManager::ReinitializeGeoemtry() in set methods
     that change geometry. Removed Update method and UI command in shared
     DetectorConstruction.
-- extended/biasing (exbiasing-V09-06-05)
+- extended/biasing (exbiasing-V09-06-06)
   o Updates to docs and scripts.
 - extended/biasing/B02 (B02-V09-06-08)
   o Migrated example to work also in multi-threading mode.
@@ -678,7 +678,7 @@ examples                                         examples-V10-00-00
 - extended/electromagnetic/TestEm12 (testem12-V09-06-11)
   o PhysListEmStandardWVI and PhysListEmStandardSS: reduced low-energy 
     threashold for the single scattering model to 10 eV.
-- extended/eventgenerator/exgps (exgps-V09-06-04)
+- extended/eventgenerator/exgps (exgps-V09-06-05)
   o Migrated example to work also in multi-threading mode.
   o Migrated to use g4tools.
 - extended/eventgenerator/HepMC (exHepMC-V09-06-01)
@@ -733,7 +733,7 @@ examples                                         examples-V10-00-00
   o Fixes to allow running in MT-mode.
 - extended/optical/wls (WLS-V09-06-15)
   o Fixes to allow running in MT-mode.
-- extended/parallel (exparallel-V09-06-03)
+- extended/parallel (exparallel-V09-06-04)
   o Moved ParN02, ParN04 and info in a new TopC directory,
     Removed ParN02tbb and created new directory TBB including new
     example based on B2b.
