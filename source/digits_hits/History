@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec 2, 2013, M.Asai (digits_hits-V09-06-13)
+- Remove uninitialized and unused datamember from G4ScoringMessenger.
+
 Nov 29, 2013, M.Asai (digits_hits-V09-06-12)
 - Remove self-deletion in G4ScoringManager::~G4Scoringmanager().
 

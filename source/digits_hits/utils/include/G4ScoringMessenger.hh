@@ -124,7 +124,7 @@ class G4ScoringMessenger: public G4UImessenger
     G4UIcmdWithoutParameter * listColorMapCmd;
     G4UIcmdWithAString *      floatMinMaxCmd;
     G4UIcommand *             colorMapMinMaxCmd;
-    G4UIcommand *             chartCmd;
+    //G4UIcommand *             chartCmd;
     //
     // Dump scoring result to file
     G4UIcommand * dumpQtyToFileCmd;
