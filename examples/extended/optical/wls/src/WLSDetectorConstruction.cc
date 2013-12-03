@@ -121,9 +121,9 @@ G4VPhysicalVolume* WLSDetectorConstruction::Construct()
 {
   if (fPhysiWorld) {
      G4GeometryManager::GetInstance()->OpenGeometry();
-     G4SolidStore::GetInstance()->Clean();
-     G4LogicalVolumeStore::GetInstance()->Clean();
      G4PhysicalVolumeStore::GetInstance()->Clean();
+     G4LogicalVolumeStore::GetInstance()->Clean();
+     G4SolidStore::GetInstance()->Clean();
      G4LogicalSkinSurface::CleanSurfaceTable();
      G4LogicalBorderSurface::CleanSurfaceTable();
   }
@@ -735,8 +735,10 @@ G4RotationMatrix
         G4double angle;
         char* p;
 
-        angle = strtod(rotation.substr(place+1).c_str(),&p) * deg;
+        const G4String tmpstring=rotation.substr(place+1);
 
+        angle = strtod(tmpstring.c_str(),&p) * deg;
+ 
         if (!p || (*p != (char)',' && *p != (char)'\0')) { 
            G4cerr << "Invalid rotation specification: " << 
                                                   rotation.c_str() << G4endl;

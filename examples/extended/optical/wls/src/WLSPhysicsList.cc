@@ -41,7 +41,9 @@
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
 
-#include "G4PhysListFactory.hh"
+//#include "G4PhysListFactory.hh"
+#include "FTFP_BERT.hh"
+#include "QGSP_BERT_HP.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -73,14 +75,19 @@ WLSPhysicsList::WLSPhysicsList(G4String physName) : G4VModularPhysicsList()
     fCutForElectron  = defaultCutValue;
     fCutForPositron  = defaultCutValue;
 
-    G4PhysListFactory factory;
+//    G4PhysListFactory factory;
     G4VModularPhysicsList* phys = NULL;
-    if (factory.IsReferencePhysList(physName)) {
-       phys = factory.GetReferencePhysList(physName);
-       if(!phys)G4Exception("WLSPhysicsList::WLSPhysicsList","InvalidSetup",
-                            FatalException,"PhysicsList does not exist");
-       fMessenger = new WLSPhysicsListMessenger(this);
+    if (physName == "QGSP_BERT_HP") {
+       phys = new QGSP_BERT_HP;
+    } else {
+       phys = new FTFP_BERT;
     }
+//    if (factory.IsReferencePhysList(physName)) {
+//       phys = factory.GetReferencePhysList(physName);
+//       if(!phys)G4Exception("WLSPhysicsList::WLSPhysicsList","InvalidSetup",
+//                            FatalException,"PhysicsList does not exist");
+       fMessenger = new WLSPhysicsListMessenger(this);
+//    }
 
     for (G4int i = 0; ; ++i) {
        G4VPhysicsConstructor* elem =

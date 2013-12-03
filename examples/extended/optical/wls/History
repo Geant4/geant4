@@ -16,6 +16,18 @@ track of all tags.
  
      ----------------------------------------------------------
 
+December 02, 2013 G. Folger     (WLS-V09-06-15)
+- corrected avoiding re-use of pointer into temporary in WLSDetectorConstruction.cc
+
+December 02, 2013 G. Folger     (WLS-V09-06-14)
+- avoid re-use of pointer into temporary in WLSDetectorConstruction.cc
+
+November 29, 2013 P. Gumplinger (WLS-V09-06-13)
+- do not user G4PhysListFactory, remove B2 stuff from gui.mac
+
+November 28, 2013 P. Gumplinger (WLS-V09-06-12)
+- add gui.mac, icons.mac and run.png
+
 November 27, 2013 P. Gumplinger (WLS-V09-06-11)
 - Fixed ConstructSDandField():
   Moved setting the SD and field manager to logical volume outside the tests

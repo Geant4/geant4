@@ -80,7 +80,7 @@ int main(int argc,char** argv)
   G4RunManager * runManager = new G4RunManager;
 #endif
 
-  G4String physName = "QGSP_BERT_EMV";
+  G4String physName = "QGSP_BERT_HP";
 
 #ifndef WIN32
   G4int c = 0;
@@ -104,15 +104,13 @@ int main(int argc,char** argv)
 #endif
 
   // Set mandatory initialization classes
-
+  //
+  // Detector construction
   WLSDetectorConstruction* detector = new WLSDetectorConstruction();
-
   runManager->SetUserInitialization(detector);
-
+  // Physics list
   runManager->SetUserInitialization(new WLSPhysicsList(physName));
-
-  // Set mandatory user action class
-
+  // User action initialization
   runManager->SetUserInitialization(new WLSActionInitialization(detector));
 
 #ifdef G4VIS_USE
