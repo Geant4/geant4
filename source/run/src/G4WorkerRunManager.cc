@@ -136,15 +136,16 @@ void G4WorkerRunManager::RunInitialization()
 #endif
 
   if(!(kernel->RunInitialization(fakeRun))) return;
-  if(currentRun) delete currentRun;
-  currentRun = 0;
 
   //Signal this thread can start event loop.
   //Note this will return only when all threads reach this point
   G4MTRunManager::GetMasterRunManager()->ThisWorkerReady();
+  if(fakeRun) return;
+
   const G4UserWorkerInitialization* uwi
        = G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
-  if(fakeRun) return;
+  if(currentRun) delete currentRun;
+  currentRun = 0;
 
   //Call a user hook: this is guaranteed all threads are "synchronized"
   if(uwi) uwi->WorkerRunStart();

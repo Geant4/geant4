@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec 2nd, 2013, A. Dotti (run-V09-06-141)
+- Adds protection for multiple runs to set SD and FieldMgr for worker
+  threads only if master shadow corresponding pointers are !=0.
+  This is needed to protect the case in which we use an invalid ptr
+  between runs. Needs: geommng-V09-06-16
+
+Dec 2nd, 2013, M. Asai (run-V09-06-140)
+- Minor clean up.
 
 Nov 29th, 2013, M. Asai (run-V09-06-138, run-V09-06-139)
 - Vis manager is now registered to the worker threads at the first

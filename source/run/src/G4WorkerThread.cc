@@ -242,17 +242,29 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
     LV2Region lv2rmap;
     typedef std::map<G4Region*,std::pair<G4FastSimulationManager*,G4UserSteppingAction*> > R2FSM;
     R2FSM rgnmap;
-    ////@@@G4PhysicalVolumeStore* mphysVolStore = G4PhysicalVolumeStore::GetInstance();
-    ////@@@for(size_t ip=0; ip<mphysVolStore->size(); ip++)
     G4LogicalVolumeStore* mLogVolStore = G4LogicalVolumeStore::GetInstance();
     for(size_t ip=0; ip<mLogVolStore->size(); ip++)
     {
-        ////@@@G4VPhysicalVolume* pv = (*mphysVolStore)[ip];
-        ////@@@G4LogicalVolume *lv = pv->GetLogicalVolume();
         G4LogicalVolume *lv = (*mLogVolStore)[ip];
-        G4VSensitiveDetector* sd = lv->GetSensitiveDetector();
-        G4FieldManager* fm = lv->GetFieldManager();
-        if ( sd || fm ) lvmap[lv] = std::make_pair(sd,fm);
+        //The following needs an explanation.
+        //Consider the case in which the user adds one LogVolume between the runs. The problem is that the thread-local part
+        //(split class) of the G4LogicalVolume object is not initialized for workers because the initialization is done once when the
+        //thread starts (see G4MTRunManagerKernel::StartThread Step-2 that calls G4WorkerThread::BuildGeometryAndPhysicsVector in this class)
+        //The problem is that pointers of SD and FM for these newly added LV
+        //may be invalid pointers (because never initialized, we have seen this behavior in our testing). If now we remember
+        //them and re-use them in Step-4 below we set invalid pointers to LV for this thread.
+        //Thus we need a way to know if for a given LV we need to remember or not the SD and FM pointers.
+        //To solve this problem: We assume that the ConstructSDandField is called also by Master thread
+        //thus for newly added LV the shadow pointers of SD and Fields are correct.
+        // (LIMITATION: this assumption may be too stringent, a user to save memory could instantiate SD only
+        // for workers, but we require this not to happen!).
+        // Thus is a SD and FieldMgr are needed for this particular LV, and shadow are !=0 it means that user
+        // wants an SD and FM to be associated with LV, we get the values and we remember them.
+        G4VSensitiveDetector* sd = 0;
+        G4FieldManager* fmgr = 0;
+        if ( lv->GetMasterSensitiveDetector() != 0 ) sd = lv->GetSensitiveDetector();
+        if ( lv->GetMasterFieldManager() != 0 ) fmgr = lv->GetFieldManager();
+        if ( sd || fmgr ) lvmap[lv] = std::make_pair(sd,fmgr);
         G4Region* rgn = lv->GetRegion();
         G4bool isRoot = lv->IsRootRegion();
         if ( rgn || isRoot ) lv2rmap[lv] = std::make_pair(rgn,isRoot);
@@ -296,9 +308,9 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
     {
         G4LogicalVolume* lv      = it->first;
         G4VSensitiveDetector* sd = (it->second).first;
-        G4FieldManager* fm       = (it->second).second;
-        lv->SetFieldManager(fm, false); //What should be the second parameter? We use always false for MT mode
-        lv->SetSensitiveDetector(sd);
+        G4FieldManager* fmgr       = (it->second).second;
+        if(fmgr) lv->SetFieldManager(fmgr, false); //What should be the second parameter? We use always false for MT mode
+        if(sd) lv->SetSensitiveDetector(sd);
     }
     for ( LV2Region::const_iterator it2 = lv2rmap.begin() ; it2 != lv2rmap.end() ; it2++ )
     {

@@ -265,11 +265,11 @@ void G4MTRunManager::CreateAndStartWorkers()
 void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile, G4int n_select)
 {
   MTkernel->SetUpDecayChannels();
+  numberOfEventToBeProcessed = n_event;
+  numberOfEventProcessed = 0;
 
-  if(n_event>0)
+  if(!fakeRun)
   {
-    numberOfEventToBeProcessed = n_event;
-    numberOfEventProcessed = 0;
     nSeedsUsed = 0;
     nSeedsFilled = 0;
 
