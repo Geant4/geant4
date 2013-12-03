@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2nd December 2013  Laurent Garnier (interfaces-V09-06-17)
+- G4UIQt : Fix a bad bug fixed 29th November 2013. The menu name was displayed
+  instead of the label.
+
 29th November 2013  Laurent Garnier (interfaces-V09-06-16)
 - G4UIQt : Fix a bug introduce the 13th November 2013. Menu name was blank, I had 
   remove the name parameter by mistake.
