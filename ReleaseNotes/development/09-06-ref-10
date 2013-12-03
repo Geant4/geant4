@@ -53,7 +53,7 @@ analysis                                         analysis-V09-06-25
 digits_hits                                      digits_hits-V09-06-10
 -----------
 - The pointer is now overwritten if a detector of same name is registered
-  to G4SDManager. Issuing warning from G4SDStructure whene same detector name
+  to G4SDManager. Issuing warning from G4SDStructure when the same detector name
   is used.
 - Fix in G4SDStructure::RemoveSD() method.
 - Issuing warning message if G4VReadOutGeometry is used.
@@ -118,13 +118,13 @@ graphics_reps                                    greps-V09-06-11
 intercoms                                        intercoms-V09-06-09
 ---------
 - A UI command directory may be specified as such that all commands in that
-  directory and all descendant directories should not be broadcased to
-  worker threads. This setting must be made by the argument of G4UIdirectory
-  constructor and cannot be changed. Each individual command may still be
-  set to be broadcasted by accessing to G4UIcommand::SetToBeBroadcasted()
-  method individually.
+  directory and all descendant directories are not be broadcast to
+  worker threads. This setting must provided as an argument of the
+  G4UIdirectory constructor and cannot be changed. Each individual command 
+  may still be set to be broadcast by calling the  G4UIcommand::SetToBeBroadcasted()
+  method for that method individually.
   G4UImessenger constructor with command directory now may take a Boolean
-  flag of not-to-be-broadcasted.
+  flag of 'not-to-be-broadcast'.
 
 interfaces                                       interfaces-V09-06-07
 ----------
@@ -133,7 +133,7 @@ interfaces                                       interfaces-V09-06-07
 - G4UIQt: fix SecondaryLoop for Qt, now processing events until exitPause=true.
   Added a field to memorise the last open directory on Icon->Open
   In ReceveiveG4Cerr() now displaying an alert box only if it will aborting
-  or quitting the program; sll G4err messages are now in red; when entering
+  or quitting the program; all G4err messages are now in red; when entering
   a command, if this command is multiple line it will now take it in account
   as multiple commands.
   Improve OGL window resizing by opening to a bigger size, changing strech
@@ -257,7 +257,7 @@ processes/hadronic
   o G4EquilibriumEvaporator, G4NucleiModel: fixed to avoid race condition
     in MT mode.
 - models/de_excitation (hadr-deex-V09-06-23)
-  o G4NeutronRadCapture: added isomere production according to the updated 
+  o G4NeutronRadCapture: added isomer production according to the updated 
     MT interface; added time propagation (correct time for delaied capture)
   o Use G4Log and G4Exp instead of standard math functions.
   o Fixes for trivial compilation issues detected on Windows/VC18 

@@ -220,7 +220,7 @@ run                                              run-V09-06-99
   world process is properly included for worker thread.
   Fixed timing of CheckRegularGeometry() so that ScoreSplitterProcess
   is properly set to the worker process manager.
-- Introducing G4MTRunManager::SetEventModulo() and correspondng
+- Introducing G4MTRunManager::SetEventModulo() and corresponding
   /run/eventModulo command to specify the number of events to be sent to a
   worker thread at one time and set the random number seeds.
 - G4IonTable::InitializeLightIons() is invoked for both MT and sequential mode.
