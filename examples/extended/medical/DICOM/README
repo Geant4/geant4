@@ -162,7 +162,6 @@ by
   Note also you must *not* set the enviromental variable DICOM_NESTED_PARAM.
 
 
-
 --->10) Calculating dose in phantom voxels for regular navigation
 
 As mentioned above the regular navigation has the option to keip voxel frontiers when two voxels share the same material, what can make the CPU time several times smaller. But this option makes that all energy deposited is computed in the last voxel, instead of distributing it along the voxels traversed. To properly calculate the dose in each voxel the G4PSDoseDeposit_RegNav scorer can be used.

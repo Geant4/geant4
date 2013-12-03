@@ -42,7 +42,7 @@ In the application the phantom is placed on a table.
 
 \section DICOM_s3 Run the example:
 
- - To run the environment variabmore le G4LEDATA needs to be set, pointing to the low energy data base, and the G4LEVELGAMMADATA pointing to the PhotonEvaporation data base
+ - To run the environment variable G4LEDATA needs to be set, pointing to the low energy data base, and the G4LEVELGAMMADATA pointing to the PhotonEvaporation data base
 
  - batch mode:
 \verbatim
@@ -145,10 +145,12 @@ The same information is also used to fill a file in binary format, that contains
 
 There are four possible ways in GEANT4 to treat the navigation in regular voxelised volumes:
 
--# The 1D optimisation . It will be very slow because each time a track exits a voxel it has to loop to all other voxels to know which one it may enter
 -# The 3D optimisation with G4SmartVoxel: a 3D grid is built, so that the location of voxels is fast, but it requires a lot of memory
 -# Using G4NestedParameterisation. The search is done hierarchically in X, Y and Z. It is fast and does not require big memory
 -# Using G4PhantomParameterisation/G4RegularNavigation: an special algorithm to navigate in regular voxelised geometries (see GEANT4 doc). This is the fastest way without any extra memory requirement (and it is the default in this example). It includes an option (default) to skip frontiers between voxels when they have the same material. When using this option at each step the energy is all deposited in the last voxel; for properly distribution of the dose (=energy/volume) the G4PSDoseDeposit_RegNav scorer can be used (see below)
+
+Obsolete option:
+-# The 1D optimisation . It will be very slow because each time a track exits a voxel it has to loop to all other voxels to know which one it may enter
 
 You can select among the four options in the following way:
 
@@ -159,7 +161,10 @@ You can select among the four options in the following way:
 patient_phys->SetRegularStructureId(0);
 \endverbatim
 
-- To use the second option apart from the change above at RegularDicomDetectorConstruction.cc you have to replace (i.e. use kUndefined)
+- To use the second option (Nested Parameterisation) you must set the enviromental variable DICOM_NESTED_PARAM to 1
+
+- To use the final, obsolete 1D-option, apart from the change above at RegularDicomDetectorConstructio\
+n.cc you need to replace (i.e. use kUndefined)
 \verbatim
 G4PVParameterised* patient_phys 
   = new G4PVParameterised("Patient",voxel_logic,container_logic,
@@ -172,10 +177,7 @@ G4PVParameterised * patient_phys
 			  kUndefined, nVoxelX*nVoxelY*nVoxelZ, param);
 \endverbatim
 
-- To use the third option you have to set the enviromental variable
-\verbatim
-DICOM_NESTED_PARAM to 1
-\endverbatim
+Note also you must *not* set the enviromental variable DICOM_NESTED_PARAM.
 
 
 \section DICOM_s10 Calculating dose in phantom voxels for regular navigation

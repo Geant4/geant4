@@ -8,6 +8,10 @@ $Id$
                       Category History file
 
                       ---------------------
+
+03.12.2013 - Ivana Hrivnacova (DICOM-V09-06-09)
+           - Updated README and .README to match (Pedro Arce)
+
 18.11.2014 - Ivana Hrivnacova (DICOM-V09-06-08)
            - Fixed DicomPhantomZSliceMerged.hh file description 
              (for Doxygen)
