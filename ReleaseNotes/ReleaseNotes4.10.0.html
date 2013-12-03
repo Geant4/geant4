@@ -118,10 +118,17 @@ re-compilation) and a re-compilation of user applications is required.
         is available at this TWiki page:
         <A HREF="https://twiki.cern.ch/twiki/bin/view/Geant4/Geant4MTForApplicationDevelopers">
            https://twiki.cern.ch/twiki/bin/view/Geant4/Geant4MTForApplicationDevelopers</A></LI>
-    <LI>Migrated examples for demonstrating use of multi-threading are:<BR>
-        advanced/dnaphysics; advanced/microdosimetry; basic/B1,2,3,4;
-        extended/electromagnetic/TestEm4; extended/optical/OpNovice;
-        extended/optical/WLS; extended/runAndEvent/RE03, RE05.</LI>
+    <LI>Migrated examples for demonstrating use of multi-threading are:
+        <UL>
+        <LI><I>advanced</I>: air_shower, brachytherapy, dnaphysics, gammaknife,
+                  human_phantom, microbeam, microdosimetry, nanobeam,
+                  radioprotection;</LI>
+        <LI><I>basic</I>: B1, B2 , B3, B4, B5;</LI>
+        <LI><I>extended</I>: AnaEx01, B02, B03, GB01, GB02, TestEm1, TestEm2, TestEm4,
+                  TestEm5, exgps, Hadr00, Hadr01, DICOM, electronScattering2,
+                  LXe, OpNovice, wls, gflash, Par01, P03, RE01, RE02, RE03,
+                  RE04, RE05, RE06.</LI>
+        </UL></LI>
     <LI>!!!!!!!!!  FILL THIS SECTION PLEASE  !!!!!!!!!</LI>
     </UL></LI>
 <LI>Introduced check for variable/parameters shadowing. Compilation warnings
@@ -142,6 +149,9 @@ re-compilation) and a re-compilation of user applications is required.
     lines. UI commands are replaced with calls to built-in overlaps checking
     based on random points located in surface. User's scripts relying on old
     UI commands may require migration accordingly.</LI>
+<LI>The <TT>G4Polycone</TT> construct by vertices, where Z-plane posioning
+    can decrease along Z, has been moved to a new class <TT>G4GenericPolycone</TT>,
+    therefore requiring adaptantion for codes making use of this construct.</LI>
 <LI>Removed deprecated BREPs module and obsolete classes G4VCellScorer and
     G4VCellScorerStore.</LI>
 </UL>
@@ -194,7 +204,16 @@ Please see the corresponding details in
 
 <B>Geometry</B>
 <UL>
-<LI>!!!!!!!!!  FILL THIS SECTION PLEASE  !!!!!!!!!</LI>
+<LI>A new module for geometrical primitives, where classes
+    are imported from the
+    <A HREF="https://aidasoft.web.cern.ch/USolids">AIDA Unified Solids Library</A>,
+    is available.
+    It includes alternative implementations for several shapes, aiming to
+    provide improved speedup in most cases. Shapes currently included are:
+    Box, Cons, GenericPolycone, Orb, Polycone, Polyhedra, Sphere, Tet, Trd,
+    Tubs. They can be enabled at configuration/build time, by adopying the
+    dedicated compiler flag <TT>G4GEOM_USE_USOLIDS</TT>, and will replace the
+    default shapes currently in use.</LI>
 </UL>
 
 <B>Materials</B>
@@ -437,9 +456,6 @@ please refer to the corresponding History files provided in most packages):
 
 <A NAME="emstd-notes">
 <H3><I>Electromagnetic Processes</I></H3></A>
-<UL>
-<LI></LI>
-</UL></LI>
 <LI><B>Adjoint</B>:
     <UL>
     <LI>G4AdjointPhotoElectricModel: use G4PEEffectFluoModel instead of
@@ -905,7 +921,7 @@ please refer to the corresponding History files provided in most packages):
     <LI>Fixed assignment of status for Dichroic.</LI>
     <LI>Fixed Coverity defects in G4OpBoundaryProcess.</LI>
     </UL></LI>
-</LI>Phonon</B>
+<LI><B>Phonon</B>
     <UL>
     <LI>New module containing processes for phonon propagation and interaction
         in materials: G4LatticeManager, G4LatticeReader, G4PhononDownconversion,
@@ -1239,7 +1255,6 @@ please refer to the corresponding History files provided in most packages):
         <LI>Made verbose level modifiers in G4HadronicInteraction into virtual
             functions.</LI>
         <LI>Removed obsolete classes G4VIsotopeProduction and G4IsoParticleChange.</LI>
-        <LI></LI>
         </UL></LI>
     </UL></LI>
 <LI><B>Stopping</B>
@@ -2096,7 +2111,7 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="data-notes">
 <H3><I>Data sets</I></H3></A>
 <UL>
-<LI>New low-energy data set, G4EMLOW.6.35:
+<LI>New low-energy data set version, G4EMLOW.6.35:
     <UL>
     <LI>Added cumulated diff cross-section files for Born ionisation.</LI>
     <LI>Corrected UNIX file permissions.</LI>
@@ -2104,7 +2119,7 @@ please refer to the corresponding History files provided in most packages):
     <LI>Added ESTAR data for electron stopping and ranges.</LI>
     <LI>Updated data for MicroElec processes.</LI>
     </UL></LI>
-<LI>New neutron data set with thermal cross sections, G4NDL.4.4:
+<LI>New neutron data set version with thermal cross sections, G4NDL.4.4:
     <UL>
     <LI>Providing compressed data for Elastic, Inelastic, Capture, Fission
         and ThermalScattering.</LI>
@@ -2112,12 +2127,12 @@ please refer to the corresponding History files provided in most packages):
     <LI>Corrected 74W182 and 90Th232, for inconsistency of inelastic
         cross-sections with final state data.</LI>
     </UL></LI>
-<LI>New data set G4NEUTRONXS-1.4 for evaluated neutron cross section data
+<LI>New data set version G4NEUTRONXS-1.4 for evaluated neutron cross section data
     on natural composition of elements:
     <UL>
     <LI>Evaluated cross section data derived from new G4NDL set.</LI>
     </UL></LI>
-<LI>New data set for radioactive-decay processes, G4RadioactiveDecay.4.0:
+<LI>New data set version for radioactive-decay processes, G4RadioactiveDecay.4.0:
     <UL>
     <LI>Fixed files with duplicate entries for nuclear level and lifetime.</LI>
     <LI>Added missing decay information for excited states to: z47.a100,
@@ -2128,7 +2143,7 @@ please refer to the corresponding History files provided in most packages):
     <LI>Removed BetaPlus and added Alpha decays in z100.a250.</LI>
     <LI>Update to ENSDF 2012 version.</LI>
     </UL></LI>
-<LI>New data set PhotonEvaporation.3.0 for nuclear de-excitation data:
+<LI>New data set version PhotonEvaporation.3.0 for nuclear de-excitation data:
     <UL>
     <LI>Update to August-2012 version of ENSDF.</LI>
     <LI>Correction to README.</LI>
@@ -2145,7 +2160,7 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI>New data set G4ENSDFSTATE-1.0:
     <UL>
-    <LI>New optional data set for properties of nuclei state from
+    <LI>Optional data set for properties of nuclei state from
         Evaluated Nuclear Structure Data File.</LI>
     </UL></LI>
 </UL></LI>
@@ -2159,16 +2174,16 @@ please refer to the corresponding History files provided in most packages):
 <LI>Updated examples to new interface changes and common tools.</LI>
 <LI><B>advanced</B>
     <UL>
-    <LI>air_shower
+    <LI><B>air_shower</B>
         <UL>
         <LI>Migrated to enable use of multi-threading.</LI>
         <LI>Added G4Ellipsoid among solids enabled for parameterisation.</LI>
         </UL></LI>
-    <LI>amsEcal
+    <LI><B>amsEcal</B>
         <UL>
         <LI>Changed to port to new G4VUserPhysicsList split-class mechanism.</LI>
         </UL></LI>
-    <LI>brachytherapy
+    <LI><B>brachytherapy</B>
         <UL>
         <LI>Migrated to enable use of multi-threading.</LI>
         <LI>Introduced modular Physics List.</LI>
@@ -2179,32 +2194,28 @@ please refer to the corresponding History files provided in most packages):
         <LI>Fix bug in BrachySteppingAction (replace = with ==).
             Use G4ParticleDefinition instead of string.</LI>
         </UL></LI>
-    <LI>ChargeExchangeMC
-        <UL>
-        <LI></LI>
-        </UL></LI>
-    <LI>composite_calorimeter
+    <LI><B>composite_calorimeter</B>
         <UL>
         <LI>Corrected search of AIDA tools. Addressing problem report
             <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1491">#1491</A>.</LI>
         </UL></LI>
-    <LI>dnageometry
+    <LI><B>dnageometry</B>
         <UL>
         <LI>New example implementing a setup of a realistic nucleus model of a cell,
             including chromosomes, in combination with Geant4-DNA physics.</LI>
         </UL></LI>
-    <LI>dnaphysics
+    <LI><B>dnaphysics</B>
         <UL>
         <LI>Migrated to enable use of multi-threading.</LI>
         <LI>Changed default water definition.</LI>
         <LI>Removed unused electron capture process.</LI>
         <LI>Changed process naming scheme.</LI>
         </UL></LI>
-    <LI>gammaknife
+    <LI><B>gammaknife</B>
         <UL>
         <LI>Migrated to enable use of multi-threading.</LI>
         </UL></LI>
-    <LI>gammaray_telescope
+    <LI><B>gammaray_telescope</B>
         <UL>
         <LI>Updated physics list: removed inelastic models for hyperons and
             anti-hyperons (only EM and decay left); use FTFP model down to zero
@@ -2212,72 +2223,72 @@ please refer to the corresponding History files provided in most packages):
             FTFP+BERT for d,t and alphas.</LI>
         <LI>Removed dependency from HEP and LEP models.</LI>
         </UL></LI>
-    <LI>hadrontherapy
+    <LI><B>hadrontherapy</B>
         <UL>
         <LI>Included class for average LET computations.</LI>
         <LI>Removed dependency from HEP and LEP models.</LI>
         <LI>Renamed hadronic physics class.</LI>
         </UL></LI>
-    <LI>human_phantom
+    <LI><B>human_phantom</B>
         <UL>
         <LI>Migrated to enable use of multi-threading.</LI>
         <LI>Testes and Genitalia modelling added for MIRD model.</LI>
         <LI>G4HumanPhantomPhysicsList is derived from G4VModularPhysics.</LI>
         <LI>Substituted G4ParticleGun with G4GeneralParticleSource.</LI>
         </UL></LI>
-    <LI>iort_therapy
+    <LI><B>iort_therapy</B>
         <UL>
         <LI>Removed G4HadronQElasticPhysics, and replaced G4QStoppingPhysics.
             Updated for renamed physics builders.</LI>
         </UL></LI>
-    <LI>lAr_calorimeter
+    <LI><B>lAr_calorimeter</B>
         <UL>
         <LI>Minor updates.</LI>
         </UL></LI>
-    <LI>medical_linac
+    <LI><B>medical_linac</B>
         <UL>
         <LI>Removed obsolete G4HadronQElasticPhysics.</LI>
         <LI>Fixed compilation erros on VC++12.</LI>
         </UL></LI>
-    <LI>microbeam
+    <LI><B>microbeam</B>
         <UL>
         <LI>Migrated to enable use of multi-threading.</LI>
         <LI>Removed comparisons of strings in MicrobeamSteppingAction.</LI>
         <LI>Added G4Ellipsoid among solids enabled for parameterisation.</LI>
         </UL></LI>
-    <LI>microdosimetry
+    <LI><B>microdosimetry</B>
         <UL>
         <LI>Updated multiple-scattering model.</LI>
         </UL></LI>
-    <LI>microdoelectronics
+    <LI><B>microdoelectronics</B>
         <UL>
         <LI>New example simulating tracks of a 5 MeV proton in silicon,
             exercising new G4MicroElec* processes and models.</LI>
         </UL></LI>
-    <LI>nanobeam
+    <LI><B>nanobeam</B>
         <UL>
         <LI>Migrated to enable use of multi-threading.</LI>
         <LI>Changed selection of volumes in SteppingAction using names.</LI>
         <LI>Updated CMake script to make explicit required use of external CLHEP.</LI>
         </UL></LI>
-    <LI>purging_magnet
+    <LI><B>purging_magnet</B>
         <UL>
         <LI>Explicitly use G4CsvAnalysisManager to be compliant with restructure of
             analysis module.</LI>
         </UL></LI>
-    <LI>radioprotection
+    <LI><B>radioprotection</B>
         <UL>
         <LI>Replaced oroginal REMSIM example with characterisation of novel diamond
             detector for radiation protection, using microdosimetric approach. 
         <LI>Migrated to enable use of multi-threading.</LI>
         </UL></LI>
-    <LI>underground_physics
+    <LI><B>underground_physics</B>
         <UL>
         <LI>In DMXMinEkineCuts, migrated calculation of the range from
             G4EnergyLossTable (obsolete class) to G4LossTableManager.</LI>
         <LI>Removed dependency from HEP and LEP models.</LI>
         </UL></LI>
-    <LI>xray_fluorescence
+    <LI><B>xray_fluorescence</B>
         <UL>
         <LI>Fixed compilation erros on VC++12.</LI>
         </UL></LI>
@@ -2286,207 +2297,207 @@ please refer to the corresponding History files provided in most packages):
     <UL>
     <LI>Migrated to enable use of multi-threading.</LI>
     <LI>Fixes to GUI macros.</LI>
-    </UL></LI>
-<LI><B>basic/B1</B>
-    <UL>
-    <LI>Removed B1EventInformation for keeping maximum simplicity.</LI>
-    <LI>Use /run/printProgress. Cleanup in EventAction.</LI>
-    </UL></LI>
-<LI><B>basic/B2</B>
-    <UL>
-    <LI>Replaced magnetic field classes (B2MagneticField, B2FieldMessenger)
-        with use of new G4GlobalMagFieldMessenger class.</LI>
-    <LI>Added G4Ellipsoid among solids enabled for parameterisation in B2b.</LI>
-    </UL></LI>
-<LI><B>basic/B3</B>
-    <UL>
-    <LI>B3PrimaryGeneratorAction: changed G4ParticleTable::GetIon() to
-        G4IonTable::GetIon(), as the former method became obsolete.</LI>
-    </UL></LI>
-<LI><B>basic/B4</B>
-    <UL>
-    <LI>Fixed EndOfRunAction() to get the printed histogram
-        statistics correctly.</LI>
-    </UL></LI>
-<LI><B>basic/B5</B>
-    <UL>
-    <LI>New example, copy of original extended/analysis/A01 example.</LI>
-    <LI>Replaced messenger classes with use of G4GenericMessenger.</LI>
-    <LI>Changed magnetic tube material to G4_Air (was G4_Galactic)
-        Resolves issue of low-energy electrons spinning forever in vacuum.</LI>
-    <LI>Changed step limit size to 1 m  (more sutable for demonstration 
-        of the smooth trajectory visualization option).</LI>
+    <LI><B>basic/B1</B>
+        <UL>
+        <LI>Removed B1EventInformation for keeping maximum simplicity.</LI>
+        <LI>Use /run/printProgress. Cleanup in EventAction.</LI>
+        </UL></LI>
+    <LI><B>basic/B2</B>
+        <UL>
+        <LI>Replaced magnetic field classes (B2MagneticField, B2FieldMessenger)
+            with use of new G4GlobalMagFieldMessenger class.</LI>
+        <LI>Added G4Ellipsoid among solids enabled for parameterisation in B2b.</LI>
+        </UL></LI>
+    <LI><B>basic/B3</B>
+        <UL>
+        <LI>B3PrimaryGeneratorAction: changed G4ParticleTable::GetIon() to
+            G4IonTable::GetIon(), as the former method became obsolete.</LI>
+        </UL></LI>
+    <LI><B>basic/B4</B>
+        <UL>
+        <LI>Fixed EndOfRunAction() to get the printed histogram
+            statistics correctly.</LI>
+        </UL></LI>
+    <LI><B>basic/B5</B>
+        <UL>
+        <LI>New example, copy of original extended/analysis/A01 example.</LI>
+        <LI>Replaced messenger classes with use of G4GenericMessenger.</LI>
+        <LI>Changed magnetic tube material to G4_Air (was G4_Galactic)
+            Resolves issue of low-energy electrons spinning forever in vacuum.</LI>
+        <LI>Changed step limit size to 1 m  (more sutable for demonstration 
+            of the smooth trajectory visualization option).</LI>
+        </UL></LI>
     </UL></LI>
 <LI><B>extended</B>
     <UL>
     <LI>Renamed example 'analysis/A01' to 'basic/B5'.</LI>
     <LI>Removed obsolete 'geometry/olap' example.</LI>
-    <LI>analysis
+    <LI><B>analysis</B>
         <UL>
         <LI>Example N03Con replaced with B1Con.</LI>
         <LI>Removed use of G4AnalysisManager::Create(isMaster).
             Added G4RunManager::ReinitializeGeoemtry() in set methods
             that change geometry. Removed Update method and UI command in shared
             DetectorConstruction.</LI>
+        <LI><B>analysis/AnaEx01</B>
+            <UL>
+            <LI>Migrated to enable use of multi-threading.</LI>
+            <LI>Updated setup for added classes in Hbook analysis code.</LI>
+            </UL></LI>
         </UL></LI>
-    <LI>analysis/AnaEx01
-        <UL>
-        <LI>Migrated to enable use of multi-threading.</LI>
-        <LI>Updated setup for added classes in Hbook analysis code.</LI>
+        <LI><B>biasing</B>
+            <UL>
+            <LI>Removed references to obsolete G4CellScorer classes and code cleanup.</LI>
+        <LI><B>biasing/B01</B>
+            <UL>
+            <LI>Replaced B01PhysicsList with FTFP_BERT as part of LHEP removal.</LI>
+            </UL></LI>
+        <LI><B>biasing/B02</B>
+            <UL>
+            <LI>Migrated to enable use of multi-threading.</LI>
+            <LI>Removed dependency from LEP models.</LI>
+            </UL></LI>
+        <LI><B>biasing/B03</B>
+            <UL>
+            <LI>New example derived from B02 but adopting modular physics-lists.</LI>
+            <LI>Migrated to enable use of multi-threading.</LI>
+            </UL></LI>
+        <LI><B>biasing/GB01</B>
+            <UL>
+            <LI>New example illustrating how to bias process cross-sections.</LI>
+            </UL></LI>
+        <LI><B>biasing/GB02</B>
+            <UL>
+            <LI>New example illustrating how to make a force collision biasing in a way
+                that is essentially similar to the approach in MCNP.</LI>
+            </UL></LI>
+        <LI><B>biasing/ReverseMC01</B>
+            <UL>
+            <LI>Slight modifications into the main in order to migrate to the new RMC
+                tracking schema where reverse tracking and forward tracking of adjoint and
+                forward equivalent particles are processed  in the same events.</LI>
+            <LI>Migrated to use g4tools.</LI>
+            </UL></LI>
         </UL></LI>
-    <LI>biasing
-        <UL>
-        <LI>Removed references to obsolete G4CellScorer classes and code cleanup.</LI>
-        </UL></LI>
-    <LI>biasing/B01
-        <UL>
-        <LI>Replaced B01PhysicsList with FTFP_BERT as part of LHEP removal.</LI>
-        </UL></LI>
-    <LI>biasing/B02
-        <UL>
-        <LI>Migrated to enable use of multi-threading.</LI>
-        <LI>Removed dependency from LEP models.</LI>
-        </UL></LI>
-    <LI>biasing/B03
-        <UL>
-        <LI>New example derived from B02 but adopting modular physics-lists.</LI>
-        <LI>Migrated to enable use of multi-threading.</LI>
-        </UL></LI>
-    <LI>biasing/GB01
-        <UL>
-        <LI>New example illustrating how to bias process cross-sections.</LI>
-        </UL></LI>
-    <LI>biasing/GB02
-        <UL>
-        <LI>New example illustrating how to make a force collision biasing in a way
-            that is essentially similar to the approach in MCNP.</LI>
-        </UL></LI>
-    <LI>biasing/ReverseMC01
-        <UL>
-        <LI>Slight modifications into the main in order to migrate to the new RMC
-            tracking schema where reverse tracking and forward tracking of adjoint and
-            forward equivalent particles are processed  in the same events.</LI>
-        <LI>Migrated to use g4tools.</LI>
-        </UL></LI>
-    <LI>common
+    <LI><B>common</B>
         <UL>
         <LI>When building materials with NistManager do not set isotopes argument
             (was set to false), as all materials have to be built from isotopes.</LI>
+        <LI><B>common/analysis</B>
+            <UL>
+            <LI>Extended the manager class for handling more than one ntuple.</LI>
+            <LI>Refactoring ExG4Hbook manager class following changes in analysis module.</LI>
+            <LI>Implemented functions for user defined/logarithmic binning for H1 
+                and H2; in case of H2 an exception is (not available in HBOOK).</LI>
+            </UL></LI>
         </UL></LI>
-    <LI>common/analysis
-        <UL>
-        <LI>Extended the manager class for handling more than one ntuple.</LI>
-        <LI>Refactoring ExG4Hbook manager class following changes in analysis module.</LI>
-        <LI>Implemented functions for user defined/logarithmic binning for H1 
-            and H2; in case of H2 an exception is (not available in HBOOK).</LI>
-        </UL></LI>
-    <LI>electromagnetic
+    <LI><B>electromagnetic</B>
         <UL>
         <LI>In HistoManager: use new analysis manager method SetH1Activation().</LI>
         <LI>Updated setup for added classes in Hbook analysis code.</LI>
         <LI>PhysListEmStandard: use default G4UrbanMscModel.</LI>
+        <LI><B>electromagnetic/TestEm0</B>
+            <UL>
+            <LI>Use G4SeltzerBergerModel instead of obsolete G4eBremsstrahlungModel.</LI>
+            <LI>DirectAccess: use G4PEEffectFluoModel instead of obsolete
+                G4PEEffectModel.</LI>
+            </UL></LI>
+        <LI><B>electromagnetic/TestEm1</B>
+            <UL>
+            <LI>Migrated to enable use of multi-threading.</LI>
+            <LI>PhysicsList::AddDecay(): use G4PhysicsListHelper.</LI>
+            <LI>Make use of G4GlobalMagFieldMessenger.</LI>
+            <LI>Removed HBOOK tools.</LI>
+            </UL></LI>
+        <LI><B>electromagnetic/TestEm2</B>
+            <UL>
+            <LI>Migrated to enable use of multi-threading.</LI>
+            </UL></LI>
+        <LI><B>electromagnetic/TestEm4</B>
+            <UL>
+            <LI>Migrated to enable use of multi-threading.</LI>
+            <LI>Removed HBOOK tools. Removed EventActionMessenger.</LI>
+            </UL></LI>
+        <LI><B>electromagnetic/TestEm5</B>
+            <UL>
+            <LI>Migrated to enable use of multi-threading.</LI>
+            <LI>Make use of G4GlobalMagFieldMessenger.</LI>
+            <LI>Removed HBOOK tools. Removed EventActionMessenger.</LI>
+            </UL></LI>
+        <LI><B>electromagnetic/TestEm6</B>
+            <UL>
+            <LI>PhysicsList: restored G4GammaConversionToMuons.</LI>
+            <LI>Added cross section factor to gamma->mu+mu- process to TestEm6.in macro.</LI>
+            </UL></LI>
+        <LI><B>electromagnetic/TestEm7</B>
+            <UL>
+            <LI>PhysListEmStandardSS, PhysListEmStandardNR: updated according to
+                Option4 physics list models and parameters.</LI>
+            <LI>PhysListEmStandardNR: use G4UrbanMscModel instead of G4UrbanMscModel95.</LI>
+            <LI>Removed use of obsolete class G4HadronQElasticPhysics.</LI>
+            </UL></LI>
+        <LI><B>electromagnetic/TestEm8</B>
+            <UL>
+            <LI>Stacking action and its messenger are added allowing to kill
+                secondary electrons inside GasDetector region and add this
+                energy to total energy deposit (option by default off).</LI>
+            <LI>PhysicsList: substituted obsolete G4PAIPhotonMOdel with G4PAIPhotModel.</LI>
+            <LI>HistoManager: added histogram for energy deposition in units
+                of ADC counts; added extra UI command "/testem/setEnergyPerChannel".</LI>
+            </UL></LI>
+        <LI><B>electromagnetic/TestEm11</B>
+            <UL>
+            <LI>PhysListEmStandard: use default G4UrbanMscModel.</LI>
+            <LI>Make use of G4GlobalMagFieldMessenger.</LI>
+            <LI>Removed EventActionMessenger.</LI>
+            </UL></LI>
+        <LI><B>electromagnetic/TestEm12</B>
+            <UL>
+            <LI>PhysListEmStandard: use default G4UrbanMscModel.</LI>
+            <LI>PhysListEmStandardWVI and PhysListEmStandardSS: reduced low-energy 
+                threashold for the single scattering model to 10 eV.</LI>
+            </UL></LI>
+        <LI><B>electromagnetic/TestEm14</B>
+            <UL>
+            <LI>PhysicsList: restored G4GammaConversionToMuons.</LI>
+            </UL></LI>
+        <LI><B>electromagnetic/TestEm15</B>
+            <UL>
+            <LI>Updated name of muon-nuclear process from "muNucl" to "muonNuclear".</LI>
+            <LI>HistoManager, RunAction: make theoretical histogram back.</LI>
+            </UL></LI>
+        <LI><B>electromagnetic/TestEm17</B>
+            <UL>
+            <LI>Updated name of muon-nuclear process from "muNucl" to "muonNuclear".</LI>
+            <LI>HistoManager, RunAction: make theoretical histogram back.</LI>
+            </UL></LI>
         </UL></LI>
-    <LI>electromagnetic/TestEm0
-        <UL>
-        <LI>Use G4SeltzerBergerModel instead of obsolete G4eBremsstrahlungModel.</LI>
-        <LI>DirectAccess: use G4PEEffectFluoModel instead of obsolete
-            G4PEEffectModel.</LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm1
-        <UL>
-        <LI>Migrated to enable use of multi-threading.</LI>
-        <LI>PhysicsList::AddDecay(): use G4PhysicsListHelper.</LI>
-        <LI>Make use of G4GlobalMagFieldMessenger.</LI>
-        <LI>Removed HBOOK tools.</LI>
-        </UL></LI>
-        electromagnetic/TestEm2
-        <UL>
-        <LI>Migrated to enable use of multi-threading.</LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm4
-        <UL>
-        <LI>Migrated to enable use of multi-threading.</LI>
-        <LI>Removed HBOOK tools. Removed EventActionMessenger.</LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm5
-        <UL>
-        <LI>Migrated to enable use of multi-threading.</LI>
-        <LI>Make use of G4GlobalMagFieldMessenger.</LI>
-        <LI>Removed HBOOK tools. Removed EventActionMessenger.</LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm6
-        <UL>
-        <LI>PhysicsList: restored G4GammaConversionToMuons.</LI>
-        <LI>Added cross section factor to gamma->mu+mu- process to TestEm6.in macro.</LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm7
-        <UL>
-        <LI>PhysListEmStandardSS, PhysListEmStandardNR: updated according to
-            Option4 physics list models and parameters.</LI>
-        <LI>PhysListEmStandardNR: use G4UrbanMscModel instead of G4UrbanMscModel95.</LI>
-        <LI>Removed use of obsolete class G4HadronQElasticPhysics.</LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm8
-        <UL>
-        <LI>Stacking action and its messenger are added allowing to kill
-            secondary electrons inside GasDetector region and add this
-            energy to total energy deposit (option by default off).</LI>
-        <LI>PhysicsList: substituted obsolete G4PAIPhotonMOdel with G4PAIPhotModel.</LI>
-        <LI>HistoManager: added histogram for energy deposition in units
-            of ADC counts; added extra UI command "/testem/setEnergyPerChannel".</LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm11
-        <UL>
-        <LI>PhysListEmStandard: use default G4UrbanMscModel.</LI>
-        <LI>Make use of G4GlobalMagFieldMessenger.</LI>
-        <LI>Removed EventActionMessenger.</LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm12
-        <UL>
-        <LI>PhysListEmStandard: use default G4UrbanMscModel.</LI>
-        <LI>PhysListEmStandardWVI and PhysListEmStandardSS: reduced low-energy 
-            threashold for the single scattering model to 10 eV.</LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm14
-        <UL>
-        <LI>PhysicsList: restored G4GammaConversionToMuons.</LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm15
-        <UL>
-        <LI>Updated name of muon-nuclear process from "muNucl" to "muonNuclear".</LI>
-        <LI>HistoManager, RunAction: make theoretical histogram back.</LI>
-        </UL></LI>
-    <LI>electromagnetic/TestEm17
-        <UL>
-        <LI>Updated name of muon-nuclear process from "muNucl" to "muonNuclear".</LI>
-        <LI>HistoManager, RunAction: make theoretical histogram back.</LI>
-        </UL></LI>
-    <LI>eventgenerator/HepMC
+    <LI><B>eventgenerator/HepMC</B>
         <UL>
         <LI>Added G4Ellipsoid among solids enabled for parameterisation in HepMCEx01.</LI>
         </UL></LI>
-    <LI>eventgenerator/particleGun
+    <LI><B>eventgenerator/particleGun</B>
         <UL>
         <LI>Simplified histograms management.</LI>
         </UL></LI>
-    <LI>eventgenerator/pythia/decayer6
+    <LI><B>eventgenerator/pythia/decayer6</B>
         <UL>
         <LI>Fixed use of particle iterator in P6DExtDecayerPhysics.</LI>
         <LI>Fixed compilation warnings for shadowed variables.</LI>
         </UL></LI>
-    <LI>eventgenerator/exgps
+    <LI><B>eventgenerator/exgps</B>
         <UL>
         <LI>Migrated to enable use of multi-threading.</LI>
         <LI>Migrated to use g4tools.</LI>
         </UL></LI>
-    <LI>exoticphysics/monopole
+    <LI><B>exoticphysics/monopole</B>
         <UL>
         <LI>G4MonopolePhysics: fixed warning at initialisation.</LI>
         <LI>G4MonopoleTransportation: use 'verboseLevel' variable from base class.</LI>
         <LI>G4MonopoleTransportation, G4MonopoleEquation: adapted to use
             G4ChargeState to pass Magnetic & Electric Charge.</LI>
         </UL></LI>
-    <LI>exoticphysics/phonon
+    <LI><B>exoticphysics/phonon</B>
         <UL>
         <LI>Removed particles, lattice classes, and processes, now all in new
             library module. Eliminated use of G4VUserTrackInfo, creating a
@@ -2494,36 +2505,36 @@ please refer to the corresponding History files provided in most packages):
             use by the stacking action and by processes.</LI>
         <LI>Fixed printout in XLogicalLattice.</LI>
         </UL></LI>
-    <LI>field
+    <LI><B>field</B>
         <UL>
         <LI>Migrated examples to enable use of multi-threading.</LI>
+        <LI><B>field/field05</B>
+            <UL>
+            <LI>Changed GetFieldValue() signature and added F05SteppingVerbose to
+                print global time.</LI>
+            </UL></LI>
+        <LI><B>field/field06</B>
+            <UL>
+            <LI>Fix for uninitialized variables in F06PrimaryGeneratorAction.</LI>
+            </UL></LI>
         </UL></LI>
-    <LI>field/field05
-        <UL>
-        <LI>Changed GetFieldValue() signature and added F05SteppingVerbose to
-            print global time.</LI>
-        </UL></LI>
-    <LI>field/field06
-        <UL>
-        <LI>Fix for uninitialized variables in F06PrimaryGeneratorAction.</LI>
-        </UL></LI>
-    <LI>hadronic/Hadr00
+    <LI><B>hadronic/Hadr00</B>
         <UL>
         <LI>Migrated to enable use of multi-threading.</LI>
         </UL></LI>
-    <LI>hadronic/Hadr01
+    <LI><B>hadronic/Hadr01</B>
         <UL>
         <LI>Migrated to enable use of multi-threading.</LI>
         <LI>PhysicsList: removed CHIPS and LHEP builders.
             Migrated to new structure of physics_lists.</LI>
         </UL></LI>
-    <LI>hadronic/Hadr02
+    <LI><B>hadronic/Hadr02</B>
         <UL>
         <LI>Replaced LEP capture with G4NeutronRadCapture.</LI>
         <LI>Migrated to cross-sections extracted from CHIPS.</LI>
         <LI>Disabled energy/momentum check.</LI>
         </UL></LI>
-    <LI>hadronic/Hadr03
+    <LI><B>hadronic/Hadr03</B>
         <UL>
         <LI>DetectorConstruction: add function MaterialWithSingleIsotope().
             Suppressed natural abundance flag. Improved material definition.</LI>
@@ -2537,17 +2548,17 @@ please refer to the corresponding History files provided in most packages):
             rebuild. Remove UI command to update geometry.</LI>
         <LI>In HistoManager: use new analysis manager method SetH1Activation().</LI>
         </UL></LI>
-    <LI>hadronic/Hadr04
+    <LI><B>hadronic/Hadr04</B>
         <UL>
         <LI>New example focussed on neutronHP physics, especially neutron transport,
             including thermal scattering.</LI>
         </UL></LI>
-    <LI>hadronic/Hadr05
+    <LI><B>hadronic/Hadr05</B>
         <UL>
         <LI>New example derived from Hadr00 demonstrating the usage of
             G4GenericPhysicsList to build the concrete physics list at the run time.</LI>
         </UL></LI>
-    <LI>medical/DICOM
+    <LI><B>medical/DICOM</B>
         <UL>
         <LI>Migrated to enable use of multi-threading.</LI>
         <LI>Fix in DicomHandler for problems when using DCM files other than
@@ -2561,85 +2572,85 @@ please refer to the corresponding History files provided in most packages):
         <LI>Added G4Ellipsoid to solids enabled for parameterisation in
             DicomNestedPhantomParameterisation.</LI>
         </UL></LI>
-    <LI>medical/electronScattering
+    <LI><B>medical/electronScattering</B>
         <UL>
         <LI>In HistoManager: use new analysis manager method SetH1Activation().</LI>
         </UL></LI>
-    <LI>medical/electronScattering2
+    <LI><B>medical/electronScattering2</B>
         <UL>
         <LI>Migrated to enable use of multi-threading.</LI>
         <LI>PhysListEmStandard: removed G4UrbanMscModel95; use default model.</LI>
         </UL></LI>
-    <LI>medical/fanoCavity[1,2]
+    <LI><B>medical/fanoCavity[1,2]</B>
         <UL>
         <LI>PhysListEmStandard_option3: use G4UrbanMscModel instead of Urban95.</LI>
         <LI>In HistoManager: use new analysis manager method SetH1Activation().</LI>
         </UL></LI>
-    <LI>medical/GammaTherapy
+    <LI><B>medical/GammaTherapy</B>
         <UL>
         <LI>When building materials with NistManager do not set isotopes argument
             (was set to false), as all materials have to be built from isotopes.</LI>
         </UL></LI>
-    <LI>optical/LXe
+    <LI><B>optical/LXe</B>
         <UL>
         <LI>Fixed overlap in geometry. Fixed data initialisation.</LI>
         <LI>Migrated to enable use of multi-threading.</LI>
         </UL></LI>
-    <LI>optical/OpNovice
+    <LI><B>optical/OpNovice</B>
         <UL>
         <LI>New example, copy of the original novice example N06.</LI>
         <LI>Migrated to enable use of multi-threading.</LI>
         </UL></LI>
-    <LI>optical/WLS
+    <LI><B>optical/WLS</B>
         <UL>
         <LI>Migrated to enable use of multi-threading.</LI>
         </UL></LI>
-    <LI>parallel
+    <LI><B>parallel</B>
         <UL>
         <LI>Moved ParN02, ParN04 and info in a new TopC directory,
             New directory TBB.</LI>
+        <LI><B>parallel/TBB</B>
+            <UL>
+            <LI>New module with example derived from original basic/B2b
+                demonstrating how to interface a simple application with the Intel
+                Threading Building Blocks library (TBB), and organise MT event-level
+                parallelism as TBB tasks.</LI>
+            </UL></LI>
         </UL></LI>
-    <LI>parallel/TBB
-        <UL>
-        <LI>New module with example derived from original basic/B2b
-            demonstrating how to interface a simple application with the Intel
-            Threading Building Blocks library (TBB), and organise MT event-level
-            parallelism as TBB tasks.</LI>
-        </UL></LI>
-    <LI>parameterisations/gflash
-        <UL>
-        <LI>Removed ExGflashMaterialManager class; now using NIST manager.</LI>
-        <LI>Migrated to enable use of multi-threading.</LI>
-        <LI>Fixed event action destructor in case fNevent == 0.</LI>
-        <LI>Changed /gps/centre 0 0 0 to /gps/pos/centre 0 0 0 to
-            clear gps deprecating command message in test.mac.</LI>
-        </UL></LI>
-    <LI>parameterisations
+    <LI><B>parameterisations</B>
         <UL>
         <LI>Added G4Ellipsoid among solids enabled for parameterisation.</LI>
+        <LI><B>parameterisations/gflash</B>
+            <UL>
+            <LI>Removed ExGflashMaterialManager class; now using NIST manager.</LI>
+            <LI>Migrated to enable use of multi-threading.</LI>
+            <LI>Fixed event action destructor in case fNevent == 0.</LI>
+            <LI>Changed /gps/centre 0 0 0 to /gps/pos/centre 0 0 0 to
+                clear gps deprecating command message in test.mac.</LI>
+            </UL></LI>
+        <LI><B>parameterisations/Par01</B>
+            <UL>
+            <LI>New example, extracted as copy of novice/N05.</LI>
+            <LI>Migrated to enable use of multi-threading.</LI>
+            </UL></LI>
         </UL></LI>
-    <LI>parameterisations/Par01
-        <UL>
-        <LI>New example, extracted as copy of novice/N05.</LI>
-        <LI>Migrated to enable use of multi-threading.</LI>
-        </UL></LI>
-    <LI>persistency/gdml/G01
+    <LI><B>persistency/gdml/G01</B>
         <UL>
         <LI>Added test case for 'genericPolycone' and 'genericPolyhedra'.</LI>
         </UL></LI>
-    <LI>persistency/P01
+    <LI><B>persistency/P01</B>
         <UL>
         <LI>Added G4Ellipsoid among solids for parameterisation.</LI>
         </UL></LI>
-    <LI>persistency/P03
+    <LI><B>persistency/P03</B>
         <UL>
         <LI>Migrated to enable use of multi-threading.</LI>
         </UL></LI>
-    <LI>polarisation/Pol01
+    <LI><B>polarisation/Pol01</B>
         <UL>
         <LI>Migrated to g4tools.</LI>
         </UL></LI>
-    <LI>radioactivedecay/rdecay01
+    <LI><B>radioactivedecay/rdecay01</B>
         <UL>
         <LI>In PhysicsList set the half life threshold of the
             G4RadioactiveDecay to nanosecond.</LI>
@@ -2647,7 +2658,7 @@ please refer to the corresponding History files provided in most packages):
         <LI>DetectorConstruction: set 'fWorldSize' to 2 um.</LI>
         <LI>In HistoManager: use new analysis manager method SetH1Activation().</LI>
         </UL></LI>
-    <LI>radioactivedecay/rdecay02
+    <LI><B>radioactivedecay/rdecay02</B>
         <UL>
         <LI>Migration to new physics_lists directory structure.</LI>
         <LI>exrdmPhysicsList: use standard constructors for EM physics, removed
@@ -2656,42 +2667,38 @@ please refer to the corresponding History files provided in most packages):
             Replaced G4LElastic and G4LCapture with G4HadronElastic and
             G4NeutronRadCapture.</LI>
         </UL></LI>
-    <LI>runAndEvent/RE01
+    <LI><B>runAndEvent</B>
         <UL>
-        <LI>Migrated to enable use of multi-threading.</LI>
-        <LI>Replaced obsolete class G4QStoppingPhysics with G4StoppingPhysics.</LI>
-        <LI>Added G4Ellipsoid among solids enabled for parameterisation.</LI>
+        <LI>Migrated examples to enable use of multi-threading.</LI>
+        <LI><B>runAndEvent/RE01</B>
+            <UL>
+            <LI>Replaced obsolete class G4QStoppingPhysics with G4StoppingPhysics.</LI>
+            <LI>Added G4Ellipsoid among solids enabled for parameterisation.</LI>
+            </UL></LI>
+        <LI><B>runAndEvent/RE02</B>
+            <UL>
+            <LI>Replaced G4AntiProtonAnnihiliationAtRest with
+                G4AntiProtonAbsorptionFritiof.</LI>
+            <LI>Added G4Ellipsoid among solids enabled for parameterisation.</LI>
+            </UL></LI>
+        <LI><B>runAndEvent/RE04</B>
+            <UL>
+            <LI>Added G4Ellipsoid among solids enabled for parameterisation.</LI>
+            </UL></LI>
+        <LI><B>runAndEvent/RE05</B>
+            <UL>
+            <LI>New example, extracted as copy of novice/N04.</LI>
+            <LI>Updated pythia_main.f and data file. Number of events in event data
+                is 100; increased digits for PDG code of HEPEVT.</LI>
+            <LI>Readout geometry is disabled, as no longer supported.
+                Migrated to parallel world that descibes the readout geometry.</LI>
+            </UL></LI>
+        <LI><B>runAndEvent/RE06</B>
+            <UL>
+            <LI>New example, extracted as copy of novice/N07.</LI>
+            </UL></LI>
         </UL></LI>
-    <LI>runAndEvent/RE02
-        <UL>
-        <LI>Migrated to enable use of multi-threading.</LI>
-        <LI>Replaced G4AntiProtonAnnihiliationAtRest with
-            G4AntiProtonAbsorptionFritiof.</LI>
-        <LI>Added G4Ellipsoid among solids enabled for parameterisation.</LI>
-        </UL></LI>
-    <LI>runAndEvent/RE03
-        <UL>
-        <LI>Migrated to enable use of multi-threading.</LI>
-        </UL></LI>
-    <LI>runAndEvent/RE04
-        <UL>
-        <LI>Migrated to enable use of multi-threading.</LI>
-        <LI>Added G4Ellipsoid among solids enabled for parameterisation.</LI>
-        </UL></LI>
-    <LI>runAndEvent/RE05
-        <UL>
-        <LI>New example, extracted as copy of novice/N04.</LI>
-        <LI>Migrated to enable use of multi-threading.</LI>
-        <LI>Updated pythia_main.f and data file. Number of events in event data
-            is 100; increased digits for PDG code of HEPEVT.</LI>
-        <LI>Readout geometry is disabled, as no longer supported.
-            Migrated to parallel world that descibes the readout geometry.</LI>
-        </UL></LI>
-    <LI>runAndEvent/RE06
-        <UL>
-        <LI>New example, extracted as copy of novice/N07.</LI>
-        </UL></LI>
-    <LI>visualization
+    <LI><B>visualization</B>
         <UL>
         <LI>Replaced physics list QGSP_BIC_EMY with FTFP_BERT.</LI>
         </UL></LI>
