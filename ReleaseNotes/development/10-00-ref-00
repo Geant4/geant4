@@ -598,7 +598,7 @@ examples                                         examples-V10-00-00
   o Testes and Genitalia modelling added for MIRD model.
 - advanced/medical_linac (medical_linac-V09-06-03)
   o Fixed compilation erros on VC++12.
-- advanced/microelectronics (microelectronics-V09-06-02)
+- advanced/microelectronics (microelectronics-V09-06-03)
   o New example simulating tracks of a 5 MeV proton in silicon,
     exercising new G4MicroElec* processes and models.
 - advanced/nanobeam (nanobeam-V09-06-13)
@@ -678,13 +678,15 @@ examples                                         examples-V10-00-00
 - extended/electromagnetic/TestEm12 (testem12-V09-06-11)
   o PhysListEmStandardWVI and PhysListEmStandardSS: reduced low-energy 
     threashold for the single scattering model to 10 eV.
-- extended/eventgenerator/exgps (exgps-V09-06-03)
+- extended/eventgenerator/exgps (exgps-V09-06-04)
   o Migrated example to work also in multi-threading mode.
   o Migrated to use g4tools.
 - extended/eventgenerator/HepMC (exHepMC-V09-06-01)
   o Applied coding guidelines.
 - extended/eventgenerator/pythia/decayer6 (p6decayer-V09-06-01)
   o Fixed compilation warnings for shadowed variables.
+- extended/exoticphysics/monopole (monopole-V09-06-06)
+  o Updated README.
 - extended/exoticphysics/phonon (phononExample-V09-06-09)
   o Removed particles, lattice classes, and processes, now all in new
     library module. Eliminated use of G4VUserTrackInfo, creating a
@@ -704,19 +706,21 @@ examples                                         examples-V10-00-00
 - extended/hadronic (exHadronic-V09-06-01)
   o Updates to docs and scripts.
 - extended/hadronic/Hadr00 (exhadr00-V09-06-06)
-- extended/hadronic/Hadr01 (exhadr01-V09-06-06)
+- extended/hadronic/Hadr01 (exhadr01-V09-06-07)
   o Migrated to work also in multi-threading mode.
 - extended/hadronic/Hadr02 (exhadr02-V09-06-09)
   o Replaced LEP capture with G4NeutronRadCapture.
-- extended/hadronic/Hadr03 (exhadr03-V09-06-22)
+- extended/hadronic/Hadr03 (exhadr03-V09-06-23)
 - extended/hadronic/Hadr04 (exhadr04-V09-06-07)
   o Use G4RunManager::ReinitializeGeometry() to trigger geo
     rebuild. Remove UI command to update geometry.
 - extended/hadronic/Hadr05 (exhadr05-V09-06-01)
   o New example derived from Hadr00 demonstrating the usage of
     G4GenericPhysicsList to build the concrete physics list at the run time.
-- extended/medical/DICOM (DICOM-V09-06-08)
+- extended/medical/DICOM (DICOM-V09-06-09)
   o Replaced LEP model for alphas by extending Binary cascade to zero energy.
+- extended/medical/electronScattering (electronScattering-V09-06-09)
+  o Updated README.
 - extended/medical/electronScattering2 (exampleES2-V09-06-12)
   o Migrated to work also in multi-threading mode.
 - extended/medical/GammaTherapy (gtherapy-V09-06-03)
@@ -738,6 +742,8 @@ examples                                         examples-V10-00-00
     Building Block (TBB) and Geant4 to achieve event-level parallelism.
 - extended/parallel/TopC (exTopC-V09-06-00)
   o Fixed compiler warnings and errors.
+= extended/parallel/TopC/ParN02 (ParN02-V09-06-01)
+  o Updated README.
 - extended/parameterisations/gflash (exgflash-V09-06-03)
   o Fixed event action destructor in case fNevent == 0.
   o Changed /gps/centre 0 0 0 to /gps/pos/centre 0 0 0 to
