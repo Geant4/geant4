@@ -632,8 +632,7 @@ examples                                         examples-V10-00-00
   o Fixed deleting magnetic field and its manager with use of G4AutoDelete 
     utility. Fixed range for random selection of particle type.
 - extended/analysis (analysisExample-V09-06-06)
-  o Example N03Con replaced with B1Con. Removed example A01, as now moved
-    in basic/B5.
+  o Removed example A01, as now moved in basic/B5.
   o Removed use of G4AnalysisManager::Create(isMaster).
     Added G4RunManager::ReinitializeGeoemtry() in set methods
     that change geometry. Removed Update method and UI command in shared
@@ -687,7 +686,7 @@ examples                                         examples-V10-00-00
 - extended/eventgenerator/pythia/decayer6 (p6decayer-V09-06-01)
   o Fixed compilation warnings for shadowed variables.
 - extended/exoticphysics/phonon (phononExample-V09-06-09)
-  o removed particles, lattice classes, and processes, now all in new
+  o Removed particles, lattice classes, and processes, now all in new
     library module. Eliminated use of G4VUserTrackInfo, creating a
     singleton (thread-local) map between tracks and wavevectors, for
     use by the stacking action and by processes.
@@ -728,7 +727,7 @@ examples                                         examples-V10-00-00
   o Added OpNoviceSteppingAction to count secondary optical photons to
     compare with OpNoviceStackingAction.
   o Fixes to allow running in MT-mode.
-- extended/optical/wls (WLS-V09-06-11)
+- extended/optical/wls (WLS-V09-06-15)
   o Fixes to allow running in MT-mode.
 - extended/parallel (exparallel-V09-06-03)
   o Moved ParN02, ParN04 and info in a new TopC directory,
