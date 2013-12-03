@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02-12-13 I.Hrivnacova (electronScattering-V09-06-09) 
+- Synchronized README and .README files
+
 11-07-13 I.Hrivnacova (electronScattering-V09-06-08) 
 - In HistoManager: use new analysis manager method SetH1Activation()   
      

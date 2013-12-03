@@ -110,6 +110,9 @@ PreInit or Idle > /control/execute vis.mac
 \verbatim
 /analysis/setFileName  name  (default nrccBenchmark)
 \endverbatim
+
+ It is possible to choose the format of the histogram file : root (default),
+ xml, csv, by using namespace in HistoManager.hh   
    
  It is also possible to print selected histograms on an ascii file:
 \verbatim
