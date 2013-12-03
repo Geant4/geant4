@@ -9,9 +9,7 @@ A simple application
 
 - Geometry     : chamber / calorimeter
 - Primary      : particle gun (200 MeV electron as default)
-- Physics List : standard EM
-
-The environment variable *G4LEDATA* for low energy EM data is required.
+- Physics List : FTFP_BERT
 
 ### Features:
 

@@ -61,29 +61,38 @@ namespace {
 tbb::task* tbbTask::execute()
 {
   // In tbb we do not have anymore the concept of thread:
-  // tasks run "somewhere", this soemwhere a thread, but
-  // there is no control over there.
+  // tasks run "somewhere"; but there is no control over where.
+  // This somewhere is a thread, created, controlled and 'switched'
+  // to our task by the TBB runtime system.
+  // 
   // The "pedantic" way to proceed is: recreate the "context"
   // from scratch every time (context=local run manager, 
   // geometry, etc)
-  // It would be an enormous waste of resources so we 
-  // do the following
-  // to  avoid re-inizialization of:
-  // We re-do reinizialization only the first time we run
-  //  on this thread
-  // We know this works because TBB works with TLS, 
-  // in addition this will
-  // ensure minimal changes needed to G4 code base.
+  // This would be a clear waste of resources: there is no 
+  // need to initialize multiple times, when the same thread 
+  // is used several times, ie for several tasks.
+
+  // In the current version to avoid this we initialize only
+  //   i) the first time we run on each thread, and
+  //  ii) at the start of a new run on each thread (reinitialization).
+  // We are confident that this works because TBB co-works with TLS.
+  // In addition this ensures that minimal changes needed to G4 code base.
   //
   // Note 1: that this "thread" is responsible for 1 or more TBB task, 
-  //         e.g. at leasst one event.
+  //         e.g. at least one event.
   // Note 2: In this first example, we do not care about memory usage:
-  //         imagine a situation in which you want to have at maximum
-  //         <N> threads doing simulation. What you want to do is to 
-  //         "acquire" a resource (workspace) where you put everything in memory
+  //         The resources required depend only on the total number of 
+  //         threads used for at least one event during the simulation.
+  // Note 3: It is possible to do better - this is left for another example.
+  //         Here is a sketch how:
+  //         If there is a set maximum <N> threads which will be doing 
+  //         simulation at any point, and that this is smaller than the 
+  //         number of TBB tasks which can run simulataneously. 
+  //         What would need to be done is to "acquire" a resource (workspace) 
+  //         which holds all the memory required for a running task/thread,
   //         and release it at the end of the task to be re-used by other tasks
   //         possibly on different threads. This is demonstrated in another 
-  //         example
+  //         example.
 
   static G4ThreadLocal tbbWorkerRunManager* localRM = 0;
 
@@ -101,8 +110,8 @@ tbb::task* tbbTask::execute()
     //Step-0: Thread ID
     //============================
     //Initliazie per-thread stream-output
-    //The following line is needed before we actually do IO initialization
-    //becasue the constructor of UI manager resets the IO destination.
+    //The following line is needed before we actually do I/O initialization
+    //because the constructor of UI manager resets the I/O destination.
       G4int thisId = counter.fetch_and_increment();
       G4Threading::G4SetThreadId( thisId );
       G4UImanager::GetUIpointer()->SetUpForAThread( thisId );

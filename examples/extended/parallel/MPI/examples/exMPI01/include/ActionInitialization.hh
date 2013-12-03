@@ -23,23 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.hh 66587 2012-12-21 11:06:44Z ihrivnac $
 //
-/// @file PhysicsListEMstd.hh
-/// @brief Define standard EM physics list
+/// @file PrimaryGeneratrorAction.hh
+/// @brief Define primary generator action
 
-#ifndef PHYSICS_LIST_EM_STD_H
-#define PHYSICS_LIST_EM_STD_H
+#ifndef ACTION_INITIALIZATION_H
+#define ACTION_INITIALIZATION_H
 
-#include "G4VPhysicsConstructor.hh"
+#include "G4VUserActionInitialization.hh"
 
-class PhysicsListEMstd : public G4VPhysicsConstructor {
+class ActionInitialization : public G4VUserActionInitialization {
 public:
-  PhysicsListEMstd();
-  ~PhysicsListEMstd();
+  ActionInitialization();
+  ~ActionInitialization();
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
+  virtual void Build() const;
+
 };
 
 #endif

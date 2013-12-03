@@ -8,8 +8,11 @@ project(exMPI01)
 #----------------------------------------------------------------------------
 # check MPI package...
 find_package(MPI REQUIRED)
-# modify these var. if needed
+
+# modify these variables if needed
 set(CMAKE_CXX_COMPILER mpicxx)
+#set(CMAKE_CXX_COMPILER mpiicpc)
+
 #set(CMAKE_CXX_INCLUDE_PATH )
 
 #------------------------------------------------------------------------------
@@ -69,6 +72,7 @@ set_target_properties(exMPI01
 # relies on these scripts being in the current working directory.
 #
 set(exMPI01_SCRIPTS
+    run.mac
     v.mac
   )
 

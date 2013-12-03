@@ -8,8 +8,11 @@ project(exMPI02)
 #------------------------------------------------------------------------------
 # check MPI package...
 find_package(MPI REQUIRED)
-# modify these var. if needed
+
+# modify these variables if needed
 set(CMAKE_CXX_COMPILER mpicxx)
+#set(CMAKE_CXX_COMPILER mpiicpc)
+
 #set(CMAKE_CXX_INCLUDE_PATH )
 
 #----------------------------------------------------------------------------
@@ -37,7 +40,7 @@ include(${Geant4_USE_FILE})
 #
 find_package(ROOT QUIET)
 if(NOT ROOT_FOUND)
-  message(STATUS "G4 Examples: ROOT package not found. --> exMPI02 example disabled")  
+  message(STATUS "G4 Examples: ROOT package not found. --> exMPI02 example disabled")
   return()
 endif()
 
@@ -60,7 +63,7 @@ file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
                     ${Geant4_INCLUDE_DIR}
                     ${ROOT_INCLUDE_DIR})
 
@@ -81,6 +84,7 @@ set_target_properties(exMPI02
 # relies on these scripts being in the current working directory.
 #
 set(exMPI02_SCRIPTS
+    run.mac
     v.mac
   )
 

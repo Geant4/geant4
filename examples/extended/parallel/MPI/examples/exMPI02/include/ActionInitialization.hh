@@ -23,44 +23,23 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.hh 66587 2012-12-21 11:06:44Z ihrivnac $
 //
-/// @file Particles.cc
-/// @brief Define particles
+/// @file PrimaryGeneratrorAction.hh
+/// @brief Define primary generator action
 
-#include "Particles.hh"
+#ifndef ACTION_INITIALIZATION_H
+#define ACTION_INITIALIZATION_H
 
-#include "G4LeptonConstructor.hh"
-#include "G4BosonConstructor.hh"
-#include "G4MesonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4ShortLivedConstructor.hh"
-#include "G4IonConstructor.hh"
+#include "G4VUserActionInitialization.hh"
 
-// --------------------------------------------------------------------------
-Particles::Particles()
-  : G4VPhysicsConstructor("Particles")
-{
-}
+class ActionInitialization : public G4VUserActionInitialization {
+public:
+  ActionInitialization();
+  ~ActionInitialization();
 
-// --------------------------------------------------------------------------
-Particles::~Particles()
-{
-}
+  virtual void BuildForMaster() const;
+  virtual void Build() const;
+};
 
-// --------------------------------------------------------------------------
-void Particles::ConstructParticle()
-{
-  G4LeptonConstructor::ConstructParticle();
-  G4BosonConstructor::ConstructParticle();
-  G4MesonConstructor::ConstructParticle();
-  G4BaryonConstructor::ConstructParticle();
-  G4ShortLivedConstructor::ConstructParticle();
-  G4IonConstructor::ConstructParticle(); 
-}
-
-// --------------------------------------------------------------------------
-void Particles::ConstructProcess()
-{
-}
-
+#endif

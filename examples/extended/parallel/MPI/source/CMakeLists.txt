@@ -7,10 +7,16 @@ cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
 
 # check MPI package...
 find_package(MPI REQUIRED)
-# modify these var. if needed
+
+# modify these variables if needed
+
 set(CMAKE_CXX_COMPILER mpicxx)
+#set(CMAKE_CXX_COMPILER mpiicpc)
+
 #set(CMAKE_CXX_INCLUDE_PATH )
 
+set(BUILD_SHARED_LIBS TRUE CACHE BOOL "Build shared library")
+message(STATUS "BUILD_SHARED_LIBS: ${BUILD_SHARED_LIBS}")
 #------------------------------------------------------------------------------
 find_package(Geant4 REQUIRED)
 include(${Geant4_USE_FILE})
@@ -22,7 +28,7 @@ endif()
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${Geant4_INCLUDE_DIR})
 
 # sources
-add_library(G4mpi SHARED
+add_library(G4mpi
   src/G4MPIbatch.cc
   src/G4MPImanager.cc
   src/G4MPImessenger.cc
@@ -48,6 +54,6 @@ set(HEADERS
 )
 
 # install
-INSTALL(TARGETS G4mpi LIBRARY DESTINATION ${Geant4_DIR}/..)
+INSTALL(TARGETS G4mpi DESTINATION ${Geant4_DIR}/..)
 INSTALL(FILES ${HEADERS} DESTINATION ${Geant4_INCLUDE_DIR})
 

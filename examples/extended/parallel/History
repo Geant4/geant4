@@ -10,6 +10,9 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03 December 2013, I. Hrivnacova (exparallel-V09-06-04)
+- Fixed file descriptions (for Doxygen)
+
 10 November 2013, I. Hrivnacova (exparallel-V09-06-03)
 - Fixed README and CMake files 
 

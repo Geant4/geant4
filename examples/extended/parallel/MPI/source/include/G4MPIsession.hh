@@ -40,8 +40,8 @@ public:
 
   virtual G4UIsession* SessionStart();
 
-protected:
-  G4VUIshell* shell;
+private:
+  G4VUIshell* shell_;
 
   // get command from user prompt of the master node
   G4String GetCommand(const char* msg = 0);

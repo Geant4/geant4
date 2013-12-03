@@ -23,23 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.cc 66587 2012-12-21 11:06:44Z ihrivnac $
 //
-/// @file Particles.hh
-/// @brief Define particles
+/// @file PrimaryGeneratrorAction.cc
+/// @brief Define primary generator action
 
-#ifndef PARTICLES_H
-#define PARTICLES_H
+#include "ActionInitialization.hh"
+#include "EventAction.hh"
+#include "MedicalBeam.hh"
+#include "RunAction.hh"
 
-#include "G4VPhysicsConstructor.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ActionInitialization::ActionInitialization()
+ : G4VUserActionInitialization()
+{
+}
 
-class Particles : public G4VPhysicsConstructor {
-public:
-  Particles();
-  ~Particles();
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ActionInitialization::~ActionInitialization()
+{
+}
 
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void ActionInitialization::BuildForMaster() const
+{
+  SetUserAction(new RunAction);
+}
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void ActionInitialization::Build() const
+{
+  SetUserAction(new MedicalBeam);
+  SetUserAction(new EventAction);
+  SetUserAction(new RunAction);
+}

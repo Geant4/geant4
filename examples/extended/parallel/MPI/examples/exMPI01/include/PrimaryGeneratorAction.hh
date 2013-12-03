@@ -30,7 +30,7 @@
 
 #ifndef PRIMARY_GENERATOR_ACTION_H
 #define PRIMARY_GENERATOR_ACTION_H
- 
+
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 class G4ParticleGun;
@@ -43,7 +43,7 @@ public:
   virtual void GeneratePrimaries(G4Event* anEvent);
 
 private:
-  G4ParticleGun* particleGun;
+  G4ParticleGun* fparticleGun;
 };
 
 #endif

@@ -28,8 +28,8 @@
 #ifndef G4MPI_BATCH_H
 #define G4MPI_BATCH_H
 
-#include "G4VMPIsession.hh"
 #include <fstream>
+#include "G4VMPIsession.hh"
 
 class G4MPIbatch : public G4VMPIsession {
 public:
@@ -39,9 +39,9 @@ public:
   virtual G4UIsession* SessionStart();
 
 protected:
-  std::ifstream batchStream;
-  G4bool isOpened;
-  G4bool isBatchMode;
+  std::ifstream batch_stream_;
+  G4bool is_opened_;
+  G4bool is_batch_mode_;
 
   // get a command from a batch script file
   G4String ReadCommand();

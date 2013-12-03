@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file exampleB2b.cc
+/// \file parallel/TBB/B2b/exampleB2b.cc
 /// \brief Main program of the B2b example
 
 #include "B2bDetectorConstruction.hh"

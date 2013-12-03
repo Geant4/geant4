@@ -23,38 +23,27 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: PrimaryGeneratorAction.cc 66587 2012-12-21 11:06:44Z ihrivnac $
 //
-/// @file PhysicsList.cc
-/// @brief Define physics list
+/// @file PrimaryGeneratrorAction.cc
+/// @brief Define primary generator action
 
-#include "PhysicsList.hh"
-#include "Particles.hh"
-#include "PhysicsListEMstd.hh"
-#include "G4SystemOfUnits.hh"
+#include "ActionInitialization.hh"
+#include "PrimaryGeneratorAction.hh"
 
-// --------------------------------------------------------------------------
-PhysicsList::PhysicsList()
-  :  G4VModularPhysicsList()
-{
-  // default cut value  (1.0mm) 
-  defaultCutValue = 1.*mm;
-  SetVerboseLevel(1);
-
-  // particles
-  RegisterPhysics(new Particles);
-
-  // EM Physics
-  RegisterPhysics(new PhysicsListEMstd);
-}
-
-// --------------------------------------------------------------------------
-PhysicsList::~PhysicsList()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ActionInitialization::ActionInitialization()
+ : G4VUserActionInitialization()
 {
 }
 
-// --------------------------------------------------------------------------
-void PhysicsList::SetCuts()
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ActionInitialization::~ActionInitialization()
 {
-  SetCutsWithDefault();   
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void ActionInitialization::Build() const
+{
+  SetUserAction(new PrimaryGeneratorAction);
 }

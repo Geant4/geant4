@@ -36,8 +36,6 @@ class G4Timer;
 
 class G4MPIstatus {
 public:
-  enum { NSIZE = 10 };
-
   G4MPIstatus();
   ~G4MPIstatus();
 
@@ -63,14 +61,16 @@ public:
 
   void Print() const;
 
+  enum { kNSIZE = 10 };
+
 private:
-  G4int rank;
-  G4int runID;
-  G4int nEventToBeProcessed;
-  G4int eventID;
-  G4double cputime;
-  G4ApplicationState g4state;
-  G4Timer* timer;
+  G4int rank_;
+  G4int run_id_;
+  G4int nevent_to_be_processed_;
+  G4int event_id_;
+  G4double cputime_;
+  G4ApplicationState g4state_;
+  G4Timer* timer_;
 
   G4String GetStateString(G4ApplicationState astate) const;
 };
@@ -78,47 +78,37 @@ private:
 // ====================================================================
 inline G4int G4MPIstatus::SizeOf() const
 {
-  return NSIZE;
+  return kNSIZE;
 }
 
 inline G4int G4MPIstatus::GetRank() const
 {
-  return rank;
+  return rank_;
 }
 
 inline G4int G4MPIstatus::GetRunID() const
 {
-  return runID;
+  return run_id_;
 }
 
 inline G4int G4MPIstatus::GetNEventToBeProcessed() const
 {
-  return nEventToBeProcessed;
+  return nevent_to_be_processed_;
 }
 
 inline G4int G4MPIstatus::GetEventID() const
 {
-  return eventID;
+  return event_id_;
 }
 
 inline G4double G4MPIstatus::GetCPUTime() const
 {
-  return cputime;
+  return cputime_;
 }
 
 inline G4ApplicationState G4MPIstatus::GetG4State() const
 {
-  return g4state;
-}
-
-inline void G4MPIstatus::StartTimer()
-{
-  timer-> Start();
-}
-
-inline void G4MPIstatus::StopTimer()
-{
-  timer-> Stop();
+  return g4state_;
 }
 
 #endif

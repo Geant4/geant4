@@ -43,7 +43,7 @@ public:
 
   virtual void ComputeDimensions(G4Box& box, const G4int id,
                                  const G4VPhysicalVolume* vol) const;
-  
+
   virtual void ComputeDimensions
   (G4Trd&,const G4int,const G4VPhysicalVolume*) const  {}
 
@@ -55,7 +55,7 @@ public:
 
   virtual void ComputeDimensions
   (G4Sphere&,const G4int,const G4VPhysicalVolume*) const {}
-  
+
   virtual void ComputeDimensions
   (G4Orb&,const G4int,const G4VPhysicalVolume*) const {}
 
@@ -65,19 +65,18 @@ public:
   virtual void ComputeDimensions
   (G4Torus&,const G4int,const G4VPhysicalVolume*) const {}
 
-
   virtual void ComputeDimensions
   (G4Para&,const G4int,const G4VPhysicalVolume*) const {}
 
   virtual void ComputeDimensions
   (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
-  
+
   virtual void ComputeDimensions
   (G4Tubs&,const G4int,const G4VPhysicalVolume*) const {}
-  
+
   virtual void ComputeDimensions
   (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
-  
+
   virtual void ComputeDimensions
   (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
 

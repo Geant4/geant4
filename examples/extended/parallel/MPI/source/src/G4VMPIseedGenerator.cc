@@ -29,7 +29,7 @@
 
 // --------------------------------------------------------------------------
 G4VMPIseedGenerator::G4VMPIseedGenerator()
-  : masterSeed(123456789)
+  : master_seed_(123456789)
 {
 }
 
@@ -41,6 +41,6 @@ G4VMPIseedGenerator::~G4VMPIseedGenerator()
 // --------------------------------------------------------------------------
 void G4VMPIseedGenerator::SetMasterSeed(G4long aseed)
 {
-  masterSeed = aseed;
+  master_seed_ = aseed;
   GenerateSeeds();
 }

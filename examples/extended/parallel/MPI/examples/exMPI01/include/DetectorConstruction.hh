@@ -28,7 +28,6 @@
 /// @file DetectorConstruction.hh
 /// @brief Define geometry
 
-
 #ifndef DETECTOR_CONSTRUCTION_H
 #define DETECTOR_CONSTRUCTION_H
 
@@ -37,9 +36,10 @@
 class DetectorConstruction : public G4VUserDetectorConstruction {
 public:
   DetectorConstruction();
-  ~DetectorConstruction(); 
+  ~DetectorConstruction();
 
-  virtual G4VPhysicalVolume* Construct(); 
+  virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
 };
 
 #endif

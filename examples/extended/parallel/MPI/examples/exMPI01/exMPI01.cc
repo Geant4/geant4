@@ -27,28 +27,32 @@
 //
 /// @brief A MPI example code
 
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-
-// my application
-#include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-
-// MPI session
 #include "G4MPImanager.hh"
 #include "G4MPIsession.hh"
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
+#include "G4RunManager.hh"
+#endif
+
+#include "G4UImanager.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
 #endif
 
+#include "ActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "FTFP_BERT.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 int main(int argc, char** argv)
 {
   // random engine
-  //CLHEP::HepJamesRandom randomEngine;
-  CLHEP::Ranlux64Engine randomEngine;
-  CLHEP::HepRandom::setTheEngine(&randomEngine);
+  CLHEP::MTwistEngine randomEngine;
+  G4Random::setTheEngine(&randomEngine);
 
   // --------------------------------------------------------------------
   // MPI session
@@ -69,12 +73,17 @@ int main(int argc, char** argv)
   // --------------------------------------------------------------------
   // user application setting
   // --------------------------------------------------------------------
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager();
+  runManager-> SetNumberOfThreads(4);
+#else
   G4RunManager* runManager = new G4RunManager();
+#endif
 
   // setup your application
   runManager-> SetUserInitialization(new DetectorConstruction);
-  runManager-> SetUserInitialization(new PhysicsList);
-  runManager-> SetUserAction(new PrimaryGeneratorAction);
+  runManager-> SetUserInitialization(new FTFP_BERT);
+  runManager-> SetUserInitialization(new ActionInitialization);
 
   runManager-> Initialize();
 
@@ -102,5 +111,5 @@ int main(int argc, char** argv)
 
   delete runManager;
 
-  return 0;
+  return EXIT_SUCCESS;
 }
