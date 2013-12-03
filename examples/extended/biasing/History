@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec 03, 2013 I.Hrivnacova - exbiasing-V09-06-06
+- Fixed files description (for Doxygen)
+
 Nov 29, 2013 I.Hrivnacova - exbiasing-V09-06-05
 - Fixed documentation for Doxygen,
   added missing GNUmakefile in GB01, GB02

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file runAndEvent/B01/include/B01ActionInitialization.hh
+/// \file biasing/B01/include/B01ActionInitialization.hh
 /// \brief Definition of the B01ActionInitialization class
 //
 //
