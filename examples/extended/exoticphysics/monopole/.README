@@ -52,7 +52,7 @@ monopole.
 \endverbatim
       b) batch mode:
 \verbatim
-% $G4BIN/$G4SYSTEM/monopole file.mac '2 0 200 GeV'  
+% monopole file.mac '2 0 200 GeV'  
 \endverbatim
 
 \section monopole_s3 AN EVENT : THE PRIMARY GENERATOR
@@ -108,47 +108,8 @@ Idle> exit
     - range for proton in current material
     - range for monopole in current material
 
- The histogram is saved in hbook (default monopole.hbook, but can be changed
- using    testex/run/HistoName   and    testex/run/HistoType   comands)
+ The histogram is saved in Root file.
  Limit of bin size can be set with testex/run/binSize (default 5mm). Real size
  is chosen as a minimal between this and step limit (see Geometry section)
-
- Note that, by default, histograms are disabled. To activate them, uncomment
- G4ANALYSIS_USE in GNUmakefile.
-
-\subsection monopole_sub_s61 Using histograms
-
- By default the histograms are not activated. To activate histograms
- the environment variable G4ANALYSIS_USE should be defined. For instance
- uncomment the flag G4ANALYSIS_USE in GNUmakefile.
-
- To use histograms any of implementations of AIDA interfaces should
- be available (see http://aida.freehep.org).
-
- A package including AIDA and extended interfaces also using Python
- is PI, available from: http://cern.ch/pi .
-
- Once installed PI or PI-Lite in a specified local area $MYPY, it is
- required to add the installation path to $PATH, i.e. for example,
- for release 1.2.1 of PI:
-
-\verbatim
-setenv PATH ${PATH}:$MYPI/1.2.1/app/releases/PI/PI_1_2_1/rh73_gcc32/bin
-\endverbatim
-
- CERN users can use the PATH to the LCG area on AFS.
-
- Before compilation of the example it is optimal to clean up old files:
-
-\verbatim
-% gmake histclean
-% gmake
-\endverbatim
-
- Before running the example the command should be issued:
-
-\verbatim
-eval `aida-config --runtime csh`
-\endverbatim
 
 */

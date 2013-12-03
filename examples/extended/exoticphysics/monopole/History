@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03 December 13: I. Hrivnacova (monopole-V09-06-06)
+- Updated README for removing AIDA
+
 10 May 13: J.Apostolakis (monopole-V09-06-05)
 - G4MonopoleTransportation and G4MonopoleEquation: 
       Adapted to use G4ChargeState to pass Magnetic & Electric Charge, 
