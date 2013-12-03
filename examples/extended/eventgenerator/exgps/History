@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3/12/2013  I.Hrivnacova (exgps-V09-06-05)
+- Fixed file descriptions (for Doxygen)
+
 3/12/2013  I.Hrivnacova (exgps-V09-06-04)
 - Updated README for removing AIDA
 

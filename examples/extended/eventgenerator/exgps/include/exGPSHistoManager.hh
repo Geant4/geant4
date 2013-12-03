@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file analysis/AnaEx01/include/exGPSHistoManager.hh
+/// \file eventgenerator/exgps/include/exGPSHistoManager.hh
 /// \brief Definition of the exGPSHistoManager class
 //
 //
