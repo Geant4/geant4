@@ -4,12 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
+ Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
+PhysicsList::SetCuts:CutLength : 1 nm 
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -50,16 +51,17 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
-PhysicsList::SetCuts:CutLength : 1 nm 
 /run/verbose 1
 /run/initialize
 /tracking/verbose 0
 /process/list
-     Transportation,ion_G4MuElecInelastic, e-_G4MuElecElastic,e-_G4MuElecInelastic
-p_G4MuElecInelastic
+     Transportation,ion_G4MicroElecInelastic,e-_G4MicroElecElastic,e-_G4MicroElecInelastic
+p_G4MicroElecInelastic
 /particle/list
-         GenericIon,        anti_proton,                 e+,                 e-
-              gamma,           geantino,      opticalphoton,             proton
+         GenericIon,                He3,              alpha,           anti_He3
+         anti_alpha,      anti_deuteron,        anti_proton,        anti_triton
+           deuteron,                 e+,                 e-,              gamma
+           geantino,      opticalphoton,             proton,             triton
 
 /run/particle/dumpCutValues
 #
@@ -69,25 +71,25 @@ p_G4MuElecInelastic
 /gun/energy 10000 eV
 /run/beamOn 1
 
-e-_G4MuElecElastic:   for  e-    SubType= 51
+e-_G4MicroElecElastic:   for  e-    SubType= 51
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  MuElecElasticModel :  Emin=        0 eV    Emax=      100 MeV
+MicroElecElasticModel :  Emin=        0 eV    Emax=      100 MeV
 
-e-_G4MuElecInelastic:   for  e-    SubType= 53
+e-_G4MicroElecInelastic:   for  e-    SubType= 53
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-MuElecInelasticModel :  Emin=        0 eV    Emax=      100 MeV
+MicroElecInelasticModel :  Emin=        0 eV    Emax=      100 MeV
 
-p_G4MuElecInelastic:   for  proton    SubType= 53
+p_G4MicroElecInelastic:   for  proton    SubType= 53
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-MuElecInelasticModel :  Emin=        0 eV    Emax=        1 GeV
+MicroElecInelasticModel :  Emin=        0 eV    Emax=       10 GeV
 
-ion_G4MuElecInelastic:   for  GenericIon    SubType= 53
+ion_G4MicroElecInelastic:   for  GenericIon    SubType= 53
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-MuElecInelasticModel :  Emin=        0 eV    Emax=      100 GeV
+MicroElecInelasticModel :  Emin=        0 eV    Emax=       10 TeV
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : G4_Si
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
@@ -96,15 +98,15 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
-Start Run processing.
+### Run 0 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.22s Real=0.22s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
 
  The run consists of 1 e- of 10 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
- Process calls frequency --->	e-_G4MuElecElastic = 1940	e-_G4MuElecInelastic = 361
+ Process calls frequency --->	e-_G4MicroElecElastic = 2072	e-_G4MicroElecInelastic = 395
  Total transfered energy (keV)=10
 
 #
@@ -114,7 +116,7 @@ Run Summary
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : G4_Si
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
@@ -123,15 +125,15 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
-Start Run processing.
+### Run 1 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.54s Real=0.54s Sys=0s
+  User=0.55s Real=0.55s Sys=0s
 
  The run consists of 1 proton of 100 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
- Process calls frequency --->	p_G4MuElecInelastic = 1395	e-_G4MuElecElastic = 11211	e-_G4MuElecInelastic = 903
+ Process calls frequency --->	p_G4MicroElecInelastic = 1425	e-_G4MicroElecInelastic = 921	e-_G4MicroElecElastic = 11841
  Total transfered energy (keV)=100
 
 #
@@ -142,7 +144,7 @@ Run Summary
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : G4_Si
  Range cuts        :  gamma  1 nm     e-  1 nm     e+  1 nm  proton 1 nm 
  Energy thresholds :  gamma  990 eV     e-  990 eV     e+  990 eV  proton 0.1 eV 
@@ -151,18 +153,23 @@ Index : 0     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
-Start Run processing.
+### Run 2 starts.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=26.87s Real=26.89s Sys=0.02s
+  User=27.75s Real=27.61s Sys=0.05s
 
- The run consists of 1 Ca48[0.0] of 4.8 MeV through 1 m   of G4_Si (density: 2.33 g/cm3 )
+ The run consists of 1 Ca48 of 4.8 MeV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
- Process calls frequency --->	ion_G4MuElecInelastic = 68208	e-_G4MuElecElastic = 569734	e-_G4MuElecInelastic = 43540
+ Process calls frequency --->	ion_G4MicroElecInelastic = 68243	e-_G4MicroElecElastic = 578566	e-_G4MicroElecInelastic = 43804
  Total transfered energy (keV)=4800
 
 #
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 33 Mb
+============================================================
+RunManagerKernel is deleted. Good bye :)

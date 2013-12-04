@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
+ Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -42,18 +42,18 @@ physicsList->setCut() start.
 SimpleBox is now made of Th
 /run/beamOn 20
 
-phot:   for  gamma, applyCuts: 1     SubType= 12
+phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma, applyCuts: 1     SubType= 13
+compt:   for  gamma    SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma, applyCuts: 1     SubType= 14
+conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -80,7 +80,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-, applyCuts: 1     SubType= 1
+CoulombScat:   for  e-    SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -107,11 +107,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+, applyCuts: 1     SubType= 5
+annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+, applyCuts: 1     SubType= 1
+CoulombScat:   for  e+    SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -275,7 +275,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
+CoulombScat:   for  mu+    SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -308,7 +308,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
+CoulombScat:   for  mu-    SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -373,7 +373,7 @@ hPairProd:   for  pi-    SubType= 4
                            Hadronic Processes for GenericIon
 
   Process: ionInelastic
-        Model: INCL++ cascade with G4ExcitationHandler: 0 eV  ---> 48 GeV
+        Model:            INCL++ v5.1.14: 0 eV  ---> 48 GeV
         Model:                      FTFP: 47.999 GeV ---> 1 TeV
      Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -494,7 +494,7 @@ hPairProd:   for  pi-    SubType= 4
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:            BertiniCascade: 2.9 GeV ---> 9.9 GeV
         Model:                     PRECO: 0 eV  ---> 2 MeV
-        Model: INCL++ cascade with G4ExcitationHandler: 1 MeV ---> 3 GeV
+        Model:            INCL++ v5.1.14: 1 MeV ---> 3 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
@@ -518,7 +518,7 @@ hPairProd:   for  pi-    SubType= 4
         Model:                      FTFP: 9.5 GeV ---> 25 GeV
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:            BertiniCascade: 2.9 GeV ---> 9.9 GeV
-        Model: INCL++ cascade with G4ExcitationHandler: 0 eV  ---> 3 GeV
+        Model:            INCL++ v5.1.14: 0 eV  ---> 3 GeV
      Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
@@ -540,7 +540,7 @@ hPairProd:   for  pi-    SubType= 4
         Model:                      FTFP: 9.5 GeV ---> 25 GeV
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:            BertiniCascade: 2.9 GeV ---> 9.9 GeV
-        Model: INCL++ cascade with G4ExcitationHandler: 0 eV  ---> 3 GeV
+        Model:            INCL++ v5.1.14: 0 eV  ---> 3 GeV
      Cr_sctns:   G4PiNuclearCrossSection: 0 eV  ---> 99.9 TeV
      Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
@@ -565,7 +565,7 @@ hPairProd:   for  pi-    SubType= 4
         Model:                      QGSP: 12 GeV ---> 100 TeV
         Model:            BertiniCascade: 2.9 GeV ---> 9.9 GeV
         Model:                     PRECO: 0 eV  ---> 2 MeV
-        Model: INCL++ cascade with G4ExcitationHandler: 1 MeV ---> 3 GeV
+        Model:            INCL++ v5.1.14: 1 MeV ---> 3 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
@@ -606,7 +606,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.46s Real=0.64s Sys=0.01s
+  User=0.42s Real=0.47s Sys=0.01s
 #
 # neutron at 1 GeV in Th
 #
@@ -644,7 +644,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.4s Real=0.44s Sys=0s
+  User=0.92s Real=0.98s Sys=0s
 #
 # pi+ at 1 GeV in Th
 #
@@ -682,7 +682,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.26s Real=0.28s Sys=0s
+  User=0.42s Real=0.42s Sys=0s
 #
 # pi- at 1 GeV in Th
 #
@@ -720,7 +720,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.33s Real=0.41s Sys=0s
+  User=0.45s Real=0.48s Sys=0.01s
 #
 # proton at 1 GeV in U
 #
@@ -730,18 +730,18 @@ Run Summary
 SimpleBox is now made of U
 /run/beamOn 20
 
-phot:   for  gamma, applyCuts: 1     SubType= 12
+phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma, applyCuts: 1     SubType= 13
+compt:   for  gamma    SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma, applyCuts: 1     SubType= 14
+conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -768,7 +768,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-, applyCuts: 1     SubType= 1
+CoulombScat:   for  e-    SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -795,11 +795,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+, applyCuts: 1     SubType= 5
+annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+, applyCuts: 1     SubType= 1
+CoulombScat:   for  e+    SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -963,7 +963,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
+CoulombScat:   for  mu+    SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -996,7 +996,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
+CoulombScat:   for  mu-    SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1087,7 +1087,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.35s Real=0.42s Sys=0.01s
+  User=0.36s Real=0.36s Sys=0s
 #
 # neutron at 1 GeV in U
 #
@@ -1130,7 +1130,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.47s Real=0.48s Sys=0s
+  User=0.45s Real=0.46s Sys=0s
 #
 # pi+ at 1 GeV in U
 #
@@ -1173,7 +1173,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.57s Real=0.59s Sys=0s
+  User=0.31s Real=0.31s Sys=0s
 #
 # pi- at 1 GeV in U
 #
@@ -1216,7 +1216,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.35s Real=0.35s Sys=0s
+  User=0.46s Real=0.46s Sys=0s
 #
 # proton at 1 GeV in Pb
 #
@@ -1226,18 +1226,18 @@ Run Summary
 SimpleBox is now made of Pb
 /run/beamOn 20
 
-phot:   for  gamma, applyCuts: 1     SubType= 12
+phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma, applyCuts: 1     SubType= 13
+compt:   for  gamma    SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma, applyCuts: 1     SubType= 14
+conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -1264,7 +1264,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-, applyCuts: 1     SubType= 1
+CoulombScat:   for  e-    SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1291,11 +1291,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+, applyCuts: 1     SubType= 5
+annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+, applyCuts: 1     SubType= 1
+CoulombScat:   for  e+    SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1459,7 +1459,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
+CoulombScat:   for  mu+    SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1492,7 +1492,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
+CoulombScat:   for  mu-    SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1588,7 +1588,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.32s Real=0.45s Sys=0s
+  User=0.3s Real=0.3s Sys=0.01s
 #
 # neutron at 1 GeV in Pb
 #
@@ -1636,7 +1636,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.39s Real=0.47s Sys=0.01s
+  User=0.66s Real=0.63s Sys=0s
 #
 # pi+ at 1 GeV in Pb
 #
@@ -1684,7 +1684,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.53s Real=0.64s Sys=0s
+  User=0.37s Real=0.36s Sys=0.01s
 #
 # pi- at 1 GeV in Pb
 #
@@ -1732,7 +1732,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.35s Real=0.38s Sys=0s
+  User=0.44s Real=0.42s Sys=0s
 #
 # proton at 1 GeV in Cu
 #
@@ -1742,18 +1742,18 @@ Run Summary
 SimpleBox is now made of Cu
 /run/beamOn 20
 
-phot:   for  gamma, applyCuts: 1     SubType= 12
+phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma, applyCuts: 1     SubType= 13
+compt:   for  gamma    SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma, applyCuts: 1     SubType= 14
+conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -1780,7 +1780,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-, applyCuts: 1     SubType= 1
+CoulombScat:   for  e-    SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1807,11 +1807,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+, applyCuts: 1     SubType= 5
+annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+, applyCuts: 1     SubType= 1
+CoulombScat:   for  e+    SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1975,7 +1975,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
+CoulombScat:   for  mu+    SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -2008,7 +2008,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
+CoulombScat:   for  mu-    SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -2109,7 +2109,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.14s Real=0.17s Sys=0s
+  User=0.09s Real=0.09s Sys=0s
 #
 # neutron at 1 GeV in Cu
 #
@@ -2162,7 +2162,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.11s Real=0.11s Sys=0s
+  User=0.17s Real=0.16s Sys=0s
 #
 # pi+ at 1 GeV in Cu
 #
@@ -2215,7 +2215,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.13s Real=0.13s Sys=0s
+  User=0.13s Real=0.12s Sys=0s
 #
 # pi- at 1 GeV in Cu
 #
@@ -2268,7 +2268,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.08s Real=0.08s Sys=0s
+  User=0.12s Real=0.12s Sys=0s
 #
 # proton at 1 GeV in Si
 #
@@ -2278,18 +2278,18 @@ Run Summary
 SimpleBox is now made of Si
 /run/beamOn 20
 
-phot:   for  gamma, applyCuts: 1     SubType= 12
+phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma, applyCuts: 1     SubType= 13
+compt:   for  gamma    SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma, applyCuts: 1     SubType= 14
+conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -2316,7 +2316,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-, applyCuts: 1     SubType= 1
+CoulombScat:   for  e-    SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -2343,11 +2343,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+, applyCuts: 1     SubType= 5
+annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+, applyCuts: 1     SubType= 1
+CoulombScat:   for  e+    SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -2511,7 +2511,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
+CoulombScat:   for  mu+    SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -2544,7 +2544,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
+CoulombScat:   for  mu-    SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -2650,7 +2650,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.05s Sys=0.01s
+  User=0.06s Real=0.05s Sys=0s
 #
 # neutron at 1 GeV in Si
 #
@@ -2708,7 +2708,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.03s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 # pi+ at 1 GeV in Si
 #
@@ -2766,7 +2766,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.04s Real=0.03s Sys=0s
 #
 # pi- at 1 GeV in Si
 #
@@ -2824,7 +2824,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=0.04s Sys=0s
 #
 # proton at 1 GeV in C
 #
@@ -2834,18 +2834,18 @@ Run Summary
 SimpleBox is now made of C
 /run/beamOn 20
 
-phot:   for  gamma, applyCuts: 1     SubType= 12
+phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
 
-compt:   for  gamma, applyCuts: 1     SubType= 13
+compt:   for  gamma    SubType= 13
       Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-conv:   for  gamma, applyCuts: 1     SubType= 14
+conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
@@ -2872,7 +2872,7 @@ eBrem:   for  e-    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-CoulombScat:   for  e-, applyCuts: 1     SubType= 1
+CoulombScat:   for  e-    SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -2899,11 +2899,11 @@ eBrem:   for  e+    SubType= 3
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
             eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
 
-annihil:   for  e+, applyCuts: 1     SubType= 5
+annihil:   for  e+    SubType= 5
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
             eplus2gg :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  e+, applyCuts: 1     SubType= 1
+CoulombScat:   for  e+    SubType= 1
       Lambda table from 100 MeV to 10 TeV in 35 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -3067,7 +3067,7 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+, applyCuts: 1     SubType= 1
+CoulombScat:   for  mu+    SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -3100,7 +3100,7 @@ muPairProd:   for  mu-    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu-, applyCuts: 1     SubType= 1
+CoulombScat:   for  mu-    SubType= 1
       Lambda table from 100 eV  to 10 TeV in 48 bins, spline: 1
       180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -3211,7 +3211,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # neutron at 1 GeV in C
 #
@@ -3274,7 +3274,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # pi+ at 1 GeV in C
 #
@@ -3400,7 +3400,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # Deuteron at 1 GeV/nucleon on Pb
 #
@@ -3463,7 +3463,7 @@ Index : 5     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.87s Real=0.97s Sys=0.02s
+  User=0.74s Real=0.76s Sys=0s
 #
 # Alpha at 500 MeV/nucleon on Pb
 #
@@ -3526,7 +3526,7 @@ Index : 5     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.46s Real=0.46s Sys=0s
+  User=0.55s Real=0.55s Sys=0s
 #
 # Carbon at 290 MeV/nucleon on C
 #
@@ -3587,6 +3587,7 @@ Index : 5     used in the geometry : Yes
 ====================================================================
 
 ### Run 26 starts.
+[INCL++] Warning: energy conservation violated by 34.8186 MeV in 306.863-MeV B11 + C12 inelastic reaction, in inverse kinematics. Will resample.
 Run terminated.
 Run Summary
   Number of events processed : 20
@@ -3653,7 +3654,7 @@ Index : 5     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.2s Real=0.23s Sys=0s
+  User=0.28s Real=0.29s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

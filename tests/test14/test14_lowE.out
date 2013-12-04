@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
+ Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -367,7 +367,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.15s Real=0.45s Sys=0s
+  User=0.16s Real=0.16s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -463,7 +463,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -800,7 +800,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.3s Real=0.68s Sys=0s
+  User=0.31s Real=0.32s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -892,7 +892,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.08s Real=0.08s Sys=0s
+  User=0.09s Real=0.09s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -982,7 +982,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.13s Sys=0s
+  User=0.02s Real=0.03s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -1295,7 +1295,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.22s Real=0.42s Sys=0s
+  User=0.23s Real=0.23s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -1419,7 +1419,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.04s Real=0.15s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -1525,7 +1525,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -1631,7 +1631,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 /gun/particle e-
 #---------------
@@ -1797,7 +1797,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -1841,7 +1841,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.45s Real=0.96s Sys=0s
+  User=0.48s Real=0.49s Sys=0.01s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -1964,7 +1964,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.18s Real=0.28s Sys=0s
+  User=0.2s Real=0.19s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -2067,7 +2067,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.14s Sys=0s
+  User=0.04s Real=0.05s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -2361,7 +2361,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -2410,7 +2410,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.14s Real=0.24s Sys=0s
+  User=0.15s Real=0.16s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -2465,7 +2465,7 @@ Index : 3     used in the geometry : Yes
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537   0.0298    0.0298    Absorber phot
+    1        0        0      -50         0 0.000537    0.026     0.026    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -2473,7 +2473,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50   0.00146        0        0         0    Absorber initStep
-    1 3.12e-05 -2.52e-05      -50         0  0.00146 0.000103  0.000103    Absorber eIoni
+    1 4.24e-05 2.01e-05      -50         0  0.00146 0.000103  0.000103    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -2526,7 +2526,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.03s Real=0.13s Sys=0s
+  User=0.04s Real=0.03s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -2581,7 +2581,7 @@ Index : 3     used in the geometry : Yes
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0006        0        0         0    Absorber initStep
-    1        0        0      -50         0 0.000537 0.000485  0.000485    Absorber phot
+    1        0        0      -50         0 0.000537  0.00021   0.00021    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -2589,7 +2589,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  6.27e-05        0        0         0    Absorber initStep
-    1 5.69e-07 -7.75e-08      -50         0 6.27e-05 4.27e-06  4.27e-06    Absorber eIoni
+    1 -2.63e-07 -3.22e-07      -50         0 6.27e-05 4.27e-06  4.27e-06    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -2642,7 +2642,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -2697,7 +2697,7 @@ Index : 3     used in the geometry : Yes
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50    0.0003        0        0         0    Absorber initStep
-    1        0        0      -50         0 2.92e-05 0.000188  0.000188    Absorber phot
+    1        0        0      -50         0 2.92e-05  0.00052   0.00052    Absorber phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -2705,7 +2705,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50  0.000271        0        0         0    Absorber initStep
-    1 1.67e-06 -3.51e-06      -50         0 0.000271 1.06e-05  1.06e-05    Absorber eIoni
+    1   -3e-07 -2.98e-06      -50         0 0.000271 1.06e-05  1.06e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -2815,39 +2815,41 @@ Index : 3     used in the geometry : Yes
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50      0.01        0        0         0    Absorber initStep
-    1 7.53e-05  4.7e-06      -50   0.00939 0.000607 0.000258  0.000258    Absorber msc
-    2 5.79e-05 -3.1e-05      -50   0.00898 0.000414 0.000258  0.000517    Absorber msc
-    3 -5.39e-05 -0.000161      -50   0.00862 0.000363 0.000258  0.000775    Absorber msc
-    4 -0.000125 -0.000236      -50   0.00824 0.000378 0.000258   0.00103    Absorber msc
-    5 -0.000164 -0.000392      -50   0.00731 0.000468 0.000235   0.00127    Absorber eIoni
-    6 -0.000268 -0.00044      -50   0.00663 0.000351 0.000145   0.00141    Absorber eIoni
-    7 -0.000471 -0.000634      -50   0.00435  0.00228 0.000327   0.00174    Absorber msc
-    8 -0.000739 -0.000634      -50   0.00176  0.00227   0.0004   0.00214    Absorber eIoni
-    9 -0.000781 -0.000588      -50         0  0.00176 0.000141   0.00228    Absorber eIoni
+    1 -5.26e-05 -5.13e-05      -50   0.00929 0.000373 0.000254  0.000254    Absorber eIoni
+    2 -0.000214 -0.000109      -50   0.00848  0.00081 0.000258  0.000512    Absorber msc
+    3  -0.0003 -4.08e-05      -50   0.00802 0.000456 0.000258   0.00077    Absorber msc
+    4 -0.000339  0.00016      -50   0.00749 0.000531 0.000258   0.00103    Absorber msc
+    5 -0.000277 0.000348      -50   0.00718 0.000307 0.000258   0.00129    Absorber msc
+    6 -0.000242 0.000481      -50   0.00642 0.000373 0.000166   0.00145    Absorber eIoni
+    7 -0.000151  0.00071      -50   0.00547 0.000944 0.000284   0.00174    Absorber msc
+    8 -3.67e-05 0.000919      -50   0.00467 0.000799 0.000296   0.00203    Absorber msc
+    9 -0.00023  0.00108      -50   0.00106  0.00301 0.000796   0.00283    Absorber eIoni
+   10 -0.000256  0.00108      -50  0.000542 0.000522 5.09e-05   0.00288    Absorber eIoni
+   11 -0.000265  0.00108      -50         0 0.000542 2.26e-05    0.0029    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 4,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.000739 -0.000634      -50  0.000326        0        0         0    Absorber initStep
-    1 -0.00074 -0.000636      -50         0 0.000326 1.27e-05  1.27e-05    Absorber eIoni
+    0 -0.00023  0.00108      -50  0.000602        0        0         0    Absorber initStep
+    1 -0.000234  0.00108      -50         0 0.000602  2.6e-05   2.6e-05    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.000268 -0.00044      -50  0.000331        0        0         0    Absorber initStep
-    1 -0.000271 -0.000435      -50         0 0.000331 1.29e-05  1.29e-05    Absorber eIoni
+    0 -0.000242 0.000481      -50  0.000392        0        0         0    Absorber initStep
+    1 -0.000245 0.000486      -50         0 0.000392 1.54e-05  1.54e-05    Absorber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 -0.000164 -0.000392      -50  0.000461        0        0         0    Absorber initStep
-    1 -0.000158 -0.000391      -50         0 0.000461 1.86e-05  1.86e-05    Absorber eIoni
+    0 -5.26e-05 -5.13e-05      -50  0.000341        0        0         0    Absorber initStep
+    1 -4.96e-05 -5.55e-05      -50         0 0.000341 1.33e-05  1.33e-05    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -2900,7 +2902,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.22s Real=0.42s Sys=0s
+  User=0.24s Real=0.23s Sys=0s
 #
 /gun/energy 2 keV
 /tracking/verbose 1
@@ -2955,13 +2957,13 @@ Index : 3     used in the geometry : Yes
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -50     0.002        0        0         0    Absorber initStep
-    1 -3.48e-05 -2.74e-06      -50   0.00152 0.000481 7.47e-05  7.47e-05    Absorber msc
-    2 -7.47e-05 7.61e-06      -50   0.00107 0.000449 7.47e-05  0.000149    Absorber msc
-    3 -9.76e-05 1.31e-05      -50         0  0.00107 6.14e-05  0.000211    Absorber eIoni
+    1  3.4e-05 -7.83e-06      -50   0.00131 0.000685 7.47e-05  7.47e-05    Absorber msc
+    2 5.61e-05 -3.95e-05      -50  2.61e-05  0.00129 7.47e-05  0.000149    Absorber msc
+    3 5.61e-05 -3.96e-05      -50         0 2.61e-05 2.75e-06  0.000152    Absorber eIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /run/beamOn 1000
 
@@ -3010,7 +3012,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.05s Real=0.15s Sys=0s
+  User=0.06s Real=0.05s Sys=0s
 #
 /gun/energy 600 eV
 /tracking/verbose 1
@@ -3118,7 +3120,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 /gun/energy 300 eV
 /tracking/verbose 1
@@ -3476,7 +3478,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.02s Real=0.12s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -3582,7 +3584,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /gun/energy 100 MeV
 /run/beamOn 1000
 
@@ -3642,39 +3644,39 @@ G4SDManager deleted.
 Rayl for gamma in Air : 2 calls
 Rayl for gamma in Aluminium : 29 calls
 Rayl for gamma in Lead : 43 calls
-Rayl for gamma in Water : 51 calls
-Transportation for e+ in Air : 1537 calls
-Transportation for e- in Air : 4990 calls
+Rayl for gamma in Water : 50 calls
+Transportation for e+ in Air : 1534 calls
+Transportation for e- in Air : 4977 calls
 Transportation for e- in Aluminium : 56 calls
 Transportation for e- in Lead : 262 calls
-Transportation for e- in Water : 13 calls
-Transportation for gamma in Air : 5465 calls
+Transportation for e- in Water : 20 calls
+Transportation for gamma in Air : 5454 calls
 annihil for e+ in Air : 2 calls
-annihil for e+ in Aluminium : 40 calls
-annihil for e+ in Lead : 933 calls
-annihil for e+ in Water : 6 calls
+annihil for e+ in Aluminium : 38 calls
+annihil for e+ in Lead : 921 calls
+annihil for e+ in Water : 4 calls
 compt for gamma in Aluminium : 3 calls
 compt for gamma in Lead : 1 calls
 compt for gamma in Water : 23 calls
-conv for gamma in Air : 2 calls
-conv for gamma in Aluminium : 498 calls
-conv for gamma in Lead : 1872 calls
-conv for gamma in Water : 146 calls
+conv for gamma in Air : 3 calls
+conv for gamma in Aluminium : 492 calls
+conv for gamma in Lead : 1864 calls
+conv for gamma in Water : 141 calls
 eBrem for e- in Aluminium : 3 calls
 eBrem for e- in Lead : 13 calls
 eBrem for e- in Water : 1 calls
-eIoni for e- in Air : 6873 calls
+eIoni for e- in Air : 6880 calls
 eIoni for e- in Aluminium : 23289 calls
 eIoni for e- in Lead : 25973 calls
-eIoni for e- in Water : 22235 calls
-msc for e- in Air : 6283 calls
+eIoni for e- in Water : 22180 calls
+msc for e- in Air : 6285 calls
 msc for e- in Aluminium : 16096 calls
 msc for e- in Lead : 32815 calls
-msc for e- in Water : 7590 calls
-phot for gamma in Air : 15 calls
+msc for e- in Water : 7627 calls
+phot for gamma in Air : 17 calls
 phot for gamma in Aluminium : 4002 calls
 phot for gamma in Lead : 4009 calls
-phot for gamma in Water : 3995 calls
+phot for gamma in Water : 3993 calls
 EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
