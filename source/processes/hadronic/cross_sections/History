@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+04 December 2013 A.Ribon  (hadr-cross-V09-06-38)
+------------------------------------------------
+- Removed the 1 millibarn threshold in G4BGGNucleonElasticXS, to avoid
+  rare crashes observed in QBBC. A better fix of this problem will
+  be done after the release 10.
+
 27 November 2013 G.Cosmo  (hadr-cross-V09-06-37)
 ------------------------------------------------
 - Replace G4ThreadLocal with 'const' for 'alpha' in Interpolate() for

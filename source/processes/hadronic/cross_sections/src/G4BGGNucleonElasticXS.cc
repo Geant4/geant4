@@ -143,7 +143,7 @@ G4BGGNucleonElasticXS::GetElementCrossSection(const G4DynamicParticle* dp,
 	   << " XS(b)= " << cross/barn 
 	   << G4endl;
   }
-  if(cross <= fLowestXSection) { cross = 0.0; }
+  //AR-04Dec2013  if(cross <= fLowestXSection) { cross = 0.0; }
   return cross;
 }
 
@@ -185,7 +185,7 @@ G4BGGNucleonElasticXS::GetIsoCrossSection(const G4DynamicParticle* dp,
 	   << " XS(b)= " << cross/barn 
 	   << G4endl;
   }
-  if(cross <= fLowestXSection) { cross = 0.0; }
+  //AR-04Dec2013  if(cross <= fLowestXSection) { cross = 0.0; }
   return cross;
 }
 
