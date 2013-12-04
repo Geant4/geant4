@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-Dec-2013  G.Cosmo               (geom-specific-V09-06-36)
+- Corrected left-over debug printout in G4Polyhedra::SetOriginalParameters().
+
 22-Nov-2013  G.Cosmo               (geom-specific-V09-06-35)
 - Correction to USolids wrappers for proper setting of name to base class.
 

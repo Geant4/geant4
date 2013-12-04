@@ -1337,12 +1337,13 @@ void  G4Polyhedra::SetOriginalParameters(G4ReduciblePolygon *rz)
   }
   else  // Set parameters(r,z) with Rmin==0 as convention
   {
+#ifdef G4SPECSDEBUG
     std::ostringstream message;
     message << "Polyhedra " << GetName() << G4endl
-            << "cannot be converted to Polyhedra with (Rmin,Rmaz,Z) parameters!";
-    G4Exception("G4Polyhedra::SetOriginalParameters()", "GeomSolids0002",
-                JustWarning, message);
-
+      << "cannot be converted to Polyhedra with (Rmin,Rmaz,Z) parameters!";
+    G4Exception("G4Polyhedra::SetOriginalParameters()",
+                "GeomSolids0002", JustWarning, message);
+#endif
     original_parameters = new G4PolyhedraHistorical;
     original_parameters->numSide = numSide;
     original_parameters->Z_values = new G4double[numPlanes];
