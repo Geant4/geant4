@@ -181,8 +181,8 @@ void HistoManager::EndOfRun()
   G4double p1 = 1*GeV;
   G4double p2 = 3*GeV;
   G4double mass = proton_mass_c2;
-  G4cout << sqrt(p1*p1 + mass*mass) - mass << "   " 
-	 << sqrt(p2*p2 + mass*mass) - mass << G4endl; 
+  G4cout << std::sqrt(p1*p1 + mass*mass) - mass << "   " 
+	 << std::sqrt(p2*p2 + mass*mass) - mass << G4endl; 
   */
   G4cout << G4endl;
   G4cout << "   Mean energy deposit in absorber = " <<

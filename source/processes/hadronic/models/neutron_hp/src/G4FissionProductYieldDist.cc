@@ -359,7 +359,7 @@ G4FFG_FUNCTIONENTER__
 
             for(unsigned int i = 0; i < Alphas->size(); ++i)
             {
-                PlusMinus = acos(RandomEngine_->G4SampleGaussian(0, MeanAlphaAngleStdDev)) - (pi / 2);
+                PlusMinus = std::acos(RandomEngine_->G4SampleGaussian(0, MeanAlphaAngleStdDev)) - (pi / 2);
                 Theta = MeanAlphaAngle + PlusMinus;
                 if(Theta < 0)
                 {
@@ -371,7 +371,7 @@ G4FFG_FUNCTIONENTER__
                 Phi = RandomEngine_->G4SampleUniform(-pi, pi);
 
                 Direction.setRThetaPhi(1.0, Theta, Phi);
-                Magnitude = sqrt(2 * Alphas->at(i)->GetKineticEnergy() * Alphas->at(i)->GetDefinition()->GetPDGMass());
+                Magnitude = std::sqrt(2 * Alphas->at(i)->GetKineticEnergy() * Alphas->at(i)->GetDefinition()->GetPDGMass());
                 Alphas->at(i)->SetMomentum(Direction * Magnitude);
                 ResultantVector += Alphas->at(i)->GetMomentum();
             }
@@ -382,11 +382,11 @@ G4FFG_FUNCTIONENTER__
         {
         	for(unsigned int i = 0; i < Neutrons->size(); ++i)
         	{
-        	    Theta = acos(RandomEngine_->G4SampleUniform(-1, 1));
+        	    Theta = std::acos(RandomEngine_->G4SampleUniform(-1, 1));
                 Phi = RandomEngine_->G4SampleUniform(-pi, pi);
 
                 Direction.setRThetaPhi(1.0, Theta, Phi);
-                Magnitude = sqrt(2 * Neutrons->at(i)->GetKineticEnergy() * Neutrons->at(i)->GetDefinition()->GetPDGMass());
+                Magnitude = std::sqrt(2 * Neutrons->at(i)->GetKineticEnergy() * Neutrons->at(i)->GetDefinition()->GetPDGMass());
                 Neutrons->at(i)->SetMomentum(Direction * Magnitude);
                 ResultantVector += Neutrons->at(i)->GetMomentum();
             }
@@ -397,7 +397,7 @@ G4FFG_FUNCTIONENTER__
 		{
         	for(unsigned int i = 0; i < Gammas->size(); ++i)
             {
-                Theta = acos(RandomEngine_->G4SampleUniform(-1, 1));
+                Theta = std::acos(RandomEngine_->G4SampleUniform(-1, 1));
                 Phi = RandomEngine_->G4SampleUniform(-pi, pi);
 
                 Direction.setRThetaPhi(1.0, Theta, Phi);
@@ -464,7 +464,7 @@ G4FFG_FUNCTIONENTER__
         //
         // nsqrt = sqrt(m_L*(m_L*(2*m_H*tk - R_x^2 - R_y^2) +
         //                   m_H*(2*m_H*tk - R_x^2 - R_y^2 - R_z^2))
-        NumeratorSqrt = sqrt(LightFragmentMass *
+        NumeratorSqrt = std::sqrt(LightFragmentMass *
                             (LightFragmentMass * (2 * HeavyFragmentMass * FragmentsKE
                                                   - ResultantX * ResultantX
                                                   - ResultantY * ResultantY)
@@ -481,9 +481,9 @@ G4FFG_FUNCTIONENTER__
 
         // P = (nsqrt + nother) / denom
         const G4double LightFragmentMomentum = (NumeratorSqrt + NumeratorOther) / Denominator;
-        const G4double HeavyFragmentMomentum = sqrt(ResultantX * ResultantX
+        const G4double HeavyFragmentMomentum = std::sqrt(ResultantX * ResultantX
                                                     + ResultantY * ResultantY
-                                                    + pow(LightFragmentMomentum + ResultantZ, 2));
+                                                    + std::pow(LightFragmentMomentum + ResultantZ, 2));
 
         // Finally! We now have everything we need for the daughter products
         LightFragment->SetMomentum(LightFragmentDirection * LightFragmentMomentum);
@@ -531,7 +531,7 @@ G4FFG_FUNCTIONENTER__
         // Sample Theta and Phi.
         G4ThreeVector RotationAxis;
 
-        Theta = acos(RandomEngine_->G4SampleUniform(-1, 1));
+        Theta = std::acos(RandomEngine_->G4SampleUniform(-1, 1));
         Phi = RandomEngine_->G4SampleUniform(-pi, pi);
         RotationAxis.setRThetaPhi(1.0, Theta, Phi);
 
@@ -1331,8 +1331,8 @@ G4FFG_FUNCTIONENTER__
         NubarWidth = const_cast<G4int*>(&NeutronInducedNubarWidth_[0][0]);
     }
 
-    XFactor = pow(10.0, -13.0);
-    BFactor = pow(10.0, -4.0);
+    XFactor = std::pow(10.0, -13.0);
+    BFactor = std::pow(10.0, -4.0);
     Nubar_ = *(WhichNubar + 1) * IncidentEnergy_ * XFactor
              + *(WhichNubar + 2) * BFactor;
     while(*WhichNubar != -1)
@@ -1347,7 +1347,7 @@ G4FFG_FUNCTIONENTER__
         WhichNubar += 3;
     }
 
-    XFactor = pow((G4double)10, -6);
+    XFactor = std::pow((G4double)10, -6);
     NubarWidth_ = *(NubarWidth + 1) * XFactor;
     while(*WhichNubar != -1)
     {

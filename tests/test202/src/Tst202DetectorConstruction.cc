@@ -610,18 +610,18 @@ G4VPhysicalVolume* Tst202DetectorConstruction::Construct()
     
     for(int j=0; j<9;j++){
       tempZ.push_back((2-0.1*j)*rplanet);
-      tempInner.push_back((2.5-sqrt(1-((1.9-0.1*j)*(1.9-0.1*j))/4)*2.5)*rplanet);
-      tempOuter.push_back((2.5+sqrt(1-((1.9-0.1*j)*(1.9-0.1*j))/4)*2.5)*rplanet);
+      tempInner.push_back((2.5-std::sqrt(1-((1.9-0.1*j)*(1.9-0.1*j))/4)*2.5)*rplanet);
+      tempOuter.push_back((2.5+std::sqrt(1-((1.9-0.1*j)*(1.9-0.1*j))/4)*2.5)*rplanet);
     }
     for(int j=0;j<23;j++){
       tempZ.push_back((1.1-0.1*j)*rplanet);
-      tempInner.push_back((sqrt(1-((1.1-0.1*j)*(1.1-0.1*j))/(1.2*1.2))*1.2)*rplanet);
-      tempOuter.push_back((2.5+sqrt(1-((1.1-0.1*j)*(1.1-0.1*j))/4)*2.5)*rplanet);
+      tempInner.push_back((std::sqrt(1-((1.1-0.1*j)*(1.1-0.1*j))/(1.2*1.2))*1.2)*rplanet);
+      tempOuter.push_back((2.5+std::sqrt(1-((1.1-0.1*j)*(1.1-0.1*j))/4)*2.5)*rplanet);
     }
     for(int j=0; j<9;j++){
       tempZ.push_back((-1.1-0.1*j)*rplanet);
-      tempInner.push_back((2.5-sqrt(1-((1.1+0.1*j)*(1.1+0.1*j))/4)*2.5)*rplanet);
-      tempOuter.push_back((2.5+sqrt(1-((1.1+0.1*j)*(1.1+0.1*j))/4)*2.5)*rplanet);
+      tempInner.push_back((2.5-std::sqrt(1-((1.1+0.1*j)*(1.1+0.1*j))/4)*2.5)*rplanet);
+      tempOuter.push_back((2.5+std::sqrt(1-((1.1+0.1*j)*(1.1+0.1*j))/4)*2.5)*rplanet);
     }
     G4double rInner[41],rOuter[41],zPlane[41];
     for(int i=0;i<41;i++){

@@ -27,7 +27,7 @@ G4double G4ILawCommonTruncatedExp::ComputeNonInteractionProbabilityAt(G4double d
 
   if ( niProba > 0.0 )
     {
-      return exp( log(niProba) / fNumberOfSharing );
+      return std::exp( std::log(niProba) / fNumberOfSharing );
     }
   else
     {

@@ -42,7 +42,7 @@ G4double G4ILawTruncatedExp::ComputeEffectiveCrossSectionAt(G4double distance) c
       // -- zero cross-section, returns the limit form of the effective cross-section:
       return 1.0 / ( fMaximumDistance - distance );
     }
-  G4double denum = 1.0 - exp( -fCrossSection * ( fMaximumDistance - distance) );
+  G4double denum = 1.0 - std::exp( -fCrossSection * ( fMaximumDistance - distance) );
   return fCrossSection / denum;
 }
 
@@ -57,8 +57,8 @@ G4double G4ILawTruncatedExp::ComputeNonInteractionProbabilityAt(G4double distanc
       // -- return limit case of null cross-section:
       return 1.0 - distance / fMaximumDistance;
     }
-  G4double   num = 1.0 - exp( -fCrossSection*distance);
-  G4double denum = 1.0 - exp( -fCrossSection*fMaximumDistance);
+  G4double   num = 1.0 - std::exp( -fCrossSection*distance);
+  G4double denum = 1.0 - std::exp( -fCrossSection*fMaximumDistance);
   return 1.0 - num/denum;
 }
 
@@ -73,7 +73,7 @@ G4double G4ILawTruncatedExp::SampleInteractionLength()
       fInteractionDistance = G4UniformRand() * fMaximumDistance;
       return fInteractionDistance;
     }
-  fInteractionDistance = -log(1.0 - G4UniformRand()* (1.0 - exp(-fCrossSection*fMaximumDistance)))/fCrossSection;
+  fInteractionDistance = -std::log(1.0 - G4UniformRand()* (1.0 - std::exp(-fCrossSection*fMaximumDistance)))/fCrossSection;
   return fInteractionDistance;
 }
 

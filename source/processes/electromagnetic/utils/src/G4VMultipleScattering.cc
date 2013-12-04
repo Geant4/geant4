@@ -517,7 +517,7 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 
 	// displaced point is definitely within the volume
 	if(r2 > postSafety*postSafety) {
-          G4double dispR = sqrt(r2);
+          G4double dispR = std::sqrt(r2);
           if(!safetyRecomputed) {
 	    postSafety = safetyHelper->ComputeSafety(fNewPosition, dispR);
 	  } 

@@ -202,7 +202,7 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   G4double phin  = twopi*G4UniformRand()*rad;
   G4double sinn = std::sqrt((1.0-cosn)*(1.0+cosn));
 
-  G4ThreeVector direction1(sinn*cos(phin), sinn*sin(phin), cosn);
+  G4ThreeVector direction1(sinn*std::cos(phin), sinn*std::sin(phin), cosn);
   direction1 = rm * direction1;
   G4DynamicParticle * daughterparticle1 
          = new G4DynamicParticle( G4MT_daughters[1], direction1*eNu);
@@ -214,7 +214,7 @@ G4DecayProducts *G4NeutronBetaDecayChannel::DecayIt(G4double)
   G4double pPx = -eNu*sinn;
   G4double pPz = -p-eNu*cosn;
   G4double pP  = std::sqrt(eP*(eP+2.*daughtermass[2]));
-  G4ThreeVector direction2(pPx/pP*cos(phin), pPx/pP*sin(phin), pPz/pP);
+  G4ThreeVector direction2(pPx/pP*std::cos(phin), pPx/pP*std::sin(phin), pPz/pP);
     G4DynamicParticle * daughterparticle2 
          = new G4DynamicParticle( G4MT_daughters[2], direction2);
   products->PushProducts(daughterparticle2);

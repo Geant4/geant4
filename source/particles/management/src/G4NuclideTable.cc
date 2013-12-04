@@ -326,7 +326,7 @@ void G4NuclideTable::GenerateNuclide()
       G4int    ionJ     = (G4int)(groundStateTable[i][idxSpin]);
       G4double ionMu    = groundStateTable[i][idxMu]*(joule/tesla);
 
-      if ( ionLife < 0.0 || ionLife*log(2.0) > threshold_of_half_life ) {
+      if ( ionLife < 0.0 || ionLife*std::log(2.0) > threshold_of_half_life ) {
 
          G4IsotopeProperty* fProperty = new G4IsotopeProperty(); 
 
@@ -448,7 +448,7 @@ void G4NuclideTable::GenerateNuclide()
          ionMu *= (joule/tesla);
 
          //if ( ionLife == -1 || ionLife > threshold_of_half_life ) {
-         if ( ionLife*log(2.0) > threshold_of_half_life && ionE != 0 ) {
+         if ( ionLife*std::log(2.0) > threshold_of_half_life && ionE != 0 ) {
 
             iLevel++;
             if ( iLevel > 9 ) iLevel=9;

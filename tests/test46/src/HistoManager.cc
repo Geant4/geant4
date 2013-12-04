@@ -363,7 +363,7 @@ void HistoManager::ScoreNewTrack(const G4Track* track)
     primaryKineticEnergy = e;
     primaryDef = pd;
   } else {
-    e = log10(e/MeV);
+    e = std::log10(e/MeV);
     if(pd == G4Gamma::Gamma())            { histo->Fill(16,e,w); }
     else if(pd == G4Electron::Electron()) { histo->Fill(17,e,w); }
     else if(pd == G4Proton::Proton())     { histo->Fill(18,e,w); }

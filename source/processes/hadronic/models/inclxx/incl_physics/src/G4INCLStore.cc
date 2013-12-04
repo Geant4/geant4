@@ -145,7 +145,7 @@ namespace G4INCL {
     // must make a copy of this list, because calls to removeAvatar will modify
     // the list itself
     IAvatarList avatars = *(particleAvatarConnections.find(particle)->second);
-    for_each(avatars.begin(), avatars.end(), std::bind1st(std::mem_fun(&G4INCL::Store::removeAndDeleteAvatar), this));
+    std::for_each(avatars.begin(), avatars.end(), std::bind1st(std::mem_fun(&G4INCL::Store::removeAndDeleteAvatar), this));
   }
 
 #ifdef INCL_AVATAR_SEARCH_INCLSort

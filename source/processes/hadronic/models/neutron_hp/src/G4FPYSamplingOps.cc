@@ -154,7 +154,7 @@ G4FFG_SAMPLING_FUNCTIONENTER__
     }
 
     // Return the sample integer value
-    G4int Sample = (G4int)(floor(SampleGaussian()));
+    G4int Sample = (G4int)(std::floor(SampleGaussian()));
 
 G4FFG_SAMPLING_FUNCTIONLEAVE__
     return Sample;
@@ -277,13 +277,13 @@ G4FFG_SAMPLING_FUNCTIONENTER__
         EvaluateWattConstants();
     }
 
-    G4double X = -log(G4SampleUniform());
-    G4double Y = -log(G4SampleUniform());
-    while(pow(Y - WattConstants_->M*(X + 1), 2)
+    G4double X = -std::log(G4SampleUniform());
+    G4double Y = -std::log(G4SampleUniform());
+    while(std::pow(Y - WattConstants_->M*(X + 1), 2)
             > WattConstants_->B * WattConstants_->L * X)
     {
-        X = -log(G4SampleUniform());
-        Y = -log(G4SampleUniform());
+        X = -std::log(G4SampleUniform());
+        Y = -std::log(G4SampleUniform());
     }
 
 G4FFG_SAMPLING_FUNCTIONLEAVE__
@@ -445,7 +445,7 @@ G4FFG_SAMPLING_FUNCTIONENTER__
 
     // Calculate the constants
     K = 1 + (WattConstants_->B / (8.0 * A));
-    WattConstants_->L = (K + pow((K * K - 1), 0.5)) / A;
+    WattConstants_->L = (K + std::pow((K * K - 1), 0.5)) / A;
     WattConstants_->M = A * WattConstants_->L - 1;
 
 G4FFG_SAMPLING_FUNCTIONLEAVE__
@@ -477,7 +477,7 @@ G4FFG_SAMPLING_FUNCTIONLEAVE__
     } while (Radius > 1.0);
 
     // Translate the values to Gaussian space
-    MappingFactor = sqrt(-2.0*log(Radius)/Radius) * StdDev_;
+    MappingFactor = std::sqrt(-2.0*std::log(Radius)/Radius) * StdDev_;
     GaussianOne_ = Mean_ + GaussianOne_*MappingFactor;
     GaussianTwo_ = Mean_ + GaussianTwo_*MappingFactor;
 
@@ -531,10 +531,10 @@ G4FFG_SAMPLING_FUNCTIONLEAVE__
 
 
         // Normalization constant for use with erf()
-        const G4double Normalization = StdDev_ * sqrt(2.0);
+        const G4double Normalization = StdDev_ * std::sqrt(2.0);
 
         // Determine the upper limit of the estimates
-        const G4int UpperLimit = (G4int) ceil(Mean_ + 9 * StdDev_);
+        const G4int UpperLimit = (G4int) std::ceil(Mean_ + 9 * StdDev_);
 
         // Calculate the integral of the Gaussian distribution
 
@@ -592,7 +592,7 @@ G4FFG_SAMPLING_FUNCTIONLEAVE__
             Container = AdjustedErfContainer / ErfContainer;
 
             // Is it close enough to what we want?
-            ToleranceCheck = (fabs(Mean_ - Container) < Tolerance_);
+            ToleranceCheck = (std::fabs(Mean_ - Container) < Tolerance_);
             if(ToleranceCheck == TRUE)
             {
                 break;

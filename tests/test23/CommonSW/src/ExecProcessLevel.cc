@@ -138,7 +138,7 @@ void ExecProcessLevel::InitBeam( const TstReader* pset )
    G4ParticleDefinition* partDef = (G4ParticleTable::GetParticleTable())->FindParticle(pset->GetBeamParticle());
    G4double partMass = partDef->GetPDGMass();
    G4double partMom = pset->GetBeamMomentum();
-   G4double partEnergy = sqrt( partMom*partMom + partMass*partMass );
+   G4double partEnergy = std::sqrt( partMom*partMom + partMass*partMass );
    
    if ( !fBeam ) fBeam = new Beam();
    fBeam->SetBeam( pset->GetBeamParticle(), partMass, partEnergy ); 
@@ -149,7 +149,7 @@ void ExecProcessLevel::InitBeam( const TstReader* pset )
    G4double amass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z, A);
 
    fBeam->SetLabV( G4LorentzVector( 0., 0., 
-                                    sqrt(partEnergy*(partEnergy+2.0*partMass))/GeV,
+                                    std::sqrt(partEnergy*(partEnergy+2.0*partMass))/GeV,
                                     (partEnergy+partMass+amass)/GeV) );
    
        // if under an agnle, then like this:
@@ -157,7 +157,7 @@ void ExecProcessLevel::InitBeam( const TstReader* pset )
        //			      mom.z()/CLHEP::GeV, (e0+mass+amass)/CLHEP::GeV);
        
     fBeam->SetLabP( G4LorentzVector( 0., 0., 
-                                     sqrt(partEnergy*(partEnergy+2.0*partMass))/GeV,
+                                     std::sqrt(partEnergy*(partEnergy+2.0*partMass))/GeV,
                                      (partEnergy+partMass+G4Proton::Proton()->GetPDGMass())/GeV) );
          
    // Track

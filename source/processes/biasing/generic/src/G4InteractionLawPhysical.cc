@@ -42,7 +42,7 @@ G4double G4InteractionLawPhysical::ComputeNonInteractionProbabilityAt(G4double s
 					 "Non interaction probabitlity value requested, but cross section has not been defined yet. Assumes it to be 0 !");
   // -- allows zero cross-section case, by convention:
   if ( fCrossSection == 0.0 ) return 1.0;
-  else return exp(-fCrossSection*stepLength);
+  else return std::exp(-fCrossSection*stepLength);
 }
 
 G4double G4InteractionLawPhysical::SampleInteractionLength()

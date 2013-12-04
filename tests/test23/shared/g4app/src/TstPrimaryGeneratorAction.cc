@@ -65,7 +65,7 @@ void TstPrimaryGeneratorAction::InitBeam( TstReader* pset )
    // G4ParticleDefinition* partDef = (G4ParticleTable::GetParticleTable())->FindParticle(pset->GetBeamParticle());
    G4double partMass = partDef->GetPDGMass();
    G4double partMom = pset->GetBeamMomentum();
-   G4double partEnergy = sqrt( partMom*partMom + partMass*partMass );
+   G4double partEnergy = std::sqrt( partMom*partMom + partMass*partMass );
    
    fPartGun->SetParticleDefinition( partDef );
    fPartGun->SetParticleEnergy( partEnergy );
@@ -90,11 +90,11 @@ void TstPrimaryGeneratorAction::InitBeam( TstReader* pset )
    
    fLabV.setX(0.);
    fLabV.setY(0.);
-   fLabV.setZ( sqrt( partEnergy*(partEnergy+2.0*partMass) )/GeV );
+   fLabV.setZ( std::sqrt( partEnergy*(partEnergy+2.0*partMass) )/GeV );
    fLabV.setT( (partEnergy+partMass+amass)/GeV );
    fLabP.setX(0.);
    fLabP.setY(0.);
-   fLabP.setZ( sqrt(partEnergy*(partEnergy+2.0*partMass))/GeV );
+   fLabP.setZ( std::sqrt(partEnergy*(partEnergy+2.0*partMass))/GeV );
    fLabP.setT( (partEnergy+partMass+G4Proton::Proton()->GetPDGMass())/GeV );
    
    return;
