@@ -1,7 +1,7 @@
 #include "CLHEP/Random/RandGaussZiggurat.h"
 #include "CLHEP/Units/PhysicalConstants.h"
 #include <iostream>
-#include <cmath>	// for log()
+#include <cmath>	// for std::log()
 
 namespace CLHEP {
 
@@ -28,7 +28,7 @@ bool RandGaussZiggurat::ziggurat_init()
   int i;
 
 /* Set up tables for RNOR */
-  q=vn/exp(-.5*dn*dn);
+  q=vn/std::exp(-.5*dn*dn);
   kn[0]=(unsigned long)((dn/q)*rzm1);
   kn[1]=0;
 
@@ -36,18 +36,18 @@ bool RandGaussZiggurat::ziggurat_init()
   wn[127]=dn/rzm1;
 
   fn[0]=1.;
-  fn[127]=exp(-.5*dn*dn);
+  fn[127]=std::exp(-.5*dn*dn);
 
   for(i=126;i>=1;i--) {
-    dn=sqrt(-2.*log(vn/dn+exp(-.5*dn*dn)));
+    dn=std::sqrt(-2.*std::log(vn/dn+std::exp(-.5*dn*dn)));
     kn[i+1]=(unsigned long)((dn/tn)*rzm1);
     tn=dn;
-    fn[i]=exp(-.5*dn*dn);
+    fn[i]=std::exp(-.5*dn*dn);
     wn[i]=dn/rzm1;
   }
 
 /* Set up tables for REXP */
-  q = ve/exp(-de);
+  q = ve/std::exp(-de);
   ke[0]=(unsigned long)((de/q)*rzm2);
   ke[1]=0;
 
@@ -55,13 +55,13 @@ bool RandGaussZiggurat::ziggurat_init()
   we[255]=de/rzm2;
 
   fe[0]=1.;
-  fe[255]=exp(-de);
+  fe[255]=std::exp(-de);
 
   for(i=254;i>=1;i--) {
-    de=-log(ve/de+exp(-de));
+    de=-std::log(ve/de+std::exp(-de));
     ke[i+1]= (unsigned long)((de/te)*rzm2);
     te=de;
-    fe[i]=exp(-de);
+    fe[i]=std::exp(-de);
     we[i]=de/rzm2;
   }
   ziggurat_is_init=true;
@@ -81,15 +81,15 @@ float RandGaussZiggurat::ziggurat_nfix(long hz,HepRandomEngine* anEngine)
     x=hz*wn[iz];      /* iz==0, handles the base strip */
     if(iz==0) {
       do { 
-        /* change to (1.0 - UNI) as argument to log(), because CLHEP generates [0,1), 
+        /* change to (1.0 - UNI) as argument to std::log(), because CLHEP generates [0,1), 
            while the original UNI generates (0,1] */
-        x=-log(1.0 - ziggurat_UNI(anEngine))*0.2904764; /* .2904764 is 1/r */
-        y=-log(1.0 - ziggurat_UNI(anEngine));
+        x=-std::log(1.0 - ziggurat_UNI(anEngine))*0.2904764; /* .2904764 is 1/r */
+        y=-std::log(1.0 - ziggurat_UNI(anEngine));
       }	while(y+y<x*x);
       return (hz>0)? r+x : -r-x;
     }
     /* iz>0, handle the wedges of other strips */
-    if( fn[iz]+(1.0 - ziggurat_UNI(anEngine))*(fn[iz-1]-fn[iz]) < exp(-.5*x*x) ) return x;
+    if( fn[iz]+(1.0 - ziggurat_UNI(anEngine))*(fn[iz-1]-fn[iz]) < std::exp(-.5*x*x) ) return x;
 
     /* initiate, try to exit for(;;) for loop*/
     hz=(signed)ziggurat_SHR3(anEngine);
