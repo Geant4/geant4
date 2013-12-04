@@ -29,9 +29,7 @@
 #include <algorithm>
 
 #include "UVector3.hh"
-//#include "UTransform3D.hh"
 
-//class UVector3;
 class UTransform3D;
 
 enum ExceptionSeverity
@@ -40,42 +38,12 @@ enum ExceptionSeverity
 namespace UUtils
 {
 
-  // Mathematical constants
-  // Abs
-
-  /*
-  inline short  Abs(short d);
-  inline int    Abs(int d);
-  inline long   Abs(long d);
-  inline float  Abs(float d);
-  inline double Abs(double d);
-  */
-
   // Sign
   inline short  Sign(short a, short b);
   inline int    Sign(int a, int b);
   inline long   Sign(long a, long b);
   inline float  Sign(float a, float b);
   inline double Sign(double a, double b);
-
-  /*
-  // Min, Max of two scalars
-  inline short  Min(short a, short b);
-  inline int    Min(int a, int b);
-  inline unsigned int Min(unsigned int a, unsigned int b);
-  inline long   Min(long a, long b);
-  inline unsigned long   Min(unsigned long a, unsigned long b);
-  inline float  Min(float a, float b);
-  inline double Min(double a, double b);
-
-  inline short  Max(short a, short b);
-  inline int    Max(int a, int b);
-  inline unsigned int Max(unsigned int a, unsigned int b);
-  inline long   Max(long a, long b);
-  inline unsigned long   Max(unsigned long a, unsigned long b);
-  inline float  Max(float a, float b);
-  inline double Max(double a, double b);
-  */
 
   // Trigonometric
   static const double kPi       = 3.14159265358979323846;
@@ -91,12 +59,6 @@ namespace UUtils
 
   inline double Infinity();
 
-  /*
-  inline double Sin(double);
-  inline double Cos(double);
-  inline double Tan(double);
-  */
-
   inline double ASin(double);
   inline double ACos(double);
   inline double ATan(double);
@@ -109,8 +71,6 @@ namespace UUtils
                  int level,
                  const char* description);
 
-
-  //  inline double Sqrt(double x);
 
   // Comparing floating points
   inline bool AreEqualAbs(double af, double bf, double epsilon)
@@ -127,15 +87,6 @@ namespace UUtils
   // Locate Min, Max element number in an array
   long  LocMin(long n, const double* a);
   long  LocMax(long n, const double* a);
-
-  /*
-  // Sorting
-  void Sort(int n, const double* a, int* index, bool down = true);
-  template <typename Element, typename Index>
-  void Sort(Index n, const Element* a, Index* index, bool down=true);
-  template <typename Iterator, typename IndexIterator>
-  void SortItr(Iterator first, Iterator last, IndexIterator index, bool down=true);
-  */
 
   // TransformLimits: Use the transformation to convert the local limits defined
   // by min/max vectors to the master frame. Returns modified limits.
@@ -180,10 +131,6 @@ namespace UUtils
 
   std::string ToString(int number);
   std::string ToString(double number);
-
-  // Equations
-  //  bool         RootsQuadratic(const double coef[3], double xmin, double xmax);
-  //  bool         RootsCubic(const double coef[4],double &x1, double &x2, double &x3);
 
   int FileSize(const std::string& filePath);
 
@@ -232,31 +179,6 @@ inline double UUtils::Infinity()
   // returns an infinity as defined by the IEEE standard
   return std::numeric_limits<double>::infinity();
 }
-//---- Abs ---------------------------------------------------------------------
-
-
-/*
-inline short UUtils::Abs(short d)
-{ return (d >= 0) ? d : -d; }
-
-inline int UUtils::Abs(int d)
-{ return (d >= 0) ? d : -d; }
-
-inline long UUtils::Abs(long d)
-{ return (d >= 0) ? d : -d; }
-
-
-inline double UUtils::Abs(double d)
-{
-return (d >= 0) ? d : -d;
-return fabs(d); //return (d >= 0) ? d : -d;
-}
-
-inline float UUtils::Abs(float d)
-{
-return fabs(d); // return (d >= 0) ? d : -d;
-}
-*/
 
 //---- Sign --------------------------------------------------------------------
 inline short UUtils::Sign(short a, short b)
@@ -284,68 +206,8 @@ inline double UUtils::Sign(double a, double b)
   return (b >= 0) ? std::abs(a) : -std::abs(a);
 }
 
-/*
-//---- Min ---------------------------------------------------------------------
-inline short std::min(short a, short b)
-{ return a <= b ? a : b; }
 
-inline int std::min(int a, int b)
-{ return a <= b ? a : b; }
-
-inline unsigned int std::min(unsigned int a, unsigned int b)
-{ return a <= b ? a : b; }
-
-inline long std::min(long a, long b)
-{ return a <= b ? a : b; }
-
-inline unsigned long std::min(unsigned long a, unsigned long b)
-{ return a <= b ? a : b; }
-
-inline float std::min(float a, float b)
-{ return a <= b ? a : b; }
-
-inline double std::min(double a, double b)
-{ return a <= b ? a : b; }
-
-//---- Max ---------------------------------------------------------------------
-inline short std::max(short a, short b)
-{ return a >= b ? a : b; }
-
-inline int std::max(int a, int b)
-{ return a >= b ? a : b; }
-
-inline unsigned int std::max(unsigned int a, unsigned int b)
-{ return a >= b ? a : b; }
-
-inline long std::max(long a, long b)
-{ return a >= b ? a : b; }
-
-inline unsigned long std::max(unsigned long a, unsigned long b)
-{ return a >= b ? a : b; }
-
-inline float std::max(float a, float b)
-{ return a >= b ? a : b; }
-
-inline double std::max(double a, double b)
-{ return a >= b ? a : b; }
-*/
-
-/*
 //---- Trigonometric------------------------------------------------------------
-inline double std::sin(double x)
-{ return sin(x); }
-
-inline double std::cos(double x)
-{ return cos(x); }
-
-inline double UUtils::Tan(double x)
-{ return tan(x); }
-
-inline double UUtils::ATan(double x)
-{ return atan(x); }
-
-*/
-
 inline double UUtils::ASin(double x)
 {
   if (x < -1.) return -kPi / 2;
@@ -368,10 +230,5 @@ inline double UUtils::ATan2(double y, double x)
   if (y >  0) return  kPi / 2;
   else        return -kPi / 2;
 }
-
-/*
-inline double std::sqrt(double x)
-{ return sqrt(x); }
-*/
 
 #endif

@@ -63,8 +63,8 @@ double& UVector2::operator()(int i)
 
 void UVector2::rotate(double angler)
 {
-  double s = sin(angler);
-  double c = cos(angler);
+  double s = std::sin(angler);
+  double c = std::cos(angler);
   double xx = x;
   x = c * xx - s * y;
   y = s * xx + c * y;
@@ -156,7 +156,7 @@ double UVector2::howNear(const UVector2& p) const
   double pdp = dot(p);
   if ((pdp > 0) && (d < pdp))
   {
-    return sqrt(d / pdp);
+    return std::sqrt(d / pdp);
   }
   else if ((pdp == 0) && (d == 0))
   {
@@ -172,13 +172,13 @@ double UVector2::howParallel(const UVector2& v) const
 {
   // | V1 x V2 | / | V1 dot V2 |
   // Of course, the "cross product" is fictitious but the math is valid
-  double v1v2 = fabs(dot(v));
+  double v1v2 = std::fabs(dot(v));
   if (v1v2 == 0)
   {
     // Zero is parallel to no other vector except for zero.
     return ((mag2() == 0) && (v.mag2() == 0)) ? 0 : 1;
   }
-  double abscross = fabs(x * v.y - y - v.x);
+  double abscross = std::fabs(x * v.y - y - v.x);
   if (abscross >= v1v2)
   {
     return 1;
@@ -194,13 +194,13 @@ bool UVector2::isParallel(const UVector2& v,
 {
   // | V1 x V2 | <= epsilon * | V1 dot V2 |
   // Of course, the "cross product" is fictitious but the math is valid
-  double v1v2 = fabs(dot(v));
+  double v1v2 = std::fabs(dot(v));
   if (v1v2 == 0)
   {
     // Zero is parallel to no other vector except for zero.
     return ((mag2() == 0) && (v.mag2() == 0));
   }
-  double abscross = fabs(x * v.y - y - v.x);
+  double abscross = std::fabs(x * v.y - y - v.x);
   return (abscross <= epsilon * v1v2);
 } /* isParallel() */
 
@@ -208,12 +208,12 @@ double UVector2::howOrthogonal(const UVector2& v) const
 {
   // | V1 dot V2 | / | V1 x V2 |
   // Of course, the "cross product" is fictitious but the math is valid
-  double v1v2 = fabs(dot(v));
+  double v1v2 = std::fabs(dot(v));
   if (v1v2 == 0)
   {
     return 0; // Even if one or both are 0, they are considered orthogonal
   }
-  double abscross = fabs(x * v.y - y - v.x);
+  double abscross = std::fabs(x * v.y - y - v.x);
   if (v1v2 >= abscross)
   {
     return 1;
@@ -229,8 +229,8 @@ bool UVector2::isOrthogonal(const UVector2& v,
 {
   // | V1 dot V2 | <= epsilon * | V1 x V2 |
   // Of course, the "cross product" is fictitious but the math is valid
-  double v1v2 = fabs(dot(v));
-  double abscross = fabs(x * v.y - y - v.x);
+  double v1v2 = std::fabs(dot(v));
+  double abscross = std::fabs(x * v.y - y - v.x);
   return (v1v2 <= epsilon * abscross);
 } /* isOrthogonal() */
 
