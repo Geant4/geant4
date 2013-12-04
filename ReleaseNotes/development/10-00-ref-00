@@ -134,7 +134,7 @@ geometry/solids/CSG                              geom-csg-V09-06-09
   Defined temporary class G4OTubs to be used internally by G4CutTubs,
   in provision to have UCutTubs in the USolids library.
 
-geometry/solids/specific                         geom-specific-V09-06-35
+geometry/solids/specific                         geom-specific-V09-06-36
 ------------------------
 - Split G4Polycone for polycones with decreasing Z-sections.
   Introduced new class G4GenericPolycone.
@@ -388,13 +388,13 @@ processes/hadronic                               hadr-V09-06-00
 ------------------
 - Removed obsolete 'low_energy' and 'high_energy' modules.
 - Renamed model 'lll_fission' to 'fission'.
-- cross_sections (hadr-cross-V09-06-37)
+- cross_sections (hadr-cross-V09-06-38)
   o G4BGGNucleonInelasticXS: added threashold of 1 millibarn; if 
     cross-section is less, it is set to zero.
-  o G4BGGNucleonElasticXS: added threashold of 1 millibarn, added Coulomb 
-    barrier for protons (as in G4BGGNucleonInelasticXS); for Hydrogen target
-    added linear approximation between SAID data and PDG data: SAID upper
-    energy 3.3 GeV, PDG low energy 5 GeV.
+  o G4BGGNucleonElasticXS: added Coulomb barrier for protons (as in
+    G4BGGNucleonInelasticXS); for Hydrogen target added linear approximation
+    between SAID data and PDG data: SAID upper energy 3.3 GeV, PDG low
+    energy 5 GeV.
   o G4ComponentSAIDTotalXS, G4NeutronElasticXS, G4UPiNuclearCrossSection:
     avoid deletion of physics-vectors at destruction.
   o Replaced G4ThreadLocal with 'const' for 'alpha' in Interpolate() for
