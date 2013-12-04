@@ -324,7 +324,8 @@ new G4PVPlacement(0, G4ThreeVector(-245*um,0,DiaVol_z - heightOfTheTube3 - Bdl_z
 return physical_world; 
 
 }
-void DetectorConstruction::ConstructSDandField()
+
+void DetectorConstruction::ConstructSDandField()
 {
    SensitiveDetector* SD = new SensitiveDetector("SD", "DetectorHitsCollection", analysis);
    SetSensitiveDetector("SV_log", SD);

@@ -17,12 +17,6 @@
 // *                                                                  *
 // * This  code  implementation is the result of  the  scientific and *
 // * technical work of the GEANT4 collaboration.                      *
-// *                                                                  *
-// * Parts of this code which have been  developed by Kh. Abdel-Waged *
-// *                                                                  *
-// * Rights to use, copy, modify and  redistribute this software for  *
-// * general public use are granted in compliance with any licensing, *
-// * distribution and development policy adopted by the Geant4        *
 // * By using,  copying,  modifying or  distributing the software (or *
 // * any work based  on the software)  you  agree  to acknowledge its *
 // * use  in  resulting  scientific  publications,  and indicate your *

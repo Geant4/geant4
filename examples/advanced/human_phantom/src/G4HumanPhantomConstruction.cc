@@ -287,7 +287,7 @@ if (model != "ORNLMale" && model != "ORNLFemale" && model!= "ORNLHead")
 {
   SetSensitiveDetector("logicalHead",SD);
   SetSensitiveDetector("logicalSkull",SD);
-  SetSensitiveDetector("logicalBrain",SD);
+  SetSensitiveDetector("logicalBrain",SD);
   if (model != "MIRDHead")
     { 
       SetSensitiveDetector("logicalTrunk",SD);
@@ -301,10 +301,10 @@ if (model != "ORNLMale" && model != "ORNLFemale" && model!= "ORNLHead")
       SetSensitiveDetector("logicalLeftScapula",SD);
       SetSensitiveDetector("logicalRightScapula",SD);
       SetSensitiveDetector("logicalLeftAdrenal",SD);
-      SetSensitiveDetector("logicalRightAdrenal",SD);      SetSensitiveDetector("logicalThymus",SD);      SetSensitiveDetector("logicalLeftClavicle",SD);
+      SetSensitiveDetector("logicalRightAdrenal",SD);      SetSensitiveDetector("logicalThymus",SD);      SetSensitiveDetector("logicalLeftClavicle",SD);
       SetSensitiveDetector("logicalRightClavicle",SD);
       SetSensitiveDetector("logicalSmallIntestine",SD); 
-      SetSensitiveDetector("logicalRibCage",SD);       SetSensitiveDetector("logicalMiddleLowerSpine",SD); 
+      SetSensitiveDetector("logicalRibCage",SD);       SetSensitiveDetector("logicalMiddleLowerSpine",SD); 
       SetSensitiveDetector("logicalStomach",SD); 
       SetSensitiveDetector("logicalUpperLargeIntestine",SD);
       SetSensitiveDetector("logicalLowerLargeIntestine",SD);
@@ -313,14 +313,14 @@ if (model != "ORNLMale" && model != "ORNLFemale" && model!= "ORNLHead")
       SetSensitiveDetector("logicalLeftKidney",SD);
       SetSensitiveDetector("logicalRightKidney",SD);       
       SetSensitiveDetector("logicalUrinaryBladder",SD);
-
+
       if(sex=="Female"){
 
 	SetSensitiveDetector("logicalLeftOvary",SD);
         SetSensitiveDetector("logicalRightOvary",SD); 
         SetSensitiveDetector("logicalUterus",SD);
         SetSensitiveDetector("logicalLeftBreast",SD);
-        SetSensitiveDetector("logicalRightBreast",SD); 
+        SetSensitiveDetector("logicalRightBreast",SD); 
 	}
 
       if(sex=="Male"){
