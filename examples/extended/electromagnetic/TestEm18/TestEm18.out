@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
+ Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -157,6 +157,7 @@
 #
 /testem/det/setMat Water
 /testem/det/setSize 1 cm
+/run/geometryModified
 #
 /testem/phys/addPhysics standard
 #
@@ -457,7 +458,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=1.66s Real=1.86s Sys=0s
+  User=2.13s Real=2.13s Sys=0s
 
  ======================== run summary ======================
 

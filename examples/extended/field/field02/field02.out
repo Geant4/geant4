@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
+ Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -115,7 +119,7 @@
          --->  Isotope:   128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
          --->  Isotope:   129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
          --->  Isotope:   130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
-         --->  Isotope:   131   Z = 54   N = 131   A = 130.91 g/mole   abundance:  21.18 %
+         --->  Isotope:   131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
          --->  Isotope:   132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
          --->  Isotope:   134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
          --->  Isotope:   136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
@@ -146,7 +150,7 @@
          --->  Isotope:   128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
          --->  Isotope:   129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
          --->  Isotope:   130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
-         --->  Isotope:   131   Z = 54   N = 131   A = 130.91 g/mole   abundance:  21.18 %
+         --->  Isotope:   131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
          --->  Isotope:   132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
          --->  Isotope:   134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
          --->  Isotope:   136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
@@ -214,6 +218,7 @@ Current available graphics systems are:
   OpenGLStoredX (OGLSX)
   OpenGLStoredXm (OGL, OGLS, OGLSXm)
   RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
@@ -355,7 +360,7 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001; from 1 GeV to 10 TeV 
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -382,7 +387,7 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001; from 1 GeV to 10 TeV 
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -1041,7 +1046,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0      0 fm      0 fm      0 fm     50 MeV     0 eV      0 fm      0 fm      World   initStep
-    1      0 fm  -7.78 cm   1.76 cm    828 MeV  19.7 keV  8.27 cm   8.27 cm      World     eIoni
+    1      0 fm  -7.78 cm   1.76 cm    828 MeV  19.8 keV  8.27 cm   8.27 cm      World     eIoni
     2   1.34 um    -13 cm   2.01 cm   1.35 GeV  10.1 keV  5.28 cm   13.5 cm      World     eIoni
     3   1.09 um    -20 cm   2.22 cm   2.05 GeV  15.1 keV  6.95 cm   20.5 cm OutOfWorldTransportation
 
@@ -1151,7 +1156,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
     0      0 fm  -5.55 cm    1.6 cm   18.8 keV     0 eV      0 fm      0 fm      World   initStep
     1  -18.6 um  -5.85 cm   1.59 cm   32.1 MeV  5.82 keV  3.09 mm   3.09 mm      World     eIoni
     2    -20 um  -6.09 cm   1.59 cm   55.5 MeV   124 eV   2.34 mm   5.42 mm      World     eIoni
-    3  -26.1 um  -10.6 cm   1.59 cm    508 MeV  8.05 keV  4.53 cm   5.07 cm      World     eIoni
+    3  -26.1 um  -10.6 cm   1.59 cm    508 MeV  8.06 keV  4.53 cm   5.07 cm      World     eIoni
     4  -28.1 um  -12.4 cm   1.59 cm    686 MeV  4.09 keV  1.77 cm   6.84 cm      World     eIoni
     5  -34.1 um  -18.7 cm   1.59 cm   1.32 GeV  11.2 keV  6.33 cm   13.2 cm      World     eIoni
     6    -35 um    -20 cm   1.59 cm   1.45 GeV  1.52 keV  1.28 cm   14.5 cm OutOfWorldTransportation
@@ -1489,7 +1494,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0      0 fm  -1.96 cm   1.15 cm   13.7 keV     0 eV      0 fm      0 fm      World   initStep
     1   48.8 um  -2.19 cm   1.15 cm   24.1 MeV  7.24 keV  2.31 mm   2.31 mm      World     eIoni
-    2   66.4 um  -4.31 cm   1.15 cm    236 MeV  3.72 keV  2.12 cm   2.35 cm      World     eIoni
+    2   66.4 um  -4.31 cm   1.15 cm    236 MeV  3.73 keV  2.12 cm   2.35 cm      World     eIoni
     3   76.4 um  -10.5 cm   1.15 cm    858 MeV  15.5 keV  6.21 cm   8.57 cm      World     eIoni
     4   76.3 um  -11.6 cm   1.15 cm    961 MeV  1.95 keV  1.03 cm    9.6 cm      World     eIoni
     5   76.3 um  -14.7 cm   1.15 cm   1.28 GeV  5.19 keV  3.16 cm   12.8 cm      World     eIoni
@@ -1640,8 +1645,9 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0  -14.6 um  -14.6 cm   1.78 cm   3.06 keV     0 eV      0 fm      0 fm      World   initStep
     1  -18.7 um  -14.7 cm   1.78 cm   3.28 MeV  3.06 keV   304 um    304 um      World     eIoni
-    2  -22.1 um    -15 cm   1.78 cm   42.2 MeV   445 eV   3.89 mm    4.2 mm      World     eIoni
-    3  -25.8 um    -20 cm   1.78 cm    538 MeV  11.2 keV  4.96 cm   5.38 cm OutOfWorldTransportation
+    2  -22.1 um    -15 cm   1.78 cm   42.2 MeV   445 eV   3.89 mm    4.2 mm      WorldTransportation
+    3  -22.1 um    -15 cm   1.78 cm   42.2 MeV9.14e-14 eV 0.000476 fm    4.2 mm      World     eIoni
+    4  -25.8 um    -20 cm   1.78 cm    538 MeV  11.2 keV  4.96 cm   5.38 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 2
@@ -1878,7 +1884,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0      0 fm      0 fm      0 fm     50 MeV     0 eV      0 fm      0 fm      World   initStep
     1      0 fm  -6.01 mm   7.18 mm    110 MeV  1.06 keV  9.85 mm   9.85 mm      World     eIoni
-    2   5.43 um  -5.29 cm   1.58 cm    579 MeV  8.65 keV  4.79 cm   5.77 cm      World     eIoni
+    2   5.43 um  -5.29 cm   1.58 cm    579 MeV  8.66 keV  4.79 cm   5.77 cm      World     eIoni
     3   9.34 um  -18.3 cm   2.18 cm   1.88 GeV  25.8 keV  13.1 cm   18.8 cm      World     eIoni
     4   9.91 um    -20 cm   2.22 cm   2.05 GeV  2.74 keV  1.64 cm   20.5 cm      World     eIoni
     5   9.91 um    -20 cm   2.22 cm   2.05 GeV  15.4 eV    186 um   20.5 cm OutOfWorldTransportation
@@ -1908,8 +1914,8 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
     0   5.43 um  -5.29 cm   1.58 cm   6.51 keV     0 eV      0 fm      0 fm      World   initStep
     1   4.76 um   -5.4 cm   1.58 cm     12 MeV  5.34 keV  1.13 mm   1.13 mm      World     eIoni
     2   4.63 um   -5.6 cm   1.58 cm   31.9 MeV   215 eV   1.99 mm   3.12 mm      World     eIoni
-    3   4.12 um  -17.3 cm   1.57 cm    1.2 GeV  23.2 keV  11.7 cm     12 cm      WorldTransportation
-    4   4.12 um  -17.3 cm   1.57 cm    1.2 GeV3.33e-12 eV 0.0158 fm     12 cm      World     eIoni
+    3   4.12 um  -17.3 cm   1.57 cm    1.2 GeV  23.3 keV  11.7 cm     12 cm      WorldTransportation
+    4   4.12 um  -17.3 cm   1.57 cm    1.2 GeV4.68e-12 eV 0.0222 fm     12 cm      World     eIoni
     5   4.72 um    -20 cm   1.57 cm   1.47 GeV  5.41 keV  2.68 cm   14.7 cm OutOfWorldTransportation
 
 *********************************************************************************************************
@@ -2130,7 +2136,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0      0 fm      0 fm      0 fm     50 MeV     0 eV      0 fm      0 fm      World   initStep
     1      0 fm  -6.81 cm    1.7 cm    731 MeV  15.5 keV  7.29 cm   7.29 cm      World     eIoni
-    2   -317 nm  -9.34 cm   1.85 cm    984 MeV   5.8 keV  2.54 cm   9.83 cm      World     eIoni
+    2   -317 nm  -9.34 cm   1.85 cm    984 MeV  5.81 keV  2.54 cm   9.83 cm      World     eIoni
     3  -3.54 um    -20 cm   2.22 cm   2.05 GeV  19.6 keV  10.7 cm   20.5 cm OutOfWorldTransportation
 
 *********************************************************************************************************
@@ -2287,7 +2293,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0      0 fm      0 fm      0 fm     50 MeV     0 eV      0 fm      0 fm      World   initStep
     1      0 fm  -2.94 cm   1.32 cm    344 MeV  5.75 keV  3.41 cm   3.41 cm      World     eIoni
-    2   2.46 um  -8.53 cm   1.81 cm    903 MeV  14.9 keV  5.61 cm   9.02 cm      World     eIoni
+    2   2.46 um  -8.53 cm   1.81 cm    903 MeV    15 keV  5.61 cm   9.02 cm      World     eIoni
     3   2.24 um  -10.6 cm   1.91 cm   1.11 GeV  4.85 keV  2.07 cm   11.1 cm      World     eIoni
     4  -1.75 um    -20 cm   2.22 cm   2.05 GeV  19.4 keV   9.4 cm   20.5 cm OutOfWorldTransportation
 
@@ -3040,7 +3046,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0      0 fm      0 fm      0 fm     50 MeV     0 eV      0 fm      0 fm      World   initStep
-    1      0 fm   -2.4 cm   1.23 cm    290 MeV   4.8 keV  2.86 cm   2.86 cm      World     eIoni
+    1      0 fm   -2.4 cm   1.23 cm    290 MeV  4.81 keV  2.86 cm   2.86 cm      World     eIoni
     2   5.23 nm  -2.41 cm   1.23 cm    291 MeV  33.6 eV   68.8 um   2.87 cm      World     eIoni
     3   1.02 um  -3.66 cm   1.41 cm    416 MeV  3.43 keV  1.26 cm   4.13 cm      World     eIoni
     4   3.72 um    -20 cm   2.22 cm   2.05 GeV  34.4 keV  16.4 cm   20.5 cm OutOfWorldTransportation
@@ -3889,7 +3895,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
     0  -47.4 um  -15.8 cm   1.97 cm   9.38 keV     0 eV      0 fm      0 fm      World   initStep
     1   -102 um  -15.9 cm   1.97 cm   17.7 MeV  6.34 keV  1.68 mm   1.68 mm      World     eIoni
     2   -122 um  -17.3 cm   1.97 cm    150 MeV  2.59 keV  1.32 cm   1.49 cm      World     eIoni
-    3   -132 um    -20 cm   1.97 cm    424 MeV     4 keV  2.74 cm   4.23 cm OutOfWorldTransportation
+    3   -132 um    -20 cm   1.97 cm    424 MeV  4.01 keV  2.74 cm   4.23 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
@@ -4366,7 +4372,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
     0  -32.3 um    -12 cm    1.4 cm   23.7 keV     0 eV      0 fm      0 fm      World   initStep
     1   62.7 um  -12.4 cm   1.41 cm     41 MeV  3.23 keV  3.96 mm   3.96 mm      World     eIoni
     2   63.6 um  -12.5 cm   1.41 cm     44 MeV    60 eV    301 um   4.26 mm      World     eIoni
-    3   99.1 um    -20 cm   1.41 cm    798 MeV  14.5 keV  7.54 cm   7.97 cm OutOfWorldTransportation
+    3   99.1 um    -20 cm   1.41 cm    798 MeV  14.6 keV  7.54 cm   7.97 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 5,   Parent ID = 3
@@ -4483,7 +4489,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
     0   -227 um  -15.7 cm    1.2 cm   2.53 keV     0 eV      0 fm      0 fm      World   initStep
     1   -226 um  -15.8 cm    1.2 cm    2.4 MeV  2.53 keV   221 um    221 um      World     eIoni
     2   -225 um  -16.2 cm    1.2 cm   43.3 MeV   570 eV   4.09 mm   4.32 mm      World     eIoni
-    3   -224 um    -20 cm    1.2 cm    427 MeV  7.55 keV  3.83 cm   4.27 cm OutOfWorldTransportation
+    3   -224 um    -20 cm    1.2 cm    427 MeV  7.56 keV  3.83 cm   4.27 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 15,   Parent ID = 12
@@ -4758,7 +4764,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
     0   14.9 um    -19 cm   2.08 cm   3.78 keV     0 eV      0 fm      0 fm      World   initStep
     1     33 um    -19 cm   2.08 cm   4.68 MeV  3.78 keV   437 um    437 um      World     eIoni
     2   41.4 um  -19.2 cm   2.08 cm     24 MeV   183 eV   1.93 mm   2.36 mm      World     eIoni
-    3   49.3 um    -20 cm   2.08 cm    103 MeV   719 eV   7.95 mm   1.03 cm OutOfWorldTransportation
+    3   49.3 um    -20 cm   2.08 cm    103 MeV   720 eV   7.95 mm   1.03 cm OutOfWorldTransportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3,   Parent ID = 1
@@ -4827,13 +4833,13 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.15s Real=0.18s Sys=0.03s
+  User=0.08s Real=0.15s Sys=0.02s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 12; of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.059 Mb
+Number of memory pools allocated: 12 of which, static: 0
+Dynamic pools deleted: 12 / Total memory freed: 0.087 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

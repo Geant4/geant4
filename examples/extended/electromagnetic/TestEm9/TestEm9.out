@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
+ Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -430,7 +430,7 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.69s Real=2.05s Sys=0s
+  User=1.74s Real=1.74s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
@@ -461,7 +461,7 @@ Erms5x5: 0.01025  delErms5x5= -0.9897 nrms= -9.897
 
    Z  bremsstrahlung photoeffect  compton    conversion
   13           0           0         154           0
-  53         256          41           0          44
+  53         255          41           0          44
   55         281          47           0          48
 #
 /testem/det/acceptance1 0.0136 0.0001 500
@@ -550,7 +550,7 @@ EventAction: Event # 900 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.77s Real=5.22s Sys=0.01s
+  User=2.77s Real=2.79s Sys=0.01s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
@@ -992,7 +992,7 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.25s Real=2.15s Sys=0s
+  User=1.39s Real=1.36s Sys=0.01s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 2
 =================================================================
@@ -1434,7 +1434,7 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.46s Real=1.78s Sys=0s
+  User=1.6s Real=1.61s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 3
 =================================================================

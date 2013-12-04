@@ -1,13 +1,13 @@
 
 Usage: load_gdml <intput_gdml_file:mandatory> <output_gdml_file:optional>
 
-G4GDML: Reading '/ec/build/release/09-06-refmt-01_branch/examples/extended/persistency/gdml/G01/solids.gdml'...
+G4GDML: Reading '/ec/G4-builds/release/slc6-gcc47-RelWithDebInfo/09-06-ref-11_branch/examples/extended/persistency/gdml/G01/solids.gdml'...
 G4GDML: Reading definitions...
 G4GDML: Reading materials...
 G4GDML: Reading solids...
 G4GDML: Reading structure...
 G4GDML: Reading setup...
-G4GDML: Reading '/ec/build/release/09-06-refmt-01_branch/examples/extended/persistency/gdml/G01/solids.gdml' done!
+G4GDML: Reading '/ec/G4-builds/release/slc6-gcc47-RelWithDebInfo/09-06-ref-11_branch/examples/extended/persistency/gdml/G01/solids.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
 
         ############################################
@@ -15,7 +15,7 @@ Stripping off GDML names of materials, solids and volumes ...
         ############################################
 
 *************************************************************
- Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
+ Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -47,14 +47,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
@@ -77,375 +77,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-     100.00          3k        11       39        118         0.00    World
-Start Run processing.
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1     -780      0.1      0.1     1e+03        0 1.22e+03  1.22e+03   vol701_PV Transportation
-    2     -720      0.1      0.1     1e+03        0       60  1.28e+03    World_PV Transportation
-    3     -540      0.1      0.1     1e+03        0      180  1.46e+03   vol101_PV Transportation
-    4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
-    5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
-    6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
-   10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
-   11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
-   12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
-   16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
-   17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
-   18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
-   19      948      0.1      0.1     1e+03        0      188  2.95e+03  vol1001_PV Transportation
-   20      952      0.1      0.1     1e+03        0      3.8  2.95e+03    World_PV Transportation
-   21    5e+03      0.1      0.1     1e+03        0 4.05e+03     7e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1     -780      122      0.1     1e+03        0 1.23e+03  1.23e+03   vol601_PV Transportation
-    2     -760      124      0.1     1e+03        0       20  1.25e+03    World_PV Transportation
-    3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
-    4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
-    5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1    5e+03      0.1      700     1e+03        0 7.03e+03  7.03e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1     -780      0.1      0.1     1e+03        0 1.22e+03  1.22e+03   vol701_PV Transportation
-    2     -720      0.1      0.1     1e+03        0       60  1.28e+03    World_PV Transportation
-    3     -540      0.1      0.1     1e+03        0      180  1.46e+03   vol101_PV Transportation
-    4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
-    5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
-    6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
-   10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
-   11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
-   12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
-   16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
-   17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
-   18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
-   19      948      0.1      0.1     1e+03        0      188  2.95e+03  vol1001_PV Transportation
-   20      952      0.1      0.1     1e+03        0      3.8  2.95e+03    World_PV Transportation
-   21    5e+03      0.1      0.1     1e+03        0 4.05e+03     7e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1     -780      122      0.1     1e+03        0 1.23e+03  1.23e+03   vol601_PV Transportation
-    2     -760      124      0.1     1e+03        0       20  1.25e+03    World_PV Transportation
-    3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
-    4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
-    5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1    5e+03      0.1      700     1e+03        0 7.03e+03  7.03e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1     -780      0.1      0.1     1e+03        0 1.22e+03  1.22e+03   vol701_PV Transportation
-    2     -720      0.1      0.1     1e+03        0       60  1.28e+03    World_PV Transportation
-    3     -540      0.1      0.1     1e+03        0      180  1.46e+03   vol101_PV Transportation
-    4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
-    5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
-    6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
-   10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
-   11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
-   12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
-   16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
-   17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
-   18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
-   19      948      0.1      0.1     1e+03        0      188  2.95e+03  vol1001_PV Transportation
-   20      952      0.1      0.1     1e+03        0      3.8  2.95e+03    World_PV Transportation
-   21    5e+03      0.1      0.1     1e+03        0 4.05e+03     7e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1     -780      122      0.1     1e+03        0 1.23e+03  1.23e+03   vol601_PV Transportation
-    2     -760      124      0.1     1e+03        0       20  1.25e+03    World_PV Transportation
-    3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
-    4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
-    5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1    5e+03      0.1      700     1e+03        0 7.03e+03  7.03e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1     -780      0.1      0.1     1e+03        0 1.22e+03  1.22e+03   vol701_PV Transportation
-    2     -720      0.1      0.1     1e+03        0       60  1.28e+03    World_PV Transportation
-    3     -540      0.1      0.1     1e+03        0      180  1.46e+03   vol101_PV Transportation
-    4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
-    5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
-    6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
-   10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
-   11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
-   12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
-   16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
-   17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
-   18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
-   19      948      0.1      0.1     1e+03        0      188  2.95e+03  vol1001_PV Transportation
-   20      952      0.1      0.1     1e+03        0      3.8  2.95e+03    World_PV Transportation
-   21    5e+03      0.1      0.1     1e+03        0 4.05e+03     7e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1     -780      122      0.1     1e+03        0 1.23e+03  1.23e+03   vol601_PV Transportation
-    2     -760      124      0.1     1e+03        0       20  1.25e+03    World_PV Transportation
-    3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
-    4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
-    5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1    5e+03      0.1      700     1e+03        0 7.03e+03  7.03e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1     -780      0.1      0.1     1e+03        0 1.22e+03  1.22e+03   vol701_PV Transportation
-    2     -720      0.1      0.1     1e+03        0       60  1.28e+03    World_PV Transportation
-    3     -540      0.1      0.1     1e+03        0      180  1.46e+03   vol101_PV Transportation
-    4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
-    5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
-    6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
-   10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
-   11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
-   12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
-   16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
-   17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
-   18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
-   19      948      0.1      0.1     1e+03        0      188  2.95e+03  vol1001_PV Transportation
-   20      952      0.1      0.1     1e+03        0      3.8  2.95e+03    World_PV Transportation
-   21    5e+03      0.1      0.1     1e+03        0 4.05e+03     7e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1     -780      122      0.1     1e+03        0 1.23e+03  1.23e+03   vol601_PV Transportation
-    2     -760      124      0.1     1e+03        0       20  1.25e+03    World_PV Transportation
-    3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
-    4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
-    5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1    5e+03      0.1      700     1e+03        0 7.03e+03  7.03e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1     -780      0.1      0.1     1e+03        0 1.22e+03  1.22e+03   vol701_PV Transportation
-    2     -720      0.1      0.1     1e+03        0       60  1.28e+03    World_PV Transportation
-    3     -540      0.1      0.1     1e+03        0      180  1.46e+03   vol101_PV Transportation
-    4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
-    5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
-    6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
-   10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
-   11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
-   12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
-   16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
-   17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
-   18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
-   19      948      0.1      0.1     1e+03        0      188  2.95e+03  vol1001_PV Transportation
-   20      952      0.1      0.1     1e+03        0      3.8  2.95e+03    World_PV Transportation
-   21    5e+03      0.1      0.1     1e+03        0 4.05e+03     7e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1     -780      122      0.1     1e+03        0 1.23e+03  1.23e+03   vol601_PV Transportation
-    2     -760      124      0.1     1e+03        0       20  1.25e+03    World_PV Transportation
-    3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
-    4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
-    5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1    5e+03      0.1      700     1e+03        0 7.03e+03  7.03e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1     -780      0.1      0.1     1e+03        0 1.22e+03  1.22e+03   vol701_PV Transportation
-    2     -720      0.1      0.1     1e+03        0       60  1.28e+03    World_PV Transportation
-    3     -540      0.1      0.1     1e+03        0      180  1.46e+03   vol101_PV Transportation
-    4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
-    5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
-    6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
-    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
-    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
-    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
-   10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
-   11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
-   12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
-   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
-   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
-   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
-   16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
-   17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
-   18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
-   19      948      0.1      0.1     1e+03        0      188  2.95e+03  vol1001_PV Transportation
-   20      952      0.1      0.1     1e+03        0      3.8  2.95e+03    World_PV Transportation
-   21    5e+03      0.1      0.1     1e+03        0 4.05e+03     7e+03  OutOfWorld Transportation
-
-*********************************************************************************************************
-* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
-*********************************************************************************************************
-
-Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
-    1     -780      122      0.1     1e+03        0 1.23e+03  1.23e+03   vol601_PV Transportation
-    2     -760      124      0.1     1e+03        0       20  1.25e+03    World_PV Transportation
-    3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
-    4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
-    5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
-Run terminated.
-Run Summary
-  Number of events processed : 20
-  User=0.01s Real=0s Sys=0s
-/gun/direction 0 0 -1
-/run/beamOn 20
-
-Region <DefaultRegionForTheWorld> --  -- appears in <World_PV> world volume
- This region is in the mass world.
- Root logical volume(s) : World 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : Air Water 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
-
-Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
- Root logical volume(s) : 
- Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
- Materials : 
- Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
-
-========= Table of registered couples ==============================
-
-Index : 0     used in the geometry : Yes     recalculation needed : No 
- Material : Air
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-Index : 1     used in the geometry : Yes     recalculation needed : No 
- Material : Water
- Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
- Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
- Region(s) which use this couple : 
-    DefaultRegionForTheWorld
-
-====================================================================
-
-Start Run processing.
+     100.00          3k        12       44        132         0.00    World
+### Run 0 starts.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -778,6 +411,373 @@ Run terminated.
 Run Summary
   Number of events processed : 20
   User=0.01s Real=0.01s Sys=0s
+/gun/direction 0 0 -1
+/run/beamOn 20
+
+Region <DefaultRegionForTheWorld> --  -- appears in <World_PV> world volume
+ This region is in the mass world.
+ Root logical volume(s) : World 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : Air Water 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
+ Root logical volume(s) : 
+ Pointers : G4VUserRegionInformation[0], G4UserLimits[0], G4FastSimulationManager[0], G4UserSteppingAction[0]
+ Materials : 
+ Production cuts :   gamma 1 mm      e- 1 mm      e+ 1 mm  proton 1 mm 
+
+========= Table of registered couples ==============================
+
+Index : 0     used in the geometry : Yes
+ Material : Air
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+Index : 1     used in the geometry : Yes
+ Material : Water
+ Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
+ Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
+ Region(s) which use this couple : 
+    DefaultRegionForTheWorld
+
+====================================================================
+
+### Run 1 starts.
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -780      0.1      0.1     1e+03        0 1.22e+03  1.22e+03   vol701_PV Transportation
+    2     -720      0.1      0.1     1e+03        0       60  1.28e+03    World_PV Transportation
+    3     -540      0.1      0.1     1e+03        0      180  1.46e+03   vol101_PV Transportation
+    4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
+    5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
+    6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
+    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
+    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+   10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
+   11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
+   12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
+   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
+   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
+   17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
+   18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
+   19      948      0.1      0.1     1e+03        0      188  2.95e+03  vol1001_PV Transportation
+   20      952      0.1      0.1     1e+03        0      3.8  2.95e+03    World_PV Transportation
+   21    5e+03      0.1      0.1     1e+03        0 4.05e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -780      122      0.1     1e+03        0 1.23e+03  1.23e+03   vol601_PV Transportation
+    2     -760      124      0.1     1e+03        0       20  1.25e+03    World_PV Transportation
+    3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
+    4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
+    5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1    5e+03      0.1      700     1e+03        0 7.03e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -780      0.1      0.1     1e+03        0 1.22e+03  1.22e+03   vol701_PV Transportation
+    2     -720      0.1      0.1     1e+03        0       60  1.28e+03    World_PV Transportation
+    3     -540      0.1      0.1     1e+03        0      180  1.46e+03   vol101_PV Transportation
+    4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
+    5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
+    6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
+    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
+    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+   10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
+   11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
+   12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
+   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
+   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
+   17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
+   18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
+   19      948      0.1      0.1     1e+03        0      188  2.95e+03  vol1001_PV Transportation
+   20      952      0.1      0.1     1e+03        0      3.8  2.95e+03    World_PV Transportation
+   21    5e+03      0.1      0.1     1e+03        0 4.05e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -780      122      0.1     1e+03        0 1.23e+03  1.23e+03   vol601_PV Transportation
+    2     -760      124      0.1     1e+03        0       20  1.25e+03    World_PV Transportation
+    3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
+    4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
+    5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1    5e+03      0.1      700     1e+03        0 7.03e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -780      0.1      0.1     1e+03        0 1.22e+03  1.22e+03   vol701_PV Transportation
+    2     -720      0.1      0.1     1e+03        0       60  1.28e+03    World_PV Transportation
+    3     -540      0.1      0.1     1e+03        0      180  1.46e+03   vol101_PV Transportation
+    4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
+    5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
+    6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
+    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
+    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+   10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
+   11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
+   12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
+   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
+   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
+   17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
+   18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
+   19      948      0.1      0.1     1e+03        0      188  2.95e+03  vol1001_PV Transportation
+   20      952      0.1      0.1     1e+03        0      3.8  2.95e+03    World_PV Transportation
+   21    5e+03      0.1      0.1     1e+03        0 4.05e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -780      122      0.1     1e+03        0 1.23e+03  1.23e+03   vol601_PV Transportation
+    2     -760      124      0.1     1e+03        0       20  1.25e+03    World_PV Transportation
+    3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
+    4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
+    5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1    5e+03      0.1      700     1e+03        0 7.03e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -780      0.1      0.1     1e+03        0 1.22e+03  1.22e+03   vol701_PV Transportation
+    2     -720      0.1      0.1     1e+03        0       60  1.28e+03    World_PV Transportation
+    3     -540      0.1      0.1     1e+03        0      180  1.46e+03   vol101_PV Transportation
+    4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
+    5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
+    6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
+    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
+    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+   10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
+   11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
+   12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
+   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
+   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
+   17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
+   18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
+   19      948      0.1      0.1     1e+03        0      188  2.95e+03  vol1001_PV Transportation
+   20      952      0.1      0.1     1e+03        0      3.8  2.95e+03    World_PV Transportation
+   21    5e+03      0.1      0.1     1e+03        0 4.05e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -780      122      0.1     1e+03        0 1.23e+03  1.23e+03   vol601_PV Transportation
+    2     -760      124      0.1     1e+03        0       20  1.25e+03    World_PV Transportation
+    3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
+    4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
+    5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1    5e+03      0.1      700     1e+03        0 7.03e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -780      0.1      0.1     1e+03        0 1.22e+03  1.22e+03   vol701_PV Transportation
+    2     -720      0.1      0.1     1e+03        0       60  1.28e+03    World_PV Transportation
+    3     -540      0.1      0.1     1e+03        0      180  1.46e+03   vol101_PV Transportation
+    4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
+    5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
+    6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
+    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
+    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+   10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
+   11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
+   12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
+   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
+   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
+   17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
+   18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
+   19      948      0.1      0.1     1e+03        0      188  2.95e+03  vol1001_PV Transportation
+   20      952      0.1      0.1     1e+03        0      3.8  2.95e+03    World_PV Transportation
+   21    5e+03      0.1      0.1     1e+03        0 4.05e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -780      122      0.1     1e+03        0 1.23e+03  1.23e+03   vol601_PV Transportation
+    2     -760      124      0.1     1e+03        0       20  1.25e+03    World_PV Transportation
+    3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
+    4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
+    5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1    5e+03      0.1      700     1e+03        0 7.03e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -780      0.1      0.1     1e+03        0 1.22e+03  1.22e+03   vol701_PV Transportation
+    2     -720      0.1      0.1     1e+03        0       60  1.28e+03    World_PV Transportation
+    3     -540      0.1      0.1     1e+03        0      180  1.46e+03   vol101_PV Transportation
+    4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
+    5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
+    6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
+    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
+    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+   10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
+   11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
+   12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
+   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
+   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
+   17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
+   18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
+   19      948      0.1      0.1     1e+03        0      188  2.95e+03  vol1001_PV Transportation
+   20      952      0.1      0.1     1e+03        0      3.8  2.95e+03    World_PV Transportation
+   21    5e+03      0.1      0.1     1e+03        0 4.05e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -780      122      0.1     1e+03        0 1.23e+03  1.23e+03   vol601_PV Transportation
+    2     -760      124      0.1     1e+03        0       20  1.25e+03    World_PV Transportation
+    3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
+    4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
+    5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1    5e+03      0.1      700     1e+03        0 7.03e+03  7.03e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -780      0.1      0.1     1e+03        0 1.22e+03  1.22e+03   vol701_PV Transportation
+    2     -720      0.1      0.1     1e+03        0       60  1.28e+03    World_PV Transportation
+    3     -540      0.1      0.1     1e+03        0      180  1.46e+03   vol101_PV Transportation
+    4     -535      0.1      0.1     1e+03        0        5  1.46e+03    World_PV Transportation
+    5     -278      0.1      0.1     1e+03        0      257  1.72e+03     vol1_PV Transportation
+    6     -222      0.1      0.1     1e+03        0       55  1.78e+03    World_PV Transportation
+    7     -127      0.1      0.1     1e+03        0     95.8  1.87e+03     vol2_PV Transportation
+    8     -117      0.1      0.1     1e+03        0       10  1.88e+03    World_PV Transportation
+    9       -5      0.1      0.1     1e+03        0      112     2e+03     vol0_PV Transportation
+   10        5      0.1      0.1     1e+03        0       10     2e+03    World_PV Transportation
+   11       75      0.1      0.1     1e+03        0       70  2.08e+03     vol3_PV Transportation
+   12      175      0.1      0.1     1e+03        0      100  2.17e+03    World_PV Transportation
+   13      244      0.1      0.1     1e+03        0     69.3  2.24e+03     vol4_PV Transportation
+   14      254      0.1      0.1     1e+03        0       10  2.25e+03    World_PV Transportation
+   15      535      0.1      0.1     1e+03        0      281  2.53e+03    vol71_PV Transportation
+   16      565      0.1      0.1     1e+03        0       30  2.56e+03    World_PV Transportation
+   17      740      0.1      0.1     1e+03        0      175  2.74e+03   vol201_PV Transportation
+   18      760      0.1      0.1     1e+03        0     19.9  2.76e+03    World_PV Transportation
+   19      948      0.1      0.1     1e+03        0      188  2.95e+03  vol1001_PV Transportation
+   20      952      0.1      0.1     1e+03        0      3.8  2.95e+03    World_PV Transportation
+   21    5e+03      0.1      0.1     1e+03        0 4.05e+03     7e+03  OutOfWorld Transportation
+
+*********************************************************************************************************
+* G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
+*********************************************************************************************************
+
+Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
+    0   -2e+03      0.1      0.1     1e+03        0        0         0    World_PV initStep
+    1     -780      122      0.1     1e+03        0 1.23e+03  1.23e+03   vol601_PV Transportation
+    2     -760      124      0.1     1e+03        0       20  1.25e+03    World_PV Transportation
+    3     -740      126      0.1     1e+03        0       20  1.27e+03   vol601_PV Transportation
+    4     -720      128      0.1     1e+03        0       20  1.29e+03    World_PV Transportation
+    5    5e+03      700      0.1     1e+03        0 5.75e+03  7.03e+03  OutOfWorld Transportation
+Run terminated.
+Run Summary
+  Number of events processed : 20
+  User=0.01s Real=0.02s Sys=0s
 /tracking/verbose 0
 /gun/direction 0.3 0.2 1
 /run/beamOn 20
@@ -797,14 +797,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
@@ -813,11 +813,11 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
-Start Run processing.
+### Run 2 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/direction 0.3 -0.2 1
 /run/beamOn 20
 
@@ -836,14 +836,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
@@ -852,11 +852,11 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
-Start Run processing.
+### Run 3 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /gun/direction -0.3 0.2 0.6
 /run/beamOn 20
 
@@ -875,14 +875,14 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes     recalculation needed : No 
+Index : 0     used in the geometry : Yes
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
  Region(s) which use this couple : 
     DefaultRegionForTheWorld
 
-Index : 1     used in the geometry : Yes     recalculation needed : No 
+Index : 1     used in the geometry : Yes
  Material : Water
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
@@ -891,7 +891,7 @@ Index : 1     used in the geometry : Yes     recalculation needed : No
 
 ====================================================================
 
-Start Run processing.
+### Run 4 starts.
 Run terminated.
 Run Summary
   Number of events processed : 20
@@ -900,9 +900,14 @@ G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserPrimaryGenerator deleted.
+RunManager is deleting RunManagerKernel.
 EventManager deleted.
-UImanager deleted.
 Units table cleared.
+================== Deleting memory pools ===================
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.0096 Mb
+============================================================
+G4Allocator objects are deleted.
+UImanager deleted.
 StateManager deleted.
-RunManagerKernel is deleted.
-RunManager is deleted.
+RunManagerKernel is deleted. Good bye :)
