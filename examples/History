@@ -17,6 +17,30 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6th December 2013  Gabriele Cosmo (examples-V10-00-00)
+- Updated reference outputs according to reference tag geant4-10-00-ref-00.
+- Includes tags: doxygen-V09-06-01, dnageometry-V09-06-01, gammaknife-V09-06-03,
+                 gammaraytel-V09-06-06, hadrontherapy-V09-06-08,
+                 human_phantom-V09-06-06, medical_linac-V09-06-03,
+                 microelectronics-V09-06-03, nanobeam-V09-06-13, DMX-V09-06-08,
+                 radioprotection-V09-06-03, XrayFluo-V09-06-02,
+                 exbasic-V09-06-03, analysisExample-V09-06-06,
+                 exbiasing-V09-06-06, excommon-analysis-V09-06-04,
+                 testem1-V09-06-17, testem2-V09-06-18, testem4-V09-06-11,
+                 testem5-V09-06-18, testem8-V09-06-03, testem11-V09-06-17,
+                 testem12-V09-06-11, exgps-V09-06-05, exHepMC-V09-06-01,
+                 p6decayer-V09-06-01, monopole-V09-06-06, fieldex-V09-06-02,
+                 phononExample-V09-06-09, exHadronic-V09-06-01,
+                 exhadr00-V09-06-06, exhadr01-V09-06-07, exhadr03-V09-06-23,
+                 exhadr05-V09-06-01, DICOM-V09-06-09, exampleES2-V09-06-12,
+                 electronScattering-V09-06-09, gtherapy-V09-06-03, LXe-V09-06-17,
+                 OpNovice-V09-06-11, WLS-V09-06-15, exparallel-V09-06-04,
+                 exgflash-V09-06-03, expar01-V09-06-02, G01-V09-06-00,
+                 exampleP03-V09-06-01, expol01-V09-06-02, rdecay02-V09-06-06,
+                 exampleRE01-V09-06-08, exampleRE02-V09-06-09,
+                 exampleRE04-V09-06-06, exampleRE05-V09-06-09,
+                 exampleRE06-V09-06-01, exam-ext-vis-UVA-V09-06-02.
+
 25th October 2013  Gabriele Cosmo (examples-V09-06-10)
 - Updated reference outputs according to reference tag geant4-09-06-ref-10.
 - Includes tags: air_shower-V09-06-03, brachy-V09-06-02, dnaphysics-V09-06-10,
