@@ -23,41 +23,65 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radioactivedecay/rdecay01/include/RunAction.hh
-/// \brief Definition of the RunAction class
+/// \file electromagnetic/TestEm11/include/Run.hh
+/// \brief Definition of the Run class
 //
+// $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $
 //
-// $Id$
-// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef RunAction_h
-#define RunAction_h 1
+#ifndef Run_h
+#define Run_h 1
 
-#include "G4UserRunAction.hh"
+#include "G4Run.hh"
+#include "G4VProcess.hh"
 #include "globals.hh"
+#include <map>
 
-class Run;
-class HistoManager;
-class PrimaryGeneratorAction;
+class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class RunAction : public G4UserRunAction
+class Run : public G4Run
 {
   public:
-    RunAction(PrimaryGeneratorAction*);
-   ~RunAction();
+    Run();
+   ~Run();
 
-    virtual G4Run* GenerateRun();   
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
-    
-  private:
-    PrimaryGeneratorAction* fPrimary;
-    Run*                    fRun;
-    HistoManager*           fHistoManager;    
+  public:
+    void ParticleCount(G4String, G4double);
+    void Balance(G4double,G4double);
+    void EventTiming(G4double);
+    void PrimaryTiming(G4double);
+        
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
+    void EndOfRun(); 
+            
+    virtual void Merge(const G4Run*);
+
+  private:    
+    struct ParticleData {
+     ParticleData()
+       : fCount(0), fEmean(0.), fEmin(0.), fEmax(0.) {}
+     ParticleData(G4int count, G4double ekin, G4double emin, G4double emax)
+       : fCount(count), fEmean(ekin), fEmin(emin), fEmax(emax) {}
+     G4int     fCount;
+     G4double  fEmean;
+     G4double  fEmin;
+     G4double  fEmax;
+    };
+     
+  private: 
+    G4ParticleDefinition*  fParticle;
+    G4double  fEkin;
+             
+    std::map<G4String,ParticleData>  fParticleDataMap;    
+    G4int    fDecayCount, fTimeCount;
+    G4double fEkinTot[3];
+    G4double fPbalance[3];
+    G4double fEventTime[3];
+    G4double fPrimaryTime;                        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

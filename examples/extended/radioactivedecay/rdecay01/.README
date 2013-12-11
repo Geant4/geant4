@@ -29,13 +29,13 @@
      
  A flag:
 \verbatim
-/rdecay01/fullChain (false or true)
+/rdecay01/fullChain (true or false)
 \endverbatim
-allows to limit to single decay (default) or full decay chain.
- 
+allows to limit to single decay or full decay chain (default). 
  In case of full decay chain, G4TrackStatus of ions is set to fStopButAlive
  in order to force decay at rest.  
-   
+ In case of single decay, G4TrackStatus of secondary ion is set to fStopAndKill.
+    
  At each decay, one counts and plots energy spectrum of created particles and
  ions, and energy-momentum balance of that decay.
  

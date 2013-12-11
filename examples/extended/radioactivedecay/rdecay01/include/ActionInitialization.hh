@@ -23,44 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file radioactivedecay/rdecay01/include/RunAction.hh
-/// \brief Definition of the RunAction class
+// $Id: ActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-//
-// $Id$
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
-#ifndef RunAction_h
-#define RunAction_h 1
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "G4UserRunAction.hh"
-#include "globals.hh"
+#include "G4VUserActionInitialization.hh"
 
-class Run;
-class HistoManager;
-class PrimaryGeneratorAction;
+class G4VSteppingVerbose;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Action initialization class.
+///
 
-class RunAction : public G4UserRunAction
+class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    RunAction(PrimaryGeneratorAction*);
-   ~RunAction();
+    ActionInitialization();
+    virtual ~ActionInitialization();
 
-    virtual G4Run* GenerateRun();   
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
     
-  private:
-    PrimaryGeneratorAction* fPrimary;
-    Run*                    fRun;
-    HistoManager*           fHistoManager;    
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
+    

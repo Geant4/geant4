@@ -4,7 +4,7 @@
   // Draw histos filled by Geant4 simulation 
   //   
   ////TFile f = TFile("run1.root");
-  TFile f = TFile("Pu.root");      
+  TFile f = TFile("Ni60.root");      
   TCanvas* c1 = new TCanvas("c1", "  ");
   
   c1->SetLogy(1);
@@ -17,8 +17,8 @@
   ///TH1D* hist2 = (TH1D*)f.Get("2");
   ///hist2->Draw("HIST");
      
-  TH1D* hist3 = (TH1D*)f.Get("3");
-  hist3->Draw("HIST");
+  ///TH1D* hist3 = (TH1D*)f.Get("3");
+  ///hist3->Draw("HIST");
   
   ///TH1D* hist6 = (TH1D*)f.Get("6");
   ///hist6->Draw("HIST");
@@ -26,6 +26,6 @@
   ///TH1D* hist7 = (TH1D*)f.Get("7");
   ///hist7->Draw("HIST");
   
-  ///TH1D* hist8 = (TH1D*)f.Get("8");
-  ///hist8->Draw("HIST");        
+  TH1D* hist8 = (TH1D*)f.Get("8");
+  hist8->Draw("HIST");        
 }  

@@ -30,7 +30,7 @@
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysicsList.hh"
 #include "G4UnitsTable.hh"
@@ -97,9 +97,6 @@ void PhysicsList::ConstructProcess()
   AddTransportation();
   
   G4RadioactiveDecay* radioactiveDecay = new G4RadioactiveDecay();
-  //Caution! With G4MT migration this threshold can no longer be set smaller
-  //than nanosecond
-  radioactiveDecay->SetHLThreshold(nanosecond);
 
   radioactiveDecay->SetICM(true);                //Internal Conversion
   radioactiveDecay->SetARM(false);               //Atomic Rearangement

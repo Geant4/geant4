@@ -3,9 +3,10 @@
 /tracking/verbose 2
 #
 /gun/particle ion
-/gun/ion 95 241
+###/gun/ion 27 60
+/gun/ion 82 210
 ###/gun/ion 43 99 0 142.7
 #
-/rdecay01/fullChain true
+/rdecay01/fullChain false
 #  
 /run/beamOn 1

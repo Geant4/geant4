@@ -7,8 +7,6 @@
 ###/gun/ion 25 53
 ###/gun/ion 55 131
 #
-/rdecay01/fullChain true
-#
 /rdecay01/event/printModulo 1
 #   
-/run/beamOn 1
+/run/beamOn 5
