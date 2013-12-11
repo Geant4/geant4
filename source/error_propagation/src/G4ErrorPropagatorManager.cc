@@ -195,11 +195,10 @@ void G4ErrorPropagatorManager::InitGeant4e()
     
     InitTrackPropagation();
   } else {
-    G4cerr << "G4ErrorPropagatorManager::InitGeant4e: Illegal application state - "
-           << "G4ErrorPropagatorManager::InitGeant4e() ignored." << G4endl;
-    G4cerr << " GEANT4e State= " << PrintG4ErrorState() 
-      //<< " GEANT4 State= " <<  PrintG4State() 
-           << G4endl;
+    std::ostringstream message;
+    message << "Illegal GEANT4e State= " << PrintG4ErrorState();
+    G4Exception("G4ErrorPropagatorManager::InitGeant4e()",
+                "IllegalState", JustWarning, message);
   }
   
   //----- Set the tracking geometry for this propagation

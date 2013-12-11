@@ -114,9 +114,6 @@ void G4ErrorRunManagerHelper::InitializeGeometry()
     
     //----- Second option: geometry has been defined to GEANT4, do nothing GEANT4 should take care 
   } else {
-    //  G4cerr << "G4 TM " << G4TransportationManager::GetTransportationManager() 
-    //      << " NAV " << G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking() 
-    //      << " WORLD " << G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking()->GetWorldVolume() << G4endl;
     //--- Check that indeed geometry has been defined to GEANT4
     if ( G4TransportationManager::GetTransportationManager()
          ->GetNavigatorForTracking()->GetWorldVolume() == 0 ) {
@@ -144,7 +141,10 @@ void G4ErrorRunManagerHelper::InitializePhysics()
     if( G4RunManager::GetRunManager() != 0 && G4RunManager::GetRunManager()->GetUserPhysicsList() != 0 ){ 
       //--- Physics should be G4ErrorPhysicsList, else send a warning
       if( static_cast<const G4ErrorPhysicsList*>(G4RunManager::GetRunManager()->GetUserPhysicsList()) == 0 ) {
-        G4cerr << " WARNING G4ErrorRunManagerHelper::InitializePhysics() physics list is not G4ErrorPhysicsList. Are you sure? " << G4endl;
+        std::ostringstream message;
+        message << "Physics list is not G4ErrorPhysicsList. Are you sure?";
+        G4Exception("G4ErrorRunManagerHelper::InitializePhysics()",
+                    "GEANT4e-Notification", JustWarning, message);
       }
     } else {
       //----- Third option: no physics list has been defined, define a G4ErrorPhysicsList

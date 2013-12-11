@@ -52,11 +52,11 @@ G4ErrorTrajState::G4ErrorTrajState( const G4String& partType,
 //--------------------------------------------------------------------------
 G4int G4ErrorTrajState::PropagateError( const G4Track* )
 { 
-  G4cerr << "ERROR - G4ErrorTrajState::PropagateError()" << G4endl
-         << "        Called for trajectory state type "
-         << G4int(GetTSType()) << G4endl;
-  G4Exception("G4ErrorTrajState::PropagateError", "GEANT4e-Error",
-              FatalException, "Wrong trajectory state type");
+   std::ostringstream message;
+   message << "Wrong trajectory state type !" << G4endl
+           << "Called for trajectory state type: " << G4int(GetTSType());
+   G4Exception("G4ErrorTrajState::PropagateError()", "GEANT4e-Error",
+               FatalException, message);
    return -1; 
 }
 
@@ -88,10 +88,10 @@ void G4ErrorTrajState::BuildCharge()
   G4ParticleDefinition* particle = particleTable->FindParticle(fParticleType); 
   if( particle == 0)
   {
-    G4cerr << "ERROR - G4ErrorTrajState::BuildCharge()" << G4endl
-           << "        Particle type not defined: " << fParticleType << G4endl;
+    std::ostringstream message;
+    message << "Particle type not defined: " << fParticleType;
     G4Exception( "G4ErrorTrajState::BuildCharge()", "GEANT4e-error",
-                  FatalException, "Particle type not defined!");
+                  FatalException, message);
   }
   else
   {
