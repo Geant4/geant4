@@ -55,7 +55,7 @@ logical volume made.
 *Modifying the geometry at runtime*
 ***********************************
 This example allows the user to modify the geometry definition at runtime. This
-is accomplished through LXeDetecotrMessenger, a derived class of G4UImessenger.
+is accomplished through LXeDetectorMessenger, a derived class of G4UImessenger.
 The commands it adds change variables stored in LXeDetectorConstructor that
 are used when constructing the geometry. After changing these variables
 the /LXe/detector/update command must be issued to reconstruct the geometry
@@ -250,7 +250,7 @@ here:
   RecordStep(const G4Step*)
 	-Call from UserSteppingAction()
 
-For the reasoning behind why it is done this way see RecorderBase.hh
+For the reasoning behind why it is done this way see LXeRecorderBase.hh
 
 *************
 *UI commands*
