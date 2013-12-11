@@ -110,7 +110,15 @@
 
   };
 
+// Deprecated.  It is not a good idea to output a pointer since failure to
+// include this prototype will not cause a compilation error - it will merely
+// cause your code to use a default function that outputs the pointer as an
+// address.
 std::ostream& operator<<
-  (std::ostream& os, const std::map<G4String,G4AttDef>* definitions);
+(std::ostream& os, const std::map<G4String,G4AttDef>* definitions);
+
+// Use this instead.
+std::ostream& operator<<
+(std::ostream& os, const std::map<G4String,G4AttDef>& definitions);
 
 #endif //G4ATTDEF_H

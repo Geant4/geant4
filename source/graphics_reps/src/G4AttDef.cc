@@ -30,20 +30,30 @@
 
 #include "G4AttDefStore.hh"
 
+using namespace std;
+
+// Deprecated - see header.
 std::ostream& operator<<
-  (std::ostream& os, const std::map<G4String,G4AttDef>* definitions)
+(std::ostream& os, const std::map<G4String,G4AttDef>* definitions)
 {
-  using namespace std;
-  if (!definitions) {
+  os << "Deprecated output function.  Use const reference equivalent." << endl;
+  if (definitions) {
+    os << *definitions;
+  } else {
     os << "G4AttCheck: ERROR: zero definitions pointer." << endl;
-    return os;
   }
+  return os;
+}
+
+std::ostream& operator<<
+(std::ostream& os, const std::map<G4String,G4AttDef>& definitions)
+{
   G4String storeKey;
-  if (G4AttDefStore::GetStoreKey(definitions, storeKey)) {
+  if (G4AttDefStore::GetStoreKey(&definitions, storeKey)) {
     os << storeKey << ":";
   }
   std::map<G4String,G4AttDef>::const_iterator i;
-  for (i = definitions->begin(); i != definitions->end(); ++i) {
+  for (i = definitions.begin(); i != definitions.end(); ++i) {
     const G4String& name = i->first;
     const G4AttDef& attDef = i->second;
     if (attDef.GetCategory() == "Physics") {

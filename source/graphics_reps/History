@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11th December 2013  John Allison  (greps-V10-00-01)
+- Introduced operator<< for const reference G4AttDefs map.
+- Deprecated const pointer equivalent.
+
 9th December 2013  John Allison  (greps-V10-00-00)
 - Another change suggested by PVS.
 
