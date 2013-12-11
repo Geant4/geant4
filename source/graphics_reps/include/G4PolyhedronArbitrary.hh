@@ -78,7 +78,7 @@ class G4PolyhedronArbitrary : public G4Polyhedron
     G4PolyhedronArbitrary (const G4int nVertices, const G4int nFacets);
     virtual ~G4PolyhedronArbitrary ();
     
-    void AddVertex (const G4ThreeVector v);
+    void AddVertex (const G4ThreeVector& v);
     void AddFacet (const G4int iv1, const G4int iv2, const G4int iv3,
       const G4int iv4=0);
     
