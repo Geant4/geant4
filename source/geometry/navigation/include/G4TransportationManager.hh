@@ -68,7 +68,7 @@ class G4TransportationManager
        // Accessors for field handling
 
      inline G4Navigator* GetNavigatorForTracking() const;
-     inline void SetNavigatorForTracking( G4Navigator* newNavigator );
+     void SetNavigatorForTracking( G4Navigator* newNavigator );
        // Accessors for the navigator for tracking
 
      inline void SetWorldForTracking(G4VPhysicalVolume* theWorld);
