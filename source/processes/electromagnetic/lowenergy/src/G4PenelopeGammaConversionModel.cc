@@ -87,13 +87,13 @@ G4PenelopeGammaConversionModel::~G4PenelopeGammaConversionModel()
 {
   //Delete shared tables, they exist only in the master model
   if (IsMaster() || fLocalTable)
-    {
-      //std::map <G4int,G4PhysicsFreeVector*>::iterator i;
+    {      
       if (logAtomicCrossSection)
 	{
 	  /*
-	  for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
-	     if (i->second) delete i->second;
+	    std::map <G4int,G4PhysicsFreeVector*>::iterator i;
+	    for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
+	    if (i->second) delete i->second;
 	  */
 	  delete logAtomicCrossSection;
 	}
@@ -257,7 +257,7 @@ G4double G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom(
 		   "em2018",JustWarning,ed);
        //protect file reading via autolock
        G4AutoLock lock(&PenelopeGammaConversionModelMutex);
-       ReadDataFile(iZ);
+       ReadDataFile(iZ);            
        lock.unlock();
      }
 
@@ -314,13 +314,32 @@ G4PenelopeGammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticle*
   G4ParticleMomentum photonDirection = aDynamicGamma->GetMomentumDirection();
   const G4Material* mat = couple->GetMaterial();
 
+  //Either Initialize() was not called, or we are in a slave and InitializeLocal() was 
+  //not invoked
+  if (!fEffectiveCharge)
+    {
+      //create a **thread-local** version of the table. Used only for G4EmCalculator and 
+      //Unit Tests
+      fLocalTable = true;    
+      fEffectiveCharge = new std::map<const G4Material*,G4double>;
+      fMaterialInvScreeningRadius = new std::map<const G4Material*,G4double>;
+      fScreeningFunction = new std::map<const G4Material*,std::pair<G4double,G4double> >;
+    }
+
   if (!fEffectiveCharge->count(mat))
     {
-      G4ExceptionDescription ed;      
+      //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
+      //not filled up. This can happen in a UnitTest or via G4EmCalculator
+      G4ExceptionDescription ed;
       ed << "Unable to allocate the EffectiveCharge data for " << 
 	mat->GetName() << G4endl;
-      G4Exception("G4PenelopeGammaConversion::SampleSecondaries()",
-		  "em2019",FatalException,ed);		  
+      ed << "This can happen only in Unit Tests" << G4endl;   
+      G4Exception("G4PenelopeGammaConversionModel::SampleSecondaries()",
+		  "em2019",JustWarning,ed);
+      //protect file reading via autolock
+      G4AutoLock lock(&PenelopeGammaConversionModelMutex);
+      InitializeScreeningFunctions(mat);
+      lock.unlock();
     }
 
   // eps is the fraction of the photon energy assigned to e- (including rest mass)
@@ -609,10 +628,12 @@ void G4PenelopeGammaConversionModel::InitializeScreeningRadii()
 
 void G4PenelopeGammaConversionModel::InitializeScreeningFunctions(const G4Material* material)
 {
+  /*
   if (!IsMaster())    
       //Should not be here!
     G4Exception("G4PenelopeGammaConversionModel::InitializeScreeningFunctions()",
 		"em01001",FatalException,"Worker thread in this method");    
+  */
 
   // This is subroutine GPPa0 of Penelope
   //

@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11.12.2013  L. Pandola, tag emlowen-V10-00-00
+            Allow for (AutoLock-protected) creation on-the-fly of 
+            tables in SampleSecondaries(). Nothing changes for loops driven 
+            by the RunManager. Avoid crash when the loop of SampleSecondaries()
+            is inkoved in a unit test.
+
+22.11.2013  M. Karamitros, tag emlowen-V09-06-49
+	    Remove creation of material in G4MuElect* 
+	    and G4MicroElec* models
+
 21.11.2013  V. Ivanchenko, tag emlowen-V09-06-48
             G4QAOLowEnergyLoss, G4hICRU49He, G4hICRU49p, 
 	    G4hParametrisedLossModel  - removed G4ThreadLocal
