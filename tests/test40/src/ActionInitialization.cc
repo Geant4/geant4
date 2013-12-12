@@ -55,8 +55,18 @@ ActionInitialization::~ActionInitialization()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void ActionInitialization::BuildForMaster() const
+{
+  SetUserAction(masterRunAction);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#include "G4AutoLock.hh"
+namespace { G4Mutex ActionInitializationMutex = G4MUTEX_INITIALIZER; }
 void ActionInitialization::Build() const
 {
+  G4AutoLock l(&ActionInitializationMutex);
   RunAction* run = new RunAction(detector, generator);
   masterRunAction->AddWorkerRunAction(run);
 
@@ -65,13 +75,6 @@ void ActionInitialization::Build() const
   SetUserAction(new TrackingAction(run));
   SetUserAction(new SteppingAction(detector, run));
   SetUserAction(new PrimaryGeneratorAction(detector));
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ActionInitialization::BuildForMaster() const
-{
-  SetUserAction(masterRunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
