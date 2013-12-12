@@ -32,11 +32,10 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "RunAction.hh"
-
+#include "Run.hh"
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
-#include "Run.hh"
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
@@ -77,8 +76,16 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {    
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
-  G4Random::showEngineStatus();
-       
+  if (isMaster) G4Random::showEngineStatus();
+  
+  // keep run condition
+  if (fPrimary) { 
+    G4ParticleDefinition* particle 
+      = fPrimary->GetParticleGun()->GetParticleDefinition();
+    G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
+    fRun->SetPrimary(particle, energy);
+  }
+             
   //histograms
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
@@ -89,47 +96,19 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run* aRun)
+void RunAction::EndOfRunAction(const G4Run*)
 {
-  G4int nbOfEvents = aRun->GetNumberOfEvent();
-
-  if ( fPrimary && nbOfEvents ) { 
-
-    G4int prec = 5;  
-    G4int dfprec = G4cout.precision(prec);
-    
-    G4Material* material = fDetector->GetMaterial();
-    G4double density = material->GetDensity();
-   
-    G4ParticleDefinition* particle = 
-                            fPrimary->GetParticleGun()->GetParticleDefinition();
-    G4String Particle = particle->GetParticleName();    
-    G4double energy = fPrimary->GetParticleGun()->GetParticleEnergy();
-    G4cout << "\n The run is of " << nbOfEvents << " "<< Particle << " of "
-           << G4BestUnit(energy,"Energy") << " through " 
-           << G4BestUnit(fDetector->GetSize(),"Length") << " of "
-           << material->GetName() << " (density: " 
-           << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
-         
-    //restore default format         
-    G4cout.precision(dfprec);
-  }         
-         
-  //compute and print statistics
-  //
-  if (isMaster) fRun->ComputeStatistics();    
+  if (isMaster) fRun->EndOfRun();    
   
   //save histograms      
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  ////G4double factor = 1./nbOfEvents;
-  ////analysisManager->ScaleH1(3,factor);      
   if ( analysisManager->IsActive() ) {
     analysisManager->Write();
     analysisManager->CloseFile();
   }
       
   // show Rndm status
-  G4Random::showEngineStatus();
+  if (isMaster) G4Random::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
