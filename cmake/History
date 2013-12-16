@@ -30,9 +30,6 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
-16th December 2013 - Gunter Folger (cmake-V10-00-00)
-- Modules/Geant4TestDriver.cmake: use CTEST_TEST_TIMEOUT if set to set
-  default timeout
 28th November 2013 - Ben Morgan (cmake-V09-06-45)
 - Modules/Geant4CTest.cmake : Remove G4ENSDFSTATE dataset from list
   exported to the testing environment, as it should not be used by

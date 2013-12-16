@@ -53,11 +53,7 @@ endif()
 if(TIM)
   math(EXPR _timeout "${TIM} - 120")
 else()
-  if(${CTEST_TEST_TIMEOUT})
-     math(EXPR _timeout "${CTEST_TEST_TIMEOUT} - 120")
-  else()	  
-     math(EXPR _timeout "1500 - 120")
-  endif	  
+  math(EXPR _timeout "1500 - 120")
 endif()
 
 if(CWD)
