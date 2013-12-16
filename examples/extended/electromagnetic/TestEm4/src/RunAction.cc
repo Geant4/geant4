@@ -67,7 +67,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {
   // save Rndm status
   //G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  G4Random::showEngineStatus();
+  if (isMaster) G4Random::showEngineStatus();
 
   
    // Get analysis manager
@@ -84,7 +84,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 void RunAction::EndOfRunAction(const G4Run*)
 {  
   // show Rndm status
-  G4Random::showEngineStatus();         
+  if (isMaster) G4Random::showEngineStatus();         
 
   //save histograms      
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();

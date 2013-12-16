@@ -7,9 +7,6 @@
 /control/verbose 2
 /run/verbose 2
 #
-# Controls whether energy is reported at end of event
-/testem/event/drawTracks all
-#
 # Use this open statement to create an OpenGL view:
 /vis/open OGL 600x600-0+0
 #
