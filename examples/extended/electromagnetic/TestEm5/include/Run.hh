@@ -97,7 +97,7 @@ class Run : public G4Run
                
    virtual void Merge(const G4Run*);
    
-   void PrintSummary();   
+   void EndOfRun();   
 
  private:
     DetectorConstruction*  fDetector;

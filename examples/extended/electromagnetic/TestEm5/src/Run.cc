@@ -34,6 +34,7 @@
 #include "Run.hh"
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "HistoManager.hh"
 
 #include "G4EmCalculator.hh"
 #include "G4SystemOfUnits.hh"
@@ -127,7 +128,7 @@ void Run::Merge(const G4Run* run)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::PrintSummary()
+void Run::EndOfRun()
 {
   // compute mean and rms
   //
@@ -300,6 +301,25 @@ void Run::PrintSummary()
   G4cout << "  central part defined as +- "
          << fMscThetaCentral/mrad << " mrad; " 
          << "  Tail ratio = " << tailMsc << " %" << G4endl;
+         
+  // normalize histograms
+  //
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  
+  G4int ih = 1;
+  G4double binWidth = analysisManager->GetH1Width(ih);
+  G4double unit     = analysisManager->GetH1Unit(ih);  
+  G4double fac = unit/(TotNbofEvents*binWidth);
+  analysisManager->ScaleH1(ih,fac);
+
+  ih = 10;
+  binWidth = analysisManager->GetH1Width(ih);
+  unit     = analysisManager->GetH1Unit(ih);  
+  fac = unit/(TotNbofEvents*binWidth);
+  analysisManager->ScaleH1(ih,fac);
+
+  ih = 12;
+  analysisManager->ScaleH1(ih,1./TotNbofEvents);
                     
   // reset default precision
   G4cout.precision(prec);
