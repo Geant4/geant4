@@ -228,7 +228,7 @@ void RunAction::EndOfRunAction(const G4Run*)
     varianceEvis = meanEvis2 - meanEvis*meanEvis;
     rmsEvis = 0.;
     if (varianceEvis > 0.) rmsEvis = std::sqrt(varianceEvis);
-    resEvis = 100*rmsEvis/meanEvis;
+    resEvis = meanEvis ? 100*rmsEvis/meanEvis : 0.;
     histoManager->FillHisto(3, i1+0.5, meanEvis);
          
     //total energy
