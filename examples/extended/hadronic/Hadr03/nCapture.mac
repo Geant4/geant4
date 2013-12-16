@@ -27,6 +27,6 @@
 /analysis/h1/set 11 100  0. 70 MeV	#Q
 /analysis/h1/set 12 100  0. 15 MeV	#Pbalance
 #
-/testhadr/event/printModulo 10000
+/run/printProgress 10000
 #
 /run/beamOn 100000

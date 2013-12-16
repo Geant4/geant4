@@ -23,54 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/src/EventAction.cc
-/// \brief Implementation of the EventAction class
+// $Id: ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-// $Id$
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.cc
+/// \brief Implementation of the ActionInitialization class
 
-#include "EventAction.hh"
-
-#include "EventActionMessenger.hh"
-
-#include "G4Event.hh"
-#include "G4UnitsTable.hh"
+#include "ActionInitialization.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "SteppingAction.hh"
+#include "SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction()
-:G4UserEventAction(),
- fPrintModulo(10000),fEventMessenger(0)
+ActionInitialization::ActionInitialization(DetectorConstruction* detector)
+ : G4VUserActionInitialization(),
+   fDetector(detector)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ActionInitialization::~ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
 {
-  fEventMessenger = new EventActionMessenger(this);
+  RunAction* runAction = new RunAction(fDetector, 0);
+  SetUserAction(runAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::~EventAction()
+void ActionInitialization::Build() const
 {
-  delete fEventMessenger;
-}
+  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(fDetector);
+  SetUserAction(primary);
+    
+  RunAction* runAction = new RunAction(fDetector, primary );
+  SetUserAction(runAction);
+  
+  SteppingAction* steppingAction = new SteppingAction();
+  SetUserAction(steppingAction);
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction(const G4Event* evt)
+G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
 {
- G4int evtNb = evt->GetEventID();
- 
- //printing survey
- if (evtNb%fPrintModulo == 0) 
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-}
+  return new SteppingVerbose();
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventAction::EndOfEventAction(const G4Event*)
-{
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

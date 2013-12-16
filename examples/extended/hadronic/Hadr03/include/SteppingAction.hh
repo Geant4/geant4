@@ -39,20 +39,18 @@
 #include <map>
 
 class G4ParticleDefinition;
-class RunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SteppingAction : public G4UserSteppingAction
 {
   public:
-    SteppingAction(RunAction*);
+    SteppingAction();
    ~SteppingAction();
 
     virtual void UserSteppingAction(const G4Step*);
     
   private:
-    RunAction*              fRunAction;
     std::map<G4ParticleDefinition*,G4int> fParticleFlag;    
 };
 

@@ -23,42 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/include/EventAction.hh
-/// \brief Definition of the EventAction class
+// $Id: ActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-// $Id$
-// 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
-#ifndef EventAction_h
-#define EventAction_h 1
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "G4UserEventAction.hh"
-#include "globals.hh"
+#include "G4VUserActionInitialization.hh"
 
-class EventActionMessenger;
+class DetectorConstruction;
+class G4VSteppingVerbose;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Action initialization class.
+///
 
-class EventAction : public G4UserEventAction
+class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    EventAction();
-   ~EventAction();
+    ActionInitialization(DetectorConstruction* detector);
+    virtual ~ActionInitialization();
 
-  public:
-    virtual void BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
     
-    void SetPrintModulo(G4int val) {fPrintModulo = val;};
-               
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+   
   private:
-    G4int                 fPrintModulo;                    
-    EventActionMessenger* fEventMessenger;
+    DetectorConstruction* fDetector;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

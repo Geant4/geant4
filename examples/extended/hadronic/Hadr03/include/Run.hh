@@ -23,41 +23,88 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/include/EventActionMessenger.hh
-/// \brief Definition of the EventActionMessenger class
+/// \file electromagnetic/TestEm11/include/Run.hh
+/// \brief Definition of the Run class
 //
-// $Id$
-// 
+// $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef EventActionMessenger_h
-#define EventActionMessenger_h 1
+#ifndef Run_h
+#define Run_h 1
 
-#include "G4UImessenger.hh"
+#include "G4Run.hh"
+#include "G4VProcess.hh"
 #include "globals.hh"
+#include <map>
 
-class EventAction;
-class G4UIdirectory;
-class G4UIcmdWithAnInteger;
+class DetectorConstruction;
+class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class EventActionMessenger: public G4UImessenger
+class Run : public G4Run
 {
   public:
-    EventActionMessenger(EventAction*);
-   ~EventActionMessenger();
-    
-    virtual void SetNewValue(G4UIcommand*, G4String);
-    
+    Run(DetectorConstruction*);
+   ~Run();
+
+  public:
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
+    void SetTargetXXX(G4bool);        
+    void CountProcesses(const G4VProcess* process);
+    void SumTrack (G4double);    
+    void CountNuclearChannel(G4String, G4double);                          
+    void ParticleCount(G4String, G4double);
+    void Balance(G4double);
+    void CountGamma(G4int);
+        
+    virtual void Merge(const G4Run*);      
+    void EndOfRun(); 
+   
   private:
-    EventAction*          fEventAction;
+    struct ParticleData {
+     ParticleData()
+       : fCount(0), fEmean(0.), fEmin(0.), fEmax(0.) {}
+     ParticleData(G4int count, G4double ekin, G4double emin, G4double emax)
+       : fCount(count), fEmean(ekin), fEmin(emin), fEmax(emax) {}
+     G4int     fCount;
+     G4double  fEmean;
+     G4double  fEmin;
+     G4double  fEmax;
+    };
     
-    G4UIdirectory*        fEventDir;   
-    G4UIcmdWithAnInteger* fPrintCmd;    
+    struct NuclChannel {
+     NuclChannel()
+       : fCount(0), fQ(0.) {}
+     NuclChannel(G4int count, G4double Q)
+       : fCount(count), fQ(Q) {}
+     G4int     fCount;
+     G4double  fQ;
+    };
+         
+  private:
+    DetectorConstruction* fDetector;
+    G4ParticleDefinition* fParticle;
+    G4double              fEkin;
+        
+    std::map<const G4VProcess*,G4int> fProcCounter;            
+    
+    G4int fTotalCount;      //all processes counter
+    G4int fGammaCount;      //nb of events with gamma
+    G4double fSumTrack;     //sum of trackLength
+    G4double fSumTrack2;    //sum of trackLength*trackLength
+         
+    std::map<G4String,NuclChannel>  fNuclChannelMap;    
+    std::map<G4String,ParticleData> fParticleDataMap;
+
+    G4bool   fTargetXXX;                    
+    G4double fPbalance[3];
+    G4int    fNbGamma[3];        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+

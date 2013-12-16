@@ -42,6 +42,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class DetectorConstruction;
+class Run;
 class PrimaryGeneratorAction;
 class HistoManager;
 class G4Run;
@@ -55,41 +56,15 @@ class RunAction : public G4UserRunAction
    ~RunAction();
 
   public:
+    virtual G4Run* GenerateRun();   
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
-
-    void CountProcesses(const G4VProcess* process) 
-                  {fProcCounter[process]++;};
-                                
-    void SumTrack (G4double track) 
-                {fTotalCount++; fSumTrack += track; fSumTrack2 += track*track;};
-                
-    void CountNuclearChannel(G4String, G4double);                
-    void ParticleCount(G4String, G4double);
-    void Balance(G4double);
-    void CountGamma(G4int);
                             
   private:
     DetectorConstruction*      fDetector;
     PrimaryGeneratorAction*    fPrimary;
+    Run*                       fRun;        
     HistoManager*              fHistoManager;
-        
-    std::map<const G4VProcess*,G4int>   fProcCounter;            
-    G4int fTotalCount;      //all processes counter
-    G4int fGammaCount;      //nb of events with gamma
-    G4double fSumTrack;     //sum of trackLength
-    G4double fSumTrack2;    //sum of trackLength*trackLength
-    
-    std::map<G4String,G4int>    fNuclChannelCount;
-    std::map<G4String,G4double> fNuclChannelQ;
-        
-    std::map<G4String,G4int> fParticleCount;
-    std::map<G4String,G4double> fEmean;
-    std::map<G4String,G4double> fEmin;
-    std::map<G4String,G4double> fEmax;
-    
-    G4double fPbalance[3];
-    G4int    fNbGamma[3];        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

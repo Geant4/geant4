@@ -46,7 +46,7 @@
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 :G4UImessenger(), 
  fDetector(Det), fTestemDir(0), fDetDir(0), fMaterCmd(0), fSizeCmd(0),
- fMagFieldCmd(0), fIsotopeCmd(0)
+ fIsotopeCmd(0)
 { 
   fTestemDir = new G4UIdirectory("/testhadr/");
   fTestemDir->SetGuidance("commands specific to this example");
@@ -67,14 +67,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fSizeCmd->SetUnitCategory("Length");
   fSizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   fSizeCmd->SetToBeBroadcasted(false);
-    
-  fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testhadr/det/setField",this);  
-  fMagFieldCmd->SetGuidance("Define magnetic field.");
-  fMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  fMagFieldCmd->SetParameterName("Bz",false);
-  fMagFieldCmd->SetUnitCategory("Magnetic flux density");
-  fMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  fMagFieldCmd->SetToBeBroadcasted(false);
     
   fIsotopeCmd = new G4UIcommand("/testhadr/det/setIsotopeMat",this);
   fIsotopeCmd->SetGuidance("Build and select a material with single isotope");
@@ -115,7 +107,6 @@ DetectorMessenger::~DetectorMessenger()
 {
   delete fMaterCmd;
   delete fSizeCmd; 
-  delete fMagFieldCmd;
   delete fIsotopeCmd;
   delete fDetDir;
   delete fTestemDir;
@@ -130,9 +121,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
    
   if( command == fSizeCmd )
    { fDetector->SetSize(fSizeCmd->GetNewDoubleValue(newValue));}
-   
-  if( command == fMagFieldCmd )
-   { fDetector->SetMagField(fMagFieldCmd->GetNewDoubleValue(newValue));}
        
   if (command == fIsotopeCmd)
    {

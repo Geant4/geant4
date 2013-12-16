@@ -32,7 +32,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "RunAction.hh"
+#include "Run.hh"
 #include "HistoManager.hh"
 
 #include "G4ParticleTypes.hh"
@@ -41,8 +41,8 @@
                            
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RuAct)
-: G4UserSteppingAction(),fRunAction(RuAct)
+SteppingAction::SteppingAction()
+: G4UserSteppingAction()
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,11 +54,14 @@ SteppingAction::~SteppingAction()
 
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
+ Run* run 
+   = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+         
   // count processes
   // 
   const G4StepPoint* endPoint = aStep->GetPostStepPoint();
   const G4VProcess* process   = endPoint->GetProcessDefinedStep();
-  fRunAction->CountProcesses(process);
+  run->CountProcesses(process);
   
   // check that an real interaction occured (eg. not a transportation)
   G4StepStatus stepStatus = endPoint->GetStepStatus();
@@ -68,7 +71,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //real processes : sum track length
   //
   G4double stepLength = aStep->GetStepLength();
-  fRunAction->SumTrack(stepLength);
+  run->SumTrack(stepLength);
   
   //energy-momentum balance initialisation
   //
@@ -86,6 +89,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4String targetName = "XXXX";  
   if (target) targetName = target->GetName();
   nuclearChannel += " + " + targetName + " --> ";
+  if (targetName == "XXXX") run->SetTargetXXX(true);
     
   //scattered primary particle (if any)
   //
@@ -112,7 +116,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     G4String type   = particle->GetParticleType();      
     G4double charge = particle->GetPDGCharge();
     G4double energy = (*secondary)[lp]->GetKineticEnergy();
-    fRunAction->ParticleCount(name,energy);
+    run->ParticleCount(name,energy);
     //energy spectrum
     if (charge > 3.)  ih = 2; 
     else if (particle == G4Gamma::Gamma())       ih = 3;
@@ -134,7 +138,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   
   //energy-momentum balance
   G4double Pbal = Pbalance.mag();
-  fRunAction->Balance(Pbal);
+  run->Balance(Pbal);
   ih = 11;
   analysis->FillH1(ih,Q);
   ih = 12;
@@ -152,7 +156,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     if (nb > kMax) nb = kMax;   
     G4String Nb = conver[nb];    
     if (particle == G4Gamma::Gamma()) {
-     fRunAction->CountGamma(nb);
+     run->CountGamma(nb);
      Nb = "N ";
     } 
     if (ip != fParticleFlag.begin()) nuclearChannel += " + ";
@@ -160,7 +164,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   }
  
   ///G4cout << "\n nuclear channel: " << nuclearChannel << G4endl;
-  fRunAction->CountNuclearChannel(nuclearChannel, Q);
+  run->CountNuclearChannel(nuclearChannel, Q);
     
   fParticleFlag.clear();
               

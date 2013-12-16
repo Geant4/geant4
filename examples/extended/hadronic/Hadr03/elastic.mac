@@ -27,6 +27,8 @@
 /analysis/h1/set 11 100 -700. 10 eV	#Q
 /analysis/h1/set 12 100  0. 15 MeV	#Pbalance
 #
+/run/printProgress 1000
+#
 /run/beamOn 10000
 
 

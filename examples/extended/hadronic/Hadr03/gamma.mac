@@ -18,6 +18,6 @@
 /analysis/h1/set 2  100  -1. 30 keV	#recoil ion
 /analysis/h1/set 11 100 -10.  1 MeV	#Q
 #
-/testhadr/event/printModulo 1000
+/run/printProgress 1000
 #
 /run/beamOn 1000

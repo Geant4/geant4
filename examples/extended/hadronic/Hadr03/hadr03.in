@@ -14,8 +14,9 @@
 #
 /process/list
 #
-/particle/createAllIsomer
 /gun/particle proton
 /gun/energy 10 MeV
+#
+/run/printProgress 1000
 #
 /run/beamOn 10000
