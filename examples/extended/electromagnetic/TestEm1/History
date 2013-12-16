@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+15-12-13 mma (testem1-V10-00-00)
+- introduce function Run::EndOfRun()
 
 21-11-13 Andrea Dotti (testem1-V09-06-17)
 - In case material is changed call PhysicsHasBeenModified
