@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 16, 2013 M. Asai (OpNovice-V10-00-01)
+- Fix race condision issue in OpNovicePhysicsList.
+
 December 04, 2013 P. Gumplinger (OpNovice-V10-00-00)
 - Fixes in gui.mac:
   Commented out command specific to B2 example
