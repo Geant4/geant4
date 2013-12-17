@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-Dec-2013  G.Cosmo               (geom-specific-V10-00-00)
+- Corrected left-over debug printout in G4Polycone::SetOriginalParameters().
+
 04-Dec-2013  G.Cosmo               (geom-specific-V09-06-36)
 - Corrected left-over debug printout in G4Polyhedra::SetOriginalParameters().
 
