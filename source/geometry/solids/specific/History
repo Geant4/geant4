@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18-Dec-2013  T.Nikitina            (geom-specific-V10-00-01)
+- Fix in G4GenericTrap::InsidePolygone() to check if p lies between the two
+  extremes of the segment. Addressing problem report #1541.
+
 17-Dec-2013  G.Cosmo               (geom-specific-V10-00-00)
 - Corrected left-over debug printout in G4Polycone::SetOriginalParameters().
 
