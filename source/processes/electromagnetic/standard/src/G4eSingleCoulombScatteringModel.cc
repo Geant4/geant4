@@ -104,21 +104,22 @@ G4eSingleCoulombScatteringModel::~G4eSingleCoulombScatteringModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4eSingleCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
-                                           const G4DataVector&  )
+						 const G4DataVector&  cuts)
 {
-  	SetupParticle(p);
-  	currentCouple = 0;
-	currentMaterialIndex = -1;
-  	cosThetaMin = cos(PolarAngleLimit());
-  	Mottcross->Initialise(p,cosThetaMin);
+  SetupParticle(p);
+  currentCouple = 0;
+  currentMaterialIndex = -1;
+  cosThetaMin = cos(PolarAngleLimit());
+  Mottcross->Initialise(p,cosThetaMin);
  
-        pCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
+  pCuts = &cuts; 
+  //G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
 
 
-  	if(!isInitialised) {
-	  isInitialised = true;
-	  fParticleChange = GetParticleChangeForGamma();
-	}
+  if(!isInitialised) {
+    isInitialised = true;
+    fParticleChange = GetParticleChangeForGamma();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

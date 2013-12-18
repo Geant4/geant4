@@ -18,8 +18,14 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+18 December 13: V.Ivanchenko (emstand-V10-00-00)
+- G4eCoulombScatteringModel, G4eSingleCoulombScatteringModel - get pointer
+    to the vector of cuts from parameter of Initialise(..) method and 
+    not from G4ProductionCutsTable - this is more convinient for
+    unit tests, results unchanged
+
 18 November 13: V.Ivanchenko (emstand-V09-06-79)
-- G4PAIPhotonModel, G4PAIxSection - fixed Coverity reports
+- G4PAIPhotonModel, G4PAIxSection - fixed Coverity reports (V.Grichine)
 
 12 November 13: V.Ivanchenko (emstand-V09-06-78)
 - G4IonCoulombScatteringModel, G4eCoulombScatteringModel,
