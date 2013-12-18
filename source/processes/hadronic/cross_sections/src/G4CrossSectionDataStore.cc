@@ -241,9 +241,6 @@ G4CrossSectionDataStore::SampleZandA(const G4DynamicParticle* part,
 
   G4double cross = GetCrossSection(part, mat);
 
-  // zero cross section case
-  if(0.0 >= cross) { return anElement; }
-
   // select element from a compound 
   if(1 < nElements) {
     cross *= G4UniformRand();
