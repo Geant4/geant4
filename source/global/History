@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 17, 2013 G.Cosmo      (global-V10-00-00)
+- Explicitly check the upper bound of 'numberOfYNodes' in
+  G4Physics2DVector::Retrieve() (read from file), to fix defect
+  reported by Coverity (L.Pandola).
+- Updated date and tag-ID for geant4-10-00-ref-01.
+
 November 20, 2013 A.Dotti      (global-V09-06-82)
 - Patched G4HepRandom to create default engine if G4Random::setTheSeed
   is called at beginning of job (allowed in SEQ).
