@@ -76,38 +76,50 @@ public: // With description
   void SetYmax (G4double ymax);
   void SetZmin (G4double zmin);
   void SetZmax (G4double zmax);
+  
+  void SetExtent(size_t axis/*0 --> 2*/, G4bool min_max, G4double value);
+  G4double GetExtent(size_t axis/*0 --> 2*/, G4bool min_max);
+  
   friend std::ostream& operator << (std::ostream& os, const G4VisExtent& e);
   static const G4VisExtent NullExtent;
 
 private:
-  G4double fXmin, fXmax, fYmin, fYmax, fZmin, fZmax;
+  G4double fExtent[3][2];  
   mutable G4bool fRadiusCached, fCentreCached;
   mutable G4double fRadius;
   mutable G4Point3D fCentre;
 };
 
-inline G4double G4VisExtent::GetXmin () const { return fXmin; }
-inline G4double G4VisExtent::GetXmax () const { return fXmax; }
-inline G4double G4VisExtent::GetYmin () const { return fYmin; }
-inline G4double G4VisExtent::GetYmax () const { return fYmax; }
-inline G4double G4VisExtent::GetZmin () const { return fZmin; }
-inline G4double G4VisExtent::GetZmax () const { return fZmax; }
+inline G4double G4VisExtent::GetXmin () const { return fExtent[0][0]; }
+inline G4double G4VisExtent::GetXmax () const { return fExtent[0][1]; }
+inline G4double G4VisExtent::GetYmin () const { return fExtent[1][0]; }
+inline G4double G4VisExtent::GetYmax () const { return fExtent[1][1]; }
+inline G4double G4VisExtent::GetZmin () const { return fExtent[2][0]; }
+inline G4double G4VisExtent::GetZmax () const { return fExtent[2][1]; }
 
 inline const G4Point3D& G4VisExtent::GetExtentCenter () const {
   return GetExtentCentre ();
 }
 
 inline void G4VisExtent::SetXmin (G4double xmin)
-{fXmin = xmin; fRadiusCached = false; fCentreCached = false;}
+{fExtent[0][0] = xmin; fRadiusCached = false; fCentreCached = false;}
 inline void G4VisExtent::SetXmax (G4double xmax)
-{fXmax = xmax; fRadiusCached = false; fCentreCached = false;}
+{fExtent[0][1] = xmax; fRadiusCached = false; fCentreCached = false;}
 inline void G4VisExtent::SetYmin (G4double ymin)
-{fYmin = ymin; fRadiusCached = false; fCentreCached = false;}
+{fExtent[1][0] = ymin; fRadiusCached = false; fCentreCached = false;}
 inline void G4VisExtent::SetYmax (G4double ymax)
-{fYmax = ymax; fRadiusCached = false; fCentreCached = false;}
+{fExtent[1][1] = ymax; fRadiusCached = false; fCentreCached = false;}
 inline void G4VisExtent::SetZmin (G4double zmin)
-{fZmin = zmin; fRadiusCached = false; fCentreCached = false;}
+{fExtent[2][0] = zmin; fRadiusCached = false; fCentreCached = false;}
 inline void G4VisExtent::SetZmax (G4double zmax)
-{fZmax = zmax; fRadiusCached = false; fCentreCached = false;}
+{fExtent[2][1] = zmax; fRadiusCached = false; fCentreCached = false;}
 
+inline void G4VisExtent::SetExtent(size_t axis, G4bool min_max, G4double value)
+{
+    fExtent[axis][min_max] = value;
+}    
+inline G4double G4VisExtent::GetExtent(size_t axis, G4bool min_max)
+{
+    return fExtent[axis][min_max];
+}
 #endif

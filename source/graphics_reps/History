@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20th December 2013  Mathieu Karamitros  (greps-V10-00-02)
+- G4VisExtent: Enable accessing data using indexes
+
 11th December 2013  John Allison  (greps-V10-00-01)
 - Introduced operator<< for const reference G4AttDefs map.
 - Deprecated const pointer equivalent.
