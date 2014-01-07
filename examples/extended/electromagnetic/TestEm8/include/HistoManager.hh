@@ -51,6 +51,7 @@
 
 #include "globals.hh"
 #include "G4DataVector.hh"
+#include "G4StatDouble.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -117,6 +118,7 @@ private:
   G4bool fHistoBooked;
 
   G4double fTotEdep;
+  G4StatDouble fEdep;
   G4double fOverflow;
   G4DataVector fEgas;
 
