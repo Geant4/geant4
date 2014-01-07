@@ -41,11 +41,7 @@
 
 #include "G4Run.hh"
 #include "G4RunManager.hh"
-#include "G4UnitsTable.hh"
-#include "G4Threading.hh"
-
 #include "G4SystemOfUnits.hh"
-#include <iomanip>
 
 #include "Randomize.hh"
 
@@ -135,12 +131,9 @@ void RunAction::BookHisto()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::SaveHisto()
+void RunAction::SetHistoName(G4String& val)
 {
-  fAnalysisManager->Write();
-  fAnalysisManager->CloseFile();
-
-  delete fAnalysisManager;
+  fHistoName[0] = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -156,13 +149,8 @@ G4Run* RunAction::GenerateRun()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
-  //fRun->Reset();
-     // not needed as a new Run object is created with each run
-
   // show Rndm status
-  if (isMaster) { 
-    G4Random::showEngineStatus(); 
-  }
+  if (isMaster) G4Random::showEngineStatus(); 
 
   //histograms
   //
@@ -173,15 +161,16 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  //compute and print statistic
-  //
-  if (isMaster) fRun->ComputeStatistics(fEdeptrue, fRmstrue, fLimittrue);    
+ //compute and print statistic
+ //
+ if (isMaster) fRun->EndOfRun(fEdeptrue, fRmstrue, fLimittrue);    
 
-  // show Rndm status
-  G4Random::showEngineStatus();
+ // show Rndm status
+ if (isMaster) G4Random::showEngineStatus();
 
-  // save histos and close analysis
-  SaveHisto(); 
+ // save histos and close analysis
+ fAnalysisManager->Write();
+ fAnalysisManager->CloseFile(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -197,7 +186,7 @@ void RunAction::SetEdepAndRMS(G4ThreeVector Value)
 void RunAction::SetVerbose(G4int val)  
 {
   fVerbose = val;
-  if ( fRun ) fRun->SetVerbose(val);
+  if (fRun) fRun->SetVerbose(val);
 }
      
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

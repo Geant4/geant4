@@ -43,7 +43,6 @@
 
 class G4Tubs;
 class G4LogicalVolume;
-class G4UniformMagField;
 class DetectorMessenger;
 class G4GlobalMagFieldMessenger;
 

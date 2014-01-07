@@ -37,8 +37,6 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class EventActionMessenger;
-
 class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,13 +50,6 @@ public:
 
   virtual void BeginOfEventAction(const G4Event*);
   virtual void   EndOfEventAction(const G4Event*);
-    
-  void SetPrintModulo(G4int    val)  {fPrintModulo = val;};
-    
-private:
-  
-  G4int                  fPrintModulo;          
-  EventActionMessenger*  fEventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

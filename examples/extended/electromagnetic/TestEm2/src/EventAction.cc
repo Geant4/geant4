@@ -33,7 +33,6 @@
 
 #include "EventAction.hh"
 
-#include "EventActionMessenger.hh"
 #include "Run.hh"
 #include "G4Event.hh"
 #include "G4RunManager.hh"
@@ -42,33 +41,21 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction()
-:G4UserEventAction(),
- fPrintModulo(10000),fEventMessenger(0)
-{
-  fEventMessenger = new EventActionMessenger(this);
-}
+:G4UserEventAction()
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
-{
-  delete fEventMessenger;
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction(const G4Event* evt)
+void EventAction::BeginOfEventAction(const G4Event*)
 {
- G4int evtNb = evt->GetEventID();     
- 
- //printing survey
- if (evtNb%fPrintModulo == 0) 
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-
  //additional initializations 
  Run* run 
-    = static_cast<Run*>(
-        G4RunManager::GetRunManager()->GetNonConstCurrentRun()); 
+   = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
  run->InitializePerEvent();
 }
 
@@ -77,8 +64,7 @@ void EventAction::BeginOfEventAction(const G4Event* evt)
 void EventAction::EndOfEventAction(const G4Event*)
 {  
  Run* run 
-    = static_cast<Run*>(
-        G4RunManager::GetRunManager()->GetNonConstCurrentRun()); 
+   = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
  run->FillPerEvent();  
 }
 

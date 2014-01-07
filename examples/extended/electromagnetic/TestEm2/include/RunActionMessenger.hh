@@ -61,7 +61,7 @@ private:
   G4UIcmdWithAnInteger* fVerbCmd;
             
   G4UIdirectory*        fHistoDir;        
-  G4UIcmdWithAString*   factoryCmd;
+  G4UIcmdWithAString*   fHFileCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -35,7 +35,6 @@
 #include "Run.hh"
 
 #include "G4RunManager.hh"
-#include "G4TrackingManager.hh"
 #include "G4Track.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -48,14 +47,13 @@ TrackingAction::TrackingAction()
 
 void TrackingAction::PostUserTrackingAction(const G4Track* aTrack)
 {
-  //count total track length
-  G4double charge = aTrack->GetDefinition()->GetPDGCharge();
-  G4double TrLeng = aTrack->GetTrackLength();
+ //count total track length
+ G4double charge = aTrack->GetDefinition()->GetPDGCharge();
+ G4double TrLeng = aTrack->GetTrackLength();
   
-  Run* run 
-    = static_cast<Run*>(
-        G4RunManager::GetRunManager()->GetNonConstCurrentRun()); 
-  run->FillPerTrack(charge,TrLeng);     
+ Run* run 
+   = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+ run->FillPerTrack(charge,TrLeng);     
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

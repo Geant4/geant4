@@ -35,18 +35,12 @@
 
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "RunActionMessenger.hh"
 #include "EmAcceptance.hh"
 
 #include "G4Run.hh"
-#include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
-#include "G4Threading.hh"
-
 #include "G4SystemOfUnits.hh"
 #include <iomanip>
-
-#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -190,7 +184,7 @@ void Run::Merge(const G4Run* run)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::ComputeStatistics(G4double edep, G4double rms, G4double& limit) 
+void Run::EndOfRun(G4double edep, G4double rms, G4double& limit) 
 {
   G4int NbOfEvents = GetNumberOfEvent();
 
@@ -332,7 +326,7 @@ void Run::ComputeStatistics(G4double edep, G4double rms, G4double& limit)
   
   G4cout << "\n ===== SUMMARY ===== \n" << G4endl;
 
-  G4cout << " Total number pf events:        " << NbOfEvents << "\n"
+  G4cout << " Total number of events:        " << NbOfEvents << "\n"
          << " Mean number of charged steps:  " << fChargedStep << G4endl;
   G4cout << " Mean number of neutral steps:  " << fNeutralStep 
          << "\n" << G4endl;

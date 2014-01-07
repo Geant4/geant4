@@ -147,12 +147,6 @@ Idle> exit
 \endverbatim
    
  The format of the histogram file can be : root (default),
- hbook, xml, csv, by selecting g4nnn.hh in RunAction.hh 
- 
-\subsection TestEm2_subs2 Using hbook format
- 
- Need a special treatement : the Cern Library must be installed and the
- environment variable CERNLIB correctly set. Then, *before* compiling,
- activate G4_USE_HBOOK in GNUmakefile and g4hbook.hh in RunAction.hh
-
+ xml, csv, by selecting g4nnn.hh in RunAction.hh
+  
 */
