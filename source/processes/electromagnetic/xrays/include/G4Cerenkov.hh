@@ -155,16 +155,16 @@ public:
                                const G4Step&
                               ) {return 0;};
 
-	void SetTrackSecondariesFirst(const G4bool state);
+	static void SetTrackSecondariesFirst(const G4bool state);
         // If set, the primary particle tracking is interrupted and any 
         // produced Cerenkov photons are tracked next. When all have 
         // been tracked, the tracking of the primary resumes. 
 	
-        void SetMaxBetaChangePerStep(const G4double d);
+        static void SetMaxBetaChangePerStep(const G4double d);
         // Set the maximum allowed change in beta = v/c in % (perCent)
         // per step.
 
-	void SetMaxNumPhotonsPerStep(const G4int NumPhotons);
+	static void SetMaxNumPhotonsPerStep(const G4int NumPhotons);
         // Set the maximum number of Cerenkov photons allowed to be 
         // generated during a tracking step. This is an average ONLY; 
         // the actual number will vary around this average. If invoked, 
@@ -204,9 +204,9 @@ protected:
 
 private:
 
-	G4bool fTrackSecondariesFirst;
-        G4double fMaxBetaChange;
-        G4int  fMaxPhotons;
+	static G4bool fTrackSecondariesFirst;
+        static G4double fMaxBetaChange;
+        static G4int  fMaxPhotons;
 };
 
 ////////////////////

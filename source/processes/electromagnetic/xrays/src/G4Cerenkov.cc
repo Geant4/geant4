@@ -77,6 +77,14 @@
 // Class Implementation  
 /////////////////////////
 
+        //////////////////////
+        // static data members
+        //////////////////////
+
+G4bool G4Cerenkov::fTrackSecondariesFirst = false;
+G4double G4Cerenkov::fMaxBetaChange = 0.;
+G4int G4Cerenkov::fMaxPhotons = 0;
+
         //////////////
         // Operators
         //////////////
@@ -93,10 +101,6 @@ G4Cerenkov::G4Cerenkov(const G4String& processName, G4ProcessType type)
            : G4VProcess(processName, type)
 {
         SetProcessSubType(fCerenkov);
-
-	fTrackSecondariesFirst = false;
-        fMaxBetaChange = 0.;
-	fMaxPhotons = 0;
 
         thePhysicsTable = NULL;
 
