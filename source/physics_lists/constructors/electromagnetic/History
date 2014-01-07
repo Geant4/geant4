@@ -14,6 +14,16 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23-Dec-2013, M.Asai (phys-ctor-em-V10-00-03)
+- Fix other via-pointer invokation to static methods.
+
+22-Dec-2013, M.Asai (phys-ctor-em-V10-00-02)
+- Avoid static G4Scintillation method invoked through a pointer.
+
+18-Dec-2013, P.Gumplinger (phys-ctor-em-V10-00-00 and 01)
+- Fix race condision issue in OpticalPhysics
+- /optics_engine/setOpProcessUse not available for G4State_Idle
+
 01-Nov-2013, M.K (phys-ctor-em-V09-06-21)
 - Update sources.cmake
 
