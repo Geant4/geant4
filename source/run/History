@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec 26th, 2013, M. Asai (run-V10-00-00)
+- Change the order of setting world volume pointer to the transportation
+  manager for worker thread to be the same as the master thread and the
+  sequential mode, i.e. prior to invoking ConstructSDandField .
+
 Dec 2nd, 2013, A. Dotti (run-V09-06-141)
 - Adds protection for multiple runs to set SD and FieldMgr for worker
   threads only if master shadow corresponding pointers are !=0.
