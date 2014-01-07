@@ -35,11 +35,16 @@
 
 // #include "Test19Reader.hh"
 #include "TstDiscreteProcessReader.hh"
-#include "ExecProcessLevel.hh"
+
+#include "Test19ExecProcessLevel.hh"
+
 #include "G4VParticleChange.hh"
+
 #include "Test19Histo.hh"
 
 #include "G4SystemOfUnits.hh"
+
+#include "TStopwatch.h"
 
 using namespace std;
 
@@ -65,7 +70,7 @@ int main(int argc, char** argv)
       if ( theConfigReader->IsDone() ) break; // double protection because 
                                               // in the previous cycle it stopped at #run
            
-      ExecProcessLevel* exec = new ExecProcessLevel( theConfigReader );
+      Test19ExecProcessLevel* exec = new Test19ExecProcessLevel( theConfigReader );
       
       // exec->Init( theConfigReader ); // leftover from old design, will delete later
       
@@ -80,11 +85,15 @@ int main(int argc, char** argv)
       G4VParticleChange* aChange = 0;
       
       G4int NEvts = theConfigReader->GetNEvents();
+      
+      TStopwatch timer;
+      timer.Start();
+      
       for (G4int iter=0; iter<NEvts; ++iter) 
       {
 
          aChange = exec->DoEvent();
-	 
+	 	 
 	 histo->FillEvt( aChange, exec->GetBeam()->GetLabV(), exec->GetBeam()->GetLabP() );
 	 
          G4int nsec = aChange->GetNumberOfSecondaries();
@@ -95,6 +104,10 @@ int main(int argc, char** argv)
          aChange->Clear();
 
       } // end loop over events
+      
+      timer.Stop();
+      G4cout << " CPU = " << timer.CpuTime() << G4endl;
+      G4cout << " Real Time = " << timer.RealTime() << G4endl;
       
       histo->Write( theConfigReader->GetNEvents() );
       

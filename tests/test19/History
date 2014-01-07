@@ -15,6 +15,25 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Dec. 20, 2013 Julia Yarba (test19-V10-00-01)
+-- Cleanup uninitialized variables
+
+Dec. 11, 2013 Julia Yarba (test19-V10-00-00)
+-- Sync with test23-V10-00-01
+
+Dec 9, 2013 Julia Yarba (test19-V09-06-08)
+- Syncronize with test23-V09-06-09
+
+Nov 26, 2013 Julia Yarba (test19-V09-06-07)
+-- Refine binning histogram binning (mainly pions, pbar) to better
+   reflect exp.data
+
+Nov 20, 2013 Julia Yarba (test19-V09-06-06)
+-- Update histo code to allow include decays of short-lived resonances
+-- Refine histo bins (to reflect binning of the exp.data)
+-- Refactor NA49 analysis/plot scripts to use common pieces from
+   test23/shared-root-macros
+
 Oct 29, 2013 Julia Yarba (test19-V09-06-05)
 -- Add 1st version of MC/Data plotting script (so far, only for NA49)
 

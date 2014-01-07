@@ -7,6 +7,8 @@
 
 #include "TProfile.h"
 
+class G4VParticleChange;
+
 class TestNA49Histo : public TstHistoSet
 {
 
@@ -29,6 +31,8 @@ private:
    std::vector<TH1D*> fHistoSecPiMinus; 
    std::vector<TH1D*> fHistoSecPiPlus; 
    std::vector<TH1D*> fHistoSecNeutron;
+   
+   G4VParticleChange* fInteraction;
 
 };
 

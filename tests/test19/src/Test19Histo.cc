@@ -28,6 +28,9 @@ Test19Histo::Test19Histo( const TstReader* pset )
       fHistoSet = new TestNA49Histo( fHistoTitle );
       fHistoDirName  = "na49-histo";
    }
+   
+   // fHistoSet->SetDoResDecay(pset->ForseResDecay());
+   fHistoSet->SetDoResDecay(fDoResDecay);   
 
 }
 
@@ -51,6 +54,10 @@ TFile* Test19Histo::OpenHistoFile()
       fname += "-";
       fname.append( buf ); 
    }  
+   if ( fDoResDecay )
+   {
+      fname += "-with-decays";
+   }
    fname += ".root";
 
    return new TFile( fname.c_str(), "recreate" );
