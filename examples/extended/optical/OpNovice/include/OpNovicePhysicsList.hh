@@ -60,7 +60,6 @@ class OpNovicePhysicsList : public G4VUserPhysicsList
     void SetNbOfPhotonsCerenkov(G4int);
  
   private:
-    G4int                fMaxNumPhotonsPerStep;
     G4int                fVerboseLebel;
     OpNovicePhysicsListMessenger* fMessenger;
 };

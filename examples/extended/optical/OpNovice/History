@@ -15,6 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 23, 2013 M. Asai (OpNovice-V10-00-04)
+- Limit invokation of static method only from master/sequential.
+
+December 22, 2013 M. Asai (OpNovice-V10-00-03)
+- Avoid static G4Scintillation method invoked through a pointer.
+
+December 18, 2013 M. Asai/P. Gumplinger (OpNovice-V10-00-02)
+- allows changes to G4Cerenkov and G4Scintillation in Idle state
+
 December 16, 2013 M. Asai (OpNovice-V10-00-01)
 - Fix race condision issue in OpNovicePhysicsList.
 

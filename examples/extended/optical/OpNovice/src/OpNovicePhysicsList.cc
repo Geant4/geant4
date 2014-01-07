@@ -59,9 +59,16 @@
 
 OpNovicePhysicsList::OpNovicePhysicsList() 
  : G4VUserPhysicsList(),
-   fMaxNumPhotonsPerStep(20),
    fVerboseLebel(1)
 {
+  // default values.
+  G4Cerenkov::SetMaxNumPhotonsPerStep(20);
+  G4Cerenkov::SetMaxBetaChangePerStep(10.0);
+  G4Cerenkov::SetTrackSecondariesFirst(true);
+
+  G4Scintillation::SetScintillationYieldFactor(1.);
+  G4Scintillation::SetTrackSecondariesFirst(true);
+
   fMessenger = new OpNovicePhysicsListMessenger(this);
 }
 
@@ -201,6 +208,7 @@ void OpNovicePhysicsList::ConstructEM()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "G4Threading.hh"
 
 void OpNovicePhysicsList::ConstructOp()
 {
@@ -218,18 +226,13 @@ void OpNovicePhysicsList::ConstructOp()
   mieHGScatteringProcess->SetVerboseLevel(fVerboseLebel);
   boundaryProcess->SetVerboseLevel(fVerboseLebel);
   
-  cerenkovProcess->SetMaxNumPhotonsPerStep(fMaxNumPhotonsPerStep);
-  cerenkovProcess->SetMaxBetaChangePerStep(10.0);
-  cerenkovProcess->SetTrackSecondariesFirst(true);
-  
-  scintillationProcess->SetScintillationYieldFactor(1.);
-  scintillationProcess->SetTrackSecondariesFirst(true);
-
   // Use Birks Correction in the Scintillation process
-
-  G4EmSaturation* emSaturation =
+  if(!G4Threading::IsWorkerThread())
+  {
+    G4EmSaturation* emSaturation =
               G4LossTableManager::Instance()->EmSaturation();
-  scintillationProcess->AddSaturation(emSaturation);
+    G4Scintillation::AddSaturation(emSaturation);
+  }
 
   theParticleIterator->reset();
   while( (*theParticleIterator)() ){
@@ -266,8 +269,9 @@ void OpNovicePhysicsList::SetVerbose(G4int verbose)
 
 void OpNovicePhysicsList::SetNbOfPhotonsCerenkov(G4int MaxNumber)
 {
-  fMaxNumPhotonsPerStep = MaxNumber;
+  G4Cerenkov::SetMaxNumPhotonsPerStep(MaxNumber);
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void OpNovicePhysicsList::SetCuts()
