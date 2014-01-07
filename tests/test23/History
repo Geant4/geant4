@@ -38,6 +38,37 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2 January 2014 Julia Yarba (test23-V10-00-02)
+- Re-tag in order to re-submit with the tag of test19 
+
+11 December 2013 Julia Yarba (test23-V10-00-01)
+- Refine shared code infrastructure
+- Include utility to extract xsec (beam+target)
+
+10 December 2013 Julia Yarba (test23-V10-00-00)
+- (Re)Activate ActionInit
+- Minor cleanup
+
+9 December 2013  Julia Yarba (test23-V09-06-09)
+- ProcessWrapper now inherits from G4HadronicProcess (instead of G4VDiscreteProcess)
+- Several related adjustments
+
+26 November 2013  Julia Yarba (test23-V09-06-08)
+- Refine MC2Data plotting utility
+- Add SSMD plotting utility
+- Note: G4VUserActionInitialization still NOT activated
+
+20 November 2013  Julia Yarba (test23-V09-06-07)
+- Include functionality to account for decays of short-lived resonances 
+  (of lifetime<0.01*ns, such as eta, eta_prime, etc.)
+- Add pp->pions data from NA49
+- Various cleanups  
+- Note: G4VUserActionInitialization is NOT activated; 
+  will be un-commnted in the next tag
+
+5 November 2013  Julia Yarba (test23-V09-06-06)
+- Refactor, cleanup and update root scripts - the shared pieces now can also be used by test19
+
 5 November 2013  Julia Yarba (test23-V09-06-05)
 - Remove LEP from NuBeam
 - update Root macros, as the 1st attempt to factor out common-use pieces of Root macros

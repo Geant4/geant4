@@ -2,7 +2,8 @@
 #
 # export G4INSTALL=/home-cluck/syjun/g4p/work/g4.9.6.b01/geant4.9.6.b01
 # export G4INSTALL=/home/yarba_j/work/test-geant4.9.6.p02/geant4.9.6.p02
-export G4INSTALL=/home/yarba_j/work/test-geant4.9.6-ref10/geant4
+# export G4INSTALL=/home/yarba_j/work/test-geant4.9.6-ref10/geant4
+export G4INSTALL=/home/yarba_j/work/test-geant4.10.00/geant4.10.00
 export G4SYSTEM=Linux-g++
 export G4SRC=${G4INSTALL}/source
 export G4LIB=${G4INSTALL}/lib64
@@ -12,13 +13,13 @@ export G4LIB_BUILD_SHARED=1
 export GLOBALLIBS=1
 
 export G4DATA=/home/g4p/pbs/download/g4data
-export G4LEDATA=${G4DATA}/G4EMLOW6.33
-export G4LEVELGAMMADATA=${G4DATA}/PhotonEvaporation2.3
-export G4NEUTRONHPDATA=${G4DATA}/G4NDL4.3
-export G4RADIOACTIVEDATA=${G4DATA}/RadioactiveDecay3.7
+export G4LEDATA=${G4DATA}/G4EMLOW6.35
+export G4LEVELGAMMADATA=${G4DATA}/PhotonEvaporation3.0
+export G4NEUTRONHPDATA=${G4DATA}/G4NDL4.4
+export G4RADIOACTIVEDATA=${G4DATA}/RadioactiveDecay4.0
 export G4ABLADATA=${G4DATA}/G4ABLA3.0
 export G4REALSURFACEDATA=${G4DATA}/RealSurface1.0
-export G4NEUTRONXSDATA=${G4DATA}/G4NEUTRONXS1.3
+export G4NEUTRONXSDATA=${G4DATA}/G4NEUTRONXS1.4
 export G4PIIDATA=${G4DATA}/G4PII1.3
 export G4SAIDXSDATA=${G4DATA}/G4SAIDDATA1.1
 

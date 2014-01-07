@@ -48,7 +48,7 @@
 
 #include "Tst23Histo.hh"
 
-// #include "Tst23ActionInit.hh"
+#include "Tst23ActionInit.hh"
 
 #include "FTFP_BERT.hh"
 #include "QGSP_FTFP_BERT.hh"
@@ -126,7 +126,8 @@ int main(int argc, char** argv)
    // G4VCrossSectionDataSet* cs = new G4HadronInelasticDataSet(); 
    //
    // from 4.10.b01 onwards as it require specific (new) infrastructure
-   // -->Tst23ActionInit* action = 0;
+   //
+   Tst23ActionInit* action = 0;
         
    do 
    {
@@ -215,17 +216,18 @@ int main(int argc, char** argv)
       
       if ( stepping ) delete stepping;
       stepping = new Tst23SteppingAction( histo );
-      // up to 4.9.6.p02
-      runManager->SetUserAction( stepping );
       
-/* from 4.10.b01 onwards
+      // up to 4.9.6.p02
+      // runManager->SetUserAction( stepping );
+      
+      // from 4.10.b01 onwards
       if ( action ) delete action;
       action = new Tst23ActionInit();
       action->SetAct( beam );
       action->SetAct( stepping );
       
       runManager->SetUserInitialization( action );
-*/
+
       if(!G4StateManager::GetStateManager()->SetNewState(G4State_Idle))            
          G4cout << "G4StateManager PROBLEM! " << G4endl;
 

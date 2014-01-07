@@ -40,10 +40,11 @@ float* err_dNdY[2] = { 0, 0 };
 void readIntegratedSpectra( std::string beam, std::string target, std::string secondary )
 {
 
-   std::string dirname = "./na49-exp-data/";
+   // std::string dirname = "./na49-exp-data/";
+   std::string dirname = "../test23/na49-exp-data/";
    
    std::string filename = beam + "_" + target + "_" + secondary;
-   
+      
    std::string filenam1;
    
    if ( secondary == "pion" )
@@ -77,8 +78,8 @@ void readIntegratedSpectra( std::string beam, std::string target, std::string se
       for ( int i=0; i<NPoints; i++ )
       {
          infile1 >> Y[i] >> dNdY[0][i] >> dNdY[1][i];
-	 err_dNdY[0][i] = dNdY[0][i]*0.02; // errors are said to be 2%
-	 err_dNdY[1][i] = dNdY[1][i]*0.02;
+	 err_dNdY[0][i] = dNdY[0][i]*0.02; // common systematic errors are said to be 2%
+	 err_dNdY[1][i] = dNdY[1][i]*0.02; // but that's for the dN/dy spectra only !!!
       } 
       return;     
    }
@@ -110,21 +111,44 @@ void readIntegratedSpectra( std::string beam, std::string target, std::string se
      err_pT2 = new float[NPoints];
    }
 
+   float syserr = 0.;
+   if ( beam == "H" )
+   {
+      syserr = 2; // in %
+   }
+   else
+   {
+      syserr = 2.5;
+   }
+   float err2 = 0.;
    for ( int i=0; i<NPoints; i++ )
    {
       if ( secondary == "neutron" )
       {
          infile1 >> xF[i] >> dNdxF[i] >> err_dNdxF[i];
-	 err_dNdxF[i] *= 0.01;
+	 err2 = err_dNdxF[i]*err_dNdxF[i] + syserr*syserr;
+	 err_dNdxF[i]  = std::sqrt(err2)*0.01;
+	 err_dNdxF[i] *= dNdxF[i];
       }
       else
       {
          infile1 >> xF[i] >> dXSecdxF[i] >> err_dXSecdxF[i]  >> dNdxF[i] >> err_dNdxF[i]  
 	         >> pT[i] >> err_pT[i] >> pT2[i] >> err_pT2[i];
-         err_dXSecdxF[i]    *= 0.01;
-	 err_dNdxF[i]       *= 0.01;
-	 err_pT[i]          *= 0.01;
-	 err_pT2[i]         *= 0.01;
+	 //
+	 // here I also should account for the 2% (p+p) or 2.5% (p+C) systematics
+	 //
+	 err2 = err_dXSecdxF[i]*err_dXSecdxF[i] + syserr*syserr;
+	 err_dXSecdxF[i]     = std::sqrt(err2)*0.01; 
+	 err_dXSecdxF[i]    *= dXSecdxF[i];
+         err2 = err_dNdxF[i]*err_dNdxF[i] + syserr*syserr;	 
+	 err_dNdxF[i]        = std::sqrt(err2) * 0.01;
+	 err_dNdxF[i]       *= dNdxF[i];
+	 err2 = err_pT[i]*err_pT[i] + syserr*syserr;
+	 err_pT[i]           = std::sqrt(err2)*0.01;
+	 err_pT[i]          *= pT[i];
+	 err2 = err_pT2[i]*err_pT2[i] + syserr*syserr;
+	 err_pT2[i]          = std::sqrt(err2)*0.01;
+	 err_pT2[i]         *= pT2[i];
       }
    }
    

@@ -155,79 +155,6 @@ Tst23NA49Histo::~Tst23NA49Histo()
 
 }
 
-/*
-void Tst23NA49Histo::InitHisto()
-{
-     
-  std::string title;
-  std::string outcome;
-  
-  fHistoNSec = new TH1D( "NSec", fHistoTitle.c_str(), 50, 0., 50. );
-  
-  outcome = " -> X + proton ";       
-  title = fHistoTitle + outcome;
-
-  fHistoSecProton.push_back( new TH1D( "proton_dXSecdxF", title.c_str(), 40, -1., 1. ) );	
-  fHistoSecProton.push_back( new TH1D( "proton_dNdxF",    title.c_str(), 40, -1., 1. ) );	
-  fHistoSecProton.push_back( new TProfile( "proton_pT",   title.c_str(), 100, -1., 1., 0., 10. ) );	
-  fHistoSecProton.push_back( new TProfile( "proton_pT2",  title.c_str(), 100, -1., 1., 0., 10. ) );	
-
-  fHistoSecProtonTot.push_back( new TH1D( "proton_dXSecdxF_total", title.c_str(), 40, -1., 1. ) );	
-  fHistoSecProtonTot.push_back( new TH1D( "proton_dNdxF_total",    title.c_str(), 40, -1., 1. ) );	
-  fHistoSecProtonTot.push_back( new TProfile( "proton_pT_total",   title.c_str(), 100, -1., 1., 0., 10. ) );	
-  fHistoSecProtonTot.push_back( new TProfile( "proton_pT2_total",  title.c_str(), 100, -1., 1., 0., 10. ) );	
-       
-  outcome = " -> X + antiproton ";
-  title = fHistoTitle + outcome;
-  
-  fHistoSecAntiProton.push_back( new TH1D( "antiproton_dXSecdxF", title.c_str(), 40, -1., 1. ) );	
-  fHistoSecAntiProton.push_back( new TH1D( "antiproton_dNdxF",    title.c_str(), 40, -1., 1. ) );	
-  fHistoSecAntiProton.push_back( new TProfile( "antiproton_pT",   title.c_str(), 100, -1., 1., 0., 10. ) );	
-  fHistoSecAntiProton.push_back( new TProfile( "antiproton_pT2",  title.c_str(), 100, -1., 1., 0., 10. ) );	
-
-  fHistoSecAntiProtonTot.push_back( new TH1D( "antiproton_dXSecdxF_total", title.c_str(), 40, -1., 1. ) );	
-  fHistoSecAntiProtonTot.push_back( new TH1D( "antiproton_dNdxF_total",    title.c_str(), 40, -1., 1. ) );	
-  fHistoSecAntiProtonTot.push_back( new TProfile( "antiproton_pT_total",   title.c_str(), 100, -1., 1., 0., 10. ) );	
-  fHistoSecAntiProtonTot.push_back( new TProfile( "antiproton_pT2_total",  title.c_str(), 100, -1., 1., 0., 10. ) );	
-  
-  outcome = " -> X + pi- ";  
-  title = fHistoTitle + outcome;
-
-  fHistoSecPiMinus.push_back( new TH1D( "pimimus_dXSecdxF", title.c_str(), 40, -1., 1. ) );	
-  fHistoSecPiMinus.push_back( new TH1D( "piminus_dNdxF",    title.c_str(), 40, -1., 1. ) );	
-  fHistoSecPiMinus.push_back( new TProfile( "piminus_pT",   title.c_str(), 100, -1., 1., 0., 10. ) );	
-  fHistoSecPiMinus.push_back( new TProfile( "piminus_pT2",  title.c_str(), 100, -1., 1., 0., 10. ) );	
-
-  fHistoSecPiMinusTot.push_back( new TH1D( "pimimus_dXSecdxF_total", title.c_str(), 40, -1., 1. ) );	
-  fHistoSecPiMinusTot.push_back( new TH1D( "piminus_dNdxF_total",    title.c_str(), 40, -1., 1. ) );	
-  fHistoSecPiMinusTot.push_back( new TProfile( "piminus_pT_total",   title.c_str(), 100, -1., 1., 0., 10. ) );	
-  fHistoSecPiMinusTot.push_back( new TProfile( "piminus_pT2_total",  title.c_str(), 100, -1., 1., 0., 10. ) );	
-
-  outcome = " -> X + pi+ ";
-  title = fHistoTitle + outcome;
-
-  fHistoSecPiPlus.push_back( new TH1D( "piplus_dXSecdxF", title.c_str(), 40, -1., 1. ) );	
-  fHistoSecPiPlus.push_back( new TH1D( "piplus_dNdxF",    title.c_str(), 40, -1., 1. ) );	
-  fHistoSecPiPlus.push_back( new TProfile( "piplus_pT",   title.c_str(), 100, -1., 1., 0., 10. ) );	
-  fHistoSecPiPlus.push_back( new TProfile( "piplus_pT2",  title.c_str(), 100, -1., 1., 0., 10. ) );	
-
-  fHistoSecPiPlusTot.push_back( new TH1D( "piplus_dXSecdxF_total", title.c_str(), 40, -1., 1. ) );	
-  fHistoSecPiPlusTot.push_back( new TH1D( "piplus_dNdxF_total",    title.c_str(), 40, -1., 1. ) );	
-  fHistoSecPiPlusTot.push_back( new TProfile( "piplus_pT_total",   title.c_str(), 100, -1., 1., 0., 10. ) );	
-  fHistoSecPiPlusTot.push_back( new TProfile( "piplus_pT2_total",  title.c_str(), 100, -1., 1., 0., 10. ) );	
-
-  outcome = " -> X + neutron ";
-  title = fHistoTitle + outcome;
-
-  fHistoSecNeutron.push_back( new TH1D( "neutron_dNdxF",    title.c_str(), 10, 0.05, 1.05 ) );	
-
-  fHistoSecNeutronTot.push_back( new TH1D( "neutron_dNdxF_total",    title.c_str(), 10, 0.05, 1.05 ) );	
-
-  return;
-
-}
-*/
-
 void Tst23NA49Histo::FillEvt( G4VParticleChange* aChange, const G4LorentzVector&, const G4LorentzVector& labp ) 
 {
 
@@ -236,6 +163,8 @@ void Tst23NA49Histo::FillEvt( G4VParticleChange* aChange, const G4LorentzVector&
    
    // if ( !isFirst ) return;
    
+   if ( isFirst && fDoResDecay ) AccountForResDecay( aChange );
+      
    double SQRT_S = 17.2;
    
    G4ThreeVector boostLabp = labp.boostVector();

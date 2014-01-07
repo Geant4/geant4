@@ -31,6 +31,9 @@ Tst23Histo::Tst23Histo( const TstReader* pset )
       fHistoSet = new Tst23HARPHisto( fHistoTitle );
       fHistoDirName = "harp-histo";
    }
+   
+   // fHistoSet->SetDoResDecay(pset->ForseResDecay());
+   fHistoSet->SetDoResDecay(fDoResDecay);
 
 }
 
@@ -46,6 +49,10 @@ TFile* Tst23Histo::OpenHistoFile()
    }
    
    G4String fname = fHistoDirName + "/" + fBeam + fTarget + fBeamMomentum + fModel;
+   if ( fDoResDecay )
+   {
+      fname += "-with-decays";
+   }
    
    if ( fJobID > -1 )
    {

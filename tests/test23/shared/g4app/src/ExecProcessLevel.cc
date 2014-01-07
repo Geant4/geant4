@@ -13,18 +13,16 @@
 #include "G4NistManager.hh"
 
 #include "G4ProcessManager.hh"
-#include "G4VParticleChange.hh"
+
 #include "G4ParticleChange.hh"
+#include "G4DynamicParticle.hh"
+
 #include "G4HadronCrossSections.hh"
 #include "G4VCrossSectionDataSet.hh"
-
 #include "G4HadronInelasticDataSet.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
-
-#include "G4ParticleChange.hh"
-#include "G4DynamicParticle.hh"
 
 #include "G4MesonConstructor.hh"
 #include "G4BaryonConstructor.hh"
@@ -32,7 +30,10 @@
 #include "G4LeptonConstructor.hh"
 #include "G4BosonConstructor.hh"
 
+#include "G4Proton.hh"
 #include "G4Gamma.hh"
+#include "G4PionMinus.hh"
+#include "G4PionPlus.hh"
 
 #include "G4ForceCondition.hh"
 
@@ -47,15 +48,13 @@
 
 #include "TstTarget.hh"
 #include "TstDiscreteProcessReader.hh"
-// #include "ProcessWrapper.hh"
-#include "FTFPWrapper.hh"
-#include "QGSPWrapper.hh"
-
+#include "ProcessWrapper.hh"
 
 ExecProcessLevel::ExecProcessLevel()
    : ExecBase(),
+     fProcWrapper(0),
      fTarget(0), fRegion(0), 
-     fProcWrapper(0), fProcManager(0),
+     fProcManager(0),
      fBeam(0),
      fTrack(0), fStep(0), fStepPoint(0), 
      fPartChange(0)
@@ -123,17 +122,34 @@ void ExecProcessLevel::InitSetup( const TstReader* pset )
 
 void ExecProcessLevel::InitBeam( const TstReader* pset )
 {
-
-   // fProcWrapper = (dynamic_cast<const TstDiscreteProcessReader*>(pset))->GetProcess();
-   
-   InitProcess( pset );
    
    assert( fProcWrapper );
    
    assert( fTarget->GetCurrentMaterial() );
-   fProcWrapper->InitTarget( fTarget->GetCurrentMaterial() );
       
-   if ( pset->GetBeamParticle() == "proton" ) fProcManager = new G4ProcessManager(G4Proton::Proton());
+   // not a very good design... 
+   // need to see if it can be refactored into subclasses
+   //
+   if ( pset->GetBeamParticle() == "proton" ) 
+   {
+      fProcManager = new G4ProcessManager(G4Proton::Proton());
+   }
+   else if ( pset->GetBeamParticle() == "pi-" )
+   {
+      fProcManager = new G4ProcessManager(G4PionMinus::PionMinus());
+   }
+   else if ( pset->GetBeamParticle() == "pi+" )
+   {
+      fProcManager = new G4ProcessManager(G4PionPlus::PionPlus());
+   }
+   else if ( pset->GetBeamParticle() == "gamma" )
+   {
+      fProcManager = new G4ProcessManager(G4Gamma::Definition());
+   }
+   // need to add also, kaons, omega, sigma, mu-, pbar !!!!!
+   
+   assert ( fProcManager );
+   
    if ( pset->IsDiscreteProcess() )
    {
       fProcManager->AddDiscreteProcess(fProcWrapper);
@@ -190,42 +206,6 @@ void ExecProcessLevel::InitBeam( const TstReader* pset )
     fStep->SetPostStepPoint( bPoint );
     fStep->SetStepLength( pset->GetStep() );
 
-   return;
-
-}
-
-void ExecProcessLevel::InitProcess( const TstReader* pset )
-{
-
-   // G4String name = (dynamic_cast<const TstDiscreteProcessReader*>(pset))->GetProcessName();
-   G4String name = (pset)->GetPhysics();
-
-   if ( name.find("ftf") != std::string::npos )
-   {
-      fProcWrapper = new FTFPWrapper();
-   }
-   else if ( name.find("qgs") != std::string::npos )
-   {
-       fProcWrapper = new QGSPWrapper();
-   }
-    
-   if (!fProcWrapper) 
-   { 
-      G4cout 
-	     << " generator " << name << " is unavailable"
-	     << G4endl;
-      exit(1);
-   } 
-    
-   std::cout << " process = " << fProcWrapper->GetProcessName() << std::endl;
-    
-   if ( name.find("lund-str-fragm") != std::string::npos )
-   {
-      fProcWrapper->UseG4LundStringFragm(true);
-   }
-    
-   fProcWrapper->Compose();
-   
    return;
 
 }

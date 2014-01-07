@@ -31,14 +31,12 @@ G4VParticleChange* ProcessWrapper::PostStepDoIt( const G4Track& track, const G4S
 {
 
   if ( !fInteractionModel ) return 0;  
-  
-  if ( !fTargetNucleus ) return 0;
-  
-  
-  // fNSec = 0;
+    
+  G4Nucleus* tNucleus = GetTargetNucleusPointer();
+  tNucleus->ChooseParameters( track.GetMaterial() );
   
   G4HadProjectile proj(track);
-  G4HadFinalState* result = fInteractionModel->ApplyYourself( proj, *fTargetNucleus );
+  G4HadFinalState* result = fInteractionModel->ApplyYourself( proj, *tNucleus );
   result->SetTrafoToLab( proj.GetTrafoToLab() );
   
   ClearNumberOfInteractionLengthLeft();
@@ -73,27 +71,3 @@ G4VParticleChange* ProcessWrapper::PostStepDoIt( const G4Track& track, const G4S
 
 }
 
-/*
-QGSPWrapper::QGSPWrapper( const G4String& name = "QGSPWrapper" )
-   : ProcessWrapper(name)
-{
-
-   fInteractionModel = G4TheoFSGenerator(); // common
-   
-   fStringModel      = new G4QGSModel< G4QGSParticipants >; // specific
-   
-   fCascade          = new G4GeneratorPrecompoundInterface(); // common
-   
-   fCascade->SetDeExcitation( new G4PreCompoundModel( new G4ExcitationHandler() ) ); // specific
-   fStringDecay      = G4ExcitedStringDecay( new G4QGSMFragmentation() ); // specific
-   fStringModel->SetFragmentationModel( fStringDecay ); // common interface but different input
-
-   fInteractionModel->SetQuasiElasticChannel( new G4QuasiElasticChannel() ); // specific
-   fInteractionModel->SetTransport( fCascade ); // common
-   fInteractionModel->SetHighEnergyGenerator( fStringModel ); // common
-
-   fInteractionModel->SetMinEnergy(GeV);  // common
-   fInteractionModel->SetMaxEnergy(100.*TeV); 
-
-}
-*/

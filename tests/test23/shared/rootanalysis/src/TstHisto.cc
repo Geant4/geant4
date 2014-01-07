@@ -13,7 +13,8 @@ TstHisto::TstHisto( const TstReader* pset )
       fTarget(pset->GetTargetMaterial()), 
       fModel(pset->GetPhysics()),
       fHistoSet(0), 
-      fHistoFile(0)
+      fHistoFile(0),
+      fDoResDecay(pset->ForceResDecay())
 {
    
    char ene[3];

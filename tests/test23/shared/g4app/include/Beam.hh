@@ -18,8 +18,8 @@ class Beam
 						                      fBeamEnergy=energy;
 						                      return; }
 						 
-      void SetLabV( G4LorentzVector lv ) { fLabV=lv; return; }
-      void SetLabP( G4LorentzVector lp ) { fLabP=lp; return; }
+      void SetLabV( G4LorentzVector  lv ) { fLabV=lv; return; }
+      void SetLabP( G4LorentzVector  lp ) { fLabP=lp; return; }
       
       G4String         GetBeamPartName()   const { return fBeamPartName; }
       G4double         GetBeamPartMass()   const { return fBeamPartMass; }

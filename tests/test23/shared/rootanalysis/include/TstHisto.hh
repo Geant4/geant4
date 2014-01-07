@@ -56,7 +56,7 @@ public:
    virtual TFile* OpenHistoFile();
 
 protected:
-           
+             
   // data members
   //
    G4int fJobID; 
@@ -66,7 +66,8 @@ protected:
    G4String        fModel;
    G4String        fHistoTitle;
    TstHistoSet*    fHistoSet;
-   TFile*          fHistoFile;
+   TFile*          fHistoFile;   
+   G4bool          fDoResDecay;
 
 };
 

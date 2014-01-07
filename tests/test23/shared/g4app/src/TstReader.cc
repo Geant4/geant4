@@ -5,11 +5,14 @@
 #include "globals.hh"
 #include "G4PhysicalConstants.hh"
 
+#include "G4ParticleTable.hh"
+
 TstReader::TstReader()
    : fInStream(0), fEndConfig(false),
      fNEvents(1000), 
      fBeamPart("proton"),
      fBeamEnergy(0.),
+     fBeamEKin(0.),
      fBeamMomentum(1000.*MeV),
      fDirection( G4ThreeVector(0.,0.,1.) ),
      fPosition( G4ThreeVector(0.,0.,0.) ),
@@ -23,7 +26,7 @@ TstReader::TstReader()
      fJobID(-1),
      fVerbose(-1),
      fExpDataSet("None"),
-     fForseResDecay(false)    
+     fForceResDecay(false)    
 {
    
    fInStream = new std::ifstream();
@@ -63,7 +66,7 @@ void TstReader::Help()
    // G4cout << "isMIPP" << G4endl;
    // G4cout << "isITEP" << G4endl;
    // G4cout << "isBNL" << G4endl;
-   G4cout << "#forseResonanceDecay" << G4endl;
+   G4cout << "#forceResonanceDecay" << G4endl;
   
 //
 // for parallel processing
@@ -124,6 +127,23 @@ void TstReader::ProcessConfig()
       }
    
    } while(!fEndConfig);
+   
+   // can't call it here because G4ParticleTable is still empty...
+   //
+   // SyncKinematics();
+   
+   return;
+
+}
+
+void TstReader::SyncKinematics() const
+{
+   
+   G4ParticleDefinition* partDef = (G4ParticleTable::GetParticleTable())->FindParticle(fBeamPart);      
+   G4double partMass = partDef->GetPDGMass();   
+   // G4double partMass = (G4ParticleTable::GetParticleTable())->FindParticle(fBeamPart)->GetPDGMass();
+   fBeamEnergy = sqrt( fBeamMomentum*fBeamMomentum + partMass*partMass );   
+   fBeamEKin = fBeamEnergy - partMass;
 
    return;
 
@@ -226,9 +246,9 @@ void TstReader::ProcessLine( G4String line )
       {
 	(*fInStream) >> fJobID ;
       }
-      else if ( line == "#forseResonanceDecay" )
+      else if ( line == "#forceResonanceDecay" )
       {
-         fForseResDecay = true;
+         fForceResDecay = true;
       }
 
    return;

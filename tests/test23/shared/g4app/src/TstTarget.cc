@@ -160,7 +160,7 @@ G4VPhysicalVolume* TstTarget::ConstructTarget()
   {
      solid = new G4Box ( "target_solid", 0.5*fX1, 0.5*fX2, 0.5*fX3 ); // size is already done in the right units (in TstReader)
   }
-  else if ( fShape = "G4Tubs" )
+  else if ( fShape == "G4Tubs" )
   {
      solid = new G4Tubs( "solid", fX1, fX2, 0.5*fX3, 0., 2.*pi );
   }

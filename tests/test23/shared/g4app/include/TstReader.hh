@@ -27,6 +27,7 @@ class TstReader
       G4int           GetNEvents()        const { return fNEvents; }
       G4String        GetBeamParticle()   const { return fBeamPart; }
       G4double        GetBeamEnergy()     const { return fBeamEnergy; }
+      G4double        GetBeamKineticEnergy() const { return fBeamEKin; } 
       G4double        GetBeamMomentum()   const { return fBeamMomentum; }
       G4ThreeVector   GetDirection()      const { return fDirection; }
       G4ThreeVector   GetPosition()       const { return fPosition; }
@@ -40,10 +41,11 @@ class TstReader
       G4int           GetVerbosity()      const { return fVerbose; } 
       G4String        GetExpDataSet()     const { return fExpDataSet; } 
       G4String        GetPhysics()        const { return fPhysics; }  
-      G4bool          ForseResDecay()     const { return fForseResDecay; }   
+      G4bool          ForceResDecay()     const { return fForceResDecay; }   
             
       G4bool IsDone() { return fEndConfig; }
       void ProcessConfig();
+      void SyncKinematics() const;
             
       virtual G4bool IsDiscreteProcess() const = 0;
       virtual G4bool IsAtRestProcess() const = 0;
@@ -60,7 +62,8 @@ class TstReader
       
       G4int          fNEvents;
       G4String       fBeamPart;
-      G4double       fBeamEnergy;   // MeV
+      mutable G4double       fBeamEnergy;   // MeV
+      mutable G4double       fBeamEKin;     // MeV
       G4double       fBeamMomentum; // MeV/c
       G4ThreeVector  fDirection;
       G4ThreeVector  fPosition;     // mm
@@ -74,7 +77,7 @@ class TstReader
       G4int          fJobID;
       G4int          fVerbose;
       G4String       fExpDataSet;
-      G4bool         fForseResDecay;
+      G4bool         fForceResDecay;
       
 };
 
