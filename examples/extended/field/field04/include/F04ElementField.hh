@@ -32,8 +32,6 @@
 #ifndef F04ElementField_h
 #define F04ElementField_h 1
 
-class G4VPhysicalVolume;
-
 #include "globals.hh"
 
 #include "G4Navigator.hh"
@@ -65,8 +63,7 @@ class F04ElementField
     F04ElementField(const G4ThreeVector, G4LogicalVolume*);
 
     /// the actual implementation constructs the F04ElementField
-    void Construct(G4VPhysicalVolume* currentWorld);
-    void UpdateWorld(G4VPhysicalVolume* currentWorld);
+    void Construct();
 
     ///  Destructor.
     virtual ~F04ElementField() {}

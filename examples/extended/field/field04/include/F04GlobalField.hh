@@ -73,13 +73,13 @@ private:
   F04GlobalField(F04DetectorConstruction* const);
   F04GlobalField(const F04GlobalField&);
 
-  virtual ~F04GlobalField();
-
   F04GlobalField& operator=(const F04GlobalField&);
 
   void SetupArray();
 
 public:
+
+  virtual ~F04GlobalField();
 
   /// GetObject() returns the single F04GlobalField object.
   /// It is constructed, if necessary.
@@ -108,9 +108,6 @@ public:
 
   /// constructs all field tracking objects
   void ConstructField();
-
-  /// updates all field tracking objects and Clear()
-  void UpdateField();
 
   /// Set the Stepper types
   void SetStepperType( G4int i ) { fStepperType = i; }

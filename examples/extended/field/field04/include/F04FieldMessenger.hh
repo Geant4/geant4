@@ -69,7 +69,6 @@ class F04FieldMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* fDeltaIntersectionCMD;
     G4UIcmdWithADoubleAndUnit* fEpsMinCMD;
     G4UIcmdWithADoubleAndUnit* fEpsMaxCMD;
-    G4UIcmdWithoutParameter*   fUpdateCMD;
 
     F04DetectorConstruction*   fDetector;
 };

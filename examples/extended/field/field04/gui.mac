@@ -3,6 +3,9 @@
 # the menu bar of the G4UIXm, G4UIQt, G4UIWin32 sessions.
 # It has no effect with G4UIterminal.
 #
+# Process vis.mac (and draw geometry)
+#
+/control/execute vis.mac
 #
 # Add icons of general interest
 #
