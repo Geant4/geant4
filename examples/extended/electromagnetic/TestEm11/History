@@ -14,7 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+17-12-13 mma (testem11-V10-00-00)
+- Run::SetPrimary(particle, ekin)
+- Run::EndOfRun()
+- Set "ToBeBroadcasted == false" for UI commands that modify physics lsit
+  and detector since these should be executed only by master
+- HistoManager: remove hbook  
+        
 21-11-13 A.Dotti      (testem11-V09-06-17)
 - Correctly call G4RunManager::ReinitializeGeometry or 
   PhysicsHasBeenModified

@@ -52,14 +52,14 @@ class RunAction : public G4UserRunAction
    ~RunAction();
 
   public:
-    virtual G4Run* GenerateRun();
     virtual void   BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*); 
+    virtual void   EndOfRunAction(const G4Run*);
+    virtual G4Run* GenerateRun();     
 
   private:
     DetectorConstruction*   fDetector;
     PhysicsList*            fPhysics;
-    PrimaryGeneratorAction* fKinematic;
+    PrimaryGeneratorAction* fPrimary;
     Run*                    fRun;
     HistoManager*           fHistoManager;
 };

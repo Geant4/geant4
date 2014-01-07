@@ -3,6 +3,8 @@
    gROOT->Reset();
 
    // Draw histograms fill by Geant4 TestEm11 simulation
+   //
+   ///TFile f1("./Al_1033keV_opt3.root");      
    TFile f1("./Ta_1000keV_opt3.root");
    TH1D* h1 = (TH1D*) f1.Get("8");
    h1->SetTitle("Depth dose distribution of 1000 keV e- in Ta");
@@ -17,8 +19,9 @@
 */
 
    ifstream in;
+   ///in.open("./EGSnrc/Al_1033keV_EGSnrc.ascii");
    in.open("./EGSnrc/Ta_1000keV_EGSnrc.ascii");
-
+      
    TMarker *pt;
    Double_t x, y;
    // First indicate number of data

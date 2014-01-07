@@ -39,7 +39,7 @@
 #include "G4Run.hh"
 
 class DetectorConstruction;
-class EventAction;
+class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -50,26 +50,28 @@ class Run : public G4Run
    ~Run();
 
   public:
-    void ComputeStatistics(); 
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);  
 
-    void AddEdep (G4double e)        { fEdeposit  += e; fEdeposit2  += e*e;};
-    void AddTrackLength (G4double t) { fTrackLen  += t; fTrackLen2  += t*t;};
-    void AddProjRange   (G4double x) { fProjRange += x; fProjRange2 += x*x;};
-    void AddStepSize    (G4int nb, G4double s)
-                                     { fNbOfSteps += nb; fNbOfSteps2 += nb*nb;
-                                       fStepSize  += s ; fStepSize2  += s*s;  };
-    void AddTrackStatus (G4int i)    { fStatus[i]++ ;};
+    void AddEdep (G4double e);
+    void AddTrackLength (G4double t);
+    void AddProjRange   (G4double x);
+    void AddStepSize    (G4int nb, G4double st);
+    void AddTrackStatus (G4int i);
     
-    void SetCsdaRange (G4int i, G4double value) { fCsdaRange[i] = value; }
-    void SetXfrontNorm(G4int i, G4double value) { fXfrontNorm[i] = value; }
+    void SetCsdaRange (G4int i, G4double value);
+    void SetXfrontNorm(G4int i, G4double value);
                                       
-    G4double GetCsdaRange (G4int i) {return fCsdaRange[i];};
-    G4double GetXfrontNorm(G4int i) {return fXfrontNorm[i];};   
+    G4double GetCsdaRange (G4int i);
+    G4double GetXfrontNorm(G4int i);   
             
-     virtual void Merge(const G4Run*);
-
+    virtual void Merge(const G4Run*);
+    void EndOfRun();
+    
   private:
     DetectorConstruction*   fDetector;
+    G4ParticleDefinition*  fParticle;
+    G4double  fEkin; 
+       
     G4double   fEdeposit,  fEdeposit2;
     G4double   fTrackLen,  fTrackLen2;
     G4double   fProjRange, fProjRange2;

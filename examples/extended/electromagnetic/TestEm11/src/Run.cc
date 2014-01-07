@@ -33,17 +33,23 @@
 
 #include "Run.hh"
 #include "DetectorConstruction.hh"
-#include "EventAction.hh"
 
-#include "G4UnitsTable.hh"
-#include "G4SystemOfUnits.hh"
+#include "EventAction.hh"
+#include "HistoManager.hh"
+#include "PrimaryGeneratorAction.hh"
+
+#include "G4Material.hh"
 #include "G4Event.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4UnitsTable.hh"
+#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::Run(DetectorConstruction* detector)
 : G4Run(),
   fDetector(detector),
+  fParticle(0), fEkin(0.),  
   fEdeposit(0.),  fEdeposit2(0.),
   fTrackLen(0.),  fTrackLen2(0.),
   fProjRange(0.), fProjRange2(0.),
@@ -59,17 +65,151 @@ Run::Run(DetectorConstruction* detector)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::~Run()
-{
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::SetPrimary (G4ParticleDefinition* particle, G4double energy)
+{ 
+  fParticle = particle;
+  fEkin     = energy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void Run::ComputeStatistics() 
+void Run::AddEdep (G4double e)        
+{
+  fEdeposit  += e;
+  fEdeposit2 += e*e;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void Run::AddTrackLength (G4double t) 
+{
+  fTrackLen  += t;
+  fTrackLen2 += t*t;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void Run::AddProjRange (G4double x) 
+{
+  fProjRange  += x;
+  fProjRange2 += x*x;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void Run::AddStepSize (G4int nb, G4double st)
+{
+  fNbOfSteps  += nb; 
+  fNbOfSteps2 += nb*nb;
+  fStepSize   += st ; 
+  fStepSize2  += st*st;  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+      
+void Run::AddTrackStatus (G4int i)    
+{
+  fStatus[i]++ ;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void Run::SetCsdaRange (G4int i, G4double value) 
+{
+  fCsdaRange[i] = value; 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+void Run::SetXfrontNorm (G4int i, G4double value) 
+{
+  fXfrontNorm[i] = value; 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+                                      
+G4double Run::GetCsdaRange (G4int i) 
+{
+  return fCsdaRange[i];
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    
+G4double Run::GetXfrontNorm (G4int i) 
+{
+  return fXfrontNorm[i];
+}
+       
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::Merge(const G4Run* run)
+{
+  const Run* localRun = static_cast<const Run*>(run);
+  
+  // pass information about primary particle
+  fParticle = localRun->fParticle;
+  fEkin     = localRun->fEkin;
+
+  // accumulate sums
+  fEdeposit   += localRun->fEdeposit;
+  fEdeposit2  += localRun->fEdeposit2;
+  fTrackLen   += localRun->fTrackLen;  
+  fTrackLen2  += localRun->fTrackLen2;
+  fProjRange  += localRun->fProjRange; 
+  fProjRange2 += localRun->fProjRange2;
+  fNbOfSteps  += localRun->fNbOfSteps ;
+  fNbOfSteps2 += localRun->fNbOfSteps2;
+  fStepSize   += localRun->fStepSize;  
+  fStepSize2  += localRun->fStepSize2;
+  
+  G4int nbOfAbsor = fDetector->GetNbOfAbsor();
+  for (G4int i=1; i<=nbOfAbsor; ++i) {
+    fCsdaRange[i]  = localRun->fCsdaRange[i]; 
+    fXfrontNorm[i] = localRun->fXfrontNorm[i];
+  } 
+   
+  for (G4int i=0; i<3; ++i)  fStatus[i] += localRun->fStatus[i];
+
+  G4Run::Merge(run); 
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::EndOfRun() 
 {
   std::ios::fmtflags mode = G4cout.flags();
   G4cout.setf(std::ios::fixed,std::ios::floatfield);
   G4int prec = G4cout.precision(2);
   
+  //run conditions
+  //     
+  G4String partName = fParticle->GetParticleName();
+  G4int nbOfAbsor   = fDetector->GetNbOfAbsor();
+  
+  G4cout << "\n ======================== run summary =====================\n";  
+  G4cout 
+    << "\n The run is " << numberOfEvent << " "<< partName << " of "
+    << G4BestUnit(fEkin,"Energy") 
+    << " through "  << nbOfAbsor << " absorbers: \n";
+  for (G4int i=1; i<= nbOfAbsor; i++) {
+     G4Material* material = fDetector->GetAbsorMaterial(i);
+     G4double thickness = fDetector->GetAbsorThickness(i);
+     G4double density = material->GetDensity();    
+     G4cout << std::setw(20) << G4BestUnit(thickness,"Length") << " of "
+            << material->GetName() << " (density: " 
+            << G4BestUnit(density,"Volumic Mass") << ")" << G4endl;
+    }         
+
+  if (numberOfEvent == 0) {
+    G4cout.setf(mode,std::ios::floatfield);
+    G4cout.precision(prec);  
+    return;
+  }
+      
   fEdeposit /= numberOfEvent; fEdeposit2 /= numberOfEvent;
   G4double rms = fEdeposit2 - fEdeposit*fEdeposit;        
   if (rms>0.) rms = std::sqrt(rms); else rms = 0.;
@@ -144,38 +284,22 @@ void Run::ComputeStatistics()
     << "   transmit = "  << transmit  << " %"
     << "   reflected = " << reflected << " %" << G4endl;
 
+    // normalize histograms of longitudinal energy profile
+    //
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+    G4int ih = 1;
+    G4double binWidth = analysisManager->GetH1Width(ih);
+    G4double fac = (1./(numberOfEvent*binWidth))*(mm/MeV);
+    analysisManager->ScaleH1(ih,fac);
+    
+    ih = 8;
+    binWidth = analysisManager->GetH1Width(ih);
+    fac = (1./(numberOfEvent*binWidth))*(g/(MeV*cm2));
+    analysisManager->ScaleH1(ih,fac);
+    
    // reset default formats
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void Run::Merge(const G4Run* run)
-{
-  const Run* localRun = static_cast<const Run*>(run);
-
-   // accumulate sums
-  fEdeposit += localRun->fEdeposit;
-  fEdeposit2 += localRun->fEdeposit2;
-  fTrackLen += localRun->fTrackLen;  
-  fTrackLen2 += localRun->fTrackLen2;
-  fProjRange += localRun->fProjRange; 
-  fProjRange2 += localRun->fProjRange2;
-  fNbOfSteps += localRun->fNbOfSteps ;
-  fNbOfSteps2 += localRun->fNbOfSteps2;
-  fStepSize += localRun->fStepSize;  
-  fStepSize2 += localRun->fStepSize2;
-  
-  G4int nbOfAbsor = fDetector->GetNbOfAbsor();
-  for (G4int i=1; i<=nbOfAbsor; ++i) {
-    fCsdaRange[i] = localRun->fCsdaRange[i]; 
-    fXfrontNorm[i] = localRun->fXfrontNorm[i];
-  } 
-   
-  for (G4int i=0; i<3; ++i)  fStatus[i] += localRun->fStatus[i];
-
-  G4Run::Merge(run); 
-} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
