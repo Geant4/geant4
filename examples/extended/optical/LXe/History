@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 18, 2013 P. Gumplinger (LXe-V10-00-01)
+- rearrange /optics_engine commands in LXe.in according to what
+  is allowed when with phys-ctor-em-V10-00-01 (G4OpticalPhysics)
+
 December 04, 2013 P. Gumplinger (LXe-V10-00-00)
 - Fixes in gui.mac:
   Commented out command specific to B2 example
