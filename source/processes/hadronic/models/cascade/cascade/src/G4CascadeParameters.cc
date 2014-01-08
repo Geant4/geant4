@@ -31,8 +31,6 @@
 // 20130308  M. Kelsey -- Add flag to use separate 3-body momentum generators
 // 20130421  M. Kelsey -- Add flag for CHECK_ECONS, replacing #ifdef's
 // 20130702  M. Kelsey -- Add flag to use N-body phase-space generator
-// 20140101  M. Kelsey -- Fix bug #1557:  Static instance must be pointer
-//		*** Drop use of Messenger until thread safety is addressed
 
 #include "G4CascadeParameters.hh"
 #include "G4CascadeParamMessenger.hh"
@@ -43,13 +41,9 @@ using std::endl;
 
 // Singleton accessor
 
-namespace {
-  static const G4CascadeParameters* theInstance = 0;
-}
-
 const G4CascadeParameters* G4CascadeParameters::Instance() {
-  if (0 == theInstance) theInstance = new G4CascadeParameters;
-  return theInstance;
+  static const G4CascadeParameters theInstance;
+  return &theInstance;
 }
 
 
@@ -79,10 +73,7 @@ G4CascadeParameters::G4CascadeParameters()
     DPMAX_3CLUSTER(getenv("DPMAX_3CLUSTER")),
     DPMAX_4CLUSTER(getenv("DPMAX_4CLUSTER")),
     messenger(0) {
-  /*** FIXME:  Messenger should not be accessing non-const shared pointer
   messenger = new G4CascadeParamMessenger(this);
-  ***/
-
   Initialize();
 }
 
