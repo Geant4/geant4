@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 7, 2014 P. Gumplinger (LXe-V10-00-02)
+- reduce the size of the output file
+
 December 18, 2013 P. Gumplinger (LXe-V10-00-01)
 - rearrange /optics_engine commands in LXe.in according to what
   is allowed when with phys-ctor-em-V10-00-01 (G4OpticalPhysics)

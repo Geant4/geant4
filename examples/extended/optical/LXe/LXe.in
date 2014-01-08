@@ -5,8 +5,8 @@
 #**
 #**************
 /run/verbose 1
-/control/verbose 1
-/tracking/verbose 1
+#/control/verbose 1
+#/tracking/verbose 1
 #/LXe/detector/MainScintYield 100
 #/optics_engine/selectOpProcess OpBoundary
 #/optics_engine/setOpProcessVerbose 1
