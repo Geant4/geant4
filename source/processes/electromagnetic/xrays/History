@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 Jan 14: P.Gumplinger (xrays-V10-00-01)
+- make all static 'Set/Add/Remove' methods non-inline in G4Scintillation
+  and G4Cerenkov
+
 18 Dec 13: P.Gumplinger (xrays-V10-00-00)
 - make some class members and methods static in G4Cerenkov and
   G4Scintillation

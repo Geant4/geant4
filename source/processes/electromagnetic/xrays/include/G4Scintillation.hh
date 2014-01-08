@@ -189,10 +189,10 @@ public:
         G4PhysicsTable* GetSlowIntegralTable() const;
         // Returns the address of the slow scintillation integral table.
 
-        static void AddSaturation(G4EmSaturation* sat) { fEmSaturation = sat; }
+        static void AddSaturation(G4EmSaturation* );
         // Adds Birks Saturation to the process.
 
-        static void RemoveSaturation() { fEmSaturation = NULL; }
+        static void RemoveSaturation();
         // Removes the Birks Saturation from the process.
 
         G4EmSaturation* GetSaturation() const { return fEmSaturation; }
@@ -261,18 +261,6 @@ G4bool G4Scintillation::IsApplicable(const G4ParticleDefinition& aParticleType)
        return true;
 }
 
-inline 
-void G4Scintillation::SetTrackSecondariesFirst(const G4bool state) 
-{
-	fTrackSecondariesFirst = state;
-}
-
-inline
-void G4Scintillation::SetFiniteRiseTime(const G4bool state)
-{
-        fFiniteRiseTime = state;
-}
-
 inline
 G4bool G4Scintillation::GetTrackSecondariesFirst() const
 {
@@ -286,21 +274,9 @@ G4bool G4Scintillation::GetFiniteRiseTime() const
 }
 
 inline
-void G4Scintillation::SetScintillationYieldFactor(const G4double yieldfactor)
-{
-        fYieldFactor = yieldfactor;
-}
-
-inline
 G4double G4Scintillation::GetScintillationYieldFactor() const
 {
         return fYieldFactor;
-}
-
-inline
-void G4Scintillation::SetScintillationExcitationRatio(const G4double excitationratio)
-{
-        fExcitationRatio = excitationratio;
 }
 
 inline

@@ -140,6 +140,21 @@ G4bool G4Cerenkov::IsApplicable(const G4ParticleDefinition& aParticleType)
     return result;
 }
 
+void G4Cerenkov::SetTrackSecondariesFirst(const G4bool state)
+{
+        fTrackSecondariesFirst = state;
+}
+
+void G4Cerenkov::SetMaxBetaChangePerStep(const G4double value)
+{
+        fMaxBetaChange = value*CLHEP::perCent;
+}
+
+void G4Cerenkov::SetMaxNumPhotonsPerStep(const G4int NumPhotons)
+{
+        fMaxPhotons = NumPhotons;
+}
+
 void G4Cerenkov::BuildPhysicsTable(const G4ParticleDefinition&)
 {
     if (!thePhysicsTable) BuildThePhysicsTable();

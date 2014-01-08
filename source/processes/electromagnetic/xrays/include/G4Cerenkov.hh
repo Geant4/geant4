@@ -158,11 +158,17 @@ public:
 	static void SetTrackSecondariesFirst(const G4bool state);
         // If set, the primary particle tracking is interrupted and any 
         // produced Cerenkov photons are tracked next. When all have 
-        // been tracked, the tracking of the primary resumes. 
-	
+        // been tracked, the tracking of the primary resumes.
+
+        G4bool GetTrackSecondariesFirst() const;
+        // Returns the boolean flag for tracking secondaries first.
+
         static void SetMaxBetaChangePerStep(const G4double d);
         // Set the maximum allowed change in beta = v/c in % (perCent)
         // per step.
+
+        G4double GetMaxBetaChangePerStep() const;
+        // Returns the maximum allowed change in beta = v/c in % (perCent)
 
 	static void SetMaxNumPhotonsPerStep(const G4int NumPhotons);
         // Set the maximum number of Cerenkov photons allowed to be 
@@ -171,6 +177,10 @@ public:
         // the maximum photon stack will roughly be of the size set.
         // If not called, the step is not limited by the number of 
         // photons generated.
+
+        G4int GetMaxNumPhotonsPerStep() const;
+        // Returns the maximum number of Cerenkov photons allowed to be
+        // generated during a tracking step.
 
         G4PhysicsTable* GetPhysicsTable() const;
         // Returns the address of the physics table.
@@ -213,22 +223,22 @@ private:
 // Inline methods
 ////////////////////
 
-inline 
-void G4Cerenkov::SetTrackSecondariesFirst(const G4bool state) 
-{ 
-	fTrackSecondariesFirst = state;
-}
-
 inline
-void G4Cerenkov::SetMaxBetaChangePerStep(const G4double value)
+G4bool G4Cerenkov::GetTrackSecondariesFirst() const
 {
-        fMaxBetaChange = value*CLHEP::perCent;
+        return fTrackSecondariesFirst;
 }
 
 inline
-void G4Cerenkov::SetMaxNumPhotonsPerStep(const G4int NumPhotons) 
-{ 
-	fMaxPhotons = NumPhotons;
+G4double G4Cerenkov::GetMaxBetaChangePerStep() const
+{
+        return fMaxBetaChange;
+}
+
+inline
+G4int G4Cerenkov::GetMaxNumPhotonsPerStep() const
+{
+        return fMaxPhotons;
 }
 
 inline

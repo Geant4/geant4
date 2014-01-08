@@ -623,6 +623,25 @@ void G4Scintillation::BuildThePhysicsTable()
         }
 }
 
+void G4Scintillation::SetTrackSecondariesFirst(const G4bool state)
+{
+        fTrackSecondariesFirst = state;
+}
+
+void G4Scintillation::SetFiniteRiseTime(const G4bool state)
+{
+        fFiniteRiseTime = state;
+}
+
+void G4Scintillation::SetScintillationYieldFactor(const G4double yieldfactor)
+{
+        fYieldFactor = yieldfactor;
+}
+
+void G4Scintillation::SetScintillationExcitationRatio(const G4double excitationratio) {
+        fExcitationRatio = excitationratio;
+}
+
 // Called by the user to set the scintillation yield as a function
 // of energy deposited by particle type
 
@@ -634,6 +653,16 @@ void G4Scintillation::SetScintillationByParticleType(const G4bool scintType)
            RemoveSaturation();
         }
         fScintillationByParticleType = scintType;
+}
+
+void G4Scintillation::AddSaturation(G4EmSaturation* sat)
+{
+        fEmSaturation = sat;
+}
+
+void G4Scintillation::RemoveSaturation()
+{
+        fEmSaturation = NULL;
 }
 
 // GetMeanFreePath
