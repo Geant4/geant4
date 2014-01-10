@@ -239,7 +239,7 @@ namespace G4INCL {
 
         if(theNewerInvariantMassSquared>=-1.e-5) {
           const G4double theNewerInvariantMass = std::sqrt(std::max(0.,theNewerInvariantMassSquared));
-          const G4double theNewerExcitationEnergy = theNewerInvariantMass-theNewerMass;
+          const G4double theNewerExcitationEnergy = ((theNewerA>1) ? theNewerInvariantMass-theNewerMass : 0.);
           // Pick the nucleon that maximises the excitation energy of the
           // ProjectileRemnant
           if(theNewerExcitationEnergy>maxExcitationEnergy) {
