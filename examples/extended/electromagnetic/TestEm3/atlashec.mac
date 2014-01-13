@@ -27,6 +27,6 @@
 /gun/energy 100 GeV
 /gun/position -40.635 0 0
 #
-/testem/event/printModulo 100
+/run/printProgress 100
 /run/beamOn 100
 

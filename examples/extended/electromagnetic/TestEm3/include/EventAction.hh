@@ -38,36 +38,25 @@
 #include "globals.hh"
 #include "DetectorConstruction.hh"
 
-class RunAction;
-class EventActionMessenger;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
   public:  
-    EventAction(DetectorConstruction*, RunAction*);
+    EventAction(DetectorConstruction*);
    ~EventAction();
 
     virtual void BeginOfEventAction(const G4Event*);
     virtual void   EndOfEventAction(const G4Event*);
-    
-    void SetDrawFlag   (G4String val)  {fDrawFlag    = val;};
-    void SetPrintModulo(G4int    val)  {fPrintModulo = val;};
     
     void SumEnergy(G4int k, G4double de, G4double dl)
         {fEnergyDeposit[k] += de; fTrackLengthCh[k] += dl;};          
         
   private:  
     DetectorConstruction* fDetector;
-    RunAction*            fRunAct;
     
     G4double              fEnergyDeposit[MaxAbsor];
     G4double              fTrackLengthCh[MaxAbsor];
-        
-    G4String              fDrawFlag; 
-    G4int                 fPrintModulo;         
-    EventActionMessenger* fEventMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

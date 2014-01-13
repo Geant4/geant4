@@ -26,6 +26,6 @@
 /gun/particle gamma
 /gun/energy 1 GeV
 #
-/testem/event/printModulo 100
+/run/printProgress 100
 #
 /run/beamOn 1000
