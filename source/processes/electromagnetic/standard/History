@@ -18,6 +18,15 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+11 January 14: V.Ivanchenko for L.Urban (emstand-V10-00-02)
+- G4UniversalFluctuation - G4Pow::expA() is substituted by G4Exp() 
+
+08 January 14: V.Ivanchenko for L.Urban (emstand-V10-00-01)
+- G4UrbanMscModel - bug fix (1st normal step in StepLimitType 2 mode   
+                    was not randomized)  
+- G4UniversalFluctuation - energy loss for extreme small cuts was too small,
+                           it is fixed now        
+
 18 December 13: V.Ivanchenko (emstand-V10-00-00)
 - G4eCoulombScatteringModel, G4eSingleCoulombScatteringModel - get pointer
     to the vector of cuts from parameter of Initialise(..) method and 

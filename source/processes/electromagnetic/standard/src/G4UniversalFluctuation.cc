@@ -76,8 +76,8 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4DynamicParticle.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4Pow.hh"
 #include "G4Log.hh"
+#include "G4Exp.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -98,8 +98,6 @@ G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
   particleMass = chargeSquare = ipotFluct = electronDensity = f1Fluct = f2Fluct 
     = e1Fluct = e2Fluct = e1LogFluct = e2LogFluct = ipotLogFluct = e0 = esmall 
     = e1 = e2 = 0;
-
-  g4pow = G4Pow::GetInstance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -238,7 +236,7 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 	if(a1 < nmaxCont) { 
 	  //small energy loss
 	  G4double sa1 = sqrt(a1);
-	  if(G4UniformRand() < g4pow->expA(-sa1))
+	  if(G4UniformRand() < G4Exp(-sa1))
 	    {
 	      e1 = esmall;
 	      a1 = meanLoss*(1.-rate)/e1;
@@ -265,6 +263,9 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
     G4double w1 = tmax/e0;
     if(tmax > e0) {
       a3 = rate*meanLoss*(tmax-e0)/(e0*tmax*G4Log(w1));
+      if(a1+a2 <= 0.) { 
+	a3 /= rate; 
+      }
     }
     //'nearly' Gaussian fluctuation if a1>nmaxCont&&a2>nmaxCont&&a3>nmaxCont  
     G4double emean = 0.;
@@ -344,7 +345,7 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
     losstot += loss;
   }
   //G4cout << "Vavilov: " << losstot << "  Nstep= " << nstep << G4endl;
-              
+
   return losstot;
 
 }

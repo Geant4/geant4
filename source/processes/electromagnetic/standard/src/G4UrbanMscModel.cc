@@ -557,7 +557,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       if(tlimit < stepmin) tlimit = stepmin;
 
       // randomize 1st step or 1st 'normal' step in volume
-      if(firstStep || ((smallstep == skin) && !insideskin)) 
+      if(firstStep || ((smallstep == skin+1) && !insideskin)) 
         { 
           G4double temptlimit = tlimit;
           if(temptlimit > tlimitmin)

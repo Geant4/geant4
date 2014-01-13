@@ -59,8 +59,6 @@
 #include "G4VEmFluctuationModel.hh"
 #include "G4ParticleDefinition.hh"
 
-class G4Pow;
-
 class G4UniversalFluctuation : public G4VEmFluctuationModel
 {
 
@@ -91,8 +89,6 @@ private:
   // hide assignment operator
   G4UniversalFluctuation & operator=(const  G4UniversalFluctuation &right);
   G4UniversalFluctuation(const  G4UniversalFluctuation&);
-
-  G4Pow*   g4pow; 
 
   const G4ParticleDefinition* particle;
   const G4Material* lastMaterial;
