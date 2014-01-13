@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10.01.2014  L. Pandola, tag emlowen-V10-00-01
+	    Suppress G4Exception (JustWarning) issued by some Penelope 
+            models in UnitTests. Controlled by verbosity flag now (for 
+            diagnostic).
+
 11.12.2013  L. Pandola, tag emlowen-V10-00-00
             Allow for (AutoLock-protected) creation on-the-fly of 
             tables in SampleSecondaries(). Nothing changes for loops driven 

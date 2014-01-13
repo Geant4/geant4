@@ -312,11 +312,15 @@ G4double G4PenelopeRayleighModel::ComputeCrossSectionPerAtom(const G4ParticleDef
      {
        //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
        //not filled up. This can happen in a UnitTest or via G4EmCalculator
-       G4ExceptionDescription ed;
-       ed << "Unable to retrieve the cross section table for Z=" << iZ << G4endl;
-       ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
-       G4Exception("G4PenelopeRayleighModel::ComputeCrossSectionPerAtom()",
-		   "em2040",JustWarning,ed);
+       if (verboseLevel > 0)
+	{
+	  //Issue a G4Exception (warning) only in verbose mode
+	  G4ExceptionDescription ed;
+	  ed << "Unable to retrieve the cross section table for Z=" << iZ << G4endl;
+	  ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;
+	  G4Exception("G4PenelopeRayleighModel::ComputeCrossSectionPerAtom()",
+		      "em2040",JustWarning,ed);
+	}
        //protect file reading via autolock
        G4AutoLock lock(&PenelopeRayleighModelMutex);
        ReadDataFile(iZ);
@@ -479,13 +483,16 @@ void G4PenelopeRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
     {
       //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
       //not filled up. This can happen in a UnitTest 
-      G4ExceptionDescription ed;
-      ed << "Unable to find the samplingTable data for " << 
-	theMat->GetName() << G4endl;
-      ed << "This can happen only in Unit Tests" << G4endl;   
-      G4Exception("G4PenelopeRayleighModel::SampleSecondaries()",
-		  "em2019",JustWarning,ed);
-      
+      if (verboseLevel > 0)
+	{
+	  //Issue a G4Exception (warning) only in verbose mode
+	  G4ExceptionDescription ed;
+	  ed << "Unable to find the samplingTable data for " << 
+	    theMat->GetName() << G4endl;
+	  ed << "This can happen only in Unit Tests" << G4endl;   
+	  G4Exception("G4PenelopeRayleighModel::SampleSecondaries()",
+		      "em2019",JustWarning,ed);
+	}
       const G4ElementVector* theElementVector = theMat->GetElementVector();
       //protect file reading via autolock
       G4AutoLock lock(&PenelopeRayleighModelMutex);

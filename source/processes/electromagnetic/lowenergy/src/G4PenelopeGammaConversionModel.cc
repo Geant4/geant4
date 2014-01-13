@@ -250,11 +250,15 @@ G4double G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom(
      {
        //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
        //not filled up. This can happen in a UnitTest or via G4EmCalculator
-       G4ExceptionDescription ed;
-       ed << "Unable to retrieve the cross section table for Z=" << iZ << G4endl;
-       ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;   
-       G4Exception("G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom()",
-		   "em2018",JustWarning,ed);
+       if (verboseLevel > 0)
+	 {
+	   //Issue a G4Exception (warning) only in verbose mode
+	   G4ExceptionDescription ed;
+	   ed << "Unable to retrieve the cross section table for Z=" << iZ << G4endl;
+	   ed << "This can happen only in Unit Tests or via G4EmCalculator" << G4endl;   
+	   G4Exception("G4PenelopeGammaConversionModel::ComputeCrossSectionPerAtom()",
+		       "em2018",JustWarning,ed);
+	 }
        //protect file reading via autolock
        G4AutoLock lock(&PenelopeGammaConversionModelMutex);
        ReadDataFile(iZ);            
@@ -330,12 +334,16 @@ G4PenelopeGammaConversionModel::SampleSecondaries(std::vector<G4DynamicParticle*
     {
       //If we are here, it means that Initialize() was inkoved, but the MaterialTable was 
       //not filled up. This can happen in a UnitTest or via G4EmCalculator
-      G4ExceptionDescription ed;
-      ed << "Unable to allocate the EffectiveCharge data for " << 
-	mat->GetName() << G4endl;
-      ed << "This can happen only in Unit Tests" << G4endl;   
-      G4Exception("G4PenelopeGammaConversionModel::SampleSecondaries()",
-		  "em2019",JustWarning,ed);
+      if (verboseLevel > 0)
+	{
+	  //Issue a G4Exception (warning) only in verbose mode
+	  G4ExceptionDescription ed;
+	  ed << "Unable to allocate the EffectiveCharge data for " << 
+	    mat->GetName() << G4endl;
+	  ed << "This can happen only in Unit Tests" << G4endl;   
+	  G4Exception("G4PenelopeGammaConversionModel::SampleSecondaries()",
+		      "em2019",JustWarning,ed);
+	}
       //protect file reading via autolock
       G4AutoLock lock(&PenelopeGammaConversionModelMutex);
       InitializeScreeningFunctions(mat);
