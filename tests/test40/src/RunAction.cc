@@ -151,42 +151,39 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
 {
   //compute and print statistic
   //
+  NbOfEvents = aRun->GetNumberOfEvent();
 
 #ifdef G4MULTITHREADED
-  if(G4Threading::IsWorkerThread() == true) {
-    NbOfEvents = aRun->GetNumberOfEvent();
-    return;
-  } 
-  Reset();
+  if(G4Threading::IsWorkerThread() == true) { return; } 
 
-  for(size_t it = 0; it < runActions.size(); ++it) { 
-    RunAction* anAction = runActions[it];
-    NbOfEvents += anAction->NbOfEvents;
+  // in real MT run there is non-zero number of RunActions
+  size_t nrun = runActions.size();
+  if(0 < nrun) {
+    NbOfEvents = 0;
+    for(size_t it = 0; it < runActions.size(); ++it) { 
+      RunAction* anAction = runActions[it];
+      NbOfEvents += anAction->NbOfEvents;
 
-    for (G4int i=0; i<nLbin; i++)
-      {
+      for (G4int i=0; i<nLbin; i++) {
 	sumELongit[i]  += anAction->sumELongit[i];
 	sumE2Longit[i] += anAction->sumE2Longit[i];
 	sumELongitCumul[i]  += anAction->sumELongitCumul[i];
 	sumE2LongitCumul[i] += anAction->sumE2LongitCumul[i];
       }
 
-    for (G4int j=0; j<nRbin; j++)
-      {
+      for (G4int j=0; j<nRbin; j++) {
 	sumERadial[j]  += anAction->sumERadial[j];
 	sumE2Radial[j] += anAction->sumE2Radial[j];
 	sumERadialCumul[j]  += anAction->sumERadialCumul[j];
 	sumE2RadialCumul[j] += anAction->sumE2RadialCumul[j];
       }
 
-    sumChargTrLength  += anAction->sumChargTrLength;
-    sum2ChargTrLength += anAction->sum2ChargTrLength;
-    sumNeutrTrLength  += anAction->sumNeutrTrLength;
-    sum2NeutrTrLength += anAction->sum2NeutrTrLength;
-
+      sumChargTrLength  += anAction->sumChargTrLength;
+      sum2ChargTrLength += anAction->sum2ChargTrLength;
+      sumNeutrTrLength  += anAction->sumNeutrTrLength;
+      sum2NeutrTrLength += anAction->sum2NeutrTrLength;
+    }
   }
-#else
-  NbOfEvents = aRun->GetNumberOfEvent();
 #endif
 
   G4double kinEnergy = Kin->GetParticleGun()->GetParticleEnergy();
