@@ -24,11 +24,9 @@ ifeq ($(G4SYSTEM),Linux-icc)
     CCFLAGS   += -pg
   endif
   ifdef G4LIB_BUILD_SHARED
-    ifndef G4MULTITHREADED
-      CXXFLAGS  += -fPIC
-      FCFLAGS   += -fPIC
-      CCFLAGS   += -fPIC
-    endif
+    CXXFLAGS  += -fPIC
+    FCFLAGS   += -fPIC
+    CCFLAGS   += -fPIC
     LDFLAGS   += -i-dynamic
   endif
   G4RUNPATHOPTION := -Wl,-rpath -Wl,
