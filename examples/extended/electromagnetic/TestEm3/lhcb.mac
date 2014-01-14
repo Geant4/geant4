@@ -18,7 +18,7 @@
 /gun/particle e-
 /gun/energy 10 GeV
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 #
 /testem/phys/setCuts 10 mm
 /run/initialize

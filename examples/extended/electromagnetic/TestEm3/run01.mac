@@ -25,6 +25,6 @@
 /analysis/h1/set 21 102  0.   102. none	#energy flow
 /analysis/h1/set 22 102  0.   102. none	#lateral energy leakage
 #
-/testem/event/printModulo 100
+/run/printProgress 100
 #
 /run/beamOn 1000

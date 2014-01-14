@@ -23,43 +23,78 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm3/include/EventActionMessenger.hh
-/// \brief Definition of the EventActionMessenger class
+/// \file electromagnetic/TestEm11/include/Run.hh
+/// \brief Definition of the Run class
 //
-// $Id$
+// $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef EventActionMessenger_h
-#define EventActionMessenger_h 1
+#ifndef Run_h
+#define Run_h 1
 
+#include "DetectorConstruction.hh"
+
+#include "G4Run.hh"
 #include "globals.hh"
-#include "G4UImessenger.hh"
+#include <map>
 
-class EventAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+class DetectorConstruction;
+class G4ParticleDefinition;
+class G4Track;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class EventActionMessenger: public G4UImessenger
+class Run : public G4Run
 {
   public:
-    EventActionMessenger(EventAction*);
-   ~EventActionMessenger();
+    Run(DetectorConstruction*);
+   ~Run();
+
+  public:
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
+      
+    void FillPerEvent(G4int,G4double,G4double);
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+    void SumEnergyFlow (G4int plane, G4double Eflow);
+    void SumLateralEleak(G4int cell, G4double Eflow);
+    void AddChargedStep();
+    void AddNeutralStep();
+    void AddSecondaryTrack(const G4Track*);
     
+    void SetEdepAndRMS(G4int, G4double, G4double, G4double);
+    void SetApplyLimit(G4bool);
+                
+    virtual void Merge(const G4Run*);
+    void EndOfRun();
+     
   private:
-    EventAction*          fEventAction;
+    DetectorConstruction*  fDetector;
+    G4ParticleDefinition*  fParticle;
+    G4double  fEkin;
+                           
+    G4double fSumEAbs [MaxAbsor], fSum2EAbs [MaxAbsor]; 
+    G4double fSumLAbs [MaxAbsor], fSum2LAbs [MaxAbsor];
     
-    G4UIdirectory*        fEventDir;         
-    G4UIcmdWithAString*   fDrawCmd;
-    G4UIcmdWithAnInteger* fPrintCmd;    
+    std::vector<G4double> fEnergyFlow;
+    std::vector<G4double> fLateralEleak;
+    std::vector<G4double> fEnergyDeposit[MaxAbsor];
+    
+    G4double fChargedStep;
+    G4double fNeutralStep;
+
+    G4int  fN_gamma;
+    G4int  fN_elec;
+    G4int  fN_pos;
+    
+    G4double fEdeptrue [MaxAbsor];
+    G4double fRmstrue  [MaxAbsor];
+    G4double fLimittrue[MaxAbsor];        
+    G4bool fApplyLimit;  
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+

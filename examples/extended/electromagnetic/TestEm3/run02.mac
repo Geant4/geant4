@@ -27,6 +27,6 @@
 /analysis/h1/set 1 100 900. 1000. MeV
 /analysis/h1/set 2 100   0.   50. MeV
 #
-/testem/event/printModulo 50
+/run/printProgress 50
 #
 /run/beamOn 200

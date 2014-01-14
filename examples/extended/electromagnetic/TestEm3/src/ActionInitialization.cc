@@ -23,67 +23,63 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm3/src/EventActionMessenger.cc
-/// \brief Implementation of the EventActionMessenger class
+// $Id: ActionInitialization.cc 76346 2013-11-08 15:48:19Z maire $
 //
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.cc
+/// \brief Implementation of the ActionInitialization class
 
-#include "EventActionMessenger.hh"
+#include "ActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
 #include "EventAction.hh"
-
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
-#include "globals.hh"
+#include "TrackingAction.hh"
+#include "SteppingAction.hh"
+#include "SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventActionMessenger::EventActionMessenger(EventAction* EvAct)
-:G4UImessenger(),fEventAction(EvAct),
- fEventDir(0),         
- fDrawCmd(0),
- fPrintCmd(0)
-{  
-  fEventDir = new G4UIdirectory("/testem/event/");
-  fEventDir->SetGuidance("event control");
-   
-  fDrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
-  fDrawCmd->SetGuidance("Draw the tracks in the event");
-  fDrawCmd->SetGuidance("  Choice : none, charged(default), all");
-  fDrawCmd->SetParameterName("choice",true);
-  fDrawCmd->SetDefaultValue("all");
-  fDrawCmd->SetCandidates("none charged all");
-  fDrawCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
-  fPrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
-  fPrintCmd->SetGuidance("Print events modulo n");
-  fPrintCmd->SetParameterName("EventNb",false);
-  fPrintCmd->SetRange("EventNb>0");
-  fPrintCmd->AvailableForStates(G4State_PreInit,G4State_Idle);    
-}
+ActionInitialization::ActionInitialization(DetectorConstruction* det)
+ : G4VUserActionInitialization(),fDetector(det)
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventActionMessenger::~EventActionMessenger()
+ActionInitialization::~ActionInitialization()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
 {
-  delete fDrawCmd;
-  delete fPrintCmd;
-  delete fEventDir;             
+ SetUserAction(new RunAction(fDetector));
 }
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventActionMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{ 
-  if(command == fDrawCmd)
-    {fEventAction->SetDrawFlag(newValue);}
-    
-  if(command == fPrintCmd)
-    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}       
-}
+void ActionInitialization::Build() const
+{
+  
+  PrimaryGeneratorAction* prim = new PrimaryGeneratorAction(fDetector);
+  SetUserAction(prim);
+
+  RunAction* run = new RunAction(fDetector,prim);
+  SetUserAction(run); 
+  
+  EventAction* event = new EventAction(fDetector);
+  SetUserAction(event);
+
+  SetUserAction(new TrackingAction(fDetector));
+
+  SetUserAction(new SteppingAction(fDetector,event));
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
+{
+  return new SteppingVerbose();
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -30,6 +30,6 @@
 #
 /testem/stepMax/absorber 2 5 um
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 #
 /run/beamOn 10

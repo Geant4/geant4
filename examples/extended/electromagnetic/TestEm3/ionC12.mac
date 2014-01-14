@@ -7,7 +7,7 @@
 #
 /control/verbose 2
 /run/verbose 2
-/tracking/verbose 1
+/tracking/verbose 0
 #
 #  select EM PhysicsList
 #
@@ -31,6 +31,6 @@
 #
 /analysis/h1/set 1 200 350. 550. MeV
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 /run/beamOn 5000
 
