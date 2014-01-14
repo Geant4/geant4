@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 January 2014, V.Ivanchenko (test17-V10-00-00)
+             Added Opt4 PhysicsList and use it by default
+
 21 November 2013, A. Dotti   (test17-V09-06-04)
 	     Use of G4RunManager::ReinitializeGeomtry() method
              requires run-V09-06-128
