@@ -36,16 +36,13 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
-#include "G4Cache.hh"
 
 class G4Box;
 class G4LogicalVolume;
 class G4VPhysicalVolume;
 class G4Material;
+class G4UniformMagField;
 class DetectorMessenger;
-
-class G4GlobalMagFieldMessenger;
-
 
      const G4int MaxAbsor = 10;                        // 0 + 9  
      
@@ -67,9 +64,13 @@ public:
   void SetWorldMaterial (const G4String&);
   void SetCalorSizeYZ   (G4double);          
   void SetNbOfLayers    (G4int);   
+
+  void SetMagField   (G4double);
   
-  virtual G4VPhysicalVolume* Construct();
-  virtual void ConstructSDandField();
+  virtual   
+  G4VPhysicalVolume* Construct();
+
+  void UpdateGeometry();
      
 public:
   
@@ -123,9 +124,10 @@ private:
   G4LogicalVolume*   fLogicAbsor[MaxAbsor];
   G4VPhysicalVolume* fPhysiAbsor[MaxAbsor];
 
+  G4UniformMagField* fMagField;
+
   DetectorMessenger* fDetectorMessenger;
-  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
-  
+
 private:
 
   void DefineMaterials();

@@ -34,24 +34,26 @@
 #include "SteppingAction.hh"
 
 #include "DetectorConstruction.hh"
-#include "Run.hh"
+#include "RunAction.hh"
 #include "EventAction.hh"
 #include "HistoManager.hh"
 
+#include "G4Step.hh"
 #include "G4Positron.hh"
 #include "G4RunManager.hh"
 #include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(DetectorConstruction* det, EventAction* evt)
-:G4UserSteppingAction(),fDetector(det),fEventAct(evt) 
+SteppingAction::SteppingAction(DetectorConstruction* det, RunAction* run,
+                               EventAction* evt)
+:G4UserSteppingAction(),fDetector(det),fRunAct(run),fEventAct(evt) 
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 SteppingAction::~SteppingAction()
-{ }
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -73,11 +75,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //
   G4int absorNum  = prePoint->GetTouchableHandle()->GetCopyNumber(0);
   G4int layerNum  = prePoint->GetTouchableHandle()->GetCopyNumber(1);
-  
-  //get Run
-  Run* run = static_cast<Run*>(
-             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
-                       
+         
   // collect energy deposit taking into account track weight
   G4double edep = aStep->GetTotalEnergyDeposit()*aStep->GetTrack()->GetWeight();
   
@@ -85,8 +83,8 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4double stepl = 0.;
   if (particle->GetPDGCharge() != 0.) {
     stepl = aStep->GetStepLength();
-    run->AddChargedStep();
-  } else { run->AddNeutralStep(); }
+    fRunAct->AddChargedStep();
+  } else { fRunAct->AddNeutralStep(); }
   
   //  G4cout << "Nabs= " << absorNum << "   edep(keV)= " << edep << G4endl;
   
@@ -96,7 +94,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   //longitudinal profile of edep per absorber
   if (edep>0.) {
     G4AnalysisManager::Instance()->FillH1(MaxAbsor+absorNum, 
-                                          G4double(layerNum+1), edep);
+					  G4double(layerNum+1), edep);
   }
   //energy flow
   //
@@ -111,10 +109,10 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     G4double sizeYZ = 0.5*fDetector->GetCalorSizeYZ();       
     G4double Eflow = endPoint->GetKineticEnergy();
     if (particle == G4Positron::Positron()) Eflow += 2*electron_mass_c2;
-   if ((std::abs(position.y()) >= sizeYZ) || (std::abs(position.z()) >= sizeYZ))
-                                  run->SumLateralEleak(Idnow, Eflow);
-    else if (direction.x() >= 0.) run->SumEnergyFlow(plane=Idnow+1, Eflow);
-    else                          run->SumEnergyFlow(plane=Idnow,  -Eflow);    
+    if ((std::abs(position.y()) >= sizeYZ) || (std::abs(position.z()) >= sizeYZ)) 
+                                  fRunAct->SumLateralEleak(Idnow, Eflow);
+    else if (direction.x() >= 0.) fRunAct->SumEnergyFlow(plane=Idnow+1, Eflow);
+    else                          fRunAct->SumEnergyFlow(plane=Idnow,  -Eflow);    
   }   
 
 ////  example of Birk attenuation

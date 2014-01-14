@@ -35,26 +35,24 @@
 #include "TrackingAction.hh"
 
 #include "DetectorConstruction.hh"
-#include "Run.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "HistoManager.hh"
 
-#include "G4RunManager.hh"
+#include "G4Track.hh"
 #include "G4Positron.hh"
 #include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det)
-:G4UserTrackingAction(),fDetector(det)
+TrackingAction::TrackingAction(DetectorConstruction* det,RunAction* run)
+:G4UserTrackingAction(),fDetector(det), fRunAct(run)
 { }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void TrackingAction::PreUserTrackingAction(const G4Track* track )
 {
-  //get Run
-  Run* run = static_cast<Run*>(
-             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
-             
   // Energy flow initialisation for primary particle
   //
   if (track->GetTrackID() == 1) {
@@ -72,9 +70,9 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track )
       Eflow += 2*electron_mass_c2; 
          
     //flux artefact, if primary vertex is inside the calorimeter   
-    for (G4int pl=1; pl<=Idnow; pl++) {run->SumEnergyFlow(pl, Eflow);}
+    for (G4int pl=1; pl<=Idnow; pl++) {fRunAct->SumEnergyFlow(pl, Eflow);}
   } else {
-    run->AddSecondaryTrack(track);
+    fRunAct->AddSecondaryTrack(track);
   }
 }
 

@@ -38,13 +38,14 @@
 #include "globals.hh"
 
 class DetectorConstruction;
+class RunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(DetectorConstruction*);
+    TrackingAction(DetectorConstruction*,RunAction*);
    ~TrackingAction() {};
    
     virtual void  PreUserTrackingAction(const G4Track*);   
@@ -52,6 +53,7 @@ class TrackingAction : public G4UserTrackingAction {
     
   private:
     DetectorConstruction* fDetector;
+    RunAction*            fRunAct;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,68 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm3/src/EventAction.cc
-/// \brief Implementation of the EventAction class
+/// \file electromagnetic/TestEm3/include/EventActionMessenger.hh
+/// \brief Definition of the EventActionMessenger class
 //
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "EventAction.hh"
+#ifndef EventActionMessenger_h
+#define EventActionMessenger_h 1
 
-#include "RunAction.hh"
-#include "EventActionMessenger.hh"
-#include "HistoManager.hh"
+#include "globals.hh"
+#include "G4UImessenger.hh"
 
-#include "G4Event.hh"
+class EventAction;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithAnInteger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(DetectorConstruction* det, RunAction* run)
-:G4UserEventAction(),fDetector(det), fRunAct(run),
- fEventMessenger(0)
+class EventActionMessenger: public G4UImessenger
 {
-  fDrawFlag = "none";
-  fPrintModulo = 10000;
-  fEventMessenger = new EventActionMessenger(this);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-EventAction::~EventAction()
-{
-  delete fEventMessenger;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventAction::BeginOfEventAction(const G4Event* evt)
-{   
-  G4int evtNb = evt->GetEventID();
-
-  //survey printing
-  if (evtNb%fPrintModulo == 0)
-    G4cout << "\n---> Begin Of Event: " << evtNb << G4endl;
+  public:
+    EventActionMessenger(EventAction*);
+   ~EventActionMessenger();
     
-  //initialize EnergyDeposit per event
-  //
-  for (G4int k=0; k<MaxAbsor; k++) {
-    fEnergyDeposit[k] = fTrackLengthCh[k] = 0.0;   
-  }
-}
+    virtual void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    EventAction*          fEventAction;
+    
+    G4UIdirectory*        fEventDir;         
+    G4UIcmdWithAString*   fDrawCmd;
+    G4UIcmdWithAnInteger* fPrintCmd;    
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::EndOfEventAction(const G4Event*)
-{
-  for (G4int k=1; k<=fDetector->GetNbOfAbsor(); k++) {
-     fRunAct->FillPerEvent(k,fEnergyDeposit[k],fTrackLengthCh[k]);                       
-     if (fEnergyDeposit[k] > 0.)
-             G4AnalysisManager::Instance()->FillH1(k, fEnergyDeposit[k]);
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
+#endif
