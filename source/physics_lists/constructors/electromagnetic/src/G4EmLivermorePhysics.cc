@@ -263,6 +263,7 @@ void G4EmLivermorePhysics::ConstructProcess()
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
+      msc->SetRangeFactor(0.01);
       msc->AddEmModel(0, msc1);
       msc->AddEmModel(0, msc2);
 
@@ -304,6 +305,7 @@ void G4EmLivermorePhysics::ConstructProcess()
       G4WentzelVIModel* msc2 = new G4WentzelVIModel();
       msc1->SetHighEnergyLimit(highEnergyLimit);
       msc2->SetLowEnergyLimit(highEnergyLimit);
+      msc->SetRangeFactor(0.01);
       msc->AddEmModel(0, msc1);
       msc->AddEmModel(0, msc2);
 
