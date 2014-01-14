@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 14, 2014 V.Ivantchenko (global-V10-00-01)
+- G4PhysicsVector: small performance optimisation; division by 6 substituted
+  by multiplication of 1/6 constant.
+
 December 17, 2013 G.Cosmo      (global-V10-00-00)
 - Explicitly check the upper bound of 'numberOfYNodes' in
   G4Physics2DVector::Retrieve() (read from file), to fix defect
