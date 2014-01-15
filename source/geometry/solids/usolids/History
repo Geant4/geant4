@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 10, 2014  T.Nikitina              geom-usolids-V10-00-00
+- Fixed typo in SafetyFromInside() for UTubs for correct calculation of
+  'safePhi'.
+
 November 29, 2013  G.Cosmo                geom-usolids-V09-06-11
 - Corrected library name in GNUmakefile and fixed comment in sources.cmake.
 
