@@ -14,6 +14,12 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-Jan-2014, V.Ivanchenko (phys-ctor-em-V10-00-05)
+- G4EmStandardPhysics_option4, G4EmLivermorePhysics,
+  G4EmPenelopePhysics: use G4UrbanMscModel for pions, kaons, protons
+    instead of WentzelVI to have more accurate ranges of low-energy 
+    hadrons (in particular, protons)
+
 14-Jan-2014, V.Ivanchenko (phys-ctor-em-V10-00-04)
 - G4EmStandardPhysics_option4, G4EmLivermorePhysics,
   G4EmPenelopePhysics: use RangeFactor=0.01 to increase 

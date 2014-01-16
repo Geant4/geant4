@@ -192,11 +192,11 @@ void G4EmStandardPhysics_option4::ConstructProcess()
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
   mumsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* pimsc = new G4hMultipleScattering();
-  pimsc->AddEmModel(0, new G4WentzelVIModel());
+  //pimsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* kmsc = new G4hMultipleScattering();
-  kmsc->AddEmModel(0, new G4WentzelVIModel());
+  //kmsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* pmsc = new G4hMultipleScattering();
-  pmsc->AddEmModel(0, new G4WentzelVIModel());
+  //pmsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
   // high energy limit for e+- scattering models
