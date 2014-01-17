@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Januar 17, 2014 G.Folger (test48-v10-00-00)
+- fix compilation warning (clang33) on unused data member in 
+  TestStoppingPhysics
+  
 November 8, 2013 A.Ribon (test48-V09-06-11)
 - binmake.gmk: replaced lll_fission with fission and removed high_energy
   and low_energy.

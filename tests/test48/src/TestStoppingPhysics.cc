@@ -226,7 +226,10 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
 #else
 
     man = new G4ProcessManager(G4MuonMinus::MuonMinus());
-
+	 
+    if (verboseLevel>1){   // use verboseLevel to suppress compilation warning
+	    G4cout <<"TestStoppingPhysics::GetProcess() not using new mucapture"<<G4endl;
+    }		
 #endif
 
   }
