@@ -15,7 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-01-01-13 V.Ivant (testem8-V10-00-00)
+16-01-14 V.Ivant (testem8-V10-00-01)
+- HistoManager - fixed output of rms of mean energy
+
+01-01-14 V.Ivant (testem8-V10-00-00)
 - HistoManager - more accurate computation of mean energy deposition
 
 21-05-13 V.Ivant (testem8-V09-06-03)

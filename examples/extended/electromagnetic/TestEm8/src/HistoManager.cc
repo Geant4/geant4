@@ -154,7 +154,7 @@ void HistoManager::EndOfRun()
   fOverflow    *= norm;
 
   G4double y1 = fEdep.mean();
-  G4double y2 = fEdep.rms();
+  G4double y2 = sqrt(fEdep.rms());
 
   G4double de = fMaxEnergy/G4double(fBinsE);  
   G4double x1 = -de*0.5; 
