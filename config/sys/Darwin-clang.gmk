@@ -5,10 +5,10 @@
 # Original author: Gabriele Cosmo - CERN
 #
 ifeq ($(G4SYSTEM),Darwin-clang)
-  CXX       := clang
+  CXX       := clang++
   CXXFLAGS  := -Wall -Wno-non-virtual-dtor -Wno-long-long
-  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
-  CXXFLAGS  += -Wno-variadic-macros -Wshadow 
+  CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
+  CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
   ifdef G4MULTITHREADED
     CXXFLAGS += -ftls-model=initial-exec -pthread
   endif
@@ -33,6 +33,12 @@ ifeq ($(G4SYSTEM),Darwin-clang)
     FCFLAGS   += -O2 -g
     CCFLAGS   += -O2 -g
   endif
+  ifdef G4LIB_BUILD_SHARED
+    CXXFLAGS  += -fPIC
+    FCFLAGS   += -fPIC
+    CCFLAGS   += -fPIC
+  endif
+  G4RUNPATHOPTION := -Wl,-rpath 
   FC := gfortran
   FCFLAGS += -fno-automatic -fno-backslash -fno-second-underscore
   LDFLAGS += -bind_at_load
@@ -151,13 +157,13 @@ ifeq ($(G4SYSTEM),Darwin-clang)
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMPDIR); \
-     $(CXX)  -dynamiclib -single_module -undefined dynamic_lookup \
+     $(CXX) -dynamiclib -single_module -undefined dynamic_lookup \
          -o $$libdir/$(@F) $(INTYLIBS) *.o
   endef
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`; \
      cd $(G4TMP)/$(G4SYSTEM); \
-     $(CXX)  -dynamiclib -single_module -undefined dynamic_lookup \
+     $(CXX) -dynamiclib -single_module -undefined dynamic_lookup \
          -o $$libdir/$(@F) $(INTYLIBS) $(foreach dir,$(SUBLIBS),$(dir)/*.o);
   endef
 
