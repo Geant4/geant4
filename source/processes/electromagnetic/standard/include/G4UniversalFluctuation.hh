@@ -94,6 +94,10 @@ private:
   const G4Material* lastMaterial;
 
   G4double particleMass;
+
+  // Derived quantities
+  G4double m_Inv_particleMass;
+  G4double m_massrate;
   G4double chargeSquare;
 
   // data members to speed up the fluctuation calculation

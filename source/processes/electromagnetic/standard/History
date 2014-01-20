@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+18 January 14: L.Urban (emstand-V10-00-04)
+- G4UniversalFluctuation - bugfix in "ionization" computing -
+   effect of the bug was small
+
+17 January 14: V.Ivanchenko for J.Apostolakis (emstand-V10-00-03)
+- G4UniversalFluctuation - reduced number of divisions by addition
+    extra class members
 
 11 January 14: V.Ivanchenko for L.Urban (emstand-V10-00-02)
 - G4UniversalFluctuation - G4Pow::expA() is substituted by G4Exp() 
