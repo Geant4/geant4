@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18 January 2013 - V.Ivanchenko (hadr-cohe-V10-00-00)
+------------------------------------------------------
+- G4LEnp - implemented SampleT() method (V.Grichine)
+
 04 June 2013 - A.Ribon (hadr-cohe-V09-06-03)
 ------------------------------------------------------
 - Fix access to ions via the IonTable class and GetIon method

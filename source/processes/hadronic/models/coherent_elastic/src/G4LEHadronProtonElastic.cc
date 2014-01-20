@@ -31,35 +31,30 @@
 //             exchange of particles.
 // FWJ 27-AUG-2010: extended to 5 GeV by Tony Kwan TRIUMF
 
-#include "G4LEnp.hh"
+#include "G4LEHadronProtonElastic.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4ios.hh"
 
-// Initialization of static data arrays:
-#include "G4LEnpData.hh"
 #include "Randomize.hh"
 
 
-G4LEnp::G4LEnp():
- G4HadronElastic("G4LEnp")  // G4HadronicInteraction("G4LEnp")
+G4LEHadronProtonElastic::G4LEHadronProtonElastic():
+ G4HadronElastic("G4LEHadronProtonElastic") 
 {
-  //    theParticleChange.SetNumberOfSecondaries(1);
-  
-  //    SetMinEnergy(10.*MeV);
-  //    SetMaxEnergy(1200.*MeV);
   SetMinEnergy(0.);
-  SetMaxEnergy(5.*GeV);
+  SetMaxEnergy(20.*MeV);
 }
 
-G4LEnp::~G4LEnp()
+G4LEHadronProtonElastic::~G4LEHadronProtonElastic()
 {
       theParticleChange.Clear();
 }
 
 G4HadFinalState*
-G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
+G4LEHadronProtonElastic::ApplyYourself(const G4HadProjectile& aTrack, 
+                            G4Nucleus& targetNucleus)
 {
     theParticleChange.Clear();
     const G4HadProjectile* aParticle = &aTrack;
@@ -71,13 +66,14 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     G4double ek = aParticle->GetKineticEnergy();
     G4ThreeVector theInitial = aParticle->Get4Momentum().vect();
 
-    if (verboseLevel > 1) {
+    if (verboseLevel > 1) 
+    {
       G4double E = aParticle->GetTotalEnergy();
       G4double E0 = aParticle->GetDefinition()->GetPDGMass();
       G4double Q = aParticle->GetDefinition()->GetPDGCharge();
       G4int A = targetNucleus.GetA_asInt();
       G4int Z = targetNucleus.GetZ_asInt();
-      G4cout << "G4LEnp:ApplyYourself: incident particle: "
+      G4cout << "G4LEHadronProtonElastic:ApplyYourself: incident particle: "
              << aParticle->GetDefinition()->GetParticleName() << G4endl;
       G4cout << "P = " << P/GeV << " GeV/c"
              << ", Px = " << Px/GeV << " GeV/c"
@@ -87,7 +83,7 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
              << ", kinetic energy = " << ek/GeV << " GeV"
              << ", mass = " << E0/GeV << " GeV"
              << ", charge = " << Q << G4endl;
-      G4cout << "G4LEnp:ApplyYourself: material:" << G4endl;
+      G4cout << "G4LEHadronProtonElastic:ApplyYourself: material:" << G4endl;
       G4cout << "A = " << A
              << ", Z = " << Z
              << ", atomic mass " 
@@ -101,72 +97,13 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
       E0 = std::sqrt(std::abs(E02));
       if (E02 < 0)E0 *= -1;
       Q += Z;
-      G4cout << "G4LEnp:ApplyYourself: total:" << G4endl;
+      G4cout << "G4LEHadronProtonElastic:ApplyYourself: total:" << G4endl;
       G4cout << "E = " << E/GeV << " GeV"
              << ", mass = " << E0/GeV << " GeV"
              << ", charge = " << Q << G4endl;
     }
 
-    // Find energy bin
-
-    G4int je1 = 0;
-    G4int je2 = NENERGY - 1;
-    ek = ek/GeV;
-    do {
-      G4int midBin = (je1 + je2)/2;
-      if (ek < elab[midBin])
-        je2 = midBin;
-      else
-        je1 = midBin;
-    } while (je2 - je1 > 1); 
-    G4double delab = elab[je2] - elab[je1];
-
-    // Sample the angle
-
-    G4float sample = G4UniformRand();
-    G4int ke1 = 0;
-    G4int ke2 = NANGLE - 1;
-    G4double dsig = sig[je2][0] - sig[je1][0];
-    G4double rc = dsig/delab;
-    G4double b = sig[je1][0] - rc*elab[je1];
-    G4double sigint1 = rc*ek + b;
-    G4double sigint2 = 0.;
-
-    if (verboseLevel > 1) {
-      G4cout << "sample=" << sample << G4endl
-	     << ke1 << " " << ke2 << " " 
-	     << sigint1 << " " << sigint2 << G4endl;
-    }
-    do {
-      G4int midBin = (ke1 + ke2)/2;
-      dsig = sig[je2][midBin] - sig[je1][midBin];
-      rc = dsig/delab;
-      b = sig[je1][midBin] - rc*elab[je1];
-      G4double sigint = rc*ek + b;
-      if (sample < sigint) {
-        ke2 = midBin;
-        sigint2 = sigint;
-      }
-      else {
-        ke1 = midBin;
-        sigint1 = sigint;
-      }
-      if (verboseLevel > 1) {
-	G4cout << ke1 << " " << ke2 << " " 
-	       << sigint1 << " " << sigint2 << G4endl;
-      }
-    } while (ke2 - ke1 > 1); 
-
-    dsig = sigint2 - sigint1;
-    rc = 1./dsig;
-    b = ke1 - rc*sigint1;
-    G4double kint = rc*sample + b;
-    G4double theta = (0.5 + kint)*pi/180.;
-
-    if (verboseLevel > 1) {
-      G4cout << "   energy bin " << je1 << " energy=" << elab[je1] << G4endl;
-      G4cout << "   angle bin " << kint << " angle=" << theta/degree << G4endl;
-    }
+    G4double theta = (0.5)*pi/180.;
 
     // Get the target particle
 
@@ -200,10 +137,12 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     G4double pznew = p*std::cos(theta);
 
     // Rotate according to the direction of the incident particle
-    if (px*px + py*py > 0) {
+    if (px*px + py*py > 0) 
+    {
       G4double cost, sint, ph, cosp, sinp;
       cost = pz/p;
-      sint = (std::sqrt(std::fabs((1-cost)*(1+cost))) + std::sqrt(px*px+py*py)/p)/2;
+      sint = (std::sqrt(std::fabs((1-cost)*(1+cost))) 
+            + std::sqrt(px*px+py*py)/p)/2;
       py < 0 ? ph = 3*halfpi : ph = halfpi;
       if (std::abs(px) > 0.000001*GeV) ph = std::atan2(py,px);
       cosp = std::cos(ph);
@@ -220,8 +159,9 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 
     if (verboseLevel > 1) {
       G4cout << "  AFTER SCATTER..." << G4endl;
-      G4cout << "  particle 1 momentum in CM " << px/GeV << " " << py/GeV << " "
-           << pz/GeV << " " << p/GeV << G4endl;
+      G4cout << "  particle 1 momentum in CM " << px/GeV 
+             << " " << py/GeV << " " << pz/GeV << " " << p/GeV 
+             << G4endl;
     }
 
     // Transform to lab system
@@ -263,7 +203,8 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     PB[4] = (PA[4] - BETPA) * BETA[4];
 
     G4DynamicParticle* newP = new G4DynamicParticle;
-    newP->SetDefinition(const_cast<G4ParticleDefinition *>(aParticle->GetDefinition()));
+    newP->SetDefinition(const_cast<G4ParticleDefinition *>
+                     (aParticle->GetDefinition()));
     newP->SetMomentum(G4ThreeVector(PB[1], PB[2], PB[3]));
 
     //The target particle...
@@ -309,69 +250,54 @@ G4LEnp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
 //
 // sample momentum transfer using Lab. momentum
 
-G4double G4LEnp::SampleInvariantT(const G4ParticleDefinition* p, 
+G4double G4LEHadronProtonElastic::SampleInvariantT(const G4ParticleDefinition* p, 
 				    G4double plab, G4int , G4int )
 {
-  G4double nMass = p->GetPDGMass(); // 939.565346*MeV;
-  G4double ek = std::sqrt(plab*plab+nMass*nMass) - nMass;
-
-    // Find energy bin
-
-  G4int je1 = 0;
-  G4int je2 = NENERGY - 1;
-  ek = ek/GeV;
-
-  do 
-  {
-      G4int midBin = (je1 + je2)/2;
-      if (ek < elab[midBin])
-        je2 = midBin;
-      else
-        je1 = midBin;
-  } while (je2 - je1 > 1); 
-
-  G4double delab = elab[je2] - elab[je1];
-
-    // Sample the angle
-
-  G4double sample = G4UniformRand();
-  G4int ke1 = 0;
-  G4int ke2 = NANGLE - 1;
-  G4double dsig = sig[je2][0] - sig[je1][0];
-  G4double rc = dsig/delab;
-  G4double b = sig[je1][0] - rc*elab[je1];
-  G4double sigint1 = rc*ek + b;
-  G4double sigint2 = 0.;
-
-  do
-  {
-      G4int midBin = (ke1 + ke2)/2;
-      dsig = sig[je2][midBin] - sig[je1][midBin];
-      rc = dsig/delab;
-      b = sig[je1][midBin] - rc*elab[je1];
-      G4double sigint = rc*ek + b;
-
-      if (sample < sigint) 
-      {
-        ke2 = midBin;
-        sigint2 = sigint;
-      }
-      else 
-      {
-        ke1 = midBin;
-        sigint1 = sigint;
-      }
-  } while (ke2 - ke1 > 1); 
-
-  dsig = sigint2 - sigint1;
-  rc = 1./dsig;
-  b = ke1 - rc*sigint1;
-
-  G4double kint = rc*sample + b;
-  G4double theta = (0.5 + kint)*pi/180.;
-  G4double t = 0.5*plab*plab*(1-std::cos(theta));
-
+  G4double hMass = p->GetPDGMass();
+  G4double pCMS = 0.5*plab;
+  // pCMS *= 50;
+  G4double hEcms = std::sqrt(pCMS*pCMS+hMass*hMass);
+  // G4double gamma = hEcms/hMass;
+  // gamma  *= 15;
+  G4double beta =  pCMS/hEcms; // std::sqrt(1-1./gamma/gamma); //
+  // beta /= 0.8; // 0.95; // 1.0; // 1.1 // 0.5*pi; // pi; twopi;
+  G4double cosDipole =  RandCosThetaDipPen();
+  G4double cosTheta = cosDipole + beta;
+  cosTheta /= 1. + cosDipole*beta;
+  G4double t = 2.*pCMS*pCMS*(1.-cosTheta);
   return t;
+
+}
+
+///////////////////////////////////////////////////////////////
+//
+// 1 + cos^2(theta) random distribution in the projectile rest frame, Penelope algorithm
+
+G4double G4LEHadronProtonElastic::RandCosThetaDipPen()
+{
+  G4double x, cosTheta, signX, modX, power = 1./3.;
+
+  if( G4UniformRand() > 0.25) 
+  {
+    cosTheta = 2.*G4UniformRand()-1.;
+  }
+  else
+  {
+    x     = 2.*G4UniformRand()-1.;
+
+    if ( x < 0. ) 
+    {
+      modX = -x;
+      signX = -1.;
+    }
+    else
+    {
+      modX = x;
+      signX = 1.;
+    }
+    cosTheta = signX*std::pow(modX,power);
+  }
+  return cosTheta; 
 }
 
  // end of file
