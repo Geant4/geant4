@@ -39,7 +39,6 @@
 
 class G4VPhysicalVolume;
 class G4Material;
-class G4UniformMagField;
 class DetectorMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -56,10 +55,8 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      void SetRadius     (G4double);
      void SetMaterial   (G4String);
      void SetNbOfLayers (G4int nb);                    
-     void SetMagField   (G4double);
           
      virtual G4VPhysicalVolume* Construct();
-     void UpdateGeometry();
      
   public:  
                     
@@ -75,7 +72,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4Material*         fAbsorMaterial;
      G4int               fNbOfLayers;
      G4double            fLayerThickness;
-     G4UniformMagField*  fMagField;
      G4VPhysicalVolume*  fAbsor;
 
      DetectorMessenger*  fDetectorMessenger;

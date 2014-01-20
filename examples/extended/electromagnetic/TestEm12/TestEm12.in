@@ -26,6 +26,6 @@
 ###/analysis/h1/set 5 200 -3.    3. cm	#proj range
 ###/analysis/h1/set 8 120  0.   1.2 none	#normalized edep profile
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 #
 /run/beamOn 10000

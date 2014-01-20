@@ -23,49 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm12/include/DetectorMessenger.hh
-/// \brief Definition of the DetectorMessenger class
+// $Id: ActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
-#ifndef DetectorMessenger_h
-#define DetectorMessenger_h 1
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#include "G4VUserActionInitialization.hh"
 
 class DetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
-class G4UIcmdWithADoubleAndUnit;
+class PhysicsList;
+class G4VSteppingVerbose;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Action initialization class.
+///
 
-class DetectorMessenger: public G4UImessenger
+class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-  
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
-    
-    virtual void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-  
-    DetectorConstruction*      fDetector;
-    
-    G4UIdirectory*             fTestemDir;
-    G4UIdirectory*             fDetDir;    
-    G4UIcmdWithAString*        fMaterCmd;
-    G4UIcmdWithADoubleAndUnit* fRadiusCmd;
-    G4UIcmdWithAnInteger*      fNbLayersCmd;
-};
+    ActionInitialization(DetectorConstruction* detector, PhysicsList* physics);
+    virtual ~ActionInitialization();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+    
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+   
+  private:
+    DetectorConstruction* fDetector;
+    PhysicsList* fPhysics;    
+};
 
 #endif
 
+    

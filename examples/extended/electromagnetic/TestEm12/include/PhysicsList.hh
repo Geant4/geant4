@@ -72,11 +72,11 @@ class PhysicsList: public G4VModularPhysicsList
     G4double fCutForElectron;
     G4double fCutForPositron;
        
-    G4String                fEmName;
-    G4VPhysicsConstructor*  fEmPhysicsList;    
-    StepMax*                fStepMaxProcess;
+    G4String                      fEmName;
+    G4VPhysicsConstructor*        fEmPhysicsList;    
+    static G4ThreadLocal StepMax* fStepMaxProcess;
     
-    PhysicsListMessenger*   fMessenger;
+    PhysicsListMessenger*  fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

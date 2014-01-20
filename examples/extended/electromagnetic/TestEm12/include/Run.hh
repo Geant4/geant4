@@ -23,67 +23,61 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm12/src/EventActionMessenger.cc
-/// \brief Implementation of the EventActionMessenger class
+/// \file electromagnetic/TestEm11/include/Run.hh
+/// \brief Definition of the Run class
 //
-// $Id$
+// $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "EventActionMessenger.hh"
+#ifndef Run_h
+#define Run_h 1
 
-#include "EventAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
+#include "DetectorConstruction.hh"
+
+#include "G4Run.hh"
+
+class DetectorConstruction;
+class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventActionMessenger::EventActionMessenger(EventAction* EvAct)
-:G4UImessenger(),fEventAction(EvAct),
- fEventDir(0),        
- fDrawCmd(0),
- fPrintCmd(0) 
+class Run : public G4Run
 {
-  fEventDir = new G4UIdirectory("/testem/event/");
-  fEventDir->SetGuidance("event control");
- 
-  fDrawCmd = new G4UIcmdWithAString("/testem/event/drawTracks",this);
-  fDrawCmd->SetGuidance("Draw the tracks in the event");
-  fDrawCmd->SetGuidance("  Choice : none,charged, all");
-  fDrawCmd->SetParameterName("choice",true);
-  fDrawCmd->SetDefaultValue("all");
-  fDrawCmd->SetCandidates("none charged all");
-  fDrawCmd->AvailableForStates(G4State_Idle);
-  
-  fPrintCmd = new G4UIcmdWithAnInteger("/testem/event/printModulo",this);
-  fPrintCmd->SetGuidance("Print events modulo n");
-  fPrintCmd->SetParameterName("EventNb",false);
-  fPrintCmd->SetRange("EventNb>0");
-  fPrintCmd->AvailableForStates(G4State_Idle);      
-}
+  public:
+    Run(DetectorConstruction* detector);
+   ~Run();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  public:
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);  
 
-EventActionMessenger::~EventActionMessenger()
-{
-  delete fDrawCmd;
-  delete fPrintCmd;
-  delete fEventDir;         
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventActionMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{ 
-  if(command == fDrawCmd)
-    {fEventAction->SetDrawFlag(newValue);}
+    void AddEdep (G4double e);
+    void AddTrackLength (G4double t);
+    void AddProjRange   (G4double x);
+    void AddStepSize    (G4int nb, G4double st);
     
-  if(command == fPrintCmd)
-    {fEventAction->SetPrintModulo(fPrintCmd->GetNewIntValue(newValue));}           
-   
-}
+    void     SetCsdaRange (G4double value);                                 
+    G4double GetCsdaRange();
+            
+    virtual void Merge(const G4Run*);
+    void EndOfRun();
+    
+  private:
+    DetectorConstruction*  fDetector;
+    G4ParticleDefinition*  fParticle;
+    G4double  fEkin; 
+       
+    G4double   fEdeposit,  fEdeposit2;
+    G4double   fTrackLen,  fTrackLen2;
+    G4double   fProjRange, fProjRange2;
+    G4int      fNbOfSteps, fNbOfSteps2;
+    G4double   fStepSize,  fStepSize2;
+    
+    G4double   fCsdaRange;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+

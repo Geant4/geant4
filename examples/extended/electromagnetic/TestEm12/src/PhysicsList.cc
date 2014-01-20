@@ -53,11 +53,12 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
+G4ThreadLocal StepMax* PhysicsList::fStepMaxProcess = 0;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList(),
   fEmPhysicsList(0),    
-  fStepMaxProcess(0),
   fMessenger(0)
 {
   G4LossTableManager::Instance();

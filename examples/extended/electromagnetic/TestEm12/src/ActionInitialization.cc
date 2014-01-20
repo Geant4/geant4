@@ -23,42 +23,64 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm12/include/EventActionMessenger.hh
-/// \brief Definition of the EventActionMessenger class
+// $Id: ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.cc
+/// \brief Implementation of the ActionInitialization class
 
-#ifndef EventActionMessenger_h
-#define EventActionMessenger_h 1
-
-#include "globals.hh"
-#include "G4UImessenger.hh"
-
-class EventAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
+#include "ActionInitialization.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "TrackingAction.hh"
+#include "SteppingAction.hh"
+#include "SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class EventActionMessenger: public G4UImessenger
+ActionInitialization::ActionInitialization(DetectorConstruction* detector, 
+                                           PhysicsList* physics)
+ : G4VUserActionInitialization(),
+   fDetector(detector),
+   fPhysics(physics)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ActionInitialization::~ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
 {
-  public:
-    EventActionMessenger(EventAction*);
-   ~EventActionMessenger();
-    
-    virtual void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-    EventAction*          fEventAction;
-    G4UIdirectory*        fEventDir;        
-    G4UIcmdWithAString*   fDrawCmd;
-    G4UIcmdWithAnInteger* fPrintCmd;    
-};
+  RunAction* runAction = new RunAction(fDetector, fPhysics, 0);
+  SetUserAction(runAction);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void ActionInitialization::Build() const
+{
+  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction();
+  SetUserAction(primary);
+  
+  RunAction* run = new RunAction(fDetector, fPhysics, primary);
+  SetUserAction(run); 
+  
+  EventAction* event = new EventAction();
+  SetUserAction(event);
+  
+  SetUserAction(new TrackingAction(primary));
+  
+  SetUserAction(new SteppingAction(event));
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
+{
+  return new SteppingVerbose();
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

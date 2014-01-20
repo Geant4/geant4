@@ -19,6 +19,6 @@
 #
 /testem/applyAutomaticStepMax false
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 #
 /run/beamOn 5000
