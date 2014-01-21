@@ -1,5 +1,4 @@
                          The g4/tools license
-                         -----------------
 
                             2011-Feb-9
 
@@ -20,20 +19,29 @@ Introduction
   are that :
 
     o We don't promise that this software works. However, we will be
-      interested in any kind of bug reports. (`as is' distribution)
+      interested in any kind of bug reports. ('as is' distribution)
 
     o You can use this software for whatever you want, in parts or
-      full form, without having to pay us. (`royalty-free' usage)
+      full form, without having to pay us. ('royalty-free' usage)
 
     o You may not pretend that you wrote this software. If you use
       it, or  only parts of it, in a program, you must acknowledge
       somewhere in your documentation that you have used the g4/tools
-      code. (`credits')
+      code. ('credits')
+
+    o We do not guarantee a 'forever support' and a fixed, frozen
+      behavior and programming interface. As this software is done
+      to do science, we reserve the right to change whatever is needed
+      in order to fulfill our scientific program. In particular
+      we reserve the right to deprecate this software if it is no more
+      relevant for our scientific activity. ('not forever' support)
 
   We specifically permit and encourage the inclusion of this
   software, with or without modifications, in commercial products.
   We disclaim all warranties covering g4/tools and assume no liability
-  related to g4/tools.
+  related to g4/tools. As a consequence of our 'not forever' support policy
+  of g4/tools, you are strongly recommended to keep a copy on your side of
+  the code sources of the version of g4/tools you are going to use.
 
 Legal Terms
 ===========
@@ -41,9 +49,9 @@ Legal Terms
 0. Definitions
 --------------
 
-  `You' refers to the licensee, or person using g4/tools, where `using'
+  'You' refers to the licensee, or person using g4/tools, where 'using'
   is a generic term including compiling the project's source code as
-  well as linking it to form a 'program' or `executable'.
+  well as linking it to form a 'program' or 'executable'.
 
   This license applies to all files distributed in the original g4/tools
   archive, including all source code, binaries and documentation,
@@ -56,11 +64,11 @@ Legal Terms
 1. No Warranty
 --------------
 
-  G4/TOOLS IS PROVIDED 'AS IS' WITHOUT WARRANTY OF ANY KIND, EITHER
-  EXPRESS OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, WARRANTIES OF
-  MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. IN NO EVENT
-  WILL ANY OF THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
-  DAMAGES CAUSED BY THE USE OR THE INABILITY TO USE G4/TOOLS.
+  g4/tools is provided 'as is' without warranty of any kind, either
+  express or implied, including, but not limited to, warranties of
+  merchantability and fitness for a particular purpose. In no event
+  will any of the authors or copyright holders be liable for any
+  damages caused by the use or the inability to use g4/tools.
 
 2. Redistribution
 -----------------
@@ -104,6 +112,6 @@ Legal Terms
 4. Contacts
 -----------
 
-  Our home page can be found at
+  Web pages can be found under the softinex portal at :
 
-    http://inexlib.lal.in2p3.fr
+    http://softinex.lal.in2p3.fr

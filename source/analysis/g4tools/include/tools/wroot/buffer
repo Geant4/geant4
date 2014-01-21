@@ -11,6 +11,8 @@
 
 #include "../realloc"
 #include "../mnmx"
+#include "../forit"
+
 #ifdef TOOLS_MEM
 #include "../mem"
 #endif
@@ -95,7 +97,7 @@ public:
   template <class T>
   bool write(T x){
     if(m_pos+sizeof(T)>m_max) {
-      if(!expand(m_size+sizeof(T))) return false;
+      if(!expand2(m_size+sizeof(T))) return false;
     }
     return m_wb.write(x);
   }
@@ -107,7 +109,7 @@ public:
   bool write(const std::string& x) {
     uint32 sz = (uint32)(x.size() + sizeof(int) + 1);
     if((m_pos+sz)>m_max) {
-      if(!expand(m_size+sz)) return false;
+      if(!expand2(m_size+sz)) return false;
     }
     return m_wb.write(x);
   }
@@ -116,7 +118,7 @@ public:
     if(!a_n) return true;
     uint32 l = a_n * sizeof(char);
     if((m_pos+l)>m_max) {
-      if(!expand(m_size+l)) return false;
+      if(!expand2(m_size+l)) return false;
     }
     ::memcpy(m_pos,a_a,l);
     m_pos += l;
@@ -132,7 +134,7 @@ public:
     if(!a_n) return true;
     uint32 l = a_n * sizeof(T);
     if((m_pos+l)>m_max) {
-      if(!expand(m_size+l)) return false;
+      if(!expand2(m_size+l)) return false;
     }
     return m_wb.write<T>(a_a,a_n);
   }
@@ -142,7 +144,7 @@ public:
     if(a_v.empty()) return true;
     uint32 l = a_v.size() * sizeof(T);
     if((m_pos+l)>m_max) {
-      if(!expand(m_size+l)) return false;
+      if(!expand2(m_size+l)) return false;
     }
     return m_wb.write<T>(a_v);
   }
@@ -185,7 +187,7 @@ public:
 
     //NOTE : the below test is lacking in CERN-ROOT !
     if((m_pos+sizeof(unsigned int))>m_max) {
-      if(!expand(m_size+sizeof(unsigned int))) return false;
+      if(!expand2(m_size+sizeof(unsigned int))) return false;
     }
     m_pos += sizeof(unsigned int);
 
@@ -253,7 +255,7 @@ public:
 
       //NOTE : the below test is lacking in CERN-ROOT !
       if((m_pos+sizeof(unsigned int))>m_max) {
-        if(!expand(m_size+sizeof(unsigned int))) return false;
+        if(!expand2(m_size+sizeof(unsigned int))) return false;
       }
       m_pos += sizeof(unsigned int);
     
@@ -273,7 +275,8 @@ public:
     return true;
   }
 
- 
+  bool expand2(uint32 a_new_size) {return expand(mx<uint32>(2*m_size,a_new_size));} //CERN-ROOT logic.
+
   bool expand(uint32 a_new_size) {
     unsigned long len = m_pos-m_buffer;
     if(!realloc<char>(m_buffer,a_new_size,m_size)) {
@@ -304,8 +307,9 @@ public:
     //      << " cls num " << m_cls_mapped.size()
     //      << std::endl;
 
-   {std::vector< std::pair<uint32,uint32> >::const_iterator it;
-    for(it=m_cls_mapped.begin();it!=m_cls_mapped.end();++it) {
+    typedef std::pair<uint32,uint32> offset_id;
+
+   {tools_vforcit(offset_id,m_cls_mapped,it) {
       unsigned int offset = (*it).first;
       unsigned int id = (*it).second;
       //m_out << "displace " << offset << " " << id << std::endl;
@@ -318,8 +322,7 @@ public:
     //      << " obj num " << m_obj_mapped.size()
     //      << std::endl;
 
-   {std::vector< std::pair<uint32,uint32> >::const_iterator it;
-    for(it=m_obj_mapped.begin();it!=m_obj_mapped.end();++it) {
+   {tools_vforcit(offset_id,m_obj_mapped,it) {
       uint32 offset = (*it).first;
       uint32 id = (*it).second;
       //m_out << "displace at " << offset

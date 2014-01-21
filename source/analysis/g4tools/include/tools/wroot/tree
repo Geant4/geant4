@@ -58,11 +58,9 @@ public: //iobject
     if(!m_branches.stream(a_buffer)) return false;
 
    {ObjArray<base_leaf> m_leaves;
-    std::vector<branch*>::const_iterator itb;
-    for(itb=m_branches.begin();itb!=m_branches.end();++itb) {
+    tools_vforcit(branch*,m_branches,itb) {
       const std::vector<base_leaf*>& leaves = (*itb)->leaves();
-      std::vector<base_leaf*>::const_iterator itl;
-      for(itl=leaves.begin();itl!=leaves.end();++itl) {
+      tools_vforcit(base_leaf*,leaves,itl) {
         m_leaves.push_back(*itl); //WARNING : ownership touchy.
       }
     }
@@ -128,8 +126,7 @@ public:
     //   If a leaf is a simple data type, a simple conversion to a machine
     //   independent format has to be done.
     a_nbytes = 0;
-    std::vector<branch*>::const_iterator it;
-    for(it=m_branches.begin();it!=m_branches.end();++it) {
+    tools_vforcit(branch*,m_branches,it) {
       //FIXME if ((*it)->testBit(kDoNotProcess)) continue;
       uint32 n;
       if(!(*it)->fill(n)) {a_nbytes = 0;return false;}

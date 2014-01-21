@@ -7,10 +7,12 @@
 #include <string>
 #include <vector>
 
+#include "forit"
+
 namespace tools {
 
 inline void replace(std::string& a_string,char a_old,char a_new){
-  for(std::string::iterator it=a_string.begin();it!=a_string.end();++it) {
+  tools_sforit(a_string,it) {
     if((*it)==a_old) *it = a_new;
   }
 }
@@ -40,8 +42,7 @@ inline bool replace(std::string& a_string,const std::string& a_old,const std::st
 }
 
 inline bool replace(std::vector<std::string>& a_strings,const std::string& a_old,const std::string& a_new){
-  std::vector<std::string>::iterator it;
-  for(it=a_strings.begin();it!=a_strings.end();++it) {
+  tools_vforit(std::string,a_strings,it) {
     if(!replace(*it,a_old,a_new)) return false;
   }
   return true;

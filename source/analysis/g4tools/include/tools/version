@@ -6,12 +6,12 @@
 
 #define TOOLS_MAJOR_VERSION 1
 #define TOOLS_MINOR_VERSION 7
-#define TOOLS_PATCH_VERSION 0
-#define TOOLS_VERSION "1.7.0"
-#define TOOLS_VERSION_VRP "v1r7p0"
+#define TOOLS_PATCH_VERSION 1
+#define TOOLS_VERSION "1.7.1"
+#define TOOLS_VERSION_VRP "v1r7p1"
 
 namespace tools {
-inline unsigned int version() {return 10700;}
+inline unsigned int version() {return 10701;}
 }
 
 #endif

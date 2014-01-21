@@ -6,6 +6,7 @@
 
 #include "seek"
 #include "wbuf"
+#include "../forit"
 
 #include <ostream>
 
@@ -95,8 +96,7 @@ namespace wroot {
 
 inline free_seg* find_after(const std::list<free_seg*>& a_list,
                             free_seg* a_what) {
-  std::list<free_seg*>::const_iterator it;
-  for(it=a_list.begin();it!=a_list.end();++it) {
+  tools_lforcit(free_seg*,a_list,it) {
     if((*it)==a_what) {
       it++;
       if(it==a_list.end()) return 0;
@@ -108,8 +108,7 @@ inline free_seg* find_after(const std::list<free_seg*>& a_list,
 
 inline void remove(std::list<free_seg*>& a_list,free_seg* a_what) {
   //NOTE : it does not delete a_what.
-  std::list<free_seg*>::iterator it;
-  for(it=a_list.begin();it!=a_list.end();++it) {
+  tools_lforit(free_seg*,a_list,it) {
     if((*it)==a_what) {
       a_list.erase(it);
       return;
@@ -119,8 +118,7 @@ inline void remove(std::list<free_seg*>& a_list,free_seg* a_what) {
 
 inline void add_before(std::list<free_seg*>& a_list,
                        free_seg* a_what,free_seg* a_new) {
-  std::list<free_seg*>::iterator it;
-  for(it=a_list.begin();it!=a_list.end();++it) {
+  tools_lforit(free_seg*,a_list,it) {
     if((*it)==a_what) {
       a_list.insert(it,a_new);
       return;
