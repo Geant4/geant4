@@ -58,6 +58,7 @@
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4Allocator.hh"
 
 class G4ParticleDefinition;
 
@@ -94,6 +95,10 @@ public:
 
   friend std::ostream& operator<<(std::ostream&, const G4Fragment*);
   friend std::ostream& operator<<(std::ostream&, const G4Fragment&);
+
+  //  new/delete operators are overloded to use G4Allocator
+  inline void *operator new(size_t);
+  inline void operator delete(void *aFragment);
 
   // ============= GENERAL METHODS ==================
 
@@ -203,6 +208,21 @@ private:
 };
 
 // ============= INLINE METHOD IMPLEMENTATIONS ===================
+
+extern G4PART_DLL G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator;
+
+inline void * G4Fragment::operator new(size_t)
+{
+  if (!pFragmentAllocator) { 
+    pFragmentAllocator = new G4Allocator<G4Fragment>;
+  }
+  return pFragmentAllocator->MallocSingle();
+}
+
+inline void G4Fragment::operator delete(void * aFragment)
+{
+  pFragmentAllocator->FreeSingle((G4Fragment *) aFragment);
+}
 
 inline void G4Fragment::CalculateExcitationEnergy()
 {
