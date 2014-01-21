@@ -45,7 +45,6 @@
 #include "G4ios.hh"
 #include <iomanip>
 
-G4ThreadLocal G4Allocator<G4Fragment> *pFragmentAllocator = 0;
 G4ThreadLocal G4int G4Fragment::errCount = 0;
 
 // Default constructor
@@ -229,8 +228,7 @@ void G4Fragment::ExcitationEnergyWarning()
       G4cout << "G4Fragment::CalculateExcitationEnergy(): WARNING "<<G4endl;
       G4cout << *this << G4endl;
       if( errCount == 10 ) {
-	G4String text = 
-	  "G4Fragment::G4Fragment Excitation Energy < 0.0  10 times!";
+	G4String text = "G4Fragment::G4Fragment Excitation Energy < 0.0  10 times!";
 	throw G4HadronicException(__FILE__, __LINE__, text);
       }
     }

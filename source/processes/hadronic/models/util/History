@@ -14,10 +14,6 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
-
-20-Jan-2014 Vladimir Ivanchenko		   hadr-mod-util-V10-00-00
-- G4Fragment - used G4Allocator to reduce memory churn
-
 01-May-2013 Andrea Dotti		   hadr-mod-util-V09-06-05
 - Replace use of CLHEP::HepRandom with MT safe equivalent G4Random
 
