@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Jan 21st, 2014, M. Asai (run-V10-00-01)
+- Making sure worker threads re-build physics tables as well when the
+  master thread is requested to rebuild.
+
 Dec 26th, 2013, M. Asai (run-V10-00-00)
 - Change the order of setting world volume pointer to the transportation
   manager for worker thread to be the same as the master thread and the
