@@ -57,11 +57,27 @@
 
   void G4iosFinalization()
   {
-    delete G4cout_p;
-    delete G4cerr_p; 
-    delete G4coutbuf_p;
-    delete G4cerrbuf_p;
+      delete G4cout_p; G4cout_p = 0;
+      delete G4cerr_p;  G4cerr_p = 0;
+      delete G4coutbuf_p; G4coutbuf_p = 0;
+      delete G4cerrbuf_p; G4cerrbuf_p = 0;
   }
+
+  //These two functions are guaranteed to be called at load and
+  //unload of the library contatining this code.
+namespace {
+  void setupG4ioSystem(void) __attribute__ ((constructor));
+  void cleanupG4ioSystem(void) __attribute__((destructor));
+
+  void setupG4ioSystem(void) {
+     G4iosInitialization();
+  }
+  void cleanupG4ioSystem(void) {
+     G4iosFinalization();
+  }
+}
+
+
 
 #else  // Sequential
 

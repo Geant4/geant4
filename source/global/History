@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 13, 2014 A. Dotti      (global-V10-00-02)
+- Call G4iosInitialization/G4iosFinalization with functions marked
+  __attribute__((destructor)) and __attribute__((destructor)) to 
+  guarantee G4cout/G4cerr are initialized correctly before main
+  function
+
 January 14, 2014 V.Ivantchenko (global-V10-00-01)
 - G4PhysicsVector: small performance optimisation; division by 6 substituted
   by multiplication of 1/6 constant.
