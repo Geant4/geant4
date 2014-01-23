@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Jan. 23rd, 2014  - H.Kurashige (procuts-V10-00-00)
+- Fix compiler warning in G4ProcessCutsTable.cc
+
+Nov. 21st, 2013  - H.Kurashige (procuts-V09-06-09)
+- Fix Coverity defects in G4VRangeToEnergyConverter destructor
 
 Nov. 21st, 2013  - H.Kurashige (procuts-V09-06-08)
 - Fix Coverity defects in G4VRangeToEnergyConverter CTOR 
