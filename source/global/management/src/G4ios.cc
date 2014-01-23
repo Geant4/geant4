@@ -63,21 +63,17 @@
       delete G4cerrbuf_p; G4cerrbuf_p = 0;
   }
 
-  //These two functions are guaranteed to be called at load and
-  //unload of the library contatining this code.
-namespace {
-  void setupG4ioSystem(void) __attribute__ ((constructor));
-  void cleanupG4ioSystem(void) __attribute__((destructor));
-
-  void setupG4ioSystem(void) {
-     G4iosInitialization();
+  // These two functions are guaranteed to be called at load and
+  // unload of the library containing this code.
+  namespace
+  {
+#ifndef WIN32
+    void setupG4ioSystem(void) __attribute__ ((constructor));
+    void cleanupG4ioSystem(void) __attribute__((destructor));
+#endif
+    void setupG4ioSystem(void) { G4iosInitialization(); }
+    void cleanupG4ioSystem(void) { G4iosFinalization(); }
   }
-  void cleanupG4ioSystem(void) {
-     G4iosFinalization();
-  }
-}
-
-
 
 #else  // Sequential
 

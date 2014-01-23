@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+January 23, 2014 G.Cosmo       (global-V10-00-03)
+- Protected __attribute__ calls in G4ios.cc from use in WIN32.
+
 January 13, 2014 A. Dotti      (global-V10-00-02)
 - Call G4iosInitialization/G4iosFinalization with functions marked
   __attribute__((destructor)) and __attribute__((destructor)) to 
