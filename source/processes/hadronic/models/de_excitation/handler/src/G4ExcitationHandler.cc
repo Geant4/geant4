@@ -246,6 +246,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 	  wasFBU = true; 
 	  // if initial fragment returned unchanged try to evaporate it
           if(1 == theTempResult->size()) {
+            delete *(theTempResult->begin());
             delete theTempResult;
 	    theTempResult = theEvaporation->BreakItUp(*(*iList)); 
 	  }
