@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 28. Jan. 2014  Makoto Asai (particles-V10-00-00)
+- Fix G4ParticleTable::GetParticle(G4int) method.
+
 - 27. Nov. 2013  Gabriele Cosmo (particles-V09-06-64)
 - Correction in G4PDefSplitter::FreeSlave() to use free() instead of
   delete for releasing offset.
