@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24.01.2014  V. Ivanchenko, tag emlowen-V10-00-02
+            G4LivermorePhotoElectricModel - fixed Coverity report 
+
 10.01.2014  L. Pandola, tag emlowen-V10-00-01
 	    Suppress G4Exception (JustWarning) issued by some Penelope 
             models in UnitTests. Controlled by verbosity flag now (for 
