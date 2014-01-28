@@ -47,11 +47,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
- G4String Tst14PrimaryGeneratorAction::thePrimaryParticleName="e-" ; 
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-Tst14PrimaryGeneratorAction::Tst14PrimaryGeneratorAction(
+Tst14PrimaryGeneratorAction::Tst14PrimaryGeneratorAction(const 
                                             Tst14DetectorConstruction* Tst14DC)
 :Tst14Detector(Tst14DC),rndmFlag("off"),xvertex(0.),yvertex(0.),zvertex(0.),
  vertexdefined(false)

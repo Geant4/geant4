@@ -46,21 +46,23 @@
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4SDManager.hh"
+#include "G4NistManager.hh"
 #include "G4RunManager.hh"
+#include "G4AutoDelete.hh"
 
+#include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
 
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........
 
 Tst14DetectorConstruction::Tst14DetectorConstruction()
-  :worldchanged(false),AbsorberMaterial(0),WorldMaterial(0),
+  :AbsorberMaterial(0),WorldMaterial(0),
    solidWorld(0),logicWorld(0),physiWorld(0),
-   solidAbsorber(0),logicAbsorber(0),physiAbsorber(0),
-   magField(0),calorimeterSD(0)
+   solidAbsorber(0),logicAbsorber(0),physiAbsorber(0)
 {
   // default parameter values of the calorimeter
   WorldSizeZ = 2.*m;
@@ -79,13 +81,6 @@ Tst14DetectorConstruction::Tst14DetectorConstruction()
 Tst14DetectorConstruction::~Tst14DetectorConstruction()
 { 
   delete detectorMessenger;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4VPhysicalVolume* Tst14DetectorConstruction::Construct()
-{
-  return ConstructCalorimeter();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -182,7 +177,7 @@ void Tst14DetectorConstruction::DefineMaterials()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
-G4VPhysicalVolume* Tst14DetectorConstruction::ConstructCalorimeter()
+G4VPhysicalVolume* Tst14DetectorConstruction::Construct()
 {
   // complete the Calor parameters definition and Print 
   ComputeCalorParameters();
@@ -190,7 +185,7 @@ G4VPhysicalVolume* Tst14DetectorConstruction::ConstructCalorimeter()
   //     
   // World
   //
-  worldchanged = CleanGeometry();
+  if(physiWorld) { CleanGeometry(); }
 		
   solidWorld = new G4Tubs("World",				//its name
 			  0.,WorldSizeR,WorldSizeZ/2.,0.,twopi)       ;//its size
@@ -229,24 +224,9 @@ G4VPhysicalVolume* Tst14DetectorConstruction::ConstructCalorimeter()
                                         
     }
   
-  //                               
-  // Sensitive Detectors: Absorber 
-  //
-  G4SDManager* SDman = G4SDManager::GetSDMpointer();
-
-  if (!calorimeterSD)
-    {
-      calorimeterSD = new Tst14CalorimeterSD("CalorSD",this);
-      SDman->AddNewDetector( calorimeterSD );
-    }
-  if (logicAbsorber)
-    logicAbsorber->SetSensitiveDetector(calorimeterSD);
-
   //
   //always return the physical World
   //
-  worldchanged = false;
-	  
   return physiWorld;
 }
 
@@ -268,43 +248,29 @@ void Tst14DetectorConstruction::PrintCalorParameters()
 
 void Tst14DetectorConstruction::SetAbsorberMaterial(G4String materialChoice)
 {
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
+  // search the material by its name
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
 
-  // search the material by its name   
-  G4Material* pttoMaterial;
-  for (size_t J=0 ; numOfMaterials ; J++)
-    { pttoMaterial = (*theMaterialTable)[J];     
-    if (pttoMaterial->GetName() == materialChoice)
-      {AbsorberMaterial = pttoMaterial;
-      logicAbsorber->SetMaterial(pttoMaterial); 
-      PrintCalorParameters();
-      return;
-      }             
-    }
-  G4cout<<"Unvalid material"<<G4endl;
+  if(pttoMaterial && AbsorberMaterial != pttoMaterial) {
+    AbsorberMaterial = pttoMaterial;
+    if(logicAbsorber) { logicAbsorber->SetMaterial(AbsorberMaterial); }
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst14DetectorConstruction::SetWorldMaterial(G4String materialChoice)
 {
-  // get the pointer to the material table
-  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
-  G4int numOfMaterials = G4Material::GetNumberOfMaterials();
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
 
-  // search the material by its name   
-  G4Material* pttoMaterial;
-  for (size_t J=0 ; numOfMaterials ; J++)
-    { pttoMaterial = (*theMaterialTable)[J];     
-    if (pttoMaterial->GetName() == materialChoice)
-      {WorldMaterial = pttoMaterial;
-      logicWorld->SetMaterial(pttoMaterial); 
-      //  PrintCalorParameters();
-      return;
-      }             
-    }
-  G4cout<<"Unvalid material"<<G4endl;
+  if(pttoMaterial && WorldMaterial != pttoMaterial) {
+    WorldMaterial = pttoMaterial;
+    if(logicWorld) { logicWorld->SetMaterial(WorldMaterial); }
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -313,7 +279,7 @@ void Tst14DetectorConstruction::SetAbsorberThickness(G4double val)
 {
   // change Absorber thickness and recompute the calorimeter parameters
   AbsorberThickness = val;
-  ComputeCalorParameters();
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -322,25 +288,23 @@ void Tst14DetectorConstruction::SetAbsorberRadius(G4double val)
 {
   // change the transverse size and recompute the calorimeter parameters
   AbsorberRadius = val;
-  ComputeCalorParameters();
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst14DetectorConstruction::SetWorldSizeZ(G4double val)
 {
-  worldchanged=true;
+  // no sense in this method - should be removed
   WorldSizeZ = val;
-  ComputeCalorParameters();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst14DetectorConstruction::SetWorldSizeR(G4double val)
 {
-  worldchanged=true;
+  // no sense in this method - should be removed
   WorldSizeR = val;
-  ComputeCalorParameters();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -348,67 +312,64 @@ void Tst14DetectorConstruction::SetWorldSizeR(G4double val)
 void Tst14DetectorConstruction::SetAbsorberZpos(G4double val)
 {
   zAbsorber  = val;
-  ComputeCalorParameters();
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void Tst14DetectorConstruction::SetMagField(G4double fieldValue)
-{
-  //apply a global uniform magnetic field along X axis
-  G4FieldManager* fieldMgr 
-    = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-    
-  if (magField) delete magField;		//delete the existing magn field
   
-  if (fieldValue!=0.)			// create a new one if non nul
-    { magField = new G4UniformMagField(G4ThreeVector(fieldValue,0.,0.));        
-    fieldMgr->SetDetectorField(magField);
-    fieldMgr->CreateChordFinder(magField);
-    } else {
-      magField = 0;
-      fieldMgr->SetDetectorField(magField);
-    }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-  
-G4bool Tst14DetectorConstruction::CleanGeometry()
+void Tst14DetectorConstruction::CleanGeometry()
 {
-  if (physiWorld)
-  {
-    G4PhysicalVolumeStore::Clean();
-    G4LogicalVolumeStore::Clean();
-    G4SolidStore::Clean();
-
-    return true;
-  }
-  else
-  {
-    return false;
-  }
+  G4GeometryManager::GetInstance()->OpenGeometry();
+  G4PhysicalVolumeStore::Clean();
+  G4LogicalVolumeStore::Clean();
+  G4SolidStore::Clean();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
   
 void Tst14DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void Tst14DetectorConstruction::ComputeCalorParameters()
 {
-  // Compute derived parameters of the calorimeter
-     if( worldchanged )
-     {
-       WorldSizeR=2.*AbsorberRadius ;
-       WorldSizeZ=2.*AbsorberThickness ;
-     }
-     
-     zstartAbs = zAbsorber-0.5*AbsorberThickness; 
-     zendAbs   = zAbsorber+0.5*AbsorberThickness; 
+  zstartAbs = zAbsorber - 0.5*AbsorberThickness; 
+  zendAbs   = zAbsorber + 0.5*AbsorberThickness; 
+  WorldSizeR= 2.*AbsorberRadius + std::abs(zAbsorber);
+  WorldSizeZ= 2.*AbsorberThickness + std::abs(zAbsorber);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void Tst14DetectorConstruction::ConstructSDandField()
+{
+  //                               
+  // Sensitive Detectors: Absorber 
+  //
+  if (calorimeterSD.Get() == 0) 
+    {    
+      Tst14CalorimeterSD* SD = new Tst14CalorimeterSD("CalorSD",this);
+      calorimeterSD.Put( SD );
+    }
+							   
+  if (logicAbsorber)    
+    SetSensitiveDetector(logicAbsorber,calorimeterSD.Get());
+
+  if (fFieldMessenger.Get() == 0)
+    {
+      //Create global magnetic field messenger
+      //Uniform magnetic field is created automatically if the 
+      //field value is not zero
+      G4ThreeVector fieldValue = G4ThreeVector();
+      G4GlobalMagFieldMessenger* msg = new 
+	G4GlobalMagFieldMessenger(fieldValue);
+      //msg->SetVerboseLevel(1);
+      G4AutoDelete::Register(msg);
+      fFieldMessenger.Put(msg);
+    }
+
+}
+

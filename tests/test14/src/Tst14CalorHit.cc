@@ -33,11 +33,12 @@
 
 #include "Tst14CalorHit.hh"
 
-G4Allocator<Tst14CalorHit> Tst14CalorHitAllocator;
+G4ThreadLocal G4Allocator<Tst14CalorHit> *Tst14CalorHitAllocator=0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Tst14CalorHit::Tst14CalorHit()
+Tst14CalorHit::Tst14CalorHit() : 
+  G4VHit()
 {
    EdepAbs = 0.; TrackLengthAbs = 0.;
    EdepGap = 0.; TrackLengthGap = 0.;

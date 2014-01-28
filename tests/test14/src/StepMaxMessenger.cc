@@ -23,49 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: StepMaxMessenger.cc 66241 2012-12-13 18:34:42Z gunter $
 //
-// $Id$
-//
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Created
-//
-// -------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Class description:
-// System test for e/gamma, electron processes a' la Penelope for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+#include "StepMaxMessenger.hh"
 
-// -------------------------------------------------------------------
+#include "StepMax.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 
-#ifndef TST14ELECTRONPENELOPE_HH
-#define TST14ELECTRONPENELOPE_HH 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4VPhysicsConstructor.hh"
-#include "globals.hh"
+StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
+:pStepMax(stepM)
+{ 
+  StepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepMax",this);
+  StepMaxCmd->SetGuidance("Set max allowed step length");
+  StepMaxCmd->SetParameterName("mxStep",false);
+  StepMaxCmd->SetRange("mxStep>0.");
+  StepMaxCmd->SetUnitCategory("Length");
+}
 
-class Tst14ElectronPenelope : public G4VPhysicsConstructor {
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-public: 
+StepMaxMessenger::~StepMaxMessenger()
+{
+  delete StepMaxCmd;
+}
 
-  Tst14ElectronPenelope(const G4String& name = "electron-penelope");
-  
-  virtual ~Tst14ElectronPenelope();
-  
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void StepMaxMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{ 
+  if (command == StepMaxCmd)
+    { pStepMax->SetMaxStep(StepMaxCmd->GetNewDoubleValue(newValue));}
+}
 
-
-
-
-
-
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

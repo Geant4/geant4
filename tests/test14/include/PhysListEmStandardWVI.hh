@@ -23,50 +23,44 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
 //
-// Author: Maria.Grazia.Pia@cern.ch
+// $Id: PhysListEmStandardWVI.hh 66241 2012-12-13 18:34:42Z gunter $
 //
-// History:
-// -----------
-// 22 Feb 2003 MGP          Designed for modular Physics List
-//
-// -------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Tst14PositronStandard.hh"
+#ifndef PhysListEmStandardWVI_h
+#define PhysListEmStandardWVI_h 1
 
-#include "G4ProcessManager.hh"
-#include "G4Gamma.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4eMultipleScattering.hh"
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
-#include "G4eplusAnnihilation.hh"
+#include "G4VPhysicsConstructor.hh"
+#include "globals.hh"
 
-Tst14PositronStandard::Tst14PositronStandard(const G4String& name): G4VPhysicsConstructor(name)
-{ }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst14PositronStandard::~Tst14PositronStandard()
-{ }
-
-void Tst14PositronStandard::ConstructProcess()
+class PhysListEmStandardWVI : public G4VPhysicsConstructor
 {
-  // Add standard processes for positrons
-  
-  aParticleIterator->reset();
+  public: 
+    PhysListEmStandardWVI(const G4String& name = "standardWVI");
+   ~PhysListEmStandardWVI();
 
-  while( (*aParticleIterator)() )
-    {
-      G4ParticleDefinition* particle = aParticleIterator->value();
-      G4ProcessManager* manager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
-     
-      if (particleName == "e+") 
-	{
-	  manager->AddProcess(new G4eMultipleScattering, -1, 1,1);
-	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
-	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-	  manager->AddProcess(new G4eplusAnnihilation,   0,-1,4);
-	}   
-    }
-}
+  public: 
+    // This method is dummy for physics
+    void ConstructParticle() {};
+ 
+    // This method will be invoked in the Construct() method.
+    // each physics process will be instantiated and
+    // registered to the process manager of each particle type 
+    void ConstructProcess();
+};
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+
+
+
+
+
+
+
+

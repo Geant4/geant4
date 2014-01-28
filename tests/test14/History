@@ -14,6 +14,36 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+27 Jan 2014 - V. Ivantchenko, tag test14-V10-00-02
+              extra trivial fix for clang compillation warning 
+
+26 Jan 2014 - V. Ivantchenko, tag test14-V10-00-01
+              fixed compillation warning at Clang
+
+24 Jan 2014 - L. Pandola, V. Ivantchenko, tag test14-V10-00-00
+             Implement magnetic field common UI via 
+              G4GlobalManFieldMessenger
+	     Revise the logic of the Sensitive Detector
+	     Update physics list so to use standard Em
+              builders (instead of local physics lists)
+             Change macros according to the new physics lists
+             Clean-up of the DetectorConstruction methods
+             Complete MT migration
+
+21 Nov 2013 - A. Dotti tag test14-V09-06-03
+              - Use new G4RunManager::ReinitializeGeoemtry
+                to change geometry between runs
+
+29 May 2013 - L.Pandola tag test14-V09-06-02
+	      Still internal tag (work in progress) during the MT 
+	      migration. Declare all UI commands in the physics 
+              list messenger as SetToBeBroadcasted(false). Fix 
+	      warning due to the G4IonTable. 
+
+29 May 2013 - L.Pandola tag test14-V09-06-01
+	      - Some basic migration to MT (still work in progress!)
+
 3 Apr 2013  - A.Dotti tag test14-V09-06-00
               - New PhysicsList interface needed for G4MT
 

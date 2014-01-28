@@ -5,18 +5,12 @@
 /control/verbose 2
 /run/verbose 2
 #
-/lowenergy/addPhysics photon-epdl
-/lowenergy/addPhysics electron-eedl
-/lowenergy/addPhysics positron-standard
+/testem/phys/addPhysics emlivermore
+/testem/phys/setCuts .01 micrometer
 /run/initialize
 #
 /process/list
 /particle/list
-#
-/lowenergy/cutG .01 micrometer
-/lowenergy/cutE .01 micrometer
-/lowenergy/lowlimG 2.5e-4
-/lowenergy/lowlimE 2.5e-4
 #
 /run/particle/dumpCutValues
 #

@@ -65,7 +65,6 @@ class Tst14DetectorMessenger: public G4UImessenger
     G4UIcmdWithADoubleAndUnit* WorldZCmd;
     G4UIcmdWithADoubleAndUnit* WorldRCmd;
 
-    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
     G4UIcmdWithoutParameter*   UpdateCmd;
 
 };

@@ -32,8 +32,10 @@
 #define Tst14DetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
+#include "G4Cache.hh"
+#include "G4GlobalMagFieldMessenger.hh"
 #include "globals.hh"
-#include "G4ios.hh"
+#include "tls.hh"
 
 class G4Box;
 class G4Tubs;
@@ -44,84 +46,83 @@ class G4UniformMagField;
 class Tst14DetectorMessenger;
 class Tst14CalorimeterSD;
 
-
 class Tst14DetectorConstruction : public G4VUserDetectorConstruction
 {
-  public:
+public:
   
-    Tst14DetectorConstruction();
-   ~Tst14DetectorConstruction();
+  Tst14DetectorConstruction();
+  virtual ~Tst14DetectorConstruction();
 
-  public:
-     
-     void SetAbsorberMaterial (G4String);     
-     void SetAbsorberThickness(G4double);     
-     void SetAbsorberRadius(G4double);          
-      
-     void SetAbsorberZpos(G4double);
-
-     void SetWorldMaterial(G4String);
-     void SetWorldSizeZ(G4double);
-     void SetWorldSizeR(G4double);
-
-     void SetMagField(G4double);
-     
-     G4VPhysicalVolume* Construct();
-
-     G4bool CleanGeometry();
-     void UpdateGeometry();
-     
-  public:
+public:
   
-     void PrintCalorParameters(); 
-                    
-     G4Material* GetWorldMaterial()    {return WorldMaterial;};
-     G4double GetWorldSizeZ()          {return WorldSizeZ;}; 
-     G4double GetWorldSizeR()          {return WorldSizeR;};
-     
-     G4double GetAbsorberZpos()        {return zAbsorber;}; 
-     G4double GetzstartAbs()           {return zstartAbs;};
-     G4double GetzendAbs()             {return zendAbs;};
-
-     G4Material* GetAbsorberMaterial()  {return AbsorberMaterial;};
-     G4double    GetAbsorberThickness() {return AbsorberThickness;};      
-     G4double GetAbsorberRadius()       {return AbsorberRadius;};
-     
-     const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};           
-     const G4VPhysicalVolume* GetAbsorber()   {return physiAbsorber;};
-                 
-  private:
-     
-     G4bool             worldchanged;
-     G4Material*        AbsorberMaterial;
-     G4double           AbsorberThickness;
-     G4double           AbsorberRadius;
- 
-     G4double           zAbsorber ;
-     G4double           zstartAbs , zendAbs ;
-     
-     G4Material*        WorldMaterial;
-     G4double           WorldSizeR;
-     G4double           WorldSizeZ;
-            
-     G4Tubs*             solidWorld;    //pointer to the solid World 
-     G4LogicalVolume*   logicWorld;    //pointer to the logical World
-     G4VPhysicalVolume* physiWorld;    //pointer to the physical World
-
-     G4Tubs*             solidAbsorber; //pointer to the solid Absorber
-     G4LogicalVolume*   logicAbsorber; //pointer to the logical Absorber
-     G4VPhysicalVolume* physiAbsorber; //pointer to the physical Absorber
-     
-     G4UniformMagField* magField;      //pointer to the magnetic field
-     
-     Tst14DetectorMessenger* detectorMessenger;  //pointer to the Messenger
-     Tst14CalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
-      
-  private:
+  void SetAbsorberMaterial (G4String);     
+  void SetAbsorberThickness(G4double);     
+  void SetAbsorberRadius(G4double);          
+  
+  void SetAbsorberZpos(G4double);
+  
+  void SetWorldMaterial(G4String);
+  void SetWorldSizeZ(G4double);
+  void SetWorldSizeR(G4double);
     
-     void DefineMaterials();
-     void ComputeCalorParameters();
-     G4VPhysicalVolume* ConstructCalorimeter();     
+  G4VPhysicalVolume* Construct();
+
+  void ConstructSDandField();
+
+  void CleanGeometry();
+  void UpdateGeometry();
+  
+public:
+  
+  void PrintCalorParameters(); 
+  
+  G4Material* GetWorldMaterial()    {return WorldMaterial;};
+  G4double GetWorldSizeZ()          {return WorldSizeZ;}; 
+  G4double GetWorldSizeR()          {return WorldSizeR;};
+  
+  G4double GetAbsorberZpos()        {return zAbsorber;}; 
+  G4double GetzstartAbs() const       {return zstartAbs;};
+  G4double GetzendAbs()             {return zendAbs;};
+  
+  G4Material* GetAbsorberMaterial()  {return AbsorberMaterial;};
+  G4double    GetAbsorberThickness() const {return AbsorberThickness;};      
+  G4double GetAbsorberRadius() const      {return AbsorberRadius;};
+  
+  const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};           
+  const G4VPhysicalVolume* GetAbsorber()   {return physiAbsorber;};
+  
+private:
+  
+  //G4bool             worldchanged;
+  G4Material*        AbsorberMaterial;
+  G4double           AbsorberThickness;
+  G4double           AbsorberRadius;
+  
+  G4double           zAbsorber ;
+  G4double           zstartAbs , zendAbs ;
+  
+  G4Material*        WorldMaterial;
+  G4double           WorldSizeR;
+  G4double           WorldSizeZ;
+  
+  G4Tubs*             solidWorld;    //pointer to the solid World 
+  G4LogicalVolume*   logicWorld;    //pointer to the logical World
+  G4VPhysicalVolume* physiWorld;    //pointer to the physical World
+  
+  G4Tubs*             solidAbsorber; //pointer to the solid Absorber
+  G4LogicalVolume*   logicAbsorber; //pointer to the logical Absorber
+  G4VPhysicalVolume* physiAbsorber; //pointer to the physical Absorber
+  
+  Tst14DetectorMessenger* detectorMessenger;  //pointer to the Messenger
+
+  G4Cache<Tst14CalorimeterSD*> calorimeterSD;  //pointer to the sensitive detector
+  //Automatic management of the UI to the mag field
+  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
+  
+private:
+  
+  void DefineMaterials();
+  void ComputeCalorParameters();
 };
 
 

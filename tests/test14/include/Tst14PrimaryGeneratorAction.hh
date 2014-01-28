@@ -43,7 +43,7 @@ class Tst14DetectorConstruction;
 class Tst14PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
   public:
-    Tst14PrimaryGeneratorAction(Tst14DetectorConstruction*);    
+    Tst14PrimaryGeneratorAction(const Tst14DetectorConstruction*);    
    ~Tst14PrimaryGeneratorAction();
 
   public:
@@ -53,16 +53,17 @@ class Tst14PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void Setyvertex(G4double y) ;
     void Setzvertex(G4double z) ;
 
-    static G4String GetPrimaryName() ;                
+    G4String GetPrimaryName() ;                
 
   private:
     G4ParticleGun*                particleGun;	//pointer a to G4 service class
-    Tst14DetectorConstruction*      Tst14Detector; //pointer to the geometry
+    const Tst14DetectorConstruction*      Tst14Detector; //pointer to the geometry
     
   //  Tst14PrimaryGeneratorMessenger* gunMessenger; //messenger of this class
     G4String                      rndmFlag;	//flag for a random impact point       
 
-    static G4String thePrimaryParticleName ;
+    G4String thePrimaryParticleName;
+
     G4double xvertex,yvertex,zvertex;
     G4bool vertexdefined ;
 

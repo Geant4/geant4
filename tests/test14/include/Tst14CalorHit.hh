@@ -34,7 +34,7 @@
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
-
+#include "tls.hh"
 
 class Tst14CalorHit : public G4VHit
 {
@@ -70,20 +70,22 @@ class Tst14CalorHit : public G4VHit
 
 typedef G4THitsCollection<Tst14CalorHit> Tst14CalorHitsCollection;
 
-extern G4Allocator<Tst14CalorHit> Tst14CalorHitAllocator;
+extern G4ThreadLocal G4Allocator<Tst14CalorHit> *Tst14CalorHitAllocator;
 
 
 inline void* Tst14CalorHit::operator new(size_t)
 {
-  void* aHit;
-  aHit = (void*) Tst14CalorHitAllocator.MallocSingle();
-  return aHit;
+  if (!Tst14CalorHitAllocator) 	
+    Tst14CalorHitAllocator = new G4Allocator<Tst14CalorHit>;
+  return (void*) Tst14CalorHitAllocator->MallocSingle();
 }
 
 
 inline void Tst14CalorHit::operator delete(void* aHit)
 {
-  Tst14CalorHitAllocator.FreeSingle((Tst14CalorHit*) aHit);
+  if (!Tst14CalorHitAllocator)
+    Tst14CalorHitAllocator = new G4Allocator<Tst14CalorHit>;
+  Tst14CalorHitAllocator->FreeSingle((Tst14CalorHit*) aHit);
 }
 
 #endif

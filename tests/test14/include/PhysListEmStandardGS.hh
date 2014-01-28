@@ -23,66 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: PhysListEmStandardGS.hh 66241 2012-12-13 18:34:42Z gunter $
 //
-// Author: Original author unknown (contact: Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Redesigned for modular PhysicsList
-// 06 Nov 2003 MGP          Introduced test of Bremsstrahlung angular distributions
-//
-// -------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Class description:
-// System test for e/gamma, standard photon processes for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+#ifndef PhysListEmStandardGS_h
+#define PhysListEmStandardGS_h 1
 
-// -------------------------------------------------------------------
-
-#ifndef TST14PHYSICSLIST_HH
-#define TST14PHYSICSLIST_HH 1
-
-#include "G4VModularPhysicsList.hh"
+#include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class Tst14PhysicsListMessenger;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Tst14PhysicsList: public G4VModularPhysicsList {
-public:
-  
-  Tst14PhysicsList();
+class PhysListEmStandardGS : public G4VPhysicsConstructor
+{
+public: 
+  PhysListEmStandardGS(const G4String& name = "standardGS");
+  virtual ~PhysListEmStandardGS();
 
-  virtual ~Tst14PhysicsList();
-
-  virtual void SetCuts();
-  
-  // Register PhysicsList chunks
-  void AddPhysicsList(const G4String& name);
-
-  // Production thresholds, expressed in range
-  void SetGammaCut(G4double cut);
-  void SetElectronCut(G4double cut);
-
-  // Production thresholds, expressed in energy, for photons, electrons and both
-  void SetGammaLowLimit(G4double cut);
-  void SetElectronLowLimit(G4double cut);
-  void SetGELowLimit(G4double cut);
-
-private:
-
-  G4bool electronIsRegistered;
-  G4bool positronIsRegistered;
-  G4bool photonIsRegistered;
-
-  G4double cutForGamma;
-  G4double cutForElectron;
-
-  Tst14PhysicsListMessenger* messenger;
-
+public: 
+  // This method is dummy for physics
+  void ConstructParticle() {};
+ 
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  void ConstructProcess();
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
+
 
 
 

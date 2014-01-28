@@ -2,21 +2,17 @@
 # Macro file test14.in
 # for tests of basic low energy e.m. processes (based on test09) 
 #
-/control/verbose 2
-/run/verbose 2
+/control/verbose 0
+/run/verbose 0
 #
-/lowenergy/addPhysics photon-penelope
-/lowenergy/addPhysics electron-penelope
-/lowenergy/addPhysics positron-penelope
+/testem/phys/addPhysics empenelope
 /run/initialize
 #
 /process/list
 /particle/list
 #
-/lowenergy/cutG .01 micrometer
-/lowenergy/cutE .01 micrometer
-/lowenergy/lowlimG 1.0e-4
-/lowenergy/lowlimE 1.0e-4
+/testem/phys/setGCut 0.01 micrometer
+/testem/phys/setECut 0.01 micrometer
 #
 /run/particle/dumpCutValues
 #

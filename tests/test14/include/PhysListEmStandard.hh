@@ -23,41 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: PhysListEmStandard.hh 66241 2012-12-13 18:34:42Z gunter $
 //
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Created
-//
-// -------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Class description:
-// System test for e/gamma, standard photon processes for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
-
-// -------------------------------------------------------------------
-
-#ifndef TST14PHOTONSTANDARD_HH
-#define TST14PHOTONSTANDARD_HH 1
+#ifndef PhysListEmStandard_h
+#define PhysListEmStandard_h 1
 
 #include "G4VPhysicsConstructor.hh"
 #include "globals.hh"
 
-class Tst14PhotonStandard : public G4VPhysicsConstructor {
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class PhysListEmStandard : public G4VPhysicsConstructor
+{
+public: 
+  PhysListEmStandard(const G4String& name = "standard");
+  virtual ~PhysListEmStandard();
 
 public: 
-
-  Tst14PhotonStandard(const G4String& name = "photon-standard");
-  
-  virtual ~Tst14PhotonStandard();
-  
   // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();
+  void ConstructParticle() {};
+ 
+  // This method will be invoked in the Construct() method.
+  // each physics process will be instantiated and
+  // registered to the process manager of each particle type 
+  void ConstructProcess();
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

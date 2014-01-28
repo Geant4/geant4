@@ -5,18 +5,12 @@
 /control/verbose 2
 /run/verbose 2
 #
-/lowenergy/addPhysics photon-penelope
-/lowenergy/addPhysics electron-penelope
-/lowenergy/addPhysics positron-penelope
+/testem/phys/addPhysics empenelope
+/testem/phys/setCuts .01 micrometer
 /run/initialize
 #
 /process/list
 /particle/list
-#
-/lowenergy/cutG .01 micrometer
-/lowenergy/cutE .01 micrometer
-/lowenergy/lowlimG 1.0e-4
-/lowenergy/lowlimE 1.0e-4
 #
 /run/particle/dumpCutValues
 #

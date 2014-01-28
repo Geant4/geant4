@@ -57,7 +57,7 @@ class Tst14CalorimeterSD : public G4VSensitiveDetector
   
       Tst14CalorHitsCollection*  CalCollection;      
       Tst14DetectorConstruction* Detector;
-      G4int*                   HitID;
+  //G4int*                   HitID;
 };
 
 #endif

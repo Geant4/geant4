@@ -23,47 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: Tst14ActionInitializer.cc 66241 2012-12-13 18:34:42Z gunter $
+// GEANT4 tag $Name:  $
 //
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Created
-//
-// -------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Class description:
-// System test for e/gamma, particles for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+#include "Tst14ActionInitializer.hh"
+#include "Tst14PrimaryGeneratorAction.hh"
+#include "Tst14RunAction.hh"
+#include "Tst14SteppingAction.hh"
+#include "Tst14TrackingAction.hh"
+#include "Tst14DetectorConstruction.hh"
 
-// -------------------------------------------------------------------
+#include "G4RunManager.hh"
 
-#ifndef TST14PARTICLES_HH
-#define TST14PARTICLES_HH 1
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4VPhysicsConstructor.hh"
-#include "globals.hh"
+Tst14ActionInitializer::Tst14ActionInitializer(Tst14DetectorConstruction* det) 
+  : detector(det)
+{}
 
-class Tst14Particles : public G4VPhysicsConstructor {
-public: 
-  Tst14Particles(const G4String& name = "particles");
-  
-  virtual ~Tst14Particles();
-  
-  virtual void ConstructParticle();
-  
-  // This method is dummy
-  virtual void ConstructProcess() {};
-  
-};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void Tst14ActionInitializer::Build() const 
+{
+  /*
+  const Tst14DetectorConstruction* detector = 
+    static_cast<const Tst14DetectorConstruction*>
+    (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
+  */
+  // primary generator
+  Tst14PrimaryGeneratorAction* primary = new Tst14PrimaryGeneratorAction(detector);
+  SetUserAction(primary);
+    
+  //Thread-local run action
+  //SetUserAction(new Tst14RunAction());
+  //SetUserAction(new Tst14SteppingAction());
+  //SetUserAction(new Tst14TrackingAction());
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
-
-
-
-
+void Tst14ActionInitializer::BuildForMaster() const
+{
+  SetUserAction(new Tst14RunAction());
+}
 

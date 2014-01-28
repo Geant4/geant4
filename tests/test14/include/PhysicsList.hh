@@ -23,49 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: PhysicsList.hh 66241 2012-12-13 18:34:42Z gunter $
 //
-// $Id$
-//
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Created
-//
-// -------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Class description:
-// System test for e/gamma, standard positron processes for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+#ifndef PhysicsList_h
+#define PhysicsList_h 1
 
-// -------------------------------------------------------------------
-
-#ifndef TST14POSITRONSTANDARD_HH
-#define TST14POSITRONSTANDARD_HH 1
-
-#include "G4VPhysicsConstructor.hh"
+#include "G4VModularPhysicsList.hh"
 #include "globals.hh"
 
-class Tst14PositronStandard : public G4VPhysicsConstructor {
+class G4VPhysicsConstructor;
+class PhysicsListMessenger;
 
-public: 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  Tst14PositronStandard(const G4String& name = "positron-standard");
-  
-  virtual ~Tst14PositronStandard();
-  
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();
+class PhysicsList: public G4VModularPhysicsList
+{
+public:
+  PhysicsList();
+  virtual ~PhysicsList();
+
+  void ConstructParticle();
+        
+  void AddPhysicsList(const G4String& name);
+    
+  void ConstructProcess();    
+  void AddDecay();
+  void AddStepMax();       
+    
+  void SetCuts();
+  void SetCutForGamma(G4double);
+  void SetCutForElectron(G4double);
+  void SetCutForPositron(G4double);
+    
+private:
+
+  PhysicsListMessenger* pMessenger; 
+
+  G4String emName;
+  G4VPhysicsConstructor*  emPhysicsList;
+    
+  G4double cutForGamma;
+  G4double cutForElectron;
+  G4double cutForPositron;    
+  G4double cutForProton;    
+
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-
-
-
-
-
-
 

@@ -23,48 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: PhysicsListMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
 //
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Created
-//
-// -------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Class description:
-// System test for e/gamma, standard photon processes for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+#ifndef PhysicsListMessenger_h
+#define PhysicsListMessenger_h 1
 
-// -------------------------------------------------------------------
-
-#ifndef TST14ELECTRONSTANDARD_HH
-#define TST14ELECTRONSTANDARD_HH 1
-
-#include "G4VPhysicsConstructor.hh"
+#include "G4UImessenger.hh"
 #include "globals.hh"
 
-class Tst14ElectronStandard : public G4VPhysicsConstructor {
+class PhysicsList;
+class G4UIdirectory;
+class G4UIcmdWithAString;
+class G4UIcmdWithADoubleAndUnit;
 
-public: 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  Tst14ElectronStandard(const G4String& name = "electron-standard");
+class PhysicsListMessenger: public G4UImessenger
+{
+public:
   
-  virtual ~Tst14ElectronStandard();
+  PhysicsListMessenger(PhysicsList* );
+  ~PhysicsListMessenger();
+    
+  void SetNewValue(G4UIcommand*, G4String);
+    
+private:
   
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();
+  PhysicsList* pPhysicsList;
+    
+  G4UIdirectory*             physDir;    
+  G4UIcmdWithAString*        pListCmd;    
+  G4UIcmdWithADoubleAndUnit* gammaCutCmd;
+  G4UIcmdWithADoubleAndUnit* electCutCmd;
+  G4UIcmdWithADoubleAndUnit* protoCutCmd;    
+  G4UIcmdWithADoubleAndUnit* allCutCmd;        
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-
-
-
-
-
-
 

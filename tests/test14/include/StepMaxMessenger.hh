@@ -23,49 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: StepMaxMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
 //
-// $Id$
-//
-// Author: Maria Grazia Pia (Maria.Grazia.Pia@cern.ch)
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Created
-//
-// -------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-// Class description:
-// System test for e/gamma, electron processes based on EEDL for PhysicsList
-// Further documentation available from http://www.ge.infn.it/geant4/lowE
+#ifndef StepMaxMessenger_h
+#define StepMaxMessenger_h 1
 
-// -------------------------------------------------------------------
-
-#ifndef TST14ELECTRONEEDL_HH
-#define TST14ELECTRONEEDL_HH 1
-
-#include "G4VPhysicsConstructor.hh"
+#include "G4UImessenger.hh"
 #include "globals.hh"
 
-class Tst14ElectronEEDL : public G4VPhysicsConstructor {
+class StepMax;
+class G4UIcmdWithADoubleAndUnit;
 
-public: 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  Tst14ElectronEEDL(const G4String& name = "electron-epdl");
-  
-  virtual ~Tst14ElectronEEDL();
-  
-  // This method is dummy for physics
-  virtual void ConstructParticle() {};
-  
-  virtual void ConstructProcess();
+class StepMaxMessenger: public G4UImessenger
+{
+  public:
+    StepMaxMessenger(StepMax*);
+   ~StepMaxMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+  private:
+    StepMax* pStepMax;
+    G4UIcmdWithADoubleAndUnit* StepMaxCmd;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-
-
-
-
-
-
-

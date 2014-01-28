@@ -41,8 +41,10 @@ Tst14RunAction::~Tst14RunAction()
 {
 }
 
-void Tst14RunAction::BeginOfRunAction(const G4Run* )
+void Tst14RunAction::BeginOfRunAction(const G4Run* run)
 {
+  G4cout << "### Tst14RunAction::BeginOfRunAction: Tst14RunAction: Start run " 
+	 << run->GetRunID() << G4endl; 
 }
 
 void Tst14RunAction::EndOfRunAction(const G4Run* )

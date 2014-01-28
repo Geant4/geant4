@@ -29,40 +29,39 @@
 
 #include "Tst14DetectorConstruction.hh"
 #include "Tst14RunAction.hh"
-#include "Tst14PrimaryGeneratorAction.hh"
-#include "Tst14PhysicsList.hh"
-#include "Tst14SteppingAction.hh"
-#include "Tst14TrackingAction.hh"
+#include "Tst14ActionInitializer.hh"
+#include "PhysicsList.hh"
 
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
-#include "G4RunManager.hh"
 
-#include "G4ios.hh"
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
+#include "G4RunManager.hh"
+#endif
 
 int main(int argc,char** argv) {
 
   // Set the default random engine to RanecuEngine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager();
+  runManager->SetNumberOfThreads(2);
+#else
   // Run manager
   G4RunManager * runManager = new G4RunManager;
+#endif
 
   // UserInitialization classes
   Tst14DetectorConstruction* detector;
   detector = new Tst14DetectorConstruction;
 
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new Tst14PhysicsList);
-
-  // UserAction classes
-  runManager->SetUserAction(new Tst14PrimaryGeneratorAction(detector));
-  Tst14RunAction* runaction = new Tst14RunAction;
-  runManager->SetUserAction(runaction);
-
-  runManager->SetUserAction(new Tst14SteppingAction);
-  //runManager->SetUserAction(new Tst14TrackingAction);
-
+  runManager->SetUserInitialization(new PhysicsList);
+  runManager->SetUserInitialization(new Tst14ActionInitializer(detector));
+ 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
   if(argc==1)

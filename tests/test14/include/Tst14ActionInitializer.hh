@@ -23,63 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: Tst14ActionInitializer.hh 66241 2012-12-13 18:34:42Z gunter $
+// GEANT4 tag $Name:  $
 //
-// Author: Maria.Grazia.Pia@cern.ch
-//
-// History:
-// -----------
-// 22 Feb 2003 MGP          Designed for modular Physics List
-//
-// -------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "Tst14ElectronStandard.hh"
+#ifndef Tst14ActionInitializer_h
+#define Tst14ActionInitializer_h 1
 
-#include "G4SystemOfUnits.hh"
-#include "G4ProcessManager.hh"
-#include "G4Gamma.hh"
-#include "G4ParticleDefinition.hh"
+#include "G4VUserActionInitialization.hh"
 
-#include "G4eMultipleScattering.hh"
-#include "G4eIonisation.hh"
-#include "G4eBremsstrahlung.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-Tst14ElectronStandard::Tst14ElectronStandard(const G4String& name): G4VPhysicsConstructor(name)
-{ }
+class Tst14DetectorConstruction;
 
-Tst14ElectronStandard::~Tst14ElectronStandard()
-{ }
-
-void Tst14ElectronStandard::ConstructProcess()
+class Tst14ActionInitializer : public G4VUserActionInitialization
 {
-  // Add standard processes for electrons
+public:
+
+  Tst14ActionInitializer(Tst14DetectorConstruction*);
+  virtual ~Tst14ActionInitializer(){;};
   
-  aParticleIterator->reset();
+  void Build() const;
+  void BuildForMaster() const;
 
-  while( (*aParticleIterator)() )
-    {
-      G4ParticleDefinition* particle = aParticleIterator->value();
-      G4ProcessManager* manager = particle->GetProcessManager();
-      G4String particleName = particle->GetParticleName();
-     
-      if (particleName == "e-") 
-	{
-/*
-	  manager->AddProcess(new G4eMultipleScattering, -1, 1,1);
-	  manager->AddProcess(new G4eIonisation,        -1, 2,2);
-	  manager->AddProcess(new G4eBremsstrahlung,    -1,-1,3);
-*/
+private:
 
-// From Option3
+  Tst14DetectorConstruction* detector;
 
-      G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->SetStepLimitType(fUseDistanceToBoundary);
-      manager->AddProcess(msc,                   -1, 1, 1);
-      G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetStepFunction(0.2, 100*um);      
-      manager->AddProcess(eIoni,                 -1, 2, 2);
-      manager->AddProcess(new G4eBremsstrahlung, -1,-3, 3);
+};
 
-	}   
-    }
-}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
+
