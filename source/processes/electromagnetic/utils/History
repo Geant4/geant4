@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 January 14: V.Ivant (emutils-V10-00-00)
+- G4VEnergyLossProcess - fixed division by zero for the case of
+    an ion with charge zero
+- G4EmCalculator - in FindCouple method implemented loop over all
+    regions if G4Region* argument of the method is NULL
+
 21 November 13: V.Ivant (emutils-V09-06-67)
 - G4EnergyLossTables - removed G4ThreadLocal (this class is obsolete)
 

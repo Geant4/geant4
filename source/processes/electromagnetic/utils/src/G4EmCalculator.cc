@@ -954,11 +954,23 @@ const G4MaterialCutsCouple* G4EmCalculator::FindCouple(
   const G4ProductionCutsTable* theCoupleTable=
         G4ProductionCutsTable::GetProductionCutsTable();
   const G4Region* r = region;
-  if(!r) {
-    r = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForTheWorld");
+  const G4MaterialCutsCouple* couple = 0;
+  if(r) {
+    couple = theCoupleTable->GetMaterialCutsCouple(material,
+						   r->GetProductionCuts());
+  } else {
+    G4RegionStore* store = G4RegionStore::GetInstance();
+    size_t nr = store->size();
+    if(0 < nr) {
+      for(size_t i=0; i<nr; ++i) {
+	couple = 
+	  theCoupleTable->GetMaterialCutsCouple(material,
+						((*store)[i])->GetProductionCuts());
+        if(couple) { break; }
+      }
+    }
   }
-  return theCoupleTable->GetMaterialCutsCouple(material,r->GetProductionCuts());
-
+  return couple;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
