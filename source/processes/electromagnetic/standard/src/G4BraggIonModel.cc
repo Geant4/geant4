@@ -160,7 +160,8 @@ G4double G4BraggIonModel::GetParticleCharge(const G4ParticleDefinition* p,
 					    const G4Material* mat,
 					    G4double kineticEnergy)
 {
-  //G4cout<<"G4BraggIonModel::GetParticleCharge e= "<<kineticEnergy<<G4endl;
+  //G4cout<<"G4BraggIonModel::GetParticleCharge e= "<<kineticEnergy <<
+  //  " q= " <<  corr->GetParticleCharge(p,mat,kineticEnergy) <<G4endl;
   // this method is called only for ions
   return corr->GetParticleCharge(p,mat,kineticEnergy);
 }

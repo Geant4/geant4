@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+
+26 January 14: V.Ivanchenko (emstand-V10-00-07)
+- G4ionIonisation - improved printout at initialisation
+
+25 January 14: V.Ivanchenko (emstand-V10-00-06)
+- G4NuclearStopping - do not change ion charge (fixed problem reported
+    by Michel Maire)
+- G4ionIonisation - do not instantiate extra model at high enegry
+    if G4IonParameterisedModel is used 
+
+24 January 14: V.Ivanchenko (emstand-V10-00-05)
+- G4PAIxSection - trivial fix of Coverity report
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable - fixed
+    Coverity reports: substitute reading of external file from fopen
+    to ifstream; use G4Log, G4Exp
+
 18 January 14: L.Urban (emstand-V10-00-04)
 - G4UniversalFluctuation - bugfix in "ionization" computing -
    effect of the bug was small
