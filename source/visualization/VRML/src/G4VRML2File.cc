@@ -42,7 +42,8 @@
 
 
 G4VRML2File::G4VRML2File() :
-	G4VGraphicsSystem("VRML2FILE", "VRML2FILE", G4VGraphicsSystem::threeD)
+	G4VGraphicsSystem("VRML2FILE", "VRML2FILE", G4VGraphicsSystem::fileWriter
+)
 {
 }
 

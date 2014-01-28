@@ -60,6 +60,8 @@
 
 #include <sstream>
 
+//#define G4DEBUG_VIS_OGL
+
 G4int G4OpenGLViewer::fPrintSizeX = -1;
 G4int G4OpenGLViewer::fPrintSizeY = -1;
 G4String G4OpenGLViewer::fPrintFilename = "G4OpenGL";
@@ -499,9 +501,9 @@ void G4OpenGLViewer::HaloingSecondPass () {
 
 }
 
-void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
+G4String G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
 {
-  //G4cout << "X: " << x << ", Y: " << y << G4endl;
+  std::ostringstream oss;
   const G4int BUFSIZE = 512;
   GLuint selectBuffer[BUFSIZE];
   glSelectBuffer(BUFSIZE, selectBuffer);
@@ -521,10 +523,10 @@ void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
   glMatrixMode(GL_MODELVIEW);
   DrawView();
   GLint hits = glRenderMode(GL_RENDER);
-  if (hits < 0)
+  if (hits < 0) {
     G4cout << "Too many hits.  Zoom in to reduce overlaps." << G4endl;
-  else if (hits > 0) {
-    G4cout << hits << " hit(s)" << G4endl;
+  } else if (hits > 0) {
+//    G4cout << hits << " hit(s)" << G4endl;
     GLuint* p = selectBuffer;
     for (GLint i = 0; i < hits; ++i) {
       GLuint nnames = *p++;
@@ -538,9 +540,9 @@ void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
       p++;
       for (GLuint j = 0; j < nnames; ++j) {
 	GLuint name = *p++;
-	G4cout << "Hit: " << i
-	       << ", Sub-hit: " << j
-	       << ", PickName: " << name << G4endl;
+//	G4cout << "Hit: " << i
+//	       << ", Sub-hit: " << j
+//	       << ", PickName: " << name << G4endl;
 	std::map<GLuint, G4AttHolder*>::iterator iter =
 	  fOpenGLSceneHandler.fPickMap.find(name);
 	if (iter != fOpenGLSceneHandler.fPickMap.end()) {
@@ -548,24 +550,23 @@ void G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
 	  if(attHolder && attHolder->GetAttDefs().size()) {
 	    for (size_t iAtt = 0;
 		 iAtt < attHolder->GetAttDefs().size(); ++iAtt) {
-	      G4cout << G4AttCheck(attHolder->GetAttValues()[iAtt],
-				   attHolder->GetAttDefs()[iAtt]);
+	      oss << G4AttCheck(attHolder->GetAttValues()[iAtt],
+                                attHolder->GetAttDefs()[iAtt]);
 	    }
+            oss << std::endl;
 	  }
 	}
       }
-      G4cout << G4endl;
     }
   }
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
+  return oss.str();
 }
 
-
-
-
-GLubyte* G4OpenGLViewer::grabPixels (int inColor, unsigned int width, unsigned int height) {
+GLubyte* G4OpenGLViewer::grabPixels
+(int inColor, unsigned int width, unsigned int height) {
   
   GLubyte* buffer;
   GLint swapbytes, lsbfirst, rowlength;
@@ -1184,6 +1185,42 @@ void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy)
    fVP.SetUpVector(new_upUnit);
    fVP.SetViewAndLights (viewPoint);
 }
+
+// 12/2013 : Not used for the moment
+void G4OpenGLViewer::g4GluPickMatrix(GLdouble x, GLdouble y, GLdouble width, GLdouble height,
+                     GLint viewport[4])
+  {
+    GLfloat mat[16];
+    GLfloat sx, sy;
+    GLfloat tx, ty;
+    
+    sx = viewport[2] / width;
+    sy = viewport[3] / height;
+    tx = (viewport[2] + 2.0 * (viewport[0] - x)) / width;
+    ty = (viewport[3] + 2.0 * (viewport[1] - y)) / height;
+    
+#define M(row, col) mat[col*4+row]
+    M(0, 0) = sx;
+    M(0, 1) = 0.0;
+    M(0, 2) = 0.0;
+    M(0, 3) = tx;
+    M(1, 0) = 0.0;
+    M(1, 1) = sy;
+    M(1, 2) = 0.0;
+    M(1, 3) = ty;
+    M(2, 0) = 0.0;
+    M(2, 1) = 0.0;
+    M(2, 2) = 1.0;
+    M(2, 3) = 0.0;
+    M(3, 0) = 0.0;
+    M(3, 1) = 0.0;
+    M(3, 2) = 0.0;
+    M(3, 3) = 1.0;
+#undef M
+    
+    glMultMatrixf(mat);
+}
+
 
 #ifdef G4VIS_BUILD_OPENGLWT_DRIVER
 

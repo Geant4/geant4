@@ -2304,16 +2304,16 @@ void G4VisCommandSceneAddTrajectories::SetNewValue (G4UIcommand*,
       "\n  \"/vis/modeling/trajectories/create/drawByAttribute\" and"
       "\n  \"/vis/filtering/trajectories/create/attributeFilter\" commands:"
 	   << G4endl;
-    G4cout << G4TrajectoriesModel().GetAttDefs();
+    G4cout << *G4TrajectoriesModel().GetAttDefs();
     if (rich) {
-      G4cout << G4RichTrajectory().GetAttDefs()
-	     << G4RichTrajectoryPoint().GetAttDefs();
+      G4cout << *G4RichTrajectory().GetAttDefs()
+	     << *G4RichTrajectoryPoint().GetAttDefs();
     } else if (smooth) {
-      G4cout << G4SmoothTrajectory().GetAttDefs()
-	     << G4SmoothTrajectoryPoint().GetAttDefs();
+      G4cout << *G4SmoothTrajectory().GetAttDefs()
+	     << *G4SmoothTrajectoryPoint().GetAttDefs();
     } else {
-      G4cout << G4Trajectory().GetAttDefs()
-	     << G4TrajectoryPoint().GetAttDefs();
+      G4cout << *G4Trajectory().GetAttDefs()
+	     << *G4TrajectoryPoint().GetAttDefs();
     }
   }
 

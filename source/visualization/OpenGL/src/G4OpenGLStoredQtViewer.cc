@@ -328,10 +328,14 @@ void G4OpenGLStoredQtViewer::paintGL()
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL VVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVVV ready %d\n",fReadyToPaint);
 #endif
+  // Ensure that we really draw the BACK buffer
+  glDrawBuffer (GL_BACK);
 
-  SetView();
-
-  ClearView (); //ok, put the background correct
+  if (! fVP.IsPicking ()) {
+    SetView();
+  
+    ClearView (); //ok, put the background correct
+  }
   ComputeView();
 
   fHasToRepaint = false;

@@ -46,13 +46,14 @@ class G4VGraphicsSystem {
 public: // With description
 
   enum Functionality {
-    noFunctionality,
-    nonEuclidian,       // e.g., tree representation of geometry hierarchy.
-    twoD,               // Simple 2D, e.g., X (no stored structures).
-    twoDStore,          // 2D with stored structures.
-    threeD,             // Passive 3D (with stored structures).
-    threeDInteractive,  // 3D with "pick" functionality.
-    virtualReality      // Virtual Reality functionality.
+    noFunctionality
+    ,nonEuclidian       // e.g., tree representation of geometry hierarchy.
+    ,twoD               // Simple 2D, e.g., X (no stored structures).
+    ,twoDStore          // 2D with stored structures.
+    ,threeD             // Passive 3D (with stored structures).
+    ,threeDInteractive  // 3D with "pick" functionality.
+    ,virtualReality     // Virtual Reality functionality.
+    ,fileWriter         // File writer
   };
 
   G4VGraphicsSystem (const G4String& name,

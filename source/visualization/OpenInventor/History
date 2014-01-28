@@ -20,6 +20,12 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+21 Dec 2013  Frederick Jones
+- G4OpenInventorXtExaminerViewer.cc:
+  o Adjusted dimensions of viewer aux window.
+  o Implemented look-ahead for better tracking of trajectory animation.
+  o Implemented mouse-over readout for trajectories.
+
 29th May 2013  John Allison  (openinventor-V09-06-04)
 - SoCounterAction.cc:
   o Completed initialisation list in constructor (Coverity warning).

@@ -24,6 +24,46 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+25th January 2014  John Allison  (vis-V10-00-01)
+- modeling-V10-00-02:
+  o GNUmakefile: Added dependency on run category.
+  o G4PhysicalVolumeModel: Improved constructor.
+- visman-V10-00-03:
+  o G4VisManager: Removed temporary model in Draw method for
+    G4VPhysicalVolume introduced in visman-V10-00-01.
+- opengl-V10-00-01:
+  o Improved protection of pointers.
+
+23rd January 2014  John Allison  (vis-V10-00-00)
+- modeling-V10-00-01:
+  o G4TrajectoriesModel: Add run ID.
+- visman-V10-00-02:
+  o Add run ID to G4Atts of user drawn trajectories.
+- opengl-V10-00-00:
+  o Improvements to class design and some bug fixes for picking.
+  o Some Qt fixes and improvements.
+
+13th January 2014  John Allison
+- modeling-V10-00-00: requires greps-V10-00-01:
+  o Migration and minor development.
+- visman-V10-00-01: requires modeling-V10-00-00:
+  o Migration and added protections.
+  o Used temporary models for Draw methods for G4VTrajectory and
+    G4VPhysicalVolume.
+
+10th December 2013  John Allison
+- visXXX-V10-00-00: G4XXXFile declared as G4VGraphicsSystem::fileWriter.
+- VRML-V10-00-00: VRML1/2File declared as G4VGraphicsSystem::fileWriter.
+
+9th December 2013  John Allison
+- visman-V10-00-00:
+  o Introduced G4VGraphicsSystem::fileWriter to allow special informational.
+  o Small bug fix for MT mode:
+- DAWN-V10-00-00: DAWNFILE declared as G4VGraphicsSystem::fileWriter.
+- gMocren-V10-00-00: gMocren declared as G4VGraphicsSystem::fileWriter.
+- vis-HepRep-V10-00-00:
+  o HepRep and HepRepFile declared as G4VGraphicsSystem::fileWriter.
+
 23rd November 2013  Joseph Perl  (vis-V09-06-37)
 - opengl-V09-06-11: Fixes for Qt
 - opengl-V09-06-10: Fixes for Qt

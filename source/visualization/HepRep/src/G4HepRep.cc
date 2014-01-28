@@ -49,7 +49,7 @@ G4HepRep::G4HepRep ()
         : G4VGraphicsSystem ("G4HepRep",
                              "HepRepXML",
         	             "HepRep Generic Driver for XML, RMI and CORBA",
-                             G4VGraphicsSystem::threeD),
+                             G4VGraphicsSystem::fileWriter),
           sceneHandler(NULL),
           viewer(NULL) {
 		G4HepRepMessenger::GetInstance();

@@ -50,7 +50,7 @@ G4DAWNFILE::G4DAWNFILE ():
   G4VGraphicsSystem ("DAWNFILE",
 		     "DAWNFILE",
 		     FR_DAWNFILE_FEATURES,
-		     G4VGraphicsSystem::threeD)
+		     G4VGraphicsSystem::fileWriter)
 {}
 
 	//----- G4DAWNFILE, destructor

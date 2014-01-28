@@ -883,14 +883,28 @@ void G4VisManager::Draw (const G4VTrajectory& traj) {
 #ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
 #endif
+  // A trajectory needs a trajectories model to provide G4Atts, etc.
+  static G4TrajectoriesModel trajectoriesModel;
+  trajectoriesModel.SetCurrentTrajectory(&traj);
+  const G4Run* currentRun = G4RunManager::GetRunManager()->GetCurrentRun();
+  if (currentRun) {
+    trajectoriesModel.SetRunID(currentRun->GetRunID());
+  }
+  const G4Event* currentEvent =
+  G4EventManager::GetEventManager()->GetConstCurrentEvent();
+  if (currentEvent) {
+    trajectoriesModel.SetEventID(currentEvent->GetEventID());
+  }
   if (fIsDrawGroup) {
-    fpSceneHandler -> SetModel (&dummyTrajectoriesModel);
+    fpSceneHandler -> SetModel (&trajectoriesModel);
     fpSceneHandler -> AddCompound (traj);
+    fpSceneHandler -> SetModel (0);
   } else {
     if (IsValidView ()) {
       ClearTransientStoreIfMarked();
-      fpSceneHandler -> SetModel (&dummyTrajectoriesModel);
+      fpSceneHandler -> SetModel (&trajectoriesModel);
       fpSceneHandler -> AddCompound (traj);
+      fpSceneHandler -> SetModel (0);
     }
   }
 }
@@ -929,10 +943,21 @@ void G4VisManager::Draw (const G4VSolid& solid,
 void G4VisManager::Draw (const G4VPhysicalVolume& physicalVol,
 			 const G4VisAttributes& attribs,
 			 const G4Transform3D& objectTransform) {
-  // Find corresponding logical volume and solid.
 #ifdef G4MULTITHREADED
   if (G4Threading::IsWorkerThread()) return;
 #endif
+  // Note: It is tempting to use a temporary model here, as for
+  // trajectories, in order to get at the G4Atts of the physical
+  // volume.  I tried it (JA).  But it's not easy to pass the
+  // vis attributes.  Also other aspects of the model seem not to
+  // be properly set up.  So, the idea has been abandoned for the time
+  // being.  The model pointer will be null.  So when picking there
+  // will be no G4Atts from this physical volume.
+  //
+  // If this is called from DrawHit, for example, the user may G4Atts to the
+  // hit and these will be available with "/vis/scene/add/hits".
+  //
+  // Find corresponding logical volume and solid.
   G4LogicalVolume* pLV  = physicalVol.GetLogicalVolume ();
   G4VSolid*        pSol = pLV -> GetSolid ();
   Draw (*pSol, attribs, objectTransform);
@@ -1666,6 +1691,7 @@ void G4VisManager::EndOfRun ()
   if (GetConcreteInstance() && eventsFromThreads) {
     std::vector<const G4Event*>::const_iterator i;
     if (fpScene->GetRefreshAtEndOfEvent()) {
+
       for (i = eventsFromThreads->begin(); i != eventsFromThreads->end(); ++i) {
         if (fVerbosity >= confirmations) {
           G4cout << "Drawing event " << (*i)->GetEventID() << G4endl;
@@ -1703,9 +1729,10 @@ void G4VisManager::EndOfRun ()
         if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
         fpSceneHandler->DrawEvent(*i);
         // ShowView guarantees the view comes to the screen.  No action
-        // is taken for passive viewers like OGL*X, but it passes control to
-        // interactive viewers, such OGL*Xm and allows file-writing
-        // viewers to close the file.
+        // is taken for passive viewers like OGL*X (without picking enabled),
+        // but it passes control to interactive viewers, such as OGL*X (with
+        // picking enabled) or OGL*Xm, and allows file-writing viewers to
+        // close the file.
         fpViewer->ShowView();
         fpSceneHandler->SetMarkForClearingTransientStore(true);
       }
@@ -1740,12 +1767,12 @@ void G4VisManager::EndOfRun ()
       eoeModels = tmpEoeModels;
       eorModels = tmpEorModels;
 
-      fTransientsDrawnThisEvent = false;
-      if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
       for (i = eventsFromThreads->begin(); i != eventsFromThreads->end(); ++i) {
         if (fVerbosity >= confirmations) {
           G4cout << "Drawing event " << (*i)->GetEventID() << G4endl;
         }
+        fTransientsDrawnThisEvent = false;
+        if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
         fpSceneHandler->DrawEvent(*i);
       }
       if (fpScene->GetRefreshAtEndOfRun()) {
@@ -1756,6 +1783,13 @@ void G4VisManager::EndOfRun ()
           fpViewer->RefreshView();
         }
         fpSceneHandler->SetMarkForClearingTransientStore(true);
+      } else {
+        if (fpGraphicsSystem->GetFunctionality() ==
+            G4VGraphicsSystem::fileWriter) {
+          if (fVerbosity >= warnings) {
+            G4cout << "\"/vis/viewer/update\" to close file." << G4endl;
+          }
+        }
       }
     }
   }
@@ -1835,9 +1869,10 @@ void G4VisManager::EndOfEvent ()
     // Unless last event (in which case wait end of run)...
     if (eventID < nEventsToBeProcessed - 1) {
       // ShowView guarantees the view comes to the screen.  No action
-      // is taken for passive viewers like OGL*X, but it passes control to
-      // interactive viewers, such OGL*Xm and allows file-writing
-      // viewers to close the file.
+      // is taken for passive viewers like OGL*X (without picking enabled),
+      // but it passes control to interactive viewers, such as OGL*X (with
+      // picking enabled) or OGL*Xm, and allows file-writing viewers to
+      // close the file.
       fpViewer->ShowView();
       fpSceneHandler->SetMarkForClearingTransientStore(true);
     } else {  // Last event...
@@ -1947,15 +1982,23 @@ void G4VisManager::EndOfRun ()
       if (fpScene->GetRefreshAtEndOfRun()) {
 	fpSceneHandler->DrawEndOfRunModels();
         // ShowView guarantees the view comes to the screen.  No action
-        // is taken for passive viewers like OGL*X, but it passes control to
-        // interactive viewers, such OGL*Xm and allows file-writing
-        // viewers to close the file.
+        // is taken for passive viewers like OGL*X (without picking enabled),
+        // but it passes control to interactive viewers, such as OGL*X (with
+        // picking enabled) or OGL*Xm, and allows file-writing viewers to
+        // close the file.
 	fpViewer->ShowView();
-        // An extra refresh for auto-refresh viewers
+        // An extra refresh for auto-refresh viewers.
         if (fpViewer->GetViewParameters().IsAutoRefresh()) {
           fpViewer->RefreshView();
         }
 	fpSceneHandler->SetMarkForClearingTransientStore(true);
+      } else {
+        if (fpGraphicsSystem->GetFunctionality() ==
+            G4VGraphicsSystem::fileWriter) {
+          if (fVerbosity >= warnings) {
+            G4cout << "\"/vis/viewer/update\" to close file." << G4endl;
+          }
+        }
       }
     }
   }

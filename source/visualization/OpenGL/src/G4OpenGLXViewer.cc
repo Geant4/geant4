@@ -118,7 +118,7 @@ void G4OpenGLXViewer::ShowView () {
       if (XPending(dpy)) {
 	XNextEvent(dpy, &event);
 	if (event.type == ButtonPress && event.xbutton.button == 1) {
-	  Pick(event.xbutton.x, event.xbutton.y);
+	  G4cout << Pick(event.xbutton.x, event.xbutton.y) << G4endl;
 	}
 	else if (event.type == ButtonPress && event.xbutton.button == 2) break;
       }

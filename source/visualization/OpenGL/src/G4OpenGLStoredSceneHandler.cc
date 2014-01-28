@@ -288,7 +288,15 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
     // this solid, re-use it if possible.  We could be smarter, and
     // recognise repeated branches of the geometry hierarchy, for
     // example.  But this algorithm should be secure, I think...
-    pSolid = pPVModel->GetCurrentPV()->GetLogicalVolume()->GetSolid();
+    G4VPhysicalVolume* pPV = pPVModel->GetCurrentPV();
+    if (!pPV)
+      // It's probably a dummy model, e.g., for a user-drawn hit?
+      goto end_of_display_list_reuse_test;
+    G4LogicalVolume* pLV = pPV->GetLogicalVolume();
+    if (!pLV)
+      // Dummy model again?
+      goto end_of_display_list_reuse_test;
+    pSolid = pLV->GetSolid();
     EAxis axis = kRho;
     G4VPhysicalVolume* pCurrentPV = pPVModel->GetCurrentPV();
     if (pCurrentPV -> IsReplicated ()) {

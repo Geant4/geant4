@@ -168,13 +168,17 @@ void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
   "\n  \"/vis/filtering/trajectories/create/attributeFilter\" commands"
   "\nand by picking:"
   << G4endl;
-  G4cout << G4TrajectoriesModel().GetAttDefs();
-  G4cout << G4RichTrajectory().GetAttDefs()
-  << G4RichTrajectoryPoint().GetAttDefs();
-  G4cout << G4SmoothTrajectory().GetAttDefs()
-  << G4SmoothTrajectoryPoint().GetAttDefs();
-  G4cout << G4Trajectory().GetAttDefs()
-  << G4TrajectoryPoint().GetAttDefs();
+  G4cout
+  << *G4TrajectoriesModel().GetAttDefs();
+  G4cout
+  << *G4RichTrajectory().GetAttDefs()
+  << *G4RichTrajectoryPoint().GetAttDefs();
+  G4cout
+  << *G4SmoothTrajectory().GetAttDefs()
+  << *G4SmoothTrajectoryPoint().GetAttDefs();
+  G4cout
+  << *G4Trajectory().GetAttDefs()
+  << *G4TrajectoryPoint().GetAttDefs();
 
   G4cout <<
   "\nAttributes available for touchables by picking:"

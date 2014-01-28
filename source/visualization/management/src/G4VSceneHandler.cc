@@ -789,16 +789,20 @@ void G4VSceneHandler::LoadAtts(const G4Visible& visible, G4AttHolder* holder)
     }
     // Load G4Atts from trajectory...
     const G4VTrajectory* traj = trajModel->GetCurrentTrajectory();
-    const std::map<G4String,G4AttDef>* trajDefs = traj->GetAttDefs();
-    if (trajDefs) {
-      holder->AddAtts(traj->CreateAttValues(), trajDefs);
-    }
-    G4int nPoints = traj->GetPointEntries();
-    for (G4int i = 0; i < nPoints; ++i) {
-      G4VTrajectoryPoint* trajPoint = traj->GetPoint(i);
-      const std::map<G4String,G4AttDef>* pointDefs = trajPoint->GetAttDefs();
-      if (pointDefs) {
-	holder->AddAtts(trajPoint->CreateAttValues(), pointDefs);
+    if (traj) {
+      const std::map<G4String,G4AttDef>* trajDefs = traj->GetAttDefs();
+      if (trajDefs) {
+        holder->AddAtts(traj->CreateAttValues(), trajDefs);
+      }
+      G4int nPoints = traj->GetPointEntries();
+      for (G4int i = 0; i < nPoints; ++i) {
+        G4VTrajectoryPoint* trajPoint = traj->GetPoint(i);
+        if (trajPoint) {
+          const std::map<G4String,G4AttDef>* pointDefs = trajPoint->GetAttDefs();
+          if (pointDefs) {
+            holder->AddAtts(trajPoint->CreateAttValues(), pointDefs);
+          }
+        }
       }
     }
   }

@@ -20,6 +20,26 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+26th January 2014  John Allison  (modeling-V10-00-02)
+- GNUmakefile: Added dependency on run category.
+- G4PhysicalVolumeModel:
+  o Augmented constructor to set sensible values of some data members,
+    namely fpCurrentPV, fpCurrentLV, fpCurrentMaterial and
+    fpCurrentTransform, so that CreateCurrentAttValues gives the G4Atts
+    of the top volume if called without any further processing.
+
+23rd January 2014  John Allison  (modeling-V10-00-01)
+- G4TrajectoriesModel:
+  o Add run ID.
+  o Initialise fRunID and fEventID to -1.
+
+13th January 2014  John Allison  (modeling-V10-00-00)
+- Requires greps-V10-00-01.
+- G4TrajectoryDrawByAttribute:
+  o Migrated to operator<< for const reference G4AttDefs map.
+- G4TrajectoriesModel:
+  o Added SetCurrentTrajectory and SetEventID.
+
 15th November 2013  John Allison  (modeling-V09-06-22)
 - Some changes as suggested by PVS.
 

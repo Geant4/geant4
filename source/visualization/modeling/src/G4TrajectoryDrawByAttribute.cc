@@ -95,7 +95,7 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
 	  ("G4TrajectoryDrawByAttribute::Draw",
 	   "modeling0117", JustWarning, ed, ". Invalid attribute name");
 	G4cout << "Available attributes:\n"
-	       << object.GetAttDefs();
+	       << *object.GetAttDefs();
 	warnedUnableToExtract = true;
       }
       return;
@@ -133,7 +133,7 @@ G4TrajectoryDrawByAttribute::Draw(const G4VTrajectory& object,
 	("G4TrajectoryDrawByAttribute::Draw",
 	 "modeling0118", JustWarning, ed, ". Invalid attribute name");
 	G4cout << "Available attributes:\n"
-	       << object.GetAttDefs();
+	       << *object.GetAttDefs();
       warnedUnableToExtract = true;
     }
       return;

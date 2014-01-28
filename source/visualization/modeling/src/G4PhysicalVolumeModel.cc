@@ -67,10 +67,6 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
   fRequestedDepth (requestedDepth),
   fUseFullExtent  (useFullExtent),
   fCurrentDepth   (0),
-  fpCurrentPV     (0),
-  fpCurrentLV     (0),
-  fpCurrentMaterial (0),
-  fpCurrentTransform (0),
   fCurtailDescent (false),
   fpClippingSolid (0),
   fClippingMode   (subtraction)
@@ -87,6 +83,10 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
 
     CalculateExtent ();
   }
+  fpCurrentPV = fpTopPV;
+  fpCurrentLV = fpCurrentPV->GetLogicalVolume();
+  fpCurrentMaterial = fpCurrentLV->GetMaterial();
+  fpCurrentTransform = const_cast<G4Transform3D*>(&modelTransformation);
 }
 
 G4PhysicalVolumeModel::~G4PhysicalVolumeModel ()

@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/FukuiRenderer sub-category
 ---------------------------------------------------------
 
+9th December 2013  John Allison  (DAWN-V10-00-00)
+- G4DAWNFILE.cc: Declared as G4VGraphicsSystem::fileWriter.
+
 15th November 2013  John Allison (DAWN-V09-06-06)
 - Some changes as suggested by PVS.
 

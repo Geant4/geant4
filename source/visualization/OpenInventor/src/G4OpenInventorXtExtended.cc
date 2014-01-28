@@ -43,15 +43,18 @@
 #include "G4Xt.hh"
 #include "G4OpenInventorSceneHandler.hh"
 #include "G4OpenInventorXtExtendedViewer.hh"
+#include "G4OpenInventorXtExaminerViewerMessenger.hh"
 
 G4OpenInventorXtExtended::G4OpenInventorXtExtended ()
 :G4OpenInventor("OpenInventorXtExtended","OIXE",G4VGraphicsSystem::threeD)
 ,fInited(false)
 {
+   G4OpenInventorXtExaminerViewerMessenger(getInstance());
 }
 
 void G4OpenInventorXtExtended::Initialize()
 {
+   G4cout << "DEBUG G4OpenInventorXtExtended::Initialize() CALLED" << G4endl;
   if(fInited) return; //Done
 
   SetInteractorManager (G4Xt::getInstance ());
@@ -61,6 +64,7 @@ void G4OpenInventorXtExtended::Initialize()
     AddDispatcher   ((G4DispatchFunction)SoXt::dispatchEvent);
 
   Widget top = (Widget)GetInteractorManager()->GetMainInteractor();
+  G4cout << "TOP LEVEL WIDGET FOR SoXt::init() = " << top << G4endl;
 
   if(getenv("XENVIRONMENT")==NULL) {
     XrmDatabase database = XrmGetDatabase(XtDisplay(top));
@@ -90,9 +94,11 @@ void G4OpenInventorXtExtended::Initialize()
 }
 
 G4OpenInventorXtExtended::~G4OpenInventorXtExtended () {}
+
 G4VViewer* G4OpenInventorXtExtended::CreateViewer (G4VSceneHandler& scene, const G4String& name) 
 {
-  Initialize();
+   // FWJ
+   //  Initialize();
   G4OpenInventorSceneHandler* pScene = (G4OpenInventorSceneHandler*)&scene;
   return new G4OpenInventorXtExtendedViewer (*pScene, name);
 }

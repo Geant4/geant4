@@ -39,7 +39,7 @@ G4XXXFile::G4XXXFile():
   G4VGraphicsSystem("G4XXXFile",
 		    "XXXFile",
 		    "File-writing graphics driver",
-		    G4VGraphicsSystem::threeD  //?? Your functionality
+		    G4VGraphicsSystem::fileWriter  //?? Your functionality
 		    )
 {}
 

@@ -24,6 +24,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/digits/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/hits/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/digits_hits/utils/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/event/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/run/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/magneticfield/include)
@@ -135,6 +136,7 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4detector
         G4detutils
         G4digits
+        G4run
         G4event
         G4geomBoolean
         G4geometrymng
@@ -152,6 +154,7 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4volumes
     GLOBAL_DEPENDENCIES
         G4digits_hits
+        G4run
         G4event
         G4geometry
         G4global

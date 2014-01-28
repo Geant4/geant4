@@ -91,7 +91,7 @@ protected:
   void InitializeGLView ();
   void ResizeGLView();
   void ResizeWindow(unsigned int, unsigned int);
-  void Pick(GLdouble x, GLdouble y);
+  virtual G4String Pick(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
   void rotateScene (G4double dx, G4double dy);
   void rotateSceneToggle (G4double dx, G4double dy);
@@ -114,6 +114,8 @@ protected:
   GLdouble getSceneFarWidth();
   GLdouble getSceneDepth();
   G4bool isGl2psWriting();
+  void g4GluPickMatrix(GLdouble x, GLdouble y, GLdouble width, GLdouble height,
+                       GLint viewport[4]);
   G4bool                            fPrintColour;
   G4bool                            fVectoredPs;
 
@@ -137,6 +139,8 @@ protected:
 
   G4double     fRot_sens;        // Rotation sensibility in degrees
   G4double     fPan_sens;        // Translation sensibility
+  unsigned int fWinSize_x;
+  unsigned int fWinSize_y;
 
 public :
 #ifdef G4OPENGL_VERSION_2
@@ -184,7 +188,6 @@ private :
   static G4int                             fPrintSizeY;
   static G4String                          fPrintFilename;
   static int                               fPrintFilenameIndex;
-  unsigned int fWinSize_x, fWinSize_y;
   G4float                           fPointSize;
   G4bool fSizeHasChanged;
   int fGl2psDefaultLineWith;

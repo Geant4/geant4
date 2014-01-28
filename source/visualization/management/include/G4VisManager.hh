@@ -133,6 +133,7 @@ class G4VisManager: public G4VVisManager {
   friend class G4OpenGLViewerMessenger;
   friend class G4OpenGLXmViewerMessenger;
   friend class G4HepRepFileSceneHandler;
+  friend class G4OpenInventorXtExaminerViewerMessenger;
 
   // Management friends...
   friend class G4VSceneHandler;
@@ -494,7 +495,6 @@ private:
   std::vector<G4UImessenger*> fMessengerList;
   std::vector<G4UIcommand*>   fDirectoryList;
   G4VisStateDependent*  fpStateDependent;   // Friend state dependent class.
-  G4TrajectoriesModel   dummyTrajectoriesModel;  // For passing drawing mode.
   G4bool                fEventRefreshing;
   G4bool                fTransientsDrawnThisRun;
   G4bool                fTransientsDrawnThisEvent;

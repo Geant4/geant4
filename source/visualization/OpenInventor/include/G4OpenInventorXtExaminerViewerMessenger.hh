@@ -22,65 +22,33 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-//
-// $Id$
-//
-// 
-// John Allison  26th August 1998.
-//
-// Class Description:
-//
-// Model which knows how to draw GEANT4 trajectories.
-//
-// For access to base class information, e.g., modeling parameters,
-// use GetModelingParameters() inherited from G4VModel.  See Class
-// Description of the base class G4VModel.
 
-#ifndef G4TRAJECTORIESMODEL_HH
-#define G4TRAJECTORIESMODEL_HH
+#ifdef G4VIS_BUILD_OIX_DRIVER
 
-#include "G4VModel.hh"
+#ifndef G4OPENINVENTORXTEXAMINERVIEWERMESSENGER_HH
+#define G4OPENINVENTORXTEXAMINERVIEWERMESSENGER_HH
 
-#include <vector>
-#include <map>
+#include "G4UImessenger.hh"
 
-class G4VTrajectory;
-class G4AttDef;
-class G4AttValue;
+#include "G4String.hh"
 
-class G4TrajectoriesModel: public G4VModel {
+class G4OpenInventorXtExaminerViewer;
+class G4UIdirectory;
+class G4UIcmdWithAnInteger;
 
-public: // With description
+class G4OpenInventorXtExaminerViewerMessenger: public G4UImessenger {
+public:
+  static G4OpenInventorXtExaminerViewerMessenger* GetInstance();  // Singleton constructor.
+  ~G4OpenInventorXtExaminerViewerMessenger();
+  void SetNewValue (G4UIcommand*, G4String);
 
-  G4TrajectoriesModel ();
-
-  virtual ~G4TrajectoriesModel ();
-
-  virtual void DescribeYourselfTo (G4VGraphicsScene&);
-  // The main task of a model is to describe itself to the graphics scene.
-
-  const G4VTrajectory* GetCurrentTrajectory() const
-  {return fpCurrentTrajectory;}
-
-  void SetCurrentTrajectory(const G4VTrajectory* pTraj)
-  {fpCurrentTrajectory = pTraj;}
-
-  void SetRunID(G4int runID)
-  {fRunID = runID;}
-
-  void SetEventID(G4int eventID)
-  {fEventID = eventID;}
-
-  const std::map<G4String,G4AttDef>* GetAttDefs() const;
-  std::vector<G4AttValue>* CreateCurrentAttValues() const;
-  
 private:
-
-  const G4VTrajectory* fpCurrentTrajectory;
-  G4int fRunID;
-  G4int fEventID;
-
+  G4OpenInventorXtExaminerViewerMessenger();  // Private constructor.
+  static G4OpenInventorXtExaminerViewerMessenger* fpInstance;
+  G4UIdirectory* fpDirectory;
+  G4UIcmdWithAnInteger* fpCommandPathLookahead;
 };
+
+#endif
 
 #endif

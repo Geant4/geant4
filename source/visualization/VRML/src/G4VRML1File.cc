@@ -42,7 +42,7 @@
 
 
 G4VRML1File::G4VRML1File() :
-	G4VGraphicsSystem("VRML1FILE", "VRML1FILE", G4VGraphicsSystem::threeD)
+	G4VGraphicsSystem("VRML1FILE", "VRML1FILE", G4VGraphicsSystem::fileWriter)
 {
 }
 

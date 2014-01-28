@@ -34,6 +34,8 @@
 
 #include "G4ModelingParameters.hh"
 #include "G4VGraphicsScene.hh"
+#include "G4RunManager.hh"
+#include "G4Run.hh"
 #include "G4Event.hh"
 #include "G4AttDefStore.hh"
 #include "G4AttValue.hh"
@@ -41,9 +43,10 @@
 #include "G4AttCheck.hh"
 #include "G4UIcommand.hh"
 
-G4TrajectoriesModel::G4TrajectoriesModel ():
-  fpCurrentTrajectory(0),
-  fEventID(0)
+G4TrajectoriesModel::G4TrajectoriesModel ()
+:fpCurrentTrajectory(0)
+,fRunID(-1)
+,fEventID(-1)
 {
   fType = "G4TrajectoriesModel";
   fGlobalTag = "G4TrajectoriesModel for all trajectories.";
@@ -57,8 +60,19 @@ void G4TrajectoriesModelDebugG4AttValues(const G4VTrajectory*);
 #include "G4VVisManager.hh"
 void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
+  const G4Run* currentRun = G4RunManager::GetRunManager()->GetCurrentRun();
+  if (currentRun) {
+    fRunID = currentRun->GetRunID();
+  } else {
+    fRunID = -1;
+  }
+
   const G4Event* event = fpMP->GetEvent();
-  if (!event) return;
+  if (event) {
+    fEventID = event->GetEventID();
+  } else {
+    fEventID = -1;
+  }
 
   G4TrajectoryContainer* TC = event -> GetTrajectoryContainer ();
   if (!TC) return;
@@ -66,8 +80,6 @@ void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
   if (!pVVisManager) return;
   
-  fEventID = event->GetEventID();
-
   pVVisManager->BeginDraw();
   // The use of Begin/EndDraw (optional methods to improve drawing
   // speed) assumes all trajectories are drawn with the same
@@ -91,6 +103,8 @@ const std::map<G4String,G4AttDef>* G4TrajectoriesModel::GetAttDefs() const
   std::map<G4String,G4AttDef>* store
   = G4AttDefStore::GetInstance("G4TrajectoriesModel", isNew);
   if (isNew) {
+    (*store)["RunID"] =
+    G4AttDef("RunID","Run ID","Physics","","G4int");
     (*store)["EventID"] =
     G4AttDef("EventID","Event ID","Physics","","G4int");
   }
@@ -100,6 +114,8 @@ const std::map<G4String,G4AttDef>* G4TrajectoriesModel::GetAttDefs() const
 std::vector<G4AttValue>* G4TrajectoriesModel::CreateCurrentAttValues() const
 {
   std::vector<G4AttValue>* values = new std::vector<G4AttValue>;
+  values->push_back
+  (G4AttValue("RunID",G4UIcommand::ConvertToString(fRunID),""));
   values->push_back
   (G4AttValue("EventID",G4UIcommand::ConvertToString(fEventID),""));
   return values;

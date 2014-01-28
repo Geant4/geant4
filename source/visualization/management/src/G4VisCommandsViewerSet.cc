@@ -1167,14 +1167,21 @@ void G4VisCommandsViewerSet::SetNewValue
   }
 
   else if (command == fpCommandViewpointVector) {
-    fViewpointVector = G4UIcommand::ConvertTo3Vector(newValue).unit();
-    vp.SetViewAndLights(fViewpointVector);
-    if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Viewpoint direction set to "
-	     << vp.GetViewpointDirection() << G4endl;
-      if (vp.GetLightsMoveWithCamera ()) {
-	G4cout << "Lightpoint direction set to "
-	       << vp.GetActualLightpointDirection () << G4endl;
+    G4ThreeVector viewpointVector = G4UIcommand::ConvertTo3Vector(newValue);
+    if (viewpointVector.mag2() <= 0.) {
+      if (verbosity >= G4VisManager::errors) {
+        G4cout << "ERROR: Null viewpoint vector. No action taken." << G4endl;
+      }
+    } else {
+      fViewpointVector = viewpointVector.unit();
+      vp.SetViewAndLights(fViewpointVector);
+      if (verbosity >= G4VisManager::confirmations) {
+        G4cout << "Viewpoint direction set to "
+        << vp.GetViewpointDirection() << G4endl;
+        if (vp.GetLightsMoveWithCamera ()) {
+          G4cout << "Lightpoint direction set to "
+          << vp.GetActualLightpointDirection () << G4endl;
+        }
       }
     }
   }

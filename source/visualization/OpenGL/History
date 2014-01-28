@@ -17,6 +17,32 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25th January 2014  John Allison  (opengl-V10-00-01)
+- G4OpenGLStoredSceneHandler::AddPrimitivePreamble:
+  o Improved protection of pointers in display list reuse test.
+
+23rd January 2014  John Allison  (opengl-V10-00-00)
+- G4OpenGLViewer:
+  o Switch off debug flag G4DEBUG_VIS_OGL.
+  o G4OpenGLViewer::Pick:
+    - Make virtual so it can be overloaded.
+    - Return information in G4String.
+    - Comment out debug printing.
+- G4OpenGLXViewer::ShowView: Adapt to new G4OpenGLViewer::Pick.
+
+9th December 2013 Laurent Garnier
+- G4OpenGLViewer : Fix a warning
+
+6th December 2013 Laurent Garnier
+- G4OpenGLStoredQtViewer.cc
+ o Fix (a part of) the picking problem (JIRA-DEV113)
+ o Fix a potentiel problem with freezing OGL window with Qt driver
+- G4OpenGLQtViewer : 
+ o Better size handling at start
+- G4OpenGLViewer : 
+ o Prepare picking in order to display additional information on viewer (and not
+   in G4cout)
+
 20th November 2013 Laurent Garnier  (opengl-V09-06-12)
 - G4OpenGLQtViewer : Fix a bug with endsWith that I have introduce in last revision
 

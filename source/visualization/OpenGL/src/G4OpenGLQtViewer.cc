@@ -82,6 +82,7 @@
 #include <qcombobox.h>
 #include <qlineedit.h>
 #include <qsignalmapper.h>
+#include <qmainwindow.h>
 
 //////////////////////////////////////////////////////////////////////////////
 void G4OpenGLQtViewer::CreateMainWindow (
@@ -124,6 +125,12 @@ void G4OpenGLQtViewer::CreateMainWindow (
   if ( fUiQt) {
     if (!fBatchMode) {
       if (!interactorManager->IsExternalApp()) {
+        // INIT size
+        fWinSize_x = fVP.GetWindowSizeHintX();
+        fWinSize_y = fVP.GetWindowSizeHintY();
+
+        glWidget->resize(fWinSize_x,fWinSize_y);
+
         isTabbedView = fUiQt->AddTabWidget((QWidget*)fWindow,name,getWinWidth(),getWinHeight());
         fUISceneTreeComponentsTBWidget = fUiQt->GetSceneTreeComponentsTBWidget();
         isTabbedView = true;
@@ -1013,6 +1020,10 @@ picture.save(fname, "svg");
 
 void G4OpenGLQtViewer::FinishView()
 {
+ /* From Apple doc: 
+  CGLFlushDrawable : Copies the back buffer of a double-buffered context to the front buffer.
+  If the backing store attribute is set to false, the buffers can be exchanged rather than copied
+ */
   glFlush ();
 
   // L. Garnier 10/2009 : Not necessary and cause problems on mac OS X 10.6
@@ -1040,6 +1051,7 @@ void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *evnt)
       if (fUiQt->IsIconPickSelected()){  // pick
         fVP.SetPicking(true);
         Pick(evnt->pos().x(),evnt->pos().y());
+        //        fWindow->setToolTip(pickToolTip);
         fVP.SetPicking(false);
  
       } else if (fUiQt->IsIconZoomInSelected()) {  // zoomIn

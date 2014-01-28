@@ -44,7 +44,7 @@ G4HepRepFile::G4HepRepFile():
   G4VGraphicsSystem("G4HepRepFile",
 		    "HepRepFile",
 		    "A HepRep (format 1) ascii file driver",
-		    G4VGraphicsSystem::threeD) {
+		    G4VGraphicsSystem::fileWriter) {
 		G4HepRepMessenger::GetInstance();
         hepRepXMLWriter = new G4HepRepFileXMLWriter();
 }
