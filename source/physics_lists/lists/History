@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03-Feb-2014, Luciano Pandola            (phys-lists-V10-00-01)
+- Registered model in LBE.icc to handle neutron capture above 20 MeV 
+ (Bug Report 1562) 
+
 29-Jan-2014, Gunter Folger              (phys-lists-V10-00-00)
 - Removed electromagnetic/dna, cascade/{evaporation,utils}, and 
    isotope_productionfrom sources.cmake
