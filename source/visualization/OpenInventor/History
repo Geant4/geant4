@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+03 Feb 2014  Gabriele Cosmo  (openinventor-V10-00-00)
+- Fixed shadowing compilation warnings in G4OpenInventorXtExaminerViewer.cc.
+
 21 Dec 2013  Frederick Jones
 - G4OpenInventorXtExaminerViewer.cc:
   o Adjusted dimensions of viewer aux window.

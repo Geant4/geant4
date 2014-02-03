@@ -26,10 +26,9 @@
 #ifdef G4VIS_BUILD_OIX_DRIVER
 
 #include "G4OpenInventorXtExaminerViewerMessenger.hh"
-
-#include "G4SystemOfUnits.hh"
 #include "G4OpenInventorXtExaminerViewer.hh"
 
+#include "G4SystemOfUnits.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommand.hh"
 #include "G4UIdirectory.hh"
