@@ -12,7 +12,10 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
-
+31 Jan 2014 Gunter Folger      had-binary-V10-00-01
+- G4BinaryLightIoncascade::FuseNucleiAndPrompound():
+   protect at low energy: available energy is not sufficient to create a 
+	 fragment.
 16 Jan 2014 Gunter Folger      had-binary-V10-00-00
 - bring back corrected change for coverity, rejected previously in 
   tag had-binary-V09-06-07.
