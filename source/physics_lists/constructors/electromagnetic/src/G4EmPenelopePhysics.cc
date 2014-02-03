@@ -283,8 +283,6 @@ void G4EmPenelopePhysics::ConstructProcess()
       ss->SetMinKinEnergy(highEnergyLimit);
       ssm->SetLowEnergyLimit(highEnergyLimit);
       ssm->SetActivationLowEnergyLimit(highEnergyLimit);
-      ph->RegisterProcess(msc, particle);
-      ph->RegisterProcess(ss, particle);
       
       //Ionisation
       G4eIonisation* eIoni = new G4eIonisation();
@@ -293,7 +291,6 @@ void G4EmPenelopePhysics::ConstructProcess()
       theIoniPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);     
       eIoni->AddEmModel(0,theIoniPenelope,new G4UniversalFluctuation());
       eIoni->SetStepFunction(0.2, 100*um); //     
-      ph->RegisterProcess(eIoni, particle);
       
       //Bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
@@ -301,7 +298,12 @@ void G4EmPenelopePhysics::ConstructProcess()
 	G4PenelopeBremsstrahlungModel();
       theBremPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       eBrem->AddEmModel(0,theBremPenelope);
+
+      // register processes
+      ph->RegisterProcess(msc, particle);
+      ph->RegisterProcess(eIoni, particle);
       ph->RegisterProcess(eBrem, particle);
+      ph->RegisterProcess(ss, particle);
 
     } else if (particleName == "e+") {
     
@@ -322,8 +324,6 @@ void G4EmPenelopePhysics::ConstructProcess()
       ss->SetMinKinEnergy(highEnergyLimit);
       ssm->SetLowEnergyLimit(highEnergyLimit);
       ssm->SetActivationLowEnergyLimit(highEnergyLimit);
-      ph->RegisterProcess(msc, particle);
-      ph->RegisterProcess(ss, particle);
       
       //Ionisation
       G4eIonisation* eIoni = new G4eIonisation();
@@ -332,7 +332,6 @@ void G4EmPenelopePhysics::ConstructProcess()
       theIoniPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       eIoni->AddEmModel(0,theIoniPenelope,new G4UniversalFluctuation());
       eIoni->SetStepFunction(0.2, 100*um); //     
-      ph->RegisterProcess(eIoni, particle);
 
        //Bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
@@ -340,7 +339,6 @@ void G4EmPenelopePhysics::ConstructProcess()
 	G4PenelopeBremsstrahlungModel();
       theBremPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       eBrem->AddEmModel(0,theBremPenelope);
-      ph->RegisterProcess(eBrem, particle);
       
       //Annihilation
       G4eplusAnnihilation* eAnni = new G4eplusAnnihilation();
@@ -348,7 +346,13 @@ void G4EmPenelopePhysics::ConstructProcess()
 	G4PenelopeAnnihilationModel();
       theAnnPenelope->SetHighEnergyLimit(PenelopeHighEnergyLimit);
       eAnni->AddEmModel(0,theAnnPenelope);
+
+      // register processes
+      ph->RegisterProcess(msc, particle);
+      ph->RegisterProcess(eIoni, particle);
+      ph->RegisterProcess(eBrem, particle);
       ph->RegisterProcess(eAnni, particle);
+      ph->RegisterProcess(ss, particle);
 
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {

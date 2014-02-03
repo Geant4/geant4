@@ -14,6 +14,13 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31-Jan-2014, V.Ivanchenko (phys-ctor-em-V10-00-06)
+- G4EmStandardPhysics_option4, G4EmLivermorePhysics,
+  G4EmPenelopePhysics, G4EmStandardPhysics_option3 - use the same 
+    order of processes for e+- and the same comments, this does not
+    change any result but make more easy comparison of log
+    files for different EM physics options
+
 15-Jan-2014, V.Ivanchenko (phys-ctor-em-V10-00-05)
 - G4EmStandardPhysics_option4, G4EmLivermorePhysics,
   G4EmPenelopePhysics: use G4UrbanMscModel for pions, kaons, protons

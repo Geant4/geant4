@@ -269,6 +269,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
       // bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
 
+      // register processes
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(eIoni, particle);
       ph->RegisterProcess(eBrem, particle);
@@ -304,13 +305,12 @@ void G4EmStandardPhysics_option4::ConstructProcess()
       // bremsstrahlung
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
 
+      // register processes
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(eIoni, particle);
       ph->RegisterProcess(eBrem, particle);
-      ph->RegisterProcess(ss, particle);
-
-      // annihilation at rest and in flight
       ph->RegisterProcess(new G4eplusAnnihilation(), particle);
+      ph->RegisterProcess(ss, particle);
 
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
