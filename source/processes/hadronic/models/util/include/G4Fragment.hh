@@ -171,8 +171,6 @@ private:
 
   // ============= DATA MEMBERS ==================
 
-  static G4ThreadLocal G4int errCount;
-
   G4int theA;
   
   G4int theZ;

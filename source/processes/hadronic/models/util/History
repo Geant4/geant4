@@ -15,6 +15,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+29-Jan-2014 Vladimir Ivanchenko		   hadr-mod-util-V10-00-04
+- G4Fragment - warning is printed out only if G4VERBOSE is set 
+
+28-Jan-2014 Vladimir Ivanchenko		   hadr-mod-util-V10-00-03
+- G4Fragment - removed counter of warnings, 
+    added G4Exception with "ifdef debug_G4Fragment"
+
 22-Jan-2014 Gabriele Cosmo		   hadr-mod-util-V10-00-02
 - Corrected use of DLL export flag for G4Fragment.
 
