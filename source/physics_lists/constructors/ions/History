@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29-Jan-2014, Gunter Folger              (phys-ctor-stopping-V10-00-01)
+- Removed from photolepton_hadron/muon_nuclear from sources.cmake
+
 08-Jan-2014, Davide Mancusi		(phys-ctor-ions-V10-00-00)
 - INCL++ was incorrectly used up to 48 GeV for deuteron, triton, He3 and alpha.
 - Change the upper limit for ions to 18*3 GeV.
