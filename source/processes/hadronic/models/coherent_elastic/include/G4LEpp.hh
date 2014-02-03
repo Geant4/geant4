@@ -23,12 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- //
- // G4 Low energy model: n-n or p-p scattering
- // F.W. Jones, L.G. Greeniaus, H.P. Wellisch
- //  
- // For further comments see G4LEppData.hh and G4LEpp.cc
- //
+//
+// G4 Low energy model: n-n or p-p scattering
+// F.W. Jones, L.G. Greeniaus, H.P. Wellisch
+//  
+// For further comments see G4LEppData.hh and G4LEpp.cc
+//
+// 30.01.14 V. Grichine add SampleInvariantT and inherit 
+//             from G4HadronElastic
 
 #ifndef G4LEpp_h
 #define G4LEpp_h 1
@@ -44,10 +46,10 @@
 #include "G4Gamma.hh"
 #include "G4Step.hh"
 #include "G4TrackStatus.hh"
-#include "G4HadronicInteraction.hh"
+#include "G4HadronElastic.hh"
 
 
-class G4LEpp : public G4HadronicInteraction
+class G4LEpp : public G4HadronElastic
 {
 private:
 
@@ -63,6 +65,9 @@ public:
 				 G4Nucleus& targetNucleus);
 
   void SetCoulombEffects(G4int State);
+
+  G4double SampleInvariantT(const G4ParticleDefinition* p, 
+			    G4double plab, G4int Z, G4int A);
   
 private:
 
