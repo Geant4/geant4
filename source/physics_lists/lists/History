@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29-Jan-2014, Gunter Folger              (phys-lists-V10-00-00)
+- Removed electromagnetic/dna, cascade/{evaporation,utils}, and 
+   isotope_productionfrom sources.cmake
+
 07-Nov-2013, Tatsumi Koi                (phys-lists-V09-06-20)
 -Activate production of fission fragments in Shielding PhysicsList
 
