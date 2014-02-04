@@ -19,7 +19,8 @@ represented by *.in macros, reference outputs for each test case are
 represented by *.out files.
 This set of tests is going to be extended in future, to become more and more
 exhaustive and complete.
- 
+
+test00 ## Test for CMake setups of tests.
 test01 ## Geometry - CSG solids and navigator:
        ## including Boolean, assemblies, reflection and calorimeter benchmark.
 test02 ## FTFP_BERT_HP Physics Lists

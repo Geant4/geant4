@@ -146,7 +146,6 @@ examples/extended
     A01                      perl@slac.stanford.edu          Joseph Perl
     AnaEx01                  Michel.Maire@lapp.in2p3.fr      Michel Maire    
     AnaEx02                  jacquem@lapp.in2p3.fr           Jean Jacquemier 
-    N03Con                   tkoi@slac.stanford.edu          Tatsumi Koi
   biasing
     B01, B02, B03            Alexander.Howard@cern.ch        Alexander Howard
     GB01, GB02               Marc.Verderi@in2p3.fr           Marc Verderi
@@ -173,7 +172,6 @@ examples/extended
     field04,05,06            gum@triumf.ca                   Peter Gumplinger
   g3tog4:
     clGeometry, cltog4       ivana@ipno.in2p3.fr             Ivana Hrivnakova
-  geometry/olap              Gabriele.Cosmo@cern.ch          Gabriele Cosmo
   geometry/transforms        Michel.Maire@lapp.in2p3.fr      Michel Maire
   hadronic:
     Hadr00                   Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
@@ -219,6 +217,7 @@ examples/extended
     standalone               John.Allison@man.ac.uk          John Allison
     userVisAction            John.Allison@man.ac.uk          John Allison
 tests                        Gunter.Folger@cern.ch           Gunter Folger
+      test00                 Gunter.Folger@cern.ch           Gunter Folger
       test01                 Gabriele.Cosmo@cern.ch          Gabriele Cosmo
       test02                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
       test02.hadron          dwright@slac.stanford.edu       Dennis Wright
