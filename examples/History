@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4th February 2014  Gabriele Cosmo (examples-V10-00-01)
+- Updated reference outputs according to reference tag geant4-10-00-ref-01.
+- Includes tags: amsEcal-V10-00-00, ChargeExchangeMC-V10-00-00,
+                 nanobeam-V10-00-00, XrayFluo-V10-00-00, testem1-V10-00-00,
+                 testem2-V10-00-00, testem3-V10-00-01, testem4-V10-00-00,
+                 testem5-V10-00-00, testem8-V10-00-01, testem11-V10-00-00,
+                 testem12-V10-00-00, fieldex04-V10-00-04, fieldex05-V10-00-00,
+                 fieldex06-V10-00-00, exhadr03-V10-00-00, exhadr04-V10-00-00,
+                 LXe-V10-00-02, OpNovice-V10-00-04, WLS-V10-00-00,
+                 rdecay01-V10-00-02, rdecay02-V10-00-00.
+
 6th December 2013  Gabriele Cosmo (examples-V10-00-00)
 - Updated reference outputs according to reference tag geant4-10-00-ref-00.
 - Includes tags: doxygen-V09-06-01, dnageometry-V09-06-01, gammaknife-V09-06-03,
