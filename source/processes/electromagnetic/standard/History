@@ -18,6 +18,11 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+03 February 14: V.Ivanchenko (emstand-V10-00-08)
+- G4SauterGavrilaAngularDistribution - use Penelope 2008 sampling
+    algorithm, because it is more effective, distribution itself
+    is unchanged
+
 26 January 14: V.Ivanchenko (emstand-V10-00-07)
 - G4ionIonisation - improved printout at initialisation
 
