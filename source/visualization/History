@@ -24,6 +24,11 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+4th February 2014  John Allison  (vis-V10-00-02)
+- openinventor-V10-00-00:
+  o Fixed shadowing compilation warnings (Gabriele Cosmo).
+  o Improvements to G4OpenInventorXtExaminerViewer (Fred Jones).
+
 25th January 2014  John Allison  (vis-V10-00-01)
 - modeling-V10-00-02:
   o GNUmakefile: Added dependency on run category.
