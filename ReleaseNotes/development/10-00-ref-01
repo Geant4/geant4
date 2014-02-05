@@ -78,11 +78,10 @@ global                                           global-V10-00-03
   guarantee G4cout/G4cerr are initialized correctly before main
   function.
 
-graphics_reps                                    greps-V10-00-02
+graphics_reps                                    greps-V10-00-05
 -------------
 - Introduced operator<< for const reference G4AttDefs map.
   Deprecated const pointer equivalent.
-- G4VisExtent: enable accessing data using indexes.
 - Fixes defects reported by PVS static analysis tool,
 
 particles                                        particles-V10-00-00
@@ -94,7 +93,7 @@ physics_lists
 - constructors/decay (phys-ctor-decay-V10-00-00)
   o Removed no longer existing photolepton_hadron/muon_nuclear module from
     dependency list in sources.cmake.
-- constructors/electromagnetic (phys-ctor-em-V10-00-06)
+- constructors/electromagnetic (phys-ctor-em-V10-00-07)
   o G4EmStandardPhysics_option4, G4EmLivermorePhysics, G4EmPenelopePhysics:
     use RangeFactor=0.01 to increase simulation accuracy.
     Use G4UrbanMscModel for pions, kaons, protons instead of WentzelVI to have
@@ -103,6 +102,10 @@ physics_lists
     G4EmStandardPhysics_option3: use the same order of processes for e+- and
     the same comments, this does not change any result but makes more easy
     comparing log files for different EM physics options.
+  o G4EmStandardPhysics, G4EmStandardPhysics_option1,
+    G4EmStandardPhysics_option2: added Coulomb scattering process for pions,
+    kaons, proton, anti-proton in order to have more smooth transition from
+    EM to hadronic scattering.
   o Fixed race condision issue in OpticalPhysics; also specify command
     /optics_engine/setOpProcessUse not available for 'Idle' state.
   o Avoid static G4Scintillation method invoked through a pointer.
@@ -258,7 +261,7 @@ track                                            track-V10-00-00
 - Corrected message from CheckIt() in G4VParticleChange and
   G4ParticleChangeForDecay.
 
-visualization                                    vis-V10-00-01
+visualization                                    vis-V10-00-02
 -------------
 - modeling:
   o G4TrajectoriesModel: Add run ID.
@@ -278,7 +281,7 @@ visualization                                    vis-V10-00-01
   o Improvements to class design and some bug fixes for picking.
   o Some Qt fixes and improvements.
   o Improved protection of pointers.
-- OpenInventor (openinventor-V10-00-00):
+- OpenInventor:
   o G4OpenInventorXtExaminerViewer: adjusted dimensions of viewer aux window;
     implemented look-ahead for better tracking of trajectory animation;
     implemented mouse-over readout for trajectories.
