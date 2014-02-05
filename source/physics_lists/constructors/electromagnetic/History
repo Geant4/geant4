@@ -14,6 +14,12 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-Feb-2014, V.Ivanchenko (phys-ctor-em-V10-00-07)
+- G4EmStandardPhysics, G4EmStandardPhysics_option1,
+  G4EmStandardPhysics_option2 - added Coulomb scattering process for
+    pions, kaons, proton, anti-proton in order to have more smooth
+    transition from EM to hadronic scattering
+
 31-Jan-2014, V.Ivanchenko (phys-ctor-em-V10-00-06)
 - G4EmStandardPhysics_option4, G4EmLivermorePhysics,
   G4EmPenelopePhysics, G4EmStandardPhysics_option3 - use the same 
