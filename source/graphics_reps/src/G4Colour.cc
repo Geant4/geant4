@@ -54,7 +54,7 @@ G4Colour::operator G4ThreeVector() {
 
 std::ostream& operator << (std::ostream& os, const G4Colour& c) {
   os << '(' << c.red << ',' << c.green << ',' << c.blue
-	    << ',' << c.alpha << ')';
+            << ',' << c.alpha << ')';
   const std::map<G4String, G4Colour>& colourMap = G4Colour::GetMap();
   // Reverse iterator to pick up English spelling of grey!!  :)
   std::map<G4String, G4Colour>::const_reverse_iterator ri;

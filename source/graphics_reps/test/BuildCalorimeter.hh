@@ -55,64 +55,64 @@ G4VPhysicalVolume* BuildCalorimeter()
     G4Tubs *myTargetTube = new G4Tubs ("TTube",0,22.5,100,0,360);
 
     G4LogicalVolume *myWorldLog=new G4LogicalVolume(myWorldBox,&myMaterial,
-						    "WLog",0,0,0);
+                                                    "WLog",0,0,0);
     G4LogicalVolume *myCalLog=new G4LogicalVolume(myCalBox,&myMaterial,
-						  "CLog",0,0,0);
+                                                  "CLog",0,0,0);
     myCalLog -> SetVisAttributes (green);
     G4LogicalVolume *myTargetLog=new G4LogicalVolume(myTargetTube,&myMaterial,
-						     "TLog",0,0,0);
+                                                     "TLog",0,0,0);
     myTargetLog -> SetVisAttributes (blue);
 
     G4PVPlacement *myWorldPhys=new G4PVPlacement(0,G4ThreeVector(),
-						 "WPhys",
-						 myWorldLog,
-						 0,false,0);
+                                                 "WPhys",
+                                                 myWorldLog,
+                                                 0,false,0);
     G4PVPlacement *myCalPhys=new G4PVPlacement(0,G4ThreeVector(),
-					       "CalPhys",
-					       myCalLog,
-					       myWorldPhys,false,0);
+                                               "CalPhys",
+                                               myCalLog,
+                                               myWorldPhys,false,0);
 
-    G4String tName1("TPhys1");	// Allow all target physicals to share
+    G4String tName1("TPhys1");        // Allow all target physicals to share
     // same name (delayed copy)
     copyNo=0;
     //for (j=1;j<=25;j++)
     for (j=1;j<=3;j++)
       {
-	yTlate=-1000.0-40.0+j*80.0;
-	
-	//for (i=1;i<=50;i++)
-	for (i=1;i<=5;i++)
-	  {
-	    copyNo++;
-	    xTlate=-1000.0-20.0+i*45.0-offset;
-	    G4PVPlacement *myTargetPhys=new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0),
-							  tName1,
-							  myTargetLog,
-							  myCalPhys,
-							  false,
-							  copyNo);
-	  }
+        yTlate=-1000.0-40.0+j*80.0;
+        
+        //for (i=1;i<=50;i++)
+        for (i=1;i<=5;i++)
+          {
+            copyNo++;
+            xTlate=-1000.0-20.0+i*45.0-offset;
+            G4PVPlacement *myTargetPhys=new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0),
+                                                          tName1,
+                                                          myTargetLog,
+                                                          myCalPhys,
+                                                          false,
+                                                          copyNo);
+          }
       }
 
-    G4String tName2("TPhys2");	// Allow all target physicals to share
-				// same name (delayed copy)
+    G4String tName2("TPhys2");        // Allow all target physicals to share
+                                // same name (delayed copy)
     copyNo=0;
     //for (j=1;j<=26;j++)
     for (j=1;j<=4;j++)
       {
-	yTlate=-1000.0-80.0+j*80.0;
-	//for (i=1;i<=50;i++)
-	for (i=1;i<=5;i++)
-	  {
-	    copyNo++;
-	    xTlate=-1000.0-20.0+i*45.0;
-	    G4PVPlacement *myTargetPhys=new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0),
-							  tName2,
-							  myTargetLog,
-							  myCalPhys,
-							  false,
-							  copyNo);
-	  }
+        yTlate=-1000.0-80.0+j*80.0;
+        //for (i=1;i<=50;i++)
+        for (i=1;i<=5;i++)
+          {
+            copyNo++;
+            xTlate=-1000.0-20.0+i*45.0;
+            G4PVPlacement *myTargetPhys=new G4PVPlacement(0,G4ThreeVector(xTlate,yTlate,0),
+                                                          tName2,
+                                                          myTargetLog,
+                                                          myCalPhys,
+                                                          false,
+                                                          copyNo);
+          }
       }
 
     return myWorldPhys;

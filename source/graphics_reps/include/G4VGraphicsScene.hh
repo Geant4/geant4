@@ -83,7 +83,7 @@ public: // With description
   // Visualization Category.
 
   virtual void PreAddSolid (const G4Transform3D& objectTransformation,
-			    const G4VisAttributes& visAttribs) = 0;
+                            const G4VisAttributes& visAttribs) = 0;
   // objectTransformation is the transformation in the world
   // coordinate system of the object about to be added, and
   // visAttribs is its visualization attributes.

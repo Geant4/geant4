@@ -47,16 +47,16 @@ inline void G4Text::SetLayout (G4Text::Layout layout) {
 
 inline G4double G4Text::GetXOffset () const 
 {
-	return fXOffset ;
+        return fXOffset ;
 }
 
 inline G4double G4Text::GetYOffset () const 
 {
-	return fYOffset ;
+        return fYOffset ;
 }
 
 inline void G4Text::SetOffset ( double x_offset,  double y_offset ) 
 {
-	fXOffset = x_offset ;
-	fYOffset = y_offset ;
+        fXOffset = x_offset ;
+        fYOffset = y_offset ;
 }

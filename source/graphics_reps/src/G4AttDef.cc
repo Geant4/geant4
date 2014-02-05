@@ -58,10 +58,10 @@ std::ostream& operator<<
     const G4AttDef& attDef = i->second;
     if (attDef.GetCategory() == "Physics") {
       os << "\n  " << attDef.GetDesc()
-	     << " (" << name << "): ";
+             << " (" << name << "): ";
       if (!attDef.GetExtra().empty()) {
-	if (attDef.GetExtra() != "G4BestUnit") os << "unit: ";
-	os << attDef.GetExtra() << " (";
+        if (attDef.GetExtra() != "G4BestUnit") os << "unit: ";
+        os << attDef.GetExtra() << " (";
       }
       os << attDef.GetValueType();
       if (!attDef.GetExtra().empty()) os << ")";

@@ -38,19 +38,11 @@
 const G4VisExtent G4VisExtent::NullExtent;  // Default extent is null.
 
 G4VisExtent::G4VisExtent (G4double xmin, G4double xmax, 
-			  G4double ymin, G4double ymax, 
-			  G4double zmin, G4double zmax):
+                          G4double ymin, G4double ymax, 
+                          G4double zmin, G4double zmax):
+  fXmin(xmin), fXmax(xmax), fYmin(ymin), fYmax(ymax), fZmin(zmin), fZmax(zmax),
   fRadiusCached(false), fCentreCached(false), fRadius(0.)
-{
-    fExtent[0][0] = xmin;
-    fExtent[0][1] = xmax;
-    
-    fExtent[1][0] = ymin;
-    fExtent[1][1] = ymax;
-    
-    fExtent[2][0] = zmin;
-    fExtent[2][1] = zmax;
-}
+{}
 
 G4VisExtent::G4VisExtent (const G4Point3D& centre, G4double radius):
   fRadiusCached(true), fCentreCached(true),
@@ -58,21 +50,21 @@ G4VisExtent::G4VisExtent (const G4Point3D& centre, G4double radius):
 {
   // Use exscribed radius ... see comments in header file.
   G4double halfSide (radius / std::sqrt (3.));
-  fExtent[0][0] = centre.x () - halfSide;
-  fExtent[0][1] = centre.x () + halfSide;
-  fExtent[1][0] = centre.y () - halfSide;
-  fExtent[1][1] = centre.y () + halfSide;
-  fExtent[2][0] = centre.z () - halfSide;
-  fExtent[2][1] = centre.z () + halfSide;
+  fXmin = centre.x () - halfSide;
+  fXmax = centre.x () + halfSide;
+  fYmin = centre.y () - halfSide;
+  fYmax = centre.y () + halfSide;
+  fZmin = centre.z () - halfSide;
+  fZmax = centre.z () + halfSide;
 }
 
 G4VisExtent::~G4VisExtent () {}
 
 const G4Point3D& G4VisExtent::GetExtentCentre () const {
   if (!fCentreCached) {
-    fCentre = G4Point3D (((GetXmin() + GetXmax()) / 2.),
-			 ((GetYmin() + GetYmax()) / 2.),
-			 ((GetZmin() + GetZmax()) / 2.));
+    fCentre = G4Point3D (((fXmin + fXmax) / 2.),
+                         ((fYmin + fYmax) / 2.),
+                         ((fZmin + fZmax) / 2.));
     fCentreCached = true;
   }
   return fCentre;
@@ -80,9 +72,9 @@ const G4Point3D& G4VisExtent::GetExtentCentre () const {
 
 G4double G4VisExtent::GetExtentRadius () const {
   if (!fRadiusCached) {
-    fRadius = std::sqrt (((GetXmax() - GetXmin()) * (GetXmax() - GetXmin())) +
-			 ((GetYmax() - GetYmin()) * (GetYmax() - GetYmin())) +
-			 ((GetZmax() - GetZmin()) * (GetZmax() - GetZmin()))) / 2.;
+    fRadius = std::sqrt (((fXmax - fXmin) * (fXmax - fXmin)) +
+                         ((fYmax - fYmin) * (fYmax - fYmin)) +
+                         ((fZmax - fZmin) * (fZmax - fZmin))) / 2.;
     fRadiusCached = true;
   }
   return fRadius;
@@ -90,17 +82,17 @@ G4double G4VisExtent::GetExtentRadius () const {
 
 std::ostream& operator << (std::ostream& os, const G4VisExtent& e) {
   os << "G4VisExtent (bounding box):";
-  os << "\n  X limits: " << e.GetXmin() << ' ' << e.GetXmax();
-  os << "\n  Y limits: " << e.GetYmin() << ' ' << e.GetYmax();
-  os << "\n  Z limits: " << e.GetZmin() << ' ' << e.GetZmax();
+  os << "\n  X limits: " << e.fXmin << ' ' << e.fXmax;
+  os << "\n  Y limits: " << e.fYmin << ' ' << e.fYmax;
+  os << "\n  Z limits: " << e.fZmin << ' ' << e.fZmax;
   return os;
 }
 
 G4bool G4VisExtent::operator != (const G4VisExtent& e) const {
-  return ((GetXmin() != e.GetXmin()) ||
-	  (GetXmax() != e.GetXmax()) ||
-	  (GetYmin() != e.GetYmin()) ||
-	  (GetYmax() != e.GetYmax()) ||
-	  (GetZmin() != e.GetZmin()) ||
-	  (GetZmax() != e.GetZmax()));
+  return ((fXmin != e.fXmin) ||
+          (fXmax != e.fXmax) ||
+          (fYmin != e.fYmin) ||
+          (fYmax != e.fYmax) ||
+          (fZmin != e.fZmin) ||
+          (fZmax != e.fZmax));
 }

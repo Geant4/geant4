@@ -78,7 +78,7 @@ namespace G4AttUtils {
     std::vector<G4AttValue>* attValues = object.CreateAttValues();
     
     std::vector<G4AttValue>::iterator iter = std::find_if(attValues->begin(), attValues->end(), 
-							  HasName<G4AttValue>(name));
+                                                          HasName<G4AttValue>(name));
     if (iter == attValues->end()) return false;
     
     attVal = *iter;

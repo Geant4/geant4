@@ -45,9 +45,9 @@ public:
 
   // Constructor
   G4AttDefT(const G4String& name,
-	    const G4String& desc,
-	    const G4String& category,
-	    const G4String& extra="")    
+            const G4String& desc,
+            const G4String& category,
+            const G4String& extra="")    
     :G4AttDef(name, desc, category, extra, G4TypeKeyT<T>())
   {}
   

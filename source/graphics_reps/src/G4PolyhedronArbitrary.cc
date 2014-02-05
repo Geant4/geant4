@@ -27,13 +27,13 @@
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// MODULE:		G4PolyhedronArbitrary.cc
+// MODULE:                G4PolyhedronArbitrary.cc
 //
-// Date:		15/06/2005
-// Author:		P R Truscott
-// Organisation:	QinetiQ Ltd, UK
-// Customer:		UK Ministry of Defence : RAO CRP TD Electronic Systems
-// Contract:		C/MAT/N03517
+// Date:                15/06/2005
+// Author:                P R Truscott
+// Organisation:        QinetiQ Ltd, UK
+// Customer:                UK Ministry of Defence : RAO CRP TD Electronic Systems
+// Contract:                C/MAT/N03517
 //
 // This software is the intellectual property of QinetiQ Ltd, subject
 // DEFCON 705 IPR conditions.

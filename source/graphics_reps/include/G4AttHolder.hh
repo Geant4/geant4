@@ -63,7 +63,7 @@ public:
   {return fDefs;}
 
   void AddAtts(const std::vector<G4AttValue>* values,
-	       const std::map<G4String,G4AttDef>* defs)
+               const std::map<G4String,G4AttDef>* defs)
   {fValues.push_back(values); fDefs.push_back(defs);}
   // Note: G4AttValues are assumed to be expendable - they will be
   // deleted in the destructor.  G4AttDefs are assumed to have long

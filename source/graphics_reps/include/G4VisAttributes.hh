@@ -91,9 +91,9 @@ public: // With description
   void SetColour              (const G4Colour&);
   void SetColor               (const G4Color&);
   void SetColour              (G4double red, G4double green, G4double blue,
-			       G4double alpha = 1.);
+                               G4double alpha = 1.);
   void SetColor               (G4double red, G4double green, G4double blue,
-			       G4double alpha = 1.);
+                               G4double alpha = 1.);
   void SetLineStyle           (LineStyle);
   void SetLineWidth           (G4double);
   void SetForceWireframe      (G4bool);
@@ -139,7 +139,7 @@ private:
   ForcedDrawingStyle fForcedStyle; // Value of forced drawing style.
   G4bool    fForceAuxEdgeVisible;  // Force drawing of auxilary edges. 
   G4int fForcedLineSegmentsPerCircle;  // Forced lines segments per
-				       // circle.  <=0 means not forced.
+                                       // circle.  <=0 means not forced.
   G4double fStartTime, fEndTime;   // Time range.
   const std::vector<G4AttValue>*     fAttValues;  // For picking, etc.
   const std::map<G4String,G4AttDef>* fAttDefs;    // Corresponding definitions.

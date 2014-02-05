@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4th February 2014  John Allison  (greps-V10-00-05)
+- Replaced tabs by 8 spaces.
+
+4th February 2014  John Allison  (greps-V10-00-04)
+- Reverted to greps-V10-00-01.
+- greps-V10-00-03: Was incorrectly tagged.
+
 20th December 2013  Mathieu Karamitros  (greps-V10-00-02)
 - G4VisExtent: Enable accessing data using indexes
 

@@ -32,9 +32,9 @@
 #include "G4Scale.hh"
 
 G4Scale::G4Scale (G4double length, const G4String& annotation,
-		  G4Scale::Direction direction,
-		  G4bool autoPlacing,
-		  G4double xmid, G4double ymid, G4double zmid):
+                  G4Scale::Direction direction,
+                  G4bool autoPlacing,
+                  G4double xmid, G4double ymid, G4double zmid):
   fLength(length),
   fAnnotation(annotation),
   fDirection(direction),

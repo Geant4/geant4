@@ -71,10 +71,10 @@ G4bool GetStoreKey
   for (i = m_defsmaps->begin(); i != m_defsmaps->end(); ++i)
     {
       if (i->second == definitions)
-	{
-	  key = i->first;
-	  return true;
-	}
+        {
+          key = i->first;
+          return true;
+        }
     }
 
   return false;

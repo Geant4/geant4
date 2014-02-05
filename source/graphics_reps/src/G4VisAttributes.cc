@@ -104,7 +104,7 @@ fAttDefs             (0)
 {}
 
 G4VisAttributes::G4VisAttributes (G4bool visibility,
-				  const G4Colour& colour):
+                                  const G4Colour& colour):
 fVisible             (visibility),
 fDaughtersInvisible  (false),
 fColour              (colour),
@@ -190,9 +190,9 @@ std::ostream& operator << (std::ostream& os, const G4VisAttributes& a) {
       os << "forced to: ";
       switch (a.fForcedStyle) {
       case G4VisAttributes::wireframe:
-	os << "wireframe"; break;
+        os << "wireframe"; break;
       case G4VisAttributes::solid:
-	os << "solid"; break;
+        os << "solid"; break;
       default: os << "unrecognised"; break;
       }
     }

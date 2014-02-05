@@ -42,9 +42,9 @@ public: // With description
   enum Direction {x, y, z};
 
   G4Scale (G4double length, const G4String& annotation = "",
-	   Direction direction = x,
-	   G4bool autoPlacing = true,
-	   G4double xmid = 0., G4double ymid = 0., G4double zmid = 0.);
+           Direction direction = x,
+           G4bool autoPlacing = true,
+           G4double xmid = 0., G4double ymid = 0., G4double zmid = 0.);
   // This creates a representation of annotated line in the specified
   // direction with tick marks at the end.  If autoPlacing is true it
   // is required to be centred at the front, right, bottom corner of

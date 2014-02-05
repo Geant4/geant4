@@ -54,8 +54,8 @@
     
   public:
     G4AttValue(const G4String& name,
-	       const G4String& value,
-	       const G4String& showLabel): 
+               const G4String& value,
+               const G4String& showLabel): 
       m_name(name),m_value(value),
       m_showLabel(showLabel){};
     G4AttValue(){};

@@ -61,8 +61,8 @@ int main() {
 
   G4cout << "=== G4PolyhedronTrap" << G4endl;
   polyhedron = G4PolyhedronTrap(390., 0.*deg, 0.*deg,
-				60., 40., 90., 15.*deg,
-				120., 80., 180., 15.*deg);
+                                60., 40., 90., 15.*deg,
+                                120., 80., 180., 15.*deg);
 
 //   T U B E
 

@@ -58,20 +58,20 @@
 
   public:
     G4AttDef(const G4String& name,
-	     const G4String& desc,
-	     const G4String& category,
-	     const G4String& extra,
-	     const G4String& valueType):
+             const G4String& desc,
+             const G4String& category,
+             const G4String& extra,
+             const G4String& valueType):
       m_name(name),m_desc(desc),
       m_category(category),
       m_extra(extra),m_valueType(valueType){};
 
     // G4Typekey based constructor
     G4AttDef(const G4String& name,
-	     const G4String& desc,
-	     const G4String& category,
-	     const G4String& extra,
-	     const G4TypeKey& typeKey):
+             const G4String& desc,
+             const G4String& category,
+             const G4String& extra,
+             const G4TypeKey& typeKey):
       m_name(name),m_desc(desc),
       m_category(category),
       m_extra(extra),m_valueType("Null"), 

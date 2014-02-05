@@ -2122,7 +2122,7 @@ HepPolyhedronEllipsoid::HepPolyhedronEllipsoid(G4double ax, G4double by,
   if (!zz || !rr)
     {
       G4Exception("HepPolyhedronEllipsoid::HepPolyhedronEllipsoid",
-		  "greps1002", FatalException, "Out of memory");
+                  "greps1002", FatalException, "Out of memory");
     }
 
   G4double a = dthe/(np1-cutflag-1);

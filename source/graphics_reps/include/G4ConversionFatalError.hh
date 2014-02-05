@@ -41,7 +41,7 @@ struct G4ConversionFatalError {
     G4ExceptionDescription ed; 
     ed <<input<<": "<<message<<G4endl;
     G4Exception("G4ConversionFatalError::ReportError",
-		"greps0101", FatalErrorInArgument, ed);
+                "greps0101", FatalErrorInArgument, ed);
   }
   
 };
