@@ -72,3 +72,18 @@ TGraphErrors* gCup135() {
   gp135->SetMarkerColor(kBlue);
   return gp135;
 }
+
+TGraphErrors* gCup150() {
+
+   Float_t xp150[] = { 47.0, 56.9, 68.7, 82.9, 99.9 };
+   Float_t yp150[] = { 12.4,  7.2,  6.2,  4.9,  2.5 }; 
+   Float_t xep150[] = { 0, 0, 0, 0, 0 };
+   Float_t yep150[] = { 1.3, 0.5, 0.4, 0.3, 0.18 };
+
+   TGraphErrors* gp150 = new TGraphErrors(sizeof(xp150)/sizeof(Float_t),
+	 				  xp150,yp150,xep150,yep150);
+   gp150->SetMarkerStyle(8);
+   gp150->SetMarkerColor(kBlue);
+
+   return gp150;
+}

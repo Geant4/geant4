@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+December 11, 2013 Julia Yarba (test75-V10-00-00)
+- restructure and make use shared code (curr. from test23/shared)
+- requires (at least) test23-V10-00-01
+- tested/operational with geant4.10.00
+
 January 30, 2013 Julia Yarba (test75-V09-06-02)
 - fix type in (c)test definition/addition
 
