@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -138,6 +138,12 @@ hPairProd:   for  proton    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  proton, applyCuts: 1     SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 49 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -216,6 +222,12 @@ hPairProd:   for  kaon+    SubType= 4
       Sampling table 14x1001 from 3.94942 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon+, applyCuts: 1     SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 47 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
@@ -335,6 +347,12 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  pi+, applyCuts: 1     SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 44 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -430,39 +448,39 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.74s Real=1.74s Sys=0s
+  User=1.77s Real=3.5s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
 Number of events             100
-Average number of e-         397.7
-Average number of gamma      632.1
-Average number of e+         47.3
-Average number of steps      2903
-Edep 1x1 =                   0.8301 +- 0.002809  res=  3.384 %   100
-Edep 3x3 =                   0.9572 +- 0.00142  res=  1.483 %   100
-Edep 5x5 =                   0.9796 +- 0.001025  res=  1.047 %   100
+Average number of e-         401.6
+Average number of gamma      635.9
+Average number of e+         47.28
+Average number of steps      2916
+Edep 1x1 =                   0.8306 +- 0.003574  res=  4.303 %   100
+Edep 3x3 =                   0.9594 +- 0.001425  res=  1.486 %   100
+Edep 5x5 =                   0.9807 +- 0.0008245  res=  0.8407 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8672 +- 0.002554
-  E1/E25 =                   0.8474 +- 0.002684
-  E9/E25 =                   0.9771 +- 0.0009546
+  E1/E9  =                   0.8657 +- 0.003381
+  E1/E25 =                   0.8469 +- 0.003589
+  E9/E25 =                   0.9782 +- 0.001124
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8301  delEdep1x1= -0.1699 nrms= -1.699
-Erms1x1: 0.02809  delErms1x1= -0.9719 nrms= -9.719
-Edep3x3: 0.9572  delEdep3x3= -0.04281 nrms= -0.4281
-Erms3x3: 0.0142  delErms3x3= -0.9858 nrms= -9.858
-Edep5x5: 0.9796  delEdep5x5= -0.02041 nrms= -0.2041
-Erms5x5: 0.01025  delErms5x5= -0.9897 nrms= -9.897
+Edep1x1: 0.8306  delEdep1x1= -0.1694 nrms= -1.694
+Erms1x1: 0.03574  delErms1x1= -0.9643 nrms= -9.643
+Edep3x3: 0.9594  delEdep3x3= -0.04061 nrms= -0.4061
+Erms3x3: 0.01425  delErms3x3= -0.9857 nrms= -9.857
+Edep5x5: 0.9807  delEdep5x5= -0.01928 nrms= -0.1928
+Erms5x5: 0.008245  delErms5x5= -0.9918 nrms= -9.918
 <<<<<END>>>>>   IS ACCEPTED
 
    Z  bremsstrahlung photoeffect  compton    conversion
-  13           0           0         154           0
-  53         255          41           0          44
-  55         281          47           0          48
+  13           0           0         156           0
+  53         262          41           0          42
+  55         278          49           0          49
 #
 /testem/det/acceptance1 0.0136 0.0001 500
 /testem/det/acceptance9 0.0139 0.0001 500
@@ -550,22 +568,22 @@ EventAction: Event # 900 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.77s Real=2.79s Sys=0.01s
+  User=2.61s Real=5.16s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
 Number of events             1000
-Average number of e-         74.54
-Average number of gamma      69.28
-Average number of e+         3.935
-Average number of steps      428.1
-Edep 1x1 =                   0.0148 +- 0.000472
-Edep 3x3 =                   0.01523 +- 0.0005329
-Edep 5x5 =                   0.01531 +- 0.0005431
+Average number of e-         70
+Average number of gamma      63
+Average number of e+         3.471
+Average number of steps      399.8
+Edep 1x1 =                   0.01438 +- 0.0002752
+Edep 3x3 =                   0.01474 +- 0.0003066
+Edep 5x5 =                   0.0148 +- 0.0003105
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.9825 +- 0.0007558
-  E1/E25 =                   0.9794 +- 0.0008627
-  E9/E25 =                   0.9967 +- 0.0002182
+  E1/E9  =                   0.9837 +- 0.0007383
+  E1/E25 =                   0.9808 +- 0.0008401
+  E9/E25 =                   0.997 +- 0.0001943
 Beam Energy                  20 GeV
 ==================================================================
 
@@ -700,6 +718,12 @@ hPairProd:   for  proton    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  proton, applyCuts: 1     SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 49 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.1395
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -778,6 +802,12 @@ hPairProd:   for  kaon+    SubType= 4
       Sampling table 14x1001 from 3.949 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon+, applyCuts: 1     SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 47 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.1395
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
@@ -897,6 +927,12 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  pi+, applyCuts: 1     SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 44 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.1395
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -992,22 +1028,22 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.39s Real=1.36s Sys=0.01s
+  User=1.26s Real=2.52s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 2
 =================================================================
 Number of events             100
-Average number of e-         171.1
-Average number of gamma      220.5
-Average number of e+         47.92
-Average number of steps      1802
-Edep 1x1 =                   0.8248 +- 0.004094  res=  4.964 %   100
-Edep 3x3 =                   0.9524 +- 0.003599  res=  3.779 %   100
-Edep 5x5 =                   0.9731 +- 0.003713  res=  3.815 %   100
+Average number of e-         174.3
+Average number of gamma      223.1
+Average number of e+         47.66
+Average number of steps      1829
+Edep 1x1 =                   0.8324 +- 0.00345  res=  4.145 %   100
+Edep 3x3 =                   0.9665 +- 0.003223  res=  3.335 %   100
+Edep 5x5 =                   0.9876 +- 0.003193  res=  3.233 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8662 +- 0.003312
-  E1/E25 =                   0.8479 +- 0.003573
-  E9/E25 =                   0.9788 +- 0.001087
+  E1/E9  =                   0.8615 +- 0.003081
+  E1/E25 =                   0.8432 +- 0.003213
+  E9/E25 =                   0.9787 +- 0.001049
 Beam Energy                  1 GeV
 ==================================================================
 
@@ -1142,6 +1178,12 @@ hPairProd:   for  proton    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  proton, applyCuts: 1     SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 49 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.1395
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for GenericIon    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1220,6 +1262,12 @@ hPairProd:   for  kaon+    SubType= 4
       Sampling table 14x1001 from 3.949 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
+
+CoulombScat:   for  kaon+, applyCuts: 1     SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 47 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.1395
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for kaon-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
@@ -1339,6 +1387,12 @@ hPairProd:   for  pi+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
            hPairProd :  Emin=        0 eV    Emax=       10 TeV
 
+CoulombScat:   for  pi+, applyCuts: 1     SubType= 1
+      Lambda table from 100 eV  to 10 TeV in 44 bins, spline: 1
+      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.1395
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
+
 msc:   for pi-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -1434,22 +1488,22 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.6s Real=1.61s Sys=0s
+  User=1.48s Real=2.93s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 3
 =================================================================
 Number of events             100
-Average number of e-         171.1
-Average number of gamma      371.4
-Average number of e+         46.82
-Average number of steps      1954
-Edep 1x1 =                   0.8264 +- 0.004458  res=  5.394 %   100
-Edep 3x3 =                   0.9579 +- 0.003489  res=  3.642 %   100
-Edep 5x5 =                   0.9799 +- 0.003582  res=  3.656 %   100
+Average number of e-         172
+Average number of gamma      373.3
+Average number of e+         47.06
+Average number of steps      1970
+Edep 1x1 =                   0.831 +- 0.003815  res=  4.59 %   100
+Edep 3x3 =                   0.9582 +- 0.003649  res=  3.808 %   100
+Edep 5x5 =                   0.9809 +- 0.003669  res=  3.741 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8626 +- 0.003168
-  E1/E25 =                   0.8434 +- 0.003326
-  E9/E25 =                   0.9776 +- 0.001009
+  E1/E9  =                   0.8676 +- 0.003079
+  E1/E25 =                   0.8476 +- 0.003402
+  E9/E25 =                   0.9769 +- 0.001196
 Beam Energy                  1 GeV
 ==================================================================
 
@@ -1457,6 +1511,6 @@ Beam Energy                  1 GeV
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.5 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.48 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)
