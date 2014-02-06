@@ -21,7 +21,7 @@ tests-V10-00-01 4th February 2014  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-10-00-ref-01.
 - Includes tags: test00-V10-00-01, test14-V10-00-02, test17-V10-00-00,
                  test19-V10-00-01, test23-V10-00-02, test31-V10-00-00,
-                 test40-V10-00-01, test48-V10-00-00.
+                 test40-V10-00-01, test48-V10-00-00, test75-V10-00-00.
 
 tests-V10-00-00 25th November 2013  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-10-00-ref-00.
