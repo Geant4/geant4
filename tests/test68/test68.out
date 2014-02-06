@@ -1,0 +1,116 @@
+  ========== START reproducibility_pWLAr.py ========== 
+ configuration= RelWithDebInfo
+  ------------------------------------------------------------- 
+  ParticleType                     =  proton
+  EnergyValue                      =  20 GeV
+  Absorber                         =  Tungsten
+  Active                           =  LiquidArgon
+  isHomogeneous                    =  0
+  BfieldValue                      =  4 tesla
+  NumEvents                        =  50
+  NumSingleEventChecks             =  100
+  GapBetweenExtraSingleEventChecks =  0
+  test  1  OK :  3fe138dd64897310 3fe138dd64897310
+  test  2  OK :  3fc70efa13eee0c0 3fc70efa13eee0c0
+  test  3  OK :  3fd72abb9a1eea20 3fd72abb9a1eea20
+  test  4  OK :  3fea3f86e31af650 3fea3f86e31af650
+  test  5  OK :  3fdbbbfb36a0f3e0 3fdbbbfb36a0f3e0
+  test  6  OK :  3fcf22b72b628340 3fcf22b72b628340
+  test  7  OK :  3fd30dfdb8f2e6e0 3fd30dfdb8f2e6e0
+  test  8  OK :  3feebaf788c335f0 3feebaf788c335f0
+  test  9  OK :  3fba9b390e212480 3fba9b390e212480
+  test  10  OK :  3fe2e43b849a6170 3fe2e43b849a6170
+  test  11  OK :  3fd10c72466e7660 3fd10c72466e7660
+  test  12  OK :  3fe783c45b5c2a70 3fe783c45b5c2a70
+  test  13  OK :  3f94886c229b7200 3f94886c229b7200
+  test  14  OK :  3fe15c005ea503d0 3fe15c005ea503d0
+  test  15  OK :  3fd16e188bf288a0 3fd16e188bf288a0
+  test  16  OK :  3fe60e7f526ee350 3fe60e7f526ee350
+  test  17  OK :  3fe4054e3607e830 3fe4054e3607e830
+  test  18  OK :  3f8f64fdc2c0ac00 3f8f64fdc2c0ac00
+  test  19  OK :  3fdfe73f3e34e020 3fdfe73f3e34e020
+  test  20  OK :  3fde702364899da0 3fde702364899da0
+  test  21  OK :  3fe2c9999e9307b0 3fe2c9999e9307b0
+  test  22  OK :  3fdf3209cd7249e0 3fdf3209cd7249e0
+  test  23  OK :  3fe020b42347e990 3fe020b42347e990
+  test  24  OK :  3fdb19f0b903f920 3fdb19f0b903f920
+  test  25  OK :  3f994ee0fcd72200 3f994ee0fcd72200
+  test  26  OK :  3fda8cae34011260 3fda8cae34011260
+  test  27  OK :  3fece24eadc7e670 3fece24eadc7e670
+  test  28  OK :  3fcf9a76631a2940 3fcf9a76631a2940
+  test  29  OK :  3fd55c4556fe0d20 3fd55c4556fe0d20
+  test  30  OK :  3fc38ed27d316e40 3fc38ed27d316e40
+  test  31  OK :  3fe833f3ac1e7ad0 3fe833f3ac1e7ad0
+  test  32  OK :  3fe8681ee9627a70 3fe8681ee9627a70
+  test  33  OK :  3fc019b451269d40 3fc019b451269d40
+  test  34  OK :  3fe7a17d944e7810 3fe7a17d944e7810
+  test  35  OK :  3feff93461df9c30 3feff93461df9c30
+  test  36  OK :  3fe8b46d664ad9f0 3fe8b46d664ad9f0
+  test  37  OK :  3fb94d73a4463780 3fb94d73a4463780
+  test  38  OK :  3fc8c004fb5f8ec0 3fc8c004fb5f8ec0
+  test  39  OK :  3fe52bfec1f5de10 3fe52bfec1f5de10
+  test  40  OK :  3fb29b06c3888680 3fb29b06c3888680
+  test  41  OK :  3fd6014895387aa0 3fd6014895387aa0
+  test  42  OK :  3fe26f441a259690 3fe26f441a259690
+  test  43  OK :  3fed96e2faed9410 3fed96e2faed9410
+  test  44  OK :  3fed7fdcc5b88bd0 3fed7fdcc5b88bd0
+  test  45  OK :  3fcde6ffd957a0c0 3fcde6ffd957a0c0
+  test  46  OK :  3fc9b179683f9d40 3fc9b179683f9d40
+  test  47  OK :  3fedd1b9853f52d0 3fedd1b9853f52d0
+  test  48  OK :  3fe3baeda77808d0 3fe3baeda77808d0
+  test  49  OK :  3fea7c250219e830 3fea7c250219e830
+  test  50  OK :  3fba747eb1cbe980 3fba747eb1cbe980
+  test  51  OK :  3fe4a7e4d6362d50 3fe4a7e4d6362d50
+  test  52  OK :  3fefec52fb759ab0 3fefec52fb759ab0
+  test  53  OK :  3fe2dc10ce420c50 3fe2dc10ce420c50
+  test  54  OK :  3fe6d0e6335dc450 3fe6d0e6335dc450
+  test  55  OK :  3fecdb2ec6096f30 3fecdb2ec6096f30
+  test  56  OK :  3fb03413d196b580 3fb03413d196b580
+  test  57  OK :  3fedebeacc51fc30 3fedebeacc51fc30
+  test  58  OK :  3fe69b8cbd63a5d0 3fe69b8cbd63a5d0
+  test  59  OK :  3fdafc18be22de60 3fdafc18be22de60
+  test  60  OK :  3fdcf96974ee1560 3fdcf96974ee1560
+  test  61  OK :  3fb6fe5a1dc88c80 3fb6fe5a1dc88c80
+  test  62  OK :  3fe20f34d9fd8130 3fe20f34d9fd8130
+  test  63  OK :  3fe23ceeaf685490 3fe23ceeaf685490
+  test  64  OK :  3fdf8ec9ce571ca0 3fdf8ec9ce571ca0
+  test  65  OK :  3fe34f87b1524610 3fe34f87b1524610
+  test  66  OK :  3fd831a4a021ada0 3fd831a4a021ada0
+  test  67  OK :  3fe92fd2d3e029d0 3fe92fd2d3e029d0
+  test  68  OK :  3fe6def3ecbc5890 3fe6def3ecbc5890
+  test  69  OK :  3f9d371a4a78de00 3f9d371a4a78de00
+  test  70  OK :  3fe5b1086387bd30 3fe5b1086387bd30
+  test  71  OK :  3fcd35a99436f1c0 3fcd35a99436f1c0
+  test  72  OK :  3fdef6a2ae3fd260 3fdef6a2ae3fd260
+  test  73  OK :  3fec08e4ae978410 3fec08e4ae978410
+  test  74  OK :  3fbdb109e9e91580 3fbdb109e9e91580
+  test  75  OK :  3fec0108d9b1ca50 3fec0108d9b1ca50
+  test  76  OK :  3fefa36f6afd86f0 3fefa36f6afd86f0
+  test  77  OK :  3fea2d95b792d8d0 3fea2d95b792d8d0
+  test  78  OK :  3fe419dd2e6959d0 3fe419dd2e6959d0
+  test  79  OK :  3f8687845e13f400 3f8687845e13f400
+  test  80  OK :  3fce50aac26a8dc0 3fce50aac26a8dc0
+  test  81  OK :  3fdd4a84d93f66e0 3fdd4a84d93f66e0
+  test  82  OK :  3fe04d47c5c64b50 3fe04d47c5c64b50
+  test  83  OK :  3fb6884017aca480 3fb6884017aca480
+  test  84  OK :  3fd69fd903fae6a0 3fd69fd903fae6a0
+  test  85  OK :  3feca610febc1cb0 3feca610febc1cb0
+  test  86  OK :  3fd766f13c4ef260 3fd766f13c4ef260
+  test  87  OK :  3fe5560297481ef0 3fe5560297481ef0
+  test  88  OK :  3fd57bcec3ab6fa0 3fd57bcec3ab6fa0
+  test  89  OK :  3feff561db962650 3feff561db962650
+  test  90  OK :  3fe143b59b437670 3fe143b59b437670
+  test  91  OK :  3fec4fd796d8fa50 3fec4fd796d8fa50
+  test  92  OK :  3fe3091565172270 3fe3091565172270
+  test  93  OK :  3fe3a073bed989d0 3fe3a073bed989d0
+  test  94  OK :  3faf545cda6ca700 3faf545cda6ca700
+  test  95  OK :  3f9bb6b7996c1200 3f9bb6b7996c1200
+  test  96  OK :  3fe446a9bd1d78b0 3fe446a9bd1d78b0
+  test  97  OK :  3fd37d54cb344ce0 3fd37d54cb344ce0
+  test  98  OK :  3fd0f316a91f2060 3fd0f316a91f2060
+  test  99  OK :  3fc59d90b47f78c0 3fc59d90b47f78c0
+  test  100  OK :  3fd75a10f4ce58e0 3fd75a10f4ce58e0
+  ****************************** 
+  *** REPRODUCIBILITY ?  YES *** 
+  ******************************
+  ========== END reproducibility_pWLAr.py ========== 

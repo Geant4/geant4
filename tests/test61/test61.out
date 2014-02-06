@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -412,7 +412,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=18.83s Real=18.94s Sys=0.01s
+  User=17.02s Real=32.8s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -943,7 +943,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=4.01s Real=3.95s Sys=0s
+  User=3.39s Real=6.7s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1216,7 +1216,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=1.91s Real=1.92s Sys=0s
+  User=1.92s Real=3.85s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1379,7 +1379,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.59s Real=0.6s Sys=0s
+  User=0.58s Real=1.13s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1660,7 +1660,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=41.63s Real=41.55s Sys=0.07s
+  User=35.74s Real=70.43s Sys=0.04s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1676,8 +1676,8 @@ RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.57 Mb
+Number of memory pools allocated: 13 of which, static: 0
+Dynamic pools deleted: 13 / Total memory freed: 0.58 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

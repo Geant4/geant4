@@ -1,0 +1,502 @@
+ Initial seed = 1391598664
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Parsing line: #--- anti_proton ---
+Parsing line: FTFP anti_proton G4_He 1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_proton
+ Target = G4_He
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_proton
+ 	 Material : G4_He
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 1.87654 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.636756
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 13.938
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 1.87654 GeV
+	 average sumEnergySecondaries = 1.85036 GeV
+	 maxSumEnergySecondaries      = 1.87728 GeV
+	 minSumEnergySecondaries      = 1.84826 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_proton G4_Be 1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_proton
+ Target = G4_Be
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_proton
+ 	 Material : G4_Be
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 1.87654 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.870304
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 17.377
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 1.87654 GeV
+	 average sumEnergySecondaries = 1.84012 GeV
+	 maxSumEnergySecondaries      = 1.87732 GeV
+	 minSumEnergySecondaries      = 1.82287 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_proton G4_C  1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_proton
+ Target = G4_C
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_proton
+ 	 Material : G4_C
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 1.87654 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.473896
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 19.442
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 1.87654 GeV
+	 average sumEnergySecondaries = 1.82737 GeV
+	 maxSumEnergySecondaries      = 1.87737 GeV
+	 minSumEnergySecondaries      = 1.80239 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_proton G4_Al 1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_proton
+ Target = G4_Al
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_proton
+ 	 Material : G4_Al
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 1.87654 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.0396376
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 18.441
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 1.87654 GeV
+	 average sumEnergySecondaries = 1.8255 GeV
+	 maxSumEnergySecondaries      = 1.87772 GeV
+	 minSumEnergySecondaries      = 1.79733 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_proton G4_Ar 1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_proton
+ Target = G4_Ar
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_proton
+ 	 Material : G4_Ar
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 1.87654 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.430355
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 18.768
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 1.87654 GeV
+	 average sumEnergySecondaries = 1.82663 GeV
+	 maxSumEnergySecondaries      = 1.87813 GeV
+	 minSumEnergySecondaries      = 1.79532 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_proton G4_Fe 1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_proton
+ Target = G4_Fe
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_proton
+ 	 Material : G4_Fe
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 1.87654 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.829651
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 20.145
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 1.87654 GeV
+	 average sumEnergySecondaries = 1.8247 GeV
+	 maxSumEnergySecondaries      = 1.86001 GeV
+	 minSumEnergySecondaries      = 1.79914 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_proton G4_Cu 1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_proton
+ Target = G4_Cu
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_proton
+ 	 Material : G4_Cu
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 1.87654 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.446336
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 20.249
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 1.87654 GeV
+	 average sumEnergySecondaries = 1.82809 GeV
+	 maxSumEnergySecondaries      = 1.87935 GeV
+	 minSumEnergySecondaries      = 1.80168 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_proton G4_W  1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_proton
+ Target = G4_W
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_proton
+ 	 Material : G4_W
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 1.87654 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.175229
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 28.718
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 1.87654 GeV
+	 average sumEnergySecondaries = 1.83184 GeV
+	 maxSumEnergySecondaries      = 1.88636 GeV
+	 minSumEnergySecondaries      = 1.80116 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_proton G4_Pb 1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_proton
+ Target = G4_Pb
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_proton
+ 	 Material : G4_Pb
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 1.87654 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.834113
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 26.811
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 1.87654 GeV
+	 average sumEnergySecondaries = 1.82952 GeV
+	 maxSumEnergySecondaries      = 1.88767 GeV
+	 minSumEnergySecondaries      = 1.79938 GeV
+	 -----------------------------------------
+
+Parsing line: #
+Parsing line: #--- anti_sigma+ ---
+Parsing line: FTFP anti_sigma+ G4_He 1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_sigma+
+ Target = G4_He
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_sigma+
+ 	 Material : G4_He
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 2.12837 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.701679
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 13.793
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 2.12837 GeV
+	 average sumEnergySecondaries = 2.10178 GeV
+	 maxSumEnergySecondaries      = 2.12838 GeV
+	 minSumEnergySecondaries      = 2.09936 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_sigma+ G4_Be 1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_sigma+
+ Target = G4_Be
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_sigma+
+ 	 Material : G4_Be
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 2.12837 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.170787
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 17.12
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 2.12837 GeV
+	 average sumEnergySecondaries = 2.09141 GeV
+	 maxSumEnergySecondaries      = 2.12841 GeV
+	 minSumEnergySecondaries      = 2.07619 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_sigma+ G4_C  1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_sigma+
+ Target = G4_C
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_sigma+
+ 	 Material : G4_C
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 2.12837 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.715481
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 19.203
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 2.12837 GeV
+	 average sumEnergySecondaries = 2.07881 GeV
+	 maxSumEnergySecondaries      = 2.12847 GeV
+	 minSumEnergySecondaries      = 2.05349 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_sigma+ G4_Al 1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_sigma+
+ Target = G4_Al
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_sigma+
+ 	 Material : G4_Al
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 2.12837 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.591253
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 18.569
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 2.12837 GeV
+	 average sumEnergySecondaries = 2.07683 GeV
+	 maxSumEnergySecondaries      = 2.12882 GeV
+	 minSumEnergySecondaries      = 2.04785 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_sigma+ G4_Ar 1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_sigma+
+ Target = G4_Ar
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_sigma+
+ 	 Material : G4_Ar
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 2.12837 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.605366
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 18.827
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 2.12837 GeV
+	 average sumEnergySecondaries = 2.07758 GeV
+	 maxSumEnergySecondaries      = 2.12922 GeV
+	 minSumEnergySecondaries      = 2.04561 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_sigma+ G4_Fe 1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_sigma+
+ Target = G4_Fe
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_sigma+
+ 	 Material : G4_Fe
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 2.12837 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.988966
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 19.652
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 2.12837 GeV
+	 average sumEnergySecondaries = 2.07701 GeV
+	 maxSumEnergySecondaries      = 2.13008 GeV
+	 minSumEnergySecondaries      = 2.04992 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_sigma+ G4_Cu 1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_sigma+
+ Target = G4_Cu
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_sigma+
+ 	 Material : G4_Cu
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 2.12837 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.841271
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 19.966
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 2.12837 GeV
+	 average sumEnergySecondaries = 2.07953 GeV
+	 maxSumEnergySecondaries      = 2.13045 GeV
+	 minSumEnergySecondaries      = 2.05331 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_sigma+ G4_W  1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_sigma+
+ Target = G4_W
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_sigma+
+ 	 Material : G4_W
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 2.12837 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.0189717
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 28.745
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 2.12837 GeV
+	 average sumEnergySecondaries = 2.08363 GeV
+	 maxSumEnergySecondaries      = 2.13746 GeV
+	 minSumEnergySecondaries      = 2.05197 GeV
+	 -----------------------------------------
+
+Parsing line: FTFP anti_sigma+ G4_Pb 1000
+ ==========  Required RUN  ============
+ Model = FTFP
+ Particle = anti_sigma+
+ Target = G4_Pb
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hFritiofCaptureAtRest
+ 	 Particle type : anti_sigma+
+ 	 Material : G4_Pb
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 2.12837 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.171069
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 26.632
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 2.12837 GeV
+	 average sumEnergySecondaries = 2.08187 GeV
+	 maxSumEnergySecondaries      = 2.21248 GeV
+	 minSumEnergySecondaries      = 2.05048 GeV
+	 -----------------------------------------
+

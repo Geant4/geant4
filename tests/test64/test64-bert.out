@@ -1,0 +1,747 @@
+ Initial seed = 1391598639
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+Parsing line: #--- pi- ---
+Parsing line: BERT pi- G4_He 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = pi-
+ Target = G4_He
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : pi-
+ 	 Material : G4_He
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.13957 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.215728
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 10.226
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.13957 GeV
+	 average sumEnergySecondaries = 0.111899 GeV
+	 maxSumEnergySecondaries      = 0.118474 GeV
+	 minSumEnergySecondaries      = 0.109992 GeV
+	 -----------------------------------------
+
+Parsing line: BERT pi- G4_Be 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = pi-
+ Target = G4_Be
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : pi-
+ 	 Material : G4_Be
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.13957 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.52686
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 14.318
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.13957 GeV
+	 average sumEnergySecondaries = 0.10205 GeV
+	 maxSumEnergySecondaries      = 0.119399 GeV
+	 minSumEnergySecondaries      = 0.0801552 GeV
+	 -----------------------------------------
+
+Parsing line: BERT pi- G4_C  1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = pi-
+ Target = G4_C
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : pi-
+ 	 Material : G4_C
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.13957 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.467482
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 15.346
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.13957 GeV
+	 average sumEnergySecondaries = 0.0946305 GeV
+	 maxSumEnergySecondaries      = 0.117472 GeV
+	 minSumEnergySecondaries      = 0.0654017 GeV
+	 -----------------------------------------
+
+Parsing line: BERT pi- G4_Al 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = pi-
+ Target = G4_Al
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : pi-
+ 	 Material : G4_Al
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.13957 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.792117
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 15.14
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.13957 GeV
+	 average sumEnergySecondaries = 0.0887039 GeV
+	 maxSumEnergySecondaries      = 0.116315 GeV
+	 minSumEnergySecondaries      = 0.0413997 GeV
+	 -----------------------------------------
+
+Parsing line: BERT pi- G4_Ar 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = pi-
+ Target = G4_Ar
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : pi-
+ 	 Material : G4_Ar
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.13957 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.71061
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 15.398
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.13957 GeV
+	 average sumEnergySecondaries = 0.0848143 GeV
+	 maxSumEnergySecondaries      = 0.119665 GeV
+	 minSumEnergySecondaries      = 0.0385357 GeV
+	 -----------------------------------------
+
+Parsing line: BERT pi- G4_Fe 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = pi-
+ Target = G4_Fe
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : pi-
+ 	 Material : G4_Fe
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.13957 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.525992
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 16.454
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.13957 GeV
+	 average sumEnergySecondaries = 0.0860709 GeV
+	 maxSumEnergySecondaries      = 0.124577 GeV
+	 minSumEnergySecondaries      = 0.0403194 GeV
+	 -----------------------------------------
+
+Parsing line: BERT pi- G4_Cu 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = pi-
+ Target = G4_Cu
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : pi-
+ 	 Material : G4_Cu
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.13957 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.929844
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 16.492
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.13957 GeV
+	 average sumEnergySecondaries = 0.0907311 GeV
+	 maxSumEnergySecondaries      = 0.140994 GeV
+	 minSumEnergySecondaries      = 0.0433727 GeV
+	 -----------------------------------------
+
+Parsing line: BERT pi- G4_W  1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = pi-
+ Target = G4_W
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : pi-
+ 	 Material : G4_W
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.13957 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.424247
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 23.365
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.13957 GeV
+	 average sumEnergySecondaries = 0.0918192 GeV
+	 maxSumEnergySecondaries      = 0.134354 GeV
+	 minSumEnergySecondaries      = 0.0439809 GeV
+	 -----------------------------------------
+
+Parsing line: BERT pi- G4_Pb 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = pi-
+ Target = G4_Pb
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : pi-
+ 	 Material : G4_Pb
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.13957 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.691818
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 22.466
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.13957 GeV
+	 average sumEnergySecondaries = 0.0884997 GeV
+	 maxSumEnergySecondaries      = 0.204445 GeV
+	 minSumEnergySecondaries      = 0.038563 GeV
+	 -----------------------------------------
+
+Parsing line: #
+Parsing line: #--- k- ---
+Parsing line: BERT kaon- G4_He 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = kaon-
+ Target = G4_He
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : kaon-
+ 	 Material : G4_He
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.493677 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.563642
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 11.66
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.493677 GeV
+	 average sumEnergySecondaries = 0.474636 GeV
+	 maxSumEnergySecondaries      = 0.493688 GeV
+	 minSumEnergySecondaries      = 0.464099 GeV
+	 -----------------------------------------
+
+Parsing line: BERT kaon- G4_Be 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = kaon-
+ Target = G4_Be
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : kaon-
+ 	 Material : G4_Be
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.493677 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.796075
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 15.246
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.493677 GeV
+	 average sumEnergySecondaries = 0.469832 GeV
+	 maxSumEnergySecondaries      = 0.493348 GeV
+	 minSumEnergySecondaries      = 0.432969 GeV
+	 -----------------------------------------
+
+Parsing line: BERT kaon- G4_C  1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = kaon-
+ Target = G4_C
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : kaon-
+ 	 Material : G4_C
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.493677 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.251439
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 16.555
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.493677 GeV
+	 average sumEnergySecondaries = 0.46023 GeV
+	 maxSumEnergySecondaries      = 0.486501 GeV
+	 minSumEnergySecondaries      = 0.399027 GeV
+	 -----------------------------------------
+
+Parsing line: BERT kaon- G4_Al 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = kaon-
+ Target = G4_Al
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : kaon-
+ 	 Material : G4_Al
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.493677 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.756898
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 17.188
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.493677 GeV
+	 average sumEnergySecondaries = 0.440102 GeV
+	 maxSumEnergySecondaries      = 0.48586 GeV
+	 minSumEnergySecondaries      = 0.351066 GeV
+	 -----------------------------------------
+
+Parsing line: BERT kaon- G4_Ar 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = kaon-
+ Target = G4_Ar
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : kaon-
+ 	 Material : G4_Ar
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.493677 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.791971
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 18.584
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.493677 GeV
+	 average sumEnergySecondaries = 0.42646 GeV
+	 maxSumEnergySecondaries      = 0.487733 GeV
+	 minSumEnergySecondaries      = 0.272406 GeV
+	 -----------------------------------------
+
+Parsing line: BERT kaon- G4_Fe 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = kaon-
+ Target = G4_Fe
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : kaon-
+ 	 Material : G4_Fe
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.493677 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.0732301
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 19.965
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.493677 GeV
+	 average sumEnergySecondaries = 0.416097 GeV
+	 maxSumEnergySecondaries      = 0.487778 GeV
+	 minSumEnergySecondaries      = 0.275942 GeV
+	 -----------------------------------------
+
+Parsing line: BERT kaon- G4_Cu 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = kaon-
+ Target = G4_Cu
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : kaon-
+ 	 Material : G4_Cu
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.493677 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.690286
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 20.335
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.493677 GeV
+	 average sumEnergySecondaries = 0.421878 GeV
+	 maxSumEnergySecondaries      = 0.489989 GeV
+	 minSumEnergySecondaries      = 0.283933 GeV
+	 -----------------------------------------
+
+Parsing line: BERT kaon- G4_W  1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = kaon-
+ Target = G4_W
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : kaon-
+ 	 Material : G4_W
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.493677 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.184807
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 32.433
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.493677 GeV
+	 average sumEnergySecondaries = 0.412242 GeV
+	 maxSumEnergySecondaries      = 0.529725 GeV
+	 minSumEnergySecondaries      = 0.289161 GeV
+	 -----------------------------------------
+
+Parsing line: BERT kaon- G4_Pb 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = kaon-
+ Target = G4_Pb
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : kaon-
+ 	 Material : G4_Pb
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.493677 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.369594
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 31.868
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.493677 GeV
+	 average sumEnergySecondaries = 0.415527 GeV
+	 maxSumEnergySecondaries      = 0.561802 GeV
+	 minSumEnergySecondaries      = 0.278806 GeV
+	 -----------------------------------------
+
+Parsing line: #
+Parsing line: #--- sigma- ---
+Parsing line: BERT sigma- G4_He 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = sigma-
+ Target = G4_He
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : sigma-
+ 	 Material : G4_He
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.258449 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.668647
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 10.975
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.258449 GeV
+	 average sumEnergySecondaries = 0.23422 GeV
+	 maxSumEnergySecondaries      = 0.257005 GeV
+	 minSumEnergySecondaries      = 0.228306 GeV
+	 -----------------------------------------
+
+Parsing line: BERT sigma- G4_Be 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = sigma-
+ Target = G4_Be
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : sigma-
+ 	 Material : G4_Be
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.258449 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.437355
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 14.193
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.258449 GeV
+	 average sumEnergySecondaries = 0.242429 GeV
+	 maxSumEnergySecondaries      = 0.257927 GeV
+	 minSumEnergySecondaries      = 0.197175 GeV
+	 -----------------------------------------
+
+Parsing line: BERT sigma- G4_C  1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = sigma-
+ Target = G4_C
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : sigma-
+ 	 Material : G4_C
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.258449 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.911396
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 15.487
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.258449 GeV
+	 average sumEnergySecondaries = 0.230945 GeV
+	 maxSumEnergySecondaries      = 0.257982 GeV
+	 minSumEnergySecondaries      = 0.164527 GeV
+	 -----------------------------------------
+
+Parsing line: BERT sigma- G4_Al 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = sigma-
+ Target = G4_Al
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : sigma-
+ 	 Material : G4_Al
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.258449 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.296727
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 15.523
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.258449 GeV
+	 average sumEnergySecondaries = 0.221554 GeV
+	 maxSumEnergySecondaries      = 0.258337 GeV
+	 minSumEnergySecondaries      = 0.135025 GeV
+	 -----------------------------------------
+
+Parsing line: BERT sigma- G4_Ar 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = sigma-
+ Target = G4_Ar
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : sigma-
+ 	 Material : G4_Ar
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.258449 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.938373
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 16.339
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.258449 GeV
+	 average sumEnergySecondaries = 0.213288 GeV
+	 maxSumEnergySecondaries      = 0.258737 GeV
+	 minSumEnergySecondaries      = 0.0900474 GeV
+	 -----------------------------------------
+
+Parsing line: BERT sigma- G4_Fe 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = sigma-
+ Target = G4_Fe
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : sigma-
+ 	 Material : G4_Fe
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.258449 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.320234
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 17.121
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.258449 GeV
+	 average sumEnergySecondaries = 0.211492 GeV
+	 maxSumEnergySecondaries      = 0.260685 GeV
+	 minSumEnergySecondaries      = 0.107958 GeV
+	 -----------------------------------------
+
+Parsing line: BERT sigma- G4_Cu 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = sigma-
+ Target = G4_Cu
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : sigma-
+ 	 Material : G4_Cu
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.258449 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.00689281
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 17.426
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.258449 GeV
+	 average sumEnergySecondaries = 0.213819 GeV
+	 maxSumEnergySecondaries      = 0.260684 GeV
+	 minSumEnergySecondaries      = 0.120419 GeV
+	 -----------------------------------------
+
+Parsing line: BERT sigma- G4_W  1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = sigma-
+ Target = G4_W
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : sigma-
+ 	 Material : G4_W
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.258449 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.780684
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 25.64
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.258449 GeV
+	 average sumEnergySecondaries = 0.21382 GeV
+	 maxSumEnergySecondaries      = 0.26877 GeV
+	 minSumEnergySecondaries      = 0.125674 GeV
+	 -----------------------------------------
+
+Parsing line: BERT sigma- G4_Pb 1000
+ ==========  Required RUN  ============
+ Model = BERT
+ Particle = sigma-
+ Target = G4_Pb
+ Nevents = 1000
+ 	 --------- Valid requested run ---------- 
+ 	 Name process : hBertiniCaptureAtRest
+ 	 Particle type : sigma-
+ 	 Material : G4_Pb
+ 	 Number of events : 1000
+ 	 ---------------------------------------- 
+	 Initial total energy = 0.258449 GeV
+	 Start event loop...
+	 	 -> Event 0
+	 End event loop.
+	 Final random number = 0.106425
+	 -------------  RUN SUMMARY  -------------
+	 average multiplicity = 23.509
+	 countOverProduction  = 0
+	 countUnderProduction = 0
+	 initialTotalEnergy           = 0.258449 GeV
+	 average sumEnergySecondaries = 0.21321 GeV
+	 maxSumEnergySecondaries      = 0.304612 GeV
+	 minSumEnergySecondaries      = 0.106681 GeV
+	 -----------------------------------------
+
