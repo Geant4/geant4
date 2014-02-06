@@ -386,3 +386,5 @@ tests                                            tests-V10-00-01
 - tests/test48 (test48-V10-00-00)
   o Fixed compilation warning on clang-3.3 for unused data member in 
     TestStoppingPhysics.
+- tests/test75 (test75-V10-00-00)
+  o Restructured and make use of shared code.
