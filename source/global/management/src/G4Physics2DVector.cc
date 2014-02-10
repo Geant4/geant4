@@ -312,7 +312,7 @@ G4bool G4Physics2DVector::Retrieve(std::ifstream& in)
   G4int k;
   in >> k >> numberOfXNodes >> numberOfYNodes;
   if (in.fail() || 0 >= numberOfXNodes || 0 >= numberOfYNodes || 
-      numberOfYNodes > INT_MAX) { 
+      numberOfXNodes >= INT_MAX || numberOfYNodes >= INT_MAX) { 
     return false; 
   }
   PrepareVectors();
