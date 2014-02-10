@@ -807,7 +807,7 @@ G4HadronicProcess::CheckEnergyMomentumConservation(const G4Track& aTrack,
       Myout << "   "<< relResult  <<" relative, limit " << checkLevels.first << ", values E/T(0) = "
              << relative << " p/p(0)= " << relative_mom  << G4endl;
       Myout << "   "<< absResult << " absolute, limit (MeV) " << checkLevels.second/MeV << ", values E / p (MeV) = "
-             << absolute/MeV << " / " << absolute_mom/MeV << G4endl;
+             << absolute/MeV << " / " << absolute_mom/MeV << " 3mom: " << (diff.vect())*1./MeV <<  G4endl;
       Myout << "   "<< chargeResult << " charge/baryon number balance " << (initial_Z-final_Z) << " / " << (initial_A-final_A) << " "<<  G4endl;
       Myout_notempty=true;
 
