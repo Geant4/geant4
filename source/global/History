@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 5, 2014 T.Koi         (global-V10-00-04)
+- Added protections to avoid core dumps caused by divided by zero 
+  and other minor updates in G4ConvergenceTester
+
 January 23, 2014 G.Cosmo       (global-V10-00-03)
 - Protected __attribute__ calls in G4ios.cc from use in WIN32.
 

@@ -49,6 +49,7 @@ G4ConvergenceTester::G4ConvergenceTester( G4String theName )
    largest_score_happened(0), mean_1(0.), var_1(0.), sd_1(0.), r_1(0.),
    shift_1(0.), vov_1(0.), fom_1(0.), noBinOfHistory(16), slope(0.),
    noBinOfPDF(10), minimizer(0), noPass(0), noTotal(8), statsAreUpdated(true)
+   , showHistory(true) , calcSLOPE(true)
 {
    nonzero_histories.clear();
    largest_scores.clear();
@@ -89,6 +90,10 @@ void G4ConvergenceTester::AddScore( G4double x )
    timer->Stop();
    cpu_time.push_back( timer->GetSystemElapsed() + timer->GetUserElapsed() );
 
+   if ( x < 0.0 ) {
+      G4cout << "Warning: G4convergenceTester expects zero or positive number as inputs, but received a negative number." << G4endl;
+   }
+
    if ( x == 0.0 ) 
    { 
    }
@@ -128,7 +133,6 @@ void G4ConvergenceTester::AddScore( G4double x )
 void G4ConvergenceTester::calStat()
 {
     
-
    efficiency = double( nonzero_histories.size() ) / n; 
 
    mean = sum / n;
@@ -153,20 +157,23 @@ void G4ConvergenceTester::calStat()
    shift += ( n - nonzero_histories.size() ) * mean * mean * mean * ( -1 );
    vov += ( n - nonzero_histories.size() ) * mean * mean * mean * mean;
 
-   vov = vov / ( var * var ) - 1.0 / n; 
+   if ( var!=0.0 ) {
 
-   var = var/(n-1);
+      vov = vov / ( var * var ) - 1.0 / n; 
 
-   sd = std::sqrt ( var );
+      var = var/(n-1);
 
-   r = sd / mean / std::sqrt ( G4double(n) ); 
+      sd = std::sqrt ( var );
 
-   r2eff = ( 1 - efficiency ) / ( efficiency * n );
-   r2int = sum_x2 / ( sum * sum ) - 1 / ( efficiency * n );
+      r = sd / mean / std::sqrt ( G4double(n) ); 
+
+      r2eff = ( 1 - efficiency ) / ( efficiency * n );
+      r2int = sum_x2 / ( sum * sum ) - 1 / ( efficiency * n );
    
-   shift = shift / ( 2 * var * n );
+      shift = shift / ( 2 * var * n );
    
-   fom =  1 / (r*r) / cpu_time.back(); 
+      fom =  1 / (r*r) / cpu_time.back(); 
+   }
 
 // Find Largest History 
    //G4double largest = 0.0;
@@ -208,24 +215,27 @@ void G4ConvergenceTester::calStat()
    vov_1 += ( xi - mean_1 ) * ( xi - mean_1 ) * ( xi - mean_1 ) * ( xi - mean_1 );
 
    var_1 += ( n - nonzero_histories.size() ) * mean_1 * mean_1;
-   shift_1 += ( n - nonzero_histories.size() ) * mean_1 * mean_1 * mean_1 * ( -1 );
-   vov_1 += ( n - nonzero_histories.size() ) * mean_1 * mean_1 * mean_1 * mean_1;
 
-   vov_1 = vov_1 / ( var_1 * var_1 ) - 1.0 / ( n + 1 ); 
+   if ( var_1 != 0.0 ) {
+      shift_1 += ( n - nonzero_histories.size() ) * mean_1 * mean_1 * mean_1 * ( -1 );
+      vov_1 += ( n - nonzero_histories.size() ) * mean_1 * mean_1 * mean_1 * mean_1;
 
-   var_1 = var_1 / n ;
+      vov_1 = vov_1 / ( var_1 * var_1 ) - 1.0 / ( n + 1 ); 
 
-   sd_1 = std::sqrt ( var_1 );
+      var_1 = var_1 / n ;
 
-   r_1 = sd_1 / mean_1 / std::sqrt ( G4double(n + 1) ); 
+      sd_1 = std::sqrt ( var_1 );
 
-   shift_1 = shift_1 / ( 2 * var_1 * ( n + 1 ) );
+      r_1 = sd_1 / mean_1 / std::sqrt ( G4double(n + 1) ); 
 
-   fom_1 = 1 / ( r * r ) / ( cpu_time.back() + spend_time_of_largest );
+      shift_1 = shift_1 / ( 2 * var_1 * ( n + 1 ) );
+
+      fom_1 = 1 / ( r * r ) / ( cpu_time.back() + spend_time_of_largest );
+   }
 
    if ( nonzero_histories.size() < 500 ) 
    {
-      G4cout << "Number of non zero history too small to calculate SLOPE" << G4endl;
+      calcSLOPE = false;
    }
    else
    {
@@ -273,6 +283,11 @@ void G4ConvergenceTester::calc_stat_history()
 {
 //   G4cout << "i/16  till_ith  mean  var  sd  r  vov  fom  shift  e  r2eff  r2int" << G4endl;
 
+   if ( history_grid [ 0 ] == 0 ) {
+      showHistory=false;
+      return; 
+   } 
+
    G4int i;
    for ( i = 1 ; i <=  noBinOfHistory  ; i++ )
    {
@@ -293,6 +308,8 @@ void G4ConvergenceTester::calc_stat_history()
             nonzero_till_ith++; 
          }
       }
+
+      if ( nonzero_till_ith == 0 ) continue; 
 
       mean_till_ith = mean_till_ith / ( ith+1 ); 
       mean_history [ i-1 ] = mean_till_ith;
@@ -315,13 +332,16 @@ void G4ConvergenceTester::calc_stat_history()
       }
 
       var_till_ith += ( (ith+1) - nonzero_till_ith ) * mean_till_ith * mean_till_ith;
-
       vov_till_ith += ( (ith+1) - nonzero_till_ith ) * mean_till_ith * mean_till_ith * mean_till_ith * mean_till_ith ;
+
+
+      if ( var_till_ith == 0 ) continue; 
       vov_till_ith = vov_till_ith / ( var_till_ith * var_till_ith ) - 1.0 / (ith+1); 
       vov_history [ i-1 ] = vov_till_ith;
 
       var_till_ith = var_till_ith / ( ith+1 - 1 );
       var_history [ i-1 ] = var_till_ith;
+
       sd_history [ i-1 ] = std::sqrt( var_till_ith );
       r_history [ i-1 ] = std::sqrt( var_till_ith ) / mean_till_ith / std::sqrt ( 1.0*(ith+1) );
 
@@ -349,6 +369,8 @@ void G4ConvergenceTester::ShowResult(std::ostream& out)
     // call calStat to recompute the statistical values
    if(!statsAreUpdated) { calStat(); }
 
+   out << std::setprecision( 6 );
+
    out << G4endl;
    out << "G4ConvergenceTester Output Result of " << name << G4endl;
    out << std::setw(20) << "EFFICIENCY = " << std::setw(13)  << efficiency << G4endl;
@@ -361,23 +383,52 @@ void G4ConvergenceTester::ShowResult(std::ostream& out)
    out << std::setw(20) << "FOM = "<< std::setw(13) << fom << G4endl;
 
    out << std::setw(20) << "THE LARGEST SCORE = " << std::setw(13) << largest << " and it happend at " << largest_score_happened << "th event" << G4endl;
-   out << std::setw(20) << "Affected Mean = " << std::setw(13) << mean_1 << " and its ratio to orignal is " << mean_1/mean << G4endl;
-   out << std::setw(20) << "Affected VAR = " << std::setw(13) << var_1 << " and its ratio to orignal is " << var_1/var << G4endl;
-   out << std::setw(20) << "Affected R = " << std::setw(13) << r_1 << " and its ratio to orignal is " << r_1/r << G4endl;
-   out << std::setw(20) << "Affected SHIFT = " << std::setw(13) << shift_1 << " and its ratio to orignal is " << shift_1/shift << G4endl;
-   out << std::setw(20) << "Affected FOM = " << std::setw(13) << fom_1 << " and its ratio to orignal is " << fom_1/fom << G4endl;
+   if ( mean!=0 ) {
+      out << std::setw(20) << "Affected Mean = " << std::setw(13) << mean_1 << " and its ratio to orignal is " << mean_1/mean << G4endl;
+   } else {
+      out << std::setw(20) << "Affected Mean = " << std::setw(13) << mean_1 << G4endl;
+   }
+   if ( var!=0 ) {
+      out << std::setw(20) << "Affected VAR = " << std::setw(13) << var_1 << " and its ratio to orignal is " << var_1/var << G4endl;
+   } else {
+      out << std::setw(20) << "Affected VAR = " << std::setw(13) << var_1 << G4endl;
+   }
+   if ( r!=0 ) {
+      out << std::setw(20) << "Affected R = " << std::setw(13) << r_1 << " and its ratio to orignal is " << r_1/r << G4endl;
+   } else {
+      out << std::setw(20) << "Affected R = " << std::setw(13) << r_1 << G4endl;
+   }
+   if ( shift!=0 ) {
+      out << std::setw(20) << "Affected SHIFT = " << std::setw(13) << shift_1 << " and its ratio to orignal is " << shift_1/shift << G4endl;
+   } else {
+      out << std::setw(20) << "Affected SHIFT = " << std::setw(13) << shift_1 << G4endl;
+   }
+   if ( fom!=0 ) {
+      out << std::setw(20) << "Affected FOM = " << std::setw(13) << fom_1 << " and its ratio to orignal is " << fom_1/fom << G4endl;
+   } else {
+      out << std::setw(20) << "Affected FOM = " << std::setw(13) << fom_1 << G4endl;
+   }
+
+   if ( !showHistory ) {
+      out << "Number of events of this run is too small to do convergence tests." << G4endl;
+      return;
+   }
 
    check_stat_history(out);
 
 // check SLOPE and output result
-   if ( slope >= 3 )
-   {    
-      noPass++;
-      out << "SLOPE is large enough" << G4endl; 
-   }
-   else
-   {
-      out << "SLOPE is not large enough" << G4endl; 
+   if ( calcSLOPE ) {
+      if ( slope >= 3 )
+      {    
+         noPass++;
+         out << "SLOPE is large enough" << G4endl; 
+      }
+      else
+      {
+         out << "SLOPE is not large enough" << G4endl; 
+      }
+   } else { 
+      out << "Number of non zero history too small to calculate SLOPE" << G4endl;
    }
 
    out << "This result passes " << noPass << " / "<< noTotal << " Convergence Test." << G4endl; 
@@ -387,6 +438,14 @@ void G4ConvergenceTester::ShowResult(std::ostream& out)
 
 void G4ConvergenceTester::ShowHistory(std::ostream& out)
 {
+
+   if ( !showHistory ) {
+      out << "Number of events of this run is too small to show history." << G4endl;
+      return;
+   }
+   
+   out << std::setprecision( 6 );
+
    out << G4endl;
    out << "G4ConvergenceTester Output History of " << name << G4endl;
    out << "i/" << noBinOfHistory << " till_ith      mean" 
@@ -435,6 +494,14 @@ void G4ConvergenceTester::check_stat_history(std::ostream& out)
 
    first_ally.resize( N );
    second_ally.resize( N );
+
+// 
+   G4double sum_of_var = std::accumulate ( var_history.begin() , var_history.end() , 0.0 );
+   if ( sum_of_var == 0.0 ) {
+      out << "Variances in all historical grids are zero." << G4endl; 
+      out << "Terminating checking behavior of statistics numbers." << G4endl; 
+      return;
+   }
 
 // Mean
 

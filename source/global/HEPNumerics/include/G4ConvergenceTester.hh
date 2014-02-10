@@ -167,6 +167,9 @@ class G4ConvergenceTester
       G4int noTotal; // Total number of tests
 
       G4bool statsAreUpdated;
+
+      G4bool showHistory;
+      G4bool calcSLOPE;
 };
 #endif
 
