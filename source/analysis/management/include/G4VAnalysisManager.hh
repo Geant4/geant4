@@ -135,16 +135,36 @@ class G4VAnalysisManager
     G4bool ScaleH2(G4int id, G4double factor);
                            
     // Methods for handling ntuples
+    //
     G4int CreateNtuple(const G4String& name, const G4String& title);
+
     // Create columns in the last created ntuple
     G4int CreateNtupleIColumn(const G4String& name);
     G4int CreateNtupleFColumn(const G4String& name);
     G4int CreateNtupleDColumn(const G4String& name);
+
+    // Create columns of vector in the last created ntuple
+    G4int CreateNtupleIColumn(
+            const G4String& name, std::vector<int>& vector);
+    G4int CreateNtupleFColumn(
+            const G4String& name, std::vector<float>& vector);
+    G4int CreateNtupleDColumn(
+            const G4String& name, std::vector<double>& vector);
     void  FinishNtuple();   
+
     // Create columns in the ntuple with given id
     G4int CreateNtupleIColumn(G4int ntupleId, const G4String& name);
     G4int CreateNtupleFColumn(G4int ntupleId, const G4String& name);
     G4int CreateNtupleDColumn(G4int ntupleId, const G4String& name);
+
+    // Create columns of vector in the ntuple with given id
+    G4int CreateNtupleIColumn(G4int ntupleId, 
+            const G4String& name, std::vector<int>& vector);
+    G4int CreateNtupleFColumn(G4int ntupleId, 
+            const G4String& name, std::vector<float>& vector);
+    G4int CreateNtupleDColumn(G4int ntupleId, 
+            const G4String& name, std::vector<double>& vector);
+
     void  FinishNtuple(G4int ntupleId); 
     
     // The ids of histograms and ntuples are generated automatically

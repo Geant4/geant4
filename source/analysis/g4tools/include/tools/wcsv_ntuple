@@ -93,36 +93,36 @@ public:
          char a_sep = ',')
   :m_writer(a_writer)
   ,m_sep(a_sep){  
-    const std::vector<ntuple_booking::col_t>& cols = a_bkg.m_columns;
-    std::vector<ntuple_booking::col_t>::const_iterator it;
+    const std::vector<column_booking>& cols = a_bkg.columns();
+    std::vector<column_booking>::const_iterator it;
     for(it=cols.begin();it!=cols.end();++it){
 
-      if((*it).second==_cid(char(0))) {
-        create_column<char>((*it).first);
-      } else if((*it).second==_cid(short(0))) {
-        create_column<short>((*it).first);
-      } else if((*it).second==_cid(int(0))) {
-        create_column<int>((*it).first);
-      } else if((*it).second==_cid(float(0))) {
-        create_column<float>((*it).first);
-      } else if((*it).second==_cid(double(0))) {
-        create_column<double>((*it).first);
+      if((*it).cls_id()==_cid(char(0))) {
+        create_column<char>((*it).name());
+      } else if((*it).cls_id()==_cid(short(0))) {
+        create_column<short>((*it).name());
+      } else if((*it).cls_id()==_cid(int(0))) {
+        create_column<int>((*it).name());
+      } else if((*it).cls_id()==_cid(float(0))) {
+        create_column<float>((*it).name());
+      } else if((*it).cls_id()==_cid(double(0))) {
+        create_column<double>((*it).name());
 
-      } else if((*it).second==_cid(byte(0))) {
-        create_column<byte>((*it).first);
-      } else if((*it).second==_cid((unsigned short)0)) {
-        create_column<unsigned short>((*it).first);
-      } else if((*it).second==_cid((unsigned int)0)) {
-        create_column<unsigned int>((*it).first);
-      } else if((*it).second==_cid(bool(true))) {
-        create_column<bool>((*it).first);
-      } else if((*it).second==_cid(uint64(0))) {
-        create_column<uint64>((*it).first);
+      } else if((*it).cls_id()==_cid(byte(0))) {
+        create_column<byte>((*it).name());
+      } else if((*it).cls_id()==_cid((unsigned short)0)) {
+        create_column<unsigned short>((*it).name());
+      } else if((*it).cls_id()==_cid((unsigned int)0)) {
+        create_column<unsigned int>((*it).name());
+      } else if((*it).cls_id()==_cid(bool(true))) {
+        create_column<bool>((*it).name());
+      } else if((*it).cls_id()==_cid(uint64(0))) {
+        create_column<uint64>((*it).name());
 
       } else {
         a_out << "tools::wcsv::ntuple :"
-              << " for column " << sout((*it).first)
-              << ", type with cid " << (*it).second << " not yet handled."
+              << " for column " << sout((*it).name())
+              << ", type with cid " << (*it).cls_id() << " not yet handled."
               << std::endl;
         //throw
         tools::clear<icol>(m_cols);

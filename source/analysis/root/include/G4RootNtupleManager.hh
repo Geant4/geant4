@@ -77,14 +77,20 @@ class G4RootNtupleManager : public G4VNtupleManager
     // Methods to create ntuples
     virtual G4int CreateNtuple(const G4String& name, const G4String& title);
     // Create columns in the last created ntuple
-    virtual G4int CreateNtupleIColumn(const G4String& name);
-    virtual G4int CreateNtupleFColumn(const G4String& name);
-    virtual G4int CreateNtupleDColumn(const G4String& name);   
+    G4int CreateNtupleIColumn(
+            const G4String& name, std::vector<int>* vector);
+    G4int CreateNtupleFColumn(
+            const G4String& name, std::vector<float>* vector);
+    G4int CreateNtupleDColumn(
+            const G4String& name, std::vector<double>* vector);
     virtual void  FinishNtuple();   
     // Create columns in the ntuple with given id
-    virtual G4int CreateNtupleIColumn(G4int ntupleId, const G4String& name);
-    virtual G4int CreateNtupleFColumn(G4int ntupleId, const G4String& name);
-    virtual G4int CreateNtupleDColumn(G4int ntupleId, const G4String& name);   
+    G4int CreateNtupleIColumn(G4int ntupleId, 
+            const G4String& name, std::vector<int>* vector);
+    G4int CreateNtupleFColumn(G4int ntupleId, 
+            const G4String& name, std::vector<float>* vector);
+    G4int CreateNtupleDColumn(G4int ntupleId, 
+            const G4String& name, std::vector<double>* vector);
     virtual void  FinishNtuple(G4int ntupleId);   
 
     // Methods to fill ntuples

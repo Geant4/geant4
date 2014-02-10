@@ -51,14 +51,20 @@ class G4VNtupleManager : public G4BaseAnalysisManager
     // Methods for handling ntuples
     virtual G4int CreateNtuple(const G4String& name, const G4String& title) = 0;
     // Create columns in the last created ntuple
-    virtual G4int CreateNtupleIColumn(const G4String& name) = 0;
-    virtual G4int CreateNtupleFColumn(const G4String& name) = 0;
-    virtual G4int CreateNtupleDColumn(const G4String& name) = 0;
+    virtual G4int CreateNtupleIColumn(const G4String& name, 
+                                      std::vector<int>* vector) = 0;
+    virtual G4int CreateNtupleFColumn(const G4String& name,
+                                      std::vector<float>* vector) = 0;
+    virtual G4int CreateNtupleDColumn(const G4String& name,
+                                      std::vector<double>* vector) = 0;
     virtual void  FinishNtuple() = 0;   
     // Create columns in the ntuple with given id
-    virtual G4int CreateNtupleIColumn(G4int ntupleId, const G4String& name) = 0;
-    virtual G4int CreateNtupleFColumn(G4int ntupleId, const G4String& name) = 0;
-    virtual G4int CreateNtupleDColumn(G4int ntupleId, const G4String& name) = 0;
+    virtual G4int CreateNtupleIColumn(G4int ntupleId, const G4String& name,
+                                      std::vector<int>* vector) = 0;
+    virtual G4int CreateNtupleFColumn(G4int ntupleId, const G4String& name,
+                                      std::vector<float>* vector) = 0;
+    virtual G4int CreateNtupleDColumn(G4int ntupleId, const G4String& name,
+                                      std::vector<double>* vector) = 0;
     virtual void  FinishNtuple(G4int ntupleId) = 0; 
     
     // The ntuple column ids are generated automatically starting from 0; 

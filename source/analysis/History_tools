@@ -1,3 +1,19 @@
+ 1.8.0 :
+ - tools/[wroot,waxml]/ntuple : handle the creation of std::vector columns through
+   the new ntuple_booking class.
+ - tools/[wroot,waxml,hbook]/ntuple, wcsv_ntuple : handle the new ntuple_booking.
+ - tools/ntuple_boooking : revisit the logic. Have a column_booking class.
+   Handle a opaque pointer for the std::vector column case. Have fields protected
+   and have getter, setter methods.
+ - tools/wroot/ntuple : rm the unused m_def field in the std_vector_column class.
+
+ 1.7.2 :
+ - test/cpp/wroot.cpp, rroot.C : have an example of std_vector columns.
+ - tools/wroot/branch_element, leaf_element, ntuple::std_vector_column : handle column
+   of std::vectors. 
+ - mgr/build_app : have :
+     cppflags="${cppflags} -I../g4tools/include"
+
  1.7.1 :
  - tools/wroot/buffer : expand2() method to have same logic as CERN-ROOT/TBuffer.
    It boosts the writing of ntuple with large number of columns.

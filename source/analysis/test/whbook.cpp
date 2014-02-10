@@ -215,8 +215,7 @@ int main(int,char**) {
   hfile.cd_home();      //go under //PAWC/LUN1
   hfile.cd("ntuple");
 
-  tools::ntuple_booking nbk;
-  nbk.m_title = "An ntuple";
+  tools::ntuple_booking nbk("","An ntuple");
   nbk.add_column<double>("rg");
   nbk.add_column<float>("rbw");
   nbk.add_column<int>("count");

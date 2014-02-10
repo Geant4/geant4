@@ -7,7 +7,7 @@
 #include "itree"
 #include "iobject"
 
-#include "branch"
+#include "branch_element"
 
 namespace tools {
 namespace wroot {
@@ -114,6 +114,13 @@ public:
 
   branch* create_branch(const std::string& a_name){
     branch* br = new branch(*this,a_name,m_name);
+    m_branches.push_back(br);
+    return br;
+  }
+
+  template <class T>
+  std_vector_be<T>* create_std_vector_be(const std::string& a_name,std::vector<T>& a_vec){
+    std_vector_be<T>* br = new std_vector_be<T>(*this,a_name,m_name,a_vec);
     m_branches.push_back(br);
     return br;
   }

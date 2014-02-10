@@ -96,6 +96,8 @@ int main(int,char**) {
  {tools::ntuple_booking nbk;
   nbk.add_column<double>("rgauss");
   nbk.add_column<double>("rbw");
+  std::vector<double> user_vec_d;
+  nbk.add_column<double>("vec_d",user_vec_d);
 
   tools::waxml::ntuple ntu(writer,std::cout,nbk);
   if(ntu.columns().size()) {
@@ -111,6 +113,11 @@ int main(int,char**) {
     for(unsigned int count=0;count<100;count++) {    
       col_rgauss->fill(rg.shoot());
       col_rbw->fill(rbw.shoot());
+     {user_vec_d.clear();
+      unsigned int number = count%5;
+      for(unsigned int i=0;i<number;i++) {
+        user_vec_d.push_back(rbw.shoot());
+      }}
       ntu.add_row(); // it will write columns data as a <row> in the file.
     }
 

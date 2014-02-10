@@ -108,6 +108,12 @@ int main(int argc,char** argv) {
   tools::wroot::ntuple::column<float>* col_rbw =
     ntu->create_column<float>("rbw");
 
+  std::vector<float> user_vec_f;
+  ntu->create_column<float>("vec_float",user_vec_f); //pass the ref of user_vec_f.
+
+  std::vector<double> user_vec_d;
+  ntu->create_column<double>("vec_double",user_vec_d);
+
   if(args.is_arg("-large")){
     entries = 300000000; //to test >2Gbytes file.
     ntu->set_basket_size(1000000);
@@ -127,6 +133,20 @@ int main(int argc,char** argv) {
       std::cout << "col_rbw fill failed." << std::endl;
       break;
     }
+
+   {user_vec_f.clear();
+    unsigned int number = count%5;
+    for(unsigned int i=0;i<number;i++) {
+      user_vec_f.push_back(rbwf.shoot());
+    }}
+
+   {user_vec_d.clear();
+    unsigned int number = count%3;
+    for(unsigned int i=0;i<number;i++) {
+      user_vec_d.push_back(rg.shoot());
+    }}
+
+
     if(!ntu->add_row()) {
       std::cout << "ntuple fill failed." << std::endl;
       break;
@@ -136,9 +156,7 @@ int main(int argc,char** argv) {
   //////////////////////////////////////////////////////////
   /// create a ntuple from a ntuple_booking object. ////////
   //////////////////////////////////////////////////////////
- {tools::ntuple_booking nbk;
-  nbk.m_name = "rg_rbw_2";
-  nbk.m_title = "Randoms";
+ {tools::ntuple_booking nbk("rg_rbw_2","Randoms");
   nbk.add_column<double>("rgauss");
   nbk.add_column<float>("rbw");
   //nbk.add_column<bool>("not_handled");

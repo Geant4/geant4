@@ -17,9 +17,26 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 05, 2014 I. Hrivnacova (analysis-V10-00-02)
+- Updated tools ntuple_booking and ntuple classes from
+  g4tools 1.9.0 (by G. Barrand) what should hopefully fix warnings issued
+  on x86_64-slc5-gcc41.
+
+February 04, 2014 I. Hrivnacova (analysis-V10-00-01)
+- Adding new functions for ntuple columns of vectors
+  in G4AnalysisManer:
+    // Create columns of vector in the last created ntuple
+    G4int CreateNtupleTColumn(
+                const G4String& name, std::vector<int>& vector);
+    G4int CreateNtupleTColumn(G4int ntupleId, 
+                const G4String& name, std::vector<int>& vector);
+          where T can be I, F, T
+- Updated to g4tools 1.8.0 (by G. Barrand)        
+  See History_tools for complete list of modifications.
+
 January 21, 2014 I. Hrivnacova (analysis-V10-00-00)
 - Updated to g4tools 1.7.1 (by G. Barrand):
-  Fixed performance observed for an ntuple with large numbers of columns
+  Fixed performance issue observed for an ntuple with large numbers of columns
   reported in item #455 in Geant4 hypernews, Analysis category.
   See History_tools for complete list of modifications.
 

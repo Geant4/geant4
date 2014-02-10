@@ -11,8 +11,8 @@ void rroot() {
     return;
   }
 
-  TCanvas* plotter = new TCanvas("canvas","",10,10,800,600);
-  plotter->Divide(2,2);  
+  TCanvas* plotter = new TCanvas("canvas","",10,10,800,800);
+  plotter->Divide(2,4);  
 
   ////////////////////////////////////////////////////////
   /// histos /////////////////////////////////////////////
@@ -60,7 +60,8 @@ void rroot() {
  {TObjArray* brs = tree->GetListOfBranches();
   for(int i=0;i<brs->GetEntries();i++) {
     TBranch* b = (TBranch*)brs->At(i);
-    std::cout << "branch : " << b->GetName() << std::endl;    
+    //std::cout << "branch : " << b->GetName() << std::endl;    
+    b->Print();
   }}
 
   int index;
@@ -69,9 +70,19 @@ void rroot() {
   tree->SetBranchAddress("rgauss",&rgauss);
   float rbw;
   tree->SetBranchAddress("rbw",&rbw);
+  std::vector<float>* vf = new std::vector<float>();
+  tree->SetBranchAddress("vec_float",&vf);
+  std::vector<double>* vd = new std::vector<double>();
+  tree->SetBranchAddress("vec_double",&vd);
 
   int num = tree->GetEntries();  
   std::cout << "number of events = " << num << std::endl;
+
+  TH1D* h_nvf = new TH1D("h_vec_float_size","vf.size()",10,0,10);
+  TH1D* h_vf = new TH1D("h_vec_float","std::vector<float>",100,-5,5);
+
+  TH1D* h_nvd = new TH1D("h_vec_double_size","vd.size()",10,0,10);
+  TH1D* h_vd = new TH1D("h_vec_double","std::vector<double>",100,-5,5);
 
   for(int i=0;i<num;i++) {
     tree->GetEntry(i);
@@ -81,12 +92,29 @@ void rroot() {
                 << std::endl;
       break;
     }
-    //std::cout << "debug : " << rgauss << std::endl;
+  //std::cout << "debug : " << rgauss << std::endl;
     hrg->Fill(rgauss,1);
+
+    h_nvf->Fill(vf->size(),1);
+    if(vf->size()) h_vf->Fill((*vf)[0],1);
+    h_nvd->Fill(vd->size(),1);
+    if(vd->size()) h_vd->Fill((*vd)[0],1);
   }
 
   plotter->cd(4);
-  hrg->Draw();}
+  hrg->Draw();
+
+  plotter->cd(5);
+  h_nvf->Draw();
+  plotter->cd(6);
+  h_vf->Draw();
+
+  plotter->cd(7);
+  h_nvd->Draw();
+  plotter->cd(8);
+  h_vd->Draw();
+
+  }
 
   plotter->Update();
 

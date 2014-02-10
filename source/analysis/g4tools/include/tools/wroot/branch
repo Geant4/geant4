@@ -102,8 +102,8 @@ public: //ibo
 
 public:
   branch(itree& a_tree,
-                const std::string& a_name,
-                const std::string& a_title)
+         const std::string& a_name,
+         const std::string& a_title)
   :m_tree(a_tree)
   ,m_out(a_tree.dir().file().out())
   ,m_name(a_name)
@@ -152,7 +152,7 @@ public:
   }
 protected:
   branch(const branch& a_from)
-  : ibo(a_from)
+  :ibo(a_from)
   ,m_tree(a_from.m_tree)
   ,m_out(a_from.m_out)
   {}
@@ -269,7 +269,7 @@ public:
     return true;
   }
 protected:
-  bool fill_leaves(buffer& a_buffer) {
+  virtual bool fill_leaves(buffer& a_buffer) { //virtual for branch_element.
     tools_vforit(base_leaf*,m_leaves,it) {
       if(!(*it)->fill_basket(a_buffer)) return false;
     }

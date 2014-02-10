@@ -75,7 +75,7 @@ G4bool G4CsvFileManager::CloseFile()
 G4bool G4CsvFileManager::CreateNtupleFile(
                                   G4CsvNtupleDescription* ntupleDescription)
 {
-  G4String ntupleName = ntupleDescription->fNtupleBooking->m_name;
+  G4String ntupleName = ntupleDescription->fNtupleBooking->name();
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
@@ -108,7 +108,7 @@ G4bool G4CsvFileManager::CreateNtupleFile(
 G4bool G4CsvFileManager::CloseNtupleFile(
                                   G4CsvNtupleDescription* ntupleDescription)
 {
-  G4String ntupleName = ntupleDescription->fNtupleBooking->m_name;
+  G4String ntupleName = ntupleDescription->fNtupleBooking->name();
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 

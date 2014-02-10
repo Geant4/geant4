@@ -95,24 +95,24 @@ public:
     //           and that a //<something> exists and is attached to a file.
     tools::replace(m_path_file,"//PAWC","/");
     cd_beg();
-    CHBNT(m_id,a_bkg.m_title," ");
+    CHBNT(m_id,a_bkg.title()," ");
     cd_end();
 
-    const std::vector<tools::ntuple_booking::col_t>& cols = a_bkg.m_columns;
-    std::vector<tools::ntuple_booking::col_t>::const_iterator it;
+    const std::vector<tools::column_booking>& cols = a_bkg.columns();
+    std::vector<tools::column_booking>::const_iterator it;
     for(it=cols.begin();it!=cols.end();++it){
 
-      if((*it).second==tools::_cid(int(0))) {
-        create_column<int>((*it).first);
-      } else if((*it).second==tools::_cid(float(0))) {
-        create_column<float>((*it).first);
-      } else if((*it).second==tools::_cid(double(0))) {
-        create_column<double>((*it).first);
+      if((*it).cls_id()==tools::_cid(int(0))) {
+        create_column<int>((*it).name());
+      } else if((*it).cls_id()==tools::_cid(float(0))) {
+        create_column<float>((*it).name());
+      } else if((*it).cls_id()==tools::_cid(double(0))) {
+        create_column<double>((*it).name());
 
       } else {
         a_out << "tools::hbook::wntuple :"
-              << " for column " << tools::sout((*it).first)
-              << ", type with cid " << (*it).second << " not yet handled."
+              << " for column " << tools::sout((*it).name())
+              << ", type with cid " << (*it).cls_id() << " not yet handled."
               << std::endl;
         //throw
         tools::clear<icol>(m_cols);

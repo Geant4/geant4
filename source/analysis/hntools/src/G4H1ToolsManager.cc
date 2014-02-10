@@ -385,7 +385,7 @@ G4bool G4H1ToolsManager::FillH1(G4int id, G4double value, G4double weight)
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) {
     G4ExceptionDescription description;
-    description << " id " << id << " value " << value;
+    description << " id " << id << " value " << value << " weight " << weight;
     fState.GetVerboseL4()->Message("fill", "H1", description);
   }  
 #endif
