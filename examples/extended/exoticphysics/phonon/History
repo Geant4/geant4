@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 February 2014:  J. Allison (phononExample-V10-00-00)
+- CMakeLists.txt: Added CrystalMaps to list copied to build directory.
+
 18 November 2013:  M. Kelsey (phononExample-V09-06-09)
 - XDetectorConstruction.cc:  Remove verbosity settings.
 - XPhysicsList:  Add verbosity ctor argument, use to set process vebosities.
