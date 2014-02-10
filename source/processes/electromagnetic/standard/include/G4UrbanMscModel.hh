@@ -67,6 +67,8 @@ class G4ParticleChangeForMSC;
 class G4SafetyHelper;
 class G4LossTableManager;
 
+static const G4double c_highland = 13.6*CLHEP::MeV ;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4UrbanMscModel : public G4VMscModel
@@ -98,22 +100,22 @@ public:
 
   G4double ComputeTrueStepLength(G4double geomStepLength);
 
-  G4double ComputeTheta0(G4double truePathLength,
-                         G4double KineticEnergy);
+  inline G4double ComputeTheta0(G4double truePathLength, 
+				G4double KineticEnergy);
 
 private:
 
-  G4double SimpleScattering(G4double xmeanth, G4double x2meanth);
-
   G4double SampleCosineTheta(G4double trueStepLength, G4double KineticEnergy);
-
-  G4double SampleDisplacement();
-
-  G4double LatCorrelation();
 
   inline void SetParticle(const G4ParticleDefinition*);
 
   inline void UpdateCache();
+  
+  inline G4double SampleDisplacement();
+
+  inline G4double SimpleScattering(G4double xmeanth, G4double x2meanth);
+
+  inline G4double LatCorrelation();
 
   //  hide assignment operator
   G4UrbanMscModel & operator=(const  G4UrbanMscModel &right);
@@ -213,6 +215,88 @@ void G4UrbanMscModel::UpdateCache()
                                               
     Zold = Zeff;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
+					G4double KineticEnergy)
+{
+  // for all particles take the width of the central part
+  //  from a  parametrization similar to the Highland formula
+  // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
+  G4double invbetacp = sqrt((currentKinEnergy+mass)*(KineticEnergy+mass)/
+			    (currentKinEnergy*(currentKinEnergy+2.*mass)*
+			     KineticEnergy*(KineticEnergy+2.*mass)));
+  y = trueStepLength/currentRadLength;
+  G4double theta0 = c_highland*std::abs(charge)*sqrt(y)*invbetacp;
+  y = G4Log(y);
+  // correction factor from e- scattering data
+  theta0 *= (coeffth1+coeffth2*y);
+  return theta0;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4double G4UrbanMscModel::SimpleScattering(G4double xmeanth, G4double x2meanth)
+{
+  // 'large angle scattering'
+  // 2 model functions with correct xmean and x2mean
+  G4double a = (2.*xmeanth+9.*x2meanth-3.)/(2.*xmeanth-3.*x2meanth+1.);
+  G4double prob = (a+2.)*xmeanth/a;
+
+  // sampling
+  G4double cth = 1.;
+  if(G4UniformRand() < prob) {
+    cth = -1.+2.*G4Exp(G4Log(G4UniformRand())/(a+1.));
+  } else {
+    cth = -1.+2.*G4UniformRand();
+  }
+  return cth;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4double G4UrbanMscModel::SampleDisplacement()
+{
+  G4double r = 0.0;
+  if ((currentTau >= tausmall) && !insideskin) {
+    G4double rmax = sqrt((tPathLength-zPathLength)*(tPathLength+zPathLength));
+    r = rmax*G4Exp(G4Log(G4UniformRand())*third);
+  }
+  return r;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline
+G4double G4UrbanMscModel::LatCorrelation()
+{
+  static const G4double kappa = 2.5;
+  static const G4double kappami1 = 1.5;
+  
+  G4double latcorr = 0.;
+  if((currentTau >= tausmall) && !insideskin)
+  {
+    if(currentTau < taulim)
+      latcorr = lambdaeff*kappa*currentTau*currentTau*
+                (1.-(kappa+1.)*currentTau*third)*third;
+    else
+    {
+      G4double etau = 0.;
+      if(currentTau < taubig) { etau = G4Exp(-currentTau); }
+      latcorr = -kappa*currentTau;
+      latcorr = G4Exp(latcorr)/kappami1;
+      latcorr += 1.-kappa*etau/kappami1 ;
+      latcorr *= 2.*lambdaeff*third;
+    }
+  }
+  return latcorr;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

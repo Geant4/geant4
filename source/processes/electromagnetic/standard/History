@@ -18,6 +18,13 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+10 February 14: V.Ivanchenko (emstand-V10-00-09)
+- G4UrbanMscModel - (L.Urban) methods ComputeTheta0,SimpleScattering,
+  SampleDisplacement,LatCorrelation have been inlined in order
+  to improve timing (K. Genser suggesting) in these methods use 
+  class member "third" to reduce number of divisions
+- G4PAIxSection - trivial fix of Coverity report
+
 03 February 14: V.Ivanchenko (emstand-V10-00-08)
 - G4SauterGavrilaAngularDistribution - use Penelope 2008 sampling
     algorithm, because it is more effective, distribution itself
