@@ -175,7 +175,7 @@ inline void G4UPolyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
     pdata->Rmin[i] = pars->Rmin[i];
     pdata->Rmax[i] = pars->Rmax[i];
   }
-  ResetPolyhedron();
+  fPolyhedron = 0;
 }
 inline G4bool G4UPolyhedra::Reset()
 {

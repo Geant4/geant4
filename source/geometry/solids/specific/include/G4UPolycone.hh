@@ -160,7 +160,7 @@ inline void G4UPolycone::SetOriginalParameters(G4PolyconeHistorical* pars)
     pdata->Rmin[i] = pars->Rmin[i];
     pdata->Rmax[i] = pars->Rmax[i];
   }
-  ResetPolyhedron();
+  fPolyhedron = 0;
 }
 inline G4bool G4UPolycone::Reset()
 {
