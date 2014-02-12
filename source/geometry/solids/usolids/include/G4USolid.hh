@@ -156,8 +156,6 @@ class G4USolid : public G4VSolid
     virtual G4Polyhedron* GetPolyhedron() const;
     // Smart access function - creates on request and stores for future
     // access.  A null pointer means "not available".
-    virtual void ResetPolyhedron() const;
-    //Reset Polyhedron used by Parametrisation
 
   public:  // without description
 
@@ -182,9 +180,6 @@ class G4USolid : public G4VSolid
   protected:  // data
 
     VUSolid* fShape;
-
-  private:
-
     mutable G4Polyhedron* fPolyhedron;
 };
 

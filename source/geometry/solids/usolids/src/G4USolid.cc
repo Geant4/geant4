@@ -551,11 +551,6 @@ G4Polyhedron* G4USolid::GetPolyhedron() const
   return fPolyhedron;
 }
 
-void G4USolid::ResetPolyhedron() const
-{
-   if (fPolyhedron) delete fPolyhedron;
-   fPolyhedron = 0;
-}
 G4VisExtent G4USolid:: GetExtent() const
 {
   G4VisExtent extent;
