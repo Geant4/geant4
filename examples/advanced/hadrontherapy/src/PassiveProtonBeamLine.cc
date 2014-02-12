@@ -1168,6 +1168,16 @@ void PassiveProtonBeamLine::HadrontherapyMOPIDetector()
 					    false,
 					    0);
 
+  //DEBUG, Luciano
+  G4cout << "############ Debugging printout ##################" << G4endl;
+  G4cout << "MOPIMotherVolumeSize: " << MOPIMotherVolumeXSize/cm << " " << 
+    MOPIMotherVolumeYSize/cm << " " << MOPIMotherVolumeYSize/cm << " cm " << G4endl;
+  G4cout  << "Position: " << G4ThreeVector(MOPIMotherVolumeXPosition,
+					   MOPIMotherVolumeYPosition,
+					   MOPIMotherVolumeZPosition)/cm << G4endl;
+  G4cout << "Dimensions of mother volume: 400cm in all directions" << G4endl;
+  G4cout << "############ End Debugging printout ##################" << G4endl;
+
   // First Kapton layer
   solidMOPIFirstKaptonLayer = new G4Box("MOPIFirstKaptonLayer",
 					MOPIFirstKaptonLayerXSize/2, 
