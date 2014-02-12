@@ -74,6 +74,8 @@ class G4UPolycone : public G4USolid
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
+    G4VSolid* Clone() const;
+
     inline UPolycone* GetShape() const;
 
     inline G4double GetStartPhi()  const;

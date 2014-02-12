@@ -78,6 +78,8 @@ class G4UPolyhedra : public G4USolid
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
+    G4VSolid* Clone() const;
+
     inline UPolyhedra* GetShape() const;
 
     inline G4int GetNumSide()     const;
