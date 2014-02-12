@@ -41,6 +41,8 @@
 #include "G4VSolid.hh"
 #include "VUSolid.hh"
 
+class G4VPVParameterisation;
+
 class G4USolid : public G4VSolid
 {
   public:  // with description
@@ -108,6 +110,11 @@ class G4USolid : public G4VSolid
     // Calculate the distance to the nearest surface of a shape from an
     // inside point. The distance can be an underestimate.
 
+    virtual void ComputeDimensions(G4VPVParameterisation* p,
+                                   const G4int n,
+                                   const G4VPhysicalVolume* pRep);
+      // Throw exception if ComputeDimensions called from an illegal
+      // derived class.
 
     virtual G4double GetCubicVolume();
     // Returns an estimation of the solid volume in internal units.
@@ -151,6 +158,7 @@ class G4USolid : public G4VSolid
     // access.  A null pointer means "not available".
     virtual void ResetPolyhedron() const;
     //Reset Polyhedron used by Parametrisation
+
   public:  // without description
 
     G4USolid(__void__&);

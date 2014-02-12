@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 12, 2014  G.Cosmo                geom-usolids-V10-00-01
+- Corrected implementation of Clone() method in UBox, UTet, UTrd.
+- Corrected cloning mechanism and copy constructor in G4USolid.
+  Addressing problem report #1553.
+
 January 10, 2014  T.Nikitina              geom-usolids-V10-00-00
 - Fixed typo in SafetyFromInside() for UTubs for correct calculation of
   'safePhi'.

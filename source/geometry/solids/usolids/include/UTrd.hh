@@ -90,10 +90,7 @@ class UTrd : public VUSolid
     void Extent(UVector3& aMin, UVector3& aMax) const;
     inline double Capacity();
     inline double SurfaceArea();
-    inline VUSolid* Clone() const
-    {
-      return new UTrd(GetName(), fDx1, fDx2, fDy1, fDy2, fDz);
-    }
+    VUSolid* Clone() const;
     UGeometryType GetEntityType() const;
  
     virtual void ComputeBBox(UBBox* /*aBox*/, bool /*aStore = false*/) {}
