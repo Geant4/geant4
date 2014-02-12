@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 12, 2014  G.Cosmo               geom-csg-V10-00-02
+- Simply reset polyhedron pointer to zero for modifiers of G4U* wrappers
+  in parameterisation. Resolves crash in MT visualization when using USolids. 
+
 February 12, 2014  G.Cosmo               geom-csg-V10-00-01 (and -00)
 - Added correct cloning mechanism in G4U* wrappers.
   Addressing problem report #1553.
