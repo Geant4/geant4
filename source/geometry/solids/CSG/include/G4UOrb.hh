@@ -57,6 +57,8 @@ class G4UOrb : public G4USolid
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
+    G4VSolid* Clone() const;
+
     inline UOrb* GetShape() const;
 
     inline G4double GetRadius() const;

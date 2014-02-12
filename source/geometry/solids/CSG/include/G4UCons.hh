@@ -63,6 +63,8 @@ class G4UCons : public G4USolid
                             const G4int n,
                             const G4VPhysicalVolume* pRep );
 
+    G4VSolid* Clone() const;
+
     inline UCons* GetShape() const;
 
     inline G4double GetInnerRadiusMinusZ() const;

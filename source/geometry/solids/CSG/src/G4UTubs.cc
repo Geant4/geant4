@@ -102,3 +102,12 @@ void G4UTubs::ComputeDimensions(      G4VPVParameterisation* p,
 {
   p->ComputeDimensions(*(G4Tubs*)this,n,pRep) ;
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4UTubs::Clone() const
+{
+  return new G4UTubs(*this);
+}

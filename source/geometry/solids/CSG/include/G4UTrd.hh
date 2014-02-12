@@ -61,6 +61,8 @@ class G4UTrd : public G4USolid
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
+    G4VSolid* Clone() const;
+
     inline UTrd* GetShape() const;
 
     inline G4double GetXHalfLength1() const;
