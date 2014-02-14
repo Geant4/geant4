@@ -618,13 +618,13 @@ void G4LossTableManager::BuildPhysicsTable(
       atomDeexcitation->InitialiseAtomicDeexcitation();
     }
     currentParticle = 0;
-    startInitialisation = false;
     all_tables_are_built= true;
   }
 
   // initialisation before any table is built
-  if ( aParticle == firstParticle ) {
+  if ( startInitialisation && aParticle == firstParticle ) {
 
+    startInitialisation = false;
     if(1 < verbose) {
       G4cout << "### G4LossTableManager start initilisation for first particle "
 	     << firstParticle->GetParticleName() 
@@ -764,20 +764,45 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
   G4PhysicsTable* dedx = 0;
   G4int i;
 
+  G4ProcessVector* pvec = 
+    aParticle->GetProcessManager()->GetProcessList();
+  G4int nvec = pvec->size();
+
   for (i=0; i<n_loss; ++i) {
     p = loss_vector[i];
-    if (p && aParticle == part_vector[i] && !tables_are_built[i]) {
-      if ((p->IsIonisationProcess() && isActive[i]) || !em) {
-        em = p;
-        iem= i;
+    if (p) {
+      G4bool yes = (aParticle == part_vector[i]);
+
+      // possible case of process sharing between particle/anti-particle
+      if(!yes) {
+        G4VProcess* ptr = static_cast<G4VProcess*>(p);
+        for(G4int j=0; j<nvec; ++j) {
+          //G4cout << "j= " << j << " " << (*pvec)[j] << " " << ptr << G4endl;
+          if(ptr == (*pvec)[j]) {
+	    yes = true;
+            break;
+	  }
+	}
+      }      
+      // process belong to this particle
+      if(yes && isActive[i]) {
+	if (p->IsIonisationProcess() || !em) {
+	  em = p;
+	  iem= i;
+	}
+	// tables may be shared between particle/anti-particle
+	if (!tables_are_built[i]) {
+	  dedx = p->BuildDEDXTable(fRestricted);
+	  //G4cout << "Build DEDX table for " << p->GetProcessName()
+	  // << " idx= " << i << dedx << " " << dedx->length() << G4endl;
+	  p->SetDEDXTable(dedx,fRestricted);
+	  tables_are_built[i] = true;
+	} else {
+          dedx = p->DEDXTable();
+	}
+	t_list.push_back(dedx);
+	loss_list.push_back(p);
       }
-      dedx = p->BuildDEDXTable(fRestricted);
-      //G4cout << "Build DEDX table for " << aParticle->GetParticleName()
-      //	     << "  " << dedx << " " << dedx->length() << G4endl;
-      p->SetDEDXTable(dedx,fRestricted); 
-      t_list.push_back(dedx);
-      loss_list.push_back(p);
-      tables_are_built[i] = true;
     }
   }
 

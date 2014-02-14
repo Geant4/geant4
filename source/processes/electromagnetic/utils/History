@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 February 14: V.Ivant (emutils-V10-00-01)
+- G4EmModelMananger - fixed bug for initialisation of several runs
+    in one job
+
 27 January 14: V.Ivant (emutils-V10-00-00)
 - G4VEnergyLossProcess - fixed division by zero for the case of
     an ion with charge zero
