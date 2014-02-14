@@ -11,26 +11,27 @@
 #
 #------------------------------------------------------------------------------
 
+#add_subdirectory(management) # moved at higher level in processes/hadronic
+#add_subdirectory(util) # moved at higher level in processes/hadronic
+add_subdirectory(im_r_matrix)
+add_subdirectory(de_excitation)
+add_subdirectory(pre_equilibrium)
+add_subdirectory(de_excitation/ablation) # Moved up
 add_subdirectory(abla)
-add_subdirectory(abrasion)
 add_subdirectory(binary_cascade)
 add_subdirectory(cascade)
+add_subdirectory(abrasion)
+add_subdirectory(neutron_hp)
 add_subdirectory(coherent_elastic)
-add_subdirectory(de_excitation)
 add_subdirectory(em_dissociation)
 add_subdirectory(fission)
-add_subdirectory(im_r_matrix)
 add_subdirectory(inclxx)
 add_subdirectory(lend)
-add_subdirectory(management)
-add_subdirectory(neutron_hp)
 #add_subdirectory(particle_hp)
 add_subdirectory(parton_string)
+add_subdirectory(quasi_elastic)
+add_subdirectory(theo_high_energy)
 add_subdirectory(lepto_nuclear)
-add_subdirectory(pre_equilibrium)
 add_subdirectory(qmd)
 add_subdirectory(radioactive_decay)
 add_subdirectory(rpg)
-add_subdirectory(theo_high_energy)
-add_subdirectory(util)
-add_subdirectory(quasi_elastic)
