@@ -11,10 +11,11 @@
 #
 #------------------------------------------------------------------------------
 
+add_subdirectory(util)
+add_subdirectory(models/management)
+add_subdirectory(models/util)
 add_subdirectory(cross_sections)
 add_subdirectory(management)
-add_subdirectory(models)
 add_subdirectory(processes)
+add_subdirectory(models)
 add_subdirectory(stopping)
-add_subdirectory(util)
-
