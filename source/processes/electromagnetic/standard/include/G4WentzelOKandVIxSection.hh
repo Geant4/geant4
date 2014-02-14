@@ -73,7 +73,7 @@ class G4WentzelOKandVIxSection
 
 public:
 
-  G4WentzelOKandVIxSection();
+  G4WentzelOKandVIxSection(G4bool combined = true);
 
   virtual ~G4WentzelOKandVIxSection();
 
@@ -131,6 +131,8 @@ private:
   G4int    nwarnings;
   G4int    nwarnlimit;
 
+  G4bool   isCombined;
+
   // single scattering parameters
   G4double coeff;
   G4double cosTetMaxElec;
@@ -182,8 +184,11 @@ G4WentzelOKandVIxSection::SetupKinematic(G4double ekin, const G4Material* mat)
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
     factB = spin/invbeta2;
-    cosTetMaxNuc = 
-	std::max(cosThetaMax,1.-factorA2*mat->GetIonisation()->GetInvA23()/mom2);
+    cosTetMaxNuc = cosThetaMax;
+    if(isCombined) {
+      G4double cost = 1.-factorA2*mat->GetIonisation()->GetInvA23()/mom2;
+      if(cost > cosTetMaxNuc) { cosTetMaxNuc = cost; }
+    }
   } 
   return cosTetMaxNuc;
 }
@@ -241,7 +246,8 @@ G4WentzelOKandVIxSection::ComputeElectronCrossSection(G4double cosTMin,
   G4double cost1 = std::max(cosTMin,cosTetMaxElec);
   G4double cost2 = std::max(cosTMax,cosTetMaxElec);
   if(cost1 > cost2) {
-    xsec = kinFactor*(cost1 - cost2)/((1.0 - cost1 + screenZ)*(1.0 - cost2 + screenZ));
+    xsec = kinFactor*(cost1 - cost2)/
+      ((1.0 - cost1 + screenZ)*(1.0 - cost2 + screenZ));
   }
   return xsec;
 }

@@ -69,7 +69,7 @@ class G4hCoulombScatteringModel : public G4VEmModel
 
 public:
 
-  G4hCoulombScatteringModel(const G4String& nam = "eCoulombScattering");
+  G4hCoulombScatteringModel(G4bool combined = true);
  
   virtual ~G4hCoulombScatteringModel();
 
@@ -107,7 +107,7 @@ private:
   G4hCoulombScatteringModel & operator=(const G4hCoulombScatteringModel &right);
   G4hCoulombScatteringModel(const  G4hCoulombScatteringModel&);
 
-protected:
+  //protected:
  
   G4IonTable*               theIonTable;
   G4ParticleChangeForGamma* fParticleChange;
@@ -134,7 +134,9 @@ protected:
 
   G4double                  lowEnergyThreshold;
 
-private:
+  G4bool                    isCombined;  
+
+  //private:
 
   G4bool                    isInitialised;             
 };

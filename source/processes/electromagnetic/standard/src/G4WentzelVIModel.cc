@@ -71,11 +71,12 @@
 
 using namespace std;
 
-G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
-  G4VMscModel(nam),
+G4WentzelVIModel::G4WentzelVIModel(G4bool combined) :
+  G4VMscModel("WentzelVIUni"),
   numlimit(0.1),
   currentCouple(0),
   cosThetaMin(1.0),
+  isCombined(combined),
   inside(false),
   singleScatteringMode(false)
 {
@@ -87,7 +88,7 @@ G4WentzelVIModel::G4WentzelVIModel(const G4String& nam) :
   xsecn.resize(nelments);
   prob.resize(nelments);
   theManager = G4LossTableManager::Instance();
-  wokvi = new G4WentzelOKandVIxSection();
+  wokvi = new G4WentzelOKandVIxSection(combined);
   fixedCut = -1.0;
 
   preKinEnergy = tPathLength = zPathLength = lambdaeff = currentRange 
@@ -116,7 +117,13 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
   SetupParticle(p);
   currentRange = 0.0;
 
-  cosThetaMax = cos(PolarAngleLimit());
+  if(isCombined) {
+    cosThetaMax = 1.0;
+    G4double tet = PolarAngleLimit();
+    if(tet >= pi)      { cosThetaMax = -1.0; }
+    else if(tet > 0.0) { cosThetaMax = cos(tet); }
+  }
+
   //G4cout << "G4WentzelVIModel::Initialise " << p->GetParticleName() << G4endl;
   wokvi->Initialise(p, cosThetaMax);
   /*

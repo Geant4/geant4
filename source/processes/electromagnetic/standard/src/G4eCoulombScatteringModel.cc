@@ -77,10 +77,11 @@
 
 using namespace std;
 
-G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
-  : G4VEmModel(nam),
+G4eCoulombScatteringModel::G4eCoulombScatteringModel(G4bool combined)
+  : G4VEmModel("eCoulombScattering"),
     cosThetaMin(1.0),
     cosThetaMax(-1.0),
+    isCombined(combined),
     isInitialised(false)
 {
   fParticleChange = 0;
@@ -97,7 +98,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(const G4String& nam)
 
   particle = 0;
   currentCouple = 0;
-  wokvi = new G4WentzelOKandVIxSection();
+  wokvi = new G4WentzelOKandVIxSection(combined);
 
   currentMaterialIndex = 0;
 
@@ -121,7 +122,14 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
 {
   SetupParticle(part);
   currentCouple = 0;
-  cosThetaMin = cos(PolarAngleLimit());
+
+  if(isCombined) {
+    cosThetaMin = 1.0;
+    G4double tet = PolarAngleLimit();
+    if(tet > pi)       { cosThetaMin = -1.0; }
+    else if(tet > 0.0) { cosThetaMin = cos(tet); }
+  }
+
   wokvi->Initialise(part, cosThetaMin);
   /*      
   G4cout << "G4eCoulombScatteringModel: " << particle->GetParticleName()

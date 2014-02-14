@@ -71,7 +71,7 @@ class G4WentzelVIRelModel : public G4VMscModel
 
 public:
 
-  G4WentzelVIRelModel(const G4String& nam = "WentzelVIUni");
+  G4WentzelVIRelModel(G4bool combined = true);
 
   virtual ~G4WentzelVIRelModel();
 
@@ -149,6 +149,7 @@ private:
   G4double lowEnergyLimit;
 
   // flags
+  G4bool   isCombined;
   G4bool   inside;
   G4bool   singleScatteringMode;
 };

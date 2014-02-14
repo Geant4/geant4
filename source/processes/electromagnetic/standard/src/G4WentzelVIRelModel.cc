@@ -70,11 +70,12 @@
 
 using namespace std;
 
-G4WentzelVIRelModel::G4WentzelVIRelModel(const G4String& nam) :
-  G4VMscModel(nam),
+G4WentzelVIRelModel::G4WentzelVIRelModel(G4bool combined) :
+  G4VMscModel("WentzelVIRel"),
   numlimit(0.1),
   currentCouple(0),
   cosThetaMin(1.0),
+  isCombined(combined),
   inside(false),
   singleScatteringMode(false)
 {
@@ -88,9 +89,10 @@ G4WentzelVIRelModel::G4WentzelVIRelModel(const G4String& nam) :
   theManager = G4LossTableManager::Instance();
   fNistManager = G4NistManager::Instance();
   fG4pow = G4Pow::GetInstance();
-  wokvi = new G4WentzelVIRelXSection();
+  wokvi = new G4WentzelVIRelXSection(combined);
 
-  preKinEnergy = tPathLength = zPathLength = lambdaeff = currentRange = xtsec = 0;
+  preKinEnergy = tPathLength = zPathLength = lambdaeff = currentRange = 
+    xtsec = 0;
   currentMaterialIndex = 0;
   cosThetaMax = cosTetMaxNuc = 1.0;
 
@@ -109,13 +111,19 @@ G4WentzelVIRelModel::~G4WentzelVIRelModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4WentzelVIRelModel::Initialise(const G4ParticleDefinition* p,
-				  const G4DataVector& cuts)
+				     const G4DataVector& cuts)
 {
   // reset parameters
   SetupParticle(p);
   currentRange = 0.0;
 
-  cosThetaMax = cos(PolarAngleLimit());
+  if(isCombined) {
+    cosThetaMax = 1.0;
+    G4double tet = PolarAngleLimit();
+    if(tet >= pi)      { cosThetaMax = -1.0; }
+    else if(tet > 0.0) { cosThetaMax = cos(tet); }
+  }
+
   wokvi->Initialise(p, cosThetaMax);
   /*  
   G4cout << "G4WentzelVIRelModel: " << particle->GetParticleName()
