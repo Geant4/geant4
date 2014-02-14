@@ -11,14 +11,14 @@
 #
 #------------------------------------------------------------------------------
 
-add_subdirectory(ablation)
+# add_subdirectory(ablation) # moved in models/CMakeLists.txt
+
+add_subdirectory(management)
+add_subdirectory(util)
+add_subdirectory(fission)
+add_subdirectory(photon_evaporation)
+add_subdirectory(gem_evaporation)
 add_subdirectory(evaporation)
 add_subdirectory(fermi_breakup)
-add_subdirectory(fission)
-add_subdirectory(gem_evaporation)
-add_subdirectory(handler)
-add_subdirectory(management)
 add_subdirectory(multifragmentation)
-add_subdirectory(photon_evaporation)
-add_subdirectory(util)
-
+add_subdirectory(handler)
