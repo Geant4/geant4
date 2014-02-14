@@ -11,8 +11,8 @@
 #
 #------------------------------------------------------------------------------
 
-add_subdirectory(diffraction)
-add_subdirectory(hadronization)
 add_subdirectory(management)
+add_subdirectory(hadronization)
+add_subdirectory(diffraction)
 add_subdirectory(qgsm)
-
+ 
