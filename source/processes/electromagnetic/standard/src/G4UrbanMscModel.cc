@@ -158,7 +158,6 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   currentMaterialIndex = -1;
   fParticleChange = 0;
   couple = 0;
-  SetSampleZ(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -172,7 +171,6 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
 				 const G4DataVector&)
 {
   skindepth = skin*stepmin;
-  //  trackID = -1;
 
   // set values of some data members
   SetParticle(p);
@@ -186,7 +184,6 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
   */
   fParticleChange = GetParticleChangeForMSC(p);
 
-  //samplez = true;
   //G4cout << "### G4UrbanMscModel::Initialise done!" << G4endl;
 }
 
@@ -839,9 +836,13 @@ G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
 	 << " geomStep(mm)= " << zPathLength
 	 << G4endl;
   */
-  if (latDisplasment && safety > tlimitminfix2) {
 
-    G4double r = SampleDisplacement();
+  if (latDisplasment && safety > tlimitminfix2 && currentTau >= tausmall &&
+      !insideskin) {
+    //sample displacement r
+    G4double rmax = sqrt((tPathLength-zPathLength)*(tPathLength+zPathLength));
+    G4double r = rmax*G4Exp(G4Log(G4UniformRand())*third);
+
     /*    
     G4cout << "G4UrbanMscModel::SampleSecondaries: e(MeV)= " << kineticEnergy
 	   << " sinTheta= " << sth << " r(mm)= " << r

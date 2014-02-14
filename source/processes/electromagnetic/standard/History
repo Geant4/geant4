@@ -18,6 +18,13 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+14 February 14: V.Ivanchenko (emstand-V10-00-12)
+- G4UrbanMscModel : cosmetic changings
+
+14 February 14: L.Urban (emstand-V10-00-11)
+- G4UrbanMscModel : method SampleDisplacement removed, its code has been
+   put into SampleScattering 
+
 13 February 14: V.Ivanchenko (emstand-V10-00-10)
 - G4WentzelOKandVIxSection, G4WentzelVIRelXSection, G4WentzelVIModel,
   G4WentzelVIRelModel, G4eCoulombScatteringModel, G4hCoulombScatteringModel
@@ -189,7 +196,7 @@ secondary electron/X-ray mode.
     pow in run time methods - expected slightly improve CPU performance
 
 21 August 13: V.Ivanchenko (emstand-V09-06-56)
-- G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96 rae removed
+- G4UrbanMscModel93, G4UrbanMscModel95, G4UrbanMscModel96 are removed
     only one version of the model G4UrbanMscModel  is left  
 
 19 August 13: V.Ivanchenko (emstand-V09-06-55)

@@ -111,8 +111,6 @@ private:
 
   inline void UpdateCache();
   
-  inline G4double SampleDisplacement();
-
   inline G4double SimpleScattering(G4double xmeanth, G4double x2meanth);
 
   inline G4double LatCorrelation();
@@ -254,19 +252,6 @@ G4double G4UrbanMscModel::SimpleScattering(G4double xmeanth, G4double x2meanth)
     cth = -1.+2.*G4UniformRand();
   }
   return cth;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-inline
-G4double G4UrbanMscModel::SampleDisplacement()
-{
-  G4double r = 0.0;
-  if ((currentTau >= tausmall) && !insideskin) {
-    G4double rmax = sqrt((tPathLength-zPathLength)*(tPathLength+zPathLength));
-    r = rmax*G4Exp(G4Log(G4UniformRand())*third);
-  }
-  return r;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
