@@ -20,6 +20,8 @@ include_directories(${CLHEP_INCLUDE_DIRS})
 
 # List internal includes needed.
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/management/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPRandom/include)
@@ -105,6 +107,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermoreRayleighModel.hh
         G4LogLogInterpolation.hh
         G4LowEPComptonModel.hh
+        G4LowEWentzelVIModel.hh
         G4MicroElecCrossSectionDataSet.hh
         G4MicroElecElastic.hh
         G4MicroElecElasticModel.hh
@@ -219,6 +222,7 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4LivermoreRayleighModel.cc
         G4LogLogInterpolation.cc
         G4LowEPComptonModel.cc
+        G4LowEWentzelVIModel.cc
         G4MicroElecCrossSectionDataSet.cc
         G4MicroElecElastic.cc
         G4MicroElecElasticModel.cc
@@ -284,9 +288,11 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4leptons
         G4materials
         G4mesons
+        G4navigation
         G4partman
         G4procman
         G4track
+        G4volumes
     GLOBAL_DEPENDENCIES
         G4geometry
         G4global

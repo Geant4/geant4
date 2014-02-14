@@ -16,6 +16,8 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/global/HEPNumerics/include \
             -I$(G4BASE)/global/HEPGeometry/include \
             -I$(G4BASE)/geometry/management/include \
+            -I$(G4BASE)/geometry/volumes/include \
+            -I$(G4BASE)/geometry/navigation/include \
             -I$(G4BASE)/track/include \
             -I$(G4BASE)/processes/management/include \
             -I$(G4BASE)/processes/cuts/include \

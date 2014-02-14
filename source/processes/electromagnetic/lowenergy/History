@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13.02.2014  V. Ivanchenko, tag emlowen-V10-00-03
+            G4LowEWentzelVIModel - new class
+
 24.01.2014  V. Ivanchenko, tag emlowen-V10-00-02
             G4LivermorePhotoElectricModel - fixed Coverity report 
 
