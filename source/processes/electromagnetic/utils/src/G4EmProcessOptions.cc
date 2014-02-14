@@ -196,7 +196,8 @@ void G4EmProcessOptions::SetVerbose(G4int val, const G4String& name,
   if("all" == name) { all = true; }
 
   if(worker && !G4Threading::IsWorkerThread()) { return; }
-
+  else if(!worker && G4Threading::IsWorkerThread()) { return; }
+  
   if(all) { 
     theManager->SetVerbose(val);
     return;

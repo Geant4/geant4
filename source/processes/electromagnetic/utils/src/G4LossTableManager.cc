@@ -103,6 +103,7 @@
 #include "G4VAtomDeexcitation.hh"
 #include "G4Region.hh"
 #include "G4PhysicalConstants.hh"
+#include "G4Threading.hh"
 
 //G4ThreadLocal G4LossTableManager* G4LossTableManager::theInstance = 0;
 
@@ -192,7 +193,7 @@ G4LossTableManager::G4LossTableManager()
   stepFunctionActive = false;
   flagLPM = true;
   splineFlag = true;
-  isMaster = false;
+  isMaster = true;
   bremsTh = DBL_MAX;
   factorForAngleLimit = 1.0;
   verbose = 1;
@@ -206,6 +207,10 @@ G4LossTableManager::G4LossTableManager()
   emElectronIonPair = new G4ElectronIonPair();
   tableBuilder->SetSplineFlag(splineFlag);
   atomDeexcitation = 0;
+  if(G4Threading::IsWorkerThread()) { 
+    verbose = 0;
+    isMaster = false;
+  }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -523,6 +528,7 @@ void G4LossTableManager::LocalPhysicsTables(
 
   if(startInitialisation) {
     ++run;
+    SetVerbose(verbose);
     if(1 < verbose) {
       G4cout << "===== G4LossTableManager::SlavePhysicsTable() for run "
 	     << run << " =====" << G4endl;
@@ -1153,7 +1159,7 @@ G4LossTableManager::SetParameters(const G4ParticleDefinition* aParticle,
   if(integralActive)     { p->SetIntegral(integral); }
   if(minEnergyActive)    { p->SetMinKinEnergy(minKinEnergy); }
   if(maxEnergyActive)    { p->SetMaxKinEnergy(maxKinEnergy); }
-  p->SetVerboseLevel(verbose);
+  // p->SetVerboseLevel(verbose);
   if(maxEnergyForMuonsActive) {
     G4double dm = std::abs(aParticle->GetPDGMass() - 105.7*MeV);
     if(dm < 5.*MeV) { p->SetMaxKinEnergy(maxKinEnergyForMuons); }

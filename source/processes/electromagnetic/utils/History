@@ -17,9 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 February 14: V.Ivant (emutils-V10-00-02)
+- G4LossTableMananger, G4EmProcessOptions - define default 
+    verbosity=0 for worket thread, so summary on EM processes 
+    is not printed out
+- G4VEnergyLossProcess, G4VEmProcess - define fixed precison=6 
+    for initialisation printout
+- G4EmCalculator - added G4Exception inside FindCouple() method if
+    G4MaterialCutsCouple is not found out and incide GetCSDARange()
+    when CSDA table is not initialized 
+
 13 February 14: V.Ivant (emutils-V10-00-01)
-- G4EmModelMananger - fixed bug for initialisation of several runs
-    in one job
+- G4LossTableMananger - fixed bug for initialisation of several runs
+    in one job (affecting muons and e- and providing non-reproducibility)
 
 27 January 14: V.Ivant (emutils-V10-00-00)
 - G4VEnergyLossProcess - fixed division by zero for the case of

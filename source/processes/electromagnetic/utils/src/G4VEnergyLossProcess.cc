@@ -876,6 +876,7 @@ void
 G4VEnergyLossProcess::PrintInfoDefinition(const G4ParticleDefinition& part)
 {
   if(0 < verboseLevel) {
+    G4cout << std::setprecision(6);
     G4cout << G4endl << GetProcessName() << ":   for  "
            << part.GetParticleName()
 	   << "    SubType= " << GetProcessSubType() 
