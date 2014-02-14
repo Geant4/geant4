@@ -16,14 +16,18 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+February 14th, 2014 G.Cosmo               - geomvol-V10-00-00
+- Minor cleanup and optimisation to G4EnhancedAllocator.
+- Code cleanup in G4GeometryWorkspace and G4GeometryWorkspacePool.
+
 November 19th, 2013 J.Apostolakis         - geomvol-V09-06-20
 - Fix(es) for issues identified by Coverity:
-   G4GeometryWorkspace: initialisation of data member.
-   G4GeometryWorkspacePool: fixed implementation of singleton.
+  G4GeometryWorkspace: initialisation of data member.
+  G4GeometryWorkspacePool: fixed implementation of singleton.
 
 November  8th, 2013 J.Apostolakis         - geomvol-V09-06-19
-- Cleanup: reduced verbosity of G4GeometryWorkspace by making
-   it optional.  
+- Cleanup: reduced verbosity of G4GeometryWorkspace by making it optional.  
   Added Set/Get Verbose methods to toggle and view it.
 
 November  7th, 2013 J.Apostolakis         - geomvol-V09-06-18
