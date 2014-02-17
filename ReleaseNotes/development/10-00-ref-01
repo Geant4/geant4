@@ -1,0 +1,390 @@
+
+                       geant4-10-00-ref-01
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Fixed problem of wrong global time for secondaries in case that the primary
+   track stops during along step.
+ o Fix in G4UrbanMscModel for randomization of first normal step. 
+   Fix in G4UniversalFluctuation for energy loss for extreme small cuts.
+ o Fixed problem in reading compressed data files from neutron-HP data set.
+ o Use G4Allocator for allocation of G4Fragment objects.
+   Should help reducing memory churn and improve CPU performance.
+
+---------- Reference-tag 'Release Notes' -----------
+
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V10-00-03
+-----
+- Include /opt/X11 paths for X11 and OpenGL on MacOS X Mavericks.
+- Directly using environment variable CTEST_TIMEOUT to set default timeout
+  finally works. 
+
+config                                           config-V10-00-01
+------
+- Fixed setting of -fPIC in MT-mode for Linux-g++, Linux-icc and Darwin targets.
+
+analysis                                         analysis-V10-00-00
+--------
+- Updated to g4tools 1.7.1.
+  Fixed performance issue observed for an ntuple with large numbers of columns
+  reported in item #455 in hypernews Analysis forum.
+
+event                                            event-V10-00-00
+-----
+- Change the default value of Q (charge) for /gun/ion and /gun/ionL commands.
+  Now electrons are fully stripped (i.e. Q = Z) if Q is not specified.
+
+g3tog4                                           g3tog4-V10-00-00
+------
+- Removed no longer existing BREPS module from dependency list in sources.cmake.
+
+geometry/magneticfield                           field-V10-00-00
+----------------------
+- Added call to G4Mag_EqRhs::SetChargeMomentumMass() from
+  G4Mag_SpinEqRhs::SetChargeMomentumMass(), following report in item #210
+  in hypernews Fields forum.
+
+geometry/navigation                              geomnav-V10-00-00
+-------------------
+- Fixed implementation of G4TransportationManager::SetNavigatorForTracking()
+  to initialise active navigator and propagator-in-field with the new
+  provided instance. Addressing problem report #1537.
+- Minor code cleanup in G4GlobalMagFieldMessenger.
+
+geometry/solids/specific                         geom-specific-V10-00-01
+------------------------
+- Fix in G4GenericTrap::InsidePolygone() to check if p lies between the two
+  extremes of the segment. Addressing problem report #1541.
+- Corrected left-over debug printout in G4Polycone::SetOriginalParameters().
+
+geometry/solids/usolids                          geom-usolids-V10-00-00
+-----------------------
+- Fixed typo in SafetyFromInside() for UTubs for correct calculation of
+  'safePhi'.
+
+global                                           global-V10-00-03
+------
+- Explicitly check the upper bound of 'numberOfYNodes' in
+  G4Physics2DVector::Retrieve() (read from file), to fix defect
+  reported by Coverity.
+- G4PhysicsVector: small performance optimisation; division by 6 substituted
+  by multiplication of 1/6 constant.
+- Call G4iosInitialization/G4iosFinalization with functions marked
+  __attribute__((destructor)) and __attribute__((destructor)) to 
+  guarantee G4cout/G4cerr are initialized correctly before main
+  function.
+
+graphics_reps                                    greps-V10-00-05
+-------------
+- Introduced operator<< for const reference G4AttDefs map.
+  Deprecated const pointer equivalent.
+- Fixes defects reported by PVS static analysis tool,
+
+particles                                        particles-V10-00-00
+---------
+- Fix in G4ParticleTable::GetParticle() method.
+
+physics_lists
+-------------
+- constructors/decay (phys-ctor-decay-V10-00-00)
+  o Removed no longer existing photolepton_hadron/muon_nuclear module from
+    dependency list in sources.cmake.
+- constructors/electromagnetic (phys-ctor-em-V10-00-07)
+  o G4EmStandardPhysics_option4, G4EmLivermorePhysics, G4EmPenelopePhysics:
+    use RangeFactor=0.01 to increase simulation accuracy.
+    Use G4UrbanMscModel for pions, kaons, protons instead of WentzelVI to have
+    more accurate ranges of low-energy hadrons (in particular, protons).
+  o G4EmStandardPhysics_option4, G4EmLivermorePhysics, G4EmPenelopePhysics,
+    G4EmStandardPhysics_option3: use the same order of processes for e+- and
+    the same comments, this does not change any result but makes more easy
+    comparing log files for different EM physics options.
+  o G4EmStandardPhysics, G4EmStandardPhysics_option1,
+    G4EmStandardPhysics_option2: added Coulomb scattering process for pions,
+    kaons, proton, anti-proton in order to have more smooth transition from
+    EM to hadronic scattering.
+  o Fixed race condision issue in OpticalPhysics; also specify command
+    /optics_engine/setOpProcessUse not available for 'Idle' state.
+  o Avoid static G4Scintillation method invoked through a pointer.
+- constructors/factory (phys-ctor-fact-V10-00-00)
+  o Removed electromagnetic/dna, cascade/{evaporation,utils}, and
+    isotope_productionno modules from dependency list in sources.cmake.
+- constructors/gamma_lepto_nuclear (phys-ctor-glnuclear-V10-00-00)
+- constructors/hadron_inelastic (phys-ctor-hinelastic-V09-06-20)
+  o Removed no longer existing photolepton_hadron/muon_nuclear module from
+    dependency list in sources.cmake.
+- constructors/ions (phys-ctor-ions-V10-00-01)
+  o INCL++ was incorrectly used up to 48 GeV for deuteron, triton, He3 and
+    alpha. Changed the upper limit for ions to 18*3 GeV.
+  o Removed no longer existing photolepton_hadron/muon_nuclear module from
+    dependency list in sources.cmake.
+- constructors/limiters (phys-ctor-limiters-V10-00-00)
+- constructors/stopping (phys-ctor-stopping-V10-00-00)
+  o Removed no longer existing photolepton_hadron/muon_nuclear module from
+    dependency list in sources.cmake.
+- lists (phys-lists-V10-00-01)
+  o Registered model to handle neutron capture above 20 MeV in in LBE list.
+    Addressing problem report #1562.
+  o Removed electromagnetic/dna, cascade/{evaporation,utils}, and
+    isotope_productionno modules from dependency list in sources.cmake.
+- util (phys-util-V10-00-00)
+  o Removed electromagnetic/dna and cascade/{evaporation,utils}
+    modules from dependency list in sources.cmake.
+
+processes/cuts                                   procuts-V10-00-00
+--------------
+- Fixed verbosity warning in G4ProductionCutsTable.
+
+processes/decay                                  decay-V10-00-00
+---------------
+- Fixed problem of wrong global time for secondaries in case that the primary
+  track stops during along step. Addressing problem report #1555.
+
+processes/electromagnetic/dna                    emdna-V10-00-01
+-----------------------------
+- Modified G4DNAMolecularMaterial to prevent segmentation fault in case a
+  model is not created at initialisation time.
+
+processes/electromagnetic/lowenergy              emlowen-V10-00-02
+-----------------------------------
+- Suppressed exception warning issued by some Penelope models in UnitTests.
+  Controlled by verbosity flag now for diagnostics.
+- Allow for (AutoLock-protected) creation on-the-fly of tables in
+  SampleSecondaries(). Nothing changes for loops driven by the RunManager.
+  Avoid crash when the loop of SampleSecondaries() is inkoved in a unit test.
+- Fixed Coverity report in G4LivermorePhotoElectricModel.
+
+processes/electromagnetic/standard               emstand-V10-00-08
+----------------------------------
+- Bug fix in G4UrbanMscModel; 1st normal step in StepLimitType 2 mode   
+  was not randomized. 
+- Fix in G4UniversalFluctuation for energy loss for extreme small cuts.
+  Bug fix in "ionization" computing (small observable effect).
+  Replaced G4Pow::expA() by faster G4Exp().
+  Reduced number of divisions by addition of extra class members.
+- G4NuclearStopping: fix to avoid changing ion charge.
+- G4ionIonisation: do not instantiate extra model at high enegry if
+  G4IonParameterisedModel is used. Improved printout at initialisation.
+- G4SauterGavrilaAngularDistribution: use Penelope 2008 sampling algorithm,
+  as it is more effective; distribution itself is unchanged.
+- G4GoudsmitSaundersonMscModel, G4GoudsmitSaundersonTable: use G4Log(),
+  and G4Exp().
+- G4eCoulombScatteringModel, G4eSingleCoulombScatteringModel: get pointer
+  to the vector of cuts from parameters of Initialise(..) method and not from
+  G4ProductionCutsTable; more convenient for unit tests.
+- Fixed Coverity defects.
+
+processes/electromagnetic/utils                  emutils-V10-00-00
+-------------------------------
+- G4VEnergyLossProcess: fixed division by zero for the case of an ion with
+  charge zero.
+- G4EmCalculator: in FindCouple() method, implemented loop over all regions
+  if argument pointer to region of the method is null.
+
+processes/electromagnetic/xrays                  xrays-V10-00-01
+-------------------------------
+- Make some class members and methods static in G4Cerenkov and G4Scintillation.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V10-00-00)
+  o Removed wrong if statement against zero cross-section in
+    G4CrossSectionDataStore::SampleZandA(). Correct fix for the crashes
+    observed in QBBC.
+  o Instead of re-activate the 1 millibarn threshold introduced previously,
+    disable the threshold also for the inelastic cross-section in
+    G4BGGNucleonInelasticXS. The rationale is that without such threshold
+    there is no CPU penalty observed; this also allows future improvements
+    of cross-section behaviour near the threshold.
+- models/binary_cascade (had-binary-V10-00-01)
+  o G4BinaryLightIonReaction: fix for Coverity report on small leak.
+  o Added printout of particle name in check for valid type of projectile 
+    in G4BinaryCasacde::ApplyYourself().
+  o G4BinaryLightIoncascade::FuseNucleiAndPrompound(): added protection at
+    low energy: available energy is not sufficient to create a fragment.
+- models/coherent_elastic (hadr-cohe-V10-00-01)
+  o Added new dipole model class G4LEHadronProtonElastic.
+  o G4LEnp, G4LEpp: added SampleInvariantT() method and inheritance
+    from G4HadronElastic; implemented SampleT() method in G4LEnp.
+- models/de_excitation (hadr-deex-V10-00-00)
+  o G4ExcitationHandler: fixed minor memory leak in the case when
+    FermiBreakUp has no final states available; reported in item #1371 in
+    hypernews Hadornic forum.
+- models/inclxx (hadr-inclxx-V10-00-00)
+  o Fix for occasionally produced excited nucleon as a pre-fragment.
+  o Added getter for INCL Config object in the G4INCLInterfaceStore.
+- models/lend (hadr-lend-V10-00-00)
+  o Removed no longer existing low_energy module from dependency list
+    in sources.cmake.
+- models/neutron_hp (hadr-hpn-V10-00-01)
+  o Fixed problem in reading compressed data files in
+    G4NeutronHPThermalScatteringData. Addressing problem report #1543.
+  o Removed no longer existing low_energy module from dependency list
+    in sources.cmake.
+- models/theo_high_energy (had-theo-HE-V10-00-00)
+  o Removed models/common from sources.cmake.
+- models/util (hadr-mod-util-V10-00-04)
+  o Use G4Allocator for allocation of G4Fragment objects.
+    Should help reducing memory churn and improve CPU performance.
+    Removed counter of warnings; added exception warning in verbose mode.
+- stopping (hadr-stopping-V10-00-00)
+  o G4MuMinusCapturePrecompound: fixed case of infinite loop by reimplementing
+    old algorithm of mu- capture which does not include direct muon reaction
+    but only considering de-excitation of residual fragment.
+    Addressing problem report #1536.
+- util (hadr-util-V10-00-00)
+  o Cleanup of automatic TLS data conversion in G4ReactionProduct,
+    G4HadSignalHandler and G4HadronicWhiteBoard.
+
+processes/management                             procman-V10-00-00
+--------------------
+- Fixed verbosity warning in G4ProcessTable.
+
+processes/optical                                op-V10-00-02
+-----------------
+- Make 'WLSTimeGeneratorProfile' and 'UseTimeProfile' static in G4OpWLS.
+
+run                                              run-V10-00-01
+---
+- Change the order of setting world volume pointer to the transportation
+  manager for worker thread to be the same as the master thread and the
+  sequential mode, i.e. prior to invoking ConstructSDandField().
+  Addressing problem report #1561.
+- Making sure worker threads re-build physics tables as well when the
+  master thread is requested to rebuild.
+
+track                                            track-V10-00-00
+-----
+- Corrected message from CheckIt() in G4VParticleChange and
+  G4ParticleChangeForDecay.
+
+visualization                                    vis-V10-00-02
+-------------
+- modeling:
+  o G4TrajectoriesModel: Add run ID.
+  o G4PhysicalVolumeModel: improved constructor.
+  o GNUmakefile: added dependency on run category.
+- management:
+  o Introduced G4VGraphicsSystem::fileWriter to allow special informational.
+  o Add run ID to G4Atts of user drawn trajectories.
+  o Small bug fix for MT mode.
+- DAWN:
+  o DAWNFILE declared as G4VGraphicsSystem::fileWriter.
+- gMocren:
+  o gMocren declared as G4VGraphicsSystem::fileWriter.
+- HepRep:
+  o HepRep and HepRepFile declared as G4VGraphicsSystem::fileWriter.
+- OpenGL:
+  o Improvements to class design and some bug fixes for picking.
+  o Some Qt fixes and improvements.
+  o Improved protection of pointers.
+- OpenInventor:
+  o G4OpenInventorXtExaminerViewer: adjusted dimensions of viewer aux window;
+    implemented look-ahead for better tracking of trajectory animation;
+    implemented mouse-over readout for trajectories.
+- VRML:
+  o VRML1/2File declared as G4VGraphicsSystem::fileWriter.
+- XXX:
+  o G4XXXFile declared as G4VGraphicsSystem::fileWriter.
+
+examples                                         examples-V10-00-01
+--------
+- Updated reference outputs and documentation.
+- advanced/amsEcal (amsEcal-V10-00-00)
+  o Added protection against division by zero in RunAction.
+    Addressing problem report #1522.
+- advanced/ChargeExchangeMC (ChargeExchangeMC-V10-00-00)
+  o Fixed few compiler warnings for shadowed variables).
+    FTFP_BERT replaces deprecated QGSP_BERT.
+- advanced/nanobeam (nanobeam-V10-00-00)
+  o Made code thread safe to overcome unsafe CLHEP matrix inversion
+    in RunAction.
+- advanced/xray_fluorescence (XrayFluo-V10-00-00)
+  o Fixed shadowed variables and compilation errors when AIDA is available.
+- extended/electromagnetic/TestEm1 (testem1-V10-00-00)
+  o Introduced function Run::EndOfRun().
+- extended/electromagnetic/TestEm2 (testem2-V10-00-00)
+  o Introduced function Run::EndOfRun(). Minor cleanup.
+- extended/electromagnetic/TestEm3 (testem3-V10-00-01)
+  o Enabled multi-threading; implemented required migration.
+- extended/electromagnetic/TestEm4 (testem4-V10-00-00)
+  o Updated vis.mac macro.
+- extended/electromagnetic/TestEm5 (testem5-V10-00-00)
+  o Introduced function Run::EndOfRun().
+- extended/electromagnetic/TestEm8 (testem8-V10-00-01)
+  o HistoManager: more accurate computation of mean energy deposition;
+    fixed output of rms of mean energy.
+- extended/electromagnetic/TestEm11 (testem11-V10-00-00)
+  o Introduced function Run::EndOfRun().
+  o HistoManager: removed hbook.
+  o Set "ToBeBroadcasted == false" for UI commands that modify physics lsit
+    and detector since these should be executed only by master.
+- extended/electromagnetic/TestEm12 (testem12-V10-00-00)
+  o Enabled multi-threading; implemented required migration.
+- extended/field/field04 (fieldex04-V10-00-04)
+  o Replaced Update() method and commands with ReinitializeGeometry().
+    Put back cleaning of volumes and solid stores in Construct().
+  o Updated gui.mac: allow for execution of vis.mac first to make the
+    command added in menus available. Corrected wireframe parameter.
+  o Avoid static method being invoked by a pointer. Fixed uninitialized
+    variables in F04GlobalField.
+- extended/field/field05 (fieldex05-V10-00-00)
+- extended/field/field06 (fieldex06-V10-00-00)
+  o Updated gui.mac: allow for execution of vis.mac first to make the
+    command added in menus available. Corrected wireframe parameter.
+- extended/hadronic/Hadr03 (exhadr03-V10-00-00)
+  o Enabled multi-threading; implemented required migration.
+  o Defined a stucture for nuclear channel data.
+- extended/hadronic/Hadr04 (exhadr04-V10-00-00)
+  o Pass primary kinematic to Run.
+- extended/optical/LXe (LXe-V10-00-02)
+  o Updated gui.mac: allow for execution of vis.mac first to make the
+    command added in menus available. Corrected wireframe parameter.
+  o Rearrange /optics_engine commands in LXe.in, according to what
+    is allowed through G4OpticalPhysics.
+- extended/optical/OpNovice (OpNovice-V10-00-04)
+  o Fixed race condision issue in OpNovicePhysicsList.
+    Addressing problem report #1539.
+    Limit invokation of static method only from master/sequential.
+  o Updated gui.mac: allow for execution of vis.mac first to make the
+    command added in menus available. Corrected wireframe parameter.
+- extended/optical/wls (WLS-V10-00-00)
+  o Updated gui.mac: allow for execution of vis.mac first to make the
+    command added in menus available. Corrected wireframe parameter.
+- extended/radioactivedecay/rdecay01 (rdecay01-V10-00-02)
+  o Enabled multi-threading; implemented required migration.
+- extended/radioactivedecay/rdecay02 (rdecay02-V10-00-00)
+  o Fixed problem identified in boudary chack mode in exrdmHisto::AddRow().
+
+tests                                            tests-V10-00-01
+-----
+- Updated reference outputs and tools.
+- tests/test00 (test00-V10-00-01)
+  o New test for checking CMake setup of tests.
+- tests/test14 (test14-V10-00-02)
+  o Enabled multi-threading; implemented required migration.
+  o Updated physics-list so to use standard EM builders instead of local
+    physics lists. Implemented magnetic field common UI via
+    G4GlobalManFieldMessenger.
+- tests/test17 (test17-V10-00-00)
+  o Added Opt4 PhysicsList and use it by default.
+- tests/test19 (test19-V10-00-01)
+- tests/test23 (test23-V10-00-02)
+  o Refine shared code infrastructure.
+  o Included utility to extract cross-sections (beam+target).
+  o (Re)Activate ActionInit. Minor cleanup.
+- tests/test31 (test31-V10-00-00)
+  o Switch physics-list from Opt2 to Opt4 in test31.in.
+- tests/test40 (test40-V10-00-01)
+  o ActionInitialisation: added Autolock into Build() method to
+    initialise RunAction properly. Fixed bug in RunAction for the case when
+    libraries are compiled for MT but test is run in sequential mode.
+  o test40.in, test40.large_N.in: tuned acceptance parameters.
+- tests/test48 (test48-V10-00-00)
+  o Fixed compilation warning on clang-3.3 for unused data member in 
+    TestStoppingPhysics.
+- tests/test75 (test75-V10-00-00)
+  o Restructured and make use of shared code.
