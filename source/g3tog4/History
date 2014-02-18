@@ -3,6 +3,9 @@ $Id$
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 
+g3tog4-V09-06-01 29-Jan-2014 G.Folger
+- remove BREPS/include from sources.cmake
+
 g3tog4-V09-06-00 09-Mar-2013 G.Cosmo
 - Fixed missing inclusion of assert.h in G3Division.cc.
 
