@@ -30,6 +30,42 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+
+18th February 2014 - Ben Morgan (cmake-V09-06-46)
+- Modules/Geant4ConfigureConfigScript.cmake : Export use of builtin
+  zlib or otherwise to geant4-config (Bugfix #1572).
+- Template/geant4-config.in : Add builtin zlib to list of features, 
+  adding G4zlib to list of libraries when used (Bugfix #1572).
+- Template/geant4-config.in : Replace use of GNU awk extension 'length'
+  for determining number of datasets. Use return value of split function
+  to get length of array. Problem reported on Hypernews:
+  http://hypernews.slac.stanford.edu/HyperNews/geant4/get/installconfig/1614.html
+
+17th February 2014 - Ben Morgan
+- Templates/geant4make-skeleton.in : Add variables for 
+  G4LIB_{BUILD,USE}_EXPAT as for ZLIB. Fixes Bug #1567
+- Modules/Geant4ToolchainBackwardCompatibility.cmake : Export 
+  G4LIB_{BUILD,USE}_EXPAT based on value of GEANT4_USE_SYSTEM_EXPAT.
+  Fixes Bug #1567.
+
+21st January 2014 - Jonathan Madsen
+- Updated Modules/Geant4InterfaceOptions.cmake to include /opt/X11
+   paths that are now the standard places for X11 and OpenGL on Mac OSX
+   as of Mavericks (OS X 10.9). Without these paths configuring CMake with 
+   GEANT4_USE_OPENGL_X11=ON fails
+
+18th December 2013 - Gunter Folger
+- Modules/Geant4TestDriver.cmake: CTEST_TEST_TIMEOUT is empty, or 
+   its setting is not visible. 
+	Directly using environment variable CTEST_TIMEOUT finally works. 
+
+16th December 2013 - Gunter Folger
+- Modules/Geant4TestDriver.cmake: fix typo introduced in previous tag
+
+16th December 2013 - Gunter Folger
+- Modules/Geant4TestDriver.cmake: use CTEST_TEST_TIMEOUT if set to set
+  default timeout
+
 28th November 2013 - Ben Morgan (cmake-V09-06-45)
 - Modules/Geant4CTest.cmake : Remove G4ENSDFSTATE dataset from list
   exported to the testing environment, as it should not be used by

@@ -135,6 +135,14 @@ if test "x${have_expat}" = "xyes" ; then
   libs="${libs} -lG4expat"
 fi
 
+# - ZLIB
+have_zlib="@G4_BUILTWITH_ZLIB@"
+feature_list="${feature_list} zlib[${have_zlib}]"
+
+if test "x${have_zlib}" = "xyes" ; then
+  libs="${libs} -lG4zlib"
+fi
+
 # - GDML
 have_gdml="@G4_BUILTWITH_GDML@"
 feature_list="${feature_list} gdml[${have_gdml}]"
@@ -226,9 +234,13 @@ fi
 # Datasets
 # - List creation for sh compatibility, see:
 #    https://wiki.ubuntu.com/DashAsBinSh
+# Note however that the guide in the link uses the GNU awk extension
+# 'length' to find the number of elements in the array. This will fail
+# on other awk implementations. Use standard feature of split function
+# returning number of elements.
 dataset_url="@GEANT4_DATASETS_URL@"
 dataset_timeout="@GEANT4_INSTALL_DATA_TIMEOUT@"
-dataset_list=$(awk 'BEGIN { split( "@GEANT4_CONFIG_DATASET_DESCRIPTIONS@", array, ";"); for (i=1;i<=length(array);i++) { print array[i]; } }')
+dataset_list=$(awk 'BEGIN { n = split( "@GEANT4_CONFIG_DATASET_DESCRIPTIONS@", array, ";"); for (i=1;i<=n;i++) { print array[i]; } }')
 
 #-----------------------------------------------------------------------
 # function print_datasets
