@@ -29,11 +29,11 @@ while test $# -ge 1 ; do
     -mem) build_mem=yes
         args="${args} $1"
         ;;
-    -*) echo "unknwon option : $1" ; exit ;;
+    -*) echo "unknown option : $1" ; exit ;;
      *) if [ $# = 1 ] ; then
           what=$1
         else         
-          echo "unknwon option : $1"
+          echo "unknown option : $1"
         fi
         ;;
   esac
@@ -74,6 +74,13 @@ else
 fi
 
 if [ ${exa} = "wroot" ] ; then
+  if [ ${build_cl_exe} = "yes" ] ; then
+    cppflags="${cppflags} -DTOOLS_DONT_HAVE_ZLIB"  
+  else
+    libs="${libs} -lz"
+  fi
+fi
+if [ ${exa} = "wroot_ntu_1000_cols" ] ; then
   if [ ${build_cl_exe} = "yes" ] ; then
     cppflags="${cppflags} -DTOOLS_DONT_HAVE_ZLIB"  
   else

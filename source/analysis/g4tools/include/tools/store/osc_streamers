@@ -67,7 +67,7 @@ public:
   TOOLS_SCLASS(tools::osc::Axis)
 protected:
   virtual void* cast(const std::string& a_class) const {
-    if(void* p = tools::cmp_cast<Axis>(this,a_class)) return p;
+    if(void* p = cmp_cast<Axis>(this,a_class)) return p;
     return 0;
   }
   virtual const std::string& store_cls() const {return s_axis();}
@@ -89,7 +89,7 @@ protected:
     return true;
   }
   static bool s_visit(const istorable& a_o,iobj_const_visitor& a_v){
-    const Axis* local = tools::safe_cast<istorable,Axis>(a_o);
+    const Axis* local = safe_cast<istorable,Axis>(a_o);
     if(!local) return false;
     return local->Axis::visit(a_v); //IMPORTANT : have Axis::
   }
@@ -132,7 +132,7 @@ public:
   TOOLS_SCLASS(tools::osc::Item)
 protected:
   virtual void* cast(const std::string& a_class) const {
-    if(void* p = tools::cmp_cast<Item>(this,a_class)) return p;
+    if(void* p = cmp_cast<Item>(this,a_class)) return p;
     return 0;
   }
 public:
@@ -151,7 +151,7 @@ public:
     return true;
   }
   static bool s_visit(const istorable& a_o,iobj_const_visitor& a_v){
-    const Item* local = tools::safe_cast<istorable,Item>(a_o);
+    const Item* local = safe_cast<istorable,Item>(a_o);
     if(!local) return false;
     return local->Item::visit(a_v); //IMPORTANT : have Item::
   }
@@ -200,7 +200,7 @@ public:
   TOOLS_T_SCLASS(T,tools::osc::Vector)
 protected:
   virtual void* cast(const std::string& a_class) const {
-    if(void* p = tools::cmp_cast<Vector>(this,a_class)) return p;
+    if(void* p = cmp_cast<Vector>(this,a_class)) return p;
     return 0;
   }
   virtual const std::string& store_cls() const {
@@ -226,7 +226,7 @@ protected:
     return true;
   }
   static bool s_visit(const istorable& a_o,iobj_const_visitor& a_v){
-    const Vector* local = tools::safe_cast<istorable,Vector>(a_o);
+    const Vector* local = safe_cast<istorable,Vector>(a_o);
     if(!local) return false;
     return local->Vector<T>::visit(a_v); //IMPORTANT : have Vector::
   }
@@ -272,7 +272,7 @@ public:
   TOOLS_SCLASS(tools::osc::Annotation)
 protected:
   virtual void* cast(const std::string& a_class) const {
-    if(void* p = tools::cmp_cast<Annotation>(this,a_class)) return p;
+    if(void* p = cmp_cast<Annotation>(this,a_class)) return p;
     return 0;
   }
   virtual const std::string& store_cls() const {return s_annotation();}
@@ -289,7 +289,7 @@ protected:
     return true;
   }
   static bool s_visit(const istorable& a_o,iobj_const_visitor& a_v){
-    const Annotation* local = tools::safe_cast<istorable,Annotation>(a_o);
+    const Annotation* local = safe_cast<istorable,Annotation>(a_o);
     if(!local) return false;
     return local->Annotation::visit(a_v); //IMPORTANT : have Annotation::
   }
@@ -329,7 +329,7 @@ public:
   TOOLS_SCLASS(tools::osc::BaseHistogram)
 protected:
   virtual void* cast(const std::string& a_class) const {
-    if(void* p = tools::cmp_cast<BaseHistogram>(this,a_class)) return p;
+    if(void* p = cmp_cast<BaseHistogram>(this,a_class)) return p;
     return 0;
   }
 public:
@@ -351,7 +351,7 @@ public:
 protected:
   static bool s_visit(const istorable& a_o,iobj_const_visitor& a_v){
     const BaseHistogram* local =
-      tools::safe_cast<istorable,BaseHistogram>(a_o);
+      safe_cast<istorable,BaseHistogram>(a_o);
     if(!local) return false;
     return local->BaseHistogram::visit(a_v); //IMPORTANT : have BaseHistogram::
   }
@@ -472,7 +472,7 @@ public:
   TOOLS_SCLASS(tools::osc::Histogram)
 protected:
   virtual void* cast(const std::string& a_class) const {
-    if(void* p = tools::cmp_cast<Histogram>(this,a_class)) return p;
+    if(void* p = cmp_cast<Histogram>(this,a_class)) return p;
     return 0;
   }
 public:
@@ -493,7 +493,7 @@ public:
   }
 protected:
   static bool s_visit(const istorable& a_o,iobj_const_visitor& a_v){
-    const Histogram* local = tools::safe_cast<istorable,Histogram>(a_o);
+    const Histogram* local = safe_cast<istorable,Histogram>(a_o);
     if(!local) return false;
     return local->Histogram::visit(a_v); //IMPORTANT : have Histogram::
   }
@@ -664,7 +664,7 @@ public:
   TOOLS_SCLASS(tools::osc::Profile)
 protected:
   virtual void* cast(const std::string& a_class) const {
-    if(void* p = tools::cmp_cast<Profile>(this,a_class)) return p;
+    if(void* p = cmp_cast<Profile>(this,a_class)) return p;
     return 0;
   }
 public:
@@ -685,7 +685,7 @@ public:
   }
 protected:
   static bool s_visit(const istorable& a_o,iobj_const_visitor& a_v){
-    const Profile* local = tools::safe_cast<istorable,Profile>(a_o);
+    const Profile* local = safe_cast<istorable,Profile>(a_o);
     if(!local) return false;
     return local->Profile::visit(a_v); //IMPORTANT : have Profile::
   }

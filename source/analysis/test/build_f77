@@ -27,8 +27,8 @@ while test $# -ge 1 ; do
     -v) build_verbose=yes
         args="${args} $1"
         ;;
-    -*) echo "unknwon option : $1" ; exit ;;
-     *) echo "unknwon option : $1"
+    -*) echo "unknown option : $1" ; exit ;;
+     *) echo "unknown option : $1"
         ;;
   esac
   shift

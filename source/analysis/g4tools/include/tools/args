@@ -8,6 +8,7 @@
 #include "strip"
 #include "words"
 #include "sto"
+#include "forit"
 
 #include <ostream>
 
@@ -51,8 +52,7 @@ public:
   const std::vector<arg>& get_args() const {return m_args;}
 
   bool is_arg(const std::string& a_string) const {
-    for(std::vector<arg>::const_iterator it = m_args.begin();
-        it!=m_args.end();++it) {
+    tools_vforcit(arg,m_args,it) {
       if((*it).first==a_string) return true;
     }
     return false;
@@ -60,29 +60,29 @@ public:
   bool is_empty() const {return m_args.size()?false:true;}
   unsigned int size() const {return m_args.size();}
   unsigned int number() const {return m_args.size();} //back comp.
-  bool find(const std::string& a_key,std::string& a_value) const {
-    for(std::vector<arg>::const_iterator it = m_args.begin();
-        it!=m_args.end();++it) {
+  bool find(const std::string& a_key,std::string& a_value,
+            const std::string& a_def = "") const {
+    tools_vforcit(arg,m_args,it) {
       if((*it).first==a_key) {
         a_value = (*it).second;
         return true;
       }
     }
-    a_value.clear();
+    a_value = a_def;
     return false;
   }
   std::vector<std::string> find(const std::string& a_key) const {
     std::vector<std::string> vals;
-    for(std::vector<arg>::const_iterator it = m_args.begin();
-      it!=m_args.end();++it) {
+    tools_vforcit(arg,m_args,it) {
       if((*it).first==a_key) vals.push_back((*it).second);
     }
     return vals;
   }
-  bool find(const std::string& a_string,bool& a_value) const {
+  bool find(const std::string& a_string,bool& a_value,
+            const bool& a_def = false) const {
     std::string s;
-    if(!find(a_string,s)) {a_value = false;return false;}
-    return to(s,a_value);
+    if(!find(a_string,s)) {a_value = a_def;return false;}
+    return to(s,a_value,a_def);
   }
   template <class aT>
   bool find(const std::string& a_string,aT& a_value,
@@ -94,8 +94,7 @@ public:
   std::vector<std::string> tovector() const {
     // Return a vector of string <name=value>
     std::vector<std::string> vec;
-    for(std::vector<arg>::const_iterator it = m_args.begin();
-        it!=m_args.end();++it) {
+    tools_vforcit(arg,m_args,it) {
       std::string s;
       if((*it).second.empty()) {
         s = (*it).first;
@@ -113,8 +112,7 @@ public:
            const std::string& a_value = "",
            bool a_override = true){
     if(a_override) {
-      for(std::vector<arg>::iterator it = m_args.begin();
-          it!=m_args.end();++it) {
+      tools_vforit(arg,m_args,it) {
         if((*it).first==a_key) {
           (*it).second = a_value;
           return true;
@@ -127,8 +125,7 @@ public:
   }
 
   void add(const std::vector<std::string>& a_args,bool a_strip = false) {
-    for(std::vector<std::string>::const_iterator it = a_args.begin();
-        it!=a_args.end();++it) {
+    tools_vforcit(std::string,a_args,it) {
       std::vector<std::string> ws;
       words((*it),"=",false,ws);
       if(ws.size()==1) {
@@ -147,9 +144,23 @@ public:
     }
   }
 
+  void add_keyvals(const std::vector<std::string>& a_args,
+                   bool a_strip = false) {
+    //a_args must contain an even number of strings.
+    unsigned int sz_half = a_args.size()/2;
+    if((2*sz_half)!=a_args.size()) return;
+    for(std::vector<std::string>::const_iterator it = a_args.begin();
+        it!=a_args.end();it+=2) {
+      if(a_strip) {
+        m_args.push_back(arg(strp(*it),strp(*(it+1))));
+      } else {
+        m_args.push_back(arg(*it,*(it+1)));
+      }
+    }
+  }
+
   void add(const std::vector<arg>& a_args){
-    std::vector<arg>::const_iterator it;
-    for(it=a_args.begin();it!=a_args.end();++it) m_args.push_back(*it);
+    tools_vforcit(arg,a_args,it) m_args.push_back(*it);
   }
 
   int remove(const std::string& a_key){
@@ -251,12 +262,10 @@ public:
     a_argv = 0;
   }
   bool known_options(const std::vector<std::string>& a_opts) const {
-    for(std::vector<arg>::const_iterator it = m_args.begin();
-        it!=m_args.end();++it) {
+    tools_vforcit(arg,m_args,it) {
       if((*it).first.find('-')==0) { //find '-' at first pos.
         bool found = false;
-        for(std::vector<std::string>::const_iterator it2 = a_opts.begin();
-          it2!=a_opts.end();++it2) {
+        tools_vforcit(std::string,a_opts,it2) {
           if((*it).first==(*it2)) {
             found = true;
             break;        
@@ -295,8 +304,7 @@ public:
 
   //NOTE : print is a Python keyword.
   void dump(std::ostream& a_out) const {
-    for(std::vector<arg>::const_iterator it = m_args.begin();
-        it!=m_args.end();++it) {
+    tools_vforcit(arg,m_args,it) {
       a_out << "key = " << sout((*it).first)
             << " value = " << sout((*it).second)
             << std::endl;
@@ -467,6 +475,9 @@ inline void window_size_from_args(const args& a_args,
   } else if(a_args.is_arg("-iPhone4")) {
     a_ww = 640;
     a_wh = 960;
+  } else if(a_args.is_arg("-wallino")) { //emulate LAL/wallino aspect ratio.
+    a_ww = 1024;
+    a_wh = 512;
   } else if(a_args.is_arg("-SGS")) { //Samsung Galaxy S
     //a_ww = 320;
     //a_wh = 533;

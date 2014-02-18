@@ -9,7 +9,8 @@
 
 namespace tools {
 
-inline bool vsprintf(std::string& a_string,int a_length,const char* a_format,va_list a_args){
+inline bool vsprintf(std::string& a_string,
+                     int a_length,const char* a_format,va_list a_args){
   a_string.clear();
   if(a_length<0) return false;
   if(!a_format) return false;
@@ -31,7 +32,8 @@ inline bool vsprintf(std::string& a_string,int a_length,const char* a_format,va_
 }
 
 
-inline bool sprintf(std::string& a_string,int a_length,const char* a_format,...){
+inline bool sprintf(std::string& a_string,
+                    int a_length,const char* a_format,...){
   a_string.clear();
   if(a_length<0) return false;
   if(!a_format) return false;

@@ -1,3 +1,8 @@
+ 1.7.1 :
+ - tools/wroot/buffer : expand2() method to have same logic as CERN-ROOT/TBuffer.
+   It boosts the writing of ntuple with large number of columns.
+ - tools/forit : use tools_[v,s,l,m]for[c]it cpp macros to shorten iterator/loop code.
+
  1.7.0 :
  - test/cpp/list_free_segs.C : to list free segments in a out.root file.
  - wroot/file : set_END() : update first back free segment m_first field
