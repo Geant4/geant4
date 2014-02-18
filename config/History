@@ -16,6 +16,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17th January 2014   Gabriele Cosmo  (config-V09-06-18)
+- Fixed setting of -fPIC also for Darwin targets.
+
+13th January 2014   Gabriele Cosmo
+- Fixed setting of -fPIC in MT-mode for Linux-g++ and Linux-icc.
+
 25th November 2013   Gabriele Cosmo  (config-V09-06-17)
 - Corrected settings for Linux-g++ and Linux-icc in the use of -fPIC in
   multi-threaded mode.
