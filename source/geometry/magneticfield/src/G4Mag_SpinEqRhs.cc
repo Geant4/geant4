@@ -57,6 +57,8 @@ G4Mag_SpinEqRhs::SetChargeMomentumMass(G4ChargeState particleCharge,
                                        G4double MomentumXc,
                                        G4double particleMass)
 {
+   G4Mag_EqRhs::SetChargeMomentumMass( particleCharge, MomentumXc, mass);
+
    charge = particleCharge.GetCharge();
    mass      = particleMass;
    magMoment = particleCharge.GetMagneticDipoleMoment();
