@@ -544,8 +544,13 @@ void UBox::SetZHalfLength(double dz)
   fSurfaceArea = 0.;
 
 }
+
 UGeometryType UBox::GetEntityType() const
 {
    return "Box";
 }
 
+VUSolid* UBox::Clone() const
+{
+   return new UBox(*this);
+}

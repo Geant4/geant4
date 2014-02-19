@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 12, 2014  G.Cosmo                geom-usolids-V09-06-12
+- Removed ResetPolyhedron() from G4USolid bridge class. Not necessary as
+  using mutable pointer for solids. Moved 'fPolyhedron' pointer to protected.
+
+February 12, 2014  G.Cosmo
+- Corrected implementation of Clone() method in UBox, UTet, UTrd.
+- Corrected cloning mechanism and copy constructor in G4USolid.
+  Addressing problem report #1553.
+
+January 10, 2014  T.Nikitina
+- Fixed typo in SafetyFromInside() for UTubs for correct calculation of
+  'safePhi'.
+
 November 29, 2013  G.Cosmo                geom-usolids-V09-06-11
 - Corrected library name in GNUmakefile and fixed comment in sources.cmake.
 

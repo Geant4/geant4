@@ -327,10 +327,22 @@ G4bool G4USolid::CalculateExtent(const EAxis pAxis,
   }
 }
 
+void G4USolid::ComputeDimensions(G4VPVParameterisation*,
+                                 const G4int,
+                                 const G4VPhysicalVolume*)
+{
+    std::ostringstream message;
+    message << "Illegal call to G4USolid::ComputeDimensions()" << G4endl
+            << "Method not overloaded by derived class !";
+    G4Exception("G4USolid::ComputeDimensions()", "GeomSolids0003",
+                FatalException, message);
+}
+
 void G4USolid::DescribeYourselfTo(G4VGraphicsScene& scene) const
 {
   scene.AddSolid(*this);
 }
+
 G4GeometryType G4USolid::GetEntityType() const
 {
 
@@ -350,8 +362,9 @@ std::ostream& G4USolid::StreamInfo(std::ostream& os) const
 }
 
 G4USolid::G4USolid(const G4USolid& rhs)
-  : G4VSolid(rhs), fShape(rhs.fShape), fPolyhedron(rhs.fPolyhedron)
+  : G4VSolid(rhs), fPolyhedron(rhs.fPolyhedron)
 {
+  fShape = rhs.fShape->Clone();
 }
 
 G4USolid& G4USolid::operator=(const G4USolid& rhs)
@@ -369,14 +382,19 @@ G4USolid& G4USolid::operator=(const G4USolid& rhs)
 
   // Copy data
   //
-  fShape = rhs.fShape;
+  fShape = rhs.fShape->Clone();
 
   return *this;
 }
 
 G4VSolid* G4USolid::Clone() const
 {
-  return new G4USolid(fShape->GetName(), fShape->Clone());
+  std::ostringstream message;
+  message << "Clone() method not implemented for type: "
+          << GetEntityType() << "!" << G4endl
+          << "Returning NULL pointer!";
+  G4Exception("G4USolid::Clone()", "GeomSolids1001", JustWarning, message);
+  return 0;
 }
 
 G4ThreeVectorList*
@@ -533,11 +551,6 @@ G4Polyhedron* G4USolid::GetPolyhedron() const
   return fPolyhedron;
 }
 
-void G4USolid::ResetPolyhedron() const
-{
-   if (fPolyhedron) delete fPolyhedron;
-   fPolyhedron = 0;
-}
 G4VisExtent G4USolid:: GetExtent() const
 {
   G4VisExtent extent;

@@ -1592,7 +1592,7 @@ double UTubs::SafetyFromInside(const UVector3& p, bool) const
   {
     if (p.y * fCosCPhi - p.x * fSinCPhi <= 0)
     {
-      safePhi = -(p.x * fSinCPhi - p.y * fCosSPhi);
+      safePhi = -(p.x * fSinSPhi - p.y * fCosSPhi);
     }
     else
     {
