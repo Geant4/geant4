@@ -78,6 +78,8 @@ class G4UPolyhedra : public G4USolid
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
+    G4VSolid* Clone() const;
+
     inline UPolyhedra* GetShape() const;
 
     inline G4int GetNumSide()     const;
@@ -173,7 +175,7 @@ inline void G4UPolyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
     pdata->Rmin[i] = pars->Rmin[i];
     pdata->Rmax[i] = pars->Rmax[i];
   }
-  ResetPolyhedron();
+  fPolyhedron = 0;
 }
 inline G4bool G4UPolyhedra::Reset()
 {

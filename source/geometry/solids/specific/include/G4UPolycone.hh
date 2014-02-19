@@ -74,6 +74,8 @@ class G4UPolycone : public G4USolid
                            const G4int n,
                            const G4VPhysicalVolume* pRep);
 
+    G4VSolid* Clone() const;
+
     inline UPolycone* GetShape() const;
 
     inline G4double GetStartPhi()  const;
@@ -158,7 +160,7 @@ inline void G4UPolycone::SetOriginalParameters(G4PolyconeHistorical* pars)
     pdata->Rmin[i] = pars->Rmin[i];
     pdata->Rmax[i] = pars->Rmax[i];
   }
-  ResetPolyhedron();
+  fPolyhedron = 0;
 }
 inline G4bool G4UPolycone::Reset()
 {
