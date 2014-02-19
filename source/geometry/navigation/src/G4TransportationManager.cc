@@ -125,6 +125,19 @@ void G4TransportationManager::SetFieldManager(G4FieldManager* newFieldManager)
 }
 
 // ----------------------------------------------------------------------------
+// SetNavigatorForTracking()
+//
+// Set the active navigator for tracking, always
+// the first in the collection of registered navigators.
+//
+void G4TransportationManager::SetNavigatorForTracking(G4Navigator* newNavigator)
+{
+   fNavigators[0] = newNavigator;
+   fActiveNavigators[0] = newNavigator;
+   fPropagatorInField->SetNavigatorForPropagating(newNavigator);
+}
+
+// ----------------------------------------------------------------------------
 // ClearNavigators()
 //
 // Clear collection of navigators and delete allocated objects.

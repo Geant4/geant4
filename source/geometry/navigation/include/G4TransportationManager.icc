@@ -60,18 +60,6 @@ void G4TransportationManager::SetWorldForTracking(G4VPhysicalVolume* theWorld)
 }
 
 // ----------------------------------------------------------------------------
-// SetNavigatorForTracking()
-//
-// Set the active navigator for tracking, always
-// the first in the collection of registered navigators.
-//
-inline
-void G4TransportationManager::SetNavigatorForTracking(G4Navigator* newNavigator)
-{
-   fNavigators[0] = newNavigator;
-}
-
-// ----------------------------------------------------------------------------
 // GetPropagatorInField()
 //
 // Return the associated propagator in field.
