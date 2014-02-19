@@ -104,3 +104,12 @@ void G4UCons::ComputeDimensions(      G4VPVParameterisation* p,
 {
   p->ComputeDimensions(*(G4Cons*)this,n,pRep);
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4UCons::Clone() const
+{
+  return new G4UCons(*this);
+}

@@ -98,3 +98,12 @@ void G4UOrb::ComputeDimensions(       G4VPVParameterisation* p,
 {
   p->ComputeDimensions(*(G4Orb*)this,n,pRep);
 }
+
+//////////////////////////////////////////////////////////////////////////
+//
+// Make a clone of the object
+
+G4VSolid* G4UOrb::Clone() const
+{
+  return new G4UOrb(*this);
+}
