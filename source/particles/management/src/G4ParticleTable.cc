@@ -552,7 +552,7 @@ G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index) const
    CheckReadiness();
   if ( (index >=0) && (index < entries()) ) {
     G4PTblDicIterator *piter = fIterator; 
-    piter -> reset();
+    piter -> reset(false);
     G4int counter = 0;
     while( (*piter)() ){
       if ( counter == index ) return piter->value();
