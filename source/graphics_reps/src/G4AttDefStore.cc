@@ -36,7 +36,7 @@ G4ThreadLocal
 std::map<G4String,std::map<G4String,G4AttDef>*> *m_defsmaps = 0;
 
 std::map<G4String,G4AttDef>*
-GetInstance(G4String storeKey, G4bool& isNew)
+GetInstance(const G4String& storeKey, G4bool& isNew)
 {
   if (!m_defsmaps)
     m_defsmaps = new std::map<G4String,std::map<G4String,G4AttDef>*>;
