@@ -19,7 +19,7 @@ committal in the CVS repository !
 
 February 7, 2014 V.Ivantchenko (global-V09-06-83)
 - G4Physics2DVector::Retrieve(): fixed Coverity report for "taited scalar".
-- Updated date and tag-ID for geant4-10-00-ref-02.
+- Updated date and tag-ID for geant4-10-00-patch-01.
 
 February 5, 2014 T.Koi
 - Added protections to avoid core dumps caused by division by zero 
