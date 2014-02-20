@@ -14,7 +14,7 @@
 /gun/particle gamma
 /gun/energy 6 MeV
 #
-/run/beamOn 5
+/run/beamOn 32
 # 
 # proton 210 MeV to the direction (0.,0.,1.)
 #
@@ -22,4 +22,4 @@
 /gun/energy 210 MeV
 /tracking/verbose 2
 #
-/run/beamOn 1
+/run/beamOn 32
