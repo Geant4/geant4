@@ -424,12 +424,13 @@ void exrdmHisto::AddRow(G4int i)
 #endif
 
 #ifdef G4ANALYSIS_USE_ROOT
-  float ar[4];
+  float *ar=new float[fRcol[i]];
   for (G4int j=0; j < fRcol[i]; j++) {
 //      G4cout << i << " " << fRarray[i][j] << G4endl;
       ar[j] = fRarray[i][j];       
   }  
   if(fROOTntup[i]) fROOTntup[i]->Fill(ar);
+  delete ar;
 #endif
 
 } 
