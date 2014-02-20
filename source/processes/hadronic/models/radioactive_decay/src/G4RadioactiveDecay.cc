@@ -211,6 +211,10 @@ G4RadioactiveDecay::~G4RadioactiveDecay()
 {
   delete theRadioactiveDecaymessenger;
   delete theIsotopeTable;
+  for (DecayTableMap::iterator i = dkmap->begin(); i != dkmap->end(); i++) {
+    delete i->second;
+  }
+  dkmap->clear(); 
 }
 
 

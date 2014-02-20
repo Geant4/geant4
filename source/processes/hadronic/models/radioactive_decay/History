@@ -14,6 +14,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+6 February 2014  Dennis Wright radioactive_decay-V09-06-23
+----------------------------------------------------------
+- G4NuclearDecayChannel::DecayIt: remove enforcement of single gamma emission
+
+31 January 2014  Dennis Wright radioactive_decay-V09-06-22
+----------------------------------------------------------
+- G4RadioactiveDecay::~G4RadioactiveDecay: fix memory leak by deleting decay
+    table map
+- G4NuclearDecayChannel::DecayIt: enforce single gamma emission from
+    deexcitation-> BreakUp() to guarantee only two elements in G4FragmentVector
+- remove obsolete hbook files from test/betatest
+
 24 November 2013  Dennis Wright radioactive_decay-V09-06-21
 -----------------------------------------------------------
 - G4RadioactiveDecay::GetMeanFreePath: currently GetPDGStable() returns stable
