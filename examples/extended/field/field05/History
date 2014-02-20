@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-December 04, 2013 I. Hrivnacova, P. Gumplinger - fieldex05-V09-06-06
+December 04, 2013 I. Hrivnacova, P. Gumplinger - fieldex05-V09-06-07
 - Fixes in gui.mac:
   Let execute vis.mac first to make the command in added menus available;
   Corrected wireframe parameter;
