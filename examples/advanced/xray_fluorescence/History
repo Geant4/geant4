@@ -19,6 +19,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-12-2013 L.Pandola Tag: XrayFluo-V09-06-03
+- Fix shadowed variables and compilation errors due to the #include of 
+  G4SystemOfUnits. Do not show up in system testing, but only when AIDA 
+  is available.
+
 25-11-2013 G.Folger Tag: XrayFluo-V09-06-02
 - Fix  one more typo in XrayFluoDetectorConstruction.cc: G4cout replaced by G4endl; 
 

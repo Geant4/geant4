@@ -49,6 +49,8 @@
 #ifdef G4ANALYSIS_USE
 #include "XrayFluoAnalysisManager.hh"
 #endif
+#include "G4SystemOfUnits.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #ifdef G4ANALYSIS_USE
@@ -92,26 +94,6 @@ XrayFluoRunAction::XrayFluoRunAction()
 
 XrayFluoRunAction::~XrayFluoRunAction()
 {
-
-  //std::map<G4int,G4DataVector*,std::less<G4int> >::iterator pos;
-  
-  // delete energies;
-  // delete data;
-  // G4cout << "energies and data deleted " << G4endl;
-
-  //for (pos = energyMap.begin(); pos != energyMap.end(); pos++)
-  //{
-  //  G4DataVector* dataSet = (*pos).second;
-  //  delete dataSet;
-  //  dataSet = 0;
-  //  }
-  //for (pos = dataMap.begin(); pos != dataMap.end(); pos++)
-  //  {
-  //    G4DataVector* dataSet = (*pos).second;
-  //    delete dataSet;
-  //    dataSet = 0;
-  //  }
-  
 
   G4cout << "XrayFluoRunAction deleted" << G4endl; 
 
