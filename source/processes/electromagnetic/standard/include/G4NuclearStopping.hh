@@ -41,6 +41,7 @@
 // class description
 //
 //  The class simulates nuclear stopping due to multiple scattering
+//  It should be instantiated after G4ionIonisation
 //
 // class description - end
 

@@ -74,7 +74,6 @@
 
 using namespace std;
 
-static const G4double c_highland = 13.6*CLHEP::MeV ;
 static const G4double Tlim = 10.*CLHEP::MeV;
 static const G4double sigmafactor =
        CLHEP::twopi*CLHEP::classic_electr_radius*CLHEP::classic_electr_radius;
@@ -557,7 +556,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       if(tlimit < stepmin) tlimit = stepmin;
 
       // randomize 1st step or 1st 'normal' step in volume
-      if(firstStep || ((smallstep == skin) && !insideskin)) 
+      if(firstStep || ((smallstep == skin+1) && !insideskin)) 
         { 
           G4double temptlimit = tlimit;
           if(temptlimit > tlimitmin)
@@ -784,28 +783,6 @@ G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
   //	 << " step= " << geomStepLength << G4endl;
 
   return tPathLength;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4UrbanMscModel::ComputeTheta0(G4double trueStepLength,
-					  G4double KineticEnergy)
-{
-  // for all particles take the width of the central part
-  //  from a  parametrization similar to the Highland formula
-  // ( Highland formula: Particle Physics Booklet, July 2002, eq. 26.10)
-  G4double betacp = sqrt(currentKinEnergy*(currentKinEnergy+2.*mass)*
-                         KineticEnergy*(KineticEnergy+2.*mass)/
-                      ((currentKinEnergy+mass)*(KineticEnergy+mass)));
-  y = trueStepLength/currentRadLength;
-  G4double theta0 = c_highland*std::abs(charge)*sqrt(y)/betacp;
-  y = G4Log(y);
-  // correction factor from e- scattering data
-  G4double corr = coeffth1+coeffth2*y;                
-
-  theta0 *= corr ;                                               
-
-  return theta0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -1080,59 +1057,3 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4UrbanMscModel::SimpleScattering(G4double xmeanth,G4double x2meanth)
-{
-  // 'large angle scattering'
-  // 2 model functions with correct xmean and x2mean
-  G4double a = (2.*xmeanth+9.*x2meanth-3.)/(2.*xmeanth-3.*x2meanth+1.);
-  G4double prob = (a+2.)*xmeanth/a;
-
-  // sampling
-  G4double cth = 1.;
-  if(G4UniformRand() < prob)
-    cth = -1.+2.*G4Exp(G4Log(G4UniformRand())/(a+1.));
-  else
-    cth = -1.+2.*G4UniformRand();
-  return cth;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4UrbanMscModel::SampleDisplacement()
-{
-  G4double r = 0.0;
-  if ((currentTau >= tausmall) && !insideskin) {
-    G4double rmax = sqrt((tPathLength-zPathLength)*(tPathLength+zPathLength));
-    r = rmax*G4Exp(G4Log(G4UniformRand())/3.);
-  }
-  return r;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4double G4UrbanMscModel::LatCorrelation()
-{
-  static const G4double kappa = 2.5;
-  static const G4double kappami1 = kappa-1.;
-
-  G4double latcorr = 0.;
-  if((currentTau >= tausmall) && !insideskin)
-  {
-    if(currentTau < taulim)
-      latcorr = lambdaeff*kappa*currentTau*currentTau*
-                (1.-(kappa+1.)*currentTau/3.)/3.;
-    else
-    {
-      G4double etau = 0.;
-      if(currentTau < taubig) etau = G4Exp(-currentTau);
-      latcorr = -kappa*currentTau;
-      latcorr = G4Exp(latcorr)/kappami1;
-      latcorr += 1.-kappa*etau/kappami1 ;
-      latcorr *= 2.*lambdaeff/3. ;
-    }
-  }
-
-  return latcorr;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
