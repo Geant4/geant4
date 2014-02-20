@@ -9,6 +9,10 @@ $Id$
                        Package History file
                        --------------------
 
+17 Dec 2013 - tag nanobeam-V09-06-14  - A. Dotti, S. Incerti
+- Made the code thread safe because of unsafe CLHEP matrix inversion
+(in RunAction.cc)
+
 28 Nov 2013 - tag nanobeam-V09-06-13  - S. Incerti
 - Changed selection of volumes in SteppingAction using names
 
