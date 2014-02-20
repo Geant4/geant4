@@ -16,7 +16,7 @@ track of all tags.
  
      ----------------------------------------------------------
 
-December 04, 2013 P. Gumplinger (WLS-V09-06-16)
+December 04, 2013 P. Gumplinger (WLS-V09-06-17)
 - Fixes in gui.mac:
   Commented out command specific to B2 example
   Let execute vis.mac first to make the command in added menus available;
