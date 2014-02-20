@@ -61,7 +61,9 @@ class G4HadronicWhiteBoard
   
   
   private:
-  
+
+  static G4ThreadLocal G4HadronicWhiteBoard *theInstance;
+
   G4HadProjectile* theProjectile;
   G4ParticleDefinition* theDef;
   char* theName;
