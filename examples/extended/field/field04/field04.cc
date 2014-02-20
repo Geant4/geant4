@@ -94,7 +94,7 @@ int main(int argc,char** argv)
 
   G4Random::setTheSeed(myseed);
 
-  G4String physicsList = "QGSP_BERT_HP";
+  G4String physicsList = "QGSP_BERT";
 
 #ifndef WIN32
   G4int c = 0;

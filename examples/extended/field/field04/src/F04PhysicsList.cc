@@ -43,7 +43,7 @@
 
 //#include "G4PhysListFactory.hh"
 #include "FTFP_BERT.hh"
-#include "QGSP_BERT_HP.hh"
+#include "QGSP_BERT.hh"
 
 #include "G4Gamma.hh"
 #include "G4Electron.hh"
@@ -79,8 +79,8 @@ F04PhysicsList::F04PhysicsList(G4String physName) : G4VModularPhysicsList()
 
 //    G4PhysListFactory factory;
     G4VModularPhysicsList* phys = NULL;
-    if (physName == "QGSP_BERT_HP") {
-       phys = new QGSP_BERT_HP;
+    if (physName == "QGSP_BERT") {
+       phys = new QGSP_BERT;
     } else {
        phys = new FTFP_BERT;
     }

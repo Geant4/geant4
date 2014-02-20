@@ -79,9 +79,6 @@ class F04DetectorMessenger : public G4UImessenger
     G4UIcmdWithADoubleAndUnit* fDgrRadCmd;
     G4UIcmdWithADoubleAndUnit* fDgrThickCmd;
     G4UIcmdWithADoubleAndUnit* fDgrPosCmd;
-
-    G4UIcmdWithoutParameter*   fUpdateCmd;
-
 };
 
 #endif

@@ -66,6 +66,7 @@ void F04OpticalPhysics::ConstructParticle()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4ProcessManager.hh"
+#include "G4Threading.hh"
 
 void F04OpticalPhysics::ConstructProcess()
 {
@@ -97,14 +98,17 @@ void F04OpticalPhysics::ConstructProcess()
 
   pManager->AddDiscreteProcess(theBoundaryProcess);
 
-  theWLSProcess->UseTimeProfile("delta");
-//  theWLSProcess->UseTimeProfile("exponential");
-
   pManager->AddDiscreteProcess(theWLSProcess);
 
-  theScintProcess->SetScintillationYieldFactor(1.);
-  theScintProcess->SetScintillationExcitationRatio(0.0);
-  theScintProcess->SetTrackSecondariesFirst(true);
+  if(!G4Threading::IsWorkerThread())
+  {
+    G4OpWLS::UseTimeProfile("delta");
+//  G4OpWLS::UseTimeProfile("exponential");
+
+    G4Scintillation::SetScintillationYieldFactor(1.);
+    G4Scintillation::SetScintillationExcitationRatio(0.0);
+    G4Scintillation::SetTrackSecondariesFirst(true);
+  }
 
   aParticleIterator->reset();
 
