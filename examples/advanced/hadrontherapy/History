@@ -8,6 +8,15 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
              History file of the Hadrontherapy application
          ====================================================
 
+
+13.02.2013 L.Pandola      Tag: hadrontherapy-V09-06-09
+           - Fix bug (missing inizialization) producing the problem 
+             observed with x86_64-mac108-gcc42. Remove debug printout
+
+12.02.2013 L.Pandola
+	   - Trying to debug problem observed with x86_64-mac108-gcc42
+             (added debugging printout)
+
 11.11.2013 F.Romano;      Tag: hadrontherapy-V09-06-08
            - Fixing compilation warnings for shadowing of variable
 

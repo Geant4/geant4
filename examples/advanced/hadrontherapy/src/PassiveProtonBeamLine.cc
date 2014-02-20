@@ -314,7 +314,7 @@ void PassiveProtonBeamLine::SetDefaultDimensions()
   MOPIMotherVolumeYPosition = defaultMOPIMotherVolumeYPosition;
 
   G4double defaultMOPIMotherVolumeZPosition = 0.0 *mm;
-  MOPIMotherVolumeYPosition = defaultMOPIMotherVolumeZPosition;
+  MOPIMotherVolumeZPosition = defaultMOPIMotherVolumeZPosition;
 
   // First Kapton Layer of MOPI
   G4double defaultMOPIFirstKaptonLayerXSize = 35 *um; 
