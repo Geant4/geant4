@@ -14,6 +14,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+12-12-2013  M.K		 tag emdna-V09-06-23
+	    - G4DNAMolecularMaterial: Remove unused variable
+
+12-12-2013  M.K
+	    - G4DNAMolecularMaterial is modified to prevent segmentation fault in case a model is not created at initialisation time
+
 21-11-2013  V.I.         tag emdna-V09-06-22
             - G4ITStepProcessor2 - removed obsolete unused header
 

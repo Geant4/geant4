@@ -88,6 +88,7 @@ protected :
     mutable std::map<const G4Material*,bool,CompareMaterial> fWarningPrinted;
 
     G4bool fIsInitialized;
+    size_t fNMaterials;
 };
 
 inline const std::vector<ComponentMap> *G4DNAMolecularMaterial::GetMassFractionTable() const
