@@ -83,7 +83,8 @@ enum CexmcBasePhysicsUsed
 {
     CexmcNoBasePhysics,
     Cexmc_QGSP_BERT,
-    Cexmc_QGSP_BIC_EMY
+    Cexmc_QGSP_BIC_EMY,
+    Cexmc_FTFP_BERT
 };
 
 

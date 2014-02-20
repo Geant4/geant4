@@ -49,8 +49,12 @@
  * and ions tracking */
 #include <QGSP_BIC_EMY.hh>
 #else
-/* standard reference physics list */
+#ifdef CEXMC_USE_QGSP_BERT
 #include <QGSP_BERT.hh>
+#else
+/* standard reference physics list */
+#include <FTFP_BERT.hh>
+#endif
 #endif
 #include <G4PionMinus.hh>
 #include "CexmcProductionModelFactory.hh"
@@ -61,7 +65,11 @@
 #ifdef CEXMC_USE_QGSP_BIC_EMY
 typedef QGSP_BIC_EMY                  CexmcBasePhysics;
 #else
+#ifdef CEXMC_USE_QGSP_BERT
 typedef QGSP_BERT                     CexmcBasePhysics;
+#else
+typedef FTFP_BERT                     CexmcBasePhysics;
+#endif
 #endif
 
 typedef CexmcProductionModelFactory< CexmcBasePhysics,

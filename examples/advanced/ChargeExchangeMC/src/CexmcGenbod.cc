@@ -43,6 +43,7 @@
 
 #ifdef CEXMC_USE_GENBOD
 
+#include <G4SystemOfUnits.hh>
 #include "CexmcGenbod.hh"
 #include "CexmcException.hh"
 

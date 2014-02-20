@@ -63,6 +63,7 @@
 #include <G4LogicalVolume.hh>
 #include <G4Box.hh>
 #include <G4Tubs.hh>
+#include <G4SystemOfUnits.hh>
 #include "CexmcHistoManager.hh"
 #include "CexmcHistoManagerMessenger.hh"
 #include "CexmcProductionModel.hh"

@@ -53,6 +53,7 @@
 #include <G4VTrajectory.hh>
 #include <G4TrajectoryContainer.hh>
 #include <G4Colour.hh>
+#include <G4SystemOfUnits.hh>
 #include "CexmcEventAction.hh"
 #include "CexmcEventActionMessenger.hh"
 #include "CexmcEventInfo.hh"

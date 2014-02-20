@@ -14,11 +14,14 @@ CEXMC_USE_CUSTOM_FILTER := no
 # if CEXMC_DEBUG_CUSTOM_FILTER is 'yes' then AST trees will be printed out
 CEXMC_DEBUG_CUSTOM_FILTER := no
 # if CEXMC_USE_HISTOGRAMING is 'yes' then ROOT histograming framework will be
-# compiled. Notice: if ROOT CERN is not installed in tour system then the
+# compiled. Notice: if ROOT CERN is not installed in your system then the
 # histograming module won't compile anyway
 CEXMC_USE_HISTOGRAMING := yes
+# if CEXMC_USE_QGSP_BERT is 'yes' then QGSP_BERT will be used as basic physics,
+# otherwise - FTFP_BERT or QGSP_BIC_EMY
+CEXMC_USE_QGSP_BERT := no
 # if CEXMC_USE_QGSP_BIC_EMY is 'yes' then QGSP_BIC_EMY will be used as basic
-# physics, otherwise - QGSP_BERT
+# physics, otherwise - FTFP_BERT or QGSP_BERT
 CEXMC_USE_QGSP_BIC_EMY := no
 # if CEXMC_USE_GENBOD is 'yes' then original FORTRAN routine GENBOD() will be
 # used as phase space generator
@@ -74,7 +77,7 @@ endif
 ifeq ($(CEXMC_USE_HISTOGRAMING),yes)
   # try to determine if ROOT will be used automatically
   USE_ROOT := $(shell which root-config 2>/dev/null)
-  ifneq ($(USE_ROOT)),)
+  ifneq ($(USE_ROOT),)
     CPPFLAGS += -I`root-config --incdir`
     EXTRALIBS += `root-config --libs`
     CPPFLAGS += -DCEXMC_USE_ROOT
@@ -87,8 +90,12 @@ ifeq ($(CEXMC_USE_HISTOGRAMING),yes)
   endif
 endif
 
-ifeq ($(CEXMC_USE_QGSP_BIC_EMY),yes)
-  CPPFLAGS += -DCEXMC_USE_QGSP_BIC_EMY
+ifeq ($(CEXMC_USE_QGSP_BERT),yes)
+  CPPFLAGS += -DCEXMC_USE_QGSP_BERT
+else
+  ifeq ($(CEXMC_USE_QGSP_BIC_EMY),yes)
+    CPPFLAGS += -DCEXMC_USE_QGSP_BIC_EMY
+  endif
 endif
 
 ifeq ($(CEXMC_DEBUG_TP),yes)
@@ -99,3 +106,4 @@ endif
 all: lib bin
 
 include $(G4INSTALL)/config/binmake.gmk
+
