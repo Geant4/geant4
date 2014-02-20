@@ -664,6 +664,14 @@ void G4RunManagerKernel::BuildPhysicsTables(G4bool fakeRun)
   if( G4ProductionCutsTable::GetProductionCutsTable()->IsModified()
   || physicsNeedsToBeReBuilt)
   {
+#ifdef G4MULTITHREADED
+    if(runManagerKernelType==masterRMK)
+    {
+      // make sure workers also rebuild physics tables
+      G4UImanager* pUImanager = G4UImanager::GetUIpointer();
+      pUImanager->ApplyCommand("/run/physicsModified");
+    }
+#endif
     physicsList->BuildPhysicsTable();
     ////G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
     physicsNeedsToBeReBuilt = false;
