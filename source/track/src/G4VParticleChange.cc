@@ -494,6 +494,12 @@ G4bool G4VParticleChange::CheckSecondary(G4Track& aTrack)
   if (!itsOKforEnergy) {
     aTrack.SetKineticEnergy(0.0);
   }
+ 
+  if (!itsOK) {
+    this->DumpInfo();
+    
+  }
+
 
   return itsOK;
 }
