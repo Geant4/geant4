@@ -16,7 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-26th August 2014 P. Gumplinger (op-V09-06-06)
+23rd December 2013 M. Asai (op-V09-06-07)
+- Additional protection.
+
+22nd December 2013 M. Asai
+- move construction of WLSTimeGeneratorProfile to the constructor of G4OpWLS.
+
+18th December 2013 P. Gumplinger
+- make WLSTimeGeneratorProfile and UseTimeProfile static in G4OpWLS
+
+26th August 2013 P. Gumplinger (op-V09-06-06)
 - move theStatus assignment for Dichroic where the decision is actually made
 - made the necessary and required modifications for G4OpBoundaryProcess to
   work in situations with parallel worlds
@@ -24,7 +33,7 @@ committal in the CVS repository !
   detector associated with the PostStepPoint volume when optical photons are
   detected at the entrance boundary
 
-14th June 2014 P. Gumplinger (op-V09-06-05)
+14th June 2013 P. Gumplinger (op-V09-06-05)
 - fix coverity errors in G4OpBoundaryProcess
 
 13th June 2013 P.Gumplinger (op-V09-06-04)
