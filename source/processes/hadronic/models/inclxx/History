@@ -16,6 +16,11 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+9 January 2014 - Davide Mancusi (hadr-inclxx-V09-06-49)
+---------------------------------------------------------------
+- Fix: occasionally produced an excited nucleon as a pre-fragment.
+- Getter for INCL Config object in the G4INCLInterfaceStore.
+
 29 November 2013 - Davide Mancusi (hadr-inclxx-V09-06-47, -48)
 ---------------------------------------------------------------
 - Fix: energy conservation systematically fails because the G4HadProjectile
