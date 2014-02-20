@@ -14,11 +14,27 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18 December 2013 A.Ribon  (hadr-cross-V09-06-40)
+------------------------------------------------
+- Fixed wrong tag format.
+
+18 December 2013 A.Ribon  (hadr-cross-V09-06-39)
+------------------------------------------------
+- Removed wrong if statement against zero cross section in
+  G4CrossSectionDataStore::SampleZandA. This should be the correct
+  fix for the crashes observed in QBBC (see previous tag).
+- Instead of re-activate the 1 millibarn threshold introduced in
+  the previous tag, we decided to disable the same threshold also for
+  the inelastic cross section in G4BGGNucleonInelasticXS.
+  The rationale is that without the threshold we don't see CPU penalty,
+  and this allows future improvements of cross section behaviour near
+  the threshold.
+
 04 December 2013 A.Ribon  (hadr-cross-V09-06-38)
 ------------------------------------------------
-- Removed the 1 millibarn threshold in G4BGGNucleonElasticXS, to avoid
-  rare crashes observed in QBBC. A better fix of this problem will
-  be done after the release 10.
+- Commented out the 1 millibarn threshold in G4BGGNucleonElasticXS, 
+  to avoid rare crashes observed in QBBC. A better fix of this problem
+  will be done after the release 10.
 
 27 November 2013 G.Cosmo  (hadr-cross-V09-06-37)
 ------------------------------------------------

@@ -1,0 +1,12 @@
+../../../../../bin/SUN-CC/G4TripathiCrossSectionTest < input_ar_ag|grep Token|sed  "s/Token//g">input_ar_ag.liste
+../../../../../bin/SUN-CC/G4TripathiCrossSectionTest < input_ar_bi|grep Token|sed "s/Token//g">input_ar_bi.liste
+../../../../../bin/SUN-CC/G4TripathiCrossSectionTest < input_ar_u|grep Token|sed "s/Token//g">input_ar_u.liste
+../../../../../bin/SUN-CC/G4TripathiCrossSectionTest < input_c_al|grep Token|sed "s/Token//g">input_c_al.liste
+../../../../../bin/SUN-CC/G4TripathiCrossSectionTest < input_c_ca|grep Token|sed "s/Token//g">input_c_ca.liste
+../../../../../bin/SUN-CC/G4TripathiCrossSectionTest < input_c_fe|grep Token|sed "s/Token//g">input_c_fe.liste
+../../../../../bin/SUN-CC/G4TripathiCrossSectionTest < input_c_zn|grep Token|sed "s/Token//g">input_c_zn.liste
+../../../../../bin/SUN-CC/G4TripathiCrossSectionTest < input_o_ca|grep Token|sed "s/Token//g">input_o_ca.liste
+../../../../../bin/SUN-CC/G4TripathiCrossSectionTest < input_o_co|grep Token|sed "s/Token//g">input_o_co.liste
+../../../../../bin/SUN-CC/G4TripathiCrossSectionTest < input_o_ni|grep Token|sed "s/Token//g">input_o_ni.liste
+../../../../../bin/SUN-CC/G4TripathiCrossSectionTest < input_o_pb|grep Token|sed "s/Token//g">input_o_pb.liste
+../../../../../bin/SUN-CC/G4TripathiCrossSectionTest < input_o_si|grep Token|sed "s/Token//g">input_o_si.liste
