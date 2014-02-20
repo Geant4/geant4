@@ -434,6 +434,11 @@ QWidget* G4UIQt::CreateRightSplitterWidget(){
   fRightSplitterWidget->addWidget(CreateCoutTBWidget());
   fRightSplitterWidget->addWidget(commandLineWidget);
 
+// set the QGLWidget size policy
+  QSizePolicy policy = QSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
+  policy.setVerticalStretch(4);
+  fViewerTabHandleWidget->setSizePolicy(policy);
+  
   fViewerTabHandleWidget->setMinimumSize(40,40);
   
   commandLineWidget->setMinimumSize(50,50);
@@ -524,10 +529,8 @@ bool G4UIQt::AddTabWidget(
       fViewerTabHandleWidget->layout()->removeWidget(fEmptyViewerTabLabel);
       delete fEmptyViewerTabLabel;
       fEmptyViewerTabLabel = NULL;
-      printf("fViewerTabHandleWidget :%d %d\n",fViewerTabHandleWidget->width(), fViewerTabHandleWidget->height());
       
       fViewerTabHandleWidget->layout()->addWidget(fViewerTabWidget);
-      printf("fViewerTabHandleWidget :%d %d\n",fViewerTabHandleWidget->width(), fViewerTabHandleWidget->height());
     }
   }
 
