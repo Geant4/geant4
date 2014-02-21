@@ -46,6 +46,7 @@
 
 #include "UCons.hh"
 #include "UTubs.hh"
+#include "UBox.hh"
 
 class UEnclosingCylinder;
 class UReduciblePolygon;
@@ -220,6 +221,7 @@ class UPolycone : public VUSolid
     UPolyconeHistorical* fOriginalParameters; // original input parameters
     double       fCubicVolume;   // Cubic Volume
     double       fSurfaceArea;   // Surface Area
+    mutable UBox fBox;  // Bounding box for Polycone
 
     inline void SetOriginalParameters()
     {
