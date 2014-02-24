@@ -12,6 +12,10 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+20 Feb 2014 Gunter Folger      had-binary-V10-00-02
+- make pointers to G4ParticleDefinition use const.
+
 31 Jan 2014 Gunter Folger      had-binary-V10-00-01
 - G4BinaryLightIoncascade::FuseNucleiAndPrompound():
    protect at low energy: available energy is not sufficient to create a 

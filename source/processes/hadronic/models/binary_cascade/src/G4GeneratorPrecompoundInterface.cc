@@ -136,7 +136,7 @@ Propagate(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus)
     G4KineticTrackVector::iterator iter;
     for(iter=theSecondaries->begin(); iter !=theSecondaries->end(); ++iter)
     {
-        G4ParticleDefinition* part = (*iter)->GetDefinition();
+        const G4ParticleDefinition* part = (*iter)->GetDefinition();
         G4double e = (*iter)->Get4Momentum().e();
         G4double mass = (*iter)->Get4Momentum().mag();
         G4ThreeVector mom = (*iter)->Get4Momentum().vect();
@@ -400,7 +400,7 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
         G4KineticTrackVector::iterator iter;
         for(iter=theSecondaries->begin(); iter !=theSecondaries->end(); ++iter)
 	{
-		G4ParticleDefinition* part = (*iter)->GetDefinition();
+		const G4ParticleDefinition* part = (*iter)->GetDefinition();
 	        G4LorentzVector aTrack4Momentum=(*iter)->Get4Momentum();
 
 		if( part != proton && part != neutron &&
@@ -610,8 +610,8 @@ PropagateNuclNucl(G4KineticTrackVector* theSecondaries, G4V3DNucleus* theNucleus
         <<" "<<aPrecoResult->operator[](ll)->GetMass()<<G4endl;
 #endif
 
-      G4ParticleDefinition * aFragment=aPrecoResult->operator[](ll)->GetDefinition();
-      G4ParticleDefinition * LastFragment=aFragment;
+      const G4ParticleDefinition * aFragment=aPrecoResult->operator[](ll)->GetDefinition();
+      const G4ParticleDefinition * LastFragment=aFragment;
       if     (aFragment == proton)  {LastFragment=G4AntiProton::AntiProtonDefinition();}
       else if(aFragment == neutron) {LastFragment=G4AntiNeutron::AntiNeutronDefinition();}
       else if(aFragment == deuteron){LastFragment=G4AntiDeuteron::AntiDeuteronDefinition();}

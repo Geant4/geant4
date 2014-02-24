@@ -174,8 +174,8 @@ G4bool G4Absorber::FindAbsorbers(G4KineticTrack & kt,
 G4bool G4Absorber::FindProducts(G4KineticTrack & kt)
 {
 // Choose the products type
-  G4ParticleDefinition * prod1;
-  G4ParticleDefinition * prod2;
+  const G4ParticleDefinition * prod1;
+  const G4ParticleDefinition * prod2;
   G4KineticTrack * abs1 = (*theAbsorbers)[0];
   G4KineticTrack * abs2 = (*theAbsorbers)[1];
 

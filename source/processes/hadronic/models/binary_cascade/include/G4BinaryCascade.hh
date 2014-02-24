@@ -211,7 +211,7 @@ private:
   G4LorentzRotation precompoundLorentzboost;
   G4double theOuterRadius;
   G4bool thePrimaryEscape;
-  G4ParticleDefinition * thePrimaryType;
+  const G4ParticleDefinition * thePrimaryType;
   G4ThreeVector theMomentumTransfer;
 
 
