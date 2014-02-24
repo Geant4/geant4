@@ -20,7 +20,6 @@
 #include <sstream>
 #include "UCons.hh"
 
-
 using namespace std;
 
 ////////////////////////////////////////////////////////////////////////
@@ -1258,13 +1257,14 @@ double UCons::DistanceToIn(const UVector3& p,
 // - Only to phi planes if outside phi extent
 // - Return 0 if point inside
 
-double UCons::SafetyFromOutside(const UVector3& p, bool) const
+double UCons::SafetyFromOutside(const UVector3& p, bool aAccurate) const
 {
   double safe = 0.0, rho, safeR1, safeR2, safeZ, safePhi, cosPsi;
   double pRMin, pRMax;
 
   rho  = std::sqrt(p.x * p.x + p.y * p.y);
   safeZ = std::fabs(p.z) - fDz;
+  safeR1 = 0; safeR2 = 0;
 
   if (fRmin1 || fRmin2)
   {
@@ -1317,10 +1317,29 @@ double UCons::SafetyFromOutside(const UVector3& p, bool) const
   }
   if (safe < 0.0)
   {
-    safe = 0.0;
+    safe = 0.0; return safe; //point is Inside
   }
+  if (!aAccurate) return safe;
 
-  return safe;
+  double safsq = 0.0;
+  int count = 0;
+  if (safeR1 > 0)
+  {
+    safsq += safeR1 * safeR1;
+    count++;
+  }
+  if (safeR2 > 0)
+  {
+    safsq += safeR2 * safeR2;
+    count++;
+  }
+  if (safeZ > 0)
+  {
+    safsq += safeZ * safeZ;
+    count++;
+  }
+  if (count == 1) return safe;
+  return std::sqrt(safsq);
 }
 
 ///////////////////////////////////////////////////////////////
