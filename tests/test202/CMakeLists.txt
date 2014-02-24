@@ -26,7 +26,8 @@ if(XVFB_FOUND)
 
   GEANT4_ADD_TEST(test202 COMMAND xvfb.sh ${CMAKE_CURRENT_BINARY_DIR}/test202 run0.mac
                               ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
-                              TIMEOUT 2000)
+                              DEPENDS test202-build
+										TIMEOUT 2000)
 
     
 endif()

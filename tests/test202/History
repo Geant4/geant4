@@ -1,8 +1,15 @@
-$Id:$
+$Id$
 -----------------------------------------------------------------------------
 
 History file for test/test202 subdirectory
 ------------------------------------------------
+21st February 2014 Gunter Folger    (test202-V10-00-01)
+- add dependency to build avoiding a running the test before teh build is done.
+  revert back changes introduced in test202-V10-00-00, used svn merge -r 78740:73547 xvfb.sh
+  
+21st January 2014  Gunter Folger    (test202-V10-00-00)
+- allow for multiple test jobs in parallel choosing a free display number.
+   Also check if a server is already running for this display.
 
 25th November 2013 Gunter Folger    (test202-V09-06-06)
 - fix for VC18, use DumpInfo in place of StreamInfo construct.
