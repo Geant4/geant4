@@ -17,10 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- Jan. 04, 14 H.Kurashige (decay-V09-06-02)
+- Feb. 22, 14 H.Kurashige   (decay-V09-06-04)
+- Fix the bug of assigning DBL_MAX for stable particle life time
+  (Bug #1569)
+
+- Jan. 04, 14 H.Kurashige   (decay-V09-06-02)
 - Fix the bug of wrong global time for secondaries 
   in case that the primary track stops during along step
-  (Bung #1551)
+  (Bug #1555)
  
 - Jun. 11, 13 M.Asai (decay-V09-06-01)
 - Remove the modification in the previous tag, as it is no longer needed as all ions
