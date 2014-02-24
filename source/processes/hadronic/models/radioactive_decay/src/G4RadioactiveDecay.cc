@@ -971,8 +971,19 @@ G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
                   modeSumBR[6] += b;
                 }
                 break;
+
+              case Beta2Minus:
+                  // Not yet implemented
+                  // G4cout << " Double beta- decay, a = " << a << ", b = " << b << ", c = " << c << G4endl;
+                  break;
+
+              case Beta2Plus:
+                  // Not yet implemented
+                  // G4cout << " Double beta+ decay, a = " << a << ", b = " << b << ", c = " << c << G4endl;
+                  break;
+
               case SpFission:
-            	  //Still needed to be implemented
+            	  // Not yet implemented
             	  //G4cout<<"Sp fission channel"<<a<<'\t'<<b<<'\t'<<c<<std::endl;
             	  break;
               case RDM_ERROR:

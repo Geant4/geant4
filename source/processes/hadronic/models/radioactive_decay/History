@@ -14,6 +14,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+20 February 2014  Dennis Wright radioactive_decay-V10-00-01
+-----------------------------------------------------------
+- G4RadioactiveDecayMode.hh, .cc: add double beta- decay and double beta+ decay
+  to enum
+- G4RadioactiveDecay.cc: add dummies for double beta- decay and double beta+
+  decay in order to partially fix Bug 1560: long ground state lifetimes with no decay
+  scheme
+ 
 6 February 2014  Dennis Wright radioactive_decay-V10-00-00
 ----------------------------------------------------------
 - G4NuclearDecayChannel::DecayIt: remove enforcement of single gamma emission
