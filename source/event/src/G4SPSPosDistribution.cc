@@ -960,6 +960,7 @@ G4bool G4SPSPosDistribution::IsSourceConfined()
   // else false
   G4VPhysicalVolume *theVolume;
   theVolume=gNavigator->LocateGlobalPointAndSetup(particle_position,ptr,true);
+  if(!theVolume) return(false);
   G4String theVolName = theVolume->GetName();
   if(theVolName == VolName)
     {
