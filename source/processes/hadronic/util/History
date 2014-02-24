@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 February 2014 Gunter Folger   (hadr-util-V10-00-01)
+------------------------------------------------------
+- G4ReactionProduct: make G4ParticleDefinition* const.
+    add temp. method returning const G4ParticleDefinition* GetDefintion_asConst()
+	 will replace GetDefinition() once hadronics converted.  
+
 22 January 2014  Gabriele Cosmo  (hadr-util-V10-00-00)
 ------------------------------------------------------
 - Cleanup of automatic TLS data conversion in G4ReactionProduct,

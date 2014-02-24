@@ -50,7 +50,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator = 0;
   }
  
  G4ReactionProduct::G4ReactionProduct(
-  G4ParticleDefinition *aParticleDefinition )
+  const G4ParticleDefinition *aParticleDefinition )
   {
     SetMomentum( 0.0, 0.0, 0.0 );
     SetPositionInNucleus( 0.0, 0.0, 0.0 );
@@ -124,7 +124,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator = 0;
  G4ReactionProduct &G4ReactionProduct::operator=(
   const G4HadProjectile &right )
   {
-    theParticleDefinition = const_cast<G4ParticleDefinition *>(right.GetDefinition());
+    theParticleDefinition = right.GetDefinition();
     SetPositionInNucleus( 0.0, 0.0, 0.0 );
     formationTime = 0.0;
     hasInitialStateParton = false;
@@ -140,7 +140,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator = 0;
   }
  
  void G4ReactionProduct::SetDefinitionAndUpdateE(
-  G4ParticleDefinition *aParticleDefinition )
+  const G4ParticleDefinition *aParticleDefinition )
   {    G4double aKineticEnergy = GetKineticEnergy();
     G4double pp = GetMomentum().mag();
     G4ThreeVector aMomentum = GetMomentum();
@@ -152,7 +152,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator = 0;
   }
 
  void G4ReactionProduct::SetDefinition(
-  G4ParticleDefinition *aParticleDefinition )
+  const G4ParticleDefinition *aParticleDefinition )
   {
     theParticleDefinition = aParticleDefinition;
     mass = aParticleDefinition->GetPDGMass();

@@ -72,7 +72,7 @@ class G4ReactionProduct
  public:
     G4ReactionProduct();
     
-    G4ReactionProduct( G4ParticleDefinition *aParticleDefinition );
+    G4ReactionProduct(const G4ParticleDefinition *aParticleDefinition );
 
     ~G4ReactionProduct() {}
     
@@ -104,12 +104,15 @@ class G4ReactionProduct
     inline G4bool operator!= ( const G4ReactionProduct &right ) const
     { return ( this != (G4ReactionProduct*) &right ); }
     
-    inline G4ParticleDefinition *GetDefinition() const
+    inline const G4ParticleDefinition* GetDefinition_asConst() const
     { return theParticleDefinition; }
     
-    void SetDefinition( G4ParticleDefinition *aParticleDefinition );
+    inline G4ParticleDefinition* GetDefinition() const
+    { return const_cast<G4ParticleDefinition*>(theParticleDefinition); }
+
+    void SetDefinition(const G4ParticleDefinition* aParticleDefinition );
    
-    void SetDefinitionAndUpdateE( G4ParticleDefinition *aParticleDefinition );
+    void SetDefinitionAndUpdateE(const G4ParticleDefinition* aParticleDefinition );
       
     void SetMomentum( const G4double x, const G4double y, const G4double z );
     
@@ -212,7 +215,7 @@ class G4ReactionProduct
  
  private:
     
-    G4ParticleDefinition *theParticleDefinition;
+    const G4ParticleDefinition *theParticleDefinition;
     
     // for use with string models and cascade.
     G4ThreeVector positionInNucleus;
