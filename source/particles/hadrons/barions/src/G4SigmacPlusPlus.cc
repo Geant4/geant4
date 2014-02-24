@@ -69,7 +69,7 @@ G4SigmacPlusPlus* G4SigmacPlusPlus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,     2.45402*GeV,      2.23*MeV,  +2.0*eplus,
+                 name,     2.45398*GeV,      2.26*MeV,  +2.0*eplus,
                     1,              +1,             0,
                     2,              +2,             0,
              "baryon",               0,            +1,        4222,

@@ -70,11 +70,11 @@ G4KaonZeroShort* G4KaonZeroShort::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,    0.497614*GeV,  7.352e-12*MeV,         0.0,
+                 name,    0.497614*GeV,  7.3508e-12*MeV,       0.0,
                     0,              -1,             0,
                     1,               0,             0,
               "meson",               0,             0,         310,
-                false,      0.08958*ns,          NULL,
+                false,      0.08954*ns,          NULL,
                 false,          "kaon",           310);
 
  //create Decay Table

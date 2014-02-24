@@ -71,11 +71,11 @@ G4PionZero* G4PionZero::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,   0.1349766*GeV,   7.8e-06*MeV,         0.0,
+                 name,   0.1349766*GeV,  7.73e-06*MeV,         0.0,
                     0,              -1,            +1,
                     2,               0,            -1,
               "meson",               0,             0,         111,
-                false,       8.4e-8*ns,          NULL,
+                false,      8.52e-8*ns,          NULL,
                 false,            "pi",          111);
 
  //create Decay Table

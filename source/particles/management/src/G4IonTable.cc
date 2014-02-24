@@ -1716,6 +1716,25 @@ G4ParticleDefinition* G4IonTable::FindIonInMaster(G4int Z, G4int A, G4int L, G4i
 }
 
 
+////////////////////
+G4double G4IonTable::GetLifeTime(const G4ParticleDefinition* particle) const
+{
+  if(!(particle->IsGeneralIon())) return particle->GetPDGLifeTime();
+
+  const G4Ions* ion = static_cast<const G4Ions*>(particle);
+  G4int Z = ion->GetAtomicNumber();
+  G4int A = ion->GetAtomicMass();
+  G4double E = ion->GetExcitationEnergy();
+
+  if(!pNuclideTable)
+  {
+   G4Exception("G4IonTable::GetLifeTime()","ParticleIon1001",FatalException,
+               "Method is invoked before G4IonTable is initialized.");
+  }
+  G4IsotopeProperty* isoP = pNuclideTable->GetIsotope(Z,A,E);
+  if(!isoP) return -1001.0;
+  return isoP->GetLifeTime();
+}
 
 
 

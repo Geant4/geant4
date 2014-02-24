@@ -555,8 +555,8 @@ const G4double G4ExcitedNucleonConstructor::mass[] = {
 };
 
 const G4double G4ExcitedNucleonConstructor::width[] = {
-  300.0*MeV, 115.0*MeV, 150.0*MeV, 165.0*MeV, 150.0*MeV,
-  130.0*MeV, 100.0*MeV, 100.0*MeV, 200.0*MeV, 500.0*MeV,
+  300.0*MeV, 115.0*MeV, 150.0*MeV, 150.0*MeV, 150.0*MeV,
+  130.0*MeV, 150.0*MeV, 100.0*MeV, 250.0*MeV, 500.0*MeV,
   555.0*MeV, 350.0*MeV, 500.0*MeV, 400.0*MeV, 500.0*MeV
 };
 

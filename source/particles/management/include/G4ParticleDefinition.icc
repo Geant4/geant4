@@ -33,6 +33,24 @@ inline
   return g4particleDefinitionInstanceID; 
 }
 
+inline
+ G4bool G4ParticleDefinition::GetPDGStable() const
+{
+  if(IsGeneralIon())
+  { return (GetIonLifeTime()<0.); }
+  else
+  { return thePDGStable; }
+}
+
+inline
+ G4double G4ParticleDefinition::GetPDGLifeTime() const
+{
+  if(IsGeneralIon())
+  { return GetIonLifeTime(); }
+  else
+  { return thePDGLifeTime; }
+}
+
 inline 
  G4ParticleTable* G4ParticleDefinition::GetParticleTable() const
 { 

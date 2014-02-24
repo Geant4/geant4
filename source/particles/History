@@ -16,6 +16,52 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- 24. Feb. 2014 Hisaya Kurashige (particles-V10-00-03)
+- Fix compiler warnings in G4IonTable::GetLifetime() 
+
+- 22. Feb. 2014 Hisaya Kurashige (particles-V10-00-02)
+-Update particle properties for PDG2013 and fix bugs
+ - Fix PDG code for f0(1370) 10221-->30221
+ - Update muon life time, mass and width
+ - Update quark mass and width
+ - Update pi0 life and width
+ - Update eta mass and width
+ - Update f0(500) mass, width and name (was f0(600))
+ - Update rho0 mass
+ - Update f0(980) mass
+ - Update f1(1285) mass and width
+ - Update eta(1405) mass and width
+ - Update K0s life and width
+ - Update K0* mass and width
+ - Update D0,AntiD0, D+/- mass
+ - Update Ds+/- mass
+ - Update B0,AntiB0, B+/- mass
+ - Update Bs0,AntiBs0 mass width and life
+ - Update Bc+/-0 mass width and life
+ - Update Etac mass width and life
+ - Update Neutron width and life
+ - Update Sigma_b+/- mass and  width
+ - Update N(1650) width
+ - Update N(1700) width
+ - Update N(1720) width
+ - Update delta(1232)- width
+ - Update delta(1600) width
+ - Update delta(1620) width
+ - Update delta(1905) mass and width
+ - Update delta(1910) mass and width
+ - Update delta(1920) width
+ - Update delta(1930) mass
+ - Update Sigmac0,Sigmac++  mass and width
+ - Update AntiLambda_b  mass ,width and life
+ - Update Sigma_b+/-  mass ,width and life
+ - Update Xi_b0/-  mass ,width and life
+ - Fix baryon number for AntiLambda_b, AntiLambda_c
+
+
+- 21. Feb. 2014  Makoto Asai (particles-V10-00-01)
+- G4ParticleDefinition::DumpTable() displays correct stability
+  information for a general ion as long as it is known to
+  G4NuclideTable. Addressing to bug report #1560.
 
 - 28. Jan. 2014  Makoto Asai (particles-V10-00-00)
 - Fix G4ParticleTable::GetParticle(G4int) method.
