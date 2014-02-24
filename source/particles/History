@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- 21. Feb. 2014  Makoto Asai (particles-V09-06-66)
+- 22. Feb. 2014  Makoto Asai (particles-V09-06-66)
+- Fixed properties for heavy anti-baryons G4AntiLambdab, G4AntiSigmabZero
+  and G4AntiLambdacPlus. Addressing problem report #1571.
+
+- 21. Feb. 2014  Makoto Asai
 - G4ParticleDefinition::DumpTable() displays correct stability
   information for a general ion as long as it is known to
   G4NuclideTable. Addressing to bug report #1560.
