@@ -34,6 +34,8 @@ List of fixes included in this public patch since the public release 10.0:
     -----
     + Changed default value of Q (charge) for /gun/ion and /gun/ionL commands.
       Now electrons are fully stripped (i.e. Q = Z) if Q is not specified.
+    + G4SPSPosDistribution::IsSourceConfined(): added protection against
+      null pointer. Addressing problem report #1255.
 
   o G3toG4:
     ------
@@ -155,6 +157,8 @@ List of fixes included in this public patch since the public release 10.0:
     + Decay:
       o Fixed problem of wrong global time for secondaries in case that the
         primary track stops during along step. Addressing problem report #1555.
+      o Replaced use of DBL_MAX with age of the universe for stable particle
+        life time. Addressing problem report #1569.
     + Management:
       o Fixed verbosity warning in G4ProcessTable.
     + Optical:
@@ -217,6 +221,11 @@ List of fixes included in this public patch since the public release 10.0:
 
   o Particles:
     ---------
+    + G4ParticleDefinition::DumpTable() displays correct stability
+      information for a general ion as long as it is known to
+      G4NuclideTable. Addressing to bug report #1560.
+    + Fixed properties for heavy anti-baryons G4AntiLambdab, G4AntiSigmabZero
+      and G4AntiLambdacPlus. Addressing problem report #1571.
     + Minor fix in G4ParticleTable::GetParticle() method.
 
   o Physics Lists:
