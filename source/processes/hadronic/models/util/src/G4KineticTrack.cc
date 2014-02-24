@@ -135,7 +135,7 @@ G4KineticTrack::G4KineticTrack(const G4KineticTrack &right) : G4VKineticNucleon(
 //   By argument constructor
 //
 
-G4KineticTrack::G4KineticTrack(G4ParticleDefinition* aDefinition,
+G4KineticTrack::G4KineticTrack(const G4ParticleDefinition* aDefinition,
                                G4double aFormationTime,
                                G4ThreeVector aPosition,
                                G4LorentzVector& a4Momentum) :
