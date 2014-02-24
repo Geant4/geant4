@@ -195,11 +195,14 @@ class G4ParticleDefinition
  
       G4bool   IsShortLived() const { return fShortLivedFlag; }
 
-      G4bool   GetPDGStable() const { return thePDGStable; }
+      G4bool   GetPDGStable() const; 
       void     SetPDGStable(const G4bool aFlag) { thePDGStable=aFlag; }
 
-      G4double GetPDGLifeTime() const { return thePDGLifeTime; }
+      G4double GetPDGLifeTime() const;
       void     SetPDGLifeTime(G4double aLifeTime) { thePDGLifeTime=aLifeTime; }
+
+      G4double GetIonLifeTime() const;
+        // Get life time of a generic ion through G4NuclideTable.
 
       G4DecayTable* GetDecayTable() const;
       void          SetDecayTable(G4DecayTable* aDecayTable); 
