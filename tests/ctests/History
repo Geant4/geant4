@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ctests-V10-00-00 21 February 2014 Gunter Folger
+- Disable tests requiring test specific environment variables
+   example-ext-exoticphysics-phonons,example-ext-errorpropagation
+	 
 ctests-V09-06-32 2  December 2013 Andrea Dotti
 - Temporary enable RE04 in Continous for debugging
 

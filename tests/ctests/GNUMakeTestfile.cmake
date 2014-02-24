@@ -169,12 +169,12 @@ foreach(_i 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18)
                   BUILD ${SRCDIR}/extended/electromagnetic/TestEm${_i})
 endforeach()
 
-GEANT4_ADD_TEST(example-ext-errorpropagation 
-                COMMAND ${BINDIR}/errprop
-                BUILD ${SRCDIR}/extended/errorpropagation
-                ENVIRONMENT G4ERROR_TARGET=PLANE_SURFACE
-                            G4ERROR_MODE=BACKWARDS
-                            G4ERROR_PROP=UNTIL_TARGET)
+#GEANT4_ADD_TEST(example-ext-errorpropagation 
+#                COMMAND ${BINDIR}/errprop
+#                BUILD ${SRCDIR}/extended/errorpropagation
+#        ------> ENVIRONMENT G4ERROR_TARGET=PLANE_SURFACE
+#                            G4ERROR_MODE=BACKWARDS
+#                            G4ERROR_PROP=UNTIL_TARGET)
 
 GEANT4_ADD_TEST(example-ext-eventgenerator-exgps 
                 COMMAND ${BINDIR}/exgps ${SRCDIR}/extended/eventgenerator/exgps/exgps_batch.in
@@ -190,10 +190,10 @@ GEANT4_ADD_TEST(example-ext-exoticphysics-monopole
                 COMMAND ${BINDIR}/monopole ${SRCDIR}/extended/exoticphysics/monopole/monopole.in
                 BUILD ${SRCDIR}/extended/exoticphysics/monopole)
 
-GEANT4_ADD_TEST(example-ext-exoticphysics-phonons
-                COMMAND ${BINDIR}/XGeBox ${SRCDIR}/extended/exoticphysics/phonon/run.in
-                BUILD ${SRCDIR}/extended/exoticphysics/phonon
-                ENVIRONMENT CRYSTALMAPS=${SRCDIR}/extended/exoticphysics/phonon/CrystalMaps)
+#GEANT4_ADD_TEST(example-ext-exoticphysics-phonons
+#                COMMAND ${BINDIR}/XGeBox ${SRCDIR}/extended/exoticphysics/phonon/run.in
+#                BUILD ${SRCDIR}/extended/exoticphysics/phonon
+#       ------>  ENVIRONMENT CRYSTALMAPS=${SRCDIR}/extended/exoticphysics/phonon/CrystalMaps)
 
 foreach(_i 01 02 03 04 05)
   GEANT4_ADD_TEST(example-ext-field-field${_i} 
