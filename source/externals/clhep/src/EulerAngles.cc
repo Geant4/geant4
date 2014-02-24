@@ -42,9 +42,9 @@ double HepEulerAngles::tolerance = Hep3Vector::ToleranceTicks * 1.0e-8;
 
 static void ZMpvEulerAnglesRep ( const HepEulerAngles & ex, double array[] ) {
 
-  register double sinPhi   = std::sin( ex.phi() )  , cosPhi   = std::cos( ex.phi() );
-  register double sinTheta = std::sin( ex.theta() ), cosTheta = std::cos( ex.theta() );
-  register double sinPsi   = std::sin( ex.psi() )  , cosPsi   = std::cos( ex.psi() );
+  double sinPhi   = std::sin( ex.phi() )  , cosPhi   = std::cos( ex.phi() );
+  double sinTheta = std::sin( ex.theta() ), cosTheta = std::cos( ex.theta() );
+  double sinPsi   = std::sin( ex.psi() )  , cosPsi   = std::cos( ex.psi() );
 
   array[0] =   cosPsi * cosPhi   - sinPsi * cosTheta * sinPhi;
   array[1] =   cosPsi * sinPhi   + sinPsi * cosTheta * cosPhi;

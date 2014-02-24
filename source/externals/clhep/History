@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 February 2014 - G.Cosmo
+- Removed deprecated 'register' qualifier in implementation.
+
 14 November 2013 - G.Cosmo
 - Updated to CLHEP-2.1.4.1:
   * Random (L.Garren <garren@fnal.gov>):

@@ -30,30 +30,30 @@ Hep3Vector & Hep3Vector::rotate (const Hep3Vector & axis,
       << "Attempt to rotate around a zero vector axis! " << std::endl;
     return *this;
   }
-  register double scale=1.0/r1;
-  register double ux = scale*axis.getX();
-  register double uy = scale*axis.getY();
-  register double uz = scale*axis.getZ();
+  double scale=1.0/r1;
+  double ux = scale*axis.getX();
+  double uy = scale*axis.getY();
+  double uz = scale*axis.getZ();
   double cd = std::cos(ddelta);
   double sd = std::sin(ddelta);
-  register double ocd = 1 - cd;
+  double ocd = 1 - cd;
   double rx;
   double ry;
   double rz;
 
-  { register double  ocdux = ocd * ux;
+  { double  ocdux = ocd * ux;
     rx = dx * ( cd + ocdux * ux           ) +
          dy * (      ocdux * uy - sd * uz ) +
          dz * (      ocdux * uz + sd * uy ) ;
   }
 
-  { register double  ocduy = ocd * uy;
+  { double  ocduy = ocd * uy;
     ry = dy * ( cd + ocduy * uy           ) +
          dz * (      ocduy * uz - sd * ux ) +
          dx * (      ocduy * ux + sd * uz ) ;
   }
 
-  { register double  ocduz = ocd * uz;
+  { double  ocduz = ocd * uz;
     rz = dz * ( cd + ocduz * uz           ) +
          dx * (      ocduz * ux - sd * uy ) +
          dy * (      ocduz * uy + sd * ux ) ;
@@ -79,9 +79,9 @@ Hep3Vector & Hep3Vector::rotate (double phi1,
   double ry;
   double rz;
 
-  register double sinPhi   = std::sin( phi1   ), cosPhi   = std::cos( phi1   );
-  register double sinTheta = std::sin( theta1 ), cosTheta1 = std::cos( theta1 );
-  register double sinPsi   = std::sin( psi1   ), cosPsi   = std::cos( psi1   );
+  double sinPhi   = std::sin( phi1   ), cosPhi   = std::cos( phi1   );
+  double sinTheta = std::sin( theta1 ), cosTheta1 = std::cos( theta1 );
+  double sinPsi   = std::sin( psi1   ), cosPsi   = std::cos( psi1   );
 
   rx = 	(cosPsi * cosPhi   - cosTheta1 * sinPsi * sinPhi)   * dx  +
 	(cosPsi * sinPhi   + cosTheta1 * sinPsi * cosPhi)   * dy  +

@@ -123,7 +123,7 @@ std::cout << "r = " << r << "sign negative \n";
   // The following big if block will locate tptr, h, and dx from whichever
   // table is applicable:
 
-  register int index;
+  int index;
 
   if ( r >= Table4step ) {
 
