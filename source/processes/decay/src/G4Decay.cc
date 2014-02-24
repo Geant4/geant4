@@ -111,7 +111,8 @@ G4double G4Decay::GetMeanLifeTime(const G4Track& aTrack  ,
 
    // check if the particle is stable?
    if (aParticleDef->GetPDGStable()) {
-     meanlife = DBL_MAX;
+    //1000000 times the life time of the universe
+     meanlife = 1e24 * s;
     
    } else {
      meanlife = aLife;
