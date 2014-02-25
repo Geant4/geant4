@@ -37,6 +37,7 @@
 // ----------------------------------------------------------------------
 
 #include "G4PionZero.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleTable.hh"
 
@@ -78,7 +79,10 @@ G4PionZero* G4PionZero::Definition()
                 false,      8.52e-8*ns,          NULL,
                 false,            "pi",          111);
 
- //create Decay Table
+   // Life time is given from width
+   anInstance->SetPDGLifeTime( hbar_Planck/(anInstance->GetPDGWidth()) );
+     
+  //create Decay Table
   G4DecayTable* table = new G4DecayTable();
 
   // create a decay channel
