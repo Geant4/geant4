@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-09-06-ref-10    (31-October-2013)
+ Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -46,6 +50,7 @@ Current available graphics systems are:
   OpenGLStoredX (OGLSX)
   OpenGLStoredXm (OGL, OGLS, OGLSXm)
   RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
@@ -2292,7 +2297,7 @@ Terminate current event processing.
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.08s Real=0.12s Sys=0.03s
+  User=0.06s Real=0.12s Sys=0.02s
 #
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -2301,7 +2306,7 @@ G4 kernel has come to Quit state.
  Maximum number of tracks in the urgent stack : 1
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 10; of which, static: 0
+Number of memory pools allocated: 10 of which, static: 0
 Dynamic pools deleted: 10 / Total memory freed: 0.0096 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

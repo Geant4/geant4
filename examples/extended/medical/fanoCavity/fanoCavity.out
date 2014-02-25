@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -220,15 +220,15 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  Current couple of seeds = 9876, 54321
 ----------------------------------------
 
- ---> NbofEvents= 1000   NbOfelectr= 70169   Tkin= 587.523 keV (0.000 %)   NbOfelec in cav= 5064   Dose/EnFluence= 34.304 cm2/g (0.000 %)
+ ---> NbofEvents= 1000   NbOfelectr= 70090   Tkin= 587.943 keV (0.000 %)   NbOfelec in cav= 4634   Dose/EnFluence= 28.618 cm2/g (0.000 %)
 
- ---> NbofEvents= 2000   NbOfelectr= 141065   Tkin= 587.759 keV (0.040 %)   NbOfelec in cav= 9786   Dose/EnFluence= 32.761 cm2/g (-4.499 %)
+ ---> NbofEvents= 2000   NbOfelectr= 140543   Tkin= 587.598 keV (-0.059 %)   NbOfelec in cav= 9379   Dose/EnFluence= 28.737 cm2/g (0.414 %)
 
- ---> NbofEvents= 3000   NbOfelectr= 211547   Tkin= 587.352 keV (-0.069 %)   NbOfelec in cav= 14334   Dose/EnFluence= 31.207 cm2/g (-4.743 %)
+ ---> NbofEvents= 3000   NbOfelectr= 210903   Tkin= 588.079 keV (0.082 %)   NbOfelec in cav= 14300   Dose/EnFluence= 28.427 cm2/g (-1.078 %)
 Run terminated.
 Run Summary
   Number of events processed : 4000
-  User=28.69s Real=28.6s Sys=0.02s
+  User=42.85s Real=84.81s Sys=0s
 
  ======================== run summary ======================
 
@@ -238,32 +238,32 @@ Run Summary
 
  ============================================================
 
- Process calls frequency --->  compt= 281689  Transportation= 78168  msc= 2464883  eIoni= 1719937
+ Process calls frequency --->  compt= 281376  Transportation= 78001  msc= 2437509  eIoni= 1734512
 
  Gamma crossSections in wall material :  compt= 63.447 cm2/g   --> total= 63.447 cm2/g
 
- Mean energy of secondary e- = 588.0271 keV +- 0.1030 %  (--> range in wall material = 2.2206 mm )
- Mass_energy_transfer coef: 29.8469 cm2/g
+ Mean energy of secondary e- = 588.1614 keV +- 0.1032 %  (--> range in wall material = 2.2213 mm )
+ Mass_energy_transfer coef: 29.8537 cm2/g
 
- StoppingPower in wall   = 1.9640 MeV*cm2/g
-               in cavity = 1.9640 MeV*cm2/g
+ StoppingPower in wall   = 1.9639 MeV*cm2/g
+               in cavity = 1.9639 MeV*cm2/g
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 19112	 Energy = 9.6496 GeV
-      Exit  --> nbParticles = 19112	 Energy = 9.6504 GeV
+      Enter --> nbParticles = 19512	 Energy = 9.9451 GeV
+      Exit  --> nbParticles = 19519	 Energy = 9.9463 GeV
 
- Total edep in cavity = 13.8889 MeV +- 3.6884 %	 Total charged trackLength = 53.2175 m     (mean value = 2.7845 mm )
- Total dose in cavity = 22.1048 MeV/mg
- Dose/EnergyFluence   = 31.2499 cm2/g
+ Total edep in cavity = 12.9039 MeV +- 2.3521 %	 Total charged trackLength = 53.6050 m     (mean value = 2.7473 mm )
+ Total dose in cavity = 20.5372 MeV/mg
+ Dose/EnergyFluence   = 29.0338 cm2/g
 
- (Dose/EnergyFluence)/Mass_energy_transfer = 1.04701 +- 0.03863
+ (Dose/EnergyFluence)/Mass_energy_transfer = 0.97254 +- 0.02290
 
- StepSize of ch. tracks in wall   = 112.7461 um  +- 72.0287 um 	 (nbSteps/track = 14.8612)
- StepSize of ch. tracks in cavity = 769.5613 um  +- 962.0339 um 	 (nbSteps/track = 3.6183)
+ StepSize of ch. tracks in wall   = 112.9240 um  +- 72.4283 um 	 (nbSteps/track = 14.9086)
+ StepSize of ch. tracks in cavity = 1.1295 mm  +- 1.1682 mm 	 (nbSteps/track = 2.4323)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 100595595, 977048709
+ Current couple of seeds = 1005932354, 1111854190
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -275,7 +275,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.085 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.083 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

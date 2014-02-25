@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -214,27 +214,27 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=7.65s Real=7.66s Sys=0s
+  User=11.29s Real=20.29s Sys=0.01s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         33.38
-Average number of gamma                      19.72
-Average number of e+                         0.7623
-Average number of steps in the phantom       12.05
-Average number of e- steps in the target     18.06
-Average number of g  produced in the target  18.88
-Average number of e- produced in the target  21.07
-Average number of g produced in the phantom  0.4998
-Average number of e- produced in the phantom 6.024
-Total fGamma fluence in front of the phantom 7.947 MeV 
+Average number of e-                         33.05
+Average number of gamma                      19.46
+Average number of e+                         0.7535
+Average number of steps in the phantom       12.01
+Average number of e- steps in the target     18.05
+Average number of g  produced in the target  18.62
+Average number of e- produced in the target  20.76
+Average number of g produced in the phantom  0.4982
+Average number of e- produced in the phantom 6.006
+Total fGamma fluence in front of the phantom 8.075 MeV 
 ========================================================
 
 
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.36 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.37 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

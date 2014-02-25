@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -431,14 +431,14 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=5.7s Real=5.72s Sys=0.01s
+  User=10.27s Real=10.43s Sys=0s
 
  The run consists of 1000000 gamma of 100 keV through 1 cm  of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	Transportation = 848039	compt = 149522	phot = 2439
+ Process calls frequency --->	Transportation = 848109	compt = 149453	phot = 2438
 
- Nb of incident particles unaltered after 1 cm  of Water : 848039 over 1000000 incident particles.  Ratio = 84.804 %
- ---> CrossSection per volume:	0.16483 cm^-1 	CrossSection per mass: 16.483 mm2/g 
+ Nb of incident particles unaltered after 1 cm  of Water : 848109 over 1000000 incident particles.  Ratio = 84.811 %
+ ---> CrossSection per volume:	0.16475 cm^-1 	CrossSection per mass: 16.475 mm2/g 
 
  Verification from G4EmCalculator: 
 	compt= 16.23 mm2/g 	phot= 268.53 um2/mg	total= 16.499 mm2/g 
@@ -446,7 +446,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1511006539, 381816580
+ Current couple of seeds = 513754673, 537143655
 ----------------------------------------
 #
 /gun/particle e-
@@ -482,7 +482,7 @@ Index : 0     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1511006539, 381816580
+ Current couple of seeds = 513754673, 537143655
 ----------------------------------------
 
 ---> Begin of Event: 0
@@ -507,14 +507,14 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=6.89s Real=6.85s Sys=0s
+  User=12.13s Real=18.24s Sys=0s
 
  The run consists of 1000000 e- of 100 MeV through 1 cm  of Water (density: 1 g/cm3 )
 
- Process calls frequency --->	Transportation = 537710	eBrem = 280655	eIoni = 181635
+ Process calls frequency --->	Transportation = 537737	eBrem = 280621	eIoni = 181642
 
- Nb of incident particles unaltered after 1 cm  of Water : 537710 over 1000000 incident particles.  Ratio = 53.771 %
- ---> CrossSection per volume:	0.62044 cm^-1 	CrossSection per mass: 62.044 mm2/g 
+ Nb of incident particles unaltered after 1 cm  of Water : 537737 over 1000000 incident particles.  Ratio = 53.774 %
+ ---> CrossSection per volume:	0.62039 cm^-1 	CrossSection per mass: 62.039 mm2/g 
 
  Verification from G4EmCalculator: 
 	eBrem= 37.785 mm2/g 	eIoni= 24.337 mm2/g 	total= 62.123 mm2/g 
@@ -522,7 +522,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2035445064, 1209465863
+ Current couple of seeds = 2042933453, 1105443544
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
