@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -216,7 +216,6 @@ ionIoni:   for  GenericIon    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 220 bins
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
-      Stopping Power data for 17 ion/material pairs 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          ParamICRU73 :  Emin=        0 eV    Emax=       10 TeV
 
@@ -517,13 +516,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.14s Real=0.13s Sys=0s
+  User=0.15s Real=0.18s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 8.0989 MeV :  1.611 MeV      1.99 +- 0.199 %      5.99 mm  +-  1.3 mm 
-   liquidArgon: 1.6766 MeV :  1.672 MeV     9.971 +- 0.9971 %      8.34 mm  +- 8.55 mm 
+          Lead:  7.786 MeV :  1.781 MeV     2.288 +- 0.2288 %      5.55 mm  +- 1.41 mm 
+   liquidArgon: 1.9333 MeV :  1.763 MeV     9.117 +- 0.9117 %      9.66 mm  +- 9.18 mm 
 
 ------------------------------------------------------------
  Beam particle gamma  E = 10 MeV
@@ -531,15 +530,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 8.09886 MeV
-liquidArgon:	 1.67656 MeV
+      Lead:	 7.78601 MeV
+liquidArgon:	 1.93326 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1550707139, 1349705094
+ Current couple of seeds = 902124852, 926412389
 ----------------------------------------
 #
 #/run/particle/storePhysicsTable data_stand
