@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+26-02-14 mma (exhadr03-V10-00-01)
+- PhysicsList: use G4HadronElasticPhysicsHP 
+     
 14-12-13 mma (exhadr03-V10-00-00)
 - DetectorConstruction: remove magfield
 - MT: add ActionInitialization. Modify Hadr03.cc

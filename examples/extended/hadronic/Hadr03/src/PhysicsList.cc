@@ -35,7 +35,7 @@
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
 
-#include "G4HadronElasticPhysics.hh"
+#include "G4HadronElasticPhysicsHP.hh"
 #include "G4HadronPhysicsFTFP_BERT_HP.hh"
 #include "G4HadronPhysicsQGSP_BIC_HP.hh"
 #include "G4HadronInelasticQBBC.hh"
@@ -68,7 +68,7 @@ PhysicsList::PhysicsList()
   new G4UnitDefinition( "um2/mg", "um2/mg","Surface/Mass", um*um/mg);  
   
   // Hadron Elastic scattering
-  RegisterPhysics( new G4HadronElasticPhysics(verb) );
+  RegisterPhysics( new G4HadronElasticPhysicsHP(verb) );
 
   // Hadron Inelastic Physics
   RegisterPhysics( new G4HadronPhysicsFTFP_BERT_HP(verb));

@@ -6,15 +6,15 @@
 /control/verbose 2
 /run/verbose 2
 #
-###/testhadr/det/setIsotopeMat B10 5 10 2.46 g/cm3
+/testhadr/det/setIsotopeMat B10 5 10 2.46 g/cm3
 ###/testhadr/det/setIsotopeMat B11 5 11 2.46 g/cm3
-/testhadr/det/setMat G4_B 
+###/testhadr/det/setMat G4_B 
 /testhadr/det/setSize 100 km
 #
 /run/initialize
 #
 /gun/particle neutron
-/gun/energy 10 keV
+/gun/energy 1 eV
 #
 /process/list
 /process/inactivate hadElastic
