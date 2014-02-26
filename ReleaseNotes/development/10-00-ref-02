@@ -1,0 +1,214 @@
+
+                       geant4-10-00-ref-02
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Added ability to handle ntuple columns of vectors in G4AnalysisManager.
+ o Corrected cloning mechanism for USolids and fixes to UPolycone shape.
+ o Updated particle properties to PDG-2013.
+ o New data sets RadioactiveDecay-4.1 and PhotonEvaporation-3.1.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(*)  Fixes included in release 10.0.p01
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V10-00-07
+-----
+- Added variables for G4LIB_{BUILD,USE}_EXPAT as for ZLIB and export them    (*)
+  based on value of GEANT4_USE_SYSTEM_EXPAT. Addresses problem report #1567.
+- Added builtin zlib to list of features, added G4zlib to list of libraries  (*)
+  when used; export them to geant4-config. Addresses problem report #1572.
+- Replaced use of GNU awk extension 'length' in geant4-config for            (*)
+  determining number of datasets. Use return value of split function to get
+  length of array. Addresses problem reported in item #1614 in hypernews
+ 'Installation and Configuration' forum.
+- Updated data sets to RadioactiveDecay-4.1 and PhotonEvaporation-3.1.
+
+analysis                                         analysis-V10-00-02
+--------
+- Updated to g4tools 1.9.0 for ntuple_booking and ntuple classes, and
+  rest of tools to g4tools 1.8.0. See History_tools for complete list
+  of modifications.
+- Added new CreateNtupleTColumn() functions for ntuple columns of vectors
+  in G4AnalysisManager.
+
+event                                            event-V10-00-01             (*)
+-----
+- G4SPSPosDistribution::IsSourceConfined(): added protection against
+  null pointer. Addressing problem report #1255.
+
+externals                                        externals-V10-00-00
+---------
+- Removed deprecated 'register' qualifiers in implementation of CLHEP classes.
+
+geometry/solids/CSG                              geom-csg-V10-00-02          (*)
+-------------------
+- Added correct cloning mechanism in G4U* wrappers.
+  Addressing problem report #1553.
+- Simply reset polyhedron pointer to zero for modifiers of G4U* wrappers
+  in parameterisation. Resolves crash in MT visualization when using USolids.
+
+geometry/solids/specific                         geom-specific-V10-00-04     (*)
+------------------------
+- Corrected cloning mechanism in G4U* wrappers. Addressing problem report #1553.
+- Simply reset polyhedron pointer to zero for modifiers of G4U* wrappers
+  in parameterisation. Resolves crash in MT visualization when using USolids.
+
+geometry/solids/usolids                          geom-usolids-V10-00-03      (*)
+-----------------------
+- Implemented precise safety in UTubs and UCons for SafetyFromOutside().
+  Precise safety is used in UPolycone for calculation of SafetyFromOutside().
+- Corrected implementation of Clone() method in UBox, UTet, UTrd.
+  Corrected cloning mechanism and copy constructor in G4USolid.
+  Addressing problem report #1553.
+- UPolycone fixes: added validity check of shape for case when RMin > RMax;
+  moved global bounding-box to be a class data member.
+  Corrected implementation of DistanceToOut(p,v) for convexity and normals;
+  corrected implementation of DistanceToOut(p,v) for stuck tracks due to
+  DistanceToIn=DistanceToOut=0; corrected implementation of Inside() in case
+  of OpenPhi.
+- Removed ResetPolyhedron() from G4USolid bridge class as not necessary;
+  moved 'fPolyhedron' pointer to protected.
+
+geometry/volumes                                 geomvol-V10-00-00
+----------------
+- Minor cleanup and optimisation to G4EnhancedAllocator.
+- Code cleanup in G4GeometryWorkspace and G4GeometryWorkspacePool.
+
+global                                           global-V10-00-05            (*)
+------
+- Added protections to avoid core dumps caused by division by zero 
+  and other minor updates in G4ConvergenceTester.
+- Fixed Coverity defects in G4Physics2DVector::Retrieve().
+
+interfaces                                       interfaces-V10-00-01        (*)
+----------
+- Explicitly set the LC_NUMBERIC locale to "C" in G4UIQt.
+  Addressing problem report #1487.
+  Fixed problem with resizing the QGLwidget when scene is opened from UI.
+
+materials                                        materials-V10-00-00
+---------
+- G4SandiaTable: make run time methods const, as materials are shared
+  between threads; added new methods GetSandiaCofWater(), GetWaterEnergyLimit()
+  and GetWaterCofForMaterial().
+
+particles                                        particles-V10-00-04
+---------
+- Updated particle properties to PDG-2013.
+- Added G4Exception in G4ElectronOcuppancy::AddElectron()
+- Compute life time from mass width for pi0 and sigma0.
+  Addressing problem report #1570.
+- G4ParticleDefinition::DumpTable() displays correct stability information   (*)
+  for a general ion as long as it is known to G4NuclideTable.
+  Addressing to bug report #1560.
+- Fixed properties for heavy anti-baryons G4AntiLambdab, G4AntiSigmabZero    (*)
+  and G4AntiLambdacPlus. Addressing problem report #1571.
+
+physics_lists
+-------------
+- constructors/electromagnetic (phys-ctor-em-V10-00-08)
+  o G4EmDNAPhysics_option1: added new constructor for DNA physics
+
+processes/decay                                  decay-V10-00-02             (*)
+---------------
+- Replaced use of DBL_MAX with age of the universe for stable particle
+  life time. Addressing problem report #1569.
+
+processes/electromagnetic/lowenergy              emlowen-V10-00-03
+-----------------------------------
+- Added new model class G4LowEWentzelVIModel.
+
+processes/electromagnetic/standard               emstand-V10-00-12
+----------------------------------
+- Moved methods ComputeTheta0,SimpleScattering(), SampleDisplacement(),      (*)
+  LatCorrelation() to be inlined for small CPU speedup.
+- Removed method SampleDisplacement() in G4UrbanMscModel; code moved inside
+  SampleScattering().
+- G4WentzelOKandVIxSection, G4WentzelVIRelXSection, G4WentzelVIModel,
+  G4WentzelVIRelModel, G4eCoulombScatteringModel, G4hCoulombScatteringModel:
+  added Boolean flag ro identify in physics-list if multiple and single
+  scattering are combined or not.
+- Trivial fix for Coverity report in G4PAIxSection.                          (*)
+
+processes/electromagnetic/utils                  emutils-V10-00-02           (*)
+-------------------------------
+- G4EmCalculator: in FindCouple() method, implemented loop over all regions
+  if argument pointer to region of the method is null.
+  Added G4Exception if G4MaterialCutsCouple is not found out and also inside
+  GetCSDARange() when CSDA table is not initialized.
+- G4LossTableMananger: fixed bug for initialisation of several runs in one
+  job (affecting muons and e- and providing non-reproducibility).
+- G4LossTableMananger, G4EmProcessOptions: define default verbosity=0
+  for worker thread, so summary on EM processes is not duplicated.
+- G4VEnergyLossProcess, G4VEmProcess: define fixed precison=6 for
+  initialisation printout.
+
+processes/hadronic
+------------------
+- management (hadr-man-V10-00-00)                                            (*)
+  o Added printout of energy momentum check in G4HadronicProcess.
+- models/binary_cascade (had-binary-V10-00-02)
+  o Made pointers to G4ParticleDefinition use const.
+- models/de_excitation (hadr-deex-V10-00-03)
+  o G4NuclearLevelManager: trivial fix for defect reported by Coverity.      (*)
+- models/parton_string (hadr-prtn-V10-00-01)
+  o Updated CMake script.
+- models/radioactive_decay (radioactive_decay-V10-00-01)
+  o G4RadioactiveDecayMode: added double beta- decay and double beta+ decay
+    to enum
+  o G4RadioactiveDecay: added dummies for double beta- decay and double beta+;
+    long ground state lifetimes with no decay scheme.
+    Addressing problem report #1560. Requires new data set RadioactiveDecay-4.1.
+- models/util (hadr-mod-util-V10-00-05)
+  o G4KineticTrack: make G4ParticleDefinition* const.
+    Added temporary method GetDefinition_asConst() to replace GetDefinition() 
+    once hadronics is converted.
+- util (hadr-util-V10-00-01)
+  o G4ReactionProduct: make G4ParticleDefinition* const.
+    Added temporary method GetDefinition_asConst() to replace GetDefinition() 
+    once hadronics is converted.
+
+data sets
+---------
+- PhotonEvaporation-3.1:
+  o Corrections of of +X, +Y, ... levels for compliance with latest isomer list.
+  o 212Bi (z83.a212, line 8): change strength of gamma transition
+    (415.272 keV to ground state) from 4.4 to 0.4.
+    Addressing problem report #1565.
+- RadioactiveDecay-4.1:
+  o Corrections for X,Y,Z,W and A levels.
+  o Added observationally stable (very long lifetime) ground states to 20
+    nuclides: 4 are thought to decay by alpha emission, 6 by double beta+
+    decay and 10 by double beta- decay.
+    G4RadioactiveDecay now recognizes double beta- and double beta+ decays,
+    but currently does nothing when they occur.
+
+examples                                         examples-V10-00-02
+--------
+- Updated reference outputs.
+- advanced/hadrontherapy (hadrontherapy-V10-00-01)                           (*)
+  o Fixed missing inizialization of data in PassiveProtonBeamLine class.
+- extended/analysis/B1Con (B1Con-V10-00-00)                                  (*)
+  o Increased number of events of run1.mac.
+- extended/exoticphysics/phonon (phononExample-V10-00-00)
+  o Fix in CMake script to copy data in build directory.
+- extended/field/field04 (fieldex04-V10-00-07)
+  o F04GlobalField: fixed case of double-delete in Clear() and set flag
+    for avoiding invalid memory access in GetField(); fix in destructor to
+    avoid wrong deletion of fFieldPropagator and fFieldManager.
+- extended/hadronic/Hadr03 (exhadr03-V10-00-01)
+  o Use G4HadronElasticPhysicsHP in physics-list.
+- extended/radioactivedecay/rdecay02 (rdecay02-V10-00-01)                    (*)
+  o Fix in exrdmAnalysisManager::EndOfEvent().
+
+tests                                            tests-V10-00-02
+-----
+- Updated reference outputs and tools.
+- tests/test202 (test202-V10-00-01)
+  o Added dependency to build avoiding running the test before the build
+    is done.
+
