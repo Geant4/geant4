@@ -38,11 +38,11 @@ geant4_add_dataset(
 # - Radioisotopes
 geant4_add_dataset(
   NAME      RadioactiveDecay
-  VERSION   4.0
+  VERSION   4.1
   FILENAME  G4RadioactiveDecay
   EXTENSION tar.gz
   ENVVAR    G4RADIOACTIVEDATA
-  MD5SUM    44a43b8f62c9f9cd4c3cb31c2b2bb7c3
+  MD5SUM    be4bc5ad366f259c8ccc51d8698721d1
   )
 
 # - Neutron XS

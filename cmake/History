@@ -30,6 +30,9 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+26th January 2014 - Gunter Folger (cmake-V10-00-06)
+- Modules/Geant4DatasetDefinitions.cmake: RadioactiveDecay4.1
+
 18th February 2014 - Ben Morgan (cmake-V10-00-05)
 - Modules/Geant4ConfigureConfigScript.cmake : Export use of builtin
   zlib or otherwise to geant4-config (Bugfix #1572).
