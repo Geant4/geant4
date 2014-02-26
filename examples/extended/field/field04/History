@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 25, 2014 G. Cosmo - (fieldex04-V10-00-06)
+- F04GlobalField.cc : Fix in destructor to -not- delete fFieldPropagator
+  and set flag in Clear() for avoiding invalid memory access in GetField().
+
+February 18, 2014 P. Gumplinger - (fieldex04-V10-00-05)
+- F04GlobalField.cc : try to fix double delete.
+
 December 27, 2013 M. Asai - (fieldex04-V10-00-04)
 - F04GlobalField.cc : Fix uninitialized variables.
 
