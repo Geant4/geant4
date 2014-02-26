@@ -97,7 +97,6 @@ F04GlobalField::~F04GlobalField()
   delete fFieldMessenger;
 
   if (fEquation)        delete fEquation;
-  if (fFieldManager)    delete fFieldManager;
   if (fStepper)         delete fStepper;
   if (fChordFinder)     delete fChordFinder;
 }
