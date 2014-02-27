@@ -60,6 +60,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+const G4double G4VEmModel::inveplus = 1.0/CLHEP::eplus;
 const G4double log106 = 6*G4Log(10.);
 
 G4VEmModel::G4VEmModel(const G4String& nam):
@@ -97,7 +98,10 @@ G4VEmModel::~G4VEmModel()
   }
   delete anglModel;
   
-  if(localTable) { delete xSectionTable; }
+  if(localTable && xSectionTable) { 
+    //xSectionTable->clearAndDestroy();
+    delete xSectionTable; 
+  }
   
   fManager->DeRegister(this);
 }
@@ -184,7 +188,7 @@ void G4VEmModel::InitialiseElementSelectors(const G4ParticleDefinition* part,
       G4double emax = std::max(highLimit, 10*emin);
       G4int nbins = G4int(fManager->GetNumberOfBinsPerDecade()
 			  *G4Log(emax/emin)/log106);
-      if(nbins < 3) { nbins = 3; }
+      nbins = std::max(nbins, 3);
 
       (*elmSelectors)[i] = new G4EmElementSelector(this,material,nbins,
 						   emin,emax,spline);
@@ -258,7 +262,7 @@ G4double G4VEmModel::CrossSectionPerVolume(const G4Material* material,
     xsec.resize(nelm);
     nsec = nelm;
   }
-  for (G4int i=0; i<nelm; i++) {
+  for (G4int i=0; i<nelm; ++i) {
     cross += theAtomNumDensityVector[i]*
       ComputeCrossSectionPerAtom(p,(*theElementVector)[i],ekin,emin,emax);
     xsec[i] = cross;
@@ -322,7 +326,7 @@ G4double G4VEmModel::ChargeSquareRatio(const G4Track& track)
 G4double G4VEmModel::GetChargeSquareRatio(const G4ParticleDefinition* p,
 					  const G4Material*, G4double)
 {
-  G4double q = p->GetPDGCharge()/CLHEP::eplus;
+  G4double q = p->GetPDGCharge()*inveplus;
   return q*q;
 }
 

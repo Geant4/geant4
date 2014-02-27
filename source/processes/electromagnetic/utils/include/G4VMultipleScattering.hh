@@ -222,6 +222,8 @@ public:
 
   inline const G4ParticleDefinition* FirstParticle() const;
 
+  inline void SetBoundaryCorrectionFlag(G4bool val);
+
   //------------------------------------------------------------------------
   // Run time methods
   //------------------------------------------------------------------------
@@ -291,6 +293,7 @@ private:
 
   G4ThreeVector               fNewPosition;
   G4bool                      fPositionChanged;
+  G4bool                      fBoundaryFlag;
   G4bool                      isActive;
 
   G4int                       warn;
@@ -413,6 +416,13 @@ inline void G4VMultipleScattering::SetLowestKinEnergy(G4double val)
 inline const G4ParticleDefinition* G4VMultipleScattering::FirstParticle() const
 {
   return firstParticle;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4VMultipleScattering::SetBoundaryCorrectionFlag(G4bool val)
+{
+  fBoundaryFlag = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

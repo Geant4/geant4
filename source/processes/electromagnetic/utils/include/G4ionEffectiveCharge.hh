@@ -83,6 +83,7 @@ private:
   G4ionEffectiveCharge & operator=(const G4ionEffectiveCharge &right);
   G4ionEffectiveCharge(const G4ionEffectiveCharge&);
 
+  static const G4double       inveplus;
   G4Pow*                      g4pow;
 
   const G4ParticleDefinition* lastPart;
@@ -111,7 +112,7 @@ inline G4double G4ionEffectiveCharge::EffectiveChargeSquareRatio(
   if( kineticEnergy != lastKinEnergy || material != lastMat || p != lastPart) {
     charge = EffectiveCharge(p,material,kineticEnergy);
   }
-  charge *= chargeCorrection/CLHEP::eplus;
+  charge *= chargeCorrection*inveplus;
 
   return charge*charge;
 }

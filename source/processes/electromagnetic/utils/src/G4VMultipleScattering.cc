@@ -308,6 +308,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 	G4VMscModel* msc0= 
 	  static_cast<G4VMscModel*>(masterProcess->GetModelByIndex(i,printing));
 	msc->SetCrossSectionTable(msc0->GetCrossSectionTable(), false);
+	msc->InitialiseLocal(firstParticle, msc0);
       }
     }
 
@@ -486,9 +487,7 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 	   << " dr= " << range - trueLength 
 	   << " ekin= " << track.GetKineticEnergy() << G4endl;
     */
-    if (tPathLength > physStepLimit) {
-      tPathLength = physStepLimit; 
-    }
+    tPathLength = std::min(tPathLength, physStepLimit);
 
     // do not sample scattering at the last or at a small step
     if(tPathLength + geomMin < range && tPathLength > geomMin) {
@@ -513,21 +512,24 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
       if(r2 > 0.0) {
 
 	fPositionChanged = true;
-        G4double fac = 1.0;
 
 	// displaced point is definitely within the volume
-	if(r2 > postSafety*postSafety) {
+	if(r2 <= postSafety*postSafety) {
+	  fNewPosition += displacement;
+	} else {
           G4double dispR = std::sqrt(r2);
           if(!safetyRecomputed) {
 	    postSafety = safetyHelper->ComputeSafety(fNewPosition, dispR);
 	  } 
 
 	  if(dispR > postSafety) { 
-	    fac = 0.99*postSafety/dispR; 
+            if(fBoundaryFlag) {
+	      fNewPosition += displacement*(0.99*postSafety/dispR); 
+	    } else {
+	      fNewPosition += displacement*(0.99*postSafety/dispR); 
+	    }
 	  }
 	}
-	// compute new endpoint of the Step
-	fNewPosition += fac*displacement;
 	//safetyHelper->ReLocateWithinVolume(fNewPosition);
       }
     }

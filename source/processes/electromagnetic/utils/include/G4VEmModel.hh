@@ -400,6 +400,7 @@ protected:
   const std::vector<G4double>* theDensityFactor;
   const std::vector<G4int>*    theDensityIdx;
   size_t                       idxTable;
+  const static G4double        inveplus;       
 
   // ======== Cashed values - may be state dependent ================
 
@@ -528,14 +529,16 @@ G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
 
 inline G4int G4VEmModel::SelectRandomAtomNumber(const G4Material* mat)
 {
+  // this algorith assumes that cross section is proportional to
+  // number electrons multiplied by number of atoms
   size_t nn = mat->GetNumberOfElements();
   const G4ElementVector* elmv = mat->GetElementVector();
-  G4int Z = G4int((*elmv)[0]->GetZ());
+  G4int Z = G4lrint((*elmv)[0]->GetZ());
   if(1 < nn) {
     const G4double* at = mat->GetVecNbOfAtomsPerVolume();
     G4double tot = mat->GetTotNbOfAtomsPerVolume()*G4UniformRand();
     for( size_t i=0; i<nn; ++i) {
-      Z = G4int((*elmv)[0]->GetZ());
+      Z = G4lrint((*elmv)[0]->GetZ());
       tot -= Z*at[i];
       if(tot <= 0.0) { break; }
     }
@@ -548,7 +551,7 @@ inline G4int G4VEmModel::SelectRandomAtomNumber(const G4Material* mat)
 inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
 {
   SetCurrentElement(elm);
-  G4int N = G4int(elm->GetN() + 0.5);
+  G4int N = G4lrint(elm->GetN());
   G4int ni = elm->GetNumberOfIsotopes();
   if(ni > 0) {
     G4int idx = 0;

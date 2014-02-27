@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 February 14: V.Ivant (emutils-V10-00-04)
+- G4EmCorrections, G4EmElementSelector, G4VEmModel, G4VEmProcess,
+  G4VEnergyLossProcess, G4VMultipleScattering, G4ionEffectiveCharge
+    - general cleanup including: removed old commented code; use std::min
+      and std::max instead of "if" where possible; use G4Log;
+      reduced number of division 
+- G4LossTableManager - minor change of ionisation for charm and bottom mesons
+
+21 February 14: V.Ivant (emutils-V10-00-03)
+- G4VMultipleScattering - added possibility to build extra table for a model
+
 14 February 14: V.Ivant (emutils-V10-00-02)
 - G4LossTableMananger, G4EmProcessOptions - define default 
     verbosity=0 for worket thread, so summary on EM processes 

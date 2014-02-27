@@ -156,8 +156,14 @@ G4VEmProcess::~G4VEmProcess()
 	   << "  " << this << "  " <<  theLambdaTable <<G4endl;
   }
   if(lManager->IsMaster()) {
-    delete theLambdaTable;
-    delete theLambdaTablePrim;
+    if(theLambdaTable) {
+      //theLambdaTable->clearAndDestroy();
+      delete theLambdaTable;
+    }
+    if(theLambdaTablePrim) {
+      //theLambdaTablePrim->clearAndDestroy();
+      delete theLambdaTablePrim;
+    }
   }
   delete modelManager;
   delete biasManager;
@@ -418,8 +424,7 @@ void G4VEmProcess::BuildLambdaTable()
   G4PhysicsLogVector* bVectorPrim = 0;
 
   G4double scale = G4Log(maxKinEnergy/minKinEnergy); 
-  G4double emax1 = maxKinEnergy;
-  if(minKinEnergyPrim < maxKinEnergy) { emax1 = minKinEnergyPrim; }
+  G4double emax1 = std::min(maxKinEnergy, minKinEnergyPrim);
     
   for(size_t i=0; i<numOfCouples; ++i) {
 
@@ -551,8 +556,6 @@ void G4VEmProcess::StartTracking(G4Track* track)
   // reset parameters for the new track
   currentParticle = track->GetParticleDefinition();
   theNumberOfInteractionLengthLeft = -1.0;
-  //currentInteractionLength = -1.0;
-  //  theInitialNumberOfInteractionLength=-1.0;
   mfpKinEnergy = DBL_MAX; 
 
   // forced biasing only for primary particles
@@ -623,9 +626,8 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
       theNumberOfInteractionLengthLeft -= 
 	previousStepSize/currentInteractionLength;
       //SubtractNumberOfInteractionLengthLeft(previousStepSize);
-      if(theNumberOfInteractionLengthLeft < 0.) {
-	theNumberOfInteractionLengthLeft = 0.0;
-      }
+      theNumberOfInteractionLengthLeft = 
+	std::max(theNumberOfInteractionLengthLeft, 0.0);
     }
 
     // new mean free path and step limit for the next step
@@ -1125,8 +1127,8 @@ G4VEmProcess::ActivateSecondaryBiasing(const G4String& region,
 
 void G4VEmProcess::SetMinKinEnergy(G4double e)
 {
-  nLambdaBins = G4lrint(nLambdaBins*std::log(maxKinEnergy/e)
-			/std::log(maxKinEnergy/minKinEnergy));
+  nLambdaBins = G4lrint(nLambdaBins*G4Log(maxKinEnergy/e)
+			/G4Log(maxKinEnergy/minKinEnergy));
   minKinEnergy = e;
 }
 
@@ -1134,8 +1136,8 @@ void G4VEmProcess::SetMinKinEnergy(G4double e)
 
 void G4VEmProcess::SetMaxKinEnergy(G4double e)
 {
-  nLambdaBins = G4lrint(nLambdaBins*std::log(e/minKinEnergy)
-			/std::log(maxKinEnergy/minKinEnergy));
+  nLambdaBins = G4lrint(nLambdaBins*G4Log(e/minKinEnergy)
+			/G4Log(maxKinEnergy/minKinEnergy));
   maxKinEnergy = e;
 }
 

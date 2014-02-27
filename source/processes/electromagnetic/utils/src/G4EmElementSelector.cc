@@ -100,7 +100,8 @@ void G4EmElementSelector::Initialise(const G4ParticleDefinition* part,
   //G4cout << "cut(keV)= " << cut/keV << G4endl;
   G4double cross;
 
-  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+  const G4double* theAtomNumDensityVector = 
+    material->GetVecNbOfAtomsPerVolume();
 
   // loop over bins
   for(G4int j=0; j<=nbins; ++j) {

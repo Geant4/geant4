@@ -276,7 +276,7 @@ G4VMscModel::GetDEDX(const G4ParticleDefinition* part,
   G4double x;
   if(ionisation) { x = ionisation->GetDEDX(kinEnergy, couple); }
   else { 
-    G4double q = part->GetPDGCharge()/CLHEP::eplus;
+    G4double q = part->GetPDGCharge()*inveplus;
     x = dedx*q*q;
   }
   return x;
@@ -288,14 +288,14 @@ inline G4double
 G4VMscModel::GetRange(const G4ParticleDefinition* part,
 		      G4double kinEnergy, const G4MaterialCutsCouple* couple)
 {
-  //G4cout << "G4VMscModel::GetRange E(MeV)= " << kinEnergy << "  " << ionisation
-  //	 << "  " << part->GetParticleName()
+  //G4cout << "G4VMscModel::GetRange E(MeV)= " << kinEnergy << "  " 
+  //  << ionisation << "  " << part->GetParticleName()
   //	 << G4endl;
   localtkin  = kinEnergy;
   if(ionisation) { 
     localrange = ionisation->GetRangeForLoss(kinEnergy, couple); 
   } else { 
-    G4double q = part->GetPDGCharge()/CLHEP::eplus;
+    G4double q = part->GetPDGCharge()*inveplus;
     localrange = kinEnergy/(dedx*q*q*couple->GetMaterial()->GetDensity()); 
   }
   //G4cout << "R(mm)= " << localrange << "  "  << ionisation << G4endl;
@@ -316,7 +316,7 @@ G4VMscModel::GetEnergy(const G4ParticleDefinition* part,
   else { 
     e = localtkin;
     if(localrange > range) {
-      G4double q = part->GetPDGCharge()/CLHEP::eplus;
+      G4double q = part->GetPDGCharge()*inveplus;
       e -= (localrange - range)*dedx*q*q*couple->GetMaterial()->GetDensity(); 
     } 
   }
