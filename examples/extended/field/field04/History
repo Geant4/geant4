@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+February 27, 2014 G. Cosmo - (fieldex04-V10-00-08)
+- Set pointer to NULL and fields size to zero in Clear().
+
 February 25, 2014 G. Cosmo - (fieldex04-V10-00-07)
 - F04GlobalField.cc : Fix in destructor to also -avoid- deletion of
   fFieldManager!

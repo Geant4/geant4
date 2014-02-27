@@ -300,6 +300,8 @@ void F04GlobalField::Clear()
   }
 
   if (fFp) delete fFp; fFirst = true;
+  fNfp = 0;
+  fFp = NULL;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
