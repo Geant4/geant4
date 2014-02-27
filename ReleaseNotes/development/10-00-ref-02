@@ -134,18 +134,25 @@ processes/electromagnetic/standard               emstand-V10-00-12
   scattering are combined or not.
 - Trivial fix for Coverity report in G4PAIxSection.                          (*)
 
-processes/electromagnetic/utils                  emutils-V10-00-02           (*)
+processes/electromagnetic/utils                  emutils-V10-00-04
 -------------------------------
-- G4EmCalculator: in FindCouple() method, implemented loop over all regions
+- G4EmCalculator: in FindCouple() method, implemented loop over all regions  (*)
   if argument pointer to region of the method is null.
   Added G4Exception if G4MaterialCutsCouple is not found out and also inside
   GetCSDARange() when CSDA table is not initialized.
-- G4LossTableMananger: fixed bug for initialisation of several runs in one
+- G4LossTableMananger: fixed bug for initialisation of several runs in one   (*)
   job (affecting muons and e- and providing non-reproducibility).
-- G4LossTableMananger, G4EmProcessOptions: define default verbosity=0
+- G4LossTableMananger, G4EmProcessOptions: define default verbosity=0        (*)
   for worker thread, so summary on EM processes is not duplicated.
-- G4VEnergyLossProcess, G4VEmProcess: define fixed precison=6 for
+- G4VEnergyLossProcess, G4VEmProcess: define fixed precison=6 for            (*)
   initialisation printout.
+- G4VMultipleScattering: added possibility to build extra table for a model.
+- G4EmCorrections, G4EmElementSelector, G4VEmModel, G4VEmProcess,
+  G4VEnergyLossProcess, G4VMultipleScattering, G4ionEffectiveCharge:
+  general cleanup including: removed old commented code; use std::min and
+  std::max instead of "if" where possible; use G4Log; reduced number of
+  divisions.
+- G4LossTableManager: minor change of ionisation for charm and bottom mesons.
 
 processes/hadronic
 ------------------
@@ -196,7 +203,7 @@ examples                                         examples-V10-00-02
   o Increased number of events of run1.mac.
 - extended/exoticphysics/phonon (phononExample-V10-00-00)
   o Fix in CMake script to copy data in build directory.
-- extended/field/field04 (fieldex04-V10-00-07)
+- extended/field/field04 (fieldex04-V10-00-08)
   o F04GlobalField: fixed case of double-delete in Clear() and set flag
     for avoiding invalid memory access in GetField(); fix in destructor to
     avoid wrong deletion of fFieldPropagator and fFieldManager.
