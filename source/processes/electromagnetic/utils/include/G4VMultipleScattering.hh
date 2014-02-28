@@ -295,8 +295,6 @@ private:
   G4bool                      fPositionChanged;
   G4bool                      fBoundaryFlag;
   G4bool                      isActive;
-
-  G4int                       warn;
 };
 
 // ======== Run time inline methods ================

@@ -87,6 +87,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+static const G4double minDisplacement = 1.e-5*CLHEP::mm;
+
 G4VMultipleScattering::G4VMultipleScattering(const G4String& name, 
 					     G4ProcessType):
   G4VContinuousDiscreteProcess("msc", fElectromagnetic),
@@ -117,12 +119,11 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   safetyHelper = 0;
   fPositionChanged = false;
   isActive = false;
+  fBoundaryFlag = false;
 
   modelManager = new G4EmModelManager();
   emManager = G4LossTableManager::Instance();
   emManager->Register(this);
-
-  warn = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -495,10 +496,13 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
       G4double preSafety = step.GetPreStepPoint()->GetSafety();
       G4double maxDisp   = (tPathLength + geomLength)*0.5; 
       G4double postSafety= preSafety - maxDisp; 
-      G4bool safetyRecomputed = false;
-      if(postSafety < maxDisp) {
-	safetyRecomputed = true;
-	postSafety = safetyHelper->ComputeSafety(fNewPosition,maxDisp); 
+      G4bool safetyRecomputed = false; 
+      if(postSafety < minDisplacement) {
+	if(fBoundaryFlag) { postSafety = minDisplacement; }
+	else {
+	  safetyRecomputed = true;
+	  postSafety = safetyHelper->ComputeSafety(fNewPosition,maxDisp); 
+	}
       } 
       G4ThreeVector displacement = currentModel->SampleScattering(
         step.GetPostStepPoint()->GetMomentumDirection(), postSafety);

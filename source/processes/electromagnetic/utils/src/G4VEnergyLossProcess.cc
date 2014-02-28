@@ -281,13 +281,11 @@ G4VEnergyLossProcess::~G4VEnergyLossProcess()
       if(theIonisationTable == theDEDXTable) { theIonisationTable = 0; }
       if(isIonisation) {
 	//G4cout << " theDEDXTable(0)= " << (*theDEDXTable)[0] << G4endl;
-	//theDEDXTable->clearAndDestroy();
 	delete theDEDXTable;
 	theDEDXTable = 0;
 	if(theDEDXSubTable) {
 	  if(theIonisationSubTable == theDEDXSubTable) 
 	    { theIonisationSubTable = 0; }
-	  //theDEDXSubTable->clearAndDestroy();
 	  delete theDEDXSubTable;
 	  theDEDXSubTable = 0;
 	}
@@ -295,52 +293,39 @@ G4VEnergyLossProcess::~G4VEnergyLossProcess()
     }
     //G4cout << " theIonisationTable " << theIonisationTable << G4endl;
     if(theIonisationTable) {
-      //G4cout << " theIonisationTable(0)= " << (*theIonisationTable)[0] << G4endl;
-      //theIonisationTable->clearAndDestroy();
       delete theIonisationTable;
       theIonisationTable = 0;
     }
     if(theIonisationSubTable) {
-      //theIonisationTable->clearAndDestroy();
       delete theIonisationSubTable;
       theIonisationSubTable = 0;
     }
     if(theDEDXunRestrictedTable && isIonisation) {
-      //theDEDXunRestrictedTable->clearAndDestroy();
       delete theDEDXunRestrictedTable;
       theDEDXunRestrictedTable = 0;
     }
     if(theCSDARangeTable && isIonisation) {
-      //theCSDARangeTable->clearAndDestroy();
       delete theCSDARangeTable;
       theCSDARangeTable = 0;
     }
     //G4cout << "delete RangeTable: " << theRangeTableForLoss << G4endl;
     if(theRangeTableForLoss && isIonisation) {
-      //theRangeTableForLoss->clearAndDestroy();
       delete theRangeTableForLoss;
       theRangeTableForLoss = 0;
     }
     //G4cout << "delete InvRangeTable: " << theInverseRangeTable << G4endl;
     if(theInverseRangeTable && isIonisation && !isIon) {
-      //theInverseRangeTable->clearAndDestroy();
       delete theInverseRangeTable;
       theInverseRangeTable = 0;
     }
     //G4cout << "delete LambdaTable: " << theLambdaTable << G4endl;
     if(theLambdaTable) {
-      //G4cout << *theLambdaTable << G4endl;
-      //theLambdaTable->clearAndDestroy();
-      //G4cout << "#9 is destroied " << G4endl;
       delete theLambdaTable;
       theLambdaTable = 0;
-      //G4cout << "#9 is done " << G4endl;
     }
     if(theSubLambdaTable) {
-      //theSubLambdaTable->clearAndDestroy();
       delete theSubLambdaTable;
       theSubLambdaTable = 0;
-      //G4cout << "#10 is done " << G4endl;
     }
   }
  
@@ -1309,7 +1294,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
 	// recompute presafety
         if(preSafety < rcut) {
-	  preSafety = safetyHelper->ComputeSafety(prePoint->GetPosition());
+	  preSafety = safetyHelper->ComputeSafety(prePoint->GetPosition(),
+						  rcut);
 	}
 
         if(preSafety < rcut) { yes = true; }
@@ -1319,7 +1305,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	  G4double postSafety = preSafety - length; 
 	  if(postSafety < rcut) {
 	    postSafety = safetyHelper->ComputeSafety(
-                         step.GetPostStepPoint()->GetPosition());
+              step.GetPostStepPoint()->GetPosition(), rcut);
 	    if(postSafety < rcut) { yes = true; }
 	  }
 	}

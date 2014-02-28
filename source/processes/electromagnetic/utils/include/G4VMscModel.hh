@@ -133,7 +133,7 @@ protected:
 public:
 
   // compute safety
-  inline G4double ComputeSafety(const G4ThreeVector& position, G4double limit);
+  inline G4double ComputeSafety(const G4ThreeVector& position, G4double limit= DBL_MAX);
 
   // compute linear distance to a geometry boundary
   inline G4double ComputeGeomLimit(const G4Track&, G4double& presafety, 
@@ -236,9 +236,9 @@ inline void G4VMscModel::SetSampleZ(G4bool val)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 inline G4double G4VMscModel::ComputeSafety(const G4ThreeVector& position, 
-					   G4double)
+					   G4double limit)
 {
-  return safetyHelper->ComputeSafety(position);
+   return safetyHelper->ComputeSafety(position, limit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

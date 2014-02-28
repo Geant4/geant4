@@ -17,6 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 February 14: V.Ivant (emutils-V10-00-07)
+- G4VMultipleScattering - minor cleanup for post-safety computation
+
+27 February 14: V.Ivant (emutils-V10-00-06)
+- G4VEnergyLossProcess - for sub-cutoff regime add upper limit when
+    call SafetyHelper as described in previous tag
+
+27 February 14: J.Apostolakis (emutils-V10-00-05)
+- Fixed G4VMscModel::ComputeSafety: pass 2nd parameter to SafetyHelper
+    ( this parameter is used for optimisation.  It is guard= max radius 
+      to check for volumes.  Estimate of safety obtained is limited by it.
+      => The displacement must never exceed value of 2nd parameter. )
+    Added default for 2nd parameter, compatible with SafetyHelper.
+
 26 February 14: V.Ivant (emutils-V10-00-04)
 - G4EmCorrections, G4EmElementSelector, G4VEmModel, G4VEmProcess,
   G4VEnergyLossProcess, G4VMultipleScattering, G4ionEffectiveCharge
