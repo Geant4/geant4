@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
+ Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -630,45 +630,45 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=32.89s Real=64s Sys=0.02s
+  User=46.29s Real=61.65s Sys=0.04s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                           pi-
 Beam Energy(MeV)                        15000
 Number of events                        100
-Average number of MIPS (Edep < 0.8 GeV) 0.37
-Average number of steps                 1.728e+04
-Average number of neutron steps         6719
-Average number of hadron steps          2530
-Average number of gamma steps           1.059e+04
-Average number of e+- steps             2660
+Average number of MIPS (Edep < 0.8 GeV) 0.4
+Average number of steps                 1.707e+04
+Average number of neutron steps         6506
+Average number of hadron steps          2545
+Average number of gamma steps           1.052e+04
+Average number of e+- steps             2664
 ==============  ECAL  ====================================
-  1x1 (GeV) =      2.044 +-      0.198    RMS= 1.98
-  3x3 (GeV) =      3.238 +-     0.2991    RMS= 2.991
-  5x5 (GeV) =      3.629 +-      0.331    RMS= 3.31
-  E1/E9     =      0.744 +-    0.02037    RMS= 0.2037
-  E1/E25    =     0.6968 +-    0.02301    RMS= 0.2301
-  E9/E25    =     0.9206 +-   0.006955    RMS= 0.06955
+  1x1 (GeV) =      1.953 +-     0.2322    RMS= 2.322
+  3x3 (GeV) =       3.13 +-     0.3316    RMS= 3.316
+  5x5 (GeV) =      3.516 +-     0.3611    RMS= 3.611
+  E1/E9     =     0.7455 +-    0.02214    RMS= 0.2214
+  E1/E25    =     0.7002 +-    0.02491    RMS= 0.2491
+  E9/E25    =     0.9191 +-   0.008184    RMS= 0.08184
 ==============  HCAL  ====================================
-Visible HCAL Edep(GeV)     =   0.0717
-Visible HCAL e-Edep(GeV)   =   0.03233
-Total HCAL Edep(GeV)       =   7.419 +- 0.1816
+Visible HCAL Edep(GeV)     =   0.08127
+Visible HCAL e-Edep(GeV)   =   0.03715
+Total HCAL Edep(GeV)       =   7.76 +- 0.1647
 ==========================================================
-Erec(GeV)   =      10.91 +-     0.3317    RMS= 3.317
-Etot(GeV)   =      11.09 +-     0.1816    RMS= 1.816
+Erec(GeV)   =      11.75 +-     0.3093    RMS= 3.093
+Etot(GeV)   =      11.32 +-     0.1647    RMS= 1.647
 ==========================================================
-Ecal/E0=   0.2397  RMS/E0(%)= 21.86
-Hcal/E0=       0.4901 +- 0.012
-Erec/E0=       0.7204 +- 0.02191
-Etot/E0=       0.7323 +- 0.012
+Ecal/E0=   0.2322  RMS/E0(%)= 23.85
+Hcal/E0=       0.5126 +- 0.01088
+Erec/E0=        0.776 +- 0.02043
+Etot/E0=       0.7477 +- 0.01088
 ==========================================================
 
 #
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.96 Mb
+Dynamic pools deleted: 13 / Total memory freed: 0.98 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)
-User=34.38s Real=67.02s Sys=0.04s
+User=48.1s Real=64.76s Sys=0.06s

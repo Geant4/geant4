@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
+ Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -463,7 +463,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=16.07s Real=31.8s Sys=0s
+  User=22.84s Real=32.99s Sys=0s
 
  ======================== run summary ======================
 
@@ -479,7 +479,15 @@ Run Summary
 
  deposit : eLoss/primary= 243.53 keV	 <dEcut > table= 209.9 keV   ---> simul/reference= 1.1602
 
- total   : eLoss/primary= 350.54 keV	 <dEfull> table= 350.54 keV   ---> simul/reference= 1
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : em0077
+      issued by : G4EmCalculator::GetCSDARange
+G4EmCalculator::GetCSDARange: CSDA table is not built  use UI command: /process/eLoss/CSDARange true
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+ total   : eLoss/primary= 350.54 keV	 <dEfull> table= 10 MeV   ---> simul/reference= 0.035054
 K-shell x-section for proton in barns 15.836  E(MeV)= 1  material G4_Cu
 L1-shell x-section in barns 47514.2
 L2-shell x-section in barns 58104.7
