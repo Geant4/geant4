@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27.02.2014  V. Ivanchenko, tag emlowen-V10-00-04
+            G4LivermorePhotoElectricModel - added low-energy cross 
+            section for water
+            G4IonParametrisedLossModel, G4LivermoreIonisationModel -
+            added G4DeltaAngle generator for angular distribution
+
 13.02.2014  V. Ivanchenko, tag emlowen-V10-00-03
             G4LowEWentzelVIModel - new class
 

@@ -35,6 +35,7 @@
 
 #include "G4LivermorePhotoElectricModel.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 #include "G4LossTableManager.hh"
 #include "G4Electron.hh"
 #include "G4Gamma.hh"
@@ -53,6 +54,8 @@ std::vector<G4double>* G4LivermorePhotoElectricModel::fParam[] = {0};
 G4int                  G4LivermorePhotoElectricModel::fNShells[] = {0};
 G4int                  G4LivermorePhotoElectricModel::fNShellsUsed[] = {0};
 G4ElementData*         G4LivermorePhotoElectricModel::fShellCrossSection = 0;
+G4Material*            G4LivermorePhotoElectricModel::fWater = 0;
+G4double               G4LivermorePhotoElectricModel::fWaterEnergyLimit = 0.0;
 
 using namespace std;
 
@@ -85,6 +88,8 @@ G4LivermorePhotoElectricModel::G4LivermorePhotoElectricModel(
 
   //Mark this model as "applicable" for atomic deexcitation
   SetDeexcitationFlag(true);
+  fSandiaCof.resize(4,0.0);
+  fCurrSection = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -110,6 +115,11 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
   }
 
   if(IsMaster()) {
+
+    if(!fWater) { 
+      fWater = G4Material::GetMaterial("G4_WATER", false); 
+      if(fWater) { fWaterEnergyLimit = 13.6*eV; }
+    }
 
     if(!fShellCrossSection) { fShellCrossSection = new G4ElementData(); }
 
@@ -154,6 +164,35 @@ G4LivermorePhotoElectricModel::Initialise(const G4ParticleDefinition*,
     G4cout << "LivermorePhotoElectric model is initialized " << G4endl
 	   << G4endl;
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4double G4LivermorePhotoElectricModel::CrossSectionPerVolume(
+                                       const G4Material* material,
+				       const G4ParticleDefinition* p,
+				       G4double energy,
+				       G4double, G4double)
+{
+  fCurrSection = 0.0;
+  if(fWater && (material == fWater || 
+		material->GetBaseMaterial() == fWater)) {
+    if(energy <= fWaterEnergyLimit) { 
+      fWater->GetSandiaTable()->GetSandiaCofWater(energy, fSandiaCof);
+
+      G4double energy2 = energy*energy;
+      G4double energy3 = energy*energy2;
+      G4double energy4 = energy2*energy2;
+
+      fCurrSection = material->GetDensity()*
+	(fSandiaCof[0]/energy  + fSandiaCof[1]/energy2 +
+	 fSandiaCof[2]/energy3 + fSandiaCof[3]/energy4);
+    } 
+  }
+  if(0.0 == fCurrSection) {
+    fCurrSection = G4VEmModel::CrossSectionPerVolume(material, p, energy);
+  }
+  return fCurrSection;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -226,16 +265,25 @@ G4LivermorePhotoElectricModel::SampleSecondaries(
   }
   
   // kill incident photon
-  fParticleChange->SetProposedKineticEnergy(0.);
   fParticleChange->ProposeTrackStatus(fStopAndKill);   
+  fParticleChange->SetProposedKineticEnergy(0.);
+
+  // low-energy photo-effect in water - full absorption
+  const G4Material* material = couple->GetMaterial();
+  if(fWater && (material == fWater || 
+		material->GetBaseMaterial() == fWater)) {
+    if(gammaEnergy <= fWaterEnergyLimit) { 
+      fParticleChange->ProposeLocalEnergyDeposit(gammaEnergy);      
+      return;
+    }
+  }
  
   // Returns the normalized direction of the momentum
   G4ThreeVector photonDirection = aDynamicGamma->GetMomentumDirection(); 
 
   // Select randomly one element in the current material
   //G4cout << "Select random atom Egamma(keV)= " << gammaEnergy/keV << G4endl;
-  const G4Element* elm = SelectRandomAtom(couple->GetMaterial(),theGamma,
-					  gammaEnergy);
+  const G4Element* elm = SelectRandomAtom(material, theGamma, gammaEnergy);
   G4int Z = G4lrint(elm->GetZ());
 
   // Select the ionised shell in the current atom according to shell 

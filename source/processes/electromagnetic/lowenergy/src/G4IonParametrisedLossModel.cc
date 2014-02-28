@@ -93,6 +93,7 @@
 #include "G4LossTableManager.hh"
 #include "G4GenericIon.hh"
 #include "G4Electron.hh"
+#include "G4DeltaAngle.hh"
 #include "Randomize.hh"
 
 //#define PRINT_TABLE_BUILT
@@ -153,6 +154,9 @@ G4IonParametrisedLossModel::G4IonParametrisedLossModel(
   dedxCacheTransitionEnergy = 0.0;  
   dedxCacheTransitionFactor = 0.0;
   dedxCacheGenIonMassRatio = 0.0;
+
+  // default generator
+  SetAngularDistribution(new G4DeltaAngle());
 }
 
 // #########################################################################
@@ -672,7 +676,7 @@ void G4IonParametrisedLossModel::PrintDEDXTableHandlers(
 
 void G4IonParametrisedLossModel::SampleSecondaries(
                              std::vector<G4DynamicParticle*>* secondaries,
-			     const G4MaterialCutsCouple*,
+			     const G4MaterialCutsCouple* couple,
 			     const G4DynamicParticle* particle,
 			     G4double cutKinEnergySec,
 			     G4double userMaxKinEnergySec) {
@@ -710,7 +714,6 @@ void G4IonParametrisedLossModel::SampleSecondaries(
   if(cutKinEnergySec >= maxKinEnergySec) return;
 
   G4double kineticEnergy = particle -> GetKineticEnergy();
-  G4ThreeVector direction = particle ->GetMomentumDirection();
 
   G4double energy  = kineticEnergy + cacheMass;
   G4double betaSquared  = kineticEnergy * 
@@ -739,31 +742,27 @@ void G4IonParametrisedLossModel::SampleSecondaries(
 
   } while( G4UniformRand() >= grej );
 
-  G4double momentumSec =
-           std::sqrt(kinEnergySec * (kinEnergySec + 2.0 * electron_mass_c2));
+  const G4Material* mat =  couple->GetMaterial();
+  G4int Z = SelectRandomAtomNumber(mat);
 
-  G4double totMomentum = energy*std::sqrt(betaSquared);
-  G4double cost = kinEnergySec * (energy + electron_mass_c2) /
-                                   (momentumSec * totMomentum);
-  if(cost > 1.0) cost = 1.0;
-  G4double sint = std::sqrt((1.0 - cost)*(1.0 + cost));
+  const G4ParticleDefinition* electron = G4Electron::Electron();
+ 
+  G4DynamicParticle* delta = new G4DynamicParticle(electron, 
+    GetAngularDistribution()->SampleDirection(particle, kinEnergySec, 
+                                              Z, mat),
+                                                   kinEnergySec);
 
-  G4double phi = twopi * G4UniformRand() ;
-
-  G4ThreeVector directionSec(sint*std::cos(phi),sint*std::sin(phi), cost) ;
-  directionSec.rotateUz(direction);
-
-  // create G4DynamicParticle object for delta ray
-  G4DynamicParticle* delta = new G4DynamicParticle(G4Electron::Definition(),
-                                                   directionSec,
-						   kinEnergySec);
 
   secondaries -> push_back(delta);
 
   // Change kinematics of primary particle
-  kineticEnergy       -= kinEnergySec;
-  G4ThreeVector finalP = direction*totMomentum - directionSec*momentumSec;
+  G4ThreeVector direction = particle ->GetMomentumDirection();
+  G4double totalMomentum = sqrt(kineticEnergy*(energy + cacheMass));
+
+  G4ThreeVector finalP = totalMomentum*direction - delta->GetMomentum();
   finalP               = finalP.unit();
+
+  kineticEnergy       -= kinEnergySec;
 
   particleChangeLoss -> SetProposedKineticEnergy(kineticEnergy);
   particleChangeLoss -> SetProposedMomentumDirection(finalP);
