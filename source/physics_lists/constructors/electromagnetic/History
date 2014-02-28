@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-Feb-2014, V.Ivanchenko (phys-ctor-em-V10-00-09)
+- G4EmLowEPPhysics - added G4LowEWentzelVIModel
+
 14-Feb-2014, V.Ivanchenko (phys-ctor-em-V10-00-08)
 - G4EmDNAPhysics_option1 - added new constructor for DNA physics 
 
