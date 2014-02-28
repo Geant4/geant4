@@ -5,7 +5,7 @@ XrayFluoSteppingVerbose created
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
+ Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -2845,7 +2845,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
       69.08          0k         3        9         24         0.00    World
       30.92          0k         2        3         11         0.00    HPGeDetector
 ### Run 0 starts.
-### Run 0x4099600 start.
+### Run 0x3ee0e90 start.
 /vis/scene/notifyHandlers
 WARNING: Scene "none" not found.
   /vis/scene/list to see scenes.
@@ -13755,7 +13755,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
     1    -78 nm   1.38 um  -1.95 mm      0 eV    284 eV   6.27 nm   6.27 nm     Sample     eIoni
 
 *********************************************************************************************************
-* G4Track Information:   Particle = e-,   Trac
+* G4Track Information:   Particle = e-,   Tra
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================

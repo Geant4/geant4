@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
+ Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -66,13 +66,13 @@ User Limits:
 	 theMinEKine:        250 eV 
 	 minRoomMinEKine:    250 eV 
 
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-/build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+/data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
 DMXPhysicsList::SetCuts:CutLength : 1 um 
 Verbosity Set to: 0
 
@@ -443,7 +443,7 @@ hIoni:   for  anti_proton    SubType= 2
 #### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(f0(1370)) skipped...
 #### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(f0(1500)) skipped...
 #### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(f0(1710)) skipped...
-#### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(f0(600)) skipped...
+#### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(f0(500)) skipped...
 #### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(f0(980)) skipped...
 #### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(f1(1285)) skipped...
 #### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(f1(1420)) skipped...
@@ -585,15 +585,15 @@ muPairProd:   for  mu-    SubType= 4
       Sampling table 9x1001 from 1 GeV to 0.1 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=      100 GeV
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /build/electric_commander/G4-builds/release/slc6-gcc47-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/6_nat_Carbon
 #### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(omega) skipped...
 #### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(omega(1420)) skipped...
 #### G4VUserPhysicsList::BuildPhysicsTable() - BuildPhysicsTable(omega(1650)) skipped...

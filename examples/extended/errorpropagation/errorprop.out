@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
+ Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0xbae180
+ creating G4RunManagerKernel 0xe55620
 
 The materials defined are : 
 
@@ -79,15 +79,15 @@ List of instantiated particles ============================================
 e+ e- gamma geantino mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0xc8eaf0G4ErrorPhysicsList:: particle process manager e+ = 0xc911d0
-0xc8e960G4ErrorPhysicsList:: particle process manager e- = 0xc92850
-0xc8e6a0G4ErrorPhysicsList:: particle process manager gamma = 0xc92ac0
-0xc90080G4ErrorPhysicsList:: particle process manager geantino = 0xc92d10
-0xc8ed00G4ErrorPhysicsList:: particle process manager mu+ = 0xc92f60
-0xc8f170G4ErrorPhysicsList:: particle process manager mu- = 0xc931b0
-0xc8f5e0G4ErrorPhysicsList:: particle process manager pi+ = 0xc93400
-0xc8fa00G4ErrorPhysicsList:: particle process manager pi- = 0xc93650
-0xc8fe20G4ErrorPhysicsList:: particle process manager proton = 0xc938a0
+0xf35b70G4ErrorPhysicsList:: particle process manager e+ = 0xf38250
+0xf359e0G4ErrorPhysicsList:: particle process manager e- = 0xf398d0
+0xf35720G4ErrorPhysicsList:: particle process manager gamma = 0xf39b40
+0xf37100G4ErrorPhysicsList:: particle process manager geantino = 0xf39d90
+0xf35d80G4ErrorPhysicsList:: particle process manager mu+ = 0xf39fe0
+0xf361f0G4ErrorPhysicsList:: particle process manager mu- = 0xf3a230
+0xf36660G4ErrorPhysicsList:: particle process manager pi+ = 0xf3a480
+0xf36a80G4ErrorPhysicsList:: particle process manager pi- = 0xf3a6d0
+0xf36ea0G4ErrorPhysicsList:: particle process manager proton = 0xf3a920
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 
@@ -239,14 +239,14 @@ Function called when *NOT* at a Boundary.
 
    39 2.21e+03     35.1        0  2.23e+04   0.0202     60.2  2.21e+03        MUON Transportation
  $$$ PROPAGATION ENDED 
- Position: (2210,35.10133251525081,0)
- Momentum: (22433.72900256995,696.1894242196864,0)
+ Position: (2210,35.10133252128853,0)
+ Momentum: (22433.72899212837,696.1894240805574,0)
  Error: 
-  9.873256458319216e-08                       0   3.726934116969994e-08   2.667638776270169e-06                       0 
-                      0   3.518751886297824e-05                       0                       0    0.004070096760695169 
-  3.726934116969994e-08                       0   3.519219307368238e-05    0.004421999331282711                       0 
-  2.667638776270169e-06                       0    0.004421999331282711      0.6258741810111936                       0 
-                      0    0.004070096760695169                       0                       0      0.5409571157844785 
+  9.873256474954529e-08                       0   3.726934122227479e-08   2.667638779398974e-06                       0 
+                      0   3.518751888030719e-05                       0                       0    0.004070096762286088 
+  3.726934122227479e-08                       0   3.519219309101649e-05      0.0044219993330468                       0 
+  2.667638779398974e-06                       0      0.0044219993330468      0.6258741812169364                       0 
+                      0    0.004070096762286088                       0                       0      0.5409571159566878 
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0  1.99e+04        0        0         0        BEAM initStep
@@ -308,14 +308,14 @@ Function called when *NOT* at a Boundary.
 
    39 2.21e+03     35.1        0  2.23e+04   0.0202     60.2  2.21e+03        MUON Transportation
  $$$ PROPAGATION ENDED 
- Position: (2210,35.10133251525081,0)
- Momentum: (22433.72900256995,696.1894242196864,0)
+ Position: (2210,35.10133252128853,0)
+ Momentum: (22433.72899212837,696.1894240805574,0)
  Error: 
-  9.873256458319216e-08                       0   3.726934116969994e-08   2.667638776270169e-06                       0 
-                      0   3.518751886297824e-05                       0                       0    0.004070096760695169 
-  3.726934116969994e-08                       0   3.519219307368238e-05    0.004421999331282711                       0 
-  2.667638776270169e-06                       0    0.004421999331282711      0.6258741810111936                       0 
-                      0    0.004070096760695169                       0                       0      0.5409571157844785 
+  9.873256474954529e-08                       0   3.726934122227479e-08   2.667638779398974e-06                       0 
+                      0   3.518751888030719e-05                       0                       0    0.004070096762286088 
+  3.726934122227479e-08                       0   3.519219309101649e-05      0.0044219993330468                       0 
+  2.667638779398974e-06                       0      0.0044219993330468      0.6258741812169364                       0 
+                      0    0.004070096762286088                       0                       0      0.5409571159566878 
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0  1.99e+04        0        0         0        BEAM initStep
@@ -377,12 +377,12 @@ Function called when *NOT* at a Boundary.
 
    39 2.21e+03     35.1        0  2.23e+04   0.0202     60.2  2.21e+03        MUON Transportation
  $$$ PROPAGATION ENDED 
- Position: (2210,35.10133251525081,0)
- Momentum: (22433.72900256995,696.1894242196864,0)
+ Position: (2210,35.10133252128853,0)
+ Momentum: (22433.72899212837,696.1894240805574,0)
  Error: 
-  9.873256458319216e-08                       0   3.726934116969994e-08   2.667638776270169e-06                       0 
-                      0   3.518751886297824e-05                       0                       0    0.004070096760695169 
-  3.726934116969994e-08                       0   3.519219307368238e-05    0.004421999331282711                       0 
-  2.667638776270169e-06                       0    0.004421999331282711      0.6258741810111936                       0 
-                      0    0.004070096760695169                       0                       0      0.5409571157844785 
+  9.873256474954529e-08                       0   3.726934122227479e-08   2.667638779398974e-06                       0 
+                      0   3.518751888030719e-05                       0                       0    0.004070096762286088 
+  3.726934122227479e-08                       0   3.519219309101649e-05      0.0044219993330468                       0 
+  2.667638779398974e-06                       0      0.0044219993330468      0.6258741812169364                       0 
+                      0    0.004070096762286088                       0                       0      0.5409571159566878 
 

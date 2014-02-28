@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
+ Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -452,7 +452,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=3.4s Real=6.79s Sys=0s
+  User=5.86s Real=8.65s Sys=0s
 
  ======================== run summary =====================
 
@@ -464,7 +464,7 @@ Run Summary
  Track length of primary track = 886.247 um  +- 189.012 um 
  Range from EmCalculator = 942.765 um  (from full dE/dx)
 
- Projected range               = 317.931 um  +- 202.827 um 
+ Projected range               = 317.927 um  +- 202.664 um 
 
  Nb of steps of primary track  = 21.32 +- 4.77	 Step size= 42.072 um  +- 7.247 um 
 
@@ -485,7 +485,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.15 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.16 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

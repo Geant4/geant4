@@ -9,7 +9,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
+ Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -359,9 +359,9 @@ WARNING: Scene "none" not found.
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.03
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 0  -----
   12004 hits are stored in ExGflashHitsCollection 
@@ -375,7 +375,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.03
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 1  -----
   11975 hits are stored in ExGflashHitsCollection 
@@ -387,7 +387,7 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.05
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.02
 ******************************************
@@ -401,9 +401,9 @@ Internal GetUserElapsed Time: 0.02
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.04
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 3  -----
   11931 hits are stored in ExGflashHitsCollection 
@@ -415,9 +415,9 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.03
+Internal Real Elapsed Time is: 0.04
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 4  -----
   11970 hits are stored in ExGflashHitsCollection 
@@ -443,9 +443,9 @@ Internal GetUserElapsed Time: 0.02
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.03
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 6  -----
   11927 hits are stored in ExGflashHitsCollection 
@@ -459,7 +459,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.02
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 7  -----
   11900 hits are stored in ExGflashHitsCollection 
@@ -471,9 +471,9 @@ Internal GetUserElapsed Time: 0.01
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.03
+Internal Real Elapsed Time is: 0.02
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 8  -----
   11909 hits are stored in ExGflashHitsCollection 
@@ -487,7 +487,7 @@ Internal GetUserElapsed Time: 0.01
 ******************************************
 Internal Real Elapsed Time is: 0.02
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.01
+Internal GetUserElapsed Time: 0.02
 ******************************************
  ------ ExGflashEventAction::End of event nr. 9  -----
   11910 hits are stored in ExGflashHitsCollection 
@@ -498,10 +498,10 @@ ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 number of event = 10
 Graphics systems deleted.
 Visualization Manager deleting...
-Internal Real Elapsed Time /event is: 0.0266667
+Internal Real Elapsed Time /event is: 0.0344444
 
 ******************************************
-Total Real Elapsed Time is: 1.91
+Total Real Elapsed Time is: 1.71
 Total System Elapsed Time: 0.01
-Total GetUserElapsed Time: 0.84
+Total GetUserElapsed Time: 1.07
 ******************************************

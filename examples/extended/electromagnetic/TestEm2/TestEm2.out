@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
+ Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -537,30 +537,30 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.97s Real=9.98s Sys=0s
+  User=8.4s Real=12.27s Sys=0.01s
 
  ===== SUMMARY ===== 
 
  Total number of events:        100
- Mean number of charged steps:  7273.55
- Mean number of neutral steps:  3910.44
+ Mean number of charged steps:  7296.86
+ Mean number of neutral steps:  3928.27
 
- energy deposit :   94.92 % E0 +-    1.07 % E0
- charged traklen:  482.14 radl +-    5.48 radl
- neutral traklen: 4214.37 radl +-  122.53 radl
+ energy deposit :   95.11 % E0 +-    0.88 % E0
+ charged traklen:  482.83 radl +-    4.67 radl
+ neutral traklen: 4225.80 radl +-  126.76 radl
 
- 90.00 % confinement: radius = 3.00 radl  (2.68 cm )
+ 90.00 % confinement: radius = 2.94 radl  (2.62 cm )
 
 
 <<<<ACCEPTANCE>>>> 100 events for Total Energy in Absorber
-Edep: 0.949194  delEdep= 0.000194182 nrms= 0.236807
-Erms: 0.0106934  delErms= 0.00249339 nrms= 3.04072
+Edep: 0.951062  delEdep= 0.00206163 nrms= 2.51418
+Erms: 0.00878629  delErms= 0.000586289 nrms= 0.714987
 <<<<END>>>>   IS ACCEPTED
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 238534857, 1609561673
+ Current couple of seeds = 528617984, 1432955268
 ----------------------------------------
 ... write Root file : testem2.root - done
 G4 kernel has come to Quit state.

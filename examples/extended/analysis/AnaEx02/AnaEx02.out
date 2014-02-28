@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
+ Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -360,20 +360,20 @@ Index : 2     used in the geometry : Yes
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 454.229 MeV +- 13.6735 MeV
- mean Energy in Gap      : 24.386 MeV +- 7.3588 MeV
+ mean Energy in Absorber : 454.69 MeV +- 12.3426 MeV
+ mean Energy in Gap      : 24.3222 MeV +- 7.38576 MeV
 
- mean trackLength in Absorber : 32.238 cm  +- 1.04467 cm 
- mean trackLength in Gap      : 12.0397 cm  +- 3.77209 cm 
+ mean trackLength in Absorber : 32.2783 cm  +- 9.47472 mm 
+ mean trackLength in Gap      : 11.9839 cm  +- 3.75192 cm 
 ------------------------------------------------------------
 
 
  ----> print histograms statistic 
 
- EAbs : mean = 454.229 MeV rms = 13.6735 MeV
- EGap : mean = 24.386 MeV rms = 7.3588 MeV
- LAbs : mean = 32.238 cm  rms = 1.04467 cm 
- LGap : mean = 12.0397 cm  rms = 3.77209 cm 
+ EAbs : mean = 454.69 MeV rms = 12.3426 MeV
+ EGap : mean = 24.3222 MeV rms = 7.38576 MeV
+ LAbs : mean = 32.2783 cm  rms = 9.47472 mm 
+ LGap : mean = 11.9839 cm  rms = 3.75192 cm 
 
 ----> Histogram Tree is saved 
 

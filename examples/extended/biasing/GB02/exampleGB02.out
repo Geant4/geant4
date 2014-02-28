@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
+ Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -3848,7 +3848,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0        0         1        0        0       500   test.phys initStep
     1        0        0     18.1     0.803        0     18.1       518   test.phys biasWrapper(hadElastic)
-    2     19.2     22.7 3.55e-15     0.803        0     34.8       553       World Transportation
+    2     19.2     22.7 7.11e-15     0.803        0     34.8       553       World Transportation
     3 8.48e+03    1e+04 -7.96e+03     0.803        0 1.53e+04  1.59e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -4197,7 +4197,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3     9.19     29.2     22.3     0.925   0.0074     8.59       540   test.phys biasWrapper(hadElastic)
     4     30.1     65.6     34.5     0.842        0     43.8       584   test.phys biasWrapper(hadElastic)
     5       45       67     26.2     0.816   0.0263     17.1       601   test.phys biasWrapper(hadElastic)
-    6     56.9     77.8 -7.11e-15     0.816        0     30.7       631       World Transportation
+    6     56.9     77.8 7.11e-15     0.816        0     30.7       631       World Transportation
     7 4.61e+03 4.22e+03   -1e+04     0.816        0 1.17e+04  1.24e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -4735,7 +4735,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      171      6.39        0        0         0   test.phys initStep
     1       81     3.89     63.8      5.15        0      134       134   test.phys biasWrapper(compt)
-    2      118    -4.95        0      5.15        0     74.1       208       World Transportation
+    2      118    -4.95 -7.11e-15      5.15        0     74.1       208       World Transportation
     3 5.85e+03 -1.39e+03   -1e+04      5.15        0 1.16e+04  1.18e+04  OutOfWorld Transportation
 
 *********************************************************************************************************

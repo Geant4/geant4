@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
+ Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -5144,9 +5144,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    21    -70.2     -252      861      47.4    0.081      164   1.6e+03     Chamber eIoni
    22    -70.2     -255      880      47.3   0.0174     19.2  1.62e+03     Chamber eIoni
    23    -70.2     -256      891      47.3  0.00739     10.4  1.63e+03     Chamber eIoni
-   24    -70.1     -258      900      47.3  0.00779     9.43  1.64e+03     Tracker Transportation
+   24    -70.1     -258      900      47.3  0.00778     9.43  1.64e+03     Tracker Transportation
    25    -69.1     -274      999      47.3   0.0167      100  1.74e+03     Tracker StepLimiter
-   26    -69.1     -274    1e+03      47.2 0.000517     3.83  1.75e+03     Tracker eIoni
+   26    -69.1     -274    1e+03      47.2 0.000518     3.84  1.75e+03     Tracker eIoni
    27    -67.3     -291  1.1e+03      47.2   0.0181      100  1.85e+03     Tracker StepLimiter
    28    -66.4     -301 1.16e+03      47.2  0.00932     63.6  1.91e+03     Tracker eIoni
    29    -66.3     -302 1.17e+03      47.2  0.00097     5.97  1.92e+03     Tracker eIoni
@@ -5172,7 +5172,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    49    -50.2     -405 1.82e+03      42.8  0.00386     18.8  2.57e+03     Tracker eIoni
    50    -48.8     -411 1.85e+03      42.8  0.00649     33.3   2.6e+03     Tracker eBrem
    51    -44.6     -428 1.95e+03      42.7   0.0196      100   2.7e+03     Tracker StepLimiter
-   52    -44.4     -430 1.95e+03      42.7  0.00119     6.35  2.71e+03     Tracker eIoni
+   52    -44.4     -430 1.95e+03      42.7  0.00119     6.33  2.71e+03     Tracker eIoni
    53    -41.1     -447 2.05e+03      42.7   0.0162      100  2.81e+03     Tracker StepLimiter
    54    -37.6     -463 2.15e+03      42.7   0.0171      100  2.91e+03     Tracker StepLimiter
    55    -35.2     -475 2.22e+03      42.7   0.0124     68.8  2.98e+03     Tracker eIoni
@@ -5184,16 +5184,16 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    61    -22.5     -556 2.66e+03      42.6  0.00641       26  3.43e+03       World eIoni
    62    -22.4     -556 2.66e+03      42.5 0.000545     4.47  3.43e+03       World eIoni
    63    -17.8     -581 2.79e+03      42.5   0.0227      134  3.56e+03       World eIoni
-   64    -16.5     -589 2.84e+03      42.5  0.00923     43.7  3.61e+03       World eIoni
-   65    -12.4     -607 2.94e+03      42.5   0.0169      102  3.71e+03       World eIoni
-   66    -12.2     -607 2.94e+03      42.5 0.000366     2.96  3.71e+03  OutOfWorld Transportation
+   64    -16.4     -589 2.84e+03      42.5  0.00923     43.7  3.61e+03       World eIoni
+   65    -12.3     -607 2.94e+03      42.5   0.0169      102  3.71e+03       World eIoni
+   66    -12.2     -607 2.94e+03      42.5 0.000366     2.95  3.71e+03  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 276,   Parent ID = 235
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -12.4     -607 2.94e+03  0.000995        0        0         0       World initStep
+    0    -12.3     -607 2.94e+03  0.000995        0        0         0       World initStep
     1    -12.4     -607 2.94e+03         0 0.000995   0.0566    0.0566       World eIoni
 
 *********************************************************************************************************
@@ -5201,7 +5201,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -16.5     -589 2.84e+03   0.00105        0        0         0       World initStep
+    0    -16.4     -589 2.84e+03   0.00105        0        0         0       World initStep
     1    -16.5     -589 2.84e+03         0  0.00105    0.061     0.061       World eIoni
 
 *********************************************************************************************************
@@ -5218,7 +5218,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -22.4     -556 2.66e+03     0.056        0        0         0       World initStep
-    1    -10.4     -557 2.67e+03    0.0481  0.00791       14        14       World eIoni
+    1    -10.3     -557 2.67e+03    0.0481  0.00791       14        14       World eIoni
     2    -14.9     -554 2.68e+03    0.0433  0.00478       11        25       World eIoni
     3    -16.1     -554 2.68e+03    0.0405  0.00127     2.35      27.4       World eIoni
     4      -22     -550 2.68e+03    0.0347   0.0058     8.49      35.9       World eIoni
@@ -5228,7 +5228,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     8    -29.3     -544 2.69e+03    0.0162  0.00282     2.54      50.7       World eIoni
     9    -29.1     -544 2.69e+03    0.0139  0.00231     1.44      52.1       World eIoni
    10    -29.3     -546 2.69e+03   0.00857  0.00533     2.41      54.5       World eIoni
-   11    -29.2     -547 2.69e+03    0.0034  0.00517     1.61      56.1       World eIoni
+   11    -29.1     -547 2.69e+03    0.0034  0.00517     1.61      56.1       World eIoni
    12      -29     -547 2.69e+03         0   0.0034    0.391      56.5       World eIoni
 
 *********************************************************************************************************
@@ -5789,12 +5789,12 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    38     -198     -179 1.64e+03      1.69   0.0206     41.1  1.65e+03     Chamber eIoni
    39     -192     -169 1.66e+03      1.68  0.00828     23.4  1.67e+03     Chamber eIoni
    40     -172     -150  1.7e+03      1.67    0.014     51.8  1.72e+03     Tracker Transportation
-   41     -163     -113 1.76e+03      1.66   0.0102     69.7  1.79e+03     Tracker eIoni
+   41     -163     -113 1.76e+03      1.66   0.0102     69.8  1.79e+03     Tracker eIoni
    42     -151    -63.9 1.84e+03      1.64   0.0136      100  1.89e+03     Tracker StepLimiter
-   43     -149      -48 1.89e+03      1.63  0.00534     50.2  1.94e+03     Tracker eIoni
+   43     -149    -48.1 1.89e+03      1.63  0.00534     50.2  1.94e+03     Tracker eIoni
    44     -147    -38.2 1.92e+03      1.63  0.00393     27.2  1.97e+03     Tracker eIoni
    45     -145    -23.3 1.96e+03      1.62  0.00548     44.5  2.01e+03     Tracker eIoni
-   46     -148     11.4 2.05e+03       1.6   0.0141      100  2.11e+03     Tracker StepLimiter
+   46     -147     11.4 2.05e+03       1.6   0.0141      100  2.11e+03     Tracker StepLimiter
    47     -147     13.5 2.06e+03       1.6  0.00113      7.2  2.12e+03     Tracker eIoni
    48     -140     34.8 2.14e+03      1.59   0.0113     80.5   2.2e+03     Tracker eIoni
    49     -136     44.3 2.17e+03      1.58  0.00498     34.1  2.24e+03     Tracker eIoni
@@ -5803,36 +5803,36 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    52     -126     85.1 2.28e+03      1.56  0.00227     19.8  2.36e+03     Tracker eIoni
    53     -125     93.7  2.3e+03      1.56  0.00196     24.2  2.38e+03     Tracker eIoni
    54     -123      133 2.38e+03      1.55   0.0118       87  2.47e+03     Tracker eIoni
-   55     -121      141  2.4e+03      1.54  0.00229     19.7  2.49e+03       World Transportation
+   55     -121      141  2.4e+03      1.54  0.00228     19.6  2.49e+03       World Transportation
    56     -113      166 2.46e+03      1.53  0.00871     65.4  2.55e+03       World eIoni
-   57      -98      193 2.52e+03      1.52  0.00715     69.4  2.62e+03       World eIoni
-   58    -71.1      174  2.6e+03      1.51   0.0161     88.5  2.71e+03       World eIoni
-   59    -10.8      114 2.78e+03      1.48    0.029      192   2.9e+03       World eIoni
-   60     28.8     49.4 2.94e+03      1.45   0.0241      183  3.09e+03  OutOfWorld Transportation
+   57    -97.8      192 2.52e+03      1.52  0.00715     69.4  2.62e+03       World eIoni
+   58      -71      174  2.6e+03      1.51   0.0161     88.5  2.71e+03       World eIoni
+   59    -10.7      114 2.78e+03      1.48    0.029      192   2.9e+03       World eIoni
+   60     28.8     49.3 2.94e+03      1.45   0.0241      183  3.09e+03  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 344,   Parent ID = 298
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -10.8      114 2.78e+03   0.00155        0        0         0       World initStep
-    1    -10.8      114 2.78e+03         0  0.00155    0.109     0.109       World eIoni
+    0    -10.7      114 2.78e+03   0.00155        0        0         0       World initStep
+    1    -10.7      114 2.78e+03         0  0.00155    0.109     0.109       World eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 343,   Parent ID = 298
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -71.1      174  2.6e+03   0.00128        0        0         0       World initStep
-    1    -71.1      174  2.6e+03         0  0.00128    0.082     0.082       World eIoni
+    0      -71      174  2.6e+03   0.00128        0        0         0       World initStep
+    1    -70.9      174  2.6e+03         0  0.00128    0.082     0.082       World eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 342,   Parent ID = 298
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      -98      193 2.52e+03   0.00159        0        0         0       World initStep
-    1    -97.9      193 2.52e+03         0  0.00159    0.113     0.113       World eIoni
+    0    -97.8      192 2.52e+03   0.00159        0        0         0       World initStep
+    1    -97.8      193 2.52e+03         0  0.00159    0.113     0.113       World eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 341,   Parent ID = 298
@@ -5888,7 +5888,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     -136     44.3 2.17e+03   0.00183        0        0         0     Tracker initStep
-    1     -136     44.3 2.17e+03         0  0.00183    0.141     0.141     Tracker eIoni
+    1     -136     44.2 2.17e+03         0  0.00183    0.141     0.141     Tracker eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 334,   Parent ID = 298
@@ -5927,7 +5927,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -149      -48 1.89e+03   0.00356        0        0         0     Tracker initStep
+    0     -149    -48.1 1.89e+03   0.00356        0        0         0     Tracker initStep
     1     -149    -47.9 1.89e+03         0  0.00356    0.423     0.423     Tracker eIoni
 
 *********************************************************************************************************
@@ -6208,11 +6208,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     6    -4.28    -41.1      466      23.4    0.018      100       391     Tracker StepLimiter
     7    -2.29    -42.4      566      23.4    0.019      100       491     Tracker StepLimiter
     8    0.127    -43.6      666      23.4   0.0165      100       591     Tracker StepLimiter
-    9    0.947    -44.4      700      23.4   0.0041     33.9       625     Chamber Transportation
+    9    0.946    -44.4      700      23.4   0.0041     33.9       625     Chamber Transportation
    10     1.23    -44.6      714      23.4     0.01     13.8       639     Chamber eIoni
    11     1.26    -44.7      720      23.4  0.00358     6.12       645     Chamber eIoni
-   12     0.39      -46      781      23.4   0.0287     61.1       706     Chamber eIoni
-   13    0.786    -46.4      791      23.4  0.00304      9.6       716     Chamber eIoni
+   12    0.389      -46      781      23.4   0.0287     61.1       706     Chamber eIoni
+   13    0.785    -46.4      791      23.4  0.00304      9.6       716     Chamber eIoni
    14     1.34    -47.1      802      23.3  0.00644     11.5       727     Chamber eIoni
    15     2.09    -48.4      834      23.3   0.0161     31.7       759     Chamber eIoni
    16     2.36    -49.5      844      23.3  0.00522     10.2       769     Chamber eIoni
@@ -6244,10 +6244,10 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    42      112     -232 2.02e+03      22.9 0.000846     1.45  1.96e+03     Tracker eIoni
    43      120     -241 2.07e+03      22.9  0.00685     56.8  2.02e+03     Tracker eIoni
    44      134     -260 2.17e+03      22.8   0.0183      100  2.12e+03     Tracker StepLimiter
-   45      143     -270 2.23e+03      22.8  0.00843     58.8  2.18e+03     Tracker eIoni
+   45      143     -271 2.23e+03      22.8  0.00843     58.8  2.18e+03     Tracker eIoni
    46      156     -288 2.33e+03      22.8   0.0186      100  2.28e+03     Tracker StepLimiter
    47      167     -302  2.4e+03      22.8   0.0139     76.9  2.36e+03       World Transportation
-   48      167     -302  2.4e+03      22.8 0.000816     4.17  2.36e+03       World eIoni
+   48      167     -302  2.4e+03      22.8 0.000816     4.18  2.36e+03       World eIoni
    49      170     -306 2.42e+03      22.8  0.00265     19.2  2.38e+03       World eIoni
    50      176     -313 2.46e+03      22.8  0.00575     36.8  2.42e+03       World eIoni
    51      184     -323 2.51e+03      22.8   0.0112     57.2  2.47e+03       World eIoni
@@ -6354,7 +6354,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0      143     -270 2.23e+03    0.0017        0        0         0     Tracker initStep
+    0      143     -271 2.23e+03    0.0017        0        0         0     Tracker initStep
     1      143     -270 2.23e+03         0   0.0017    0.125     0.125     Tracker eIoni
 
 *********************************************************************************************************
@@ -6565,7 +6565,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1     2.38    -49.5      844    0.0204 0.000389   0.0649    0.0649     Chamber eIoni
     2      2.3    -49.9      844    0.0176 0.000845    0.609     0.674     Chamber eIoni
     3     1.76    -51.2      844   0.00859  0.00437     1.89      2.56     Chamber eIoni
-    4     1.85    -51.3      844   0.00668 0.000439    0.134       2.7     Chamber eIoni
+    4     1.84    -51.3      844   0.00668 0.000439    0.134       2.7     Chamber eIoni
     5     1.91    -51.2      844         0  0.00668    0.626      3.32     Chamber eIoni
 
 *********************************************************************************************************
@@ -6573,7 +6573,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     1.85    -51.3      844   0.00147        0        0         0     Chamber initStep
+    0     1.84    -51.3      844   0.00147        0        0         0     Chamber initStep
     1     1.84    -51.3      844         0  0.00147   0.0684    0.0684     Chamber eIoni
 
 *********************************************************************************************************
@@ -6621,16 +6621,16 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    0.786    -46.4      791    0.0019        0        0         0     Chamber initStep
-    1     0.79    -46.4      791         0   0.0019   0.0969    0.0969     Chamber eIoni
+    0    0.785    -46.4      791    0.0019        0        0         0     Chamber initStep
+    1    0.789    -46.4      791         0   0.0019   0.0969    0.0969     Chamber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 350,   Parent ID = 297
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     0.39      -46      781   0.00168        0        0         0     Chamber initStep
-    1     0.38      -46      781         0  0.00168   0.0821    0.0821     Chamber eIoni
+    0    0.389      -46      781   0.00168        0        0         0     Chamber initStep
+    1    0.379      -46      781         0  0.00168   0.0821    0.0821     Chamber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 349,   Parent ID = 297
@@ -6914,7 +6914,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0      891     -135 2.32e+03     0.218        0        0         0     Tracker initStep
     1      881     -152 2.35e+03      0.21  0.00654     36.6      36.6     Tracker eIoni
     2      863     -162  2.4e+03     0.198   0.0102     48.5      85.1     Tracker eIoni
-    3      862     -165  2.4e+03     0.195  0.00313     5.36      90.5       World Transportation
+    3      862     -165  2.4e+03     0.195  0.00312     5.36      90.5       World Transportation
     4      862     -183 2.43e+03     0.183   0.0106     37.5       128       World eIoni
     5      862     -191 2.47e+03     0.175  0.00725     34.9       163       World eIoni
     6      913     -213 2.54e+03     0.153   0.0221     92.5       255       World eIoni
@@ -6931,7 +6931,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    17 1.01e+03     -199  2.7e+03    0.0646  0.00586      8.7       475       World eIoni
    18 1.01e+03     -206 2.71e+03    0.0571  0.00643     12.8       488       World eIoni
    19 1.01e+03     -208 2.71e+03    0.0537  0.00122     3.28       492       World eIoni
-   20 1.01e+03     -209 2.71e+03    0.0495  0.00249     1.93       494       World eIoni
+   20 1.01e+03     -209 2.71e+03    0.0494  0.00249     1.93       494       World eIoni
    21 1.01e+03     -208 2.72e+03    0.0445  0.00493     11.5       505       World eIoni
    22    1e+03     -207 2.73e+03    0.0373  0.00718     9.79       515       World eIoni
    23      999     -205 2.74e+03    0.0311   0.0062     7.53       522       World eIoni
@@ -7462,9 +7462,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     6 1.06e+03      476     99.1     0.407  0.00835     13.8       171     Chamber eIoni
     7 1.06e+03      474     97.5     0.406  0.00103      5.2       177     Chamber eIoni
     8 1.08e+03      472     69.8     0.382  0.00993     49.2       226     Chamber eBrem
-    9 1.09e+03      473     68.5     0.377  0.00084     2.47       228     Chamber eIoni
+    9 1.09e+03      473     68.6     0.377  0.00084     2.47       228     Chamber eIoni
    10 1.09e+03      486     59.8     0.366  0.00899     17.4       246     Chamber eIoni
-   11 1.07e+03      515     17.5     0.323   0.0392     68.4       314     Chamber eIoni
+   11 1.07e+03      515     17.6     0.323   0.0392     68.4       314     Chamber eIoni
    12 1.07e+03      515     12.1     0.273  0.00378        6       320     Chamber eIoni
    13 1.07e+03      515     11.5     0.267 0.000544    0.716       321     Chamber eIoni
    14 1.07e+03      515     9.38     0.263 0.000815     2.34       323     Chamber eIoni
@@ -7483,7 +7483,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    27 1.06e+03      449    -18.6    0.0977  0.00101    0.994       480     Chamber eIoni
    28 1.06e+03      448    -18.4    0.0866 0.000329    0.607       481     Chamber eIoni
    29 1.07e+03      441    -18.1    0.0724   0.0143     12.1       493     Chamber eIoni
-   30 1.07e+03      441      -19    0.0685  0.00123     1.17       494     Chamber eIoni
+   30 1.07e+03      441    -18.9    0.0685  0.00123     1.17       494     Chamber eIoni
    31 1.07e+03      442    -21.2    0.0607   0.0056     4.37       499     Chamber eIoni
    32 1.08e+03      439    -24.4    0.0545   0.0062     7.26       506     Chamber eIoni
    33 1.08e+03      438    -21.6    0.0467  0.00783     6.28       512     Chamber eIoni
@@ -7532,8 +7532,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 1.07e+03      441      -19   0.00263        0        0         0     Chamber initStep
-    1 1.07e+03      441      -19         0  0.00263    0.152     0.152     Chamber eIoni
+    0 1.07e+03      441    -18.9   0.00263        0        0         0     Chamber initStep
+    1 1.07e+03      441    -18.9         0  0.00263    0.152     0.152     Chamber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 498,   Parent ID = 453
@@ -7543,7 +7543,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     0 1.06e+03      448    -18.4    0.0107        0        0         0     Chamber initStep
     1 1.06e+03      448    -18.6   0.00856 0.000613    0.177     0.177     Chamber eIoni
     2 1.06e+03      448    -19.1   0.00193  0.00663    0.829      1.01     Chamber eIoni
-    3 1.06e+03      448    -19.1         0  0.00193   0.0988       1.1     Chamber eIoni
+    3 1.06e+03      448    -19.1         0  0.00193   0.0988      1.11     Chamber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 504,   Parent ID = 498
@@ -7699,7 +7699,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     2 1.07e+03      514     11.3    0.0364  0.00176     1.13      2.25     Chamber eIoni
     3 1.07e+03      513     10.9    0.0322  0.00169    0.853       3.1     Chamber eIoni
     4 1.07e+03      512     9.07    0.0242  0.00796     3.38      6.48     Chamber eIoni
-    5 1.07e+03      512     7.77    0.0199  0.00432     2.59      9.07     Chamber eIoni
+    5 1.07e+03      512     7.78    0.0199  0.00432     2.59      9.07     Chamber eIoni
     6 1.08e+03      511     7.72    0.0157  0.00241     1.85      10.9     Chamber eIoni
     7 1.08e+03      510     7.94    0.0065  0.00724     1.34      12.3     Chamber eIoni
     8 1.08e+03      510     7.89         0   0.0065    0.598      12.9     Chamber eIoni
@@ -7710,7 +7710,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0 1.08e+03      510     7.94   0.00195        0        0         0     Chamber initStep
-    1 1.08e+03      510     7.93         0  0.00195      0.1       0.1     Chamber eIoni
+    1 1.08e+03      510     7.94         0  0.00195      0.1       0.1     Chamber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 510,   Parent ID = 483
@@ -7749,7 +7749,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 1.07e+03      515     17.5   0.00435        0        0         0     Chamber initStep
+    0 1.07e+03      515     17.6   0.00435        0        0         0     Chamber initStep
     1 1.07e+03      515     17.5         0  0.00435    0.317     0.317     Chamber eIoni
 
 *********************************************************************************************************
@@ -7765,7 +7765,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0 1.09e+03      473     68.5   0.00388        0        0         0     Chamber initStep
+    0 1.09e+03      473     68.6   0.00388        0        0         0     Chamber initStep
     1 1.09e+03      474     68.5   0.00116  0.00272    0.239     0.239     Chamber eIoni
     2 1.09e+03      474     68.5         0  0.00116   0.0503     0.289     Chamber eIoni
 
@@ -7791,12 +7791,12 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     6 1.05e+03      483      100    0.0762 9.34e-05    0.112        16     Tracker Transportation
     7 1.05e+03      480      106    0.0695  0.00479     10.4      26.5     Tracker eIoni
     8 1.03e+03      473      101    0.0568   0.0107     19.9      46.4     Tracker eIoni
-    9 1.03e+03      469      100    0.0531  0.00372     6.11      52.5     Chamber Transportation
+    9 1.03e+03      469      100    0.0531  0.00372      6.1      52.5     Chamber Transportation
    10 1.03e+03      469     99.7    0.0506  0.00246     1.42      53.9     Chamber msc
    11 1.02e+03      469     99.5    0.0481  0.00251     1.13        55     Chamber msc
    12 1.02e+03      469     99.7    0.0467  0.00146     1.13      56.1     Chamber msc
    13 1.02e+03      468      100    0.0457 0.000933    0.819        57     Tracker Transportation
-   14 1.02e+03      472      101    0.0388  0.00501     8.46      65.4     Tracker eIoni
+   14 1.02e+03      472      101    0.0388  0.00502     8.46      65.4     Tracker eIoni
    15 1.02e+03      473      101    0.0338 0.000989     1.02      66.4     Tracker eIoni
    16 1.02e+03      478      101    0.0298  0.00396     6.54        73     Tracker eIoni
    17 1.01e+03      479      101    0.0265  0.00123     1.24      74.2     Tracker eIoni
@@ -7875,8 +7875,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     4 1.05e+03      485     99.1    0.0114 0.000465    0.203     0.635     Chamber msc
     5 1.05e+03      484     99.1    0.0107 0.000734    0.178     0.813     Chamber msc
     6 1.05e+03      484     99.3   0.00981  0.00084    0.216      1.03     Chamber msc
-    7 1.05e+03      484     99.2   0.00939 0.000429    0.175       1.2     Chamber msc
-    8 1.05e+03      484     99.2   0.00826  0.00112    0.151      1.35     Chamber msc
+    7 1.05e+03      484     99.2   0.00939 0.000429    0.174       1.2     Chamber msc
+    8 1.05e+03      484     99.2   0.00827  0.00112    0.151      1.35     Chamber msc
     9 1.05e+03      484     99.3   0.00636  0.00191    0.194      1.55     Chamber msc
    10 1.05e+03      484     99.4   0.00545  0.00091    0.165      1.71     Chamber msc
    11 1.05e+03      484     99.4         0  0.00545    0.451      2.16     Chamber eIoni
@@ -8324,7 +8324,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0      -22    -95.4     -732      45.8        0        0         0     Chamber initStep
     1    -21.7    -96.8     -709      45.8   0.0106     22.2      22.2     Chamber eIoni
-    2    -21.6    -97.4     -700      45.8  0.00291     9.39      31.6     Tracker Transportation
+    2    -21.6    -97.4     -700      45.8  0.00291     9.38      31.6     Tracker Transportation
     3    -21.7     -104     -600      45.8   0.0167      100       132     Tracker StepLimiter
     4    -21.7     -105     -590      45.8  0.00152     10.3       142     Tracker eIoni
     5    -21.7     -110     -500      45.7   0.0169     89.8       232     Tracker eIoni
@@ -8373,15 +8373,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    48    -12.9     -273 2.01e+03      44.9   0.0144      100  2.74e+03     Tracker StepLimiter
    49    -11.8     -283 2.11e+03      44.9   0.0139      100  2.84e+03     Tracker StepLimiter
    50    -10.8     -293  2.2e+03      44.9   0.0179      100  2.94e+03     Tracker StepLimiter
-   51     -9.5     -303  2.3e+03      44.9   0.0188      100  3.04e+03     Tracker StepLimiter
+   51    -9.51     -303  2.3e+03      44.9   0.0188      100  3.04e+03     Tracker StepLimiter
    52    -9.25     -309 2.36e+03      44.9  0.00973     52.7   3.1e+03     Tracker eIoni
-   53    -8.83     -313  2.4e+03      44.9  0.00635     43.7  3.14e+03       World Transportation
+   53    -8.84     -313  2.4e+03      44.9  0.00635     43.7  3.14e+03       World Transportation
    54    -8.28     -318 2.45e+03      44.7  0.00707       50  3.19e+03       World eIoni
    55    -8.03     -320 2.47e+03      44.7   0.0039     16.6  3.21e+03       World eIoni
    56     -6.9     -332 2.58e+03      44.7   0.0191      115  3.32e+03       World eIoni
    57    -5.47     -344  2.7e+03      44.7   0.0227      116  3.44e+03       World eIoni
    58    -5.19     -347 2.72e+03      44.7   0.0043     25.5  3.46e+03       World eIoni
-   59    -1.99     -370 2.94e+03      44.6   0.0374      220  3.68e+03  OutOfWorld Transportation
+   59       -2     -370 2.94e+03      44.6   0.0374      220  3.68e+03  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 587,   Parent ID = 236
@@ -8390,7 +8390,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -5.19     -347 2.72e+03   0.00475        0        0         0       World initStep
     1     -5.7     -347 2.72e+03  0.000843  0.00391    0.627     0.627       World eIoni
-    2    -5.71     -347 2.72e+03         0 0.000843   0.0449     0.672       World eIoni
+    2    -5.72     -347 2.72e+03         0 0.000843   0.0449     0.672       World eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 586,   Parent ID = 236
@@ -8406,7 +8406,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     -6.9     -332 2.58e+03    0.0096        0        0         0       World initStep
-    1    -5.69     -332 2.58e+03   0.00441  0.00518     1.77      1.77       World eIoni
+    1     -5.7     -332 2.58e+03   0.00441  0.00518     1.77      1.77       World eIoni
     2    -5.43     -332 2.58e+03         0  0.00441    0.615      2.39       World eIoni
 
 *********************************************************************************************************
@@ -8415,7 +8415,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -8.03     -320 2.47e+03   0.00144        0        0         0       World initStep
-    1       -8     -320 2.47e+03         0  0.00144   0.0972    0.0972       World eIoni
+    1    -8.01     -320 2.47e+03         0  0.00144   0.0972    0.0972       World eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 583,   Parent ID = 236
@@ -8428,18 +8428,18 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     3    -8.35     -337 2.48e+03    0.0739   0.0111     27.8       109       World eIoni
     4     -1.5     -342 2.47e+03    0.0682   0.0031     9.32       118       World eIoni
     5       14     -341 2.46e+03    0.0575   0.0107     19.3       138       World eIoni
-    6     7.08     -341 2.46e+03     0.052  0.00323     7.29       145       World eIoni
+    6     7.07     -341 2.46e+03     0.052  0.00323     7.29       145       World eIoni
     7     1.84     -341 2.46e+03    0.0467  0.00266     5.68       150       World eIoni
-    8   -0.201     -344 2.46e+03    0.0438  0.00166     3.88       154       World eIoni
+    8   -0.203     -344 2.46e+03    0.0438  0.00166     3.88       154       World eIoni
     9     -6.9     -346 2.45e+03    0.0371  0.00667     9.54       164       World eIoni
    10    -6.71     -345 2.45e+03    0.0354  0.00013    0.348       164       World eIoni
    11    -2.26     -341 2.45e+03    0.0296  0.00576     6.97       171       World eIoni
    12    -1.56     -340 2.45e+03    0.0259  0.00116     1.76       173       World eIoni
-   13      0.4     -336 2.45e+03    0.0207  0.00519     4.59       178       World eIoni
-   14    0.415     -335 2.45e+03    0.0157  0.00493     3.54       181       World eIoni
-   15   -0.588     -333 2.45e+03     0.012  0.00371     2.69       184       World eIoni
-   16   -0.101     -333 2.45e+03   0.00809  0.00393     2.13       186       World eIoni
-   17    0.931     -334 2.45e+03   0.00388  0.00421     1.52       187       World eIoni
+   13    0.398     -336 2.45e+03    0.0207  0.00519     4.59       178       World eIoni
+   14    0.413     -335 2.45e+03    0.0157  0.00493     3.54       181       World eIoni
+   15    -0.59     -333 2.45e+03     0.012  0.00371     2.69       184       World eIoni
+   16   -0.103     -333 2.45e+03   0.00809  0.00393     2.13       186       World eIoni
+   17    0.929     -334 2.45e+03   0.00388  0.00421     1.52       187       World eIoni
    18     1.02     -334 2.45e+03         0  0.00388    0.491       188       World eIoni
 
 *********************************************************************************************************
@@ -8463,8 +8463,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0   -0.201     -344 2.46e+03   0.00128        0        0         0       World initStep
-    1   -0.192     -344 2.46e+03         0  0.00128   0.0816    0.0816       World eIoni
+    0   -0.203     -344 2.46e+03   0.00128        0        0         0       World initStep
+    1   -0.194     -344 2.46e+03         0  0.00128   0.0816    0.0816       World eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 590,   Parent ID = 583
@@ -8472,14 +8472,14 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0     1.84     -341 2.46e+03   0.00266        0        0         0       World initStep
-    1     1.75     -341 2.46e+03         0  0.00266    0.257     0.257       World eIoni
+    1     1.74     -341 2.46e+03         0  0.00266    0.257     0.257       World eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 589,   Parent ID = 583
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     7.08     -341 2.46e+03   0.00221        0        0         0       World initStep
+    0     7.07     -341 2.46e+03   0.00221        0        0         0       World initStep
     1     7.08     -341 2.46e+03         0  0.00221     0.19      0.19       World eIoni
 
 *********************************************************************************************************
@@ -8716,7 +8716,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     5    -14.3     -132    -70.1    0.0263  0.00224    0.495      18.2     Chamber eIoni
     6    -14.6     -130    -69.8    0.0223  0.00128     1.72      19.9     Chamber eIoni
     7      -15     -133    -70.3    0.0147  0.00757     2.41      22.3     Chamber eIoni
-    8    -15.1     -133    -70.5   0.00948  0.00133    0.195      22.5     Chamber eIoni
+    8      -15     -133    -70.5   0.00948  0.00133    0.195      22.5     Chamber eIoni
     9    -15.3     -133    -70.5    0.0045  0.00326    0.348      22.8     Chamber eIoni
    10    -15.3     -133    -70.6         0   0.0045    0.334      23.2     Chamber eIoni
 
@@ -8733,7 +8733,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -15.1     -133    -70.5    0.0039        0        0         0     Chamber initStep
+    0      -15     -133    -70.5    0.0039        0        0         0     Chamber initStep
     1      -15     -133    -70.5         0   0.0039    0.268     0.268     Chamber eIoni
 
 *********************************************************************************************************
@@ -8985,7 +8985,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    89    -44.3     3.19      548       474   0.0186      100  2.97e+03     Tracker StepLimiter
    90      -45      3.4      592       474    0.007     43.9  3.01e+03     Tracker eIoni
    91    -45.1     3.43      598       474  0.00116     6.04  3.02e+03     Tracker eIoni
-   92    -45.7     3.58      633       473  0.00597     35.6  3.05e+03     Tracker eBrem
+   92    -45.7     3.58      633       473  0.00597     35.7  3.05e+03     Tracker eBrem
    93    -46.2      3.7      660       473  0.00439     26.9  3.08e+03     Tracker eIoni
    94    -46.7     3.85      693       473  0.00532       33  3.11e+03     Tracker eIoni
    95    -46.8     3.89      700       473   0.0016     6.72  3.12e+03     Chamber Transportation
@@ -9736,28 +9736,28 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    16     -163     52.5      710    0.0534  0.00512        5       206     Chamber msc
    17     -163     54.5      709    0.0471  0.00281     2.98       209     Chamber eIoni
    18     -164     53.8      710    0.0397  0.00265     1.84       211     Chamber eIoni
-   19     -166     50.9      712    0.0319  0.00787     4.24       215     Chamber eIoni
-   20     -167     48.8      714    0.0263  0.00556     3.35       219     Chamber eIoni
-   21     -166     47.7      713    0.0148  0.00292     1.43       220     Chamber eIoni
-   22     -165     48.5      714   0.00775  0.00705     1.74       222     Chamber eIoni
-   23     -165     48.7      715   0.00422  0.00205    0.384       222     Chamber eIoni
-   24     -165     48.7      715         0  0.00422    0.301       222     Chamber eIoni
+   19     -165     53.1      709    0.0319  0.00787     4.24       215     Chamber eIoni
+   20     -166       51      711    0.0263  0.00556     3.35       219     Chamber eIoni
+   21     -165     49.9      710    0.0148  0.00292     1.43       220     Chamber eIoni
+   22     -164     50.7      711   0.00775  0.00705     1.74       222     Chamber eIoni
+   23     -164     50.9      712   0.00422  0.00205    0.384       222     Chamber eIoni
+   24     -164     50.9      712         0  0.00422    0.301       222     Chamber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 766,   Parent ID = 676
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -165     48.7      715   0.00148        0        0         0     Chamber initStep
-    1     -165     48.7      715         0  0.00148   0.0691    0.0691     Chamber eIoni
+    0     -164     50.9      712   0.00148        0        0         0     Chamber initStep
+    1     -164     50.8      712         0  0.00148   0.0691    0.0691     Chamber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 765,   Parent ID = 676
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0     -166     47.7      713   0.00859        0        0         0     Chamber initStep
-    1     -166     47.8      713         0  0.00859    0.949     0.949     Chamber eIoni
+    0     -165     49.9      710   0.00859        0        0         0     Chamber initStep
+    1     -165       50      710         0  0.00859    0.949     0.949     Chamber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 764,   Parent ID = 676
@@ -10386,19 +10386,19 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    15     -312      140 -2.32e+03      2.39   0.0131     86.9       354     Tracker eIoni
    16     -328      146 -2.31e+03      2.39  0.00117     18.1       372     Tracker eIoni
    17     -348      155 -2.31e+03      2.38  0.00354     22.2       394     Tracker eIoni
-   18     -363      162 -2.3e+03      2.38  0.00344     18.5       413     Tracker eBrem
+   18     -363      162 -2.3e+03      2.38  0.00345     18.5       413     Tracker eBrem
    19     -444      206 -2.26e+03      2.36   0.0147      100       513     Tracker StepLimiter
-   20     -453      211 -2.26e+03      2.36  0.00128     10.2       523     Tracker eIoni
+   20     -453      211 -2.26e+03      2.36  0.00128     10.1       523     Tracker eIoni
    21     -489      230 -2.25e+03      2.35  0.00537     42.2       565     Tracker eIoni
    22     -568      279 -2.21e+03      2.34   0.0157      100       665     Tracker StepLimiter
-   23     -641      332 -2.17e+03      2.32   0.0169      100       765     Tracker StepLimiter
+   23     -641      333 -2.17e+03      2.32   0.0169      100       765     Tracker StepLimiter
    24     -660      344 -2.16e+03      2.31  0.00413       24       789     Tracker eIoni
    25     -704      374 -2.14e+03       2.3  0.00854     58.9       848     Tracker eIoni
    26     -734      395 -2.12e+03      2.29  0.00592     40.1       888     Tracker eIoni
    27     -736      396 -2.12e+03      2.28 0.000158      1.9       890     Tracker eIoni
    28     -819      446 -2.1e+03      2.27   0.0142      100       990     Tracker StepLimiter
    29     -856      473 -2.09e+03      2.26  0.00608     45.8  1.04e+03     Tracker eIoni
-   30     -942      524 -2.08e+03      2.25   0.0121      100  1.14e+03     Tracker StepLimiter
+   30     -941      524 -2.08e+03      2.25   0.0121      100  1.14e+03     Tracker StepLimiter
    31     -954      531 -2.08e+03      2.24  0.00311     14.3  1.15e+03     Tracker eIoni
    32     -977      545 -2.08e+03      2.23  0.00452     28.2  1.18e+03     Tracker eIoni
    33   -1e+03      561 -2.07e+03      2.23  0.00375     29.4  1.21e+03     Tracker eIoni
@@ -10445,7 +10445,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    74 -2.75e+03 2.38e+03 -1.29e+03      1.74  0.00125     2.93   3.9e+03       World eIoni
    75 -2.76e+03 2.39e+03 -1.29e+03      1.73  0.00271       13  3.91e+03       World eIoni
    76 -2.93e+03 2.55e+03 -1.29e+03       1.7   0.0318      237  4.15e+03       World eIoni
-   77 -2.94e+03 2.56e+03 -1.29e+03       1.7  0.00126     11.3  4.16e+03  OutOfWorld Transportation
+   77 -2.94e+03 2.56e+03 -1.29e+03       1.7  0.00127     11.4  4.16e+03  OutOfWorld Transportation
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 823,   Parent ID = 770
@@ -11449,7 +11449,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
    36      -24    -23.8 -1.04e+03       448  0.00493     23.6  1.36e+03     Tracker eIoni
    37    -25.8    -25.6     -945       448   0.0183      100  1.46e+03     Tracker StepLimiter
    38    -26.6    -26.4     -900       448   0.0118     44.6   1.5e+03     Chamber Transportation
-   39    -26.9    -26.7     -881       440  0.00939     19.3  1.52e+03     Chamber eBrem
+   39    -26.9    -26.7     -881       440   0.0094     19.3  1.52e+03     Chamber eBrem
    40    -27.2      -27     -867       440   0.0084     13.6  1.54e+03     Chamber eIoni
    41    -28.4    -28.5     -781       440   0.0539     86.2  1.62e+03     Chamber eBrem
    42    -29.6    -30.1     -700       440   0.0579       81   1.7e+03     Tracker Transportation
@@ -12211,7 +12211,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -32.4     0.39 -1.51e+03    0.0033        0        0         0     Chamber initStep
-    1    -32.4     0.39 -1.51e+03         0   0.0033    0.209     0.209     Chamber eIoni
+    1    -32.4    0.389 -1.51e+03         0   0.0033    0.209     0.209     Chamber eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 979,   Parent ID = 905
@@ -14015,33 +14015,33 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0627   0.0854 -2.41e+03         0     0.11   0.0317    0.0317      Target eIoni
 
 *********************************************************************************************************
-* G4Track Information:   Partic
+* G4Track Information:   Parti
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================
 
-    473 hits stored in this event
+    88 hits stored in this event
 >>> Event: 89
-    284 hits stored in this event
+    63 hits stored in this event
 >>> Event: 90
-    319 hits stored in this event
+    39 hits stored in this event
 >>> Event: 91
-    75 hits stored in this event
+    115 hits stored in this event
 >>> Event: 92
-    57 hits stored in this event
+    141 hits stored in this event
 >>> Event: 93
-    99 hits stored in this event
+    63 hits stored in this event
 >>> Event: 94
     72 hits stored in this event
 >>> Event: 95
-    81 hits stored in this event
+    74 hits stored in this event
 >>> Event: 96
-    127 hits stored in this event
+    61 hits stored in this event
 >>> Event: 97
-    80 hits stored in this event
+    1417 hits stored in this event
 >>> Event: 98
-    79 hits stored in this event
+    261 hits stored in this event
 >>> Event: 99
-    203 hits stored in this event
+    107 hits stored in this event
 Graphics systems deleted.
 Visualization Manager deleting...

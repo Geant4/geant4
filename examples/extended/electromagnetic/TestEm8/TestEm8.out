@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
+ Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -841,27 +841,27 @@ HistoManager: Histograms are booked and run has been started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.22s Real=0.44s Sys=0s
+  User=0.25s Real=0.25s Sys=0s
 RunAction: End of run actions are started
  ================== run summary =====================
    End of Run TotNbofEvents    = 1000
    Energy(keV) per ADC channel = 3.0769
 
-   Mean energy deposit in absorber = 16.415 +- 0.6317 keV    RMS/Emean = 1.2169
-   Mean number of steps in absorber= 1.255  mean number of ion-clusters = 820.3 MeanCluster= 820.48
+   Mean energy deposit in absorber = 16.408 +- 0.63742 keV    RMS/Emean = 1.2285
+   Mean number of steps in absorber= 1.247  mean number of ion-clusters = 819.6 MeanCluster= 820.12
 
  ====== Energy deposit distribution   Noverflows= 0.019 ====== 
  bin nb      Elow      entries     normalized 
     0         0           0           0
-    1         3           6       0.006
-    2         6         108       0.108
-    3         9         255       0.255
-    4        12         233       0.233
+    1         3           5       0.005
+    2         6         105       0.105
+    3         9         258       0.258
+    4        12         241       0.241
     5        15         157       0.157
-    6        18          77       0.077
-    7        21          52       0.052
-    8        24          36       0.036
-    9        27          21       0.021
+    6        18          73       0.073
+    7        21          54       0.054
+    8        24          32       0.032
+    9        27          20        0.02
    10        30          10        0.01
    11        33           8       0.008
    12        36           7       0.007

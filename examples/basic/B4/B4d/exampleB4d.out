@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-01    (31-January-2014)
+ Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -1006,15 +1006,15 @@ hPairProd:   for  pi-    SubType= 4
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 253.059 MeV       total track length: 18.1637 cm 
-        Gap: total energy: 16.1853 MeV       total track length: 7.78199 cm 
+   Absorber: total energy: 252.567 MeV       total track length: 18.1356 cm 
+        Gap: total energy:  16.676 MeV       total track length:  7.9709 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 253.059 MeV rms = 0 eV 
- EGap : mean = 16.1853 MeV rms = 0 eV 
- LAbs : mean = 18.1637 cm  rms = 0 fm 
- LGap : mean = 7.78199 cm  rms = 0 fm 
+ EAbs : mean = 252.567 MeV rms = 0 eV 
+ EGap : mean = 16.676 MeV rms = 0 eV 
+ LAbs : mean = 18.1356 cm  rms = 0 fm 
+ LGap : mean = 7.9709 cm  rms = 0 fm 
 ... write Root file : B4.root - done
 
 phot:   for  gamma    SubType= 12
@@ -1362,15 +1362,15 @@ hPairProd:   for  pi-    SubType= 4
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 453.541 MeV       total track length: 32.2352 cm 
-        Gap: total energy:  26.544 MeV       total track length: 13.2539 cm 
+   Absorber: total energy: 459.395 MeV       total track length: 32.3332 cm 
+        Gap: total energy: 23.3245 MeV       total track length: 12.2949 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 453.541 MeV rms = 0 eV 
- EGap : mean = 26.544 MeV rms = 0 eV 
- LAbs : mean = 32.2352 cm  rms = 0 fm 
- LGap : mean = 13.2539 cm  rms = 0 fm 
+ EAbs : mean = 459.395 MeV rms = 0 eV 
+ EGap : mean = 23.3245 MeV rms = 0 eV 
+ LAbs : mean = 32.3332 cm  rms = 0 fm 
+ LGap : mean = 12.2949 cm  rms = 0 fm 
 ... write Root file : B4.root - done
 Graphics systems deleted.
 Visualization Manager deleting...
