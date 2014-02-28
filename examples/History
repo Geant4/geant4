@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28th February 2014  Gabriele Cosmo (examples-V10-00-02)
+- Updated reference outputs according to reference tag geant4-10-00-ref-02.
+- Includes tags: hadrontherapy-V10-00-01, B1Con-V10-00-00, fieldex04-V10-00-08,
+                 phononExample-V10-00-00, exhadr03-V10-00-01, rdecay02-V10-00-01.
+
 4th February 2014  Gabriele Cosmo (examples-V10-00-01)
 - Updated reference outputs according to reference tag geant4-10-00-ref-01.
 - Includes tags: amsEcal-V10-00-00, ChargeExchangeMC-V10-00-00,
