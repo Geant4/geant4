@@ -1259,8 +1259,9 @@ double UCons::DistanceToIn(const UVector3& p,
 
 double UCons::SafetyFromOutside(const UVector3& p, bool aAccurate) const
 {
-  double safe = 0.0, rho, safeR1, safeR2, safeZ, safePhi, cosPsi;
+  double safe = 0.0, rho, safeR1, safeR2, safeZ, safePhi;
   double pRMin, pRMax;
+  bool outside;
 
   rho  = std::sqrt(p.x * p.x + p.y * p.y);
   safeZ = std::fabs(p.z) - fDz;
@@ -1296,23 +1297,11 @@ double UCons::SafetyFromOutside(const UVector3& p, bool aAccurate) const
   if (!fPhiFullCone && rho)
   {
     // Psi=angle from central phi to point
-
-    cosPsi = (p.x * cosCPhi + p.y * sinCPhi) / rho;
-
-    if (cosPsi < std::cos(fDPhi * 0.5)) // Point lies outside phi range
+    //
+    safePhi = SafetyToPhi(p,rho,outside);
+    if ((outside) && (safePhi > safe))
     {
-      if ((p.y * cosCPhi - p.x * sinCPhi) <= 0.0)
-      {
-        safePhi = std::fabs(p.x * std::sin(fSPhi) - p.y * std::cos(fSPhi));
-      }
-      else
-      {
-        safePhi = std::fabs(p.x * sinEPhi - p.y * cosEPhi);
-      }
-      if (safePhi > safe)
-      {
-        safe = safePhi;
-      }
+      safe = safePhi;
     }
   }
   if (safe < 0.0)
@@ -1998,10 +1987,8 @@ double UCons::DistanceToOut(const UVector3& p,
 
 double UCons::SafetyFromInside(const UVector3& p, bool) const
 {
-  double safe = 0.0, rho, safeR1, safeR2, safeZ, safePhi;
-  double pRMin;
-  double pRMax;
-
+  double safe = 0.0, rho, safeZ;
+ 
 #ifdef UCSGDEBUG
   if (Inside(p) == eOutside)
   {
@@ -2024,54 +2011,15 @@ double UCons::SafetyFromInside(const UVector3& p, bool) const
 
   }
 #endif
-
+  
   rho = std::sqrt(p.x * p.x + p.y * p.y);
+
+  safe = SafetyFromInsideR(p, rho, false);
   safeZ = fDz - std::fabs(p.z);
 
-  if (fRmin1 || fRmin2)
-  {
-    pRMin  = tanRMin * p.z + (fRmin1 + fRmin2) * 0.5;
-    safeR1  = (rho - pRMin) / secRMin;
-  }
-  else
-  {
-    safeR1 = UUtils::kInfinity;
-  }
-
-  pRMax  = tanRMax * p.z + (fRmax1 + fRmax2) * 0.5;
-  safeR2  = (pRMax - rho) / secRMax;
-
-  if (safeR1 < safeR2)
-  {
-    safe = safeR1;
-  }
-  else
-  {
-    safe = safeR2;
-  }
   if (safeZ < safe)
   {
     safe = safeZ;
-  }
-
-  // Check if phi divided, Calc distances closest phi plane
-
-  if (!fPhiFullCone)
-  {
-    // Above/below central phi of UCons?
-
-    if ((p.y * cosCPhi - p.x * sinCPhi) <= 0)
-    {
-      safePhi = -(p.x * sinSPhi - p.y * cosSPhi);
-    }
-    else
-    {
-      safePhi = (p.x * sinEPhi - p.y * cosEPhi);
-    }
-    if (safePhi < safe)
-    {
-      safe = safePhi;
-    }
   }
   if (safe < 0)
   {
