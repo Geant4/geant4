@@ -53,6 +53,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4Electron.hh"
 #include "G4AtomicShells.hh"
+#include "G4SystemOfUnits.hh"
 #include "G4Log.hh"
 
 using namespace std;
@@ -63,10 +64,20 @@ G4DeltaAngle::G4DeltaAngle(const G4String&)
   fElectron = G4Electron::Electron();
   nprob = 26;
   prob.resize(nprob,0.0);
+  fShellIdx = -1;
 }    
 
 G4DeltaAngle::~G4DeltaAngle() 
 {}
+
+G4ThreeVector& 
+G4DeltaAngle::SampleDirectionForShell(const G4DynamicParticle* dp,
+			      G4double kinEnergyFinal, G4int Z, G4int idx, 
+			      const G4Material* mat)
+{
+  fShellIdx = idx;
+  return SampleDirection(dp, kinEnergyFinal,Z, mat);
+}
 
 G4ThreeVector& 
 G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
@@ -74,26 +85,27 @@ G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
 			      const G4Material*)
 {
   G4int nShells = G4AtomicShells::GetNumberOfShells(Z);
-  if(nShells> nprob) {
-    nprob = nShells;
-    prob.resize(nprob,0.0);
-  }
-  G4int idx;
-  G4double sum = 0.0;
-  for(idx=0; idx<nShells; ++idx) {
-    sum += G4AtomicShells::GetNumberOfElectrons(Z, idx)
-      /G4AtomicShells::GetBindingEnergy(Z, idx);
-    prob[idx] = sum;
-  }
-  sum *= G4UniformRand();
-  for(idx=0; idx<nShells; ++idx) {
-    if(sum <= prob[idx]) { break; }
+  G4int idx = fShellIdx;
+
+  // if idx is not properly defined sample shell index
+  if(idx < 0 || idx >= nShells) {
+    if(nShells> nprob) {
+      nprob = nShells;
+      prob.resize(nprob,0.0);
+    }
+    G4double sum = 0.0;
+    for(idx=0; idx<nShells; ++idx) {
+      sum += G4AtomicShells::GetNumberOfElectrons(Z, idx)
+	/G4AtomicShells::GetBindingEnergy(Z, idx);
+      prob[idx] = sum;
+    }
+    sum *= G4UniformRand();
+    for(idx=0; idx<nShells; ++idx) {
+      if(sum <= prob[idx]) { break; }
+    }
   }
   G4double bindingEnergy = G4AtomicShells::GetBindingEnergy(Z, idx);
-  G4double mass = dp->GetParticleDefinition()->GetPDGMass();
-
-  G4ThreeVector bst(0.0,0.0,0.0);
-  G4double cost, en, mom;
+  G4double cost;
 
   do {
   
@@ -102,6 +114,7 @@ G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
     G4double eKinEnergy = bindingEnergy*x;
     G4double ePotEnergy = bindingEnergy*(1.0 + x);
     G4double e = kinEnergyFinal + ePotEnergy + electron_mass_c2;
+    G4double p = sqrt((e + electron_mass_c2)*(e - electron_mass_c2));
 
     G4double totEnergy = dp->GetTotalEnergy();
     G4double totMomentum = dp->GetTotalMomentum();
@@ -111,41 +124,35 @@ G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
 			 *(totEnergy - electron_mass_c2));
     }
  
-    G4double eTotMomentum = sqrt(eKinEnergy*(eKinEnergy + 2*electron_mass_c2));
-    G4double phi = G4UniformRand()*twopi;
+    G4double eTotEnergy = eKinEnergy + electron_mass_c2;
+    G4double eTotMomentum = sqrt(eKinEnergy*(eTotEnergy + electron_mass_c2));
     G4double costet = 2*G4UniformRand() - 1;
     G4double sintet = sqrt((1 - costet)*(1 + costet));
- 
-    G4LorentzVector lv0(eTotMomentum*sintet*cos(phi),
-			eTotMomentum*sintet*sin(phi),
-			eTotMomentum*costet + totMomentum,
-			eKinEnergy + electron_mass_c2 + totEnergy);
-    bst = lv0.boostVector();
 
-    G4double m0  = lv0.mag();
-    G4double bet = lv0.beta();
-    G4double gam = lv0.gamma();
-
-    en = 0.5*(m0*m0 - mass*mass + electron_mass_c2*electron_mass_c2)/m0;
-    mom = sqrt((en + electron_mass_c2)*(en - electron_mass_c2));
-
-    cost= (e/gam - en)/(mom*bet);
-
-    //G4cout << "e= " << e << " gam= " << gam << " en= " << en 
-    //	   << " mom= " << mom << "  beta= " << bet << " cost= " << cost 
-    //	   << G4endl; 
+    cost = 2.0;
+    G4double x0 = p*(totMomentum + eTotMomentum*costet);
+    if(x0 > 0.0) {
+      G4double x1 = p*eTotMomentum*sintet;
+      G4double x2 = totEnergy*(eTotEnergy - e) - e*eTotEnergy 
+	- totMomentum*eTotMomentum*costet + electron_mass_c2*electron_mass_c2;
+      G4double y = -x2/x0;
+      if(std::fabs(y) <= 1.0) { cost = -(x2 + x1*sqrt(1. - y*y))/x0; }
+      /*
+      G4cout << " Ekin(MeV)= " << dp->GetKineticEnergy() 
+	     << " e1(keV)= " <<  eKinEnergy/keV 
+	     << " e2(keV)= " << (e - electron_mass_c2)/keV 
+	     << " 1-cost= " << 1-cost 
+	     << " x0= " << x0 << " x1= " << x1 << " x2= " << x2 
+	     << G4endl; 
+      */
+    }
 
   } while(std::fabs(cost) > 1.0);
 
   G4double sint = sqrt((1 - cost)*(1 + cost));
   G4double phi  = twopi*G4UniformRand(); 
 
-  G4LorentzVector lv1(sint*std::cos(phi)*mom, sint*std::sin(phi)*mom,
-		      mom*cost, en);
-  lv1.boost(bst);
-
-  fLocalDirection.set(lv1.x(), lv1.y(), lv1.z());
-  fLocalDirection = fLocalDirection.unit();
+  fLocalDirection.set(sint*cos(phi), sint*sin(phi), cost);
   fLocalDirection.rotateUz(dp->GetMomentumDirection());
 
   return fLocalDirection;

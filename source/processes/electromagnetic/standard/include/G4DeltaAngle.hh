@@ -68,6 +68,12 @@ public:
                                          G4int Z,
                                          const G4Material* mat = 0);
 
+  virtual G4ThreeVector& SampleDirectionForShell(
+                                         const G4DynamicParticle* dp,
+                                         G4double kinEnergyFinal,
+                                         G4int Z, G4int shellIdx,
+                                         const G4Material* mat = 0);
+
   void PrintGeneratorInformation() const;
 
 private:
@@ -79,7 +85,7 @@ private:
   const G4ParticleDefinition* fElectron;
   std::vector<G4double> prob;
   G4int                 nprob;
-
+  G4int                 fShellIdx;
 };
 
 #endif

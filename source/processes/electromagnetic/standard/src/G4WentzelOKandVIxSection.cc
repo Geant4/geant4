@@ -372,9 +372,19 @@ G4WentzelOKandVIxSection::ComputeMaxElectronScattering(G4double cutEnergy)
       G4double mom22 = t1*(t1 + 2.0*mass);
       G4double ctm = (mom2 + mom22 - mom21)*0.5/sqrt(mom2*mom22);
       if(ctm <  1.0) { cosTetMaxElec = ctm; }
-      if(particle == theElectron && cosTetMaxElec < 0.0) { cosTetMaxElec = 0.0; }
+      if(particle == theElectron && cosTetMaxElec < 0.0) { 
+	cosTetMaxElec = 0.0; 
+      }
     }
   }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double 
+G4WentzelOKandVIxSection::ComputeSecondTransportMoment(G4double /*CosThetaMax*/)
+{
+  return 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

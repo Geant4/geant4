@@ -77,6 +77,9 @@ public:
 
   virtual void Initialise(const G4ParticleDefinition*, const G4DataVector&);
 
+  virtual void InitialiseLocal(const G4ParticleDefinition*, 
+                               G4VEmModel* masterModel);
+
   void StartTracking(G4Track*);
 
   virtual G4double ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
@@ -105,9 +108,22 @@ public:
   // access to cross section class
   inline G4WentzelOKandVIxSection* GetWVICrossSection();
 
+  inline void SetUseSecondMoment(G4bool);
+
+  inline G4bool UseSecondMoment() const;
+
+  inline G4PhysicsTable* GetSecondMomentTable();
+
+  inline G4double SecondMoment(const G4ParticleDefinition*,
+			       const G4MaterialCutsCouple*,
+			       G4double kineticEnergy);
+
 private:
 
-  G4double ComputeXSectionPerVolume();
+  G4double ComputeTransportXSectionPerVolume();
+
+  G4double ComputeSecondMoment(const G4ParticleDefinition*,
+			       G4double kineticEnergy);
 
   inline void SetupParticle(const G4ParticleDefinition*);
 
@@ -123,12 +139,16 @@ private:
 
   const G4DataVector*       currentCuts;
 
+  G4PhysicsTable*           fSecondMoments;
+  size_t                    idx2;
+
   G4double tlimitminfix;
   G4double invsqrt12;
   G4double fixedCut;
 
   // cache kinematics
   G4double preKinEnergy;
+  G4double effKinEnergy;
   G4double tPathLength;
   G4double zPathLength;
   G4double lambdaeff;
@@ -160,6 +180,7 @@ private:
   G4bool   isCombined;
   G4bool   inside;
   G4bool   singleScatteringMode;
+  G4bool   useSecondMoment;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -206,6 +227,48 @@ inline G4double G4WentzelVIModel::GetFixedCut() const
 inline G4WentzelOKandVIxSection* G4WentzelVIModel::GetWVICrossSection()
 {
   return wokvi;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4WentzelVIModel::SetUseSecondMoment(G4bool val)
+{
+  useSecondMoment = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4bool G4WentzelVIModel::UseSecondMoment() const
+{
+  return useSecondMoment;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4PhysicsTable* G4WentzelVIModel::GetSecondMomentTable()
+{
+  return fSecondMoments;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline G4double 
+G4WentzelVIModel::SecondMoment(const G4ParticleDefinition* part,
+			       const G4MaterialCutsCouple* couple,
+			       G4double ekin)
+{
+  G4double x = 0.0;
+  if(useSecondMoment) { 
+    DefineMaterial(couple);
+    if(fSecondMoments) { 
+      x = (*fSecondMoments)[(*theDensityIdx)[currentMaterialIndex]]
+	->Value(ekin, idx2)
+	*(*theDensityFactor)[currentMaterialIndex]/(ekin*ekin);
+    } else {
+      x = ComputeSecondMoment(part, ekin);
+    }
+  }
+  return x;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

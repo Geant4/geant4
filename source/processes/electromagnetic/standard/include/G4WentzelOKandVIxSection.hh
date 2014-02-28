@@ -91,6 +91,8 @@ public:
 				       G4double CosThetaMax,
 				       G4double elecRatio = 0.0);
 
+  G4double ComputeSecondTransportMoment(G4double CosThetaMax);
+
   inline G4double ComputeNuclearCrossSection(G4double CosThetaMin,
 					     G4double CosThetaMax);
  

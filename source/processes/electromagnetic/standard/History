@@ -18,6 +18,21 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+27 February 14: V.Ivanchenko (emstand-V10-00-15)
+- G4DeltaAngle - added implementation of SampleDirectionForShell 
+    virtual method; improved sampling 
+
+27 February 14: V.Ivanchenko (emstand-V10-00-14)
+- G4WentzelVIModel - added possibility to compute second momentum
+
+20 February 14: V.Ivanchenko (emstand-V10-00-13)
+- G4UrbanMscModel : some code cleanup - no results change
+- G4WentzelOKandVIxSection, G4WentzelVIModel - similar cleanup
+
+16 February 14: L.Urban
+- G4UrbanMscModel : change in optimization for fUseSafety case by
+    usage std::min/std::max instead of "if" constructions 
+
 14 February 14: V.Ivanchenko (emstand-V10-00-12)
 - G4UrbanMscModel : cosmetic changings
 
