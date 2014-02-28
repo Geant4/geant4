@@ -299,7 +299,7 @@ void F04GlobalField::Clear()
      }
   }
 
-  if (fFp) delete fFp; fFirst = true;
+  if (fFp) delete [] fFp; fFirst = true;
   fNfp = 0;
   fFp = NULL;
 }
