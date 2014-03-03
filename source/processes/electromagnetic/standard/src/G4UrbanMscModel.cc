@@ -147,6 +147,7 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   firstStep     = true; 
   inside        = false;  
   insideskin    = false;
+  latDisplasmentbackup = false;
 
   skindepth = skin*stepmin;
 
@@ -183,6 +184,8 @@ void G4UrbanMscModel::Initialise(const G4ParticleDefinition* p,
   }
   */
   fParticleChange = GetParticleChangeForMSC(p);
+
+  latDisplasmentbackup = latDisplasment;
 
   //G4cout << "### G4UrbanMscModel::Initialise done!" << G4endl;
 }
@@ -441,9 +444,11 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   currentRange = GetRange(particle,currentKinEnergy,couple);
   lambda0 = GetTransportMeanFreePath(particle,currentKinEnergy);
   tPathLength = min(tPathLength,currentRange);
+  latDisplasment = latDisplasmentbackup;
 
   // stop here if small range particle
   if(inside || tPathLength < tlimitminfix) { 
+    latDisplasment = false;   
     return ConvertTrueToGeom(tPathLength, currentMinimalStep); 
   }
   
@@ -458,6 +463,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   if(currentRange < presafety)
     {
       inside = true;
+      latDisplasment = false;   
       return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
     }
 
@@ -472,6 +478,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       if(currentRange < presafety)
 	{
 	  inside = true;
+          latDisplasment = false;   
 	  return ConvertTrueToGeom(tPathLength, currentMinimalStep);   
 	}
 
@@ -495,7 +502,8 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
           tlimitmin = 10.*stepmin;
           tlimitmin = max(tlimitmin,tlimitminfix);
 	  //G4cout << "rangeinit= " << rangeinit << " stepmin= " << stepmin
-	  //	 << " tlimitmin= " << tlimitmin << " geomlimit= " << geomlimit <<G4endl;
+	  //       << " tlimitmin= " << tlimitmin << " geomlimit= " 
+	  //       << geomlimit <<G4endl;
           // constraint from the geometry
           if((geomlimit < geombig) && (geomlimit > geommin))
             {
@@ -527,7 +535,9 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       // shortcut
       if((tPathLength < tlimit) && (tPathLength < presafety) &&
          (smallstep > skin) && (tPathLength < geomlimit-0.999*skindepth))
+      {
 	return ConvertTrueToGeom(tPathLength, currentMinimalStep);   
+      }
 
       // step reduction near to boundary
       if(smallstep <= skin)
@@ -589,6 +599,7 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       if(currentRange < presafety)
         {
           inside = true;
+          latDisplasment = false;
           return ConvertTrueToGeom(tPathLength, currentMinimalStep);  
         }
 
@@ -910,6 +921,11 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       xmeanth = G4Exp(-tau);
       x2meanth = (1.+2.*G4Exp(-2.5*tau))/3.;
     }
+
+    // these new simplification added by Laszlo 28 Feb 2014
+    if(latDisplasment != latDisplasmentbackup)
+      return SimpleScattering(xmeanth,x2meanth);
+
     G4double relloss = 1.-KineticEnergy/currentKinEnergy;
 
     if(relloss > rellossmax) 

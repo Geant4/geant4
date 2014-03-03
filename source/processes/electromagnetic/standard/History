@@ -18,6 +18,14 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+28 February 14: V.Ivanchenko (emstand-V10-00-16)
+- G4WentzelVIModel - make part of members of the class and one method 
+    protected in order to allow inheritence for derived models
+
+28 February 14: L.Urban
+- G4UrbanMscModel - modification in order to improve timing by
+  1-14 % (depending on the setup and cut)
+
 27 February 14: V.Ivanchenko (emstand-V10-00-15)
 - G4DeltaAngle - added implementation of SampleDirectionForShell 
     virtual method; improved sampling 

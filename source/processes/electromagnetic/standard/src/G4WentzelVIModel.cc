@@ -71,16 +71,16 @@
 
 using namespace std;
 
-G4WentzelVIModel::G4WentzelVIModel(G4bool combined) :
-  G4VMscModel("WentzelVIUni"),
+G4WentzelVIModel::G4WentzelVIModel(G4bool combined, const G4String& nam) :
+  G4VMscModel(nam),
+  currentCouple(0),
+  inside(false),
+  singleScatteringMode(false),
+  cosThetaMin(1.0),
   fSecondMoments(0),
   idx2(0),
   numlimit(0.1),
-  currentCouple(0),
-  cosThetaMin(1.0),
   isCombined(combined),
-  inside(false),
-  singleScatteringMode(false),
   useSecondMoment(false)
 {
   invsqrt12 = 1./sqrt(12.);
@@ -97,7 +97,7 @@ G4WentzelVIModel::G4WentzelVIModel(G4bool combined) :
   preKinEnergy = effKinEnergy = tPathLength = zPathLength = lambdaeff 
     = currentRange = xtsec = 0;
   currentMaterialIndex = 0;
-  cosThetaMax = cosTetMaxNuc = 1.0;
+  cosThetaMax = cosTetMaxNuc = -1.0;
 
   fParticleChange = 0;
   currentCuts = 0;

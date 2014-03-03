@@ -71,7 +71,7 @@ class G4WentzelVIModel : public G4VMscModel
 
 public:
 
-  G4WentzelVIModel(G4bool combined = true);
+  G4WentzelVIModel(G4bool comb = true, const G4String& nam = "WentzelVIUni");
 
   virtual ~G4WentzelVIModel();
 
@@ -118,6 +118,10 @@ public:
 			       const G4MaterialCutsCouple*,
 			       G4double kineticEnergy);
 
+protected:
+
+  inline void DefineMaterial(const G4MaterialCutsCouple*);
+
 private:
 
   G4double ComputeTransportXSectionPerVolume();
@@ -127,32 +131,54 @@ private:
 
   inline void SetupParticle(const G4ParticleDefinition*);
 
-  inline void DefineMaterial(const G4MaterialCutsCouple*);
-
   //  hide assignment operator
   G4WentzelVIModel & operator=(const  G4WentzelVIModel &right);
   G4WentzelVIModel(const  G4WentzelVIModel&);
 
-  G4LossTableManager*       theManager;
-  G4ParticleChangeForMSC*   fParticleChange;
+protected:
+
   G4WentzelOKandVIxSection* wokvi;
 
-  const G4DataVector*       currentCuts;
-
-  G4PhysicsTable*           fSecondMoments;
-  size_t                    idx2;
-
   G4double tlimitminfix;
-  G4double invsqrt12;
-  G4double fixedCut;
 
   // cache kinematics
   G4double preKinEnergy;
-  G4double effKinEnergy;
   G4double tPathLength;
   G4double zPathLength;
   G4double lambdaeff;
   G4double currentRange; 
+
+  G4double cosTetMaxNuc;
+
+  // cache material
+  G4int    currentMaterialIndex;
+  const G4MaterialCutsCouple* currentCouple;
+  const G4Material* currentMaterial;
+
+  const G4ParticleDefinition* particle;
+
+  // flags
+  G4bool   inside;
+  G4bool   singleScatteringMode;
+
+private:
+
+  G4LossTableManager*       theManager;
+  G4ParticleChangeForMSC*   fParticleChange;
+  const G4DataVector*       currentCuts;
+
+  G4double invsqrt12;
+  G4double fixedCut;
+
+  // cache kinematics
+  G4double effKinEnergy;
+
+  // single scattering parameters
+  G4double cosThetaMin;
+  G4double cosThetaMax;
+
+  G4PhysicsTable*           fSecondMoments;
+  size_t                    idx2;
 
   // data for single scattering mode
   G4double xtsec;
@@ -162,24 +188,11 @@ private:
 
   G4double numlimit;
 
-  // cache material
-  G4int    currentMaterialIndex;
-  const G4MaterialCutsCouple* currentCouple;
-  const G4Material* currentMaterial;
-
-  // single scattering parameters
-  G4double cosThetaMin;
-  G4double cosThetaMax;
-  G4double cosTetMaxNuc;
-
   // projectile
-  const G4ParticleDefinition* particle;
   G4double lowEnergyLimit;
 
   // flags
   G4bool   isCombined;
-  G4bool   inside;
-  G4bool   singleScatteringMode;
   G4bool   useSecondMoment;
 };
 

@@ -173,6 +173,8 @@ private:
   G4bool   firstStep;
   G4bool   inside;
   G4bool   insideskin;
+
+  G4bool   latDisplasmentbackup ;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
