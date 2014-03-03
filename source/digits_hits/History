@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Mar 2, 2014, T.Aso, M.Asai (digits_hits-V10-00-00)
+- Fix the angle factor in G4PSSphereSurfaceFlux to keep it always
+  positive. Addressing to Bug Report #1479.
+
 Dec 2, 2013, M.Asai (digits_hits-V09-06-13)
 - Remove uninitialized and unused datamember from G4ScoringMessenger.
 
