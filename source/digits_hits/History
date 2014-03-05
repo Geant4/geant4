@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Mar 5, 2014, G.Cosmo (digits_hits-V10-00-01)
+- Added missing dependency to graphics_reps in scorer module.
+
 Mar 2, 2014, T.Aso, M.Asai (digits_hits-V10-00-00)
 - Fix the angle factor in G4PSSphereSurfaceFlux to keep it always
   positive. Addressing to Bug Report #1479.

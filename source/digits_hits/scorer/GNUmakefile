@@ -27,6 +27,7 @@ CPPFLAGS += \
             -I$(G4BASE)/digits_hits/detector/include \
             -I$(G4BASE)/digits_hits/digits/include \
             -I$(G4BASE)/intercoms/include \
+            -I$(G4BASE)/graphics_reps/include
 
 include $(G4INSTALL)/config/common.gmk
 
