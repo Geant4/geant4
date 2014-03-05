@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 5, 2014  G.Cosmo                    geom-usolids-V10-00-05
+- Fixed handling of polyhedron pointer in G4USolid.
+
 February 28, 2014  T.Nikitina             geom-usolids-V10-00-04
 - New Implementation of safetyFromInside() for UPolycone, skipping internal
   Z sections.
