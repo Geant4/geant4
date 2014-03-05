@@ -327,8 +327,7 @@ G4HadFinalState *G4EMDissociation::ApplyYourself
 
     G4ThreeVector v = pP.vect();
     v.setMag(1.0);
-    G4DynamicParticle *changedP = new G4DynamicParticle
-      (const_cast<G4ParticleDefinition*>(definitionP), v, E*AP-Eg);
+    G4DynamicParticle *changedP = new G4DynamicParticle (definitionP, v, E*AP-Eg);
     theParticleChange.AddSecondary (changedP);
     if (verboseLevel >= 2)
     {
