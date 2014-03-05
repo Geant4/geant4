@@ -74,6 +74,9 @@ public:
     Command& SetParameterName(const G4String&, G4bool, G4bool =false);
     Command& SetDefaultValue(const G4String&);
     Command& SetCandidates(const G4String&);
+    Command& SetToBeBroadcasted(G4bool s) { command->SetToBeBroadcasted(s); return *this; }
+    Command& SetToBeFlushed(G4bool s) { command->SetToBeFlushed(s); return *this; }
+    Command& SetWorkerThreadOnly(G4bool s) { command->SetWorkerThreadOnly(s); return *this; }
     
     G4UIcommand* command;
     const std::type_info* type;

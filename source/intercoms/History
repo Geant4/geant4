@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04 March, 2014 M. Asai (intercoms-V10-00-00)
+- G4GenericMessenger : introducing three additional methods to make
+  it Geant4-v10.0-compliant. Addressing to bug report #1580.
+
 26 November, 2013 M. Asai (intercoms-V09-06-16)
 - G4GenericMessenger : introducing two methods for declaring a method
   that has a unit. This solves the issue of G4GenericMessenger in
