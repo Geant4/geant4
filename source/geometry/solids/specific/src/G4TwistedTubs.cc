@@ -253,6 +253,7 @@ G4TwistedTubs::G4TwistedTubs(const G4TwistedTubs& rhs)
     fEndZ2[i] = rhs.fEndZ2[i];
   }
   CreateSurfaces();
+  fpPolyhedron = GetPolyhedron();
 }
 
 
@@ -282,7 +283,6 @@ G4TwistedTubs& G4TwistedTubs::operator = (const G4TwistedTubs& rhs)
    fLowerEndcap= fUpperEndcap= fLatterTwisted= fFormerTwisted= 0;
    fInnerHype= fOuterHype= 0;
    fCubicVolume= rhs.fCubicVolume; fSurfaceArea= rhs.fSurfaceArea;
-   fpPolyhedron= 0;
    fLastInside= rhs.fLastInside; fLastNormal= rhs.fLastNormal;
    fLastDistanceToIn= rhs.fLastDistanceToIn;
    fLastDistanceToOut= rhs.fLastDistanceToOut;
@@ -299,6 +299,7 @@ G4TwistedTubs& G4TwistedTubs::operator = (const G4TwistedTubs& rhs)
    }
  
    CreateSurfaces();
+   delete fpPolyhedron; fpPolyhedron = 0; fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

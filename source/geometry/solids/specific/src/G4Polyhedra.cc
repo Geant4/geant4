@@ -63,7 +63,6 @@
 
 #include "Randomize.hh"
 
-#include "G4Polyhedron.hh"
 #include "G4EnclosingCylinder.hh"
 #include "G4ReduciblePolygon.hh"
 #include "G4VPVParameterisation.hh"
@@ -455,6 +454,8 @@ void G4Polyhedra::CopyStuff( const G4Polyhedra &source )
   // Enclosing cylinder
   //
   enclosingCylinder = new G4EnclosingCylinder( *source.enclosingCylinder );
+
+  fpPolyhedron = GetPolyhedron();
 }
 
 

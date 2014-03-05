@@ -47,6 +47,7 @@
 #include "UPolyhedra.hh"
 #include "G4PolyhedraSide.hh"
 #include "G4PolyhedraHistorical.hh"
+#include "G4Polyhedron.hh"
 
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;
@@ -175,7 +176,7 @@ inline void G4UPolyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
     pdata->Rmin[i] = pars->Rmin[i];
     pdata->Rmax[i] = pars->Rmax[i];
   }
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline G4bool G4UPolyhedra::Reset()
 {

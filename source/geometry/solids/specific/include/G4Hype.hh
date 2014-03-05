@@ -59,6 +59,7 @@
 
 #include "G4VSolid.hh"
 #include "G4ThreeVector.hh"
+#include "G4Polyhedron.hh"
 
 class G4SolidExtentList;
 class G4ClippablePolygon;

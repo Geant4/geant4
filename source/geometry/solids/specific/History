@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-Mar-2014  G.Cosmo               (geom-specific-V10-00-05)
+- Fixed proper handling of polyhedron pointer in solids, to avoid memory
+  leak for visualization of parameterised volumes.
+
 12-Feb-2014  G.Cosmo               (geom-specific-V10-00-04)
 - Simply reset polyhedron pointer to zero for modifiers of G4U* wrappers
   in parameterisation. Resolves crash in MT visualization when using USolids. 

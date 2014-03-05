@@ -49,7 +49,6 @@
 #include "Randomize.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 #include "G4VisExtent.hh"
 
 using namespace CLHEP;
@@ -99,6 +98,7 @@ G4EllipticalTube::G4EllipticalTube(const G4EllipticalTube& rhs)
     fCubicVolume(rhs.fCubicVolume), fSurfaceArea(rhs.fSurfaceArea),
     fpPolyhedron(0)
 {
+  fpPolyhedron = GetPolyhedron();
 }
 
 
@@ -120,7 +120,7 @@ G4EllipticalTube& G4EllipticalTube::operator = (const G4EllipticalTube& rhs)
    dx = rhs.dx; dy = rhs.dy; dz = rhs.dz;
    halfTol = rhs.halfTol;
    fCubicVolume = rhs.fCubicVolume; fSurfaceArea = rhs.fSurfaceArea;
-   fpPolyhedron = 0;
+   delete fpPolyhedron; fpPolyhedron = 0; fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

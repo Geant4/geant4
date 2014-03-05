@@ -47,6 +47,7 @@
 #include "UPolycone.hh"
 #include "G4PolyconeSide.hh"
 #include "G4PolyconeHistorical.hh"
+#include "G4Polyhedron.hh"
 
 class G4UPolycone : public G4USolid 
 {
@@ -160,7 +161,7 @@ inline void G4UPolycone::SetOriginalParameters(G4PolyconeHistorical* pars)
     pdata->Rmin[i] = pars->Rmin[i];
     pdata->Rmax[i] = pars->Rmax[i];
   }
-  fPolyhedron = 0;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 inline G4bool G4UPolycone::Reset()
 {

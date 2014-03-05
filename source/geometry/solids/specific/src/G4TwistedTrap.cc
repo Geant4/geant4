@@ -90,6 +90,7 @@ G4TwistedTrap::~G4TwistedTrap()
 G4TwistedTrap::G4TwistedTrap(const G4TwistedTrap& rhs)
   : G4VTwistedFaceted(rhs)
 {
+  fpPolyhedron = GetPolyhedron();
 }
 
 // Assignment operator
@@ -103,6 +104,7 @@ G4TwistedTrap& G4TwistedTrap::operator = (const G4TwistedTrap& rhs)
    // Copy base class data
    //
    G4VTwistedFaceted::operator=(rhs);
+   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

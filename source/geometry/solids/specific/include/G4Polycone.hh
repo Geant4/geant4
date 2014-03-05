@@ -73,6 +73,7 @@
 #include "G4VCSGfaceted.hh"
 #include "G4PolyconeSide.hh"
 #include "G4PolyconeHistorical.hh"
+#include "G4Polyhedron.hh"
 
 class G4EnclosingCylinder;
 class G4ReduciblePolygon;

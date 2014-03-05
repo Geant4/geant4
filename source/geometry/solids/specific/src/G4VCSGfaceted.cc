@@ -167,6 +167,7 @@ void G4VCSGfaceted::DeleteStuff()
 
     delete [] faces;
   }
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 
