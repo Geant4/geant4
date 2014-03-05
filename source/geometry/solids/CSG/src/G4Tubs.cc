@@ -74,7 +74,6 @@
 #include "meshdefs.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 
 using namespace CLHEP;
 
@@ -158,6 +157,7 @@ G4Tubs::G4Tubs(const G4Tubs& rhs)
     halfRadTolerance(rhs.halfRadTolerance),
     halfAngTolerance(rhs.halfAngTolerance)
 {
+   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -187,6 +187,7 @@ G4Tubs& G4Tubs::operator = (const G4Tubs& rhs)
    halfCarTolerance = rhs.halfCarTolerance;
    halfRadTolerance = rhs.halfRadTolerance;
    halfAngTolerance = rhs.halfAngTolerance;
+   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

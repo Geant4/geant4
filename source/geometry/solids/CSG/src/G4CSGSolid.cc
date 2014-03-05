@@ -93,7 +93,7 @@ G4CSGSolid& G4CSGSolid::operator = (const G4CSGSolid& rhs)
    //
    fCubicVolume = rhs.fCubicVolume;
    fSurfaceArea = rhs.fSurfaceArea;
-   fpPolyhedron = 0;
+   delete fpPolyhedron; fpPolyhedron = 0;
 
    return *this;
 }  

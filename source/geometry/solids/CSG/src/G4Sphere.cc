@@ -70,7 +70,6 @@
 
 #include "G4VGraphicsScene.hh"
 #include "G4VisExtent.hh"
-#include "G4Polyhedron.hh"
 
 using namespace CLHEP;
 
@@ -170,6 +169,7 @@ G4Sphere::G4Sphere(const G4Sphere& rhs)
     halfCarTolerance(rhs.halfCarTolerance),
     halfAngTolerance(rhs.halfAngTolerance)
 {
+   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -205,6 +205,7 @@ G4Sphere& G4Sphere::operator = (const G4Sphere& rhs)
    fFullThetaSphere = rhs.fFullThetaSphere; fFullSphere = rhs.fFullSphere;
    halfCarTolerance = rhs.halfCarTolerance;
    halfAngTolerance = rhs.halfAngTolerance;
+   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

@@ -52,7 +52,6 @@
 #include "G4VPVParameterisation.hh"
 
 #include "G4VGraphicsScene.hh"
-#include "G4Polyhedron.hh"
 
 using namespace CLHEP;
 
@@ -176,6 +175,7 @@ G4Para::G4Para(const G4Para& rhs)
     fTalpha(rhs.fTalpha), fTthetaCphi(rhs.fTthetaCphi),
     fTthetaSphi(rhs.fTthetaSphi)
 {
+   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -197,6 +197,7 @@ G4Para& G4Para::operator = (const G4Para& rhs)
    fDx = rhs.fDx; fDy = rhs.fDy; fDz = rhs.fDz;
    fTalpha = rhs.fTalpha; fTthetaCphi = rhs.fTthetaCphi;
    fTthetaSphi = rhs.fTthetaSphi;
+   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }
