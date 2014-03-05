@@ -48,7 +48,7 @@ class G4HadronicWhiteBoard
 
   const G4HadProjectile* GetProjectile();
   const G4Nucleus& GetTargetNucleus(); 
-  G4ParticleDefinition* GetPDef();
+  const G4ParticleDefinition* GetPDef();
   G4String GetParticleName();
   G4double GetEnergy();
   G4double GetPx();
@@ -64,9 +64,9 @@ class G4HadronicWhiteBoard
 
   static G4ThreadLocal G4HadronicWhiteBoard *theInstance;
 
-  G4HadProjectile* theProjectile;
-  G4ParticleDefinition* theDef;
-  char* theName;
+  const G4HadProjectile* theProjectile;
+  const G4ParticleDefinition* theDef;
+  const char* theName;
   G4double theE;
   G4double thePx;
   G4double thePy;

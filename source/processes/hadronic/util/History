@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 March 2014 Gunter Folger      (hadr-util-V10-00-02)
+------------------------------------------------------
+- remove not needed several const_casts in G4HadronicWhiteBoard.
+
 20 February 2014 Gunter Folger   (hadr-util-V10-00-01)
 ------------------------------------------------------
 - G4ReactionProduct: make G4ParticleDefinition* const.
