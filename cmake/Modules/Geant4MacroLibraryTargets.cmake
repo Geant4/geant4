@@ -100,7 +100,7 @@ MACRO(GEANT4_LIBRARY_TARGET)
       # but then remove the archive from the LINK_INTERFACE.
       target_link_libraries(${G4LIBTARGET_NAME}
         ${_archive}
-        ${G4LIBTARGET_GEANT4_LINK_LIBRARIES} 
+        ${G4LIBTARGET_GEANT4_LINK_LIBRARIES}
         ${G4LIBTARGET_LINK_LIBRARIES})
 
       set_target_properties(${G4LIBTARGET_NAME}
@@ -109,15 +109,15 @@ MACRO(GEANT4_LIBRARY_TARGET)
     else()
       # - We build a Shared library in the usual fashion...
       add_library(${G4LIBTARGET_NAME} SHARED ${G4LIBTARGET_SOURCES})
-      geant4_compile_definitions_config(${G4LIBTARGET_NAME})      
+      geant4_compile_definitions_config(${G4LIBTARGET_NAME})
       target_link_libraries(${G4LIBTARGET_NAME}
-        ${G4LIBTARGET_GEANT4_LINK_LIBRARIES} 
+        ${G4LIBTARGET_GEANT4_LINK_LIBRARIES}
         ${G4LIBTARGET_LINK_LIBRARIES})
     endif()
 
-    # This property is set to prevent concurrent builds of static and 
+    # This property is set to prevent concurrent builds of static and
     # shared libs removing each others files.
-    set_target_properties(${G4LIBTARGET_NAME} 
+    set_target_properties(${G4LIBTARGET_NAME}
       PROPERTIES CLEAN_DIRECT_OUTPUT 1)
 
     # Set the INSTALL_NAME_DIR of the library to its final installation
@@ -159,16 +159,26 @@ MACRO(GEANT4_LIBRARY_TARGET)
       list(APPEND G4LIBTARGET_GEANT4_LINK_LIBRARIES_STATIC ${_tgt}-static)
     endforeach()
 
-    target_link_libraries(${G4LIBTARGET_NAME}-static 
+    # If we are building both types of library and builtin clhep etc,
+    # we want to link shared->shared and static->static.
+    # Because externals like clhep appear in G4LIBTARGET_LINK_LIBRARIES,
+    # filter this list to replace shared builtins with their static variant
+    string(REGEX REPLACE
+      "(G4clhep|G4expat|G4zlib)(;|$)" "\\1-static\\2"
+      G4LIBTARGET_LINK_LIBRARIES_STATIC
+      "${G4LIBTARGET_LINK_LIBRARIES}"
+      )
+
+    target_link_libraries(${G4LIBTARGET_NAME}-static
       ${G4LIBTARGET_GEANT4_LINK_LIBRARIES_STATIC}
-      ${G4LIBTARGET_LINK_LIBRARIES})
+      ${G4LIBTARGET_LINK_LIBRARIES_STATIC})
 
     # But we can rename the output library to the correct name
     # On WIN32 we *retain* the -static postfix because otherwise
     # we'll conflict with the .lib from the DLL build...
     # We could also install differently...
     if(NOT WIN32)
-      set_target_properties(${G4LIBTARGET_NAME}-static 
+      set_target_properties(${G4LIBTARGET_NAME}-static
         PROPERTIES OUTPUT_NAME ${G4LIBTARGET_NAME})
     endif()
 
@@ -288,13 +298,13 @@ MACRO(GEANT4_GLOBAL_LIBRARY_TARGET)
   endif()
 
   # Now add the library target
-  GEANT4_LIBRARY_TARGET(NAME ${G4GLOBLIB_NAME} 
-    SOURCES 
-    ${${G4GLOBLIB_NAME}_GLOBAL_SOURCES} 
+  GEANT4_LIBRARY_TARGET(NAME ${G4GLOBLIB_NAME}
+    SOURCES
+    ${${G4GLOBLIB_NAME}_GLOBAL_SOURCES}
     ${${G4GLOBLIB_NAME}_GLOBAL_HEADERS}
-    GEANT4_LINK_LIBRARIES 
+    GEANT4_LINK_LIBRARIES
     ${${G4GLOBLIB_NAME}_GLOBAL_DEPENDENCIES}
-    LINK_LIBRARIES 
+    LINK_LIBRARIES
     ${${G4GLOBLIB_NAME}_LINK_LIBRARIES})
 
   # Header install?
