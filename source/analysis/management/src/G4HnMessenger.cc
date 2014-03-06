@@ -103,22 +103,6 @@ void G4HnMessenger::SetHnAsciiCmd()
 //_____________________________________________________________________________
 void G4HnMessenger::SetHnActivationCmd()
 {
-  G4String name = GetCmdDirectoryName();
-  name.append("setActivationToAll");
-  fSetHnAsciiCmd = new G4UIcmdWithAnInteger(name, this);
-  
-  G4String guidance("Set activation to all ");
-  guidance.append(GetHnDescription());
-  guidance.append(" histograms.");
-
-  fSetHnActivationAllCmd = new G4UIcmdWithABool(name, this);
-  fSetHnActivationAllCmd->SetGuidance(guidance);
-  fSetHnActivationAllCmd->SetParameterName("Activation",false);
-}  
-  
-//_____________________________________________________________________________
-void G4HnMessenger::SetHnActivationToAllCmd()
-{
   G4UIparameter* hnId = new G4UIparameter("idActivation", 'i', false);
   hnId->SetGuidance("Histogram id");
   hnId->SetParameterRange("idActivation>=0");
@@ -141,6 +125,21 @@ void G4HnMessenger::SetHnActivationToAllCmd()
   fSetHnActivationCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }  
 
+//_____________________________________________________________________________
+void G4HnMessenger::SetHnActivationToAllCmd()
+{
+  G4String name = GetCmdDirectoryName();
+  name.append("setActivationToAll");
+  fSetHnActivationAllCmd = new G4UIcmdWithABool(name, this);
+  
+  G4String guidance("Set activation to all ");
+  guidance.append(GetHnDescription());
+  guidance.append(" histograms.");
+
+  fSetHnActivationAllCmd->SetGuidance(guidance);
+  fSetHnActivationAllCmd->SetParameterName("Activation",false);
+}  
+  
 //
 // public methods
 //

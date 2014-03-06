@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 05, 2014 I. Hrivnacova (analysis-V10-00-03)
+- Fixed bug in /analysis/h1/setAscii command 
+  (introduced with refactoring messenger classes in analysis-V09-06-19)
+
 February 05, 2014 I. Hrivnacova (analysis-V10-00-02)
 - Updated tools ntuple_booking and ntuple classes from
   g4tools 1.9.0 (by G. Barrand) what should hopefully fix warnings issued

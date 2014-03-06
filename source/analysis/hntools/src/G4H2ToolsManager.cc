@@ -697,7 +697,7 @@ G4bool G4H2ToolsManager::WriteOnAscii(std::ofstream& /*output*/)
 // extended examples.
 // Not yet available for H2
 
-  return false;
+  return ! fHnManager->IsAscii();
 } 
 
 //
