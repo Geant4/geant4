@@ -72,15 +72,9 @@ List of fixes included in this public patch since the public release 9.6.p01:
     + Decay:
       o Fixed problem of wrong global time for secondaries in case that the        (+)
         primary track stops during along step. Addressing problem report #1555.
-    + Scoring:
-      o 
-    + Transportation:
-      o 
 
   o Hadronic Processes:
     ------------------
-    + cross_sections:
-      o 
     + models/cascade:
       o G4NucleiModel: fixed rare cases of non-reproducibility in
         method generateParticleFate(). Some data was not properly
@@ -139,10 +133,6 @@ List of fixes included in this public patch since the public release 9.6.p01:
       G4EmLivermorePhysics, G4EmPenelopePhysics: use RangeFactor=0.01
       for increased simulation accuracy; use G4UrbanMscModel96.
 
-  o Track:
-    -----
-    + 
-
   o Visualization:
     -------------
     + OpenGL:
@@ -152,10 +142,6 @@ List of fixes included in this public patch since the public release 9.6.p01:
   o Examples:
     --------
     + Updated reference outputs.
-    + advanced/composite_calorimeter:
-      o 
-    + advanced/lAr_calorimeter:
-      o 
 
  ----------------------------------------------------------------------------
 
