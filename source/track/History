@@ -17,6 +17,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- Mar. 07,  2014 H.Kurashige (track-V10-00-02)
+- Fix memory leak in G4Step::SetPre/PostStepPoint
+ (Bug # 1583)
 
 - Jan. 04, 2014 H.Kurashige (track-V10-00-00)
 - modify message from CheckIt for G4VParticleChange and G4ParticleChangeForDecay  
