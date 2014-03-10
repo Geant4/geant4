@@ -157,7 +157,8 @@ CandidateCheck(const char* newValue) {
       iToken++;
       if(aToken==newValue) return iToken;
     } 
-    G4cerr << "parameter value is not listed in the candidate List." << G4endl;
+    G4cerr << "parameter value (" << newValue
+           << ") is not listed in the candidate List." << G4endl;
     return 0;
 }
 

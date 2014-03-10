@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 March, 2014 K. Murakami (intercoms-V10-00-01)
+- G4UIparameter : improve dignostic message of CandidateCheck().
+
 04 March, 2014 M. Asai (intercoms-V10-00-00)
 - G4GenericMessenger : introducing three additional methods to make
   it Geant4-v10.0-compliant. Addressing to bug report #1580.
