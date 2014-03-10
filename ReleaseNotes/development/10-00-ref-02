@@ -11,6 +11,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 9.6.p03
 (*)  Fixes included in release 10.0.p01
 
 Summarised, the list of changes is the following:
@@ -105,7 +106,7 @@ particles                                        particles-V10-00-04
 - G4ParticleDefinition::DumpTable() displays correct stability information   (*)
   for a general ion as long as it is known to G4NuclideTable.
   Addressing to bug report #1560.
-- Fixed properties for heavy anti-baryons G4AntiLambdab, G4AntiSigmabZero    (*)
+- Fixed properties for heavy anti-baryons G4AntiLambdab, G4AntiSigmabZero   (+*)
   and G4AntiLambdacPlus. Addressing problem report #1571.
 
 physics_lists

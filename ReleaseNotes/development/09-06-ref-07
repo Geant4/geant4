@@ -16,6 +16,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 9.6.p03
 
 Summarised, the list of changes is the following:
 
@@ -42,7 +43,7 @@ geometry/navigation                              geomnav-V09-06-12
 
 geometry/solids/specific                         geom-specific-V09-06-15
 ------------------------
-- Fix in G4SurfaceVoxelizer affecting tessellated-solid (and extruded-solid)
+- Fix in G4SurfaceVoxelizer affecting tessellated-solid (and extruded-solid) (+)
   for incorerct computation of DistanceToIn(p,v) for points outside, when
   optimisation is active.
 - Extended method SetOriginalParameters() in G4Polycone in order to handle

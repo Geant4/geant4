@@ -19,6 +19,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 9.6.p03
 
 Summarised, the list of changes is the following:
 
@@ -32,7 +33,7 @@ cmake                                            cmake-V09-06-18
 
 analysis                                         analysis-V09-06-11
 --------
-- Fix in G4RootAnalysisManager::WriteOnAscii().
+- Fix in G4RootAnalysisManager::WriteOnAscii().                             (+)
   Addressing problem report #1473.
 - Improved handling of files: empty files are now removed in CloseFile().
   Moved generation of file name in G4VAnalysisManager.
@@ -63,7 +64,7 @@ geometry/management                              geommng-V09-06-07
 
 geometry/navigation                              geomnav-V09-06-10
 -------------------
-- G4MultiNavigator: fixed use of enum as Boolean in GetGlobalExitNormal().  
+- G4MultiNavigator: fixed use of enum as Boolean in GetGlobalExitNormal().  (+)
   Issue identified by Coverity.
 - Corrected deletion of commands in destructor and removed unused pointer
   in G4GeometryMessenger.
@@ -221,11 +222,11 @@ processes/electromagnetic/utils                  emutils-V09-06-41
 - G4VMultipleScattering: fixed list models per multiple-scattering process
   for ions.
 - G4VEnergyLossProcess: avoid unnecessary deletion of tables between runs.
-  Fixed CrossSectionPerVolume() method.
+- G4VEnergyLossProcess: fixed CrossSectionPerVolume() method.                (+)
 - G4VEmModel: take into account reaction threshold when initialising
   G4EmElementSelectors; set smallest number of bins to 3 (was 5) and fixed
   initialisation. Fixed SetCrossSectionTable() method.
-- G4VEmProcess: fixed CrossSectionPerVolume() method, use 'tablePrim' for
+- G4VEmProcess: fixed CrossSectionPerVolume() method, use 'tablePrim' for    (+)
   high energy if this table is defined.
 - G4VEnergyLossProcess: make ion initialisation assuming that each ion 
   may have an individual process. Do not destroy old tables in worker thread
@@ -287,7 +288,7 @@ processes/hadronic
     properly adopt calls to GetInstance().
     Fixed case of thread collisions by making singleton instances thread-local.
   o G4InuclNuclei: fixed access to ions via the G4IonTable class.
-  o G4NucleiModel: fixed rare cases of non-reproducibility in method
+  o G4NucleiModel: fixed rare cases of non-reproducibility in method         (+)
     generateParticleFate().
 - models/coherent_elastic (hadr-cohe-V09-06-03)
   o Fixed access to ions via the G4IonTable class and GetIon() method
@@ -296,7 +297,7 @@ processes/hadronic
   o G4CompetitiveFission: removed wrong use of static which caused
     reproducibility violations.
   o G4Evaporation: fixed trivial Coverity report.
-- models/em_dissociation (hadr-emd-V09-06-00)
+- models/em_dissociation (hadr-emd-V09-06-00)                                (+)
   o Fixed memory leak of products from G4ExcitationHandler.
 - models/inclxx (hadr-inclxx-V09-06-19)
   o Updated to INCL++ v5.1.13.2: 

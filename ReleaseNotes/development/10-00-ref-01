@@ -14,19 +14,21 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 9.6.p03
 (*)  Fixes included in release 10.0.p01
 
 Summarised, the list of changes is the following:
 
 cmake                                            cmake-V10-00-03             (*)
 -----
-- Include /opt/X11 paths for X11 and OpenGL on MacOS X Mavericks.
+- Include /opt/X11 paths for X11 and OpenGL on MacOS X Mavericks.            (+)
 - Directly using environment variable CTEST_TIMEOUT to set default timeout
   finally works. 
 
 config                                           config-V10-00-01            (*)
 ------
-- Fixed setting of -fPIC in MT-mode for Linux-g++, Linux-icc and Darwin targets.
+- Fixed setting of -fPIC in MT-mode for Linux-g++, Linux-icc.
+- Fixed setting of -fPIC for Darwin targets.                                 (+)
 
 analysis                                         analysis-V10-00-00          (*)
 --------
@@ -58,8 +60,8 @@ geometry/navigation                              geomnav-V10-00-00           (*)
 
 geometry/solids/specific                         geom-specific-V10-00-01     (*)
 ------------------------
-- Fix in G4GenericTrap::InsidePolygone() to check if p lies between the two
-  extremes of the segment. Addressing problem report #1541.
+- Fix in G4GenericTrap::InsidePolygone() to check if p lies between the      (+)
+  two extremes of the segment. Addressing problem report #1541.
 - Corrected left-over debug printout in G4Polycone::SetOriginalParameters().
 
 geometry/solids/usolids                          geom-usolids-V10-00-00      (*)
@@ -95,7 +97,7 @@ physics_lists
   o Removed no longer existing photolepton_hadron/muon_nuclear module from
     dependency list in sources.cmake.
 - constructors/electromagnetic (phys-ctor-em-V10-00-07)                      (*)
-  o G4EmStandardPhysics_option4, G4EmLivermorePhysics, G4EmPenelopePhysics:
+  o G4EmStandardPhysics_option4, G4EmLivermorePhysics, G4EmPenelopePhysics:  (+)
     use RangeFactor=0.01 to increase simulation accuracy.
     Use G4UrbanMscModel for pions, kaons, protons instead of WentzelVI to have
     more accurate ranges of low-energy hadrons (in particular, protons).
@@ -141,8 +143,8 @@ processes/cuts                                   procuts-V10-00-00           (*)
 
 processes/decay                                  decay-V10-00-00             (*)
 ---------------
-- Fixed problem of wrong global time for secondaries in case that the primary
-  track stops during along step. Addressing problem report #1555.
+- Fixed problem of wrong global time for secondaries in case that the        (+)
+  primary track stops during along step. Addressing problem report #1555.
 
 processes/electromagnetic/dna                    emdna-V10-00-01             (*)
 -----------------------------
@@ -160,13 +162,13 @@ processes/electromagnetic/lowenergy              emlowen-V10-00-02           (*)
 
 processes/electromagnetic/standard               emstand-V10-00-08           (*)
 ----------------------------------
-- Bug fix in G4UrbanMscModel; 1st normal step in StepLimitType 2 mode   
+- Bug fix in G4UrbanMscModel; 1st normal step in StepLimitType 2 mode        (+)
   was not randomized. 
 - Fix in G4UniversalFluctuation for energy loss for extreme small cuts.
   Bug fix in "ionization" computing (small observable effect).
   Replaced G4Pow::expA() by faster G4Exp().
   Reduced number of divisions by addition of extra class members.
-- G4NuclearStopping: fix to avoid changing ion charge.
+- G4NuclearStopping: fix to avoid changing ion charge.                       (+)
 - G4ionIonisation: do not instantiate extra model at high enegry if
   G4IonParameterisedModel is used. Improved printout at initialisation.
 - G4SauterGavrilaAngularDistribution: use Penelope 2008 sampling algorithm,
@@ -210,7 +212,7 @@ processes/hadronic
   o Added new dipole model class G4LEHadronProtonElastic.
   o G4LEnp, G4LEpp: added SampleInvariantT() method and inheritance
     from G4HadronElastic; implemented SampleT() method in G4LEnp.
-- models/de_excitation (hadr-deex-V10-00-00)                                 (*)
+- models/de_excitation (hadr-deex-V10-00-00)                                (+*)
   o G4ExcitationHandler: fixed minor memory leak in the case when
     FermiBreakUp has no final states available; reported in item #1371 in
     hypernews Hadronic forum.
@@ -231,7 +233,7 @@ processes/hadronic
   o Use G4Allocator for allocation of G4Fragment objects.
     Should help reducing memory churn and improve CPU performance.
     Removed counter of warnings; added exception warning in verbose mode.
-- stopping (hadr-stopping-V10-00-00)                                         (*)
+- stopping (hadr-stopping-V10-00-00)                                        (+*)
   o G4MuMinusCapturePrecompound: fixed case of infinite loop by reimplementing
     old algorithm of mu- capture which does not include direct muon reaction
     but only considering de-excitation of residual fragment.

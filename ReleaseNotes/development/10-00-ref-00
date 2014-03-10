@@ -27,6 +27,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 9.6.p03
 
 Summarised, the list of changes is the following:
 
@@ -41,11 +42,11 @@ cmake                                            cmake-V09-06-44
   Implemented post-install of datasets. Supplying the --install-data flag
   will perform a download and install of all datasets to the configured data
   directory.
-- Fix bug in checking of status of Xmu include path and library variables
+- Fix bug in checking of status of Xmu include path and library variables    (+)
   that resulted in no error being emitted if these were not found.
 - Added FindTBB to exported modules.
 - Added section for support of Wt and new FindWt.cmake module.
-- Provided scripts for support of Qt5 external libraries.
+- Provided scripts for support of Qt5 external libraries.                    (+)
 - Set compilation flags for MT mode on Intel compiler to
   "-ftls-model=initial-exec -pthread" as for GNU and Clang.
 - Updated data-sets to PhotonEvaporation-3.0, RadioactiveDecay-4.0,
@@ -53,7 +54,7 @@ cmake                                            cmake-V09-06-44
 
 config                                           config-V09-06-17
 ------
-- Updated Darwin-g++ and Darwin-clang configurations for Qt to allow for
+- Updated Darwin-g++ and Darwin-clang configurations for Qt to allow for     (+)
   correct detection of Qt5 directory structure.
   Removed '-ansi -pedantic' compilation options, now obsolete.
   Corrected include paths for X11FLAGS, to resolve compilation errors on
@@ -208,7 +209,7 @@ materials                                        materials-V09-06-34
 - New classes G4LatticeLogical, G4LatticePhysical for logical (physics info)
   and physical (oriented) crystal lattices. Ported from exoticphysics/phonons
   example.
-- G4IonisParamMat: fixed density effect parameterisation.
+- G4IonisParamMat: fixed density effect parameterisation.                    (+)
 - G4SandiaTable, G4StaticSandiaData: added data for water.
 
 particles                                        particles-V09-06-64
@@ -237,8 +238,8 @@ particles                                        particles-V09-06-64
 persistency/ascii                                ascii-V09-06-09
 -----------------
 - Added support for G4GenericPolycone.
-- Replaced deprecated calls to solids accessor methods.
-- Corrected typo in G4tgrUtils::WordIsUnit().
+- Replaced deprecated calls to solids accessor methods.                      (+)
+- Corrected typo in G4tgrUtils::WordIsUnit().                                (+)
 
 persistency/gdml                                 gdml-V09-06-08
 ----------------
@@ -248,10 +249,10 @@ persistency/gdml                                 gdml-V09-06-08
 - Added MultiUnion solid and 'generic' Polycone and Polyhedra to the schema.
   Added support for parameterisation of 'genericPolyone' and 'genericPolyhedra'.
   GDML schema updated to version 3.1.0.
-- Fix in G4GDMLReadParamvol::ParametersRead() for reading parameterised
+- Fix in G4GDMLReadParamvol::ParametersRead() for reading parameterised      (+)
   Sphere, Orb, Torus and Para.
-  Added support for parameterisation of 'genericPolyone' and 'genericPolyhedra'.
-- Replaced deprecated calls to G4Sphere accessor methods.
+- Added support for parameterisation of 'genericPolyone' and 'genericPolyhedra'.
+- Replaced deprecated calls to G4Sphere accessor methods.                    (+)
 
 physics_lists
 -------------
@@ -407,7 +408,7 @@ processes/hadronic                               hadr-V09-06-00
 - models/de_excitation (hadr-deex-V09-06-27)
   o G4NeutronRadCapture, G4ExcitationHandler: changed max isomer level 
     number to 8 (before was 9) due to limitations of PDG encoding
-  o G4LevelReader, G4NuclearLevelManager: fix to ReadDataItem() method
+  o G4LevelReader, G4NuclearLevelManager: fix to ReadDataItem() method       (+)
     to allow for compilation on VC12.
   o Fixes for Coverity defects.
 - models/fission (hadr-fission-V09-06-00)
@@ -433,7 +434,7 @@ processes/hadronic                               hadr-V09-06-00
   o Made data arrays 'const' in place of thread-local in
     G4NeutronHPFastLegendre and its source files.
 - models/parton_string/hadronization (had-hadronization-V09-06-02)
-  o Fixed two bugs in the index manipulation of the BaryonWeight
+  o Fixed two bugs in the index manipulation of the BaryonWeight             (+)
     4-dimensional vector in G4LundStringFragmentation.
 - models/radioactive_decay (radioactive_decay-V09-06-21)
   o Fixed bugs causing decay chains to stop prematurely.
@@ -553,7 +554,7 @@ visualization                                    vis-V09-06-37
   o Make use of G4GenericPolycone in G4ArrowModel.
 - OpenGL (opengl-V09-06-12):
   o Fixes to enable support for Wt.
-  o Fixed bug in the G4OpenGLQtViewer allowing for visualization on Qt-5.
+  o Fixed bug in the G4OpenGLQtViewer allowing for visualization on Qt-5.    (+)
   o Fixed text position in Qt.
 - VRML:
   o Replaced deprecated calls to solids accessor methods.

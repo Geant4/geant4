@@ -14,6 +14,7 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 9.6.p03
 
 Summarised, the list of changes is the following:
 
@@ -29,7 +30,7 @@ analysis                                         analysis-V09-06-23
 - Added possibility to define logarithmic binning for H1 and H2.
 - Reorganized messenger classes per objects: they are now associated
   with the public interface (G4VAnalysisManager).
-- Fixed incorrect setting of the list of free blocks in the Root file.
+- Fixed incorrect setting of the list of free blocks in the Root file.       (+)
   Addressing problem report #1523.
 - Fixed saving binScheme in H2 information.
 - Adapted to new namespace interface from G4Threading.
