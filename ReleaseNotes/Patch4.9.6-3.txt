@@ -24,6 +24,11 @@ List of fixes included in this public patch since the public release 9.6.p01:
     + Fix in G4RootAnalysisManager::WriteOnAscii().
       Addressing problem report report #1473.
 
+  o Digits_Hits:
+    -----------
+    + Fixed angle factor in G4PSSphereSurfaceFlux to keep it always
+      positive. Addressing problem report #1479.
+
   o Geometry:
     --------
     + management:
