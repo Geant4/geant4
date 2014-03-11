@@ -85,6 +85,8 @@ List of fixes included in this public patch since the public release 9.6.p01:
         method generateParticleFate(). Some data was not properly
         initialized in the case that the interaction-partners list has
         one single element.
+      o Fixed implementation of G4CascadeParameters singleton to follow
+        canonical format. Addressing problem report #1557.
     + models/de_excitation:
       o G4NeutronRadCapture: fixed run time memory leak, fixed time of 
         reaction products.
@@ -97,11 +99,6 @@ List of fixes included in this public patch since the public release 9.6.p01:
         detected on Visual C++ 18.
     + models/em_dissociation:
       o Fixed memory leak of products from G4ExcitationHandler.
-    + models/parton_string/diffraction:
-      o Use the method G4FTFModel::AjustTargetNucleonForAnnihilation
-        to fix a problem of unphysical negative excitation energies
-        for nuclear residual fragments. This is relevant mainly for
-        anti-proton annihilation at rest.
     + models/parton_string/hadronization:
       o Fixed two mistakes in the index manipulation of the BaryonWeight
         4-dimensional vector in G4LundStringFragmentation.
