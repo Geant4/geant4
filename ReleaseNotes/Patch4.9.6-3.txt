@@ -83,6 +83,9 @@ List of fixes included in this public patch since the public release 9.6.p01:
 
   o Hadronic Processes:
     ------------------
+    + cross_sections:
+      o Code optimization for G4ElectroNuclearCrossSection and
+        G4PhotoNuclearCrossSection.
     + models/cascade:
       o G4NucleiModel: fixed rare cases of non-reproducibility in
         method generateParticleFate(). Some data was not properly

@@ -256,7 +256,7 @@ processes/electromagnetic/utils                  emutils-V09-06-53
 processes/hadronic
 ------------------
 - cross_sections (hadr-cross-V09-06-29)
-  o Improvements and cleanup in G4ElectroNuclearCrossSection.
+  o Improvements and cleanup in G4ElectroNuclearCrossSection.                (+)
 - models/cascade (hadr-casc-V09-06-47)
   o Added use of "Id" and "Name" keywords where missing.
   o Moved local statics to file scope to avoid thread collisions.
