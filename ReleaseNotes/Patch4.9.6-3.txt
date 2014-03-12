@@ -54,6 +54,9 @@ List of fixes included in this public patch since the public release 9.6.p01:
 
   o Electromagnetic Processes:
     -------------------------
+    + Low Energy:
+      o Fixed case of exception from G4PenelopeOscillatorManager for
+        specific materials.
     + Muons:
       o G4MuPairProductionModel, G4MuBremsstrahlungModel: complete fix for
         cross-section computation. Addresses problem report #1471.
@@ -87,6 +90,8 @@ List of fixes included in this public patch since the public release 9.6.p01:
         one single element.
       o Fixed implementation of G4CascadeParameters singleton to follow
         canonical format. Addressing problem report #1557.
+      o G4ParticleLargerEkin, G4ParticleLargerBeta: correct ">=" to ">"
+        conditions to avoid error in case that both inputs are identical.
     + models/de_excitation:
       o G4NeutronRadCapture: fixed run time memory leak, fixed time of 
         reaction products.

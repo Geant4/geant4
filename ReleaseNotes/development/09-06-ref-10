@@ -197,7 +197,7 @@ processes/electromagnetic/lowenergy              emlowen-V09-06-31
 - Improved CPU performances of G4PenelopePhotoElectricModel.
 - G4LivermoreComptonModel, G4LivermoreGammaConversionModel,
   G4RayleighAngularGenerator: use G4Log, G4Exp.
-- Fixed Exception on G4PenelopeOscillatorManager for specific materials.
+- Fixed Exception on G4PenelopeOscillatorManager for specific materials.     (+)
 
 processes/electromagnetic/muons                  emmuons-V09-06-23
 -------------------------------
