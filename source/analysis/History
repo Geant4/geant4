@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 11, 2014 I. Hrivnacova (analysis-V10-00-04)
+- Fixed H1, H2 functions to access xmin, xmax and width 
+  (do not apply function and unit to return values)
+
 March 05, 2014 I. Hrivnacova (analysis-V10-00-03)
 - Fixed bug in /analysis/h1/setAscii command 
   (introduced with refactoring messenger classes in analysis-V09-06-19)

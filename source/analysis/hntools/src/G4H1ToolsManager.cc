@@ -425,8 +425,7 @@ G4double G4H1ToolsManager::GetH1Xmin(G4int id) const
   tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1Xmin");
   if ( ! h1d ) return 0;
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH1Xmin");
-  return info->fXFcn(h1d->axis().lower_edge()*info->fXUnit);
+  return h1d->axis().lower_edge();
 }  
 
 //_____________________________________________________________________________
@@ -435,8 +434,7 @@ G4double G4H1ToolsManager::GetH1Xmax(G4int id) const
   tools::histo::h1d* h1d = GetH1InFunction(id, "GetH1Xmax");
   if ( ! h1d ) return 0;
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH1Xmax");
-  return info->fXFcn(h1d->axis().upper_edge()*info->fXUnit);
+  return h1d->axis().upper_edge();
 }  
 
 //_____________________________________________________________________________
@@ -454,9 +452,7 @@ G4double G4H1ToolsManager::GetH1Width(G4int id) const
     return 0;
   }              
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH1XWidth");
-  return ( info->fXFcn(h1d->axis().upper_edge()) 
-           - info->fXFcn(h1d->axis().lower_edge()))*info->fXUnit/nbins;
+  return ( h1d->axis().upper_edge() - h1d->axis().lower_edge())/nbins;
 }  
 
 //_____________________________________________________________________________
