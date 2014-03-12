@@ -203,8 +203,7 @@ G4LEHadronProtonElastic::ApplyYourself(const G4HadProjectile& aTrack,
     PB[4] = (PA[4] - BETPA) * BETA[4];
 
     G4DynamicParticle* newP = new G4DynamicParticle;
-    newP->SetDefinition(const_cast<G4ParticleDefinition *>
-                     (aParticle->GetDefinition()));
+    newP->SetDefinition(aParticle->GetDefinition());
     newP->SetMomentum(G4ThreeVector(PB[1], PB[2], PB[3]));
 
     //The target particle...
@@ -250,8 +249,9 @@ G4LEHadronProtonElastic::ApplyYourself(const G4HadProjectile& aTrack,
 //
 // sample momentum transfer using Lab. momentum
 
-G4double G4LEHadronProtonElastic::SampleInvariantT(const G4ParticleDefinition* p, 
-				    G4double plab, G4int , G4int )
+G4double 
+G4LEHadronProtonElastic::SampleInvariantT(const G4ParticleDefinition* p, 
+					  G4double plab, G4int , G4int )
 {
   G4double hMass = p->GetPDGMass();
   G4double pCMS = 0.5*plab;

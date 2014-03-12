@@ -280,7 +280,7 @@ G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     PB[4] = (PA[4] - BETPA) * BETA[4];
 
     G4DynamicParticle* newP = new G4DynamicParticle;
-    newP->SetDefinition(const_cast<G4ParticleDefinition *>(aParticle->GetDefinition()) );
+    newP->SetDefinition(aParticle->GetDefinition());
     newP->SetMomentum(G4ThreeVector(PB[1], PB[2], PB[3]));
 
     //The target particle...
