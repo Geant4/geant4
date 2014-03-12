@@ -135,40 +135,40 @@ void G4FissionLibrary::Init (G4double A, G4double Z, G4int M, G4String & dirName
   theData.close();
 }
 
-G4HadFinalState * G4FissionLibrary::ApplyYourself(const G4HadProjectile & theTrack)
+G4HadFinalState* G4FissionLibrary::ApplyYourself(const G4HadProjectile & theTrack)
 {  
   theResult.Clear();
 
-// prepare neutron
+  // prepare neutron
   G4double eKinetic = theTrack.GetKineticEnergy();
-  const G4HadProjectile *incidentParticle = &theTrack;
-  G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>(incidentParticle->GetDefinition()) );
-  theNeutron.SetMomentum( incidentParticle->Get4Momentum().vect() );
-  theNeutron.SetKineticEnergy( eKinetic );
+  const G4HadProjectile* incidentParticle = &theTrack;
+  G4ReactionProduct theNeutron(incidentParticle->GetDefinition() );
+  theNeutron.SetMomentum(incidentParticle->Get4Momentum().vect() );
+  theNeutron.SetKineticEnergy(eKinetic);
 
-// prepare target
+  // prepare target
   G4Nucleus aNucleus;
   G4ReactionProduct theTarget; 
   G4ThreeVector neuVelo = (1./incidentParticle->GetDefinition()->GetPDGMass())*theNeutron.GetMomentum();
   theTarget = aNucleus.GetBiasedThermalNucleus( targetMass, neuVelo, theTrack.GetMaterial()->GetTemperature());
 
-// set neutron and target in the FS classes 
+  // set neutron and target in the FS classes 
   theNeutronAngularDis.SetNeutron(theNeutron);
   theNeutronAngularDis.SetTarget(theTarget);
 
-// boost to target rest system
+  // boost to target rest system
   theNeutron.Lorentz(theNeutron, -1*theTarget);
 
   eKinetic = theNeutron.GetKineticEnergy();    
 
-// dice neutron and gamma multiplicities, energies and momenta in Lab. @@
-// no energy conservation on an event-to-event basis. we rely on the data to be ok. @@
-// also for mean, we rely on the consistency of the data. @@
+  // dice neutron and gamma multiplicities, energies and momenta in Lab. @@
+  // no energy conservation on an event-to-event basis. we rely on the data to be ok. @@
+  // also for mean, we rely on the consistency of the data. @@
 
   G4int nPrompt=0, gPrompt=0;
   SampleMult(theTrack, &nPrompt, &gPrompt, eKinetic);
 
-// Build neutrons and add them to dynamic particle vector
+  // Build neutrons and add them to dynamic particle vector
   G4double momentum;
   for(G4int i=0; i<nPrompt; i++)
   {
@@ -185,7 +185,7 @@ G4HadFinalState * G4FissionLibrary::ApplyYourself(const G4HadProjectile & theTra
 //    G4cout <<"G4FissionLibrary::ApplyYourself: energy of prompt neutron " << i << " = " << it->GetKineticEnergy()<<G4endl;
   }
 
-// Build gammas, lorentz transform them, and add them to dynamic particle vector
+  // Build gammas, lorentz transform them, and add them to dynamic particle vector
   for(G4int i=0; i<gPrompt; i++)
   {
     G4ReactionProduct * thePhoton = new G4ReactionProduct;
@@ -210,11 +210,11 @@ G4HadFinalState * G4FissionLibrary::ApplyYourself(const G4HadProjectile & theTra
 //  G4cout <<"G4FissionLibrary::ApplyYourself: Number of induced prompt neutron = "<<nPrompt<<G4endl;
 //  G4cout <<"G4FissionLibrary::ApplyYourself: Number of induced prompt photons = "<<gPrompt<<G4endl;
 
-// finally deal with local energy depositions.
+  // finally deal with local energy depositions.
   G4double eDepByFragments = theEnergyRelease.GetFragmentKinetic();
   theResult.SetLocalEnergyDeposit(eDepByFragments);
 //   G4cout << "G4FissionLibrary::local energy deposit" << eDepByFragments<<G4endl;
-// clean up the primary neutron
+  // clean up the primary neutron
   theResult.SetStatusChange(stopAndKill);
   return &theResult;
 }
