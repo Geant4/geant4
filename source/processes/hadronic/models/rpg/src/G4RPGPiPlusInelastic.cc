@@ -47,8 +47,7 @@ G4RPGPiPlusInelastic::ApplyYourself(const G4HadProjectile& aTrack,
     G4DynamicParticle *originalTarget = targetNucleus.ReturnTargetParticle();
     G4ReactionProduct targetParticle( originalTarget->GetDefinition() );
     
-    G4ReactionProduct currentParticle( 
-    const_cast<G4ParticleDefinition *>(originalIncident->GetDefinition() ) );
+    G4ReactionProduct currentParticle(originalIncident->GetDefinition() );
     currentParticle.SetMomentum( originalIncident->Get4Momentum().vect() );
     currentParticle.SetKineticEnergy( originalIncident->GetKineticEnergy() );
     
