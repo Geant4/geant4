@@ -16,6 +16,10 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+10 March 2014 - Davide Mancusi (hadr-inclxx-V10-00-02)
+---------------------------------------------------------------
+- Const-correctness fix for G4ParticleDefinition objects.
+
 5 March 2014 - Davide Mancusi (hadr-inclxx-V10-00-01)
 ---------------------------------------------------------------
 - Fix: avoid negative Fermi energies for delta resonances
