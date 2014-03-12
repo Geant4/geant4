@@ -121,7 +121,7 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
   // two body reaction mu- + A(Z,A) -> nuMu + A(Z-1,A)
   if((1 == Z && 1 == A) || (2 == Z && 3 == A)) {
 
-    G4ParticleDefinition* pd = 0;
+    const G4ParticleDefinition* pd = 0;
     if(1 == Z) { pd = fNeutron; }
     else { pd = G4Triton::Triton(); }
 
@@ -148,7 +148,7 @@ G4MuMinusCapturePrecompound::ApplyYourself(const G4HadProjectile& projectile,
     G4double eEx;
     fNucleus.Init(A, Z);
     const std::vector<G4Nucleon>& nucleons= fNucleus.GetNucleons();
-    G4ParticleDefinition* pDef;
+    const G4ParticleDefinition* pDef;
 
     G4int reentryCount = 0;
   

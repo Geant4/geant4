@@ -77,7 +77,7 @@ public:
 
 private:
 
-  inline void AddNewParticle(G4ParticleDefinition* aParticle,
+  inline void AddNewParticle(const G4ParticleDefinition* aParticle,
 			     G4ThreeVector& direction,
 			     G4double kinEnergy);
 
@@ -87,8 +87,8 @@ private:
 
   G4HadFinalState result;
   G4Fancy3DNucleus fNucleus;
-  G4ParticleDefinition* fProton;
-  G4ParticleDefinition* fNeutron;
+  const G4ParticleDefinition* fProton;
+  const G4ParticleDefinition* fNeutron;
   G4VPreCompoundModel* fPreCompound;
   G4double fMuMass;
   G4double fThreshold;
@@ -98,10 +98,10 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void 
-G4MuMinusCapturePrecompound::AddNewParticle(G4ParticleDefinition* aParticle,
-					    G4ThreeVector& direction,
-					    G4double kinEnergy)
+inline void G4MuMinusCapturePrecompound::AddNewParticle(
+                      const G4ParticleDefinition* aParticle,
+		      G4ThreeVector& direction,
+		      G4double kinEnergy)
 {
   G4DynamicParticle* dp = new G4DynamicParticle(aParticle,
                                                 direction,
