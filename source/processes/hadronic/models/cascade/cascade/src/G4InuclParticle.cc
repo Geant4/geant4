@@ -32,6 +32,7 @@
 // 20130620  M. Kelsey -- Address Coverity #37504, check self in op=()
 // 20130806  M. Kelsey -- Per A. Dotti, move empty G4DynPart to file scope to
 //		address thread-collision problem.
+// 20140310  M. Kelsey -- Fix constness in G4PD* passing
 
 #include <cmath>
 
@@ -40,7 +41,7 @@
 #include "G4SystemOfUnits.hh"
 
 // Internal constructor only usable by subclasses
-G4InuclParticle::G4InuclParticle(G4ParticleDefinition* pd,
+G4InuclParticle::G4InuclParticle(const G4ParticleDefinition* pd,
 				 const G4LorentzVector& mom,
 				 G4InuclParticle::Model model)
   : modelId(model) {
@@ -66,7 +67,7 @@ namespace {
   static const G4DynamicParticle empty;		// To zero out everything
 }
 
-void G4InuclParticle::setDefinition(G4ParticleDefinition* pd) {
+void G4InuclParticle::setDefinition(const G4ParticleDefinition* pd) {
   if (pd) pDP.SetDefinition(pd);
   else pDP = empty;
 }

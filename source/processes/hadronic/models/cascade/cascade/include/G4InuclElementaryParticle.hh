@@ -44,6 +44,7 @@
 // 20110922  M. Kelsey -- Add stream argument to printParticle() => print()
 // 20120608  M. Kelsey -- Fix variable-name "shadowing" compiler warnings.
 // 20130702  M. Kelsey -- Use static type classifiers in G4InuclParticleNames
+// 20140310  M. Kelsey -- Fix constness in G4PD* passing
 
 #ifndef G4INUCL_ELEMENTARY_PARTICLE_HH
 #define G4INUCL_ELEMENTARY_PARTICLE_HH
@@ -77,7 +78,8 @@ public:
 
   // WARNING:  This may create a particle without a valid type code!
   G4InuclElementaryParticle(const G4LorentzVector& mom,
-			    G4ParticleDefinition* pd, Model model=DefaultModel)
+			    const G4ParticleDefinition* pd,
+			    Model model=DefaultModel)
     : G4InuclParticle(pd, mom, model) {}
 
   // Copy and assignment constructors for use with std::vector<>
@@ -94,7 +96,7 @@ public:
   void fill(G4double ekin, G4int ityp, Model model=DefaultModel);
 
   // WARNING:  This may create a particle without a valid type code!
-  void fill(const G4LorentzVector& mom, G4ParticleDefinition* pd,
+  void fill(const G4LorentzVector& mom, const G4ParticleDefinition* pd,
 	    Model model=DefaultModel);
 
   // Assignment and accessor functions
@@ -136,7 +138,7 @@ public:
 
 protected:
   // Convert internal type code to standard GEANT4 pointer
-  static G4ParticleDefinition* makeDefinition(G4int ityp);
+  static const G4ParticleDefinition* makeDefinition(G4int ityp);
 };        
 
 #endif // G4INUCL_ELEMENTARY_PARTICLE_HH 

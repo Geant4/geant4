@@ -113,6 +113,7 @@
 // 20121205  M. Kelsey -- In processSecondary(), set generation to 1, as these
 //		particles are not true projectiles, but already embedded.
 // 20130304  M. Kelsey -- Use new G4CascadeHistory to dump cascade structure
+// 20140310  M. Kelsey -- (Bug #1584) Release memory allocated by DecayIt()
 
 #include <algorithm>
 
@@ -900,4 +901,6 @@ decayTrappedParticle(const G4CascadParticle& trapped) {
       output.addOutgoingParticle(idaugEP);
     }
   }
+
+  delete daughters;		// Clean up memory created by DecayIt()
 }

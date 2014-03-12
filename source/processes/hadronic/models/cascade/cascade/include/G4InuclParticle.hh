@@ -38,6 +38,7 @@
 // 20110919  M. Kelsey -- Move setDefinition code to .cc to allow null argument
 // 20110922  M. Kelsey -- Add stream argument to printParticle() => print(),
 //		add operator<<().
+// 20140310  M. Kelsey -- Fix constness in G4PD* passing
 
 #ifndef G4INUCL_PARTICLE_HH
 #define G4INUCL_PARTICLE_HH
@@ -129,7 +130,7 @@ public:
 
   virtual void print(std::ostream& os) const;
 
-  G4ParticleDefinition* getDefinition() const {
+  const G4ParticleDefinition* getDefinition() const {
     return pDP.GetDefinition();
   }
 
@@ -143,20 +144,21 @@ public:
 
 protected: 
   //  Special constructors for subclasses to set particle type correctly
-  explicit G4InuclParticle(G4ParticleDefinition* pd, Model model=DefaultModel)
+  explicit G4InuclParticle(const G4ParticleDefinition* pd,
+			   Model model=DefaultModel)
     : modelId(model) { setDefinition(pd); }
 
   // FIXME: Bertini code doesn't pass valid 4-vectors, so force mass value
   //	    from supplied PartDefn, with required unit conversions
-  G4InuclParticle(G4ParticleDefinition* pd, const G4LorentzVector& mom,
+  G4InuclParticle(const G4ParticleDefinition* pd, const G4LorentzVector& mom,
 		  Model model=DefaultModel);
 
   // NOTE:  Momentum forced along Z direction
-  G4InuclParticle(G4ParticleDefinition* pd, G4double ekin,
+  G4InuclParticle(const G4ParticleDefinition* pd, G4double ekin,
 		  Model model=DefaultModel)
     : pDP(pd,G4ThreeVector(0.,0.,1.),ekin*CLHEP::GeV/CLHEP::MeV), modelId(model) {}
 
-  void setDefinition(G4ParticleDefinition* pd);
+  void setDefinition(const G4ParticleDefinition* pd);
 
 private:
   G4DynamicParticle pDP;		// Carries all the kinematics and info

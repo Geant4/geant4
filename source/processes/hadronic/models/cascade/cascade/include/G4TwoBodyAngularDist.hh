@@ -46,6 +46,10 @@ class G4GamP2PPi0AngDst;
 class G4PP2PPAngDst;
 class G4NP2NPAngDst;
 class G4NuclNuclAngDst;
+class G4Pi0P2Pi0PAngDst;
+class G4PimP2Pi0NAngDst;
+class G4PimP2PimPAngDst;
+class G4PipP2PipPAngDst;
 class G4PiNInelasticAngDst;
 class G4HadNElastic1AngDst;
 class G4HadNElastic2AngDst;
@@ -88,6 +92,11 @@ private:
   G4PP2PPAngDst* ppAngDst;              // pp, nn elastic
   G4NP2NPAngDst* npAngDst;              // np and pn elastic
   G4NuclNuclAngDst* nnAngDst;		// Y N elastic and inelastic
+  G4Pi0P2Pi0PAngDst* pi0pAngDst;        // pi0 p, pi0 n elastic
+  G4PimP2Pi0NAngDst* pipCXAngDst;       // pi- p, pi+ n, pi0 p, pi0 n charge exchange
+  G4PimP2PimPAngDst* pimpAngDst;        // pi- p, pi+ n elastic
+  G4PipP2PipPAngDst* pippAngDst;        // pi+ p, pi- n elastic
+
   G4PiNInelasticAngDst* qxAngDst;	// pi N charge/strangeness exchange
   G4HadNElastic1AngDst* hn1AngDst;	// pi+p and related elastic scattering
   G4HadNElastic2AngDst* hn2AngDst;	// pi-p and related elastic scattering

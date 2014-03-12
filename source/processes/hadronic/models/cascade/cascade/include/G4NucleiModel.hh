@@ -72,6 +72,8 @@
 // 20130808  M. Kelsey -- To avoid thread collisions, move static neutronEP
 //		and protonEP objects to const data members.
 // 20131001  M. Kelsey -- Move QDinterp object to data member, thread local
+// 20140116  M. Kelsey -- Move statics to const data members to avoid weird
+//		interactions with MT.
 
 #ifndef G4NUCLEI_MODEL_HH
 #define G4NUCLEI_MODEL_HH
@@ -294,31 +296,28 @@ private:
   // Symbolic names for nuclear potentials
   enum PotentialType { WoodsSaxon=0, Gaussian=1 };
 
+  // Parameters for nuclear structure
+  const G4double crossSectionUnits;	// Scale from internal to natural units
+  const G4double radiusUnits;
+  const G4double skinDepth;		// Fraction of radius for outer skin
+  const G4double radiusScale;		// Coefficients for two-parameter fit
+  const G4double radiusScale2;		//   R = 1.16*cbrt(A) - 1.3456/cbrt(A)
+  const G4double radiusForSmall; 	// Average radius of light A<5 nuclei
+  const G4double radScaleAlpha;		// Scaling factor R_alpha/R_small
+  const G4double fermiMomentum;
+  const G4double R_nucleon;
+  const G4double gammaQDscale;		// Gamma/cluster scattering rescaling
+
   // Cutoffs for extreme values
   static const G4double small;
   static const G4double large;
+  static const G4double piTimes4thirds;  // FIXME:  We should not be using this!
 
-  // Parameters for nuclear structure
-  static const G4double skinDepth;
-  static const G4double radiusScale;	// Coefficients for two-parameter fit
-  static const G4double radiusScale2;	//   R = 1.16*cbrt(A) - 1.3456/cbrt(A)
-  static const G4double radiusForSmall; // Average radius of light A<5 nuclei
-  static const G4double radScaleAlpha;	// Scaling factor R_alpha/R_small
-  static const G4double fermiMomentum;
-  static const G4double R_nucleon;
-  static const G4double alfa3[3], alfa6[6];
-  static const G4double pion_vp;
+  static const G4double alfa3[3], alfa6[6];	// Zone boundaries in radii
+  static const G4double pion_vp;		// Flat potentials for pi, K, Y
   static const G4double pion_vp_small;
   static const G4double kaon_vp;
   static const G4double hyperon_vp;
-
-  // Scale parameter for gamma-quasideuteron scattering
-  static const G4double gammaQDscale;
-
-  // FIXME:  We should not be using this!
-  static const G4double piTimes4thirds;
-  static const G4double crossSectionUnits;
-  static const G4double radiusUnits;
 
   // Neutrons and protons, for computing trajectory placements
   const G4InuclElementaryParticle neutronEP;

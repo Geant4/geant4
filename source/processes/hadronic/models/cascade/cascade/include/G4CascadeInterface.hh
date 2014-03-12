@@ -56,6 +56,8 @@
 //		Remove local verboseLevel; shadows base class data member.
 // 20130501  M. Kelsey -- Add static initializer to created shared objects.
 // 20130628  M. Kelsey -- Address Coverity warnings about copy operations.
+// 20140116  M. Kelsey -- Move statics to const data members to avoid weird
+//		interactions with MT.
 
 #ifndef G4CASCADEINTERFACE_H
 #define G4CASCADEINTERFACE_H 1
@@ -157,8 +159,8 @@ private:
     return (this != &right);
   }
 
-  static const G4String randomFile;	// Filename to capture random seeds
-  static const G4int maximumTries;	// Number of iterations for inelastic
+  const G4String randomFile;		// Filename to capture random seeds
+  const G4int maximumTries;		// Number of iterations for inelastic
 
   G4int numberOfTries;
 

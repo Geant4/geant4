@@ -64,19 +64,14 @@
 typedef std::vector<G4InuclElementaryParticle> hadronList;
 typedef hadronList::const_iterator hadronIter;
 
-// Maximum relative momentum (in Bertini GeV) for nucleons in each cluster type
-
-const G4double G4CascadeCoalescence::dpMaxDoublet = G4CascadeParameters::dpMaxDoublet();
-
-const G4double G4CascadeCoalescence::dpMaxTriplet = G4CascadeParameters::dpMaxTriplet();
-
-const G4double G4CascadeCoalescence::dpMaxAlpha = G4CascadeParameters::dpMaxAlpha();
-
 
 // Constructor and Destructor
 
 G4CascadeCoalescence::G4CascadeCoalescence(G4int verbose)
-  : verboseLevel(verbose), thisFinalState(0), thisHadrons(0) {}
+  : verboseLevel(verbose), thisFinalState(0), thisHadrons(0),
+    dpMaxDoublet(G4CascadeParameters::dpMaxDoublet()),
+    dpMaxTriplet(G4CascadeParameters::dpMaxTriplet()),
+    dpMaxAlpha(G4CascadeParameters::dpMaxAlpha()) {}
 
 G4CascadeCoalescence::~G4CascadeCoalescence() {}
 

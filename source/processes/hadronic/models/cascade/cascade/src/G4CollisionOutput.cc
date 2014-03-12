@@ -160,7 +160,7 @@ void G4CollisionOutput::addOutgoingParticles(const G4ReactionProductVector* rpro
 
   G4ReactionProductVector::const_iterator j;
   for (j=rproducts->begin(); j!=rproducts->end(); ++j) {
-    G4ParticleDefinition* pd = (*j)->GetDefinition();
+    const G4ParticleDefinition* pd = (*j)->GetDefinition();
     G4int type = G4InuclElementaryParticle::type(pd);
 
     // FIXME:  Momentum returned by value; extra copying here!
