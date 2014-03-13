@@ -47,17 +47,17 @@ protected:
   
 private:
   // relative probability that anharmonic decay occurs L->L'+T'
-  inline double GetLTDecayProb(G4double, G4double) const;
-  inline double GetTTDecayProb(G4double, G4double) const;
-  inline double MakeLDeviation(G4double, G4double) const;
-  inline double MakeTTDeviation(G4double, G4double) const;
-  inline double MakeTDeviation(G4double, G4double) const;
+  G4double GetLTDecayProb(G4double, G4double) const;
+  G4double GetTTDecayProb(G4double, G4double) const;
+  G4double MakeLDeviation(G4double, G4double) const;
+  G4double MakeTTDeviation(G4double, G4double) const;
+  G4double MakeTDeviation(G4double, G4double) const;
 
   void MakeTTSecondaries(const G4Track&);
   void MakeLTSecondaries(const G4Track&);
 
 private:
-  double fBeta, fGamma, fLambda, fMu;	// Local buffers for calculations
+  G4double fBeta, fGamma, fLambda, fMu;	// Local buffers for calculations
 
   // hide assignment operator as private 
   G4PhononDownconversion(G4PhononDownconversion&);
@@ -65,13 +65,3 @@ private:
 };
 
 #endif
-
-
-
-
-
-
-
-
-
-
