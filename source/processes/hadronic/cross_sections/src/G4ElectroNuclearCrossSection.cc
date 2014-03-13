@@ -2205,31 +2205,29 @@ G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
      cache.clear();
 }
 
-inline G4double G4ElectroNuclearCrossSection::HighEnergyJ1(G4double lE)
+G4double G4ElectroNuclearCrossSection::HighEnergyJ1(G4double lE)
 {
     return ha*(lE*lE-lEMa2)-ab*(lE-lEMa)-cd*(std::exp(-reg*lE)-ele);
 }
 
-inline G4double G4ElectroNuclearCrossSection::HighEnergyJ2(G4double lE, G4double E)
+G4double G4ElectroNuclearCrossSection::HighEnergyJ2(G4double lE, G4double E)
 {
     return poc*((lE-1.)*E-le1)-ab*(E-EMa)+cd1*(std::exp(d1*lE)-ele1);
 }
 
-inline G4double G4ElectroNuclearCrossSection::HighEnergyJ3(G4double lE, G4double E2)
+G4double G4ElectroNuclearCrossSection::HighEnergyJ3(G4double lE, G4double E2)
 {
     return ha*((lE-.5)*E2-leh)-hab*(E2-EMa2)+cd2*(std::exp(d2*lE)-ele2);
 }
 
-inline G4double
-G4ElectroNuclearCrossSection::DFun(G4double x)
+G4double G4ElectroNuclearCrossSection::DFun(G4double x)
 {
     G4double y=std::exp(x-lastG-lmel);             // y for the x
     G4double flux=lastG*(2.-y*(2.-y))-1.;          // flux factor
     return (poc*(x-pos)+shd*std::exp(-reg*x))*flux;
 }
 
-inline G4double
-G4ElectroNuclearCrossSection::Fun(G4double x)
+G4double G4ElectroNuclearCrossSection::Fun(G4double x)
 {
     // Integrated PhoNuc cross section
     G4double dlg1=lastG+lastG-1.;
