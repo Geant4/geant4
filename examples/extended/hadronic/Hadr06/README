@@ -1,0 +1,127 @@
+$Id: README 69174 2013-04-21 20:38:15Z maire $
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                            Hadr06
+                            ------
+
+   Survey energy deposition and particle's flux from an hadronic cascade.
+   Use PhysicsConstructor objects rather than predefined G4 PhysicsLists.   
+
+	
+ 1- MATERIALS AND GEOMETRY DEFINITION
+ 
+   The geometry is a single sphere (absorber) of an homogenous material.
+    
+   Two parameters define the geometry :
+	- the radius of the sphere	   
+ 	- the material of the sphere
+ 	
+   The default geometry (R=30 cm of water) is built in 
+   DetectorConstruction, but the above parameters can be changed interactively 
+   via commands defined in DetectorMessenger.
+   
+   The absorber is surrounded by a World volume (vacuum)
+   
+   A function, and its associated UI command, allows to build a material
+   directly from a single isotope.
+   
+   To be identified by the ThermalScattering module, the elements composing a
+   material must have a specific name (see G4NeutronHPThermalScatteringNames.cc)
+   Examples of such materials are build in DetectorConstruction.
+ 	
+ 2- PHYSICS LIST
+   
+  "Full" set of physics processes are registered, but via PhysicsConstructor
+  objects rather than complete pre-defined G4 physics lists. This alternative 
+  way gives more freedom to register physics.
+  
+  PhysicsConstructors are either predefined G4 PhysicsConstructors or 'local'. 
+  They include : HadronElastic (including neutronHP), HadronInelastic,
+  IonsInelastic, GammaNuclear physics, RadioactiveDecay and electomagnetic.
+  (see geant4/source/physics_lists/constructors)
+    
+  Several hadronic physics options are controlled by environment variables.
+  To trigger them, an envHadronic.csh has been added in this example.
+  One must select the options wished, and do
+        source envHadronic.csh  (or sh) 
+ 	 
+ 3- AN EVENT : THE PRIMARY GENERATOR
+ 
+   The primary kinematic is a single particle randomly shooted at the 
+   centre of the sphere. The type of the particle and its energy are set in 
+   PrimaryGeneratorAction (neutron 14 MeV), and can be changed via the G4 
+   build-in commands of ParticleGun class (see the macros provided with 
+   this example).
+ 	
+ 4- PHYSICS
+
+   The program computes and plots energy deposited in the interaction volume
+   (absorber) and the flux of particles leaving this volume.
+   Processes invoked and particles generated during hadronic cascade are listed.
+
+ 5- HISTOGRAMS
+         
+   The test contains 13 built-in 1D histograms, which are managed by
+   G4AnalysisManager and its Messenger. The histos can be individually 
+   activated with the command :
+   /analysis/h1/set id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, etc..)
+   (see the macros xxxx.mac).
+   
+            1     "total energy deposit"
+            2     "Edep (MeV/mm) profile along radius"		  
+            3     "total kinetic energy flow"
+            4     "gamma flux (dN/dE) at exit"
+            5     "e+- flux (dN/dE) at exit"
+            6     "neutrons flux (dN/dE) at exit"
+            7     "protons flux (dN/dE) at exit"
+            8     "deuterons flux (dN/dE) at exit"
+            9     "alphas flux (dN/dE) at exit"
+            10    "all others ions flux (dN/dE) at exit"
+            11    "all others baryons flux (dN/dE) at exit"
+            12    "all others mesons flux (dN/dE) at exit"
+            13    "all others leptons flux (dN/dE) at exit" 
+      
+   The histograms are managed by the HistoManager class and its Messenger. 
+   The histos can be individually activated with the command :
+   /analysis/h1/set id nbBins  valMin valMax unit 
+   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
+   
+   One can control the name of the histograms file with the command:
+   /analysis/setFileName  name  (default Hadr06)
+   
+   It is possible to choose the format of the histogram file : root (default),
+   xml, csv, by using namespace in HistoManager.hh
+       
+   It is also possible to print selected histograms on an ascii file:
+   /analysis/h1/setAscii id
+   All selected histos will be written on a file name.ascii (default Hadr04) 
+ 	 				
+ 6- VISUALIZATION
+ 
+   The Visualization Manager is set in the main().
+   The initialisation of the drawing is done via the commands
+   /vis/... in the macro vis.mac. To get visualisation:
+   > /control/execute vis.mac
+ 	
+   The tracks are drawn at the end of event, and erased at the end of run.   
+   gamma green   
+   neutron yellow
+   negative particles (e-, ...) red
+   positive particles (e+, ions, ...) blue
+ 	
+ 7- HOW TO START ?
+ 
+   Execute Hadr06 in 'batch' mode from macro files :
+ 	% Hadr06   run1.mac
+ 		
+   Execute Hadr06 in 'interactive mode' with visualization :
+ 	% Hadr06
+	Idle> control/execute vis.mac
+ 	....
+ 	Idle> type your commands
+ 	....
+ 	Idle> exit
