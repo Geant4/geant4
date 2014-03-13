@@ -31,6 +31,7 @@
 // 20130308  M. Kelsey -- Add flag to use separate 3-body momentum generators
 // 20130421  M. Kelsey -- Add flag for CHECK_ECONS, replacing #ifdef's
 // 20130702  M. Kelsey -- Add flag to use N-body phase-space generator
+// 20140311  G. Cosmo -- Implement standard (non-const) singleton pattern
 
 #ifndef G4CascadeParameters_hh
 #define G4CascadeParameters_hh 1
@@ -126,6 +127,8 @@ private:	// Singleton -- no public constructor
 
   G4CascadeParamMessenger* messenger;		// For access via UI commands
   friend class G4CascadeParamMessenger;
+
+  static G4CascadeParameters* fpInstance;
 };
 
 #endif	/* G4CascadeParameters_hh */

@@ -31,6 +31,7 @@
 // 20130308  M. Kelsey -- Add flag to use separate 3-body momentum generators
 // 20130421  M. Kelsey -- Add flag for CHECK_ECONS, replacing #ifdef's
 // 20130702  M. Kelsey -- Add flag to use N-body phase-space generator
+// 20140311  G. Cosmo -- Implement standard (non-const) singleton pattern
 
 #include "G4CascadeParameters.hh"
 #include "G4CascadeParamMessenger.hh"
@@ -41,9 +42,11 @@ using std::endl;
 
 // Singleton accessor
 
+G4CascadeParameters* G4CascadeParameters::fpInstance = 0;
+
 const G4CascadeParameters* G4CascadeParameters::Instance() {
-  static const G4CascadeParameters theInstance;
-  return &theInstance;
+  if (!fpInstance) fpInstance = new G4CascadeParameters;
+  return fpInstance;
 }
 
 

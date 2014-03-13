@@ -15,6 +15,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 March 2014  M. Kelsey (hadr-casc-V10-00-06)
+----------------------------------------------
+- G4CascadeParameters:  Copy Gabriele's version of the singleton here, from
+  the 9.6-patch-03 branch.
+
 10 March 2014  M. Kelsey (hadr-casc-V10-00-05)
 ----------------------------------------------
 - G4CollisionOutput.cc:  Use const G4PD* for G4HadronicProduct secondaries.
