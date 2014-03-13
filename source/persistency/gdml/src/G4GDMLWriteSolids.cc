@@ -559,7 +559,7 @@ TessellatedWrite(xercesc::DOMElement* solElement,
    tessellatedElement->setAttributeNode(NewAttribute("lunit","mm"));
    solElement->appendChild(tessellatedElement);
 
-   std::map<G4ThreeVector, G4String> vertexMap;
+   std::map<G4ThreeVector, G4String, G4ThreeVectorCompare> vertexMap;
 
    const size_t NumFacets = tessellated->GetNumberOfFacets();
    size_t NumVertex = 0;

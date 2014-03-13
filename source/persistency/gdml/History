@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 March 2014 Gabriele Cosmo (gdml-V10-00-00)
+- Added comparison operator for 3-vector key in 'vertexMap' in
+  G4GDMLWriteSolids for export of tessellated solid.
+  Addressing problem report #1573.
+
 29 November 2013 Tatiana Nikitina (gdml-V09-06-09)
 - Fixed GDML schema for spurious validation errors on last changes introduced
   for parameterisation of polycone and polyhedra and multi-union.
