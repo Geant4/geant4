@@ -3,6 +3,10 @@ $Id$
 G3toG4 Modification History (reverse chronological order, please !)
 --------------------------------------------------------------------
 
+g3tog4-V10-00-01 29-Jan-2014 G.Cosmo
+- Remove inline specification for G3VolTableEntry::operator==()
+  in sorce file.
+
 g3tog4-V10-00-00 29-Jan-2014 G.Folger
 - remove BREPS/include from sources.cmake
 
