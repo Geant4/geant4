@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 13, 2014  G.Cosmo                   geom-usolids-V10-00-06
+- Fixed use of inline keyword for methods defined in .cc files in UTrd,
+  UVCSGfaceted and UVoxelizer.
+- Moved findComponentFastest() to be a method of UVoxelizer and changed
+  to FindComponentFastest().
+
 March 5, 2014  G.Cosmo                    geom-usolids-V10-00-05
 - Fixed handling of polyhedron pointer in G4USolid.
 
