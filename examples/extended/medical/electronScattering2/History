@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 March 2014  Daren Sawkey        (exampleES2-V10-00-00)
+- Fixed memcheck error: foil thickness now defined in Detector constructor
+- Allow selection of physics list option4
+
 26 November 2013  Andrea Dotti     (exampleES2-V09-06-12)
 - Bug fixing for MT:
 	- Moving DefineMaterials in constructor of detector construction

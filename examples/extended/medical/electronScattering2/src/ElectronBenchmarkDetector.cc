@@ -77,6 +77,7 @@ fScorerVisAtt(0)
     
     // Scattering Foil
     fPosPrimFoil    =   2.650000*cm;
+    fHalfThicknessPrimFoil = 0.0*cm;
     
     // Monitor Chamber
     fPosMon0        =   5.000000*cm;
