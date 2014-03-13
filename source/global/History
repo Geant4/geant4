@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 13, 2014 G.Cosmo (global-V10-00-06)
+- Fix in G4SimplexDownhill header to proper define header guard.
+
 February 7, 2014 V.Ivantchenko (global-V10-00-05)
 - G4Physics2DVector::Retrieve(): fixed Coverity report for "taited scalar".
 - Updated date and tag-ID for geant4-10-00-ref-02.

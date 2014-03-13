@@ -37,8 +37,8 @@
 // Author: Tatsumi Koi (SLAC/SCCS), 2007
 // --------------------------------------------------------------------------
 
-#ifndef G4SimplexDownhill
-#define G4SimplexDownhill_h
+#ifndef G4SimplexDownhill_hh
+#define G4SimplexDownhill_hh
 
 #include "globals.hh"
 
