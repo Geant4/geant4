@@ -54,7 +54,7 @@ G4VParticipants::~G4VParticipants()
 }
 
 
-inline void G4VParticipants::Init(G4int theA, G4int theZ)
+void G4VParticipants::Init(G4int theA, G4int theZ)
 {
   if ( theNucleus == NULL ) theNucleus = new G4Fancy3DNucleus();
   theNucleus->Init(theA, theZ);
@@ -62,13 +62,13 @@ inline void G4VParticipants::Init(G4int theA, G4int theZ)
 }
 
 
-inline void G4VParticipants::SetNucleus(G4V3DNucleus * aNucleus)
+void G4VParticipants::SetNucleus(G4V3DNucleus * aNucleus)
 {
   if (theNucleus != NULL) delete theNucleus;
   theNucleus = aNucleus;
 }
 
-inline void G4VParticipants::InitProjectileNucleus(G4int theA, G4int theZ) // Uzhi Nov. 2012
+void G4VParticipants::InitProjectileNucleus(G4int theA, G4int theZ) // Uzhi Nov. 2012
 {
   if ( theProjectileNucleus == NULL ) theProjectileNucleus = new G4Fancy3DNucleus();
   theProjectileNucleus->Init(theA, theZ);
@@ -76,7 +76,7 @@ inline void G4VParticipants::InitProjectileNucleus(G4int theA, G4int theZ) // Uz
 }
 
 
-inline void G4VParticipants::SetProjectileNucleus(G4V3DNucleus * aNucleus)
+void G4VParticipants::SetProjectileNucleus(G4V3DNucleus * aNucleus)
 {
   if (theProjectileNucleus != NULL) delete theProjectileNucleus;
   theProjectileNucleus = aNucleus;
