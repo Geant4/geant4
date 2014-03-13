@@ -12,7 +12,7 @@
 
 #/vis/open DAWNFILE
 #/vis/open VRML2FILE
-/vis/open OGLIX
+/vis/open OGL
 #/vis/viewer/flush
 
 /vis/drawVolume

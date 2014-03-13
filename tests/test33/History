@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 11th, 2014 L. Garnier    - test33-V10-00-00
+- Use the generic way to /vis/open 
+
 November 28th, 2013 A. Howard  - test33-V09-06-09
 - Reproposing tag to test with co-working tag in process/biasing:
   procbiasing-V09-06-16
