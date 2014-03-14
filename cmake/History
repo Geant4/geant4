@@ -30,6 +30,13 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+6th March 2014 - Ben Morgan (cmake-V10-00-09)
+- Modules/Geant4Config.cmake.in : When static libraries are used,
+  wrap G4physicslists library with flags suitable to import whole
+  archive. Implemented for GNU/Clang/Intel compilers. Other compilers
+  require further checks on flags and how to apply to single library.
+  This functionality is needed to support global registration of
+  factories.
 
 5th March 2014 - Ben Morgan (cmake-V10-00-08)
 - Modules/Geant4MacroLibraryTargets.cmake : Fixup usage of shared/static

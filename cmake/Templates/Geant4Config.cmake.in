@@ -504,6 +504,28 @@ if(_geant4_use_g3tog4_library)
   set(_geant4_g3tog4_library G3toG4${_geant4_lib_use_suffix})
 endif()
 
+# - Factory registration mechanism in physics_lists requires whole
+# archive to be linked when using static libs, so requires wrapping
+# with suitable compiler dependent flags
+set(_geant4_physicslists_library G4physicslists${_geant4_lib_use_suffix})
+if(_geant4_lib_use_suffix STREQUAL "-static")
+  # - Use CMAKE_CXX_COMPILER_ID, which should be reliable enough...
+  # Though the GNU/Clang/Intel compilers/linkers *should* use identical
+  # flags,keep their sections separate until behaviour confirmed
+  #
+  if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
+    set(_geant4_physicslists_library -Wl,-whole-archive G4physicslists${_geant4_lib_use_suffix} -Wl,-no-whole-archive)
+  elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
+    set(_geant4_physicslists_library -Wl,-whole-archive G4physicslists${_geant4_lib_use_suffix} -Wl,-no-whole-archive)
+  elseif(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
+    set(_geant4_physicslists_library -Wl,-whole-archive G4physicslists${_geant4_lib_use_suffix} -Wl,-no-whole-archive)
+  else()
+    # Needs determination of other compiler options.
+    # NB: MSVC has /OPT:NOREF, but may apply globally...
+    set(_geant4_physicslists_library G4physicslists${_geant4_lib_use_suffix})
+  endif()
+endif()
+
 # - 'Kernel' libraries
 list(APPEND _geant4_internal_libraries
   G4vis_management${_geant4_lib_use_suffix}
@@ -514,7 +536,7 @@ list(APPEND _geant4_internal_libraries
   G4analysis${_geant4_lib_use_suffix}
   G4error_propagation${_geant4_lib_use_suffix}
   G4readout${_geant4_lib_use_suffix}
-  G4physicslists${_geant4_lib_use_suffix}
+  ${_geant4_physicslists_library}
   G4run${_geant4_lib_use_suffix}
   G4event${_geant4_lib_use_suffix}
   G4tracking${_geant4_lib_use_suffix}
