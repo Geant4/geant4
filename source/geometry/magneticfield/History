@@ -16,8 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+Mar 14, 2013 J.Apostolakis                - field-V10-00-01
+--------------------------
+- Fix assignment operator for G4FieldTrack. (Copied Rest Mass)
+- Improve printing of G4FieldTrack
 
 Jan 17, 2013 P.Gumplinger                 - field-V10-00-00
+-------------------------
 - add G4Mag_EqRhs::SetChargeMomentumMass( particleCharge, MomentumXc, mass)
   to G4Mag_SpinEqRhs::SetChargeMomentumMass, see bug reported at:
   http://hypernews.slac.stanford.edu/HyperNews/geant4/get/emfields/210.html

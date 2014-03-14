@@ -17,3 +17,6 @@ track of all tags.
 
 5th December 2012  John Allison
 - Migrated to DrawTrajectory (i_mode argument no longer available).
+
+12th March 2014    John Apostolakis
+- Deleting: This was moved to examples/extended/field/field02

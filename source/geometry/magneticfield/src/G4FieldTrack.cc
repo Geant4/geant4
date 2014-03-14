@@ -36,12 +36,16 @@ std::ostream& operator<<( std::ostream& os, const G4FieldTrack& SixVec)
      os << " ( ";
      os << " X= " << SixV[0] << " " << SixV[1] << " "
                   << SixV[2] << " ";  // Position
-     os << " V= " << SixV[3] << " " << SixV[4] << " "
+     os << " P= " << SixV[3] << " " << SixV[4] << " "
                   << SixV[5] << " ";  // Momentum
-     os << " v2= "
+     os << " Pmag= "
         << G4ThreeVector(SixV[3], SixV[4], SixV[5]).mag(); // mom magnitude
-     os << " mdm= " << SixVec.fMomentumDir.mag(); 
-     os << " l= " << SixVec.GetCurveLength();
+     os << " Ekin= " << SixVec.fKineticEnergy ;
+     os << " m0= " <<   SixVec.fRestMass_c2;
+     os << " Pdir= " <<  SixVec.fMomentumDir.mag(); 
+     os << " l= " <<    SixVec.GetCurveLength();
+     os << " t_lab= " << SixVec.fLabTimeOfFlight; 
+     os << " t_proper= " << SixVec.fProperTimeOfFlight ; 
      os << " ) ";
      return os;
 }

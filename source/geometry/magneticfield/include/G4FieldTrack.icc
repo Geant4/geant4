@@ -300,6 +300,7 @@ G4FieldTrack & G4FieldTrack::operator = ( const G4FieldTrack& rStVec )
   SetCurveLength( rStVec.GetCurveLength() );
 
   fKineticEnergy= rStVec.fKineticEnergy;
+  fRestMass_c2= rStVec.fRestMass_c2;
   SetLabTimeOfFlight( rStVec.GetLabTimeOfFlight()  ); 
   SetProperTimeOfFlight( rStVec.GetProperTimeOfFlight()  ); 
   SetSpin( rStVec.GetSpin() );
