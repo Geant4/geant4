@@ -14,8 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14 March 2014 Tatsumi Koi    (hadr-hpn-V10-00-02)
+Fix compilation warnings detected by clang compiler on MacOS-10.9.
+	src/G4NeutronHPInelasticCompFS.cc
+
+
 29 Jan 2014 Gunter Folger    (hadr-hpn-V10-00-01)
 Removed low_energy from sources.cmake
+
 
 16 December 2013 Tatsumi Koi (hadr-hpn-V10-00-00)
 Fix problem reading zlibed data files 
