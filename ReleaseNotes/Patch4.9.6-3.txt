@@ -110,6 +110,10 @@ List of fixes included in this public patch since the public release 9.6.p01:
     + models/parton_string/hadronization:
       o Fixed two mistakes in the index manipulation of the BaryonWeight
         4-dimensional vector in G4LundStringFragmentation.
+    + models/parton_string/management:
+      o Fix to remove 'inline' qualifier from methods in G4VParticipants.cc
+        and G4PomeronCrossSection.cc, responsible for cases of run-time
+        errors for undefined symbols in library...
     + stopping:
       o G4MuMinusCapturePrecompound: fixed case of infinite loop by
         reimplementing old algorithm of mu- capture which does not include
