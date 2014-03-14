@@ -53,6 +53,7 @@
 #include "G4ParticleTable.hh"
 #include "G4ChordFinder.hh"
 #include "G4Field.hh"
+#include "G4FieldTrack.hh"
 #include "G4FieldManagerStore.hh"
 
 class G4VSensitiveDetector;
@@ -395,6 +396,9 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
       fTransportEndKineticEnergy  = track.GetKineticEnergy();
 
       fTransportEndPosition = startPosition;
+
+      endTrackState= theFieldTrack;  // Ensures that time is updated
+
       // If the step length requested is 0, and we are on a boundary
       //   then a boundary will also limit the step.
       if( startMassSafety == 0.0 )

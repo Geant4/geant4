@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+March 14th 2014, J.Apostolakis transport-V10-00-01
+------------------------------
+- Fix time in case of zero step, in G4CoupledTransportation.
+  This caused a 'going back in time' error, when a zero step occurred
+  in particular at the boundary of a parallel world volume when scoring.
+
+  > Corrects Issue 1017 in the Geant4 Problem reporting System
+    http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1017
 
 October 18th 2013, J.Apostolakis transport-V09-06-07
 --------------------------------
