@@ -13,6 +13,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14 March 2014 Tatsumi Koi (hadr-qmd-V10-00-00)
+-Migrate to handle returned const pointer of G4ParticleDefinition
+	src/G4QMDReaction.cc
+
 15 October 2013 Tatsumi Koi (hadr-qmd-V09-06-10)
 -Change G4ParticleTable::GetParticleTable()->GetIon(,,) 
      to G4IonTable::GetIonTable()->GetIon(,,);

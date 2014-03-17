@@ -502,7 +502,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
           notBreak = false;
           // Secondary from this nucleus (*it) 
-          G4ParticleDefinition* pd = (*itt)->GetDefinition();
+          const G4ParticleDefinition* pd = (*itt)->GetDefinition();
 
           G4LorentzVector p4 ( (*itt)->GetMomentum()/GeV , (*itt)->GetTotalEnergy()/GeV );  //in nucleus(*it) rest system
           G4LorentzVector p4_CM = CLHEP::boostOf( p4 , -nucleus_p4CM.findBoostToCM() );  // Back to CM
