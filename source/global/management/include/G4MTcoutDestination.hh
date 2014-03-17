@@ -58,6 +58,7 @@ class G4MTcoutDestination : public G4coutDestination
     void EnableBuffering(G4bool flag=true);
     void SetPrefixString(const G4String& wd = "G4WT");
     void SetIgnoreCout(G4int tid = 0);
+    void SetIgnoreInit(G4bool val=true) { ignoreInit = val; }
 
   private:
 
@@ -74,6 +75,7 @@ class G4MTcoutDestination : public G4coutDestination
     G4bool threadCoutToFile;
     G4bool threadCerrToFile;
     G4bool ignoreCout;
+    G4bool ignoreInit;
 
     std::ostringstream cout_buffer;
     std::ostringstream cerr_buffer;

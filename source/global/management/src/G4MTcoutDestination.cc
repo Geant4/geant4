@@ -38,7 +38,8 @@
 G4MTcoutDestination::G4MTcoutDestination(const G4int& threadId,
                               std::ostream& co, std::ostream&  ce)
 : finalcout(co), finalcerr(ce), id(threadId), useBuffer(false),
-  threadCoutToFile(false), threadCerrToFile(false), ignoreCout(false)
+  threadCoutToFile(false), threadCerrToFile(false),
+  ignoreCout(false), ignoreInit(true)
 {
   G4coutbuf.SetDestination(this);
   G4cerrbuf.SetDestination(this);
@@ -53,6 +54,7 @@ G4MTcoutDestination::~G4MTcoutDestination()
 }
 
 namespace  { G4Mutex coutm = G4MUTEX_INITIALIZER; }
+#include "G4StateManager.hh"
 
 G4int G4MTcoutDestination::ReceiveG4cout(const G4String& msg)
 {
@@ -61,7 +63,16 @@ G4int G4MTcoutDestination::ReceiveG4cout(const G4String& msg)
   else if( useBuffer )
   { cout_buffer<<msg; }
   else if( !ignoreCout )
-  {   G4AutoLock l(&coutm); finalcout<<prefix<<id<<" > "<<msg; }
+  {
+    if(!ignoreInit || 
+       G4StateManager::GetStateManager()->GetCurrentState() != G4State_Idle )
+    {
+      G4AutoLock l(&coutm);
+      finalcout<<prefix<<id
+    //         <<" "<<G4StateManager::GetStateManager()->GetStateString(sta)
+             <<" > "<<msg;
+    }
+  }
   return 0;
 }
 

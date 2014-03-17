@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 16, 2014 M.Asai (global-V10-00-07)
+- G4MTcoutDestination : by default ignores the printout during
+  the initialization of each thread, as they are identical to
+  each other and thus redundant.
+
 March 13, 2014 G.Cosmo (global-V10-00-06)
 - Fix in G4SimplexDownhill header to proper define header guard.
 
