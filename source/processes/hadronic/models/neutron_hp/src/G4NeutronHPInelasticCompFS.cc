@@ -223,7 +223,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     theResult.Clear();
     G4double eKinetic = theTrack.GetKineticEnergy();
     const G4HadProjectile *incidentParticle = &theTrack;
-    G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>(incidentParticle->GetDefinition()) );
+    G4ReactionProduct theNeutron( incidentParticle->GetDefinition() );
     theNeutron.SetMomentum( incidentParticle->Get4Momentum().vect() );
     theNeutron.SetKineticEnergy( eKinetic );
 
@@ -362,7 +362,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
            iLevel = 0;
            G4bool find = false;
            G4int imaxEx = 0;
-           while( !( theGammas.GetLevel(iLevel+1) == 0 ) ) 
+           while ( theGammas.GetLevel(iLevel+1) != 0 ) 
            { 
               G4double maxEx = 0.0;
               if ( maxEx < theGammas.GetLevel(iLevel)->GetLevelEnergy() ) 
@@ -590,7 +590,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     if(theParticles != 0) 
     {
       nSecondaries = theParticles->size();
-      G4ParticleDefinition * aDef;
+      const G4ParticleDefinition * aDef;
       unsigned int ii0;
       for(ii0=0; ii0<theParticles->size(); ii0++)
       {

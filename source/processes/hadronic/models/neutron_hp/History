@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14 March 2014 Tatsumi Koi    (hadr-hpn-V10-00-03)
+-Remove const_cast now that pointer to G4ParticleDefinition is const
+       include/G4NeutronHPThermalBoost.hh
+       src/G4NeutronHPInelasticBaseFS.cc
+       src/G4NeutronHPFissionFS.cc
+       src/G4NeutronHPCaptureFS.cc
+       src/G4NeutronHPInelasticCompFS.cc
+       src/G4NeutronHPElasticFS.cc
+       src/G4NeutronHPThermalScattering.cc
+
+
 14 March 2014 Tatsumi Koi    (hadr-hpn-V10-00-02)
 Fix compilation warnings detected by clang compiler on MacOS-10.9.
 	src/G4NeutronHPInelasticCompFS.cc

@@ -354,7 +354,7 @@ G4HadFinalState* G4NeutronHPThermalScattering::ApplyYourself(const G4HadProjecti
 
 //    Select Reaction  (Inelastic, coherent, incoherent)  
 
-      G4ParticleDefinition* pd = const_cast< G4ParticleDefinition* >( aTrack.GetDefinition() );
+      const G4ParticleDefinition* pd = aTrack.GetDefinition();
       G4DynamicParticle* dp = new G4DynamicParticle ( pd , aTrack.Get4Momentum() );
       G4double total = theXSection->GetCrossSection( dp , theElement , theMaterial );
       G4double inelastic = theXSection->GetInelasticCrossSection( dp , theElement , theMaterial );

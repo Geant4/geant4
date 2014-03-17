@@ -54,7 +54,7 @@ public:
   {
     // prepare neutron
     G4double eKinetic = aP.GetKineticEnergy();
-    G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>(aP.GetDefinition()) );
+    G4ReactionProduct theNeutron( aP.GetDefinition() );
     theNeutron.SetMomentum( aP.Get4Momentum().vect() );
     theNeutron.SetKineticEnergy( eKinetic );
     G4ThreeVector neuVelo = (1./aP.GetDefinition()->GetPDGMass())*theNeutron.GetMomentum();
