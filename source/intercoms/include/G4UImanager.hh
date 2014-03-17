@@ -286,6 +286,7 @@ class G4UImanager : public G4VStateDependent
       void SetThreadPrefixString(const G4String& s = "W");
       void SetThreadUseBuffer(G4bool flg = true);
       void SetThreadIgnore(G4int tid = 0);
+      void SetThreadIgnoreInit(G4bool flg = true);
 };
 
 #endif

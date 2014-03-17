@@ -760,3 +760,10 @@ void G4UImanager::SetThreadIgnore(G4int tid)
   threadCout->SetIgnoreCout(tid);
 }
 
+void G4UImanager::SetThreadIgnoreInit(G4bool flg)
+{
+  // for sequential mode, ignore this method.
+  if(threadID<0) { return; }
+  threadCout->SetIgnoreInit(flg);
+}
+
