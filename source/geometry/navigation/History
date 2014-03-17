@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 14, 2014 - J.Apostolakis  (geomnav-V10-00-01)
+------------------------------
+- G4PathFinder: Added method for end of track - needed to signal
+   G4 Transportation Manager to use 'ordinary' Navigator.
+- Revised G4Navigator::SetupHierarchy, to reduce extra cost due to
+   handling the case of Nested Parameterisation.
+- PropagatorInField: When setting up a new Intersection Locator 
+   pass pointer to current Navigator.
+
 December 11th, 2013 - G.Cosmo  (geomnav-V10-00-00)
 -----------------------------
 - Fixed implementation of G4TransportationManager::SetNavigatorForTracking()

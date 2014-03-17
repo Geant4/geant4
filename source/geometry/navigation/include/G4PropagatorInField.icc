@@ -250,7 +250,12 @@ inline
 void G4PropagatorInField::
 SetIntersectionLocator( G4VIntersectionLocator *pIntLoc )
 {
-  if(pIntLoc)  { fIntersectionLocator= pIntLoc; }
+  if(pIntLoc)  { 
+     fIntersectionLocator= pIntLoc; 
+
+     // Ensure that the Intersection Locator uses the correct Navigator
+     pIntLoc->SetNavigatorFor( fNavigator ); 
+  }
 }
 
 inline

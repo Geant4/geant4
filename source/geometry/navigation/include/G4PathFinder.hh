@@ -99,6 +99,11 @@ class G4PathFinder
      //
      // Check and cache set of active navigators.
 
+   void EndTrack();
+     // Signal end of tracking of current track.  
+     //   Reset internal state
+     //   Inform TransportationManager to use 'ordinary' Navigator
+
    G4TouchableHandle CreateTouchableHandle( G4int navId ) const;
    inline G4VPhysicalVolume* GetLocatedVolume( G4int navId ) const; 
 

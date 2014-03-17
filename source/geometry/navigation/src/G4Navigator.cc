@@ -1237,15 +1237,21 @@ void G4Navigator::SetupHierarchy()
         pSolid->ComputeDimensions(pParam, replicaNo, current);
         pParam->ComputeTransformation(replicaNo, current);
 
-        G4TouchableHistory touchable( fHistory );
-        touchable.MoveUpHistory();  // move up to the parent level
-      
+        G4TouchableHistory *pTouchable= 0;
+        if( pParam->IsNested() ) {
+           pTouchable= new G4TouchableHistory( fHistory );
+           pTouchable->MoveUpHistory();           // move up to the parent level 
+                                                  // Adequate only if Nested at the Branch level (last)
+           // To extend to other cases:  
+           // pTouchable->MoveUpHistory(cdepth-i-1); // move to the parent level of *Current* level                       // Could replace this line and constructor with a revised c-tor for History( levels to drop)
+        }
         // Set up the correct solid and material in Logical Volume
         //
         G4LogicalVolume *pLogical = current->GetLogicalVolume();
         pLogical->SetSolid( pSolid );
         pLogical->UpdateMaterial( pParam ->
-          ComputeMaterial(replicaNo, current, &touchable) );
+          ComputeMaterial(replicaNo, current, pTouchable) );
+        delete pTouchable;
         break;
     }
   }

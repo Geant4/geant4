@@ -433,6 +433,15 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector& position,
   fRelocatedPoint= false; 
 }
 
+
+void G4PathFinder::EndTrack()
+     // Signal end of tracking of current track.  
+     //   Reset TransportationManager to use 'ordinary' Navigator
+     //   Reset internal state, if needed
+{
+  EnableParallelNavigation(false);  // Else it will be continue to be used
+}
+
 void G4PathFinder::ReportMove( const G4ThreeVector& OldVector, 
                                const G4ThreeVector& NewVector, 
                                const G4String& Quantity ) const
