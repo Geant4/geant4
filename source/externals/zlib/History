@@ -19,6 +19,12 @@ committal in the CVS repository !
 
 History file for G4 zlib package
 --------------------------------
+
+18 March 2014 Gabriele Cosmo (zlib-V10-00-00)
+-  Fixed compilation warnings from clang-3.4 for unused varibles in
+   deflate.cc and inftrees.cc 
+
+
 7 May 2013 Gunter Folger     (zlib-V09-06-03)
 -  Fixes for Windows:
    - Add few more explicit typecasts, in #ifdef protected code
@@ -38,8 +44,8 @@ History file for G4 zlib package
    - include complete zlib, not only writer.
    
 20 March 2013 Gabriele Cosmo (zlib-V09-06-00)
-- Moved from visualization/externals module
+-  Moved from visualization/externals module
 
 25 May 2005 Mark Donszelmann
-- zlib version 1.2.2
+-  zlib version 1.2.2
 
