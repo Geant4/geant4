@@ -146,12 +146,13 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
     }
        
     std::ostringstream eFullFileName;
-    eFullFileName << path << "/dna/sigmadiff_cumulated_elastic_e_champion.dat";
+    eFullFileName << path << "/dna/sigmadiff_cumulated_elastic_e_champion_hp.dat";
     std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
      
     if (!eDiffCrossSection) 
       G4Exception("G4DNAChampionElasticModel::Initialise","em0003",
-                  FatalException,"Missing data file:/dna/sigmadiff_cumulated_elastic_e_champion.dat");
+                  FatalException,
+                  "Missing data file:/dna/sigmadiff_cumulated_elastic_e_champion_hp.dat");
     
     eTdummyVec.push_back(0.);
 
