@@ -30,6 +30,9 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+18th March 2014 - Gunter Folger (cmake-V10-00-10)
+- Modules/Geant4DatasetDefinitions.cmake: G4EMLOW6.36
+
 6th March 2014 - Ben Morgan (cmake-V10-00-09)
 - Modules/Geant4Config.cmake.in : When static libraries are used,
   wrap G4physicslists library with flags suitable to import whole
