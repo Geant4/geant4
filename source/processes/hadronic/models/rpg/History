@@ -14,6 +14,10 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+18 March 2014 - Dennis Wright (hadr-rpg-V10-00-01)
+--------------------------------------------------
+- G4RPGInelastic::CheckQnums:  make projDef and targDef const pointers
+
 10 March 2014 - Dennis Wright (hadr-rpg-V10-00-00)
 --------------------------------------------------
 - remove const_cast from G4RPGKPlusInelastic.cc, G4RPGKMinusInelastic.cc,

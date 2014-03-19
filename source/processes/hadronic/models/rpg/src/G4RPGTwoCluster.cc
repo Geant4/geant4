@@ -639,7 +639,7 @@ ReactionStage(const G4HadProjectile* originalIncident,
   pseudoParticle[4].SetTotalEnergy( etOriginal*GeV );
   pseudoParticle[4].SetMomentum( 0.0, 0.0, pOriginal*GeV );
     
-  G4ParticleDefinition * aOrgDef = modifiedOriginal.GetDefinition();
+  const G4ParticleDefinition* aOrgDef = modifiedOriginal.GetDefinition();
   G4int diff = 0;
   if(aOrgDef == G4Proton::Proton() || aOrgDef == G4Neutron::Neutron() )  diff = 1;
   if(numberofFinalStateNucleons == 1) diff = 0;
