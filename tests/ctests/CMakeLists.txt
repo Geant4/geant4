@@ -215,7 +215,7 @@ GEANT4_ADD_TEST(example-ext-geometry-transforms
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/geometry/transforms
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/geometry/transforms
                 BUILD transforms )
-foreach(_i 00 01 02 03 04)
+foreach(_i 00 01 02 03 04 05 06)
   GEANT4_ADD_TEST(example-ext-hadronic-hadr${_i} 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/hadronic/Hadr${_i}/Hadr${_i}
                           ${CMAKE_SOURCE_DIR}/examples/extended/hadronic/Hadr${_i}/hadr${_i}.in
@@ -223,14 +223,6 @@ foreach(_i 00 01 02 03 04)
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/hadronic/Hadr${_i}
                   BUILD Hadr${_i} ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 endforeach()
-if(BUILD_SHARED_LIBS)
-  GEANT4_ADD_TEST(example-ext-hadronic-hadr05 
-                  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/hadronic/Hadr05/Hadr05
-                          ${CMAKE_SOURCE_DIR}/examples/extended/hadronic/Hadr05/hadr05.in
-                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/hadronic/Hadr05
-                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/hadronic/Hadr05
-                  BUILD Hadr05 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-endif()
 GEANT4_ADD_TEST(example-ext-medical-dicom 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/medical/DICOM/DICOM
                         ${CMAKE_SOURCE_DIR}/examples/extended/medical/DICOM/run.mac

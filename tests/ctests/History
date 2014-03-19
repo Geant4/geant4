@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ctests-V10-00-01 18 March 2014 Gunter Folger
+- Add hadr06, remove protection hadr05 to run only with shared libs.
+ 
 ctests-V10-00-00 21 February 2014 Gunter Folger
 - Disable tests requiring test specific environment variables
    example-ext-exoticphysics-phonons,example-ext-errorpropagation
