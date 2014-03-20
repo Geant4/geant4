@@ -444,10 +444,17 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   currentRange = GetRange(particle,currentKinEnergy,couple);
   lambda0 = GetTransportMeanFreePath(particle,currentKinEnergy);
   tPathLength = min(tPathLength,currentRange);
+
+  // set flag to default values
   latDisplasment = latDisplasmentbackup;
 
   // stop here if small range particle
-  if(inside || tPathLength < tlimitminfix) { 
+  if(inside) { 
+    latDisplasment = false;   
+    return ConvertTrueToGeom(tPathLength, currentMinimalStep); 
+  }
+  // stop here if small step
+  if(tPathLength < tlimitminfix) { 
     latDisplasment = false;   
     return ConvertTrueToGeom(tPathLength, currentMinimalStep); 
   }
@@ -488,8 +495,8 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       if(firstStep || (stepStatus == fGeomBoundary))
         {
           rangeinit = currentRange;
-          if(firstStep) smallstep = 1.e10;
-          else  smallstep = 1.;
+          if(firstStep) { smallstep = 1.e10; }
+          else          { smallstep = 1.; }
 
           //define stepmin here (it depends on lambda!)
           //rough estimation of lambda_elastic/lambda_transport
@@ -585,10 +592,15 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
     //  there no small step/single scattering at boundaries
   else if(steppingAlgorithm == fUseSafety)
     {
-      // compute presafety again if presafety <= 0 and no boundary
-      // i.e. when it is needed for optimization purposes
-      if((stepStatus != fGeomBoundary) && (presafety < tlimitminfix)) 
+      if(currentRange < presafety)
+        {
+          inside = true;
+          latDisplasment = false;
+          return ConvertTrueToGeom(tPathLength, currentMinimalStep);
+        }   
+      else if(stepStatus != fGeomBoundary)  {
 	presafety = ComputeSafety(sp->GetPosition(),tPathLength); 
+      }
       /*
       G4cout << "presafety= " << presafety
 	     << " firstStep= " << firstStep
@@ -610,24 +622,21 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
         // 9.1 like stepping for e+/e- only (not for muons,hadrons)
         if(mass < masslimite) 
         {
-          if(lambda0 > currentRange)
-            rangeinit = lambda0;
-          if(lambda0 > lambdalimit)
-            fr *= 0.75+0.25*lambda0/lambdalimit;
+	  rangeinit = max(rangeinit, lambda0);
+          if(lambda0 > lambdalimit) {
+            fr *= (0.75+0.25*lambda0/lambdalimit);
+	  }
         }
 
         //lower limit for tlimit
-        G4double rat = currentKinEnergy/MeV ;
-        rat = 1.e-3/(rat*(10.+rat)) ;
+        G4double rat = currentKinEnergy/MeV;
+        rat = 1.e-3/(rat*(10 + rat)) ;
         stepmin = lambda0*rat;
-        tlimitmin = 10.*stepmin;
-        tlimitmin = max(tlimitmin, tlimitminfix);
+        tlimitmin = max(10*stepmin, tlimitminfix);
       }
+
       //step limit
-      tlimit = fr*rangeinit;               
-    
-      G4double upperlimit = min(facsafety*presafety,currentRange);
-      tlimit = max(tlimit, upperlimit);
+      tlimit = max(fr*rangeinit, facsafety*presafety);
   
       //lower limit for tlimit
       tlimit = max(tlimit, tlimitmin); 
@@ -653,8 +662,8 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
     {
       if (stepStatus == fGeomBoundary)
 	{
-	  if (currentRange > lambda0) tlimit = facrange*currentRange;
-	  else                        tlimit = facrange*lambda0;
+	  if (currentRange > lambda0) { tlimit = facrange*currentRange; }
+	  else                        { tlimit = facrange*lambda0; }
 
           tlimit = max(tlimit, tlimitmin);
         }
@@ -806,14 +815,11 @@ G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
   G4double cth = SampleCosineTheta(tPathLength,kineticEnergy);
 
   // protection against 'bad' cth values
-  if(std::fabs(cth) > 1.) { return fDisplacement; }
+  if(std::fabs(cth) > 1.) { 
+    latDisplasment = latDisplasmentbackup;
+    return fDisplacement; 
+  }
 
-  // extra protection agaist high energy particles backscattered 
-    //G4cout << "Warning: large scattering E(MeV)= " << kineticEnergy 
-    //	   << " s(mm)= " << tPathLength/mm
-    //	   << " 1-cosTheta= " << 1.0 - cth << G4endl;
-    // do Gaussian central scattering
-  //  if(kineticEnergy > 5*GeV && cth < 0.9) {
   /*
   if(cth < 1.0 - 1000*tPathLength/lambda0 && cth < 0.5 &&
      kineticEnergy > 20*MeV) { 
@@ -900,7 +906,7 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
     UpdateCache();
 
   G4double lambda1 = GetTransportMeanFreePath(particle,KineticEnergy);
-  if(std::fabs(lambda1/lambda0 - 1) > 0.01 && lambda1 > 0.)
+  if(std::fabs(lambda1 - lambda0) > lambda0*0.01 && lambda1 > 0.)
   {
     // mean tau value
     tau = trueStepLength*G4Log(lambda0/lambda1)/(lambda0-lambda1);
@@ -922,15 +928,11 @@ G4double G4UrbanMscModel::SampleCosineTheta(G4double trueStepLength,
       x2meanth = (1.+2.*G4Exp(-2.5*tau))/3.;
     }
 
-    // these new simplification added by Laszlo 28 Feb 2014
-    if(latDisplasment != latDisplasmentbackup)
+    // too large step of low-energy particle
+    G4double relloss = 1. - KineticEnergy/currentKinEnergy;
+    if(relloss > rellossmax) {
       return SimpleScattering(xmeanth,x2meanth);
-
-    G4double relloss = 1.-KineticEnergy/currentKinEnergy;
-
-    if(relloss > rellossmax) 
-      return SimpleScattering(xmeanth,x2meanth);
-
+    }
     // is step extreme small ?
     G4bool extremesmallstep = false ;
     G4double tsmall = tlimitmin;

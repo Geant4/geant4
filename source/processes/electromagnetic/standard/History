@@ -18,6 +18,19 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+19 March 14: V.Ivanchenko (emstand-V10-00-18)
+19 March 14: L.Urban
+- G4UrbanMscModel - efficiency corrections rewritten, no extra
+  SimpleScattering call
+
+14 March 14: V.Ivanchenko (emstand-V10-00-17)
+13 March 14: L.Urban
+- G4UrbanMscModel - useSimpleScattering boolean flag in order to get
+   a more readable code
+
+11 March 14: L.Urban
+- G4UrbanMscModel - correction improves efficiency in UseSafety mode
+
 28 February 14: V.Ivanchenko (emstand-V10-00-16)
 - G4WentzelVIModel - make part of members of the class and one method 
     protected in order to allow inheritence for derived models
