@@ -105,7 +105,11 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
   //total energy deposit and charged track segment in cavity
   //
   fEdepCavity = fEdepCavity2 = fTrkSegmCavity = 0.;
-  fNbEventCavity = 0; 
+  fNbEventCavity = 0;
+  
+  //survey convergence
+  //
+  fOldEmean = fOldDose = 0.;
    
   //stepLenth of charged particles
   //

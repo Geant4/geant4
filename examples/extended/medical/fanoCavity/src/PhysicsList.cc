@@ -77,8 +77,6 @@ PhysicsList::PhysicsList(DetectorConstruction* det)
   defaultCutValue = 10*km;
 
   SetVerboseLevel(1);  
-  
-  G4LossTableManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

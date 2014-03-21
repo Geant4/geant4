@@ -141,7 +141,7 @@
   - 10 : step size of e+- in cavity
   - 11 : energy deposit in cavity per track     
       
-  The histograms are managed by the HistoManager class and its Messenger. 
+  The histograms are managed by G4AnalysisManager class and its messenger. 
   The histos can be individually activated with the command :
 \verbatim
 /analysis/h1/set id nbBins  valMin valMax unit 

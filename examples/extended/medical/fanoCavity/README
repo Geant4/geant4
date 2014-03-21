@@ -144,7 +144,7 @@ $Id$
      10 : step size of e+- in cavity
      11 : energy deposit in cavity per track     
       
-   The histograms are managed by G4AnalysisManager class and its Messenger. 
+   The histograms are managed by G4AnalysisManager class and its messenger. 
    The histos can be individually activated with the command :
    /analysis/h1/set id nbBins  valMin valMax unit 
    where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
@@ -162,10 +162,10 @@ $Id$
  6- HOW TO START ?
  
  	- execute fanoCavity in 'batch' mode from macro files
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/fanoCavity   run01.mac
+ 		% fanoCavity   run01.mac
  		
  	- execute fanoCavity in 'interactive mode' with visualization
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/fanoCavity
+ 		% fanoCavity
  		....
  		Idle> type your commands
  		....

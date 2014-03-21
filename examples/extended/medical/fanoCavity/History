@@ -14,6 +14,17 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+21-03-14 mma (fano-V10-00-00)
+- RunAction: initialise fOldEmean and fOldDose
+
+02-12-13 I.Hrivnacova
+- Minor fixes in README, .README
+
+12-11-13 V.Ivant 
+- PhysListEmStandard_WVI, PhysListEmStandard_SS - improvements for 
+    single scattering configuration (not for 10.0 release) - can
+    be picked up for any new tags
 
 21-08-13 V.Ivant (fano-V09-06-08)
 - PhysListEmStandard_option3 - use G4UrbanMscModel instead of 

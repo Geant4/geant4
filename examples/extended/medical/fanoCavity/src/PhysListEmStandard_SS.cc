@@ -29,7 +29,7 @@
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "PhysListEmStandard_SS.hh"
 #include "DetectorConstruction.hh"
@@ -43,6 +43,7 @@
 #include "G4PhotoElectricEffect.hh"
 
 #include "G4CoulombScattering.hh"
+#include "G4eCoulombScatteringModel.hh"
 
 #include "G4eIonisation.hh"
 #include "MyMollerBhabhaModel.hh"
@@ -85,7 +86,8 @@ void PhysListEmStandard_SS::ConstructProcess()
       // gamma
     
       G4ComptonScattering* compton = new G4ComptonScattering();
-      MyKleinNishinaCompton* comptonModel = new MyKleinNishinaCompton(fDetector);
+      MyKleinNishinaCompton* comptonModel = 
+        new MyKleinNishinaCompton(fDetector);
       comptonModel->SetCSFactor(1000.);      
       compton->SetEmModel(comptonModel );
             
@@ -97,10 +99,14 @@ void PhysListEmStandard_SS::ConstructProcess()
       //electron
       
       G4eIonisation* eIoni = new G4eIonisation();
-      eIoni->SetEmModel(new MyMollerBhabhaModel);
+      eIoni->SetEmModel(new MyMollerBhabhaModel, 1);
                          
-      pmanager->AddProcess(new G4CoulombScattering,  -1, -1, 1);
-      pmanager->AddProcess(eIoni,                    -1,  1, 2);
+      G4CoulombScattering* cs = new G4CoulombScattering();
+      G4eCoulombScatteringModel* csmod = new G4eCoulombScatteringModel();
+      csmod->SetLowEnergyThreshold(1*eV);
+      cs->SetEmModel(csmod, 1);
+      pmanager->AddProcess(cs,     -1, -1, 1);
+      pmanager->AddProcess(eIoni,  -1,  1, 2);
 ///      pmanager->AddProcess(new G4eBremsstrahlung,    -1, 2, 3);
             
     } else if (particleName == "e+") {
