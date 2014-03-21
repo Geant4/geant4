@@ -514,11 +514,11 @@ if(_geant4_lib_use_suffix STREQUAL "-static")
   # flags,keep their sections separate until behaviour confirmed
   #
   if(CMAKE_CXX_COMPILER_ID MATCHES "GNU")
-    set(_geant4_physicslists_library -Wl,-whole-archive G4physicslists${_geant4_lib_use_suffix} -Wl,-no-whole-archive)
+    set(_geant4_physicslists_library -Wl,--whole-archive G4physicslists${_geant4_lib_use_suffix} -Wl,--no-whole-archive)
   elseif(CMAKE_CXX_COMPILER_ID MATCHES "Clang")
-    set(_geant4_physicslists_library -Wl,-whole-archive G4physicslists${_geant4_lib_use_suffix} -Wl,-no-whole-archive)
+    set(_geant4_physicslists_library -Wl,-force_load G4physicslists${_geant4_lib_use_suffix})
   elseif(CMAKE_CXX_COMPILER_ID MATCHES "Intel")
-    set(_geant4_physicslists_library -Wl,-whole-archive G4physicslists${_geant4_lib_use_suffix} -Wl,-no-whole-archive)
+    set(_geant4_physicslists_library -Wl,--whole-archive G4physicslists${_geant4_lib_use_suffix} -Wl,--no-whole-archive)
   else()
     # Needs determination of other compiler options.
     # NB: MSVC has /OPT:NOREF, but may apply globally...
