@@ -223,6 +223,11 @@ CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR)
 #
 ifndef LDFLAGS
   LDFLAGS :=
+  #
+  # run-time loading flags
+  #
+  G4STATIC_MODE :=
+  G4NOSTATIC_MODE :=
 endif
 ifndef G4LIB_USE_CLHEP
   ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))

@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24th March 2014   Gabriele Cosmo  (config-V10-00-02)
+- Force loading of symbols for templated libraries in physics_lists modules.
+  Defined LDFLAGS for Linux and Darwin targets.
+  Modified binmake.gmk accordingly.
+
 17th January 2014   Gabriele Cosmo  (config-V10-00-01)
 - Fixed setting of -fPIC also for Darwin targets.
 
