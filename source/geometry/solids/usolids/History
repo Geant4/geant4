@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 25, 2014  T.Nikitina                geom-usolids-V10-00-07
+- Fix to DistanceToIn() for UBox in case of points located on edges.
+
 March 13, 2014  G.Cosmo                   geom-usolids-V10-00-06
 - Fixed use of inline keyword for methods defined in .cc files in UTrd,
   UVCSGfaceted and UVoxelizer.
@@ -27,7 +30,7 @@ March 5, 2014  G.Cosmo                    geom-usolids-V10-00-05
 - Fixed handling of polyhedron pointer in G4USolid.
 
 February 28, 2014  T.Nikitina             geom-usolids-V10-00-04
-- New Implementation of safetyFromInside() for UPolycone, skipping internal
+- New Implementation of SafetyFromInside() for UPolycone, skipping internal
   Z sections.
 - Implementation of auxiliary methods in UTubs and UCons: SafetyFromInsideR(),
   SafetyFromOutsideR(),SafetyToPhi(). These methds are used in Polycone for

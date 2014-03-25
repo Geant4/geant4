@@ -142,18 +142,15 @@ double UBox::DistanceToIn(const UVector3& aPoint,
     // If point close to this surface, check against the normal
     if (safx > -delta)
     {
-      //         aNormal.x = UUtils::Sign(1.0, aPoint.x);
-      return (aPoint.x * aDirection.x > 0) ? UUtils::kInfinity : 0.0;
+      if (aPoint.x * aDirection.x > 0) return UUtils::kInfinity ;
     }
     if (safy > -delta)
     {
-      //         aNormal.y = UUtils::Sign(1.0, aPoint.y);
-      return (aPoint.y * aDirection.y > 0) ? UUtils::kInfinity : 0.0;
+      if (aPoint.y * aDirection.y > 0) return UUtils::kInfinity ;
     }
     if (safz > -delta)
     {
-      //         aNormal.z = UUtils::Sign(1.0, aPoint.z);
-      return (aPoint.z * aDirection.z > 0) ? UUtils::kInfinity : 0.0;
+      if (aPoint.z * aDirection.z > 0) return UUtils::kInfinity ;
     }
     // Point actually "deep" inside, return zero distance, normal un-defined
     return 0.0;
