@@ -143,7 +143,7 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
   {
     fWaterMaterial = pttoMaterial;
     fLogicWorld->SetMaterial(fWaterMaterial);
-    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+    G4RunManager::GetRunManager()->GeometryHasBeenModified();
   }
 }
 
@@ -151,6 +151,6 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
  
 void DetectorConstruction::UpdateGeometry()
 {
-  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
   G4RunManager::GetRunManager()->DefineWorldVolume(ConstructDetector());
 }
