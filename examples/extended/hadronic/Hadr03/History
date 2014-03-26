@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+25-03-14 mma (exhadr03-V10-00-02)
+- Cosmetic when printing EndOfRun
+      
 26-02-14 mma (exhadr03-V10-00-01)
 - PhysicsList: use G4HadronElasticPhysicsHP 
      

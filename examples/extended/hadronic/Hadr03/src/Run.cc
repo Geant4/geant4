@@ -249,7 +249,7 @@ void Run::EndOfRun()
              
   //frequency of processes
   //
-  G4cout << "\n Process calls frequency --->";  
+  G4cout << "\n Process calls frequency:" << G4endl;  
   G4int survive = 0;
   std::map<const G4VProcess*,G4int>::iterator it;    
   for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
@@ -296,7 +296,7 @@ void Run::EndOfRun()
   }         
   //check cross section from G4HadronicProcessStore
   //
-  G4cout << "\n Verification : "
+  G4cout << "\n Verification: "
          << "crossSections from G4HadronicProcessStore:";
   
   G4HadronicProcessStore* store = G4HadronicProcessStore::Instance();  
