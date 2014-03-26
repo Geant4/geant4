@@ -151,9 +151,17 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
      
     if (!eDiffCrossSection) 
       G4Exception("G4DNAChampionElasticModel::Initialise","em0003",
-                  FatalException,
-                  "Missing data file:/dna/sigmadiff_cumulated_elastic_e_champion_hp.dat");
+                  FatalException,"Missing data file:/dna/sigmadiff_cumulated_elastic_e_champion_hp.dat");
     
+    // March 25th, 2014 - Vaclav Stepan, Sebastien Incerti
+    // Added clear for MT
+
+    eTdummyVec.clear();
+    eVecm.clear();
+    eDiffCrossSectionData.clear();
+
+    //
+
     eTdummyVec.push_back(0.);
 
     while(!eDiffCrossSection.eof())

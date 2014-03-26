@@ -146,6 +146,28 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
                          FatalException,"Missing data file:/dna/sigmadiff_ionisation_e_born.dat");
     }
 
+    //
+
+    // Clear the arrays for re-initialization case (MT mode)
+    // March 25th, 2014 - Vaclav Stepan, Sebastien Incerti
+
+    eTdummyVec.clear();
+    pTdummyVec.clear();
+
+    eVecm.clear();
+    pVecm.clear();
+
+    eProbaShellMap->clear();
+    pProbaShellMap->clear();
+
+    eDiffCrossSectionData->clear();
+    pDiffCrossSectionData->clear();
+
+    eNrjTransfData->clear();
+    pNrjTransfData->clear();
+
+    //
+
     eTdummyVec.push_back(0.);
     while(!eDiffCrossSection.eof())
     {

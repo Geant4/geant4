@@ -100,20 +100,25 @@ void G4DNAScreenedRutherfordElasticModel::Initialise(const G4ParticleDefinition*
         SetHighEnergyLimit(highEnergyLimit);
     }
 
-    // Constants for final stae by Brenner & Zaider
+    // Constants for final state by Brenner & Zaider
+    // March 25th, 2014 - Vaclav Stepan, Sebastien Incerti
+    // Added clear for MT 
 
+    betaCoeff.clear();
     betaCoeff.push_back(7.51525);
     betaCoeff.push_back(-0.41912);
     betaCoeff.push_back(7.2017E-3);
     betaCoeff.push_back(-4.646E-5);
     betaCoeff.push_back(1.02897E-7);
 
+    deltaCoeff.clear();
     deltaCoeff.push_back(2.9612);
     deltaCoeff.push_back(-0.26376);
     deltaCoeff.push_back(4.307E-3);
     deltaCoeff.push_back(-2.6895E-5);
     deltaCoeff.push_back(5.83505E-8);
 
+    gamma035_10Coeff.clear();
     gamma035_10Coeff.push_back(-1.7013);
     gamma035_10Coeff.push_back(-1.48284);
     gamma035_10Coeff.push_back(0.6331);
@@ -121,12 +126,14 @@ void G4DNAScreenedRutherfordElasticModel::Initialise(const G4ParticleDefinition*
     gamma035_10Coeff.push_back(8.358E-3);
     gamma035_10Coeff.push_back(-2.388E-4);
 
+    gamma10_100Coeff.clear();
     gamma10_100Coeff.push_back(-3.32517);
     gamma10_100Coeff.push_back(0.10996);
     gamma10_100Coeff.push_back(-4.5255E-3);
     gamma10_100Coeff.push_back(5.8372E-5);
     gamma10_100Coeff.push_back(-2.4659E-7);
 
+    gamma100_200Coeff.clear();
     gamma100_200Coeff.push_back(2.4775E-2);
     gamma100_200Coeff.push_back(-2.96264E-5);
     gamma100_200Coeff.push_back(-1.20655E-7);

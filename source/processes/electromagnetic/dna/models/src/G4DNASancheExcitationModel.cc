@@ -131,6 +131,11 @@ void G4DNASancheExcitationModel::Initialise(const G4ParticleDefinition* /*partic
                     FatalException,"Missing data file:/dna/sigma_excitationvib_e_sanche.dat");
     }
 
+    // March 25th, 2014 - Vaclav Stepan, Sebastien Incerti
+    // Added clear for MT
+    tdummyVec.clear();
+    //
+
     while(!input.eof())
     {
         double t;
