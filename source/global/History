@@ -17,11 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 26, 2014 G.Cosmo (global-V10-00-10)
+- Minor code cleanup.
+
 March 25, 2014 A.Dotti (global-V10-00-08,global-V10-00-09)
 - Introduce G4SetPinAffinity function (available only for LINUX): 
-  "locks" a pthread to the given CPU index. This will be used by 
-  run category as an option to improve performances on high-core counts
-  CPU.
+  "locks" a pthread to the given CPU index. This will be used by run
+  category as an option to improve performance on high-core counts CPUs.
 
 March 16, 2014 M.Asai (global-V10-00-07)
 - G4MTcoutDestination : by default ignores the printout during

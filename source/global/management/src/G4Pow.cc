@@ -64,9 +64,10 @@ G4Pow* G4Pow::GetInstance()
 G4Pow::G4Pow()
   : onethird(1.0/3.0), max2(5)
 {
-  if(G4Threading::IsWorkerThread() == true) { 
-    G4Exception ("G4Pow::G4Pow()", "glob090", FatalException, 
-                 "Attempt to instantiate G4Pow in worker thread");
+  if(G4Threading::IsWorkerThread())
+  { 
+    G4Exception ("G4Pow::G4Pow()", "InvalidSetup", FatalException, 
+                 "Attempt to instantiate G4Pow in worker thread!");
   }
 
   const G4int maxZ = 512; 

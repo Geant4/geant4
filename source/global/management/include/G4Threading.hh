@@ -178,7 +178,8 @@
 
 #endif //G4MULTITHREADING
 
-namespace G4Threading {
+namespace G4Threading
+{
   G4Pid_t G4GetPidId();
   G4int G4GetNumberOfCores();
   G4int G4GetThreadId();
@@ -186,4 +187,5 @@ namespace G4Threading {
   void G4SetThreadId( G4int aNewValue );
   G4bool G4SetPinAffinity( G4int idx , G4Thread& at);
 }
+
 #endif //G4Threading_hh
