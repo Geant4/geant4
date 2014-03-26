@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 26, 2014 G.Cosmo (global-V10-00-11)
+- Minor refinements to G4Poisson, based on suggestions by K.Genser/FNAL.
+
 March 26, 2014 G.Cosmo (global-V10-00-10)
 - Minor code cleanup.
 
