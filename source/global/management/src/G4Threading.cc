@@ -35,6 +35,8 @@
 // ---------------------------------------------------------------
 
 #include "G4Threading.hh"
+#include "G4AutoDelete.hh"
+#include "globals.hh"
 #if defined (WIN32)
    #include <Windows.h>
 #else
@@ -84,6 +86,23 @@ BOOL G4ReleaseMutex( __in G4Mutex m)
  { return ReleaseMutex(m); }
 #endif
 
+#if defined(__linux__) || defined(_AIX)
+G4bool G4Threading::G4SetPinAffinity(G4int cpu, G4Thread& aT) {
+    cpu_set_t* aset = new cpu_set_t;
+    G4AutoDelete::Register(aset);
+    CPU_ZERO(aset);
+    CPU_SET(cpu,aset);
+    return ( pthread_setaffinity_np(aT, sizeof(cpu_set_t), aset) == 0 );
+}
+#else //Not available for Mac, WIN,...
+G4bool G4Threading::G4SetPinAffinity(G4int, G4Thread&) {
+    G4Exception("G4Threading::G4SetPinAffinity(G4int,G4Thread&)",
+                "Run0035", JustWarning,
+                "Affinity setting not available for this architecure, ignoring");
+    return true;
+}
+#endif
+
 #else  // Sequential mode
 
 #include "globals.hh"
@@ -104,6 +123,7 @@ G4int G4Threading::G4GetThreadId() { return -2; }
 G4bool G4Threading::IsWorkerThread() { return false; }
 void G4Threading::G4SetThreadId(G4int) {}
 
+G4bool G4Threading::G4SetPinAffinity(G4int,G4Thread&) { return true;}
 #endif
 
 

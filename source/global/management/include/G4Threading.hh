@@ -80,9 +80,11 @@
         pthread_create( worker, &attr, func , arg ); \
     }
 
-    // Macro to join a G4Thread
-    //
+    // Macro to join thread
     #define G4THREADJOIN( worker ) pthread_join( worker , NULL)
+
+   // Macro to retrieve caller thread
+   #define G4THREADSELF pthread_self
 
     // Some useful types
     //
@@ -129,6 +131,7 @@
 
     #define G4THREADCREATE( worker, func, arg ) { *worker = CreateThread( NULL, 16*1024*1024 , func , arg , 0 , NULL ); }
     #define G4THREADJOIN( worker ) WaitForSingleObject( worker , INFINITE);
+    #define G4THREADSELF GetCurrentThreadId
     #define G4ThreadFunReturnType DWORD WINAPI
     typedef LPVOID G4ThreadFunArgType;
     typedef DWORD (*thread_lock)(G4Mutex);
@@ -162,6 +165,7 @@
   #define G4MUTEXUNLOCK fake_mutex_lock_unlock
   #define G4THREADCREATE( worker , func , arg ) ;;
   #define G4THREADJOIN( worker ) ;;
+  #define G4THREADSELF( nothing ) G4Thread(nothing); 
   typedef void* G4ThreadFunReturnType;
   typedef void* G4ThreadFunArgType;
   typedef G4int (*thread_lock)(G4Mutex*);
@@ -180,5 +184,6 @@ namespace G4Threading {
   G4int G4GetThreadId();
   G4bool IsWorkerThread();
   void G4SetThreadId( G4int aNewValue );
+  G4bool G4SetPinAffinity( G4int idx , G4Thread& at);
 }
 #endif //G4Threading_hh
