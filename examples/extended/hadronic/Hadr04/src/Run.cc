@@ -65,12 +65,13 @@ void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
 
 void Run::CountProcesses(const G4VProcess* process) 
 {
-  std::map<const G4VProcess*,G4int>::iterator it = fProcCounter.find(process);
+  G4String procName = process->GetProcessName();
+  std::map<G4String,G4int>::iterator it = fProcCounter.find(procName);
   if ( it == fProcCounter.end()) {
-    fProcCounter[process] = 1;
+    fProcCounter[procName] = 1;
   }
   else {
-    fProcCounter[process]++; 
+    fProcCounter[procName]++; 
   }
 }                 
                   
@@ -125,21 +126,22 @@ void Run::Merge(const G4Run* run)
   fTime1     += localRun->fTime1;  
   fTime2     += localRun->fTime2;
   
-  //maps
-  std::map<const G4VProcess*,G4int>::const_iterator itp;
+  //map: processes count
+  std::map<G4String,G4int>::const_iterator itp;
   for ( itp = localRun->fProcCounter.begin();
         itp != localRun->fProcCounter.end(); ++itp ) {
 
-    const G4VProcess* process = itp->first;
+    G4String procName = itp->first;
     G4int localCount = itp->second;
-    if ( fProcCounter.find(process) == fProcCounter.end()) {
-      fProcCounter[process] = localCount;
+    if ( fProcCounter.find(procName) == fProcCounter.end()) {
+      fProcCounter[procName] = localCount;
     }
     else {
-      fProcCounter[process] += localCount;
+      fProcCounter[procName] += localCount;
     }  
-  }    
-       
+  }
+   
+  //map: created particles count         
   std::map<G4String,ParticleData>::const_iterator itn;
   for (itn = localRun->fParticleDataMap.begin(); 
        itn != localRun->fParticleDataMap.end(); ++itn) {
@@ -190,11 +192,11 @@ void Run::EndOfRun()
              
   //frequency of processes
   //
-  G4cout << "\n Process calls frequency --->";  
+  G4cout << "\n Process calls frequency :" << G4endl;  
   G4int survive = 0;
-  std::map<const G4VProcess*,G4int>::iterator it;    
+  std::map<G4String,G4int>::iterator it;    
   for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
-     G4String procName = it->first->GetProcessName();
+     G4String procName = it->first;
      G4int    count    = it->second;
      G4cout << "\t" << procName << "= " << count;
      if (procName == "Transportation") survive = count;

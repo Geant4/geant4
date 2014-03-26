@@ -77,8 +77,8 @@ class Run : public G4Run
     G4ParticleDefinition* fParticle;
     G4double              fEkin;
         
-    std::map<const G4VProcess*,G4int> fProcCounter;            
-    std::map<G4String,ParticleData>   fParticleDataMap;
+    std::map<G4String,G4int>        fProcCounter;            
+    std::map<G4String,ParticleData> fParticleDataMap;
         
     G4int    fNbStep1, fNbStep2;
     G4double fTrackLen1, fTrackLen2;

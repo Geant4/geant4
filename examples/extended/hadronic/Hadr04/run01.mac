@@ -20,7 +20,7 @@
 /gun/particle neutron
 /gun/energy 2 MeV
 #
-/analysis/setFileName Water_thermal_42
+/analysis/setFileName Water_thermal_44
 /analysis/h1/set 1  100  0. 100. none	#nb colli >1eV
 /analysis/h1/set 2  100  0. 100. cm	#track len >1eV
 /analysis/h1/set 3  100  0. 5. mus	#time of flight >1eV
