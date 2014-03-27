@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- 26. Mar. 2014 Tatsumi Koi (particles-V10-00-05)
+-Fix lack of Cl35 ground state in NuclideTable2
+-Fix lack of "*std::log(2.0)" in some comparison of threshold time
+
 - 25. Feb. 2014 Hisaya Kurashige (particles-V10-00-04)
 - Add G4Exception in G4ElectronOcuppancy::AddElectron()
 - Life time is given from mass width for pi0 and sigma0

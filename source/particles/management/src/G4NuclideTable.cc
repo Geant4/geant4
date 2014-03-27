@@ -374,7 +374,7 @@ void G4NuclideTable::GenerateNuclide()
          G4int    ionJ     = (G4int)(exciteStateTable[i][idxSpin]);
          G4double ionMu    = exciteStateTable[i][idxMu]*(joule/tesla);
 
-         if (( ionLife < 0.0 || ionLife > threshold_of_half_life )
+         if (( ionLife < 0.0 || ionLife*ionLife*std::log(2.0) > threshold_of_half_life )
            && (ionE > levelTolerance+previousE)) {
             previousE = ionE;
             iLevel++;
