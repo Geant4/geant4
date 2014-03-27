@@ -123,7 +123,7 @@ clean_tmps:
 	@rm -rf $(G4LIBDIR)/*.def $(G4LIBDIR)/*.exp
 	@rm -rf $(G4TMPDIR)/*
 
-dll_build: banner win32def
+dll_build: banner genwindef
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
 	@$(ECHO) "Verifying existence of global libraries for DLLs ..."
 	@$(MAKE) kernel_global G4LIB_BUILD_DLL=1
@@ -146,11 +146,11 @@ else
 	@$(ECHO) "Sorry !"
 endif
 
-win32def: $(G4INSTALL)/config/win32def.c
+genwindef: $(G4INSTALL)/config/genwindef.cc
 ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-	@$(ECHO) "Building DLL management utility win32def ..."
+	@$(ECHO) "Building DLL management utility genwindef ..."
 	@if [ ! -d $(G4LIBDIR) ] ; then mkdir $(G4LIBDIR) ;fi
-	@$(CC) $(CCFLAGS) -o $(G4LIBDIR)/win32def $(G4INSTALL)/config/win32def.c
+	@$(CXX) $(CXXFLAGS) /Fe$(G4LIBDIR)/genwindef.exe $(G4INSTALL)/config/genwindef.cc
 else
 	@$(ECHO) "Build of DLLs is only supported on Windows platforms !"
 	@$(ECHO) "The system you have currently selected is $(G4SYSTEM)."
