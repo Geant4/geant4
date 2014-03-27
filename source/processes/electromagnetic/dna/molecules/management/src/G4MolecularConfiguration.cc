@@ -34,6 +34,7 @@
 // -------------------------------------------------------------------
 
 #include "G4MolecularConfiguration.hh"
+#include "G4MoleculeDefinition.hh"
 #include "G4UIcommand.hh"
 
 using namespace std;
@@ -53,6 +54,10 @@ G4MolecularConfiguration::G4MolecularConfigurationManager*
     }
 
     return fgManager;
+}
+
+G4MolecularConfiguration::G4MolecularConfigurationManager::G4MolecularConfigurationManager()
+{
 }
 
 G4MolecularConfiguration::G4MolecularConfigurationManager::~G4MolecularConfigurationManager()
