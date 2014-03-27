@@ -117,7 +117,7 @@ G4Fragment::G4Fragment(G4int A, G4int Z, const G4LorentzVector& aMomentum) :
 
 // This constructor is for initialize photons or electrons
 G4Fragment::G4Fragment(const G4LorentzVector& aMomentum, 
-		       G4ParticleDefinition * aParticleDefinition) :
+		       const G4ParticleDefinition * aParticleDefinition) :
   theA(0),
   theZ(0),
   theMomentum(aMomentum),

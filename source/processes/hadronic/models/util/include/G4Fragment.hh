@@ -85,7 +85,7 @@ public:
 
   // 4-momentum and pointer to G4particleDefinition (for gammas, e-)
   G4Fragment(const G4LorentzVector& aMomentum, 
-	     G4ParticleDefinition* aParticleDefinition);
+	     const G4ParticleDefinition* aParticleDefinition);
 
   // ============= OPERATORS ==================
     
@@ -148,8 +148,8 @@ public:
   inline G4int GetNumberOfElectrons() const;
   inline void SetNumberOfElectrons(G4int value);
 
-  inline G4ParticleDefinition * GetParticleDefinition() const;
-  inline void SetParticleDefinition(G4ParticleDefinition * p);
+  inline const G4ParticleDefinition * GetParticleDefinition() const;
+  inline void SetParticleDefinition(const G4ParticleDefinition * p);
 
   inline G4double GetCreationTime() const;
   inline void SetCreationTime(G4double time);
@@ -197,7 +197,7 @@ private:
 
   G4int numberOfShellElectrons;
 
-  G4ParticleDefinition * theParticleDefinition;
+  const G4ParticleDefinition * theParticleDefinition;
   
   G4double theCreationTime;
 
@@ -385,12 +385,12 @@ inline void G4Fragment::SetNumberOfElectrons(G4int value)
 }
 
 inline 
-G4ParticleDefinition * G4Fragment::GetParticleDefinition(void) const
+const G4ParticleDefinition * G4Fragment::GetParticleDefinition(void) const
 {
   return theParticleDefinition;
 }
 
-inline void G4Fragment::SetParticleDefinition(G4ParticleDefinition * p)
+inline void G4Fragment::SetParticleDefinition(const G4ParticleDefinition * p)
 {
   theParticleDefinition = p;
 }

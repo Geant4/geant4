@@ -15,6 +15,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 March 2014 Gunter Folger      (hadr-mod-util-V10-00-07)
+- G4Fragment: make G4ParticleDefinition* const.
+
 05 March 2014 Gunter Folger      (hadr-mod-util-V10-00-06)
 - G4SampleResonance.cc remove const_cast in use of G4ParticleDefinition
  
