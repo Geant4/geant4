@@ -83,7 +83,7 @@ class G4CrossSectionPairGG : public G4VCrossSectionDataSet
     G4GlauberGribovCrossSection * theHighX;
     G4double ETransition;
     typedef std::valarray<G4double> XS_factors;
-    typedef std::pair<G4ParticleDefinition *, XS_factors > ParticleXScale;
+    typedef std::pair<const G4ParticleDefinition *, XS_factors > ParticleXScale;
     std::vector<ParticleXScale> scale_factors;
 
 };

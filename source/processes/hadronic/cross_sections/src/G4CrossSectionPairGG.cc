@@ -96,7 +96,7 @@ G4double G4CrossSectionPairGG::GetElementCrossSection(
    } else {
 
       std::vector<ParticleXScale>::iterator iter = scale_factors.begin();
-      G4ParticleDefinition * pDef = aParticle->GetDefinition();
+      const G4ParticleDefinition * pDef = aParticle->GetDefinition();
       while (iter != scale_factors.end() && (*iter).first != pDef)
       {
          ++iter;
@@ -133,7 +133,7 @@ void G4CrossSectionPairGG::BuildPhysicsTable(const G4ParticleDefinition& pDef) {
             << theLowX->GetName() << "  " << theHighX->GetName() << G4endl;
    }
 
-   G4ParticleDefinition * myDef = const_cast<G4ParticleDefinition*>(&pDef);
+   const G4ParticleDefinition * myDef = &pDef;
    std::vector<ParticleXScale>::iterator iter;
    iter = scale_factors.begin();
    while (iter != scale_factors.end() && (*iter).first != myDef) {

@@ -227,9 +227,8 @@ void G4BGGNucleonInelasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
     fHighEnergy = 2*GeV;
   }
 
-  G4ParticleDefinition* part = const_cast<G4ParticleDefinition*>(particle);
   G4ThreeVector mom(0.0,0.0,1.0);
-  G4DynamicParticle dp(part, mom, fGlauberEnergy);
+  G4DynamicParticle dp(particle, mom, fGlauberEnergy);
 
   G4NistManager* nist = G4NistManager::Instance();
   G4int A;

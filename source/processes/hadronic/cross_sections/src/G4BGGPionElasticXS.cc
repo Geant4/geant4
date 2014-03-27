@@ -212,9 +212,8 @@ void G4BGGPionElasticXS::BuildPhysicsTable(const G4ParticleDefinition& p)
   fGlauber->BuildPhysicsTable(*particle);
   if(particle == G4PionPlus::PionPlus()) { isPiplus = true; }
 
-  G4ParticleDefinition* part = const_cast<G4ParticleDefinition*>(particle);
   G4ThreeVector mom(0.0,0.0,1.0);
-  G4DynamicParticle dp(part, mom, fGlauberEnergy);
+  G4DynamicParticle dp(particle, mom, fGlauberEnergy);
 
   G4NistManager* nist = G4NistManager::Instance();
 
