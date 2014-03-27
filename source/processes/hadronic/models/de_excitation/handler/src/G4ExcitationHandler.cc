@@ -371,7 +371,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
       theFragmentA = (*i)->GetA_asInt();
       theFragmentZ = (*i)->GetZ_asInt();
       G4double etot= (*i)->GetMomentum().e();
-      G4ParticleDefinition* theKindOfFragment = 0;
+      const G4ParticleDefinition* theKindOfFragment = 0;
       if (theFragmentA == 0) {       // photon or e-
 	theKindOfFragment = (*i)->GetParticleDefinition();   
       } else if (theFragmentA == 1 && theFragmentZ == 0) { // neutron
@@ -404,12 +404,12 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
         if(eexc > minExcitation) {
           G4double elevel1 = 0.0;
           G4double elevel2 = 0.0;
-	  G4ParticleDefinition* ion = 0; 
+	  const G4ParticleDefinition* ion = 0;
           for(level=1; level<9; ++level) {
 	    ion = theTableOfIons->GetIon(theFragmentZ,theFragmentA,level);
             //G4cout << level << "  " << ion << G4endl;
             if(ion) {
-	      G4Ions* ip = dynamic_cast<G4Ions*>(ion);
+	      const G4Ions* ip = dynamic_cast<const G4Ions*>(ion);
 	      if(ip) {
 		elevel2 = ip->GetExcitationEnergy();
 		//G4cout<<"   Level "<<level<<" E(MeV)= "<<elevel2/MeV<<G4endl;
