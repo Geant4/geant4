@@ -99,9 +99,8 @@ G4bool G4Threading::G4SetPinAffinity(G4int cpu, G4Thread& aT)
 G4bool G4Threading::G4SetPinAffinity(G4int, G4Thread&)
 {
    G4Exception("G4Threading::G4SetPinAffinity()",
-               "NotImplemented", JustWarning,
-               "Affinity setting not available for this architecture!",
-               "Ignoring...");
+          "NotImplemented", JustWarning,
+          "Affinity setting not available for this architecture, ignoring...");
    return true;
 }
 #endif

@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 27, 2014 G.Cosmo (global-V10-00-12)
+- Fixed signature for call to G4Exception in G4Threading.cc.
+
 March 26, 2014 G.Cosmo (global-V10-00-11)
 - Minor refinements to G4Poisson, based on suggestions by K.Genser/FNAL.
 
