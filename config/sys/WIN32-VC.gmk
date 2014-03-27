@@ -55,21 +55,20 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   endif
 
 #
-# Building DLLs (G.Barrand)
+# Building DLLs
 # -------------
 #  The commands below allow to build DLLs from the archive libraries.
-#  From a libG4xxx.a, it will extract the symbols with :
-#    DOS> dumpbin /symbols libG4xxx.a > G4xxx.dumpbin
-#  After that it will produce a G4xxx.def using the 'win32def' program.
+#  From a libG4xxx.a, will extract the symbols with the genwindef tool,
+#  which will produce a G4xxx.def file.
 #  The G4xxx.def file will contain the list of symbols that are "exported"
 #  or made public for using the DLLs.
-#  The source win32def.c is in the geant4/config directory. The binary is
+#  The source genwindef.cc is in the geant4/config directory. The binary is
 #  built during the library installation process, and will be placed in
 #  $G4LIB/G4SYSTEM. 
 #  If can also be built as follows :
-#    DOS> cl.exe /Fowin32def.exe win32def.c 
+#    DOS> cl.exe /Fegenwindef.exe genwindef.cc 
 #  Then, to use it :
-#    DOS> win32def G4xxx < G4xxx.dumpbin > G4xxx.def
+#    DOS> genwindef -o G4xxx.def -l G4xxx libG4xxx.a 
 #  Libraries libG4xxx.lib can also be built with :
 #    DOS> lib /def:G4xxx.def /out:libG4xxx.lib
 #  It also produces a libG4xxx.exp used to build the DLL.
@@ -84,13 +83,9 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   define build-granular-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`;\
     cd $(G4TMP)/$(G4SYSTEM);\
-    $(ECHO) "Building $(name).dumpbin file ...";\
-    $(RM) $(name).dumpbin;\
-    dumpbin /symbols $(G4LIBDIR)/lib$(name).a > $(name).dumpbin;\
     $(ECHO) "Building $(name).def file ...";\
     $(RM) $(name).def;\
-    $(G4LIB)/$(G4SYSTEM)/win32def.exe $(name) < $(name).dumpbin > $(name).def;\
-    $(RM) $(name).dumpbin;\
+    $(G4LIB)/$(G4SYSTEM)/genwindef.exe -o $(name).def -l $(name) $(G4LIBDIR)/lib$(name).a;\
     $(ECHO) "Building lib$(name).exp and lib$(name).lib file ...";\
     $(RM) $(G4LIBDIR)/lib$(name).exp;\
     $(RM) $(G4LIBDIR)/lib$(name).lib;\
@@ -107,13 +102,9 @@ ifeq ($(G4SYSTEM),WIN32-VC)
   define build-global-shared-lib
     @libdir=`(cd $(@D);/bin/pwd)`;\
     cd $(G4TMP)/$(G4SYSTEM);\
-    $(ECHO) "Building $(name).dumpbin file ...";\
-    $(RM) $(name).dumpbin;\
-    dumpbin /symbols $(G4LIBDIR)/lib$(name).a > $(name).dumpbin;\
     $(ECHO) "Building $(name).def file ...";\
     $(RM) $(name).def;\
-    $(G4LIB)/$(G4SYSTEM)/win32def.exe $(name) < $(name).dumpbin > $(name).def;\
-    $(RM) $(name).dumpbin;\
+    $(G4LIB)/$(G4SYSTEM)/genwindef.exe -o $(name).def -l $(name) $(G4LIBDIR)/lib$(name).a;\
     $(ECHO) "Building lib$(name).exp and lib$(name).lib ...";\
     $(RM) $(G4LIBDIR)/lib$(name).exp;\
     $(RM) $(G4LIBDIR)/lib$(name).lib;\

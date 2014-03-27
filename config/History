@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th March 2014   Gabriele Cosmo  (config-V10-00-03)
+- Replaced old win32def tool for extracting symbols definitions for
+  DLLs build on Windows with genwindef used also in CMake.
+
 24th March 2014   Gabriele Cosmo  (config-V10-00-02)
 - Force loading of symbols for templated libraries in physics_lists modules.
   Defined LDFLAGS for Linux and Darwin targets.
