@@ -111,6 +111,20 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   nThreadsCmd->SetToBeBroadcasted(false);
   nThreadsCmd->AvailableForStates(G4State_PreInit);
 
+  pinAffinityCmd = new G4UIcmdWithAnInteger("/run/pinAffinity",this);
+  pinAffinityCmd->SetGuidance("Locks each thread to a specific logical core. Workers are locked in round robin to logical cores.");
+  pinAffinityCmd->SetGuidance("This command is valid only for multi-threaded mode.");
+  pinAffinityCmd->SetGuidance("This command works only in PreInit state.");
+  pinAffinityCmd->SetGuidance("This command is ignored if it is issued in sequential mode.");
+  pinAffinityCmd->SetGuidance("If a value n>0 is provided it starts setting affinity from the n-th CPU (note: counting from 1).");
+  pinAffinityCmd->SetGuidance("E.g. /run/pinAffinity 3 locks first thread on third logical CPU (number 2).");
+  pinAffinityCmd->SetGuidance("If a value n<0 is provided never locks on n-th CPU.");
+  pinAffinityCmd->SetParameterName("pinAffinity",true);
+  pinAffinityCmd->SetDefaultValue(1);
+  pinAffinityCmd->SetToBeBroadcasted(false);
+  pinAffinityCmd->SetRange("pinAffinity > 0 || pinAffinity < 0");
+  pinAffinityCmd->AvailableForStates(G4State_PreInit);
+
   evModCmd = new G4UIcmdWithAnInteger("/run/eventModulo",this);
   evModCmd->SetGuidance("Set the event modulo for dispatching events to worker threads"); 
   evModCmd->SetGuidance("i.e. each worker thread is ordered to simulate N events and then");
@@ -335,6 +349,26 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
       G4Exception("G4RunMessenger::ApplyNewCommand","Run0901",FatalException,
       "/run/numberOfThreads command is issued to local thread.");
     }
+  }
+  else if ( command == pinAffinityCmd )
+  {
+	    G4RunManager::RMType rmType = runManager->GetRunManagerType();
+	    if( rmType==G4RunManager::masterRM )
+	    {
+	      static_cast<G4MTRunManager*>(runManager)->SetPinAffinity(
+	    		  pinAffinityCmd->GetNewIntValue(newValue) );
+	    }
+	    else if ( rmType==G4RunManager::sequentialRM )
+	    {
+	      G4cout<<"*** /run/pinAffinity command is issued in sequential mode."
+	            <<"\nCommand is ignored."<<G4endl;
+	    }
+	    else
+	    {
+	      G4Exception("G4RunMessenger::ApplyNewCommand","Run0901",FatalException,
+	      "/run/pinAffinity command is issued to local thread.");
+	    }
+
   }
   else if( command==evModCmd)
   {
