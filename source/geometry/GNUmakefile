@@ -17,6 +17,6 @@ SUBDIRS  = management volumes magneticfield navigation biasing divisions
 SUBDIRS += solids/CSG solids/specific solids/usolids solids/Boolean
 SUBLIBS  = G4geometrymng G4volumes G4magneticfield
 SUBLIBS += G4navigation G4geombias G4geomdivision
-SUBLIBS += G4csg G4specsolids G4geomBoolean
+SUBLIBS += G4csg G4specsolids G4geomUSolids G4geomBoolean
 
 include $(G4INSTALL)/config/globlib.gmk
