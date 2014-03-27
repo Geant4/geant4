@@ -5,6 +5,18 @@
 
 name := G4processes
 
+ifndef G4INSTALL
+  G4INSTALL = ../..
+endif
+
+GLOBLIBS  = libG4digits_hits.lib
+GLOBLIBS += libG4track.lib libG4particles.lib libG4geometry.lib
+GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
+GLOBLIBS += libG4intercoms.lib libG4global.lib
+GLOBLIBS += libG4expat.lib libG4zlib.lib
+
+include $(G4INSTALL)/config/architecture.gmk
+
 SUBDIRS  = management 
 SUBDIRS += cuts 
 SUBDIRS += optical 
@@ -58,13 +70,6 @@ SUBLIBS += G4emdna-molman
 SUBLIBS += G4emdna-moltypes
 SUBLIBS += G4empii
 SUBLIBS += G4empolar
-
-GLOBLIBS  = libG4digits_hits.lib libG4track.lib libG4particles.lib libG4geometry.lib
-GLOBLIBS += libG4materials.lib libG4graphics_reps.lib
-GLOBLIBS += libG4intercoms.lib libG4global.lib
-ifeq ($(G4SYSTEM), WIN32-VC)
-  GLOBLIBS += libG4expat.lib
-endif
 
 SUBDIRS += hadronic/cross_sections
 SUBDIRS += hadronic/management 
@@ -149,9 +154,5 @@ SUBLIBS +=  G4had_string_frag
 SUBLIBS +=  G4had_string_man
 SUBLIBS +=  G4hadronic_quasi_elastic
 SUBLIBS +=  G4hadronic_qgstring
-
-ifndef G4INSTALL
-  G4INSTALL = ../..
-endif
 
 include $(G4INSTALL)/config/globlib.gmk
