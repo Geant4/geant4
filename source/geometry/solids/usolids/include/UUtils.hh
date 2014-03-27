@@ -28,7 +28,7 @@
 #include <vector>
 #include <algorithm>
 
-class UVector3;
+struct UVector3;
 class UTransform3D;
 
 enum ExceptionSeverity
