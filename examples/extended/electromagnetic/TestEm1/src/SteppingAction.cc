@@ -39,6 +39,7 @@
 #include "G4RunManager.hh"
 #include "G4SteppingManager.hh"
 #include "G4VProcess.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -66,12 +67,14 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4double steplen = aStep->GetStepLength();
   if (ID == 1) analysisManager->FillH1(3,steplen);
 /*  
-  //mass and charge
+  //debug: charge and mass
   //
+  G4int stepNb = aStep->GetTrack()->GetCurrentStepNumber();
   G4StepPoint* postPoint = aStep->GetPostStepPoint();
   G4double charge = postPoint->GetCharge();
   G4double mass   = postPoint->GetMass();
-  G4cout << "\n   charge= " << charge << "  mass= " << mass << G4endl;
+  G4cout << "\n   step= " << stepNb << "   charge= " << charge 
+         << "  mass= " << G4BestUnit(mass, "Energy");
 */      
 }
 

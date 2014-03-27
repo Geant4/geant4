@@ -25,5 +25,5 @@
   hist5->Draw("HIST");
   
   TH1D* hist6 = (TH1D*)f.Get("6");
-  hist6->Draw("HIST");                
+  hist6->Draw("HIST");                  
 }  

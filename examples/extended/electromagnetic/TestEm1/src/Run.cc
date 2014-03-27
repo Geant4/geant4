@@ -67,6 +67,18 @@ void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
   fParticle = particle;
   fEkin = energy;
 }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::CountProcesses(G4String procName) 
+{
+  std::map<G4String,G4int>::iterator it = fProcCounter.find(procName);
+  if ( it == fProcCounter.end()) {
+    fProcCounter[procName] = 1;
+  }
+  else {
+    fProcCounter[procName]++; 
+  }
+}
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -92,11 +104,19 @@ void Run::Merge(const G4Run* run)
   fTransvDev  += localRun->fTransvDev;
   fTransvDev2 += localRun->fTransvDev2;  
       
-  //map
+  //map: processes count
   std::map<G4String,G4int>::const_iterator it;
   for (it = localRun->fProcCounter.begin(); 
        it !=localRun->fProcCounter.end(); ++it) {
-     fProcCounter[it->first] += it->second;
+       
+    G4String procName = it->first;
+    G4int localCount  = it->second;
+    if ( fProcCounter.find(procName) == fProcCounter.end()) {
+      fProcCounter[procName] = localCount;
+    }
+    else {
+      fProcCounter[procName] += localCount;
+    }         
   }
   
   G4Run::Merge(run); 
@@ -138,15 +158,18 @@ void Run::EndOfRun()
          << "   charged: " << std::setw(wid) << fNbOfSteps1/dNbOfEvents
          << G4endl;
         
-  //frequency of processes call
+  //frequency of processes
+  //
+  G4cout << "\n Process calls frequency :" << G4endl;
+  G4int index = 0;  
   std::map<G4String,G4int>::iterator it;         
-  G4cout << "\n nb of process calls per event: \n   ";        
-  for (it = fProcCounter.begin(); it != fProcCounter.end(); it++)  
-     G4cout << std::setw(12) << it->first;
-             
-  G4cout << "\n   ";       
-  for (it = fProcCounter.begin(); it != fProcCounter.end(); it++)   
-     G4cout << std::setw(12) << (it->second)/dNbOfEvents;
+  for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
+     G4String procName = it->first;
+     G4int    count    = it->second;
+     G4String space = " "; if (++index%3 == 0) space = "\n";
+     G4cout << " " << std::setw(20) << procName << "="<< std::setw(7) << count
+            << space;
+  }     
   G4cout << G4endl;
         
   //compute true and projected ranges, and transverse dispersion

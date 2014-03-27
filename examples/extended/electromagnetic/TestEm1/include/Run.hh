@@ -56,7 +56,7 @@ class Run : public G4Run
     void CountTraks1(G4int nt) { fNbOfTraks1 += nt;}
     void CountSteps0(G4int ns) { fNbOfSteps0 += ns;}
     void CountSteps1(G4int ns) { fNbOfSteps1 += ns;}
-    void CountProcesses(G4String procName) { fProcCounter[procName]++;}
+    void CountProcesses(G4String procName);
     
     void AddEdep(G4double val)     { fEdep += val;}
     void AddTrueRange (G4double l) { fTrueRange += l; fTrueRange2 += l*l;}
