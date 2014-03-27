@@ -631,9 +631,9 @@ G4bool G4FTFModel::PutOnMassShell() {
           G4double MassNuc = std::sqrt( sqr( targetSplitable->GetDefinition()->GetPDGMass() )
                                        + targetSplitable->Get4Momentum().perp2() );
           G4int PDGcode = targetSplitable->GetDefinition()->GetPDGEncoding();
-          G4ParticleDefinition* Old_def = targetSplitable->GetDefinition();
+          const G4ParticleDefinition* Old_def = targetSplitable->GetDefinition();
           G4int newPDGcode = PDGcode/10; newPDGcode = newPDGcode*10 + 4; // Delta
-          G4ParticleDefinition* ptr = 
+          const G4ParticleDefinition* ptr =
               G4ParticleTable::GetParticleTable()->FindParticle( newPDGcode );
           targetSplitable->SetDefinition( ptr );
           G4double MassDel = std::sqrt( sqr( targetSplitable->GetDefinition()->GetPDGMass() )
@@ -1060,10 +1060,10 @@ G4bool G4FTFModel::PutOnMassShell() {
         G4double MassNuc = std::sqrt( sqr( projectileSplitable->GetDefinition()->GetPDGMass() ) +
                                       projectileSplitable->Get4Momentum().perp2() );
         G4int PDGcode = std::abs( projectileSplitable->GetDefinition()->GetPDGEncoding() );
-        G4ParticleDefinition* Old_def = projectileSplitable->GetDefinition();
+        const G4ParticleDefinition* Old_def = projectileSplitable->GetDefinition();
         G4int newPDGcode = PDGcode/10; newPDGcode = newPDGcode*10 + 4; // Delta
         if ( projectileSplitable->GetDefinition()->GetPDGEncoding() < 0 ) newPDGcode *= -1;
-        G4ParticleDefinition* ptr = G4ParticleTable::GetParticleTable()->FindParticle(newPDGcode);
+        const G4ParticleDefinition* ptr = G4ParticleTable::GetParticleTable()->FindParticle(newPDGcode);
         projectileSplitable->SetDefinition( ptr );
         G4double MassDel = std::sqrt( sqr( projectileSplitable->GetDefinition()->GetPDGMass() ) +
                                       projectileSplitable->Get4Momentum().perp2() );
@@ -1088,9 +1088,9 @@ G4bool G4FTFModel::PutOnMassShell() {
         G4double MassNuc = std::sqrt( sqr( targetSplitable->GetDefinition()->GetPDGMass() ) +
                                            targetSplitable->Get4Momentum().perp2() );
         G4int PDGcode = targetSplitable->GetDefinition()->GetPDGEncoding();
-        G4ParticleDefinition* Old_def = targetSplitable->GetDefinition();
+        const G4ParticleDefinition* Old_def = targetSplitable->GetDefinition();
         G4int newPDGcode = PDGcode/10; newPDGcode=newPDGcode*10 + 4;  // Delta
-        G4ParticleDefinition* ptr = G4ParticleTable::GetParticleTable()->FindParticle(newPDGcode);
+        const G4ParticleDefinition* ptr = G4ParticleTable::GetParticleTable()->FindParticle(newPDGcode);
         targetSplitable->SetDefinition( ptr );
         G4double MassDel = std::sqrt( sqr( targetSplitable->GetDefinition()->GetPDGMass() ) +
                                       targetSplitable->Get4Momentum().perp2() );

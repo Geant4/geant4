@@ -15,6 +15,10 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
 
 --------------------------------------------------
+26 March 2014,  G.Folger (hadr-prtn-V10-00-02)
+   convert to const G4Particledefinition*
+
+--------------------------------------------------
 25 February 2014,  A. Ribon (hadr-prtn-V10-00-01)
    Reverting back the CMakeLists.txt as before the previous tag.
 

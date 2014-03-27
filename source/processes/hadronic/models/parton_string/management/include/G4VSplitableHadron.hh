@@ -67,8 +67,8 @@ class G4VSplitableHadron
       void Set4Momentum(const G4LorentzVector &a4Momentum);
       const G4LorentzVector & Get4Momentum() const;
 
-      void SetDefinition(G4ParticleDefinition *aDefinition);
-      G4ParticleDefinition * GetDefinition() const;
+      void SetDefinition(const G4ParticleDefinition *aDefinition);
+      const G4ParticleDefinition * GetDefinition() const;
       
       void IncrementCollisionCount(G4int aCount);
       void SetCollisionCount(G4int aCount);
@@ -101,7 +101,7 @@ class G4VSplitableHadron
 
   private:
 
-      G4ParticleDefinition *theDefinition;
+      const G4ParticleDefinition *theDefinition;
 
       G4LorentzVector the4Momentum;
 
@@ -134,12 +134,12 @@ inline const G4LorentzVector & G4VSplitableHadron::Get4Momentum() const
 	return the4Momentum;
 }
 
-inline void G4VSplitableHadron::SetDefinition(G4ParticleDefinition *aDefinition)
+inline void G4VSplitableHadron::SetDefinition(const G4ParticleDefinition *aDefinition)
 {
 	theDefinition=aDefinition;
 }
 
-inline G4ParticleDefinition * G4VSplitableHadron::GetDefinition() const
+inline const G4ParticleDefinition * G4VSplitableHadron::GetDefinition() const
 {
 	return theDefinition;
 }
