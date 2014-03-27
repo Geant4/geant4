@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 27, 2014  G.Cosmo                   geom-usolids-V10-00-08
+- Removed unused SaveVectorToExternalFile() methods in UUtils, also
+  causing cyclic dependency with UVector3.
+
 March 25, 2014  T.Nikitina                geom-usolids-V10-00-07
 - Fix to DistanceToIn() for UBox in case of points located on edges.
 
