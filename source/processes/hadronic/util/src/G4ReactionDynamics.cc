@@ -131,11 +131,11 @@
     // Protection in case no secondary has been created; cascades down to two-body.
     if(vecLen == 0) return false;
 
-    G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
-    G4ParticleDefinition *aProton = G4Proton::Proton();
-    G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
-    G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
-    G4ParticleDefinition *aPiZero = G4PionZero::PionZero();
+    const G4ParticleDefinition *aPiMinus = G4PionMinus::PionMinus();
+    const G4ParticleDefinition *aProton = G4Proton::Proton();
+    const G4ParticleDefinition *aNeutron = G4Neutron::Neutron();
+    const G4ParticleDefinition *aPiPlus = G4PionPlus::PionPlus();
+    const G4ParticleDefinition *aPiZero = G4PionZero::PionZero();
 
     G4int i, l;
     G4bool veryForward = false;
@@ -1135,7 +1135,7 @@
     pseudoParticle[3].SetTotalEnergy(
      std::sqrt( pOriginal*pOriginal + mOriginal*mOriginal )*GeV );
     
-    G4ParticleDefinition * aOrgDef = modifiedOriginal.GetDefinition();
+    const G4ParticleDefinition * aOrgDef = modifiedOriginal.GetDefinition();
     G4int diff = 0;
     if(aOrgDef == G4Proton::Proton() || aOrgDef == G4Neutron::Neutron() )  diff = 1;
     if(numberofFinalStateNucleons == 1) diff = 0;
@@ -2046,7 +2046,7 @@
     pseudoParticle[4].SetTotalEnergy( etOriginal*GeV );
     pseudoParticle[4].SetMomentum( 0.0, 0.0, pOriginal*GeV );
     
-    G4ParticleDefinition * aOrgDef = modifiedOriginal.GetDefinition();
+    const G4ParticleDefinition * aOrgDef = modifiedOriginal.GetDefinition();
     G4int diff = 0;
     if(aOrgDef == G4Proton::Proton() || aOrgDef == G4Neutron::Neutron() )  diff = 1;
     if(numberofFinalStateNucleons == 1) diff = 0;
