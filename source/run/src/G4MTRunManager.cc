@@ -81,7 +81,7 @@ G4MTRunManagerKernel* G4MTRunManager::GetMTMasterRunManagerKernel()
 }
 
 G4MTRunManager::G4MTRunManager() : G4RunManager(masterRM),
-    nworkers(2),forcedNwokers(-1),pinAffinity(0),
+    nworkers(2),forcedNwokers(-1),
     masterRNGEngine(0),
     nextActionRequest(UNDEFINED),
     eventModuloDef(0),eventModulo(1),
@@ -862,16 +862,4 @@ G4MTRunManager::WorkerActionRequest G4MTRunManager::ThisWorkerWaitForNextAction(
   G4AutoLock l2(&nextActionRequestMutex);
   WorkerActionRequest result = nextActionRequest;
   return result;
-}
-
-void G4MTRunManager::SetPinAffinity(G4int n)
-{
-	if ( n == 0 )
-	{
-		G4Exception("G4MTRunManager::SetPinAffinity",
-					"Run0035",FatalException,
-					"Pin affinity must be >0 or <0.");
-	}
-	pinAffinity = n;
-	return;
 }

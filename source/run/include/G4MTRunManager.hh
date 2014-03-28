@@ -54,8 +54,6 @@ public:
     //New method
     void SetNumberOfThreads( G4int n );
     G4int GetNumberOfThreads() const { return nworkers; }
-    void SetPinAffinity(G4int n=1);
-    G4int GetPinAffinity() const { return pinAffinity; }
 public:
 
     //Inherited methods to re-implement for MT case
@@ -105,8 +103,6 @@ private:
     G4int nworkers;
     // Force to use this number regardless of SetNumberOfThreads() method.
     G4int forcedNwokers;
-    // Pin Affinity parameter
-    G4int pinAffinity;
 
     //List of workers (i.e. thread)
     typedef std::list<G4Thread*> G4ThreadsList;

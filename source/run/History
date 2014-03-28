@@ -17,9 +17,6 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Mar 26th, 2014, A. Dotti (run-V10-00-02)
-- Introduced pin affinity functionalities
-
 Jan 21st, 2014, M. Asai (run-V10-00-01)
 - Making sure worker threads re-build physics tables as well when the
   master thread is requested to rebuild.
