@@ -91,6 +91,8 @@ public:
   void SetMaxAandZForFermiBreakUp(G4int anA,G4int aZ);
   void SetMinEForMultiFrag(G4double anE);
 
+  void ModelDescription(std::ostream& outFile) const;
+
   // access methods
   inline G4VEvaporation* GetEvaporation();
   inline G4VMultiFragmentation* GetMultiFragmentation();

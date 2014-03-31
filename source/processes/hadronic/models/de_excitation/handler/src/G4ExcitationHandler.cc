@@ -510,6 +510,11 @@ void G4ExcitationHandler::SetMinEForMultiFrag(G4double anE)
 {
   minEForMultiFrag = anE;
 }
+void G4ExcitationHandler::ModelDescription(std::ostream& outFile) const
+{
+    outFile << "G4ExcitationHandler description\n"
+            << "\n";
+}
 
 
 
