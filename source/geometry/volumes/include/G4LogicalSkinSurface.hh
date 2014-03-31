@@ -80,7 +80,7 @@ class G4LogicalSkinSurface : public G4LogicalSurface
   private:
 
     G4LogicalSkinSurface(const G4LogicalSkinSurface &right);
-    const G4LogicalSkinSurface& operator=(const G4LogicalSkinSurface &right);
+    G4LogicalSkinSurface& operator=(const G4LogicalSkinSurface &right);
       // Assignment and copying must be denied.
 
   private:

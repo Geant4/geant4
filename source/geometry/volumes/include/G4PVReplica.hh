@@ -198,7 +198,7 @@ class G4PVReplica : public G4VPhysicalVolume
     void CheckAndSetParameters(const EAxis pAxis, const G4int nReplicas,
                                const G4double width, const G4double offset);
     G4PVReplica(const G4PVReplica&);
-    const G4PVReplica& operator=(const G4PVReplica&);
+    G4PVReplica& operator=(const G4PVReplica&);
 
   private:
 

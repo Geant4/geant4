@@ -88,7 +88,7 @@ G4LogicalBorderSurface::~G4LogicalBorderSurface()
 // Operators
 //
 
-const G4LogicalBorderSurface&
+G4LogicalBorderSurface&
 G4LogicalBorderSurface::operator=(const G4LogicalBorderSurface &right)
 {
   if (&right == this) return *this;

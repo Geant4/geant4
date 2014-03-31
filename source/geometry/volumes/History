@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 31st, 2014 G.Cosmo                  - geomvol-V10-00-01
+- Corrected signature of operator=() for G4LogicalBorder/SkinSurface.
+
 February 14th, 2014 G.Cosmo               - geomvol-V10-00-00
 - Minor cleanup and optimisation to G4EnhancedAllocator.
 - Code cleanup in G4GeometryWorkspace and G4GeometryWorkspacePool.
