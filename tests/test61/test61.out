@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
+ Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -412,7 +412,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=32.27s Real=49.7s Sys=0.01s
+  User=52.65s Real=52.91s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -943,7 +943,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=6.55s Real=8.51s Sys=0s
+  User=6.47s Real=6.48s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1216,7 +1216,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=3.01s Real=3.02s Sys=0s
+  User=1.86s Real=1.87s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1379,7 +1379,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.78s Real=0.8s Sys=0s
+  User=0.27s Real=0.27s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1660,11 +1660,11 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=27.43s Real=41.58s Sys=0.01s
+  User=44.61s Real=44.78s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2043912650, 826452604
+ Current couple of seeds = 2054080255, 2145218207
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -1677,7 +1677,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.6 Mb
+Dynamic pools deleted: 13 / Total memory freed: 0.59 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

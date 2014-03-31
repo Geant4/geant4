@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
+ Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -100,7 +100,7 @@ eIoni:   for  e-    SubType= 2
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV
+       LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV   deltaVI
         MollerBhabha :  Emin=      100 keV   Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
@@ -189,7 +189,7 @@ ionIoni:   for  GenericIon    SubType= 2
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         ParamICRU73 :  Emin=        0 eV    Emax=       10 TeV
+         ParamICRU73 :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 nuclearStopping:   for  GenericIon    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -455,8 +455,8 @@ ooo Run 0 starts (global).
 Choosing random seed according to time(0) 
 
 --------- Ranecu engine status ---------
- Initial seed (index) = 211
- Current couple of seeds = 784790965, 240506060
+ Initial seed (index) = 87
+ Current couple of seeds = 375678842, 500570750
 ----------------------------------------
 
 ---> Begin Of Event: 0
@@ -498,7 +498,7 @@ Choosing random seed according to time(0)
 ---> Begin Of Event: 90000
 
 ---> Begin Of Event: 95000
-Global results with 100000 events : 137
+Global results with 100000 events : 133
 ooo Run 1 starts (global).
 
 ---> Begin Of Event: 0
@@ -540,7 +540,7 @@ ooo Run 1 starts (global).
 ---> Begin Of Event: 90000
 
 ---> Begin Of Event: 95000
-Global results with 100000 events : 726
+Global results with 100000 events : 730
 ooo Run 2 starts (global).
 
 ---> Begin Of Event: 0
@@ -582,7 +582,7 @@ ooo Run 2 starts (global).
 ---> Begin Of Event: 90000
 
 ---> Begin Of Event: 95000
-Global results with 100000 events : 2561
+Global results with 100000 events : 2505
 ooo Run 3 starts (global).
 
 ---> Begin Of Event: 0
@@ -624,7 +624,7 @@ ooo Run 3 starts (global).
 ---> Begin Of Event: 90000
 
 ---> Begin Of Event: 95000
-Global results with 100000 events : 2452
+Global results with 100000 events : 2372
 ooo Run 4 starts (global).
 
 ---> Begin Of Event: 0
@@ -666,7 +666,7 @@ ooo Run 4 starts (global).
 ---> Begin Of Event: 90000
 
 ---> Begin Of Event: 95000
-Global results with 100000 events : 1445
+Global results with 100000 events : 1379
 ooo Run 5 starts (global).
 
 ---> Begin Of Event: 0
@@ -708,8 +708,8 @@ ooo Run 5 starts (global).
 ---> Begin Of Event: 90000
 
 ---> Begin Of Event: 95000
-Global results with 100000 events : 570
+Global results with 100000 events : 601
 TEST PASSED
 Going to close the ROOT file....done
 Execution terminated
-User=45.71s Real=59.95s Sys=0.04s
+User=45.62s Real=46.24s Sys=0.04s

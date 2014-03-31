@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
+ Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -9993,5 +9993,5 @@ SimpleBox is now made of 67Ho166m1
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 679158647, 185280256
+ Current couple of seeds = 333037429, 2145443589
 ----------------------------------------

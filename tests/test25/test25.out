@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
+ Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -392,7 +392,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.03s Real=0.03s Sys=0s
+  User=0.03s Real=0.04s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -422,7 +422,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.03s Real=0.03s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -452,7 +452,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.44s Real=0.47s Sys=0s
+  User=0.39s Real=0.39s Sys=0.01s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -482,7 +482,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.95s Real=1.06s Sys=0s
+  User=0.86s Real=0.86s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -512,7 +512,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.92s Real=2.67s Sys=0s
+  User=2.11s Real=2.11s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -542,7 +542,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.28s Real=6.59s Sys=0s
+  User=3.84s Real=3.85s Sys=0s
 SimpleBox is now made of Cu
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
@@ -573,7 +573,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.19s Real=0.21s Sys=0s
+  User=0.19s Real=0.19s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -603,7 +603,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.38s Real=0.49s Sys=0s
+  User=0.36s Real=0.36s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -633,7 +633,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.08s Real=1.21s Sys=0s
+  User=1.04s Real=1.04s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -663,7 +663,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.68s Real=1.94s Sys=0s
+  User=1.52s Real=1.53s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -693,7 +693,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.76s Real=4.67s Sys=0s
+  User=2.45s Real=2.46s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -723,7 +723,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.5s Real=6.19s Sys=0s
+  User=4.96s Real=4.97s Sys=0s
 SimpleBox is now made of U
 
 conv:   for  gamma    SubType= 14
@@ -978,7 +978,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.03s Real=0.08s Sys=0s
+  User=0.04s Real=0.05s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1013,7 +1013,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.08s Real=0.09s Sys=0s
+  User=0.07s Real=0.07s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1048,7 +1048,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.5s Real=3.66s Sys=0s
+  User=2.2s Real=2.21s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1083,7 +1083,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.04s Real=7.05s Sys=0.01s
+  User=4.24s Real=4.26s Sys=0.01s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1118,7 +1118,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=10.81s Real=14.55s Sys=0.01s
+  User=11.57s Real=11.6s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1153,7 +1153,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=21.41s Real=32.05s Sys=0s
+  User=20s Real=20.07s Sys=0.01s
 SimpleBox is now made of U
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
@@ -1189,7 +1189,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.65s Real=0.89s Sys=0s
+  User=0.66s Real=0.67s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1224,7 +1224,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.82s Real=1.95s Sys=0s
+  User=1.86s Real=1.87s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1259,7 +1259,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.53s Real=7.85s Sys=0s
+  User=5.56s Real=5.57s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1294,7 +1294,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=7.64s Real=11.37s Sys=0s
+  User=7.63s Real=7.66s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1329,7 +1329,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=11.57s Real=16.93s Sys=0s
+  User=12.93s Real=12.97s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1364,7 +1364,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=22.18s Real=34.01s Sys=0s
+  User=21.2s Real=21.24s Sys=0s
 SimpleBox is now made of Si
 
 conv:   for  gamma    SubType= 14
@@ -1624,7 +1624,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.02s Real=0.06s Sys=0.01s
+  User=0.02s Real=0.02s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1664,7 +1664,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.04s Real=0.08s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1704,7 +1704,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.27s Real=0.53s Sys=0s
+  User=0.19s Real=0.19s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1744,7 +1744,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.51s Real=1.03s Sys=0s
+  User=0.58s Real=0.58s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1784,7 +1784,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.13s Real=1.88s Sys=0s
+  User=1.16s Real=1.17s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1824,7 +1824,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.04s Real=3.38s Sys=0s
+  User=2.13s Real=2.13s Sys=0s
 SimpleBox is now made of Si
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
@@ -1865,7 +1865,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.14s Real=0.21s Sys=0s
+  User=0.14s Real=0.14s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1905,7 +1905,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.29s Real=0.42s Sys=0s
+  User=0.25s Real=0.26s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1945,7 +1945,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.68s Real=1.07s Sys=0s
+  User=0.65s Real=0.66s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -1985,7 +1985,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.82s Real=1.02s Sys=0s
+  User=0.81s Real=0.82s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -2025,7 +2025,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.38s Real=1.83s Sys=0s
+  User=1.34s Real=1.34s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -2065,7 +2065,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.42s Real=3.12s Sys=0s
+  User=2.13s Real=2.14s Sys=0s
 SimpleBox is now made of H
 
 conv:   for  gamma    SubType= 14
@@ -2330,7 +2330,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -2420,7 +2420,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -2465,7 +2465,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -2510,7 +2510,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -2646,7 +2646,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -2736,7 +2736,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
  This region is in the mass world.
@@ -2838,7 +2838,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.63 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.64 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

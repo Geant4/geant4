@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
+ Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-macro --> /ec/G4-builds/release/slc6-gcc48-RelWithDebInfo/10-00-ref-02_branch/tests/test50/test50.in
+macro --> /ec/G4-builds/release/slc6-gcc48-RelWithDebInfo/10-00-ref-03_branch/tests/test50/test50.in
 /tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
@@ -127,7 +127,7 @@ eIoni:   for  e-    SubType= 2
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV
+       LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV   deltaVI
         MollerBhabha :  Emin=      100 keV   Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
@@ -216,7 +216,7 @@ ionIoni:   for  GenericIon    SubType= 2
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         ParamICRU73 :  Emin=        0 eV    Emax=       10 TeV
+         ParamICRU73 :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 nuclearStopping:   for  GenericIon    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -511,7 +511,7 @@ eIoni:   for  e-    SubType= 2
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 0, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-       LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV
+       LowEnergyIoni :  Emin=        0 eV    Emax=      100 keV   deltaVI
         MollerBhabha :  Emin=      100 keV   Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
@@ -600,7 +600,7 @@ ionIoni:   for  GenericIon    SubType= 2
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 0, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         ParamICRU73 :  Emin=        0 eV    Emax=       10 TeV
+         ParamICRU73 :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 nuclearStopping:   for  GenericIon    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======

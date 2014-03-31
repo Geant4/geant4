@@ -1,11 +1,11 @@
- Initial seed = 1393590174
+ Initial seed = 1396013344
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
+ Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -28,13 +28,13 @@ Parsing line: FTFP anti_proton G4_He 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.959097
+	 Final random number = 0.0980752
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 13.832
+	 average multiplicity = 13.912
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 1.87654 GeV
-	 average sumEnergySecondaries = 1.85049 GeV
+	 average sumEnergySecondaries = 1.85051 GeV
 	 maxSumEnergySecondaries      = 1.87728 GeV
 	 minSumEnergySecondaries      = 1.84826 GeV
 	 -----------------------------------------
@@ -55,13 +55,13 @@ Parsing line: FTFP anti_proton G4_Be 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.158597
+	 Final random number = 0.0930472
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 17.306
+	 average multiplicity = 17.433
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 1.87654 GeV
-	 average sumEnergySecondaries = 1.84005 GeV
+	 average sumEnergySecondaries = 1.83984 GeV
 	 maxSumEnergySecondaries      = 1.87732 GeV
 	 minSumEnergySecondaries      = 1.8251 GeV
 	 -----------------------------------------
@@ -82,15 +82,15 @@ Parsing line: FTFP anti_proton G4_C  1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.92349
+	 Final random number = 0.958
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 19.487
+	 average multiplicity = 19.107
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 1.87654 GeV
-	 average sumEnergySecondaries = 1.8274 GeV
+	 average sumEnergySecondaries = 1.82773 GeV
 	 maxSumEnergySecondaries      = 1.87737 GeV
-	 minSumEnergySecondaries      = 1.80093 GeV
+	 minSumEnergySecondaries      = 1.8042 GeV
 	 -----------------------------------------
 
 Parsing line: FTFP anti_proton G4_Al 1000
@@ -109,15 +109,15 @@ Parsing line: FTFP anti_proton G4_Al 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.683641
+	 Final random number = 0.553185
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 18.501
+	 average multiplicity = 18.615
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 1.87654 GeV
-	 average sumEnergySecondaries = 1.82609 GeV
+	 average sumEnergySecondaries = 1.82552 GeV
 	 maxSumEnergySecondaries      = 1.87772 GeV
-	 minSumEnergySecondaries      = 1.79281 GeV
+	 minSumEnergySecondaries      = 1.79555 GeV
 	 -----------------------------------------
 
 Parsing line: FTFP anti_proton G4_Ar 1000
@@ -136,15 +136,15 @@ Parsing line: FTFP anti_proton G4_Ar 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.415297
+	 Final random number = 0.00979114
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 19.002
+	 average multiplicity = 18.744
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 1.87654 GeV
-	 average sumEnergySecondaries = 1.82662 GeV
+	 average sumEnergySecondaries = 1.82616 GeV
 	 maxSumEnergySecondaries      = 1.87813 GeV
-	 minSumEnergySecondaries      = 1.79525 GeV
+	 minSumEnergySecondaries      = 1.79153 GeV
 	 -----------------------------------------
 
 Parsing line: FTFP anti_proton G4_Fe 1000
@@ -163,15 +163,15 @@ Parsing line: FTFP anti_proton G4_Fe 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.554897
+	 Final random number = 0.438582
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 19.843
+	 average multiplicity = 19.763
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 1.87654 GeV
-	 average sumEnergySecondaries = 1.82569 GeV
+	 average sumEnergySecondaries = 1.82596 GeV
 	 maxSumEnergySecondaries      = 1.87898 GeV
-	 minSumEnergySecondaries      = 1.79882 GeV
+	 minSumEnergySecondaries      = 1.79991 GeV
 	 -----------------------------------------
 
 Parsing line: FTFP anti_proton G4_Cu 1000
@@ -190,15 +190,15 @@ Parsing line: FTFP anti_proton G4_Cu 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.878365
+	 Final random number = 0.695208
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 19.866
+	 average multiplicity = 20.051
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 1.87654 GeV
-	 average sumEnergySecondaries = 1.82798 GeV
+	 average sumEnergySecondaries = 1.82843 GeV
 	 maxSumEnergySecondaries      = 1.87935 GeV
-	 minSumEnergySecondaries      = 1.79855 GeV
+	 minSumEnergySecondaries      = 1.80124 GeV
 	 -----------------------------------------
 
 Parsing line: FTFP anti_proton G4_W  1000
@@ -217,14 +217,14 @@ Parsing line: FTFP anti_proton G4_W  1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.238056
+	 Final random number = 0.174585
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 28.682
+	 average multiplicity = 28.332
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 1.87654 GeV
-	 average sumEnergySecondaries = 1.83157 GeV
-	 maxSumEnergySecondaries      = 1.88636 GeV
+	 average sumEnergySecondaries = 1.83206 GeV
+	 maxSumEnergySecondaries      = 1.87398 GeV
 	 minSumEnergySecondaries      = 1.80116 GeV
 	 -----------------------------------------
 
@@ -244,15 +244,15 @@ Parsing line: FTFP anti_proton G4_Pb 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.234728
+	 Final random number = 0.128819
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 26.924
+	 average multiplicity = 27.129
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 1.87654 GeV
-	 average sumEnergySecondaries = 1.83058 GeV
-	 maxSumEnergySecondaries      = 1.95133 GeV
-	 minSumEnergySecondaries      = 1.80054 GeV
+	 average sumEnergySecondaries = 1.82984 GeV
+	 maxSumEnergySecondaries      = 1.96555 GeV
+	 minSumEnergySecondaries      = 1.80213 GeV
 	 -----------------------------------------
 
 Parsing line: #
@@ -273,13 +273,13 @@ Parsing line: FTFP anti_sigma+ G4_He 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.436284
+	 Final random number = 0.909343
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 13.772
+	 average multiplicity = 13.804
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 2.12837 GeV
-	 average sumEnergySecondaries = 2.1016 GeV
+	 average sumEnergySecondaries = 2.10168 GeV
 	 maxSumEnergySecondaries      = 2.12838 GeV
 	 minSumEnergySecondaries      = 2.09936 GeV
 	 -----------------------------------------
@@ -300,13 +300,13 @@ Parsing line: FTFP anti_sigma+ G4_Be 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.253661
+	 Final random number = 0.668858
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 17.118
+	 average multiplicity = 17.063
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 2.12837 GeV
-	 average sumEnergySecondaries = 2.09191 GeV
+	 average sumEnergySecondaries = 2.09167 GeV
 	 maxSumEnergySecondaries      = 2.12841 GeV
 	 minSumEnergySecondaries      = 2.07619 GeV
 	 -----------------------------------------
@@ -327,15 +327,15 @@ Parsing line: FTFP anti_sigma+ G4_C  1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.729009
+	 Final random number = 0.612351
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 19.234
+	 average multiplicity = 19.195
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 2.12837 GeV
-	 average sumEnergySecondaries = 2.07877 GeV
+	 average sumEnergySecondaries = 2.07838 GeV
 	 maxSumEnergySecondaries      = 2.12847 GeV
-	 minSumEnergySecondaries      = 2.05676 GeV
+	 minSumEnergySecondaries      = 2.05203 GeV
 	 -----------------------------------------
 
 Parsing line: FTFP anti_sigma+ G4_Al 1000
@@ -354,15 +354,15 @@ Parsing line: FTFP anti_sigma+ G4_Al 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.399803
+	 Final random number = 0.918221
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 18.529
+	 average multiplicity = 18.492
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 2.12837 GeV
-	 average sumEnergySecondaries = 2.077 GeV
+	 average sumEnergySecondaries = 2.07736 GeV
 	 maxSumEnergySecondaries      = 2.12882 GeV
-	 minSumEnergySecondaries      = 2.04475 GeV
+	 minSumEnergySecondaries      = 2.04665 GeV
 	 -----------------------------------------
 
 Parsing line: FTFP anti_sigma+ G4_Ar 1000
@@ -381,15 +381,15 @@ Parsing line: FTFP anti_sigma+ G4_Ar 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.801957
+	 Final random number = 0.730123
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 18.857
+	 average multiplicity = 18.687
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 2.12837 GeV
-	 average sumEnergySecondaries = 2.07713 GeV
+	 average sumEnergySecondaries = 2.07761 GeV
 	 maxSumEnergySecondaries      = 2.12922 GeV
-	 minSumEnergySecondaries      = 2.04642 GeV
+	 minSumEnergySecondaries      = 2.0459 GeV
 	 -----------------------------------------
 
 Parsing line: FTFP anti_sigma+ G4_Fe 1000
@@ -408,15 +408,15 @@ Parsing line: FTFP anti_sigma+ G4_Fe 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.85826
+	 Final random number = 0.918807
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 19.956
+	 average multiplicity = 19.761
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 2.12837 GeV
-	 average sumEnergySecondaries = 2.07649 GeV
+	 average sumEnergySecondaries = 2.07652 GeV
 	 maxSumEnergySecondaries      = 2.13008 GeV
-	 minSumEnergySecondaries      = 2.05024 GeV
+	 minSumEnergySecondaries      = 2.0464 GeV
 	 -----------------------------------------
 
 Parsing line: FTFP anti_sigma+ G4_Cu 1000
@@ -435,15 +435,15 @@ Parsing line: FTFP anti_sigma+ G4_Cu 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.0667057
+	 Final random number = 0.642941
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 19.861
+	 average multiplicity = 20.109
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 2.12837 GeV
-	 average sumEnergySecondaries = 2.07971 GeV
+	 average sumEnergySecondaries = 2.07983 GeV
 	 maxSumEnergySecondaries      = 2.13045 GeV
-	 minSumEnergySecondaries      = 2.05173 GeV
+	 minSumEnergySecondaries      = 2.05229 GeV
 	 -----------------------------------------
 
 Parsing line: FTFP anti_sigma+ G4_W  1000
@@ -462,15 +462,15 @@ Parsing line: FTFP anti_sigma+ G4_W  1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.182988
+	 Final random number = 0.830002
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 28.1
+	 average multiplicity = 28.393
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 2.12837 GeV
-	 average sumEnergySecondaries = 2.08306 GeV
-	 maxSumEnergySecondaries      = 2.13746 GeV
-	 minSumEnergySecondaries      = 2.05543 GeV
+	 average sumEnergySecondaries = 2.08414 GeV
+	 maxSumEnergySecondaries      = 2.18802 GeV
+	 minSumEnergySecondaries      = 2.05226 GeV
 	 -----------------------------------------
 
 Parsing line: FTFP anti_sigma+ G4_Pb 1000
@@ -489,14 +489,14 @@ Parsing line: FTFP anti_sigma+ G4_Pb 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.0266157
+	 Final random number = 0.111876
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 27.516
+	 average multiplicity = 26.775
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 2.12837 GeV
-	 average sumEnergySecondaries = 2.07945 GeV
-	 maxSumEnergySecondaries      = 2.13877 GeV
-	 minSumEnergySecondaries      = 2.05346 GeV
+	 average sumEnergySecondaries = 2.08205 GeV
+	 maxSumEnergySecondaries      = 2.20399 GeV
+	 minSumEnergySecondaries      = 2.04769 GeV
 	 -----------------------------------------
 
