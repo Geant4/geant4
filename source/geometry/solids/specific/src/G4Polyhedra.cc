@@ -397,7 +397,7 @@ G4Polyhedra::G4Polyhedra( const G4Polyhedra &source )
 //
 // Assignment operator
 //
-const G4Polyhedra &G4Polyhedra::operator=( const G4Polyhedra &source )
+G4Polyhedra &G4Polyhedra::operator=( const G4Polyhedra &source )
 {
   if (this == &source) return *this;
 

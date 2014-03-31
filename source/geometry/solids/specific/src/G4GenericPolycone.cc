@@ -279,7 +279,7 @@ G4GenericPolycone::G4GenericPolycone( const G4GenericPolycone &source )
 //
 // Assignment operator
 //
-const G4GenericPolycone &G4GenericPolycone::operator=( const G4GenericPolycone &source )
+G4GenericPolycone &G4GenericPolycone::operator=( const G4GenericPolycone &source )
 {
   if (this == &source) return *this;
   

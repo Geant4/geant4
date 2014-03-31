@@ -149,7 +149,7 @@ class G4Polyhedra : public G4VCSGfaceted
     // persistifiable objects.
 
   G4Polyhedra( const G4Polyhedra &source );
-  const G4Polyhedra &operator=( const G4Polyhedra &source );
+  G4Polyhedra &operator=( const G4Polyhedra &source );
     // Copy constructor and assignment operator.
 
  protected:  // without description
