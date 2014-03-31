@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31-Mar-2014  G.Cosmo               (geom-specific-V10-00-07)
+- Fixed signature of assignment operator to G4VCSGfaceted.
+
 31-Mar-2014  G.Cosmo               (geom-specific-V10-00-06)
 - Fixed signature of assignment operator to G4Polycone, G4Polyhedra and
   and G4GenericPolycone.
