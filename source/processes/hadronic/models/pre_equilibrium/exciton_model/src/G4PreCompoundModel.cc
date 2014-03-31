@@ -116,7 +116,12 @@ void G4PreCompoundModel::ModelDescription(std::ostream& outFile) const
 		<<	"their associated emission  probabilities according to exciton model)\n"
 		<<	"\n"
 		<<	"[1] K.K. Gudima, S.G. Mashnik, V.D. Toneev, Nucl. Phys. A401 329 (1983)\n"
-		<< std::endl;
+		<< "\n";
+}
+void G4PreCompoundModel::DeExciteModelDescription(std::ostream& outFile) const
+{
+   outFile << "description of precompound model as used with DeExcite()"
+           << "\n";
 }
 /////////////////////////////////////////////////////////////////////////////////////////
 
