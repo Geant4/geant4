@@ -83,6 +83,9 @@ public:
   
   virtual G4ReactionProductVector* DeExcite(G4Fragment& aFragment) = 0;
 
+  virtual void DeExciteModelDescription(std::ostream& outFile) const = 0;
+
+
   inline void SetExcitationHandler(G4ExcitationHandler* ptr);
     
   inline G4ExcitationHandler* GetExcitationHandler() const;
