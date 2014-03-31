@@ -73,33 +73,33 @@ using namespace std;
 
 G4eSingleCoulombScatteringModel::G4eSingleCoulombScatteringModel(const G4String& nam)
   : G4VEmModel(nam),
-
     cosThetaMin(1.0),
     isInitialised(false)
 {
-  	fNistManager = G4NistManager::Instance();
-  	theIonTable = G4ParticleTable::GetParticleTable()->GetIonTable();
-	fParticleChange = 0;
+  fNistManager = G4NistManager::Instance();
+  theIonTable = G4ParticleTable::GetParticleTable()->GetIonTable();
+  fParticleChange = 0;
 
-	pCuts=0;
-  	currentMaterial = 0;
-  	currentElement  = 0;
-        currentCouple = 0;
+  pCuts=0;
+  currentMaterial = 0;
+  currentElement  = 0;
+  currentCouple = 0;
 
-        lowEnergyLimit  = 0*eV;
-  	recoilThreshold = 0.*eV;
-  	particle = 0;
-	mass=0;
-	currentMaterialIndex = -1;
+  lowEnergyLimit  = 0*eV;
+  recoilThreshold = 0.*eV;
+  particle = 0;
+  mass=0;
+  currentMaterialIndex = -1;
 
-  	Mottcross = new G4ScreeningMottCrossSection(); 
-
+  Mottcross = new G4ScreeningMottCrossSection(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eSingleCoulombScatteringModel::~G4eSingleCoulombScatteringModel()
-{ delete  Mottcross;}
+{ 
+  delete  Mottcross;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -109,7 +109,7 @@ void G4eSingleCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   SetupParticle(p);
   currentCouple = 0;
   currentMaterialIndex = -1;
-  cosThetaMin = cos(PolarAngleLimit());
+  //cosThetaMin = cos(PolarAngleLimit());
   Mottcross->Initialise(p,cosThetaMin);
  
   pCuts = &cuts; 
@@ -132,19 +132,18 @@ G4double G4eSingleCoulombScatteringModel::ComputeCrossSectionPerAtom(
 				G4double, 
 				G4double )
 {
-
-  	SetupParticle(p);
+  SetupParticle(p);
  
-  	G4double cross =0.0;
-	if(kinEnergy < lowEnergyLimit) return cross;
+  G4double cross =0.0;
+  if(kinEnergy < lowEnergyLimit) return cross;
 
-  	DefineMaterial(CurrentCouple());
+  DefineMaterial(CurrentCouple());
 
-	//Total Cross section
-        Mottcross->SetupKinematic(kinEnergy, Z);
-  	cross = Mottcross->NuclearCrossSection();
+  //Total Cross section
+  Mottcross->SetupKinematic(kinEnergy, Z);
+  cross = Mottcross->NuclearCrossSection();
 
-	//cout<< "....cross "<<G4BestUnit(cross,"Surface") << " cm2 "<< cross/cm2 <<endl;
+  //cout<< "....cross "<<G4BestUnit(cross,"Surface") << " cm2 "<< cross/cm2 <<endl;
   return cross;
 }
 
@@ -157,37 +156,37 @@ void G4eSingleCoulombScatteringModel::SampleSecondaries(
 			       G4double cutEnergy, 
 			       G4double)
 {
-  	G4double kinEnergy = dp->GetKineticEnergy();
-	//cout<<"--- kinEnergy "<<kinEnergy<<endl;
+  G4double kinEnergy = dp->GetKineticEnergy();
+  //cout<<"--- kinEnergy "<<kinEnergy<<endl;
 
-  	if(kinEnergy < lowEnergyLimit) return;
+  if(kinEnergy < lowEnergyLimit) return;
 	
-  	DefineMaterial(couple);
-  	SetupParticle(dp->GetDefinition());
+  DefineMaterial(couple);
+  SetupParticle(dp->GetDefinition());
 
-	// Choose nucleus
-	//last two :cutEnergy= min e kinEnergy=max
-  	currentElement = SelectRandomAtom(couple,particle,
-					  kinEnergy,cutEnergy,kinEnergy);
+  // Choose nucleus
+  //last two :cutEnergy= min e kinEnergy=max
+  currentElement = SelectRandomAtom(couple,particle,
+				    kinEnergy,cutEnergy,kinEnergy);
 
-	G4double Z  = currentElement->GetZ();
-  	G4int iz    = G4int(Z);
-  	G4int ia = SelectIsotopeNumber(currentElement);
+  G4double Z  = currentElement->GetZ();
+  G4int iz    = G4int(Z);
+  G4int ia = SelectIsotopeNumber(currentElement);
 
-	//cout<<"Element "<<currentElement->GetName()<<endl;;	
+  //cout<<"Element "<<currentElement->GetName()<<endl;;	
 
-	G4double cross= Mottcross->GetTotalCross();
+  G4double cross= Mottcross->GetTotalCross();
 
-	if(cross == 0.0) { return; }
+  if(cross == 0.0) { return; }
     		
-  	G4ThreeVector dir = dp->GetMomentumDirection(); //old direction
-	G4ThreeVector newDirection=Mottcross->GetNewDirection();//new direction
-  	newDirection.rotateUz(dir);   
+  G4ThreeVector dir = dp->GetMomentumDirection(); //old direction
+  G4ThreeVector newDirection=Mottcross->GetNewDirection();//new direction
+  newDirection.rotateUz(dir);   
   
-	fParticleChange->ProposeMomentumDirection(newDirection);   
+  fParticleChange->ProposeMomentumDirection(newDirection);   
   
-	//Recoil energy
-	G4double trec= Mottcross->GetTrec();
+  //Recoil energy
+  G4double trec= Mottcross->GetTrec();
 
   //Energy after scattering	
   if(trec > kinEnergy) { trec = kinEnergy; }

@@ -18,6 +18,11 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+28 March 14: V.Ivanchenko (emstand-V10-00-19)
+- G4CoulombScattering - use G4IonCoulombScatteringModel for ions
+    by default
+- G4IonCoulombScatteringModel - fixed warning from G4ParticleTable
+
 19 March 14: V.Ivanchenko (emstand-V10-00-18)
 19 March 14: L.Urban
 - G4UrbanMscModel - efficiency corrections rewritten, no extra
