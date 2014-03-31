@@ -1,6 +1,6 @@
 /run/verbose 1
 /control/verbose 1
-/tracking/verbose 1
+/tracking/verbose 0
 
 #/testem/det/setAbsorberMat  G4_POLYETHYLENE
 #/testem/det/setWidth        4.74 mm
@@ -12,16 +12,16 @@
 /testem/det/setAbsorberMat  G4_lH2
 /testem/det/setWidth        116.24 mm
 
-#/testem/phys/addPhysics  standard
-#/testem/phys/addPhysics  standardSS
-/testem/phys/addPhysics  standardIG
+/testem/phys/addPhysics  emstandard
+#/testem/phys/addPhysics  emstandardSS
+#/testem/phys/addPhysics  emstandardIG
 #/testem/phys/addPhysics  emstandard
 #/testem/phys/addPhysics  emstandard_opt1
 #/testem/phys/addPhysics  emstandard_opt2
 #/testem/phys/addPhysics  livermore
 #/testem/phys/addPhysics  penelope
 
-/testem/setFileName       test41_ch2.log 
+/testem/setFileName       test41_h2.log 
 
 /testem/phys/setCuts 0.7 mm
 /run/initialize
