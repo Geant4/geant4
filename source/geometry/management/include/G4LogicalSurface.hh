@@ -107,7 +107,7 @@ class G4LogicalSurface
  private:  // Copying restricted
 
    G4LogicalSurface(const G4LogicalSurface &right);
-   inline const G4LogicalSurface& operator=(const G4LogicalSurface& right);
+   inline G4LogicalSurface& operator=(const G4LogicalSurface& right);
 
  private:
 
