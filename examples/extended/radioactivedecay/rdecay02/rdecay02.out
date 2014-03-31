@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
+ Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -362,96 +362,6 @@ Creating Ntuple RDecayProducts in ROOT file: All Products of RDecay
 ROOT Ntuple tRDecayProducts All Products of RDecay PID:Z:A:Energy:Time:Weight booked 
 exrdmAnalysisManager: Histograms are booked and the run has been started
 ### Run : 0
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
 *** G4Exception : HAD_RDM_011

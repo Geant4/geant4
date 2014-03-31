@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
+ Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -1014,12 +1014,12 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -1.96     0.38     -197     0.213        0        0         0 PhantomSens initStep
     1    -1.96    0.382     -197     0.187   0.0257   0.0148    0.0148 PhantomSens msc
-    2    -1.97     0.38     -197     0.177  0.00979  0.00746    0.0223 PhantomSens msc
-    3    -1.96    0.388     -197     0.155   0.0224  0.00955    0.0319 PhantomSens msc
-    4    -1.96    0.394     -197     0.139   0.0163  0.00686    0.0387 PhantomSens msc
-    5    -1.96    0.392     -197    0.0992   0.0394  0.00883    0.0476 PhantomSens msc
-    6    -1.96    0.393     -197     0.087   0.0122  0.00797    0.0555 PhantomSens msc
-    7    -1.95    0.392     -197         0    0.087   0.0219    0.0774 PhantomSens eIoni
+    2    -1.97    0.378     -197     0.167   0.0202    0.012    0.0268 PhantomSens msc
+    3    -1.97    0.378     -197     0.146   0.0211  0.00965    0.0365 PhantomSens msc
+    4    -1.97    0.374     -197     0.132   0.0134  0.00902    0.0455 PhantomSens msc
+    5    -1.97    0.376     -197     0.121   0.0114   0.0089    0.0544 PhantomSens msc
+    6    -1.97    0.369     -197    0.0789   0.0421   0.0094    0.0638 PhantomSens msc
+    7    -1.97    0.369     -197         0   0.0789   0.0187    0.0825 PhantomSens eIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
@@ -1035,23 +1035,21 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.67    0.102   -1e+03     0.356        0        0         0       World initStep
-    1    -2.67    0.102     -200     0.356        0      800       800 PhantomSens Transportation
-    2    -2.67    0.102     -198     0.356        0        2       802 PhantomSens Transportation
-    3    -2.67    0.102     -196     0.356        0        2       804 PhantomSens Transportation
-    4    -2.67    0.102     -194     0.356        0        2       806 PhantomSens Transportation
-    5    -2.67    0.102     -194         0    0.088     0.42       806 PhantomSens phot
+    0     -1.4    -3.44   -1e+03     0.356        0        0         0       World initStep
+    1     -1.4    -3.44     -200     0.356        0      800       800 PhantomSens Transportation
+    2     -1.4    -3.44     -198     0.356        0        2       802 PhantomSens Transportation
+    3     -1.4    -3.44     -196     0.356        0        2       804 PhantomSens Transportation
+    4     -1.4    -3.44     -194     0.356        0        2       806 PhantomSens Transportation
+    5     -1.4    -3.44     -192     0.356        0        2       808 PhantomSens Transportation
+    6     -1.4    -3.44     -191         0    0.088    0.618       809 PhantomSens phot
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 2,   Parent ID = 1
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -2.67    0.102     -194     0.268        0        0         0 PhantomSens initStep
-    1    -2.65   0.0896     -194     0.245   0.0234   0.0243    0.0243 PhantomSens msc
-    2    -2.64   0.0986     -194     0.213    0.032   0.0227     0.047 PhantomSens msc
-    3    -2.65   0.0889     -194     0.148    0.065   0.0202    0.0671 PhantomSens msc
-    4    -2.65   0.0883     -194         0    0.148   0.0508     0.118 PhantomSens eIoni
+    0     -1.4    -3.44     -191     0.268        0        0         0 PhantomSens initStep
+    1    -1.39    -3.44     -191         0    0.268    0.126     0.126 PhantomSens eIoni
 >>> Event 9
 Run terminated.
 Run Summary
@@ -1059,13 +1057,13 @@ Run Summary
   User=0s Real=0.01s Sys=0s
  PrimitiveScorer RUN PhantomSD,totalEDep
  Number of entries 11
+  copy no.: 969804  Run Value : 0.356
   copy no.: 970200  Run Value : 0.356
   copy no.: 989603  Run Value : 0.356
   copy no.: 989800  Run Value : 0.356
   copy no.: 990401  Run Value : 0.05394182216018539
   copy no.: 1009601  Run Value : 0.0552461286491831
-  copy no.: 1009603  Run Value : 0.356
-  copy no.: 1009801  Run Value : 0.3007538713508168
+  copy no.: 1009801  Run Value : 0.3007538713508169
   copy no.: 1010401  Run Value : 0.3020581778398146
   copy no.: 1029600  Run Value : 0.356
   copy no.: 1029801  Run Value : 0.712
@@ -1078,13 +1076,13 @@ Run Summary
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,chargedCellFlux
  Number of entries 11
+  copy no.: 969804  Run Value : 0.01579545990714856
   copy no.: 970200  Run Value : 0.01579545990714856
   copy no.: 989603  Run Value : 0.01579545990714856
   copy no.: 989800  Run Value : 0.01164307368013543
   copy no.: 990401  Run Value : 0.001261629842865205
   copy no.: 1009601  Run Value : 0.001311691248042601
-  copy no.: 1009603  Run Value : 0.01474565290570142
-  copy no.: 1009801  Run Value : 0.009679447544371184
+  copy no.: 1009801  Run Value : 0.01031411265622923
   copy no.: 1010401  Run Value : 0.01128527936501595
   copy no.: 1029600  Run Value : 0.01220049314686011
   copy no.: 1029801  Run Value : 0.02691678446910657
@@ -1096,7 +1094,12 @@ Run Summary
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr001
  Number of entries 0
  PrimitiveScorer RUN PhantomSD,gammaSurfCurr002
- Number of entries 16
+ Number of entries 19
+  copy no.: 969800  Run Value : 0.25
+  copy no.: 969801  Run Value : 0.25
+  copy no.: 969802  Run Value : 0.25
+  copy no.: 969803  Run Value : 0.25
+  copy no.: 969804  Run Value : 0.25
   copy no.: 970200  Run Value : 0.25
   copy no.: 989600  Run Value : 0.25
   copy no.: 989601  Run Value : 0.25
@@ -1105,10 +1108,8 @@ Run Summary
   copy no.: 989800  Run Value : 0.25
   copy no.: 990400  Run Value : 0.25
   copy no.: 990401  Run Value : 0.25
-  copy no.: 1009600  Run Value : 0.5
-  copy no.: 1009601  Run Value : 0.5
-  copy no.: 1009602  Run Value : 0.25
-  copy no.: 1009603  Run Value : 0.25
+  copy no.: 1009600  Run Value : 0.25
+  copy no.: 1009601  Run Value : 0.25
   copy no.: 1029600  Run Value : 0.25
   copy no.: 1029800  Run Value : 0.5
   copy no.: 1029801  Run Value : 0.5

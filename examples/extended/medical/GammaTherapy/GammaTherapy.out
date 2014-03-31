@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
+ Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -214,27 +214,27 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=11.47s Real=14.84s Sys=0s
+  User=11.09s Real=11.14s Sys=0s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         33.18
-Average number of gamma                      19.56
-Average number of e+                         0.7632
-Average number of steps in the phantom       11.82
-Average number of e- steps in the target     18.15
-Average number of g  produced in the target  18.73
-Average number of e- produced in the target  20.91
-Average number of g produced in the phantom  0.4856
-Average number of e- produced in the phantom 5.963
-Total fGamma fluence in front of the phantom 8.113 MeV 
+Average number of e-                         33.17
+Average number of gamma                      19.63
+Average number of e+                         0.7653
+Average number of steps in the phantom       11.71
+Average number of e- steps in the target     18.04
+Average number of g  produced in the target  18.79
+Average number of e- produced in the target  21
+Average number of g produced in the phantom  0.4948
+Average number of e- produced in the phantom 5.98
+Total fGamma fluence in front of the phantom 8.033 MeV 
 ========================================================
 
 
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.37 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.38 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

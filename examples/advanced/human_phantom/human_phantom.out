@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
+ Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -507,7 +507,7 @@ ionIoni:   for  GenericIon    SubType= 2
       Lambda tables from threshold to 10 TeV in 220 bins, spline: 1
       finalRange(mm)= 0.001, dRoverRange= 0.1, integral: 1, fluct: 1, linLossLimit= 0.02
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-         ParamICRU73 :  Emin=        0 eV    Emax=       10 TeV
+         ParamICRU73 :  Emin=        0 eV    Emax=       10 TeV   deltaVI
 
 nuclearStopping:   for  GenericIon    SubType= 8
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -765,31 +765,31 @@ Index : 2     used in the geometry : Yes
 ### Run 0 start.
 Number of events = 100
 Energy Total in Run:logicalBrain, ID: 0, Energy Deposition (MeV): 0
-Energy Total in Run:logicalHead, ID: 1, Energy Deposition (MeV): 5.65842
+Energy Total in Run:logicalHead, ID: 1, Energy Deposition (MeV): 4.97299
 Energy Total in Run:logicalHeart, ID: 2, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftAdrenal, ID: 3, Energy Deposition (MeV): 0
-Energy Total in Run:logicalLeftArmBone, ID: 4, Energy Deposition (MeV): 0.0204955
+Energy Total in Run:logicalLeftArmBone, ID: 4, Energy Deposition (MeV): 0.178367
 Energy Total in Run:logicalLeftBreast, ID: 5, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftClavicle, ID: 6, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftKidney, ID: 7, Energy Deposition (MeV): 0
-Energy Total in Run:logicalLeftLeg, ID: 8, Energy Deposition (MeV): 5.73471
+Energy Total in Run:logicalLeftLeg, ID: 8, Energy Deposition (MeV): 7.61426
 Energy Total in Run:logicalLeftLegBone, ID: 9, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftLung, ID: 10, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftOvary, ID: 11, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftScapula, ID: 12, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLeftTeste, ID: 13, Energy Deposition (MeV): 0
 Energy Total in Run:logicalLowerLargeIntestine, ID: 14, Energy Deposition (MeV): 0
-Energy Total in Run:logicalMaleGenitalia, ID: 15, Energy Deposition (MeV): 0.298387
+Energy Total in Run:logicalMaleGenitalia, ID: 15, Energy Deposition (MeV): 0
 Energy Total in Run:logicalMiddleLowerSpine, ID: 16, Energy Deposition (MeV): 0
 Energy Total in Run:logicalPancreas, ID: 17, Energy Deposition (MeV): 0
 Energy Total in Run:logicalPelvis, ID: 18, Energy Deposition (MeV): 0
-Energy Total in Run:logicalRibCage, ID: 19, Energy Deposition (MeV): 0.962561
+Energy Total in Run:logicalRibCage, ID: 19, Energy Deposition (MeV): 1.04975
 Energy Total in Run:logicalRightAdrenal, ID: 20, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightArmBone, ID: 21, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightBreast, ID: 22, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightClavicle, ID: 23, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightKidney, ID: 24, Energy Deposition (MeV): 0
-Energy Total in Run:logicalRightLeg, ID: 25, Energy Deposition (MeV): 13.2316
+Energy Total in Run:logicalRightLeg, ID: 25, Energy Deposition (MeV): 11.0619
 Energy Total in Run:logicalRightLegBone, ID: 26, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightLung, ID: 27, Energy Deposition (MeV): 0
 Energy Total in Run:logicalRightOvary, ID: 28, Energy Deposition (MeV): 0
@@ -801,11 +801,11 @@ Energy Total in Run:logicalSpleen, ID: 33, Energy Deposition (MeV): 0
 Energy Total in Run:logicalStomach, ID: 34, Energy Deposition (MeV): 0
 Energy Total in Run:logicalThymus, ID: 35, Energy Deposition (MeV): 0
 Energy Total in Run:logicalThyroid, ID: 36, Energy Deposition (MeV): 0
-Energy Total in Run:logicalTrunk, ID: 37, Energy Deposition (MeV): 29.3366
+Energy Total in Run:logicalTrunk, ID: 37, Energy Deposition (MeV): 26.8207
 Energy Total in Run:logicalUpperLargeIntestine, ID: 38, Energy Deposition (MeV): 0
 Energy Total in Run:logicalUpperSpine, ID: 39, Energy Deposition (MeV): 0
 Energy Total in Run:logicalUrinaryBladder, ID: 40, Energy Deposition (MeV): 0
 Energy Total in Run:logicalUterus, ID: 41, Energy Deposition (MeV): 0
-Total Energy deposit in the body is: 55.2428 MeV
+Total Energy deposit in the body is: 51.698 MeV
 Graphics systems deleted.
 Visualization Manager deleting...

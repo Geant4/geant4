@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
+ Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -868,50 +868,46 @@ EV: 99
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.05s Real=0.05s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 
 --------------------End of Global Run----------------------- 
  The run was 200 events 
 LOCAL TOTAL DOSE : 	0 Gy
-      TOTAL DOSE : 	1.03211e-06 Gy
+      TOTAL DOSE : 	9.59047e-07 Gy
  ###### EndOfRunAction ###### 
 =============================================================
  Number of event processed : 200
 =============================================================
  opened file dicom.out for dose output
      Voxel |   DoseDeposit  |
-    4775     4.91042e-09 Gy
-    6578     1.25928e-09 Gy
-    6579     5.11129e-09 Gy
-    8002     3.35046e-10 Gy
-    8130     1.06675e-07 Gy
-    8131     1.02614e-07 Gy
-    8258     5.53762e-08 Gy
-    8259     1.22192e-07 Gy
-    21159     4.079e-09 Gy
-    24514     7.95384e-08 Gy
-    24515     9.36611e-08 Gy
-    24642     5.76385e-08 Gy
-    24643     9.5024e-08 Gy
-    33793     2.69846e-11 Gy
-    33794     1.97705e-09 Gy
-    33921     3.05806e-09 Gy
-    37543     1.64355e-09 Gy
-    40772     1.36983e-09 Gy
-    40773     7.30793e-10 Gy
-    40898     8.69516e-08 Gy
-    40899     7.30829e-08 Gy
-    40900     1.37245e-09 Gy
-    40901     9.35888e-10 Gy
-    41026     4.9087e-08 Gy
-    41027     8.34606e-08 Gy
+    8130     7.00538e-08 Gy
+    8131     1.06111e-07 Gy
+    8258     5.82096e-08 Gy
+    8259     9.35871e-08 Gy
+    8260     3.17435e-09 Gy
+    8388     5.58997e-10 Gy
+    11074     3.99899e-11 Gy
+    12479     6.46079e-10 Gy
+    24514     4.60958e-08 Gy
+    24515     1.06512e-07 Gy
+    24642     5.85308e-08 Gy
+    24643     7.93981e-08 Gy
+    24644     1.22873e-09 Gy
+    40884     2.07704e-10 Gy
+    40898     6.64373e-08 Gy
+    40899     1.19504e-07 Gy
+    41026     4.63435e-08 Gy
+    41027     7.9736e-08 Gy
+    41028     3.19877e-10 Gy
+    41156     1.87916e-08 Gy
+    41284     3.56111e-09 Gy
 =============================================
  closed file dicom.out for dose output
 Finished : End of Run Action 0
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.93 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.92 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)
 Graphics systems deleted.

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
+ Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -635,15 +635,15 @@ hPairProd:   for  pi-    SubType= 4
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 266.089 MeV       total track length:  18.963 cm 
-        Gap: total energy: 28.2698 MeV       total track length: 14.5167 cm 
+   Absorber: total energy:  277.55 MeV       total track length: 19.5641 cm 
+        Gap: total energy: 17.8961 MeV       total track length: 8.58063 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 266.089 MeV rms = 0 eV 
- EGap : mean = 28.2698 MeV rms = 0 eV 
- LAbs : mean = 18.963 cm  rms = 0 fm 
- LGap : mean = 14.5167 cm  rms = 0 fm 
+ EAbs : mean = 277.55 MeV rms = 0 eV 
+ EGap : mean = 17.8961 MeV rms = 0 eV 
+ LAbs : mean = 19.5641 cm  rms = 0 fm 
+ LGap : mean = 8.58063 cm  rms = 0 fm 
 ... write Root file : B4.root - done
      Transportation,                msc,              hIoni,            ionIoni
              hBrems,          hPairProd,        CoulombScat,              eIoni
@@ -1006,15 +1006,15 @@ hPairProd:   for  pi-    SubType= 4
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 252.567 MeV       total track length: 18.1356 cm 
-        Gap: total energy:  16.676 MeV       total track length:  7.9709 cm 
+   Absorber: total energy: 283.113 MeV       total track length: 20.5536 cm 
+        Gap: total energy: 13.7521 MeV       total track length: 7.16788 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 252.567 MeV rms = 0 eV 
- EGap : mean = 16.676 MeV rms = 0 eV 
- LAbs : mean = 18.1356 cm  rms = 0 fm 
- LGap : mean = 7.9709 cm  rms = 0 fm 
+ EAbs : mean = 283.113 MeV rms = 0 eV 
+ EGap : mean = 13.7521 MeV rms = 0 eV 
+ LAbs : mean = 20.5536 cm  rms = 0 fm 
+ LGap : mean = 7.16788 cm  rms = 0 fm 
 ... write Root file : B4.root - done
 
 phot:   for  gamma    SubType= 12
@@ -1362,15 +1362,15 @@ hPairProd:   for  pi-    SubType= 4
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 459.395 MeV       total track length: 32.3332 cm 
-        Gap: total energy: 23.3245 MeV       total track length: 12.2949 cm 
+   Absorber: total energy: 472.466 MeV       total track length: 34.0996 cm 
+        Gap: total energy: 16.5609 MeV       total track length: 7.60808 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 459.395 MeV rms = 0 eV 
- EGap : mean = 23.3245 MeV rms = 0 eV 
- LAbs : mean = 32.3332 cm  rms = 0 fm 
- LGap : mean = 12.2949 cm  rms = 0 fm 
+ EAbs : mean = 472.466 MeV rms = 0 eV 
+ EGap : mean = 16.5609 MeV rms = 0 eV 
+ LAbs : mean = 34.0996 cm  rms = 0 fm 
+ LGap : mean = 7.60808 cm  rms = 0 fm 
 ... write Root file : B4.root - done
 Graphics systems deleted.
 Visualization Manager deleting...

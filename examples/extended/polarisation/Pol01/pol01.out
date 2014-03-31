@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
+ Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -146,39 +146,39 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.28s Real=0.28s Sys=0s
+  User=0.27s Real=0.28s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.344868 0.263885 0.720886 0.250691 0.957837 0.85481 0.29758 0.8672 0.956535 0.840755 0.579154 0.190276 0.381379 0.246336 0.484575 0.319169 0.536992 0.423369 0.587601 0.0167793 0.659681 0.789817 0.238025 0.938781 
- i_lag = 17, j_lag = 3
- carry = 0, count24 = 16
+ float_seed_table[] = 0.743992 0.64703 0.0869757 0.710991 0.233069 0.826155 0.122855 0.805531 0.565217 0.778719 0.702802 0.73805 0.783516 0.628761 0.617438 0.639826 0.339587 0.397652 0.0885432 0.829005 0.581366 0.432578 0.601643 0.58504 
+ i_lag = 7, j_lag = 17
+ carry = 5.96046e-08, count24 = 8
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31132
-	pol-compt = 270
-	pol-eBrem = 330
-	msc = 3067
-	pol-eIoni = 635
-	pol-conv = 210
-	pol-annihil = 68
-	pol-phot = 149
+	Transportation = 31100
+	pol-compt = 294
+	pol-eBrem = 349
+	msc = 2513
+	pol-eIoni = 654
+	pol-conv = 197
+	pol-annihil = 57
+	pol-phot = 174
  Gamma: 
-Mean Number per Event :1.0103
-Mean Energy :9.5788 MeV +- 1.9029 MeV
-Mean Polarization :-0.96438 +- 0.1814
+Mean Number per Event :1.0089
+Mean Energy :9.5911 MeV +- 1.8721 MeV
+Mean Polarization :-0.96492 +- 0.18353
  Electron: 
-Mean Number per Event :0.0314
-Mean Energy :5.2667 MeV +- 2.504 MeV
-Mean Polarization :-0.7249 +- 0.29587
+Mean Number per Event :0.032
+Mean Energy :5.3026 MeV +- 2.4768 MeV
+Mean Polarization :-0.7287 +- 0.29284
  Positron: 
-Mean Number per Event :0.0149
-Mean Energy :4.2812 MeV +- 2.0758 MeV
-Mean Polarization :-0.63711 +- 0.31186
+Mean Number per Event :0.0141
+Mean Energy :4.188 MeV +- 2.0219 MeV
+Mean Polarization :-0.61546 +- 0.30557
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

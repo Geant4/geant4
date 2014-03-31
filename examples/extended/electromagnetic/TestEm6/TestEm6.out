@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
+ Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -314,7 +314,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -409,7 +409,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 5
-  User=0s Real=0.01s Sys=0.01s
+  User=0s Real=0s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -470,55 +470,55 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     6   -250 m   -5.27 mm   3.04 mm    644 MeV    46 MeV  3.46 cm   27.5 cm       Iron       hhIoni
     7   -250 m   -7.32 mm   4.87 mm    600 MeV  44.2 MeV  3.13 cm   30.7 cm       Iron       hhIoni
     8   -250 m   -7.97 mm   8.08 mm    558 MeV  41.6 MeV  2.82 cm   33.5 cm       Iron       hhIoni
-    9   -250 m      -9 mm   1.08 cm    518 MeV  39.7 MeV  2.53 cm     36 cm       Iron       hhIoni
-   10   -250 m   -1.01 cm   1.39 cm    483 MeV    35 MeV  2.26 cm   38.3 cm       Iron       hhIoni
-   11   -250 m   -1.08 cm   1.59 cm    452 MeV  31.7 MeV  2.03 cm   40.3 cm       Iron       hhIoni
-   12   -250 m   -1.19 cm   1.75 cm    423 MeV  28.9 MeV  1.83 cm   42.1 cm       Iron       hhIoni
-   13   -250 m   -1.28 cm   1.91 cm    396 MeV  26.4 MeV  1.65 cm   43.8 cm       Iron       hhIoni
-   14   -250 m   -1.32 cm   2.06 cm    370 MeV  26.4 MeV  1.49 cm   45.3 cm       Iron       hhIoni
-   15   -250 m   -1.35 cm   2.19 cm    348 MeV  22.3 MeV  1.34 cm   46.6 cm       Iron       hhIoni
-   16   -250 m   -1.44 cm   2.31 cm    325 MeV  22.5 MeV  1.21 cm   47.8 cm       Iron       hhIoni
-   17   -250 m   -1.49 cm   2.41 cm    305 MeV  20.6 MeV  1.09 cm   48.9 cm       Iron       hhIoni
-   18   -250 m   -1.58 cm   2.46 cm    286 MeV  18.7 MeV  9.83 mm   49.9 cm       Iron       hhIoni
-   19   -249 m   -1.64 cm   2.51 cm    268 MeV  18.3 MeV  8.88 mm   50.8 cm       Iron       hhIoni
-   20   -249 m   -1.72 cm   2.56 cm    251 MeV  16.4 MeV  7.98 mm   51.6 cm       Iron       hhIoni
-   21   -249 m   -1.82 cm   2.61 cm    236 MeV  15.5 MeV  7.21 mm   52.3 cm       Iron       hhIoni
-   22   -249 m    -1.9 cm   2.64 cm    221 MeV  15.2 MeV   6.5 mm     53 cm       Iron       hhIoni
-   23   -249 m   -1.97 cm   2.66 cm    208 MeV    13 MeV  5.83 mm   53.6 cm       Iron       hhIoni
-   24   -249 m   -2.03 cm   2.69 cm    195 MeV  12.5 MeV  5.28 mm   54.1 cm       Iron       hhIoni
-   25   -249 m   -2.06 cm   2.71 cm    182 MeV  12.6 MeV  4.78 mm   54.6 cm       Iron       hhIoni
-   26   -249 m   -2.11 cm   2.74 cm    171 MeV  11.3 MeV  4.28 mm     55 cm       Iron       hhIoni
-   27   -249 m   -2.15 cm   2.79 cm    160 MeV  10.8 MeV  3.86 mm   55.4 cm       Iron       hhIoni
-   28   -249 m   -2.18 cm   2.82 cm    150 MeV  9.93 MeV  3.48 mm   55.7 cm       Iron       hhIoni
-   29   -249 m   -2.21 cm   2.84 cm    141 MeV  9.73 MeV  3.13 mm     56 cm       Iron       hhIoni
-   30   -249 m   -2.23 cm   2.86 cm    133 MeV  8.18 MeV  2.81 mm   56.3 cm       Iron       hhIoni
-   31   -249 m   -2.25 cm   2.88 cm    124 MeV  8.37 MeV  2.56 mm   56.6 cm       Iron       hhIoni
-   32   -249 m   -2.27 cm   2.89 cm    116 MeV  7.66 MeV   2.3 mm   56.8 cm       Iron       hhIoni
-   33   -249 m   -2.28 cm    2.9 cm    110 MeV  6.81 MeV  2.08 mm     57 cm       Iron       hhIoni
-   34   -249 m   -2.29 cm   2.92 cm    102 MeV  7.42 MeV  1.89 mm   57.2 cm       Iron       hhIoni
-   35   -249 m    -2.3 cm   2.93 cm   95.7 MeV  6.58 MeV  1.69 mm   57.4 cm       Iron       hhIoni
-   36   -249 m    -2.3 cm   2.95 cm   90.2 MeV   5.5 MeV  1.53 mm   57.5 cm       Iron       hhIoni
-   37   -249 m   -2.31 cm   2.97 cm   83.8 MeV  6.36 MeV   1.4 mm   57.7 cm       Iron       hhIoni
-   38   -249 m   -2.31 cm   2.99 cm   78.3 MeV   5.5 MeV  1.25 mm   57.8 cm       Iron       hhIoni
-   39   -249 m   -2.32 cm      3 cm   72.8 MeV  5.54 MeV  1.13 mm   57.9 cm       Iron       hhIoni
-   40   -249 m   -2.32 cm   3.02 cm     68 MeV  4.78 MeV  1.02 mm     58 cm       Iron       hhIoni
-   41   -249 m   -2.33 cm   3.03 cm   62.5 MeV   5.5 MeV   921 um   58.1 cm       Iron       hhIoni
-   42   -249 m   -2.33 cm   3.04 cm   57.6 MeV  4.89 MeV   819 um   58.2 cm       Iron       hhIoni
-   43   -249 m   -2.33 cm   3.05 cm   53.1 MeV  4.51 MeV   734 um   58.2 cm       Iron       hhIoni
-   44   -249 m   -2.33 cm   3.06 cm     49 MeV  4.14 MeV   660 um   58.3 cm       Iron       hhIoni
-   45   -249 m   -2.33 cm   3.07 cm   44.8 MeV  4.12 MeV   596 um   58.4 cm       Iron       hhIoni
-   46   -249 m   -2.33 cm   3.08 cm   40.9 MeV   3.9 MeV   536 um   58.4 cm       Iron       hhIoni
-   47   -249 m   -2.33 cm   3.08 cm   37.1 MeV  3.86 MeV   483 um   58.5 cm       Iron       hhIoni
-   48   -249 m   -2.32 cm   3.09 cm   33.4 MeV  3.69 MeV   434 um   58.5 cm       Iron       hhIoni
-   49   -249 m   -2.32 cm   3.09 cm   29.5 MeV  3.89 MeV   391 um   58.6 cm       Iron       hhIoni
-   50   -249 m   -2.32 cm    3.1 cm   25.9 MeV  3.63 MeV   348 um   58.6 cm       Iron       hhIoni
-   51   -249 m   -2.32 cm    3.1 cm   22.6 MeV  3.31 MeV   312 um   58.6 cm       Iron       hhIoni
-   52   -249 m   -2.32 cm    3.1 cm   19.2 MeV  3.38 MeV   281 um   58.7 cm       Iron       hhIoni
-   53   -249 m   -2.33 cm   3.11 cm   15.6 MeV  3.56 MeV   252 um   58.7 cm       Iron       hhIoni
-   54   -249 m   -2.33 cm   3.11 cm   11.8 MeV  3.81 MeV   223 um   58.7 cm       Iron       hhIoni
-   55   -249 m   -2.33 cm   3.11 cm   7.53 MeV  4.28 MeV   192 um   58.7 cm       Iron       hhIoni
-   56   -249 m   -2.32 cm   3.12 cm   2.22 MeV  5.31 MeV   145 um   58.7 cm       Iron       hhIoni
-   57   -249 m   -2.32 cm   3.12 cm      0 eV   2.22 MeV  27.6 um   58.7 cm       Iron       hhIoni
+    9   -250 m   -8.84 mm    1.1 cm    523 MeV  35.4 MeV  2.53 cm     36 cm       Iron       hhIoni
+   10   -250 m   -9.67 mm   1.37 cm    486 MeV  36.3 MeV  2.29 cm   38.3 cm       Iron       hhIoni
+   11   -250 m   -9.41 mm   1.53 cm    454 MeV  32.7 MeV  2.05 cm   40.4 cm       Iron       hhIoni
+   12   -250 m   -9.41 mm    1.7 cm    424 MeV  29.7 MeV  1.84 cm   42.2 cm       Iron       hhIoni
+   13   -250 m   -9.43 mm   1.86 cm    396 MeV  28.2 MeV  1.66 cm   43.9 cm       Iron       hhIoni
+   14   -250 m   -9.88 mm      2 cm    371 MeV  24.5 MeV  1.49 cm   45.4 cm       Iron       hhIoni
+   15   -250 m   -1.07 cm   2.12 cm    349 MeV  22.9 MeV  1.35 cm   46.7 cm       Iron       hhIoni
+   16   -250 m   -1.11 cm   2.24 cm    326 MeV    22 MeV  1.22 cm   47.9 cm       Iron       hhIoni
+   17   -250 m   -1.14 cm   2.35 cm    306 MeV  20.8 MeV   1.1 cm     49 cm       Iron       hhIoni
+   18   -250 m   -1.17 cm   2.46 cm    286 MeV  19.9 MeV  9.89 mm     50 cm       Iron       hhIoni
+   19   -249 m   -1.19 cm   2.53 cm    269 MeV    17 MeV  8.88 mm   50.9 cm       Iron       hhIoni
+   20   -249 m   -1.22 cm    2.6 cm    251 MeV  18.2 MeV  8.04 mm   51.7 cm       Iron       hhIoni
+   21   -249 m   -1.25 cm   2.66 cm    234 MeV  16.3 MeV  7.18 mm   52.4 cm       Iron       hhIoni
+   22   -249 m   -1.29 cm   2.72 cm    220 MeV  14.2 MeV  6.44 mm   53.1 cm       Iron       hhIoni
+   23   -249 m   -1.34 cm   2.77 cm    205 MeV  15.2 MeV  5.82 mm   53.6 cm       Iron       hhIoni
+   24   -249 m   -1.39 cm   2.81 cm    192 MeV  12.7 MeV  5.18 mm   54.2 cm       Iron       hhIoni
+   25   -249 m   -1.43 cm   2.84 cm    180 MeV  12.5 MeV  4.67 mm   54.6 cm       Iron       hhIoni
+   26   -249 m   -1.46 cm   2.87 cm    168 MeV  11.4 MeV  4.19 mm     55 cm       Iron       hhIoni
+   27   -249 m   -1.49 cm   2.92 cm    158 MeV  10.2 MeV  3.76 mm   55.4 cm       Iron       hhIoni
+   28   -249 m    -1.5 cm   2.96 cm    148 MeV  10.3 MeV   3.4 mm   55.8 cm       Iron       hhIoni
+   29   -249 m   -1.52 cm      3 cm    139 MeV  8.81 MeV  3.05 mm   56.1 cm       Iron       hhIoni
+   30   -249 m   -1.54 cm   3.04 cm    130 MeV  8.72 MeV  2.77 mm   56.3 cm       Iron       hhIoni
+   31   -249 m   -1.56 cm   3.08 cm    122 MeV  8.43 MeV  2.49 mm   56.6 cm       Iron       hhIoni
+   32   -249 m   -1.58 cm   3.11 cm    114 MeV  7.75 MeV  2.24 mm   56.8 cm       Iron       hhIoni
+   33   -249 m   -1.61 cm   3.13 cm    107 MeV  7.28 MeV  2.02 mm     57 cm       Iron       hhIoni
+   34   -249 m   -1.63 cm   3.15 cm    101 MeV  5.84 MeV  1.82 mm   57.2 cm       Iron       hhIoni
+   35   -249 m   -1.66 cm   3.17 cm   94.8 MeV  6.41 MeV  1.67 mm   57.4 cm       Iron       hhIoni
+   36   -249 m   -1.68 cm   3.18 cm   88.6 MeV  6.19 MeV  1.51 mm   57.5 cm       Iron       hhIoni
+   37   -249 m    -1.7 cm    3.2 cm   83.2 MeV  5.35 MeV  1.36 mm   57.7 cm       Iron       hhIoni
+   38   -249 m   -1.71 cm   3.21 cm   78.1 MeV  5.15 MeV  1.24 mm   57.8 cm       Iron       hhIoni
+   39   -249 m   -1.73 cm   3.22 cm   72.4 MeV  5.71 MeV  1.12 mm   57.9 cm       Iron       hhIoni
+   40   -249 m   -1.74 cm   3.23 cm   67.1 MeV  5.24 MeV  1.01 mm     58 cm       Iron       hhIoni
+   41   -249 m   -1.75 cm   3.23 cm     62 MeV  5.15 MeV   905 um   58.1 cm       Iron       hhIoni
+   42   -249 m   -1.77 cm   3.23 cm     57 MeV  5.02 MeV   810 um   58.2 cm       Iron       hhIoni
+   43   -249 m   -1.78 cm   3.23 cm   52.9 MeV  4.06 MeV   723 um   58.2 cm       Iron       hhIoni
+   44   -249 m    -1.8 cm   3.22 cm   48.6 MeV  4.25 MeV   657 um   58.3 cm       Iron       hhIoni
+   45   -249 m   -1.81 cm   3.22 cm   44.8 MeV  3.83 MeV   591 um   58.4 cm       Iron       hhIoni
+   46   -249 m   -1.83 cm   3.21 cm   40.7 MeV   4.1 MeV   536 um   58.4 cm       Iron       hhIoni
+   47   -249 m   -1.84 cm   3.21 cm     37 MeV  3.71 MeV   480 um   58.5 cm       Iron       hhIoni
+   48   -249 m   -1.85 cm    3.2 cm     33 MeV  4.03 MeV   433 um   58.5 cm       Iron       hhIoni
+   49   -249 m   -1.86 cm    3.2 cm   29.3 MeV  3.61 MeV   386 um   58.5 cm       Iron       hhIoni
+   50   -249 m   -1.87 cm    3.2 cm   25.9 MeV  3.47 MeV   346 um   58.6 cm       Iron       hhIoni
+   51   -249 m   -1.87 cm    3.2 cm   22.3 MeV  3.61 MeV   312 um   58.6 cm       Iron       hhIoni
+   52   -249 m   -1.88 cm   3.19 cm   18.7 MeV  3.58 MeV   278 um   58.6 cm       Iron       hhIoni
+   53   -249 m   -1.89 cm   3.19 cm   14.9 MeV  3.79 MeV   248 um   58.7 cm       Iron       hhIoni
+   54   -249 m   -1.89 cm   3.19 cm   10.9 MeV  4.01 MeV   217 um   58.7 cm       Iron       hhIoni
+   55   -249 m   -1.89 cm   3.19 cm   6.38 MeV  4.51 MeV   183 um   58.7 cm       Iron       hhIoni
+   56   -249 m    -1.9 cm   3.19 cm    765 keV  5.62 MeV   126 um   58.7 cm       Iron       hhIoni
+   57   -249 m    -1.9 cm   3.19 cm      0 eV    765 keV  7.71 um   58.7 cm       Iron       hhIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = anti_proton,   Track ID = 1,   Parent ID = 0
@@ -526,70 +526,70 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm      1 GeV     0 eV      0 fm      0 fm       Iron   initStep
-    1   -250 m    -910 um   -107 um    924 MeV  75.5 MeV  5.87 cm   5.87 cm       Iron       hhIoni
-    2   -250 m    -776 um    282 um    855 MeV  69.6 MeV  5.26 cm   11.1 cm       Iron       hhIoni
-    3   -250 m    -432 um    786 um    793 MeV  62.2 MeV  4.71 cm   15.8 cm       Iron       hhIoni
-    4   -250 m   -1.86 mm   2.62 mm    732 MeV  60.6 MeV  4.23 cm   20.1 cm       Iron       hhIoni
-    5   -250 m   -3.48 mm    4.3 mm    680 MeV  52.1 MeV  3.77 cm   23.8 cm       Iron       hhIoni
-    6   -250 m   -4.56 mm   6.61 mm    632 MeV  48.3 MeV  3.39 cm   27.2 cm       Iron       hhIoni
-    7   -250 m   -5.24 mm   9.15 mm    587 MeV  45.1 MeV  3.04 cm   30.3 cm       Iron       hhIoni
-    8   -250 m   -4.01 mm   1.12 cm    545 MeV  41.6 MeV  2.72 cm     33 cm       Iron       hhIoni
-    9   -250 m   -3.02 mm   1.28 cm    510 MeV  35.3 MeV  2.44 cm   35.4 cm       Iron       hhIoni
-   10   -250 m   -2.05 mm    1.5 cm    475 MeV  34.6 MeV   2.2 cm   37.6 cm       Iron       hhIoni
-   11   -250 m   -1.07 mm   1.72 cm    443 MeV    32 MeV  1.98 cm   39.6 cm       Iron       hhIoni
-   12   -250 m    3.12 um   1.87 cm    413 MeV  30.1 MeV  1.78 cm   41.4 cm       Iron       hhIoni
-   13   -250 m     513 um   2.02 cm    386 MeV  27.3 MeV  1.59 cm     43 cm       Iron       hhIoni
-   14   -250 m    2.02 mm   2.13 cm    360 MeV  25.9 MeV  1.43 cm   44.4 cm       Iron       hhIoni
-   15   -250 m    3.49 mm   2.23 cm    338 MeV    22 MeV  1.28 cm   45.7 cm       Iron       hhIoni
-   16   -250 m    5.08 mm   2.32 cm    317 MeV  20.5 MeV  1.16 cm   46.9 cm       Iron       hhIoni
-   17   -250 m    6.38 mm   2.44 cm    297 MeV  19.8 MeV  1.05 cm   47.9 cm       Iron       hhIoni
-   18   -250 m    7.47 mm   2.55 cm    278 MeV  19.4 MeV  9.46 mm   48.8 cm       Iron       hhIoni
-   19   -250 m    8.05 mm   2.66 cm    261 MeV  16.9 MeV  8.49 mm   49.7 cm       Iron       hhIoni
-   20   -249 m     8.6 mm   2.74 cm    244 MeV    17 MeV  7.68 mm   50.5 cm       Iron       hhIoni
-   21   -249 m    8.82 mm   2.82 cm    229 MeV  15.5 MeV  6.89 mm   51.2 cm       Iron       hhIoni
-   22   -249 m    9.24 mm   2.89 cm    214 MeV  14.4 MeV  6.19 mm   51.8 cm       Iron       hhIoni
-   23   -249 m    9.54 mm   2.95 cm    201 MeV  13.5 MeV  5.57 mm   52.3 cm       Iron       hhIoni
-   24   -249 m       1 cm      3 cm    188 MeV  12.5 MeV  5.01 mm   52.8 cm       Iron       hhIoni
-   25   -249 m    1.05 cm   3.04 cm    177 MeV  11.7 MeV  4.51 mm   53.3 cm       Iron       hhIoni
-   26   -249 m    1.08 cm   3.08 cm    165 MeV  11.1 MeV  4.07 mm   53.7 cm       Iron       hhIoni
-   27   -249 m    1.11 cm   3.13 cm    155 MeV  10.3 MeV  3.66 mm   54.1 cm       Iron       hhIoni
-   28   -249 m    1.13 cm   3.19 cm    145 MeV    10 MeV   3.3 mm   54.4 cm       Iron       hhIoni
-   29   -249 m    1.16 cm   3.23 cm    136 MeV  9.11 MeV  2.96 mm   54.7 cm       Iron       hhIoni
-   30   -249 m    1.18 cm   3.27 cm    127 MeV  8.98 MeV  2.67 mm   54.9 cm       Iron       hhIoni
-   31   -249 m    1.19 cm    3.3 cm    119 MeV  8.53 MeV  2.39 mm   55.2 cm       Iron       hhIoni
-   32   -249 m    1.21 cm   3.33 cm    111 MeV   7.2 MeV  2.14 mm   55.4 cm       Iron       hhIoni
-   33   -249 m    1.23 cm   3.37 cm    104 MeV  7.44 MeV  1.94 mm   55.6 cm       Iron       hhIoni
-   34   -249 m    1.24 cm    3.4 cm   97.3 MeV   6.6 MeV  1.74 mm   55.8 cm       Iron       hhIoni
-   35   -249 m    1.25 cm   3.43 cm   91.1 MeV  6.24 MeV  1.57 mm   55.9 cm       Iron       hhIoni
-   36   -249 m    1.26 cm   3.45 cm   84.6 MeV  6.41 MeV  1.42 mm   56.1 cm       Iron       hhIoni
-   37   -249 m    1.26 cm   3.48 cm   78.8 MeV  5.84 MeV  1.27 mm   56.2 cm       Iron       hhIoni
-   38   -249 m    1.27 cm   3.49 cm   72.6 MeV  6.16 MeV  1.14 mm   56.3 cm       Iron       hhIoni
-   39   -249 m    1.27 cm   3.51 cm   67.4 MeV  5.23 MeV  1.01 mm   56.4 cm       Iron       hhIoni
-   40   -249 m    1.27 cm   3.52 cm   62.2 MeV  5.21 MeV   910 um   56.5 cm       Iron       hhIoni
-   41   -249 m    1.27 cm   3.53 cm   57.8 MeV  4.38 MeV   814 um   56.6 cm       Iron       hhIoni
-   42   -249 m    1.27 cm   3.53 cm   53.4 MeV  4.45 MeV   738 um   56.7 cm       Iron       hhIoni
-   43   -249 m    1.27 cm   3.54 cm   48.8 MeV  4.54 MeV   665 um   56.7 cm       Iron       hhIoni
-   44   -249 m    1.27 cm   3.54 cm   44.4 MeV  4.41 MeV   594 um   56.8 cm       Iron       hhIoni
-   45   -249 m    1.26 cm   3.55 cm   40.6 MeV  3.85 MeV   531 um   56.8 cm       Iron       hhIoni
-   46   -249 m    1.26 cm   3.55 cm   36.7 MeV  3.93 MeV   479 um   56.9 cm       Iron       hhIoni
-   47   -249 m    1.26 cm   3.56 cm   32.9 MeV  3.74 MeV   429 um   56.9 cm       Iron       hhIoni
-   48   -249 m    1.26 cm   3.56 cm   29.3 MeV  3.59 MeV   385 um     57 cm       Iron       hhIoni
-   49   -249 m    1.26 cm   3.56 cm   25.8 MeV  3.57 MeV   346 um     57 cm       Iron       hhIoni
-   50   -249 m    1.26 cm   3.56 cm   22.1 MeV  3.62 MeV   311 um     57 cm       Iron       hhIoni
-   51   -249 m    1.26 cm   3.57 cm   18.6 MeV  3.52 MeV   277 um   57.1 cm       Iron       hhIoni
-   52   -249 m    1.26 cm   3.57 cm     15 MeV  3.67 MeV   247 um   57.1 cm       Iron       hhIoni
-   53   -249 m    1.26 cm   3.57 cm     11 MeV   3.9 MeV   217 um   57.1 cm       Iron       hhIoni
-   54   -249 m    1.26 cm   3.57 cm   6.46 MeV  4.59 MeV   185 um   57.1 cm       Iron       hhIoni
-   55   -249 m    1.26 cm   3.57 cm    785 keV  5.67 MeV   127 um   57.1 cm       Iron       hhIoni
-   56   -249 m    1.26 cm   3.57 cm      0 eV    785 keV  7.91 um   57.1 cm       Iron       hhIoni
+    1   -250 m    -646 um   -642 um    926 MeV  73.8 MeV  5.87 cm   5.87 cm       Iron       hhIoni
+    2   -250 m    -556 um  -3.01 mm    861 MeV    65 MeV  5.27 cm   11.1 cm       Iron       hhIoni
+    3   -250 m    -517 um  -3.94 mm    802 MeV  59.7 MeV  4.76 cm   15.9 cm       Iron       hhIoni
+    4   -250 m    -515 um  -4.58 mm    745 MeV  56.7 MeV   4.3 cm   20.2 cm       Iron       hhIoni
+    5   -250 m    -136 um  -4.92 mm    691 MeV  53.6 MeV  3.87 cm   24.1 cm       Iron       hhIoni
+    6   -250 m   -1.23 mm  -4.46 mm    647 MeV  44.7 MeV  3.47 cm   27.5 cm       Iron       hhIoni
+    7   -250 m   -2.45 mm   -4.4 mm    603 MeV    44 MeV  3.15 cm   30.7 cm       Iron       hhIoni
+    8   -250 m   -4.02 mm   -4.8 mm    560 MeV  42.3 MeV  2.84 cm   33.5 cm       Iron       hhIoni
+    9   -250 m    -5.8 mm  -4.93 mm    526 MeV  34.6 MeV  2.54 cm   36.1 cm       Iron       hhIoni
+   10   -250 m   -7.57 mm  -5.34 mm    492 MeV  34.1 MeV  2.31 cm   38.4 cm       Iron       hhIoni
+   11   -250 m    -9.4 mm  -5.64 mm    458 MeV  33.2 MeV  2.08 cm   40.5 cm       Iron       hhIoni
+   12   -250 m   -1.15 cm  -6.22 mm    428 MeV  30.7 MeV  1.87 cm   42.3 cm       Iron       hhIoni
+   13   -250 m   -1.33 cm  -6.81 mm    402 MeV  25.3 MeV  1.68 cm     44 cm       Iron       hhIoni
+   14   -250 m    -1.5 cm  -7.01 mm    377 MeV  25.7 MeV  1.53 cm   45.5 cm       Iron       hhIoni
+   15   -250 m   -1.64 cm  -7.56 mm    351 MeV  25.5 MeV  1.38 cm   46.9 cm       Iron       hhIoni
+   16   -250 m   -1.78 cm  -7.78 mm    330 MeV  20.7 MeV  1.23 cm   48.2 cm       Iron       hhIoni
+   17   -250 m   -1.92 cm  -7.67 mm    309 MeV  21.2 MeV  1.12 cm   49.3 cm       Iron       hhIoni
+   18   -249 m   -2.04 cm  -7.68 mm    289 MeV  20.2 MeV  1.01 cm   50.3 cm       Iron       hhIoni
+   19   -249 m   -2.12 cm  -7.72 mm    271 MeV  18.4 MeV  9.04 mm   51.2 cm       Iron       hhIoni
+   20   -249 m   -2.21 cm  -7.86 mm    254 MeV  17.2 MeV  8.13 mm     52 cm       Iron       hhIoni
+   21   -249 m   -2.29 cm  -8.09 mm    237 MeV  16.4 MeV  7.31 mm   52.7 cm       Iron       hhIoni
+   22   -249 m   -2.36 cm  -8.45 mm    221 MeV  15.9 MeV  6.56 mm   53.4 cm       Iron       hhIoni
+   23   -249 m   -2.43 cm  -8.75 mm    207 MeV  14.2 MeV  5.87 mm     54 cm       Iron       hhIoni
+   24   -249 m   -2.48 cm  -8.99 mm    193 MeV  13.9 MeV  5.27 mm   54.5 cm       Iron       hhIoni
+   25   -249 m   -2.53 cm  -9.28 mm    182 MeV  11.6 MeV   4.7 mm     55 cm       Iron       hhIoni
+   26   -249 m   -2.57 cm  -9.59 mm    170 MeV  11.2 MeV  4.25 mm   55.4 cm       Iron       hhIoni
+   27   -249 m   -2.62 cm  -9.94 mm    160 MeV  10.6 MeV  3.83 mm   55.8 cm       Iron       hhIoni
+   28   -249 m   -2.66 cm  -1.03 cm    150 MeV  9.84 MeV  3.45 mm   56.1 cm       Iron       hhIoni
+   29   -249 m    -2.7 cm  -1.06 cm    141 MeV  8.49 MeV  3.12 mm   56.4 cm       Iron       hhIoni
+   30   -249 m   -2.72 cm  -1.09 cm    132 MeV  9.18 MeV  2.84 mm   56.7 cm       Iron       hhIoni
+   31   -249 m   -2.75 cm  -1.12 cm    124 MeV  7.98 MeV  2.55 mm     57 cm       Iron       hhIoni
+   32   -249 m   -2.77 cm  -1.15 cm    117 MeV  6.91 MeV   2.3 mm   57.2 cm       Iron       hhIoni
+   33   -249 m   -2.78 cm  -1.18 cm    110 MeV  7.41 MeV   2.1 mm   57.4 cm       Iron       hhIoni
+   34   -249 m    -2.8 cm  -1.21 cm    103 MeV  6.62 MeV   1.9 mm   57.6 cm       Iron       hhIoni
+   35   -249 m   -2.81 cm  -1.24 cm   96.7 MeV  6.63 MeV  1.72 mm   57.8 cm       Iron       hhIoni
+   36   -249 m   -2.83 cm  -1.27 cm   90.1 MeV  6.55 MeV  1.55 mm   57.9 cm       Iron       hhIoni
+   37   -249 m   -2.84 cm  -1.29 cm   84.4 MeV  5.74 MeV  1.39 mm   58.1 cm       Iron       hhIoni
+   38   -249 m   -2.85 cm  -1.32 cm   78.4 MeV  5.92 MeV  1.26 mm   58.2 cm       Iron       hhIoni
+   39   -249 m   -2.87 cm  -1.34 cm   72.7 MeV  5.74 MeV  1.13 mm   58.3 cm       Iron       hhIoni
+   40   -249 m   -2.88 cm  -1.35 cm   67.6 MeV  5.08 MeV  1.01 mm   58.4 cm       Iron       hhIoni
+   41   -249 m   -2.89 cm  -1.37 cm   62.4 MeV  5.23 MeV   914 um   58.5 cm       Iron       hhIoni
+   42   -249 m    -2.9 cm  -1.38 cm   57.4 MeV  5.04 MeV   818 um   58.6 cm       Iron       hhIoni
+   43   -249 m   -2.91 cm  -1.38 cm   52.8 MeV  4.57 MeV   730 um   58.7 cm       Iron       hhIoni
+   44   -249 m   -2.92 cm  -1.39 cm   48.4 MeV  4.43 MeV   655 um   58.7 cm       Iron       hhIoni
+   45   -249 m   -2.92 cm   -1.4 cm     44 MeV  4.31 MeV   587 um   58.8 cm       Iron       hhIoni
+   46   -249 m   -2.93 cm  -1.41 cm     40 MeV  4.07 MeV   525 um   58.8 cm       Iron       hhIoni
+   47   -249 m   -2.93 cm  -1.41 cm     36 MeV  3.97 MeV   471 um   58.9 cm       Iron       hhIoni
+   48   -249 m   -2.94 cm  -1.41 cm   32.1 MeV  3.86 MeV   421 um   58.9 cm       Iron       hhIoni
+   49   -249 m   -2.94 cm  -1.42 cm   28.7 MeV  3.49 MeV   377 um     59 cm       Iron       hhIoni
+   50   -249 m   -2.94 cm  -1.42 cm   24.8 MeV  3.82 MeV   339 um     59 cm       Iron       hhIoni
+   51   -249 m   -2.94 cm  -1.42 cm   21.3 MeV  3.56 MeV   302 um     59 cm       Iron       hhIoni
+   52   -249 m   -2.94 cm  -1.42 cm   17.6 MeV  3.66 MeV   270 um   59.1 cm       Iron       hhIoni
+   53   -249 m   -2.94 cm  -1.42 cm   13.9 MeV   3.7 MeV   239 um   59.1 cm       Iron       hhIoni
+   54   -249 m   -2.94 cm  -1.42 cm    9.6 MeV  4.31 MeV   209 um   59.1 cm       Iron       hhIoni
+   55   -249 m   -2.94 cm  -1.42 cm   4.82 MeV  4.78 MeV   171 um   59.1 cm       Iron       hhIoni
+   56   -249 m   -2.94 cm  -1.42 cm      0 eV   4.82 MeV  85.7 um   59.1 cm       Iron       hhIoni
 Run terminated.
 Run Summary
   Number of events processed : 2
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0.01s Sys=0.01s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1520429789, 22482315
+ Current couple of seeds = 563750285, 1270994016
 ----------------------------------------
 
  Number of process calls --->	hhIoni : 113

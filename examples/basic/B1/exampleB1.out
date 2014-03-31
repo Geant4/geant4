@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-02    (28-February-2014)
+ Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -602,7 +602,7 @@ hPairProd:   for  pi-    SubType= 4
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 gamma of 6 MeV
- Dose in scoring volume : 50.9887 picoGy  +- 4.26027 picoGy 
+ Dose in scoring volume : 44.1454 picoGy  +- 4.00162 picoGy 
 ------------------------------------------------------------
 
 ### Run 1 starts.
@@ -619,7 +619,7 @@ hPairProd:   for  pi-    SubType= 4
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume : 4.67373 nanoGy  +- 144.685 picoGy 
+ Dose in scoring volume : 4.74921 nanoGy  +- 145.5 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.
