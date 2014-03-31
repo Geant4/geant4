@@ -111,7 +111,7 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection(G4bool combined) :
   tkin = mom2 = momCM2 = factorA2 = mass = spin = chargeSquare = charge3 = 0.0;
   ecut = etag = DBL_MAX;
   targetZ = 0;
-  cosThetaMax = 1.0;
+  cosThetaMax = -1.0;
   targetMass = proton_mass_c2;
   particle = 0;
 }
@@ -318,31 +318,30 @@ G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
       cost2 = std::max(cost2,cosTetMaxElec);
     }
   }
-  if(cost1 < cost2) { return v; }
+  if(cost1 > cost2) {
+    G4double w1 = 1. - cost1 + screenZ;
+    G4double w2 = 1. - cost2 + screenZ;
+    G4double z1, z2;
+    do {
+      z1 = w1*w2/(w1 + G4UniformRand()*(w2 - w1)) - screenZ;
+      z2 = 1. - z1*factB;
+    } while( G4UniformRand() >= z2); 
+    G4double fm =  1.0 + formf*z1;
+    G4double grej = (1. + factB1*targetZ*sqrt(z1*factB)*(2 - z1)/z2)/
+      ( (1.0 + z1*factD)*fm*fm );
 
-  G4double w1 = 1. - cost1 + screenZ;
-  G4double w2 = 1. - cost2 + screenZ;
-  G4double z1 = w1*w2/(w1 + G4UniformRand()*(w2 - w1)) - screenZ;
+    // exclude "false" scattering due to formfactor
+    if( G4UniformRand() < grej ) { 
+      G4double cost = 1.0 - z1;
 
-  //G4double fm =  1.0 + formf*z1/(1.0 + (mass + tkin)*z1/targetMass);
-  G4double fm =  1.0 + formf*z1;
-  //G4double grej = (1. - z1*factB)/( (1.0 + z1*factD)*fm*fm );
-  G4double grej = (1. - z1*factB + factB1*targetZ*sqrt(z1*factB)*(2 - z1))/( (1.0 + z1*factD)*fm*fm );
-  // "false" scattering
-  if( G4UniformRand() > grej ) { return v; }
-    // } 
-  G4double cost = 1.0 - z1;
-
-  if(cost > 1.0)       { cost = 1.0; }
-  else if(cost < -1.0) { cost =-1.0; }
-  G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
-  //G4cout << "sint= " << sint << G4endl;
-  G4double phi  = twopi*G4UniformRand();
-  G4double vx1 = sint*cos(phi);
-  G4double vy1 = sint*sin(phi);
-
-  // only direction is changed
-  v.set(vx1,vy1,cost);
+      if(cost > 1.0)       { cost = 1.0; }
+      else if(cost < -1.0) { cost =-1.0; }
+      G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
+      //G4cout << "sint= " << sint << G4endl;
+      G4double phi  = twopi*G4UniformRand();
+      v.set(sint*cos(phi),sint*sin(phi),cost);
+    }
+  }
   return v;
 }
 

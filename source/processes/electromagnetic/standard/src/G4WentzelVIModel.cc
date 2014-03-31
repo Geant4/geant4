@@ -124,16 +124,16 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
   SetupParticle(p);
   currentRange = 0.0;
 
+  cosThetaMax = -1.0;
   if(isCombined) {
-    cosThetaMax = 1.0;
     G4double tet = PolarAngleLimit();
-    if(tet >= pi)      { cosThetaMax = -1.0; }
-    else if(tet > 0.0) { cosThetaMax = cos(tet); }
+    if(tet <= 0.0)           { cosThetaMax = 1.0; }
+    else if(tet < CLHEP::pi) { cosThetaMax = cos(tet); }
   }
 
   //G4cout << "G4WentzelVIModel::Initialise " << p->GetParticleName() << G4endl;
   wokvi->Initialise(p, cosThetaMax);
-  /*
+  /*  
   G4cout << "G4WentzelVIModel: " << particle->GetParticleName()
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMax 
 	 << G4endl;
@@ -248,10 +248,10 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   lambdaeff = GetTransportMeanFreePath(particle,preKinEnergy);
   currentRange = GetRange(particle,preKinEnergy,currentCouple);
   cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
-
-  //G4cout << "lambdaeff= " << lambdaeff << " Range= " << currentRange
-  //	 << " tlimit= " << tlimit << " 1-cost= " << 1 - cosTetMaxNuc << G4endl;
-
+  /*  
+  G4cout << "lambdaeff= " << lambdaeff << " Range= " << currentRange
+  	 << " tlimit= " << tlimit << " 1-cost= " << 1 - cosTetMaxNuc << G4endl;
+  */
   // extra check for abnormal situation
   // this check needed to run MSC with eIoni and eBrem inactivated
   if(tlimit > currentRange) { tlimit = currentRange; }
@@ -278,15 +278,14 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
       return ConvertTrueToGeom(tlimit, currentMinimalStep);
     }
   }
-  /* 
+  /*     
   G4cout << "e(MeV)= " << preKinEnergy/MeV
 	 << "  " << particle->GetParticleName() 
 	 << " CurLimit(mm)= " << tlimit/mm <<" safety(mm)= " << presafety/mm
 	 << " R(mm)= " <<currentRange/mm
 	 << " L0(mm^-1)= " << lambdaeff*mm 
-	 <<G4endl;
+	 << G4endl;
   */
-
   // natural limit for high energy
   G4double rlimit = std::max(facrange*currentRange, 
 			     0.7*(1.0 - cosTetMaxNuc)*lambdaeff);
@@ -316,11 +315,10 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
     G4double geomlimit = ComputeGeomLimit(track, presafety, currentRange);
     tlimit = std::min(tlimit, geomlimit/facgeom);
   } 
-
-  /*    
+  /*        
   G4cout << particle->GetParticleName() << " e= " << preKinEnergy
 	 << " L0= " << lambdaeff << " R= " << currentRange
-	 << "tlimit= " << tlimit  
+	 << " tlimit= " << tlimit  
   	 << " currentMinimalStep= " << currentMinimalStep << G4endl;
   */
   return ConvertTrueToGeom(tlimit, currentMinimalStep);
@@ -336,7 +334,7 @@ G4double G4WentzelVIModel::ComputeGeomPathLength(G4double truelength)
   if(lambdaeff > 0.0 && lambdaeff != DBL_MAX) {
     G4double tau = tPathLength/lambdaeff;
     //G4cout << "ComputeGeomPathLength: tLength= " << tPathLength
-    //	 << " Leff= " << lambdaeff << " tau= " << tau << G4endl; 
+    //	   << " Leff= " << lambdaeff << " tau= " << tau << G4endl; 
     // small step
     if(tau < numlimit) {
       zPathLength *= (1.0 - 0.5*tau + tau*tau/6.0);
@@ -354,7 +352,7 @@ G4double G4WentzelVIModel::ComputeGeomPathLength(G4double truelength)
     }
   } else { lambdaeff = DBL_MAX; }
   //G4cout << "Comp.geom: zLength= "<<zPathLength<<" tLength= "
-  //      << tPathLength<<G4endl;
+  //     << tPathLength<<G4endl;
   return zPathLength;
 }
 
@@ -365,7 +363,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
   // initialisation of single scattering x-section
   xtsec = 0.0;
   cosThetaMin = cosTetMaxNuc;
-  /*  
+  /*    
   G4cout << "ComputeTrueStepLength: Step= " << geomStepLength 
 	 << "  Lambda= " <<  lambdaeff 
   	 << " 1-cosThetaMaxNuc= " << 1 - cosTetMaxNuc << G4endl;
@@ -442,8 +440,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
       if(tPathLength > currentRange) { tPathLength = currentRange; }
     } 
   }
-
-  /*     
+  /*      
   G4cout <<"Comp.true: zLength= "<<zPathLength<<" tLength= "<<tPathLength
 	 <<" Leff(mm)= "<<lambdaeff/mm<<" sig0(1/mm)= " << xtsec <<G4endl;
   G4cout << particle->GetParticleName() << " 1-cosThetaMin= " << 1-cosThetaMin
@@ -474,13 +471,12 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
   // use average kinetic energy over the step
   G4double cut = (*currentCuts)[currentMaterialIndex];
   if(fixedCut > 0.0) { cut = fixedCut; }
-  /*  
+  /*      
   G4cout <<"SampleScat: E0(MeV)= "<< preKinEnergy/MeV
   	 << " Leff= " << lambdaeff <<" sig0(1/mm)= " << xtsec 
  	 << " xmsc= " <<  tPathLength*invlambda 
 	 << " safety= " << safety << G4endl;
   */
-
   // step limit due msc
   G4int nMscSteps = 1;
   G4double x0 = tPathLength;
@@ -540,7 +536,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
   G4double x2 = x0;
   G4double step, z;
   G4bool singleScat;
-  /*
+  /*  
     G4cout << "Start of the loop x1(mm)= " << x1 << "  x2(mm)= " << x2 
     << " 1-cost1= " << 1 - cosThetaMin << "  " << singleScatteringMode 
 	   << " xtsec= " << xtsec << "  "  << nMscSteps << G4endl;

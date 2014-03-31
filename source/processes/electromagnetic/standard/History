@@ -18,6 +18,16 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+31 March 14: V.Ivanchenko (emstand-V10-00-21)
+- G4WentzelVIModel - removed forgotten debug printout
+
+31 March 14: V.Ivanchenko (emstand-V10-00-20)
+- G4WentzelVIModel - fixed step limitation
+- G4WentzelOKandVIxSection - fixed initialisation for low-energy
+    model (this model is not combined with single scattering);
+    fixed small inaccuracy for sampling 
+- G4GammaConversion - switch default number of bins from 77 to 220
+
 28 March 14: V.Ivanchenko (emstand-V10-00-19)
 - G4CoulombScattering - use G4IonCoulombScatteringModel for ions
     by default
