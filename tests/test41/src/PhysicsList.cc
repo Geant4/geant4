@@ -26,7 +26,9 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
+#include "PhysListEmStandard.hh"
 #include "PhysListEmStandardSS.hh"
+#include "PhysListEmStandardSSM.hh"
 #include "PhysListEmStandardIG.hh"
 
 #include "G4SystemOfUnits.hh"
@@ -137,23 +139,35 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new G4EmStandardPhysics_option3();
+    emPhysicsList = new G4EmStandardPhysics_option4();
 
-  } else if (name == "standardSS") {
+  } else if (name == "emstandardSS") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardSS(name);
 
-  } else if (name == "standardIG") {
+  } else if (name == "emstandardSSM") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandardSSM(name);
+
+  } else if (name == "emstandardIG") {
 
     emName = name;
     delete emPhysicsList;
     emPhysicsList = new PhysListEmStandardIG(name);
 
+  } else if (name == "emstandardUB") {
+
+    emName = name;
+    delete emPhysicsList;
+    emPhysicsList = new PhysListEmStandard(name);
+
   } else if (name == "emstandardGS") {
 
-    AddPhysicsList("emstandard_opt3");
+    emPhysicsList = new PhysListEmStandard(name);
     G4EmConfigurator* conf = G4LossTableManager::Instance()->EmConfigurator();
     G4GoudsmitSaundersonMscModel* mscm = new G4GoudsmitSaundersonMscModel();
     conf->SetExtraEmModel("mu+","msc",mscm);
