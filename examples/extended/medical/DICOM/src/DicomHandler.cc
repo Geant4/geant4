@@ -875,11 +875,14 @@ void DicomHandler::CheckFileFormat()
 
     if(!(checkData.is_open())) { //Check existance of Data.dat
 
-        G4cout << "\nDicomG4 needs Data.dat (or another driver file specified in command line)"
-        << ":\n\tFirst line: number of image pixel for a "
-        << "voxel (G4Box)\n\tSecond line: number of images (CT slices) to "
-        << "read\n\tEach following line contains the name of a Dicom image except "
-        << "for the .dcm extension\n";
+        std::ostringstream message;
+        message << "\nDicomG4 needs Data.dat (or another driver file specified"
+                << " in command line):\n"
+                << "\tFirst line: number of image pixel for a voxel (G4Box)\n"
+                << "\tSecond line: number of images (CT slices) to read\n"
+                << "\tEach following line contains the name of a Dicom image"
+                << " except for the .dcm extension";
+        G4cout << message.str() << G4endl;
         exit(0);
     }
 
