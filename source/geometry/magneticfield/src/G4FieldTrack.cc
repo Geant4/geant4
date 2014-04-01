@@ -132,3 +132,50 @@ void G4FieldTrack::
   // fpChargeState= new G4ChargeState(  charge, magnetic_dipole_moment, 
   //			     electric_dipole_moment, magnetic_charge  ); 
 }
+
+// Load values from array
+//  
+//   note that momentum direction must-be/is normalised
+
+void G4FieldTrack::LoadFromArray(const G4double valArrIn[ncompSVEC],
+                                       G4int noVarsIntegrated)
+{
+  G4int i;
+
+  // Fill the variables not integrated with zero -- so it's clear !!
+  G4double valArr[ncompSVEC];
+  for( i=0; i<noVarsIntegrated; i++){
+     valArr[i]= valArrIn[i];
+  }
+  for( i=noVarsIntegrated; i<ncompSVEC; i++) {
+     valArr[i]= 0.0; 
+  }
+
+  SixVector[0]=valArr[0];
+  SixVector[1]=valArr[1];
+  SixVector[2]=valArr[2];
+  SixVector[3]=valArr[3];
+  SixVector[4]=valArr[4];
+  SixVector[5]=valArr[5];
+
+  G4ThreeVector Momentum(valArr[3],valArr[4],valArr[5]);
+
+  G4double momentum_square= Momentum.mag2();
+  fMomentumDir= Momentum.unit();
+
+  fKineticEnergy = momentum_square / 
+                   (std::sqrt(momentum_square+fRestMass_c2*fRestMass_c2)
+                     + fRestMass_c2 ); 
+  // The above equation is stable for small and large momenta
+
+  // The following components may or may not be
+  //    integrated over -- integration is optional
+  // fKineticEnergy= valArr[6];
+
+  fLabTimeOfFlight=valArr[7];
+  fProperTimeOfFlight=valArr[8];
+  fSpin=G4ThreeVector(valArr[9],valArr[10],valArr[11]);
+  // fMomentumDir=G4ThreeVector(valArr[13],valArr[14],valArr[15]);
+  // fDistanceAlongCurve= valArr[]; 
+}
+  
