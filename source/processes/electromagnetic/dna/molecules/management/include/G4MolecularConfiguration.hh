@@ -24,16 +24,22 @@
 // ********************************************************************
 //
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+
+// The code is developed in the framework of the ESA AO7146
 //
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
+// We would be very happy hearing from you, so do not hesitate to send us your feedback!
 //
-// History:
-// -----------
-// 10 Oct 2011 M.Karamitros created
+// In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
 //
-// -------------------------------------------------------------------
+// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we ask that you please cite the following papers reference papers on chemistry:
+//
+// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
+// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
+
 
 
 #ifndef G4MolecularConfiguration_
@@ -42,8 +48,9 @@
 #include <vector>
 #include <map>
 #include <CLHEP/Utility/memory.h>
+#include "G4Threading.hh"
 
-class G4MolecularDecayChannel;
+class G4MolecularDissociationChannel;
 class G4MoleculeDefinition;
 
 #include "G4ElectronOccupancy.hh"
@@ -101,12 +108,16 @@ public :
     /////////////////
     // Static methods
 
+    // Get ground state electronic configuration
+    static G4MolecularConfiguration* GetMolecularConfiguration(const G4MoleculeDefinition*);
+
     // Get for a given moleculeDefinition and a given electronic configuration, the mol conf
     static G4MolecularConfiguration* GetMolecularConfiguration(const G4MoleculeDefinition*,
             const G4ElectronOccupancy& electronOccupancy);
 
-    // Get ground state electronic configuration
-    static G4MolecularConfiguration* GetMolecularConfiguration(const G4MoleculeDefinition*);
+    // Get for a given moleculeDefinition and a given electronic configuration, the mol conf
+    static G4MolecularConfiguration* GetMolecularConfiguration(const G4MoleculeDefinition*,
+            int charge);
 
     // Release memory of the mol conf manager
     static void DeleteManager();
@@ -118,6 +129,10 @@ public :
     /** Returns the name of the molecule
     */
     const G4String& GetName() const;
+
+    /** Returns the formated name of the molecule
+    */
+    const G4String& GetFormatedName() const;
 
     /** Returns the nomber of atoms compouning the molecule
        */
@@ -153,9 +168,11 @@ public :
     */
     void PrintState() const;
 
-    const std::vector <const G4MolecularDecayChannel*>* GetDecayChannel() const;
+    const std::vector <const G4MolecularDissociationChannel*>* GetDecayChannel() const;
 
-    G4int GetMoleculeID() const;
+    G4int GetFakeParticleID() const;
+
+    inline G4int GetMoleculeID() const;
 
     /** Sets the diffusion coefficient D of the molecule used in diffusion
        * processes to calculate the mean square jump distance between two
@@ -206,27 +223,56 @@ public :
 
 protected :
     G4MolecularConfiguration(const G4MoleculeDefinition*, const G4ElectronOccupancy&);
+    G4MolecularConfiguration(const G4MoleculeDefinition*, int);
     G4MolecularConfiguration(const G4MolecularConfiguration&);
     G4MolecularConfiguration & operator=(G4MolecularConfiguration &right);
     ~G4MolecularConfiguration();
     G4MolecularConfiguration* ChangeConfiguration(const G4ElectronOccupancy& newElectronOccupancy);
+    G4MolecularConfiguration* ChangeConfiguration(int charge);
 
     const G4MoleculeDefinition* fMoleculeDefinition;
     const G4ElectronOccupancy* fElectronOccupancy;
 
+    void CheckElectronOccupancy(const char* line) const;
+
 public:
-    struct G4MolecularConfigurationManager
+    class G4MolecularConfigurationManager
     {
-        G4MolecularConfigurationManager();
+    public:
+        G4MolecularConfigurationManager(): fMoleculeCreationMutex() { fLastMoleculeID = -1;}
         ~G4MolecularConfigurationManager();
 
+        G4int SetMolecularConfiguration(const G4MoleculeDefinition* molDef,
+                                       const G4ElectronOccupancy& eOcc,
+                                       G4MolecularConfiguration* molConf);
+
+        G4int SetMolecularConfiguration(const G4MoleculeDefinition* molDef,
+                                       int charge,
+                                       G4MolecularConfiguration* molConf);
+
+        const G4ElectronOccupancy* FindCommonElectronOccupancy(const G4MoleculeDefinition* molDef, const G4ElectronOccupancy& eOcc);
+
+        G4MolecularConfiguration* GetMolecularConfiguration(const G4MoleculeDefinition* molDef,
+                                                            const G4ElectronOccupancy& eOcc);
+
+        G4MolecularConfiguration* GetMolecularConfiguration(const G4MoleculeDefinition* molDef,
+                                                            int charge);
+
+
+        static G4Mutex fManagerCreationMutex;
+
+    private:
         typedef std::map<const G4MoleculeDefinition*, std::map<G4ElectronOccupancy, G4MolecularConfiguration*, comparator> > MolecularConfigurationTable;
         MolecularConfigurationTable fTable;
+        typedef std::map<const G4MoleculeDefinition*, std::map<int, G4MolecularConfiguration*, comparator> > MolChargeConfigurationTable;
+        MolChargeConfigurationTable fChargeTable;
+        G4int fLastMoleculeID;
+
+        G4Mutex fMoleculeCreationMutex;
     };
 
-protected:
-    static G4ThreadLocal G4MolecularConfigurationManager* fgManager;
-
+protected :
+    static G4MolecularConfigurationManager* fgManager;
     static G4MolecularConfigurationManager* GetManager();
 
     G4double fDynDiffusionCoefficient;
@@ -234,6 +280,8 @@ protected:
     G4double fDynDecayTime;
     G4double fDynMass;
     G4int    fDynCharge;
+    G4int    fMoleculeID;
+    mutable G4String fFormatedName; // mutable allowed this member to be changed in const methods
     mutable G4String fName; // mutable allowed this member to be changed in const methods
 };
 
@@ -291,5 +339,10 @@ inline void G4MolecularConfiguration::SetMass(G4double aMass)
 inline G4double G4MolecularConfiguration::GetMass() const
 {
     return fDynMass;
+}
+
+inline G4int G4MolecularConfiguration::GetMoleculeID() const
+{
+	return fMoleculeID;
 }
 #endif

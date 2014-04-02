@@ -14,6 +14,37 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+02-04-2014  MK                  tag emdna-V10-00-14
+		- on mac: template parameter declared as a friend class is supported only with c++11 which causes a warning
+		-> this part is withdrawn for now
+
+02-04-2014  MK                  tag emdna-V10-00-13
+		- version 2 : try fixing the build error on mac
+
+02-04-2014  MK                  tag emdna-V10-00-12
+		- version 1 : try to fix build errors and warnings on mac
+
+02-04-2014  MK                  tag emdna-V10-00-11
+		- try to fix build error on windows platform - 3
+		(G4MemStat & G4MolecularConfiguration)
+
+02-04-2014  MK                  tag emdna-V10-00-10
+                - try to fix build error on windows platform - 2
+		(problem coming from having as a friend class a template argument)
+
+02-04-2014  MK                  tag emdna-V10-00-09
+		- try to fix build error on windows platform 
+
+01-04-2014  MK                  tag emdna-V10-00-08
+		- G4DNAChemistryManager.cc: remove a G4cout in destructor causing a crash in test60
+		- G4TrackState.hh: change 'typename' to 'class' in template argument of typewrapper
+
+01-04-2014  MK                  tag emdna-V10-00-07
+		- reset CMakeLists.txt
+
+01-04-2014  MK                  tag emdna-V10-00-06
+                - update chemistry
+
 01-04-2014  SI		 	tag emdna-V10-00-05
 		- Modified calculation of secondary kinetic for fast code
 

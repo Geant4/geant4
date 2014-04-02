@@ -107,20 +107,9 @@ void G4ITReactionChange::Initialize(const G4Track& trackA,
 
 void G4ITReactionChange::AddSecondary(G4Track* aTrack)
 {
-    if(fSecondaries==0) fSecondaries = new G4TrackFastVector();
-
-    // add a secondary after size check
-    if (G4TrackFastVectorSize > fNumberOfSecondaries)
-    {
-        fSecondaries->SetElement(fNumberOfSecondaries, aTrack);
-        fNumberOfSecondaries++;
-    }
-    else
-    {
-        G4cerr << "G4ITReactionChange::AddSecondary() Warning  ";
-        G4cerr << "fSecondaries is full !! " << G4endl;
-        G4cerr << " The object will not be added in fSecondaries" << G4endl;
-    }
+    if(fSecondaries==0) fSecondaries = new std::vector<G4Track*>();
+    fSecondaries->push_back(aTrack);
+    fNumberOfSecondaries++;
 }
 
 void G4ITReactionChange::UpdateStepInfo(G4Step* stepA, G4Step* stepB)

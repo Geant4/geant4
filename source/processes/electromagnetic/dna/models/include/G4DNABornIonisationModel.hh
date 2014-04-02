@@ -90,13 +90,17 @@ private:
   std::map<G4String,G4double,std::less<G4String> > lowEnergyLimit;
   std::map<G4String,G4double,std::less<G4String> > highEnergyLimit;
 
+  // TODO :
+//  std::map<const G4ParticleDefinition*,std::pair<G4double,G4double> > fEnergyLimits;
+
+
   G4bool isInitialised;
   G4int verboseLevel;
   
   // Cross section
 
   typedef std::map<G4String,G4String,std::less<G4String> > MapFile;
-  MapFile tableFile;
+  MapFile tableFile; // useful ?
 
   typedef std::map<G4String,G4DNACrossSectionDataSet*,std::less<G4String> > MapData;
   MapData tableData;

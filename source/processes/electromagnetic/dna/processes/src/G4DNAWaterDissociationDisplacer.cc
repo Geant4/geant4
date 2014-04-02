@@ -64,7 +64,7 @@ G4DNAWaterDissociationDisplacer::G4DNAWaterDissociationDisplacer() :
 G4DNAWaterDissociationDisplacer::~G4DNAWaterDissociationDisplacer()
 {;}
 
-G4ThreeVector G4DNAWaterDissociationDisplacer::GetMotherMoleculeDisplacement(const G4MolecularDecayChannel* theDecayChannel) const
+G4ThreeVector G4DNAWaterDissociationDisplacer::GetMotherMoleculeDisplacement(const G4MolecularDissociationChannel* theDecayChannel) const
 {
     G4int decayType = theDecayChannel -> GetDisplacementType();
 
@@ -102,7 +102,7 @@ G4ThreeVector G4DNAWaterDissociationDisplacer::GetMotherMoleculeDisplacement(con
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-vector<G4ThreeVector> G4DNAWaterDissociationDisplacer::GetProductsDisplacement(const G4MolecularDecayChannel* theDecayChannel) const
+vector<G4ThreeVector> G4DNAWaterDissociationDisplacer::GetProductsDisplacement(const G4MolecularDissociationChannel* theDecayChannel) const
 {
     G4int nbProducts = theDecayChannel -> GetNbProducts();
     vector<G4ThreeVector> theProductDisplacementVector (nbProducts);

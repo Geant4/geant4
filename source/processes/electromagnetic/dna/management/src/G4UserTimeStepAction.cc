@@ -34,6 +34,7 @@
 // -------------------------------------------------------------------
 
 #include "G4UserTimeStepAction.hh"
+#include "G4ITStepManager.hh"
 
 G4UserTimeStepAction::G4UserTimeStepAction()
 {;}
@@ -47,4 +48,9 @@ G4UserTimeStepAction& G4UserTimeStepAction::operator=(const G4UserTimeStepAction
 {
     if (this == &rhs) return *this;
     return *this;
+}
+
+void G4UserTimeStepAction::SetMinimumTimeSteps(std::map<double, double>* timeSteps)
+{
+	G4ITStepManager::Instance()-> SetTimeSteps(timeSteps);
 }

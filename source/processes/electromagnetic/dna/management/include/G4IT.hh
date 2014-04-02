@@ -25,16 +25,22 @@
 //
 // $Id$
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+
+// The code is developed in the framework of the ESA AO7146
 //
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
+// We would be very happy hearing from you, so do not hesitate to send us your feedback!
 //
-// History:
-// -----------
-// 10 Oct 2011 M.Karamitros created
+// In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
 //
-// -------------------------------------------------------------------
+// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we ask that you please cite the following papers reference papers on chemistry:
+//
+// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
+// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
+
 
 #ifndef G4IT_h
 #define G4IT_h 1
@@ -44,6 +50,7 @@
 #include "G4ThreeVector.hh"
 #include "G4VUserTrackInformation.hh"
 #include "G4TrackingInformation.hh"
+#include <CLHEP/Utility/memory.h>
 
 ///
 // To implement your own IT class, you should use
@@ -53,7 +60,8 @@
 ///
 
 class G4IT;
-class G4KDNode;
+//template<typename PointT> class G4KDNode;
+class G4KDNode_Base;
 class G4ITBox;
 class G4Track;
 
@@ -67,6 +75,26 @@ extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4IT> *aITAllocator;
 #endif
 
 class G4TrackListNode;
+
+/*
+template <typename PositionT = G4ThreeVector>
+class G4ITPoint
+{
+public:
+	typedef CLHEP::shared_ptr<G4ITPoint> Ptr;
+	typedef PositionT Position;
+
+	G4ITPoint()
+	{}
+
+	G4ITPoint(const G4ITPoint& right)
+	{}
+
+	virtual ~G4ITPoint(){;}
+	virtual const PositionT& GetPosition() = 0;
+	virtual const double& operator[](int i) = 0;
+};
+*/
 
 /**
   * G4IT is a interface which allows the inheriting object :
@@ -82,6 +110,10 @@ class G4TrackListNode;
 class G4IT : public virtual G4VUserTrackInformation
 {
 public :
+//	typedef CLHEP::shared_ptr<G4IT> Ptr;
+	typedef G4IT* Ptr;
+	typedef G4ThreeVector Position;
+
     G4IT();
     G4IT(G4Track*);
     virtual ~G4IT();
@@ -110,6 +142,9 @@ public :
     inline G4Track* GetTrack();
     inline const G4Track* GetTrack() const;
 
+	virtual const G4ThreeVector& GetPosition() const;
+	virtual const double& operator[](int i) const;
+
     void RecordCurrentPositionNTime();
 
     inline void SetPrevious(G4IT*);
@@ -121,7 +156,7 @@ public :
     inline void SetITBox(G4ITBox*);
     inline const G4ITBox* GetITBox() const;
     void TakeOutBox();
-    inline void SetNode(G4KDNode*);
+    inline void SetNode(G4KDNode_Base*);
 
     inline void SetParentID(int,int);
     inline void GetParentID(int&,int&);
@@ -129,7 +164,7 @@ public :
     inline const G4ThreeVector&    GetPreStepPosition() const;
     inline G4double                GetPreStepLocalTime() const;
     inline G4double                GetPreStepGlobalTime() const;
-    inline G4KDNode*               GetNode() const;
+    inline G4KDNode_Base*               GetNode() const;
 
     inline G4TrackingInformation* GetTrackingInfo(){return &fTrackingInformation;}
 
@@ -147,7 +182,7 @@ private :
     G4ITBox *   fpITBox;
     G4IT*       fpPreviousIT;
     G4IT*       fpNextIT;
-    G4KDNode*   fpKDNode ;
+    G4KDNode_Base*   fpKDNode ;
 
     int fParentID_A;
     int fParentID_B;
@@ -252,12 +287,12 @@ inline const G4IT* G4IT::GetNext() const
     return fpNextIT ;
 }
 
-inline void G4IT::SetNode(G4KDNode* aNode)
+inline void G4IT::SetNode(G4KDNode_Base* aNode)
 {
     fpKDNode = aNode ;
 }
 
-inline G4KDNode* G4IT::GetNode() const
+inline G4KDNode_Base* G4IT::GetNode() const
 {
     return fpKDNode ;
 }

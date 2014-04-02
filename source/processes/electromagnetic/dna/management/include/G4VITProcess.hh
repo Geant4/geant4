@@ -25,16 +25,22 @@
 //
 // $Id$
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+
+// The code is developed in the framework of the ESA AO7146
 //
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
+// We would be very happy hearing from you, so do not hesitate to send us your feedback!
 //
-// History:
-// -----------
-// 10 Oct 2011 M.Karamitros created
+// In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
 //
-// -------------------------------------------------------------------
+// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we ask that you please cite the following papers reference papers on chemistry:
+//
+// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
+// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
+
 
 #ifndef G4VITProcess_H
 #define G4VITProcess_H
@@ -42,6 +48,8 @@
 #include <G4VProcess.hh>
 #include "AddClone_def.hh"
 #include "G4ReferenceCast.hh"
+#include "G4shared_ptr.hh"
+#include <typeinfo>
 
 class G4IT ;
 class G4TrackingInformation ;
@@ -50,8 +58,30 @@ struct G4ProcessState_Lock{
     inline virtual ~G4ProcessState_Lock(){;}
 };
 
-#define InitProcessState(destination,source) \
-    destination(reference_cast(destination,source))
+/*
+class G4ProcessStateHandle_Lock : public G4::shared_ptr<G4ProcessState_Lock>
+{
+public:
+	G4ProcessStateHandle_Lock(G4ProcessState_Lock* plock) : G4::shared_ptr<G4ProcessState_Lock>(plock)
+	{}
+	virtual ~G4ProcessStateHandle_Lock(){}
+};
+*/
+
+#define InitProcessState(destinationType,source) \
+    reference_cast<destinationType>(source)
+
+#define DowncastProcessState(destinationType) \
+	G4::dynamic_pointer_cast<destinationType>(G4VITProcess::fpState)
+
+#define UpcastProcessState(destinationType) \
+	G4::dynamic_pointer_cast<destinationType>(G4VITProcess::fpState)
+
+#define DowncastState(destinationType,source) \
+	G4::dynamic_pointer_cast<destinationType>(source)
+
+#define UpcastState(destinationType,source) \
+	G4::dynamic_pointer_cast<destinationType>(source)
 
 /**
  * G4VITProcess inherits from G4VProcess.
@@ -82,14 +112,29 @@ public:
         return fProcessID;
     }
 
-    G4ProcessState_Lock* GetProcessState()
+//    G4ProcessState_Lock* GetProcessState()
+//    {
+//        return fpState;
+//    }
+//
+//    void SetProcessState(G4ProcessState_Lock* aProcInfo)
+//    {
+//        fpState = (G4ProcessState*) aProcInfo;
+//    }
+
+    G4::shared_ptr<G4ProcessState_Lock> GetProcessState()
     {
-        return fpState;
+        return UpcastProcessState(G4ProcessState_Lock);
     }
 
-    void SetProcessState(G4ProcessState_Lock* aProcInfo)
+    void SetProcessState(G4::shared_ptr<G4ProcessState_Lock> aProcInfo)
     {
-        fpState = (G4ProcessState*) aProcInfo;
+        fpState = DowncastState(G4ProcessState,aProcInfo);
+    }
+
+    void ResetProcessState()
+    {
+    	fpState.reset();
     }
 
     //__________________________________
@@ -124,6 +169,11 @@ protected:  // with description
     public:
         G4ProcessState();
         virtual ~G4ProcessState();
+	
+		virtual G4String GetType()
+		{
+			return "G4ProcessState";
+		}
 
         G4double          theNumberOfInteractionLengthLeft;
         // The flight length left for the current tracking particle
@@ -134,18 +184,40 @@ protected:  // with description
 
         G4double          currentInteractionLength;
         // The InteractionLength in the current material
+
+        template<typename T> T* GetState()
+        {
+        	return dynamic_cast<T*>(this);
+        }
     };
 
-    G4ProcessState* fpState ;
+    template<typename T>
+    class G4ProcessStateBase : public G4ProcessState
+    {
+    public:
+    	G4ProcessStateBase() : G4ProcessState() {}
+    	virtual ~G4ProcessStateBase() {}
+
+    	virtual G4String GetType()
+		{
+    		return typeid(T).name();
+		}
+    };
+
+    template<typename T> T* GetState()
+    {
+    	return fpState->GetState<T>();
+    }
+
+    G4::shared_ptr<G4ProcessState> fpState;
 
     inline virtual void ClearInteractionTimeLeft();
 
-    inline virtual void      ClearNumberOfInteractionLengthLeft();
+    inline virtual void ClearNumberOfInteractionLengthLeft();
     // clear NumberOfInteractionLengthLeft
     // !!! This method should be at the end of PostStepDoIt()
     // !!! and AtRestDoIt
     //_________________________________________________
-
 
     void SetInstantiateProcessState(G4bool flag)
     { fInstantiateProcessState = flag; }

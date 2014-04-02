@@ -190,3 +190,15 @@ G4bool G4IT::operator!=(const G4IT& right) const
 {
     return !(this->operator==(right));
 }
+
+const G4ThreeVector& G4IT::GetPosition() const
+{
+	if(fpTrack)
+		return GetTrack()->GetPosition();
+	return *(new G4ThreeVector());
+}
+
+const double& G4IT::operator[](int i) const
+{
+	return const_cast<G4ThreeVector&>(GetTrack()->GetPosition())[i];
+}

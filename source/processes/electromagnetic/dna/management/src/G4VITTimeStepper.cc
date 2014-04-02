@@ -41,7 +41,8 @@ G4ThreadLocal G4double G4VITTimeStepper::fUserMinTimeStep   = -1;
 G4VITTimeStepper::G4VITTimeStepper()
 {
     fVerbose = 0;
-    fReactants = 0;
+//    fReactants = 0;
+    fReactants.reset();
     fSampledMinTimeStep = 0 ;
     fpReactionTable      = 0;
 }
@@ -60,7 +61,8 @@ G4VITTimeStepper::G4VITTimeStepper(const G4VITTimeStepper& right)
 {
     fVerbose            = right.fVerbose ;
     fpReactionTable      = right.fpReactionTable ;
-    fReactants          = 0;
+//    fReactants          = 0;
+    fReactants          .reset();
     fSampledMinTimeStep = 0 ;
 }
 
