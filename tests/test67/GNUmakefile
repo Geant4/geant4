@@ -22,6 +22,11 @@ ifdef ROOTSYS
   LDFLAGS  += `root-config --libs`
 endif
 
+ifdef G4PROFILE
+  CPPFLAGS += -pg
+  LDFLAGS  += -pg
+endif
+
 include $(G4INSTALL)/config/binmake.gmk
 
 visclean:

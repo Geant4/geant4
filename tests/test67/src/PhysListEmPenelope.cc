@@ -246,7 +246,7 @@ void PhysListEmPenelope::ConstructProcess()
       // Identical to G4EmStandardPhysics_option3
       
       G4MuMultipleScattering* msc = new G4MuMultipleScattering();
-      msc->AddEmModel(0, new G4WentzelVIModel());
+      //msc->AddEmModel(0, new G4WentzelVIModel());
       pmanager->AddProcess(msc,                       -1, 1, 1);
 
       G4MuIonisation* muIoni = new G4MuIonisation();

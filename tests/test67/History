@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-04-2014, L.Pandola and G.Folger (test67-V10-00-00)
+  Make the CMakeLists.txt able to build the test as a standalone 
+  application (e.g. as an example). 
+  Some minor cosmetics in the local physics list.
+
 21-08-2013, V.Ivanchenko (test67-V09-06-14)
   Removed G4UrbanMscModel93
 
