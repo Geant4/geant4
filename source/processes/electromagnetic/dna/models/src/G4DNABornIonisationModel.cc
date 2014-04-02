@@ -132,7 +132,7 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
     
     std::ostringstream eFullFileName;
    
-    if (fasterCode)  eFullFileName << path << "/dna/sigmadiff_cumulated_ionisation_e_born.dat"; 
+    if (fasterCode)  eFullFileName << path << "/dna/sigmadiff_cumulated_ionisation_e_born_hp.dat"; 
     if (!fasterCode) eFullFileName << path << "/dna/sigmadiff_ionisation_e_born.dat";
     
     std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
@@ -140,7 +140,7 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
     if (!eDiffCrossSection)
     {
         if (fasterCode)  G4Exception("G4DNABornIonisationModel::Initialise","em0003",
-                         FatalException,"Missing data file:/dna/sigmadiff_cumulated_ionisation_e_born.dat");
+                         FatalException,"Missing data file:/dna/sigmadiff_cumulated_ionisation_e_born_hp.dat");
 			 
         if (!fasterCode) G4Exception("G4DNABornIonisationModel::Initialise","em0003",
                          FatalException,"Missing data file:/dna/sigmadiff_ionisation_e_born.dat");
@@ -213,7 +213,7 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
 
     std::ostringstream pFullFileName;
 
-    if (fasterCode)  pFullFileName << path << "/dna/sigmadiff_cumulated_ionisation_p_born.dat"; 
+    if (fasterCode)  pFullFileName << path << "/dna/sigmadiff_cumulated_ionisation_p_born_hp.dat"; 
 
     if (!fasterCode) pFullFileName << path << "/dna/sigmadiff_ionisation_p_born.dat";
     
@@ -222,7 +222,7 @@ void G4DNABornIonisationModel::Initialise(const G4ParticleDefinition* particle,
     if (!pDiffCrossSection)
     {
         if (fasterCode)  G4Exception("G4DNABornIonisationModel::Initialise","em0003",
-                         FatalException,"Missing data file:/dna/sigmadiff_cumulated_ionisation_p_born.dat");
+                         FatalException,"Missing data file:/dna/sigmadiff_cumulated_ionisation_p_born_hp.dat");
 			 
         if (!fasterCode) G4Exception("G4DNABornIonisationModel::Initialise","em0003",
                          FatalException,"Missing data file:/dna/sigmadiff_ionisation_p_born.dat");
@@ -470,13 +470,10 @@ void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
         if (!fasterCode) secondaryKinetic = RandomizeEjectedElectronEnergy(particle->GetDefinition(),k,ionizationShell);
        
+        // SI - 01/04/2014
         if (fasterCode) 
-	do
-	{
           secondaryKinetic = RandomizeEjectedElectronEnergyFromCumulatedDcs(particle->GetDefinition(),k,ionizationShell);
-	  
-        }	 
-	while (secondaryKinetic<0) ;
+        //
         
 	G4double cosTheta = 0.;
         G4double phi = 0.;
@@ -522,8 +519,13 @@ void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
 
 	fParticleChangeForGamma->ProposeLocalEnergyDeposit(k-scatteredEnergy-secondaryKinetic-deexSecEnergy);
 
-	G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
-	fvect->push_back(dp);
+	// SI - 01/04/2014
+        if (secondaryKinetic>0) 
+        {
+          G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
+	  fvect->push_back(dp);
+        } 
+        //
 
         const G4Track * theIncomingTrack = fParticleChangeForGamma->GetCurrentTrack();
         G4DNAChemistryManager::Instance()->CreateWaterMolecule(eIonizedMolecule,
@@ -898,8 +900,13 @@ G4double G4DNABornIonisationModel::RandomizeEjectedElectronEnergyFromCumulatedDc
 	G4double secondaryElectronKineticEnergy = 0.;
 	
 	secondaryElectronKineticEnergy= 
-	  RandomTransferedEnergy(particleDefinition, k/eV, shell)*eV-waterStructure.IonisationEnergy(shell);
+	  RandomTransferedEnergy(particleDefinition, k/eV, shell)*eV-waterStructure.IonisationEnergy(shell);	
 	
+        //G4cout << RandomTransferedEnergy(particleDefinition, k/eV, shell) << G4endl;
+        // SI - 01/04/2014
+        if (secondaryElectronKineticEnergy<0.) return 0.;
+        //
+
         return secondaryElectronKineticEnergy;
 }
 
