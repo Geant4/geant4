@@ -196,7 +196,7 @@ G4ITStepProcessor::~G4ITStepProcessor()
 
     if(fpSecondary)                      delete fpSecondary;
     ClearProcessInfo();
-    //G4ITTransportationManager::DeleteInstance();
+    G4ITTransportationManager::DeleteInstance();
 
     //    if(fpUserSteppingAction)             delete fpUserSteppingAction;
 }
@@ -481,8 +481,7 @@ void G4ITStepProcessor::GetAtRestIL()
         fCondition=NotForced;
         fpCurrentProcess->SetProcessState(fpTrackingInfo->GetProcessState(fpCurrentProcess->GetProcessID()));
         lifeTime = fpCurrentProcess->AtRestGPIL( *fpTrack, &fCondition );
-//        fpCurrentProcess->SetProcessState(0);
-        fpCurrentProcess->ResetProcessState();
+        fpCurrentProcess->SetProcessState(0);
 
         if(fCondition==Forced)
         {
@@ -532,7 +531,7 @@ void G4ITStepProcessor::SetInitialStep()
     {
         G4ThreeVector direction= fpTrack->GetMomentumDirection();
         fpNavigator->LocateGlobalPointAndSetup( fpTrack->GetPosition(),
-                                                &direction, false, false ); // was false, false
+                                                &direction, false, false );
         fpState->fTouchableHandle = fpNavigator->CreateTouchableHistory();
 
         fpTrack->SetTouchableHandle( fpState->fTouchableHandle );
@@ -620,6 +619,7 @@ void G4ITStepProcessor::InitDefineStep()
 
     if(!fpStep)
     {
+
         // Create new Step and give it to the track
         fpStep = new G4Step();
         fpTrack->SetStep(fpStep);
@@ -631,7 +631,6 @@ void G4ITStepProcessor::InitDefineStep()
 
         SetupMembers();
         fpNavigator->NewNavigatorState();
-        fpITrack->GetTrackingInfo()->SetNavigatorState(fpNavigator->GetNavigatorState());
 
         SetInitialStep();
     }
@@ -682,11 +681,6 @@ void G4ITStepProcessor::InitDefineStep()
                 fpNavigator->ResetHierarchyAndLocate( fpTrack->GetPosition(),
                                                       fpTrack->GetMomentumDirection(),
                                                       *((G4TouchableHistory*)fpTrack->GetTouchableHandle()()) );
-
-//        G4VPhysicalVolume* newTopVolume=
-//                fpNavigator->LocateGlobalPointAndSetup( fpTrack->GetPosition(),
-//                                                      &fpTrack->GetMomentumDirection(),
-//                                                      true, false);
 
         //        G4cout << "New Top Volume : " << newTopVolume->GetName() << G4endl;
 
@@ -762,8 +756,7 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
                 PostStepGPIL( *fpTrack,
                               fpState->fPreviousStepSize,
                               &fCondition );
-        fpCurrentProcess->ResetProcessState();
-        //fpCurrentProcess->SetProcessState(0);
+        fpCurrentProcess->SetProcessState(0);
 
         switch (fCondition)
         {
@@ -933,8 +926,7 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
             }
         }
 
-//        fpCurrentProcess->SetProcessState(0);
-        fpCurrentProcess->ResetProcessState();
+        fpCurrentProcess->SetProcessState(0);
 
         // Make sure to check the safety, even if Step is not limited
         //  by this process.                      J. Apostolakis, June 20, 1998

@@ -65,30 +65,22 @@
 #include "G4PropagatorInField.hh"
 #include "G4FieldManager.hh"
 #include "G4ChordFinder.hh"
-#include "G4ITSafetyHelper.hh"
+#include "G4SafetyHelper.hh"
 #include "G4FieldManagerStore.hh"
 
 #include "G4UnitsTable.hh"
-#include "G4ReferenceCast.hh"
 
 class G4VSensitiveDetector;
 
 #ifndef State
-#define State(theXInfo) (GetState<G4ITTransportationState>()->theXInfo)
-#endif
-
-//#define DEBUG_MEM
-
-#ifdef DEBUG_MEM
-#include "G4MemStat.hh"
-using namespace G4MemStat;
-using G4MemStat::MemStat;
+#define State(theXInfo) (fTransportationState->theXInfo)
 #endif
 
 //#define G4DEBUG_TRANSPORT 1
 
 G4ITTransportation::G4ITTransportation(const G4String& aName, int verbose) :
     G4VITProcess(aName, fTransportation),
+    InitProcessState(fTransportationState, fpState),
     fThreshold_Warning_Energy( 100 * MeV ),
     fThreshold_Important_Energy( 250 * MeV ),
     fThresholdTrials( 10 ),
@@ -104,7 +96,7 @@ G4ITTransportation::G4ITTransportation(const G4String& aName, int verbose) :
     ITtransportMgr = G4ITTransportationManager::GetTransportationManager() ;
     fLinearNavigator = ITtransportMgr->GetNavigatorForTracking() ;
     fFieldPropagator = transportMgr->GetPropagatorInField() ;
-    fpSafetyHelper =   ITtransportMgr->GetSafetyHelper();  // New
+    fpSafetyHelper =   0; // transportMgr->GetSafetyHelper();  // New
 
     // Cannot determine whether a field exists here, as it would
     //  depend on the relative order of creating the detector's
@@ -118,20 +110,12 @@ G4ITTransportation::G4ITTransportation(const G4String& aName, int verbose) :
     SetInstantiateProcessState(true);
     G4VITProcess::SetInstantiateProcessState(false);
     fInstantiateProcessState = true;
-
-    G4VITProcess::fpState.reset(new G4ITTransportationState());
-/*
-    if(fTransportationState == 0)
-    {
-    	G4cout << "KILL in G4ITTransportation::G4ITTransportation" << G4endl;
-        abort();
-    }
-*/
 }
 
 
 G4ITTransportation::G4ITTransportation(const G4ITTransportation& right) :
-    G4VITProcess(right)
+    G4VITProcess(right),
+    InitProcessState(fTransportationState, fpState)
 {
     // Copy attributes
     fVerboseLevel               = right.fVerboseLevel ;
@@ -150,7 +134,7 @@ G4ITTransportation::G4ITTransportation(const G4ITTransportation& right) :
     ITtransportMgr = G4ITTransportationManager::GetTransportationManager() ;
     fLinearNavigator = ITtransportMgr->GetNavigatorForTracking() ;
     fFieldPropagator = transportMgr->GetPropagatorInField() ;
-    fpSafetyHelper =   ITtransportMgr->GetSafetyHelper();  // New
+    fpSafetyHelper =   0; //transportMgr->GetSafetyHelper();  // New
 
     // Cannot determine whether a field exists here, as it would
     //  depend on the relative order of creating the detector's
@@ -213,11 +197,6 @@ G4ITTransportation::~G4ITTransportation()
         G4cout << "   Max energy of loopers killed: " <<  fMaxEnergyKilled << G4endl;
     }
 #endif
-}
-
-void G4ITTransportation::BuildPhysicsTable(const G4ParticleDefinition&)
-{
-	fpSafetyHelper->InitialiseHelper();
 }
 
 G4bool G4ITTransportation::DoesGlobalFieldExist()
@@ -565,13 +544,7 @@ G4double G4ITTransportation::AlongStepGetPhysicalInteractionLength(
             currentSafety      = endSafety ;
             State(fPreviousSftOrigin) = State(fTransportEndPosition) ;
             State(fPreviousSafety)    = currentSafety ;
-
-            G4VTrackStateHandle state =
-            		GetIT(track)->GetTrackingInfo()->GetTrackState(fpSafetyHelper);
-
-            fpSafetyHelper->SetTrackState(state);
             fpSafetyHelper->SetCurrentSafety( currentSafety, State(fTransportEndPosition));
-            fpSafetyHelper->ResetTrackState();
 
             // Because the Stepping Manager assumes it is from the start point,
             //  add the StepLength
@@ -639,18 +612,9 @@ G4VParticleChange* G4ITTransportation::AlongStepDoIt( const G4Track& track,
                                                       const G4Step&  stepData )
 {
 
-#if defined (DEBUG_MEM)
-    MemStat mem_first, mem_second, mem_diff;
-#endif
-
-#if defined (DEBUG_MEM)
-    mem_first = MemoryUsage();
-#endif
-
-
-    // G4cout << "G4ITTransportation::AlongStepDoIt" << G4endl;
+    //    G4cout << "G4ITTransportation::AlongStepDoIt" << G4endl;
     // set  pdefOpticalPhoton
-    // Andrea Dotti: the following statement should be in a single line:
+    //Andrea Dotti: the following statement should be in a single line:
     // G4-MT transformation tools get confused if statement spans two lines
     // If needed contact: adotti@slac.stanford.edu
     static G4ThreadLocal  G4ParticleDefinition* pdefOpticalPhoton  = 0 ; if (!pdefOpticalPhoton) pdefOpticalPhoton= G4ParticleTable::GetParticleTable()->FindParticle("opticalphoton");
@@ -708,7 +672,7 @@ G4VParticleChange* G4ITTransportation::AlongStepDoIt( const G4Track& track,
 
     fParticleChange.ProposeGlobalTime( State(fCandidateEndGlobalTime) ) ;
     fParticleChange.ProposeLocalTime(  track.GetLocalTime() + deltaTime) ;
-/*
+    /*
     // Now Correct by Lorentz factor to get delta "proper" Time
 
     G4double  restMass       = track.GetDynamicParticle()->GetMass() ;
@@ -784,13 +748,8 @@ G4VParticleChange* G4ITTransportation::AlongStepDoIt( const G4Track& track,
 
     // Introduce smooth curved trajectories to particle-change
     //
-    fParticleChange.SetPointerToVectorOfAuxiliaryPoints(fFieldPropagator->GimmeTrajectoryVectorAndForgetIt() );
-
-#if defined (DEBUG_MEM)
-    mem_second = MemoryUsage();
-    mem_diff = mem_second-mem_first;
-    G4cout << "\t || MEM || End of G4ITTransportation::AlongStepDoIt, diff is: " << mem_diff << G4endl;
-#endif
+    fParticleChange.SetPointerToVectorOfAuxiliaryPoints
+            (fFieldPropagator->GimmeTrajectoryVectorAndForgetIt() );
 
     return &fParticleChange ;
 }
@@ -978,15 +937,8 @@ G4ITTransportation::StartTracking(G4Track* track)
 {
     G4VProcess::StartTracking(track);
     if(fInstantiateProcessState)
-    {
-//        G4VITProcess::fpState = new G4ITTransportationState();
-        G4VITProcess::fpState.reset(new G4ITTransportationState());
+        G4VITProcess::fpState = new G4ITTransportationState();
     // Will set in the same time fTransportationState
-    }
-
-    fpSafetyHelper->NewTrackState();
-    GetIT(track)->GetTrackingInfo()->SetTrackState(fpSafetyHelper,fpSafetyHelper->PopTrackState());
-
 
     // The actions here are those that were taken in AlongStepGPIL
     //   when track.GetCurrentStepNumber()==1

@@ -25,22 +25,16 @@
 //
 // $Id$
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
-
-// The code is developed in the framework of the ESA AO7146
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
-// We would be very happy hearing from you, so do not hesitate to send us your feedback!
+// WARNING : This class is released as a prototype.
+// It might strongly evolve or even disapear in the next releases.
 //
-// In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
-// If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
+// History:
+// -----------
+// 10 Oct 2011 M.Karamitros created
 //
-// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
-//
-// we ask that you please cite the following papers reference papers on chemistry:
-//
-// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
-// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
-
+// -------------------------------------------------------------------
 
 #ifndef G4ITBROWNIANTRANSPORTATION_H
 #define G4ITBROWNIANTRANSPORTATION_H
@@ -56,55 +50,50 @@ class G4SafetyHelper;
 class G4DNABrownianTransportation : public G4ITTransportation
 {
 public:
-	G4DNABrownianTransportation(const G4String& aName =  "DNABrownianTransportation", G4int verbosityLevel= 0);
-	G4IT_ADD_CLONE(G4VITProcess,G4DNABrownianTransportation)
-	virtual ~G4DNABrownianTransportation();
-	G4DNABrownianTransportation(const G4DNABrownianTransportation& other);
-	G4DNABrownianTransportation& operator=(const G4DNABrownianTransportation& other);
+    G4DNABrownianTransportation(const G4String& aName =  "DNABrownianTransportation", G4int verbosityLevel= 1);
+    G4IT_ADD_CLONE(G4VITProcess,G4DNABrownianTransportation)
+    virtual ~G4DNABrownianTransportation();
+    G4DNABrownianTransportation(const G4DNABrownianTransportation& other);
+    G4DNABrownianTransportation& operator=(const G4DNABrownianTransportation& other);
 
-	virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+    virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 
-	virtual void StartTracking(G4Track* aTrack);
+    virtual void StartTracking(G4Track* aTrack);
 
-	virtual void ComputeStep(const G4Track&,
-			const G4Step&,
-			const double,
-			double&) ;
+    virtual void ComputeStep(const G4Track&,
+                             const G4Step&,
+                             const double,
+                             double&) ;
 
-	virtual G4double AlongStepGetPhysicalInteractionLength( const G4Track& /*track*/,
-			G4double /*previousStepSize*/,
-			G4double /*currentMinimumStep*/,
-			G4double& /*currentSafety*/,
-			G4GPILSelection* /*selection*/);
-	virtual G4VParticleChange* PostStepDoIt( const G4Track& track, const G4Step& ) ;
+    virtual G4double AlongStepGetPhysicalInteractionLength( const G4Track& /*track*/,
+                                                            G4double /*previousStepSize*/,
+                                                            G4double /*currentMinimumStep*/,
+                                                            G4double& /*currentSafety*/,
+                                                            G4GPILSelection* /*selection*/);
+    virtual G4VParticleChange* PostStepDoIt( const G4Track& track, const G4Step& ) ;
 
-	virtual G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&);
+    virtual G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&);
 
 protected:
-	void Diffusion(const G4Track& track);
+    void Diffusion(const G4Track& track);
 
-	//________________________________________________________________
-	// Process information
-	struct G4ITBrownianState : public G4ITTransportationState
-	{
-	public :
-		G4ITBrownianState();
-		virtual ~G4ITBrownianState(){;}
-		virtual G4String GetType()
-		{
-			return "G4ITBrownianState";
-		}
+    //________________________________________________________________
+    // Process information
+    struct G4ITBrownianState : public G4ITTransportationState
+    {
+    public :
+        G4ITBrownianState();
+        virtual ~G4ITBrownianState(){;}
+        G4bool  fPathLengthWasCorrected;
+    };
 
-		G4bool  fPathLengthWasCorrected;
-		G4bool fTimeStepReachedLimit;
-	};
+    G4ITBrownianState* const & fpBrownianState;
 
+    G4bool fUseMaximumTimeBeforeReachingBoundary;
+    G4Material* fNistWater ;
 
-	G4bool fUseMaximumTimeBeforeReachingBoundary;
-	G4Material* fNistWater ;
-
-	// Water density table
-	const std::vector<G4double>* fpWaterDensity;
+    // Water density table
+    const std::vector<G4double>* fpWaterDensity;
 };
 
 #endif // G4ITBROWNIANTRANSPORTATION_H

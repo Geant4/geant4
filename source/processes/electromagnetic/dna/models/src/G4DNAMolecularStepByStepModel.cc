@@ -27,7 +27,6 @@
 //
 #include "G4DNAMolecularStepByStepModel.hh"
 #include "G4VDNAReactionModel.hh"
-#include "G4DNASmoluchowskiReactionModel.hh"
 
 G4DNAMolecularStepByStepModel::G4DNAMolecularStepByStepModel(const G4String& name) :
     G4VITModel(name),
@@ -74,21 +73,7 @@ G4DNAMolecularStepByStepModel::G4DNAMolecularStepByStepModel(const G4DNAMolecula
 
 void G4DNAMolecularStepByStepModel::Initialize()
 {
-	if(fpReactionTable == 0)
-	{
-		SetReactionTable(G4DNAMolecularReactionTable::GetReactionTable());
-	}
-
-    if(fReactionModel == 0)
-    {
-    	fReactionModel = new G4DNASmoluchowskiReactionModel();
-    }
-
     fReactionModel ->SetReactionTable((const G4DNAMolecularReactionTable*)fpReactionTable);
-
-    ((G4DNAMolecularReaction*)      fpReactionProcess)-> SetReactionModel(fReactionModel);
-    ((G4DNAMoleculeEncounterStepper*) 	fpTimeStepper)	 -> SetReactionModel(fReactionModel);
-
     G4VITModel::Initialize();
 }
 

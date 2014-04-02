@@ -194,10 +194,6 @@ G4ITReactionChange* G4DNAMolecularReaction::MakeReaction(const G4Track& trackA, 
             G4Track* productTrack = product->BuildTrack(trackA.GetGlobalTime(),
                                                         reactionSite);
 
-//            G4cout << ">> G4DNAMolecularReaction::MakeReaction " << G4endl
-//            		<< "\t track A ("<< trackA.GetTrackID() <<"): " << trackA.GetGlobalTime() << G4endl
-//            		<< "\t track B ("<< trackB.GetTrackID() <<"): " << trackB.GetGlobalTime() << G4endl;
-
             productTrack->SetTrackStatus(fAlive);
 
             fpChanges->AddSecondary(productTrack);

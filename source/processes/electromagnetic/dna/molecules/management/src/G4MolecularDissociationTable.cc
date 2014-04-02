@@ -40,16 +40,16 @@
 
 using namespace std;
 
-G4MolecularDissociationTable::G4MolecularDissociationTable()
+G4MolecularDecayTable::G4MolecularDecayTable()
 {;}
 
-G4MolecularDissociationTable::~G4MolecularDissociationTable()
+G4MolecularDecayTable::~G4MolecularDecayTable()
 {
     channelsMap::iterator it_map = fDecayChannelsMap.begin();
 
     for(;it_map != fDecayChannelsMap.end() ; it_map++)
     {
-        vector<const G4MolecularDissociationChannel*>& decayChannels = it_map->second;
+        vector<const G4MolecularDecayChannel*>& decayChannels = it_map->second;
         if(!decayChannels.empty())
         {
             for(int i = 0 ; i < (int) decayChannels.size() ; i++)
@@ -66,19 +66,19 @@ G4MolecularDissociationTable::~G4MolecularDissociationTable()
     fDecayChannelsMap.clear();
 }
 
-G4MolecularDissociationTable::G4MolecularDissociationTable(const G4MolecularDissociationTable& right)
+G4MolecularDecayTable::G4MolecularDecayTable(const G4MolecularDecayTable& right)
 {
     *this = right;
 }
 
-G4MolecularDissociationTable& G4MolecularDissociationTable::operator=(const G4MolecularDissociationTable& aMolecularDecayTable)
+G4MolecularDecayTable& G4MolecularDecayTable::operator=(const G4MolecularDecayTable& aMolecularDecayTable)
 {
     fExcitedStatesMap = aMolecularDecayTable.fExcitedStatesMap;
     fDecayChannelsMap = channelsMap(aMolecularDecayTable.GetDecayChannelsMap());
     return *this;
 }
 
-const vector<const G4MolecularDissociationChannel*>* G4MolecularDissociationTable::GetDecayChannels(const G4ElectronOccupancy* conf) const
+const vector<const G4MolecularDecayChannel*>* G4MolecularDecayTable::GetDecayChannels(const G4ElectronOccupancy* conf) const
 {
     statesMap::const_iterator it_exstates  = fExcitedStatesMap.find(*conf);
     if(it_exstates == fExcitedStatesMap.end()) return 0;
@@ -87,14 +87,14 @@ const vector<const G4MolecularDissociationChannel*>* G4MolecularDissociationTabl
     return &(it_decchannel->second);
 }
 
-const vector<const G4MolecularDissociationChannel*>* G4MolecularDissociationTable::GetDecayChannels(const G4String& exState) const
+const vector<const G4MolecularDecayChannel*>* G4MolecularDecayTable::GetDecayChannels(const G4String& exState) const
 {
     channelsMap::const_iterator it_decchannel = fDecayChannelsMap.find(exState);
     if(it_decchannel == fDecayChannelsMap.end()) return 0;
     return &(it_decchannel->second);
 }
 
-const G4String& G4MolecularDissociationTable::GetExcitedState(const G4ElectronOccupancy* conf) const
+const G4String& G4MolecularDecayTable::GetExcitedState(const G4ElectronOccupancy* conf) const
 {
     statesMap::const_iterator it_exstates  = fExcitedStatesMap.find(*conf);
 
@@ -109,7 +109,7 @@ const G4String& G4MolecularDissociationTable::GetExcitedState(const G4ElectronOc
     return it_exstates->second;
 }
 
-const G4ElectronOccupancy& G4MolecularDissociationTable::GetElectronOccupancy(const G4String& exState) const
+const G4ElectronOccupancy& G4MolecularDecayTable::GetElectronOccupancy(const G4String& exState) const
 {
     statesMap::const_iterator statesIter;
     const G4ElectronOccupancy* conf(0);
@@ -127,7 +127,7 @@ const G4ElectronOccupancy& G4MolecularDissociationTable::GetElectronOccupancy(co
     return *conf;
 }
 
-void G4MolecularDissociationTable::AddExcitedState(const G4String& label)
+void G4MolecularDecayTable::AddExcitedState(const G4String& label)
 {
     channelsMap::iterator channelsIter = fDecayChannelsMap.find(label);
     if(channelsIter != fDecayChannelsMap.end())
@@ -140,7 +140,7 @@ void G4MolecularDissociationTable::AddExcitedState(const G4String& label)
     fDecayChannelsMap[label] ;
 }
 
-void G4MolecularDissociationTable::AddeConfToExcitedState(const G4String& label, const G4ElectronOccupancy& conf)
+void G4MolecularDecayTable::AddeConfToExcitedState(const G4String& label, const G4ElectronOccupancy& conf)
 {
     statesMap::iterator statesIter = fExcitedStatesMap.find(conf);
 
@@ -155,12 +155,12 @@ void G4MolecularDissociationTable::AddeConfToExcitedState(const G4String& label,
     }
 }
 
-void G4MolecularDissociationTable::AddDecayChannel(const G4String& label, const G4MolecularDissociationChannel* channel)
+void G4MolecularDecayTable::AddDecayChannel(const G4String& label, const G4MolecularDecayChannel* channel)
 {
     fDecayChannelsMap[label].push_back(channel);
 }
 
-void G4MolecularDissociationTable::CheckDataConsistency()
+void G4MolecularDecayTable::CheckDataConsistency()
 {
     channelsMap::iterator channelsIter;
 
@@ -169,14 +169,14 @@ void G4MolecularDissociationTable::CheckDataConsistency()
     for (channelsIter=fDecayChannelsMap.begin(); channelsIter!=fDecayChannelsMap.end(); channelsIter++ )
     {
 
-        vector<const G4MolecularDissociationChannel*>& decayVect = channelsIter->second;
+        vector<const G4MolecularDecayChannel*>& decayVect = channelsIter->second;
         G4double sum=0;
 
         G4double max = decayVect.size();
 
         for (size_t i=0; i<max; i++)
         {
-            const G4MolecularDissociationChannel* decay = decayVect[i];
+            const G4MolecularDecayChannel* decay = decayVect[i];
             const G4double prob = decay->GetProbability();
             sum += prob;
         }

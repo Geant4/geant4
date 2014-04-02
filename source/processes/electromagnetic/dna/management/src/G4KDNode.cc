@@ -36,162 +36,214 @@
 #include "globals.hh"
 #include "G4KDNode.hh"
 #include "G4KDTree.hh"
-#include <ostream>
 
 //*********************************************
 
 //______________________________________________________________________
 // Node functions
 
-//void* GetData(G4KDNode* node)
-//{
-//	return node->GetData() ;
-//}
-//
-//const double* GetNodePosition(G4KDNode* node)
-//{
-//	return node->GetPosition() ;
-//}
-
-//______________________________________________________________________
-
-void InactiveNode(G4KDNode_Base* node)
+void* GetData(G4KDNode* node)
 {
-	if(!node) return ;
-	node->InactiveNode() ;
+    return node->GetData() ;
 }
 
-void Free(G4KDNode_Base*& node)
+const double* GetNodePosition(G4KDNode* node)
 {
-	if(node)
-		delete node ;
-	node = 0;
+    return node->GetPosition() ;
 }
 
 //______________________________________________________________________
-G4KDNode_Base::G4KDNode_Base(G4KDTree* tree,
-		G4KDNode_Base* parent):
-    						fTree(tree),
-    						fLeft(0), fRight(0), fParent(parent)
+
+void InactiveNode(G4KDNode* node)
 {
-	fSide = 0;
-	fAxis = fParent == 0? 0 : fParent->fAxis +1 < fTree->fDim? fParent->fAxis+1:0;
+    if(!node) return ;
+    node->InactiveNode() ;
+}
+
+void Free(G4KDNode*& node)
+{
+    if(node)
+    delete node ;
+    node = 0;
+}
+//*********************************************
+
+G4KDNode::G4KDNode(G4KDTree* tree, const double* position, void* data,
+                   G4KDNode* parent, int axis) :
+    fPosition(0), fData(data), fTree(tree),
+    fLeft(0), fRight(0), fParent(parent)
+{
+    fSide = 0;
+    fAxis = axis;
+    SetPosition(position);
 }
 
 // Copy constructor should not be used
-G4KDNode_Base::G4KDNode_Base(const G4KDNode_Base& ):
-    						fTree(0),
-    						fLeft(0), fRight(0), fParent(0)
+G4KDNode::G4KDNode(const G4KDNode& ):
+    fPosition(0), fData(0), fTree(0),
+    fLeft(0), fRight(0), fParent(0)
 {
-	fSide = 0;
-	fAxis = 0;
+    fSide = 0;
+    fAxis = 0;
+    fPosition = 0;
 }
 
 // Assignement should not be used
-G4KDNode_Base& G4KDNode_Base::operator=(const G4KDNode_Base& right)
+G4KDNode& G4KDNode::operator=(const G4KDNode& right)
 {
-	if (this == &right) return *this;
-	fTree = right.fTree;
-	fLeft = right.fLeft;
-	fRight = right.fRight;
-	fParent = right.fParent;
-	fSide = right.fSide;
-	fAxis = right.fAxis;
-	return *this;
+    if (this == &right) return *this;
+    fPosition = 0;
+    fData = right.fData;
+    fTree = right.fTree;
+    fLeft = right.fLeft;
+    fRight = right.fRight;
+    fParent = right.fParent;
+    fSide = right.fSide;
+    fAxis = right.fAxis;
+    SetPosition(right.fPosition);
+    return *this;
 }
 
-G4KDNode_Base::~G4KDNode_Base()
+G4KDNode::~G4KDNode()
 {
+    delete[] fPosition;
 }
 
-void G4KDNode_Base::InactiveNode()
+int G4KDNode::GetDim()
 {
-	fTree->NoticeNodeDeactivation();
+    if(fTree)
+        return fTree->GetDim();
+    else
+        return -1;
 }
 
-int G4KDNode_Base::GetDim() const
+void G4KDNode::InactiveNode()
 {
-	if(fTree)
-		return fTree->GetDim();
-	else
-		return -1;
+    fData = 0 ;
 }
 
-int G4KDNode_Base::Insert(G4KDNode_Base* newNode)
+int G4KDNode::SetPosition(const double* newposition)
 {
-	G4KDNode_Base* aParent = FindParent(*newNode);
-	// TODO check p == aParent->pos
-	// Exception
+    if(!newposition) return -1;
+    if(!fPosition)
+    {
+        fPosition = new double[fTree->fDim];
+    }
 
-	newNode->fAxis = aParent->fAxis +1 < fTree->GetDim()? aParent->fAxis+1:0;
-	newNode->fParent = aParent ;
+    memcpy(fPosition, newposition, fTree->fDim * sizeof(double));
 
-	if((*newNode)[aParent->fAxis] > (*aParent)[aParent->fAxis])
-	{
-		aParent->fRight = newNode ;
-		newNode->fSide = 1 ;
-	}
-	else
-	{
-		aParent->fLeft = newNode ;
-		newNode->fSide = -1 ;
-	}
+    return 0;
+}
 
-	newNode->fRight = 0;
-	newNode->fLeft = 0;
+G4KDNode* G4KDNode::FindParent(const double* x0)
+{
+    G4KDNode* aParent = 0 ;
+    G4KDNode* next = this ;
+    int split = -1 ;
+    while(next)
+    {
+        split = next->fAxis  ;
+        aParent = next ;
 
-	return 0 ;
+        if(x0[split] > next->fPosition[split])
+            next = next->fRight ;
+        else
+            next = next->fLeft ;
+    }
+    return aParent ;
+}
+
+G4KDNode* G4KDNode::Insert(const double* p, void* data)
+{
+    G4KDNode* aParent = FindParent(p);
+    // TODO check p == aParent->pos
+    // Exception
+
+    G4KDNode* newNode = new G4KDNode(fTree, p, data, aParent,
+                                     aParent->fAxis +1 < fTree->fDim? aParent->fAxis+1:0);
+
+    if(p[aParent->fAxis] > aParent->fPosition[aParent->fAxis])
+    {
+        aParent->fRight = newNode ;
+        newNode->fSide = 1 ;
+    }
+    else
+    {
+        aParent->fLeft = newNode ;
+        newNode->fSide = -1 ;
+    }
+
+    return newNode ;
 }
 
 
-void G4KDNode_Base::PullSubTree()
+int G4KDNode::Insert(G4KDNode* newNode, double* p)
 {
-	if(fParent)
-	{
-		if(fSide == -1)
-		{
-			fParent->fLeft = 0;
-		}
-		else
-			fParent->fRight = 0;
-	}
-	if(fLeft) fLeft -> PullSubTree();
-	if(fRight) fRight-> PullSubTree();
+    G4KDNode* aParent = FindParent(p);
+    // TODO check p == aParent->pos
+    // Exception
 
-	fParent  = 0 ;
-	fRight   = 0 ;
-	fLeft    = 0 ;
-	fTree    = 0 ;
+    newNode->fAxis = aParent->fAxis +1 < fTree->fDim? aParent->fAxis+1:0;
+    newNode->fParent = aParent ;
+
+    if(p[aParent->fAxis] > aParent->fPosition[aParent->fAxis])
+    {
+        aParent->fRight = newNode ;
+        newNode->fSide = 1 ;
+    }
+    else
+    {
+        aParent->fLeft = newNode ;
+        newNode->fSide = -1 ;
+    }
+
+    newNode->fRight = 0;
+    newNode->fLeft = 0;
+
+    return 0 ;
 }
 
-void G4KDNode_Base::RetrieveNodeList(std::list<G4KDNode_Base *>& output)
+int G4KDNode::Insert(G4KDNode* newNode, const double& x, const double& y, const double& z)
 {
-	output.push_back(this);
-
-	if(fLeft)
-		fLeft->RetrieveNodeList(output);
-
-	if(fRight)
-		fRight->RetrieveNodeList(output);
+    double p[3] ;
+    p[0] = x;
+    p[1] = y ;
+    p[2] = z ;
+    return Insert(newNode, p);
 }
 
-void G4KDNode_Base::Print(std::ostream& out, int level) const
+int G4KDNode::Insert(G4KDNode* newNode)
 {
-	// Print node level
-	out << G4endl;
-	for (int i=0; i<level; i++)         // Indent to level
-	{
-		out << "  ";
-	}
-	out << level;
+    return Insert(newNode, newNode->fPosition);
+}
 
-	// Print children
-	if(fLeft)
-	{
-		fLeft->Print(out, level + 1);
-	}
-	if(fRight)
-	{
-		fRight->Print(out, level + 1);
-	}
+void G4KDNode::PullSubTree()
+{
+    if(fParent)
+    {
+        if(fSide == -1)
+        {
+            fParent->fLeft = 0;
+        }
+        else
+            fParent->fRight = 0;
+    }
+    if(fLeft) fLeft -> PullSubTree();
+    if(fRight) fRight-> PullSubTree();
+
+    fParent  = 0 ;
+    fRight   = 0 ;
+    fLeft    = 0 ;
+    fTree    = 0 ;
+}
+
+void G4KDNode::RetrieveNodeList(std::list<G4KDNode*>& output)
+{
+    output.push_back(this);
+
+    if(fLeft)
+        fLeft->RetrieveNodeList(output);
+
+    if(fRight)
+        fRight->RetrieveNodeList(output);
 }

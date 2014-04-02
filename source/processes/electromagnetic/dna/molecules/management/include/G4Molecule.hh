@@ -28,20 +28,6 @@
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
 //
-// The code is developed in the framework of the ESA AO7146
-//
-// We would be very happy hearing from you, so do not hesitate to send us your feedback!
-//
-// In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
-// If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
-//
-// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
-//
-// we ask that you please cite the following reference papers on chemistry:
-//
-// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
-// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
-//
 // ---------------------------------------------------------------------
 //	GEANT 4 class header file
 //
@@ -75,7 +61,7 @@
 class G4Molecule;
 class G4MolecularConfiguration;
 class G4MoleculeDefinition;
-class G4MolecularDissociationChannel;
+class G4MolecularDecayChannel;
 class G4DynamicParticle;
 
 G4Molecule* GetMolecule(const G4Track& track) ;
@@ -110,14 +96,16 @@ public: // With Description
     G4bool operator!=(const G4Molecule &right) const;
     G4bool operator<(const G4Molecule &right) const;
 
+private :
+    bool CompareElectronOccupancy (const G4ElectronOccupancy* /*elecOccupancy2*/,
+                                   const G4int& /*totalOcc1*/, const G4int& /*totalOcc2*/) const;
+
 public:
     //------ Constructors --------------------------
     /** To build a molecule at ground state according to a given
      * G4MoleculeDefinition that can be obtained from G4GenericMoleculeManager
      */
     G4Molecule(G4MoleculeDefinition * molecule);
-
-    G4Molecule(G4MoleculeDefinition* molDef, int charge);
 
     /** To build a molecule at a specific excitation/ionisation state according
      * to a ground state that can be obtained from G4GenericMoleculeManager
@@ -137,10 +125,6 @@ public:
     /** Returns the name of the molecule
      */
     const G4String& GetName() const;
-
-    /** Returns the formated name of the molecule
-     */
-    const G4String& GetFormatedName() const;
 
     /** Returns the nomber of atoms compouning the molecule
      */
@@ -187,9 +171,8 @@ public:
 
     G4double GetDiffusionVelocity() const;
 
-    const std::vector <const G4MolecularDissociationChannel*>* GetDecayChannel() const;
+    const std::vector <const G4MolecularDecayChannel*>* GetDecayChannel() const;
 
-    G4int GetFakeParticleID() const;
     G4int GetMoleculeID() const;
 
     //-------------Inline functions ---------------------

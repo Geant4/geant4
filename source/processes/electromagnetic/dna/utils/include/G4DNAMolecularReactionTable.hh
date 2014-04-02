@@ -25,22 +25,16 @@
 //
 // $Id$
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
-
-// The code is developed in the framework of the ESA AO7146
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
-// We would be very happy hearing from you, so do not hesitate to send us your feedback!
+// WARNING : This class is released as a prototype.
+// It might strongly evolve or even disapear in the next releases.
 //
-// In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
-// If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
+// History:
+// -----------
+// 10 Oct 2011 M.Karamitros created
 //
-// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
-//
-// we ask that you please cite the following papers reference papers on chemistry:
-//
-// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
-// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
-
+// -------------------------------------------------------------------
 
 #ifndef G4MolecularReactionTable_h
 #define G4MolecularReactionTable_h 1
@@ -65,14 +59,10 @@ public :
     G4DNAMolecularReactionData(G4double reactionRate,
                             const G4Molecule* reactive1,
                             const G4Molecule* reactive2);
-
-    G4DNAMolecularReactionData(G4double reactionRate,
-                            const G4String& reactive1,
-                            const G4String& reactive2);
     ~G4DNAMolecularReactionData();
 
-    const G4Molecule* GetReactive1() const { return fReactive1; }
-    const G4Molecule* GetReactive2() const { return fReactive2; }
+    const G4Molecule* GetReactive1() const { return fReactive1.get(); }
+    const G4Molecule* GetReactive2() const { return fReactive2.get(); }
 
     G4double GetReactionRate() const {return fReactionRate;}
     G4double GetReducedReactionRadius() const {return fReducedReactionRadius;}
@@ -83,11 +73,6 @@ public :
     void SetReactive(const G4Molecule* reactive1, const G4Molecule* reactive2);
     void AddProduct(const G4Molecule* molecule);
 
-    void SetReactive1(const G4String& reactive) ;
-    void SetReactive2(const G4String& reactive) ;
-    void SetReactive(const G4String& reactive1, const G4String& reactive2);
-    void AddProduct(const G4String& molecule);
-
     G4int GetNbProducts() const
     {
         if(fProducts) return fProducts->size();
@@ -96,18 +81,18 @@ public :
 
     const G4Molecule* GetProduct(G4int i) const
     {
-        if(fProducts) return (*fProducts)[i];
+        if(fProducts) return (*fProducts)[i].get();
         return 0;
     }
 
 protected :
     G4DNAMolecularReactionData();
-    const G4Molecule* fReactive1;
-    const G4Molecule* fReactive2;
+    G4MoleculeHandle fReactive1;
+    G4MoleculeHandle fReactive2;
     G4double fReactionRate;
     G4double fReducedReactionRadius;
 
-    std::vector<const G4Molecule*>* fProducts;
+    std::vector<G4MoleculeHandle>* fProducts;
 };
 
 struct compMoleculeP

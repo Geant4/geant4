@@ -25,32 +25,25 @@
 //
 // $Id$
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
-
-// The code is developed in the framework of the ESA AO7146
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
-// We would be very happy hearing from you, so do not hesitate to send us your feedback!
+// WARNING : This class is released as a prototype.
+// It might strongly evolve or even disapear in the next releases.
 //
-// In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
-// If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
+// History:
+// -----------
+// 10 Oct 2011 M.Karamitros created
 //
-// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
-//
-// we ask that you please cite the following papers reference papers on chemistry:
-//
-// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
-// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
-
+// -------------------------------------------------------------------
 
 #ifndef G4ITReactionChange_H
 #define G4ITReactionChange_H
 
 #include "globals.hh"
 #include "G4ParticleChange.hh"
-#include <vector>
+#include "G4TrackFastVector.hh"
 
-/**
-  * Similar to G4ParticleChange, but deal with two tracks
+/** Similar to G4ParticleChange, but deal with two tracks
   * rather than one.
   */
 
@@ -84,7 +77,7 @@ public:
     // Not to be used in reaction processes
     void UpdateStepInfo(G4Step*, G4Step*);
     G4Track* GetSecondary(G4int) const;
-    std::vector<G4Track*>* GetfSecondary() ;
+    G4TrackFastVector* GetfSecondary() ;
 
     G4int GetNumberOfSecondaries() const;
     G4bool WereParentsKilled() const;
@@ -108,7 +101,7 @@ protected:
     // "equal" means that the objects have the same pointer.
 protected:
     std::map<const G4Track*, G4VParticleChange*> fParticleChange;
-    std::vector<G4Track*>* fSecondaries ;
+    G4TrackFastVector* fSecondaries ;
     G4int fNumberOfSecondaries;
     G4bool fKillParents ;
     G4bool fParticleChangeIsSet;
@@ -116,10 +109,7 @@ protected:
 
 inline G4Track* G4ITReactionChange::GetSecondary(G4int anIndex) const
 {
-    if(fSecondaries)
-	   return (*fSecondaries)[anIndex];
-    else
-	return 0;
+    return (*fSecondaries)[anIndex];
 }
 
 inline G4int G4ITReactionChange::GetNumberOfSecondaries() const
@@ -137,7 +127,7 @@ inline G4bool G4ITReactionChange::WereParentsKilled() const
     return fKillParents ;
 }
 
-inline std::vector<G4Track*>* G4ITReactionChange::GetfSecondary()
+inline G4TrackFastVector* G4ITReactionChange::GetfSecondary()
 {
     return fSecondaries;
 }

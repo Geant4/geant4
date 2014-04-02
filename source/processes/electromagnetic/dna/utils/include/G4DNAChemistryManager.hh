@@ -25,22 +25,16 @@
 //
 // $Id$
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
-
-// The code is developed in the framework of the ESA AO7146
+// Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
-// We would be very happy hearing from you, so do not hesitate to send us your feedback!
+// WARNING : This class is released as a prototype.
+// It might strongly evolve or even disapear in the next releases.
 //
-// In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
-// If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
+// History:
+// -----------
+// 10 Oct 2011 M.Karamitros created
 //
-// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
-//
-// we ask that you please cite the following papers reference papers on chemistry:
-//
-// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
-// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
-
+// -------------------------------------------------------------------
 
 #ifndef G4DNACHEMISTRYMANAGER_HH
 #define G4DNACHEMISTRYMANAGER_HH
@@ -49,17 +43,11 @@
 #include "G4ThreeVector.hh"
 #include <fstream>
 #include <memory>
-#include "G4UImessenger.hh"
-#include "G4VStateDependent.hh"
 
 class G4Track;
 class G4DNAWaterExcitationStructure;
 class G4DNAWaterIonisationStructure;
 class G4Molecule;
-class G4VUserChemistryList;
-class G4UIcmdWithABool;
-class G4ITGun;
-
 
 enum ElectronicModification
 {
@@ -69,10 +57,9 @@ enum ElectronicModification
 };
 
 /**
- *  THIS CLASS IS A PROTOTYPE
   * G4DNAChemistryManager is called from the physics models.
   * It creates the water molecules and the solvated electrons and
-  * and send them to G4ITStepManager to be treated in the chemistry stage.
+  * and send them to synchronous step manager to be treated in the chemistry stage.
   * For this, the fActiveChemistry flag needs to be on.
   * It is also possible to give already molecule's pointers already built.
   * G4DNAChemistryManager will then be in charge of creating the track and loading
@@ -81,30 +68,19 @@ enum ElectronicModification
   * creation of water molecules and solvated electrons.
   */
 
-class G4DNAChemistryManager : public G4UImessenger, public G4VStateDependent
+class G4DNAChemistryManager
 {
-	virtual ~G4DNAChemistryManager();
+    friend class std::auto_ptr<G4DNAChemistryManager>;
+    ~G4DNAChemistryManager();
 
 public:
     static G4DNAChemistryManager* Instance();
-    static G4DNAChemistryManager* GetInstanceIfExists();
-
-    virtual G4bool Notify(G4ApplicationState requestedState) ;
 
     /**
       * You should rather use DeleteInstance than the destructor of this class
       */
     static void DeleteInstance();
 
-    void InitializeMaster();
-    inline void ForceMasterReinitialization();
-    inline void TagThreadForReinitialization();
-
-    void Run();
-    void Clear();
-    void Gun(G4ITGun*, bool physicsTableToBuild = true);
-
-    virtual void SetNewValue(G4UIcommand*, G4String);
 
     /**
       * Tells the chemMan to write into a file
@@ -116,11 +92,8 @@ public:
     /** Close the file specified with WriteInto
       */
     void CloseFile();
-    inline G4bool IsChemistryActivated();
+    inline G4bool IsChemistryActived();
     inline void SetChemistryActivation(G4bool);
-
-    inline void SetChemistryList(G4VUserChemistryList*);
-    inline void Deregister(G4VUserChemistryList*);
 
     /**
       * Method used by DNA physics model to create a water molecule.
@@ -167,46 +140,23 @@ public:
 
     void AddEmptyLineInOuputFile();
 
-    inline void ForceThreadReinitialization();
-    inline void ForceRebuildingPhysicsTable();
-
 protected :
     G4DNAWaterExcitationStructure* GetExcitationLevel();
     G4DNAWaterIonisationStructure* GetIonisationLevel();
     void InitializeFile();
-    void InitializeThread();
-
     G4DNAChemistryManager();
 
 private:
-    G4UIdirectory* fpChemDNADirectory;
-    G4UIcmdWithABool* fpActivateChem;
-
-    static G4DNAChemistryManager* fgInstance;
+    static std::auto_ptr<G4DNAChemistryManager> fInstance;
     bool fActiveChemistry;
     G4bool fWriteFile;
-    static G4ThreadLocal std::ofstream*  fpgOutput_tl;
-    static G4ThreadLocal G4bool*  fpgThreadInitialized_tl;
-    G4bool fMasterInitialized;
-    G4bool fForceThreadReinitialization;
+    static G4ThreadLocal std::ofstream*  fOutput;
 
-    G4DNAWaterExcitationStructure* fpExcitationLevel;
-    G4DNAWaterIonisationStructure* fpIonisationLevel;
-
-    G4VUserChemistryList* fpUserChemistryList;
-    G4bool fBuildPhysicsTable;
-    G4bool fPhysicsTableBuilt;
-
-    G4bool fGeometryClosed;
+    G4DNAWaterExcitationStructure* fExcitationLevel;
+    G4DNAWaterIonisationStructure* fIonisationLevel;
 };
 
-
-inline void G4DNAChemistryManager::ForceRebuildingPhysicsTable()
-{
-	fPhysicsTableBuilt = false;
-}
-
-inline G4bool G4DNAChemistryManager::IsChemistryActivated()
+inline G4bool G4DNAChemistryManager::IsChemistryActived()
 {
     return fActiveChemistry;
 }
@@ -214,33 +164,6 @@ inline G4bool G4DNAChemistryManager::IsChemistryActivated()
 inline void G4DNAChemistryManager::SetChemistryActivation(G4bool flag)
 {
     fActiveChemistry = flag;
-}
-
-inline void G4DNAChemistryManager::SetChemistryList(G4VUserChemistryList* chemistryList)
-{
-	fpUserChemistryList = chemistryList;
-}
-
-inline void G4DNAChemistryManager::Deregister(G4VUserChemistryList* chemistryList)
-{
-	if(fpUserChemistryList == chemistryList) fpUserChemistryList = 0;
-}
-
-inline void G4DNAChemistryManager::ForceMasterReinitialization()
-{
-	fMasterInitialized = false;
-	InitializeMaster();
-}
-
-inline void G4DNAChemistryManager::ForceThreadReinitialization()
-{
-	// TODO
-	fForceThreadReinitialization = true;
-}
-
-inline void G4DNAChemistryManager::TagThreadForReinitialization()
-{
-	if(fpgThreadInitialized_tl) delete fpgThreadInitialized_tl;
 }
 
 #endif // G4DNACHEMISTRYMANAGER_HH

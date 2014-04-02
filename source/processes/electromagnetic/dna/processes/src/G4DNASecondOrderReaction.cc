@@ -34,10 +34,6 @@
 #include "G4UnitsTable.hh"
 #include "G4ITTrackHolder.hh"
 
-#ifndef State
-#define State(theXInfo) (GetState<SecondOrderReactionState>()->theXInfo)
-#endif
-
 void G4DNASecondOrderReaction::Create()
 {
     pParticleChange = &fParticleChange;
@@ -64,13 +60,15 @@ void G4DNASecondOrderReaction::Create()
 }
 
 G4DNASecondOrderReaction::G4DNASecondOrderReaction(const G4String &aName, G4ProcessType type) :
-    G4VITProcess(aName,type)
+    G4VITProcess(aName,type),
+    InitProcessState(fpSecondOrderReactionState, fpState)
 {
     Create();
 }
 
 G4DNASecondOrderReaction::G4DNASecondOrderReaction(const G4DNASecondOrderReaction& rhs):
-    G4VITProcess(rhs)
+    G4VITProcess(rhs),
+    InitProcessState(fpSecondOrderReactionState, fpState)
 {
     Create();
 }
@@ -104,7 +102,7 @@ void
 G4DNASecondOrderReaction::StartTracking(G4Track* track)
 {
     G4VProcess::StartTracking(track);
-    G4VITProcess::fpState.reset(new SecondOrderReactionState());
+    G4VITProcess::fpState = new SecondOrderReactionState();
     G4VITProcess::StartTracking(track);
 }
 
@@ -148,10 +146,10 @@ G4double G4DNASecondOrderReaction::PostStepGetPhysicalInteractionLength(const G4
 
     if(molDensity == 0.0) // ie : not found
     {
-        if(State(fIsInGoodMaterial))
+        if(fpSecondOrderReactionState->fIsInGoodMaterial)
         {
             ResetNumberOfInteractionLengthLeft();
-            State(fIsInGoodMaterial) = false;
+            fpSecondOrderReactionState->fIsInGoodMaterial = false;
         }
 
 //        G4cout << " Material " << fpMaterial->GetName() << " not found "
@@ -163,7 +161,7 @@ G4double G4DNASecondOrderReaction::PostStepGetPhysicalInteractionLength(const G4
 
 //    G4cout << " Va calculer le temps d'interaction " << G4endl;
 
-    State(fIsInGoodMaterial) = true;
+    fpSecondOrderReactionState->fIsInGoodMaterial = true;
 
 //    fConcentration = molDensity/fMolarMassOfMaterial;
     fConcentration = molDensity/CLHEP::Avogadro;
@@ -179,9 +177,9 @@ G4double G4DNASecondOrderReaction::PostStepGetPhysicalInteractionLength(const G4
     G4double previousTimeStep(-1.);
 
     if(track.GetCurrentStepNumber() > 0)
-        previousTimeStep = track.GetGlobalTime() - State(fPreviousTimeAtPreStepPoint) ;
+        previousTimeStep = track.GetGlobalTime() - fpSecondOrderReactionState->fPreviousTimeAtPreStepPoint ;
 
-    State(fPreviousTimeAtPreStepPoint) = track.GetGlobalTime();
+    fpSecondOrderReactionState->fPreviousTimeAtPreStepPoint = track.GetGlobalTime();
 
     if ( (previousTimeStep < 0.0) || (fpState->theNumberOfInteractionLengthLeft<=0.0)) {
         // beggining of tracking (or just after DoIt of this process)

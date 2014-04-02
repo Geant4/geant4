@@ -28,67 +28,55 @@
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
-
-// The code is developed in the framework of the ESA AO7146
+// Author: Mathieu Karamitros (kara@cenbg.in2p3.fr)
 //
-// We would be very happy hearing from you, so do not hesitate to send us your feedback!
+// History:
+// -----------
+// 10 Oct 2011 M.Karamitros created
 //
-// In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
-// If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
-//
-// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
-//
-// we ask that you please cite the following papers reference papers on chemistry:
-//
-// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
-// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
-
+// -------------------------------------------------------------------
 
 #ifndef G4VUSERITACTION_H
 #define G4VUSERITACTION_H
 
 #include "globals.hh"
 #include "G4Track.hh"
-#include <vector>
+#include "G4TrackFastVector.hh"
 
 /**
- * G4UserTimeStepAction is used by G4ITStepManager.
- * - StartProcessing called before processing
- * - TimeStepAction called at every global step
- * - UserReactionAction called when a reaction occurs
- * - EndProcessing called after processing
- */
+  * G4UserTimeStepAction is used by G4ITStepManager.
+  * - StartProcessing called before processing
+  * - TimeStepAction called at every global step
+  * - UserReactionAction called when a reaction occurs
+  * - EndProcessing called after processing
+  */
 
 class G4UserTimeStepAction
 {
 public:
-	G4UserTimeStepAction();
-	G4UserTimeStepAction(const G4UserTimeStepAction& );
-	virtual ~G4UserTimeStepAction();
+   G4UserTimeStepAction();
+   G4UserTimeStepAction(const G4UserTimeStepAction& );
+   virtual ~G4UserTimeStepAction();
 
-	virtual void StartProcessing(){;}
+   virtual void StartProcessing(){;}
 
-	/** In this method, the user can use :
-	 * G4ITStepManager::Instance()->GetGlobalTime(), to know the current simulation time
-	 * G4ITStepManager::Instance()->GetTimeStep(), to know the selected minimum time
-	 * WARNING : The call of this method happens before the call of DoIT methods
-	 */
-	virtual void UserPreTimeStepAction(){;}
-	virtual void UserPostTimeStepAction(){;}
+   /** In this method, the user can use :
+    * G4ITStepManager::Instance()->GetGlobalTime(), to know the current simulation time
+    * G4ITStepManager::Instance()->GetMinTime(), to know the selected minimum time
+    * WARNING : The call of this method happens before the call of DoIT methods
+    */
+   virtual void TimeStepAction(){;}
 
-	/**
-	 * Inform about a reaction
-	 */
-	virtual void UserReactionAction(const G4Track& /*trackA*/,const G4Track& /*trackB*/,
-			const std::vector<G4Track*>& /*products*/){;}
-	virtual void EndProcessing(){;}
-
-protected:
-	void SetMinimumTimeSteps(std::map<double,double>*);
+   /**
+    * This method enables to kill products right after they are generated
+    */
+   virtual void UserReactionAction(const G4Track& /*trackA*/,const G4Track& /*trackB*/,
+                                   const G4TrackFastVector& /*products*/,
+                                   int /*nbProducts*/){;}
+   virtual void EndProcessing(){;}
 
 private:
-	G4UserTimeStepAction& operator=(const G4UserTimeStepAction& );
+    G4UserTimeStepAction& operator=(const G4UserTimeStepAction& );
 };
 
 #endif // G4VUSERITACTION_H

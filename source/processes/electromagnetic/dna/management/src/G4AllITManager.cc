@@ -52,12 +52,7 @@ G4AllITManager* G4AllITManager::Instance()
 
 void G4AllITManager::DeleteInstance()
 {
-    if(fpInstance)
-    {
-    	delete fpInstance;
-    	fpInstance = 0;
-    }
-
+    if(fpInstance) delete fpInstance;
 }
 
 G4AllITManager::~G4AllITManager()

@@ -25,10 +25,10 @@
 //
 // $Id$
 //
-//
-// class G4ITNavigator1 Inline implementation
 // 
-// G4ITNavigator1 is a duplicate version of G4Navigator started from Geant4.9.5
+// class G4ITNavigator Inline implementation
+//
+// G4ITNavigator is a duplicate version of G4Navigator started from Geant4.9.5
 // initially written by Paul Kent and colleagues.
 // The only difference resides in the way the information is saved and managed
 //
@@ -41,7 +41,7 @@
 // ********************************************************************
 //
 inline
-G4ThreeVector G4ITNavigator1::GetCurrentLocalCoordinate() const
+G4ThreeVector G4ITNavigator::GetCurrentLocalCoordinate() const
 {
   return fLastLocatedPointLocal;
 }
@@ -53,7 +53,7 @@ G4ThreeVector G4ITNavigator1::GetCurrentLocalCoordinate() const
 // ********************************************************************
 //
 inline
-G4ThreeVector G4ITNavigator1::ComputeLocalAxis(const G4ThreeVector& pVec) const
+G4ThreeVector G4ITNavigator::ComputeLocalAxis(const G4ThreeVector& pVec) const
 {
   return (fHistory.GetTopTransform().IsRotated())
          ? fHistory.GetTopTransform().TransformAxis(pVec) : pVec ;
@@ -67,7 +67,7 @@ G4ThreeVector G4ITNavigator1::ComputeLocalAxis(const G4ThreeVector& pVec) const
 //
 inline
 G4ThreeVector
-G4ITNavigator1::ComputeLocalPoint(const G4ThreeVector& pGlobalPoint) const
+G4ITNavigator::ComputeLocalPoint(const G4ThreeVector& pGlobalPoint) const
 {
   return ( fHistory.GetTopTransform().TransformPoint(pGlobalPoint) ) ;
 }
@@ -79,7 +79,7 @@ G4ITNavigator1::ComputeLocalPoint(const G4ThreeVector& pGlobalPoint) const
 // ********************************************************************
 //
 inline
-G4VPhysicalVolume* G4ITNavigator1::GetWorldVolume() const
+G4VPhysicalVolume* G4ITNavigator::GetWorldVolume() const
 {
   return fTopPhysical;
 }
@@ -91,17 +91,17 @@ G4VPhysicalVolume* G4ITNavigator1::GetWorldVolume() const
 // ********************************************************************
 //
 inline
-void G4ITNavigator1::SetWorldVolume(G4VPhysicalVolume* pWorld)
+void G4ITNavigator::SetWorldVolume(G4VPhysicalVolume* pWorld)
 {
   if ( !(pWorld->GetTranslation()==G4ThreeVector(0,0,0)) )
   {
-    G4Exception ("G4ITNavigator1::SetWorldVolume()", "GeomNav0002",
+    G4Exception ("G4ITNavigator::SetWorldVolume()", "GeomNav0002",
                  FatalException, "Volume must be centered on the origin.");
   }
   const G4RotationMatrix* rm = pWorld->GetRotation();
   if ( rm && (!rm->isIdentity()) )
   {
-    G4Exception ("G4ITNavigator1::SetWorldVolume()", "GeomNav0002",
+    G4Exception ("G4ITNavigator::SetWorldVolume()", "GeomNav0002",
                  FatalException, "Volume must not be rotated.");
   }
   fTopPhysical = pWorld;
@@ -116,7 +116,7 @@ void G4ITNavigator1::SetWorldVolume(G4VPhysicalVolume* pWorld)
 // ********************************************************************
 //
 inline
-void G4ITNavigator1::SetGeometricallyLimitedStep()
+void G4ITNavigator::SetGeometricallyLimitedStep()
 {
   fWasLimitedByGeometry=true;
 }
@@ -128,7 +128,7 @@ void G4ITNavigator1::SetGeometricallyLimitedStep()
 // ********************************************************************
 //
 inline
-void G4ITNavigator1::ResetStackAndState()
+void G4ITNavigator::ResetStackAndState()
 {
   fHistory.Reset();
   ResetState();
@@ -139,9 +139,23 @@ void G4ITNavigator1::ResetStackAndState()
 // ********************************************************************
 //
 inline
-EVolume G4ITNavigator1::VolumeType(const G4VPhysicalVolume *pVol) const
+EVolume G4ITNavigator::VolumeType(const G4VPhysicalVolume *pVol) const
 {
-  return pVol->VolumeType();
+  EVolume type;
+  EAxis axis;
+  G4int nReplicas;
+  G4double width,offset;
+  G4bool consuming;
+  if ( pVol->IsReplicated() )
+  {
+    pVol->GetReplicationData(axis,nReplicas,width,offset,consuming);
+    type = (consuming) ? kReplica : kParameterised;
+  }
+  else
+  {
+    type = kNormal;
+  }
+  return type;
 }
 
 // ********************************************************************
@@ -149,9 +163,33 @@ EVolume G4ITNavigator1::VolumeType(const G4VPhysicalVolume *pVol) const
 // ********************************************************************
 //
 inline
-EVolume G4ITNavigator1::CharacteriseDaughters(const G4LogicalVolume *pLog) const
+EVolume G4ITNavigator::CharacteriseDaughters(const G4LogicalVolume *pLog) const
 {
-  return pLog->CharacteriseDaughters();
+  EVolume type;
+  EAxis axis;
+  G4int nReplicas;
+  G4double width,offset;
+  G4bool consuming;
+  G4VPhysicalVolume *pVol;
+
+  if ( pLog->GetNoDaughters()==1 )
+  {
+    pVol = pLog->GetDaughter(0);
+    if (pVol->IsReplicated())
+    {
+      pVol->GetReplicationData(axis,nReplicas,width,offset,consuming);
+      type = (consuming) ? kReplica : kParameterised;
+    }
+    else
+    {
+      type = kNormal;
+    }
+  }
+  else
+  {
+    type = kNormal;
+  }
+  return type;
 }
 
 // ********************************************************************
@@ -159,7 +197,7 @@ EVolume G4ITNavigator1::CharacteriseDaughters(const G4LogicalVolume *pLog) const
 // ********************************************************************
 //
 inline
-G4int G4ITNavigator1::
+G4int G4ITNavigator::
 GetDaughtersRegularStructureId(const G4LogicalVolume *pLog) const
 {
   G4int regId = 0;
@@ -182,7 +220,7 @@ GetDaughtersRegularStructureId(const G4LogicalVolume *pLog) const
 // ********************************************************************
 //
 inline
-const G4AffineTransform& G4ITNavigator1::GetGlobalToLocalTransform() const
+const G4AffineTransform& G4ITNavigator::GetGlobalToLocalTransform() const
 {
   return fHistory.GetTopTransform();
 }
@@ -194,7 +232,7 @@ const G4AffineTransform& G4ITNavigator1::GetGlobalToLocalTransform() const
 // ********************************************************************
 //
 inline
-const G4AffineTransform G4ITNavigator1::GetLocalToGlobalTransform() const
+const G4AffineTransform G4ITNavigator::GetLocalToGlobalTransform() const
 {
   G4AffineTransform  tempTransform;
   tempTransform = fHistory.GetTopTransform().Inverse(); 
@@ -208,7 +246,7 @@ const G4AffineTransform G4ITNavigator1::GetLocalToGlobalTransform() const
 // ********************************************************************
 //
 inline
-G4ThreeVector G4ITNavigator1::NetTranslation() const
+G4ThreeVector G4ITNavigator::NetTranslation() const
 {
   G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
   return tf.NetTranslation();
@@ -221,7 +259,7 @@ G4ThreeVector G4ITNavigator1::NetTranslation() const
 // ********************************************************************
 //
 inline
-G4RotationMatrix G4ITNavigator1::NetRotation() const
+G4RotationMatrix G4ITNavigator::NetRotation() const
 {
   G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
   return tf.NetRotation();
@@ -234,7 +272,7 @@ G4RotationMatrix G4ITNavigator1::NetRotation() const
 // ********************************************************************
 //
 inline
-G4GRSVolume* G4ITNavigator1::CreateGRSVolume() const
+G4GRSVolume* G4ITNavigator::CreateGRSVolume() const
 {
   G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
   return new G4GRSVolume(fHistory.GetTopVolume(),
@@ -249,7 +287,7 @@ G4GRSVolume* G4ITNavigator1::CreateGRSVolume() const
 // ********************************************************************
 //
 inline
-G4GRSSolid* G4ITNavigator1::CreateGRSSolid() const
+G4GRSSolid* G4ITNavigator::CreateGRSSolid() const
 {
   G4AffineTransform tf(fHistory.GetTopTransform().Inverse());
   return new G4GRSSolid(fHistory.GetTopVolume()->GetLogicalVolume()->GetSolid(),
@@ -264,7 +302,7 @@ G4GRSSolid* G4ITNavigator1::CreateGRSSolid() const
 // ********************************************************************
 //
 inline
-G4TouchableHistory* G4ITNavigator1::CreateTouchableHistory() const
+G4TouchableHistory* G4ITNavigator::CreateTouchableHistory() const
 {
   return new G4TouchableHistory(fHistory);
 }
@@ -277,7 +315,7 @@ G4TouchableHistory* G4ITNavigator1::CreateTouchableHistory() const
 //
 inline
 G4TouchableHistory*
-G4ITNavigator1::CreateTouchableHistory(const G4NavigationHistory* history) const
+G4ITNavigator::CreateTouchableHistory(const G4NavigationHistory* history) const
 {
   return new G4TouchableHistory(*history);
 }
@@ -287,7 +325,7 @@ G4ITNavigator1::CreateTouchableHistory(const G4NavigationHistory* history) const
 // ********************************************************************
 //
 inline
-void G4ITNavigator1::LocateGlobalPointAndUpdateTouchableHandle(
+void G4ITNavigator::LocateGlobalPointAndUpdateTouchableHandle(
                                const G4ThreeVector&       position,
                                const G4ThreeVector&       direction,
                                      G4TouchableHandle&   oldTouchableToUpdate,
@@ -316,7 +354,7 @@ void G4ITNavigator1::LocateGlobalPointAndUpdateTouchableHandle(
 // ********************************************************************
 //
 inline
-void G4ITNavigator1::LocateGlobalPointAndUpdateTouchable(
+void G4ITNavigator::LocateGlobalPointAndUpdateTouchable(
                            const G4ThreeVector&       position,
                            const G4ThreeVector&       direction,
                                  G4VTouchable*        touchableToUpdate,
@@ -332,7 +370,7 @@ void G4ITNavigator1::LocateGlobalPointAndUpdateTouchable(
 // ********************************************************************
 //
 inline
-void G4ITNavigator1::LocateGlobalPointAndUpdateTouchable(
+void G4ITNavigator::LocateGlobalPointAndUpdateTouchable(
                            const G4ThreeVector&       position,
                                  G4VTouchable*        touchableToUpdate,
                            const G4bool               RelativeSearch )
@@ -347,7 +385,7 @@ void G4ITNavigator1::LocateGlobalPointAndUpdateTouchable(
 // ********************************************************************
 //
 inline
-G4int G4ITNavigator1::GetVerboseLevel() const
+G4int G4ITNavigator::GetVerboseLevel() const
 {
   return fVerbose;
 }
@@ -357,7 +395,7 @@ G4int G4ITNavigator1::GetVerboseLevel() const
 // ********************************************************************
 //
 inline
-void G4ITNavigator1::SetVerboseLevel(G4int level)
+void G4ITNavigator::SetVerboseLevel(G4int level)
 {
   fVerbose = level;
   fnormalNav.SetVerboseLevel(level);
@@ -372,7 +410,7 @@ void G4ITNavigator1::SetVerboseLevel(G4int level)
 // ********************************************************************
 //
 inline
-G4bool G4ITNavigator1::IsActive() const
+G4bool G4ITNavigator::IsActive() const
 {
   return fActive;
 }
@@ -382,7 +420,7 @@ G4bool G4ITNavigator1::IsActive() const
 // ********************************************************************
 //
 inline
-void G4ITNavigator1::Activate(G4bool flag)
+void G4ITNavigator::Activate(G4bool flag)
 {
   fActive = flag;
 }
@@ -394,7 +432,7 @@ void G4ITNavigator1::Activate(G4bool flag)
 // ********************************************************************
 //
 inline
-G4bool G4ITNavigator1::EnteredDaughterVolume() const
+G4bool G4ITNavigator::EnteredDaughterVolume() const
 {
   return fEnteredDaughter;
 }
@@ -404,7 +442,7 @@ G4bool G4ITNavigator1::EnteredDaughterVolume() const
 // ********************************************************************
 //
 inline
-G4bool G4ITNavigator1::ExitedMotherVolume() const
+G4bool G4ITNavigator::ExitedMotherVolume() const
 {
   return fExitedMother;
 }
@@ -414,7 +452,7 @@ G4bool G4ITNavigator1::ExitedMotherVolume() const
 // ********************************************************************
 //
 inline
-void  G4ITNavigator1::CheckMode(G4bool mode)
+void  G4ITNavigator::CheckMode(G4bool mode)
 {
   fCheck = mode;
   fnormalNav.CheckMode(mode);
@@ -429,7 +467,7 @@ void  G4ITNavigator1::CheckMode(G4bool mode)
 // ********************************************************************
 //
 inline
-G4bool G4ITNavigator1::IsCheckModeActive() const
+G4bool G4ITNavigator::IsCheckModeActive() const
 {
   return fCheck;
 }
@@ -439,7 +477,7 @@ G4bool G4ITNavigator1::IsCheckModeActive() const
 // ********************************************************************
 //
 inline
-void G4ITNavigator1::SetPushVerbosity(G4bool mode)
+void G4ITNavigator::SetPushVerbosity(G4bool mode)
 {
   fWarnPush = mode;
 }
@@ -452,7 +490,7 @@ void G4ITNavigator1::SetPushVerbosity(G4bool mode)
 // ********************************************************************
 //
 inline 
-G4int G4ITNavigator1::SeverityOfZeroStepping( G4int* noZeroSteps ) const
+G4int G4ITNavigator::SeverityOfZeroStepping( G4int* noZeroSteps ) const
 {
   G4int severity=0, noZeros= fNumberZeroSteps;
   if( noZeroSteps) *noZeroSteps = fNumberZeroSteps;
@@ -485,7 +523,7 @@ G4int G4ITNavigator1::SeverityOfZeroStepping( G4int* noZeroSteps ) const
 // EnableBestSafety
 // ********************************************************************
 //
-inline void G4ITNavigator1::EnableBestSafety( G4bool value )
+inline void G4ITNavigator::EnableBestSafety( G4bool value )
 {
   fvoxelNav.EnableBestSafety( value );
 }

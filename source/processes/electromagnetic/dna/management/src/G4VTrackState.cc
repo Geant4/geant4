@@ -23,17 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
-//
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
-//
-// History:
-// -----------
-// 10 Oct 2011 M.Karamitros created
-//
-// -------------------------------------------------------------------
+/*
+ * G4VTrackState.cc
+ *
+ *  Created on: 8 avr. 2013
+ *      Author: kara
+ */
 
+#include "G4VTrackState.hh"
 
-#include "G4FakeParticleID.hh"
+int G4VTrackStateID::fgLastID = 0;
 
-G4ThreadLocal int G4FakeParticleID::fLastValue(999666999);
+template <class T> CLHEP::shared_ptr<G4TrackStateID<T> > G4TrackStateID<T>::fgTrackStateID (0);

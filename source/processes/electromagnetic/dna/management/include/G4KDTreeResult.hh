@@ -25,22 +25,16 @@
 //
 // $Id$
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
-
-// The code is developed in the framework of the ESA AO7146
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
-// We would be very happy hearing from you, so do not hesitate to send us your feedback!
+// WARNING : This class is released as a prototype.
+// It might strongly evolve or even disapear in the next releases.
 //
-// In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
-// If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
+// History:
+// -----------
+// 10 Oct 2011 M.Karamitros created
 //
-// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
-//
-// we ask that you please cite the following papers reference papers on chemistry:
-//
-// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
-// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
-
+// -------------------------------------------------------------------
 
 #ifndef G4KDTREERESULT_HH
 #define G4KDTREERESULT_HH
@@ -48,11 +42,10 @@
 #include <list>
 #include "globals.hh"
 #include "G4ReferenceCountedHandle.hh"
-#include "G4KDNode.hh"
-
 class G4KDTree;
-class G4KDNode_Base;
+class G4KDNode;
 struct ResNode;
+
 class G4KDTreeResult;
 
 typedef G4ReferenceCountedHandle<G4KDTreeResult> G4KDTreeResultHandle;
@@ -66,23 +59,23 @@ typedef G4ReferenceCountedHandle<ResNode> ResNodeHandle;
 class G4KDTreeResult : protected std::list<ResNode>
 {
 protected :
-	G4KDTree *fTree;
+    G4KDTree *fTree;
     std::list<ResNode>::iterator fIterator;
 
 public:
     G4KDTreeResult(G4KDTree*);
     virtual ~G4KDTreeResult();
 
-    void Insert(double, G4KDNode_Base*);
+    void Insert(double, G4KDNode*);
 
     void Clear();
 
     void Sort();
 
     /* returns the size of the result set (in elements) */
-    size_t GetSize() const;
+    size_t GetSize();
 
-    size_t size() const;
+    size_t size();
 
     /* rewinds the result set iterator */
     void Rewind();
@@ -97,22 +90,12 @@ public:
     /* returns the data pointer (can be null) of the current result set item
      * and optionally sets its position to the pointers(s) if not null.
      */
-    template<typename PointT> PointT* GetItem() const;
-    G4KDNode_Base* GetNode() const;
-    template<typename PointT> PointT* GetItemNDistanceSQ(double& /*distance*/) const;
-    double GetDistanceSqr() const;
+    void* GetItemData();
+    void* GetItem(double*& /*position*/);
+    void* GetItem(double& x, double& y, double& z); // 3D
+    void* GetItemNDistanceSQ(double& /*distance*/);
+    void* GetItemNDistanceSQ(double*& /*position*/, double& /*distance*/);
+    double GetDistanceSqr();
 };
-
-template<typename PointT> PointT*  G4KDTreeResult::GetItem() const
-{
-	G4KDNode<PointT>* node = (G4KDNode<PointT>*) (GetNode());
-    return node->GetPoint();
-}
-
-template<typename PointT> PointT*  G4KDTreeResult::GetItemNDistanceSQ(double& dist_sq) const
-{
-    dist_sq = GetDistanceSqr();
-    return this->GetItem<PointT>();
-}
 
 #endif // G4KDTREERESULT_HH
