@@ -18,6 +18,12 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+01 April 14: V.Ivanchenko (emstand-V10-00-22)
+- G4WentzelOKandVIxSection - some cleanup for sampling
+- G4IonCoulombScatteringModel - fixed final state generation
+- G4GammaConversion - switch default number of bins from 220 to 140
+- G4eCoulombScatteringModel - fixed mass of reocil for Hydrogen target
+
 31 March 14: V.Ivanchenko (emstand-V10-00-21)
 - G4WentzelVIModel - removed forgotten debug printout
 

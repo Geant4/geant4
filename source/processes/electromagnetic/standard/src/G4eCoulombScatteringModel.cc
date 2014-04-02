@@ -178,6 +178,8 @@ G4eCoulombScatteringModel::MinPrimaryEnergy(const G4Material* material,
   // find out lightest element
   const G4ElementVector* theElementVector = material->GetElementVector();
   G4int nelm = material->GetNumberOfElements();
+
+  // select lightest element
   G4int Z = 300;
   for (G4int j=0; j<nelm; ++j) {        
     G4int iz = (G4int)(*theElementVector)[j]->GetZ();
@@ -267,59 +269,58 @@ void G4eCoulombScatteringModel::SampleSecondaries(
   G4double Z = currentElement->GetZ();
 
   if(ComputeCrossSectionPerAtom(particle,kinEnergy, Z,
-  				kinEnergy, cut, kinEnergy) == 0.0) 
-    { return; }
+  				kinEnergy, cut, kinEnergy) > 0.0) {
+    G4int iz = G4int(Z);
+    G4int ia = SelectIsotopeNumber(currentElement);
+    G4double targetMass = G4NucleiProperties::GetNuclearMass(ia, iz);
+    wokvi->SetTargetMass(targetMass);
 
-  G4int iz = G4int(Z);
-  G4int ia = SelectIsotopeNumber(currentElement);
-  G4double targetMass = G4NucleiProperties::GetNuclearMass(ia, iz);
-  wokvi->SetTargetMass(targetMass);
+    G4ThreeVector newDirection = 
+      wokvi->SampleSingleScattering(cosTetMinNuc, cosThetaMax, elecRatio);
+    G4double cost = newDirection.z();
 
-  G4ThreeVector newDirection = 
-    wokvi->SampleSingleScattering(cosTetMinNuc, cosThetaMax, elecRatio);
-  G4double cost = newDirection.z();
+    G4ThreeVector direction = dp->GetMomentumDirection(); 
+    newDirection.rotateUz(direction);   
 
-  G4ThreeVector direction = dp->GetMomentumDirection(); 
-  newDirection.rotateUz(direction);   
+    fParticleChange->ProposeMomentumDirection(newDirection);   
 
-  fParticleChange->ProposeMomentumDirection(newDirection);   
+    // recoil sampling assuming a small recoil
+    // and first order correction to primary 4-momentum
+    G4double mom2 = wokvi->GetMomentumSquare();
+    G4double trec = mom2*(1.0 - cost)
+      /(targetMass + (mass + kinEnergy)*(1.0 - cost));
 
-  // recoil sampling assuming a small recoil
-  // and first order correction to primary 4-momentum
-  G4double mom2 = wokvi->GetMomentumSquare();
-  G4double trec = mom2*(1.0 - cost)
-    /(targetMass + (mass + kinEnergy)*(1.0 - cost));
+    // the check likely not needed
+    if(trec > kinEnergy) { trec = kinEnergy; }
+    G4double finalT = kinEnergy - trec; 
+    G4double edep = 0.0;
+    //G4cout<<"G4eCoulombScatteringModel: finalT= "<<finalT<<" Trec= "
+    //	<<trec << " Z= " << iz << " A= " << ia<<G4endl;
 
-  // the check likely not needed
-  if(trec > kinEnergy) { trec = kinEnergy; }
-  G4double finalT = kinEnergy - trec; 
-  G4double edep = 0.0;
-  //G4cout<<"G4eCoulombScatteringModel: finalT= "<<finalT<<" Trec= "
-  //	<<trec << " Z= " << iz << " A= " << ia<<G4endl;
+    G4double tcut = recoilThreshold;
+    if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); }
 
-  G4double tcut = recoilThreshold;
-  if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); }
+    if(trec > tcut) {
+      G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
+      G4ThreeVector dir = (direction*sqrt(mom2) - 
+			   newDirection*sqrt(finalT*(2*mass + finalT))).unit();
+      G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, trec);
+      fvect->push_back(newdp);
+    } else {
+      edep = trec;
+      fParticleChange->ProposeNonIonizingEnergyDeposit(edep);
+    }
 
-  if(trec > tcut) {
-    G4ParticleDefinition* ion = theIonTable->GetIon(iz, ia, 0);
-    G4ThreeVector dir = (direction*sqrt(mom2) - 
-			 newDirection*sqrt(finalT*(2*mass + finalT))).unit();
-    G4DynamicParticle* newdp = new G4DynamicParticle(ion, dir, trec);
-    fvect->push_back(newdp);
-  } else {
-    edep = trec;
-    fParticleChange->ProposeNonIonizingEnergyDeposit(edep);
+    // finelize primary energy and energy balance
+    // this threshold may be applied only because for low-enegry
+    // e+e- msc model is applied
+    if(finalT <= lowEnergyThreshold) { 
+      edep += finalT;  
+      finalT = 0.0;
+    } 
+    fParticleChange->SetProposedKineticEnergy(finalT);
+    fParticleChange->ProposeLocalEnergyDeposit(edep);
   }
-
-  // finelize primary energy and energy balance
-  // this threshold may be applied only because for low-enegry
-  // e+e- msc model is applied
-  if(finalT <= lowEnergyThreshold) { 
-    edep += finalT;  
-    finalT = 0.0;
-  } 
-  fParticleChange->SetProposedKineticEnergy(finalT);
-  fParticleChange->ProposeLocalEnergyDeposit(edep);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

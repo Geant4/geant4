@@ -170,7 +170,11 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
     etag    = tkin; 
     targetZ = Z;
     if(targetZ > 99) { targetZ = 99; }
-    SetTargetMass(fNistManager->GetAtomicMassAmu(targetZ)*CLHEP::amu_c2);
+    G4double massT = proton_mass_c2;
+    if(targetZ > 1) { 
+      massT = fNistManager->GetAtomicMassAmu(targetZ)*CLHEP::amu_c2;
+    }
+    SetTargetMass(massT);
     //G4double tmass2 = targetMass*targetMass;
     //G4double etot = tkin + mass;
     //G4double invmass2 = mass*mass + tmass2 + 2*etot*targetMass;
@@ -207,87 +211,89 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
 G4double 
 G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom(G4double cosTMax)
 {
-  G4double xsec = 0.0;
-  if(cosTMax >= 1.0) { return xsec; }
- 
   G4double xSection = 0.0;
-  G4double x = 0; 
-  G4double y = 0;
-  G4double x1= 0;
-  G4double x2= 0;
-  G4double xlog = 0.0;
+  if(cosTMax < 1.0) {
+ 
+    G4double x = 0; 
+    G4double y = 0;
+    G4double x1= 0;
+    G4double x2= 0;
+    G4double xlog = 0.0;
 
-  G4double costm = std::max(cosTMax,cosTetMaxElec); 
-  G4double fb = screenZ*factB;
+    G4double costm = std::max(cosTMax,cosTetMaxElec); 
+    G4double fb = screenZ*factB;
 
-  // scattering off electrons
-  if(costm < 1.0) {
-    x = (1.0 - costm)/screenZ;
-    if(x < numlimit) { 
-      x2 = 0.5*x*x;
-      y  = x2*(1.0 - 1.3333333*x + 3*x2);
-      if(0.0 < factB) { y -= fb*x2*x*(0.6666667 - x); }
-    } else { 
-      x1= x/(1 + x);
-      xlog = G4Log(1.0 + x);  
-      y = xlog - x1; 
-      if(0.0 < factB) { y -= fb*(x + x1 - 2*xlog); }
-    }
-
-    if(y < 0.0) {
-      ++nwarnings;
-      if(nwarnings < nwarnlimit) {
-	G4cout << "G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom scattering on e- <0"
-	       << G4endl;
-	G4cout << "y= " << y 
-	       << " e(MeV)= " << tkin << " p(MeV/c)= " << sqrt(mom2) 
-	       << " Z= " << targetZ << "  " 
-	       << particle->GetParticleName() << G4endl;
-	G4cout << " 1-costm= " << 1.0-costm << " screenZ= " << screenZ 
-	       << " x= " << x << G4endl;
+    // scattering off electrons
+    if(costm < 1.0) {
+      x = (1.0 - costm)/screenZ;
+      if(x < numlimit) { 
+	x2 = 0.5*x*x;
+	y  = x2*(1.0 - 1.3333333*x + 3*x2);
+	if(0.0 < factB) { y -= fb*x2*x*(0.6666667 - x); }
+      } else { 
+	x1= x/(1 + x);
+	xlog = G4Log(1.0 + x);  
+	y = xlog - x1; 
+	if(0.0 < factB) { y -= fb*(x + x1 - 2*xlog); }
       }
-      y = 0.0;
+
+      if(y < 0.0) {
+	++nwarnings;
+	if(nwarnings < nwarnlimit) {
+	  G4cout << "G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom"
+		 << " scattering on e- <0"
+		 << G4endl;
+	  G4cout << "y= " << y 
+		 << " e(MeV)= " << tkin << " p(MeV/c)= " << sqrt(mom2) 
+		 << " Z= " << targetZ << "  " 
+		 << particle->GetParticleName() << G4endl;
+	  G4cout << " 1-costm= " << 1.0-costm << " screenZ= " << screenZ 
+		 << " x= " << x << G4endl;
+	}
+	y = 0.0;
+      }
+      xSection = y;
     }
-    xSection = y;
-  }
-  /* 
-  G4cout << "G4WentzelVI:XS per A " << " Z= " << targetZ 
-	 << " e(MeV)= " << tkin/MeV << " XSel= " << xSection
+    /* 
+       G4cout << "G4WentzelVI:XS per A " << " Z= " << targetZ 
+       << " e(MeV)= " << tkin/MeV << " XSel= " << xSection
 	 << " cut(MeV)= " << ecut/MeV  
   	 << " zmaxE= " << (1.0 - cosTetMaxElec)/screenZ 
 	 << " zmaxN= " << (1.0 - cosThetaMax)/screenZ 
          << " 1-costm= " << 1.0 - cosThetaMax << G4endl;
-  */
-  // scattering off nucleus
-  if(cosTMax < 1.0) {
-    x = (1.0 - cosTMax)/screenZ;
-    if(x < numlimit) { 
-      x2 = 0.5*x*x;
-      y  = x2*(1.0 - 1.3333333*x + 3*x2); 
-      if(0.0 < factB) { y -= fb*x2*x*(0.6666667 - x); }
-    } else { 
-      x1= x/(1 + x);
-      xlog = G4Log(1.0 + x);  
-      y = xlog - x1; 
-      if(0.0 < factB) { y -= fb*(x + x1 - 2*xlog); }
-    }
-
-    if(y < 0.0) {
-      ++nwarnings;
-      if(nwarnings < nwarnlimit) {
-	G4cout << "G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom scattering on e- <0"
-	       << G4endl;
-	G4cout << "y= " << y 
-	       << " e(MeV)= " << tkin << " Z= " << targetZ << "  " 
-	       << particle->GetParticleName() << G4endl;
-	G4cout << " formfactA= " << formfactA << " screenZ= " << screenZ 
-	       << " x= " << " x1= " << x1 <<G4endl;
+    */
+    // scattering off nucleus
+    if(cosTMax < 1.0) {
+      x = (1.0 - cosTMax)/screenZ;
+      if(x < numlimit) { 
+	x2 = 0.5*x*x;
+	y  = x2*(1.0 - 1.3333333*x + 3*x2); 
+	if(0.0 < factB) { y -= fb*x2*x*(0.6666667 - x); }
+      } else { 
+	x1= x/(1 + x);
+	xlog = G4Log(1.0 + x);  
+	y = xlog - x1; 
+	if(0.0 < factB) { y -= fb*(x + x1 - 2*xlog); }
       }
-      y = 0.0;
+
+      if(y < 0.0) {
+	++nwarnings;
+	if(nwarnings < nwarnlimit) {
+	  G4cout << "G4WentzelOKandVIxSection::ComputeTransportCrossSectionPerAtom"
+		 << " scattering on nucleus <0"
+		 << G4endl;
+	  G4cout << "y= " << y 
+		 << " e(MeV)= " << tkin << " Z= " << targetZ << "  " 
+		 << particle->GetParticleName() << G4endl;
+	  G4cout << " formfactA= " << formfactA << " screenZ= " << screenZ 
+		 << " x= " << " x1= " << x1 <<G4endl;
+	}
+	y = 0.0;
+      }
+      xSection += y*targetZ; 
     }
-    xSection += y*targetZ; 
+    xSection *= kinFactor;
   }
-  xSection *= kinFactor;
   /*
   G4cout << "Z= " << targetZ << " XStot= " << xSection/barn 
 	 << " screenZ= " << screenZ << " formF= " << formfactA 
@@ -321,17 +327,23 @@ G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
   if(cost1 > cost2) {
     G4double w1 = 1. - cost1 + screenZ;
     G4double w2 = 1. - cost2 + screenZ;
-    G4double z1, z2;
-    do {
+    G4double z1 = 0.0;
+    G4double z2 = 1.0;
+    if(factB > 0.0) {
+      do {
+	z1 = w1*w2/(w1 + G4UniformRand()*(w2 - w1)) - screenZ;
+	z2 = 1. - z1*factB;
+      } while( G4UniformRand() > z2);
+    } else {
       z1 = w1*w2/(w1 + G4UniformRand()*(w2 - w1)) - screenZ;
-      z2 = 1. - z1*factB;
-    } while( G4UniformRand() >= z2); 
+    } 
     G4double fm =  1.0 + formf*z1;
     G4double grej = (1. + factB1*targetZ*sqrt(z1*factB)*(2 - z1)/z2)/
       ( (1.0 + z1*factD)*fm*fm );
+    //G4double grej = (1.0 + z1*factD)*fm*fm;
 
     // exclude "false" scattering due to formfactor
-    if( G4UniformRand() < grej ) { 
+    if( grej - 1.0 <= 1.e-5 || G4UniformRand() <= grej) { 
       G4double cost = 1.0 - z1;
 
       if(cost > 1.0)       { cost = 1.0; }
