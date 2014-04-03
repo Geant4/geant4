@@ -23,18 +23,35 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+
+// The code is developed in the framework of the ESA AO7146
+//
+// We would be very happy hearing from you, so do not hesitate to send us your feedback!
+//
+// In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
+//
+// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we ask that you please cite the following papers reference papers on chemistry:
+//
+// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
+// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
+
 #ifndef G4MoleculeCounter_h
 #define G4MoleculeCounter_h
 
 #include "G4Molecule.hh"
 #include <map>
 #include <memory>
+#include <set>
 
 struct compDoubleWithPrecision
 {
     bool operator() (const double& a, const double& b) const
     {
-        if(std::fabs(a - b) < fPrecision)
+        if(fabs(a - b) < fPrecision)
         {
             return false;
         }
@@ -49,16 +66,28 @@ struct compDoubleWithPrecision
 
 typedef std::map<G4double, G4int, compDoubleWithPrecision> NbMoleculeAgainstTime;
 
+#if __cplusplus > 199711L && !defined __clang__
+#define stdunique_ptr std::unique_ptr
+#else
+#define stdunique_ptr std::auto_ptr
+#endif
+
+typedef stdunique_ptr<std::set<G4double> > RecordedTimes;
+typedef std::set<G4double>::iterator  RecordedTimesIterator;
+
 class G4MoleculeCounter
 {
 public:
 	typedef std::map<G4Molecule, NbMoleculeAgainstTime> CounterMapType;
+	typedef stdunique_ptr<std::vector<G4Molecule> > 	RecordedMolecules;
 
+/*
 #if __cplusplus > 199711L && !defined __clang__
     typedef std::unique_ptr<std::vector<G4Molecule> > RecordedMolecules;
 #else
     typedef std::auto_ptr<std::vector<G4Molecule> > RecordedMolecules;
 #endif
+*/
 
 protected:
     G4MoleculeCounter();
@@ -71,17 +100,43 @@ protected:
 
     G4int fVerbose ;
 
+    struct Search
+    {
+    	Search()
+    	{
+    		fLowerBoundSet = false;
+    	}
+    	CounterMapType::iterator fLastMoleculeSearched;
+    	NbMoleculeAgainstTime::iterator fLowerBoundTime;
+    	bool fLowerBoundSet;
+    };
+
+    stdunique_ptr<Search> fpLastSearch;
+
+#ifdef MOLECULE_COUNTER_TESTING
+public:
+#else
+protected:
+#endif
+
     friend class G4Molecule;
     virtual void AddAMoleculeAtTime(const G4Molecule&, G4double);
     virtual void RemoveAMoleculeAtTime(const G4Molecule&, G4double);
 
 public:
     static void DeleteInstance();
-
+    static  G4MoleculeCounter* Instance();
     static  G4MoleculeCounter* GetMoleculeCounter();
+    void Initialize();
+
+    G4bool SearchTimeMap(const G4Molecule &molecule);
+    int SearchUpperBoundTime(double time, bool sameTypeOfMolecule);
+
+    int GetNMoleculesAtTime(const G4Molecule &molecule, double time);
     inline const NbMoleculeAgainstTime& GetNbMoleculeAgainstTime(const G4Molecule &molecule);
 
     RecordedMolecules GetRecordedMolecules();
+    RecordedTimes GetRecordedTimes();
 
     /*
      * The dynamics of the given molecule won't be saved into memory.

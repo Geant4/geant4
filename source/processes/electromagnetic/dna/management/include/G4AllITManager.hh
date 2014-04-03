@@ -25,16 +25,22 @@
 //
 // $Id$
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+
+// The code is developed in the framework of the ESA AO7146
 //
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
+// We would be very happy hearing from you, so do not hesitate to send us your feedback!
 //
-// History:
-// -----------
-// 10 Oct 2011 M.Karamitros created
+// In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
 //
-// -------------------------------------------------------------------
+// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we ask that you please cite the following papers reference papers on chemistry:
+//
+// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
+// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
+
 
 #ifndef G4AllITManager_h
 #define G4AllITManager_h 1
@@ -44,6 +50,7 @@
 #include "G4ITType.hh"
 #include "G4ThreeVector.hh"
 #include <memory>
+#include "G4KDTreeResult.hh"
 
 class G4IT;
 class G4VITManager;
@@ -93,11 +100,11 @@ public :
     void UpdatePositionMap();
     void CreateTree();
 
-    template<typename T> inline std::vector<std::pair<G4IT*, double> >* FindNearest(const G4ThreeVector& pos, const T* it);
-    template<typename T> inline std::vector<std::pair<G4IT*, double> >* FindNearest(const T* it0, const T* it);
-    template<typename T> inline std::vector<std::pair<G4IT*, double> >* FindNearestInRange(const G4ThreeVector& pos,
-                                                                                           const T* it, G4double range);
-    template<typename T> inline std::vector<std::pair<G4IT*, double> >* FindNearestInRange(const T* it0, const T* it, G4double range);
+    template<typename T> inline G4KDTreeResultHandle FindNearest(const G4ThreeVector& pos, const T* it);
+    template<typename T> inline G4KDTreeResultHandle FindNearest(const T* it0, const T* it);
+    template<typename T> inline G4KDTreeResultHandle FindNearestInRange(const G4ThreeVector& pos,
+    																const T* it, G4double range);
+    template<typename T> inline G4KDTreeResultHandle FindNearestInRange(const T* it0, const T* it, G4double range);
 
 private :
     G4AllITManager();
@@ -108,25 +115,25 @@ private :
 };
 
 template<typename T>
-inline std::vector<std::pair<G4IT*, double> >* G4AllITManager::FindNearest(const G4ThreeVector& pos, const T* it)
+inline G4KDTreeResultHandle G4AllITManager::FindNearest(const G4ThreeVector& pos, const T* it)
 {
     return G4ITManager<T>::Instance()->FindNearest(pos,it);
 }
 
 template<typename T>
-inline std::vector<std::pair<G4IT*, double> >* G4AllITManager::FindNearest(const T* it0, const T* it)
+inline G4KDTreeResultHandle G4AllITManager::FindNearest(const T* it0, const T* it)
 {
     return G4ITManager<T>::Instance()->FindNearest(it0, it) ;
 }
 
 template<typename T>
-inline std::vector<std::pair<G4IT*, double> >* G4AllITManager::FindNearestInRange(const G4ThreeVector& pos, const T* it, G4double range)
+inline G4KDTreeResultHandle G4AllITManager::FindNearestInRange(const G4ThreeVector& pos, const T* it, G4double range)
 {
     return G4ITManager<T>::Instance()->FindNearestInRange(pos, it, range);
 }
 
 template<typename T>
-inline std::vector<std::pair<G4IT*, double> >* G4AllITManager::FindNearestInRange(const T* it0, const T* it, G4double range)
+inline G4KDTreeResultHandle G4AllITManager::FindNearestInRange(const T* it0, const T* it, G4double range)
 {
     return G4ITManager<T>::Instance()->FindNearestInRange(it0, it, range);
 }

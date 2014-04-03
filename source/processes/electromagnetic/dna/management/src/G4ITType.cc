@@ -89,7 +89,10 @@ void G4ITTypeManager::ReleaseRessource()
 }
 
 G4ITTypeManager::G4ITTypeManager()
-{ fLastType = 0;}
+{
+	fLastType = 0;
+	fRessource = 0;
+}
 
 G4ITTypeManager::~G4ITTypeManager()
 {;}

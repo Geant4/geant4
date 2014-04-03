@@ -25,25 +25,34 @@
 //
 // $Id$
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+
+// The code is developed in the framework of the ESA AO7146
 //
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
+// We would be very happy hearing from you, so do not hesitate to send us your feedback!
 //
-// History:
-// -----------
-// 10 Oct 2011 M.Karamitros created
+// In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
+// If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
 //
-// -------------------------------------------------------------------
+// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+//
+// we ask that you please cite the following papers reference papers on chemistry:
+//
+// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
+// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
+
 
 #ifndef G4TRACKINGINFORMATION_HH
 #define G4TRACKINGINFORMATION_HH
 
 #include "globals.hh"
 #include <vector>
+#include <map>
 #include "G4StepStatus.hh"
 #include "G4ThreeVector.hh"
 #include "G4TouchableHandle.hh"
+#include "G4TrackState.hh"
+#include "G4shared_ptr.hh"
 
 class G4ITStepProcessor;
 
@@ -95,13 +104,43 @@ public:
          * computed at the InteractionLegth stage in the track.
          */
 
+    /*
     G4ProcessState_Lock* GetProcessState(size_t index);
 
     inline void RecordProcessState(G4ProcessState_Lock*,
                                    size_t index);
+    */
+
+    G4::shared_ptr<G4ProcessState_Lock> GetProcessState(size_t index);
+
+    inline void RecordProcessState(G4::shared_ptr<G4ProcessState_Lock>,
+                                   size_t index);
+
+    //___________________________________________________
 
     void SetStepProcessorState(G4ITStepProcessorState_Lock*);
     G4ITStepProcessorState_Lock* GetStepProcessorState();
+
+    std::map<int,G4VTrackStateHandle> fTrackStates;
+    std::map<void*,G4VTrackStateHandle> fMultipleTrackStates;
+
+    void SetTrackState(void* adress, G4VTrackStateHandle state)
+    {
+    	fMultipleTrackStates[adress] = state;
+    }
+    G4VTrackStateHandle GetTrackState(void* adress)
+    {
+       	return fMultipleTrackStates[adress];
+    }
+
+    void SetTrackState(G4VTrackStateHandle state)
+    {
+    	fTrackStates[state->GetID()] = state;
+    }
+    template<typename T> G4VTrackStateHandle GetTrackState()
+    {
+    	return fTrackStates[G4TrackStateID<T>::GetID()] ;
+    }
 
     inline G4Trajectory_Lock* GetTrajectory_Lock()
     {
@@ -144,7 +183,8 @@ protected:
       *  Indexed on GetPhysIntVector
       * (cf. G4ITStepProcessor header)
       */
-    std::vector<G4ProcessState_Lock*> fProcessState;
+//    std::vector<G4ProcessState_Lock*> fProcessState;
+    std::vector<G4::shared_ptr<G4ProcessState_Lock> > fProcessState;
 
     //_______________________________________________________
     G4ITStepProcessorState_Lock* fpStepProcessorState;
@@ -171,13 +211,21 @@ inline G4ITStepProcessorState_Lock* G4TrackingInformation::GetStepProcessorState
 {
     return fpStepProcessorState;
 }
-
+/*
 inline void G4TrackingInformation::RecordProcessState(G4ProcessState_Lock* state,
                                size_t index)
 {
+	// G4cout << "G4TrackingInformation::RecordProcessState" << G4endl;
+    fProcessState[index] = state;
+}*/
+
+
+inline void G4TrackingInformation::RecordProcessState(G4::shared_ptr<G4ProcessState_Lock> state,
+                               size_t index)
+{
+	// G4cout << "G4TrackingInformation::RecordProcessState" << G4endl;
     fProcessState[index] = state;
 }
-
 
 inline G4double G4TrackingInformation::GetPreStepGlobalTime() const
 {
@@ -197,6 +245,7 @@ inline const G4ThreeVector& G4TrackingInformation::GetPreStepPosition() const
 
 inline void G4TrackingInformation::SetNavigatorState(G4ITNavigatorState_Lock* state)
 {
+	// G4cout << "Set Navigator state : " << state << G4endl;
     fNavigatorState = state;
 }
 

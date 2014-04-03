@@ -44,8 +44,27 @@
 #include "G4UIcommand.hh"
 #include "G4VDNAReactionModel.hh"
 #include "G4MoleculeHandleManager.hh"
+#include "G4MoleculeTable.hh"
 
 using namespace std;
+
+class IosFlagSaver {
+public:
+    explicit IosFlagSaver(std::ostream& _ios):
+        ios(_ios),
+        f(_ios.flags()) {
+    }
+    ~IosFlagSaver() {
+        ios.flags(f);
+    }
+
+//    IosFlagSaver(const IosFlagSaver &rhs) = delete;
+//    IosFlagSaver& operator= (const IosFlagSaver& rhs) = delete;
+
+private:
+    std::ostream& ios;
+    std::ios::fmtflags f;
+};
 
 G4DNAMolecularReactionTable* G4DNAMolecularReactionTable::fInstance(0);
 //G4ThreadLocal G4DNAMolecularReactionTable* G4DNAMolecularReactionTable::fInstance(0);
@@ -78,6 +97,28 @@ G4DNAMolecularReactionData::G4DNAMolecularReactionData(G4double reactionRate,
     }
 }
 
+G4DNAMolecularReactionData::G4DNAMolecularReactionData(G4double reactionRate,
+                        const G4String& reactive1,
+                        const G4String& reactive2):fProducts(0)
+{
+    fReactionRate = reactionRate;
+    SetReactive1(reactive1);
+    SetReactive2(reactive2);
+
+    G4double sumDiffCoeff(0.);
+
+    if(*fReactive1 == *fReactive2)
+    {
+        sumDiffCoeff = fReactive1->GetDiffusionCoefficient();
+        fReducedReactionRadius = fReactionRate/(4*pi* fReactive1->GetDiffusionCoefficient() * Avogadro);
+    }
+    else
+    {
+        sumDiffCoeff = fReactive1->GetDiffusionCoefficient() + fReactive2->GetDiffusionCoefficient();
+        fReducedReactionRadius = fReactionRate/(4*pi* sumDiffCoeff  * Avogadro);
+    }
+}
+
 G4DNAMolecularReactionData::~G4DNAMolecularReactionData()
 {
     if(fProducts)
@@ -90,23 +131,51 @@ G4DNAMolecularReactionData::~G4DNAMolecularReactionData()
 
 void G4DNAMolecularReactionData::SetReactive1(const G4Molecule* reactive)
 {
-    fReactive1 = G4MoleculeHandleManager::Instance()->GetMoleculeHandle(reactive);
+//    fReactive1 = G4MoleculeHandleManager::Instance()->GetMoleculeHandle(reactive);
+    fReactive1 = reactive;
 }
 void G4DNAMolecularReactionData::SetReactive2(const G4Molecule* reactive)
 {
-    fReactive2 = G4MoleculeHandleManager::Instance()->GetMoleculeHandle(reactive);
+//    fReactive2 = G4MoleculeHandleManager::Instance()->GetMoleculeHandle(reactive);
+    fReactive2 = reactive;
 }
 void G4DNAMolecularReactionData::SetReactive(const G4Molecule* reactive1,
                                           const G4Molecule* reactive2)
 {
-    fReactive1 = G4MoleculeHandleManager::Instance()->GetMoleculeHandle(reactive1);
-    fReactive2 = G4MoleculeHandleManager::Instance()->GetMoleculeHandle(reactive2);
+//    fReactive1 = G4MoleculeHandleManager::Instance()->GetMoleculeHandle(reactive1);
+//    fReactive2 = G4MoleculeHandleManager::Instance()->GetMoleculeHandle(reactive2);
+    fReactive1 = reactive1;
+    fReactive2 = reactive2;
 }
 
 void G4DNAMolecularReactionData::AddProduct(const G4Molecule* molecule)
 {
-    if(!fProducts) fProducts = new std::vector<G4MoleculeHandle>();
-    fProducts->push_back(G4MoleculeHandleManager::Instance()->GetMoleculeHandle(molecule));
+//    if(!fProducts) fProducts = new std::vector<G4MoleculeHandle>();
+	//    fProducts->push_back(G4MoleculeHandleManager::Instance()->GetMoleculeHandle(molecule));
+    if(!fProducts) fProducts = new std::vector<const G4Molecule*>();
+    fProducts->push_back(molecule);
+}
+
+void G4DNAMolecularReactionData::SetReactive1(const G4String& reactive)
+{
+    fReactive1 = G4MoleculeTable::Instance()->GetMoleculeModel(reactive);
+}
+void G4DNAMolecularReactionData::SetReactive2(const G4String& reactive)
+{
+    fReactive2 = G4MoleculeTable::Instance()->GetMoleculeModel(reactive);
+}
+void G4DNAMolecularReactionData::SetReactive(const G4String& reactive1,
+                                          const G4String& reactive2)
+{
+    fReactive1 = G4MoleculeTable::Instance()->GetMoleculeModel(reactive1);
+    fReactive2 = G4MoleculeTable::Instance()->GetMoleculeModel(reactive2);
+}
+
+void G4DNAMolecularReactionData::AddProduct(const G4String& molecule)
+{
+//    if(!fProducts) fProducts = new std::vector<G4MoleculeHandle>();
+    if(!fProducts) fProducts = new std::vector<const G4Molecule*>();
+    fProducts->push_back(G4MoleculeTable::Instance()->GetMoleculeModel(molecule));
 }
 //_____________________________________________________________________________________
 G4DNAMolecularReactionTable* G4DNAMolecularReactionTable::GetReactionTable()
@@ -139,6 +208,8 @@ G4DNAMolecularReactionTable::~G4DNAMolecularReactionTable()
 {
     // DEBUG
 //    G4cout << "G4MolecularReactionTable::~G4MolecularReactionTable" << G4endl;
+
+/*
     ReactionDataMap::iterator it1 = fReactionData.begin();
 
     std::map<const G4Molecule*,
@@ -162,7 +233,7 @@ G4DNAMolecularReactionTable::~G4DNAMolecularReactionTable()
             }
         }
     }
-
+*/
     fReactionDataMV.clear();
     fReactionData.clear();
     fReactivesMV.clear();
@@ -196,6 +267,8 @@ void G4DNAMolecularReactionTable::SetReaction(G4double reactionRate,
 void G4DNAMolecularReactionTable::PrintTable(G4VDNAReactionModel* pReactionModel)
 {
     // Print Reactions and Interaction radius for jump step = 3ps
+
+	IosFlagSaver iosfs(G4cout);
 
     if(pReactionModel)
     {
@@ -282,7 +355,7 @@ void G4DNAMolecularReactionTable::PrintTable(G4VDNAReactionModel* pReactionModel
             }
         }
     }
-    G4cout<<"Number of possible reactions: "<< n << G4endl;
+    // G4cout<<"Number of possible reactions: "<< n << G4endl;
 
     ////////////////////////////////////////////////////////////////////
     // Tableau dynamique en fonction du nombre de caractere maximal dans
@@ -310,36 +383,56 @@ void G4DNAMolecularReactionTable::PrintTable(G4VDNAReactionModel* pReactionModel
     if(maxlengthOutputReaction<10) maxlengthOutputReaction = 10;
     if(maxlengthOutputReactionRate<30) maxlengthOutputReactionRate = 30;
 
-    G4String title[3];
+    G4String* title;
+
+    if(pReactionModel)
+     title = new G4String[3];
+    else
+     title = new G4String[2];
 
     title[0] = "Reaction";
     title[1] = "Reaction Rate [dm3/(mol*s)]";
-    title[2] = "Interaction Range for chosen reaction model";
+
+    if(pReactionModel)
+    	title[2] = "Interaction Range for chosen reaction model [nm]";
 
     G4cout<< setfill(' ')
           << setw(maxlengthOutputReaction)     << left << title[0]
-          << setw(maxlengthOutputReactionRate) << left << title[1]
-          << setw(2)  << left << title[2]
-          << G4endl;
+          << setw(maxlengthOutputReactionRate) << left << title[1];
+
+    if(pReactionModel)
+    	G4cout << setw(2)  << left << title[2];
+
+    G4cout << G4endl;
 
     G4cout.fill('-');
-    G4cout.width(maxlengthOutputReaction+2+maxlengthOutputReactionRate+2+(G4int)title[2].length());
+    if(pReactionModel)
+    	G4cout.width(maxlengthOutputReaction+2+maxlengthOutputReactionRate+2+(G4int)title[2].length());
+    else
+    	G4cout.width(maxlengthOutputReaction+2+maxlengthOutputReactionRate);
     G4cout<<"-"<<G4endl;
     G4cout.fill(' ');
 
     for(G4int i = 0 ; i < n ; i ++)
     {
         G4cout<< setw(maxlengthOutputReaction)<< left  << outputReaction[i]
-              << setw(maxlengthOutputReactionRate) << left << outputReactionRate[i]
-              << setw(2)  << left <<outputRange[i]
-              <<G4endl;
+              << setw(maxlengthOutputReactionRate) << left << outputReactionRate[i];
+
+        if(pReactionModel)
+              G4cout << setw(2)  << left <<outputRange[i];
+
+        G4cout <<G4endl;
 
         G4cout.fill('-');
-        G4cout.width(maxlengthOutputReaction+2+maxlengthOutputReactionRate+2+(G4int)title[2].length());
+        if(pReactionModel)
+        	G4cout.width(maxlengthOutputReaction+2+maxlengthOutputReactionRate+2+(G4int)title[2].length());
+        else
+        	G4cout.width(maxlengthOutputReaction+2+maxlengthOutputReactionRate);
         G4cout<<"-"<<G4endl;
         G4cout.fill(' ');
     }
 
+    delete [] title;
     delete [] outputReaction;
     delete [] outputReactionRate;
     delete [] outputRange;
@@ -354,7 +447,7 @@ G4DNAMolecularReactionTable::GetReactionData(const G4Molecule* reactive1,
     if(fReactionData.empty())
     {
         G4String errMsg = "No reaction table was implemented";
-        G4Exception("G4MolecularInteractionTable::CanInteractWith","",FatalErrorInArgument, errMsg);
+        G4Exception("G4MolecularInteractionTable::GetReactionData","",FatalErrorInArgument, errMsg);
         return 0;
     }
 
@@ -362,10 +455,12 @@ G4DNAMolecularReactionTable::GetReactionData(const G4Molecule* reactive1,
 
     if(it1 == fReactionData.end())
     {
-        G4cout<<"Nom : " << reactive1->GetName()<<G4endl;
-        G4String errMsg = "No reaction table was implemented for this molecule Definition : "
-                + reactive1 -> GetName();
-        G4Exception("G4MolecularInteractionTable::CanReactWith","",FatalErrorInArgument, errMsg);
+    	G4String errMsg = "No reaction table was implemented for this molecule Definition : "
+               + reactive1 -> GetName();
+//  	G4cout << "--- G4MolecularInteractionTable::GetReactionData ---" << G4endl;
+//  	G4cout << errMsg << G4endl;
+    	G4Exception("G4MolecularInteractionTable::GetReactionData","",FatalErrorInArgument, errMsg);
+//  	return 0;
     }
 
     std::map<const G4Molecule*,
@@ -375,9 +470,9 @@ G4DNAMolecularReactionTable::GetReactionData(const G4Molecule* reactive1,
     if(it2 == it1->second.end())
     {
         G4cout<<"Nom : " << reactive2->GetName()<<G4endl;
-        G4String errMsg = "No reaction table was implemented for this molecule Definition : "
+        G4String errMsg = "No reaction table was implemented for this molecule : "
                 + reactive2 -> GetName();
-        G4Exception("G4MolecularInteractionTable::CanReactWith","",FatalErrorInArgument, errMsg);
+        G4Exception("G4MolecularInteractionTable::GetReactionData","",FatalErrorInArgument, errMsg);
     }
 
     return (it2->second);
@@ -397,10 +492,16 @@ G4DNAMolecularReactionTable::CanReactWith(const G4Molecule * aMolecule) const
 
     if(itReactivesMap == fReactivesMV.end())
     {
-        G4cout<<"Nom : " << aMolecule->GetName()<<G4endl;
-        G4String errMsg = "No reaction table was implemented for this molecule Definition : "
-                + aMolecule -> GetName();
-        G4Exception("G4MolecularInteractionTable::CanReactWith","",FatalErrorInArgument, errMsg);
+#ifdef G4VERBOSE
+    	if(fVerbose)
+    	{
+    		G4String errMsg = "No reaction table was implemented for this molecule : "
+    						+ aMolecule -> GetName();
+//        	G4Exception("G4MolecularInteractionTable::CanReactWith","",FatalErrorInArgument, errMsg);
+        	G4cout << "--- G4MolecularInteractionTable::GetReactionData ---" << G4endl;
+        	G4cout << errMsg << G4endl;
+    	}
+#endif
         return 0;
     }
     else

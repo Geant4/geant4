@@ -37,6 +37,7 @@
 #include "G4ITTransportationManager.hh"
 #include "G4TransportationManager.hh"
 #include "G4ITNavigator.hh"
+#include "G4ITSafetyHelper.hh"
 
 G4ThreadLocal G4ITTransportationManager* G4ITTransportationManager::fpInstance (0);
 
@@ -66,6 +67,7 @@ void G4ITTransportationManager::Initialize()
     G4Navigator* navForTracking = G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
     G4VPhysicalVolume* world = navForTracking->GetWorldVolume();
     fpNavigator->SetWorldVolume(world);
+    fpSafetyHelper = new G4ITSafetyHelper();
 }
 
 G4ITTransportationManager* G4ITTransportationManager::GetTransportationManager()
@@ -77,4 +79,9 @@ G4ITTransportationManager* G4ITTransportationManager::GetTransportationManager()
 G4ITNavigator* G4ITTransportationManager::GetNavigatorForTracking()
 {
     return fpNavigator;
+}
+
+G4ITSafetyHelper* G4ITTransportationManager::GetSafetyHelper()
+{
+	return fpSafetyHelper;
 }

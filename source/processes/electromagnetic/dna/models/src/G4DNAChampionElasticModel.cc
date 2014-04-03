@@ -199,6 +199,7 @@ void G4DNAChampionElasticModel::Initialise(const G4ParticleDefinition* /*particl
   }
 
   // Initialize water density pointer
+  G4DNAMolecularMaterial::Instance()->Initialize();
   fpMolWaterDensity = G4DNAMolecularMaterial::Instance()->GetNumMolPerVolTableFor(G4Material::GetMaterial("G4_WATER"));
 
   if (isInitialised) { return; }

@@ -44,15 +44,22 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4AllITManager.hh
         G4ITBox.hh
         G4IT.hh
+        G4ITGun.hh
         G4ITManager.hh
         G4ITManager.icc
         G4ITModelHandler.hh
         G4ITModelManager.hh
         G4ITModelProcessor.hh
         G4ITNavigator.hh
-        G4ITNavigator.icc
+        G4ITNavigator1.hh
+        G4ITNavigator1.icc
+	G4ITNavigator2.hh
+	G4ITNavigator2.icc
         G4ITReactionChange.hh
         G4ITReactionTable.hh
+        G4ITSafetyHelper.hh
+        G4ITStepManager.hh
+        G4ITSteppingMessenger.hh
         G4ITStepProcessor.hh
         G4ITStepStatus.hh
         G4ITTrackHolder.hh
@@ -66,9 +73,12 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4KDNode.hh
         G4KDTree.hh
         G4KDTreeResult.hh
+        G4MemStat.hh
         G4ReferenceCast.hh
-        G4TrackingInformation.hh
+        G4shared_ptr.hh
+	G4TrackingInformation.hh
         G4TrackList.hh
+	G4TrackState.hh
         G4UserTimeStepAction.hh
         G4VITModel.hh
         G4VITProcess.hh
@@ -80,6 +90,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4AllITManager.cc
         G4ITBox.cc
         G4IT.cc
+        G4ITGun.cc
         G4ITManager_allbox_iterator.cc
         G4ITManager.cc
         G4ITManager_const_iterator.cc
@@ -87,14 +98,20 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITModelHandler.cc
         G4ITModelManager.cc
         G4ITModelProcessor.cc
-        G4ITNavigator.cc
+        G4ITNavigator1.cc
+        G4ITNavigator2.cc
+        G4ITNavigatorState2.cc
         G4ITReactionChange.cc
         G4ITReactionTable.cc
+        G4ITSafetyHelper.cc
+        G4ITStepManager.cc
+        G4ITSteppingMessenger.cc
         G4ITStepProcessor2.cc
         G4ITStepProcessor.cc
         G4ITTrackHolder.cc
         G4ITTrackingInteractivity.cc
         G4ITTrackingManager.cc
+	G4TrackState.cc
         G4ITTransportation.cc
         G4ITTransportationManager.cc
         G4ITType.cc
@@ -102,8 +119,10 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4KDNode.cc
         G4KDTree.cc
         G4KDTreeResult.cc
+        G4MemStat.cc
         G4TrackingInformation.cc
         G4TrackList.cc
+        G4TrackState.cc
         G4UserTimeStepAction.cc
         G4VITModel.cc
         G4VITProcess.cc

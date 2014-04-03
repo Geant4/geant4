@@ -35,6 +35,7 @@
 #include "G4MolecularDissociationChannel.hh"
 #include "G4Molecule.hh"
 #include "G4MoleculeHandleManager.hh"
+#include "G4MoleculeTable.hh"
 
 using namespace std;
 
@@ -50,7 +51,7 @@ struct CompMoleculePointer
     }
 };
 
-G4MolecularDecayChannel::G4MolecularDecayChannel(G4String aName) : fName(aName)
+G4MolecularDissociationChannel::G4MolecularDissociationChannel(G4String aName) : fName(aName)
 {
     //pointer
     fProductsVector = 0;
@@ -62,7 +63,7 @@ G4MolecularDecayChannel::G4MolecularDecayChannel(G4String aName) : fName(aName)
     fDisplacementType = 0; // meaning no displacement cf G4VMolecularDisplacer
 }
 
-G4MolecularDecayChannel::G4MolecularDecayChannel()
+G4MolecularDissociationChannel::G4MolecularDissociationChannel()
 {
     // pointer
     fProductsVector = 0;
@@ -74,7 +75,7 @@ G4MolecularDecayChannel::G4MolecularDecayChannel()
     fDisplacementType = 0; // meaning no displacement cf G4VMolecularDisplacer
 }
 
-G4MolecularDecayChannel::~G4MolecularDecayChannel()
+G4MolecularDissociationChannel::~G4MolecularDissociationChannel()
 {
     if(fProductsVector)
     {
@@ -83,13 +84,13 @@ G4MolecularDecayChannel::~G4MolecularDecayChannel()
     }
 }
 
-G4MolecularDecayChannel::G4MolecularDecayChannel(const G4MolecularDecayChannel& right)
+G4MolecularDissociationChannel::G4MolecularDissociationChannel(const G4MolecularDissociationChannel& right)
 {
     *this = right;
 }
 
-G4MolecularDecayChannel& G4MolecularDecayChannel::operator=
-(const G4MolecularDecayChannel& right)
+G4MolecularDissociationChannel& G4MolecularDissociationChannel::operator=
+(const G4MolecularDissociationChannel& right)
 {
     if (&right==this) return *this;
 
@@ -100,7 +101,8 @@ G4MolecularDecayChannel& G4MolecularDecayChannel::operator=
     // pointer
     if(right.fProductsVector)
     {
-        fProductsVector = new vector<G4MoleculeHandle>(*(right.fProductsVector));
+//        fProductsVector = new vector<G4MoleculeHandle>(*(right.fProductsVector));
+        fProductsVector = new vector<const G4Molecule*>(*(right.fProductsVector));
     }
     else fProductsVector = 0;
 
@@ -115,31 +117,44 @@ G4MolecularDecayChannel& G4MolecularDecayChannel::operator=
 
 }
 
-void G4MolecularDecayChannel::AddProduct(const G4Molecule* molecule, G4double displacement)
+void G4MolecularDissociationChannel::AddProduct(const G4Molecule* molecule, G4double displacement)
 {
-    if(!fProductsVector) fProductsVector = new vector<G4MoleculeHandle> ;
+//    if(!fProductsVector) fProductsVector = new vector<G4MoleculeHandle> ;
+    if(!fProductsVector) fProductsVector = new vector<const G4Molecule*> ;
 
-    G4MoleculeHandle molHandle(G4MoleculeHandleManager::Instance()->GetMoleculeHandle(molecule));
-    fProductsVector->push_back(molHandle);
+//    G4MoleculeHandle molHandle(G4MoleculeHandleManager::Instance()->GetMoleculeHandle(molecule));
+//    fProductsVector->push_back(molHandle);
+
+    fProductsVector->push_back(molecule);
     fRMSProductsDisplacementVector.push_back(displacement);
 }
 
-G4int G4MolecularDecayChannel::GetNbProducts() const
+void G4MolecularDissociationChannel::AddProduct(const G4String& molecule, G4double displacement)
+{
+//    if(!fProductsVector) fProductsVector = new vector<G4MoleculeHandle> ;
+    if(!fProductsVector) fProductsVector = new vector<const G4Molecule*> ;
+
+    fProductsVector->push_back(G4MoleculeTable::Instance()->GetMoleculeModel(molecule));
+    fRMSProductsDisplacementVector.push_back(displacement);
+}
+
+G4int G4MolecularDissociationChannel::GetNbProducts() const
 {
     if(fProductsVector)
         return fProductsVector->size();
     return 0;
 }
 
-const G4Molecule* G4MolecularDecayChannel::GetProduct(int index) const
+const G4Molecule* G4MolecularDissociationChannel::GetProduct(int index) const
 {
     if(fProductsVector)
-        return ((*fProductsVector)[index]).get();
+//        return ((*fProductsVector)[index]).get();
+        return ((*fProductsVector)[index]);
 
     return 0;
 }
 
-G4double G4MolecularDecayChannel::GetRMSRadialDisplacementOfProduct(const G4Molecule* product)
+G4double G4MolecularDissociationChannel::GetRMSRadialDisplacementOfProduct(const G4Molecule* product)
 {
     if(!fProductsVector) return -1.;
 
@@ -147,7 +162,8 @@ G4double G4MolecularDecayChannel::GetRMSRadialDisplacementOfProduct(const G4Mole
     G4double value = DBL_MAX;
     for (G4int i=0; i<sz ; i++)
     {
-        if(*product != *((*fProductsVector)[i]).get())
+//        if(*product != *((*fProductsVector)[i]).get())
+        if(*product != *((*fProductsVector)[i]))
         {
             value = fRMSProductsDisplacementVector[i];
         }

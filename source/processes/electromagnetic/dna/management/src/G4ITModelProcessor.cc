@@ -36,6 +36,15 @@
 #include "G4ITModelProcessor.hh"
 #include "G4VITTimeStepper.hh"
 #include "G4VITReactionProcess.hh"
+#include "G4ITStepManager.hh"
+
+//#define DEBUG_MEM
+
+#ifdef DEBUG_MEM
+ #include "G4MemStat.hh"
+ using namespace G4MemStat;
+#endif
+
 
 G4ThreadLocal std::map<const G4Track*, G4bool> *G4ITModelProcessor::fHasReacted = 0;
 
@@ -138,8 +147,22 @@ void G4ITModelProcessor::InitializeStepper(const G4double& currentGlobalTime,
                 model       =  modman -> GetModel(currentGlobalTime);
                 G4VITTimeStepper* stepper   = model->GetTimeStepper() ;
 
+#if defined (DEBUG_MEM)
+	MemStat mem_first, mem_second, mem_diff;
+#endif
+
+#if defined (DEBUG_MEM)
+	mem_first = MemoryUsage();
+#endif
+
 //                stepper -> PrepareForAllProcessors() ;
                 stepper -> Prepare() ;
+
+#if defined (DEBUG_MEM)
+    mem_second = MemoryUsage();
+	mem_diff = mem_second-mem_first;
+	G4cout << "\t || MEM || G4ITModelProcessor::InitializeStepper || After computing stepper -> Prepare(), diff is : " << mem_diff << G4endl;
+#endif
                 fCurrentModel[i][j] = model;
             }
         }
@@ -202,7 +225,9 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
 
     if(fpModelHandler->GetAllModelManager()->empty()) return ;
 
-    std::map<G4Track*, G4TrackVectorHandle>::iterator tracks_i = tracks->begin();;
+    std::map<G4Track*, G4TrackVectorHandle>::iterator tracks_i = tracks->begin();
+
+//    G4cout << "G4ITModelProcessor::FindReaction at step :" << G4ITStepManager::Instance()->GetNbSteps() << G4endl;
 
     for(tracks_i = tracks->begin() ; tracks_i != tracks-> end() ; tracks_i ++)
     {
@@ -210,6 +235,8 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
         G4Track* trackA = tracks_i->first;
 
         if(trackA == 0)         continue;
+
+        // G4cout << "trackA is " << GetIT(trackA)->GetName() << G4endl;
 
         std::map<const G4Track*, G4bool>::iterator it_hasReacted = fHasReacted->find(trackA);
         if(it_hasReacted != fHasReacted->end()) continue;
@@ -279,6 +306,12 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
                 changes -> GetTrackB();
 
                 fReactionInfo.push_back(changes);
+		
+//				G4cout << "pushing reaction for trackA (" << trackA->GetTrackID() << ") and trackB ("
+//					   << trackB->GetTrackID() << ")" << G4endl;
+//
+//				G4cout << "nb of secondaries : " << changes->GetNumberOfSecondaries() << G4endl;
+//				G4cout << "with track 0 = " << changes->GetSecondary(0) << G4endl;
 
                 process->ResetChanges();
                 changes = 0;

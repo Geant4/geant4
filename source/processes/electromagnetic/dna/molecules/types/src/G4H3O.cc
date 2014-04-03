@@ -46,40 +46,47 @@
 
 G4H3O* G4H3O::Definition()
 {
-    if (theInstance !=0) return theInstance;
-    const G4String name = "H_{3}O";
-    // search in particle table]
-    G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-    G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-    if (anInstance ==0)
-    {
-        // Create molecule
-        //        G4MoleculeDefinition(G4String name,
-        //                             G4double mass,
-        //                             G4int    electronsNumber,
-        //                             G4int    electronicLevels,
-        //                             G4double diffCoeff,
-        //                             G4int atomsNumber = -1,
-        //                             G4double radius = -1,
-        //                             G4double lifetime = -1,
-        //                             G4String aType = "",
-        //                             G4MoleculeID ID = G4MoleculeID::Create()
-        //                             );
+	if (theInstance !=0) return theInstance;
+	const G4String name = "H3O";
+	// search in particle table]
+	G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+	G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+	if (anInstance ==0)
+	{
+		const G4String formatedName = "H_{3}O";
 
-        ///Actually, neutral H3O does exist
-        G4double  mass = 19.02 * g/Avogadro * c_squared ;
-        anInstance = new G4MoleculeDefinition(name, mass,
-                                              11, 5,
-                                              9e-9*(m*m/s),
-                                              4, 0.961 * angstrom);
+		// create molecule
+		//
+		//    	G4MoleculeDefinition(const G4String& name,
+		//    			G4double mass,
+		//    			G4double diffCoeff,
+		//    			G4int 	 charge = 0,
+		//    			G4int    electronicLevels = 0,
+		//    			G4double radius = -1,
+		//    			G4int    atomsNumber = -1,
+		//    			G4double lifetime = -1,
+		//    			G4String aType = "",
+		//    			G4FakeParticleID ID = G4FakeParticleID::Create()
+		//    	);
 
-        ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0);
-        ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(1);
-        ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(2,4);
-        ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(3);
-        ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(4,1);
+		///Actually, neutral H3O does exist
+		G4double  mass = 19.02 * g/Avogadro * c_squared ;
+		anInstance = new G4MoleculeDefinition(name,
+				mass,
+				9e-9*(m*m/s),
+				1, // charge
+				5, // nb of occupancies
+				0.961 * angstrom, // radius
+				4 // nb of atoms
+				);
 
-    }
-    theInstance = reinterpret_cast<G4H3O*>(anInstance);
-    return theInstance;
+		((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0);
+		((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(1);
+		((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(2,4);
+		((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(3);
+		((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(4,1);
+		((G4MoleculeDefinition*) anInstance)->SetFormatedName(formatedName);
+	}
+	theInstance = reinterpret_cast<G4H3O*>(anInstance);
+	return theInstance;
 }

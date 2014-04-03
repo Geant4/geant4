@@ -48,6 +48,7 @@ G4ITTrackHolder::G4ITTrackHolder()
 
 G4ITTrackHolder::~G4ITTrackHolder()
 {
+	fInstance = 0;
 }
 
 G4ITTrackHolder* G4ITTrackHolder::Instance()
