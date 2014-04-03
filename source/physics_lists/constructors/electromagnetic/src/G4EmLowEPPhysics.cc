@@ -37,6 +37,7 @@
 
 #include "G4ComptonScattering.hh"
 #include "G4LowEPComptonModel.hh"
+#include "G4LivermoreComptonModel.hh"
 
 #include "G4GammaConversion.hh"
 #include "G4LivermoreGammaConversionModel.hh"
@@ -203,9 +204,6 @@ void G4EmLowEPPhysics::ConstructProcess()
   G4hMultipleScattering* pimsc = new G4hMultipleScattering();
   G4hMultipleScattering* kmsc = new G4hMultipleScattering();
 
-  // high energy limit for e+- scattering models
-  G4double highEnergyLimit = 100*MeV;
-
   // nuclear stopping
   G4NuclearStopping* ionnuc = new G4NuclearStopping();
   G4NuclearStopping* pnuc = new G4NuclearStopping();
@@ -222,58 +220,37 @@ void G4EmLowEPPhysics::ConstructProcess()
       G4cout << "### " << GetPhysicsName() << " instantiates for " 
 	     << particleName << G4endl;
 
-    //Applicability range for Livermore models
-    //for higher energies, the Standard models are used   
-    G4double LivermoreHighEnergyLimit = GeV;
-
     if (particleName == "gamma") {
 
+      // Photoelectric effect - Livermore model only
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = 
-	new G4LivermorePhotoElectricModel();
-      theLivermorePhotoElectricModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      thePhotoElectricEffect->AddEmModel(0, theLivermorePhotoElectricModel);
+      thePhotoElectricEffect->SetEmModel(new G4LivermorePhotoElectricModel(), 1);
       ph->RegisterProcess(thePhotoElectricEffect, particle);
 
+      // Compton scattering - Livermore model above 20 MeV, Monarsh's model below 
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
+      theComptonScattering->SetEmModel(new G4LivermoreComptonModel(),1);
       G4LowEPComptonModel* theLowEPComptonModel = 
 	new G4LowEPComptonModel();
-      theLowEPComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
+      theLowEPComptonModel->SetHighEnergyLimit(20*MeV);
       theComptonScattering->AddEmModel(0, theLowEPComptonModel);
       ph->RegisterProcess(theComptonScattering, particle);
 
+      // gamma conversion - Livermore model below 80 GeV
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      G4LivermoreGammaConversionModel* theLivermoreGammaConversionModel = 
-	new G4LivermoreGammaConversionModel();
-      theLivermoreGammaConversionModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theGammaConversion->AddEmModel(0, theLivermoreGammaConversionModel);
+      theGammaConversion->SetEmModel(new G4LivermoreGammaConversionModel(),1);
       ph->RegisterProcess(theGammaConversion, particle);
 
+      // default Rayleigh scattering is Livermore
       G4RayleighScattering* theRayleigh = new G4RayleighScattering();
-      G4LivermoreRayleighModel* theRayleighModel = new G4LivermoreRayleighModel();
-      theRayleighModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theRayleigh->AddEmModel(0, theRayleighModel);
       ph->RegisterProcess(theRayleigh, particle);
 
     } else if (particleName == "e-") {
 
+      // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering();
-      msc->SetStepLimitType(fUseDistanceToBoundary);
-      //G4UrbanMscModel* msc1 = new G4UrbanMscModel();
-      G4LowEWentzelVIModel* msc1 = new G4LowEWentzelVIModel();
-      G4WentzelVIModel* msc2 = new G4WentzelVIModel();
-      msc1->SetHighEnergyLimit(highEnergyLimit);
-      msc2->SetLowEnergyLimit(highEnergyLimit);
       msc->SetRangeFactor(0.01);
-      msc->AddEmModel(0, msc1);
-      msc->AddEmModel(0, msc2);
-
-      G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
-      G4CoulombScattering* ss = new G4CoulombScattering();
-      ss->SetEmModel(ssm, 1); 
-      ss->SetMinKinEnergy(highEnergyLimit);
-      ssm->SetLowEnergyLimit(highEnergyLimit);
-      ssm->SetActivationLowEnergyLimit(highEnergyLimit);
+      msc->SetEmModel(new G4LowEWentzelVIModel(), 1);
 
       // Ionisation - Livermore should be used only for low energies
       G4eIonisation* eIoni = new G4eIonisation();
@@ -294,29 +271,15 @@ void G4EmLowEPPhysics::ConstructProcess()
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(eIoni, particle);
       ph->RegisterProcess(eBrem, particle);
-      ph->RegisterProcess(ss, particle);
 
     } else if (particleName == "e+") {
 
       // multiple scattering
-      G4eMultipleScattering* msc = new G4eMultipleScattering;
-      msc->SetStepLimitType(fUseDistanceToBoundary);
-      //G4UrbanMscModel* msc1 = new G4UrbanMscModel();
-      G4LowEWentzelVIModel* msc1 = new G4LowEWentzelVIModel();
-      G4WentzelVIModel* msc2 = new G4WentzelVIModel();
-      msc1->SetHighEnergyLimit(highEnergyLimit);
-      msc2->SetLowEnergyLimit(highEnergyLimit);
+      G4eMultipleScattering* msc = new G4eMultipleScattering();
       msc->SetRangeFactor(0.01);
-      msc->AddEmModel(0, msc1);
-      msc->AddEmModel(0, msc2);
+      msc->SetEmModel(new G4LowEWentzelVIModel(), 1);
 
-      G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
-      G4CoulombScattering* ss = new G4CoulombScattering();
-      ss->SetEmModel(ssm, 1); 
-      ss->SetMinKinEnergy(highEnergyLimit);
-      ssm->SetLowEnergyLimit(highEnergyLimit);
-      ssm->SetActivationLowEnergyLimit(highEnergyLimit);
-
+      // Standard ionisation 
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);      
 
@@ -332,7 +295,6 @@ void G4EmLowEPPhysics::ConstructProcess()
       ph->RegisterProcess(eIoni, particle);
       ph->RegisterProcess(eBrem, particle);
       ph->RegisterProcess(new G4eplusAnnihilation(), particle);
-      ph->RegisterProcess(ss, particle);
 
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {

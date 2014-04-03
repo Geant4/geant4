@@ -14,6 +14,11 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02-Apr-2014, V.Ivanchenko (phys-ctor-em-V10-00-10)
+- G4EmLowEPPhysics, G4EmStandardPhysics_option3, 
+  G4EmStandardPhysics_option4, G4EmLivermoreStandardPhysics - cleanup 
+    gamma and e- models instantiation
+
 28-Feb-2014, V.Ivanchenko (phys-ctor-em-V10-00-09)
 - G4EmLowEPPhysics - added G4LowEWentzelVIModel
 

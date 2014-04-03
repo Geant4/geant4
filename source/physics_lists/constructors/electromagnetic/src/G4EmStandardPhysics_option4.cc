@@ -214,6 +214,12 @@ void G4EmStandardPhysics_option4::ConstructProcess()
 
     if (particleName == "gamma") {
 
+      // Photoelectric
+      G4PhotoElectricEffect* pe = new G4PhotoElectricEffect();
+      G4VEmModel* theLivermorePEModel = new G4LivermorePhotoElectricModel();
+      pe->SetEmModel(theLivermorePEModel,1);
+      ph->RegisterProcess(pe, particle);
+
       // Compton scattering
       G4ComptonScattering* cs = new G4ComptonScattering;
       cs->SetEmModel(new G4KleinNishinaModel(),1);
@@ -221,13 +227,6 @@ void G4EmStandardPhysics_option4::ConstructProcess()
       theLowEPComptonModel->SetHighEnergyLimit(20*MeV);
       cs->AddEmModel(0, theLowEPComptonModel);
       ph->RegisterProcess(cs, particle);
-
-      // Photoelectric
-      G4PhotoElectricEffect* pe = new G4PhotoElectricEffect();
-      G4VEmModel* theLivermorePEModel = new G4LivermorePhotoElectricModel();
-      theLivermorePEModel->SetHighEnergyLimit(10*GeV);
-      pe->SetEmModel(theLivermorePEModel,1);
-      ph->RegisterProcess(pe, particle);
 
       // Gamma conversion
       G4GammaConversion* gc = new G4GammaConversion();

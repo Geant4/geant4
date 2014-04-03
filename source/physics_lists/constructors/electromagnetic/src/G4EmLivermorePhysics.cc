@@ -222,32 +222,21 @@ void G4EmLivermorePhysics::ConstructProcess()
     G4ParticleDefinition* particle = aParticleIterator->value();
     G4String particleName = particle->GetParticleName();
 
-    //Applicability range for Livermore models
-    //for higher energies, the Standard models are used   
-    G4double LivermoreHighEnergyLimit = GeV;
-
     if (particleName == "gamma") {
 
-      // Photoelectric effect - define low-energy model
+      // photoelectric effect - Livermore model only
       G4PhotoElectricEffect* thePhotoElectricEffect = new G4PhotoElectricEffect();
-      G4LivermorePhotoElectricModel* theLivermorePhotoElectricModel = 
-	new G4LivermorePhotoElectricModel();
-      thePhotoElectricEffect->SetEmModel(theLivermorePhotoElectricModel);
+      thePhotoElectricEffect->SetEmModel(new G4LivermorePhotoElectricModel(), 1);
       ph->RegisterProcess(thePhotoElectricEffect, particle);
 
-      // Compton scattering - define low-energy model
+      // Compton scattering - Livermore model only
       G4ComptonScattering* theComptonScattering = new G4ComptonScattering();
-      G4LivermoreComptonModel* theLivermoreComptonModel = 
-	new G4LivermoreComptonModel();
-      theLivermoreComptonModel->SetHighEnergyLimit(LivermoreHighEnergyLimit);
-      theComptonScattering->SetEmModel(theLivermoreComptonModel, 1);
+      theComptonScattering->SetEmModel(new G4LivermoreComptonModel(),1);
       ph->RegisterProcess(theComptonScattering, particle);
 
-      // gamma conversion - define low-energy model
+      // gamma conversion - Livermore model below 80 GeV
       G4GammaConversion* theGammaConversion = new G4GammaConversion();
-      G4VEmModel* theLivermoreGammaConversionModel = 
-	new G4LivermoreGammaConversionModel();
-      theGammaConversion->SetEmModel(theLivermoreGammaConversionModel, 1);
+      theGammaConversion->SetEmModel(new G4LivermoreGammaConversionModel(),1);
       ph->RegisterProcess(theGammaConversion, particle);
 
       // default Rayleigh scattering is Livermore
@@ -286,7 +275,7 @@ void G4EmLivermorePhysics::ConstructProcess()
       G4eBremsstrahlung* eBrem = new G4eBremsstrahlung();
       G4VEmModel* theBremLivermore = new G4LivermoreBremsstrahlungModel();
       theBremLivermore->SetHighEnergyLimit(1*GeV);
-      //theBremLivermore->SetAngularDistribution(new G4Generator2BS());
+      theBremLivermore->SetAngularDistribution(new G4Generator2BS());
       eBrem->SetEmModel(theBremLivermore,1);
      
       // register processes
@@ -297,8 +286,6 @@ void G4EmLivermorePhysics::ConstructProcess()
 
     } else if (particleName == "e+") {
 
-      // Identical to G4EmStandardPhysics_option3
-      
       // multiple scattering
       G4eMultipleScattering* msc = new G4eMultipleScattering;
       msc->SetStepLimitType(fUseDistanceToBoundary);
@@ -317,6 +304,7 @@ void G4EmLivermorePhysics::ConstructProcess()
       ssm->SetLowEnergyLimit(highEnergyLimit);
       ssm->SetActivationLowEnergyLimit(highEnergyLimit);
 
+      // ionisation
       G4eIonisation* eIoni = new G4eIonisation();
       eIoni->SetStepFunction(0.2, 100*um);      
 
@@ -341,8 +329,6 @@ void G4EmLivermorePhysics::ConstructProcess()
 
     } else if (particleName == "alpha" ||
                particleName == "He3" ) {
-
-      // Identical to G4EmStandardPhysics_option3
       
       G4hMultipleScattering* msc = new G4hMultipleScattering();
       G4ionIonisation* ionIoni = new G4ionIonisation();
@@ -353,8 +339,6 @@ void G4EmLivermorePhysics::ConstructProcess()
       ph->RegisterProcess(ionnuc, particle);
 
     } else if (particleName == "GenericIon") {
-
-      // Identical to G4EmStandardPhysics_option3
       
       G4ionIonisation* ionIoni = new G4ionIonisation();
       ionIoni->SetEmModel(new G4IonParametrisedLossModel());
@@ -431,8 +415,6 @@ void G4EmLivermorePhysics::ConstructProcess()
                particleName == "triton" ||
                particleName == "xi_c+" ||
                particleName == "xi-" ) {
-
-      // Identical to G4EmStandardPhysics_option3
       
       ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);

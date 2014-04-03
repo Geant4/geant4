@@ -185,7 +185,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
   // muon & hadron multiple scattering
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
-  mumsc->AddEmModel(0, new G4WentzelVIModel());
+  //  mumsc->AddEmModel(0, new G4WentzelVIModel());
   //G4hMultipleScattering* pimsc = new G4hMultipleScattering();
   // pimsc->AddEmModel(0, new G4WentzelVIModel());
   // G4hMultipleScattering* kmsc = new G4hMultipleScattering();
@@ -253,7 +253,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
       ph->RegisterProcess(muIoni, particle);
       ph->RegisterProcess(mub, particle);
       ph->RegisterProcess(mup, particle);
-      ph->RegisterProcess(new G4CoulombScattering(), particle);
+      //ph->RegisterProcess(new G4CoulombScattering(), particle);
 
     } else if (particleName == "alpha" ||
                particleName == "He3") {
