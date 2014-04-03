@@ -178,7 +178,23 @@ void G4BinaryCascade::ModelDescription(std::ostream& outFile) const
             << "are then propagated through the nuclear potential along curved\n"
             << "trajectories until they re-interact or leave the nucleus.\n"
             << "This model is valid for incident pions up to 1.5 GeV and\n"
-            << "nucleons up to 10 GeV.\n";
+            << "nucleons up to 10 GeV.\n"
+            << "The remaining excited nucleus is handed on to ";
+            if (theDeExcitation)                // pre-compound
+            {
+              outFile << theDeExcitation->GetModelName() << " : \n ";
+              theDeExcitation->DeExciteModelDescription(outFile);
+            }
+            else if (theExcitationHandler)    // de-excitation
+            {
+               outFile << "G4ExcitationHandler";    //theExcitationHandler->GetModelName();
+               theExcitationHandler->ModelDescription(outFile);
+            }
+            else
+            {
+               outFile << "void.\n";
+            }
+    outFile<< " \n";
 }
 void G4BinaryCascade::PropagateModelDescription(std::ostream& outFile) const
 {
@@ -194,7 +210,23 @@ void G4BinaryCascade::PropagateModelDescription(std::ostream& outFile) const
             << "are in turn propagated through the nuclear potential along curved\n"
             << "trajectories until they re-interact or leave the nucleus.\n"
             << "This model is valid for pions up to 1.5 GeV and\n"
-            << "nucleons up to about 3.5 GeV.\n";
+            << "nucleons up to about 3.5 GeV.\n"
+            << "The remaining excited nucleus is handed on to ";
+    if (theDeExcitation)                // pre-compound
+    {
+      outFile << theDeExcitation->GetModelName() << " : \n ";
+      theDeExcitation->DeExciteModelDescription(outFile);
+    }
+    else if (theExcitationHandler)    // de-excitation
+    {
+       outFile << "G4ExcitationHandler";    //theExcitationHandler->GetModelName();
+       theExcitationHandler->ModelDescription(outFile);
+    }
+    else
+    {
+       outFile << "void.\n";
+    }
+outFile<< " \n";
 }
 
 //----------------------------------------------------------------------------
