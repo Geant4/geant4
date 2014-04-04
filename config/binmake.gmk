@@ -300,19 +300,22 @@ else
   endif
   # Bring all symbols in for libraries which requires this (templated factories).
   #
-  ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-    ifndef SHAREDLIBS
-      LDFLAGS += $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_decay.a $(G4NOSTATIC_MODE) \
-                 $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_em.a $(G4NOSTATIC_MODE) \
-                 $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_factory.a $(G4NOSTATIC_MODE) \
-                 $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_glnuclear.a $(G4NOSTATIC_MODE) \
-                 $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_helastic.a $(G4NOSTATIC_MODE) \
-                 $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_hinelastic.a $(G4NOSTATIC_MODE) \
-                 $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_ions.a $(G4NOSTATIC_MODE) \
-                 $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_limiters.a $(G4NOSTATIC_MODE) \
-                 $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_stopping.a $(G4NOSTATIC_MODE)
-    endif
-  endif
+  # ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  #   ifndef SHAREDLIBS
+  #     LDFLAGS += $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_lists.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_decay.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_em.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_glnuclear.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_helastic.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_hinelastic.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_ions.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_limiters.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_stopping.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_builders.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4phys_ctor_factory.a $(G4NOSTATIC_MODE) \
+  #                $(G4STATIC_MODE) $(G4LIB)/$(G4SYSTEM)/libG4physlist_util.a $(G4NOSTATIC_MODE)
+  #   endif
+  # endif
 endif
 
 # LDLIBS3 contains the first set of low level libraries...
