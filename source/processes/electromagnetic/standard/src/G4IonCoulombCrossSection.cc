@@ -83,9 +83,8 @@ G4IonCoulombCrossSection::G4IonCoulombCrossSection():
   cosTetMaxNuc=0;
   nucXSection =0;
 
-  chargeSquare = spin = mass =0;
-  tkinLab = momLab2 = invbetaLab2=0;
-  tkin = mom2 = invbeta2=0;
+  chargeSquare = spin = mass = 0.0;
+  tkinLab = momLab2 = invbetaLab2 = tkin = mom2 = invbeta2 = 0.0;
 
   targetZ = targetMass = screenZ = ScreenRSquare = etag = ecut = 0.0;
 }
@@ -143,10 +142,11 @@ void G4IonCoulombCrossSection::SetupKinematic(G4double ekin,
   }
 
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-
-void G4IonCoulombCrossSection::SetupTarget(G4double Z, G4double e, G4int heavycorr)
+void G4IonCoulombCrossSection::SetupTarget(G4double Z, G4double e, 
+					   G4int heavycorr)
 {
   if(Z != targetZ || e != etag) {
     etag    = e;
@@ -184,6 +184,8 @@ void G4IonCoulombCrossSection::SetScreenRSquare(G4int iz)
   G4double x;
   if(particle == theProton){ 
     x = a0*fNistManager->GetZ13(iz);
+    //} else if(fabs(1 - targetZ) < 0.1) {
+    // x = a0*fNistManager->GetZ13(G4lrint(std::sqrt(chargeSquare)));
   } else {
     //target nucleus
     G4double Z1 = std::sqrt(chargeSquare);

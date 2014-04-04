@@ -288,7 +288,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   */
   // natural limit for high energy
   G4double rlimit = std::max(facrange*currentRange, 
-			     0.7*(1.0 - cosTetMaxNuc)*lambdaeff);
+			     (1.0 - cosTetMaxNuc)*lambdaeff);
 
   // low-energy e-
   if(cosThetaMax > cosTetMaxNuc) {
@@ -374,6 +374,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
     zPathLength  = geomStepLength;
     tPathLength  = geomStepLength;
     cosThetaMin = 1.0;
+    lambdaeff = DBL_MAX;
 
     // normal case
   } else {
@@ -385,6 +386,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
       cosThetaMin = 1.0;
       zPathLength  = geomStepLength;
       tPathLength  = geomStepLength;
+      lambdaeff = DBL_MAX;
 
       // step defined by transportation 
     } else if(geomStepLength != zPathLength) { 
@@ -413,33 +415,37 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 
   // check of step length
   // define threshold angle between single and multiple scattering 
-  if(!singleScatteringMode) { cosThetaMin = 1.0 - 1.5*tPathLength/lambdaeff; }
+  if(!singleScatteringMode) { 
+    cosThetaMin = 1.0 - tPathLength/lambdaeff; 
 
-  // recompute transport cross section - do not change energy
-  // anymore - cannot be applied for big steps
-  if(cosThetaMin > cosTetMaxNuc) {
+    // recompute transport cross section - do not change energy
+    // anymore - cannot be applied for big steps
+    if(cosThetaMin <= cosTetMaxNuc) {
+      cosThetaMin = cosTetMaxNuc;
+    } else {
+      // new computation
+      G4double cross = ComputeTransportXSectionPerVolume();
+      //G4cout << "%%%% cross= " << cross << "  xtsec= " << xtsec << G4endl;
+      if(cross <= 0.0) {
+	singleScatteringMode = true;
+	tPathLength = zPathLength; 
+	lambdaeff = DBL_MAX;
+	cosThetaMin = 1.0;
+      } else if(xtsec > 0.0) {
 
-    // new computation
-    G4double cross = ComputeTransportXSectionPerVolume();
-    //G4cout << "%%%% cross= " << cross << "  xtsec= " << xtsec << G4endl;
-    if(cross <= 0.0) {
-      singleScatteringMode = true;
-      tPathLength = zPathLength; 
-      lambdaeff = DBL_MAX;
-      cosThetaMin = 1.0;
-    } else if(xtsec > 0.0) {
-
-      lambdaeff = 1./cross; 
-      G4double tau = zPathLength*cross;
-      if(tau < numlimit) { 
-	tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); 
-      } 
-      else if(tau < 0.999999) { tPathLength = -lambdaeff*G4Log(1.0 - tau); } 
-      else                    { tPathLength = currentRange; }
-
-      if(tPathLength > currentRange) { tPathLength = currentRange; }
+	lambdaeff = 1./cross; 
+	G4double tau = zPathLength*cross;
+	if(tau < numlimit) { 
+	  tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); 
+	} else if(tau < 0.999999) { 
+	  tPathLength = -lambdaeff*G4Log(1.0 - tau); 
+	} else { 
+	  tPathLength = currentRange; 
+	}
+      }
     } 
   }
+  if(tPathLength > currentRange) { tPathLength = currentRange; }
   /*      
   G4cout <<"Comp.true: zLength= "<<zPathLength<<" tLength= "<<tPathLength
 	 <<" Leff(mm)= "<<lambdaeff/mm<<" sig0(1/mm)= " << xtsec <<G4endl;
@@ -502,7 +508,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
     G4double zzz = 0.0;
     if(z0 > zzmin) { 
       zzz = G4Exp(-1.0/z0); 
-      z0 *= (1 + zzz); 
+      z0 += zzz; 
       prob2 *= (1 + zzz);
     }
     prob2 /= (1 + prob2);
@@ -607,11 +613,6 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
       G4double vx1 = sint*cos(phi);
       G4double vy1 = sint*sin(phi);
 
-      // change direction
-      temp.set(vx1,vy1,cost);
-      temp.rotateUz(dir);
-      dir = temp;
-
       // lateral displacement  
       if (latDisplasment && safety > tlimitminfix) {
 	G4double rms = invsqrt12*sqrt(2*z0);
@@ -629,6 +630,10 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 	  fDisplacement += temp;
 	}
       }
+      // change direction
+      temp.set(vx1,vy1,cost);
+      temp.rotateUz(dir);
+      dir = temp;
     }
   } while (0 < nMscSteps);
     

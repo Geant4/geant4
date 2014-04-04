@@ -185,7 +185,8 @@ G4WentzelOKandVIxSection::SetupKinematic(G4double ekin, const G4Material* mat)
     tkin  = ekin;
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
-    factB = spin/invbeta2;
+    //if(mass > CLHEP::MeV) { factB = spin/invbeta2; }
+    factB = spin/invbeta2; 
     cosTetMaxNuc = cosThetaMax;
     if(isCombined) {
       G4double cost = 1.-factorA2*mat->GetIonisation()->GetInvA23()/mom2;

@@ -152,6 +152,7 @@ void G4WentzelOKandVIxSection::SetupParticle(const G4ParticleDefinition* p)
   mass = particle->GetPDGMass();
   spin = particle->GetPDGSpin();
   if(0.0 != spin) { spin = 0.5; }
+  factB = 0.0;
   G4double q = std::fabs(particle->GetPDGCharge()/eplus);
   chargeSquare = q*q;
   charge3 = chargeSquare*q;
