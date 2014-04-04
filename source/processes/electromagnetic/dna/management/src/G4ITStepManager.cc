@@ -372,18 +372,24 @@ void G4ITStepManager::Process()
 	Reset();
 	if(fpUserTimeStepAction) fpUserTimeStepAction->StartProcessing();
 
+#ifdef G4VERBOSE
 	G4bool trackFound = false;
+#endif
 
 	if(fDelayedList.empty() == false)
 	{
 		fStartTime = fDelayedList.begin()->first;
+#ifdef G4VERBOSE
 		trackFound = true;
+#endif
 		SynchronizeTracks() ;
 	}
 
 	if(fpMainList && fpMainList->empty() == false)
 	{
+#ifdef G4VERBOSE
 		trackFound = true;
+#endif
 		DoProcess() ;
 	}
 

@@ -194,7 +194,7 @@ public:
 	virtual void ResetTrackState() = 0;
 };
 
-#define Handle CLHEP::shared_ptr
+//#define Handle CLHEP::shared_ptr
 
 //!
 template<class T>

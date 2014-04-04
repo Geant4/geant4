@@ -249,7 +249,11 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
 			fSampledMinTimeStep = 0.;
 			G4KDTreeResultHandle resultsInRange (G4ITManager<G4Molecule>::Instance()
 					-> FindNearestInRange(moleculeA, moleculeB,R));
-			CheckAndRecordResults(utils, R, resultsInRange);
+			CheckAndRecordResults(utils,
+#ifdef G4VERBOSE
+					R,
+#endif
+					resultsInRange);
 		}
 		else
 		{
@@ -278,7 +282,11 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
 					G4KDTreeResultHandle resultsInRange (G4ITManager<G4Molecule>::Instance()
 							-> FindNearestInRange(moleculeA, moleculeB,range));
 
-					CheckAndRecordResults(utils, range, resultsInRange);
+					CheckAndRecordResults(utils,
+#ifdef G4VERBOSE
+							range,
+#endif
+							resultsInRange);
 				}
 				else // ==> Record nearest
 				{
@@ -288,7 +296,11 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
 						fReactants->clear();
 					}
 
-					CheckAndRecordResults(utils, R, resultsNearest);
+					CheckAndRecordResults(utils,
+#ifdef G4VERBOSE
+							R,
+#endif
+							resultsNearest);
 				}
 			}
 		}
@@ -332,7 +344,10 @@ G4double G4DNAMoleculeEncounterStepper::CalculateStep(const G4Track& trackA, con
 }
 
 
-void G4DNAMoleculeEncounterStepper::CheckAndRecordResults(const Utils& utils, const G4double R,
+void G4DNAMoleculeEncounterStepper::CheckAndRecordResults(const Utils& utils,
+#ifdef G4VERBOSE
+		const G4double R,
+#endif
 		G4KDTreeResultHandle& results)
 {
 	if(results == 0)

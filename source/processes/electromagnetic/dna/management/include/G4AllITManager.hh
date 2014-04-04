@@ -44,13 +44,14 @@
 
 #ifndef G4AllITManager_h
 #define G4AllITManager_h 1
-#include <globals.hh>
-#include <map>
-#include <vector>
+#include "globals.hh"
 #include "G4ITType.hh"
 #include "G4ThreeVector.hh"
-#include <memory>
 #include "G4KDTreeResult.hh"
+
+#include <map>
+#include <vector>
+#include <memory>
 
 class G4IT;
 class G4VITManager;

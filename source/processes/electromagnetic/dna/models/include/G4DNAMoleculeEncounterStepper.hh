@@ -87,7 +87,10 @@ private:
 	void InitializeForNewTrack();
 
 	class Utils;
-	void CheckAndRecordResults(const Utils&, const G4double reactionRange,
+	void CheckAndRecordResults(const Utils&,
+#ifdef G4VERBOSE
+			const G4double reactionRange,
+#endif
 			G4KDTreeResultHandle&);
 
 	G4bool fHasAlreadyReachedNullTime;

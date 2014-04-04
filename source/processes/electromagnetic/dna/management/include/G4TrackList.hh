@@ -47,7 +47,7 @@
 
 #include "globals.hh"
 #include "G4ReferenceCountedHandle.hh"
-#include "CLHEP/Utility/memory.h"
+#include <CLHEP/Utility/memory.h>
 
 class G4Track;
 class G4TrackList;
