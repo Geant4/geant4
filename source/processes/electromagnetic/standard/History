@@ -18,6 +18,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+04 April 14: V.Ivanchenko (emstand-V10-00-24)
+- G4WentzelVIModel - fixed minor bug introduced in the previous tag
+
 03 April 14: V.Ivanchenko (emstand-V10-00-23)
 - G4WentzelVIModel - optimized transition between multiple and single 
   scattering modes
