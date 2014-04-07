@@ -1021,7 +1021,7 @@ G4double G4DNABornIonisationModel::RandomTransferedEnergy
 		
                 // zeros are explicitely set
 		
-		G4double value = Interpolate(0., valueK2, k, 0., interpolatedvalue2);
+		G4double value = Interpolate(valueK1, valueK2, k, 0., interpolatedvalue2);
 		
 		/*
 		G4cout << "        " << ionizationLevelIndex << " " 
@@ -1127,7 +1127,7 @@ G4double G4DNABornIonisationModel::RandomTransferedEnergy
 		
                 // zeros are explicitely set
 		
-		G4double value = Interpolate(0., valueK2, k, 0., interpolatedvalue2);
+		G4double value = Interpolate(valueK1, valueK2, k, 0., interpolatedvalue2);
 		
 		/*
 		G4cout << "        " << ionizationLevelIndex << " " 

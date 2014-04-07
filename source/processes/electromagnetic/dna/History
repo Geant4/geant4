@@ -14,6 +14,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+07-04-2014  SI	tag emdna-V10-00-19
+                Changed faster method interpolation in
+                G4DNABornIonisationModel 
+
 04-04-2014  G.Cosmo				tag emdna-V10-00-18
 		Removed problematic #define in G4TrackState.hh causing errors on
 		Windows for overriding of system keyword 'Handle'...
