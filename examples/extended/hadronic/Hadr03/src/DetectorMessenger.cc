@@ -45,11 +45,11 @@
 
 DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 :G4UImessenger(), 
- fDetector(Det), fTestemDir(0), fDetDir(0), fMaterCmd(0), fSizeCmd(0),
+ fDetector(Det), fTesthadDir(0), fDetDir(0), fMaterCmd(0), fSizeCmd(0),
  fIsotopeCmd(0)
 { 
-  fTestemDir = new G4UIdirectory("/testhadr/");
-  fTestemDir->SetGuidance("commands specific to this example");
+  fTesthadDir = new G4UIdirectory("/testhadr/");
+  fTesthadDir->SetGuidance("commands specific to this example");
   
   fDetDir = new G4UIdirectory("/testhadr/det/");
   fDetDir->SetGuidance("detector construction commands");
@@ -109,7 +109,7 @@ DetectorMessenger::~DetectorMessenger()
   delete fSizeCmd; 
   delete fIsotopeCmd;
   delete fDetDir;
-  delete fTestemDir;
+  delete fTesthadDir;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

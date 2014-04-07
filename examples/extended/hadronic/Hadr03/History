@@ -13,6 +13,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+05-04-14 mma (exhadr03-V10-00-03)
+- Histograms: change numbering scheme. Add histo of atomic mass
+- EndOfRun: introduce optional print and UI command to control it
+- refresh nFission.mac
      
 25-03-14 mma (exhadr03-V10-00-02)
 - Cosmetic when printing EndOfRun

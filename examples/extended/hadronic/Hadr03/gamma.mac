@@ -15,8 +15,8 @@
 /gun/energy 10 MeV
 #
 /analysis/setFileName gamma
-/analysis/h1/set 2  100  -1. 30 keV	#recoil ion
-/analysis/h1/set 11 100 -10.  1 MeV	#Q
+/analysis/h1/set 7  100  -1. 30 keV	#nuclei
+/analysis/h1/set 10 100 -10.  1 MeV	#Q
 #
 /run/printProgress 1000
 #

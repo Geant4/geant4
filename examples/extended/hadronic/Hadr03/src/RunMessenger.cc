@@ -23,50 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/include/DetectorMessenger.hh
-/// \brief Definition of the DetectorMessenger class
+/// \file hadronic/Hadr03/src/RunMessenger.cc
+/// \brief Implementation of the RunMessenger class
 //
-// $Id$
+// $Id: RunMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef DetectorMessenger_h
-#define DetectorMessenger_h 1
+#include "RunMessenger.hh"
 
-#include "G4UImessenger.hh"
-#include "globals.hh"
-
-class DetectorConstruction;
-class G4UIdirectory;
-class G4UIcommand;
-class G4UIcmdWithAString;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+#include "Run.hh"
+#include "G4UIdirectory.hh"
+#include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+RunMessenger::RunMessenger(Run* run)
+:G4UImessenger(),fRun(run),
+ fRunDir(0),
+ fPrintCmd(0)
 {
-  public:
-  
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
+  fRunDir = new G4UIdirectory("/testhadr/run/");
+  fRunDir->SetGuidance("run commands");
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
-    
-  private:
-  
-    DetectorConstruction*      fDetector;
-    
-    G4UIdirectory*             fTesthadDir;
-    G4UIdirectory*             fDetDir;
-    G4UIcmdWithAString*        fMaterCmd;
-    G4UIcmdWithADoubleAndUnit* fSizeCmd;
-    G4UIcommand*               fIsotopeCmd;    
-};
+  fPrintCmd = new G4UIcmdWithABool("/testhadr/run/printStat",this);
+  fPrintCmd->SetGuidance("print list of nuclear reactions");
+  fPrintCmd->SetParameterName("print",false);
+  fPrintCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+RunMessenger::~RunMessenger()
+{
+  delete fPrintCmd;
+  delete fRunDir;      
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+{      
+  if( command == fPrintCmd )
+   { fRun->SetPrintFlag(fPrintCmd->GetNewBoolValue(newValue));}
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

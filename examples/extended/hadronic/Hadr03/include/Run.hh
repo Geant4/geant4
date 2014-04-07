@@ -41,6 +41,7 @@
 
 class DetectorConstruction;
 class G4ParticleDefinition;
+class RunMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -59,6 +60,7 @@ class Run : public G4Run
     void ParticleCount(G4String, G4double);
     void Balance(G4double);
     void CountGamma(G4int);
+    void SetPrintFlag(G4bool);
         
     virtual void Merge(const G4Run*);      
     void EndOfRun(); 
@@ -101,7 +103,10 @@ class Run : public G4Run
 
     G4bool   fTargetXXX;                    
     G4double fPbalance[3];
-    G4int    fNbGamma[3];        
+    G4int    fNbGamma[3];
+
+    G4bool   fPrint;      //optional printing 
+    RunMessenger* fRunMessenger;       
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

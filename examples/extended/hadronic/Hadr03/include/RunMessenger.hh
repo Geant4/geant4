@@ -23,50 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file hadronic/Hadr03/include/DetectorMessenger.hh
-/// \brief Definition of the DetectorMessenger class
+/// \file hadronic/Hadr03/include/RunMessenger.hh
+/// \brief Definition of the RunMessenger class
 //
-// $Id$
+// $Id: RunMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef DetectorMessenger_h
-#define DetectorMessenger_h 1
+#ifndef RunMessenger_h
+#define RunMessenger_h 1
 
-#include "G4UImessenger.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-class DetectorConstruction;
+class Run;
 class G4UIdirectory;
-class G4UIcommand;
-class G4UIcmdWithAString;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorMessenger: public G4UImessenger
+class RunMessenger: public G4UImessenger
 {
-  public:
-  
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
+public:
+  RunMessenger(Run*);
+  virtual ~RunMessenger();
     
-    virtual void SetNewValue(G4UIcommand*, G4String);
+  void SetNewValue(G4UIcommand*, G4String);
     
-  private:
-  
-    DetectorConstruction*      fDetector;
+private:
+  Run*              fRun;
     
-    G4UIdirectory*             fTesthadDir;
-    G4UIdirectory*             fDetDir;
-    G4UIcmdWithAString*        fMaterCmd;
-    G4UIcmdWithADoubleAndUnit* fSizeCmd;
-    G4UIcommand*               fIsotopeCmd;    
+  G4UIdirectory*    fRunDir;
+  G4UIcmdWithABool* fPrintCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-

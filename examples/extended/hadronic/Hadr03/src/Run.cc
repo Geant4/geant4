@@ -32,6 +32,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "Run.hh"
+#include "RunMessenger.hh"
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
@@ -47,15 +48,17 @@ Run::Run(DetectorConstruction* det)
   fDetector(det), fParticle(0), fEkin(0.),
   fTotalCount(0), fGammaCount(0),
   fSumTrack(0.), fSumTrack2(0.),
-  fTargetXXX(false)
+  fTargetXXX(false), fPrint (true), fRunMessenger(0)
 {
   for (G4int i=0; i<3; i++) { fPbalance[i] = 0. ; } 
   for (G4int i=0; i<3; i++) { fNbGamma[i] = 0 ; }
+  
+  fRunMessenger = new RunMessenger(this);
 }
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Run::~Run()
-{ }
+{ delete fRunMessenger;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -70,6 +73,13 @@ void Run::SetPrimary(G4ParticleDefinition* particle, G4double energy)
 void Run::SetTargetXXX(G4bool flag)
 { 
   fTargetXXX = flag;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::SetPrintFlag(G4bool flag)
+{ 
+  fPrint = flag;
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -148,6 +158,7 @@ void Run::CountGamma(G4int nGamma)
   if (nGamma < fNbGamma[1]) fNbGamma[1] = nGamma;
   if (nGamma > fNbGamma[2]) fNbGamma[2] = nGamma;    
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void Run::Merge(const G4Run* run)
@@ -223,6 +234,9 @@ void Run::Merge(const G4Run* run)
     }   
   }
 
+  // optional printing
+  fPrint = localRun->fPrint;
+  
   G4Run::Merge(run); 
 } 
 
@@ -345,20 +359,20 @@ void Run::EndOfRun()
     NuclChannel data = ic->second;
     G4int count = data.fCount;
     G4double Q  = data.fQ/count; 
-         
-    G4cout << "  " << std::setw(50) << name << ": " << std::setw(7) << count
-           << "   Q = " << std::setw(wid) << G4BestUnit(Q, "Energy")
-           << G4endl;           
+    if (fPrint)         
+      G4cout << "  " << std::setw(50) << name << ": " << std::setw(7) << count
+             << "   Q = " << std::setw(wid) << G4BestUnit(Q, "Energy")
+             << G4endl;           
  } 
  
  //Gamma count
  //
- if (fGammaCount > 0) {       
+ if (fPrint && (fGammaCount > 0)) {       
    G4cout << "\n" << std::setw(58) << "Number of gamma: N = " 
            << fNbGamma[1] << " --> " << fNbGamma[2] << G4endl;
  }
  
- if (fTargetXXX) {
+ if (fPrint && fTargetXXX) {
    G4cout 
    << "\n   --> NOTE: XXXX because neutronHP is unable to return target nucleus"
    << G4endl;
@@ -376,7 +390,7 @@ void Run::EndOfRun()
     G4double eMean = data.fEmean/count;
     G4double eMin = data.fEmin;
     G4double eMax = data.fEmax;    
-         
+    if (fPrint)         
     G4cout << "  " << std::setw(13) << name << ": " << std::setw(7) << count
            << "  Emean = " << std::setw(wid) << G4BestUnit(eMean, "Energy")
            << "\t( "  << G4BestUnit(eMin, "Energy")
