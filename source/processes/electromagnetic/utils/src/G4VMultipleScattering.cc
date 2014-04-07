@@ -87,7 +87,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-static const G4double minDisplacement = 1.e-5*CLHEP::mm;
+static const G4double defaultSafety = 1.2*CLHEP::nm;
+static const G4double geomMin       = 0.05*CLHEP::nm;
+static const G4double minDisplacement2 = geomMin*geomMin;
 
 G4VMultipleScattering::G4VMultipleScattering(const G4String& name, 
 					     G4ProcessType):
@@ -106,7 +108,6 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   SetProcessSubType(fMultipleScattering);
   if("ionmsc" == name) { firstParticle = G4GenericIon::GenericIon(); }
 
-  geomMin = 0.01*CLHEP::nm;
   lowestKinEnergy = 10*eV;
 
   // default limit on polar angle
@@ -491,21 +492,13 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
     tPathLength = std::min(tPathLength, physStepLimit);
 
     // do not sample scattering at the last or at a small step
-    if(tPathLength + geomMin < range && tPathLength > geomMin) {
+    if(tPathLength < range && tPathLength > geomMin) {
 
-      G4double preSafety = step.GetPreStepPoint()->GetSafety();
-      G4double maxDisp   = (tPathLength + geomLength)*0.5; 
-      G4double postSafety= preSafety - maxDisp; 
-      G4bool safetyRecomputed = false; 
-      if(postSafety < minDisplacement) {
-	if(fBoundaryFlag) { postSafety = minDisplacement; }
-	else {
-	  safetyRecomputed = true;
-	  postSafety = safetyHelper->ComputeSafety(fNewPosition,maxDisp); 
-	}
-      } 
+      const G4double sFactor = 0.999;
+      G4double postSafety = 
+	sFactor*(step.GetPreStepPoint()->GetSafety() - geomLength); 
       G4ThreeVector displacement = currentModel->SampleScattering(
-        step.GetPostStepPoint()->GetMomentumDirection(), postSafety);
+	step.GetPostStepPoint()->GetMomentumDirection(),defaultSafety);
 
       G4double r2 = displacement.mag2();
 
@@ -513,25 +506,40 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
       // << G4endl;
 
       // make correction for displacement
-      if(r2 > 0.0) {
+      if(r2 > minDisplacement2) {
 
 	fPositionChanged = true;
 
 	// displaced point is definitely within the volume
-	if(r2 <= postSafety*postSafety) {
+	if(r2 < postSafety*postSafety) {
 	  fNewPosition += displacement;
+
+	  // check first that postSafety is correct
 	} else {
           G4double dispR = std::sqrt(r2);
-          if(!safetyRecomputed) {
-	    postSafety = safetyHelper->ComputeSafety(fNewPosition, dispR);
-	  } 
+	  postSafety = 
+	    sFactor*safetyHelper->ComputeSafety(fNewPosition, dispR); 
 
-	  if(dispR > postSafety) { 
-            if(fBoundaryFlag) {
-	      fNewPosition += displacement*(0.99*postSafety/dispR); 
-	    } else {
-	      fNewPosition += displacement*(0.99*postSafety/dispR); 
-	    }
+	  // second check against safety
+	  if(dispR < postSafety) { 
+	    fNewPosition += displacement;
+
+	    // optional extra mechanism is applied only if a particle
+	    // is stopped by the boundary
+	  } else if(fBoundaryFlag && geomLength < gPathLength) {
+	    fNewPosition += displacement;
+	    //G4VPhysicalVolume* pv = 
+	    //step.GetPreStepPoint()->GetPhysicalVolume();
+            // fNewDirection = fParticleChange.GetMomentumDirection();
+	    fNewPosition += displacement*(postSafety/dispR - 1); 
+
+	    // reduced displacement
+	  } else if(postSafety > defaultSafety) {
+	    fNewPosition += displacement*(postSafety/dispR); 
+
+	    // very small postSafety
+	  } else {
+	    fPositionChanged = false;
 	  }
 	}
 	//safetyHelper->ReLocateWithinVolume(fNewPosition);

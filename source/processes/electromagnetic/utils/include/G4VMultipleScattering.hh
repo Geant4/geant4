@@ -251,7 +251,6 @@ private:
 
   G4EmModelManager*           modelManager;
   G4LossTableManager*         emManager;
-  G4double                    geomMin;
 
   // ======== Parameters of the class fixed at initialisation =======
 
@@ -292,6 +291,7 @@ private:
   G4double                    gPathLength;
 
   G4ThreeVector               fNewPosition;
+  G4ThreeVector               fNewDirection;
   G4bool                      fPositionChanged;
   G4bool                      fBoundaryFlag;
   G4bool                      isActive;

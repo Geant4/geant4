@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+06 April 14: V.Ivant (emutils-V10-00-08)
+- G4VMultipleScattering - prepared for displacement on boundary;
+    set geomMin = 0.05 nm (was 0.01 nm) - Bohr radius 
+
 28 February 14: V.Ivant (emutils-V10-00-07)
 - G4VMultipleScattering - minor cleanup for post-safety computation
 

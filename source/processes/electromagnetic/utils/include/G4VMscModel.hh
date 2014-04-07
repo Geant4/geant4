@@ -133,7 +133,8 @@ protected:
 public:
 
   // compute safety
-  inline G4double ComputeSafety(const G4ThreeVector& position, G4double limit= DBL_MAX);
+  inline G4double ComputeSafety(const G4ThreeVector& position, 
+				G4double limit= DBL_MAX);
 
   // compute linear distance to a geometry boundary
   inline G4double ComputeGeomLimit(const G4Track&, G4double& presafety, 
