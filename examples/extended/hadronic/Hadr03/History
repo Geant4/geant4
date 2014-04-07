@@ -13,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+07-04-14 mma (exhadr03-V10-00-04)
+- Register RunMessenger in RunAction instead of Run
 	 
 05-04-14 mma (exhadr03-V10-00-03)
 - Histograms: change numbering scheme. Add histo of atomic mass

@@ -33,6 +33,7 @@
 
 #include "RunAction.hh"
 #include "Run.hh"
+#include "RunMessenger.hh"
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
@@ -49,9 +50,11 @@
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
   : G4UserRunAction(),
-    fDetector(det), fPrimary(prim), fRun(0), fHistoManager(0)
+    fDetector(det), fPrimary(prim), fRun(0), fHistoManager(0),
+    fRunMessenger(0), fPrint(true)    
 {
- fHistoManager = new HistoManager(); 
+ fHistoManager = new HistoManager();
+ fRunMessenger = new RunMessenger(this);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,7 +62,9 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
 RunAction::~RunAction()
 {
  delete fHistoManager;
+ delete fRunMessenger;
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4Run* RunAction::GenerateRun()
@@ -96,7 +101,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
 void RunAction::EndOfRunAction(const G4Run*)
 {
-  if (isMaster) fRun->EndOfRun();    
+  if (isMaster) fRun->EndOfRun(fPrint);    
   
   //save histograms      
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
@@ -109,4 +114,11 @@ void RunAction::EndOfRunAction(const G4Run*)
   if (isMaster) G4Random::showEngineStatus();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void RunAction::SetPrintFlag(G4bool flag)
+{ 
+  fPrint = flag;
+}
+ 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

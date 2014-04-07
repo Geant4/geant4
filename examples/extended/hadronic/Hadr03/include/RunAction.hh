@@ -43,6 +43,7 @@
 
 class DetectorConstruction;
 class Run;
+class RunMessenger;
 class PrimaryGeneratorAction;
 class HistoManager;
 class G4Run;
@@ -59,12 +60,17 @@ class RunAction : public G4UserRunAction
     virtual G4Run* GenerateRun();   
     virtual void BeginOfRunAction(const G4Run*);
     virtual void   EndOfRunAction(const G4Run*);
-                            
+    
+    void SetPrintFlag(G4bool);
+                                
   private:
     DetectorConstruction*      fDetector;
     PrimaryGeneratorAction*    fPrimary;
     Run*                       fRun;        
     HistoManager*              fHistoManager;
+    RunMessenger*              fRunMessenger;
+     
+    G4bool   fPrint;      //optional printing           
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

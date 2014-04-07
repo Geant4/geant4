@@ -33,13 +33,13 @@
 
 #include "RunMessenger.hh"
 
-#include "Run.hh"
+#include "RunAction.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithABool.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunMessenger::RunMessenger(Run* run)
+RunMessenger::RunMessenger(RunAction* run)
 :G4UImessenger(),fRun(run),
  fRunDir(0),
  fPrintCmd(0)
