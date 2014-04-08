@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 April 14: V.Ivant (emutils-V10-00-09)
+- G4VMultipleScattering - return the limit to 0.01 nm; return condition
+    that if step is below geomMin then no scattering is sampled
 
 06 April 14: V.Ivant (emutils-V10-00-08)
 - G4VMultipleScattering - prepared for displacement on boundary;

@@ -87,8 +87,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-static const G4double defaultSafety = 1.2*CLHEP::nm;
-static const G4double geomMin       = 0.05*CLHEP::nm;
+static const G4double minSafety = 1.20*CLHEP::nm;
+static const G4double geomMin   = 0.01*CLHEP::nm;
 static const G4double minDisplacement2 = geomMin*geomMin;
 
 G4VMultipleScattering::G4VMultipleScattering(const G4String& name, 
@@ -108,7 +108,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   SetProcessSubType(fMultipleScattering);
   if("ionmsc" == name) { firstParticle = G4GenericIon::GenericIon(); }
 
-  lowestKinEnergy = 10*eV;
+  lowestKinEnergy = 10*CLHEP::eV;
 
   // default limit on polar angle
   polarAngleLimit = 0.0;
@@ -420,7 +420,7 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
       SelectModel(ekin,track.GetMaterialCutsCouple()->GetIndex()));
   }
   // step limit
-  if(currentModel->IsActive(ekin) && gPathLength >= geomMin 
+  if(currentModel->IsActive(ekin) && tPathLength > geomMin
      && ekin >= lowestKinEnergy) {
     isActive = true;
     tPathLength = 
@@ -494,11 +494,11 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
     // do not sample scattering at the last or at a small step
     if(tPathLength < range && tPathLength > geomMin) {
 
-      const G4double sFactor = 0.999;
+      const G4double sFactor = 0.99;
       G4double postSafety = 
-	sFactor*(step.GetPreStepPoint()->GetSafety() - geomLength); 
+	(step.GetPreStepPoint()->GetSafety() - geomLength); 
       G4ThreeVector displacement = currentModel->SampleScattering(
-	step.GetPostStepPoint()->GetMomentumDirection(),defaultSafety);
+	step.GetPostStepPoint()->GetMomentumDirection(),minSafety);
 
       G4double r2 = displacement.mag2();
 
@@ -511,7 +511,7 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 	fPositionChanged = true;
 
 	// displaced point is definitely within the volume
-	if(r2 < postSafety*postSafety) {
+	if(r2 <= postSafety*postSafety) {
 	  fNewPosition += displacement;
 
 	  // check first that postSafety is correct
@@ -521,20 +521,21 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 	    sFactor*safetyHelper->ComputeSafety(fNewPosition, dispR); 
 
 	  // second check against safety
-	  if(dispR < postSafety) { 
+	  if(dispR <= postSafety) { 
 	    fNewPosition += displacement;
 
 	    // optional extra mechanism is applied only if a particle
 	    // is stopped by the boundary
+	    /*
 	  } else if(fBoundaryFlag && geomLength < gPathLength) {
 	    fNewPosition += displacement;
 	    //G4VPhysicalVolume* pv = 
 	    //step.GetPreStepPoint()->GetPhysicalVolume();
             // fNewDirection = fParticleChange.GetMomentumDirection();
 	    fNewPosition += displacement*(postSafety/dispR - 1); 
-
+	    */
 	    // reduced displacement
-	  } else if(postSafety > defaultSafety) {
+	  } else if(postSafety > geomMin) {
 	    fNewPosition += displacement*(postSafety/dispR); 
 
 	    // very small postSafety

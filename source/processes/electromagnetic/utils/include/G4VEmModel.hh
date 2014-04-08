@@ -587,7 +587,10 @@ inline G4VEmAngularDistribution* G4VEmModel::GetAngularDistribution()
 
 inline void G4VEmModel::SetAngularDistribution(G4VEmAngularDistribution* p)
 {
-  anglModel = p;
+  if(p != anglModel) {
+    delete anglModel;
+    anglModel = p;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
