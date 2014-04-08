@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 April 14: V.Ivant (emutils-V10-00-10)
+- G4VMultipleScattering - fixed old problem of displacement handling;
+    set geomMin = 0.05 nm (Bohr radius)
+
 08 April 14: V.Ivant (emutils-V10-00-09)
 - G4VMultipleScattering - return the limit to 0.01 nm; return condition
     that if step is below geomMin then no scattering is sampled
