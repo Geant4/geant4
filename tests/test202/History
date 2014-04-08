@@ -3,6 +3,19 @@ $Id$
 
 History file for test/test202 subdirectory
 ------------------------------------------------
+7st April 2014 Laurent Garnier (test202-V10-00-04 needs visexternal-V10-00-00)
+- xvfb.sh, CMakeLists.txt, testVisSceneAdd.mac, testVisSet.mac :
+  o Change test202 in order to check output files only fo OGLIX for the moment. 
+- Requires co-working tag "visexternal-V10-00-00".
+
+7st April 2014 Laurent Garnier (test202-V10-00-03)
+- Fix a problem in xvfb.sh
+- revert run0.mac at previous version (as it should always be)
+
+4st April 2014 Laurent Garnier (test202-V10-00-02)
+- improve xvfb.sh script in order not to fail if xvfb GLX extension is not present
+- add some tests on run0.mac
+
 21st February 2014 Gunter Folger    (test202-V10-00-01)
 - add dependency to build avoiding a running the test before teh build is done.
   revert back changes introduced in test202-V10-00-00, used svn merge -r 78740:73547 xvfb.sh
