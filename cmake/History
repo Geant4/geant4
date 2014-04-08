@@ -30,6 +30,9 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+18th March 2014 - Gunter Folger (cmake-V10-00-12)
+- Modules/Geant4DatasetDefinitions.cmake: G4EMLOW6.37
+
 20th March 2014 - Ben Morgan (cmake-V10-00-11)
 - Templates/Geant4Config.cmake.in : Fixes by Witold Pokorski for correct
   static archive flags on Clang and syntax fixes for GNU.
