@@ -74,12 +74,9 @@ class BeamTestEventAction : public G4UserEventAction {
 		
 		BeamTestRunAction* runAct;
 		// Data member
-		G4int fHitsCollectionID;
 		G4int fHitsCollectionID_monitor;
 		G4double p;
 		G4double pT;
-		G4double angle;
-		G4double pz;
 		G4ThreeVector I;
 		G4ThreeVector E;
 		G4ThreeVector PD;

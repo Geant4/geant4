@@ -85,26 +85,22 @@ class BeamTestDetectorConstruction : public G4VUserDetectorConstruction
 
 		G4Box*             solidChamber;  // pointer to the solid Chamber
 		G4LogicalVolume*   logicChamber;  // pointer to the logical Chamber
-		G4VPhysicalVolume* physChamber;  // pointer to the physical Chamber
 
 		G4VPhysicalVolume* physiChamber;  // pointer to the physical Chamber
 
 		G4Material*         ChamberMater; // pointer to the chamber material
 
 		G4VPVParameterisation* chamberParam; // pointer to chamber parameterisation
-		G4UserLimits* stepLimit;             // pointer to user step limits
 
 		//ExN02MagneticField* fpMagField;   // pointer to the magnetic field 
 
 		//ExN02DetectorMessenger* detectorMessenger;  // pointer to the Messenger
 
 		G4double fWorldLength;            // Full length of the world volume
-		G4double fTargetLength;           // Full length of Target
 		G4double fTrackerLength;          // Full length of Tracker
 		G4int    NbOfChambers;            // Nb of chambers in the tracker region
 		G4double ChamberWidth;            // width of the chambers
 		G4double ChamberSpacing;	       // distance between chambers
-		G4double normalise;	       // distance between chambers
         BeamTestDetectorMessenger* messenger;   //Commands messenger
         G4VSensitiveDetector* monitor;        //The sensitive detector
     public:

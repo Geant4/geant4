@@ -31,7 +31,7 @@
 ////////////////////////////////////////////////////////////////////////
 
 BeamTestEventAction::BeamTestEventAction(/*Parameters* parameter,*/ BeamTestRunAction* run) 
-: runAct(run),fHitsCollectionID(0), fHitsCollectionID_monitor(0),p(0),pT(0),angle(0),pz(0), I(0),E(0),PD(0),b(0),
+: runAct(run),fHitsCollectionID_monitor(0),p(0),pT(0),I(0),E(0),PD(0),b(0),
  numberOfChambers(0),abortEvent(false)
 { }
 

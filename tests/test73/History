@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-04-14 A. Dotti         (test73-V10-00-00)
+- Removing warnings for unused variables
+
 21-11-13 A. Dotti         (test73-V09-06-04)
 - Use G4RunManager::ReinitializeGeometry()
 

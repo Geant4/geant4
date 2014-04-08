@@ -48,7 +48,7 @@ BeamTestRunAction::BeamTestRunAction()
 : mergedFileName("merged"), pT(0)
 #ifdef G4ANALYSIS_USEROOT
 , f(0), pTString(0),ipPerTrackb_x(0),ipPerTrackb_y(0), ipPerTrackb_z(0), ipPerTrackb_mag(0), EDepPerTrack(0), sigma(0)
-, msigma_x(0), msigma_y(0), msigma_z(0), edep(0), fitresultx(0), fitresulty(0), fitresultz(0)
+, msigma_x(0), msigma_y(0), msigma_z(0), fitresultx(0), fitresulty(0), fitresultz(0)
 #endif
 ,messager(new BeamTestRunActionMessenger(this))
 {}

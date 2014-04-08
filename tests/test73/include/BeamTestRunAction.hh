@@ -104,7 +104,7 @@ class BeamTestRunAction : public G4UserRunAction
 
 		//TTree* newTree;
 		TTree* sigma;
-		Double_t msigma_x, msigma_y, msigma_z, edep;
+		Double_t msigma_x, msigma_y, msigma_z;
 
 		TF1* fitresultx;
 		TF1* fitresulty;

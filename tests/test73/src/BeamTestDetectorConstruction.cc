@@ -70,10 +70,10 @@
 BeamTestDetectorConstruction::BeamTestDetectorConstruction(/*Parameters* parameter*/)
 :solidWorld(0),  logicWorld(0),  physiWorld(0),
 	solidTracker(0),logicTracker(0),physiTracker(0), 
-	solidChamber(0),logicChamber(0),physChamber(0),physiChamber(0), 
-	ChamberMater(0),chamberParam(0),stepLimit(0),
+	solidChamber(0),logicChamber(0),physiChamber(0), 
+	ChamberMater(0),chamberParam(0),
 	fWorldLength(0.),  fTrackerLength(0.),
-	NbOfChambers(20) ,  ChamberWidth(1*mm),  ChamberSpacing(1*um), normalise(0.),
+	NbOfChambers(20) ,  ChamberWidth(1*mm),  ChamberSpacing(1*um), 
     messenger(new BeamTestDetectorMessenger(this)),
     monitor(0)
 {
