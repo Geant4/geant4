@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8th April 2014   Gabriele Cosmo  (config-V10-00-05)
+- Added G4USE_STD11 flag for C++11 Standard.
+
 4th April 2014   Gabriele Cosmo  (config-V10-00-04)
 - Force loading of symbols for templated libraries in physics_lists modules
   only for global libraries. Granular libraries not supporting physics_lists

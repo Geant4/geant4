@@ -13,6 +13,9 @@ ifeq ($(G4SYSTEM),Darwin-g++)
 # CXXFLAGS  += -Wunused-parameter -Winline -Wunreachable-code
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual
   CXXFLAGS  += -Wno-variadic-macros -Wshadow -pipe
+  ifdef G4USE_STD11
+    CXXFLAGS  += -std=c++11
+  endif
 # CXXFLAGS  += -stdlib=libstdc++
   ifdef G4OPTIMISE
     CXXFLAGS  += -O2

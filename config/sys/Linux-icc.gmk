@@ -4,6 +4,9 @@
 ifeq ($(G4SYSTEM),Linux-icc)
   CXX       := icc
   CXXFLAGS  := -ansi -fp-model precise -no-gcc -w1
+  ifdef G4USE_STD11
+    CXXFLAGS  += -std=c++11
+  endif
   ifdef G4MULTITHREADED
     CXXFLAGS += -ftls-model=initial-exec -pthread
   endif
