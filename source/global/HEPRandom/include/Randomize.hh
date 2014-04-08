@@ -31,7 +31,7 @@
 
 #include <CLHEP/Random/Randomize.h>
 
-#ifdef G4MULTITHREADED
+#if (defined(G4MULTITHREADED) && !defined(G4USE_STD11))
 
 // MT needs special Random Number distribution classes
 //
@@ -63,7 +63,7 @@
 #define G4RandFlatInt G4MTRandFlat::shootInt
 #define G4RandGeneralTmp G4MTRandGeneral
 
-#else // Sequential mode
+#else // Sequential mode or supporting C++11 standard
 
 // Distributions used ...
 //

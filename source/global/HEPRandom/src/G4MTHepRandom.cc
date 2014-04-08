@@ -26,7 +26,7 @@
 //
 // $Id:$
 //
-#ifdef G4MULTITHREADED
+#if (defined(G4MULTITHREADED) && !defined(G4USE_STD11))
 
 #include <CLHEP/Random/StaticRandomStates.h>
 #include <CLHEP/Random/JamesRandom.h>

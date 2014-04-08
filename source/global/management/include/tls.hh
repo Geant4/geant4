@@ -34,18 +34,23 @@
 #define G4_TLS
 
 #if defined (G4MULTITHREADED)
-  #if ( defined(__MACH__) && defined(__clang__) && defined(__x86_64__) ) || \
-      ( defined(__MACH__) && defined(__GNUC__) && __GNUC__>=4 && __GNUC_MINOR__>=7 ) 
-  #  define G4ThreadLocalStatic static __thread
-  #  define G4ThreadLocal __thread
-  #elif defined(__linux__) || defined(_AIX)
-  #  define G4ThreadLocalStatic static __thread
-  #  define G4ThreadLocal __thread
-  #elif defined(WIN32)
-  #  define G4ThreadLocalStatic static __declspec(thread)
-  #  define G4ThreadLocal __declspec(thread)
+  #if defined (G4USE_STD11)
+    #  define G4ThreadLocalStatic static std::thread_local
+    #  define G4ThreadLocal std::thread_local
   #else
-  #  error "No Thread Local Storage (TLS) technology supported for this platform. Use sequential build !"
+    #if ( defined(__MACH__) && defined(__clang__) && defined(__x86_64__) ) || \
+        ( defined(__MACH__) && defined(__GNUC__) && __GNUC__>=4 && __GNUC_MINOR__>=7 ) 
+    #  define G4ThreadLocalStatic static __thread
+    #  define G4ThreadLocal __thread
+    #elif defined(__linux__) || defined(_AIX)
+    #  define G4ThreadLocalStatic static __thread
+    #  define G4ThreadLocal __thread
+    #elif defined(WIN32)
+    #  define G4ThreadLocalStatic static __declspec(thread)
+    #  define G4ThreadLocal __declspec(thread)
+    #else
+    #  error "No Thread Local Storage (TLS) technology supported for this platform. Use sequential build !"
+    #endif
   #endif
 #else
   #  define G4ThreadLocalStatic static

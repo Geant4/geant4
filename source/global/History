@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 8, 2014 G.Cosmo (global-V10-00-13)
+- Define G4ThreadLocal to be std::thread_local in case C++11 standard is
+  used (temporarly enabled only on GNUMake system for testing, through use
+  of environment variable G4USE_STD11); directly adopt CLHEP classes in such
+  a case instead of G4MT* wrappers. 
+
 March 27, 2014 G.Cosmo (global-V10-00-12)
 - Fixed signature for call to G4Exception in G4Threading.cc.
 
