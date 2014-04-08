@@ -35,7 +35,6 @@
 #include "G4Element.hh"
 #include "G4Timer.hh"
 
-#include "G4PEEffectModel.hh"
 #include "G4KleinNishinaCompton.hh"
 #include "G4BetheHeitlerModel.hh"
 
@@ -55,11 +54,11 @@
 #include "G4UnitsTable.hh"
 
 #include "G4PenelopeComptonModel.hh"
-#include "G4Penelope08RayleighModel.hh"
-#include "G4Penelope08PhotoElectricModel.hh"
-#include "G4Penelope08GammaConversionModel.hh"
-#include "G4Penelope08ComptonModel.hh"
-#include "G4Penelope08IonisationModel.hh"
+#include "G4PenelopeRayleighModel.hh"
+#include "G4PenelopePhotoElectricModel.hh"
+#include "G4PenelopeGammaConversionModel.hh"
+#include "G4PenelopeComptonModel.hh"
+#include "G4PenelopeIonisationModel.hh"
 #include "G4PenelopePhotoElectricModel.hh"
 #include "G4PenelopeGammaConversionModel.hh"
 #include "G4PenelopeAnnihilationModel.hh"
@@ -71,6 +70,8 @@
 #include "G4Electron.hh"
 #include "G4Proton.hh"
 #include "G4MuonPlus.hh"
+
+#include "G4SystemOfUnits.hh"
 
 int main() {
 
@@ -123,17 +124,15 @@ int main() {
   // G4VEmModel* phot = new G4PenelopePhotoElectricModel();
   //G4VEmModel* comp = new G4PenelopeComptonModel();
   //G4VEmModel* conv = new G4PenelopeGammaConversionModel(); 
-  //G4Penelope08RayleighModel* ray = new G4Penelope08RayleighModel();
-  //G4Penelope08PhotoElectricModel* phot = new
-  //G4Penelope08PhotoElectricModel();
-  //G4Penelope08ComptonModel* comp = new 
-  //G4Penelope08ComptonModel();
+  //G4PenelopeRayleighModel* ray = new G4Penelope08RayleighModel();
+  //G4PenelopePhotoElectricModel* phot = new
+  //G4PenelopePhotoElectricModel();
+  //G4PenelopeComptonModel* comp = new 
+  //G4PenelopeComptonModel();
 
   G4cout << "Going to instantiate the model..";
 
-  G4Penelope08IonisationModel* ioni = 
-    new G4Penelope08IonisationModel();
-  G4PenelopeIonisationModel* oldIoni = 
+  G4PenelopeIonisationModel* ioni = 
     new G4PenelopeIonisationModel();
   G4cout << "...done" << G4endl;
 
@@ -150,13 +149,12 @@ int main() {
   //comp->SetVerbosityLevel(0);
   //phot->Initialise(gamma,dummy);
   //phot->SetVerbosityLevel(0);
-  ioni->SetVerbosityLevel(1);
-  oldIoni->SetVerbosityLevel(1);
+  ioni->SetVerbosityLevel(4);
   G4cout << "Going to initialize...";
-  ioni->Initialise(electron,dummy);
-  oldIoni->Initialise(electron,dummy);
+  ioni->Initialise(electron,dummy);  
   G4cout << "...done " << G4endl;
- 
+  ioni->Initialise(positron,dummy);  
+
 
   G4double atomDensity = material->GetTotNbOfAtomsPerVolume();
   G4cout << atomDensity/(1./cm3) << " atoms/cm3" << G4endl;
@@ -175,10 +173,9 @@ int main() {
   for (G4int i=1;i<=nstep;i++)
     {
       G4double energy = Emin*std::pow(10,i*logStep);
-      G4double delta = ioni->GetDensityCorrection(material,energy);
       G4double xsvolume = ioni->CrossSectionPerVolume(material,electron,energy,tCut);
       G4double sPower = ioni->ComputeDEDXPerVolume(material,electron,energy,tCut);
-      file << energy/eV << " " << delta << " " << xsvolume/(1./cm) << " " << 
+      file << energy/eV << " " << xsvolume/(1./cm) << " " << 
 	sPower/(eV/cm) << G4endl;
 
       //file << energy/eV << " " << XSVOLUME/(1./cm) << " " << 
@@ -187,13 +184,12 @@ int main() {
     }	
   file.close();
 
-  std::ofstream file2("ioni_v2001_divided_v2008.dat");
+  std::ofstream file2("testPenelopeIonisation.dat");
   for (G4int i=1;i<=nstep;i++)
     {
       G4double energy = Emin*std::pow(10,i*logStep);
       G4double sPower = ioni->ComputeDEDXPerVolume(material,electron,energy,tCut);
-      G4double sPower2 = oldIoni->ComputeDEDXPerVolume(material,electron,energy,tCut);
-      file2 << energy/eV << " " <<  sPower2/sPower << G4endl;
+      file2 << energy/eV << G4endl;
 
       //file << energy/eV << " " << XSVOLUME/(1./cm) << " " <<
       //meanSigma/barn << G4endl;

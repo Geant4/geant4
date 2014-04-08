@@ -716,8 +716,8 @@ void G4IonParametrisedLossModel::SampleSecondaries(
   G4double kineticEnergy = particle -> GetKineticEnergy();
 
   G4double energy  = kineticEnergy + cacheMass;
-  G4double betaSquared  = kineticEnergy * 
-                                    (energy + cacheMass) / (energy * energy);
+  G4double betaSquared = kineticEnergy * (energy + cacheMass) 
+    / (energy * energy);
 
   G4double kinEnergySec;
   G4double grej;
@@ -753,7 +753,7 @@ void G4IonParametrisedLossModel::SampleSecondaries(
                                                    kinEnergySec);
 
 
-  secondaries -> push_back(delta);
+  secondaries->push_back(delta);
 
   // Change kinematics of primary particle
   G4ThreeVector direction = particle ->GetMomentumDirection();
@@ -764,8 +764,8 @@ void G4IonParametrisedLossModel::SampleSecondaries(
 
   kineticEnergy       -= kinEnergySec;
 
-  particleChangeLoss -> SetProposedKineticEnergy(kineticEnergy);
-  particleChangeLoss -> SetProposedMomentumDirection(finalP);
+  particleChangeLoss->SetProposedKineticEnergy(kineticEnergy);
+  particleChangeLoss->SetProposedMomentumDirection(finalP);
 }
 
 // #########################################################################
