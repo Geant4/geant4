@@ -1,16 +1,26 @@
 /control/verbose 2
 /vis/verbose warnings
 
+# Open OGLSQt viewer
 /vis/open OGLSQt
 
+# Draw volume
 /vis/drawVolume
-/vis/ogl/set/printFilename OGLSQt-output/visSceneAdd
+
+# Execute testVisSceneAdd.mac
 /control/execute testVisSceneAdd.mac
 
-/vis/open OGLSQt
-/vis/drawVolume
-/vis/ogl/set/printFilename OGLSQt-output/visSet
+# Execute testVisSet.mac
 /control/execute testVisSet.mac
 
-# ensure that last print command is done
-/vis/viewer/flush
+# Fire a e+
+/gun/particle e+
+/vis/modeling/trajectories/create/drawByCharge
+/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 5
+/vis/ogl/set/displayListLimit 200000
+/run/beamOn 1
+
+# printEPS
+/vis/ogl/set/printFilename OGLSQt-output/visSceneTest
+/vis/ogl/printEPS

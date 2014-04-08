@@ -24,7 +24,7 @@ find_package(Xvfb QUIET)
 if(XVFB_FOUND)
   message(STATUS "G4 TESTS: found Xvfb --> run test202")
 
-  GEANT4_ADD_TEST(test202 COMMAND xvfb.sh ${CMAKE_CURRENT_BINARY_DIR}/test202 run0.mac
+  GEANT4_ADD_TEST(test202-OGLIX COMMAND xvfb.sh ${CMAKE_CURRENT_BINARY_DIR}/test202 OGLIX
                               ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
                               DEPENDS test202-build
 										TIMEOUT 2000)
