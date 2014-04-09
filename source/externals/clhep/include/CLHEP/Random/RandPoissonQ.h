@@ -33,8 +33,8 @@ class RandPoissonQ : public RandPoisson {
 
 public:
 
-  inline RandPoissonQ ( HepRandomEngine& anEngine, double m=1.0 );
-  inline RandPoissonQ ( HepRandomEngine* anEngine, double m=1.0 );
+  inline RandPoissonQ ( HepRandomEngine& anEngine, double b1=1.0 );
+  inline RandPoissonQ ( HepRandomEngine* anEngine, double b1=1.0 );
   // These constructors should be used to instantiate a RandPoissonQ
   // distribution object defining a local engine for it.
   // The static generator will be skipped using the non-static methods

@@ -25,9 +25,9 @@ Hep3Vector & Hep3Vector::transform(const HepRotation & m1) {
   return *this = m1 * (*this);
 }
 
-Hep3Vector & Hep3Vector::rotate(double aangle, const Hep3Vector & aaxis){
+Hep3Vector & Hep3Vector::rotate(double angle1, const Hep3Vector & aaxis){
   HepRotation trans;
-  trans.rotate(aangle, aaxis);
+  trans.rotate(angle1, aaxis);
   operator*=(trans);
   return *this;
 }

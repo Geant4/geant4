@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+9 April 2014 - G.Cosmo
+- Updated to CLHEP-2.2.0.0:
+  * Random (D.Dagenhart <wdd@fnal.gov>)
+    o Converted statics and globals to const, thread-local or atomic
+      to improve thread safety.
+    o Introduced CLHEP_THREAD_LOCAL and CLHEP_ATOMIC_INT_TYPE macros
+      thread_local and atomic<int> keywords.
+
 24 February 2014 - G.Cosmo
 - Removed deprecated 'register' qualifier in implementation.
 

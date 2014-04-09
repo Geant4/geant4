@@ -14,14 +14,14 @@
 
 namespace CLHEP {
 
-inline RandPoisson::RandPoisson(HepRandomEngine & anEngine, double a )
-: HepRandom(), meanMax(2.0E9), defaultMean(a),
+inline RandPoisson::RandPoisson(HepRandomEngine & anEngine, double a1 )
+: HepRandom(), meanMax(2.0E9), defaultMean(a1),
   localEngine(&anEngine, do_nothing_deleter()), oldm(-1.0) {
   status[0] = status[1] = status[2] = 0.;
 }
 
-inline RandPoisson::RandPoisson(HepRandomEngine * anEngine, double a )
-: HepRandom(), meanMax(2.0E9), defaultMean(a), 
+inline RandPoisson::RandPoisson(HepRandomEngine * anEngine, double a1 )
+: HepRandom(), meanMax(2.0E9), defaultMean(a1), 
   localEngine(anEngine), oldm(-1.0) {
   status[0] = status[1] = status[2] = 0.;
 }

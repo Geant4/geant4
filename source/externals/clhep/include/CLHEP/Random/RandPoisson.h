@@ -31,6 +31,7 @@
 
 #include "CLHEP/Random/Random.h"
 #include "CLHEP/Utility/memory.h"
+#include "CLHEP/Utility/thread_local.h"
 
 namespace CLHEP {
 
@@ -42,8 +43,8 @@ class RandPoisson : public HepRandom {
 
 public:
 
-  inline RandPoisson ( HepRandomEngine& anEngine, double m=1.0 );
-  inline RandPoisson ( HepRandomEngine* anEngine, double m=1.0 );
+  inline RandPoisson ( HepRandomEngine& anEngine, double a1=1.0 );
+  inline RandPoisson ( HepRandomEngine* anEngine, double a1=1.0 );
   // These constructors should be used to instantiate a RandPoisson
   // distribution object defining a local engine for it.
   // The static generator will be skipped using the non-static methods
@@ -118,8 +119,8 @@ private:
   double status[3], oldm;
 
   // static data
-  static double status_st[3];
-  static double oldm_st;
+  static CLHEP_THREAD_LOCAL double status_st[3];
+  static CLHEP_THREAD_LOCAL double oldm_st;
   static const double meanMax_st;
 
 };

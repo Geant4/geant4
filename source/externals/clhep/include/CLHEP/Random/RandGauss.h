@@ -31,6 +31,7 @@
 
 #include "CLHEP/Random/Random.h"
 #include "CLHEP/Utility/memory.h"
+#include "CLHEP/Utility/thread_local.h"
 
 namespace CLHEP {
 
@@ -159,8 +160,8 @@ private:
   double nextGauss;
 
   // static data
-  static bool set_st;
-  static double nextGauss_st;
+  static CLHEP_THREAD_LOCAL bool set_st;
+  static CLHEP_THREAD_LOCAL double nextGauss_st;
 
 };
 

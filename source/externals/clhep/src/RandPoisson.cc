@@ -36,8 +36,8 @@ std::string RandPoisson::name() const {return "RandPoisson";}
 HepRandomEngine & RandPoisson::engine() {return *localEngine;}
 
 // Initialisation of static data
-double RandPoisson::status_st[3] = {0., 0., 0.};
-double RandPoisson::oldm_st = -1.0;
+CLHEP_THREAD_LOCAL double RandPoisson::status_st[3] = {0., 0., 0.};
+CLHEP_THREAD_LOCAL double RandPoisson::oldm_st = -1.0;
 const double RandPoisson::meanMax_st = 2.0E9;
 
 RandPoisson::~RandPoisson() {
@@ -57,7 +57,7 @@ double gammln(double xx) {
 // xx > 1. For 0 < xx < 1. the reflection formula (6.1.4) can be used first.
 // (Adapted from Numerical Recipes in C)
 
-  static double cof[6] = {76.18009172947146,-86.50532032941677,
+  static const double cof[6] = {76.18009172947146,-86.50532032941677,
                              24.01409824083091, -1.231739572450155,
                              0.1208650973866179e-2, -0.5395239384953e-5};
   int j;

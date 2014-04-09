@@ -42,21 +42,29 @@
 #include "CLHEP/Random/Random.h"
 #include "CLHEP/Random/MTwistEngine.h"
 #include "CLHEP/Random/engineIDulong.h"
+#include "CLHEP/Utility/atomic_int.h"
+
 #include <string.h>	// for strcmp
 #include <cstdlib>	// for std::abs(int)
 
 namespace CLHEP {
 
+namespace {
+  // Number of instances with automatic seed selection
+  CLHEP_ATOMIC_INT_TYPE numberOfEngines(0);
+
+  // Maximum index into the seed table
+  const int maxIndex = 215;
+}
+
 static const int MarkerLen = 64; // Enough room to hold a begin or end marker. 
 
 std::string MTwistEngine::name() const {return "MTwistEngine";}
 
-int MTwistEngine::numEngines = 0;
-int MTwistEngine::maxIndex = 215;
-
 MTwistEngine::MTwistEngine() 
 : HepRandomEngine()
 {
+  int numEngines = numberOfEngines++;
   int cycle = std::abs(int(numEngines/maxIndex));
   int curIndex = std::abs(int(numEngines%maxIndex));
   long mask = ((cycle & 0x007fffff) << 8);
@@ -66,7 +74,7 @@ MTwistEngine::MTwistEngine()
   seedlist[1] = 0;
   setSeeds( seedlist, numEngines );
   count624=0;
-  ++numEngines;
+
   for( int i=0; i < 2000; ++i ) flat();      // Warm up just a bit
 }
 

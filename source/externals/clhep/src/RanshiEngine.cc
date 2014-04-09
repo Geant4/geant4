@@ -34,21 +34,26 @@
 
 #include "CLHEP/Random/RanshiEngine.h"
 #include "CLHEP/Random/engineIDulong.h"
+#include "CLHEP/Utility/atomic_int.h"
+
 #include <string.h>	// for strcmp
 
 namespace CLHEP {
+
+namespace {
+  // Number of instances with automatic seed selection
+  CLHEP_ATOMIC_INT_TYPE numberOfEngines(0);
+}
 
 static const int MarkerLen = 64; // Enough room to hold a begin or end marker. 
 
 std::string RanshiEngine::name() const {return "RanshiEngine";}
 
-// Number of instances with automatic seed selection
-int RanshiEngine::numEngines = 0;
-
 RanshiEngine::RanshiEngine()
 : HepRandomEngine(),
   halfBuff(0), numFlats(0) 
 {
+  int numEngines = numberOfEngines++;
   int i = 0;
   while (i < numBuff) {    
     buffer[i] = (unsigned int)(numEngines+19780503L*(i+1));
@@ -56,7 +61,7 @@ RanshiEngine::RanshiEngine()
   }
   theSeed = numEngines+19780503L*++i;
   redSpin = (unsigned int)(theSeed & 0xffffffff);
-  ++numEngines;
+
   for( i = 0; i < 10000; ++i) flat();  // Warm-up by running thorugh 10000 nums
 }
 

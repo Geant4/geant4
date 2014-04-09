@@ -22,7 +22,7 @@ unsigned long crc32ul(const std::string & s);
 
 template <class E> 
 unsigned long engineIDulong() {
-  static unsigned long id = crc32ul(E::engineName());
+  static const unsigned long id = crc32ul(E::engineName());
   return id;
 }
 

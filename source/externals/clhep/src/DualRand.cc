@@ -53,16 +53,20 @@
 
 #include "CLHEP/Random/DualRand.h"
 #include "CLHEP/Random/engineIDulong.h"
+#include "CLHEP/Utility/atomic_int.h"
+
 #include <string.h>	// for strcmp
 
 namespace CLHEP {
 
+namespace {
+  // Number of instances with automatic seed selection
+  CLHEP_ATOMIC_INT_TYPE numberOfEngines(0);
+}
+
 static const int MarkerLen = 64; // Enough room to hold a begin or end marker. 
 
 std::string DualRand::name() const {return "DualRand";}
-
-// Number of instances with automatic seed selection
-int DualRand::numEngines = 0;
 
 // The following constructors (excluding the istream constructor)  fill
 // the bits of the tausworthe and the starting state of the integer
@@ -72,15 +76,16 @@ int DualRand::numEngines = 0;
 
 DualRand::DualRand() 
 : HepRandomEngine(),
+  numEngines(numberOfEngines++),
   tausworthe (1234567 + numEngines + 175321),
   integerCong(69607 * tausworthe + 54329, numEngines)
 {
   theSeed = 1234567;
-  ++numEngines;
 }
 
 DualRand::DualRand(long seed)
 : HepRandomEngine(),
+  numEngines(0),
   tausworthe ((unsigned int)seed + 175321),
   integerCong(69607 * tausworthe + 54329, 8043) // MF - not numEngines
 {
@@ -88,13 +93,15 @@ DualRand::DualRand(long seed)
 }
 
 DualRand::DualRand(std::istream & is) 
-: HepRandomEngine()
+: HepRandomEngine(),
+  numEngines(0)
 {
   is >> *this;
 }
 
 DualRand::DualRand(int rowIndex, int colIndex)
 : HepRandomEngine(),
+  numEngines(0),
   tausworthe (rowIndex + 1000 * colIndex + 85329),
   integerCong(69607 * tausworthe + 54329, 1123) // MF - not numengines
 {
@@ -120,8 +127,8 @@ void DualRand::flatArray(const int size, double* vect) {
 
 void DualRand::setSeed(long seed, int) {
   theSeed = seed;
-  tausworthe  = Tausworthe((unsigned int)seed + numEngines + 175321);
-  integerCong = IntegerCong(69607 * tausworthe + 54329, numEngines);
+  tausworthe  = Tausworthe((unsigned int)seed + 175321);
+  integerCong = IntegerCong(69607 * tausworthe + 54329, 8043);
 }
 
 void DualRand::setSeeds(const long * seeds, int) {

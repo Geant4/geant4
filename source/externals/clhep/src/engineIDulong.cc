@@ -35,7 +35,7 @@ static std::vector<unsigned long> gen_crc_table() {
 }
 
 unsigned long crc32ul(const std::string & s) {
-  static std::vector<unsigned long> crc_table =  gen_crc_table();
+  static const std::vector<unsigned long> crc_table =  gen_crc_table();
   unsigned long crc = 0;
   int end = s.length();
   for (int j = 0; j != end; ++j) {

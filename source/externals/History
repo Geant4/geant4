@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-April-2014: G.Cosmo (externals-V10-00-01)
+- Updated CLHEP module to version 2.2.0.0.
+
 24-February-2014: G.Cosmo (externals-V10-00-00)
 - Removed deprecated 'register' qualifiers in implementation of CLHEP classes.
 

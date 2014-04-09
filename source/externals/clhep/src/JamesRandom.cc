@@ -40,21 +40,25 @@
 #include "CLHEP/Random/JamesRandom.h"
 #include "CLHEP/Random/engineIDulong.h"
 #include "CLHEP/Random/DoubConv.h"
+#include "CLHEP/Utility/atomic_int.h"
+
 #include <string.h>	// for strcmp
 #include <cmath>
 #include <cstdlib>
 
 namespace CLHEP {
 
+namespace {
+  // Number of instances with automatic seed selection
+  CLHEP_ATOMIC_INT_TYPE numberOfEngines(0);
+
+  // Maximum index into the seed table
+  const int maxIndex = 215;
+}
+
 static const int MarkerLen = 64; // Enough room to hold a begin or end marker. 
 
 std::string HepJamesRandom::name() const {return "HepJamesRandom";}
-
-// Number of instances with automatic seed selection
-int HepJamesRandom::numEngines = 0;
-
-// Maximum index into the seed table
-int HepJamesRandom::maxIndex = 215;
 
 HepJamesRandom::HepJamesRandom(long seed)
 : HepRandomEngine()
@@ -69,9 +73,10 @@ HepJamesRandom::HepJamesRandom()     	// 15 Feb. 1998  JMM
   long seeds[2];
   long seed;
 
+  int numEngines = numberOfEngines++;
   int cycle = std::abs(int(numEngines/maxIndex));
   int curIndex = std::abs(int(numEngines%maxIndex));
-  ++numEngines;
+
   long mask = ((cycle & 0x007fffff) << 8);
   HepRandom::getTheTableSeeds( seeds, curIndex );
   seed = seeds[0]^mask;

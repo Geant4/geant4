@@ -5,10 +5,9 @@
 
 namespace CLHEP {
 
-bool RandGaussZiggurat::ziggurat_is_init=RandGaussZiggurat::ziggurat_init();
-//bool RandGaussZiggurat::ziggurat_is_init=false;
-unsigned long RandGaussZiggurat::kn[128], RandGaussZiggurat::ke[256];
-float RandGaussZiggurat::wn[128],RandGaussZiggurat::fn[128],RandGaussZiggurat::we[256],RandGaussZiggurat::fe[256];
+CLHEP_THREAD_LOCAL unsigned long RandGaussZiggurat::kn[128], RandGaussZiggurat::ke[256];
+CLHEP_THREAD_LOCAL float RandGaussZiggurat::wn[128],RandGaussZiggurat::fn[128],RandGaussZiggurat::we[256],RandGaussZiggurat::fe[256];
+CLHEP_THREAD_LOCAL bool RandGaussZiggurat::ziggurat_is_init = false;
 
 HepRandomEngine & RandGaussZiggurat::engine() {return RandGauss::engine();}
 
@@ -73,6 +72,7 @@ bool RandGaussZiggurat::ziggurat_init()
 
 float RandGaussZiggurat::ziggurat_nfix(long hz,HepRandomEngine* anEngine)
 {
+  if(!ziggurat_is_init) ziggurat_init();
   const float r = 3.442620f;     /* The start of the right tail */
   float x, y;
   unsigned long iz=hz&127;

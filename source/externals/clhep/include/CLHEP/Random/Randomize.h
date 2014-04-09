@@ -58,7 +58,7 @@ namespace CLHEP {
 // On some compilers the static instance of the HepRandom generator
 // needs to be created explicitly in the client code (i.e. here).
 
-static int HepRandomGenActive = HepRandom::createInstance();
+static const int HepRandomGenActive = HepRandom::createInstance();
 
 }  // namespace CLHEP
 

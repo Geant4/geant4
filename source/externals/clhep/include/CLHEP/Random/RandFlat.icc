@@ -59,8 +59,8 @@ inline long RandFlat::shootInt(long n) {
   return long(shoot()*double(n));
 }
 
-inline long RandFlat::shootInt(long a, long b) {
-  return long(shoot()*double(b-a)) + a;
+inline long RandFlat::shootInt(long a1, long n) {
+  return long(shoot()*double(n-a1)) + a1;
 }
 
 inline void RandFlat::shootBits() {
@@ -100,8 +100,8 @@ inline long RandFlat::shootInt(HepRandomEngine* anEngine,
 }
 
 inline long RandFlat::shootInt(HepRandomEngine* anEngine,
-                                  long a, long b) {
-  return long(double(b-a)*anEngine->flat()) + a;
+                                  long a1, long n) {
+  return long(double(n-a1)*anEngine->flat()) + a1;
 }
 
 inline void RandFlat::shootArray(HepRandomEngine* anEngine,
@@ -141,8 +141,8 @@ inline long RandFlat::fireInt(long n) {
   return long(localEngine->flat()*double(n));
 }
 
-inline long RandFlat::fireInt(long a, long b) {
-  return long(localEngine->flat()*double(b-a)) + a;
+inline long RandFlat::fireInt(long a1, long n) {
+  return long(localEngine->flat()*double(n-a1)) + a1;
 }
 
 inline void RandFlat::fireBits() {

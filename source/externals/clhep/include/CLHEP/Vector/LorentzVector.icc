@@ -331,12 +331,12 @@ inline void HepLorentzVector::setV( double x1,
              double z1 ) { pp.set(x1, y1, z1); }
 
 inline void HepLorentzVector::setRThetaPhi 
-		( double r1, double theta1, double phi1 ) 
-                         { pp.setRThetaPhi( r1, theta1, phi1 ); }
+		( double r, double ttheta, double phi1 ) 
+                         { pp.setRThetaPhi( r, ttheta, phi1 ); }
 
 inline void HepLorentzVector::setREtaPhi 
-		( double r1, double eta1, double phi1 ) 
-                         { pp.setREtaPhi( r1, eta1, phi1 ); }
+		( double r, double eta1, double phi1 ) 
+                         { pp.setREtaPhi( r, eta1, phi1 ); }
 
 inline void HepLorentzVector::setRhoPhiZ
 		( double rho1, double phi1, double z1 )

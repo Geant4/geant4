@@ -57,20 +57,24 @@
 #include "CLHEP/Random/Ranlux64Engine.h"
 #include "CLHEP/Random/engineIDulong.h"
 #include "CLHEP/Random/DoubConv.h"
+#include "CLHEP/Utility/atomic_int.h"
+
 #include <string.h>	// for strcmp
 #include <cstdlib>	// for std::abs(int)
 #include <limits>       // for numeric_limits
 
 namespace CLHEP {
 
+namespace {
+  // Number of instances with automatic seed selection
+  CLHEP_ATOMIC_INT_TYPE numberOfEngines(0);
+
+  // Maximum index into the seed table
+  const int maxIndex = 215;
+}
+
 static const int MarkerLen = 64; // Enough room to hold a begin or end marker. 
 
-
-// Number of instances with automatic seed selection
-int Ranlux64Engine::numEngines = 0;
-
-// Maximum index into the seed table
-int Ranlux64Engine::maxIndex = 215;
 
 #ifndef WIN32
 namespace detail {
@@ -102,9 +106,10 @@ Ranlux64Engine::Ranlux64Engine()
 : HepRandomEngine()
 {
    luxury = 1;
+   int numEngines = numberOfEngines++;
    int cycle    = std::abs(int(numEngines/maxIndex));
    int curIndex = std::abs(int(numEngines%maxIndex));
-   numEngines +=1;
+
    long mask = ((cycle & 0x007fffff) << 8);
    long seedlist[2];
    HepRandom::getTheTableSeeds( seedlist, curIndex );

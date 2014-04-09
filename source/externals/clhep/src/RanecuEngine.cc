@@ -40,11 +40,18 @@
 #include "CLHEP/Random/Random.h"
 #include "CLHEP/Random/RanecuEngine.h"
 #include "CLHEP/Random/engineIDulong.h"
+#include "CLHEP/Utility/atomic_int.h"
+
 #include <string.h>	// for strcmp
 #include <cmath>
 #include <cstdlib>
 
 namespace CLHEP {
+
+namespace {
+  // Number of instances with automatic seed selection
+  CLHEP_ATOMIC_INT_TYPE numberOfEngines(0);
+}
 
 static const int MarkerLen = 64; // Enough room to hold a begin or end marker. 
 
@@ -58,15 +65,13 @@ void RanecuEngine::further_randomize (int seq1, int col, int index, int modulus)
   while (table[seq1][col] <= 0) table[seq1][col] += (modulus-1);
 }  // mf 6/22/10
 
-// Number of instances with automatic seed selection
-int RanecuEngine::numEngines = 0;
-
 RanecuEngine::RanecuEngine()
 : HepRandomEngine()
 {
+  int numEngines = numberOfEngines++;
   int cycle = std::abs(int(numEngines/maxSeq));
   seq = std::abs(int(numEngines%maxSeq));
-  numEngines += 1;
+
   theSeed = seq;
   long mask = ((cycle & 0x007fffff) << 8);
   for (int i=0; i<2; ++i) {

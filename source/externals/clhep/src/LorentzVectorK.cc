@@ -22,9 +22,9 @@ namespace CLHEP  {
 // Metric flexibility
 //-******************
 
-ZMpvMetric_t HepLorentzVector::setMetric( ZMpvMetric_t met ) {
+ZMpvMetric_t HepLorentzVector::setMetric( ZMpvMetric_t a1 ) {
   ZMpvMetric_t oldMetric = (metric > 0) ? TimePositive : TimeNegative;
-  if ( met == TimeNegative ) {
+  if ( a1 == TimeNegative ) {
     metric = -1.0;
   } else {
     metric =  1.0;
