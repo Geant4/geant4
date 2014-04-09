@@ -3,6 +3,9 @@ $Id$
 
 History file for test/test202 subdirectory
 ------------------------------------------------
+9st April 2014 Laurent Garnier (test202-V10-00-05)
+- CMakeLists.txt : Fix a missing copy of OGLIX.mac
+
 7st April 2014 Laurent Garnier (test202-V10-00-04 needs visexternal-V10-00-00)
 - xvfb.sh, CMakeLists.txt, testVisSceneAdd.mac, testVisSet.mac :
   o Change test202 in order to check output files only fo OGLIX for the moment. 
