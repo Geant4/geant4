@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-04-14 V.Ivanchenko (materials-V10-00-01)
+- G4Material, G4Element - defined defaulut names and symbols for elements
+    and isotopes if they are not explicitly defined by users - this fixing
+    names for gdml IO which has problem to work with names starting from a
+    decimal number     
+
 14-02-14 V.Ivanchenko (materials-V10-00-00)
 14-02-14 V.Ivanchenko (materials-V10-10-00)
 - G4SandiaTable - make run time methods const, because materials are shared
