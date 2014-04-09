@@ -22,12 +22,18 @@ endif()
 #------------------------------------------------------------------------------
 # - Define CMake requirements and override make rules as needed
 #
-cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)
+cmake_minimum_required(VERSION 2.8.4 FATAL_ERROR)
+
+# If Policy CMP0022 exists, use OLD because Geant4 still needs
+# to support versions < 2.8.12.
+# This relates to LINK_INTERFACE_LIBRARIES and can be removed once
+# minimum required CMake version reaches 2.8.12
+if(POLICY CMP0022)
+  cmake_policy(SET CMP0022 OLD)
+endif()
+
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
    ${CMAKE_SOURCE_DIR}/cmake/Modules/Geant4MakeRules_cxx.cmake)
-
-#set(CMAKE_USER_MAKE_RULES_OVERRIDE_Fortran
-#   ${CMAKE_SOURCE_DIR}/cmake/Modules/Geant4MakeRules_fortran.cmake)
 
 #------------------------------------------------------------------------------
 # - Project definition
@@ -51,10 +57,10 @@ set(CMAKE_MODULE_PATH
 # See the documentation in each of these modules for further details.
 #
 # - Versioning. We do this here for now
-set(${PROJECT_NAME}_VERSION "10.0.0")
+set(${PROJECT_NAME}_VERSION "10.0.1")
 set(${PROJECT_NAME}_VERSION_MAJOR "10")
 set(${PROJECT_NAME}_VERSION_MINOR "0")
-set(${PROJECT_NAME}_VERSION_PATCH "0")
+set(${PROJECT_NAME}_VERSION_PATCH "1")
 
 # - Provide dependent options as these are needed for some Geant4 features
 include(CMakeDependentOption)
@@ -97,7 +103,7 @@ add_subdirectory(source)
 #----------------------------------------------------------------------------
 # - Perform all post build tasks
 # At the CMake level, this simply means that we must know about targets
-# and other properties processed in source and environments trees before 
+# and other properties processed in source and environments trees before
 # these tasks can be performed.
 #
 #----------------------------------------------------------------------------
