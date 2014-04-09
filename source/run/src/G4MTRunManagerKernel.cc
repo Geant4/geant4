@@ -154,7 +154,7 @@ void* G4MTRunManagerKernel::StartThread(void* context)
 	  }
 	  G4cout<<"AFFINITY:"<<cpuindex<<G4endl;
       //Avoid compilation warning in C90 standard w/o MT
-#if defined(G4MULTITHREADED)
+#if ( defined(G4MULTITHREADED) && !defined(WIN32) )
       G4Thread t = G4THREADSELF();
 #else
       G4Thread t = 1;
