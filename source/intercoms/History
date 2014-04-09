@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+9 April, 2014 L. Garnier (intercoms-V10-00-03)
+- Fix DEV-140 : "/control/macroPath" now also apply to macros 
+  called inside a loop.
+
 16 March, 2014 M. Asai (intercoms-V10-00-02)
 - Introducing /control/cout/ignoreInitializationCout command to
   omit G4cout from threads during initialization, as they should

@@ -356,7 +356,7 @@ void G4UImanager::Foreach(const char * macroFile,const char * variableName,
     vl += " ";
     vl += cd;
     SetAlias(vl);
-    ExecuteMacroFile(macroFile);
+    ExecuteMacroFile(FindMacroPath(macroFile));
   }
 }
 
