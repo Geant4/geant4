@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 10, 2014 G.Cosmo (global-V10-00-14)
+- Get rid of deprecated 'register' storage class specifier in source files.
+
 April 8, 2014 G.Cosmo (global-V10-00-13)
 - Define G4ThreadLocal to be std::thread_local in case C++11 standard is
   used (temporarly enabled only on GNUMake system for testing, through use
