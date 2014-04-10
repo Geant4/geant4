@@ -1,0 +1,274 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_stl_vector
+#define tools_rroot_stl_vector
+
+#include "buffer"
+#include "cids"
+
+#include "../stype"
+#include "../scast"
+#include "../cids"
+
+namespace tools {
+namespace rroot {
+
+template <class T>
+class stl_vector : public virtual iro, public std::vector<T> {
+  static const std::string& s_store_class() {
+    static const std::string s_v("vector<"+stype(T())+">");
+    return s_v;
+  }
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::stl_vector<"+stype(T())+">");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast< stl_vector<T> >(this,a_class)) return p;
+    return 0;
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return stl_vector_cid()+_cid(T());}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast< stl_vector<T> >(this,a_class)) {return p;}
+    return 0;
+  }
+  virtual iro* copy() const {return new stl_vector<T>(*this);}
+  virtual bool stream(buffer& a_buffer) {
+    std::vector<T>::clear();
+
+    short v;
+    unsigned int s, c;
+    if(!a_buffer.read_version(v,s,c)) return false;
+
+    //::printf("debug : stl_vector::stream<%s> : version %d, byte count %d\n",
+    //   stype(T()).c_str(),v,c);
+
+    unsigned int num;
+    if(!a_buffer.read(num)) return false;
+
+    //::printf("debug : stl_vector : %d\n",num);
+
+    if(num) {    
+      T* vec = new T[num];
+      if(!a_buffer.read_fast_array<T>(vec,num)) {
+        delete [] vec;
+        return false;
+      }
+      std::vector<T>::resize(num);
+      T* pos = vec;
+      for(unsigned int index=0;index<num;index++,pos++) {    
+        std::vector<T>::operator[](index) = *pos;
+      }
+      delete [] vec;
+    }
+
+    return a_buffer.check_byte_count(s,c,s_store_class());
+  }
+public:
+  stl_vector(){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~stl_vector(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  stl_vector(const stl_vector& a_from)
+  :iro(a_from)
+  ,std::vector<T>(a_from)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  stl_vector& operator=(const stl_vector& a_from){
+    std::vector<T>::operator=(a_from);
+    return *this;
+  }
+};
+
+template <class T>
+class stl_vector_vector
+:public virtual iro
+,public std::vector< std::vector<T> > 
+{
+  static const std::string& s_store_class() {
+    static const std::string s_v("vector<vector<"+stype(T())+"> >");
+    return s_v;
+  }
+public:
+  static const std::string& s_class() {
+    static const std::string s_v
+      ("tools::rroot::stl_vector_vector<"+stype(T())+">");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p=cmp_cast< stl_vector_vector<T> >(this,a_class)) return p;
+    return 0;
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return stl_vector_vector_cid()+_cid(T());}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast< stl_vector_vector<T> >(this,a_class)) {return p;}
+    return 0;
+  }
+  virtual iro* copy() const {return new stl_vector_vector<T>(*this);}
+  virtual bool stream(buffer& a_buffer) {
+    typedef typename std::vector<T> vec_t;
+    std::vector<vec_t>::clear();
+
+    short v;
+    unsigned int s, c;
+    if(!a_buffer.read_version(v,s,c)) return false;
+
+    //::printf("debug : stl_vector_vector::stream<%s> : version %d, byte count %d\n",stype(T()).c_str(),v,c);
+
+    unsigned int vecn;
+    if(!a_buffer.read(vecn)) return false;
+
+    std::vector<vec_t>::resize(vecn);
+    //::printf("debug : stl_vector_vector : %d\n",vecn);
+    for(unsigned int veci=0;veci<vecn;veci++) {
+      vec_t& elem = std::vector<vec_t>::operator[](veci);
+
+      unsigned int num;
+      if(!a_buffer.read(num)) {
+        std::vector<vec_t>::clear();
+        return false;
+      }
+      //::printf("debug : stl_vector_vector :   index %d num %d\n",veci,num);
+      if(num) {    
+        T* vec = new T[num];
+        if(!a_buffer.read_fast_array<T>(vec,num)) {
+          delete [] vec;
+          std::vector<vec_t>::clear();
+          return false;
+        }
+        elem.resize(num);
+        T* pos = vec;
+        for(unsigned int index=0;index<num;index++,pos++) elem[index] = *pos;
+        delete [] vec;
+      }
+    }
+
+    return a_buffer.check_byte_count(s,c,s_store_class());
+  }
+public:
+  stl_vector_vector(){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~stl_vector_vector(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  stl_vector_vector(const stl_vector_vector& a_from)
+  :iro(a_from)
+  ,std::vector< std::vector<T> >(a_from)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  stl_vector_vector& operator=(const stl_vector_vector& a_from){
+    std::vector< std::vector<T> >::operator=(a_from);
+    return *this;
+  }
+};
+
+class stl_vector_string : public virtual iro, public std::vector<std::string> {
+  static const std::string& s_store_class() {
+    static const std::string s_v("vector<string>");
+    return s_v;
+  }
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::stl_vector_string");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<stl_vector_string>(this,a_class)) return p;
+    return 0;
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return stl_vector_string_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<stl_vector_string>(this,a_class)) {return p;}
+    return 0;
+  }
+  virtual iro* copy() const {return new stl_vector_string(*this);}
+  virtual bool stream(buffer& a_buffer) {
+    std::vector<std::string>::clear();
+
+    //uint32 startpos = a_buffer.length();
+
+    //WARNING : not tested yet.
+
+    short v;
+    unsigned int s, c;
+    if(!a_buffer.read_version(v,s,c)) return false;
+
+    //::printf("debug : stl_vector_string::stream : version %d, byte count %d\n",v,c);
+
+    unsigned int num;
+    if(!a_buffer.read(num)) return false;
+
+    //::printf("debug : stl_vector_string : %d\n",num);
+
+    std::vector<std::string>::resize(num);
+    for(unsigned int index=0;index<num;index++) {    
+      std::string& vs = std::vector<std::string>::operator[](index);
+      if(!a_buffer.read(vs)) {
+        std::vector<std::string>::clear();
+        return false;
+      }
+    }
+
+    //a_buffer.set_offset(startpos+c+sizeof(unsigned int));
+
+    return a_buffer.check_byte_count(s,c,s_store_class());
+  }
+public:
+  stl_vector_string(){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~stl_vector_string(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  stl_vector_string(const stl_vector_string& a_from)
+  :iro(a_from)
+  ,std::vector<std::string>(a_from)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  stl_vector_string& operator=(const stl_vector_string& a_from){
+    std::vector<std::string>::operator=(a_from);
+    return *this;
+  }
+};
+
+}}
+
+#endif

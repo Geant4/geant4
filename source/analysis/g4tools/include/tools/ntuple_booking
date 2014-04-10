@@ -26,6 +26,7 @@ public:
   ,m_user_obj(a_from.m_user_obj)
   {}    
   column_booking& operator=(const column_booking& a_from) {
+    if(&a_from==this) return *this;
     m_name = a_from.m_name;
     m_cid = a_from.m_cid;
     m_user_obj = a_from.m_user_obj;

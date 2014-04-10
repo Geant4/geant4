@@ -83,7 +83,7 @@ class G4VNtupleManager : public G4BaseAnalysisManager
     virtual G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value) = 0;
     virtual G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value) = 0;
     virtual G4bool AddNtupleRow(G4int ntupleId) = 0;
-    
+
     // Access methods
     virtual G4int GetNofNtuples() const = 0;
     

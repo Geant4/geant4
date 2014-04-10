@@ -1,0 +1,152 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_fac
+#define tools_rroot_fac
+
+#include "../sout"
+
+#include "branch_element"
+#include "leaf"
+#include "basket"
+#include "tree_index"
+#include "stl_vector"
+#include "dummy"
+
+namespace tools {
+namespace rroot {
+
+class fac : public virtual ifac {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::fac");
+    return s_v;
+  }
+public: //ifac
+  virtual iro* create(const std::string& a_class,const args& a_args) {
+    //m_file.out() << "tools::rroot::fac::create :"
+    //      << " create object of class " << a_class << "..."
+    //      << std::endl;
+    if(a_class=="TBranch") {
+      return new branch(m_file,*this);
+    } else if(a_class=="TBranchElement") {
+      return new branch_element(m_file,*this);
+
+    } else if(a_class=="TLeafB") {
+      branch* b = arg_branch(a_args);
+      if(!b) return 0;
+      return new leaf<char>(m_file.out(),*b,*this);
+
+    } else if(a_class=="TLeafS") {
+      branch* b = arg_branch(a_args);
+      if(!b) return 0;
+      return new leaf<short>(m_file.out(),*b,*this);
+
+    } else if(a_class=="TLeafI") {
+      branch* b = arg_branch(a_args);
+      if(!b) return 0;
+      return new leaf<int>(m_file.out(),*b,*this);
+
+    } else if(a_class=="TLeafF") {
+      branch* b = arg_branch(a_args);
+      if(!b) return 0;
+      return new leaf<float>(m_file.out(),*b,*this);
+
+    } else if(a_class=="TLeafD") {
+      branch* b = arg_branch(a_args);
+      if(!b) return 0;
+      return new leaf<double>(m_file.out(),*b,*this);
+
+    } else if(a_class=="TLeafO") {
+      branch* b = arg_branch(a_args);
+      if(!b) return 0;
+      return new leaf<bool>(m_file.out(),*b,*this);
+
+    } else if(a_class=="TLeafC") {
+      branch* b = arg_branch(a_args);
+      if(!b) return 0;
+      return new leaf_string(m_file.out(),*b,*this);
+
+    } else if(a_class=="TLeafElement") {
+      branch* b = arg_branch(a_args);
+      if(!b) return 0;
+      return new leaf_element(m_file.out(),*b,*this);
+
+    } else if(a_class=="TBasket") {
+      return new basket(m_file);
+
+    // L.Duflot ATLAS file :
+    } else if(a_class=="TTreeIndex") {
+      return new tree_index();
+
+    } else if(a_class=="TList") {
+      return new List(*this,true);
+
+    } else if(a_class=="vector<unsigned short>") {
+      return new stl_vector<unsigned short>();
+    } else if(a_class=="vector<short>") {
+      return new stl_vector<short>();
+    } else if(a_class=="vector<unsigned int>") {
+      return new stl_vector<unsigned int>();
+    } else if(a_class=="vector<int>") {
+      return new stl_vector<int>();
+    } else if(a_class=="vector<float>") {
+      return new stl_vector<float>();
+    } else if(a_class=="vector<double>") {
+      return new stl_vector<double>();
+
+    } else if(a_class=="vector<unsigned long>") { //beurk
+      return new stl_vector<uint64>(); //is it ok to map to an uint64 ?
+
+    } else if(a_class=="vector<string>") {
+      return new stl_vector_string();
+
+    } else if(a_class=="vector<vector<unsigned short> >") {
+      return new stl_vector_vector<unsigned short>();
+    } else if(a_class=="vector<vector<short> >") {
+      return new stl_vector_vector<short>();
+    } else if(a_class=="vector<vector<unsigned int> >") {
+      return new stl_vector_vector<unsigned int>();
+    } else if(a_class=="vector<vector<int> >") {
+      return new stl_vector_vector<int>();
+    } else if(a_class=="vector<vector<float> >") {
+      return new stl_vector_vector<float>();
+    } else if(a_class=="vector<vector<double> >") {
+      return new stl_vector_vector<double>();
+
+    } else if(a_class=="TBranchRef") {
+      return new dummy();
+
+    } else {
+      m_file.out() << "tools::rroot::fac::create :"
+                   << " unknown class " << sout(a_class) << "."
+                   << " Create a tools::rroot::dummy object."
+                   << std::endl;
+      return new dummy();
+    }
+  }
+  virtual void destroy(iro*& a_obj) {delete a_obj;a_obj = 0;}
+public:
+  fac(ifile& a_file):m_file(a_file){}
+  virtual ~fac(){}
+public:
+  fac(const fac& a_from): ifac(a_from),m_file(a_from.m_file){}
+  fac& operator=(const fac&){return *this;}
+protected:
+  branch* arg_branch(const args& a_args) {
+    void* p = ifac::find_args(a_args,ifac::arg_branch());
+    if(!p) {
+      m_file.out() << "tools::rroot::fac::arg_branch :"
+                   << " branch not found in args."
+                   << std::endl;
+      return 0;
+    }
+    return (branch*)p;
+  }
+protected:
+  ifile& m_file;
+};
+
+}}
+
+#endif

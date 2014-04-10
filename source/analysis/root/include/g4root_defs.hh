@@ -33,14 +33,18 @@
 #include "tools/histo/h1d"
 #include "tools/histo/h2d"
 #include "tools/wroot/ntuple"
+#include "tools/rroot/ntuple"
 #include "G4RootAnalysisManager.hh"
+#include "G4RootAnalysisReader.hh"
 
 namespace G4Root {
 
   typedef tools::histo::h1d  G4AnaH1;
   typedef tools::histo::h2d  G4AnaH2;    
   typedef tools::wroot::ntuple  G4Ntuple; 
+  typedef tools::rroot::ntuple  G4RNtuple; 
   typedef G4RootAnalysisManager G4AnalysisManager; 
+  typedef G4RootAnalysisReader  G4AnalysisReader; 
 } 
 
 #endif

@@ -51,8 +51,8 @@ DEL hbook.obj
 REM //////////////////////////////////////////////////////////////
 REM /// chbook.cpp ///////////////////////////////////////////////
 REM //////////////////////////////////////////////////////////////
-F77.exe %f77flags% /compile_only /object:.\close.obj ..\..\tools\hbook\close.f
-F77.exe %f77flags% /compile_only /object:.\setpawc.obj ..\..\tools\hbook\setpawc.f
+F77.exe %f77flags% /compile_only /object:.\close.obj ..\..\src\close.f
+F77.exe %f77flags% /compile_only /object:.\setpawc.obj ..\..\src\setpawc.f
 
 CL.exe %cppflags% /c /Fo.\chbook.obj /Tp.\chbook.cpp
 
@@ -65,7 +65,7 @@ REM /// whbook.cpp ///////////////////////////////////////////////
 REM //////////////////////////////////////////////////////////////
 
 CL.exe %cppflags% /c /Fo.\whbook.obj /Tp.\whbook.cpp
-F77.exe %f77flags% /compile_only /object:.\setntuc.obj ..\..\tools\hbook\setntuc.f
+F77.exe %f77flags% /compile_only /object:.\setntuc.obj ..\..\src\setntuc.f
 
 LINK.exe /nologo /OPT:NOREF /out:.\tools_test_whbook.exe .\whbook.obj .\setntuc.obj .\setpawc.obj .\close.obj /libpath:%CERNLIB_home%\lib packmd.lib shiftmd.lib advapi32.lib ws2_32.lib
 

@@ -42,6 +42,7 @@ class G4VH2Manager : public G4BaseAnalysisManager
 {
   // Disable using the object managers outside G4VAnalysisManager
   friend class G4VAnalysisManager;
+  friend class G4VAnalysisReader;
 
   protected:
     G4VH2Manager(const G4AnalysisManagerState& state);

@@ -12,6 +12,7 @@
 
 #include "../sout"
 #include "../sto"
+#include "../srep"
 
 namespace tools {
 namespace waxml {
@@ -45,8 +46,8 @@ namespace waxml {
     annotations_t::const_iterator it;
     for(it=a_annotations.begin();it!=a_annotations.end();++it){
       a_writer << spaces << "      <item"
-           << " key=" << sout((*it).first)
-           << " value=" << sout((*it).second)
+           << " key=" << sout(to_xml((*it).first))
+           << " value=" << sout(to_xml((*it).second))
            << "/>" << std::endl;
     }
     a_writer << spaces << "    </annotation>" << std::endl;
@@ -273,9 +274,9 @@ namespace waxml {
   
     // <histogram1d> :
     writer << spaces << "  <histogram1d"
-         << " path=" << sout(aPath)
-         << " name=" << sout(aName)
-         << " title=" << sout(aObject.title())
+         << " path=" << sout(to_xml(aPath))
+         << " name=" << sout(to_xml(aName))
+         << " title=" << sout(to_xml(aObject.title()))
          << ">" << std::endl;
   
     // <annotations> :
@@ -327,9 +328,9 @@ namespace waxml {
 
     // <histogram2d> :
     writer << spaces << "  <histogram2d"
-         << " path=" << sout(aPath)
-         << " name=" << sout(aName)
-         << " title=" << sout(aObject.title())
+         << " path=" << sout(to_xml(aPath))
+         << " name=" << sout(to_xml(aName))
+         << " title=" << sout(to_xml(aObject.title()))
          << ">" << std::endl;
   
     // <annotations> :
@@ -338,7 +339,7 @@ namespace waxml {
     // <axis> :
     write_axis(aObject.axis_x(),"x",writer,aShift);
     write_axis(aObject.axis_y(),"y",writer,aShift);
-  
+
     // <statistics> : 
     writer << spaces << "    <statistics"
          << " entries=" << sout<unsigned int>(aObject.entries())
@@ -407,9 +408,9 @@ namespace waxml {
   
     // <histogram3d> :
     writer << spaces << "  <histogram3d"
-         << " path=" << sout(aPath)
-         << " name=" << sout(aName)
-         << " title=" << sout(aObject.title())
+         << " path=" << sout(to_xml(aPath))
+         << " name=" << sout(to_xml(aName))
+         << " title=" << sout(to_xml(aObject.title()))
          << ">" << std::endl;
   
     // <annotations> :
@@ -597,9 +598,9 @@ namespace waxml {
   
     // <profile1d> :
     writer << spaces << "  <profile1d"
-         << " path=" << sout(aPath)
-         << " name=" << sout(aName)
-         << " title=" << sout(aObject.title())
+         << " path=" << sout(to_xml(aPath))
+         << " name=" << sout(to_xml(aName))
+         << " title=" << sout(to_xml(aObject.title()))
          << ">" << std::endl;
   
     // <annotations> :
@@ -650,9 +651,9 @@ namespace waxml {
   
     // <profile2d> :
     writer << spaces << "  <profile2d"
-         << " path=" << sout(aPath)
-         << " name=" << sout(aName)
-         << " title=" << sout(aObject.title())
+         << " path=" << sout(to_xml(aPath))
+         << " name=" << sout(to_xml(aName))
+         << " title=" << sout(to_xml(aObject.title()))
          << ">" << std::endl;
   
     // <annotations> :

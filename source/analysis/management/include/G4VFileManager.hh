@@ -51,7 +51,7 @@ class G4VFileManager
     G4bool SetHistoDirectoryName(const G4String& dirName);
     G4bool SetNtupleDirectoryName(const G4String& dirName);
     G4String GetFileName() const;
-    G4String GetFullFileName() const;
+    G4String GetFullFileName(const G4String& baseFileName = "") const;
     G4String GetNtupleFileName(const G4String& ntupleName) const;
     G4String GetHistoDirectoryName() const;
     G4String GetNtupleDirectoryName() const;

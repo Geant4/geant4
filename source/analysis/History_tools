@@ -1,3 +1,24 @@
+ 1.9.4 :
+ - test/cpp/rxrayfluo.cpp : add a ntuple_binding usage.
+ - tools/ntuple_binding, rroot/ntuple : logic to attach user variables to ntuple columns when reading.
+   Available today only for the root format.
+ - tools/rroot/named, tree : use of the tools_vforcit cpp macro to simplify edition of loops with iterators.
+ - histo/c1d : correct a mistyping in "#define tools_histo_c1d" that was _cld !
+
+ 1.9.3 :
+ - test/cpp/waxml.cpp : have an histo title with <,>,&,",' to test XML escaping when writing
+   at the AIDA XML format.
+ - tools/waxml/begend, histos, ntuple : use to_xml() to escape the XML special characters in strings.
+ - tools/waxml/begend : change output dtd version from 3.0 to 3.2.1.
+ - tools/ntuple_booking : to quiet coverity, in operator=() add :
+     if(&a_from==this) return *this;
+
+ 1.9.1 :
+ - test/cpp/rxrayfluo.cpp : to test the reading of a xrayfluo.root file.
+
+ 1.9.0 :
+ - tools/rroot, test/cpp/rroot.cpp : code to read a file at CERN-ROOT format.
+
  1.8.0 :
  - tools/[wroot,waxml]/ntuple : handle the creation of std::vector columns through
    the new ntuple_booking class.

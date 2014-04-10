@@ -55,9 +55,9 @@ inline std::string to_xml(const std::string& a_string){
   // " : &quot;
   // ' : &apos;
   std::string s = a_string;
+  replace(s,"&","&amp;"); //must be first.
   replace(s,"<","&lt;");
   replace(s,">","&gt;");
-  replace(s,"&","&amp;");
   replace(s,"\"","&quot;");
   replace(s,"'","&apos;");
   return s;

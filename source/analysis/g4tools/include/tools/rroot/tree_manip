@@ -1,0 +1,111 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_tree_manip
+#define tools_rroot_tree_manip
+
+#include "file"
+#include "tree"
+#include "stl_vector"
+
+namespace tools {
+namespace rroot {
+
+inline tree* find_tree(file& a_file,ifac& a_fac,const std::string& a_name) {
+  std::ostream& out = a_file.out();
+  //out << "tools::rroot::find_tree : name : " << file << std::endl;
+
+  key* key = a_file.dir().find_key(a_name);
+  if(!key) {
+    out << "tools::rroot::find_tree :"
+        << " key " << sout(a_name) << " not found."
+        << std::endl;
+    return 0;     
+  }
+
+  unsigned int sz;    
+  char* buf = key->get_object_buffer(sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::find_tree :"
+        << " can't get data buffer of "
+        << sout(key->object_name()) << "."
+        << std::endl;
+    return 0;     
+  }
+  
+  //out << "tools::rroot::find_tree :"
+  //    << " get data buffer size " << sz << "."
+  //    << std::endl;
+
+  buffer b(out,key->file().byte_swap(),sz,buf,key->key_length(),false);
+  
+  if(key->object_class()!=TTree_cls()) {
+    out << "tools::rroot::find_tree :"
+        << " key object class "
+        << sout(key->object_class())
+        << " is not a TTree."
+        << std::endl;
+    return 0;     
+  }
+     
+  tree* _tree = new tree(a_file,a_fac);
+  if(!_tree->stream(b)) {
+    out << "tools::rroot::find_tree :"
+        << " TTree streaming failed"
+        << std::endl;
+    delete _tree;
+    return 0;     
+  }
+ 
+  return _tree; 
+}
+
+inline branch_element* find_be(tree& a_tree,const std::string& a_name){
+  std::ostream& out = a_tree.file().out();
+    
+  branch* _branch = a_tree.find_branch(a_name,true);
+  if(!_branch) {
+    out << "tools::rroot::find_be :"
+        << " branch not found."
+        << std::endl;
+    return 0;     
+  }
+
+  branch_element* be = id_cast<branch,branch_element>(*_branch);
+  if(!be) {
+    out << "tools::rroot::find_be :"
+        << " branch not a branch_element."
+        << std::endl;
+    return 0;     
+  }
+  
+  return be;
+}
+
+template <class T>
+inline stl_vector<T>* find_vec(branch_element& a_be,unsigned int a_event){
+  std::ostream& out = a_be.file().out();
+
+  unsigned int n;
+  if(!a_be.find_entry(a_event,n)) {
+    out << "tools::rroot::find_vec :"
+        << " find event failed."
+        << std::endl;
+    return 0;     
+  }
+
+  iro* o = a_be.object();
+  stl_vector<T>* od = id_cast<iro, stl_vector<T> >(*o);
+  if(!od) {
+    out << "tools::rroot::find_vec :"
+        << " object not a tools::rroot::stl_vector<T>."
+        << std::endl;
+    return 0;     
+  }
+
+  return od; //WARNING : we are not owner.
+}
+
+}}
+
+#endif

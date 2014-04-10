@@ -44,10 +44,13 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4HnMessenger.hh
         G4VAnalysisManager.hh
         G4VAnalysisManager.icc
+        G4VAnalysisReader.hh
+        G4VAnalysisReader.icc
         G4VFileManager.hh
         G4VH1Manager.hh
         G4VH2Manager.hh
         G4VNtupleManager.hh
+        G4VRNtupleManager.hh
         g4analysis_defs.hh
     SOURCES
         G4AnalysisVerbose.cc
@@ -63,6 +66,7 @@ GEANT4_DEFINE_MODULE(NAME G4analysismng
         G4HnManager.cc
         G4HnMessenger.cc
         G4VAnalysisManager.cc
+        G4VAnalysisReader.cc
         G4VFileManager.cc
         G4VH1Manager.cc
         G4VH2Manager.cc

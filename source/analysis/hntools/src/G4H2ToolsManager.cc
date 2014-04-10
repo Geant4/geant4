@@ -697,6 +697,30 @@ G4bool G4H2ToolsManager::WriteOnAscii(std::ofstream& /*output*/)
 // 
 
 //_____________________________________________________________________________
+G4int G4H2ToolsManager::AddH2(const G4String& name, tools::histo::h2d* h2d)
+{
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) 
+    fState.GetVerboseL4()->Message("add", "H2", name);
+#endif
+
+  // Add annotation
+  AddH2Annotation(h2d, "none", "none", "none", "none");        
+  // Add information
+  AddH2Information(name, "none", "none", "none", "none", 
+                   kLinearBinScheme, kLinearBinScheme);
+    
+  // Register histogram 
+  G4int id = RegisterToolsH2(h2d, name); 
+  
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL2() ) 
+    fState.GetVerboseL2()->Message("add", "H2", name);
+#endif
+  return id;
+}  
+
+//_____________________________________________________________________________
 void G4H2ToolsManager::AddH2Vector(
                           const std::vector<tools::histo::h2d*>& h2Vector)
 {
