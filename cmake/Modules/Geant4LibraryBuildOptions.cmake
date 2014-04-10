@@ -118,6 +118,15 @@ if(CXXSTD_IS_AVAILABLE)
   geant4_add_feature(GEANT4_BUILD_CXXSTD "Compiling against C++ Standard '${GEANT4_BUILD_CXXSTD}'")
 
   set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${${GEANT4_BUILD_CXXSTD}_FLAGS}")
+
+  # Get needed defs for selected standard
+  # NB this needs refactoring because, for example, newer MSVC versions
+  # will just support c++11, and the selection above isn't needed, nor
+  # available, so we cannot check it in the if statement below.
+  # Add the def(s) to flags, because it may be *required*
+  if(GEANT4_BUILD_CXXSTD MATCHES "c\\+\\+11")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -DG4USE_STD11")
+  endif()
 endif()
 
 #-----------------------------------------------------------------------
