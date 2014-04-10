@@ -112,7 +112,8 @@ private:
   G4bool IsIntegralModeUsed;
   
   
-  
+  G4int trackid;
+  G4int nstep;  
 
  
 
