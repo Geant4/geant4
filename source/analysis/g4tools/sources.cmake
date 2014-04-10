@@ -21,7 +21,7 @@
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4tools
     SOURCES
-        csz/inflate.c
+        inflate.cc
     LINK_LIBRARIES
 )
 

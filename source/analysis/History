@@ -17,6 +17,12 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 10, 2014 G. Cosmo (analysis-V10-00-07)
+- Corrected organisation of source files in g4tools sub-module to
+  allow for building with GNUmake system:
+  o Moved g4tools/src/csz/inflate.c to g4tools/src and renamed to inflate.cc.
+  o Corrected main GNUmakefile for build order.
+
 April 10, 2014 I. Hrivnacova (analysis-V10-00-06)
 - Fixed GNUmakefile (Gabriele)
 

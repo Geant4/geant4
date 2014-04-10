@@ -1,6 +1,6 @@
 # $Id: GNUmakefile 66356 2012-12-18 09:02:32Z gcosmo $
 # --------------------------------------------------------------------
-# GNUmakefile for geometry/biasing library.  Gabriele Cosmo, 25/03/02.
+# GNUmakefile for analysis/root sub-library.
 # --------------------------------------------------------------------
 
 name := G4root
