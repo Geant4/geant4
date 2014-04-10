@@ -1750,6 +1750,7 @@ void G4VisManager::EndOfRun ()
       // But, for this stop-gap solution...
       // Deactivate end-of-event and end-of-run models...
       G4Scene* scene = fpSceneHandler->GetScene();
+      assert(scene);  // To keep Coverity happy.
       std::vector<G4Scene::Model>& eoeModels = scene->SetEndOfEventModelList();
       std::vector<G4Scene::Model> tmpEoeModels = eoeModels;
       std::vector<G4Scene::Model>::iterator iEoe;

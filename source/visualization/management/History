@@ -26,6 +26,12 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+10th April 2014  Gabriele Cosmo (visman-V10-00-05)
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+6th March 2014  John Allison  (visman-V10-00-04)
+- G4VisManager.cc: Coverity fix.
+
 24th January 2014  John Allison  (visman-V10-00-03)
 - G4VisManager:
   o Draw(const G4VPhysicalVolume&,..): Removed the temporary physical
