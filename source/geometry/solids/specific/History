@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-Apr-2014  G.Cosmo               (geom-specific-V10-00-08)
+- Get rid of deprecated 'register' storage class specifier in source files.
+
 31-Mar-2014  G.Cosmo               (geom-specific-V10-00-07)
 - Fixed signature of assignment operator to G4VCSGfaceted.
 
