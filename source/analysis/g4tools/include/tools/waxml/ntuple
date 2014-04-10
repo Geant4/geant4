@@ -10,7 +10,6 @@
 #include "../vfind"
 #include "../vmanip"
 #include "../sout"
-#include "../srep"
 #include "../tos"
 #include "../forit"
 
@@ -158,9 +157,9 @@ public:
 
     const std::vector<iobj*>& columns() const {return m_cols;}
 
-    std::string booking(bool a_xml_esc) const {
+    std::string booking() const {
       std::string s;
-      get_booking(m_cols,a_xml_esc,s);
+      get_booking(m_cols,s);
       return s;
     }
     void reset() {m_tmp.clear();}
@@ -380,9 +379,9 @@ public:
 
     // <tuple> :
     m_writer << m_spaces << "  <tuple"
-             << " path=" << sout(to_xml(a_path))
-             << " name=" << sout(to_xml(a_name))
-             << " title=" << sout(to_xml(a_title))
+             << " path=" << sout(a_path)
+             << " name=" << sout(a_name)
+             << " title=" << sout(a_title)
              << ">" << std::endl;
 
     // <columns> :
@@ -391,20 +390,20 @@ public:
     tools_vforcit(iobj*,m_cols,it) {
       if(leaf* vlf = is_std_vector_column(*(*it))) {
         m_writer << m_spaces << "      <column"
-                 << " name=" << sout(to_xml((*it)->name())) 
+                 << " name=" << sout((*it)->name()) 
                  << " type=" << sout("ITuple")
-                 << " booking=\"{" << vlf->aida_type() << " " << to_xml((*it)->name())
+                 << " booking=\"{" << vlf->aida_type() << " " << (*it)->name()
                  << "}\""
                  << "/>" << std::endl;
       } else if(sub_ntuple* sub = id_cast<iobj,sub_ntuple>(*(*it))){
         m_writer << m_spaces << "      <column"
-                 << " name=" << sout(to_xml((*it)->name()))
+                 << " name=" << sout((*it)->name()) 
                  << " type=" << sout("ITuple")
-                 << " booking=" << sout(sub->booking(true))
+                 << " booking=" << sout(sub->booking())
                  << "/>" << std::endl;
       } else if(/*leaf* lf =*/ id_cast<iobj,leaf>(*(*it))){
         m_writer << m_spaces << "      <column"
-                 << " name=" << sout(to_xml((*it)->name()))
+                 << " name=" << sout((*it)->name()) 
                  << " type=" << sout((*it)->aida_type())
                //<< " default=" << sout(lf->s_def()) //not understood by jas3
                  << "/>" << std::endl;
@@ -443,32 +442,29 @@ public:
     m_writer << m_spaces << "  </tuple>" << std::endl;
   }
 
-  std::string booking(bool a_xml_esc) const {
+  std::string booking() const {
     std::string s;
-    get_booking(m_cols,a_xml_esc,s);
+    get_booking(m_cols,s);
     return s;
   }
 
 protected:
-  static void get_booking(const std::vector<iobj*>& a_cols,bool a_xml_esc,
-                          std::string& a_string) {
+  static void get_booking(const std::vector<iobj*>& a_cols,
+                                 std::string& a_string) {
     a_string += "{"; //we need the + because of the tuple in tuple.
 
     tools_vforcit(iobj*,a_cols,it) {
       if(it!=a_cols.begin()) a_string += ",";
 
-      std::string sname = (*it)->name();
-      if(a_xml_esc) sname = to_xml(sname);
-
       if(leaf* vlf = is_std_vector_column(*(*it))) {
-        a_string += "ITuple " + (*it)->name() + " = {" + vlf->aida_type() + " " + sname + "}";
+        a_string += "ITuple " + (*it)->name() + " = {" + vlf->aida_type() + " " + (*it)->name() + "}";
 
       } else if(sub_ntuple* sub = id_cast<iobj,sub_ntuple>(*(*it))){
-        a_string += (*it)->aida_type() + " " + sname + " = ";
+        a_string += (*it)->aida_type() + " " + (*it)->name() + " = ";
 
-        get_booking(sub->columns(),a_xml_esc,a_string);
+        get_booking(sub->columns(),a_string);
       } else if(leaf* lf = id_cast<iobj,leaf>(*(*it))){
-        a_string += (*it)->aida_type() + " " + sname + " = " + lf->s_def();
+        a_string += (*it)->aida_type() + " " + (*it)->name() + " = " + lf->s_def();
       }  
     }  
     a_string += "}";
