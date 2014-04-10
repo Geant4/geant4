@@ -5,6 +5,7 @@
 #
 # electron 100 MeV; all processes
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #

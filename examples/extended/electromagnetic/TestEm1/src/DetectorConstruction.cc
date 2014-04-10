@@ -117,8 +117,13 @@ void DetectorConstruction::DefineMaterials()
   G4Material* CO2 = new G4Material("CO2", density, ncomponents=2);
   CO2->AddElement(C, natoms=1);
   CO2->AddElement(O, natoms=2);
-  
-  new G4Material("D2_gas", z=2., a= 2.0141*g/mole, density= 0.036*mg/cm3);
+
+  G4Isotope* d = new G4Isotope("d", 1, 2, 0.0, 0);
+  G4Element* D = new G4Element("Heavy-Hydrogen" ,"D", ncomponents=1);
+  D->AddIsotope(d, 1.0);
+  G4Material* D2 = 
+    new G4Material("D2_gas", density= 0.036*mg/cm3, ncomponents=1);
+  D2->AddElement(D, natoms=2);
 
   new G4Material("liquidArgon", z=18., a= 39.95*g/mole, density= 1.390*g/cm3);
 
