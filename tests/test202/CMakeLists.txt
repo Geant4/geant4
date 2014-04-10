@@ -9,7 +9,7 @@ configure_file(testVisSceneAdd.mac testVisSceneAdd.mac COPYONLY) # test expects 
 configure_file(testVisSet.mac testVisSet.mac COPYONLY) # test expects file to be local
 configure_file(vis.mac vis.mac COPYONLY) # test expects file to be local
 configure_file(run0.mac run0.mac COPYONLY) # this file local too
-configure_file(OGLIX.mac run0.mac COPYONLY) # this file local too
+configure_file(OGLIX.mac OGLIX.mac COPYONLY) # this file local too
 configure_file(xvfb.sh xvfb.sh COPYONLY) # this file local too
 #---Test definitions----------------------------------------------------------------------------
 
