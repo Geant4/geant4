@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 10, 2014 - G.Cosmo  (geomnav-V10-00-02)
+------------------------
+- Get rid of deprecated 'register' storage class specifier in source files.
+
 March 14, 2014 - J.Apostolakis  (geomnav-V10-00-01)
 ------------------------------
 - G4PathFinder: Added method for end of track - needed to signal
