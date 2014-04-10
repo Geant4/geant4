@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 10th, 2014 G.Cosmo                  - geomvol-V10-00-02
+- Get rid of deprecated 'register' storage class specifier in source files
+
 March 31st, 2014 G.Cosmo                  - geomvol-V10-00-01
 - Corrected signature of operator=() for G4LogicalBorder/SkinSurface.
 

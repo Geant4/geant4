@@ -119,7 +119,7 @@ void G4EnhancedVecAllocator<_Tp>::deallocate(_Tp* _Ptr, size_t _Count)
   G4int found = -1;
   if (G4AllocStats::allocStat != 0)
   {
-    for (register int j = 0 ; j < G4AllocStats::numCat ; j++)
+    for (G4int j = 0 ; j < G4AllocStats::numCat ; j++)
     {
       if (G4AllocStats::allocStat[j].size == (_Count * sizeof(_Tp)))
       {
@@ -132,7 +132,7 @@ void G4EnhancedVecAllocator<_Tp>::deallocate(_Tp* _Ptr, size_t _Count)
 
   G4ChunkIndexType& chunk = G4AllocStats::allocStat[found];
 
-  for (register int k = 0; k < chunk.totalspace; k++)
+  for (G4int k = 0; k < chunk.totalspace; k++)
   {
     if ( (chunk.preAllocated[k]).address == ((char *) _Ptr))
     {
@@ -160,7 +160,7 @@ _Tp* G4EnhancedVecAllocator<_Tp>::allocate(size_t _Count)
   G4int found = -1;
   if (G4AllocStats::allocStat != 0)
   {
-    for (register int j = 0 ; j < G4AllocStats::numCat ; j++)
+    for (G4int j = 0 ; j < G4AllocStats::numCat ; j++)
     {
       if (G4AllocStats::allocStat[j].size == totalsize)
       {
@@ -207,7 +207,7 @@ _Tp* G4EnhancedVecAllocator<_Tp>::allocate(size_t _Count)
       // failure in allocating extra space for instances !
     // assert(newSpace1 != 0);
 
-    for (register int k = 0; k < 512 ; k++)
+    for (G4int k = 0; k < 512 ; k++)
     {
       (chunk.preAllocated[k]).isAllocated = 0;
       (chunk.preAllocated[k]).address = newSpace1+totalsize*k;
@@ -221,7 +221,7 @@ _Tp* G4EnhancedVecAllocator<_Tp>::allocate(size_t _Count)
 
   // assert(chunk.size == totalsize);
 
-  for (register int k = 0; k < chunk.totalspace; k++)
+  for (G4int k = 0; k < chunk.totalspace; k++)
   {
     if ((chunk.preAllocated[k]).isAllocated == 0)
     { 
@@ -245,7 +245,7 @@ _Tp* G4EnhancedVecAllocator<_Tp>::allocate(size_t _Count)
     // failure in allocating extra space for instances !
   // assert(newSpace != 0);
 
-  for (register int k = 0; k < 512 ; k++)
+  for (G4int k = 0; k < 512 ; k++)
   {
     (chunk.preAllocated[originalchunknumber+k]).isAllocated = 0;
     (chunk.preAllocated[originalchunknumber+k]).address = newSpace+totalsize*k;
