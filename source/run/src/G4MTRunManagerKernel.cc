@@ -131,6 +131,7 @@ void* G4MTRunManagerKernel::StartThread(void* context)
   //Optimization Step
   //============================
   //Enforce thread affinity if requested
+#if !defined(WIN32)
   if ( masterRM->GetPinAffinity() != 0 ) {
 	  G4cout<<"AFFINITY SET"<<G4endl;
       //Assign this thread to cpus in a round robin way
@@ -154,17 +155,17 @@ void* G4MTRunManagerKernel::StartThread(void* context)
 	  }
 	  G4cout<<"AFFINITY:"<<cpuindex<<G4endl;
       //Avoid compilation warning in C90 standard w/o MT
-#if ( defined(G4MULTITHREADED) && !defined(WIN32) )
+#if defined(G4MULTITHREADED)
       G4Thread t = G4THREADSELF();
 #else
-      G4Thread t = 1;
+      G4Thread t;
 #endif
       G4bool success = G4Threading::G4SetPinAffinity(cpuindex,t);
       if ( ! success ) {
-	G4Exception("G4MTRunManagerKernel::StarThread","Run0035",JustWarning,"Cannot set thread affinity.");
+          G4Exception("G4MTRunManagerKernel::StarThread","Run0035",JustWarning,"Cannot set thread affinity.");
       }
   }
-  
+#endif
     
   //============================
   //Step-1: Random number engine

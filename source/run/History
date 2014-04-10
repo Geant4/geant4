@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Apr 8th, 2014,  A. Dotti (run-V10-00-04)
+Apr 8th, 2014,  A. Dotti (run-V10-00-04,run-V10-00-05)
 - Protect against compilation error in WIN32 for pin-affinity
 
 Mar 28th, 2014, A. Dotti (run-V10-00-03)
