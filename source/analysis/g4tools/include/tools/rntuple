@@ -1,0 +1,71 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rntuple
+#define tools_rntuple
+
+// interfaces to read ntuple.
+
+#include "scast"
+#include "cids"
+
+#include <string>
+#include <vector>
+
+namespace tools {
+namespace read {
+
+class icol {
+public:
+  virtual ~icol(){}
+public:
+  virtual void* cast(cid) const = 0;
+  virtual cid id_cls() const = 0;
+public:
+  virtual const std::string& name() const = 0;
+public:
+  virtual void stop() {}
+  virtual bool fetch_entry() const {return false;} //for binded column API.
+};
+  
+template <class T>
+class icolumn : public virtual icol {
+public:
+  static cid id_class() {
+    static const T s_v = T(); //do that for T = std::string.
+    return _cid(s_v);
+  }
+public: //icol
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<icolumn>(this,a_class)) {return p;}
+    else return 0;
+  }
+  virtual cid id_cls() const {return id_class();}
+public:
+  virtual ~icolumn(){}
+public:
+  virtual bool get_entry(T&) const = 0;
+};
+
+class intuple {
+public:
+  virtual ~intuple(){}
+public:
+  virtual void start() = 0;
+  virtual bool next() = 0;
+  virtual icol* find_icol(const std::string&) = 0;
+  virtual const std::vector<icol*>& columns() const = 0;
+public:
+  virtual void stop() {}
+public:
+  template <class T>
+  icolumn<T>* find_column(const std::string& a_name){
+    read::icol* col = find_icol(a_name);
+    if(!col) return 0;
+    return id_cast<read::icol, icolumn<T> >(*col);
+  }
+};
+
+}}
+
+#endif

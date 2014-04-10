@@ -13,17 +13,18 @@
 #------------------------------------------------------------------------------
 
 add_subdirectory(csv)
+add_subdirectory(g4tools)
 add_subdirectory(hntools)
 add_subdirectory(management)
 add_subdirectory(root)
 add_subdirectory(xml)
-add_subdirectory(g4tools)
 
 if(NOT GEANT4_BUILD_GRANULAR_LIBS)
     include(Geant4MacroLibraryTargets)
     GEANT4_GLOBAL_LIBRARY_TARGET(NAME G4analysis
         COMPONENTS
             csv/sources.cmake
+            g4tools/sources.cmake
             hntools/sources.cmake
             management/sources.cmake
             root/sources.cmake

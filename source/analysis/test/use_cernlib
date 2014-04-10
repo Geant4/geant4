@@ -41,7 +41,7 @@ if [ "${use_cernlib}" = "yes" ] ; then
       # gfortran is 32 bits !
       cernlib_cflags="-m32"
       obj="hdummy.o"
-      eval ${cc_compiler} -c ${ccflags0} ${cernlib_cflags} -o ${obj} ${tools_mgr}/../../tools/hbook/hdummy.c
+      eval ${cc_compiler} -c ${ccflags0} ${cernlib_cflags} -o ${obj} ${tools_mgr}/../../src/hdummy.c
 
       objs="${objs} ${obj}"
       f77_objs="${f77_objs} ${obj}"

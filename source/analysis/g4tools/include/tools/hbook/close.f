@@ -1,6 +1,0 @@
-      SUBROUTINE OCLOSE(IUNIT)
-      IMPLICIT NONE
-      INTEGER IUNIT 
-      CLOSE(IUNIT)
-      RETURN 
-      END

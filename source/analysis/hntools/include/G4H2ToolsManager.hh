@@ -53,6 +53,8 @@ class G4H2ToolsManager : public G4VH2Manager
     G4H2ToolsManager(const G4AnalysisManagerState& state);
     virtual ~G4H2ToolsManager();
 
+    // Method to add histograms read from a file
+    G4int AddH2(const G4String& name, tools::histo::h2d* h2d);
     // Method for merge (MT)
     void AddH2Vector(const std::vector<tools::histo::h2d*>& h2Vector);
     // Reset data
@@ -111,7 +113,7 @@ class G4H2ToolsManager : public G4VH2Manager
                            const G4String& yfcnName = "none");
 
     virtual G4bool ScaleH2(G4int id, G4double factor);
-
+    
     // Method to fill histograms
     //
     virtual G4bool FillH2(G4int id, G4double xvalue, G4double yvalue,

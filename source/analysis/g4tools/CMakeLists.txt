@@ -47,3 +47,11 @@ install(FILES tools.license
   DESTINATION ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}
   )
 
+#------------------------------------------------------------------------------
+# Finally we need to build C source code file(s)
+#
+if(GEANT4_BUILD_GRANULAR_LIBS)
+    include(Geant4MacroLibraryTargets)
+    GEANT4_GRANULAR_LIBRARY_TARGET(COMPONENT sources.cmake)
+endif()
+

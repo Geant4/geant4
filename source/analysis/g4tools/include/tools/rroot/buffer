@@ -1,0 +1,593 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_buffer
+#define tools_rroot_buffer
+
+#include "rbuf"
+#include "ifac"
+#include "iro"
+#include "../tos"
+#ifdef TOOLS_MEM
+#include "../mem"
+#endif
+
+#include <string>
+#include <vector>
+#include <ostream>
+
+// in TOOLS_STL, we don't have (yet) a performant map.
+
+#ifdef inlib_stl_vector
+#define TOOLS_RROOT_OBJ_MAP_HASH_TABLE
+//#define TOOLS_RROOT_OBJ_MAP_OMAP
+#else
+#define TOOLS_RROOT_OBJ_MAP_STD_MAP
+#endif
+
+#ifdef TOOLS_RROOT_OBJ_MAP_STD_MAP
+#include <map>
+#endif
+#ifdef TOOLS_RROOT_OBJ_MAP_OMAP
+#include "../omap"
+#endif
+#ifdef TOOLS_RROOT_OBJ_MAP_HASH_TABLE
+#include "../hash_table"
+#include "../hash"
+#endif
+
+namespace tools {
+namespace rroot {
+
+class buffer : public rbuf {
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::buffer");
+    return s_v;
+  }
+
+#ifdef TOOLS_RROOT_OBJ_MAP_STD_MAP
+  typedef std::map<uint32,iro*> obj_map;
+#endif
+#ifdef TOOLS_RROOT_OBJ_MAP_OMAP
+  typedef inlib::omap<uint32,iro*> obj_map;
+#endif
+#ifdef TOOLS_RROOT_OBJ_MAP_HASH_TABLE
+  class obj_map : public inlib::hash_table<uint32,iro*> {
+    typedef inlib::hash_table<uint32,iro*> parent;
+  protected:
+    virtual unsigned int hash(const uint32& a_key) {
+      return inlib::hash(&a_key,sizeof(uint32));
+    }
+    virtual bool cmp(const uint32& a_key1,const uint32& a_key2) {
+      return a_key1==a_key2?true:false;
+    }
+  public:
+    obj_map():parent(){}
+    virtual ~obj_map(){}
+  private:
+    obj_map(const obj_map& a_from):parent(a_from){}
+    obj_map& operator=(const obj_map& a_from){
+      parent::operator=(a_from);
+      return *this;
+    }
+  };
+#endif
+
+public:
+  buffer(std::ostream& a_out,bool a_byte_swap,
+         uint32 a_size,char* a_buffer,uint32 a_klen,bool a_verbose)
+  : rbuf(a_out,a_byte_swap,a_buffer+a_size,m_pos)
+  ,m_byte_swap(a_byte_swap)
+  ,m_verbose(a_verbose)
+  ,m_size(a_size)     //expect a not zero size.
+  ,m_buffer(a_buffer) //don't get ownership.
+  ,m_pos(a_buffer)
+  ,m_klen(a_klen) //to compute refs (used in read_class, read_object)
+  ,m_map_objs(false)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~buffer(){
+    m_objs.clear();
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  buffer(const buffer& a_from)
+  : rbuf(a_from.m_out,a_from.m_byte_swap,0,m_pos)
+  ,m_byte_swap(a_from.m_byte_swap)
+  ,m_map_objs(a_from.m_map_objs)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  buffer& operator=(const buffer&){return *this;}
+public:
+  void set_offset(unsigned int a_off) {m_pos = m_buffer+a_off;}
+
+  //char* buffer() const {return m_buffer;}
+  uint32 length() const {return m_pos-m_buffer;}
+  uint32 size() const {return m_size;}
+
+  void set_map_objs(bool a_value) {m_map_objs = a_value;}
+protected:
+  // on first_int :
+  static uint32 kNullTag() {return 0;}
+  static uint32 kByteCountMask() {return 0x40000000;}
+  // on tag :
+  static uint32 kNewClassTag() {return 0xFFFFFFFF;}
+  static uint32 kClassMask() {return 0x80000000;  }
+  static uint32 kMapOffset() {return 2;}
+  static short kByteCountVMask() {return 0x4000;}
+
+  bool read_class_tag(std::string& a_class) {
+    a_class.clear();
+
+    uint32 tag;
+    if(!rbuf::read(tag)) return false;
+    //m_out << "tag " << tag << " " << tosx(tag) << std::endl;
+
+    if(tag==kNewClassTag()) {
+      char s[80];
+      if(!read_string(s, 80)) {
+        m_out << "tools::rroot::read_class_tag :"
+              << " read string." << std::endl;
+        return false;
+      }
+      //m_out << "tools::rroot::read_class_tag :"
+      //      << " tag kNewClassTag"
+      //      << " class " << s
+      //      << std::endl;
+      a_class = s;
+      return true;
+
+    } else if(tag & kClassMask()) {
+      //m_out << "tools::rroot::read_class_tag :"
+      //      << " tag & kClassMask"
+      //      << " ref " << (uint32)(tag & ~kClassMask)
+      //      << " recurse..."
+      //      << std::endl;
+
+      unsigned int cl_offset = (tag & ~kClassMask());
+      cl_offset -= kMapOffset();
+      cl_offset -= m_klen;
+      char* old_pos = m_pos;
+      m_pos = m_buffer + cl_offset;
+      //std::string scls;
+      //uint32 ref;
+      if(!read_class_tag(a_class)) return false;
+      m_pos = old_pos;
+
+      return true;
+
+    } else {
+
+      m_out << "tools::rroot::read_class_tag :"
+            << " tag unknown case ! "  
+            << tag << " hex " << tosx(tag)
+            << std::endl;             
+
+      return false;
+    }
+  }
+
+  bool read_class(std::string& a_class,uint32& a_bcnt,bool& a_is_ref){
+    //m_verbose = true;
+    a_class.clear();
+    a_bcnt = 0;
+    a_is_ref = false;
+
+    //uint32 fVersion = 0;       //Buffer format version
+
+    // read byte count and/or tag (older files don't have byte count)
+    uint32 first_int = 0;
+    if(!rbuf::read(first_int)) return false;
+
+    if(m_verbose) {
+      m_out << "tools::rroot::read_class :"
+            << " first_int " << tosx(first_int)
+            << std::endl;
+    }
+
+    if(first_int==kNullTag()) { //GB
+      if(m_verbose) {
+        m_out << "tools::rroot::read_class :"
+              << " first_int is kNullTag."
+              << std::endl;
+      }
+      a_bcnt = 0;
+      return true;
+
+  //} else if(first_int==kNewClassTag()) { // class desc follows.
+    } else if(first_int & kByteCountMask()) {
+      // at write :
+      //   skip int to store bcnt.
+      // + write class
+      //     if(!write((clIdx | Rio_kClassMask))) return false;
+      //   or
+      //     if(!write(Rio_kNewClassTag)) return false;
+      // + write object 
+      // + set byte cnt (cnt|kByteCountMask()) at skipped int.
+
+      if(m_verbose) {
+        m_out << "tools::rroot::read_class :"
+              << " first_int & kByteCountMask."
+              << std::endl;
+      }
+
+      uint32 bef_tag = m_pos-m_buffer;
+      //fVersion = 1;
+
+      std::string scls;
+      if(!read_class_tag(scls)) return false;
+      if(scls.empty()) {
+        m_out << "tools::rroot::buffer::read_class :"
+              << " read_class_tag did not find a class name."
+              << std::endl;
+        return false;
+      }
+
+      a_class = scls;
+      a_bcnt = (first_int & ~kByteCountMask());
+
+      if(m_verbose) {
+        m_out << "tools::rroot::read_class :"
+              << " kNewClassTag : read class name " << sout(a_class)
+              << " a_bcnt " << a_bcnt
+              << " bef_tag " << bef_tag
+              << "." << std::endl;
+      }
+
+      return true;
+            
+    } else {
+      if(m_verbose) {
+        m_out << "tools::rroot::read_class :"
+             << " first_int " << tosx(first_int)
+             << ". first_int is position toward object."
+             << std::endl;
+      }
+      a_bcnt = first_int; //pos toward object.
+      a_is_ref = true;
+      a_class.clear();
+      return true;
+    }
+    
+    return false;
+  }  
+public:
+  bool read_object(ifac& a_fac,const ifac::args& a_args,iro*& a_obj){
+    a_obj = 0;
+
+    // before reading object save start position
+    uint32 startpos = (uint32)(m_pos-m_buffer);
+
+    uint32 bcnt;
+    std::string sclass;
+    bool is_ref;
+    if(!read_class(sclass,bcnt,is_ref)) {
+      m_out << "tools::rroot::buffer::read_object :"
+            << " can't read class." << std::endl;
+      return false;
+    }
+    //::printf("debug : %d\n",length()-startpos);
+
+    if(m_verbose) {
+      m_out << "tools::rroot::buffer::read_object :"
+            << " class " << sout(sclass)
+            << " bcnt " << bcnt
+            << std::endl;
+    }
+
+    if(is_ref) {
+      //bcnt is the position toward an object or an object ref.
+      //m_out << "tools::rroot::buffer::read_object :"
+      //      << " is_ref : bcnt " << bcnt
+      //      << std::endl;
+
+      unsigned int obj_offset = bcnt;
+      obj_offset -= kMapOffset();
+      obj_offset -= m_klen;
+
+      if(m_map_objs) {
+#ifdef TOOLS_RROOT_OBJ_MAP_HASH_TABLE
+        if(m_objs.find(obj_offset,a_obj)) return true;
+#else
+        obj_map::const_iterator it = m_objs.find(obj_offset);
+        if(it!=m_objs.end()) {
+          a_obj = (*it).second;
+          //::printf("debug : find : %d %lu\n",obj_offset,a_obj);
+          //stay at current m_pos ?
+          return true;
+        }
+#endif
+      }
+
+     {char* old_pos = m_pos;
+
+      m_pos = m_buffer + obj_offset;
+
+      uint32 first_int;
+      if(!rbuf::read(first_int)) return false;
+      if(first_int & kByteCountMask()) {
+        std::string scls;
+        if(!read_class_tag(scls)) return false;
+        if(scls.empty()) {
+          m_out << "tools::rroot::buffer::read_object :"
+                << " read_class_tag did not find a class name."
+                << std::endl;
+          return false;
+        }
+
+        //m_out << "tools::rroot::buffer::read_object :"
+        //      << " is_ref : class " << sout(scls)
+        //      << std::endl;
+
+        iro* obj = a_fac.create(scls,a_args);
+        if(!obj) return false;
+
+        if(m_map_objs) {
+          //must be done before stream()
+#ifdef TOOLS_RROOT_OBJ_MAP_HASH_TABLE
+          if(!m_objs.insert(obj_offset,obj)) {
+            m_out << "tools::rroot::buffer::read_object :"
+                  << " map insert failed."
+                  << std::endl;
+          }
+#else
+          m_objs[obj_offset] = obj;
+#endif
+        }
+
+        if(!obj->stream(*this)) {
+          m_out << "tools::rroot::buffer::read_object :"
+                << " is_ref : streamed failed for class " << sout(scls)
+                << std::endl;
+          //restore a good buffer position :
+          //m_pos = m_buffer+startpos+sizeof(unsigned int); 
+          a_fac.destroy(obj);
+          return false;
+        }
+
+        //m_out << "tools::rroot::buffer::read_object :"
+        //      << " is_ref : streamed ok for class " << sout(scls)
+        //      << std::endl;
+
+        a_obj = obj;
+
+      } else {
+        m_out << "tools::rroot::buffer::read_object :"
+              << " is_ref : zzz"
+              << std::endl;
+      }
+
+      m_pos = old_pos;}
+
+      // in principle at this point m_pos should be
+      //   m_buffer+startpos+sizeof(unsigned int)
+      // but enforce it anyway : 
+      m_pos = m_buffer+startpos+sizeof(unsigned int); 
+      //check_byte_count(startpos,0,sclass) would always be ok.
+
+      //a_obj = ???
+
+    } else {
+      if(sclass.empty()) {
+        //m_out << "tools::rroot::buffer::read_object :"
+        //      << " found empty class name."
+        //      << std::endl;
+
+        m_pos = m_buffer+startpos+bcnt+sizeof(unsigned int); 
+
+      } else {
+
+        // Being not a ref, it must NOT be in the map.
+        // We gain a lot by not doing the below find.
+/*
+        if(m_map_objs) {
+#ifdef TOOLS_RROOT_OBJ_MAP_HASH_TABLE
+          if(m_objs.find(startpos,a_obj)) return true;
+#else
+          obj_map::const_iterator it = m_objs.find(startpos);
+          if(it!=m_objs.end()) {
+            a_obj = (*it).second;	
+            ::printf("debug : find xxx : %d %lu\n",startpos,a_obj);
+            //stay at current m_pos ?
+            return true;
+          }
+#endif
+        }
+*/
+
+        iro* obj = a_fac.create(sclass,a_args);
+        if(!obj) return false;
+
+        if(m_map_objs) {
+          //must be done before stream()
+#ifdef TOOLS_RROOT_OBJ_MAP_HASH_TABLE
+          if(!m_objs.insert(startpos,obj)) {
+            m_out << "tools::rroot::buffer::read_object :"
+                  << " map insert failed."
+                  << std::endl;
+          }
+#else
+          m_objs[startpos] = obj;
+#endif
+        }
+
+        //::printf("debug : map : %d %lu\n",startpos,obj);
+
+        //NOTE : if class ref, "up there"-startpos = 8.
+        if(!obj->stream(*this)) {
+          //restore a good buffer position :
+          //m_pos = m_buffer+startpos+bcnt+sizeof(unsigned int);
+          a_fac.destroy(obj);
+          return false;
+        }
+
+        //NOTE : if obj stream ok, the below line is not needed.
+        //m_pos = m_buffer+startpos+bcnt+sizeof(unsigned int);
+
+        if(!check_byte_count(startpos,bcnt,sclass)) {
+          m_out << "tools::rroot::buffer::read_object :"
+                << " check_byte_count failed "
+                << "for object of class " 
+                << sout(sclass) << "." << std::endl;
+          a_fac.destroy(obj);
+          return false;
+        }
+
+        a_obj = obj;
+      }
+
+    }
+
+    if(m_verbose) {
+      m_out << "tools::rroot::buffer::read_object :"
+            << " end : "
+            << std::endl;
+    }
+
+    return true;
+  }
+public:
+  bool read_version(short& a_version){
+    // Read class version from I/O buffer.
+    // Is read a short or three shorts.
+    a_version = 0;
+    short version = 0;
+    // not interested in byte count
+    if(!rbuf::read(version)) return false;
+      
+    // if this is a byte count, then skip next short and read version
+    if(version & kByteCountVMask()) {
+      if(!rbuf::read(version)) return false;
+      if(!rbuf::read(version)) return false;
+    }
+    
+    a_version = version;
+    return true;
+  }
+
+  bool read_version(short& a_version,uint32& a_start_pos,uint32& a_byte_count){
+    // Read class version from I/O buffer.
+    // Is read one or three shorts.
+    a_version = 0;
+    a_start_pos = 0;
+    a_byte_count = 0;
+
+    short version = 0;
+
+    // before reading object save start position
+    uint32 startpos = (uint32)(m_pos-m_buffer);
+      
+    // read byte count (older files don't have byte count)
+    // byte count is packed in two individual shorts, this to be
+    // backward compatible with old files that have at this location
+    // only a single short (i.e. the version)
+    union {
+      unsigned int cnt;
+      short vers[2];
+    } v;
+
+    if(m_byte_swap) {
+      if(!rbuf::read(v.vers[1])) return false;
+      if(!rbuf::read(v.vers[0])) return false;
+    } else {
+      if(!rbuf::read(v.vers[0])) return false;
+      if(!rbuf::read(v.vers[1])) return false;
+    }
+    
+    // no bytecount, backup and read version
+    uint32 bcnt = 0;
+    if(v.cnt & kByteCountMask()) {
+      bcnt = (v.cnt & ~kByteCountMask());
+    } else {
+      m_pos -= sizeof(unsigned int);
+    }
+    if(!rbuf::read(version)) return false;
+    //printf("Reading version=%d at pos=%d, bytecount=%d\n",
+    //version,*startpos,*bcnt);
+    
+    a_version = version;
+    a_start_pos = startpos;
+    a_byte_count = bcnt;
+  
+    return true;
+  }
+
+  bool check_byte_count(uint32 a_start_pos,
+                        uint32 a_byte_count,
+                        const std::string& a_store_cls){
+    if(!a_byte_count) return true;
+
+    unsigned long len = a_start_pos + a_byte_count + sizeof(unsigned int);
+
+    unsigned long diff = m_pos-m_buffer;  
+
+    if(diff==len) return true;
+
+    if(diff<len) {
+      m_out << "tools::rroot::buffer::check_byte_count :"
+            << " object of class " << sout(a_store_cls)
+            << " read too few bytes (" 
+            << long2s(len-diff) << " missing)."
+            << std::endl;
+    }
+    if(diff>len) {
+      m_out << "tools::rroot::buffer::check_byte_count :"
+            << " object of class " << sout(a_store_cls)
+            << " read too many bytes (" 
+            << long2s(diff-len) << " in excess)." << std::endl;
+    }
+
+    m_out << "tools::rroot::buffer::check_byte_count :"
+          << " " << sout(a_store_cls)
+          << " streamer not in sync with data on file, fix streamer."
+          << std::endl;
+    
+    m_pos = m_buffer+len;
+
+    return false;
+  }
+protected:
+  bool read_string(char* a_string,uint32 a_max) {
+    // Read string from I/O buffer. String is read till 0 character is
+    // found or till max-1 characters are read (i.e. string s has max
+    // bytes allocated).
+    int nr = 0;
+    while (nr < int(a_max-1)) {
+      char ch;
+      if(!rbuf::read(ch)) return false;
+      // stop when 0 read
+      if(ch == 0) break;
+      a_string[nr++] = ch;
+    }
+    a_string[nr] = 0;
+    return true;
+  }
+protected:
+  // buffer objects cannot be copied or assigned
+  //void checkCount(unsigned int);
+  //unsigned int checkObject(unsigned int,const IClass*,bool = false);
+  static std::string sout(const std::string& a_string) {
+    return std::string("\"")+a_string+"\"";
+  }
+protected:
+  bool m_byte_swap;
+  bool m_verbose;
+  uint32 m_size;
+  char* m_buffer;
+  char* m_pos;
+  uint32 m_klen; //GB
+  bool m_map_objs;
+  obj_map m_objs;
+};
+
+}}
+
+#endif

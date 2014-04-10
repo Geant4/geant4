@@ -1,0 +1,14 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_date
+#define tools_rroot_date
+
+namespace tools {
+namespace rroot {
+
+typedef unsigned int date;
+
+}}
+
+#endif

@@ -59,15 +59,15 @@ class G4VAnalysisManager
     virtual ~G4VAnalysisManager();
    
     // Methods for handling files 
-    G4bool OpenFile();
-    G4bool OpenFile(const G4String& fileName);
+    G4bool OpenFile(const G4String& fileName = "");
     G4bool Write(); 
     G4bool CloseFile(); 
 
-    // Methods for handling files and directories names    
+    // Methods for handling files and directories names  
     G4bool SetFileName(const G4String& fileName);
     G4bool SetHistoDirectoryName(const G4String& dirName);
     G4bool SetNtupleDirectoryName(const G4String& dirName);
+
     G4String GetFileName() const;
     G4String GetHistoDirectoryName() const;
     G4String GetNtupleDirectoryName() const;
@@ -132,7 +132,7 @@ class G4VAnalysisManager
                    const G4String& yfcnName = "none");
 
     G4bool ScaleH1(G4int id, G4double factor);
-    G4bool ScaleH2(G4int id, G4double factor);
+    G4bool ScaleH2(G4int id, G4double factor);    
                            
     // Methods for handling ntuples
     //
@@ -217,7 +217,6 @@ class G4VAnalysisManager
     // Access methods via names
     G4int GetH1Id(const G4String& name, G4bool warn = true) const;
     G4int GetH2Id(const G4String& name, G4bool warn = true) const;
-
    
     // Methods to manipulate additional information
     void  SetH1Activation(G4bool activation);
@@ -286,9 +285,9 @@ class G4VAnalysisManager
   protected:
     // virtual methods
     virtual G4bool OpenFileImpl(const G4String& fileName) = 0;
-    virtual G4bool WriteImpl() = 0; 
-    virtual G4bool CloseFileImpl() = 0; 
-  
+    virtual G4bool WriteImpl() = 0;
+    virtual G4bool CloseFileImpl() = 0;
+ 
     // methods
     void SetH1Manager(G4VH1Manager* h1Manager);
     void SetH2Manager(G4VH2Manager* h2Manager);
@@ -317,4 +316,3 @@ class G4VAnalysisManager
 #include "G4VAnalysisManager.icc"
  
 #endif
-

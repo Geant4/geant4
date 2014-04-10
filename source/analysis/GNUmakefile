@@ -15,7 +15,7 @@ endif
 
 include $(G4INSTALL)/config/architecture.gmk
 
-SUBDIRS  = management hntools csv root xml
+SUBDIRS  = management g4tools hntools csv root xml
 SUBLIBS  = G4analysismng G4hntools G4csv G4root G4xml
 
 include $(G4INSTALL)/config/globlib.gmk

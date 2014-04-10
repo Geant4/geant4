@@ -17,6 +17,14 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 10, 2014 I. Hrivnacova (analysis-V10-00-05)
+- Updated to g4tools 1.9.4 (by G. Barrand):
+  See History_tools for complete list of modifications.
+- Added interface classes for reading:
+    G4VAnalysisReader, G4VRNtupleManager
+  and their implementation for Root:
+    G4RootAnalysisReader, G4RootRNtupleManager
+
 March 11, 2014 I. Hrivnacova (analysis-V10-00-04)
 - Fixed H1, H2 functions to access xmin, xmax and width 
   (do not apply function and unit to return values)

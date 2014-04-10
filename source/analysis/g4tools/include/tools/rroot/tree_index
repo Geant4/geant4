@@ -1,0 +1,105 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rroot_tree_index
+#define tools_rroot_tree_index
+
+#include "named"
+
+namespace tools {
+namespace rroot {
+
+class tree_index : public virtual iro {
+  static const std::string& s_store_class() {
+    static const std::string s_v("TTreeIndex");
+    return s_v;
+  }
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::rroot::tree_index");
+    return s_v;
+  }
+public: //iro
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<tree_index>(this,a_class)) return p;
+    return 0;
+  }
+  virtual const std::string& s_cls() const {return s_class();}
+public:
+  static cid id_class() {return branch_cid();}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<tree_index>(this,a_class)) {return p;}
+    else return 0;
+  }
+public:
+  virtual iro* copy() const {return new tree_index(*this);}
+  virtual bool stream(buffer& a_buffer) {
+    uint32 startpos = a_buffer.length();
+
+    unsigned int s,c;
+    short v;
+    if(!a_buffer.read_version(v,s,c)) return false;
+    //::printf("debug : tree_index::stream : version %d count %d\n",v,c);
+
+    if(!virtual_index_stream(a_buffer)) return false;
+
+    std::string ds;
+    if(!a_buffer.read(ds)) return false;           //fMajorName
+    //::printf("debug : tree_index::stream : fMajorName \"%s\"\n",ds.c_str());
+    if(!a_buffer.read(ds)) return false;           //fMinorName
+    //::printf("debug : tree_index::stream : fMinorName \"%s\"\n",ds.c_str());
+
+    int64 m_n;
+    if(!a_buffer.read(m_n)) return false; //fN
+    //::printf("debug : tree_index::stream : fN %ld\n",m_n);
+    
+    if(!dummy_array_stream<int64>(a_buffer,int(m_n))) return false;
+    if(!dummy_array_stream<int64>(a_buffer,int(m_n))) return false;
+
+    //FIXME : still problem with this streamer.
+
+    a_buffer.set_offset(startpos+c+sizeof(unsigned int));
+
+    if(!a_buffer.check_byte_count(s,c,s_store_class())) return false;
+
+    //::printf("debug : tree_index::stream : ok\n");
+    return true;
+  }
+
+public:
+  tree_index()
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~tree_index(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+protected:
+  tree_index(const tree_index& a_from):iro(a_from){}
+  tree_index& operator=(const tree_index&){return *this;}
+protected:
+  static const std::string& virtual_index_s_store_class() {
+    static const std::string s_v("TVirtualIndex");
+    return s_v;
+  }
+  bool virtual_index_stream(buffer& a_buffer){
+    short v;
+    unsigned int s, c;
+    if(!a_buffer.read_version(v,s,c)) return false;
+    //::printf("debug : virtual_index::stream : version %d count %d\n",v,c);
+    std::string ds;
+    if(!Named_stream(a_buffer,ds,ds)) return false;
+    if(!a_buffer.check_byte_count(s,c,virtual_index_s_store_class()))
+      return false;
+    return true;
+  }
+
+};
+
+}}
+
+#endif
