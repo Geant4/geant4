@@ -14,7 +14,7 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-10 April 2014 - G.Cosmo (hadr-cohe-V10-00-03)
+10 April 2014 - G.Cosmo (hadr-cohe-V10-00-04/03)
 -----------------------------------------------------------------
 - Get rid of deprecated 'register' storage class specifier in source files.
 
