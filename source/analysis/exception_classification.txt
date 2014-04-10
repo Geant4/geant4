@@ -32,10 +32,3 @@ Analysis_W013: Wrong histogram/ntuple attribute value
               
 Analysis_W014: Master manager not instatiated, 
                histogram data cannot be merged
-               
-Analysis_W016: Cannot acces object from file. File name was not set.               
-
-Analysis_W017: Cannot find key for the object in the input file.
-               Reading failed.               
-
-Analysis_W018: Reading object from file failed.

@@ -58,7 +58,6 @@ if [ ${exa} = "whbook" ] ; then exit;fi
 echo "build ${exa}..."
 
 . ./use_cpp
-. ./use_cc
 
 if [ ${build_cl_exe} = "yes" ] ; then
   # rm painfull warnings about API strcpy, etc... deprecated.
@@ -88,36 +87,13 @@ if [ ${exa} = "wroot_ntu_1000_cols" ] ; then
     libs="${libs} -lz"
   fi
 fi
-if [ ${exa} = "rroot" -o ${exa} = "rxrayfluo" ] ; then
-  if [ ${build_cl_exe} = "yes" ] ; then
-    cppflags="${cppflags} -DTOOLS_DONT_HAVE_ZLIB"  
-  else
-    libs="${libs} -lz"
-  fi
-  cfiles="${cfiles} ../g4tools/src/csz/inflate.c"
-fi
 
 # let the freedom to some application to not use G4_cppflags.
 cppflags="${G4_cppflags} ${cppflags}"
-
-for file in ${cfiles} ; do
-  oname=`basename ${file}`
-  obj="./${oname}.o"
-  if [ ${build_cl_exe} = "yes" ] ; then
-    eval ${cc_compiler} /c ${ccflags} /Fo${obj} ${file}
-  else
-    eval ${cc_compiler} -c ${ccflags} -o ${obj} ${file}
-    use_status=$?;if [ ${use_status} != 0 ] ; then exit ${use_status};fi
-  fi
-  objs="${objs} ${obj}"
-done
 
 if [ ${build_cl_exe} = "yes" ] ; then
   eval ${cpp_compiler} /c ${cppflags} /Fomain.o ${exa}.cpp
   eval ${cpp_linker} /nologo /OPT:NOREF /out:tools_test_${exa}.exe main.o ${objs} ${libs}
 else
-  eval ${cpp_linker} -o tools_test_${exa} ${cppflags} ${exa}.cpp ${objs} ${libs}
+  eval ${cpp_linker} -o tools_test_${exa} ${cppflags} ${exa}.cpp ${libs}
 fi
-
-/bin/rm -f ${objs}
-

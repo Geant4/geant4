@@ -55,14 +55,7 @@ int main(int,char**) {
     return EXIT_FAILURE;
   }}
 
- {std::string title = "Gauss_BW";  
-  // have XML special characters in the title.
-  title += " lower <";
-  title += " greater >";
-  title += " amp &";
-  title += " quote '";
-  title += " double quote \"";
-  tools::histo::h2d h(title,20,-5,5,20,-2,2);
+ {tools::histo::h2d h("Gauss_BW",20,-5,5,20,-2,2);
   for(unsigned int count=0;count<entries;count++) {
     h.fill(rg.shoot(),rbw.shoot(),0.8);
   }

@@ -31,7 +31,6 @@
 #include "G4AnalysisManagerState.hh"
 
 #include "tools/wroot/file"
-#include "tools/rroot/file"
 #include <tools/gzip_buffer>
 
 #include <iostream>
@@ -42,18 +41,14 @@ G4RootFileManager::G4RootFileManager(const G4AnalysisManagerState& state)
  : G4VFileManager(state),
    fFile(0),
    fHistoDirectory(0),
-   fNtupleDirectory(0),
-   fRFiles()
+   fNtupleDirectory(0)
 {
 }
 
 //_____________________________________________________________________________
 G4RootFileManager::~G4RootFileManager()
 {  
-  delete fFile;
-  for (G4int i=0; i<G4int(fRFiles.size()); ++i) { 
-    delete fRFiles[i];
-  }    
+  delete fFile;  
 }
 
 //
@@ -68,8 +63,7 @@ G4bool G4RootFileManager::OpenFile(const G4String& fileName)
   
   // delete previous file if exists
   if ( fFile ) delete fFile;
-
-  // create new file
+  
   fFile = new tools::wroot::file(std::cout, name);
   fFile->add_ziper('Z',tools::gzip_buffer);
   fFile->set_compression(9);
@@ -85,7 +79,7 @@ G4bool G4RootFileManager::OpenFile(const G4String& fileName)
   // Create directories
   if ( ! CreateHistoDirectory() ) return false;
   if ( ! CreateNtupleDirectory() ) return false;
-
+  
   fLockFileName = true;
   fLockHistoDirectoryName = true;
   fLockNtupleDirectoryName = true;
@@ -122,35 +116,6 @@ G4bool G4RootFileManager::CloseFile()
   return true;
 } 
    
-//_____________________________________________________________________________
-G4bool G4RootFileManager::OpenRFile(const G4String& fileName)
-{
-  // create new file
-  tools::rroot::file* newFile = new tools::rroot::file(std::cout, fileName);
-  newFile->add_unziper('Z',tools::gunzip_buffer);
-  
-  if ( ! newFile->is_open() ) {
-    G4ExceptionDescription description;
-    description << "      " << "Cannot open file " << fileName;
-    G4Exception("G4RootRFileManager::OpenFile()",
-                "Analysis_W001", JustWarning, description);
-    return false;
-  }
-
-  // add file in a map and delete the previous file if it exists
-  std::map<G4String, tools::rroot::file*>::iterator it
-    = fRFiles.find(fileName);
-  if ( it != fRFiles.end() ) { 
-    delete it->second;
-    it->second = newFile;
-  }
-  else {
-    fRFiles[fileName] = newFile;
-  }    
-
-  return true;
-}  
-  
 //_____________________________________________________________________________
 G4bool G4RootFileManager::CreateHistoDirectory()
 {
@@ -219,15 +184,5 @@ G4bool G4RootFileManager::CreateNtupleDirectory()
   return true;
 }
 
-//_____________________________________________________________________________
-tools::rroot::file* G4RootFileManager::GetRFile(const G4String& fileName) const
-{ 
-  std::map<G4String, tools::rroot::file*>::const_iterator it
-    = fRFiles.find(fileName);
-  if  ( it != fRFiles.end() )
-    return it->second;
-  else {
-    // TO DO add warning
-    return 0;
-  }     
-}
+
+

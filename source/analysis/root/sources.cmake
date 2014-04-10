@@ -34,21 +34,15 @@ GEANT4_DEFINE_MODULE(NAME G4root
     HEADERS
         G4RootAnalysisManager.hh
         G4RootAnalysisManager.icc
-        G4RootAnalysisReader.hh
-        G4RootAnalysisReader.icc
         G4RootFileManager.hh
         G4RootNtupleDescription.hh
         G4RootNtupleManager.hh
-        G4RootRNtupleDescription.hh
-        G4RootRNtupleManager.hh
-       g4root_defs.hh
+        g4root_defs.hh
         g4root.hh
     SOURCES
         G4RootAnalysisManager.cc
-        G4RootAnalysisReader.cc
         G4RootFileManager.cc
         G4RootNtupleManager.cc
-        G4RootRNtupleManager.cc
     GRANULAR_DEPENDENCIES
         G4globman
         G4intercoms

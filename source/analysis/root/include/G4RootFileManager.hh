@@ -35,16 +35,10 @@
 #include "G4VFileManager.hh"
 #include "globals.hh"
 
-#include <map>
-
 namespace tools {
 namespace wroot { 
 class file; 
 class directory;
-}
-namespace rroot { 
-class file; 
-//class directory;
 }
 }  
 
@@ -54,32 +48,25 @@ class G4RootFileManager : public G4VFileManager
     G4RootFileManager(const G4AnalysisManagerState& state);
     virtual ~G4RootFileManager();
 
-    // Methods to manipulate output file
+    // Methods to manipulate files
     virtual G4bool OpenFile(const G4String& fileName);
     virtual G4bool WriteFile();
     virtual G4bool CloseFile(); 
-    // Methods to manipulate input files
-    virtual G4bool OpenRFile(const G4String& fileName);
 
     G4bool CreateHistoDirectory();
     G4bool CreateNtupleDirectory();
     
     // Get methods
-    // Output file
     tools::wroot::file* GetFile() const;
     tools::wroot::directory* GetHistoDirectory() const;
     tools::wroot::directory* GetNtupleDirectory() const;
-    // Input files
-    tools::rroot::file* GetRFile(const G4String& fileName) const;
 
   private:
     // data members
-    // output file
+    //
     tools::wroot::file*       fFile;
     tools::wroot::directory*  fHistoDirectory;
     tools::wroot::directory*  fNtupleDirectory;
-    // input files
-    std::map<G4String, tools::rroot::file*> fRFiles;
 };
 
 // inline functions

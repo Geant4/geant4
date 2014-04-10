@@ -102,11 +102,9 @@ G4bool G4VFileManager::SetNtupleDirectoryName(const G4String& dirName)
 }  
 
 //_____________________________________________________________________________
-G4String G4VFileManager::GetFullFileName(const G4String& baseFileName) const 
+G4String G4VFileManager::GetFullFileName() const 
 {  
-  G4String name(baseFileName);
-  if ( name == "" ) name = fFileName;
- 
+  G4String name(fFileName);
   // Add thread Id to a file name if MT processing
   if ( ! fState.GetIsMaster() ) {
     std::ostringstream os;

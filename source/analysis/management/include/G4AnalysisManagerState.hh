@@ -40,7 +40,6 @@ class G4AnalysisManagerState
 {
   // Only G4VAnalysisManager can change the state
   friend class G4VAnalysisManager;
-  friend class G4VAnalysisReader;
 
   public: 
     G4AnalysisManagerState(const G4String& type, G4bool isMaster);

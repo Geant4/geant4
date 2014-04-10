@@ -570,29 +570,6 @@ G4bool G4H1ToolsManager::WriteOnAscii(std::ofstream& output)
 //
 
 //_____________________________________________________________________________
-G4int G4H1ToolsManager::AddH1(const G4String& name, tools::histo::h1d* h1d)
-{
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("add", "H1", name);
-#endif
-    
-  // Add annotation
-  AddH1Annotation(h1d, "none", "none");        
-  // Add information
-  AddH1Information(name, "none", "none", kLinearBinScheme);
-    
-  // Register histogram 
-  G4int id = RegisterToolsH1(h1d, name); 
-  
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL2() ) 
-    fState.GetVerboseL2()->Message("add", "H1", name);
-#endif
-  return id;
-}  
-
-//_____________________________________________________________________________
 void G4H1ToolsManager::AddH1Vector(
                           const std::vector<tools::histo::h1d*>& h1Vector)
 {

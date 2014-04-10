@@ -143,23 +143,25 @@ G4bool G4VAnalysisManager::WriteAscii(const G4String& fileName)
 //
 
 //_____________________________________________________________________________
+G4bool G4VAnalysisManager::OpenFile()
+{
+  if ( fVFileManager->GetFileName() == "" ) {
+    G4ExceptionDescription description;
+    description 
+      << "Cannot open file. File name is not defined.";
+    G4Exception("G4VFileManager::OpenFile()",
+                "Analysis_W009", JustWarning, description);
+    return false;
+  }           
+  
+  return OpenFileImpl(fVFileManager->GetFileName());
+} 
+
+//_____________________________________________________________________________
 G4bool G4VAnalysisManager::OpenFile(const G4String& fileName)
 {
-  if ( fileName != "" ) {
-    return OpenFileImpl(fileName);
-  }
-  else {  
-    if ( fVFileManager->GetFileName() == "" ) {
-      G4ExceptionDescription description;
-      description 
-        << "Cannot open file. File name is not defined.";
-      G4Exception("G4VFileManager::OpenFile()",
-                  "Analysis_W009", JustWarning, description);
-      return false;
-    }           
-    return OpenFileImpl(fVFileManager->GetFileName());
-  }  
-} 
+  return OpenFileImpl(fileName);
+}  
 
 //_____________________________________________________________________________
 G4bool G4VAnalysisManager::Write()
