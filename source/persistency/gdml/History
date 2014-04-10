@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 April 2014 Gabriele Cosmo (gdml-V10-00-01)
+- Get rid of deprecated 'register' storage class specifier in source files.
+
 13 March 2014 Gabriele Cosmo (gdml-V10-00-00)
 - Added comparison operator for 3-vector key in 'vertexMap' in
   G4GDMLWriteSolids for export of tessellated solid.

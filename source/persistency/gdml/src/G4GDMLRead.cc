@@ -123,7 +123,7 @@ void G4GDMLRead::StripNames() const
          << G4endl;
 
   G4String sname;
-  register size_t i;
+  size_t i;
 
   // Solids...
   //
