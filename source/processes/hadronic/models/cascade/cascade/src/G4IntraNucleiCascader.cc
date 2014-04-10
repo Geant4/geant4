@@ -114,6 +114,7 @@
 //		particles are not true projectiles, but already embedded.
 // 20130304  M. Kelsey -- Use new G4CascadeHistory to dump cascade structure
 // 20140310  M. Kelsey -- (Bug #1584) Release memory allocated by DecayIt()
+// 20140409  M. Kelsey -- Use const G4ParticleDefinition* everywhere
 
 #include <algorithm>
 
@@ -746,7 +747,7 @@ void G4IntraNucleiCascader::processSecondary(const G4KineticTrack* ktrack) {
   if (!ktrack) return;			// Sanity check
 
   // Get particle type to determine whether to keep or release
-  G4ParticleDefinition* kpd = ktrack->GetDefinition();
+  const G4ParticleDefinition* kpd = ktrack->GetDefinition();
   if (!kpd) return;
 
   G4int ktype = G4InuclElementaryParticle::type(kpd);
@@ -784,7 +785,7 @@ void G4IntraNucleiCascader::processSecondary(const G4KineticTrack* ktrack) {
 // Transfer unusable pre-cascade secondaries directly to output
 
 void G4IntraNucleiCascader::releaseSecondary(const G4KineticTrack* ktrack) {
-  G4ParticleDefinition* kpd = ktrack->GetDefinition();
+  const G4ParticleDefinition* kpd = ktrack->GetDefinition();
 
   if (verboseLevel > 1) {
     G4cout << " >>> G4IntraNucleiCascader::releaseSecondary "
@@ -792,7 +793,7 @@ void G4IntraNucleiCascader::releaseSecondary(const G4KineticTrack* ktrack) {
   }
 
   // Convert light ion into nucleus on fragment list
-  if (dynamic_cast<G4Ions*>(kpd)) {
+  if (dynamic_cast<const G4Ions*>(kpd)) {
     // Use resize() and fill() to avoid memory churn
     output.getOutgoingNuclei().resize(output.numberOfOutgoingNuclei()+1);
     G4InuclNuclei& inucl = output.getOutgoingNuclei().back();

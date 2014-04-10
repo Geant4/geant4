@@ -15,6 +15,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+9 April 2014  M. Kelsey (hadr-casc-V10-00-07)
+---------------------------------------------
+- G4IntraNucleiCascader.cc:  Use const G4PD*.
+- G4InuclEvaporation.cc:  Remove temporary const_cast<G4PD*> (see 10 Mar).
+
 12 March 2014  M. Kelsey (hadr-casc-V10-00-06)
 ----------------------------------------------
 - G4CascadeParameters:  Copy Gabriele's version of the singleton here, from

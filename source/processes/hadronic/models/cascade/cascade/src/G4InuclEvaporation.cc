@@ -155,7 +155,7 @@ G4FragmentVector* G4InuclEvaporation::BreakItUp(const G4Fragment &theNucleus) {
       G4LorentzVector vlab = ipart->getMomentum().boost(boostToLab);
 
       // TEMPORARY:  Remove constness on PD until G4Fragment is fixed
-      theResult->push_back( new G4Fragment(vlab, const_cast<G4ParticleDefinition*>(ipart->getDefinition())) );
+      theResult->push_back( new G4Fragment(vlab, ipart->getDefinition()) );
     }  
   }
 
