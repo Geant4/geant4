@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 April 2014 Gabriele Cosmo (gdml-V10-00-02)
+- Corrected dump of 'phi' and 'theta' for G4Trap and G4Para in writer.
+  Addressing problem report #1602.
+
 10 April 2014 Gabriele Cosmo (gdml-V10-00-01)
 - Get rid of deprecated 'register' storage class specifier in source files.
 
