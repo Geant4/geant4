@@ -3,15 +3,14 @@
 
 # Open OGLIX viewer
 /vis/open OGLIX
-
 # Draw volume
 /vis/drawVolume
 
 # Execute testVisSceneAdd.mac
-/control/execute testVisSceneAdd.mac
+#/control/execute testVisSceneAdd.mac
 
 # Execute testVisSet.mac
-/control/execute testVisSet.mac
+#/control/execute testVisSet.mac
 
 # Fire a e+
 /gun/particle e+

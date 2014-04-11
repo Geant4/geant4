@@ -3,6 +3,9 @@ $Id$
 
 History file for test/test202 subdirectory
 ------------------------------------------------
+11th April 2014 Laurent Garnier (test202-V10-00-07)
+- OGLIX.mac: remove calling other macro in order to avoid timeout
+
 10th April 2014 Laurent Garnier (test202-V10-00-06)
 - CMakeLists.txt : Fix a bad name in the copy of OGLIX.mac
 
