@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 11, 2014 G.Cosmo (global-V10-00-15)
+- Move G4PhysicsVector::Value(energy,idx) to inline.
+
 April 10, 2014 G.Cosmo (global-V10-00-14)
 - Get rid of deprecated 'register' storage class specifier in source files.
 
