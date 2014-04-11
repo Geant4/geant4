@@ -2031,11 +2031,12 @@ G4double G4ChipsNeutronElasticXS::GetTabValues(G4double lp, G4int PDG, G4int tgZ
     G4double p16=p8*p8;
     G4double dl=lp-5.;
     G4double a=tgZ+tgN;
+    if(a<6.5)
+    {
     G4double pah=std::pow(p,a/2);
     G4double pa=pah*pah;
     G4double pa2=pa*pa;
-    if(a<6.5)
-    {
+
       theS1=lastPAR[15]/(1.+lastPAR[16]*p4*pa)+lastPAR[17]/(p4+lastPAR[18]*p4/pa2)+
             (lastPAR[19]*dl*dl+lastPAR[20])/(1.+lastPAR[21]/p2);
       theB1=(lastPAR[22]+lastPAR[23]*p2)/(p4+lastPAR[24]/pah)+lastPAR[25];
