@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 April 2014 - P.Arce (ascii-V10-00-01)
+- G4tgbGeometryDumper: G4Para use G4ThreeVector methods for SymAxis
+
 22 November 2013 - G.Cosmo (ascii-V09-06-09, ascii-V09-06-08)
 - Corrected compilation warning on previous tag...
 
