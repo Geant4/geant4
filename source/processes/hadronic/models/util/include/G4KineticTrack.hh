@@ -84,7 +84,8 @@ class G4KineticTrack : public G4VKineticNucleon
       inline void *operator new(size_t);
       inline void operator delete(void *aTrack);
 */
-      const G4ParticleDefinition* GetDefinition() const;
+      G4ParticleDefinition* GetDefinition() const;
+      const G4ParticleDefinition* GetDefinition_asConst() const;
       void SetDefinition(const G4ParticleDefinition* aDefinition);
 
       G4double GetFormationTime() const;
@@ -210,9 +211,14 @@ inline void G4KineticTrack::operator delete(void * aT)
 }
 */
 
-inline const G4ParticleDefinition* G4KineticTrack::GetDefinition() const
+inline const G4ParticleDefinition* G4KineticTrack::GetDefinition_asConst() const
 {
   return theDefinition;
+}
+
+inline G4ParticleDefinition* G4KineticTrack::GetDefinition() const
+{
+  return const_cast<G4ParticleDefinition*>(theDefinition);
 }
 
 inline void G4KineticTrack::SetDefinition(const G4ParticleDefinition* aDefinition)
