@@ -45,6 +45,8 @@ G4MTRunManagerKernel::G4MTRunManagerKernel() : G4RunManagerKernel(masterRMK)
     G4Exception("G4RunManagerKernel::G4RunManagerKernel()","Run0035",FatalException,msg);
 #endif
     if(!workerRMvector) workerRMvector = new std::vector<G4WorkerRunManager*>;
+    //Set flag that a MT-type kernel has been instantiated
+    G4Threading::SetMultithreadedApplication(true);
 }
 
 G4MTRunManagerKernel::~G4MTRunManagerKernel()
