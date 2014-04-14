@@ -95,6 +95,22 @@ G4bool CheckEdges(const std::vector<G4double>& edges)
 }
 
 //_____________________________________________________________________________
+G4bool CheckName(const G4String& name, const G4String& objectType)
+{
+  if ( ! name.size() ) {
+    G4ExceptionDescription description;
+    description 
+      << "    Empty " << objectType << " name is not allowed." << G4endl
+      << "    " << objectType << " was not created." << G4endl;
+      G4Exception("G4VAnalysisManager::CheckName",
+                  "Analysis_W013", JustWarning, description);
+    return false;
+  }
+  else
+    return true;                   
+}
+
+//_____________________________________________________________________________
 G4double GetUnitValue(const G4String& unit)
 {
    G4double value = 1.;

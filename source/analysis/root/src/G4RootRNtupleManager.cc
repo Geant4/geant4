@@ -393,7 +393,7 @@ G4bool G4RootRNtupleManager::GetNtupleRow(G4int ntupleId)
         << "      " 
         << "Ntuple initialization failed !!"; 
       G4Exception("G4RootRNtuple::GetNtupleRow()",
-                  "Analysis_W018", JustWarning, description);
+                  "Analysis_WR003", JustWarning, description);
       return false;
     }
     fNtupleVector[index]->fIsInitialized = true;
@@ -408,7 +408,7 @@ G4bool G4RootRNtupleManager::GetNtupleRow(G4int ntupleId)
         << "      " 
         << "Ntuple get_row() failed !!"; 
       G4Exception("G4RootRNtuple::GetNtupleRow()",
-                  "Analysis_W018", JustWarning, description);
+                  "Analysis_WR003", JustWarning, description);
       return false;
     }
   }  

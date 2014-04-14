@@ -94,7 +94,7 @@ if [ ${exa} = "rroot" -o ${exa} = "rxrayfluo" ] ; then
   else
     libs="${libs} -lz"
   fi
-  cfiles="${cfiles} ../g4tools/src/csz/inflate.c"
+  cfiles="${cfiles} ../g4tools/src/csz_inflate.cc"
 fi
 
 # let the freedom to some application to not use G4_cppflags.

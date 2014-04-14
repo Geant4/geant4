@@ -183,7 +183,7 @@ G4int G4RootAnalysisReader::GetH1Impl(const G4String& h1Name,
       << "      " 
       << "Key " << h1Name << " for H1 not found in file " << fileName; 
     G4Exception("G4RootAnalysisReader::GetH1Impl()",
-                "Analysis_W017", JustWarning, description);
+                "Analysis_WR002", JustWarning, description);
     return -1;
   }
 
@@ -195,7 +195,7 @@ G4int G4RootAnalysisReader::GetH1Impl(const G4String& h1Name,
       << "      " 
       << "Cannot get data buffer for H1 " << h1Name << " in file " << fileName; 
     G4Exception("G4RootAnalysisReader::GetH1Impl()",
-                "Analysis_W017", JustWarning, description);
+                "Analysis_WR002", JustWarning, description);
     return -1;
   }
   
@@ -245,7 +245,7 @@ G4int G4RootAnalysisReader::GetH2Impl(const G4String& h2Name,
       << "      " 
       << "Key " << h2Name << " for H2 not found in file " << fileName; 
     G4Exception("G4RootAnalysisReader::GetH2Impl()",
-                "Analysis_W017", JustWarning, description);
+                "Analysis_WR002", JustWarning, description);
     return -1;
   }
 
@@ -257,7 +257,7 @@ G4int G4RootAnalysisReader::GetH2Impl(const G4String& h2Name,
       << "      " 
       << "Cannot get data buffer for H2 " << h2Name << " in file " << fileName; 
     G4Exception("G4RootAnalysisReader::GetH2Impl()",
-                "Analysis_W017", JustWarning, description);
+                "Analysis_WR002", JustWarning, description);
     return -1;
   }
   
@@ -308,7 +308,7 @@ G4int G4RootAnalysisReader::GetNtupleImpl(const G4String& ntupleName,
       << "      " 
       << "Key " << ntupleName << " for Ntuple not found in file " << fileName; 
     G4Exception("G4RootAnalysisReader::GetNtupleImpl()",
-                "Analysis_W017", JustWarning, description);
+                "Analysis_WR002", JustWarning, description);
     return -1;
   }
 
@@ -320,7 +320,7 @@ G4int G4RootAnalysisReader::GetNtupleImpl(const G4String& ntupleName,
       << "      " 
       << "Cannot get data buffer for Ntuple " << ntupleName << " in file " << fileName; 
     G4Exception("G4RootAnalysisReader::GetNtupleImpl()",
-                "Analysis_W017", JustWarning, description);
+                "Analysis_WR002", JustWarning, description);
     return -1;
   }
   
@@ -339,7 +339,7 @@ G4int G4RootAnalysisReader::GetNtupleImpl(const G4String& ntupleName,
       << "      " 
       << "TTree streaming failed for Ntuple " << ntupleName << " in file " << fileName; 
     G4Exception("G4RootAnalysisReader::GetH1Impl()",
-                "Analysis_W017", JustWarning, description);
+                "Analysis_WR002", JustWarning, description);
     return -1;
   }
   

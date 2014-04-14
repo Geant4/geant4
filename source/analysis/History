@@ -17,6 +17,13 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 14, 2014 G. Cosmo (analysis-V10-00-08)
+- Do not allow creating objects with empty names
+  (this addresses problem report #1579)
+- Introduced independent numbering of warnings from reader 
+- Renamed g4tools/src/inflate.cc in csz_inflate.cc to avoid confusion with
+  zlib inflate.cc
+
 April 10, 2014 G. Cosmo (analysis-V10-00-07)
 - Corrected organisation of source files in g4tools sub-module to
   allow for building with GNUmake system:
