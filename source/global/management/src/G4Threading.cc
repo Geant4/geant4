@@ -36,6 +36,7 @@
 
 #include "G4Threading.hh"
 #include "G4AutoDelete.hh"
+#include "G4AutoLock.hh"
 #include "globals.hh"
 
 #if defined (WIN32)
@@ -51,6 +52,7 @@
 namespace
 {
    G4ThreadLocal G4int G4ThreadID = -1;
+   G4bool isMTAppType = false;
 }
 
 G4Pid_t G4Threading::G4GetPidId()
@@ -105,6 +107,9 @@ G4bool G4Threading::G4SetPinAffinity(G4int, G4Thread&)
 }
 #endif
 
+void G4Threading::SetMultithreadedApplication(G4bool value ) { isMTAppType = value; }
+G4bool G4Threading::IsMultithreadedApplication() { return isMTAppType; }
+
 #else  // Sequential mode
 
 G4int fake_mutex_lock_unlock( G4Mutex* ) { return 0; }
@@ -125,4 +130,6 @@ void G4Threading::G4SetThreadId(G4int) {}
 
 G4bool G4Threading::G4SetPinAffinity(G4int,G4Thread&) { return true;}
 
+void G4Threading::SetMultithreadedApplication(G4bool) {}
+G4bool G4Threading::IsMultithreadedApplication() { return true; }
 #endif

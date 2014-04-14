@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 11, 2014 A.Dotti (global-V10-00-16)
+- New utility function G4Threading::IsMultithreadedApplication() 
+  and G4Threding::SetMultithreadedApplication(bool) used to 
+  specify which type of kernel is instantiated indipendently by
+  build type (e.g. to distinghuish application migrated to MT or 
+  still using sequential run manager)
+
 April 11, 2014 G.Cosmo (global-V10-00-15)
 - Move G4PhysicsVector::Value(energy,idx) to inline.
 

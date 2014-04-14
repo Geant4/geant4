@@ -186,6 +186,8 @@ namespace G4Threading
   G4bool IsWorkerThread();
   void G4SetThreadId( G4int aNewValue );
   G4bool G4SetPinAffinity( G4int idx , G4Thread& at);
+  void SetMultithreadedApplication(G4bool value);
+  G4bool IsMultithreadedApplication();
 }
 
 #endif //G4Threading_hh
