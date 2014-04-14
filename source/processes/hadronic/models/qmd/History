@@ -13,9 +13,6 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-14 April 2014 Gunter Folger (hadr-qmd-V10-00-01)
-- Changes for const G4ParticleDefintion* in use with G4KineticTrack.
-
 14 March 2014 Tatsumi Koi (hadr-qmd-V10-00-00)
 -Migrate to handle returned const pointer of G4ParticleDefinition
 	src/G4QMDReaction.cc

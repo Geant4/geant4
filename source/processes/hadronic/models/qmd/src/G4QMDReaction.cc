@@ -87,7 +87,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
    G4int proj_Z = 0;
    G4int proj_A = 0;
-   const G4ParticleDefinition* proj_pd = ( const G4ParticleDefinition* ) projectile.GetDefinition();
+   G4ParticleDefinition* proj_pd = ( G4ParticleDefinition* ) projectile.GetDefinition();
    if ( proj_pd->GetParticleType() == "nucleus" )
    {
       proj_Z = proj_pd->GetAtomicNumber();
@@ -103,7 +103,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
    //migrate to integer A and Z (GetN_asInt returns number of neutrons in the nucleus since this) 
    G4int targ_Z = target.GetZ_asInt();
    G4int targ_A = target.GetA_asInt();
-   const G4ParticleDefinition* targ_pd = G4IonTable::GetIonTable()->GetIon( targ_Z , targ_A , 0.0 );
+   G4ParticleDefinition* targ_pd = G4IonTable::GetIonTable()->GetIon( targ_Z , targ_A , 0.0 );
 
 
    //G4NistManager* nistMan = G4NistManager::Instance();
@@ -331,10 +331,10 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
    G4int sec_a_Z = 0;
    G4int sec_a_A = 0;
-   const G4ParticleDefinition* sec_a_pd = NULL;
+   G4ParticleDefinition* sec_a_pd = NULL;
    G4int sec_b_Z = 0;
    G4int sec_b_A = 0;
-   const G4ParticleDefinition* sec_b_pd = NULL;
+   G4ParticleDefinition* sec_b_pd = NULL;
 
    if ( numberOfSecondary == 2 )
    {
@@ -572,7 +572,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
       if ( notBreak == true )
       {
 
-         const G4ParticleDefinition* pd = G4IonTable::GetIonTable()->GetIon( (*it)->GetAtomicNumber() , (*it)->GetMassNumber(), (*it)->GetExcitationEnergy()*GeV );
+         G4ParticleDefinition* pd = G4IonTable::GetIonTable()->GetIon( (*it)->GetAtomicNumber() , (*it)->GetMassNumber(), (*it)->GetExcitationEnergy()*GeV );
          G4LorentzVector p4_CM = nucleus_p4CM;
          G4LorentzVector p4_LAB = CLHEP::boostOf( p4_CM , boostBackToLAB ); // Back to LAB  
          G4DynamicParticle* dp = new G4DynamicParticle( pd , p4_LAB*GeV );  
@@ -598,7 +598,7 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
       // Secondary particles 
 
-      const G4ParticleDefinition* pd = system->GetParticipant( i )->GetDefinition();
+      G4ParticleDefinition* pd = system->GetParticipant( i )->GetDefinition();
       G4LorentzVector p4_CM = system->GetParticipant( i )->Get4Momentum();
       G4LorentzVector p4_LAB = CLHEP::boostOf( p4_CM , boostBackToLAB );
       G4DynamicParticle* dp = new G4DynamicParticle( pd , p4_LAB*GeV );  
@@ -632,8 +632,8 @@ G4HadFinalState* G4QMDReaction::ApplyYourself( const G4HadProjectile & projectil
 
 
 void G4QMDReaction::calcOffSetOfCollision( G4double b , 
-const G4ParticleDefinition* pd_proj ,
-const G4ParticleDefinition* pd_targ ,
+G4ParticleDefinition* pd_proj , 
+G4ParticleDefinition* pd_targ , 
 G4double ptot , G4double etot , G4double bmax , G4ThreeVector boostToCM )
 {
 
