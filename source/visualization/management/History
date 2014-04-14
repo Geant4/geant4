@@ -26,6 +26,9 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+10th April 2014  Laurent Garnier (visman-V10-00-06)
+- G4VSceneHandler.cc: NULL pointer fixed
+
 10th April 2014  Gabriele Cosmo (visman-V10-00-05)
 - Get rid of deprecated 'register' storage class specifier in source files.
 

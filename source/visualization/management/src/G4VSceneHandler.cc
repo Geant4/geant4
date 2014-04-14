@@ -672,6 +672,8 @@ void G4VSceneHandler::DrawEndOfRunModels()
 G4ModelingParameters* G4VSceneHandler::CreateModelingParameters ()
 {
   // Create modeling parameters from View Parameters...
+  if (!fpViewer) return NULL;
+
   const G4ViewParameters& vp = fpViewer -> GetViewParameters ();
 
   // Convert drawing styles...
