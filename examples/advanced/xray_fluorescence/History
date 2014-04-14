@@ -19,6 +19,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-04-2014 L.Pandola Tag: XrayFluo-V10-00-02
+- Complete the migration to the g4tools (removed AIDA dependency).
+Method XrayFluoAnalysisManager::LoadGunData() is restored by using the
+new G4AnalysisReader interface.
+
+13-12-2013 L.Pandola Tag: XrayFluo-V10-00-01
+- First partial migration to g4tools (internal tag). Removed AIDA 
+dependency. Output works properly, but the application is presently 
+unable to use the method 
+ XrayFluoAnalysisManager::LoadGunData()
+to open a phase space file and feed data to the primary generator.
+
 13-12-2013 L.Pandola Tag: XrayFluo-V10-00-00
 - Fix shadowed variables and compilation errors due to the #include of 
 G4SystemOfUnits. Do not show up in system testing, but only when AIDA 

@@ -48,9 +48,8 @@
 #include "Randomize.hh"
 #include "XrayFluoAnalysisManager.hh"
 #include "XrayFluoDataSet.hh"
-#ifdef G4ANALYSIS_USE  
-#include "AIDA/AIDA.h"
-#endif
+
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(XrayFluoDetectorConstruction* XrayFluoDC)
@@ -87,7 +86,6 @@ XrayFluoPrimaryGeneratorAction::XrayFluoPrimaryGeneratorAction(XrayFluoDetectorC
 }
 
 
-#ifdef G4ANALYSIS_USE     
 void XrayFluoPrimaryGeneratorAction::ActivatePhaseSpace(G4String fileName) {
 
   // load phase-space
@@ -102,9 +100,6 @@ void XrayFluoPrimaryGeneratorAction::ActivatePhaseSpace(G4String fileName) {
   particleTypes = analysis->GetEmittedParticleTypes();
   detectorPosition = XrayFluoDetector->GetDetectorPosition();
   detectorPosition.setR(detectorPosition.r()-(5.*cm)); // 5 cm before the detector, so in front of it.
-#else     
-void XrayFluoPrimaryGeneratorAction::ActivatePhaseSpace(G4String ) {
-#endif
 
 }
 
@@ -262,13 +257,10 @@ void XrayFluoPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 
   }
 
-#ifdef G4ANALYSIS_USE 
-
   G4double partEnergy = particleGun->GetParticleEnergy();
   XrayFluoAnalysisManager* analysis =  XrayFluoAnalysisManager::getInstance();
   analysis->analysePrimaryGenerator(partEnergy/keV);
 
-#endif
  
   particleGun->GeneratePrimaryVertex(anEvent);
 }
