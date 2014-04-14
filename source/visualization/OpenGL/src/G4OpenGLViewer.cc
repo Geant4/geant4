@@ -853,9 +853,17 @@ bool G4OpenGLViewer::printGl2PS() {
    bool extendBuffer = true;
    bool endWriteAction = false;
    bool beginWriteAction = true;
-   while ((extendBuffer) && (! endWriteAction)) {
+   bool filePointerOk = true;
+   while ((extendBuffer) && (! endWriteAction) && (filePointerOk)) {
      
      beginWriteAction = fGL2PSAction->enableFileWriting();
+     // 3 cases :
+     // - true
+     // - false && ! fGL2PSAction->fileWritingEnabled() => bad file name
+     // - false && fGL2PSAction->fileWritingEnabled() => buffer size problem ?
+
+     filePointerOk = fGL2PSAction->fileWritingEnabled();
+       
      if (beginWriteAction) {
        
        // Set the viewport
@@ -868,14 +876,16 @@ bool G4OpenGLViewer::printGl2PS() {
        DrawView ();
        endWriteAction = fGL2PSAction->disableFileWriting();
      }
-     if ((! endWriteAction) || (! beginWriteAction)) {
-       extendBuffer = fGL2PSAction->extendBufferSize();
+     if (filePointerOk) {
+       if ((! endWriteAction) || (! beginWriteAction)) {
+         extendBuffer = fGL2PSAction->extendBufferSize();
+       }
      }
    }
    fGL2PSAction->resetBufferSizeParameters();
 
    if (!extendBuffer ) {
-     G4cerr << "gl2ps buffer size is not big enough to print this geometry. Thy to extend it. No output produced"<< G4endl;
+     G4cerr << "gl2ps buffer size is not big enough to print this geometry. Try to extend it. No output produced"<< G4endl;
    }
    if (!beginWriteAction ) {
      G4cerr << "Error while writing in the file "<<getRealPrintFilename().c_str()<<". Check read/write access No output produced" << G4endl;

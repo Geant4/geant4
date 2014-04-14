@@ -349,6 +349,9 @@ void G4OpenGLStoredQtViewer::paintGL()
 }
 
 void G4OpenGLStoredQtViewer::paintEvent(QPaintEvent *) {
+  if (!fReadyToPaint) {
+    return;
+  }
   if ( fHasToRepaint) {
     updateGL();
   }

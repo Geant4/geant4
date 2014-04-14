@@ -2378,6 +2378,9 @@ void G4OpenGLQtViewer::DrawText(const G4Text& g4text)
     QFont font = QFont();
     font.setPointSizeF(size);
 
+    const G4Colour& c = fSceneHandler.GetTextColour(g4text);
+    glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());
+    
     G4Point3D position = g4text.GetPosition();
 
     const G4String& textString = g4text.GetText();

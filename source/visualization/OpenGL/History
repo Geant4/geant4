@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10th April 2014  Laurent Garnier (opengl-V10-00-02)
+- G4OpenGLQtViewer : Add changing the color of text in DrawText() 
+- G4OpenGLViewer : manage bad file name case (missing directory) in printGl2PS()
+
+5th February 2014  Laurent Garnier
+- G4OpenGLStoredQtViewer : Bugfix for Qt5
+
 25th January 2014  John Allison  (opengl-V10-00-01)
 - G4OpenGLStoredSceneHandler::AddPrimitivePreamble:
   o Improved protection of pointers in display list reuse test.
