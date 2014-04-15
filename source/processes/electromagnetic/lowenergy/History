@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15.04.2014  S. Incerti, tag emlowen-V10-00-06
+            New class for ionisation cs model from Miranda et al. 
+
 07.04.2014  V. Ivanchenko, tag emlowen-V10-00-05
             G4LowEWentzelVIModel - fixed initialisation
 
