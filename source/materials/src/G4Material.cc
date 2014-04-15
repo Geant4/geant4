@@ -287,7 +287,7 @@ void G4Material::InitializePointers()
   fIndexInTable = theMaterialTable.size();
   for(size_t i=0; i<fIndexInTable; ++i) {
     if(theMaterialTable[i]->GetName() == fName) {
-      G4cout << "G4Material WARNING: doublicate name of the new material "
+      G4cout << "G4Material WARNING: duplicate name of material "
 	     << fName << G4endl;
       break;
     }

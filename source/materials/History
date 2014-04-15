@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-04-14 G.Cosmo (materials-V10-00-02)
+- G4Material: corrected typo in printout for duplicate materials in
+  function InitializePointers().
+
 09-04-14 V.Ivanchenko (materials-V10-00-01)
 - G4Material, G4Element - defined defaulut names and symbols for elements
     and isotopes if they are not explicitly defined by users - this fixing
