@@ -44,11 +44,6 @@ class G4AnalysisManagerState
 
   public: 
     G4AnalysisManagerState(const G4String& type, G4bool isMaster);
-    
-    // Utility method 
-    static G4bool IsMT() { 
-      return G4Threading::G4GetThreadId() > -2;
-    }            
 
     // get methods
     G4String GetType() const;

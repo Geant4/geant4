@@ -32,6 +32,7 @@
 #include "G4H1ToolsManager.hh"
 #include "G4H2ToolsManager.hh"
 #include "G4XmlNtupleManager.hh"
+#include "G4AnalysisManagerState.hh"
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
 
@@ -365,7 +366,8 @@ G4bool G4XmlAnalysisManager::CloseFileImpl()
   finalResult = finalResult && result;
   
   // Close ntuple files
-  if ( ( ! G4AnalysisManagerState::IsMT() ) || ( ! fState.GetIsMaster() ) ) {
+  if ( ( ! G4Threading::IsMultithreadedApplication() ) || 
+       ( ! fState.GetIsMaster() ) ) {
     // In sequential mode or in MT mode only on workers
     result = CloseNtupleFiles();
     finalResult = finalResult && result;

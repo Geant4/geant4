@@ -33,6 +33,7 @@
 #include "G4H2DummyManager.hh"
 #include "G4CsvNtupleManager.hh"
 #include "G4AnalysisVerbose.hh"
+#include "G4AnalysisManagerState.hh"
 #include "G4UnitsTable.hh"
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
@@ -164,7 +165,8 @@ G4bool G4CsvAnalysisManager::CloseFileImpl()
   finalResult = finalResult && result;
   
   // Close ntuple files
-  if ( ( ! G4AnalysisManagerState::IsMT() ) || ( ! fState.GetIsMaster() ) ) {
+  if ( ( ! G4Threading::IsMultithreadedApplication() ) || 
+       ( ! fState.GetIsMaster() ) ) {
     // In sequential mode or in MT mode only on workers
     result = CloseNtupleFiles();
     finalResult = finalResult && result;

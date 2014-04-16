@@ -17,7 +17,13 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-April 14, 2014 G. Cosmo (analysis-V10-00-08)
+April 14, 2014 I. Hrivnacova (analysis-V10-00-09)
+- Use G4Threading::IsMultithreadedApplication() instead of  
+  G4AnalysisManagerState::IsMT() (now removed); 
+  this function fixes files clean-up at the end of sequential
+  application built against multi-threaded Geant4 libraries. 
+
+April 14, 2014 I. Hrivnacova (analysis-V10-00-08)
 - Do not allow creating objects with empty names
   (this addresses problem report #1579)
 - Introduced independent numbering of warnings from reader 

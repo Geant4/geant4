@@ -31,6 +31,7 @@
 #include "G4CsvNtupleDescription.hh"
 #include "G4CsvFileManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4Threading.hh"
 
 #include <iostream>
 
@@ -167,7 +168,8 @@ void G4CsvNtupleManager::CreateNtuplesFromBooking()
 // Create ntuple from ntuple_booking.
 
   // Do not create ntuples on master thread 
-  if ( G4AnalysisManagerState::IsMT() && fState.GetIsMaster() ) return;     
+  if ( G4Threading::IsMultithreadedApplication() && 
+       fState.GetIsMaster() ) return;     
   
   std::vector<G4CsvNtupleDescription*>::iterator itn;  
   for (itn = fNtupleVector.begin(); itn != fNtupleVector.end(); itn++ ) {

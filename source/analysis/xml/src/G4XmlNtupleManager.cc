@@ -31,6 +31,7 @@
 #include "G4XmlNtupleDescription.hh"
 #include "G4XmlFileManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4Threading.hh"
 #include "G4UnitsTable.hh"
 
 #include "tools/ntuple_booking"
@@ -161,7 +162,8 @@ void G4XmlNtupleManager::CreateNtuplesFromBooking()
 // Create ntuple from ntuple_booking.
 
   // Do not create ntuples on master thread 
-  if ( G4AnalysisManagerState::IsMT() && fState.GetIsMaster() ) return;     
+  if ( G4Threading::IsMultithreadedApplication() && 
+       fState.GetIsMaster() ) return;     
   
   std::vector<G4XmlNtupleDescription*>::iterator itn;  
   for (itn = fNtupleVector.begin(); itn != fNtupleVector.end(); itn++ ) {

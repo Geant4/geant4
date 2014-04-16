@@ -33,6 +33,7 @@
 #include "G4H2ToolsManager.hh"
 #include "G4RootNtupleManager.hh"
 #include "G4AnalysisVerbose.hh"
+#include "G4AnalysisManagerState.hh"
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
 
@@ -316,7 +317,7 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
   fFileManager->CloseFile();  
 
   // No files clean-up in sequential mode
-  if ( ! fState.IsMT() )  return result;
+  if ( ! G4Threading::IsMultithreadedApplication() )  return result;
   
   // Delete files if empty in MT mode
   if ( ( fState.GetIsMaster() && 
