@@ -57,6 +57,9 @@ public:
     return NULL;
   }
 
+  virtual void ModelDescription(std::ostream& outFile) const;
+  virtual void DeExciteModelDescription(std::ostream& outFile) const;
+
 private:
   G4VarNtp *ablaResult;
   G4Volant *volant;

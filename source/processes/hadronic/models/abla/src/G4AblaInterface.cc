@@ -140,4 +140,17 @@ G4ReactionProduct *G4AblaInterface::toG4Particle(G4int A, G4int Z,
   return r;
 }
 
+void G4AblaInterface::ModelDescription(std::ostream& outFile) const {
+   outFile << "ABLA V3 does not provide an implementation of the ApplyYourself method!\n\n";
+}
+
+void G4AblaInterface::DeExciteModelDescription(std::ostream& outFile) const {
+   outFile << "ABLA V3 is a statistical model for nuclear de-excitation. It simulates\n"
+     << "evaporation of neutrons, protons and alpha particles, as well as fission\n"
+     << "where applicable. The code included in Geant4 is a C++ translation of the\n"
+     << "original Fortran code. More details about the physics are available in the\n"
+     << "the Geant4 Physics Reference Manual and in the reference articles.\n\n"
+     << "References: A.R. Junghans et al., Nucl. Phys. A629 (1998) 635;\n"
+     << "            J. Benlliure et al., Nucl. Phys. A628 (1998) 458.\n\n"; }
+
 #endif // ABLAXX_IN_GEANT4_MODE

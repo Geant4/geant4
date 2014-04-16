@@ -16,6 +16,10 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+16 April 2014 - Davide Mancusi (hadr-abla-V10-00-00)
+--------------------------------------------------
+- Add model-description methods to the interface.
+
 6 November 2013 - Davide Mancusi (hadr-abla-V09-06-03)
 --------------------------------------------------
 - Fix segfault on the production of exotic fragments.
