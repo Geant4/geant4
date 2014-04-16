@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 April, 2014 G. Cosmo (intercoms-V10-00-04)
+- Removed unnecessary source file G4AnyType.cc, as all symbols are inlined.
+- Corrected inclusion protection flag in G4GenericMessenger.hh.
+  Addressing old problem report #1527.
+
 9 April, 2014 L. Garnier (intercoms-V10-00-03)
 - Fix DEV-140 : "/control/macroPath" now also apply to macros 
   called inside a loop.
