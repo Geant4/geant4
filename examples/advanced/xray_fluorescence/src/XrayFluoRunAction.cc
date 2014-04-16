@@ -46,10 +46,14 @@
 #include <fstream>
 #include <sstream>
 #include "XrayFluoNormalization.hh"
+#ifdef G4ANALYSIS_USE
 #include "XrayFluoAnalysisManager.hh"
+#endif
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#ifdef G4ANALYSIS_USE
 
 XrayFluoRunAction::XrayFluoRunAction()
   :dataSet(0),dataGammaSet(0),dataAlphaSet(0)
@@ -60,7 +64,7 @@ XrayFluoRunAction::XrayFluoRunAction()
   data = new G4DataVector;
   
   
-  ReadData(keV,"M_flare");
+  ReadData(keV,"spec10");
   //ReadResponse("SILIresponse");
   
   G4double minGamma = 0.*keV;
@@ -71,16 +75,36 @@ XrayFluoRunAction::XrayFluoRunAction()
   dataGammaSet = normalization.Normalize(minGamma, maxGamma, nBinsGamma,
 				  "M_flare");
   
+
+  //G4String fileName = "SILIefficiency";
+  //G4VDataSetAlgorithm* interpolation4 = new G4LogLogInterpolation();
+  //efficiencySet = new XrayFluoDataSet(1,fileName,interpolation4,keV,1);
+  //delete interpolation4;  
   G4cout << "XrayFluoRunAction created" << G4endl;  
 }
-
+#else
+XrayFluoRunAction::XrayFluoRunAction()
+{
+  G4cout << "XrayFluoRunAction created" << G4endl; 
+}
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#ifdef G4ANALYSIS_USE
 
+XrayFluoRunAction::~XrayFluoRunAction()
+{
+
+  G4cout << "XrayFluoRunAction deleted" << G4endl; 
+
+}
+
+#else
 XrayFluoRunAction::~XrayFluoRunAction()
 {
   G4cout << "XrayFluoRunAction deleted" << G4endl;   
 }
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -93,21 +117,29 @@ void XrayFluoRunAction::BeginOfRunAction(const G4Run* aRun)
       G4UImanager* UI = G4UImanager::GetUIpointer(); 
       UI->ApplyCommand("/vis/scene/notifyHandlers");
     } 
+#ifdef G4ANALYSIS_USE
+
   // Book histograms and ntuples
   XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
   analysis->book();
+  analysis->InitializePlotter();
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoRunAction::EndOfRunAction(const G4Run*)
 {
+#ifdef G4ANALYSIS_USE
   XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
-  analysis->finish();
+#endif
   // Run ended, update the visualization
   if (G4VVisManager::GetConcreteInstance()) {
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
   }
+#ifdef G4ANALYSIS_USE
+   analysis->finish();
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -117,48 +149,37 @@ const XrayFluoDataSet* XrayFluoRunAction::GetSet()
 {
   return  dataSet;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 const XrayFluoDataSet* XrayFluoRunAction::GetGammaSet()
 {
   return  dataGammaSet;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 const XrayFluoDataSet* XrayFluoRunAction::GetAlphaSet()
 {
   return  dataAlphaSet;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+//const XrayFluoDataSet* XrayFluoRunAction::GetEfficiencySet()
+//{
+//  return efficiencySet;
+//}
 G4DataVector* XrayFluoRunAction::GetEnergies()
 {
   return energies;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4DataVector* XrayFluoRunAction::GetData()
 {
   return data;
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double XrayFluoRunAction::GetDataSum()
 {
   G4double sum = 0;
-  for (size_t i = 0; i < data->size(); i++)
+  size_t size = data->size();
+  for (size_t i = 0; i <size; i++)
     {
       sum+=(*data)[i];
     }
   return sum;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoRunAction::ReadData(G4double unitE, G4String fileName)
 {
