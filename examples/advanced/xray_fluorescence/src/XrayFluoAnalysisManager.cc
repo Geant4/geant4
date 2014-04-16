@@ -164,7 +164,6 @@ void XrayFluoAnalysisManager::LoadGunData(G4String fileName, G4bool raileighFlag
   analysisReader->SetNtupleDColumn("energies", energy);
   analysisReader->SetNtupleIColumn("particles", particleID);
 
-  G4int counter = 0;
   while (analysisReader->GetNtupleRow() ) 
     {
       if (raileighFlag ^ (!raileighFlag && (processID == 1 || 

@@ -19,6 +19,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-04-2014 L.Pandola Tag: XrayFluo-V10-00-03
+- Remove compiler warning which caused the rejection of 
+XrayFluo-V10-00-02
+
 14-04-2014 L.Pandola Tag: XrayFluo-V10-00-02
 - Complete the migration to the g4tools (removed AIDA dependency).
 Method XrayFluoAnalysisManager::LoadGunData() is restored by using the
