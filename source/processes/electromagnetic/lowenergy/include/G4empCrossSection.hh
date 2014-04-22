@@ -45,8 +45,11 @@
 
 #include "globals.hh"
 #include "G4VhShellCrossSection.hh"
+
 #include "G4PaulKxsModel.hh"
+
 #include "G4OrlicLiXsModel.hh"
+#include "G4MirandaLiXsModel.hh"
 
 class G4empCrossSection : public G4VhShellCrossSection 
 {
@@ -81,9 +84,11 @@ public:
 private:
   
   G4double totalCS;
+  G4int flag; // Flag to select Li XS set (orlic or miranda)
               
   G4PaulKxsModel*  paulShellK;
   G4OrlicLiXsModel* orlicShellLi;  
+  G4MirandaLiXsModel* mirandaShellLi;  
 						
   G4empCrossSection(const G4empCrossSection&);
   G4empCrossSection & operator = (const G4empCrossSection &right);

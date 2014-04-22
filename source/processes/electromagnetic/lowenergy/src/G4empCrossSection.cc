@@ -43,9 +43,28 @@
 G4empCrossSection::G4empCrossSection(const G4String& nam)
   :G4VhShellCrossSection(nam),totalCS(0.0)
 { 
-
-  paulShellK = new G4PaulKxsModel();
-  orlicShellLi = new G4OrlicLiXsModel();
+ if (nam == "Empirical") 
+  {
+    paulShellK = new G4PaulKxsModel();
+    orlicShellLi = new G4OrlicLiXsModel();
+    mirandaShellLi=0;    
+    flag=0;
+  }
+  else if (nam == "Empirical_Miranda")
+  {
+    paulShellK = new G4PaulKxsModel();
+    mirandaShellLi = new G4MirandaLiXsModel();
+    orlicShellLi=0;
+    flag=1;
+  }
+  else 
+  { 
+    G4cout << "ERROR in G4empCrossSection name ; Paul+Orlic is selected." << G4endl; 
+    paulShellK = new G4PaulKxsModel();
+    orlicShellLi = new G4OrlicLiXsModel();
+    mirandaShellLi=0;    
+    flag=0;
+  }
 
 }
 
@@ -53,7 +72,8 @@ G4empCrossSection::~G4empCrossSection()
 { 
 
   delete paulShellK;
-  delete orlicShellLi;
+  if (orlicShellLi)   delete orlicShellLi;
+  if (mirandaShellLi) delete mirandaShellLi;
 
 }
 
@@ -74,9 +94,20 @@ std::vector<G4double> G4empCrossSection::GetCrossSection(G4int Z,
   // so it can hadle the responsibility of this check too
 
   if (mass == aProton->GetPDGMass()) {
-    crossSections.push_back( orlicShellLi->CalculateL1CrossSection(Z, incidentEnergy) );
-    crossSections.push_back( orlicShellLi->CalculateL2CrossSection(Z, incidentEnergy) );
-    crossSections.push_back( orlicShellLi->CalculateL3CrossSection(Z, incidentEnergy) );
+
+    if (flag==0)
+    {
+      crossSections.push_back( orlicShellLi->CalculateL1CrossSection(Z, incidentEnergy) );
+      crossSections.push_back( orlicShellLi->CalculateL2CrossSection(Z, incidentEnergy) );
+      crossSections.push_back( orlicShellLi->CalculateL3CrossSection(Z, incidentEnergy) );
+    }
+
+    if (flag==1)
+    {
+      crossSections.push_back( mirandaShellLi->CalculateL1CrossSection(Z, mass, incidentEnergy) );
+      crossSections.push_back( mirandaShellLi->CalculateL2CrossSection(Z, mass, incidentEnergy) );
+      crossSections.push_back( mirandaShellLi->CalculateL3CrossSection(Z, mass, incidentEnergy) );
+    }
   }
 
   else {
@@ -93,11 +124,9 @@ G4double G4empCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
 					 G4double mass,
 					 const G4Material*)
 {
-
-  //let's reproduce  
-
   G4double res = 0.0;
   G4ParticleDefinition* aProton = G4Proton::Proton();
+  
   if(fKShell == shell) { 
     res = paulShellK->CalculateKCrossSection(Z, mass, incidentEnergy);
   } 
@@ -106,17 +135,19 @@ G4double G4empCrossSection::CrossSection(G4int Z, G4AtomicShellEnumerator shell,
   // moreover, at the present time,this class handles explicitly Paul and Orlic models,
   // so it can hadle the responsibility of this check too
 
-
   else if (mass == aProton->GetPDGMass()) {
     
     if(fL1Shell == shell) { 
-      res = orlicShellLi->CalculateL1CrossSection(Z, incidentEnergy);
+      if (flag==0) res =   orlicShellLi->CalculateL1CrossSection(Z, incidentEnergy);
+      if (flag==1) res = mirandaShellLi->CalculateL1CrossSection(Z, mass, incidentEnergy);
     } 
     else if(fL2Shell == shell) { 
-      res = orlicShellLi->CalculateL2CrossSection(Z, incidentEnergy);
+      if (flag==0) res =   orlicShellLi->CalculateL2CrossSection(Z, incidentEnergy);
+      if (flag==1) res = mirandaShellLi->CalculateL2CrossSection(Z, mass, incidentEnergy);
     } 
     else if(fL3Shell == shell) { 
-      res = orlicShellLi->CalculateL3CrossSection(Z, incidentEnergy);
+      if (flag==0) res =   orlicShellLi->CalculateL3CrossSection(Z, incidentEnergy);
+      if (flag==1) res = mirandaShellLi->CalculateL3CrossSection(Z, mass, incidentEnergy);
     } 
   }
   return res;

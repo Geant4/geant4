@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21.04.2014  S. Incerti, tag emlowen-V10-00-08
+            Fix of G4empCrossSection 
+
+19.04.2014  S. Incerti, tag emlowen-V10-00-07
+            Update of G4empCrossSection for Miranda et al. model 
+
 15.04.2014  S. Incerti, tag emlowen-V10-00-06
             New class for ionisation cs model from Miranda et al. 
 
