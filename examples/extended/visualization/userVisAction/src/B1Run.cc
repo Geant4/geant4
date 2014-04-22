@@ -23,38 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B1Run.cc 66536 2012-12-19 14:32:36Z ihrivnac $
 //
-/// \file B1SteppingAction.hh
-/// \brief Definition of the B1SteppingAction class
+/// \file B1Run.cc
+/// \brief Implementation of the B1Run class
 
-#ifndef B1SteppingAction_h
-#define B1SteppingAction_h 1
-
-#include "G4UserSteppingAction.hh"
-#include "globals.hh"
-
-class B1EventAction;
-
-class G4LogicalVolume;
-
-/// Stepping action class
-/// 
-
-class B1SteppingAction : public G4UserSteppingAction
-{
-  public:
-    B1SteppingAction(B1EventAction* eventAction);
-    virtual ~B1SteppingAction();
-
-    // method from the base class
-    virtual void UserSteppingAction(const G4Step*);
-
-  private:
-    B1EventAction*  fEventAction;
-    G4LogicalVolume* fScoringVolume;
-};
+#include "B1Run.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+B1Run::B1Run()
+: G4Run(),
+  fEdep(0.), 
+  fEdep2(0.)
+{} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B1Run::~B1Run()
+{} 
+ 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1Run::Merge(const G4Run* run)
+{
+  const B1Run* localRun = static_cast<const B1Run*>(run);
+  fEdep  += localRun->fEdep;
+  fEdep2 += localRun->fEdep2;
+
+  G4Run::Merge(run); 
+} 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1Run::AddEdep (G4double edep)
+{
+  fEdep  += edep;
+  fEdep2 += edep*edep;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+

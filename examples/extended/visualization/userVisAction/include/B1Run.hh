@@ -23,38 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B1Run.hh 66536 2012-12-19 14:32:36Z ihrivnac $
 //
-/// \file B1SteppingAction.hh
-/// \brief Definition of the B1SteppingAction class
+/// \file B1Run.hh
+/// \brief Definition of the B1Run class
 
-#ifndef B1SteppingAction_h
-#define B1SteppingAction_h 1
+#ifndef B1Run_h
+#define B1Run_h 1
 
-#include "G4UserSteppingAction.hh"
+#include "G4Run.hh"
 #include "globals.hh"
 
-class B1EventAction;
+class G4Event;
 
-class G4LogicalVolume;
+/// Run class
+///
 
-/// Stepping action class
-/// 
-
-class B1SteppingAction : public G4UserSteppingAction
+class B1Run : public G4Run
 {
   public:
-    B1SteppingAction(B1EventAction* eventAction);
-    virtual ~B1SteppingAction();
+    B1Run();
+    virtual ~B1Run();
 
     // method from the base class
-    virtual void UserSteppingAction(const G4Step*);
+    virtual void Merge(const G4Run*);
+    
+    void AddEdep (G4double edep); 
+
+    // get methods
+    G4double GetEdep()  const { return fEdep; }
+    G4double GetEdep2() const { return fEdep2; }
 
   private:
-    B1EventAction*  fEventAction;
-    G4LogicalVolume* fScoringVolume;
+    G4double  fEdep;
+    G4double  fEdep2;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
+

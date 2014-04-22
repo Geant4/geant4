@@ -23,38 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: B1ActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-/// \file B1SteppingAction.hh
-/// \brief Definition of the B1SteppingAction class
+/// \file B1ActionInitialization.cc
+/// \brief Implementation of the B1ActionInitialization class
 
-#ifndef B1SteppingAction_h
-#define B1SteppingAction_h 1
-
-#include "G4UserSteppingAction.hh"
-#include "globals.hh"
-
-class B1EventAction;
-
-class G4LogicalVolume;
-
-/// Stepping action class
-/// 
-
-class B1SteppingAction : public G4UserSteppingAction
-{
-  public:
-    B1SteppingAction(B1EventAction* eventAction);
-    virtual ~B1SteppingAction();
-
-    // method from the base class
-    virtual void UserSteppingAction(const G4Step*);
-
-  private:
-    B1EventAction*  fEventAction;
-    G4LogicalVolume* fScoringVolume;
-};
+#include "B1ActionInitialization.hh"
+#include "B1PrimaryGeneratorAction.hh"
+#include "B1RunAction.hh"
+#include "B1EventAction.hh"
+#include "B1SteppingAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+B1ActionInitialization::B1ActionInitialization()
+ : G4VUserActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+B1ActionInitialization::~B1ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1ActionInitialization::BuildForMaster() const
+{
+  SetUserAction(new B1RunAction);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void B1ActionInitialization::Build() const
+{
+  SetUserAction(new B1PrimaryGeneratorAction);
+  SetUserAction(new B1RunAction);
+  
+  B1EventAction* eventAction = new B1EventAction;
+  SetUserAction(eventAction);
+  
+  SetUserAction(new B1SteppingAction(eventAction));
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
