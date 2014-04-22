@@ -225,12 +225,14 @@ G4Material::G4Material(const G4String& name, G4double density,
 //                            for usage restricted to object persistency
 
 G4Material::G4Material(__void__&)
-  : fNumberOfComponents(0), fNumberOfElements(0), theElementVector(0), 
-    fImplicitElement(false), fMassFractionVector(0), fAtomsVector(0), 
-    fMaterialPropertiesTable(0), fIndexInTable(0), 
-    VecNbOfAtomsPerVolume(0)
+  : fChemicalFormula(""), fDensity(0.0), fState(kStateUndefined), fTemp(0.0), 
+    fPressure(0.0), maxNbComponents(0), fArrayLength(0), fNumberOfComponents(0),
+    fNumberOfElements(0), theElementVector(0), fImplicitElement(false),
+    fMassFractionVector(0), fAtomsVector(0), fMaterialPropertiesTable(0),
+    fIndexInTable(0), VecNbOfAtomsPerVolume(0), TotNbOfAtomsPerVolume(0),
+    TotNbOfElectPerVolume(0), fRadlen(0.0), fNuclInterLen(0.0),
+    fIonisation(0), fSandiaTable(0), fBaseMaterial(0), fMassOfMolecule(0.0)
 {
-  InitializePointers();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
