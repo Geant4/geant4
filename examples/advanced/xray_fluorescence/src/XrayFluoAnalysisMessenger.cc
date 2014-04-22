@@ -35,12 +35,7 @@
 //
 // -------------------------------------------------------------------
 
-#ifdef G4ANALYSIS_USE
 #include "XrayFluoAnalysisMessenger.hh"
-
-
-
-
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -52,27 +47,14 @@ XrayFluoAnalysisMessenger::XrayFluoAnalysisMessenger(XrayFluoAnalysisManager* an
   XrayFluoAnalysisDir->SetGuidance("analysis control.");
   
   outputFileCommand = new G4UIcmdWithAString("/analysis/outputFile",this);
-  outputFileCommand->SetGuidance("specify the name of the output file (lowercase if paw will be used)");
-  outputFileCommand->SetGuidance("command /analysis/update MUST be used after this command");
+  outputFileCommand->SetGuidance("specify the name of the output file");
   outputFileCommand->SetParameterName("choice",true);
-  outputFileCommand->SetDefaultValue("xrayfluo.hbk");
+  outputFileCommand->SetDefaultValue("xrayfluo.root");
   outputFileCommand->AvailableForStates(G4State_Idle);
     
-  outputFileType = new G4UIcmdWithAString("/analysis/fileType",this);
-  outputFileType->SetGuidance("specify the type of the output file");
-  outputFileType->SetGuidance("command /analysis/update MUST be used after this command");
-  outputFileType->SetParameterName("choice",true);
-  outputFileType->SetDefaultValue("hbook");
-  outputFileType->SetCandidates("hbook xml");
-  outputFileType->AvailableForStates(G4State_Idle);
-  
-  persistencyUpdateCommand = new G4UIcmdWithoutParameter("/analysis/update",this);
-  outputFileCommand->SetGuidance("Update persistency file");
-  outputFileCommand->SetGuidance("This command MUST be used after outputFile or outputFileType commands");
-  outputFileCommand->AvailableForStates(G4State_Idle);
 
   physicFlagCmd = new G4UIcmdWithABool("/analysis/setPhysicProduction",this);
-  physicFlagCmd->SetGuidance("Select if data stored in the Pahse-Space must contain physical data or particles exiting the sample");
+  physicFlagCmd->SetGuidance("Select if data stored in the Phase-Space must contain physical data or particles exiting the sample");
   physicFlagCmd->SetGuidance("To be used before and togheter with /gun/loadGunData");
   physicFlagCmd->SetParameterName("Physyc Flag",true);
   physicFlagCmd->SetDefaultValue(false);
@@ -94,19 +76,10 @@ void XrayFluoAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String newVal
 { 
 
   if(command == outputFileCommand)
-    {
-      if ((xrayFluoAnalysis->GetDeletePersistencyFileFlag())) remove("xrayfluo.hbk");      
+    {      
       xrayFluoAnalysis->SetOutputFileName(newValue);
     }
   
-  else if (command == persistencyUpdateCommand)
-    {xrayFluoAnalysis->CreatePersistency();}
-
-  else if(command == outputFileType)
-    {
-      if (xrayFluoAnalysis->GetDeletePersistencyFileFlag()) remove("xrayfluo.hbk");      
-      xrayFluoAnalysis->SetOutputFileType(newValue);
-    }
   if( command == physicFlagCmd )
     { 
       G4bool newPhysFlag = physicFlagCmd->GetNewBoolValue(newValue);
@@ -116,7 +89,7 @@ void XrayFluoAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String newVal
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#endif
+
 
 
 

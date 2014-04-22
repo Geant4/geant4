@@ -20,7 +20,9 @@
 /process/em/pixe true
 #Selecting Reis model for PIXE. Analytical PIXE will be used outsie 01-10 MeV energy Range
 /process/em/pixeXSmodel ecpssr_interpolated
-
+#
+#/analysis/setPhysicProduction true
+#
 #setting cuts
 /phys/setGCut  1 nm
 /phys/setECut  1 nm

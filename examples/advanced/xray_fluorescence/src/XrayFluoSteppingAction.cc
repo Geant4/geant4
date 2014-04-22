@@ -42,10 +42,8 @@
 #include "XrayFluoSteppingAction.hh"
 #include "G4SteppingManager.hh"
 #include "G4TrackVector.hh"
-#ifdef G4ANALYSIS_USE
 #include "XrayFluoAnalysisManager.hh"
-#endif
-#include "G4ios.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoSteppingAction::XrayFluoSteppingAction() 
@@ -65,10 +63,8 @@ XrayFluoSteppingAction::~XrayFluoSteppingAction()
 
 void XrayFluoSteppingAction::UserSteppingAction(const G4Step* aStep)
 {
-#ifdef G4ANALYSIS_USE
   XrayFluoAnalysisManager* analysis  = XrayFluoAnalysisManager::getInstance();
   analysis->analyseStepping(aStep);
-#endif
 
   if (mercuryFlag){
     XrayFluoMercuryDetectorConstruction* detector = XrayFluoMercuryDetectorConstruction::GetInstance();
