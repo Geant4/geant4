@@ -47,7 +47,9 @@
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
+#include "G4EmLowEPPhysics.hh"
 #include "G4EmDNAPhysics.hh"
+#include "G4EmDNAPhysics_option1.hh"
 
 #include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
@@ -303,10 +305,20 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics();
 
+  } else if (name == "emlowenergy") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLowEPPhysics();
+
   } else if (name == "dna") {
     fEmName = name;
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmDNAPhysics();
+         
+  } else if (name == "dna_opt1") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmDNAPhysics_option1();
          
   } else {
 
