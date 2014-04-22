@@ -36,15 +36,12 @@
 // debug switch
 //#define debug_PartonStringModel
 
-
 #include "G4VPartonStringModel.hh"
 #include "G4ios.hh"
 #include "G4ShortLivedConstructor.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
-
-//#define debug_PartonStringModel
 
 G4VPartonStringModel::G4VPartonStringModel(const G4String& modelName)
     : G4VHighEnergyGenerator(modelName),
@@ -113,15 +110,54 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   }
 
   G4double InvMass=SumStringMom.mag();   
+// Uzhi Insert start, 25. Feb. 2014
+  G4V3DNucleus * ResNucleus=theThis->GetWoundedNucleus(); 
+
+   // loop over wounded nucleus
+  G4Nucleon * theNuclNucleon = ResNucleus->StartLoop() ?
+                                ResNucleus->GetNextNucleon() : NULL;
+  while( theNuclNucleon )
+  {
+     if(theNuclNucleon->AreYouHit())
+     {
+      G4LorentzVector tmp=toLab*theNuclNucleon->Get4Momentum();
+      theNuclNucleon->SetMomentum(tmp);
+     }
+     theNuclNucleon = ResNucleus->GetNextNucleon();
+  }
+
+  G4V3DNucleus * ProjResNucleus=theThis->GetProjectileNucleus();
 
 #ifdef debug_PartonStringModel
+  G4ThreeVector hitNucleonMomentum(0.,0.,0.);
+#endif
+
+  if(ProjResNucleus != 0)
+  {
+    theNuclNucleon = ProjResNucleus->StartLoop() ?
+                     ProjResNucleus->GetNextNucleon() : NULL;
+    while( theNuclNucleon )
+    {
+     if(theNuclNucleon->AreYouHit())
+     {
+      G4LorentzVector tmp=toLab*theNuclNucleon->Get4Momentum();
+      #ifdef debug_PartonStringModel
+         hitNucleonMomentum += tmp.vect();
+      #endif
+      theNuclNucleon->SetMomentum(tmp);
+     }
+     theNuclNucleon = ProjResNucleus->GetNextNucleon();
+    }
+  }
+// Uzhi Insert end, 25. Feb. 2014
+#ifdef debug_PartonStringModel
   G4cout<<"Parton-String model: SumStringMom "<<SumStringMom<<G4endl;
- 
+
      G4V3DNucleus * fancynucleus=theThis->GetWoundedNucleus();
-  
+
        // loop over wounded nucleus
      G4int hits(0), charged_hits(0);
-     G4ThreeVector hitNucleonMomentum(0.,0.,0.);
+//     G4ThreeVector hitNucleonMomentum(0.,0.,0.);                 // Uzhi Feb. 2014
      G4Nucleon * theCurrentNucleon = fancynucleus->StartLoop() ? 
                                      fancynucleus->GetNextNucleon() : NULL;
      while( theCurrentNucleon )
@@ -139,7 +175,8 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
      G4int initialA=fancynucleus->GetMassNumber();
      G4double initial_mass=
        G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(initialZ,initialA);
-     G4double final_mass = 
+     G4double final_mass(0.);                                        // Uzhi Apr. 2014
+     if(initialA-hits != 0) final_mass =                             // Uzhi Apr. 2014
        G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(
                                    initialZ-charged_hits, initialA-hits);
      G4cout << "G4VPSM:             "                   <<G4endl
@@ -212,3 +249,4 @@ void G4VPartonStringModel::ModelDescription(std::ostream& outFile) const
 
 G4V3DNucleus * G4VPartonStringModel::GetProjectileNucleus() const // Uzhi Jan. 2013
 { return 0;}
+
