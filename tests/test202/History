@@ -3,6 +3,9 @@ $Id$
 
 History file for test/test202 subdirectory
 ------------------------------------------------
+22th April 2014 Laurent Garnier (test202-V10-00-10)
+- CMakeLists.txt : Change timeout from 2000 to 600sec.
+
 16th April 2014 Laurent Garnier (test202-V10-00-09)
 - CMakeLists.txt : add OGLIX-reference directory
 
