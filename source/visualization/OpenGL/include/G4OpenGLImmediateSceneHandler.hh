@@ -62,11 +62,15 @@ public:
 
 protected:
 
-  G4bool AddPrimitivePreamble(const G4Visible& visible);
+  G4bool AddPrimitivePreamble(const G4VMarker& visible);
+  G4bool AddPrimitivePreamble(const G4Polyline& visible);
+  G4bool AddPrimitivePreamble(const G4Polyhedron& visible);
 
   void ClearTransientStore ();
 
   static G4int    fSceneIdCount;  // static counter for OpenGLImmediate scenes.
+  private:
+  bool AddPrimitivePreambleInternal(const G4Visible& visible, bool isMarker, bool isPolyline);
 };
 
 #endif

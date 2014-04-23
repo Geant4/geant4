@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23th April 2014  Laurent Garnier (opengl-V10-00-03)
+- G4OpenGL.hh: Fix bugzilla #1618 : for a Linux user, compiling Geant4 with only 
+  Qt driver will failed because of missing glu.h.
+
+18th April 2014  Laurent Garnier
+- G4OpenGLImmediateSceneHandler: Split AddPrimitivePreamble() in 3 functions to avoid 
+  dynamic_cast (+20% faster in drawing)
+
+17th April 2014  Laurent Garnier
+- G4OpenGLViewer : Time optimization in printEPS for Immediate mode
+  => save 70-80% in drawing time on batch drawing. 10-20% when printing with a screen
+     viewer
+
 10th April 2014  Laurent Garnier (opengl-V10-00-02)
 - G4OpenGLQtViewer : Add changing the color of text in DrawText() 
 - G4OpenGLViewer : manage bad file name case (missing directory) in printGl2PS()

@@ -831,6 +831,11 @@ bool G4OpenGLViewer::printGl2PS() {
   int width = getRealPrintSizeX();
   int height = getRealPrintSizeY();
 
+  // no need to redraw at each new primitive for printgl2PS
+  G4OpenGLSceneHandler& oglSceneHandler = dynamic_cast<G4OpenGLSceneHandler&>(fSceneHandler);
+  G4int drawInterval = oglSceneHandler.GetEventsDrawInterval();
+  oglSceneHandler.SetEventsDrawInterval(1000); // some big value but not too big to not crash memory
+
   if (!fGL2PSAction) return false;
 
   fGL2PSAction->setFileName(getRealPrintFilename().c_str());
@@ -895,6 +900,8 @@ bool G4OpenGLViewer::printGl2PS() {
    }
   fWinSize_x = X;
   fWinSize_y = Y;
+
+  oglSceneHandler.SetEventsDrawInterval(drawInterval);
 
   // Reset for next time (useful is size change)
   //  fPrintSizeX = 0;
