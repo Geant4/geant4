@@ -56,7 +56,7 @@ class G4VKineticNucleon
 
       virtual const G4LorentzVector& Get4Momentum() const =0;
 
-      virtual G4ParticleDefinition* GetDefinition()const =0;
+      virtual const G4ParticleDefinition* GetDefinition()const =0;
 
       virtual const G4ThreeVector& GetPosition() const =0;
 
