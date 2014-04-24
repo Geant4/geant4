@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 April 2014 - G.Cosmo
+- Corrected definition of 'thread_local' keyword in Utility/thread_local.h.
+- Removed 'inline' specification in Random.cc for theDefaults().
+
 9 April 2014 - G.Cosmo
 - Updated to CLHEP-2.2.0.0:
   * Random (D.Dagenhart <wdd@fnal.gov>)
