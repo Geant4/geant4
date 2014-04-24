@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-Apr-2014, Alberto Ribon              (phys-ctro-glnuclear-V10-00-02)
+- Switched on muon-nuclear by default.
+
 10-Apr-2014, Andrea Dotti               (phys-ctro-glnuclear-V10-00-01)
 - Implement thread safe UI messenger. Addressing bug #1606
 

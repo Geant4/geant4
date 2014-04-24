@@ -35,7 +35,8 @@
 // 10.11.2005 V.Ivanchenko edit to provide a standard
 // 19.06.2006 V.Ivanchenko add mu-nuclear process
 // 16.10.2012 A.Ribon: renamed G4EmExtraBertiniPhysics as G4EmExtraPhysics
-// 10.08.2014 A.Dotti: Add MT functionality for messenger
+// 10.04.2014 A.Dotti: Add MT functionality for messenger
+// 24.04.2014 A.Ribon: switched on muon-nuclear by default
 //
 //----------------------------------------------------------------------------
 //
@@ -67,7 +68,7 @@ G4ThreadLocal G4bool G4EmExtraPhysics::gnActivated  = false;
 G4ThreadLocal G4bool G4EmExtraPhysics::synActivated = false;
 G4ThreadLocal G4bool G4EmExtraPhysics::synchOn      = false;
 G4ThreadLocal G4bool G4EmExtraPhysics::gammNucOn    = true;
-G4ThreadLocal G4bool G4EmExtraPhysics::muNucOn      = false;
+G4ThreadLocal G4bool G4EmExtraPhysics::muNucOn      = true;
 
 namespace {
     //Thread-private instance of a messenger.
