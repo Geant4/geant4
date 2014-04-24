@@ -765,7 +765,7 @@ void G4BinaryCascade::BuildTargetList()
         // check if nucleon is hit by higher energy model.
         if ( ! nucleon->AreYouHit() )
         {
-            definition = nucleon->GetDefinition_asConst();
+            definition = nucleon->GetDefinition();
             pos = nucleon->GetPosition();
             mom = nucleon->GetMomentum();
             //    G4cout << "Nucleus " << pos.mag()/fermi << " " << mom.e() << G4endl;
@@ -928,7 +928,7 @@ G4ReactionProductVector *  G4BinaryCascade::DeExcite()
          std::vector<G4KineticTrack *>::iterator i;
          if ( theTargetList.size() == 1 )  {i=theTargetList.begin();}
          if ( theCapturedList.size() == 1 ) {i=theCapturedList.begin();}                             // Uzhi
-         G4ReactionProduct * aNew = new G4ReactionProduct((*i)->GetDefinition_asConst());
+         G4ReactionProduct * aNew = new G4ReactionProduct((*i)->GetDefinition());
          aNew->SetTotalEnergy((*i)->GetDefinition()->GetPDGMass());
          aNew->SetMomentum(G4ThreeVector(0));// see boost for preCompoundProducts below..
          precompoundProducts = new G4ReactionProductVector();
@@ -1002,7 +1002,7 @@ G4ReactionProductVector *  G4BinaryCascade::DecayVoidNucleus()
                (aNuc != theTargetList.end()) && (aMom!=momenta->end());
                aNuc++, aMom++ )
          {
-            G4ReactionProduct * aNew = new G4ReactionProduct((*aNuc)->GetDefinition_asConst());
+            G4ReactionProduct * aNew = new G4ReactionProduct((*aNuc)->GetDefinition());
             aNew->SetTotalEnergy((*aMom)->e());
             aNew->SetMomentum((*aMom)->vect());
             result->push_back(aNew);
@@ -1018,7 +1018,7 @@ G4ReactionProductVector *  G4BinaryCascade::DecayVoidNucleus()
                aNuc++, aMom++ )                                             // Uzhi
          {                                                                  // Uzhi
             G4ReactionProduct * aNew = new G4ReactionProduct(               // Uzhi
-                  (*aNuc)->GetDefinition_asConst());            // Uzhi
+                  (*aNuc)->GetDefinition());            // Uzhi
             aNew->SetTotalEnergy((*aMom)->e());                             // Uzhi
             aNew->SetMomentum((*aMom)->vect());                             // Uzhi
             result->push_back(aNew);                           // Uzhi
@@ -1040,7 +1040,7 @@ G4ReactionProductVector * G4BinaryCascade::ProductsAddFinalState(G4ReactionProdu
     for(i = 0; i< fs.size(); i++)
     {
         G4KineticTrack * kt = fs[i];
-        G4ReactionProduct * aNew = new G4ReactionProduct(kt->GetDefinition_asConst());
+        G4ReactionProduct * aNew = new G4ReactionProduct(kt->GetDefinition());
         aNew->SetMomentum(kt->Get4Momentum().vect());
         aNew->SetTotalEnergy(kt->Get4Momentum().e());
         aNew->SetNewlyAdded(kt->IsParticipant());
@@ -1554,7 +1554,7 @@ G4bool G4BinaryCascade::CheckPauliPrinciple(G4KineticTrackVector * products)
     //  G4ThreeVector xpos(0);
     for(i = products->begin(); i != products->end(); ++i)
     {
-        definition = (*i)->GetDefinition_asConst();
+        definition = (*i)->GetDefinition();
         if((definition == G4Proton::Proton()) ||
                 (definition == G4Neutron::Neutron()))
         {
@@ -1594,7 +1594,7 @@ G4bool G4BinaryCascade::CheckPauliPrinciple(G4KineticTrackVector * products)
     {
         for(i = products->begin(); i != products->end(); ++i)
         {
-            definition = (*i)->GetDefinition_asConst();
+            definition = (*i)->GetDefinition();
             if((definition == G4Proton::Proton()) ||
                     (definition == G4Neutron::Neutron()))
             {
@@ -1768,7 +1768,7 @@ G4double G4BinaryCascade::CorrectShortlivedPrimaryForFermi(
         std::vector<G4KineticTrack *>::iterator titer;
         for ( titer=target_collection.begin() ; titer!=target_collection.end(); ++titer)
         {
-            const G4ParticleDefinition * aDef=(*titer)->GetDefinition_asConst();
+            const G4ParticleDefinition * aDef=(*titer)->GetDefinition();
             G4int aCode=aDef->GetPDGEncoding();
             G4ThreeVector aPos=(*titer)->GetPosition();
             Efermi+= ((G4RKPropagation *)thePropagator)->GetField(aCode, aPos);
@@ -2636,7 +2636,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate1H1(
     for(iter = theFinalState.begin(); iter != theFinalState.end(); ++iter)
     {
         G4KineticTrack * kt = *iter;
-        G4ReactionProduct * aNew = new G4ReactionProduct(kt->GetDefinition_asConst());
+        G4ReactionProduct * aNew = new G4ReactionProduct(kt->GetDefinition());
         aNew->SetMomentum(kt->Get4Momentum().vect());
         aNew->SetTotalEnergy(kt->Get4Momentum().e());
         products->push_back(aNew);
@@ -2753,7 +2753,7 @@ void G4BinaryCascade::PrintKTVector(G4KineticTrack * kt, std::string comment)
         G4ThreeVector pos = kt->GetPosition();
         G4LorentzVector mom = kt->Get4Momentum();
         G4LorentzVector tmom = kt->GetTrackingMomentum();
-        const G4ParticleDefinition * definition = kt->GetDefinition_asConst();
+        const G4ParticleDefinition * definition = kt->GetDefinition();
         G4cout << "    definition: " << definition->GetPDGEncoding() << " pos: "
                 << 1/fermi*pos << " R: " << 1/fermi*pos.mag() << " 4mom: "
                 << 1/MeV*mom <<"Tr_mom" <<  1/MeV*tmom << " P: " << 1/MeV*mom.vect().mag()
@@ -2807,7 +2807,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
     //PrintKTVector(&theFinalState, " theFinalState @ void Nucl");
     for(iter = theFinalState.begin(); iter != theFinalState.end(); ++iter)
     {
-        G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition_asConst());
+        G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
         aNew->SetMomentum((*iter)->Get4Momentum().vect());
         aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
         Esecondaries +=(*iter)->Get4Momentum().e();
@@ -2819,7 +2819,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
     //PrintKTVector(&theCapturedList, " theCapturedList @ void Nucl");
     for(iter = theCapturedList.begin(); iter != theCapturedList.end(); ++iter)
     {
-        G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition_asConst());
+        G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
         aNew->SetMomentum((*iter)->Get4Momentum().vect());
         aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
         Esecondaries +=(*iter)->Get4Momentum().e();
@@ -2838,7 +2838,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
             G4KineticTrackVector * lates = collision->GetFinalState();
             if ( lates->size() == 1 ) {
                 G4KineticTrack * atrack=*(lates->begin());
-                G4ReactionProduct * aNew = new G4ReactionProduct(atrack->GetDefinition_asConst());
+                G4ReactionProduct * aNew = new G4ReactionProduct(atrack->GetDefinition());
                 aNew->SetMomentum(atrack->Get4Momentum().vect());
                 aNew->SetTotalEnergy(atrack->Get4Momentum().e());
                 Esecondaries +=atrack->Get4Momentum().e();
@@ -2858,7 +2858,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
     //PrintKTVector(&theSecondaryList, " secondaires @ void Nucl");
     for(iter = theSecondaryList.begin(); iter != theSecondaryList.end(); ++iter)
     {
-        G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition_asConst());
+        G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
         aNew->SetMomentum((*iter)->Get4Momentum().vect());
         aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
         Esecondaries +=(*iter)->Get4Momentum().e();
@@ -2885,7 +2885,7 @@ G4ReactionProductVector * G4BinaryCascade::FillVoidNucleusProducts(G4ReactionPro
 
     for(iter = theTargetList.begin(); iter != theTargetList.end(); ++iter)
     {
-        G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition_asConst());
+        G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
         G4double mass=(*iter)->GetDefinition()->GetPDGMass();
         G4double p=std::sqrt(sqr(Ekinetic) + 2.*Ekinetic*mass);
         aNew->SetMomentum(p*(*iter)->Get4Momentum().vect().unit());
@@ -2903,7 +2903,7 @@ G4ReactionProductVector * G4BinaryCascade::HighEnergyModelFSProducts(G4ReactionP
     std::vector<G4KineticTrack *>::iterator iter;
     for(iter = secondaries->begin(); iter != secondaries->end(); ++iter)
     {
-        G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition_asConst());
+        G4ReactionProduct * aNew = new G4ReactionProduct((*iter)->GetDefinition());
         aNew->SetMomentum((*iter)->Get4Momentum().vect());
         aNew->SetTotalEnergy((*iter)->Get4Momentum().e());
         aNew->SetNewlyAdded(true);
