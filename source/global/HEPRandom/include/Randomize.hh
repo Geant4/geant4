@@ -31,8 +31,15 @@
 
 #include <CLHEP/Random/Randomize.h>
 
+#if __clang__
+  #if (defined(G4MULTITHREADED) && !defined(G4USE_STD11) && \
+      !__has_feature(cxx_thread_local))
+    #define CLANG_NOSTDTLS
+  #endif
+#endif
+
 #if (defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
-    (defined(__clang__) && !__has_feature(cxx_thread_local))
+    (defined(CLANG_NOSTDTLS))
 
 // MT needs special Random Number distribution classes
 //
