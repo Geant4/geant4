@@ -1039,7 +1039,10 @@ Diquark_AntiDiquark_aboveThreshold_lastSplitting(G4FragmentingString * & string,
 
 				//G4cout<<"StringMass LeftHadronMass RightHadronMass "<<StringMass<<" "<<LeftHadronMass<<" "<< RightHadronMass<<G4endl;
 
-				if(StringMass >= LeftHadronMass + RightHadronMass)
+				//M. Novak: = was removed. 
+				//	1. it can cause numerical problems 
+				//	2. weight of the corresponding FS is zero (in theory)
+				if(StringMass > LeftHadronMass + RightHadronMass)
 				{
 					G4double FS_Psqr=lambda(StringMassSqr,sqr(LeftHadronMass),
 								sqr(RightHadronMass));
@@ -1149,7 +1152,10 @@ Quark_Diquark_lastSplitting(G4FragmentingString * & string,
 
 				//G4cout<<"StringMass LeftHadronMass RightHadronMass "<<StringMass<<" "<<LeftHadronMass<<" "<< RightHadronMass<<G4endl;
 
-				if(StringMass >= LeftHadronMass + RightHadronMass)
+				//M. Novak: = was removed. 
+				//	1. it can cause numerical problems 
+				//	2. weight of the corresponding FS is zero (in theory)
+				if(StringMass > LeftHadronMass + RightHadronMass)
 				{
 					G4double FS_Psqr=lambda(StringMassSqr,sqr(LeftHadronMass),
 								sqr(RightHadronMass));
@@ -1240,7 +1246,10 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 				G4double RightHadronMass=RightHadron->GetPDGMass();
 				StateAQ++;
 
-				if(StringMass >= LeftHadronMass + RightHadronMass)
+				//M. Novak: = was removed. 
+				//	1. it can cause numerical problems 
+				//	2. weight of the corresponding FS is zero (in theory)
+				if(StringMass > LeftHadronMass + RightHadronMass)
 				{
 					G4double FS_Psqr=lambda(StringMassSqr,sqr(LeftHadronMass),
 								sqr(RightHadronMass));
