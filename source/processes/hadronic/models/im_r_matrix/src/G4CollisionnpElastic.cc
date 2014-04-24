@@ -66,8 +66,8 @@ G4bool G4CollisionnpElastic::IsInCharge(const G4KineticTrack& trk1,
 { 
   G4bool isInCharge = false;
 
-  G4ParticleDefinition* def1 = trk1.GetDefinition();
-  G4ParticleDefinition* def2 = trk2.GetDefinition();
+  const G4ParticleDefinition* def1 = trk1.GetDefinition();
+  const G4ParticleDefinition* def2 = trk2.GetDefinition();
   
   if ( (def1 == G4Neutron::NeutronDefinition() && 
 	def2 == G4Proton::ProtonDefinition() )

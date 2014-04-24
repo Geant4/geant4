@@ -47,7 +47,6 @@
 #include "G4XAqmElastic.hh"
 #include "G4XAqmTotal.hh"
 #include "G4KineticTrack.hh"
-#include "G4ParticleDefinition.hh"
 
 
 // Validity range of this cross-section

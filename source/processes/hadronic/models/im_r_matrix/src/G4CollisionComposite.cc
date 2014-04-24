@@ -177,8 +177,8 @@ BufferCrossSection(const G4ParticleDefinition * aP, const G4ParticleDefinition *
      }
      G4LorentzVector a4Momentum(aE, aMom);
      G4LorentzVector b4Momentum(bE, bMom);
-     G4KineticTrack a(const_cast<G4ParticleDefinition *>(aP), atime, aPosition, a4Momentum);
-     G4KineticTrack b(const_cast<G4ParticleDefinition *>(bP), btime, bPosition, b4Momentum);
+     G4KineticTrack a(aP, atime, aPosition, a4Momentum);
+     G4KineticTrack b(bP, btime, bPosition, b4Momentum);
      
      for (i=0; i<components.size(); i++)
      {

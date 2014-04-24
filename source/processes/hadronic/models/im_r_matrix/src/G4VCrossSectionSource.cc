@@ -46,13 +46,13 @@ G4VCrossSectionSource::~G4VCrossSectionSource()
 { }
 
 
-G4ParticleDefinition * G4VCrossSectionSource::
+const G4ParticleDefinition * G4VCrossSectionSource::
 FindKeyParticle(const G4KineticTrack& trk1,const G4KineticTrack& trk2) const
 {
-  G4ParticleDefinition * result;
+  const G4ParticleDefinition * result;
   
-  G4ParticleDefinition * p1 = trk1.GetDefinition();
-  G4ParticleDefinition * p2 = trk2.GetDefinition();
+  const G4ParticleDefinition * p1 = trk1.GetDefinition();
+  const G4ParticleDefinition * p2 = trk2.GetDefinition();
   
   if( (p1==G4Proton::Proton() && p2==G4Proton::Proton() ) ||
       (p1==G4Neutron::Neutron() && p2==G4Neutron::Neutron()) )

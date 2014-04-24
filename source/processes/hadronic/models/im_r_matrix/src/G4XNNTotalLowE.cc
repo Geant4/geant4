@@ -30,7 +30,6 @@
 #include "G4XNNTotalLowE.hh"
 #include "G4KineticTrack.hh"
 #include "G4ParticleDefinition.hh"
-#include "G4ParticleDefinition.hh"
 #include "G4Proton.hh"
 #include "G4Neutron.hh"
 
@@ -81,7 +80,7 @@ G4double G4XNNTotalLowE::CrossSection(const G4KineticTrack& trk1, const G4Kineti
 {
   G4double result = 0.;
   G4double sqrtS = (trk1.Get4Momentum() + trk2.Get4Momentum()).mag();
-  G4ParticleDefinition * key = FindKeyParticle(trk1,trk2);
+  const G4ParticleDefinition * key = FindKeyParticle(trk1,trk2);
 
   if (theCrossSections.find(key)!= theCrossSections.end())
   {

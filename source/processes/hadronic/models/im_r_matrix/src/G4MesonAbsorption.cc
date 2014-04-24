@@ -139,14 +139,14 @@ GetFinalState(G4KineticTrack * projectile,
   G4LorentzRotation toLab(toZ.inverse());
 
   // Get definitions
-  G4ParticleDefinition * d1 = targets[0]->GetDefinition();
-  G4ParticleDefinition * d2 = targets[1]->GetDefinition();
+  const G4ParticleDefinition * d1 = targets[0]->GetDefinition();
+  const G4ParticleDefinition * d2 = targets[1]->GetDefinition();
   if(0.5>G4UniformRand())
   {
-    G4ParticleDefinition * temp;
+    const G4ParticleDefinition * temp;
     temp=d1;d1=d2;d2=temp;
   }
-  G4ParticleDefinition * dp = projectile->GetDefinition();
+  const G4ParticleDefinition * dp = projectile->GetDefinition();
   if(dp->GetPDGCharge()<-.5)
   {
     if(d1->GetPDGCharge()>.5)

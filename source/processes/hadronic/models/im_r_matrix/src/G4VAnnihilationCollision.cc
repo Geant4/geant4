@@ -65,7 +65,6 @@ G4KineticTrackVector* G4VAnnihilationCollision::FinalState(const G4KineticTrack&
 //  G4double m1 = trk1.GetActualMass();
 //  G4double m2 = trk2.GetActualMass();
 
-  G4ParticleDefinition* OutputDefinition = const_cast<G4ParticleDefinition *>( GetOutgoingParticle(trk1,trk2) );
 
   // Unit vector of three-momentum
 
@@ -78,8 +77,8 @@ G4KineticTrackVector* G4VAnnihilationCollision::FinalState(const G4KineticTrack&
   G4LorentzRotation toLabFrame(p.boostVector());
   p4Final *= toLabFrame;
   
-  G4KineticTrack* final = new G4KineticTrack(OutputDefinition, 0.0, 
-					     trk1.GetPosition(), p4Final);
+ const G4ParticleDefinition* OutputDefinition = GetOutgoingParticle(trk1,trk2);
+ G4KineticTrack* final = new G4KineticTrack(OutputDefinition, 0.0, trk1.GetPosition(), p4Final);
   
   G4KineticTrackVector* finalTracks = new G4KineticTrackVector;
 
