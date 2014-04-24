@@ -103,10 +103,19 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
   for ( unsigned int astring=0; astring < strings->size(); astring++)
   {
 //    rotate string to lab frame, models have it aligned to z
-    stringEnergy += (*strings)[astring]->GetLeftParton()->Get4Momentum().t();
-    stringEnergy += (*strings)[astring]->GetRightParton()->Get4Momentum().t();
-    (*strings)[astring]->LorentzRotate(toLab);
-    SumStringMom+=(*strings)[astring]->Get4Momentum();
+    if((*strings)[astring]->IsExcited())
+    {
+     stringEnergy += (*strings)[astring]->GetLeftParton()->Get4Momentum().t();
+     stringEnergy += (*strings)[astring]->GetRightParton()->Get4Momentum().t();
+     (*strings)[astring]->LorentzRotate(toLab);
+     SumStringMom+=(*strings)[astring]->Get4Momentum();
+    }
+    else
+    {
+     stringEnergy += (*strings)[astring]->GetKineticTrack()->Get4Momentum().t();
+     (*strings)[astring]->LorentzRotate(toLab);
+     SumStringMom+=(*strings)[astring]->GetKineticTrack()->Get4Momentum();
+    }
   }
 
   G4double InvMass=SumStringMom.mag();   
@@ -207,11 +216,13 @@ G4KineticTrackVector * G4VPartonStringModel::Scatter(const G4Nucleus &theNucleus
     std::for_each(theResult->begin(), theResult->end(), DeleteKineticTrack());
     delete theResult;
    }
+
    theResult = stringFragmentationModel->FragmentStrings(strings);
+
    if(attempts > maxAttempts ) break;
 
 #ifdef debug_PartonStringModel
-  G4cout<<"Parton-String model: Number of produced particles "<<theResult->size()<<G4endl;
+   G4cout<<"Parton-String model: Number of produced particles "<<theResult->size()<<G4endl;
    G4LorentzVector SumPsecondr(0.,0.,0.,0.);
 #endif
 
