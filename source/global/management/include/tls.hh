@@ -34,23 +34,44 @@
 #define G4_TLS
 
 #if defined (G4MULTITHREADED)
-  #if defined (G4USE_STD11)
-    #  define G4ThreadLocalStatic static std::thread_local
-    #  define G4ThreadLocal std::thread_local
-  #else
-    #if ( defined(__MACH__) && defined(__clang__) && defined(__x86_64__) ) || \
-        ( defined(__MACH__) && defined(__GNUC__) && __GNUC__>=4 && __GNUC_MINOR__>=7 ) 
-    #  define G4ThreadLocalStatic static __thread
-    #  define G4ThreadLocal __thread
-    #elif defined(__linux__) || defined(_AIX)
-    #  define G4ThreadLocalStatic static __thread
-    #  define G4ThreadLocal __thread
-    #elif defined(WIN32)
-    #  define G4ThreadLocalStatic static __declspec(thread)
-    #  define G4ThreadLocal __declspec(thread)
+  #if ( defined(__MACH__) && defined(__clang__) && defined(__x86_64__) ) || \
+      ( defined(__linux__) && defined(__clang__) )
+    #if (defined (G4USE_STD11) && __has_feature(cxx_thread_local))
+      #  define G4ThreadLocalStatic static thread_local
+      #  define G4ThreadLocal thread_local
     #else
-    #  error "No Thread Local Storage (TLS) technology supported for this platform. Use sequential build !"
+      #  define G4ThreadLocalStatic static __thread
+      #  define G4ThreadLocal __thread
     #endif
+  #elif ( defined(__MACH__) && defined(__GNUC__) && __GNUC__>=4 && __GNUC_MINOR__>=7 )
+    #if defined (G4USE_STD11)
+      #  define G4ThreadLocalStatic static thread_local
+      #  define G4ThreadLocal thread_local
+    #else
+      #  define G4ThreadLocalStatic static __thread
+      #  define G4ThreadLocal __thread
+    #endif
+  #elif defined(__linux__)
+    #if ( defined (G4USE_STD11) && defined(__GNUC__) && __GNUC__>=4 && __GNUC_MINOR__>=7 )
+      #  define G4ThreadLocalStatic static thread_local
+      #  define G4ThreadLocal thread_local
+    #else
+      #  define G4ThreadLocalStatic static __thread
+      #  define G4ThreadLocal __thread
+    #endif
+  #elif defined(_AIX)
+    #if defined (G4USE_STD11)
+      #  define G4ThreadLocalStatic static thread_local
+      #  define G4ThreadLocal thread_local
+    #else
+      #  define G4ThreadLocalStatic static __thread
+      #  define G4ThreadLocal __thread
+    #endif
+  #elif defined(WIN32)
+  #  define G4ThreadLocalStatic static __declspec(thread)
+  #  define G4ThreadLocal __declspec(thread)
+  #else
+  #  error "No Thread Local Storage (TLS) technology supported for this platform. Use sequential build !"
   #endif
 #else
   #  define G4ThreadLocalStatic static

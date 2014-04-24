@@ -26,7 +26,8 @@
 //
 // $Id:$
 //
-#if (defined(G4MULTITHREADED) && !defined(G4USE_STD11))
+#if (defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
+    (defined(__clang__) && !__has_feature(cxx_thread_local))
 
 #include "G4MTRandGeneral.hh"
 
