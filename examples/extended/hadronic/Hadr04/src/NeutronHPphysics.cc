@@ -84,21 +84,20 @@ void NeutronHPphysics::ConstructProcess()
    // process: elastic
    //
    G4HadronElasticProcess* process1 = new G4HadronElasticProcess();
-   pManager->AddDiscreteProcess(process1);   
+   pManager->AddDiscreteProcess(process1);
    //
-   // cross section data set
-   G4NeutronHPElasticData* dataSet1a = new G4NeutronHPElasticData();
-   G4NeutronHPThermalScatteringData* dataSet1b 
-                               = new G4NeutronHPThermalScatteringData();
-   process1->AddDataSet(dataSet1a);                               
-   if (fThermal) process1->AddDataSet(dataSet1b);
+   // model1a
+   G4NeutronHPElastic*  model1a = new G4NeutronHPElastic();
+   process1->RegisterMe(model1a);
+   process1->AddDataSet(new G4NeutronHPElasticData());
    //
-   // models
-   G4NeutronHPElastic*           model1a = new G4NeutronHPElastic();
-   G4NeutronHPThermalScattering* model1b = new G4NeutronHPThermalScattering();
-  if (fThermal)  model1a->SetMinEnergy(4*eV);
-   process1->RegisterMe(model1a);    
-   if (fThermal) process1->RegisterMe(model1b);
+   // model1b
+   if (fThermal) {
+     G4NeutronHPThermalScattering* model1b = new G4NeutronHPThermalScattering();
+     process1->RegisterMe(model1b);
+     process1->AddDataSet(new G4NeutronHPThermalScatteringData());         
+     model1a->SetMinEnergy(4*eV);
+   }
    
    // process: inelastic
    //

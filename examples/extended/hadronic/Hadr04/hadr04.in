@@ -15,7 +15,6 @@
 #
 /process/list
 #
-###/particle/createAllIsomer
 /gun/particle neutron
 /gun/energy 2 MeV
 #
