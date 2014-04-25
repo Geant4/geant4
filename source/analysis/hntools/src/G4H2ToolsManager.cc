@@ -601,7 +601,7 @@ G4bool G4H2ToolsManager::SetH2YAxisTitle(G4int id, const G4String& title)
   tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2YAxisTitle");
   if ( ! h2d ) return false;
   
-  h2d->add_annotation(tools::histo::key_axis_x_title(), title);
+  h2d->add_annotation(tools::histo::key_axis_y_title(), title);
   return true;  
 }  
 

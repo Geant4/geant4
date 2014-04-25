@@ -30,6 +30,30 @@
 #include "G4AnalysisUtilities.hh"
 #include "G4BinScheme.hh"
 #include "G4UnitsTable.hh"
+#include "G4String.hh"
+
+namespace {
+
+//_____________________________________________________________________________
+G4bool GetToken(const G4String& line, G4String& token, 
+                std::string::size_type begIdx, std::string::size_type& endIdx)
+{
+  while ( line[begIdx] == ' ') ++begIdx;
+  if ( line[begIdx] == '"' ) {
+    endIdx = line.find('"', begIdx+1);
+    if ( endIdx == std::string::npos ) endIdx = line.length();
+    token = line.substr(begIdx+1, (endIdx-1)-begIdx);
+    ++endIdx;
+  }
+  else {
+    endIdx = line.find(' ', begIdx);
+    if ( endIdx == std::string::npos ) endIdx = line.length();
+    token = line.substr(begIdx, endIdx-begIdx);
+  }
+  return ( token.length() > 0 );
+}              
+
+}
 
 namespace G4Analysis
 {
@@ -130,5 +154,24 @@ void UpdateTitle(G4String& title,
   if ( unitName != "none" ) { title += " ["; title += unitName; title += "]";}
   if ( fcnName != "none" )  { title += ")"; }
 }                                                            
+
+//_____________________________________________________________________________
+void  Tokenize(const G4String& line, std::vector<G4String>& tokens)
+{
+  // Define start values
+  std::string::size_type begIdx = 0;
+  std::string::size_type endIdx = 0; 
+  G4String token;
+  
+  do {
+    if ( GetToken(line, token, begIdx, endIdx) ) {
+      //G4cout << "got token: '" << token << "'" << G4endl;
+      //G4cout << "beg, end: " << begIdx << ", " << endIdx << G4endl;
+      tokens.push_back(token);
+    }  
+    begIdx = endIdx + 1;
+  }
+  while ( endIdx != line.length() );
+}
 
 }

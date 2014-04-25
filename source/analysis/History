@@ -17,6 +17,14 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 25, 2014 I. Hrivnacova (analysis-V10-00-10)
+- Fixed implementation of compound commands in G4H[1,2,n]Messenger classes
+  using new G4AnalysisUtilities::Tokenize() function.
+  This allows to pass multi-word strings within "" and fixes problem report 
+  #1616.
+- Fixed G4H2ToolsManager::SetH2YAxisTitle: set title to y-axis and not x-axis.
+  This addresses problem report #1620.  
+
 April 14, 2014 I. Hrivnacova (analysis-V10-00-09)
 - Use G4Threading::IsMultithreadedApplication() instead of  
   G4AnalysisManagerState::IsMT() (now removed); 
