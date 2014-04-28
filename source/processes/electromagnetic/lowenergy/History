@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25.04.2014  S. Incerti, tag emlowen-V10-00-09
+            Updated G4UAtomicDeexcitation according to previous tag 
+
 21.04.2014  S. Incerti, tag emlowen-V10-00-08
             Fix of G4empCrossSection 
 
