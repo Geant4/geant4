@@ -3,30 +3,7 @@ $Id$
 
 History file for test/test202 subdirectory
 ------------------------------------------------
-22th April 2014 Laurent Garnier (test202-V10-00-10)
-- CMakeLists.txt : Change timeout from 2000 to 600sec.
-
-16th April 2014 Laurent Garnier (test202-V10-00-09)
-- CMakeLists.txt : add OGLIX-reference directory
-
-16th April 2014 Laurent Garnier (test202-V10-00-08)
-- OGLIX.mac: set autoRefresh to false
-
-11th April 2014 Laurent Garnier (test202-V10-00-07)
-- OGLIX.mac: remove calling other macro in order to avoid timeout
-
-10th April 2014 Laurent Garnier (test202-V10-00-06)
-- CMakeLists.txt : Fix a bad name in the copy of OGLIX.mac
-
-9th April 2014 Laurent Garnier (test202-V10-00-05)
-- CMakeLists.txt : Fix a missing copy of OGLIX.mac
-
-7th April 2014 Laurent Garnier (test202-V10-00-04 needs visexternal-V10-00-00)
-- xvfb.sh, CMakeLists.txt, testVisSceneAdd.mac, testVisSet.mac :
-  o Change test202 in order to check output files only fo OGLIX for the moment. 
-- Requires co-working tag "visexternal-V10-00-00".
-
-7th April 2014 Laurent Garnier (test202-V10-00-03)
+7st April 2014 Laurent Garnier (test202-V10-00-03)
 - Fix a problem in xvfb.sh
 - revert run0.mac at previous version (as it should always be)
 

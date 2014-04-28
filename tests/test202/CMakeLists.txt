@@ -9,13 +9,8 @@ configure_file(testVisSceneAdd.mac testVisSceneAdd.mac COPYONLY) # test expects 
 configure_file(testVisSet.mac testVisSet.mac COPYONLY) # test expects file to be local
 configure_file(vis.mac vis.mac COPYONLY) # test expects file to be local
 configure_file(run0.mac run0.mac COPYONLY) # this file local too
-configure_file(OGLIX.mac OGLIX.mac COPYONLY) # this file local too
+configure_file(run0.mac run0.mac COPYONLY) # this file local too
 configure_file(xvfb.sh xvfb.sh COPYONLY) # this file local too
-
-# OGLIX-reference directory
-file(MAKE_DIRECTORY [OGLIX-reference])
-configure_file(OGLIX-reference/visSceneTest_0.eps OGLIX-reference/visSceneTest_0.eps  COPYONLY) # this file local too
-
 #---Test definitions----------------------------------------------------------------------------
 
 #build example:
@@ -29,10 +24,10 @@ find_package(Xvfb QUIET)
 if(XVFB_FOUND)
   message(STATUS "G4 TESTS: found Xvfb --> run test202")
 
-  GEANT4_ADD_TEST(test202-OGLIX COMMAND xvfb.sh ${CMAKE_CURRENT_BINARY_DIR}/test202 OGLIX
+  GEANT4_ADD_TEST(test202 COMMAND xvfb.sh ${CMAKE_CURRENT_BINARY_DIR}/test202 run0.mac
                               ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
                               DEPENDS test202-build
-										TIMEOUT 600)
+										TIMEOUT 2000)
 
     
 endif()
