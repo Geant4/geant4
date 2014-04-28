@@ -410,6 +410,7 @@ void G4NuclideTable::GenerateNuclide()
       if ( !path ) {
          G4Exception("G4NuclideTable", "PART70000",
                   FatalException, "G4ENSDFSTATEDATA environment variable must be set");
+	 return;
       }
    
       std::fstream ifs;
@@ -421,6 +422,7 @@ void G4NuclideTable::GenerateNuclide()
       if ( !ifs.good() ) {
          G4Exception("G4NuclideTable", "PART70001",
                   FatalException, "ENSDFSTATE.dat is not found.");
+	 return;
       }
      
 

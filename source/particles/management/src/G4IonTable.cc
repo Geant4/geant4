@@ -1730,10 +1730,12 @@ G4double G4IonTable::GetLifeTime(const G4ParticleDefinition* particle) const
   {
    G4Exception("G4IonTable::GetLifeTime()","ParticleIon1001",FatalException,
                "Method is invoked before G4IonTable is initialized.");
+   return 0.;
+  } else {
+   G4IsotopeProperty* isoP = pNuclideTable->GetIsotope(Z,A,E);
+    if(!isoP) return -1001.0;
+    return isoP->GetLifeTime();
   }
-  G4IsotopeProperty* isoP = pNuclideTable->GetIsotope(Z,A,E);
-  if(!isoP) return -1001.0;
-  return isoP->GetLifeTime();
 }
 
 

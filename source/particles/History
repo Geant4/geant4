@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- 27. May. 2014 Hisaya Kurashige (particles-V10-00-06)
+- Fix Coverity defects in G4NuclideTable.cc and G4IonTable.cc
+
 - 26. Mar. 2014 Tatsumi Koi (particles-V10-00-05)
 -Fix lack of Cl35 ground state in NuclideTable2
 -Fix lack of "*std::log(2.0)" in some comparison of threshold time
