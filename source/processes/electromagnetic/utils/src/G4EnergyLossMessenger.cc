@@ -220,6 +220,12 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   G4UIparameter* flagPIXE = new G4UIparameter("flagPIXE",'s',false);
   deexCmd->SetParameter(flagPIXE);
 
+  dcutCmd = new G4UIcmdWithABool("/process/em/deexcitationIgnoreCut",this);
+  dcutCmd->SetGuidance("The flag to disable cuts in de-excitation module");
+  dcutCmd->SetParameterName("deexcut",true);
+  dcutCmd->SetDefaultValue(false);
+  dcutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   dedxCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsDEDX",this);
   dedxCmd->SetGuidance("Set number of bins for DEDX tables");
   dedxCmd->SetParameterName("binsDEDX",true);
@@ -344,7 +350,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   fiCmd->AvailableForStates(G4State_Idle);
 
   brCmd = new G4UIcommand("/process/em/setSecBiasing",this);
-  brCmd->SetGuidance("Set bremsstrahlung or delta-electron splitting/Russian roullette per region.");
+  brCmd->SetGuidance("Set bremsstrahlung or delta-e- splitting/Russian roullette per region.");
   brCmd->SetGuidance("  bProcNam : process name");
   brCmd->SetGuidance("  bRegNam  : region name");
   brCmd->SetGuidance("  bFactor  : number of splitted gamma or probability of Russian roulette");
@@ -379,6 +385,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete SubSecCmd;
   delete MinSubSecCmd;
   delete StepFuncCmd;
+  delete dcutCmd;
   delete deexCmd;
   delete eLossDirectory;
   delete mscDirectory;
@@ -446,12 +453,16 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     if(s3 == "true") { b3 = true; }
     if(s4 == "true") { b4 = true; }
     opt->SetDeexcitationActiveRegion(s1,b2,b3,b4);
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == deCmd) {
     opt->SetFluo(deCmd->GetNewBoolValue(newValue));
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == auCmd) {
     opt->SetAuger(auCmd->GetNewBoolValue(newValue));
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == pixeCmd) {
     opt->SetPIXE(pixeCmd->GetNewBoolValue(newValue));
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == pixeXsCmd) {
     G4String name;
     if (newValue == "ecpssr_analytical") 
@@ -461,8 +472,13 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     else 
       {name = newValue;}
     opt->SetPIXECrossSectionModel(name);
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == pixeeXsCmd) {
     opt->SetPIXEElectronCrossSectionModel(newValue);
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  } else if (command == dcutCmd) {
+    opt->SetDeexcitationIgnoreCuts(dcutCmd->GetNewBoolValue(newValue));
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == mscCmd) {
     if(newValue == "Minimal") 
       opt->SetMscStepLimitation(fMinimal);
@@ -511,6 +527,7 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     opt->SetLinearLossLimit(lllCmd->GetNewDoubleValue(newValue));
   } else if (command == labCmd) {
     opt->SetLambdaFactor(labCmd->GetNewDoubleValue(newValue));
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == skinCmd) {
     opt->SetSkin(skinCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");

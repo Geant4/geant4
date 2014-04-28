@@ -286,6 +286,14 @@ void G4EmProcessOptions::SetPIXE(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4EmProcessOptions::SetDeexcitationIgnoreCuts(G4bool val)
+{
+  G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();
+  if(ad) { ad->SetIgnoreCuts(val); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4EmProcessOptions::SetPIXECrossSectionModel(const G4String& mname)
 {
   G4VAtomDeexcitation* ad = theManager-> AtomDeexcitation();

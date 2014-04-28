@@ -70,7 +70,8 @@ G4int G4VAtomDeexcitation::pixeIDe = -1;
 G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname, 
 					 const G4String& pname) 
   : lowestKinEnergy(keV), verbose(1), name(modname), namePIXE(pname), 
-    nameElectronPIXE(""), isActive(false), flagAuger(false), flagPIXE(false)
+    nameElectronPIXE(""), isActive(false), flagAuger(false), 
+    flagPIXE(false), ignoreCuts(false)
 {
   vdyn.reserve(5);
   theCoupleTable = 0;
@@ -228,9 +229,11 @@ G4VAtomDeexcitation::AlongStepDeexcitation(std::vector<G4Track*>& tracks,
 
   // media parameters
   G4double gCut = (*theCoupleTable->GetEnergyCutsVector(0))[coupleIndex];
+  if(ignoreCuts) { gCut = 0.0; }
   G4double eCut = DBL_MAX;
   if(CheckAugerActiveRegion(coupleIndex)) { 
     eCut = (*theCoupleTable->GetEnergyCutsVector(1))[coupleIndex];
+    if(ignoreCuts) { eCut = 0.0; }    
   }
 
   //G4cout<<"!Sample PIXE gCut(MeV)= "<<gCut<<"  eCut(MeV)= "<<eCut

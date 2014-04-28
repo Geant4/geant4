@@ -106,6 +106,7 @@ private:
   G4UIcmdWithABool*          deCmd;
   G4UIcmdWithABool*          auCmd;
   G4UIcmdWithABool*          pixeCmd;
+  G4UIcmdWithABool*          dcutCmd;
   G4UIcmdWithAString*        pixeXsCmd;
   G4UIcmdWithAString*        pixeeXsCmd;
   G4UIcmdWithAnInteger*      verCmd;

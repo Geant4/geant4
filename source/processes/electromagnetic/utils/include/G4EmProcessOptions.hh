@@ -117,6 +117,8 @@ public:
 
   void SetPIXE(G4bool val);
 
+  void SetDeexcitationIgnoreCuts(G4bool val);
+
   void SetPIXECrossSectionModel(const G4String& val);
 
   void SetPIXEElectronCrossSectionModel(const G4String& val);

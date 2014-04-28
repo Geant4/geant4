@@ -517,7 +517,7 @@ void G4LossTableManager::LocalPhysicsTables(
      G4VEnergyLossProcess* p)
 {
   if(1 < verbose) {
-    G4cout << "### G4LossTableManager::SlavePhysicsTable() for "
+    G4cout << "### G4LossTableManager::LocalPhysicsTable() for "
 	   << aParticle->GetParticleName()
   	   << " and process " << p->GetProcessName()
 	   << G4endl;
@@ -532,7 +532,7 @@ void G4LossTableManager::LocalPhysicsTables(
     ++run;
     SetVerbose(verbose);
     if(1 < verbose) {
-      G4cout << "===== G4LossTableManager::SlavePhysicsTable() for run "
+      G4cout << "===== G4LossTableManager::LocalPhysicsTable() for run "
 	     << run << " =====" << G4endl;
     }
     if(atomDeexcitation) {
@@ -589,7 +589,7 @@ void G4LossTableManager::LocalPhysicsTables(
   SetParameters(aParticle, p);
 
   if(1 < verbose) {
-    G4cout << "### G4LossTableManager::SlavePhysicsTable end"
+    G4cout << "### G4LossTableManager::LocalPhysicsTable end"
 	   << G4endl;
   }
   if(all_tables_are_built) { 
@@ -620,7 +620,7 @@ void G4LossTableManager::BuildPhysicsTable(
     ++run;
     if(1 < verbose) {
       G4cout << "===== G4LossTableManager::BuildPhysicsTable() for run "
-	     << run << " =====" << G4endl;
+	     << run << " ===== " << atomDeexcitation << G4endl;
     }
     if(atomDeexcitation) {
       atomDeexcitation->InitialiseAtomicDeexcitation();

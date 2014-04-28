@@ -110,6 +110,10 @@ public:
   inline void SetPIXEElectronCrossSectionModel(const G4String&);
   inline const G4String& PIXEElectronCrossSectionModel() const;
 
+  // Set flag allowing ignore production thresholds in deexcitation
+  inline void SetIgnoreCuts(G4bool);
+  inline G4bool IgnoreCuts() const;
+
   // Access to the list of atoms active for deexcitation
   inline const std::vector<G4bool>& GetListOfActiveAtoms() const;
 
@@ -181,6 +185,7 @@ private:
   G4bool   isActive;
   G4bool   flagAuger;
   G4bool   flagPIXE;
+  G4bool   ignoreCuts;
   std::vector<G4bool>   activeZ;
   std::vector<G4bool>   activeDeexcitationMedia;
   std::vector<G4bool>   activeAugerMedia;
@@ -226,6 +231,16 @@ inline G4bool G4VAtomDeexcitation::IsPIXEActive() const
 {
   return flagPIXE;
 }
+
+inline void G4VAtomDeexcitation::SetIgnoreCuts(G4bool val)
+{
+  ignoreCuts = val;
+} 
+
+inline G4bool G4VAtomDeexcitation::IgnoreCuts() const
+{
+  return ignoreCuts;
+} 
 
 inline const G4String& G4VAtomDeexcitation::GetName() const
 {
@@ -292,13 +307,17 @@ G4VAtomDeexcitation::GenerateParticles(std::vector<G4DynamicParticle*>* v,
 				       G4int idx)
 {
   G4double gCut = DBL_MAX;
-  if (theCoupleTable) {
+  if(ignoreCuts) {
+    gCut = 0.0;
+  } else if (theCoupleTable) {
     gCut = (*(theCoupleTable->GetEnergyCutsVector(0)))[idx];
   }
   if(gCut < as->BindingEnergy()) {
     G4double eCut = DBL_MAX;
     if(CheckAugerActiveRegion(idx)) {
-      if (theCoupleTable) {
+      if(ignoreCuts) {
+        eCut = 0.0;
+      } else if (theCoupleTable) {
 	eCut = (*(theCoupleTable->GetEnergyCutsVector(1)))[idx];
       }
     }

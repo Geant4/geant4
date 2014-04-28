@@ -1507,9 +1507,9 @@ G4VEnergyLossProcess::SampleSubCutSecondaries(std::vector<G4Track*>& tracks,
   G4double fragment = 0.0;
 
   do {
-    G4double del = -std::log(G4UniformRand())/cross;
+    G4double del = -G4Log(G4UniformRand())/cross;
     fragment += del/length;
-    if (fragment > 1.0) break;
+    if (fragment > 1.0) { break; }
 
     // sample secondaries
     secParticles.clear();
