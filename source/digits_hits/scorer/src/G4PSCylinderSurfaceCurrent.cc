@@ -98,7 +98,7 @@ G4bool G4PSCylinderSurfaceCurrent::ProcessHits(G4Step* aStep,G4TouchableHistory*
   G4Tubs* tubsSolid = (G4Tubs*)(solid);
 
   G4int dirFlag =IsSelectedSurface(aStep,tubsSolid);
-  G4cout << " pos " << preStep->GetPosition() <<" dirFlag " << G4endl;
+  // G4cout << " pos " << preStep->GetPosition() <<" dirFlag " << G4endl;
   if ( dirFlag > 0 ) {
     if ( fDirection == fCurrent_InOut || fDirection == dirFlag ){
       G4TouchableHandle theTouchable = preStep->GetTouchableHandle();

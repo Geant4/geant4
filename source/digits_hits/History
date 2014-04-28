@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Apr 27, 2014, M.Asai (digits_hits-V10-00-02)
+- G4PSCylinderSurfaceCurrent.cc : remove unnecessary cout. 
+  Addressing to Bug Report #1610.
+
 Mar 5, 2014, G.Cosmo (digits_hits-V10-00-01)
 - Added missing dependency to graphics_reps in scorer module.
 
