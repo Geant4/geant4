@@ -14,9 +14,5 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
-24-04-14 mma (exhadr06-V10-00-01)
-- local physics constructor HadronElasticPhysicsHP
-- NeutronHPMessenger to set up neutron thermal scattering
-     
 13-03-14 Michel Maire (exhadr06-V10-00-00)
 - created from Hadr03 and Hadr04
