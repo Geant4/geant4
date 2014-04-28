@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-04-14 V.Ivant (test45-V10-00-01)
+- CMakeLists.txt: allow to build standalone 
+    without GEANT4_ENABLE_TESTING=ON
+
 12-03-14 L. Garnier    (test45-V10-00-00)
 - Use the generic way to /vis/open 
 
