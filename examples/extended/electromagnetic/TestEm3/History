@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+28-04-14 V.Ivant (testem3-V10-00-02)
+- added "emlowenergy" option for EM physics 
      
 14-01-14 mma (testem3-V10-00-01)
 - MT: Add forgotten classes ActionInitialization, Run
