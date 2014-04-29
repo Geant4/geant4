@@ -109,8 +109,24 @@ void G4MaterialPropertiesTable::DumpTable()
   }
 }
 
+#ifdef G4MULTITHREADED
+#include "G4AutoLock.hh"
+namespace {
+ G4Mutex materialPropertyTableMutex = G4MUTEX_INITIALIZER;
+}
+#endif
+
 G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
 {
+#ifdef G4MULTITHREADED
+  G4AutoLock mptm(&materialPropertyTableMutex);
+#endif
+
+  // check if "GROUPVEL" already exists
+  MPTiterator itr;
+  itr = MPT.find("GROUPVEL");
+  if(itr != MPT.end()) return itr->second;
+
   // fetch RINDEX data, give up if unavailable
   //
   G4MaterialPropertyVector *rindex = this->GetProperty("RINDEX");
@@ -124,8 +140,6 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
   //
   G4MaterialPropertyVector* groupvel = new G4MaterialPropertyVector();
 
-  this->AddProperty( "GROUPVEL", groupvel );
-                                                                                
   // fill GROUPVEL vector using RINDEX values
   // rindex built-in "iterator" was advanced to first entry above
   //
@@ -203,6 +217,8 @@ G4MaterialPropertyVector* G4MaterialPropertiesTable::SetGROUPVEL()
   {
     groupvel->InsertValues( E0, c_light/n0 );
   }
+                                                                                
+  this->AddProperty( "GROUPVEL", groupvel );
                                                                                 
   return groupvel;
 }

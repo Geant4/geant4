@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-04-14 M.Asai (materials-V10-00-05)
+- G4MaterialPropertyTable: fix race condition problem. Addressing to
+  bug report #1590.
+
 22-04-14 G.Cosmo (materials-V10-00-04, materials-V10-00-03)
 - G4Material: corrected initialisation of pointers in fake default constructor
   per use of persistency.
