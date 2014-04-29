@@ -55,6 +55,7 @@
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
+#include "G4EmLowEPPhysics.hh"
 #include "G4DecayPhysics.hh"
 #include "G4HadronElasticPhysics.hh"
 #include "G4HadronInelasticQBBC.hh"
@@ -216,6 +217,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics();
 
+  } else if (name == "emlowenergy") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLowEPPhysics();
+
   } else if (name == "elastic" && !fHelIsRegisted) {
     fHadronPhys.push_back( new G4HadronElasticPhysics());
     fHelIsRegisted = true;
@@ -227,13 +233,15 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     fHadronPhys.push_back(new G4IonPhysics());
     fBicIsRegisted = true;
     if (verboseLevel > 0) 
-      G4cout << "PhysicsList::Add hadron inelastic physics from <QBBC>" << G4endl;
+      G4cout << "PhysicsList::Add hadron inelastic physics from <QBBC>" 
+             << G4endl;
 
   } else if (name == "gamma_nuc" && !fGnucIsRegisted) {
     fHadronPhys.push_back(new G4EmExtraPhysics());
     fGnucIsRegisted = true;
     if (verboseLevel > 0) 
-      G4cout << "PhysicsList::Add gamma- and electro-nuclear physics" << G4endl;
+      G4cout << "PhysicsList::Add gamma- and electro-nuclear physics" 
+             << G4endl;
 
   } else if (name == "stopping" && !fStopIsRegisted) {
     fHadronPhys.push_back(new G4StoppingPhysics());
@@ -274,21 +282,15 @@ void PhysicsList::SetCuts()
   SetCutValue(fCutForElectron, "e-", "DefaultRegionForTheWorld");
   SetCutValue(fCutForElectron, "e+", "DefaultRegionForTheWorld");
   SetCutValue(fCutForProton, "proton", "DefaultRegionForTheWorld");
-  //  G4cout << "PhysicsList: world cuts are set cutG= " << cutForGamma/mm 
-  //         << " mm    cutE= " << fCutForElectron/mm << " mm " << G4endl;
 
-  //G4cout << " cutV= " << fCutForVertexDetector 
-  //     << " cutM= " << fCutForMuonDetector<<G4endl;
-
-  G4Region* region = (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
+  G4Region* region = 
+    (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
   fVertexDetectorCuts = region->GetProductionCuts();
   SetVertexCut(fCutForVertexDetector);
-  //  G4cout << "Vertex cuts are set" << G4endl;
  
   region = (G4RegionStore::GetInstance())->GetRegion("MuonDetector");
   fMuonDetectorCuts = region->GetProductionCuts();
   SetMuonCut(fCutForMuonDetector);
-  //G4cout << "Muon cuts are set " <<muonRegion << " " << muonDetectorCuts << G4endl;
   
   if (verboseLevel>0) DumpCutValuesTable();
 }
