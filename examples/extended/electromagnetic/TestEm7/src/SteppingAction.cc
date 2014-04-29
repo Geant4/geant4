@@ -65,7 +65,10 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     G4cout << step->GetTrack()->GetMaterial()->GetName()
            << "  E1= " << step->GetPreStepPoint()->GetKineticEnergy()
            << "  E2= " << step->GetPostStepPoint()->GetKineticEnergy()
-           << " Edep= " << edep << G4endl;
+           << " Edep= " << edep 
+           << " Q= " << step->GetTrack()->GetDynamicParticle()->GetCharge()
+           << " Qp= " << step->GetPostStepPoint()->GetCharge()
+           << G4endl;
     */
   } 
 

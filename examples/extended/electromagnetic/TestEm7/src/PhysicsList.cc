@@ -44,6 +44,7 @@
 #include "G4EmStandardPhysics_option4.hh"
 #include "G4EmLivermorePhysics.hh"
 #include "G4EmPenelopePhysics.hh"
+#include "G4EmLowEPPhysics.hh"
 
 #include "G4DecayPhysics.hh"
 
@@ -222,6 +223,11 @@ void PhysicsList::AddPhysicsList(const G4String& name)
     delete fEmPhysicsList;
     fEmPhysicsList = new G4EmPenelopePhysics();
 
+  } else if (name == "emlowenergy") {
+    fEmName = name;
+    delete fEmPhysicsList;
+    fEmPhysicsList = new G4EmLowEPPhysics();
+
   } else if (name == "elastic" && !fHelIsRegisted) {
     fHadronPhys.push_back( new G4HadronElasticPhysics());
     fHelIsRegisted = true;
@@ -315,7 +321,8 @@ void PhysicsList::SetCutForPositron(G4double cut)
 
 void PhysicsList::AddIonGasModels()
 {
-  G4EmConfigurator* em_config = G4LossTableManager::Instance()->EmConfigurator();
+  G4EmConfigurator* em_config = 
+    G4LossTableManager::Instance()->EmConfigurator();
   theParticleIterator->reset();
   while ((*theParticleIterator)())
   {
