@@ -72,7 +72,12 @@ StackingAction::ClassifyNewTrack(const G4Track* aTrack)
   Run* run = static_cast<Run*>(
              G4RunManager::GetRunManager()->GetNonConstCurrentRun()); 
   run->CountParticles(aTrack->GetDefinition());
-
+  /*
+  G4cout << "###StackingAction: new " 
+         << aTrack->GetDefinition()->GetParticleName()
+         << " E(MeV)= " << aTrack->GetKineticEnergy()
+         << "  " << aTrack->GetMomentumDirection() << G4endl;
+  */
   //
   //energy spectrum of secondaries
   //
