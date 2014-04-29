@@ -157,6 +157,7 @@
 #include "G4TransportationManager.hh"
 #include "G4EmConfigurator.hh"
 #include "G4VAtomDeexcitation.hh"
+#include "G4VSubCutProducer.hh"
 #include "G4EmBiasingManager.hh"
 #include "G4Log.hh"
 
@@ -243,6 +244,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   lManager->Register(this);
   fluctModel = 0;
   atomDeexcitation = 0;
+  subcutProducer = 0;
 
   biasManager  = 0;
   biasFlag     = false; 
@@ -539,7 +541,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 	G4PhysicsTableHelper::PreparePhysicsTable(theInverseRangeTable);  
     }
 
-    if (nSCoffRegions) {
+    if (nSCoffRegions && !lManager->SubCutProducer()) {
       theDEDXSubTable = 
 	G4PhysicsTableHelper::PreparePhysicsTable(theDEDXSubTable);
       theSubLambdaTable = 
@@ -587,23 +589,21 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 				     minSubRange, verboseLevel);
 
   // Sub Cutoff 
-  if (nSCoffRegions>0) {
+  if(nSCoffRegions > 0) {
     theSubCuts = modelManager->SubCutoff();
 
-    if(nSCoffRegions>0) { idxSCoffRegions = new G4bool[n]; }
+    idxSCoffRegions = new G4bool[n]; 
     for (size_t j=0; j<n; ++j) {
 
       const G4MaterialCutsCouple* couple = 
 	theCoupleTable->GetMaterialCutsCouple(j);
       const G4ProductionCuts* pcuts = couple->GetProductionCuts();
       
-      if(nSCoffRegions>0) {
-	G4bool reg = false;
-	for(G4int i=0; i<nSCoffRegions; ++i) {
-	  if( pcuts == scoffRegions[i]->GetProductionCuts()) { reg = true; }
-	}
-	idxSCoffRegions[j] = reg;
+      G4bool reg = false;
+      for(G4int i=0; i<nSCoffRegions; ++i) {
+	if( pcuts == scoffRegions[i]->GetProductionCuts()) { reg = true; }
       }
+      idxSCoffRegions[j] = reg;
     }
   }
 
@@ -711,6 +711,7 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   if(isIonisation) { 
     fParticleChange.SetLowEnergyLimit(lowestKinEnergy); 
     atomDeexcitation = lManager->AtomDeexcitation();
+    if(nSCoffRegions > 0) { subcutProducer = lManager->SubCutProducer(); }
     if(atomDeexcitation) { 
       if(atomDeexcitation->IsPIXEActive()) { useDeexcitation = true; } 
     }
@@ -984,7 +985,7 @@ void G4VEnergyLossProcess::ActivateSubCutoff(G4bool val, const G4Region* r)
   }
 
   // the region is in the list
-  if (nSCoffRegions) {
+  if (nSCoffRegions > 0) {
     for (G4int i=0; i<nSCoffRegions; ++i) {
       if (reg == scoffRegions[i]) {
         return;
@@ -1110,9 +1111,6 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   }
   //  if(particle->GetPDGMass() > 0.9*GeV)
   //G4cout << "q2= "<<chargeSqRatio << " massRatio= " << massRatio << G4endl; 
-  // initialisation for sampling of the interaction length 
-  //if(previousStepSize <= 0.0) { theNumberOfInteractionLengthLeft = -1.0; }
-  //if(theNumberOfInteractionLengthLeft < 0.0) { mfpKinEnergy = DBL_MAX; }
 
   // forced biasing only for primary particles
   if(biasManager) {
@@ -1141,7 +1139,6 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
     if (theNumberOfInteractionLengthLeft < 0.0) {
 
       // beggining of tracking (or just after DoIt of this process)
-      // ResetNumberOfInteractionLengthLeft();
       theNumberOfInteractionLengthLeft =  -G4Log( G4UniformRand() );
       theInitialNumberOfInteractionLength = theNumberOfInteractionLengthLeft; 
 
@@ -1278,7 +1275,7 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 
   // SubCutOff 
   if(useSubCutoff) {
-    if(idxSCoffRegions[currentCoupleIndex]) {
+    if(idxSCoffRegions[currentCoupleIndex] && !subcutProducer) {
 
       G4bool yes = false;
       G4StepPoint* prePoint = step.GetPreStepPoint();
@@ -1398,6 +1395,9 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
 	     << G4endl; 
     } 
     */   
+  }
+  if(subcutProducer && idxSCoffRegions[currentCoupleIndex]) {
+    subcutProducer->SampleSecondaries(step, scTracks, eloss, cut);
   }
   if(scTracks.size() > 0) { FillSecondariesAlongStep(eloss, weight); }
 

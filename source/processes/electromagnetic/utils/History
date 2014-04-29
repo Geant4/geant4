@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 April 14: V.Ivant (emutils-V10-00-12)
+- G4VSubCutProducer, G4LossTableManager, G4VEnergyLossProcess - new
+    interface is added allowing production of delta-electrons below 
+    production threshold
+
 28 April 14: V.Ivant (emutils-V10-00-11)
 - G4EnergyLossMessenger and G4EmProcessOption - added extra flag and 
     UI command "/process/em/deexcitationIgnoreCut" allowing

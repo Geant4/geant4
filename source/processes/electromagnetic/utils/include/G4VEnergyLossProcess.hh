@@ -114,6 +114,7 @@ class G4DataVector;
 class G4Region;
 class G4SafetyHelper;
 class G4VAtomDeexcitation;
+class G4VSubCutProducer;
 class G4EmBiasingManager;
 class G4LossTableManager;
 
@@ -479,13 +480,12 @@ private:
   const G4ParticleDefinition* theGamma;
   const G4ParticleDefinition* theGenericIon;
 
-  //  G4PhysicsVector*            vstrag;
-
   // ======== Parameters of the class fixed at initialisation =======
 
   std::vector<G4VEmModel*>              emModels;
   G4VEmFluctuationModel*                fluctModel;
   G4VAtomDeexcitation*                  atomDeexcitation;
+  G4VSubCutProducer*                    subcutProducer;
   std::vector<const G4Region*>          scoffRegions;
   G4int                                 nSCoffRegions;
   G4bool*                               idxSCoffRegions;

@@ -101,22 +101,15 @@
 #include "G4EmTableType.hh"
 #include "G4LossTableBuilder.hh"
 #include "G4VAtomDeexcitation.hh"
+#include "G4VSubCutProducer.hh"
 #include "G4Region.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4Threading.hh"
-
-//G4ThreadLocal G4LossTableManager* G4LossTableManager::theInstance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4LossTableManager* G4LossTableManager::Instance()
 {
-  /*
-  if(!theInstance) {
-    theInstance = new G4LossTableManager;
-  }
-  return theInstance;
-  */
   static G4ThreadLocalSingleton<G4LossTableManager> instance;
   return instance.Instance();
 }
@@ -162,6 +155,7 @@ G4LossTableManager::~G4LossTableManager()
   delete emConfigurator;
   delete emElectronIonPair;
   delete atomDeexcitation;
+  delete subcutProducer;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -209,6 +203,7 @@ G4LossTableManager::G4LossTableManager()
   emElectronIonPair = new G4ElectronIonPair();
   tableBuilder->SetSplineFlag(splineFlag);
   atomDeexcitation = 0;
+  subcutProducer = 0;
   if(G4Threading::IsWorkerThread()) { 
     verbose = 0;
     isMaster = false;
@@ -830,9 +825,14 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
            << " and the sum of " << n_dedx << " processes"
            << " iem= " << iem << " em= " << em->GetProcessName()
            << " buildCSDARange= " << buildCSDARange
-	   << " nSubRegions= " << nSubRegions
-	   << G4endl;
+	   << " nSubRegions= " << nSubRegions;
+    if(subcutProducer) { 
+      G4cout << " SubCutProducer " << subcutProducer->GetName(); 
+    }
+    G4cout << G4endl;
   }
+  // do not build tables if producer class is defined
+  if(subcutProducer) { nSubRegions = 0; }
 
   dedx = em->DEDXTable(); 
   em->SetIonisation(true);
@@ -1324,7 +1324,27 @@ G4LossTableBuilder* G4LossTableManager::GetTableBuilder()
  
 void G4LossTableManager::SetAtomDeexcitation(G4VAtomDeexcitation* p)
 {
-  atomDeexcitation = p;
+  if(atomDeexcitation != p) {
+    delete atomDeexcitation;
+    atomDeexcitation = p;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::SetSubCutProducer(G4VSubCutProducer* p) 
+{
+  if(subcutProducer != p) {
+    delete subcutProducer;
+    subcutProducer = p;
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+G4VSubCutProducer* G4LossTableManager::SubCutProducer()
+{ 
+  return subcutProducer;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

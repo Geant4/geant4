@@ -95,6 +95,7 @@ class G4EmConfigurator;
 class G4ElectronIonPair;
 class G4LossTableBuilder;
 class G4VAtomDeexcitation;
+class G4VSubCutProducer;
 class G4Region;
 
 class G4LossTableManager
@@ -226,8 +227,6 @@ public:
 
   void SetLambdaBinning(G4int val);
 
-  G4int GetNumberOfBinsPerDecade() const;
-
   void SetStepFunction(G4double v1, G4double v2);
 
   void SetBuildCSDARange(G4bool val);
@@ -243,6 +242,10 @@ public:
   void SetFactorForAngleLimit(G4double val);
 
   void SetVerbose(G4int val);
+
+  void SetAtomDeexcitation(G4VAtomDeexcitation*);
+
+  void SetSubCutProducer(G4VSubCutProducer*);
 
   //-------------------------------------------------
   // Access methods
@@ -266,6 +269,8 @@ public:
 
   G4double MaxKinEnergy() const;
 
+  G4int GetNumberOfBinsPerDecade() const;
+
   const std::vector<G4VEnergyLossProcess*>& GetEnergyLossProcessVector();
 
   const std::vector<G4VEmProcess*>& GetEmProcessVector();
@@ -284,9 +289,9 @@ public:
 
   G4VAtomDeexcitation* AtomDeexcitation();
 
-  G4LossTableBuilder* GetTableBuilder();
+  G4VSubCutProducer* SubCutProducer();
 
-  void SetAtomDeexcitation(G4VAtomDeexcitation*);
+  G4LossTableBuilder* GetTableBuilder();
 
 private:
 
@@ -310,8 +315,6 @@ private:
 
   G4LossTableManager(G4LossTableManager &);
   G4LossTableManager & operator=(const G4LossTableManager &right);
-
-  //static G4ThreadLocal G4LossTableManager* theInstance;
 
   typedef const G4ParticleDefinition* PD;
 
@@ -373,6 +376,7 @@ private:
   G4EmConfigurator*           emConfigurator;
   G4ElectronIonPair*          emElectronIonPair;
   G4VAtomDeexcitation*        atomDeexcitation;
+  G4VSubCutProducer*          subcutProducer;
 
   G4int nbinsLambda;
   G4int nbinsPerDecade;

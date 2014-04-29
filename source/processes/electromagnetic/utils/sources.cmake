@@ -74,6 +74,7 @@ GEANT4_DEFINE_MODULE(NAME G4emutils
         G4VEnergyLossProcess.hh
         G4VMscModel.hh
         G4VMultipleScattering.hh
+        G4VSubCutProducer.hh
         G4ionEffectiveCharge.hh
     SOURCES
         G4AngleDirect.cc
