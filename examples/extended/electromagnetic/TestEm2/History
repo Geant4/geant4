@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+
+28-04-14 V.Ivant (testem2-V10-00-01)
+- added "emlowenergy" option for EM physics 
+          
 27-12-13 mma (testem2-V10-00-00)
 - Run::EndOfRun()
 - minor cleanup
