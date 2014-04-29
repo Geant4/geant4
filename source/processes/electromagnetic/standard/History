@@ -18,6 +18,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+28 April 14: V.Ivanchenko (emstand-V10-00-25)
+- G4WentzelOKandVIxSection - fixed bug introduced in April tags
+
 04 April 14: V.Ivanchenko (emstand-V10-00-24)
 - G4WentzelVIModel - fixed minor bug introduced in the previous tag
 

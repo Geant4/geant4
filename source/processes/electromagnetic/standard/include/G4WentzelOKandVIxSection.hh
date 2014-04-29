@@ -87,9 +87,9 @@ public:
 
   G4double ComputeTransportCrossSectionPerAtom(G4double CosThetaMax);
  
-  G4ThreeVector SampleSingleScattering(G4double CosThetaMin,
-				       G4double CosThetaMax,
-				       G4double elecRatio = 0.0);
+  G4ThreeVector& SampleSingleScattering(G4double CosThetaMin,
+					G4double CosThetaMax,
+					G4double elecRatio = 0.0);
 
   G4double ComputeSecondTransportMoment(G4double CosThetaMax);
 
@@ -124,6 +124,8 @@ private:
 
   G4NistManager*  fNistManager;
   G4Pow*          fG4pow;
+
+  G4ThreeVector   temp;
 
   G4double numlimit;
 
@@ -185,7 +187,6 @@ G4WentzelOKandVIxSection::SetupKinematic(G4double ekin, const G4Material* mat)
     tkin  = ekin;
     mom2  = tkin*(tkin + 2.0*mass);
     invbeta2 = 1.0 +  mass*mass/mom2;
-    //if(mass > CLHEP::MeV) { factB = spin/invbeta2; }
     factB = spin/invbeta2; 
     cosTetMaxNuc = cosThetaMax;
     if(isCombined) {
