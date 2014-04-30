@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -94,7 +94,7 @@ compt:   for  gamma    SubType= 13
     LivermoreCompton :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
  LivermoreConversion :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -954,10 +954,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 10
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 26
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 10
 
@@ -981,10 +978,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 40
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 16
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 40
 
@@ -992,7 +986,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 50
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 29
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 50
 
@@ -1000,10 +997,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 60
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 23
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 60
 
@@ -1027,7 +1021,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 90
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 17
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 90
 
@@ -1052,7 +1049,7 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 19
+     Number of hits in LXe: 15
      Total energy in LXe: 60 keV
      Event summary in file gamma_1000.out
 
@@ -1070,10 +1067,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 140
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 21
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 140
 
@@ -1089,10 +1083,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 160
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 18
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 160
 
@@ -1116,7 +1107,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 190
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 19
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 190
 
@@ -1124,10 +1118,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 200
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 30
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 200
 
@@ -1152,7 +1143,7 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 20
+     Number of hits in LXe: 16
      Total energy in LXe: 60 keV
      Event summary in file gamma_1000.out
 
@@ -1170,7 +1161,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 250
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 24
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 250
 
@@ -1178,10 +1172,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 260
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 21
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 260
 
@@ -1197,7 +1188,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 280
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 24
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 280
 
@@ -1229,10 +1223,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 320
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 46
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 320
 
@@ -1248,7 +1239,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 340
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 22
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 340
 
@@ -1257,7 +1251,7 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 33
+     Number of hits in LXe: 53
      Total energy in LXe: 60 keV
      Event summary in file gamma_1000.out
 
@@ -1275,10 +1269,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 370
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 36
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 370
 
@@ -1310,7 +1301,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 410
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 14
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 410
 
@@ -1351,7 +1345,7 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 20
+     Number of hits in LXe: 22
      Total energy in LXe: 60 keV
      Event summary in file gamma_1000.out
 
@@ -1370,7 +1364,7 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 27
+     Number of hits in LXe: 18
      Total energy in LXe: 60 keV
      Event summary in file gamma_1000.out
 
@@ -1380,10 +1374,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 490
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 24
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 490
 
@@ -1391,10 +1382,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 500
 
      Primary Energy: 60 keV
-     First hit in LXe: e-
-     Number of hits in LXe: 38
-     Total energy in LXe: 35.5834 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 500
 
@@ -1419,7 +1407,7 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 20
+     Number of hits in LXe: 45
      Total energy in LXe: 60 keV
      Event summary in file gamma_1000.out
 
@@ -1429,7 +1417,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 540
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 28
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 540
 
@@ -1437,7 +1428,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 550
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 26
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 550
 
@@ -1445,7 +1439,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 560
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 26
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 560
 
@@ -1470,7 +1467,7 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 26
+     Number of hits in LXe: 27
      Total energy in LXe: 60 keV
      Event summary in file gamma_1000.out
 
@@ -1480,10 +1477,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 600
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 24
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 600
 
@@ -1491,10 +1485,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 610
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 24
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 610
 
@@ -1502,7 +1493,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 620
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: e-
+     Number of hits in LXe: 20
+     Total energy in LXe: 32.8408 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 620
 
@@ -1510,7 +1504,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 630
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 58
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 630
 
@@ -1518,7 +1515,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 640
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 25
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 640
 
@@ -1526,10 +1526,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 650
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 27
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 650
 
@@ -1537,10 +1534,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 660
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 25
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 660
 
@@ -1548,7 +1542,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 670
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 13
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 670
 
@@ -1556,9 +1553,9 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 680
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 18
-     Total energy in LXe: 60 keV
+     First hit in LXe: e-
+     Number of hits in LXe: 39
+     Total energy in LXe: 37.3682 keV
      Event summary in file gamma_1000.out
 
 ---> End of event: 680
@@ -1583,10 +1580,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 710
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 22
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 710
 
@@ -1594,7 +1588,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 720
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 23
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 720
 
@@ -1626,10 +1623,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 760
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 10
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 760
 
@@ -1637,10 +1631,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 770
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 27
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 770
 
@@ -1649,7 +1640,7 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 16
+     Number of hits in LXe: 13
      Total energy in LXe: 60 keV
      Event summary in file gamma_1000.out
 
@@ -1659,10 +1650,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 790
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 20
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 790
 
@@ -1670,10 +1658,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 800
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 22
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 800
 
@@ -1681,7 +1666,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 810
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 24
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 810
 
@@ -1689,7 +1677,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 820
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 22
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 820
 
@@ -1705,10 +1696,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 840
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 22
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 840
 
@@ -1716,10 +1704,7 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 850
 
      Primary Energy: 60 keV
-     First hit in LXe: gamma
-     Number of hits in LXe: 17
-     Total energy in LXe: 60 keV
-     Event summary in file gamma_1000.out
+     Total energy in LXe: 0 eV 
 
 ---> End of event: 850
 
@@ -1727,7 +1712,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 860
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 18
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 860
 
@@ -1752,7 +1740,7 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 22
+     Number of hits in LXe: 23
      Total energy in LXe: 60 keV
      Event summary in file gamma_1000.out
 
@@ -1762,7 +1750,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 900
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 45
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 900
 
@@ -1778,7 +1769,10 @@ Index : 12     used in the geometry : Yes
 ---> Begin of event: 920
 
      Primary Energy: 60 keV
-     Total energy in LXe: 0 eV 
+     First hit in LXe: gamma
+     Number of hits in LXe: 17
+     Total energy in LXe: 60 keV
+     Event summary in file gamma_1000.out
 
 ---> End of event: 920
 
@@ -1803,7 +1797,7 @@ Index : 12     used in the geometry : Yes
 
      Primary Energy: 60 keV
      First hit in LXe: gamma
-     Number of hits in LXe: 13
+     Number of hits in LXe: 20
      Total energy in LXe: 60 keV
      Event summary in file gamma_1000.out
 

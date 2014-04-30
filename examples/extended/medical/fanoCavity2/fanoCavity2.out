@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,7 +13,7 @@
 
 ***** Table : Nb of materials = 6 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.416 cm 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.092 cm   Nucl.Int.Length:  75.356 cm 
                        Imean:  78.000 eV 
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -28,7 +28,7 @@
           ElmMassFraction:  88.79 %  ElmAbundance  33.33 % 
 
 
- Material: Water_gas    density:  1.000 mg/cm3  RadL: 360.924 m    Nucl.Int.Length: 754.163 m  
+ Material: Water_gas    density:  1.000 mg/cm3  RadL: 360.924 m    Nucl.Int.Length: 753.560 m  
                        Imean:  78.000 eV   temperature: 273.15 K  pressure:   1.00 atm
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -46,34 +46,34 @@
  Material: Graphite    density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.387 cm 
                        Imean:  81.000 eV 
 
-   --->  Element: Graphite ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:    12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:    13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material: Graphite_gas    density:  2.265 mg/cm3  RadL: 188.496 m    Nucl.Int.Length: 353.873 m  
                        Imean:  81.000 eV   temperature: 273.15 K  pressure:   1.00 atm
 
-   --->  Element: Graphite_gas ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:    12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:    13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm 
                        Imean: 166.000 eV 
 
-   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole
-         --->  Isotope:    27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material: Aluminium_gas    density:  2.700 mg/cm3  RadL:  88.925 m    Nucl.Int.Length: 388.793 m  
                        Imean: 166.000 eV   temperature: 273.15 K  pressure:   1.00 atm
 
-   --->  Element: Aluminium_gas ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole
-         --->  Isotope:    27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -265,37 +265,37 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
  StoppingPower in wall   = 1.8644 MeV*cm2/g
                in cavity = 1.8644 MeV*cm2/g
 
---->evntNb= 10000 Nwall= 10000 Ncav= 1 Ic/Iw= 0.52690 Ne-_cav= 2817 doseCavity/Ebeam= 1.02748  (100*(ratio-1) = 2.74845 %)
+--->evntNb= 10000 Nwall= 9998 Ncav= 3 Ic/Iw= 1.58102 Ne-_cav= 2814 doseCavity/Ebeam= 1.18238  (100*(ratio-1) = 18.23756 %)
 
---->evntNb= 20000 Nwall= 19998 Ncav= 3 Ic/Iw= 0.79043 Ne-_cav= 5584 doseCavity/Ebeam= 1.05359  (100*(ratio-1) = 5.35900 %)
+--->evntNb= 20000 Nwall= 19993 Ncav= 8 Ic/Iw= 2.10834 Ne-_cav= 5606 doseCavity/Ebeam= 1.07778  (100*(ratio-1) = 7.77784 %)
 
---->evntNb= 30000 Nwall= 29998 Ncav= 3 Ic/Iw= 0.52694 Ne-_cav= 8432 doseCavity/Ebeam= 1.16277  (100*(ratio-1) = 16.27715 %)
+--->evntNb= 30000 Nwall= 29991 Ncav= 10 Ic/Iw= 1.75686 Ne-_cav= 8441 doseCavity/Ebeam= 1.04366  (100*(ratio-1) = 4.36649 %)
 Run terminated.
 Run Summary
   Number of events processed : 40000
-  User=10.1s Real=10.12s Sys=0s
+  User=11.61s Real=11.65s Sys=0s
 
- Process calls frequency --->  msc= 568236  eIoni= 609015  Transportation= 22483
+ Process calls frequency --->  msc= 567746  eIoni= 608490  Transportation= 22501
 
  Charged particle flow in cavity :
-      Enter --> nbParticles = 11243	 Energy = 7.090 GeV
-      Exit  --> nbParticles = 11240	 Energy = 7.085 GeV
+      Enter --> nbParticles = 11249	 Energy = 7.161 GeV
+      Exit  --> nbParticles = 11252	 Energy = 7.164 GeV
 
- beamFluence in wall = 39996	 in cavity = 4	 Icav/Iwall = 0.52695	 energyFluence = 37.95067 MeV*cm2/mg
+ beamFluence in wall = 39988	 in cavity = 12	 Icav/Iwall = 1.58117	 energyFluence = 37.95067 MeV*cm2/mg
 
- Total edep in cavity = 8.81516 MeV +- 5.07759 %
- Total dose in cavity = 44.07579 MeV*cm2/mg +- 5.07759 %
+ Total edep in cavity = 8.24759 MeV +- 4.55865 %
+ Total dose in cavity = 41.23797 MeV*cm2/mg +- 4.55865 %
 
- DoseCavity/EnergyFluence = 1.16140 +- 0.05897
+ DoseCavity/EnergyFluence = 1.08662 +- 0.04954
 
- Total charged trackLength in cavity = 38.7426 m     (mean value = 3.4459 mm )
+ Total charged trackLength in cavity = 36.1855 m     (mean value = 3.2168 mm )
 
- StepSize of ch. tracks in wall   = 150.4638 um  +- 137.5352 um 	 (nbSteps/track = 29.3128)
- StepSize of ch. tracks in cavity = 1.4171 mm  +- 2.5287 mm 	 (nbSteps/track = 2.4317)
+ StepSize of ch. tracks in wall   = 150.4348 um  +- 137.3339 um 	 (nbSteps/track = 29.3084)
+ StepSize of ch. tracks in cavity = 1.3526 mm  +- 2.1282 mm 	 (nbSteps/track = 2.3782)
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 640116911, 1873394817
+ Current couple of seeds = 1697709219, 1775302776
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

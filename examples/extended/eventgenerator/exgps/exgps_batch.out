@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -82,6 +82,7 @@ Verbosity Set to: 0
 
 ---> Begin of event: 1000
 ... write Root file : expGPS.root - done
+... close Root file : expGPS.root - done
 
 ----> Histogram Tree is saved in expGPS.root
 Graphics systems deleted.

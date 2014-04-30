@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -352,14 +352,15 @@ nb event 265000
 nb event 270000
 nb event 275000
 nb event 280000
+nb event 285000
 1%  Precision reached!
 Run terminated.
 Run Summary
-  Run Aborted after 282864 events processed.
-  User=457.9s Real=459.87s Sys=0.06s
+  Run Aborted after 287244 events processed.
+  User=469.97s Real=473.17s Sys=0s
 Results of reverse/adjoint simulation!
-normalised edep [MeV] = 0.00157203
-error[MeV] = 1.572e-05
+normalised edep [MeV] = 0.00153068
+error[MeV] = 1.53065e-05
 
 ----> Histogram Tree is saved in adjoint_sim.root
 Graphics systems deleted.
@@ -367,6 +368,6 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 1
-Dynamic pools deleted: 12 / Total memory freed: 0.079 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.076 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

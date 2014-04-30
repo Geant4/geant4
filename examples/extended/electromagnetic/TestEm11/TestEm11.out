@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -276,7 +276,7 @@ hPairProd:   for  kaon-    SubType= 4
 msc:   for mu+    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu+    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -301,16 +301,10 @@ muPairProd:   for  mu+    SubType= 4
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
-CoulombScat:   for  mu+    SubType= 1
-      Lambda table from 10 eV  to 10 TeV in 108 bins, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
-
 msc:   for mu-    SubType= 10
       RangeFactor= 0.2, step limit type: 0, lateralDisplacement: 1, polarAngleLimit(deg)= 180
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-        WentzelVIUni :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 220 bins Emin=    100 eV    Emax=     10 TeV
 
 muIoni:   for  mu-    SubType= 2
       dE/dx and range tables from 10 eV  to 10 TeV in 240 bins
@@ -334,12 +328,6 @@ muPairProd:   for  mu-    SubType= 4
       Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
-
-CoulombScat:   for  mu-    SubType= 1
-      Lambda table from 10 eV  to 10 TeV in 108 bins, spline: 1
-      180 < Theta(degree) < 180 pLimit(GeV^1)= 0.139531
-      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-  eCoulombScattering :  Emin=        0 eV    Emax=       10 TeV
 
 msc:   for pi+    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -452,27 +440,27 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20000
-  User=5.12s Real=5.13s Sys=0s
+  User=5.3s Real=5.57s Sys=0s
 
  ======================== run summary =====================
 
  The run is 20000 e- of 500.00 keV through 1 absorbers: 
                 1.00 mm  of G4_Si (density: 2.33 g/cm3 )
 
- Total Energy deposited        = 452.824 keV +- 101.499 keV
+ Total Energy deposited        = 452.772 keV +- 101.362 keV
 
- Track length of primary track = 886.806 um  +- 189.590 um 
+ Track length of primary track = 887.278 um  +- 189.099 um 
  Range from EmCalculator = 942.765 um  (from full dE/dx)
 
- Projected range               = 317.180 um  +- 195.589 um 
+ Projected range               = 315.939 um  +- 194.370 um 
 
- Nb of steps of primary track  = 21.33 +- 4.76	 Step size= 42.071 um  +- 7.269 um 
+ Nb of steps of primary track  = 21.36 +- 4.80	 Step size= 42.048 um  +- 7.264 um 
 
- absorbed = 80.22 %   transmit = 4.07 %   reflected = 15.72 %
+ absorbed = 80.06 %   transmit = 4.30 %   reflected = 15.63 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1930150770, 215273489
+ Current couple of seeds = 264111843, 669102357
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.

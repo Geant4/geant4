@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -30,19 +30,19 @@ Using Root
  Material: liquidArgon    density:  1.390 g/cm3   RadL:  14.065 cm   Nucl.Int.Length:  86.078 cm 
                        Imean: 188.000 eV 
 
-   --->  Element: liquidArgon ( )   Z = 18.0   N =  40.0   A =  39.95 g/mole
-         --->  Isotope:    36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
-         --->  Isotope:    38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
-         --->  Isotope:    40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.837 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -113,7 +113,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -550,7 +550,18 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
                            Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
 
   Process: muMinusCaptureAtRest
 
@@ -629,31 +640,32 @@ hPairProd:   for  pi-    SubType= 4
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy:  277.55 MeV       total track length: 19.5641 cm 
-        Gap: total energy: 17.8961 MeV       total track length: 8.58063 cm 
+   Absorber: total energy: 287.276 MeV       total track length: 20.6031 cm 
+        Gap: total energy: 9.04061 MeV       total track length:  4.1042 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 277.55 MeV rms = 0 eV 
- EGap : mean = 17.8961 MeV rms = 0 eV 
- LAbs : mean = 19.5641 cm  rms = 0 fm 
- LGap : mean = 8.58063 cm  rms = 0 fm 
+ EAbs : mean = 287.276 MeV rms = 0 eV 
+ EGap : mean = 9.04061 MeV rms = 0 eV 
+ LAbs : mean = 20.6031 cm  rms = 0 fm 
+ LGap : mean = 4.1042 cm  rms = 0 fm 
 ... write Root file : B4.root - done
+... close Root file : B4.root - done
      Transportation,                msc,              hIoni,            ionIoni
              hBrems,          hPairProd,        CoulombScat,              eIoni
               eBrem,            annihil,               phot,              compt
                conv,             muIoni,            muBrems,         muPairProd
-      photonNuclear,    electronNuclear,    positronNuclear,              Decay
-         hadElastic,   neutronInelastic,           nCapture,    protonInelastic
-       pi+Inelastic,       pi-Inelastic,     kaon+Inelastic,     kaon-Inelastic
-    kaon0LInelastic,    kaon0SInelastic,    lambdaInelastic,anti-lambdaInelastic
-    sigma-Inelastic,anti_sigma-Inelastic,    sigma+Inelastic,anti_sigma+Inelastic
-       xi-Inelastic,  anti_xi-Inelastic,       xi0Inelastic,  anti_xi0Inelastic
-    omega-Inelastic,anti_omega-Inelastic,anti_protonInelastic,anti_neutronInelastic
-anti_deuteronInelastic,anti_tritonInelastic,  anti_He3Inelastic,anti_alphaInelastic
-hFritiofCaptureAtRest,hBertiniCaptureAtRest,muMinusCaptureAtRest,         dInelastic
-         tInelastic,       He3Inelastic,     alphaInelastic,       ionInelastic
-            nKiller
+      photonNuclear,    electronNuclear,    positronNuclear,        muonNuclear
+              Decay,         hadElastic,   neutronInelastic,           nCapture
+    protonInelastic,       pi+Inelastic,       pi-Inelastic,     kaon+Inelastic
+     kaon-Inelastic,    kaon0LInelastic,    kaon0SInelastic,    lambdaInelastic
+anti-lambdaInelastic,    sigma-Inelastic,anti_sigma-Inelastic,    sigma+Inelastic
+anti_sigma+Inelastic,       xi-Inelastic,  anti_xi-Inelastic,       xi0Inelastic
+  anti_xi0Inelastic,    omega-Inelastic,anti_omega-Inelastic,anti_protonInelastic
+anti_neutronInelastic,anti_deuteronInelastic,anti_tritonInelastic,  anti_He3Inelastic
+anti_alphaInelastic,hFritiofCaptureAtRest,hBertiniCaptureAtRest,muMinusCaptureAtRest
+         dInelastic,         tInelastic,       He3Inelastic,     alphaInelastic
+       ionInelastic,            nKiller
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -667,7 +679,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1000,16 +1012,17 @@ hPairProd:   for  pi-    SubType= 4
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 283.113 MeV       total track length: 20.5536 cm 
-        Gap: total energy: 13.7521 MeV       total track length: 7.16788 cm 
+   Absorber: total energy: 277.166 MeV       total track length:  19.304 cm 
+        Gap: total energy: 15.9638 MeV       total track length: 7.95538 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 283.113 MeV rms = 0 eV 
- EGap : mean = 13.7521 MeV rms = 0 eV 
- LAbs : mean = 20.5536 cm  rms = 0 fm 
- LGap : mean = 7.16788 cm  rms = 0 fm 
+ EAbs : mean = 277.166 MeV rms = 0 eV 
+ EGap : mean = 15.9638 MeV rms = 0 eV 
+ LAbs : mean = 19.304 cm  rms = 0 fm 
+ LGap : mean = 7.95538 cm  rms = 0 fm 
 ... write Root file : B4.root - done
+... close Root file : B4.root - done
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -1023,7 +1036,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1356,15 +1369,16 @@ hPairProd:   for  pi-    SubType= 4
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 472.466 MeV       total track length: 34.0996 cm 
-        Gap: total energy: 16.5609 MeV       total track length: 7.60808 cm 
+   Absorber: total energy: 445.326 MeV       total track length: 31.9066 cm 
+        Gap: total energy: 32.6758 MeV       total track length: 16.2435 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 472.466 MeV rms = 0 eV 
- EGap : mean = 16.5609 MeV rms = 0 eV 
- LAbs : mean = 34.0996 cm  rms = 0 fm 
- LGap : mean = 7.60808 cm  rms = 0 fm 
+ EAbs : mean = 445.326 MeV rms = 0 eV 
+ EGap : mean = 32.6758 MeV rms = 0 eV 
+ LAbs : mean = 31.9066 cm  rms = 0 fm 
+ LGap : mean = 16.2435 cm  rms = 0 fm 
 ... write Root file : B4.root - done
+... close Root file : B4.root - done
 Graphics systems deleted.
 Visualization Manager deleting...

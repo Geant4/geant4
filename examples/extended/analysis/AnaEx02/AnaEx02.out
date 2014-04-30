@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,7 +13,7 @@
 
 ***** Table : Nb of materials = 3 *****
 
- Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114319208.901 pc 
+ Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114314827.001 pc 
                        Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -62,7 +62,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -360,20 +360,20 @@ Index : 2     used in the geometry : Yes
 
 --------------------End of Run------------------------------
 
- mean Energy in Absorber : 454.926 MeV +- 12.9818 MeV
- mean Energy in Gap      : 23.6746 MeV +- 7.30075 MeV
+ mean Energy in Absorber : 454.565 MeV +- 12.7258 MeV
+ mean Energy in Gap      : 23.8219 MeV +- 7.18588 MeV
 
- mean trackLength in Absorber : 32.294 cm  +- 1.00747 cm 
- mean trackLength in Gap      : 11.6652 cm  +- 3.72998 cm 
+ mean trackLength in Absorber : 32.2619 cm  +- 1.00239 cm 
+ mean trackLength in Gap      : 11.746 cm  +- 3.67885 cm 
 ------------------------------------------------------------
 
 
  ----> print histograms statistic 
 
- EAbs : mean = 454.926 MeV rms = 12.9818 MeV
- EGap : mean = 23.6746 MeV rms = 7.30075 MeV
- LAbs : mean = 32.294 cm  rms = 1.00747 cm 
- LGap : mean = 11.6652 cm  rms = 3.72998 cm 
+ EAbs : mean = 454.565 MeV rms = 12.7258 MeV
+ EGap : mean = 23.8219 MeV rms = 7.18588 MeV
+ LAbs : mean = 32.2619 cm  rms = 1.00239 cm 
+ LGap : mean = 11.746 cm  rms = 3.67885 cm 
 
 ----> Histogram Tree is saved 
 

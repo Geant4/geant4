@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -37,7 +37,7 @@ G4VModularPhysicsList::ReplacePhysics: ionInelasticFTFP_BICwith type : 8  is rep
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114319208.901 pc 
+ Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114314827.001 pc 
                        Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -66,7 +66,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -503,7 +503,18 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
                            Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
 
   Process: muMinusCaptureAtRest
 
@@ -615,28 +626,28 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.32s Real=0.33s Sys=0.01s
+  User=0.38s Real=0.39s Sys=0.01s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        S32
 Beam Energy(GeV)                     200
 Number of events                     100
-Average energy deposit (GeV)         7.065   RMS(GeV) 4.273
-Average number of steps              60.15
-Average number of gamma              2.36
+Average energy deposit (GeV)         6.299   RMS(GeV) 4.371
+Average number of steps              53.62
+Average number of gamma              1.8
 Average number of e-                 0
 Average number of e+                 0
-Average number of neutrons           11.04
-Average number of protons            11.75
-Average number of antiprotons        0
-Average number of pi+ & pi-          6.09
-Average number of pi0                3.43
-Average number of kaons              0.11
+Average number of neutrons           12.91
+Average number of protons            14.2
+Average number of antiprotons        0.01
+Average number of pi+ & pi-          8.36
+Average number of pi0                4.36
+Average number of kaons              0.23
 Average number of muons              0
-Average number of deuterons+tritons  1.36
-Average number of He3+alpha          1.14
-Average number of ions               0.76
+Average number of deuterons+tritons  1.45
+Average number of He3+alpha          1.22
+Average number of ions               0.71
 ========================================================
 
 G4 kernel has come to Quit state.

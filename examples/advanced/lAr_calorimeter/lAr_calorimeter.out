@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -62,91 +62,91 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
-G4Material WARNING: doublicate name of the new material Aluminium
-G4Material WARNING: doublicate name of the new material Iron
-G4Material WARNING: doublicate name of the new material Copper
-G4Material WARNING: doublicate name of the new material Tungsten
-G4Material WARNING: doublicate name of the new material Lead
-G4Material WARNING: doublicate name of the new material LiquidArgon
-G4Material WARNING: doublicate name of the new material ArgonGas
-G4Material WARNING: doublicate name of the new material Nickel
-G4Material WARNING: doublicate name of the new material Air
-G4Material WARNING: doublicate name of the new material Vacuum
-G4Material WARNING: doublicate name of the new material CO2
-G4Material WARNING: doublicate name of the new material Kapton
-G4Material WARNING: doublicate name of the new material Polystyrene
-G4Material WARNING: doublicate name of the new material FCAL1CuArKap
-G4Material WARNING: doublicate name of the new material FCAL1CuAr
-G4Material WARNING: doublicate name of the new material FCAL2CuArKap
-G4Material WARNING: doublicate name of the new material FCAL2WFeNi
-G4Material WARNING: doublicate name of the new material FCAL2WFeNiCuAr
-G4Material WARNING: doublicate name of the new material MWPCArCO2
-G4Material WARNING: doublicate name of the new material ShieldingConcrete
-G4Material WARNING: doublicate name of the new material StainlessSteel
-G4Material WARNING: doublicate name of the new material Aluminium
-G4Material WARNING: doublicate name of the new material Iron
-G4Material WARNING: doublicate name of the new material Copper
-G4Material WARNING: doublicate name of the new material Tungsten
-G4Material WARNING: doublicate name of the new material Lead
-G4Material WARNING: doublicate name of the new material LiquidArgon
-G4Material WARNING: doublicate name of the new material ArgonGas
-G4Material WARNING: doublicate name of the new material Nickel
-G4Material WARNING: doublicate name of the new material Air
-G4Material WARNING: doublicate name of the new material Vacuum
-G4Material WARNING: doublicate name of the new material CO2
-G4Material WARNING: doublicate name of the new material Kapton
-G4Material WARNING: doublicate name of the new material Polystyrene
-G4Material WARNING: doublicate name of the new material FCAL1CuArKap
-G4Material WARNING: doublicate name of the new material FCAL1CuAr
-G4Material WARNING: doublicate name of the new material FCAL2CuArKap
-G4Material WARNING: doublicate name of the new material FCAL2WFeNi
-G4Material WARNING: doublicate name of the new material FCAL2WFeNiCuAr
-G4Material WARNING: doublicate name of the new material MWPCArCO2
-G4Material WARNING: doublicate name of the new material ShieldingConcrete
-G4Material WARNING: doublicate name of the new material StainlessSteel
-G4Material WARNING: doublicate name of the new material Aluminium
-G4Material WARNING: doublicate name of the new material Iron
-G4Material WARNING: doublicate name of the new material Copper
-G4Material WARNING: doublicate name of the new material Tungsten
-G4Material WARNING: doublicate name of the new material Lead
-G4Material WARNING: doublicate name of the new material LiquidArgon
-G4Material WARNING: doublicate name of the new material ArgonGas
-G4Material WARNING: doublicate name of the new material Nickel
-G4Material WARNING: doublicate name of the new material Air
-G4Material WARNING: doublicate name of the new material Vacuum
-G4Material WARNING: doublicate name of the new material CO2
-G4Material WARNING: doublicate name of the new material Kapton
-G4Material WARNING: doublicate name of the new material Polystyrene
-G4Material WARNING: doublicate name of the new material FCAL1CuArKap
-G4Material WARNING: doublicate name of the new material FCAL1CuAr
-G4Material WARNING: doublicate name of the new material FCAL2CuArKap
-G4Material WARNING: doublicate name of the new material FCAL2WFeNi
-G4Material WARNING: doublicate name of the new material FCAL2WFeNiCuAr
-G4Material WARNING: doublicate name of the new material MWPCArCO2
-G4Material WARNING: doublicate name of the new material ShieldingConcrete
-G4Material WARNING: doublicate name of the new material StainlessSteel
+G4Material WARNING: duplicate name of material Aluminium
+G4Material WARNING: duplicate name of material Iron
+G4Material WARNING: duplicate name of material Copper
+G4Material WARNING: duplicate name of material Tungsten
+G4Material WARNING: duplicate name of material Lead
+G4Material WARNING: duplicate name of material LiquidArgon
+G4Material WARNING: duplicate name of material ArgonGas
+G4Material WARNING: duplicate name of material Nickel
+G4Material WARNING: duplicate name of material Air
+G4Material WARNING: duplicate name of material Vacuum
+G4Material WARNING: duplicate name of material CO2
+G4Material WARNING: duplicate name of material Kapton
+G4Material WARNING: duplicate name of material Polystyrene
+G4Material WARNING: duplicate name of material FCAL1CuArKap
+G4Material WARNING: duplicate name of material FCAL1CuAr
+G4Material WARNING: duplicate name of material FCAL2CuArKap
+G4Material WARNING: duplicate name of material FCAL2WFeNi
+G4Material WARNING: duplicate name of material FCAL2WFeNiCuAr
+G4Material WARNING: duplicate name of material MWPCArCO2
+G4Material WARNING: duplicate name of material ShieldingConcrete
+G4Material WARNING: duplicate name of material StainlessSteel
+G4Material WARNING: duplicate name of material Aluminium
+G4Material WARNING: duplicate name of material Iron
+G4Material WARNING: duplicate name of material Copper
+G4Material WARNING: duplicate name of material Tungsten
+G4Material WARNING: duplicate name of material Lead
+G4Material WARNING: duplicate name of material LiquidArgon
+G4Material WARNING: duplicate name of material ArgonGas
+G4Material WARNING: duplicate name of material Nickel
+G4Material WARNING: duplicate name of material Air
+G4Material WARNING: duplicate name of material Vacuum
+G4Material WARNING: duplicate name of material CO2
+G4Material WARNING: duplicate name of material Kapton
+G4Material WARNING: duplicate name of material Polystyrene
+G4Material WARNING: duplicate name of material FCAL1CuArKap
+G4Material WARNING: duplicate name of material FCAL1CuAr
+G4Material WARNING: duplicate name of material FCAL2CuArKap
+G4Material WARNING: duplicate name of material FCAL2WFeNi
+G4Material WARNING: duplicate name of material FCAL2WFeNiCuAr
+G4Material WARNING: duplicate name of material MWPCArCO2
+G4Material WARNING: duplicate name of material ShieldingConcrete
+G4Material WARNING: duplicate name of material StainlessSteel
+G4Material WARNING: duplicate name of material Aluminium
+G4Material WARNING: duplicate name of material Iron
+G4Material WARNING: duplicate name of material Copper
+G4Material WARNING: duplicate name of material Tungsten
+G4Material WARNING: duplicate name of material Lead
+G4Material WARNING: duplicate name of material LiquidArgon
+G4Material WARNING: duplicate name of material ArgonGas
+G4Material WARNING: duplicate name of material Nickel
+G4Material WARNING: duplicate name of material Air
+G4Material WARNING: duplicate name of material Vacuum
+G4Material WARNING: duplicate name of material CO2
+G4Material WARNING: duplicate name of material Kapton
+G4Material WARNING: duplicate name of material Polystyrene
+G4Material WARNING: duplicate name of material FCAL1CuArKap
+G4Material WARNING: duplicate name of material FCAL1CuAr
+G4Material WARNING: duplicate name of material FCAL2CuArKap
+G4Material WARNING: duplicate name of material FCAL2WFeNi
+G4Material WARNING: duplicate name of material FCAL2WFeNiCuAr
+G4Material WARNING: duplicate name of material MWPCArCO2
+G4Material WARNING: duplicate name of material ShieldingConcrete
+G4Material WARNING: duplicate name of material StainlessSteel
 ******** Number of Rods in FCAL1 : 2351
-G4Material WARNING: doublicate name of the new material Aluminium
-G4Material WARNING: doublicate name of the new material Iron
-G4Material WARNING: doublicate name of the new material Copper
-G4Material WARNING: doublicate name of the new material Tungsten
-G4Material WARNING: doublicate name of the new material Lead
-G4Material WARNING: doublicate name of the new material LiquidArgon
-G4Material WARNING: doublicate name of the new material ArgonGas
-G4Material WARNING: doublicate name of the new material Nickel
-G4Material WARNING: doublicate name of the new material Air
-G4Material WARNING: doublicate name of the new material Vacuum
-G4Material WARNING: doublicate name of the new material CO2
-G4Material WARNING: doublicate name of the new material Kapton
-G4Material WARNING: doublicate name of the new material Polystyrene
-G4Material WARNING: doublicate name of the new material FCAL1CuArKap
-G4Material WARNING: doublicate name of the new material FCAL1CuAr
-G4Material WARNING: doublicate name of the new material FCAL2CuArKap
-G4Material WARNING: doublicate name of the new material FCAL2WFeNi
-G4Material WARNING: doublicate name of the new material FCAL2WFeNiCuAr
-G4Material WARNING: doublicate name of the new material MWPCArCO2
-G4Material WARNING: doublicate name of the new material ShieldingConcrete
-G4Material WARNING: doublicate name of the new material StainlessSteel
+G4Material WARNING: duplicate name of material Aluminium
+G4Material WARNING: duplicate name of material Iron
+G4Material WARNING: duplicate name of material Copper
+G4Material WARNING: duplicate name of material Tungsten
+G4Material WARNING: duplicate name of material Lead
+G4Material WARNING: duplicate name of material LiquidArgon
+G4Material WARNING: duplicate name of material ArgonGas
+G4Material WARNING: duplicate name of material Nickel
+G4Material WARNING: duplicate name of material Air
+G4Material WARNING: duplicate name of material Vacuum
+G4Material WARNING: duplicate name of material CO2
+G4Material WARNING: duplicate name of material Kapton
+G4Material WARNING: duplicate name of material Polystyrene
+G4Material WARNING: duplicate name of material FCAL1CuArKap
+G4Material WARNING: duplicate name of material FCAL1CuAr
+G4Material WARNING: duplicate name of material FCAL2CuArKap
+G4Material WARNING: duplicate name of material FCAL2WFeNi
+G4Material WARNING: duplicate name of material FCAL2WFeNiCuAr
+G4Material WARNING: duplicate name of material MWPCArCO2
+G4Material WARNING: duplicate name of material ShieldingConcrete
+G4Material WARNING: duplicate name of material StainlessSteel
 ********* Number of Rods in FCAL2 : 2546
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 
@@ -162,7 +162,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -599,7 +599,18 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
                            Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
 
   Process: muMinusCaptureAtRest
 
@@ -822,13 +833,13 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   389 kByte
-    Total CPU time elapsed for geometry optimisation: 0.64 seconds
+    Total CPU time elapsed for geometry optimisation: 0.65 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      85.94         0.55         0.00          148k EmModuleLogical
-      14.06         0.09         0.00          236k HadModuleLogical
+      84.62         0.55         0.00          148k EmModuleLogical
+      15.38         0.10         0.01          236k HadModuleLogical
        0.00         0.00         0.00            4k Mother
        0.00         0.00         0.00            0k CryostatLogical
        0.00         0.00         0.00            0k LArgLogical
@@ -839,7 +850,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      60.56        235k      1361     2360       3772         0.09    HadModuleLogical
+      60.56        235k      1361     2360       3772         0.10    HadModuleLogical
       38.11        148k      1077     1143       2440         0.55    EmModuleLogical
        0.94          3k         8       42        146         0.00    Mother
        0.11          0k         1        6          8         0.00    SolidWLogical
@@ -859,390 +870,390 @@ Read 2001 events from file data-tracks/tracks-20GeV.dat
 ---> Begin of event: 1
  ****  Primary : 1
  Vertex : (5.55552,7.16569,32740)
-Number of F1 Tiles with Positive energy : 49
+Number of F1 Tiles with Positive energy : 41
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-2.56709 2.8361 1.69726 
+3.7309 1.62166 1.62899 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-3.87248
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 2
-N Scondaries 167
-EmEdep is=19747.6 MeV 
-HadEdep is=11.816 MeV
-Edep in FCAL1 FCAl2 : 19747.6 11.816
- ****  Primary : 2
- Vertex : (-3.76032,10.9751,32740)
-Number of F1 Tiles with Positive energy : 59
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.68905 2.80814 1.60387 
- Visible Energy in Hole Counter  (MeV) 
-0 101.885
- Visible Energy in Upstream Dead Materials 
-969.486
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 63
-N Scondaries 189
-EmEdep is=17904.3 MeV 
-HadEdep is=10.1489 MeV
-Edep in FCAL1 FCAl2 : 17904.3 10.1489
- ****  Primary : 3
- Vertex : (13.1951,2.677,32740)
-Number of F1 Tiles with Positive energy : 48
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.85951 1.58335 1.58892 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-6.71693
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 4
-N Scondaries 154
-EmEdep is=19829.3 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 19829.3 0
- ****  Primary : 4
- Vertex : (-8.66148,-8.80731,32740)
-Number of F1 Tiles with Positive energy : 48
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.61909 1.53699 2.67037 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-10.7513
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 1
-N Scondaries 172
-EmEdep is=19669.9 MeV 
-HadEdep is=9.71344 MeV
-Edep in FCAL1 FCAl2 : 19669.9 9.71344
- ****  Primary : 5
- Vertex : (4.75859,7.01622,32740)
-Number of F1 Tiles with Positive energy : 39
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.63692 1.89911 1.73538 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-0.73555
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 1
-N Scondaries 129
-EmEdep is=19853.8 MeV 
-HadEdep is=26.972 MeV
-Edep in FCAL1 FCAl2 : 19853.8 26.972
- ****  Primary : 6
- Vertex : (1.94335,14.9228,32740)
-Number of F1 Tiles with Positive energy : 53
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.82918 1.85571 1.70865 
- Visible Energy in Hole Counter  (MeV) 
-0 73.4896
- Visible Energy in Upstream Dead Materials 
-572.08
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 24
-N Scondaries 172
-EmEdep is=18369.6 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 18369.6 0
- ****  Primary : 7
- Vertex : (-10.9878,-6.7949,32740)
-Number of F1 Tiles with Positive energy : 59
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.58101 1.6813 1.80861 
- Visible Energy in Hole Counter  (MeV) 
-0 44.5914
- Visible Energy in Upstream Dead Materials 
-909.884
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 40
-N Scondaries 237
-EmEdep is=17966.9 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 17966.9 0
- ****  Primary : 8
- Vertex : (10.9757,-1.49585,32740)
-Number of F1 Tiles with Positive energy : 43
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-2.0484 1.62097 1.64037 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-3.07902
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 2
-N Scondaries 202
-EmEdep is=19793.5 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 19793.5 0
- ****  Primary : 9
- Vertex : (-27.7734,3.36444,32740)
-Number of F1 Tiles with Positive energy : 72
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-2.01021 1.77452 1.41865 
- Visible Energy in Hole Counter  (MeV) 
-0 198.046
- Visible Energy in Upstream Dead Materials 
-8871.03
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 249
-N Scondaries 130
-EmEdep is=8060.15 MeV 
-HadEdep is=14.8322 MeV
-Edep in FCAL1 FCAl2 : 8060.15 14.8322
- ****  Primary : 10
- Vertex : (-22.5474,4.1006,32740)
-Number of F1 Tiles with Positive energy : 43
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.49319 1.80743 3.43602 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-3.20274
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 4
-N Scondaries 65
-EmEdep is=19552.3 MeV 
-HadEdep is=0 MeV
-Edep in FCAL1 FCAl2 : 19552.3 0
-
----> Begin of event: 11
- ****  Primary : 11
- Vertex : (-6.31939,21.5056,32740)
-Number of F1 Tiles with Positive energy : 72
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.70254 1.70242 1.6521 
- Visible Energy in Hole Counter  (MeV) 
-0 3.39106
- Visible Energy in Upstream Dead Materials 
-28.282
- Visible Energy in Tail Catcher Scintillator
-0 0 0.00819353 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 2.5598 0 0 0 0.0489151 
-N Tracks out of world 32
-N Scondaries 289
-EmEdep is=18175 MeV 
-HadEdep is=188.68 MeV
-Edep in FCAL1 FCAl2 : 18175 188.68
- ****  Primary : 12
- Vertex : (17.1015,6.30557,32740)
-Number of F1 Tiles with Positive energy : 43
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.93975 1.5173 2.14351 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-1.0003
+8.44501
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
 N Tracks out of world 0
-N Scondaries 143
-EmEdep is=19934.1 MeV 
-HadEdep is=8.65289 MeV
-Edep in FCAL1 FCAl2 : 19934.1 8.65289
- ****  Primary : 13
- Vertex : (-24.9484,11.8659,32740)
-Number of F1 Tiles with Positive energy : 46
+N Scondaries 175
+EmEdep is=19674.6 MeV 
+HadEdep is=0 MeV
+Edep in FCAL1 FCAl2 : 19674.6 0
+ ****  Primary : 2
+ Vertex : (-3.76032,10.9751,32740)
+Number of F1 Tiles with Positive energy : 49
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.54301 2.96902 1.75078 
+1.56688 1.51778 1.72274 
  Visible Energy in Hole Counter  (MeV) 
-0 196.696
+0 93.3965
  Visible Energy in Upstream Dead Materials 
-15970.5
+1141.5
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-N Tracks out of world 312
-N Scondaries 121
-EmEdep is=2269.31 MeV 
-HadEdep is=8.04093 MeV
-Edep in FCAL1 FCAl2 : 2269.31 8.04093
- ****  Primary : 14
- Vertex : (-0.133696,18.3151,32740)
-Number of F1 Tiles with Positive energy : 46
+N Tracks out of world 35
+N Scondaries 168
+EmEdep is=17871.6 MeV 
+HadEdep is=5.04952 MeV
+Edep in FCAL1 FCAl2 : 17871.6 5.04952
+ ****  Primary : 3
+ Vertex : (13.1951,2.677,32740)
+Number of F1 Tiles with Positive energy : 43
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-2.38009 1.44701 1.91854 
+1.89707 2.08583 1.629 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-5.71906
+9.71699
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-N Tracks out of world 3
-N Scondaries 141
-EmEdep is=19787.7 MeV 
-HadEdep is=0.510999 MeV
-Edep in FCAL1 FCAl2 : 19787.7 0.510999
- ****  Primary : 15
- Vertex : (17.3196,17.6617,32740)
+N Tracks out of world 2
+N Scondaries 192
+EmEdep is=19777.4 MeV 
+HadEdep is=0 MeV
+Edep in FCAL1 FCAl2 : 19777.4 0
+ ****  Primary : 4
+ Vertex : (-8.66148,-8.80731,32740)
+Number of F1 Tiles with Positive energy : 48
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.91512 3.15456 2.48221 
+ Visible Energy in Hole Counter  (MeV) 
+0 91.9186
+ Visible Energy in Upstream Dead Materials 
+1984.97
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 68
+N Scondaries 142
+EmEdep is=17299.7 MeV 
+HadEdep is=2.77448 MeV
+Edep in FCAL1 FCAl2 : 17299.7 2.77448
+ ****  Primary : 5
+ Vertex : (4.75859,7.01622,32740)
 Number of F1 Tiles with Positive energy : 38
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.65101 2.38768 1.48083 
+2.45946 1.817 1.62267 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-13.282
+16.1098
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 2
+N Scondaries 153
+EmEdep is=19877.5 MeV 
+HadEdep is=1.15193 MeV
+Edep in FCAL1 FCAl2 : 19877.5 1.15193
+ ****  Primary : 6
+ Vertex : (1.94335,14.9228,32740)
+Number of F1 Tiles with Positive energy : 46
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.57914 1.63916 1.87565 
+ Visible Energy in Hole Counter  (MeV) 
+0 0
+ Visible Energy in Upstream Dead Materials 
+4.70782
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
 N Tracks out of world 1
-N Scondaries 207
-EmEdep is=19785.4 MeV 
-HadEdep is=0.851193 MeV
-Edep in FCAL1 FCAl2 : 19785.4 0.851193
- ****  Primary : 16
- Vertex : (-20.8489,10.8988,32740)
-Number of F1 Tiles with Positive energy : 62
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.71963 1.98326 1.43543 
- Visible Energy in Hole Counter  (MeV) 
-0 107.189
- Visible Energy in Upstream Dead Materials 
-2173.64
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 85
-N Scondaries 222
-EmEdep is=16258.5 MeV 
-HadEdep is=0.169226 MeV
-Edep in FCAL1 FCAl2 : 16258.5 0.169226
- ****  Primary : 17
- Vertex : (-9.96316,-9.33478,32740)
-Number of F1 Tiles with Positive energy : 50
-Number of F2 tiles with Positive energy : 0
- Visisble Energy in S1 , S2 , S3 in (MeV)
-1.55451 2.42587 1.68381 
- Visible Energy in Hole Counter  (MeV) 
-0 0
- Visible Energy in Upstream Dead Materials 
-8.59855
- Visible Energy in Tail Catcher Scintillator
-0 0 0 0 0 0 0 
- Visible Energy in Tail Catcher Absorber
-0 0 0 0 0 0 
-N Tracks out of world 1
-N Scondaries 167
-EmEdep is=19890 MeV 
-HadEdep is=4.20222 MeV
-Edep in FCAL1 FCAl2 : 19890 4.20222
- ****  Primary : 18
- Vertex : (-9.96316,-9.33478,32740)
+N Scondaries 151
+EmEdep is=19653.8 MeV 
+HadEdep is=17.4385 MeV
+Edep in FCAL1 FCAl2 : 19653.8 17.4385
+ ****  Primary : 7
+ Vertex : (-10.9878,-6.7949,32740)
 Number of F1 Tiles with Positive energy : 44
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.72296 2.19164 1.80801 
+1.77977 1.83299 1.84224 
  Visible Energy in Hole Counter  (MeV) 
-0 3.18926
+0 79.5984
  Visible Energy in Upstream Dead Materials 
-4.88109
+1210.52
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 55
+N Scondaries 230
+EmEdep is=17643.7 MeV 
+HadEdep is=0.693003 MeV
+Edep in FCAL1 FCAl2 : 17643.7 0.693003
+ ****  Primary : 8
+ Vertex : (10.9757,-1.49585,32740)
+Number of F1 Tiles with Positive energy : 46
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.85573 1.59846 1.8114 
+ Visible Energy in Hole Counter  (MeV) 
+0 0
+ Visible Energy in Upstream Dead Materials 
+9.76616
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 0
+N Scondaries 319
+EmEdep is=19809.1 MeV 
+HadEdep is=0 MeV
+Edep in FCAL1 FCAl2 : 19809.1 0
+ ****  Primary : 9
+ Vertex : (-27.7734,3.36444,32740)
+Number of F1 Tiles with Positive energy : 77
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+2.35821 1.8829 1.80282 
+ Visible Energy in Hole Counter  (MeV) 
+0 125.389
+ Visible Energy in Upstream Dead Materials 
+5358.95
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 115
+N Scondaries 113
+EmEdep is=12228.5 MeV 
+HadEdep is=0 MeV
+Edep in FCAL1 FCAl2 : 12228.5 0
+ ****  Primary : 10
+ Vertex : (-22.5474,4.1006,32740)
+Number of F1 Tiles with Positive energy : 44
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.60427 1.6569 1.62615 
+ Visible Energy in Hole Counter  (MeV) 
+0 0
+ Visible Energy in Upstream Dead Materials 
+12.1759
+ Visible Energy in Tail Catcher Scintillator
+0.00212372 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0.0186044 0 0 0 0 0 
+N Tracks out of world 4
+N Scondaries 149
+EmEdep is=19855.1 MeV 
+HadEdep is=10.1325 MeV
+Edep in FCAL1 FCAl2 : 19855.1 10.1325
+
+---> Begin of event: 11
+ ****  Primary : 11
+ Vertex : (-6.31939,21.5056,32740)
+Number of F1 Tiles with Positive energy : 55
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.81831 1.45634 1.61363 
+ Visible Energy in Hole Counter  (MeV) 
+0 66.1659
+ Visible Energy in Upstream Dead Materials 
+936.268
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 26
+N Scondaries 105
+EmEdep is=18043.2 MeV 
+HadEdep is=3.24624 MeV
+Edep in FCAL1 FCAl2 : 18043.2 3.24624
+ ****  Primary : 12
+ Vertex : (17.1015,6.30557,32740)
+Number of F1 Tiles with Positive energy : 50
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+2.01542 1.93466 2.28289 
+ Visible Energy in Hole Counter  (MeV) 
+0 0
+ Visible Energy in Upstream Dead Materials 
+3.11173
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 1
+N Scondaries 115
+EmEdep is=19893.4 MeV 
+HadEdep is=1.46764 MeV
+Edep in FCAL1 FCAl2 : 19893.4 1.46764
+ ****  Primary : 13
+ Vertex : (-24.9484,11.8659,32740)
+Number of F1 Tiles with Positive energy : 28
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+2.45747 1.95985 2.15069 
+ Visible Energy in Hole Counter  (MeV) 
+0 129.283
+ Visible Energy in Upstream Dead Materials 
+18047.9
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 246
+N Scondaries 204
+EmEdep is=798.132 MeV 
+HadEdep is=0 MeV
+Edep in FCAL1 FCAl2 : 798.132 0
+ ****  Primary : 14
+ Vertex : (-0.133696,18.3151,32740)
+Number of F1 Tiles with Positive energy : 42
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.69227 1.83476 1.63846 
+ Visible Energy in Hole Counter  (MeV) 
+0 0
+ Visible Energy in Upstream Dead Materials 
+1.73443
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
 N Tracks out of world 1
 N Scondaries 149
-EmEdep is=19854.1 MeV 
-HadEdep is=16.7174 MeV
-Edep in FCAL1 FCAl2 : 19854.1 16.7174
- ****  Primary : 19
- Vertex : (-3.64184,-3.4838,32740)
+EmEdep is=19858 MeV 
+HadEdep is=9.76138 MeV
+Edep in FCAL1 FCAl2 : 19858 9.76138
+ ****  Primary : 15
+ Vertex : (17.3196,17.6617,32740)
 Number of F1 Tiles with Positive energy : 42
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-1.50134 1.97743 1.49036 
+1.67497 1.58 1.53606 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-9.43906
+6.9831
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
-N Tracks out of world 2
-N Scondaries 267
-EmEdep is=19884.6 MeV 
-HadEdep is=20.8822 MeV
-Edep in FCAL1 FCAl2 : 19884.6 20.8822
- ****  Primary : 20
- Vertex : (-3.38741,1.01439,32740)
-Number of F1 Tiles with Positive energy : 49
+N Tracks out of world 8
+N Scondaries 185
+EmEdep is=19692.1 MeV 
+HadEdep is=0 MeV
+Edep in FCAL1 FCAl2 : 19692.1 0
+ ****  Primary : 16
+ Vertex : (-20.8489,10.8988,32740)
+Number of F1 Tiles with Positive energy : 68
 Number of F2 tiles with Positive energy : 0
  Visisble Energy in S1 , S2 , S3 in (MeV)
-2.3839 1.4374 2.49839 
+1.74305 2.30224 1.72872 
+ Visible Energy in Hole Counter  (MeV) 
+0 124.458
+ Visible Energy in Upstream Dead Materials 
+4946.52
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 153
+N Scondaries 254
+EmEdep is=13261.8 MeV 
+HadEdep is=0 MeV
+Edep in FCAL1 FCAl2 : 13261.8 0
+ ****  Primary : 17
+ Vertex : (-9.96316,-9.33478,32740)
+Number of F1 Tiles with Positive energy : 55
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+3.17013 1.9255 1.76782 
+ Visible Energy in Hole Counter  (MeV) 
+0 54.5404
+ Visible Energy in Upstream Dead Materials 
+689.533
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 29
+N Scondaries 181
+EmEdep is=18575.9 MeV 
+HadEdep is=0.203641 MeV
+Edep in FCAL1 FCAl2 : 18575.9 0.203641
+ ****  Primary : 18
+ Vertex : (-9.96316,-9.33478,32740)
+Number of F1 Tiles with Positive energy : 47
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.81797 1.64996 1.81775 
  Visible Energy in Hole Counter  (MeV) 
 0 0
  Visible Energy in Upstream Dead Materials 
-2.59745
+8.671
  Visible Energy in Tail Catcher Scintillator
 0 0 0 0 0 0 0 
  Visible Energy in Tail Catcher Absorber
 0 0 0 0 0 0 
 N Tracks out of world 2
-N Scondaries 173
-EmEdep is=19830.9 MeV 
-HadEdep is=0.814838 MeV
-Edep in FCAL1 FCAl2 : 19830.9 0.814838
+N Scondaries 195
+EmEdep is=19647.1 MeV 
+HadEdep is=1.16563 MeV
+Edep in FCAL1 FCAl2 : 19647.1 1.16563
+ ****  Primary : 19
+ Vertex : (-3.64184,-3.4838,32740)
+Number of F1 Tiles with Positive energy : 43
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.54063 1.94004 1.47293 
+ Visible Energy in Hole Counter  (MeV) 
+0 0
+ Visible Energy in Upstream Dead Materials 
+2.21405
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 2
+N Scondaries 132
+EmEdep is=19858.2 MeV 
+HadEdep is=0 MeV
+Edep in FCAL1 FCAl2 : 19858.2 0
+ ****  Primary : 20
+ Vertex : (-3.38741,1.01439,32740)
+Number of F1 Tiles with Positive energy : 43
+Number of F2 tiles with Positive energy : 0
+ Visisble Energy in S1 , S2 , S3 in (MeV)
+1.79806 2.56461 1.71417 
+ Visible Energy in Hole Counter  (MeV) 
+0 0
+ Visible Energy in Upstream Dead Materials 
+3.1858
+ Visible Energy in Tail Catcher Scintillator
+0 0 0 0 0 0 0 
+ Visible Energy in Tail Catcher Absorber
+0 0 0 0 0 0 
+N Tracks out of world 1
+N Scondaries 153
+EmEdep is=19833.1 MeV 
+HadEdep is=6.64948 MeV
+Edep in FCAL1 FCAl2 : 19833.1 6.64948
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=30.65s Real=31.86s Sys=0.04s
+  User=31.65s Real=33.99s Sys=0.04s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...
@@ -1256,8 +1267,8 @@ G4SDManager deleted.
 EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 14 of which, static: 1
-Dynamic pools deleted: 13 / Total memory freed: 1.2 Mb
+Number of memory pools allocated: 13 of which, static: 1
+Dynamic pools deleted: 12 / Total memory freed: 1.2 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.
