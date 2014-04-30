@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30th April 2014  Gabriele Cosmo (examples-V10-00-04)
+- Updated reference outputs according to reference tag geant4-10-00-ref-04.
+- Includes tags: XrayFluo-V10-00-04, testem1-V10-00-02, testem2-V10-00-01,
+                 testem3-V10-00-02, testem5-V10-00-01, testem7-V10-00-00,
+                 testem8-V10-00-02, testem9-V10-00-00, testem12-V10-00-01,
+                 exhadr03-V10-00-04, exhadr04-V10-00-02, DICOM-V10-00-00,
+                 G01-V10-00-02, exam-ext-vis-UVA-V10-00-00.
+
 31st March 2014  Gabriele Cosmo (examples-V10-00-03)
 - Updated reference outputs according to reference tag geant4-10-00-ref-03.
 - Includes tags: dnaphysics-V10-00-01, testem1-V10-00-01, fieldex04-V10-00-09,
