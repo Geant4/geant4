@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -102,11 +102,11 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.27s Real=0.27s Sys=0s
+  User=0.24s Real=0.24s Sys=0s
 
  The run consists of 1 e- of 10 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
- Process calls frequency --->	e-_G4MicroElecElastic = 2072	e-_G4MicroElecInelastic = 395
+ Process calls frequency --->	e-_G4MicroElecElastic = 1993	e-_G4MicroElecInelastic = 394
  Total transfered energy (keV)=10
 
 #
@@ -129,11 +129,11 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.75s Real=0.76s Sys=0s
+  User=0.64s Real=0.64s Sys=0.01s
 
  The run consists of 1 proton of 100 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
- Process calls frequency --->	p_G4MicroElecInelastic = 1425	e-_G4MicroElecInelastic = 921	e-_G4MicroElecElastic = 11841
+ Process calls frequency --->	p_G4MicroElecInelastic = 1427	e-_G4MicroElecElastic = 12423	e-_G4MicroElecInelastic = 913
  Total transfered energy (keV)=100
 
 #
@@ -157,11 +157,11 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=34.25s Real=34.5s Sys=0.07s
+  User=33.43s Real=33.63s Sys=0.03s
 
  The run consists of 1 Ca48 of 4.8 MeV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
- Process calls frequency --->	ion_G4MicroElecInelastic = 68243	e-_G4MicroElecElastic = 578566	e-_G4MicroElecInelastic = 43804
+ Process calls frequency --->	ion_G4MicroElecInelastic = 68244	e-_G4MicroElecElastic = 571711	e-_G4MicroElecInelastic = 43767
  Total transfered energy (keV)=4800
 
 #

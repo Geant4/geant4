@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -37,7 +37,7 @@
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114319208.901 pc 
+ Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114314827.001 pc 
                        Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -84,54 +84,55 @@ EventAction: Event # 0 started
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      -20       100        0        0         0      Target initStep
-    1        0        0      -19      98.6     1.38        1         1      Target Transportation
-    2 -0.00496 -0.00218      -18      97.3      1.3        1         2      Target Transportation
-    3  -0.0135 -0.00402      -17      95.8     1.56        1         3      Target Transportation
-    4  -0.0196 -0.00192      -16      94.4     1.37        1         4      Target Transportation
-    5  -0.0273 -9.72e-05      -15      92.9     1.47        1         5      Target Transportation
-    6  -0.0372 -0.00501      -14      91.4     1.48        1         6      Target Transportation
-    7  -0.0468 -0.00824      -13      89.8     1.59        1         7      Target Transportation
-    8  -0.0495 -0.00676      -12      88.4     1.47        1         8      Target Transportation
-    9  -0.0611 -0.00407      -11      86.9     1.47        1         9      Target Transportation
-   10  -0.0694 -0.00369      -10      85.3     1.61        1        10      Target Transportation
-   11  -0.0585  -0.0131       -9      83.7     1.57        1        11      Target Transportation
-   12  -0.0455  -0.0251       -8      82.2     1.48        1        12      Target Transportation
-   13  -0.0382  -0.0457       -7      80.7     1.54        1        13      Target Transportation
-   14  -0.0373  -0.0662       -6        79     1.74        1        14      Target Transportation
-   15  -0.0395  -0.0714       -5      77.3     1.64        1        15      Target Transportation
-   16  -0.0486  -0.0664       -4      75.6     1.71        1        16      Target Transportation
-   17  -0.0711  -0.0224       -3      73.8     1.77        1        17      Target Transportation
-   18  -0.0831   0.0248       -2        72      1.8        1        18      Target Transportation
-   19  -0.0845   0.0701       -1      70.2     1.89        1        19      Target Transportation
-   20  -0.0694    0.109        0      68.3     1.84        1        20      Target Transportation
-   21   -0.055    0.142        1      66.5     1.78        1        21      Target Transportation
-   22  -0.0523    0.167        2      64.5     2.01        1        22      Target Transportation
-   23  -0.0443    0.187        3      62.5     2.06        1        23      Target Transportation
-   24  -0.0285    0.218        4      60.5     1.98        1        24      Target Transportation
-   25   -0.017    0.252        5      58.5     1.94        1        25      Target Transportation
-   26  0.00696    0.279        6      56.4     2.17        1        26      Target Transportation
-   27   0.0485    0.307        7      54.1     2.24        1        27      Target Transportation
-   28   0.0669    0.333        8      51.8     2.29        1        28      Target Transportation
-   29   0.0758    0.369        9      49.4     2.43        1        29      Target Transportation
-   30   0.0853    0.398       10        47     2.37        1        30      Target Transportation
-   31   0.0768    0.423       11      44.5     2.52        1        31      Target Transportation
-   32   0.0705    0.459       12      41.6     2.97        1        32      Target Transportation
-   33   0.0574      0.5       13      38.5     3.01        1        33      Target Transportation
-   34   0.0518    0.543       14      35.5     3.04        1        34      Target Transportation
-   35   0.0716    0.581       15      32.2     3.32        1        35      Target Transportation
-   36   0.0828    0.618       16      28.5     3.73        1        36      Target Transportation
-   37    0.107    0.637       17      24.5     3.98     0.96        37      Target hIoni
-   38    0.109    0.637       17      24.3    0.174    0.042        37      Target Transportation
-   39     0.14    0.663     17.8      20.6     3.67    0.764      37.8      Target hIoni
-   40    0.153    0.683       18      19.5     1.16    0.239        38      Target Transportation
-   41    0.202    0.713     18.6      16.4     3.08    0.566      38.6      Target hIoni
-   42    0.215    0.745       19      13.5     2.86    0.438        39      Target Transportation
-   43    0.231    0.759     19.4      10.5     3.04    0.368      39.4      Target hIoni
-   44    0.228    0.756     19.7       7.8      2.7    0.286      39.7      Target hIoni
-   45    0.213     0.73     19.9      4.89      2.9    0.223      39.9      Target hIoni
-   46    0.196    0.706       20      2.33     2.56     0.13        40       World Transportation
-   47   0.0438    0.577       21      2.33 2.29e-24     1.02      41.1       World Transportation
-   48    -1.32   -0.585       30      2.33 2.06e-23     9.18      50.2  OutOfWorld Transportation
+    1        0        0      -19      98.7     1.27        1         1      Target Transportation
+    2 -0.00487 -0.00214      -18      97.4     1.36        1         2      Target Transportation
+    3 -0.00648  -0.0135      -17      95.9     1.45        1         3      Target Transportation
+    4  -0.0146  -0.0217      -16      94.4     1.47        1         4      Target Transportation
+    5   -0.025  -0.0329      -15      93.1      1.4        1         5      Target Transportation
+    6  -0.0398  -0.0406      -14      91.6     1.48        1         6      Target Transportation
+    7  -0.0607  -0.0522      -13      90.1     1.47        1         7      Target Transportation
+    8  -0.0758   -0.058      -12      88.7     1.41        1         8      Target Transportation
+    9  -0.0913  -0.0711      -11      87.2     1.51        1         9      Target Transportation
+   10  -0.0949  -0.0845      -10      85.6     1.62        1        10      Target Transportation
+   11   -0.105   -0.097       -9      83.9     1.62        1        11      Target Transportation
+   12   -0.116   -0.103       -8      82.4     1.49        1        12      Target Transportation
+   13   -0.121   -0.108       -7      80.8     1.64        1        13      Target Transportation
+   14   -0.122   -0.123       -6        79     1.76        1        14      Target Transportation
+   15   -0.121   -0.131       -5      77.4     1.66        1        15      Target Transportation
+   16   -0.118   -0.137       -4      75.6     1.74        1        16      Target Transportation
+   17   -0.106   -0.127       -3      73.9     1.75        1        17      Target Transportation
+   18  -0.0705   -0.127       -2      72.2     1.68        1        18      Target Transportation
+   19  -0.0341   -0.118       -1      70.3      1.9        1        19      Target Transportation
+   20 -4.93e-05   -0.125        0      68.5     1.77        1        20      Target Transportation
+   21   0.0275   -0.129        1      66.6     1.91        1        21      Target Transportation
+   22   0.0562   -0.123        2      64.6     2.04        1        22      Target Transportation
+   23   0.0828   -0.117        3      62.7     1.86        1        23      Target Transportation
+   24      0.1  -0.0984        4      60.6     2.12        1        24      Target Transportation
+   25    0.133   -0.063        5      58.6     2.05        1        25      Target Transportation
+   26    0.164  -0.0325        6      56.5     2.09        1        26      Target Transportation
+   27    0.205  0.00313        7      54.2     2.25        1        27      Target Transportation
+   28     0.24   0.0436        8      51.9     2.32        1        28      Target Transportation
+   29    0.246   0.0783        9      49.4     2.53        1        29      Target Transportation
+   30    0.269   0.0961       10      46.8      2.6        1        30      Target Transportation
+   31     0.31    0.147       11      44.2     2.59        1        31      Target Transportation
+   32    0.363    0.194       12      41.4     2.74        1        32      Target Transportation
+   33    0.401    0.213       13      38.5     2.95        1        33      Target Transportation
+   34     0.44     0.22       14      35.3     3.13        1        34      Target Transportation
+   35    0.514    0.221       15        32     3.36        1        35      Target Transportation
+   36    0.548    0.207       16      28.2     3.82        1        36      Target Transportation
+   37    0.639    0.196     16.9        24      4.2    0.945        37      Target hIoni
+   38    0.645    0.196       17      23.7    0.274     0.06        37      Target Transportation
+   39     0.71    0.189     17.7      20.2     3.48    0.737      37.8      Target hIoni
+   40    0.729    0.186       18      18.8     1.38    0.267        38      Target Transportation
+   41    0.777    0.183     18.5      15.6      3.2    0.543      38.6      Target hIoni
+   42    0.805    0.179       19      12.7     2.97    0.433        39      Target hIoni
+   43    0.806    0.179       19      12.5    0.218    0.028        39      Target Transportation
+   44    0.823    0.171     19.3      9.54     2.92    0.337      39.4      Target hIoni
+   45    0.832    0.157     19.6      6.78     2.76    0.263      39.6      Target hIoni
+   46    0.844    0.143     19.8      3.79     2.99      0.2      39.8      Target hIoni
+   47    0.852    0.138     19.9     0.343     3.45    0.118        40      Target hIoni
+   48    0.852    0.138     19.9    0.0565    0.287  0.00351        40      Target hIoni
+   49    0.852    0.138     19.9         0   0.0565 0.000657        40      Target hIoni
 Run terminated.
 Run Summary
   Number of events processed : 1
@@ -142,8 +143,8 @@ HistoManager: End of run actions are started
 Beam particle                        proton
 Beam Energy(MeV)                     100
 Number of events                     1
-Average energy deposit (MeV)         97.67   RMS(MeV) 0
-Average number of steps of primary   46
+Average energy deposit (MeV)         100   RMS(MeV) 0
+Average number of steps of primary   49
 ========================================================
 
 #

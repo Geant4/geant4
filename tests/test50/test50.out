@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-macro --> /ec/G4-builds/release/slc6-gcc48-RelWithDebInfo/10-00-ref-03_branch/tests/test50/test50.in
+macro --> /ec/G4-builds/release/slc6-gcc48-RelWithDebInfo/10-00-ref-04_branch/tests/test50/test50.in
 /tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
@@ -43,46 +43,46 @@ Target Material is: Aluminium
 /target/update
 /run/reinitializeGeometry
 /run/beamOn 1
-G4Material WARNING: doublicate name of the new material Hydrogen
-G4Material WARNING: doublicate name of the new material Beryllium
-G4Material WARNING: doublicate name of the new material Graphite
+G4Material WARNING: duplicate name of material Hydrogen
+G4Material WARNING: duplicate name of material Beryllium
+G4Material WARNING: duplicate name of material Graphite
 G4Material: Mean excitation energy is changed for Graphite Iold= 81eV Inew= 78 eV
-G4Material WARNING: doublicate name of the new material Oxygen
+G4Material WARNING: duplicate name of material Oxygen
 G4Material: Mean excitation energy is changed for Oxygen Iold= 95eV Inew= 95 eV
-G4Material WARNING: doublicate name of the new material Magnesium
-G4Material WARNING: doublicate name of the new material Aluminium
+G4Material WARNING: duplicate name of material Magnesium
+G4Material WARNING: duplicate name of material Aluminium
 G4Material: Mean excitation energy is changed for Aluminium Iold= 166eV Inew= 166 eV
-G4Material WARNING: doublicate name of the new material Silicon
+G4Material WARNING: duplicate name of material Silicon
 G4Material: Mean excitation energy is changed for Silicon Iold= 173eV Inew= 173 eV
-G4Material WARNING: doublicate name of the new material liquidArgon
-G4Material WARNING: doublicate name of the new material Titanium
-G4Material WARNING: doublicate name of the new material Iron
+G4Material WARNING: duplicate name of material liquidArgon
+G4Material WARNING: duplicate name of material Titanium
+G4Material WARNING: duplicate name of material Iron
 G4Material: Mean excitation energy is changed for Iron Iold= 286eV Inew= 286 eV
-G4Material WARNING: doublicate name of the new material Cobalt
-G4Material WARNING: doublicate name of the new material Nickel
-G4Material WARNING: doublicate name of the new material Copper
-G4Material WARNING: doublicate name of the new material Zinc
-G4Material WARNING: doublicate name of the new material Gallium
-G4Material WARNING: doublicate name of the new material Germanium
-G4Material WARNING: doublicate name of the new material Zirconium
-G4Material WARNING: doublicate name of the new material Molybdenium
-G4Material WARNING: doublicate name of the new material Silver
-G4Material WARNING: doublicate name of the new material Cadmium
-G4Material WARNING: doublicate name of the new material Indium
-G4Material WARNING: doublicate name of the new material Tin
-G4Material WARNING: doublicate name of the new material Cesium
-G4Material WARNING: doublicate name of the new material Samarium
-G4Material WARNING: doublicate name of the new material Ytterbium
-G4Material WARNING: doublicate name of the new material Tantalum
-G4Material WARNING: doublicate name of the new material Tungsten
-G4Material WARNING: doublicate name of the new material Gold
-G4Material WARNING: doublicate name of the new material Lead
-G4Material WARNING: doublicate name of the new material Uranium
-G4Material WARNING: doublicate name of the new material Quartz
-G4Material WARNING: doublicate name of the new material Air
+G4Material WARNING: duplicate name of material Cobalt
+G4Material WARNING: duplicate name of material Nickel
+G4Material WARNING: duplicate name of material Copper
+G4Material WARNING: duplicate name of material Zinc
+G4Material WARNING: duplicate name of material Gallium
+G4Material WARNING: duplicate name of material Germanium
+G4Material WARNING: duplicate name of material Zirconium
+G4Material WARNING: duplicate name of material Molybdenium
+G4Material WARNING: duplicate name of material Silver
+G4Material WARNING: duplicate name of material Cadmium
+G4Material WARNING: duplicate name of material Indium
+G4Material WARNING: duplicate name of material Tin
+G4Material WARNING: duplicate name of material Cesium
+G4Material WARNING: duplicate name of material Samarium
+G4Material WARNING: duplicate name of material Ytterbium
+G4Material WARNING: duplicate name of material Tantalum
+G4Material WARNING: duplicate name of material Tungsten
+G4Material WARNING: duplicate name of material Gold
+G4Material WARNING: duplicate name of material Lead
+G4Material WARNING: duplicate name of material Uranium
+G4Material WARNING: duplicate name of material Quartz
+G4Material WARNING: duplicate name of material Air
 G4Material: Mean excitation energy is changed for Air Iold= 85.7031eV Inew= 85.7 eV
-G4Material WARNING: doublicate name of the new material Galactic
-G4Material WARNING: doublicate name of the new material Nytrogen
+G4Material WARNING: duplicate name of material Galactic
+G4Material WARNING: duplicate name of material Nytrogen
 G4Material: Mean excitation energy is changed for Nytrogen Iold= 82eV Inew= 82 eV
 G4NistMaterialBuilder::FindOrBuildMaterial G4_WATER
  Target zdimension is: 1.5e+08 mm

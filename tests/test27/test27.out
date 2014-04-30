@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -32,7 +32,7 @@ SimpleBox is now made of U
 /run/beamOn 2000
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -410,7 +410,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=76.24s Real=76.49s Sys=0.04s
+  User=78s Real=78.35s Sys=0.04s
 #
 # and at 30 MeV
 /gun/energy 30 MeV
@@ -444,7 +444,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.04s Real=0.05s Sys=0s
+  User=0.04s Real=0.04s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -455,7 +455,7 @@ SimpleBox is now made of H
 /run/beamOn 2000
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -706,7 +706,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.05s Real=0.05s Sys=0s
+  User=0.04s Real=0.05s Sys=0s
 #
 # and at 30 MeV
 /gun/energy 30 MeV
@@ -745,7 +745,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.26s Real=0.26s Sys=0s
+  User=0.27s Real=0.27s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on Silicon
 #
@@ -756,7 +756,7 @@ SimpleBox is now made of Si
 /run/beamOn 2000
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1012,7 +1012,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=21.32s Real=21.38s Sys=0s
+  User=21.58s Real=21.64s Sys=0s
 #
 # and at 30 MeV
 /gun/energy 30 MeV
@@ -1056,7 +1056,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.08s Real=0.07s Sys=0s
+  User=0.08s Real=0.08s Sys=0s
 #
 #
 # deuteron at 200 MeV in U
@@ -1105,7 +1105,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=2.75s Real=2.75s Sys=0s
+  User=2.77s Real=2.77s Sys=0s
 #
 # and at 30 MeV
 /gun/energy 30 MeV
@@ -1149,7 +1149,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.04s Real=0.04s Sys=0s
+  User=0.05s Real=0.04s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -1197,7 +1197,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.06s Real=0.06s Sys=0s
+  User=0.05s Real=0.06s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on Silicon
 #
@@ -1245,7 +1245,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.93s Real=1.94s Sys=0s
+  User=1.85s Real=1.86s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -1295,7 +1295,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=4.36s Real=4.37s Sys=0.01s
+  User=4s Real=4.02s Sys=0s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -1343,7 +1343,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.07s Real=0.07s Sys=0s
+  User=0.08s Real=0.07s Sys=0s
 #
 # alpha at 1 GeV/nucleon on Silicon
 #
@@ -1391,7 +1391,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.81s Real=1.82s Sys=0s
+  User=1.7s Real=1.7s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -1439,7 +1439,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.07s Real=0.07s Sys=0s
+  User=0.06s Real=0.06s Sys=0s
 #
 # alpha at 200 MeV/nucleon on H
 #
@@ -1487,7 +1487,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.54s Real=0.54s Sys=0s
+  User=0.56s Real=0.56s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon
 #
@@ -1535,7 +1535,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.12s Real=0.12s Sys=0s
+  User=0.13s Real=0.13s Sys=0s
 #
 #  .....end alpha............
 #
@@ -1586,7 +1586,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=3.49s Real=3.5s Sys=0s
+  User=3.21s Real=3.22s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -1635,7 +1635,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.14s Real=0.14s Sys=0s
+  User=0.15s Real=0.15s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -1684,7 +1684,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.43s Real=1.43s Sys=0s
+  User=1.03s Real=1.03s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1696,7 +1696,7 @@ SimpleBox is now made of H2O
 /run/beamOn 2000
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1957,7 +1957,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.04s Real=1.04s Sys=0s
+  User=0.81s Real=0.81s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -2012,7 +2012,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.06s Real=0.06s Sys=0s
+  User=0.04s Real=0.05s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -2066,7 +2066,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.57s Real=0.58s Sys=0s
+  User=0.51s Real=0.51s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -2120,7 +2120,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.11s Real=0.12s Sys=0s
+  User=0.11s Real=0.11s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -2135,7 +2135,7 @@ SimpleBox is now made of Pb
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV

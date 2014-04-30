@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -40,8 +40,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -57,8 +57,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -74,8 +74,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -114,7 +114,7 @@ SimpleBox is now made of Pb
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -337,8 +337,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -564,7 +564,7 @@ SimpleBox is now made of Al
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -766,8 +766,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -864,7 +864,7 @@ SimpleBox is now made of Air
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1066,8 +1066,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -1164,7 +1164,7 @@ SimpleBox is now made of G4_H
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1366,8 +1366,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -1488,7 +1488,7 @@ SimpleBox is now made of G4_C
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1690,8 +1690,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -1812,7 +1812,7 @@ SimpleBox is now made of G4_Al
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -2014,8 +2014,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -2136,7 +2136,7 @@ SimpleBox is now made of G4_Fe
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -2338,8 +2338,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -2460,7 +2460,7 @@ SimpleBox is now made of G4_Ag
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -2662,8 +2662,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -2784,7 +2784,7 @@ SimpleBox is now made of G4_Pb
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -2986,8 +2986,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -3108,7 +3108,7 @@ SimpleBox is now made of G4_U
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -3310,8 +3310,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -3432,7 +3432,7 @@ SimpleBox is now made of Hydrogen1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -3634,8 +3634,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -3756,7 +3756,7 @@ SimpleBox is now made of Water_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -3958,8 +3958,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -4080,7 +4080,7 @@ SimpleBox is now made of G4_WATER
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -4282,8 +4282,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -4404,7 +4404,7 @@ SimpleBox is now made of Polyethylene_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -4606,8 +4606,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -4728,7 +4728,7 @@ SimpleBox is now made of G4_POLYETHYLENE
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -4930,8 +4930,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -5052,7 +5052,7 @@ SimpleBox is now made of Graphite_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -5254,8 +5254,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -5376,7 +5376,7 @@ SimpleBox is now made of G4_GRAPHITE
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -5578,8 +5578,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -5700,7 +5700,7 @@ SimpleBox is now made of Heavy_Water_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -5902,8 +5902,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -6024,7 +6024,7 @@ SimpleBox is now made of Beryllium_Oxide_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -6226,8 +6226,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -6348,7 +6348,7 @@ SimpleBox is now made of G4_BERYLLIUM_OXIDE
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -6550,8 +6550,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -6672,7 +6672,7 @@ SimpleBox is now made of Be_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -6874,8 +6874,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -6996,7 +6996,7 @@ SimpleBox is now made of Al_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -7198,8 +7198,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -7320,7 +7320,7 @@ SimpleBox is now made of Fe_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -7522,8 +7522,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -7732,7 +7732,7 @@ SimpleBox is now made of 27Co58m1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -7934,8 +7934,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -8056,7 +8056,7 @@ SimpleBox is now made of 47Ag110m1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -8258,8 +8258,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -8380,7 +8380,7 @@ SimpleBox is now made of 48Cd115m1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -8582,8 +8582,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -8704,7 +8704,7 @@ SimpleBox is now made of 52Te127m1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -8906,8 +8906,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -9028,7 +9028,7 @@ SimpleBox is now made of 52Te129m1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -9230,8 +9230,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -9352,7 +9352,7 @@ SimpleBox is now made of 61Pm148m1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -9554,8 +9554,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -9676,7 +9676,7 @@ SimpleBox is now made of 67Ho166m1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -9878,8 +9878,8 @@ Element TS_O_of_Beryllium_Oxide,  internal thermal scattering id 4
 Element TS_Beryllium_Metal,  internal thermal scattering id 6
 Element TS_Aluminium_Metal,  internal thermal scattering id 7
 Element TS_Iron_Metal,  internal thermal scattering id 8
-Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_GRAPHITE - Element C,  internal thermal scattering id 1
+Material G4_WATER - Element H,  internal thermal scattering id 0
 Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
@@ -9993,5 +9993,5 @@ SimpleBox is now made of 67Ho166m1
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 333037429, 2145443589
+ Current couple of seeds = 608991421, 1095997288
 ----------------------------------------

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -45,7 +45,7 @@ SimpleBox is now made of U
 /run/beamOn 20
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -429,7 +429,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.11s Real=1.13s Sys=0.02s
+  User=1.09s Real=1.09s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -441,7 +441,7 @@ SimpleBox is now made of H
 /run/beamOn 20
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -709,7 +709,7 @@ SimpleBox is now made of Si
 /run/beamOn 20
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -970,7 +970,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.35s Real=0.36s Sys=0s
+  User=0.33s Real=0.34s Sys=0s
 #
 #
 # deuteron at 200 MeV in U
@@ -1025,7 +1025,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -1079,7 +1079,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on Silicon
 #
@@ -1519,8 +1519,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
       issued by : G4HadronicProcess:CheckResult()
 Warning: Bad energy non-conservation detected, will re-sample the interaction
  Process / Model: ionInelastic / G4WilsonAbrasion
- Primary: C12 (1000060120), E= 12030, target nucleus (92,238)
- E(initial - final) = -3708.14 MeV.
+ Primary: C12 (1000060120), E= 11990.7, target nucleus (92,238)
+ E(initial - final) = -3174.67 MeV.
 
 *** This is just a warning message. ***
 -------- WWWW -------- G4Exception-END --------- WWWW -------
@@ -1531,8 +1531,8 @@ Warning: Bad energy non-conservation detected, will re-sample the interaction
       issued by : G4HadronicProcess:CheckResult()
 Warning: Bad energy non-conservation detected, will re-sample the interaction
  Process / Model: ionInelastic / G4WilsonAbrasion
- Primary: C12 (1000060120), E= 12030, target nucleus (92,238)
- E(initial - final) = -2991.23 MeV.
+ Primary: C12 (1000060120), E= 11990.7, target nucleus (92,238)
+ E(initial - final) = -3044.43 MeV.
 
 *** This is just a warning message. ***
 -------- WWWW -------- G4Exception-END --------- WWWW -------
@@ -1543,80 +1543,8 @@ Warning: Bad energy non-conservation detected, will re-sample the interaction
       issued by : G4HadronicProcess:CheckResult()
 Warning: Bad energy non-conservation detected, will re-sample the interaction
  Process / Model: ionInelastic / G4WilsonAbrasion
- Primary: C12 (1000060120), E= 12030, target nucleus (92,238)
- E(initial - final) = -1179.54 MeV.
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : had012
-      issued by : G4HadronicProcess:CheckResult()
-Warning: Bad energy non-conservation detected, will re-sample the interaction
- Process / Model: ionInelastic / G4WilsonAbrasion
- Primary: C12 (1000060120), E= 12030, target nucleus (92,238)
- E(initial - final) = -2468.2 MeV.
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : had012
-      issued by : G4HadronicProcess:CheckResult()
-Warning: Bad energy non-conservation detected, will re-sample the interaction
- Process / Model: ionInelastic / G4WilsonAbrasion
- Primary: C12 (1000060120), E= 12030, target nucleus (92,238)
- E(initial - final) = -6650.64 MeV.
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : had012
-      issued by : G4HadronicProcess:CheckResult()
-Warning: Bad energy non-conservation detected, will re-sample the interaction
- Process / Model: ionInelastic / G4WilsonAbrasion
- Primary: C12 (1000060120), E= 12030, target nucleus (92,238)
- E(initial - final) = -2478.64 MeV.
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : had012
-      issued by : G4HadronicProcess:CheckResult()
-Warning: Bad energy non-conservation detected, will re-sample the interaction
- Process / Model: ionInelastic / G4WilsonAbrasion
- Primary: C12 (1000060120), E= 12030, target nucleus (92,238)
- E(initial - final) = -4439.75 MeV.
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : had012
-      issued by : G4HadronicProcess:CheckResult()
-Warning: Bad energy non-conservation detected, will re-sample the interaction
- Process / Model: ionInelastic / G4WilsonAbrasion
- Primary: C12 (1000060120), E= 12030, target nucleus (92,238)
- E(initial - final) = -5625.75 MeV.
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : had012
-      issued by : G4HadronicProcess:CheckResult()
-Warning: Bad energy non-conservation detected, will re-sample the interaction
- Process / Model: ionInelastic / G4WilsonAbrasion
- Primary: C12 (1000060120), E= 12030, target nucleus (92,238)
- E(initial - final) = -2354.21 MeV.
+ Primary: C12 (1000060120), E= 11990.7, target nucleus (92,238)
+ E(initial - final) = -1409.82 MeV.
 
 *** This is just a warning message. ***
 -------- WWWW -------- G4Exception-END --------- WWWW -------
@@ -1624,7 +1552,7 @@ Warning: Bad energy non-conservation detected, will re-sample the interaction
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.87s Real=0.88s Sys=0.01s
+  User=0.11s Real=0.11s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -1676,22 +1604,10 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 13 starts.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : had012
-      issued by : G4HadronicProcess:CheckResult()
-Warning: Bad energy non-conservation detected, will re-sample the interaction
- Process / Model: ionInelastic / G4WilsonAbrasion
- Primary: C12 (1000060120), E= 12133.8, target nucleus (1,1)
- E(initial - final) = -1132.93 MeV.
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -1743,10 +1659,22 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 14 starts.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : had012
+      issued by : G4HadronicProcess:CheckResult()
+Warning: Bad energy non-conservation detected, will re-sample the interaction
+ Process / Model: ionInelastic / G4WilsonAbrasion
+ Primary: C12 (1000060120), E= 11766.4, target nucleus (14,28)
+ E(initial - final) = -1135.91 MeV.
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.01s Sys=0s
+  User=0.06s Real=0.06s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1759,7 +1687,7 @@ SimpleBox is now made of H2O
 /run/beamOn 20
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -2022,10 +1950,18 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 15 starts.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : PART11117
+      issued by : G4ParticleTable::FindIon()
+This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -2222,7 +2158,7 @@ SimpleBox is now made of Pb
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -2505,7 +2441,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.79 Mb
+Dynamic pools deleted: 13 / Total memory freed: 0.72 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

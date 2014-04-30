@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -34,7 +34,7 @@ SimpleBox is now made of U
 /run/beamOn 4
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -412,7 +412,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=52.65s Real=52.91s Sys=0s
+  User=56.84s Real=57s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -424,7 +424,7 @@ SimpleBox is now made of H
 /run/beamOn 16
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -687,7 +687,7 @@ SimpleBox is now made of Si
 /run/beamOn 16
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -943,7 +943,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=6.47s Real=6.48s Sys=0s
+  User=5.49s Real=5.51s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -955,7 +955,7 @@ SimpleBox is now made of H2O
 /run/beamOn 16
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1213,10 +1213,34 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 3 starts.
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : had012
+      issued by : G4HadronicProcess:CheckResult()
+Warning: Bad energy non-conservation detected, will re-sample the interaction
+ Process / Model: ionInelastic / QMDModel
+ Primary: C12 (1000060120), E= 20575.7, target nucleus (1,1)
+ E(initial - final) = -1082.94 MeV.
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
+
+-------- WWWW ------- G4Exception-START -------- WWWW -------
+*** G4Exception : had012
+      issued by : G4HadronicProcess:CheckResult()
+Warning: Bad energy non-conservation detected, will re-sample the interaction
+ Process / Model: inelastic / QMDModel
+ Primary: alpha (1000020040), E= 6288.79, target nucleus (1,1)
+ E(initial - final) = -1156.88 MeV.
+
+*** This is just a warning message. ***
+-------- WWWW -------- G4Exception-END --------- WWWW -------
+
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=1.86s Real=1.87s Sys=0s
+  User=2.81s Real=2.81s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1325,7 +1349,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -1379,7 +1403,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.27s Real=0.27s Sys=0s
+  User=0.32s Real=0.32s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1394,7 +1418,7 @@ SimpleBox is now made of Pb
 /run/beamOn 4
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1660,11 +1684,11 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=44.61s Real=44.78s Sys=0s
+  User=38.76s Real=38.9s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2054080255, 2145218207
+ Current couple of seeds = 954019652, 537463573
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -1677,7 +1701,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.59 Mb
+Dynamic pools deleted: 13 / Total memory freed: 0.61 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

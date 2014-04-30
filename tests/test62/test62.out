@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -54,7 +54,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -495,7 +495,18 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
+                           Hadronic Processes for mu+
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
                            Hadronic Processes for mu-
+
+  Process: muonNuclear
+        Model:      G4MuonVDNuclearModel: 0 eV  ---> 1 PeV
+     Cr_sctns:     KokoulinMuonNuclearXS: 0 eV  ---> 100 TeV
 
   Process: muMinusCaptureAtRest
 
@@ -624,7 +635,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.37s Real=0.37s Sys=0s
+  User=0.44s Real=0.44s Sys=0s
 #
 # neutron at 1 GeV in Th
 #
@@ -662,7 +673,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.68s Real=0.68s Sys=0s
+  User=0.54s Real=0.54s Sys=0s
 #
 # pi+ at 1 GeV in Th
 #
@@ -700,7 +711,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.58s Real=0.58s Sys=0.01s
+  User=0.58s Real=0.59s Sys=0s
 #
 # pi- at 1 GeV in Th
 #
@@ -738,7 +749,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.62s Real=0.62s Sys=0s
+  User=0.7s Real=0.74s Sys=0s
 #
 # proton at 1 GeV in U
 #
@@ -760,7 +771,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1123,7 +1134,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.52s Real=0.52s Sys=0s
+  User=0.6s Real=0.61s Sys=0.01s
 #
 # neutron at 1 GeV in U
 #
@@ -1166,7 +1177,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.64s Real=0.65s Sys=0.01s
+  User=0.43s Real=0.43s Sys=0s
 #
 # pi+ at 1 GeV in U
 #
@@ -1209,7 +1220,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.62s Real=0.63s Sys=0s
+  User=0.51s Real=0.51s Sys=0s
 #
 # pi- at 1 GeV in U
 #
@@ -1252,7 +1263,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.45s Real=0.45s Sys=0s
+  User=0.47s Real=0.47s Sys=0s
 #
 # proton at 1 GeV in Pb
 #
@@ -1274,7 +1285,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1642,7 +1653,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.45s Real=0.45s Sys=0.01s
+  User=0.28s Real=0.29s Sys=0.01s
 #
 # neutron at 1 GeV in Pb
 #
@@ -1690,7 +1701,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.7s Real=0.71s Sys=0s
+  User=0.49s Real=0.49s Sys=0s
 #
 # pi+ at 1 GeV in Pb
 #
@@ -1738,7 +1749,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.78s Real=0.78s Sys=0s
+  User=0.7s Real=0.71s Sys=0s
 #
 # pi- at 1 GeV in Pb
 #
@@ -1786,7 +1797,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.36s Real=0.37s Sys=0s
+  User=0.58s Real=0.58s Sys=0s
 #
 # proton at 1 GeV in Cu
 #
@@ -1808,7 +1819,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -2181,7 +2192,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.2s Sys=0.01s
+  User=0.2s Real=0.21s Sys=0.01s
 #
 # neutron at 1 GeV in Cu
 #
@@ -2234,7 +2245,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.23s Real=0.23s Sys=0s
+  User=0.2s Real=0.2s Sys=0s
 #
 # pi+ at 1 GeV in Cu
 #
@@ -2287,7 +2298,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.16s Real=0.16s Sys=0s
+  User=0.1s Real=0.1s Sys=0.01s
 #
 # pi- at 1 GeV in Cu
 #
@@ -2340,7 +2351,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.14s Real=0.14s Sys=0s
+  User=0.15s Real=0.15s Sys=0s
 #
 # proton at 1 GeV in Si
 #
@@ -2362,7 +2373,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -2740,7 +2751,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.09s Real=0.09s Sys=0.01s
+  User=0.07s Real=0.08s Sys=0s
 #
 # neutron at 1 GeV in Si
 #
@@ -2798,7 +2809,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.05s Sys=0s
+  User=0.04s Real=0.05s Sys=0s
 #
 # pi+ at 1 GeV in Si
 #
@@ -2856,7 +2867,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.04s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 #
 # pi- at 1 GeV in Si
 #
@@ -2936,7 +2947,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -3508,7 +3519,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 # Deuteron at 1 GeV/nucleon on Pb
 #
@@ -3571,7 +3582,7 @@ Index : 5     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.65s Real=0.66s Sys=0s
+  User=1s Real=1s Sys=0s
 #
 # Alpha at 500 MeV/nucleon on Pb
 #
@@ -3631,12 +3642,10 @@ Index : 5     used in the geometry : No
 ====================================================================
 
 ### Run 25 starts.
-[INCL++] Warning: energy conservation violated by 34.1006 MeV in 1384.03-MeV alpha + Pb207 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 34.1006 MeV in 1536.87-MeV alpha + Pb207 inelastic reaction, in direct kinematics. Will resample.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1.66s Real=1.67s Sys=0s
+  User=0.48s Real=0.48s Sys=0s
 #
 # Carbon at 290 MeV/nucleon on C
 #
@@ -3700,7 +3709,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.05s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # Carbon at 500 MeV/nucleon on Pb
 #
@@ -3763,7 +3772,7 @@ Index : 5     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.43s Real=0.44s Sys=0s
+  User=0.42s Real=0.42s Sys=0.01s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-03    (31-March-2014)
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -26,12 +26,12 @@ userDetector->Construct() start.
  	 liquidArgon:    5.7 mm 
 -------------------------------------------------------------
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113728944.973 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -516,13 +516,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.16s Real=0.16s Sys=0s
+  User=0.17s Real=0.2s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 8.0926 MeV :  1.708 MeV     2.111 +- 0.2111 %       5.9 mm  +-  1.4 mm 
-   liquidArgon: 1.7682 MeV :   1.66 MeV     9.386 +- 0.9386 %      8.67 mm  +- 8.34 mm 
+          Lead: 8.1811 MeV :  1.783 MeV     2.179 +- 0.2179 %      5.81 mm  +- 1.35 mm 
+   liquidArgon: 1.6531 MeV :   1.76 MeV     10.65 +- 1.065 %      8.16 mm  +- 8.97 mm 
 
 ------------------------------------------------------------
  Beam particle gamma  E = 10 MeV
@@ -530,15 +530,15 @@ Run Summary
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 8.09259 MeV
-liquidArgon:	 1.7682 MeV
+      Lead:	 8.18115 MeV
+liquidArgon:	 1.65308 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1531793759, 1448015336
+ Current couple of seeds = 452415824, 1501227942
 ----------------------------------------
 #
 #/run/particle/storePhysicsTable data_stand
@@ -555,7 +555,7 @@ EventManager deleted.
 Units table cleared.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.3 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.29 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.
