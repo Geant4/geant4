@@ -1050,7 +1050,7 @@ void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *evnt)
 
       if (fUiQt->IsIconPickSelected()){  // pick
         fVP.SetPicking(true);
-        Pick(evnt->pos().x(),evnt->pos().y());
+        G4cout << Pick(evnt->pos().x(),evnt->pos().y()) << G4endl;
         //        fWindow->setToolTip(pickToolTip);
         fVP.SetPicking(false);
  

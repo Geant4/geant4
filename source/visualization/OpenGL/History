@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5th May 2014  Laurent Garnier (opengl-V10-00-04)
+- G4OpenGLQtViewer : Fix a bug in Picking in Qt viewer. A G4cout was missing in order 
+  to see picked informations
+
 23th April 2014  Laurent Garnier (opengl-V10-00-03)
 - G4OpenGL.hh: Fix bugzilla #1618 : for a Linux user, compiling Geant4 with only 
   Qt driver will failed because of missing glu.h.
