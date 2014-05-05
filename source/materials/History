@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-04-14 P.Gumplinger (materials-V10-00-06)
+- attempt at avoiding Coverity errors 37180 and 37340
+
 28-04-14 M.Asai (materials-V10-00-05)
 - G4MaterialPropertyTable: fix race condition problem. Addressing to
   bug report #1590.
