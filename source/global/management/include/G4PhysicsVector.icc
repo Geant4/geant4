@@ -63,34 +63,6 @@ inline
 //---------------------------------------------------------------
 
 inline
- G4double G4PhysicsVector::Value(G4double theEnergy, size_t& lastIdx) const
-{
-  G4double y;
-  if(theEnergy <= edgeMin) {
-    lastIdx = 0; 
-    y = dataVector[0]; 
-  } else if(theEnergy >= edgeMax) { 
-    lastIdx = numberOfNodes-1; 
-    y = dataVector[lastIdx]; 
-  } else {
-    lastIdx = FindBin(theEnergy, lastIdx);
-    y = Interpolation(lastIdx, theEnergy);
-  }
-  return y;
-}
-
-//---------------------------------------------------------------
-
-inline
- G4double G4PhysicsVector::Value(G4double theEnergy) const
-{
-  size_t idx=0;
-  return Value(theEnergy, idx);
-}
-
-//---------------------------------------------------------------
-
-inline
  G4double G4PhysicsVector::operator[](const size_t binNumber) const
 {
   return  dataVector[binNumber];
@@ -279,10 +251,10 @@ size_t G4PhysicsVector::FindBinLocation(G4double theEnergy) const
        else { bin3 = bin2; }
      }
 /*
-//   Bin location proposed by K.Genser (FNAL)
+// Bin location proposed by K.Genser (FNAL)
 // V.I. Usage of this algorithm provides identical results
-//      no CPU advantage is observed in EM tests
-//      if new validation information will be known this code may be used
+// no CPU advantage is observed in EM tests
+// if new validation information will be known this code may be used
      G4PVDataVector::const_iterator it =
        std::lower_bound(binVector.begin(), binVector.end(), theEnergy);
      bin = it - binVector.begin() - 1;
@@ -300,10 +272,20 @@ inline size_t G4PhysicsVector::FindBin(G4double e, size_t idx) const
     id = 0; 
   } else if(e >= binVector[numberOfNodes-2]) { 
     id = numberOfNodes - 2; 
-  } else if(idx >= numberOfNodes || e < binVector[idx] || e > binVector[idx+1]) { 
+  } else if(idx >= numberOfNodes || e < binVector[idx] 
+            || e > binVector[idx+1]) { 
     id = FindBinLocation(e); 
   }
   return id;
+}
+
+//---------------------------------------------------------------
+
+inline
+ G4double G4PhysicsVector::Value(G4double theEnergy) const
+{
+  size_t idx=0;
+  return Value(theEnergy, idx);
 }
 
 //---------------------------------------------------------------

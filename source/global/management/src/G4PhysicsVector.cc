@@ -68,7 +68,6 @@ G4PhysicsVector::G4PhysicsVector(G4bool)
    verboseLevel(0)
 {
   if (!fpPVAllocator) fpPVAllocator = new G4Allocator<G4PhysicsVector>;
-  // g4pow = G4Pow::GetInstance();
 }
 
 // --------------------------------------------------------------
@@ -503,6 +502,24 @@ std::ostream& operator<<(std::ostream& out, const G4PhysicsVector& pv)
   out << std::setprecision(6);
 
   return out;
+}
+
+//---------------------------------------------------------------
+
+G4double G4PhysicsVector::Value(G4double theEnergy, size_t& lastIdx) const
+{
+  G4double y;
+  if(theEnergy <= edgeMin) {
+    lastIdx = 0; 
+    y = dataVector[0]; 
+  } else if(theEnergy >= edgeMax) { 
+    lastIdx = numberOfNodes-1; 
+    y = dataVector[lastIdx]; 
+  } else {
+    lastIdx = FindBin(theEnergy, lastIdx);
+    y = Interpolation(lastIdx, theEnergy);
+  }
+  return y;
 }
 
 //---------------------------------------------------------------

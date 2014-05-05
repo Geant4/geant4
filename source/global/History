@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 5, 2014 V.Ivantchenko (global-V10-00-20)
+- Moved G4PhysicsVector::Value(energy,idx) from inline back to source.
+- G4Physics2DVector::Retrieve(): added extra protection to fix
+  Coverity reports in classes which are using 2-D vector.
+
 April 24, 2014 G.Cosmo (global-V10-00-19, global-V10-00-18)
 - Added protection for clang on MT with c++11, as not yet supporting
   'thread_local' keyword on MacOS (!). Added protection in all G4MTRandom*

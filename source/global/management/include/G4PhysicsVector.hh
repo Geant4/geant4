@@ -94,7 +94,7 @@ class G4PhysicsVector
     inline void* operator new(size_t);
     inline void  operator delete(void*);
 
-    inline G4double Value(G4double theEnergy, size_t& lastidx) const; 
+    G4double Value(G4double theEnergy, size_t& lastidx) const; 
          // Get the cross-section/energy-loss value corresponding to the
          // given energy. An appropriate interpolation is used to calculate
          // the value. Consumer code got changed index and may reuse it
