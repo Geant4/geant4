@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4 May, 2014 M. Asai (intercoms-V10-00-07)
+- G4GenericMessenger.cc : Fix core dump when GetCurrentValue()
+  method is invoked for a command defined by DeclareMethod().
+
+4 May, 2014 M. Asai (intercoms-V10-00-06)
+- Introducing new UI commands /control/doif and /control/getVal.
+
+3 May, 2014 M. Asai (intercoms-V10-00-05)
+- Fix the treatment of double-quotes in G4UImanager::ForeachS().
+  Addressing bug report #1614.
+
 16 April, 2014 G. Cosmo (intercoms-V10-00-04)
 - Removed unnecessary source file G4AnyType.cc, as all symbols are inlined.
 - Corrected inclusion protection flag in G4GenericMessenger.hh.
