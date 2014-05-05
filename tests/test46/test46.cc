@@ -59,6 +59,7 @@
 
 #include "QGSPCMS_FTFP_BERT_EML.hh"
 #include "QGSPCMS_FTFP_BERT_EML95msc93.hh"
+#include "QGSPCMS_FTFP_BERT_EML_New.hh"
 
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
@@ -88,6 +89,8 @@ int main(int argc,char** argv) {
   if("QGSP_FTFP_BERT_EML" == physName) { phys = new QGSPCMS_FTFP_BERT_EML(); }
   else if("QGSP_FTFP_BERT_EML95msc93" == physName) { 
     phys = new QGSPCMS_FTFP_BERT_EML95msc93(); }
+  else if("QGSP_FTFP_BERT_EML_New" == physName) { 
+    phys = new QGSPCMS_FTFP_BERT_EML_New(); }
   else if("" == physName) { physName = "FTFP_BERT_EMV"; }
 
   if(!phys) {
