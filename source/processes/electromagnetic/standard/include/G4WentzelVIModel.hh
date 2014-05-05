@@ -112,6 +112,8 @@ public:
 
   inline G4bool UseSecondMoment() const;
 
+  inline void SetSingleScatteringFactor(G4double);
+
   inline G4PhysicsTable* GetSecondMomentTable();
 
   inline G4double SecondMoment(const G4ParticleDefinition*,
@@ -140,6 +142,8 @@ protected:
   G4WentzelOKandVIxSection* wokvi;
 
   G4double tlimitminfix;
+  G4double ssFactor;
+  G4double invssFactor;
 
   // cache kinematics
   G4double preKinEnergy;
@@ -261,6 +265,16 @@ inline G4bool G4WentzelVIModel::UseSecondMoment() const
 inline G4PhysicsTable* G4WentzelVIModel::GetSecondMomentTable()
 {
   return fSecondMoments;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline void G4WentzelVIModel::SetSingleScatteringFactor(G4double val)
+{
+  if(val > 0.05) {
+    ssFactor = val;
+    invssFactor = 1.0/(val - 0.05);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

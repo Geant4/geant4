@@ -18,6 +18,10 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+02 May 14: V.Ivanchenko (emstand-V10-00-26)
+- G4WentzelVIModel, G4WentzelOKandVIxSection - a small optimisation
+    to address soem CPU penalty against previous reference tag
+
 28 April 14: V.Ivanchenko (emstand-V10-00-25)
 - G4WentzelOKandVIxSection - fixed bug introduced in April tags
 

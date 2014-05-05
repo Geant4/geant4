@@ -73,6 +73,8 @@ using namespace std;
 
 G4WentzelVIModel::G4WentzelVIModel(G4bool combined, const G4String& nam) :
   G4VMscModel(nam),
+  ssFactor(1.0),
+  invssFactor(1.0/(ssFactor-0.05)),
   currentCouple(0),
   inside(false),
   singleScatteringMode(false),
@@ -288,7 +290,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   */
   // natural limit for high energy
   G4double rlimit = std::max(facrange*currentRange, 
-			     (1.0 - cosTetMaxNuc)*lambdaeff);
+			     (1.0 - cosTetMaxNuc)*lambdaeff*invssFactor);
 
   // low-energy e-
   if(cosThetaMax > cosTetMaxNuc) {
@@ -412,13 +414,13 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 
   // check of step length
   // define threshold angle between single and multiple scattering 
-  if(!singleScatteringMode) { cosThetaMin = 1.0 - tPathLength/lambdaeff; }
+  if(!singleScatteringMode) { 
+    cosThetaMin = 1.0 - ssFactor*tPathLength/lambdaeff; 
+  }
 
   // recompute transport cross section - do not change energy
   // anymore - cannot be applied for big steps
-  if(cosThetaMin <= cosTetMaxNuc) {
-    cosThetaMin = cosTetMaxNuc;
-  } else {
+  if(cosThetaMin > cosTetMaxNuc) {
     // new computation
     G4double cross = ComputeTransportXSectionPerVolume();
     //G4cout << "%%%% cross= " << cross << "  xtsec= " << xtsec << G4endl;
@@ -440,7 +442,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
       }
     } 
   }
-  if(tPathLength > currentRange) { tPathLength = currentRange; }
+  tPathLength = std::min(tPathLength, currentRange);
   /*        
   G4cout <<"Comp.true: zLength= "<<zPathLength<<" tLength= "<<tPathLength
 	 <<" Leff(mm)= "<<lambdaeff/mm<<" sig0(1/mm)= " << xtsec <<G4endl;
