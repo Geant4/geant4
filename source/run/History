@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 6th, 2014, G. Cosmo (run-V10-00-07)
+- Use G4ThreadLocalStatic in G4VUPLSplitter.
+
 Apr 11th, 2014, A. Dotti (run-V10-00-06)
 - Use G4Threading::SetMultithreadedApplication(true) if a G4MTRunManagerKernel
   is instantiated. Requires global-V10-00-16 or more recent 

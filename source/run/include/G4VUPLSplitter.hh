@@ -145,8 +145,8 @@ class G4VUPLSplitter
     }
   public:
 
-    G4RUN_DLL static G4ThreadLocal G4int slavetotalspace; //Per-thread available number of slots
-    G4RUN_DLL static G4ThreadLocal T* offset; //Pointer to first instance of an array
+    G4RUN_DLL G4ThreadLocalStatic G4int slavetotalspace; //Per-thread available number of slots
+    G4RUN_DLL G4ThreadLocalStatic T* offset; //Pointer to first instance of an array
 
   private:
 
