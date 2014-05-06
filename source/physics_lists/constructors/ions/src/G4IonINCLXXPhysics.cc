@@ -58,6 +58,7 @@
 #include "G4FTFBuilder.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4BuilderType.hh"
+#include "G4HadronicInteractionRegistry.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -162,8 +163,10 @@ void G4IonINCLXXPhysics::ConstructProcess()
   model_list->push_back(theINCLXXAlpha);
   model_list->push_back(theINCLXXIons);
 
-  G4ExcitationHandler* handler = new G4ExcitationHandler();
-  G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(handler);
+  G4HadronicInteraction* p =
+    G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
+  G4PreCompoundModel* thePreCompound = static_cast<G4PreCompoundModel*>(p); 
+  if(!thePreCompound) { thePreCompound = new G4PreCompoundModel; }
 
   theFTFPBuilderDeuteron = new G4FTFBuilder("FTFP",thePreCompound);
   theFTFPDeuteron = theFTFPBuilderDeuteron->GetModel();

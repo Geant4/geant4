@@ -58,6 +58,7 @@
 #include "G4FTFBuilder.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4BuilderType.hh"
+#include "G4HadronicInteractionRegistry.hh"
 
 using namespace std;
 
@@ -122,8 +123,10 @@ void G4IonPhysics::ConstructProcess()
 
   G4double emax = 100.*TeV;
 
-  G4ExcitationHandler* handler = new G4ExcitationHandler();
-  G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(handler);
+  G4HadronicInteraction* p =
+    G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
+  G4PreCompoundModel* thePreCompound = static_cast<G4PreCompoundModel*>(p); 
+  if(!thePreCompound) { thePreCompound = new G4PreCompoundModel; }
 
   // Binary Cascade
   theIonBC = new G4BinaryLightIonReaction(thePreCompound);
@@ -136,7 +139,8 @@ void G4IonPhysics::ConstructProcess()
   theFTFP->SetMinEnergy(2*GeV);
   theFTFP->SetMaxEnergy(emax);
 
-  theNuclNuclData = new G4CrossSectionInelastic( theGGNuclNuclXS = new G4ComponentGGNuclNuclXsc() );
+  theNuclNuclData = 
+    new G4CrossSectionInelastic( theGGNuclNuclXS = new G4ComponentGGNuclNuclXsc() );
 
   AddProcess("dInelastic", G4Deuteron::Deuteron(),false);
   AddProcess("tInelastic",G4Triton::Triton(),false);

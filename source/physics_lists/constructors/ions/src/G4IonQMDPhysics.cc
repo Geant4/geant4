@@ -68,6 +68,7 @@
 // Nuclei
 #include "G4IonConstructor.hh"
 #include "G4BuilderType.hh"
+#include "G4HadronicInteractionRegistry.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -136,8 +137,10 @@ void G4IonQMDPhysics::ConstructProcess()
   if(wasActivated) return;
   wasActivated = true;
 
-  G4ExcitationHandler* handler = new G4ExcitationHandler();
-  G4PreCompoundModel* thePreCompound = new G4PreCompoundModel(handler);
+  G4HadronicInteraction* p =
+    G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
+  G4PreCompoundModel* thePreCompound = static_cast<G4PreCompoundModel*>(p); 
+  if(!thePreCompound) { thePreCompound = new G4PreCompoundModel; }
 
   theIonBC = new G4BinaryLightIonReaction(thePreCompound);
   if ( model_list == 0 ) model_list = new std::vector<G4HadronicInteraction*>;

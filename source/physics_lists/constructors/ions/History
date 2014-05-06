@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-May-2014, Vladimir Ivanchenko        (phys-ctor-ions-V10-00-02)
+- Reuse G4PreCompoundModel and not create a new local in all
+  ion physics classes, should reduce memory and memory churn 
+
 29-Jan-2014, Gunter Folger              (phys-ctor-ions-V10-00-01)
 - Removed from photolepton_hadron/muon_nuclear from sources.cmake
 
