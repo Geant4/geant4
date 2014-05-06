@@ -151,7 +151,6 @@ protected:
   G4double zPathLength;
   G4double lambdaeff;
   G4double currentRange; 
-
   G4double cosTetMaxNuc;
 
   // cache material
@@ -181,8 +180,8 @@ private:
   G4double cosThetaMin;
   G4double cosThetaMax;
 
-  G4PhysicsTable*           fSecondMoments;
-  size_t                    idx2;
+  G4PhysicsTable* fSecondMoments;
+  size_t          idx2;
 
   // data for single scattering mode
   G4double xtsec;

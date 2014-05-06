@@ -38,8 +38,6 @@
 //
 // Modifications:
 //
-//
-
 // -------------------------------------------------------------------
 //
 
@@ -70,6 +68,7 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection(G4bool combined) :
   nwarnings(0),
   nwarnlimit(50),
   isCombined(combined),
+  cosThetaMax(-1.0),
   alpha2(fine_structure_const*fine_structure_const)
 {
   fNistManager = G4NistManager::Instance();
@@ -103,7 +102,7 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection(G4bool combined) :
     } 
   }
   currentMaterial = 0;
-  elecXSRatio = factB = factD = formfactA = screenZ = 0.0;
+  factB = factD = formfactA = screenZ = 0.0;
   cosTetMaxElec = cosTetMaxNuc = invbeta2 = kinFactor = gam0pcmp = pcmp2 = 1.0;
 
   factB1= 0.5*CLHEP::pi*fine_structure_const;
@@ -111,7 +110,6 @@ G4WentzelOKandVIxSection::G4WentzelOKandVIxSection(G4bool combined) :
   tkin = mom2 = momCM2 = factorA2 = mass = spin = chargeSquare = charge3 = 0.0;
   ecut = etag = DBL_MAX;
   targetZ = 0;
-  cosThetaMax = -1.0;
   targetMass = proton_mass_c2;
   particle = 0;
 }
@@ -140,7 +138,8 @@ void G4WentzelOKandVIxSection::Initialise(const G4ParticleDefinition* p,
   currentMaterial = 0;
   
   //G4cout << "G4WentzelOKandVIxSection::Initialise  mass= " << mass
-  //	 << "  " << p->GetParticleName() << G4endl; 
+  //	 << "  " << p->GetParticleName() 
+  //     << "  cosThetaMax= " << cosThetaMax << G4endl; 
   
 }
 
@@ -152,7 +151,6 @@ void G4WentzelOKandVIxSection::SetupParticle(const G4ParticleDefinition* p)
   mass = particle->GetPDGMass();
   spin = particle->GetPDGSpin();
   if(0.0 != spin) { spin = 0.5; }
-  //factB = 0.0;
   G4double q = std::fabs(particle->GetPDGCharge()/eplus);
   chargeSquare = q*q;
   charge3 = chargeSquare*q;
@@ -176,12 +174,6 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
       massT = fNistManager->GetAtomicMassAmu(targetZ)*CLHEP::amu_c2;
     }
     SetTargetMass(massT);
-    //G4double tmass2 = targetMass*targetMass;
-    //G4double etot = tkin + mass;
-    //G4double invmass2 = mass*mass + tmass2 + 2*etot*targetMass;
-    //momCM2 = mom2*tmass2/invmass2;
-    //gam0pcmp = (etot + targetMass)*targetMass/invmass2;
-    //pcmp2    = tmass2/invmass2;
 
     kinFactor = coeff*Z*chargeSquare*invbeta2/mom2;
 

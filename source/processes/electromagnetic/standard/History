@@ -18,6 +18,14 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+05 May 14: V.Ivanchenko (emstand-V10-00-27)
+- G4WentzelVIModel, G4WentzelVIRelModel, G4WentzelOKandVIxSection, 
+  G4eCoulombScatteringModel - revised and make consistent definition
+    of min and max scattering angle for single scattering mode,
+    removed unused class members
+- G4IonCoulombCrossSection - fixed screen factor for projectile
+    and target Z=1 
+
 02 May 14: V.Ivanchenko (emstand-V10-00-26)
 - G4WentzelVIModel, G4WentzelOKandVIxSection - a small optimisation
     to address soem CPU penalty against previous reference tag

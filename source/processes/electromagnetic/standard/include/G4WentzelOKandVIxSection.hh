@@ -129,8 +129,6 @@ private:
 
   G4double numlimit;
 
-  G4double elecXSRatio;
-
   // integer parameters
   G4int    nwarnings;
   G4int    nwarnlimit;
@@ -190,8 +188,8 @@ G4WentzelOKandVIxSection::SetupKinematic(G4double ekin, const G4Material* mat)
     factB = spin/invbeta2; 
     cosTetMaxNuc = cosThetaMax;
     if(isCombined) {
-      G4double cost = 1.-factorA2*mat->GetIonisation()->GetInvA23()/mom2;
-      if(cost > cosTetMaxNuc) { cosTetMaxNuc = cost; }
+      cosTetMaxNuc = std::max(cosTetMaxNuc, 
+	1.-factorA2*mat->GetIonisation()->GetInvA23()/mom2);
     }
   } 
   return cosTetMaxNuc;

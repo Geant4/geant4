@@ -73,12 +73,13 @@ using namespace std;
 
 G4WentzelVIModel::G4WentzelVIModel(G4bool combined, const G4String& nam) :
   G4VMscModel(nam),
-  ssFactor(1.0),
+  ssFactor(1.5),
   invssFactor(1.0/(ssFactor-0.05)),
   currentCouple(0),
   inside(false),
   singleScatteringMode(false),
   cosThetaMin(1.0),
+  cosThetaMax(-1.0),
   fSecondMoments(0),
   idx2(0),
   numlimit(0.1),
@@ -97,9 +98,8 @@ G4WentzelVIModel::G4WentzelVIModel(G4bool combined, const G4String& nam) :
   fixedCut = -1.0;
 
   preKinEnergy = effKinEnergy = tPathLength = zPathLength = lambdaeff 
-    = currentRange = xtsec = 0;
+    = currentRange = xtsec = cosTetMaxNuc = 0.0;
   currentMaterialIndex = 0;
-  cosThetaMax = cosTetMaxNuc = -1.0;
 
   fParticleChange = 0;
   currentCuts = 0;
@@ -126,7 +126,6 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
   SetupParticle(p);
   currentRange = 0.0;
 
-  cosThetaMax = -1.0;
   if(isCombined) {
     G4double tet = PolarAngleLimit();
     if(tet <= 0.0)           { cosThetaMax = 1.0; }
@@ -208,8 +207,8 @@ G4double G4WentzelVIModel::ComputeCrossSectionPerAtom(
   if(cosTetMaxNuc < 1.0) {
     G4double cut = cutEnergy;
     if(fixedCut > 0.0) { cut = fixedCut; }
-    cosTetMaxNuc = wokvi->SetupTarget(G4lrint(Z), cut);
-    cross = wokvi->ComputeTransportCrossSectionPerAtom(cosTetMaxNuc);
+    G4double cost = wokvi->SetupTarget(G4lrint(Z), cut);
+    cross = wokvi->ComputeTransportCrossSectionPerAtom(cost);
     /*
     if(p->GetParticleName() == "e-")      
     G4cout << "G4WentzelVIModel::CS: Z= " << G4int(Z) << " e(MeV)= "<<kinEnergy 
@@ -415,7 +414,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
   // check of step length
   // define threshold angle between single and multiple scattering 
   if(!singleScatteringMode) { 
-    cosThetaMin = 1.0 - ssFactor*tPathLength/lambdaeff; 
+    cosThetaMin -= ssFactor*tPathLength/lambdaeff; 
   }
 
   // recompute transport cross section - do not change energy
@@ -673,13 +672,14 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
     xsecn.resize(nelm);
     prob.resize(nelm);
   }
-  G4double cut = (*currentCuts)[currentMaterialIndex];
-  if(fixedCut > 0.0) { cut = fixedCut; }
   //  cosTetMaxNuc = wokvi->GetCosThetaNuc();
 
   // check consistency
   xtsec = 0.0;
-  if(cosTetMaxNuc > cosThetaMin) { return 0.0; }
+  if(cosTetMaxNuc >= cosThetaMin) { return 0.0; }
+
+  G4double cut = (*currentCuts)[currentMaterialIndex];
+  if(fixedCut > 0.0) { cut = fixedCut; }
 
   // loop over elements
   G4double xs = 0.0;
@@ -736,9 +736,10 @@ G4double G4WentzelVIModel:: ComputeSecondMoment(const G4ParticleDefinition* p,
 
   // loop over elements
   for (G4int i=0; i<nelm; ++i) {
-    wokvi->SetupTarget(G4lrint((*theElementVector)[i]->GetZ()), cut);
+    G4double costm = 
+      wokvi->SetupTarget(G4lrint((*theElementVector)[i]->GetZ()), cut);
     xs += theAtomNumDensityVector[i]
-      *wokvi->ComputeSecondTransportMoment(cosTetMaxNuc);
+      *wokvi->ComputeSecondTransportMoment(costm);
   }
   return xs;
 }

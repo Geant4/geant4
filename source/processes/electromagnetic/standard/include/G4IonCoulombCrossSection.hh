@@ -143,7 +143,8 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4IonCoulombCrossSection::SetupParticle(const G4ParticleDefinition* p)
+inline 
+void G4IonCoulombCrossSection::SetupParticle(const G4ParticleDefinition* p)
 {
   particle = p;
   mass = particle->GetPDGMass();

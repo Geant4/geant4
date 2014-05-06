@@ -134,13 +134,10 @@ void G4IonCoulombCrossSection::SetupKinematic(G4double ekin,
     mom2 = momCM*momCM;
     invbeta2 = 1.0 +  mu_rel*mu_rel/mom2;
     tkin = momCM*sqrt(invbeta2) - mu_rel;//Ekin of mu_rel
-    //.........................................................
 
     cosTetMinNuc = cosThetaMin;
     cosTetMaxNuc = cosThetaMax;
-
   }
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -181,18 +178,19 @@ void G4IonCoulombCrossSection::SetupTarget(G4double Z, G4double e,
 void G4IonCoulombCrossSection::SetScreenRSquare(G4int iz)
 {
   //for proton Thomas-Fermi screening length	
-  G4double x;
-  if(particle == theProton){ 
-    x = a0*fNistManager->GetZ13(iz);
-    //} else if(fabs(1 - targetZ) < 0.1) {
-    // x = a0*fNistManager->GetZ13(G4lrint(std::sqrt(chargeSquare)));
+  G4double x = a0;
+  G4int Z1 = (G4int)std::sqrt(chargeSquare);
+
+  if(1 == iz) {
+    if(Z1 > 1) { x = a0*fNistManager->GetZ13(Z1); }
+
+  } else if (1 == Z1) {
+    x = a0*fNistManager->GetZ13(iz); 
+
   } else {
-    //target nucleus
-    G4double Z1 = std::sqrt(chargeSquare);
-    G4double Z2 = targetZ;
-        
-    G4double Z1023 = G4Exp(G4Log(Z1)*0.23);
-    G4double Z2023 = G4Exp(G4Log(Z2)*0.23);
+
+    G4double Z1023 = G4Exp(fNistManager->GetLOGZ(Z1)*0.23);
+    G4double Z2023 = G4Exp(fNistManager->GetLOGZ(iz)*0.23);
         
     // Universal screening length
     x = a0*(Z1023+Z2023);

@@ -146,8 +146,6 @@ private:
 
   G4double                  cosThetaMin;
   G4double                  cosThetaMax;
-  G4double                  cosTetMinNuc;
-  G4double                  cosTetMaxNuc;
   G4double                  recoilThreshold;
   G4double                  elecRatio;
   G4double                  mass;

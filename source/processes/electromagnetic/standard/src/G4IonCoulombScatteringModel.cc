@@ -112,10 +112,10 @@ void G4IonCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
   SetupParticle(p);
   currentCouple = 0;
   currentMaterialIndex = -1;
-  //cosThetaMin = cos(PolarAngleLimit());
   ioncross->Initialise(p,cosThetaMin);
  
-  pCuts = G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
+  pCuts = 
+    G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
   if(!isInitialised) {
     isInitialised = true;
     fParticleChange = GetParticleChangeForGamma();
