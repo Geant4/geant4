@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-04-14 V.Ivanchenko (materials-V10-00-07)
+- G4NistmaterialBuilder - added new material G4_lBr - at STP Bromine
+    is mainly liquid while in NIST DB it is described as a gas.
+    This is a bugfix #1607. Data are taken from
+    http://en.wikipedia.org/wiki/Bromine
+
 30-04-14 P.Gumplinger (materials-V10-00-06)
 - attempt at avoiding Coverity errors 37180 and 37340
 
@@ -114,7 +120,7 @@ committal in the CVS repository !
 - Partially fix for coverity errors in G4OpticalSurface.cc
 
 06-06-13 V.Ivanchenko (materials-V09-06-17)
-- G4Material - added warning if new material has doublicate name
+- G4Material - added warning if new material has duplicate name
 
 05-06-13 P.Gumplinger (materials-V09-06-16)
 - Add dichroic filter surface
