@@ -820,7 +820,7 @@ G4DiffuseElastic::SampleTableThetaCMS(const G4ParticleDefinition* particle,
 
     for(iAngle = 0; iAngle < fAngleBin-1; iAngle++)
     {
-      if( position < (*(*fAngleTable)(iMomentum))(iAngle) ) break;
+      if( position > (*(*fAngleTable)(iMomentum))(iAngle) ) break;
     }
     if (iAngle >= fAngleBin-1) iAngle = fAngleBin-2;
 
