@@ -50,7 +50,7 @@
 #endif
 
 #ifndef G4VERSION_TAG
-#define G4VERSION_TAG "$Name: geant4-10-00-ref-04 $"
+#define G4VERSION_TAG "$Name: geant4-10-00-ref-05 $"
 #endif
 
 // as variables
@@ -58,10 +58,10 @@
 #include "G4String.hh"
 
 #ifdef G4MULTITHREADED
-static const G4String G4Version = "$Name: geant4-10-00-ref-04 [MT]$";
+static const G4String G4Version = "$Name: geant4-10-00-ref-05 [MT]$";
 #else
-static const G4String G4Version = "$Name: geant4-10-00-ref-04 $";
+static const G4String G4Version = "$Name: geant4-10-00-ref-05 $";
 #endif
-static const G4String G4Date    = "(30-April-2014)";
+static const G4String G4Date    = "(31-May-2014)";
 
 #endif

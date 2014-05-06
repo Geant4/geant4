@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 6, 2014 G.Cosmo (global-V10-00-21)
+- Temporarly set G4ThreadLocalStatic to "static __thread" in tls.hh for
+  platforms supporting TLS (overcomes limitation in latest GCC compiler).
+- Updated version and date for development.
+
 May 5, 2014 V.Ivantchenko (global-V10-00-20)
 - Moved G4PhysicsVector::Value(energy,idx) from inline back to source.
 - G4Physics2DVector::Retrieve(): added extra protection to fix
