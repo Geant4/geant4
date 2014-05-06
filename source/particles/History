@@ -16,7 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-- 27. May. 2014 Hisaya Kurashige (particles-V10-00-06)
+
+- 06. May. 2014 Gabriele Cosmo (particles-V10-00-07)
+- Use G4ThreadLocalStatic in G4PDefSplitter.
+
+- 27. Mar. 2014 Hisaya Kurashige (particles-V10-00-06)
 - Fix Coverity defects in G4NuclideTable.cc and G4IonTable.cc
 
 - 26. Mar. 2014 Tatsumi Koi (particles-V10-00-05)
@@ -31,7 +35,7 @@ committal in the CVS repository !
 - Fix compiler warnings in G4IonTable::GetLifetime() 
 
 - 22. Feb. 2014 Hisaya Kurashige (particles-V10-00-02)
--Update particle properties for PDG2013 and fix bugs
+- Update particle properties for PDG2013 and fix bugs
  - Fix PDG code for f0(1370) 10221-->30221
  - Update muon life time, mass and width
  - Update quark mass and width
@@ -67,7 +71,6 @@ committal in the CVS repository !
  - Update Sigma_b+/-  mass ,width and life
  - Update Xi_b0/-  mass ,width and life
  - Fix baryon number for AntiLambda_b, AntiLambda_c
-
 
 - 21. Feb. 2014  Makoto Asai (particles-V10-00-01)
 - G4ParticleDefinition::DumpTable() displays correct stability

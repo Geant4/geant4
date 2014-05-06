@@ -97,8 +97,8 @@ class G4PDefSplitter
 
   public:
 
-    G4PART_DLL static G4ThreadLocal G4int slavetotalspace;
-    G4PART_DLL static G4ThreadLocal T* offset;
+    G4PART_DLL G4ThreadLocalStatic G4int slavetotalspace;
+    G4PART_DLL G4ThreadLocalStatic T* offset;
 
   private:
 
