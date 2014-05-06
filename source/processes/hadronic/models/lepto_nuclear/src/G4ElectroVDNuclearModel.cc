@@ -58,46 +58,48 @@
 #include "G4FTFModel.hh"
 
 #include "G4HadFinalState.hh"
-
+#include "G4HadronicInteractionRegistry.hh"
 
 G4ElectroVDNuclearModel::G4ElectroVDNuclearModel()
  : G4HadronicInteraction("G4ElectroVDNuclearModel"),
    leptonKE(0.0), photonEnergy(0.0), photonQ2(0.0)
 {
-    SetMinEnergy(0.0);
-    SetMaxEnergy(1*PeV);
-    
-    electroXS = (G4ElectroNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->
+  SetMinEnergy(0.0);
+  SetMaxEnergy(1*PeV);
+  electroXS = 
+    (G4ElectroNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->
     GetCrossSectionDataSet(G4ElectroNuclearCrossSection::Default_Name());
-    gammaXS = (G4PhotoNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->
+  gammaXS = 
+    (G4PhotoNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->
     GetCrossSectionDataSet(G4PhotoNuclearCrossSection::Default_Name());
-    ftfp = new G4TheoFSGenerator();
-    precoInterface = new G4GeneratorPrecompoundInterface();
-    theHandler = new G4ExcitationHandler();
-    preEquilib = new G4PreCompoundModel(theHandler);
-    precoInterface->SetDeExcitation(preEquilib);
-    ftfp->SetTransport(precoInterface);
-    theFragmentation = new G4LundStringFragmentation();
-    theStringDecay = new G4ExcitedStringDecay(theFragmentation);
-    theStringModel = new G4FTFModel();
-    theStringModel->SetFragmentationModel(theStringDecay);
-    ftfp->SetHighEnergyGenerator(theStringModel);
-    
-    // Build Bertini model
-    bert = new G4CascadeInterface();
-}
 
+  // reuse existing pre-compound model
+  G4GeneratorPrecompoundInterface* precoInterface 
+    = new G4GeneratorPrecompoundInterface();
+  G4HadronicInteraction* p =
+    G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
+  G4VPreCompoundModel* pre = static_cast<G4VPreCompoundModel*>(p);
+  if(!pre) { pre = new G4PreCompoundModel(); }
+  precoInterface->SetDeExcitation(pre);
+
+  // string model
+  ftfp = new G4TheoFSGenerator();
+  ftfp->SetTransport(precoInterface);
+  theFragmentation = new G4LundStringFragmentation();
+  theStringDecay = new G4ExcitedStringDecay(theFragmentation);
+  G4FTFModel* theStringModel = new G4FTFModel();
+  theStringModel->SetFragmentationModel(theStringDecay);
+  ftfp->SetHighEnergyGenerator(theStringModel);
+    
+  // Build Bertini model
+  bert = new G4CascadeInterface();
+}
 
 G4ElectroVDNuclearModel::~G4ElectroVDNuclearModel()
 {
-  delete ftfp;
-  delete preEquilib;
   delete theFragmentation;
   delete theStringDecay;
-  delete theStringModel;
-  delete bert;
 }
-
     
 void G4ElectroVDNuclearModel::ModelDescription(std::ostream& outFile) const 
 {

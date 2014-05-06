@@ -43,13 +43,8 @@
 
 class G4CascadeInterface;
 class G4TheoFSGenerator; 
-class G4GeneratorPrecompoundInterface;
-class G4ExcitationHandler;
-class G4PreCompoundModel;
 class G4LundStringFragmentation;
 class G4ExcitedStringDecay;
-class G4FTFModel;
-
 
 class G4MuonVDNuclearModel : public G4HadronicInteraction
 {
@@ -80,12 +75,8 @@ class G4MuonVDNuclearModel : public G4HadronicInteraction
     G4KokoulinMuonNuclearXS muNucXS;
 
     G4TheoFSGenerator* ftfp;
-    G4GeneratorPrecompoundInterface* precoInterface;
-    G4ExcitationHandler* theHandler;
-    G4PreCompoundModel* preEquilib;
     G4LundStringFragmentation* theFragmentation;
     G4ExcitedStringDecay* theStringDecay;
-    G4FTFModel* theStringModel;
     G4CascadeInterface* bert;
 };
  

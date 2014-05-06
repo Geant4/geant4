@@ -48,6 +48,7 @@
 #include "G4LundStringFragmentation.hh"
 #include "G4ExcitedStringDecay.hh"
 #include "G4FTFModel.hh"
+#include "G4HadronicInteractionRegistry.hh"
 
 G4MuonVDNuclearModel::G4MuonVDNuclearModel()
  : G4HadronicInteraction("G4MuonVDNuclearModel")
@@ -68,16 +69,21 @@ G4MuonVDNuclearModel::G4MuonVDNuclearModel()
 
   MakeSamplingTable();
 
+  // reuse existing pre-compound model
+  G4GeneratorPrecompoundInterface* precoInterface 
+    = new G4GeneratorPrecompoundInterface();
+  G4HadronicInteraction* p =
+    G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
+  G4VPreCompoundModel* pre = static_cast<G4VPreCompoundModel*>(p);
+  if(!pre) { pre = new G4PreCompoundModel(); }
+  precoInterface->SetDeExcitation(pre);
+
   // Build FTFP model
   ftfp = new G4TheoFSGenerator();
-  precoInterface = new G4GeneratorPrecompoundInterface();
-  theHandler = new G4ExcitationHandler();
-  preEquilib = new G4PreCompoundModel(theHandler);
-  precoInterface->SetDeExcitation(preEquilib);
   ftfp->SetTransport(precoInterface);
   theFragmentation = new G4LundStringFragmentation();
   theStringDecay = new G4ExcitedStringDecay(theFragmentation);    
-  theStringModel = new G4FTFModel;
+  G4FTFModel* theStringModel = new G4FTFModel;
   theStringModel->SetFragmentationModel(theStringDecay);
   ftfp->SetHighEnergyGenerator(theStringModel);
 
@@ -88,12 +94,8 @@ G4MuonVDNuclearModel::G4MuonVDNuclearModel()
 
 G4MuonVDNuclearModel::~G4MuonVDNuclearModel()
 {
-  delete ftfp;
-  delete preEquilib;
   delete theFragmentation;
   delete theStringDecay;
-  delete theStringModel;
-  delete bert;
 }
 
   
