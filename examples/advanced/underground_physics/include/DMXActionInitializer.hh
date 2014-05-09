@@ -23,63 +23,33 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: DMXActionInitializer.hh 66241 2012-12-13 18:34:42Z gunter $
+// GEANT4 tag $Name:  $
 //
-// --------------------------------------------------------------
-//   GEANT 4 - Underground Dark Matter Detector Advanced Example
-//
-//      For information related to this code contact: Alex Howard
-//      e-mail: alexander.howard@cern.ch
-// --------------------------------------------------------------
-// Comments
-//
-//                  Underground Advanced
-//               by A. Howard and H. Araujo 
-//                    (27th November 2001)
-//
-// RunAction header
-// --------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef DMXRunAction_h
-#define DMXRunAction_h 1
+#ifndef DMXActionInitializer_h
+#define DMXActionInitializer_h 1
 
-#include "G4UserRunAction.hh"
+#include "G4VUserActionInitialization.hh"
 #include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DMXRunActionMessenger;
-class G4Run;
-class DMXAnalysisManager;
-
-class DMXRunAction : public G4UserRunAction
+class DMXActionInitializer : public G4VUserActionInitialization
 {
-  public:
-    DMXRunAction();
-   ~DMXRunAction();
+public:
 
-  public:
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
-
-  public:
-    void SetsavehitsFile   (G4String val)        { savehitsFile   = val;};
-    void SetsavepmtFile    (G4String val)        { savepmtFile    = val;};
-    void SetsavehistFile   (G4String val)        { savehistFile   = val;};
-
-    G4String GetsavehitsFile()                   {return savehitsFile;};
-    G4String GetsavepmtFile()                    {return savepmtFile;};
-
-  private:
-    void Book();
-
-  //messenger
-    G4String savehitsFile;
-    G4String savepmtFile;
-    G4String savehistFile;
-
-  DMXRunActionMessenger* runMessenger;
-
+  DMXActionInitializer();
+  ~DMXActionInitializer(){;};
+  
+  void Build() const;
+  void BuildForMaster() const;
+  
 };
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 

@@ -55,27 +55,21 @@
 #include "DMXAnalysisManager.hh"
 #include "DMXDetectorConstruction.hh"
 #include "DMXPhysicsList.hh"
-#include "DMXPrimaryGeneratorAction.hh"
-#include "DMXRunAction.hh"
-#include "DMXEventAction.hh"
-#include "DMXSteppingAction.hh"
-#include "DMXStackingAction.hh"
-
-#include <vector>
+#include "DMXActionInitializer.hh"
 
 int main(int argc,char** argv) {
 
   // choose the Random engine
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  G4Random::setTheEngine(new CLHEP::RanecuEngine);
   
   // Construct the default run manager
   G4RunManager * runManager = new G4RunManager;
 
   // set mandatory initialization classes
-  DMXDetectorConstruction* detector = new DMXDetectorConstruction;
-  runManager->SetUserInitialization(detector);
+  runManager->SetUserInitialization(new DMXDetectorConstruction);
   runManager->SetUserInitialization(new DMXPhysicsList);
-  
+  runManager->SetUserInitialization(new DMXActionInitializer());
+
 #ifdef G4VIS_USE
   // visualization manager
   G4VisManager* visManager = new G4VisExecutive;
@@ -89,21 +83,7 @@ int main(int argc,char** argv) {
   G4cout << " Using the DMX gun " << G4endl;
 #endif
     
-  // set user action classes
-  DMXPrimaryGeneratorAction* DMXGenerator = new DMXPrimaryGeneratorAction;
-  runManager->SetUserAction(DMXGenerator);
-  //  runManager->SetUserAction(new DMXPrimaryGeneratorAction);
-  // RunAction is inherited by EventAction for output filenames - will all
-  // change when implement proper analysis manager?
-  DMXRunAction* DMXRun = new DMXRunAction;
-  runManager->SetUserAction(DMXRun);
-  DMXEventAction* eventAction = new DMXEventAction(DMXRun,DMXGenerator);
-  runManager->SetUserAction(eventAction);
-  // eventAction is inherited by SteppingAction in order to switch colour
-  // flag:
-  runManager->SetUserAction(new DMXSteppingAction(eventAction));
-  runManager->SetUserAction(new DMXStackingAction);
-
+ 
   //Initialize G4 kernel
   runManager->Initialize();
     
@@ -129,10 +109,6 @@ int main(int argc,char** argv) {
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);
     }
-
-  // job termination
-  DMXRun->Finish();
-  G4cout << "Analysis files closed" << G4endl;
 
 #ifdef G4VIS_USE
   if(visManager) delete visManager;

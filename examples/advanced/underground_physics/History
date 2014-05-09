@@ -9,6 +9,9 @@ $Id$
                       Category History file
                       ---------------------
 
+08.05.2014 - L. Pandola (DMX-V10-00-00)
+             Added ActionInitialization class 
+
 07.11.2013 - L. Pandola (DMX-V09-06-08)
 	     Remove dependency from the deprecated LEP and HEP 	
 	     models from Geisha

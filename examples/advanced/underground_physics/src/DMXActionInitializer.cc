@@ -23,63 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: DMXActionInitializer.cc 66241 2012-12-13 18:34:42Z gunter $
+// GEANT4 tag $Name:  $
 //
-// --------------------------------------------------------------
-//   GEANT 4 - Underground Dark Matter Detector Advanced Example
-//
-//      For information related to this code contact: Alex Howard
-//      e-mail: alexander.howard@cern.ch
-// --------------------------------------------------------------
-// Comments
-//
-//                  Underground Advanced
-//               by A. Howard and H. Araujo 
-//                    (27th November 2001)
-//
-// RunAction header
-// --------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef DMXRunAction_h
-#define DMXRunAction_h 1
+#include "DMXActionInitializer.hh"
+#include "DMXPrimaryGeneratorAction.hh"
+#include "DMXRunAction.hh"
+#include "DMXEventAction.hh"
+#include "DMXSteppingAction.hh"
+#include "DMXStackingAction.hh"
 
-#include "G4UserRunAction.hh"
-#include "globals.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DMXRunActionMessenger;
-class G4Run;
-class DMXAnalysisManager;
+DMXActionInitializer::DMXActionInitializer() : 
+  G4VUserActionInitialization()
+{;}
 
-class DMXRunAction : public G4UserRunAction
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void DMXActionInitializer::Build() const 
 {
-  public:
-    DMXRunAction();
-   ~DMXRunAction();
+  DMXPrimaryGeneratorAction* DMXGenerator = new DMXPrimaryGeneratorAction();
+  SetUserAction(DMXGenerator);
 
-  public:
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
+  // RunAction is inherited by EventAction for output filenames - will all
+  // change when implement proper analysis manager?
+  DMXRunAction* DMXRun = new DMXRunAction();
+  SetUserAction(DMXRun);
 
-  public:
-    void SetsavehitsFile   (G4String val)        { savehitsFile   = val;};
-    void SetsavepmtFile    (G4String val)        { savepmtFile    = val;};
-    void SetsavehistFile   (G4String val)        { savehistFile   = val;};
+  DMXEventAction* eventAction = new DMXEventAction(DMXRun,DMXGenerator);
+  SetUserAction(eventAction);
+  SetUserAction(new DMXSteppingAction(eventAction));
+  SetUserAction(new DMXStackingAction());
+  
+}
 
-    G4String GetsavehitsFile()                   {return savehitsFile;};
-    G4String GetsavepmtFile()                    {return savepmtFile;};
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  private:
-    void Book();
-
-  //messenger
-    G4String savehitsFile;
-    G4String savepmtFile;
-    G4String savehistFile;
-
-  DMXRunActionMessenger* runMessenger;
-
-};
-
-#endif
+void DMXActionInitializer::BuildForMaster() const
+{;}
 
