@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+09-05-14 mma (exhadr04-V10-00-03)
+- NeutronHPphysics: check for pre-existing processes
+     
 24-04-14 mma (exhadr04-V10-00-02)
 - small cleanup in NeutronHPphysics.cc
       

@@ -34,14 +34,19 @@ $Id: README 69174 2013-04-21 20:38:15Z maire $
    
    Only processes of neutronHP package are registered : neutronElastic 
    (including thermalScattering), neutronInelastic, nCapture; nFission.
-   See class NeutronHPphysics. No other hadronic nor electromagnetic processes.
+   See class NeutronHPphysics. 
+   No other hadronic nor electromagnetic processes are registered.
    
    A command allows to select or not ThermalScattering model.
  
    Several hadronic physics options are controlled by environment variables.
    To trigger them, an envHadronic.csh has been added in this example.
    One must select the options wished, and do
-        source envHadronic.csh  (or sh) 
+        source envHadronic.csh  (or sh)
+   
+   NB. class NeutronHPphysics can be reused with other physicsConstructors,
+   as neutron processes are deleted before to be re-created.	
+	 
  	 
  3- AN EVENT : THE PRIMARY GENERATOR
  

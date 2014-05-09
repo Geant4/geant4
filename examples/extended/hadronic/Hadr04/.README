@@ -42,7 +42,10 @@
 \verbatim   
         source envHadronic.csh  (or sh)
 \endverbatim	 
- 	 
+   
+   NB. class NeutronHPphysics can be reused with other physicsConstructors,
+   as neutron processes are deleted before to be re-created.
+   	 	 
 \section Hadr04_s3 AN EVENT : THE PRIMARY GENERATOR
  
    The primary kinematic is a single particle randomly shooted at the 
