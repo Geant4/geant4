@@ -89,6 +89,7 @@ G4Material* XrayFluoNistMaterials::GetMaterial(G4String material)
   nistMan = G4NistManager::Instance();
   nistMan->SetVerbose(0);
 
+  //If not available at NIST, look for the local version of it
   G4Material* mat =  nistMan->FindOrBuildMaterial(material);
   if (!mat) {
     mat = G4Material::GetMaterial(material);

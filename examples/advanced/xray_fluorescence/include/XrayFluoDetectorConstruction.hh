@@ -41,12 +41,11 @@
 #ifndef XrayFluoDetectorConstruction_hh
 #define XrayFluoDetectorConstruction_hh 1
 
-#include <CLHEP/Units/SystemOfUnits.h>
-
 #include "globals.hh"
 #include "G4RotationMatrix.hh"
 #include "G4VUserDetectorConstruction.hh"
 #include "G4Navigator.hh"
+#include "G4Cache.hh"
 
 #include "XrayFluoSiLiDetectorType.hh"
 #include "XrayFluoHPGeDetectorType.hh"
@@ -78,6 +77,8 @@ public:
   
   G4VPhysicalVolume* Construct();
   
+  void ConstructSDandField();
+
   void UpdateGeometry();
 
   void SetOhmicPosThickness(G4double);
@@ -97,7 +98,7 @@ public:
   inline void PhaseSpaceOff() 
   {phaseSpaceFlag = false;};
   
-  inline G4bool GetPhaseSpaceFlag()
+  inline G4bool GetPhaseSpaceFlag() const 
   {return phaseSpaceFlag;};
 
   inline void SetGrainDia(G4double size)
@@ -109,41 +110,41 @@ public:
   
   void PrintApparateParameters(); 
 
-  XrayFluoVDetectorType* GetDetectorType();
+  XrayFluoVDetectorType* GetDetectorType() const;
 
 
-  G4double GetWorldSizeZ()           {return WorldSizeZ;}; 
-  G4double GetWorldSizeXY()          {return WorldSizeXY;};
+  G4double GetWorldSizeZ()  const         {return WorldSizeZ;}; 
+  G4double GetWorldSizeXY() const     {return WorldSizeXY;};
   
-  G4double GetDeviceThickness()      {return DeviceThickness;}; 
-  G4double GetDeviceSizeX()          {return DeviceSizeX;};
-  G4double GetDeviceSizeY()          {return DeviceSizeY;};
-  G4double GetPixelSizeXY()          {return PixelSizeXY;};
-  G4double GetContactSizeXY()        {return ContactSizeXY;};
+  G4double GetDeviceThickness() const     {return DeviceThickness;}; 
+  G4double GetDeviceSizeX() const          {return DeviceSizeX;};
+  G4double GetDeviceSizeY() const         {return DeviceSizeY;};
+  G4double GetPixelSizeXY() const         {return PixelSizeXY;};
+  G4double GetContactSizeXY() const       {return ContactSizeXY;};
   
-  G4int GetNbOfPixels()              {return NbOfPixels;}; 
-  G4int GetNbOfPixelRows()           {return NbOfPixelRows;}; 
-  G4int GetNbOfPixelColumns()        {return NbOfPixelColumns;}; 
+  G4int GetNbOfPixels() const             {return NbOfPixels;}; 
+  G4int GetNbOfPixelRows() const        {return NbOfPixelRows;}; 
+  G4int GetNbOfPixelColumns() const       {return NbOfPixelColumns;}; 
   
-  G4Material* GetOhmicPosMaterial()  {return OhmicPosMaterial;};
-  G4double    GetOhmicPosThickness() {return OhmicPosThickness;};      
+  G4Material* GetOhmicPosMaterial() const  {return OhmicPosMaterial;};
+  G4double    GetOhmicPosThickness() const {return OhmicPosThickness;};      
   
-  G4Material* GetOhmicNegMaterial()  {return OhmicNegMaterial;};
-  G4double    GetOhmicNegThickness() {return OhmicNegThickness;};      
+  G4Material* GetOhmicNegMaterial() const  {return OhmicNegMaterial;};
+  G4double    GetOhmicNegThickness() const {return OhmicNegThickness;};      
   
-  G4ThreeVector GetDetectorPosition();
-  G4ThreeVector GetSamplePosition()  {return G4ThreeVector(0,0,0);};
+  G4ThreeVector GetDetectorPosition() const;
+  G4ThreeVector GetSamplePosition() const {return G4ThreeVector(0,0,0);};
 
-  const G4VPhysicalVolume* GetphysiWorld() {return physiWorld;};  
-  const G4VPhysicalVolume* GetHPGe()        {return physiHPGe;};
-  const G4VPhysicalVolume* GetSample()     {return physiSample;};
-  const G4VPhysicalVolume* GetDia1()        {return physiDia1;};
-  const G4VPhysicalVolume* GetDia3()        {return physiDia3;};
+  const G4VPhysicalVolume* GetphysiWorld() const {return physiWorld;};  
+  const G4VPhysicalVolume* GetHPGe() const       {return physiHPGe;};
+  const G4VPhysicalVolume* GetSample() const    {return physiSample;};
+  const G4VPhysicalVolume* GetDia1() const       {return physiDia1;};
+  const G4VPhysicalVolume* GetDia3() const       {return physiDia3;};
   
-  const G4VPhysicalVolume* GetphysiPixel()  {return physiPixel;};           
-  const G4VPhysicalVolume* GetOhmicPos()    {return physiOhmicPos;};
-  const G4VPhysicalVolume* GetOhmicNeg()    {return physiOhmicNeg;};
-  const G4VPhysicalVolume* GetWindow  ()    {return physiWindow  ;};
+  const G4VPhysicalVolume* GetphysiPixel() const {return physiPixel;};           
+  const G4VPhysicalVolume* GetOhmicPos() const   {return physiOhmicPos;};
+  const G4VPhysicalVolume* GetOhmicNeg() const   {return physiOhmicNeg;};
+  const G4VPhysicalVolume* GetWindow  () const   {return physiWindow  ;};
 private:
 
   G4Navigator* aNavigator;  
@@ -237,19 +238,13 @@ private:
   
 public:
 
-  G4Material* GetSampleMaterial()  {return sampleMaterial;};
-  G4Material* GetPixelMaterial()  {return pixelMaterial;}; 
-  G4Material* GetDia1Material()  {return Dia1Material;}; 
-  G4Material* GetDia3Material()  {return Dia3Material;}; 
-  
-  // GetSampleIlluminatedFacecoord();
-  // GetSampleShadowedFaceCoord();
-  // GetSampleXplusFaceCoord();
-  // GetSampleXminusFaceCoord();
-  // GetSampleYplusFaceCoord();
-  // GetSampleYminusFaceCoord();
+  G4Material* GetSampleMaterial() const {return sampleMaterial;};
+  G4Material* GetPixelMaterial() const {return pixelMaterial;}; 
+  G4Material* GetDia1Material()  const {return Dia1Material;}; 
+  G4Material* GetDia3Material()  const {return Dia3Material;}; 
+ 
 
-  G4Navigator* GetGeometryNavigator() {return aNavigator;};
+  G4Navigator* GetGeometryNavigator() const {return aNavigator;};
   
 private:
 
@@ -266,14 +261,14 @@ private:
 public: 
   
   
-  G4double GetSampleThickness()         {return SampleThickness;};
-  G4double GetSampleSizeXY()              {return SampleSizeXY;};
+  G4double GetSampleThickness() const {return SampleThickness;};
+  G4double GetSampleSizeXY() const  {return SampleSizeXY;};
   
-  G4double GetDia1Thickness()         {return Dia1Thickness;};
-  G4double GetDia1SizeXY()              {return Dia1SizeXY;};
+  G4double GetDia1Thickness() const {return Dia1Thickness;};
+  G4double GetDia1SizeXY() const {return Dia1SizeXY;};
   
-  G4double GetDia3Thickness()         {return Dia3Thickness;};
-  G4double GetDia3SizeXY()              {return Dia3SizeXY;};
+  G4double GetDia3Thickness() const {return Dia3Thickness;};
+  G4double GetDia3SizeXY() const {return Dia3SizeXY;};
   
   
 private:
@@ -302,7 +297,7 @@ private:
   
   XrayFluoDetectorMessenger* detectorMessenger; //pointer to the Messenger
 
-  XrayFluoSD* HPGeSD;  //pointer to the sensitive detector
+  G4Cache<XrayFluoSD*> HPGeSD;  //pointer to the sensitive detector
 
   G4Region* sampleRegion;
 

@@ -52,7 +52,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoMercuryPrimaryGeneratorAction::XrayFluoMercuryPrimaryGeneratorAction(XrayFluoMercuryDetectorConstruction* XrayFluoDC)
+XrayFluoMercuryPrimaryGeneratorAction::XrayFluoMercuryPrimaryGeneratorAction(const XrayFluoMercuryDetectorConstruction* XrayFluoDC)
   :globalFlag(false),spectrum("off")
 {
 

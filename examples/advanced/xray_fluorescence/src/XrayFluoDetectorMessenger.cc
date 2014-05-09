@@ -37,6 +37,7 @@
 
 #include "XrayFluoDetectorMessenger.hh"
 #include "XrayFluoDetectorConstruction.hh"
+#include "G4RunManager.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
@@ -110,14 +111,21 @@ XrayFluoDetectorMessenger::XrayFluoDetectorMessenger(XrayFluoDetectorConstructio
 void XrayFluoDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
  if( command == UpdateCmd )
-   { Detector->UpdateGeometry(); }
-
+   { 
+     //This triggers a full re-build of the geometry. The method in the 
+     //geometry will take care of that.
+     Detector->UpdateGeometry(); 
+     return;
+   }
  else if ( command == sampleCmd )
-   { Detector->SetSampleMaterial(newValue);}
+   { 
+     Detector->SetSampleMaterial(newValue);
+   }
 
  else if ( command == detectorCmd )
-   { Detector->SetDetectorType(newValue);}
-
+   { 
+     Detector->SetDetectorType(newValue);     
+   }
  else if ( command == grainDiaCmd )
    {  
      G4double newSize = grainDiaCmd->GetNewDoubleValue(newValue);  
@@ -135,7 +143,10 @@ void XrayFluoDetectorMessenger::SetNewValue(G4UIcommand* command,G4String newVal
      G4double newSize = OhmicPosThicknessCmd->GetNewDoubleValue(newValue);  
      Detector->SetOhmicPosThickness(newSize);
    }
+ //Notify the run manager that the geometry has been modified
+ G4RunManager::GetRunManager()->GeometryHasBeenModified();
 }
+
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

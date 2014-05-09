@@ -19,6 +19,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08-05-2014 L.Pandola Tag: XrayFluo-V10-00-06
+- Updated hit class to make it MT-compliant
+- Fixed the procedure for the update of geometry between runs
+- Make const methods in the RunAction. Revised logic of RunAction: only 
+the master RunAction loads data
+- Take RunAction pointer in XrayFluoPrimaryGeneratorAction
+- Remove unused verbosity in XrayFluoDataSet
+- Revise logic for reading external events (MT-compliant). 
+- Protect methods of the singleton analysis class by Mutex.
+
+22-04-2014 L.Pandola Tag: XrayFluo-V10-00-05
+- Created and integrated an action initialization class. 
+- Make const methods and add ConstructSDandField() in the detector 
+ construction classes. 
+- Getting prepared for the MT migration
+
 17-04-2014 L.Pandola Tag: XrayFluo-V10-00-04
 - Fix bug in the analysis manager
 - Remove the workaround to avoid the deletion of the output file

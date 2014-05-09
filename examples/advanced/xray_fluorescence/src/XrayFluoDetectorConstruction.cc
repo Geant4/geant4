@@ -57,6 +57,10 @@
 #include "G4ios.hh"
 #include "G4PVReplica.hh"
 #include "G4UserLimits.hh"
+#include "G4GeometryManager.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+#include "G4SolidStore.hh"
 #include "XrayFluoNistMaterials.hh"
 
 
@@ -163,9 +167,10 @@ XrayFluoDetectorConstruction* XrayFluoDetectorConstruction::GetInstance()
   return instance;
 }
 
-void XrayFluoDetectorConstruction::SetDetectorType(G4String type)
-{
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void XrayFluoDetectorConstruction::SetDetectorType(G4String type) 
+{
   if (type=="sili")
     {
       detectorType = XrayFluoSiLiDetectorType::GetInstance();
@@ -185,9 +190,11 @@ void XrayFluoDetectorConstruction::SetDetectorType(G4String type)
       G4Exception("XrayFluoDataSet::LoadData()","example-xray_fluorescence06",
 	  FatalException, execp);
     }
+  //GeometryHasBeenModified invoked by the messenger
+  
 }
 
-XrayFluoVDetectorType* XrayFluoDetectorConstruction::GetDetectorType()
+XrayFluoVDetectorType* XrayFluoDetectorConstruction::GetDetectorType() const
 {
   return detectorType;
 }
@@ -208,6 +215,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::Construct()
 {
   return ConstructApparate();
 }
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoDetectorConstruction::DefineDefaultMaterials()
@@ -257,7 +265,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
   // complete the apparate parameters definition 
   
   //ComputeApparateParameters();
-  
+
   //world and associated navigator
   
   solidWorld = new G4Box("World",	      		        //its name
@@ -634,29 +642,7 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
       }    
   }
 
-  if (!phaseSpaceFlag) {
-
-    G4SDManager* SDman = G4SDManager::GetSDMpointer();
-    
-    
-    if(!HPGeSD)
-      {
-	HPGeSD = new XrayFluoSD ("HPGeSD",this);
-	SDman->AddNewDetector(HPGeSD);
-      }
-    
-    
-    if (logicPixel)
-      {
-	logicPixel->SetSensitiveDetector(HPGeSD);
-      }
-  }
-  // cut per region
   
-//   logicSample->SetRegion(sampleRegion);
-//   sampleRegion->AddRootLogicalVolume(logicSample);
-  
-
   
   // Visualization attributes
   
@@ -711,6 +697,28 @@ G4VPhysicalVolume* XrayFluoDetectorConstruction::ConstructApparate()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void XrayFluoDetectorConstruction::ConstructSDandField()
+{
+  if (!phaseSpaceFlag) 
+    {
+
+      //                               
+      // Sensitive Detectors 
+      //
+      if (HPGeSD.Get() == 0) 
+	{    
+	  XrayFluoSD* SD = new XrayFluoSD ("HPGeSD",this);
+	  HPGeSD.Put( SD );
+	}
+                                                           
+      if (logicPixel)    
+	SetSensitiveDetector(logicPixel,HPGeSD.Get());
+    }
+  return;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void XrayFluoDetectorConstruction::PrintApparateParameters()
 {
   G4cout << "-----------------------------------------------------------------------"
@@ -739,43 +747,23 @@ void XrayFluoDetectorConstruction::PrintApparateParameters()
 
 void XrayFluoDetectorConstruction::UpdateGeometry()
 {
-
-  if (solidPixel) delete solidPixel;
-  if (logicPixel) delete logicPixel;
-  if (physiPixel) delete physiPixel;
-  if (solidOhmicNeg) delete solidOhmicNeg;
-  if (logicOhmicNeg) delete logicOhmicNeg;
-  if (physiOhmicNeg) delete physiOhmicNeg;
-  if (solidOhmicPos) delete solidOhmicPos;
-  if (logicOhmicPos) delete logicOhmicPos;
-  if (physiOhmicPos) delete physiOhmicPos;
-  if (solidHPGe) delete solidHPGe;
-  if (logicHPGe) delete logicHPGe;
-  if (physiHPGe) delete physiHPGe;
-
-  if (sampleRegion) sampleRegion->RemoveRootLogicalVolume(logicSample);
-  if (solidSample) delete solidSample;
-  if (logicSample) delete logicSample;
-  if (physiSample) delete physiSample;
-
-  if (solidDia1) delete solidDia1;
-  if (logicDia1) delete logicDia1;
-  if (physiDia1) delete physiDia1;
-  if (solidDia3) delete solidDia3;
-  if (logicDia3) delete logicDia3;
-  if (physiDia3) delete physiDia3;
-
-  if (solidWorld) delete solidWorld;
-  if (logicWorld) delete logicWorld;
-  if (physiWorld) delete physiWorld;
-  
+  G4GeometryManager::GetInstance()->OpenGeometry();
+  G4PhysicalVolumeStore::Clean();
+  G4LogicalVolumeStore::Clean();
+  G4SolidStore::Clean();
+ 
+  if (sampleRegion) 
+    sampleRegion->RemoveRootLogicalVolume(logicSample);
+   
   zRotPhiHPGe.rotateX(-1.*PhiHPGe);
   zRotPhiDia1.rotateX(-1.*AlphaDia1);
   zRotPhiDia3.rotateX(-1.*AlphaDia3);
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructApparate());
 
+  //Triggers a new call of Construct() and of all the geometry resets.
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoDetectorConstruction::DeleteGrainObjects()
 {
@@ -787,11 +775,10 @@ void XrayFluoDetectorConstruction::DeleteGrainObjects()
 
 }
 
-G4ThreeVector XrayFluoDetectorConstruction::GetDetectorPosition() 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+G4ThreeVector XrayFluoDetectorConstruction::GetDetectorPosition() const
 {
-
-
-
   G4double 	z = DistDe * std::cos(ThetaHPGe);
   G4double	y = DistDe * std::sin(ThetaHPGe);
   G4double	x = 0.*cm;
@@ -802,15 +789,15 @@ G4ThreeVector XrayFluoDetectorConstruction::GetDetectorPosition()
 
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void XrayFluoDetectorConstruction::SetSampleMaterial(G4String newMaterial)
 {
-
-
     G4cout << "Material Change in Progress " << newMaterial << G4endl;
     sampleMaterial = materials->GetMaterial(newMaterial);
     logicSample->SetMaterial(sampleMaterial);
     PrintApparateParameters();
-  
+    //GeometryHasBeenModified is called by the messenger
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

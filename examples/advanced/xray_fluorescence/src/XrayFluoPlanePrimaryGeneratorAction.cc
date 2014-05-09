@@ -53,7 +53,7 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-XrayFluoPlanePrimaryGeneratorAction::XrayFluoPlanePrimaryGeneratorAction(XrayFluoPlaneDetectorConstruction* XrayFluoDC)
+XrayFluoPlanePrimaryGeneratorAction::XrayFluoPlanePrimaryGeneratorAction(const XrayFluoPlaneDetectorConstruction* XrayFluoDC)
   :rndmFlag("on"),beam("off"),spectrum("off"),isoVert("off")
 {
 

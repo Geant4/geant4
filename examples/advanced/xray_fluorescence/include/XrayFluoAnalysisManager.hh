@@ -82,8 +82,8 @@ public:
   //method to chenge the name of the output file
   void SetOutputFileName(G4String);
 
-  std::vector<G4double>* GetEmittedParticleEnergies();
-  std::vector<G4String>* GetEmittedParticleTypes();
+  const std::pair<G4double,G4String> GetEmittedParticleEnergyAndType();
+
   void LoadGunData(G4String, G4bool);
 
   void SetPhysicFlag(G4bool);
@@ -107,7 +107,10 @@ private:
   //pointer to the analysis messenger
   XrayFluoAnalysisMessenger* analisysMessenger;
 
+  G4bool dataLoaded;
  
+  G4int fParticleEnergyAndTypeIndex;
+
 };
 #endif
 

@@ -37,7 +37,7 @@
 
 #include "XrayFluoSensorHit.hh"
 
-G4Allocator<XrayFluoSensorHit> XrayFluoSensorHitAllocator;
+G4ThreadLocal G4Allocator<XrayFluoSensorHit> *XrayFluoSensorHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

@@ -51,69 +51,60 @@ class G4DataVector;
 
 class XrayFluoRunAction : public G4UserRunAction
 {
-  public:
-   
 
- XrayFluoRunAction();
-
- ~XrayFluoRunAction();
-  const XrayFluoDataSet* GetSet();
-  const XrayFluoDataSet* GetGammaSet();
-  const XrayFluoDataSet* GetAlphaSet();
+public:
+  XrayFluoRunAction();
+  
+  ~XrayFluoRunAction();
+  const XrayFluoDataSet* GetSet() const;
+  const XrayFluoDataSet* GetGammaSet() const;
+  const XrayFluoDataSet* GetAlphaSet() const;
+  
   //  const XrayFluoDataSet* GetEfficiencySet();
-  G4DataVector* GetEnergies();
-  G4DataVector* GetData();
+  G4DataVector* GetEnergies() const;
+  G4DataVector* GetData() const;
   
-
-  public:
-    void BeginOfRunAction(const G4Run*);
-    void EndOfRunAction(const G4Run*);
   
- //returns the sum of the element of data
-  G4double GetDataSum();
-
+public:
+  void BeginOfRunAction(const G4Run*);
+  void EndOfRunAction(const G4Run*);
+  
+  //returns the sum of the element of data
+  G4double GetDataSum() const;
+  
   //calulates the maximum integer contained in energy
   //choose from dataMap and energyMap the set of values
   //corresponding to the calculated integer
   //returns a value of energy chosen randomly from this set 
   //  G4double GetInfData(G4double energy, G4double random, G4int posIndex);
-
- //calulates the minimum integer contained in energy
+  
+  //calulates the minimum integer contained in energy
   //choose from dataMap and energyMap the set of values
   //corresponding to the calculated integer
   //returns a value of energy chosen randomly from this set 
   //  G4double GetSupData(G4double energy, G4double random, G4int posIndex);
-
+  
 private:
 
-  const XrayFluoDataSet* dataSet;
+  void Initialise();
+  G4bool isInitialized;
 
+  const XrayFluoDataSet* dataSet;
+  
   //stores the data of the incident gamma spectrum
   const XrayFluoDataSet* dataGammaSet;
 
   //stores the data of the incident alpha spectrum
-  const XrayFluoDataSet* dataAlphaSet;
-
-  //stores the data of the efficience of the detector
-  //const XrayFluoDataSet* efficiencySet;
+  const XrayFluoDataSet* dataAlphaSet;  
 
   //stores the energy data of the proton and alpha spectra
   G4DataVector* energies;
 
-//stores the data of the proton and alpha spectra
+  //stores the data of the proton and alpha spectra
    G4DataVector* data;
-
-  //stores the energy data (first column of the file) of the 
-  //response function 
-
-  //std::map<G4int,G4DataVector*,std::less<G4int> > energyMap;
-  
-  //stores the values (second column of the file) of the 
-  //response function 
-  //std::map<G4int,G4DataVector*,std::less<G4int> > dataMap;
   
   //read the data for protons and alpha spectra
- void ReadData(G4double,G4String);
+  void ReadData(G4double,G4String);
 
   //read the data for the response function if the detector
   //void ReadResponse(const G4String& fileName);

@@ -23,57 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: XrayFluoActionInitializer.hh 66241 2012-12-13 18:34:42Z gunter $
+// GEANT4 tag $Name:  $
 //
-// $Id: XrayFluoSteppingAction.cc
-// GEANT4 tag $Name: xray_fluo-V03-02-00
-//
-// Author: Elena Guardincerri (Elena.Guardincerri@ge.infn.it)
-//
-// History:
-// -----------
-// 28 Nov 2001 Elena Guardincerri     Created
-//
-// -------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "XrayFluoSteppingAction.hh"
-#include "G4SteppingManager.hh"
-#include "G4TrackVector.hh"
-#include "XrayFluoAnalysisManager.hh"
+#ifndef XrayFluoActionInitializer_h
+#define XrayFluoActionInitializer_h 1
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+#include "G4VUserActionInitialization.hh"
+#include "globals.hh"
 
-XrayFluoSteppingAction::XrayFluoSteppingAction() 
-    :mercuryFlag(false)
-{;}
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-XrayFluoSteppingAction::~XrayFluoSteppingAction()
-{;}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void XrayFluoSteppingAction::UserSteppingAction(const G4Step* aStep)
+class XrayFluoActionInitializer : public G4VUserActionInitialization
 {
-  XrayFluoAnalysisManager* analysis  = XrayFluoAnalysisManager::getInstance();
-  analysis->analyseStepping(aStep);
+public:
 
-  if (mercuryFlag){
-    const 
-      XrayFluoMercuryDetectorConstruction* detector = 
-      XrayFluoMercuryDetectorConstruction::GetInstance();
+  XrayFluoActionInitializer(G4int geometryFlag);
+  ~XrayFluoActionInitializer(){;};
+  
+  void Build() const;
+  void BuildForMaster() const;
+  
+private:
+  G4int fGeometryFlag;
 
-    if(aStep->GetTrack()->GetNextVolume()) 
-      { 
-	if(aStep->GetTrack()->GetNextVolume()->GetName() == "DetectorOptic") {
-	  G4ThreeVector particlePosition = aStep->GetPostStepPoint()->GetPosition();
-	  G4ThreeVector detectorPosition = detector->GetOptic()->GetObjectTranslation();
-	  G4ThreeVector newDirection = detectorPosition - particlePosition;
-	  aStep->GetPostStepPoint()->SetMomentumDirection(newDirection);
-	}
-      }
-  }
-}
+};
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
 

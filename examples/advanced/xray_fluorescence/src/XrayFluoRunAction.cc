@@ -52,8 +52,24 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoRunAction::XrayFluoRunAction()
-  :dataSet(0),dataGammaSet(0),dataAlphaSet(0)
+  : isInitialized(false), dataSet(0), dataGammaSet(0), 
+    dataAlphaSet(0)
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+XrayFluoRunAction::~XrayFluoRunAction()
+{;}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void XrayFluoRunAction::Initialise()
 {
+  //Only the master is initialized and keeps the data
+  //(or in sequential mode)
+  if (!IsMaster())
+    return;
+
   XrayFluoNormalization normalization;
   
   energies = new G4DataVector;
@@ -70,24 +86,25 @@ XrayFluoRunAction::XrayFluoRunAction()
 
   dataGammaSet = normalization.Normalize(minGamma, maxGamma, nBinsGamma,
 				  "M_flare");
-  
-  G4cout << "XrayFluoRunAction created" << G4endl;  
-}
-
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-XrayFluoRunAction::~XrayFluoRunAction()
-{
-  G4cout << "XrayFluoRunAction deleted" << G4endl;   
+  isInitialized = true;
+  G4cout << "XrayFluoRunAction initialized" << G4endl;  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void XrayFluoRunAction::BeginOfRunAction(const G4Run* aRun)
 {
-  
-  G4cout << "### Run " << aRun << " start." << G4endl;
+ 
+  //Master mode or sequential
+  if (IsMaster())
+    {
+      G4cout << "### Run " << aRun->GetRunID() << " starts (master)." << G4endl;
+      if (!isInitialized)
+	Initialise();
+    }
+  else    
+    G4cout << "### Run " << aRun->GetRunID() << " starts (worker)." << G4endl;
+
   if (G4VVisManager::GetConcreteInstance())
     {
       G4UImanager* UI = G4UImanager::GetUIpointer(); 
@@ -113,43 +130,44 @@ void XrayFluoRunAction::EndOfRunAction(const G4Run*)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
-const XrayFluoDataSet* XrayFluoRunAction::GetSet()
+const XrayFluoDataSet* XrayFluoRunAction::GetSet() const
 {
   return  dataSet;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const XrayFluoDataSet* XrayFluoRunAction::GetGammaSet()
+const XrayFluoDataSet* XrayFluoRunAction::GetGammaSet() const
 {
   return  dataGammaSet;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-const XrayFluoDataSet* XrayFluoRunAction::GetAlphaSet()
+const XrayFluoDataSet* XrayFluoRunAction::GetAlphaSet() const
 {
   return  dataAlphaSet;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DataVector* XrayFluoRunAction::GetEnergies()
+G4DataVector* XrayFluoRunAction::GetEnergies() const
 {
   return energies;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4DataVector* XrayFluoRunAction::GetData()
+G4DataVector* XrayFluoRunAction::GetData() const
 {
   return data;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double XrayFluoRunAction::GetDataSum()
+G4double XrayFluoRunAction::GetDataSum() const
 {
+ 
   G4double sum = 0;
   for (size_t i = 0; i < data->size(); i++)
     {
@@ -162,6 +180,7 @@ G4double XrayFluoRunAction::GetDataSum()
 
 void XrayFluoRunAction::ReadData(G4double unitE, G4String fileName)
 {
+  G4cout << "Reading data...";
   std::ostringstream ost;
   
   ost << fileName <<".dat";
@@ -232,6 +251,7 @@ void XrayFluoRunAction::ReadData(G4double unitE, G4String fileName)
     } while (a != -2); // end of file
   
   file.close();
+  G4cout << " done" << G4endl;
 }
 
 

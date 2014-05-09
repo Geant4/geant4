@@ -56,10 +56,24 @@ XrayFluoAnalysisManager* XrayFluoAnalysisManager::instance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+namespace { 
+  //Mutex to acquire access to singleton instance check/creation
+  G4Mutex instanceMutex = G4MUTEX_INITIALIZER;
+  //Mutex to acquire accss to histograms creation/access
+  //It is also used to control all operations related to histos 
+  //File writing and check analysis
+  G4Mutex dataManipulationMutex = G4MUTEX_INITIALIZER;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 XrayFluoAnalysisManager::XrayFluoAnalysisManager()
   :outputFileName("xrayfluo"), phaseSpaceFlag(false), physicFlag (false), 
    gunParticleEnergies(0), gunParticleTypes(0)
 {
+  dataLoaded = false;
+  fParticleEnergyAndTypeIndex = 0;
+
   //creating the messenger
   analisysMessenger = new XrayFluoAnalysisMessenger(this);
   
@@ -85,9 +99,6 @@ XrayFluoAnalysisManager::~XrayFluoAnalysisManager()
   instance = 0;
   
   delete G4AnalysisManager::Instance();  
-
-  G4cout << "XrayFluoAnalysisManager delete" << G4endl;
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -95,6 +106,7 @@ XrayFluoAnalysisManager::~XrayFluoAnalysisManager()
 XrayFluoAnalysisManager* XrayFluoAnalysisManager::getInstance()
 
 {
+  G4AutoLock l(&instanceMutex);
   if (instance == 0) {instance = new XrayFluoAnalysisManager;}
   return instance;
 }
@@ -103,6 +115,7 @@ XrayFluoAnalysisManager* XrayFluoAnalysisManager::getInstance()
 
 void XrayFluoAnalysisManager::book()
 {
+  G4AutoLock l(&dataManipulationMutex);
   // Get analysis manager
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   // Open an output file
@@ -142,7 +155,12 @@ void XrayFluoAnalysisManager::book()
 
 void XrayFluoAnalysisManager::LoadGunData(G4String fileName, G4bool raileighFlag) 
 {
-  
+  G4AutoLock l(&dataManipulationMutex);
+
+  //Do not allow more than one thread to trigger the file reading
+  if (dataLoaded)
+    return;
+
   // Get analysis reader manager
   G4AnalysisReader* analysisReader = G4AnalysisReader::Instance();
   analysisReader->SetVerboseLevel(1);
@@ -173,29 +191,36 @@ void XrayFluoAnalysisManager::LoadGunData(G4String fileName, G4bool raileighFlag
 	}
     }
 
-  G4cout << "Maximum mumber of events: "<< gunParticleEnergies->size() <<G4endl;
+  G4cout << "Maximum mumber of events: "<< gunParticleEnergies->size() <<G4endl;  
 
+  dataLoaded= true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-std::vector<G4double>* XrayFluoAnalysisManager::GetEmittedParticleEnergies() {
+const std::pair<G4double,G4String> XrayFluoAnalysisManager::GetEmittedParticleEnergyAndType() 
+{
+  G4AutoLock l(&dataManipulationMutex);
+  std::pair<G4double,G4String> result;
+  
+  if(fParticleEnergyAndTypeIndex < (G4int) gunParticleEnergies->size())
+    {
+      G4double energy = gunParticleEnergies->at(fParticleEnergyAndTypeIndex);
+      G4String name = gunParticleTypes->at(fParticleEnergyAndTypeIndex);
+      result.first = energy;
+      result.second = name;
+    }
 
-  return gunParticleEnergies;
-
+  fParticleEnergyAndTypeIndex++;
+  return result;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-std::vector<G4String>* XrayFluoAnalysisManager::GetEmittedParticleTypes() {
-
-  return gunParticleTypes;
-
-}
 
 
 void XrayFluoAnalysisManager::finish()
 { 
+  G4AutoLock l(&dataManipulationMutex);
   G4cout << "Going to save histograms" << G4endl;
   // Save histograms
   G4AnalysisManager* man = G4AnalysisManager::Instance();
@@ -215,6 +240,7 @@ void XrayFluoAnalysisManager::SetPhysicFlag(G4bool val)
 
 void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
 {
+  G4AutoLock l(&dataManipulationMutex);
   G4AnalysisManager* man = G4AnalysisManager::Instance();
 
   if (phaseSpaceFlag){       
@@ -402,7 +428,7 @@ void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
 
 void XrayFluoAnalysisManager::analyseEnergyDep(G4double energyDep)
 {
-
+  G4AutoLock l(&dataManipulationMutex);
   // Filling of Energy Deposition, called by XrayFluoEventAction  
   G4AnalysisManager* man = G4AnalysisManager::Instance();
 
@@ -415,6 +441,7 @@ void XrayFluoAnalysisManager::analyseEnergyDep(G4double energyDep)
 
 void XrayFluoAnalysisManager::analysePrimaryGenerator(G4double energy)
 {
+  G4AutoLock l(&dataManipulationMutex);
   // Filling of energy spectrum histogram of the primary generator
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   if (!phaseSpaceFlag)
@@ -426,7 +453,7 @@ void XrayFluoAnalysisManager::analysePrimaryGenerator(G4double energy)
 
 void XrayFluoAnalysisManager::SetOutputFileName(G4String newName)
 {
-
+  
   outputFileName = newName;
 }
 

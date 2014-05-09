@@ -49,9 +49,9 @@ XrayFluoDataSet::XrayFluoDataSet(G4int /*Z*/,
   numberOfBins = energies->size();
   unit1 = unitE;
   unit2 = unitData;
-
-  G4cout << "XrayFluo FluoDataSet created" << G4endl;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 XrayFluoDataSet:: XrayFluoDataSet(G4int /*Z*/, 
 			  const G4String& dataFile,
@@ -65,21 +65,18 @@ XrayFluoDataSet:: XrayFluoDataSet(G4int /*Z*/,
   unit2 = unitData;  
   LoadData(dataFile);
   numberOfBins = energies->size();
-
-  G4cout << "XrayFluo FluoDataSet created" << G4endl;
-
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 // Destructor
-
 XrayFluoDataSet::~XrayFluoDataSet()
 { 
   delete energies;
   delete data;
-  G4cout << "XrayFluo FluoDataSet deleted" << G4endl;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double XrayFluoDataSet::FindValue(G4double e, G4int) const
 {
@@ -105,6 +102,8 @@ G4double XrayFluoDataSet::FindValue(G4double e, G4int) const
   return value;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4int XrayFluoDataSet::FindBinLocation(G4double energy) const
 {
   // Protection against call outside allowed range
@@ -129,6 +128,7 @@ G4int XrayFluoDataSet::FindBinLocation(G4double energy) const
   return upperBound;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4bool XrayFluoDataSet::LoadData(const G4String& fileName)
 {
@@ -141,8 +141,8 @@ G4bool XrayFluoDataSet::LoadData(const G4String& fileName)
   if (!path)
     path = getenv("PWD");
 
-  G4cout << path << G4endl;
-  G4cout << fileName << G4endl;
+  //G4cout << path << G4endl;
+  //G4cout << fileName << G4endl;
 
 
   G4String pathString(path);
@@ -200,6 +200,9 @@ G4bool XrayFluoDataSet::LoadData(const G4String& fileName)
   return true;
 
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void XrayFluoDataSet::PrintData() const
 {
   size_t size = numberOfBins;
