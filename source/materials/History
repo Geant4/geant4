@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-09-05-14 G.Cosmo (materials-V10-00-09)
+09-05-14 G.Cosmo (materials-V10-00-10, materials-V10-00-09)
 - Replaced size_t with int type for 'fNumberOfIsotopes' in G4Element
   and 'fNumberOfComponents' and 'fNumberOfElements' in G4Material.
   Adapted code accordingly.

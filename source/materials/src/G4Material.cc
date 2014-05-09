@@ -503,7 +503,7 @@ void G4Material::AddMaterial(G4Material* material, G4double fraction)
     for (G4int elm=0; elm<nelm; ++elm)
       {
         G4Element* element = (*(material->GetElementVector()))[elm];
-        size_t el = 0;
+        G4int el = 0;
         while ((el<fNumberOfElements)&&(element!=(*theElementVector)[el])) el++;
         if (el < fNumberOfElements) fMassFractionVector[el] += fraction
                                           *(material->GetFractionVector())[elm];
