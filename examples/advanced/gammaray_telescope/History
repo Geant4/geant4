@@ -9,6 +9,11 @@ $Id$
                           History file
                           ------------
 
+07.05.2014   L.Pandola, Tag gammaraytel-V10-00-00
+	     Start to prepare the MT migration: (1) create ActionInitializer
+             (2) make const Getters in the detector construction; (3) 
+             retrieve const pointer to geometry from Analysis class
+
 07.11.2013   L.Pandola, Tag: gammaraytel-V09-06-06
 	     Edit physics list according to A. Ribon's suggestions.
              (1) Remove inelastic models for hyperons and anti-hyperons (only 

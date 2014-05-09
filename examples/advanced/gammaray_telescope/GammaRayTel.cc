@@ -52,10 +52,8 @@
  
 #include "GammaRayTelDetectorConstruction.hh"
 #include "GammaRayTelPhysicsList.hh"
-#include "GammaRayTelPrimaryGeneratorAction.hh"
-#include "GammaRayTelRunAction.hh"
-#include "GammaRayTelEventAction.hh"
- 
+#include "GammaRayTelActionInitializer.hh"
+
 //#include "QGSP_BIC.hh" 
 #include "FTFP_BERT.hh" 
 
@@ -85,21 +83,14 @@ int main(int argc, char** argv)
   //  runManager->SetUserInitialization(new QGSP_BIC);
   runManager->SetUserInitialization(new FTFP_BERT);
 
-  
-  // Set mandatory user action classes
-  runManager->SetUserAction(new GammaRayTelPrimaryGeneratorAction);
-  
+  //Initialize actions
+  runManager->SetUserInitialization(new GammaRayTelActionInitializer());
+
 #ifdef G4ANALYSIS_USE
   // Creation of the analysis manager
   GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
 #endif
-  
-  // Set optional user action classes
-  GammaRayTelEventAction* eventAction = new GammaRayTelEventAction();
-  GammaRayTelRunAction* runAction = new GammaRayTelRunAction();
-  runManager->SetUserAction(eventAction);
-  runManager->SetUserAction(runAction);
-  
+    
   // Set visualization and user interface
 #ifdef G4VIS_USE
   // Visualization manager

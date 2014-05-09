@@ -108,7 +108,7 @@ private:
 private:
   static GammaRayTelAnalysis* instance;
 
-  GammaRayTelDetectorConstruction*    GammaRayTelDetector;
+  const GammaRayTelDetectorConstruction*    GammaRayTelDetector;
 
   G4String histo2DMode;
   G4String histoFileName;

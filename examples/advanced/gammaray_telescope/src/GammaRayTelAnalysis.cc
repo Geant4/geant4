@@ -68,9 +68,9 @@ GammaRayTelAnalysis* GammaRayTelAnalysis::instance = 0;
 GammaRayTelAnalysis::GammaRayTelAnalysis()
   :GammaRayTelDetector(0),histo2DMode("strip")
 {
-  G4RunManager* runManager = G4RunManager::GetRunManager();
   GammaRayTelDetector =
-    (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
+    static_cast<const GammaRayTelDetectorConstruction*>
+        (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
 
 #ifdef  G4ANALYSIS_USE
   // Define the messenger and the analysis system
