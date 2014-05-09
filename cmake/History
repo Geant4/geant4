@@ -30,6 +30,9 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+09th May 2014 - Gunter Folger (cmake-V10-00-14)
+- Modules/Geant4DatasetDefinitions.cmake: G4EMLOW6.38
+
 10th April - Ben Morgan (cmake-V10-00-13)
 - Modules/Geant4LibraryBuildOptions.cmake: When building against the C++11
   standard, append -DG4USE_STD11 to CMAKE_CXX_FLAGS. Requested by Gabriele
