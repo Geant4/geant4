@@ -67,11 +67,11 @@ class G4KineticTrack : public G4VKineticNucleon
 
       G4KineticTrack(const G4ParticleDefinition* aDefinition,
                      G4double aFormationTime,
-                     G4ThreeVector aPosition, 
-                     G4LorentzVector& a4Momentum);
+                     const G4ThreeVector& aPosition,
+                     const G4LorentzVector& a4Momentum);
       G4KineticTrack(G4Nucleon * nucleon,
-                     G4ThreeVector aPosition,
-                     G4LorentzVector& a4Momentum);
+                     const G4ThreeVector& aPosition,
+                     const G4LorentzVector& a4Momentum);
 
       ~G4KineticTrack();
 
