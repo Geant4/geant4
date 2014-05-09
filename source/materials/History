@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-05-14 G.Cosmo (materials-V10-00-09)
+- Replaced size_t with int type for 'fNumberOfIsotopes' in G4Element
+  and 'fNumberOfComponents' and 'fNumberOfElements' in G4Material.
+  Adapted code accordingly.
+  Workaround to overcome limitation in Root I/O for object persistency.
+
+08-05-14 P.Gumplinger (materials-V10-00-08)
+- Further attempts at avoiding all Coverity errors
+
 06-04-14 V.Ivanchenko (materials-V10-00-07)
 - G4NistmaterialBuilder - added new material G4_lBr - at STP Bromine
     is mainly liquid while in NIST DB it is described as a gas.
@@ -24,7 +33,7 @@ committal in the CVS repository !
     http://en.wikipedia.org/wiki/Bromine
 
 30-04-14 P.Gumplinger (materials-V10-00-06)
-- attempt at avoiding Coverity errors 37180 and 37340
+- Attempt at avoiding Coverity errors 37180 and 37340
 
 28-04-14 M.Asai (materials-V10-00-05)
 - G4MaterialPropertyTable: fix race condition problem. Addressing to

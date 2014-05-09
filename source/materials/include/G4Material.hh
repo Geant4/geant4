@@ -315,9 +315,9 @@ private:
 
   G4int            maxNbComponents;       // totalNbOfComponentsInTheMaterial 
   G4int            fArrayLength;          // the length of fAtomsVector 
-  size_t           fNumberOfComponents;   // Nb of components declared so far
+  G4int            fNumberOfComponents;   // Nb of components declared so far
 
-  size_t           fNumberOfElements;     // Nb of Elements in the material
+  G4int            fNumberOfElements;     // Nb of Elements in the material
   G4ElementVector* theElementVector;      // vector of constituent Elements
   G4bool           fImplicitElement;      // implicit Element created by this?
   G4double*        fMassFractionVector;   // composition by fractional mass

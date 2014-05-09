@@ -218,9 +218,6 @@ private:
 
         G4float* AngularDistribution;
 
-        // Open LUT with Material and Integer Angle
-        FILE* readLUTFileHandle;
-
         G4Physics2DVector* DichroicVector;
 
 };
