@@ -429,7 +429,9 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 	   << "  " << this << G4endl;
   }
 
-  if(GetMasterProcess() != this) { isMaster = false; }
+  const G4VEnergyLossProcess* masterProcess = 
+    static_cast<const G4VEnergyLossProcess*>(GetMasterProcess());
+  if(masterProcess && masterProcess != this) { isMaster = false; }
 
   currentCouple = 0;
   preStepLambda = 0.0;
@@ -644,9 +646,6 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
            << " isIon= " << isIon << "  " << this << G4endl;
   }
 
-  const G4VEnergyLossProcess* masterProcess = 
-    static_cast<const G4VEnergyLossProcess*>(GetMasterProcess());
-
   if(&part == particle) {
 
     G4LossTableBuilder* bld = lManager->GetTableBuilder();
@@ -656,6 +655,9 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
       lManager->BuildPhysicsTable(particle, this);
 
     } else {
+
+      const G4VEnergyLossProcess* masterProcess = 
+	static_cast<const G4VEnergyLossProcess*>(GetMasterProcess());
 
       // define density factors for worker thread
       bld->InitialiseBaseMaterials(masterProcess->DEDXTable()); 

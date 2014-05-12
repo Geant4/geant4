@@ -183,7 +183,9 @@ void
 G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
   G4bool master = true;
-  if(GetMasterProcess() != this) { master = false; }
+  const G4VMultipleScattering* masterProc = 
+    static_cast<const G4VMultipleScattering*>(GetMasterProcess());
+  if(masterProc && masterProc != this) { master = false; }
 
   if(!firstParticle) { firstParticle = &part; }
   if(part.GetParticleType() == "nucleus") {
@@ -280,7 +282,7 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
   G4bool master = true;
   const G4VMultipleScattering* masterProcess = 
     static_cast<const G4VMultipleScattering*>(GetMasterProcess()); 
-  if(masterProcess != this) { master = false; }
+  if(masterProcess && masterProcess != this) { master = false; }
 
   if(firstParticle == &part) { 
     /*    
@@ -313,7 +315,6 @@ void G4VMultipleScattering::BuildPhysicsTable(const G4ParticleDefinition& part)
 	msc->InitialiseLocal(firstParticle, msc0);
       }
     }
-
   }
 
   // explicitly defined printout by particle name

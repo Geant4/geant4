@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09 May 14: V.Ivant (emutils-V10-00-13)
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - fixed 
+    bug report #1594 (crash G4WrapperProcess in sequential mode)
+
 28 April 14: V.Ivant (emutils-V10-00-12)
 - G4VSubCutProducer, G4LossTableManager, G4VEnergyLossProcess - new
     interface is added allowing production of delta-electrons below 

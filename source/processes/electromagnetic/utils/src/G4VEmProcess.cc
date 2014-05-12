@@ -236,7 +236,11 @@ G4VEmModel* G4VEmProcess::GetModelByIndex(G4int idx, G4bool ver) const
 
 void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 {
-  G4bool isMaster = false;
+  G4bool isMaster = true;
+  const G4VEmProcess* masterProcess = 
+    static_cast<const G4VEmProcess*>(GetMasterProcess());
+  if(masterProcess && masterProcess != this) { isMaster = false; }
+
   if(GetMasterProcess() == this) { isMaster = true; }
   if(!particle) { SetParticle(&part); }
 
@@ -330,10 +334,10 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
 void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
 {
-  const G4VEmProcess* masterProc = 0;
-  if(GetMasterProcess() != this) {
-    masterProc = static_cast<const G4VEmProcess*>(GetMasterProcess()); 
-  }
+  G4bool isMaster = true;
+  const G4VEmProcess* masterProc = 
+    static_cast<const G4VEmProcess*>(GetMasterProcess());
+  if(masterProc && masterProc != this) { isMaster = false; }
 
   G4String num = part.GetParticleName();
   if(1 < verboseLevel) {
@@ -349,7 +353,7 @@ void G4VEmProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
     G4LossTableBuilder* bld = lManager->GetTableBuilder();
 
     // worker initialisation
-    if(masterProc) {
+    if(!isMaster) {
       theLambdaTable = masterProc->LambdaTable();
       theLambdaTablePrim = masterProc->LambdaTablePrim();
 
