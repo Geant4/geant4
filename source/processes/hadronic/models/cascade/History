@@ -15,6 +15,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+9 May 2014  M. Kelsey (hadr-casc-V10-00-09)
+-------------------------------------------
+- G4PreCompoundDeexcitation.cc: Fix mistake in copying example code; created
+  a local copy instead of filling the data member.
+
+9 May 2014  M. Kelsey (hadr-casc-V10-00-08)
+-------------------------------------------
+- 4PreCompoundDeexcitation.cc:  Per V.Ivanchenko, attempt to use shared
+  instance of PreCompound by fetching from hadronic registry.  Only if that
+  fails should a local instance be created.
+
 9 April 2014  M. Kelsey (hadr-casc-V10-00-07)
 ---------------------------------------------
 - G4IntraNucleiCascader.cc:  Use const G4PD*.
