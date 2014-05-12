@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11.05.2014  V. Ivanchenko, tag emlowen-V10-00-10
+            G4LowEWentzelVIModel - set single scattering factor 0.7 
+              (was 1.0 before) - increasing accuracy but more slow
+            G4AtomicTransitionManager, G4UAtomicDeexcitation,
+            G4FluoData, G4LivermoreIonisationModel,
+            G4PenelopeOscillatorManager - G4AtomicTransitionManager
+              become pure singleton shared between threads, all
+              run time methods are const;
+              Initilise() method should be called in the beginning 
+              of the run.
+
 25.04.2014  S. Incerti, tag emlowen-V10-00-09
             Updated G4UAtomicDeexcitation according to previous tag 
 

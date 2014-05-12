@@ -109,7 +109,7 @@ private:
   G4eIonisationCrossSectionHandler* crossSectionHandler;
   G4VEnergySpectrum* energySpectrum;
 
-  const G4AtomicTransitionManager* transitionManager;
+  G4AtomicTransitionManager* transitionManager;
 };
 
 #endif

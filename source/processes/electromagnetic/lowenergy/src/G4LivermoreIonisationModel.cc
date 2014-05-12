@@ -110,6 +110,8 @@ void G4LivermoreIonisationModel::Initialise(const G4ParticleDefinition* particle
 		  "Livermore Ionisation Model is applicable only to electrons");
     }
 
+  transitionManager->Initialise();
+
   //Read energy spectrum
   if (energySpectrum) 
     {
