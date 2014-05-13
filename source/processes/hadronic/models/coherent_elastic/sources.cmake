@@ -53,6 +53,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4DiffuseElastic.hh
         G4ElasticHadrNucleusHE.hh
         G4HadronElastic.hh
+        G4hhElastic.hh
         G4LEnp.hh
         G4LEnpData.hh
         G4LEpp.hh
@@ -66,6 +67,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4DiffuseElastic.cc
         G4ElasticHadrNucleusHE.cc
         G4HadronElastic.cc
+        G4hhElastic.cc
         G4LEnp.cc
         G4LEpp.cc
         G4NuclNuclDiffuseElastic.cc

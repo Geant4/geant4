@@ -14,6 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+13 May 2014 - A.Ribon (hadr-cohe-V10-00-07)
+-----------------------------------------------------------------
+- Removed unused private members of G4hhElastic which are not used
+  (to avoid warnings).
+
+12 May 2014 - A.Ribon (hadr-cohe-V10-00-06)
+-----------------------------------------------------------------
+- Added V. Grichine's new class G4hhElastic : implementation of the
+  qQ-model with springy Pomeron for hadron-hadron elastic scattering
+
 06 May 2014 - A.Ribon (hadr-cohe-V10-00-05)
 -----------------------------------------------------------------
 - Tag V. Grichine's bug fix in G4DiffuseElastic.cc .
