@@ -42,7 +42,8 @@ target_link_libraries(Hadr06 ${Geant4_LIBRARIES} )
 set(Hadr04_SCRIPTS
     debug.mac
     envHadronic.csh
-    envHadronic.sh 
+    envHadronic.sh
+	fission.mac 
     graphite.mac 
     hadr06.in
     run1.mac 

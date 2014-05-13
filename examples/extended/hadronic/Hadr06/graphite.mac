@@ -8,6 +8,8 @@
 /testhadr/det/setMat graphite
 /testhadr/det/setRadius 20 cm
 #
+###/testhadr/phys/thermalScattering true
+#
 /run/initialize
 #
 /process/list
