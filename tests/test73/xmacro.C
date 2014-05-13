@@ -2,7 +2,7 @@
 using namespace std;
 #include "TMath.h"
 
-void xmacro(TString f1="thin.root", TString f2="thick.root", TString outf="result.pdf")
+void xmacro(TString f1="thin.root", TString f2="thick.root", TString outf="result.pdf" , Double_t pvallim=0.001)
 {
   //Reduce verbosity: Info level is disabled or, since it will send to stderr will
   //create problems...
@@ -276,16 +276,16 @@ void xmacro(TString f1="thin.root", TString f2="thick.root", TString outf="resul
 	if ( t1 > 0 ) pval1 = 1-pval1;
 
 	cout<<"Student's t-test on intercept: "<<t0<<" p-value="<<pval0<<" (one-tailed)";//<<endl;
-	if ( pval0<0.025 ) 
+	if ( pval0<pvallim ) 
 	  {
-	    cout<<" test is failing, limit is p-val=0.025";
+	    cout<<" test is failing, limit is p-val="<<pvallim;
 	    cerr<<"Student's t-test failing for \"Intercept\" fitted value. Check file: "<<outf<<endl;
 	  }
 	cout<<endl;
 	cout<<"Student's t-test on slope: "<<t1<<" p-value="<<pval1<<" (one-tailed)";//<<endl;
-	if ( pval1<0.025 ) { 
-		    cout<<" test is failing, limit is p-val=0.025";
-		    cerr<<"Student's t-test failing for \"Slope\" fitted value. Check file: "<<outf<<endl;
+	if ( pval1<pvallim ) { 
+	  cout<<" test is failing, limit is p-val="<<pvallim;
+	  cerr<<"Student's t-test failing for \"Slope\" fitted value. Check file: "<<outf<<endl;
 	}
 	cout<<endl;
 

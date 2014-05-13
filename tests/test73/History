@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-05-14 A. Dotti         (test73-V10-00-01)
+- Reducing level for error in test 
+
 07-04-14 A. Dotti         (test73-V10-00-00)
 - Removing warnings for unused variables
 
