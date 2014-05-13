@@ -52,7 +52,7 @@
 #include "G4ThreeVector.hh"
 #include "G4TouchableHandle.hh"
 #include "G4TrackState.hh"
-#include "G4shared_ptr.hh"
+#include "G4memory.hh"
 
 class G4ITStepProcessor;
 
@@ -121,6 +121,7 @@ public:
     void SetStepProcessorState(G4ITStepProcessorState_Lock*);
     G4ITStepProcessorState_Lock* GetStepProcessorState();
 
+    /*
     std::map<int,G4VTrackStateHandle> fTrackStates;
     std::map<void*,G4VTrackStateHandle> fMultipleTrackStates;
 
@@ -141,7 +142,20 @@ public:
     {
     	return fTrackStates[G4TrackStateID<T>::GetID()] ;
     }
+    */
 
+    G4TrackStateManager fTrackStateManager;
+
+    G4TrackStateManager& GetTrackStateManager()
+    {
+    	return fTrackStateManager;
+    }
+/*
+    G4TrackStateManager& GetTrackStateManager() const
+    {
+    	return fTrackStateManager;
+    }
+*/
     inline G4Trajectory_Lock* GetTrajectory_Lock()
     {
         return fpTrajectory_Lock ;

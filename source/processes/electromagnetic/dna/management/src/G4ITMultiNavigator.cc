@@ -24,15 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4MultiNavigator.cc 70934 2013-06-07 13:29:05Z gcosmo $
+// $Id: G4ITMultiNavigator.cc 70934 2013-06-07 13:29:05Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
 // class G4PathFinder Implementation
 //
 // Author:  John Apostolakis, November 2006
 // --------------------------------------------------------------------
-
-#ifdef DNADEV
 
 #include <iomanip>
 
@@ -45,31 +43,36 @@ class G4FieldManager;
 #include "G4PropagatorInField.hh"
 #include "G4ITTransportationManager.hh"
 
+#define State(X) fpTrackState->X
+#define fLimitedStep State(fLimitedStep)
+#define fLimitTruth State(fLimitTruth)
+#define fCurrentStepSize State(fCurrentStepSize)
+#define fNewSafety State(fNewSafety)
+#define fNoLimitingStep State(fNoLimitingStep)
+#define fIdNavLimiting State(fIdNavLimiting)
+#define fMinStep  State(fMinStep)
+#define fMinSafety State(fMinSafety)
+#define fTrueMinStep   State(fTrueMinStep)
+#define fLocatedVolume State(fLocatedVolume)
+#define fLastLocatedPosition State(fLastLocatedPosition)
+#define fSafetyLocation State(fSafetyLocation)
+#define fMinSafety_atSafLocation State(fMinSafety_atSafLocation)
+#define fPreStepLocation State(fPreStepLocation)
+#define fMinSafety_PreStepPt State(fMinSafety_PreStepPt)
+#define fWasLimitedByGeometry State(fWasLimitedByGeometry)
+
 // ********************************************************************
 // Constructor
 // ********************************************************************
 //
-G4MultiNavigator::G4MultiNavigator() 
-  : G4Navigator(), fLastMassWorld(0)
+G4ITMultiNavigator::G4ITMultiNavigator()
+  : G4ITNavigator(), fLastMassWorld(0)
 {
   fNoActiveNavigators= 0; 
-  G4ThreeVector Big3Vector( kInfinity, kInfinity, kInfinity ); 
-  fLastLocatedPosition = Big3Vector;
-  fSafetyLocation  = Big3Vector;
-  fPreStepLocation = Big3Vector;
-
-  fMinSafety_PreStepPt=  -1.0; 
-  fMinSafety_atSafLocation= -1.0; 
-  fMinSafety= -kInfinity;  
-  fTrueMinStep= fMinStep= -kInfinity;  
 
   for(register int num=0; num< fMaxNav; ++num )
   {
     fpNavigator[num] =  0;   
-    fLimitTruth[num] = false;
-    fLimitedStep[num] = kUndefLimited;
-    fCurrentStepSize[num] = fNewSafety[num] = -1.0; 
-    fLocatedVolume[num] = 0; 
   }
 
   pTransportManager= G4ITTransportationManager::GetTransportationManager();
@@ -84,46 +87,13 @@ G4MultiNavigator::G4MultiNavigator()
       fLastMassWorld = pWorld; 
     }
   }
-
-  fNoLimitingStep= -1; 
-  fIdNavLimiting= -1; 
 }
 
-G4MultiNavigator::~G4MultiNavigator() 
+G4ITMultiNavigator::~G4ITMultiNavigator()
 {
 }
 
-
-template<>
- G4TrackState<G4ITMultiNavigator>::G4TrackState<G4ITMultiNavigator>()
-{
-
-  G4ThreeVector Big3Vector( kInfinity, kInfinity, kInfinity );
-  fLastLocatedPosition = Big3Vector;
-  fSafetyLocation  = Big3Vector;
-  fPreStepLocation = Big3Vector;
-
-  fMinSafety_PreStepPt=  -1.0;
-  fMinSafety_atSafLocation= -1.0;
-  fMinSafety= -kInfinity;
-  fTrueMinStep= fMinStep= -kInfinity;
-
-  for(register int num=0; num< fMaxNav; ++num )
-  {
-    fpNavigator[num] =  0;
-    fLimitTruth[num] = false;
-    fLimitedStep[num] = kUndefLimited;
-    fCurrentStepSize[num] = fNewSafety[num] = -1.0;
-    fLocatedVolume[num] = 0;
-  }
-
-   fNoLimitingStep = -1;       // How many geometries limited the step
-   fIdNavLimiting = -1;        // Id of Navigator limiting step (if only one limits)
-};
-
-
-
-G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
+G4double G4ITMultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
                                        const G4ThreeVector &pDirection,
                                        const G4double       proposedStepLength,
                                              G4double      &pNewSafety)
@@ -137,7 +107,7 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
 #ifdef G4DEBUG_NAVIGATION
   if( fVerbose > 2 )
   {
-    G4cout << " G4MultiNavigator::ComputeStep : entered " << G4endl;
+    G4cout << " G4ITMultiNavigator::ComputeStep : entered " << G4endl;
     G4cout << "   Input position= " << pGlobalPoint
            << "   direction= "      << pDirection         << G4endl;
     G4cout << "   Requested step= " << proposedStepLength << G4endl;
@@ -169,7 +139,7 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
 #ifdef G4DEBUG_NAVIGATION
      if( fVerbose > 2 )
      {
-       G4cout << "G4MultiNavigator::ComputeStep : Navigator ["
+       G4cout << "G4ITMultiNavigator::ComputeStep : Navigator ["
               << num << "] -- step size " << step
               << " safety= " << safety << G4endl;
      }
@@ -197,7 +167,7 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
     G4ThreeVector endPosition = initialPosition+fTrueMinStep*initialDirection;
 
     G4int oldPrec = G4cout.precision(8); 
-    G4cout << "G4MultiNavigator::ComputeStep : "
+    G4cout << "G4ITMultiNavigator::ComputeStep : "
            << " initialPosition = " << initialPosition 
            << " and endPosition = " << endPosition << G4endl;
     G4cout.precision( oldPrec );
@@ -211,7 +181,7 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
 #ifdef G4DEBUG_NAVIGATION
   if( fVerbose > 2 )
   {
-    G4cout << " G4MultiNavigator::ComputeStep : exits returning "
+    G4cout << " G4ITMultiNavigator::ComputeStep : exits returning "
            << minStep << G4endl;
   }
 #endif
@@ -222,7 +192,7 @@ G4double G4MultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
 // ----------------------------------------------------------------------
 
 G4double 
-G4MultiNavigator::ObtainFinalStep( G4int     navigatorId, 
+G4ITMultiNavigator::ObtainFinalStep( G4int     navigatorId,
                                    G4double &pNewSafety,  // for this geometry
                                    G4double &minStep,
                                    ELimited &limitedStep) 
@@ -233,7 +203,7 @@ G4MultiNavigator::ObtainFinalStep( G4int     navigatorId,
      message << "Bad Navigator Id!" << G4endl
              << "        Navigator Id = " << navigatorId 
              << "        No Active = " << fNoActiveNavigators << ".";
-     G4Exception("G4MultiNavigator::ObtainFinalStep()", "GeomNav0002",
+     G4Exception("G4ITMultiNavigator::ObtainFinalStep()", "GeomNav0002",
                  FatalException, message); 
   }
 
@@ -246,7 +216,7 @@ G4MultiNavigator::ObtainFinalStep( G4int     navigatorId,
 #ifdef G4DEBUG_NAVIGATION
   if( fVerbose > 1 )
   { 
-     G4cout << " G4MultiNavigator::ComputeStep returns "
+     G4cout << " G4ITMultiNavigator::ComputeStep returns "
             << fCurrentStepSize[ navigatorId ]
             << " for Navigator " << navigatorId
             << " Limited step = " << limitedStep 
@@ -259,17 +229,17 @@ G4MultiNavigator::ObtainFinalStep( G4int     navigatorId,
 
 // ----------------------------------------------------------------------
 
-void G4MultiNavigator::PrepareNewTrack( const G4ThreeVector position, 
+void G4ITMultiNavigator::PrepareNewTrack( const G4ThreeVector position,
                                         const G4ThreeVector direction )
 {
 #ifdef G4DEBUG_NAVIGATION
   if( fVerbose > 1 )
   {
-    G4cout << " Entered G4MultiNavigator::PrepareNewTrack() " << G4endl;
+    G4cout << " Entered G4ITMultiNavigator::PrepareNewTrack() " << G4endl;
   }
 #endif
 
-  G4MultiNavigator::PrepareNavigators(); 
+  G4ITMultiNavigator::PrepareNavigators();
 
   LocateGlobalPointAndSetup( position, &direction, false, false );   
   //
@@ -280,7 +250,7 @@ void G4MultiNavigator::PrepareNewTrack( const G4ThreeVector position,
 
 // ----------------------------------------------------------------------
 
-void G4MultiNavigator::PrepareNavigators()
+void G4ITMultiNavigator::PrepareNavigators()
 {
   // Key purposes:
   //   - Check and cache set of active navigators
@@ -289,13 +259,13 @@ void G4MultiNavigator::PrepareNavigators()
 #ifdef G4DEBUG_NAVIGATION
   if( fVerbose > 1 )
   {
-    G4cout << " Entered G4MultiNavigator::PrepareNavigators() " << G4endl;
+    G4cout << " Entered G4ITMultiNavigator::PrepareNavigators() " << G4endl;
   }
 #endif
 
   // Message the transportation-manager to find active navigators
 
-  std::vector<G4Navigator*>::iterator pNavigatorIter; 
+  std::vector<G4ITNavigator*>::iterator pNavigatorIter;
   fNoActiveNavigators=  pTransportManager-> GetNoActiveNavigators();
 
   if( fNoActiveNavigators > fMaxNav )
@@ -306,7 +276,7 @@ void G4MultiNavigator::PrepareNavigators()
             << fNoActiveNavigators << G4endl
             << "        which is more than the number allowed: "
             << fMaxNav << " !";
-    G4Exception("G4MultiNavigator::PrepareNavigators()", "GeomNav0002",  
+    G4Exception("G4ITMultiNavigator::PrepareNavigators()", "GeomNav0002",
                 FatalException, message); 
   }
 
@@ -334,7 +304,7 @@ void G4MultiNavigator::PrepareNavigators()
 #ifdef G4DEBUG_NAVIGATION
      if( fVerbose > 0 )
      { 
-       G4cout << " G4MultiNavigator::PrepareNavigators() changed world volume " 
+       G4cout << " G4ITMultiNavigator::PrepareNavigators() changed world volume "
               << " for mass geometry to " << massWorld->GetName() << G4endl; 
      }
 #endif
@@ -346,7 +316,7 @@ void G4MultiNavigator::PrepareNavigators()
 // ----------------------------------------------------------------------
 
 G4VPhysicalVolume* 
-G4MultiNavigator::LocateGlobalPointAndSetup(const G4ThreeVector& position,
+G4ITMultiNavigator::LocateGlobalPointAndSetup(const G4ThreeVector& position,
                                             const G4ThreeVector* pDirection,
                                             const G4bool pRelativeSearch,
                                             const G4bool ignoreDirection )
@@ -355,7 +325,7 @@ G4MultiNavigator::LocateGlobalPointAndSetup(const G4ThreeVector& position,
 
   G4ThreeVector direction(0.0, 0.0, 0.0);
   G4bool relative = pRelativeSearch; 
-  std::vector<G4Navigator*>::iterator pNavIter
+  std::vector<G4ITNavigator*>::iterator pNavIter
     = pTransportManager->GetActiveNavigatorsIterator(); 
 
   if( pDirection ) { direction = *pDirection; }
@@ -363,7 +333,7 @@ G4MultiNavigator::LocateGlobalPointAndSetup(const G4ThreeVector& position,
 #ifdef G4DEBUG_NAVIGATION
   if( fVerbose > 2 )
   {
-    G4cout << " Entered G4MultiNavigator::LocateGlobalPointAndSetup() "
+    G4cout << " Entered G4ITMultiNavigator::LocateGlobalPointAndSetup() "
            << G4endl;
     G4cout << "   Locating at position: " << position
            << ", with direction: " << direction << G4endl
@@ -424,17 +394,17 @@ G4MultiNavigator::LocateGlobalPointAndSetup(const G4ThreeVector& position,
 // ----------------------------------------------------------------------
 
 void
-G4MultiNavigator::LocateGlobalPointWithinVolume(const G4ThreeVector& position)
+G4ITMultiNavigator::LocateGlobalPointWithinVolume(const G4ThreeVector& position)
 {
   // Relocate the point in each geometry
 
-  std::vector<G4Navigator*>::iterator pNavIter
+  std::vector<G4ITNavigator*>::iterator pNavIter
     = pTransportManager->GetActiveNavigatorsIterator(); 
 
 #ifdef G4DEBUG_NAVIGATION
   if( fVerbose > 2 )
   {
-    G4cout << " Entered G4MultiNavigator::ReLocate() " << G4endl
+    G4cout << " Entered G4ITMultiNavigator::ReLocate() " << G4endl
            << "  Re-locating at position: " << position  << G4endl; 
   }
 #endif
@@ -458,7 +428,7 @@ G4MultiNavigator::LocateGlobalPointWithinVolume(const G4ThreeVector& position)
 
 // ----------------------------------------------------------------------
 
-G4double G4MultiNavigator::ComputeSafety( const G4ThreeVector& position,
+G4double G4ITMultiNavigator::ComputeSafety( const G4ThreeVector& position,
                                           const G4double       maxDistance,
                                           const G4bool         state)
 {
@@ -466,7 +436,7 @@ G4double G4MultiNavigator::ComputeSafety( const G4ThreeVector& position,
 
     G4double minSafety = kInfinity, safety = kInfinity;
   
-    std::vector<G4Navigator*>::iterator pNavigatorIter;
+    std::vector<G4ITNavigator*>::iterator pNavigatorIter;
     pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();
 
     for( register int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
@@ -481,7 +451,7 @@ G4double G4MultiNavigator::ComputeSafety( const G4ThreeVector& position,
 #ifdef G4DEBUG_NAVIGATION
     if( fVerbose > 1 )
     { 
-      G4cout << " G4MultiNavigator::ComputeSafety - returns: " 
+      G4cout << " G4ITMultiNavigator::ComputeSafety - returns: "
              << minSafety << ", at location: " << position << G4endl;
     }
 #endif
@@ -491,11 +461,11 @@ G4double G4MultiNavigator::ComputeSafety( const G4ThreeVector& position,
 // -----------------------------------------------------------------------
 
 G4TouchableHistoryHandle 
-G4MultiNavigator::CreateTouchableHistoryHandle() const
+G4ITMultiNavigator::CreateTouchableHistoryHandle() const
 {
-  G4Exception( "G4MultiNavigator::CreateTouchableHistoryHandle()", 
+  G4Exception( "G4ITMultiNavigator::CreateTouchableHistoryHandle()",
                "GeomNav0001", FatalException,  
-               "Getting a touchable from G4MultiNavigator is not defined."); 
+               "Getting a touchable from G4ITMultiNavigator is not defined.");
 
   G4TouchableHistory* touchHist;
   touchHist= fpNavigator[0] -> CreateTouchableHistory(); 
@@ -513,7 +483,7 @@ G4MultiNavigator::CreateTouchableHistoryHandle() const
 
 // -----------------------------------------------------------------------
 
-void G4MultiNavigator::WhichLimited()
+void G4ITMultiNavigator::WhichLimited()
 {
   // Flag which processes limited the step
 
@@ -525,7 +495,7 @@ void G4MultiNavigator::WhichLimited()
 #ifdef G4DEBUG_NAVIGATION
   if( fVerbose > 2 )
   {
-    G4cout << " Entered G4MultiNavigator::WhichLimited() " << G4endl;
+    G4cout << " Entered G4ITMultiNavigator::WhichLimited() " << G4endl;
   }
 #endif
 
@@ -571,7 +541,7 @@ void G4MultiNavigator::WhichLimited()
 // -----------------------------------------------------------------------
 
 void
-G4MultiNavigator::PrintLimited()
+G4ITMultiNavigator::PrintLimited()
 {
   // Report results -- for checking   
 
@@ -579,7 +549,7 @@ G4MultiNavigator::PrintLimited()
                   StrUndefined("Undefined"),
                   StrSharedTransport("SharedTransport"),
                   StrSharedOther("SharedOther");
-  G4cout << "### G4MultiNavigator::PrintLimited() reports: " << G4endl;
+  G4cout << "### G4ITMultiNavigator::PrintLimited() reports: " << G4endl;
   G4cout << "    Minimum step (true): " << fTrueMinStep 
          << ", reported min: " << fMinStep << G4endl; 
 
@@ -623,7 +593,7 @@ G4MultiNavigator::PrintLimited()
     G4cout << " " << std::setw(15) << limitedStr << " ";  
     G4cout.precision(oldPrec); 
 
-    G4Navigator *pNav= fpNavigator[ num ]; 
+    G4ITNavigator *pNav= fpNavigator[ num ];
     G4String  WorldName( "Not-Set" ); 
     if (pNav)
     {
@@ -641,15 +611,15 @@ G4MultiNavigator::PrintLimited()
 
 // -----------------------------------------------------------------------
 
-void G4MultiNavigator::ResetState()
+void G4ITMultiNavigator::ResetState()
 {
    fWasLimitedByGeometry= false; 
 
-   G4Exception("G4MultiNavigator::ResetState()", "GeomNav0001",  
+   G4Exception("G4ITMultiNavigator::ResetState()", "GeomNav0001",
                FatalException,  
-               "Cannot reset state for navigators of G4MultiNavigator.");
+               "Cannot reset state for navigators of G4ITMultiNavigator.");
    
-   std::vector<G4Navigator*>::iterator pNavigatorIter;
+   std::vector<G4ITNavigator*>::iterator pNavigatorIter;
    pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();
    for( register int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
    {
@@ -659,23 +629,23 @@ void G4MultiNavigator::ResetState()
 
 // -----------------------------------------------------------------------
 
-void G4MultiNavigator::SetupHierarchy()
+void G4ITMultiNavigator::SetupHierarchy()
 {
-  G4Exception( "G4MultiNavigator::SetupHierarchy()", 
+  G4Exception( "G4ITMultiNavigator::SetupHierarchy()",
                "GeomNav0001", FatalException,  
-               "Cannot setup hierarchy for navigators of G4MultiNavigator."); 
+               "Cannot setup hierarchy for navigators of G4ITMultiNavigator.");
 }
 
 // -----------------------------------------------------------------------
 
-void G4MultiNavigator::CheckMassWorld()
+void G4ITMultiNavigator::CheckMassWorld()
 {
    G4VPhysicalVolume* navTrackWorld=
      pTransportManager->GetNavigatorForTracking()->GetWorldVolume();
 
    if( navTrackWorld != fLastMassWorld )
    { 
-      G4Exception( "G4MultiNavigator::CheckMassWorld()",
+      G4Exception( "G4ITMultiNavigator::CheckMassWorld()",
                    "GeomNav0003", FatalException, 
                    "Mass world pointer has been changed." ); 
    }
@@ -684,14 +654,14 @@ void G4MultiNavigator::CheckMassWorld()
 // -----------------------------------------------------------------------
 
 G4VPhysicalVolume*
-G4MultiNavigator::ResetHierarchyAndLocate(const G4ThreeVector &point,
+G4ITMultiNavigator::ResetHierarchyAndLocate(const G4ThreeVector &point,
                                           const G4ThreeVector &direction,
                                           const G4TouchableHistory &MassHistory)
 {
    // Reset geometry for all -- and use the touchable for the mass history
 
    G4VPhysicalVolume* massVolume=0; 
-   G4Navigator* pMassNavigator= fpNavigator[0]; 
+   G4ITNavigator* pMassNavigator= fpNavigator[0];
 
    if( pMassNavigator )
    {
@@ -700,12 +670,12 @@ G4MultiNavigator::ResetHierarchyAndLocate(const G4ThreeVector &point,
    }
    else
    {
-      G4Exception("G4MultiNavigator::ResetHierarchyAndLocate()",
+      G4Exception("G4ITMultiNavigator::ResetHierarchyAndLocate()",
                   "GeomNav0002", FatalException,
                   "Cannot reset hierarchy before navigators are initialised.");
    }
 
-   std::vector<G4Navigator*>::iterator pNavIter= 
+   std::vector<G4ITNavigator*>::iterator pNavIter=
        pTransportManager->GetActiveNavigatorsIterator(); 
 
    for ( register int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
@@ -723,7 +693,7 @@ G4MultiNavigator::ResetHierarchyAndLocate(const G4ThreeVector &point,
 // -----------------  ooooooOOOOOOOOOOOOOOOoooooo -------------------------------------
 
 G4ThreeVector 
-G4MultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
+G4ITMultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
                                       G4bool* argpObtained)  //  obtained valid
 {
   G4ThreeVector normalGlobalCrd(0.0, 0.0, 0.0); 
@@ -742,7 +712,7 @@ G4MultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
   {
     if( fNoLimitingStep > 1 )
     { 
-      std::vector<G4Navigator*>::iterator pNavIter= 
+      std::vector<G4ITNavigator*>::iterator pNavIter=
         pTransportManager->GetActiveNavigatorsIterator(); 
 
       for ( register int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
@@ -780,7 +750,7 @@ G4MultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
                     message << "  Dot product of 2 normals = " << dotNewPrevious << G4endl;
                     message << "        Normal (previous) = " << normalGlobalCrd << G4endl;
                     message << "        Normal (current)  = " << newNormal       << G4endl;
-                    G4Exception("G4MultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
+                    G4Exception("G4ITMultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
                                 JustWarning, message); 
                   }
                 }
@@ -800,7 +770,7 @@ G4MultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
         std::ostringstream message;
         message << "No Normal obtained despite having " << fNoLimitingStep
                 << " candidate Navigators limiting the step!" << G4endl;
-        G4Exception("G4MultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
+        G4Exception("G4ITMultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
                     JustWarning, message); 
       }
 
@@ -814,7 +784,7 @@ G4MultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
 // -----------------  ooooooOOOOOOOOOOOOOOOoooooo -------------------------------------
 
 G4ThreeVector 
-G4MultiNavigator::GetLocalExitNormal(G4bool* argpObtained)
+G4ITMultiNavigator::GetLocalExitNormal(G4bool* argpObtained)
 {
   // If it is the mass navigator, then expect
   G4ThreeVector normalGlobalCrd(0.0, 0.0, 0.0); 
@@ -834,7 +804,7 @@ G4MultiNavigator::GetLocalExitNormal(G4bool* argpObtained)
     {
     std::ostringstream message;
     message << "Cannot obtain normal in local coordinates of two or more coordinate systems." << G4endl;
-    G4Exception("G4MultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
+    G4Exception("G4ITMultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
                 JustWarning, message);       
     }
   }
@@ -845,7 +815,7 @@ G4MultiNavigator::GetLocalExitNormal(G4bool* argpObtained)
         // Does not make sense - cannot obtain *local* normal in several coordinate systems
         std::ostringstream message;
         message << "Cannot obtain normal in local coordinates of two or more coordinate systems." << G4endl;
-        G4Exception("G4MultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
+        G4Exception("G4ITMultiNavigator::GetGlobalExitNormal()", "GeomNav0002",
                     FatalException, message);       
     }
   }
@@ -858,10 +828,8 @@ G4MultiNavigator::GetLocalExitNormal(G4bool* argpObtained)
 // -----------------  ooooooOOOOOOOOOOOOOOOoooooo -------------------------------------
 
 G4ThreeVector 
-G4MultiNavigator::GetLocalExitNormalAndCheck(const G4ThreeVector &, // point,
+G4ITMultiNavigator::GetLocalExitNormalAndCheck(const G4ThreeVector &, // point,
                                                    G4bool* obtained)
 {
-  return G4MultiNavigator::GetLocalExitNormal( obtained);
+  return G4ITMultiNavigator::GetLocalExitNormal( obtained);
 }
-
-#endif

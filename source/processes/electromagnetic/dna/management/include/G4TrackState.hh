@@ -42,7 +42,8 @@
 #ifndef G4TRACKSTATE_HH_
 #define G4TRACKSTATE_HH_
 
-#include <CLHEP/Utility/memory.h>
+#include "G4memory.hh"
+#include <map>
 
 class G4VTrackStateID
 {
@@ -87,7 +88,7 @@ public:
 	virtual int GetID() = 0;
 };
 
-typedef CLHEP::shared_ptr<G4VTrackState> G4VTrackStateHandle;
+typedef G4shared_ptr<G4VTrackState> G4VTrackStateHandle;
 
 
 //template<class TrackStateDependent>
@@ -100,7 +101,7 @@ typedef CLHEP::shared_ptr<G4VTrackState> G4VTrackStateHandle;
 template < class T>
 struct type_wrapper
 {
-   typedef T type;
+	typedef T type;
 };
 
 //!
@@ -111,8 +112,8 @@ template<class T>
 class G4TrackStateBase : public G4VTrackState
 {
 	//friend class type_wrapper<T>::type; // works with gcc
-        typedef type_wrapper<T> traits_type;
-/*
+	typedef type_wrapper<T> traits_type;
+	/*
 #ifdef WIN32
         friend typename traits_type::type;
 #elif defined(__clang__)
@@ -121,8 +122,8 @@ class G4TrackStateBase : public G4VTrackState
 //        friend class traits_type::type;
 	friend class type_wrapper<T>::type;
 #endif
-*/
-        friend class G4TrackStateDependent<T>; //!
+	 */
+	friend class G4TrackStateDependent<T>; //!
 
 
 public:
@@ -148,10 +149,10 @@ protected:
 template<class T>
 class G4TrackState : public G4TrackStateBase<T>
 {
-//	friend class type_wrapper<T>::type; // works with gcc
+	//	friend class type_wrapper<T>::type; // works with gcc
 
-        typedef type_wrapper<T> traits_type;
-/*
+	typedef type_wrapper<T> traits_type;
+	/*
 #ifdef WIN32
         friend typename traits_type::type;
 #elif defined(__clang__)
@@ -160,7 +161,7 @@ class G4TrackState : public G4TrackStateBase<T>
 	friend class type_wrapper<T>::type; 
         //friend class traits_type::type;
 #endif
-*/
+	 */
 	friend class G4TrackStateDependent<T>; //!
 public:
 	virtual ~G4TrackState(){}
@@ -176,9 +177,55 @@ public:
 	}
 
 	G4TrackState() : G4TrackStateBase<T>()
-	{}
+			{}
 
 protected:
+};
+
+class G4TrackStateManager
+{
+	std::map<int,G4VTrackStateHandle> fTrackStates;
+	std::map<void*,G4VTrackStateHandle> fMultipleTrackStates;
+
+public:
+
+	void SetTrackState(void* adress, G4VTrackStateHandle state)
+	{
+		fMultipleTrackStates[adress] = state;
+	}
+
+	G4VTrackStateHandle GetTrackState(void* adress) const
+	{
+		std::map<void*,G4VTrackStateHandle>::const_iterator it = fMultipleTrackStates.find(adress);
+		if(it == fMultipleTrackStates.end())
+		{
+			return G4VTrackStateHandle();
+		}
+		return it->second;
+	}
+
+	template<class T> G4VTrackStateHandle GetTrackState(T* adress) const
+	{
+		std::map<void*,G4VTrackStateHandle>::const_iterator it = fMultipleTrackStates.find((void*) adress);
+		if(it == fMultipleTrackStates.end())
+		{
+			return G4VTrackStateHandle();
+		}
+		return it->second;
+	}
+	void SetTrackState(G4VTrackStateHandle state)
+	{
+		fTrackStates[state->GetID()] = state;
+	}
+	template<typename T> G4VTrackStateHandle GetTrackState() const
+	{
+		std::map<int,G4VTrackStateHandle>::const_iterator it = fTrackStates.find(G4TrackStateID<T>::GetID());
+		if(it == fTrackStates.end())
+		{
+			return G4VTrackStateHandle();
+		}
+		return it->second;
+	}
 };
 
 class G4VTrackStateDependent
@@ -188,21 +235,38 @@ public:
 	virtual ~G4VTrackStateDependent(){;}
 
 	virtual void NewTrackState() = 0;
-	virtual void SetTrackState(G4VTrackStateHandle) = 0;
+	virtual void LoadTrackState(const G4TrackStateManager& ) = 0;
+	virtual void SaveTrackState(G4TrackStateManager& ) = 0;
 	virtual G4VTrackStateHandle GetTrackState() const = 0;
 	virtual G4VTrackStateHandle PopTrackState() = 0;
 	virtual void ResetTrackState() = 0;
 };
 
-//#define Handle CLHEP::shared_ptr
+#define G4TrackStateHandle(T) G4shared_ptr<G4TrackState<T> >
+
+template<class OriginalType> G4shared_ptr<G4VTrackState> ConvertToAbstractTrackState(G4shared_ptr<G4TrackState<OriginalType> > state) {
+
+	G4shared_ptr<G4VTrackState> output = CLHEP::dynamic_pointer_cast<G4VTrackState>(state);
+	return output;
+}
+
+template<class FinalType> G4shared_ptr<G4TrackState<FinalType> > ConvertToConcreteTrackState(G4VTrackStateHandle state) {
+
+	G4shared_ptr<G4TrackState<FinalType> > output = CLHEP::dynamic_pointer_cast<G4TrackState<FinalType> >(state);
+	return output;
+}
 
 //!
 template<class T>
 class G4TrackStateDependent : public G4VTrackStateDependent
 {
 public:
+	typedef T ClassType;
+	typedef G4TrackState<T> StateType;
+	typedef G4shared_ptr<StateType> StateTypeHandle;
+
 	virtual ~G4TrackStateDependent(){;}
-	virtual void SetTrackState(CLHEP::shared_ptr<T> state)
+	virtual void SetTrackState(CLHEP::shared_ptr<StateType> state)
 	{
 		fpTrackState = state;
 	}
@@ -220,14 +284,24 @@ public:
 		return output;
 	}
 
-	virtual void SetTrackState(G4VTrackStateHandle state)//{};
+	virtual StateTypeHandle  GetConcreteTrackState() const
 	{
-		fpTrackState = CLHEP::dynamic_pointer_cast<T>(state);
+		return fpTrackState;
 	}
 
-	virtual void NewTrackState() //{};
+	virtual void LoadTrackState(const G4TrackStateManager& manager)
 	{
-		fpTrackState = CLHEP::shared_ptr<T>(new T());
+		fpTrackState = ConvertToConcreteTrackState<ClassType>(manager.GetTrackState(this));
+	}
+
+	virtual void SaveTrackState(G4TrackStateManager& manager)
+	{
+		manager.SetTrackState(this, ConvertToAbstractTrackState(fpTrackState));
+	}
+
+	virtual void NewTrackState()
+	{
+		fpTrackState = StateTypeHandle(new StateType());
 	}
 
 	virtual void ResetTrackState()
@@ -237,10 +311,30 @@ public:
 
 protected:
 	G4TrackStateDependent()
-	: G4VTrackStateDependent(){;}
+: G4VTrackStateDependent(){;}
 
-//	CLHEP::shared_ptr<G4VTrackState> fpTrackState;
-	CLHEP::shared_ptr<T> fpTrackState;
+	StateTypeHandle fpTrackState;
 };
+
+#define RegisterTrackState(CLASS,STATE) \
+		template<> \
+		class G4TrackState<CLASS> : public G4TrackStateBase<CLASS>, public STATE \
+		{ \
+	typedef STATE State; \
+	friend class G4TrackStateDependent<CLASS>;  \
+		public: \
+		G4TrackState() : G4TrackStateBase<CLASS>(),STATE(){}\
+		virtual ~G4TrackState(){}\
+		virtual int GetID()\
+		{\
+			return  G4TrackStateID<CLASS>::GetID();\
+		}\
+		static int ID()\
+		{\
+			return  G4TrackStateID<CLASS>::GetID();\
+		}\
+		protected:\
+		};\
+
 
 #endif /* G4TRACKSTATE_HH_ */

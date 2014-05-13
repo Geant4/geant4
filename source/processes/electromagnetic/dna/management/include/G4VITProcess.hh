@@ -48,7 +48,7 @@
 #include <G4VProcess.hh>
 #include "AddClone_def.hh"
 #include "G4ReferenceCast.hh"
-#include "G4shared_ptr.hh"
+#include "G4memory.hh"
 #include <typeinfo>
 
 class G4IT ;

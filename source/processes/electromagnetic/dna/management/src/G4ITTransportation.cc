@@ -565,11 +565,13 @@ G4double G4ITTransportation::AlongStepGetPhysicalInteractionLength(
             currentSafety      = endSafety ;
             State(fPreviousSftOrigin) = State(fTransportEndPosition) ;
             State(fPreviousSafety)    = currentSafety ;
-
+/*
             G4VTrackStateHandle state =
             		GetIT(track)->GetTrackingInfo()->GetTrackState(fpSafetyHelper);
-
-            fpSafetyHelper->SetTrackState(state);
+  */
+            G4TrackStateManager& trackStateMan = GetIT(track)->GetTrackingInfo()->GetTrackStateManager();
+            fpSafetyHelper->LoadTrackState(trackStateMan);
+            // fpSafetyHelper->SetTrackState(state);
             fpSafetyHelper->SetCurrentSafety( currentSafety, State(fTransportEndPosition));
             fpSafetyHelper->ResetTrackState();
 
@@ -985,8 +987,7 @@ G4ITTransportation::StartTracking(G4Track* track)
     }
 
     fpSafetyHelper->NewTrackState();
-    GetIT(track)->GetTrackingInfo()->SetTrackState(fpSafetyHelper,fpSafetyHelper->PopTrackState());
-
+    fpSafetyHelper->SaveTrackState(GetIT(track)->GetTrackingInfo()->GetTrackStateManager());
 
     // The actions here are those that were taken in AlongStepGPIL
     //   when track.GetCurrentStepNumber()==1

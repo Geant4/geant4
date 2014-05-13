@@ -54,7 +54,7 @@
 #include "G4KDTree.hh"
 #include "G4Track.hh"
 #include "G4TrackList.hh"
-#include "G4shared_ptr.hh"
+#include "G4memory.hh"
 
 // namespace
 enum EListType

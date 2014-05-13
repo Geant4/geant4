@@ -24,43 +24,68 @@
 // ********************************************************************
 //
 //
-// $Id: G4PathFinder.cc 73734 2013-09-09 15:01:46Z gcosmo $
+// $Id: G4ITPathFinder.cc 73734 2013-09-09 15:01:46Z gcosmo $
 // GEANT4 tag $ Name:  $
 // 
-// class G4PathFinder Implementation
+// class G4ITPathFinder Implementation
 //
 // Original author:  John Apostolakis,  April 2006
 // 
 // --------------------------------------------------------------------
 
-#ifdef DNADEV
-
 #include <iomanip>
 
-#include "G4PathFinder.hh"
+#include "G4ITPathFinder.hh"
 
 #include "G4SystemOfUnits.hh"
 #include "G4GeometryTolerance.hh"
-#include "G4Navigator.hh"
+#include "G4ITNavigator.hh"
 #include "G4PropagatorInField.hh"
-#include "G4TransportationManager.hh"
-#include "G4MultiNavigator.hh"
-#include "G4SafetyHelper.hh"
+#include "G4ITTransportationManager.hh"
+#include "G4ITMultiNavigator.hh"
+#include "G4ITSafetyHelper.hh"
+
+// to ease comparaison with G4PathFinder
+#define State(X)  fpTrackState->X
+#define fNewTrack State(fNewTrack)
+#define fLimitedStep State(fLimitedStep)
+#define fLimitTruth State(fLimitTruth)
+#define fCurrentStepSize State(fCurrentStepSize)
+#define fNoGeometriesLimiting State(fNoGeometriesLimiting)
+#define fPreSafetyLocation State(fPreSafetyLocation)
+#define fPreSafetyMinValue State(fPreSafetyMinValue)
+#define fPreSafetyValues State(fPreSafetyValues)
+#define fPreStepLocation  State(fPreStepLocation)
+#define fMinSafety_PreStepPt State(fMinSafety_PreStepPt)
+#define fCurrentPreStepSafety State(fCurrentPreStepSafety)
+#define fPreStepCenterRenewed State(fPreStepCenterRenewed)
+#define fMinStep State(fMinStep)
+#define fTrueMinStep State(fTrueMinStep)
+#define fLocatedVolume State(fLocatedVolume)
+#define fLastLocatedPosition State(fLastLocatedPosition)
+#define fEndState State(fEndState)
+#define fFieldExertedForce State(fFieldExertedForce)
+#define fRelocatedPoint State(fRelocatedPoint)
+#define fSafetyLocation State(fSafetyLocation)
+#define fMinSafety_atSafLocation State(fMinSafety_atSafLocation)
+#define fNewSafetyComputed State(fNewSafetyComputed)
+#define fLastStepNo State(fLastStepNo)
+#define fCurrentStepNo State(fCurrentStepNo)
 
 // Initialise the static instance of the singleton
 //
-G4ThreadLocal G4PathFinder* G4PathFinder::fpPathFinder=0;
+G4ThreadLocal G4ITPathFinder* G4ITPathFinder::fpPathFinder=0;
 
 // ----------------------------------------------------------------------------
 // GetInstance()
 //
 // Retrieve the static instance of the singleton
 //
-G4PathFinder* G4PathFinder::GetInstance()
+G4ITPathFinder* G4ITPathFinder::GetInstance()
 {
    if( ! fpPathFinder )
    {
-     fpPathFinder = new G4PathFinder; 
+     fpPathFinder = new G4ITPathFinder;
    }
    return fpPathFinder;
 }
@@ -68,53 +93,27 @@ G4PathFinder* G4PathFinder::GetInstance()
 // ----------------------------------------------------------------------------
 // Constructor
 //
-G4PathFinder::G4PathFinder() 
-  : fEndState( G4ThreeVector(), G4ThreeVector(), 0., 0., 0., 0., 0.),
-    fFieldExertedForce(false),
-    fRelocatedPoint(true),
-    fLastStepNo(-1), fCurrentStepNo(-1),
+G4ITPathFinder::G4ITPathFinder():
     fVerboseLevel(0)
 {
-   fpMultiNavigator= new G4MultiNavigator(); 
+   fpMultiNavigator= new G4ITMultiNavigator();
 
-   fpTransportManager= G4TransportationManager::GetTransportationManager();
-   fpFieldPropagator = fpTransportManager->GetPropagatorInField();
+   fpTransportManager= G4ITTransportationManager::GetTransportationManager();
+   // fpFieldPropagator = fpTransportManager->GetPropagatorInField();
 
    kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
    fNoActiveNavigators= 0; 
-   G4ThreeVector  Big3Vector( kInfinity, kInfinity, kInfinity );
-   fLastLocatedPosition= Big3Vector;
-   fSafetyLocation= Big3Vector; 
-   fPreSafetyLocation= Big3Vector;
-   fPreStepLocation= Big3Vector;
-
-   fPreSafetyMinValue=  -1.0; 
-   fMinSafety_PreStepPt= -1.0; 
-   fMinSafety_atSafLocation= -1.0; 
-   fMinStep=   -1.0;
-   fTrueMinStep= -1.0;
-   fPreStepCenterRenewed= false;
-   fNewTrack= false; 
-   fNoGeometriesLimiting= 0; 
-
-   for( register int num=0; num< fMaxNav; ++num )
+   for( register int num=0; num< G4ITNavigator::fMaxNav; ++num )
    {
       fpNavigator[num] =  0;   
-      fLimitTruth[num] = false;
-      fLimitedStep[num] = kUndefLimited;
-      fCurrentStepSize[num] = -1.0; 
-      fLocatedVolume[num] = 0;
-      fPreSafetyValues[num]= -1.0; 
-      fCurrentPreStepSafety[num] = -1.0;
-      fNewSafetyComputed[num]= -1.0; 
    }
 }
 
 // ----------------------------------------------------------------------------
 // Destructor
 //
-G4PathFinder::~G4PathFinder() 
+G4ITPathFinder::~G4ITPathFinder()
 {
    delete fpMultiNavigator;
    if (fpPathFinder)  { delete fpPathFinder; fpPathFinder=0; }
@@ -123,14 +122,16 @@ G4PathFinder::~G4PathFinder()
 // ----------------------------------------------------------------------------
 //
 void
-G4PathFinder::EnableParallelNavigation(G4bool enableChoice)
+G4ITPathFinder::EnableParallelNavigation(G4bool enableChoice)
 {
-   G4Navigator *navigatorForPropagation=0, *massNavigator=0;
+/*
+   G4ITNavigator *navigatorForPropagation=0, *massNavigator=0;
 
    massNavigator= fpTransportManager->GetNavigatorForTracking(); 
+*/
    if( enableChoice )
    {
-      navigatorForPropagation= fpMultiNavigator;
+     // navigatorForPropagation= fpMultiNavigator;
 
       // Enable SafetyHelper to use PF
       //
@@ -138,26 +139,26 @@ G4PathFinder::EnableParallelNavigation(G4bool enableChoice)
    }
    else
    {
-      navigatorForPropagation= massNavigator;
+     // navigatorForPropagation= massNavigator;
        
       // Disable SafetyHelper to use PF
       //
       fpTransportManager->GetSafetyHelper()->EnableParallelNavigation(false);
    }
-   fpFieldPropagator->SetNavigatorForPropagating(navigatorForPropagation);
+  // fpFieldPropagator->SetNavigatorForPropagating(navigatorForPropagation);
 }
 
 // ----------------------------------------------------------------------------
 //
 G4double 
-G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack, 
+G4ITPathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
                                  G4double     proposedStepLength,
                                  G4int        navigatorNo, 
                                  G4int        stepNo,       // find next step 
                                  G4double     &pNewSafety,  // for this geom 
                                  ELimited     &limitedStep, 
                                  G4FieldTrack &EndState,
-                                 G4VPhysicalVolume* currentVolume)
+                                 G4VPhysicalVolume* /*currentVolume*/)
 {
   G4double  possibleStep= -1.0; 
 
@@ -165,7 +166,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   if( fVerboseLevel > 2 )
   { 
     G4cout << " -------------------------" <<  G4endl;
-    G4cout << " G4PathFinder::ComputeStep - entered " << G4endl;
+    G4cout << " G4ITPathFinder::ComputeStep - entered " << G4endl;
     G4cout << "   - stepNo = "  << std::setw(4) << stepNo  << " "
            << " navigatorId = " << std::setw(2) << navigatorNo  << " "
            << " proposed step len = " << proposedStepLength << " " << G4endl;
@@ -181,7 +182,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
     message << "Bad Navigator ID !" << G4endl
             << "        Requested Navigator ID = " << navigatorNo << G4endl
             << "        Number of active navigators = " << fNoActiveNavigators;
-    G4Exception("G4PathFinder::ComputeStep()", "GeomNav0002",
+    G4Exception("G4ITPathFinder::ComputeStep()", "GeomNav0002",
                 FatalException, message); 
   }
 #endif
@@ -193,13 +194,13 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
 
     G4FieldTrack currentState= InitialFieldTrack;
 
-    fCurrentStepNo = stepNo; 
+    fCurrentStepNo = stepNo;
 
     // Check whether a process shifted the position 
     // since the last step -- by physics processes
     //
     G4ThreeVector newPosition = InitialFieldTrack.GetPosition();   
-    G4ThreeVector moveVector= newPosition - fLastLocatedPosition; 
+    G4ThreeVector moveVector= newPosition - fLastLocatedPosition;
     G4double moveLenSq= moveVector.mag2(); 
     if( moveLenSq > kCarTolerance * kCarTolerance )
     { 
@@ -208,7 +209,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
        if( fVerboseLevel > 2 )
        { 
           G4double moveLen= std::sqrt( moveLenSq ); 
-          G4cout << " G4PathFinder::ComputeStep : Point moved since last step " 
+          G4cout << " G4ITPathFinder::ComputeStep : Point moved since last step "
                  << " -- at step # = " << stepNo << G4endl
                  << " by " << moveLen  << " to " << newPosition << G4endl;      
        } 
@@ -222,6 +223,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
 
     // Check whether the particle have an (EM) field force exerting upon it
     //
+    /*
     G4double particleCharge=  currentState.GetCharge(); 
 
     G4FieldManager* fieldMgr=0;
@@ -244,10 +246,11 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
        DoNextCurvedStep( currentState, proposedStepLength, currentVolume ); 
        //--------------
     }else{
+    */
        DoNextLinearStep( currentState, proposedStepLength ); 
        //--------------
-    }
-    fLastStepNo= stepNo; 
+//    }
+    fLastStepNo= stepNo;
 
 #ifdef  G4DEBUG_PATHFINDER
     if ( (fNoGeometriesLimiting < 0)
@@ -257,7 +260,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
       message << "Number of geometries limiting the step not set." << G4endl
               << "        Number of geometries limiting step = "
               << fNoGeometriesLimiting;
-      G4Exception("G4PathFinder::ComputeStep()", 
+      G4Exception("G4ITPathFinder::ComputeStep()",
                   "GeomNav0002", FatalException, message); 
     }
 #endif
@@ -299,7 +302,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
                << "     -- Step info> stepNo= " << stepNo
                << " last= " << fLastStepNo 
                << " newTr= " << fNewTrack << G4endl;
-        G4Exception("G4PathFinder::ComputeStep()", 
+        G4Exception("G4ITPathFinder::ComputeStep()",
                     "GeomNav0003", FatalException, message);
      }
      else
@@ -319,11 +322,11 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
   }
 #endif
 
-  fNewTrack= false; 
+  fNewTrack= false;
 
   // Prepare the information to return
 
-  pNewSafety  = fCurrentPreStepSafety[ navigatorNo ]; 
+  pNewSafety  = fCurrentPreStepSafety[ navigatorNo ];
   limitedStep = fLimitedStep[ navigatorNo ];
   fRelocatedPoint= false;
 
@@ -333,7 +336,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 0 )
   { 
-    G4cout << " G4PathFinder::ComputeStep returns "
+    G4cout << " G4ITPathFinder::ComputeStep returns "
            << fCurrentStepSize[ navigatorNo ]
            << " for Navigator " << navigatorNo 
            << " Limited step = " << limitedStep 
@@ -348,7 +351,7 @@ G4PathFinder::ComputeStep( const G4FieldTrack &InitialFieldTrack,
 // ----------------------------------------------------------------------
 
 void
-G4PathFinder::PrepareNewTrack( const G4ThreeVector& position, 
+G4ITPathFinder::PrepareNewTrack( const G4ThreeVector& position,
                                const G4ThreeVector& direction,
                                G4VPhysicalVolume*  massStartVol)
 {
@@ -364,23 +367,23 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector& position,
   fpTransportManager->GetSafetyHelper()->InitialiseHelper(); 
     // Reinitialise state of safety helper -- avoid problems with overlaps
 
-  fNewTrack= true; 
+  fNewTrack= true;
   this->MovePoint();   // Signal further that the last status is wiped
 
   // Message the G4NavigatorPanel / Dispatcher to find active navigators
   //
-  std::vector<G4Navigator*>::iterator pNavigatorIter; 
+  std::vector<G4ITNavigator*>::iterator pNavigatorIter;
 
   fNoActiveNavigators=  fpTransportManager-> GetNoActiveNavigators();
-  if( fNoActiveNavigators > fMaxNav )
+  if( fNoActiveNavigators > G4ITNavigator::fMaxNav )
   {
     std::ostringstream message;
     message << "Too many active Navigators / worlds." << G4endl
             << "        Transportation Manager has "
             << fNoActiveNavigators << " active navigators." << G4endl
             << "        This is more than the number allowed = "
-            << fMaxNav << " !";
-    G4Exception("G4PathFinder::PrepareNewTrack()", "GeomNav0002",  
+            << G4ITNavigator::fMaxNav << " !";
+    G4Exception("G4ITPathFinder::PrepareNewTrack()", "GeomNav0002",
                 FatalException, message); 
   }
 
@@ -395,8 +398,8 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector& position,
      fpNavigator[num] =  *pNavigatorIter;   
      fLimitTruth[num] = false;
      fLimitedStep[num] = kDoNot;
-     fCurrentStepSize[num] = 0.0; 
-     fLocatedVolume[num] = 0; 
+     fCurrentStepSize[num] = 0.0;
+     fLocatedVolume[num] = 0;
   }
   fNoGeometriesLimiting= 0;  // At start of track, no process limited step
 
@@ -435,7 +438,7 @@ G4PathFinder::PrepareNewTrack( const G4ThreeVector& position,
   fRelocatedPoint= false; 
 }
 
-void G4PathFinder::ReportMove( const G4ThreeVector& OldVector, 
+void G4ITPathFinder::ReportMove( const G4ThreeVector& OldVector,
                                const G4ThreeVector& NewVector, 
                                const G4String& Quantity ) const
 {
@@ -451,19 +454,19 @@ void G4PathFinder::ReportMove( const G4ThreeVector& OldVector,
             << (1.0/mm) * moveVec << " mm " << G4endl
             << "          Endpoint of ComputeStep() was " << OldVector << G4endl
             << "          and current position to locate is " << NewVector;
-    G4Exception("G4PathFinder::ReportMove()", "GeomNav1002",  
+    G4Exception("G4ITPathFinder::ReportMove()", "GeomNav1002",
                 JustWarning, message); 
     G4cerr.precision(prc); 
 }
 
 void
-G4PathFinder::Locate( const   G4ThreeVector& position, 
+G4ITPathFinder::Locate( const   G4ThreeVector& position,
                       const   G4ThreeVector& direction,
                       G4bool  relative)
 {
   // Locate the point in each geometry
 
-  std::vector<G4Navigator*>::iterator pNavIter=
+  std::vector<G4ITNavigator*>::iterator pNavIter=
      fpTransportManager->GetActiveNavigatorsIterator(); 
 
   G4ThreeVector lastEndPosition= fEndState.GetPosition(); 
@@ -480,7 +483,7 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
   if( fVerboseLevel > 2 )
   {
     G4cout << G4endl; 
-    G4cout << " G4PathFinder::Locate : entered " << G4endl;
+    G4cout << " G4ITPathFinder::Locate : entered " << G4endl;
     G4cout << " --------------------   -------" <<  G4endl;
     G4cout << "   Locating at position " << position
            << "  with direction " << direction 
@@ -535,11 +538,11 @@ G4PathFinder::Locate( const   G4ThreeVector& position,
   fRelocatedPoint= false;
 }
 
-void G4PathFinder::ReLocate( const G4ThreeVector& position )
+void G4ITPathFinder::ReLocate( const G4ThreeVector& position )
 {
   // Locate the point in each geometry
 
-  std::vector<G4Navigator*>::iterator pNavIter=
+  std::vector<G4ITNavigator*>::iterator pNavIter=
     fpTransportManager->GetActiveNavigatorsIterator(); 
 
 #ifdef G4DEBUG_PATHFINDER
@@ -680,7 +683,7 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
                 << " Debug:  distCheckRevisedEnd = "
                 << distCheckRevisedEnd;
         ReportMove( lastEndPosition, position, "Position" ); 
-        G4Exception("G4PathFinder::ReLocate", "GeomNav0003", 
+        G4Exception("G4ITPathFinder::ReLocate", "GeomNav0003",
                     FatalException, message); 
         G4cout.precision(oldPrec); 
     }
@@ -689,7 +692,7 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
   if( fVerboseLevel > 2 )
   {
     G4cout << G4endl; 
-    G4cout << " G4PathFinder::ReLocate : entered " << G4endl;
+    G4cout << " G4ITPathFinder::ReLocate : entered " << G4endl;
     G4cout << " ----------------------   -------" <<  G4endl;
     G4cout << "  *Re*Locating at position " << position  << G4endl; 
       // << "  with direction " << direction 
@@ -723,7 +726,7 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 )
   {
-    G4cout << " G4PathFinder::ReLocate : exiting " 
+    G4cout << " G4ITPathFinder::ReLocate : exiting "
            << "  at position " << fLastLocatedPosition << G4endl << G4endl;
   }
 #endif
@@ -731,13 +734,13 @@ void G4PathFinder::ReLocate( const G4ThreeVector& position )
 
 // -----------------------------------------------------------------------------
 
-G4double  G4PathFinder::ComputeSafety( const G4ThreeVector& position )
+G4double  G4ITPathFinder::ComputeSafety( const G4ThreeVector& position )
 {
     // Recompute safety for the relevant point
 
    G4double minSafety= kInfinity; 
   
-   std::vector<G4Navigator*>::iterator pNavigatorIter;
+   std::vector<G4ITNavigator*>::iterator pNavigatorIter;
    pNavigatorIter= fpTransportManager->GetActiveNavigatorsIterator();
 
    for( register G4int num=0; num<fNoActiveNavigators; ++pNavigatorIter,++num )
@@ -753,7 +756,7 @@ G4double  G4PathFinder::ComputeSafety( const G4ThreeVector& position )
 #ifdef G4DEBUG_PATHFINDER
    if( fVerboseLevel > 1 )
    { 
-     G4cout << " G4PathFinder::ComputeSafety - returns " 
+     G4cout << " G4ITPathFinder::ComputeSafety - returns "
             << minSafety << " at location " << position << G4endl;
    }
 #endif
@@ -764,12 +767,12 @@ G4double  G4PathFinder::ComputeSafety( const G4ThreeVector& position )
 // -----------------------------------------------------------------------------
 
 G4TouchableHandle 
-G4PathFinder::CreateTouchableHandle( G4int navId ) const
+G4ITPathFinder::CreateTouchableHandle( G4int navId ) const
 {
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 )
   {
-    G4cout << "G4PathFinder::CreateTouchableHandle : navId = "
+    G4cout << "G4ITPathFinder::CreateTouchableHandle : navId = "
            << navId << " -- " << GetNavigator(navId) << G4endl;
   }
 #endif
@@ -800,10 +803,10 @@ G4PathFinder::CreateTouchableHandle( G4int navId ) const
 }
 
 G4double
-G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
+G4ITPathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
                                       G4double      proposedStepLength )
 {
-  std::vector<G4Navigator*>::iterator pNavigatorIter;
+  std::vector<G4ITNavigator*>::iterator pNavigatorIter;
   G4double safety= 0.0, step=0.0;
   G4double minSafety= kInfinity, minStep;
 
@@ -813,7 +816,7 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 )
   {
-    G4cout << " G4PathFinder::DoNextLinearStep : entered " << G4endl;
+    G4cout << " G4ITPathFinder::DoNextLinearStep : entered " << G4endl;
     G4cout << "   Input field track= " << initialState << G4endl;
     G4cout << "   Requested step= " << proposedStepLength << G4endl;
   }
@@ -865,7 +868,7 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
 #ifdef G4DEBUG_PATHFINDER
      if( fVerboseLevel > 2 )
      {
-       G4cout << "G4PathFinder::DoNextLinearStep : Quick Stepping. " << G4endl
+       G4cout << "G4ITPathFinder::DoNextLinearStep : Quick Stepping. " << G4endl
                << " proposedStepLength " <<  proposedStepLength
                << " < (full) safety = " << fullSafety 
                << " at " << initialPosition 
@@ -897,7 +900,7 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
 
 #ifdef G4DEBUG_PATHFINDER
            G4cout.precision(8); 
-           G4cout << "PathFinder::ComputeStep> small proposed step = "
+           G4cout << "G4ITNavigator::ComputeStep> small proposed step = "
                   << proposedStepLength
                   << " <=  safety = " << safety << " for nav " << num 
                   << " Step fully taken. " << G4endl;
@@ -922,7 +925,7 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
            if( fVerboseLevel > 0)
            {
              G4cout.precision(8); 
-             G4cout << "PathFinder::ComputeStep> long  proposed step = "
+             G4cout << "G4ITNavigator::ComputeStep> long  proposed step = "
                     << proposedStepLength
                     << "  >  safety = " << previousSafety
                     << " for nav " << num 
@@ -945,7 +948,7 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
 #ifdef G4DEBUG_PATHFINDER
         if( fVerboseLevel > 2 )
         {
-          G4cout << "G4PathFinder::DoNextLinearStep : Navigator ["
+          G4cout << "G4ITPathFinder::DoNextLinearStep : Navigator ["
                  << num << "] -- step size " << step << G4endl;
         }
 #endif
@@ -981,7 +984,7 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 1 )
   {
-    G4cout << "G4PathFinder::DoNextLinearStep : "
+    G4cout << "G4ITPathFinder::DoNextLinearStep : "
            << " initialPosition = " << initialPosition 
            << " and endPosition = " << endPosition<< G4endl;
   }
@@ -1007,7 +1010,7 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 )
   {
-    G4cout << " G4PathFinder::DoNextLinearStep : exits returning "
+    G4cout << " G4ITPathFinder::DoNextLinearStep : exits returning "
            << minStep << G4endl;
     G4cout << "   Endpoint values = " << fEndState << G4endl;
     G4cout << G4endl;
@@ -1017,7 +1020,7 @@ G4PathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
   return minStep;
 }
 
-void G4PathFinder::WhichLimited()
+void G4ITPathFinder::WhichLimited()
 {
   // Flag which processes limited the step
 
@@ -1069,17 +1072,17 @@ void G4PathFinder::WhichLimited()
   {
     PrintLimited();   // --> for tracing 
     if( fVerboseLevel > 4 ) {
-      G4cout << " G4PathFinder::WhichLimited - exiting. " << G4endl;
+      G4cout << " G4ITPathFinder::WhichLimited - exiting. " << G4endl;
     }
   }
 #endif
 }
 
-void G4PathFinder::PrintLimited()
+void G4ITPathFinder::PrintLimited()
 {
   // Report results -- for checking   
 
-  G4cout << "G4PathFinder::PrintLimited reports: " ; 
+  G4cout << "G4ITPathFinder::PrintLimited reports: " ;
   G4cout << "  Minimum step (true)= " << fTrueMinStep 
          << "  reported min = " << fMinStep 
          << G4endl; 
@@ -1115,7 +1118,7 @@ void G4PathFinder::PrintLimited()
     G4cout << " " << std::setw(15) << limitedStr << " ";  
     G4cout.precision(oldPrec); 
 
-    G4Navigator *pNav= GetNavigator( num ); 
+    G4ITNavigator *pNav= GetNavigator( num );
     G4String  WorldName( "Not-Set" ); 
     if (pNav)
     {
@@ -1131,14 +1134,14 @@ void G4PathFinder::PrintLimited()
 
   if( fVerboseLevel > 4 )
   {
-    G4cout << " G4PathFinder::PrintLimited - exiting. " << G4endl;
+    G4cout << " G4ITPathFinder::PrintLimited - exiting. " << G4endl;
   }
 }
 
 G4double
-G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
+G4ITPathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
                                 G4double      proposedStepLength,
-                                G4VPhysicalVolume* pCurrentPhysicalVolume )
+                                G4VPhysicalVolume* /*pCurrentPhysicalVolume*/ )
 {
   const G4double toleratedRelativeError= 1.0e-10; 
   G4double minStep= kInfinity, newSafety=0.0;
@@ -1150,7 +1153,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
   G4int prc= G4cout.precision(9);
   if( fVerboseLevel > 2 )
   {
-    G4cout << " G4PathFinder::DoNextCurvedStep ****** " << G4endl;
+    G4cout << " G4ITPathFinder::DoNextCurvedStep ****** " << G4endl;
     G4cout << " Initial value of field track is " << fieldTrack 
            << " and proposed step= " << proposedStepLength  << G4endl;
   }
@@ -1179,13 +1182,14 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
      fMinSafety_PreStepPt= minSafety;
   }
 
+  /*
   // Allow Propagator In Field to do the hard work, calling G4MultiNavigator
   //
   minStep=  fpFieldPropagator->ComputeStep( fieldTrack,
                                             proposedStepLength,
                                             newSafety, 
                                             pCurrentPhysicalVolume );
-
+*/
   // fieldTrack now contains the endpoint information
   //
   fEndState= fieldTrack; 
@@ -1211,10 +1215,10 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 )
   {
-    G4cout << "G4PathFinder::DoNextCurvedStep : " << G4endl
+    G4cout << "G4ITPathFinder::DoNextCurvedStep : " << G4endl
            << " initialState = " << initialState << G4endl
            << " and endState = " << fEndState << G4endl;
-    G4cout << "G4PathFinder::DoNextCurvedStep : " 
+    G4cout << "G4ITPathFinder::DoNextCurvedStep : "
            << " minStep = " << minStep 
            << " proposedStepLength " << proposedStepLength 
            << " safety = " << newSafety << G4endl;
@@ -1274,7 +1278,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
       {
         G4String  limitedString=  LimitedString( fLimitedStep[numNav] ); 
         
-        G4cout << " G4PathFinder::ComputeStep. Geometry " << numNav
+        G4cout << " G4ITPathFinder::ComputeStep. Geometry " << numNav
                << "  step= " << fCurrentStepSize[numNav] 
                << " from final-step= " << finalStep 
                << " fTrueMinStep= " << fTrueMinStep 
@@ -1292,7 +1296,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
                   << "        currentStepSize = " << currentStepSize 
                   << ", diffStep= " << diffStep << G4endl
                   << "ERROR in computing step size for this navigator.";
-          G4Exception("G4PathFinder::DoNextCurvedStep",
+          G4Exception("G4ITPathFinder::DoNextCurvedStep",
                       "GeomNav0003", FatalException, message);
         }
       }
@@ -1308,7 +1312,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
   { 
     // In case the step was not limited, use default responses
     //  --> all Navigators 
-    // Also avoid problems in case of PathFinder using safety to optimise
+    // Also avoid problems in case of G4ITPathFinder using safety to optimise
     //  - it is possible that the Navigators were not called
     //    if the safety was already satisfactory.
     //    (In that case calling ObtainFinalStep gives invalid results.)
@@ -1329,14 +1333,14 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
     message << "Incorrect calculation of step size for one navigator." << G4endl
             << "        currentStepSize = " << minStep << " is larger than "
             << " proposed StepSize = " << proposedStepLength << ".";
-    G4Exception("G4PathFinder::DoNextCurvedStep()",
+    G4Exception("G4ITPathFinder::DoNextCurvedStep()",
                 "GeomNav0003", FatalException, message); 
   }
 
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 )
   {
-    G4cout << " Exiting G4PathFinder::DoNextCurvedStep " << G4endl;
+    G4cout << " Exiting G4ITPathFinder::DoNextCurvedStep " << G4endl;
     PrintLimited(); 
   }
   G4cout.precision(prc); 
@@ -1345,7 +1349,7 @@ G4PathFinder::DoNextCurvedStep( const G4FieldTrack &initialState,
   return minStep; 
 }
 
-G4String& G4PathFinder::LimitedString( ELimited lim )
+G4String& G4ITPathFinder::LimitedString( ELimited lim )
 {
   static G4String StrDoNot("DoNot"),
                   StrUnique("Unique"),
@@ -1365,7 +1369,7 @@ G4String& G4PathFinder::LimitedString( ELimited lim )
   return *limitedStr;
 }
 
-void G4PathFinder::PushPostSafetyToPreSafety()
+void G4ITPathFinder::PushPostSafetyToPreSafety()
 {
   fPreSafetyLocation= fSafetyLocation;
   fPreSafetyMinValue= fMinSafety_atSafLocation;
@@ -1375,4 +1379,3 @@ void G4PathFinder::PushPostSafetyToPreSafety()
   }
 }
 
-#endif

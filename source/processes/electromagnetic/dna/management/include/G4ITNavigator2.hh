@@ -77,6 +77,7 @@
 #include "G4RegularNavigation.hh"
 
 #include <iostream>
+#include "G4TrackState.hh"
 
 class G4VPhysicalVolume;
 
@@ -90,6 +91,9 @@ protected:
 
 class G4ITNavigator2
 {
+public:
+	static const G4int fMaxNav = 8;   // rename to kMaxNoNav ??
+
 public:  // with description
 
 	friend std::ostream& operator << (std::ostream &os, const G4ITNavigator2 &n);
@@ -369,9 +373,10 @@ protected:  // without description
 	G4double kCarTolerance;
 	// Geometrical tolerance for surface thickness of shapes.
 
-private:
     G4int  fVerbose;
     // Verbose(ness) level  [if > 0, printout can occur].
+
+private:
 
     G4bool fActive;
     // States if the navigator is activated or not.
@@ -382,6 +387,7 @@ private:
     // After this many failed/zero steps, abandon track
 
 protected:
+public:
     struct G4SaveNavigatorState;
 
 	//
@@ -552,6 +558,8 @@ protected:
 	G4RegularNavigation fregularNav;
 	G4VoxelSafety       *fpVoxelSafety;
 };
+
+RegisterTrackState(G4ITNavigator2,G4ITNavigator2::G4NavigatorState)
 
 #define CheckNavigatorStateIsValid() \
 if(fpNavigatorState == 0) \

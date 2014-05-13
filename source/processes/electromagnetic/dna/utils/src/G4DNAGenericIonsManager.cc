@@ -74,6 +74,7 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
  G4DNAIons *carbon;
  G4DNAIons *nitrogen;
  G4DNAIons *oxygen;
+ G4DNAIons *silicon;
  G4DNAIons *iron;
 
  iron=     new G4DNAIons(
@@ -84,6 +85,16 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
 			true,                -1.0,             0,       
 			false,		      "",               0,             
 			0.0);
+
+ silicon=  new G4DNAIons(
+            "silicon",    28.085*GeV,       0.0*MeV,  +14.0*eplus,
+            0,              +1,             0,
+            0,               0,             0,
+            "nucleus",              +14,            +28,           0,
+            true,                -1.0,             0,
+            false,		      "",               0,
+            0.0);
+
 
  oxygen=   new G4DNAIons(
 			"oxygen",    15.0074*GeV,       0.0*MeV,  +8.0*eplus,
@@ -160,6 +171,7 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
  map["carbon"  ]=carbon;
  map["nitrogen"]=nitrogen;
  map["oxygen"  ]=oxygen;
+ map["silicon" ]=silicon;
  map["iron"    ]=iron;
 
 

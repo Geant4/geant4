@@ -50,11 +50,13 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITModelHandler.hh
         G4ITModelManager.hh
         G4ITModelProcessor.hh
+        G4ITMultiNavigator.hh
         G4ITNavigator.hh
         G4ITNavigator1.hh
         G4ITNavigator1.icc
-	G4ITNavigator2.hh
-	G4ITNavigator2.icc
+	    G4ITNavigator2.hh
+	    G4ITNavigator2.icc
+	    G4ITPathFinder.hh
         G4ITReactionChange.hh
         G4ITReactionTable.hh
         G4ITSafetyHelper.hh
@@ -75,10 +77,10 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4KDTreeResult.hh
         G4MemStat.hh
         G4ReferenceCast.hh
-        G4shared_ptr.hh
-	G4TrackingInformation.hh
+        G4memory.hh
+	    G4TrackingInformation.hh
         G4TrackList.hh
-	G4TrackState.hh
+	    G4TrackState.hh
         G4UserTimeStepAction.hh
         G4VITModel.hh
         G4VITProcess.hh
@@ -98,9 +100,11 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITModelHandler.cc
         G4ITModelManager.cc
         G4ITModelProcessor.cc
+        G4ITMultiNavigator.cc
         G4ITNavigator1.cc
         G4ITNavigator2.cc
         G4ITNavigatorState2.cc
+        G4ITPathFinder.cc
         G4ITReactionChange.cc
         G4ITReactionTable.cc
         G4ITSafetyHelper.cc
@@ -111,7 +115,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITTrackHolder.cc
         G4ITTrackingInteractivity.cc
         G4ITTrackingManager.cc
-	G4TrackState.cc
+	    G4TrackState.cc
         G4ITTransportation.cc
         G4ITTransportationManager.cc
         G4ITType.cc

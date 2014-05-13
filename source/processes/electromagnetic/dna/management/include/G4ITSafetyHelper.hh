@@ -51,26 +51,8 @@
 #include "G4TrackState.hh"
 
 class G4PathFinder;
-class G4ITSafetyHelper;
 
-// State used during tracking -- for optimisation
-template<>
-class G4TrackState<G4ITSafetyHelper> : public G4TrackStateBase<G4ITSafetyHelper>
-{
-	friend class G4ITSafetyHelper;
-	G4ThreeVector fLastSafetyPosition;
-	G4double      fLastSafety;
-
-public:
-	G4TrackState<G4ITSafetyHelper>() :
-		fLastSafetyPosition(0.0,0.0,0.0),
-		fLastSafety(0.0)
-{}
-
-	virtual ~G4TrackState<G4ITSafetyHelper>(){}
-};
-
-class G4ITSafetyHelper : public G4TrackStateDependent<G4TrackState<G4ITSafetyHelper> >
+class G4ITSafetyHelper : public G4TrackStateDependent<G4ITSafetyHelper>
 {
 public: // with description
 	G4ITSafetyHelper();
@@ -117,23 +99,6 @@ public: // with description
 	inline G4VPhysicalVolume* GetWorldVolume();
 	inline void SetCurrentSafety(G4double val, const G4ThreeVector& pos);
 
-	//!
-	/*
-	virtual void SetTrackState(G4VTrackStateHandle state)
-	{
-		fpState = CLHEP::dynamic_pointer_cast<G4ITSafetyHelperState>(state);
-	}
-
-	virtual void NewTrackState()
-	{
-		fpState = Handle<G4ITSafetyHelperState>(new G4ITSafetyHelperState);
-	}
-	/
-	//{
-	//	fpState = CLHEP::shared_ptr<T>(new T());
-	//}
-	 */
-
 public: // without description
 
 	void InitialiseHelper();
@@ -151,31 +116,30 @@ private:
 	G4int         fVerbose;
 	// Whether to print warning in case of move outside safety
 
-	/*
+public:
 	// State used during tracking -- for optimisation
-	class G4ITSafetyHelperState : public G4TrackState<G4ITSafetyHelper>
+	class State
 	{
 		friend class G4ITSafetyHelper;
 		G4ThreeVector fLastSafetyPosition;
 		G4double      fLastSafety;
 
 	public:
-		G4ITSafetyHelperState() :
+		State() :
 			fLastSafetyPosition(0.0,0.0,0.0),
 			fLastSafety(0.0)
 		{}
 
-		virtual ~G4ITSafetyHelperState(){}
+		virtual ~State(){}
 	};
-
-	Handle <G4ITSafetyHelperState>& fpState;
-	 */
 
 	// const G4double  fRecomputeFactor;
 	// parameter for further optimisation:
 	// if ( move < fact*safety )  do fast recomputation of safety
 	// End State (tracking)
 };
+
+RegisterTrackState(G4ITSafetyHelper, G4ITSafetyHelper::State)
 
 // Inline definitions
 

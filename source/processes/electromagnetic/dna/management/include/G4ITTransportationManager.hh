@@ -50,25 +50,80 @@
 #define G4ITTRANSPORTATIONMANAGER_HH
 
 #include "globals.hh"
+#include "G4ITNavigator.hh"
+#include <vector>
 
-class G4ITNavigator;
 class G4ITSafetyHelper;
+class G4VPhysicalVolume;
 
 class G4ITTransportationManager
 {
 public:
     static void DeleteInstance();
     static G4ITTransportationManager* GetTransportationManager();
-    G4ITNavigator* GetNavigatorForTracking();
-    G4ITSafetyHelper* GetSafetyHelper();
+
+    G4ITNavigator* GetNavigatorForTracking() const;
+
+    inline void SetWorldForTracking(G4VPhysicalVolume* theWorld);
+      // Set the world volume for tracking
+      // This method is to be invoked by G4RunManagerKernel.
+
+    inline size_t GetNoActiveNavigators() const;
+    inline std::vector<G4ITNavigator*>::iterator GetActiveNavigatorsIterator();
+      // Return an iterator to the list of active navigators
+
+    inline size_t GetNoWorlds() const;
+    inline std::vector<G4VPhysicalVolume*>::iterator GetWorldsIterator();
+      // Return an iterator to the list of registered worlds
+
+    inline G4ITSafetyHelper* GetSafetyHelper() const;
+
+    G4VPhysicalVolume* GetParallelWorld ( const G4String& worldName );
+      // Return an exact copy of the tracking world volume. If already
+      // existing just return the pointer
+
+    G4VPhysicalVolume* IsWorldExisting ( const G4String& worldName );
+      // Verify existance or not of an istance of the world volume with
+      // same name in the collection
+
+    G4ITNavigator* GetNavigator ( const G4String& worldName );
+    G4ITNavigator* GetNavigator ( G4VPhysicalVolume* aWorld );
+      // Return a navigator associated to either the world volume name
+      // or the pointer to world physical volume. If not existing already
+      // create it and register it in the collection
+
+    G4bool RegisterWorld( G4VPhysicalVolume* aWorld );
+    void DeRegisterNavigator( G4ITNavigator* aNavigator );
+    G4int  ActivateNavigator( G4ITNavigator* aNavigator );
+    void DeActivateNavigator( G4ITNavigator* aNavigator );
+    void InactivateAll();
+      // Methods for handling navigators. Navigator for tracking is always the
+      // first, i.e. position 0 in the collection and cannot be de-registered
+
+private:
+
+   void ClearNavigators();
+     // Clear collection of navigators and delete allocated objects
+   void DeRegisterWorld( G4VPhysicalVolume* aWorld );
+     // Register/de-register an already allocated world volume.
+     // The pointed object is not deleted.
 
 private:
     G4ITTransportationManager();
     ~G4ITTransportationManager();
     static G4ThreadLocal G4ITTransportationManager* fpInstance;
     void Initialize();
-    G4ITNavigator* fpNavigator;
+    //G4ITNavigator* fpNavigator;
     G4ITSafetyHelper* fpSafetyHelper;
+   std::vector<G4ITNavigator*> fNavigators;
+     // The collection of all navigators registered
+   std::vector<G4ITNavigator*> fActiveNavigators;
+     // The collection of only active navigators
+   std::vector<G4VPhysicalVolume*> fWorlds;
+     // The collection of worlds associated to the registered navigators
+
 };
+
+#include "G4ITTransportationManager.icc"
 
 #endif // G4ITTRANSPORTATIONMANAGER_HH

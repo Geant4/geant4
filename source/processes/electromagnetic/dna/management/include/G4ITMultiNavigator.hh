@@ -47,8 +47,6 @@
 // - Created. John Apostolakis, November 2006
 // *********************************************************************
 
-#ifdef DNADEV
-
 #ifndef G4ITMULTINAVIGATOR_HH
 #define G4ITMULTINAVIGATOR_HH
 
@@ -62,10 +60,13 @@
 
 #include "G4NavigationHistory.hh"
 #include "G4TrackState.hh"
+#include "G4MultiNavigator.hh"
 
-enum  ELimited { kDoNot,kUnique,kSharedTransport,kSharedOther,kUndefLimited };
-
-class G4TransportationManager;
+namespace G4IT
+{
+	enum  ELimited { kDoNot,kUnique,kSharedTransport,kSharedOther,kUndefLimited };
+}
+class G4ITTransportationManager;
 class G4VPhysicalVolume;
 
 
@@ -73,38 +74,64 @@ class G4ITMultiNavigator;
 
 // Global state (retained during stepping for one track
 template<>
-class G4TrackState<G4ITMultiNavigator> : public G4TrackStateBase<G4ITMultiNavigator>
+class G4TrackState<G4ITMultiNavigator> : public G4TrackState<G4ITNavigator>
 {
-   friend class G4ITMultiNavigator;
+public:
+	~G4TrackState<G4ITMultiNavigator>(){}
 
-   G4TrackState<G4ITMultiNavigator>();
-   ~G4TrackState<G4ITMultiNavigator>();
+	G4TrackState<G4ITMultiNavigator>(){
+		G4ThreeVector Big3Vector( kInfinity, kInfinity, kInfinity );
+		fLastLocatedPosition = Big3Vector;
+		fSafetyLocation  = Big3Vector;
+		fPreStepLocation = Big3Vector;
 
-   // State after a step computation
-   ELimited      fLimitedStep[fMaxNav];
-   G4bool        fLimitTruth[fMaxNav];
-   G4double      fCurrentStepSize[fMaxNav];
-   G4double      fNewSafety[ fMaxNav ];      // Safety for starting point
-   G4int         fNoLimitingStep;       // How many geometries limited the step
-   G4int         fIdNavLimiting;        // Id of Navigator limiting step (if only one limits)
+		fMinSafety_PreStepPt=  -1.0;
+		fMinSafety_atSafLocation= -1.0;
+		fMinSafety= -kInfinity;
+		fTrueMinStep= fMinStep= -kInfinity;
 
-   // Lowest values - determine step length, and safety
-   G4double      fMinStep;      // As reported by Navigators. Can be kInfinity
-   G4double      fMinSafety;
-   G4double      fTrueMinStep;  // Corrected in case fMinStep >= proposed
+		for(register int num=0; num< G4ITNavigator::fMaxNav; ++num )
+		{
+			fLimitTruth[num] = false;
+			fLimitedStep[num] = kUndefLimited;
+			fCurrentStepSize[num] = fNewSafety[num] = -1.0;
+			fLocatedVolume[num] = 0;
+		}
 
-   // State after calling 'locate'
-   G4VPhysicalVolume* fLocatedVolume[fMaxNav];
-   G4ThreeVector      fLastLocatedPosition;
+		fNoLimitingStep = -1;       // How many geometries limited the step
+		fIdNavLimiting = -1;        // Id of Navigator limiting step (if only one limits)
+		fWasLimitedByGeometry = false;
+	};
 
-   // cache of safety information
-   G4ThreeVector fSafetyLocation;       //  point where ComputeSafety is called
-   G4double      fMinSafety_atSafLocation; // /\ corresponding value of safety
-   G4ThreeVector fPreStepLocation;      //  point where last ComputeStep called
-   G4double      fMinSafety_PreStepPt;  //   /\ corresponding value of safety
+protected:
+	friend class G4ITMultiNavigator;
+	// State after a step computation
+	ELimited      fLimitedStep[G4ITNavigator::fMaxNav];
+	G4bool        fLimitTruth[G4ITNavigator::fMaxNav];
+	G4double      fCurrentStepSize[G4ITNavigator::fMaxNav];
+	G4double      fNewSafety[ G4ITNavigator::fMaxNav ];      // Safety for starting point
+	G4int         fNoLimitingStep;       // How many geometries limited the step
+	G4int         fIdNavLimiting;        // Id of Navigator limiting step (if only one limits)
+
+	G4bool fWasLimitedByGeometry;
+
+	// Lowest values - determine step length, and safety
+	G4double      fMinStep;      // As reported by Navigators. Can be kInfinity
+	G4double      fMinSafety;
+	G4double      fTrueMinStep;  // Corrected in case fMinStep >= proposed
+
+	// State after calling 'locate'
+	G4VPhysicalVolume* fLocatedVolume[G4ITNavigator::fMaxNav];
+	G4ThreeVector      fLastLocatedPosition;
+
+	// cache of safety information
+	G4ThreeVector fSafetyLocation;       //  point where ComputeSafety is called
+	G4double      fMinSafety_atSafLocation; // /\ corresponding value of safety
+	G4ThreeVector fPreStepLocation;      //  point where last ComputeStep called
+	G4double      fMinSafety_PreStepPt;  //   /\ corresponding value of safety
 };
 
-class G4ITMultiNavigator : public G4ITNavigator, public G4TrackStateDependent<G4TrackState<G4ITMultiNavigator> >
+class G4ITMultiNavigator : public G4ITNavigator, public G4TrackStateDependent<G4ITMultiNavigator>
 {
 public:  // with description
 
@@ -173,7 +200,7 @@ public:  // with description
 			G4bool* obtained); // const
 	virtual G4ThreeVector GetGlobalExitNormal(const G4ThreeVector &CurrentE_Point,
 			G4bool* obtained); // const
-			// Return Exit Surface Normal and validity too.
+	// Return Exit Surface Normal and validity too.
 	// Can only be called if the Navigator's last Step either
 	//  - has just crossed a volume geometrical boundary and relocated, or
 	//  - has arrived at a boundary in a ComputeStep
@@ -212,15 +239,11 @@ private:
 	// STATE Information
 
 	G4int   fNoActiveNavigators;
-	static const G4int fMaxNav = 8;   // rename to kMaxNoNav ??
 	G4VPhysicalVolume* fLastMassWorld;
 
 	G4ITNavigator*  fpNavigator[fMaxNav];   // G4ITNavigator** fpNavigator;
 
-	//G4TrackState<G4ITMultiNavigator>* fpState;
-
 	G4ITTransportationManager* pTransportManager; // Cache for frequent use
 };
 
-#endif
 #endif

@@ -26,8 +26,6 @@
 // $Id$
 // GEANT4 tag $Name:  $
 //
-
-
 // Modified by Z. Francis to handle HZE && inverse rudd function sampling 26-10-2010
 
 #include "G4DNARuddIonisationExtendedModel.hh"
@@ -126,6 +124,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     G4String fileCarbon("dna/sigma_ionisation_c_rudd");
     G4String fileNitrogen("dna/sigma_ionisation_n_rudd");
     G4String fileOxygen("dna/sigma_ionisation_o_rudd");
+    G4String fileSilicon("dna/sigma_ionisation_si_rudd");
     G4String fileIron("dna/sigma_ionisation_fe_rudd");
 
     G4DNAGenericIonsManager *instance;
@@ -138,6 +137,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     G4ParticleDefinition* carbonDef = instance->GetIon("carbon");
     G4ParticleDefinition* nitrogenDef = instance->GetIon("nitrogen");
     G4ParticleDefinition* oxygenDef = instance->GetIon("oxygen");
+    G4ParticleDefinition* siliconDef = instance->GetIon("silicon");
     G4ParticleDefinition* ironDef = instance->GetIon("iron");
 
     G4String proton;
@@ -148,6 +148,7 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     G4String carbon;
     G4String nitrogen;
     G4String oxygen;
+    G4String silicon;
     G4String iron;
 
     G4double scaleFactor = 1 * m*m;
@@ -282,6 +283,22 @@ void G4DNARuddIonisationExtendedModel::Initialise(const G4ParticleDefinition* pa
     tableData[nitrogen] = tableNitrogen;
 
     // **********************************************************************************************
+
+    silicon = siliconDef->GetParticleName();
+    tableFile[silicon] = fileSilicon;
+    
+    lowEnergyLimit[silicon] = lowEnergyLimitForA[5]* particle->GetAtomicMass();
+    highEnergyLimit[silicon] = 1e6* particle->GetAtomicMass()* MeV;
+    
+    // Cross section
+    
+    G4DNACrossSectionDataSet* tableSilicon = new G4DNACrossSectionDataSet(new G4LogLogInterpolation,
+                                                                          eV,
+                                                                          scaleFactor );
+    tableSilicon->LoadData(fileSilicon);
+    tableData[silicon] = tableSilicon;
+     
+    // **********************************************************************************************
     
     iron = ironDef->GetParticleName();
     tableFile[iron] = fileIron;
@@ -401,6 +418,8 @@ G4double G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(const G4Materia
             particleDefinition != instance->GetIon("nitrogen")
             &&
             particleDefinition != instance->GetIon("oxygen")
+            &&
+            particleDefinition != instance->GetIon("silicon")
             &&
             particleDefinition != instance->GetIon("iron")
             )

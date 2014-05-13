@@ -90,6 +90,9 @@ protected:
 
 class G4ITNavigator1
 {
+public:
+	static const G4int fMaxNav = 8;   // rename to kMaxNoNav ??
+
   public:  // with description
 
   friend std::ostream& operator << (std::ostream &os, const G4ITNavigator1 &n);

@@ -36,21 +36,15 @@
 #include "G4ITPathFinder.hh"
 #include "G4ITTransportationManager.hh"
 #include "G4ITNavigator.hh"
-#include "G4ReferenceCast.hh"
 #include "G4PathFinder.hh"
 #include "globals.hh"
 
-#define InitState(destination,source) \
-    destination(reference_cast(destination,source))
-
 G4ITSafetyHelper::G4ITSafetyHelper()
 :
-	G4TrackStateDependent<G4TrackState<G4ITSafetyHelper> >(),
+	G4TrackStateDependent<G4ITSafetyHelper>(),
 	fUseParallelGeometries(false),     // By default, one geometry only
 	fFirstCall(true),
-	fVerbose(0)//,
-	//fpState(fpTrackState)
-	//InitState(fpState,fpTrackState)
+	fVerbose(0)
 // fRecomputeFactor(0.0)
 {
 	fpPathFinder= 0; //  Cannot initialise this yet - a loop results

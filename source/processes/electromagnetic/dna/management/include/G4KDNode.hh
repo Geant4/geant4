@@ -164,7 +164,7 @@ private :
 	G4KDNode(const G4KDNode<PointT>& right);
 	G4KDNode& operator=(const G4KDNode<PointT>& right);
 
-	G4ThreadLocalStatic G4Allocator<G4KDNode<PointT> >* fgAllocator;
+	static G4ThreadLocal G4Allocator<G4KDNode<PointT> >* fgAllocator;
 };
 
 template <typename PointT>
