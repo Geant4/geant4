@@ -15,6 +15,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12-May-2014, A.Ribon       (had-hadronization-V10-00-01)
+- Applied Vladimir Uzhinsky's bug-fix on the positions of the increment
+  of the variables "StateQ++" and "StateAQ" in G4LundStringFragmentation.cc.
+
 24-Apr-2014, A.Ribon       (had-hadronization-V10-00-00)
 - Applied Novak's bug fix in G4LundStringFragmentation.cc : replacing
   ">=" with ">" in three if statements, which caused crashes in the

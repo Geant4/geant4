@@ -1236,7 +1236,6 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 			LeftHadron=G4ParticleTable::GetParticleTable()->FindParticle(SignQ*
 						       Meson[AbsIDquark-1][ProdQ-1][StateQ]);
 			G4double LeftHadronMass=LeftHadron->GetPDGMass();
-			StateQ++;
 
 			G4int StateAQ=0;
 			do // while(Meson[AbsIDanti_quark-1][ProdQ-1][StateAQ]<>0);
@@ -1244,7 +1243,6 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 				RightHadron=G4ParticleTable::GetParticleTable()->FindParticle(SignAQ*
 								Meson[AbsIDanti_quark-1][ProdQ-1][StateAQ]);
 				G4double RightHadronMass=RightHadron->GetPDGMass();
-				StateAQ++;
 
 				//M. Novak: = was removed. 
 				//	1. it can cause numerical problems 
@@ -1275,7 +1273,11 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 					if(NumberOf_FS > 34)
 					{G4int Uzhi; G4cout<<"QQbar string #_FS "<<NumberOf_FS<<G4endl; G4cin>>Uzhi;}
 				} // End of if(StringMass >= LeftHadronMass + RightHadronMass)
+
+				StateAQ++;
 			} while(Meson[AbsIDanti_quark-1][ProdQ-1][StateAQ]!=0);
+
+			StateQ++;
 		} while(Meson[AbsIDquark-1][ProdQ-1][StateQ]!=0);
 	} // End of for(G4int ProdQ=1; ProdQ < 4; ProdQ++)
 
