@@ -85,10 +85,11 @@ XrayFluoDetectorConstruction::XrayFluoDetectorConstruction()
     OhmicPosMaterial(0), OhmicNegMaterial(0),
     pixelMaterial(0),sampleMaterial(0),
     Dia1Material(0),Dia3Material(0),
-    defaultMaterial(0), windowMaterial (0), HPGeSD(0)
-  
+    defaultMaterial(0), windowMaterial (0)  
 { 
   materials = XrayFluoNistMaterials::GetInstance();
+
+  HPGeSD.Put(0);
 
   aNavigator = new G4Navigator();
  

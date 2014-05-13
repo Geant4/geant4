@@ -87,7 +87,8 @@ void XrayFluoActionInitializer::Build() const
       stepAction->SetMercuryFlag(true);
       SetUserAction(new XrayFluoMercuryPrimaryGeneratorAction(mercuryDetector));
   }
- 
+
+  SetUserAction(eventAction);
   SetUserAction(new XrayFluoRunAction());
   SetUserAction(stepAction);
   

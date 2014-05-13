@@ -110,6 +110,7 @@ void XrayFluoRunAction::BeginOfRunAction(const G4Run* aRun)
       G4UImanager* UI = G4UImanager::GetUIpointer(); 
       UI->ApplyCommand("/vis/scene/notifyHandlers");
     } 
+
   // Book histograms and ntuples
   XrayFluoAnalysisManager* analysis = XrayFluoAnalysisManager::getInstance();
   analysis->book();

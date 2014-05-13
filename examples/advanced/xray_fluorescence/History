@@ -19,6 +19,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-05-2014 L.Pandola Tag: XrayFluo-V10-00-07
+- Fix a bug with ntuple numbering in XrayFluoAnalysisManager
+- Fix a bug in the ActionInitializer causing the rejection of previous tag
+
 08-05-2014 L.Pandola Tag: XrayFluo-V10-00-06
 - Updated hit class to make it MT-compliant
 - Fixed the procedure for the update of geometry between runs

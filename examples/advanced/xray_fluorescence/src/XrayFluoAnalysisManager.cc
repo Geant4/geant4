@@ -77,11 +77,8 @@ XrayFluoAnalysisManager::XrayFluoAnalysisManager()
   //creating the messenger
   analisysMessenger = new XrayFluoAnalysisMessenger(this);
   
-  // Create analysis manager
-  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  analysisManager->SetVerboseLevel(1);
-  analysisManager->SetFirstHistoId(1);
-  analysisManager->SetFirstNtupleId(1);
+  //Instantiate the analysis manager
+  G4AnalysisManager::Instance();
 
   G4cout << "XrayFluoAnalysisManager created" << G4endl;
 }
@@ -120,6 +117,9 @@ void XrayFluoAnalysisManager::book()
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   // Open an output file
   man->OpenFile(outputFileName);
+  man->SetVerboseLevel(1);
+  man->SetFirstHistoId(1);
+  man->SetFirstNtupleId(1);
 
   G4cout << "Open output file: " << outputFileName << G4endl;
 
@@ -136,7 +136,8 @@ void XrayFluoAnalysisManager::book()
       man->CreateNtupleIColumn("origin");
       man->CreateNtupleDColumn("depth");
       man->FinishNtuple();
-  }
+      G4cout << "Created ntuple for phase space" << G4endl;
+    }
   else {
     // Book histograms
     man->CreateH1("h1","Energy Deposit", 500,0.,10.); //20eV def.
@@ -148,6 +149,7 @@ void XrayFluoAnalysisManager::book()
     man->CreateH1("h7","Spectrum of the incident particles", 100,0.,10.);
     man->CreateH1("h8","Protons reaching the detector", 100,0.,10.);
     man->CreateH1("h9","Protons leaving the sample", 100,0.,10.);
+    G4cout << "Created histos" << G4endl;
   }
 } 
 
@@ -310,8 +312,7 @@ void XrayFluoAnalysisManager::analyseStepping(const G4Step* aStep)
 	  if (particleType == G4Electron::Definition()) part = 0;
 	  if (particleType == G4Proton::Definition()) part = 2;
 	  
-	  //Fill ntuple
-	  
+	  //Fill ntuple	 
 	  man->FillNtupleIColumn(1,0, part);
 	  man->FillNtupleDColumn(1,1,particleEnergy);
 	  man->FillNtupleDColumn(1,2,momentum.theta());
