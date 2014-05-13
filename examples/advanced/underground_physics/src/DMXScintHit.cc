@@ -47,7 +47,7 @@
 #include "G4VisAttributes.hh"
 #include <iomanip>
 
-G4Allocator<DMXScintHit> DMXScintHitAllocator;
+G4ThreadLocal G4Allocator<DMXScintHit> *DMXScintHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

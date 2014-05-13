@@ -9,6 +9,14 @@ $Id$
                       Category History file
                       ---------------------
 
+13.05.2014 - L. Pandola (DMX-V10-00-01)
+	     Analysis files closed at the end of execution (not
+             end of event). 
+             Added ConstructSDandField() method in the Detector
+             Clean up the detector construction messenger
+             Made Hits allocators as ThreadLocal
+             Remove CLHEP::Random
+
 08.05.2014 - L. Pandola (DMX-V10-00-00)
              Added ActionInitialization class 
 

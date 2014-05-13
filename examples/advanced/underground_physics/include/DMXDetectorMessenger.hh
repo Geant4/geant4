@@ -67,7 +67,6 @@ class DMXDetectorMessenger: public G4UImessenger {
     G4UIcmdWithADoubleAndUnit* EKineCutCmd;
     G4UIcmdWithADoubleAndUnit* RoomTimeCutCmd;
     G4UIcmdWithADoubleAndUnit* TimeCutCmd;
-  //    G4UIcmdWithoutParameter*   UpdateCmd;
 
 };
 

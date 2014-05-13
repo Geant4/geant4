@@ -44,6 +44,7 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include "G4Cache.hh"
 
 class G4LogicalVolume;
 class G4VPhysicalVolume;
@@ -66,14 +67,13 @@ public:
 public:
 
   G4VPhysicalVolume* Construct();
+  void ConstructSDandField();
 
   void SetRoomEnergyCut(G4double);
   void SetEnergyCut(G4double);
   void SetTimeCut(G4double);
   void SetRoomTimeCut(G4double);
-  //  void UpdateGeometry();
-
-
+ 
 private:
 
   void DefineMaterials();
@@ -164,9 +164,8 @@ private:
   G4LogicalVolume*   phcath_log;
   G4VPhysicalVolume* phcath_phys; 
 
-
-  DMXScintSD*  LXeSD;            //pointer to sensitive detectors
-  DMXPmtSD* pmtSD;
+  G4Cache<DMXScintSD*> LXeSD; //pointer to sensitive detectors
+  G4Cache<DMXPmtSD*> pmtSD;
 
   // pointer to the Detector Messenger:
   DMXDetectorMessenger*  detectorMessenger;

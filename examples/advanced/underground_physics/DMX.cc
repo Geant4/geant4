@@ -41,7 +41,6 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
-
 #include "Randomize.hh"
 
 #ifdef G4VIS_USE
@@ -109,6 +108,14 @@ int main(int argc,char** argv) {
       G4String fileName = argv[1];
       UImanager->ApplyCommand(command+fileName);
     }
+
+  //Close-out analysis:
+  // Save histograms
+  G4AnalysisManager* man = G4AnalysisManager::Instance();
+  man->Write();
+  man->CloseFile();
+  // Complete clean-up
+  delete G4AnalysisManager::Instance();
 
 #ifdef G4VIS_USE
   if(visManager) delete visManager;

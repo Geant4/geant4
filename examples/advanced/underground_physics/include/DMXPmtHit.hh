@@ -85,18 +85,18 @@ class DMXPmtHit : public G4VHit
 typedef G4THitsCollection<DMXPmtHit> DMXPmtHitsCollection;
 
 
-extern G4Allocator<DMXPmtHit> DMXPmtHitsAllocator;
+extern G4ThreadLocal G4Allocator<DMXPmtHit> *DMXPmtHitsAllocator;
 
 
 inline void* DMXPmtHit::operator new(size_t) {
-  void* aHit;
-  aHit = (void*) DMXPmtHitsAllocator.MallocSingle();
-  return aHit;
+  if (!DMXPmtHitsAllocator)
+    DMXPmtHitsAllocator = new G4Allocator<DMXPmtHit>;
+  return (void*) DMXPmtHitsAllocator->MallocSingle();
 }
 
 
 inline void DMXPmtHit::operator delete(void* aHit) {
-  DMXPmtHitsAllocator.FreeSingle((DMXPmtHit*) aHit);
+  DMXPmtHitsAllocator->FreeSingle((DMXPmtHit*) aHit);
 }
 
 #endif

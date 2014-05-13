@@ -95,22 +95,22 @@ class DMXScintHit : public G4VHit
 
 typedef G4THitsCollection<DMXScintHit> DMXScintHitsCollection;
 
-extern G4Allocator<DMXScintHit> DMXScintHitAllocator;
+extern G4ThreadLocal G4Allocator<DMXScintHit> *DMXScintHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void* DMXScintHit::operator new(size_t)
 {
-  void* aHit;
-  aHit = (void*) DMXScintHitAllocator.MallocSingle();
-  return aHit;
+  if (!DMXScintHitAllocator)
+    DMXScintHitAllocator = new G4Allocator<DMXScintHit>;
+  return (void*) DMXScintHitAllocator->MallocSingle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void DMXScintHit::operator delete(void* aHit)
 {
-  DMXScintHitAllocator.FreeSingle((DMXScintHit*) aHit);
+  DMXScintHitAllocator->FreeSingle((DMXScintHit*) aHit);
 }
 
 #endif

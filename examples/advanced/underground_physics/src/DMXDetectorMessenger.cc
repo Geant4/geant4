@@ -48,6 +48,8 @@
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithoutParameter.hh"
 
+#include "G4RunManager.hh"
+
 
 DMXDetectorMessenger::DMXDetectorMessenger
    (DMXDetectorConstruction* DC):detectorConstruction(DC) {
@@ -84,28 +86,23 @@ DMXDetectorMessenger::DMXDetectorMessenger
   TimeCutCmd->SetUnitCategory("Time");
   TimeCutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  //UpdateCmd = new G4UIcmdWithoutParameter("/dmx/update",this);
-  //UpdateCmd->SetGuidance("Update calorimeter geometry.");
-  //UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  //UpdateCmd->SetGuidance("if you changed timecut value(s).");
-  //UpdateCmd->AvailableForStates(G4State_Idle);
-
 }
 
 
 //ooooooooooooooooooooooooooooooooooooooooo
-DMXDetectorMessenger::~DMXDetectorMessenger() {
-
+DMXDetectorMessenger::~DMXDetectorMessenger() 
+{
+  delete EKineCutCmd;
+  delete RoomEKineCutCmd;
   delete RoomTimeCutCmd;
   delete TimeCutCmd;
-  //  delete UpdateCmd;
-
-}
+ }
 
 
 //ooooooooooooooooooooooooooooooooooooooooo
 void DMXDetectorMessenger::SetNewValue(G4UIcommand* command, 
-  G4String newValue) {
+				       G4String newValue) 
+{
 
   if(command == EKineCutCmd)
    detectorConstruction->
@@ -123,8 +120,10 @@ void DMXDetectorMessenger::SetNewValue(G4UIcommand* command,
     detectorConstruction->
       SetRoomTimeCut(RoomTimeCutCmd->GetNewDoubleValue(newValue));
 
-  //  if( command == UpdateCmd )
-  //  { detectorConstruction->UpdateGeometry(); }
+  //trigger a re-optimization of the geometry
+  G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  G4RunManager::GetRunManager()->GeometryHasBeenModified();
+
 
 }
 
