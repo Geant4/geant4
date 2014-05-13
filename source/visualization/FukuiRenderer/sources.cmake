@@ -44,12 +44,16 @@ set(G4VIS_DAWN_MODULE_HEADERS
     G4FRConst.hh
     G4FRFeatures.hh
     G4FRSceneFunc.icc
-    G4FRofstream.hh)
+    G4FRofstream.hh
+    G4VisFeaturesOfDAWNFILE.hh
+    G4VisFeaturesOfFukuiRenderer.hh)
 
 set(G4VIS_DAWN_MODULE_SOURCES
     G4DAWNFILE.cc
     G4DAWNFILESceneHandler.cc
-    G4DAWNFILEViewer.cc)
+    G4DAWNFILEViewer.cc
+    G4VisFeaturesOfDAWNFILE.cc
+    G4VisFeaturesOfFukuiRenderer.cc)
 
 #
 # DAWN Network driver only built if user selected

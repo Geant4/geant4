@@ -56,23 +56,33 @@
 #include <sstream>
 
 G4PhysicalVolumeModel::G4PhysicalVolumeModel
-(G4VPhysicalVolume*          pVPV,
- G4int                       requestedDepth,
- const G4Transform3D& modelTransformation,
- const G4ModelingParameters* pMP,
- G4bool useFullExtent):
-  G4VModel        (modelTransformation, pMP),
-  fpTopPV         (pVPV),
-  fTopPVCopyNo    (0),
-  fRequestedDepth (requestedDepth),
-  fUseFullExtent  (useFullExtent),
-  fCurrentDepth   (0),
-  fCurtailDescent (false),
-  fpClippingSolid (0),
-  fClippingMode   (subtraction)
+(G4VPhysicalVolume*          pVPV
+ , G4int                       requestedDepth
+ , const G4Transform3D& modelTransformation
+ , const G4ModelingParameters* pMP
+ , G4bool useFullExtent)
+: G4VModel           (modelTransformation, pMP)
+, fpTopPV            (pVPV)
+, fTopPVCopyNo       (0)
+, fRequestedDepth    (requestedDepth)
+, fUseFullExtent     (useFullExtent)
+, fCurrentDepth      (0)
+, fpCurrentPV        (0)
+, fpCurrentLV        (0)
+, fpCurrentMaterial  (0)
+, fpCurrentTransform (0)
+, fCurtailDescent    (false)
+, fpClippingSolid    (0)
+, fClippingMode      (subtraction)
 {
-  if (fpTopPV) {
-    
+  if (!fpTopPV) {
+
+    G4Exception
+    ("G4PhysicalVolumeModel::G4PhysicalVolumeModel",
+     "modeling0010", FatalException, "Null G4PhysicalVolumeModel pointer.");
+
+  } else {
+
     fType = "G4PhysicalVolumeModel";
     fTopPVName = fpTopPV -> GetName ();
     fTopPVCopyNo = fpTopPV -> GetCopyNo ();
@@ -81,12 +91,13 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
     fGlobalTag = fpTopPV -> GetName () + "." + o.str();
     fGlobalDescription = "G4PhysicalVolumeModel " + fGlobalTag;
 
+    fpCurrentPV = fpTopPV;
+    if (fpCurrentPV) fpCurrentLV = fpCurrentPV->GetLogicalVolume();
+    if (fpCurrentLV) fpCurrentMaterial = fpCurrentLV->GetMaterial();
+    fpCurrentTransform = const_cast<G4Transform3D*>(&modelTransformation);
+
     CalculateExtent ();
   }
-  fpCurrentPV = fpTopPV;
-  fpCurrentLV = fpCurrentPV->GetLogicalVolume();
-  fpCurrentMaterial = fpCurrentLV->GetMaterial();
-  fpCurrentTransform = const_cast<G4Transform3D*>(&modelTransformation);
 }
 
 G4PhysicalVolumeModel::~G4PhysicalVolumeModel ()

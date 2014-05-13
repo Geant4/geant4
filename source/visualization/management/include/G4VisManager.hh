@@ -118,23 +118,6 @@ typedef G4VModelFactory<G4VFilter<G4VDigi> > G4DigiFilterFactory;
 
 class G4VisManager: public G4VVisManager {
 
-  // Friends - classes and functions which need access to private
-  // members of G4VisManager.  This is mainly to obtain access to
-  // GetInstance (), which is private.  The correct way for normal
-  // users to obtain a pointer to the vis manager is with
-  // G4VVisManager::GetConcreteInstance (), always testing for
-  // non-zero.
-
-  // Odd friends that need access to the G4VisManager...
-  friend class G4RTSteppingAction;
-  friend class G4RayTrajectory;
-  friend class G4RayTracerSceneHandler;
-  friend class G4RTMessenger;
-  friend class G4OpenGLViewerMessenger;
-  friend class G4OpenGLXmViewerMessenger;
-  friend class G4HepRepFileSceneHandler;
-  friend class G4OpenInventorXtExaminerViewerMessenger;
-
   // Management friends...
   friend class G4VSceneHandler;
   friend class G4VViewer;
@@ -175,11 +158,12 @@ private:
   G4VisManager (const G4VisManager&);
   G4VisManager& operator = (const G4VisManager&);
 
+public:
   static G4VisManager* GetInstance ();
   // Returns pointer to itself.  Throws a G4Exception if called before
-  // instantiation.  Private so that only friends can use; the normal
-  // user should instead use G4VVisManager::GetConcreteInstance () to
-  // get a "higher level" pointer for general use - but always test
+  // instantiation.  Intended only for use within the vis category; the
+  // normal user should instead use G4VVisManager::GetConcreteInstance()
+  // to get a "higher level" pointer for general use - but always test
   // for non-zero.
 
 public: // With description

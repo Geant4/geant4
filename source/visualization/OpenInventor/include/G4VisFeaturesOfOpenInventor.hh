@@ -24,15 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisFeaturesOfOpenInventor.hh 66264 2012-12-14 10:17:44Z allison $
 //
 // 
 
-#ifndef G4VISFEATURESOFFUKUIRENDERER_HH
-#define G4VISFEATURESOFFUKUIRENDERER_HH
+#ifndef G4VISFEATURESOFOPENINVENTOR_HH
+#define G4VISFEATURESOFOPENINVENTOR_HH
 
 #include "globals.hh"
 
-G4String G4VisFeaturesOfFukuiRenderer ();
+G4String G4VisFeaturesOfOpenInventor ();
 
 #endif

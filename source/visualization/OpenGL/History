@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-5th May 2014  Laurent Garnier (opengl-V10-00-04)
+13th May 2014  John Allison  (opengl-V10-00-05)
+- Coworks: DAWN-V10-00-02, visman-V10-00-08, openinventor-V10-00-01.
+- Moved G4VisFeaturesOfOpenGL from management sub-category.
+
+5th May 2014  Laurent Garnier  (opengl-V10-00-04)
 - G4OpenGLQtViewer : Fix a bug in Picking in Qt viewer. A G4cout was missing in order 
   to see picked informations
 

@@ -26,6 +26,21 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+13th May 2014  John Allison (visman-V10-00-08)
+- Coworks: DAWN-V10-00-02, opengl-V10-00-05, openinventor-V10-00-01.
+- Moved G4VisFeaturesOf* to appropriate sub-categories.
+
+13th May 2014  John Allison (visman-V10-00-07)
+- G4VisCommandsSceneAdd.cc:
+  o Added axes to /vis/scene/add/logicalVolume.
+  o Normalised axes and scale lengths to 1, 2 and 5 times an integer
+    power of 10.
+  o Trap cases of scene of null extent and output message.
+  o Minor protection for null date string.
+- G4VisManager.hh:
+  o GetInstance now public.
+  o Thus we can remove cross-subcategory friendships.
+
 10th April 2014  Laurent Garnier (visman-V10-00-06)
 - G4VSceneHandler.cc: NULL pointer fixed
 

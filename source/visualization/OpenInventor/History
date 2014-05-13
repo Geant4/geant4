@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/OpenInventor
 -------------------------------------------
 
+13th May 2014  John Allison  (openinventor-V10-00-01)
+- Coworks: DAWN-V10-00-02, visman-V10-00-08, opengl-V10-00-05.
+- Moved G4VisFeaturesOfOpenInventor from management sub-category.
+
 03 Feb 2014  Gabriele Cosmo  (openinventor-V10-00-00)
 - Fixed shadowing compilation warnings in G4OpenInventorXtExaminerViewer.cc.
 

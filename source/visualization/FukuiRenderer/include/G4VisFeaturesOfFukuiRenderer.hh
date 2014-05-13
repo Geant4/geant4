@@ -24,16 +24,15 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisFeaturesOfFukuiRenderer.hh 66264 2012-12-14 10:17:44Z allison $
 //
 // 
 
-#include "G4VisFeaturesOfOpenInventor.hh"
+#ifndef G4VISFEATURESOFFUKUIRENDERER_HH
+#define G4VISFEATURESOFFUKUIRENDERER_HH
 
-G4String G4VisFeaturesOfOpenInventor () {
-  return
-    "    Open Inventor Window/View/Scene."
-    "\n    Advantages:    Open Inventor feature set (interactivity, scene control)."
-    "\n    Disadvantages: Requires Open Inventor license ($$), Hepvis library (Free).";
-}
+#include "globals.hh"
 
+G4String G4VisFeaturesOfFukuiRenderer ();
+
+#endif

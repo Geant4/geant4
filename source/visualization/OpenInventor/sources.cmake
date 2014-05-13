@@ -57,6 +57,7 @@ set(G4VIS_MODULE_OPENINVENTOR_HEADERS
   G4OpenInventorSceneHandler.hh
   G4OpenInventorTransform3D.hh
   G4OpenInventorViewer.hh
+  G4VisFeaturesOfOpenInventor.hh
   Geant4_SoPolyhedron.h
   SoG4LineSet.h
   SoG4MarkerSet.h
@@ -68,6 +69,7 @@ set(G4VIS_MODULE_OPENINVENTOR_SOURCES
   G4OpenInventorSceneHandler.cc
   G4OpenInventorTransform3D.cc
   G4OpenInventorViewer.cc
+  G4VisFeaturesOfOpenInventor.cc
   SbPainter.cc
   SbPainterPS.cc
   SoAlternateRepAction.cc

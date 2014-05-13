@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+6th March 2014  John Allison  (modeling-V10-00-04)
+- G4PhysicalVolumeModel.cc:
+  o More careful protection of zero pointers in constructor.
+
 26th January 2014  John Allison  (modeling-V10-00-02)
 - GNUmakefile: Added dependency on run category.
 - G4PhysicalVolumeModel:

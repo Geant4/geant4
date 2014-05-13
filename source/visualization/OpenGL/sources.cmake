@@ -55,6 +55,7 @@ set(G4VIS_MODULE_OPENGL_HEADERS
     G4OpenGLSceneHandler.icc
     G4OpenGLViewerMessenger.hh
     G4OpenGLTransform3D.hh
+    G4VisFeaturesOfOpenGL.hh
 )
 
 set(G4VIS_MODULE_OPENGL_SOURCES
@@ -67,6 +68,7 @@ set(G4VIS_MODULE_OPENGL_SOURCES
     G4OpenGLSceneHandler.cc
     G4OpenGLViewerMessenger.cc
     G4OpenGLTransform3D.cc
+    G4VisFeaturesOfOpenGL.cc
 )
 
 #

@@ -311,6 +311,15 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
       G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
+  } else {
+    if (pScene->GetExtent().GetExtentRadius() <= 0.) {
+      if (verbosity >= G4VisManager::errors) {
+        G4cout
+        << "ERROR: Scene has no extent - not properly established."
+        << G4endl;
+      }
+      return;
+    }
   }
 
   G4String unitString, colourString;
@@ -322,9 +331,11 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
   x0 *= unit; y0 *= unit; z0 *= unit;
   const G4VisExtent& sceneExtent = pScene->GetExtent();  // Existing extent.
   if (length < 0.) {
-    length = 0.5 * sceneExtent.GetExtentRadius();
-    G4double intLog10Length = std::floor(std::log10(length));
+    const G4double lengthMax = 0.5 * sceneExtent.GetExtentRadius();
+    const G4double intLog10Length = std::floor(std::log10(lengthMax));
     length = std::pow(10,intLog10Length);
+    if (5.*length < lengthMax) length *= 5.;
+    else if (2.*length < lengthMax) length *= 2.;
   } else {
     length *= unit;
   }
@@ -411,6 +422,7 @@ void G4VisCommandSceneAddDate::SetNewValue (G4UIcommand*, G4String newValue)
   // Read rest of line, if any.
   const size_t NREMAINDER = 100;
   char remainder[NREMAINDER];
+  remainder[0]='\0';  // In case there is nothing remaining.
   is.getline(remainder, NREMAINDER);
   dateString += remainder;
   G4Text::Layout layout = G4Text::right;
@@ -1015,7 +1027,8 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
     return;
   }
 
-  const std::vector<G4Scene::Model>& rdModelList = pScene -> GetRunDurationModelList();
+  const std::vector<G4Scene::Model>& rdModelList =
+    pScene -> GetRunDurationModelList();
   std::vector<G4Scene::Model>::const_iterator i;
   for (i = rdModelList.begin(); i != rdModelList.end(); ++i) {
     if (i->fpModel->GetGlobalDescription().find("Volume") != std::string::npos) break;
@@ -1036,13 +1049,27 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
 	     << "\n (and also, if necessary, /vis/viewer/flush)"
              << G4endl;
     }
+    return;
   }
 
   G4VModel* model = new G4LogicalVolumeModel
     (pLV, requestedDepthOfDescent, booleans, voxels, readout);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
+
   if (successful) {
+
+    // Draw axes
+    const G4double radius = model->GetExtent().GetExtentRadius();
+    const G4double axisLengthMax = radius / 2.;
+    const G4double intLog10Length = std::floor(std::log10(axisLengthMax));
+    G4double axisLength = std::pow(10,intLog10Length);
+    if (5.*axisLength < axisLengthMax) axisLength *= 5.;
+    else if (2.*axisLength < axisLengthMax) axisLength *= 2.;
+    const G4double axisWidth = axisLength / 20.;
+    G4VModel* axesModel = new G4AxesModel(0.,0.,0.,axisLength,axisWidth);
+    pScene -> AddRunDurationModel (axesModel, warn);
+    
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Logical volume \"" << pLV -> GetName ()
 	     << " with requested depth of descent "
@@ -1138,6 +1165,15 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
       G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
+  } else {
+    if (pScene->GetExtent().GetExtentRadius() <= 0.) {
+      if (verbosity >= G4VisManager::errors) {
+        G4cout
+        << "ERROR: Scene has no extent - not properly established."
+        << G4endl;
+      }
+      return;
+    }
   }
 
   G4VViewer* pViewer = fpVisManager->GetCurrentViewer();
@@ -1543,7 +1579,7 @@ G4VisCommandSceneAddMagneticField::G4VisCommandSceneAddMagneticField () {
    "\nor, if only a small part of the scene has a field:"
    "\n  /vis/scene/add/magneticField 50 # or more");
   fpCommand -> SetGuidance
-  ("In the arrow representation, the length of the arrow is proporational"
+  ("In the arrow representation, the length of the arrow is proportional"
    "\nto the magnitude of the field and the colour is mapped onto the range"
    "\nas a fraction of the maximum magnitude: 0->0.5->1 is blue->green->red.");
 }
@@ -1719,6 +1755,15 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
       G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
+  } else {
+    if (pScene->GetExtent().GetExtentRadius() <= 0.) {
+      if (verbosity >= G4VisManager::errors) {
+        G4cout
+        << "ERROR: Scene has no extent - not properly established."
+        << G4endl;
+      }
+      return;
+    }
   }
 
   G4double userLength, red, green, blue, xmid, ymid, zmid;
@@ -1732,9 +1777,11 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   G4double length = userLength;
   const G4VisExtent& sceneExtent = pScene->GetExtent();  // Existing extent.
   if (userLengthUnit == "auto") {
-    length *= sceneExtent.GetExtentRadius();
-    G4double intLog10Length = std::floor(std::log10(length));
+    const G4double lengthMax = 0.5 * sceneExtent.GetExtentRadius();
+    const G4double intLog10Length = std::floor(std::log10(lengthMax));
     length = std::pow(10,intLog10Length);
+    if (5.*length < lengthMax) length *= 5.;
+    else if (2.*length < lengthMax) length *= 2.;
   } else {
     length *= G4UIcommand::ValueOf(userLengthUnit);
   }

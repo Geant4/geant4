@@ -24,6 +24,21 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+13th May 2014  John Allison  (vis-V10-00-03)
+- visman-V10-00-08, DAWN-V10-00-02, opengl-V10-00-05, openinventor-V10-00-01:
+  o Moved G4VisFeaturesOf* to appropriate sub-categories.
+— visman-V10-00-07:
+  o G4VisCommandsSceneAdd.cc:
+    . Added axes to /vis/scene/add/logicalVolume.
+    . Other small changes.
+  o G4VisManager.hh:
+    . GetInstance now public.
+    . Thus removed cross-subcategory friendships.
+
+6th March 2014  John Allison
+- modeling-V10-00-04: Protection of zero pointers.
+- visman-V10-00-04: Coverity fix.
+
 4th February 2014  John Allison  (vis-V10-00-02)
 - openinventor-V10-00-00:
   o Fixed shadowing compilation warnings (Gabriele Cosmo).

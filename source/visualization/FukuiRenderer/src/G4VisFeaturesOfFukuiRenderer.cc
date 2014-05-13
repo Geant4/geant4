@@ -24,24 +24,22 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4VisFeaturesOfFukuiRenderer.cc 66264 2012-12-14 10:17:44Z allison $
 //
 // 
 
-#ifndef G4VISFEATURESOFOPENGL_HH
-#define G4VISFEATURESOFOPENGL_HH
+#include "G4VisFeaturesOfFukuiRenderer.hh"
 
-#include "globals.hh"
-
-G4String G4VisFeaturesOfOpenGLIX ();
-G4String G4VisFeaturesOfOpenGLSX ();
-G4String G4VisFeaturesOfOpenGLIXm ();
-G4String G4VisFeaturesOfOpenGLSXm ();
-G4String G4VisFeaturesOfOpenGLIWin32 ();
-G4String G4VisFeaturesOfOpenGLSWin32 ();
-G4String G4VisFeaturesOfOpenGLIQt ();
-G4String G4VisFeaturesOfOpenGLSQt ();
-G4String G4VisFeaturesOfOpenGLIWt ();
-//G4String G4VisFeaturesOfOpenGLSWt ();
-
-#endif
+G4String G4VisFeaturesOfFukuiRenderer () {
+  return
+    "High quality technical renderer."
+    "\n    Features:      exact hidden line, hidden surface algorithms."
+    "\n                   high (unlimited) resolution."
+    "\n                   renders to PostScript for viewing and/or hardcopy."
+    "\n                   remote rendering."
+    "\n                   off-line rendering."
+    "\n                   graphical user interface."
+    "\n    Disadvantages: compute intensive, takes time (use a fast graphics"
+    "\n                   system, such as OpenGL, to select view, then copy"
+    "\n                   to this renderer - /vis~/copy/view, /vis~/set/view).";
+}
