@@ -349,6 +349,7 @@ void G4Material::CopyPointersOfBaseMaterial()
   }
   fRadlen = fBaseMaterial->GetRadlen()/factor;
   fNuclInterLen = fBaseMaterial->GetNuclearInterLength()/factor;
+
   if (fIonisation) { delete fIonisation; }
   fIonisation = new G4IonisParamMat(this);
 
@@ -733,9 +734,11 @@ std::ostream& operator<<(std::ostream& flux, G4Material* material)
     << "  RadL: "            << std::setw(7)  << std::setprecision(3)  
     << G4BestUnit(material->fRadlen,"Length")
     << "  Nucl.Int.Length: " << std::setw(7)  << std::setprecision(3)  
-    << G4BestUnit(material->fNuclInterLen,"Length") <<"\n" << std::setw(30)   
+    << G4BestUnit(material->fNuclInterLen,"Length") 
+    << "\n" << std::setw(30)   
     << "  Imean: "           << std::setw(7)  << std::setprecision(3)  
-    << G4BestUnit(material->GetIonisation()->GetMeanExcitationEnergy(),"Energy");
+    << G4BestUnit(material->GetIonisation()->GetMeanExcitationEnergy(),
+		  "Energy");
     
   if(material->fState == kStateGas) {
     flux

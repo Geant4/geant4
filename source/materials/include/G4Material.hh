@@ -217,7 +217,7 @@ public:  // with description
   // Radiation length:     
   inline G4double  GetRadlen()          const {return fRadlen;}
     
-  // Nuclear interaction length:     
+  // Nuclear interaction length     
   inline G4double GetNuclearInterLength() const {return fNuclInterLen;}
         
   // ionisation parameters:

@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-05-14 V.Ivanchenko (materials-V10-00-12)
+- G4Material - revert back modifications due to fail of tests,
+    improve material printout only to address #1563    
+
+12-05-14 V.Ivanchenko (materials-V10-00-11)
+- G4Material - commented out method GetNuclearInterLength() and 
+    extention for material printout to address bug report #1563 
+
 09-05-14 G.Cosmo (materials-V10-00-10, materials-V10-00-09)
 - Replaced size_t with int type for 'fNumberOfIsotopes' in G4Element
   and 'fNumberOfComponents' and 'fNumberOfElements' in G4Material.
