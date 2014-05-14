@@ -37,6 +37,7 @@
 #include "G4ExceptionHandler.hh"
 #include "G4PrimaryTransformer.hh"
 #include "G4GeometryManager.hh"
+#include "G4NavigationHistoryPool.hh"
 #include "G4TransportationManager.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4LogicalVolume.hh"
@@ -277,6 +278,11 @@ G4RunManagerKernel::~G4RunManagerKernel()
 
   G4UnitDefinition::ClearUnitsTable();
   if(verboseLevel>1) G4cout << "Units table cleared." << G4endl;
+
+  // deletion of navigation levels
+  delete G4NavigationHistoryPool::GetInstance();
+
+  // deletion of allocators
   G4AllocatorList* allocList = G4AllocatorList::GetAllocatorListIfExist();
   if(allocList)
   {

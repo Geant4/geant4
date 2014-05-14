@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 14th, 2014, G. Cosmo (run-V10-00-08)
+- Explicitly invoke deletion of new G4NavigationHistoryPool instance
+  in G4RunManagerKernel at job's end. Requires tag geomvol-V10-00-03.
+
 May 6th, 2014, G. Cosmo (run-V10-00-07)
 - Use G4ThreadLocalStatic in G4VUPLSplitter.
 
