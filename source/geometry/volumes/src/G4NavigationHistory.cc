@@ -33,31 +33,37 @@
 //
 // ----------------------------------------------------------------------
 
-#include "G4NavigationHistory.hh"
 #include "G4ios.hh"
+#include "G4NavigationHistory.hh"
+#include "G4NavigationHistoryPool.hh"
 
-#ifndef WIN32
-  // Initialise static data for the specialized memory pool
-  // for the internal STL vector of histories  ...
-  //
-  G4ThreadLocal G4ChunkIndexType* G4AllocStats::allocStat = 0;
-  G4ThreadLocal G4int             G4AllocStats::totSpace = 0;
-  G4ThreadLocal G4int             G4AllocStats::numCat = 0;
-#endif
+G4ThreadLocal G4Allocator<G4NavigationHistory> *aNavigHistoryAllocator = 0;
 
 G4NavigationHistory::G4NavigationHistory()
-  : fNavHistory(kHistoryMax), fStackDepth(0)
+  : fStackDepth(0)
 {
+  fNavHistory = G4NavigationHistoryPool::GetInstance()->GetNewLevels();
   Clear();
 }
 
 G4NavigationHistory::G4NavigationHistory(const G4NavigationHistory &h)
-  : fNavHistory(h.fNavHistory), fStackDepth(h.fStackDepth)
 {
+  fNavHistory = G4NavigationHistoryPool::GetInstance()->GetLevels();
+  if( this->GetMaxDepth() < h.fStackDepth )
+  {
+    fNavHistory->resize( h.fStackDepth ); 
+  }
+  for ( G4int ilev=h.fStackDepth; ilev>=0; ilev-- )
+  { 
+    (*fNavHistory)[ilev] = (*h.fNavHistory)[ilev]; 
+  } 
+  fStackDepth=h.fStackDepth;
 }
 
 G4NavigationHistory::~G4NavigationHistory()
 {
+  Clear();
+  G4NavigationHistoryPool::GetInstance()->DeRegister(fNavHistory);
 }
 
 std::ostream&

@@ -52,6 +52,7 @@ GEANT4_DEFINE_MODULE(NAME G4volumes
         G4LogicalSkinSurface.icc
         G4NavigationHistory.hh
         G4NavigationHistory.icc
+        G4NavigationHistoryPool.hh
         G4NavigationLevel.hh
         G4NavigationLevel.icc
         G4NavigationLevelRep.hh
@@ -72,6 +73,7 @@ GEANT4_DEFINE_MODULE(NAME G4volumes
         G4LogicalBorderSurface.cc
         G4LogicalSkinSurface.cc
         G4NavigationHistory.cc
+        G4NavigationHistoryPool.cc
         G4NavigationLevel.cc
         G4NavigationLevelRep.cc
         G4PVParameterised.cc
