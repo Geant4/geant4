@@ -3,6 +3,9 @@ project(test70)
 find_package(Geant4 REQUIRED)
 include(${Geant4_USE_FILE})
 
+#add_executable(test70 main.cc)
+GEANT4_EXECUTABLE(test70 main.cc)
+
 #GEANT4_EXECUTABLE(test70 test70.cc src/*.cc)
 
 # ----------------------------------------------------------------------------------------------------
@@ -17,9 +20,9 @@ include(${Geant4_USE_FILE})
 # --- Test definitions
 # ----------------------------------------------------------------------------------------------------
 
-#GEANT4_ADD_TEST(test70-build BUILD test70
-#                       LABELS Nightly Continuous
-#                       ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(test70-build BUILD test70
+                       LABELS Nightly Continuous
+                       ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 
 
 #GEANT4_ADD_TEST(test70 COMMAND test70 -mac ${CMAKE_CURRENT_SOURCE_DIR}/short.mac

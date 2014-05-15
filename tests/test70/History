@@ -12,6 +12,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13.05.2014 M.K                  tag test70-V10-00-00
+-----------------------------------------------------
+- Crash this test : how to use way unordered_map
+on all compilers ?
+
 11.11.2013 M.K                  tag test70-V09-06-06
 -----------------------------------------------------
 - Remove test70 from tests
