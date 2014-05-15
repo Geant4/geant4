@@ -4,6 +4,9 @@ $Id$
 History file for test/test202 subdirectory
 ------------------------------------------------
 
+14th May 2014 Laurent Garnier (test202-V10-00-14)
+- OGLIX.mac: Create a big viewer and try to send an email to garnier@lal in case of errors
+
 13th May 2014 Laurent Garnier (test202-V10-00-13)
 - OGLIX.mac: Create a small viewer
 

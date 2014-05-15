@@ -53,6 +53,7 @@ if grep "GLX" XvfbExtensions; then
     echo "======================================================"
     echo `diff $reference_folder/$testFile $output_folder/$testFile`
     echo "======================================================"
+    mail -s "ERROR: Output and reference are different for $2" garnier@lal.in2p3.fr < $output_folder/$testFile
     exit 1
   fi
 
