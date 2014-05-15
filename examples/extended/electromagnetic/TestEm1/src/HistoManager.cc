@@ -71,7 +71,7 @@ void HistoManager::Book()
                   "step size of primary particle",               //3
                   "total energy deposit",                        //4
                   "energy of charged secondaries at creation",   //5
-                  "energy of neutral secondaries at creation"    //6                  
+                  "energy of neutral secondaries at creation"    //6 
                  };
   // Default values (to be reset via /analysis/h1/set command)               
   G4int nbins = 100;
@@ -81,7 +81,8 @@ void HistoManager::Book()
   // Create all histograms as inactivated 
   // as we have not yet set nbins, vmin, vmax
   for (G4int k=0; k<kMaxHisto; k++) {
-    G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
+    G4int ih = analysisManager->CreateH1("h"+id[k], title[k], 
+                                         nbins, vmin, vmax);
     analysisManager->SetH1Activation(ih, false);    
   }
 }

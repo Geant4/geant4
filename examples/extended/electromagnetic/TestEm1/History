@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+09-04-14 V.Ivant (testem1-V10-00-03)
+- TestEm1.in - reduce printout more
+- PhysicsList - added "emlowenergy" option
+- HistoManager - added "h"
+
 09-04-14 V.Ivant (testem1-V10-00-02)
 - DetectorConstruction - define heavy water vapor starting from isotopes
 - TestEm1.in - removed printout from second thread
