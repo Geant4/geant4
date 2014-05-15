@@ -888,6 +888,9 @@ std::pair< G4double , E_isoAng > G4NeutronHPThermalScattering::create_sE_and_EPM
          E_isoAng E_isoAng_H = create_E_isoAng_from_energy ( sE , &(pE_P_E_isoAng_EH->vE_isoAngle) );
 
          E_isoAng anE_isoAng; 
+         //For defeating warning message from compiler
+         anE_isoAng.n = 1;
+         anE_isoAng.energy = sE; //never used 
          if ( E_isoAng_L.n == E_isoAng_H.n ) 
          {
             anE_isoAng.n =  E_isoAng_L.n; 
@@ -900,7 +903,8 @@ std::pair< G4double , E_isoAng > G4NeutronHPThermalScattering::create_sE_and_EPM
          }
          else
          {
-            G4cout << "Do not Suuport yet." << G4endl; 
+            //G4cout << "Do not Suuport yet." << G4endl; 
+            throw G4HadronicException(__FILE__, __LINE__, "Unexpected values!");
          }
      
    
