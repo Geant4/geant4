@@ -132,10 +132,13 @@ public:
   }
 protected:
   base_leaf(const base_leaf& a_from)
-  : iro(a_from)
+  :iro(a_from)
   ,m_out(a_from.m_out)
   ,m_branch(a_from.m_branch)
   ,m_fac(a_from.m_fac)
+  ,m_ndata(0)
+  ,m_length(0)
+  ,m_leaf_count(0)
   {}
   base_leaf& operator=(const base_leaf&){return *this;}
 public:

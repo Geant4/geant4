@@ -134,6 +134,7 @@ G4bool G4RootFileManager::OpenRFile(const G4String& fileName)
     description << "      " << "Cannot open file " << fileName;
     G4Exception("G4RootRFileManager::OpenFile()",
                 "Analysis_W001", JustWarning, description);
+    delete newFile;
     return false;
   }
 

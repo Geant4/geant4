@@ -4,96 +4,59 @@
 #ifndef tools_randf
 #define tools_randf
 
-#include <cstdlib>   //::rand, RAND_MAX
-#include "fmath"
+#include "randT"
+#include "rtausmef"
 
 namespace tools {
-namespace randf {
 
-class flat {
+class rgaussf : public rgauss<rtausmef,float> {
+  typedef rgauss<rtausmef,float> parent;
 public:
-  float shoot() const {
-    // Shoot random numbers in [0,1] according a flat distribution.
-    float value  = (float)::rand();
-    value /= (float)RAND_MAX;
-    return value;
-  }
-};
-
-class gauss {
+  rgaussf(float a_mean = 0,float a_std_dev = 1):parent(m_flat,a_mean,a_std_dev),m_flat(){}
+  virtual ~rgaussf(){}
 public:
-  gauss(float a_mean = 0,float a_std_dev = 1)
-  :m_mean(a_mean),m_std_dev(a_std_dev){}
-public:
-  gauss(const gauss& a_from)
-  :m_mean(a_from.m_mean),m_std_dev(a_from.m_std_dev){}
-  gauss& operator=(const gauss& a_from) {
-    m_mean = a_from.m_mean;
-    m_std_dev = a_from.m_std_dev;
+  rgaussf(const rgaussf& a_from):parent(m_flat),m_flat(a_from.m_flat){}
+  rgaussf& operator=(const rgaussf& a_from) {
+    parent::operator=(a_from);
+    m_flat = a_from.m_flat;
     return *this;
   }
-public:
-  float shoot() const {
-    //  Shoot random numbers according a 
-    // gaussian distribution of mean 0 and sigma 1.
-    float v1,v2,r,fac;
-    do {
-      v1 = 2 * m_flat.shoot() - 1;
-      v2 = 2 * m_flat.shoot() - 1;
-      r = v1*v1 + v2*v2;
-    } while ( r > 1 );
-    fac = fsqrt(-2*flog(r)/r);
-    return (v2 * fac) * m_std_dev + m_mean;
-  }
 protected:
-  flat m_flat;
-  float m_mean;
-  float m_std_dev;
+  rtausmef m_flat;
 };
 
-class bw {
+class rbwf : public rbw<rtausmef,float> {
+  typedef rbw<rtausmef,float> parent;
 public:
-  bw(float a_mean = 0,float a_gamma = 1)
-  :m_mean(a_mean),m_gamma(a_gamma){}
+  rbwf(float a_mean = 0,float a_gamma = 1):parent(m_flat,a_mean,a_gamma),m_flat(){}
+  virtual ~rbwf(){}
 public:
-  bw(const bw& a_from)
-  :m_mean(a_from.m_mean),m_gamma(a_from.m_gamma){}
-  bw& operator=(const bw& a_from) {
-    m_mean = a_from.m_mean;
-    m_gamma = a_from.m_gamma;
+  rbwf(const rbwf& a_from):parent(m_flat),m_flat(a_from.m_flat){}
+  rbwf& operator=(const rbwf& a_from) {
+    parent::operator=(a_from);
+    m_flat = a_from.m_flat;
     return *this;
   }
-public:
-  float shoot() const {
-    float rval = 2 * m_flat.shoot() - 1;
-    float displ = 0.5f * m_gamma * ftan(rval * fhalf_pi());
-    return m_mean + displ;
-  }
 protected:
-  flat m_flat;
-  float m_mean;
-  float m_gamma;
+  rtausmef m_flat;
 };
 
-class exp {
+class rexpf : public rexp<rtausmef,float> {
+  typedef rexp<rtausmef,float> parent;
 public:
-  exp(float a_rate = 1):m_rate(a_rate){}
+  rexpf(float a_rate = 1):parent(m_flat,a_rate),m_flat(){}
+  virtual ~rexpf(){}
 public:
-  exp(const exp& a_from):m_rate(a_from.m_rate){}
-  exp& operator=(const exp& a_from) {m_rate = a_from.m_rate;return *this;}
-public:
-  float shoot() const {
-    float v;
-    do {
-      v = m_flat.shoot();
-    } while(v<=0);
-    return -flog(v)/m_rate;
+  rexpf(const rexpf& a_from):parent(m_flat),m_flat(a_from.m_flat){}
+  rexpf& operator=(const rexpf& a_from) {
+    parent::operator=(a_from);
+    m_flat = a_from.m_flat;
+    return *this;
   }
 protected:
-  flat m_flat;
-  float m_rate;
+  rtausmef m_flat;
 };
 
-}}
+}
 
 #endif

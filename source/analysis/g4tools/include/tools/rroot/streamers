@@ -24,7 +24,7 @@
 
 #include <list>
 #include <cmath> //::log10, ::fabs.
-#include <cstdlib> //::rand
+#include "../rtausmed"
 
 namespace tools {
 namespace rroot {
@@ -394,10 +394,10 @@ inline tools::histo::h1d* TH1F_stream(buffer& a_buffer,bool a_profile = false){
         //Correct some bins randomly (beurk, do you have a better idea ?) :
         int diff = int(fEntries)-allEntries;
         unsigned int nx = data.m_axes[0].m_number_of_bins;
+        rtausmed r;
         for(int i=0;i<diff;i++) {
-          int ri = ::rand();
           // ibin in [1,nx-1]
-          int ibin =  int((nx-1) * ((double)ri/(double)RAND_MAX)) + 1;
+          int ibin = int((nx-1) * r.shoot()) + 1;
           int offset = ibin;
           data.m_bin_entries[offset]++;
         }
@@ -506,9 +506,9 @@ inline tools::histo::h1d* TH1D_stream(buffer& a_buffer,bool a_profile = false){
         //Correct some bins randomly (beurk, do you have a better idea ?) :
         int diff = int(fEntries)-allEntries;
         unsigned int nx = data.m_axes[0].m_number_of_bins;
+        rtausmed r;
         for(int i=0;i<diff;i++) {
-          int ri = ::rand();
-          int ibin =  int((nx-1) * ((double)ri/(double)RAND_MAX)) + 1;
+          int ibin = int((nx-1) * r.shoot()) + 1;
           int offset = ibin;
           data.m_bin_entries[offset]++;
         }
@@ -619,11 +619,10 @@ inline tools::histo::h2d* TH2F_stream(buffer& a_buffer,bool a_profile = false){
         int diff = int(fEntries-allEntries);
         unsigned int nx = data.m_axes[0].m_number_of_bins;
         unsigned int ny = data.m_axes[1].m_number_of_bins;
+        rtausmed r;
         for(int i=0;i<diff;i++) {
-          int ri = ::rand();
-          int ibin =  int((nx-1) * ((double)ri/(double)RAND_MAX)) + 1;
-          int rj = ::rand();
-          int jbin =  int((ny-1) * ((double)rj/(double)RAND_MAX)) + 1;
+          int ibin = int((nx-1) * r.shoot()) + 1;
+          int jbin = int((ny-1) * r.shoot()) + 1;
           int offset = ibin + jbin * data.m_axes[1].m_offset;
           data.m_bin_entries[offset]++;
         }
@@ -734,11 +733,10 @@ inline tools::histo::h2d* TH2D_stream(buffer& a_buffer,bool a_profile = false){
         int diff = int(fEntries-allEntries);
         unsigned int nx = data.m_axes[0].m_number_of_bins;
         unsigned int ny = data.m_axes[1].m_number_of_bins;
+        rtausmed r;
         for(int i=0;i<diff;i++) {
-          int ri = ::rand();
-          int ibin =  int((nx-1) * ((double)ri/(double)RAND_MAX)) + 1;
-          int rj = ::rand();
-          int jbin =  int((ny-1) * ((double)rj/(double)RAND_MAX)) + 1;
+          int ibin = int((nx-1) * r.shoot()) + 1;
+          int jbin = int((ny-1) * r.shoot()) + 1;
           int offset = ibin + jbin * data.m_axes[1].m_offset;
           data.m_bin_entries[offset]++;
         }

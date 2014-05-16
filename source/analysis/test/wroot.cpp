@@ -17,7 +17,7 @@
 #include <tools/histo/p1d>
 #include <tools/wroot/ntuple>
 
-#include <tools/random>
+#include <tools/randd>
 #include <tools/randf>
 
 #ifdef TOOLS_DONT_HAVE_ZLIB
@@ -27,6 +27,7 @@
 
 #include <tools/args>
 #include <iostream>
+#include <cstdlib>
 
 int main(int argc,char** argv) {
 
@@ -64,8 +65,8 @@ int main(int argc,char** argv) {
 
   unsigned int entries = 1000000;
 
-  tools::random::gauss rg(1,2);
-  tools::random::bw rbw(0,1);
+  tools::rgaussd rg(1,2);
+  tools::rbwd rbw(0,1);
 
  {tools::histo::h1d h("Gauss",100,-5,5);
   for(unsigned int count=0;count<entries;count++) {
@@ -119,7 +120,7 @@ int main(int argc,char** argv) {
     ntu->set_basket_size(1000000);
   }
 
-  tools::randf::bw rbwf(0,1);
+  tools::rbwf rbwf(0,1);
   for(unsigned int count=0;count<entries;count++) {    
     if(!col_index->fill(count)) {
       std::cout << "col_index fill failed." << std::endl;
@@ -169,7 +170,7 @@ int main(int argc,char** argv) {
     tools::wroot::ntuple::column<float>* col_rbw =
       ntu->find_column<float>("rbw");
 
-    tools::randf::bw rbwf(0,1);
+    tools::rbwf rbwf(0,1);
     for(unsigned int count=0;count<1000;count++) {    
       if(!col_rgauss->fill(rg.shoot())) {
         std::cout << "col_rgauss fill failed." << std::endl;

@@ -10,7 +10,7 @@
 #include <tools/histo/p1d>
 #include <tools/histo/sliced>
 
-#include <tools/random>
+#include <tools/randd>
 
 #include <iostream>
 
@@ -31,7 +31,7 @@ int main(int argc,char** argv) {
   /// h1d ////////////////////////////////
   ////////////////////////////////////////
  {
-   tools::random::gauss rg(1,2);
+   tools::rgaussd rg(1,2);
    tools::histo::h1d h("Gauss",100,-5,5);
    for(unsigned int count=0;count<entries;count++) {
      h.fill(rg.shoot(),1.4);
@@ -48,7 +48,7 @@ int main(int argc,char** argv) {
  }
 
  {
-   tools::random::bw rbw(0,1);
+   tools::rbwd rbw(0,1);
    tools::histo::h1d h("BW",100,-5,5);
    for(unsigned int count=0;count<entries;count++) {
      h.fill(rbw.shoot(),2.3);
@@ -60,8 +60,8 @@ int main(int argc,char** argv) {
   /// p1d ////////////////////////////////
   ////////////////////////////////////////
  {
-   tools::random::gauss rg(1,2);
-   tools::random::bw rbw(0,1);
+   tools::rgaussd rg(1,2);
+   tools::rbwd rbw(0,1);
    tools::histo::p1d h("Profile",100,-5,5,-2,2);
    for(unsigned int count=0;count<entries;count++) {
      h.fill(rg.shoot(),rbw.shoot(),1);
@@ -73,8 +73,8 @@ int main(int argc,char** argv) {
   /// h2d ////////////////////////////////
   ////////////////////////////////////////
  {
-   tools::random::gauss rg(1,2);
-   tools::random::bw rbw(0,1);
+   tools::rgaussd rg(1,2);
+   tools::rbwd rbw(0,1);
    tools::histo::h2d h("Gauss_BW",100,-5,5,100,-2,2);
    for(unsigned int count=0;count<entries;count++) {
      h.fill(rg.shoot(),rbw.shoot(),0.8);
@@ -173,9 +173,9 @@ int main(int argc,char** argv) {
   /// h3d ////////////////////////////////
   ////////////////////////////////////////
  {
-   tools::random::gauss rg(1,2);
-   tools::random::bw rbw(0,1);
-   tools::random::flat rflat;
+   tools::rgaussd rg(1,2);
+   tools::rbwd rbw(0,1);
+   tools::rtausmed rflat;
    tools::histo::h3d h("Gauss_BW_flat",100,-10,10,100,-2,2,100,-2,2);
    for(unsigned int count=0;count<entries;count++) {
      h.fill(rg.shoot(),rbw.shoot(),rflat.shoot());

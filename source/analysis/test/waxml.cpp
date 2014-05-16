@@ -5,7 +5,7 @@
 #include <tools/waxml/histos>
 #include <tools/waxml/ntuple>
 
-#include <tools/random>
+#include <tools/randd>
 
 #include <iostream>
 #include <cstdlib>
@@ -29,8 +29,8 @@ int main(int,char**) {
   //////////////////////////////////////////////////////////
   /// create and write some histos : ///////////////////////
   //////////////////////////////////////////////////////////
-  tools::random::gauss rg(1,2);
-  tools::random::bw rbw(0,1);
+  tools::rgaussd rg(1,2);
+  tools::rbwd rbw(0,1);
   unsigned int entries = 1000000;
 
  {tools::histo::h1d h("Gauss",100,-5,5);

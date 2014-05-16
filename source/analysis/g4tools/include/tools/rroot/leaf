@@ -283,7 +283,9 @@ public:
     delete [] m_value;
   }
 protected:
-  leaf_string(const leaf_string& a_from):iro(a_from),base_leaf(a_from){}
+  leaf_string(const leaf_string& a_from)
+  :iro(a_from),base_leaf(a_from)
+  ,m_min(0),m_max(0),m_value(0){}
   leaf_string& operator=(const leaf_string&){return *this;}
 public:
   const char* value() const {return m_value;}
@@ -342,7 +344,7 @@ public:
   virtual ~leaf_element(){}
 protected:
   leaf_element(const leaf_element& a_from)
-  :iro(a_from),base_leaf(a_from){}
+  :iro(a_from),base_leaf(a_from),fID(0),fType(0){}
   leaf_element& operator=(const leaf_element&){return *this;}
 public:
   //int id() const {return fID;}

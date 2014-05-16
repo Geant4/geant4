@@ -245,6 +245,8 @@ tools::wroot::ntuple* G4RootNtupleManager::GetNtuple(G4int ntupleId) const
   G4RootNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "GetNtuple");
     
+  if ( ! ntupleDescription ) return 0; 
+    
   return ntupleDescription->fNtuple;  
 }  
 

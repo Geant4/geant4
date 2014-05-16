@@ -28,6 +28,8 @@
 #include <tools/randf>
 #include <tools/cmp>
 
+#include <cstdlib>
+
 #ifdef WIN32
 extern "C" int __stdcall SETPAWC();
 extern "C" int __stdcall SETNTUC();
@@ -72,8 +74,8 @@ int main(int,char**) {
   //hfile.mkcd("histo");
 
   unsigned int entries = 100000;
-  tools::randf::gauss rg(0,1);
-  tools::randf::bw rbw(0,1);
+  tools::rgaussf rg(0,1);
+  tools::rbwf rbw(0,1);
 
   /////////////////////////////////////////////////////////////////////////
   // create some histos under //PAWC/LUN1/histo.

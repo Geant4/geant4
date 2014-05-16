@@ -387,7 +387,16 @@ G4bool G4XmlAnalysisManager::CloseFileImpl()
   // (ntuple files are created only if an ntuple is created)
   if ( fFileManager->GetHnFile() && 
        fH1Manager->IsEmpty() && fH2Manager->IsEmpty() ) {
-    std::remove(fFileManager->GetFullFileName());
+    result = ! std::remove(fFileManager->GetFullFileName());
+    //  std::remove returns 0 when success
+    if ( ! result ) {
+      G4ExceptionDescription description;
+      description << "      " << "Removing file " 
+                  << fFileManager->GetFullFileName() << " failed";
+      G4Exception("G4XmlAnalysisManager::CloseFile()",
+                "Analysis_W002", JustWarning, description);
+    }            
+    finalResult = finalResult && result;
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL1() ) 
       fState.GetVerboseL1()

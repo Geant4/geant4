@@ -255,6 +255,8 @@ tools::wcsv::ntuple* G4CsvNtupleManager::GetNtuple(G4int ntupleId) const
 {
   G4CsvNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "GetNtuple");
+
+  if ( ! ntupleDescription ) return 0; 
     
   return ntupleDescription->fNtuple;  
 }  

@@ -17,6 +17,11 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 16, 2014 I. Hrivnacova (analysis-V10-00-11)
+- Fixed Coverity defects. 
+- Updated to g4tools 1.10.0 (by G. Barrand):
+  See History_tools for complete list of modifications.
+
 April 25, 2014 I. Hrivnacova (analysis-V10-00-10)
 - Fixed implementation of compound commands in G4H[1,2,n]Messenger classes
   using new G4AnalysisUtilities::Tokenize() function.

@@ -1,0 +1,34 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_rtausmef
+#define tools_rtausmef
+
+#include "rtausmeui"
+#include "S_STRING"
+
+#include <cmath>
+
+namespace tools {
+
+class rtausmef : public rtausmeui {
+public:
+  TOOLS_SCLASS(tools::rtausmef)
+public:
+  rtausmef(unsigned int a_seed = 4357):rtausmeui(a_seed){}
+  virtual ~rtausmef(){}
+public:
+  rtausmef(const rtausmef& a_from):rtausmeui(a_from){}
+  rtausmef& operator=(const rtausmef& a_from) {rtausmeui::operator=(a_from);return *this;}
+protected:
+  static float two_to_minus_32()  {
+    static const float s_v = ::ldexpf(1,-32);
+    return s_v;
+  }
+public:
+  float shoot() {return float(rtausmeui::shoot()) * two_to_minus_32();}
+};
+
+}
+
+#endif

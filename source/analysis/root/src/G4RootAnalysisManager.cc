@@ -296,7 +296,7 @@ G4bool G4RootAnalysisManager::WriteImpl()
 //_____________________________________________________________________________
 G4bool G4RootAnalysisManager::CloseFileImpl()
 {
-  G4bool result = true;
+  G4bool finalResult = true;
 
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
@@ -305,25 +305,35 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
 #endif
 
   // reset data
-  result = Reset();
+  G4bool result = Reset();
   if ( ! result ) {
       G4ExceptionDescription description;
       description << "      " << "Resetting data failed";
       G4Exception("G4RootAnalysisManager::Write()",
                 "Analysis_W002", JustWarning, description);
   } 
+  finalResult = finalResult && result;
 
   // close file
   fFileManager->CloseFile();  
 
   // No files clean-up in sequential mode
-  if ( ! G4Threading::IsMultithreadedApplication() )  return result;
+  if ( ! G4Threading::IsMultithreadedApplication() )  return finalResult;
   
   // Delete files if empty in MT mode
   if ( ( fState.GetIsMaster() && 
          fH1Manager->IsEmpty() && fH2Manager->IsEmpty() ) || 
        ( ( ! fState.GetIsMaster() ) && fNtupleManager->IsEmpty() ) ) {
-    std::remove(fFileManager->GetFullFileName());
+    result = ! std::remove(fFileManager->GetFullFileName());
+    //  std::remove returns 0 when success
+    if ( ! result ) {
+      G4ExceptionDescription description;
+      description << "      " << "Removing file " 
+                  << fFileManager->GetFullFileName() << " failed";
+      G4Exception("G4XmlAnalysisManager::CloseFile()",
+                "Analysis_W002", JustWarning, description);
+    }            
+    finalResult = finalResult && result;
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL1() ) 
       fState.GetVerboseL1()
@@ -338,6 +348,6 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
 #endif
   }
 
-  return result;
+  return finalResult;
 } 
   

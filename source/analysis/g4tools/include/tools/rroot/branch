@@ -768,10 +768,19 @@ public:
   }
 protected:
   branch(const branch& a_from)
-  : iro(a_from)
+  :iro(a_from)
   ,m_file(a_from.m_file),m_out(a_from.m_out),m_fac(a_from.m_fac)
   ,m_streamed_baskets(m_fac,false),m__read_basket(0)
-  ,m_branches(m_fac,false),m_leaves(m_fac,false){}
+  ,fAutoDelete(false)
+  ,m_branches(m_fac,false),m_leaves(m_fac,false)
+  ,fEntryOffsetLen(1000)
+  ,m_write_basket(0)
+  ,m_entry_number(0)
+  ,m_read_basket(0)
+  ,fBasketBytes(0)
+  ,fBasketEntry(0)
+  ,fBasketSeek(0)
+  {}
   branch& operator=(const branch&){return *this;}
 public:
   ifile& file() {return m_file;}

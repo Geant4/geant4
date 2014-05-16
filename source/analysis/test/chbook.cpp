@@ -26,6 +26,7 @@ extern "C" void oclose_(int*);
 #include <tools/randf>
 
 #include <iostream>
+#include <cstdlib>
 
 int main(int,char**) {
 
@@ -57,8 +58,8 @@ int main(int,char**) {
 
   // create some histos in memory :
   unsigned int entries = 100000;
-  tools::randf::gauss rg(0,1);
-  tools::randf::bw rbw(0,1);
+  tools::rgaussf rg(0,1);
+  tools::rbwf rbw(0,1);
 
   tools::hbook::CHBOOK1(10,"Gauss",100,-5,5);
  {for(unsigned int count=0;count<entries;count++) {

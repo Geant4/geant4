@@ -192,6 +192,9 @@ public:
   }
   basket(ifile& a_file,seek a_pos,uint32 a_nbytes)
   :key(a_file,a_pos,a_nbytes)
+  ,m_nev_buf_size(0)
+  ,m_nev(0)
+  ,m_last(0)
   ,m_entry_offset(0)
   ,m_displacement(0)
   {
@@ -207,7 +210,7 @@ public:
   }
 public:
   basket(const basket& a_from)
-  : iro(a_from)
+  :iro(a_from)
   ,key(a_from)
   ,m_nev_buf_size(a_from.m_nev_buf_size)
   ,m_nev(a_from.m_nev)

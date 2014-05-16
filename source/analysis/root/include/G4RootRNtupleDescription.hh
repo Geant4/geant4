@@ -69,6 +69,12 @@ struct G4RootRNtupleDescription
   tools::rroot::fac* fFac;
   tools::rroot::tree* fTree;
   G4bool fIsInitialized;
+  
+  private:
+    // disabled (not implemented) copy constructor
+    G4RootRNtupleDescription(const G4RootRNtupleDescription& rhs);
+    // disabled (not implemented) assignement operator
+    G4RootRNtupleDescription& operator=(G4RootRNtupleDescription& rhs);
 };
 
 #endif  

@@ -164,16 +164,19 @@ G4int G4RootAnalysisReader::GetH1Impl(const G4String& h1Name,
     = fFileManager->GetRFile(fileName);
 
   if ( ! rfile ) {
-/*  
-    std::cout << "go to open read file " << fileName << std::endl;
-    if ( ! fFileManager->OpenRFile(fileName) ) {
-      std::cout << "open read file failed !!" << std::endl;
-      // Add exception
+    if ( ! OpenFile(fileName) ) return -1;
+    rfile = fFileManager->GetRFile(fileName);
+/*
+    if ( ! rfile ) {
+      G4ExceptionDescription description;
+      description 
+        << "      " 
+        << "Cannot get open file  " << fileName <<"."; 
+      G4Exception("G4RootAnalysisReader::GetH1Impl()",
+                "Analysis_WR002", JustWarning, description);
       return -1;
     }
 */
-    if ( ! OpenFile(fileName) ) return -1;
-    rfile = fFileManager->GetRFile(fileName);
   } 
   
   tools::rroot::key* key = rfile->dir().find_key(h1Name);
@@ -225,18 +228,21 @@ G4int G4RootAnalysisReader::GetH2Impl(const G4String& h2Name,
   tools::rroot::file* rfile
     = fFileManager->GetRFile(fileName);
 
-  if ( ! rfile && ( fileName != "" ) ) {
+  if ( ! rfile ) {
+    if ( ! OpenFile(fileName) ) return -1;
+    rfile = fFileManager->GetRFile(fileName);
 /*
-    std::cout << "go to open read file " << fileName << std::endl;
-    if ( ! fFileManager->OpenRFile(fileName) ) {
-      std::cout << "open read file failed !!" << std::endl;
-      // Add exception
+    if ( ! rfile ) {
+      G4ExceptionDescription description;
+      description 
+        << "      " 
+        << "Cannot get open file  " << fileName <<"."; 
+      G4Exception("G4RootAnalysisReader::GetH2Impl()",
+                "Analysis_WR002", JustWarning, description);
       return -1;
     }
 */
-    if ( ! OpenFile(fileName) ) return -1;
-    rfile = fFileManager->GetRFile(fileName);
-  } 
+  }
   
   tools::rroot::key* key = rfile->dir().find_key(h2Name);
   if ( ! key ) {
@@ -340,6 +346,9 @@ G4int G4RootAnalysisReader::GetNtupleImpl(const G4String& ntupleName,
       << "TTree streaming failed for Ntuple " << ntupleName << " in file " << fileName; 
     G4Exception("G4RootAnalysisReader::GetH1Impl()",
                 "Analysis_WR002", JustWarning, description);
+                
+    delete buffer;
+    delete tree;    
     return -1;
   }
   

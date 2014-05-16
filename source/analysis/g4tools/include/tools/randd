@@ -1,0 +1,62 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_randd
+#define tools_randd
+
+#include "randT"
+#include "rtausmed"
+
+namespace tools {
+
+class rgaussd : public rgauss<rtausmed,double> {
+  typedef rgauss<rtausmed,double> parent;
+public:
+  rgaussd(double a_mean = 0,double a_std_dev = 1):parent(m_flat,a_mean,a_std_dev),m_flat(){}
+  virtual ~rgaussd(){}
+public:
+  rgaussd(const rgaussd& a_from):parent(m_flat),m_flat(a_from.m_flat){}
+  rgaussd& operator=(const rgaussd& a_from) {
+    parent::operator=(a_from);
+    m_flat = a_from.m_flat;
+    return *this;
+  }
+protected:
+  rtausmed m_flat;
+};
+
+class rbwd : public rbw<rtausmed,double> {
+  typedef rbw<rtausmed,double> parent;
+public:
+  rbwd(double a_mean = 0,double a_gamma = 1):parent(m_flat,a_mean,a_gamma),m_flat(){}
+  virtual ~rbwd(){}
+public:
+  rbwd(const rbwd& a_from):parent(m_flat),m_flat(a_from.m_flat){}
+  rbwd& operator=(const rbwd& a_from) {
+    parent::operator=(a_from);
+    m_flat = a_from.m_flat;
+    return *this;
+  }
+protected:
+  rtausmed m_flat;
+};
+
+class rexpd : public rexp<rtausmed,double> {
+  typedef rexp<rtausmed,double> parent;
+public:
+  rexpd(double a_rate = 1):parent(m_flat,a_rate),m_flat(){}
+  virtual ~rexpd(){}
+public:
+  rexpd(const rexpd& a_from):parent(m_flat),m_flat(a_from.m_flat){}
+  rexpd& operator=(const rexpd& a_from) {
+    parent::operator=(a_from);
+    m_flat = a_from.m_flat;
+    return *this;
+  }
+protected:
+  rtausmed m_flat;
+};
+
+}
+
+#endif

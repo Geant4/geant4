@@ -17,7 +17,7 @@
 #include <tools/histo/p1d>
 #include <tools/wroot/ntuple>
 
-#include <tools/random>
+#include <tools/randd>
 #include <tools/randf>
 
 #ifdef TOOLS_DONT_HAVE_ZLIB
@@ -29,7 +29,7 @@
 #include <iostream>
 
 #include <ctime>
-
+#include <cstdlib>
 
 int main(int argc,char** argv) {
 
@@ -92,7 +92,7 @@ int main(int argc,char** argv) {
 
   std::cout << "Fill ntuple start ..." << std::endl;
   time_t start1 = time(NULL);
-  tools::random::gauss rg(1,2);
+  tools::rgaussd rg(1,2);
   for(unsigned int count=0;count<entries;count++) {    
     double value = rg.shoot();
     for (int i=0; i<nofColumns; ++i) {

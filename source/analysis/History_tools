@@ -1,3 +1,12 @@
+ 1.10.0 :
+ - tests/cpp/*.cpp : use new random API.
+ - tools/cmathT,randT,rtausme[ui,f,d],randd,randf,random,rroot/streamers : to quit Coverity, revisit random
+   generators to avoid usage of stdlib.h/rand() indirectly used in rroot/streamers.
+ - tools/rroot/base_leaf,basket,branch,leaf,streamers : modifications to quiet Coverity.
+ - tools/mathd : rename math to mathd to follow naming convention [f,d] used in other places.
+ - test/cpp/build : inflate.c -> csz_inflate.cc.
+ - src/inflate.c -> src/csz_inflate.cc.
+
  1.9.4 :
  - test/cpp/rxrayfluo.cpp : add a ntuple_binding usage.
  - tools/ntuple_binding, rroot/ntuple : logic to attach user variables to ntuple columns when reading.

@@ -8,7 +8,7 @@
 
 #include <tools/wcsv_ntuple>
 
-#include <tools/random>
+#include <tools/randd>
 #include <tools/randf>
 
 #include <fstream>
@@ -28,8 +28,8 @@ int main(int,char**) {
   }
 
   unsigned int entries = 1000;
-  tools::random::gauss rg(1,2);
-  tools::randf::bw rbw(0,1);
+  tools::rgaussd rg(1,2);
+  tools::rbwf rbw(0,1);
 
   //////////////////////////////////////////////////////////
   /// create a ntuple_booking object : /////////////////////
