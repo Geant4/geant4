@@ -141,6 +141,7 @@ G4RunManager::G4RunManager( RMType rmType )
   {
     G4Exception("G4RunManager::G4RunManager()", "Run0031",
                     FatalException, "G4RunManager constructed twice.");
+    return;
   }
   fRunManager = this;
     
@@ -156,6 +157,7 @@ G4RunManager::G4RunManager( RMType rmType )
     G4ExceptionDescription msgx;
     msgx<<" This type of RunManager can only be used in mult-threaded applications.";
     G4Exception("G4RunManager::G4RunManager(G4bool)","Run0035",FatalException,msgx);
+    return;
   }
   runManagerType = rmType;
 

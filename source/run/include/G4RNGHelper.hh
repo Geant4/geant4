@@ -65,6 +65,7 @@ private:
           offset=0;
           nev_filled=0;
           nev_total=0;
+	  nRandParEvent=0;
     }
 
 public:

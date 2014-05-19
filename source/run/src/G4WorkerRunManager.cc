@@ -68,6 +68,7 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM) {
     eventLoopOnGoing = false;
     nevModulo = -1;
     currEvID = -1;
+    workerContext = 0;
 
     G4UImanager::GetUIpointer()->SetIgnoreCmdNotFound(true);
 

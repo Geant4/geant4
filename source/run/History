@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 16th, 2014, A. Dotti (run-V10-00-09)
+- Fix coverity defects
+
 May 14th, 2014, G. Cosmo (run-V10-00-08)
 - Explicitly invoke deletion of new G4NavigationHistoryPool instance
   in G4RunManagerKernel at job's end. Requires tag geomvol-V10-00-03.
