@@ -19,6 +19,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-05-2014 L.Pandola Tag: XrayFluo-V10-00-08
+- Real MT migration: use the G4MTRunManager
+- Add PhysicsHasBeenChanged() to the commands of the physics list 
+ messenger
+
 13-05-2014 L.Pandola Tag: XrayFluo-V10-00-07
 - Fix a bug with ntuple numbering in XrayFluoAnalysisManager
 - Fix a bug in the ActionInitializer causing the rejection of previous tag

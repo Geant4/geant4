@@ -35,7 +35,13 @@
 // 18 Jan 2011 adapted to new deexcitation design
 //
 // -------------------------------------------------------------------
+
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 #ifdef G4VIS_USE
@@ -71,28 +77,29 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   //XrayFluo Verbose output class
   G4VSteppingVerbose::SetInstance(new XrayFluoSteppingVerbose);
      
+#ifdef G4MULTITHREADED
   // Construct the default run manager
+  G4MTRunManager* runManager = new G4MTRunManager();
+  G4cout << "Using the MT Run Manager (G4MULTITHREADED=ON)" << G4endl; 
+#else
   G4RunManager * runManager = new G4RunManager;
+  G4cout << "Using the sequential Run Manager" << G4endl;
+#endif
 
-  // set mandatory initialization 
-
-  XrayFluoPhysicsList* xrayList = new   XrayFluoPhysicsList();
 
   // chosing Geometry setup
-
   G4int geometryNumber = 0; 
 
   if (argc == 3){
     geometryNumber =  atoi(argv[2]);
 
   }
-  while ( (geometryNumber != 1) && (geometryNumber !=2) && (geometryNumber !=3) && (geometryNumber !=4)) {
+  while ( (geometryNumber < 1) || (geometryNumber >4)) {
     G4cout << "Please Select Simulation Geometrical Set-Up: "<< G4endl;
     G4cout << "1 - Test Beam" << G4endl;
     G4cout << "2 - Infinite Plane" << G4endl;
     G4cout << "3 - Planet and Sun"<< G4endl;
     G4cout << "4 - Phase-Space Production"<< G4endl;
-
 
     G4cin >> geometryNumber;
   }
@@ -100,6 +107,8 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   // set analysis to have the messenger running...
   XrayFluoAnalysisManager* analysis = 
     XrayFluoAnalysisManager::getInstance();
+
+  // set mandatory initialization 
 
   //Initialize geometry
   if (geometryNumber == 1 || geometryNumber == 4) {
@@ -122,10 +131,9 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
     runManager->SetUserInitialization(mercuryDetector);
   }
 
-  //Initialize physics
-  runManager->SetUserInitialization(xrayList);
 
- 
+  //Initialize physics
+  runManager->SetUserInitialization(new   XrayFluoPhysicsList()); 
 
   //Initialize actions
   runManager->SetUserInitialization
@@ -136,13 +144,10 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
-
-  //Initialize G4 kernel
-  //runManager->Initialize();
   
   // get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
+  
   if (getenv("G4VIS_USE")) {
     UImanager->ApplyCommand("/control/execute vis.mac");
   }     
@@ -151,10 +156,7 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
     {
       UImanager->ApplyCommand("/control/execute initInter.mac");     
 #ifdef G4UI_USE
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-
-      if (ui->IsGUI())
-        UImanager->ApplyCommand("/control/execute gui.mac");     
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);        
       ui->SessionStart();
       delete ui;
 #endif
