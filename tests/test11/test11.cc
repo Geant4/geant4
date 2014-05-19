@@ -52,11 +52,11 @@ int main(int argc,char** argv) {
 
   // Run manager
   #ifdef G4MULTITHREADED
-    G4cout<<"Warning: forcing G4FORCENUMBEROFTHREADS=4"<<G4endl;
-    char env[]="G4FORCENUMBEROFTHREADS=4";
+    G4cout<<"Warning: forcing G4FORCENUMBEROFTHREADS=3"<<G4endl;
+    char env[]="G4FORCENUMBEROFTHREADS=3";
     putenv(env);
     G4MTRunManager* runManager = new G4MTRunManager;
-    runManager->SetNumberOfThreads(4);
+    //runManager->SetNumberOfThreads(4);
   #else
     G4RunManager* runManager = new G4RunManager;
   #endif
