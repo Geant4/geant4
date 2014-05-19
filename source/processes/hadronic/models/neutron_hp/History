@@ -14,6 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+14 May 2014 Tatsumi Koi for Federico Carminati (hadr-hpn-V10-00-07)
+-Fix memory leaks and simplify function for better stability
+       include/G4NeutronHPHash.hh
+       include/G4NeutronHPFFFissionFS.hh
+       src/G4NeutronHPFinalState.cc
+       src/G4NeutronHPVector.cc
+       src/G4NeutronHPFFFissionFS.cc
+       src/G4NeutronHPInterpolator.cc
+
+
 12 May 2014 Tatsumi Koi      (hadr-hpn-V10-00-06)
 -Defeating warning message from gcc4.9.0 compiler
        src/G4NeutronHPThermalScattering.cc

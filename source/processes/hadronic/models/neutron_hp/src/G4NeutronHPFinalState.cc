@@ -201,7 +201,13 @@ void G4NeutronHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
       dif_4p = init_4p_lab - ( secs_4p_lab + p4 );  
    }
 
-   if ( needOneMoreSec )
+   if ( needOneMoreSec && oneMoreSec_pd)
+     //
+     // fca: this is not a fix, this is a crash avoidance...
+     // fca: the baryon number is still wrong, most probably because it
+     // fca: should have been decreased, but since we could not create a particle
+     // fca: we just do not add it
+     //
    {
       nSecondaries += 1;
       G4DynamicParticle* one = new G4DynamicParticle ( oneMoreSec_pd , dif_4p.v() );    
