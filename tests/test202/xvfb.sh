@@ -45,6 +45,12 @@ if grep "GLX" XvfbExtensions; then
     exit 1
   fi
 
+  # mail me results
+    mail -s "[G4Testing] visSceneTest_0.eps" garnier@lal.in2p3.fr < $output_folder/$testFile
+    mail -s "[G4Testing] visSceneAdd_0.eps" garnier@lal.in2p3.fr < $output_folder/visSceneTest-VisSceneAdd_0.eps
+    mail -s "[G4Testing] visSet_0.eps" garnier@lal.in2p3.fr < $output_folder/visSceneTest-VisSet_0.eps
+    mail -s "[G4Testing] visBeamOn_0.eps" garnier@lal.in2p3.fr < $output_folder/visSceneTest-VisBeamOn_0.eps
+
   if [`diff $reference_folder/$testFile $output_folder/$testFile | wc -l` == 0 ]; then
     echo "All OK"
     exit 0
@@ -53,7 +59,7 @@ if grep "GLX" XvfbExtensions; then
     echo "======================================================"
     echo `diff $reference_folder/$testFile $output_folder/$testFile`
     echo "======================================================"
-    mail -s "ERROR: Output and reference are different for $2" garnier@lal.in2p3.fr < $output_folder/$testFile
+    mail -s "[G4Testing] ERROR Output and reference are different for $2" garnier@lal.in2p3.fr < $output_folder/$testFile
     exit 1
   fi
 

@@ -14,8 +14,16 @@
 # Execute testVisSceneAdd.mac
 /control/execute testVisSceneAdd.mac
 
+# printEPS
+/vis/ogl/set/printFilename OGLIX-output/visSceneTest-VisSceneAdd
+/vis/ogl/printEPS
+
 # Execute testVisSet.mac
 /control/execute testVisSet.mac
+
+# printEPS
+#/vis/ogl/set/printFilename OGLIX-output/visSceneTest-VisSet
+#/vis/ogl/printEPS
 
 # Fire a e+
 /gun/particle e+
@@ -24,3 +32,6 @@
 /vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 5
 /run/beamOn 1
 
+# printEPS
+# /vis/ogl/set/printFilename OGLIX-output/visSceneTest-BeamOn
+# /vis/ogl/printEPS

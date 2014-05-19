@@ -4,6 +4,15 @@ $Id$
 History file for test/test202 subdirectory
 ------------------------------------------------
 
+17th May 2014 Laurent Garnier (test202-V10-00-17)
+- OGLIX.mac: Comment the before last /printEPS and increase the timeout
+
+16th May 2014 Laurent Garnier (test202-V10-00-16)
+- OGLIX.mac: Comment the last /printEPS and increase the timeout
+
+15th May 2014 Laurent Garnier (test202-V10-00-15)
+- OGLIX.mac: send an email to garnier@lal with another test file
+
 14th May 2014 Laurent Garnier (test202-V10-00-14)
 - OGLIX.mac: Create a big viewer and try to send an email to garnier@lal in case of errors
 
