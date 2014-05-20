@@ -47,15 +47,9 @@ DMXActionInitializer::DMXActionInitializer() :
 
 void DMXActionInitializer::Build() const 
 {
-  DMXPrimaryGeneratorAction* DMXGenerator = new DMXPrimaryGeneratorAction();
-  SetUserAction(DMXGenerator);
-
-  // RunAction is inherited by EventAction for output filenames - will all
-  // change when implement proper analysis manager?
-  DMXRunAction* DMXRun = new DMXRunAction();
-  SetUserAction(DMXRun);
-
-  DMXEventAction* eventAction = new DMXEventAction(DMXRun,DMXGenerator);
+  SetUserAction(new DMXPrimaryGeneratorAction());
+  SetUserAction(new DMXRunAction());
+  DMXEventAction* eventAction = new DMXEventAction();
   SetUserAction(eventAction);
   SetUserAction(new DMXSteppingAction(eventAction));
   SetUserAction(new DMXStackingAction());

@@ -9,6 +9,12 @@ $Id$
                       Category History file
                       ---------------------
 
+20.05.2014 - L. Pandola (DMX-V10-00-02)
+	     Edit the constructor of DMXEventAction 
+	     Make Getters const in RunAction and PrimaryGenerator
+	     ASCII files are created per-thread. Not open at every 
+	      event, but kept as private class members.
+
 13.05.2014 - L. Pandola (DMX-V10-00-01)
 	     Analysis files closed at the end of execution (not
              end of event). 

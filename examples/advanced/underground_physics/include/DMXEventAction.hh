@@ -58,13 +58,13 @@ class DMXAnalysisManager;
 class DMXEventAction : public G4UserEventAction {
 
   public:
-    DMXEventAction(DMXRunAction*, DMXPrimaryGeneratorAction*);
+    DMXEventAction();
     virtual ~DMXEventAction();
     virtual void BeginOfEventAction(const G4Event*);
     virtual void EndOfEventAction(const G4Event*);
 
   private:
-    void writeScintHitsToFile(void);
+    void writeScintHitsToFile();
     void writePmtHitsToFile(const DMXPmtHitsCollection*);
     void drawTracks(const G4Event*);
 
@@ -122,9 +122,10 @@ class DMXEventAction : public G4UserEventAction {
     G4int printModulo;                         
     DMXEventActionMessenger*  eventMessenger;
 
-    DMXRunAction*    runAct;  //pointer to run action
-    DMXPrimaryGeneratorAction* genAction; // pointer to particle generator
-
+    const DMXRunAction*    runAct;  //pointer to run action
+    const DMXPrimaryGeneratorAction* genAction; // pointer to particle generator
+  std::ofstream *hitsfile;
+  std::ofstream *pmtfile;
 };
 
 #endif
