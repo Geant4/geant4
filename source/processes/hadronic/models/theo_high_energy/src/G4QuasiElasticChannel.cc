@@ -107,7 +107,7 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
     index=G4lrint((A-1)*G4UniformRand());
   } while (index < 0 || index >= static_cast<G4int>(nucleons.size()));
 
-  G4ParticleDefinition * pDef= nucleons[index].GetDefinition();
+  const G4ParticleDefinition * pDef= nucleons[index].GetDefinition();
 
   G4int resA=A - 1;
   G4int resZ=Z - static_cast<int>(pDef->GetPDGCharge());
