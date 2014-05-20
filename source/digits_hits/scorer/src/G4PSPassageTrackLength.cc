@@ -45,7 +45,7 @@
 
 G4PSPassageTrackLength::G4PSPassageTrackLength(G4String name, G4int depth)
   :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fTrackLength(0.),
-   weighted(false)
+   EvtMap(0),weighted(false)
 {
     SetUnit("mm");
 }
@@ -54,7 +54,7 @@ G4PSPassageTrackLength::G4PSPassageTrackLength(G4String name,
 					       const G4String& unit, 
 					       G4int depth)
   :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fTrackLength(0.),
-   weighted(false)
+   EvtMap(0),weighted(false)
 {
     SetUnit(unit);
 }

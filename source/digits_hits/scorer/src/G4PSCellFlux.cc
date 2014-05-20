@@ -54,7 +54,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSCellFlux::G4PSCellFlux(G4String name, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(true)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0),weighted(true)
 {
     DefineUnitAndCategory();
     SetUnit("percm2");
@@ -62,7 +62,7 @@ G4PSCellFlux::G4PSCellFlux(G4String name, G4int depth)
 }
 
 G4PSCellFlux::G4PSCellFlux(G4String name, const G4String& unit, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(true)
+    :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0),weighted(true)
 {
     DefineUnitAndCategory();
     SetUnit(unit);

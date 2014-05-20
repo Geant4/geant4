@@ -41,7 +41,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSTermination::G4PSTermination(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),weighted(false)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0),weighted(false)
 {
     SetUnit("");
 }

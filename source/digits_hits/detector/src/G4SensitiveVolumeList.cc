@@ -55,7 +55,7 @@
 
 
  //Assignment Operation
-   const G4SensitiveVolumeList & G4SensitiveVolumeList::operator=(const G4SensitiveVolumeList &right)
+    G4SensitiveVolumeList & G4SensitiveVolumeList::operator=(const G4SensitiveVolumeList &right)
    {
      thePhysicalVolumeList = right.thePhysicalVolumeList;
      theLogicalVolumeList = right.theLogicalVolumeList;

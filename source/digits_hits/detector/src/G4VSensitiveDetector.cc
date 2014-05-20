@@ -75,8 +75,9 @@ G4VSensitiveDetector* G4VSensitiveDetector::Clone() const
     return NULL;
 }
 
-const G4VSensitiveDetector & G4VSensitiveDetector::operator=(const G4VSensitiveDetector &right)
+G4VSensitiveDetector & G4VSensitiveDetector::operator=(const G4VSensitiveDetector &right)
 {
+  if (this == &right ) return *this;
   SensitiveDetectorName = right.SensitiveDetectorName;
   thePathName = right.thePathName;
   fullPathName = right.fullPathName;

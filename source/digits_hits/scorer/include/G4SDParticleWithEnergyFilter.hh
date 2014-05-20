@@ -69,6 +69,9 @@ class G4SDParticleWithEnergyFilter : public G4VSDFilter
   private:
      G4SDParticleFilter* fParticleFilter;
      G4SDKineticEnergyFilter* fKineticFilter;
+  public:
+    G4SDParticleWithEnergyFilter(const G4SDParticleWithEnergyFilter&);
+    G4SDParticleWithEnergyFilter& operator=(const G4SDParticleWithEnergyFilter&);
 };
 
 #endif

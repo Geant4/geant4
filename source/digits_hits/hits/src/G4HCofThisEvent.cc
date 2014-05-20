@@ -61,3 +61,26 @@ void G4HCofThisEvent::AddHitsCollection(G4int HCID,G4VHitsCollection * aHC)
 }
 
 
+G4HCofThisEvent::G4HCofThisEvent(const G4HCofThisEvent& rhs)
+{
+    if ( !anHCoTHAllocator_G4MT_TLS_ ) anHCoTHAllocator_G4MT_TLS_ = new G4Allocator<G4HCofThisEvent>;
+    HC = new std::vector<G4VHitsCollection*>(rhs.HC->size());
+    for ( unsigned int i = 0 ; i<rhs.HC->size() ; ++i)
+        *(HC->at(i)) = *(rhs.HC->at(i));
+}
+
+G4HCofThisEvent& G4HCofThisEvent::operator=(const G4HCofThisEvent& rhs)
+{
+    if ( this == &rhs ) return *this;
+    if ( !anHCoTHAllocator_G4MT_TLS_ ) anHCoTHAllocator_G4MT_TLS_ = new G4Allocator<G4HCofThisEvent>;
+    for ( std::vector<G4VHitsCollection*>::const_iterator it = HC->begin() ;
+         it != HC->end() ; ++it )
+    {
+        delete *it;
+    }
+    HC->resize(rhs.HC->size());
+    for ( unsigned int i = 0 ; i<rhs.HC->size() ; ++i)
+        *(HC->at(i)) = *(rhs.HC->at(i));
+    return *this;
+}
+

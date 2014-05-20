@@ -43,7 +43,7 @@ class G4VScoreColorMap;
 
 #include <map>
 
-enum MeshShape { boxMesh, cylinderMesh, sphereMesh };
+enum MeshShape { boxMesh, cylinderMesh, sphereMesh , undefinedMesh = -1};
 typedef std::map<G4String,G4THitsMap<G4double>* > MeshScoreMap;
 // class description:
 //

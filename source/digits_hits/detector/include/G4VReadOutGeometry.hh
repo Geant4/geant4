@@ -58,7 +58,7 @@ class G4VReadOutGeometry
 
   protected:
       G4VReadOutGeometry(const G4VReadOutGeometry &right);
-      const G4VReadOutGeometry & operator=(const G4VReadOutGeometry &right);
+      G4VReadOutGeometry & operator=(const G4VReadOutGeometry &right);
 
       virtual G4bool FindROTouchable(G4Step*);
 

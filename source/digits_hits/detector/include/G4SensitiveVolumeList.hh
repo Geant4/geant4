@@ -64,7 +64,7 @@ class G4SensitiveVolumeList
       ~G4SensitiveVolumeList();
 
     //Assignment Operation
-      const G4SensitiveVolumeList & operator=(const G4SensitiveVolumeList &right
+    G4SensitiveVolumeList & operator=(const G4SensitiveVolumeList &right
 );
 
     //Equality Operations

@@ -58,6 +58,8 @@ class G4DCofThisEvent
 
       void AddDigiCollection(G4int DCID,G4VDigiCollection * aDC);
 
+      G4DCofThisEvent(const G4DCofThisEvent&);
+      G4DCofThisEvent& operator=(const G4DCofThisEvent&);
   private:
       std::vector<G4VDigiCollection*> * DC;
 

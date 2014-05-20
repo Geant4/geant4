@@ -55,7 +55,7 @@
 
 G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, G4int depth)
   : G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0),
-    weighted(true)
+    EvtMap(0),weighted(true)
 {
     DefineUnitAndCategory();
     SetUnit("percm2");
@@ -64,7 +64,7 @@ G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, G4int depth)
 G4PSPassageCellFlux::G4PSPassageCellFlux(G4String name, const G4String& unit,
 					 G4int depth)
   : G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCellFlux(0),
-    weighted(true)
+    EvtMap(0),weighted(true)
 {
     DefineUnitAndCategory();
     SetUnit(unit);

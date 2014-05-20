@@ -44,7 +44,7 @@
 #include "G4SDManager.hh"
 
 G4VScoringMesh::G4VScoringMesh(const G4String& wName)
-  : fWorldName(wName),fCurrentPS(0),fConstructed(false),fActive(true),
+  : fWorldName(wName),fCurrentPS(0),fConstructed(false),fActive(true),fShape(undefinedMesh),
     fRotationMatrix(0), fMFD(new G4MultiFunctionalDetector(wName)),
     verboseLevel(0),sizeIsSet(false),nMeshIsSet(false),
     fDrawUnit(""), fDrawUnitValue(1.), fMeshElementLogical(0)

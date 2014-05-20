@@ -58,7 +58,7 @@
 
 G4PSFlatSurfaceCurrent::G4PSFlatSurfaceCurrent(G4String name, 
 					 G4int direction, G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),EvtMap(0),
      weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
@@ -69,7 +69,7 @@ G4PSFlatSurfaceCurrent::G4PSFlatSurfaceCurrent(G4String name,
 					       G4int direction, 
 					       const G4String& unit, 
 					       G4int depth)
-    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+    :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),EvtMap(0),
      weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();

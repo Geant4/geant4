@@ -40,7 +40,8 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSTrackCounter::G4PSTrackCounter(G4String name, G4int direction, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),weighted(false)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
+   EvtMap(0),weighted(false)
 {
  SetUnit("");
 }

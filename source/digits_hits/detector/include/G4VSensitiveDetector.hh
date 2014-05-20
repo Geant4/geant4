@@ -60,7 +60,7 @@ class G4VSensitiveDetector
   public:
       virtual ~G4VSensitiveDetector();
 
-      const G4VSensitiveDetector & operator=(const G4VSensitiveDetector &right);
+      G4VSensitiveDetector & operator=(const G4VSensitiveDetector &right);
 
       G4int operator==(const G4VSensitiveDetector &right) const;
       G4int operator!=(const G4VSensitiveDetector &right) const;

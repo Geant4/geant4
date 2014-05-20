@@ -57,6 +57,8 @@ class G4HCofThisEvent
 
       void AddHitsCollection(G4int HCID,G4VHitsCollection * aHC);
 
+      G4HCofThisEvent(const G4HCofThisEvent&);
+      G4HCofThisEvent& operator=(const G4HCofThisEvent&);
   private:
       std::vector<G4VHitsCollection*> * HC;
 

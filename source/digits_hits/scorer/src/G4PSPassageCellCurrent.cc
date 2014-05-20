@@ -46,7 +46,7 @@
 
 G4PSPassageCellCurrent::G4PSPassageCellCurrent(G4String name, G4int depth)
     :G4VPrimitiveScorer(name,depth),HCID(-1),fCurrentTrkID(-1),fCurrent(0),
-     weighted(true)
+     EvtMap(0),weighted(true)
 {
     SetUnit("");
 }

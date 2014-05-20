@@ -389,7 +389,7 @@ void G4ScoringMessenger::SetNewValue(G4UIcommand * command,G4String newVal)
   } else if(command==meshCylinderCreateCmd) {
       G4VScoringMesh* currentmesh = fSMan->GetCurrentMesh(); 
       if ( currentmesh ){
-	G4cerr << "ERROR[" << meshBoxCreateCmd->GetCommandPath()
+	G4cerr << "ERROR[" << meshCylinderCreateCmd->GetCommandPath()
 	       << "] : Mesh <" << currentmesh->GetWorldName() 
 	       << "> is still open. Close it first. Command ignored." << G4endl;
       } else {

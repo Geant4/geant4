@@ -75,8 +75,9 @@ G4VReadOutGeometry::~G4VReadOutGeometry()
   if(ROnavigator)      delete ROnavigator;
 }
 
-const G4VReadOutGeometry & G4VReadOutGeometry::operator=(const G4VReadOutGeometry &right)
+G4VReadOutGeometry & G4VReadOutGeometry::operator=(const G4VReadOutGeometry &right)
 {
+  if ( this == &right ) return *this;
   delete fincludeList; fincludeList     = 0;
   delete fexcludeList; fexcludeList     = 0;
   name             = right.name;

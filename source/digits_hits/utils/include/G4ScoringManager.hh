@@ -150,6 +150,10 @@ class G4ScoringManager
         if(writer) writer->SetVerboseLevel(verboseLevel);
       }
       // Replace score writers.
+private:
+    //Disable copy constructor and assignement operator
+    G4ScoringManager(const G4ScoringManager&);
+    G4ScoringManager& operator=(const G4ScoringManager&);
 };
 
 

@@ -39,14 +39,14 @@
 ///////////////////////////////////////////////////////////////////////////////
 
 G4PSEnergyDeposit::G4PSEnergyDeposit(G4String name, G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1) 
+  :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
 {
   SetUnit("MeV");
 }
 
 G4PSEnergyDeposit::G4PSEnergyDeposit(G4String name, const G4String& unit, 
 				     G4int depth)
-  :G4VPrimitiveScorer(name,depth),HCID(-1)
+  :G4VPrimitiveScorer(name,depth),HCID(-1),EvtMap(0)
 {
   SetUnit(unit);
 }

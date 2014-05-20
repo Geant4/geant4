@@ -80,3 +80,22 @@ void G4SDParticleWithEnergyFilter::show(){
   fParticleFilter->show();
   fKineticFilter->show();
 }
+
+G4SDParticleWithEnergyFilter::G4SDParticleWithEnergyFilter(const G4SDParticleWithEnergyFilter& rhs)
+    : G4VSDFilter(rhs.filterName)
+{
+    fParticleFilter = new G4SDParticleFilter(*rhs.fParticleFilter);
+    fKineticFilter = new G4SDKineticEnergyFilter(*rhs.fKineticFilter);
+}
+
+
+G4SDParticleWithEnergyFilter& G4SDParticleWithEnergyFilter::operator=(const G4SDParticleWithEnergyFilter& rhs)
+{
+    if ( this == &rhs ) return *this;
+    G4VSDFilter::operator=(rhs);
+    delete fParticleFilter;
+    fParticleFilter = new G4SDParticleFilter(*(rhs.fParticleFilter));
+    delete fKineticFilter;
+    fKineticFilter = new G4SDKineticEnergyFilter(*(rhs.fKineticFilter));
+    return *this;
+}

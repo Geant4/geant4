@@ -60,7 +60,7 @@
 G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(G4String name, 
                                          G4int direction, G4int depth)
   : G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
-    weighted(true),divideByArea(true)
+    EvtMap(0),weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
     SetUnit("percm2");
@@ -71,7 +71,7 @@ G4PSSphereSurfaceFlux::G4PSSphereSurfaceFlux(G4String name,
                                              const G4String& unit,
                                              G4int depth)
   : G4VPrimitiveScorer(name,depth),HCID(-1),fDirection(direction),
-    weighted(true),divideByArea(true)
+    EvtMap(0),weighted(true),divideByArea(true)
 {
     DefineUnitAndCategory();
     SetUnit(unit);

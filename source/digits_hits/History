@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 20, 2014, A.Dotti (digits_hits-V10-00-05)
+- Correcting another missing end of line in a file
+
+May 19, 2014, A.Dotti (digits_hits-V10-00-04)
+- Missing end of file empty line added
+
+May 16, 2014, A.Dotti (digits_hits-V10-00-03)
+- Coverity fixes
+
 Apr 27, 2014, M.Asai (digits_hits-V10-00-02)
 - G4PSCylinderSurfaceCurrent.cc : remove unnecessary cout. 
   Addressing to Bug Report #1610.
