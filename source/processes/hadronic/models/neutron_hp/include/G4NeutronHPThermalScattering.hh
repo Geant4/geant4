@@ -50,6 +50,10 @@ struct E_isoAng
    G4double energy;
    G4int n;
    std::vector < G4double > isoAngle; 
+   E_isoAng() {
+      energy=0.0;
+      n=0;
+   };
 };
 
 struct E_P_E_isoAng 
@@ -59,6 +63,11 @@ struct E_P_E_isoAng
    std::vector < G4double > prob; 
    std::vector < E_isoAng* > vE_isoAngle; 
    G4double sum_of_probXdEs;  // should be close to 1
+   E_P_E_isoAng() {
+      energy=0.0;
+      n=0;
+      sum_of_probXdEs=0.0;
+   };
 };
 
 class G4NeutronHPThermalScattering : public G4HadronicInteraction
