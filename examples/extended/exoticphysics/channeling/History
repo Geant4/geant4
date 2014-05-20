@@ -1,0 +1,23 @@
+$Id: $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Exotic Examples History file
+                    -----------------------------
+This file should be used by the G4 example coordinator to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+May 19, 2014 E. Bagli (channelingExample-V10-00-01)
+- Class names modified.
+
+May 9, 2014, E. Bagli (channelingExample-V10-00-00)
+- First import.
+
