@@ -46,7 +46,7 @@ ExExChRunAction::ExExChRunAction(): G4UserRunAction(){
     analysisManager->SetFirstHistoId(1);
     
     // Creating ntuple
-    analysisManager->CreateNtuple("G4CH", "Angles and Positions");
+    analysisManager->CreateNtuple("ExExChTree", "Angles and Positions");
     analysisManager->CreateNtupleDColumn("angXin");
     analysisManager->CreateNtupleDColumn("angYin");
     analysisManager->CreateNtupleDColumn("posXin");
