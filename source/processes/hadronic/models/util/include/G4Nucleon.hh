@@ -81,9 +81,8 @@ class G4Nucleon : public G4VKineticNucleon
     inline void SetParticleType(G4AntiNeutron *aAntiNeutron){theParticleType =aAntiNeutron;}//VU
 
 
-    inline   G4ParticleDefinition * GetParticleType() const {return const_cast<G4ParticleDefinition*>(theParticleType);}
-    virtual  G4ParticleDefinition* GetDefinition() const {return const_cast<G4ParticleDefinition*>(theParticleType);}
-    inline  const G4ParticleDefinition * GetParticleType_asConst() const {return theParticleType;}
+    inline  const G4ParticleDefinition* GetParticleType() const {return theParticleType;}
+    virtual const G4ParticleDefinition* GetDefinition() const {return theParticleType;}
     
     inline void Boost(const G4ThreeVector & beta){ theMomentum.boost(beta); } 
            void Boost(const G4LorentzVector & aMomentum);
