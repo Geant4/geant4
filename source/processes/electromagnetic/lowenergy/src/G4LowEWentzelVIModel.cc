@@ -58,7 +58,7 @@ using namespace std;
 G4LowEWentzelVIModel::G4LowEWentzelVIModel() :
   G4WentzelVIModel(false,"LowEnWentzelVI")
 {
-  SetSingleScatteringFactor(0.7);
+  SetSingleScatteringFactor(0.5);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

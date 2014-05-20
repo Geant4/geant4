@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19.05.2014 V. Ivanchenko/L. Pandola, tag emlowen-V10-00-11 
+	   Bug fix in G4PenelopePhotoElectric effect (no fluorescence in 
+           MT mode). Some cosmetics to G4PenelopeRayleigh.
+           G4LowEWentzelVIModel - set single scattering factor 0.5
+
 11.05.2014  V. Ivanchenko, tag emlowen-V10-00-10
             G4LowEWentzelVIModel - set single scattering factor 0.7 
               (was 1.0 before) - increasing accuracy but more slow

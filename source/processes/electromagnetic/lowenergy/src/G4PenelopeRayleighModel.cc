@@ -132,8 +132,8 @@ void G4PenelopeRayleighModel::ClearTables()
 		"em0100",FatalException,"Worker thread in this method");    
   */
 
-  //std::map <const G4Material*,G4PhysicsFreeVector*>::iterator i;
- 
+  //std::map <const G4Material*,G4PhysicsFreeVector*>::iterator i;  
+
    if (logFormFactorTable)
      {
        /*
@@ -181,6 +181,9 @@ void G4PenelopeRayleighModel::Initialise(const G4ParticleDefinition* part,
     {
       //clear tables depending on materials, not the atomic ones
       ClearTables();
+
+      if (verboseLevel > 3)
+	G4cout << "Calling G4PenelopeRayleighModel::Initialise() [master]" << G4endl;
   
       //create new tables
       //
@@ -226,7 +229,7 @@ void G4PenelopeRayleighModel::Initialise(const G4ParticleDefinition* part,
 
 	  //3) retrieve or build the pMax data
 	  if (!pMaxTable->count(material))
-	    GetPMaxTable(material);
+	    GetPMaxTable(material);	  
 
 	}
   
@@ -523,9 +526,7 @@ void G4PenelopeRayleighModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
 
   //Ok, restart the job
   
-  G4PenelopeSamplingData* theDataTable = samplingTable->find(theMat)->second;
-  
- 
+  G4PenelopeSamplingData* theDataTable = samplingTable->find(theMat)->second;  
   G4PhysicsFreeVector* thePMax = pMaxTable->find(theMat)->second;
 
   G4double cosTheta = 1.0;
@@ -1228,9 +1229,17 @@ void G4PenelopeRayleighModel::GetPMaxTable(const G4Material* mat)
       return;
     }
 
+  //This should not be: the sampling table is built before the p-table
   if (!samplingTable->count(mat))
-    InitializeSamplingAlgorithm(mat);      
-  
+    {
+       G4ExceptionDescription ed;
+       ed << "Sampling table for material " << mat->GetName() << " not found";
+       G4Exception("G4PenelopeRayleighModel::GetPMaxTable()",
+                  "em2052",FatalException,
+                  ed);
+       return;
+    }
+
   G4PenelopeSamplingData *theTable = samplingTable->find(mat)->second;
   size_t tablePoints = theTable->GetNumberOfStoredPoints();
 
