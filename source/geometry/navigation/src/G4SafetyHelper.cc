@@ -193,3 +193,35 @@ void  G4SafetyHelper::Locate( const G4ThreeVector& newPosition,
     fpPathFinder->Locate( newPosition, newDirection ); 
   }
 }
+
+G4bool G4SafetyHelper::RecheckDistanceToCurrentBoundary(
+                                        const G4ThreeVector &pGlobalPoint,
+                                        const G4ThreeVector &pDirection,
+                                        const G4double aProposedMove,
+                                        G4double  *prDistance,
+                                        G4double  *prNewSafety) const
+{
+  G4bool retval;
+  if( !fUseParallelGeometries)
+  {
+    retval= fpMassNavigator->RecheckDistanceToCurrentBoundary(
+                                                              pGlobalPoint,
+                                                              pDirection,
+                                                              aProposedMove,
+                                                              prDistance,
+                                                              prNewSafety);
+  }
+  else
+  {
+    //G4Exception("G4Navigator::RecheckDistanceToCurrentBoundary()", "GeomNav0001",
+    //  JustWarning, "Method NOT Available (yet) in case of Multiple Geometries (where PathFinder is involved.).");
+    retval= fpPathFinder->RecheckDistanceToCurrentBoundary(
+                                                              pGlobalPoint,
+                                                               pDirection,
+                                                              aProposedMove,
+                                                              prDistance,
+                                                              prNewSafety);
+  }
+  return retval;
+}
+

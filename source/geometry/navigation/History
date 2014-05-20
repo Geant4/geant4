@@ -17,6 +17,32 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May   16, 2014 - J.Apostolakis  (geomnav-V10-00-05)
+------------------------------
+- Fixed G4PathFinder::RecheckDistanceToCurrentBoundary
+    Compilation error identified error: return value from Navigator
+    was not used to accumulate method return value.
+
+May   16, 2014 - J.Apostolakis  (geomnav-V10-00-04)
+------------------------------
+- Improved G4Navigator::RecheckDistanceToCurrentBoundary
+  * Extended it to check a daughter volume, in case the previous step ended at 
+    its boundary.  In case the proposed point is inside that daughter, it 
+    tries to identify a distance to backtrack (=> returns a negative value. )
+  * Added check that ComputeStep() that was called last, not a Locate method.
+      -currently optional - it fails due to call to Locate in ComputeSafety.
+
+May    7, 2014 - J.Apostolakis  (geomnav-V10-00-03) - (internal)
+------------------------------
+- Created  G4Navigator::RecheckDistanceToCurrentBoundary
+  * First version of a new method RecheckDistanceToCurrentBoundary
+   in G4SafetyHelper, G4Navigator and G4PathFinder
+  * The method checks
+       a proposed displacement (new Position) to see if it is in mother;
+       a proposed new direction to find potential backtrack to return to 
+          mother volume, or distance to new exit.
+  Requested by EM team (Vladimir Iv.) for use by MultipleScattering.
+
 April 10, 2014 - G.Cosmo  (geomnav-V10-00-02)
 ------------------------
 - Get rid of deprecated 'register' storage class specifier in source files.

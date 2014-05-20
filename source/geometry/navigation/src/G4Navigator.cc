@@ -1744,6 +1744,167 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
   return newSafety;
 }
 
+G4bool G4Navigator::RecheckDistanceToCurrentBoundary(
+                     const G4ThreeVector &aDisplacedGlobalPoint,
+                     const G4ThreeVector &aNewDirection,
+                     const G4double ProposedMove,
+                     G4double *prDistance,
+                     G4double *prNewSafety) const
+// Trial method for checking potential displacement for MS
+// Check position aDisplacedGlobalpoint, to see whether it is in the 
+// current volume (mother).
+// If in mother, check distance to boundary along aNewDirection.
+// If in entering daughter, check distance back to boundary. 
+// NOTE:
+// Can be called only after ComputeStep is called - before ReLocation
+// Deals only with current volume (and potentially entered)
+// Caveats
+// First VERSION:  Does not consider daughter volumes if it remained in mother
+//   neither for checking whether it has exited current (mother) volume,
+//   nor for determining distance to exit this (mother) volume.
+{
+  G4ThreeVector localPosition  = ComputeLocalPoint(aDisplacedGlobalPoint);
+  G4ThreeVector localDirection = ComputeLocalAxis(aNewDirection);
+  // G4double Step = kInfinity;
+
+  G4bool validExitNormal;
+  G4ThreeVector exitNormal;
+  // Check against mother solid
+  G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
+  G4LogicalVolume *motherLogical = motherPhysical->GetLogicalVolume();
+
+#ifdef CHECK_ORDER_OF_METHODS
+  if( ! fLastTriedStepComputation ){
+     G4Exception("G4Navigator::RecheckDistanceToCurrentBoundary()", "GeomNav0001",
+                 FatalException, 
+    "Method Must be called after ComputeStep() - before any subsequent call to LocateMethod."
+        );
+  }
+#endif
+
+  EInside locatedDaug; // = kUndefined;
+  G4double daughterStep= DBL_MAX;
+  G4double daughterSafety= DBL_MAX;
+
+  if( fEnteredDaughter )
+  {
+     if( motherLogical->CharacteriseDaughters() ==kReplica )
+     return false;
+
+
+     // Track arrived at boundary of a daughter volume at 
+     //   the last call of ComputeStep().
+     // In case the proposed displaced point is inside this daughter,
+     //   it must backtrack at least to the entry point.
+
+     // NOTE: No check is made against other daughter volumes.  It is 
+     //   assumed that the proposed displacement is small enough that 
+     //   this is not needed.
+
+     // Must check boundary of current daughter
+     G4VPhysicalVolume *candPhysical= fBlockedPhysicalVolume; 
+     G4LogicalVolume *candLogical= candPhysical->GetLogicalVolume();
+     G4VSolid        *candSolid=   candLogical->GetSolid();
+
+     G4AffineTransform nextLevelTrf(candPhysical->GetRotation(),
+                                    candPhysical->GetTranslation());
+
+     G4ThreeVector dgPosition=  nextLevelTrf.TransformPoint(localPosition); 
+     G4ThreeVector dgDirection= nextLevelTrf.TransformAxis(localDirection);
+     locatedDaug = candSolid->Inside(dgPosition);
+
+     if( locatedDaug == kInside ){
+         // Reverse direction - and find first exit. ( Is it valid?)
+         // Must backtrack
+        G4double distanceBackOut = 
+          candSolid->DistanceToOut(dgPosition,
+                                   - dgDirection,  // Reverse direction
+                                   true, &validExitNormal, &exitNormal);
+        daughterStep= - distanceBackOut;
+         // No check is made whether the particle could have arrived at 
+         // at this location without encountering another volume or 
+         // a different psurface of the current volume
+        if( prNewSafety )
+           daughterSafety= candSolid->DistanceToOut(dgPosition);
+     }else{
+        if( locatedDaug == kOutside ){
+           // See whether it still intersects it.
+            daughterStep=  candSolid->DistanceToIn(dgPosition,
+                                                dgDirection);
+           if( prNewSafety )
+              daughterSafety= candSolid->DistanceToIn(dgPosition);
+        }
+        else
+        {
+           // The point remains on the surface of candidate solid.
+           daughterStep= 0.0;
+           daughterSafety= 0.0; 
+        }
+     }
+     //  If trial point is in daughter (or on its surface) we have the
+     //    answer, the rest is not relevant.
+     if( locatedDaug != kOutside ){
+        *prDistance= daughterStep;
+        if( prNewSafety )
+           *prNewSafety= daughterSafety;
+        return true;
+     }
+     // If ever extended, so that some type of mother cut daughter, 
+     //   this would change
+  }
+
+  G4VSolid *motherSolid= motherLogical->GetSolid();
+
+  G4double motherStep= DBL_MAX, motherSafety= DBL_MAX;
+  
+  // Check distance to boundary of mother
+  //
+  if ( fHistory.GetTopVolumeType()!=kReplica )
+  {
+     EInside locatedMoth = motherSolid->Inside(localPosition);
+
+     if( locatedMoth == kInside ){
+         motherSafety= motherSolid->DistanceToOut(localPosition);
+        if( ProposedMove >= motherSafety ){
+          motherStep= motherSolid->DistanceToOut(localPosition,
+                             localDirection,
+                             true, &validExitNormal, &exitNormal);
+        }else{
+          motherStep= ProposedMove;
+        }
+     }else if( locatedMoth == kOutside){
+        motherSafety= motherSolid->DistanceToIn(localPosition);
+        if( ProposedMove >= motherSafety ){
+            motherStep= - motherSolid->DistanceToIn(localPosition,
+                                                -localDirection);
+        }
+     }else{
+        motherSafety= 0.0; 
+        *prDistance= 0.0;  //  On surface - no move // motherStep;
+        if( prNewSafety )
+           *prNewSafety= motherSafety; 
+        return false;
+     }
+
+
+  }
+  else
+  {
+#ifdef G4GEOM_FEATURE_COMPLETENESS
+     G4Exception("G4Navigator::RecheckDistanceToCurrentBoundary()", "GeomNav0001",
+                 FatalException, "Method NOT Available (yet) for replicated volumes.");
+#endif 
+     return false;
+  }
+ 
+  *prDistance=  std::min( motherStep, daughterStep ); 
+  if( prNewSafety )
+     *prNewSafety= std::min( motherSafety, daughterSafety ); 
+ 
+  return true;
+}
+
+
 // ********************************************************************
 // CreateTouchableHistoryHandle
 // ********************************************************************

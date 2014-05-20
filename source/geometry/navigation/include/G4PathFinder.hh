@@ -104,11 +104,19 @@ class G4PathFinder
      //   Reset internal state
      //   Inform TransportationManager to use 'ordinary' Navigator
 
-   G4TouchableHandle CreateTouchableHandle( G4int navId ) const;
-   inline G4VPhysicalVolume* GetLocatedVolume( G4int navId ) const; 
+    G4TouchableHandle CreateTouchableHandle( G4int navId ) const;
+    inline G4VPhysicalVolume* GetLocatedVolume( G4int navId ) const;
+
+    G4bool RecheckDistanceToCurrentBoundary(
+                                          const G4ThreeVector &pGlobalPoint,
+                                          const G4ThreeVector &pDirection,
+                                          const G4double pCurrentProposedStepLength,
+                                          G4double  *prDistance,
+                                          G4double  *prNewSafety= 0)const;
+   // Trial method for checking potential displacement for MS
 
    // -----------------------------------------------------------------
-
+  
    inline G4bool   IsParticleLooping() const;
 
    inline G4double GetCurrentSafety() const;
