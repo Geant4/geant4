@@ -73,7 +73,7 @@ class G4EmSaturation
 {
 public: 
 
-  G4EmSaturation(G4LossTableManager* man, G4int verb);
+  G4EmSaturation(G4int verb);
   virtual ~G4EmSaturation();
 
   // this method may be overwritten in the derived class

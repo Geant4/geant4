@@ -55,8 +55,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4EmSaturation::G4EmSaturation(G4LossTableManager* man, G4int verb) 
-  : manager(man)
+G4EmSaturation::G4EmSaturation(G4int verb) 
+  : manager(0)
 {
   verbose = verb;
   manager = 0;
@@ -98,6 +98,7 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
     G4int pdgCode = p->GetPDGEncoding();
     // atomic relaxations for gamma incident
     if(22 == pdgCode) {
+      //G4cout << "%% gamma edep= " << edep/keV << " keV " << manager << G4endl; 
       evis /= (1.0 + bfactor*edep/manager->GetRange(electron,edep,couple));
 
       // energy loss
@@ -120,6 +121,12 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
       // non-ionizing energy loss
       if(nloss > 0.0) {
         G4double escaled = nloss*curRatio;
+	/*
+        G4cout << "%% p edep= " << nloss/keV << " keV  Escaled= " 
+	       << escaled << " MeV  in " << couple->GetMaterial()->GetName()
+	       << "  " << p->GetParticleName()
+	       << G4endl; 
+	*/
         G4double range = manager->GetRange(proton,escaled,couple)/curChargeSq; 
 	nloss /= (1.0 + bfactor*nloss/range);
       }
@@ -155,8 +162,11 @@ G4double G4EmSaturation::FindG4BirksCoefficient(const G4Material* mat)
 void G4EmSaturation::InitialiseBirksCoefficient(const G4Material* mat)
 {
   // electron and proton should exist in any case
-  if(!electron) { electron= G4Electron::Electron(); }
-  if(!proton)   { proton = G4Proton::Proton(); }
+  if(!manager) {
+    manager = G4LossTableManager::Instance();
+    electron = G4Electron::Electron(); 
+    proton = G4Proton::Proton(); 
+  }
 
   curMaterial = mat;
   curBirks = 0.0;

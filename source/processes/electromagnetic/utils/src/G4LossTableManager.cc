@@ -208,7 +208,7 @@ G4LossTableManager::G4LossTableManager()
   tableBuilder = new G4LossTableBuilder();
   tableBuilder->SetSplineFlag(splineFlag);
   emCorrections= new G4EmCorrections(verbose);
-  emSaturation = new G4EmSaturation(this, verbose);
+  emSaturation = new G4EmSaturation(verbose);
   emConfigurator = new G4EmConfigurator(verbose);
   emElectronIonPair = new G4ElectronIonPair(verbose);
   atomDeexcitation = 0;
@@ -1378,6 +1378,8 @@ G4VSubCutProducer* G4LossTableManager::SubCutProducer()
 G4VEnergyLossProcess* 
 G4LossTableManager::GetEnergyLossProcess(const G4ParticleDefinition *aParticle)
 {
+  //G4cout << aParticle << "  " << currentParticle 
+  //<< "  " << currentLoss << G4endl;
   if(aParticle != currentParticle) {
     currentParticle = aParticle;
     std::map<PD,G4VEnergyLossProcess*,std::less<PD> >::const_iterator pos;
@@ -1452,7 +1454,9 @@ G4double G4LossTableManager::GetRange(const G4ParticleDefinition *aParticle,
 {
   if(aParticle != currentParticle) { GetEnergyLossProcess(aParticle); }
   G4double x = DBL_MAX;
-  if(currentLoss) { x = currentLoss->GetRange(kineticEnergy, couple); }
+  if(currentLoss) {
+    x = currentLoss->GetRange(kineticEnergy, couple); 
+  }
   return x;
 }
 

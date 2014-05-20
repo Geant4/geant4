@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 May 14: V.Ivant (emutils-V10-00-19)
+- G4LossTableManager, G4EmSaturation - changed initialisation
+    of  G4EmSaturation class to work in MT mode
+
 19 May 14: V.Ivant (emutils-V10-00-18)
 - G4LossTableManager, G4EmSaturation - improved printout;
   G4EmProcessOptions, G4LossTableManager - address Coverity reports
