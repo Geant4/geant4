@@ -222,7 +222,7 @@ public:
 
   inline const G4ParticleDefinition* FirstParticle() const;
 
-  inline void SetBoundaryCorrectionFlag(G4bool val);
+  inline void SetDisplacementBeyondSafety(G4bool val);
 
   //------------------------------------------------------------------------
   // Run time methods
@@ -277,7 +277,7 @@ private:
 
 protected:
 
-  G4GPILSelection             valueGPILSelectionMSC;
+  //G4GPILSelection             valueGPILSelectionMSC;
   G4ParticleChangeForMSC      fParticleChange;
 
 private:
@@ -293,7 +293,7 @@ private:
   G4ThreeVector               fNewPosition;
   G4ThreeVector               fNewDirection;
   G4bool                      fPositionChanged;
-  G4bool                      fBoundaryFlag;
+  G4bool                      fDispBeyondSafety;
   G4bool                      isActive;
 };
 
@@ -418,9 +418,9 @@ inline const G4ParticleDefinition* G4VMultipleScattering::FirstParticle() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline void G4VMultipleScattering::SetBoundaryCorrectionFlag(G4bool val)
+inline void G4VMultipleScattering::SetDisplacementBeyondSafety(G4bool val)
 {
-  fBoundaryFlag = val;
+  fDispBeyondSafety = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

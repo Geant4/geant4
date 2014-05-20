@@ -58,6 +58,7 @@
 
 
 #include "globals.hh"
+#include <CLHEP/Random/RandomEngine.h>
 
 class G4ParticleDefinition;
 class G4DynamicParticle;
@@ -101,7 +102,11 @@ public:
   // Generic methods common to all models
   //------------------------------------------------------------------------
 
-  inline G4String GetName() const;
+  inline const G4String& GetName() const;
+
+protected:
+
+  CLHEP::HepRandomEngine* rndmEngineF;
 
 private:
 
@@ -116,7 +121,7 @@ private:
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-inline G4String G4VEmFluctuationModel::GetName() const 
+inline const G4String& G4VEmFluctuationModel::GetName() const 
 {
   return name;
 }

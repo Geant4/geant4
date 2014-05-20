@@ -17,6 +17,34 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 May 14: V.Ivant (emutils-V10-00-18)
+- G4LossTableManager, G4EmSaturation - improved printout;
+  G4EmProcessOptions, G4LossTableManager - address Coverity reports
+
+19 May 14: V.Ivant (emutils-V10-00-17)
+- G4LossTableManager, G4EmSaturation, G4EmCorrections, 
+    G4ElectronIonPair - improved verbosity
+
+18 May 14: V.Ivant (emutils-V10-00-16)
+- G4EmSaturation - updated class design, VisibleEnergyDeposition()
+    method become virtual allowing application of user alternative
+    algorithm, improved warning message
+
+17 May 14: V.Ivant (emutils-V10-00-15)
+- G4VEmModel, G4VEmFluctuationModel - defined different pattern to 
+    access random generator for sequential and MT modes (fix problem 
+    of previous tag)
+- G4EmProcessOptions, G4EnergyLossMessenger - added new c++ and UI 
+    interface "/process/msc/DisplacementBeyondSafety"
+
+15 May 14: V.Ivant (emutils-V10-00-14)
+- G4VMultipleScattering - introduced mechanism of displacement at
+    geometry boundary default
+- G4VEmModel, G4VEmFluctuationModel - added protected pointers
+    to random engine in order to save CPU in derived classes 
+- G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - fixed 
+    Coverity defects
+
 09 May 14: V.Ivant (emutils-V10-00-13)
 - G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering - fixed 
     bug report #1594 (crash G4WrapperProcess in sequential mode)

@@ -56,6 +56,15 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Log.hh"
+#include "Randomize.hh"
+//#include "G4MTHepRandom.hh"
+
+#if __clang__
+  #if (defined(G4MULTITHREADED) && !defined(G4USE_STD11) && \
+      !__has_feature(cxx_thread_local))
+    #define CLANG_NOSTDTLS
+  #endif
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,6 +91,13 @@ G4VEmModel::G4VEmModel(const G4String& nam):
 
   fManager = G4LossTableManager::Instance();
   fManager->Register(this);
+
+#if (defined(G4MULTITHREADED) && !defined(G4USE_STD11)) || \
+    (defined(CLANG_NOSTDTLS))
+  rndmEngineMod = G4MTHepRandom::getTheEngine(); 
+#else // Sequential mode or supporting C++11 standard
+  rndmEngineMod = CLHEP::HepRandom::getTheEngine();
+#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -287,7 +303,7 @@ const G4Element* G4VEmModel::SelectRandomAtom(const G4Material* material,
   G4int n = material->GetNumberOfElements() - 1;
   fCurrentElement = (*theElementVector)[n];
   if (n > 0) {
-    G4double x = G4UniformRand()*
+    G4double x = rndmEngineMod->flat()*
       G4VEmModel::CrossSectionPerVolume(material,pd,kinEnergy,tcut,tmax);
     for(G4int i=0; i<n; ++i) {
       if (x <= xsec[i]) {

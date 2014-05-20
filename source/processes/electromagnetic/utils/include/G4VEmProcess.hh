@@ -480,8 +480,8 @@ inline G4double G4VEmProcess::GetLambdaFromTablePrim(G4double e)
 
 inline G4double G4VEmProcess::ComputeCurrentLambda(G4double e)
 {
-  return currentModel->CrossSectionPerVolume(baseMaterial,currentParticle,
-					     e,(*theCuts)[currentCoupleIndex]);
+  return currentModel->CrossSectionPerVolume(
+         baseMaterial,currentParticle, e,(*theCuts)[currentCoupleIndex]);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

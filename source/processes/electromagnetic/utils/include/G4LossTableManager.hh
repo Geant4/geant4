@@ -316,6 +316,8 @@ private:
   G4LossTableManager(G4LossTableManager &);
   G4LossTableManager & operator=(const G4LossTableManager &right);
 
+  static G4ThreadLocal G4LossTableManager* instance;
+
   typedef const G4ParticleDefinition* PD;
 
   std::map<PD,G4VEnergyLossProcess*,std::less<PD> > loss_map;

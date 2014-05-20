@@ -118,21 +118,25 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
 
   // default limit on polar angle
   polarAngleLimit = 0.0;
-  biasFactor = 1.0;
+  biasFactor = fFactor = 1.0;
 
   // particle types
   theGamma     = G4Gamma::Gamma();
   theElectron  = G4Electron::Electron();
   thePositron  = G4Positron::Positron();
 
+  theCuts = theCutsGamma = theCutsElectron = theCutsPositron = 0;
+
   pParticleChange = &fParticleChange;
   fParticleChange.SetSecondaryWeightByProcess(true);
   secParticles.reserve(5);
 
-  preStepLambda = 0.0;
+  baseMaterial = currentMaterial = 0;
+
+  preStepLambda = preStepKinEnergy = 0.0;
   mfpKinEnergy  = DBL_MAX;
 
-  idxLambda = idxLambdaPrim = 0;
+  idxLambda = idxLambdaPrim = currentCoupleIndex = 0;
 
   modelManager = new G4EmModelManager();
   biasManager  = 0;

@@ -88,7 +88,7 @@
 #include "G4VEmFluctuationModel.hh"
 #include "G4VEmAngularDistribution.hh"
 #include "G4EmElementSelector.hh"
-#include "Randomize.hh"
+#include <CLHEP/Random/RandomEngine.h>
 #include <vector>
 
 class G4ElementData;
@@ -394,6 +394,8 @@ private:
 
 protected:
 
+  CLHEP::HepRandomEngine*      rndmEngineMod;
+
   G4ElementData*               fElementData;
   G4VParticleChange*           pParticleChange;
   G4PhysicsTable*              xSectionTable;
@@ -536,7 +538,7 @@ inline G4int G4VEmModel::SelectRandomAtomNumber(const G4Material* mat)
   G4int Z = G4lrint((*elmv)[0]->GetZ());
   if(1 < nn) {
     const G4double* at = mat->GetVecNbOfAtomsPerVolume();
-    G4double tot = mat->GetTotNbOfAtomsPerVolume()*G4UniformRand();
+    G4double tot = mat->GetTotNbOfAtomsPerVolume()*rndmEngineMod->flat();
     for( size_t i=0; i<nn; ++i) {
       Z = G4lrint((*elmv)[0]->GetZ());
       tot -= Z*at[i];
@@ -557,7 +559,7 @@ inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
     G4int idx = 0;
     if(ni > 1) {
       G4double* ab = elm->GetRelativeAbundanceVector();
-      G4double x = G4UniformRand();
+      G4double x = rndmEngineMod->flat();
       for(; idx<ni; ++idx) {
 	x -= ab[idx];
 	if (x <= 0.0) { break; }

@@ -101,6 +101,7 @@ private:
   G4UIcmdWithABool*          rangeCmd;
   G4UIcmdWithABool*          lpmCmd;
   G4UIcmdWithABool*          latCmd;
+  G4UIcmdWithABool*          catCmd;
   G4UIcmdWithABool*          splCmd;
   G4UIcmdWithABool*          aplCmd;
   G4UIcmdWithABool*          deCmd;

@@ -360,7 +360,6 @@ G4EmManagerMessenger::~G4EmManagerMessenger()
   delete SubSecCmd;
   delete MinSubSecCmd;
   delete StepFuncCmd;
-  delete deexCmd;
   delete eLossDirectory;
   delete mscDirectory;
   delete emDirectory;
@@ -372,8 +371,8 @@ G4EmManagerMessenger::~G4EmManagerMessenger()
   delete splCmd;
   delete lllCmd;
   delete lamCmd;
-  delete dedxCmd;
   /*
+  delete dedxCmd;
   delete aplCmd;
   delete latCmd;
   delete verCmd;

@@ -78,7 +78,7 @@
 const G4double G4EmCorrections::inveplus = 1.0/CLHEP::eplus;
 static const G4double twoln10 = 2.0*G4Log(10.0);
 
-G4EmCorrections::G4EmCorrections()
+G4EmCorrections::G4EmCorrections(G4int verb)
 {
   particle   = 0;
   curParticle= 0;
@@ -89,7 +89,7 @@ G4EmCorrections::G4EmCorrections()
   ionLEModel = 0;
   ionHEModel = 0;
   nIons      = 0;
-  verbose    = 1;
+  verbose    = verb;
   ncouples   = 0;
   massFactor = 1.0;
   eth        = 2.0*MeV;

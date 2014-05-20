@@ -73,7 +73,7 @@ class G4EmCorrections
 
 public:
 
-  G4EmCorrections();
+  G4EmCorrections(G4int verb);
 
   virtual ~G4EmCorrections();
 
@@ -163,6 +163,8 @@ public:
   inline void SetIonisationModels(G4VEmModel* m1 = 0, G4VEmModel* m2 = 0);
 
   inline G4int GetNumberOfStoppingVectors();
+
+  inline void SetVerbose(G4int verb);
 
 private:
 
@@ -369,6 +371,11 @@ inline void G4EmCorrections::SetupKinematics(const G4ParticleDefinition* p,
     atomDensity  = material->GetAtomicNumDensityVector(); 
     numberOfElements = material->GetNumberOfElements();
   }
+}
+
+inline void G4EmCorrections::SetVerbose(G4int verb)
+{
+  verbose = verb;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

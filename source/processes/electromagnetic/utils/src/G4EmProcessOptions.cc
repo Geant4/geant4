@@ -101,63 +101,69 @@ void G4EmProcessOptions::SetIntegral(G4bool val)
 
 void G4EmProcessOptions::SetMinSubRange(G4double val)
 {
-  theManager->SetMinSubRange(val);
+  if(0.0 < val && val < DBL_MAX) { theManager->SetMinSubRange(val); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetMinEnergy(G4double val)
 {
-  theManager->SetMinEnergy(val);
+  if(0.0 < val && val < DBL_MAX) { theManager->SetMinEnergy(val); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetMaxEnergy(G4double val)
 {
-  theManager->SetMaxEnergy(val);
+  if(0.0 < val && val < DBL_MAX) { theManager->SetMaxEnergy(val); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetMaxEnergyForCSDARange(G4double val)
 {
-  theManager->SetMaxEnergyForCSDARange(val);
+  if(0.0 < val && val < DBL_MAX) {
+    theManager->SetMaxEnergyForCSDARange(val);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetMaxEnergyForMuons(G4double val)
 {
-  theManager->SetMaxEnergyForMuons(val);
+  if(0.0 < val && val < DBL_MAX) { theManager->SetMaxEnergyForMuons(val); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetDEDXBinning(G4int val)
 {
-  theManager->SetDEDXBinning(val);
+  if(0 < val && val < INT_MAX) { theManager->SetDEDXBinning(val); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetDEDXBinningForCSDARange(G4int val)
 {
-  theManager->SetDEDXBinningForCSDARange(val);
+  if(0 < val && val < INT_MAX) { 
+    theManager->SetDEDXBinningForCSDARange(val);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetLambdaBinning(G4int val)
 {
-  theManager->SetLambdaBinning(val);
+  if(0 < val && val < INT_MAX) { theManager->SetLambdaBinning(val); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetStepFunction(G4double v1, G4double v2)
 {
-  theManager->SetStepFunction(v1, v2);
+  if(0.0 < v1 && 0.0 < v2 && v1 < DBL_MAX && v2 < DBL_MAX) {
+    theManager->SetStepFunction(v1, v2);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -224,7 +230,7 @@ void G4EmProcessOptions::SetVerbose(G4int val, const G4String& name,
   const std::vector<G4VMultipleScattering*>& u =
         theManager->GetMultipleScatteringVector();
   std::vector<G4VMultipleScattering*>::const_iterator itm;
-  for(itm = u.begin(); itm != u.end(); itm++) {
+  for(itm = u.begin(); itm != u.end(); ++itm) {
     G4VMultipleScattering* msc = *itm;
     if(s) {
       if (msc->GetProcessName() == name) { msc->SetVerboseLevel(val); }
@@ -316,7 +322,7 @@ void G4EmProcessOptions::SetMscStepLimitation(G4MscStepLimitType val)
   const std::vector<G4VMultipleScattering*>& u =
         theManager->GetMultipleScatteringVector();
   std::vector<G4VMultipleScattering*>::const_iterator itm;
-  for(itm = u.begin(); itm != u.end(); itm++) {
+  for(itm = u.begin(); itm != u.end(); ++itm) {
     if(*itm) (*itm)->SetStepLimitType(val);
   }
 }
@@ -328,8 +334,20 @@ void G4EmProcessOptions::SetMscLateralDisplacement(G4bool val)
   const std::vector<G4VMultipleScattering*>& u =
         theManager->GetMultipleScatteringVector();
   std::vector<G4VMultipleScattering*>::const_iterator itm;
-  for(itm = u.begin(); itm != u.end(); itm++) {
+  for(itm = u.begin(); itm != u.end(); ++itm) {
     if(*itm) { (*itm)->SetLateralDisplasmentFlag(val); }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4EmProcessOptions::SetDisplacementBeyondSafety(G4bool val)
+{
+  const std::vector<G4VMultipleScattering*>& u =
+        theManager->GetMultipleScatteringVector();
+  std::vector<G4VMultipleScattering*>::const_iterator itm;
+  for(itm = u.begin(); itm != u.end(); ++itm) {
+    if(*itm) { (*itm)->SetDisplacementBeyondSafety(val); }
   }
 }
 
@@ -341,7 +359,7 @@ void G4EmProcessOptions::SetSkin(G4double val)
   const std::vector<G4VMultipleScattering*>& u =
         theManager->GetMultipleScatteringVector();
   std::vector<G4VMultipleScattering*>::const_iterator itm;
-  for(itm = u.begin(); itm != u.end(); itm++) {
+  for(itm = u.begin(); itm != u.end(); ++itm) {
     if(*itm) { (*itm)->SetSkin(val); }
   }
 }
@@ -354,7 +372,7 @@ void G4EmProcessOptions::SetMscRangeFactor(G4double val)
   const std::vector<G4VMultipleScattering*>& u =
         theManager->GetMultipleScatteringVector();
   std::vector<G4VMultipleScattering*>::const_iterator itm;
-  for(itm = u.begin(); itm != u.end(); itm++) {
+  for(itm = u.begin(); itm != u.end(); ++itm) {
     if(*itm) { (*itm)->SetRangeFactor(val); }
   }
 }
@@ -367,7 +385,7 @@ void G4EmProcessOptions::SetMscGeomFactor(G4double val)
   const std::vector<G4VMultipleScattering*>& u =
         theManager->GetMultipleScatteringVector();
   std::vector<G4VMultipleScattering*>::const_iterator itm;
-  for(itm = u.begin(); itm != u.end(); itm++) {
+  for(itm = u.begin(); itm != u.end(); ++itm) {
     if(*itm) { (*itm)->SetGeomFactor(val); }
   }
 }
@@ -379,7 +397,7 @@ void G4EmProcessOptions::SetPolarAngleLimit(G4double val)
   const std::vector<G4VMultipleScattering*>& u =
         theManager->GetMultipleScatteringVector();
   std::vector<G4VMultipleScattering*>::const_iterator itm;
-  for(itm = u.begin(); itm != u.end(); itm++) {
+  for(itm = u.begin(); itm != u.end(); ++itm) {
     if(*itm) { (*itm)->SetPolarAngleLimit(val); }
   }
   const std::vector<G4VEmProcess*>& w =

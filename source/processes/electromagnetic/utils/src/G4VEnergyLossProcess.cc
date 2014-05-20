@@ -259,6 +259,8 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   scTracks.reserve(5);
   secParticles.reserve(5);
 
+  theCuts = theSubCuts = 0;
+
   secID = biasID = subsecID = -1;
 }
 
@@ -603,7 +605,10 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
       
       G4bool reg = false;
       for(G4int i=0; i<nSCoffRegions; ++i) {
-	if( pcuts == scoffRegions[i]->GetProductionCuts()) { reg = true; }
+	if( pcuts == scoffRegions[i]->GetProductionCuts()) { 
+	  reg = true;
+	  break; 
+	}
       }
       idxSCoffRegions[j] = reg;
     }
@@ -1276,8 +1281,8 @@ G4VParticleChange* G4VEnergyLossProcess::AlongStepDoIt(const G4Track& track,
   G4double esec = 0.0;
 
   // SubCutOff 
-  if(useSubCutoff) {
-    if(idxSCoffRegions[currentCoupleIndex] && !subcutProducer) {
+  if(useSubCutoff && !subcutProducer) {
+    if(idxSCoffRegions[currentCoupleIndex]) {
 
       G4bool yes = false;
       G4StepPoint* prePoint = step.GetPreStepPoint();

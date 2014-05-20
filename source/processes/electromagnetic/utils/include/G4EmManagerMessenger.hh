@@ -92,8 +92,8 @@ private:
   G4UIcmdWithABool*          rangeCmd;
   G4UIcmdWithABool*          lpmCmd;
   G4UIcmdWithABool*          splCmd;
-  G4UIcommand*               deexCmd;
   /*
+  G4UIcommand*               deexCmd;
   G4UIcmdWithABool*          aplCmd;
   G4UIcmdWithABool*          deCmd;
   G4UIcmdWithABool*          auCmd;

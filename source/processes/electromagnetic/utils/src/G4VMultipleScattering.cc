@@ -102,7 +102,8 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   facrange(0.04),
   facgeom(2.5),
   latDisplasment(true),
-  isIon(false)
+  isIon(false),
+  fDispBeyondSafety(false)
 {
   SetVerboseLevel(1);
   SetProcessSubType(fMultipleScattering);
@@ -120,8 +121,8 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   safetyHelper = 0;
   fPositionChanged = false;
   isActive = false;
-  fBoundaryFlag = false;
-
+  
+  currentModel = 0;
   modelManager = new G4EmModelManager();
   emManager = G4LossTableManager::Instance();
   emManager->Register(this);
@@ -483,13 +484,14 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
     tPathLength = currentModel->ComputeTrueStepLength(geomLength);
   
     // protection against wrong t->g->t conversion
+    
+    //if(currParticle->GetPDGMass() > GeV)    
     /*
-    if(currParticle->GetPDGMass() > GeV)    
     G4cout << "G4VMsc::AlongStepDoIt: GeomLength= " 
 	   << geomLength 
 	   << " tPathLength= " << tPathLength
 	   << " physStepLimit= " << physStepLimit
-	   << " dr= " << range - trueLength 
+	   << " dr= " << range - tPathLength
 	   << " ekin= " << track.GetKineticEnergy() << G4endl;
     */
     tPathLength = std::min(tPathLength, physStepLimit);
@@ -508,8 +510,7 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
         const G4double sFact = 0.99;
 	G4double postSafety = 
 	  sFact*(step.GetPreStepPoint()->GetSafety() - geomLength); 
-	//G4cout << "R= " << sqrt(r2) << " postSafety= " << postSafety 
-	// << G4endl;
+	//G4cout<<"R= "<<sqrt(r2)<<" postSafety= "<<postSafety<<G4endl;
 
 	// far away from geometry boundary
         if(postSafety > 0.0 && r2 <= postSafety*postSafety) {
@@ -526,14 +527,47 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 
 	    // optional extra mechanism is applied only if a particle
 	    // is stopped by the boundary
+	  } else if(fDispBeyondSafety && 0.0 == postSafety) {
+	    fNewPosition += displacement;
+	    G4double maxshift = 
+	      std::min(2.0*dispR, physStepLimit-tPathLength);
+	    G4double dist = 0.0;
+	    G4double safety = postSafety + dispR;
+	    fNewDirection = *(fParticleChange.GetMomentumDirection());
 	    /*
-	      } else if(fBoundaryFlag && geomLength < gPathLength) {
-	      fNewPosition += displacement;
-	      //G4VPhysicalVolume* pv = 
-	      //step.GetPreStepPoint()->GetPhysicalVolume();
-	      // fNewDirection = fParticleChange.GetMomentumDirection();
-	      fNewPosition += displacement*(postSafety/dispR - 1); 
+              G4cout << "##MSC before Recheck maxshift= " << maxshift
+		     << " postsafety= " << postSafety
+		     << " Ekin= " << track.GetKineticEnergy()
+		     << "  " << track.GetDefinition()->GetParticleName()
+		     << G4endl; 
 	    */
+	    // check if it is possible to shift to the boundary
+	    if(safetyHelper->RecheckDistanceToCurrentBoundary(fNewPosition,
+							      fNewDirection,
+							      maxshift,
+							      &dist,
+							      &safety)) 
+	      {
+		/*
+		  G4cout << "##MSC after Recheck dist= " << dist
+			 << " postsafety= " << postSafety
+			 << " t= " << tPathLength
+			 << " g=  " << geomLength
+			 << " p=  " << physStepLimit
+			 << G4endl; 
+		*/
+		G4double tnew = tPathLength*(1.0 + dist/geomLength);
+		if(tnew >= 0.0 && tnew < physStepLimit) {
+		  tPathLength = tnew;
+		} else { 
+		  fNewPosition += displacement*(postSafety/dispR - 1.0); 
+		}
+	      }
+	    else
+	      // shift on boundary is not possible
+	      { 
+		fNewPosition += displacement*(postSafety/dispR - 1.0); 
+	      }
 	    // reduced displacement
 	  } else if(postSafety > geomMin) {
 	    fNewPosition += displacement*(postSafety/dispR); 
@@ -557,7 +591,7 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 G4VParticleChange* 
 G4VMultipleScattering::PostStepDoIt(const G4Track& track, const G4Step&)
 {
-  fParticleChange.Initialize(track);  
+  fParticleChange.Initialize(track);
  
   if(fPositionChanged) { 
     safetyHelper->ReLocateWithinVolume(fNewPosition);

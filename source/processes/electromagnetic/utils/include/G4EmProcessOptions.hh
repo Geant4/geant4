@@ -127,6 +127,8 @@ public:
 
   void SetMscLateralDisplacement(G4bool val);
 
+  void SetDisplacementBeyondSafety(G4bool val);
+
   void SetSkin(G4double val);
 
   void SetMscRangeFactor(G4double val);

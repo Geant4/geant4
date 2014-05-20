@@ -277,6 +277,12 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   latCmd->SetDefaultValue(true);
   latCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  catCmd = new G4UIcmdWithABool("/process/msc/DisplacementBeyondSafety",this);
+  catCmd->SetGuidance("Set flag of displacement at geometry boundary");
+  catCmd->SetParameterName("cat",true);
+  catCmd->SetDefaultValue(true);
+  catCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
   frCmd = new G4UIcmdWithADouble("/process/msc/RangeFactor",this);
   frCmd->SetGuidance("Set RangeFactor parameter for msc processes");
   frCmd->SetParameterName("Fr",true);
@@ -397,6 +403,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete lpmCmd;
   delete splCmd;
   delete aplCmd;
+  delete catCmd;
   delete latCmd;
   delete verCmd;
   delete ver1Cmd;
@@ -517,6 +524,8 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   } else if (command == latCmd) {
     opt->SetMscLateralDisplacement(latCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+  } else if (command == catCmd) {
+    opt->SetDisplacementBeyondSafety(catCmd->GetNewBoolValue(newValue));
   } else if (command == verCmd) {
     opt->SetVerbose(verCmd->GetNewIntValue(newValue),"all",false);
   } else if (command == ver1Cmd) {
