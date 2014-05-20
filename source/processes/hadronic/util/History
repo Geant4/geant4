@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 May 2014 Gunter Folger        (hadr-util-V10-00-05)
+------------------------------------------------------
+- remove temp. method GetDefintion_asConst()
+
 26 March 2014 Gunter Folger      (hadr-util-V10-00-04)
 ------------------------------------------------------
 - G4ReactionDynamics: convert to const G4ParticleDefinition*

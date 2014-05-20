@@ -104,13 +104,8 @@ class G4ReactionProduct
     inline G4bool operator!= ( const G4ReactionProduct &right ) const
     { return ( this != (G4ReactionProduct*) &right ); }
     
-    inline const G4ParticleDefinition* GetDefinition_asConst() const
-    { return theParticleDefinition; }
-    
     inline const G4ParticleDefinition* GetDefinition() const
     { return theParticleDefinition; }
-//    inline G4ParticleDefinition* GetDefinition() const
-//    { return /*const_cast<G4ParticleDefinition*>*/(theParticleDefinition); }
 
     void SetDefinition(const G4ParticleDefinition* aParticleDefinition );
    
