@@ -51,7 +51,8 @@ class GammaRayTelDetectorMessenger;
 class GammaRayTelTrackerSD;
 class GammaRayTelAnticoincidenceSD;
 class GammaRayTelCalorimeterSD;
-class GammaRayTelTrackerROGeometry;
+
+//class GammaRayTelTrackerROGeometry;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

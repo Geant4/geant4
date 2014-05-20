@@ -41,7 +41,6 @@
 #include "GammaRayTelDetectorMessenger.hh"
 
 #include "GammaRayTelTrackerSD.hh"
-#include "GammaRayTelTrackerROGeometry.hh"
 
 #include "GammaRayTelAnticoincidenceSD.hh"
 #include "GammaRayTelCalorimeterSD.hh"
@@ -542,6 +541,8 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 			"Active Tile Y",0,0,0);
   
   
+
+
   G4int j=0;
   G4int k=0;
   
@@ -565,14 +566,14 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 	  z = 0.;
 	  
 	  new G4PVPlacement(0,
-			      G4ThreeVector(x,y,z),
-			      "Active Tile Y",		
-			      logicTKRActiveTileY,
-			      physiTKRDetectorY,
-			      false,	
-			      k);
+			    G4ThreeVector(x,y,z),
+			    logicTKRActiveTileY,
+			    "Active Tile Y",		
+			    logicTKRDetectorY,
+			    false,	
+			    k);
 	  
-
+	  
 	  x = -TKRSizeXY/2+TilesSeparation+SiliconGuardRing+
 	    TKRActiveTileXY/2+(j)*((2*SiliconGuardRing)+
 				   TilesSeparation+TKRActiveTileXY);
@@ -582,16 +583,79 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 	  z = 0.;
 	      
 	  new G4PVPlacement(0,
-			      G4ThreeVector(x,y,z),
-			      "Active Tile X",		
-			      logicTKRActiveTileX,
-			      physiTKRDetectorX,
-			      false,	
-			      k);	
+			    G4ThreeVector(x,y,z),
+			    logicTKRActiveTileX,
+			    "Active Tile X",
+			    logicTKRDetectorX,
+			    false,	
+			    k);	
 	  
 	}
     }
+
+
+  // STRIPS (not any more in the Readout Geometry)
+
+  // Silicon Strips 
+    
+  /*
+    G4double TKRXStripX=0.;
+    G4double TKRYStripY=0.;
+    G4double TKRYStripX=0.; 
+    G4double TKRXStripY=0.;
+  */
+
+  TKRXStripX = TKRYStripY = TKRSiliconPitch;
+  TKRYStripX = TKRXStripY = TKRActiveTileXY;
+  TKRZStrip  = TKRSiliconThickness;
   
+  
+  G4VSolid* solidTKRStripX = new G4Box("Strip X",			
+				       TKRXStripX/2,TKRYStripX/2,
+				       TKRZStrip/2); 
+  
+  G4LogicalVolume* logicTKRStripX = 
+    new G4LogicalVolume(solidTKRStripX,TKRMaterial,"Strip X",0,0,0);	 
+  
+		
+  G4VSolid* solidTKRStripY = new G4Box("Strip Y",			
+				       TKRXStripY/2,TKRYStripY/2,
+				       TKRZStrip/2); 
+  
+
+  G4LogicalVolume* logicTKRStripY = 
+    new G4LogicalVolume(solidTKRStripY,TKRMaterial,"Strip Y",0,0,0);	 
+	
+
+  for (i=0;i< NbOfTKRStrips; i++)
+    {  
+      new G4PVPlacement(0,
+			G4ThreeVector(-TKRActiveTileXY/2 +TKRSiliconPitch/2 +
+				      (i)*TKRSiliconPitch, 0., 0.),
+			logicTKRStripX,
+			"Strip X",		
+			logicTKRActiveTileX,
+			false,	
+			i);	
+      
+      
+      new G4PVPlacement(0,
+			G4ThreeVector(0.,-TKRActiveTileXY/2 
+				      +TKRSiliconPitch/2 +
+				      (i)*TKRSiliconPitch, 0.),
+			logicTKRStripY,
+			"Strip Y",		
+			logicTKRActiveTileY,
+			false,	
+			i);	
+      
+      
+      
+      
+
+    }
+  
+
 
   // Calorimeter Structure (CALLayerX + CALLayerY)
   
@@ -661,9 +725,9 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 	new G4PVPlacement(0,
 			  G4ThreeVector(-CALSizeXY/2+ CALBarY/2 +
 					(i)*CALBarY, 0, 0),
-			  "CALDetectorY",		
 			  logicCALDetectorY,
-			  physiCALLayerY,
+			  "CALDetectorY",		
+			  logicCALLayerY,
 			  false,	
 			  i);	
       
@@ -671,9 +735,9 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
 	new G4PVPlacement(0,
 			  G4ThreeVector(0,-CALSizeXY/2+ CALBarY/2 +
 					(i)*CALBarY, 0),
-			  "CALDetectorX",		
 			  logicCALDetectorX,
-			  physiCALLayerX,
+			  "CALDetectorX",		
+			  logicCALLayerX,
 			  false,	
 			  i);	
       
@@ -713,17 +777,24 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
     }
 
 
-  G4String ROgeometryName = "TrackerROGeom";
-  G4VReadOutGeometry* trackerRO = 
+  /*
+    G4String ROgeometryName = "TrackerROGeom";
+    G4VReadOutGeometry* trackerRO = 
     new GammaRayTelTrackerROGeometry(ROgeometryName);
-  
-  trackerRO->BuildROGeometry();
-  trackerSD->SetROgeometry(trackerRO);
+    
+    trackerRO->BuildROGeometry();
+    trackerSD->SetROgeometry(trackerRO);
+  */
 
-  if (logicTKRActiveTileX)
-    logicTKRActiveTileX->SetSensitiveDetector(trackerSD); // ActiveTileX
-  if (logicTKRActiveTileY)
-    logicTKRActiveTileY->SetSensitiveDetector(trackerSD); // ActiveTileY
+
+  //Flags the strips as sensitive .
+
+  if (logicTKRStripX)
+    logicTKRStripX->SetSensitiveDetector(trackerSD); // ActiveStripX
+  if (logicTKRStripY)
+    logicTKRStripY->SetSensitiveDetector(trackerSD); // ActiveStripY
+  
+
 
   //
   // Sensitive Detectors: Calorimeter
