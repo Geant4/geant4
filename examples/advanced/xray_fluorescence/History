@@ -19,6 +19,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-05-2014 L.Pandola Tag: XrayFluo-V10-00-09
+- Migrated SteppingVerbose, registered now through the 
+ ActionInitialization class.
+
 16-05-2014 L.Pandola Tag: XrayFluo-V10-00-08
 - Real MT migration: use the G4MTRunManager
 - Add PhysicsHasBeenChanged() to the commands of the physics list 

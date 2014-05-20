@@ -55,7 +55,7 @@
 #include "XrayFluoMercuryDetectorConstruction.hh"
 #include "XrayFluoPhysicsList.hh"
 #include "XrayFluoSimulation.hh"
-#include "XrayFluoSteppingVerbose.hh"
+
 #include "XrayFluoActionInitializer.hh"
 #include "XrayFluoAnalysisManager.hh"
 
@@ -69,14 +69,10 @@ XrayFluoSimulation::~XrayFluoSimulation()
 
 void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
 {
-
   // choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
   G4Random::setTheSeed(dir);
-
-  //XrayFluo Verbose output class
-  G4VSteppingVerbose::SetInstance(new XrayFluoSteppingVerbose);
-     
+   
 #ifdef G4MULTITHREADED
   // Construct the default run manager
   G4MTRunManager* runManager = new G4MTRunManager();
@@ -169,7 +165,6 @@ void XrayFluoSimulation::RunSimulation(int argc,char* argv[])
     }
   
   // job termination
-  
 #ifdef G4VIS_USE
   delete visManager;
   G4cout << "visManager deleted"<< G4endl;

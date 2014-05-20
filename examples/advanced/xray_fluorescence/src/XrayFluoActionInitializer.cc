@@ -39,7 +39,7 @@
 #include "XrayFluoRunAction.hh"
 #include "XrayFluoEventAction.hh"
 #include "XrayFluoSteppingAction.hh"
-
+#include "XrayFluoSteppingVerbose.hh"
 
 #include "G4RunManager.hh"
 
@@ -67,7 +67,6 @@ void XrayFluoActionInitializer::Build() const
       eventAction = new XrayFluoEventAction(testBeamDetector);
       SetUserAction(new XrayFluoPrimaryGeneratorAction(testBeamDetector));
     }
-
   else if (fGeometryFlag == 2) 
     {      
       const XrayFluoPlaneDetectorConstruction* planeDetector = 
@@ -77,7 +76,6 @@ void XrayFluoActionInitializer::Build() const
       eventAction = new XrayFluoEventAction(planeDetector);
       SetUserAction(new XrayFluoPlanePrimaryGeneratorAction(planeDetector));
     }
-
   else if (fGeometryFlag == 3) 
     {      
       const XrayFluoMercuryDetectorConstruction* mercuryDetector = 
@@ -87,11 +85,10 @@ void XrayFluoActionInitializer::Build() const
       stepAction->SetMercuryFlag(true);
       SetUserAction(new XrayFluoMercuryPrimaryGeneratorAction(mercuryDetector));
   }
-
   SetUserAction(eventAction);
   SetUserAction(new XrayFluoRunAction());
   SetUserAction(stepAction);
-  
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -101,3 +98,11 @@ void XrayFluoActionInitializer::BuildForMaster() const
   SetUserAction(new XrayFluoRunAction());
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+
+G4VSteppingVerbose* XrayFluoActionInitializer::InitializeSteppingVerbose() const
+{
+  //XrayFluo Verbose output class
+  return new XrayFluoSteppingVerbose();
+}

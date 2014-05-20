@@ -33,6 +33,7 @@
 #define XrayFluoActionInitializer_h 1
 
 #include "G4VUserActionInitialization.hh"
+#include "G4VSteppingVerbose.hh"
 #include "globals.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +47,8 @@ public:
   
   void Build() const;
   void BuildForMaster() const;
-  
+  G4VSteppingVerbose* InitializeSteppingVerbose() const;
+
 private:
   G4int fGeometryFlag;
 
