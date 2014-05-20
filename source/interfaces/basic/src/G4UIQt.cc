@@ -258,7 +258,7 @@ QWidget* G4UIQt::CreateHelpTBWidget(
   QWidget *helpWidget = new QWidget();
   QHBoxLayout *helpLayout = new QHBoxLayout();
   QVBoxLayout *vLayout = new QVBoxLayout();
-  fHelpVSplitter = new QSplitter(Qt::Horizontal);
+  fHelpVSplitter = new QSplitter(Qt::Vertical);
   fHelpLine = new QLineEdit();
   helpLayout->addWidget(new QLabel("Search :"));
   helpLayout->addWidget(fHelpLine);
@@ -1817,8 +1817,9 @@ void G4UIQt::FillHelpTree()
   if (fHelpArea) {
 #if QT_VERSION < 0x040200
     fHelpArea->clear();
+    fHelpArea->append("Choose a command in the command tree");
 #else
-    fHelpArea->setText("");
+    fHelpArea->setText("Choose a command in the command tree");
 #endif
   }
 
@@ -2348,33 +2349,33 @@ QTreeWidgetItem* G4UIQt::FindTreeItem(
 
 
 /**   Build the command list parameters in a QString<br>
-   Reimplement partialy the G4UIparameter.cc
-   @param aCommand : command to list parameters
-   @see G4UIparameter::List()
-   @see G4UIcommand::List()
-   @return the command list parameters, or "" if nothing
-*/
+ Reimplement partialy the G4UIparameter.cc
+ @param aCommand : command to list parameters
+ @see G4UIparameter::List()
+ @see G4UIcommand::List()
+ @return the command list parameters, or "" if nothing
+ */
 QString G4UIQt::GetCommandList (
- const G4UIcommand *aCommand
-)
+                                const G4UIcommand *aCommand
+                                )
 {
-
+  
   QString txt ="";
   if (aCommand == NULL)
     return txt;
-
+  
   G4String commandPath = aCommand->GetCommandPath();
   G4String rangeString = aCommand->GetRange();
   G4int n_guidanceEntry = aCommand->GetGuidanceEntries();
   G4int n_parameterEntry = aCommand->GetParameterEntries();
   
-  if ((commandPath == "") && 
+  if ((commandPath == "") &&
       (rangeString == "") &&
       (n_guidanceEntry == 0) &&
       (n_parameterEntry == 0)) {
     return txt;
   }
-
+  
   if((commandPath.length()-1)!='/') {
     txt += "Command " + QString((char*)(commandPath).data()) + "\n";
   }
@@ -2415,6 +2416,115 @@ QString G4UIQt::GetCommandList (
       }
     }
   }
+  return txt;
+}
+
+
+/**   Build the command list parameters in a QString with HTML<br>
+   Reimplement partialy the G4UIparameter.cc
+   @param aCommand : command to list parameters
+   @see G4UIparameter::List()
+   @see G4UIcommand::List()
+   @return the command list parameters, or "" if nothing
+*/
+QString G4UIQt::GetCommandListToHtml (
+ const G4UIcommand *aCommand
+)
+{
+
+  QString txt ="";
+  if (aCommand == NULL)
+    return txt;
+
+  G4String commandPath = aCommand->GetCommandPath();
+  G4String rangeString = aCommand->GetRange();
+  G4int n_guidanceEntry = aCommand->GetGuidanceEntries();
+  G4int n_parameterEntry = aCommand->GetParameterEntries();
+  
+  if ((commandPath == "") && 
+      (rangeString == "") &&
+      (n_guidanceEntry == 0) &&
+      (n_parameterEntry == 0)) {
+    return txt;
+  }
+
+  if((commandPath.length()-1)!='/') {
+    txt += "<b>Command </b>" + QString((char*)(commandPath).data()) + "<br />";
+  }
+  txt += "<b>Guidance :</b>";
+  
+  for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
+    txt += QString((char*)(aCommand->GetGuidanceLine(i_thGuidance)).data()) + "<br />";
+  }
+  if( ! rangeString.isNull() ) {
+    txt += "<b>Range of parameters : </b>" + QString((char*)(rangeString).data()) + "<br />";
+  } else {
+    txt += "<br />";
+  }
+  if( n_parameterEntry > 0 ) {
+    G4UIparameter *param;
+    
+    // Re-implementation of G4UIparameter.cc
+    
+    if (n_parameterEntry > 0) {
+      txt+= "<table style='border-width:1px; border-style:solid;border-color:black;'>";
+      txt+= "<tr>";
+      txt+= "<td style='background-color: #E0E0E0;'>Parameter</td>";
+      txt+= "<td style='background-color: #E0E0E0;'>Guidance</td>";
+      txt+= "<td style='background-color: #E0E0E0;'>Type</td>";
+      txt+= "<td style='background-color: #E0E0E0;'>Omittable</td>";
+      txt+= "<td style='background-color: #E0E0E0;'>Default</td>";
+      txt+= "<td style='background-color: #E0E0E0;'>Range</td>";
+      txt+= "<td style='background-color: #E0E0E0;'>Candidates</td>";
+      txt+= "</tr>";
+    }
+    QString color1 = " style=\"background-color: #fce68d;\"";
+    QString color2 = " style=\"background-color: #ffcc00;\"";
+    QString currentColor = color1;
+    
+    for( G4int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ ) {
+      if (currentColor==color1) {
+        currentColor = color2;
+      } else {
+        currentColor = color1;
+      }
+      txt+= "<tr>";
+      param = aCommand->GetParameter(i_thParameter);
+      txt += "<td"+currentColor+">" + QString((char*)(param->GetParameterName()).data()) + "</td>";
+      if( ! param->GetParameterGuidance().isNull() ) {
+        txt += "<td"+currentColor+">" + QString((char*)(param->GetParameterGuidance()).data())+ "</td>" ;
+      } else {
+        txt += "<td"+currentColor+">&nbsp;</td>";
+      }
+      txt += "<td"+currentColor+">" + QString(QChar(param->GetParameterType())) + "</td>";
+      if(param->IsOmittable()){
+        txt += "<td"+currentColor+">True</td>";
+      } else {
+        txt += "<td"+currentColor+">False</td>";
+      }
+      if( param->GetCurrentAsDefault() ) {
+        txt += "<td"+currentColor+">" + "taken from the current value</td>";
+      } else if( ! param->GetDefaultValue().isNull() ) {
+        txt += "<td"+currentColor+">" + QString((char*)(param->GetDefaultValue()).data())+ "</td>";
+      }
+      if( ! param->GetParameterRange().isNull() ) {
+        txt += "<td"+currentColor+">" + QString((char*)(param->GetParameterRange()).data())+ "</td>";
+      } else {
+        txt += "<td"+currentColor+">&nbsp;</td>";
+      }
+      if( ! param->GetParameterCandidates().isNull() ) {
+        txt += "<td"+currentColor+">" + QString((char*)(param->GetParameterCandidates()).data())+ "</td>";
+      } else {
+        txt += "<td"+currentColor+">&nbsp;</td>";
+      }
+      txt+= "</tr>";
+    }
+    if (n_parameterEntry > 0) {
+      txt+= "</table>";
+    }
+
+  }
+  std::string t = txt.toStdString().c_str();
   return txt;
 }
 
@@ -2798,7 +2908,7 @@ void G4UIQt::HelpTreeClicCallback (
     fHelpArea->clear();
     fHelpArea->append(GetCommandList(command));
  #else
-    fHelpArea->setText(GetCommandList(command));
+    fHelpArea->setHtml(GetCommandListToHtml(command));
  #endif
   } else {  // this is a command
     G4UIcommandTree* path = treeTop->FindCommandTree(itemText.c_str());

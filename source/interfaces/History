@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20nd May 2014  Laurent Garnier (interfaces-V10-00-02)
+- G4UIQt : 
+  o Change help tree splitter from vertical to horizontal
+  o Add method to display text in HTML
+
 22nd Janvier 2014  Laurent Garnier (interfaces-V10-00-01)
 - G4Qt : BUGFIX : bugzilla 1487 : Explicitly set the LC_NUMBERIC locale to "C"
 
