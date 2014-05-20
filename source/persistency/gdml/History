@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 May 2014 Gabriele Cosmo (gdml-V10-00-04)
+- Correction to G4GDMLRead::Read() for the case when schema validation
+  is turned off, to disable initialisation of validation machinery in the
+  parser and allow for standalone parsing off-network.
+
 15 May 2014 Gabriele Cosmo (gdml-V10-00-03)
 - Corrected minor Coverity defect in G4GDMLParser for uninitialised
   'strip' flag in constructors.

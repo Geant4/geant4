@@ -288,13 +288,16 @@ void G4GDMLRead::Read(const G4String& fileName,
    xercesc::ErrorHandler* handler = new G4GDMLErrorHandler(!validate);
    xercesc::XercesDOMParser* parser = new xercesc::XercesDOMParser;
 
-   parser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
-   parser->setValidationSchemaFullChecking(true);
+   if (validate)
+   {
+     parser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
+   }
+   parser->setValidationSchemaFullChecking(validate);
    parser->setCreateEntityReferenceNodes(false); 
      // Entities will be automatically resolved by Xerces
 
    parser->setDoNamespaces(true);
-   parser->setDoSchema(true);
+   parser->setDoSchema(validate);
    parser->setErrorHandler(handler);
 
    try { parser->parse(fileName.c_str()); }
