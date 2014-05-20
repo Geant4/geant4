@@ -61,7 +61,8 @@ foreach(_macro ${TEST69_MACROS})
                     COMMAND test69 ${PROJECT_BINARY_DIR}/macros/${_macro}
                     DEPENDS test69-build
                     LABELS Nightly Continuous
-                    ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} "TEST69_PHYSLIST=${_list}")
+                    ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} "TEST69_PHYSLIST=${_list}"
+                    TIMEOUT 3600)
 
   endforeach()
 endforeach()
@@ -75,7 +76,8 @@ foreach(_macro ${TEST69_SHORT_MACROS})
                     COMMAND test69 ${PROJECT_BINARY_DIR}/macros/${_macro}
                     DEPENDS test69-build
                     LABELS Nightly Continuous
-                    ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} "TEST69_PHYSLIST=${_list}")
+                    ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} "TEST69_PHYSLIST=${_list}"
+                    TIMEOUT 3600)
 
   endforeach()
 endforeach()

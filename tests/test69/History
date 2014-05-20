@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 May 2014, Davide Mancusi (test69-V10-00-00)
+- Extend test timeout to 1 hour.
+
 12 November 2013, Davide Mancusi (test69-V09-06-10)
 - Remove the quick-and-dirty fix for Windows crash, the problem (?) was in
   G4INCLXXInterfaceStore.
