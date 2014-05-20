@@ -42,6 +42,8 @@
 #include "G4TouchableHistory.hh"
 #include "G4Step.hh"
 #include "G4Track.hh"
+#include "G4LossTableManager.hh"
+#include "G4EmSaturation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -49,6 +51,7 @@ HcalSD::HcalSD(const G4String& name)
  :G4VSensitiveDetector(name)
 {
   theHisto = HistoManager::GetPointer();
+  emSaturation = G4LossTableManager::Instance()->EmSaturation();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -65,7 +68,7 @@ void HcalSD::Initialize(G4HCofThisEvent*)
 
 G4bool HcalSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
-  G4double edep = emSaturation.VisibleEnergyDeposition(aStep);
+  G4double edep = emSaturation->VisibleEnergyDeposition(aStep);
   const G4ParticleDefinition* part = aStep->GetTrack()->GetDefinition();
   theHisto->AddStep(part);
   if(edep > 0.0) {
@@ -73,7 +76,8 @@ G4bool HcalSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
     G4StepPoint* preStepPoint = aStep->GetPreStepPoint();
     G4TouchableHandle theTouchable = preStepPoint->GetTouchableHandle();
     G4int copyNo = theTouchable->GetCopyNumber();
-    theHisto->AddHcalHit(part, copyNo, edep, aStep->GetTrack()->GetGlobalTime());
+    theHisto->AddHcalHit(part, copyNo, edep, 
+			 aStep->GetTrack()->GetGlobalTime());
   }
   return true;
 }

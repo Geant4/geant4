@@ -43,7 +43,6 @@
 
 #include "G4VSensitiveDetector.hh"
 #include "globals.hh"
-#include "G4EmSaturation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -51,6 +50,7 @@ class G4Step;
 class G4TouchableHistory;
 class G4HCofThisEvent;
 class HistoManager;
+class G4EmSaturation;
 
 class EcalSD : public G4VSensitiveDetector
 {
@@ -68,7 +68,7 @@ public: // Without description
 private:
 
   HistoManager*   theHisto;
-  G4EmSaturation  emSaturation;
+  G4EmSaturation*  emSaturation;
 
 };
 

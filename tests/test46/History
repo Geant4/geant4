@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-05-13  V.Ivanchenko (test46-V10-00-02)
+- EcalSD, HcalSD - use G4EmSaturation from G4LossTableManager
+
 29-04-14 V.Ivant (test46-V10-00-01)
 - CMakeLists.txt: allow to build standalone 
     without GEANT4_ENABLE_TESTING=ON

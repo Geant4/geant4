@@ -51,6 +51,7 @@ class G4Step;
 class G4TouchableHistory;
 class G4HCofThisEvent;
 class HistoManager;
+class G4EmSaturation;
 
 class HcalSD : public G4VSensitiveDetector
 {
@@ -68,7 +69,7 @@ public: // Without description
 private:
 
   HistoManager*  theHisto;
-  G4EmSaturation emSaturation;
+  G4EmSaturation* emSaturation;
 
 };
 

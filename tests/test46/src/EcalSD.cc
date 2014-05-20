@@ -43,6 +43,8 @@
 #include "G4Step.hh"
 #include "G4Track.hh"
 #include "G4TouchableHandle.hh"
+#include "G4LossTableManager.hh"
+#include "G4EmSaturation.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -50,6 +52,7 @@ EcalSD::EcalSD(const G4String& name)
  :G4VSensitiveDetector(name)
 {
   theHisto = HistoManager::GetPointer();
+  emSaturation = G4LossTableManager::Instance()->EmSaturation();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,7 +69,7 @@ void EcalSD::Initialize(G4HCofThisEvent*)
 
 G4bool EcalSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
-  G4double edep = emSaturation.VisibleEnergyDeposition(aStep);
+  G4double edep = emSaturation->VisibleEnergyDeposition(aStep);
   const G4ParticleDefinition* part = aStep->GetTrack()->GetDefinition();
   theHisto->AddStep(part);
   if(edep > 0.0) {
