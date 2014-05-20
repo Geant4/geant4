@@ -36,30 +36,23 @@
 #include "G4PhysicalVolumeModel.hh"
 #include "G4Vector3D.hh"
 
-G4BoundingSphereScene::G4BoundingSphereScene (G4VModel* pModel):
-  fpModel (pModel),
-  fRadius (-1.),
-  fpObjectTransformation (0)
+G4BoundingSphereScene::G4BoundingSphereScene (G4VModel* pModel)
+:fpModel(pModel)
+,fRadius(-1.)
 {}
 
 G4BoundingSphereScene::~G4BoundingSphereScene () {}
-
-void G4BoundingSphereScene::PreAddSolid
-(const G4Transform3D& objectTransformation,
- const G4VisAttributes&) {
-  fpObjectTransformation = &objectTransformation;
-}
 
 G4VisExtent G4BoundingSphereScene::GetBoundingSphereExtent () {
   return G4VisExtent (fCentre, fRadius);
 }
 
-void G4BoundingSphereScene::Accrue (const G4VSolid& solid) {
-
+void G4BoundingSphereScene::ProcessVolume(const G4VSolid& solid)
+{
   const G4VisExtent& newExtent = solid.GetExtent ();
   G4Point3D newCentre = newExtent.GetExtentCentre ();
-  if (fpObjectTransformation) {
-    newCentre.transform (*fpObjectTransformation);
+  if (fpCurrentObjectTransformation) {
+    newCentre.transform (*fpCurrentObjectTransformation);
   }
   const G4double newRadius = newExtent.GetExtentRadius ();
   AccrueBoundingSphere (newCentre, newRadius);
@@ -72,7 +65,7 @@ void G4BoundingSphereScene::Accrue (const G4VSolid& solid) {
 void G4BoundingSphereScene::ResetBoundingSphere () {
   fCentre = G4Point3D ();
   fRadius = -1.;
-  fpObjectTransformation = 0;
+  fpCurrentObjectTransformation = 0;
 }
 
 void G4BoundingSphereScene::AccrueBoundingSphere

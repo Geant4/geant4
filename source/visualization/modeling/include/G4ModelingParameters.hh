@@ -74,6 +74,7 @@ public: // With description
     VASForceAuxEdgeVisible,
     VASForceLineSegmentsPerCircle
   };
+
   class PVNameCopyNo {
   public:
     PVNameCopyNo(G4String name, G4int copyNo):
@@ -88,6 +89,7 @@ public: // With description
   };
   typedef std::vector<PVNameCopyNo> PVNameCopyNoPath;
   typedef PVNameCopyNoPath::const_iterator PVNameCopyNoPathConstIterator;
+
   class VisAttributesModifier {
   public:
     VisAttributesModifier

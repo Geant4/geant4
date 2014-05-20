@@ -271,6 +271,8 @@ G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
    "\n  use \"/vis/list\".");
   fpCommand -> SetGuidance
   ("If \"length\" is negative, it is set to about 25% of scene extent.");
+  fpCommand -> SetGuidance
+  ("If \"showtext\" is false, annotations are suppressed.");
   G4UIparameter* parameter;
   parameter =  new G4UIparameter ("x0", 'd', omitable = true);
   parameter->SetDefaultValue (0.);
@@ -289,6 +291,9 @@ G4VisCommandSceneAddAxes::G4VisCommandSceneAddAxes () {
   fpCommand->SetParameter (parameter);
   parameter =  new G4UIparameter ("unitcolour", 's', omitable = true);
   parameter->SetDefaultValue  ("auto");
+  fpCommand->SetParameter (parameter);
+  parameter =  new G4UIparameter ("showtext", 'b', omitable = true);
+  parameter->SetDefaultValue  ("true");
   fpCommand->SetParameter (parameter);
 }
 
@@ -322,10 +327,13 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
     }
   }
 
-  G4String unitString, colourString;
+  G4String unitString, colourString, showTextString;
   G4double x0, y0, z0, length;
   std::istringstream is (newValue);
-  is >> x0 >> y0 >> z0 >> length >> unitString  >> colourString;
+  is >> x0 >> y0 >> z0 >> length >> unitString
+  >> colourString >> showTextString;
+  G4bool showText = G4UIcommand::ConvertToBool(showTextString);
+
 
   G4double unit = G4UIcommand::ValueOf(unitString);
   x0 *= unit; y0 *= unit; z0 *= unit;
@@ -339,7 +347,6 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
   } else {
     length *= unit;
   }
-  G4String annotation = G4BestUnit(length,"Length");
 
   // Consult scene for arrow width...
   G4double arrowWidth =
@@ -348,14 +355,15 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
   if (arrowWidth > length/50.) arrowWidth = length/50.;
 
   G4VModel* model = new G4AxesModel
-    (x0, y0, z0, length, arrowWidth, colourString, newValue);
+    (x0, y0, z0, length, arrowWidth, colourString, newValue, showText);
 
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   const G4String& currentSceneName = pScene -> GetName ();
   if (successful) {
     if (verbosity >= G4VisManager::confirmations) {
-      G4cout << "Axes have been added to scene \"" << currentSceneName << "\"."
-	     << G4endl;
+      G4cout << "Axes of length " << G4BestUnit(length,"Length")
+      << "have been added to scene \"" << currentSceneName << "\"."
+      << G4endl;
     }
   }
   else G4VisCommandsSceneAddUnsuccessful(verbosity);
@@ -960,7 +968,7 @@ G4VisCommandSceneAddLogicalVolume::G4VisCommandSceneAddLogicalVolume () {
   fpCommand -> SetGuidance
     ("Shows boolean components (if any), voxels (if any) and readout geometry"
      "\n(if any).  Note: voxels are not constructed until start of run -"
-     "\n \"/run/beamOn\".");
+     "\n \"/run/beamOn\".  (For voxels without a run, \"/run/beamOn 0\".)");
   G4UIparameter* parameter;
   parameter = new G4UIparameter ("logical-volume-name", 's', omitable = false);
   fpCommand -> SetParameter (parameter);

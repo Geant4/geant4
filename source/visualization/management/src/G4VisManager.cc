@@ -38,6 +38,7 @@
 #include "G4VisCommandsScene.hh"
 #include "G4VisCommandsSceneAdd.hh"
 #include "G4VisCommandsSceneHandler.hh"
+#include "G4VisCommandsTouchable.hh"
 #include "G4VisCommandsTouchableSet.hh"
 #include "G4VisCommandsViewer.hh"
 #include "G4VisCommandsViewerDefault.hh"
@@ -443,6 +444,8 @@ void G4VisManager::RegisterMessengers () {
   directory = new G4UIdirectory ("/vis/touchable/");
   directory -> SetGuidance ("Operations on touchables.");
   fDirectoryList.push_back (directory);
+  RegisterMessenger(new G4VisCommandsTouchable);
+  
   directory = new G4UIdirectory ("/vis/touchable/set/");
   directory -> SetGuidance ("Set vis attributes of current touchable.");
   fDirectoryList.push_back (directory);

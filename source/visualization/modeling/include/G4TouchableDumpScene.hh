@@ -24,35 +24,43 @@
 // ********************************************************************
 //
 //
-// $Id$
+// $Id: G4TouchableDumpScene.hh 66773 2013-01-12 14:48:08Z allison $
 //
 // 
 // John Allison  10th August 1998.
 // An artificial scene to find physical volumes.
 
-inline void G4PhysicalVolumeSearchScene::PreAddSolid
-(const G4Transform3D& objectTransformation,
- const G4VisAttributes&) {
-  fpCurrentObjectTransformation = &objectTransformation;
-}
+#ifndef G4TOUCHABLEDUMPSCENE_HH
+#define G4TOUCHABLEDUMPSCENE_HH
 
-inline void G4PhysicalVolumeSearchScene::PostAddSolid () {}
+#include "G4PseudoScene.hh"
+#include "G4VisExtent.hh"
+#include "G4ModelingParameters.hh"
+#include "G4PhysicalVolumeModel.hh"
 
-inline const std::vector<G4PhysicalVolumeModel::G4PhysicalVolumeNodeID>&
-G4PhysicalVolumeSearchScene::GetFoundFullPVPath () const {
-  return fFoundFullPVPath;
-}
+#include <iostream>
 
-inline G4int G4PhysicalVolumeSearchScene::GetFoundDepth () const {
-  return fFoundDepth;
-}
+class G4TouchableDumpScene: public G4PseudoScene {
 
-inline G4VPhysicalVolume*
-G4PhysicalVolumeSearchScene::GetFoundVolume () const {
-  return fpFoundPV;
-}
+public:
 
-inline const G4Transform3D&
-G4PhysicalVolumeSearchScene::GetFoundTransformation () const {
-  return fFoundObjectTransformation;
-}
+  G4TouchableDumpScene
+  (std::ostream& os,
+   G4PhysicalVolumeModel* pPVModel,
+   const G4ModelingParameters::PVNameCopyNoPath& requiredTouchable);
+
+  virtual ~G4TouchableDumpScene ();
+
+  G4bool IsFound() {return fFound;}
+
+private:
+
+  void ProcessVolume(const G4VSolid&);
+
+  std::ostream& fos;
+  const G4PhysicalVolumeModel* fpPVModel;
+  G4ModelingParameters::PVNameCopyNoPath fRequiredTouchable;
+  G4bool fFound;
+};
+
+#endif

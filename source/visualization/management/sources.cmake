@@ -77,6 +77,7 @@ GEANT4_DEFINE_MODULE(NAME G4vis_management
         G4VisCommandsScene.hh
         G4VisCommandsSceneAdd.hh
         G4VisCommandsSceneHandler.hh
+        G4VisCommandsTouchable.hh
         G4VisCommandsTouchableSet.hh
         G4VisCommandsViewer.hh
         G4VisCommandsViewerDefault.hh
@@ -108,6 +109,7 @@ GEANT4_DEFINE_MODULE(NAME G4vis_management
         G4VisCommandsScene.cc
         G4VisCommandsSceneAdd.cc
         G4VisCommandsSceneHandler.cc
+        G4VisCommandsTouchable.cc
         G4VisCommandsTouchableSet.cc
         G4VisCommandsViewer.cc
         G4VisCommandsViewerDefault.cc

@@ -74,9 +74,10 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4PhysicalVolumeMassScene.hh
         G4PhysicalVolumeModel.hh
         G4PhysicalVolumeSearchScene.hh
-        G4PhysicalVolumeSearchScene.icc
+        G4PseudoScene.hh
         G4ScaleModel.hh
         G4TextModel.hh
+        G4TouchableDumpScene.hh
         G4TrajectoriesModel.hh
         G4TrajectoryChargeFilter.hh
         G4TrajectoryDrawByAttribute.hh
@@ -116,6 +117,7 @@ GEANT4_DEFINE_MODULE(NAME G4modeling
         G4PhysicalVolumeSearchScene.cc
         G4ScaleModel.cc
         G4TextModel.cc
+        G4TouchableDumpScene.cc
         G4TrajectoriesModel.cc
         G4TrajectoryChargeFilter.cc
         G4TrajectoryDrawByAttribute.cc

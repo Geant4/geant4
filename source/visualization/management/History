@@ -26,6 +26,11 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+19th May 2014  John Allison (visman-V10-00-09 - requires modeling-V10-00-05)
+- Added /vis/touchable/dump.  Dumps the G4Atts to G4cout.
+- Added parameter to /vis/scene/add/axes to suppress annotations.
+- G4VisCommands.cc: Fixed deprecated call to GetAttDefs.
+
 13th May 2014  John Allison (visman-V10-00-08)
 - Coworks: DAWN-V10-00-02, opengl-V10-00-05, openinventor-V10-00-01.
 - Moved G4VisFeaturesOf* to appropriate sub-categories.

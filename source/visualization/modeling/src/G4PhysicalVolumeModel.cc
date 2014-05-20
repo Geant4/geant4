@@ -71,19 +71,30 @@ G4PhysicalVolumeModel::G4PhysicalVolumeModel
 , fpCurrentLV        (0)
 , fpCurrentMaterial  (0)
 , fpCurrentTransform (0)
+, fAbort             (false)
 , fCurtailDescent    (false)
 , fpClippingSolid    (0)
 , fClippingMode      (subtraction)
 {
+  fType = "G4PhysicalVolumeModel";
+
   if (!fpTopPV) {
 
-    G4Exception
-    ("G4PhysicalVolumeModel::G4PhysicalVolumeModel",
-     "modeling0010", FatalException, "Null G4PhysicalVolumeModel pointer.");
+    // In some circumstances creating an "empty" G4PhysicalVolumeModel is
+    // allowed, so I have supressed the G4Exception below.  If it proves to
+    // be a problem we might have to re-instate it, but it is unlikley to
+    // be used except by visualisation experts.  See, for example, /vis/list,
+    // where it is used simply to get a list of G4AttDefs.
+    //    G4Exception
+    //    ("G4PhysicalVolumeModel::G4PhysicalVolumeModel",
+    //     "modeling0010", FatalException, "Null G4PhysicalVolumeModel pointer.");
+
+    fTopPVName = "NULL";
+    fGlobalTag = "Empty";
+    fGlobalDescription = "G4PhysicalVolumeModel " + fGlobalTag;
 
   } else {
 
-    fType = "G4PhysicalVolumeModel";
     fTopPVName = fpTopPV -> GetName ();
     fTopPVCopyNo = fpTopPV -> GetCopyNo ();
     std::ostringstream o;
@@ -181,6 +192,8 @@ void G4PhysicalVolumeModel::DescribeYourselfTo
      "\nwrong.  Please contact visualisation coordinator.");
   }
   fDrawnPVPath.clear();
+  fAbort = false;
+  fCurtailDescent = false;
 }
 
 G4String G4PhysicalVolumeModel::GetCurrentTag () const
@@ -339,8 +352,6 @@ void G4PhysicalVolumeModel::VisitGeometryAndGetVisReps
       }
     }
   }
-
-  return;
 }
 
 void G4PhysicalVolumeModel::DescribeAndDescend
@@ -503,7 +514,9 @@ void G4PhysicalVolumeModel::DescribeAndDescend
       if (density < densityCut) thisToBeDrawn = false;
     }
   }
-  
+  // 6) The user has asked for all further traversing to be aborted...
+  if (fAbort) thisToBeDrawn = false;
+
   // Record thisToBeDrawn in path...
   fFullPVPath.back().SetDrawn(thisToBeDrawn);
 
@@ -544,7 +557,9 @@ void G4PhysicalVolumeModel::DescribeAndDescend
   if (!nDaughters) daughtersToBeDrawn = false;
   // 2) We are at the limit if requested depth...
   else if (requestedDepth == 0) daughtersToBeDrawn = false;
-  // 3) The user has asked that the descent be curtailed...
+  // 3) The user has asked for all further traversing to be aborted...
+  else if (fAbort) daughtersToBeDrawn = false;
+  // 4) The user has asked that the descent be curtailed...
   else if (fCurtailDescent) daughtersToBeDrawn = false;
 
   // Now, reasons that depend on culling policy...
@@ -565,20 +580,20 @@ void G4PhysicalVolumeModel::DescribeAndDescend
       }
     }
     G4bool opaque = pVisAttribs->GetColour().GetAlpha() >= 1.;
-    // 4) Global culling is on....
+    // 5) Global culling is on....
     if (culling) {
-      // 5) ..and culling of invisible volumes is on...
+      // 6) ..and culling of invisible volumes is on...
       if (cullingInvisible) {
-	// 6) ...and the mother requests daughters invisible
+	// 7) ...and the mother requests daughters invisible
 	if (daughtersInvisible) daughtersToBeDrawn = false;
       }
-      // 7) Or culling of covered daughters is requested...
+      // 8) Or culling of covered daughters is requested...
       if (cullingCovered) {
-	// 8) ...and surface drawing is operating...
+	// 9) ...and surface drawing is operating...
 	if (surfaceDrawing) {
-	  // 9) ...but only if mother is visible...
+	  // 10) ...but only if mother is visible...
 	  if (thisToBeDrawn) {
-	    // 10) ...and opaque...
+	    // 11) ...and opaque...
 	      if (opaque) daughtersToBeDrawn = false;
 	  }
 	}

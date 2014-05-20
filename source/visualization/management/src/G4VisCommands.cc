@@ -181,9 +181,9 @@ void G4VisCommandList::SetNewValue (G4UIcommand*, G4String newValue)
   << *G4TrajectoryPoint().GetAttDefs();
 
   G4cout <<
-  "\nAttributes available for touchables by picking:"
-  << G4endl;
-  G4cout << G4PhysicalVolumeModel().GetAttDefs();
+  "\nGeometry attributes available for touchables by picking:\n";
+  G4cout
+  << *G4PhysicalVolumeModel().GetAttDefs();
 
   if (verbosity < G4VisManager::parameters)
     G4cout <<

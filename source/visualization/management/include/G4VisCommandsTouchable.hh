@@ -24,52 +24,27 @@
 // ********************************************************************
 //
 //
-// $Id$
-//
-// 
-// John Allison  7th June 1997
-// An artificial scene to reuse G4VScene code to calculate a bounding sphere.
+// $Id: G4VisCommandsTouchableSet.hh 66264 2012-12-14 10:17:44Z allison $
 
-#ifndef G4BOUNDINGSPHERESCENE_HH
-#define G4BOUNDINGSPHERESCENE_HH
+// /vis/touchable/set commands - John Allison  14th May 2014
 
-#include "G4PseudoScene.hh"
-#include "G4VisExtent.hh"
+#ifndef G4VISCOMMANDSTOUCHABLE_HH
+#define G4VISCOMMANDSTOUCHABLE_HH
 
-class G4VModel;
+#include "G4VisCommands.hh"
 
-class G4BoundingSphereScene: public G4PseudoScene {
+class G4UIcmdWithoutParameter;
 
+class G4VisCommandsTouchable: public G4VVisCommand {
 public:
-
-  G4BoundingSphereScene (G4VModel* pModel = 0);
-
-  virtual ~G4BoundingSphereScene ();
-
-  G4VisExtent GetBoundingSphereExtent ();
-
-  const G4Point3D& GetCentre() const {return fCentre;}
-
-  G4double GetRadius() const {return fRadius;}
-
-  void SetCentre(const G4Point3D& centre) {fCentre = centre;}
-
-  ////////////////////////////////////////////////////////////////
-  // The following 2 functions can be used by any code which wishes to
-  // accrue a bounding sphere.  Just instantiate a
-  // G4BoundingSphereScene and use AccrueBoundingSphere.
-
-  void ResetBoundingSphere ();
-  void AccrueBoundingSphere (const G4Point3D& centre,
-			     G4double radius);
-
+  G4VisCommandsTouchable ();
+  virtual ~G4VisCommandsTouchable ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
 private:
-
-  void ProcessVolume (const G4VSolid& solid);
-
-  G4VModel* fpModel;  // Instantiating code may optionally set this.
-  G4Point3D fCentre;
-  G4double fRadius;
+  G4VisCommandsTouchable (const G4VisCommandsTouchable&);
+  G4VisCommandsTouchable& operator = (const G4VisCommandsTouchable&);
+  G4UIcmdWithoutParameter*          fpCommandDump;
 };
 
 #endif
