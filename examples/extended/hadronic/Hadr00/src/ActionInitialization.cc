@@ -34,12 +34,14 @@
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "PrimaryGeneratorAction.hh"
+#include "DetectorConstruction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization()
+ActionInitialization::ActionInitialization(const DetectorConstruction* det)
+  : fDetector(det)
 {
-  masterRunAction = new RunAction();
+  masterRunAction = new RunAction(fDetector);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

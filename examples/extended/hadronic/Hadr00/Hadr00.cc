@@ -87,7 +87,8 @@ int main(int argc,char** argv) {
 #endif
 
   //set mandatory initialization classes
-  runManager->SetUserInitialization(new DetectorConstruction());
+  DetectorConstruction* det = new DetectorConstruction();
+  runManager->SetUserInitialization(det);
 
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys = 0;
@@ -113,7 +114,7 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(phys);
 
   //set user action classes
-  runManager->SetUserInitialization(new ActionInitialization());
+  runManager->SetUserInitialization(new ActionInitialization(det));
 
   //get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();

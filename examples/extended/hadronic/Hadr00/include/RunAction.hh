@@ -50,12 +50,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 class HistoManager;
+class DetectorConstruction;
 
 class RunAction : public G4UserRunAction
 {
 public: // Without description
 
-  RunAction();
+  RunAction(const DetectorConstruction* det = 0);
   virtual ~RunAction();
 
 public: // With description
@@ -68,7 +69,8 @@ public: // With description
 
 private:
  
-  HistoManager* fHisto;
+  HistoManager*         fHisto;
+  const DetectorConstruction* fDetector;
 
 };
 

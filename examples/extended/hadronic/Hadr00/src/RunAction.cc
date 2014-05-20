@@ -44,10 +44,12 @@
 #include "G4VVisManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Threading.hh"
+#include "DetectorConstruction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction() 
+RunAction::RunAction(const DetectorConstruction* det) 
+  : fDetector(det)
 {
   fHisto = new HistoManager();
 }
@@ -64,7 +66,10 @@ RunAction::~RunAction()
 void RunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4bool show = true;
+  //#ifdef G4MULTITHREADED
   if(G4Threading::IsWorkerThread() == true) { show = false; }
+  //#endif
+  //  G4cout << "###### show= " << show << G4endl;
 
   if(show) {
     G4int id = aRun->GetRunID();
@@ -90,10 +95,15 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
 void RunAction::EndOfRunAction(const G4Run*)
 {
   G4bool show = true;
+  //#ifdef G4MULTITHREADED
   if(G4Threading::IsWorkerThread() == true) { show = false; }
+  //#endif
 
   if(show) {
     G4cout << "RunAction: End of run actions are started" << G4endl;
+    if(fDetector) {
+      fHisto->SetTargetMaterial(fDetector->GetTargetMaterial());
+    }
     fHisto->EndOfRun();
   }
 #ifdef G4VIS_USE

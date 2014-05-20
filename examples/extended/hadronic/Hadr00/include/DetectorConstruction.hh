@@ -66,6 +66,8 @@ public:
   void SetTargetRadius(G4double val);
   void SetTargetLength(G4double val);
 
+  const G4Material* GetTargetMaterial() const { return fTargetMaterial; }
+
 private:
 
   DetectorConstruction & operator=(const DetectorConstruction &right);

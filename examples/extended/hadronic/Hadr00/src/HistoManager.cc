@@ -75,6 +75,8 @@ HistoManager::HistoManager()
   fParticleName  = "proton";
   fElementName   = "Al";
 
+  fTargetMaterial = 0;
+
   fMinKinEnergy  = 0.1*MeV;
   fMaxKinEnergy  = 10*TeV;
   fMinMomentum   = 1*MeV;
@@ -130,6 +132,12 @@ void HistoManager::BeginOfRun()
   fAnalysisManager->CreateH1("h8",
      "Total cross section (barn) as a functions of log10(E/MeV)",
                   fBinsE,e1,e2);
+  fAnalysisManager->CreateH1("h9",
+     "Inelastic cross section per volume as a functions of log10(E/MeV)",
+                  fBinsE,e1,e2);
+  fAnalysisManager->CreateH1("h10",
+     "Elastic cross section per volume as a functions of log10(E/MeV)",
+                  fBinsE,e1,e2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -182,6 +190,10 @@ void HistoManager::EndOfRun()
   G4double x  = e1 - de*0.5; 
   G4double e, p, xs, xtot;
   G4int i;
+
+  G4double coeff = 1.0;
+  if(fTargetMaterial) { coeff = fTargetMaterial->GetDensity()*cm2/g; }
+
   for(i=0; i<fBinsE; i++) {
     x += de;
     e  = std::pow(10.,x)*MeV;
@@ -193,7 +205,15 @@ void HistoManager::EndOfRun()
     xs = store->GetInelasticCrossSectionPerAtom(particle,e,elm,mat);
     xtot += xs;
     if(fVerbose>0) G4cout << " " << std::setw(12) << xs/barn;  
-    fAnalysisManager->FillH1(4, x, xs/barn);    
+    fAnalysisManager->FillH1(4, x, xs/barn);
+    if(fTargetMaterial) {
+      xs = 
+        store->GetInelasticCrossSectionPerVolume(particle,e,fTargetMaterial);
+      fAnalysisManager->FillH1(9, x, xs/coeff);
+      xs = 
+        store->GetElasticCrossSectionPerVolume(particle,e,fTargetMaterial);
+      fAnalysisManager->FillH1(10, x, xs/coeff);
+    }
     if(particle == fNeutron) {
       xs = store->GetCaptureCrossSectionPerAtom(particle,e,elm,mat);
       xtot += xs;
