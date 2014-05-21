@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20-May-2014 Andrea Dotti               had-im_r-V10-00-01
+- Do not delete physics vector explictly in destructors since 
+  they are managed by allocators in G4XResonance and 
+  G4XAnnihilationChannel
+
 15-April-2014 Gunter Folger            had-im_r-V10-00-00
 -  Correct tag name from bad had-im_r-V09-06-08
 

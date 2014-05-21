@@ -69,9 +69,11 @@ G4XAnnihilationChannel::G4XAnnihilationChannel(const G4ParticleDefinition* resDe
 
 G4XAnnihilationChannel::~G4XAnnihilationChannel()
 {
-  if (widthTable) delete widthTable;
+  //Do not delete phsyics vectors at exit since they are
+  //managed by allocators
+  //if (widthTable) delete widthTable;
   widthTable = 0;
-  if (partWidthTable) delete partWidthTable;
+  //if (partWidthTable) delete partWidthTable;
   partWidthTable = 0;
  }
 
