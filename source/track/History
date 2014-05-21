@@ -17,6 +17,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- May  21,  2014 J.Apostolakis (track-V10-00-03)
+- Fix G4FieldTrackUpdator to energy/momentum passed to field integration: 
+   first set rest mass, then update kinetic energy. Problem affects 
+   propagation in multiple geometries.
+
 - Mar. 07,  2014 H.Kurashige (track-V10-00-02)
 - Fix memory leak in G4Step::SetPre/PostStepPoint
  (Bug # 1583)
