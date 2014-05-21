@@ -9,6 +9,12 @@ $Id$
                       Category History file
                       ---------------------
 
+21.05.2014 - L. Pandola (DMX-V10-00-03)
+	     Edit constructor of DMXSteppingAction, make const 
+             Getters in DMXEventAction.
+	     Instantiate DMXRunAction also in the master
+	     Fix a problem with the names of the ASCII files
+
 20.05.2014 - L. Pandola (DMX-V10-00-02)
 	     Edit the constructor of DMXEventAction 
 	     Make Getters const in RunAction and PrimaryGenerator

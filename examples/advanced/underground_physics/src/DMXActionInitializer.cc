@@ -49,9 +49,8 @@ void DMXActionInitializer::Build() const
 {
   SetUserAction(new DMXPrimaryGeneratorAction());
   SetUserAction(new DMXRunAction());
-  DMXEventAction* eventAction = new DMXEventAction();
-  SetUserAction(eventAction);
-  SetUserAction(new DMXSteppingAction(eventAction));
+  SetUserAction(new DMXEventAction());
+  SetUserAction(new DMXSteppingAction());
   SetUserAction(new DMXStackingAction());
   
 }
@@ -59,5 +58,8 @@ void DMXActionInitializer::Build() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void DMXActionInitializer::BuildForMaster() const
-{;}
+{
+  //Run action in the master
+  SetUserAction(new DMXRunAction());
+}
 

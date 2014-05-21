@@ -70,10 +70,10 @@ class DMXEventAction : public G4UserEventAction {
 
   public:
     void SetDrawTrksFlag (G4String val)     {drawTrksFlag    = val;};
-    G4String GetDrawTrksFlag()              {return drawTrksFlag;};
+    G4String GetDrawTrksFlag() const         {return drawTrksFlag;};
 
     void SetDrawColsFlag (G4String val)     {drawColsFlag    = val;};
-    G4String GetDrawColsFlag()              {return drawColsFlag;};
+    G4String GetDrawColsFlag() const  {return drawColsFlag;};
 
     void SetDrawHitsFlag (G4int val)        {drawHitsFlag    = val;};
     void SetSavePmtFlag  (G4int val)        {savePmtFlag     = val;};

@@ -311,17 +311,21 @@ void DMXEventAction::writeScintHitsToFile()
   if (runAct)
     filename=runAct->GetsavehitsFile();
 
-  //check that we are in a worker: returns -1 in a master and -2 in sequential
-  //one file per thread is produced ending with ".N", with N= thread number
-  if (G4Threading::G4GetThreadId() >= 0)
-    {
-      filename += ".";
-      filename += G4String(G4Threading::G4GetThreadId()); 
-    }
+ 
   
   //First time it is inkoved
   if (!hitsfile)
     {
+      //check that we are in a worker: returns -1 in a master and -2 in sequential
+      //one file per thread is produced ending with ".N", with N= thread number
+      if (G4Threading::G4GetThreadId() >= 0)
+	{
+	  std::stringstream sss;
+	  sss << filename.c_str() << "." << G4Threading::G4GetThreadId();	 
+	  filename = sss.str();
+	  //G4cout << "Filename is: " << filename << G4endl;
+	}
+      
       hitsfile = new std::ofstream;
       hitsfile->open(filename);
       (*hitsfile) <<"Evt     Eprim   Etot    LXe     LXeTime PMT     PMTTime Seed1           Seed2           First   Flags" 
@@ -417,17 +421,19 @@ void DMXEventAction::writePmtHitsToFile(const DMXPmtHitsCollection* hits)
   if (runAct)
     filename=runAct->GetsavepmtFile();
   
-  //check that we are in a worker: returns -1 in a master and -2 in sequential
-  //one file per thread is produced ending with ".N", with N= thread number
-  if (G4Threading::G4GetThreadId() >= 0)
-    {
-      filename += ".";
-      filename += G4String(G4Threading::G4GetThreadId()); 
-    }
 
   //first time it is invoked: create it
   if (!pmtfile)
     {
+      //check that we are in a worker: returns -1 in a master and -2 in sequential
+      //one file per thread is produced ending with ".N", with N= thread number
+      if (G4Threading::G4GetThreadId() >= 0)
+	{
+	  std::stringstream sss;
+	  sss << filename.c_str() << "." << G4Threading::G4GetThreadId();	 
+	  filename = sss.str();
+	  //G4cout << "Filename is: " << filename << G4endl;
+	}
       pmtfile = new std::ofstream;
       pmtfile->open(filename);
     }
