@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 May 2014 A.Dotti (hadr-cross-V10-00-04)
+------------------------------------------
+- Introduce protection in destructor of G4ElectroNuclearCrossSection
+  to protect for NULL pointer entries in cache.
+- G4KokoulinMuonNuclearXS does not call anymore explicitly
+  theCrossSectionTable::clearAndDestroy() since underlying physics vectors
+  are managed by allocators
+ 
 11 April 2014 W.Pokorski (hadr-cross-V10-00-03)
 ----------------------------------------------
 - Minor reshuffling of some variables suggested by Federico 

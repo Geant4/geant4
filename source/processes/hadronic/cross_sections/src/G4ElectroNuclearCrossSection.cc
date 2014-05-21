@@ -2197,9 +2197,11 @@ G4ElectroNuclearCrossSection::~G4ElectroNuclearCrossSection()
      std::vector<cacheEl_t*>::iterator it = cache.begin();
      while ( it != cache.end() )
      {
-     delete[] (*it)->J1; (*it)->J1 = 0;
-     delete[] (*it)->J2; (*it)->J2 = 0;
-     delete[] (*it)->J3; (*it)->J3 = 0;
+         if ( *it ) {
+             delete[] (*it)->J1; (*it)->J1 = 0;
+             delete[] (*it)->J2; (*it)->J2 = 0;
+             delete[] (*it)->J3; (*it)->J3 = 0;
+         }
      ++it;
      }
      cache.clear();

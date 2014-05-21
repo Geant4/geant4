@@ -55,7 +55,10 @@ G4KokoulinMuonNuclearXS::G4KokoulinMuonNuclearXS()
 G4KokoulinMuonNuclearXS::~G4KokoulinMuonNuclearXS()
 {
   if (theCrossSectionTable) {
-    theCrossSectionTable->clearAndDestroy();
+    //A. Dotti 20-May-2014
+    //Do not delete content of theCrossSectionTable
+    //because it's handled by allocators
+    //theCrossSectionTable->clearAndDestroy();
     delete theCrossSectionTable;
   }
 }
