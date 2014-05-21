@@ -15,6 +15,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21-May-2014 A. Ribon       (hadr-string-diff-V10-00-00)
+-  Set the minimum energy to apply ReggeonCascade at 2 GeV
+   (it was wrongly set to 5 GeV in G4 9.6.ref03, causing the bump at
+    5 GeV in the calorimeter visible energy of FTFP_BERT physics list).
+
 16-Oct-2013 A. Ribon       (hadr-string-diff-V09-06-18)
 -  Fixed a trivial warning error of the previous tag.
 
