@@ -99,3 +99,4 @@ G4SDParticleWithEnergyFilter& G4SDParticleWithEnergyFilter::operator=(const G4SD
     fKineticFilter = new G4SDKineticEnergyFilter(*(rhs.fKineticFilter));
     return *this;
 }
+
