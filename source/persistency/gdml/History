@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 May 2014 Gabriele Cosmo (gdml-V10-00-05)
+- Added better description to fatal exception in case document content
+  imported happens to be empty in G4GDMLRead::Read().
+
 20 May 2014 Gabriele Cosmo (gdml-V10-00-04)
 - Correction to G4GDMLRead::Read() for the case when schema validation
   is turned off, to disable initialisation of validation machinery in the

@@ -319,8 +319,14 @@ void G4GDMLRead::Read(const G4String& fileName,
 
    if (!element)
    {
-     G4Exception("G4GDMLRead::Read()", "InvalidRead",
-                 FatalException, "Empty document!");
+     std::ostringstream message;
+     message << "ERROR - Empty document!" << G4endl
+             << "        Check Internet connection is ON in case of schema"
+             << G4endl
+             << "        validation enabled and location defined as URL in"
+             << G4endl
+             << "        the GDML file - " << fileName << " - being imported!";
+     G4Exception("G4GDMLRead::Read()", "InvalidRead", FatalException, message);
      return;
    }
 
