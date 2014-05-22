@@ -1044,6 +1044,14 @@ Diquark_AntiDiquark_aboveThreshold_lastSplitting(G4FragmentingString * & string,
 				//	2. weight of the corresponding FS is zero (in theory)
 				if(StringMass > LeftHadronMass + RightHadronMass)
 				{
+                                        if ( NumberOf_FS > 34 ) {
+                                          G4ExceptionDescription ed;
+                                          ed << " NumberOf_FS exceeds its limit: NumberOf_FS=" << NumberOf_FS << G4endl;
+                                          G4Exception( "G4LundStringFragmentation::Diquark_AntiDiquark_aboveThreshold_lastSplitting ",
+                                                       "HAD_LUND_001", JustWarning, ed );
+                                          NumberOf_FS = 34;
+                                        }
+
 					G4double FS_Psqr=lambda(StringMassSqr,sqr(LeftHadronMass),
 								sqr(RightHadronMass));
 					//FS_Psqr=1.;
@@ -1058,9 +1066,6 @@ Diquark_AntiDiquark_aboveThreshold_lastSplitting(G4FragmentingString * & string,
 					//G4cout<<"State "<<NumberOf_FS<<" "<<BaryonWeight[ADi_q1-1][ADi_q2-1][ProdQ-1][StateADiQ]*BaryonWeight[Di_q1-1][Di_q2-1][ProdQ-1][StateDiQ]<<G4endl;
 					//G4cout<<"State "<<NumberOf_FS<<" "<<std::sqrt(FS_Psqr/4./StringMassSqr)<<" "<<std::sqrt(FS_Psqr)<<" "<<FS_Weight[NumberOf_FS]<<G4endl;
 					NumberOf_FS++;
-
-					if(NumberOf_FS > 34)
-					{G4int Uzhi; G4cout<<"QQ_QQbar string #_FS "<<NumberOf_FS<<G4endl; G4cin>>Uzhi;}
 				} // End of if(StringMass >= LeftHadronMass + RightHadronMass)
 
 				StateDiQ++;
@@ -1157,6 +1162,14 @@ Quark_Diquark_lastSplitting(G4FragmentingString * & string,
 				//	2. weight of the corresponding FS is zero (in theory)
 				if(StringMass > LeftHadronMass + RightHadronMass)
 				{
+                                        if ( NumberOf_FS > 34 ) {
+                                          G4ExceptionDescription ed;
+                                          ed << " NumberOf_FS exceeds its limit: NumberOf_FS=" << NumberOf_FS << G4endl;
+                                          G4Exception( "G4LundStringFragmentation::Quark_Diquark_lastSplitting ",
+                                                       "HAD_LUND_002", JustWarning, ed );
+                                          NumberOf_FS = 34;
+                                        }
+
 					G4double FS_Psqr=lambda(StringMassSqr,sqr(LeftHadronMass),
 								sqr(RightHadronMass));
 					FS_Weight[NumberOf_FS]=std::sqrt(FS_Psqr)*
@@ -1170,9 +1183,6 @@ Quark_Diquark_lastSplitting(G4FragmentingString * & string,
 					//G4cout<<"State "<<NumberOf_FS<<" "<<std::sqrt(FS_Psqr/4./StringMassSqr)<<" "<<std::sqrt(FS_Psqr)<<" "<<FS_Weight[NumberOf_FS]<<G4endl;
 					//G4cout<<"++++++++++++++++++++++++++++++++"<<G4endl;
 					NumberOf_FS++;
-
-					if(NumberOf_FS > 34)
-					{G4int Uzhi; G4cout<<"QQbar string #_FS "<<NumberOf_FS<<G4endl; G4cin>>Uzhi;}
 				} // End of if(StringMass >= LeftHadronMass + RightHadronMass)
 
 				StateDiQ++;
@@ -1249,7 +1259,15 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 				//	2. weight of the corresponding FS is zero (in theory)
 				if(StringMass > LeftHadronMass + RightHadronMass)
 				{
-					G4double FS_Psqr=lambda(StringMassSqr,sqr(LeftHadronMass),
+                                        if ( NumberOf_FS > 34 ) {
+                                          G4ExceptionDescription ed;
+                                          ed << " NumberOf_FS exceeds its limit: NumberOf_FS=" << NumberOf_FS << G4endl;
+                                          G4Exception( "G4LundStringFragmentation::Quark_AntiQuark_lastSplitting ",
+                                                       "HAD_LUND_003", JustWarning, ed );
+                                          NumberOf_FS = 34;
+                                        }
+
+                                        G4double FS_Psqr=lambda(StringMassSqr,sqr(LeftHadronMass),
 								sqr(RightHadronMass));
 					//FS_Psqr=1.;
 					FS_Weight[NumberOf_FS]=std::sqrt(FS_Psqr)*
@@ -1269,9 +1287,6 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 					NumberOf_FS++;
 					//G4cout<<LeftHadron->GetParticleName()<<" "<<RightHadron->GetParticleName()<<" ";
 					//G4cout<<"Masses "<<StringMass<<" "<<LeftHadronMass<<" "<<RightHadronMass<<" "<<NumberOf_FS-1<<G4endl; //FS_Psqr<<G4endl;
-
-					if(NumberOf_FS > 34)
-					{G4int Uzhi; G4cout<<"QQbar string #_FS "<<NumberOf_FS<<G4endl; G4cin>>Uzhi;}
 				} // End of if(StringMass >= LeftHadronMass + RightHadronMass)
 
 				StateAQ++;
@@ -1287,6 +1302,13 @@ Quark_AntiQuark_lastSplitting(G4FragmentingString * & string,
 //----------------------------------------------------------------------------------------------------------
 G4int G4LundStringFragmentation::SampleState(void) 
 {
+        if ( NumberOf_FS > 34 ) {
+          G4ExceptionDescription ed;
+          ed << " NumberOf_FS exceeds its limit: NumberOf_FS=" << NumberOf_FS << G4endl;
+          G4Exception( "G4LundStringFragmentation::SampleState ", "HAD_LUND_004", JustWarning, ed );
+          NumberOf_FS = 34;
+        }
+
 	G4double SumWeights=0.;
 	for(G4int i=0; i<NumberOf_FS; i++) {SumWeights+=FS_Weight[i];}
 
