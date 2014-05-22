@@ -33,33 +33,30 @@
 
 G4NeutronHPFFFissionFS::~G4NeutronHPFFFissionFS()
 {
-//  G4int iii=0;
-//  G4int jjj=0;
-//  G4cout << "==============================================" << G4endl << "Size of global map FissionProductYieldData = " << FissionProductYieldData.size() << G4endl;
-  for(std::map< G4int , std::map< G4double , std::map< G4int , G4double >* >* >::iterator ii = FissionProductYieldData.begin();
-      ii!= FissionProductYieldData.end(); ++ii) {
-//    G4cout << "    Size of first level map #" << iii << " = " << ii->second->size() <<G4endl;
-    for(std::map< G4double , std::map< G4int , G4double >* >::iterator jj = ii->second->begin();
-        jj != ii->second->end(); ++jj) {
-//      G4cout << "        Size of second level map #" << jjj << " is " << jj->second->size() << G4endl;
-      delete jj->second;
-      ii->second->erase(jj);
-//      ++jjj;
+    std::map<G4int,std::map<G4double,std::map<G4int,G4double >* >* >::iterator it = FissionProductYieldData.begin();
+    while ( it != FissionProductYieldData.end() ) {
+        std::map<G4double,std::map<G4int,G4double>* >* firstLevel = it->second;
+        if ( firstLevel ) {
+            std::map<G4double,std::map<G4int,G4double>*>::iterator it2 = firstLevel->begin();
+            while ( it2 != firstLevel->end() ) {
+                delete it2->second;
+                it2->second = 0;
+                firstLevel->erase(it2);
+                it2=firstLevel->begin();
+            }
+        }
+        delete firstLevel;
+        it->second = 0;
+        FissionProductYieldData.erase(it);
+        it = FissionProductYieldData.begin();
     }
-    delete ii->second;
-    FissionProductYieldData.erase(ii);
-//    ++iii;
-  }
-  
-//  iii=0;
-//  G4cout << "==============================================" << G4endl << "Size of global map mMTInterpolation = " << mMTInterpolation.size() << G4endl;
-  for(std::map< G4int , std::map< G4double , G4int >* >::iterator ii = mMTInterpolation.begin();
-      ii!= mMTInterpolation.end(); ++ii) {
-//    G4cout << "    Size of first level map #" << iii << " = " << ii->second->size() <<G4endl;
-    delete ii->second;
-    mMTInterpolation.erase(ii);
-//    ++iii;
-  }
+    
+    std::map< G4int , std::map< G4double , G4int >* >::iterator ii = mMTInterpolation.begin();
+    while ( ii != mMTInterpolation.end() ) {
+        delete ii->second;
+        mMTInterpolation.erase(ii);
+        ii = mMTInterpolation.begin();
+    }
 }
 
 void G4NeutronHPFFFissionFS::Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & )
