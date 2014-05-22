@@ -73,13 +73,6 @@ public:
 
   void EndOfRunAction(const G4Run*);
 
-  void Update(G4double energy);
-
-private:
- 
-  G4int nEnteringTracks;
-  G4double totEnteringEnergy;
-
 };
 
 #endif

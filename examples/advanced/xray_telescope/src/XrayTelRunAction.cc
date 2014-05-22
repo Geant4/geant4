@@ -71,7 +71,6 @@
 #include "G4VVisManager.hh"
 
 XrayTelRunAction::XrayTelRunAction()
-  :nEnteringTracks(0), totEnteringEnergy(0.)
 { }
 
 
@@ -89,10 +88,6 @@ void XrayTelRunAction::BeginOfRunAction(const G4Run* aRun)
     G4UImanager* UI = G4UImanager::GetUIpointer(); 
     UI->ApplyCommand("/vis/scene/notifyHandlers");
   } 
-
-  nEnteringTracks = 0;
-  totEnteringEnergy = 0.;
-
   // Book histograms and ntuples
   XrayTelAnalysis* analysis = XrayTelAnalysis::getInstance();
   analysis->book();
@@ -102,29 +97,11 @@ void XrayTelRunAction::BeginOfRunAction(const G4Run* aRun)
 void XrayTelRunAction::EndOfRunAction(const G4Run* )
 {
   XrayTelAnalysis* analysis = XrayTelAnalysis::getInstance();
-  analysis->finish();
+  analysis->finish(IsMaster());
 
   if (G4VVisManager::GetConcreteInstance())
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-
-  G4cout << "End of Run summary" << G4endl << G4endl;
-
-  G4cout << "Total Entering Detector : " << nEnteringTracks  << G4endl;
-  G4cout << "Total Entering Detector Energy : " 
-	 << totEnteringEnergy/MeV  
-	 << " MeV"
-	 << G4endl;
 }
-
-
-void XrayTelRunAction::Update(G4double energy)
-{
-  nEnteringTracks++;
-  totEnteringEnergy += energy;
-}
-
-
-
 
 
 

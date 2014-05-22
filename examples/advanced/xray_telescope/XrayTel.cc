@@ -79,6 +79,7 @@
 #include "G4UImanager.hh"
 #include "XrayTelDetectorConstruction.hh"
 #include "XrayTelPhysicsList.hh"
+#include "XrayTelActionInitializer.hh"
 
 #ifdef G4VIS_USE
   #include "G4VisExecutive.hh"
@@ -88,11 +89,7 @@
   #include "G4UIExecutive.hh"
 #endif
 
-#include "XrayTelRunAction.hh"
-#include "XrayTelSteppingAction.hh"
-#include "XrayTelPrimaryGeneratorAction.hh"
-//#include <iostream.h>
-#include <vector>
+
 
 int main( int argc, char** argv )
 {
@@ -102,11 +99,7 @@ int main( int argc, char** argv )
   // set mandatory initialization classes
   runManager->SetUserInitialization(new XrayTelDetectorConstruction ) ;
   runManager->SetUserInitialization(new XrayTelPhysicsList);
-
-  // set mandatory user action class
-  runManager->SetUserAction(new XrayTelPrimaryGeneratorAction);
-  runManager->SetUserAction(new XrayTelRunAction);
-  runManager->SetUserAction(new XrayTelSteppingAction);
+  runManager->SetUserInitialization(new XrayTelActionInitializer());
 
 #ifdef G4VIS_USE
   // visualization manager

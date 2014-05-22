@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21.05.2014   Luciano Pandola, tag xraytel-V10-00-00
+	     Added ActionInitialization class
+	     Move the method Update() from RunAction (thread-local) to 
+	      Analysis (global) 
+	     Protect analysis singleton by Mutex
+	     Changed named scheme of output objects
+
 19.03.2013   Luciano Pandola, tag xraytel-V09-06-00
 	     Migrated analysis to g4tools (removed AIDA dependency) 
              and other small cosmetics. CMakeLists.txt, GNUmakefile 

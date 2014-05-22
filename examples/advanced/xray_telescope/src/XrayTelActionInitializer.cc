@@ -23,78 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: XrayFluoActionInitializer.cc 66241 2012-12-13 18:34:42Z gunter $
+// GEANT4 tag $Name:  $
 //
-// $Id$
-//
-// Author: A. Pfeiffer (Andreas.Pfeiffer@cern.ch) 
-//         
-//
-// History:
-// -----------
-// 19 Mar 2013   LP   Migrated to G4AnalysisManager
-//  7 Nov 2001   MGP  Implemented according to A. Pfeiffer's instructions
-//
-// -------------------------------------------------------------------
-// Class description:
-// Example of analysis in a simulation application (histograms, ntuples etc.)
-// This class follows the singleton design pattern; 
-// it is responsible for the analysis management and algorithms 
-//
-// -------------------------------------------------------------------
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "XrayTelActionInitializer.hh"
 
-#ifndef G4PROCESSTESTANALYSIS_HH
-#define G4PROCESSTESTANALYSIS_HH
+#include "XrayTelRunAction.hh"
+#include "XrayTelSteppingAction.hh"
+#include "XrayTelPrimaryGeneratorAction.hh"
 
-#include "globals.hh"
-#include "G4ios.hh"
 
-// uncomment g4root.hh and comment g4xml.hh for a ROOT-based output file
 
-#include "g4root.hh"
-//#include "g4xml.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class G4Track;
+XrayTelActionInitializer::XrayTelActionInitializer() : 
+  G4VUserActionInitialization()
+{;}
 
-class XrayTelAnalysis
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void XrayTelActionInitializer::Build() const 
 {
-public:
+  SetUserAction(new XrayTelPrimaryGeneratorAction());
+  SetUserAction(new XrayTelRunAction());
+  SetUserAction(new XrayTelSteppingAction());
+}
 
-  ~XrayTelAnalysis();
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  void book();
-  
-  void finish(G4bool isMaster);
-  
-  void analyseStepping(const G4Track& track, G4bool entering);
+void XrayTelActionInitializer::BuildForMaster() const
+{
+  SetUserAction(new XrayTelRunAction());
+}
 
-  static XrayTelAnalysis* getInstance();
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-  void Update(G4double energy,G4int threadID);
 
-private:
-
-  XrayTelAnalysis();
-
-  static XrayTelAnalysis* instance;
-
-  // Quantities for the ntuple
-  G4double eKin;
-  G4double x;
-  G4double y;
-  G4double z;
-  G4double dirX;
-  G4double dirY;
-  G4double dirZ;
-
-  G4String asciiFileName;
-  G4String histFileName;
-  
-  std::ofstream *asciiFile;
-
-  //global counters: log separately for each thread (or sequential)
-  std::map<G4int,G4int> *nEnteringTracks;
-  std::map<G4int,G4double> *totEnteringEnergy;
-
-};
-
-#endif 
