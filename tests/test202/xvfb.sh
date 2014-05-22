@@ -1,7 +1,10 @@
 #!/bin/sh
 
 # Test file name :
-testFile="visSceneTest_0.eps"
+testFile1="visTest-DrawVolume_0.eps"
+testFile2="visTest-SceneAdd_0.eps"
+testFile3="visTest-SceneSet_0.eps"
+testFile4="visTest-BeamOn_0.eps"
 
 # reference folder :
 reference_folder=$2-reference
@@ -39,30 +42,34 @@ if grep "GLX" XvfbExtensions; then
   fi
 
   # check if all ok
-  echo "Check if output and reference are similar... "
-  if ! test -f $output_folder/$testFile; then
-    echo "ERROR: $output_folder/$testFile not found. No output produced!"
+  echo "Check if output file exists ... "
+  if ! test -f $output_folder/$testFile1; then
+    echo "ERROR: $output_folder/$testFile1 not found. No output produced!"
     exit 1
   fi
 
   # mail me results
-  mail -s "G4Testing visSceneTest_0.eps" garnier@lal.in2p3.fr < $output_folder/$testFile
-  mail -s "G4Testing visSceneAdd_0.eps" garnier@lal.in2p3.fr < $output_folder/visSceneTest-VisSceneAdd_0.eps
-  mail -s "G4Testing visSet_0.eps" garnier@lal.in2p3.fr < $output_folder/visSceneTest-VisSet_0.eps
-  mail -s "G4Testing visBeamOn_0.eps" garnier@lal.in2p3.fr < $output_folder/visSceneTest-VisBeamOn_0.eps
+  mail -s "G4Testing visTest-DrawVolume_0.eps" garnier@lal.in2p3.fr < $output_folder/$testFile1
+  mail -s "G4Testing visTest-VisSet_0.eps" garnier@lal.in2p3.fr < $output_folder/$testFile2
+  mail -s "G4Testing visTest-VisAdd_0.eps" garnier@lal.in2p3.fr < $output_folder/$testFile3
+  mail -s "G4Testing visTest-BeamOn_0.eps" garnier@lal.in2p3.fr < $output_folder/$testFile4
   sleep 10
+  resCheck=0
 
+for testFile in $testFile1 $testFile2 $testFile3 $testFile4
+do
   if [`diff $reference_folder/$testFile $output_folder/$testFile | wc -l` == 0 ]; then
-    echo "All OK"
-    exit 0
+    echo "Check $output_folder/$testFile ....OK"
   else
-    echo "ERROR: Output and reference are different!"
+    echo "ERROR: Output and reference are different for $output_folder/$testFile !"
     echo "======================================================"
     echo `diff $reference_folder/$testFile $output_folder/$testFile`
     echo "======================================================"
-    mail -s "G4Testing ERROR Output and reference are different for $2" garnier@lal.in2p3.fr < $output_folder/$testFile
-    exit 1
+    mail -s "G4Testing ERROR Output and reference are different for $output_folder/$testFile" garnier@lal.in2p3.fr < $output_folder/$testFile
+    resCheck=1
   fi
+
+done
 
 else
   echo "No GLX extension on Xvfb server"
@@ -72,3 +79,5 @@ else
   fi
   exit 0
 fi
+
+exit $resCheck

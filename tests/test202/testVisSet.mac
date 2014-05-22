@@ -13,10 +13,10 @@
 /vis/set/touchable World 0 Envelope 0 Shape1 0
 
 # Change viewpoint, zoom, projection, background
-/vis/viewer/set/viewpointThetaPhi -50 75
+/vis/viewer/set/viewpointThetaPhi -30 55
 /vis/viewer/set/projection p
 /vis/viewer/set/style s
 /vis/viewer/set/hiddenEdge 1
-/vis/viewer/zoom 2.2
-/vis/viewer/pan -2 -2
+/vis/viewer/zoom 3.2
+/vis/viewer/pan -4.5 -2.5
 /vis/viewer/set/background ! 0.2 0.2 0 0.1

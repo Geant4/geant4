@@ -4,6 +4,13 @@ $Id$
 History file for test/test202 subdirectory
 ------------------------------------------------
 
+21th May 2014 Laurent Garnier (test202-V10-00-20)
+- CMakeLists.txt : Fix missing file
+
+21th May 2014 Laurent Garnier (test202-V10-00-19)
+- xvfb.sh: Minor changes
+- add other reference files
+
 19th May 2014 Laurent Garnier (test202-V10-00-18)
 - xvfb.sh: Minor changes
 
