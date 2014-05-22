@@ -116,8 +116,9 @@ G4XNNElasticLowE::G4XNNElasticLowE()
 
 G4XNNElasticLowE::~G4XNNElasticLowE()
 {
-  delete xMap[G4Proton::ProtonDefinition()];
-  delete xMap[G4Neutron::NeutronDefinition()];
+  //Do not delete in constructor G4PhysicsVector: managed by allocators
+  //delete xMap[G4Proton::ProtonDefinition()];
+  //delete xMap[G4Neutron::NeutronDefinition()];
 }
 
 
