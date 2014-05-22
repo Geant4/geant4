@@ -261,6 +261,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      //      ->GetEquationOfMotion();
 
      // Consolidate into auxiliary method G4EquationOfMotion* GetEquationOfMotion() 
+     //  equationOfMotion= fFieldPropagator->GetCurrentEquationOfMotion();
      G4MagIntegratorStepper*  pStepper= 0;
 
      G4ChordFinder*    pChordFinder= fFieldPropagator->GetChordFinder();
@@ -278,12 +279,14 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
            equationOfMotion= pStepper->GetEquationOfMotion();
         }
      }
+     // End of proto GetEquationOfMotion()
 
      G4ChargeState chargeState(particleCharge,             // The charge can change (dynamic)
-                               pParticleDef->GetPDGSpin(),
-                               magneticMoment); 
+                               magneticMoment,
+                               pParticleDef->GetPDGSpin() ); 
+     // For insurance, could set it again
+     // chargeState.SetPDGSpin( pParticleDef->GetPDGSpin() );   // Newly/provisionally in same object
 
-     // End of proto GetEquationOfMotion() 
      if( equationOfMotion )
      {
         equationOfMotion->SetChargeMomentumMass( chargeState,
@@ -291,17 +294,20 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
                                                  restMass );
      }
   }
-  G4ThreeVector spin        = track.GetPolarization() ;
-  G4FieldTrack  theFieldTrack = G4FieldTrack( startPosition, 
+
+  G4ThreeVector polarizationVec  = track.GetPolarization() ;
+  G4FieldTrack  aFieldTrack = G4FieldTrack( startPosition, 
+                                            track.GetGlobalTime(), // Lab.
+                                            // track.GetProperTime(), // Particle rest frame
                                             track.GetMomentumDirection(),
-                                            0.0, 
                                             track.GetKineticEnergy(),
                                             restMass,
-                                            0.0,    // UNUSED: track.GetVelocity(),
-                                            track.GetGlobalTime(), // Lab.
-                                            track.GetProperTime(), // Part.
-                                            &spin                  ) ;
-
+                                            particleCharge, 
+                                            polarizationVec, 
+                                            pParticleDef->GetPDGMagneticMoment(),
+                                            0.0,                    // Length along track
+                                            pParticleDef->GetPDGSpin()
+     ) ;
   G4int stepNo= track.GetCurrentStepNumber(); 
 
   ELimited limitedStep; 
@@ -315,7 +321,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
       // Do the Transport in the field (non recti-linear)
       //
-      lengthAlongCurve = fPathFinder->ComputeStep( theFieldTrack,
+      lengthAlongCurve = fPathFinder->ComputeStep( aFieldTrack,
                                                    currentMinimumStep, 
                                                    fNavigatorId,
                                                    stepNo,
@@ -397,7 +403,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
 
       fTransportEndPosition = startPosition;
 
-      endTrackState= theFieldTrack;  // Ensures that time is updated
+      endTrackState= aFieldTrack;  // Ensures that time is updated
 
       // If the step length requested is 0, and we are on a boundary
       //   then a boundary will also limit the step.
@@ -947,6 +953,7 @@ void
 G4CoupledTransportation::EndTracking()
 {
   G4TransportationManager::GetTransportationManager()->InactivateAll();
+  fPathFinder->EndTrack();   //  Resets TransportationManager to use ordinary Navigator
 }
 
 void
