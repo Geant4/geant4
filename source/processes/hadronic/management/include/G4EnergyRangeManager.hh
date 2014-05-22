@@ -35,50 +35,41 @@
 #define G4EnergyRangeManager_h 1
  
 #include "G4HadronicInteraction.hh"
+#include <vector>
  
-
 class G4EnergyRangeManager 
-{
-     
-  public:
+{     
+public:
     
-    G4EnergyRangeManager();
+  G4EnergyRangeManager();
  
-    ~G4EnergyRangeManager() {}
+  ~G4EnergyRangeManager();
     
-    G4EnergyRangeManager(const G4EnergyRangeManager& right);
+  G4EnergyRangeManager(const G4EnergyRangeManager& right);
     
-    G4EnergyRangeManager& operator=( const G4EnergyRangeManager &right );
+  G4EnergyRangeManager& operator=( const G4EnergyRangeManager &right );
     
-  public:
-    
-    inline G4bool operator==( const G4EnergyRangeManager &right ) const
+  inline G4bool operator==( const G4EnergyRangeManager &right ) const
     { return ( this == (G4EnergyRangeManager *) &right ); }
     
-    inline G4bool operator!=( const G4EnergyRangeManager &right ) const
+  inline G4bool operator!=( const G4EnergyRangeManager &right ) const
     { return ( this != (G4EnergyRangeManager *) &right ); }
     
-    void RegisterMe( G4HadronicInteraction *a );
+  void RegisterMe( G4HadronicInteraction *a );
     
-    G4HadronicInteraction *GetHadronicInteraction(
-     const G4double kineticEnergy,
-     const G4Material *aMaterial,
-     const G4Element *anElement ) const;
-    
-	//private:
-    
-    inline G4int GetHadronicInteractionCounter() const
-    { return theHadronicInteractionCounter; }
+  G4HadronicInteraction *GetHadronicInteraction(const G4double kineticEnergy,
+						const G4Material *aMaterial,
+						const G4Element *anElement ) const;
 
-    void Dump( G4int verbose = 0 ); 
+  std::vector<G4HadronicInteraction*>& GetHadronicInteractionList();
     
-  private:
+  void Dump( G4int verbose = 0 ); 
+    
+private:
      
-    enum { MAX_NUMBER_OF_MODELS = 100 };
-
-    G4int theHadronicInteractionCounter;
-    G4HadronicInteraction* theHadronicInteraction[ MAX_NUMBER_OF_MODELS ];
- };
+  G4int theHadronicInteractionCounter;
+  std::vector<G4HadronicInteraction*> theHadronicInteraction;
+};
 
 #endif
  

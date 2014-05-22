@@ -57,6 +57,7 @@
 #include "G4HadronicInteraction.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4HadronicProcessType.hh"
+#include "G4ThreadLocalSingleton.hh"
 #include <map>
 #include <vector>
 #include <iostream>
@@ -67,6 +68,8 @@ class G4HadronicEPTestMessenger;
 
 class G4HadronicProcessStore
 {
+
+friend class G4ThreadLocalSingleton<G4HadronicProcessStore>;
 
 public:
 

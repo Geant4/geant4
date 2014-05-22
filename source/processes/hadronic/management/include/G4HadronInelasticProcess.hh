@@ -25,13 +25,13 @@
 //
 //
 //
- // Hadronic Inelastic Process class
- // The specific particle inelastic processes derive from this class
- // This is an abstract base class, since the pure virtual function
- // PostStepDoIt has not been defined yet.
- //
- // J.L. Chuma, TRIUMF, 10-Mar-1997
- // Last modified: 27-Mar-1997
+// Hadronic Inelastic Process class
+// The specific particle inelastic processes derive from this class
+// This is an abstract base class, since the pure virtual function
+// PostStepDoIt has not been defined yet.
+//
+// J.L. Chuma, TRIUMF, 10-Mar-1997
+// Last modified: 27-Mar-1997
 //
 // 14-APR-98 F.W.Jones: variant G4HadronInelastic process for
 // G4CrossSectionDataSet/DataStore class design.

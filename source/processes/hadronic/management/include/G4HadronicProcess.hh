@@ -65,7 +65,6 @@ class G4Step;
 class G4Element;
 class G4ParticleChange;
 
-
 class G4HadronicProcess : public G4VDiscreteProcess
 {
 public:
@@ -118,8 +117,10 @@ public:
   { theCrossSectionDataStore->AddDataSet(aDataSet);}
 
   // access to the manager
-  inline G4EnergyRangeManager *GetManagerPointer()
-  { return &theEnergyRangeManager; }
+  std::vector<G4HadronicInteraction*>& GetHadronicInteractionList()
+  { return theEnergyRangeManager.GetHadronicInteractionList(); }
+  // inline G4EnergyRangeManager *GetManagerPointer()
+  //{ return &theEnergyRangeManager; }
           
   // get inverse cross section per volume
   G4double GetMeanFreePath(const G4Track &aTrack, G4double, 
@@ -178,12 +179,12 @@ protected:
   void DumpState(const G4Track&, const G4String&, G4ExceptionDescription&);
             
   // obsolete method will be removed
-  inline const G4EnergyRangeManager &GetEnergyRangeManager() const
-  { return theEnergyRangeManager; }
+  //inline const G4EnergyRangeManager &GetEnergyRangeManager() const
+  //{ return theEnergyRangeManager; }
     
   // obsolete method will be removed
-  inline void SetEnergyRangeManager( const G4EnergyRangeManager &value )
-  { theEnergyRangeManager = value; }
+  //inline void SetEnergyRangeManager( const G4EnergyRangeManager &value )
+  //{ theEnergyRangeManager = value; }
 
   // access to the chosen generator
   inline G4HadronicInteraction* GetHadronicInteraction() const

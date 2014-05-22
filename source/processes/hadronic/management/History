@@ -14,6 +14,32 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21 May 2014 Andrea Dotti (hadr-man-V10-00-04)
+- Retagging: previous tag was ok. 
+
+21 May 2014 Alberto Ribon (hadr-man-V10-00-03)
+---------------------------------------------
+- G4HadronicProcessStore : add printout information for deuteron, triton,
+  He3 and alpha.
+
+20 May 2014 Andrea Dotti (hadr-man-V10-00-02)
+---------------------------------------------
+- G4HadronicProcessStore : correct for bug in Clear() for which stopping
+  processes are deleted twice (once because are registered as normal 
+  processes and once are registered as extra processes).
+
+15 May 2014 Vladimir Ivanchenko (hadr-man-V10-00-01)
+---------------------------------------------------
+- G4HadronicProcess: added method  GetHadronicInteractionList() allowing 
+    access to the list of registered models, removed obsolete access
+    methods to G4EnergyRangeManager
+- G4HadronicProcessStore - become G4ThreadLocalSingletone allowing
+    proper destruction of hadronic processes/models/x-sections
+- G4EnergyRangeManager - cleaned up; instead of c-array models pointers
+    are stored in stl vector
+- this tag requires remove deletion of Physics vectors from destructors 
+    of all hadronic classes
+
 03 February 2014 Gunter Folger (hadr-man-V10-00-00)
 ---------------------------------------------------
 - G4HadronicProcess: in EnergyMomentumCheck... add printout of 3momentum  

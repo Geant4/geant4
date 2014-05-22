@@ -142,7 +142,7 @@ void G4HadronicProcess::GetEnergyMomentumCheckEnvvars() {
 void G4HadronicProcess::RegisterMe( G4HadronicInteraction *a )
 {
   if(!a) { return; }
-  try{GetManagerPointer()->RegisterMe( a );}
+  try{ theEnergyRangeManager.RegisterMe( a ); }
   catch(G4HadronicException & aE)
   {
     G4ExceptionDescription ed;

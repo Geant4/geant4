@@ -59,17 +59,19 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4HadronicEPTestMessenger.hh"
 
-G4ThreadLocal G4HadronicProcessStore* G4HadronicProcessStore::theInstance = 0;
+//G4ThreadLocal G4HadronicProcessStore* G4HadronicProcessStore::theInstance = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4HadronicProcessStore* G4HadronicProcessStore::Instance()
 {
-  if(0 == theInstance) {
-    static G4ThreadLocal G4HadronicProcessStore *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4HadronicProcessStore  ;  G4HadronicProcessStore &manager = *manager_G4MT_TLS_;
-    theInstance = &manager;
-  }
-  return theInstance;
+  static G4ThreadLocalSingleton<G4HadronicProcessStore> instance;
+  return instance.Instance();
+  //if(0 == theInstance) {
+    //  static G4ThreadLocal G4HadronicProcessStore *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4HadronicProcessStore  ;  G4HadronicProcessStore &manager = *manager_G4MT_TLS_;
+    //theInstance = &manager;
+  //}
+  //return theInstance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -92,9 +94,14 @@ void G4HadronicProcessStore::Clean()
   if(n_proc > 0) {
     for (i=0; i<n_proc; ++i) {
       if( process[i] ) {
-        //G4cout << "G4HadronicProcessStore::Clean() delete hadronic " << i << G4endl;
-	//G4cout <<  process[i]->GetProcessName() << G4endl;
-	G4HadronicProcess* p = process[i]; 
+        //G4cout << "G4HadronicProcessStore::Clean() delete hadronic " 
+	//  << i << "  " <<  process[i]->GetProcessName() << G4endl;
+	G4HadronicProcess* p = process[i];
+    //Stopping are registered ALSO in extra, remove it if found
+          for ( G4int j = 0 ; j<n_extra;++j)
+          {
+              if ( extraProcess[j]==p) extraProcess[j]=0;
+          }
 	process[i] = 0;
 	delete p;
       }
@@ -103,9 +110,8 @@ void G4HadronicProcessStore::Clean()
   if(n_extra > 0) {
     for(i=0; i<n_extra; ++i) {
       if(extraProcess[i]) {
-        //G4cout << "G4HadronicProcessStore::Clean() delete extra "  
-	//       << i << G4endl;
-	//G4cout << extraProcess[i]->GetProcessName() << G4endl;
+       // G4cout << "G4HadronicProcessStore::Clean() delete extra proc "
+	   //<< i << "  " << extraProcess[i]->GetProcessName() << G4endl;
 	G4VProcess* p = extraProcess[i]; 
         extraProcess[i] = 0;
 	delete p;
@@ -187,7 +193,8 @@ G4double G4HadronicProcessStore::GetElasticCrossSectionPerVolume(
 {
   G4double cross = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+  const G4double* theAtomNumDensityVector = 
+    material->GetVecNbOfAtomsPerVolume();
   size_t nelm = material->GetNumberOfElements();
   for (size_t i=0; i<nelm; ++i) {
     const G4Element* elm = (*theElementVector)[i];
@@ -232,7 +239,8 @@ G4double G4HadronicProcessStore::GetInelasticCrossSectionPerVolume(
 {
   G4double cross = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+  const G4double* theAtomNumDensityVector = 
+    material->GetVecNbOfAtomsPerVolume();
   size_t nelm = material->GetNumberOfElements();
   for (size_t i=0; i<nelm; ++i) {
     const G4Element* elm = (*theElementVector)[i];
@@ -277,7 +285,8 @@ G4double G4HadronicProcessStore::GetCaptureCrossSectionPerVolume(
 {
   G4double cross = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+  const G4double* theAtomNumDensityVector = 
+    material->GetVecNbOfAtomsPerVolume();
   size_t nelm = material->GetNumberOfElements();
   for (size_t i=0; i<nelm; ++i) {
     const G4Element* elm = (*theElementVector)[i];
@@ -322,7 +331,8 @@ G4double G4HadronicProcessStore::GetFissionCrossSectionPerVolume(
 {
   G4double cross = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+  const G4double* theAtomNumDensityVector = 
+    material->GetVecNbOfAtomsPerVolume();
   size_t nelm = material->GetNumberOfElements();
   for (size_t i=0; i<nelm; i++) {
     const G4Element* elm = (*theElementVector)[i];
@@ -367,12 +377,13 @@ G4double G4HadronicProcessStore::GetChargeExchangeCrossSectionPerVolume(
 {
   G4double cross = 0.0;
   const G4ElementVector* theElementVector = material->GetElementVector();
-  const G4double* theAtomNumDensityVector = material->GetVecNbOfAtomsPerVolume();
+  const G4double* theAtomNumDensityVector = 
+    material->GetVecNbOfAtomsPerVolume();
   size_t nelm = material->GetNumberOfElements();
   for (size_t i=0; i<nelm; ++i) {
     const G4Element* elm = (*theElementVector)[i];
     cross += theAtomNumDensityVector[i]*
-      GetChargeExchangeCrossSectionPerAtom(aParticle,kineticEnergy,elm,material);
+    GetChargeExchangeCrossSectionPerAtom(aParticle,kineticEnergy,elm,material);
   }
   return cross;
 }
@@ -412,8 +423,10 @@ void G4HadronicProcessStore::Register(G4HadronicProcess* proc)
       if(process[i] == proc) { return; }
     }
   }
-  //  G4cout << "G4HadronicProcessStore::Register hadronic " << n_proc
-  //	 << "  " << proc->GetProcessName() << G4endl;
+  if(1 < verbose) {
+    G4cout << "G4HadronicProcessStore::Register hadronic " << n_proc
+	   << "  " << proc->GetProcessName() << G4endl;
+  }
   ++n_proc;
   process.push_back(proc);
 }
@@ -428,6 +441,11 @@ void G4HadronicProcessStore::RegisterParticle(G4HadronicProcess* proc,
   G4int j=0;
   for(; j<n_part; ++j) {if(particle[j] == part) break;}
 
+  if(1 < verbose) {
+    G4cout << "G4HadronicProcessStore::RegisterParticle " 
+	   << part->GetParticleName()
+	   << " for  " << proc->GetProcessName() << G4endl;
+  }
   if(j == n_part) {
     ++n_part;
     particle.push_back(part);
@@ -489,9 +507,10 @@ void G4HadronicProcessStore::RegisterExtraProcess(G4VProcess* proc)
       if(extraProcess[i] == proc) { return; }
     }
   }
-  //G4cout << "Extra Process: " << n_extra << "  " <<  proc->GetProcessName() 
-  //	 << "  " << proc << G4endl;
-    
+  if(1 < verbose) {
+    G4cout << "Extra Process: " << n_extra 
+	   << "  " <<  proc->GetProcessName() << G4endl;
+  }
   n_extra++;
   extraProcess.push_back(proc);
 }
@@ -531,12 +550,14 @@ void G4HadronicProcessStore::RegisterParticleForExtraProcess(
 
 void G4HadronicProcessStore::DeRegisterExtraProcess(G4VProcess* proc)
 {
-  //G4cout << "Deregister Extra Process: " << proc << "  "<<proc->GetProcessName()<< G4endl;
   if(0 == n_extra) { return; }
   for(G4int i=0; i<n_extra; ++i) {
     if(extraProcess[i] == proc) {
       extraProcess[i] = 0;
-      //G4cout << "Extra Process: " << i << " is deregisted " << G4endl;
+      if(1 < verbose) {
+	G4cout << "Extra Process: " << i << "  " 
+	       <<proc->GetProcessName()<< " is deregisted " << G4endl;
+      }
       return;
     }
   }
@@ -637,7 +658,8 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
 
     outFile << "    <ul>\n"; 
     for (HPHImap::iterator jt = itmod.first; jt != itmod.second; ++jt) {
-      outFile << "    <li><b><a href=\"" << (*jt).second->GetModelName() << ".html\"> "
+      outFile << "    <li><b><a href=\"" << (*jt).second->GetModelName() 
+	      << ".html\"> "
               << (*jt).second->GetModelName() << "</a>" 
               << " from " << (*jt).second->GetMinEnergy()/GeV
               << " GeV to " << (*jt).second->GetMaxEnergy()/GeV
@@ -664,7 +686,8 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4HadronicProcessStore::PrintModelHtml(const G4HadronicInteraction * mod) const
+void 
+G4HadronicProcessStore::PrintModelHtml(const G4HadronicInteraction * mod) const
 {
 	G4String dirName(getenv("G4PhysListDocDir"));
 	G4String pathName = dirName + "/" + mod->GetModelName() + ".html";
@@ -672,7 +695,8 @@ void G4HadronicProcessStore::PrintModelHtml(const G4HadronicInteraction * mod) c
 	outModel.open(pathName);
 	outModel << "<html>\n";
 	outModel << "<head>\n";
-	outModel << "<title>Description of " << mod->GetModelName() << "</title>\n";
+	outModel << "<title>Description of " << mod->GetModelName() 
+		 << "</title>\n";
 	outModel << "</head>\n";
 	outModel << "<body>\n";
 
@@ -701,6 +725,10 @@ void G4HadronicProcessStore::Dump(G4int level)
 
     if (level == 1 && (pname == "proton" || 
 		       pname == "neutron" ||
+                       pname == "deuteron" ||
+                       pname == "triton" ||
+                       pname == "He3" ||
+                       pname == "alpha" ||
 		       pname == "pi+" ||
 		       pname == "pi-" ||
                        pname == "gamma" ||
@@ -713,7 +741,11 @@ void G4HadronicProcessStore::Dump(G4int level)
 		       pname == "lambda" ||
 		       pname == "GenericIon" ||
 		       pname == "anti_neutron" ||
-		       pname == "anti_proton")) yes = true;
+		       pname == "anti_proton" ||
+                       pname == "anti_deuteron" ||
+                       pname == "anti_triton" ||
+                       pname == "anti_He3" ||
+                       pname == "anti_alpha")) yes = true;
     if (level > 1) yes = true;			   
     if (yes) {
       // main processes
@@ -735,7 +767,7 @@ void G4HadronicProcessStore::Dump(G4int level)
 	if(itp->first == part) {
 	  G4VProcess* proc = (itp->second);
 	  if (wasPrinted[i] == 0) {
-            G4cout << "\n---------------------------------------------------\n"  
+            G4cout << "\n---------------------------------------------------\n"
            << std::setw(50) << "Hadronic Processes for " 
 	   << part->GetParticleName() << "\n";	  
 	    wasPrinted[i] = 1;
@@ -855,7 +887,8 @@ void G4HadronicProcessStore::SetEpReportLevel(G4int level)
 
 void G4HadronicProcessStore::SetProcessAbsLevel(G4double abslevel)
 {
-  G4cout << " Setting absolute energy/momentum test level to " << abslevel << G4endl;
+  G4cout << " Setting absolute energy/momentum test level to " << abslevel 
+	 << G4endl;
   G4double rellevel = 0.0;
   G4HadronicProcess* theProcess = 0;
   for (G4int i = 0; i < G4int(process.size()); ++i) {
@@ -869,7 +902,8 @@ void G4HadronicProcessStore::SetProcessAbsLevel(G4double abslevel)
 
 void G4HadronicProcessStore::SetProcessRelLevel(G4double rellevel)
 {
-  G4cout << " Setting relative energy/momentum test level to " << rellevel << G4endl;
+  G4cout << " Setting relative energy/momentum test level to " << rellevel 
+	 << G4endl;
   G4double abslevel = 0.0;
   G4HadronicProcess* theProcess = 0;
   for (G4int i = 0; i < G4int(process.size()); ++i) {
