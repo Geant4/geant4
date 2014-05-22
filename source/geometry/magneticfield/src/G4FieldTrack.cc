@@ -56,23 +56,26 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
 			          G4double       kineticEnergy,
 			          G4double       restMass_c2,
 		                  G4double       charge, 
-			    const G4ThreeVector& Spin,
+			    const G4ThreeVector& vecPolarization,
 			          G4double       magnetic_dipole_moment,
-			          G4double       curve_length )
+                                  G4double       curve_length,
+                                  G4double       pdgSpin )
 :  fDistanceAlongCurve(curve_length),
    fKineticEnergy(kineticEnergy),
    fRestMass_c2(restMass_c2),
    fLabTimeOfFlight(LaboratoryTimeOfFlight), 
    fProperTimeOfFlight(0.),
    // fMomentumDir(pMomentumDirection),
-   fChargeState(  charge, magnetic_dipole_moment ) 
+   fChargeState(  charge, magnetic_dipole_moment, pdgSpin ) 
+   // fChargeState(  charge, magnetic_dipole_moment ) , 
+   // fPDGSpin( pdgSpin )
 {
   UpdateFourMomentum( kineticEnergy, pMomentumDirection ); 
       // Sets momentum direction as well.
 
   SetPosition( pPosition ); 
 
-  InitialiseSpin( Spin ); 
+  SetPolarization( vecPolarization ); 
 }
 
 G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition, 
@@ -83,32 +86,33 @@ G4FieldTrack::G4FieldTrack( const G4ThreeVector& pPosition,
                                   G4double,   // velocity
                                   G4double       pLaboratoryTimeOfFlight,
                                   G4double       pProperTimeOfFlight,
-                            const G4ThreeVector* pSpin)
+                            const G4ThreeVector* pPolarization,
+                                  G4double       pdgSpin )
  : fDistanceAlongCurve(curve_length),
    fKineticEnergy(kineticEnergy),
    fRestMass_c2(restMass_c2),
    fLabTimeOfFlight(pLaboratoryTimeOfFlight), 
    fProperTimeOfFlight(pProperTimeOfFlight),
-   // fMomentumDir(pMomentumDirection), 
-   fChargeState( DBL_MAX ) //  charge not set 
+   fChargeState( DBL_MAX, DBL_MAX, -1.0 ) //  charge not set 
 {
   UpdateFourMomentum( kineticEnergy, pMomentumDirection ); 
       // Sets momentum direction as well.
     
   SetPosition( pPosition );    
-   
-  G4ThreeVector Spin(0.0, 0.0, 0.0); 
-  if( pSpin )   Spin= *pSpin;
-  InitialiseSpin( Spin ); 
+  fChargeState.SetPDGSpin( pdgSpin );   
+
+  G4ThreeVector PolarVec(0.0, 0.0, 0.0); 
+  if( pPolarization )  { PolarVec= *pPolarization; }
+  SetPolarization( PolarVec );
 }
 
 G4FieldTrack::G4FieldTrack( char )                  //  Nothing is set !!
   : fKineticEnergy(0.), fRestMass_c2(0.), fLabTimeOfFlight(0.),
-    fProperTimeOfFlight(0.), fChargeState( DBL_MAX )
+    fProperTimeOfFlight(0.), fChargeState( DBL_MAX , DBL_MAX, -1 )
 {
   G4ThreeVector Zero(0.0, 0.0, 0.0);
   SetCurvePnt( Zero, Zero, 0.0 );
-  InitialiseSpin( Zero ); 
+  SetPolarization( Zero ); 
   // fInitialMomentumMag= 0.00; // Invalid
   // fLastMomentumMag= 0.0; 
 }
@@ -119,13 +123,16 @@ void G4FieldTrack::
 			 G4double electric_dipole_moment, //   ditto
 			 G4double magnetic_charge )       //   ditto
 {
-  fChargeState.SetChargeAndMoments( charge,  magnetic_dipole_moment, 
-		      electric_dipole_moment,  magnetic_charge ); 
+  fChargeState.SetChargesAndMoments( charge,  
+                                     magnetic_dipole_moment, 
+                                     electric_dipole_moment,  
+                                     magnetic_charge ); 
 
-  // fpChargeState->SetChargeAndMoments( charge,  magnetic_dipole_moment, 
-  //	      electric_dipole_moment,  magnetic_charge ); 
+  // NOTE: Leaves Spin unchanged !
+  // 
+  // G4double pdgSpin= fChargeState.GetSpin();   // New Property of ChargeState (not well documented! )
 
-  // TO-DO: Improve the implementation using handles
+  // IDEA: Improve the implementation using handles
   //   -- and handle to the old one (which can be shared by other copies) and
   //      must not be left to hang loose 
   // 
@@ -174,7 +181,9 @@ void G4FieldTrack::LoadFromArray(const G4double valArrIn[ncompSVEC],
 
   fLabTimeOfFlight=valArr[7];
   fProperTimeOfFlight=valArr[8];
-  fSpin=G4ThreeVector(valArr[9],valArr[10],valArr[11]);
+  G4ThreeVector  vecPolarization= G4ThreeVector(valArr[9],valArr[10],valArr[11]);
+  SetPolarization( vecPolarization ); 
+
   // fMomentumDir=G4ThreeVector(valArr[13],valArr[14],valArr[15]);
   // fDistanceAlongCurve= valArr[]; 
 }
