@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ctests-V10-00-02 21 May 2014 Luciano Pandola
+- Add advanced example xray_fluorescence
+
 ctests-V10-00-01 18 March 2014 Gunter Folger
 - Add hadr06, remove protection hadr05 to run only with shared libs.
  

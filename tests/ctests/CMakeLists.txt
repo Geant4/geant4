@@ -501,6 +501,12 @@ GEANT4_ADD_TEST(example-adv-xray_fluorescence
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/xray_fluorescence
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/xray_fluorescence
                 BUILD XrayFluo PROJECT xray_fluorescence ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} XRAYDATA=. )
+GEANT4_ADD_TEST(example-adv-xray_telescope
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/xray_telescope/XrayTel test.mac
+                WORKING_DIRECTORY  ${CMAKE_SOURCE_DIR}/examples/advanced/xray_telescope
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/xray_telescope
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/xray_telescope
+                BUILD XrayTel PROJECT xray_telescope ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-iort_therapy-build
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/iort_therapy
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/iort_therapy
