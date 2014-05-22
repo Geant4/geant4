@@ -61,7 +61,7 @@ public:
 
   ~XrayTelAnalysis();
 
-  void book();
+  void book(G4bool isMaster);
   
   void finish(G4bool isMaster);
   

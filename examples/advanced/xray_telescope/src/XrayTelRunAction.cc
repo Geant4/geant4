@@ -81,8 +81,10 @@ XrayTelRunAction::~XrayTelRunAction()
 void XrayTelRunAction::BeginOfRunAction(const G4Run* aRun)
 {
   G4int runN = aRun->GetRunID();
-  if ( runN % 1000 == 0 ) 
-    G4cout << "### Run : " << runN << G4endl;
+  if (IsMaster())
+    G4cout << "### Run : " << runN << " (master)" << G4endl;
+  else
+    G4cout << "### Run : " << runN << " (worker)" << G4endl;
 
   if (G4VVisManager::GetConcreteInstance()) {
     G4UImanager* UI = G4UImanager::GetUIpointer(); 
@@ -90,7 +92,7 @@ void XrayTelRunAction::BeginOfRunAction(const G4Run* aRun)
   } 
   // Book histograms and ntuples
   XrayTelAnalysis* analysis = XrayTelAnalysis::getInstance();
-  analysis->book();
+  analysis->book(IsMaster());
 }
 
 

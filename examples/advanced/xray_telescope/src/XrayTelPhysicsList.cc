@@ -115,6 +115,9 @@ void XrayTelPhysicsList::ConstructLeptons()
   G4AntiNeutrinoE::AntiNeutrinoEDefinition();
   G4NeutrinoMu::NeutrinoMuDefinition();
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
+
+  G4MuonPlus::Definition();
+  G4MuonMinus::Definition();
 }
 void XrayTelPhysicsList::ConstructMesons()
 {
@@ -122,21 +125,29 @@ void XrayTelPhysicsList::ConstructMesons()
   G4MesonConstructor mConstructor;
   mConstructor.ConstructParticle();
 }
+
 void XrayTelPhysicsList::ConstructBaryons()
 {
   //  barions
   G4BaryonConstructor bConstructor;
   bConstructor.ConstructParticle();
 }
+
 void XrayTelPhysicsList::ConstructIons()
 {
   // ions
   G4IonConstructor iConstructor;
   iConstructor.ConstructParticle();
 }
+
 void XrayTelPhysicsList::ConstructAllShortLiveds()
 {
+  //Short-lived
+  G4ShortLivedConstructor slConstructor;
+  slConstructor.ConstructParticle();
 }
+
+
 void XrayTelPhysicsList::ConstructProcess()
 {
   // Transportation, electromagnetic and general processes 

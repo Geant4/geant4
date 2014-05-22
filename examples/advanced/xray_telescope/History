@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22.05.2014   Luciano Pandola, tag xraytel-V10-00-01
+	     Added definition of muons and short-lived
+	     Revise method book() of analysis singleton
+	     Actual MT migration, G4MTRunManager is used
+	     Added new macro geantino.mac and updated CMakeLists.txt
+
 21.05.2014   Luciano Pandola, tag xraytel-V10-00-00
 	     Added ActionInitialization class
 	     Move the method Update() from RunAction (thread-local) to 

@@ -92,32 +92,39 @@ XrayTelAnalysis* XrayTelAnalysis::getInstance()
 }
 
 
-void XrayTelAnalysis::book()
+void XrayTelAnalysis::book(G4bool isMaster)
 {
   G4AutoLock l(&dataManipulationMutex);
-  //reset counters
-  if (nEnteringTracks)    
+
+  //reset counters: do be done only once, by the master
+  if (isMaster)
     {
-      delete nEnteringTracks;
-      nEnteringTracks = 0;
-    }
-  nEnteringTracks = new std::map<G4int,G4int>;
+      if (nEnteringTracks)    
+	{
+	  delete nEnteringTracks;
+	  nEnteringTracks = 0;
+	}
+      nEnteringTracks = new std::map<G4int,G4int>;
   
-  if (totEnteringEnergy)
-    {
-      delete totEnteringEnergy;
-      totEnteringEnergy = 0;
+      if (totEnteringEnergy)
+	{
+	  delete totEnteringEnergy;
+	  totEnteringEnergy = 0;
+	}
+      totEnteringEnergy = new std::map<G4int,G4double>;
     }
-  totEnteringEnergy = new std::map<G4int,G4double>;
-    
+
   // Get/create analysis manager
   G4AnalysisManager* man = G4AnalysisManager::Instance();
 
-  // Open an output file
-  G4cout << "Opening output file " << histFileName << " ... ";
+  // Open an output file: it is done in master and threads. The 
+  // printout is done only by the master, for tidyness
+  if (isMaster)
+    G4cout << "Opening output file " << histFileName << " ... ";
   man->OpenFile(histFileName);
   man->SetFirstHistoId(1);
-  G4cout << " done" << G4endl;
+  if (isMaster)
+    G4cout << " done" << G4endl;
 
   // Book 1D histograms
   man->CreateH1("h1","Energy, all /keV",  100,0.,100.);
@@ -173,7 +180,7 @@ void XrayTelAnalysis::finish(G4bool isMaster)
   //MT run: sum results
  
 
-  //MT build, but sequential run
+  //MT build, but sequential run  
   if (nEnteringTracks->count(-1))
     {
       G4cout << "End of Run summary (sequential with MT build)" << G4endl << G4endl;
@@ -183,6 +190,7 @@ void XrayTelAnalysis::finish(G4bool isMaster)
 	     << (totEnteringEnergy->find(-1)->second)/MeV  
 	     << " MeV"
 	     << G4endl;
+      G4cout << "##########################################" << G4endl;
       return;
     }
 
@@ -190,14 +198,15 @@ void XrayTelAnalysis::finish(G4bool isMaster)
   G4int totEntries = 0;
   G4double totEnergy = 0.;
 
+  G4cout << "##########################################" << G4endl;
   for (size_t i=0; loopAgain; i++)
     {
       //ok, this thread was found
       if (nEnteringTracks->count(i))
 	{
-	  G4cout << "End of Run summary (thread=)" << i << G4endl;
+	  G4cout << "End of Run summary (thread= " << i << ")" << G4endl;
 	  G4int part = nEnteringTracks->find(i)->second;
-	  G4cout << "Total Entering Detector : " << i << G4endl;
+	  G4cout << "Total Entering Detector : " << part << G4endl;
 	  G4double ene = totEnteringEnergy->find(i)->second;
 	  G4cout << "Total Entering Detector Energy : " 
 		 << ene/MeV  
@@ -217,6 +226,7 @@ void XrayTelAnalysis::finish(G4bool isMaster)
       G4cout << "Total Entering Detector Energy : " 
 	     << totEnergy/MeV  
 	     << " MeV" << G4endl;
+      G4cout << "##########################################" << G4endl;
     }
 }
 
@@ -287,7 +297,9 @@ void XrayTelAnalysis::Update(G4double energy,G4int threadID)
   G4AutoLock l(&dataManipulationMutex);
   //It already exists: increase the counter
   if (nEnteringTracks->count(threadID))
-    (nEnteringTracks->find(threadID)->second)++;
+    {
+      (nEnteringTracks->find(threadID)->second)++;     
+    }
   else //enter a new one
     {
       G4int tracks = 1;

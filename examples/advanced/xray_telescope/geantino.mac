@@ -1,0 +1,8 @@
+/run/verbose 1
+/gps/particle geantino
+/gps/pos/type Point
+/gps/pos/centre 0 0 0 cm
+/gps/ene/type Mono
+/gps/ene/mono 1 MeV
+#/tracking/verbose 1
+/run/beamOn 10
