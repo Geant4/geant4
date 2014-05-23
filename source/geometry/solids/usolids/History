@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 23, 2014  T.Nikitina                  geom-usolids-V10-00-10
+- Fixed DistanceToOut() for UTubs, UCons, USphere, UVSCGfaceted and UPolycone, 
+  DistanceToOut() return normal even for concave faces.
+- Fixed DistanceToOut() for UPolycone in case of points starting on
+  the Surface or on the Internal Surface. Improved convexity algorithm in 
+  DistanceToOut() for UPolycone for points leaving +/-Dz. 
+- Introducing UMultiUnion class; fix in DistanceToOut(), added protection
+  against possible infinite loop.
+
 March 27, 2014  G.Cosmo                   geom-usolids-V10-00-09, 08
 - Removed unused SaveVectorToExternalFile() methods in UUtils, also
   causing cyclic dependency with UVector3.

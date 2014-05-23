@@ -41,6 +41,7 @@ GEANT4_DEFINE_MODULE(NAME G4geomUSolids
         UGenericPolycone.hh
         UGenericPolycone.icc
         UIntersectingCone.hh
+        UMultiUnion.hh
         UOrb.hh
         UPolycone.hh
         UPolycone.icc
@@ -76,6 +77,7 @@ GEANT4_DEFINE_MODULE(NAME G4geomUSolids
         UEnclosingCylinder.cc
         UGenericPolycone.cc
         UIntersectingCone.cc
+        UMultiUnion.cc
         UOrb.cc
         UPolycone.cc
         UPolyconeSide.cc

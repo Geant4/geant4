@@ -49,7 +49,7 @@ UTubs::UTubs(const std::string& pName,
     std::ostringstream message;
     message << "Invalid values for radii in solid: " << GetName()
             << std::endl
-            << "				pRMin = " << pRMin << ", pRMax = " << pRMax;
+            << "pRMin = " << pRMin << ", pRMax = " << pRMax;
     UUtils::Exception("UTubs::UTubs()", "GeomSolids0002", FatalErrorInArguments, 1, message.str().c_str());
   }
 
@@ -1117,11 +1117,8 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
     }
     else
     {
-      //      if (calcNorm)
-      {
-        n        = UVector3(0, 0, 1);
-        validNorm = true;
-      }
+      n = UVector3(0, 0, 1);
+      validNorm = true;
       return snxt = 0;
     }
   }
@@ -1136,11 +1133,8 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
     }
     else
     {
-      //      if (calcNorm)
-      {
-        n        = UVector3(0, 0, -1);
-        validNorm = true;
-      }
+      n = UVector3(0, 0, -1);
+      validNorm = true;
       return snxt = 0.0;
     }
   }
@@ -1206,13 +1200,9 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
       {
         // On tolerant boundary & heading outwards (or perpendicular to)
         // outer radial surface -> leaving immediately
-
-        //        if ( calcNorm )
-        {
-          n        = UVector3(p.x / fRMax, p.y / fRMax, 0);
+          n = UVector3(p.x / fRMax, p.y / fRMax, 0);
           validNorm = true;
-        }
-        return snxt = 0; // Leaving by rmax immediately
+          return snxt = 0; // Leaving by rmax immediately
       }
     }
     else if (t2 < 0.)   // i.e.  t2 < 0; Possible rmin intersection
@@ -1238,10 +1228,8 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
           }
           else
           {
-            //if ( calcNorm )
-            {
-              validNorm = false;  // Concave side
-            }
+            validNorm = false;  // Concave side
+            n = UVector3(-p.x / fRMin, -p.y / fRMin, 0);
             return snxt = 0.0;
           }
         }
@@ -1258,11 +1246,8 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
           else // Case: On the border+t2<kRadTolerance
             //       (v is perpendicular to the surface)
           {
-            // if (calcNorm)
-            {
-              n = UVector3(p.x / fRMax, p.y / fRMax, 0);
-              validNorm = true;
-            }
+            n = UVector3(p.x / fRMax, p.y / fRMax, 0);
+            validNorm = true;
             return snxt = 0.0;
           }
         }
@@ -1282,11 +1267,8 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
         else // Case: On the border+t2<kRadTolerance
           //       (v is perpendicular to the surface)
         {
-          //          if (calcNorm)
-          {
-            n = UVector3(p.x / fRMax, p.y / fRMax, 0);
-            validNorm = true;
-          }
+          n = UVector3(p.x / fRMax, p.y / fRMax, 0);
+          validNorm = true;
           return snxt = 0.0;
         }
       }
@@ -1472,17 +1454,21 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
         break;
 
       case kRMin:
+        xi = p.x + snxt * v.x;
+        yi = p.y + snxt * v.y;
+        n = UVector3(-xi / fRMin, -yi / fRMin, 0);
         validNorm = false;  // Rmin is inconvex
         break;
 
       case kSPhi:
         if (fDPhi <= UUtils::kPi)
         {
-          n        = UVector3(fSinSPhi, -fCosSPhi, 0);
+          n = UVector3(fSinSPhi, -fCosSPhi, 0);
           validNorm = true;
         }
         else
         {
+          n = UVector3(fSinSPhi, -fCosSPhi, 0);
           validNorm = false;
         }
         break;
@@ -1495,6 +1481,7 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
         }
         else
         {
+          n = UVector3(-fSinEPhi, fCosEPhi, 0);
           validNorm = false;
         }
         break;
@@ -1606,15 +1593,15 @@ std::ostream& UTubs::StreamInfo(std::ostream& os) const
 {
   int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
-     << "		*** Dump for solid - " << GetName() << " ***\n"
-     << "		===================================================\n"
+     << "                *** Dump for solid - " << GetName() << " ***\n"
+     << "                ===================================================\n"
      << " Solid type: UTubs\n"
      << " Parameters: \n"
-     << "		inner radius : " << fRMin << " mm \n"
-     << "		outer radius : " << fRMax << " mm \n"
-     << "		half length Z: " << fDz << " mm \n"
-     << "		starting phi : " << fSPhi / (UUtils::kPi / 180.0) << " degrees \n"
-     << "		delta phi		: " << fDPhi / (UUtils::kPi / 180.0) << " degrees \n"
+     << "                inner radius : " << fRMin << " mm \n"
+     << "                outer radius : " << fRMax << " mm \n"
+     << "                half length Z: " << fDz << " mm \n"
+     << "                starting phi : " << fSPhi / (UUtils::kPi / 180.0) << " degrees \n"
+     << "                delta phi    : " << fDPhi / (UUtils::kPi / 180.0) << " degrees \n"
      << "-----------------------------------------------------------\n";
   os.precision(oldprc);
 
