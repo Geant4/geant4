@@ -9,6 +9,11 @@ $Id$
                       Category History file
                       ---------------------
 
+23.05.2014 - L. Pandola (DMX-V10-00-04)
+	     Actual MT migration. Use G4MTRunManager
+	     Added G4ShortLivedConstructor in the physics list, to 
+              avoid G4Exception PART10116.
+
 21.05.2014 - L. Pandola (DMX-V10-00-03)
 	     Edit constructor of DMXSteppingAction, make const 
              Getters in DMXEventAction.

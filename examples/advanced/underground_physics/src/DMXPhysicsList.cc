@@ -159,12 +159,13 @@ void DMXPhysicsList::ConstructMyHadrons()
 
 }
 
+#include "G4ShortLivedConstructor.hh"
 
 // construct Shortliveds://///////////////////////////////////////////////////
 void DMXPhysicsList::ConstructMyShortLiveds()
 {
-  // ShortLiveds
-  ;
+  G4ShortLivedConstructor slConstructor;
+  slConstructor.ConstructParticle();
 }
 
 
