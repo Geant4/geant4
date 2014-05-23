@@ -59,19 +59,12 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4HadronicEPTestMessenger.hh"
 
-//G4ThreadLocal G4HadronicProcessStore* G4HadronicProcessStore::theInstance = 0;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4HadronicProcessStore* G4HadronicProcessStore::Instance()
 {
   static G4ThreadLocalSingleton<G4HadronicProcessStore> instance;
   return instance.Instance();
-  //if(0 == theInstance) {
-    //  static G4ThreadLocal G4HadronicProcessStore *manager_G4MT_TLS_ = 0 ; if (!manager_G4MT_TLS_) manager_G4MT_TLS_ = new  G4HadronicProcessStore  ;  G4HadronicProcessStore &manager = *manager_G4MT_TLS_;
-    //theInstance = &manager;
-  //}
-  //return theInstance;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -91,34 +84,35 @@ void G4HadronicProcessStore::Clean()
   G4int i;
   //G4cout << "G4HadronicProcessStore::Clean() Nproc= " << n_proc
   //	 << "  Nextra= " << n_extra << G4endl;
-  if(n_proc > 0) {
-    for (i=0; i<n_proc; ++i) {
-      if( process[i] ) {
-        //G4cout << "G4HadronicProcessStore::Clean() delete hadronic " 
-	//  << i << "  " <<  process[i]->GetProcessName() << G4endl;
-	G4HadronicProcess* p = process[i];
-    //Stopping are registered ALSO in extra, remove it if found
-          for ( G4int j = 0 ; j<n_extra;++j)
-          {
-              if ( extraProcess[j]==p) extraProcess[j]=0;
-          }
-	process[i] = 0;
-	delete p;
-      }
+  for (i=0; i<n_proc; ++i) {
+    if( process[i] ) {
+        //G4cout << "G4HadronicProcessStore::Clean() delete hadronic "
+        //  << i << "  " <<  process[i]->GetProcessName() << G4endl;
+	    G4HadronicProcess* p = process[i];
+        //Prevent de-registration
+        p->SetDeRegisterFlag(false);
+        //Stopping are registered ALSO in extra, remove it if found
+        for ( G4int j = 0 ; j<n_extra;++j) {
+            if ( extraProcess[j]==p) extraProcess[j]=0;
+        }
+        delete p;
+        process[i] = 0;
     }
   }
-  if(n_extra > 0) {
-    for(i=0; i<n_extra; ++i) {
-      if(extraProcess[i]) {
-       // G4cout << "G4HadronicProcessStore::Clean() delete extra proc "
-	   //<< i << "  " << extraProcess[i]->GetProcessName() << G4endl;
-	G4VProcess* p = extraProcess[i]; 
+  for(i=0; i<n_extra; ++i) {
+    if(extraProcess[i]) {
+        // G4cout << "G4HadronicProcessStore::Clean() delete extra proc "
+        //<< i << "  " << extraProcess[i]->GetProcessName() << G4endl;
+        G4VProcess* p = extraProcess[i];
+        //The following should not be needed, because it has already been
+        //done by previous for-loop.
+        if ( dynamic_cast<G4HadronicProcess*>(p) != NULL )
+            dynamic_cast<G4HadronicProcess*>(p)->SetDeRegisterFlag(false);
+        delete p;
         extraProcess[i] = 0;
-	delete p;
-      }
     }
   }
-  //G4cout << "G4HadronicProcessStore::Clean() done" << G4endl; 
+  //G4cout << "G4HadronicProcessStore::Clean() done" << G4endl;
   n_extra = 0;
   n_proc = 0;
 }
@@ -489,7 +483,6 @@ void G4HadronicProcessStore::RegisterInteraction(G4HadronicProcess* proc,
 
 void G4HadronicProcessStore::DeRegister(G4HadronicProcess* proc)
 {
-  if(0 == n_proc) return;
   for(G4int i=0; i<n_proc; ++i) {
     if(process[i] == proc) {
       process[i] = 0;
@@ -550,7 +543,6 @@ void G4HadronicProcessStore::RegisterParticleForExtraProcess(
 
 void G4HadronicProcessStore::DeRegisterExtraProcess(G4VProcess* proc)
 {
-  if(0 == n_extra) { return; }
   for(G4int i=0; i<n_extra; ++i) {
     if(extraProcess[i] == proc) {
       extraProcess[i] = 0;

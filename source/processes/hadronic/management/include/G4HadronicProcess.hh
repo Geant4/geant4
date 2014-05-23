@@ -174,6 +174,11 @@ public:
   inline void MultiplyCrossSectionBy(G4double factor)
   { aScaleFactor = factor; }
 
+  //Request destructor to de-register this from
+  //process store.
+  //This should be called only by kernel.
+  inline void SetDeRegisterFlag( G4bool val )
+  { deRegister = val; }
 protected:
 
   void DumpState(const G4Track&, const G4String&, G4ExceptionDescription&);
@@ -223,6 +228,11 @@ protected:
   G4ParticleChange* theTotalResult; 
 
   G4int epReportLevel;
+
+  //The following flags controls if destrcutr de-register
+  // "this" from process store (default: true)
+  //Needed in MT for thread-local-singleton process store
+  G4bool deRegister;
 
 private:
     

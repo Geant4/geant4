@@ -214,8 +214,6 @@ private:
   // print process info
   void Print(G4int idxProcess, G4int idxParticle);
 
-  static G4ThreadLocal G4HadronicProcessStore* theInstance;
-
   typedef const G4ParticleDefinition* PD;
   typedef G4HadronicProcess* HP;
   typedef G4HadronicInteraction* HI;
@@ -243,7 +241,7 @@ private:
   G4int  verbose;
   G4bool buildTableStart;
 
-  // cash
+  // cache
   HP   currentProcess;
   PD   currentParticle;
 
