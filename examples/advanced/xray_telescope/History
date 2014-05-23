@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23.05.2014   Luciano Pandola, tag xraytel-V10-00-02
+	     Fix compiler warning which caused the rejection 
+	     of tag xraytel-V10-00-01
+
 22.05.2014   Luciano Pandola, tag xraytel-V10-00-01
 	     Added definition of muons and short-lived
 	     Revise method book() of analysis singleton
