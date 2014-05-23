@@ -28,7 +28,7 @@
 
 # Fire a e+
 /vis/geometry/set/visibility calo_L 1 false
-/vis/viewer/zoom 4
+/vis/viewer/zoom 40
 /vis/viewer/set/viewpointThetaPhi -60 75
 /vis/ogl/set/printSize 4000 4000
 /gun/energy 1000 MeV

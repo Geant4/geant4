@@ -19,4 +19,5 @@
 /vis/viewer/set/hiddenEdge 1
 /vis/viewer/zoom 3.2
 /vis/viewer/pan -4.5 -2.5
+/vis/viewer/zoom 1.7
 /vis/viewer/set/background ! 0.2 0.2 0 0.1
