@@ -80,6 +80,15 @@ namespace G4INCL {
      */
     void add(Particle *p);
 
+    /// \brief Add an empty entry for this particle into map AvatarID -> [ParticleID]
+    void initParticleAvatarConnections(Particle *p);
+
+    /** \brief Add a list of particles to the Store
+     *
+     * This acts as if add(Particle *) was called on each element of the list.
+     */
+    void add(ParticleList const &pL);
+
     /// \brief Add one ParticleEntry avatar
     void addParticleEntryAvatar(IAvatar *a);
 
@@ -287,7 +296,7 @@ namespace G4INCL {
      * Load particle configuration from ASCII file (see
      * avatarPredictionTest).
      */
-    void loadParticles(std::string filename);
+    void loadParticles(std::string const &filename);
 
     /**
      * Get the value of the nucleus mass number that we read from file
@@ -315,7 +324,7 @@ namespace G4INCL {
     /**
      * Print the nucleon configuration of the nucleus.
      */
-    void writeParticles(std::string filename);
+    void writeParticles(std::string const &filename);
 
     /**
      * Print the list of avatars

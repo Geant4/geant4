@@ -190,7 +190,7 @@ namespace G4INCL {
        * n: non-statistical emission (decay) */
       std::vector<std::string> history;
       /** \brief Number of remnants */
-      Int_t nRemnants;
+      Short_t nRemnants;
       /** \brief Remnant mass number */
       Short_t ARem[maxSizeRemnants];
       /** \brief Remnant charge number */

@@ -124,12 +124,12 @@ namespace G4INCL {
 
       // File name
       std::string fileName(path + "/walletlifetime.dat");
-      INCL_DEBUG("Reading real nuclear masses from file " << fileName << std::endl);
+      INCL_DEBUG("Reading real nuclear masses from file " << fileName << '\n');
 
       // Open the file stream
       std::ifstream massTableIn(fileName.c_str());
       if(!massTableIn.good()) {
-        std::cerr << "Cannot open " << fileName << " data file." << std::endl;
+        std::cerr << "Cannot open " << fileName << " data file." << '\n';
         std::abort();
         return;
       }
@@ -142,11 +142,11 @@ namespace G4INCL {
         records.push_back(record);
       }
       massTableIn.close();
-      INCL_DEBUG("Read " << records.size() << " nuclear masses" << std::endl);
+      INCL_DEBUG("Read " << records.size() << " nuclear masses" << '\n');
 
       // determine the max A
       AMax = std::max_element(records.begin(), records.end(), compareA)->A;
-      INCL_DEBUG("Max A in nuclear-mass table = " << AMax << std::endl);
+      INCL_DEBUG("Max A in nuclear-mass table = " << AMax << '\n');
       ZMaxArray = new G4int[AMax+1];
       std::fill(ZMaxArray, ZMaxArray+AMax+1, 0);
       theTable = new G4double*[AMax+1];
@@ -173,7 +173,7 @@ namespace G4INCL {
       if(A>AMax || Z>ZMaxArray[A]) {
         INCL_DEBUG("Real mass unavailable for isotope A=" << A << ", Z=" << Z
                    << ", using Weizsaecker's formula"
-                   << std::endl);
+                   << '\n');
         return getWeizsaeckerMass(A,Z);
       }
 
@@ -181,7 +181,7 @@ namespace G4INCL {
       if(mass<0.) {
         INCL_DEBUG("Real mass unavailable for isotope A=" << A << ", Z=" << Z
                    << ", using Weizsaecker's formula"
-                   << std::endl);
+                   << '\n');
         return getWeizsaeckerMass(A,Z);
       } else
         return mass;

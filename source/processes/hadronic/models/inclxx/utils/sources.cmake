@@ -54,6 +54,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLIAvatar.hh
         G4INCLConfig.hh
         G4INCLNaturalIsotopicDistributions.hh
+        G4INCLHornerFormEvaluator.hh
         G4INCLHashing.hh
         G4INCLLogger.hh
         G4INCLGlobalInfo.hh
@@ -65,23 +66,27 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLIRandomGenerator.hh
         G4INCLIntersection.hh
         G4INCLGeant4Random.hh
+        G4INCLInvFInterpolationTable.hh
         G4INCLIFunction1D.hh
         G4INCLConfigEnums.hh
         G4INCLRandom.hh
         G4INCLEventInfo.hh
         G4INCLRootFinder.hh
         G4INCLVersion.hh
+        G4INCLRanecu3.hh
         G4INCLGeant4Compat.hh
         G4INCLParticleSpecies.hh
         G4INCLThreeVector.hh
         G4INCLFinalState.hh
+        G4INCLInterpolationTable.hh
         G4INCLParticle.hh
-        G4INCLInverseInterpolationTable.hh
 
     SOURCES
-        G4INCLThreeVector.cc
         G4INCLParticleTable.cc
         G4INCLIAvatar.cc
+        G4INCLRanecu3.cc
+        G4INCLInterpolationTable.cc
+        G4INCLInvFInterpolationTable.cc
         G4INCLIFunction1D.cc
         G4INCLNuclearMassTable.cc
         G4INCLEventInfo.cc
@@ -92,7 +97,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLRootFinder.cc
         G4INCLRanecu.cc
         G4INCLRandomSeedVector.cc
-        G4INCLInverseInterpolationTable.cc
         G4INCLRandom.cc
         G4INCLFinalState.cc
         G4INCLNaturalIsotopicDistributions.cc

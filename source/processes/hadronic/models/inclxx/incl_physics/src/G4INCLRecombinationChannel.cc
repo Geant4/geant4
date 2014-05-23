@@ -93,7 +93,7 @@ namespace G4INCL {
         theNucleon->setType(Neutron);
         break;
       default:
-        INCL_ERROR("Unknown particle type in RecombinationChannel" << std::endl);
+        INCL_ERROR("Unknown particle type in RecombinationChannel" << '\n');
         break;
     }
 

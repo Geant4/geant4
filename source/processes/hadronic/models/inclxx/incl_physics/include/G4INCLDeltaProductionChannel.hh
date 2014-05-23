@@ -54,6 +54,8 @@ namespace G4INCL {
     G4double sampleDeltaMass(G4double ecm);
 
     Particle *particle1, *particle2;
+
+    static const G4int maxTries;
   };
 }
 

@@ -156,10 +156,7 @@ namespace G4INCL {
 
     /// \brief Get the seeds for the random-number generator.
     Random::SeedVector getRandomSeeds() const {
-      Random::SeedVector s;
-      s.push_back(randomSeed1);
-      s.push_back(randomSeed2);
-      return s;
+      return randomSeedVector;
     }
 
     /// \brief Get the Pauli-blocking algorithm.
@@ -254,6 +251,12 @@ namespace G4INCL {
     /// \brief Set the Fermi-momentum type
     void setFermiMomentumType(FermiMomentumType const f) { fermiMomentumType=f; }
 
+    /// \brief Get the Fermi momentum
+    G4double getFermiMomentum() const { return fermiMomentum; }
+
+    /// \brief Set the Fermi momentum
+    void setFermiMomentum(const G4double p) { fermiMomentum = p; }
+
     G4double getCutNN() const { return cutNN; }
 
 #ifdef INCL_ROOT_USE
@@ -307,6 +310,30 @@ namespace G4INCL {
     /// \brief Set the refraction variable
     void setRefraction(const G4bool r) { refraction = r; }
 
+    /// \brief Get the RNG type
+    RNGType getRNGType() const { return rngType; }
+
+    /// \brief Set the RNG type
+    void setRNGType(RNGType const r) { rngType=r; }
+
+    /// \brief Get the phase-space-generator type
+    PhaseSpaceGeneratorType getPhaseSpaceGeneratorType() const { return phaseSpaceGeneratorType; }
+
+    /// \brief Set the phase-space-generator type
+    void setPhaseSpaceGeneratorType(PhaseSpaceGeneratorType const p) { phaseSpaceGeneratorType=p; }
+
+    /// \brief Get the autosave frequency
+    unsigned int getAutosaveFrequency() const { return autosaveFrequency; }
+
+    /// \brief Set the autosave frequency
+    void setAutosaveFrequency(const unsigned int f) { autosaveFrequency=f; }
+
+    /// \brief Get the Cross Section type
+    CrossSectionsType getCrossSectionsType() const { return crossSectionsType; }
+
+    /// \brief Set the Cross Section type
+    void setCrossSectionsType(CrossSectionsType const c) { crossSectionsType=c; }
+
 #if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
     /// \brief Echo the input options.
     std::string const echo() const;
@@ -343,7 +370,8 @@ namespace G4INCL {
 
     G4int verboseEvent;
 
-    G4int randomSeed1, randomSeed2;
+    std::string randomSeeds;
+    Random::SeedVector randomSeedVector;
     static const G4int randomSeedMin, randomSeedMax;
 
     std::string pauliString;
@@ -395,10 +423,12 @@ namespace G4INCL {
     std::string fermiMomentumString;
     FermiMomentumType fermiMomentumType;
 
+    G4double fermiMomentum;
+
     G4double cutNN;
 
 #ifdef INCL_ROOT_USE
-    std::string rootSelectionString; 
+    std::string rootSelectionString;
 #endif
 
 #ifdef INCL_DEEXCITATION_FERMI_BREAKUP
@@ -413,6 +443,17 @@ namespace G4INCL {
     G4double neutronSkinAdditionalDiffuseness;
 
     G4bool refraction;
+
+    std::string randomNumberGenerator;
+    RNGType rngType;
+
+    std::string phaseSpaceGenerator;
+    PhaseSpaceGeneratorType phaseSpaceGeneratorType;
+
+    unsigned int autosaveFrequency;
+
+    std::string crossSectionsString;
+    CrossSectionsType crossSectionsType;
   };
 
 }

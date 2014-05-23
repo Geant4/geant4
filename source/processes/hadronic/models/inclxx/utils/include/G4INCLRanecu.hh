@@ -71,7 +71,7 @@ namespace G4INCL {
     G4double flat();
 
   private:
-    long iseed1, iseed2;
+    G4int iseed1, iseed2;
   };
 
 }

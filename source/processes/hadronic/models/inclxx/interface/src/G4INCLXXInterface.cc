@@ -290,7 +290,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
       G4LorentzVector fourMomentumOut;
 
-      for(G4int i = 0; i < eventInfo.nParticles; i++) {
+      for(G4int i = 0; i < eventInfo.nParticles; ++i) {
 	G4int A = eventInfo.A[i];
 	G4int Z = eventInfo.Z[i];
 	//	G4cout <<"INCL particle A = " << A << " Z = " << Z << G4endl;
@@ -321,7 +321,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 	}
       }
 
-      for(G4int i = 0; i < eventInfo.nRemnants; i++) {
+      for(G4int i = 0; i < eventInfo.nRemnants; ++i) {
 	const G4int A = eventInfo.ARem[i];
 	const G4int Z = eventInfo.ZRem[i];
 	//	G4cout <<"INCL particle A = " << A << " Z = " << Z << G4endl;
@@ -435,7 +435,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
 
   if(theDeExcitation != 0) {
     for(std::list<G4Fragment>::iterator i = remnants.begin();
-	i != remnants.end(); i++) {
+	i != remnants.end(); ++i) {
       G4ReactionProductVector *deExcitationResult = theDeExcitation->DeExcite((*i));
 
       for(G4ReactionProductVector::iterator fragment = deExcitationResult->begin();
@@ -540,5 +540,19 @@ G4double G4INCLXXInterface::remnant4MomentumScaling(G4double mass,
   } else {
     return 1.0;
   }
+}
+
+void G4INCLXXInterface::ModelDescription(std::ostream& outFile) const {
+   outFile
+     << "The Liège Intranuclear Cascade (INCL++) is a model for reactions induced\n"
+     << "by nucleons, pions and light ion on any nucleus. The reaction is\n"
+     << "described as an avalanche of binary nucleon-nucleon collisions, which can\n"
+     << "lead to the emission of energetic particles and to the formation of an\n"
+     << "excited thermalised nucleus (remnant). The de-excitation of the remnant is\n"
+     << "outside the scope of INCL++ and is typically described by another model.\n\n"
+     << "INCL++ has been reasonably well tested for projectiles up to A=18,\n"
+     << "energies from ~10 AMeV to ~3 AGeV and target nuclei close to the\n"
+     << "stability valley, with mass numbers between 4 and 250.\n\n"
+     << "Reference: A. Boudard et al., Phys. Rev. C87 (2013) 014606\n\n";
 }
 

@@ -34,7 +34,7 @@
 
 #include "globals.hh"
 
-/** \file G4INCLInverseInterpolationTable.cc
+/** \file G4INCLInvFInterpolationTable.cc
  * \brief Simple interpolation table for the inverse of a IFunction1D functor
  *
  * \date 17 July 2012
@@ -44,11 +44,11 @@
 // #include <cassert>
 #include <algorithm>
 #include <functional>
-#include "G4INCLInverseInterpolationTable.hh"
+#include "G4INCLInvFInterpolationTable.hh"
 
 namespace G4INCL {
 
-  InverseInterpolationTable::InverseInterpolationTable(IFunction1D const &f, const unsigned int nNodes) {
+  InvFInterpolationTable::InvFInterpolationTable(IFunction1D const &f, const unsigned int nNodes) {
 // assert(nNodes>2);
 
     const G4double x0 = f.getXMinimum();
@@ -77,65 +77,6 @@ namespace G4INCL {
 
     // Initialise the "derivative" values
     initDerivatives();
-    setFunctionDomain();
-  }
-
-  InverseInterpolationTable::InverseInterpolationTable(std::vector<G4double> const &x, std::vector<G4double> const &y) {
-// assert(x.size()==y.size());
-    // Assert that the x vector is sorted (corresponding to a monotonous
-    // function
-// assert(std::adjacent_find(nodes.begin(), nodes.end(), std::greater<InterpolationNode>()) == nodes.end());
-
-    for(unsigned i = 0; i < x.size(); ++i)
-      nodes.push_back(InterpolationNode(x.at(i), y.at(i), 0.));
-
-    initDerivatives();
-    setFunctionDomain();
-  }
-
-  void InverseInterpolationTable::initDerivatives() {
-    for(unsigned i = 0; i < nodes.size()-1; i++) {
-      if((nodes.at(i+1).getX() - nodes.at(i).getX()) == 0.0) // Safeguard against division by zero
-        nodes[i].setYPrime(0.0);
-      else
-        nodes[i].setYPrime((nodes.at(i+1).getY() - nodes.at(i).getY())/(nodes.at(i+1).getX() - nodes.at(i).getX()));
-    }
-    nodes.back().setYPrime(nodes.at(nodes.size()-2).getYPrime()); // Duplicate the last value
-  }
-
-  void InverseInterpolationTable::setFunctionDomain() {
-    // Set the function domain
-    if(nodes.front()>nodes.back()) {
-      xMin = nodes.back().getX();
-      xMax = nodes.front().getX();
-    } else {
-      xMin = nodes.front().getX();
-      xMax = nodes.back().getX();
-    }
-  }
-
-  G4double InverseInterpolationTable::operator()(const G4double x) const {
-    // Find the relevant interpolation bin
-    InterpolationNode xNode(x,0.,0.);
-    std::vector<InterpolationNode>::const_iterator iter =
-      std::lower_bound(nodes.begin(), nodes.end(), xNode);
-
-    if(iter==nodes.begin())
-      return nodes.front().getY();
-
-    if(iter==nodes.end())
-      return nodes.back().getY();
-
-    std::vector<InterpolationNode>::const_iterator previousIter = iter - 1;
-    const G4double dx = x - previousIter->getX();
-    return previousIter->getY() + previousIter->getYPrime()*dx;
-  }
-
-  std::string InverseInterpolationTable::print() const {
-    std::string message;
-    for(std::vector<InterpolationNode>::const_iterator n=nodes.begin(), e=nodes.end(); n!=e; ++n)
-      message += n->print();
-    return message;
   }
 
 }

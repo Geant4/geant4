@@ -80,9 +80,6 @@ namespace G4INCL {
     ParticleList const &getCreatedParticles() const;
     ParticleList const &getEnteringParticles() const;
 
-    void setBlockedDelta(Particle * const p) { blockedDelta = p; }
-    Particle *getBlockedDelta() { return blockedDelta; }
-
     FinalStateValidity getValidity() const { return validity; }
     void makeValid() { validity = ValidFS; }
     void makePauliBlocked() { validity = PauliBlockedFS; }
@@ -90,13 +87,16 @@ namespace G4INCL {
     void makeParticleBelowFermi() { validity = ParticleBelowFermiFS; }
     void makeParticleBelowZero() { validity = ParticleBelowZeroFS; }
 
+    void setDeltaFixed(const G4bool f);
+    G4bool getDeltaFixed() const;
+
     std::string print() const;
 
   private:
     ParticleList outgoing, created, destroyed, modified, entering;
     G4double totalEnergyBeforeInteraction;
     FinalStateValidity validity;
-    Particle *blockedDelta;
+    G4bool isDeltaFixed;
   };
 
 }

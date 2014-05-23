@@ -16,6 +16,13 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+22 May 2014 - Davide Mancusi (hadr-inclxx-V10-00-04, -05)
+---------------------------------------------------------------
+- INCL++ v5.2_rc1
+  o Extends INCL++ up to 15-20 GeV incident energy.
+  o A few improvementsi, minor bug fixes and speed-ups.
+  o Fixes a minor Coverity warning.
+
 13 March 2014 - Gabriele Cosmo (hadr-inclxx-V10-00-03)
 ---------------------------------------------------------------
 - Fixed use of inline keyword for method getPhaseSpace() defined in

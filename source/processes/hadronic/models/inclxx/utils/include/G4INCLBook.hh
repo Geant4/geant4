@@ -94,7 +94,7 @@ namespace G4INCL {
     G4bool getFirstCollisionIsElastic() const { return firstCollisionIsElastic; };
 
     void setCurrentTime(G4double t) { currentTime = t; };
-    G4double getCurrentTime() { return currentTime; };
+    G4double getCurrentTime() const { return currentTime; };
 
     G4int getAcceptedCollisions() const { return nAcceptedCollisions; };
     G4int getBlockedCollisions() const {return nBlockedCollisions; };

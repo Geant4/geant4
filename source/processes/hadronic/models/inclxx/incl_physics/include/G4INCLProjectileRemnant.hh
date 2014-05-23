@@ -53,9 +53,6 @@
 
 namespace G4INCL {
 
-  /// \brief Helper function for ProjectileRemnant::shuffleStoredComponents
-  G4int shuffleComponentsHelper(G4int range);
-
   class ProjectileRemnant : public Cluster {
     public:
 
@@ -63,7 +60,7 @@ namespace G4INCL {
     typedef std::vector<G4double> EnergyLevels;
     typedef std::map<long, G4double> EnergyLevelMap;
 
-    ProjectileRemnant(ParticleSpecies const species, const G4double kineticEnergy)
+    ProjectileRemnant(ParticleSpecies const &species, const G4double kineticEnergy)
       : Cluster(species.theZ, species.theA) {
 
       // Use the table mass
@@ -136,7 +133,7 @@ namespace G4INCL {
      *
      * Return a list of rejected dynamical spectators.
      */
-    ParticleList addAllDynamicalSpectators(ParticleList pL);
+    ParticleList addAllDynamicalSpectators(ParticleList const &pL);
 
     /// \brief Clear the stored projectile components and delete the particles
     void deleteStoredComponents() {
@@ -228,7 +225,7 @@ namespace G4INCL {
     /// \brief Shuffle the list of stored projectile components
     ParticleList shuffleStoredComponents() {
       ParticleList pL = getStoredComponents();
-      std::random_shuffle(pL.begin(), pL.end(), shuffleComponentsHelper);
+      std::random_shuffle(pL.begin(), pL.end(), Random::getAdapter());
       return pL;
     }
 
@@ -243,7 +240,7 @@ namespace G4INCL {
     ThreeVector const &getStoredMomentum(Particle const * const p) const {
       std::map<long,Particle*>::const_iterator i = storedComponents.find(p->getID());
       if(i==storedComponents.end()) {
-        INCL_ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << std::endl);
+        INCL_ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << '\n');
         return p->getMomentum();
       } else {
         return i->second->getMomentum();
@@ -262,7 +259,7 @@ namespace G4INCL {
     /*    G4double getStoredEnergy(Particle const * const p) {
           std::map<long,Particle*>::const_iterator i = initialProjectileComponents.find(p->getID());
           if(i==initialProjectileComponents.end()) {
-          INCL_ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << std::endl);
+          INCL_ERROR("Couldn't find particle " << p->getID() << " in the list of projectile components" << '\n');
           return 0.;
           } else {
           return i->second->getEnergy();

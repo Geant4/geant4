@@ -46,13 +46,13 @@
 #include "G4INCLGlobals.hh"
 #include "G4INCLRandom.hh"
 #include "G4INCLINuclearPotential.hh"
-#include "G4INCLInverseInterpolationTable.hh"
+#include "G4INCLInterpolationTable.hh"
 
 namespace G4INCL {
 
   class NuclearDensity {
   public:
-    NuclearDensity(const G4int A, const G4int Z, InverseInterpolationTable const * const rpCorrelationTableProton, InverseInterpolationTable const * const rpCorrelationTableNeutron);
+    NuclearDensity(const G4int A, const G4int Z, InterpolationTable const * const rpCorrelationTableProton, InterpolationTable const * const rpCorrelationTableNeutron);
     ~NuclearDensity();
 
     /// \brief Copy constructor
@@ -121,8 +121,8 @@ namespace G4INCL {
     /* \brief map of transmission radii per particle type */
     G4double transmissionRadius[UnknownParticle];
 
-    InverseInterpolationTable const *rFromP[UnknownParticle];
-    InverseInterpolationTable const *pFromR[UnknownParticle];
+    InterpolationTable const *rFromP[UnknownParticle];
+    InterpolationTable const *pFromR[UnknownParticle];
   };
 
 }

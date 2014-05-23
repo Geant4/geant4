@@ -40,15 +40,13 @@
 #include "G4INCLIPauli.hh"
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
+#include "G4INCLConfig.hh"
 
 namespace G4INCL {
 
-  /**
-   * Pauli blocking
-   *
-   */
-  class Pauli {
-  public:
+  /// \brief Pauli blocking
+  namespace Pauli {
+
     /** \brief Check Pauli blocking.
      *
      * Note: This is a "pure" function: it doesn't retain or modify
@@ -57,7 +55,7 @@ namespace G4INCL {
      * \param p list of modified and created particles
      * \param n the nucleus
      */
-    static G4bool isBlocked(ParticleList const &p, Nucleus const * const n);
+    G4bool isBlocked(ParticleList const &p, Nucleus const * const n);
 
     /** \brief Check CDPP blocking.
      *
@@ -67,46 +65,27 @@ namespace G4INCL {
      * \param p list of created particles
      * \param n the nucleus
      */
-    static G4bool isCDPPBlocked(ParticleList const &p, Nucleus const * const n);
+    G4bool isCDPPBlocked(ParticleList const &p, Nucleus const * const n);
 
-    /**
-     * Get the Pauli blocker algorithm.
-     */
-    static IPauli * getBlocker() { return thePauliBlocker; }
+    /// \brief Get the Pauli blocker algorithm.
+    IPauli * getBlocker();
 
-    /**
-     * Get the CDPP blocker algorithm.
-     */
-    static IPauli * getCDPP() { return theCDPP; }
+    /// \brief Get the CDPP blocker algorithm.
+    IPauli * getCDPP();
 
-    /**
-     * Set the Pauli blocker algorithm.
-     */
-    static void setBlocker(IPauli * const);
+    /// \brief Set the Pauli blocker algorithm.
+    void setBlocker(IPauli * const);
 
-    /**
-     * Set the CDPP blocker algorithm.
-     */
-    static void setCDPP(IPauli * const);
+    /// \brief Set the CDPP blocker algorithm.
+    void setCDPP(IPauli * const);
 
-    /**
-     * Delete blockers
-     */
-    static void deleteBlockers() {
-      delete thePauliBlocker;
-      thePauliBlocker=NULL;
-      delete theCDPP;
-      theCDPP=NULL;
-    }
+    /// \brief Delete blockers
+    void deleteBlockers();
 
-  protected:
-    Pauli() {}
-    ~Pauli() {}
+    /// \brief Initialise blockers according to a Config object
+    void initialize(Config const * const aConfig);
 
-  private:
-    static G4ThreadLocal IPauli * thePauliBlocker;
-    static G4ThreadLocal IPauli * theCDPP;
-  };
+  }
 
 }
 

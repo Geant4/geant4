@@ -39,6 +39,8 @@
 #include "G4INCLParticleSpecies.hh"
 #include "G4INCLParticleTable.hh"
 #include "G4INCLGlobals.hh"
+#include <cerrno>
+#include <cstdlib>
 
 namespace G4INCL {
 
@@ -66,6 +68,8 @@ namespace G4INCL {
     physicsOptDesc("Physics options"),
     naturalTarget(false)
   {
+    init();
+
     const std::string suggestHelpMsg("You might want to run `INCLCascade --help' to get a help message.\n");
 
     // Define the names of the de-excitation models
@@ -151,11 +155,9 @@ namespace G4INCL {
         ;
 
       // Run-specific options
-      std::stringstream randomSeed1Description, randomSeed2Description;
-      randomSeed1Description << "first seed for the random-number generator (between "
-        << randomSeedMin << "and " << randomSeedMax << ")";
-      randomSeed2Description << "second seed for the random-number generator (between "
-        << randomSeedMin << "and " << randomSeedMax << ")";
+      std::stringstream randomSeedsDescription;
+      randomSeedsDescription << "comma-separated list of seeds for the random-number generator. Allowed seed range: "
+        << randomSeedMin << "-" << randomSeedMax << ".";
 
       runOptDesc.add_options()
         ("title", po::value<std::string>(&title)->default_value("INCL default run title"), "run title")
@@ -174,8 +176,9 @@ namespace G4INCL {
          "  \tHe-4, He4, 4He (and so on)")
         ("energy,E", po::value<G4double>(&projectileKineticEnergy), "* total kinetic energy of the projectile, in MeV")
         ("verbose-event", po::value<G4int>(&verboseEvent)->default_value(-1), "request verbose logging for the specified event only")
-        ("random-seed-1", po::value<G4int>(&randomSeed1)->default_value(666), randomSeed1Description.str().c_str())
-        ("random-seed-2", po::value<G4int>(&randomSeed2)->default_value(777), randomSeed2Description.str().c_str())
+        ("random-number-generator", po::value<std::string>(&randomNumberGenerator)->default_value("Ranecu"), "Random number generator to use:\n  \tRanecu (2 seeds, default)\n  \tRanecu3 (3 seeds)")
+        ("random-seeds", po::value<std::string>(&randomSeeds)->default_value("666,777,1234"), randomSeedsDescription.str().c_str())
+        ("autosave-frequency", po::value<unsigned int>(&autosaveFrequency)->default_value(10000), "frequency between automatic saves of the output/log files")
 #ifdef INCL_ROOT_USE
         ("root-selection", po::value<std::string>(&rootSelectionString)->default_value(""), "ROOT selection for abridged output ROOT tree. For example: \"A==1 && Z==0 && theta<3\" selects only events where a neutron is scattered in the forward direction.")
 #endif
@@ -219,7 +222,7 @@ namespace G4INCL {
         ("back-to-spectator", po::value<G4bool>(&backToSpectator)->default_value("true"), "whether to use back-to-spectator:\n  \ttrue, 1 (default)\n  \tfalse, 0")
         ("use-real-masses", po::value<G4bool>(&useRealMasses)->default_value("true"), "whether to use real masses for the outgoing particle energies:\n  \ttrue, 1 (default)\n  \tfalse, 0")
         ("separation-energies", po::value<std::string>(&separationEnergyString)->default_value("INCL"), "how to assign the separation energies of the INCL nucleus:\n  \tINCL (default)\n  \treal\n  \treal-light")
-        ("fermi-momentum", po::value<std::string>(&fermiMomentumString)->default_value("constant"), "how to assign the Fermi momentum of the INCL nucleus:\n  \tconstant (default)\n  \tconstant-light\n  \tmass-dependent")
+        ("fermi-momentum", po::value<std::string>(&fermiMomentumString)->default_value("constant"), "how to assign the Fermi momentum of the INCL nucleus:\n  \tconstant (default)\n  \tconstant-light\n  \tmass-dependent\n  \t[a positive value]")
         ("cutNN", po::value<G4double>(&cutNN)->default_value(1910.), "minimum CM energy for nucleon-nucleon collisions, in MeV. Default: 1910.")
         ("rp-correlation", po::value<G4double>(&rpCorrelationCoefficient)->default_value(1.), "correlation coefficient for the r-p correlation. Default: 1 (full correlation).")
         ("rp-correlation-p", po::value<G4double>(&rpCorrelationCoefficientProton)->default_value(1.), "correlation coefficient for the proton r-p correlation. Overrides the value specified using the rp-correlation option. Default: 1 (full correlation).")
@@ -227,6 +230,10 @@ namespace G4INCL {
         ("neutron-skin-thickness", po::value<G4double>(&neutronSkinThickness)->default_value(0.), "thickness of the neutron skin, in fm. Default: 0.")
         ("neutron-skin-additional-diffuseness", po::value<G4double>(&neutronSkinAdditionalDiffuseness)->default_value(0.), "additional diffuseness of the neutron density distribution (with respect to the proton diffuseness), in fm. Default: 0.")
         ("refraction", po::value<G4bool>(&refraction)->default_value(false), "whether to use refraction when particles are transmitted. Default: false.")
+        ("cross-sections", po::value<std::string>(&crossSectionsString)->default_value("multipions"), "cross-section parametrizations:\n"
+         "  \tmultipions (default)\n"
+         "  \tincl46")
+        ("phase-space-generator", po::value<std::string>(&phaseSpaceGenerator)->default_value("raubold-lynch"), "algorithm to generate phase-space decays:\n  \tRaubold-Lynch (default)\n  \tKopylov")
         ;
 
       // Select options allowed on the command line
@@ -263,7 +270,7 @@ namespace G4INCL {
       if(variablesMap.count("input-file")) {
         std::ifstream inputFileStream(inputFileName.c_str());
         if(!inputFileStream) {
-          std::cerr << "Cannot open input file: " << inputFileName << std::endl;
+          std::cerr << "Cannot open input file: " << inputFileName << '\n';
           std::exit(EXIT_FAILURE);
         } else {
           // Merge options from the input file
@@ -280,10 +287,10 @@ namespace G4INCL {
               continue;
             }
             if(i->rfind(match) == i->length()-match.length()) {
-              std::cout << "Ignoring unrecognized option " << *i << std::endl;
+              std::cout << "# Ignoring unrecognized option " << *i << '\n';
               ignoreNext = true;
             } else {
-              std::cerr << "Error: unrecognized option " << *i << std::endl;
+              std::cerr << "Error: unrecognized option " << *i << '\n';
               std::cerr << suggestHelpMsg;
               std::exit(EXIT_FAILURE);
             }
@@ -314,9 +321,9 @@ namespace G4INCL {
       }
 
       std::ifstream configFileStream(configFileName.c_str());
-      std::cout << "Reading config file " << configFileName << std::endl;
+      std::cout << "# Reading config file " << configFileName << std::endl;
       if(!configFileStream) {
-        std::cout << "INCL++ config file " << configFileName
+        std::cout << "# INCL++ config file " << configFileName
           << " not found. Continuing the run regardless."
           << std::endl;
       } else {
@@ -385,8 +392,6 @@ namespace G4INCL {
           std::cerr << suggestHelpMsg;
           std::exit(EXIT_FAILURE);
         }
-      } else {
-        std::cout <<"Not performing a full run. This had better be a test..." << std::endl;
       }
 
       // -p/--projectile: projectile species
@@ -621,13 +626,26 @@ namespace G4INCL {
         else if(fermiMomentumNorm=="mass-dependent")
           fermiMomentumType = MassDependentFermiMomentum;
         else {
-          std::cerr << "Unrecognized fermi-momentum option. "
-            << "Must be one of:" << std::endl
-            << "  constant (default)" << std::endl
-            << "  constant-light" << std::endl
-            << "  mass-dependent" << std::endl;
-          std::cerr << suggestHelpMsg;
-          std::exit(EXIT_FAILURE);
+          // Try to convert the option value to a G4float, and bomb out on failure
+          errno = 0;
+          char *tail;
+          fermiMomentum = strtod(fermiMomentumNorm.c_str(), &tail);
+          if(errno || *tail!='\0') {
+            std::cerr << "Unrecognized fermi-momentum option. "
+              << "Must be one of:" << std::endl
+              << "  constant (default)" << std::endl
+              << "  constant-light" << std::endl
+              << "  mass-dependent" << std::endl
+              << "  [a postiive value]" << std::endl;
+            std::cerr << suggestHelpMsg;
+            std::exit(EXIT_FAILURE);
+          }
+          if(fermiMomentum<=0.) {
+            std::cerr << "Values passed to fermi-momentum must be positive." << std::endl;
+            std::cerr << suggestHelpMsg;
+            std::exit(EXIT_FAILURE);
+          }
+          fermiMomentumType = ConstantFermiMomentum;
         }
       } else {
         fermiMomentumType = ConstantFermiMomentum;
@@ -641,14 +659,72 @@ namespace G4INCL {
           rpCorrelationCoefficientNeutron = rpCorrelationCoefficient;
       }
 
+      // --cross-sections
+      if(variablesMap.count("cross-sections")) {
+        std::string crossSectionsNorm = crossSectionsString;
+        std::transform(crossSectionsNorm.begin(), crossSectionsNorm.end(), crossSectionsNorm.begin(), ::tolower);
+        if(crossSectionsNorm=="incl46")
+          crossSectionsType = INCL46CrossSections;
+        else if(crossSectionsNorm=="multipions")
+          crossSectionsType = MultiPionsCrossSections;
+        else {
+          std::cerr << "Unrecognized cross section parametrization. Must be one of:" << std::endl
+            << "  multipions (default)" << std::endl
+            << "  incl46" << std::endl;
+          std::cerr << suggestHelpMsg;
+          std::exit(EXIT_FAILURE);
+        }
+      }
+
+      // --phase-space-generator
+      if(variablesMap.count("phase-space-generator")) {
+        std::string phaseSpaceGeneratorNorm = phaseSpaceGenerator;
+        std::transform(phaseSpaceGeneratorNorm.begin(),
+            phaseSpaceGeneratorNorm.end(),
+            phaseSpaceGeneratorNorm.begin(), ::tolower);
+        if(phaseSpaceGeneratorNorm=="raubold-lynch")
+          phaseSpaceGeneratorType = RauboldLynchType;
+        else if(phaseSpaceGeneratorNorm=="kopylov")
+          phaseSpaceGeneratorType = KopylovType;
+        else {
+          std::cerr << "Unrecognized phase-space-generator option. "
+            << "Must be one of:" << std::endl
+            << "  Raubold-Lynch (default)" << std::endl
+            << "  Kopylov" << std::endl;
+          std::cerr << suggestHelpMsg;
+          std::exit(EXIT_FAILURE);
+        }
+      } else {
+        phaseSpaceGeneratorType = RauboldLynchType;
+      }
+
       // -s/--suffix
       if(!variablesMap.count("suffix")) {
         // update the value in the variables_map
         variablesMap.insert(std::make_pair("suffix", po::variable_value(boost::any(fileSuffix), false)));
       }
 
-      // --output: construct a reasonable output file root if not specified
-      if(!variablesMap.count("output") && isFullRun) {
+      // --*-path: perform tilde expansion on the datafile paths
+      if(variablesMap.count("inclxx-datafile-path"))
+        INCLXXDataFilePath = String::expandPath(INCLXXDataFilePath);
+#ifdef INCL_DEEXCITATION_ABLAXX
+      if(variablesMap.count("ablav3p-cxx-datafile-path"))
+        ablav3pCxxDataFilePath = String::expandPath(ablav3pCxxDataFilePath);
+#endif
+#ifdef INCL_DEEXCITATION_ABLA07
+      if(variablesMap.count("abla07-datafile-path"))
+        abla07DataFilePath = String::expandPath(abla07DataFilePath);
+#endif
+#ifdef INCL_DEEXCITATION_GEMINIXX
+      if(variablesMap.count("geminixx-datafile-path"))
+        geminixxDataFilePath = String::expandPath(geminixxDataFilePath);
+#endif
+
+      // --output: path expansion is applied
+      if(variablesMap.count("output")) {
+        outputFileRoot = String::expandPath(outputFileRoot);
+      } else if(isFullRun) {
+        // construct a reasonable output file root if not specified
         std::stringstream outputFileRootStream;
         // If an input file was specified, use its name as the output file root
         if(variablesMap.count("input-file"))
@@ -671,8 +747,8 @@ namespace G4INCL {
                && name!="target"
                && name!="energy"
                && name!="number-shots"
-               && name!="random-seed-1"
-               && name!="random-seed-2"
+               && name!="random-seeds"
+               && name!="random-number-generator"
                && name!="verbosity"
                && name!="verbose-event"
                && name!="suffix"
@@ -722,23 +798,58 @@ namespace G4INCL {
         logFileName = outputFileRoot + ".log";
         // update the value in the variables_map
         variablesMap.insert(std::make_pair("logfile", po::variable_value(boost::any(logFileName), false)));
+      } else {
+        // perform path expansion
+        logFileName = String::expandPath(logFileName);
       }
 
-      // --random-seed-1 and 2
-      if(!variablesMap.count("random-seed-1")) {
-        if(randomSeed1<randomSeedMin || randomSeed1>randomSeedMax) {
-          std::cerr << "Invalid value for random-seed-1. "
-            << "Allowed range: [" << randomSeedMin << ", " << randomSeedMax << "]." << std::endl;
+      // --random-number-generator
+      if(variablesMap.count("random-number-generator")) {
+        std::string randomNumberGeneratorNorm = randomNumberGenerator;
+        std::transform(randomNumberGeneratorNorm.begin(),
+            randomNumberGeneratorNorm.end(),
+            randomNumberGeneratorNorm.begin(), ::tolower);
+        if(randomNumberGeneratorNorm=="ranecu")
+          rngType = RanecuType;
+        else if(randomNumberGeneratorNorm=="ranecu3")
+          rngType = Ranecu3Type;
+        else {
+          std::cerr << "Unrecognized random-number-generator option. "
+            << "Must be one of:" << std::endl
+            << "  Ranecu (2 seeds, default)" << std::endl
+            << "  Ranecu3 (3 seeds)" << std::endl;
           std::cerr << suggestHelpMsg;
           std::exit(EXIT_FAILURE);
         }
+      } else {
+        rngType = RanecuType;
       }
-      if(!variablesMap.count("random-seed-2")) {
-        if(randomSeed2<randomSeedMin || randomSeed2>randomSeedMax) {
-          std::cerr << "Invalid value for random-seed-2. "
-            << "Allowed range: [" << randomSeedMin << ", " << randomSeedMax << "]." << std::endl;
-          std::cerr << suggestHelpMsg;
-          std::exit(EXIT_FAILURE);
+
+      // --random-seeds
+      if(variablesMap.count("random-seeds")) {
+        randomSeedVector.clear();
+
+        std::vector<std::string> tokens = String::tokenize(randomSeeds, ", \t");
+        for(std::vector<std::string>::const_iterator i=tokens.begin(), e=tokens.end(); i!=e; ++i) {
+          if(!String::isInteger(*i)) {
+            std::cerr << "Invalid random seed, must be an integer. Parsed token: "
+              << *i << std::endl;
+            std::cerr << suggestHelpMsg;
+            std::exit(EXIT_FAILURE);
+          }
+
+          std::stringstream ss(*i);
+          G4int seed;
+          ss >> seed;
+
+          if(seed<randomSeedMin || seed>randomSeedMax) {
+            std::cerr << "Invalid value for random-seed-1. "
+              << "Allowed range: [" << randomSeedMin << ", " << randomSeedMax << "]." << std::endl;
+            std::cerr << suggestHelpMsg;
+            std::exit(EXIT_FAILURE);
+          }
+
+          randomSeedVector.push_back(seed);
         }
       }
 
@@ -763,6 +874,7 @@ namespace G4INCL {
 
   void Config::init() {
       verbosity = 1;
+      logFileName = "-";
       inputFileName = "";
       title = "INCL default run title";
       nShots = 1000;
@@ -771,8 +883,10 @@ namespace G4INCL {
       projectileSpecies = G4INCL::Proton;
       projectileKineticEnergy = 1000.0;
       verboseEvent = -1;
-      randomSeed1 = 666;
-      randomSeed2 = 777;
+      randomSeeds = "";
+      randomSeedVector.push_back(666);
+      randomSeedVector.push_back(777);
+      randomSeedVector.push_back(1234);
       pauliString = "strict-statistical";
       pauliType = StrictStatisticalPauli;
       CDPP = true;
@@ -797,6 +911,7 @@ namespace G4INCL {
       separationEnergyType = INCLSeparationEnergy;
       fermiMomentumString = "constant";
       fermiMomentumType = ConstantFermiMomentum;
+      fermiMomentum = -1.;
       cutNN = 1910.;
 #ifdef INCL_DEEXCITATION_FERMI_BREAKUP
       maxMassFermiBreakUp = 18;
@@ -807,21 +922,28 @@ namespace G4INCL {
       neutronSkinThickness = 0.;
       neutronSkinAdditionalDiffuseness = 0.;
       refraction=false;
+      phaseSpaceGenerator = "Raubold-Lynch";
+      phaseSpaceGeneratorType = RauboldLynchType;
+      randomNumberGenerator = "Ranecu";
+      rngType = RanecuType;
+      autosaveFrequency = 10000;
+      crossSectionsString = "multipions";
+      crossSectionsType = MultiPionsCrossSections;
   }
 
   std::string Config::summary() {
     std::stringstream message;
-    message << "INCL++ version " << getVersionString() << std::endl;
+    message << "INCL++ version " << getVersionString() << '\n';
     if(projectileSpecies.theType != Composite)
-      message << "Projectile: " << ParticleTable::getName(projectileSpecies) << std::endl;
+      message << "Projectile: " << ParticleTable::getName(projectileSpecies) << '\n';
     else
-      message << "Projectile: composite, A=" << projectileSpecies.theA << ", Z=" << projectileSpecies.theZ << std::endl;
-    message << "  energy = " << projectileKineticEnergy << std::endl;
+      message << "Projectile: composite, A=" << projectileSpecies.theA << ", Z=" << projectileSpecies.theZ << '\n';
+    message << "  energy = " << projectileKineticEnergy << '\n';
     if(targetSpecies.theA>0)
-      message << "Target: A = " << targetSpecies.theA << " Z = " << targetSpecies.theZ << std::endl;
+      message << "Target: A = " << targetSpecies.theA << " Z = " << targetSpecies.theZ << '\n';
     else
-      message << "Target: natural isotopic composition, Z = " << targetSpecies.theZ << std::endl;
-    message << "Number of requested shots = " << nShots << std::endl;
+      message << "Target: natural isotopic composition, Z = " << targetSpecies.theZ << '\n';
+    message << "Number of requested shots = " << nShots << '\n';
     return message.str();
   }
 
@@ -857,22 +979,24 @@ namespace G4INCL {
     ss << std::boolalpha;
     OptVector const &anOptVect = aDesc.options();
     for(OptIter opt=anOptVect.begin(), e=anOptVect.end(); opt!=e; ++opt) {
-      std::string description = (*opt)->description();
-      String::wrap(description);
-      String::replaceAll(description, "\n", "\n# ");
-      ss << "\n# " << description << std::endl;
+      std::string optDescription = (*opt)->description();
+      String::wrap(optDescription);
+      String::replaceAll(optDescription, "\n", "\n# ");
+      ss << "\n# " << optDescription << '\n';
       const std::string &name = (*opt)->long_name();
       ss << name << " = ";
       po::variable_value const &value = variablesMap.find(name)->second;
       std::type_info const &type = value.value().type();
       if(type == typeid(std::string)) {
-        const std::string svalue = value.as<std::string>();
-        if(svalue.empty())
+        const std::string s = value.as<std::string>();
+        if(s.empty())
           ss << "\"\"";
         else
-          ss << svalue;
+          ss << s;
       } else if(type == typeid(G4int))
         ss << value.as<G4int>();
+      else if(type == typeid(unsigned int))
+        ss << value.as<unsigned int>();
       else if(type == typeid(G4float))
         ss << value.as<G4float>();
       else if(type == typeid(G4double))

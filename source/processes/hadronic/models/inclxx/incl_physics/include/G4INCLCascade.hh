@@ -321,7 +321,7 @@ namespace G4INCL {
       void makeCompoundNucleus();
 
       /// \brief Initialise the cascade
-      G4bool preCascade(ParticleSpecies const projectileSpecies, const G4double kineticEnergy);
+      G4bool preCascade(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy);
 
       /// \brief The actual cascade loop
       void cascade();

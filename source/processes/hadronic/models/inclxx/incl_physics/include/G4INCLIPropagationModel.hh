@@ -46,6 +46,7 @@
 
 #include "G4INCLIAvatar.hh"
 #include "G4INCLNucleus.hh"
+#include "G4INCLFinalState.hh"
 
 namespace G4INCL {
 
@@ -78,10 +79,10 @@ namespace G4INCL {
        */
       virtual G4INCL::Nucleus* getNucleus() = 0;
 
-      virtual G4double shoot(ParticleSpecies const projectileSpecies, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) = 0;
+      virtual G4double shoot(ParticleSpecies const &projectileSpecies, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) = 0;
     protected:
       virtual G4double shootParticle(ParticleType const t, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) = 0;
-      virtual G4double shootComposite(ParticleSpecies const s, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) = 0;
+      virtual G4double shootComposite(ParticleSpecies const &s, const G4double kineticEnergy, const G4double impactParameter, const G4double phi) = 0;
 
     public:
 
@@ -105,7 +106,7 @@ namespace G4INCL {
        *
        * @return G4INCL::IAvatar the next avatar
        */
-      virtual G4INCL::IAvatar* propagate() = 0;
+      virtual G4INCL::IAvatar* propagate(FinalState const * const fs) = 0;
     };
 
 }

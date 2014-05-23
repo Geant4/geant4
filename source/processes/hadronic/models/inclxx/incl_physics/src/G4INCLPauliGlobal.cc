@@ -54,7 +54,7 @@ namespace G4INCL {
       if((*p)->getMomentum().mag2() > pFermiSquared) continue;
 
       // Count particles of the same type as p below the Fermi sea
-      const ParticleList particles = n->getStore()->getParticles();
+      ParticleList const &particles = n->getStore()->getParticles();
       G4int nSea = 0;
       for(ParticleIter i=particles.begin(), end=particles.end(); i!=end; ++i) {
         if((*i)->getType() != t) continue;

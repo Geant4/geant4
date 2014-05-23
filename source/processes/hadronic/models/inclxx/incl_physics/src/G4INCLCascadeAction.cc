@@ -100,8 +100,8 @@ namespace G4INCL {
   void CascadeAction::beforeAvatarDefaultAction(IAvatar *a, Nucleus *n) {
     n->getStore()->getBook().incrementAvatars(a->getType());
     INCL_DEBUG("Random seeds before avatar " << a->getID() << ": "
-          << G4INCL::Random::getSeeds() << std::endl);
-    INCL_DEBUG("Next avatar:" << std::endl << a->dump() << std::endl);
+          << G4INCL::Random::getSeeds() << '\n');
+    INCL_DEBUG("Next avatar:" << '\n' << a->dump() << '\n');
   }
 
   void CascadeAction::afterAvatarDefaultAction(IAvatar *a, Nucleus * /*n*/, FinalState *fs) {
@@ -110,7 +110,7 @@ namespace G4INCL {
       return;
 
     INCL_DEBUG("Random seeds after avatar " << a->getID() << ": "
-          << G4INCL::Random::getSeeds() << std::endl);
+          << G4INCL::Random::getSeeds() << '\n');
 
     ParticleList modified = fs->getModifiedParticles();
     for(ParticleIter p=modified.begin(), e=modified.end(); p!=e; ++p )

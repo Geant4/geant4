@@ -48,8 +48,6 @@
 
 namespace G4INCL {
 
-  enum ChannelType {toNucleonNucleon, toNucleonDelta, toDeltaDelta};
-
   /**
    * Channel generates a final state of an avatar.
    */

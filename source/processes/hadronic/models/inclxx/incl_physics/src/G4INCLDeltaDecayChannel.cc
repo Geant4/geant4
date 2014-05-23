@@ -42,17 +42,18 @@
 
 namespace G4INCL {
 
-  DeltaDecayChannel::DeltaDecayChannel(Particle *p, ThreeVector const dir)
+  DeltaDecayChannel::DeltaDecayChannel(Particle *p, ThreeVector const &dir)
     :theParticle(p), incidentDirection(dir)
   { }
 
   DeltaDecayChannel::~DeltaDecayChannel() {}
 
-  G4double DeltaDecayChannel::computeDecayTime(Particle *p) {
+  G4double DeltaDecayChannel::computeDecayTime(Particle *p, const G4bool isDeltaFixed) {
     const G4double m = p->getMass();
     const G4double g0 = 115.0;
     G4double gg = g0;
     if(m > 1500.0) gg = 200.0;
+    if (isDeltaFixed) gg = 200.0;
     const G4double geff = p->getEnergy()/m;
     const G4double qqq = KinematicsUtils::momentumInCM(m, ParticleTable::effectiveNucleonMass, ParticleTable::effectivePionMass);
     const G4double psf = std::pow(qqq, 3)/(std::pow(qqq, 3) + 5832000.0);
@@ -157,7 +158,7 @@ namespace G4INCL {
         pionType = PiMinus;
         break;
       default:
-        INCL_FATAL("Unrecognized delta type; type=" << theParticle->getType() << std::endl);
+        INCL_FATAL("Unrecognized delta type; type=" << theParticle->getType() << '\n');
         pionType = UnknownParticle;
         break;
     }

@@ -34,15 +34,15 @@
 
 #include "globals.hh"
 
-/** \file G4INCLInverseInterpolationTable.hh
- * \brief Simple interpolation table for the inverse of a IFunction1D functor
+/** \file G4INCLInterpolationTable.hh
+ * \brief Simple interpolation table
  *
- * \date 16 July 2012
+ * \date 30 January 2014
  * \author Davide Mancusi
  */
 
-#ifndef G4INCLINVERSEINTERPOLATIONTABLE_HH_
-#define G4INCLINVERSEINTERPOLATIONTABLE_HH_
+#ifndef G4INCLINTERPOLATIONTABLE_HH_
+#define G4INCLINTERPOLATIONTABLE_HH_
 
 #include "G4INCLIFunction1D.hh"
 #include <algorithm>
@@ -50,9 +50,6 @@
 #include <sstream>
 
 namespace G4INCL {
-
-  // Forward declaration
-  class InverseInterpolationTable;
 
   /// \brief Interpolation node
   class InterpolationNode {
@@ -91,7 +88,7 @@ namespace G4INCL {
 
       std::string print() const {
         std::stringstream message;
-        message << "x, y, yPrime: " << x << '\t' << y << '\t' << yPrime << std::endl;
+        message << "x, y, yPrime: " << x << '\t' << y << '\t' << yPrime << '\n';
         return message.str();
       }
 
@@ -104,39 +101,27 @@ namespace G4INCL {
       G4double yPrime;
   };
 
-  /// \brief Class for interpolating the inverse of a 1-dimensional function
-  class InverseInterpolationTable : public IFunction1D {
+  /// \brief Class for interpolating the  of a 1-dimensional function
+  class InterpolationTable : public IFunction1D {
     public:
-      InverseInterpolationTable(IFunction1D const &f, const unsigned int nNodes=30);
-      InverseInterpolationTable(std::vector<G4double> const &x, std::vector<G4double> const &y);
-      virtual ~InverseInterpolationTable() {}
+      InterpolationTable(std::vector<G4double> const &x, std::vector<G4double> const &y);
+      virtual ~InterpolationTable() {}
 
       unsigned int getNumberOfNodes() const { return nodes.size(); }
 
-      std::vector<G4double> getNodeAbscissae() const {
-        std::vector<G4double> x(nodes.size());
-        std::transform(nodes.begin(), nodes.end(), x.begin(),
-            std::mem_fun_ref(&InterpolationNode::getX));
-        return x;
-      }
+      std::vector<G4double> getNodeAbscissae() const;
 
-      std::vector<G4double> getNodeValues() const {
-        std::vector<G4double> y(nodes.size());
-        std::transform(nodes.begin(), nodes.end(), y.begin(),
-            std::mem_fun_ref(&InterpolationNode::getY));
-        return y;
-      }
+      std::vector<G4double> getNodeValues() const;
 
       G4double operator()(const G4double x) const;
 
       std::string print() const;
 
-    private:
+    protected:
+      InterpolationTable();
+
       /// \brief Initialise the values of the node derivatives
       void initDerivatives();
-
-      /// \brief Set the function domain
-      void setFunctionDomain();
 
       /// \brief Interpolating nodes
       std::vector<InterpolationNode> nodes;
@@ -145,4 +130,4 @@ namespace G4INCL {
 
 }
 
-#endif // G4INCLINVERSEINTERPOLATIONTABLE_HH_
+#endif // G4INCLINTERPOLATIONTABLE_HH_

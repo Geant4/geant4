@@ -46,6 +46,7 @@
 
 #include "G4INCLNuclearDensity.hh"
 #include "G4INCLINuclearPotential.hh"
+#include "G4INCLInterpolationTable.hh"
 
 namespace G4INCL {
 
@@ -87,6 +88,7 @@ namespace G4INCL {
       }
 
       ParticleList sampleParticles(ThreeVector const &position);
+      void sampleParticlesIntoList(ThreeVector const &position, ParticleList &theList);
 
     private:
 
@@ -122,10 +124,10 @@ namespace G4INCL {
       const G4int theZ;
 
       /// \brief Array of pointers to the r-space CDF table
-      InverseInterpolationTable const *theRCDFTable[UnknownParticle];
+      InterpolationTable const *theRCDFTable[UnknownParticle];
 
       /// \brief Array of pointers to the p-space CDF table
-      InverseInterpolationTable const *thePCDFTable[UnknownParticle];
+      InterpolationTable const *thePCDFTable[UnknownParticle];
 
       /// \brief Pointer to the Cluster's NuclearDensity
       NuclearDensity const *theDensity;

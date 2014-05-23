@@ -46,10 +46,10 @@
 namespace G4INCL {
   class DeltaDecayChannel : public IChannel {
   public:
-    DeltaDecayChannel(Particle *, ThreeVector const);
+    DeltaDecayChannel(Particle *, ThreeVector const &);
     virtual ~DeltaDecayChannel();
 
-    static G4double computeDecayTime(Particle *p);
+    static G4double computeDecayTime(Particle *p, const G4bool isDeltaFixed);
     FinalState* getFinalState();
 
   private:

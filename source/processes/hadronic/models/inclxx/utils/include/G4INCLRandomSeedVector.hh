@@ -53,16 +53,18 @@ namespace G4INCL {
 
     class SeedVector {
       public:
-        long at(const size_t i) const;
-        long &operator[](const size_t i);
+        G4int at(const size_t i) const;
+        G4int &operator[](const size_t i);
+        const G4int &operator[](const size_t i) const;
         size_t size() const;
         void resize(const size_t n);
-        void push_back(const long val);
+        void push_back(const G4int val);
+        void clear();
 
         friend std::ostream &operator<<(std::ostream &out, SeedVector const &sv);
 
       private:
-        std::vector<long> theSeeds;
+        std::vector<G4int> theSeeds;
     };
 
   }

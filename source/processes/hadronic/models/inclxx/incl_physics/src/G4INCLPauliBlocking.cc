@@ -38,35 +38,77 @@
 #include "G4INCLPauliBlocking.hh"
 #include "G4INCLGlobals.hh"
 
+#include "G4INCLPauliStrict.hh"
+#include "G4INCLPauliStandard.hh"
+#include "G4INCLPauliStrictStandard.hh"
+#include "G4INCLPauliGlobal.hh"
+#include "G4INCLCDPP.hh"
+
 namespace G4INCL {
 
-  G4ThreadLocal IPauli * Pauli::thePauliBlocker = 0;
-  G4ThreadLocal IPauli * Pauli::theCDPP = 0;
+  namespace Pauli {
 
-  void Pauli::setBlocker(IPauli * const pauliBlocker) {
-    thePauliBlocker = pauliBlocker;
-  }
-
-  void Pauli::setCDPP(IPauli * const cdpp) {
-    theCDPP = cdpp;
-  }
-
-  G4bool Pauli::isBlocked(ParticleList const &modifiedAndCreated, Nucleus const * const nucleus) {
-    G4bool isPauliBlocked = false;
-    if(thePauliBlocker != 0) {
-      isPauliBlocked = thePauliBlocker->isBlocked(modifiedAndCreated, nucleus);
+    namespace {
+      G4ThreadLocal IPauli * thePauliBlocker = NULL;
+      G4ThreadLocal IPauli * theCDPP = NULL;
     }
 
-    return isPauliBlocked;
-  }
+    IPauli * getBlocker() { return thePauliBlocker; }
 
-  G4bool Pauli::isCDPPBlocked(ParticleList const &created, Nucleus const * const nucleus) {
-    G4bool isCDPPBlocked = false;
-    if(theCDPP != 0) {
-      isCDPPBlocked = theCDPP->isBlocked(created, nucleus);
+    IPauli * getCDPP() { return theCDPP; }
+
+    void setBlocker(IPauli * const pauliBlocker) {
+      thePauliBlocker = pauliBlocker;
     }
 
-    return isCDPPBlocked;
-  }
+    void setCDPP(IPauli * const cdpp) {
+      theCDPP = cdpp;
+    }
 
+    G4bool isBlocked(ParticleList const &modifiedAndCreated, Nucleus const * const nucleus) {
+      G4bool isPauliBlocked = false;
+      if(thePauliBlocker != 0) {
+        isPauliBlocked = thePauliBlocker->isBlocked(modifiedAndCreated, nucleus);
+      }
+
+      return isPauliBlocked;
+    }
+
+    G4bool isCDPPBlocked(ParticleList const &created, Nucleus const * const nucleus) {
+      G4bool isCDPPBlocked = false;
+      if(theCDPP != 0) {
+        isCDPPBlocked = theCDPP->isBlocked(created, nucleus);
+      }
+
+      return isCDPPBlocked;
+    }
+
+    void deleteBlockers() {
+      delete thePauliBlocker;
+      thePauliBlocker=NULL;
+      delete theCDPP;
+      theCDPP=NULL;
+    }
+
+    void initialize(Config const * const aConfig) {
+      // Select the Pauli blocking algorithm:
+      PauliType pauli = aConfig->getPauliType();
+      if(pauli == StrictStatisticalPauli)
+        setBlocker(new PauliStrictStandard);
+      else if(pauli == StatisticalPauli)
+        setBlocker(new PauliStandard);
+      else if(pauli == StrictPauli)
+        setBlocker(new PauliStrict);
+      else if(pauli == GlobalPauli)
+        setBlocker(new PauliGlobal);
+      else if(pauli == NoPauli)
+        setBlocker(NULL);
+
+      if(aConfig->getCDPP())
+        setCDPP(new CDPP);
+      else
+        setCDPP(NULL);
+
+    }
+  }
 }

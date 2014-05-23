@@ -40,6 +40,7 @@
 #include "G4INCLNDFGaussian.hh"
 #include "G4INCLNDFParis.hh"
 #include "G4INCLNDFHardSphere.hh"
+#include "G4INCLInvFInterpolationTable.hh"
 
 namespace G4INCL {
 
@@ -48,9 +49,9 @@ namespace G4INCL {
     namespace {
 
       G4ThreadLocal std::map<G4int,NuclearDensity const *> *nuclearDensityCache = NULL;
-      G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *rpCorrelationTableCache = NULL;
-      G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *rCDFTableCache = NULL;
-      G4ThreadLocal std::map<G4int,InverseInterpolationTable*> *pCDFTableCache = NULL;
+      G4ThreadLocal std::map<G4int,InterpolationTable*> *rpCorrelationTableCache = NULL;
+      G4ThreadLocal std::map<G4int,InterpolationTable*> *rCDFTableCache = NULL;
+      G4ThreadLocal std::map<G4int,InterpolationTable*> *pCDFTableCache = NULL;
 
     }
 
@@ -61,8 +62,8 @@ namespace G4INCL {
       const G4int nuclideID = 1000*Z + A; // MCNP-style nuclide IDs
       const std::map<G4int,NuclearDensity const *>::const_iterator mapEntry = nuclearDensityCache->find(nuclideID);
       if(mapEntry == nuclearDensityCache->end()) {
-        InverseInterpolationTable *rpCorrelationTableProton = createRPCorrelationTable(Proton, A, Z);
-        InverseInterpolationTable *rpCorrelationTableNeutron = createRPCorrelationTable(Neutron, A, Z);
+        InterpolationTable *rpCorrelationTableProton = createRPCorrelationTable(Proton, A, Z);
+        InterpolationTable *rpCorrelationTableNeutron = createRPCorrelationTable(Neutron, A, Z);
         if(!rpCorrelationTableProton || !rpCorrelationTableNeutron)
           return NULL;
         NuclearDensity const *density = new NuclearDensity(A, Z, rpCorrelationTableProton, rpCorrelationTableNeutron);
@@ -73,14 +74,14 @@ namespace G4INCL {
       }
     }
 
-    InverseInterpolationTable *createRPCorrelationTable(const ParticleType t, const G4int A, const G4int Z) {
+    InterpolationTable *createRPCorrelationTable(const ParticleType t, const G4int A, const G4int Z) {
 // assert(t==Proton || t==Neutron);
 
       if(!rpCorrelationTableCache)
-        rpCorrelationTableCache = new std::map<G4int,InverseInterpolationTable*>;
+        rpCorrelationTableCache = new std::map<G4int,InterpolationTable*>;
 
       const G4int nuclideID = ((t==Proton) ? 1000 : -1000)*Z + A; // MCNP-style nuclide IDs
-      const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = rpCorrelationTableCache->find(nuclideID);
+      const std::map<G4int,InterpolationTable*>::const_iterator mapEntry = rpCorrelationTableCache->find(nuclideID);
       if(mapEntry == rpCorrelationTableCache->end()) {
 
         IFunction1D *rpCorrelationFunction;
@@ -100,32 +101,15 @@ namespace G4INCL {
           rpCorrelationFunction = new NuclearDensityFunctions::GaussianRP(maximumRadius, Math::oneOverSqrtThree * radius);
         } else {
           INCL_ERROR("No r-p correlation function for " << ((t==Proton) ? "protons" : "neutrons") << " in A = "
-                << A << " Z = " << Z << std::endl);
+                << A << " Z = " << Z << '\n');
           return NULL;
 
         }
 
-        class InverseCDFOneThird : public IFunction1D {
-          public:
-            InverseCDFOneThird(IFunction1D const * const f) :
-              IFunction1D(f->getXMinimum(), f->getXMaximum()),
-              theFunction(f),
-              normalisation(1./theFunction->integrate(xMin,xMax))
-          {}
-
-            G4double operator()(const G4double x) const {
-              return Math::pow13(normalisation * theFunction->integrate(xMin,x));
-            }
-          private:
-            IFunction1D const * const theFunction;
-            const G4double normalisation;
-        } *theInverseCDFOneThird = new InverseCDFOneThird(rpCorrelationFunction);
-
-        InverseInterpolationTable *theTable = new InverseInterpolationTable(*theInverseCDFOneThird);
-        delete theInverseCDFOneThird;
+        InterpolationTable *theTable = rpCorrelationFunction->inverseCDFTable(Math::pow13);
         delete rpCorrelationFunction;
         INCL_DEBUG("Creating r-p correlation function for " << ((t==Proton) ? "protons" : "neutrons") << " in A=" << A << ", Z=" << Z << ":"
-              << std::endl << theTable->print() << std::endl);
+              << '\n' << theTable->print() << '\n');
 
         (*rpCorrelationTableCache)[nuclideID] = theTable;
         return theTable;
@@ -134,14 +118,14 @@ namespace G4INCL {
       }
     }
 
-    InverseInterpolationTable *createRCDFTable(const ParticleType t, const G4int A, const G4int Z) {
+    InterpolationTable *createRCDFTable(const ParticleType t, const G4int A, const G4int Z) {
 // assert(t==Proton || t==Neutron);
 
       if(!rCDFTableCache)
-        rCDFTableCache = new std::map<G4int,InverseInterpolationTable*>;
+        rCDFTableCache = new std::map<G4int,InterpolationTable*>;
 
       const G4int nuclideID = ((t==Proton) ? 1000 : -1000)*Z + A; // MCNP-style nuclide IDs
-      const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = rCDFTableCache->find(nuclideID);
+      const std::map<G4int,InterpolationTable*>::const_iterator mapEntry = rCDFTableCache->find(nuclideID);
       if(mapEntry == rCDFTableCache->end()) {
 
         IFunction1D *rDensityFunction;
@@ -163,14 +147,14 @@ namespace G4INCL {
           rDensityFunction = new NuclearDensityFunctions::ParisR();
         } else {
           INCL_ERROR("No nuclear density function for target A = "
-                << A << " Z = " << Z << std::endl);
+                << A << " Z = " << Z << '\n');
           return NULL;
         }
 
-        InverseInterpolationTable *theTable = rDensityFunction->inverseCDFTable();
+        InterpolationTable *theTable = rDensityFunction->inverseCDFTable();
         delete rDensityFunction;
         INCL_DEBUG("Creating inverse position CDF for A=" << A << ", Z=" << Z << ":" <<
-              std::endl << theTable->print() << std::endl);
+              '\n' << theTable->print() << '\n');
 
         (*rCDFTableCache)[nuclideID] = theTable;
         return theTable;
@@ -179,14 +163,14 @@ namespace G4INCL {
       }
     }
 
-    InverseInterpolationTable *createPCDFTable(const ParticleType t, const G4int A, const G4int Z) {
+    InterpolationTable *createPCDFTable(const ParticleType t, const G4int A, const G4int Z) {
 // assert(t==Proton || t==Neutron);
 
       if(!pCDFTableCache)
-        pCDFTableCache = new std::map<G4int,InverseInterpolationTable*>;
+        pCDFTableCache = new std::map<G4int,InterpolationTable*>;
 
       const G4int nuclideID = ((t==Proton) ? 1000 : -1000)*Z + A; // MCNP-style nuclide IDs
-      const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = pCDFTableCache->find(nuclideID);
+      const std::map<G4int,InterpolationTable*>::const_iterator mapEntry = pCDFTableCache->find(nuclideID);
       if(mapEntry == pCDFTableCache->end()) {
         IFunction1D *pDensityFunction;
         if(A > 19) {
@@ -199,14 +183,14 @@ namespace G4INCL {
           pDensityFunction = new NuclearDensityFunctions::ParisP();
         } else {
           INCL_ERROR("No nuclear density function for target A = "
-                << A << " Z = " << Z << std::endl);
+                << A << " Z = " << Z << '\n');
           return NULL;
         }
 
-        InverseInterpolationTable *theTable = pDensityFunction->inverseCDFTable();
+        InterpolationTable *theTable = pDensityFunction->inverseCDFTable();
         delete pDensityFunction;
         INCL_DEBUG("Creating inverse momentum CDF for A=" << A << ", Z=" << Z << ":" <<
-              std::endl << theTable->print() << std::endl);
+              '\n' << theTable->print() << '\n');
 
         (*pCDFTableCache)[nuclideID] = theTable;
         return theTable;
@@ -215,14 +199,14 @@ namespace G4INCL {
       }
     }
 
-    void addRPCorrelationToCache(const G4int A, const G4int Z, const ParticleType t, InverseInterpolationTable * const table) {
+    void addRPCorrelationToCache(const G4int A, const G4int Z, const ParticleType t, InterpolationTable * const table) {
 // assert(t==Proton || t==Neutron);
 
       if(!rpCorrelationTableCache)
-        rpCorrelationTableCache = new std::map<G4int,InverseInterpolationTable*>;
+        rpCorrelationTableCache = new std::map<G4int,InterpolationTable*>;
 
       const G4int nuclideID = ((t==Proton) ? 1000 : -1000)*Z + A; // MCNP-style nuclide IDs
-      const std::map<G4int,InverseInterpolationTable*>::const_iterator mapEntry = rpCorrelationTableCache->find(nuclideID);
+      const std::map<G4int,InterpolationTable*>::const_iterator mapEntry = rpCorrelationTableCache->find(nuclideID);
       if(mapEntry != rpCorrelationTableCache->end())
         delete mapEntry->second;
 
@@ -252,7 +236,7 @@ namespace G4INCL {
       }
 
       if(rpCorrelationTableCache) {
-        for(std::map<G4int,InverseInterpolationTable*>::const_iterator i = rpCorrelationTableCache->begin(); i!=rpCorrelationTableCache->end(); ++i)
+        for(std::map<G4int,InterpolationTable*>::const_iterator i = rpCorrelationTableCache->begin(); i!=rpCorrelationTableCache->end(); ++i)
           delete i->second;
         rpCorrelationTableCache->clear();
         delete rpCorrelationTableCache;
@@ -260,7 +244,7 @@ namespace G4INCL {
       }
 
       if(rCDFTableCache) {
-        for(std::map<G4int,InverseInterpolationTable*>::const_iterator i = rCDFTableCache->begin(); i!=rCDFTableCache->end(); ++i)
+        for(std::map<G4int,InterpolationTable*>::const_iterator i = rCDFTableCache->begin(); i!=rCDFTableCache->end(); ++i)
           delete i->second;
         rCDFTableCache->clear();
         delete rCDFTableCache;
@@ -268,7 +252,7 @@ namespace G4INCL {
       }
 
       if(pCDFTableCache) {
-        for(std::map<G4int,InverseInterpolationTable*>::const_iterator i = pCDFTableCache->begin(); i!=pCDFTableCache->end(); ++i)
+        for(std::map<G4int,InterpolationTable*>::const_iterator i = pCDFTableCache->begin(); i!=pCDFTableCache->end(); ++i)
           delete i->second;
         pCDFTableCache->clear();
         delete pCDFTableCache;

@@ -34,7 +34,7 @@
 
 #include "globals.hh"
 
-#include "G4INCLPionNucleonChannel.hh"
+#include "G4INCLPiNToDeltaChannel.hh"
 #include "G4INCLKinematicsUtils.hh"
 #include "G4INCLBinaryCollisionAvatar.hh"
 #include "G4INCLRandom.hh"
@@ -43,17 +43,17 @@
 
 namespace G4INCL {
 
-  PionNucleonChannel::PionNucleonChannel(Particle *p1, Particle *p2, Nucleus *nucleus)
-    : theNucleus(nucleus), particle1(p1), particle2(p2)
+  PiNToDeltaChannel::PiNToDeltaChannel(Particle *p1, Particle *p2)
+    : particle1(p1), particle2(p2)
   {
 
   }
 
-  PionNucleonChannel::~PionNucleonChannel(){
+  PiNToDeltaChannel::~PiNToDeltaChannel(){
 
   }
 
-  FinalState* PionNucleonChannel::getFinalState() {
+  FinalState* PiNToDeltaChannel::getFinalState() {
     FinalState *fs = new FinalState;
 
     Particle * nucleon;
@@ -80,14 +80,12 @@ namespace G4INCL {
     } else if(ParticleConfig::isPair(particle1, particle2, Neutron, PiMinus)) {
       deltaType = DeltaMinus;
     } else {
-      INCL_ERROR("Unknown particle pair in Pi-N collision." << std::endl);
+      INCL_ERROR("Unknown particle pair in Pi-N collision." << '\n');
     }
 
-    G4double deltaEnergy = nucleon->getEnergy() - nucleon->getPotentialEnergy()
-      + pion->getEnergy() - pion->getPotentialEnergy();
+    G4double deltaEnergy = nucleon->getEnergy()+ pion->getEnergy();
 
     nucleon->setType(deltaType); // nucleon becomes the delta
-    deltaEnergy += theNucleus->getPotential()->computePotentialEnergy(nucleon);
     nucleon->setEnergy(deltaEnergy); // set the energy of the delta
 
     ThreeVector deltaMomentum = nucleon->getMomentum() + pion->getMomentum();
@@ -95,7 +93,6 @@ namespace G4INCL {
 
     const G4double deltaMass = std::sqrt(deltaEnergy*deltaEnergy - deltaMomentum.mag2());
     nucleon->setMass(deltaMass);
-    theNucleus->updatePotentialEnergy(nucleon);
 
     fs->addModifiedParticle(nucleon); // nucleon became a delta
     fs->addDestroyedParticle(pion);  // pion was removed

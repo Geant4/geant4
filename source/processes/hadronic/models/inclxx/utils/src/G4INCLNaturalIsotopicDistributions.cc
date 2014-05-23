@@ -87,7 +87,7 @@ namespace G4INCL {
     if(i!=theDistributions.end())
       return i->second;
     else {
-      INCL_FATAL("Requested natural isotopic distribution for synthetic element Z = " << Z << std::endl);
+      INCL_FATAL("Requested natural isotopic distribution for synthetic element Z = " << Z << '\n');
       return theDistributions.begin()->second;
     }
   }
@@ -388,7 +388,7 @@ namespace G4INCL {
     };
 
     // Cool hack to get the size of an array in C++
-    template<typename T, ::std::size_t N> inline ::std::size_t sizeOfArray(const T(&)[ N ] ) {
+    template<typename T, ::std::size_t N> ::std::size_t sizeOfArray(const T(&)[ N ] ) {
       return N;
     }
   }

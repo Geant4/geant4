@@ -126,6 +126,8 @@ public:
     theINCLModel = NULL;
   }
 
+  virtual void ModelDescription(std::ostream& outFile) const;
+
 private:
   G4bool AccurateProjectile(const G4HadProjectile &aTrack, const G4Nucleus &theTargetNucleus) const;
 

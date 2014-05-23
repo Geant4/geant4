@@ -56,10 +56,10 @@ namespace G4INCL {
 
   std::string ParticleEntryAvatar::dump() const {
     std::stringstream ss;
-    ss << "(avatar " << theTime <<" 'particle-entry" << std::endl
-      << "(list " << std::endl
+    ss << "(avatar " << theTime <<" 'particle-entry" << '\n'
+      << "(list " << '\n'
        << theParticle->dump()
-      << "))" << std::endl;
+      << "))" << '\n';
     return ss.str();
   }
 

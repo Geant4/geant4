@@ -47,14 +47,14 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
 #include "G4INCLICoulomb.hh"
+#include "G4INCLConfig.hh"
 
 namespace G4INCL {
 
   /**
    * Coulomb distortion
    */
-  class CoulombDistortion {
-  public:
+  namespace CoulombDistortion {
     /** \brief Modify the momentum of an incoming particle and position it on
      *         the surface of the nucleus.
      *
@@ -74,9 +74,7 @@ namespace G4INCL {
      * \param n distorting nucleus
      * \return the ParticleEntryAvatar for the projectile particle
      **/
-    static ParticleEntryAvatar *bringToSurface(Particle *p, Nucleus * const n) {
-      return theCoulomb->bringToSurface(p, n);
-    }
+    ParticleEntryAvatar *bringToSurface(Particle *p, Nucleus * const n);
 
     /** \brief Modify the momentum of an incoming cluster and position it on
      *         the surface of the target.
@@ -91,44 +89,29 @@ namespace G4INCL {
      * \param n distorting nucleus
      * \return a list of ParticleEntryAvatars
      **/
-    static IAvatarList bringToSurface(Cluster * const c, Nucleus * const n) {
-      return theCoulomb->bringToSurface(c, n);
-    }
+    IAvatarList bringToSurface(Cluster * const c, Nucleus * const n);
 
     /** \brief Modify the momentum of an outgoing particle. */
-    static void distortOut(ParticleList const &pL, Nucleus const * const n) {
-      theCoulomb->distortOut(pL, n);
-    }
+    void distortOut(ParticleList const &pL, Nucleus const * const n);
 
     /** \brief Return the maximum impact parameter for Coulomb-distorted
      *         trajectories. **/
-    static G4double maxImpactParameter(ParticleSpecies const &p, const G4double kinE, Nucleus const * const n) {
-      return theCoulomb->maxImpactParameter(p, kinE, n);
-    }
+    G4double maxImpactParameter(ParticleSpecies const &p, const G4double kinE, Nucleus const * const n);
 
     /** \brief Return the maximum impact parameter for Coulomb-distorted
      *         trajectories. **/
-    static G4double maxImpactParameter(Particle const * const p, Nucleus const * const n) {
-      return maxImpactParameter(p->getSpecies(), p->getKineticEnergy(), n);
-    }
+    G4double maxImpactParameter(Particle const * const p, Nucleus const * const n);
 
     /** \brief Set the Coulomb-distortion algorithm. */
-    static void setCoulomb(ICoulomb * const coulomb) { theCoulomb = coulomb; }
+    void setCoulomb(ICoulomb * const coulomb);
 
     /** \brief Delete the Coulomb-distortion object. */
-    static void deleteCoulomb() {
-      delete theCoulomb;
-      theCoulomb = 0;
-    }
+    void deleteCoulomb();
 
-  protected:
-    CoulombDistortion() {}
-    ~CoulombDistortion() {}
+    /// \brief Initialize the Coulomb-distortion algorithm
+    void initialize(Config const * const theConfig);
 
-  private:
-    static G4ThreadLocal ICoulomb *theCoulomb;
-
-  };
+  }
 }
 
 #endif /* G4INCLCOULOMBDISTORTION_HH_ */

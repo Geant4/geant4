@@ -45,7 +45,6 @@
 #define G4INCLDEUTERONDENSITY_HH_ 1
 
 #include "G4INCLIFunction1D.hh"
-#include "G4INCLInverseInterpolationTable.hh"
 
 namespace G4INCL {
 

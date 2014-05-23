@@ -46,11 +46,13 @@
 namespace G4INCL {
   namespace Random {
 
-    long SeedVector::at(const size_t i) const { return theSeeds.at(i); }
-    long &SeedVector::operator[](const size_t i) { return theSeeds[i]; }
+    G4int SeedVector::at(const size_t i) const { return theSeeds.at(i); }
+    G4int &SeedVector::operator[](const size_t i) { return theSeeds[i]; }
+    const G4int &SeedVector::operator[](const size_t i) const { return theSeeds[i]; }
     size_t SeedVector::size() const { return theSeeds.size(); }
     void SeedVector::resize(const size_t n) { theSeeds.resize(n); }
-    void SeedVector::push_back(const long val) { theSeeds.push_back(val); }
+    void SeedVector::push_back(const G4int val) { theSeeds.push_back(val); }
+    void SeedVector::clear() { theSeeds.clear(); }
 
     std::ostream &operator<<(std::ostream &out, SeedVector const &sv) {
       if(sv.size()<=0)

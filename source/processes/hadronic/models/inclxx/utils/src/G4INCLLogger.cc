@@ -60,22 +60,20 @@ namespace G4INCL {
       return std::string("Unknown");
   }
 
-  void LoggerSlave::logMessage(const MessageType type, const std::string &fileName, const G4int lineNumber, std::string const &s) const {
-    if(type==InfoMsg) {
-      (*logStream) << s;
-      return;
+  void LoggerSlave::logMessage(const MessageType type, const std::string &fileName, const G4int lineNumber, std::string const &s, const G4bool prefixHash) const {
+    std::string cont = (prefixHash ? "\n# " : "\n");
+    std::string header = (prefixHash ? "# " : "");
+    if(type!=InfoMsg) {
+      std::stringstream headerss;
+      headerss << typeToString(type) << " [";
+      cont += headerss.str();
+      headerss <<
+        fileName.substr(fileName.find_last_of("/")+1) <<
+        ":" << lineNumber << "] ";
+      header += headerss.str();
+      cont.append(header.size() - cont.size() - 1, '.');
+      cont += "] ";
     }
-
-    std::stringstream headerss;
-    headerss << typeToString(type) << " [";
-    std::string cont("\n");
-    cont += headerss.str();
-    headerss <<
-      fileName.substr(fileName.find_last_of("/")+1) <<
-      ":" << lineNumber << "] ";
-    std::string header = headerss.str();
-    cont.append(header.size() - cont.size() - 1, '.');
-    cont += "] ";
 
     std::string message(s);
     String::replaceAll(message, "\n", cont, s.size()-2);
@@ -87,10 +85,10 @@ namespace G4INCL {
   void LoggerSlave::logDataBlock(const std::string &block, const std::string &fileName, const G4int lineNumber) const {
     (*logStream) << typeToString(DataBlockMsg) << " [" <<
       fileName.substr(fileName.find_last_of("/")+1) <<
-      ":" << lineNumber << "] " << std::endl
+      ":" << lineNumber << "] " << '\n'
       << "BEGINDATA"
       << block
-      << "ENDDATA" << std::endl;
+      << "ENDDATA" << '\n';
   }
 
   namespace Logger {
@@ -99,11 +97,15 @@ namespace G4INCL {
       G4ThreadLocal LoggerSlave *theLoggerSlave = NULL;
     }
 
-    void logMessage(const MessageType type, std::string const &fileName, const G4int lineNumber, std::string const &s) {
-      theLoggerSlave->logMessage(type, fileName, lineNumber, s);
+    void logMessage(const MessageType type, std::string const &fileName, const G4int lineNumber, std::string const &s, const G4bool prefixHash) {
+      if(theLoggerSlave)
+        theLoggerSlave->logMessage(type, fileName, lineNumber, s, prefixHash);
     }
 
-    void flush() { theLoggerSlave->flush(); }
+    void flush() {
+      if(theLoggerSlave)
+        theLoggerSlave->flush();
+    }
 
     void dataBlock(const std::string &block, const std::string &fileName, const G4int lineNumber) {
       theLoggerSlave->logDataBlock(block, fileName, lineNumber);
@@ -111,13 +113,25 @@ namespace G4INCL {
 
     void setLoggerSlave(LoggerSlave * const logger) { theLoggerSlave = logger; }
 
-    void setVerbosityLevel(G4int lvl) { theLoggerSlave->setVerbosityLevel(lvl); }
+    void setVerbosityLevel(G4int lvl) {
+      if(theLoggerSlave)
+        theLoggerSlave->setVerbosityLevel(lvl);
+    }
 
-    G4int getVerbosityLevel() { return theLoggerSlave->getVerbosityLevel(); }
+    G4int getVerbosityLevel() {
+      if(theLoggerSlave)
+        return theLoggerSlave->getVerbosityLevel();
+      else
+        return 0;
+    }
 
     void deleteLoggerSlave() {
       delete theLoggerSlave;
       theLoggerSlave=NULL;
+    }
+
+    void initialize(Config const * const theConfig) {
+      setLoggerSlave(new LoggerSlave(theConfig->getLogFileName(), theConfig->getVerbosity()));
     }
 
   }

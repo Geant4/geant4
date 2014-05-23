@@ -85,7 +85,7 @@ namespace G4INCL {
             thePotential = new NuclearPotentialConstant(theA, theZ, pionPotential);
             break;
           default:
-            INCL_FATAL("Unrecognized potential type at Nucleus creation." << std::endl);
+            INCL_FATAL("Unrecognized potential type at Nucleus creation." << '\n');
             break;
         }
         (*nuclearPotentialCache)[nuclideID] = thePotential;

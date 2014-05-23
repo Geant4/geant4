@@ -68,7 +68,7 @@ namespace G4INCL {
 
   const G4double ClusteringModelIntercomparison::limitCosEscapeAngle = 0.7;
 
-#ifndef INCLXX_IN_GEANT4_MODE
+#ifdef INCL_DO_NOT_COMPILE
   namespace {
     G4bool cascadingFirstPredicate(ConsideredPartner const &aPartner) {
       return !aPartner.isTargetSpectator;
@@ -145,7 +145,7 @@ namespace G4INCL {
     // cluster production:
     cascadingEnergyPool = 0.;
     nConsidered = 0;
-    const ParticleList particles = theNucleus->getStore()->getParticles();
+    ParticleList const &particles = theNucleus->getStore()->getParticles();
     for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i) {
       if (!(*i)->isNucleon()) continue; // Only nucleons are allowed in clusters
       if ((*i)->getID() == theLeadingParticle->getID()) continue; // Don't count the leading particle
@@ -173,12 +173,14 @@ namespace G4INCL {
     // spectators too.
 //    std::partition(consideredPartners, consideredPartners+nConsidered, cascadingFirstPredicate);
 
+#ifndef INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_None
     // Clear the sets of checked configurations
     // We stop caching two masses short of the max mass -- there seems to be a
     // performance hit above
     maxMassConfigurationSkipping = runningMaxClusterAlgorithmMass-2;
     for(G4int i=0; i<runningMaxClusterAlgorithmMass-2; ++i) // no caching for A=1,2
       checkedConfigurations[i].clear();
+#endif
 
     // Initialise position, momentum and energy of the running cluster
     // configuration
@@ -241,8 +243,8 @@ namespace G4INCL {
       theConfigContainer = &(checkedConfigurations[oldA-2]);
     else
       theConfigContainer = NULL;
-#else
-#error Unrecognized INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON. Allowed values are: Set, HashMask.
+#elif !defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_None)
+#error Unrecognized INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON. Allowed values are: Set, HashMask, None.
 #endif
 
     // Minimum and maximum Z values for this mass
@@ -323,12 +325,13 @@ namespace G4INCL {
       runningMomenta[newA] = runningMomenta[oldA] + candidateNucleon.momentum;
 
       // Add the config to the container
-      if(cachingEnabled)
+      if(cachingEnabled) {
 #if defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_HashMask)
         theHashContainer->insert(aHashIter, configHash);
 #elif defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_Set)
         theConfigContainer->insert(thisConfigIter, thisConfig);
 #endif
+      }
 
       // Set the flag that reminds us that this nucleon has already been taken
       // in the running configuration

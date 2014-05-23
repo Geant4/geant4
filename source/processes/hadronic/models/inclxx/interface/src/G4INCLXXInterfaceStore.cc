@@ -146,7 +146,10 @@ G4bool G4INCLXXInterfaceStore::GetAccurateProjectile() const { return accuratePr
 
 G4double G4INCLXXInterfaceStore::GetCascadeMinEnergyPerNucleon() const { return cascadeMinEnergyPerNucleon; }
 
-G4INCL::Config &G4INCLXXInterfaceStore::GetINCLConfig() { return theConfig; }
+G4INCL::Config &G4INCLXXInterfaceStore::GetINCLConfig() {
+  DeleteModel(); // in case the Config is modified
+  return theConfig;
+}
 
 G4double G4INCLXXInterfaceStore::GetConservationTolerance() const { return conservationTolerance; }
 

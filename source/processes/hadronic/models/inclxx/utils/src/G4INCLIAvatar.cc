@@ -71,7 +71,7 @@ namespace G4INCL {
   std::string IAvatar::toString() {
     std::stringstream entry;
     std::stringstream particleString;
-    ParticleList pl = getParticles();
+    ParticleList const &pl = getParticles();
     G4int numberOfParticles = 0;
     for(ParticleIter i=pl.begin(), e=pl.end(); i!=e; ++i) {
       numberOfParticles++;
@@ -87,16 +87,16 @@ namespace G4INCL {
 
   G4INCL::FinalState* IAvatar::getFinalState()
   {
-    INCL_DEBUG("Random seeds before preInteraction: " << Random::getSeeds() << std::endl);
+    INCL_DEBUG("Random seeds before preInteraction: " << Random::getSeeds() << '\n');
     preInteraction();
-    INCL_DEBUG("Random seeds before getChannel: " << Random::getSeeds() << std::endl);
+    INCL_DEBUG("Random seeds before getChannel: " << Random::getSeeds() << '\n');
     IChannel *c = getChannel();
     if( !c ) {
       return NULL;
     }
-    INCL_DEBUG("Random seeds before getFinalState: " << Random::getSeeds() << std::endl);
+    INCL_DEBUG("Random seeds before getFinalState: " << Random::getSeeds() << '\n');
     FinalState *fs = c->getFinalState();
-    INCL_DEBUG("Random seeds before postInteraction: " << Random::getSeeds() << std::endl);
+    INCL_DEBUG("Random seeds before postInteraction: " << Random::getSeeds() << '\n');
     fs = postInteraction(fs);
     delete c;
     return fs;

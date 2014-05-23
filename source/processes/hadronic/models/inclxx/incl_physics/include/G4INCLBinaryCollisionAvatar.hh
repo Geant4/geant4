@@ -51,7 +51,7 @@
 
 namespace G4INCL {
 
-  class BinaryCollisionAvatar: public G4INCL::InteractionAvatar {
+  class BinaryCollisionAvatar: public InteractionAvatar {
   public:
     BinaryCollisionAvatar(G4double, G4double, G4INCL::Nucleus*, G4INCL::Particle*, G4INCL::Particle*);
     virtual ~BinaryCollisionAvatar();

@@ -60,7 +60,7 @@ namespace G4INCL {
     IAvatarList theAvatarList;
 
     // Loop over the particles in the cluster
-    ParticleList projectiles = c->getParticles();
+    ParticleList const &projectiles = c->getParticles();
     std::list<Intersection> theIntersections;
     G4double theFirstEntryTime = 1E+60; // a large time
     G4int theFirstID = 0;

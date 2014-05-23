@@ -70,7 +70,7 @@ namespace G4INCL {
     std::string dump() const;
   private:
     G4bool forced;
-    ThreeVector const &incidentDirection;
+    ThreeVector const incidentDirection;
   };
 
 }

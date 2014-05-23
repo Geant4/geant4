@@ -99,19 +99,6 @@ namespace G4INCL {
     G4int getInitialZ() const { return theInitialZ; };
 
     /**
-     * Get the list of particles that were created by the last applied final state
-     */
-    ParticleList const &getCreatedParticles() const { return justCreated; }
-
-    /**
-     * Get the list of particles that were updated by the last applied final state
-     */
-    ParticleList const &getUpdatedParticles() const { return toBeUpdated; }
-
-    /// \brief Get the delta that could not decay
-    Particle *getBlockedDelta() const { return blockedDelta; }
-
-    /**
      * Propagate the particles one time step.
      *
      * @param step length of the time step
@@ -410,9 +397,6 @@ namespace G4INCL {
     ThreeVector initialCenterOfMass;
     G4bool remnant;
 
-    ParticleList toBeUpdated;
-    ParticleList justCreated;
-    Particle *blockedDelta;
     G4double initialEnergy;
     Store *theStore;
     G4bool tryCN;

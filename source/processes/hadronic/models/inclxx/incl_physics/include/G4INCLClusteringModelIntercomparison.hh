@@ -153,10 +153,10 @@ namespace G4INCL {
     G4double runningPotentials[ParticleTable::maxClusterMass+1];
 #if defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_HashMask)
     Hashing::NucleonItem runningConfiguration[ParticleTable::maxClusterMass];
-#elif defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_Set)
+#elif defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_Set) || defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_None)
     G4int runningConfiguration[ParticleTable::maxClusterMass];
 #else
-#error Unrecognized INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON. Allowed values are: Set, HashMask.
+#error Unrecognized INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON. Allowed values are: Set, HashMask, None.
 #endif
 
     G4int selectedA, selectedZ;
@@ -298,8 +298,8 @@ namespace G4INCL {
 
     /// \brief Array of containers for configurations that have already been checked
     SortedNucleonConfigurationContainer checkedConfigurations[ParticleTable::maxClusterMass-2];
-#else
-#error Unrecognized INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON. Allowed values are: Set, HashMask.
+#elif !defined(INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON_None)
+#error Unrecognized INCL_CACHING_CLUSTERING_MODEL_INTERCOMPARISON. Allowed values are: Set, HashMask, None.
 #endif
 
     /** \brief Maximum mass for configuration storage

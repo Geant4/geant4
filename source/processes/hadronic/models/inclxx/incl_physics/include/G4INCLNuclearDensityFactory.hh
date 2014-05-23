@@ -40,21 +40,22 @@
 #include "G4INCLNuclearDensity.hh"
 #include "G4INCLParticleSampler.hh"
 #include "G4INCLParticleTable.hh"
+#include "G4INCLInterpolationTable.hh"
 #include <map>
 
 namespace G4INCL {
 
   namespace NuclearDensityFactory {
 
-    InverseInterpolationTable *createRPCorrelationTable(const ParticleType t, const G4int A, const G4int Z);
+    InterpolationTable *createRPCorrelationTable(const ParticleType t, const G4int A, const G4int Z);
 
-    InverseInterpolationTable *createRCDFTable(const ParticleType t, const G4int A, const G4int Z);
+    InterpolationTable *createRCDFTable(const ParticleType t, const G4int A, const G4int Z);
 
-    InverseInterpolationTable *createPCDFTable(const ParticleType t, const G4int A, const G4int Z);
+    InterpolationTable *createPCDFTable(const ParticleType t, const G4int A, const G4int Z);
 
     NuclearDensity const *createDensity(const G4int A, const G4int Z);
 
-    void addRPCorrelationToCache(const G4int A, const G4int Z, const ParticleType t, InverseInterpolationTable * const table);
+    void addRPCorrelationToCache(const G4int A, const G4int Z, const ParticleType t, InterpolationTable * const table);
 
     void addDensityToCache(const G4int A, const G4int Z, NuclearDensity * const density);
 

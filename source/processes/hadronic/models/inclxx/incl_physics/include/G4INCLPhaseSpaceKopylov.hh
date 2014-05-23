@@ -34,28 +34,38 @@
 
 #include "globals.hh"
 
-#ifndef G4INCLPHASESPACEDECAY_HH_
-#define G4INCLPHASESPACEDECAY_HH_
+#ifndef G4INCLPHASESPACEKOPYLOV_HH
+#define G4INCLPHASESPACEKOPYLOV_HH
 
 #include "G4INCLThreeVector.hh"
 #include "G4INCLParticle.hh"
+#include "G4INCLIPhaseSpaceGenerator.hh"
 #include <vector>
 
 namespace G4INCL {
-  namespace PhaseSpaceDecay {
+  /// \brief Generate momenta using the Kopylov method
+  class PhaseSpaceKopylov : public IPhaseSpaceGenerator {
 
-    /** \brief Generate decay momenta according to a uniform phase-space model
-     *
-     * This function will assign momenta to the particles in the list that is
-     * passed as an argument.
-     *
-     * \param initialMass mass of the decaying system
-     * \param theBoostVector boost vector of the decaying system
-     * \param particles list of decay particles
-     */
-    void decay(G4double initialMass, const ThreeVector &theBoostVector, ParticleList &particles);
+    public:
+      /** \brief Generate momenta according to a uniform, non-Lorentz-invariant phase-space model
+       *
+       * This function will assign momenta to the particles in the list that is
+       * passed as an argument. The event is generated in the CM frame.
+       *
+       * \param initialMass total centre-of-mass energy of the system
+       * \param particles list of particles
+       */
+      void generate(const G4double sqrtS, ParticleList &particles);
 
-  }
+    private:
+      /// \brief Internal function used by the Kopylov algorithm
+      G4double betaKopylov(G4int K) const;
+
+      std::vector<G4double> masses;
+      std::vector<G4double> sumMasses;
+      ThreeVector PFragCM, PRestCM;
+      ThreeVector boostV;
+  };
 }
 
-#endif // G4INCLPHASESPACEDECAY_HH_
+#endif // G4INCLPHASESPACEKOPYLOV_HH

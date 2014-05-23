@@ -46,7 +46,7 @@
 #include <cstdlib>
 #include "G4INCLIFunction1D.hh"
 #include "G4INCLLogger.hh"
-#include "G4INCLInverseInterpolationTable.hh"
+#include "G4INCLInvFInterpolationTable.hh"
 
 namespace G4INCL {
 
@@ -119,27 +119,31 @@ namespace G4INCL {
     return thePrimitive;
   }
 
-  InverseInterpolationTable *IFunction1D::inverseCDFTable(const G4int nNodes) const {
+  InterpolationTable *IFunction1D::inverseCDFTable(IFunction1D::ManipulatorFunc fWrap, const G4int nNodes) const {
     class InverseCDF : public IFunction1D {
       public:
-        InverseCDF(IFunction1D const * const f) :
+        InverseCDF(IFunction1D const * const f, ManipulatorFunc fw) :
           IFunction1D(f->getXMinimum(), f->getXMaximum()),
           theFunction(f),
-          normalisation(1./theFunction->integrate(xMin,xMax))
+          normalisation(1./theFunction->integrate(xMin,xMax)),
+          fWrap(fw)
       {}
 
         G4double operator()(const G4double x) const {
-          return std::min(1., normalisation * theFunction->integrate(xMin,x));
+          if(fWrap)
+            return fWrap(std::min(1., normalisation * theFunction->integrate(xMin,x)));
+          else
+            return std::min(1., normalisation * theFunction->integrate(xMin,x));
         }
       private:
         IFunction1D const * const theFunction;
         const G4double normalisation;
-    } *theInverseCDF = new InverseCDF(this);
+        ManipulatorFunc fWrap;
+    } *theInverseCDF = new InverseCDF(this, fWrap);
 
-    InverseInterpolationTable *theTable = new InverseInterpolationTable(*theInverseCDF, nNodes);
+    InterpolationTable *theTable = new InvFInterpolationTable(*theInverseCDF, nNodes);
     delete theInverseCDF;
     return theTable;
   }
-
 }
 

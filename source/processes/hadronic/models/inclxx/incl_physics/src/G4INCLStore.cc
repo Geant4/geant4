@@ -56,11 +56,20 @@ namespace G4INCL {
 
   void Store::add(Particle *p) {
     inside.push_back(p);
+    initParticleAvatarConnections(p);
+  }
 
+  void Store::initParticleAvatarConnections(Particle *p) {
     if(particleAvatarConnections.find(p)==particleAvatarConnections.end()) {
       IAvatarList *avatars = new IAvatarList;
       particleAvatarConnections[p] = avatars;
     }
+  }
+
+  void Store::add(ParticleList const &pL) {
+    inside.insert(inside.end(), pL.begin(), pL.end());
+    for(ParticleIter p=pL.begin(), e=pL.end(); p!=e; ++p)
+      initParticleAvatarConnections(*p);
   }
 
   void Store::addParticleEntryAvatar(IAvatar *a) {
@@ -158,7 +167,7 @@ namespace G4INCL {
     count = distance(first,last);
     while (count>0)
     {
-      it = first; step=count/2; advance(it,step);
+      it = first; step=count/2; std::advance(it,step);
       if ((**it)->getTime()>avatarTime)
       { first=++it; count-=step+1;  }
       else count=step;
@@ -277,7 +286,7 @@ namespace G4INCL {
     clearOutgoing();
 
     if( incoming.size() != 0 ) {
-      INCL_WARN("Incoming list is not empty when Store::clear() is called" << std::endl);
+      INCL_WARN("Incoming list is not empty when Store::clear() is called" << '\n');
     }
     incoming.clear();
 
@@ -310,7 +319,7 @@ namespace G4INCL {
     outgoing.clear();
   }
 
-  void Store::loadParticles(std::string filename) {
+  void Store::loadParticles(std::string const &filename) {
     clear();
     G4int projectileA, projectileZ, A, Z;
     G4double stoppingTime, cutNN;
@@ -340,7 +349,7 @@ namespace G4INCL {
 	readA++;
       }
       else {
-        INCL_FATAL("Unrecognized particle type while loading particles; type=" << type << std::endl);
+        INCL_FATAL("Unrecognized particle type while loading particles; type=" << type << '\n');
         t = UnknownParticle;
       }
 
@@ -373,7 +382,7 @@ namespace G4INCL {
     // anything about them at this point).
     ss << "0 0 " << A << " " << Z << " "
 	      << "100.0" << " "
-	      << "0.0" << std::endl;
+	      << "0.0" << '\n';
 
     for(ParticleIter i=inside.begin(), e=inside.end(); i!=e; ++i) {
       G4int ID = (*i)->getID();
@@ -402,13 +411,13 @@ namespace G4INCL {
       ss << ID << " " << type << " " << isParticipant << " "
 		<< x << " " << y << " " << z << " "
 		<< px << " " << py << " " << pz << " "
-	 << E << " " << V << std::endl;
+	 << E << " " << V << '\n';
     }
 
     return ss.str();
   }
 
-  void Store::writeParticles(std::string filename) {
+  void Store::writeParticles(std::string const &filename) {
     std::ofstream out(filename.c_str());
     out << printParticleConfiguration();
     out.close();
@@ -417,7 +426,7 @@ namespace G4INCL {
   std::string Store::printAvatars() {
     std::stringstream ss;
     for(IAvatarIter i = avatarList.begin(), e = avatarList.end(); i != e; ++i) {
-      ss << (*i)->toString() << std::endl;
+      ss << (*i)->toString() << '\n';
     }
     return ss.str();
   }

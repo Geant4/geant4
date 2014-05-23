@@ -106,6 +106,24 @@ namespace G4INCL {
     MassDependentFermiMomentum
   };
 
+  // Enumerator for RNG
+  enum RNGType {
+    RanecuType,
+    Ranecu3Type
+  };
+
+  // Enumerator for Cross-Section parametrizations
+  enum CrossSectionsType {
+    INCL46CrossSections,
+    MultiPionsCrossSections
+  };
+
+  // Enumerator for phase-space generator
+  enum PhaseSpaceGeneratorType {
+    KopylovType,
+    RauboldLynchType
+  };
+
 }
 
 #endif

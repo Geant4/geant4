@@ -36,6 +36,9 @@
 
 #include "G4INCLGlobals.hh"
 #include "G4INCLParticle.hh"
+#ifdef HAVE_WORDEXP
+#include <wordexp.h>
+#endif
 
 namespace G4INCL {
   namespace Math {
@@ -67,6 +70,16 @@ namespace G4INCL {
 
     G4double gaussianCDF(const G4double x, const G4double x0, const G4double sigma) {
       return gaussianCDF((x-x0)/sigma);
+    }
+
+    G4double arcSin(const G4double x) {
+// assert(x>-1.000001 && x<1.000001);
+      return ((x > 1.) ? 0. : ((x<-1.) ? pi : std::asin(x)));
+    }
+
+    G4double arcCos(const G4double x) {
+// assert(x>-1.000001 && x<1.000001);
+      return ((x > 1.) ? 0. : ((x<-1.) ? pi : std::acos(x)));
     }
   }
 
@@ -110,7 +123,43 @@ namespace G4INCL {
           cur_max_pos += to_len - from_len;
       }
     }
+
+    std::vector<std::string> tokenize(std::string const &str, const std::string &delimiters) {
+      size_t startPos = 0, endPos;
+      std::vector<std::string> tokens;
+      do {
+        endPos = str.find_first_of(delimiters, startPos);
+        std::string token = str.substr(startPos, endPos-startPos);
+        tokens.push_back(token);
+        startPos = str.find_first_not_of(delimiters, endPos);
+      } while(endPos!=std::string::npos);
+
+      return tokens;
+    }
+
+    G4bool isInteger(std::string const &str) {
+      const size_t pos = str.find_first_not_of("0123456789");
+      return (pos==std::string::npos);
+    }
+
+    std::string expandPath(std::string const &path) {
+#ifdef HAVE_WORDEXP
+      wordexp_t expansionResult;
+      std::string result;
+      G4int err = wordexp(path.c_str(), &expansionResult, WRDE_NOCMD);
+      if(err)
+        result = path;
+      else
+        result = expansionResult.we_wordv[0];
+      wordfree(&expansionResult);
+      return result;
+#else
+      // no-op if wordexp.h is not found
+      return path;
+#endif
+    }
   }
+
 #endif // INCLXX_IN_GEANT4_MODE
 
 }
