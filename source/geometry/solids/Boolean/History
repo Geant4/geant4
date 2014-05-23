@@ -20,6 +20,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ May 23, 2014  G.Cosmo                   geom-bool-V10-00-00
+ - Enabled G4MultiUnion wrapper.
+
  November 13, 2013  G.Cosmo              geom-bool-V09-06-05, 04
  - Removed G4MultiUnion and related wrapper, as not yet ready for release.
    Returning to tag "geom-bool-V09-06-02".
