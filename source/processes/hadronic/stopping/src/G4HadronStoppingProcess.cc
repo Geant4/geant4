@@ -77,8 +77,7 @@ G4HadronStoppingProcess::G4HadronStoppingProcess(const G4String& name)
 
 G4HadronStoppingProcess::~G4HadronStoppingProcess()
 {
-  if ( deRegister )
-      G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
+  G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
   delete fElementSelector;
   // NOTE: fEmCascade and fEmBoundDecay owned by registry, not locally
 }
