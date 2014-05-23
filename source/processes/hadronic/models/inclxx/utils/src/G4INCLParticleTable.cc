@@ -251,7 +251,7 @@ namespace G4INCL {
 #endif
 
       /// \brief Default value for constant Fermi momentum
-      G4ThreadLocal G4double constantFermiMomentum = PhysicalConstants::Pf;
+      G4ThreadLocal G4double constantFermiMomentum = 0.0;
 
       /// \brief Transform a IUPAC char to an char representing an integer digit
       char iupacToInt(char c) {
