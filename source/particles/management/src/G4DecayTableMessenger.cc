@@ -56,7 +56,10 @@
 #include <iomanip>                  // Include from 'system'
 
 G4DecayTableMessenger::G4DecayTableMessenger(G4ParticleTable* pTable)
-                     :theParticleTable(pTable)
+                      :theParticleTable(pTable),
+		       currentParticle(0), currentDecayTable(0),
+		       idxCurrentChannel(-1), currentChannel(0),
+		       thisDirectory(0),dumpCmd(0),selectCmd(0),brCmd(0) 
 {
   if ( theParticleTable == 0) theParticleTable = G4ParticleTable::GetParticleTable();
 
