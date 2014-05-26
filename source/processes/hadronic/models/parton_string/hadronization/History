@@ -15,6 +15,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+25-May-2014, V. Uzhinsky   (had-hadronization-V10-00-03)
+- Parameters of G4LundStringFragmentation.cc were re-tuned.
+  Fragmentation function F(qq->B+anti-quark) was set to Z^2.
+
 22-May-2014, A.Ribon       (had-hadronization-V10-00-02)
 - Applied Coverity's suggestion to check that the vector index NumberOf_FS
   in G4LundStringFragmentation.cc does not exceed the allowed range.
