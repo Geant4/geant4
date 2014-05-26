@@ -18,6 +18,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+envs-V10-00-02 / May 25 2014 Koichi Murakami
+ - pyG4EllipticalCone.cc, add missing return in CreateEllipticalCone() method.
+
+envs-V10-00-01 / May 25 2014 Koichi Murakami
+ - configure script, physics list is changed to be always turned on.
+
+envs-V10-00-00 / May 25 2014 Koichi Murakami
+ - fix compile error on pyG4Polycone
+
 envs-V09-06-00 / 15 November 2013 Koichi Murakami
 [g4py]
  - add support for CMake build (experimental)

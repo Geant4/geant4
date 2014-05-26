@@ -45,7 +45,7 @@ G4EllipticalCone* CreateEllipticalCone(const G4String& name,
                                        G4double  zMax,
                                        G4double  pzTopCut)
 {
-  new G4EllipticalCone(name, pxSemiAxis,pySemiAxis, zMax, pzTopCut);
+  return new G4EllipticalCone(name, pxSemiAxis,pySemiAxis, zMax, pzTopCut);
 }
 
 }
