@@ -15,6 +15,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 May 2014  M. Kelsey (hadr-casc-V10-00-10)
+--------------------------------------------
+- G4InuclNuclei.cc:  Avoid FPE in setExcitationEnergy() for zero Ekin.  This
+  must be backported to 9.6 and 10.0.
+
 9 May 2014  M. Kelsey (hadr-casc-V10-00-09)
 -------------------------------------------
 - G4PreCompoundDeexcitation.cc: Fix mistake in copying example code; created
