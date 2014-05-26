@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 26, 2014, M.Asai (digits_hits-V10-00-07)
+- G4ScoringMessenger.cc : fix broadcast parameters of the commands
+  that should be used only by the master threads. Addressing to
+  bug report #1554.
+
 May 20, 2014, A.Dotti (digits_hits-V10-00-05, -06)
 - Correcting another missing end of line in a file
 
