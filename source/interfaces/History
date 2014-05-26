@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-20nd May 2014  Laurent Garnier (interfaces-V10-00-02)
+May 25th 2014 Koichi Murakami, interfaces-V10-00-04
+- basic/src/G4UIterminal.cc, fixed the problem that some commands cannot be
+  processed, because of a bug in G4SubString== operator like nC(0,3)="xxx".
+  Use substr() instead of () operator for the comparison of substr.
+
+20nd May 2014  Laurent Garnier (interfaces-V10-00-02, interfaces-V10-00-03)
 - G4UIQt : 
   o Change help tree splitter from vertical to horizontal
   o Add method to display text in HTML

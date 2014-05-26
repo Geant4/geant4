@@ -2506,6 +2506,8 @@ QString G4UIQt::GetCommandListToHtml (
         txt += "<td"+currentColor+">" + "taken from the current value</td>";
       } else if( ! param->GetDefaultValue().isNull() ) {
         txt += "<td"+currentColor+">" + QString((char*)(param->GetDefaultValue()).data())+ "</td>";
+      } else {
+        txt += "<td"+currentColor+">&nbsp;</td>";
       }
       if( ! param->GetParameterRange().isNull() ) {
         txt += "<td"+currentColor+">" + QString((char*)(param->GetParameterRange()).data())+ "</td>";
@@ -2524,7 +2526,6 @@ QString G4UIQt::GetCommandListToHtml (
     }
 
   }
-  std::string t = txt.toStdString().c_str();
   return txt;
 }
 
