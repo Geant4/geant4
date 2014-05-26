@@ -16,8 +16,6 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-- 25 May 2014 Hisaya Kurashige (particles-V10-00-08)
-- Fix Coverity Defects in G4PrimaryParticle
 
 - 06. May. 2014 Gabriele Cosmo (particles-V10-00-07)
 - Use G4ThreadLocalStatic in G4PDefSplitter.

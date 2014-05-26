@@ -328,8 +328,6 @@ void G4VDecayChannel::FillDaughters()
 
   //
   G4double sumofdaughtermass = 0.0;
-  G4double sumofdaughterwidthsq = 0.0;
-
   if ((numberOfDaughters <=0) || (daughters_name == 0) ){
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
@@ -387,14 +385,11 @@ void G4VDecayChannel::FillDaughters()
     }
 #endif
     G4MT_daughters_mass[index] = G4MT_daughters[index]->GetPDGMass();
-    G4double d_width = G4MT_daughters[index]->GetPDGMass();
-    G4MT_daughters_width[index] = d_width;
     sumofdaughtermass += G4MT_daughters[index]->GetPDGMass();
-    sumofdaughterwidthsq += d_width*d_width;
   }  // end loop over all daughters
 
   // check sum of daghter mass
-  G4double widthMass = std::sqrt(G4MT_parent->GetPDGWidth()+G4MT_parent->GetPDGWidth()+sumofdaughterwidthsq);
+  G4double widthMass = G4MT_parent->GetPDGWidth();
   if ( (G4MT_parent->GetParticleType() != "nucleus") &&
        (sumofdaughtermass > parentmass + 5*widthMass) ){
    // !!! illegal mass  !!!

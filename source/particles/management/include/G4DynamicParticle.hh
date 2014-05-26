@@ -93,10 +93,6 @@ class G4DynamicParticle
      G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
 			G4double aTotalEnergy,
                         const G4ThreeVector &aParticleMomentum);
-     G4DynamicParticle(const G4ParticleDefinition * aParticleDefinition,
-		       const G4ThreeVector& aMomentumDirection,
-		       G4double aKineticEnergy,
-		       const G4double dynamicalMass);
 
      G4DynamicParticle(const G4DynamicParticle &right);
 

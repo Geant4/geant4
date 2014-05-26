@@ -79,7 +79,7 @@ G4PrimaryParticle::G4PrimaryParticle(G4int Pcode,
 :PDGcode(Pcode),
  direction(0.,0.,1.),kinE(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
- mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
+ charge(0.),polX(0.),polY(0.),polZ(0.),
  Weight0(1.0),properTime(0.0),userInfo(0)
 {
  G4code = G4ParticleTable::GetParticleTable()->FindParticle(Pcode); 
@@ -125,7 +125,7 @@ G4PrimaryParticle::G4PrimaryParticle(const G4ParticleDefinition* Gcode,
 :PDGcode(0),G4code(Gcode),
  direction(0.,0.,1.),kinE(0.),
  nextParticle(0),daughterParticle(0),trackID(-1),
- mass(-1.),charge(0.),polX(0.),polY(0.),polZ(0.),
+ charge(0.),polX(0.),polY(0.),polZ(0.),
  Weight0(1.0),properTime(0.0),userInfo(0)
 {
   if (G4code !=0) {

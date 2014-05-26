@@ -231,7 +231,6 @@ class G4VDecayChannel
     G4ParticleDefinition** G4MT_daughters;
     G4double               G4MT_parent_mass;
     G4double*              G4MT_daughters_mass;
-    G4double*              G4MT_daughters_width;
 };
 
 // ------------------------------------------------------------
