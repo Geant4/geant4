@@ -72,9 +72,6 @@ G4VRangeToEnergyConverter & G4VRangeToEnergyConverter::operator=(const G4VRangeT
     theLossTable=0;
  }
 
-  LowestEnergy = right.LowestEnergy;
-  HighestEnergy = right.HighestEnergy;
-  MaxEnergyCut = right.MaxEnergyCut;
   fMaxEnergyCut = right.fMaxEnergyCut;
   NumberOfElements = right.NumberOfElements;
   theParticle = right.theParticle;
