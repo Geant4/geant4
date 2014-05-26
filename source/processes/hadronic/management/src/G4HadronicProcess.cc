@@ -94,7 +94,7 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
   aScaleFactor = 1;
   xBiasOn = false;
   G4HadronicProcess_debug_flag = false;
-
+  deRegister = true;
   GetEnergyMomentumCheckEnvvars();
 }
 
@@ -114,14 +114,15 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
   aScaleFactor = 1;
   xBiasOn = false;
   G4HadronicProcess_debug_flag = false;
-
+  deRegister = true;
   GetEnergyMomentumCheckEnvvars();
 }
 
 
 G4HadronicProcess::~G4HadronicProcess()
 {
-  G4HadronicProcessStore::Instance()->DeRegister(this);
+  if ( deRegister )
+      G4HadronicProcessStore::Instance()->DeRegister(this);
   delete theTotalResult;
   delete theCrossSectionDataStore;
 }
