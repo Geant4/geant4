@@ -4,6 +4,9 @@ $Id$
 History file for test/test202 subdirectory
 ------------------------------------------------
 
+23th May 2014 Laurent Garnier (test202-V10-00-22)
+- OGLIX.mac: Reduce bevent number
+
 23th May 2014 Laurent Garnier (test202-V10-00-21)
 - OGLIX.mac: Reduce macro output size
 

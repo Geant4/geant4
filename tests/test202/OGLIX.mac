@@ -37,7 +37,7 @@
 /vis/modeling/trajectories/create/drawByCharge
 /vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
 /vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 5
-/run/beamOn 5
+/run/beamOn 2
 
 # printEPS
 /vis/ogl/set/printFilename OGLIX-output/visTest-BeamOn
