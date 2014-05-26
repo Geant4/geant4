@@ -74,16 +74,16 @@ public:
       int operator!=(const G4ExcitedString &right) const;
 
 public:
-      G4double GetTimeOfCreation() const;               // Uzhi 15.05.08
+      G4double GetTimeOfCreation() const;
 
-      void  SetTimeOfCreation(G4double aTime);          // Uzhi 15.05.08
+      void  SetTimeOfCreation(G4double aTime);
 
       const G4ThreeVector & GetPosition() const;
 
       void SetPosition(const G4ThreeVector &aPosition); 
 
       const G4PartonVector * GetPartonList() const;
-      
+
       G4LorentzVector Get4Momentum() const;
       void LorentzRotate(const G4LorentzRotation & rotation);
 
@@ -134,15 +134,15 @@ int G4ExcitedString::operator!=(const G4ExcitedString &right) const
 }
 
 inline
-G4double G4ExcitedString::GetTimeOfCreation() const      // Uzhi 15.05.08
+G4double G4ExcitedString::GetTimeOfCreation() const
 {
 	return theTimeOfCreation;
 }
 
 inline
-void G4ExcitedString::SetTimeOfCreation(G4double aTime)  // Uzhi 15.05.08
+void G4ExcitedString::SetTimeOfCreation(G4double aTime)
 {
-	theTimeOfCreation=aTime;                         // Uzhi 15.05.08
+	theTimeOfCreation=aTime;
 }
 
 inline
@@ -161,21 +161,35 @@ inline
 G4LorentzVector G4ExcitedString::Get4Momentum() const
 {
 	G4LorentzVector momentum;
+if(IsExcited())                          // Uzhi Apr. 2014
+{
 	for ( unsigned int index=0; index < thePartons.size() ; index++ )
 	{
 	    // std::cout << "HPW "<<thePartons[index]->Get4Momentum()<<std::endl;
 	    momentum += thePartons[index]->Get4Momentum();
 	}
+}
+else
+{
+ momentum=theTrack->Get4Momentum();      // Uzhi Apr. 2014
+}
 	return momentum;
 }
 
 inline
 void G4ExcitedString::LorentzRotate(const G4LorentzRotation & rotation)
 {
+if(IsExcited())                          // Uzhi Apr. 2014
+{
 	for ( unsigned int index=0; index < thePartons.size() ; index++ )
 	{
 	    thePartons[index]->Set4Momentum(rotation*thePartons[index]->Get4Momentum());
 	}
+}
+else
+{
+ theTrack->Set4Momentum(rotation*theTrack->Get4Momentum()); // Uzhi Apr. 2014
+}
 }
 
 inline
@@ -203,11 +217,19 @@ G4LorentzRotation G4ExcitedString::TransformToCenterOfMass()
 	G4LorentzVector momentum=Get4Momentum();
 	G4LorentzRotation toCms(-1*momentum.boostVector());
 
+if(IsExcited())                          // Uzhi Apr. 2014
+{
 	for ( unsigned int index=0; index < thePartons.size() ; index++ )
 	{
 	    momentum=toCms * thePartons[index]->Get4Momentum();
 	    thePartons[index]->Set4Momentum(momentum);
 	}
+}
+else
+{
+ momentum*=toCms;                        // Uzhi Apr. 2014
+ theTrack->Set4Momentum(momentum);       // Uzhi Apr. 2014
+}
 	return toCms;
 }
 
