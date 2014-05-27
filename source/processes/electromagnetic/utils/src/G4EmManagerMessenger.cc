@@ -371,8 +371,8 @@ G4EmManagerMessenger::~G4EmManagerMessenger()
   delete splCmd;
   delete lllCmd;
   delete lamCmd;
-  /*
   delete dedxCmd;
+  /*
   delete aplCmd;
   delete latCmd;
   delete verCmd;

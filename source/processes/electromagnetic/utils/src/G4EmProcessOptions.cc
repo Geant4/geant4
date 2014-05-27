@@ -101,69 +101,63 @@ void G4EmProcessOptions::SetIntegral(G4bool val)
 
 void G4EmProcessOptions::SetMinSubRange(G4double val)
 {
-  if(0.0 < val && val < DBL_MAX) { theManager->SetMinSubRange(val); }
+  theManager->SetMinSubRange(val); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetMinEnergy(G4double val)
 {
-  if(0.0 < val && val < DBL_MAX) { theManager->SetMinEnergy(val); }
+  theManager->SetMinEnergy(val); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetMaxEnergy(G4double val)
 {
-  if(0.0 < val && val < DBL_MAX) { theManager->SetMaxEnergy(val); }
+  theManager->SetMaxEnergy(val); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetMaxEnergyForCSDARange(G4double val)
 {
-  if(0.0 < val && val < DBL_MAX) {
-    theManager->SetMaxEnergyForCSDARange(val);
-  }
+  theManager->SetMaxEnergyForCSDARange(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetMaxEnergyForMuons(G4double val)
 {
-  if(0.0 < val && val < DBL_MAX) { theManager->SetMaxEnergyForMuons(val); }
+  theManager->SetMaxEnergyForMuons(val); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetDEDXBinning(G4int val)
 {
-  if(0 < val && val < INT_MAX) { theManager->SetDEDXBinning(val); }
+  theManager->SetDEDXBinning(val); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetDEDXBinningForCSDARange(G4int val)
 {
-  if(0 < val && val < INT_MAX) { 
-    theManager->SetDEDXBinningForCSDARange(val);
-  }
+  theManager->SetDEDXBinningForCSDARange(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetLambdaBinning(G4int val)
 {
-  if(0 < val && val < INT_MAX) { theManager->SetLambdaBinning(val); }
+  theManager->SetLambdaBinning(val); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4EmProcessOptions::SetStepFunction(G4double v1, G4double v2)
 {
-  if(0.0 < v1 && 0.0 < v2 && v1 < DBL_MAX && v2 < DBL_MAX) {
-    theManager->SetStepFunction(v1, v2);
-  }
+  theManager->SetStepFunction(v1, v2);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

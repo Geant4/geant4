@@ -1005,7 +1005,7 @@ void G4LossTableManager::SetIntegral(G4bool val)
 
 void G4LossTableManager::SetMinSubRange(G4double val)
 {
-  if(0 < val && val < DBL_MAX) { 
+  if(1.e-18 < val && val < 1.e+50) { 
     minSubRange = val;
     for(G4int i=0; i<n_loss; ++i) {
       if(loss_vector[i]) { loss_vector[i]->SetMinSubRange(val); }
@@ -1027,7 +1027,7 @@ void G4LossTableManager::SetRandomStep(G4bool val)
 
 void G4LossTableManager::SetMinEnergy(G4double val)
 {
-  if(0.0 < val && val < DBL_MAX) { 
+  if(1.e-18 < val && val < 1.e+50) { 
     minEnergyActive = true;
     minKinEnergy = val;
     for(G4int i=0; i<n_loss; ++i) {
@@ -1044,7 +1044,7 @@ void G4LossTableManager::SetMinEnergy(G4double val)
 
 void G4LossTableManager::SetMaxEnergy(G4double val)
 {
-  if(0.0 < val && val < DBL_MAX) { 
+  if(1.e-18 < val && val < 1.e+50) { 
     maxEnergyActive = true;
     maxKinEnergy = val;
     for(G4int i=0; i<n_loss; ++i) {
@@ -1061,7 +1061,7 @@ void G4LossTableManager::SetMaxEnergy(G4double val)
 
 void G4LossTableManager::SetMaxEnergyForCSDARange(G4double val)
 {
-  if(0.0 < val && val < DBL_MAX) { 
+  if(1.e-18 < val && val < 1.e+50) { 
     for(G4int i=0; i<n_loss; ++i) {
       if(loss_vector[i]) { loss_vector[i]->SetMaxKinEnergyForCSDARange(val); }
     }
@@ -1072,7 +1072,7 @@ void G4LossTableManager::SetMaxEnergyForCSDARange(G4double val)
 
 void G4LossTableManager::SetMaxEnergyForMuons(G4double val)
 {
-  if(0.0 < val && val < DBL_MAX) { 
+  if(1.e-18 < val && val < 1.e+50) { 
     maxEnergyForMuonsActive = true;
     maxKinEnergyForMuons = val;
   }
@@ -1082,7 +1082,7 @@ void G4LossTableManager::SetMaxEnergyForMuons(G4double val)
 
 void G4LossTableManager::SetDEDXBinning(G4int val)
 {
-  if(0 < val && val < INT_MAX) { 
+  if(2 < val && val < 1000000000) { 
     for(G4int i=0; i<n_loss; ++i) {
       if(loss_vector[i]) { loss_vector[i]->SetDEDXBinning(val); }
     }
@@ -1093,7 +1093,7 @@ void G4LossTableManager::SetDEDXBinning(G4int val)
 
 void G4LossTableManager::SetDEDXBinningForCSDARange(G4int val)
 {
-  if(0 < val && val < INT_MAX) { 
+  if(2 < val && val < 1000000000) { 
     for(G4int i=0; i<n_loss; ++i) {
       if(loss_vector[i]) { loss_vector[i]->SetDEDXBinningForCSDARange(val); }
     }
@@ -1104,7 +1104,7 @@ void G4LossTableManager::SetDEDXBinningForCSDARange(G4int val)
 
 void G4LossTableManager::SetLambdaBinning(G4int val)
 {
-  if(0 < val && val < INT_MAX) { 
+  if(2 < val && val < 1000000000) { 
     G4int n = val/G4int(std::log10(maxKinEnergy/minKinEnergy) + 0.5);
     if(n < 5) {
       G4cout << "G4LossTableManager::SetLambdaBinning WARNING "
@@ -1156,7 +1156,7 @@ void G4LossTableManager::SetVerbose(G4int val)
 
 void G4LossTableManager::SetStepFunction(G4double v1, G4double v2)
 {
-  if(0.0 < v1 && v1 < DBL_MAX && 0.0 < v2 && v2 < DBL_MAX) { 
+  if(0.0 < v1 && v1 < 1.01 && 0.0 < v2 && v2 < 1.e+50) { 
     stepFunctionActive = true;
     maxRangeVariation = v1;
     maxFinalStep = v2;

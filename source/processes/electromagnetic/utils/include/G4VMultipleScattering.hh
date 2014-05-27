@@ -277,7 +277,6 @@ private:
 
 protected:
 
-  //G4GPILSelection             valueGPILSelectionMSC;
   G4ParticleChangeForMSC      fParticleChange;
 
 private:

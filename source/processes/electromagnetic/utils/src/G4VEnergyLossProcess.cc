@@ -243,6 +243,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   lManager = G4LossTableManager::Instance();
   lManager->Register(this);
   fluctModel = 0;
+  currentModel = 0;
   atomDeexcitation = 0;
   subcutProducer = 0;
 
@@ -260,6 +261,10 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   secParticles.reserve(5);
 
   theCuts = theSubCuts = 0;
+  currentMaterial = 0;
+  currentCoupleIndex = 0;
+  massRatio = fFactor = reduceFactor = chargeSqRatio = 1.0;
+  preStepLambda = preStepScaledEnergy = fRange = 0.0;
 
   secID = biasID = subsecID = -1;
 }
