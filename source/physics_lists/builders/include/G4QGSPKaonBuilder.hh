@@ -23,62 +23,65 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4INCLXXPiKBuilder_h
-#define G4INCLXXPiKBuilder_h 1
+// $Id$
+//
+//---------------------------------------------------------------------------
+//
+// ClassName:   G4QGSPKaonBuilder
+//
+// Author: 23-May-2014 D. Mancusi
+//
+// Description: Modified version of G4QGSBinaryKaonBuilder to use PreCompound
+//
+// Modified:
+//
+//----------------------------------------------------------------------------
+//
+#ifndef G4QGSPKaonBuilder_h
+#define G4QGSPKaonBuilder_h 1
 
 #include "globals.hh"
 
 #include "G4HadronElasticProcess.hh"
-#include "G4HadronFissionProcess.hh"
-#include "G4HadronCaptureProcess.hh"
-#include "G4NeutronInelasticProcess.hh"
-#include "G4VPiKBuilder.hh"
+#include "G4VKaonBuilder.hh"
 
-#include "G4PiNuclearCrossSection.hh"
-#include "G4INCLXXInterface.hh"   
-#include "G4CascadeInterface.hh"
+#include "G4TheoFSGenerator.hh"
+#include "G4ExcitationHandler.hh"
+#include "G4PreCompoundModel.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
+#include "G4QGSModel.hh"
+#include "G4QGSParticipants.hh"
+#include "G4QGSMFragmentation.hh"
+#include "G4ExcitedStringDecay.hh"
+#include "G4QuasiElasticChannel.hh"
 
-/**
- * Builder for pion processes using the INCL++ intra-nuclear
- * cascade model.
- *
- * By default the INCL++ model is used for projectile energies 0 - 3 GeV.
- *
- * The builder uses INCL++ cascade model with G4ExcitationHandler
- * de-excitation. This is implemented in interface
- * G4INCLXXInterface.
- *
- * @see G4INCLXXInterface
- * @see G4INCLXXProtonBuilder
- * @see G4INCLXXNeutronBuilder
- */
-class G4INCLXXPiKBuilder : public G4VPiKBuilder
+
+class G4QGSPKaonBuilder : public G4VKaonBuilder
 {
   public: 
-    G4INCLXXPiKBuilder();
-    virtual ~G4INCLXXPiKBuilder();
+    G4QGSPKaonBuilder(G4bool quasiElastic=false);
+    virtual ~G4QGSPKaonBuilder();
 
   public: 
     virtual void Build(G4HadronElasticProcess * aP);
-    virtual void Build(G4PionPlusInelasticProcess * aP);
-    virtual void Build(G4PionMinusInelasticProcess * aP);
     virtual void Build(G4KaonPlusInelasticProcess * aP);
     virtual void Build(G4KaonMinusInelasticProcess * aP);
     virtual void Build(G4KaonZeroLInelasticProcess * aP);
     virtual void Build(G4KaonZeroSInelasticProcess * aP);
     
     void SetMinEnergy(G4double aM) {theMin = aM;}
-    void SetMaxEnergy(G4double aM) {theMax = aM;}
 
   private:
-    G4PiNuclearCrossSection thePiData;
-    G4INCLXXInterface * theModel;    
+    G4TheoFSGenerator * theModel;
+    G4PreCompoundModel * thePreEquilib;
+    G4GeneratorPrecompoundInterface * theCascade;
+    G4QGSModel< G4QGSParticipants > * theStringModel;
+    G4ExcitedStringDecay * theStringDecay;
+    G4QuasiElasticChannel * theQuasiElastic;
     G4double theMin;
     G4double theMax;
-    G4CascadeInterface *theBertiniModel;
-};
 
-// 2011 by P. Kaitaniemi
+};
 
 #endif
 

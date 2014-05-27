@@ -23,32 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
- #include "G4INCLXXPiKBuilder.hh"
+ #include "G4INCLXXPionBuilder.hh"
  #include "G4SystemOfUnits.hh"
  #include "G4ParticleDefinition.hh"
  #include "G4ParticleTable.hh"
  #include "G4ProcessManager.hh"
 
- G4INCLXXPiKBuilder::
- G4INCLXXPiKBuilder() 
+ G4INCLXXPionBuilder::
+ G4INCLXXPionBuilder() 
  {
    theMin = 0*GeV;
-   theMax = 3.0*GeV;
+   theMax = 20.0*GeV;
    theModel = new G4INCLXXInterface();
    theModel->SetMinEnergy(theMin);
    theModel->SetMaxEnergy(theMax); 
-   theBertiniModel = new G4CascadeInterface;
-   theBertiniModel->SetMinEnergy(theMin);
-   theBertiniModel->SetMaxEnergy(theMax); 
  }
 
- G4INCLXXPiKBuilder::
- ~G4INCLXXPiKBuilder() 
+ G4INCLXXPionBuilder::
+ ~G4INCLXXPionBuilder() 
 {
   delete theModel;
 }
 
- void G4INCLXXPiKBuilder::
+ void G4INCLXXPionBuilder::
  Build(G4PionPlusInelasticProcess * aP)
  {
    aP->RegisterMe(theModel);
@@ -56,7 +53,7 @@
    theModel->SetMaxEnergy(theMax);
  }
 
- void G4INCLXXPiKBuilder::
+ void G4INCLXXPionBuilder::
  Build(G4PionMinusInelasticProcess * aP)
  {
    aP->RegisterMe(theModel);
@@ -65,40 +62,8 @@
    theModel->SetMaxEnergy(theMax);
  }
 
- void G4INCLXXPiKBuilder::
+ void G4INCLXXPionBuilder::
  Build(G4HadronElasticProcess * ) {}
-
- void G4INCLXXPiKBuilder::
- Build(G4KaonPlusInelasticProcess *aP)
- {
-   aP->RegisterMe(theBertiniModel);
-   theBertiniModel->SetMinEnergy(theMin);
-   theBertiniModel->SetMaxEnergy(theMax);
- }
-
- void G4INCLXXPiKBuilder::
- Build(G4KaonMinusInelasticProcess *aP)
- {
-   aP->RegisterMe(theBertiniModel);
-   theBertiniModel->SetMinEnergy(theMin);
-   theBertiniModel->SetMaxEnergy(theMax);
- }
-
- void G4INCLXXPiKBuilder::
- Build(G4KaonZeroLInelasticProcess *aP)
- {
-   aP->RegisterMe(theBertiniModel);
-   theBertiniModel->SetMinEnergy(theMin);
-   theBertiniModel->SetMaxEnergy(theMax);
- }
-
- void G4INCLXXPiKBuilder::
- Build(G4KaonZeroSInelasticProcess *aP)
- {
-   aP->RegisterMe(theBertiniModel);
-   theBertiniModel->SetMinEnergy(theMin);
-   theBertiniModel->SetMaxEnergy(theMax);
- }
 
  // 2011 by P. Kaitaniemi
 
