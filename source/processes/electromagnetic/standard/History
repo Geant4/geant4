@@ -18,6 +18,20 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+27 May 14: V.Ivanchenko (emstand-V10-00-28)
+- G4IonCoulombCrossSection - tunned computation of the screen 
+    factor 
+- G4UrbanMscModel - changed ComputeGeomPathLength() method - instead
+    of many return use the one for easier printouts; no change in 
+    algorithms 
+- G4UniversalFluctuations - implemented Andrea Dotti suggestion
+    to use more vectorized code (use random engine pointer, use 
+    flatArray method) for CPU performance improvement;
+    no change of the algorithm
+- G4eCoulombScattering - fixed simple Coverity report
+- G4WentzelVIModel - changed single scattering factor from 1.5 to
+    1.25
+
 05 May 14: V.Ivanchenko (emstand-V10-00-27)
 - G4WentzelVIModel, G4WentzelVIRelModel, G4WentzelOKandVIxSection, 
   G4eCoulombScatteringModel - revised and make consistent definition

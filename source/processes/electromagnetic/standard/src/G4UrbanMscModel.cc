@@ -447,7 +447,12 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
 
   // set flag to default values
   latDisplasment = latDisplasmentbackup;
-
+  /*
+  G4cout << "G4Urban::StepLimit tPathLength= " 
+   	 <<tPathLength<<" inside= " << inside
+	 << " range= " <<currentRange<< " lambda= "<<lambda0
+   	 <<G4endl;
+  */
   // stop here if small range particle
   if(inside) { 
     latDisplasment = false;   
@@ -460,8 +465,8 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
   }
   
   presafety = sp->GetSafety();
-  /*
-  G4cout << "G4Urban96::StepLimit tPathLength= " 
+  /*  
+  G4cout << "G4Urban::StepLimit tPathLength= " 
    	 <<tPathLength<<" safety= " << presafety
           << " range= " <<currentRange<< " lambda= "<<lambda0
    	 << " Alg: " << steppingAlgorithm <<G4endl;
@@ -706,36 +711,29 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
 
   // this correction needed to run MSC with eIoni and eBrem inactivated
   // and makes no harm for a normal run
-  // It is already checked
+  // VI: it is already checked
   // if(tPathLength > currentRange)
   //  tPathLength = currentRange ;
 
   G4double tau = tPathLength/lambda0 ;
 
   if ((tau <= tausmall) || insideskin) {
-    zPathLength = tPathLength;
-    zPathLength = min(zPathLength, lambda0); 
-    return zPathLength;
-  }
+    zPathLength = min(tPathLength, lambda0); 
 
-  G4double zmean = tPathLength;
-  if (tPathLength < currentRange*dtrl) {
-    if(tau < taulim) zmean = tPathLength*(1.-0.5*tau) ;
-    else             zmean = lambda0*(1.-G4Exp(-tau));
-    zPathLength = zmean ;
-    return zPathLength;    
+  } else  if (tPathLength < currentRange*dtrl) {
+    if(tau < taulim) zPathLength = tPathLength*(1.-0.5*tau) ;
+    else             zPathLength = lambda0*(1.-G4Exp(-tau));
 
   } else if(currentKinEnergy < mass || tPathLength == currentRange)  {
     par1 = 1./currentRange ;
     par2 = 1./(par1*lambda0) ;
     par3 = 1.+par2 ;
-    if(tPathLength < currentRange)
-      zmean = (1.-G4Exp(par3*G4Log(1.-tPathLength/currentRange)))/(par1*par3) ;
-    else {
-      zmean = 1./(par1*par3) ;
+    if(tPathLength < currentRange) {
+      zPathLength = 
+	(1.-G4Exp(par3*G4Log(1.-tPathLength/currentRange)))/(par1*par3);
+    } else {
+      zPathLength = 1./(par1*par3);
     }
-    zPathLength = zmean ;
-    return zPathLength;    
 
   } else {
     G4double T1 = GetEnergy(particle,currentRange-tPathLength,couple);
@@ -744,10 +742,8 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
     par1 = (lambda0-lambda1)/(lambda0*tPathLength);
     par2 = 1./(par1*lambda0);
     par3 = 1.+par2 ;
-    zmean = (1.-G4Exp(par3*G4Log(lambda1/lambda0)))/(par1*par3);
+    zPathLength = (1.-G4Exp(par3*G4Log(lambda1/lambda0)))/(par1*par3);
   }
-
-  zPathLength = zmean;
 
   zPathLength = min(zPathLength, lambda0);
   //G4cout<< "zPathLength= "<< zPathLength<< " lambda1= " << lambda0 << G4endl;
@@ -759,8 +755,11 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
 G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
 {
   // step defined other than transportation 
-  if(geomStepLength == zPathLength)
-    { return tPathLength; }
+  if(geomStepLength == zPathLength) { 
+    //G4cout << "Urban::ComputeTrueLength: tPathLength= " << tPathLength 
+    //	   << " step= " << geomStepLength << " *** " << G4endl;
+    return tPathLength; 
+  }
 
   zPathLength = geomStepLength;
 
@@ -789,8 +788,8 @@ G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
     }  
     tPathLength = tlength; 
   }
-  //G4cout << "Urban96::ComputeTrueLength: tPathLength= " << tPathLength 
-  //	 << " step= " << geomStepLength << G4endl;
+  //G4cout << "Urban::ComputeTrueLength: tPathLength= " << tPathLength 
+  //	 << " step= " << geomStepLength << " &&& " << G4endl;
 
   return tPathLength;
 }

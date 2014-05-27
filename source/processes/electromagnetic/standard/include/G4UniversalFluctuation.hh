@@ -122,6 +122,8 @@ private:
   G4double nmaxCont;
   G4double rate,fw;
 
+  G4int     sizearray;
+  G4double* rndmarray;
 
 };
 

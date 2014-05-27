@@ -73,7 +73,7 @@ using namespace std;
 
 G4WentzelVIModel::G4WentzelVIModel(G4bool combined, const G4String& nam) :
   G4VMscModel(nam),
-  ssFactor(1.5),
+  ssFactor(1.25),
   invssFactor(1.0/(ssFactor-0.05)),
   currentCouple(0),
   inside(false),

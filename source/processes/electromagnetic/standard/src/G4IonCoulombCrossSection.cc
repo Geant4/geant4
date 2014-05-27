@@ -148,7 +148,7 @@ void G4IonCoulombCrossSection::SetupTarget(G4double Z, G4double e,
   if(Z != targetZ || e != etag) {
     etag    = e;
     targetZ = Z;
-    G4int iz= G4int(Z);
+    G4int iz= G4lrint(Z);
 
     SetScreenRSquare(iz);
     screenZ = 0;
@@ -178,23 +178,13 @@ void G4IonCoulombCrossSection::SetupTarget(G4double Z, G4double e,
 void G4IonCoulombCrossSection::SetScreenRSquare(G4int iz)
 {
   //for proton Thomas-Fermi screening length	
-  G4double x = a0;
-  G4int Z1 = (G4int)std::sqrt(chargeSquare);
+  G4int Z1 = G4lrint(std::sqrt(chargeSquare));
+  G4double Z1023 = G4Exp(fNistManager->GetLOGZ(Z1)*0.23);
+  G4double Z2023 = G4Exp(fNistManager->GetLOGZ(iz)*0.23);
+                
+  // Universal screening length
+  G4double x = a0*(Z1023+Z2023);
 
-  if(1 == iz) {
-    if(Z1 > 1) { x = a0*fNistManager->GetZ13(Z1); }
-
-  } else if (1 == Z1) {
-    x = a0*fNistManager->GetZ13(iz); 
-
-  } else {
-
-    G4double Z1023 = G4Exp(fNistManager->GetLOGZ(Z1)*0.23);
-    G4double Z2023 = G4Exp(fNistManager->GetLOGZ(iz)*0.23);
-        
-    // Universal screening length
-    x = a0*(Z1023+Z2023);
-  }
   ScreenRSquare  = alpha2*x*x;
 }
 

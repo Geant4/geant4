@@ -102,6 +102,7 @@ G4eCoulombScatteringModel::G4eCoulombScatteringModel(G4bool combined)
 
   currentMaterialIndex = 0;
   mass = proton_mass_c2;
+  elecRatio = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

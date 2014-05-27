@@ -99,12 +99,16 @@ G4UniversalFluctuation::G4UniversalFluctuation(const G4String& nam)
     = e1Fluct = e2Fluct = e1LogFluct = e2LogFluct = ipotLogFluct = e0 = esmall 
     = e1 = e2 = 0;
   m_Inv_particleMass = m_massrate = DBL_MAX;
+  sizearray = 30;
+  rndmarray = new G4double[30];
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4UniversalFluctuation::~G4UniversalFluctuation()
-{}
+{
+  delete [] rndmarray;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -175,14 +179,14 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 
 	G4double twomeanLoss = meanLoss + meanLoss;
     	do {
-	  loss = G4RandGauss::shoot(meanLoss,siga);
+	  loss = G4RandGauss::shoot(rndmEngineF,meanLoss,siga);
     	} while  (0.0 > loss || twomeanLoss < loss);
 
 	// Gamma distribution
       } else {
 
 	G4double neff = sn*sn;
-	loss = meanLoss*G4RandGamma::shoot(neff,1.0)/neff;
+	loss = meanLoss*G4RandGamma::shoot(rndmEngineF,neff,1.0)/neff;
       }
       //G4cout << "Gauss: " << loss << G4endl;
       return loss;
@@ -212,7 +216,7 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
   G4int    nstep = 1;
   if(meanLoss < 25.*ipotFluct)
     {
-      if(G4UniformRand()*ipotFluct< 0.04*meanLoss)          
+      if(rndmEngineF->flat()*ipotFluct< 0.04*meanLoss)          
 	{ nstep = 1; }
       else
 	{ 
@@ -239,7 +243,7 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 	if(a1 < nmaxCont) { 
 	  //small energy loss
 	  G4double sa1 = sqrt(a1);
-	  if(G4UniformRand() < G4Exp(-sa1))
+	  if(rndmEngineF->flat() < G4Exp(-sa1))
 	    {
 	      e1 = esmall;
 	      a1 = meanLoss*(1.-rate)/e1;
@@ -286,7 +290,7 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 	p1 = G4double(G4Poisson(a1));
 	loss += p1*e1;
 	if(p1 > 0.) {
-	  loss += (1.-2.*G4UniformRand())*e1;
+	  loss += (1.-2.*rndmEngineF->flat())*e1;
 	}
       }
 
@@ -301,12 +305,12 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 	p2 = G4double(G4Poisson(a2));
 	loss += p2*e2;
 	if(p2 > 0.) 
-	  loss += (1.-2.*G4UniformRand())*e2;
+	  loss += (1.-2.*rndmEngineF->flat())*e2;
       }
     if(emean > 0.)
       {
 	sige   = sqrt(sig2e);
-	loss += max(0.,G4RandGauss::shoot(emean,sige));
+	loss += max(0.,G4RandGauss::shoot(rndmEngineF,emean,sige));
       }
 
     // ionisation 
@@ -329,15 +333,21 @@ G4UniversalFluctuation::SampleFluctuations(const G4MaterialCutsCouple* couple,
 
       G4double w2 = alfa*e0;
       G4double w  = (tmax-w2)/tmax;
-      G4int nb = G4Poisson(p3);
+      const G4int nb = G4Poisson(p3);
       if(nb > 0) {
-	for (G4int k=0; k<nb; k++) { lossc += w2/(1.-w*G4UniformRand()); }
+        if(nb > sizearray) {
+	  sizearray = nb;
+	  delete [] rndmarray;
+	  rndmarray = new G4double[nb];
+	}
+	rndmEngineF->flatArray(nb, rndmarray);
+	for (G4int k=0; k<nb; ++k) { lossc += w2/(1.-w*rndmarray[k]); }
       }
 
     if(emean > 0.)
       {
 	sige   = sqrt(sig2e);
-	lossc += max(0.,G4RandGauss::shoot(emean,sige));
+	lossc += max(0.,G4RandGauss::shoot(rndmEngineF,emean,sige));
       }
     }
 
