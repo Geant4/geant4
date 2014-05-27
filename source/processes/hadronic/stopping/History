@@ -14,6 +14,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 May 2014 V. Ivantchenko (hadr-stopping-V10-00-04)
+--------------------------------------------------------------------
+- G4MuonMinusCaptureAtRest, G4AntiNeutronAnnihilationAtRest -
+    fixed Coverity defects
+
 22 May 2014 A. Dotti       (hadr-stopping-V10-00-03)
 -------------------------------------------------------------------
 - G4HadronStoppingProcess : in destructor do not de-register if 

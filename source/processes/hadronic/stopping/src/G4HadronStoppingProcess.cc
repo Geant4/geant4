@@ -78,7 +78,7 @@ G4HadronStoppingProcess::G4HadronStoppingProcess(const G4String& name)
 G4HadronStoppingProcess::~G4HadronStoppingProcess()
 {
   if ( deRegister )
-      G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
+    G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
   delete fElementSelector;
   // NOTE: fEmCascade and fEmBoundDecay owned by registry, not locally
 }
@@ -92,9 +92,10 @@ G4bool G4HadronStoppingProcess::IsApplicable(const G4ParticleDefinition& p)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4HadronStoppingProcess::PreparePhysicsTable(const G4ParticleDefinition& p)
+void 
+G4HadronStoppingProcess::PreparePhysicsTable(const G4ParticleDefinition& p)
 {
-  G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this, &p);
+  G4HadronicProcessStore::Instance()->RegisterParticleForExtraProcess(this,&p);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

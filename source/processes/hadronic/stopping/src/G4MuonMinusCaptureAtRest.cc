@@ -55,6 +55,7 @@
 #include "G4Fancy3DNucleus.hh"
 #include "G4ExcitationHandler.hh"
 #include "G4HadronicProcessStore.hh"
+#include "G4HadronicDeprecate.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -63,6 +64,7 @@ G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName,
   G4VRestProcess (processName, aType), nCascade(0), targetZ(0), targetA(0), 
   isInitialised(false)
 {
+  G4HadronicDeprecate(processName);
   SetProcessSubType(fHadronAtRest);
   Cascade    = new G4GHEKinematicsVector [17];
   pSelector  = new G4StopElementSelector();
@@ -70,6 +72,7 @@ G4MuonMinusCaptureAtRest::G4MuonMinusCaptureAtRest(const G4String& processName,
   theN       = new G4Fancy3DNucleus();
   theHandler = new G4ExcitationHandler();
   G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
+  targetMass = 0.0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
