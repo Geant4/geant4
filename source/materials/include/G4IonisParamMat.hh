@@ -111,9 +111,7 @@ public:
   void      SetMeanEnergyPerIonPair(G4double value) {fMeanEnergyPerIon = value;}; 
   G4double  GetMeanEnergyPerIonPair()         const {return fMeanEnergyPerIon;};
       
-public:  // without description
-
-  G4IonisParamMat(const G4IonisParamMat&);
+  // operators
   G4IonisParamMat& operator=(const G4IonisParamMat&);          
   G4int operator==(const G4IonisParamMat&) const;
   G4int operator!=(const G4IonisParamMat&) const;
@@ -137,7 +135,7 @@ private:
   // Compute parameters for ion parameterizations
   void ComputeIonParameters();
 
-private:
+  G4IonisParamMat(const G4IonisParamMat&);
 
 //
 // data members

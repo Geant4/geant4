@@ -620,13 +620,13 @@ G4Material::GetMaterial(const G4String& materialName, G4bool warning)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+/*
 G4Material::G4Material(const G4Material& right)
 {
   InitializePointers();
   *this = right;
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4Material::GetZ() const
@@ -654,7 +654,7 @@ G4double G4Material::GetA() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+/*
 const G4Material& G4Material::operator=(const G4Material& right)
 {
   if (this != &right)
@@ -703,7 +703,7 @@ const G4Material& G4Material::operator=(const G4Material& right)
     } 
   return *this;
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4int G4Material::operator==(const G4Material& right) const

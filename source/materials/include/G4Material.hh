@@ -269,8 +269,7 @@ public:  // with description
   friend std::ostream& operator<<(std::ostream&, G4Material&);    
   friend std::ostream& operator<<(std::ostream&, G4MaterialTable);
     
-public:  // without description 
-       
+  // operators       
   G4int operator==(const G4Material&) const;
   G4int operator!=(const G4Material&) const;
   G4Material(__void__&);

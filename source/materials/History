@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26-05-14 V.Ivanchenko (materials-V10-00-14)
+- G4Material - make copy constructor private 
+
+26-05-14 V.Ivanchenko (materials-V10-00-13)
+- G4Material, G4IonisParamElm, G4IonisParamMat - fixed Coverity 
+    reports - copy constructor is private, because it is not 
+    assumed to create a new material as a copy 
+
 13-05-14 V.Ivanchenko (materials-V10-00-12)
 - G4Material - revert back modifications due to fail of tests,
     improve material printout only to address #1563    

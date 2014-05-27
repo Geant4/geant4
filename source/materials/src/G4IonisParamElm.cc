@@ -153,13 +153,13 @@ G4IonisParamElm::~G4IonisParamElm()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
-
+/*
 G4IonisParamElm::G4IonisParamElm(G4IonisParamElm& right)
 {
   fShellCorrectionVector = 0;
   *this = right;
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
 G4IonisParamElm& G4IonisParamElm::operator=(const G4IonisParamElm& right)
