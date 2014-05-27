@@ -74,6 +74,7 @@ G4VDecayChannel::G4VDecayChannel()
   G4MT_daughters = 0;
   G4MT_parent_mass = 0.0;
   G4MT_daughters_mass = 0;
+  G4MT_daughters_width = 0;
 
   // set pointer to G4ParticleTable (static and singleton object)
   particletable = G4ParticleTable::GetParticleTable();
@@ -92,6 +93,7 @@ G4VDecayChannel::G4VDecayChannel(const G4String &aName, G4int Verbose)
   G4MT_daughters = 0;
   G4MT_parent_mass = 0.0;
   G4MT_daughters_mass = 0;
+  G4MT_daughters_width = 0;
 
   // set pointer to G4ParticleTable (static and singleton object)
   particletable = G4ParticleTable::GetParticleTable();
@@ -117,6 +119,7 @@ G4VDecayChannel::G4VDecayChannel(const G4String  &aName,
   G4MT_daughters = 0;
   G4MT_parent_mass = 0.0;
   G4MT_daughters_mass = 0;
+  G4MT_daughters_width = 0;
 
   // set pointer to G4ParticleTable (static and singleton object)
   particletable = G4ParticleTable::GetParticleTable();
@@ -164,6 +167,7 @@ G4VDecayChannel::G4VDecayChannel(const G4VDecayChannel &right)
   //
   G4MT_daughters_mass = 0;
   G4MT_daughters = 0;
+  G4MT_daughters_width = 0;
 
   // particle table
   particletable = G4ParticleTable::GetParticleTable();
@@ -199,6 +203,7 @@ G4VDecayChannel & G4VDecayChannel::operator=(const G4VDecayChannel &right)
   G4MT_daughters = 0;
   G4MT_parent_mass = 0.0;
   G4MT_daughters_mass = 0;
+  G4MT_daughters_width = 0;
 
   // particle table
   particletable = G4ParticleTable::GetParticleTable();
@@ -213,6 +218,8 @@ G4VDecayChannel::~G4VDecayChannel()
   parent_name = 0;
   if (G4MT_daughters_mass != 0) delete [] G4MT_daughters_mass;
   G4MT_daughters_mass =0;
+  if (G4MT_daughters_width != 0) delete [] G4MT_daughters_width;
+  G4MT_daughters_width = 0;
 } 
 
 /////@@const G4DecayChannelManager& G4VDecayChannel::GetSubInstanceManager()
@@ -240,8 +247,11 @@ void G4VDecayChannel::ClearDaughtersName()
   // 
   if (G4MT_daughters != 0) delete [] G4MT_daughters;
   if (G4MT_daughters_mass != 0) delete [] G4MT_daughters_mass;
+  if (G4MT_daughters_width != 0) delete [] G4MT_daughters_width;
+  G4MT_daughters_width = 0;
   G4MT_daughters = 0;
   G4MT_daughters_mass = 0;
+  G4MT_daughters_width = 0;
 
   numberOfDaughters = 0;
 }
@@ -328,6 +338,8 @@ void G4VDecayChannel::FillDaughters()
 
   //
   G4double sumofdaughtermass = 0.0;
+  G4double sumofdaughterwidthsq = 0.0;
+
   if ((numberOfDaughters <=0) || (daughters_name == 0) ){
 #ifdef G4VERBOSE
     if (verboseLevel>0) {
@@ -345,7 +357,9 @@ void G4VDecayChannel::FillDaughters()
   //create and set the array of pointers to daughter particles
   G4MT_daughters = new G4ParticleDefinition*[numberOfDaughters];
   if (G4MT_daughters_mass != 0) delete [] G4MT_daughters_mass;
+  if (G4MT_daughters_width != 0) delete [] G4MT_daughters_width;
   G4MT_daughters_mass = new G4double[numberOfDaughters];
+  G4MT_daughters_width = new G4double[numberOfDaughters];
   // loop over all daughters
   for (index=0; index < numberOfDaughters;  index++) { 
     if (daughters_name[index] == 0) {
@@ -385,11 +399,14 @@ void G4VDecayChannel::FillDaughters()
     }
 #endif
     G4MT_daughters_mass[index] = G4MT_daughters[index]->GetPDGMass();
+    G4double d_width = G4MT_daughters[index]->GetPDGWidth();
+    G4MT_daughters_width[index] = d_width;
     sumofdaughtermass += G4MT_daughters[index]->GetPDGMass();
+    sumofdaughterwidthsq += d_width*d_width;
   }  // end loop over all daughters
 
   // check sum of daghter mass
-  G4double widthMass = G4MT_parent->GetPDGWidth();
+  G4double widthMass = std::sqrt(G4MT_parent->GetPDGWidth()+G4MT_parent->GetPDGWidth()+sumofdaughterwidthsq);
   if ( (G4MT_parent->GetParticleType() != "nucleus") &&
        (sumofdaughtermass > parentmass + 5*widthMass) ){
    // !!! illegal mass  !!!
