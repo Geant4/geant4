@@ -62,7 +62,7 @@ public:
   ~G4LEpp();
  
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
-				 G4Nucleus& targetNucleus);
+  				 G4Nucleus& targetNucleus);
 
   void SetCoulombEffects(G4int State);
 
@@ -71,7 +71,8 @@ public:
   
 private:
 
-  const G4float * sig[NANGLE];
+  G4int nenergy;
+  //const G4float * sig;
   const G4float * elab;
 
   // The following arrays are declared static to allow the use of initializers.
