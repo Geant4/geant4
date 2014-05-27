@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May   27st 2014, V.Ivanchenko transport-V10-00-03
+------------------------------
+- G4UserSpecialCuts - fixed trivial Coverity report
+
 May   21st 2014, J.Apostolakis transport-V10-00-02
 ------------------------------
 - Revised  AlongStepDoIt methods of G4Transportation and 

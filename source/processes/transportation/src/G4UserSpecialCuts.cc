@@ -74,6 +74,7 @@ G4UserSpecialCuts::~G4UserSpecialCuts()
 G4UserSpecialCuts::G4UserSpecialCuts(G4UserSpecialCuts& right)
   : G4VProcess(right)
 {
+  theLossTableManager = G4LossTableManager::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
