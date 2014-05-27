@@ -32,6 +32,7 @@
 // Author: 2011 P. Kaitaniemi
 //
 // Modified:
+// 22.05.2014 D. Mancusi: Extend INCL++ to 20 GeV
 // 19.03.2013 A.Ribon: Replace LEP with FTFP and BERT
 // 01.03.2013 D. Mancusi: Rename to G4HadronPhysicsINCLXX and introduce
 //                        parameters for FTFP and NeutronHP
@@ -48,22 +49,23 @@
 
 #include "G4VPhysicsConstructor.hh"
 
-#include "G4PiKBuilder.hh"
-#include "G4QGSPPiKBuilder.hh"
-#include "G4FTFPPiKBuilder.hh"
-#include "G4BertiniPiKBuilder.hh"
-#include "G4INCLXXPiKBuilder.hh"
+#include "G4PionBuilder.hh"
+#include "G4KaonBuilder.hh"
+#include "G4QGSPPionBuilder.hh"
+#include "G4FTFPPionBuilder.hh"
+#include "G4QGSPKaonBuilder.hh"
+#include "G4FTFPKaonBuilder.hh"
+#include "G4INCLXXPionBuilder.hh"
+#include "G4BertiniKaonBuilder.hh"
 
 #include "G4ProtonBuilder.hh"
 #include "G4QGSPProtonBuilder.hh"
 #include "G4FTFPProtonBuilder.hh"
-#include "G4BertiniProtonBuilder.hh"
 #include "G4INCLXXProtonBuilder.hh"
 
 #include "G4NeutronBuilder.hh"
 #include "G4QGSPNeutronBuilder.hh"
 #include "G4FTFPNeutronBuilder.hh"
-#include "G4BertiniNeutronBuilder.hh"
 #include "G4INCLXXNeutronBuilder.hh"
 #include "G4NeutronHPBuilder.hh"
 
@@ -77,7 +79,7 @@
  *
  * @see G4INCLXXProtonBuilder
  * @see G4INCLXXNeutronBuilder
- * @see G4INCLXXPiKBuilder
+ * @see G4INCLXXPionBuilder
  * @see G4IonINCLXXBuilder
  */
 class G4HadronPhysicsINCLXX : public G4VPhysicsConstructor
@@ -100,20 +102,22 @@ class G4HadronPhysicsINCLXX : public G4VPhysicsConstructor
       G4NeutronBuilder * theNeutrons;
       G4QGSPNeutronBuilder * theQGSPNeutron;
       G4FTFPNeutronBuilder * theFTFPNeutron;
-      G4BertiniNeutronBuilder * theBertiniNeutron;
       G4INCLXXNeutronBuilder * theINCLXXNeutron;
       G4NeutronHPBuilder * theNeutronHP;
     
-      G4PiKBuilder * thePiK;
-      G4QGSPPiKBuilder * theQGSPPiK;
-      G4FTFPPiKBuilder * theFTFPPiK;
-      G4BertiniPiKBuilder * theBertiniPiK;
-      G4INCLXXPiKBuilder * theINCLXXPiK;
-    
+      G4PionBuilder * thePion;
+      G4QGSPPionBuilder * theQGSPPion;
+      G4FTFPPionBuilder * theFTFPPion;
+      G4INCLXXPionBuilder * theINCLXXPion;
+
+      G4KaonBuilder * theKaon;
+      G4QGSPKaonBuilder * theQGSPKaon;
+      G4FTFPKaonBuilder * theFTFPKaon;
+      G4BertiniKaonBuilder * theBertiniKaon;
+
       G4ProtonBuilder * thePro;
       G4QGSPProtonBuilder * theQGSPPro;
       G4FTFPProtonBuilder * theFTFPPro;
-      G4BertiniProtonBuilder * theBertiniPro;
       G4INCLXXProtonBuilder * theINCLXXPro;
     
       G4HyperonFTFPBuilder * theHyperon;
