@@ -55,14 +55,15 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4StepLimiterPhysics);
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4StepLimiterPhysics::G4StepLimiterPhysics(const G4String& name)
-   :  G4VPhysicsConstructor(name)
-{;
-}
+  :  G4VPhysicsConstructor(name),fStepLimiter(0),fUserSpecialCuts(0)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4StepLimiterPhysics::~G4StepLimiterPhysics()
-{;
+{
+  delete fStepLimiter;
+  delete fUserSpecialCuts;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,8 +77,8 @@ void G4StepLimiterPhysics::ConstructProcess()
 {
   aParticleIterator->reset();
 
-  G4StepLimiter* fStepLimiter = new G4StepLimiter();
-  G4UserSpecialCuts* fUserSpecialCuts = new G4UserSpecialCuts();
+  fStepLimiter = new G4StepLimiter();
+  fUserSpecialCuts = new G4UserSpecialCuts();
   while ((*aParticleIterator)()) {
     G4ParticleDefinition* particle = aParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();
