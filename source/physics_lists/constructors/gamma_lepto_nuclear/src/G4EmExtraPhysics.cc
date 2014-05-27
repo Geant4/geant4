@@ -81,6 +81,7 @@ G4EmExtraPhysics::G4EmExtraPhysics(G4int ver):
   G4VPhysicsConstructor("G4GammaLeptoNuclearPhys"),
   verbose(ver)
 {
+  theGNPhysics = 0;
   theMessenger = new G4EmMessenger(this);
   theLocalMessenger = theMessenger;
   SetPhysicsType(bEmExtra);
@@ -99,6 +100,7 @@ G4EmExtraPhysics::G4EmExtraPhysics(const G4String&):
 G4EmExtraPhysics::~G4EmExtraPhysics()
 {
   delete theMessenger;
+  delete theGNPhysics;
 }
 
 void G4EmExtraPhysics::Synch(G4String & newState)
@@ -139,9 +141,10 @@ void G4EmExtraPhysics::ConstructProcess()
   if(wasBuilt) return;
   wasBuilt = true;
   if ( theLocalMessenger == 0 ) {
-      //This thread needs a private instence of the messenger
-      theLocalMessenger = new G4EmMessenger(this);
-      G4AutoDelete::Register(theLocalMessenger); //This is tricky. Messenger should be safely deleted at the end of the job
+    //This thread needs a private instence of the messenger
+    theLocalMessenger = new G4EmMessenger(this);
+    G4AutoDelete::Register(theLocalMessenger); 
+    //This is tricky. Messenger should be safely deleted at the end of the job
   }
   if (synchOn)   BuildSynch();
   if (gammNucOn) BuildGammaNuclear();
@@ -170,7 +173,7 @@ void G4EmExtraPhysics::BuildGammaNuclear()
   if(gnActivated) return;
   gnActivated = true;
 
-  G4BertiniElectroNuclearBuilder* theGNPhysics = new G4BertiniElectroNuclearBuilder();
+  theGNPhysics = new G4BertiniElectroNuclearBuilder();
   theGNPhysics->Build();
 }
 

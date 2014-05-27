@@ -65,14 +65,14 @@ G4BertiniElectroNuclearBuilder::~G4BertiniElectroNuclearBuilder()
   if(wasActivated) {
     delete theFragmentation;
     delete theStringDecay;
-    delete theStringModel;
-    delete thePhotoNuclearProcess; 
-    delete theElectronNuclearProcess;
-    delete thePositronNuclearProcess;
-    delete theElectroReaction;
-    delete theGammaReaction;
-    delete theModel;
-    delete theCascade; 
+    //delete theStringModel;
+    //delete thePhotoNuclearProcess; 
+    //delete theElectronNuclearProcess;
+    //delete thePositronNuclearProcess;
+    //delete theElectroReaction;
+    //delete theGammaReaction;
+    //delete theModel;
+    //delete theCascade; 
   }
 }
 

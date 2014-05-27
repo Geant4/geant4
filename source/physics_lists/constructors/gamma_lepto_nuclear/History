@@ -14,6 +14,15 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-May-2013, V.Ivanchenko               (phys-ctor-glnuclear-V10-00-05)
+- G4BertiniElectroNuclearBuilder - removed double deletion
+
+27-May-2013, V.Ivanchenko               (phys-ctor-glnuclear-V10-00-04)
+- G4EmExtraPhysics - fixed bug in previous tag
+
+27-May-2013, V.Ivanchenko               (phys-ctor-glnuclear-V10-00-03)
+- G4EmExtraPhysics - fixed memory leak reported by Coverity
+
 24-Apr-2014, Alberto Ribon              (phys-ctro-glnuclear-V10-00-02)
 - Switched on muon-nuclear by default.
 
