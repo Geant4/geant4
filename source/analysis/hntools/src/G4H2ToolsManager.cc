@@ -499,8 +499,7 @@ G4double G4H2ToolsManager::GetH2Xmin(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Xmin");
   if ( ! h2d ) return 0;
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2Xmin");
-  return info->fXFcn(h2d->axis_x().lower_edge()*info->fXUnit);
+   return h2d->axis_x().lower_edge();
 }  
 
 //_____________________________________________________________________________
@@ -509,8 +508,7 @@ G4double G4H2ToolsManager::GetH2Xmax(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Xmax");
   if ( ! h2d ) return 0;
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2Xmax");
-  return info->fXFcn(h2d->axis_x().upper_edge()*info->fXUnit);
+  return h2d->axis_x().upper_edge();
 }  
 
 //_____________________________________________________________________________
@@ -528,9 +526,7 @@ G4double G4H2ToolsManager::GetH2XWidth(G4int id) const
     return 0;
   }              
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2XWidth");
-  return ( info->fXFcn(h2d->axis_x().upper_edge()) 
-           - info->fXFcn(h2d->axis_x().lower_edge()))*info->fXUnit/nbins;
+  return ( h2d->axis_x().upper_edge() - h2d->axis_x().lower_edge())/nbins;
 }  
 
 //_____________________________________________________________________________
@@ -550,8 +546,7 @@ G4double G4H2ToolsManager::GetH2Ymin(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Ymin");
   if ( ! h2d ) return 0;
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2Ymin");
-  return info->fYFcn(h2d->axis_y().lower_edge()*info->fYUnit);
+  return h2d->axis_y().lower_edge();
 }  
 
 //_____________________________________________________________________________
@@ -560,8 +555,7 @@ G4double G4H2ToolsManager::GetH2Ymax(G4int id) const
   tools::histo::h2d* h2d = GetH2InFunction(id, "GetH2Ymax");
   if ( ! h2d ) return 0;
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2Ymax");
-  return info->fYFcn(h2d->axis_y().upper_edge()*info->fYUnit);
+  return h2d->axis_y().upper_edge();
 }  
 
 //_____________________________________________________________________________
@@ -579,9 +573,7 @@ G4double G4H2ToolsManager::GetH2YWidth(G4int id) const
     return 0;
   }              
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2YWidth");
-  return ( info->fYFcn(h2d->axis_y().upper_edge()) 
-           - info->fYFcn(h2d->axis_y().lower_edge()))*info->fYUnit/nbins;
+  return ( h2d->axis_y().upper_edge() - h2d->axis_y().lower_edge())/nbins;
 }  
 
 //_____________________________________________________________________________
@@ -609,7 +601,7 @@ G4bool G4H2ToolsManager::SetH2YAxisTitle(G4int id, const G4String& title)
   tools::histo::h2d* h2d = GetH2InFunction(id, "SetH2YAxisTitle");
   if ( ! h2d ) return false;
   
-  h2d->add_annotation(tools::histo::key_axis_x_title(), title);
+  h2d->add_annotation(tools::histo::key_axis_y_title(), title);
   return true;  
 }  
 
@@ -697,7 +689,7 @@ G4bool G4H2ToolsManager::WriteOnAscii(std::ofstream& /*output*/)
 // extended examples.
 // Not yet available for H2
 
-  return false;
+  return ! fHnManager->IsAscii();
 } 
 
 //

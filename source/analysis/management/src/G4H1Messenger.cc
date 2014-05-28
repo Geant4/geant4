@@ -33,12 +33,31 @@
 
 #include "G4H1Messenger.hh"
 #include "G4VAnalysisManager.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include "G4UIdirectory.hh"
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
+#include "G4Tokenizer.hh"
 
 #include <iostream>
+#include <vector>
+
+namespace {
+
+void Exception(G4UIcommand* command, G4int nofParameters)
+{
+  G4ExceptionDescription description;
+  description 
+    << "Got wrong number of \"" << command->GetCommandName() 
+    << "\" parameters: " << nofParameters
+    << " instead of " << command->GetParameterEntries() 
+    << " expected" << G4endl;
+  G4Exception("G4H1Messenger::SetNewValue",
+              "Analysis_W013", JustWarning, description);
+}
+
+}                  
 
 //_____________________________________________________________________________
 G4H1Messenger::G4H1Messenger(G4VAnalysisManager* manager)
@@ -246,50 +265,55 @@ void G4H1Messenger::SetH1YAxisCmd()
 //_____________________________________________________________________________
 void G4H1Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
 {
+  // tokenize parameters in a vector
+  std::vector<G4String> parameters;
+  G4Analysis::Tokenize(newValues, parameters);
+  // check consistency
+  if ( G4int(parameters.size()) != command->GetParameterEntries() ) {
+    // Should never happen but let's check anyway for consistency
+    Exception(command, parameters.size());
+    return;
+  }  
+
   if ( command == fCreateH1Cmd ) { 
-    G4String name, title;
-    G4int nbins; 
-    G4double vmin,vmax; 
-    G4String sunit;
-    G4String sfcn;
-    G4String sbinScheme;
-    std::istringstream is(newValues.data());
-    is >> name >> title >> nbins >> vmin >> vmax >> sunit >> sfcn >> sbinScheme;
-    fManager->CreateH1(name, title, nbins, vmin, vmax, sunit, sfcn, sbinScheme);     
+    G4int counter = 0;
+    G4String name = parameters[counter++];
+    G4String title = parameters[counter++];
+    G4int nbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
+    G4double vmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
+    G4double vmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
+    G4String sunit = parameters[counter++];
+    G4String sfcn = parameters[counter++];
+    G4String sbinScheme = parameters[counter++];
+    fManager->CreateH1(name, title, nbins, vmin, vmax, sunit, sfcn, sbinScheme); 
   }
   else if ( command == fSetH1Cmd ) {
-    G4int id; 
-    G4int nbins; 
-    G4double vmin, vmax; 
-    G4String sunit;
-    G4String sfcn;
-    G4String sbinScheme;
-    std::istringstream is(newValues.data());
-    is >> id >> nbins >> vmin >> vmax >> sunit >> sfcn >> sbinScheme;
-    fManager->SetH1(id, nbins, vmin, vmax, sunit, sfcn, sbinScheme);     
+    G4int counter = 0;
+    G4int id = G4UIcommand::ConvertToInt(parameters[counter++]);
+    G4int nbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
+    G4double vmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
+    G4double vmax = G4UIcommand::ConvertToDouble(parameters[counter++]); 
+    G4String sunit = parameters[counter++];
+    G4String sfcn = parameters[counter++];
+    G4String sbinScheme = parameters[counter++];
+    fManager->SetH1(id, nbins, vmin, vmax, sunit, sfcn, sbinScheme); 
   }
   else if ( command == fSetH1TitleCmd ) {
-    G4int id; 
-    G4String title;
-    std::istringstream is(newValues.data());
-    is >> id;
-    getline(is, title);
+    G4int counter = 0;
+    G4int id = G4UIcommand::ConvertToInt(parameters[counter++]); 
+    G4String title = parameters[counter++];
     fManager->SetH1Title(id, title);     
   }
   else if ( command == fSetH1XAxisCmd ) {
-    G4int id; 
-    G4String xaxis;
-    std::istringstream is(newValues.data());
-    is >> id;
-    getline(is, xaxis);
+    G4int counter = 0;
+    G4int id = G4UIcommand::ConvertToInt(parameters[counter++]); 
+    G4String xaxis = parameters[counter++];
     fManager->SetH1XAxisTitle(id, xaxis);     
   }
   else if ( command == fSetH1YAxisCmd ) {
-    G4int id; 
-    G4String yaxis;
-    std::istringstream is(newValues.data());
-    is >> id;
-    getline(is, yaxis);
+    G4int counter = 0;
+    G4int id = G4UIcommand::ConvertToInt(parameters[counter++]); 
+    G4String yaxis = parameters[counter++];
     fManager->SetH1YAxisTitle(id, yaxis);     
   }
 }  

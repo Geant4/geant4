@@ -217,6 +217,7 @@ G4int G4VAnalysisManager::CreateH1(const G4String& name,  const G4String& title,
                                const G4String& unitName, const G4String& fcnName,
                                const G4String& binSchemeName)
 {
+  if ( ! CheckName(name, "H1") ) return kInvalidId;
   if ( ! CheckNbins(nbins) ) return kInvalidId;
   if ( ! CheckMinMax(xmin, xmax, binSchemeName) ) return kInvalidId;
 
@@ -229,6 +230,7 @@ G4int G4VAnalysisManager::CreateH1(const G4String& name,  const G4String& title,
                                const std::vector<G4double>& edges,
                                const G4String& unitName, const G4String& fcnName)
 {
+  if ( ! CheckName(name, "H1") ) return kInvalidId;
   if ( ! CheckEdges(edges) ) return kInvalidId;
 
   return fVH1Manager->CreateH1(name, title, edges, unitName, fcnName);
@@ -244,6 +246,8 @@ G4int G4VAnalysisManager::CreateH2(const G4String& name,  const G4String& title,
                                const G4String& ybinSchemeName)
                                
 {
+  if ( ! CheckName(name, "H2") ) return kInvalidId;
+  
   if ( ! CheckNbins(nxbins) ) return kInvalidId;
   if ( ! CheckMinMax(xmin, xmax, xbinSchemeName) ) return kInvalidId;
 
@@ -264,6 +268,8 @@ G4int G4VAnalysisManager::CreateH2(const G4String& name,  const G4String& title,
                                const G4String& xfcnName, const G4String& yfcnName)
                                
 {
+  if ( ! CheckName(name, "H2") ) return kInvalidId;
+  
   if ( ! CheckEdges(xedges) ) return kInvalidId;
   if ( ! CheckEdges(yedges) ) return kInvalidId;
 
@@ -344,24 +350,32 @@ G4bool G4VAnalysisManager::ScaleH2(G4int id, G4double factor)
 G4int G4VAnalysisManager::CreateNtuple(const G4String& name, 
                                           const G4String& title)
 {
+  if ( ! CheckName(name, "Ntuple") ) return kInvalidId;
+
   return fVNtupleManager->CreateNtuple(name, title);
 }                                         
 
 //_____________________________________________________________________________
 G4int G4VAnalysisManager::CreateNtupleIColumn(const G4String& name)
 {
+  if ( ! CheckName(name, "NtupleIColumn") ) return kInvalidId;
+
   return fVNtupleManager->CreateNtupleIColumn(name);
 }  
 
 //_____________________________________________________________________________
 G4int G4VAnalysisManager::CreateNtupleFColumn(const G4String& name)
 {
+  if ( ! CheckName(name, "NtupleFColumn") ) return kInvalidId;
+
   return fVNtupleManager->CreateNtupleFColumn(name);
 }  
 
 //_____________________________________________________________________________
 G4int G4VAnalysisManager::CreateNtupleDColumn(const G4String& name)
 {
+  if ( ! CheckName(name, "NtupleDColumn") ) return kInvalidId;
+
   return fVNtupleManager->CreateNtupleDColumn(name);
 }  
 
@@ -375,12 +389,16 @@ void G4VAnalysisManager::FinishNtuple()
 G4int G4VAnalysisManager::CreateNtupleIColumn(G4int ntupleId, 
                                                  const G4String& name)
 {
+  if ( ! CheckName(name, "NtupleIColumn") ) return kInvalidId;
+
   return fVNtupleManager->CreateNtupleIColumn(ntupleId, name);
 }                                         
 
 //_____________________________________________________________________________
 G4int G4VAnalysisManager::CreateNtupleFColumn(G4int ntupleId, const G4String& name)
 {
+  if ( ! CheckName(name, "NtupleFColumn") ) return kInvalidId;
+
   return fVNtupleManager->CreateNtupleFColumn(ntupleId, name);
 }                                         
 
@@ -388,6 +406,8 @@ G4int G4VAnalysisManager::CreateNtupleFColumn(G4int ntupleId, const G4String& na
 //_____________________________________________________________________________
 G4int G4VAnalysisManager::CreateNtupleDColumn(G4int ntupleId, const G4String& name)   
 {
+  if ( ! CheckName(name, "NtupleDColumn") ) return kInvalidId;
+
   return fVNtupleManager->CreateNtupleDColumn(ntupleId, name);
 }                                         
 

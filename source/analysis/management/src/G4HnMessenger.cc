@@ -29,6 +29,7 @@
 
 #include "G4HnMessenger.hh"
 #include "G4HnManager.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
@@ -36,6 +37,22 @@
 #include "G4UIcmdWithABool.hh"
 
 #include <iostream>
+
+namespace {
+
+void Exception(G4UIcommand* command, G4int nofParameters)
+{
+  G4ExceptionDescription description;
+  description 
+    << "Got wrong number of \"" << command->GetCommandName() 
+    << "\" parameters: " << nofParameters
+    << " instead of " << command->GetParameterEntries() 
+    << " expected" << G4endl;
+  G4Exception("G4HnMessenger::SetNewValue",
+              "Analysis_W013", JustWarning, description);
+}
+
+}                  
 
 //_____________________________________________________________________________
 G4HnMessenger::G4HnMessenger(G4HnManager* manager)
@@ -103,22 +120,6 @@ void G4HnMessenger::SetHnAsciiCmd()
 //_____________________________________________________________________________
 void G4HnMessenger::SetHnActivationCmd()
 {
-  G4String name = GetCmdDirectoryName();
-  name.append("setActivationToAll");
-  fSetHnAsciiCmd = new G4UIcmdWithAnInteger(name, this);
-  
-  G4String guidance("Set activation to all ");
-  guidance.append(GetHnDescription());
-  guidance.append(" histograms.");
-
-  fSetHnActivationAllCmd = new G4UIcmdWithABool(name, this);
-  fSetHnActivationAllCmd->SetGuidance(guidance);
-  fSetHnActivationAllCmd->SetParameterName("Activation",false);
-}  
-  
-//_____________________________________________________________________________
-void G4HnMessenger::SetHnActivationToAllCmd()
-{
   G4UIparameter* hnId = new G4UIparameter("idActivation", 'i', false);
   hnId->SetGuidance("Histogram id");
   hnId->SetParameterRange("idActivation>=0");
@@ -141,6 +142,21 @@ void G4HnMessenger::SetHnActivationToAllCmd()
   fSetHnActivationCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 }  
 
+//_____________________________________________________________________________
+void G4HnMessenger::SetHnActivationToAllCmd()
+{
+  G4String name = GetCmdDirectoryName();
+  name.append("setActivationToAll");
+  fSetHnActivationAllCmd = new G4UIcmdWithABool(name, this);
+  
+  G4String guidance("Set activation to all ");
+  guidance.append(GetHnDescription());
+  guidance.append(" histograms.");
+
+  fSetHnActivationAllCmd->SetGuidance(guidance);
+  fSetHnActivationAllCmd->SetParameterName("Activation",false);
+}  
+  
 //
 // public methods
 //
@@ -153,12 +169,20 @@ void G4HnMessenger::SetNewValue(G4UIcommand* command, G4String newValues)
     fManager->SetAscii(id, true); 
   }      
   else if ( command == fSetHnActivationCmd ) {
-    G4int id; 
-    G4String sactivation;
-    std::istringstream is(newValues.data());
-    is >> id >> sactivation;
-    G4bool activation = G4UIcommand::ConvertToBool(sactivation);
-    fManager->SetActivation(id, activation);     
+    // tokenize parameters in a vector
+    std::vector<G4String> parameters;
+    G4Analysis::Tokenize(newValues, parameters);
+    // check consistency
+    if ( G4int(parameters.size()) == command->GetParameterEntries() ) {
+      G4int counter = 0;
+      G4int id = G4UIcommand::ConvertToInt(parameters[counter++]);
+      G4bool activation = G4UIcommand::ConvertToBool(parameters[counter++]);
+      fManager->SetActivation(id, activation);     
+    }
+    else {
+      // Should never happen but let's check anyway for consistency
+      Exception(command, parameters.size());
+    }  
   }
   else if ( command == fSetHnActivationAllCmd ) {
     G4bool activation = fSetHnActivationAllCmd->GetNewBoolValue(newValues);
