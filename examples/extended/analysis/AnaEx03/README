@@ -53,7 +53,13 @@ $Id$
 	==========================================================================
 	
  	    
- 2- An event : PrimaryGeneratorAction
+ 2- Physics list
+ ------------------------------------
+ 
+   The particle's type and the physic processes which will be available
+   in this example are set in the FTFP_BERT physics list.
+ 	 
+ 3- An event : PrimaryGeneratorAction
  ------------------------------------
  
  The primary kinematic consists of a single particle which hits the
@@ -62,7 +68,7 @@ $Id$
  be changed via the G4 build-in commands of ParticleGun class.
  	
 
- 3- Histograms
+ 4- Histograms
  ------------- 
  To produce histograms, at least one of the AIDA implementations should be 
  available. See the file InstallAida.txt
@@ -92,7 +98,7 @@ $Id$
  Note that, by default, histograms are disabled. To activate them, uncomment
  the flag G4ANALYSIS_USE in GNUmakefile, *before* compilation.
    
- 4- OpenScientist
+ 5- OpenScientist
  ----------------
 
  See the files README.AIDA and README.OpenScientist for more indications 

@@ -51,7 +51,12 @@
 </pre>	
 	
  	    
-\section AnaEx03_s2 An event : PrimaryGeneratorAction
+\section AnaEx03_s2 Physics list
+
+   The particle's type and the physic processes which will be available
+   in this example are set in the FTFP_BERT physics list.
+
+\section AnaEx03_s3 An event : PrimaryGeneratorAction
  
  The primary kinematic consists of a single particle which hits the
  calorimeter perpendicular to the input face. The type of the particle
@@ -59,7 +64,7 @@
  be changed via the G4 build-in commands of ParticleGun class.
  	
 
-\section AnaEx03_s3 Histograms
+\section AnaEx03_s4 Histograms
 
  To produce histograms, at least one of the AIDA implementations should be 
  available. See the file InstallAida.txt

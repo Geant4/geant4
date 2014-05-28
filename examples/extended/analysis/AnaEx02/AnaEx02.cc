@@ -35,9 +35,9 @@
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
+#include "FTFP_BERT.hh"
 
 #include "DetectorConstruction.hh"
-#include "PhysicsList.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "EventAction.hh"
@@ -65,8 +65,7 @@ int main(int argc,char** argv)
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
   //
-  PhysicsList* physics = new PhysicsList;
-  runManager->SetUserInitialization(physics);
+  runManager->SetUserInitialization(new FTFP_BERT);
  
   // set an HistoManager
   //

@@ -37,7 +37,6 @@ list(APPEND sources
   ${PROJECT_SOURCE_DIR}/../shared/src/DetectorConstruction.cc
   ${PROJECT_SOURCE_DIR}/../shared/src/DetectorMessenger.cc
   ${PROJECT_SOURCE_DIR}/../shared/src/EventAction.cc
-  ${PROJECT_SOURCE_DIR}/../shared/src/PhysicsList.cc
   ${PROJECT_SOURCE_DIR}/../shared/src/PrimaryGeneratorAction.cc
   ${PROJECT_SOURCE_DIR}/../shared/src/RunAction.cc
   ${PROJECT_SOURCE_DIR}/../shared/src/SteppingAction.cc)

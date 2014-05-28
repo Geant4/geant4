@@ -55,7 +55,13 @@ $Id$
 	==========================================================================
 	
  	    
- 2- An event : PrimaryGeneratorAction
+ 2- Physics list
+ ------------------------------------
+ 
+   The particle's type and the physic processes which will be available
+   in this example are set in the FTFP_BERT physics list.
+ 	 
+ 3- An event : PrimaryGeneratorAction
  ------------------------------------
  
  The primary kinematic consists of a single particle which hits the
@@ -64,7 +70,7 @@ $Id$
  be changed via the G4 build-in commands of ParticleGun class.
  	
 
- 3- Histograms
+ 4- Histograms
  ------------- 
  To produce histograms, ROOT system must be installed
     
