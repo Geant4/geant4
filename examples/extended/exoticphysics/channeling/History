@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 27, 2014 A. Dotti (channelingExample-V10-00-03)
+- First version of CTest introduced, via extenral
+  file CTestDefinitions.txt
+
 May 20, 2014 E. Bagli (channelingExample-V10-00-02)
 - Removed src/G4Channeling*.
 - Removed include/G4Channeling*.
