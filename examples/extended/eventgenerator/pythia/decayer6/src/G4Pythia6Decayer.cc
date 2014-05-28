@@ -96,7 +96,7 @@ GetParticleDefinition(const Pythia6Particle* particle, G4bool warn) const
     particleDefinition = particleTable->FindParticle(pdgEncoding);
 
   if ( particleDefinition == 0 && warn) {
-    std::cerr 
+    G4cerr 
       << "G4Pythia6Decayer: GetParticleDefinition: " << std::endl
       << "G4ParticleTable::FindParticle() for particle with PDG = " 
       << pdgEncoding 
