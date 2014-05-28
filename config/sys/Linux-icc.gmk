@@ -30,6 +30,8 @@ ifeq ($(G4SYSTEM),Linux-icc)
     LDFLAGS   += -i-dynamic
   endif
   G4RUNPATHOPTION := -Wl,-rpath -Wl,
+  G4STATIC_MODE += -Wl,--whole-archive
+  G4NOSTATIC_MODE += -Wl,--no-whole-archive
   CC := icc
   FC := ifort
   FCFLAGS += -noautomatic -assume nobscc -assume no2underscores
