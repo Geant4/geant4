@@ -412,7 +412,7 @@ foreach(_i 1 2)
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/visualization/userVisAction
                   DEPENDS example-ext-visualization-uservisaction-build ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 endforeach()
-
+include( ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/channeling/CTestDefinitions.txt)
 #-------------------------------------------------------------------------------------------------
 #---Advanced--------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------

@@ -16,6 +16,9 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+ctests-V10-00-03 27 May 2014 Andrea Dotti
+- Add extended/exoticphysics/channeling example
+
 ctests-V10-00-02 21 May 2014 Luciano Pandola
 - Add advanced example xray_fluorescence
 
