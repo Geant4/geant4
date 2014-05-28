@@ -20,3 +20,15 @@ B) test202 runN.mac, where N = 0,1,2,...
    macros vary the volume selection and shoot some particles to
    demonstrate some problems.  Consult the comment lines of the
    individual macros for explanations.
+
+NOTE : 
+
+There is a visualisation test associate with this macro. On 28th May 2014, the only test run with OGLIX.mac.
+This macro file with generate some pictures and the test script xvfb.sh will compare produced pictures to a
+reference folder OGLIX-reference.
+In order to generate a new reference file, the best way is to :
+- 1. do some changes in OGLIX.mac
+- 2. produce eps files on the tested machine (Nightly builds for example)
+- 3. get theses files from OGLIX-output and copy them into OGLIX-reference folder
+- 3. OR send theses files by email (that's what is done on 28th May 2014)
+

@@ -27,18 +27,18 @@
 /vis/ogl/printEPS
 
 # Fire a e+
-/vis/geometry/set/visibility calo_L 1 false
-/vis/viewer/zoom 40
-/vis/viewer/set/viewpointThetaPhi -60 75
-/vis/ogl/set/printSize 4000 4000
-/gun/energy 1000 MeV
-/gun/particle e+
-/vis/scene/endOfEventAction accumulate
-/vis/modeling/trajectories/create/drawByCharge
-/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
-/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 5
-/run/beamOn 2
+# /vis/geometry/set/visibility calo_L 1 false
+# /vis/viewer/zoom 40
+# /vis/viewer/set/viewpointThetaPhi -60 75
+# /vis/ogl/set/printSize 4000 4000
+# /gun/energy 1000 MeV
+# /gun/particle e+
+# /vis/scene/endOfEventAction accumulate
+# /vis/modeling/trajectories/create/drawByCharge
+# /vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+# /vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 5
+# /run/beamOn 2
 
 # printEPS
-/vis/ogl/set/printFilename OGLIX-output/visTest-BeamOn
-/vis/ogl/printEPS
+# /vis/ogl/set/printFilename OGLIX-output/visTest-BeamOn
+# /vis/ogl/printEPS

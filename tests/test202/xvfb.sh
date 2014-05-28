@@ -4,7 +4,6 @@
 testFile1="visTest-DrawVolume_0.eps"
 testFile2="visTest-SceneAdd_0.eps"
 testFile3="visTest-SceneSet_0.eps"
-testFile4="visTest-BeamOn_0.eps"
 
 # reference folder :
 reference_folder=$2-reference
@@ -48,23 +47,14 @@ if grep "GLX" XvfbExtensions; then
     exit 1
   fi
 
-  # mail me results
-  mail -s "G4Testing visTest-DrawVolume_0.eps" garnier@lal.in2p3.fr < $output_folder/$testFile1
-  mail -s "G4Testing visTest-VisSet_0.eps" garnier@lal.in2p3.fr < $output_folder/$testFile2
-  mail -s "G4Testing visTest-VisAdd_0.eps" garnier@lal.in2p3.fr < $output_folder/$testFile3
-  mail -s "G4Testing visTest-BeamOn_0.eps" garnier@lal.in2p3.fr < $output_folder/$testFile4
-  sleep 10
   resCheck=0
 
-for testFile in $testFile1 $testFile2 $testFile3 $testFile4
+for testFile in $testFile1 $testFile2 $testFile3
 do
   if [`diff $reference_folder/$testFile $output_folder/$testFile | wc -l` == 0 ]; then
     echo "Check $output_folder/$testFile ....OK"
   else
     echo "ERROR: Output and reference are different for $output_folder/$testFile !"
-    echo "======================================================"
-    echo `diff $reference_folder/$testFile $output_folder/$testFile`
-    echo "======================================================"
     mail -s "G4Testing ERROR Output and reference are different for $output_folder/$testFile" garnier@lal.in2p3.fr < $output_folder/$testFile
     resCheck=1
   fi

@@ -4,6 +4,13 @@ $Id$
 History file for test/test202 subdirectory
 ------------------------------------------------
 
+28th May 2014 Laurent Garnier (test202-V10-00-24)
+- CMakeLists.txt : Fix bad output file name
+
+28th May 2014 Laurent Garnier (test202-V10-00-23)
+- OGLIX.mac: Suppress run/beamOn test (does nothing on one of geant4vm01 machine)
+- Changing refernces files for OGLIX
+
 23th May 2014 Laurent Garnier (test202-V10-00-22)
 - OGLIX.mac: Reduce bevent number
 
