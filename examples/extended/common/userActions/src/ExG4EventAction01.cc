@@ -40,35 +40,36 @@
 
 #include <sstream>
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 const  G4int ExG4EventAction01::fgkDefaultVerboseLevel = 1;
 const  G4int ExG4EventAction01::fgkDefaultPrintModulo = 10000;
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExG4EventAction01::ExG4EventAction01()
  : G4UserEventAction(),
    fMessenger(this),
    fVerboseLevel(fgkDefaultVerboseLevel),
-   fPrintModulo(fgkDefaultPrintModulo),
    fSaveRndm(false)
 {
 /// Standard constructor
 }
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExG4EventAction01::~ExG4EventAction01()
 {
 /// Destructor
 }
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void ExG4EventAction01::BeginOfEventAction(const G4Event* event)
 {
   // Print event info
   //
   G4int eventNumber = event->GetEventID();
-  if ( eventNumber%fPrintModulo == 0 ) {
-    G4cout << "\n---> Begin of Event: " << eventNumber << G4endl;
-  }   
      
   // Print verbose info
   //
@@ -77,7 +78,8 @@ void ExG4EventAction01::BeginOfEventAction(const G4Event* event)
   }   
 }
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void ExG4EventAction01::EndOfEventAction(const G4Event* event)
 {
   // Print verbose info
@@ -95,10 +97,7 @@ void ExG4EventAction01::EndOfEventAction(const G4Event* event)
     std::ostringstream fileName;
     fileName << "run" << runNumber << "event" << eventNumber << ".rndm";
     CLHEP::HepRandom::saveEngineStatus(fileName.str().c_str()); 
-
-    if ( eventNumber%fPrintModulo == 0 ) {
-      G4cout << "\n---> End of Event: " << eventNumber << G4endl;
-      CLHEP::HepRandom::showEngineStatus();
-    }
   }       
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28/05/14 I. Hrivnacova (excommon-V10-00-00)
+- Removed fPrintModulo from ExG4EventAction01
+  and fSetPrintModuloCmd from ExG4EventAction01Messenger,
+  now obsolete.
+- Fixed long lines, separators in userActions classes   
+
 28/02/13 I. Hrivnacova (excommon-V09-06-00)
 - When building materials with NistManager
   do not set fromIsotopes argument (which was set to false), 

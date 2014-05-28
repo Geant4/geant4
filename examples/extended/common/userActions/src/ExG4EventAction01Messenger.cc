@@ -36,14 +36,15 @@
 #include "G4UIcmdWithABool.hh"
 #include "globals.hh"
 
-//_____________________________________________________________________________
-ExG4EventAction01Messenger::ExG4EventAction01Messenger(ExG4EventAction01* eventAction)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ExG4EventAction01Messenger::ExG4EventAction01Messenger(
+                                ExG4EventAction01* eventAction)
   : G4UImessenger(),
     fEventAction(eventAction),
     fTopDirectory(0),
     fDirectory(0),
     fSetVerboseLevelCmd(0),
-    fSetPrintModuloCmd(0),
     fSetSaveRndmCmd(0)
 { 
   fTopDirectory = new G4UIdirectory("/ExG4/");
@@ -52,43 +53,41 @@ ExG4EventAction01Messenger::ExG4EventAction01Messenger(ExG4EventAction01* eventA
   fDirectory = new G4UIdirectory("/ExG4/event/");
   fDirectory->SetGuidance("Event control");
        
-  fSetVerboseLevelCmd = new G4UIcmdWithAnInteger("/ExG4/event/verboseLevel",this);
+  fSetVerboseLevelCmd 
+    = new G4UIcmdWithAnInteger("/ExG4/event/verboseLevel",this);
   fSetVerboseLevelCmd->SetGuidance("Set event verbose level ." );
   fSetVerboseLevelCmd->SetParameterName("VerboseLevel",false);
   fSetVerboseLevelCmd->AvailableForStates(G4State_PreInit, G4State_Init);
 
-  fSetPrintModuloCmd = new G4UIcmdWithAnInteger("/ExG4/event/printModulo",this);
-  fSetPrintModuloCmd->SetGuidance("Print events modulo n");
-  fSetPrintModuloCmd->SetParameterName("PrintModulo",false);
-  fSetPrintModuloCmd->SetRange("PrintModulo>0");
-  fSetPrintModuloCmd->AvailableForStates(G4State_Idle, G4State_Init);     
-
   fSetSaveRndmCmd = new G4UIcmdWithABool("/ExG4/event/saveRndm",this);
-  fSetSaveRndmCmd->SetGuidance("Activate saving random number at endOfEvent.");
+  fSetSaveRndmCmd
+    ->SetGuidance("Activate saving random number at endOfEvent.");
   fSetSaveRndmCmd->SetParameterName("SaveRndm",false);
   fSetSaveRndmCmd->AvailableForStates(G4State_Idle, G4State_Init);     
 }
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExG4EventAction01Messenger::~ExG4EventAction01Messenger()
 {
   delete fTopDirectory;
   delete fDirectory;
   delete fSetVerboseLevelCmd;
-  delete fSetPrintModuloCmd;    
   delete fSetSaveRndmCmd;    
 }
 
-//_____________________________________________________________________________
-void ExG4EventAction01Messenger::SetNewValue(G4UIcommand* command, G4String newValue)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ExG4EventAction01Messenger::SetNewValue(G4UIcommand* command, 
+                                             G4String newValue)
 { 
   if(command == fSetVerboseLevelCmd) {
-    fEventAction->SetVerboseLevel(fSetVerboseLevelCmd->GetNewIntValue(newValue));
+    fEventAction
+      ->SetVerboseLevel(fSetVerboseLevelCmd->GetNewIntValue(newValue));
   }
-  else if ( command == fSetPrintModuloCmd ) {
-    fEventAction->SetPrintModulo(fSetPrintModuloCmd->GetNewIntValue(newValue));
-  }               
   else if ( command == fSetSaveRndmCmd ) {
     fEventAction->SetSaveRndm(fSetSaveRndmCmd->GetNewBoolValue(newValue));
   }               
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

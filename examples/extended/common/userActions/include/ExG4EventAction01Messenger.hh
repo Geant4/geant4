@@ -56,13 +56,11 @@ class ExG4EventAction01Messenger: public G4UImessenger
     
   private:
     // data members
-    ExG4EventAction01*     fEventAction;   
+    ExG4EventAction01*    fEventAction;   
     G4UIdirectory*        fTopDirectory;
     G4UIdirectory*        fDirectory;
     G4UIcmdWithAnInteger* fSetVerboseLevelCmd;
-    G4UIcmdWithAnInteger* fSetPrintModuloCmd;
     G4UIcmdWithABool*     fSetSaveRndmCmd;
-    //G4UIcmdWithAString*   DrawCmd;
 };
 
 #endif //ExG4EventAction01Messenger_h

@@ -55,7 +55,6 @@ class ExG4EventAction01 : public G4UserEventAction
 
     // set methods
     void SetVerboseLevel(G4int level);
-    void SetPrintModulo(G4int value);
     void SetSaveRndm(G4bool value);
     void SetDrawFlag(G4String value);
         
@@ -67,7 +66,6 @@ class ExG4EventAction01 : public G4UserEventAction
     // data members
     ExG4EventAction01Messenger  fMessenger;
     G4int     fVerboseLevel;
-    G4int     fPrintModulo; 
     G4bool    fSaveRndm;  
 };
 
@@ -76,10 +74,6 @@ class ExG4EventAction01 : public G4UserEventAction
 inline void ExG4EventAction01::SetVerboseLevel(G4int level) {
   fVerboseLevel = level;
 }  
-
-inline void ExG4EventAction01::SetPrintModulo(G4int value) {
-  fPrintModulo = value;
-}
 
 inline void ExG4EventAction01::SetSaveRndm(G4bool value) {
   fSaveRndm = value;
