@@ -96,7 +96,6 @@ void export_G4Polycone()
     .def("GetStartPhi",    &G4Polycone::GetStartPhi)
     .def("GetEndPhi",      &G4Polycone::GetEndPhi)
     .def("IsOpen",         &G4Polycone::IsOpen)
-    .def("IsGeneric",      &G4Polycone::IsGeneric)
     .def("GetNumRZCorner", &G4Polycone::GetNumRZCorner)
 
     // operators
