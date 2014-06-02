@@ -1,5 +1,6 @@
 # macro file for TestEm5.cc    
 #     		    
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #
@@ -13,9 +14,8 @@
 /testem/phys/addPhysics emlivermore
 #/testem/phys/addPhysics empenelope
 ###/testem/phys/addPhysics emstandard_opt3
-/testem/phys/setGCut 0.5 um
-/testem/phys/setECut 1 mm
-/testem/phys/setPCut 1 mm
+/run/setCut 0.01 mm
+/run/setCutForAGivenParticle gamma 0.5 um
 #
 /run/initialize
 #

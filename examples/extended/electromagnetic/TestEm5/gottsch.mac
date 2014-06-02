@@ -14,7 +14,7 @@
 /testem/det/setAbsThick 0.8 mm
 /testem/det/setAbsYZ    1 cm
 #
-/testem/phys/setCuts 1 mm
+/run/setCut 1 mm
 #
 /run/initialize
 #

@@ -9,8 +9,7 @@
 #
 /testem/phys/addPhysics local
 ###/testem/phys/addPhysics emstandard_opt3
-/testem/phys/setCuts 100 um
-###/run/setCut 100 um
+/run/setCut 100 um
 #
 /run/initialize
 #

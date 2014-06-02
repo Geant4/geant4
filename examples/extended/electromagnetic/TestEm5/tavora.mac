@@ -6,6 +6,7 @@
 # L.M. Tavora et al. J.Phys.D: Appl. Phys. 33 (2000) page 2497
 # Fig. 7
 #     		    
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #

@@ -5,6 +5,7 @@
 # energy deposit by 1 MeV electrons in silicon counters.
 # M.J.Berger et al. NIM 69 (1969) page 181
 #     		    
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #
@@ -20,7 +21,7 @@
 ###/testem/phys/addPhysics emstandard_opt0
 /testem/phys/addPhysics local
 #
-/testem/phys/setCuts 10 um   
+/run/setCut 10 um   
 #
 /run/initialize
 #

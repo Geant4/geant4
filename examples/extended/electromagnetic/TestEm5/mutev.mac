@@ -4,6 +4,7 @@
 #
 # mu+, transmitted through 1 m of iron
 #
+/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #/tracking/verbose 1
@@ -15,10 +16,10 @@
 /testem/det/setWorldX   10 m
 /testem/det/setWorldYZ  10 m
 #
-/testem/phys/addPhysics local
-###/testem/phys/addPhysics emstandard_opt0
+/testem/phys/addPhysics emstandard_opt0
 #
-/testem/phys/setCuts 1 km
+/run/setCut 0.1 km
+/run/setCutForAGivenParticle proton 10 cm
 #
 /run/initialize
 #
@@ -29,11 +30,11 @@
 /gun/particle mu+
 /gun/energy 1000 GeV
 #
-#/analysis/setFileName mumsc/local
+/analysis/setFileName mutev
 /analysis/h1/set 14  100 -5.0  +5.0 mm		#x-position at exit  
 /analysis/h1/set 15  100  0.  +10.0 mm		#radius at exit  
 #
 /testem/stack/killSecondaries 2
 #
-/run/printProgress 100
-/run/beamOn 1000
+/run/printProgress 1000
+/run/beamOn 10000

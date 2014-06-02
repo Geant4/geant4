@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02-05-14 V.Ivant (testem5-V10-00-02)
+- PhysicsList, PhysicsListMessenger - removed local cuts commands,
+    instead /run/setCut and /run/setCutForAGivenParticle commands 
+    are used
+- HistoManager - added "h" in front of histogram id
+- macro and README updated accordingly
+
 28-04-14 V.Ivant (testem5-V10-00-01)
 - added "emlowenergy" option for EM physics 
 - slightly reduced printout for the default macro

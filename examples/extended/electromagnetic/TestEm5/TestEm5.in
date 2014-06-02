@@ -12,11 +12,11 @@
 #
 /testem/phys/addPhysics  emstandard_opt3
 #
-/testem/phys/setCuts 7 um
+/run/setCut 7 um
 #
 /run/initialize
 #/process/em/verbose 1
-#/process/em/workerVerbose 0
+/process/em/workerVerbose 0
 #
 /testem/gun/setDefault
 /gun/particle pi+ 
@@ -36,7 +36,7 @@
 /gun/energy 15.7 MeV
 /run/beamOn 50000
 #
-/testem/phys/setCuts 10 um
+/run/setCut 10 um
 #
 /testem/det/setAbsMat G4_POLYETHYLENE
 /testem/det/setAbsThick 4.74 mm
@@ -46,7 +46,7 @@
 /gun/energy 96.2 MeV
 /run/beamOn 50000
 #
-/testem/phys/setCuts 1 mm
+/run/setCut 1 mm
 #
 /testem/stack/killSecondaries
 #

@@ -63,10 +63,15 @@ int main(int argc,char** argv) {
 
   // Construct the default run manager
 #ifdef G4MULTITHREADED
-    G4MTRunManager* runManager = new G4MTRunManager;
+  G4MTRunManager* runManager = new G4MTRunManager;
+  // Number of threads can be defined via 3rd argument
+  if (argc==3) {
+    G4int nThreads = G4UIcommand::ConvertToInt(argv[2]);
+    if(0 < nThreads) { runManager->SetNumberOfThreads(nThreads); }
+  }
 #else
-    G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-    G4RunManager* runManager = new G4RunManager;
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+  G4RunManager* runManager = new G4RunManager;
 #endif
 
   // set mandatory initialization classes
@@ -79,20 +84,20 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(new ActionInitialization(detector));  
    
   // get the pointer to the User Interface manager 
-    G4UImanager* UI = G4UImanager::GetUIpointer();  
+  G4UImanager* UI = G4UImanager::GetUIpointer();  
  
   if (argc!=1)   // batch mode  
     {
-     G4String command = "/control/execute ";
-     G4String fileName = argv[1];
-     UI->ApplyCommand(command+fileName);
+      G4String command = "/control/execute ";
+      G4String fileName = argv[1];
+      UI->ApplyCommand(command+fileName);
     }
     
   else           //define visualization and UI terminal for interactive mode
     { 
 #ifdef G4VIS_USE
-   G4VisManager* visManager = new G4VisExecutive;
-   visManager->Initialize();
+      G4VisManager* visManager = new G4VisExecutive;
+      visManager->Initialize();
 #endif    
      
 #ifdef G4UI_USE
@@ -102,7 +107,7 @@ int main(int argc,char** argv) {
 #endif
      
 #ifdef G4VIS_USE
-     delete visManager;
+      delete visManager;
 #endif     
     }
     

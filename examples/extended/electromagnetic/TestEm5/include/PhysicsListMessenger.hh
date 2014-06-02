@@ -59,10 +59,6 @@ private:
     
   G4UIdirectory*             fPhysDir;    
   G4UIcmdWithAString*        fListCmd;    
-  G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* fElectCutCmd;
-  G4UIcmdWithADoubleAndUnit* fProtoCutCmd;    
-  G4UIcmdWithADoubleAndUnit* fAllCutCmd;        
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

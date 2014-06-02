@@ -15,7 +15,7 @@
 ###/testem/phys/addPhysics emlivermore
 ###/testem/phys/addPhysics empenelope
 #
-/testem/phys/setCuts 1 km
+/run/setCut 1 km
 #    
 /run/initialize
 #

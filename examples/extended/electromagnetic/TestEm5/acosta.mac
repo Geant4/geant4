@@ -22,7 +22,7 @@
 /analysis/setFileName acosta
 /analysis/h1/set 40 40 0 20 keV	#energy at exit. (reflect,neutral)
 #
-/testem/phys/setGCut 1 um
+/run/setCut 1 um
 #
 /run/printProgress 100000
 # 

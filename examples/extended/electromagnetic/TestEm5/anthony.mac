@@ -15,9 +15,8 @@
 ###/testem/det/setAbsThick 0.15 mm  
 /testem/det/setAbsYZ   10 cm
 #
-/testem/phys/setGCut 1 mm   
-/testem/phys/setECut 5 um
-/testem/phys/setPCut 5 um
+/run/setCut 5 um
+/run/setCutForAGivenParticle  gamma 1 mm   
 #
 /run/initialize
 #
