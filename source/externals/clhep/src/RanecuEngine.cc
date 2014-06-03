@@ -217,7 +217,7 @@ void RanecuEngine::flatArray(const int size, double* vect)
    long seed1 = table[index][0];
    long seed2 = table[index][1];
    int k1, k2;
-   register int i;
+   int i;
 
    for (i=0; i<size; ++i)
    {

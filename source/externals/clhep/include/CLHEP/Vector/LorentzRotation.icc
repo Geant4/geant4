@@ -264,10 +264,10 @@ inline bool HepLorentzRotation::isIdentity() const {
 
 inline HepLorentzVector
 HepLorentzRotation::vectorMultiplication(const HepLorentzVector & p) const {
-  register double x(p.x());
-  register double y(p.y());
-  register double z(p.z());
-  register double t(p.t());
+  double x(p.x());
+  double y(p.y());
+  double z(p.z());
+  double t(p.t());
   return HepLorentzVector(mxx*x + mxy*y + mxz*z + mxt*t,
                 	  myx*x + myy*y + myz*z + myt*t,
 			  mzx*x + mzy*y + mzz*z + mzt*t,
