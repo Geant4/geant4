@@ -33,6 +33,8 @@
 # EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE. 
 # <<END-copyright>>
 */
+#include <iostream>
+#include <float.h>
 #include <string.h>
 #include <cmath>
 #include <tpia_target.h>
@@ -108,7 +110,12 @@ int tpia_kinetics_COMKineticEnergy2LabEnergyAndMomentum( statusMessageReporting 
     outgoingData[0].py_vy = py3;
     outgoingData[0].pz_vz = pz3;
     pp3 = p_perp2 + pz3 * pz3;
+//TK140602 Modified for protecting divided by 0 BEGIN
+    if ( m3cc2 != 0 ) 
     x = pp3 / ( 2 * m3cc2 );
+    else
+    x = FLT_MIN;
+//TK140602 Modified for protecting divided by 0 END
     if( x < 1e-5 ) {
         outgoingData[0].kineticEnergy = m3cc * x  * ( 1 - 0.5 * x * ( 1 - x ) ); }
     else {

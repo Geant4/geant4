@@ -36,6 +36,8 @@
 
 #include "Randomize.hh"
 
+#include <float.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -459,8 +461,22 @@ int tpia_misc_sampleEqualProbableBin( statusMessageReporting *, tpia_decaySampli
         value1 = ( 1. - fE ) * binned->energies[index1].bins[j] + fE * binned->energies[index2].bins[j];
         value2 = ( 1. - fE ) * binned->energies[index1].bins[j+1] + fE * binned->energies[index2].bins[j+1];
         value3 = ( 1. - fE ) * binned->energies[index1].bins[j+2] + fE * binned->energies[index2].bins[j+2];
+//
+//TK140602 Modified for protecting divided by 0 BEGIN
+        if ( value1 == value2 && value2 == value3 ) {
+          value = value1;
+        } else {
+
+        if ( value2 != value1 ) 
         P12 = 1. / ( value2 - value1 );
+        else
+        P12 =FLT_MAX;
+
+        if ( value3 != value2 ) 
         P23 = 1. / ( value3 - value2 );
+        else
+        P23 =FLT_MAX;
+
         r = tpia_misc_drng( decaySamplingInfo->rng, decaySamplingInfo->rngState );
         if( 0.25 * ( 1.0 + 2.0 * ( value2 - value1 ) / ( value3 - value1 ) ) > r ) {
             P23 = 2. / ( value3 - value1 );
@@ -472,6 +488,8 @@ int tpia_misc_sampleEqualProbableBin( statusMessageReporting *, tpia_decaySampli
         r = tpia_misc_drng( decaySamplingInfo->rng, decaySamplingInfo->rngState );
         if( P23 != P12 ) r = ( -P12 + std::sqrt( P12 * P12 * ( 1. - r ) + r * P23 * P23 ) ) / ( P23 - P12 );
         value = 0.5 * ( value1 + value2 + r * ( value3 - value1 ) );
+        }
+//TK140602 Modified for protecting divided by 0 END
     }
     *value_ = value;
     return( 0 );
