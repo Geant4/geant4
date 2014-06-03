@@ -128,19 +128,19 @@ void G4eCoulombScatteringModel::Initialise(const G4ParticleDefinition* part,
   }
 
   wokvi->Initialise(part, cosThetaMin);
-  /*    
+  /*
   G4cout << "G4eCoulombScatteringModel: " << particle->GetParticleName()
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMin
 	 << "  cos(thetaMax)= " <<  cosThetaMax
 	 << G4endl;
   */
   pCuts = &cuts;
-  //  G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
+  //G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
   /*
   G4cout << "!!! G4eCoulombScatteringModel::Initialise for " 
   	 << part->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
   	 << "  cos(TetMax)= " << cosThetaMax <<G4endl;
-  G4cout << "cut= " << *pCuts[0] << "  cut1= " << *pCuts[1] << G4endl;
+  G4cout << "cut= " << (*pCuts)[0] << "  cut1= " << (*pCuts)[1] << G4endl;
   */
   if(!isInitialised) {
     isInitialised = true;
@@ -311,9 +311,11 @@ void G4eCoulombScatteringModel::SampleSecondaries(
     if(trec > kinEnergy) { trec = kinEnergy; }
     G4double finalT = kinEnergy - trec; 
     G4double edep = 0.0;
-    //G4cout<<"G4eCoulombScatteringModel: finalT= "<<finalT<<" Trec= "
-    //	<<trec << " Z= " << iz << " A= " << ia<<G4endl;
-
+    /*
+    G4cout<<"G4eCoulombScatteringModel: finalT= "<<finalT<<" Trec= "
+	  <<trec << " Z= " << iz << " A= " << ia
+	  << " tcut(keV)= " << (*pCuts)[currentMaterialIndex]/keV << G4endl;
+    */
     G4double tcut = recoilThreshold;
     if(pCuts) { tcut= std::max(tcut,(*pCuts)[currentMaterialIndex]); }
 

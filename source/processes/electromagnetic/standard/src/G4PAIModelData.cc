@@ -78,9 +78,10 @@ G4PAIModelData::G4PAIModelData(G4double tmin, G4double tmax, G4int ver)
 						 fTotBin);
   if(0 < ver) {
     G4cout << "### G4PAIModelData: Nbins= " << fTotBin
-	   << " Tmin(MeV)= " << fLowestKineticEnergy/MeV
+	   << " Tlowest(MeV)= " << fLowestKineticEnergy/MeV
+	   << " Tmin(keV)= " << tmin/keV 
 	   << " Tmax(GeV)= " << fHighestKineticEnergy/GeV 
-	   << "  tmin(keV)= " << tmin/keV << G4endl;
+	   << G4endl;
   }
 }
 

@@ -73,8 +73,8 @@ using namespace std;
 
 G4WentzelVIModel::G4WentzelVIModel(G4bool combined, const G4String& nam) :
   G4VMscModel(nam),
-  ssFactor(1.25),
-  invssFactor(1.0/(ssFactor-0.05)),
+  ssFactor(1.05),
+  invssFactor(1.0),
   currentCouple(0),
   inside(false),
   singleScatteringMode(false),
@@ -86,6 +86,7 @@ G4WentzelVIModel::G4WentzelVIModel(G4bool combined, const G4String& nam) :
   isCombined(combined),
   useSecondMoment(false)
 {
+  SetSingleScatteringFactor(1.25);
   invsqrt12 = 1./sqrt(12.);
   tlimitminfix = 1.e-6*mm;
   lowEnergyLimit = 1.0*eV;
@@ -134,11 +135,12 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
 
   //G4cout << "G4WentzelVIModel::Initialise " << p->GetParticleName() << G4endl;
   wokvi->Initialise(p, cosThetaMax);
-  /*  
+    
   G4cout << "G4WentzelVIModel: " << particle->GetParticleName()
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMax 
+	 << " SingScatFactor= " << ssFactor
 	 << G4endl;
-  */
+  
   currentCuts = &cuts;
 
   // set values of some data members
@@ -742,6 +744,16 @@ G4double G4WentzelVIModel:: ComputeSecondMoment(const G4ParticleDefinition* p,
       *wokvi->ComputeSecondTransportMoment(costm);
   }
   return xs;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4WentzelVIModel::SetSingleScatteringFactor(G4double val)
+{
+  if(val > 0.05) {
+    ssFactor = val;
+    invssFactor = 1.0/(val - 0.05);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -61,7 +61,6 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4WentzelOKandVIxSection.hh"
 
-class G4ParticleDefinition;
 class G4LossTableManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -112,13 +111,13 @@ public:
 
   inline G4bool UseSecondMoment() const;
 
-  inline void SetSingleScatteringFactor(G4double);
-
   inline G4PhysicsTable* GetSecondMomentTable();
 
   inline G4double SecondMoment(const G4ParticleDefinition*,
 			       const G4MaterialCutsCouple*,
 			       G4double kineticEnergy);
+
+  void SetSingleScatteringFactor(G4double);
 
 protected:
 
@@ -264,16 +263,6 @@ inline G4bool G4WentzelVIModel::UseSecondMoment() const
 inline G4PhysicsTable* G4WentzelVIModel::GetSecondMomentTable()
 {
   return fSecondMoments;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4WentzelVIModel::SetSingleScatteringFactor(G4double val)
-{
-  if(val > 0.05) {
-    ssFactor = val;
-    invssFactor = 1.0/(val - 0.05);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

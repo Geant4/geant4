@@ -18,6 +18,16 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+03 June 14: V.Ivanchenko (emstand-V10-00-29)
+- G4WentzelVIModel - SetSingleScattering Factor is moded to source
+    with attempt to fix compillation problem for strict compiler
+- G4PAIModel, G4PAIModelData - improved cout
+- G4G4BraggModel, G4BraggIonModel - added spin correction
+- G4eCoulombScatteringModel, G4hCoulombScatteringModel,
+  G4IonCoulombScatteringModel - updated initialisation
+    of vector of cuts - cut for recoil can be changed via
+    /run/setCut command
+
 27 May 14: V.Ivanchenko (emstand-V10-00-28)
 - G4IonCoulombCrossSection - tunned computation of the screen 
     factor 

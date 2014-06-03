@@ -107,15 +107,15 @@ G4IonCoulombScatteringModel::~G4IonCoulombScatteringModel()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4IonCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
-                                           const G4DataVector&  )
+					     const G4DataVector& cuts)
 {
   SetupParticle(p);
   currentCouple = 0;
   currentMaterialIndex = -1;
   ioncross->Initialise(p,cosThetaMin);
  
-  pCuts = 
-    G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
+  pCuts = &cuts;
+  //  G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
   if(!isInitialised) {
     isInitialised = true;
     fParticleChange = GetParticleChangeForGamma();

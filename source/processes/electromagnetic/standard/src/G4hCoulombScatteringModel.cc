@@ -126,8 +126,8 @@ void G4hCoulombScatteringModel::Initialise(const G4ParticleDefinition* p,
 	 << "  cos(thetaMax)= " <<  cosThetaMax
 	 << G4endl;
   */
-  pCuts = 
-    G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
+  pCuts = &cuts;
+  //  G4ProductionCutsTable::GetProductionCutsTable()->GetEnergyCutsVector(3);
   //G4cout << "!!! G4hCoulombScatteringModel::Initialise for " 
   //	 << p->GetParticleName() << "  cos(TetMin)= " << cosThetaMin 
   //	 << "  cos(TetMax)= " << cosThetaMax <<G4endl;
