@@ -548,7 +548,13 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
 //
 void
 G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
-{  
+{
+#ifdef G4DEBUG_NAVIGATION
+   // Check: Either step was not limited by a boundary
+   //         or else the full step is no longer being taken
+   assert( !fWasLimitedByGeometry );
+#endif
+  
    fLastLocatedPointLocal = ComputeLocalPoint(pGlobalpoint);
    fLastTriedStepComputation= false;
    fChangedGrandMotherRefFrame= false;  //  Frame for Exit Normal
@@ -620,6 +626,10 @@ G4Navigator::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
 //
 void G4Navigator::SetSavedState()
 {
+  // Note: the state of dependent objects is not currently saved.
+  //   ( This means that the full state is changed by calls between
+  //     SetSavedState() and RestoreSavedState(); 
+  
   fSaveState.sExitNormal = fExitNormal;
   fSaveState.sValidExitNormal = fValidExitNormal;
   fSaveState.sExiting = fExiting;
@@ -634,6 +644,7 @@ void G4Navigator::SetSavedState()
   fSaveState.sLastLocatedPointLocal= fLastLocatedPointLocal;
   fSaveState.sEnteredDaughter= fEnteredDaughter;
   fSaveState.sExitedMother= fExitedMother;
+  fSaveState.sWasLimitedByGeometry= fWasLimitedByGeometry;
 
   // Even the safety sphere - if you want to change it do it explicitly!
   //
@@ -663,8 +674,11 @@ void G4Navigator::RestoreSavedState()
   fLastLocatedPointLocal= fSaveState.sLastLocatedPointLocal;
   fEnteredDaughter= fSaveState.sEnteredDaughter;
   fExitedMother= fSaveState.sExitedMother;
-  fSaveState.sPreviousSftOrigin= fPreviousSftOrigin;
-  fSaveState.sPreviousSafety= fPreviousSafety;
+  fWasLimitedByGeometry= fSaveState.sWasLimitedByGeometry;
+  
+  // The 'expected' behaviour is to restore these too (fix 2014.05.26)
+  fPreviousSftOrigin=   fSaveState.sPreviousSftOrigin;
+  fPreviousSafety= fSaveState.sPreviousSafety;
 }
 
 // ********************************************************************
@@ -1102,7 +1116,6 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
       fExitNormalGlobalFrame= G4ThreeVector( 0., 0., 0.);
     }
   }
-  fStepEndPoint= pGlobalpoint+Step*pDirection; 
 
   if( (Step == pCurrentProposedStepLength) && (!fExiting) && (!fEntering) )
   {
@@ -1156,10 +1169,14 @@ G4double G4Navigator::CheckNextStep( const G4ThreeVector& pGlobalpoint,
                        pCurrentProposedStepLength, 
                        pNewSafety ); 
 
-  // If a parasitic call, then attempt to restore the key parts of the state
+  // It is a parasitic call, so attempt to restore the key parts of the state
   //
   RestoreSavedState(); 
-
+  // NOTE: the state of the current subnavigator is NOT restored.
+  // ***> TODO: restore subnavigator state
+  //            if( last_located)       Need Position of last location
+  //            if( last_computed step) Need Endposition of last step
+  
   return step; 
 }
 
@@ -1632,14 +1649,30 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
   }
 #endif
 
-  if (keepState)  { SetSavedState(); }
-
   G4double distEndpointSq = (pGlobalpoint-fStepEndPoint).mag2(); 
   G4bool   stayedOnEndpoint  = distEndpointSq < kCarTolerance*kCarTolerance; 
   G4bool   endpointOnSurface = fEnteredDaughter || fExitedMother;
 
-  if( !(endpointOnSurface && stayedOnEndpoint) )
+  if( endpointOnSurface && stayedOnEndpoint )
+    {
+#ifdef G4DEBUG_NAVIGATION
+      if( fVerbose >= 2 )
+      {
+        G4cout << "    G4Navigator::ComputeSafety() finds that point - "
+        << pGlobalpoint << " - is on surface " << G4endl;
+        if( fEnteredDaughter ) { G4cout << "   entered new daughter volume"; }
+        if( fExitedMother )    { G4cout << "   and exited previous volume."; }
+        G4cout << G4endl;
+        G4cout << " EndPoint was = " << fStepEndPoint << G4endl;
+      }
+#endif
+      newSafety = 0.0;
+      // return newSafety;
+    }
+  else // if( !(endpointOnSurface && stayedOnEndpoint) )
   {
+    if (keepState)  { SetSavedState(); }
+    
     // Pseudo-relocate to this point (updates voxel information only)
     //
     LocateGlobalPointWithinVolume( pGlobalpoint ); 
@@ -1707,35 +1740,26 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
       newSafety = freplicaNav.ComputeSafety(pGlobalpoint, localPoint,
                                             fHistory, pMaxLength);
     }
+    
+    if (keepState)  {
+      RestoreSavedState();
+      // This now overwrites the values of the Safety 'sphere' (correction)
+    }
+    
+    // Remember last safety origin & value
+    //
+    // We overwrite the Safety 'sphere' - keeping old behaviour
+    fPreviousSftOrigin = pGlobalpoint;
+    fPreviousSafety = newSafety;
   }
-  else // if( endpointOnSurface && stayedOnEndpoint )
-  {
+  
 #ifdef G4DEBUG_NAVIGATION
-    if( fVerbose >= 2 )
-    {
-      G4cout << "    G4Navigator::ComputeSafety() finds that point - " 
-             << pGlobalpoint << " - is on surface " << G4endl; 
-      if( fEnteredDaughter ) { G4cout << "   entered new daughter volume"; }
-      if( fExitedMother )    { G4cout << "   and exited previous volume."; }
-      G4cout << G4endl;
-      G4cout << " EndPoint was = " << fStepEndPoint << G4endl;
-    } 
-#endif
-    newSafety = 0.0; 
-  }
-
-  // Remember last safety origin & value
-  //
-  fPreviousSftOrigin = pGlobalpoint;
-  fPreviousSafety = newSafety; 
-
-  if (keepState)  { RestoreSavedState(); }
-
-#ifdef G4DEBUG_NAVIGATION
+  // G4cout << "Nav::ComputeSafety Ending. GeomLimitedStep= "  << fWasLimitedByGeometry << G4endl;
   if( fVerbose > 1 )
   {
     G4cout << "   ---- Exiting ComputeSafety  " << G4endl;
     if( fVerbose > 2 )  { PrintState(); }
+    G4cout << "    GeomLimitedStep= "  << fWasLimitedByGeometry << G4endl;
     G4cout << "    Returned value of Safety = " << newSafety << G4endl;
   }
   G4cout.precision(oldcoutPrec);
@@ -1743,6 +1767,27 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
 
   return newSafety;
 }
+
+
+static void PrintReportExperimentalFeature()
+{
+  G4cout << "************************************************************************"
+    << G4endl;
+  G4cout << "** Using new G4Navigator::RecheckDistanceToCurrentBoundary() method. ** "
+    << G4endl;
+  G4cout << "   This is an *experimental* feature, as of May 2014, " << G4endl
+    << "   for use together with in-developments of EM scattering. " << G4endl;
+  G4cout << "   Please check results, by comparing to runs without this feature. "
+    << G4endl;
+  G4cout << "************************************************************************"
+    << G4endl;
+}
+
+
+// #define G4GEOM_FEATURE_COMPLETENESS  1
+//  To check that the feature works with all types of geometry - or warn otherwise
+//     Currently it fails with exception if it detects a replica
+//
 
 G4bool G4Navigator::RecheckDistanceToCurrentBoundary(
                      const G4ThreeVector &aDisplacedGlobalPoint,
@@ -1773,6 +1818,12 @@ G4bool G4Navigator::RecheckDistanceToCurrentBoundary(
   G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
   G4LogicalVolume *motherLogical = motherPhysical->GetLogicalVolume();
 
+  static G4ThreadLocal bool reportExperimentalFeature= false;
+  if( !reportExperimentalFeature){
+    PrintReportExperimentalFeature();
+    reportExperimentalFeature= true;
+  }
+  
 #ifdef CHECK_ORDER_OF_METHODS
   if( ! fLastTriedStepComputation ){
      G4Exception("G4Navigator::RecheckDistanceToCurrentBoundary()", "GeomNav0001",

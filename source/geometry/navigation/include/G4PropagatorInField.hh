@@ -166,6 +166,9 @@ class G4PropagatorInField
    inline G4double  GetDeltaOneStep() const;
 
    inline G4FieldManager*  GetCurrentFieldManager();
+   inline G4EquationOfMotion*  GetCurrentEquationOfMotion();
+      // Auxiliary methods - their results can/will change during propagation
+
    inline void             SetNavigatorForPropagating( G4Navigator *SimpleOrMultiNavigator ); 
    inline G4Navigator*     GetNavigatorForPropagating(); 
 
