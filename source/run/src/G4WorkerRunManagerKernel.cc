@@ -57,8 +57,12 @@ void G4WorkerRunManagerKernel::SetupShadowProcess() const
         G4ProcessManager* pmM= pd->GetMasterProcessManager();
         if ( !pm || !pmM )
         {
+            G4ExceptionDescription msg;
+            msg << "Process manager or process manager shadow to master are not set.\n";
+            msg << "Particle : "<<pd->GetParticleName()<<" ("<<pd<<"), proc-manager: "<<pm;
+            msg << " proc-manager-shadow: "<<pmM;
             G4Exception("G4WorkerRunManagerKernel::SetupShadowProcess()","Run11001",FatalException,
-            "Process manager or process manager shadow to master are not set.");
+            msg);
 	    return;
         }
         G4ProcessVector& procs = *(pm->GetProcessList());

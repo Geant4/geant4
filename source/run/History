@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 2nd, 2014, A. Dotti (run-V10-00-10)
+- Increase verbosity in case of NULL process-manager pointer in MT
+
 May 16th, 2014, A. Dotti (run-V10-00-09)
 - Fix coverity defects
 
