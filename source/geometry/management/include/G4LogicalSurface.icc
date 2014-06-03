@@ -78,7 +78,7 @@ G4LogicalSurface::SetTransitionRadiationSurface(G4TransitionRadiationSurface*
   // Operators
   //////////////
 
-inline const G4LogicalSurface &
+inline G4LogicalSurface &
 G4LogicalSurface::operator=(const G4LogicalSurface &right)
 {
   if (&right == this)  { return *this; }
