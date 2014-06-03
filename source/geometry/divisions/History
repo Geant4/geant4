@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+March 5th, 2014         G.Cosmo (geomdiv-V09-00-05)
+- Added missing dependency to graphics_reps.
+
 October 29th, 2013      T.Nikitina (geomdiv-V09-06-04)
 - Split G4Polycone into G4GenericPolycone and optimised.
   Coworks with tag "geom-specific-V09-06-22".
