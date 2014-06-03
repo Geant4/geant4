@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2 June 14: V.Ivant (emutils-V10-00-22)
+- G4EmModelManager - fixed cuts for single scattering models (use 
+    "cut for protons")
+
 27 May 14: V.Ivant (emutils-V10-00-21)
 - G4LossTableManager - minor change of Set methods
 
