@@ -60,21 +60,6 @@ class LXeMuonPhysics : public G4VPhysicsConstructor
     // registered to the process manager of each particle type
     virtual void ConstructProcess();
 
-  protected:
-
-   // Muon physics
-   G4MuIonisation*         fMuPlusIonisation;
-   G4MuMultipleScattering* fMuPlusMultipleScattering;
-   G4MuBremsstrahlung*     fMuPlusBremsstrahlung;
-   G4MuPairProduction*     fMuPlusPairProduction;
-
-   G4MuIonisation*         fMuMinusIonisation;
-   G4MuMultipleScattering* fMuMinusMultipleScattering;
-   G4MuBremsstrahlung*     fMuMinusBremsstrahlung;
-   G4MuPairProduction*     fMuMinusPairProduction;
-
-   G4MuonMinusCaptureAtRest* fMuMinusCaptureAtRest;
-
 };
 
 #endif

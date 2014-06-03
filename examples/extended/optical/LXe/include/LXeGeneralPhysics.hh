@@ -37,7 +37,7 @@
 
 #include "G4VPhysicsConstructor.hh"
 
-#include "G4Decay.hh"
+
 
 class LXeGeneralPhysics : public G4VPhysicsConstructor
 {
@@ -55,9 +55,6 @@ class LXeGeneralPhysics : public G4VPhysicsConstructor
     // registered to the process manager of each particle type
     virtual void ConstructProcess();
 
-  protected:
-
-    G4Decay* fDecayProcess;
 };
 
 #endif

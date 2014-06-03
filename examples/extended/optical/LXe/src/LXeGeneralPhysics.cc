@@ -34,7 +34,7 @@
 #include "globals.hh"
 #include "G4ios.hh"
 #include <iomanip>
-
+#include "G4Decay.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXeGeneralPhysics::LXeGeneralPhysics(const G4String& name)
@@ -43,7 +43,7 @@ LXeGeneralPhysics::LXeGeneralPhysics(const G4String& name)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 LXeGeneralPhysics::~LXeGeneralPhysics() {
-  fDecayProcess = NULL;
+  //fDecayProcess = NULL;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -55,6 +55,8 @@ LXeGeneralPhysics::~LXeGeneralPhysics() {
 #include "G4ChargedGeantino.hh"
 
 #include "G4GenericIon.hh"
+
+#include "G4Proton.hh"
 
 void LXeGeneralPhysics::ConstructParticle()
 {
@@ -69,7 +71,7 @@ void LXeGeneralPhysics::ConstructParticle()
 
 void LXeGeneralPhysics::ConstructProcess()
 {
-  fDecayProcess = new G4Decay();
+  G4Decay* fDecayProcess = new G4Decay();
 
   // Add Decay Process
   aParticleIterator->reset();

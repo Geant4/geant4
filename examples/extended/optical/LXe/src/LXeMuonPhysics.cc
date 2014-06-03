@@ -40,17 +40,6 @@
 
 LXeMuonPhysics::LXeMuonPhysics(const G4String& name)
                    :  G4VPhysicsConstructor(name) {
-  fMuPlusIonisation = NULL;
-  fMuPlusMultipleScattering = NULL;
-  fMuPlusBremsstrahlung = NULL;
-  fMuPlusPairProduction = NULL;
-
-  fMuMinusIonisation = NULL;
-  fMuMinusMultipleScattering = NULL;
-  fMuMinusBremsstrahlung = NULL;
-  fMuMinusPairProduction = NULL;
-
-  fMuMinusCaptureAtRest = NULL;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,17 +71,26 @@ void LXeMuonPhysics::ConstructParticle()
 
 void LXeMuonPhysics::ConstructProcess()
 {
-  fMuPlusIonisation = new G4MuIonisation();
-  fMuPlusMultipleScattering = new G4MuMultipleScattering();
-  fMuPlusBremsstrahlung=new G4MuBremsstrahlung();
-  fMuPlusPairProduction= new G4MuPairProduction();
+  G4MuIonisation* fMuPlusIonisation =
+    new G4MuIonisation();
+  G4MuMultipleScattering* fMuPlusMultipleScattering =
+    new G4MuMultipleScattering();
+  G4MuBremsstrahlung* fMuPlusBremsstrahlung=
+    new G4MuBremsstrahlung();
+  G4MuPairProduction* fMuPlusPairProduction=
+    new G4MuPairProduction();
 
-  fMuMinusIonisation = new G4MuIonisation();
-  fMuMinusMultipleScattering = new G4MuMultipleScattering;
-  fMuMinusBremsstrahlung = new G4MuBremsstrahlung();
-  fMuMinusPairProduction = new G4MuPairProduction();
+  G4MuIonisation* fMuMinusIonisation =
+    new G4MuIonisation();
+  G4MuMultipleScattering* fMuMinusMultipleScattering =
+    new G4MuMultipleScattering();
+  G4MuBremsstrahlung* fMuMinusBremsstrahlung =
+    new G4MuBremsstrahlung();
+  G4MuPairProduction* fMuMinusPairProduction =
+    new G4MuPairProduction();
 
-  fMuMinusCaptureAtRest = new G4MuonMinusCaptureAtRest();
+  G4MuonMinusCaptureAtRest* fMuMinusCaptureAtRest =
+    new G4MuonMinusCaptureAtRest();
 
   G4ProcessManager * pManager = 0;
 
