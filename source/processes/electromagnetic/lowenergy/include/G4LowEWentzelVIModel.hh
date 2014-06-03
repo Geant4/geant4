@@ -53,8 +53,6 @@
 
 #include "G4WentzelVIModel.hh"
 
-class G4ParticleDefinition;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4LowEWentzelVIModel : public G4WentzelVIModel
