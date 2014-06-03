@@ -111,7 +111,7 @@ G4KineticTrackVector * G4QuasiElasticChannel::Scatter(G4Nucleus &theNucleus,
 
   G4int resA=A - 1;
   G4int resZ=Z - static_cast<int>(pDef->GetPDGCharge());
-  G4ParticleDefinition* resDef;
+  const G4ParticleDefinition* resDef;
   G4double residualNucleusMass;
   if(resZ)
   {
