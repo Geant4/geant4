@@ -25,6 +25,7 @@
 //
 
 #include "XCrystalPlanarMoliereElectricField.hh"
+#include "G4PhysicalConstants.hh"
 
 XCrystalPlanarMoliereElectricField::XCrystalPlanarMoliereElectricField(){
     fAlfa[0] = 0.1;
@@ -57,7 +58,7 @@ ComputeECForSinglePlane(G4double vXposition,
                                  exp( - fabs(vXposition) * fBeta[i] / aTF ) );
     }
 
-    vValueForSinglePlane *= 2. * M_PI;
+    vValueForSinglePlane *= 2. * CLHEP::pi;
     vValueForSinglePlane *= GetXUnitCell(vVolume)->ComputeDirectPeriod(
                                     GetXPhysicalLattice(vVolume)->GetMiller(0),
                                     GetXPhysicalLattice(vVolume)->GetMiller(1),

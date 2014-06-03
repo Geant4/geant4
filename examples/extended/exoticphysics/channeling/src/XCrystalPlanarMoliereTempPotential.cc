@@ -25,6 +25,7 @@
 //
 
 #include "XCrystalPlanarMoliereTempPotential.hh"
+#include "G4PhysicalConstants.hh"
 
 XCrystalPlanarMoliereTempPotential::XCrystalPlanarMoliereTempPotential(){
     fAlfa[0] = 0.1;
@@ -73,7 +74,7 @@ ComputeECForSinglePlane(G4double vX,
         vValueForSinglePlane += ( vTemp * fGamma[i] * exp( vTau[i] ) /2.0);
     }
     
-    vValueForSinglePlane *= 2. * M_PI;
+    vValueForSinglePlane *= 2. * CLHEP::pi;
     vValueForSinglePlane *= GetXUnitCell(vVolume)->ComputeDirectPeriod(
                                 GetXPhysicalLattice(vVolume)->GetMiller(0),
                                 GetXPhysicalLattice(vVolume)->GetMiller(1),

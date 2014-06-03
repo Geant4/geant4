@@ -44,6 +44,7 @@
 #include "G4GeometryTolerance.hh"
 
 #include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 #include "XLatticeManager3.hh"
 
@@ -924,7 +925,7 @@ ComputeOscillationPeriod(const G4Track& aTrack){
     G4double vInterplanarPeriod =
         GetXPhysicalLattice(aTrack)->ComputeInterplanarPeriod();
     G4double vOscillationPeriod =
-        M_PI * vInterplanarPeriod / ComputeCriticalAngle(aTrack);
+        CLHEP::pi * vInterplanarPeriod / ComputeCriticalAngle(aTrack);
     return vOscillationPeriod;
 }
 

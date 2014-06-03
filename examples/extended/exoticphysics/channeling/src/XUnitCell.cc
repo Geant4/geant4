@@ -32,9 +32,9 @@ XUnitCell::XUnitCell(){
     fSize = G4ThreeVector(0. * CLHEP::angstrom,
                           0. * CLHEP::angstrom,
                           0. * CLHEP::angstrom);
-    fAngle = G4ThreeVector(0.5 * M_PI * CLHEP::radian,
-                           0.5 * M_PI * CLHEP::radian,
-                           0.5 * M_PI * CLHEP::radian);
+    fAngle = G4ThreeVector(0.5 * CLHEP::pi * CLHEP::radian,
+                           0.5 * CLHEP::pi * CLHEP::radian,
+                           0.5 * CLHEP::pi * CLHEP::radian);
     fNumberOfBases = 0;
 }
 
@@ -173,7 +173,7 @@ G4double XUnitCell::ComputeReciprocalVectorSquared(G4int h, G4int k, G4int l){
         vReciprocalVectorSquared /= vVolume;
     }
     
-    vReciprocalVectorSquared  *= (4. * M_PI * M_PI);    
+    vReciprocalVectorSquared  *= (4. * CLHEP::pi * CLHEP::pi);    
     return vReciprocalVectorSquared;
 }
 
@@ -224,9 +224,9 @@ G4double XUnitCell::ComputeDirectPeriod(G4int h, G4int k, G4int l){
 
 
 G4bool XUnitCell::IsOrthogonal(){
-    if(fAngle.x() == M_PI / 2.)
-        if(fAngle.y() == M_PI / 2.)
-            if(fAngle.z() == M_PI / 2.)
+    if(fAngle.x() == CLHEP::pi / 2.)
+        if(fAngle.y() == CLHEP::pi / 2.)
+            if(fAngle.z() == CLHEP::pi / 2.)
                 return true;
     return false;
 }

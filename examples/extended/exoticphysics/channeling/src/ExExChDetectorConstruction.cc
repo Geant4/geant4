@@ -36,6 +36,8 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4UniformMagField.hh"
+#include "G4SystemOfUnits.hh"
+#include "G4PhysicalConstants.hh"
 
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
@@ -228,7 +230,7 @@ void ExExChDetectorConstruction::ConstructXtalTarget(){
         new G4RotationMatrix; // Rotates X and Z axes only
     
     if(fXtalCurvatureRadius.x() != 0.){
-        vRotationMatrix->rotateX(fXtalAngle.x()-M_PI*0.5);
+        vRotationMatrix->rotateX(fXtalAngle.x()-CLHEP::pi*0.5);
         vRotationMatrix->rotateY(fXtalAngle.y());
         vRotationMatrix->rotateZ(fXtalAngle.z());
         fXtalPhysical =

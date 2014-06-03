@@ -25,6 +25,7 @@
 //
 
 #include "XCrystalPlanarNucleiDensity.hh"
+#include "G4SystemOfUnits.hh"
 
 XCrystalPlanarNucleiDensity::XCrystalPlanarNucleiDensity(){
 }
@@ -44,7 +45,7 @@ ComputeECForSinglePlane(G4double vXposition,
             pow(vXposition/vLattice->GetThermalVibrationAmplitude(),2.0 ) );
 
     vValueForSinglePlane /= (vLattice->GetThermalVibrationAmplitude());
-    vValueForSinglePlane /= ( sqrt( 2 * M_PI) );
+    vValueForSinglePlane /= ( sqrt( 2 * CLHEP::pi) );
     
     return vValueForSinglePlane;
 }
