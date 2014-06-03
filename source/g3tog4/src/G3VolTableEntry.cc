@@ -56,7 +56,7 @@ G3VolTableEntry::~G3VolTableEntry(){
   delete fDivision;
 }
 
-inline G4bool 
+G4bool
 G3VolTableEntry::operator == ( const G3VolTableEntry& lv) const {
   return (this==&lv) ? true : false;
 }
