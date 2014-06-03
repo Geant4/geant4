@@ -297,13 +297,13 @@ G4PropagatorInField*  SetupPropagator( G4int type)
 //
 void  ObsoleteSetChargeMomentumMass(G4double charge, G4double MomentumXc, G4double Mass)
 {
-    G4ChordFinder*  pChordFinder; 
+   G4FieldManager fieldMgr;
 
-    pChordFinder= G4TransportationManager::GetTransportationManager()->
-		   GetFieldManager()->GetChordFinder();
+   fieldMgr= G4TransportationManager::GetTransportationManager()->
+              GetFieldManager(); 
 
     // pMagFieldPropagator->set_magnetic_field();
-    pChordFinder->SetChargeMomentumMass(
+    fieldMgr->SetChargeMomentumMass(
 		      charge,                    // charge in e+ units
 		      MomentumXc,   // Momentum in Mev/c ?
                       Mass );
