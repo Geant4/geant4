@@ -168,6 +168,9 @@ class G4VDecayChannel
     void  SetVerboseLevel(G4int value);
     G4int GetVerboseLevel()  const;
     void  DumpInfo();
+ 
+    G4double  GetRangeMass() const;
+    void      SetRangeMass(G4double val);
 
 /////@@  public:  // without description
 /////@@
@@ -200,6 +203,9 @@ class G4VDecayChannel
     const G4String& GetNoName() const;
 
   protected:
+     G4double DynamicalMass(G4double massPDG, G4double width, G4double maxDev = +1.) const;
+
+  protected:
 
     // kinematics name
     G4String   kinematics_name;
@@ -211,7 +217,10 @@ class G4VDecayChannel
     G4String*  parent_name;
     // daughter particles
     G4String** daughters_name;
-
+ 
+    //  range of mass allowed in decay
+    G4double   rangeMass;
+   
     // pointer to particle table
     G4ParticleTable*       particletable;
 
@@ -338,6 +347,12 @@ inline
 inline
  G4int G4VDecayChannel::GetVerboseLevel() const { return verboseLevel; }
 
+inline   
+ G4double  G4VDecayChannel::GetRangeMass() const { return rangeMass; }
+
+inline   
+  void  G4VDecayChannel::SetRangeMass(G4double val){ if(val>=0.) rangeMass=val; }
+ 
 /////@@inline
 /////@@ G4int G4VDecayChannel::GetInstanceID() const { return instanceID; }
 

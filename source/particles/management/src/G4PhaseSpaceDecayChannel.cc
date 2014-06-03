@@ -158,11 +158,13 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
   // parent mass
   G4double parentmass = current_parent_mass;
   
-  //daughters'mass
-  G4double daughtermass[2]; 
+  //daughters'mass, width
+  G4double daughtermass[2], daughterwidth[2]; 
   G4double daughtermomentum;
   daughtermass[0] = G4MT_daughters_mass[0];
   daughtermass[1] = G4MT_daughters_mass[1];
+  daughterwidth[0] = G4MT_daughters_width[0];
+  daughterwidth[1] = G4MT_daughters_width[1];
 
   //create parent G4DynamicParticle at rest
   G4ThreeVector dummy;
@@ -171,23 +173,54 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
+  G4bool withWidth = (daughterwidth[0]>1.0e-3*daughtermass[0]) || (daughterwidth[1]>1.0e-3*daughtermass[1]);
+  if (withWidth) {
+    G4double sumofdaughterwidthsq = daughterwidth[0]*daughterwidth[0]+daughterwidth[1]*daughterwidth[1];
+    // check parent mass and daughter mass
+    G4double maxDev = (parentmass - daughtermass[0] - daughtermass[1] )/std::sqrt(sumofdaughterwidthsq);
+    if (maxDev < -0.9*rangeMass ){
+#ifdef G4VERBOSE
+      if (GetVerboseLevel()>0) {
+	G4cout << "G4PhaseSpaceDecayChannel::TwoBodyDecayIt " 
+	       << "sum of daughter mass is larger than parent mass" << G4endl;
+	G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass/GeV << G4endl;
+	G4cout << "daughter 1 :" << G4MT_daughters[0]->GetParticleName() << "  " << daughtermass[0]/GeV << G4endl;
+	G4cout << "daughter 2:" << G4MT_daughters[1]->GetParticleName() << "  " << daughtermass[1]/GeV << G4endl;
+      }
+#endif
+      G4Exception("G4PhaseSpaceDecayChannel::TwoBodyDecayIt",
+		  "PART112", JustWarning,
+                "Can not create decay products: sum of daughter mass is larger than parent mass");
+      return products;
+    }
+    G4double dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
+    G4double dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);
+    while (dm1+dm2>parentmass){
+      dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
+      dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);
+    }
+    daughtermass[0] = dm1;
+    daughtermass[1] = dm2;
+  } else {
+    if (parentmass < daughtermass[0] + daughtermass[1] ){
+#ifdef G4VERBOSE
+      if (GetVerboseLevel()>0) {
+	G4cout << "G4PhaseSpaceDecayChannel::TwoBodyDecayIt " 
+	       << "sum of daughter mass is larger than parent mass" << G4endl;
+	G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass/GeV << G4endl;
+	G4cout << "daughter 1 :" << G4MT_daughters[0]->GetParticleName() << "  " << daughtermass[0]/GeV << G4endl;
+	G4cout << "daughter 2:" << G4MT_daughters[1]->GetParticleName() << "  " << daughtermass[1]/GeV << G4endl;
+      }
+#endif
+      G4Exception("G4PhaseSpaceDecayChannel::TwoBodyDecayIt",
+		  "PART112", JustWarning,
+		  "Can not create decay products: sum of daughter mass is larger than parent mass");
+      return products;
+    }  
+  }
+
   //calculate daughter momentum
   daughtermomentum = Pmx(parentmass,daughtermass[0],daughtermass[1]);
-  if (daughtermomentum <0.0) {
-#ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
-      G4cout << "G4PhaseSpaceDecayChannel::TwoBodyDecayIt " 
-             << "sum of daughter mass is larger than parent mass" << G4endl;
-      G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass/GeV << G4endl;
-      G4cout << "daughter 1 :" << G4MT_daughters[0]->GetParticleName() << "  " << daughtermass[0]/GeV << G4endl;
-      G4cout << "daughter 2:" << G4MT_daughters[1]->GetParticleName() << "  " << daughtermass[1]/GeV << G4endl;
-    }
-#endif
-    G4Exception("G4PhaseSpaceDecayChannel::TwoBodyDecayIt",
-                "PART112", JustWarning,
-                "Can not create decay products: sum of daughter mass is larger than parent mass");
-    return products;
-  }
 
   G4double costheta = 2.*G4UniformRand()-1.0;
   G4double sintheta = std::sqrt((1.0 - costheta)*(1.0 + costheta));
@@ -195,9 +228,11 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
   G4ThreeVector direction(sintheta*std::cos(phi),sintheta*std::sin(phi),costheta);
 
   //create daughter G4DynamicParticle 
-  G4DynamicParticle * daughterparticle = new G4DynamicParticle( G4MT_daughters[0], direction*daughtermomentum);
+  G4double Ekin = std::sqrt(daughtermomentum*daughtermomentum + daughtermass[0]*daughtermass[0]) - daughtermass[0];
+  G4DynamicParticle * daughterparticle = new G4DynamicParticle( G4MT_daughters[0], direction, Ekin, daughtermass[0]);
   products->PushProducts(daughterparticle);
-  daughterparticle = new G4DynamicParticle( G4MT_daughters[1], direction*(-1.0*daughtermomentum));
+  Ekin = std::sqrt(daughtermomentum*daughtermomentum + daughtermass[1]*daughtermass[1]) - daughtermass[1];
+  daughterparticle = new G4DynamicParticle( G4MT_daughters[1], direction, Ekin, daughtermass[1]);
   products->PushProducts(daughterparticle);
 
 #ifdef G4VERBOSE
@@ -219,11 +254,16 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
   // parent mass
   G4double parentmass = current_parent_mass;
   //daughters'mass
-  G4double daughtermass[3]; 
+  G4double daughtermass[3], daughterwidth[3]; 
   G4double sumofdaughtermass = 0.0;
+  G4double sumofdaughterwidthsq = 0.0;
+  G4bool withWidth = false; 
   for (G4int index=0; index<3; index++){
     daughtermass[index] = G4MT_daughters_mass[index];
     sumofdaughtermass += daughtermass[index];
+    daughterwidth[index] = G4MT_daughters_width[index];
+    sumofdaughterwidthsq += daughterwidth[index]*daughterwidth[index];
+    withWidth = withWidth ||(daughterwidth[index]>1.0e-3*daughtermass[index]);
   }
   
    //create parent G4DynamicParticle at rest
@@ -235,21 +275,53 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
   G4DecayProducts *products = new G4DecayProducts(*parentparticle);
   delete parentparticle;
 
-  if (sumofdaughtermass >parentmass) {
+  if (withWidth){
+    G4double maxDev = (parentmass - sumofdaughtermass )/std::sqrt(sumofdaughterwidthsq) ;
+    if (maxDev < -0.9*rangeMass ){
 #ifdef G4VERBOSE
-    if (GetVerboseLevel()>0) {
-      G4cout << "G4PhaseSpaceDecayChannel::ThreeBodyDecayIt " 
-             << "sum of daughter mass is larger than parent mass" << G4endl;
-      G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass/GeV << G4endl;
-      G4cout << "daughter 1 :" << G4MT_daughters[0]->GetParticleName() << "  " << daughtermass[0]/GeV << G4endl;
-      G4cout << "daughter 2:" << G4MT_daughters[1]->GetParticleName() << "  " << daughtermass[1]/GeV << G4endl;
-      G4cout << "daughter 3:" << G4MT_daughters[2]->GetParticleName() << "  " << daughtermass[2]/GeV << G4endl;
-    }
+      if (GetVerboseLevel()>0) {
+	G4cout << "G4PhaseSpaceDecayChannel::ThreeBodyDecayIt " 
+	       << "sum of daughter mass is larger than parent mass" << G4endl;
+	G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass/GeV << G4endl;
+	G4cout << "daughter 1 :" << G4MT_daughters[0]->GetParticleName() << "  " << daughtermass[0]/GeV << G4endl;
+	G4cout << "daughter 2:" << G4MT_daughters[1]->GetParticleName() << "  " << daughtermass[1]/GeV << G4endl;
+	G4cout << "daughter 3:" << G4MT_daughters[2]->GetParticleName() << "  " << daughtermass[2]/GeV << G4endl;
+      }
 #endif
-    G4Exception("G4PhaseSpaceDecayChannel::ThreeBodyDecayIt",
-                "PART112", JustWarning,
-                "Can not create decay products: sum of daughter mass is larger than parent mass");
-    return products;
+      G4Exception("G4PhaseSpaceDecayChannel::ThreeBodyDecayIt",
+		  "PART112", JustWarning,
+		  "Can not create decay products: sum of daughter mass is larger than parent mass");
+      return products;
+    }
+    G4double dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
+    G4double dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);
+    G4double dm3= DynamicalMass(daughtermass[2],daughterwidth[2], maxDev);
+    while (dm1+dm2+dm3>parentmass){
+      dm1= DynamicalMass(daughtermass[0],daughterwidth[0], maxDev);
+      dm2= DynamicalMass(daughtermass[1],daughterwidth[1], maxDev);
+      dm3= DynamicalMass(daughtermass[2],daughterwidth[2], maxDev);
+    }
+    daughtermass[0] = dm1;
+    daughtermass[1] = dm2;
+    daughtermass[2] = dm3;
+
+  } else {
+    if (sumofdaughtermass >parentmass) {
+#ifdef G4VERBOSE
+      if (GetVerboseLevel()>0) {
+	G4cout << "G4PhaseSpaceDecayChannel::ThreeBodyDecayIt " 
+	       << "sum of daughter mass is larger than parent mass" << G4endl;
+	G4cout << "parent :" << G4MT_parent->GetParticleName() << "  " << current_parent_mass/GeV << G4endl;
+	G4cout << "daughter 1 :" << G4MT_daughters[0]->GetParticleName() << "  " << daughtermass[0]/GeV << G4endl;
+	G4cout << "daughter 2:" << G4MT_daughters[1]->GetParticleName() << "  " << daughtermass[1]/GeV << G4endl;
+	G4cout << "daughter 3:" << G4MT_daughters[2]->GetParticleName() << "  " << daughtermass[2]/GeV << G4endl;
+	}
+#endif
+      G4Exception("G4PhaseSpaceDecayChannel::ThreeBodyDecayIt",
+		  "PART112", JustWarning,
+		  "Can not create decay products: sum of daughter mass is larger than parent mass");
+      return products;
+    }
   }
 
 

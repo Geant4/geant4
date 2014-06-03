@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+- 31 May 2014 Hisaya Kurashige (particles-V10-00-11)
+- Fix bugs in G4ExcitedMesonConstructor (missing pi + eta mode in DecayTable)
+- G4PhaseSpaceDecayChannel takes in to account mass width of daughter particles
+  and gives the dynamical mass according to Breit-Wigner distribution
+
 - 27 May 2014 Hisaya Kurashige (particles-V10-00-10)
 - Add daughters_width in G4VDecayChannel
 

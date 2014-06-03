@@ -66,6 +66,7 @@ G4VDecayChannel::G4VDecayChannel()
    rbranch(0.0),
    numberOfDaughters(0),
    parent_name(0), daughters_name(0),
+   rangeMass(1.0),
    particletable(0),
    verboseLevel(1)		
 {
@@ -85,6 +86,7 @@ G4VDecayChannel::G4VDecayChannel(const G4String &aName, G4int Verbose)
    rbranch(0.0),
    numberOfDaughters(0),
    parent_name(0), daughters_name(0),
+   rangeMass(1.0),
    particletable(0),
    verboseLevel(Verbose)		
 {
@@ -111,6 +113,7 @@ G4VDecayChannel::G4VDecayChannel(const G4String  &aName,
 		rbranch(theBR),
 		numberOfDaughters(theNumberOfDaughters),
 		parent_name(0), daughters_name(0),
+                rangeMass(1.0),
 		particletable(0),
 		verboseLevel(1)		
 {
@@ -145,6 +148,7 @@ G4VDecayChannel::G4VDecayChannel(const G4VDecayChannel &right)
   kinematics_name = right.kinematics_name;
   verboseLevel = right.verboseLevel;
   rbranch = right.rbranch;
+  rangeMass =  right.rangeMass;
 
   // copy parent name
   parent_name = new G4String(*right.parent_name);
@@ -179,6 +183,7 @@ G4VDecayChannel & G4VDecayChannel::operator=(const G4VDecayChannel &right)
     kinematics_name = right.kinematics_name;
     verboseLevel = right.verboseLevel;
     rbranch = right.rbranch;
+    rangeMass =  right.rangeMass;
 
     // copy parent name
     parent_name = new G4String(*right.parent_name);
@@ -408,7 +413,7 @@ void G4VDecayChannel::FillDaughters()
   // check sum of daghter mass
   G4double widthMass = std::sqrt(G4MT_parent->GetPDGWidth()+G4MT_parent->GetPDGWidth()+sumofdaughterwidthsq);
   if ( (G4MT_parent->GetParticleType() != "nucleus") &&
-       (sumofdaughtermass > parentmass + 5*widthMass) ){
+       (sumofdaughtermass > parentmass + rangeMass*widthMass) ){
    // !!! illegal mass  !!!
 #ifdef G4VERBOSE
    if (GetVerboseLevel()>0) {
@@ -545,4 +550,20 @@ void G4VDecayChannel::DumpInfo()
 const G4String& G4VDecayChannel::GetNoName() const
 {
   return noName;
+}
+
+#include "Randomize.hh"
+G4double G4VDecayChannel::DynamicalMass(G4double massPDG, G4double width, G4double maxDev ) const
+{ 
+  if (maxDev >rangeMass) maxDev = rangeMass;
+  if (maxDev <-1.*rangeMass) return massPDG;  // can not calculate
+ 
+  G4double x = G4UniformRand()*(maxDev+rangeMass) - rangeMass;
+  G4double y = G4UniformRand();
+  while ( y * (width*width*x*x + massPDG*massPDG*width*width) > massPDG*massPDG*width*width  ){
+    x = G4UniformRand()*(maxDev+rangeMass) - rangeMass;
+    y = G4UniformRand();
+  }
+  G4double mass = massPDG + x*width;
+  return mass;
 }
