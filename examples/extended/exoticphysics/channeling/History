@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 30, 2014 E. Bagli (channelingExample-v10-00-05)
+- Removed measurement of time elapsed into channeling.c
+
+May 28, 2014 E. Bagli (channelingExample-v10-00-04)
+- Corrected conversions between data types.
+- Added root reference file (physical/ExExCh.root).
+
 May 27, 2014 A. Dotti (channelingExample-V10-00-03)
 - First version of CTest introduced, via extenral
   file CTestDefinitions.txt

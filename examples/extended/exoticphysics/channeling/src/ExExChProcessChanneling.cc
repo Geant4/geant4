@@ -271,11 +271,11 @@ void ExExChProcessChanneling::UpdateDensity(const G4Track& aTrack){
         G4double vNucleiDensity =
             fIntegratedDensity->GetIntegratedDensityNuclei(vTransverseEnergy,
                                             GetXPhysicalLattice(aTrack),
-                                            vCharge);
+                                            G4int(vCharge));
         G4double vElectronDensity =
             fIntegratedDensity->GetIntegratedDensityElectron(vTransverseEnergy,
                                             GetXPhysicalLattice(aTrack),
-                                            vCharge);
+                                            G4int(vCharge));
         
         G4double vLowerBoundNegative = 1.;
         G4double vLowerBoundPositive = 0.01;

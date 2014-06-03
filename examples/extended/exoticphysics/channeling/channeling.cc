@@ -59,15 +59,10 @@
 #include "G4UIExecutive.hh"
 #endif
 
-#include <sys/time.h>
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {
-    struct timeval start,end;
-    gettimeofday(&start,NULL);
-
     // Construct the default run manager
 #ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
@@ -140,11 +135,6 @@ int main(int argc,char** argv)
     // Job termination
     delete runManager;
     
-    gettimeofday(&end,NULL);
-    G4cout << "Elapsed time [s] = ";
-    G4cout << ((end.tv_sec - start.tv_sec) * 1000000
-               + (end.tv_usec - start.tv_usec))/1.E6 << G4endl;
-
     return 0;
 }
 

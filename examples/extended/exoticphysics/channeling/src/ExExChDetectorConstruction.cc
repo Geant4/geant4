@@ -266,7 +266,7 @@ void ExExChDetectorConstruction::ConstructXtalTarget(){
     XLogicalAtomicLatticeDiamond *diamond_lattice =
         new XLogicalAtomicLatticeDiamond();
     G4Element* element = G4NistManager::
-        Instance()->FindOrBuildElement(fXtalMaterial->GetZ());
+        Instance()->FindOrBuildElement(G4int(fXtalMaterial->GetZ()));
     XLogicalBase *base = new XLogicalBase(element,diamond_lattice);
     
     //----------------------------------------
@@ -282,9 +282,9 @@ void ExExChDetectorConstruction::ConstructXtalTarget(){
     XPhysicalLattice* physicalLattice =
         new XPhysicalLattice(fXtalPhysical, logicalLattice);
     physicalLattice->SetUnitCell(myCell);
-    physicalLattice->SetMillerOrientation(fXtalMiller.x(),
-                                          fXtalMiller.y(),
-                                          fXtalMiller.z());
+    physicalLattice->SetMillerOrientation(G4int(fXtalMiller.x()),
+                                          G4int(fXtalMiller.y()),
+                                          G4int(fXtalMiller.z()));
     physicalLattice->SetLatticeOrientation(fXtalAngle.x(),
                                            fXtalAngle.y(),
                                            fXtalAngle.z());

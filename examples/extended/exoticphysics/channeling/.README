@@ -1,6 +1,6 @@
 //$Id: .README $
 
-///\file "exoticphysics/cahnneling/.README"
+///\file "exoticphysics/channeling/.README"
 ///\brief Example channeling README page
 
 /*! \page Examplechanneling Example channeling
@@ -45,7 +45,7 @@ interaction of high-energy particles in straight and bent
 crystals implemented in Geant4’ by E. Bagli et al., available
 online at http://arxiv.org/abs/1403.5819
 
-\section channeling_s4 EXECUTION & OUTPUT
+\section channeling_s5 EXECUTION & OUTPUT
 
 The executable must be run from within the source directory of the example
 to ensure that it can find the path for crystal data files.
@@ -74,8 +74,8 @@ To change crystal length to XXX millimeter
 
 Use
 \verbatim
-\endverbatim
 /xtal/potfilename data/si110
+\endverbatim
 or
 \verbatim
 /xtal/potfilename data/si111

@@ -35,7 +35,7 @@ XUnitCell::XUnitCell(){
     fAngle = G4ThreeVector(0.5 * M_PI * CLHEP::radian,
                            0.5 * M_PI * CLHEP::radian,
                            0.5 * M_PI * CLHEP::radian);
-    fNumberOfBases = 0.;
+    fNumberOfBases = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
