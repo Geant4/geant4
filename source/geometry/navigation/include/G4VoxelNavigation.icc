@@ -128,7 +128,7 @@ G4VoxelNavigation::LevelLocate( G4NavigationHistory& history,
   // Search daughters in volume
   //
 
-  for ( register int sampleNo=targetNoDaughters-1; sampleNo>=0; sampleNo-- )
+  for ( G4int sampleNo=targetNoDaughters-1; sampleNo>=0; sampleNo-- )
   {
     samplePhysical = targetLogical->
                      GetDaughter(targetVoxelNode->GetVolume(sampleNo));

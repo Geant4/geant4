@@ -604,7 +604,7 @@ G4ParameterisedNavigation::LevelLocate( G4NavigationHistory& history,
 
   // Search replicated daughter volume
   //
-  for ( register int sampleNo=voxelNoDaughters-1; sampleNo>=0; sampleNo-- )
+  for ( G4int sampleNo=voxelNoDaughters-1; sampleNo>=0; sampleNo-- )
   {
     replicaNo = motherVoxelNode->GetVolume(sampleNo);
     if ( (replicaNo!=blockedNum) || (pPhysical!=blockedVol) )
