@@ -23,72 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-//
 // $Id$
 //
 
-#include "Tst65DetectorConstruction.hh"
+#include "Tst65ActionInitialization.hh"
+
 #include "Tst65RunAction.hh"
 #include "Tst65PrimaryGeneratorAction.hh"
-#include "Tst65ActionInitialization.hh"
-#include "Tst65PhysicsList.hh"
-//#include "Tst65SteppingAction.hh"
 
-#include "G4UImanager.hh"
-#include "G4UIterminal.hh"
+Tst65ActionInitialization::Tst65ActionInitialization()
+{}
 
-#ifdef G4MULTITHREADED
-#include "G4MTRunManager.hh"
-#else
-#include "G4RunManager.hh"
-#endif
+Tst65ActionInitialization::~Tst65ActionInitialization()
+{}
 
-#include "G4ios.hh"
+void Tst65ActionInitialization::Build() const {
+  SetUserAction(new Tst65PrimaryGeneratorAction);
+  SetUserAction(new Tst65RunAction);
+}
 
-int main(int argc,char** argv) {
-
-  // Set the default random engine to RanecuEngine
-  CLHEP::RanecuEngine defaultEngine;
-  G4Random::setTheEngine(&defaultEngine);
-
-  // Run manager
-  #ifdef G4MULTITHREADED
-    G4cout<<"Warning: forcing G4FORCENUMBEROFTHREADS=4"<<G4endl;
-    char env[]="G4FORCENUMBEROFTHREADS=4";
-    putenv(env);
-    G4MTRunManager* runManager = new G4MTRunManager;
-    runManager->SetNumberOfThreads(4);
-  #else
-    G4RunManager* runManager = new G4RunManager;
-  #endif
-
-  // UserInitialization classes
-  runManager->SetUserInitialization(new Tst65DetectorConstruction);
-  runManager->SetUserInitialization(new Tst65PhysicsList);
-
-  // UserAction classes
-  //runManager->SetUserAction(new Tst65RunAction);
-  //runManager->SetUserAction(new Tst65PrimaryGeneratorAction);
-  //runManager->SetUserAction(new Tst65SteppingAction);
-  runManager->SetUserInitialization(new Tst65ActionInitialization);
-
-  if(argc==1)
-  {
-    // G4UIterminal is a (dumb) terminal.
-    G4UIsession* session = new G4UIterminal;
-    session->SessionStart();
-    delete session;
-  }
-  else
-  {
-    G4UImanager* UImanager = G4UImanager::GetUIpointer();
-    G4String command = "/control/execute ";
-    G4String fileName = argv[1];
-    UImanager->ApplyCommand(command+fileName);
-  }
-
-  G4Random::showEngineStatus();
-  delete runManager;
-  return 0;
+void Tst65ActionInitialization::BuildForMaster() const {
 }
 

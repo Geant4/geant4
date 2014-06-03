@@ -238,9 +238,9 @@ void Tst65PhysicsList::ConstructEM()
 
 // Low-energy Models
 
-#include "G4LElastic.hh"
+#include "G4HadronElastic.hh"
 #include "G4LFission.hh"
-#include "G4LCapture.hh"
+#include "G4NeutronRadCapture.hh"
 
 //#include "G4LEPionPlusInelastic.hh"
 //#include "G4LEPionMinusInelastic.hh"
@@ -381,10 +381,9 @@ void Tst65PhysicsList::ConstructHad()
 
    G4HadronElasticProcess* theElasticProcess = 
                                     new G4HadronElasticProcess;
-   G4LElastic* theElasticModel = new G4LElastic;
+   G4HadronElastic* theElasticModel = new G4HadronElastic;
    theElasticProcess->RegisterMe(theElasticModel);
-   G4HadronElasticProcess* theElasticProcess1 = 
-                                    new G4HadronElasticProcess;
+
    theParticleIterator->reset();
    while ((*theParticleIterator)()) {
       G4ParticleDefinition* particle = theParticleIterator->value();
@@ -478,8 +477,10 @@ void Tst65PhysicsList::ConstructHad()
       }
       else if (particleName == "neutron") {
          
-          // elastic scattering
-         G4LElastic* theElasticModel1 = new G4LElastic;
+         // elastic scattering
+         G4HadronElasticProcess* theElasticProcess1 = 
+                                    new G4HadronElasticProcess;
+         G4HadronElastic* theElasticModel1 = new G4HadronElastic;
          G4LENDElastic * theElasticNeutron = new G4LENDElastic(G4Neutron::Neutron());
          theElasticProcess1->RegisterMe(theElasticModel1);
          theElasticModel1->SetMinEnergy(19*MeV);
@@ -529,7 +530,7 @@ void Tst65PhysicsList::ConstructHad()
          // capture
          G4HadronCaptureProcess* theCaptureProcess =
                                     new G4HadronCaptureProcess;
-         G4LCapture* theCaptureModel = new G4LCapture;
+         G4NeutronRadCapture* theCaptureModel = new G4NeutronRadCapture;
          theCaptureModel->SetMinEnergy(19*MeV);
          theCaptureProcess->RegisterMe(theCaptureModel);
          G4LENDCapture * theLENeutronCaptureModel = new G4LENDCapture(G4Neutron::Neutron());
