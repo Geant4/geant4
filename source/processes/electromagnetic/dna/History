@@ -14,6 +14,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+03-06-2014  SI, tag emdna-V10-00-26
+                Switched to DNAion for Si in G4DNAGenericIonsManager
+
+28-05-2014  VI, SI tag emdna-V10-00-25
+                Added G4DNABornAngle and G4DNARuddAngle generators;
+                Ionisation models switch to use angular generator
+                interface
+
 12.05.2014  MK, tag emdna-V10-00-24
 	    Try to remove warnings 4
 

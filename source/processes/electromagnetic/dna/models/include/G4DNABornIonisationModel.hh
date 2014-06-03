@@ -114,9 +114,6 @@ private:
   G4double RandomizeEjectedElectronEnergyFromCumulatedDcs(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4int shell) ;
 
   G4double RandomTransferedEnergy(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4int shell) ;
-
-  void RandomizeEjectedElectronDirection(G4ParticleDefinition * aParticleDefinition, G4double incomingParticleEnergy, G4double
-                                           outgoingParticleEnergy, G4double & cosTheta, G4double & phi );
    
   G4double Interpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
    

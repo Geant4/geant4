@@ -49,6 +49,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emdna-models
     HEADERS
+        G4DNABornAngle.hh
         G4DNABornExcitationModel.hh
         G4DNABornIonisationModel.hh
         G4DNAChampionElasticModel.hh
@@ -61,6 +62,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNAMolecularReaction.hh
         G4DNAMolecularStepByStepModel.hh
         G4DNAMoleculeEncounterStepper.hh
+        G4DNARuddAngle.hh
         G4DNARuddIonisationExtendedModel.hh
         G4DNARuddIonisationModel.hh
         G4DNASancheExcitationModel.hh
@@ -68,6 +70,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNAScreenedRutherfordElasticModel.hh
         G4DNATransformElectronModel.hh
     SOURCES
+        G4DNABornAngle.cc
         G4DNABornExcitationModel.cc
         G4DNABornIonisationModel.cc
         G4DNAChampionElasticModel.cc
@@ -80,6 +83,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNAMolecularReaction.cc
         G4DNAMolecularStepByStepModel.cc
         G4DNAMoleculeEncounterStepper.cc
+        G4DNARuddAngle.cc
         G4DNARuddIonisationExtendedModel.cc
         G4DNARuddIonisationModel.cc
         G4DNASancheExcitationModel.cc

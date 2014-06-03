@@ -35,6 +35,8 @@
 #include "G4LossTableManager.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMolecularMaterial.hh"
+#include "G4DNARuddAngle.hh"
+#include "G4DeltaAngle.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -79,6 +81,9 @@ G4DNARuddIonisationExtendedModel::G4DNARuddIonisationExtendedModel(const G4Parti
     {
         G4cout << "Rudd ionisation model is constructed " << G4endl;
     }
+
+    // define default angular generator
+    SetAngularDistribution(new G4DNARuddAngle());
 
     //Mark this model as "applicable" for atomic deexcitation
     SetDeexcitationFlag(true);
@@ -512,7 +517,7 @@ G4double G4DNARuddIonisationExtendedModel::CrossSectionPerVolume(const G4Materia
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-                                                         const G4MaterialCutsCouple* /*couple*/,
+                                                         const G4MaterialCutsCouple* couple,
                                                          const G4DynamicParticle* particle,
                                                          G4double,
                                                          G4double)
@@ -586,8 +591,8 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
         G4double bindingEnergy = 0;
         bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
 
+	G4int Z = 8;
         if(fAtomDeexcitation) {
-            G4int Z = 8;
             G4AtomicShellEnumerator as = fKShell;
 
             if (ionizationShell <5 && ionizationShell >1)
@@ -619,16 +624,11 @@ void G4DNARuddIonisationExtendedModel::SampleSecondaries(std::vector<G4DynamicPa
 
         G4double secondaryKinetic = RandomizeEjectedElectronEnergy(definition,k,ionizationShell);
 
-        G4double cosTheta = 0.;
-        G4double phi = 0.;
-        RandomizeEjectedElectronDirection(definition, k,secondaryKinetic, cosTheta, phi, ionizationShell);
+	G4ThreeVector deltaDirection = 
+	  GetAngularDistribution()->SampleDirectionForShell(particle, secondaryKinetic, 
+							    Z, ionizationShell,
+							    couple->GetMaterial());
 
-        G4double sinTheta = std::sqrt(1.-cosTheta*cosTheta);
-        G4double dirX = sinTheta*std::cos(phi);
-        G4double dirY = sinTheta*std::sin(phi);
-        G4double dirZ = cosTheta;
-        G4ThreeVector deltaDirection(dirX,dirY,dirZ);
-        deltaDirection.rotateUz(primaryDirection);
 
         // Ignored for ions on electrons
         /*
@@ -712,6 +712,10 @@ G4double G4DNARuddIonisationExtendedModel::RandomizeEjectedElectronEnergy(G4Part
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+// The following section is not used anymore but is kept for memory
+// GetAngularDistribution()->SampleDirectionForShell is used instead
+
+/*
 
 void G4DNARuddIonisationExtendedModel::RandomizeEjectedElectronDirection(G4ParticleDefinition* particleDefinition, 
                                                                          G4double k,
@@ -722,28 +726,6 @@ void G4DNARuddIonisationExtendedModel::RandomizeEjectedElectronDirection(G4Parti
 {
     G4double maxSecKinetic = 0.;
     G4double maximumEnergyTransfer = 0.;
-
-    /* if (particleDefinition == G4Proton::ProtonDefinition()
-      || particleDefinition == instance->GetIon("hydrogen"))
-  {
-      if(k/MeV < 100.)maxSecKinetic = 4.* (electron_mass_c2 / proton_mass_c2) * k;
-      else {
-        G4double beta2 = 1.-(1.+k*);
-        maxSecKinetic =
-        }
-  }
-  
-  if (particleDefinition == instance->GetIon("helium")
-      || particleDefinition == instance->GetIon("alpha+")
-      || particleDefinition == instance->GetIon("alpha++"))
-  {
-      maxSecKinetic = 4.* (0.511 / 3728) * k;
-  }
-  
-  if (particleDefinition == G4Carbon::Carbon())
-  {
-      maxSecKinetic = 4.* (electron_mass_c2 / proton_mass_c2) * k / 12.;
-  }*/
 
     // ZF. generalized & relativistic version
 
@@ -770,6 +752,8 @@ void G4DNARuddIonisationExtendedModel::RandomizeEjectedElectronDirection(G4Parti
     else cosTheta = (2.*G4UniformRand())-1.;
 
 }
+
+*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

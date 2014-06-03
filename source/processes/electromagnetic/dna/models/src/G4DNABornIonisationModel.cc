@@ -33,6 +33,8 @@
 #include "G4LossTableManager.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMolecularMaterial.hh"
+#include "G4DNABornAngle.hh"
+#include "G4DeltaAngle.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -62,6 +64,9 @@ G4DNABornIonisationModel::G4DNABornIonisationModel(const G4ParticleDefinition*,
     fAtomDeexcitation = 0;
     fParticleChangeForGamma = 0;
     fpMolWaterDensity = 0;
+
+    // define default angular generator
+    SetAngularDistribution(new G4DNABornAngle());
     
     // Selection of computation method
     
@@ -371,7 +376,7 @@ G4double G4DNABornIonisationModel::CrossSectionPerVolume(const G4Material* mater
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-                                                 const G4MaterialCutsCouple* ,//must be set!
+                                                 const G4MaterialCutsCouple* couple,
                                                  const G4DynamicParticle* particle,
                                                  G4double,
                                                  G4double)
@@ -411,7 +416,7 @@ void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
         G4double pSquare = k * (totalEnergy + particleMass);
         G4double totalMomentum = std::sqrt(pSquare);
 
-        G4int ionizationShell = -1;
+        G4int ionizationShell = 0;
 	
 	if (!fasterCode) ionizationShell = RandomSelect(k,particleName);
 	
@@ -438,8 +443,8 @@ void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
         G4double bindingEnergy = 0;
         bindingEnergy = waterStructure.IonisationEnergy(ionizationShell);
 
+	G4int Z = 8;
         if(fAtomDeexcitation) {
-            G4int Z = 8;
             G4AtomicShellEnumerator as = fKShell;
 
             if (ionizationShell <5 && ionizationShell >1)
@@ -475,16 +480,10 @@ void G4DNABornIonisationModel::SampleSecondaries(std::vector<G4DynamicParticle*>
           secondaryKinetic = RandomizeEjectedElectronEnergyFromCumulatedDcs(particle->GetDefinition(),k,ionizationShell);
         //
         
-	G4double cosTheta = 0.;
-        G4double phi = 0.;
-        RandomizeEjectedElectronDirection(particle->GetDefinition(), k,secondaryKinetic, cosTheta, phi);
-
-        G4double sinTheta = std::sqrt(1.-cosTheta*cosTheta);
-        G4double dirX = sinTheta*std::cos(phi);
-        G4double dirY = sinTheta*std::sin(phi);
-        G4double dirZ = cosTheta;
-        G4ThreeVector deltaDirection(dirX,dirY,dirZ);
-        deltaDirection.rotateUz(primaryDirection);
+	G4ThreeVector deltaDirection = 
+	  GetAngularDistribution()->SampleDirectionForShell(particle, secondaryKinetic, 
+							    Z, ionizationShell,
+							    couple->GetMaterial());
 
         if (particle->GetDefinition() == G4Electron::ElectronDefinition())
         {
@@ -619,6 +618,10 @@ G4double G4DNABornIonisationModel::RandomizeEjectedElectronEnergy(G4ParticleDefi
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+// The following section is not used anymore but is kept for memory
+// GetAngularDistribution()->SampleDirectionForShell is used instead
+
+/*
 void G4DNABornIonisationModel::RandomizeEjectedElectronDirection(G4ParticleDefinition* particleDefinition, 
                                                                  G4double k,
                                                                  G4double secKinetic,
@@ -655,6 +658,7 @@ void G4DNABornIonisationModel::RandomizeEjectedElectronDirection(G4ParticleDefin
         
     }
 }
+*/
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

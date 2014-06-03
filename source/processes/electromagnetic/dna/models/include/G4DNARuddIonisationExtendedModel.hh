@@ -102,12 +102,6 @@ private:
 					  G4double incomingParticleEnergy, 
 					  G4int shell);
 
-  void RandomizeEjectedElectronDirection(G4ParticleDefinition* particleDefinition, 
-					 G4double incomingParticleEnergy, 
-					 G4double outgoingParticleEnergy, 
-					 G4double & cosTheta, 
-					 G4double & phi, G4int shell);
-
   G4double RejectionFunction(G4ParticleDefinition* particle, 
 							      G4double k, 
 							      G4double proposed_ws, 

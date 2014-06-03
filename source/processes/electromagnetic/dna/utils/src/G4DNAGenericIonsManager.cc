@@ -90,7 +90,7 @@ G4DNAGenericIonsManager :: G4DNAGenericIonsManager()
             "silicon",    28.085*GeV,       0.0*MeV,  +14.0*eplus,
             0,              +1,             0,
             0,               0,             0,
-            "nucleus",              +14,            +28,           0,
+            "DNAion",              +14,            +28,           0,
             true,                -1.0,             0,
             false,		      "",               0,
             0.0);
