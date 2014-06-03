@@ -30,7 +30,7 @@
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
@@ -87,22 +87,22 @@ void HistoManager::Book()
                   "(transmit, charged) : projected angle at exit",        //13
                   "(transmit, charged) : projected position at exit",     //14
                   "(transmit, charged) : radius at exit",                 //15
-                  "dummy","dummy","dummy","dummy",                        //16-19
+                  "dummy","dummy","dummy","dummy",                       //16-19
                   "(transmit, neutral) : kinetic energy at exit",         //20
                   "(transmit, neutral) : ener fluence: dE(MeV)/dOmega",   //21
                   "(transmit, neutral) : space angle: dN/dOmega",         //22
                   "(transmit, neutral) : projected angle at exit",        //23
-                  "dummy","dummy","dummy","dummy","dummy","dummy",        //24-29
+                  "dummy","dummy","dummy","dummy","dummy","dummy",       //24-29
                   "(reflect , charged) : kinetic energy at exit",         //30
                   "(reflect , charged) : ener fluence: dE(MeV)/dOmega",   //31
                   "(reflect , charged) : space angle: dN/dOmega",         //32
                   "(reflect , charged) : projected angle at exit",        //33
-                  "dummy","dummy","dummy","dummy","dummy","dummy",        //34-39
+                  "dummy","dummy","dummy","dummy","dummy","dummy",       //34-39
                   "(reflect , neutral) : kinetic energy at exit",         //40
                   "(reflect , neutral) : ener fluence: dE(MeV)/dOmega",   //41
                   "(reflect , neutral) : space angle: dN/dOmega",         //42
                   "(reflect , neutral) : projected angle at exit",        //43
-                  "dummy","dummy","dummy","dummy","dummy","dummy"         //44-49
+                  "dummy","dummy","dummy","dummy","dummy","dummy"        //44-49
                  };
 
   // Default values (to be reset via /analysis/h1/set command)               

@@ -15,6 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03-05-14 V.Ivant (testem5-V10-00-04)
+- TestEm5.cc - added possibility to change number on threads by
+    2nd parameter in command line
+
+03-05-14 V.Ivant (testem5-V10-00-03)
+- Correct commit
+
 02-05-14 V.Ivant (testem5-V10-00-02)
 - PhysicsList, PhysicsListMessenger - removed local cuts commands,
     instead /run/setCut and /run/setCutForAGivenParticle commands 
