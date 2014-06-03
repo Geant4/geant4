@@ -2,8 +2,8 @@
 
 # Test file name :
 testFile1="visTest-DrawVolume_0.eps"
-testFile2="visTest-SceneAdd_0.eps"
-testFile3="visTest-SceneSet_0.eps"
+testFile2="visTest-VisAdd_0.eps"
+testFile3="visTest-VisSet_0.eps"
 
 # reference folder :
 reference_folder=$2-reference
@@ -51,10 +51,12 @@ if grep "GLX" XvfbExtensions; then
 
 for testFile in $testFile1 $testFile2 $testFile3
 do
-  if [`diff $reference_folder/$testFile $output_folder/$testFile | wc -l` == 0 ]; then
+  number=`diff -w $reference_folder/$testFile $output_folder/$testFile | wc -l`
+  if [ $number -eq 0 ]; then
     echo "Check $output_folder/$testFile ....OK"
   else
     echo "ERROR: Output and reference are different for $output_folder/$testFile !"
+    echo "$number differences found"
     mail -s "G4Testing ERROR Output and reference are different for $output_folder/$testFile" garnier@lal.in2p3.fr < $output_folder/$testFile
     resCheck=1
   fi
@@ -65,7 +67,7 @@ else
   echo "No GLX extension on Xvfb server"
   XVFB_PID="`pgrep -f "$XV_CMD"`"
   if [ XVFB_PID ]; then
-    kill -9 $XVFB_PID
+    kill -9 $XVFB_PID 2>&1
   fi
   exit 0
 fi

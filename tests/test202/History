@@ -4,6 +4,19 @@ $Id$
 History file for test/test202 subdirectory
 ------------------------------------------------
 
+2nd June 2014 Laurent Garnier (test202-V10-00-28)
+- Fix sh comparison in xvfb.sh
+
+31th May 2014 Laurent Garnier (test202-V10-00-27)
+- suppress whitespaces from diff
+
+30th May 2014 Laurent Garnier (test202-V10-00-26)
+- updated xvfb.sh
+- new reference files directly from server side (avoid formatting errors)
+
+29th May 2014 Laurent Garnier (test202-V10-00-25)
+- xvfb.sh : Fix a bad name in printEPS
+
 28th May 2014 Laurent Garnier (test202-V10-00-24)
 - CMakeLists.txt : Fix bad output file name
 

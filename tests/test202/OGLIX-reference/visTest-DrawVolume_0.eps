@@ -46,69 +46,69 @@
 /LE { lineto stroke } BD
 /T  { newpath moveto lineto lineto closepath fill } BD
 /STshfill {
-     /b1 exch def /g1 exch def /r1 exch def /y1 exch def /x1 exch def
-     /b2 exch def /g2 exch def /r2 exch def /y2 exch def /x2 exch def
-     /b3 exch def /g3 exch def /r3 exch def /y3 exch def /x3 exch def
-     gsave << /ShadingType 4 /ColorSpace [/DeviceRGB]
-     /DataSource [ 0 x1 y1 r1 g1 b1 0 x2 y2 r2 g2 b2 0 x3 y3 r3 g3 b3 ] >>
-     shfill grestore } BD
+      /b1 exch def /g1 exch def /r1 exch def /y1 exch def /x1 exch def
+      /b2 exch def /g2 exch def /r2 exch def /y2 exch def /x2 exch def
+      /b3 exch def /g3 exch def /r3 exch def /y3 exch def /x3 exch def
+      gsave << /ShadingType 4 /ColorSpace [/DeviceRGB]
+      /DataSource [ 0 x1 y1 r1 g1 b1 0 x2 y2 r2 g2 b2 0 x3 y3 r3 g3 b3 ] >>
+      shfill grestore } BD
 /Tm { 3 -1 roll 8 -1 roll 13 -1 roll add add 3 div
-     3 -1 roll 7 -1 roll 11 -1 roll add add 3 div
-     3 -1 roll 6 -1 roll 9 -1 roll add add 3 div C T } BD
+      3 -1 roll 7 -1 roll 11 -1 roll add add 3 div
+      3 -1 roll 6 -1 roll 9 -1 roll add add 3 div C T } BD
 /STsplit {
-     4 index 15 index add 0.5 mul
-     4 index 15 index add 0.5 mul
-     4 index 15 index add 0.5 mul
-     4 index 15 index add 0.5 mul
-     4 index 15 index add 0.5 mul
-     5 copy 5 copy 25 15 roll
-     9 index 30 index add 0.5 mul
-     9 index 30 index add 0.5 mul
-     9 index 30 index add 0.5 mul
-     9 index 30 index add 0.5 mul
-     9 index 30 index add 0.5 mul
-     5 copy 5 copy 35 5 roll 25 5 roll 15 5 roll
-     4 index 10 index add 0.5 mul
-     4 index 10 index add 0.5 mul
-     4 index 10 index add 0.5 mul
-     4 index 10 index add 0.5 mul
-     4 index 10 index add 0.5 mul
-     5 copy 5 copy 40 5 roll 25 5 roll 15 5 roll 25 5 roll
-     STnoshfill STnoshfill STnoshfill STnoshfill } BD
+      4 index 15 index add 0.5 mul
+      4 index 15 index add 0.5 mul
+      4 index 15 index add 0.5 mul
+      4 index 15 index add 0.5 mul
+      4 index 15 index add 0.5 mul
+      5 copy 5 copy 25 15 roll
+      9 index 30 index add 0.5 mul
+      9 index 30 index add 0.5 mul
+      9 index 30 index add 0.5 mul
+      9 index 30 index add 0.5 mul
+      9 index 30 index add 0.5 mul
+      5 copy 5 copy 35 5 roll 25 5 roll 15 5 roll
+      4 index 10 index add 0.5 mul
+      4 index 10 index add 0.5 mul
+      4 index 10 index add 0.5 mul
+      4 index 10 index add 0.5 mul
+      4 index 10 index add 0.5 mul
+      5 copy 5 copy 40 5 roll 25 5 roll 15 5 roll 25 5 roll
+      STnoshfill STnoshfill STnoshfill STnoshfill } BD
 /STnoshfill {
-     2 index 8 index sub abs rThreshold gt
-     { STsplit }
-     { 1 index 7 index sub abs gThreshold gt
-       { STsplit }
-       { dup 6 index sub abs bThreshold gt
-         { STsplit }
-         { 2 index 13 index sub abs rThreshold gt
-           { STsplit }
-           { 1 index 12 index sub abs gThreshold gt
-             { STsplit }
-             { dup 11 index sub abs bThreshold gt
-               { STsplit }
-               { 7 index 13 index sub abs rThreshold gt
-                 { STsplit }
-                 { 6 index 12 index sub abs gThreshold gt
-                   { STsplit }
-                   { 5 index 11 index sub abs bThreshold gt
-                     { STsplit }
-                     { Tm }
-                     ifelse }
-                   ifelse }
-                 ifelse }
-               ifelse }
-             ifelse }
-           ifelse }
-         ifelse }
-       ifelse }
-     ifelse } BD
+      2 index 8 index sub abs rThreshold gt
+      { STsplit }
+      { 1 index 7 index sub abs gThreshold gt
+        { STsplit }
+        { dup 6 index sub abs bThreshold gt
+          { STsplit }
+          { 2 index 13 index sub abs rThreshold gt
+            { STsplit }
+            { 1 index 12 index sub abs gThreshold gt
+              { STsplit }
+              { dup 11 index sub abs bThreshold gt
+                { STsplit }
+                { 7 index 13 index sub abs rThreshold gt
+                  { STsplit }
+                  { 6 index 12 index sub abs gThreshold gt
+                    { STsplit }
+                    { 5 index 11 index sub abs bThreshold gt
+                      { STsplit }
+                      { Tm }
+                      ifelse }
+                    ifelse }
+                  ifelse }
+                ifelse }
+              ifelse }
+            ifelse }
+          ifelse }
+        ifelse }
+      ifelse } BD
 tryPS3shading
 { /shfill where
- { /ST { STshfill } BD }
- { /ST { STnoshfill } BD }
- ifelse }
+  { /ST { STshfill } BD }
+  { /ST { STnoshfill } BD }
+  ifelse }
 { /ST { STnoshfill } BD }
 ifelse
 end
