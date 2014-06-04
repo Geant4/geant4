@@ -141,6 +141,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4QGSBinaryPionBuilder.hh
         G4QGSBinaryProtonBuilder.hh
         G4QGSBuilder.hh
+	G4QGSPLundStrFragmProtonBuilder.hh
         G4QGSPNeutronBuilder.hh
         G4QGSPPiKBuilder.hh
         G4QGSPPionBuilder.hh
@@ -198,6 +199,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4QGSBinaryProtonBuilder.cc
         G4QGSBuilder.cc
         G4QGSPNeutronBuilder.cc
+	G4QGSPLundStrFragmProtonBuilder.cc
         G4QGSPPiKBuilder.cc
         G4QGSPPionBuilder.cc
         G4QGSPKaonBuilder.cc
