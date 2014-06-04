@@ -42,6 +42,14 @@
 // Version 1.0, 05/02/2004, Fan Lei, Created.
 //    Based on the G4GeneralParticleSource class in Geant4 v6.0
 //
+//
+//  26/03/2014, Andrew Green.
+//      Modification to used STL vectors instead of C-style arrays. This should save some space,
+//      particularly when the blackbody function is not used. Also moved to dynamically allocated
+//      memory in the LinearInterpolation, ExpInterpolation and LogInterpolation functions. Again,
+//      this will save space if these functions are unused.
+//
+//
 ///////////////////////////////////////////////////////////////////////////////
 //
 //
@@ -140,7 +148,8 @@
 #include "G4ParticleDefinition.hh"
 #include "G4DataInterpolation.hh"
 
-//
+#include <vector>
+
 #include "G4SPSRandomGenerator.hh"
 
 class G4SPSEneDistribution {
@@ -149,28 +158,28 @@ public:
 	~G4SPSEneDistribution();
 
 	void SetEnergyDisType(G4String);
-	inline G4String GetEnergyDisType() {
+	inline G4String GetEnergyDisType()
+    {
 		return EnergyDisType;
 	}
-	;
 	void SetEmin(G4double);
-	inline G4double GetEmin() {
+	inline G4double GetEmin()
+    {
 		return Emin;
 	}
-	;
-	inline G4double GetArbEmin() {
+	inline G4double GetArbEmin()
+    {
 		return ArbEmin;
 	}
-	;
 	void SetEmax(G4double);
-	inline G4double GetEmax() {
+	inline G4double GetEmax()
+    {
 		return Emax;
 	}
-	;
-	inline G4double GetArbEmax() {
+	inline G4double GetArbEmax()
+    {
 		return ArbEmax;
 	}
-	;
 	void SetMonoEnergy(G4double);
 	void SetAlpha(G4double);
 	void SetBiasAlpha(G4double);
@@ -187,62 +196,75 @@ public:
 	void InputEnergySpectra(G4bool);
 	void InputDifferentialSpectra(G4bool);
 	void ArbInterpolate(G4String);
-	inline G4String GetIntType() {
+	inline G4String GetIntType()
+    {
 		return IntType;
 	}
 	;
 	void Calculate();
 	//
-	void SetBiasRndm(G4SPSRandomGenerator* a) {
+	void SetBiasRndm(G4SPSRandomGenerator* a)
+    {
 		eneRndm = a;
 	}
 	;
 	// method to re-set the histograms
 	void ReSetHist(G4String);
 	// Set the verbosity level.
-	void SetVerbosity(G4int a) {
+	void SetVerbosity(G4int a)
+    {
 		verbosityLevel = a;
 	}
 	;
 	//x
-	G4double GetWeight() {
+	G4double GetWeight()
+    {
 		return weight;
 	}
 
-	G4double GetMonoEnergy() {
+	G4double GetMonoEnergy()
+    {
 		return MonoEnergy;
 	}
 	; //Mono-energteic energy
-	G4double GetSE() {
+	G4double GetSE()
+    {
 		return SE;
 	}
 	; // Standard deviation for Gaussion distrbution in energy
-	G4double Getalpha() {
+	G4double Getalpha()
+    {
 		return alpha;
 	}
 	; // alpha (pow)
-	G4double GetEzero() {
+	G4double GetEzero()
+    {
 		return Ezero;
 	}
 	; // E0 (exp)
-	G4double GetTemp() {
+	G4double GetTemp()
+    {
 		return Temp;
 	}
 	; // Temp (bbody,brem)
-	G4double Getgrad() {
+	G4double Getgrad()
+    {
 		return grad;
 	}
 	; // gradient and intercept for linear spectra
-	G4double Getcept() {
+	G4double Getcept()
+    {
 		return cept;
 	}
 	;
 
-	inline G4PhysicsOrderedFreeVector GetUserDefinedEnergyHisto() {
+	inline G4PhysicsOrderedFreeVector GetUserDefinedEnergyHisto()
+    {
 		return UDefEnergyH;
 	}
 	;
-	inline G4PhysicsOrderedFreeVector GetArbEnergyHisto() {
+	inline G4PhysicsOrderedFreeVector GetArbEnergyHisto()
+    {
 		return ArbEnergyH;
 	}
 	;
@@ -275,6 +297,13 @@ private:
 	void GenArbPointEnergies();
 	// converts energy per nucleon to energy.
 	void ConvertEPNToEnergy();
+    
+    void InitHists()
+    {
+		BBHist = new std::vector<G4double>(10001, 0.0);
+        Bbody_x = new std::vector<G4double>(10001, 0.0);
+        histInit = true;
+    }
 
 
 private:
@@ -287,8 +316,8 @@ private:
 	G4double alpha, Ezero, Temp; // alpha (pow), E0 (exp) and Temp (bbody,brem)
 	G4double biasalpha; // biased power index
 	G4double grad, cept; // gradient and intercept for linear spectra
-        G4double prob_norm; // normalisation factor use in calculate the probability 
-        G4bool Biased; // true - biased to power-law
+    G4double prob_norm; // normalisation factor use in calculate the probability
+    G4bool Biased; // true - biased to power-law
 	G4bool EnergySpec; // true - energy spectra, false - momentum spectra
 	G4bool DiffSpec; // true - differential spec, false integral spec
 	//G4bool ApplyRig; // false no rigidity cutoff, true then apply one
@@ -300,11 +329,27 @@ private:
 	G4PhysicsOrderedFreeVector IPDFArbEnergyH; // IPDF for Arb
 	G4PhysicsOrderedFreeVector EpnEnergyH;
 	G4double CDGhist[3]; // cumulative histo for cdg
-	G4double BBHist[10001], Bbody_x[10001];
+    
+    //AG: Begin edit to use STL vectors.
+//	G4double BBHist[10001], Bbody_x[10001];
+    std::vector<G4double>* BBHist;
+    std::vector<G4double>* Bbody_x;
+    G4bool histInit;
+    G4bool histCalcd;
+    
+    //AG: Edit here to use dynamic memory, will save space inless these functions are used.
 	G4String IntType; // Interpolation type
-	G4double Arb_grad[1024], Arb_cept[1024]; // grad and cept for 1024 segments
-	G4double Arb_alpha[1024], Arb_Const[1024]; // alpha and constants
-	G4double Arb_ezero[1024]; // ezero
+//	G4double Arb_grad[1024], Arb_cept[1024]; // grad and cept for 1024 segments AG: Switched to DMA
+    G4double* Arb_grad;
+    G4double* Arb_cept;
+    G4bool Arb_grad_cept_flag;
+//	G4double Arb_alpha[1024], Arb_Const[1024]; // alpha and constants AG: Switched to DMA
+    G4double* Arb_alpha;
+    G4double* Arb_Const;
+    G4bool Arb_alpha_Const_flag;
+//	G4double Arb_ezero[1024]; // ezero AG: Switched to DMA
+    G4double* Arb_ezero;
+    G4bool Arb_ezero_flag;
 	G4double ArbEmin, ArbEmax; // Emin and Emax for the whole arb distribution used primarily for debug.
 
 	G4double particle_energy;

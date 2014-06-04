@@ -45,6 +45,11 @@
 //     - old commands have been retained for backward compatibility, will be
 //       removed in the future. 
 //
+//
+// 20/03/2014, Andrew Green - Modifications for MT
+//      - Added a check to force only one thread to parse the macro file
+//          This information is fed into the GPS which now has a split mechanism for the large data (hence need to only read in 1 thread)
+//      - Thread ID used is 0, so *should* work under interactive mode as well - may need checking, or the may be another way...
 ///////////////////////////////////////////////////////////////////////////////
 //
 
@@ -79,7 +84,10 @@ G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   particleTable = G4ParticleTable::GetParticleTable();
   histtype = "biasx";
 
-  gpsDirectory = new G4UIdirectory("/gps/");
+  //UI Commands only for master
+    G4bool broadcast = false;
+  gpsDirectory = new G4UIdirectory("/gps/",broadcast);
+    
   gpsDirectory->SetGuidance("General Paricle Source control commands.");
   //  gpsDirectory->SetGuidance(" The first 9 commands are the same as in G4ParticleGun ");
 
@@ -1341,7 +1349,7 @@ void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4Strin
     particleTable->DumpTable(); 
   }
   else if( command==addsourceCmd )
-    { 
+    {
       fGPS->AddaSource(addsourceCmd->GetNewDoubleValue(newValues));
     }
   else if( command==listsourceCmd )

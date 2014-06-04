@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 3rd, 2014 A.Dotti (event-V10-00-02)
+- First implementation of memory reduction mechanism in MT 
+  courtesy of Andrew Green (Manchester U).
+
 February 21st, 2014  M.Asai (event-V10-00-01)
 - G4SPSPosDistribution::IsSourceConfined() : Add protection against
   null pointer. Addressing to Bug report #1255.

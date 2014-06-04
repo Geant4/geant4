@@ -52,6 +52,12 @@
 // distributions.  It is used by the General Particle source class
 // and it is derived from G4VPrimaryGenerator.
 //
+// Note on thread safety:
+//    G4SingleParticleSource instances can be shared among threads. GeneratePrimaryVertex
+//    is protected via a mutex because underlying generators are not assumed to be thread-safe.
+//    Note that internal status of this class is assumed to be changed by master thread (typically
+//    via UI commands).
+//
 ///////////////////////////////////////////////////////////////////////////////
 //
 // MEMBER FUNCTIONS
@@ -119,6 +125,7 @@
 #include "G4SPSAngDistribution.hh"
 #include "G4SPSEneDistribution.hh"
 #include "G4SPSRandomGenerator.hh"
+#include "G4Threading.hh"
 
 class G4SingleParticleSource: public G4VPrimaryGenerator {
 public:
@@ -221,6 +228,8 @@ private:
 	// Verbosity
 	G4int verbosityLevel;
 
+    //This can be a shared resource, this mutex is used in GeneratePrimaryVertex
+    G4Mutex mutex;
 };
 
 #endif

@@ -86,6 +86,7 @@ GEANT4_DEFINE_MODULE(NAME G4event
         evmandefs.hh
         evtdefs.hh
         trajectoryControl.hh
+	G4GeneralParticleSourceData.hh
     SOURCES
         G4AdjointPosOnPhysVolGenerator.cc
         G4AdjointPrimaryGenerator.cc
@@ -115,6 +116,7 @@ GEANT4_DEFINE_MODULE(NAME G4event
         G4UserEventAction.cc
         G4UserStackingAction.cc
         G4VPrimaryGenerator.cc
+	G4GeneralParticleSourceData.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
