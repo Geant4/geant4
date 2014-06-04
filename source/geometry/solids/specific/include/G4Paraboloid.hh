@@ -60,6 +60,7 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4VSolid.hh"
+#include "G4Polyhedron.hh"
 
 class G4Paraboloid : public G4VSolid
 {

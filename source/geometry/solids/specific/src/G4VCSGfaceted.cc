@@ -105,7 +105,7 @@ G4VCSGfaceted::G4VCSGfaceted( const G4VCSGfaceted &source )
 //
 // Assignment operator
 //
-const G4VCSGfaceted &G4VCSGfaceted::operator=( const G4VCSGfaceted &source )
+G4VCSGfaceted &G4VCSGfaceted::operator=( const G4VCSGfaceted &source )
 {
   if (&source == this) { return *this; }
   
@@ -167,6 +167,7 @@ void G4VCSGfaceted::DeleteStuff()
 
     delete [] faces;
   }
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 

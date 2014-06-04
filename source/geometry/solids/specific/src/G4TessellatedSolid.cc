@@ -190,6 +190,7 @@ void G4TessellatedSolid::DeleteObjects ()
   G4int size = fFacets.size();
   for (G4int i = 0; i < size; ++i)  { delete fFacets[i]; }
   fFacets.clear();
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -210,6 +211,7 @@ void G4TessellatedSolid::CopyObjects (const G4TessellatedSolid &ts)
     AddFacet(facetClone);
   }
   if (ts.GetSolidClosed()) SetSolidClosed(true);
+  fpPolyhedron = GetPolyhedron();
 }
 
 ///////////////////////////////////////////////////////////////////////////////

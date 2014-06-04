@@ -200,6 +200,7 @@ G4GenericTrap::G4GenericTrap(const G4GenericTrap& rhs)
    if (rhs.fTessellatedSolid && !fIsTwisted )
    { fTessellatedSolid = CreateTessellatedSolid(); } 
 #endif
+   fpPolyhedron = GetPolyhedron();
 }
 
 // --------------------------------------------------------------------
@@ -216,7 +217,7 @@ G4GenericTrap& G4GenericTrap::operator = (const G4GenericTrap& rhs)
 
    // Copy data
    //
-   fpPolyhedron = 0; halfCarTolerance = rhs.halfCarTolerance;
+   halfCarTolerance = rhs.halfCarTolerance;
    fDz = rhs.fDz; fVertices = rhs.fVertices;
    fIsTwisted = rhs.fIsTwisted; fTessellatedSolid = 0;
    fMinBBoxVector = rhs.fMinBBoxVector; fMaxBBoxVector = rhs.fMaxBBoxVector;
@@ -228,6 +229,7 @@ G4GenericTrap& G4GenericTrap::operator = (const G4GenericTrap& rhs)
    if (rhs.fTessellatedSolid && !fIsTwisted )
    { delete fTessellatedSolid; fTessellatedSolid = CreateTessellatedSolid(); } 
 #endif
+   delete fpPolyhedron; fpPolyhedron = 0; fpPolyhedron = GetPolyhedron(); 
 
    return *this;
 }

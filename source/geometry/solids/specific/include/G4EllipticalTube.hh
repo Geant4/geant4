@@ -51,6 +51,7 @@
 #define G4EllipticalTube_hh
 
 #include "G4VSolid.hh"
+#include "G4Polyhedron.hh"
 
 class G4EllipticalTube : public G4VSolid
 {

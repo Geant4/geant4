@@ -71,6 +71,7 @@ G4TwistedBox::~G4TwistedBox()
 G4TwistedBox::G4TwistedBox(const G4TwistedBox& rhs)
   : G4VTwistedFaceted(rhs)
 {
+  fpPolyhedron = GetPolyhedron();
 }
 
 
@@ -85,6 +86,7 @@ G4TwistedBox& G4TwistedBox::operator = (const G4TwistedBox& rhs)
    // Copy base class data
    //
    G4VTwistedFaceted::operator=(rhs);
+   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }
