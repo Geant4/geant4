@@ -89,7 +89,7 @@ class G4LogicalBorderSurface : public G4LogicalSurface
   private:
 
     G4LogicalBorderSurface(const G4LogicalBorderSurface &right);
-    const G4LogicalBorderSurface& operator=(const G4LogicalBorderSurface &right);
+    G4LogicalBorderSurface& operator=(const G4LogicalBorderSurface &right);
 
   private:
 

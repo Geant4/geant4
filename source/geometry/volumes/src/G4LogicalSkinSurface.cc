@@ -83,7 +83,7 @@ G4LogicalSkinSurface::~G4LogicalSkinSurface()
 // Operators
 //
 
-const G4LogicalSkinSurface&
+G4LogicalSkinSurface&
 G4LogicalSkinSurface::operator=(const G4LogicalSkinSurface& right)
 {
   if (&right == this) return *this;
