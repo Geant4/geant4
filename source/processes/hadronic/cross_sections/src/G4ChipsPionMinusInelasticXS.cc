@@ -79,7 +79,7 @@ G4bool G4ChipsPionMinusInelasticXS::IsIsoApplicable(const G4DynamicParticle* Pt,
 				 const G4Element*,
 				 const G4Material*)
 {
-  G4ParticleDefinition* particle = Pt->GetDefinition();
+  const G4ParticleDefinition* particle = Pt->GetDefinition();
   if (particle == G4PionMinus::PionMinus()      ) return true;
   return false;
 }

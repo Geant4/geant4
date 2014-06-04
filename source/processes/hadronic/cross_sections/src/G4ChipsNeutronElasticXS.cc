@@ -134,7 +134,7 @@ G4bool G4ChipsNeutronElasticXS::IsIsoApplicable(const G4DynamicParticle* Pt, G4i
 				 const G4Element*,
 				 const G4Material*)
 {
-  G4ParticleDefinition* particle = Pt->GetDefinition();
+  const G4ParticleDefinition* particle = Pt->GetDefinition();
   if (particle == G4Proton::Proton()      ) return true;
   return false;
 }
