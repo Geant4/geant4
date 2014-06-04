@@ -615,6 +615,7 @@ double UPolycone::DistanceToOut(const UVector3&  p, const UVector3& v,
   return totalDistance;
 }
 
+/*
 double UPolycone::SafetyFromInside(const UVector3& p, bool) const
 {
   int index = UVoxelizer::BinarySearch(fZs, p.z);
@@ -646,7 +647,56 @@ double UPolycone::SafetyFromInside(const UVector3& p, bool) const
   }
   return minSafety;
 }
+*/
 
+double UPolycone::SafetyFromInside(const UVector3& p, bool) const
+{
+  int index = UVoxelizer::BinarySearch(fZs, p.z);
+  if (index < 0 || index > fMaxSection) return 0;
+  
+  double rho=std::sqrt(p.x*p.x+p.y*p.y);
+  double safeR = SafetyFromInsideSection(index,rho, p);
+  double safeDown = p.z-fZs[index];
+  double safeUp = fZs[index+1]-p.z;
+  
+  double minSafety =safeR;
+  
+  if (minSafety == UUtils::kInfinity) return 0;
+  if (minSafety < 1e-6) return 0;
+ 
+  for (int i = index + 1; i <= fMaxSection; ++i)
+  {
+    double dz1 = fZs[i] - p.z;
+    double dz2 = fZs[i+1] - p.z;
+    safeR = SafetyFromOutsideSection(i,rho, p); 
+    if (safeR < 0.) { safeUp=dz1; break; } 
+    if (dz1 < dz2) { safeR = std::sqrt(safeR*safeR+dz1*dz1); }
+    else {safeR = std::sqrt(safeR*safeR+dz1*dz1); }
+    if (safeR < dz1) { safeUp = safeR; break; }
+    if (safeR < dz2) { safeUp = safeR; break; }
+    safeUp=dz2;
+  }
+
+  if (index > 0)
+  {
+    for (int i = index - 1; i >= 0; --i)
+    {
+      double dz1 = p.z-fZs[i+1];
+      double dz2 = p.z-fZs[i];
+      safeR = SafetyFromOutsideSection(i,rho, p); 
+      if (safeR < 0.) { safeDown=dz1; break; } 
+      if(dz1 < dz2) { safeR = std::sqrt(safeR*safeR+dz1*dz1); }
+      else { safeR = std::sqrt(safeR*safeR+dz1*dz1); }
+      if (safeR < dz1) { safeDown = safeR; break; }
+      if (safeR < dz2) { safeDown = safeR; break; }
+      safeDown=dz2;
+    }
+  }
+  if (safeUp < minSafety) minSafety=safeUp;
+  if (safeDown < minSafety) minSafety=safeDown;
+  
+  return minSafety;
+}
 
 double UPolycone::SafetyFromOutside(const UVector3& p, bool aAccurate) const
 {

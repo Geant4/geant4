@@ -28,8 +28,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "UVector3.hh"
-
+struct UVector3;
 class UTransform3D;
 
 enum ExceptionSeverity
@@ -124,10 +123,6 @@ namespace UUtils
 
     T fData;
   };
-
-  int SaveVectorToExternalFile(const std::vector<double>& vector, const std::string& filename);
-  int SaveVectorToExternalFile(const std::vector<UVector3>& vector, const std::string& filename);
-  int SaveVectorToExternalFile(const std::vector<int>& vector, const std::string& filename);
 
   std::string ToString(int number);
   std::string ToString(double number);

@@ -129,7 +129,7 @@ double UTrd::SafetyFromInside(const UVector3& p, bool aAccurate) const
 
 
 
-inline double UTrd::SafetyFromInsideAccurate(const UVector3& p) const
+double UTrd::SafetyFromInsideAccurate(const UVector3& p) const
 {
   // computes the closest distance from given point to this shape, according
   // to option. The matching point on the shape is stored in spoint.
@@ -206,7 +206,7 @@ double UTrd::SafetyFromOutside(const UVector3& p, bool aAccurate) const
   return safe;
 }
 
-inline double UTrd::SafetyFromOutsideAccurate(const UVector3& p) const
+double UTrd::SafetyFromOutsideAccurate(const UVector3& p) const
 {
   // computes the closest distance from given point to this shape, according
   // to option. The matching point on the shape is stored in spoint.
@@ -552,8 +552,8 @@ double UTrd::DistanceToIn(const UVector3& p,
 */
 
 
-inline double UTrd::DistanceToOut(const UVector3&  p, const UVector3& v,
-                                  UVector3& n, bool& aConvex, double /*aPstep*/) const
+double UTrd::DistanceToOut(const UVector3&  p, const UVector3& v,
+                                 UVector3& n, bool& aConvex, double /*aPstep*/) const
 {
   ESide side = kUndefined, snside = kUndefined;
   aConvex = true;
@@ -1044,7 +1044,7 @@ bool UTrd::Normal(const UVector3& p, UVector3& norm) const
 // Algorithm for SurfaceNormal() following the original specification
 // for points not on the surface
 
-inline UVector3 UTrd::ApproxSurfaceNormal(const UVector3& p) const
+UVector3 UTrd::ApproxSurfaceNormal(const UVector3& p) const
 {
   UVector3 norm;
   double z, tanx, secx, newpx, widx;

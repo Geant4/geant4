@@ -52,9 +52,8 @@ class UVoxelizer
 
   public:
 
-    template <typename T>
-
     // Binary search
+    template <typename T>
     static inline int BinarySearch(const std::vector<T>& vec, T value)
     {
       // Binary search in an array of doubles. If match is found, function returns
@@ -64,7 +63,6 @@ class UVoxelizer
       int res = std::upper_bound(begin, end, value) - begin - 1;
       return res;
     }
-//  int BinarySearch(int n, const T *array, T value);
 
 #ifdef USOLIDSONLY
     void Voxelize(std::vector<VUSolid*>& solids, std::vector<UTransform3D*>& transforms);
@@ -196,28 +194,6 @@ class UVoxelizer
       return  sx * sy * sz;
     }
 
-    /*
-    inline int GetCandidates(std::vector<int> &curVoxel, std::vector<int> *&candidates, std::vector<int> &space) const
-    {
-      int voxelsIndex;
-      int emptys = fEmpty.GetNbits();
-      if (!emptys || ((voxelsIndex = GetVoxelsIndex(curVoxel)) >= 0) && !fEmpty[voxelsIndex])
-      {
-        if (emptys)
-        {
-          candidates = &fCandidates[voxelsIndex];
-        }
-        else
-        {
-          GetCandidatesVoxelArray(curVoxel, space, NULL);
-          candidates = &space;
-        }
-        return candidates->size();
-      }
-      return 0;
-    }
-    */
-
     inline const std::vector<int>& GetCandidates(std::vector<int>& curVoxel) const
     {
       int voxelsIndex = GetVoxelsIndex(curVoxel);
@@ -258,6 +234,8 @@ class UVoxelizer
 
     void BuildBoundingBox(UVector3& amin, UVector3& amax, double tolerance = 0);
 
+    static void FindComponentsFastest(unsigned int mask,
+                                      std::vector<int> &list, int i);
   private:
 
     static int fDefaultVoxelsCount;
@@ -300,7 +278,7 @@ class UVoxelizer
 
     int fNPerSlice;
 
-    std::vector<UVoxelBox> fBoxes;                // Array of box limits on the 3 cartesian axis
+    std::vector<UVoxelBox> fBoxes; // Array of box limits on the 3 cartesian axis
 
     std::vector<double> fBoundaries[3]; // Sorted and if need skimmed fBoundaries along X,Y,Z axis
 
@@ -322,27 +300,5 @@ class UVoxelizer
 
     UBits fEmpty;
 };
-
-
-#ifdef USOLIDSONLY
-
-/*
-class UVoxelCandidatesIterator
-{
-private:
-  unsigned int mask;
-  int curInt, curBit, carNodes, n, sliceX, sliceY, sliceZ;
-  unsigned int *maskX, *maskY, *maskZ;
-  unsigned int *maskXLeft, *maskYLeft, *maskZLeft;
-  bool nextAvailable;
-
-public:
-  UVoxelCandidatesIterator(const UVoxelizer &f, const UVector3 &point);
-
-  int Next();
-};
-*/
-
-#endif // USOLIDSONLY
 
 #endif

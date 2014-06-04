@@ -1030,7 +1030,8 @@ double UTubs::DistanceToIn(const UVector3& p, const UVector3& v, double) const
 double UTubs::SafetyFromOutside(const UVector3& p, bool aAccurate) const
 {
   double safe = 0.0, rho, safe1, safe2, safe3;
-  double safePhi, cosPsi;
+  double safePhi;
+  bool outside;
 
   rho  = std::sqrt(p.x * p.x + p.y * p.y);
   safe1 = fRMin - rho;
@@ -1052,28 +1053,13 @@ double UTubs::SafetyFromOutside(const UVector3& p, bool aAccurate) const
 
   if ((!fPhiFullTube) && (rho))
   {
-    // Psi=angle from central phi to point
-    //
-    cosPsi = (p.x * fCosCPhi + p.y * fSinCPhi) / rho;
-
-    if (cosPsi < std::cos(fDPhi * 0.5))
+    safePhi = SafetyToPhi(p,rho,outside);
+    if ((outside) && (safePhi > safe))
     {
-      // Point lies outside phi range
-
-      if ((p.y * fCosCPhi - p.x * fSinCPhi) <= 0)
-      {
-        safePhi = std::fabs(p.x * fSinSPhi - p.y * fCosSPhi);
-      }
-      else
-      {
-        safePhi = std::fabs(p.x * fSinEPhi - p.y * fCosEPhi);
-      }
-      if (safePhi > safe)
-      {
-        safe = safePhi;
-      }
+      safe = safePhi;
     }
   }
+
   if (safe < 0)
   {
     safe = 0; return safe; // point is Inside;
@@ -1554,14 +1540,13 @@ double UTubs::DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, b
   return snxt;
 }
 
-
 //////////////////////////////////////////////////////////////////////////
 //
 // Calculate distance (<=actual) to closest surface of shape from inside
 
 double UTubs::SafetyFromInside(const UVector3& p, bool) const
 {
-  double safe = 0.0, rho, safeR1, safeR2, safeZ, safePhi;
+  double safe = 0.0, rho, safeZ;
   rho = std::sqrt(p.x * p.x + p.y * p.y);
 
 #ifdef UDEBUG
@@ -1579,57 +1564,21 @@ double UTubs::SafetyFromInside(const UVector3& p, bool) const
                       Warning, 1, "Point p is outside !?");
   }
 #endif
-
-  if (fRMin)
-  {
-    safeR1 = rho   - fRMin;
-    safeR2 = fRMax - rho;
-
-    if (safeR1 < safeR2)
-    {
-      safe = safeR1;
-    }
-    else
-    {
-      safe = safeR2;
-    }
-  }
-  else
-  {
-    safe = fRMax - rho;
-  }
+  safe = SafetyFromInsideR(p, rho);
   safeZ = fDz - std::fabs(p.z);
 
   if (safeZ < safe)
   {
     safe = safeZ;
   }
-
-  // Check if phi divided, Calc distances closest phi plane
-  //
-  if (!fPhiFullTube)
-  {
-    if (p.y * fCosCPhi - p.x * fSinCPhi <= 0)
-    {
-      safePhi = -(p.x * fSinSPhi - p.y * fCosSPhi);
-    }
-    else
-    {
-      safePhi = (p.x * fSinEPhi - p.y * fCosEPhi);
-    }
-    if (safePhi < safe)
-    {
-      safe = safePhi;
-    }
-  }
+  
   if (safe < 0)
   {
     safe = 0;
   }
-
+  
   return safe;
 }
-
 
 //////////////////////////////////////////////////////////////////////////
 //

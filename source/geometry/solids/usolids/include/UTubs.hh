@@ -86,11 +86,17 @@ class UTubs : public VUSolid
 
     bool Normal(const UVector3& p, UVector3& normal) const;
 
-    double DistanceToIn(const UVector3& p, const UVector3& v, double aPstep = UUtils::kInfinity) const;
+    double DistanceToIn(const UVector3& p, const UVector3& v,
+                        double aPstep = UUtils::kInfinity) const;
     double SafetyFromInside(const UVector3& p, bool precise = false) const;
-    double DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n, bool& validNorm, double aPstep = UUtils::kInfinity) const;
-    double SafetyFromOutside(const UVector3& p, bool precise = false) const;
-
+    double DistanceToOut(const UVector3& p, const UVector3& v, UVector3& n,
+                        bool& validNorm, double aPstep=UUtils::kInfinity) const;
+    double SafetyFromOutside(const UVector3& p, bool precise = false ) const;
+ 
+    inline double SafetyFromInsideR(const UVector3& p, const double rho,
+                                    bool precise = false) const;
+    inline double SafetyFromOutsideR(const UVector3& p, const double rho,
+                                     bool precise = false) const;
     UGeometryType GetEntityType() const;
 
     UVector3 GetPointOnSurface() const;
@@ -99,7 +105,6 @@ class UTubs : public VUSolid
 
     std::ostream& StreamInfo(std::ostream& os) const;
 
-//  void Extent (EAxisType aAxis, double &aMin, double &aMax) const;
     void Extent(UVector3& aMin, UVector3& aMax) const;
 
     virtual void GetParametersList(int /*aNumber*/, double* /*aArray*/) const;
@@ -152,6 +157,7 @@ class UTubs : public VUSolid
     // Algorithm for SurfaceNormal() following the original
     // specification for points not on the surface
 
+     inline double SafetyToPhi(const UVector3& p, const double rho, bool& outside) const;
   protected:
 
     double fCubicVolume, fSurfaceArea;
