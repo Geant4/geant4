@@ -36,8 +36,8 @@
 #include "G4ChargeState.hh"
 
 G4ChargeState::G4ChargeState(G4double charge,
-                             G4double spin,
                              G4double magnetic_dipole_moment,
+                             G4double spin,
                              G4double electric_dipole_moment,
                              G4double magnetic_charge)
 {
@@ -70,11 +70,11 @@ G4ChargeState& G4ChargeState::operator = ( const G4ChargeState& right )
   return *this;
 }
 
-void G4ChargeState::SetChargeAndMoments(G4double charge,
-                                        G4double spin,
-                                        G4double magnetic_dipole_moment,
-                                        G4double electric_dipole_moment,
-                                        G4double magnetic_charge )
+void G4ChargeState::SetChargeSpinMoments(G4double charge,
+                                         G4double spin,
+                                         G4double magnetic_dipole_moment,
+                                         G4double electric_dipole_moment,
+                                         G4double magnetic_charge )
    //  Revise the charge and potentially all moments.
    //   By default do not change mdm, edm, mag charge.
 {
