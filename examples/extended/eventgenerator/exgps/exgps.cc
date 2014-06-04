@@ -49,7 +49,7 @@
 
 
 #include "exGPSGeometryConstruction.hh"
-#include "exGPSPhysicsList.hh"
+#include "QGSP_BIC_HP.hh"
 #include "exGPSPrimaryGeneratorAction.hh"
 #include "exGPSRunAction.hh"
 #include "exGPSEventAction.hh"
@@ -69,7 +69,7 @@ int main(int argc,char** argv) {
   // set mandatory initialization classes
   exGPSGeometryConstruction* detector = new exGPSGeometryConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new exGPSPhysicsList);
+  runManager->SetUserInitialization(new QGSP_BIC_HP());
   runManager->SetUserInitialization(new exGPSActionInitialization());
   
   //Initialize G4 kernel

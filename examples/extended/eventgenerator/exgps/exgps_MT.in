@@ -1,6 +1,4 @@
 
-/run/numberOfThreads 3
-
 # focused beam
 #
 /gps/verbose 0

@@ -34,7 +34,7 @@
 #include "G4VUserActionInitialization.hh"
 
 class exGPSGeometryConstruction;
-
+class G4GeneralParticleSource;
 /// Action initialization class.
 ///
 
@@ -46,7 +46,8 @@ class exGPSActionInitialization : public G4VUserActionInitialization
 
     virtual void BuildForMaster() const;
     virtual void Build() const;
-
+private:
+    G4GeneralParticleSource* masterGPS;
 };
 
 #endif

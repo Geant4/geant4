@@ -12,6 +12,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3/06/2014 A. Dotti (exgps-V10-00-01)
+- Implemented changes needed for new GPS that substantially reduces
+  memory footprint in MT mode. Requires event-V10-00-02
+
+31/05/2014  L.Desorgher (exgps-V10-00-00)
+- Migrate to use of G4 built-in physics list
+- Remove  drawTracks and printModulo commands and adapt the macro files to use 
+  the equivalent Geant4 built-in macro commands
+
 3/12/2013  I.Hrivnacova (exgps-V09-06-05)
 - Fixed file descriptions (for Doxygen)
 

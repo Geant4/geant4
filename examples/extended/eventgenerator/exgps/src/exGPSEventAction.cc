@@ -30,11 +30,7 @@
 //
 
 #include "exGPSEventAction.hh"
-#include "exGPSEventActionMessenger.hh"
-
 #include "exGPSHistoManager.hh"
-
-
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "G4ios.hh"
@@ -43,33 +39,17 @@
 #include "G4PhysicalConstants.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 exGPSEventAction::exGPSEventAction(exGPSHistoManager* histoManager)
 :G4UserEventAction(),
- fDrawFlag("all"), fPrintModulo(1000), fEventMessenger(NULL),
  fexGPSHistoManager(histoManager)
-{
- fEventMessenger = new exGPSEventActionMessenger(this);
+{;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 exGPSEventAction::~exGPSEventAction()
-{
-  delete fEventMessenger;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void exGPSEventAction::BeginOfEventAction(const G4Event* evt)
-{
-  
-  G4int evtNb = evt->GetEventID();
-  if (evtNb%fPrintModulo == 0)
-    { 
-      G4cout << "\n---> Begin of event: " << evtNb << G4endl;
-      //  HepRandom::showEngineStatus();
-    }
-    
+{;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -77,7 +57,6 @@ void exGPSEventAction::BeginOfEventAction(const G4Event* evt)
 void exGPSEventAction::EndOfEventAction(const G4Event* evt)
 {
   //  G4int evtNb = evt->GetEventID();
-
   G4int nVertex = evt->GetNumberOfPrimaryVertex();
   for ( G4int j = 0; j < nVertex; j++) { 
     G4int nPart =  evt->GetPrimaryVertex(j)->GetNumberOfParticle(); 

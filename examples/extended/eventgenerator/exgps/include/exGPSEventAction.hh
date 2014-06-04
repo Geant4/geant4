@@ -35,7 +35,6 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class exGPSEventActionMessenger;
 class exGPSHistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -45,17 +44,9 @@ class exGPSEventAction : public G4UserEventAction
   public:
     exGPSEventAction(exGPSHistoManager* histoManager) ;
     virtual ~exGPSEventAction();
-
-    virtual void   BeginOfEventAction(const G4Event*);
     virtual void   EndOfEventAction(const G4Event*);
     
-    void SetDrawFlag   (G4String val)  {fDrawFlag = val;};
-    void SetPrintModulo(G4int    val)  {fPrintModulo = val;};
-    
   private:
-    G4String                    fDrawFlag;
-    G4int                       fPrintModulo;                         
-    exGPSEventActionMessenger*  fEventMessenger;
     exGPSHistoManager* fexGPSHistoManager;
 };
 
