@@ -1,16 +1,11 @@
 #include "ProcessWrapper.hh"
 
-
-// -> #include "G4TheoFSGenerator.hh"
-
 ProcessWrapper::~ProcessWrapper()
 {
-
-   
+  
    // need to see how desctructors of other data members work !!!...
    // ... to avoid potential memory leaks...
    //
-   if ( fInteractionModel ) delete fInteractionModel;
 
 }
 
@@ -30,13 +25,20 @@ G4double ProcessWrapper::PostStepGetPhysicalInteractionLength(const G4Track&,
 G4VParticleChange* ProcessWrapper::PostStepDoIt( const G4Track& track, const G4Step& )
 {
 
-  if ( !fInteractionModel ) return 0;  
-    
+  G4Material* mat = track.GetMaterial();
+  G4Element*  elm = (G4Element*)mat->GetElement(0); // terrible trick - cast away const...
+   
   G4Nucleus* tNucleus = GetTargetNucleusPointer();
-  tNucleus->ChooseParameters( track.GetMaterial() );
-  
+  tNucleus->ChooseParameters( mat );
+    
+  G4HadronicInteraction* hint = ChooseHadronicInteraction( (track.GetDynamicParticle())->GetKineticEnergy(),
+                                                             mat, elm );  
+  if ( !hint ) return 0;
+
   G4HadProjectile proj(track);
-  G4HadFinalState* result = fInteractionModel->ApplyYourself( proj, *tNucleus );
+  
+  G4HadFinalState* result = hint->ApplyYourself( proj, *tNucleus );
+
   result->SetTrafoToLab( proj.GetTrafoToLab() );
   
   ClearNumberOfInteractionLengthLeft();

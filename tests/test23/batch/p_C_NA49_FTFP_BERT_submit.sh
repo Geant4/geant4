@@ -1,11 +1,11 @@
 #!/usr/bin/env bash
 #
 
-APP_ENV=/home/yarba_j/work/test-geant4.9.6-ref08/geant4/tests/test23/batch/g4setup.sh
+APP_ENV=/home/yarba_j/work/test-geant4.10.00-ref01/geant4/tests/test23/batch/g4setup.sh
 
 source ${APP_ENV}
 
-PBS_WORK_DIR=${G4WORKDIR}/t23-bld
+PBS_WORK_DIR=${G4WORKDIR}/t23-bld-4
 
 cd ${PBS_WORK_DIR}
 
@@ -28,6 +28,8 @@ printf "#target-geom(mm) \n0.0 3.15 160. G4Tubs \n" >> FTFP_BERT.C.na49.${JobID}
 printf "#material \nC \n" >> FTFP_BERT.C.na49.${JobID}
 
 printf "#momentum(MeV/c) \n158000.0 \n" >> FTFP_BERT.C.na49.${JobID}
+
+printf "#forceResonanceDecay \n" >> FTFP_BERT.C.na49.${JobID}
 
 printf "// --- \n#physicslist \nftfp_bert \n#run \n" >> FTFP_BERT.C.na49.${JobID}
 

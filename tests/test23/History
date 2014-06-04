@@ -38,6 +38,23 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3 June 2014 Julia Yarba (test23-V10-00-05)
+- Port several more HARP subsets (mainly proton+C)
+- Improve analysis of NA61 and HARP data and stat.testing vs simulated results
+- Include ShieldingM in the testing
+- Various small cleanups
+
+13 May 2014 Julia Yarba (test23-V10-00-04)
+- Includes several updates related to restructuring
+- Improve analysis of NA49 data
+- Start incorporating double diff. xsec for p+C -> pi+/- from NA49,
+  both the data and analysis scripts (currently added data for pi+)
+
+8 January 2014 Julia Yarba (test23-V10-00-03)
+- Intermediate tag to include several changes towards
+  restructuring of test47
+- Fully compatible with current tags of test19 and test75 
+
 2 January 2014 Julia Yarba (test23-V10-00-02)
 - Re-tag in order to re-submit with the tag of test19 
 

@@ -24,6 +24,7 @@ TstReader::TstReader()
      fStep(0.01*micrometer),
      fRndmSeed(135799753),
      fJobID(-1),
+     fClusterID(-1),
      fVerbose(-1),
      fExpDataSet("None"),
      fForceResDecay(false)    
@@ -60,9 +61,9 @@ void TstReader::Help()
    G4cout << "#position(mm)" << G4endl;
    G4cout << "#direction" << G4endl;
    G4cout << "#time(ns)" << G4endl; // why would I need this ?
-   G4cout << "isHARP" << G4endl;
-   G4cout << "isNA61" << G4endl;
-   G4cout << "isNA49" << G4endl;
+   G4cout << "#isHARP" << G4endl;
+   G4cout << "#isNA61" << G4endl;
+   G4cout << "#isNA49" << G4endl;
    // G4cout << "isMIPP" << G4endl;
    // G4cout << "isITEP" << G4endl;
    // G4cout << "isBNL" << G4endl;
@@ -73,6 +74,7 @@ void TstReader::Help()
 //
    G4cout << "#randomSeed" << G4endl;
    G4cout << "#jobID" << G4endl;
+   G4cout << "#clusterID" << G4endl;
 
    G4cout << "#run" << G4endl;
    G4cout << "#exit" << G4endl;
@@ -245,6 +247,10 @@ void TstReader::ProcessLine( G4String line )
       else if ( line == "#jobID" )
       {
 	(*fInStream) >> fJobID ;
+      }
+      else if ( line == "#clusterID" )
+      {
+	(*fInStream) >> fClusterID ;
       }
       else if ( line == "#forceResonanceDecay" )
       {

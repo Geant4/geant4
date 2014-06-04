@@ -8,6 +8,7 @@
 
 #include "G4QGSModel.hh"
 #include "G4QGSParticipants.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
 #include "G4PreCompoundModel.hh"
 
 #include "G4SystemOfUnits.hh"
@@ -21,8 +22,6 @@ void QGSPWrapper::Compose()
 {
 
    G4TheoFSGenerator* gen = new G4TheoFSGenerator();
-
-   // fInteractionModel = new G4TheoFSGenerator();
 
    fStringModel      = new G4QGSModel< G4QGSParticipants >; // specific
    
@@ -52,10 +51,10 @@ void QGSPWrapper::Compose()
    gen->SetTransport( fCascade );
    gen->SetHighEnergyGenerator( fStringModel );
    
-   fInteractionModel = gen;
+   gen->SetMinEnergy(GeV);  // common
+   gen->SetMaxEnergy(100.*TeV);   
    
-   fInteractionModel->SetMinEnergy(GeV);  // common
-   fInteractionModel->SetMaxEnergy(100.*TeV);   
+   RegisterMe( gen );
    
    return; 
 

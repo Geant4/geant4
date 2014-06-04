@@ -17,14 +17,15 @@
 #include "TStyle.h"
 #include "TGraph.h"
 
-const int NModels = 2;
+const int NModels = 3;
 // std::string ModelName[4]  = { "qgsp_ftfp_bert", "ftfp_bert", "ftfp", "qgsp" };  
-std::string ModelName[2]  = { "NuBeam", "ftfp_bert" };  
+std::string ModelName[2]  = { "NuBeam-with-decays", "ftfp_bert-with-decays", "qgsp_bert-with-decays" };  
 //std::string ModelName[5]  = { "NuBeam", "qgsp_bert", "ftfp_bert", "NuBeam-with-res-decays", "qgsp-g4lund-str-fragm"};  
 // std::string ModelName[4]  = { "ftfp", "qgsp", "ftfp_bert", "qgsp_ftfp_bert" };  
 // const int NModels = 3;
 // std::string ModelName[3]  = { "ftfp", "qgsp", "qgsp-g4lund-str-fragm" };
 int         ColorModel[5] = { kMagenta, 7, kRed, kBlack, 14 }; // 14 = grey, 7 = light "sky"-blue
+int         SymbModel[4]     = { 8, 21, 23, 25 };
 
 static int isNA49UtilLoaded = 0;
 
@@ -139,6 +140,102 @@ void plot_pT( std::string beam, std::string target )
    myc->cd(4);
    drawIntegratedSpectrum( beam, target, "piminus", "pT" );
 
+
+   return;
+
+}
+
+void plot_dNdxF_pT( std::string beam, std::string target, std::string secondary )
+{
+
+   if ( isNA49UtilLoaded <= 0 )
+   {
+      gROOT->LoadMacro("../test23/shared-root-macros/ReadNA49Data.C");
+      gROOT->LoadMacro("../test23/shared-root-macros/DrawNA49Spectra.C");
+      isNA49UtilLoaded = 1;
+   }
+
+   TCanvas* myc   = new TCanvas("myc","",1000,600);
+   
+/*
+   TPad*    pad11 = new TPad( "pad11", "", 0.01, 0.71, 0.33, 0.99 );
+   TPad*    pad12 = new TPad( "pad12", "", 0.01, 0.51, 0.33, 0.709 );
+   pad11->Draw();
+   pad12->Draw();
+   pad11->cd();
+   drawIntegratedSpectrum( beam, target, "piplus", "dNdxF" );
+   pad12->cd();
+   drawIntSpectrumMC2Data( beam, target, "piplus", "dNdxF" );
+*/
+
+   TPad* pad1 = new TPad( "pad1", "", 0.01, 0.01, 0.49, 0.99 );
+   
+   pad1->Draw();
+   pad1->Divide(1.,2.,0.,0.);
+   pad1->cd(1); gPad->SetRightMargin(0.025);
+   drawIntegratedSpectrum( beam, target, secondary, "dNdxF" );
+   pad1->cd(2); gPad->SetRightMargin(0.025);
+   drawIntSpectrumMC2Data( beam, target, secondary, "dNdxF" );
+   
+   myc->cd();
+      
+   TPad* pad2 = new TPad( "pad2", "", 0.51, 0.01, 0.99, 0.99 );
+
+   pad2->Draw();
+   pad2->Divide(1.,2.,0.,0.);
+   pad2->cd(1); gPad->SetRightMargin(0.025);
+   drawIntegratedSpectrum( beam, target, secondary, "pT" );
+   pad2->cd(2); gPad->SetRightMargin(0.025);
+   drawIntSpectrumMC2Data( beam, target, secondary, "pT" );
+   
+   return;
+
+} 
+
+void plotDDiffXSec( std::string beam, std::string target, std::string secondary, int start=0, int end=22 )
+{
+
+   if ( isNA49UtilLoaded <= 0 )
+   {
+      gROOT->LoadMacro("./shared-root-macros/ReadNA49Data.C");
+      gROOT->LoadMacro("./shared-root-macros/DrawNA49Spectra.C");
+      isNA49UtilLoaded = 1;
+   }
+
+   readDDiffSpectra( beam, target, secondary );
+
+   int N1 = std::min(0,start);
+   int N2 = std::max(end,NSubSets); 
+   int NN = N2 - N1 ;
+   int NN1 = 0;
+
+   
+   TCanvas** cnv = 0;
+   if ( NN%2 == 0 )
+   {
+      NN1 = NN/2;
+   }
+   else
+   {
+      NN1 = NN/2 + 1;
+   }
+
+   cnv = new TCanvas*[NN1];
+
+   for ( int i=0; i<NN1; ++i )
+   {
+      std::ostringstream cnt;
+      cnt << i;
+      std::string name = "cnv" + cnt.str();
+      cnv[i] = new TCanvas( name.c_str(), "", 800, 500 );
+      cnv[i]->Divide( 2, 1 );
+   }
+   
+   for ( int i=0; i<NN; ++i )
+   {
+      cnv[i/2]->cd((i%2)+1);
+      draw1DDiffXSec( beam, target, secondary, i );
+   }
 
    return;
 

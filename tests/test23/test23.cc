@@ -55,8 +55,10 @@
 #include "QGSP_BERT.hh"
 #include "FTF_BIC.hh"
 
-// experimental list !!!
+// experimental lists !!!
 #include "NuBeam.hh"
+#include "ShieldingM.hh"
+
 
 #include "G4ParticleTable.hh"
 
@@ -201,6 +203,10 @@ int main(int argc, char** argv)
       else if (  theConfigReader->GetPhysics() ==  "NuBeam" )
       {
          plist = new NuBeam();
+      }
+      else if (  theConfigReader->GetPhysics() ==  "ShieldingM" )
+      {
+         plist = new ShieldingM();
       }
       
       runManager->SetUserInitialization( plist );

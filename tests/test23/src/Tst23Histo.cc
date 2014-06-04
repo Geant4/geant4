@@ -11,11 +11,15 @@
 #include <fstream>
 #include <iomanip>
 
+#include "TH1.h"
+
 
 Tst23Histo::Tst23Histo( const TstReader* pset )
    : TstHisto(pset)
 {
    
+   TH1::SetDefaultSumw2();
+
    if ( pset->GetExpDataSet() == "NA49" )
    {
       fHistoSet = new Tst23NA49Histo( fHistoTitle );

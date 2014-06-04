@@ -38,6 +38,7 @@ class TstReader
       G4double        GetStep()           const { return fStep; }
       long            GetRndmSeed()       const { return fRndmSeed; }
       G4int           GetJobID()          const { return fJobID; }
+      G4int           GetClusterID()      const { return fClusterID; }
       G4int           GetVerbosity()      const { return fVerbose; } 
       G4String        GetExpDataSet()     const { return fExpDataSet; } 
       G4String        GetPhysics()        const { return fPhysics; }  
@@ -75,6 +76,7 @@ class TstReader
       G4double       fStep;         // mm ...not really used though... 
       long           fRndmSeed;
       G4int          fJobID;
+      G4int          fClusterID;
       G4int          fVerbose;
       G4String       fExpDataSet;
       G4bool         fForceResDecay;

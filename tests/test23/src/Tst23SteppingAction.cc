@@ -86,6 +86,9 @@ void Tst23SteppingAction::UserSteppingAction( const G4Step * theStep ) {
    
    const std::vector<const G4Track*>* secs = theStep->GetSecondaryInCurrentStep();
    int nsec = secs->size();
+
+   fFirstInter->SetIncomingTrack( theStep->GetTrack() );
+   fOtherInter->SetIncomingTrack( theStep->GetTrack() );
    
 /*
    // the beam particle can go through without interactions or at least without changing its identity;

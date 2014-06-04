@@ -20,6 +20,8 @@
 #include "G4HadronCrossSections.hh"
 #include "G4VCrossSectionDataSet.hh"
 #include "G4HadronInelasticDataSet.hh"
+#include "G4BGGNucleonInelasticXS.hh"
+#include "G4BGGPionInelasticXS.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
@@ -167,6 +169,32 @@ void ExecProcessLevel::InitBeam( const TstReader* pset )
    G4int A = (G4int)(elm->GetN()+0.5);
    G4int Z = (G4int)(elm->GetZ()+0.5);
    G4double amass = G4ParticleTable::GetParticleTable()->GetIonTable()->GetIonMass(Z, A);
+
+   G4DynamicParticle dParticle( partDef, pset->GetDirection(), partEnergy);  
+   // actually, it needs to be a bit more extensive
+   //    
+   G4VCrossSectionDataSet* cs = 0;
+   if ( ( pset->GetBeamParticle() == "proton" || pset->GetBeamParticle() == "neutron" ) && Z > 1 )
+   {
+      cs = new G4BGGNucleonInelasticXS(partDef);
+   }
+   else if ( (pset->GetBeamParticle() == "pi+" || pset->GetBeamParticle() == "pi-") && Z > 1 )
+   {
+      cs = new G4BGGPionInelasticXS(partDef);
+   }
+   else
+   {
+      cs = new G4HadronInelasticDataSet();
+   }   
+   if ( cs ) 
+   {
+      cs->BuildPhysicsTable(*partDef);
+      fXSecOnTarget = cs->GetCrossSection( &dParticle, elm );
+   }
+   else
+   {
+      fXSecOnTarget = (G4HadronCrossSections::Instance())->GetInelasticCrossSection( &dParticle, Z, A );
+   }
 
    fBeam->SetLabV( G4LorentzVector( 0., 0., 
                                     std::sqrt(partEnergy*(partEnergy+2.0*partMass))/GeV,

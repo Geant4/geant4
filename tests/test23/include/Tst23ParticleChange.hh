@@ -8,15 +8,18 @@ class Tst23ParticleChange : public G4VParticleChange
 
    public:
    
-      Tst23ParticleChange() : fIsFirstInter(false) {}
-      Tst23ParticleChange( bool isFirst ) : fIsFirstInter( isFirst ) {}
+      Tst23ParticleChange() : fIsFirstInter(false), fIncomingTrack(0) {}
+      Tst23ParticleChange( bool isFirst ) : fIsFirstInter( isFirst ), fIncomingTrack(0) {}
       virtual ~Tst23ParticleChange() {}
       
-      bool IsFisrtInteraction() const { return fIsFirstInter; }
+      void           SetIncomingTrack( G4Track* trk ) { fIncomingTrack=trk; return; }
+      bool           IsFisrtInteraction() const { return fIsFirstInter; }
+      const G4Track* GetIncomingTrack()   const { return fIncomingTrack; }
 
    private:
    
-      bool fIsFirstInter;
+      bool     fIsFirstInter;
+      G4Track* fIncomingTrack;
 
 };
 

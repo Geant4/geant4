@@ -7,6 +7,7 @@
 
 #include "G4LundStringFragmentation.hh"
 #include "G4QGSMFragmentation.hh"
+#include "G4GeneratorPrecompoundInterface.hh"
 
 #include "G4SystemOfUnits.hh"
 
@@ -28,12 +29,16 @@ void FTFPWrapper::Compose()
 
    fStringModel      = new G4FTFModel();
    
-   // Note: one can explicitly instantiate it with G4PreCompoundModel,
-   //       but if not, the ctor will either fish it out of a registry,
-   //       or will create a new one on the spot
+   // Note-1: one can explicitly instantiate it with G4PreCompoundModel,
+   //         but if not, the ctor will either fish it out of a registry,
+   //         or will create a new one on the spot
    //
-   fCascade          = new G4GeneratorPrecompoundInterface();
-   fCascade->SetCaptureThreshold(10.*MeV);
+   // Note-2: need the "trick" because G4VIntraNuclTransport stuff 
+   //         does NOT have the SetCaptureThreshold method
+   //         
+   G4GeneratorPrecompoundInterface* preco = new G4GeneratorPrecompoundInterface();
+   preco->SetCaptureThreshold(10.*MeV);
+   fCascade = preco;
    
    // there're these 2 options for modeling string fragmentation,
    // the Lund one is "traditionally" used with FTF, and 
@@ -52,9 +57,10 @@ void FTFPWrapper::Compose()
    gen->SetTransport( fCascade );
    gen->SetHighEnergyGenerator( fStringModel );
    
-   fInteractionModel = gen;
-   
-   fInteractionModel->SetMinEnergy(GeV); 
+   gen->SetMinEnergy(GeV);
+   gen->SetMaxEnergy(500.*GeV);
+      
+   RegisterMe( gen );
    
    return;  
 
