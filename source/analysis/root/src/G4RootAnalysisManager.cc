@@ -316,7 +316,17 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
   fFileManager->CloseFile();  
 
   // No files clean-up in sequential mode
-  if ( ! fState.IsMT() )  return result;
+  // or if ntuples are in use
+  // (to avoid removing non-empty files if a sequential application
+  // is built against MT Geant4 installation_
+  if ( ! fState.IsMT() || ! fNtupleManager->IsEmpty() ) {
+ #ifdef G4VERBOSE
+    if ( fState.GetVerboseL1() ) 
+      fState.GetVerboseL1()
+        ->Message("close", "file", fFileManager->GetFullFileName());
+#endif
+    return result;
+  }  
   
   // Delete files if empty in MT mode
   if ( ( fState.GetIsMaster() && 
