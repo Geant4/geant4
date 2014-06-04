@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-4 May, 2014 M. Asai (intercoms-V09-06-17)
+4 May, 2014 M. Asai (intercoms-V09-06-18)
 - G4GenericMessenger.cc : Fix core dump when GetCurrentValue()
   method is invoked for a command defined by DeclareMethod().
 
@@ -29,7 +29,7 @@ committal in the CVS repository !
 - Corrected inclusion protection flag in G4GenericMessenger.hh.
   Addressing old problem report #1527.
 
-04 March, 2014 M. Asai
+04 March, 2014 M. Asai (intercoms-V09-06-17)
 - G4GenericMessenger : introducing three additional methods to make
   it Geant4-v10.0-compliant. Addressing to bug report #1580.
 
