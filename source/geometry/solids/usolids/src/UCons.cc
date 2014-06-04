@@ -53,9 +53,8 @@ UCons::UCons(const std::string& pName,
   {
     std::ostringstream message;
     message << "Invalid Z half-length for Solid: " << GetName() << std::endl
-            << "				hZ = " << pDz;
+            << "  hZ = " << pDz;
     UUtils::Exception("UCons::UCons()", "UGeomSolids", FatalErrorInArguments, 1, message.str().c_str());
-
   }
 
   // Check radii
@@ -64,7 +63,7 @@ UCons::UCons(const std::string& pName,
   {
     std::ostringstream message;
     message << "Invalid values of radii for Solid: " << GetName() << std::endl
-            << "				pRmin1 = " << pRmin1 << ", pRmin2 = " << pRmin2
+            << "  pRmin1 = " << pRmin1 << ", pRmin2 = " << pRmin2
             << ", pRmax1 = " << pRmax1 << ", pRmax2 = " << pRmax2;
     UUtils::Exception("UCons::UCons()", "UGeomSolids", FatalErrorInArguments, 1, message.str().c_str());
 
@@ -1621,6 +1620,8 @@ double UCons::DistanceToOut(const UVector3& p,
           if (nt2 < 0.0)
           {
             aConvex = false;
+            risec = std::sqrt(p.x * p.x + p.y * p.y) * secRMin;
+            aNormalVector = UVector3(-p.x / risec, -p.y / risec, tanRMin / secRMin);
             return          snxt      = 0.0;
           }
         }
@@ -1913,6 +1914,10 @@ double UCons::DistanceToOut(const UVector3& p,
       aConvex = true;
       break;
     case kRMin:
+      xi         = p.x + snxt * v.x;
+      yi         = p.y + snxt * v.y;
+      risec = std::sqrt(xi * xi + yi * yi) * secRMin;
+      aNormalVector = UVector3(-xi / risec, -yi / risec, tanRMin / secRMin);
       aConvex = false;  // Rmin is inconvex
       break;
     case kSPhi:
@@ -1923,6 +1928,7 @@ double UCons::DistanceToOut(const UVector3& p,
       }
       else
       {
+        aNormalVector = UVector3(sinSPhi, -cosSPhi, 0);
         aConvex = false;
       }
       break;
@@ -1934,6 +1940,7 @@ double UCons::DistanceToOut(const UVector3& p,
       }
       else
       {
+        aNormalVector = UVector3(-sinEPhi, cosEPhi, 0);
         aConvex = false;
       }
       break;
@@ -2057,17 +2064,17 @@ std::ostream& UCons::StreamInfo(std::ostream& os) const
 {
   int oldprc = os.precision(16);
   os << "-----------------------------------------------------------\n"
-     << "		*** Dump for solid - " << GetName() << " ***\n"
-     << "		===================================================\n"
+     << "                *** Dump for solid - " << GetName() << " ***\n"
+     << "                ===================================================\n"
      << " Solid type: UCons\n"
      << " Parameters: \n"
-     << "	 inside	-fDz radius: "  << fRmin1 << " mm \n"
-     << "	 outside -fDz radius: " << fRmax1 << " mm \n"
-     << "	 inside	+fDz radius: "  << fRmin2 << " mm \n"
-     << "	 outside +fDz radius: " << fRmax2 << " mm \n"
-     << "	 half length in Z	 : "  << fDz << " mm \n"
-     << "	 starting angle of segment: " << fSPhi / (UUtils::kPi / 180.0) << " degrees \n"
-     << "	 delta angle of segment	 : " << fDPhi / (UUtils::kPi / 180.0) << " degrees \n"
+     << "         inside -fDz radius : " << fRmin1 << " mm \n"
+     << "         outside -fDz radius: " << fRmax1 << " mm \n"
+     << "         inside +fDz radius : " << fRmin2 << " mm \n"
+     << "         outside +fDz radius: " << fRmax2 << " mm \n"
+     << "         half length in Z   : " << fDz << " mm \n"
+     << "         starting angle of segment: " << fSPhi / (UUtils::kPi / 180.0) << " degrees \n"
+     << "         delta angle of segment   : " << fDPhi / (UUtils::kPi / 180.0) << " degrees \n"
      << "-----------------------------------------------------------\n";
   os.precision(oldprc);
 
