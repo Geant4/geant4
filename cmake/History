@@ -31,6 +31,20 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+27th May 2014 - Ben Morgan (cmake-V09-06-48)
+- Modules/Geant4MakeRules_cxx.cmake : Factor -ftls-model flag
+  out of GEANT4_MULTITHREADED_CXX_FLAGS and provide function
+  supplying available thread local storage model flag arguments.
+  Addresses JIRA DEV-142
+- Modules/Geant4LibraryBuildOptions.cmake : Provide advanced option
+  to select thread local storage model when building multithreaded.
+  Default to supported initial-exec model. Addresses JIRA DEV-142.
+ 
+26th May 2014 - Ben Morgan
+- Modules/Geant4MakeRules_cxx.cmake : Add -DG4FPE_DEBUG to GNU/Clang
+  flags for Debug build mode. Added following discussion with Gunter
+  Folger to help developers diagnose FPE problems.
+
 20th March 2014 - Ben Morgan (cmake-V09-06-47)
 - Templates/Geant4Config.cmake.in : Fixes by Witold Pokorski for correct
   static archive flags on Clang and syntax fixes for GNU.
