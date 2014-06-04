@@ -56,6 +56,7 @@
 #include <CLHEP/Units/PhysicalConstants.h>
 
 #include "G4CSGSolid.hh"
+#include "G4Polyhedron.hh"
 
 class G4Orb : public G4CSGSolid
 {

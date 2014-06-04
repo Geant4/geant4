@@ -72,6 +72,7 @@
 #define G4Para_HH
 
 #include "G4CSGSolid.hh"
+#include "G4Polyhedron.hh"
 
 class G4Para : public G4CSGSolid
 {

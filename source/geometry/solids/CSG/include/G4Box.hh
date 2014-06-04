@@ -59,6 +59,7 @@
 #else
 
 #include "G4CSGSolid.hh"
+#include "G4Polyhedron.hh"
 
 class G4Box : public G4CSGSolid 
 {

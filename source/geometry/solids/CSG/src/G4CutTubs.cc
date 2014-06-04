@@ -164,6 +164,7 @@ G4CutTubs::G4CutTubs(const G4CutTubs& rhs)
     halfRadTolerance(rhs.halfRadTolerance),
     halfAngTolerance(rhs.halfAngTolerance)
 {
+   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -187,6 +188,8 @@ G4CutTubs& G4CutTubs::operator = (const G4CutTubs& rhs)
    halfCarTolerance = rhs.halfCarTolerance;
    halfRadTolerance = rhs.halfRadTolerance;
    halfAngTolerance = rhs.halfAngTolerance;
+
+   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

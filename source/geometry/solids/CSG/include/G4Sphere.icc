@@ -80,7 +80,7 @@ void G4Sphere::Initialize()
 {
   fCubicVolume = 0.;
   fSurfaceArea = 0.;
-  fpPolyhedron = 0;
+  delete fpPolyhedron; fpPolyhedron = 0;
 }
 
 inline
