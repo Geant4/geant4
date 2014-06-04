@@ -17,6 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 21, 2014 G.Cosmo (global-V09-06-84)
+- Correction in G4Exp::G4Expf() to remove 2nd order term contribution
+  repeated twice by mistake. Correction included in VDT 0.3.7 library,
+  kindly contributed by D.Piparo (CERN).
+
+April 10, 2014 G.Cosmo
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+March 26, 2014 G.Cosmo
+- Minor refinements to G4Poisson, based on suggestions by K.Genser/FNAL.
+
+March 13, 2014 G.Cosmo
+- Fix in G4SimplexDownhill header to proper define header guard.
+
 February 7, 2014 V.Ivantchenko (global-V09-06-83)
 - G4Physics2DVector::Retrieve(): fixed Coverity report for "taited scalar".
 - Updated date and tag-ID for geant4-10-00-patch-01.
