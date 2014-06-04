@@ -171,6 +171,15 @@ G4Polyhedra::G4Polyhedra( const G4String& name,
                           const G4double z[]   )
   : G4VCSGfaceted( name ), genericPgon(true)
 { 
+  if (theNumSide <= 0)
+  {
+    std::ostringstream message;
+    message << "Solid must have at least one side - " << GetName() << G4endl
+            << "        No sides specified !";
+    G4Exception("G4Polyhedra::G4Polyhedra()", "GeomSolids0002",
+                FatalErrorInArgument, message);
+  }
+
   G4ReduciblePolygon *rz = new G4ReduciblePolygon( r, z, numRZ );
   
   Create( phiStart, phiTotal, theNumSide, rz );
