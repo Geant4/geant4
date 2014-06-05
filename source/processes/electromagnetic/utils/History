@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4 June 14: A.Dotti (emutils-V10-00-23)
+- Added protection in G4EmSaturation to throw exception if e- or proton
+  are not defined when used in G4EmSaturation::VisibleEnergyDeposition 
+  method.
+- Do not instantiate G4Electron and G4Proton by default in G4EmSaturation::InitialiseBirksCoefficient
 2 June 14: V.Ivant (emutils-V10-00-22)
 - G4EmModelManager - fixed cuts for single scattering models (use 
     "cut for protons")

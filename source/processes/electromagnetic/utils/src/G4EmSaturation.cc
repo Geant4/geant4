@@ -52,7 +52,7 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
-
+#include "G4ParticleTable.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4EmSaturation::G4EmSaturation(G4int verb) 
@@ -67,8 +67,6 @@ G4EmSaturation::G4EmSaturation(G4int verb)
   curChargeSq = 1.0;
   nMaterials  = nWarnings = 0;
 
-  electron = 0;
-  proton   = 0;
   nist     = G4NistManager::Instance();
 
   InitialiseG4materials(); 
@@ -98,8 +96,13 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
     G4int pdgCode = p->GetPDGEncoding();
     // atomic relaxations for gamma incident
     if(22 == pdgCode) {
-      //G4cout << "%% gamma edep= " << edep/keV << " keV " << manager << G4endl; 
-      evis /= (1.0 + bfactor*edep/manager->GetRange(electron,edep,couple));
+      //G4cout << "%% gamma edep= " << edep/keV << " keV " << manager << G4endl;
+        G4ParticleDefinition* electron = G4ParticleTable::GetParticleTable()->FindParticle("e-");
+        if (!electron ) {
+            G4Exception("G4EmSaturation::VisibleEnergyDeposition", "em0089", FatalException,"Cannot find particle \"e-\" needed for range calculations.");
+            return 0;
+        }
+        evis /= (1.0 + bfactor*edep/manager->GetRange(G4Electron::Definition(),edep,couple));
 
       // energy loss
     } else {
@@ -127,7 +130,12 @@ G4double G4EmSaturation::VisibleEnergyDeposition(
 	       << "  " << p->GetParticleName()
 	       << G4endl; 
 	*/
-        G4double range = manager->GetRange(proton,escaled,couple)/curChargeSq; 
+          G4ParticleDefinition* proton = G4ParticleTable::GetParticleTable()->FindParticle("proton");
+          if (!proton) {
+              G4Exception("G4EmSaturation::VisibleEnergyDeposition", "em0089", FatalException,"Cannot find particle \"proton\" needed for range calculations.");
+              return 0;
+          }
+          G4double range = manager->GetRange(proton,escaled,couple)/curChargeSq;
 	nloss /= (1.0 + bfactor*nloss/range);
       }
 
@@ -164,8 +172,6 @@ void G4EmSaturation::InitialiseBirksCoefficient(const G4Material* mat)
   // electron and proton should exist in any case
   if(!manager) {
     manager = G4LossTableManager::Instance();
-    electron = G4Electron::Electron(); 
-    proton = G4Proton::Proton(); 
   }
 
   curMaterial = mat;

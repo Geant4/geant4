@@ -110,8 +110,6 @@ private:
 
   void InitialiseG4materials();
 
-  const G4ParticleDefinition* electron;
-  const G4ParticleDefinition* proton;
   G4LossTableManager*         manager;
   G4NistManager*              nist;
 
