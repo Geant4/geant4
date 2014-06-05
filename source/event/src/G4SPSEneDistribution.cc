@@ -97,6 +97,9 @@ G4SPSEneDistribution::G4SPSEneDistribution(): particle_definition(0), eneRndm(0)
     Arb_ezero_flag = false;
     histInit = false;
     histCalcd = false;
+    
+    BBHist = NULL;
+    Bbody_x = NULL;
 
 }
 
@@ -118,6 +121,14 @@ G4SPSEneDistribution::~G4SPSEneDistribution()
     {
         delete[] Arb_ezero;
     }
+    delete Bbody_x;
+    delete BBHist;
+    for ( std::vector<G4DataInterpolation*>::iterator it = SplineInt.begin() ; it!=SplineInt.end() ; ++it)
+    {
+        delete *it;
+        *it = 0;
+    }
+    SplineInt.clear();
 }
 
 void G4SPSEneDistribution::SetEnergyDisType(G4String DisType) {
@@ -313,29 +324,21 @@ void G4SPSEneDistribution::CalculateBbodySpectrum()
 	G4double erange = Emax - Emin;
 	G4double steps = erange / 10000.;
     
-    // editing to use STL vectors
-	G4double Bbody_y[10000];
-//    std::vector<G4double> Bbody_y;
-    
-	G4double k = 8.6181e-11; //Boltzmann const in MeV/K
-	G4double h = 4.1362e-21; // Plancks const in MeV s
-	G4double c = 3e8; // Speed of light
-	G4double h2 = h * h;
-	G4double c2 = c * c;
+	const G4double k = 8.6181e-11; //Boltzmann const in MeV/K
+	const G4double h = 4.1362e-21; // Plancks const in MeV s
+	const G4double c = 3e8; // Speed of light
+	const G4double h2 = h * h;
+	const G4double c2 = c * c;
 	G4int count = 0;
 	G4double sum = 0.;
 	BBHist->at(0) = 0.;
+    
 	while (count < 10000) {
 		Bbody_x->at(count) = Emin + G4double(count * steps);
-		Bbody_y[count] = (2. * std::pow(Bbody_x->at(count), 2.)) / (h2 * c2 * (std::exp(Bbody_x->at(count) / (k * Temp)) - 1.));
-        if(std::isnan(Bbody_y[count]))
-        {
-            Bbody_y[count] = 0.0;
-        }
-		sum = sum + Bbody_y[count];
-		BBHist->at(count + 1) = BBHist->at(count) + Bbody_y[count];
+        G4double Bbody_y = (2. * std::pow(Bbody_x->at(count), 2.)) / (h2 * c2 * (std::exp(Bbody_x->at(count) / (k * Temp)) - 1.));
+		sum = sum + Bbody_y;
+		BBHist->at(count + 1) = BBHist->at(count) + Bbody_y;
         count++;
-        
 	}
 
 	Bbody_x->at(10000) = Emax;
@@ -808,6 +811,13 @@ void G4SPSEneDistribution::SplineInterpolation()
 	sum = 0.;
 	Splinetemp = new G4DataInterpolation(Arb_x, Arb_y, maxi, 0., 0.);
 	G4double ei[101],prob[101];
+    for ( std::vector<G4DataInterpolation*>::iterator it = SplineInt.begin() ; it!=SplineInt.end() ; ++it)
+    {
+        delete *it;
+        *it = 0;
+    }
+    SplineInt.clear();
+    SplineInt.resize(1024,NULL);
 	while (i < maxi) {
 	  // 100 step per segment for the integration of area
 	  G4double de = (Arb_x[i] - Arb_x[i - 1])/100.;
@@ -831,7 +841,7 @@ void G4SPSEneDistribution::SplineInterpolation()
 	  for (count = 1; count < 100; count++)
 	    prob[count] = prob[count-1] + prob[count]/(area/de);
 
-	  SplineInt[i] = new G4DataInterpolation(prob, ei, 101, 0., 0.);
+	  SplineInt[i]=new G4DataInterpolation(prob, ei, 101, 0., 0.);
 	  // note i start from 1!
 	  i++;
 	}
@@ -1118,7 +1128,7 @@ void G4SPSEneDistribution::GenerateBbodyEnergies()
 	// Now interpolate in that bin to find the correct output value.
 	G4double x1, x2, y1, y2, t, q;
 	x1 = Bbody_x->at(nbelow);
-    if(nbelow+1 == Bbody_x->size())
+    if(nbelow+1 == static_cast<G4int>(Bbody_x->size()))
     {
         x2 = Bbody_x->back();
     }
@@ -1127,7 +1137,7 @@ void G4SPSEneDistribution::GenerateBbodyEnergies()
         x2 = Bbody_x->at(nbelow + 1);
     }
 	y1 = BBHist->at(nbelow);
-    if(nbelow+1 == BBHist->size())
+    if(nbelow+1 == static_cast<G4int>(BBHist->size()))
     {
         G4cout << BBHist->back() << G4endl;
         y2 = BBHist->back();

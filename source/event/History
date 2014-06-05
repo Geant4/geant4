@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 4th, 2014 A.Dotti (event-V10-00-04)
+- Correcting compilation warnings and errors.
+- Small changes to G4SPSEneDistribution: further memory reduction
+
+June 4th, 2013  L.Desorgher (event-V10-00-03)
+- G4AdjointPrimaryGenerator: Add splitting of fwd gamma primaries to improve 
+  convergence of G4RMC. 
+
 June 3rd, 2014 A.Dotti (event-V10-00-02)
 - First implementation of memory reduction mechanism in MT 
   courtesy of Andrew Green (Manchester U).

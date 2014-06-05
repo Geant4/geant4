@@ -362,7 +362,7 @@ private:
 
 	G4PhysicsOrderedFreeVector ZeroPhysVector; // for re-set only
 
-	G4DataInterpolation *SplineInt[1024]; // holds Spline stuff required for sampling
+    std::vector<G4DataInterpolation*> SplineInt;//[1024]; // holds Spline stuff required for sampling
 	G4DataInterpolation *Splinetemp; // holds a temp Spline used for calculating area
 
 };
