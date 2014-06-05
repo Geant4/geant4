@@ -166,6 +166,8 @@ class G4AdjointSimMessenger: public G4UImessenger
     G4UIcmdWithAString*  ConsiderParticleAsPrimaryCmd;
     G4UIcmdWithAString*  NeglectParticleAsPrimaryCmd;
 
+    G4UIcmdWithAnInteger*  setNbOfPrimaryFwdGammasPerEventCmd;
+
 };
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

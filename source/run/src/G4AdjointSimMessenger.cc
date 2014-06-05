@@ -163,6 +163,16 @@ G4AdjointSimMessenger::G4AdjointSimMessenger(G4AdjointSimManager* pAdjointRunMan
   NeglectParticleAsPrimaryCmd->SetGuidance("Remove the selected particle from the lits of primaries");
   NeglectParticleAsPrimaryCmd->SetParameterName("particle",false);
   NeglectParticleAsPrimaryCmd->SetCandidates("e- gamma proton ion");
+
+
+  setNbOfPrimaryFwdGammasPerEventCmd =
+            new G4UIcmdWithAnInteger("/adjoint/SetNbOfPrimaryFwdGammasPerEvent",this);
+  setNbOfPrimaryFwdGammasPerEventCmd->SetGuidance("Set the nb of primary fwd gamm  generated on the adjoint source");
+  setNbOfPrimaryFwdGammasPerEventCmd->SetParameterName("Nb_gammas",false);
+  setNbOfPrimaryFwdGammasPerEventCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+
+
+
 }
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //
@@ -312,6 +322,9 @@ void G4AdjointSimMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   else if ( command== setAdjSourceEmaxCmd){
     
     theAdjointRunManager->SetAdjointSourceEmax(setAdjSourceEmaxCmd->GetNewDoubleValue(newValue));
+  }
+  else if ( command== setNbOfPrimaryFwdGammasPerEventCmd){
+    theAdjointRunManager->SetNbOfPrimaryFwdGammasPerEvent(setNbOfPrimaryFwdGammasPerEventCmd->GetNewIntValue(newValue));
   }
 
 

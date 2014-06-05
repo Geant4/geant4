@@ -97,8 +97,10 @@ class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     void SetPrimaryIon(G4ParticleDefinition* adjointIon, G4ParticleDefinition* fwdIon);
     void UpdateListOfPrimaryParticles();
     inline size_t GetNbOfAdjointPrimaryTypes(){return ListOfPrimaryAdjParticles.size();}
-    inline std::vector<G4ParticleDefinition*> GetListOfPrimaryFwdParticles(){return ListOfPrimaryFwdParticles;}
+    inline std::vector<G4ParticleDefinition*>* GetListOfPrimaryFwdParticles(){
+                                             return &ListOfPrimaryFwdParticles;}
     inline const G4String& GetPrimaryIonName(){return ion_name;}
+    inline void SetNbPrimaryFwdGammasPerEvent(G4int nb) {nb_fwd_gammas_per_event=nb;}
 
   private: //private methods
 
@@ -126,12 +128,13 @@ class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
 
     size_t index_particle;
-    //G4bool last_generated_part_was_adjoint;
+
     G4ThreeVector  pos,  direction, p; 
    
     G4String type_of_adjoint_source; //Spherical ExtSurfaceOfAVolume
     G4double radius_spherical_source;
     G4ThreeVector center_spherical_source;
+    G4int nb_fwd_gammas_per_event;
     
     //For simulation with ions
     //--------------------------

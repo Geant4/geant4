@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 4th, 2014, L. Desorgher (run-V10-00-11)
+- Changes in G4AdjointSimManager, G4AdjointSimMessenger, and G4AdjointPrimaryGeneratorAction
+  to add fwd primary splitting in the G4RMC.
+
 June 2nd, 2014, A. Dotti (run-V10-00-10)
 - Increase verbosity in case of NULL process-manager pointer in MT
 
