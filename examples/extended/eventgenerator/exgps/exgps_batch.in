@@ -31,7 +31,7 @@
 #/analysis/mineng 200 MeV
 #/analysis/maxpos 10 cm 
 #/analysis/minpos -10 cm
-/event/printModulo 1000
+/run/printProgress 1000
 #/tracking/verbose 1
 #
 #/control/execute macros/display.mac

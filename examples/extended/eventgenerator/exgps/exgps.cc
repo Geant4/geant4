@@ -49,7 +49,8 @@
 
 
 #include "exGPSGeometryConstruction.hh"
-#include "QGSP_BIC_HP.hh"
+#include "G4PhysListFactory.hh"
+#include "G4VModularPhysicsList.hh"
 #include "exGPSPrimaryGeneratorAction.hh"
 #include "exGPSRunAction.hh"
 #include "exGPSEventAction.hh"
@@ -69,7 +70,12 @@ int main(int argc,char** argv) {
   // set mandatory initialization classes
   exGPSGeometryConstruction* detector = new exGPSGeometryConstruction;
   runManager->SetUserInitialization(detector);
-  runManager->SetUserInitialization(new QGSP_BIC_HP());
+
+  G4PhysListFactory factory;
+  G4VModularPhysicsList* phys = 0;
+  G4String physName = "QGSP_BIC";
+  phys = factory.GetReferencePhysList(physName);
+  runManager->SetUserInitialization(phys);
   runManager->SetUserInitialization(new exGPSActionInitialization());
   
   //Initialize G4 kernel

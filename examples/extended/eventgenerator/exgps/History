@@ -12,6 +12,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+4/06/2014 A. Dotti (exgps-V10-00-03)
+- Correct macros to use /run/printProgress instead of /event/printModulo
+
+4/06/2014 L. Desorgher (exgps-V10-00-02)
+- Migrate to use of  QGSP_BIC physics list to avoid dependency on data
+
 3/06/2014 A. Dotti (exgps-V10-00-01)
 - Implemented changes needed for new GPS that substantially reduces
   memory footprint in MT mode. Requires event-V10-00-02
@@ -124,7 +130,7 @@ track of all tags.
 21/12/2006 F.Lei (exgps-V08-02-00)
 -  Added the option for output results in .root file
 -  Changed particle_name to PDGcode in the ntuple
-
+exit
 19/07/2005 F.Lei (exgps-V07-01-00)
 -  Changing in GNUmakefile 
    LOADLIBS += `aida-config --lib`
@@ -138,5 +144,6 @@ track of all tags.
 03/12/2004, G.Cosmo,  (exgps-V06-02-01)
 - Implemented migration to <cmath>.
 
-28/10/2004, F.Lei,  (exgps-V06-02-00)
+mplemented changes needed for new GPS that substantially reduces
+  memory footprint in MT mode. Requires event-V10-00-0228/10/2004, F.Lei,  (exgps-V06-02-00)
 - Created.
