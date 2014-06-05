@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-Jun-2014, Andrea Dotti (exgflash-V10-00-00)
+- New GPS MT compliant system
+
 06-Nov-2013, Marc Verderi (exgflash-V09-06-03)
 - Fix event action destructor in case fNevent == 0
 - change /gps/centre 0 0 0 to /gps/pos/centre 0 0 0 to
