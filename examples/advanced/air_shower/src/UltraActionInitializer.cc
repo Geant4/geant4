@@ -34,12 +34,26 @@
 #include "UltraPrimaryGeneratorAction.hh"
 #include "UltraRunAction.hh"
 #include "UltraEventAction.hh"
+#include "G4GeneralParticleSource.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 UltraActionInitializer::UltraActionInitializer() : 
   G4VUserActionInitialization()
-{;}
+{
+    //AND->3June2014, temporary to take into account new GPS
+    //Create an instance of GPS in master so shared resources and messenger
+    //exist in master.
+    masterGPS = new G4GeneralParticleSource();
+    //AND<-3June2014
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+UltraActionInitializer::~UltraActionInitializer() 
+{
+   delete masterGPS;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

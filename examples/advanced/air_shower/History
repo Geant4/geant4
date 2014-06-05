@@ -7,6 +7,9 @@
                            History file
                            ------------
 
+04.06.2014 - A. Dotti   (air_shower-V10-00-00)
+             New MT-ready GPS: migration
+
 22.10.2013 - L. Pandola (air_shower-V09-06-03) 
 	     UltraRunAction.cc: add include for <ctime>, 
              needed for Windows
