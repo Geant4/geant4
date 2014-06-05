@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+	 
+04-06-14 mma (testem2-V10-00-02)
+- cleanup macros for /run/setCut
+ 
 28-04-14 V.Ivant (testem2-V10-00-01)
 - added "emlowenergy" option for EM physics 
           
