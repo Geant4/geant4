@@ -62,17 +62,9 @@ class PhysicsList: public G4VModularPhysicsList
     void AddStepMax();
 
     virtual void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
     void GetRange(G4double);
       
-  private:
-    G4double fCutForGamma;
-    G4double fCutForElectron;
-    G4double fCutForPositron;
-    G4double fCurrentDefaultCut;
-    
+  private:    
     G4VPhysicsConstructor* fEmPhysicsList;
     G4String               fEmName;
     

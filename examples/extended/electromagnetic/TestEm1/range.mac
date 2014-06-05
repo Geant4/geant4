@@ -18,7 +18,7 @@
 /run/initialize
 #
 # prevent any secondary production
-/testem/phys/setCuts 1 km
+/run/setCut 1 km
 #
 # no step limitation from eLoss
 /process/eLoss/StepFunction 1 100 um

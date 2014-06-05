@@ -66,7 +66,6 @@ StackingAction::ClassifyNewTrack(const G4Track* track)
   if (charge != 0.) analysisManager->FillH1(5,energy);
   else              analysisManager->FillH1(6,energy);   
   return fUrgent;
-  //return fKill;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -25,12 +25,12 @@
 /analysis/h1/set 6 100 0   100 MeV      #sec. neutral energy spectrum
 /analysis/h1/setAscii 1  
 #
-/testem/phys/setCuts 1 mm
+/run/setCut 1 mm
 /analysis/setFileName run0 
 /run/beamOn 2000
 #
 /process/eLoss/verbose 0
 #
-/testem/phys/setCuts 10 um
+/run/setCut 10 um
 /analysis/setFileName run1
 /run/beamOn 2000

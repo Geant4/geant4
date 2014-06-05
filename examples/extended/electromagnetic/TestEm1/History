@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+04-06-14 mma (testem1-V10-00-04)
+- replace /testem/phys/setCuts by /run/setCut in all macro.
+- simplify PhysicsList and its messenger, accordingly.
 
 09-04-14 V.Ivant (testem1-V10-00-03)
 - TestEm1.in - reduce printout more

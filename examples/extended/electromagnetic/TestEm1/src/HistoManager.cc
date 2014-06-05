@@ -29,7 +29,7 @@
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
@@ -81,9 +81,8 @@ void HistoManager::Book()
   // Create all histograms as inactivated 
   // as we have not yet set nbins, vmin, vmax
   for (G4int k=0; k<kMaxHisto; k++) {
-    G4int ih = analysisManager->CreateH1("h"+id[k], title[k], 
-                                         nbins, vmin, vmax);
-    analysisManager->SetH1Activation(ih, false);    
+    G4int ih = analysisManager->CreateH1(id[k], title[k], nbins, vmin, vmax);
+    analysisManager->SetH1Activation(ih, false);
   }
 }
 

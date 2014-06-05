@@ -22,7 +22,7 @@
 /process/inactivate compt
 #
 # prevent ionisation and bremsstrahlung production
-/testem/phys/setCuts 1 km
+/run/setCut 1 km
 #
 # no multiple scattering
 /process/inactivate msc

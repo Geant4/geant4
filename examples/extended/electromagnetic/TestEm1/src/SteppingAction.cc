@@ -66,12 +66,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
   G4int ID         = aStep->GetTrack()->GetTrackID();
   G4double steplen = aStep->GetStepLength();
   if (ID == 1) analysisManager->FillH1(3,steplen);
-  /*
-  if(steplen > 3.7) {
-  G4cout << "!!!! step= " << steplen
-  << " mm E= " << aStep->GetPreStepPoint()->GetKineticEnergy() << " MeV " 
-  << G4endl;
-  */
+
 /*  
   //debug: charge and mass
   //
