@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04 June 2014   Andrea Dotti        (exampleES2-V10-00-01)
+- Porting to new GPS for MT
+
 12 March 2014  Daren Sawkey        (exampleES2-V10-00-00)
 - Fixed memcheck error: foil thickness now defined in Detector constructor
 - Allow selection of physics list option4
