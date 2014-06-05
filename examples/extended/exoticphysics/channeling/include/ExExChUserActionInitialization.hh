@@ -32,14 +32,16 @@
 #endif
 
 #include "G4VUserActionInitialization.hh"
+class G4GeneralParticleSource;
 
 class ExExChUserActionInitialization : public G4VUserActionInitialization{
-
 public:
-protected:
-private:
+  ExExChUserActionInitialization();
+  ~ExExChUserActionInitialization();
     void Build() const;
     void BuildForMaster() const;
+private:
+    G4GeneralParticleSource* masterGPS;
 };
 
 #endif

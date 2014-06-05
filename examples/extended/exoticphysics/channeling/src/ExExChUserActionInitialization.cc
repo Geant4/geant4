@@ -31,7 +31,22 @@
 #include "ExExChStackingAction.hh"
 #include "ExExChEventAction.hh"
 #include "ExExChRunAction.hh"
+#include "G4GeneralParticleSource.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ExExChUserActionInitialization::ExExChUserActionInitialization() {
+    //AND->3June2014, temporary to take into account new GPS
+    //Create an instance of GPS in master so shared resources and messenger
+    //exist in master.
+    masterGPS = new G4GeneralParticleSource();
+    //AND<-3June2014
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ExExChUserActionInitialization::~ExExChUserActionInitialization() {
+  delete masterGPS;
+}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ExExChUserActionInitialization::Build() const {
