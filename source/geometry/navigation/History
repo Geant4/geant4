@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+May 27, 2014 - J.Apostolakis  (geomnav-V09-06-22)
+----------------------------
+- G4Navigator: corrected saving/restoring of 'navigator state':
+  - Added bool sWasLimitedByGeometry to G4SaveNavigatorState struct
+     ( fixes side effect of call to ComputeSafety. )
+  - Corrected RestoreState() to reset the Safety Origin and Value
+  - ComputeSafety: If at endpoint of step, answer safety=0.0 quickly.
+       Do not save/restore state. 
+
 April 10, 2014 - G.Cosmo  (geomnav-V09-06-21)
 ------------------------
 - Get rid of deprecated 'register' storage class specifier in source files.
