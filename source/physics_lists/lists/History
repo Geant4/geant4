@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-Jun-2014, Alberto Ribon              (phys-lists-V10-00-03)
+- FTFP_BERT_TRV: use (temporary) G4HadronHElasticPhysics in order
+  to allow testing of improvements in elastic.
+
 03-June-2014, Julia Yarba               (phys-lists-V10-00-02)
 - Include new (experimental) physics lists ShieldingM and NuBeam
 
