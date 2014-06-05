@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+04-06-14 mma (testem5-V10-00-05)
+- rm plotHisto.kumac
 
 03-05-14 V.Ivant (testem5-V10-00-04)
 - TestEm5.cc - added possibility to change number on threads by

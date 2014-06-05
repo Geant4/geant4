@@ -67,7 +67,7 @@ int main(int argc,char** argv) {
   // Number of threads can be defined via 3rd argument
   if (argc==3) {
     G4int nThreads = G4UIcommand::ConvertToInt(argv[2]);
-    if(0 < nThreads) { runManager->SetNumberOfThreads(nThreads); }
+    if(nThreads > 0) { runManager->SetNumberOfThreads(nThreads); }
   }
 #else
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
