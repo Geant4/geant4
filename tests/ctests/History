@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+ctests-V10-00-04 04 June 2014 Andrea Dotti
+- Correct environment bug for exgps
+
 ctests-V10-00-03 27 May 2014 Andrea Dotti
 - Add extended/exoticphysics/channeling example
 

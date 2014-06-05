@@ -165,7 +165,8 @@ GEANT4_ADD_TEST(example-ext-eventgenerator-exgps
                         ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps/exgps_batch.in
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/exgps
-                BUILD exgps )
+                BUILD exgps 
+		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-ext-eventgenerator-particleGun-build 
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/particleGun
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/eventgenerator/particleGun
