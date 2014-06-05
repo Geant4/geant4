@@ -16,6 +16,9 @@ track of all tags.
  
      ----------------------------------------------------------
 
+June 06, 2014 A. Dotti (WLS-V10-00-01)
+- Migration to new GPS for MT
+
 December 04, 2013 P. Gumplinger (WLS-V10-00-00)
 - Fixes in gui.mac:
   Commented out command specific to B2 example

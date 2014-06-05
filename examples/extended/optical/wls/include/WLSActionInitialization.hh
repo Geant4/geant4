@@ -37,6 +37,8 @@ class WLSDetectorConstruction;
 
 class B4DetectorConstruction;
 
+class G4GeneralParticleSource;
+
 /// Action initialization class.
 ///
 
@@ -53,6 +55,7 @@ class WLSActionInitialization : public G4VUserActionInitialization
 
   private:
     WLSDetectorConstruction* fDetector;
+    G4GeneralParticleSource* masterGPS;
 };
 
 #endif
