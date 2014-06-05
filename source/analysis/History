@@ -17,18 +17,31 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 04, 2014 I. Hrivnacova (analysis-V10-00-12)
+- Udated History with the descriptions of the tags analysis-V09-06-*
+  applied from the analysis_10-00-patches branch.
+
+June 03, 2014 I. Hrivnacova (analysis-V09-06-31)
+- Do not remove Root base file if ntuples are in use
+  (this addresses problem report #1633)
+
 May 16, 2014 I. Hrivnacova (analysis-V10-00-11)
 - Fixed Coverity defects. 
 - Updated to g4tools 1.10.0 (by G. Barrand):
   See History_tools for complete list of modifications.
 
 April 25, 2014 I. Hrivnacova (analysis-V10-00-10)
+April 25, 2014 I. Hrivnacova (analysis-V09-06-30)
 - Fixed implementation of compound commands in G4H[1,2,n]Messenger classes
   using new G4AnalysisUtilities::Tokenize() function.
   This allows to pass multi-word strings within "" and fixes problem report 
   #1616.
 - Fixed G4H2ToolsManager::SetH2YAxisTitle: set title to y-axis and not x-axis.
   This addresses problem report #1620.  
+
+April 16, 2014 I. Hrivnacova (analysis-V09-06-29)
+- Do not allow creating objects with empty names
+  (this addresses problem report #1579)
 
 April 14, 2014 I. Hrivnacova (analysis-V10-00-09)
 - Use G4Threading::IsMultithreadedApplication() instead of  
@@ -60,9 +73,14 @@ April 10, 2014 I. Hrivnacova (analysis-V10-00-05)
   and their implementation for Root:
     G4RootAnalysisReader, G4RootRNtupleManager
 
+March 12, 2014 I. Hrivnacova (analysis-V09-06-28)
 March 11, 2014 I. Hrivnacova (analysis-V10-00-04)
 - Fixed H1, H2 functions to access xmin, xmax and width 
   (do not apply function and unit to return values)
+
+March 10, 2014 I. Hrivnacova (analysis-V09-06-27)
+- Fixed bug in /analysis/h1/setAscii command 
+  (introduced with refactoring messenger classes in analysis-V09-06-19)
 
 March 05, 2014 I. Hrivnacova (analysis-V10-00-03)
 - Fixed bug in /analysis/h1/setAscii command 
@@ -86,6 +104,7 @@ February 04, 2014 I. Hrivnacova (analysis-V10-00-01)
   See History_tools for complete list of modifications.
 
 January 21, 2014 I. Hrivnacova (analysis-V10-00-00)
+January 21, 2014 I. Hrivnacova (analysis-V09-06-26)
 - Updated to g4tools 1.7.1 (by G. Barrand):
   Fixed performance issue observed for an ntuple with large numbers of columns
   reported in item #455 in Geant4 hypernews, Analysis category.
