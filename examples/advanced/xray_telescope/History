@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04.06.2014   Andrea Dotti, tag xraytel-V10-00-03
+	     Migration to new MT compliant GPS
+
 23.05.2014   Luciano Pandola, tag xraytel-V10-00-02
 	     Fix compiler warning which caused the rejection 
 	     of tag xraytel-V10-00-01

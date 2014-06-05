@@ -36,6 +36,8 @@
 #include "G4VSteppingVerbose.hh"
 #include "globals.hh"
 
+class G4GeneralParticleSource;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class XrayTelActionInitializer : public G4VUserActionInitialization
@@ -43,11 +45,12 @@ class XrayTelActionInitializer : public G4VUserActionInitialization
 public:
 
   XrayTelActionInitializer();
-  ~XrayTelActionInitializer(){;};
+  ~XrayTelActionInitializer();
   
   void Build() const;
   void BuildForMaster() const;
-
+private:
+  G4GeneralParticleSource* masterGPS;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
