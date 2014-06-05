@@ -66,9 +66,9 @@ public:
   // registered to the process manager of each particle type 
   virtual void ConstructProcess();
 
-  inline G4HadronElastic* GetNeutronModel();
+  G4HadronElastic* GetNeutronModel();
 
-  inline G4HadronicProcess* GetNeutronProcess();
+  G4HadronicProcess* GetNeutronProcess();
 
 private:
 
@@ -83,17 +83,6 @@ private:
   static G4ThreadLocal G4HadronicProcess* neutronProcess;
 
 };
-
-inline G4HadronElastic* G4HadronElasticPhysics::GetNeutronModel()
-{
-  return neutronModel;
-}
-
-inline G4HadronicProcess* G4HadronElasticPhysics::GetNeutronProcess()
-{
-  return neutronProcess;
-}
-
 #endif
 
 

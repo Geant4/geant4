@@ -243,3 +243,14 @@ void G4HadronElasticPhysics::ConstructProcess()
 }
 
 
+G4HadronElastic* G4HadronElasticPhysics::GetNeutronModel()
+{
+  return neutronModel;
+}
+
+G4HadronicProcess* G4HadronElasticPhysics::GetNeutronProcess()
+{
+  return neutronProcess;
+}
+
+
