@@ -63,7 +63,7 @@ G4DNAMoleculeEncounterStepper:: Utils::Utils(const G4Track& tA, const G4Molecule
 }
 
 G4DNAMoleculeEncounterStepper::G4DNAMoleculeEncounterStepper() :
-    								G4VITTimeStepper(),
+    								G4VITTimeStepComputer(),
     								fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable)),
     								fReactionModel(0)
 {
@@ -85,7 +85,7 @@ G4DNAMoleculeEncounterStepper::~G4DNAMoleculeEncounterStepper()
 {}
 
 G4DNAMoleculeEncounterStepper::G4DNAMoleculeEncounterStepper(const G4DNAMoleculeEncounterStepper& right) :
-    								G4VITTimeStepper(right),
+    								G4VITTimeStepComputer(right),
     								fMolecularReactionTable(reference_cast<const G4DNAMolecularReactionTable*>(fpReactionTable))
 {
 	fVerbose                    = right.fVerbose ;
@@ -98,7 +98,7 @@ void G4DNAMoleculeEncounterStepper::Prepare()
 {
 	// DEBUG
 	//    G4cout << "G4DNAMoleculeEncounterStepper::PrepareForAllProcessors" << G4endl;
-	G4VITTimeStepper::Prepare();
+	G4VITTimeStepComputer::Prepare();
 
 #if defined (DEBUG_MEM)
 	MemStat mem_first, mem_second, mem_diff;

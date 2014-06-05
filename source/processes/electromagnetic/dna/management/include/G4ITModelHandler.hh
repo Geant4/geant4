@@ -68,12 +68,12 @@ public:
     // if a second model is registered at a later time (time2);
     // the second model will be considered from
     // time2 to the end of simulation
-    void RegisterModel(G4VITModel* aModel, const G4double globalTime);
+    void RegisterModel(G4VITStepModel* aModel, const G4double globalTime);
 
     // Model applying for type 1 and type 2
     inline G4ITModelManager* GetModelManager(G4ITType, G4ITType);
-    void              SetModel(G4ITType, G4ITType, G4VITModel* aModel, G4double startingTime);
-    G4VITModel*       GetModel(G4ITType, G4ITType, const G4double globalTime);
+    void              SetModel(G4ITType, G4ITType, G4VITStepModel* aModel, G4double startingTime);
+    G4VITStepModel*       GetModel(G4ITType, G4ITType, const G4double globalTime);
 
     //
     inline const std::vector<std::vector<G4ITModelManager*> >* GetAllModelManager()

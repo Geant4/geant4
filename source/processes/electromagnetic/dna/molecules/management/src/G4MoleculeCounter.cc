@@ -70,12 +70,12 @@ void G4MoleculeCounter::DeleteInstance()
 
 void G4MoleculeCounter::Initialize()
 {
-	G4MoleculeModelIterator*  mol_iterator = G4MoleculeTable::Instance()->GetModelIterator();
-	while((*mol_iterator)())
+	G4MoleculeModelIterator mol_iterator = G4MoleculeTable::Instance()->GetModelIterator();
+	while((mol_iterator)())
 	{
 		//		G4cout << "G4MoleculeCounter::Initialize" << G4endl;
 		//		G4cout << mol_iterator->value()->GetName() << G4endl;
-		fCounterMap[*(mol_iterator->value())]; // initialize the second map
+		fCounterMap[*(mol_iterator.value())]; // initialize the second map
 	}
 }
 

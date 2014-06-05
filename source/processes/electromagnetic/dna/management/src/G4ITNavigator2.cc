@@ -1883,6 +1883,7 @@ G4double G4ITNavigator2::ComputeSafety( const G4ThreeVector &pGlobalpoint,
   if (keepState)
   {
 	  *fpNavigatorState = *savedState;
+	  delete savedState;
 	//  RestoreSavedState();
   }
 

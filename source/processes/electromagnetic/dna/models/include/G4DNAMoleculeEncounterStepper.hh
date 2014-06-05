@@ -45,7 +45,7 @@
 #ifndef G4MOLECULEENCOUNTERSTEPPER_H
 #define G4MOLECULEENCOUNTERSTEPPER_H
 
-#include "G4VITTimeStepper.hh"
+#include "G4VITTimeStepComputer.hh"
 #include "G4ITManager.hh"
 
 class G4VDNAReactionModel;
@@ -64,13 +64,13 @@ class G4Molecule;
  *
  */
 
-class G4DNAMoleculeEncounterStepper : public G4VITTimeStepper
+class G4DNAMoleculeEncounterStepper : public G4VITTimeStepComputer
 {
 public:
 	G4DNAMoleculeEncounterStepper();
 	virtual ~G4DNAMoleculeEncounterStepper();
 	G4DNAMoleculeEncounterStepper(const G4DNAMoleculeEncounterStepper&);
-	G4IT_ADD_CLONE(G4VITTimeStepper,G4DNAMoleculeEncounterStepper)
+	G4IT_ADD_CLONE(G4VITTimeStepComputer,G4DNAMoleculeEncounterStepper)
 
 	virtual void Prepare();
 	//    virtual void PrepareForAllProcessors();

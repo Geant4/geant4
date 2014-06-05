@@ -66,6 +66,10 @@ G4MoleculeDefinition::G4MoleculeDefinition(const G4String& name,
 	{
 		fElectronOccupancy = new G4ElectronOccupancy(electronicLevels);
 	}
+	else
+	{
+		fElectronOccupancy = 0;
+	}
 	fDecayTable = NULL;
 	G4MoleculeTable::Instance()->Insert(this);
 }

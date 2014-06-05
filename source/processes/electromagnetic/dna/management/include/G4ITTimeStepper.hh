@@ -1,0 +1,68 @@
+/*
+ * G4ITTimeStepper.hh
+ *
+ *  Created on: 4 juin 2014
+ *      Author: kara
+ */
+
+#ifndef G4ITTIMESTEPPER_HH_
+#define G4ITTIMESTEPPER_HH_
+
+#include "globals.hh"
+#include "tls.hh"
+#include <map>
+
+class G4VITStepModel;
+class G4ITModelHandler;
+class G4UserTimeStepAction;
+class G4ITGun;
+
+class G4ITTimeStepper
+{
+protected:
+	G4ITTimeStepper();
+	virtual ~G4ITTimeStepper();
+private:
+	static G4ThreadLocal G4ITTimeStepper* fpInstance;
+
+public:
+	static G4ITTimeStepper* Instance(){return fpInstance;}
+	virtual void Initialize(){;}
+	virtual void Reset(){;}
+
+	virtual void SetGun(G4ITGun*){;}
+
+	virtual void Process(){;}
+
+	virtual G4ITModelHandler* GetModelHandler(){return 0;}
+	virtual void RegisterModel(G4VITStepModel*, double){;}
+
+	virtual void SetEndTime(const double){;}
+
+	virtual void SetTimeTolerance(double){;}
+	// Two tracks below the time tolerance are supposed to be
+	// in the same time slice
+	virtual double GetTimeTolerance() const{return -1;}
+
+	virtual void SetMaxZeroTimeAllowed(int){;}
+	virtual int GetMaxZeroTimeAllowed() const{return -1;}
+
+	virtual void     SetTimeSteps(std::map<double,double>*){;}
+	virtual void		SetDefaultTimeStep(double){;}
+	virtual double GetLimitingTimeStep() const{return -1;}
+	virtual G4int    GetNbSteps() const{return -1;}
+	virtual void     SetMaxNbSteps(G4int){;}
+	virtual G4int    GetMaxNbSteps() const{return 0;}
+	virtual G4double GetStartTime() const{return -1;}
+	virtual G4double GetEndTime() const{return -1;}
+	virtual G4double GetTimeStep() const{return -1;}
+	virtual G4double GetPreviousTimeStep() const { return -1;}
+	virtual G4double GetGlobalTime() const { return -1;}
+
+	virtual void SetUserAction(G4UserTimeStepAction*){;}
+	virtual G4UserTimeStepAction* GetUserReactionAction() const{return 0;}
+
+};
+
+
+#endif /* G4ITTIMESTEPPER_HH_ */

@@ -46,7 +46,7 @@
 #define G4MOLECULARSTEPBYSTEPMODEL_H
 
 #include "AddClone_def.hh"
-#include "G4VITModel.hh"
+#include "G4VITStepModel.hh"
 #include "G4DNAMoleculeEncounterStepper.hh"
 #include "G4DNAMolecularReaction.hh"
 #include "G4DNAMolecularReactionTable.hh"
@@ -61,7 +61,7 @@
   * reaction.
   */
 
-class G4DNAMolecularStepByStepModel : public G4VITModel
+class G4DNAMolecularStepByStepModel : public G4VITStepModel
 {
 public:
     /** Default constructor */
@@ -71,7 +71,7 @@ public:
 
     G4DNAMolecularStepByStepModel(const G4DNAMolecularStepByStepModel&);
 
-    G4IT_ADD_CLONE(G4VITModel, G4DNAMolecularStepByStepModel)
+    G4IT_ADD_CLONE(G4VITStepModel, G4DNAMolecularStepByStepModel)
 
     virtual void PrintInfo();
     virtual void Initialize();

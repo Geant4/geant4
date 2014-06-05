@@ -51,6 +51,7 @@
 #include "G4VUserTrackInformation.hh"
 #include "G4TrackingInformation.hh"
 #include <CLHEP/Utility/memory.h>
+#include "G4Allocator.hh"
 
 ///
 // To implement your own IT class, you should use

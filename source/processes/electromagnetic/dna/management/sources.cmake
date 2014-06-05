@@ -60,10 +60,11 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITReactionChange.hh
         G4ITReactionTable.hh
         G4ITSafetyHelper.hh
-        G4ITStepManager.hh
-        G4ITSteppingMessenger.hh
+#        G4ITStepManager.hh
+#        G4ITSteppingMessenger.hh
         G4ITStepProcessor.hh
         G4ITStepStatus.hh
+        G4ITTimeStepper.hh
         G4ITTrackHolder.hh
         G4ITTrackingInteractivity.hh
         G4ITTrackingManager.hh
@@ -82,12 +83,12 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4TrackList.hh
 	    G4TrackState.hh
         G4UserTimeStepAction.hh
-        G4VITModel.hh
         G4VITProcess.hh
         G4VITReactionProcess.hh
         G4VITRestDiscreteProcess.hh
         G4VITRestProcess.hh
-        G4VITTimeStepper.hh
+        G4VITStepModel.hh
+        G4VITTimeStepComputer.hh
     SOURCES
         G4AllITManager.cc
         G4ITBox.cc
@@ -108,10 +109,11 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITReactionChange.cc
         G4ITReactionTable.cc
         G4ITSafetyHelper.cc
-        G4ITStepManager.cc
-        G4ITSteppingMessenger.cc
+#        G4ITStepManager.cc
+#        G4ITSteppingMessenger.cc
         G4ITStepProcessor2.cc
         G4ITStepProcessor.cc
+        G4ITTimeStepper.cc
         G4ITTrackHolder.cc
         G4ITTrackingInteractivity.cc
         G4ITTrackingManager.cc
@@ -128,12 +130,12 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4TrackList.cc
         G4TrackState.cc
         G4UserTimeStepAction.cc
-        G4VITModel.cc
         G4VITProcess.cc
         G4VITReactionProcess.cc
         G4VITRestDiscreteProcess.cc
         G4VITRestProcess.cc
-        G4VITTimeStepper.cc
+        G4VITStepModel.cc
+        G4VITTimeStepComputer.cc
     GRANULAR_DEPENDENCIES
         G4detector
         G4geometrymng

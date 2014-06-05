@@ -120,7 +120,7 @@ void G4ITModelHandler::Initialize()
 }
 
 void G4ITModelHandler::RegisterModel(
-    G4VITModel* aModel,
+    G4VITStepModel* aModel,
     G4double startingTime)
 {
     assert(aModel != 0);
@@ -174,7 +174,7 @@ void G4ITModelHandler::RegisterModel(
 
 void G4ITModelHandler::SetModel(G4ITType type1,
                               G4ITType type2,
-                              G4VITModel* aModel,
+                              G4VITStepModel* aModel,
                               G4double startingTime)
 {
     assert(aModel == 0);
@@ -201,7 +201,7 @@ void G4ITModelHandler::SetModel(G4ITType type1,
 }
 
 
-G4VITModel* G4ITModelHandler::GetModel(G4ITType type1,
+G4VITStepModel* G4ITModelHandler::GetModel(G4ITType type1,
                                      G4ITType type2,
                                      const G4double globalTime)
 {

@@ -34,9 +34,9 @@
 // -------------------------------------------------------------------
 
 #include "G4ITModelProcessor.hh"
-#include "G4VITTimeStepper.hh"
+#include "G4VITTimeStepComputer.hh"
 #include "G4VITReactionProcess.hh"
-#include "G4ITStepManager.hh"
+//#include "G4ITTimeStepper.hh"
 
 //#define DEBUG_MEM
 
@@ -57,7 +57,7 @@ G4ITModelProcessor::G4ITModelProcessor()
     fpModel = 0;
     fInitialized = false;
     fpModelManager = 0;
-    fCurrentModel.assign(G4ITType::size(), std::vector<G4VITModel*>());
+    fCurrentModel.assign(G4ITType::size(), std::vector<G4VITStepModel*>());
 
     for(int i = 0 ; i < (int) G4ITType::size() ; i++)
     {
@@ -125,13 +125,13 @@ void G4ITModelProcessor::InitializeStepper(const G4double& currentGlobalTime,
 
     int nbModels1 = modelManager->size() ;
 
-    G4VITTimeStepper::SetTimes(currentGlobalTime, userMinTime) ;
+    G4VITTimeStepComputer::SetTimes(currentGlobalTime, userMinTime) ;
 
     // TODO !!!
     //    if( nbModels1 != 1 || (nbModels1 == 1 && !fpModelManager) )
     {
         int nbModels2 = -1;
-        G4VITModel* model = 0;
+        G4VITStepModel* model = 0;
         G4ITModelManager* modman = 0;
 
         for(int i = 0 ; i < nbModels1 ; i++)
@@ -145,7 +145,7 @@ void G4ITModelProcessor::InitializeStepper(const G4double& currentGlobalTime,
                 if(modman == 0) continue ;
 
                 model       =  modman -> GetModel(currentGlobalTime);
-                G4VITTimeStepper* stepper   = model->GetTimeStepper() ;
+                G4VITTimeStepComputer* stepper   = model->GetTimeStepper() ;
 
 #if defined (DEBUG_MEM)
 	MemStat mem_first, mem_second, mem_diff;
@@ -203,7 +203,7 @@ void G4ITModelProcessor::DoCalculateStep()
     }
     else // ie many models have been declared and will be used
     {
-        std::vector<G4VITModel*>& model = fCurrentModel[GetIT(fpTrack)->GetITType()];
+        std::vector<G4VITStepModel*>& model = fCurrentModel[GetIT(fpTrack)->GetITType()];
 
         for(int i =0 ; i < (int) model.size() ; i++)
         {
@@ -227,7 +227,7 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
 
     std::map<G4Track*, G4TrackVectorHandle>::iterator tracks_i = tracks->begin();
 
-//    G4cout << "G4ITModelProcessor::FindReaction at step :" << G4ITStepManager::Instance()->GetNbSteps() << G4endl;
+//    G4cout << "G4ITModelProcessor::FindReaction at step :" << G4ITTimeStepper::Instance()->GetNbSteps() << G4endl;
 
     for(tracks_i = tracks->begin() ; tracks_i != tracks-> end() ; tracks_i ++)
     {
@@ -245,7 +245,7 @@ void G4ITModelProcessor::FindReaction(std::map<G4Track*, G4TrackVectorHandle>* t
         G4IT* ITA = GetIT(trackA);
         G4ITType ITypeA = ITA -> GetITType();
 
-        const std::vector<G4VITModel*> model = fCurrentModel[ITypeA];
+        const std::vector<G4VITStepModel*> model = fCurrentModel[ITypeA];
 
         G4TrackVectorHandle& trackB_vector = tracks_i->second ;
         std::vector<G4Track*>::iterator trackB_i = trackB_vector->begin();

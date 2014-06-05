@@ -33,12 +33,12 @@
 //
 // -------------------------------------------------------------------
 
-#include "G4VITTimeStepper.hh"
+#include "G4VITTimeStepComputer.hh"
 
-G4ThreadLocal G4double G4VITTimeStepper::fCurrentGlobalTime = -1;
-G4ThreadLocal G4double G4VITTimeStepper::fUserMinTimeStep   = -1;
+G4ThreadLocal G4double G4VITTimeStepComputer::fCurrentGlobalTime = -1;
+G4ThreadLocal G4double G4VITTimeStepComputer::fUserMinTimeStep   = -1;
 
-G4VITTimeStepper::G4VITTimeStepper()
+G4VITTimeStepComputer::G4VITTimeStepComputer()
 {
     fVerbose = 0;
 //    fReactants = 0;
@@ -47,17 +47,17 @@ G4VITTimeStepper::G4VITTimeStepper()
     fpReactionTable      = 0;
 }
 
-G4VITTimeStepper::~G4VITTimeStepper()
+G4VITTimeStepComputer::~G4VITTimeStepComputer()
 {;}
 
-G4VITTimeStepper& G4VITTimeStepper::operator=(const G4VITTimeStepper& rhs)
+G4VITTimeStepComputer& G4VITTimeStepComputer::operator=(const G4VITTimeStepComputer& rhs)
 {
     if (this == &rhs) return *this; // handle self assignment
     //assignment operator
     return *this;
 }
 
-G4VITTimeStepper::G4VITTimeStepper(const G4VITTimeStepper& right)
+G4VITTimeStepComputer::G4VITTimeStepComputer(const G4VITTimeStepComputer& right)
 {
     fVerbose            = right.fVerbose ;
     fpReactionTable      = right.fpReactionTable ;
@@ -66,7 +66,7 @@ G4VITTimeStepper::G4VITTimeStepper(const G4VITTimeStepper& right)
     fSampledMinTimeStep = 0 ;
 }
 
-void G4VITTimeStepper::SetTimes(const G4double& currentGlobalTime,
+void G4VITTimeStepComputer::SetTimes(const G4double& currentGlobalTime,
                             const G4double& userMinStepTime)
 {
     fCurrentGlobalTime = currentGlobalTime ;

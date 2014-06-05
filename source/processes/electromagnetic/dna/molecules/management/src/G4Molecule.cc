@@ -184,7 +184,9 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int OrbitalT
 	}
 	else
 	{
-		// TODO exception
+		 fpMolecularConfiguration = 0;
+		 G4Exception("G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int OrbitalToFree, G4int OrbitalToFill)","G4Molecule_wrong_usage_of_constructor",
+		 				FatalErrorInArgument,"If you want to use this constructor, the molecule definition has to be first defined with electron occupancies");
 	}
 }
 
@@ -217,7 +219,10 @@ G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int Level, G
 	}
 	else
 	{
-		// TODO exception
+		fpMolecularConfiguration = 0;
+		G4Exception("G4Molecule::G4Molecule(G4MoleculeDefinition * moleculeDefinition, G4int OrbitalToFree, G4int OrbitalToFill)","G4Molecule_wrong_usage_of_constructor",
+				 				FatalErrorInArgument,"If you want to use this constructor, the molecule definition has to be first defined with electron occupancies");
+
 	}
 }
 

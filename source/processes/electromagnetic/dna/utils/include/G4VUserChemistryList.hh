@@ -19,7 +19,7 @@
 
 class G4Molecule;
 class G4DNAMolecularReactionTable;
-class G4VITModel;
+class G4VITStepModel;
 class G4MoleculeDefinition;
 
 class G4VUserChemistryList {
@@ -42,7 +42,7 @@ public:
 	void BuildPhysicsTable();
 
 protected:
-	void RegisterTimeStepModel(G4VITModel* timeStepModel, double startingTime = 0);
+	void RegisterTimeStepModel(G4VITStepModel* timeStepModel, double startingTime = 0);
 	void BuildPhysicsTable(G4MoleculeDefinition*);
 
 	int verboseLevel;

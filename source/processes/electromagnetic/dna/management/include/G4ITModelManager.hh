@@ -47,7 +47,7 @@
 
 #include "globals.hh"
 #include <map>
-#include "G4VITModel.hh"
+#include "G4VITStepModel.hh"
 
 /**
   * G4ITModelManager chooses which model to use according
@@ -62,11 +62,11 @@ public:
     void Initialize();
     G4ITModelManager(const G4ITModelManager& other);
     G4ITModelManager& operator=(const G4ITModelManager& rhs);
-    void SetModel(G4VITModel* aModel, G4double startingTime);
-    G4VITModel* GetModel(const G4double globalTime);
+    void SetModel(G4VITStepModel* aModel, G4double startingTime);
+    G4VITStepModel* GetModel(const G4double globalTime);
 
 protected :
-    typedef std::map<G4double /*startingTime*/, G4VITModel* /*aModel*/>  mapModels ;
+    typedef std::map<G4double /*startingTime*/, G4VITStepModel* /*aModel*/>  mapModels ;
     mapModels fModels ;
     G4bool fIsInitialized ;
 };

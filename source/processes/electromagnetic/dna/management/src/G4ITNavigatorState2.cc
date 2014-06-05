@@ -19,6 +19,8 @@ G4ITNavigator2::G4NavigatorState::G4NavigatorState() : G4ITNavigatorState_Lock2(
 void G4ITNavigator2::G4NavigatorState::Reset()
 {
 	fHistory.Reset();
+	fCalculatedExitNormal  = false;
+	fChangedGrandMotherRefFrame= false;
 	fLastTriedStepComputation= false;
 	fWasLimitedByGeometry  = false;
 	fEntering              = false;

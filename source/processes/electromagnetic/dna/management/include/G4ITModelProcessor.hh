@@ -50,7 +50,7 @@
 #include "G4ITType.hh"
 #include "G4ITModelHandler.hh"
 
-class G4VITTimeStepper;
+class G4VITTimeStepComputer;
 class G4VITReactionProcess;
 class G4ITModelHandler;
 
@@ -101,7 +101,7 @@ public :
 
     //____________________________________________________________
     // Get results
-    inline const std::vector<std::vector<G4VITModel*> >* GetCurrentModel();
+    inline const std::vector<std::vector<G4VITStepModel*> >* GetCurrentModel();
 
     inline std::vector<G4ITReactionChange*>*   GetReactionInfo()
     {
@@ -135,11 +135,11 @@ protected:
 
     // Attributes for interaction between many IT types
     // eg : electron/proton
-    std::vector<std::vector<G4VITModel*> >   fCurrentModel;
+    std::vector<std::vector<G4VITStepModel*> >   fCurrentModel;
 
     // Attributes for interaction between one type of IT
     // eg : molecule/molecule or electron/electron
-    G4VITModel*                 fpModel;
+    G4VITStepModel*                 fpModel;
     G4ITModelManager*           fpModelManager;
 //    G4double                    fNextTimeChangeModel ;
 
@@ -160,7 +160,7 @@ inline void G4ITModelProcessor::SetTrack(const G4Track* track)
     fpTrack = track;
 }
 
-inline const std::vector<std::vector<G4VITModel*> >* G4ITModelProcessor::GetCurrentModel()
+inline const std::vector<std::vector<G4VITStepModel*> >* G4ITModelProcessor::GetCurrentModel()
 {
     return &fCurrentModel ;
 }

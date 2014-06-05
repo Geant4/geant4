@@ -48,7 +48,7 @@
 #include "G4ITManager.hh"
 #include "G4MolecularConfiguration.hh"
 #include "G4MoleculeCounter.hh"
-#include "G4ITStepManager.hh"
+#include "G4ITTimeStepper.hh"
 #include "G4VUserChemistryList.hh"
 #include "G4AutoLock.hh"
 #include "G4UIcmdWithABool.hh"
@@ -208,7 +208,7 @@ void G4DNAChemistryManager::Run()
 			G4Exception("G4DNAChemistryManager::Run", "THREAD_INIT", FatalException, description);
 		}
 
-		G4ITStepManager::Instance() -> Process();
+		G4ITTimeStepper::Instance() -> Process();
 		CloseFile();
 	}
 }
@@ -216,7 +216,7 @@ void G4DNAChemistryManager::Run()
 void G4DNAChemistryManager::Gun(G4ITGun* gun, bool physicsTableToBuild)
 {
 	fBuildPhysicsTable = physicsTableToBuild;
-	G4ITStepManager::Instance() -> SetGun(gun);
+	G4ITTimeStepper::Instance() -> SetGun(gun);
 }
 
 void G4DNAChemistryManager::InitializeMaster()
@@ -263,7 +263,7 @@ void G4DNAChemistryManager::InitializeThread()
 				fPhysicsTableBuilt = true;
 			}
 			fpUserChemistryList->ConstructTimeStepModel(G4DNAMolecularReactionTable::GetReactionTable());
-			G4ITStepManager::Instance()-> Initialize();
+			G4ITTimeStepper::Instance()-> Initialize();
 			fpgThreadInitialized_tl = new G4bool(true);
 		}
 		else

@@ -40,14 +40,14 @@ public:
 	G4Molecule* GetMoleculeModel(const G4String&);
 
 	void Insert(G4MoleculeDefinition*);
-	G4MoleculeDefinitionIterator* GetDefintionIterator()
+	G4MoleculeDefinitionIterator GetDefintionIterator()
 	{
-		return new G4MoleculeDefinitionIterator(this->fMoleculeDefTable);
+		return G4MoleculeDefinitionIterator(this->fMoleculeDefTable);
 	}
 
-	G4MoleculeModelIterator* GetModelIterator()
+	G4MoleculeModelIterator GetModelIterator()
 	{
-		return new G4MoleculeModelIterator(this->fMoleculeTable);
+		return G4MoleculeModelIterator(this->fMoleculeTable);
 	}
 
 

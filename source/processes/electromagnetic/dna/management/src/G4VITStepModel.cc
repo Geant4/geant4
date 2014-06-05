@@ -33,9 +33,9 @@
 //
 // -------------------------------------------------------------------
 
-#include "G4VITModel.hh"
+#include "G4VITStepModel.hh"
 
-G4VITModel::G4VITModel(const G4String& aName)
+G4VITStepModel::G4VITStepModel(const G4String& aName)
 {
     //ctor
     fpTimeStepper        = 0;
@@ -47,7 +47,7 @@ G4VITModel::G4VITModel(const G4String& aName)
     fName               = aName;
 }
 
-G4VITModel::~G4VITModel()
+G4VITStepModel::~G4VITStepModel()
 {
     //dtor
     if(fpTimeStepper)        delete fpTimeStepper;
@@ -56,7 +56,7 @@ G4VITModel::~G4VITModel()
     // Let the concrete class delete the reactionTable
 }
 
-G4VITModel::G4VITModel(const G4VITModel& right)
+G4VITStepModel::G4VITStepModel(const G4VITStepModel& right)
 {
     //copy ctor
     fName               = right.fName;
@@ -68,7 +68,7 @@ G4VITModel::G4VITModel(const G4VITModel& right)
 }
 
 // should not be used
-G4VITModel& G4VITModel::operator=(const G4VITModel& right)
+G4VITStepModel& G4VITStepModel::operator=(const G4VITStepModel& right)
 {
     if (this == &right) return *this; // handle self assignment
 
@@ -85,14 +85,14 @@ G4VITModel& G4VITModel::operator=(const G4VITModel& right)
     return *this;
 }
 
-void G4VITModel::IsApplicable(G4ITType& type1, G4ITType& type2)
+void G4VITStepModel::IsApplicable(G4ITType& type1, G4ITType& type2)
 {
     type1 = fType1;
     type2 = fType2;
     PrintInfo();
 }
 
-void G4VITModel::Initialize()
+void G4VITStepModel::Initialize()
 {
     fpReactionProcess->SetReactionTable(fpReactionTable);
     fpTimeStepper->SetReactionTable(fpReactionTable);

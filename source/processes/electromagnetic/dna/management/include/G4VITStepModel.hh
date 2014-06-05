@@ -41,96 +41,104 @@
 // Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
 // Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
 
-#ifndef G4VITTimeStepper_H
-#define G4VITTimeStepper_H
+#ifndef G4VITMODEL_HH
+#define G4VITMODEL_HH
 
-#include "G4Track.hh"
-#include "G4ITReactionTable.hh"
-#include "G4ReferenceCountedHandle.hh"
 #include "AddClone_def.hh"
-
-#include "CLHEP/Utility/memory.h"
-
-//typedef G4ReferenceCountedHandle< std::vector<G4Track*> > G4TrackVectorHandle;
-typedef CLHEP::shared_ptr< std::vector<G4Track*> > G4TrackVectorHandle;
+#include "G4VITTimeStepComputer.hh"
+#include "G4VITReactionProcess.hh"
+#include "G4ITReactionTable.hh"
 
 /**
-  * Before stepping all tracks G4ITStepManager calls all the G4VITModel
-  * which may contain a G4VITTimeStepper (optionnal).
-  * G4VITTimeStepper returns what should be the next global time step.
-  * Time step that will be used to step all tracks.
-  */
+ * Define what to do before stepping and after stepping.
+ * The concrete implementation of G4VITModel defines the interaction
+ * between two G4IT types. The type might be just equal like :
+ * Molecule + Molecule, or different : Molecule + Atom.
+ */
 
-class G4VITTimeStepper
+class G4VITStepModel
 {
 public:
-    G4VITTimeStepper();
-    virtual ~G4VITTimeStepper();
+    /** Default constructor */
+    G4VITStepModel(const G4String& aName = "NoName");
+    /** Default destructor */
+    virtual ~G4VITStepModel();
 
-    G4VITTimeStepper(const G4VITTimeStepper&);
-    G4VITTimeStepper& operator=(const G4VITTimeStepper& other);
+    /* Macro define in AddClone_def*/
+    G4IT_TO_BE_CLONED(G4VITStepModel)
 
-    /** This macro defined in AddClone_def **/
-    G4IT_TO_BE_CLONED(G4VITTimeStepper)
+    void IsApplicable(G4ITType& type1, G4ITType& type2) ;
+    void virtual PrintInfo(){;}
 
-    // First initialization (done once for all at the begin of the run)
-    // eg. check if the reaction table is given ...
-    inline virtual void Initialize(){;}
+    virtual void Initialize();
 
-    // Preparation part
-    static void SetTimes(const G4double&, const G4double&);
-//    inline virtual void PrepareForAllProcessors(){;}
-    inline virtual void Prepare() ;
+    inline void SetTimeStepper(G4VITTimeStepComputer* timeStepper);
+    inline void SetReactionProcess(G4VITReactionProcess* reactionProcess);
 
-    virtual G4double CalculateStep(const G4Track&, const G4double&) = 0;
+    inline G4VITTimeStepComputer* GetTimeStepper();
+    inline const G4String& GetName();
 
-    inline G4TrackVectorHandle GetReactants();
-    inline virtual void ResetReactants()
-//    {fReactants = 0;}
-    {fReactants.reset();}
-
-    //
-    inline G4double GetSampledMinTimeStep() ;
-    
-    inline void SetReactionTable(const G4ITReactionTable*);
+    inline G4VITReactionProcess* GetReactionProcess();
+    inline void SetReactionTable(G4ITReactionTable*);
     inline const G4ITReactionTable* GetReactionTable();
 
+protected:
+
+    G4String fName;
+
+    G4VITTimeStepComputer* fpTimeStepper;
+    G4VITReactionProcess* fpReactionProcess;
+
+    const G4ITReactionTable* fpReactionTable ;
+
+    G4ITType fType1;
+    G4ITType fType2;
+
 protected :
-    static G4ThreadLocal G4double fCurrentGlobalTime ;
-    static G4ThreadLocal G4double fUserMinTimeStep   ;
-
-    G4double fSampledMinTimeStep ;
-    G4TrackVectorHandle fReactants;
-
-    const G4ITReactionTable* fpReactionTable;
-
-private:
-    G4int fVerbose ;
+    /** Copy constructor
+         *  \param other Object to copy from
+         */
+    G4VITStepModel(const G4VITStepModel& other);
+    /** Assignment operator
+         *  \param other Object to assign from
+         *  \return A reference to this
+         */
+    G4VITStepModel& operator=(const G4VITStepModel& other);
 };
 
-inline void G4VITTimeStepper::SetReactionTable(const G4ITReactionTable* table)
+inline void G4VITStepModel::SetReactionTable(G4ITReactionTable* table)
 {
     fpReactionTable = table;
 }
 
-inline const G4ITReactionTable* G4VITTimeStepper::GetReactionTable()
+inline const G4ITReactionTable* G4VITStepModel::GetReactionTable()
 {
     return fpReactionTable ;
 }
 
-inline void G4VITTimeStepper::Prepare()
+inline void G4VITStepModel::SetTimeStepper(G4VITTimeStepComputer* timeStepper)
 {
-//    fReactants = 0 ;
-	fReactants.reset() ;
+    fpTimeStepper = timeStepper ;
 }
 
-inline G4double G4VITTimeStepper::GetSampledMinTimeStep()
+inline void G4VITStepModel::SetReactionProcess(G4VITReactionProcess* reactionProcess)
 {
-    return fSampledMinTimeStep ;
+    fpReactionProcess = reactionProcess ;
 }
 
-inline G4TrackVectorHandle G4VITTimeStepper::GetReactants()
+inline G4VITTimeStepComputer* G4VITStepModel::GetTimeStepper()
 {
-    return  fReactants ;
+    return fpTimeStepper;
 }
-#endif // G4VITTimeStepper_H
+
+inline G4VITReactionProcess* G4VITStepModel::GetReactionProcess()
+{
+    return fpReactionProcess ;
+}
+
+inline const G4String& G4VITStepModel::GetName()
+{
+    return fName;
+}
+
+#endif // G4VITMODEL_HH

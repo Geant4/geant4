@@ -14,6 +14,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+04-06-2014  MK, tag emdna-V10-00-28
+	    Remove directory management/include/impl
+	    Prepare for release
+
+04-06-2014  MK, tag emdna-V10-00-27
+            Resolve several defects pointed out by coverity
+            Add interface G4ITTimeStepper
+            Avoid usage of molecule iterators as pointers
+
 03-06-2014  SI, tag emdna-V10-00-26
                 Switched to DNAion for Si in G4DNAGenericIonsManager
 

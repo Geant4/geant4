@@ -38,12 +38,22 @@ public:
 
 	}
 
-	G4MoleculeIterator(const G4MoleculeIterator& right) : MAP::iterator(right)
+	G4MoleculeIterator(const G4MoleculeIterator& right)
 	{
 		fMap = right.fMap;
 		fDefined = right.fDefined;
 		fIt = right.fIt;
 	}
+
+	G4MoleculeIterator& operator=(const G4MoleculeIterator& right)
+	{
+		if(this == &right) return *this;
+		fMap = right.fMap;
+		fDefined = right.fDefined;
+		fIt = right.fIt;
+		return *this;
+	}
+
 
 	G4bool operator++ (int) {
 		if(!fDefined) return false;

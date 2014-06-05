@@ -53,7 +53,7 @@
 #include "G4UnitsTable.hh"
 #include "G4NistManager.hh"
 #include "G4DNAMolecularMaterial.hh"
-#include "G4ITStepManager.hh"
+#include "G4ITTimeStepper.hh"
 #include "G4ITNavigator.hh"
 
 using namespace std;
@@ -459,8 +459,8 @@ G4double G4DNABrownianTransportation::AlongStepGetPhysicalInteractionLength(
 			State(theInteractionTimeLeft) = 1/(4*diffusionCoefficient) * pow(geometryStepLength/InvErfc(G4UniformRand()),2);
 		}
 
-		double minTimeStepAllowed = G4ITStepManager::Instance()->GetLimitingTimeStep();
-		double currentMinTimeStep = G4ITStepManager::Instance()->GetTimeStep();
+		double minTimeStepAllowed = G4ITTimeStepper::Instance()->GetLimitingTimeStep();
+		double currentMinTimeStep = G4ITTimeStepper::Instance()->GetTimeStep();
 
 		if(State(theInteractionTimeLeft) < minTimeStepAllowed
 				&& State(theInteractionTimeLeft) < currentMinTimeStep

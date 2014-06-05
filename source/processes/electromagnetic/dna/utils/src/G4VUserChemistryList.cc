@@ -6,7 +6,7 @@
  */
 
 #include "G4VUserChemistryList.hh"
-#include "G4ITStepManager.hh"
+#include "G4ITTimeStepper.hh"
 #include "G4MoleculeTable.hh"
 #include "G4MoleculeDefinition.hh"
 #include "G4ProcessManager.hh"
@@ -28,10 +28,10 @@ G4VUserChemistryList::~G4VUserChemistryList() {
 	}
 }
 
-void G4VUserChemistryList::RegisterTimeStepModel(G4VITModel* timeStepModel,
+void G4VUserChemistryList::RegisterTimeStepModel(G4VITStepModel* timeStepModel,
 		double startingTime)
 {
-	G4ITStepManager::Instance()->GetModelHandler()->RegisterModel(timeStepModel, startingTime);
+	G4ITTimeStepper::Instance()->RegisterModel(timeStepModel, startingTime);
 }
 
 
@@ -39,7 +39,7 @@ void G4VUserChemistryList::BuildPhysicsTable()
 {
 	G4MoleculeTable* theMoleculeTable = G4MoleculeTable::Instance();
 
-	G4MoleculeDefinitionIterator* iterator = theMoleculeTable ->GetDefintionIterator();
+	G4MoleculeDefinitionIterator iterator = theMoleculeTable ->GetDefintionIterator();
 
 	//Prepare Physics table for all particles
 	//	iterator->reset();
@@ -48,9 +48,9 @@ void G4VUserChemistryList::BuildPhysicsTable()
 	//PreparePhysicsTable(particle);
 	//	}
 
-	iterator->reset();
-	while( (*iterator)() ){
-		G4MoleculeDefinition* moleculeDef = iterator->value();
+	iterator.reset();
+	while( iterator() ){
+		G4MoleculeDefinition* moleculeDef = iterator.value();
 		G4cout << moleculeDef->GetName() << G4endl;
 		BuildPhysicsTable(moleculeDef);
 	}

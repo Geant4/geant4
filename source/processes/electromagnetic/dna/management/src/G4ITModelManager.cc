@@ -79,7 +79,7 @@ void G4ITModelManager::Initialize()
 
     for( ; it != fModels.end() ; it ++)
     {
-        G4VITModel* model = it ->second;
+        G4VITStepModel* model = it ->second;
         if(model!=0)
         {
             model->Initialize();
@@ -87,7 +87,7 @@ void G4ITModelManager::Initialize()
     }
 }
 
-void G4ITModelManager::SetModel(G4VITModel* aModel, G4double startingTime)
+void G4ITModelManager::SetModel(G4VITStepModel* aModel, G4double startingTime)
 {
     assert(fIsInitialized == FALSE);
     if(fIsInitialized == true)
@@ -100,7 +100,7 @@ void G4ITModelManager::SetModel(G4VITModel* aModel, G4double startingTime)
     fModels[startingTime] = aModel;
 }
 
-G4VITModel* G4ITModelManager::GetModel(const G4double globalTime)
+G4VITStepModel* G4ITModelManager::GetModel(const G4double globalTime)
 {
     if(!fModels.empty())
     {
