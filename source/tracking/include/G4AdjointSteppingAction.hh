@@ -88,6 +88,7 @@ class G4AdjointSteppingAction : public G4UserSteppingAction
     inline void SetUserForwardSteppingAction( G4UserSteppingAction* anAction) {
     	                                  theUserFwdSteppingAction = anAction;}
     inline void SetAdjointTrackingMode(G4bool aBool){is_adjoint_tracking_mode =aBool;}
+    inline void SetAdjointGeantinoTrackingMode(G4bool aBool){is_adjoint_geantino_tracking_mode =aBool;}
   private:
 
     G4double ext_sourceEMax;
@@ -103,6 +104,8 @@ class G4AdjointSteppingAction : public G4UserSteppingAction
     G4UserSteppingAction* theUserAdjointSteppingAction;
     G4UserSteppingAction* theUserFwdSteppingAction;
     G4bool is_adjoint_tracking_mode;
+    G4bool is_adjoint_geantino_tracking_mode;
+
 
 };
 #endif

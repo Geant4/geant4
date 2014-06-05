@@ -50,9 +50,9 @@ G4AdjointTrackingAction::~G4AdjointTrackingAction()
 {;}
 /////////////////////////////////////////////////////////
 void G4AdjointTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
-{ G4String partType = aTrack->GetParticleDefinition()->GetParticleType();
-  if (aTrack->GetDynamicParticle()->GetPrimaryParticle() &&
-              partType.contains(G4String("adjoint"))){
+{
+  G4String partType = aTrack->GetParticleDefinition()->GetParticleType();
+  if (partType.contains(G4String("adjoint"))){
    is_adjoint_tracking_mode =true;
    theAdjointSteppingAction->SetPrimWeight(aTrack->GetWeight());
   }
@@ -65,12 +65,19 @@ void G4AdjointTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
 }
 /////////////////////////////////////////////////////////
  void G4AdjointTrackingAction::PostUserTrackingAction(const G4Track* aTrack)
-{ if(!is_adjoint_tracking_mode){
+{
+
+  //important to have it here !
+  last_weight = theAdjointSteppingAction->GetLastWeight();
+  last_ekin = theAdjointSteppingAction->GetLastEkin();
+
+
+  if(!is_adjoint_tracking_mode){
 	if (theUserFwdTrackingAction)
 		theUserFwdTrackingAction->PostUserTrackingAction(aTrack);
   }
   else if (theAdjointSteppingAction->GetDidAdjParticleReachTheExtSource()){
-    last_pos = theAdjointSteppingAction->GetLastPosition();
+	last_pos = theAdjointSteppingAction->GetLastPosition();
     last_direction = theAdjointSteppingAction->GetLastMomentum();
     last_direction /=last_direction.mag();
     last_cos_th =  last_direction.z();
@@ -85,7 +92,17 @@ void G4AdjointTrackingAction::PreUserTrackingAction(const G4Track* aTrack)
       G4double  nb_nuc=double(aPartDef->GetBaryonNumber());
       last_ekin_nuc /=nb_nuc;
     }
-    last_weight = theAdjointSteppingAction->GetLastWeight(); ;
+
+    last_fwd_part_index=-1;
+      size_t i=0;
+      while(i< pListOfPrimaryFwdParticles->size() && last_fwd_part_index<0) {
+       if ((*pListOfPrimaryFwdParticles)[i]->GetParticleName() == last_fwd_part_name)
+                last_fwd_part_index=i;
+       i++;
+      }
+  }
+  else {
+
   }
 }
 

@@ -44,8 +44,10 @@
 #include "globals.hh"
 #include "G4UserTrackingAction.hh"
 #include "G4ThreeVector.hh"
+#include <vector>
 class G4AdjointSteppingAction;
 class G4Track;
+class G4ParticleDefinition;
 ///////////////////////////
 class G4AdjointTrackingAction : public G4UserTrackingAction
 ///////////////////////////
@@ -75,7 +77,11 @@ public: // with description
    inline G4double GetCosthAtEndOfLastAdjointTrack(){return last_cos_th;}
    inline const G4String& GetFwdParticleNameAtEndOfLastAdjointTrack(){return last_fwd_part_name;}
    inline G4int GetFwdParticlePDGEncodingAtEndOfLastAdjointTrack(){return last_fwd_part_PDGEncoding;}
-
+   inline G4bool GetIsAdjointTrackingMode(){return is_adjoint_tracking_mode;}
+   inline G4int GetLastFwdParticleIndex(){
+             return last_fwd_part_index;};
+   inline void SetListOfPrimaryFwdParticles( std::vector<G4ParticleDefinition*>*
+            aListOfParticles){pListOfPrimaryFwdParticles=aListOfParticles;}
 
 private:
    G4AdjointSteppingAction* theAdjointSteppingAction;
@@ -92,7 +98,9 @@ private:
    G4String last_fwd_part_name;
    G4int  last_fwd_part_PDGEncoding;
    G4double last_weight;
-   G4int ID_of_last_particle_that_reach_the_ext_source;
+   G4int  last_fwd_part_index;
+   std::vector<G4ParticleDefinition*>* pListOfPrimaryFwdParticles;
+
 
 
 };

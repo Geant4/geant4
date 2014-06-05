@@ -70,8 +70,6 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
        theUserFwdSteppingAction->UserSteppingAction(aStep);
      return;
    }
-
-
   //Apply first the user adjoint stepping action
   //---------------------------
   if (theUserAdjointSteppingAction) theUserAdjointSteppingAction->UserSteppingAction(aStep);
@@ -109,7 +107,7 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
   G4bool GoingIn;
   G4ThreeVector crossing_pos;
   if (theG4AdjointCrossSurfChecker->CrossingOneOfTheRegisteredSurface(aStep, surface_name, crossing_pos, cos_to_surface, GoingIn) ){
-  	
+
 	//G4cout<<"Test_step11"<<std::endl;
 	if (surface_name == "ExternalSource") {
 		//Registering still needed
@@ -130,6 +128,7 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
 	}  
   }
   //Check for reaching out of world
+  //G4cout<<aStep->GetPostStepPoint()->GetStepStatus()<<std::endl;
   if (aStep->GetPostStepPoint()->GetStepStatus() == fWorldBoundary) {
 	  did_adj_part_reach_ext_source=true;
 	  last_momentum =aTrack->GetMomentum();
@@ -140,6 +139,6 @@ void G4AdjointSteppingAction::UserSteppingAction(const G4Step* aStep)
   		return;
 
   }
-  
+
 }
 
