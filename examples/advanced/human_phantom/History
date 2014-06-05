@@ -17,6 +17,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+May 4, 2014, A. Dotti tag human_phantom-V09-06-07
+- migration to new GPS MT-ready
+
 Nov 11, 2013, S. Guatelli tag human_phantom-V09-06-06
 - warning with CLANG removed
 
