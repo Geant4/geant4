@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+April 23rd, 2014 Gabriele Cosmo G01-V09-06-01
+- Added GDML sample mat_nist.gdml showing how to load a NIST material,
+  although format is not part of the GDML schema yet (i.e. expected
+  warning in schema validation).
+
+April 14th, 2014 Tatiana Nikitina
+- Correction to solids.gdml for 'para' solid, where angle unit was missing.
+
 November 22nd, 2013 Tatiana Nikitina G01-V09-06-00
 - Added test case for 'genericPolycone' and 'genericPolyhedra'.
   Requires update to GDML schema 3.1.0 to avoid validation errors.

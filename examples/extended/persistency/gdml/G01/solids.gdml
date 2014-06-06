@@ -76,7 +76,7 @@
 
   <cone name="c1" z="111.0" rmax1="22.0" rmax2="33.0" deltaphi="TWOPI" aunit="rad"/>
 
-  <para name="pa1" x="10.0" y="10.0" z="10.0" alpha="30.0" theta="30.0" phi="30.0"/>
+  <para name="pa1" x="10.0" y="10.0" z="10.0" alpha="30.0" theta="30.0" phi="30.0" aunit="deg"/>
 
   <sphere name="s1" rmax="50.0" deltaphi="TWOPI" deltatheta="PI" aunit="rad"/>
 
@@ -89,7 +89,7 @@
   <trap name="trap1" z="100.0" theta="60.0" phi="60.0"
                              y1="10.0"    x1="10.0" x2="10.0"
                              alpha1="30.0"  y2="10.0" x3="10.0"
-                             x4="10.0"    alpha2="30.0"/>
+                             x4="10.0"    alpha2="30.0" aunit="deg"/>
   <trd name="trd1" x1="10.0" x2="10.0" y1="10.0" y2="20.0" z="30.0"/>
   <tube name="t1000" z="1000.0" rmax="100.0" deltaphi="TWOPI" aunit="rad"/>
   <tube name="t400" z="200.0" rmax="50.0" deltaphi="customangle" aunit="rad"/>
