@@ -446,12 +446,16 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     if(s3 == "true") { b3 = true; }
     if(s4 == "true") { b4 = true; }
     opt->SetDeexcitationActiveRegion(s1,b2,b3,b4);
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == deCmd) {
     opt->SetFluo(deCmd->GetNewBoolValue(newValue));
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == auCmd) {
     opt->SetAuger(auCmd->GetNewBoolValue(newValue));
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == pixeCmd) {
     opt->SetPIXE(pixeCmd->GetNewBoolValue(newValue));
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == pixeXsCmd) {
     G4String name;
     if (newValue == "ecpssr_analytical") 
@@ -461,8 +465,10 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     else 
       {name = newValue;}
     opt->SetPIXECrossSectionModel(name);
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == pixeeXsCmd) {
     opt->SetPIXEElectronCrossSectionModel(newValue);
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == mscCmd) {
     if(newValue == "Minimal") 
       opt->SetMscStepLimitation(fMinimal);
@@ -511,6 +517,7 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     opt->SetLinearLossLimit(lllCmd->GetNewDoubleValue(newValue));
   } else if (command == labCmd) {
     opt->SetLambdaFactor(labCmd->GetNewDoubleValue(newValue));
+    G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
   } else if (command == skinCmd) {
     opt->SetSkin(skinCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
