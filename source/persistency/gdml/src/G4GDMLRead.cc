@@ -123,7 +123,7 @@ void G4GDMLRead::StripNames() const
          << G4endl;
 
   G4String sname;
-  register size_t i;
+  size_t i;
 
   // Solids...
   //
@@ -288,13 +288,16 @@ void G4GDMLRead::Read(const G4String& fileName,
    xercesc::ErrorHandler* handler = new G4GDMLErrorHandler(!validate);
    xercesc::XercesDOMParser* parser = new xercesc::XercesDOMParser;
 
-   parser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
-   parser->setValidationSchemaFullChecking(true);
+   if (validate)
+   {
+     parser->setValidationScheme(xercesc::XercesDOMParser::Val_Always);
+   }
+   parser->setValidationSchemaFullChecking(validate);
    parser->setCreateEntityReferenceNodes(false); 
      // Entities will be automatically resolved by Xerces
 
    parser->setDoNamespaces(true);
-   parser->setDoSchema(true);
+   parser->setDoSchema(validate);
    parser->setErrorHandler(handler);
 
    try { parser->parse(fileName.c_str()); }
@@ -316,8 +319,14 @@ void G4GDMLRead::Read(const G4String& fileName,
 
    if (!element)
    {
-     G4Exception("G4GDMLRead::Read()", "InvalidRead",
-                 FatalException, "Empty document!");
+     std::ostringstream message;
+     message << "ERROR - Empty document!" << G4endl
+             << "        Check Internet connection is ON in case of schema"
+             << G4endl
+             << "        validation enabled and location defined as URL in"
+             << G4endl
+             << "        the GDML file - " << fileName << " - being imported!";
+     G4Exception("G4GDMLRead::Read()", "InvalidRead", FatalException, message);
      return;
    }
 
