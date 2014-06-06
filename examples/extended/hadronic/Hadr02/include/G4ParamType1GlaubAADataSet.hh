@@ -76,7 +76,7 @@
 
 
 class G4ParamType1GlaubAADataSet : public G4GlaubAADataSet,
-				   public G4Type1GlauberParameterisation 
+                                   public G4Type1GlauberParameterisation 
 {
 public:
 
@@ -106,7 +106,7 @@ public:
 //
 inline 
 G4double G4ParamType1GlaubAADataSet::GetValueN (const G4double f,
-						const G4double ppn) const
+                                                const G4double ppn) const
 {return GetParameterisedValueN (f, ppn);}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -115,7 +115,7 @@ G4double G4ParamType1GlaubAADataSet::GetValueN (const G4double f,
 //
 inline 
 G4double G4ParamType1GlaubAADataSet::GetValueM (const G4double f,
-						const G4double ppn) const
+                                                const G4double ppn) const
 {return GetParameterisedValueM (f, ppn);}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

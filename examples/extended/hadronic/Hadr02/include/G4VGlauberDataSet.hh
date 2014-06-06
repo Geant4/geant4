@@ -119,9 +119,9 @@ public:
   G4int         verboseLevel; 
     
   friend std::ofstream & operator << (std::ofstream &File, 
-				      const G4VGlauberDataSet &q);
+                                      const G4VGlauberDataSet &q);
   friend std::ifstream & operator >> (std::ifstream &File, 
-				      G4VGlauberDataSet &q);
+                                      G4VGlauberDataSet &q);
 
 };
 

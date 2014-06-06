@@ -127,9 +127,9 @@ however, position command is active only if before it the flag is set
  
                            SCORING
 
-The scoring is performed with the help of UserStackingAction class and two
-sensitive detector  classes: one associated with a target slice, another with
-the Check volume. Each secondary particle is scored by the StackingAction.  In
+The scoring is performed with the help of UserStackingAction class and a
+sensitive detector class associated with a target slice. 
+Each secondary particle is scored by the StackingAction.  In
 the StackingAction it is also possible to kill all or only EM (e+, e-, gamma)
 secondary particles 
 
@@ -138,7 +138,7 @@ secondary particles
 
 To control running the following options are available:
 
-/testhadr/PrintModulo      10
+/run/printProgress      10
 
 
                            PHYSICS

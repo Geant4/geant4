@@ -83,11 +83,11 @@ public:
   virtual ~G4UrQMD1_3Model ();
     
   G4ReactionProductVector* Propagate(G4KineticTrackVector* 
-				     theSecondaries, 
-				     G4V3DNucleus* theTarget);
+                                     theSecondaries, 
+                                     G4V3DNucleus* theTarget);
 
   virtual G4HadFinalState* ApplyYourself(const G4HadProjectile&, 
-					 G4Nucleus&);
+                                         G4Nucleus&);
     
 private: 
 

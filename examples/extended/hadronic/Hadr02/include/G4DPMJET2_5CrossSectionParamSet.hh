@@ -71,7 +71,7 @@ class G4DPMJET2_5CrossSectionParamSet
 public:
   G4DPMJET2_5CrossSectionParamSet () {c[0]=0.0; c[1]=0.0; c[2]=0.0;}
   G4DPMJET2_5CrossSectionParamSet (const G4double c0, const G4double c1,
-				   const G4double c2) 
+                                   const G4double c2) 
   {c[0]=c0; c[1]=c1; c[2]=c2;}
 
   ~G4DPMJET2_5CrossSectionParamSet () {};

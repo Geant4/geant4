@@ -68,17 +68,17 @@ private:
 
   DetectorConstruction* Detector;
 
-  G4UIdirectory*             testDir;
-  G4UIcmdWithAString*        matCmd;
-  G4UIcmdWithAString*        mat1Cmd;
-  G4UIcmdWithAString*        ionCmd;
-  G4UIcmdWithADoubleAndUnit* rCmd;
-  G4UIcmdWithADoubleAndUnit* lCmd;
-  G4UIcmdWithADoubleAndUnit* edepCmd;
-  G4UIcmdWithAnInteger*      binCmd;
-  G4UIcmdWithAnInteger*      nOfAbsCmd;
-  G4UIcmdWithAnInteger*      verbCmd;
-  G4UIcmdWithABool*          beamCmd;
+  G4UIdirectory*             fTestDir;
+  G4UIcmdWithAString*        fMatCmd;
+  G4UIcmdWithAString*        fMat1Cmd;
+  G4UIcmdWithAString*        fIonCmd;
+  G4UIcmdWithADoubleAndUnit* fRCmd;
+  G4UIcmdWithADoubleAndUnit* fLCmd;
+  G4UIcmdWithADoubleAndUnit* fEdepCmd;
+  G4UIcmdWithAnInteger*      fBinCmd;
+  G4UIcmdWithAnInteger*      fNOfAbsCmd;
+  G4UIcmdWithAnInteger*      fVerbCmd;
+  G4UIcmdWithABool*          fBeamCmd;
 
 };
 

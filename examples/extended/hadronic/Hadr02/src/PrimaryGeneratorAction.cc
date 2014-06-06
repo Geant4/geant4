@@ -50,6 +50,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PrimaryGeneratorAction::PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(),
+   fParticleGun(0),
+   fHisto(0)
 {
   fParticleGun  = new G4ParticleGun(1);
   fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
@@ -65,15 +68,15 @@ PrimaryGeneratorAction::~PrimaryGeneratorAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
+void PrimaryGeneratorAction::GeneratePrimaries(G4Event* event)
 {
-  if(0 == anEvent->GetEventID()) {
-    if(fHisto->DefaultBeamPosition()) {
+  if (event->GetEventID() == 0) {
+    if (fHisto->DefaultBeamPosition()) {
       G4double zVertex = -(5.0*mm + fHisto->Length());
       fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,zVertex));
     }
   }
-  fParticleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(event);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

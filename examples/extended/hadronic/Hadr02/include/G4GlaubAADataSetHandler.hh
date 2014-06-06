@@ -96,7 +96,7 @@ public:
 
   G4bool IsGlauberDataSetAvailable (const G4int AP, const G4int AT) const;
   G4bool SetCurrentGlauberDataSet (const G4int AP, const G4int AT,
-				   const G4double ppn = 0.0);
+                                   const G4double ppn = 0.0);
   G4GlaubAADataSet *GetCurrentGlauberDataSet () const;
   void   ResetCurrentGlauberDataSet ();
   G4double GetValueN (const G4double v, const G4double ppn1 = 0.0);

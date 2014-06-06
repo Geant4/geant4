@@ -67,12 +67,6 @@ public:
 
   static HistoManager* GetPointer();
 
-private:
-
-  HistoManager();
-
-public: 
-
   ~HistoManager();
 
   void BookHisto();
@@ -107,6 +101,7 @@ public:
   inline void SetPhysicsList(G4VModularPhysicsList* p) {fPhysList = p;};
 
 private:
+  HistoManager();
 
   void Initialise();
 

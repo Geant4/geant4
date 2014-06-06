@@ -9,7 +9,7 @@
 /testhadr/TargetMat        G4_Al 
 /testhadr/TargetRadius     20 cm
 /testhadr/TargetLength     10 cm
-/testhadr/PrintModulo      10
+/run/printProgress      10
 #
 #/testhadr/ionPhysics DPMJET
 /testhadr/ionPhysics FTF
@@ -19,7 +19,7 @@
 /gun/particle ion
 /gun/ion 16 32
 /gun/energy 200. GeV
-#/testhadr/HistoType  root
-#/testhadr/HistoName  s32_al_ftf
+/testhadr/histo/fileType  root
+/testhadr/histo/fileName  s32_al_ftf
 /run/beamOn 100
 #

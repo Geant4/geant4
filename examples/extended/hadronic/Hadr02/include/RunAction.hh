@@ -32,14 +32,6 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
-// -------------------------------------------------------------
-//
-//      GEANT4 
-//
-// 
-// -------------------------------------------------------------
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4UserRunAction.hh"

@@ -47,7 +47,12 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HistoMessenger::HistoMessenger(Histo* hist)
-  :fHisto(hist)
+  : G4UImessenger(),
+    fHisto(hist),
+    fHistoDir(0),   
+    fFactoryCmd(0),
+    fFileCmd(0),
+    fHistoCmd(0)
 {
   fHistoDir = new G4UIdirectory("/testhadr/histo/");
   fHistoDir->SetGuidance("histograms control");

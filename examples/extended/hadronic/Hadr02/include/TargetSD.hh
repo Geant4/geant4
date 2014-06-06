@@ -63,8 +63,6 @@ public: // Without description
   virtual void Initialize(G4HCofThisEvent*);
   virtual G4bool ProcessHits(G4Step*,G4TouchableHistory*);
   virtual void EndOfEvent(G4HCofThisEvent*);
-  virtual void clear();
-  virtual void PrintAll();
 
 private:
 

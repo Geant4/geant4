@@ -88,16 +88,16 @@ public:
   virtual ~G4DPMJET2_5CrossSection();
 
   virtual G4bool IsIsoApplicable(const G4DynamicParticle* theProjectile,
-				 G4int ZZ, G4int AA,
-				 const G4Element* elm = 0,
-				 const G4Material* mat = 0);
+                                 G4int ZZ, G4int AA,
+                                 const G4Element* elm = 0,
+                                 const G4Material* mat = 0);
 
   virtual 
   G4double GetIsoCrossSection(const G4DynamicParticle* theProjectile,
-			      G4int ZZ, G4int AA,
-			      const G4Isotope*,
-			      const G4Element* elm = 0,
-			      const G4Material* mat = 0);
+                              G4int ZZ, G4int AA,
+                              const G4Isotope*,
+                              const G4Element* elm = 0,
+                              const G4Material* mat = 0);
  
   virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 

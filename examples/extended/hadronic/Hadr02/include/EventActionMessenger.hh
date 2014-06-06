@@ -63,11 +63,9 @@ public:
     
 private:
 
-  EventAction*          eventAction;   
-  G4UIcmdWithAString*   drawCmd;
-  G4UIcmdWithAString*   ionCmd;
-  G4UIcmdWithAnInteger* printCmd;    
-  G4UIcmdWithAnInteger* dCmd;    
+  EventAction*          fEventAction;   
+  G4UIcmdWithAString*   fIonCmd;
+  G4UIcmdWithAnInteger* fDebugCmd;    
 
 };
 

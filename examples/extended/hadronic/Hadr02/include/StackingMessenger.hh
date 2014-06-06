@@ -66,7 +66,7 @@ private:
   StackingAction*     fStackAction;
     
   G4UIcmdWithABool*   fKillCmd;
-  G4UIcmdWithABool*   fKCmd;
+  G4UIcmdWithABool*   fKillEMCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

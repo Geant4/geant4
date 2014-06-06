@@ -51,7 +51,6 @@
 
 class G4Event;
 class EventActionMessenger;
-class G4UImanager;
 
 class EventAction : public G4UserEventAction
 {
@@ -63,23 +62,15 @@ public: // Without description
   virtual void BeginOfEventAction(const G4Event*);
   virtual void   EndOfEventAction(const G4Event*);
 
-  inline void SetPrintModulo(G4int val)   {printModulo = val;};
-  inline void SetDrawFlag(G4String val)   {drawFlag = val;};
-  inline void AddEventToDebug(G4int val)  {selectedEvents.push_back(val);
-                                           nSelected++;};
+  void AddEventToDebug(G4int val);
 
 private:
 
-  EventActionMessenger* eventMessenger;
-  G4UImanager*          UI;
-  std::vector<G4int>    selectedEvents;
+  EventActionMessenger* fEventMessenger;
+  std::vector<G4int>    fSelectedEvents;
 
-  G4int        printModulo;
-  G4int        nSelected;
-
-  // drawFlags = all, charged, neutral, charged+n
-  G4String     drawFlag;
-  G4bool       debugStarted;
+  G4int        fNSelected;
+  G4bool       fDebugStarted;
 
 };
 
