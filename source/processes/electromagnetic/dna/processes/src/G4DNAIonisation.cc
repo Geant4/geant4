@@ -28,6 +28,9 @@
 #include "G4DNAIonisation.hh"
 #include "G4SystemOfUnits.hh"
 
+//SEB
+#include "G4GenericIon.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 using namespace std;
@@ -59,11 +62,12 @@ G4bool G4DNAIonisation::IsApplicable(const G4ParticleDefinition& p)
    || &p == instance->GetIon("alpha++")
    || &p == instance->GetIon("alpha+")
    || &p == instance->GetIon("helium")
-   || &p == instance->GetIon("carbon")
-   || &p == instance->GetIon("nitrogen")
-   || &p == instance->GetIon("oxygen")
-   || &p == instance->GetIon("silicon")
-   || &p == instance->GetIon("iron")
+   //SEB
+   //|| &p == instance->GetIon("carbon")
+   //|| &p == instance->GetIon("nitrogen")
+   //|| &p == instance->GetIon("oxygen")
+   //|| &p == instance->GetIon("iron")
+   || &p == G4GenericIon::GenericIonDefinition()  
   );
 }
 
@@ -121,13 +125,16 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
 
     // Extension to HZE proposed by Z. Francis
     
-    if(name == "carbon" || name == "nitrogen" || name == "oxygen" 
-       || name == "silicon" || name == "iron")
+    //SEB
+    if(/*name == "carbon" || name == "nitrogen" || name == "oxygen" || name == "iron" ||*/
+       name == "GenericIon")
+    //
     {
       if(!EmModel()) SetEmModel(new G4DNARuddIonisationExtendedModel);
       EmModel()->SetLowEnergyLimit(0*keV);
-      EmModel()->SetHighEnergyLimit(p->GetAtomicMass()*1e6*MeV);
-
+      //SEB: 1e6*MeV by default - updated in model class
+      //EmModel()->SetHighEnergyLimit(p->GetAtomicMass()*1e6*MeV);
+      EmModel()->SetHighEnergyLimit(1e6*MeV);
       AddEmModel(1, EmModel());   
     }
 

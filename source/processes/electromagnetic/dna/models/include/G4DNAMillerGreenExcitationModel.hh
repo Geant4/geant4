@@ -40,6 +40,8 @@
 #include "Randomize.hh"
 #include "G4NistManager.hh"
 
+#include <deque>
+
 class G4DNAMillerGreenExcitationModel : public G4VEmModel
 {
 
