@@ -1001,7 +1001,7 @@ int G4ViewParameters::ParseGeometry (
 {
 
   G4int mask = fNoValue;
-  register char *strind;
+  char *strind;
   unsigned int tempWidth  = 0;
   unsigned int tempHeight = 0;
   G4int tempX = 0;
@@ -1087,7 +1087,7 @@ int G4ViewParameters::ParseGeometry (
  */
 G4int G4ViewParameters::ReadInteger(char *string, char **NextString)
 {
-    register G4int Result = 0;
+    G4int Result = 0;
     G4int Sign = 1;
 
     if (*string == '+')

@@ -26,6 +26,9 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+10th April 2014  Gabriele Cosmo (visman-V09-06-28)
+- Get rid of deprecated 'register' storage class specifier in source files.
+
 22nd November 2013  John Allison (visman-V09-06-27)
 - G4VisManager.cc: Fix for end-of-run action "accumulate".
 - G4VisCommandsSceneAdd.cc: Tidied.
