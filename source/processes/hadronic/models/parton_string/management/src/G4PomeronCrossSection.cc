@@ -249,58 +249,58 @@ G4double G4PomeronCrossSection::Expand(G4double z)
 	return sum;
 }
 
-inline G4double G4PomeronCrossSection::Power(const G4double S)
+G4double G4PomeronCrossSection::Power(const G4double S)
 {
 	return pomeron_Gamma *std::pow(S/pomeron_S, pomeron_Alpha -1);
 }
 
-inline G4double G4PomeronCrossSection::Z(const G4double S)
+G4double G4PomeronCrossSection::Z(const G4double S)
 {
 	return 2*pomeron_C * Power(S) / Lambda(S);
 }
 
-inline G4double G4PomeronCrossSection::Lambda(const G4double S)
+G4double G4PomeronCrossSection::Lambda(const G4double S)
 {
 	return pomeron_Rsquare+pomeron_Alphaprime*std::log(S/pomeron_S);
 }
 
-inline G4double G4PomeronCrossSection::SigP(const G4double S)
+G4double G4PomeronCrossSection::SigP(const G4double S)
 {
 	return 8 * pi * hbarc_squared * Power(S);
 }
 
-inline G4double G4PomeronCrossSection::Eikonal(const G4double S,
+G4double G4PomeronCrossSection::Eikonal(const G4double S,
 					       const G4double impactsquare)
 {
 	return Z(S)/2 * std::exp(-impactsquare/(4*Lambda(S)*hbarc_squared));
 }
 //*************************************************************************************************
-inline G4double G4PomeronCrossSection::PowerSoft(const G4double S)
+G4double G4PomeronCrossSection::PowerSoft(const G4double S)
     {
     return pomeron_Gamma *std::pow(S/pomeron_S, pomeron_Alpha -1);
     }
 
-inline G4double G4PomeronCrossSection::PowerHard(const G4double S)
+G4double G4PomeronCrossSection::PowerHard(const G4double S)
     {
     return pomeron_Gamma_Hard*std::pow(S/pomeron_S, pomeron_Alpha_Hard -1);
     }
 
-inline G4double G4PomeronCrossSection::LambdaSoft(const G4double S)
+G4double G4PomeronCrossSection::LambdaSoft(const G4double S)
     {
     return pomeron_Rsquare+pomeron_Alphaprime*std::log(S/pomeron_S);
     }
     
-inline G4double G4PomeronCrossSection::LambdaHard(const G4double /*S*/)
+G4double G4PomeronCrossSection::LambdaHard(const G4double /*S*/)
     {
     return pomeron_Rsquare; //+pomeron_Alphaprime*std::log(s/pomeron_S);
     }
 
-inline G4double G4PomeronCrossSection::Zsoft(const G4double S)
+G4double G4PomeronCrossSection::Zsoft(const G4double S)
    {
    return 2*pomeron_C*PowerHard(S) / LambdaSoft(S);
    }
 
-inline G4double G4PomeronCrossSection::Zhard(const G4double S)
+G4double G4PomeronCrossSection::Zhard(const G4double S)
    {
    return 2*pomeron_C*PowerHard(S)/LambdaHard(S);
    }
