@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
+5th June 2014  Laurent Garnier  (gMocren-V10-00-01)
+- G4GMocrenFile.cc: FIX Problem 1585 - Memory leak in G4GMocrenFile.cc
+
 9th December 2013  John Allison  (gMocren-V10-00-00)
 - G4GMocrenFile.cc: Declared as G4VGraphicsSystem::fileWriter.
 

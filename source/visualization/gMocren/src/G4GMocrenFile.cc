@@ -53,7 +53,7 @@ G4GMocrenFile::G4GMocrenFile ()
 
 	//----- G4GMocrenFile, destructor
 G4GMocrenFile::~G4GMocrenFile () {
-  ;
+  delete kMessenger;
 }
 
 
