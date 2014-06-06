@@ -15,6 +15,25 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+23 May 2014  M. Kelsey (hadr-casc-V09-06-55)
+--------------------------------------------
+- G4InuclNuclei.cc:  Avoid FPE in setExcitationEnergy() for zero Ekin.
+
+10 March 2014  M. Kelsey
+------------------------
+- G4IntraNucleiCascader.cc:  Fix bug #1584, memory leak in secondaries.
+
+29 January 2014  G.Folger  not tagged
+-------------------------------------
+- Removed cascade/utils from cascade/sources.cmake
+
+6 January 2014  M.Kelsey (hadr-casc-V09-06-53)
+----------------------------------------------
+- G4CascadeParameters.cc:  Improve singleton initialization by moving static
+  instance to pointer in file scope (anon namespace), check for null pointer
+  in Instance() call.  Drop use of messenger (temporarily) since it's not
+  thread safe.  This change is backported to 10.0.
+
 2 October 2013  V.Ivanchenko (hadr-casc-V09-06-52)
 ----------------------------------------------------
 - G4NonEquilibriumEvaporator.hh - added forward declaration of G4Pow,
