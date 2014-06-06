@@ -30,6 +30,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+06th June 2014 - Ben Morgan (cmake-V10-00-18)
+- Templates/geant4-config.in : Add zlib and g3tog4 to list of features
+  that --has-feature recognizes and can query (Patch from Ivana
+  Hrivnacova)
 
 05th June 2014 - Gunter Folger (cmake-V10-00-17)
 - Modules/Geant4DatasetDefinitions.cmake: G4EMLOW6.39
