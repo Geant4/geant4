@@ -14,6 +14,11 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+ 5 June 2014 - Alberto Ribon (hadr-rpg-V10-00-02)
+--------------------------------------------------
+- G4RPGInelastic: defined here GHADLISTSIZE, which is needed after
+  the removal of the class G4ReactionDynamics.
+
 18 March 2014 - Dennis Wright (hadr-rpg-V10-00-01)
 --------------------------------------------------
 - G4RPGInelastic::CheckQnums:  make projDef and targDef const pointers

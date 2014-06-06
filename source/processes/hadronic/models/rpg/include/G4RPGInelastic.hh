@@ -49,6 +49,8 @@
 #include "G4RPGStrangeProduction.hh"
 #include "G4RPGPionSuppression.hh"
 
+enum{ GHADLISTSIZE=256};
+
 
 class G4RPGInelastic : public G4HadronicInteraction
  {
