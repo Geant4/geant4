@@ -313,6 +313,8 @@ private:
 
   void CopyDEDXTables();
 
+  void PrintEWarning(G4String, G4double);
+
   G4LossTableManager(G4LossTableManager &);
   G4LossTableManager & operator=(const G4LossTableManager &right);
 

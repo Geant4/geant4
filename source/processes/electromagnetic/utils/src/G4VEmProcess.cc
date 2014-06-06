@@ -245,7 +245,6 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     static_cast<const G4VEmProcess*>(GetMasterProcess());
   if(masterProcess && masterProcess != this) { isMaster = false; }
 
-  if(GetMasterProcess() == this) { isMaster = true; }
   if(!particle) { SetParticle(&part); }
 
   if(part.GetParticleType() == "nucleus" && 
@@ -1133,20 +1132,74 @@ G4VEmProcess::ActivateSecondaryBiasing(const G4String& region,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4VEmProcess::SetLambdaBinning(G4int n)
+{
+  if(2 < n && n < 1000000000) {  nLambdaBins = n; }
+  else { 
+    G4double e = (G4double)n;
+    PrintWarning("SetLambdaBinning", e); 
+  } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 void G4VEmProcess::SetMinKinEnergy(G4double e)
 {
-  nLambdaBins = G4lrint(nLambdaBins*G4Log(maxKinEnergy/e)
-			/G4Log(maxKinEnergy/minKinEnergy));
-  minKinEnergy = e;
+  if(1.e-18 < e && e < maxKinEnergy) { 
+    nLambdaBins = G4lrint(nLambdaBins*G4Log(maxKinEnergy/e)
+			  /G4Log(maxKinEnergy/minKinEnergy));
+    minKinEnergy = e;
+  } else { PrintWarning("SetMinKinEnergy", e); } 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEmProcess::SetMaxKinEnergy(G4double e)
 {
-  nLambdaBins = G4lrint(nLambdaBins*G4Log(e/minKinEnergy)
-			/G4Log(maxKinEnergy/minKinEnergy));
-  maxKinEnergy = e;
+  if(minKinEnergy < e && e < 1.e+50) { 
+    nLambdaBins = G4lrint(nLambdaBins*G4Log(e/minKinEnergy)
+			  /G4Log(maxKinEnergy/minKinEnergy));
+    maxKinEnergy = e;
+  } else { PrintWarning("SetMaxKinEnergy", e); } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetMinKinEnergyPrim(G4double e)
+{
+  if(1.e-18 < e && e < maxKinEnergy) { minKinEnergyPrim = e; } 
+  else { PrintWarning("SetMinKinEnergyPrim", e); } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetPolarAngleLimit(G4double val)
+{
+  if(val < 0.0)            { polarAngleLimit = 0.0; }
+  else if(val > CLHEP::pi) { polarAngleLimit = CLHEP::pi;  }
+  else                     { polarAngleLimit = val; }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::SetLambdaFactor(G4double val)
+{
+  if(val > 0.0 && val <= 1.0) { lambdaFactor = val; }
+  else { PrintWarning("SetLambdaFactor", val); } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEmProcess::PrintWarning(G4String tit, G4double val)
+{
+  G4String ss = "G4VEmProcess::" + tit;
+  G4ExceptionDescription ed;
+  ed << "Parameter is out of range: " << val 
+     << " it will have no effect!\n" << "  Process " 
+     << GetProcessName() << "  nbins= " <<  nLambdaBins
+     << " Emin(keV)= " << minKinEnergy/keV 
+     << " Emax(GeV)= " << maxKinEnergy/GeV;
+  G4Exception(ss, "em0044", JustWarning, ed);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

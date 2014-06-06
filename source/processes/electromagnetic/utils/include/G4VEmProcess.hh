@@ -180,7 +180,7 @@ public:
   //------------------------------------------------------------------------
 
   // Binning for lambda table
-  inline void SetLambdaBinning(G4int nbins);
+  void SetLambdaBinning(G4int nbins);
   inline G4int LambdaBinning() const;
 
   // Min kinetic energy for tables
@@ -192,7 +192,7 @@ public:
   inline G4double MaxKinEnergy() const;
 
   // Min kinetic energy for high energy table
-  inline void SetMinKinEnergyPrim(G4double e);
+  void SetMinKinEnergyPrim(G4double e);
 
   // Cross section table pointers
   inline G4PhysicsTable* LambdaTable() const;
@@ -251,10 +251,10 @@ public:
           
 
   // Single scattering parameters
-  inline void SetPolarAngleLimit(G4double a);
+  void SetPolarAngleLimit(G4double a);
   inline G4double PolarAngleLimit() const;
 
-  inline void SetLambdaFactor(G4double val);
+  void SetLambdaFactor(G4double val);
 
   inline void SetIntegral(G4bool val);
   inline G4bool IsIntegral() const;
@@ -303,6 +303,8 @@ private:
   void PrintInfoProcess(const G4ParticleDefinition&);
 
   void FindLambdaMax();
+
+  void PrintWarning(G4String tit, G4double val);
 
   inline void DefineMaterial(const G4MaterialCutsCouple* couple);
 
@@ -541,11 +543,6 @@ inline void G4VEmProcess::ComputeIntegralLambda(G4double e)
 
 // ======== Get/Set inline methods used at initialisation ================
 
-inline void G4VEmProcess::SetLambdaBinning(G4int nbins)
-{
-  nLambdaBins = nbins;
-}
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4int G4VEmProcess::LambdaBinning() const
@@ -565,22 +562,6 @@ inline G4double G4VEmProcess::MinKinEnergy() const
 inline G4double G4VEmProcess::MaxKinEnergy() const
 {
   return maxKinEnergy;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::SetMinKinEnergyPrim(G4double e)
-{
-  minKinEnergyPrim = e;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::SetPolarAngleLimit(G4double val)
-{
-  if(val < 0.0)            { polarAngleLimit = 0.0; }
-  else if(val > CLHEP::pi) { polarAngleLimit = CLHEP::pi;  }
-  else                     { polarAngleLimit = val; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -623,13 +604,6 @@ inline const G4ParticleDefinition* G4VEmProcess::Particle() const
 inline const G4ParticleDefinition* G4VEmProcess::SecondaryParticle() const
 {
   return secondaryParticle;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-inline void G4VEmProcess::SetLambdaFactor(G4double val)
-{
-  if(val > 0.0 && val <= 1.0) { lambdaFactor = val; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

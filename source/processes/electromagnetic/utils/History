@@ -17,11 +17,27 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6 June 14: V.Ivant (emutils-V10-00-25)
+- G4EmSaturation - removed fatal exception if proton is not 
+    instantiated
+
+5 June 14: V.Ivant (emutils-V10-00-24)
+- G4EmSaturation - moved check on existence of e- and proton 
+    from run time to initialisation (it is done only once)
+- G4LossTableManager, G4VEnergyLossProcess, G4VEmProcess -
+    improved initialisation: moved set methods for parameters 
+    from inline to source and add extra check on parameter value,
+    throw warnings if parameters are out of range
+- G4LossTableManager - helper classes are instantiated only if
+    user requests via access method 
+
 4 June 14: A.Dotti (emutils-V10-00-23)
 - Added protection in G4EmSaturation to throw exception if e- or proton
   are not defined when used in G4EmSaturation::VisibleEnergyDeposition 
   method.
-- Do not instantiate G4Electron and G4Proton by default in G4EmSaturation::InitialiseBirksCoefficient
+- Do not instantiate G4Electron and G4Proton by default in 
+  G4EmSaturation::InitialiseBirksCoefficient
+
 2 June 14: V.Ivant (emutils-V10-00-22)
 - G4EmModelManager - fixed cuts for single scattering models (use 
     "cut for protons")

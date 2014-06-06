@@ -2260,3 +2260,130 @@ G4VEnergyLossProcess::ActivateSecondaryBiasing(const G4String& region,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+void G4VEnergyLossProcess::SetIonisation(G4bool val)
+{
+  isIonisation = val;
+  if(val) { aGPILSelection = CandidateForSelection; }
+  else    { aGPILSelection = NotCandidateForSelection; }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+ void G4VEnergyLossProcess::SetLinearLossLimit(G4double val)
+{
+  if(0.0 < val && val < 1.0) { linLossLimit = val; }
+  else { PrintWarning("SetLinearLossLimit", val); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+ void G4VEnergyLossProcess::SetMinSubRange(G4double val)
+{
+  if(1.e-18 < val && val < 1.e+50) { minSubRange = val; }
+  else { PrintWarning("SetMinSubRange", val); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+ void G4VEnergyLossProcess::SetLambdaFactor(G4double val)
+{
+  if(val > 0.0 && val <= 1.0) { lambdaFactor = val; }
+  else { PrintWarning("SetLambdaFactor", val); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetStepFunction(G4double v1, G4double v2)
+{
+  if(0.0 < v1 && 0.0 < v2 && v2 < 1.e+50) { 
+    dRoverRange = std::min(1.0, v1);
+    finalRange = v2;
+  } else if(v1 <= 0.0) {
+    PrintWarning("SetStepFunction", v1); 
+  } else {
+    PrintWarning("SetStepFunction", v2); 
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetLowestEnergyLimit(G4double val)
+{
+  if(1.e-18 < val && val < 1.e+50) { lowestKinEnergy = val; }
+  else { PrintWarning("SetLowestEnergyLimit", val); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetDEDXBinning(G4int n)
+{
+  if(2 < n && n < 1000000000) { nBins = n; }
+  else {
+    G4double e = (G4double)n;
+    PrintWarning("SetDEDXBinning", e); 
+  } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetLambdaBinning(G4int n)
+{
+  if(2 < n && n < 1000000000) { nBins = n; }
+  else { 
+    G4double e = (G4double)n;
+    PrintWarning("SetLambdaBinning", e); 
+  } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetDEDXBinningForCSDARange(G4int n)
+{
+  if(2 < n && n < 1000000000) { nBinsCSDA = n; }
+  else { 
+    G4double e = (G4double)n;
+    PrintWarning("SetDEDXBinningForCSDARange", e); 
+  } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetMinKinEnergy(G4double e)
+{
+  if(1.e-18 < e && e < maxKinEnergy) { minKinEnergy = e; }
+  else { PrintWarning("SetMinKinEnergy", e); } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetMaxKinEnergy(G4double e)
+{
+  if(minKinEnergy < e && e < 1.e+50) { 
+    maxKinEnergy = e;
+    if(e < maxKinEnergyCSDA) { maxKinEnergyCSDA = e; }
+  } else { PrintWarning("SetMaxKinEnergy", e); } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::SetMaxKinEnergyForCSDARange(G4double e)
+{
+  if(1.e-18 < e && e < 1.e+50) { maxKinEnergyCSDA = e; }
+  else { PrintWarning("SetMaxKinEnergyForCSDARange", e); } 
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void G4VEnergyLossProcess::PrintWarning(G4String tit, G4double val)
+{
+  G4String ss = "G4VEnergyLossProcess::" + tit; 
+  G4ExceptionDescription ed;
+  ed << "Parameter is out of range: " << val 
+     << " it will have no effect!\n" << "  Process " 
+     << GetProcessName() << "  nbins= " << nBins 
+     << " Emin(keV)= " << minKinEnergy/keV 
+     << " Emax(GeV)= " << maxKinEnergy/GeV;
+  G4Exception(ss, "em0044", JustWarning, ed);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
