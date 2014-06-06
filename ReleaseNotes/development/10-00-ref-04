@@ -1,0 +1,336 @@
+
+                       geant4-10-00-ref-04
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Added interface classes in analysis module G4VAnalysisReader and
+   G4VRNtupleManager for reading
+ o Updated internal CLHEP module to development version 2.2.0.0 for
+   experimental use with c++11.
+ o Updated chemistry in DNA codes.
+ o Switched on muon-nuclear by default in physics lists.
+ o Introduced pin affinity functionalities for multi-threading.
+ o New data set G4EMLOW-6.37.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(o)  Fixes included in release 10.0.p02
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V10-00-13
+-----
+- Added -DG4USE_STD11 compilation flag when c++11 is selected at configuration
+  time for capable compilers.
+- Updated data sets to G4EMLOW-6.37.
+
+config                                           config-V10-00-05
+------
+- Force loading of symbols for templated libraries in physics_lists modules  (o)
+  only for global libraries. Granular libraries not supporting physics_lists
+  factories.
+- Added G4USE_STD11 compilation flag for c++11 Standard.
+
+analysis                                         analysis-V10-00-10
+--------
+- Updated to g4tools 1.9.4, see History for complete list of modifications.
+- Added interface classes G4VAnalysisReader and G4VRNtupleManager for reading,    
+  and their Root specializations: G4RootAnalysisReader, G4RootRNtupleManager.
+  Introduced independent numbering of warnings from reader.
+- Fixed implementation of compound commands in G4H[1,2,n]Messenger classes   (o)
+  using new G4AnalysisUtilities::Tokenize() function.
+  This allows to pass multi-word strings within "".
+  Addressing problem report #1616.
+- Fixed G4H2ToolsManager::SetH2YAxisTitle(), to set title to y-axis and      (o)
+  not x-axis. Addressing problem report #1620.
+- Do not allow creating objects with empty names                             (o)
+  Addressing problem report #1579.
+- Use G4Threading::IsMultithreadedApplication() instead of  
+  G4AnalysisManagerState::IsMT() (now removed); this function fixes files
+  clean-up at the end of sequential application built against multi-threaded
+  libraries.
+
+digits_hits                                      digits_hits-V10-00-02       (o)
+-----------
+- G4PSCylinderSurfaceCurrent: removed unnecessary printout. 
+  Addressing problem report #1610.
+
+externals                                        externals-V10-00-02
+---------
+- Updated CLHEP module to development version 2.2.0.0 (experimental):
+  o Converted statics and globals to const, thread-local or atomic
+    to improve thread safety.
+  o Introduced CLHEP_THREAD_LOCAL and CLHEP_ATOMIC_INT_TYPE macros
+    thread_local and atomic<int> keywords.
+- zlib: get rid of deprecated 'register' storage class specifier in source   (o)
+  files.
+
+geometry/magneticfield                           field-V10-00-02             (o)
+----------------------
+- Moved G4FieldTrack::LoadFromArray() to .cc and removed non-necessary
+  thread-local static data local to the function.
+  Fixes crash experienced when upgrading to clang-3.4 on MacOSX.
+  Addressing problem reports #1603, #1619.
+
+geometry/management                              geommng-V10-00-01           (o)
+-------------------
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+geometry/navigation                              geomnav-V10-00-02           (o)
+-------------------
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+geometry/solids/specific                         geom-specific-V10-00-08     (o)
+------------------------
+- Fixed signature of assignment operator to G4Polycone, G4Polyhedra,
+  G4GenericPolycone and G4VCSGfaceted.
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+geometry/volumes                                 geomvol-V10-00-02           (o)
+----------------
+- Corrected signature of operator=() for G4LogicalBorder/SkinSurface.
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+global                                           global-V10-00-19
+------
+- Define G4ThreadLocal to be 'thread_local' in case C++11 standard is
+  used (enabled through use of flag G4USE_STD11); directly adopt CLHEP
+  classes in such a case instead of G4MT* wrappers, if keyword is supported.
+- Move G4PhysicsVector::Value(energy,idx) to inline.
+- Get rid of deprecated 'register' storage class specifier in source files.  (o)
+- New utility function G4Threading::IsMultithreadedApplication() 
+  and G4Threading::SetMultithreadedApplication(bool) used to specify which
+  type of kernel is instantiated indipendently by build type (e.g. to
+  distinghuish application migrated to MT or still using sequential run
+  manager).
+
+intercoms                                        intercoms-V10-00-04
+---------
+- Extended use of "/control/macroPath" UI command to now also apply to
+  macros called inside a loop.
+- Removed unnecessary source file G4AnyType.cc, as all symbols are inlined.
+- Corrected inclusion protection flag in G4GenericMessenger.hh.              (o)
+  Addressing old problem report #1527.
+
+materials                                        materials-V10-00-05
+---------
+- G4Material, G4Element: define default names and symbols for elements       (o)
+  and isotopes when loaded from NIST and not explicitly defined by users.
+  Fixes exporting of names in GDML when writing detector description.
+- G4Material: corrected initialisation of pointers in fake default           (o)
+  constructor per use of persistency. Corrected typo in printout for
+  duplicate materials in function InitializePointers().
+- G4MaterialPropertyTable: fixed race condition problem.                     (o)
+  Addressing problem report #1590.
+
+particles                                        particles-V10-00-06
+---------
+- Fixed Coverity defects in G4NuclideTable and G4IonTable.
+
+persistency/ascii                                ascii-V10-00-01             (o)
+-----------------
+- G4tgbGeometryDumper: directly use G4ThreeVector methods for SymAxis
+  for dumping G4Para parameters.
+
+persistency/gdml                                 gdml-V10-00-02              (o)
+----------------
+- Corrected dump of 'phi' and 'theta' for G4Trap and G4Para in writer.
+  Addressing problem report #1602.
+- Get rid of deprecated 'register' storage class specifier in source files.
+
+physics_lists
+-------------
+- constructors/electromagnetic (phys-ctor-em-V10-00-10)
+  o G4EmLowEPPhysics, G4EmStandardPhysics_option3, G4EmStandardPhysics_option4,
+    and G4EmLivermoreStandardPhysics: cleanup gamma and e- models instantiation.
+- constructors/gamma_lepto_nuclear (phys-ctro-glnuclear-V10-00-02)
+  o Switched on muon-nuclear by default.
+  o Implemented thread safe UI messenger.
+    Addressing problem report #1606.
+
+processes/cuts                                   procuts-V10-00-01           (o)
+--------------
+- Fixed Coverity defects in G4VRangeToEnergyConverter.
+
+processes/electromagnetic/adjoint                emadjoint-V10-00-00         (o)
+---------------------------------
+- G4VAdjointReverseReaction: added protection against potential infinite 
+  loop; if cross-section correction exceeds 100 the total cross-section is
+  set to zero.
+
+processes/electromagnetic/dna                    emdna-V10-00-19
+-----------------------------
+- Modified calculation of secondary kinetic for fast code. Updated chemistry.
+- Changed to faster method interpolation in G4DNABornIonisationModel .
+- G4ITSafetyHelper: force temporary usage of G4PathFinder.
+
+processes/electromagnetic/lowenergy              emlowen-V10-00-09
+-----------------------------------
+- Added new class for ionisation cross-section model from Miranda et al.
+  Updated G4empCrossSection and G4UAtomicDeexcitation accordingly.
+  Requires new data set G4EMLOW-6.37.
+- Fixed initialisation in G4LowEWentzelVIModel.
+
+processes/electromagnetic/standard               emstand-V10-00-25
+----------------------------------
+- G4CoulombScattering: use G4IonCoulombScatteringModel for ions by default.  (o)
+- G4IonCoulombScatteringModel: fixed warning from G4ParticleTable;           (o)
+  fixed final state generation and scattering off Hydrogen.
+- G4WentzelOKandVIxSection: fixed mass of recoil for Hydrogen target.        (o)
+- G4WentzelVIModel: fixed step limitation. Optimized transition between multiple
+  and single scattering modes.
+- G4WentzelOKandVIxSection: fixed initialisation for low-energy model (this
+  model is not combined with single scattering); fixed small inaccuracy for
+  sampling. Some cleanup for sampling
+- G4GammaConversion: switch default number of bins from 77 to 140.           (o)
+
+processes/electromagnetic/utils                  emutils-V10-00-12
+-------------------------------
+- G4VMultipleScattering - fixed old problem of displacement handling;        (o)
+  setting minimum displacement to 0.05 nm (Bohr radius).
+- G4VSubCutProducer, G4LossTableManager, G4VEnergyLossProcess: added new
+  interface to allow for production of delta-electrons below production
+  threshold.
+- G4EnergyLossMessenger, G4EmProcessOption: added extra flag and UI command
+  "/process/em/deexcitationIgnoreCut" allowing to disable check on production
+  threshold by deexcitation module.
+- G4EnergyLossMessenger: enable RunManager flag "/run/physicsModified"       (o)
+  for all deexcitation UI commands.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V10-00-03)
+  o Minor reshuffling of some variables to calculate some variables only
+    when used to prevent overflows.
+- models/abla (hadr-abla-V10-00-00)
+  o Added model-description methods to the interface.
+- models/binary_cascade (had-binary-V10-00-04)
+  o Extended model-description to cover de-excitation model.
+  o Move back to use GetDefinition() method, as this now returns const pointer.
+- models/cascade (hadr-casc-V10-00-07)
+  o G4IntraNucleiCascader: use const pointer to G4ParticleDefinition.
+    Removed temporary cast in G4InuclEvaporation.
+- models/coherent_elastic (hadr-cohe-V10-00-04)
+  o Get rid of deprecated 'register' storage class specifier in code.        (o)
+- models/de_excitation (hadr-deex-V10-00-05)
+  o Added ModelDescription() to G4ExcitationHandler.
+- models/im_r_matrix (had-im_r-V10-00-00)
+  o Use const pointer to G4ParticleDefinition in use with G4KineticTrack.
+- models/lend (hadr-lend-V10-00-03)
+  o Fixed use of GetIon() from G4ParticleTable, obsolete since 10.0.         (o)
+- models/management (hadr-modman-V10-00-02)
+  o Added DeExciteModelDescription() to G4VPreCompoundModel and provided
+    default implementation.
+  o Use const pointer to G4ParticleDefinition in G4VKineticNucleon.
+- models/neutron_hp (hadr-hpn-V10-00-03)
+  o Reset isotope pointer to the target G4Nucleus object of reaction in      (o)
+    G4NeutronHPCapture, G4NeutronHPElastic, G4NeutronHPFission and
+    G4NeutronHPInelastic.
+- models/parton_string/hadronization (had-hadronization-V10-00-00)           (o)
+  o Fix in G4LundStringFragmentation: replacing ">=" with ">" in three if
+    statements, to avoid potential crashes in the case of anti_sigma+ capture
+    at rest on hydrogen. Courtesy of M.Novak, CERN.
+- models/parton_string/management (hadr-partonstring-mgt-V10-00-02)
+  o Fix in G4VPartonStringModel, occuring when debugging with residual
+    nucleus mass number equal to zero.
+    Improved code to treat an ExcitedString when it is a hadron stored as
+    a track of the ExcitedString; needed for a correct processing of
+    quark-exchange processes in FTF model.
+- models/pre_equilibrium (hadr-pre-V10-00-01)
+  o Added DeExciteModelDescription() to G4PreCompoundModel.
+- models/qmd (hadr-qmd-V10-00-01)
+  o Use const pointer to G4ParticleDefinition.
+- models/util (hadr-mod-util-V10-00-08)
+  o Removed temporary method GetDefinition_asConst(), GetDefinition() now
+    returns const pointer to G4ParticleDefinition. Fixed remaining uses of
+    non const.
+
+run                                             run-V10-00-06
+---
+- Introduced pin affinity functionalities.
+- Use G4Threading::SetMultithreadedApplication(true) if a
+  G4MTRunManagerKernel is instantiated.
+
+visualization
+-------------
+- externals (visexternal-V10-00-00)                                          (o)
+  o Fixed bad text in G4OpenGL2PS action.
+- management (visman-V10-00-06)
+  o Fix for NULL pointer in G4VSceneHandler.
+  o Get rid of deprecated 'register' storage class specifier in code.        (o)
+- OpenGL (opengl-V10-00-03)
+  o Fix in G4OpenGL to allow for compilation with only Qt driver on Linux    (o)
+    in case 'glu'h' is missing. Addressing problem report #1618.
+  o G4OpenGLImmediateSceneHandler: split AddPrimitivePreamble() in 3 functions
+    to avoid dynamic_cast. Gaining up to 20% speedup in drawing.
+  o G4OpenGLViewer: time optimization in printEPS() for Immediate mode;
+    saving 70-80% in drawing time on batch drawing, 10-20% when printing with
+    a screen viewer.
+    Manage bad file name case (missing directory) in printGl2PS().
+  o G4OpenGLQtViewer: added ability to change the color of text in DrawText().
+
+data sets
+---------
+- G4EMLOW-6.37:
+  o added sigmadiff_cumulated_ionisation_e_born_hp.dat and
+    sigmadiff_cumulated_ionisation_p_born_hp.dat.
+  o Updated electron inelastic files for Si (microelec).
+  o Added cross-section shell data by Miranda et al. (2014).
+
+examples                                         examples-V10-00-04
+--------
+- Updated reference outputs.
+- advanced/xray_fluorescence (XrayFluo-V10-00-04)
+  o Completed migration to g4tools (removed AIDA dependency).
+  o Removed workaround to avoid the deletion of the output file.
+- extended/electromagnetic/TestEm1 (testem1-V10-00-02)
+  o DetectorConstruction: define heavy water vapor starting from isotopes.
+  o Removed printout from second thread in TestEm1.in macro.
+- extended/electromagnetic/TestEm2 (testem2-V10-00-01)
+- extended/electromagnetic/TestEm3 (testem3-V10-00-02)
+  o Added "emlowenergy" option for EM physics.
+- extended/electromagnetic/TestEm5 (testem5-V10-00-01)
+  o Added "emlowenergy" option for EM physics.
+  o Slightly reduced printout for the default macro.
+- extended/electromagnetic/TestEm7 (testem7-V10-00-00)
+- extended/electromagnetic/TestEm8 (testem8-V10-00-02)
+- extended/electromagnetic/TestEm9 (testem9-V10-00-00)
+  o Added "emlowenergy" option for EM physics.
+- extended/electromagnetic/TestEm12 (testem12-V10-00-01)
+  o Added "emlowenergy" and dna_option1 in physics-list.
+- extended/hadronic/Hadr03 (exhadr03-V10-00-04)
+  o Histograms: changed numbering scheme. Added histo of atomic mass.
+  o EndOfRun: introduced optional print and UI command to control it.
+  o Register RunMessenger in RunAction instead of Run.
+  o Updated nFission.mac macro.
+- extended/hadronic/Hadr04 (exhadr04-V10-00-02)
+  o Minor cleanup in NeutronHPphysics.
+- extended/medical/DICOM (DICOM-V10-00-00)                                   (o)
+  o Reshuffled code for printout in DicomHandler::CheckFileFormat().
+- extended/persistency/gdml/G01 (G01-V10-00-02)                              (o)
+  o Correction to solids.gdml for 'para' solid, where angle unit was missing.
+  o Added GDML sample mat_nist.gdml showing how to load a NIST material,
+    although format is not part of the GDML schema yet (i.e. expected
+    warning in schema validation).
+- extended/visualization/userVisAction (exam-ext-vis-UVA-V10-00-00)
+  o Migrated to multi-threading (based on basic/B1 example).
+
+tests                                            tests-V10-00-04
+-----
+- Updated reference outputs and tools.
+- tests/test35 (test35-V10-00-00)
+  o Allow test to be built standalone; adapted CMake script.
+- tests/test41 (test41-V10-00-01)
+  o PhysicsList: added UrbanModel as a separate option.
+  o Fixed macro and scripts.
+- tests/test45 (test45-V10-00-01)
+  o Allow test to be built standalone; adapted CMake script.
+- tests/test67 (test67-V10-00-00)
+  o Allow test to be built standalone; adapted CMake script.
+  o Some minor cosmetics in the local physics list.
+- tests/test73 (test73-V10-00-00)
+  o Fixed compilation warnings for unused variables.
+- tests/test202 (test202-V10-00-03)
+  o Improved xvfb.sh script in order not to fail if xvfb GLX extension
+    is not present.
