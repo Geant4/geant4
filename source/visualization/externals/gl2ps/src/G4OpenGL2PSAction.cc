@@ -179,7 +179,7 @@ bool G4OpenGL2PSAction::G4gl2psBegin(
   
   glGetIntegerv(GL_VIEWPORT,fViewport);
 
-  GLint res = gl2psBeginPage("title","HEPVis::G4OpenGL2PSAction", 
+  GLint res = gl2psBeginPage("Geant4 output","Geant4", 
                  fViewport,
                  GL2PS_EPS, 
                  sort, 
