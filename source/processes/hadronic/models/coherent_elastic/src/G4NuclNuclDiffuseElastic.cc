@@ -126,13 +126,13 @@ G4NuclNuclDiffuseElastic::G4NuclNuclDiffuseElastic()
 
 G4NuclNuclDiffuseElastic::~G4NuclNuclDiffuseElastic()
 {
-  if(fEnergyVector) delete fEnergyVector;
-
-  if( fAngleTable )
-  {
-      fAngleTable->clearAndDestroy();
-      delete fAngleTable ;
+  // Physics vectors must not be deleted. Physics tables must be deleted. 
+  for ( std::vector<G4PhysicsTable*>::iterator it = fAngleBank.begin();
+        it != fAngleBank.end(); ++it ) {
+    delete *it;
+    *it = 0;
   }
+  fAngleTable = 0;
 }
 
 //////////////////////////////////////////////////////////////////////////////

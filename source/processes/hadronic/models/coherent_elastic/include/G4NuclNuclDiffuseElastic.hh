@@ -482,21 +482,18 @@ inline  G4double G4NuclNuclDiffuseElastic::CalculateNuclearRad( G4double A)
   // r0 *= 1.44;
   r0 *= fNuclearRadiusCof;
 
-  /*
+  //AR-05Jun2014 : giving that fNuclearRadiusCof is null,
+  //               try to do the same as in G4DiffuseElastic
   if( A < 50. )
   {
     if( A > 10. ) r0  = 1.16*( 1 - std::pow(A, -2./3.) )*CLHEP::fermi;   // 1.08*fermi;
     else          r0  = 1.1*CLHEP::fermi;
-
-    radius = r0*std::pow(A, 1./3.);
   }
   else
   {
     r0 = 1.7*CLHEP::fermi;   // 1.7*fermi;
-
-    radius = r0*std::pow(A, 0.27); // 0.27);
   }
-  */
+
   radius = r0*std::pow(A, 1./3.);
 
   return radius;

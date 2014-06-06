@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+06 June 2014 - A.Ribon (hadr-cohe-V10-00-09)
+-----------------------------------------------------------------
+- G4DiffuseElastic : fixed deletion in destructor.
+- G4NuclNuclDiffuseElastic : fixed deletion in destructor; 
+  temporary fix of the nuclear radius (which was zero).   
+
 27 May 2014 - V.Ivanchenko (hadr-cohe-V10-00-08)
 -----------------------------------------------------------------
 - G4LEpp - fixed incorrect use data array, used GetInvariantT()
