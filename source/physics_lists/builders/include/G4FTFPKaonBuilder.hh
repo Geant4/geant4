@@ -46,8 +46,6 @@
 #include "G4VKaonBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4ExcitationHandler.hh"
-#include "G4PreCompoundModel.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4FTFModel.hh"
 #include "G4LundStringFragmentation.hh"
@@ -74,13 +72,11 @@ class G4FTFPKaonBuilder : public G4VKaonBuilder
 
   private:
     G4TheoFSGenerator * theModel;
-    G4PreCompoundModel * thePreEquilib;
     G4GeneratorPrecompoundInterface * theCascade;
     G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
     G4QuasiElasticChannel * theQuasiElastic;
     G4LundStringFragmentation * theLund;
-    G4ExcitationHandler * theHandler;
 
     G4double theMin;
     G4double theMax;

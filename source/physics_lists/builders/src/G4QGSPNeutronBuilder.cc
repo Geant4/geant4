@@ -45,7 +45,6 @@
 #include "G4ProcessManager.hh"
 #include "G4NeutronInelasticCrossSection.hh"
 #include "G4BGGNucleonInelasticXS.hh"
-#include "G4ExcitationHandler.hh"
 
 
 G4QGSPNeutronBuilder::
@@ -58,9 +57,7 @@ G4QGSPNeutronBuilder(G4bool quasiElastic)
   theStringDecay = new G4ExcitedStringDecay(theQGSM = new G4QGSMFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  theCascade = new G4GeneratorPrecompoundInterface;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
+  theCascade = new G4GeneratorPrecompoundInterface();
 
   theModel->SetTransport(theCascade);
   theModel->SetHighEnergyGenerator(theStringModel);
@@ -75,11 +72,7 @@ G4QGSPNeutronBuilder(G4bool quasiElastic)
 G4QGSPNeutronBuilder::~G4QGSPNeutronBuilder() 
 {
   delete theStringDecay;
-  delete theStringModel;
-  delete thePreEquilib;
-  delete theCascade;
   if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theModel;
   delete theQGSM;
 }
 

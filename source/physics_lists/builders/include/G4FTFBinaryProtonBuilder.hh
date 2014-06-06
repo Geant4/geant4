@@ -48,8 +48,6 @@
 #include "G4VProtonBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4ExcitationHandler.hh"
-#include "G4PreCompoundModel.hh"
 #include "G4BinaryCascade.hh"
 #include "G4FTFModel.hh"
 #include "G4LundStringFragmentation.hh"
@@ -71,7 +69,6 @@ class G4FTFBinaryProtonBuilder : public G4VProtonBuilder
 
   private:
     G4TheoFSGenerator * theModel;
-    G4PreCompoundModel * thePreEquilib;
     G4BinaryCascade * theCascade;
     G4FTFModel * theStringModel;
     G4ExcitedStringDecay * theStringDecay;

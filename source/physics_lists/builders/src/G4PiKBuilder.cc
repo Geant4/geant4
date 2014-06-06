@@ -53,15 +53,8 @@ G4PiKBuilder(): wasActivated(false)
   theKaonZeroSInelastic=new G4KaonZeroSInelasticProcess;
 }
 
-G4PiKBuilder::
-~G4PiKBuilder(){
-  delete thePionPlusInelastic;
-  delete thePionMinusInelastic;
-  delete theKaonPlusInelastic;
-  delete theKaonMinusInelastic;
-  delete theKaonZeroLInelastic;
-  delete theKaonZeroSInelastic;
-}
+G4PiKBuilder::~G4PiKBuilder()
+{}
 
 void G4PiKBuilder::
 Build()

@@ -76,7 +76,6 @@ G4FTFBinaryNeutronBuilder::
 {
   delete theStringDecay;
   delete theStringModel;
-  delete theCascade;
   if ( theQuasiElastic ) delete theQuasiElastic;
 }
 

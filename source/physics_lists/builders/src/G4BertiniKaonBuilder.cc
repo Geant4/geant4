@@ -64,9 +64,11 @@ G4BertiniKaonBuilder()
 
 G4BertiniKaonBuilder::~G4BertiniKaonBuilder() 
 {
+  /*
    delete ChipsKaonMinus;
    delete ChipsKaonPlus;
    delete ChipsKaonZero;
+  */
 }
 
 void G4BertiniKaonBuilder::

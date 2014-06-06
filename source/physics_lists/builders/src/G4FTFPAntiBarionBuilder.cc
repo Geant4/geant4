@@ -60,8 +60,7 @@ G4FTFPAntiBarionBuilder(G4bool quasiElastic)
   theStringDecay = new G4ExcitedStringDecay(theLund = new G4LundStringFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  thePreEquilib = new G4PreCompoundModel(theHandler = new G4ExcitationHandler);
-  theCascade = new G4GeneratorPrecompoundInterface(thePreEquilib);
+  theCascade = new G4GeneratorPrecompoundInterface();
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -78,16 +77,13 @@ G4FTFPAntiBarionBuilder(G4bool quasiElastic)
 
 G4FTFPAntiBarionBuilder::~G4FTFPAntiBarionBuilder() 
 {
-  delete theCascade;
   delete theStringDecay;
   delete theStringModel;
-  delete theModel;
+  //delete theModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
-  delete thePreEquilib;
-  //delete theHandler;
   delete theLund;
   delete theAntiNucleonXS;
-  delete theAntiNucleonData;
+  //delete theAntiNucleonData;
 }
 
 void G4FTFPAntiBarionBuilder::

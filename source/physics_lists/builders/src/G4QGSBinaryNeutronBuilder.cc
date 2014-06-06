@@ -55,8 +55,6 @@ G4QGSBinaryNeutronBuilder(G4bool quasiElastic)
   theStringModel->SetFragmentationModel(theStringDecay);
 
   theCascade = new G4BinaryCascade;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
 
   theModel->SetTransport(theCascade);
   theModel->SetHighEnergyGenerator(theStringModel);
@@ -73,10 +71,7 @@ G4QGSBinaryNeutronBuilder::
 {
   delete theStringDecay;
   delete theStringModel;
-  delete thePreEquilib;
-  delete theCascade;
   if ( theQuasiElastic ) delete theQuasiElastic;
-  delete theModel;
 }
 
 void G4QGSBinaryNeutronBuilder::

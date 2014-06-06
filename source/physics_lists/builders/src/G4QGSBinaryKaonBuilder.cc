@@ -54,8 +54,6 @@ G4QGSBinaryKaonBuilder(G4bool quasiElastic)
   theStringModel->SetFragmentationModel(theStringDecay);
 
   theCascade = new G4BinaryCascade;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -70,12 +68,9 @@ G4QGSBinaryKaonBuilder(G4bool quasiElastic)
 G4QGSBinaryKaonBuilder::
 ~G4QGSBinaryKaonBuilder() 
 {
-  delete theCascade;
-  delete thePreEquilib;
   if ( theQuasiElastic ) delete theQuasiElastic;
   delete theStringDecay;
   delete theStringModel;
-  delete theModel;
 }
 
 void G4QGSBinaryKaonBuilder::

@@ -62,8 +62,6 @@ G4QGSBinaryPiKBuilder(G4bool quasiElastic)
   
 
   theCascade = new G4BinaryCascade;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -78,12 +76,9 @@ G4QGSBinaryPiKBuilder(G4bool quasiElastic)
 G4QGSBinaryPiKBuilder::
 ~G4QGSBinaryPiKBuilder() 
 {
-  delete theCascade;
-  delete thePreEquilib;
   if ( theQuasiElastic ) delete theQuasiElastic;
   delete theStringDecay;
   delete theStringModel;
-  delete theModel;
 }
 
 void G4QGSBinaryPiKBuilder::

@@ -56,8 +56,6 @@ G4QGSBinaryProtonBuilder(G4bool quasiElastic)
    theStringModel->SetFragmentationModel(theStringDecay);
 
    theCascade = new G4BinaryCascade;
-   thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-   theCascade->SetDeExcitation(thePreEquilib);  
 
    theModel->SetTransport(theCascade);
    theModel->SetHighEnergyGenerator(theStringModel);
@@ -85,11 +83,8 @@ Build(G4HadronElasticProcess * )
 
 G4QGSBinaryProtonBuilder::~G4QGSBinaryProtonBuilder() 
  {
-   delete thePreEquilib;
-   delete theCascade;
    if ( theQuasiElastic ) delete theQuasiElastic;
    delete theStringDecay;
    delete theStringModel;
-   delete theModel;
  }
 

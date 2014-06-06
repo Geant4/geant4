@@ -53,12 +53,14 @@ G4AntiBarionBuilder(): wasActivated(false)
 
 G4AntiBarionBuilder::
 ~G4AntiBarionBuilder(){
+  /*
   delete theAntiProtonInelastic;
   delete theAntiNeutronInelastic;
   delete theAntiDeuteronInelastic;
   delete theAntiTritonInelastic;
   delete theAntiHe3Inelastic;
   delete theAntiAlphaInelastic;
+  */
 }
 
 void G4AntiBarionBuilder::

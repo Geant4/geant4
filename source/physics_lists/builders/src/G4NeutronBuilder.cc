@@ -55,11 +55,7 @@ G4NeutronBuilder(G4bool fissionFlag): wasActivated(false), isFissionActivated(fi
 
 G4NeutronBuilder::
 ~G4NeutronBuilder() 
-{
-  delete theNeutronInelastic;
-  delete theNeutronCapture;
-  if ( isFissionActivated ) delete theNeutronFission;
-}
+{}
 
 void G4NeutronBuilder::
 Build()

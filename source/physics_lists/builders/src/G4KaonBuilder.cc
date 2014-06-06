@@ -51,12 +51,8 @@ G4KaonBuilder(): wasActivated(false)
 }
 
 G4KaonBuilder::
-~G4KaonBuilder(){
-  delete theKaonPlusInelastic;
-  delete theKaonMinusInelastic;
-  delete theKaonZeroLInelastic;
-  delete theKaonZeroSInelastic;
-}
+~G4KaonBuilder()
+{}
 
 void G4KaonBuilder::
 Build()

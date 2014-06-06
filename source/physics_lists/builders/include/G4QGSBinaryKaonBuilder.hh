@@ -46,8 +46,6 @@
 #include "G4VKaonBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4ExcitationHandler.hh"
-#include "G4PreCompoundModel.hh"
 #include "G4BinaryCascade.hh"
 #include "G4QGSModel.hh"
 #include "G4QGSParticipants.hh"
@@ -73,7 +71,6 @@ class G4QGSBinaryKaonBuilder : public G4VKaonBuilder
 
   private:
     G4TheoFSGenerator * theModel;
-    G4PreCompoundModel * thePreEquilib;
     G4BinaryCascade * theCascade;
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;

@@ -45,7 +45,6 @@
 #include "G4ProcessManager.hh"
 #include "G4ProtonInelasticCrossSection.hh"
 #include "G4BGGNucleonInelasticXS.hh"
-#include "G4ExcitationHandler.hh"
 
 
 G4QGSPProtonBuilder::
@@ -58,9 +57,7 @@ G4QGSPProtonBuilder(G4bool quasiElastic)
    theStringDecay = new G4ExcitedStringDecay(theQGSM = new G4QGSMFragmentation);
    theStringModel->SetFragmentationModel(theStringDecay);
 
-   theCascade = new G4GeneratorPrecompoundInterface;
-   thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-   theCascade->SetDeExcitation(thePreEquilib);  
+   theCascade = new G4GeneratorPrecompoundInterface();
 
    theModel->SetTransport(theCascade);
    theModel->SetHighEnergyGenerator(theStringModel);
@@ -88,12 +85,9 @@ Build(G4HadronElasticProcess * )
 
 G4QGSPProtonBuilder::~G4QGSPProtonBuilder() 
  {
-   delete thePreEquilib;
-   delete theCascade;
    if ( theQuasiElastic ) delete theQuasiElastic;
    delete theStringDecay;
    delete theStringModel;
-   delete theModel;
    delete theQGSM;
  }
 

@@ -64,7 +64,6 @@
  G4ProtonBuilder::
  ~G4ProtonBuilder() 
  {
-   delete theProtonInelastic;
  }
 
  // 2002 by J.P. Wellisch

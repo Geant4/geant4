@@ -48,7 +48,6 @@
 #include "G4VNeutronBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4PreCompoundModel.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QGSModel.hh"
 #include "G4QGSParticipants.hh"
@@ -72,7 +71,6 @@ class G4QGSPNeutronBuilder : public G4VNeutronBuilder
 
   private:
     G4TheoFSGenerator * theModel;
-    G4PreCompoundModel * thePreEquilib;
     G4GeneratorPrecompoundInterface * theCascade;
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;

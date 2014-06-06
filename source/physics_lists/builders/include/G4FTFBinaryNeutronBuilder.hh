@@ -48,8 +48,6 @@
 #include "G4VNeutronBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4ExcitationHandler.hh"
-#include "G4PreCompoundModel.hh"
 #include "G4BinaryCascade.hh"
 #include "G4FTFModel.hh"
 #include "G4LundStringFragmentation.hh"

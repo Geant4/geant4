@@ -48,11 +48,8 @@ G4PionBuilder(): wasActivated(false)
   thePionMinusInelastic=new G4PionMinusInelasticProcess;
 }
 
-G4PionBuilder::
-~G4PionBuilder(){
-  delete thePionPlusInelastic;
-  delete thePionMinusInelastic;
-}
+G4PionBuilder::~G4PionBuilder()
+{}
 
 void G4PionBuilder::
 Build()

@@ -59,8 +59,6 @@ G4FTFBinaryPionBuilder(G4bool quasiElastic)
   theStringModel->SetFragmentationModel(theStringDecay);
 
   theCascade = new G4BinaryCascade;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -77,10 +75,9 @@ G4FTFBinaryPionBuilder(G4bool quasiElastic)
 
 G4FTFBinaryPionBuilder:: ~G4FTFBinaryPionBuilder()
 {
-  delete theCascade;
   delete theStringDecay;
   delete theStringModel;
-  delete theModel;
+  //delete theModel;
   if ( theQuasiElastic ) delete theQuasiElastic;
 }
 

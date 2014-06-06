@@ -46,7 +46,6 @@
 #include "G4ProcessManager.hh"
 #include "G4PiNuclearCrossSection.hh"
 #include "G4CrossSectionPairGG.hh"
-#include "G4ExcitationHandler.hh"
 
 
 G4QGSPPionBuilder::
@@ -61,9 +60,7 @@ G4QGSPPionBuilder(G4bool quasiElastic)
   theStringModel->SetFragmentationModel(theStringDecay);
   
 
-  theCascade = new G4GeneratorPrecompoundInterface;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
+  theCascade = new G4GeneratorPrecompoundInterface();
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -79,12 +76,9 @@ G4QGSPPionBuilder(G4bool quasiElastic)
 G4QGSPPionBuilder::
 ~G4QGSPPionBuilder() 
 {
-  delete theCascade;
-  delete thePreEquilib;
   if ( theQuasiElastic ) delete theQuasiElastic;
   delete theStringDecay;
   delete theStringModel;
-  delete theModel;
   delete theQGSM;
 }
 

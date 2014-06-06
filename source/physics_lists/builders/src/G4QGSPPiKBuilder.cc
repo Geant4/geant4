@@ -49,7 +49,6 @@
 #include "G4ChipsKaonPlusInelasticXS.hh"
 #include "G4ChipsKaonZeroInelasticXS.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
-#include "G4ExcitationHandler.hh"
 
 
 G4QGSPPiKBuilder::
@@ -65,9 +64,7 @@ G4QGSPPiKBuilder(G4bool quasiElastic)
   theStringModel->SetFragmentationModel(theStringDecay);
   
 
-  theCascade = new G4GeneratorPrecompoundInterface;
-  thePreEquilib = new G4PreCompoundModel(new G4ExcitationHandler);
-  theCascade->SetDeExcitation(thePreEquilib);  
+  theCascade = new G4GeneratorPrecompoundInterface();
 
   theModel->SetHighEnergyGenerator(theStringModel);
   if (quasiElastic)
@@ -83,12 +80,9 @@ G4QGSPPiKBuilder(G4bool quasiElastic)
 G4QGSPPiKBuilder::
 ~G4QGSPPiKBuilder() 
 {
-  delete theCascade;
-  delete thePreEquilib;
   if ( theQuasiElastic ) delete theQuasiElastic;
   delete theStringDecay;
   delete theStringModel;
-  delete theModel;
   delete theQGSM;
 }
 

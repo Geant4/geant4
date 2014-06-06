@@ -14,6 +14,12 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-June-2014, Vladimir Ivanchenko	(phys-builders-V10-00-04)
+- In all builders do not create a new instance of G4PreCompoundModel
+    and G4ExcitationHandler to reduce number of its instances.
+- Do not delete processes/models/cross sections in destructors
+    of builders 
+
 03-June-2014, Julia Yarba               (phys-builders-V10-00-03)
 - Add G4QGSPLundStrFragmProtonBuilder(.hh and .cc) which outfits
   QGSP model with G4 LundStringFragmentation object (instead of the

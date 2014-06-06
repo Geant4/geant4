@@ -28,8 +28,6 @@ G4QGSPLundStrFragmProtonBuilder(G4bool quasiElastic)
    theStringModel->SetFragmentationModel(theStringDecay);
 
    theCascade = new G4GeneratorPrecompoundInterface;
-   thePreEquilib = new G4PreCompoundModel(theHandler = new G4ExcitationHandler);
-   theCascade->SetDeExcitation(thePreEquilib);  
 
    theModel->SetTransport(theCascade);
    theModel->SetHighEnergyGenerator(theStringModel);
@@ -58,14 +56,10 @@ Build(G4HadronElasticProcess * )
 
 G4QGSPLundStrFragmProtonBuilder::~G4QGSPLundStrFragmProtonBuilder() 
  {
-   delete thePreEquilib;
-   delete theCascade;
    if ( theQuasiElastic ) delete theQuasiElastic;
    delete theStringDecay;
    delete theStringModel;
-   delete theModel;
    delete theStrFragm;
-   //delete theHandler;
  }
 
  

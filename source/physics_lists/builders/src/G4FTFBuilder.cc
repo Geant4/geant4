@@ -56,7 +56,6 @@ G4FTFBuilder::~G4FTFBuilder()
 {
   delete fStringDecay;
   delete fStringModel;
-  //delete fPrecoInterface;
   delete fLund;
 }                                     
 
@@ -70,7 +69,6 @@ G4HadronicInteraction* G4FTFBuilder::BuildModel()
   theFTFModel->SetHighEnergyGenerator(fStringModel);
 
   if(!fPreCompound) {
-    //G4ExcitationHandler* handler = new G4ExcitationHandler();
     fPreCompound = new G4PreCompoundModel();
   }
 

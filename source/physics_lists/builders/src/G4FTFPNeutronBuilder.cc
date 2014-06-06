@@ -56,8 +56,7 @@ G4FTFPNeutronBuilder(G4bool quasiElastic)
   theStringDecay = new G4ExcitedStringDecay(theLund = new G4LundStringFragmentation);
   theStringModel->SetFragmentationModel(theStringDecay);
 
-  thePreEquilib = new G4PreCompoundModel(theHandler = new G4ExcitationHandler);
-  theCascade = new G4GeneratorPrecompoundInterface(thePreEquilib);
+  theCascade = new G4GeneratorPrecompoundInterface();
 
   theModel->SetTransport(theCascade);
 
@@ -78,10 +77,7 @@ G4FTFPNeutronBuilder::
 {
   delete theStringDecay;
   delete theStringModel;
-  delete thePreEquilib;
-  delete theCascade;
   if ( theQuasiElastic ) delete theQuasiElastic;
-  //delete theHandler;
   delete theLund;
 }
 

@@ -48,7 +48,6 @@
 #include "G4VPiKBuilder.hh"
 
 #include "G4TheoFSGenerator.hh"
-#include "G4PreCompoundModel.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QGSModel.hh"
 #include "G4QGSParticipants.hh"
@@ -77,7 +76,6 @@ class G4QGSPPiKBuilder : public G4VPiKBuilder
   private:
     G4VCrossSectionDataSet* thePiData;
     G4TheoFSGenerator * theModel;
-    G4PreCompoundModel * thePreEquilib;
     G4GeneratorPrecompoundInterface * theCascade;
     G4QGSModel< G4QGSParticipants > * theStringModel;
     G4ExcitedStringDecay * theStringDecay;
