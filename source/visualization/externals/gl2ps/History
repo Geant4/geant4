@@ -16,7 +16,8 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-8 April 2014 Laurent Garnier (visexternal-V10-00-00)
+
+8 April 2014 Laurent Garnier (visexternal-V09-06-05)
 - Fix a bad text in G4OpenGL2PSAction
 
 20 Sept 2013 Laurent Garnier
