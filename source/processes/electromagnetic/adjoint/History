@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+10 Apr 2014: V.Ivanchenko (emadjoint-V09-06-10)
+- G4VAdjointReverseReaction - added protection against infinite 
+    loop in ReverseMC01 example: if cross section correction 
+    exceed 100 the total cross section is set to zero
+
 31 Oct 2013: L.Desorgher (emadjoint-V09-06-09)
 - Modifications for limitation of convergence peak
 - G4AdjointBremsstrahlungModel - biased the gamma->e.- reverse brem CS by factor 100
