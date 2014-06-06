@@ -17,17 +17,31 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6th June 2014  Laurent Garnier  (interfaces-V10-00-06)
+- G4UIQt : 
+  o Fix a Qt function that was only defined for Qt5
+ 
+5th June 2014  Laurent Garnier  (interfaces-V10-00-05 co-works opengl-V10-00-06)
+- G4UIQt : 
+  o Change help display to render parameters in a QTableView
+  o Change window expanding policy. Now when expanding main window, it will keep the size of the viewer
+  o When choosing "pick" icon, it will now apply /vis/viewer/set/picking true
+ 
+27th May 2014  Laurent Garnier
+- G4UIQt : 
+  o Change help display in help tree
+
 May 25th 2014 Koichi Murakami, interfaces-V10-00-04
 - basic/src/G4UIterminal.cc, fixed the problem that some commands cannot be
   processed, because of a bug in G4SubString== operator like nC(0,3)="xxx".
   Use substr() instead of () operator for the comparison of substr.
 
-20nd May 2014  Laurent Garnier (interfaces-V10-00-02, interfaces-V10-00-03)
+20th May 2014  Laurent Garnier (interfaces-V10-00-02, interfaces-V10-00-03)
 - G4UIQt : 
   o Change help tree splitter from vertical to horizontal
   o Add method to display text in HTML
 
-22nd Janvier 2014  Laurent Garnier (interfaces-V10-00-01)
+22th Janvier 2014  Laurent Garnier (interfaces-V10-00-01)
 - G4Qt : BUGFIX : bugzilla 1487 : Explicitly set the LC_NUMBERIC locale to "C"
 
 4nd December 2013  Laurent Garnier (interfaces-V09-06-18)

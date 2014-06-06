@@ -54,6 +54,7 @@ class QTabWidget;
 class QStringList;
 class QSplitter;
 class QToolBar;
+class QTableWidget;
 
 // Class description :
 //
@@ -183,7 +184,7 @@ private:
   QTreeWidgetItem* FindTreeItem(QTreeWidgetItem *,const QString&);
 
   QString GetCommandList(const G4UIcommand*);
-  QString GetCommandListToHtml(const G4UIcommand*);
+  void updateHelpArea(const G4UIcommand*);
   virtual G4bool GetHelpChoice(G4int&);// have to be implemeted because we heritate from G4VBasicShell
   bool eventFilter(QObject*,QEvent*);
   void ActivateCommand(G4String);
@@ -210,7 +211,6 @@ private:
   QLabel *fCommandLabel;
   QLineEdit * fCommandArea;
   QTextEdit *fCoutTBTextArea;
-  QTextEdit *fHelpArea;
   QTabWidget* fUITabWidget;
   QStringList fG4cout;
   QLineEdit * fCoutFilter;
@@ -230,6 +230,8 @@ private:
   QWidget* fLeftSplitterWidget;
   QSplitter * fHelpVSplitter;
   QWidget* fViewerTabHandleWidget;
+  QTextEdit* fParameterHelpLabel;
+  QTableWidget* fParameterHelpTable;
 
   QToolBar *fToolbarApp;
   QToolBar *fToolbarUser;

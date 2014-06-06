@@ -64,6 +64,7 @@
 #include <qmenu.h>
 #include <qlistwidget.h>
 #include <qtreewidget.h>
+#include <qheaderview.h>
 #include <qgroupbox.h>
 #include <qscrollarea.h>
 #include <qtoolbox.h>
@@ -77,7 +78,7 @@
 #include <qfiledialog.h>
 #include <qdesktopwidget.h>
 #include <qmessagebox.h>
-
+#include <qtablewidget.h>
 
 #include <stdlib.h>
 
@@ -113,7 +114,6 @@ G4UIQt::G4UIQt (
 ,fCommandLabel(NULL)
 ,fCommandArea(NULL)
 ,fCoutTBTextArea(NULL)
-,fHelpArea(NULL)
 ,fUITabWidget(NULL)
 ,fG4cout("")
 ,fCoutFilter(NULL)
@@ -132,6 +132,8 @@ G4UIQt::G4UIQt (
 ,fLeftSplitterWidget(NULL)
 ,fHelpVSplitter(NULL)
 ,fViewerTabHandleWidget(NULL)
+,fParameterHelpLabel(NULL)
+,fParameterHelpTable(NULL)
 ,fToolbarApp(NULL)
 ,fToolbarUser(NULL)
 ,fStringSeparator("__$$$@%%###__")
@@ -183,9 +185,6 @@ G4UIQt::G4UIQt (
   fMainSplitterWidget->addWidget(CreateRightSplitterWidget());
   
   QSizePolicy policy = QSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
-  policy.setHorizontalStretch(2);
-  fRightSplitterWidget->setSizePolicy(policy);
-  
   policy = QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
   policy.setHorizontalStretch(1);
   fLeftSplitterWidget->setSizePolicy(policy);
@@ -267,18 +266,30 @@ QWidget* G4UIQt::CreateHelpTBWidget(
   // Create Help tree
   FillHelpTree();
   
-  fHelpArea = new QTextEdit();
-  fHelpArea->setReadOnly(true);
+  fParameterHelpLabel = new QTextEdit();
+  fParameterHelpLabel->setReadOnly(true);
+  fParameterHelpTable = new QTableWidget();
   
   // Set layouts
   
   if (fHelpTreeWidget) {
     fHelpVSplitter->addWidget(fHelpTreeWidget);
   }
-  fHelpVSplitter->addWidget(fHelpArea);
+  fHelpVSplitter->addWidget(fParameterHelpLabel);
+  fHelpVSplitter->addWidget(fParameterHelpTable);
   
+  QSizePolicy policy = QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
+  policy.setVerticalStretch(4);
+  fHelpTreeWidget->setSizePolicy(policy);
+  
+  policy = QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
+  policy.setVerticalStretch(1);
+  fParameterHelpLabel->setSizePolicy(policy);
+  fParameterHelpTable->setSizePolicy(policy);
+
   vLayout->addWidget(helpWidget);
   vLayout->addWidget(fHelpVSplitter,1);
+  vLayout->setContentsMargins(5,5,5,5);
   
   helpWidget->setLayout(helpLayout);
   fHelpTBWidget->setLayout(vLayout);
@@ -1814,13 +1825,9 @@ void G4UIQt::FillHelpTree()
     return; 
   }
 
-  if (fHelpArea) {
-#if QT_VERSION < 0x040200
-    fHelpArea->clear();
-    fHelpArea->append("Choose a command in the command tree");
-#else
-    fHelpArea->setText("Choose a command in the command tree");
-#endif
+  if (fParameterHelpLabel) {
+    fParameterHelpLabel->setText("Choose a command in the command tree");
+    fParameterHelpTable->setVisible(false);
   }
 
   if (fHelpLine) {
@@ -2427,14 +2434,19 @@ QString G4UIQt::GetCommandList (
    @see G4UIcommand::List()
    @return the command list parameters, or "" if nothing
 */
-QString G4UIQt::GetCommandListToHtml (
+void G4UIQt::updateHelpArea (
  const G4UIcommand *aCommand
 )
 {
-
-  QString txt ="";
+  if (!fParameterHelpLabel)
+    return;
+  if (!fParameterHelpTable)
+    return;
+  
+  fParameterHelpLabel->setTextInteractionFlags(Qt::NoTextInteraction);
+  QString txt;
   if (aCommand == NULL)
-    return txt;
+    return;
 
   G4String commandPath = aCommand->GetCommandPath();
   G4String rangeString = aCommand->GetRange();
@@ -2445,88 +2457,106 @@ QString G4UIQt::GetCommandListToHtml (
       (rangeString == "") &&
       (n_guidanceEntry == 0) &&
       (n_parameterEntry == 0)) {
-    return txt;
+    return;
   }
 
   if((commandPath.length()-1)!='/') {
-    txt += "<b>Command </b>" + QString((char*)(commandPath).data()) + "<br />";
+    txt += "<b>Command </b> " + QString((char*)(commandPath).data()) + "<br />";
   }
-  txt += "<b>Guidance :</b>";
+  txt += "<b>Guidance :</b> ";
   
   for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
     txt += QString((char*)(aCommand->GetGuidanceLine(i_thGuidance)).data()) + "<br />";
   }
   if( ! rangeString.isNull() ) {
-    txt += "<b>Range of parameters : </b>" + QString((char*)(rangeString).data()) + "<br />";
+    txt += "<b>Range of parameters : </b> " + QString((char*)(rangeString).data()) + "<br />";
   } else {
     txt += "<br />";
   }
+  fParameterHelpLabel->setHtml(txt);
+
   if( n_parameterEntry > 0 ) {
     G4UIparameter *param;
     
     // Re-implementation of G4UIparameter.cc
     
-    if (n_parameterEntry > 0) {
-      txt+= "<table style='border-width:1px; border-style:solid;border-color:black;'>";
-      txt+= "<tr>";
-      txt+= "<td style='background-color: #E0E0E0;'>Parameter</td>";
-      txt+= "<td style='background-color: #E0E0E0;'>Guidance</td>";
-      txt+= "<td style='background-color: #E0E0E0;'>Type</td>";
-      txt+= "<td style='background-color: #E0E0E0;'>Omittable</td>";
-      txt+= "<td style='background-color: #E0E0E0;'>Default</td>";
-      txt+= "<td style='background-color: #E0E0E0;'>Range</td>";
-      txt+= "<td style='background-color: #E0E0E0;'>Candidates</td>";
-      txt+= "</tr>";
-    }
-    QString color1 = " style=\"background-color: #fce68d;\"";
-    QString color2 = " style=\"background-color: #ffcc00;\"";
-    QString currentColor = color1;
+    fParameterHelpTable->clear();
+    fParameterHelpTable->setRowCount(n_parameterEntry);
+    fParameterHelpTable->setColumnCount(8);
+    fParameterHelpTable->setHorizontalHeaderLabels(QStringList() <<
+                                                   tr("") <<
+                                                   tr("Parameter") <<
+                                                   tr("Guidance") <<
+                                                   tr("Type") <<
+                                                   tr("Ommitable") <<
+                                                   tr("Default") <<
+                                                   tr("Range") <<
+                                                   tr("Candidate"));
+    fParameterHelpTable->setColumnWidth(2,60);
+
+    fParameterHelpTable->verticalHeader()->setVisible(false);
+    fParameterHelpTable->setAlternatingRowColors (true);
+#if QT_VERSION < 0x050000
+    fParameterHelpTable->verticalHeader()->setResizeMode(QHeaderView::ResizeToContents);
+    fParameterHelpTable->horizontalHeader()->setResizeMode(2, QHeaderView::Stretch);
+#else
+    fParameterHelpTable->verticalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    fParameterHelpTable->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+#endif
+    fParameterHelpTable->setWordWrap(true);
+
+    QTableWidgetItem* t = fParameterHelpTable->horizontalHeaderItem(1);
+    QFont fnt = t->font();
+    int size = fnt.pointSize();
+    fnt.setPointSize(size-2);
     
-    for( G4int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ ) {
-      if (currentColor==color1) {
-        currentColor = color2;
-      } else {
-        currentColor = color1;
-      }
-      txt+= "<tr>";
-      param = aCommand->GetParameter(i_thParameter);
-      txt += "<td"+currentColor+">" + QString((char*)(param->GetParameterName()).data()) + "</td>";
+    for( G4int a=0; a<n_parameterEntry; a++ ) {
+      param = aCommand->GetParameter(a);
+      fParameterHelpTable->setItem(a, 0, new QTableWidgetItem(QString::number(a+1)));
+      
+      fParameterHelpTable->setItem(a, 1, new QTableWidgetItem(QString((char*)(param->GetParameterName()).data())));
       if( ! param->GetParameterGuidance().isNull() ) {
-        txt += "<td"+currentColor+">" + QString((char*)(param->GetParameterGuidance()).data())+ "</td>" ;
-      } else {
-        txt += "<td"+currentColor+">&nbsp;</td>";
+        fParameterHelpTable->setItem(a, 2, new QTableWidgetItem(QString((char*)(param->GetParameterGuidance()).data())));
       }
-      txt += "<td"+currentColor+">" + QString(QChar(param->GetParameterType())) + "</td>";
+      fParameterHelpTable->setItem(a, 3, new QTableWidgetItem(QString(QChar(param->GetParameterType()))));
+ 
       if(param->IsOmittable()){
-        txt += "<td"+currentColor+">True</td>";
+        fParameterHelpTable->setItem(a, 4, new QTableWidgetItem(QString("True")));
       } else {
-        txt += "<td"+currentColor+">False</td>";
+        fParameterHelpTable->setItem(a, 4, new QTableWidgetItem(QString("False")));
       }
       if( param->GetCurrentAsDefault() ) {
-        txt += "<td"+currentColor+">" + "taken from the current value</td>";
+        fParameterHelpTable->setItem(a, 5, new QTableWidgetItem(QString("taken from the current value")));
       } else if( ! param->GetDefaultValue().isNull() ) {
-        txt += "<td"+currentColor+">" + QString((char*)(param->GetDefaultValue()).data())+ "</td>";
-      } else {
-        txt += "<td"+currentColor+">&nbsp;</td>";
+        fParameterHelpTable->setItem(a, 5, new QTableWidgetItem(QString((char*)(param->GetDefaultValue()).data())));
       }
       if( ! param->GetParameterRange().isNull() ) {
-        txt += "<td"+currentColor+">" + QString((char*)(param->GetParameterRange()).data())+ "</td>";
-      } else {
-        txt += "<td"+currentColor+">&nbsp;</td>";
+        fParameterHelpTable->setItem(a, 6, new QTableWidgetItem(QString((char*)(param->GetParameterRange()).data())));
       }
       if( ! param->GetParameterCandidates().isNull() ) {
-        txt += "<td"+currentColor+">" + QString((char*)(param->GetParameterCandidates()).data())+ "</td>";
-      } else {
-        txt += "<td"+currentColor+">&nbsp;</td>";
+        fParameterHelpTable->setItem(a, 7, new QTableWidgetItem(QString((char*)(param->GetParameterCandidates()).data())));
       }
-      txt+= "</tr>";
+      // tooltips
+      for (int b=0; b<8; b++) {
+        QTableWidgetItem* tmp = fParameterHelpTable->item(a,b);
+        if (tmp) {
+          tmp->setToolTip(tmp->text());
+          tmp->setFlags(Qt::NoItemFlags);
+          tmp->setForeground(QBrush());
+          tmp->setFont(fnt);
+        }
+      }
+      fParameterHelpTable->resizeRowToContents(a);
     }
-    if (n_parameterEntry > 0) {
-      txt+= "</table>";
+    for (int c=0; c<8; c++) {
+      if (c !=2) {
+        fParameterHelpTable->resizeColumnToContents(c);
+      }
     }
 
+    fParameterHelpTable->setVisible(true);
+    
   }
-  return txt;
 }
 
 
@@ -2881,9 +2911,6 @@ void G4UIQt::HelpTreeClicCallback (
   QTreeWidgetItem* item =  NULL;
   if (!fHelpTreeWidget)
     return ;
-
-  if (!fHelpArea)
-    return;
   
   QList<QTreeWidgetItem *> list =fHelpTreeWidget->selectedItems();
   if (list.isEmpty())
@@ -2905,23 +2932,14 @@ void G4UIQt::HelpTreeClicCallback (
   G4UIcommand* command = treeTop->FindPath(itemText.c_str());
 
   if (command) {
- #if QT_VERSION < 0x040200
-    fHelpArea->clear();
-    fHelpArea->append(GetCommandList(command));
- #else
-    fHelpArea->setHtml(GetCommandListToHtml(command));
- #endif
+    updateHelpArea(command);
   } else {  // this is a command
     G4UIcommandTree* path = treeTop->FindCommandTree(itemText.c_str());
     if ( path) {
       // this is not a command, this is a sub directory
       // We display the Title
- #if QT_VERSION < 0x040200
-      fHelpArea->clear();
-      fHelpArea->append(path->GetTitle().data());
- #else
-      fHelpArea->setText(path->GetTitle().data());
- #endif
+      fParameterHelpLabel->setText(path->GetTitle().data());
+      fParameterHelpTable->setVisible(false);
     }
   }
 }
@@ -2937,9 +2955,6 @@ void G4UIQt::HelpTreeDoubleClicCallback (
   if (!fHelpTreeWidget)
     return ;
 
-  if (!fHelpArea)
-    return;
-  
   QList<QTreeWidgetItem *> list =fHelpTreeWidget->selectedItems();
   if (list.isEmpty())
     return;
@@ -2993,11 +3008,8 @@ void G4UIQt::LookForHelpStringCallback(
 {
   QString searchText = fHelpLine->text();
 
-#if QT_VERSION < 0x040200
-  fHelpArea->clear();
-#else
-  fHelpArea->setText("");
-#endif
+  fParameterHelpLabel->setText("");
+  fParameterHelpTable->setVisible(false);
   if (searchText =="") {
     // clear old help tree
     fHelpTreeWidget->clear();
@@ -3059,12 +3071,8 @@ void G4UIQt::OpenHelpTreeOnCommand(
   fHelpTreeWidget->setHeaderLabels(labels);
 
   if (commandResultMap.empty()) {
-#if QT_VERSION < 0x040200
-    fHelpArea->clear();
-    fHelpArea->append("No match found");
-#else
-    fHelpArea->setText("No match found");
-#endif
+    fParameterHelpLabel->setText("No match found");
+    fParameterHelpTable->setVisible(false);
     return;
   }
 
@@ -3253,12 +3261,16 @@ void G4UIQt::ChangeCursorStyle(const QString& action) {
   for (int i = 0; i < list.size(); ++i) {
     if (list.at(i)->data().toString () == action) {
       list.at(i)->setChecked(TRUE);
+      if (list.at(i)->data().toString () == "pick") {
+        G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/picking true");
+      }
     } else if (list.at(i)->data().toString () == "move") {
       fMoveSelected = false;
       list.at(i)->setChecked(FALSE);
     } else if (list.at(i)->data().toString () == "pick") {
       fPickSelected = false;
       list.at(i)->setChecked(FALSE);
+      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/set/picking false");
     } else if (list.at(i)->data().toString () == "rotate") {
       fRotateSelected = false;
       list.at(i)->setChecked(FALSE);
