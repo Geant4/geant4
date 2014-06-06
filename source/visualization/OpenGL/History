@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23th April 2014  Laurent Garnier (opengl-V09-06-13)
+- G4OpenGL.hh: Fix bugzilla #1618 : for a Linux user, compiling Geant4 with only 
+  Qt driver will failed because of missing glu.h.
+
 20th November 2013 Laurent Garnier  (opengl-V09-06-12)
 - G4OpenGLQtViewer : Fix a bug with endsWith that I have introduce in last revision
 
