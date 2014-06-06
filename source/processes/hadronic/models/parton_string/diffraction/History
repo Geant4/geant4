@@ -15,7 +15,7 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-23-May-2014 A. Ribon       (hadr-string-diff-V09-06-19)
+23-May-2014 A. Ribon       (hadr-string-diff-V09-06-20)
 -  Fix bug #1550 : extend the vectors CandAQ, CandQ of G4FTFAnnihilation
    in the case of one quark - anti-quark string, in order to correctly
    handle antiproton - proton and antineutron - neutron annihilations.
