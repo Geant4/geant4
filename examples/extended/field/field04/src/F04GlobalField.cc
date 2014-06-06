@@ -92,11 +92,11 @@ F04GlobalField::~F04GlobalField()
 {
   Clear();
 
+  delete fFields;
+
   delete fFieldMessenger;
 
   if (fEquation)        delete fEquation;
-  if (fFieldManager)    delete fFieldManager;
-  if (fFieldPropagator) delete fFieldPropagator;
   if (fStepper)         delete fStepper;
   if (fChordFinder)     delete fChordFinder;
 }
@@ -299,7 +299,9 @@ void F04GlobalField::Clear()
      }
   }
 
-  if (fFp) delete[] fFp;
+  if (fFp) delete [] fFp; fFirst = true;
+  fNfp = 0;
+  fFp = NULL;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
