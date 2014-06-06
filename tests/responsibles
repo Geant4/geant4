@@ -166,6 +166,7 @@ examples/extended
     MCTruth                  Witold.Pokorski@cern.ch         Witold Pokorski
     pythia                   ivana@ipno.in2p3.fr             Ivana Hrivnacova
   exoticphysics:
+    channeling               bagli@fe.infn.it                Enrico Bagli
     monopole                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
     phonon                   asai@slac.stanford.edu          Makoto Asai         
   field:
