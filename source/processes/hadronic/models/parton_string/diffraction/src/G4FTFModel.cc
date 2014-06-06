@@ -77,7 +77,7 @@ G4FTFModel::G4FTFModel( const G4String& modelName ) :
   NumberOfInvolvedNucleonsOfTarget = 0;
   NumberOfInvolvedNucleonsOfProjectile= 0;
 
-  LowEnergyLimit = 5000.0*MeV;
+  LowEnergyLimit = 2000.0*MeV;
   HighEnergyInter = true;
 
   G4LorentzVector tmp( 0.0, 0.0, 0.0, 0.0 );
