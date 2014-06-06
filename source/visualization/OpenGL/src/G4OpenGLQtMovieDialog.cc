@@ -69,7 +69,7 @@ G4OpenGLQtMovieDialog::G4OpenGLQtMovieDialog(
     fParentViewer(parentViewer)
 {
   setModal(false);
-  setWindowTitle( tr( " Movie parameters" ));
+  setWindowTitle( tr( " Save as movie" ));
 
 
   // global layout

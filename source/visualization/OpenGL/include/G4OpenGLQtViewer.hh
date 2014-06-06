@@ -42,10 +42,12 @@
 
 #include <qobject.h>
 #include <qpoint.h>
+#include <qpixmap.h>
 
 class G4OpenGLSceneHandler;
 class G4UImanager;
 class G4Text;
+class G4UIcommand;
 
 class QGLWidget;
 class QDialog;
@@ -71,6 +73,8 @@ class G4OpenGLQtMovieDialog;
 class QLineEdit;
 class QSignalMapper;
 class G4UIQt;
+class QTableWidget;
+class QTableWidgetItem;
 
 class G4OpenGLQtViewer: public QObject, virtual public G4OpenGLViewer {
 
@@ -87,6 +91,7 @@ private:
   G4OpenGLQtViewer& operator= (const G4OpenGLQtViewer&);
 public:
   virtual void updateQWidget()=0;
+  void updateSceneTreeComponentTreeWidgetInfos();
   QString setEncoderPath(QString path);
   QString getEncoderPath();
   QString setTempFolderPath(QString path);
@@ -217,6 +222,7 @@ private:
   std::string parseSceneTreeAndSaveState();
 
   std::string parseSceneTreeElementAndSaveState(QTreeWidgetItem* item, unsigned int level);
+  QString GetCommandParameterList (const G4UIcommand *aCommand);
 
   QMenu *fContextMenu;
   QPoint fLastPos1;
@@ -275,12 +281,14 @@ private:
   QLineEdit* fHelpLine;
   QString fFileSavePath;
   QString fDefaultSaveFileFormat;
+  QPushButton* fViewerPropertiesButton;
   
   int fNbRotation ;
   int fTimeRotation;
   QString fTouchableVolumes;
   QDialog* fShortcutsDialog;
-  QTextEdit *fTreeInfoDialogInfos;
+  QTableWidget *fSceneTreeComponentTreeWidgetInfos;
+  int fTreeWidgetInfosIgnoredCommands;
   QPushButton * fSceneTreeButtonApply;
   QTextEdit *fShortcutsDialogInfos;
   QSlider* fSceneTreeDepthSlider;
@@ -311,6 +319,9 @@ private:
   std::map <int, QTreeWidgetItem*>::const_iterator fOldLastSceneTreeWidgetAskForIterator;
   std::map <int, QTreeWidgetItem*>::const_iterator fOldLastSceneTreeWidgetAskForIteratorEnd;
 
+  // icons
+  QPixmap fTreeIconOpen;
+  QPixmap fTreeIconClosed;
 
 public Q_SLOTS :
   void startPauseVideo();
@@ -339,12 +350,14 @@ private Q_SLOTS :
   void processLookForFinished();
   void processEncodeStdout();
   void sceneTreeComponentItemChanged(QTreeWidgetItem* item, int id);
+  void toggleSceneTreeComponentTreeWidgetInfos();
 
   // action trigger by a click on a component scene tree
   void sceneTreeComponentSelected();
   void changeDepthInSceneTree(int);
   void changeSearchSelection();
   void changeColorAndTransparency(QTreeWidgetItem* item,int val);
+  void tableWidgetViewerSetItemChanged(QTableWidgetItem *);
 };
 
 #endif

@@ -17,6 +17,39 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+5th June 2014  Laurent Garnier (opengl-V10-00-07)
+- G4OpenGLStoredSceneHandler : Split AddPrimitivePreamble() in 3 functions to avoid 
+  dynamic_cast (+20% faster in drawing)
+
+5th June 2014  Laurent Garnier (opengl-V10-00-06 co-works interfaces-V10-00-05)
+- G4OpenGLQtViewer: 
+  o Improve Viewer parameters info panel
+  o Fix problem with /vis/viewer/set/ "auxiliaryEdge"/"defaultTextColour"/"globalLineWidthScale"
+  o Implement missing commands : "edge", "lightsThetaPhi", "upVector", "viewpointVector"
+- G4OpenGLImmediateQtViewer/G4OpenGLStoredQtViewer:
+  o Add feedback for Viewer parameters info panel
+
+3rd June 2014  Laurent Garnier
+- G4OpenGLQtViewer: 
+  o Hide Viewer parameters under a widget at the bottom of the Viewer panel
+  o Most of viewer/set parameters are now implemented. Still missing :
+    "culling", "edge", "lightsThetaPhi", "upVector", "viewpointVector"
+
+28th May 2014  Laurent Garnier
+- G4OpenGLQtViewer: Add current parameters for targetPoint, lineSegmentsPerCircle, upThetaPhi
+
+27th May 2014  Laurent Garnier
+- G4OpenGLQtViewer: Viewer parameter panel improvments, all viewer parameters are editable
+
+26th May 2014  Laurent Garnier
+- G4OpenGLQtViewer: Beggining of DEV-151 : Add a viewer parameter panel
+   o All view parameters with a "set" ui command are there.
+   o Only viewpointThetaPhi has a feedback
+   o All other parameters are default.
+
+20th May 2014  Laurent Garnier
+- G4OpenGLQtMovieDialog: Minor change in movie menu title
+
 13th May 2014  John Allison  (opengl-V10-00-05)
 - Coworks: DAWN-V10-00-02, visman-V10-00-08, openinventor-V10-00-01.
 - Moved G4VisFeaturesOfOpenGL from management sub-category.

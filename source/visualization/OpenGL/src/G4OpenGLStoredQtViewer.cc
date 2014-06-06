@@ -206,7 +206,9 @@ void G4OpenGLStoredQtViewer::ComputeView () {
   G4bool kernelVisitWasNeeded = fNeedKernelVisit; // Keep (ProcessView resets).
   ProcessView ();
    
-
+  if (fNeedKernelVisit) {
+    displaySceneTreeComponent();
+  }
   if(dstyle!=G4ViewParameters::hlr &&
      haloing_enabled) {
 #ifdef G4DEBUG_VIS_OGL
@@ -340,8 +342,6 @@ void G4OpenGLStoredQtViewer::paintGL()
 
   fHasToRepaint = false;
 
-  // update the view component tree
-  displaySceneTreeComponent();
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n",fReadyToPaint);
 #endif
@@ -405,6 +405,7 @@ void G4OpenGLStoredQtViewer::contextMenuEvent(QContextMenuEvent *e)
 void G4OpenGLStoredQtViewer::updateQWidget() {
   fHasToRepaint= true;
   updateGL();
+  updateSceneTreeComponentTreeWidgetInfos();
   fHasToRepaint= false;
 }
 

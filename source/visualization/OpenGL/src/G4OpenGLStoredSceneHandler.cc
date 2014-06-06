@@ -184,7 +184,20 @@ void G4OpenGLStoredSceneHandler::EndPrimitives2D ()
   G4OpenGLSceneHandler::EndPrimitives2D ();
 }
 
-G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible)
+G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4VMarker& visible)
+{
+  return AddPrimitivePreambleInternal(visible, true, false);
+}
+G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Polyline& visible)
+{
+  return AddPrimitivePreambleInternal(visible, false, true);
+}
+G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Polyhedron& visible)
+{
+  return AddPrimitivePreambleInternal(visible, false, false);
+}
+
+G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreambleInternal(const G4Visible& visible, bool isMarker, bool isPolyline)
 {
   const G4Colour& c = GetColour (visible);
   G4double opacity = c.GetAlpha ();
@@ -196,20 +209,6 @@ G4bool G4OpenGLStoredSceneHandler::AddPrimitivePreamble(const G4Visible& visible
     transparency_enabled = pViewer->transparency_enabled;
     isMarkerNotHidden = pViewer->fVP.IsMarkerNotHidden();
   }
-  
-  G4bool isMarker = false;
-  try {
-    (void) dynamic_cast<const G4VMarker&>(visible);
-    isMarker = true;
-  }
-  catch (std::bad_cast) {}
-  
-  G4bool isPolyline = false;
-  try {
-    (void) dynamic_cast<const G4Polyline&>(visible);
-    isPolyline = true;
-  }
-  catch (std::bad_cast) {}
   
   G4bool isTransparent = opacity < 1.;
   G4bool isMarkerOrPolyline = isMarker || isPolyline;

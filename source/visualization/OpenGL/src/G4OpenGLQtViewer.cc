@@ -49,6 +49,7 @@
 #include "G4VisCommandsGeometrySet.hh"
 #include "G4PhysicalVolumeModel.hh"
 #include "G4Text.hh"
+#include "G4UnitsTable.hh"
 
 #include <CLHEP/Units/SystemOfUnits.h>
 
@@ -59,7 +60,6 @@
 #include <qdialog.h>
 #include <qpushbutton.h>
 #include <qprocess.h>
-#include <qapplication.h>
 #include <qdesktopwidget.h>
 
 #include <qmenu.h>
@@ -83,6 +83,8 @@
 #include <qlineedit.h>
 #include <qsignalmapper.h>
 #include <qmainwindow.h>
+#include <qtablewidget.h>
+#include <qheaderview.h>
 
 //////////////////////////////////////////////////////////////////////////////
 void G4OpenGLQtViewer::CreateMainWindow (
@@ -227,10 +229,13 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fSceneTreeWidget(NULL)
   ,fPVRootNodeCreate(false)
   ,fHelpLine(NULL)
+  ,fViewerPropertiesButton(NULL)
   ,fNbRotation(0)
   ,fTimeRotation(0)
   ,fTouchableVolumes("Touchables")
   ,fShortcutsDialog(NULL)
+  ,fSceneTreeComponentTreeWidgetInfos(NULL)
+  ,fTreeWidgetInfosIgnoredCommands(0)
   ,fSceneTreeDepthSlider(NULL)
   ,fSceneTreeDepth(1)
   ,fModelShortNameItem(NULL)
@@ -259,6 +264,160 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   // Set default path and format
   fFileSavePath = QDir::currentPath();
   fDefaultSaveFileFormat = "png";
+
+  const char * const icon1[]={
+    /* columns rows colors chars-per-pixel */
+          "20 20 34 1",
+     "  c None",
+     ". c #7C7C7C7C7C7C",
+     "X c #7D7D7D7D7D7D",
+     "o c #828282828282",
+     "O c #838383838383",
+     "+ c #848484848484",
+     "@ c #858585858585",
+     "# c #878787878787",
+     "$ c #888888888888",
+     "% c #8B8B8B8B8B8B",
+     "& c #8C8C8C8C8C8C",
+     "* c #8F8F8F8F8F8F",
+     "= c #909090909090",
+     "- c #919191919191",
+     "; c #999999999999",
+     ": c #9D9D9D9D9D9D",
+     "> c #A2A2A2A2A2A2",
+     ", c #A3A3A3A3A3A3",
+     "< c #A5A5A5A5A5A5",
+     "1 c #A6A6A6A6A6A6",
+     "2 c #B3B3B3B3B3B3",
+     "3 c #B6B6B6B6B6B6",
+     "4 c #C2C2C2C2C2C2",
+     "5 c #C6C6C6C6C6C6",
+     "6 c #CACACACACACA",
+     "7 c #CFCFCFCFCFCF",
+     "8 c #D0D0D0D0D0D0",
+     "9 c #D4D4D4D4D4D4",
+     "0 c #D7D7D7D7D7D7",
+     "q c #DEDEDEDEDEDE",
+     "w c #E0E0E0E0E0E0",
+     "e c #E7E7E7E7E7E7",
+     "r c #F4F4F4F4F4F4",
+     "t c #F7F7F7F7F7F7",
+     "                               ",
+     "                               ",
+     "                               ",
+     "                               ",
+     "                               ",
+     "                               ",
+     "    =========>                 ",
+     "    7&X+++Oo<e                 ",
+     "     2o+@@+-8                  ",
+     "     w;.#@+3                   ",
+     "      4$o@:q                   ",
+     "      r1X%5                    ",
+     "       9*,t                    ",
+     "        60                     ",
+     "                               ",
+     "                               ",
+     "                               ",
+     "                               ",
+     "                               ",
+     "                               "
+  };
+  const char * const icon2[]={
+    "20 20 68 1",
+    "  c None",
+    ". c #5F5F10102323",
+    "X c #40405F5F1010",
+    "o c #696963632E2E",
+    "O c #101019194C4C",
+    "+ c #101023237070",
+    "@ c #70702D2D6363",
+    "# c #73732D2D6464",
+    "$ c #79792E2E6767",
+    "% c #19194C4C5353",
+    "& c #2D2D63636161",
+    "* c #2E2E61617070",
+    "= c #6F6F6E6E4343",
+    "- c #707065655F5F",
+    "; c #727279795454",
+    ": c #535341417070",
+    "> c #797954547979",
+    ", c #434361617474",
+    "< c #414170707070",
+    "1 c #686869696363",
+    "2 c #6C6C69696363",
+    "3 c #656567676F6F",
+    "4 c #69696F6F6E6E",
+    "5 c #747465656767",
+    "6 c #757562626C6C",
+    "7 c #70706C6C6969",
+    "8 c #616174746565",
+    "9 c #656573736969",
+    "0 c #616174746969",
+    "q c #707075756262",
+    "w c #797970706565",
+    "e c #636361617474",
+    "r c #67676F6F7272",
+    "t c #727261617070",
+    "y c #616170707070",
+    "u c #6F6F72727979",
+    "i c #67676E6ED1D1",
+    "p c #808080808080",
+    "a c #828282828282",
+    "s c #838383838383",
+    "d c #848484848484",
+    "f c #858585858585",
+    "g c #868686868686",
+    "h c #888888888888",
+    "j c #8A8A8A8A8A8A",
+    "k c #8D8D8D8D8D8D",
+    "l c #8F8F8F8F8F8F",
+    "z c #909090909090",
+    "x c #949494949494",
+    "c c #9C9C9C9C9C9C",
+    "v c #9F9F9F9F9F9F",
+    "b c #A2A2A2A2A2A2",
+    "n c #AEAEAEAEAEAE",
+    "m c #B7B7B7B7B7B7",
+    "M c #C7C7C7C7C7C7",
+    "N c #C9C9C9C9C9C9",
+    "B c #D1D1D1D1D1D1",
+    "V c #D4D4D4D4D4D4",
+    "C c #D9D9D9D9D9D9",
+    "Z c #E0E0E0E0E0E0",
+    "A c #E2E2E2E2E2E2",
+    "S c #EEEEEEEEEEEE",
+    "D c #F0F0F0F0F0F0",
+    "F c #F5F5F5F5F5F5",
+    "G c #F6F6F6F6F6F6",
+    "H c #F9F9F9F9F9F9",
+    "J c #FCFCFCFCFCFC",
+    "K c #FDFDFDFDFDFD",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "     bC             ",
+    "     zjnD           ",
+    "     ldjjMK         ",
+    "     zdhdjcA        ",
+    "     zddhdddVK      ",
+    "     zghdalBH       ",
+    "     zghamSK        ",
+    "     lubZH          ",
+    "     xMF            ",
+    "     G              ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    "                    ",
+    
+  };
+  
+  fTreeIconOpen = QPixmap(icon1);
+  fTreeIconClosed = QPixmap(icon2);
 
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLQtViewer::G4OpenGLQtViewer END\n");
@@ -402,7 +561,7 @@ void G4OpenGLQtViewer::createPopupMenu()    {
                     SLOT(actionSaveImage()));
 
   // === Action Menu ===
-  QAction *movieParameters = mActions->addAction("Movie parameters...");
+  QAction *movieParameters = mActions->addAction("Save as movie...");
   QObject ::connect(movieParameters, 
                     SIGNAL(triggered()),
                     this,
@@ -614,6 +773,7 @@ void G4OpenGLQtViewer::toggleMouseAction(int aAction) {
     fUiQt->SetIconZoomInSelected();
   }
 
+  updateQWidget();
   updateToolbarAndMouseContextMenu();
 }
 
@@ -1048,11 +1208,9 @@ void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *evnt)
     fLastEventTime->start();
     if (fUiQt != NULL) {
 
-      if (fUiQt->IsIconPickSelected()){  // pick
-        fVP.SetPicking(true);
+      if (fVP.IsPicking()){  // pick
         G4cout << Pick(evnt->pos().x(),evnt->pos().y()) << G4endl;
         //        fWindow->setToolTip(pickToolTip);
-        fVP.SetPicking(false);
  
       } else if (fUiQt->IsIconZoomInSelected()) {  // zoomIn
         // Move click point to center of OGL
@@ -2276,7 +2434,31 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   connect(fSceneTreeComponentTreeWidget,SIGNAL(itemSelectionChanged ()),SLOT(sceneTreeComponentSelected()));
   connect(fSceneTreeComponentTreeWidget,SIGNAL(itemDoubleClicked ( QTreeWidgetItem*, int)),SLOT(changeColorAndTransparency( QTreeWidgetItem*, int)));
 
+  // Search line
+  QWidget *helpWidget = new QWidget();
+  QHBoxLayout *helpLayout = new QHBoxLayout();
+  QPushButton* select = new QPushButton("select item(s)");
+  fHelpLine = new QLineEdit();
+  helpLayout->addWidget(fHelpLine);
+  helpLayout->addWidget(select);
+  helpWidget->setLayout(helpLayout);
+  helpLayout->setContentsMargins(0,0,0,0);
+  
+  // set a minimum size
+  fHelpLine->setMinimumWidth (20);
+  
+  QSizePolicy policy = fHelpLine->sizePolicy();
+  policy.setHorizontalStretch(10);
+  fHelpLine->setSizePolicy(policy);
+  
+  policy = select->sizePolicy();
+  policy.setHorizontalStretch(1);
+  select->setSizePolicy(policy);
+  
+  layoutSceneTreeComponentsTBWidget->addWidget(helpWidget);
+  
 
+  
   // Depth slider
   QLabel *depth = new QLabel();
   depth->setText("Depth :");
@@ -2308,28 +2490,25 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
 
   connect( fSceneTreeDepthSlider, SIGNAL( valueChanged(int) ), this, SLOT( changeDepthInSceneTree(int) ) );
 
-  // Search line
-  QWidget *helpWidget = new QWidget();
-  QHBoxLayout *helpLayout = new QHBoxLayout();
-  QPushButton* select = new QPushButton("select item(s)");
-  fHelpLine = new QLineEdit();
-  helpLayout->addWidget(fHelpLine);
-  helpLayout->addWidget(select);
-  helpWidget->setLayout(helpLayout);
-  helpLayout->setContentsMargins(0,0,0,0);
+  // add properties
+  
+  fViewerPropertiesButton = new QPushButton("Viewer properties");
+  fViewerPropertiesButton->setStyleSheet ("text-align: left; padding: 5px ");
+  fViewerPropertiesButton->setIcon(fTreeIconClosed);
+  
+  layoutSceneTreeComponentsTBWidget->addWidget(fViewerPropertiesButton);
+  connect(fViewerPropertiesButton,SIGNAL(clicked()),this, SLOT(toggleSceneTreeComponentTreeWidgetInfos()));
+  
+  // add infos
+  fSceneTreeComponentTreeWidgetInfos = new QTableWidget();
+  fSceneTreeComponentTreeWidgetInfos->setVisible(false);
+  fSceneTreeComponentTreeWidgetInfos->setStyleSheet ("padding: 0px ");
 
-  // set a minimum size
-  fHelpLine->setMinimumWidth (20);
-
-  QSizePolicy policy = fHelpLine->sizePolicy();
-  policy.setHorizontalStretch(10);
-  fHelpLine->setSizePolicy(policy);
-
-  policy = select->sizePolicy();
-  policy.setHorizontalStretch(1);
-  select->setSizePolicy(policy);
-
-  layoutSceneTreeComponentsTBWidget->addWidget(helpWidget);
+  layoutSceneTreeComponentsTBWidget->addWidget(fSceneTreeComponentTreeWidgetInfos);
+  
+  connect(fSceneTreeComponentTreeWidgetInfos, SIGNAL(itemChanged(QTableWidgetItem*)),this, SLOT(tableWidgetViewerSetItemChanged(QTableWidgetItem *)));
+  
+  updateSceneTreeComponentTreeWidgetInfos();
 
   connect( fHelpLine, SIGNAL( returnPressed () ), this, SLOT(changeSearchSelection()));
   connect( select, SIGNAL( clicked () ), this, SLOT(changeSearchSelection()));
@@ -3773,6 +3952,360 @@ void G4OpenGLQtViewer::updateToolbarAndMouseContextMenu(){
       fMouseRotateAction->setChecked(false);
     }
   }
+}
+
+/**
+ Update the scene tree info component widget
+ Clear it only if the number of command is less than the previous table widget row count
+ */
+void G4OpenGLQtViewer::updateSceneTreeComponentTreeWidgetInfos() {
+  
+  if (!fSceneTreeComponentTreeWidgetInfos) {
+    return;
+  }
+  int treeWidgetInfosIgnoredCommands = 0;
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UIcommandTree * commandTreeTop = UI->GetTree();
+  G4UIcommandTree* path = commandTreeTop->FindCommandTree("/vis/viewer/set/");
+  
+  // clear old table
+  if ((path->GetCommandEntry()-fTreeWidgetInfosIgnoredCommands) != fSceneTreeComponentTreeWidgetInfos->rowCount()) {
+    fSceneTreeComponentTreeWidgetInfos->clear();
+  }
+  
+  fSceneTreeComponentTreeWidgetInfos->blockSignals(true);
+  // TODO : Could be optimized by comparing current command to old commands. That should not change so much
+
+  fSceneTreeComponentTreeWidgetInfos->setColumnCount (2);
+  fSceneTreeComponentTreeWidgetInfos->setRowCount (path->GetCommandEntry()-fTreeWidgetInfosIgnoredCommands);
+  fSceneTreeComponentTreeWidgetInfos->setHorizontalHeaderLabels(QStringList() << tr("Property")
+                                                        << tr("Value"));
+  fSceneTreeComponentTreeWidgetInfos->verticalHeader()->setVisible(false);
+  fSceneTreeComponentTreeWidgetInfos->setAlternatingRowColors (true);
+  
+  // For the moment, we do only command that have a "set" command in UI
+  
+  for (int a=0;a<path->GetCommandEntry();a++) {
+    G4UIcommand* commandTmp = path->GetCommand(a+1);
+  
+    // get current parameters
+    QString params = "";
+    
+    if(commandTmp->GetCommandName() == "autoRefresh") {
+      if (fVP.IsAutoRefresh()) {
+        params = "True";
+      } else {
+        params = "False";
+      }
+    } else if(commandTmp->GetCommandName() == "auxiliaryEdge") {
+      if (fVP.IsAuxEdgeVisible()) {
+        params = "True";
+      } else {
+        params = "False";
+      }
+    } else if(commandTmp->GetCommandName() == "background") {
+      params = QString().number(fVP.GetBackgroundColour().GetRed()) + "  "+
+      QString().number(fVP.GetBackgroundColour().GetGreen()) + "  "+
+      QString().number(fVP.GetBackgroundColour().GetBlue()) + "  "+
+      QString().number(fVP.GetBackgroundColour().GetAlpha());
+      
+    } else if(commandTmp->GetCommandName() == "culling") {
+      params = QString().number(fVP. IsCulling ());
+    } else if(commandTmp->GetCommandName() == "cutawayMode") {
+      if (fVP.GetCutawayMode() == G4ViewParameters::cutawayUnion) {
+        params = "union";
+      } else {
+        params = "intersection";
+      }
+
+    } else if(commandTmp->GetCommandName() == "defaultColour") {
+      params = QString().number(fVP.GetBackgroundColour().GetRed()) + "  "+
+      QString().number(fVP.GetBackgroundColour().GetGreen()) + "  "+
+      QString().number(fVP.GetBackgroundColour().GetBlue()) + "  "+
+      QString().number(fVP.GetBackgroundColour().GetAlpha());
+
+    } else if(commandTmp->GetCommandName() == "defaultTextColour") {
+      params = QString().number(fVP.GetBackgroundColour().GetRed()) + "  "+
+      QString().number(fVP.GetBackgroundColour().GetGreen()) + "  "+
+      QString().number(fVP.GetBackgroundColour().GetBlue()) + "  "+
+      QString().number(fVP.GetBackgroundColour().GetAlpha());
+      
+    } else if(commandTmp->GetCommandName() == "edge") {
+      G4ViewParameters::DrawingStyle existingStyle = fVP.GetDrawingStyle();
+      params = "False";
+      if (existingStyle == G4ViewParameters::hsr) {
+        params = "True";
+      }
+
+    } else if(commandTmp->GetCommandName() == "explodeFactor") {
+      params = QString().number(fVP.GetExplodeFactor()) +  "  " + QString(G4String(G4BestUnit(fVP.GetExplodeFactor(),"Length")).data());
+
+    } else if(commandTmp->GetCommandName() == "globalLineWidthScale") {
+      params = QString().number(fVP.GetGlobalLineWidthScale());
+      
+    } else if(commandTmp->GetCommandName() == "globalMarkerScale") {
+      params = QString().number(fVP.GetGlobalMarkerScale());
+
+    } else if(commandTmp->GetCommandName() == "hiddenEdge") {
+      G4ViewParameters::DrawingStyle style = fVP.GetDrawingStyle();
+      if ((style == G4ViewParameters::hlr) ||
+          (style == G4ViewParameters::hlhsr)) {
+        params = "True";
+      } else {
+        params = "False";
+      }
+
+    } else if(commandTmp->GetCommandName() == "hiddenMarker") {
+      if (fVP.IsMarkerNotHidden()) {
+        params = "True";
+      } else {
+        params = "False";
+      }
+
+    } else if(commandTmp->GetCommandName() == "lightsMove") {
+      if (fVP.GetLightsMoveWithCamera()) {
+        params = "camera";
+      } else {
+        params = "object";
+      }
+    } else if(commandTmp->GetCommandName() == "lightsThetaPhi") {
+      G4Vector3D direction = fVP.GetLightpointDirection();
+      // degree
+      params = QString().number(direction.theta()/CLHEP::degree)+ "  "+ QString().number(direction.phi()/CLHEP::degree)+"  deg";
+      if (commandTmp->GetParameterEntries() == 3) {
+        if (commandTmp->GetParameter(2)->GetDefaultValue() != "deg") {
+          params = QString().number(direction.theta())+ "  "+ QString().number(direction.phi())+" "+commandTmp->GetParameter(2)->GetDefaultValue().data();
+        }
+      }
+    } else if(commandTmp->GetCommandName() == "lightsVector") {
+     params = QString().number(fVP.GetLightpointDirection().x()) + "  "+
+      QString().number(fVP.GetLightpointDirection().y()) + "  "+
+      QString().number(fVP.GetLightpointDirection().z());
+
+    } else if(commandTmp->GetCommandName() == "lineSegmentsPerCircle") {
+      params = QString().number(fVP.GetNoOfSides());
+      
+    } else if(commandTmp->GetCommandName() == "picking") {
+      if (fVP.IsPicking()) {
+        params = "True";
+      } else {
+        params = "False";
+      }
+
+    } else if(commandTmp->GetCommandName() == "projection") {
+      if (fVP.GetFieldHalfAngle() == 0.) {
+        params = "orthogonal";
+      } else {
+        params = QString("perspective ") + QString().number(fVP.GetFieldHalfAngle()/CLHEP::degree) + " deg";
+      }
+
+    } else if(commandTmp->GetCommandName() == "rotationStyle") {
+      if (fVP.GetRotationStyle() == G4ViewParameters::constrainUpDirection) {
+        params = "constrainUpDirection";
+      } else {
+        params = "freeRotation";
+      }
+
+    } else if(commandTmp->GetCommandName() == "sectionPlane") {
+      if (fVP.IsSection()) {
+        params =  QString("on ") +
+        G4String(G4BestUnit(fVP.GetSectionPlane().point(),"Length")).data()+
+        QString().number(fVP.GetSectionPlane().normal().x())
+        + " " + QString().number(fVP.GetSectionPlane().normal().y())
+        + " " + QString().number(fVP.GetSectionPlane().normal().z());
+      } else {
+        params = "off";
+      }
+
+    } else if(commandTmp->GetCommandName() == "style") {
+      if (fVP.GetDrawingStyle() == G4ViewParameters::wireframe || fVP.GetDrawingStyle() == G4ViewParameters::hlr) {
+         params = "wireframe";
+      } else {
+        params = "surface";
+      }
+
+      
+    } else if(commandTmp->GetCommandName() == "targetPoint") {
+      G4Point3D point = fVP.GetCurrentTargetPoint();
+      G4String b = G4BestUnit(fSceneHandler.GetScene()->GetStandardTargetPoint() + fVP.GetCurrentTargetPoint(),"Length");
+      params = b.data();
+
+    } else if(commandTmp->GetCommandName() == "upThetaPhi") {
+      G4Vector3D up = fVP.GetUpVector();
+      // degree
+      params = QString().number(up.theta()/CLHEP::degree)+ "  "+ QString().number(up.phi()/CLHEP::degree)+"  deg";
+      if (commandTmp->GetParameterEntries() == 3) {
+        if (commandTmp->GetParameter(2)->GetDefaultValue() != "deg") {
+          params = QString().number(up.theta())+ "  "+ QString().number(up.phi())+" "+commandTmp->GetParameter(2)->GetDefaultValue().data();
+        }
+      }
+    } else if(commandTmp->GetCommandName() == "upVector") {
+      G4Vector3D up = fVP.GetUpVector();
+      params = QString().number(up.x())+ "  "+ QString().number(up.y())+"  "+QString().number(up.z())+ "  ";
+      
+    } else if(commandTmp->GetCommandName() == "viewpointThetaPhi") {
+      G4Vector3D direction = fVP.GetViewpointDirection();
+      // degree
+      params = QString().number(direction.theta()/CLHEP::degree)+ "  "+ QString().number(direction.phi()/CLHEP::degree)+"  deg";
+      if (commandTmp->GetParameterEntries() == 3) {
+        if (commandTmp->GetParameter(2)->GetDefaultValue() != "deg") {
+          params = QString().number(direction.theta())+ "  "+ QString().number(direction.phi())+" "+commandTmp->GetParameter(2)->GetDefaultValue().data();
+        }
+      }
+    } else if(commandTmp->GetCommandName() == "viewpointVector") {
+      G4Vector3D direction = fVP.GetViewpointDirection();
+      params = QString().number(direction.x())+ "  "+ QString().number(direction.y())+" "+QString().number(direction.z());
+    } else {
+      // No help
+    }
+    
+    /* DO NOT DISPLAY COMMANDS WITHOUT ANY PARAMETERS SET
+    if (params == "") {
+      // TODO : display default parameters // should not be editable ?
+      
+      for( G4int i_thParameter=0; i_thParameter<commandTmp->GetParameterEntries(); i_thParameter++ ) {
+        commandParam = commandTmp->GetParameter(i_thParameter);
+        
+        if (QString(QChar(commandParam->GetParameterType())) == "b") {
+          if (commandParam->GetDefaultValue().data()) {
+            params += "True";
+          } else {
+            params += "False";
+          }
+        } else {
+          params += QString((char*)(commandParam->GetDefaultValue()).data());
+        }
+        if (i_thParameter<commandTmp->GetParameterEntries()-1) {
+          params += " ";
+        }
+      }
+    }
+    */
+    
+    if (params != "") {
+
+      QTableWidgetItem *nameItem;
+      QTableWidgetItem *paramItem;
+      
+      // already present ?
+      QList<QTableWidgetItem *>	list = fSceneTreeComponentTreeWidgetInfos->findItems (commandTmp->GetCommandName().data(),Qt::MatchExactly);
+      if (list.size() == 1) {
+        nameItem = list.first();
+        paramItem = fSceneTreeComponentTreeWidgetInfos->item(nameItem->row(),1);
+        
+      } else {
+        nameItem = new QTableWidgetItem();
+        paramItem = new QTableWidgetItem();
+        fSceneTreeComponentTreeWidgetInfos->setItem(a-treeWidgetInfosIgnoredCommands, 0, nameItem);
+        fSceneTreeComponentTreeWidgetInfos->setItem(a-treeWidgetInfosIgnoredCommands, 1, paramItem);
+        
+        // Set Guidance
+        QString guidance;
+        G4int n_guidanceEntry = commandTmp->GetGuidanceEntries();
+        for( G4int i_thGuidance=0; i_thGuidance < n_guidanceEntry; i_thGuidance++ ) {
+          guidance += QString((char*)(commandTmp->GetGuidanceLine(i_thGuidance)).data()) + "\n";
+        }
+        
+        nameItem->setToolTip(guidance);
+        paramItem->setToolTip(GetCommandParameterList(commandTmp));
+        
+        fSceneTreeComponentTreeWidgetInfos->setRowHeight(a-treeWidgetInfosIgnoredCommands,15);
+      }
+      
+      // set current name and parameters
+      nameItem->setText(commandTmp->GetCommandName().data());
+      paramItem->setText(params);
+      
+      nameItem->setFlags(Qt::NoItemFlags);
+      nameItem->setForeground(QBrush());
+      
+    } else {
+      treeWidgetInfosIgnoredCommands++;
+    }
+  }
+  // remove empty content row
+  for (int i=0; i<treeWidgetInfosIgnoredCommands; i++) {
+    fSceneTreeComponentTreeWidgetInfos->removeRow (fSceneTreeComponentTreeWidgetInfos->rowCount() - 1);
+  }
+
+  fSceneTreeComponentTreeWidgetInfos->resizeColumnToContents(0);
+  fSceneTreeComponentTreeWidgetInfos->horizontalHeader()->setStretchLastSection(true);
+  fSceneTreeComponentTreeWidgetInfos->blockSignals(false);
+
+  fTreeWidgetInfosIgnoredCommands = treeWidgetInfosIgnoredCommands;
+}
+
+
+
+void G4OpenGLQtViewer::toggleSceneTreeComponentTreeWidgetInfos() {
+  fSceneTreeComponentTreeWidgetInfos->setVisible(!fSceneTreeComponentTreeWidgetInfos->isVisible());
+  if (fSceneTreeComponentTreeWidgetInfos->isVisible()) {
+    fViewerPropertiesButton->setIcon(fTreeIconOpen);
+  } else {
+    fViewerPropertiesButton->setIcon(fTreeIconClosed);
+  }
+}
+
+void G4OpenGLQtViewer::tableWidgetViewerSetItemChanged(QTableWidgetItem * item) {
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if(UI != NULL)  {
+    QTableWidgetItem* previous = fSceneTreeComponentTreeWidgetInfos->item(fSceneTreeComponentTreeWidgetInfos->row(item),0);
+    if (previous) {
+      fSceneTreeComponentTreeWidgetInfos->blockSignals(true);
+      UI->ApplyCommand((std::string("/vis/viewer/set/")
+                        + previous->text().toStdString()
+                        + " "
+                        + item->text().toStdString()).c_str());
+      fSceneTreeComponentTreeWidgetInfos->blockSignals(false);
+    }
+  }
+}
+
+
+/**   Build the parameter list parameters in a QString<br>
+ Reimplement partialy the G4UIparameter.cc
+ @param aCommand : command to list parameters
+ @see G4UIparameter::List()
+ @see G4UIcommand::List()
+ @return the command list parameters, or "" if nothing
+ */
+QString G4OpenGLQtViewer::GetCommandParameterList (
+                                  const G4UIcommand *aCommand
+                                  )
+{
+  G4int n_parameterEntry = aCommand->GetParameterEntries();
+  QString txt;
+  
+  if( n_parameterEntry > 0 ) {
+    G4UIparameter *param;
+    
+    // Re-implementation of G4UIparameter.cc
+    
+    for( G4int i_thParameter=0; i_thParameter<n_parameterEntry; i_thParameter++ ) {
+      param = aCommand->GetParameter(i_thParameter);
+      txt += "\nParameter : " + QString((char*)(param->GetParameterName()).data()) + "\n";
+      if( ! param->GetParameterGuidance().isNull() )
+        txt += QString((char*)(param->GetParameterGuidance()).data())+ "\n" ;
+      txt += " Parameter type  : " + QString(QChar(param->GetParameterType())) + "\n";
+      if(param->IsOmittable()){
+        txt += " Omittable       : True\n";
+      } else {
+        txt += " Omittable       : False\n";
+      }
+      if( param->GetCurrentAsDefault() ) {
+        txt += " Default value   : taken from the current value\n";
+      } else if( ! param->GetDefaultValue().isNull() ) {
+        txt += " Default value   : " + QString((char*)(param->GetDefaultValue()).data())+ "\n";
+      }
+      if( ! param->GetParameterRange().isNull() ) {
+        txt += " Parameter range : " + QString((char*)(param->GetParameterRange()).data())+ "\n";
+      }
+      if( ! param->GetParameterCandidates().isNull() ) {
+        txt += " Candidates      : " + QString((char*)(param->GetParameterCandidates()).data())+ "\n";
+      }
+    }
+  }
+  return txt;
 }
 
 

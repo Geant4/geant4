@@ -262,6 +262,7 @@ void G4OpenGLImmediateQtViewer::paintEvent(QPaintEvent *) {
 void G4OpenGLImmediateQtViewer::updateQWidget() {
   fHasToRepaint= true;
   updateGL();
+  updateSceneTreeComponentTreeWidgetInfos();
   repaint();
   fHasToRepaint= false;
 }
