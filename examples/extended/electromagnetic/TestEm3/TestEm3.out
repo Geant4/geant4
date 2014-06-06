@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -77,6 +77,12 @@ PhysicsList::SetCuts:CutLength : 1 mm
 /run/printProgress 50
 #
 /run/beamOn 100
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -486,35 +492,35 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=6.29s Real=6.3s Sys=0s
+  User=7.1s Real=7.13s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 777.35 MeV :  17.79 MeV     2.288 +- 0.2288 %      54.4 cm  +- 1.44 cm 
-   liquidArgon: 212.16 MeV :  17.42 MeV     8.213 +- 0.8213 %      1.05 m   +- 8.92 cm 
+          Lead: 777.81 MeV :  16.87 MeV     2.169 +- 0.2169 %      54.4 cm  +-  1.3 cm 
+   liquidArgon: 210.56 MeV :  15.78 MeV     7.495 +- 0.7495 %      1.04 m   +-  8.1 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       508
- Mean number of e-          874
- Mean number of e+          53
- Mean number of charged steps  4602.61
- Mean number of neutral steps  3658.17
+ Mean number of gamma       509
+ Mean number of e-          869
+ Mean number of e+          53.6
+ Mean number of charged steps  4594.86
+ Mean number of neutral steps  3621.77
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 777.364 MeV
-liquidArgon:	 212.156 MeV
+      Lead:	 777.807 MeV
+liquidArgon:	 210.555 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1632646162, 906323833
+ Current couple of seeds = 1980074624, 1217652529
 ----------------------------------------
 #
 /process/em/setSecBiasing eIoni World 0.3 2 MeV
@@ -523,14 +529,20 @@ liquidArgon:	 212.156 MeV
 /run/physicsModified
 /run/physicsModified
 /run/beamOn 100
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
  Secondary biasing is activated for e+ and eIoni inside G4Regions: 
            DefaultRegionForTheWorld  BiasingWeight= 3.33333
  Secondary biasing is activated for e+ and eBrem inside G4Regions: 
            DefaultRegionForTheWorld  BiasingWeight= 5
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
  Secondary biasing is activated for e- and eIoni inside G4Regions: 
            DefaultRegionForTheWorld  BiasingWeight= 3.33333
  Secondary biasing is activated for e- and eBrem inside G4Regions: 
            DefaultRegionForTheWorld  BiasingWeight= 5
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -916,42 +928,42 @@ Index : 2     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1632646162, 906323833
+ Current couple of seeds = 1980074624, 1217652529
 ----------------------------------------
 --> Event 0 starts.
 --> Event 50 starts.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.51s Real=5.57s Sys=0s
+  User=6s Real=6.01s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
  
-          Lead: 777.95 MeV :  20.69 MeV      2.66 +- 0.266 %        52 cm  +- 1.22 cm 
-   liquidArgon: 212.78 MeV :  14.12 MeV     6.637 +- 0.6637 %      1.01 m   +- 6.83 cm 
+          Lead: 777.34 MeV :  19.32 MeV     2.486 +- 0.2486 %        52 cm  +- 1.22 cm 
+   liquidArgon: 210.72 MeV :  15.91 MeV     7.553 +- 0.7553 %         1 m   +- 7.43 cm 
 
 ------------------------------------------------------------
  Beam particle e-  E = 1 GeV
- Mean number of gamma       291
- Mean number of e-          557
- Mean number of e+          53.3
- Mean number of charged steps  3931.28
- Mean number of neutral steps  2885.77
+ Mean number of gamma       292
+ Mean number of e-          555
+ Mean number of e+          53.9
+ Mean number of charged steps  3969.88
+ Mean number of neutral steps  2877.56
 ------------------------------------------------------------
 
  Energy deposition from Energy flow balance : 
   material 	 Total Edep 
  
-      Lead:	 776.39 MeV
-liquidArgon:	 214.401 MeV
+      Lead:	 777.108 MeV
+liquidArgon:	 213.356 MeV
 
 ------------------------------------------------------------
 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 41539635, 1643125264
+ Current couple of seeds = 598120415, 770162274
 ----------------------------------------
 #
 G4 kernel has come to Quit state.
@@ -963,9 +975,10 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
+Total navigation history collections cleaned: 158
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.33 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.35 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

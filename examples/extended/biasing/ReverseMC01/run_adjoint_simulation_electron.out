@@ -4,13 +4,12 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-G4AdjointSimManager::G4AdjointSimManager() Here
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
 Registering graphics systems...
@@ -171,7 +170,6 @@ Index : 4     used in the geometry : Yes
 ====================================================================
 
 ### Run 0 starts.
-G4AdjointSimManager::BeginOfRunAction
 ### Run 0 start.
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
@@ -353,21 +351,56 @@ nb event 270000
 nb event 275000
 nb event 280000
 nb event 285000
+nb event 290000
+nb event 295000
+nb event 300000
+nb event 305000
+nb event 310000
+nb event 315000
+nb event 320000
+nb event 325000
+nb event 330000
+nb event 335000
+nb event 340000
+nb event 345000
+nb event 350000
+nb event 355000
+nb event 360000
+nb event 365000
+nb event 370000
+nb event 375000
+nb event 380000
+nb event 385000
+nb event 390000
+nb event 395000
+nb event 400000
+nb event 405000
+nb event 410000
+nb event 415000
+nb event 420000
+nb event 425000
+nb event 430000
+nb event 435000
+nb event 440000
+nb event 445000
+nb event 450000
+nb event 455000
 1%  Precision reached!
 Run terminated.
 Run Summary
-  Run Aborted after 287244 events processed.
-  User=469.97s Real=473.17s Sys=0s
+  Run Aborted after 457565 events processed.
+  User=614.81s Real=620.26s Sys=0.1s
 Results of reverse/adjoint simulation!
-normalised edep [MeV] = 0.00153068
-error[MeV] = 1.53065e-05
+normalised edep [MeV] = 0.00160507
+error[MeV] = 1.60506e-05
 
 ----> Histogram Tree is saved in adjoint_sim.root
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
+Total navigation history collections cleaned: 18
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 1
-Dynamic pools deleted: 12 / Total memory freed: 0.076 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.085 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

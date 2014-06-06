@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -157,6 +157,12 @@ Phantom R= 200 dz= 150
 Absorber R= 200 dz= 2.5 posZ= -77.5
 ### PhysicsList Construte Processes
 /run/beamOn 10000
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 ========= Table of registered couples ==============================
 
@@ -214,7 +220,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=11.6s Real=11.69s Sys=0.01s
+  User=10.61s Real=10.71s Sys=0.01s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
@@ -233,6 +239,7 @@ Total fGamma fluence in front of the phantom 8.009 MeV
 
 
 G4 kernel has come to Quit state.
+Total navigation history collections cleaned: 21
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
 Dynamic pools deleted: 11 / Total memory freed: 0.38 Mb

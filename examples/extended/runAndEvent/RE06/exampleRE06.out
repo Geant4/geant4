@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -499,7 +499,7 @@ Index : 6     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.57s Real=2.81s Sys=0.23s
+  User=1.84s Real=2.02s Sys=0.17s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -975,7 +975,7 @@ Index : 6     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.45s Real=2.65s Sys=0.19s
+  User=2.55s Real=2.83s Sys=0.22s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -1482,7 +1482,7 @@ Index : 12     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.68s Real=1.84s Sys=0.14s
+  User=1.03s Real=1.25s Sys=0.11s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -2018,7 +2018,7 @@ Index : 12     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.93s Real=2.1s Sys=0.17s
+  User=1.34s Real=1.47s Sys=0.13s
 ############################################################
  Run Summary - Number of events : 10
 ############################################################
@@ -2233,8 +2233,9 @@ Index : 12     used in the geometry : Yes
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
+Total navigation history collections cleaned: 276
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.92 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.93 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

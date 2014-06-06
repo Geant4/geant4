@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -655,11 +655,12 @@ WARNING: Scene "none" not found.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0s Real=0s Sys=0s
+  User=0.01s Real=0s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
+Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0
 Dynamic pools deleted: 13 / Total memory freed: 0.07 Mb

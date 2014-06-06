@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -36,6 +36,12 @@ Vertex is 3 cm  of 3 layers of Si of 100 um  npads= 601
 /gun/particle e-
 /gun/energy 1 GeV
 /run/beamOn 100
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma, applyCuts: 1     SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -448,39 +454,39 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.86s Real=2.88s Sys=0s
+  User=2.68s Real=2.7s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
 Number of events             100
-Average number of e-         400.9
-Average number of gamma      636.7
-Average number of e+         48.15
-Average number of steps      2918
-Edep 1x1 =                   0.8277 +- 0.002473  res=  2.988 %   100
-Edep 3x3 =                   0.9587 +- 0.001194  res=  1.246 %   100
-Edep 5x5 =                   0.9792 +- 0.0009057  res=  0.9249 %   100
+Average number of e-         399.5
+Average number of gamma      640.1
+Average number of e+         48.44
+Average number of steps      2927
+Edep 1x1 =                   0.8319 +- 0.002523  res=  3.033 %   100
+Edep 3x3 =                   0.9581 +- 0.001416  res=  1.478 %   100
+Edep 5x5 =                   0.9793 +- 0.001065  res=  1.088 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8634 +- 0.002317
-  E1/E25 =                   0.8453 +- 0.002446
-  E9/E25 =                   0.9791 +- 0.0008242
+  E1/E9  =                   0.8682 +- 0.002302
+  E1/E25 =                   0.8495 +- 0.002457
+  E9/E25 =                   0.9784 +- 0.0008347
 Beam Energy                  1 GeV
 ==================================================================
 
 
 <<<<<ACCEPTANCE>>>>> 100 events for Crystal Calorimeter
-Edep1x1: 0.8277  delEdep1x1= -0.1723 nrms= -1.723
-Erms1x1: 0.02473  delErms1x1= -0.9753 nrms= -9.753
-Edep3x3: 0.9587  delEdep3x3= -0.04126 nrms= -0.4126
-Erms3x3: 0.01194  delErms3x3= -0.9881 nrms= -9.881
-Edep5x5: 0.9792  delEdep5x5= -0.02079 nrms= -0.2079
-Erms5x5: 0.009057  delErms5x5= -0.9909 nrms= -9.909
+Edep1x1: 0.8319  delEdep1x1= -0.1681 nrms= -1.681
+Erms1x1: 0.02523  delErms1x1= -0.9748 nrms= -9.748
+Edep3x3: 0.9581  delEdep3x3= -0.04185 nrms= -0.4185
+Erms3x3: 0.01416  delErms3x3= -0.9858 nrms= -9.858
+Edep5x5: 0.9793  delEdep5x5= -0.02073 nrms= -0.2073
+Erms5x5: 0.01065  delErms5x5= -0.9893 nrms= -9.893
 <<<<<END>>>>>   IS ACCEPTED
 
    Z  bremsstrahlung photoeffect  compton    conversion
   13           0           0         156           0
-  53         264          41           0          45
-  55         275          48           0          47
+  53         254          40           0          45
+  55         288          48           0          49
 #
 /testem/det/acceptance1 0.0136 0.0001 500
 /testem/det/acceptance9 0.0139 0.0001 500
@@ -568,22 +574,22 @@ EventAction: Event # 900 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.52s Real=4.54s Sys=0s
+  User=3.87s Real=3.89s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
 Number of events             1000
-Average number of e-         70.87
-Average number of gamma      65.48
-Average number of e+         3.678
-Average number of steps      414.7
-Edep 1x1 =                   0.01443 +- 0.0001988
-Edep 3x3 =                   0.01478 +- 0.0002206
-Edep 5x5 =                   0.01484 +- 0.0002241
+Average number of e-         73.29
+Average number of gamma      67.94
+Average number of e+         3.855
+Average number of steps      419.9
+Edep 1x1 =                   0.01463 +- 0.0003278
+Edep 3x3 =                   0.01506 +- 0.0003734
+Edep 5x5 =                   0.01514 +- 0.0003815
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.9834 +- 0.0007103
-  E1/E25 =                   0.9803 +- 0.000812
-  E9/E25 =                   0.9968 +- 0.0001959
+  E1/E9  =                   0.9819 +- 0.0007871
+  E1/E25 =                   0.9787 +- 0.0008961
+  E9/E25 =                   0.9966 +- 0.0002154
 Beam Energy                  20 GeV
 ==================================================================
 
@@ -602,10 +608,13 @@ Beam Energy                  20 GeV
 /gun/particle e-
 /gun/energy 1 GeV
 /run/beamOn 100
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
  Secondary biasing is activated for e+ and eIoni inside G4Regions: 
            DefaultRegionForTheWorld  BiasingWeight= 0
  Secondary biasing is activated for e+ and eBrem inside G4Regions: 
            DefaultRegionForTheWorld  BiasingWeight= 10
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
  Secondary biasing is activated for e- and eIoni inside G4Regions: 
            DefaultRegionForTheWorld  BiasingWeight= 0
  Secondary biasing is activated for e- and eBrem inside G4Regions: 
@@ -616,6 +625,9 @@ Beam Energy                  20 GeV
            DefaultRegionForTheWorld  BiasingWeight= 0
  Secondary biasing is activated for gamma and conv inside G4Regions: 
            DefaultRegionForTheWorld  BiasingWeight= 0
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma, applyCuts: 1     SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -1028,22 +1040,22 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.89s Real=1.9s Sys=0s
+  User=1.93s Real=1.93s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 2
 =================================================================
 Number of events             100
-Average number of e-         171
-Average number of gamma      221.1
-Average number of e+         47.52
-Average number of steps      1812
-Edep 1x1 =                   0.8333 +- 0.004332  res=  5.199 %   100
-Edep 3x3 =                   0.9607 +- 0.003651  res=  3.8 %   100
-Edep 5x5 =                   0.9835 +- 0.003614  res=  3.675 %   100
+Average number of e-         172.1
+Average number of gamma      220.8
+Average number of e+         46.7
+Average number of steps      1815
+Edep 1x1 =                   0.8351 +- 0.003253  res=  3.895 %   100
+Edep 3x3 =                   0.9677 +- 0.003006  res=  3.107 %   100
+Edep 5x5 =                   0.9898 +- 0.003156  res=  3.188 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8674 +- 0.003169
-  E1/E25 =                   0.8474 +- 0.003404
-  E9/E25 =                   0.9769 +- 0.00113
+  E1/E9  =                   0.8634 +- 0.003218
+  E1/E25 =                   0.8442 +- 0.003253
+  E9/E25 =                   0.9777 +- 0.001126
 Beam Energy                  1 GeV
 ==================================================================
 
@@ -1058,10 +1070,13 @@ Beam Energy                  1 GeV
 /run/physicsModified
 #
 /run/beamOn 100
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
  Secondary biasing is activated for e+ and eIoni inside G4Regions: 
            DefaultRegionForTheWorld  BiasingWeight= 0
  Secondary biasing is activated for e+ and eBrem inside G4Regions: 
            DefaultRegionForTheWorld  BiasingWeight= 10
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
  Secondary biasing is activated for e- and eIoni inside G4Regions: 
            DefaultRegionForTheWorld  BiasingWeight= 0
  Secondary biasing is activated for e- and eBrem inside G4Regions: 
@@ -1072,6 +1087,9 @@ Beam Energy                  1 GeV
            DefaultRegionForTheWorld  BiasingWeight= 0
  Secondary biasing is activated for gamma and conv inside G4Regions: 
            DefaultRegionForTheWorld  BiasingWeight= 0
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma, applyCuts: 1     SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -1491,29 +1509,30 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.15s Real=2.16s Sys=0s
+  User=2.25s Real=2.26s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 3
 =================================================================
 Number of events             100
-Average number of e-         171.2
-Average number of gamma      369.3
-Average number of e+         47.17
-Average number of steps      1957
-Edep 1x1 =                   0.8269 +- 0.003793  res=  4.588 %   100
-Edep 3x3 =                   0.9546 +- 0.003046  res=  3.191 %   100
-Edep 5x5 =                   0.9768 +- 0.003173  res=  3.249 %   100
+Average number of e-         171
+Average number of gamma      377.8
+Average number of e+         47.67
+Average number of steps      1965
+Edep 1x1 =                   0.8333 +- 0.003738  res=  4.486 %   100
+Edep 3x3 =                   0.96 +- 0.003406  res=  3.548 %   100
+Edep 5x5 =                   0.9807 +- 0.003246  res=  3.31 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8663 +- 0.003096
-  E1/E25 =                   0.8468 +- 0.003446
-  E9/E25 =                   0.9774 +- 0.001404
+  E1/E9  =                   0.8682 +- 0.00294
+  E1/E25 =                   0.8498 +- 0.003085
+  E9/E25 =                   0.9788 +- 0.001155
 Beam Energy                  1 GeV
 ==================================================================
 
 #
 G4 kernel has come to Quit state.
+Total navigation history collections cleaned: 34
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.5 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.49 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

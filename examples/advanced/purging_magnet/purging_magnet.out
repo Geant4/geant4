@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -327,3 +327,4 @@ number of event = 5000
 ----------------------------------------
 Graphics systems deleted.
 Visualization Manager deleting...
+Total navigation history collections cleaned: 7

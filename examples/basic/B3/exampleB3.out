@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -206,6 +206,12 @@ Available colours:
 
 #
 /run/beamOn 10000
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 ### Run 0 start.
 
 ---> end of event: 0
@@ -217,3 +223,4 @@ Available colours:
 
 Graphics systems deleted.
 Visualization Manager deleting...
+Total navigation history collections cleaned: 10

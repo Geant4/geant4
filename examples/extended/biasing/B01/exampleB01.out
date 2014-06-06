@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -89,6 +89,12 @@ Going to assign importance: 16384, to volume: cell_15
 Going to assign importance: 32768, to volume: cell_16
 Going to assign importance: 65536, to volume: cell_17
 Going to assign importance: 131072, to volume: cell_18
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -445,6 +451,76 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
+                           Hadronic Processes for He3
+
+  Process: He3Inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: alphaInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
@@ -471,6 +547,35 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: dInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
@@ -624,6 +729,19 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: tInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
 ================================================================
 ++ ConcreteSD/Collisions id 0
 ++ ConcreteSD/CollWeight id 1
@@ -642,26 +760,26 @@ hPairProd:   for  pi-    SubType= 4
 =============================================================
 =============================================================
         Volume |   Tr.Entering |    Population |    Collisions |      Coll*WGT |     NumWGTedE |    FluxWGTedE |     Av.Tr.WGT |            SL |           SLW |         SLW_v |          SLWE |        SLWE_v |
-       cell_00 |            46 |           141 |            46 |            46 |     0.0742909 |       2.07471 |             1 |       8061.52 |       8061.52 |       9031.07 |       16725.3 |       670.926 |
-       cell_01 |           187 |           217 |           898 |           898 |     0.0246944 |       3.14777 |             1 |       32388.7 |       32388.7 |        118701 |        101952 |       2931.26 |
-       cell_02 |           283 |           377 |          2733 |        1366.5 |    0.00943939 |       1.59768 |           0.5 |       80991.7 |       40495.8 |        228560 |       64699.4 |       2157.47 |
-       cell_03 |           366 |           504 |          3610 |         902.5 |    0.00565949 |       1.20071 |          0.25 |        102409 |       25602.2 |        198878 |       30740.8 |       1125.55 |
-       cell_04 |           386 |           518 |          3899 |       487.375 |    0.00538177 |       1.14835 |         0.125 |        110095 |       13761.8 |        107181 |       15803.4 |       576.823 |
-       cell_05 |           399 |           539 |          4258 |       266.125 |    0.00419382 |       1.02752 |        0.0625 |        116908 |       7306.77 |       66531.9 |       7507.83 |       279.023 |
-       cell_06 |           391 |           532 |          4121 |       128.781 |    0.00467991 |       1.05634 |       0.03125 |        116592 |       3643.49 |       31146.3 |       3848.76 |       145.762 |
-       cell_07 |           396 |           542 |          4190 |       65.4688 |    0.00494625 |       1.10617 |      0.015625 |        118922 |       1858.15 |       15878.3 |       2055.43 |       78.5381 |
-       cell_08 |           387 |           513 |          3663 |       28.6172 |    0.00564445 |        1.1622 |     0.0078125 |        108282 |       845.951 |       6866.25 |       983.167 |       38.7562 |
-       cell_09 |           431 |           572 |          4271 |       16.6836 |    0.00510826 |       1.02321 |    0.00390625 |        122672 |       479.186 |       3851.32 |        490.31 |       19.6735 |
-       cell_10 |           448 |           590 |          4651 |       9.08398 |    0.00370201 |      0.835399 |    0.00195312 |        132415 |       258.623 |       2334.21 |       216.053 |       8.64127 |
-       cell_11 |           436 |           593 |          4550 |       4.44336 |    0.00415549 |      0.908773 |   0.000976562 |        128748 |       125.731 |       1113.69 |       114.261 |       4.62791 |
-       cell_12 |           406 |           533 |          4239 |       2.06982 |     0.0042507 |      0.897119 |   0.000488281 |        122228 |       59.6816 |       527.178 |       53.5415 |       2.24087 |
-       cell_13 |           376 |           521 |          3805 |      0.928955 |    0.00325472 |      0.806166 |   0.000244141 |        104456 |       25.5019 |       268.637 |       20.5588 |      0.874338 |
-       cell_14 |           345 |           453 |          3522 |      0.429932 |    0.00543421 |      0.937436 |    0.00012207 |        102678 |       12.5339 |       92.8906 |       11.7497 |      0.504787 |
-       cell_15 |           365 |           485 |          3845 |       0.23468 |    0.00489701 |      0.810402 |   6.10352e-05 |        107690 |       6.57288 |       49.1925 |       5.32667 |      0.240896 |
-       cell_16 |           386 |           484 |          4044 |      0.123413 |    0.00319232 |      0.616339 |   3.05176e-05 |        110264 |         3.365 |       31.5871 |       2.07398 |      0.100836 |
-       cell_17 |           357 |           451 |          3710 |     0.0566101 |    0.00249206 |      0.445083 |   1.52588e-05 |         99250 |       1.51444 |         14.29 |      0.674049 |     0.0356116 |
-       cell_18 |           201 |           347 |          2754 |     0.0210114 |    0.00279804 |      0.625411 |   7.62939e-06 |       71911.5 |      0.548641 |       5.63298 |      0.343126 |     0.0157613 |
-       cell_19 |            90 |            90 |            90 |   0.000686646 |    0.00817955 |       1.38381 |   7.62939e-06 |       13538.1 |      0.103287 |      0.665303 |       0.14293 |    0.00544188 |
+       cell_00 |            55 |           145 |            55 |            55 |     0.0153054 |       2.11686 |             1 |       8993.45 |       8993.45 |       44325.1 |       19037.9 |       678.415 |
+       cell_01 |           163 |           194 |           684 |           684 |     0.0317946 |       3.97027 |             1 |       28790.4 |       28790.4 |       98546.9 |        114306 |       3133.26 |
+       cell_02 |           246 |           322 |          1969 |         984.5 |     0.0143792 |       2.35561 |           0.5 |       62392.9 |       31196.4 |        156387 |       73486.6 |       2248.72 |
+       cell_03 |           372 |           492 |          3147 |        786.75 |    0.00987746 |       1.74357 |          0.25 |       98267.7 |       24566.9 |        144865 |       42834.3 |        1430.9 |
+       cell_04 |           484 |           635 |          4685 |       585.625 |    0.00558203 |        1.2546 |         0.125 |        133258 |       16657.3 |        131137 |       20898.3 |       732.009 |
+       cell_05 |           600 |           758 |          5473 |       342.062 |    0.00479282 |       1.08859 |        0.0625 |        162066 |       10129.2 |       84366.9 |       11026.5 |       404.355 |
+       cell_06 |           650 |           838 |          5965 |       186.406 |    0.00481854 |       1.04314 |       0.03125 |        171410 |       5356.57 |       44737.4 |       5587.66 |       215.569 |
+       cell_07 |           696 |           875 |          7095 |       110.859 |    0.00481337 |      0.918289 |      0.015625 |        198765 |        3105.7 |       23846.4 |       2851.93 |       114.782 |
+       cell_08 |           652 |           881 |          6753 |       52.7578 |    0.00431002 |      0.946348 |     0.0078125 |        187011 |       1461.03 |       12418.9 |       1382.64 |       53.5258 |
+       cell_09 |           613 |           840 |          6595 |       25.7617 |    0.00395946 |       0.90327 |    0.00390625 |        182188 |       711.673 |       6498.21 |       642.833 |       25.7294 |
+       cell_10 |           565 |           788 |          5617 |       10.9707 |    0.00502956 |        1.0279 |    0.00195312 |        161227 |       314.896 |       2534.38 |       323.681 |       12.7468 |
+       cell_11 |           534 |           715 |          5442 |       5.31445 |    0.00467525 |      0.912453 |   0.000976562 |        157026 |       153.345 |       1230.95 |        139.92 |       5.75499 |
+       cell_12 |           518 |           696 |          5279 |       2.57764 |    0.00537633 |      0.931144 |   0.000488281 |        147864 |       72.1992 |       534.717 |       67.2279 |       2.87482 |
+       cell_13 |           474 |           640 |          5018 |        1.2251 |    0.00343175 |       0.79341 |   0.000244141 |        137150 |       33.4839 |       324.668 |       26.5665 |       1.11418 |
+       cell_14 |           438 |           598 |          4445 |      0.542603 |    0.00417738 |      0.789554 |    0.00012207 |        126493 |       15.4411 |        126.89 |       12.1915 |      0.530066 |
+       cell_15 |           472 |           606 |          4600 |      0.280762 |    0.00418705 |       0.78312 |   6.10352e-05 |        134057 |       8.18217 |       67.5959 |       6.40762 |      0.283027 |
+       cell_16 |           488 |           586 |          4836 |      0.147583 |    0.00342187 |      0.622624 |   3.05176e-05 |        132859 |       4.05452 |       36.0381 |       2.52444 |      0.123318 |
+       cell_17 |           427 |           558 |          4622 |     0.0705261 |    0.00350526 |      0.527772 |   1.52588e-05 |        123824 |        1.8894 |       15.1969 |      0.997171 |      0.053269 |
+       cell_18 |           241 |           401 |          3133 |     0.0239029 |    0.00304338 |      0.521234 |   7.62939e-06 |       84117.2 |      0.641764 |       5.58448 |      0.334509 |     0.0169957 |
+       cell_19 |           129 |           129 |           129 |   0.000984192 |     0.0054028 |      0.907829 |   7.62939e-06 |       20538.4 |      0.156695 |       1.10193 |      0.142253 |    0.00595349 |
 =============================================
 === G4ProcessPlacer::RemoveProcess: for: neutron
   ProcessName: ImportanceProcess, will be removed!
@@ -710,3 +828,4 @@ DoIt Vector:
    nCapture
    nKiller
 ================================================
+Total navigation history collections cleaned: 84

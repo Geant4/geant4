@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -106,6 +106,12 @@ Some /vis commands (optionally) take a string to specify colour.
 Available colours:
   black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
 
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -462,6 +468,76 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
+                           Hadronic Processes for He3
+
+  Process: He3Inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: alphaInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
@@ -488,6 +564,35 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: dInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
@@ -641,20 +746,33 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: tInelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 4 GeV
+        Model:                      FTFP: 2 GeV ---> 100 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
 ================================================================
 ### Run 0 starts.
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 287.276 MeV       total track length: 20.6031 cm 
-        Gap: total energy: 9.04061 MeV       total track length:  4.1042 cm 
+   Absorber: total energy:  274.84 MeV       total track length: 19.1701 cm 
+        Gap: total energy: 15.0072 MeV       total track length: 7.44906 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 287.276 MeV rms = 0 eV 
- EGap : mean = 9.04061 MeV rms = 0 eV 
- LAbs : mean = 20.6031 cm  rms = 0 fm 
- LGap : mean = 4.1042 cm  rms = 0 fm 
+ EAbs : mean = 274.84 MeV rms = 0 eV 
+ EGap : mean = 15.0072 MeV rms = 0 eV 
+ LAbs : mean = 19.1701 cm  rms = 0 fm 
+ LGap : mean = 7.44906 cm  rms = 0 fm 
 ... write Root file : B4.root - done
 ... close Root file : B4.root - done
      Transportation,                msc,              hIoni,            ionIoni
@@ -672,6 +790,12 @@ anti_neutronInelastic,anti_deuteronInelastic,anti_tritonInelastic,  anti_He3Inel
 anti_alphaInelastic,hFritiofCaptureAtRest,hBertiniCaptureAtRest,muMinusCaptureAtRest
          dInelastic,         tInelastic,       He3Inelastic,     alphaInelastic
        ionInelastic,            nKiller
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -1018,17 +1142,23 @@ hPairProd:   for  pi-    SubType= 4
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 277.166 MeV       total track length:  19.304 cm 
-        Gap: total energy: 15.9638 MeV       total track length: 7.95538 cm 
+   Absorber: total energy: 268.396 MeV       total track length: 18.9217 cm 
+        Gap: total energy: 20.8532 MeV       total track length: 10.3578 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 277.166 MeV rms = 0 eV 
- EGap : mean = 15.9638 MeV rms = 0 eV 
- LAbs : mean = 19.304 cm  rms = 0 fm 
- LGap : mean = 7.95538 cm  rms = 0 fm 
+ EAbs : mean = 268.396 MeV rms = 0 eV 
+ EGap : mean = 20.8532 MeV rms = 0 eV 
+ LAbs : mean = 18.9217 cm  rms = 0 fm 
+ LGap : mean = 10.3578 cm  rms = 0 fm 
 ... write Root file : B4.root - done
 ... close Root file : B4.root - done
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -1375,16 +1505,17 @@ hPairProd:   for  pi-    SubType= 4
 ... open Root analysis file : B4.root - done
 --> Event 0 starts.
 ---> End of event: 0
-   Absorber: total energy: 445.326 MeV       total track length: 31.9066 cm 
-        Gap: total energy: 32.6758 MeV       total track length: 16.2435 cm 
+   Absorber: total energy: 463.247 MeV       total track length: 32.8185 cm 
+        Gap: total energy: 10.6088 MeV       total track length: 5.08836 cm 
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 445.326 MeV rms = 0 eV 
- EGap : mean = 32.6758 MeV rms = 0 eV 
- LAbs : mean = 31.9066 cm  rms = 0 fm 
- LGap : mean = 16.2435 cm  rms = 0 fm 
+ EAbs : mean = 463.247 MeV rms = 0 eV 
+ EGap : mean = 10.6088 MeV rms = 0 eV 
+ LAbs : mean = 32.8185 cm  rms = 0 fm 
+ LGap : mean = 5.08836 cm  rms = 0 fm 
 ... write Root file : B4.root - done
 ... close Root file : B4.root - done
 Graphics systems deleted.
 Visualization Manager deleting...
+Total navigation history collections cleaned: 26

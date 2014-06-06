@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -93,7 +93,7 @@ e-_G4DNAIonisation:   for  e-    SubType= 53
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           DummyModel :  Emin=        0 eV    Emax=        1 MeV
       ===== EM models for the G4Region  Target ======
-DNABornIonisationModel :  Emin=        0 eV    Emax=        1 MeV
+DNABornIonisationModel :  Emin=        0 eV    Emax=        1 MeV   deltaBorn
 
 e-_G4DNAAttachment:   for  e-    SubType= 55
  Total cross sections computed from DummyModel
@@ -140,8 +140,8 @@ proton_G4DNAIonisation:   for  proton    SubType= 53
           DummyModel :  Emin=        0 eV    Emax=      500 keV
           DummyModel :  Emin=      500 keV   Emax=      100 MeV
       ===== EM models for the G4Region  Target ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      500 keV
-DNABornIonisationModel :  Emin=      500 keV   Emax=       10 MeV
+DNARuddIonisationModel :  Emin=        0 eV    Emax=      500 keV   deltaRudd
+DNABornIonisationModel :  Emin=      500 keV   Emax=       10 MeV   deltaBorn
 
 proton_G4DNAChargeDecrease:   for  proton    SubType= 56
  Total cross sections computed from DNADingfelderChargeDecreaseModel model
@@ -190,7 +190,7 @@ alpha_G4DNAIonisation:   for  alpha    SubType= 53
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           DummyModel :  Emin=        0 eV    Emax=      400 MeV
       ===== EM models for the G4Region  Target ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=       10 MeV
+DNARuddIonisationModel :  Emin=        0 eV    Emax=       10 MeV   deltaRudd
 
 alpha_G4DNAChargeDecrease:   for  alpha    SubType= 56
  Total cross sections computed from DNADingfelderChargeDecreaseModel model
@@ -215,7 +215,7 @@ Index : 1     used in the geometry : Yes
 
 ====================================================================
 
-##### Create analysis manager   0x17e09c0
+##### Create analysis manager   0x1c3c600
 Using Root analysis manager
 ... open Root analysis file : microdosimetry.root - done
 ... write Root file : microdosimetry.root - done
@@ -224,9 +224,10 @@ Number and type of particles created outside region "Target" :
 N e- : 5212
 _______________________
 Number and type of particles created in region "Target" :
-N e- : 46674
+N e- : 46650
 Graphics systems deleted.
 Visualization Manager deleting...
 G4DNAMolecularMaterial::Notify ---> received G4State_Quit
 G4DNAChemistryManager::Notify ---> received G4State_Quit
+Total navigation history collections cleaned: 7
 Deleting G4DNAMolecularMaterial

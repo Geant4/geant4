@@ -1,6 +1,10 @@
 
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-00    (6-December-2013)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -21,6 +25,7 @@ Current available graphics systems are:
   OpenGLStoredX (OGLSX)
   OpenGLStoredXm (OGL, OGLS, OGLSXm)
   RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
   VRML2FILE (VRML2FILE)
   gMocrenFile (gMocrenFile)
@@ -52,6 +57,7 @@ Available colours:
 
 Construction /LXeDet/pmtSD
 Construction /LXeDet/scintSD
+WARNING: muMinusCaptureAtRest is deprecated and will be removed in GEANT4 version 10.0.
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -65,7 +71,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -137,7 +143,7 @@ muBrems:   for  mu+    SubType= 3
 muPairProd:   for  mu+    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001; from 1 GeV to 10 TeV 
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -164,7 +170,7 @@ muBrems:   for  mu-    SubType= 3
 muPairProd:   for  mu-    SubType= 4
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
       Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
-      Sampling table 17x1001; from 1 GeV to 10 TeV 
+      Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
 
@@ -212,7 +218,7 @@ Index : 3     used in the geometry : Yes
 
 ### Run 0 starts.
 ### G4EmSaturation::FindBirksCoefficient Birks coefficient for LXe  0.126 mm/MeV
-	Energy weighted position of hits in LXe : (-0.0117245,0.00361397,-103.477)
+	Energy weighted position of hits in LXe : (-0.0205722,0.00634123,-103.48)
 	Total energy deposition in scintillator : 511 (keV)
 	Reconstructed position of hits in LXe : (0,0,0)
 WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
@@ -221,17 +227,17 @@ WARNING: G4VisManager::IsValidView(): Attempt to draw when no graphics system
   manager (G4VisExecutive), possibly by setting G4VIS_NONE, and ensure
   drawing code is executed only if G4VVisManager::GetConcreteInstance()
   is non-zero.
-	Number of photons that hit PMTs in this event : 1403
+	Number of photons that hit PMTs in this event : 1407
 	Number of PMTs above threshold(2) : 32
 	Number of photons produced by scintillation in this event : 5702
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 4299
+	Number of photons absorbed (OpAbsorption) in this event : 4295
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.66s Real=0.66s Sys=0s
+  User=0.33s Real=0.33s Sys=0s
 
 ========= Table of registered couples ==============================
 
@@ -266,25 +272,26 @@ Index : 3     used in the geometry : Yes
 ====================================================================
 
 ### Run 1 starts.
-	Energy weighted position of hits in LXe : (30.2793,10.6345,-68.6251)
-	Total energy deposition in scintillator : 511 (keV)
+	Energy weighted position of hits in LXe : (-19.2508,-27.1141,-91.4813)
+	Total energy deposition in scintillator : 352.314 (keV)
 	Reconstructed position of hits in LXe : (0,0,0)
-	Number of photons that hit PMTs in this event : 1500
+	Number of photons that hit PMTs in this event : 1133
 	Number of PMTs above threshold(2) : 32
-	Number of photons produced by scintillation in this event : 5476
+	Number of photons produced by scintillation in this event : 3977
 	Number of photons produced by cerenkov in this event : 0
-	Number of photons absorbed (OpAbsorption) in this event : 3976
+	Number of photons absorbed (OpAbsorption) in this event : 2844
 	Number of photons absorbed at boundaries (OpBoundary) in this event : 0
 Unacounted for photons in this event : 0
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.63s Real=0.62s Sys=0s
+  User=0.23s Real=0.23s Sys=0s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
+Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 16; of which, static: 0
-Dynamic pools deleted: 16 / Total memory freed: 2.1 Mb
+Number of memory pools allocated: 16 of which, static: 0
+Dynamic pools deleted: 16 / Total memory freed: 2.6 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)
