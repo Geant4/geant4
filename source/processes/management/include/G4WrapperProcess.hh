@@ -178,7 +178,8 @@ class G4WrapperProcess : public G4VProcess
    public:
       virtual void      ResetNumberOfInteractionLengthLeft();
       // reset (determine the value of)NumberOfInteractionLengthLeft
-
+      virtual void SetMasterProcess(G4VProcess* masterP);
+     // Needed for MT, forward call to underlying process 
 };
 
 inline

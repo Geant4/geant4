@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- May 12th, 2014    A.Dotti     (procman-V09-06-09)
+- Fixing bug #1625: G4WrapperProcess not correctly 
+  forwards call to SetMasterProcess to wrapped process. 
+  Needed for MT.
+
 - Jan. 23rd, 2014   H.Kurashige (procman-V09-06-08)
 - Fix compiler warning in G4ProcessTable.cc
 
