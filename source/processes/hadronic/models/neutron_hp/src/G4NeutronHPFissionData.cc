@@ -58,7 +58,9 @@ G4NeutronHPFissionData::G4NeutronHPFissionData()
    
 G4NeutronHPFissionData::~G4NeutronHPFissionData()
 {
-   if ( theCrossSections != NULL ) theCrossSections->clearAndDestroy();
+   //This should be now avoided in destructor because these are
+   //handled by allocators
+   //if ( theCrossSections != NULL ) theCrossSections->clearAndDestroy();
    delete theCrossSections;
 }
 

@@ -121,7 +121,21 @@
     }
     //return theFission[index].ApplyYourself(aTrack);                 //-2:Marker for Fission
     G4HadFinalState* result = (*theFission[index]).ApplyYourself(aTrack,-2);
+
+    //Overwrite target parameters
     aNucleus.SetParameters(G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA(),G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargZ());
+    const G4Element* target_element = (*G4Element::GetElementTable())[index];
+    const G4Isotope* target_isotope=NULL;
+    G4int iele = target_element->GetNumberOfIsotopes();
+    for ( G4int j = 0 ; j != iele ; j++ ) { 
+       target_isotope=target_element->GetIsotope( j );
+       if ( target_isotope->GetN() == G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA() ) break; 
+    }
+    //G4cout << "Target Material of this reaction is " << theMaterial->GetName() << G4endl;
+    //G4cout << "Target Element of this reaction is " << target_element->GetName() << G4endl;
+    //G4cout << "Target Isotope of this reaction is " << target_isotope->GetName() << G4endl;
+    aNucleus.SetIsotope( target_isotope );
+
     G4NeutronHPManager::GetInstance()->CloseReactionWhiteBoard();
     return result; 
   }

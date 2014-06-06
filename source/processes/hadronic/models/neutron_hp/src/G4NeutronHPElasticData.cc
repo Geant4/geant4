@@ -61,7 +61,9 @@ G4NeutronHPElasticData::G4NeutronHPElasticData()
    
 G4NeutronHPElasticData::~G4NeutronHPElasticData()
 {
-   if ( theCrossSections != 0 ) theCrossSections->clearAndDestroy();
+   //This should be now avoided in destructor because these are
+   //handled by allocators
+   //if ( theCrossSections != 0 ) theCrossSections->clearAndDestroy();
    delete theCrossSections;
 }
    

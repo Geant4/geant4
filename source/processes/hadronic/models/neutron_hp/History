@@ -14,8 +14,66 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21 May 2014 Andrea Dotti    (hadr-hpn-V09-06-26)
+- Change deleting of maps in G4NeutronHPFFFissionFS destructor.
+
+21 May 2014 Andrea Dotti
+- Do not call G4PhysicsTable::clearAndDestroy() in destructors of 
+  G4NeutronHPCaptureData, G4NeutronHPElasticData, G4NeutronHPFissionData
+  G4NeutronHPInelasticData. Because G4PhysicsTable content are manged by
+  allocators
+
+20 May 2014 Tatsumi Koi
+-Fix bug in kinematics of residual nucleus 
+       src/G4NeutronHPCaptureFS.cc
+
+
+19 May 2014 Tatsumi Koi
+-Defeating warning message from clang3.4 compiler
+       include/G4NeutronHPThermalScattering.hh
+
+
+19 May 2014 Tatsumi Koi
+-Defeating warning message from gcc4.9.0 compiler
+       include/G4NeutronHPThermalScattering.hh
+
+
+14 May 2014 Tatsumi Koi for Federico Carminati
+-Fix memory leaks and simplify function for better stability
+       include/G4NeutronHPHash.hh
+       include/G4NeutronHPFFFissionFS.hh
+       src/G4NeutronHPFinalState.cc
+       src/G4NeutronHPVector.cc
+       src/G4NeutronHPFFFissionFS.cc
+       src/G4NeutronHPInterpolator.cc
+
+
+12 May 2014 Tatsumi Koi
+-Defeating warning message from gcc4.9.0 compiler
+       src/G4NeutronHPThermalScattering.cc
+
+
+4 May 2014 Tatsumi Koi
+-Fix problem on single temperature data file 
+       src/G4NeutronHPThermalScattering.cc
+
+
+23 April 2014 Tatsumi Koi
+-Reset isotope pointer to the target G4Nucleus object of reaction
+       src/G4NeutronHPCapture.cc
+       src/G4NeutronHPElastic.cc
+       src/G4NeutronHPFission.cc
+       src/G4NeutronHPInelastic.cc
+
+
+14 March 2014 Tatsumi Koi
+Fix compilation warnings detected by clang compiler on MacOS-10.9.
+	src/G4NeutronHPInelasticCompFS.cc
+
+
 29 Jan 2014 Gunter Folger    (hadr-hpn-V09-06-25)
 Removed low_energy from sources.cmake
+
 
 16 December 2013 Tatsumi Koi
 Fix problem reading zlibed data files 

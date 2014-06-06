@@ -53,7 +53,7 @@
 // prepare neutron
     G4double eKinetic = theTrack.GetKineticEnergy();
     const G4HadProjectile *incidentParticle = &theTrack;
-    G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>(incidentParticle->GetDefinition()) );
+    G4ReactionProduct theNeutron( const_cast<G4ParticleDefinition *>( incidentParticle->GetDefinition() ) );
     theNeutron.SetMomentum( incidentParticle->Get4Momentum().vect() );
     theNeutron.SetKineticEnergy( eKinetic );
 
@@ -77,7 +77,7 @@
     G4ReactionProductVector * thePhotons = 0;
     if ( HasFSData() && !getenv ( "G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION" ) ) 
     { 
-       //TK110430
+       //NDL has final state data
        if ( hasExactMF6 )
        {
           theMF6FinalState.SetTarget(theTarget);
@@ -89,6 +89,7 @@
     }
     else
     {
+       //NDL does not have final state data or forced to use PhotoEvaporation model
       G4ThreeVector aCMSMomentum = theNeutron.GetMomentum()+theTarget.GetMomentum();
       G4LorentzVector p4(aCMSMomentum, theTarget.GetTotalEnergy() + theNeutron.GetTotalEnergy());
       G4Fragment nucleus(static_cast<G4int>(theBaseA+1), static_cast<G4int>(theBaseZ) ,p4);
@@ -110,7 +111,6 @@
         // T. K. comment out below line
         //theOne->SetDefinition( G4Gamma::Gamma() );
         G4IonTable* theTable = G4IonTable::GetIonTable();
-        //if( (*it)->GetMomentum().mag() > 10*MeV ) theOne->SetDefinition( theTable->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ)) );
         if( (*it)->GetMomentum().mag() > 10*MeV ) theOne->SetDefinition( theTable->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0 ) );
 
         //if ( (*i)->GetExcitationEnergy() > 0 )
@@ -160,8 +160,6 @@
     {
        G4ThreeVector direction = thePhotons->operator[](0)->GetMomentum().unit();
 
-       //G4double Q = G4ParticleTable::GetParticleTable()->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0, static_cast<G4int>(theBaseZ))->GetPDGMass() + G4Neutron::Neutron()->GetPDGMass()
-       //  - G4ParticleTable::GetParticleTable()->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ))->GetPDGMass();
        G4double Q = G4IonTable::GetIonTable()->GetIonMass(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0) + G4Neutron::Neutron()->GetPDGMass()
          - G4IonTable::GetIonTable()->GetIonMass(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0);
 
@@ -181,8 +179,6 @@
     if ( nPhotons == 1 && thePhotons->operator[](0)->GetDefinition()->GetBaryonNumber() == 0 )
     {
        G4DynamicParticle * theOne = new G4DynamicParticle;
-       //G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
-       //                                 ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
        G4ParticleDefinition * aRecoil = G4IonTable::GetIonTable()
                                         ->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0);
        theOne->SetDefinition(aRecoil);
@@ -192,14 +188,17 @@
                                  +theTarget.GetMomentum()
 				 -thePhotons->operator[](0)->GetMomentum();
 
-       G4ThreeVector theMomUnit = aMomentum.unit();
-       G4double aKinEnergy =  theTrack.GetKineticEnergy()
-                             +theTarget.GetKineticEnergy(); // gammas come from Q-value
-       G4double theResMass = aRecoil->GetPDGMass();
-       G4double theResE = aRecoil->GetPDGMass()+aKinEnergy;
-       G4double theAbsMom = std::sqrt(theResE*theResE - theResMass*theResMass);
-       G4ThreeVector theMomentum = theAbsMom*theMomUnit;
-       theOne->SetMomentum(theMomentum);
+       //TKDB 140520 
+       //G4ThreeVector theMomUnit = aMomentum.unit();
+       //G4double aKinEnergy =  theTrack.GetKineticEnergy()
+       //                      +theTarget.GetKineticEnergy(); // gammas come from Q-value
+       //G4double theResMass = aRecoil->GetPDGMass();
+       //G4double theResE = aRecoil->GetPDGMass()+aKinEnergy;
+       //G4double theAbsMom = std::sqrt(theResE*theResE - theResMass*theResMass);
+       //G4ThreeVector theMomentum = theAbsMom*theMomUnit;
+       //theOne->SetMomentum(theMomentum);
+       
+       theOne->SetMomentum(aMomentum);
        theResult.AddSecondary(theOne);
     }
 
@@ -217,8 +216,6 @@
 
 //101203TK
     G4bool residual = false;
-    //G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
-    //                               ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
     G4ParticleDefinition * aRecoil = G4IonTable::GetIonTable()
                                    ->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0);
     for ( G4int j = 0 ; j != theResult.GetNumberOfSecondaries() ; j++ )
@@ -228,8 +225,6 @@
 
     if ( residual == false )
     {
-       //G4ParticleDefinition * aRecoil = G4ParticleTable::GetParticleTable()
-       //                                 ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA+1), 0, static_cast<G4int>(theBaseZ));
        G4int nNonZero = 0;
        G4LorentzVector p_photons(0,0,0,0);
        for ( G4int j = 0 ; j != theResult.GetNumberOfSecondaries() ; j++ )
