@@ -14,6 +14,15 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-Jun-2014, Alberto Ribon          (phys-ctor-helastic-V10-00-03)
+- G4HadronHElasticPhysics: use G4NuclNuclDiffuseElastic model
+  (instead of the Gheisha-based G4HadronElastic) for all ions.
+
+05-Jun-2014, Alberto Ribon          (phys-ctor-helastic-V10-00-02)
+- G4HadronHElasticPhysics: improved version of elastic, used temporarily
+  only in FTFP_BERT_TRV as playground before becoming the default in
+  all physics lists.
+    
 04-Jun-2014, Gunter Folger          (phys-ctor-helastic-V10-00-01)
 - Fix to previous tag. the previous tag badly screwed up code for 
    G4HadronInelastic. 
