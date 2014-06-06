@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6th June 2014  Gabriele Cosmo (examples-V10-00-05)
+- Updated reference outputs according to reference tag geant4-10-00-ref-05.
+- Includes tags: air_shower-V10-00-00, gammaknife-V10-00-00,
+                 gammaraytel-V10-00-01, human_phantom-V10-00-00, DMX-V10-00-04,
+                 XrayFluo-V10-00-09, xraytel-V10-00-03, excommon-V10-00-00,
+                 analysisExample-V10-00-00, testem1-V10-00-04, exgps-V10-00-03.
+                 testem2-V10-00-02, testem5-V10-00-05, p6decayer-V10-00-00,
+                 channelingExample-V10-00-07, exhadr00-V10-00-00, LXe-V10-00-03,
+                 exhadr04-V10-00-03, exhadr06-V10-00-03, exampleES2-V10-00-01,
+                 WLS-V10-00-01, exgflash-V10-00-00.
+
 30th April 2014  Gabriele Cosmo (examples-V10-00-04)
 - Updated reference outputs according to reference tag geant4-10-00-ref-04.
 - Includes tags: XrayFluo-V10-00-04, testem1-V10-00-02, testem2-V10-00-01,
