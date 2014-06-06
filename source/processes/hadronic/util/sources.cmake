@@ -59,8 +59,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_util
         G4LightMedia.hh
         G4Nucleus.hh
         G4Pair.hh
-        G4ReactionDynamics.hh
-        G4ReactionKinematics.hh
         G4ReactionProduct.hh
         G4ReactionProductVector.hh
         G4StableIsotopes.hh
@@ -76,8 +74,6 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_util
         G4IsoResult.cc
         G4LightMedia.cc
         G4Nucleus.cc
-        G4ReactionDynamics.cc
-        G4ReactionKinematics.cc
         G4ReactionProduct.cc
         G4StableIsotopes.cc
     GRANULAR_DEPENDENCIES
