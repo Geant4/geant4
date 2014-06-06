@@ -9,6 +9,10 @@ $Id$
 
                       ---------------------
 
+03.12.2013 - Gabriele Cosmo (DICOM-V09-06-10)
+           - Attempt to fix Valgrind run-time error from printout in
+             DicomHandler::CheckFileFormat().
+
 03.12.2013 - Ivana Hrivnacova (DICOM-V09-06-09)
            - Updated README and .README to match (Pedro Arce)
 
