@@ -124,7 +124,10 @@ class G4DigiManager
         if(DCtable) delete DCtable;
         DCtable = dc;
       }
-
+  private:
+     //Disable copy constructor and assignement operator
+     G4DigiManager(const G4DigiManager&);
+     G4DigiManager& operator=(const G4DigiManager&);
 };
 
 
