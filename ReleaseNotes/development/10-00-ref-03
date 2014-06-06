@@ -19,81 +19,82 @@ Major development/fixes included since the last development tag are:
 
 (+)  Fixes included in release 9.6.p03
 (*)  Fixes included in release 10.0.p01
+(o)  Fixes included in release 10.0.p02
 
 Summarised, the list of changes is the following:
 
 cmake                                            cmake-V10-00-11
 -----
-- When static libraries are used, wrap G4physicslists library with flags
+- When static libraries are used, wrap G4physicslists library with flags     (o)
   suitable to import whole archive. Implemented for GNU, Clang and Intel
   compilers. Other compilers require further checks on flags and how to
   apply to single library. Functionality needed to support global
   registration of templated factories.
-- Fixup usage of shared/static builtin libraries. Ensure that shared builtins
-  do not get linked to static. Added new component 'static' allowing
+- Fixup usage of shared/static builtin libraries. Ensure that shared         (o)
+  builtins do not get linked to static. Added new component 'static' allowing
   user to select static Geant4 libraries if they are available.
 - Updated data sets to G4EMLOW-6.36.
 
 config                                           config-V10-00-03
 ------
-- Force loading of symbols for templated libraries in physics_lists modules.
+- Force loading of symbols for templated libraries in physics_lists modules. (o)
   Defined LDFLAGS for Linux and Darwin targets.
   Modified binmake.gmk accordingly.
-- Replaced old win32def tool for extracting symbols definitions for
+- Replaced old win32def tool for extracting symbols definitions for          (o)
   DLLs build on Windows with genwindef used also in CMake.
 
 analysis                                         analysis-V10-00-04
 --------
-- Fixed bug in /analysis/h1/setAscii command.
-- Fixed H1, H2 functions to access xmin, xmax and width 
+- Fixed bug in /analysis/h1/setAscii command.                                (o)
+- Fixed H1, H2 functions to access xmin, xmax and width                      (o)
   (do not apply function and unit to return values)
 
-digits_hits                                      digits_hits-V10-00-01
+digits_hits                                      digits_hits-V10-00-01       (o)
 -----------
 - Fix the angle factor in G4PSSphereSurfaceFlux to keep it always            (+)
   positive. Addressing to Bug Report #1479.
 - Added missing dependency to graphics_reps in scorer module.
 
-externals/zlib                                   zlib-V10-00-00
+externals/zlib                                   zlib-V10-00-00              (o)
 --------------
-- Fixed compilation warnings from clang-3.4 for unused varibles.
+- Fixed compilation warnings from clang-3.4 for unused variables.
 
-g3tog4                                           g3tog4-V10-00-01
+g3tog4                                           g3tog4-V10-00-01            (o)
 ------
 - Removed inline specification for G3VolTableEntry::operator==()
   in sorce file.
 - Correction to CMake script: removed no longer existing package from        (*)
   dependency list.
 
-geometry/divisions                               geomdiv-V10-00-00
+geometry/divisions                               geomdiv-V10-00-00           (o)
 ------------------
 - Added missing dependency to graphics_reps.
 
-geometry/magneticfield                           field-V10-00-01
+geometry/magneticfield                           field-V10-00-01             (o)
 ----------------------
 - Fixed assignment operator for G4FieldTrack.
 - Improved printing of G4FieldTrack
 
-geometry/navigation                              geomnav-V10-00-01
+geometry/navigation                              geomnav-V10-00-01           (o)
 -------------------
 - Added method in G4PathFinder for end of track, needed to signal
   G4TransportationManager to use 'ordinary' Navigator.
 - Revised G4Navigator::SetupHierarchy() to reduce extra cost due to
   handling the case of nested parameterisations.
 - PropagatorInField: when setting up a new intersection-locator 
-  pass pointer to the current Navigator.
+  pass pointer to the current navigator.
 
-geometry/solids/CSG                              geom-csg-V10-00-03
+geometry/solids/CSG                              geom-csg-V10-00-03          (o)
 -------------------
 - Fixed proper handling of polyhedron pointer in solids, to avoid memory
   leak for visualization of parameterised volumes.
 
-geometry/solids/specific                         geom-specific-V10-00-05
+geometry/solids/specific                         geom-specific-V10-00-05     (o)
 ------------------------
 - Fixed proper handling of polyhedron pointer in solids, to avoid memory
   leak for visualization of parameterised volumes.
 
-geometry/solids/usolids                          geom-usolids-V10-00-09
+geometry/solids/usolids                          geom-usolids-V10-00-09      (o)
 -----------------------
 - New Implementation of SafetyFromInside() for UPolycone, skipping internal
   Z sections.
@@ -118,12 +119,12 @@ global                                           global-V10-00-12
 - Introduced G4SetPinAffinity() function (available only for LINUX): 
   "locks" a pthread to the given CPU index. This will be used by run
   category as an option to improve performance on high-core counts CPUs.
-- Minor refinements to G4Poisson.
-- Fix in G4SimplexDownhill header to proper define header guard.
+- Minor refinements to G4Poisson.                                            (o)
+- Fix in G4SimplexDownhill header to proper define header guard.             (o)
 
 intercoms                                        intercoms-V10-00-02
 ---------
-- G4GenericMessenger: introducing three additional methods to make class
+- G4GenericMessenger: introducing three additional methods to make class     (o)
   compliant to release 10. Addressing problem report #1580.
 - G4UIparameter: improved dignostic message of CandidateCheck().
 - Introducing "/control/cout/ignoreInitializationCout" UI command to
@@ -135,7 +136,7 @@ particles                                        particles-V10-00-05
 - Fixed lack of Cl35 ground state in G4NuclideTable2.
   Fixed lack of "*std::log(2.0)" in some comparison of threshold time.
 
-persistency/gdml                                 gdml-V10-00-00
+persistency/gdml                                 gdml-V10-00-00              (o)
 ----------------
 - Added comparison operator for 3-vector key in 'vertexMap' in
   G4GDMLWriteSolids for export of tessellated solid.
@@ -143,7 +144,7 @@ persistency/gdml                                 gdml-V10-00-00
 
 physics_lists
 -------------
-- builders (phys-builders-V10-00-00)
+- builders (phys-builders-V10-00-00)                                         (o)
   o Fixed memory leak in G4FTFBuilder.
 - constructors/electromagnetic (phys-ctor-em-V10-00-09)
   o G4EmLowEPPhysics: added G4LowEWentzelVIModel.
@@ -155,7 +156,7 @@ processes/electromagnetic/dna                    emdna-V10-00-04
 - Added several clear() to vectors for MT.
 - Corrected inclusion order of headers and forward declations in
   G4MolecularConfiguration.
-- Corrected typo in DLL import flag in G4DNAWaterDissociationDisplacer.
+- Corrected typo in DLL import flag in G4DNAWaterDissociationDisplacer.      (o)
 
 processes/electromagnetic/lowenergy              emlowen-V10-00-04
 -----------------------------------
@@ -196,13 +197,13 @@ processes/hadronic
     with Coulomb phase removed. Above 2.6 GeV, taken from data.
   o G4NucleiModel, G4CascadeCoalescence, G4CascadeInterface: moved static
     members which use envvars into const data, and initialize them in ctors.
-  o Fixed implementation of G4CascadeParameters singleton to follow          (+)
+  o Fixed implementation of G4CascadeParameters singleton to follow         (+o)
     canonical format. Addressing problem report #1557.
-  o Fix for memory leak in secondaries in G4IntraNucleiCascader.
+  o Fix for memory leak in secondaries in G4IntraNucleiCascader.             (o)
     Addressing problem report #1584.
   o Use const pointer to G4ParticleDefinition in G4CollisionOutput,
     G4InuclParticle and G4InuclElementaryParticle.
-  o Removed non-existing modules from dependency list in CMake script.
+  o Removed non-existing modules from dependency list in CMake script.       (o)
 - models/coherent_elastic (hadr-cohe-V10-00-02)
   o Use const pointer to G4ParticleDefinition in G4LEHadronProtonElastic,
     G4LEnp and G4LEpp.
@@ -213,13 +214,13 @@ processes/hadronic
 - models/inclxx (hadr-inclxx-V10-00-03)
   o Fix: avoid negative Fermi energies for delta resonances.
   o Use const pointer to G4ParticleDefinition.
-  o Fixed use of inline keyword in G4INCLClusteringModelIntercomparison.
+  o Fixed use of inline keyword in G4INCLClusteringModelIntercomparison.     (o)
 - models/lend (hadr-lend-V10-00-02)
+  o Fixed compilation warnings detected by clang-3.4 compiler.               (o)
 - models/neutron_hp (hadr-hpn-V10-00-03)
   o Remove use of const_cast for pointer to G4ParticleDefinition.
-  o Fixed compilation warnings detected by clang-3.4 compiler.
 - models/parton_string (hadr-prtn-V10-00-02)
-  o Fix to remove 'inline' qualifier from methods in G4VParticipants and     (+)
+  o Fix to remove 'inline' qualifier from methods in G4VParticipants and    (+o)
     G4PomeronCrossSection source files, responsible for run-time errors for
     undefined symbols in library with clang-3.4.
   o Use const pointer to G4ParticleDefinition.
@@ -232,26 +233,26 @@ processes/hadronic
 - util (hadr-util-V10-00-04)
   o Use const pointer to G4ParticleDefinition.
 
-processes/phonon                                prophonon-V10-00-00
+processes/phonon                                prophonon-V10-00-00          (o)
 ----------------
 - Removed inline keywords in methods in G4PhononDownconversion source file
   and make coherent use of G4 types.
 
-processes/transportation                        transport-V10-00-01
+processes/transportation                        transport-V10-00-01          (o)
 ------------------------
 - Fixed time in case of zero step in G4CoupledTransportation.
   This caused a 'going back in time' error, when a zero step occurred
   in particular at the boundary of a parallel world volume when scoring.
   Addressing problem report #1017.
 
-track                                           track-V10-00-02
+track                                           track-V10-00-02              (o)
 -----
 - Fixed memory leak in G4Step::SetPre/PostStepPoint().
   Addressing problem report #1583.
 
 visualization/FukuiRenderer                     DAWN-V10-00-01
 ---------------------------
-- Fixed compilation warnings detected by clang-3.4 compiler.
+- Fixed compilation warnings detected by clang-3.4 compiler.                 (o)
 
 data sets
 ---------
@@ -266,7 +267,7 @@ examples                                         examples-V10-00-03
   o Updated macro.
 - extended/electromagnetic/TestEm1 (testem1-V10-00-01)
   o Updated printout from EndOfRun.
-- extended/field/field04 fieldex04-V10-00-09)
+- extended/field/field04 (fieldex04-V10-00-09)                                (o)
   o Corrected mismatch for delete/new of fFp pointer array in Clear().
 - extended/hadronic/Hadr03 (exhadr03-V10-00-02)
   o Updated printout from EndOfRun.

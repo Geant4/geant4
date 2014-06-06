@@ -15,9 +15,11 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(o)  Fixes included in release 10.0.p02
+
 Summarised, the list of changes is the following:
 
-cmake                                            cmake-V10-00-11
+cmake                                            cmake-V10-00-13
 -----
 - Added -DG4USE_STD11 compilation flag when c++11 is selected at configuration
   time for capable compilers.
@@ -25,7 +27,7 @@ cmake                                            cmake-V10-00-11
 
 config                                           config-V10-00-05
 ------
-- Force loading of symbols for templated libraries in physics_lists modules
+- Force loading of symbols for templated libraries in physics_lists modules  (o)
   only for global libraries. Granular libraries not supporting physics_lists
   factories.
 - Added G4USE_STD11 compilation flag for c++11 Standard.
@@ -36,20 +38,20 @@ analysis                                         analysis-V10-00-10
 - Added interface classes G4VAnalysisReader and G4VRNtupleManager for reading,    
   and their Root specializations: G4RootAnalysisReader, G4RootRNtupleManager.
   Introduced independent numbering of warnings from reader.
-- Fixed implementation of compound commands in G4H[1,2,n]Messenger classes
+- Fixed implementation of compound commands in G4H[1,2,n]Messenger classes   (o)
   using new G4AnalysisUtilities::Tokenize() function.
   This allows to pass multi-word strings within "".
   Addressing problem report #1616.
-- Fixed G4H2ToolsManager::SetH2YAxisTitle(), to set title to y-axis and
+- Fixed G4H2ToolsManager::SetH2YAxisTitle(), to set title to y-axis and      (o)
   not x-axis. Addressing problem report #1620.
-- Do not allow creating objects with empty names
+- Do not allow creating objects with empty names                             (o)
   Addressing problem report #1579.
 - Use G4Threading::IsMultithreadedApplication() instead of  
   G4AnalysisManagerState::IsMT() (now removed); this function fixes files
   clean-up at the end of sequential application built against multi-threaded
   libraries.
 
-digits_hits                                      digits_hits-V10-00-02
+digits_hits                                      digits_hits-V10-00-02       (o)
 -----------
 - G4PSCylinderSurfaceCurrent: removed unnecessary printout. 
   Addressing problem report #1610.
@@ -61,31 +63,31 @@ externals                                        externals-V10-00-02
     to improve thread safety.
   o Introduced CLHEP_THREAD_LOCAL and CLHEP_ATOMIC_INT_TYPE macros
     thread_local and atomic<int> keywords.
-- zlib: get rid of deprecated 'register' storage class specifier in source
+- zlib: get rid of deprecated 'register' storage class specifier in source   (o)
   files.
 
-geometry/magneticfield                           field-V10-00-02
+geometry/magneticfield                           field-V10-00-02             (o)
 ----------------------
 - Moved G4FieldTrack::LoadFromArray() to .cc and removed non-necessary
   thread-local static data local to the function.
   Fixes crash experienced when upgrading to clang-3.4 on MacOSX.
   Addressing problem reports #1603, #1619.
 
-geometry/management                              geommng-V10-00-01
+geometry/management                              geommng-V10-00-01           (o)
 -------------------
 - Get rid of deprecated 'register' storage class specifier in source files.
 
-geometry/navigation                              geomnav-V10-00-02
+geometry/navigation                              geomnav-V10-00-02           (o)
 -------------------
 - Get rid of deprecated 'register' storage class specifier in source files.
 
-geometry/solids/specific                         geom-specific-V10-00-08
+geometry/solids/specific                         geom-specific-V10-00-08     (o)
 ------------------------
 - Fixed signature of assignment operator to G4Polycone, G4Polyhedra,
   G4GenericPolycone and G4VCSGfaceted.
 - Get rid of deprecated 'register' storage class specifier in source files.
 
-geometry/volumes                                 geomvol-V10-00-02
+geometry/volumes                                 geomvol-V10-00-02           (o)
 ----------------
 - Corrected signature of operator=() for G4LogicalBorder/SkinSurface.
 - Get rid of deprecated 'register' storage class specifier in source files.
@@ -96,7 +98,7 @@ global                                           global-V10-00-19
   used (enabled through use of flag G4USE_STD11); directly adopt CLHEP
   classes in such a case instead of G4MT* wrappers, if keyword is supported.
 - Move G4PhysicsVector::Value(energy,idx) to inline.
-- Get rid of deprecated 'register' storage class specifier in source files.
+- Get rid of deprecated 'register' storage class specifier in source files.  (o)
 - New utility function G4Threading::IsMultithreadedApplication() 
   and G4Threading::SetMultithreadedApplication(bool) used to specify which
   type of kernel is instantiated indipendently by build type (e.g. to
@@ -108,30 +110,30 @@ intercoms                                        intercoms-V10-00-04
 - Extended use of "/control/macroPath" UI command to now also apply to
   macros called inside a loop.
 - Removed unnecessary source file G4AnyType.cc, as all symbols are inlined.
-- Corrected inclusion protection flag in G4GenericMessenger.hh.
+- Corrected inclusion protection flag in G4GenericMessenger.hh.              (o)
   Addressing old problem report #1527.
 
 materials                                        materials-V10-00-05
 ---------
-- G4Material, G4Element: define default names and symbols for elements
+- G4Material, G4Element: define default names and symbols for elements       (o)
   and isotopes when loaded from NIST and not explicitly defined by users.
   Fixes exporting of names in GDML when writing detector description.
-- G4Material: corrected initialisation of pointers in fake default
+- G4Material: corrected initialisation of pointers in fake default           (o)
   constructor per use of persistency. Corrected typo in printout for
   duplicate materials in function InitializePointers().
-- G4MaterialPropertyTable: fixed race condition problem.
+- G4MaterialPropertyTable: fixed race condition problem.                     (o)
   Addressing problem report #1590.
 
 particles                                        particles-V10-00-06
 ---------
 - Fixed Coverity defects in G4NuclideTable and G4IonTable.
 
-persistency/ascii                                ascii-V10-00-01
+persistency/ascii                                ascii-V10-00-01             (o)
 -----------------
 - G4tgbGeometryDumper: directly use G4ThreeVector methods for SymAxis
   for dumping G4Para parameters.
 
-persistency/gdml                                 gdml-V10-00-02
+persistency/gdml                                 gdml-V10-00-02              (o)
 ----------------
 - Corrected dump of 'phi' and 'theta' for G4Trap and G4Para in writer.
   Addressing problem report #1602.
@@ -147,11 +149,11 @@ physics_lists
   o Implemented thread safe UI messenger.
     Addressing problem report #1606.
 
-processes/cuts                                   procuts-V10-00-01
+processes/cuts                                   procuts-V10-00-01           (o)
 --------------
 - Fixed Coverity defects in G4VRangeToEnergyConverter.
 
-processes/electromagnetic/adjoint                emadjoint-V10-00-00
+processes/electromagnetic/adjoint                emadjoint-V10-00-00         (o)
 ---------------------------------
 - G4VAdjointReverseReaction: added protection against potential infinite 
   loop; if cross-section correction exceeds 100 the total cross-section is
@@ -172,28 +174,29 @@ processes/electromagnetic/lowenergy              emlowen-V10-00-09
 
 processes/electromagnetic/standard               emstand-V10-00-25
 ----------------------------------
-- G4CoulombScattering: use G4IonCoulombScatteringModel for ions by default.
-- G4IonCoulombScatteringModel: fixed warning from G4ParticleTable; fixed final
-  state generation and scattering off Hydrogen.
-- G4eCoulombScatteringModel: fixed mass of recoil for Hydrogen target.
+- G4CoulombScattering: use G4IonCoulombScatteringModel for ions by default.  (o)
+- G4IonCoulombScatteringModel: fixed warning from G4ParticleTable;           (o)
+  fixed final state generation and scattering off Hydrogen.
+- G4WentzelOKandVIxSection: fixed mass of recoil for Hydrogen target.        (o)
 - G4WentzelVIModel: fixed step limitation. Optimized transition between multiple
   and single scattering modes.
 - G4WentzelOKandVIxSection: fixed initialisation for low-energy model (this
   model is not combined with single scattering); fixed small inaccuracy for
   sampling. Some cleanup for sampling
-- G4GammaConversion: switch default number of bins from 77 to 140.
+- G4GammaConversion: switch default number of bins from 77 to 140.           (o)
 
 processes/electromagnetic/utils                  emutils-V10-00-12
 -------------------------------
-- G4VMultipleScattering - fixed old problem of displacement handling;
+- G4VMultipleScattering - fixed old problem of displacement handling;        (o)
   setting minimum displacement to 0.05 nm (Bohr radius).
 - G4VSubCutProducer, G4LossTableManager, G4VEnergyLossProcess: added new
   interface to allow for production of delta-electrons below production
   threshold.
 - G4EnergyLossMessenger, G4EmProcessOption: added extra flag and UI command
   "/process/em/deexcitationIgnoreCut" allowing to disable check on production
-  threshold by deexcitation module; enable RunManager flag
-  "/run/physicsModified" for all deexcitation UI commands.
+  threshold by deexcitation module.
+- G4EnergyLossMessenger: enable RunManager flag "/run/physicsModified"       (o)
+  for all deexcitation UI commands.
 
 processes/hadronic
 ------------------
@@ -209,22 +212,22 @@ processes/hadronic
   o G4IntraNucleiCascader: use const pointer to G4ParticleDefinition.
     Removed temporary cast in G4InuclEvaporation.
 - models/coherent_elastic (hadr-cohe-V10-00-04)
-  o Get rid of deprecated 'register' storage class specifier in source files.
+  o Get rid of deprecated 'register' storage class specifier in code.        (o)
 - models/de_excitation (hadr-deex-V10-00-05)
   o Added ModelDescription() to G4ExcitationHandler.
 - models/im_r_matrix (had-im_r-V10-00-00)
   o Use const pointer to G4ParticleDefinition in use with G4KineticTrack.
 - models/lend (hadr-lend-V10-00-03)
-  o Fixed use of GetIon() from G4ParticleTable, which is obsolete since 10.0.
+  o Fixed use of GetIon() from G4ParticleTable, obsolete since 10.0.         (o)
 - models/management (hadr-modman-V10-00-02)
   o Added DeExciteModelDescription() to G4VPreCompoundModel and provided
     default implementation.
   o Use const pointer to G4ParticleDefinition in G4VKineticNucleon.
 - models/neutron_hp (hadr-hpn-V10-00-03)
-  o Reset isotope pointer to the target G4Nucleus object of reaction in
+  o Reset isotope pointer to the target G4Nucleus object of reaction in      (o)
     G4NeutronHPCapture, G4NeutronHPElastic, G4NeutronHPFission and
     G4NeutronHPInelastic.
-- models/parton_string/hadronization (had-hadronization-V10-00-00)
+- models/parton_string/hadronization (had-hadronization-V10-00-00)           (o)
   o Fix in G4LundStringFragmentation: replacing ">=" with ">" in three if
     statements, to avoid potential crashes in the case of anti_sigma+ capture
     at rest on hydrogen. Courtesy of M.Novak, CERN.
@@ -251,13 +254,13 @@ run                                             run-V10-00-06
 
 visualization
 -------------
-- externals (visexternal-V10-00-00)
+- externals (visexternal-V10-00-00)                                          (o)
   o Fixed bad text in G4OpenGL2PS action.
 - management (visman-V10-00-06)
   o Fix for NULL pointer in G4VSceneHandler.
-  o Get rid of deprecated 'register' storage class specifier in source files.
+  o Get rid of deprecated 'register' storage class specifier in code.        (o)
 - OpenGL (opengl-V10-00-03)
-  o Fix in G4OpenGL to allow for compilation with only Qt driver on Linux
+  o Fix in G4OpenGL to allow for compilation with only Qt driver on Linux    (o)
     in case 'glu'h' is missing. Addressing problem report #1618.
   o G4OpenGLImmediateSceneHandler: split AddPrimitivePreamble() in 3 functions
     to avoid dynamic_cast. Gaining up to 20% speedup in drawing.
@@ -303,9 +306,9 @@ examples                                         examples-V10-00-04
   o Updated nFission.mac macro.
 - extended/hadronic/Hadr04 (exhadr04-V10-00-02)
   o Minor cleanup in NeutronHPphysics.
-- extended/medical/DICOM (DICOM-V10-00-00)
+- extended/medical/DICOM (DICOM-V10-00-00)                                   (o)
   o Reshuffled code for printout in DicomHandler::CheckFileFormat().
-- extended/persistency/gdml/G01 (G01-V10-00-02)
+- extended/persistency/gdml/G01 (G01-V10-00-02)                              (o)
   o Correction to solids.gdml for 'para' solid, where angle unit was missing.
   o Added GDML sample mat_nist.gdml showing how to load a NIST material,
     although format is not part of the GDML schema yet (i.e. expected

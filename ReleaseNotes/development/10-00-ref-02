@@ -13,6 +13,7 @@ Major development/fixes included since the last development tag are:
 
 (+)  Fixes included in release 9.6.p03
 (*)  Fixes included in release 10.0.p01
+(o)  Fixes included in release 10.0.p02
 
 Summarised, the list of changes is the following:
 
@@ -41,7 +42,7 @@ event                                            event-V10-00-01             (*)
 - G4SPSPosDistribution::IsSourceConfined(): added protection against
   null pointer. Addressing problem report #1255.
 
-externals                                        externals-V10-00-00
+externals                                        externals-V10-00-00         (o)
 ---------
 - Removed deprecated 'register' qualifiers in implementation of CLHEP classes.
 
@@ -74,7 +75,7 @@ geometry/solids/usolids                          geom-usolids-V10-00-03      (*)
 - Removed ResetPolyhedron() from G4USolid bridge class as not necessary;
   moved 'fPolyhedron' pointer to protected.
 
-geometry/volumes                                 geomvol-V10-00-00
+geometry/volumes                                 geomvol-V10-00-00           (o)
 ----------------
 - Minor cleanup and optimisation to G4EnhancedAllocator.
 - Code cleanup in G4GeometryWorkspace and G4GeometryWorkspacePool.
