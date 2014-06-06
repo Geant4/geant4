@@ -98,6 +98,7 @@ template<class T> void TFTFP_BERT_HP<T>::SetCuts()
   //   the default cut value for all particle types 
 
   this->SetCutsWithDefault();   
+  this->SetCutValue(0.0, "proton");   
  
 //  if (this->verboseLevel > 0)
 //    G4VUserPhysicsList::DumpCutValuesTable();  
