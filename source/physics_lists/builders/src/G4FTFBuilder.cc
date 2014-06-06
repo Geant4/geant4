@@ -55,6 +55,7 @@ G4FTFBuilder::G4FTFBuilder(const G4String& aName, G4PreCompoundModel* p)
 G4FTFBuilder::~G4FTFBuilder() 
 {
   delete fStringDecay;
+  delete fStringModel;
   //delete fPrecoInterface;
   delete fLund;
 }                                     
