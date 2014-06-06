@@ -166,7 +166,11 @@ G4WentzelOKandVIxSection::SetupTarget(G4int Z, G4double cut)
     etag    = tkin; 
     targetZ = Z;
     if(targetZ > 99) { targetZ = 99; }
-    SetTargetMass(fNistManager->GetAtomicMassAmu(targetZ)*CLHEP::amu_c2);
+    G4double massT = proton_mass_c2;
+    if(targetZ > 1) { 
+      massT = fNistManager->GetAtomicMassAmu(targetZ)*CLHEP::amu_c2;
+    }
+    SetTargetMass(massT);
     //G4double tmass2 = targetMass*targetMass;
     //G4double etot = tkin + mass;
     //G4double invmass2 = mass*mass + tmass2 + 2*etot*targetMass;

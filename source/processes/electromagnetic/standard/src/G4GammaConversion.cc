@@ -85,6 +85,7 @@ G4GammaConversion::G4GammaConversion(const G4String& processName,
   SetStartFromNullFlag(true);
   SetBuildTableFlag(true);
   SetSecondaryParticle(G4Electron::Electron());
+  SetLambdaBinning(140);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

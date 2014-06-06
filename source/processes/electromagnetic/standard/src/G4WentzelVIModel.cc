@@ -536,11 +536,6 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
       G4double vx1 = sint*cos(phi);
       G4double vy1 = sint*sin(phi);
 
-      // change direction
-      temp.set(vx1,vy1,cost);
-      temp.rotateUz(dir);
-      dir = temp;
-
       // lateral displacement  
       if (latDisplasment && safety > tlimitminfix) {
 	G4double rms = invsqrt12*sqrt(2*z0);
@@ -558,6 +553,10 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 	  fDisplacement += temp;
 	}
       }
+      // change direction
+      temp.set(vx1,vy1,cost);
+      temp.rotateUz(dir);
+      dir = temp;
     }
   } while (0 < nMscSteps);
     

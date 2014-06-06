@@ -18,6 +18,21 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+01 April 14: V.Ivanchenko (emstand-V09-06-81)
+- G4IonCoulombScatteringModel - fixed final state generation
+- G4GammaConversion - switch default number of bins from 220 to 140
+- G4WentzelOKandVIxSection - fixed mass of recoil for Hydrogen target
+- G4WentzelVIModel - changed order of displacement and angular 
+    deflection (second order effect)
+
+31 March 14: V.Ivanchenko
+- G4GammaConversion - switch default number of bins from 77 to 220
+
+28 March 14: V.Ivanchenko
+- G4CoulombScattering - use G4IonCoulombScatteringModel for ions
+    by default
+- G4IonCoulombScatteringModel - fixed warning from G4ParticleTable
+
 10 February 14: V.Ivanchenko (emstand-V09-06-80)
 - G4UrbanMscModel - (L.Urban) methods ComputeTheta0,SimpleScattering,
   SampleDisplacement,LatCorrelation have been inlined in order
