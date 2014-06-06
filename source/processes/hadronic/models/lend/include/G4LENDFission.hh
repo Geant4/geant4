@@ -59,7 +59,7 @@ class G4LENDFission : public G4LENDModel
      };
   
      ~G4LENDFission(){;};
-  
+     virtual const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
      G4HadFinalState* ApplyYourself( const G4HadProjectile& aTrack, G4Nucleus& aTargetNucleus );
 };
 

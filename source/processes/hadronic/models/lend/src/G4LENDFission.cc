@@ -26,7 +26,7 @@
 #include "G4LENDFission.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Nucleus.hh"
-#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
   
 G4HadFinalState * G4LENDFission::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aTarg )
 {
@@ -55,6 +55,7 @@ G4HadFinalState * G4LENDFission::ApplyYourself(const G4HadProjectile& aTrack, G4
       {
          G4int jZ = (*products)[j].Z; 
          G4int jA = (*products)[j].A; 
+         G4int jM = (*products)[j].m; 
 
          //G4cout << "Z = "    << (*products)[j].Z 
          //       << ", A = "  << (*products)[j].A 
@@ -68,8 +69,7 @@ G4HadFinalState * G4LENDFission::ApplyYourself(const G4HadProjectile& aTrack, G4
 
          if ( jZ > 0 )
          {
-                                                                                        //Ex  j?
-            theSec->SetDefinition( G4ParticleTable::GetParticleTable()->FindIon( jZ, jA , 0, 0 ) );
+            theSec->SetDefinition( G4IonTable::GetIonTable()->GetIon( jZ, jA , jM ) );
          } 
          else if ( jA == 1 && jZ == 0 )
          {
@@ -91,4 +91,10 @@ G4HadFinalState * G4LENDFission::ApplyYourself(const G4HadProjectile& aTrack, G4
 
    return theResult; 
 
+}
+const std::pair<G4double, G4double> G4LENDFission::GetFatalEnergyCheckLevels() const
+{
+        // max energy non-conservation is mass of heavy nucleus
+        //return std::pair<G4double, G4double>(5*perCent,250*GeV);
+        return std::pair<G4double, G4double>(5*perCent,DBL_MAX);
 }
