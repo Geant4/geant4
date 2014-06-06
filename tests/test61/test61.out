@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -267,6 +267,21 @@ hIoni:   for  pi-    SubType= 2
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 100 MeV
+        Model:                  QMDModel: 90 MeV ---> 10 GeV
+        Model:                      FTFP: 9 GeV ---> 100 TeV
+     Cr_sctns:                  IonsShen: 0 eV  ---> 100 TeV
+     Cr_sctns:                  Tripathi: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
@@ -286,6 +301,21 @@ hIoni:   for  pi-    SubType= 2
 
   Process: inelastic
         Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 100 MeV
+        Model:                  QMDModel: 90 MeV ---> 10 GeV
+        Model:                      FTFP: 9 GeV ---> 100 TeV
+     Cr_sctns:                  IonsShen: 0 eV  ---> 100 TeV
+     Cr_sctns:                  Tripathi: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
@@ -377,6 +407,21 @@ hIoni:   for  pi-    SubType= 2
         Model:                      FTFP: 2 GeV ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 100 MeV
+        Model:                  QMDModel: 90 MeV ---> 10 GeV
+        Model:                      FTFP: 9 GeV ---> 100 TeV
+     Cr_sctns:                  IonsShen: 0 eV  ---> 100 TeV
+     Cr_sctns:                  Tripathi: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
 ================================================================
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
@@ -412,7 +457,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=56.84s Real=57s Sys=0s
+  User=50.14s Real=50.45s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -943,7 +988,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=5.49s Real=5.51s Sys=0.01s
+  User=5.39s Real=5.41s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1240,7 +1285,7 @@ Warning: Bad energy non-conservation detected, will re-sample the interaction
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=2.81s Real=2.81s Sys=0s
+  User=2.42s Real=2.42s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1349,7 +1394,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.01s Real=0.02s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -1403,7 +1448,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.32s Real=0.32s Sys=0s
+  User=0.21s Real=0.21s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1684,7 +1729,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=38.76s Real=38.9s Sys=0s
+  User=39.65s Real=39.75s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1699,9 +1744,10 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
+Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.61 Mb
+Dynamic pools deleted: 13 / Total memory freed: 1.3 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

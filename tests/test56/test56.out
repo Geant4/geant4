@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -62,6 +62,12 @@ PhysicsList::SetCuts:CutLength : 1 mm
 ----> SetHisto 5: energy spectrum of gamma (keV)  200 bins from 0 keV to 10 keV
 #
 /run/beamOn 10000
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -467,7 +473,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=23.89s Real=23.95s Sys=0s
+  User=22.73s Real=22.83s Sys=0.04s
 
  ======================== run summary ======================
 
@@ -475,13 +481,13 @@ Run Summary
  ===========================================================
 
 
- trackLength= 14.143 um 	 nb of steps= 86.973  stepSize= 162.61 nm 
+ trackLength= 14.109 um 	 nb of steps= 86.826  stepSize= 162.49 nm 
 
- d-rays  : eLoss/primary= 106.28 keV	  nb of d-rays= 41.368  <Tkin>= 2.5691 keV  Tmin= 3.533 eV   Tmax= 30.452 keV
+ d-rays  : eLoss/primary= 105.98 keV	  nb of d-rays= 41.305  <Tkin>= 2.5657 keV  Tmin= 4.1934 eV   Tmax= 232.64 keV
 
- brems   : eLoss/primary= 413.46 eV 	  nb of gammas= 0.1965  <Tkin>= 2.1041 keV  Tmin= 100.95 eV   Tmax= 11.497 keV
+ brems   : eLoss/primary= 397.64 eV 	  nb of gammas= 0.1976  <Tkin>= 2.0124 keV  Tmin= 100.11 eV   Tmax= 8.8653 keV
 
- deposit : eLoss/primary= 243.54 keV	 <dEcut > table= 209.48 keV   ---> simul/reference= 1.1626
+ deposit : eLoss/primary= 243.33 keV	 <dEcut > table= 208.97 keV   ---> simul/reference= 1.1644
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
 *** G4Exception : em0077
@@ -491,7 +497,7 @@ G4EmCalculator::GetCSDARange: CSDA table is not built  use UI command: /process/
 -------- WWWW -------- G4Exception-END --------- WWWW -------
 
 
- total   : eLoss/primary= 350.23 keV	 <dEfull> table= 10 MeV   ---> simul/reference= 0.035023
+ total   : eLoss/primary= 349.71 keV	 <dEfull> table= 10 MeV   ---> simul/reference= 0.034971
 K-shell x-section for proton in barns 15.836  E(MeV)= 1  material G4_Cu
 L1-shell x-section in barns 47514.2
 L2-shell x-section in barns 58104.7
@@ -513,7 +519,7 @@ N K-shell vacancies in 0.01 mm absorber 0.0184295
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1920572994, 1893255322
+ Current couple of seeds = 988929844, 532122600
 ----------------------------------------
 #
 G4 kernel has come to Quit state.
@@ -524,6 +530,7 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
+Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
 Dynamic pools deleted: 10 / Total memory freed: 0.26 Mb

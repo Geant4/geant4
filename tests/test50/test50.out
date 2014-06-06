@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-macro --> /ec/G4-builds/release/slc6-gcc48-RelWithDebInfo/10-00-ref-04_branch/tests/test50/test50.in
+macro --> /ec/G4-builds/release/slc6-gcc48-RelWithDebInfo/10-00-ref-05_branch/tests/test50/test50.in
 /tracking/verbose 0
 /run/verbose 0
 /event/verbose 0
@@ -89,6 +89,9 @@ G4NistMaterialBuilder::FindOrBuildMaterial G4_WATER
  Target xdimension is: 1.5e+08 mm
  Target ydimension is: 1.5e+08 mm
 Target Material is: G4_WATER
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 154 bins 
@@ -473,6 +476,9 @@ Index : 1     used in the geometry : Yes
 /gun/randomDirection on
 /gun/energy 0.01 MeV
 /run/beamOn 1
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 154 bins 
@@ -867,3 +873,4 @@ hPairProd:   for  pi-    SubType= 4
 /gun/energy 10. MeV
 /run/beamOn 1
 <Tst50Collection> is not found.
+Total navigation history collections cleaned: 5

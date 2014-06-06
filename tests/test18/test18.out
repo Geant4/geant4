@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -231,6 +231,28 @@ hIoni:   for  pi-    SubType= 2
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
 
 ---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 110 MeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 110 MeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
                            Hadronic Processes for kaon+
 
   Process: hadElastic
@@ -309,6 +331,17 @@ hIoni:   for  pi-    SubType= 2
 
   Process: inelastic
         Model:            BertiniCascade: 0 eV  ---> 25 GeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 110 MeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ================================================================
@@ -24637,43 +24670,11 @@ Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DB
 
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : HAD_RDM_011
-      issued by : G4RadioactiveDecay::GetMeanFreePath()
-Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DBL_MAX
-
-*** Thi
+*
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================
 
-         585           1       557.4     anti_nu_e
      0.00125           1       557.4     Pb207
            0           1           0     Po215
     7.42e+03           1    0.007784     alpha
@@ -24698,3 +24699,4 @@ Ion has negative lifetime -1001 but is not stable.  Setting mean free path to DB
          946           1        5546     anti_nu_e
      0.00494           1        5546     Pb207
 
+Total navigation history collections cleaned: 7

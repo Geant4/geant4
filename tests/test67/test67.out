@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -62,6 +62,9 @@ List name in the ROOT file set to: empenelope
 
 Using geometry#3
 PhysicsList::SetCuts:CutLength : 1 mm 
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 154 bins 
@@ -457,8 +460,8 @@ ooo Run 0 starts (global).
 Choosing random seed according to time(0) 
 
 --------- Ranecu engine status ---------
- Initial seed (index) = 208
- Current couple of seeds = 1961807420, 1598767731
+ Initial seed (index) = 71
+ Current couple of seeds = 1263133253, 268492656
 ----------------------------------------
 
 ---> Begin Of Event: 0
@@ -660,7 +663,7 @@ Choosing random seed according to time(0)
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 125
+Global results with 100000 events : 116
 ooo Run 1 starts (global).
 
 ---> Begin Of Event: 0
@@ -862,7 +865,7 @@ ooo Run 1 starts (global).
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 759
+Global results with 100000 events : 808
 ooo Run 2 starts (global).
 
 ---> Begin Of Event: 0
@@ -1064,7 +1067,7 @@ ooo Run 2 starts (global).
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 2517
+Global results with 100000 events : 2540
 ooo Run 3 starts (global).
 
 ---> Begin Of Event: 0
@@ -1266,7 +1269,7 @@ ooo Run 3 starts (global).
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 2428
+Global results with 100000 events : 2466
 ooo Run 4 starts (global).
 
 ---> Begin Of Event: 0
@@ -1468,7 +1471,7 @@ ooo Run 4 starts (global).
 ---> Begin Of Event: 98000
 
 ---> Begin Of Event: 99000
-Global results with 100000 events : 1376
+Global results with 100000 events : 1393
 ooo Run 5 starts (global).
 
 ---> Begin Of Event: 0
@@ -1673,5 +1676,6 @@ ooo Run 5 starts (global).
 Global results with 100000 events : 608
 TEST PASSED
 Going to close the ROOT file....done
+Total navigation history collections cleaned: 12
 Execution terminated
-User=38.02s Real=39.17s Sys=0.04s
+User=40.79s Real=43.23s Sys=0.06s

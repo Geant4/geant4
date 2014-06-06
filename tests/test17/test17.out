@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -198,6 +198,9 @@ PhysicsList::SetCuts:CutLength : 100 um
 /gun/energy 500 keV
 #
 /run/beamOn 1000
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 154 bins 
@@ -580,7 +583,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.89s Real=3.9s Sys=0s
+  User=3.44s Real=3.48s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -625,7 +628,7 @@ EvtNo= 367  length= 0.0112026  xend= 0.00219871
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.67s Real=4.69s Sys=0s
+  User=3.75s Real=3.75s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 998 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -643,6 +646,9 @@ Average Number photons per event   = 0
 /gun/ion 6 12 6
 /gun/energy 6000 keV
 /run/beamOn 1000
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 154 bins 
@@ -1026,7 +1032,7 @@ EvtNo= 701  length= 0.00825519  xend= 0.000450326
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.13s Real=0.12s Sys=0s
+  User=0.11s Real=0.11s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 999 for C12 with Ekin = 6 MeV p= 366.244 MeV/c
@@ -1052,6 +1058,9 @@ Average Number photons per event   = 0
 /gun/particle proton
 /gun/energy 500 keV
 /run/beamOn 1000
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 154 bins 
@@ -1438,7 +1447,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.44s Real=5.45s Sys=0s
+  User=3.89s Real=3.9s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -1458,6 +1467,9 @@ Average Number photons per event   = 0.021
 /process/em/auger true
 /run/physicsModified
 /run/beamOn 1000
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 154 bins 
@@ -1844,7 +1856,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.9s Real=4.97s Sys=0s
+  User=4.02s Real=4.03s Sys=0.01s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -1862,6 +1874,7 @@ Average Number photons per event   = 0.02
 
 #
 G4 kernel has come to Quit state.
+Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
 Dynamic pools deleted: 10 / Total memory freed: 0.44 Mb

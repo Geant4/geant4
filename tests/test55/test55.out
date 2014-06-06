@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -176,6 +176,9 @@ has been modified since last Run.
 ---> The Absorber is 20 cm  of G4_Al
 
 ---------------------------------------------------------
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 154 bins 
@@ -555,7 +558,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=2.93s Real=2.94s Sys=0s
+  User=3.1s Real=3.26s Sys=0s
 
  The run consists of 1000 C12 of 144 MeV through 20 cm  of G4_Al (density: 2.699 g/cm3 )
 
@@ -648,6 +651,9 @@ Run Summary
 ---> The Absorber is 20 cm  of G4_Be
 
 ---------------------------------------------------------
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 ### Run 1 start.
 
 --------- Ranecu engine status ---------
@@ -756,6 +762,9 @@ Run Summary
 ---> The Absorber is 20 cm  of G4_C
 
 ---------------------------------------------------------
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 ### Run 2 start.
 
 --------- Ranecu engine status ---------
@@ -889,6 +898,9 @@ Run Summary
 ---> The Absorber is 70.14 um  of G4_KAPTON
 
 ---------------------------------------------------------
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 ### Run 3 start.
 
 --------- Ranecu engine status ---------
@@ -1042,6 +1054,9 @@ Run Summary
 ---> The Absorber is 29.333 um  of G4_POLYCARBONATE
 
 ---------------------------------------------------------
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 ### Run 4 start.
 
 --------- Ranecu engine status ---------
@@ -1215,6 +1230,9 @@ Run Summary
 ---> The Absorber is 23.143 um  of G4_MYLAR
 
 ---------------------------------------------------------
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 ### Run 5 start.
 
 --------- Ranecu engine status ---------
@@ -1388,6 +1406,9 @@ Run Summary
 ---> The Absorber is 70.14 um  of G4_KAPTON
 
 ---------------------------------------------------------
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 ### Run 6 start.
 
 --------- Ranecu engine status ---------
@@ -1561,6 +1582,9 @@ Run Summary
 ---> The Absorber is 29.333 um  of G4_POLYCARBONATE
 
 ---------------------------------------------------------
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 ### Run 7 start.
 
 --------- Ranecu engine status ---------
@@ -1734,6 +1758,9 @@ Run Summary
 ---> The Absorber is 23.143 um  of G4_MYLAR
 
 ---------------------------------------------------------
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 ### Run 8 start.
 
 --------- Ranecu engine status ---------
@@ -1907,6 +1934,9 @@ Run Summary
 ---> The Absorber is 46.7 um  of G4_KAPTON
 
 ---------------------------------------------------------
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 ### Run 9 start.
 
 --------- Ranecu engine status ---------
@@ -2080,6 +2110,9 @@ Run Summary
 ---> The Absorber is 29.333 um  of G4_POLYCARBONATE
 
 ---------------------------------------------------------
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 ### Run 10 start.
 
 --------- Ranecu engine status ---------
@@ -2253,6 +2286,9 @@ Run Summary
 ---> The Absorber is 23.143 um  of G4_MYLAR
 
 ---------------------------------------------------------
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 ### Run 11 start.
 
 --------- Ranecu engine status ---------
@@ -2315,3 +2351,4 @@ Run Summary
   TOTAL = 9, FAILED = 1, PASSED = 8
 ===============================================================================
 
+Total navigation history collections cleaned: 7

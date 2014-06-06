@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -41,6 +41,12 @@ physicsList->setCut() start.
 /mydet/SelectMaterial Th
 SimpleBox is now made of Th
 /run/beamOn 20
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -391,10 +397,80 @@ hPairProd:   for  pi-    SubType= 4
                            Hadronic Processes for GenericIon
 
   Process: ionInelastic
-        Model:          INCL++ v5.1.14.7: 0 eV  ---> 54 GeV
+        Model:               INCL++ v5.2: 0 eV  ---> 54 GeV
         Model:                      FTFP: 53.9 GeV ---> 1 TeV
      Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for He3
+
+  Process: He3Inelastic
+        Model:               INCL++ v5.2: 0 eV  ---> 9 GeV
+        Model:                      FTFP: 8.9 GeV ---> 1 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: alphaInelastic
+        Model:               INCL++ v5.2: 0 eV  ---> 12 GeV
+        Model:                      FTFP: 11.9 GeV ---> 1 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for anti_He3
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_He3Inelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_alphaInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_deuteronInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
 
 ---------------------------------------------------
                            Hadronic Processes for anti_neutron
@@ -423,6 +499,35 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
   Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for anti_triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100.1 MeV
+        Model:              AntiAElastic: 100 MeV ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: anti_tritonInelastic
+        Model:                      FTFP: 0 eV  ---> 100 TeV
+     Cr_sctns:              AntiAGlauber: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: hFritiofCaptureAtRest
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: dInelastic
+        Model:               INCL++ v5.2: 0 eV  ---> 6 GeV
+        Model:                      FTFP: 5.9 GeV ---> 1 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ---------------------------------------------------
                            Hadronic Processes for e+
@@ -457,10 +562,9 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon+Inelastic
-        Model:                      FTFP: 9.5 GeV ---> 25 GeV
-        Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:            BertiniCascade: 2.9 GeV ---> 9.9 GeV
-        Model:            BertiniCascade: 0 eV  ---> 3 GeV
+        Model:                      QGSP: 14 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 15 GeV
+     Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:  ChipsKaonPlusInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -472,10 +576,9 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: kaon-Inelastic
-        Model:                      FTFP: 9.5 GeV ---> 25 GeV
-        Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:            BertiniCascade: 2.9 GeV ---> 9.9 GeV
-        Model:            BertiniCascade: 0 eV  ---> 3 GeV
+        Model:                      QGSP: 14 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 15 GeV
+     Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns: ChipsKaonMinusInelasticXS: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -519,13 +622,10 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: neutronInelastic
-        Model:                      FTFP: 9.5 GeV ---> 25 GeV
-        Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:            BertiniCascade: 2.9 GeV ---> 9.9 GeV
+        Model:                      QGSP: 15 GeV ---> 100 TeV
         Model:                     PRECO: 0 eV  ---> 2 MeV
-        Model:          INCL++ v5.1.14.7: 1 MeV ---> 3 GeV
+        Model:               INCL++ v5.2: 1 MeV ---> 20 GeV
      Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
-     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -544,13 +644,8 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi+Inelastic
-        Model:                      FTFP: 9.5 GeV ---> 25 GeV
-        Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:            BertiniCascade: 2.9 GeV ---> 9.9 GeV
-        Model:          INCL++ v5.1.14.7: 0 eV  ---> 3 GeV
-     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
-                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
-                           below 91 GeV, Glauber-Gribov above 
+        Model:                      QGSP: 15 GeV ---> 100 TeV
+        Model:               INCL++ v5.2: 0 eV  ---> 20 GeV
      Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
@@ -566,14 +661,9 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: pi-Inelastic
-        Model:                      FTFP: 9.5 GeV ---> 25 GeV
-        Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:            BertiniCascade: 2.9 GeV ---> 9.9 GeV
-        Model:          INCL++ v5.1.14.7: 0 eV  ---> 3 GeV
+        Model:                      QGSP: 15 GeV ---> 100 TeV
+        Model:               INCL++ v5.2: 0 eV  ---> 20 GeV
      Cr_sctns:   G4PiNuclearCrossSection: 0 eV  ---> 99.9 TeV
-     Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
-                         G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
-                           below 91 GeV, Glauber-Gribov above 
      Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
@@ -590,14 +680,24 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: protonInelastic
-        Model:                      FTFP: 9.5 GeV ---> 25 GeV
-        Model:                      QGSP: 12 GeV ---> 100 TeV
-        Model:            BertiniCascade: 2.9 GeV ---> 9.9 GeV
+        Model:                      QGSP: 15 GeV ---> 100 TeV
         Model:                     PRECO: 0 eV  ---> 2 MeV
-        Model:          INCL++ v5.1.14.7: 1 MeV ---> 3 GeV
+        Model:               INCL++ v5.2: 1 MeV ---> 20 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: tInelastic
+        Model:               INCL++ v5.2: 0 eV  ---> 9 GeV
+        Model:                      FTFP: 8.9 GeV ---> 1 TeV
+     Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
 ================================================================
@@ -635,7 +735,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.44s Real=0.44s Sys=0s
+  User=0.51s Real=0.52s Sys=0.01s
 #
 # neutron at 1 GeV in Th
 #
@@ -673,7 +773,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.54s Real=0.54s Sys=0s
+  User=0.86s Real=0.87s Sys=0s
 #
 # pi+ at 1 GeV in Th
 #
@@ -711,7 +811,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.58s Real=0.59s Sys=0s
+  User=0.6s Real=0.61s Sys=0s
 #
 # pi- at 1 GeV in Th
 #
@@ -749,7 +849,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.7s Real=0.74s Sys=0s
+  User=0.53s Real=0.53s Sys=0.01s
 #
 # proton at 1 GeV in U
 #
@@ -758,6 +858,12 @@ Run Summary
 /mydet/SelectMaterial U
 SimpleBox is now made of U
 /run/beamOn 20
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -1134,7 +1240,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.6s Real=0.61s Sys=0.01s
+  User=0.39s Real=0.4s Sys=0s
 #
 # neutron at 1 GeV in U
 #
@@ -1177,7 +1283,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.43s Real=0.43s Sys=0s
+  User=0.57s Real=0.58s Sys=0s
 #
 # pi+ at 1 GeV in U
 #
@@ -1220,7 +1326,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.51s Real=0.51s Sys=0s
+  User=0.77s Real=0.78s Sys=0s
 #
 # pi- at 1 GeV in U
 #
@@ -1263,7 +1369,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.47s Real=0.47s Sys=0s
+  User=0.4s Real=0.4s Sys=0.01s
 #
 # proton at 1 GeV in Pb
 #
@@ -1272,6 +1378,12 @@ Run Summary
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 20
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -1653,7 +1765,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.28s Real=0.29s Sys=0.01s
+  User=0.73s Real=0.73s Sys=0s
 #
 # neutron at 1 GeV in Pb
 #
@@ -1701,7 +1813,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.49s Real=0.49s Sys=0s
+  User=0.48s Real=0.49s Sys=0s
 #
 # pi+ at 1 GeV in Pb
 #
@@ -1749,7 +1861,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.7s Real=0.71s Sys=0s
+  User=0.33s Real=0.34s Sys=0s
 #
 # pi- at 1 GeV in Pb
 #
@@ -1797,7 +1909,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.58s Real=0.58s Sys=0s
+  User=0.39s Real=0.39s Sys=0s
 #
 # proton at 1 GeV in Cu
 #
@@ -1806,6 +1918,12 @@ Run Summary
 /mydet/SelectMaterial Cu
 SimpleBox is now made of Cu
 /run/beamOn 20
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -2192,7 +2310,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.2s Real=0.21s Sys=0.01s
+  User=0.2s Real=0.2s Sys=0.01s
 #
 # neutron at 1 GeV in Cu
 #
@@ -2245,7 +2363,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.2s Real=0.2s Sys=0s
+  User=0.19s Real=0.2s Sys=0s
 #
 # pi+ at 1 GeV in Cu
 #
@@ -2298,7 +2416,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.1s Real=0.1s Sys=0.01s
+  User=0.16s Real=0.16s Sys=0.01s
 #
 # pi- at 1 GeV in Cu
 #
@@ -2351,7 +2469,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.15s Real=0.15s Sys=0s
+  User=0.1s Real=0.1s Sys=0s
 #
 # proton at 1 GeV in Si
 #
@@ -2360,6 +2478,12 @@ Run Summary
 /mydet/SelectMaterial Si
 SimpleBox is now made of Si
 /run/beamOn 20
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -2751,7 +2875,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.07s Real=0.08s Sys=0s
+  User=0.05s Real=0.06s Sys=0s
 #
 # neutron at 1 GeV in Si
 #
@@ -2809,7 +2933,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.05s Sys=0s
+  User=0.07s Real=0.07s Sys=0s
 #
 # pi+ at 1 GeV in Si
 #
@@ -2867,7 +2991,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.05s Sys=0s
+  User=0.06s Real=0.06s Sys=0s
 #
 # pi- at 1 GeV in Si
 #
@@ -2925,7 +3049,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.05s Sys=0s
+  User=0.07s Real=0.07s Sys=0s
 #
 # proton at 1 GeV in C
 #
@@ -2934,6 +3058,12 @@ Run Summary
 /mydet/SelectMaterial C
 SimpleBox is now made of C
 /run/beamOn 20
+G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
+G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -3330,7 +3460,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 # neutron at 1 GeV in C
 #
@@ -3393,7 +3523,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 # pi+ at 1 GeV in C
 #
@@ -3456,7 +3586,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0.03s Real=0.02s Sys=0s
 #
 # pi- at 1 GeV in C
 #
@@ -3519,7 +3649,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.01s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # Deuteron at 1 GeV/nucleon on Pb
 #
@@ -3582,7 +3712,7 @@ Index : 5     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=1s Real=1s Sys=0s
+  User=0.83s Real=0.85s Sys=0s
 #
 # Alpha at 500 MeV/nucleon on Pb
 #
@@ -3642,10 +3772,11 @@ Index : 5     used in the geometry : No
 ====================================================================
 
 ### Run 25 starts.
+[INCL++] Warning: energy conservation violated by 34.1006 MeV in 1434.69-MeV alpha + Pb208 inelastic reaction, in direct kinematics. Will resample.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.48s Real=0.48s Sys=0s
+  User=0.6s Real=0.6s Sys=0s
 #
 # Carbon at 290 MeV/nucleon on C
 #
@@ -3706,10 +3837,12 @@ Index : 5     used in the geometry : Yes
 ====================================================================
 
 ### Run 26 starts.
+[INCL++] Warning: energy conservation violated by 36.3181 MeV in 609.726-MeV alpha + C12 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 36.3181 MeV in 1039.24-MeV alpha + C12 inelastic reaction, in direct kinematics. Will resample.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.03s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 #
 # Carbon at 500 MeV/nucleon on Pb
 #
@@ -3772,7 +3905,7 @@ Index : 5     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.42s Real=0.42s Sys=0.01s
+  User=0.26s Real=0.26s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -3781,9 +3914,10 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
+Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 2 Mb
+Dynamic pools deleted: 12 / Total memory freed: 8.8 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

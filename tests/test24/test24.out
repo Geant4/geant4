@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -255,6 +255,19 @@ hIoni:   for  pi-    SubType= 2
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
 
 ---------------------------------------------------
+                           Hadronic Processes for alpha
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 110 MeV
+        Model:                  QMDModel: 100 MeV ---> 10 GeV
+        Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
                            Hadronic Processes for anti_neutron
 
   Process: hadElastic
@@ -275,6 +288,19 @@ hIoni:   for  pi-    SubType= 2
 
   Process: inelastic
         Model:           TheoFSGenerator: 0 eV  ---> 100 TeV
+        Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+---------------------------------------------------
+                           Hadronic Processes for deuteron
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 110 MeV
+        Model:                  QMDModel: 100 MeV ---> 10 GeV
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
@@ -367,6 +393,19 @@ hIoni:   for  pi-    SubType= 2
         Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
 
+---------------------------------------------------
+                           Hadronic Processes for triton
+
+  Process: hadElastic
+        Model:              hElasticLHEP: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: inelastic
+        Model:  Binary Light Ion Cascade: 0 eV  ---> 110 MeV
+        Model:                  QMDModel: 100 MeV ---> 10 GeV
+        Model:           TheoFSGenerator: 19 GeV ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
 ================================================================
 
 Region <DefaultRegionForTheWorld> --  -- appears in <SPhys> world volume
@@ -402,7 +441,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.57s Real=3.61s Sys=0.01s
+  User=3.43s Real=3.49s Sys=0.03s
 #
 # neutron at 10 GeV in U
 #
@@ -440,7 +479,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.27s Real=3.38s Sys=0.01s
+  User=3.2s Real=3.45s Sys=0.02s
 #
 # pi+ at 10 GeV in U
 #
@@ -478,7 +517,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.83s Real=2.9s Sys=0.01s
+  User=2.79s Real=2.95s Sys=0.01s
 #
 # pi- at 10 GeV in U
 #
@@ -516,7 +555,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3s Real=3.01s Sys=0s
+  User=2.64s Real=2.67s Sys=0.02s
 #
 # proton at 10 GeV in Cu
 #
@@ -778,7 +817,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.82s Real=0.82s Sys=0.01s
+  User=0.75s Real=0.75s Sys=0s
 #
 # neutron at 10 GeV in Cu
 #
@@ -821,7 +860,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.83s Real=0.84s Sys=0s
+  User=0.81s Real=0.82s Sys=0.01s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -864,7 +903,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.83s Real=0.83s Sys=0.01s
+  User=0.81s Real=0.82s Sys=0s
 #
 # pi- at 10 GeV in Cu
 #
@@ -907,7 +946,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.79s Real=0.8s Sys=0s
+  User=0.78s Real=0.78s Sys=0s
 #
 # proton at 10 GeV in Si
 #
@@ -1174,7 +1213,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.31s Real=0.31s Sys=0s
+  User=0.29s Real=0.3s Sys=0s
 #
 # neutron at 10 GeV in Si
 #
@@ -1222,7 +1261,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.3s Real=0.3s Sys=0s
+  User=0.3s Real=0.29s Sys=0s
 #
 # pi+ at 10 GeV in Si
 #
@@ -1270,7 +1309,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.29s Real=0.3s Sys=0s
+  User=0.28s Real=0.28s Sys=0s
 #
 # pi- at 10 GeV in Si
 #
@@ -1318,7 +1357,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.28s Real=0.28s Sys=0s
+  User=0.27s Real=0.27s Sys=0s
 #
 # proton at 10 GeV in Carbon
 #
@@ -1591,7 +1630,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.2s Real=0.2s Sys=0s
+  User=0.19s Real=0.19s Sys=0s
 #
 # neutron at 10 GeV in Carbon
 #
@@ -1753,7 +1792,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.17s Real=0.17s Sys=0s
+  User=0.16s Real=0.17s Sys=0s
 #
 # proton at 10 GeV in Beryllium
 #
@@ -2031,7 +2070,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.19s Sys=0s
+  User=0.18s Real=0.18s Sys=0s
 #
 # neutron at 10 GeV in Beryllium
 #
@@ -2149,7 +2188,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.19s Sys=0s
+  User=0.18s Real=0.18s Sys=0s
 #
 # pi- at 10 GeV in Beryllium
 #
@@ -2208,7 +2247,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.2s Real=0.19s Sys=0s
+  User=0.19s Real=0.19s Sys=0s
 #
 # proton at 10 GeV in H
 #
@@ -2689,9 +2728,10 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
+Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.68 Mb
+Dynamic pools deleted: 12 / Total memory freed: 1.7 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

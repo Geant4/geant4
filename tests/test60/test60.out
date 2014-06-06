@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -65,7 +65,7 @@ Available colours:
            deuteron,                 e+,                 e-,              gamma
            geantino,             helium,           hydrogen,               iron
            nitrogen,      opticalphoton,             oxygen,             proton
-             triton,
+            silicon,             triton,
 /run/particle/dumpCutValues
 #
 /gun/direction 0 0 1
@@ -87,7 +87,7 @@ DNABornExcitationModel :  Emin=        0 eV    Emax=        1 MeV
 DNAIonisation:   for  e-    SubType= 53
  Total cross sections computed from DNABornIonisationModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNABornIonisationModel :  Emin=        0 eV    Emax=        1 MeV
+DNABornIonisationModel :  Emin=        0 eV    Emax=        1 MeV   deltaBorn
 
 DNAVibrationalExcitation:   for  e-    SubType= 54
  Total cross sections computed from DNASancheExcitationModel
@@ -108,8 +108,8 @@ DNABornExcitationModel :  Emin=      500 keV   Emax=      100 MeV
 DNAIonisation:   for  proton    SubType= 53
  Total cross sections computed from DNARuddIonisationModel and DNABornIonisationModel models
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      500 keV
-DNABornIonisationModel :  Emin=      500 keV   Emax=      100 MeV
+DNARuddIonisationModel :  Emin=        0 eV    Emax=      500 keV   deltaRudd
+DNABornIonisationModel :  Emin=      500 keV   Emax=      100 MeV   deltaBorn
 
 DNAChargeDecrease:   for  proton    SubType= 56
  Total cross sections computed from DNADingfelderChargeDecreaseModel model
@@ -124,7 +124,7 @@ DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      400 MeV
 DNAIonisation:   for  alpha    SubType= 53
  Total cross sections computed from DNARuddIonisationModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-DNARuddIonisationModel :  Emin=        0 eV    Emax=      400 MeV
+DNARuddIonisationModel :  Emin=        0 eV    Emax=      400 MeV   deltaRudd
 
 DNAChargeDecrease:   for  alpha    SubType= 56
  Total cross sections computed from DNADingfelderChargeDecreaseModel model
@@ -146,7 +146,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.41s Real=0.42s Sys=0s
+  User=0.49s Real=0.49s Sys=0s
 
  The run consists of 1 e- of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -173,7 +173,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.29s Real=0.3s Sys=0s
+  User=0.39s Real=0.4s Sys=0s
 
  The run consists of 1 proton of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -200,7 +200,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.37s Real=0.38s Sys=0s
+  User=0.4s Real=0.39s Sys=0s
 
  The run consists of 1 hydrogen of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -227,7 +227,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.9s Real=0.9s Sys=0s
+  User=0.92s Real=0.93s Sys=0s
 
  The run consists of 1 alpha of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -254,7 +254,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.66s Real=0.66s Sys=0s
+  User=0.93s Real=0.93s Sys=0s
 
  The run consists of 1 alpha+ of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -281,7 +281,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.7s Real=0.7s Sys=0s
+  User=0.83s Real=0.83s Sys=0s
 
  The run consists of 1 helium of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -294,6 +294,7 @@ Visualization Manager deleting...
 G4 kernel has come to Quit state.
 G4DNAMolecularMaterial::Notify ---> received G4State_Quit
 G4DNAChemistryManager::Notify ---> received G4State_Quit
+Total navigation history collections cleaned: 4
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
 Dynamic pools deleted: 10 / Total memory freed: 0.28 Mb

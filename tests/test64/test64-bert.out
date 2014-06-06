@@ -1,11 +1,11 @@
- Initial seed = 1398782856
+ Initial seed = 1401983487
 
         ############################################
         !!! WARNING - FPE detection is activated !!!
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+ Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -28,15 +28,15 @@ Parsing line: BERT pi- G4_He 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.864707
+	 Final random number = 0.466713
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 10.175
+	 average multiplicity = 10.223
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.13957 GeV
-	 average sumEnergySecondaries = 0.111849 GeV
+	 average sumEnergySecondaries = 0.111824 GeV
 	 maxSumEnergySecondaries      = 0.118474 GeV
-	 minSumEnergySecondaries      = 0.109987 GeV
+	 minSumEnergySecondaries      = 0.109991 GeV
 	 -----------------------------------------
 
 Parsing line: BERT pi- G4_Be 1000
@@ -55,13 +55,13 @@ Parsing line: BERT pi- G4_Be 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.113354
+	 Final random number = 0.616714
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 14.342
+	 average multiplicity = 14.245
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.13957 GeV
-	 average sumEnergySecondaries = 0.103322 GeV
+	 average sumEnergySecondaries = 0.103124 GeV
 	 maxSumEnergySecondaries      = 0.119399 GeV
 	 minSumEnergySecondaries      = 0.0801552 GeV
 	 -----------------------------------------
@@ -82,15 +82,15 @@ Parsing line: BERT pi- G4_C  1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.670251
+	 Final random number = 0.790885
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 15.467
+	 average multiplicity = 15.451
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.13957 GeV
-	 average sumEnergySecondaries = 0.0950313 GeV
-	 maxSumEnergySecondaries      = 0.111191 GeV
-	 minSumEnergySecondaries      = 0.0668628 GeV
+	 average sumEnergySecondaries = 0.0945151 GeV
+	 maxSumEnergySecondaries      = 0.111287 GeV
+	 minSumEnergySecondaries      = 0.0626798 GeV
 	 -----------------------------------------
 
 Parsing line: BERT pi- G4_Al 1000
@@ -109,15 +109,15 @@ Parsing line: BERT pi- G4_Al 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.700255
+	 Final random number = 0.746582
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 14.952
+	 average multiplicity = 14.991
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.13957 GeV
-	 average sumEnergySecondaries = 0.0888915 GeV
+	 average sumEnergySecondaries = 0.0890312 GeV
 	 maxSumEnergySecondaries      = 0.116315 GeV
-	 minSumEnergySecondaries      = 0.039564 GeV
+	 minSumEnergySecondaries      = 0.045832 GeV
 	 -----------------------------------------
 
 Parsing line: BERT pi- G4_Ar 1000
@@ -136,15 +136,15 @@ Parsing line: BERT pi- G4_Ar 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.486482
+	 Final random number = 0.452549
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 15.607
+	 average multiplicity = 15.524
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.13957 GeV
-	 average sumEnergySecondaries = 0.0853572 GeV
-	 maxSumEnergySecondaries      = 0.118529 GeV
-	 minSumEnergySecondaries      = 0.0425687 GeV
+	 average sumEnergySecondaries = 0.0860882 GeV
+	 maxSumEnergySecondaries      = 0.126603 GeV
+	 minSumEnergySecondaries      = 0.0449673 GeV
 	 -----------------------------------------
 
 Parsing line: BERT pi- G4_Fe 1000
@@ -163,15 +163,15 @@ Parsing line: BERT pi- G4_Fe 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.442415
+	 Final random number = 0.281273
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 16.341
+	 average multiplicity = 16.284
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.13957 GeV
-	 average sumEnergySecondaries = 0.0878795 GeV
+	 average sumEnergySecondaries = 0.0868255 GeV
 	 maxSumEnergySecondaries      = 0.124577 GeV
-	 minSumEnergySecondaries      = 0.0459304 GeV
+	 minSumEnergySecondaries      = 0.0462635 GeV
 	 -----------------------------------------
 
 Parsing line: BERT pi- G4_Cu 1000
@@ -190,15 +190,15 @@ Parsing line: BERT pi- G4_Cu 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.990746
+	 Final random number = 0.484323
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 16.312
+	 average multiplicity = 16.378
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.13957 GeV
-	 average sumEnergySecondaries = 0.0905679 GeV
-	 maxSumEnergySecondaries      = 0.141009 GeV
-	 minSumEnergySecondaries      = 0.0499918 GeV
+	 average sumEnergySecondaries = 0.0910421 GeV
+	 maxSumEnergySecondaries      = 0.141064 GeV
+	 minSumEnergySecondaries      = 0.0411355 GeV
 	 -----------------------------------------
 
 Parsing line: BERT pi- G4_W  1000
@@ -217,15 +217,15 @@ Parsing line: BERT pi- G4_W  1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.759087
+	 Final random number = 0.19697
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 23.031
+	 average multiplicity = 23.182
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.13957 GeV
-	 average sumEnergySecondaries = 0.0929169 GeV
-	 maxSumEnergySecondaries      = 0.178423 GeV
-	 minSumEnergySecondaries      = 0.0470025 GeV
+	 average sumEnergySecondaries = 0.0913473 GeV
+	 maxSumEnergySecondaries      = 0.18788 GeV
+	 minSumEnergySecondaries      = 0.0452946 GeV
 	 -----------------------------------------
 
 Parsing line: BERT pi- G4_Pb 1000
@@ -244,14 +244,14 @@ Parsing line: BERT pi- G4_Pb 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.826767
+	 Final random number = 0.866762
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 21.958
+	 average multiplicity = 22.237
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.13957 GeV
-	 average sumEnergySecondaries = 0.0909401 GeV
-	 maxSumEnergySecondaries      = 0.198842 GeV
+	 average sumEnergySecondaries = 0.0905296 GeV
+	 maxSumEnergySecondaries      = 0.209416 GeV
 	 minSumEnergySecondaries      = 0.0415547 GeV
 	 -----------------------------------------
 
@@ -273,13 +273,13 @@ Parsing line: BERT kaon- G4_He 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.812091
+	 Final random number = 0.0207769
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 11.547
+	 average multiplicity = 11.721
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.493677 GeV
-	 average sumEnergySecondaries = 0.47469 GeV
+	 average sumEnergySecondaries = 0.474876 GeV
 	 maxSumEnergySecondaries      = 0.493688 GeV
 	 minSumEnergySecondaries      = 0.464099 GeV
 	 -----------------------------------------
@@ -300,15 +300,15 @@ Parsing line: BERT kaon- G4_Be 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.851165
+	 Final random number = 0.503799
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 15.107
+	 average multiplicity = 15.26
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.493677 GeV
-	 average sumEnergySecondaries = 0.469575 GeV
-	 maxSumEnergySecondaries      = 0.493348 GeV
-	 minSumEnergySecondaries      = 0.432969 GeV
+	 average sumEnergySecondaries = 0.4695 GeV
+	 maxSumEnergySecondaries      = 0.49372 GeV
+	 minSumEnergySecondaries      = 0.434125 GeV
 	 -----------------------------------------
 
 Parsing line: BERT kaon- G4_C  1000
@@ -327,15 +327,15 @@ Parsing line: BERT kaon- G4_C  1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.217596
+	 Final random number = 0.42412
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 16.582
+	 average multiplicity = 16.643
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.493677 GeV
-	 average sumEnergySecondaries = 0.460611 GeV
-	 maxSumEnergySecondaries      = 0.493775 GeV
-	 minSumEnergySecondaries      = 0.411027 GeV
+	 average sumEnergySecondaries = 0.460629 GeV
+	 maxSumEnergySecondaries      = 0.486501 GeV
+	 minSumEnergySecondaries      = 0.413817 GeV
 	 -----------------------------------------
 
 Parsing line: BERT kaon- G4_Al 1000
@@ -354,15 +354,15 @@ Parsing line: BERT kaon- G4_Al 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.123259
+	 Final random number = 0.718023
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 17.209
+	 average multiplicity = 17.103
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.493677 GeV
-	 average sumEnergySecondaries = 0.438423 GeV
-	 maxSumEnergySecondaries      = 0.49413 GeV
-	 minSumEnergySecondaries      = 0.35329 GeV
+	 average sumEnergySecondaries = 0.439146 GeV
+	 maxSumEnergySecondaries      = 0.48586 GeV
+	 minSumEnergySecondaries      = 0.340289 GeV
 	 -----------------------------------------
 
 Parsing line: BERT kaon- G4_Ar 1000
@@ -381,15 +381,15 @@ Parsing line: BERT kaon- G4_Ar 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.497675
+	 Final random number = 0.245345
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 18.968
+	 average multiplicity = 18.61
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.493677 GeV
-	 average sumEnergySecondaries = 0.423377 GeV
+	 average sumEnergySecondaries = 0.4273 GeV
 	 maxSumEnergySecondaries      = 0.487733 GeV
-	 minSumEnergySecondaries      = 0.282888 GeV
+	 minSumEnergySecondaries      = 0.31738 GeV
 	 -----------------------------------------
 
 Parsing line: BERT kaon- G4_Fe 1000
@@ -408,15 +408,15 @@ Parsing line: BERT kaon- G4_Fe 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.95763
+	 Final random number = 0.827944
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 19.916
+	 average multiplicity = 19.98
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.493677 GeV
-	 average sumEnergySecondaries = 0.417459 GeV
-	 maxSumEnergySecondaries      = 0.487778 GeV
-	 minSumEnergySecondaries      = 0.265417 GeV
+	 average sumEnergySecondaries = 0.417398 GeV
+	 maxSumEnergySecondaries      = 0.488071 GeV
+	 minSumEnergySecondaries      = 0.284032 GeV
 	 -----------------------------------------
 
 Parsing line: BERT kaon- G4_Cu 1000
@@ -435,15 +435,15 @@ Parsing line: BERT kaon- G4_Cu 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.257173
+	 Final random number = 0.83433
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 20.473
+	 average multiplicity = 20.338
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.493677 GeV
-	 average sumEnergySecondaries = 0.419861 GeV
+	 average sumEnergySecondaries = 0.420471 GeV
 	 maxSumEnergySecondaries      = 0.489989 GeV
-	 minSumEnergySecondaries      = 0.293529 GeV
+	 minSumEnergySecondaries      = 0.290163 GeV
 	 -----------------------------------------
 
 Parsing line: BERT kaon- G4_W  1000
@@ -462,15 +462,15 @@ Parsing line: BERT kaon- G4_W  1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.0485572
+	 Final random number = 0.623747
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 32.231
+	 average multiplicity = 31.699
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.493677 GeV
-	 average sumEnergySecondaries = 0.412925 GeV
-	 maxSumEnergySecondaries      = 0.534889 GeV
-	 minSumEnergySecondaries      = 0.308251 GeV
+	 average sumEnergySecondaries = 0.413842 GeV
+	 maxSumEnergySecondaries      = 0.537521 GeV
+	 minSumEnergySecondaries      = 0.2865 GeV
 	 -----------------------------------------
 
 Parsing line: BERT kaon- G4_Pb 1000
@@ -489,15 +489,15 @@ Parsing line: BERT kaon- G4_Pb 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.719993
+	 Final random number = 0.0838911
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 31.983
+	 average multiplicity = 31.963
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.493677 GeV
-	 average sumEnergySecondaries = 0.41353 GeV
-	 maxSumEnergySecondaries      = 0.565455 GeV
-	 minSumEnergySecondaries      = 0.299233 GeV
+	 average sumEnergySecondaries = 0.41574 GeV
+	 maxSumEnergySecondaries      = 0.574651 GeV
+	 minSumEnergySecondaries      = 0.284796 GeV
 	 -----------------------------------------
 
 Parsing line: #
@@ -518,14 +518,14 @@ Parsing line: BERT sigma- G4_He 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.303829
+	 Final random number = 0.419582
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 11.126
+	 average multiplicity = 11.274
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.258449 GeV
-	 average sumEnergySecondaries = 0.234224 GeV
-	 maxSumEnergySecondaries      = 0.257005 GeV
+	 average sumEnergySecondaries = 0.234443 GeV
+	 maxSumEnergySecondaries      = 0.257895 GeV
 	 minSumEnergySecondaries      = 0.228306 GeV
 	 -----------------------------------------
 
@@ -545,13 +545,13 @@ Parsing line: BERT sigma- G4_Be 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.556006
+	 Final random number = 0.732374
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 14.27
+	 average multiplicity = 14.138
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.258449 GeV
-	 average sumEnergySecondaries = 0.242222 GeV
+	 average sumEnergySecondaries = 0.241934 GeV
 	 maxSumEnergySecondaries      = 0.257927 GeV
 	 minSumEnergySecondaries      = 0.198469 GeV
 	 -----------------------------------------
@@ -572,13 +572,13 @@ Parsing line: BERT sigma- G4_C  1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.0563906
+	 Final random number = 0.325205
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 15.456
+	 average multiplicity = 15.374
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.258449 GeV
-	 average sumEnergySecondaries = 0.231146 GeV
+	 average sumEnergySecondaries = 0.232283 GeV
 	 maxSumEnergySecondaries      = 0.257982 GeV
 	 minSumEnergySecondaries      = 0.164527 GeV
 	 -----------------------------------------
@@ -599,15 +599,15 @@ Parsing line: BERT sigma- G4_Al 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.3778
+	 Final random number = 0.484087
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 15.638
+	 average multiplicity = 15.574
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.258449 GeV
-	 average sumEnergySecondaries = 0.218968 GeV
+	 average sumEnergySecondaries = 0.221034 GeV
 	 maxSumEnergySecondaries      = 0.258337 GeV
-	 minSumEnergySecondaries      = 0.124744 GeV
+	 minSumEnergySecondaries      = 0.126205 GeV
 	 -----------------------------------------
 
 Parsing line: BERT sigma- G4_Ar 1000
@@ -626,15 +626,15 @@ Parsing line: BERT sigma- G4_Ar 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.339755
+	 Final random number = 0.287467
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 16.311
+	 average multiplicity = 16.442
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.258449 GeV
-	 average sumEnergySecondaries = 0.213466 GeV
+	 average sumEnergySecondaries = 0.212292 GeV
 	 maxSumEnergySecondaries      = 0.258737 GeV
-	 minSumEnergySecondaries      = 0.117601 GeV
+	 minSumEnergySecondaries      = 0.105828 GeV
 	 -----------------------------------------
 
 Parsing line: BERT sigma- G4_Fe 1000
@@ -653,15 +653,15 @@ Parsing line: BERT sigma- G4_Fe 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.566122
+	 Final random number = 0.959957
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 17.192
+	 average multiplicity = 17.159
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.258449 GeV
-	 average sumEnergySecondaries = 0.210626 GeV
-	 maxSumEnergySecondaries      = 0.259924 GeV
-	 minSumEnergySecondaries      = 0.117524 GeV
+	 average sumEnergySecondaries = 0.212673 GeV
+	 maxSumEnergySecondaries      = 0.260441 GeV
+	 minSumEnergySecondaries      = 0.109944 GeV
 	 -----------------------------------------
 
 Parsing line: BERT sigma- G4_Cu 1000
@@ -680,15 +680,15 @@ Parsing line: BERT sigma- G4_Cu 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.107765
+	 Final random number = 0.938182
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 17.811
+	 average multiplicity = 17.424
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.258449 GeV
-	 average sumEnergySecondaries = 0.210678 GeV
-	 maxSumEnergySecondaries      = 0.261629 GeV
-	 minSumEnergySecondaries      = 0.11598 GeV
+	 average sumEnergySecondaries = 0.21403 GeV
+	 maxSumEnergySecondaries      = 0.261688 GeV
+	 minSumEnergySecondaries      = 0.115808 GeV
 	 -----------------------------------------
 
 Parsing line: BERT sigma- G4_W  1000
@@ -707,15 +707,15 @@ Parsing line: BERT sigma- G4_W  1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.0596235
+	 Final random number = 0.222759
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 26.217
+	 average multiplicity = 25.855
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.258449 GeV
-	 average sumEnergySecondaries = 0.21082 GeV
-	 maxSumEnergySecondaries      = 0.26877 GeV
-	 minSumEnergySecondaries      = 0.116134 GeV
+	 average sumEnergySecondaries = 0.214011 GeV
+	 maxSumEnergySecondaries      = 0.293233 GeV
+	 minSumEnergySecondaries      = 0.117192 GeV
 	 -----------------------------------------
 
 Parsing line: BERT sigma- G4_Pb 1000
@@ -734,14 +734,15 @@ Parsing line: BERT sigma- G4_Pb 1000
 	 Start event loop...
 	 	 -> Event 0
 	 End event loop.
-	 Final random number = 0.756645
+	 Final random number = 0.659588
 	 -------------  RUN SUMMARY  -------------
-	 average multiplicity = 23.711
+	 average multiplicity = 24.363
 	 countOverProduction  = 0
 	 countUnderProduction = 0
 	 initialTotalEnergy           = 0.258449 GeV
-	 average sumEnergySecondaries = 0.212022 GeV
-	 maxSumEnergySecondaries      = 0.303968 GeV
-	 minSumEnergySecondaries      = 0.117287 GeV
+	 average sumEnergySecondaries = 0.209504 GeV
+	 maxSumEnergySecondaries      = 0.297433 GeV
+	 minSumEnergySecondaries      = 0.111705 GeV
 	 -----------------------------------------
 
+Total navigation history collections cleaned: 29
