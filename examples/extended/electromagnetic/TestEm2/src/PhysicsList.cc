@@ -54,8 +54,6 @@
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
-#include "G4Threading.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() 
@@ -94,7 +92,7 @@ void PhysicsList::ConstructParticle()
 
 void PhysicsList::ConstructProcess()
 {
-  if (verboseLevel>-1) {
+  if (verboseLevel > -1) {
     G4cout << "PhysicsList::ConstructProcess start" << G4endl;
   }
   // transportation
@@ -206,15 +204,7 @@ void PhysicsList::AddStepMax()
 
 void PhysicsList::SetCuts()
 {
-#ifdef G4MULTITHREADED
-  if(G4Threading::IsWorkerThread()) {
-    if(verboseLevel>1) { DumpCutValuesTable(); }
-  } else {
-    if(verboseLevel>0) { DumpCutValuesTable(); }
-  }
-#else
-  if(verboseLevel>0) { DumpCutValuesTable(); }
-#endif
+  if (verboseLevel > 0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
