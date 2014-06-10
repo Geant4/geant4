@@ -18,6 +18,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+06 June 14: V.Ivanchenko (emstand-V10-00-30)
+- G4WentzelVIModel - removed extra printout at initialisation
+
 03 June 14: V.Ivanchenko (emstand-V10-00-29)
 - G4WentzelVIModel - SetSingleScattering Factor is moded to source
     with attempt to fix compillation problem for strict compiler
@@ -62,7 +65,8 @@ committal in the CVS repository !
 
 03 April 14: V.Ivanchenko (emstand-V10-00-23)
 - G4WentzelVIModel - optimized transition between multiple and single 
-  scattering modes
+    scattering modes; changed order of displacement and angular 
+    deflection (second order effect)
 - G4WentzelOKandVIxSection - some cleanup for sampling
 - G4IonCoulombScatteringModel - fixed for scattering off Hydrogen
 

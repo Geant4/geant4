@@ -135,12 +135,12 @@ void G4WentzelVIModel::Initialise(const G4ParticleDefinition* p,
 
   //G4cout << "G4WentzelVIModel::Initialise " << p->GetParticleName() << G4endl;
   wokvi->Initialise(p, cosThetaMax);
-    
+  /*    
   G4cout << "G4WentzelVIModel: " << particle->GetParticleName()
          << "  1-cos(ThetaLimit)= " << 1 - cosThetaMax 
 	 << " SingScatFactor= " << ssFactor
 	 << G4endl;
-  
+  */
   currentCuts = &cuts;
 
   // set values of some data members
@@ -366,7 +366,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
   // initialisation of single scattering x-section
   xtsec = 0.0;
   cosThetaMin = 1.0;
-  /*      
+  /*        
   G4cout << "ComputeTrueStepLength: Step= " << geomStepLength 
 	 << "  Lambda= " <<  lambdaeff 
   	 << " 1-cosThetaMaxNuc= " << 1 - cosTetMaxNuc << G4endl;
@@ -383,6 +383,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
     // small step use only single scattering
     static const G4double singleScatLimit = 1.0e-7;
     if(geomStepLength < lambdaeff*singleScatLimit*(1.0 - cosTetMaxNuc)) {
+      //if(geomStepLength < lambdaeff*2.0e-7) {
       singleScatteringMode = true;
       zPathLength  = geomStepLength;
       tPathLength  = geomStepLength;
@@ -450,7 +451,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
   G4cout << particle->GetParticleName() << " 1-cosThetaMin= " << 1-cosThetaMin
 	 << " 1-cosTetMaxNuc= " << 1-cosTetMaxNuc 
 	 << " e(MeV)= " << preKinEnergy/MeV << "  "  
-	 << singleScatteringMode << G4endl;
+	 << " SSmode= " << singleScatteringMode << G4endl;
   */
   return tPathLength;
 }
@@ -540,10 +541,10 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
   G4double x2 = x0;
   G4double step, z;
   G4bool singleScat;
-  /*    
+  /*      
     G4cout << "Start of the loop x1(mm)= " << x1 << "  x2(mm)= " << x2 
-    << " 1-cost1= " << 1 - cosThetaMin << "  " << singleScatteringMode 
-	   << " xtsec= " << xtsec << "  "  << nMscSteps << G4endl;
+    << " 1-cost1= " << 1 - cosThetaMin << " SSmode= " << singleScatteringMode 
+	   << " xtsec= " << xtsec << " Nst= "  << nMscSteps << G4endl;
   */
   do {
 
