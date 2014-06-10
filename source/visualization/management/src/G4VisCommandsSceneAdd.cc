@@ -985,6 +985,10 @@ G4VisCommandSceneAddLogicalVolume::G4VisCommandSceneAddLogicalVolume () {
   parameter = new G4UIparameter ("readout-flag", 'b', omitable = true);
   parameter -> SetDefaultValue (true);
   fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("axes-flag", 'b', omitable = true);
+  parameter -> SetDefaultValue (true);
+  parameter -> SetGuidance ("Set \"false\" to suppress axes.");
+  fpCommand -> SetParameter (parameter);
 }
 
 G4VisCommandSceneAddLogicalVolume::~G4VisCommandSceneAddLogicalVolume () {
@@ -1011,13 +1015,14 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
 
   G4String name;
   G4int requestedDepthOfDescent;
-  G4String booleansString, voxelsString, readoutString;
+  G4String booleansString, voxelsString, readoutString, axesString;
   std::istringstream is (newValue);
   is >> name >> requestedDepthOfDescent
-     >>  booleansString >> voxelsString >> readoutString;
+     >>  booleansString >> voxelsString >> readoutString >> axesString;
   G4bool booleans = G4UIcommand::ConvertToBool(booleansString);
   G4bool voxels = G4UIcommand::ConvertToBool(voxelsString);
   G4bool readout = G4UIcommand::ConvertToBool(readoutString);
+  G4bool axes = G4UIcommand::ConvertToBool(axesString);
 
   G4LogicalVolumeStore *pLVStore = G4LogicalVolumeStore::GetInstance();
   int nLV = pLVStore -> size ();
@@ -1067,17 +1072,18 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
 
   if (successful) {
 
-    // Draw axes
-    const G4double radius = model->GetExtent().GetExtentRadius();
-    const G4double axisLengthMax = radius / 2.;
-    const G4double intLog10Length = std::floor(std::log10(axisLengthMax));
-    G4double axisLength = std::pow(10,intLog10Length);
-    if (5.*axisLength < axisLengthMax) axisLength *= 5.;
-    else if (2.*axisLength < axisLengthMax) axisLength *= 2.;
-    const G4double axisWidth = axisLength / 20.;
-    G4VModel* axesModel = new G4AxesModel(0.,0.,0.,axisLength,axisWidth);
-    pScene -> AddRunDurationModel (axesModel, warn);
-    
+    if (axes) {
+      const G4double radius = model->GetExtent().GetExtentRadius();
+      const G4double axisLengthMax = radius / 2.;
+      const G4double intLog10Length = std::floor(std::log10(axisLengthMax));
+      G4double axisLength = std::pow(10,intLog10Length);
+      if (5.*axisLength < axisLengthMax) axisLength *= 5.;
+      else if (2.*axisLength < axisLengthMax) axisLength *= 2.;
+      const G4double axisWidth = axisLength / 20.;
+      G4VModel* axesModel = new G4AxesModel(0.,0.,0.,axisLength,axisWidth);
+      pScene -> AddRunDurationModel (axesModel, warn);
+    }
+
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Logical volume \"" << pLV -> GetName ()
 	     << " with requested depth of descent "

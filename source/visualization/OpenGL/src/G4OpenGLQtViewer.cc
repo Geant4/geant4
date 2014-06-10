@@ -4019,16 +4019,16 @@ void G4OpenGLQtViewer::updateSceneTreeComponentTreeWidgetInfos() {
       }
 
     } else if(commandTmp->GetCommandName() == "defaultColour") {
-      params = QString().number(fVP.GetBackgroundColour().GetRed()) + "  "+
-      QString().number(fVP.GetBackgroundColour().GetGreen()) + "  "+
-      QString().number(fVP.GetBackgroundColour().GetBlue()) + "  "+
-      QString().number(fVP.GetBackgroundColour().GetAlpha());
-
+      params = QString().number(fVP.GetDefaultVisAttributes()->GetColor().GetRed()) + "  "+
+      QString().number(fVP.GetDefaultVisAttributes()->GetColor().GetGreen()) + "  "+
+      QString().number(fVP.GetDefaultVisAttributes()->GetColor().GetBlue()) + "  "+
+      QString().number(fVP.GetDefaultVisAttributes()->GetColor().GetAlpha());
+      
     } else if(commandTmp->GetCommandName() == "defaultTextColour") {
-      params = QString().number(fVP.GetBackgroundColour().GetRed()) + "  "+
-      QString().number(fVP.GetBackgroundColour().GetGreen()) + "  "+
-      QString().number(fVP.GetBackgroundColour().GetBlue()) + "  "+
-      QString().number(fVP.GetBackgroundColour().GetAlpha());
+      params = QString().number(fVP.GetDefaultTextVisAttributes()->GetColor().GetRed()) + "  "+
+      QString().number(fVP.GetDefaultTextVisAttributes()->GetColor().GetGreen()) + "  "+
+      QString().number(fVP.GetDefaultTextVisAttributes()->GetColor().GetBlue()) + "  "+
+      QString().number(fVP.GetDefaultTextVisAttributes()->GetColor().GetAlpha());
       
     } else if(commandTmp->GetCommandName() == "edge") {
       G4ViewParameters::DrawingStyle existingStyle = fVP.GetDrawingStyle();

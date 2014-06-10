@@ -313,6 +313,10 @@ G4VisCommandSpecify::G4VisCommandSpecify() {
   parameter = new G4UIparameter("readout-flag", 'b', omitable = true);
   parameter->SetDefaultValue(true);
   fpCommand->SetParameter(parameter);
+  parameter = new G4UIparameter("axes-flag", 'b', omitable = true);
+  parameter->SetDefaultValue(true);
+  parameter -> SetGuidance ("Set \"false\" to suppress axes.");
+  fpCommand->SetParameter(parameter);
 }
 
 G4VisCommandSpecify::~G4VisCommandSpecify() {

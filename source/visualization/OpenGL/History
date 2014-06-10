@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6th June 2014  Laurent Garnier (opengl-V10-00-08)
+- G4OpenGLQtViewer: Fix a problem in viewer/set parameters
+
 5th June 2014  Laurent Garnier (opengl-V10-00-07)
 - G4OpenGLStoredSceneHandler : Split AddPrimitivePreamble() in 3 functions to avoid 
   dynamic_cast (+20% faster in drawing)

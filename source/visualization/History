@@ -24,6 +24,23 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+6th June 2014  Laurent Garnier (vis-V10-00-06)
+- opengl-V10-00-08 :
+  o G4OpenGLQtViewer: Fix a problem in viewer/set parameters
+
+5th June 2014  Laurent Garnier  (vis-V10-00-05)
+- opengl-V10-00-07 :
+  o Speed improvments by avoiding a dynamic_cast
+  o New Viewer parameters info panel (DEV-151)
+- gMocren-V10-00-01
+  o FIX Problem 1585 - Memory leak in G4GMocrenFile.cc
+- visexternal-V10-00-00
+  o Fix a bad text in G4OpenGL2PSAction
+
+27th May 2014  John Allison
+- visman-V10-00-10: /vis/specify and /vis/scene/add/logicalVolume:
+  o Added flag for drawing/suppressing axes.
+
 19th May 2014  John Allison  (vis-V10-00-04)
 - modeling-V10-00-05:
   o Introduced G4TouchableDumpScene and G4PseudoScene.
