@@ -63,6 +63,11 @@ int main(int argc,char** argv) {
   // Construct the default run manager
 #ifdef G4MULTITHREADED
     G4MTRunManager* runManager = new G4MTRunManager;
+    // Number of threads can be defined via 3rd argument
+    if (argc==3) {
+      G4int nThreads = G4UIcommand::ConvertToInt(argv[2]);
+      if (nThreads > 0) runManager->SetNumberOfThreads(nThreads);
+    }
 #else
     G4VSteppingVerbose::SetInstance(new SteppingVerbose);
     G4RunManager* runManager = new G4RunManager;

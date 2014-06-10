@@ -15,7 +15,7 @@
 /testem/det/setSizeYZ 1 cm
 #
 /testem/phys/addPhysics  local
-/testem/phys/setCuts 1 km
+/run/setCut 1 km
 #
 /run/initialize
 #

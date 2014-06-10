@@ -14,11 +14,11 @@
 /testem/det/setSizeYZ 20 cm
 #
 /testem/phys/addPhysics  emstandard_opt0
-/testem/phys/setCuts 1 um
+/run/setCut 1 um
 #
 /run/initialize
 #
-/analysis/setFileName mu.1mm
+/analysis/setFileName mu_1mm
 /analysis/h1/set 1 100  500.  1000.  MeV
 /analysis/h1/set 2 100    0.    50.  MeV
 #

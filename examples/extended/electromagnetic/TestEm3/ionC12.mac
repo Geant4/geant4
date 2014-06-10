@@ -13,7 +13,7 @@
 #
 /testem/phys/addPhysics  local
 #
-/testem/phys/setCuts 1 mm
+/run/setCut 1 mm
 #
 /testem/det/setNbOfLayers 1
 /testem/det/setNbOfAbsor 1

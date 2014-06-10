@@ -19,7 +19,7 @@
 /testem/det/setAbsor 3 Aluminium 850 um
 /testem/det/setSizeYZ 1050 um
 #
-/testem/phys/setCuts 1 um
+/run/setCut 1 um
 #
 /run/initialize
 #

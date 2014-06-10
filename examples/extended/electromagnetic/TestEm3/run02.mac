@@ -15,7 +15,7 @@
 /testem/det/setAbsor 1 Tungsten 2 mm
 /testem/det/setAbsor 2 Silicon 0.3 mm
 #
-/testem/phys/setCuts 100 um
+/run/setCut 100 um
 #
 /run/initialize
 #

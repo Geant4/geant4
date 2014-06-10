@@ -16,7 +16,7 @@
 /testem/det/setSizeYZ  30 cm
 #
 /testem/phys/addPhysics  local
-/testem/phys/setCuts 10 um
+/run/setCut 10 um
 #
 /run/initialize
 #

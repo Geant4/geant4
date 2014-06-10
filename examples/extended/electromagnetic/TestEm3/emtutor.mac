@@ -11,7 +11,7 @@
 /testem/det/setAbsor 1 Aluminium 10 cm
 /testem/det/setSizeYZ 10 cm
 #
-/testem/phys/setCuts 2 cm
+/run/setCut 2 cm
 #
 /run/initialize
 #

@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+	 
+05-06-14 mma (testem3-V10-00-03)
+- replace /testem/phys/setCuts by /run/setCut
+ 
 28-04-14 V.Ivant (testem3-V10-00-02)
 - added "emlowenergy" option for EM physics 
      
