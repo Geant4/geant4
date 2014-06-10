@@ -328,7 +328,7 @@ G4bool G4MPImanager::CheckThreadStatus()
   unsigned qstatus = 0;
 
   if( is_master_ ) {
-    qstatus = unsigned(thread_id_);
+    qstatus = (thread_id_ != 0);
     // get slave status
     for ( G4int islave = 1; islave < size_; islave++ ) {
       MPI::Request request = COMM_G4COMMAND_.Irecv(&buff, 1, MPI::UNSIGNED,
@@ -339,7 +339,7 @@ G4bool G4MPImanager::CheckThreadStatus()
       qstatus |= buff;
     }
   } else {
-    buff = unsigned(thread_id_);
+    buff = (thread_id_ !=0);
     COMM_G4COMMAND_.Send(&buff, 1, MPI::UNSIGNED, kRANK_MASTER, kTAG_G4STATUS);
   }
 

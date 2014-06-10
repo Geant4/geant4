@@ -28,20 +28,19 @@ How to build
 ============
 Use CMake on Geant4 library installed with CMake build.
 
-Check `CMakeList.txt`, especially the following two variables
-should be taken care to match your MPI library.
-
-    eg.
-    set(CMAKE_CXX_COMPILER mpicxx)
-    # set(CMAKE_CXX_INCLUDE_PATH ) set if necessary
+This example requires G4mpi library to be installed
+(see examples/extended/parallel/MPI/source/REDME.md)
 
 Follow these commands,
 
     > mkdir build
     > cd build
-    > cmake -DGeant4_DIR=<your Geant4 install path>/lib64/Geant4-V.m.n ..
+    > cmake -DG4mpi_DIR=<where-G4mpi-wasintalled>/lib[64]/G4mpi -DCMAKE_CXX_COMPILER=mpicxx \
+      -DGeant4_DIR=<your Geant4 install path>/lib[64]/Geant4-V.m.n <path-to-source>
       (V.m.n is the version of Geant4, eg. Geant4-9.6.0)
     > make
     > make install
+
+Repalce mpicxx with your MPI-compiler wrapper
 
 */

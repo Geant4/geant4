@@ -10,7 +10,7 @@ project(exMPI01)
 find_package(MPI REQUIRED)
 
 # modify these variables if needed
-set(CMAKE_CXX_COMPILER mpicxx)
+#set(CMAKE_CXX_COMPILER mpicxx)
 #set(CMAKE_CXX_COMPILER mpiicpc)
 
 #set(CMAKE_CXX_INCLUDE_PATH )
@@ -26,25 +26,15 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
-if(NOT CMAKE_BUILD_TYPE)
-  set(CMAKE_BUILD_TYPE "RelWithDebInfo")
-endif()
+
+find_package(G4mpi REQUIRED)
+message(${G4mpi_INCLUDE_DIR})
+message(${G4mpi_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
 #
 include(${Geant4_USE_FILE})
-
-#----------------------------------------------------------------------------
-# Add G4mpi library
-#
-SET(Geant4_LIBRARIES ${Geant4_LIBRARIES} G4mpi)
-ADD_LIBRARY(G4mpi SHARED IMPORTED)
-SET_PROPERTY(TARGET G4mpi APPEND PROPERTY IMPORTED_CONFIGURATIONS RELEASE)
-SET_TARGET_PROPERTIES(G4mpi PROPERTIES
-  IMPORTED_LOCATION_RELEASE "${Geant4_DIR}/../libG4mpi.so"
-  IMPORTED_SONAME_RELEASE "libG4mpi.so"
-)
 
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
@@ -53,18 +43,16 @@ include_directories(${PROJECT_SOURCE_DIR}/include)
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${Geant4_INCLUDE_DIR})
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include
+			      ${Geant4_INCLUDE_DIR}
+			      ${G4mpi_INCLUDE_DIR})
 
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(exMPI01 exMPI01.cc ${sources} ${headers})
-target_link_libraries(exMPI01 ${Geant4_LIBRARIES})
-set_target_properties(exMPI01
-                      PROPERTIES INSTALL_RPATH
-                      ${Geant4_DIR}/..
-                      BUILD_WITH_INSTALL_RPATH TRUE)
+target_link_libraries(exMPI01 ${Geant4_LIBRARIES} ${G4mpi_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we

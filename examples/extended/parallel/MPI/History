@@ -9,6 +9,9 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 June 2014 A. Dotti (MPI-V10-00-00)
+- New CMake receipe: increase portability of the code
+ 
 10 Novembeer 2013 K. Murakami (MPI-V09-06-00)
 [source]
 - new coding guide line

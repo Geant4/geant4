@@ -225,23 +225,22 @@ from each other.</li>
 
 <p>Use CMake on Geant4 library installed with CMake build.</p>
 
-<p>Check <code>CMakeList.txt</code>, especially the following two variables
-should be taken care to match your MPI library.</p>
-
-<pre><code>eg.
-set(CMAKE_CXX_COMPILER mpicxx)
-# set(CMAKE_CXX_INCLUDE_PATH ) set if necessary
-</code></pre>
+<p>This example requires G4mpi library to be installed
+(see examples/extended/parallel/MPI/source/REDME.md)</p>
 
 <p>Follow these commands,</p>
 
+
 <pre><code>&gt; mkdir build
 &gt; cd build
-&gt; cmake -DGeant4_DIR=&lt;your Geant4 install path&gt;/lib64/Geant4-V.m.n ..
-  (V.m.n is the version of Geant4, eg. Geant4-9.6.0)
-&gt; make
+&gt; cmake -DG4mpi_DIR=&lt;where-G4mpi-wasintalled &gt;/lib[64]/G4mpi -DCMAKE_CXX_COMPILER=mpicxx \
+     -DGeant4_DIR=&lt;your Geant4 install path
+&gt;/lib[64]/Geant4-V.m.n &lt;path-to-source&gt;<
+      (V.m.n is the version of Geant4, eg. Geant4-9.6.0)
+&gt; make<
 &gt; make install
 </code></pre>
+
 
 </body>
 </html>
