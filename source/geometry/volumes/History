@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 10th, 2014 G.Cosmo                   - geomvol-V10-00-04
+- Avoid un-necessary clearing of navigation history levels in
+  G4NavigationHistory destructor.
+
 May 14th, 2014 G.Cosmo                    - geomvol-V10-00-03
 - Introduced pool G4NavigationHistoryPool for storage and reuse of
   navigation history levels collections.
