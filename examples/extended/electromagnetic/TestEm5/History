@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+07-06-14 mma (testem5-V10-00-06)
+- minor cleanup in PhysicsList::SetCuts()
+	 
 04-06-14 mma (testem5-V10-00-05)
 - rm plotHisto.kumac
 
