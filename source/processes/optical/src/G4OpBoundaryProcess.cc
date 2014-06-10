@@ -869,12 +869,35 @@ void G4OpBoundaryProcess::DielectricDichroic()
                        "A dichroic surface must have an associated G4Physics2DVector");
         }
 
-        if ( !G4BooleanRand(theTransmittance) ) // Not transmitted, so reflect
-           DoReflection();
-        else {
+        if ( !G4BooleanRand(theTransmittance) ) { // Not transmitted, so reflect
+
+           if ( theModel == glisur || theFinish == polished ) {
+              DoReflection();
+           } else {
+              ChooseReflection();
+              if ( theStatus == LambertianReflection ) {
+                 DoReflection();
+              } else if ( theStatus == BackScattering ) {
+                 NewMomentum = -OldMomentum;
+                 NewPolarization = -OldPolarization;
+              } else {
+                do {
+                   if (theStatus==LobeReflection)
+                      theFacetNormal = GetFacetNormal(OldMomentum,theGlobalNormal);
+                   G4double PdotN = OldMomentum * theFacetNormal;
+                   NewMomentum = OldMomentum - (2.*PdotN)*theFacetNormal;
+                } while (NewMomentum * theGlobalNormal <= 0.0);
+                G4double EdotN = OldPolarization * theFacetNormal;
+                NewPolarization = -OldPolarization + (2.*EdotN)*theFacetNormal;
+              }
+           }
+
+        } else {
+
            theStatus = Dichroic;
            NewMomentum = OldMomentum;
            NewPolarization = OldPolarization;
+
         }
 }
 

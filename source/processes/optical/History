@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6th June 2014 P. Gumplinger (op-V10-00-03)
+- implement the full UNIFIED reflectivity probabilities when a
+  dichroic surface reflects
+
 23rd December 2013 M. Asai (op-V10-00-02)
 - Additional protection.
 
