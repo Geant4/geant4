@@ -136,7 +136,8 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   preStepLambda = preStepKinEnergy = 0.0;
   mfpKinEnergy  = DBL_MAX;
 
-  idxLambda = idxLambdaPrim = currentCoupleIndex = 0;
+  idxLambda = idxLambdaPrim = currentCoupleIndex 
+    = basedCoupleIndex = 0;
 
   modelManager = new G4EmModelManager();
   biasManager  = 0;

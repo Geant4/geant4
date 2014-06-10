@@ -262,7 +262,7 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 
   theCuts = theSubCuts = 0;
   currentMaterial = 0;
-  currentCoupleIndex = 0;
+  currentCoupleIndex  = basedCoupleIndex = 0;
   massRatio = fFactor = reduceFactor = chargeSqRatio = 1.0;
   preStepLambda = preStepScaledEnergy = fRange = 0.0;
 

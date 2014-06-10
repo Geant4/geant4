@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+6 June 14: V.Ivant (emutils-V10-00-26)
+- G4VEmProcess, G4VEnergyLossProcess - fixed Coverity reports
+
 6 June 14: V.Ivant (emutils-V10-00-25)
 - G4EmSaturation - removed fatal exception if proton is not 
     instantiated
@@ -129,8 +132,10 @@ committal in the CVS repository !
     - general cleanup including: removed old commented code; use std::min
       and std::max instead of "if" where possible; use G4Log;
       reduced number of division 
-- G4LossTableManager - minor change of ionisation for charm and bottom mesons
-
+- G4LossTableManager - minor change of ionisation for charm and bottom mesons;
+    do not recompute x-section if a process is shared between particle and 
+    anti-particles;
+    
 21 February 14: V.Ivant (emutils-V10-00-03)
 - G4VMultipleScattering - added possibility to build extra table for a model
 
