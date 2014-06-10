@@ -37,6 +37,12 @@
 //
 // CHANGE HISTORY
 // --------------
+// 06/06/2014 A Dotti
+//    Note on thread safety: added a mutex to protect access to shared
+//    resources (data members).
+//    Getters and Setters are mutex'd but not the GetRand* methods,
+//    because it is assumed these are called only during the event loop
+//    during which the status of this class is invariant.
 //
 // 26/10/2004 F Lei
 //    Created separated the theta, phi generators for position distributions.
@@ -134,6 +140,7 @@
 
 #include "G4PhysicsOrderedFreeVector.hh"
 #include "G4DataInterpolation.hh"
+#include "G4Threading.hh"
 
 class G4SPSRandomGenerator {
 public:
@@ -160,26 +167,15 @@ public:
 	G4double GenRandPosTheta();
 	G4double GenRandPosPhi();
 
-	inline void SetIntensityWeight(G4double weight) {
-		bweights[8] = weight;
-	}
-	;
+    void SetIntensityWeight(G4double weight);
 
-	inline G4double GetBiasWeight() {
-		return bweights[0] * bweights[1] * bweights[2] * bweights[3]
-				* bweights[4] * bweights[5] * bweights[6] * bweights[7]
-				* bweights[8];
-	}
-	;
+    G4double GetBiasWeight();
 
 	// method to re-set the histograms
 	void ReSetHist(G4String);
 
 	// Set the verbosity level.
-	void SetVerbosity(G4int a) {
-		verbosityLevel = a;
-	}
-	;
+	void SetVerbosity(G4int a);
 
 private:
 
@@ -219,6 +215,7 @@ private:
 
 	G4PhysicsOrderedFreeVector ZeroPhysVector; // for re-set only
 
+    G4Mutex mutex; //protect shared resources
 };
 
 #endif

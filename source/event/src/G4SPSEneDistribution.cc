@@ -55,14 +55,15 @@
 #include "G4Exp.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
+#include "G4AutoLock.hh"
 
-G4SPSEneDistribution::G4SPSEneDistribution(): particle_definition(0), eneRndm(0), Splinetemp(0)
+G4SPSEneDistribution::G4SPSEneDistribution(): eneRndm(0), Splinetemp(0)
 {
 	//
 	// Initialise all variables
 	particle_energy = 1.0 * MeV;
 	EnergyDisType = "Mono";
-	weight = 1.;
+	weight=1.;
 	MonoEnergy = 1 * MeV;
 	Emin = 0.;
 	Emax = 1.e30;
@@ -101,6 +102,16 @@ G4SPSEneDistribution::G4SPSEneDistribution(): particle_definition(0), eneRndm(0)
     BBHist = NULL;
     Bbody_x = NULL;
 
+    threadLocal_t& data = threadLocalData.Get();
+    data.Emax = Emax;
+    data.Emin = Emin;
+    data.alpha =alpha;
+    data.cept = cept;
+    data.Ezero = Ezero;
+    data.grad = grad;
+    data.particle_energy = 0;
+    data.particle_definition = NULL;
+    data.weight = weight;
 }
 
 G4SPSEneDistribution::~G4SPSEneDistribution()
@@ -132,6 +143,7 @@ G4SPSEneDistribution::~G4SPSEneDistribution()
 }
 
 void G4SPSEneDistribution::SetEnergyDisType(G4String DisType) {
+    G4AutoLock l(&mutex);
 	EnergyDisType = DisType;
 	if (EnergyDisType == "User")
     {
@@ -149,51 +161,169 @@ void G4SPSEneDistribution::SetEnergyDisType(G4String DisType) {
 		IPDFEnergyExist = false;
 		EpnEnergyH = ZeroPhysVector;
 	}
+}
 
+G4String G4SPSEneDistribution::GetEnergyDisType()
+{
+    G4AutoLock l(&mutex);
+    return EnergyDisType;
 }
 
 void G4SPSEneDistribution::SetEmin(G4double emi) {
+    G4AutoLock l(&mutex);
 	Emin = emi;
+    threadLocalData.Get().Emin = Emin;
+}
+
+G4double G4SPSEneDistribution::GetEmin()
+{
+    return threadLocalData.Get().Emin;
+}
+
+G4double G4SPSEneDistribution::GetArbEmin()
+{
+    G4AutoLock l(&mutex);
+    return ArbEmin;
+}
+
+G4double G4SPSEneDistribution::GetArbEmax()
+{
+    G4AutoLock l(&mutex);
+    return ArbEmax;
 }
 
 void G4SPSEneDistribution::SetEmax(G4double ema) {
+    G4AutoLock l(&mutex);
 	Emax = ema;
+    threadLocalData.Get().Emax = Emax;
 }
 
+G4double G4SPSEneDistribution::GetEmax()
+{
+    return threadLocalData.Get().Emax;
+}
+
+
 void G4SPSEneDistribution::SetMonoEnergy(G4double menergy) {
+    G4AutoLock l(&mutex);
 	MonoEnergy = menergy;
 }
 
 void G4SPSEneDistribution::SetBeamSigmaInE(G4double e) {
+    G4AutoLock l(&mutex);
 	SE = e;
 }
 void G4SPSEneDistribution::SetAlpha(G4double alp) {
+    G4AutoLock l(&mutex);
 	alpha = alp;
+    threadLocalData.Get().alpha = alpha;
 }
 
 void G4SPSEneDistribution::SetBiasAlpha(G4double alp) {
+    G4AutoLock l(&mutex);
 	biasalpha = alp;
 	Biased = true;
 }
 
 void G4SPSEneDistribution::SetTemp(G4double tem) {
-	Temp = tem;
+	G4AutoLock l(&mutex);
+    Temp = tem;
 }
 
 void G4SPSEneDistribution::SetEzero(G4double eze) {
-	Ezero = eze;
+	G4AutoLock l(&mutex);
+    Ezero = eze;
+    threadLocalData.Get().Ezero = Ezero;
 }
 
 void G4SPSEneDistribution::SetGradient(G4double gr) {
-	grad = gr;
+	G4AutoLock l(&mutex);
+    grad = gr;
+    threadLocalData.Get().grad = grad;
 }
 
 void G4SPSEneDistribution::SetInterCept(G4double c) {
-	cept = c;
+	G4AutoLock l(&mutex);
+    cept = c;
+    threadLocalData.Get().cept = cept;
+}
+
+G4String G4SPSEneDistribution::GetIntType()
+{
+	G4AutoLock l(&mutex);
+    return IntType;
+}
+
+void G4SPSEneDistribution::SetBiasRndm(G4SPSRandomGenerator* a)
+{
+    G4AutoLock l(&mutex);
+    eneRndm = a;
+}
+
+void G4SPSEneDistribution::SetVerbosity(G4int a)
+{
+    G4AutoLock l(&mutex);
+    verbosityLevel = a;
+}
+
+G4double G4SPSEneDistribution::GetWeight()
+{
+    return threadLocalData.Get().weight;
+}
+
+G4double G4SPSEneDistribution::GetMonoEnergy()
+{
+    G4AutoLock l(&mutex);
+    return MonoEnergy;
+}
+
+G4double G4SPSEneDistribution::GetSE()
+{
+    G4AutoLock l(&mutex);
+    return SE;
+}
+
+G4double G4SPSEneDistribution::Getalpha()
+{
+    return threadLocalData.Get().alpha;
+}
+
+G4double G4SPSEneDistribution::GetEzero()
+{
+    return threadLocalData.Get().Ezero;
+}
+
+G4double G4SPSEneDistribution::GetTemp()
+{
+    G4AutoLock l(&mutex);
+    return Temp;
+}
+
+G4double G4SPSEneDistribution::Getgrad()
+{
+    return threadLocalData.Get().grad;
+}
+
+G4double G4SPSEneDistribution::Getcept()
+{
+    return threadLocalData.Get().cept;
+}
+
+G4PhysicsOrderedFreeVector G4SPSEneDistribution::GetUserDefinedEnergyHisto()
+{
+    G4AutoLock l(&mutex);
+    return UDefEnergyH;
+}
+
+G4PhysicsOrderedFreeVector G4SPSEneDistribution::GetArbEnergyHisto()
+{
+    G4AutoLock l(&mutex);
+    return ArbEnergyH;
 }
 
 void G4SPSEneDistribution::UserEnergyHisto(G4ThreeVector input) {
-	G4double ehi, val;
+	G4AutoLock l(&mutex);
+    G4double ehi, val;
 	ehi = input.x();
 	val = input.y();
 	if (verbosityLevel > 1) {
@@ -202,10 +332,12 @@ void G4SPSEneDistribution::UserEnergyHisto(G4ThreeVector input) {
 	}
 	UDefEnergyH.InsertValues(ehi, val);
 	Emax = ehi;
+    threadLocalData.Get().Emax = Emax;
 }
 
 void G4SPSEneDistribution::ArbEnergyHisto(G4ThreeVector input)
 {
+    G4AutoLock l(&mutex);
 	G4double ehi, val;
 	ehi = input.x();
 	val = input.y();
@@ -219,6 +351,7 @@ void G4SPSEneDistribution::ArbEnergyHisto(G4ThreeVector input)
 
 void G4SPSEneDistribution::ArbEnergyHistoFile(G4String filename)
 {
+    G4AutoLock l(&mutex);
 	std::ifstream infile(filename, std::ios::in);
 	if (!infile)
     {
@@ -233,6 +366,7 @@ void G4SPSEneDistribution::ArbEnergyHistoFile(G4String filename)
 
 void G4SPSEneDistribution::EpnEnergyHisto(G4ThreeVector input)
 {
+    G4AutoLock l(&mutex);
 	G4double ehi, val;
 	ehi = input.x();
 	val = input.y();
@@ -243,11 +377,13 @@ void G4SPSEneDistribution::EpnEnergyHisto(G4ThreeVector input)
 	}
 	EpnEnergyH.InsertValues(ehi, val);
 	Emax = ehi;
+    threadLocalData.Get().Emax = Emax;
 	Epnflag = true;
 }
 
 void G4SPSEneDistribution::Calculate()
 {
+    G4AutoLock l(&mutex);
 	if (EnergyDisType == "Cdg")
     {
 		CalculateCdgSpectrum();
@@ -262,6 +398,16 @@ void G4SPSEneDistribution::Calculate()
     }
 }
 
+//MT: Lock in caller
+void G4SPSEneDistribution::InitHists()
+{
+    BBHist = new std::vector<G4double>(10001, 0.0);
+    Bbody_x = new std::vector<G4double>(10001, 0.0);
+    histInit = true;
+}
+
+
+//MT: Lock in caller
 void G4SPSEneDistribution::CalculateCdgSpectrum()
 {
 	// This uses the spectrum from The INTEGRAL Mass Model (TIMM)
@@ -271,15 +417,15 @@ void G4SPSEneDistribution::CalculateCdgSpectrum()
 	G4double ene_line[3] = { 1. * keV, 18. * keV, 1E6 * keV };
 	G4int n_par;
 
-	ene_line[0] = Emin;
-	if (Emin < 18 * keV)
+	ene_line[0] = threadLocalData.Get().Emin;
+	if (threadLocalData.Get().Emin < 18 * keV)
     {
 		n_par = 2;
-		ene_line[2] = Emax;
-		if (Emax < 18 * keV)
+		ene_line[2] = threadLocalData.Get().Emax;
+		if (threadLocalData.Get().Emax < 18 * keV)
         {
 			n_par = 1;
-			ene_line[1] = Emax;
+			ene_line[1] = threadLocalData.Get().Emax;
 		}
 	}
     else
@@ -287,7 +433,7 @@ void G4SPSEneDistribution::CalculateCdgSpectrum()
 		n_par = 1;
 		pfact[0] = 112.;
 		spind[0] = 2.3;
-		ene_line[1] = Emax;
+		ene_line[1] = threadLocalData.Get().Emax;
 	}
 
 	// Create a cumulative histogram.
@@ -312,6 +458,7 @@ void G4SPSEneDistribution::CalculateCdgSpectrum()
 	}
 }
 
+//MT: Lock in caller
 void G4SPSEneDistribution::CalculateBbodySpectrum()
 {
 	// create bbody spectrum
@@ -321,7 +468,7 @@ void G4SPSEneDistribution::CalculateBbodySpectrum()
 	// Use photon density spectrum = 2 nu**2/c**2 * (std::exp(h nu/kT)-1)
 	// = 2 E**2/h**2c**2 times the exponential
     
-	G4double erange = Emax - Emin;
+	G4double erange = threadLocalData.Get().Emax - threadLocalData.Get().Emin;
 	G4double steps = erange / 10000.;
     
 	const G4double k = 8.6181e-11; //Boltzmann const in MeV/K
@@ -334,14 +481,14 @@ void G4SPSEneDistribution::CalculateBbodySpectrum()
 	BBHist->at(0) = 0.;
     
 	while (count < 10000) {
-		Bbody_x->at(count) = Emin + G4double(count * steps);
+		Bbody_x->at(count) = threadLocalData.Get().Emin + G4double(count * steps);
         G4double Bbody_y = (2. * std::pow(Bbody_x->at(count), 2.)) / (h2 * c2 * (std::exp(Bbody_x->at(count) / (k * Temp)) - 1.));
 		sum = sum + Bbody_y;
 		BBHist->at(count + 1) = BBHist->at(count) + Bbody_y;
         count++;
 	}
 
-	Bbody_x->at(10000) = Emax;
+	Bbody_x->at(10000) = threadLocalData.Get().Emax;
 	// Normalise cumulative histo.
 	count = 0;
 	while (count < 10001) {
@@ -351,6 +498,7 @@ void G4SPSEneDistribution::CalculateBbodySpectrum()
 }
 
 void G4SPSEneDistribution::InputEnergySpectra(G4bool value) {
+    G4AutoLock l(&mutex);
 	// Allows user to specifiy spectrum is momentum
 	EnergySpec = value; // false if momentum
 	if (verbosityLevel > 1)
@@ -358,6 +506,7 @@ void G4SPSEneDistribution::InputEnergySpectra(G4bool value) {
 }
 
 void G4SPSEneDistribution::InputDifferentialSpectra(G4bool value) {
+    G4AutoLock l(&mutex);
 	// Allows user to specify integral or differential spectra
 	DiffSpec = value; // true = differential, false = integral
 	if (verbosityLevel > 1)
@@ -365,8 +514,11 @@ void G4SPSEneDistribution::InputDifferentialSpectra(G4bool value) {
 }
 
 void G4SPSEneDistribution::ArbInterpolate(G4String IType) {
+    G4AutoLock l(&mutex);
 	if (EnergyDisType != "Arb")
-		G4cout << "Error: this is for arbitrary distributions" << G4endl;
+        G4Exception("G4SPSEneDistribution::ArbInterpolate",
+                    "Event0302",FatalException,
+			        "Error: this is for arbitrary distributions");
 	IntType = IType;
 	ArbEmax = ArbEnergyH.GetMaxLowEdgeEnergy();
 	ArbEmin = ArbEnergyH.GetMinLowEdgeEnergy();
@@ -382,6 +534,7 @@ void G4SPSEneDistribution::ArbInterpolate(G4String IType) {
 		SplineInterpolation();
 }
 
+//MT: Lock in caller
 void G4SPSEneDistribution::LinearInterpolation() {
 	// Method to do linear interpolation on the Arb points
 	// Calculate equation of each line segment, max 1024.
@@ -414,16 +567,19 @@ void G4SPSEneDistribution::LinearInterpolation() {
     {
 		// change currently stored values (emin etc) which are actually momenta
 		// to energies.
-		if (particle_definition == NULL)
+        G4ParticleDefinition* pdef =threadLocalData.Get().particle_definition;
+		if (pdef == NULL)
         {
-			G4cout << "Error: particle not defined" << G4endl;
+            G4Exception("G4SPSEneDistribution::LinearInterpolation",
+                        "Event0302",FatalException,
+                        "Error: particle not defined");
         }
 		else
         {
 			// Apply Energy**2 = p**2c**2 + m0**2c**4
 			// p should be entered as E/c i.e. without the division by c
 			// being done - energy equivalent.
-			G4double mass = particle_definition->GetPDGMass();
+			G4double mass = pdef->GetPDGMass();
 			// convert point to energy unit and its value to per energy unit
 			G4double total_energy;
 			for (count = 0; count < maxi; count++)
@@ -511,6 +667,7 @@ void G4SPSEneDistribution::LinearInterpolation() {
 	}
 }
 
+//MT: Lock in caller
 void G4SPSEneDistribution::LogInterpolation()
 {
 	// Interpolation based on Logarithmic equations
@@ -543,16 +700,19 @@ void G4SPSEneDistribution::LogInterpolation()
     {
 		// change currently stored values (emin etc) which are actually momenta
 		// to energies.
-		if (particle_definition == NULL)
+        G4ParticleDefinition* pdef = threadLocalData.Get().particle_definition;
+		if (pdef == NULL)
         {
-			G4cout << "Error: particle not defined" << G4endl;
+            G4Exception("G4SPSEneDistribution::LogInterpolation",
+                        "Event0302",FatalException,
+                        "Error: particle not defined");
         }
 		else
         {
 			// Apply Energy**2 = p**2c**2 + m0**2c**4
 			// p should be entered as E/c i.e. without the division by c
 			// being done - energy equivalent.
-			G4double mass = particle_definition->GetPDGMass();
+			G4double mass = pdef->GetPDGMass();
 			// convert point to energy unit and its value to per energy unit
 			G4double total_energy;
 			for (count = 0; count < maxi; count++)
@@ -647,6 +807,7 @@ void G4SPSEneDistribution::LogInterpolation()
     }
 }
 
+//MT: Lock in caller
 void G4SPSEneDistribution::ExpInterpolation()
 {
 	// Interpolation based on Exponential equations
@@ -680,16 +841,19 @@ void G4SPSEneDistribution::ExpInterpolation()
     {
 		// change currently stored values (emin etc) which are actually momenta
 		// to energies.
-		if (particle_definition == NULL)
+        G4ParticleDefinition* pdef = threadLocalData.Get().particle_definition;
+		if (pdef == NULL)
         {
-			G4cout << "Error: particle not defined" << G4endl;
+            G4Exception("G4SPSEneDistribution::ExpInterpolation",
+                        "Event0302",FatalException,
+                        "Error: particle not defined");
         }
 		else
         {
 			// Apply Energy**2 = p**2c**2 + m0**2c**4
 			// p should be entered as E/c i.e. without the division by c
 			// being done - energy equivalent.
-			G4double mass = particle_definition->GetPDGMass();
+			G4double mass = pdef->GetPDGMass();
 			// convert point to energy unit and its value to per energy unit
 			G4double total_energy;
 			for (count = 0; count < maxi; count++)
@@ -722,6 +886,9 @@ void G4SPSEneDistribution::ExpInterpolation()
 		}
         else
         {
+            G4Exception("G4SPSEneDistribution::ExpInterpolation",
+                        "Event0302",JustWarning,
+                        "Flat line segment: problem, setting to zero parameters.");
 			G4cout << "Flat line segment: problem" << G4endl;
 			Arb_ezero[i] = 0.;
 			Arb_Const[i] = 0.;
@@ -753,6 +920,7 @@ void G4SPSEneDistribution::ExpInterpolation()
     }
 }
 
+//MT: Lock in caller
 void G4SPSEneDistribution::SplineInterpolation()
 {
 	// Interpolation using Splines.
@@ -784,7 +952,8 @@ void G4SPSEneDistribution::SplineInterpolation()
 	if (EnergySpec == false) {
 		// change currently stored values (emin etc) which are actually momenta
 		// to energies.
-		if (particle_definition == NULL)
+        G4ParticleDefinition* pdef = threadLocalData.Get().particle_definition;
+		if (pdef == NULL)
                     G4Exception("G4SPSEneDistribution::SplineInterpolation",
                                 "Event0302",FatalException,
 			        "Error: particle not defined");
@@ -792,7 +961,7 @@ void G4SPSEneDistribution::SplineInterpolation()
 			// Apply Energy**2 = p**2c**2 + m0**2c**4
 			// p should be entered as E/c i.e. without the division by c
 			// being done - energy equivalent.
-			G4double mass = particle_definition->GetPDGMass();
+			G4double mass = pdef->GetPDGMass();
 			// convert point to energy unit and its value to per energy unit
 			G4double total_energy;
 			for (count = 0; count < maxi; count++) {
@@ -860,68 +1029,70 @@ void G4SPSEneDistribution::SplineInterpolation()
 
 void G4SPSEneDistribution::GenerateMonoEnergetic() {
 	// Method to generate MonoEnergetic particles.
-	particle_energy = MonoEnergy;
+    threadLocalData.Get().particle_energy = MonoEnergy;
 }
 
 void G4SPSEneDistribution::GenerateGaussEnergies() {
 	// Method to generate Gaussian particles.
-	particle_energy = G4RandGauss::shoot(MonoEnergy,SE);
-	if (particle_energy < 0) particle_energy = 0.;
+	G4double ene = G4RandGauss::shoot(MonoEnergy,SE);
+	if (ene < 0) ene = 0.;
+    threadLocalData.Get().particle_energy = ene;
 }
 
 void G4SPSEneDistribution::GenerateLinearEnergies(G4bool bArb = false) {
 	G4double rndm;
-	G4double emaxsq = std::pow(Emax, 2.); //Emax squared
-	G4double eminsq = std::pow(Emin, 2.); //Emin squared
-	G4double intersq = std::pow(cept, 2.); //cept squared
+    threadLocal_t& params = threadLocalData.Get();
+	G4double emaxsq = std::pow(params.Emax, 2.); //Emax squared
+	G4double eminsq = std::pow(params.Emin, 2.); //Emin squared
+	G4double intersq = std::pow(params.cept, 2.); //cept squared
 
 	if (bArb)
 		rndm = G4UniformRand();
 	else
 		rndm = eneRndm->GenRandEnergy();
 
-	G4double bracket = ((grad / 2.) * (emaxsq - eminsq) + cept * (Emax - Emin));
+	G4double bracket = ((params.grad / 2.) * (emaxsq - eminsq) + params.cept * (params.Emax - params.Emin));
 	bracket = bracket * rndm;
-	bracket = bracket + (grad / 2.) * eminsq + cept * Emin;
+	bracket = bracket + (params.grad / 2.) * eminsq + params.cept * params.Emin;
 	// Now have a quad of form m/2 E**2 + cE - bracket = 0
 	bracket = -bracket;
 	//  G4cout << "BRACKET" << bracket << G4endl;
-	if (grad != 0.)
+	if (params.grad != 0.)
     {
-		G4double sqbrack = (intersq - 4 * (grad / 2.) * (bracket));
+		G4double sqbrack = (intersq - 4 * (params.grad / 2.) * (bracket));
 		//      G4cout << "SQBRACK" << sqbrack << G4endl;
 		sqbrack = std::sqrt(sqbrack);
-		G4double root1 = -cept + sqbrack;
-		root1 = root1 / (2. * (grad / 2.));
+		G4double root1 = -params.cept + sqbrack;
+		root1 = root1 / (2. * (params.grad / 2.));
 
-		G4double root2 = -cept - sqbrack;
-		root2 = root2 / (2. * (grad / 2.));
+		G4double root2 = -params.cept - sqbrack;
+		root2 = root2 / (2. * (params.grad / 2.));
 
 		//      G4cout << root1 << " roots " << root2 << G4endl;
 
-		if (root1 > Emin && root1 < Emax)
+		if (root1 > params.Emin && root1 < params.Emax)
         {
-			particle_energy = root1;
+			params.particle_energy = root1;
         }
-		if (root2 > Emin && root2 < Emax)
+		if (root2 > params.Emin && root2 < params.Emax)
         {
-			particle_energy = root2;
+			params.particle_energy = root2;
         }
 	}
-    else if (grad == 0.)
+    else if (params.grad == 0.)
     {
 		// have equation of form cE - bracket =0
-		particle_energy = bracket / cept;
+		params.particle_energy = bracket / params.cept;
     }
 
-	if (particle_energy < 0.)
+	if (params.particle_energy < 0.)
     {
-		particle_energy = -particle_energy;
+		params.particle_energy = -params.particle_energy;
     }
 
 	if (verbosityLevel >= 1)
     {
-		G4cout << "Energy is " << particle_energy << G4endl;
+		G4cout << "Energy is " << params.particle_energy << G4endl;
     }
 }
 
@@ -932,9 +1103,11 @@ void G4SPSEneDistribution::GeneratePowEnergies(G4bool bArb = false)
 
 	G4double rndm;
 	G4double emina, emaxa;
-
-	emina = std::pow(Emin, alpha + 1);
-	emaxa = std::pow(Emax, alpha + 1);
+    
+    threadLocal_t& params = threadLocalData.Get();
+    
+	emina = std::pow(params.Emin, params.alpha + 1);
+	emaxa = std::pow(params.Emax, params.alpha + 1);
 
 	if (bArb)
     {
@@ -945,34 +1118,37 @@ void G4SPSEneDistribution::GeneratePowEnergies(G4bool bArb = false)
 		rndm = eneRndm->GenRandEnergy();
     }
 
-	if (alpha != -1.)
+	if (params.alpha != -1.)
     {
-		particle_energy = ((rndm * (emaxa - emina)) + emina);
-		particle_energy = std::pow(particle_energy, (1. / (alpha + 1.)));
+		G4double ene = ((rndm * (emaxa - emina)) + emina);
+		ene = std::pow(ene, (1. / (params.alpha + 1.)));
+        params.particle_energy = ene;
 	}
     else
     {
-		particle_energy = (std::log(Emin) + rndm * (std::log(Emax) - std::log(Emin)));
-		particle_energy = std::exp(particle_energy);
+		G4double ene = (std::log(params.Emin) + rndm * (std::log(params.Emax) - std::log(params.Emin)));
+		params.particle_energy = std::exp(ene);
 	}
 	if (verbosityLevel >= 1)
     {
-		G4cout << "Energy is " << particle_energy << G4endl;
+		G4cout << "Energy is " << params.particle_energy << G4endl;
     }
 }
 
-void G4SPSEneDistribution::GenerateBiasPowEnergies()
+void G4SPSEneDistribution::GenerateBiasPowEnergies()//G4double& ene,G4double& wweight)
 {
 	// Method to generate particle energies distributed as
 	// in biased power-law and calculate its weight
-
+    
+    threadLocal_t& params = threadLocalData.Get();
+    
     G4double rndm;
 	G4double emina, emaxa, emin, emax;
 
 	G4double normal = 1.;
 
-	emin = Emin;
-	emax = Emax;
+	emin = params.Emin;
+	emax = params.Emax;
 	//	if (EnergyDisType == "Arb") { 
 	//  emin = ArbEmin;
 	//  emax = ArbEmax;
@@ -984,21 +1160,22 @@ void G4SPSEneDistribution::GenerateBiasPowEnergies()
     {
         emina = std::pow(emin, biasalpha + 1);
         emaxa = std::pow(emax, biasalpha + 1);
-		particle_energy = ((rndm * (emaxa - emina)) + emina);
-		particle_energy = std::pow(particle_energy, (1. / (biasalpha + 1.)));
+		G4double ee = ((rndm * (emaxa - emina)) + emina);
+		params.particle_energy = std::pow(ee, (1. / (biasalpha + 1.)));
 		normal = 1./(1+biasalpha) * (emaxa - emina);
 	}
     else
     {
-		particle_energy = (std::log(emin) + rndm * (std::log(emax) - std::log(emin)));
-		particle_energy = std::exp(particle_energy);
+		G4double ee = (std::log(emin) + rndm * (std::log(emax) - std::log(emin)));
+		params.particle_energy = std::exp(ee);
 		normal = std::log(emax) - std::log(emin) ;
 	}
-	weight = GetProbability(particle_energy) / (std::pow(particle_energy,biasalpha)/normal);
+	params.weight = GetProbability(params.particle_energy)
+                  / (std::pow(params.particle_energy,biasalpha)/normal);
 
 	if (verbosityLevel >= 1)
     {
-		G4cout << "Energy is " << particle_energy << G4endl;
+		G4cout << "Energy is " << params.particle_energy << G4endl;
     }
 }
 
@@ -1017,10 +1194,11 @@ void G4SPSEneDistribution::GenerateExpEnergies(G4bool bArb = false)
 		rndm = eneRndm->GenRandEnergy();
     }
 
-	particle_energy = -Ezero * (std::log(rndm * (std::exp(-Emax / Ezero) - std::exp(-Emin / Ezero)) + std::exp(-Emin / Ezero)));
+    threadLocal_t& params = threadLocalData.Get();
+	params.particle_energy = -params.Ezero * (std::log(rndm * (std::exp(-params.Emax / params.Ezero) - std::exp(-params.Emin / params.Ezero)) + std::exp(-params.Emin / params.Ezero)));
 	if (verbosityLevel >= 1)
     {
-		G4cout << "Energy is " << particle_energy << G4endl;
+		G4cout << "Energy is " << params.particle_energy  << G4endl;
     }
 }
 
@@ -1033,35 +1211,41 @@ void G4SPSEneDistribution::GenerateBremEnergies()
 	G4double rndm;
 	rndm = eneRndm->GenRandEnergy();
 	G4double expmax, expmin, k;
-
+    
 	k = 8.6181e-11; // Boltzmann's const in MeV/K
 	G4double ksq = std::pow(k, 2.); // k squared
 	G4double Tsq = std::pow(Temp, 2.); // Temp squared
 
-	expmax = std::exp(-Emax / (k * Temp));
-	expmin = std::exp(-Emin / (k * Temp));
+    threadLocal_t& params = threadLocalData.Get();
+
+	expmax = std::exp(-params.Emax / (k * Temp));
+	expmin = std::exp(-params.Emin / (k * Temp));
 
 	// If either expmax or expmin are zero then this will cause problems
 	// Most probably this will be because T is too low or E is too high
 
 	if (expmax == 0.)
     {
-		G4cout << "*****EXPMAX=0. Choose different E's or Temp" << G4endl;
+        G4Exception("G4SPSEneDistribution::GenerateBremEnergies",
+                    "Event0302",FatalException,
+			        "*****EXPMAX=0. Choose different E's or Temp");
     }
 	if (expmin == 0.)
     {
-		G4cout << "*****EXPMIN=0. Choose different E's or Temp" << G4endl;
+        G4Exception("G4SPSEneDistribution::GenerateBremEnergies",
+                    "Event0302",FatalException,
+			        "*****EXPMIN=0. Choose different E's or Temp");
     }
 
-	G4double tempvar = rndm * ((-k) * Temp * (Emax * expmax - Emin * expmin) - (ksq * Tsq * (expmax - expmin)));
+	G4double tempvar = rndm * ((-k) * Temp * (params.Emax * expmax - params.Emin * expmin) - (ksq * Tsq * (expmax - expmin)));
 
-	G4double bigc = (tempvar - k * Temp * Emin * expmin - ksq * Tsq * expmin) / (-k * Temp);
+	G4double bigc = (tempvar - k * Temp * params.Emin * expmin - ksq * Tsq * expmin) / (-k * Temp);
 
 	// This gives an equation of form: Ee(-E/kT) + kTe(-E/kT) - C =0
 	// Solve this iteratively, step from Emin to Emax in 1000 steps
 	// and take the best solution.
 
-	G4double erange = Emax - Emin;
+	G4double erange = params.Emax - params.Emin;
 	G4double steps = erange / 1000.;
 	G4int i;
 	G4double etest, diff, err;
@@ -1070,7 +1254,7 @@ void G4SPSEneDistribution::GenerateBremEnergies()
 
 	for (i = 1; i < 1000; i++)
     {
-		etest = Emin + (i - 1) * steps;
+		etest = params.Emin + (i - 1) * steps;
 
 		diff = etest * (std::exp(-etest / (k * Temp))) + k * Temp * (std::exp(-etest / (k * Temp))) - bigc;
 
@@ -1082,12 +1266,12 @@ void G4SPSEneDistribution::GenerateBremEnergies()
 		if (diff < err)
         {
 			err = diff;
-			particle_energy = etest;
+			params.particle_energy = etest;
 		}
 	}
 	if (verbosityLevel >= 1)
     {
-		G4cout << "Energy is " << particle_energy << G4endl;
+		G4cout << "Energy is " << params.particle_energy << G4endl;
     }
 }
 
@@ -1101,10 +1285,15 @@ void G4SPSEneDistribution::GenerateBbodyEnergies()
 	G4int nabove, nbelow = 0, middle;
 	nabove = 10001;
 	rndm = eneRndm->GenRandEnergy();
-    if(!histCalcd)
+    G4AutoLock l(&mutex);
+    G4bool done = histCalcd;
+    l.unlock();
+    if(!done)
     {
-        Calculate();
+        Calculate(); //This is has a lock inside, risk is to do it twice
+        l.lock();
         histCalcd = true;
+        l.unlock();
     }
 
 	// Binary search to find bin that rndm is in
@@ -1149,10 +1338,10 @@ void G4SPSEneDistribution::GenerateBbodyEnergies()
 	t = (y2 - y1) / (x2 - x1);
 	q = y1 - t * x1;
 
-	particle_energy = (rndm - q) / t;
+	threadLocalData.Get().particle_energy = (rndm - q) / t;
 
 	if (verbosityLevel >= 1) {
-		G4cout << "Energy is " << particle_energy << G4endl;
+		G4cout << "Energy is " << threadLocalData.Get().particle_energy << G4endl;
 	}
 }
 
@@ -1166,25 +1355,26 @@ void G4SPSEneDistribution::GenerateCdgEnergies() {
 	G4double rndm, rndm2;
 	G4double ene_line[3];
 	G4double omalpha[2];
-	if (Emin < 18 * keV && Emax < 18 * keV)
+    threadLocal_t& params = threadLocalData.Get();
+	if (params.Emin < 18 * keV && params.Emax < 18 * keV)
     {
 		omalpha[0] = 1. - 1.4;
-		ene_line[0] = Emin;
-		ene_line[1] = Emax;
+		ene_line[0] = params.Emin;
+		ene_line[1] = params.Emax;
 	}
-	if (Emin < 18 * keV && Emax > 18 * keV)
+	if (params.Emin < 18 * keV && params.Emax > 18 * keV)
     {
 		omalpha[0] = 1. - 1.4;
 		omalpha[1] = 1. - 2.3;
-		ene_line[0] = Emin;
+		ene_line[0] = params.Emin;
 		ene_line[1] = 18. * keV;
-		ene_line[2] = Emax;
+		ene_line[2] = params.Emax;
 	}
-	if (Emin > 18 * keV)
+	if (params.Emin > 18 * keV)
     {
 		omalpha[0] = 1. - 2.3;
-		ene_line[0] = Emin;
-		ene_line[1] = Emax;
+		ene_line[0] = params.Emin;
+		ene_line[1] = params.Emax;
 	}
 	rndm = eneRndm->GenRandEnergy();
 	rndm2 = eneRndm->GenRandEnergy();
@@ -1195,12 +1385,12 @@ void G4SPSEneDistribution::GenerateCdgEnergies() {
 		i++;
 	}
 	// Generate final energy.
-	particle_energy = (std::pow(ene_line[i - 1], omalpha[i - 1]) + (std::pow(ene_line[i], omalpha[i - 1]) - std::pow(ene_line[i - 1], omalpha[i- 1])) * rndm2);
-	particle_energy = std::pow(particle_energy, (1. / omalpha[i - 1]));
+	G4double ene = (std::pow(ene_line[i - 1], omalpha[i - 1]) + (std::pow(ene_line[i], omalpha[i - 1]) - std::pow(ene_line[i - 1], omalpha[i- 1])) * rndm2);
+	params.particle_energy = std::pow(ene, (1. / omalpha[i - 1]));
 
 	if (verbosityLevel >= 1)
     {
-		G4cout << "Energy is " << particle_energy << G4endl;
+		G4cout << "Energy is " << params.particle_energy << G4endl;
     }
 }
 
@@ -1208,6 +1398,7 @@ void G4SPSEneDistribution::GenUserHistEnergies()
 {
 	// Histograms are DIFFERENTIAL.
 	//  G4cout << "In GenUserHistEnergies " << G4endl;
+    G4AutoLock l(&mutex);
 	if (IPDFEnergyExist == false)
     {
 		G4int ii;
@@ -1215,15 +1406,18 @@ void G4SPSEneDistribution::GenUserHistEnergies()
 		G4double bins[1024], vals[1024], sum;
 		sum = 0.;
 
-		if ((EnergySpec == false) && (particle_definition == NULL))
+		if ((EnergySpec == false) && (threadLocalData.Get().particle_definition == NULL))
         {
-			G4cout << "Error: particle definition is NULL" << G4endl;
+            G4Exception("G4SPSEneDistribution::GenUserHistEnergies",
+                        "Event0302",FatalException,
+                        "Error: particle definition is NULL");
         }
 
 		if (maxbin > 1024)
         {
-			G4cout << "Maxbin > 1024" << G4endl;
-			G4cout << "Setting maxbin to 1024, other bins are lost" << G4endl;
+            G4Exception("G4SPSEneDistribution::GenUserHistEnergies",
+                        "Event0302",JustWarning,"Maxbin>1024\n Setting maxbin to 1024, other bins are lost");
+            maxbin = 1024;
 		}
 
 		if (DiffSpec == false)
@@ -1245,7 +1439,7 @@ void G4SPSEneDistribution::GenUserHistEnergies()
 
 		if (EnergySpec == false)
         {
-			G4double mass = particle_definition->GetPDGMass();
+			G4double mass = threadLocalData.Get().particle_definition->GetPDGMass();
 			// multiply the function (vals) up by the bin width
 			// to make the function counts/s (i.e. get rid of momentum
 			// dependence).
@@ -1279,10 +1473,11 @@ void G4SPSEneDistribution::GenUserHistEnergies()
 			IPDFEnergyH.DumpValues();
         }
 	}
-
+    l.unlock();
+    
 	// IPDF has been create so carry on
 	G4double rndm = eneRndm->GenRandEnergy();
-	particle_energy = IPDFEnergyH.GetEnergy(rndm);
+	threadLocalData.Get().particle_energy= IPDFEnergyH.GetEnergy(rndm);
 
 	if (verbosityLevel >= 1)
     {
@@ -1321,50 +1516,53 @@ void G4SPSEneDistribution::GenArbPointEnergies()
             nbelow = middle;
         }
 	}
+    threadLocal_t& params = threadLocalData.Get();
 	if (IntType == "Lin")
     {
-        Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow + 1));
-        Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
-        grad = Arb_grad[nbelow + 1];
-        cept = Arb_cept[nbelow + 1];
+        //Update thread-local copy of parameters
+        params.Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow + 1));
+        params.Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
+        params.grad = Arb_grad[nbelow + 1];
+        params.cept = Arb_cept[nbelow + 1];
         //	  G4cout << rndm << " " << Emax << " " << Emin << " " << grad << " " << cept << G4endl;
         GenerateLinearEnergies(true);
 	}
     else if (IntType == "Log")
     {
-        Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow + 1));
-        Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
-        alpha = Arb_alpha[nbelow + 1];
+        params.Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow + 1));
+        params.Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
+        params.alpha = Arb_alpha[nbelow + 1];
         //	  G4cout << rndm << " " << Emax << " " << Emin << " " << alpha << G4endl;
         GeneratePowEnergies(true);
 	}
     else if (IntType == "Exp")
     {
-        Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow + 1));
-        Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
-        Ezero = Arb_ezero[nbelow + 1];
+        params.Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow + 1));
+        params.Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
+        params.Ezero = Arb_ezero[nbelow + 1];
         //	  G4cout << rndm << " " << Emax << " " << Emin << " " << Ezero << G4endl;
         GenerateExpEnergies(true);
 	}
     else if (IntType == "Spline")
     {
-        Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow + 1));
-        Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
-        particle_energy = -1e100;
+        params.Emax = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow + 1));
+        params.Emin = IPDFArbEnergyH.GetLowEdgeEnergy(size_t(nbelow));
+        params.particle_energy = -1e100;
         rndm = eneRndm->GenRandEnergy();
-        while (particle_energy < Emin || particle_energy > Emax)
+        while (params.particle_energy < params.Emin || params.particle_energy > params.Emax)
         {
-            particle_energy = SplineInt[nbelow+1]->CubicSplineInterpolation(rndm);
+            params.particle_energy = SplineInt[nbelow+1]->CubicSplineInterpolation(rndm);
             rndm = eneRndm->GenRandEnergy();
         }
         if (verbosityLevel >= 1)
         {
-            G4cout << "Energy is " << particle_energy << G4endl;
+            G4cout << "Energy is " << params.particle_energy << G4endl;
         }
 	}
     else
     {
-		G4cout << "Error: IntType unknown type" << G4endl;
+        G4Exception("G4SPSEneDistribution::GenArbPointEnergies","Event0302",
+                    FatalException,"Error: IntType unknown type");
     }
 }
 
@@ -1372,6 +1570,7 @@ void G4SPSEneDistribution::GenEpnHistEnergies() {
 	//  G4cout << "In GenEpnHistEnergies " << Epnflag << G4endl;
 
 	// Firstly convert to energy if not already done.
+    G4AutoLock l(&mutex);
 	if (Epnflag == true)
 	// epnflag = true means spectrum is epn, false means e.
 	{
@@ -1380,8 +1579,6 @@ void G4SPSEneDistribution::GenEpnHistEnergies() {
 		// EpnEnergyH will be replace by UDefEnergyH.
 		//      UDefEnergyH.DumpValues();
 	}
-
-	//  G4cout << "Creating IPDFEnergy if not already done so" << G4endl;
 	if (IPDFEnergyExist == false)
     {
 		// IPDF has not been created, so create it
@@ -1398,6 +1595,7 @@ void G4SPSEneDistribution::GenEpnHistEnergies() {
 			sum = sum + UDefEnergyH(size_t(ii));
 		}
 
+        l.lock();
 		for (ii = 0; ii < maxbin; ii++)
         {
 			vals[ii] = vals[ii] / sum;
@@ -1405,25 +1603,29 @@ void G4SPSEneDistribution::GenEpnHistEnergies() {
 		}
 		// Make IPDFEpnExist = true
 		IPDFEnergyExist = true;
+       
 	}
+    l.unlock();
 	//  IPDFEnergyH.DumpValues();
 	// IPDF has been create so carry on
 	G4double rndm = eneRndm->GenRandEnergy();
-	particle_energy = IPDFEnergyH.GetEnergy(rndm);
+	threadLocalData.Get().particle_energy = IPDFEnergyH.GetEnergy(rndm);
 
 	if (verbosityLevel >= 1)
     {
-		G4cout << "Energy is " << particle_energy << G4endl;
+		G4cout << "Energy is " << threadLocalData.Get().particle_energy << G4endl;
     }
 }
 
+//MT: lock in caller
 void G4SPSEneDistribution::ConvertEPNToEnergy()
 {
 	// Use this before particle generation to convert  the
 	// currently stored histogram from energy/nucleon
 	// to energy.
 	//  G4cout << "In ConvertEpntoEnergy " << G4endl;
-	if (particle_definition == NULL)
+    threadLocal_t& params = threadLocalData.Get();
+	if (params.particle_definition == NULL)
     {
 		G4cout << "Error: particle not defined" << G4endl;
     }
@@ -1431,7 +1633,7 @@ void G4SPSEneDistribution::ConvertEPNToEnergy()
     {
 		// Need to multiply histogram by the number of nucleons.
 		// Baryon Number looks to hold the no. of nucleons.
-		G4int Bary = particle_definition->GetBaryonNumber();
+		G4int Bary = params.particle_definition->GetBaryonNumber();
 		//      G4cout << "Baryon No. " << Bary << G4endl;
 		// Change values in histogram, Read it out, delete it, re-create it
 		G4int count, maxcount;
@@ -1440,14 +1642,13 @@ void G4SPSEneDistribution::ConvertEPNToEnergy()
 		G4double ebins[1024], evals[1024];
 		if (maxcount > 1024)
         {
-			G4cout << "Histogram contains more than 1024 bins!" << G4endl;
-			G4cout << "Those above 1024 will be ignored" << G4endl;
+            G4Exception("G4SPSEneDistribution::ConvertEPNToEnergy()","gps001", JustWarning,
+                        "Histogram contains more than 1024 bins!\nThose above 1024 will be ignored");
 			maxcount = 1024;
 		}
 		if (maxcount < 1)
         {
-			G4cout << "Histogram contains less than 1 bin!" << G4endl;
-			G4cout << "Redefine the histogram" << G4endl;
+            G4Exception("G4SPSEneDistribution::ConvertEPNToEnergy()","gps001", FatalException,"Histogram contains less than 1 bin!\nRedefine the histogram");
 			return;
 		}
 		for (count = 0; count < maxcount; count++)
@@ -1464,14 +1665,14 @@ void G4SPSEneDistribution::ConvertEPNToEnergy()
 		}
 
 		// Set Emin and Emax
-		Emin = ebins[0];
+		params.Emin = ebins[0];
 		if (maxcount > 1)
         {
-			Emax = ebins[maxcount - 1];
+			params.Emax = ebins[maxcount - 1];
         }
 		else
         {
-			Emax = ebins[0];
+			params.Emax = ebins[0];
         }
 		// Put energy bins into new histogram - UDefEnergyH.
 		for (count = 0; count < maxcount; count++)
@@ -1485,12 +1686,15 @@ void G4SPSEneDistribution::ConvertEPNToEnergy()
 //
 void G4SPSEneDistribution::ReSetHist(G4String atype)
 {
+    G4AutoLock l(&mutex);
 	if (atype == "energy")
     {
 		UDefEnergyH = IPDFEnergyH = ZeroPhysVector;
 		IPDFEnergyExist = false;
 		Emin = 0.;
 		Emax = 1e30;
+        threadLocalData.Get().Emin = Emin;
+        threadLocalData.Get().Emax = Emax;
 	}
     else if (atype == "arb")
     {
@@ -1511,10 +1715,19 @@ void G4SPSEneDistribution::ReSetHist(G4String atype)
 
 G4double G4SPSEneDistribution::GenerateOne(G4ParticleDefinition* a)
 {
-	particle_definition = a;
-	particle_energy = -1.;
-
-	while ((EnergyDisType == "Arb") ? (particle_energy < ArbEmin || particle_energy > ArbEmax) : (particle_energy < Emin|| particle_energy > Emax))
+    //Copy global shared status to thread-local one
+    threadLocal_t& params = threadLocalData.Get();
+	params.particle_definition=a;
+    params.particle_energy=-1;
+    params.Emax = Emax;
+    params.Emin = Emin;
+    params.alpha = alpha;
+    params.Ezero = Ezero;
+    params.grad = grad;
+    params.cept = cept;
+    params.weight = weight;
+	//particle_energy = -1.;
+	while ((EnergyDisType == "Arb") ? (params.particle_energy < ArbEmin || params.particle_energy > ArbEmax) : (params.particle_energy < params.Emin|| params.particle_energy > params.Emax))
     {
 		if (Biased)
         {
@@ -1528,15 +1741,15 @@ G4double G4SPSEneDistribution::GenerateOne(G4ParticleDefinition* a)
             }
 			else if (EnergyDisType == "Lin")
             {
-				GenerateLinearEnergies();
+				GenerateLinearEnergies(false);
             }
 			else if (EnergyDisType == "Pow")
             {
-				GeneratePowEnergies();
+				GeneratePowEnergies(false);
             }
 			else if (EnergyDisType == "Exp")
             {
-				GenerateExpEnergies();
+				GenerateExpEnergies(false);
             }
 			else if (EnergyDisType == "Gauss")
             {
@@ -1552,7 +1765,6 @@ G4double G4SPSEneDistribution::GenerateOne(G4ParticleDefinition* a)
             }
 			else if (EnergyDisType == "Cdg")
             {
-
 				GenerateCdgEnergies();
             }
 			else if (EnergyDisType == "User")
@@ -1573,20 +1785,21 @@ G4double G4SPSEneDistribution::GenerateOne(G4ParticleDefinition* a)
             }
 		}
 	}
-	return particle_energy;
+	return params.particle_energy;
 }
 
 G4double G4SPSEneDistribution::GetProbability(G4double ene)
 {
     G4double prob = 1.;
 
+    threadLocal_t& params = threadLocalData.Get();
     if (EnergyDisType == "Lin")
     {
         if (prob_norm == 1.)
         {
-            prob_norm = 0.5*grad*Emax*Emax + cept*Emax - 0.5*grad*Emin*Emin - cept*Emin;
+            prob_norm = 0.5*params.grad*params.Emax*params.Emax + params.cept*params.Emax - 0.5*params.grad*params.Emin*params.Emin - params.cept*params.Emin;
         }
-        prob = cept + grad * ene;
+        prob = params.cept + params.grad * ene;
         prob /= prob_norm;
     }
     else if (EnergyDisType == "Pow")
@@ -1595,24 +1808,24 @@ G4double G4SPSEneDistribution::GetProbability(G4double ene)
         {
             if (alpha != -1.)
             {
-                G4double emina = std::pow(Emin, alpha + 1);
-                G4double emaxa = std::pow(Emax, alpha + 1);
+                G4double emina = std::pow(params.Emin, params.alpha + 1);
+                G4double emaxa = std::pow(params.Emax, params.alpha + 1);
                 prob_norm = 1./(1.+alpha) * (emaxa - emina);
             }
             else
             {
-                prob_norm = std::log(Emax) - std::log(Emin) ;
+                prob_norm = std::log(params.Emax) - std::log(params.Emin) ;
             }
         }
-        prob = std::pow(ene, alpha)/prob_norm;
+        prob = std::pow(ene, params.alpha)/prob_norm;
     }
     else if (EnergyDisType == "Exp")
     {
         if (prob_norm == 1.)
         {
-            prob_norm = -Ezero*(std::exp(-Emax/Ezero) - std::exp(Emin/Ezero));
+            prob_norm = -params.Ezero*(std::exp(-params.Emax/params.Ezero) - std::exp(params.Emin/params.Ezero));
         }  
-        prob = std::exp(-ene / Ezero);
+        prob = std::exp(-ene / params.Ezero);
         prob /= prob_norm;
     }
     else if (EnergyDisType == "Arb")

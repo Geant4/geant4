@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 10th, 2014 A.Dotti (event-V10-00-05)
+- Removing data-race conditions in G4SPSEneDistribution class
+
 June 4th, 2014 A.Dotti (event-V10-00-04)
 - Correcting compilation warnings and errors.
 - Small changes to G4SPSEneDistribution: further memory reduction
