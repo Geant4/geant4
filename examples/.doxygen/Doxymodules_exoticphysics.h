@@ -10,9 +10,74 @@
  *  @{
  */
 
+/** @defgroup extended_exoticphysics_channeling channeling
+ *  Exotic physics example channeling
+ *  @ingroup extended_exoticphysics
+ *  @{
+ */
+
+  class ExExChAnalysis {};
+  class ExExChAntiBarionBuilder {};
+  class ExExChDetectorConstruction {};
+  class ExExChDetectorConstructionMessenger {};
+  class ExExChEventAction {};
+  class ExExChHadronElasticPhysics {};
+  class ExExChHadronPhysicsQGSP_BIC {};
+  class ExExChHyperonFTFPBuilder {};
+  class ExExChIonPhysics {};
+  class ExExChParticleUserInfo {};
+  class ExExChPhysicsList {};
+  class ExExChPhysicsListMessenger {};
+  class ExExChPhysListEmStandardSS {};
+  class ExExChPiKBuilder {};
+  class ExExChPrimaryGeneratorAction {};
+  class ExExChProcessChanneling {};
+  class ExExChProtonBuilder {};
+  class ExExChRunAction {};
+  class ExExChSensitiveDetector {};
+  class ExExChSensitiveDetectorHit {};
+  class ExExChStackingAction {};
+  class ExExChStackingActionMessenger {};
+  class ExExChTrackingAction {};
+  class ExExChUserActionInitialization {};
+  class XCrystalCharacteristicArray {};
+  class XCrystalIntegratedDensityHub {};
+  class XCrystalIntegratedDensityPlanar {};
+  class XCrystalPlanarMoliereElectricField {};
+  class XCrystalPlanarMoliereElectronDensity {};
+  class XCrystalPlanarMolierePotential {};
+  class XCrystalPlanarMoliereTempPotential {};
+  class XCrystalPlanarNucleiDensity {};
+  class XLatticeManager3 {};
+  class XLogicalAtomicLatticeDiamond {};
+  class XLogicalAtomicLattice {};
+  class XLogicalAtomicLatticeSingleAtom {};
+  class XLogicalBase {};
+  class XLogicalLattice {};
+  class XPhysicalLattice {};
+  class XUnitCell {};
+  class XVCrystalCharacteristic {};
+  class XVCrystalIntegratedDensity {};
+  class XVCrystalPlanarAnalytical {};
+  class XWrapperContinuousDiscreteProcess {};
+  class XWrapperDiscreteProcess {};
+
+/** @} */
 /** @defgroup extended_exoticphysics_monopole monopole
  *  Exoticphysics monopole example has its
  *  <a href="../html_monopole/html/index.html">standalone documentation </a>
+ *  @ingroup extended_exoticphysics
+ *  @{
+ */
+
+/** @defgroup extended_exoticphysics_channeling channeling
+ *  Exotic physics example channeling
+ *  @ingroup extended_exoticphysics
+ *  @{
+ */
+
+/** @defgroup extended_exoticphysics_ucn ucn
+ *  Exotic physics example ucn
  *  @ingroup extended_exoticphysics
  *  @{
  */
@@ -25,22 +90,13 @@
  *  @{
  */
 
-  class XAlminumElectrodeHit {};
-  class XAlminumElectrodeSensitivity {};
+  class XAluminumElectrodeHit {};
+  class XAluminumElectrodeSensitivity {};
   class XDetectorConstruction {};
-  class XLatticeManager3 {};
-  class XLogicalLattice {};
-  class XLPhonon {};
-  class XPhononDownconversionProcess {};
-  class XPhononReflectionProcess {};
-  class XPhononScatteringProcess {};
   class XPhononStackingAction {};
-  class XPhononTrackInformation {};
-  class XPhysicalLattice {};
   class XPhysicsList {};
   class XPrimaryGeneratorAction {};
-  class XTPhononFast {};
-  class XTPhononSlow {};
+
 
 /** @} */
 

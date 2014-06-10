@@ -805,8 +805,11 @@ INPUT                  = Doxymain.h \
                          ../extended/eventgenerator/pythia/.README \
                          ../extended/eventgenerator/pythia/decayer6 \
                          ../extended/exoticphysics/.README \
+                         ../extended/exoticphysics/channeling \
                          ../extended/exoticphysics/monopole/.README \
                          ../extended/exoticphysics/phonon \
+                         ../extended/exoticphysics/channeling \
+                         ../extended/exoticphysics/ucn/.README \
                          ../extended/field \
                          ../extended/g3tog4 \
                          ../extended/geometry/.README \
@@ -832,7 +835,9 @@ INPUT                  = Doxymain.h \
                          ../extended/parallel/MPI/examples/exMPI02/.README \
                          ../extended/parallel/TBB \
                          ../extended/parallel/TopC/ParN02/.README \
+                         ../extended/parallel/TopC/ParN02/.README.N02 \
                          ../extended/parallel/TopC/ParN04/.README \
+                         ../extended/parallel/TopC/ParN04/.README.N04 \
                          ../extended/parameterisations \
                          ../extended/persistency \
                          ../extended/polarisation/.README \

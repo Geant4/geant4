@@ -16,12 +16,11 @@
  *  @{
  */
 
-  class exGPSAnalysisManager {};
-  class exGPSAnalysisMessenger {};
+  class exGPSActionInitialization {};
   class exGPSEventAction {};
-  class exGPSEventActionMessenger {};
   class exGPSGeometryConstruction {};
-  class exGPSPhysicsList {};
+  class exGPSHistoManager {};
+  class exGPSHistoMessenger {};
   class exGPSPrimaryGeneratorAction {};
   class exGPSRunAction {};
 
