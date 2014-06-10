@@ -1,0 +1,95 @@
+
+*************************************************************
+ Geant4 version Name: geant4-10-00-ref-04    (30-April-2014)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+
+***** Table : Nb of materials = 2 *****
+
+ Material: G4_Galactic    density:  0.000 kg/m3   RadL: 204310101.835 pc   Nucl.Int.Length: 114314827.001 pc 
+                       Imean:  21.800 eV   temperature:   2.73 K  pressure:   0.00 atm
+
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material:    G4_Ni    density:  8.902 g/cm3   RadL:   1.424 cm   Nucl.Int.Length:  15.268 cm 
+                       Imean: 311.000 eV 
+
+   --->  Element: Ni (Ni)   Z = 28.0   N =  58.8   A =  58.69 g/mole
+         --->  Isotope:  Ni58   Z = 28   N =  58   A =  57.94 g/mole   abundance:  68.08 %
+         --->  Isotope:  Ni60   Z = 28   N =  60   A =  59.93 g/mole   abundance:  26.22 %
+         --->  Isotope:  Ni61   Z = 28   N =  61   A =  60.93 g/mole   abundance:   1.14 %
+         --->  Isotope:  Ni62   Z = 28   N =  62   A =  61.93 g/mole   abundance:   3.63 %
+         --->  Isotope:  Ni64   Z = 28   N =  64   A =  63.93 g/mole   abundance:   0.93 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  OpenGLImmediateX (OGLIX)
+  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLStoredX (OGLSX)
+  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  RayTracer (RayTracer)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+Sum NoMT:                            0
+Sum NoMRT:                           0
+Sum NoMRCondition:                   0
+Sum No. E < V Loss:                  0
+Sum No. E > V Ezero:                 0
+Sum No. E < V SpinFlip:              0
+Sum No. E > V Specular Reflection:   0
+Sum No. E < V Specular Reflection:   571
+Sum No. E < V Lambertian Reflection: 0
+Sum No. E > V MR DiffuseReflection:  0
+Sum No. E < V MR DiffuseReflection:  4
+Sum No. E > V SnellTransmit:         0
+Sum No. E > V MR SnellTransmit:      0
+Sum No. E > V DiffuseTransmit:       0
+                                     
+Graphics systems deleted.
+Visualization Manager deleting...
+Total navigation history collections cleaned: 5

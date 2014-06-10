@@ -16,3 +16,13 @@ phonon
 
 This example simulates phonons in sub-Kelvin temperature Germanium crystal.
 
+channeling
+----------
+
+This example simulates channeling of 400 GeV/c protons in a bent crystal.
+
+ucn
+---
+
+This example simulates the passage of ultra-cold neutrons (UCN) in a
+hollow pipe

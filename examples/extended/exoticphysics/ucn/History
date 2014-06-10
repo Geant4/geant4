@@ -15,21 +15,5 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-8 June 2014: P. Gumplinger (exExoticphysics-V10-00-01)
-- Added new example subdirectory ucn
-
-6 June 2014: A. Dotti (exExoticphysics-V10-00-00)
-- Added new example subdirectory channeling
-
-17 November 2012: I. Hrivnacova (exExoticphysics-V09-05-02)
-- Updated documentation:
-  - Removed obsolete instructions (how to compile & link)
-  - Fixed example page name in phonon example .README
-
-1 November 2012: I. Hrivnacova (exExoticphysics-V09-05-01)
-- Renamed "phononExample" to "phonon" per Gabriele Cosmo.  Updated README
-  and CMakeLists.txt accordingly.
-
-29 October 2012: I. Hrivnacova (exExoticphysics-V09-05-00)
-- Updated top files (makefiles, READMEs) with added phononExample.
-
+June 6, 2014 P. Gumplinger (ExUCN-V10-00-00)
+- First import

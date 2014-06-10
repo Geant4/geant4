@@ -1,0 +1,54 @@
+#
+# Macro file for the initialization phase of "exampleN03.cc"
+# when running in interactive mode
+#
+# Sets some default verbose
+#
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+#
+# create empty scene
+#
+/vis/scene/create
+#
+# Create a scene handler for a specific graphics system
+# (Edit the next line(s) to choose another graphic system)
+#
+# Use this open statement instead for OpenGL in immediate mode.
+/vis/open OGL 600x600-0+0
+#
+# Output an empty detector
+#/vis/viewer/flush
+#
+# Draw trajectories at end of event, showing trajectory points as
+# markers of size 2 pixels
+/vis/scene/add/trajectories
+#/vis/modeling/trajectories/create/drawByCharge
+#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
+#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 2
+# (if too many tracks cause core dump => /tracking/storeTrajectory 0)
+#
+# To draw gammas only
+#/vis/filtering/trajectories/create/particleFilter
+#/vis/filtering/trajectories/particleFilter-0/add gamma
+#
+# To draw charged particles only
+#/vis/filtering/trajectories/particleFilter-0/invert true
+#
+# To draw positive charge particl only
+#/vis/filtering/trajectories/create/chargeFilter
+#/vis/filtering/trajectories/chargeFilter-0/add +1
+#
+# Many other options available with /vis/modeling and /vis/filtering.
+# For example, select colour by particle ID
+/vis/modeling/trajectories/create/drawByParticleID
+/vis/modeling/trajectories/drawByParticleID-0/set e- blue 
+/vis/modeling/trajectories/drawByParticleID-0/set mu+ green 
+/vis/modeling/trajectories/drawByParticleID-0/set e+ red 
+/vis/modeling/trajectories/drawByParticleID-0/set gamma gray
+/vis/modeling/trajectories/drawByParticleID-0/set nu_e yellow 
+/vis/modeling/trajectories/drawByParticleID-0/set anti_nu_mu yellow 
+#
+/vis/scene/endOfEventAction accumulate
+#

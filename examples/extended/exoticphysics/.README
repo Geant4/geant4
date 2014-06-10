@@ -17,5 +17,14 @@ monopole.
 
 This example simulates phonons in sub-Kelvin temperature Germanium crystal.
 
+\link Examplechanneling channeling \endlink
+
+This example simulates channeling of 400 GeV/c protons in a bent crystal.
+
+\link Exampleucn ucn \endlink
+
+This example simulates the passage of ultra-cold neutrons (UCN) in a
+hollow pipe
+
 */
 
