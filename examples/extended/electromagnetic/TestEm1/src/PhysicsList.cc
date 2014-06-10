@@ -54,16 +54,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList(DetectorConstruction* p) 
-: G4VModularPhysicsList(),
-  fEmPhysicsList(0),
-  fDet(0),
-  fMessenger(0)
+PhysicsList::PhysicsList(DetectorConstruction* det) 
+: G4VModularPhysicsList(), fEmPhysicsList(0), fDet(0), fMessenger(0)
 {
   G4LossTableManager::Instance();
-  fDet = p;
+  SetDefaultCutValue(1*mm);
+  
+  fDet = det;
   fMessenger = new PhysicsListMessenger(this);
-
   SetVerboseLevel(1);
 
   // EM physics
@@ -344,14 +342,10 @@ void PhysicsList::AddStepMax()
 
 void PhysicsList::SetCuts()
 {
-  if (verboseLevel >0) {
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
   // fix lower limit for cut
   G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(10*eV, 1*GeV);
   
-  if (verboseLevel>0) DumpCutValuesTable();
+  if (verboseLevel > 0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
