@@ -29,7 +29,7 @@
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -41,7 +41,6 @@
 #include "SteppingVerbose.hh"
 
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "SteppingAction.hh"
 #include "StackingAction.hh"
 
@@ -76,7 +75,6 @@ int main(int argc,char** argv) {
    RunAction* RunAct;
   
   runManager->SetUserAction(RunAct = new RunAction); 
-  runManager->SetUserAction(new EventAction);
   runManager->SetUserAction(new SteppingAction(RunAct));
   runManager->SetUserAction(new StackingAction);
 
@@ -115,4 +113,4 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
