@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-05 06 June 2014 Peter Gumplinger
+- Add extended/exoticphysics/ucn example
+
 ctests-V10-00-04 04 June 2014 Andrea Dotti
 - Correct environment bug for exgps
 

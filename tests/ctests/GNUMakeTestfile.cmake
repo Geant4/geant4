@@ -195,6 +195,10 @@ GEANT4_ADD_TEST(example-ext-exoticphysics-monopole
 #                BUILD ${SRCDIR}/extended/exoticphysics/phonon
 #       ------>  ENVIRONMENT CRYSTALMAPS=${SRCDIR}/extended/exoticphysics/phonon/CrystalMaps)
 
+GEANT4_ADD_TEST(example-ext-exoticphysics-ucn
+                 COMMAND ${BINDIR}/ExUCN -m ${SRCDIR}/extended/exoticphysics/ucn/ExUCN.in
+                 BUILD ${SRCDIR}/extended/exoticphysics/ucn)
+
 foreach(_i 01 02 03 04 05)
   GEANT4_ADD_TEST(example-ext-field-field${_i} 
                   COMMAND ${BINDIR}/field${_i} ${SRCDIR}/extended/field/field${_i}/field${_i}.in

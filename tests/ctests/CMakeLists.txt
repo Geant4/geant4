@@ -414,6 +414,14 @@ foreach(_i 1 2)
                   DEPENDS example-ext-visualization-uservisaction-build ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 endforeach()
 include( ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/channeling/CTestDefinitions.txt)
+
+  GEANT4_ADD_TEST(example-ext-exoticphysics-ExUCN
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/ucn/ExUCN
+                          -m ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/ucn/ExUCN.in
+                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/ucn
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/ucn
+                  BUILD ExUCN ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+
 #-------------------------------------------------------------------------------------------------
 #---Advanced--------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------
