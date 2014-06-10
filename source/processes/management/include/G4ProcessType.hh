@@ -53,7 +53,8 @@ enum G4ProcessType
   fParameterisation,
   fUserDefined,
   fParallel,
-  fPhonon
+  fPhonon,
+  fUCN
 };
 #endif
 

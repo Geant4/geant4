@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- June 6th, 2014    P.Gumplinger (procman-V10-00-02)
+- Add new process type fUCN in G4ProcessType.hh
+
 - May 12th, 2014    A.Dotti     (procman-V10-00-01)
 - Fixing bug #1625: G4WrapperProcess not correctly 
   forwards call to SetMasterProcess to wrapped process. 
