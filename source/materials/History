@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06-06-14 P.Gumplinger (materials-V10-00-15)
+- add G4UCNMaterialPropertiesTable and G4UCNMicroRoughnessHelper classes
+
 26-05-14 V.Ivanchenko (materials-V10-00-14)
 - G4Material - make copy constructor private 
 
