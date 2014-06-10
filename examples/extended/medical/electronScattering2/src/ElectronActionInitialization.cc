@@ -32,7 +32,6 @@
 #include "ElectronActionInitialization.hh"
 #include "ElectronRunAction.hh"
 #include "ElectronPrimaryGeneratorAction.hh"
-#include "ElectronEventAction.hh"
 #include "G4GeneralParticleSource.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -69,7 +68,6 @@ void ElectronActionInitialization::Build() const
 {
   SetUserAction(new ElectronRunAction(fOutputFileSpec));
   SetUserAction(new ElectronPrimaryGeneratorAction);
-  SetUserAction(new ElectronEventAction);
 }  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

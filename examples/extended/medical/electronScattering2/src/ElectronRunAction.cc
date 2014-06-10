@@ -31,13 +31,16 @@
 #include "ElectronRunAction.hh"
 #include "ElectronRun.hh"
 #include "G4Run.hh"
+#include "G4RunManager.hh"
 #include <assert.h>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ElectronRunAction::ElectronRunAction(const G4String& outputFile):
 G4UserRunAction(), fOutputFileSpec(outputFile)
-{;}
+{
+    G4RunManager::GetRunManager()->SetPrintProgress(100000);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

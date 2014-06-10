@@ -53,21 +53,12 @@ public:
   void AddDecay();
   void AddStepMax();       
     
-  virtual void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-    
 private:
   
   PhysicsListMessenger* fMessenger; 
 
   G4String fEmName;
   G4VPhysicsConstructor*  fEmPhysicsList;
-    
-  G4double fCutForGamma;
-  G4double fCutForElectron;
-  G4double fCutForPositron;    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+06 June 2014   Daren Sawkey        (exampleES2-V10-00-02)
+- extended example coding guidelines:
+  - set cuts using G4UserPhysicsListMessenger command
+  - print status using G4RunMessenger command (and remove EventAction)
+  - G4Exception rather than std::exit
+- add G4EmLowEPPhysics
 
 04 June 2014   Andrea Dotti        (exampleES2-V10-00-01)
 - Porting to new GPS for MT
