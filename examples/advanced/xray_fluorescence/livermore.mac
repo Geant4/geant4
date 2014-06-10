@@ -5,7 +5,7 @@
 #
 /control/verbose 2
 /run/verbose 2
-/tracking/verbose 1
+/tracking/verbose 0
 
 # activating livermore processes
 /phys/addPhysics emlivermore
@@ -14,7 +14,7 @@
 
 /run/initialize
 
-#Setting fluorescence ON  and Auger OFF
+#Setting fluorescence ON  and Auger ON
 /process/em/fluo true
 /process/em/auger true
 /process/em/pixe true
@@ -37,7 +37,5 @@
 /gun/particle proton
 /gun/energy 3 MeV 
 
-
-
 #just one shot: put /tracking/verbose 0 for more particles
-/run/beamOn 1
+/run/beamOn 10
