@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 June 2014  Dennis Wright (test18-V10-00-00)
+----------------------------------------------
+- Tst18RunAction.cc: limit output at end of run
+
 26 October 2013  Makoto Asai  (test18-V09-06-11)
 ------------------------------------------------
 - remove obsolete UI commands.

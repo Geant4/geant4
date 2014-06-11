@@ -58,10 +58,8 @@ Tst18RunAction::~Tst18RunAction()
 
 void Tst18RunAction::BeginOfRunAction(const G4Run* aRun)
 {
- 
   G4int RunN = aRun->GetRunID();
-  if ( RunN % 1000 == 0 ) 
-    G4cout << "### Run : " << RunN << G4endl;
+  G4cout << "### Run : " << RunN << G4endl;
 
   Particles.clear();
   Energies.clear();
@@ -73,26 +71,28 @@ void Tst18RunAction::BeginOfRunAction(const G4Run* aRun)
 
 void Tst18RunAction::EndOfRunAction(const G4Run* )
 {
-  for (size_t i = 0; i < Particles.size(); i++) {
-    G4cout
-      << std::setiosflags(std::ios::fixed)
-      << std::setprecision(3)
-      << std::setiosflags(std::ios::right)
-      << std::setw(12)
-      << Energies[i]
-      << std::setw(12)<<std::setprecision(4) 
-      << std::setiosflags(std::ios::scientific)
-      << std::setiosflags(std::ios::right)
-      << Weights[i]
-      << std::setw(12)<<std::setprecision(4)
-      << std::setiosflags(std::ios::scientific)
-      << std::setiosflags(std::ios::right)
-      << Times[i] << "     "
-      << Particles[i]
-      << G4endl ;    
+  // Limit test output size
+  if (Particles.size() > 999) {
+    for (size_t i = 0; i < 1000; i++) {
+      G4cout
+        << std::setiosflags(std::ios::fixed)
+        << std::setprecision(3)
+        << std::setiosflags(std::ios::right)
+        << std::setw(12)
+        << Energies[i]
+        << std::setw(12)<<std::setprecision(4) 
+        << std::setiosflags(std::ios::scientific)
+        << std::setiosflags(std::ios::right)
+        << Weights[i]
+        << std::setw(12)<<std::setprecision(4)
+        << std::setiosflags(std::ios::scientific)
+        << std::setiosflags(std::ios::right)
+        << Times[i] << "     "
+        << Particles[i]
+        << G4endl ;    
+    }
+    G4cout<< G4endl;
   }
-  G4cout<< G4endl;
-
 }
 
 void Tst18RunAction::FillParticleName(G4String name)
