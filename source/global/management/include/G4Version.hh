@@ -62,6 +62,6 @@ static const G4String G4Version = "$Name: geant4-10-00-patch-02 [MT]$";
 #else
 static const G4String G4Version = "$Name: geant4-10-00-patch-02 $";
 #endif
-static const G4String G4Date    = "(6-June-2014)";
+static const G4String G4Date    = "(13-June-2014)";
 
 #endif
