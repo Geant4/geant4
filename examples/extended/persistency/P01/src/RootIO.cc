@@ -88,7 +88,7 @@ void RootIO::Write(std::vector<ExP01TrackerHit*>* hcont)
   std::string stevt = "Event_" + os.str(); 
   const char* chevt = stevt.c_str();
 
-  std::cout << "writing " << stevt << std::endl;
+  G4cout << "writing " << stevt << G4endl;
 
 
   fFile->WriteObject(hcont, chevt);

@@ -34,12 +34,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "ExP01DetectorConstruction.hh"
-#include "ExP01PhysicsList.hh"
 #include "ExP01PrimaryGeneratorAction.hh"
 #include "ExP01RunAction.hh"
 #include "ExP01EventAction.hh"
 #include "ExP01SteppingAction.hh"
 #include "ExP01SteppingVerbose.hh"
+
+#include "FTFP_BERT.hh"
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -65,7 +66,9 @@ int main(int argc,char** argv) {
   // UserInitialization classes (mandatory)
   ExP01DetectorConstruction* ExP01detector = new ExP01DetectorConstruction;
   runManager->SetUserInitialization(ExP01detector);
-  runManager->SetUserInitialization(new ExP01PhysicsList);
+
+  G4VModularPhysicsList* physicsList = new FTFP_BERT;
+  runManager->SetUserInitialization(physicsList);
   
 #ifdef G4VIS_USE
   // Visualization, if you choose to have it!

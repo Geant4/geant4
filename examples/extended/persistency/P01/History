@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June1th, 2014 W. Pokorski  (exampleP01-V10-00-01)
+ - Replacing broken previous tag
+
+June 6th, 2014 W. Pokorski  (exampleP01-V10-00-00)
+ - Modifications to comply with coding conventions
+
 August 27th, 2013  G. Cosmo (exampleP01-V09-06-03)
 - Added G4Ellipsoid among solids enabled for parameterisation.
 
