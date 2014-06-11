@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-Jun-2014, V.Ivanchenko               (phys-lists-V10-00-05)
+- INCLXXPhysicsListHelper - for the case of HP set cut on proton to 
+  zero to simulate all recoils from elastic scattering
+
 06-Jun-2014, Alberto Ribon              (phys-lists-V10-00-04)
 - Proposed the tag which includes the two internal tags below,
   made yesterday by Krzysztof and Vladimir I.
