@@ -622,7 +622,11 @@ G4double G4RadioactiveDecay::GetMeanFreePath (const G4Track& aTrack, G4double,
   if (tau != -1) {
     // Ion can decay
 
-    if (tau < 0.0) {
+    if (tau < -1000.0) {
+      pathlength = DBL_MIN;  // nuclide had very short lifetime or wasn't in table
+
+    } else if (tau < 0.0) {
+      G4cout << aParticleDef->GetParticleName() << " has lifetime " << tau << G4endl;
       G4ExceptionDescription ed;
       ed << "Ion has negative lifetime " << tau
          << " but is not stable.  Setting mean free path to DBL_MAX" << G4endl; 
