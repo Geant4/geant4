@@ -14,10 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 10, 2014 E. Bagli (channelingExample-V10-00-08)
+- Moved Channeling to channeling in CMakeLists.txt and CTestDefinitions.txt
 
 June 4, 2014 A. Dotti (channelingExample-V10-00-07)
 - New GPS MT ready migration
-
 
 June 2, 2014 E. Bagli (channelingExample-v10-00-06)
 - Modified M_PI to CLHEP::pi

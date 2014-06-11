@@ -2,7 +2,7 @@
 # Setup the project
 #
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
-project(Channelling)
+project(channelling)
 
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
@@ -71,7 +71,7 @@ target_link_libraries(channeling ${Geant4_LIBRARIES})
 # For internal Geant4 use - but has no effect if you build this
 # example standalone
 #
-add_custom_target(Channeling DEPENDS channeling)
+add_custom_target(channeling_custom DEPENDS channeling)
 
 #----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX

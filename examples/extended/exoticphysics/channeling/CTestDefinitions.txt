@@ -4,6 +4,6 @@ GEANT4_ADD_TEST(example-ext-exoticphysics-channeling
 						   ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/channeling/2009_PLB680_129.mac
 				SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/channeling
 				BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/channeling
-				BUILD channeling PROJECT Channeling 
+				BUILD channeling PROJECT channeling 
 				ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
 				)
