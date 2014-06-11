@@ -49,14 +49,15 @@ G4NavigationHistory::G4NavigationHistory()
 G4NavigationHistory::G4NavigationHistory(const G4NavigationHistory &h)
 {
   fNavHistory = G4NavigationHistoryPool::GetInstance()->GetLevels();
-  if( this->GetMaxDepth() < h.fStackDepth )
+  if( GetMaxDepth() != h.GetMaxDepth() )
   {
-    fNavHistory->resize( h.fStackDepth ); 
+    fNavHistory->resize( h.GetMaxDepth() );
   }
-  for ( G4int ilev=h.fStackDepth; ilev>=0; ilev-- )
+
+  for ( G4int ilev=h.fStackDepth; ilev>=0; --ilev )
   { 
-    (*fNavHistory)[ilev] = (*h.fNavHistory)[ilev]; 
-  } 
+    (*fNavHistory)[ilev] = (*h.fNavHistory)[ilev];
+  }
   fStackDepth=h.fStackDepth;
 }
 
