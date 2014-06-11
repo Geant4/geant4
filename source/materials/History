@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+11-06-14 G.Folger     (materials-V10-00-16)
+- add new classes G4UCNMaterialPropertiesTable and G4UCNMicroRoughnessHelper
+   to sources.cmake
+	
 06-06-14 P.Gumplinger (materials-V10-00-15)
 - add G4UCNMaterialPropertiesTable and G4UCNMicroRoughnessHelper classes
 
