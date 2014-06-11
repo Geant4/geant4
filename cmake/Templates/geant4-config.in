@@ -526,11 +526,17 @@ while test $# -gt 0 ; do
         expat)
           echo ${have_expat}
           ;;
+        zlib)
+          echo ${have_zlib}
+          ;;
         gdml)
           echo ${have_gdml}
           ;;
         usolids)
           echo ${have_usolids}
+          ;;
+        g3tog4)
+          echo ${have_g3tog4}
           ;;
         qt)
           echo ${have_qt}
