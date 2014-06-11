@@ -64,10 +64,8 @@ RunAction::~RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run* aRun)
+void RunAction::BeginOfRunAction(const G4Run*)
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-
   // save Rndm status
   ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
   CLHEP::HepRandom::showEngineStatus();
@@ -95,7 +93,8 @@ void RunAction::EndOfRunAction(const G4Run*)
     << E_rms/(keV * std::sqrt((G4double) f_n_gam_sync)) << " keV" << '\n'
     << "  E_rms             = " << G4BestUnit(E_rms,"Energy") << '\n'
     << "  Energy Max / Mean = " << f_e_gam_sync_max / Emean << '\n'
-    << "  MeanFreePath      = " << G4BestUnit(f_lam_gam_sync/f_n_gam_sync,"Length")
+    << "  MeanFreePath      = " << G4BestUnit(f_lam_gam_sync/f_n_gam_sync,
+                                          "Length")
     << G4endl;
   }
   

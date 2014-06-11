@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+09-06-14 mma (testem16-V10-00-00)
+- suppress EventAction and its messenger
 
 15-10-13 V.Ivant (testem16-V09-06-05)
 - updated vis.mac
