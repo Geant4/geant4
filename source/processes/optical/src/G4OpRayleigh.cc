@@ -103,7 +103,7 @@ G4OpRayleigh::G4OpRayleigh(const G4String& processName, G4ProcessType type)
 
 G4OpRayleigh::~G4OpRayleigh()
 {
-        if (thePhysicsTable!= NULL) {
+        if (thePhysicsTable) {
            thePhysicsTable->clearAndDestroy();
            delete thePhysicsTable;
         }
@@ -112,11 +112,6 @@ G4OpRayleigh::~G4OpRayleigh()
         ////////////
         // Methods
         ////////////
-
-void G4OpRayleigh::BuildPhysicsTable(const G4ParticleDefinition&)
-{
-    if (!thePhysicsTable) BuildThePhysicsTable();
-}
 
 // PostStepDoIt
 // -------------
@@ -209,14 +204,18 @@ G4OpRayleigh::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
 
-// BuildThePhysicsTable for the Rayleigh Scattering process
+// BuildPhysicsTable for the Rayleigh Scattering process
 // --------------------------------------------------------
-//
-void G4OpRayleigh::BuildThePhysicsTable()
+
+void G4OpRayleigh::BuildPhysicsTable(const G4ParticleDefinition&)
 {
 //      Builds a table of scattering lengths for each material
 
-        if (thePhysicsTable) return;
+        if (thePhysicsTable) {
+           thePhysicsTable->clearAndDestroy();
+           delete thePhysicsTable;
+           thePhysicsTable = NULL;
+        }
 
         const G4MaterialTable* theMaterialTable=
                                G4Material::GetMaterialTable();

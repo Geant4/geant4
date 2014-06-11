@@ -73,6 +73,7 @@ G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
   SetProcessSubType(fOpWLS);
 
   theIntegralTable = NULL;
+
   if(!WLSTimeGeneratorProfile)
   { WLSTimeGeneratorProfile = new G4WLSTimeGeneratorProfileDelta("WLSTimeGeneratorProfileDelta"); }
  
@@ -87,7 +88,7 @@ G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
 
 G4OpWLS::~G4OpWLS()
 {
-  if (theIntegralTable != 0) {
+  if (theIntegralTable) {
     theIntegralTable->clearAndDestroy();
     delete theIntegralTable;
   }
@@ -96,11 +97,6 @@ G4OpWLS::~G4OpWLS()
 ////////////
 // Methods
 ////////////
-
-void G4OpWLS::BuildPhysicsTable(const G4ParticleDefinition&)
-{
-    if (!theIntegralTable) BuildThePhysicsTable();
-}
 
 // PostStepDoIt
 // -------------
@@ -288,21 +284,24 @@ G4OpWLS::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
   return G4VDiscreteProcess::PostStepDoIt(aTrack, aStep);
 }
 
-// BuildThePhysicsTable for the wavelength shifting process
+// BuildPhysicsTable for the wavelength shifting process
 // --------------------------------------------------
-//
 
-void G4OpWLS::BuildThePhysicsTable()
+void G4OpWLS::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-  if (theIntegralTable) return;
-  
+  if (theIntegralTable) {
+     theIntegralTable->clearAndDestroy();
+     delete theIntegralTable;
+     theIntegralTable = NULL;
+  }
+
   const G4MaterialTable* theMaterialTable = 
     G4Material::GetMaterialTable();
   G4int numOfMaterials = G4Material::GetNumberOfMaterials();
   
   // create new physics table
   
-  if(!theIntegralTable)theIntegralTable = new G4PhysicsTable(numOfMaterials);
+  theIntegralTable = new G4PhysicsTable(numOfMaterials);
   
   // loop for materials
   

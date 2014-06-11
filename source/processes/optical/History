@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10th June 2014 P. Gumplinger (op-V10-00-04)
+- G4OpWLS always rebuild theIntegralTable in BuildPhysicsTable method
+- G4OpRayleigh always rebuild thePhysicsTable in BuildPhysicsTable method
+- remove the private method BuildThePhysicsTable
+
 6th June 2014 P. Gumplinger (op-V10-00-03)
 - implement the full UNIFIED reflectivity probabilities when a
   dichroic surface reflects
