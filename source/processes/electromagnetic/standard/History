@@ -18,12 +18,23 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
-01 April 14: V.Ivanchenko (emstand-V09-06-81)
+27 May 14: V.Ivanchenko (emstand-V09-06-82)
+- G4IonCoulombCrossSection - tunned computation of the screen 
+    factor 
+
+05 May 14: V.Ivanchenko
+- G4IonCoulombCrossSection - fixed screen factor for projectile
+    and target Z=1 
+
+03 April 14: V.Ivanchenko
+- G4WentzelVIModel - optimized transition between multiple and single 
+    scattering modes; changed order of displacement and angular 
+    deflection (second order effect)
+
+01 April 14: V.Ivanchenko
 - G4IonCoulombScatteringModel - fixed final state generation
 - G4GammaConversion - switch default number of bins from 220 to 140
 - G4WentzelOKandVIxSection - fixed mass of recoil for Hydrogen target
-- G4WentzelVIModel - changed order of displacement and angular 
-    deflection (second order effect)
 
 31 March 14: V.Ivanchenko
 - G4GammaConversion - switch default number of bins from 77 to 220
