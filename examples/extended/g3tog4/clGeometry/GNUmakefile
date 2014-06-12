@@ -1,4 +1,4 @@
-# $Id: GNUmakefile,v 1.2 2006-03-14 10:13:55 vnivanch Exp $
+# $Id$
 # ----------------------------------------------------------------
 
 name := clGeometry
@@ -14,11 +14,11 @@ all: lib bin
 
 setup:
 	@echo "Copying files from common"
-	@$(G4INSTALL)/examples/extended/common/scripts/copy_files.sh
+	@../../common/scripts/copy_files.sh
 
 clean_setup:
 	@echo "Removing files copied from common"
-	@$(G4INSTALL)/examples/extended/common/scripts/clean_files.sh
+	@../../common/scripts/clean_files.sh
 
 include $(G4INSTALL)/config/architecture.gmk
 

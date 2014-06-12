@@ -65,6 +65,19 @@ foreach(_script ${clGeometry_SCRIPTS})
 endforeach()
 
 #----------------------------------------------------------------------------
+# Copy data
+#
+file(GLOB clGeometry_DATA 
+     RELATIVE ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/data/*.dat)
+foreach(_data_file ${clGeometry_DATA})
+  configure_file(
+    ${PROJECT_SOURCE_DIR}/${_data_file}
+    ${PROJECT_BINARY_DIR}/${_data_file}
+    COPYONLY
+    )
+endforeach()
+
+#----------------------------------------------------------------------------
 # Install the executable to 'bin' directory under CMAKE_INSTALL_PREFIX
 #
 install(TARGETS clGeometry DESTINATION bin)

@@ -1,4 +1,4 @@
-$Id: History,v 1.11 2010-11-04 21:47:43 allison Exp $
+$Id$
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,21 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+June 12th, 2014  I.Hrivnacova (g3tog4Tests-V10-00-01)
+---------------------------
+- Moved data directory in clGeometry and added copying data files
+  in CMake build directory
+  
+June 11th, 2014  I.Hrivnacova (g3tog4Tests-V10-00-00)
+---------------------------
+- Fixed path to copy_files.sh, clean_files.sh in GNUmakefile
+  (this makes GNUmake build working with Geant4 installation via
+   CMake)
+
+August 30th, 2013  I.Hrivnacova (g3tog4Tests-V09-06-00)
+---------------------------
+- Migration to MT
 
 October 22nd, 2012  I.Hrivnacova (g3tog4Tests-V09-05-04)
 ---------------------------
