@@ -58,7 +58,7 @@ HistoMessenger::HistoMessenger(Histo* hist)
   fFactoryCmd->SetGuidance("set name for the histograms file");
 
   fFileCmd = new G4UIcmdWithAString("/testem/histo/fileType",this);
-  fFileCmd->SetGuidance("set type (hbook, XML) for the histograms file");
+  fFileCmd->SetGuidance("set type (root, ascii, xml) for the histograms file");
 
   fHistoCmd = new G4UIcommand("/testem/histo/setHisto",this);
   fHistoCmd->SetGuidance("Set bining of the histo number ih :");

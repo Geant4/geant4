@@ -19,7 +19,7 @@
 #
 /run/setCut  1 mm
 /run/setCutForRegion GasDetector 0.2 mm
-/run/particle/dumpCutValues
+#/run/particle/dumpCutValues
 #
 /gun/particle proton
 #
