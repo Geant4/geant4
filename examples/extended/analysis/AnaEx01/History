@@ -15,6 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-06-14 I. Hrivnacova (AnaEx01-V10-00-00)
+- Fixed path to copy_files.sh, clean_files.sh in GNUmalefile
+  (this makes GNUmake build working with Geant4 installation via
+   CMake)
+- Fixed SharedFilesList.txt - removed PhysicList class
+- Fixed path to hbook *.f files in GNUmakefile.tools_hbook
+
+28-05-14 I. Hrivnacova
+- Use Geant4 physics list (FTFP_BERT) in AnaEx01,02,03, 
+  removed PhysicList class from shared
+  (tag in examples/analysis)
+    
 16-09-13 I. Hrivnacova (AnaEx01-V09-06-02)
 - Updated SharedFilesList.txt for addedActionInitialization class
   (missing in analysisExample-V09-06-02 in top directory)

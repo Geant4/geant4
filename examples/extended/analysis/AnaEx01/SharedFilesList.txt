@@ -18,7 +18,6 @@ ActionInitialization
 DetectorConstruction
 DetectorMessenger
 EventAction
-PhysicsList
 PrimaryGeneratorAction
 RunAction
 SteppingAction

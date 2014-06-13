@@ -16,28 +16,28 @@ EXTRALIBS += -L${CERNLIB}/lib  -lpacklib -lmathlib -lgfortran -lcrypt
 hbook: close.o setpawc.o setntuc.o
 	(mv *.o  $(G4TMPDIR)/exe);    
 
-close.o : $(G4BASE)/analysis/include/tools/hbook/close.f
+close.o : $(G4INCLUDE)/tools/hbook/close.f
 	@echo Compiling close.f
 ifdef CPPVERBOSE
-	$(FC) -c $(G4BASE)/analysis/include/tools/hbook/close.f
+	$(FC) -c $(G4INCLUDE)/tools/hbook/close.f
 else
-	@$(FC) -c $(G4BASE)/analysis/include/tools/hbook/close.f
+	@$(FC) -c $(G4INCLUDE)/tools/hbook/close.f
 endif
 
-setpawc.o : $(G4BASE)/analysis/include/tools/hbook/setpawc.f
+setpawc.o : $(G4INCLUDE)/tools/hbook/setpawc.f
 	@echo Compiling setpawc.f
 ifdef CPPVERBOSE
-	$(FC) -c $(G4BASE)/analysis/include/tools/hbook/setpawc.f
+	$(FC) -c $(G4INCLUDE)/tools/hbook/setpawc.f
 else
-	@$(FC) -c $(G4BASE)/analysis/include/tools/hbook/setpawc.f
+	@$(FC) -c $(G4INCLUDE)/tools/hbook/setpawc.f
 endif
 
-setntuc.o : $(G4BASE)/analysis/include/tools/hbook/setntuc.f
+setntuc.o : $(G4INCLUDE)/tools/hbook/setntuc.f
 	@echo Compiling setntuc.f
 ifdef CPPVERBOSE
-	$(FC) -c $(G4BASE)/analysis/include/tools/hbook/setntuc.f
+	$(FC) -c $(G4INCLUDE)/tools/hbook/setntuc.f
 else
-	@$(FC) -c $(G4BASE)/analysis/include/tools/hbook/setntuc.f
+	@$(FC) -c $(G4INCLUDE)/tools/hbook/setntuc.f
 endif
 
 else
