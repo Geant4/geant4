@@ -108,7 +108,22 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
                              G4bool onlyIfActive = true) const;
     tools::hbook::wntuple* GetNtuple() const;
     tools::hbook::wntuple* GetNtuple(G4int ntupleId) const;
-  
+ 
+     // Iterators
+    std::vector<tools::hbook::h1*>::iterator BeginH1();
+    std::vector<tools::hbook::h1*>::iterator EndH1();
+    std::vector<tools::hbook::h1*>::const_iterator BeginConstH1() const;
+    std::vector<tools::hbook::h1*>::const_iterator EndConstH1() const;
+    
+    std::vector<tools::hbook::h2*>::iterator BeginH2();
+    std::vector<tools::hbook::h2*>::iterator EndH2();
+    std::vector<tools::hbook::h2*>::const_iterator BeginConstH2() const;
+    std::vector<tools::hbook::h2*>::const_iterator EndConstH2() const;
+    
+    std::vector<tools::hbook::wntuple*>::iterator BeginNtuple();
+    std::vector<tools::hbook::wntuple*>::iterator EndNtuple();
+    std::vector<tools::hbook::wntuple*>::const_iterator BeginConstNtuple() const;
+    std::vector<tools::hbook::wntuple*>::const_iterator EndConstNtuple() const;
     
   protected:
     // virtual methods from base class

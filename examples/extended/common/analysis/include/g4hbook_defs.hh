@@ -40,9 +40,24 @@
 
 namespace G4Hbook {
 
-  typedef tools::hbook::h1  G4AnaH1;
-  typedef tools::hbook::h2  G4AnaH2;    
-  typedef tools::hbook::wntuple  G4Ntuple; 
+  // H1 types
+  typedef tools::hbook::h1  G4AnaH1; // keep for backward compatibility
+  typedef tools::hbook::h1  G4H1;
+  typedef std::vector<tools::hbook::h1*>::iterator  G4H1Iterator;
+  typedef std::vector<tools::hbook::h1*>::const_iterator  G4H1ConstIterator;
+
+  // H2 types
+  typedef tools::hbook::h2  G4AnaH2; // keep for backward compatibility    
+  typedef tools::hbook::h2  G4H2;    
+  typedef std::vector<tools::hbook::h2*>::iterator  G4H2Iterator;
+  typedef std::vector<tools::hbook::h2*>::const_iterator  G4H2ConstIterator;
+  
+  // Ntuple types
+  typedef tools::hbook::wntuple  G4Ntuple;
+  typedef std::vector<tools::hbook::wntuple*>::iterator  G4NtupleIterator;
+  typedef std::vector<tools::hbook::wntuple*>::const_iterator  G4NtupleConstIterator;
+  
+  // Managers
   typedef ExG4HbookAnalysisManager G4AnalysisManager; 
 } 
 

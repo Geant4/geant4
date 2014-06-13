@@ -102,7 +102,12 @@ class ExG4HbookH1Manager : public G4VH1Manager
     //
     tools::hbook::h1*  GetH1(G4int id, G4bool warn = true,
                              G4bool onlyIfActive = true) const;
-   
+                              
+    // Iterators
+    std::vector<tools::hbook::h1*>::iterator BeginH1();
+    std::vector<tools::hbook::h1*>::iterator EndH1();
+    std::vector<tools::hbook::h1*>::const_iterator BeginConstH1() const;
+    std::vector<tools::hbook::h1*>::const_iterator EndConstH1() const;
     
     // Virtual functions from base class
     //
@@ -209,6 +214,21 @@ inline void ExG4HbookH1Manager::SetFileManager(ExG4HbookFileManager* fileManager
 inline G4int ExG4HbookH1Manager::GetH1HbookIdOffset() const {
   return fH1HbookIdOffset;
 }  
+
+inline  std::vector<tools::hbook::h1*>::iterator ExG4HbookH1Manager::BeginH1()
+{ return fH1Vector.begin(); }
+
+inline  std::vector<tools::hbook::h1*>::iterator ExG4HbookH1Manager::EndH1()
+{ return fH1Vector.end(); }
+
+inline  std::vector<tools::hbook::h1*>::const_iterator 
+ExG4HbookH1Manager::BeginConstH1() const
+{ return fH1Vector.begin(); }
+
+inline  std::vector<tools::hbook::h1*>::const_iterator 
+ExG4HbookH1Manager::EndConstH1() const
+{ return fH1Vector.end(); }
+
 
 #endif 
 

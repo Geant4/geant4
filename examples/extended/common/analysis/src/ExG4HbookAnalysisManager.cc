@@ -75,7 +75,7 @@ ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()
    fNtupleManager(0),
    fFileManager(0)
 {
-  if ( G4AnalysisManagerState::IsMT() ) {
+  if ( G4Threading::IsWorkerThread() ) {
     // Hbook output is not supported in MT mode
     G4ExceptionDescription description;
     description << "      " 

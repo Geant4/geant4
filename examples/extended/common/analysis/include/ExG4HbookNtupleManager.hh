@@ -75,20 +75,32 @@ class ExG4HbookNtupleManager : public G4VNtupleManager
     tools::hbook::wntuple* GetNtuple() const;
     tools::hbook::wntuple* GetNtuple(G4int ntupleId) const;
 
+    // Iterators
+    std::vector<tools::hbook::wntuple*>::iterator BeginNtuple();
+    std::vector<tools::hbook::wntuple*>::iterator EndNtuple();
+    std::vector<tools::hbook::wntuple*>::const_iterator BeginConstNtuple() const;
+    std::vector<tools::hbook::wntuple*>::const_iterator EndConstNtuple() const;
+
     // Virtual functions from base class
     //
     // Methods to create ntuples
     virtual G4int CreateNtuple(const G4String& name, const G4String& title);
     // Create columns in the last created ntuple
-    virtual G4int CreateNtupleIColumn(const G4String& name);
-    virtual G4int CreateNtupleFColumn(const G4String& name);
-    virtual G4int CreateNtupleDColumn(const G4String& name);
+    virtual G4int CreateNtupleIColumn(
+                    const G4String& name, std::vector<int>* vector);
+    virtual G4int CreateNtupleFColumn(
+                    const G4String& name, std::vector<float>* vector);
+    virtual G4int CreateNtupleDColumn(
+                    const G4String& name, std::vector<double>* vector);
     virtual void  FinishNtuple();   
-     // Create columns in the ntuple with given id
-    virtual G4int CreateNtupleIColumn(G4int ntupleId, const G4String& name);
-    virtual G4int CreateNtupleFColumn(G4int ntupleId, const G4String& name);
-    virtual G4int CreateNtupleDColumn(G4int ntupleId, const G4String& name);   
-    virtual void  FinishNtuple(G4int ntupleId);
+    // Create columns in the ntuple with given id
+    virtual G4int CreateNtupleIColumn(G4int ntupleId, 
+                    const G4String& name, std::vector<int>* vector);
+    virtual G4int CreateNtupleFColumn(G4int ntupleId, 
+                    const G4String& name, std::vector<float>* vector);
+    virtual G4int CreateNtupleDColumn(G4int ntupleId, 
+                    const G4String& name, std::vector<double>* vector);
+    virtual void  FinishNtuple(G4int ntupleId);   
  
     // Methods to fill ntuples
     // Methods for ntuple with id = FirstNtupleId                     
@@ -131,7 +143,8 @@ class ExG4HbookNtupleManager : public G4VNtupleManager
     //
     ExG4HbookFileManager* fFileManager;
     G4int fNtupleHbookIdOffset;
-    std::vector<ExG4HbookNtupleDescription*> fNtupleVector;
+    std::vector<ExG4HbookNtupleDescription*> fNtupleDescriptionVector;
+    std::vector<tools::hbook::wntuple*> fNtupleVector;
 };
 
 // inline functions
@@ -142,6 +155,22 @@ inline void ExG4HbookNtupleManager::SetFileManager(ExG4HbookFileManager* fileMan
 inline G4int ExG4HbookNtupleManager::GetNtupleHbookIdOffset() const {
   return fNtupleHbookIdOffset;
 }  
+
+inline std::vector<tools::hbook::wntuple*>::iterator 
+ExG4HbookNtupleManager::BeginNtuple()
+{ return fNtupleVector.begin(); }
+
+inline std::vector<tools::hbook::wntuple*>::iterator 
+ExG4HbookNtupleManager::EndNtuple()
+{ return fNtupleVector.end(); }
+
+inline std::vector<tools::hbook::wntuple*>::const_iterator 
+ExG4HbookNtupleManager::BeginConstNtuple() const
+{ return fNtupleVector.begin(); }
+
+inline  std::vector<tools::hbook::wntuple*>::const_iterator 
+ExG4HbookNtupleManager::EndConstNtuple() const
+{ return fNtupleVector.end(); }
 
 inline G4int ExG4HbookNtupleManager::GetNofNtuples() const
 { return fNtupleVector.size(); }
