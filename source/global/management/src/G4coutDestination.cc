@@ -33,6 +33,8 @@
 
 #include "G4coutDestination.hh"
 
+G4coutDestination* G4coutDestination::masterG4coutDestination = 0;
+
 G4coutDestination::G4coutDestination()
 {
 }

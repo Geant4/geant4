@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 12, 2014 A.Dotti (global-V10-00-23,global-V10-00-24)
+- Add forward of cout and cerr in MT to master G4coutDestination
+  if setup in client derived classes. To be used by special
+  sessions (e.g. GUI) that want to intercept thread cout/cerr
+
 May 21, 2014 G.Cosmo (global-V10-00-22)
 - Correction in G4Exp::G4Expf() to remove 2nd order term contribution
   repeated twice by mistake. Correction included in VDT 0.3.7 library,

@@ -73,6 +73,15 @@ G4int G4MTcoutDestination::ReceiveG4cout(const G4String& msg)
              <<" > "<<msg;
     }
   }
+  //forward message to master G4coutDestination if set
+  if ( masterG4coutDestination &&  !ignoreCout &&
+       ( !ignoreInit || G4StateManager::GetStateManager()->GetCurrentState() != G4State_Idle )
+    ){
+        G4AutoLock l(&coutm);
+        std::stringstream ss;
+        ss<<prefix<<id<<" > "<<msg;
+        masterG4coutDestination->ReceiveG4cout(ss.str());
+    }
   return 0;
 }
 
@@ -84,6 +93,15 @@ G4int G4MTcoutDestination::ReceiveG4cerr(const G4String& msg)
   { cerr_buffer<<msg; }
   else
   {   G4AutoLock l(&coutm); finalcerr<<prefix<<id<<" > "<<msg; }
+  //forward message to master G4coutDestination if set
+    if ( masterG4coutDestination &&  !ignoreCout &&
+        ( !ignoreInit || G4StateManager::GetStateManager()->GetCurrentState() != G4State_Idle )
+    ){
+        G4AutoLock l(&coutm);
+        std::stringstream ss;
+        ss<<prefix<<id<<" > "<<msg;
+        masterG4coutDestination->ReceiveG4cerr(ss.str());
+    }
   return 0;
 }
 
