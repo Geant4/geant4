@@ -46,18 +46,19 @@
 #include "G4EmPenelopePhysics.hh"
 #include "G4EmLowEPPhysics.hh"
 
+#include "G4LossTableManager.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList(),
- fEmPhysicsList(0),
- fStepMaxProcess(0),
- fMessenger(0)
+ fEmPhysicsList(0), fStepMaxProcess(0), fMessenger(0)
 {
+  G4LossTableManager::Instance();
+  SetDefaultCutValue(1*mm);
+  
   fMessenger = new PhysicsListMessenger(this);
-
   SetVerboseLevel(1);
 
   // EM physics
@@ -307,13 +308,8 @@ void PhysicsList::AddStepMax()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCuts()
-{      
-  if (verboseLevel >0) {
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }  
-    
-  if (verboseLevel>0) DumpCutValuesTable();
+{          
+  if (verboseLevel > 0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
