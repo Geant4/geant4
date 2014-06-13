@@ -14,5 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-06-14 Gunter Folger    (exExtHadFissFrag-V10-00-07)
+                      (tag exExtHadFissFrag-V10-00-06 exists in tagsDB)
+- correct compilation warning on unused variable run in FFRunAction
+- add input file for testing: batch.in
+	
+	
 06-06-13 (exExtHadFissFrag-V10-00-05)
 First release

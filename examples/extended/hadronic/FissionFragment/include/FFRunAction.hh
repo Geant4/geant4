@@ -26,8 +26,8 @@ public:
     FFRunAction();
     
 // Function
-    virtual void BeginOfRunAction(const G4Run* run);
-    virtual void EndOfRunAction(const G4Run* run);
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void EndOfRunAction(const G4Run*);
     
 // Destructor
     virtual ~FFRunAction();

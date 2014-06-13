@@ -29,13 +29,13 @@ FFRunAction()
 }
 
 void FFRunAction::
-BeginOfRunAction(const G4Run* run)
+BeginOfRunAction(const G4Run*)
 {
     G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 }
 
 void FFRunAction::
-EndOfRunAction(const G4Run* run)
+EndOfRunAction(const G4Run*)
 {
     // TODO Check location of fission fragments here
     // TODO Implement detector tally here
