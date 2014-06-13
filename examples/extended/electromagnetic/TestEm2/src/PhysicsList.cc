@@ -57,18 +57,18 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() 
- : G4VModularPhysicsList(),fEmPhysicsList(0),fMessenger(0)
+ : G4VModularPhysicsList(),fEmPhysicsList(0),fDecay(0),fMessenger(0)
 {
-  G4LossTableManager::Instance();
-  SetDefaultCutValue(1*mm);
-
-  fMessenger = new PhysicsListMessenger(this);
   SetVerboseLevel(1);
+  fMessenger = new PhysicsListMessenger(this);
 
   // EM physics
   fEmName = "emstandard_opt0";  
   fEmPhysicsList = new G4EmStandardPhysics();
   fDecay = new G4DecayPhysics();
+  
+  G4LossTableManager::Instance();
+  SetDefaultCutValue(1*mm);  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -198,13 +198,6 @@ void PhysicsList::AddStepMax()
           pmanager ->AddDiscreteProcess(stepMaxProcess);
         }
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCuts()
-{
-  if (verboseLevel > 0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

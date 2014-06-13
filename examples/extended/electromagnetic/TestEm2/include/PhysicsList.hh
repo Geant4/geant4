@@ -54,7 +54,6 @@ public:
 
   virtual void ConstructParticle();
   virtual void ConstructProcess();
-  virtual void SetCuts();
             
   void AddPhysicsList(const G4String& name);
     
