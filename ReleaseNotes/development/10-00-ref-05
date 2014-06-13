@@ -238,7 +238,7 @@ processes/electromagnetic/standard               emstand-V10-00-29
   random engine for CPU performance improvement; no change to algorithms.
 - G4UrbanMscModel: modified ComputeGeomPathLength() method to provide one
   single return statement for easier printouts. No change in the algorithms.
-- G4IonCoulombCrossSection: fixed screen factor for projectile and
+- G4IonCoulombCrossSection: fixed screen factor for projectile and           (o)
   target Z=1. Tuned computation of the screen factor.
 - G4eCoulombScatteringModel, G4hCoulombScatteringModel,
   G4IonCoulombScatteringModel: updated initialisation of vector of cuts;

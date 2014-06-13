@@ -154,7 +154,9 @@ processes/electromagnetic/utils                  emutils-V10-00-04
   general cleanup including: removed old commented code; use std::min and
   std::max instead of "if" where possible; use G4Log; reduced number of
   divisions.
-- G4LossTableManager: minor change of ionisation for charm and bottom mesons.
+- G4LossTableManager - minor change of ionisation for charm and bottom       (o)
+  mesons; do not recompute x-section if a process is shared between particle
+  and  anti-particles.
 
 processes/hadronic
 ------------------

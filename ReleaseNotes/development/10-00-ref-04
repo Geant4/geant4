@@ -176,10 +176,11 @@ processes/electromagnetic/standard               emstand-V10-00-25
 ----------------------------------
 - G4CoulombScattering: use G4IonCoulombScatteringModel for ions by default.  (o)
 - G4IonCoulombScatteringModel: fixed warning from G4ParticleTable;           (o)
-  fixed final state generation and scattering off Hydrogen.
+  fixed final state generation.
 - G4WentzelOKandVIxSection: fixed mass of recoil for Hydrogen target.        (o)
-- G4WentzelVIModel: fixed step limitation. Optimized transition between multiple
-  and single scattering modes.
+- G4WentzelVIModel - optimized transition between multiple and single        (o)
+    scattering modes; changed order of displacement and angular 
+    deflection (second order effect)
 - G4WentzelOKandVIxSection: fixed initialisation for low-energy model (this
   model is not combined with single scattering); fixed small inaccuracy for
   sampling. Some cleanup for sampling
