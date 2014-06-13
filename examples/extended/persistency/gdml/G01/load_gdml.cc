@@ -45,7 +45,7 @@
 
 #include "G01PrimaryGeneratorAction.hh"
 #include "G01DetectorConstruction.hh"
-#include "G01PhysicsList.hh"
+#include "FTFP_BERT.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -89,15 +89,15 @@ int main(int argc,char **argv)
 
    runManager->SetUserInitialization(new G01DetectorConstruction(
                                      parser.GetWorldVolume()));
-   runManager->SetUserInitialization(new G01PhysicsList);
+   runManager->SetUserInitialization(new FTFP_BERT);
    runManager->SetUserAction(new G01PrimaryGeneratorAction);
 
    runManager->Initialize();
 
    if (argc>=3)
    {
-      parser.Write(argv[2], G4TransportationManager::GetTransportationManager()->
-                   GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
+      parser.Write(argv[2], G4TransportationManager::GetTransportationManager()
+      ->GetNavigatorForTracking()->GetWorldVolume()->GetLogicalVolume());
    }
 
    G4UImanager* UImanager = G4UImanager::GetUIpointer();
