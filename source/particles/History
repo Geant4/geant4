@@ -16,6 +16,14 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- 13 Jun. 2014 Hisaya Kurashige (particles-V10-00-13)
+- Fix the bug of mass width in G4VDecayChannelFIlleDuaghters
+
+- 12 Jun. 2014 Alberto Ribon (particles-V10-00-12)
+- G4PhaseSpaceDecayChannel: fix bug of momentum non-conservation
+  in the two-body decay
+
 - 31 May 2014 Hisaya Kurashige (particles-V10-00-11)
 - Fix bugs in G4ExcitedMesonConstructor (missing pi + eta mode in DecayTable)
 - G4PhaseSpaceDecayChannel takes in to account mass width of daughter particles

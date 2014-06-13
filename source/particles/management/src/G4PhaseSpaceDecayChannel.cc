@@ -232,7 +232,7 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::TwoBodyDecayIt()
   G4DynamicParticle * daughterparticle = new G4DynamicParticle( G4MT_daughters[0], direction, Ekin, daughtermass[0]);
   products->PushProducts(daughterparticle);
   Ekin = std::sqrt(daughtermomentum*daughtermomentum + daughtermass[1]*daughtermass[1]) - daughtermass[1];
-  daughterparticle = new G4DynamicParticle( G4MT_daughters[1], direction, Ekin, daughtermass[1]);
+  daughterparticle = new G4DynamicParticle( G4MT_daughters[1], -1.0*direction, Ekin, daughtermass[1]);
   products->PushProducts(daughterparticle);
 
 #ifdef G4VERBOSE

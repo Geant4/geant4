@@ -411,7 +411,7 @@ void G4VDecayChannel::FillDaughters()
   }  // end loop over all daughters
 
   // check sum of daghter mass
-  G4double widthMass = std::sqrt(G4MT_parent->GetPDGWidth()+G4MT_parent->GetPDGWidth()+sumofdaughterwidthsq);
+  G4double widthMass = std::sqrt(G4MT_parent->GetPDGWidth()*G4MT_parent->GetPDGWidth()+sumofdaughterwidthsq);
   if ( (G4MT_parent->GetParticleType() != "nucleus") &&
        (sumofdaughtermass > parentmass + rangeMass*widthMass) ){
    // !!! illegal mass  !!!
