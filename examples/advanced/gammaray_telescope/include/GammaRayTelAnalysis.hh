@@ -23,7 +23,6 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifdef G4ANALYSIS_USE
 //
 // $Id$
 // ------------------------------------------------------------
@@ -117,5 +116,4 @@ private:
 };
 
 
-#endif
 #endif

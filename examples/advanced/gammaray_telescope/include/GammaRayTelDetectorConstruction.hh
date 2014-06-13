@@ -39,6 +39,7 @@
 #define GammaRayTelDetectorConstruction_h 1
 
 #include "G4VUserDetectorConstruction.hh"
+#include "G4Cache.hh"
 #include "globals.hh"
 
 class G4Box;
@@ -51,6 +52,7 @@ class GammaRayTelDetectorMessenger;
 class GammaRayTelTrackerSD;
 class GammaRayTelAnticoincidenceSD;
 class GammaRayTelCalorimeterSD;
+class G4GlobalMagFieldMessenger;
 
 //class GammaRayTelTrackerROGeometry;
 
@@ -88,6 +90,7 @@ public:
      
   G4VPhysicalVolume* Construct();
   void UpdateGeometry();
+  void ConstructSDandField();
   
 public:
   
@@ -261,12 +264,18 @@ private:
   G4LogicalVolume*   logicConverter;
   G4VPhysicalVolume* physiConverter;         
 
-  G4UniformMagField* magField;      //pointer to the magnetic field
-  
+  G4LogicalVolume* logicTKRStripX;
+  G4LogicalVolume* logicTKRStripY;
+
+  // magnetic field messenger
+  static G4ThreadLocal G4GlobalMagFieldMessenger*  fMagFieldMessenger; 
+                                           
   GammaRayTelDetectorMessenger* detectorMessenger;  //pointer to the Messenger
-  GammaRayTelTrackerSD* trackerSD;  //pointer to the sensitive detector
-  GammaRayTelCalorimeterSD* calorimeterSD;  //pointer to the sensitive detector
-  GammaRayTelAnticoincidenceSD* anticoincidenceSD;  //pointer to the sensitive detector
+  
+ 
+  G4Cache<GammaRayTelTrackerSD*> trackerSD;  //pointer to the sensitive detector
+  G4Cache<GammaRayTelCalorimeterSD*> calorimeterSD;  //pointer to the sensitive detector
+  G4Cache<GammaRayTelAnticoincidenceSD*> anticoincidenceSD;  //pointer to the sensitive detector
 
   //G4Region* aTKRRegion; // TKR cut region
   //G4Region* aCALRegion; // CAL cut region

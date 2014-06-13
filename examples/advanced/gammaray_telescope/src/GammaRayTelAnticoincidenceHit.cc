@@ -39,7 +39,7 @@
 
 #include "GammaRayTelAnticoincidenceHit.hh"
 
-G4Allocator<GammaRayTelAnticoincidenceHit> GammaRayTelAnticoincidenceHitAllocator;
+G4ThreadLocal G4Allocator<GammaRayTelAnticoincidenceHit> *GammaRayTelAnticoincidenceHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

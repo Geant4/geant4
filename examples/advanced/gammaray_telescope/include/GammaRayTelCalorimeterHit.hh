@@ -92,22 +92,22 @@ public:
 
 typedef G4THitsCollection<GammaRayTelCalorimeterHit> GammaRayTelCalorimeterHitsCollection;
 
-extern G4Allocator<GammaRayTelCalorimeterHit> GammaRayTelCalorimeterHitAllocator;
+extern G4ThreadLocal G4Allocator<GammaRayTelCalorimeterHit> *GammaRayTelCalorimeterHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void* GammaRayTelCalorimeterHit::operator new(size_t)
 {
-  void* aHit;
-  aHit = (void*) GammaRayTelCalorimeterHitAllocator.MallocSingle();
-  return aHit;
+  if (!GammaRayTelCalorimeterHitAllocator)
+    GammaRayTelCalorimeterHitAllocator = new G4Allocator<GammaRayTelCalorimeterHit>;
+  return (void*) GammaRayTelCalorimeterHitAllocator->MallocSingle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void GammaRayTelCalorimeterHit::operator delete(void* aHit)
 {
-  GammaRayTelCalorimeterHitAllocator.FreeSingle((GammaRayTelCalorimeterHit*) aHit);
+  GammaRayTelCalorimeterHitAllocator->FreeSingle((GammaRayTelCalorimeterHit*) aHit);
 }
 
 #endif

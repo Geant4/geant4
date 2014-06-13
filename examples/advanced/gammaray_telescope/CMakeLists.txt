@@ -24,13 +24,9 @@ include(${Geant4_USE_FILE})
 # Add option to control storage 
 #
 option(G4STORE_DATA "Stores output data" OFF)
-option(G4ANALYSIS_USE "Histograms for Analysis" ON)
 
 if(G4STORE_DATA)
   add_definitions(-DG4STORE_DATA)
-endif()
-if(G4ANALYSIS_USE)
-  add_definitions(-DG4ANALYSIS_USE)  
 endif()
 
 #----------------------------------------------------------------------------

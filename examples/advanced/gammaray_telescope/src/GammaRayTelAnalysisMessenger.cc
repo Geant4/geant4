@@ -35,7 +35,6 @@
 //           by R.Giannitrapani, F.Longo & G.Santin (03 dic 2000)
 // 20.11.01 G.Santin: modified according to the new GammaRayTelAnalysis.cc
 // ************************************************************
-#ifdef G4ANALYSIS_USE
 
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithAString.hh"
@@ -81,7 +80,6 @@ void GammaRayTelAnalysisMessenger::SetNewValue(G4UIcommand* command,G4String new
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-#endif
 
 
 

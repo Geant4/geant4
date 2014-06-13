@@ -38,7 +38,6 @@
 // ************************************************************
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-#ifdef G4ANALYSIS_USE
 #ifndef GammaRayTelAnalysisMessenger_h
 #define GammaRayTelAnalysisMessenger_h 1
 
@@ -65,7 +64,6 @@ private:
   
   G4UIcmdWithAString*        Histo2DModeCmd;
 };
-#endif
 #endif
 
 

@@ -91,22 +91,22 @@ public:
 
 typedef G4THitsCollection<GammaRayTelTrackerHit> GammaRayTelTrackerHitsCollection;
 
-extern G4Allocator<GammaRayTelTrackerHit> GammaRayTelTrackerHitAllocator;
+extern G4ThreadLocal G4Allocator<GammaRayTelTrackerHit> *GammaRayTelTrackerHitAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void* GammaRayTelTrackerHit::operator new(size_t)
 {
-  void* aHit;
-  aHit = (void*) GammaRayTelTrackerHitAllocator.MallocSingle();
-  return aHit;
+  if (!GammaRayTelTrackerHitAllocator)
+    GammaRayTelTrackerHitAllocator = new G4Allocator<GammaRayTelTrackerHit>;
+  return (void*) GammaRayTelTrackerHitAllocator->MallocSingle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void GammaRayTelTrackerHit::operator delete(void* aHit)
 {
-  GammaRayTelTrackerHitAllocator.FreeSingle((GammaRayTelTrackerHit*) aHit);
+  GammaRayTelTrackerHitAllocator->FreeSingle((GammaRayTelTrackerHit*) aHit);
 }
 
 #endif

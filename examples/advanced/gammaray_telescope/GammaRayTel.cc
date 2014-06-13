@@ -57,9 +57,7 @@
 //#include "QGSP_BIC.hh" 
 #include "FTFP_BERT.hh" 
 
-#ifdef G4ANALYSIS_USE
 #include "GammaRayTelAnalysis.hh"
-#endif
  
 /* This global file is used to store relevant data for
    analysis with external tools */
@@ -86,10 +84,8 @@ int main(int argc, char** argv)
   //Initialize actions
   runManager->SetUserInitialization(new GammaRayTelActionInitializer());
 
-#ifdef G4ANALYSIS_USE
   // Creation of the analysis manager
   GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
-#endif
     
   // Set visualization and user interface
 #ifdef G4VIS_USE
@@ -126,9 +122,7 @@ int main(int argc, char** argv)
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-#ifdef G4ANALYSIS_USE
   delete analysis;
-#endif
   delete runManager;
   return 0;
 }

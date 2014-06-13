@@ -57,8 +57,13 @@ public:
 public:
   void BeginOfRunAction(const G4Run*);
   void EndOfRunAction(const G4Run*);
+  std::ofstream* GetOutputFile(){return outFile;};
+  
 
 private:
+  std::ofstream* outFile;
+  G4String fileName;
+
 };
 
 #endif

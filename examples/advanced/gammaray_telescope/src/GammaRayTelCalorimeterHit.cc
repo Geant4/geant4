@@ -39,7 +39,7 @@
 
 #include "GammaRayTelCalorimeterHit.hh"
 
-G4Allocator<GammaRayTelCalorimeterHit> GammaRayTelCalorimeterHitAllocator;
+G4ThreadLocal G4Allocator<GammaRayTelCalorimeterHit> *GammaRayTelCalorimeterHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

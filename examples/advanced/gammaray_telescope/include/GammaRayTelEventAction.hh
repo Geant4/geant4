@@ -46,6 +46,7 @@
 
 #include "G4UserEventAction.hh"
 #include "globals.hh"
+#include "GammaRayTelRunAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -53,7 +54,7 @@ class GammaRayTelEventAction : public G4UserEventAction
 {
 public:
 
-  GammaRayTelEventAction();
+  GammaRayTelEventAction(GammaRayTelRunAction* runAction=0);
   virtual ~GammaRayTelEventAction();
   
 public:
@@ -68,6 +69,9 @@ private:
   G4int       calorimeterCollID;                
   G4int       anticoincidenceCollID;                
   G4String    drawFlag;
+
+  GammaRayTelRunAction* theRunAction;
+
 };
 
 #endif

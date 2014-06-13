@@ -9,6 +9,20 @@ $Id$
                           History file
                           ------------
 
+13.06.2014   L.Pandola, Tag  gammaraytel-V10-00-04
+             Get rid of compiler warning in GammaRayTelRunAction 
+             showing up when G4STORE_DATA=OFF
+
+12.06.2014   L.Pandola, Tag  gammaraytel-V10-00-03
+	     const access to DetectorConstruction by PrimaryGen
+	     Remove G4ANALYSIS_USE flag (no external dependency!)
+	     Get rid of the extern output file (now member of RunAction)
+
+11.06.2014   L.Pandola, Tag  gammaraytel-V10-00-02
+	     Migrated hit and digi classes, to make them MT-compliant
+	     Added method ConstructSDandField in the geometry class
+             Use G4GlobalFieldManager instead of local field
+	     
 19.05.2014   F.Longo, Tag gammaraytel-V10-00-01
              Removed deprecated RO geometry
 

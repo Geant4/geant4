@@ -47,9 +47,10 @@ GammaRayTelActionInitializer::GammaRayTelActionInitializer() :
 
 void GammaRayTelActionInitializer::Build() const 
 {
+  GammaRayTelRunAction* theRunAction = new GammaRayTelRunAction();
   SetUserAction(new GammaRayTelPrimaryGeneratorAction());
-  SetUserAction(new GammaRayTelRunAction());
-  SetUserAction(new GammaRayTelEventAction()); 
+  SetUserAction(theRunAction);
+  SetUserAction(new GammaRayTelEventAction(theRunAction)); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

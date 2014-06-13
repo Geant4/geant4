@@ -93,22 +93,22 @@ public:
 
 typedef G4TDigiCollection<GammaRayTelDigi> GammaRayTelDigitsCollection;
 
-extern G4Allocator<GammaRayTelDigi> GammaRayTelDigiAllocator;
+extern G4ThreadLocal G4Allocator<GammaRayTelDigi> *GammaRayTelDigiAllocator;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void* GammaRayTelDigi::operator new(size_t)
 {
-  void* aDigi;
-  aDigi = (void*) GammaRayTelDigiAllocator.MallocSingle();
-  return aDigi;
+  if (!GammaRayTelDigiAllocator)
+    GammaRayTelDigiAllocator = new G4Allocator<GammaRayTelDigi>;
+  return (void*) GammaRayTelDigiAllocator->MallocSingle();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void GammaRayTelDigi::operator delete(void* aDigi)
 {
-  GammaRayTelDigiAllocator.FreeSingle((GammaRayTelDigi*) aDigi);
+  GammaRayTelDigiAllocator->FreeSingle((GammaRayTelDigi*) aDigi);
 }
 
 #endif

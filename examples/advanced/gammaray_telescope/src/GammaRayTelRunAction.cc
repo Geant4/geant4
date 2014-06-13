@@ -43,9 +43,7 @@
 
 #include "GammaRayTelRunAction.hh"
 
-#ifdef  G4ANALYSIS_USE
 #include "GammaRayTelAnalysis.hh"
-#endif
 
 #include <stdlib.h>
 #include "G4Run.hh"
@@ -53,31 +51,32 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 
-extern std::ofstream outFile;
-
-GammaRayTelRunAction::GammaRayTelRunAction()
-{
-}
+GammaRayTelRunAction::GammaRayTelRunAction() :
+  outFile(0),fileName("NULL")
+{;}
 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 GammaRayTelRunAction::~GammaRayTelRunAction()
-{
-}
+{;}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void GammaRayTelRunAction::BeginOfRunAction(const G4Run* aRun)
 {  
+  G4cout << "Start of Run " << aRun->GetRunID() << G4endl;
 
   // Open the file for the tracks of this run
-
-  char name[15];
-  sprintf(name,"Tracks_%d.dat", aRun->GetRunID());
-
 #ifdef G4STORE_DATA
-  outFile.open(name);
+  char name[15];
+  sprintf(name,"Tracks_%d.dat",aRun->GetRunID());
+  if (!outFile)
+    {
+      outFile = new std::ofstream;
+      outFile->open(name);
+      fileName = G4String(name);
+    }
 #endif
 
   // Prepare the visualization
@@ -88,39 +87,28 @@ void GammaRayTelRunAction::BeginOfRunAction(const G4Run* aRun)
     } 
 
   // If analysis is used reset the histograms
-#ifdef G4ANALYSIS_USE
   GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
   //  analysis->BeginOfRun(aRun->GetRunID());
   analysis->BeginOfRun();
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void GammaRayTelRunAction::EndOfRunAction(const G4Run* aRun)
 {
-  char name[15];
-  sprintf(name,"Tracks_%d.dat", aRun->GetRunID());
-  G4cout << "End of Run " << G4endl;
-  G4cout << "File " << name << G4endl;
-
-/*	
-  // Run ended, update the visualization
-  if (G4VVisManager::GetConcreteInstance()) {
-     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  }
-*/
+  G4cout << "End of Run " << aRun->GetRunID() << G4endl;
 
   // Close the file with the hits information
 #ifdef G4STORE_DATA
-  outFile.close();
+  G4cout << "File " << fileName << G4endl;
+  outFile->close();
+  delete outFile;
+  outFile = 0;
 #endif
 
   // If analysis is used, print out the histograms
-#ifdef G4ANALYSIS_USE
   GammaRayTelAnalysis* analysis = GammaRayTelAnalysis::getInstance();
   analysis->EndOfRun();
-#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

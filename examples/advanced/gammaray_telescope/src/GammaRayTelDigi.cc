@@ -38,7 +38,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 #include "GammaRayTelDigi.hh"
 
-G4Allocator<GammaRayTelDigi> GammaRayTelDigiAllocator;
+G4ThreadLocal G4Allocator<GammaRayTelDigi> *GammaRayTelDigiAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

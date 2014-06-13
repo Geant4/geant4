@@ -39,7 +39,7 @@
 
 #include "GammaRayTelTrackerHit.hh"
 
-G4Allocator<GammaRayTelTrackerHit> GammaRayTelTrackerHitAllocator;
+G4ThreadLocal G4Allocator<GammaRayTelTrackerHit> *GammaRayTelTrackerHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

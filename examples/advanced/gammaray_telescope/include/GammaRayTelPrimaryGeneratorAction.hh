@@ -73,7 +73,7 @@ public:
 private:
   G4ParticleGun*                particleGun;
   G4GeneralParticleSource*      particleSource;	  
-  GammaRayTelDetectorConstruction*    GammaRayTelDetector;  
+  const GammaRayTelDetectorConstruction*    GammaRayTelDetector;  
   GammaRayTelPrimaryGeneratorMessenger* gunMessenger; 
   G4String                      rndmFlag;    //flag for a random impact point
   G4int                         nSourceType;

@@ -58,10 +58,8 @@
 GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction()
   :rndmFlag("off"),nSourceType(0),nSpectrumType(0)
 {
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-  GammaRayTelDetector =
-    (GammaRayTelDetectorConstruction*)(runManager->GetUserDetectorConstruction());
-
+  GammaRayTelDetector = static_cast<const GammaRayTelDetectorConstruction*>
+    (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
 
   //create a messenger for this class
   
