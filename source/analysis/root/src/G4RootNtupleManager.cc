@@ -37,6 +37,7 @@
 G4RootNtupleManager::G4RootNtupleManager(const G4AnalysisManagerState& state)
  : G4VNtupleManager(state),
    fNtupleDirectory(0),
+   fNtupleDescriptionVector(),
    fNtupleVector()
 {
 }
@@ -45,7 +46,7 @@ G4RootNtupleManager::G4RootNtupleManager(const G4AnalysisManagerState& state)
 G4RootNtupleManager::~G4RootNtupleManager()
 {  
   std::vector<G4RootNtupleDescription*>::iterator it;  
-  for (it = fNtupleVector.begin(); it != fNtupleVector.end(); it++ ) {
+  for (it = fNtupleDescriptionVector.begin(); it != fNtupleDescriptionVector.end(); it++ ) {
     delete (*it);
   }   
 }
@@ -136,7 +137,7 @@ G4RootNtupleDescription* G4RootNtupleManager::GetNtupleInFunction(G4int id,
                                       G4bool /*onlyIfActive*/) const
 {                                      
   G4int index = id - fFirstId;
-  if ( index < 0 || index >= G4int(fNtupleVector.size()) ) {
+  if ( index < 0 || index >= G4int(fNtupleDescriptionVector.size()) ) {
     if ( warn) {
       G4String inFunction = "G4RootNtupleManager::";
       inFunction += functionName;
@@ -147,7 +148,7 @@ G4RootNtupleDescription* G4RootNtupleManager::GetNtupleInFunction(G4int id,
     return 0;         
   }
   
-  return fNtupleVector[index];
+  return fNtupleDescriptionVector[index];
 }
   
 // 
@@ -159,10 +160,10 @@ void G4RootNtupleManager::CreateNtuplesFromBooking()
 {
 // Create ntuple from ntuple_booking.
 
-  if ( ! fNtupleVector.size() ) return;     
+  if ( ! fNtupleDescriptionVector.size() ) return;     
   
   std::vector<G4RootNtupleDescription*>::iterator itn;  
-  for (itn = fNtupleVector.begin(); itn != fNtupleVector.end(); itn++ ) {
+  for (itn = fNtupleDescriptionVector.begin(); itn != fNtupleDescriptionVector.end(); itn++ ) {
 
     tools::ntuple_booking* ntupleBooking = (*itn)->fNtupleBooking;
     if ( ! ntupleBooking ) continue;
@@ -175,6 +176,7 @@ void G4RootNtupleManager::CreateNtuplesFromBooking()
 
     (*itn)->fNtuple
       = new tools::wroot::ntuple(*fNtupleDirectory, *ntupleBooking);
+    fNtupleVector.push_back((*itn)->fNtuple);  
   
     if ( ntupleBooking->columns().size() ) {
       // store ntuple columns in local maps
@@ -215,7 +217,7 @@ void G4RootNtupleManager::CreateNtuplesFromBooking()
 //_____________________________________________________________________________
 G4bool G4RootNtupleManager::IsEmpty() const
 {
-  return ! fNtupleVector.size();
+  return ! fNtupleDescriptionVector.size();
 }  
  
 //_____________________________________________________________________________
@@ -224,11 +226,12 @@ G4bool G4RootNtupleManager::Reset()
 // Reset ntuples
 
   std::vector<G4RootNtupleDescription*>::iterator it;  
-  for (it = fNtupleVector.begin(); it != fNtupleVector.end(); it++ ) {
+  for (it = fNtupleDescriptionVector.begin(); it != fNtupleDescriptionVector.end(); it++ ) {
     // ntuple is deleted automatically when file is closed
     // delete (*it)->fNtuple;
     (*it)->fNtuple=0; 
-  }  
+  } 
+  fNtupleVector.clear(); 
   
   return true;
 }  
@@ -260,10 +263,10 @@ G4int G4RootNtupleManager::CreateNtuple(const G4String& name,
 #endif
 
   // Create ntuple description
-  G4int index = fNtupleVector.size();
+  G4int index = fNtupleDescriptionVector.size();
   G4RootNtupleDescription* ntupleDescription
     = new G4RootNtupleDescription();
-  fNtupleVector.push_back(ntupleDescription);  
+  fNtupleDescriptionVector.push_back(ntupleDescription);  
 
   // Create ntuple booking
   ntupleDescription->fNtupleBooking 
@@ -275,6 +278,7 @@ G4int G4RootNtupleManager::CreateNtuple(const G4String& name,
     ntupleDescription->fNtuple 
       = new tools::wroot::ntuple(*fNtupleDirectory, name, title);
            // ntuple object is deleted automatically when closing a file
+    fNtupleVector.push_back(ntupleDescription->fNtuple);       
   }
 
   fLockFirstId = true;
@@ -294,7 +298,7 @@ G4int G4RootNtupleManager::CreateNtuple(const G4String& name,
 G4int G4RootNtupleManager::CreateNtupleIColumn(const G4String& name,
                                                std::vector<int>* vector)
 {
-  G4int ntupleId = fNtupleVector.size() + fFirstId - 1;
+  G4int ntupleId = fNtupleDescriptionVector.size() + fFirstId - 1;
   return CreateNtupleIColumn(ntupleId, name, vector);
 }  
 
@@ -302,7 +306,7 @@ G4int G4RootNtupleManager::CreateNtupleIColumn(const G4String& name,
 G4int G4RootNtupleManager::CreateNtupleFColumn(const G4String& name,
                                                std::vector<float>* vector)
 {
-  G4int ntupleId = fNtupleVector.size() + fFirstId - 1;
+  G4int ntupleId = fNtupleDescriptionVector.size() + fFirstId - 1;
   return CreateNtupleFColumn(ntupleId, name, vector);
 }  
 
@@ -310,7 +314,7 @@ G4int G4RootNtupleManager::CreateNtupleFColumn(const G4String& name,
 G4int G4RootNtupleManager::CreateNtupleDColumn(const G4String& name,
                                                std::vector<double>* vector)
 {
-  G4int ntupleId = fNtupleVector.size() + fFirstId - 1;
+  G4int ntupleId = fNtupleDescriptionVector.size() + fFirstId - 1;
   return CreateNtupleDColumn(ntupleId, name, vector);
 }  
 

@@ -102,7 +102,7 @@ G4CsvAnalysisManager::~G4CsvAnalysisManager()
 G4bool G4CsvAnalysisManager::CloseNtupleFiles()
 {
   const std::vector<G4CsvNtupleDescription*>& ntupleVector
-    = fNtupleManager->GetNtupleVector();
+    = fNtupleManager->GetNtupleDescriptionVector();
 
   // Close ntuple files
   std::vector<G4CsvNtupleDescription*>::const_iterator it;  

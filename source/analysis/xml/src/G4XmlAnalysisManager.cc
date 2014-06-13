@@ -210,7 +210,7 @@ G4bool G4XmlAnalysisManager::WriteH2()
 G4bool G4XmlAnalysisManager::WriteNtuple()
 {
   const std::vector<G4XmlNtupleDescription*>& ntupleVector
-    = fNtupleManager->GetNtupleVector();
+    = fNtupleManager->GetNtupleDescriptionVector();
 
   for ( G4int i=0; i<G4int(ntupleVector.size()); ++i ) {
     if ( ntupleVector[i]->fNtuple ) ntupleVector[i]->fNtuple->write_trailer();
@@ -223,7 +223,7 @@ G4bool G4XmlAnalysisManager::WriteNtuple()
 G4bool G4XmlAnalysisManager::CloseNtupleFiles()
 {
   const std::vector<G4XmlNtupleDescription*>& ntupleVector
-    = fNtupleManager->GetNtupleVector();
+    = fNtupleManager->GetNtupleDescriptionVector();
 
   // Close ntuple files
   std::vector<G4XmlNtupleDescription*>::const_iterator it;  

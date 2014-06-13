@@ -39,10 +39,27 @@
 
 namespace G4Root {
 
-  typedef tools::histo::h1d  G4AnaH1;
-  typedef tools::histo::h2d  G4AnaH2;    
+  // H1 types
+  typedef tools::histo::h1d  G4AnaH1; // keep for backward compatibility
+  typedef tools::histo::h1d  G4H1;
+  typedef std::vector<tools::histo::h1d*>::iterator  G4H1Iterator;
+  typedef std::vector<tools::histo::h1d*>::const_iterator  G4H1ConstIterator;
+
+  // H2 types
+  typedef tools::histo::h2d  G4AnaH2; // keep for backward compatibility   
+  typedef tools::histo::h2d  G4H2;    
+  typedef std::vector<tools::histo::h2d*>::iterator  G4H2Iterator;
+  typedef std::vector<tools::histo::h2d*>::const_iterator  G4H2ConstIterator;
+
+  // Ntuple types
   typedef tools::wroot::ntuple  G4Ntuple; 
+  typedef std::vector<tools::wroot::ntuple*>::iterator  G4NtupleIterator;
+  typedef std::vector<tools::wroot::ntuple*>::const_iterator  G4NtupleConstIterator;
+
+  // RNtuple types
   typedef tools::rroot::ntuple  G4RNtuple; 
+  
+  // Managers
   typedef G4RootAnalysisManager G4AnalysisManager; 
   typedef G4RootAnalysisReader  G4AnalysisReader; 
 } 

@@ -65,8 +65,14 @@ class G4XmlNtupleManager : public G4VNtupleManager
     tools::waxml::ntuple* GetNtuple() const;
     tools::waxml::ntuple* GetNtuple(G4int ntupleId) const;
 
+    // Iterators
+    std::vector<tools::waxml::ntuple*>::iterator BeginNtuple();
+    std::vector<tools::waxml::ntuple*>::iterator EndNtuple();
+    std::vector<tools::waxml::ntuple*>::const_iterator BeginConstNtuple() const;
+    std::vector<tools::waxml::ntuple*>::const_iterator EndConstNtuple() const;
+
     // Access to ntuple vector (needed for Write())
-    const std::vector<G4XmlNtupleDescription*>& GetNtupleVector() const;
+    const std::vector<G4XmlNtupleDescription*>& GetNtupleDescriptionVector() const;
 
     // Virtual functions from base class
     //
@@ -124,7 +130,8 @@ class G4XmlNtupleManager : public G4VNtupleManager
     // data members
     //
     G4XmlFileManager*  fFileManager;
-    std::vector<G4XmlNtupleDescription*> fNtupleVector;
+    std::vector<G4XmlNtupleDescription*> fNtupleDescriptionVector;
+    std::vector<tools::waxml::ntuple*> fNtupleVector;
 };
 
 // inline functions
@@ -132,11 +139,28 @@ class G4XmlNtupleManager : public G4VNtupleManager
 inline void G4XmlNtupleManager::SetFileManager(G4XmlFileManager* fileManager)
 { fFileManager = fileManager; }
 
+inline std::vector<tools::waxml::ntuple*>::iterator 
+G4XmlNtupleManager::BeginNtuple()
+{ return fNtupleVector.begin(); }
+
+inline std::vector<tools::waxml::ntuple*>::iterator 
+G4XmlNtupleManager::EndNtuple()
+{ return fNtupleVector.end(); }
+
+inline std::vector<tools::waxml::ntuple*>::const_iterator 
+G4XmlNtupleManager::BeginConstNtuple() const
+{ return fNtupleVector.begin(); }
+
+inline  std::vector<tools::waxml::ntuple*>::const_iterator 
+G4XmlNtupleManager::EndConstNtuple() const
+{ return fNtupleVector.end(); }
+
 inline G4int G4XmlNtupleManager::GetNofNtuples() const
 { return fNtupleVector.size(); }
 
-inline const std::vector<G4XmlNtupleDescription*>& G4XmlNtupleManager::GetNtupleVector() const
-{ return fNtupleVector; }
+inline const std::vector<G4XmlNtupleDescription*>& 
+G4XmlNtupleManager::GetNtupleDescriptionVector() const
+{ return fNtupleDescriptionVector; }
 
 
 #endif

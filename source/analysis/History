@@ -17,6 +17,22 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 12, 2014 I. Hrivnacova (analysis-V10-00-14)
+- Added typedefs and functions for accessing iterators 
+  over H1, H2, Ntuples;
+  Usage:
+   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
+   for (G4H1Iterator it = analysisManager->BeginH1(); 
+                     it != analysisManager->EndH1(); it++ ) {
+      G4H1* h1 = *it;
+      // call any h1 function define in tools
+    }  
+- Added G4AnalysisManager functions to access FirstIds   
+  G4int GetFirst[H1|H2|Ntuple|NtupleColumn]Id() const;
+
+June 11, 2014 I. Hrivnacova (analysis-V10-00-13)
+- Restored hbook files lost with moving to g4tools 1.9.4
+
 June 04, 2014 I. Hrivnacova (analysis-V10-00-12)
 - Udated History with the descriptions of the tags analysis-V09-06-*
   applied from the analysis_10-00-patches branch.

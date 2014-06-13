@@ -71,6 +71,12 @@ class G4RootNtupleManager : public G4VNtupleManager
     tools::wroot::ntuple* GetNtuple() const;
     tools::wroot::ntuple* GetNtuple(G4int ntupleId) const;
 
+    // Iterators
+    std::vector<tools::wroot::ntuple*>::iterator BeginNtuple();
+    std::vector<tools::wroot::ntuple*>::iterator EndNtuple();
+    std::vector<tools::wroot::ntuple*>::const_iterator BeginConstNtuple() const;
+    std::vector<tools::wroot::ntuple*>::const_iterator EndConstNtuple() const;
+    
     // Functions independent from the output type 
     //
 
@@ -126,15 +132,31 @@ class G4RootNtupleManager : public G4VNtupleManager
     // data members
     //
     tools::wroot::directory*  fNtupleDirectory;
-    std::vector<G4RootNtupleDescription*> fNtupleVector;
+    std::vector<G4RootNtupleDescription*> fNtupleDescriptionVector;
+    std::vector<tools::wroot::ntuple*>   fNtupleVector;
 };    
 
 // inline functions
 
 inline void G4RootNtupleManager::SetNtupleDirectory(
-                                    tools::wroot::directory* directory) {
-  fNtupleDirectory = directory;
-}    
+                                    tools::wroot::directory* directory) 
+{ fNtupleDirectory = directory; }    
+
+inline std::vector<tools::wroot::ntuple*>::iterator 
+G4RootNtupleManager::BeginNtuple()
+{ return fNtupleVector.begin(); }
+
+inline std::vector<tools::wroot::ntuple*>::iterator 
+G4RootNtupleManager::EndNtuple()
+{ return fNtupleVector.end(); }
+
+inline std::vector<tools::wroot::ntuple*>::const_iterator 
+G4RootNtupleManager::BeginConstNtuple() const
+{ return fNtupleVector.begin(); }
+
+inline  std::vector<tools::wroot::ntuple*>::const_iterator 
+G4RootNtupleManager::EndConstNtuple() const
+{ return fNtupleVector.end(); }
 
 inline G4int G4RootNtupleManager::GetNofNtuples() const
 { return fNtupleVector.size(); }

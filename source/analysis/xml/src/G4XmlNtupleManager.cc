@@ -43,6 +43,7 @@
 G4XmlNtupleManager::G4XmlNtupleManager(const G4AnalysisManagerState& state)
  : G4VNtupleManager(state),
    fFileManager(0),
+   fNtupleDescriptionVector(),
    fNtupleVector()
 {
 }
@@ -51,7 +52,7 @@ G4XmlNtupleManager::G4XmlNtupleManager(const G4AnalysisManagerState& state)
 G4XmlNtupleManager::~G4XmlNtupleManager()
 {  
   std::vector<G4XmlNtupleDescription*>::iterator it;  
-  for (it = fNtupleVector.begin(); it != fNtupleVector.end(); it++ ) {
+  for (it = fNtupleDescriptionVector.begin(); it != fNtupleDescriptionVector.end(); it++ ) {
     delete (*it);
   }   
 }
@@ -138,7 +139,7 @@ G4XmlNtupleDescription* G4XmlNtupleManager::GetNtupleInFunction(G4int id,
                                       G4bool /*onlyIfActive*/) const
 {                                      
   G4int index = id - fFirstId;
-  if ( index < 0 || index >= G4int(fNtupleVector.size()) ) {
+  if ( index < 0 || index >= G4int(fNtupleDescriptionVector.size()) ) {
     if ( warn) {
       G4String inFunction = "G4XmlNtupleManager::";
       inFunction += functionName;
@@ -149,7 +150,7 @@ G4XmlNtupleDescription* G4XmlNtupleManager::GetNtupleInFunction(G4int id,
     return 0;         
   }
   
-  return fNtupleVector[index];
+  return fNtupleDescriptionVector[index];
 }
   
 // 
@@ -163,10 +164,13 @@ void G4XmlNtupleManager::CreateNtuplesFromBooking()
 
   // Do not create ntuples on master thread 
   if ( G4Threading::IsMultithreadedApplication() && 
-       fState.GetIsMaster() ) return;     
+       fState.GetIsMaster() ) {
+       G4cout << "Do not create ntuples on master thread"  << G4endl; 
+       return;
+  }          
   
   std::vector<G4XmlNtupleDescription*>::iterator itn;  
-  for (itn = fNtupleVector.begin(); itn != fNtupleVector.end(); itn++ ) {
+  for (itn = fNtupleDescriptionVector.begin(); itn != fNtupleDescriptionVector.end(); itn++ ) {
 
     tools::ntuple_booking* ntupleBooking = (*itn)->fNtupleBooking;
     if ( ! ntupleBooking ) continue;
@@ -184,6 +188,7 @@ void G4XmlNtupleManager::CreateNtuplesFromBooking()
     // create ntuple
     (*itn)->fNtuple
       = new tools::waxml::ntuple(*((*itn)->fFile), G4cerr, *ntupleBooking);
+    fNtupleVector.push_back((*itn)->fNtuple);  
 
     if ( ntupleBooking->columns().size() ) {
       // store ntuple columns in local maps
@@ -225,7 +230,7 @@ void G4XmlNtupleManager::CreateNtuplesFromBooking()
 //_____________________________________________________________________________
 G4bool G4XmlNtupleManager::IsEmpty() const
 {
-  return ! fNtupleVector.size();
+  return ! fNtupleDescriptionVector.size();
 }  
  
 //_____________________________________________________________________________
@@ -234,10 +239,11 @@ G4bool G4XmlNtupleManager::Reset()
 // Reset ntuples
 
   std::vector<G4XmlNtupleDescription*>::iterator it;  
-  for (it = fNtupleVector.begin(); it != fNtupleVector.end(); it++ ) {
+  for (it = fNtupleDescriptionVector.begin(); it != fNtupleDescriptionVector.end(); it++ ) {
     delete (*it)->fNtuple;
     (*it)->fNtuple = 0;
   }  
+  fNtupleVector.clear(); 
   
   return true;
 }  
@@ -267,10 +273,10 @@ G4int G4XmlNtupleManager::CreateNtuple(const G4String& name,
 #endif
 
   // Create ntuple description
-  G4int index = fNtupleVector.size();
+  G4int index = fNtupleDescriptionVector.size();
   G4XmlNtupleDescription* ntupleDescription
     = new G4XmlNtupleDescription();
-  fNtupleVector.push_back(ntupleDescription);  
+  fNtupleDescriptionVector.push_back(ntupleDescription);  
 
   // Create ntuple booking
   ntupleDescription->fNtupleBooking 
@@ -283,6 +289,7 @@ G4int G4XmlNtupleManager::CreateNtuple(const G4String& name,
       ntupleDescription->fNtuple 
         = new tools::waxml::ntuple(*(ntupleDescription->fFile));
            // ntuple object is deleted when closing a file
+      fNtupleVector.push_back(ntupleDescription->fNtuple);       
     }       
   }
 
@@ -303,7 +310,7 @@ G4int G4XmlNtupleManager::CreateNtuple(const G4String& name,
 G4int G4XmlNtupleManager::CreateNtupleIColumn(const G4String& name,
                                                std::vector<int>* vector)
 {
-  G4int ntupleId = fNtupleVector.size() + fFirstId - 1;
+  G4int ntupleId = fNtupleDescriptionVector.size() + fFirstId - 1;
   return CreateNtupleIColumn(ntupleId, name, vector);
 }  
 
@@ -311,7 +318,7 @@ G4int G4XmlNtupleManager::CreateNtupleIColumn(const G4String& name,
 G4int G4XmlNtupleManager::CreateNtupleFColumn(const G4String& name,
                                                std::vector<float>* vector)
 {
-  G4int ntupleId = fNtupleVector.size() + fFirstId - 1;
+  G4int ntupleId = fNtupleDescriptionVector.size() + fFirstId - 1;
   return CreateNtupleFColumn(ntupleId, name, vector);
 }  
 
@@ -319,14 +326,14 @@ G4int G4XmlNtupleManager::CreateNtupleFColumn(const G4String& name,
 G4int G4XmlNtupleManager::CreateNtupleDColumn(const G4String& name,
                                                std::vector<double>* vector)
 {
-  G4int ntupleId = fNtupleVector.size() + fFirstId - 1;
+  G4int ntupleId = fNtupleDescriptionVector.size() + fFirstId - 1;
   return CreateNtupleDColumn(ntupleId, name, vector);
 }  
 
 //_____________________________________________________________________________
 void G4XmlNtupleManager::FinishNtuple()
 { 
-  G4int ntupleId = fNtupleVector.size() + fFirstId - 1;
+  G4int ntupleId = fNtupleDescriptionVector.size() + fFirstId - 1;
   FinishNtuple(ntupleId);
 }
    

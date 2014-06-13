@@ -67,6 +67,13 @@ class G4H1ToolsManager : public G4VH1Manager
     //
     tools::histo::h1d*  GetH1(G4int id, G4bool warn = true,
                               G4bool onlyIfActive = true) const;
+                              
+    // Iterators
+    std::vector<tools::histo::h1d*>::iterator BeginH1();
+    std::vector<tools::histo::h1d*>::iterator EndH1();
+    std::vector<tools::histo::h1d*>::const_iterator BeginConstH1() const;
+    std::vector<tools::histo::h1d*>::const_iterator EndConstH1() const;
+                              
     // Access to histogram vector (needed for Write())
     const std::vector<tools::histo::h1d*>& GetH1Vector() const;
     const std::vector<G4HnInformation*>&   GetHnVector() const;  
@@ -151,6 +158,20 @@ class G4H1ToolsManager : public G4VH1Manager
 };
 
 // inline methods
+
+inline  std::vector<tools::histo::h1d*>::iterator G4H1ToolsManager::BeginH1()
+{ return fH1Vector.begin(); }
+
+inline  std::vector<tools::histo::h1d*>::iterator G4H1ToolsManager::EndH1()
+{ return fH1Vector.end(); }
+
+inline  std::vector<tools::histo::h1d*>::const_iterator 
+G4H1ToolsManager::BeginConstH1() const
+{ return fH1Vector.begin(); }
+
+inline  std::vector<tools::histo::h1d*>::const_iterator 
+G4H1ToolsManager::EndConstH1() const
+{ return fH1Vector.end(); }
 
 inline const std::vector<tools::histo::h1d*>& G4H1ToolsManager::GetH1Vector() const
 { return fH1Vector; }

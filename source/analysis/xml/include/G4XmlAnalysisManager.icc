@@ -58,3 +58,92 @@ tools::waxml::ntuple* G4XmlAnalysisManager::GetNtuple(G4int ntupleId) const
 {
   return fNtupleManager->GetNtuple(ntupleId);
 }  
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h1d*>::iterator G4XmlAnalysisManager::BeginH1()
+{
+  return fH1Manager->BeginH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h1d*>::iterator G4XmlAnalysisManager::EndH1()
+{
+  return fH1Manager->EndH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h1d*>::const_iterator 
+G4XmlAnalysisManager::BeginConstH1() const
+{
+  return fH1Manager->BeginConstH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h1d*>::const_iterator 
+G4XmlAnalysisManager::EndConstH1() const
+{
+  return fH1Manager->EndConstH1();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h2d*>::iterator G4XmlAnalysisManager::BeginH2()
+{
+  return fH2Manager->BeginH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h2d*>::iterator G4XmlAnalysisManager::EndH2()
+{
+  return fH2Manager->EndH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h2d*>::const_iterator 
+G4XmlAnalysisManager::BeginConstH2() const
+{
+  return fH2Manager->BeginConstH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::histo::h2d*>::const_iterator 
+G4XmlAnalysisManager::EndConstH2() const
+{
+  return fH2Manager->EndConstH2();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::waxml::ntuple*>::iterator G4XmlAnalysisManager::BeginNtuple()
+{
+  return fNtupleManager->BeginNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::waxml::ntuple*>::iterator G4XmlAnalysisManager::EndNtuple()
+{
+  return fNtupleManager->EndNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::waxml::ntuple*>::const_iterator 
+G4XmlAnalysisManager::BeginConstNtuple() const
+{
+  return fNtupleManager->BeginConstNtuple();
+}  
+
+//_____________________________________________________________________________
+inline
+std::vector<tools::waxml::ntuple*>::const_iterator 
+G4XmlAnalysisManager::EndConstNtuple() const
+{
+  return fNtupleManager->EndConstNtuple();
+}  

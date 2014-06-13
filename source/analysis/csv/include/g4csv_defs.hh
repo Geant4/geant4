@@ -35,7 +35,12 @@
 
 namespace G4Csv {
 
+  // Ntuple types
   typedef tools::wcsv::ntuple  G4Ntuple; 
+  typedef std::vector<tools::wcsv::ntuple*>::iterator  G4NtupleIterator;
+  typedef std::vector<tools::wcsv::ntuple*>::const_iterator  G4NtupleConstIterator;
+
+  // Managers
   typedef G4CsvAnalysisManager G4AnalysisManager; 
 }  
 

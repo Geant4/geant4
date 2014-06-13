@@ -49,6 +49,9 @@ class G4BaseAnalysisManager
     // starting from 0; with the following function it is possible to
     // change the first Id to start from other value
     G4bool SetFirstId(G4int firstId);
+
+    // Access method
+    G4int GetFirstId() const;
     
   protected:
     // methods
@@ -60,6 +63,11 @@ class G4BaseAnalysisManager
     G4bool   fLockFirstId;     
 };
 
+// inline functions
+
+inline G4int G4BaseAnalysisManager::GetFirstId() const {
+  return fFirstId;
+}  
 
 #endif
 

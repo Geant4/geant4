@@ -210,6 +210,11 @@ class G4VAnalysisManager
     G4bool IsAscii() const;
 
     // Access methods
+    G4int GetFirstH1Id() const;
+    G4int GetFirstH2Id() const;
+    G4int GetFirstNtupleId() const;
+    G4int GetFirstNtupleColumnId() const;
+  
     G4int GetNofH1s() const;
     G4int GetNofH2s() const;
     G4int GetNofNtuples() const;

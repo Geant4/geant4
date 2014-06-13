@@ -71,6 +71,7 @@ class G4VNtupleManager : public G4BaseAnalysisManager
     // with the following function it is possible to change it 
     // to start from another value
     G4bool SetFirstNtupleColumnId(G4int firstId); 
+    G4int  GetFirstNtupleColumnId() const;
 
     // Methods to fill histogrammes, ntuples
     // Methods for ntuple with id = FirstNtupleId                     
@@ -91,6 +92,11 @@ class G4VNtupleManager : public G4BaseAnalysisManager
     G4int   fFirstNtupleColumnId;
     G4bool  fLockFirstNtupleColumnId;     
 };
+// inline functions
+
+inline G4int G4VNtupleManager::GetFirstNtupleColumnId() const {
+  return fFirstNtupleColumnId;
+}  
     
 #endif
 

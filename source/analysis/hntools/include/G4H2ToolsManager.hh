@@ -66,6 +66,12 @@ class G4H2ToolsManager : public G4VH2Manager
     //
     tools::histo::h2d*  GetH2(G4int id, G4bool warn = true,
                               G4bool onlyIfActive = true) const;
+    // Iterators
+    std::vector<tools::histo::h2d*>::iterator BeginH2();
+    std::vector<tools::histo::h2d*>::iterator EndH2();
+    std::vector<tools::histo::h2d*>::const_iterator BeginConstH2() const;
+    std::vector<tools::histo::h2d*>::const_iterator EndConstH2() const;
+                              
     // Access to histogram vector (needed for Write())
     const std::vector<tools::histo::h2d*>& GetH2Vector() const;
     const std::vector<G4HnInformation*>&   GetHnVector() const;
@@ -174,6 +180,20 @@ class G4H2ToolsManager : public G4VH2Manager
     std::map<G4String, G4int>  fH2NameIdMap;            
 };
 // inline methods
+
+inline  std::vector<tools::histo::h2d*>::iterator G4H2ToolsManager::BeginH2()
+{ return fH2Vector.begin(); }
+
+inline  std::vector<tools::histo::h2d*>::iterator G4H2ToolsManager::EndH2()
+{ return fH2Vector.end(); }
+
+inline  std::vector<tools::histo::h2d*>::const_iterator 
+G4H2ToolsManager::BeginConstH2() const
+{ return fH2Vector.begin(); }
+
+inline  std::vector<tools::histo::h2d*>::const_iterator 
+G4H2ToolsManager::EndConstH2() const
+{ return fH2Vector.end(); }
 
 inline const std::vector<tools::histo::h2d*>& G4H2ToolsManager::GetH2Vector() const
 { return fH2Vector; }

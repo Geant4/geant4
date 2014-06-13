@@ -63,6 +63,22 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     tools::waxml::ntuple* GetNtuple() const;
     tools::waxml::ntuple* GetNtuple(G4int ntupleId) const;
 
+    // Iterators
+    std::vector<tools::histo::h1d*>::iterator BeginH1();
+    std::vector<tools::histo::h1d*>::iterator EndH1();
+    std::vector<tools::histo::h1d*>::const_iterator BeginConstH1() const;
+    std::vector<tools::histo::h1d*>::const_iterator EndConstH1() const;
+    
+    std::vector<tools::histo::h2d*>::iterator BeginH2();
+    std::vector<tools::histo::h2d*>::iterator EndH2();
+    std::vector<tools::histo::h2d*>::const_iterator BeginConstH2() const;
+    std::vector<tools::histo::h2d*>::const_iterator EndConstH2() const;
+    
+    std::vector<tools::waxml::ntuple*>::iterator BeginNtuple();
+    std::vector<tools::waxml::ntuple*>::iterator EndNtuple();
+    std::vector<tools::waxml::ntuple*>::const_iterator BeginConstNtuple() const;
+    std::vector<tools::waxml::ntuple*>::const_iterator EndConstNtuple() const;
+    
   protected:
     // virtual methods from base class
     virtual G4bool OpenFileImpl(const G4String& fileName);

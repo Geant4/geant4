@@ -561,6 +561,37 @@ G4bool G4VAnalysisManager::IsAscii() const
 }  
 
 //_____________________________________________________________________________
+G4int G4VAnalysisManager::GetFirstH1Id() const
+{
+// Return first H1 id
+
+  return fVH1Manager->GetFirstId();
+}  
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::GetFirstH2Id() const
+{
+// Return first H2 id
+
+  return fVH2Manager->GetFirstId();
+}  
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::GetFirstNtupleId() const
+{
+// Return first Ntuple id
+
+  return fVNtupleManager->GetFirstId();
+}  
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::GetFirstNtupleColumnId() const
+{
+// Return first Ntuple column id
+
+  return fVNtupleManager->GetFirstNtupleColumnId();
+}  
+
+//_____________________________________________________________________________
 G4int G4VAnalysisManager::GetNofH1s() const
 {
   return fH1HnManager->GetNofHns();

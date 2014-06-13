@@ -65,9 +65,15 @@ class G4CsvNtupleManager : public G4VNtupleManager
     // Access methods
     tools::wcsv::ntuple* GetNtuple() const;
     tools::wcsv::ntuple* GetNtuple(G4int ntupleId) const;
+
+    // Iterators
+    std::vector<tools::wcsv::ntuple*>::iterator BeginNtuple();
+    std::vector<tools::wcsv::ntuple*>::iterator EndNtuple();
+    std::vector<tools::wcsv::ntuple*>::const_iterator BeginConstNtuple() const;
+    std::vector<tools::wcsv::ntuple*>::const_iterator EndConstNtuple() const;
     
     // Access to ntuple vector (needed for Write())
-    const std::vector<G4CsvNtupleDescription*>& GetNtupleVector() const;
+    const std::vector<G4CsvNtupleDescription*>& GetNtupleDescriptionVector() const;
 
     // Functions independent from the output type 
     //
@@ -124,7 +130,8 @@ class G4CsvNtupleManager : public G4VNtupleManager
     // data members
     //
     G4CsvFileManager*  fFileManager;
-    std::vector<G4CsvNtupleDescription*> fNtupleVector;
+    std::vector<G4CsvNtupleDescription*> fNtupleDescriptionVector;
+    std::vector<tools::wcsv::ntuple*> fNtupleVector;
 };
 
 // inline functions
@@ -132,11 +139,28 @@ class G4CsvNtupleManager : public G4VNtupleManager
 inline void G4CsvNtupleManager::SetFileManager(G4CsvFileManager* fileManager)
 { fFileManager = fileManager; }
 
-inline G4int G4CsvNtupleManager::GetNofNtuples() const
-{ return fNtupleVector.size(); }
+inline std::vector<tools::wcsv::ntuple*>::iterator 
+G4CsvNtupleManager::BeginNtuple()
+{ return fNtupleVector.begin(); }
 
-inline const std::vector<G4CsvNtupleDescription*>& G4CsvNtupleManager::GetNtupleVector() const
-{ return fNtupleVector; }
+inline std::vector<tools::wcsv::ntuple*>::iterator 
+G4CsvNtupleManager::EndNtuple()
+{ return fNtupleVector.end(); }
+
+inline std::vector<tools::wcsv::ntuple*>::const_iterator 
+G4CsvNtupleManager::BeginConstNtuple() const
+{ return fNtupleVector.begin(); }
+
+inline  std::vector<tools::wcsv::ntuple*>::const_iterator 
+G4CsvNtupleManager::EndConstNtuple() const
+{ return fNtupleVector.end(); }
+
+inline G4int G4CsvNtupleManager::GetNofNtuples() const
+{ return fNtupleDescriptionVector.size(); }
+
+inline const std::vector<G4CsvNtupleDescription*>& 
+G4CsvNtupleManager::GetNtupleDescriptionVector() const
+{ return fNtupleDescriptionVector; }
 
 #endif
 

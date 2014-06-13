@@ -39,6 +39,7 @@
 G4CsvNtupleManager::G4CsvNtupleManager(const G4AnalysisManagerState& state)
  : G4VNtupleManager(state),
    fFileManager(0),
+   fNtupleDescriptionVector(),
    fNtupleVector()
 {
 }
@@ -47,7 +48,7 @@ G4CsvNtupleManager::G4CsvNtupleManager(const G4AnalysisManagerState& state)
 G4CsvNtupleManager::~G4CsvNtupleManager()
 {  
   std::vector<G4CsvNtupleDescription*>::iterator it;  
-  for (it = fNtupleVector.begin(); it != fNtupleVector.end(); it++ ) {
+  for (it = fNtupleDescriptionVector.begin(); it != fNtupleDescriptionVector.end(); it++ ) {
     delete (*it);
   }   
 }
@@ -144,7 +145,7 @@ G4CsvNtupleDescription* G4CsvNtupleManager::GetNtupleInFunction(G4int id,
                                       G4bool /*onlyIfActive*/) const
 {                                      
   G4int index = id - fFirstId;
-  if ( index < 0 || index >= G4int(fNtupleVector.size()) ) {
+  if ( index < 0 || index >= G4int(fNtupleDescriptionVector.size()) ) {
     if ( warn) {
       G4String inFunction = "G4CsvNtupleManager::";
       inFunction += functionName;
@@ -155,7 +156,7 @@ G4CsvNtupleDescription* G4CsvNtupleManager::GetNtupleInFunction(G4int id,
     return 0;         
   }
   
-  return fNtupleVector[index];
+  return fNtupleDescriptionVector[index];
 }
   
 // 
@@ -172,7 +173,7 @@ void G4CsvNtupleManager::CreateNtuplesFromBooking()
        fState.GetIsMaster() ) return;     
   
   std::vector<G4CsvNtupleDescription*>::iterator itn;  
-  for (itn = fNtupleVector.begin(); itn != fNtupleVector.end(); itn++ ) {
+  for (itn = fNtupleDescriptionVector.begin(); itn != fNtupleDescriptionVector.end(); itn++ ) {
 
     tools::ntuple_booking* ntupleBooking = (*itn)->fNtupleBooking;  
     if ( ! ntupleBooking ) continue;
@@ -189,6 +190,7 @@ void G4CsvNtupleManager::CreateNtuplesFromBooking()
     // create ntuple
     (*itn)->fNtuple
       = new tools::wcsv::ntuple(*((*itn)->fFile), G4cerr, *ntupleBooking);
+    fNtupleVector.push_back((*itn)->fNtuple);  
   
     if ( ntupleBooking->columns().size() ) {
       // store ntuple columns in local maps
@@ -229,17 +231,18 @@ void G4CsvNtupleManager::CreateNtuplesFromBooking()
 //_____________________________________________________________________________
 G4bool G4CsvNtupleManager::IsEmpty() const
 {
-  return ! fNtupleVector.size();
+  return ! fNtupleDescriptionVector.size();
 }  
  
 //_____________________________________________________________________________
 G4bool G4CsvNtupleManager::Reset()
 {
   std::vector<G4CsvNtupleDescription*>::iterator it;  
-  for (it = fNtupleVector.begin(); it != fNtupleVector.end(); it++ ) {
+  for (it = fNtupleDescriptionVector.begin(); it != fNtupleDescriptionVector.end(); it++ ) {
     delete (*it)->fNtuple; 
     (*it)->fNtuple = 0;
   }  
+  fNtupleVector.clear(); 
   
   return true;
 }  
@@ -263,7 +266,7 @@ tools::wcsv::ntuple* G4CsvNtupleManager::GetNtuple(G4int ntupleId) const
 
 //_____________________________________________________________________________
 G4int G4CsvNtupleManager::CreateNtuple(const G4String& name, 
-                                         const G4String& title)
+                                       const G4String& title)
 {
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
@@ -271,10 +274,10 @@ G4int G4CsvNtupleManager::CreateNtuple(const G4String& name,
 #endif
 
   // Create ntuple description
-  G4int index = fNtupleVector.size();
+  G4int index = fNtupleDescriptionVector.size();
   G4CsvNtupleDescription* ntupleDescription
     = new G4CsvNtupleDescription();
-  fNtupleVector.push_back(ntupleDescription);  
+  fNtupleDescriptionVector.push_back(ntupleDescription);  
 
   // Create ntuple booking
   ntupleDescription->fNtupleBooking 
@@ -288,7 +291,8 @@ G4int G4CsvNtupleManager::CreateNtuple(const G4String& name,
       ntupleDescription->fNtuple 
         = new tools::wcsv::ntuple(*(ntupleDescription->fFile));
            // ntuple object is deleted when closing a file
-    }       
+      fNtupleVector.push_back(ntupleDescription->fNtuple);       
+   }       
   }  
 
   fLockFirstId = true;
@@ -308,7 +312,7 @@ G4int G4CsvNtupleManager::CreateNtuple(const G4String& name,
 G4int G4CsvNtupleManager::CreateNtupleIColumn(const G4String& name,
                                               std::vector<int>* vector)
 {
-  G4int ntupleId = fNtupleVector.size() + fFirstId - 1;
+  G4int ntupleId = fNtupleDescriptionVector.size() + fFirstId - 1;
   return CreateNtupleIColumn(ntupleId, name, vector);
 }  
 
@@ -316,7 +320,7 @@ G4int G4CsvNtupleManager::CreateNtupleIColumn(const G4String& name,
 G4int G4CsvNtupleManager::CreateNtupleFColumn(const G4String& name,
                                               std::vector<float>* vector)
 {
-  G4int ntupleId = fNtupleVector.size() + fFirstId - 1;
+  G4int ntupleId = fNtupleDescriptionVector.size() + fFirstId - 1;
   return CreateNtupleFColumn(ntupleId, name, vector);
 }  
 
@@ -324,7 +328,7 @@ G4int G4CsvNtupleManager::CreateNtupleFColumn(const G4String& name,
 G4int G4CsvNtupleManager::CreateNtupleDColumn(const G4String& name,
                                               std::vector<double>* vector)
 {
-  G4int ntupleId = fNtupleVector.size() + fFirstId - 1;
+  G4int ntupleId = fNtupleDescriptionVector.size() + fFirstId - 1;
   return CreateNtupleDColumn(ntupleId, name, vector);
 }  
 

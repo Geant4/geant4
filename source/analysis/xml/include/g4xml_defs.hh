@@ -37,10 +37,24 @@
 
 namespace G4Xml {
 
-  typedef tools::histo::h1d  G4AnaH1;
-  typedef tools::histo::h2d  G4AnaH2;    
-  typedef tools::waxml::ntuple*  G4Ntuple; 
+  // H1 types
+  typedef tools::histo::h1d  G4AnaH1; // keep for backward compatibility
+  typedef tools::histo::h1d  G4H1;
+  typedef std::vector<tools::histo::h1d*>::iterator  G4H1Iterator;
+  typedef std::vector<tools::histo::h1d*>::const_iterator  G4H1ConstIterator;
 
+  // H2 types
+  typedef tools::histo::h2d  G4AnaH2; // keep for backward compatibility    
+  typedef tools::histo::h2d  G4H2;
+  typedef std::vector<tools::histo::h2d*>::iterator  G4H2Iterator;
+  typedef std::vector<tools::histo::h2d*>::const_iterator  G4H2ConstIterator;
+
+  // Ntuple types
+  typedef tools::waxml::ntuple  G4Ntuple; 
+  typedef std::vector<tools::waxml::ntuple*>::iterator  G4NtupleIterator;
+  typedef std::vector<tools::waxml::ntuple*>::const_iterator  G4NtupleConstIterator;
+
+  // Managers
   typedef G4XmlAnalysisManager G4AnalysisManager; 
 }  
 

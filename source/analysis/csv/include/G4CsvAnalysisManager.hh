@@ -62,6 +62,12 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
     tools::wcsv::ntuple* GetNtuple() const;
     tools::wcsv::ntuple* GetNtuple(G4int ntupleId) const;
 
+    // Iterators
+    std::vector<tools::wcsv::ntuple*>::iterator BeginNtuple();
+    std::vector<tools::wcsv::ntuple*>::iterator EndNtuple();
+    std::vector<tools::wcsv::ntuple*>::const_iterator BeginConstNtuple() const;
+    std::vector<tools::wcsv::ntuple*>::const_iterator EndConstNtuple() const;
+
   protected:
     // virtual methods from base class
     virtual G4bool OpenFileImpl(const G4String& fileName);
