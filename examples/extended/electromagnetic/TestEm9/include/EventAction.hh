@@ -41,8 +41,6 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class EventActionMessenger;
-
 class EventAction : public G4UserEventAction
 {
 public: 
@@ -54,14 +52,9 @@ public:
   virtual void BeginOfEventAction(const G4Event*);
   virtual void   EndOfEventAction(const G4Event*);
 
-  inline void SetPrintModulo(G4int val) { fPrintModulo = val;};
-
 private:
 
-  G4int    fPrintModulo;
   G4int    fVerbose;
-
-  EventActionMessenger* fEventMessenger;
 };
 
 #endif

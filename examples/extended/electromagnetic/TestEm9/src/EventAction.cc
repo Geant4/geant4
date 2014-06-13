@@ -28,33 +28,29 @@
 //
 // $Id$
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
 #include "HistoManager.hh"
-#include "EventActionMessenger.hh"
 
 #include "G4UImanager.hh"
 #include "G4Gamma.hh"
 #include "G4ios.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction():
   G4UserEventAction(),
-  fPrintModulo(100),
   fVerbose(0)
-{
-  fEventMessenger = new EventActionMessenger(this);
-}
+{}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::BeginOfEventAction(const G4Event* event)
 {
@@ -77,15 +73,9 @@ void EventAction::BeginOfEventAction(const G4Event* event)
     hi->SetVerbose(0);
     (G4UImanager::GetUIpointer())->ApplyCommand("/tracking/verbose 0");
   }
-
-  // Initialize user actions
-  if(fVerbose > 0 || (n/fPrintModulo)*fPrintModulo == n) {
-    G4cout << "EventAction: Event # " << n << " started" << G4endl;
-  }
-
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event* event)
 {
@@ -97,4 +87,4 @@ void EventAction::EndOfEventAction(const G4Event* event)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

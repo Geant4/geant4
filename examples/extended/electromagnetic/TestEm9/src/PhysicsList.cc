@@ -64,8 +64,6 @@
 #include "G4StoppingPhysics.hh"
 
 #include "G4RegionStore.hh"
-#include "G4Region.hh"
-#include "G4ProductionCuts.hh"
 #include "G4ProcessManager.hh"
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
@@ -88,20 +86,10 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList(),
   fEmPhysicsList(0),
   fDecayPhysicsList(0),
   fStepMaxProcess(0),
-  fMessenger(0),
-  fVertexDetectorCuts(0),
-  fMuonDetectorCuts(0)
+  fMessenger(0)
 {
   G4LossTableManager::Instance();
-  defaultCutValue  = 1.*mm;
-  fCutForGamma     = defaultCutValue;
-  fCutForElectron  = defaultCutValue;
-  fCutForPositron  = defaultCutValue;
-  fCutForVertexDetector = defaultCutValue;
-  fCutForMuonDetector   = defaultCutValue;
-
-  fVertexDetectorCuts = 0;
-  fMuonDetectorCuts   = 0;
+  SetDefaultCutValue(1*mm);
 
   fMessenger = new PhysicsListMessenger(this);
   fStepMaxProcess = new StepMax();
@@ -271,80 +259,6 @@ void PhysicsList::AddStepMax()
       {
         pmanager ->AddDiscreteProcess(fStepMaxProcess);
       }
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCuts()
-{
-  SetCutValue(fCutForGamma, "gamma", "DefaultRegionForTheWorld");
-  SetCutValue(fCutForElectron, "e-", "DefaultRegionForTheWorld");
-  SetCutValue(fCutForElectron, "e+", "DefaultRegionForTheWorld");
-  SetCutValue(fCutForProton, "proton", "DefaultRegionForTheWorld");
-
-  G4Region* region = 
-    (G4RegionStore::GetInstance())->GetRegion("VertexDetector");
-  fVertexDetectorCuts = region->GetProductionCuts();
-  SetVertexCut(fCutForVertexDetector);
- 
-  region = (G4RegionStore::GetInstance())->GetRegion("MuonDetector");
-  fMuonDetectorCuts = region->GetProductionCuts();
-  SetMuonCut(fCutForMuonDetector);
-  
-  if (verboseLevel>0) DumpCutValuesTable();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForGamma(G4double cut)
-{
-  fCutForGamma = cut;
-  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForElectron(G4double cut)
-{
-  fCutForElectron = cut;
-  SetParticleCuts(fCutForElectron, G4Electron::Electron());
-  SetParticleCuts(fCutForElectron, G4Positron::Positron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForProton(G4double cut)
-{
-  fCutForProton = cut;
-  SetParticleCuts(fCutForProton, G4Proton::Proton());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetVertexCut(G4double cut)
-{
-  fCutForVertexDetector = cut;
-  
-  if( fVertexDetectorCuts ) {
-    fVertexDetectorCuts->SetProductionCut(cut, idxG4GammaCut);
-    fVertexDetectorCuts->SetProductionCut(cut, idxG4ElectronCut);
-    fVertexDetectorCuts->SetProductionCut(cut, idxG4PositronCut);
-    fVertexDetectorCuts->SetProductionCut(cut, idxG4ProtonCut);
-  } 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetMuonCut(G4double cut)
-{
-  fCutForMuonDetector = cut;
-
-  if( fMuonDetectorCuts ) {
-    fMuonDetectorCuts->SetProductionCut(cut, idxG4GammaCut);
-    fMuonDetectorCuts->SetProductionCut(cut, idxG4ElectronCut);
-    fMuonDetectorCuts->SetProductionCut(cut, idxG4PositronCut);
-    fMuonDetectorCuts->SetProductionCut(cut, idxG4ProtonCut);
   }
 }
 
