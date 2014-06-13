@@ -39,7 +39,6 @@
 
 class PhysicsList;
 class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
 
@@ -62,10 +61,6 @@ private:
   PhysicsList*               fPhysicsList;
     
   G4UIdirectory*             fPhysDir;    
-  G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
-  G4UIcmdWithADoubleAndUnit* fElectCutCmd;
-  G4UIcmdWithADoubleAndUnit* fPositCutCmd;    
-  G4UIcmdWithADoubleAndUnit* fAllCutCmd;    
   G4UIcmdWithAnInteger*      fVerbCmd;
   G4UIcmdWithAString*        fListCmd;
     

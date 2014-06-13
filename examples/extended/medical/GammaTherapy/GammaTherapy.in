@@ -8,8 +8,6 @@
 /event/verbose 0
 /testem/verbose 0
 #
-/testem/phys/setCuts          0.1 mm
-#
 /testem/phys/addPhysics       emstandard
 #/testem/phys/addPhysics      emstandard_opt2
 #/testem/phys/addPhysics       empenelope
@@ -21,7 +19,7 @@
 /testem/target1Z              9 mm
 /testem/target2Z              6 mm
 #
-#/testem/histoName            be_w_st.paw
+#/testem/histoName            be_w_st
 #
 #/testem/stepMax               1.0  mm
 #
@@ -29,5 +27,8 @@
 /gun/energy 50.0 MeV
 #
 /run/initialize
+#
+/run/setCut          0.1 mm
+#
 /run/beamOn 10000
-
+#
