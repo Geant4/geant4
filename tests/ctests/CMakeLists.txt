@@ -204,8 +204,8 @@ endforeach()
 if(GEANT4_USE_G3TOG4)
   GEANT4_ADD_TEST(example-ext-g3tog4-clgeometry 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/g3tog4/clGeometry/clGeometry
-                          ${CMAKE_SOURCE_DIR}/examples/extended/g3tog4/data/testmodel.dat
-                          ${CMAKE_SOURCE_DIR}/examples/extended/g3tog4/clGeometry/clGeometry.in
+                          ${CMAKE_SOURCE_DIR}/examples/extended/g3tog4/clGeometry/data/testmodel.dat
+                          -m ${CMAKE_SOURCE_DIR}/examples/extended/g3tog4/clGeometry/clGeometry.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/g3tog4/clGeometry
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/g3tog4/clGeometry
                   BUILD clGeometry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
@@ -224,6 +224,12 @@ foreach(_i 00 01 02 03 04 05 06)
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/hadronic/Hadr${_i}
                   BUILD Hadr${_i} ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 endforeach()
+GEANT4_ADD_TEST(example-ext-hadronic-FissionFragment 
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/hadronic/FissionFragment/FissionFragment
+						        -i ${CMAKE_SOURCE_DIR}/examples/extended/hadronic/FissionFragment/batch.in
+                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/hadronic/FissionFragment
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/hadronic/FissionFragment
+                  BUILD FissionFragment ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} G4NEUTRON_HP_USE_WENDT_FISSION_MODEL=1)
 GEANT4_ADD_TEST(example-ext-medical-dicom 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/medical/DICOM/DICOM
                         ${CMAKE_SOURCE_DIR}/examples/extended/medical/DICOM/run.mac
@@ -300,14 +306,14 @@ if(GEANT4_USE_GDML)
                           ${CMAKE_SOURCE_DIR}/examples/extended/persistency/gdml/G01/g01.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/persistency/gdml/G01
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/persistency/gdml/G01
-                  BUILD load_gdml PROJECT G01)
+                  BUILD load_gdml PROJECT G01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
   GEANT4_ADD_TEST(example-ext-persistency-gdml-g04 
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/persistency/gdml/G04/gdml_det
                           ${CMAKE_SOURCE_DIR}/examples/extended/persistency/gdml/G04/auxiliary.gdml 
                           ${CMAKE_SOURCE_DIR}/examples/extended/persistency/gdml/G04/g04.mac
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/persistency/gdml/G04
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/persistency/gdml/G04
-                  BUILD gdml_det PROJECT G04)
+                  BUILD gdml_det PROJECT G04 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 endif()
 if(ROOT_FOUND AND GCCXML AND Geant4_shared_FOUND)
   GEANT4_ADD_TEST(example-ext-persistency-p01-write 

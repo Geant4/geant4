@@ -207,15 +207,15 @@ endforeach()
   GEANT4_ADD_TEST(example-ext-field-field06
                   COMMAND ${BINDIR}/field06 -m ${SRCDIR}/extended/field/field06/field06.in
                   BUILD ${SRCDIR}/extended/field/field06)
-#if(GEANT4_USE_G3TOG4)
-#  GEANT4_ADD_TEST(example-ext-g3tog4-clgeometry 
-#                  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/g3tog4/clGeometry/clGeometry
-#                          ${SRCDIR}/extended/g3tog4/data/testmodel.dat
-#                          ${SRCDIR}/extended/g3tog4/clGeometry/clGeometry.in
-#                  BUILD ${SRCDIR}/extended/g3tog4/clGeometry
-#                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/g3tog4/clGeometry
-#                  BUILD clGeometry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-#endif()
+if(GEANT4_USE_G3TOG4)
+  GEANT4_ADD_TEST(example-ext-g3tog4-clgeometry 
+                  COMMAND ${CMAKE_BINARY_DIR}/examples/extended/g3tog4/clGeometry/clGeometry
+                          ${SRCDIR}/extended/g3tog4/clGeometry/data/testmodel.dat
+                          -m ${SRCDIR}/extended/g3tog4/clGeometry/clGeometry.in
+                  BUILD ${SRCDIR}/extended/g3tog4/clGeometry
+                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/g3tog4/clGeometry
+                  BUILD clGeometry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+endif()
 foreach(_i 00 01 02 03 04 05)
   GEANT4_ADD_TEST(example-ext-hadronic-hadr${_i} 
                   COMMAND ${BINDIR}/Hadr${_i} ${SRCDIR}/extended/hadronic/Hadr${_i}/hadr${_i}.in

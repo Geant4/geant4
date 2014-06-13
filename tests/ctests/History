@@ -17,6 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-09 13 June 2014 Gunter Folger
+- correct settings for FissionFragment extended hadronic example 
+
+ctests-V10-00-08 12 June 2014 Gunter Folger
+- add FissionFragment extended hadronic example 
+
+ctests-V10-00-07 12 June 2014 Gunter Folger
+- Update for gdml/g01 and g04: these need datasets, so need 
+   the default environment to be set
+
+ctests-V10-00-06 12 June 2014 Ivana Hrivnacova
+- Updated extended/g3tog4/clGeometry test for changes in the example
+  and activated this test in GNUMakeTestfile.cmake
+
 ctests-V10-00-05 06 June 2014 Peter Gumplinger
 - Add extended/exoticphysics/ucn example
 
