@@ -1,13 +1,13 @@
 
 Usage: gdml_det <intput_gdml_file:mandatory>
 
-G4GDML: Reading '/ec/G4-builds/release/slc6-gcc48-RelWithDebInfo/10-00-ref-05_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml'...
+G4GDML: Reading '/ec/build/release/09-06-refmt-01_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml'...
 G4GDML: Reading definitions...
 G4GDML: Reading materials...
 G4GDML: Reading solids...
 G4GDML: Reading structure...
 G4GDML: Reading setup...
-G4GDML: Reading '/ec/G4-builds/release/slc6-gcc48-RelWithDebInfo/10-00-ref-05_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml' done!
+G4GDML: Reading '/ec/build/release/09-06-refmt-01_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
 
         ############################################
@@ -15,7 +15,7 @@ Stripping off GDML names of materials, solids and volumes ...
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
+ Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -42,10 +42,12 @@ Current available graphics systems are:
   DAWNFILE (DAWNFILE)
   G4HepRep (HepRepXML)
   G4HepRepFile (HepRepFile)
+  OpenGLImmediateQt (OGLI, OGLIQt)
   OpenGLImmediateX (OGLIX)
-  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLImmediateXm (OGLIXm, OGLI_FALLBACK, OGLIQt_FALLBACK)
+  OpenGLStoredQt (OGL, OGLS, OGLSQt)
   OpenGLStoredX (OGLSX)
-  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  OpenGLStoredXm (OGLSXm, OGL_FALLBACK, OGLS_FALLBACK, OGLSQt_FALLBACK)
   RayTracer (RayTracer)
   RayTracerX (RayTracerX)
   VRML1FILE (VRML1FILE)
@@ -95,7 +97,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
@@ -109,7 +111,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
-### Run 0 starts.
+Start Run processing.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -333,7 +335,7 @@ Processing hits ....
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /gun/direction 0 0 -1
 /run/beamOn 20
 
@@ -352,7 +354,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
@@ -361,7 +363,7 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-### Run 1 starts.
+Start Run processing.
 
 *********************************************************************************************************
 * G4Track Information:   Particle = geantino,   Track ID = 1,   Parent ID = 0
@@ -585,7 +587,7 @@ Processing hits ....
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 /tracking/verbose 0
 /gun/direction 0.3 0.2 1
 /run/beamOn 20
@@ -605,7 +607,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
@@ -614,7 +616,7 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-### Run 2 starts.
+Start Run processing.
 Processing hits ....
 Processing hits ....
 Processing hits ....
@@ -657,7 +659,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
@@ -666,7 +668,7 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-### Run 3 starts.
+Start Run processing.
 Processing hits ....
 Processing hits ....
 Processing hits ....
@@ -690,7 +692,7 @@ Processing hits ....
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /gun/direction -0.3 0.2 0.6
 /run/beamOn 20
 
@@ -709,7 +711,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Air
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  -1 MeV    e-  -1 MeV    e+  -1 MeV proton -1 MeV
@@ -718,7 +720,7 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-### Run 4 starts.
+Start Run processing.
 Processing hits ....
 Processing hits ....
 Processing hits ....
@@ -749,16 +751,10 @@ G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserPrimaryGenerator deleted.
-RunManager is deleting RunManagerKernel.
 G4SDManager deleted.
 EventManager deleted.
-Units table cleared.
-Total navigation history collections cleaned: 7
-================== Deleting memory pools ===================
-Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.011 Mb
-============================================================
-G4Allocator objects are deleted.
 UImanager deleted.
+Units table cleared.
 StateManager deleted.
-RunManagerKernel is deleted. Good bye :)
+RunManagerKernel is deleted.
+RunManager is deleted.
