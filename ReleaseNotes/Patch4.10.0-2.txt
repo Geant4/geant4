@@ -2,7 +2,7 @@
                  Geant4 10.0 - patch-02 Release Notes
                  ------------------------------------
 
-                                                           6 June 2014
+                                                           13 June 2014
 
 List of fixes included in this public patch since the public release 10.0.p01:
 
@@ -19,6 +19,8 @@ List of fixes included in this public patch since the public release 10.0.p01:
         allowing user to select static Geant4 libraries if they are available.
       o Provide advanced option to select thread local storage model when
         building multithreaded. Supported default mode: initial-exec model.
+      o Added zlib and g3tog4 to list of features that --has-feature
+        recognizes and can query.
       o Added -DG4FPE_DEBUG to GNU/Clang flags for Debug build mode.
     + GNUMake:
       o Force loading of symbols for templated libraries in physics_lists
@@ -205,6 +207,10 @@ List of fixes included in this public patch since the public release 10.0.p01:
       o OrderingParameterTable: processes "AnnihToMuMu" and "AnnihToHad"
         should not be active AtRest. Addressing problem report #1598.
       o Fixed memory leak in G4FTFBuilder.
+    + lists:
+      o Set cut on proton to zero to simulate all recoils from elastic
+        scattering in HP physics-lists (FTFP_BERT_HP, QGSP_BIC_HP,
+        QGSP_BERT_HP and in INCLXXPhysicsListHelper).
 
   o Processes - Electromagnetic :
     ---------------------------
