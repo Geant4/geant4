@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+12 June 2014  Dennis Wright radioactive_decay-V10-00-03
+-------------------------------------------------------
+- fix memory leak in dtor of G4RIsotopeTable.cc from bug report 1617
+
 10 June 2014  Dennis Wright radioactive_decay-V10-00-02
 -------------------------------------------------------
 - G4RadioactiveDecay::GetMeanFreePath: tau = -1001 now indicates a nuclide with
