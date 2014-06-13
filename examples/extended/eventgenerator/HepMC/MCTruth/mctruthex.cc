@@ -31,7 +31,7 @@
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
 
-#include "PhysicsList.hh"
+#include "FTFP_BERT.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "DetectorConstruction.hh"
 
@@ -47,7 +47,7 @@ int main()
 
   // set mandatory initialization classes
   runManager->SetUserInitialization(new DetectorConstruction);
-  runManager->SetUserInitialization(new PhysicsList);
+  runManager->SetUserInitialization(new FTFP_BERT);
 
   // set mandatory user action class
   runManager->SetUserAction(new PrimaryGeneratorAction);
