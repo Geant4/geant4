@@ -168,4 +168,6 @@
 <class name="G4VPVParameterisation"/>
 <class name="std::vector<G4VPhysicalVolume*>"/>
 
+<class name="std::map<G4Material*,G4double>" />
+
 </lcgdict>
