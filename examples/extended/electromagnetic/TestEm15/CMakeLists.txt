@@ -40,7 +40,7 @@ target_link_libraries(TestEm15 ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(TestEm15_SCRIPTS
-    electron.mac proton.mac TestEm15.in TestEm15.out vis.mac
+    electron.mac muon.mac proton.mac TestEm15.in TestEm15.out vis.mac
   )
 
 foreach(_script ${TestEm15_SCRIPTS})

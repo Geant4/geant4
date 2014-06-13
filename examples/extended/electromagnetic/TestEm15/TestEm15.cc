@@ -40,7 +40,6 @@
 #include "SteppingVerbose.hh"
 
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "SteppingAction.hh"
 
 #ifdef G4VIS_USE
@@ -74,7 +73,6 @@ int main(int argc,char** argv) {
   // set user action classes
   RunAction* run;  
   runManager->SetUserAction(run = new RunAction(det,prim)); 
-  runManager->SetUserAction(new EventAction);
   runManager->SetUserAction(new SteppingAction(det,run));
    
   // get the pointer to the User Interface manager 

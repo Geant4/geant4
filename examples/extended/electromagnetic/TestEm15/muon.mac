@@ -12,7 +12,7 @@
 #
 /run/initialize
 #
-/testem/phys/setCuts 1 mm
+/run/setCut 1 mm
 #
 /process/list
 /process/inactivate muIoni
