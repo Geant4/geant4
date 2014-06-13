@@ -16,6 +16,23 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12/06/2014 I. Hrivnacova (excommon-analysis-V10-00-01)
+- Added typedefs and functions for accessing iterators 
+  over H1, H2, Ntuples;
+  Usage:
+   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
+   for (G4H1Iterator it = analysisManager->BeginH1(); 
+                     it != analysisManager->EndH1(); it++ ) {
+      G4H1* h1 = *it;
+      // call any h1 function define in tools
+    }  
+
+11/06/2014 I. Hrivnacova (excommon-analysis-V10-00-00)
+- Updated for changes in analysis category:
+  ntuple columns of vectors (disabled), changes in ntuple_booking
+- Updated to g4tools 1.10.0 (by G. Barrand):
+  See History_tools for complete list of modifications.
+
 07/11/2013 I. Hrivnacova (excommon-analysis-V09-06-04)
 - Implemented functions for user defined/logarithmic binning for H1 
   and H2; in case of H2 an exception is (not available in HBOOK) 
