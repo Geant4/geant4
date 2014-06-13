@@ -35,7 +35,7 @@
 # beam size
 #/testem/gun/rndm 3 mm
 #
-/testem/event/printModulo 100
+/run/printProgress 100
 #/testem/stepMax 1 mm
 #/tracking/verbose 1
 #

@@ -20,11 +20,11 @@
 /gun/energy 100 MeV
 #
 # step limit
-#/testem/phys/setCuts 0.5 mm
-/testem/phys/setCuts 1 mm
+#/run/setCut 0.5 mm
+/run/setCut 1 mm
 #/testem/stepMax 0.5 mm
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 #
 /analysis/setFileName testem7
 /analysis/h1/set 2 100 70 80 mm

@@ -35,6 +35,6 @@
 # limit the step size
 /testem/stepMax 1 mm
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 #
 /run/beamOn 10000

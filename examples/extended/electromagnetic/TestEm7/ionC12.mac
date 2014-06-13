@@ -31,9 +31,9 @@
 /gun/energy 2.4 GeV
 #
 # step limit
-/testem/phys/setCuts 0.5 mm
+/run/setCut 0.5 mm
 #
-/testem/event/printModulo 1000
+/run/printProgress 100
 #
 /testem/histo/setFileName c12
 /testem/histo/setHisto 2 100 80 90 mm

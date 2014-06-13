@@ -56,11 +56,6 @@ public:
 
   virtual void ConstructParticle();
     
-  virtual void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-        
   void AddPhysicsList(const G4String& name);
   virtual void ConstructProcess();
     
@@ -70,10 +65,6 @@ public:
 private:
 
   void AddIonGasModels();
-
-  G4double fCutForGamma;
-  G4double fCutForElectron;
-  G4double fCutForPositron;
 
   G4bool   fHelIsRegisted;
   G4bool   fBicIsRegisted;

@@ -32,11 +32,11 @@
 # beam size
 /testem/gun/rndm 3 mm
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 /testem/stepMax 1 mm
 #
 /run/beamOn 1000
-exit
+#exit
 #
 /testem/stepMax 100 mm
 /gun/particle ion

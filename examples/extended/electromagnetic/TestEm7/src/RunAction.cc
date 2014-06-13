@@ -201,7 +201,7 @@ void RunAction::BookHisto()
 
   // Define histograms start values
   const G4int kMaxHisto = 4;
-  const G4String id[] = { "0", "1", "2", "3" };
+  const G4String id[] = { "h0", "h1", "h2", "h3" };
   const G4String title[] = 
                 { "dummy",                                      //0
                   "Edep (MeV/mm) along absorber ",              //1

@@ -22,7 +22,7 @@
 # step limit
 /testem/stepMax 0.5 mm
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 #
 /analysis/setFileName alpha
 /analysis/h1/set 2 100 75 85 mm
