@@ -14,6 +14,12 @@ modifications introduced in the code and keep track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11/06/2014 - I.Hrivnacova (p6decayer-V10-00-01)
+-------------------------
+- Fixed path to copy_files.sh, clean_files.sh in GNUmakefile
+  (this makes GNUmake build working with Geant4 installation via
+   CMake)
+
 28/05/2014 - I.Hrivnacova (p6decayer-V10-00-00)
 -------------------------
 Code clean-up:
