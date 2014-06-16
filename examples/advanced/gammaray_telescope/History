@@ -9,6 +9,11 @@ $Id$
                           History file
                           ------------
 
+14.06.2014   L.Pandola, Tag  gammaraytel-V10-00-05
+             Get rid of additional compiler warning from 
+             GammaRayTelEventAction showing up when 
+             G4STORE_DATA=OFF
+
 13.06.2014   L.Pandola, Tag  gammaraytel-V10-00-04
              Get rid of compiler warning in GammaRayTelRunAction 
              showing up when G4STORE_DATA=OFF

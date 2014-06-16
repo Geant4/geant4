@@ -107,12 +107,13 @@ void GammaRayTelEventAction::EndOfEventAction(const G4Event* evt)
 {
   G4int event_id = evt->GetEventID();
 
-#ifdef G4STORE_DATA
+
   if (!theRunAction)
     {
       G4Exception("GammaRayTelEventAction::BeginOfEventAction()",
-		  "GTR0001",FatalException,"Null pointer to Run Action");
+		  "GTR0001",FatalException,"Null pointer to Run Action: this should not be");
     }
+#ifdef G4STORE_DATA
   std::ofstream* outFile = theRunAction->GetOutputFile();
 #endif
 
