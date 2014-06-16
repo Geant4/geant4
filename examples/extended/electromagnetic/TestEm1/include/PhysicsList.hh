@@ -61,7 +61,6 @@ class PhysicsList: public G4VModularPhysicsList
     void AddRadioactiveDecay();
     void AddStepMax();
 
-    virtual void SetCuts();
     void GetRange(G4double);
       
   private:    

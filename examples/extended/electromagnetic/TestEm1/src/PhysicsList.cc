@@ -57,9 +57,6 @@
 PhysicsList::PhysicsList(DetectorConstruction* det) 
 : G4VModularPhysicsList(), fEmPhysicsList(0), fDet(0), fMessenger(0)
 {
-  G4LossTableManager::Instance();
-  SetDefaultCutValue(1*mm);
-  
   fDet = det;
   fMessenger = new PhysicsListMessenger(this);
   SetVerboseLevel(1);
@@ -67,6 +64,11 @@ PhysicsList::PhysicsList(DetectorConstruction* det)
   // EM physics
   fEmName = G4String("local");
   fEmPhysicsList = new PhysListEmStandard(fEmName);
+  
+  G4LossTableManager::Instance();
+  // fix lower limit for cut
+  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(10*eV, 1*GeV);
+  SetDefaultCutValue(1*mm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -336,16 +338,6 @@ void PhysicsList::AddStepMax()
           pmanager ->AddDiscreteProcess(stepMaxProcess);
         }
   }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCuts()
-{
-  // fix lower limit for cut
-  G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(10*eV, 1*GeV);
-  
-  if (verboseLevel > 0) DumpCutValuesTable();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
