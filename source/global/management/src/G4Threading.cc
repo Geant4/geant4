@@ -131,5 +131,5 @@ void G4Threading::G4SetThreadId(G4int) {}
 G4bool G4Threading::G4SetPinAffinity(G4int,G4Thread&) { return true;}
 
 void G4Threading::SetMultithreadedApplication(G4bool) {}
-G4bool G4Threading::IsMultithreadedApplication() { return true; }
+G4bool G4Threading::IsMultithreadedApplication() { return false; }
 #endif

@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 13, 2014 A.Dotti (global-V10-00-25)
+- Bug fix in G4Threading::IsMultiThreadedApplication function
+  for sequential mode.
+
 June 12, 2014 A.Dotti (global-V10-00-23,global-V10-00-24)
 - Add forward of cout and cerr in MT to master G4coutDestination
   if setup in client derived classes. To be used by special
