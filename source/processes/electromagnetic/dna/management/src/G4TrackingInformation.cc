@@ -40,7 +40,7 @@
 
 G4TrackingInformation::G4TrackingInformation() :
     fStepLeader                     (false),
-    fProcessState                   ((size_t)G4VITProcess::GetMaxProcessIndex(),0)
+    fProcessState                   ((size_t)G4VITProcess::GetMaxProcessIndex()) //,0)
 {
     //ctor
     fpTrajectory_Lock           = 0;
@@ -53,14 +53,6 @@ G4TrackingInformation::G4TrackingInformation() :
 G4TrackingInformation::~G4TrackingInformation()
 {
     //dtor
-    for(int i = 0 ; i < (int) fProcessState.size() - 1 ; i++)
-    {
-        if(fProcessState[i])
-        {
-            delete fProcessState[i];
-            fProcessState[i] = 0;
-        }
-    }
     fProcessState.clear();
     if(fpStepProcessorState) delete fpStepProcessorState;
     fpStepProcessorState = 0;
@@ -88,7 +80,7 @@ G4TrackingInformation& G4TrackingInformation::operator=(const G4TrackingInformat
     return *this;
 }
 
-G4ProcessState_Lock* G4TrackingInformation::GetProcessState(size_t index)
+G4::shared_ptr<G4ProcessState_Lock> G4TrackingInformation::GetProcessState(size_t index)
 {
     if(index> G4VITProcess::GetMaxProcessIndex())
     {

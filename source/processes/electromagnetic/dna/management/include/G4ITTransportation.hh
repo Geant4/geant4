@@ -193,8 +193,6 @@ protected :
         G4double endpointDistance;
     };
 
-    G4ITTransportationState* const & fTransportationState;
-
     //________________________________________________________________
     // Informations relative to the process only (meaning no information
     // relative to the treated particle)

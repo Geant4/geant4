@@ -32,8 +32,7 @@
 /*G4ThreadLocal*/ size_t *G4VITProcess::fNbProcess = 0;
 
 G4VITProcess::G4VITProcess(const G4String& name, G4ProcessType type) :
-    G4VProcess( name, type ),
-    fpState (0)//,
+    G4VProcess( name, type )//,
 			  //fProcessID(fNbProcess)
 {
         if (!fNbProcess) fNbProcess = new size_t (0);
@@ -65,7 +64,6 @@ G4VITProcess::~G4VITProcess()
 G4VITProcess::G4VITProcess(const G4VITProcess& other)  : G4VProcess(other), fProcessID(other.fProcessID)
 {
 	//copy ctor
-        fpState                             = 0 ;
         currentInteractionLength            = 0;
         theInteractionTimeLeft              = 0;
         theNumberOfInteractionLengthLeft    = 0;
@@ -85,13 +83,13 @@ void G4VITProcess::StartTracking(G4Track* track)
     G4TrackingInformation* trackingInfo = GetIT(track)->GetTrackingInfo();
     if(InstantiateProcessState())
     {
-        fpState = new G4ProcessState();
+        fpState.reset(new G4ProcessState());
     }
 
     theNumberOfInteractionLengthLeft    = &(fpState->theNumberOfInteractionLengthLeft );
     theInteractionTimeLeft              = &(fpState->theInteractionTimeLeft           );
     currentInteractionLength            = &(fpState->currentInteractionLength         );
     trackingInfo->RecordProcessState(fpState,fProcessID);
-    fpState = 0;
+	fpState.reset();
 }
 

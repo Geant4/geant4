@@ -67,6 +67,7 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4KDTree.hh
         G4KDTreeResult.hh
         G4ReferenceCast.hh
+        G4shared_ptr.hh
         G4TrackingInformation.hh
         G4TrackList.hh
         G4UserTimeStepAction.hh

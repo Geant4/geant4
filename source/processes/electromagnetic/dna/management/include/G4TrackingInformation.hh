@@ -44,6 +44,7 @@
 #include "G4StepStatus.hh"
 #include "G4ThreeVector.hh"
 #include "G4TouchableHandle.hh"
+#include "G4shared_ptr.hh"
 
 class G4ITStepProcessor;
 
@@ -95,9 +96,9 @@ public:
          * computed at the InteractionLegth stage in the track.
          */
 
-    G4ProcessState_Lock* GetProcessState(size_t index);
+    G4::shared_ptr<G4ProcessState_Lock> GetProcessState(size_t index);
 
-    inline void RecordProcessState(G4ProcessState_Lock*,
+    inline void RecordProcessState(G4::shared_ptr<G4ProcessState_Lock>,
                                    size_t index);
 
     void SetStepProcessorState(G4ITStepProcessorState_Lock*);
@@ -144,7 +145,7 @@ protected:
       *  Indexed on GetPhysIntVector
       * (cf. G4ITStepProcessor header)
       */
-    std::vector<G4ProcessState_Lock*> fProcessState;
+    std::vector<G4::shared_ptr<G4ProcessState_Lock> > fProcessState;
 
     //_______________________________________________________
     G4ITStepProcessorState_Lock* fpStepProcessorState;
@@ -172,7 +173,7 @@ inline G4ITStepProcessorState_Lock* G4TrackingInformation::GetStepProcessorState
     return fpStepProcessorState;
 }
 
-inline void G4TrackingInformation::RecordProcessState(G4ProcessState_Lock* state,
+inline void G4TrackingInformation::RecordProcessState(G4::shared_ptr<G4ProcessState_Lock> state,
                                size_t index)
 {
     fProcessState[index] = state;

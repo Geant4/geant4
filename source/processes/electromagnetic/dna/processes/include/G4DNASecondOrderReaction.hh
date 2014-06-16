@@ -117,7 +117,6 @@ protected:
     G4double fReactionRate;
     G4double fConcentration;
     G4double fMolarMassOfMaterial;
-    SecondOrderReactionState*& fpSecondOrderReactionState;
     G4ParticleChange fParticleChange;
 
     const G4MolecularConfiguration* fpMolecularConfiguration;

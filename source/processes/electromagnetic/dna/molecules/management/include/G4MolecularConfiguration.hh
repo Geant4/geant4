@@ -50,6 +50,46 @@ class G4MoleculeDefinition;
 class G4ElectronOccupancy;
 class G4MolecularDecayChannel;
 
+struct comparator
+{
+    bool operator() (const G4ElectronOccupancy& occ1, const G4ElectronOccupancy& occ2) const
+    {
+        // Since this method is called a lot of time,
+        // we retrieve only once the totOcc
+        G4int totalOcc1 = occ1.GetTotalOccupancy() ;
+        G4int totalOcc2 = occ2.GetTotalOccupancy() ;
+        if ( totalOcc1!= totalOcc2)
+        {
+            return totalOcc1<totalOcc2;
+        }
+        else
+        {
+            G4int occupancy1 = -1 ;
+            G4int occupancy2 = -1 ;
+            const G4int sizeOrbit = occ1.GetSizeOfOrbit() ;
+            for (G4int i=0; i<occ1.GetSizeOfOrbit();)
+            {
+                // Since this method is called a lot of time,
+                // we retrieve only once the Occ
+
+                occupancy1 = occ1.GetOccupancy(i);
+                occupancy2 = occ2.GetOccupancy(i);
+
+                if (occupancy1 != occupancy2)
+                {
+                    return occupancy1 < occupancy2;
+                }
+                else
+                {
+                    i++;
+                    if (i >= sizeOrbit) return false;
+                }
+            }
+        }
+        return false;
+    }
+};
+
 /** The pointer G4MolecularConfiguration will be shared by all the
 * molecules having the same molecule definition and the same
 * electron occupancy
@@ -198,47 +238,6 @@ protected:
     G4int    fDynCharge;
     mutable G4String fName; // mutable allowed this member to be changed in const methods
 };
-
-struct comparator
-{
-    bool operator() (const G4ElectronOccupancy& occ1, const G4ElectronOccupancy& occ2) const
-    {
-        // Since this method is called a lot of time,
-        // we retrieve only once the totOcc
-        G4int totalOcc1 = occ1.GetTotalOccupancy() ;
-        G4int totalOcc2 = occ2.GetTotalOccupancy() ;
-        if ( totalOcc1!= totalOcc2)
-        {
-            return totalOcc1<totalOcc2;
-        }
-        else
-        {
-            G4int occupancy1 = -1 ;
-            G4int occupancy2 = -1 ;
-            const G4int sizeOrbit = occ1.GetSizeOfOrbit() ;
-            for (G4int i=0; i<occ1.GetSizeOfOrbit();)
-            {
-                // Since this method is called a lot of time,
-                // we retrieve only once the Occ
-
-                occupancy1 = occ1.GetOccupancy(i);
-                occupancy2 = occ2.GetOccupancy(i);
-
-                if (occupancy1 != occupancy2)
-                {
-                    return occupancy1 < occupancy2;
-                }
-                else
-                {
-                    i++;
-                    if (i >= sizeOrbit) return false;
-                }
-            }
-        }
-        return false;
-    }
-};
-
 
 inline const G4MoleculeDefinition* G4MolecularConfiguration::GetDefinition() const
 {

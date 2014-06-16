@@ -84,10 +84,12 @@ protected:
     public :
         G4ITBrownianState();
         virtual ~G4ITBrownianState(){;}
+        virtual G4String GetType()
+		{
+			return "G4ITBrownianState";
+		}
         G4bool  fPathLengthWasCorrected;
     };
-
-    G4ITBrownianState* const & fpBrownianState;
 
     G4bool fUseMaximumTimeBeforeReachingBoundary;
     G4Material* fNistWater ;
