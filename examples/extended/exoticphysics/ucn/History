@@ -15,5 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 13, 2014 P. Gumplinger (ExUCN-V10-00-01)
+- Remove G4PhysicsListHelper->GetTransportation in ExUCNExtraPhysics.cc
+- Remove run.png from CMakeLists.txt
+
 June 6, 2014 P. Gumplinger (ExUCN-V10-00-00)
 - First import

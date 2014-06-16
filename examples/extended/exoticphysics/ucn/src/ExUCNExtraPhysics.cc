@@ -89,11 +89,11 @@ void ExUCNExtraPhysics::ConstructProcess()
 
     ConstructUCN();
 
-    G4Transportation* transportation = NULL;
-    G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
-    transportation = (G4Transportation*) ph->GetTransportation();
+//    G4Transportation* transportation = NULL;
+//    G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+//    transportation = (G4Transportation*) ph->GetTransportation();
 
-    if (transportation) transportation->EnableUseMagneticMoment();
+//    if (transportation) transportation->EnableUseMagneticMoment();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
