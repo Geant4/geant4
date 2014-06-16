@@ -23,46 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/electronScattering/include/EventAction.hh
-/// \brief Definition of the EventAction class
+/// \file electromagnetic/TestEm11/include/Run.hh
+/// \brief Definition of the Run class
 //
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef EventAction_h
-#define EventAction_h 1
+#ifndef Run_h
+#define Run_h 1
 
-#include "G4UserEventAction.hh"
-#include "globals.hh"
+#include "G4Run.hh"
+#include "G4ParticleDefinition.hh"
 
-class EventMessenger;
+class DetectorConstruction;
+class Run;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class EventAction : public G4UserEventAction
+class Run : public G4Run
 {
   public:
-    EventAction();
-   ~EventAction();
+    Run(DetectorConstruction*);
+   ~Run();
 
   public:
-    virtual void BeginOfEventAction(const G4Event*);
-    virtual void   EndOfEventAction(const G4Event*);
-                                             
-    void SetDrawFlag(G4String val)  {fDrawFlag = val;};
-    void SetPrintModulo(G4int val)  {fPrintModulo = val;};
-        
+    void SetPrimary(G4ParticleDefinition* particle);
+    void EndOfRun();
+    void SumFluence(G4double, G4double);
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
+    virtual void Merge(const G4Run*);
+
+
+
   private:
-    G4String        fDrawFlag;
-    G4int           fPrintModulo;
-    
-    EventMessenger* fEventMessenger;                    
+    void InitFluence ();
+    void ComputeFluenceError();
+    void PrintFluence(G4int);
+
+   DetectorConstruction*  fDetector;
+   G4ParticleDefinition* fParticle;
+   G4double              fEnergy;
+
+
+    //for fluence computation
+
+   G4int                   fNbBins;
+   G4double                fDr;
+   std::vector<G4double>   fluence;
+   std::vector<G4double>   fluence1;        //normalized fluence    
+   std::vector<G4double>   fluence2;        //rms on norm. fl
+   std::vector<G4int>      fNbEntries;      //entries per bin       
+
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 #endif
-
-    

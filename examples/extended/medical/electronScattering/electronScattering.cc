@@ -32,16 +32,20 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
+#include "ActionInitialization.hh"
+ 
 #include "RunAction.hh"
-#include "EventAction.hh"
-#include "TrackingAction.hh"
 #include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
@@ -59,36 +63,23 @@ int main(int argc,char** argv) {
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
-
-  // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+    G4MTRunManager* runManager = new G4MTRunManager;
+#else
+    G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+    G4RunManager* runManager = new G4RunManager;
+#endif
 
   // set mandatory initialization classes
   DetectorConstruction* detector;
   detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
+
   runManager->SetUserInitialization(new PhysicsList());
 
   // set user action classes
-  //
-  //primaryGenerator
-  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
-  runManager->SetUserAction(primary);
+  runManager->SetUserInitialization(new ActionInitialization(detector));
 
-  //runAction
-  RunAction* runaction = new RunAction(detector,primary);
-  runManager->SetUserAction(runaction);
-
-  //eventAction
-  EventAction* eventaction = new EventAction();
-  runManager->SetUserAction(eventaction);
-
-  //trackAction
-  TrackingAction* trackingaction = new TrackingAction(detector,runaction);
-  runManager->SetUserAction(trackingaction);
-   
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
  

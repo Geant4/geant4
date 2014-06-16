@@ -23,52 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file medical/electronScattering/src/EventAction.cc
-/// \brief Implementation of the EventAction class
-//
 // $Id$
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
-#include "EventAction.hh"
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "HistoManager.hh"
-#include "EventMessenger.hh"
+#include "G4VUserActionInitialization.hh"
 
-#include "G4Event.hh"
+class DetectorConstruction;
+class G4VSteppingVerbose;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Action initialization class.
+///
 
-EventAction::EventAction()
-:fDrawFlag("none"), fPrintModulo(10000), fEventMessenger(0)
+class ActionInitialization : public G4VUserActionInitialization
 {
-  fEventMessenger = new EventMessenger(this);
-}
+  public:
+    ActionInitialization(DetectorConstruction*);
+    virtual ~ActionInitialization();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+    
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+    
+  private:
+    DetectorConstruction* fDetector;
 
-EventAction::~EventAction()
-{
-  delete fEventMessenger;
-}
+};
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif
 
-void EventAction::BeginOfEventAction(const G4Event* evt)
-{
- G4int evtNb = evt->GetEventID();
-
- //printing survey
- if (evtNb%fPrintModulo == 0) 
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void EventAction::EndOfEventAction(const G4Event*)
-{
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+    

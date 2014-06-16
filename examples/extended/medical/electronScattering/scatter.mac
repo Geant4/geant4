@@ -1,41 +1,168 @@
-# $Id$
-#
-# macro file for electronScattering
-#
-/control/verbose 2
-/run/verbose 2
-#
-# define here the Scattering foil
-#
-##/testem/det/setMaterial Beryllium
-##/testem/det/setThickness 5.005 mm	#Be
-##/testem/det/setMaterial Graphite
-##/testem/det/setThickness 2.505 mm	#C
-/testem/det/setMaterial Aluminium
-/testem/det/setThickness 518.5 um	#Al2
-##/testem/det/setMaterial Titanium
-##/testem/det/setThickness 123.5 um	#Ti4
-##/testem/det/setMaterial Gold
-##/testem/det/setThickness 16.2 um	#Au1
-##/testem/det/setThickness 48.5 um	#Au3
-#
-###/testem/phys/addPhysics  emstandard_opt3
-/testem/phys/addPhysics  local
-#
-/run/initialize
-#
-##/testem/phys/setCut 10 um
-/testem/phys/setCut 1 mm
-#
-/gun/particle e- 
-/gun/energy 13 MeV
-#
-##/analysis/setFileName results/Be1_local
-/analysis/setFileName results/Al2_local
-/analysis/h1/set 3 120 0. 240. mm		#d(N/cost)/dS = f(r)
-/analysis/h1/set 4 120 0. 240. mm		#normalized d(N/cost)/dS = f(r)
-###/analysis/h1/setAscii 3
-#
-/testem/event/printModulo 100000
-#
-/run/beamOn 1000000
+<%@ page language="java" contentType="text/html; charset=UTF-8"
+    pageEncoding="UTF-8"%>
+<%@taglib uri="http://www.springframework.org/tags/form" prefix="form"%>
+<%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<!DOCTYPE html>
+<html>
+<head>
+        <meta content="user-scalable=no, initial-scale = 1, minimum-scale = 1, maximum-scale = 1, width=device-width" name="viewport"></meta>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+        <title>Geant4 Simulation Welcome</title>
+        <script src="http://code.jquery.com/jquery-1.9.1.js"></script>
+        <link type="text/css" rel="stylesheet" href="./resources/bootstrap/css/bootstrap.min.css"/>
+        <script src="./resources/bootstrap/js/bootstrap.min.js"></script>
+
+
+</head>
+<body>
+
+                <!-- Navigator bat -->
+                <div class="navbar navbar-inverse">
+
+                        <div class="navbar-header col-lg-3 col-md-3 col-sm-6 col-xs-12 text-center">
+
+                                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-navbar">
+                                <span class="sr-only">Toggle navigation</span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                                <span class="icon-bar"></span>
+                            </button>
+
+                                <p class="navbar-text h4">Geant4 Simulation <small class="hidden-xs">${TitleEdition}</small></p>
+  
+                        </div>
+ 
+                        <div class="collapse navbar-collapse" id="bs-navbar">
+  
+                                <div class="col-lg-3 col-md-3 col-sm-6 col-xs-12 text-center">
+                                        <ul class="nav navbar-nav">
+                                                <li ><a href="explications">See explications</a> </li>
+                                        </ul>
+                                </div>
+
+                                <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center">
+
+                                        <c:if test="${pageContext.request.userPrincipal.name != null}">
+                                                <p class="navbar-text"> ${pageContext.request.userPrincipal.name}</p>
+
+                                                <c:if test="${pageContext.request.userPrincipal.name == 'admin'}">
+                                                        <button class="btn  btn-info navbar-btn" type="button" onclick="self.location.href='http://www.histats.com/viewstats/?sid=2683866&act=2'">
+                                                                <span class="glyphicon glyphicon-stats"></span> Statistics
+                                                        </button>
+                                                        <button class="btn  btn-info navbar-btn" type="button" onclick="self.location.href='resetTmp'">
+                                                                <span class="glyphicon glyphicon-refresh"></span> Reset Tmp
+                                                        </button>
+                                                </c:if>
+
+                                                <button class="btn  btn-info navbar-btn" type="button" onclick="self.location.href='macro_management'">
+                                                        <span class="glyphicon glyphicon-cloud"></span> Macros management
+                                                </button>
+
+                                                <button class="btn  btn-info navbar-btn" type="button" onclick="self.location.href='<c:url value="/j_spring_security_logout"/>'">
+                                                        <span class="glyphicon glyphicon-log-out"></span>  Logout
+                                                </button>
+                                        </c:if>
+
+                                        <c:if test="${pageContext.request.userPrincipal.name == null}">
+
+                                                <button class="btn  btn-info navbar-btn" type="button" onclick="self.location.href='login_welcome'">
+                                                <span class="glyphicon glyphicon-log-in"></span>  Login
+                                                </button>
+
+                                                <button class="btn  btn-info navbar-btn" type="button" onclick="self.location.href='register'">
+                                                        <span class="glyphicon glyphicon-pencil"></span> Sign up
+                                                </button>
+                                        </c:if>
+                                </div>
+
+                        </div>
+                </div> <!--  End navigator Bar -->
+
+        <div style="display:none;">
+        <!-- Histats.com  START  (standard)-->
+        <script type="text/javascript">document.write(unescape("%3Cscript src=%27http://s10.histats.com/js15.js%27 type=%27text/javascript%27%3E%3C/script%3E"));</script>
+        <a href="http://www.histats.com" target="_blank" title="web counters" ><script  type="text/javascript" >
+        try {Histats.start(1,2683866,4,322,112,62,"00011001");
+        Histats.track_hits();} catch(err){};
+        </script></a>
+        <noscript><a href="http://www.histats.com" target="_blank"><img  src="http://sstatic1.histats.com/0.gif?2683866&101" alt="web counters" border="0"></a></noscript>
+        <!-- Histats.com  END  -->
+        </div>
+
+
+
+        <div class="text-center bg-success"  style="margin-bottom:10px;display:${displaySucces};">
+                <span class="glyphicon glyphicon-ok"></span>  Tmp deleted successfully
+        </div>
+
+
+
+
+        <div class="container">
+
+                <div class="row">
+
+                        <!-- Form -->
+                        <div class="col-lg-12 text-center"> 
+
+                                <form:form method="POST" action="/org.lapp.webGeant4/simulation" modelAttribute="edition" accept-charset="utf-8">
+
+                                        <div class="radio-inline">
+                                                <label>
+                                                        <form:radiobutton path="editionName" value="simpleEdition"/>
+                                                        Simple edition
+                                                </label>
+                                        </div>
+
+                                        <div class="radio-inline">
+                                                <label>
+                                                        <form:radiobutton path="editionName" value="advancedEdition"/>
+                                                        Advanced edition
+                                                </label>
+                                        </div>
+
+                                        <div class="col-lg-12">
+                                                <input class="btn btn-primary" type="submit" value="Enter"/>
+                                        </div>
+
+                                </form:form>  <!--  End Form -->
+                        </div>
+                </div>
+
+                <div class="row" style="margin-top:50px;">
+
+                        <div class="text-center col-lg-12">
+
+                                <h1>
+                                Welcome.
+                                </h1>
+                                <h3>
+                                <p>This application will help you to understand how particles are detected within high energy physics.</p>
+                                <p>Thanks to Geant4, a toolkit for the simulation of the passage of particles through matter.</p>
+                                </h3>
+                                <h2>
+                                <p>So be ready to be a Particle physicists.</p>
+                                </h2>
+                                <h4>
+                                <p><a href="http://en.wikipedia.org/wiki/Particle_physics"> Particle Physics - Wikipedia, the free encyclopedia</a></p>
+                                <p><a href="https://geant4.web.cern.ch/geant4"> Geant4 official website</a></p>
+                                </h4>
+
+                        </div>
+
+                        <div class="text-center col-lg-12">
+
+                                <img class="col-lg-6 img-responsive" src="./resources/image/particle-chart.jpg" alt="Particle chart" title      ="une illustration"/>
+
+                        </div>
+
+
+
+                </div>
+
+
+        </div> <!-- end container -->
+</body>
+</html>
+
