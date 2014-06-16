@@ -377,9 +377,12 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
   phi  = twopi*G4UniformRand()*rad;
   sinphi = std::sin(phi);
   cosphi = std::cos(phi);
+
   G4ThreeVector direction0(sintheta*cosphi,sintheta*sinphi,costheta);
-  G4DynamicParticle * daughterparticle 
-         = new G4DynamicParticle( G4MT_daughters[0], direction0*daughtermomentum[0]);
+  G4double Ekin = std::sqrt(daughtermomentum[0]*daughtermomentum[0] + daughtermass[0]*daughtermass[0]) - daughtermass[0];
+  G4DynamicParticle * daughterparticle = new G4DynamicParticle( G4MT_daughters[0], 
+								direction0, 
+								Ekin, daughtermass[0]);
   products->PushProducts(daughterparticle);
 
   costhetan = (daughtermomentum[1]*daughtermomentum[1]-daughtermomentum[2]*daughtermomentum[2]-daughtermomentum[0]*daughtermomentum[0])/(2.0*daughtermomentum[2]*daughtermomentum[0]);
@@ -391,14 +394,19 @@ G4DecayProducts *G4PhaseSpaceDecayChannel::ThreeBodyDecayIt()
   direction2.setX( sinthetan*cosphin*costheta*cosphi - sinthetan*sinphin*sinphi + costhetan*sintheta*cosphi); 
   direction2.setY( sinthetan*cosphin*costheta*sinphi + sinthetan*sinphin*cosphi + costhetan*sintheta*sinphi); 
   direction2.setZ( -sinthetan*cosphin*sintheta + costhetan*costheta);
-  daughterparticle = new G4DynamicParticle( G4MT_daughters[2], direction2*(daughtermomentum[2]/direction2.mag()));
+  G4ThreeVector pmom = daughtermomentum[2]*direction2/direction2.mag();
+  Ekin = std::sqrt(pmom.mag2() + daughtermass[2]*daughtermass[2]) - daughtermass[2];
+  daughterparticle = new G4DynamicParticle( G4MT_daughters[2], 
+					    pmom/pmom.mag(),
+					    Ekin, daughtermass[2]);
   products->PushProducts(daughterparticle);
 
-  daughterparticle = 
-       new G4DynamicParticle( 
-	        G4MT_daughters[1],
-	       (direction0*daughtermomentum[0] + direction2*(daughtermomentum[2]/direction2.mag()))*(-1.0)   
-		);
+  pmom = (direction0*daughtermomentum[0] + direction2*(daughtermomentum[2]/direction2.mag()))*(-1.0);
+  Ekin = std::sqrt(pmom.mag2() + daughtermass[1]*daughtermass[1]) - daughtermass[1];
+  daughterparticle = new G4DynamicParticle( 
+					   G4MT_daughters[1],
+					   pmom/pmom.mag(),
+					   Ekin, daughtermass[1]);
   products->PushProducts(daughterparticle);
   
 #ifdef G4VERBOSE

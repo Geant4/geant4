@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 14 Jun. 2014 Hisaya Kurashige (particles-V10-00-14)
+- fix problems in the three-body decay in G4PhaseSpaceDecayChannel
+
 - 13 Jun. 2014 Hisaya Kurashige (particles-V10-00-13)
 - Fix the bug of mass width in G4VDecayChannelFIlleDuaghters
 
