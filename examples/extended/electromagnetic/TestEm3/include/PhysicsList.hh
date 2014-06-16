@@ -55,8 +55,6 @@ public:
     
     void AddPhysicsList(const G4String& name);
     void AddStepMax();
-    
-    virtual void SetCuts();
 
 private:
     
