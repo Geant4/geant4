@@ -55,8 +55,6 @@ public:
   virtual void ConstructProcess();    
   void AddDecay();
   void AddStepMax();
-  
-  virtual void SetCuts();         
     
 private:
 
