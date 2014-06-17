@@ -58,8 +58,6 @@ class PhysicsList: public G4VModularPhysicsList
     void AddPhysicsList(const G4String& name);
     
     void AddStepMax();           
-
-    virtual void SetCuts();
       
   private:
     G4VPhysicsConstructor* fEmPhysicsList;

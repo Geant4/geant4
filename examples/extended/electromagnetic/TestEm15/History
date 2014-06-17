@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+17-06-14 mma (testem15-V10-00-01)
+- remove PhysicsList::SetCuts()
+		 
 11-06-14 mma (testem15-V10-00-00)
 - rm local commands for PhysicsList::SetCuts()
 
