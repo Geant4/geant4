@@ -17,11 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-June-2014: G.Cosmo (externals-V10-00-03)
+- Updated to CLHEP-2.2.0.0: fixes for compilation warnings on clang compiler
+  for RanshiEngine.cc and MTwistEngine.cc.
+
 24-April-2014: G.Cosmo (externals-V10-00-02)
 - Corrected definition of 'thread_local' keyword in CLHEP module.
 
 09-April-2014: G.Cosmo (externals-V10-00-01)
-- Updated CLHEP module to version 2.2.0.0.
+- Updated CLHEP module to version 2.2.0.0.b01.
 
 24-February-2014: G.Cosmo (externals-V10-00-00)
 - Removed deprecated 'register' qualifiers in implementation of CLHEP classes.

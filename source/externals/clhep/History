@@ -17,12 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 June 2014 - G.Cosmo
+- Updated to CLHEP-2.2.0.0:
+  * Random (L.Garren <garren@fnal.gov>)
+    o RanshiEngine.cc: use explicit 32bit mask to avoid compiler warnings
+    o MTwistEngine.cc: make sure we don't go past the end of the 
+      array in MTwistEngine::showStatus().
+
 24 April 2014 - G.Cosmo
 - Corrected definition of 'thread_local' keyword in Utility/thread_local.h.
 - Removed 'inline' specification in Random.cc for theDefaults().
 
 9 April 2014 - G.Cosmo
-- Updated to CLHEP-2.2.0.0:
+- Updated to CLHEP-2.2.0.0.b01:
   * Random (D.Dagenhart <wdd@fnal.gov>)
     o Converted statics and globals to const, thread-local or atomic
       to improve thread safety.

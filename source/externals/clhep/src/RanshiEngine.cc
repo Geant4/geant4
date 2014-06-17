@@ -12,7 +12,7 @@
 //
 // =======================================================================
 // Ken Smith      - Created:                                 9th June 1998
-//                - Removed pow() from flat method:          21st Jul 1998
+//                - Removed std::pow() from flat method:     21st Jul 1998
 //                - Added conversion operators:               6th Aug 1998
 // J. Marraffino  - Added some explicit casts to deal with
 //                  machines where sizeof(int) != sizeof(long) 22 Aug 1998
@@ -29,6 +29,7 @@
 // M. Fischler    - split get() into tag validation and 
 //                  getState() for anonymous restores           12/27/04    
 // M. Fischler    - State-saving using only ints, for portability 4/12/05
+// L. Garren      - use explicit 32bit mask to avoid compiler warnings  6/6/2014  
 //
 // =======================================================================
 
@@ -37,6 +38,7 @@
 #include "CLHEP/Utility/atomic_int.h"
 
 #include <string.h>	// for strcmp
+#include <iostream>
 
 namespace CLHEP {
 
@@ -56,7 +58,7 @@ RanshiEngine::RanshiEngine()
   int numEngines = numberOfEngines++;
   int i = 0;
   while (i < numBuff) {    
-    buffer[i] = (unsigned int)(numEngines+19780503L*(i+1));
+    buffer[i] = (unsigned int)((numEngines+19780503L*(i+1))& 0xffffffff);
     ++i;
   }
   theSeed = numEngines+19780503L*++i;

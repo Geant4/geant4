@@ -13,7 +13,7 @@
 // with a Mersenne-prime period of 2^19937-1, uniform on open interval (0,1)
 // =======================================================================
 // Ken Smith      - Started initial draft:                    14th Jul 1998
-//                - Optimized to get pow() out of flat() method
+//                - Optimized to get std::pow() out of flat() method
 //                - Added conversion operators:                6th Aug 1998
 // J. Marraffino  - Added some explicit casts to deal with
 //                  machines where sizeof(int) != sizeof(long)  22 Aug 1998
@@ -219,10 +219,14 @@ void MTwistEngine::showStatus() const
    std::cout << " Initial seed      = " << theSeed << std::endl;
    std::cout << " Current index     = " << count624 << std::endl;
    std::cout << " Array status mt[] = " << std::endl;
-   for (int i=0; i<624; i+=5) {
+   // 2014/06/06  L Garren
+   // the final line has 4 elements, not 5
+   for (int i=0; i<620; i+=5) {
      std::cout << mt[i]   << " " << mt[i+1] << " " << mt[i+2] << " " 
-	       << mt[i+3] << " " << mt[i+4] << std::endl;
+	       << mt[i+3] << " " << mt[i+4] << "\n";
    }
+   std::cout << mt[620]   << " " << mt[621] << " " << mt[622] << " " 
+	     << mt[623]  << std::endl;
    std::cout << "----------------------------------------" << std::endl;
 }
 
