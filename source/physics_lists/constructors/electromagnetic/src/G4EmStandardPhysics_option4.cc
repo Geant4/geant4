@@ -127,7 +127,7 @@ G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver, const G4String&)
-  : G4VPhysicsConstructor("G4EmStandard_opt3"), verbose(ver)
+  : G4VPhysicsConstructor("G4EmStandard_opt4"), verbose(ver)
 {
   G4LossTableManager::Instance();
   SetPhysicsType(bElectromagnetic);
@@ -191,11 +191,11 @@ void G4EmStandardPhysics_option4::ConstructProcess()
   // muon & hadron multiple scattering
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
   mumsc->AddEmModel(0, new G4WentzelVIModel());
-  G4hMultipleScattering* pimsc = new G4hMultipleScattering();
+  //G4hMultipleScattering* pimsc = new G4hMultipleScattering();
   //pimsc->AddEmModel(0, new G4WentzelVIModel());
-  G4hMultipleScattering* kmsc = new G4hMultipleScattering();
+  //G4hMultipleScattering* kmsc = new G4hMultipleScattering();
   //kmsc->AddEmModel(0, new G4WentzelVIModel());
-  G4hMultipleScattering* pmsc = new G4hMultipleScattering();
+  //G4hMultipleScattering* pmsc = new G4hMultipleScattering();
   //pmsc->AddEmModel(0, new G4WentzelVIModel());
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
 
@@ -347,7 +347,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
     } else if (particleName == "pi+" ||
                particleName == "pi-" ) {
 
-      //G4hMultipleScattering* pimsc = new G4hMultipleScattering();
+      G4hMultipleScattering* pimsc = new G4hMultipleScattering();
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 50*um);
 
@@ -359,7 +359,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
     } else if (particleName == "kaon+" ||
                particleName == "kaon-" ) {
 
-      //G4hMultipleScattering* kmsc = new G4hMultipleScattering();
+      G4hMultipleScattering* kmsc = new G4hMultipleScattering();
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 50*um);
 
@@ -371,7 +371,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
     } else if (particleName == "proton" ||
 	       particleName == "anti_proton") {
 
-      //G4hMultipleScattering* pmsc = new G4hMultipleScattering();
+      G4hMultipleScattering* pmsc = new G4hMultipleScattering();
       G4hIonisation* hIoni = new G4hIonisation();
       hIoni->SetStepFunction(0.2, 50*um);
 

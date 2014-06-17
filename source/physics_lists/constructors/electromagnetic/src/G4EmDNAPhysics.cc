@@ -123,10 +123,10 @@ void G4EmDNAPhysics::ConstructParticle()
   genericIonsManager->GetIon("alpha+");
   genericIonsManager->GetIon("helium");
   genericIonsManager->GetIon("hydrogen");
-  genericIonsManager->GetIon("carbon");
-  genericIonsManager->GetIon("nitrogen");
-  genericIonsManager->GetIon("oxygen");
-  genericIonsManager->GetIon("iron");
+  //genericIonsManager->GetIon("carbon");
+  //genericIonsManager->GetIon("nitrogen");
+  //genericIonsManager->GetIon("oxygen");
+  //genericIonsManager->GetIon("iron");
 
 }
 
@@ -197,6 +197,11 @@ void G4EmDNAPhysics::ConstructProcess()
     
     // Extension to HZE proposed by Z. Francis
 
+    //SEB
+    } else if ( particleName == "GenericIon" ) {
+      ph->RegisterProcess(new G4DNAIonisation("GenericIon_G4DNAIonisation"), particle);
+
+    /*
     } else if ( particleName == "carbon" ) {
       ph->RegisterProcess(new G4DNAIonisation("carbon_G4DNAIonisation"), particle);
 
@@ -208,6 +213,7 @@ void G4EmDNAPhysics::ConstructProcess()
 
     } else if ( particleName == "iron" ) {
       ph->RegisterProcess(new G4DNAIonisation("iron_G4DNAIonisation"), particle);
+    */ 
 
     }
     

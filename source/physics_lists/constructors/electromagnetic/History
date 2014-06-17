@@ -14,6 +14,15 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-Jun-2014, S. Incerti (phys-ctor-em-V10-00-12)
+- Updated G4EmDNAPhysics to G4GenericIon usage for Z>4
+
+05-Apr-2014, V.Ivanchenko (phys-ctor-em-V10-00-11)
+- G4EmLivermorePhysics, G4EmLivermorePolarizedPhysics, G4EmPenelopePhysics, 
+  G4EmStandardPhysics_option3, G4EmStandardPhysics_option4 - cleanup 
+    msc instantiation for hadrons (use the same models for 
+    particle/anti_particle)
+
 02-Apr-2014, V.Ivanchenko (phys-ctor-em-V10-00-10)
 - G4EmLowEPPhysics, G4EmStandardPhysics_option3, 
   G4EmStandardPhysics_option4, G4EmLivermoreStandardPhysics - cleanup 

@@ -184,9 +184,9 @@ void G4EmStandardPhysics_option3::ConstructProcess()
   G4hPairProduction* pp = new G4hPairProduction();
 
   // muon & hadron multiple scattering
-  G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
-  //  mumsc->AddEmModel(0, new G4WentzelVIModel());
-  //G4hMultipleScattering* pimsc = new G4hMultipleScattering();
+  // G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
+  // mumsc->AddEmModel(0, new G4WentzelVIModel());
+  // G4hMultipleScattering* pimsc = new G4hMultipleScattering();
   // pimsc->AddEmModel(0, new G4WentzelVIModel());
   // G4hMultipleScattering* kmsc = new G4hMultipleScattering();
   // kmsc->AddEmModel(0, new G4WentzelVIModel());
@@ -246,6 +246,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
     } else if (particleName == "mu+" ||
                particleName == "mu-"    ) {
 
+      G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
       G4MuIonisation* muIoni = new G4MuIonisation();
       muIoni->SetStepFunction(0.2, 50*um);          
 
@@ -346,6 +347,7 @@ void G4EmStandardPhysics_option3::ConstructProcess()
 
       ph->RegisterProcess(hmsc, particle);
       ph->RegisterProcess(new G4hIonisation(), particle);
+      ph->RegisterProcess(pnuc, particle);
     }
   }
     

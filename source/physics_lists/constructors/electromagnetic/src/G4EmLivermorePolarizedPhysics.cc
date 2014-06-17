@@ -361,6 +361,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       ph->RegisterProcess(hIoni, particle);
       ph->RegisterProcess(pib, particle);
       ph->RegisterProcess(pip, particle);
+      ph->RegisterProcess(new G4CoulombScattering(), particle);
 
     } else if (particleName == "kaon+" ||
                particleName == "kaon-" ) {
@@ -373,6 +374,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       ph->RegisterProcess(hIoni, particle);
       ph->RegisterProcess(kb, particle);
       ph->RegisterProcess(kp, particle);
+      ph->RegisterProcess(new G4CoulombScattering(), particle);
 
     } else if (particleName == "proton" ||
 	       particleName == "anti_proton") {
@@ -386,6 +388,7 @@ void G4EmLivermorePolarizedPhysics::ConstructProcess()
       ph->RegisterProcess(pb, particle);
       ph->RegisterProcess(pp, particle);
       ph->RegisterProcess(pnuc, particle);
+      ph->RegisterProcess(new G4CoulombScattering(), particle);
 
     } else if (particleName == "B+" ||
 	       particleName == "B-" ||
