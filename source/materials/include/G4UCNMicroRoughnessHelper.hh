@@ -108,6 +108,7 @@ class G4UCNMicroRoughnessHelper
 //         6) b^2,
 //         7) w^2,
 //         8) angular cut
+//         9) theta_refract
 
     G4double FmuS(G4double, G4double, G4double, G4double,
                   G4double, G4double, G4double, G4double, G4double);
