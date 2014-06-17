@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 16, 2014 P. Gumplinger (ExUCN-V10-00-02)
+- retag to work with materials-V10-00-17
+
 June 13, 2014 P. Gumplinger (ExUCN-V10-00-01)
 - Remove G4PhysicsListHelper->GetTransportation in ExUCNExtraPhysics.cc
 - Remove run.png from CMakeLists.txt
