@@ -34,7 +34,7 @@
 
 #include "globals.hh"
 
-/** \file G4INCLCrossSectionsMultipions.hh
+/** \file G4INCLCrossSectionsMultiPions.hh
  * \brief Cross sections used in INCL Multipions
  *
  * \date 26th November 2013

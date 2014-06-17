@@ -51,6 +51,7 @@
 #endif
 
 #include <string>
+#include <vector>
 
 namespace G4INCL {
 #ifndef INCL_ROOT_USE
@@ -147,6 +148,10 @@ namespace G4INCL {
       Int_t nEnergyViolationInteraction;
       /** \brief Cross section for attempted collisions/decays for which the energy-conservation algorithm failed to find a solution. */
       Float_t energyViolationInteractionCrossSection;
+      /** \brief Initial seeds for the pseudo-random-number generator */
+      std::vector<Int_t> initialRandomSeeds;
+      /** \brief Final seeds for the pseudo-random-number generator */
+      std::vector<Int_t> finalRandomSeeds;
     };
 }
 

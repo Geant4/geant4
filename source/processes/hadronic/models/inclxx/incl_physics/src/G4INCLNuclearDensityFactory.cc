@@ -84,32 +84,35 @@ namespace G4INCL {
       const std::map<G4int,InterpolationTable*>::const_iterator mapEntry = rpCorrelationTableCache->find(nuclideID);
       if(mapEntry == rpCorrelationTableCache->end()) {
 
+        INCL_DEBUG("Creating r-p correlation function for " << ((t==Proton) ? "protons" : "neutrons") << " in A=" << A << ", Z=" << Z << std::endl);
+
         IFunction1D *rpCorrelationFunction;
         if(A > 19) {
-          G4double radius = ParticleTable::getRadiusParameter(t, A, Z);
-          G4double diffuseness = ParticleTable::getSurfaceDiffuseness(t, A, Z);
+          const G4double radius = ParticleTable::getRadiusParameter(t, A, Z);
+          const G4double diffuseness = ParticleTable::getSurfaceDiffuseness(t, A, Z);
           const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(t, A, Z);
           rpCorrelationFunction = new NuclearDensityFunctions::WoodsSaxonRP(radius, maximumRadius, diffuseness);
+          INCL_DEBUG(" ... Woods-Saxon; R0=" << radius << ", a=" << diffuseness << ", Rmax=" << maximumRadius << std::endl);
         } else if(A <= 19 && A > 6) {
           const G4double radius = ParticleTable::getRadiusParameter(t, A, Z);
           const G4double diffuseness = ParticleTable::getSurfaceDiffuseness(t, A, Z);
           const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(t, A, Z);
           rpCorrelationFunction = new NuclearDensityFunctions::ModifiedHarmonicOscillatorRP(radius, maximumRadius, diffuseness);
+          INCL_DEBUG(" ... MHO; param1=" << radius << ", param2=" << diffuseness << ", Rmax=" << maximumRadius << std::endl);
         } else if(A <= 6 && A > 1) { // Gaussian distribution for light nuclei
           const G4double radius = ParticleTable::getRadiusParameter(t, A, Z);
           const G4double maximumRadius = ParticleTable::getMaximumNuclearRadius(t, A, Z);
           rpCorrelationFunction = new NuclearDensityFunctions::GaussianRP(maximumRadius, Math::oneOverSqrtThree * radius);
+          INCL_DEBUG(" ... Gaussian; sigma=" << radius << ", Rmax=" << maximumRadius << std::endl);
         } else {
           INCL_ERROR("No r-p correlation function for " << ((t==Proton) ? "protons" : "neutrons") << " in A = "
                 << A << " Z = " << Z << '\n');
           return NULL;
-
         }
 
         InterpolationTable *theTable = rpCorrelationFunction->inverseCDFTable(Math::pow13);
         delete rpCorrelationFunction;
-        INCL_DEBUG("Creating r-p correlation function for " << ((t==Proton) ? "protons" : "neutrons") << " in A=" << A << ", Z=" << Z << ":"
-              << '\n' << theTable->print() << '\n');
+        INCL_DEBUG(" ... here comes the table:\n" << theTable->print() << '\n');
 
         (*rpCorrelationTableCache)[nuclideID] = theTable;
         return theTable;

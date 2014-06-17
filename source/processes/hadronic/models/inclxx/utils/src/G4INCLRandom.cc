@@ -48,6 +48,7 @@
 #include "G4INCLRanecu.hh"
 #include "G4INCLRanecu3.hh"
 #include "G4INCLGeant4Random.hh"
+#include "G4INCLLogger.hh"
 
 namespace G4INCL {
 

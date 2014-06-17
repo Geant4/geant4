@@ -176,7 +176,12 @@ namespace G4INCL {
 
   const G4double PhaseSpaceRauboldLynch::wMaxInterpolationMargin = std::log(1.5);
 
-  PhaseSpaceRauboldLynch::PhaseSpaceRauboldLynch() {
+  PhaseSpaceRauboldLynch::PhaseSpaceRauboldLynch() :
+    nParticles(0),
+    sqrtS(0.),
+    availableEnergy(0.),
+    maxGeneratedWeight(0.)
+  {
     std::vector<G4double> wMaxMasslessXV(wMaxMasslessX, wMaxMasslessX + wMaxNE);
     std::vector<G4double> wMaxMasslessYV(wMaxMasslessY, wMaxMasslessY + wMaxNE);
     wMaxMassless = new InterpolationTable(wMaxMasslessXV, wMaxMasslessYV);

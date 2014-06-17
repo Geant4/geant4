@@ -48,9 +48,12 @@ namespace G4INCL {
   const G4double PiNToMultiPionsChannel::angularSlope = 15.;
 
   PiNToMultiPionsChannel::PiNToMultiPionsChannel(const G4int npi, Particle *p1, Particle *p2)
-    : npion(npi), particle1(p1), particle2(p2)
+    : npion(npi),
+    ind2(0),
+    particle1(p1),
+    particle2(p2)
   {
-
+    std::fill(isosp, isosp+4, 0);
   }
 
   PiNToMultiPionsChannel::~PiNToMultiPionsChannel(){

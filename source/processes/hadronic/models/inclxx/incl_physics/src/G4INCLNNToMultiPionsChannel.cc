@@ -48,9 +48,13 @@ namespace G4INCL {
   const G4double NNToMultiPionsChannel::angularSlope = 6.;
 
   NNToMultiPionsChannel::NNToMultiPionsChannel(const G4int npi, Particle *p1, Particle *p2)
-    : npion(npi), particle1(p1), particle2(p2)
+    : npion(npi),
+    iso1(0),
+    iso2(0),
+    particle1(p1),
+    particle2(p2)
   {
-
+    std::fill(isosp, isosp+4, 0);
   }
 
   NNToMultiPionsChannel::~NNToMultiPionsChannel(){

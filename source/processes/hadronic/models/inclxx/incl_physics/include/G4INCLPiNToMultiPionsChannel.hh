@@ -53,11 +53,11 @@ namespace G4INCL {
       G4int npion;
       G4int ind2; // like isosp, can be changed in isospinRepartition
       G4int isosp[4];
-      void isospinRepartition(G4int ipi);
       Particle *particle1, *particle2;
 
       static const G4double angularSlope;
 
+      void isospinRepartition(G4int ipi);
   };
 }
 

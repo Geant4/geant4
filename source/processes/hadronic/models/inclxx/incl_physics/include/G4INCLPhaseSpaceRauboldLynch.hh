@@ -51,6 +51,12 @@ namespace G4INCL {
       PhaseSpaceRauboldLynch();
       virtual ~PhaseSpaceRauboldLynch();
 
+      /// \brief Dummy copy constructor to silence Coverity warning
+      PhaseSpaceRauboldLynch(PhaseSpaceRauboldLynch const &other);
+
+      /// \brief Dummy assignment operator to silence Coverity warning
+      PhaseSpaceRauboldLynch &operator=(PhaseSpaceRauboldLynch const &rhs);
+
       /** \brief Generate momenta according to a uniform, Lorentz-invariant phase-space model
        *
        * This function will assign momenta to the particles in the list that is

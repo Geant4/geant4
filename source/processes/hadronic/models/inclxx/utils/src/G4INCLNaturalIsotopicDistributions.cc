@@ -43,6 +43,7 @@
 
 #include "G4INCLNaturalIsotopicDistributions.hh"
 #include "G4INCLRandom.hh"
+#include "G4INCLLogger.hh"
 // #include <cassert>
 #include <utility>
 #include <iostream>

@@ -52,7 +52,7 @@ namespace G4INCL {
        * This function will assign momenta to the particles in the list that is
        * passed as an argument. The event is generated in the CM frame.
        *
-       * \param initialMass total centre-of-mass energy of the system
+       * \param sqrtS total centre-of-mass energy of the system
        * \param particles list of particles
        */
       void generate(const G4double sqrtS, ParticleList &particles);

@@ -51,20 +51,19 @@ namespace G4INCL {
 
   namespace Random {
 
-    class SeedVector {
+    class SeedVector : private std::vector<G4int> {
       public:
-        G4int at(const size_t i) const;
-        G4int &operator[](const size_t i);
-        const G4int &operator[](const size_t i) const;
-        size_t size() const;
-        void resize(const size_t n);
-        void push_back(const G4int val);
-        void clear();
+        using std::vector<G4int>::at;
+        using std::vector<G4int>::operator[];
+        using std::vector<G4int>::size;
+        using std::vector<G4int>::resize;
+        using std::vector<G4int>::push_back;
+        using std::vector<G4int>::clear;
+        using std::vector<G4int>::begin;
+        using std::vector<G4int>::end;
 
         friend std::ostream &operator<<(std::ostream &out, SeedVector const &sv);
 
-      private:
-        std::vector<G4int> theSeeds;
     };
 
   }

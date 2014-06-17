@@ -675,7 +675,7 @@ namespace G4INCL {
     return true;
   }
 
-  void INCL::finalizeGlobalInfo() {
+  void INCL::finalizeGlobalInfo(Random::SeedVector const &initialSeeds) {
     const G4double normalisationFactor = theGlobalInfo.geometricCrossSection /
       ((G4double) theGlobalInfo.nShots);
     theGlobalInfo.nucleonAbsorptionCrossSection = normalisationFactor *
@@ -696,6 +696,11 @@ namespace G4INCL {
       std::sqrt((G4double) (theGlobalInfo.nCompleteFusion));
     theGlobalInfo.energyViolationInteractionCrossSection = normalisationFactor *
       ((G4double) theGlobalInfo.nEnergyViolationInteraction);
+
+    theGlobalInfo.initialRandomSeeds.assign(initialSeeds.begin(), initialSeeds.end());
+
+    Random::SeedVector theSeeds = Random::getSeeds();
+    theGlobalInfo.finalRandomSeeds.assign(theSeeds.begin(), theSeeds.end());
   }
 
   G4int INCL::makeProjectileRemnant() {

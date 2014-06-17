@@ -140,16 +140,31 @@ G4bool G4INCLXXInterface::AccurateProjectile(const G4HadProjectile &aTrack, cons
 
 G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& theNucleus)
 {
+  G4ParticleDefinition const * const trackDefinition = aTrack.GetDefinition();
+  const G4bool isIonTrack = trackDefinition->GetParticleType()==G4GenericIon::GenericIon()->GetParticleType();
+  const G4int trackA = trackDefinition->GetAtomicMass();
+  const G4int trackZ = trackDefinition->GetAtomicNumber();
+  const G4int nucleusA = theNucleus.GetA_asInt();
+  const G4int nucleusZ = theNucleus.GetZ_asInt();
+
+  // For reactions induced by weird projectiles (e.g. He2), bail out
+  if((isIonTrack && (trackZ<=0 || trackA<=trackZ)) || (nucleusA>1 && (nucleusZ<=0 || nucleusA<=nucleusZ))) {
+    theResult.Clear();
+    theResult.SetStatusChange(isAlive);
+    theResult.SetEnergyChange(aTrack.GetKineticEnergy());
+    theResult.SetMomentumChange(aTrack.Get4Momentum().vect().unit());
+    return &theResult;
+  }
+
   // For reactions on nucleons, use the backup model (without complaining)
-  if(aTrack.GetDefinition()->GetAtomicMass()<=1 && theNucleus.GetA_asInt()<=1) {
+  if(trackA<=1 && nucleusA<=1) {
     return theBackupModelNucleon->ApplyYourself(aTrack, theNucleus);
   }
 
   // For systems heavier than theMaxProjMassINCL, use another model (typically
   // BIC)
   const G4int theMaxProjMassINCL = theInterfaceStore->GetMaxProjMassINCL();
-  if(aTrack.GetDefinition()->GetAtomicMass() > theMaxProjMassINCL
-      && theNucleus.GetA_asInt() > theMaxProjMassINCL) {
+  if(trackA > theMaxProjMassINCL && nucleusA > theMaxProjMassINCL) {
     if(!complainedAboutBackupModel) {
       complainedAboutBackupModel = true;
       std::stringstream ss;
@@ -166,7 +181,6 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   // For energies lower than cascadeMinEnergyPerNucleon, use PreCompound
   const G4double cascadeMinEnergyPerNucleon = theInterfaceStore->GetCascadeMinEnergyPerNucleon();
   const G4double trackKinE = aTrack.GetKineticEnergy();
-  const G4ParticleDefinition *trackDefinition = aTrack.GetDefinition();
   if((trackDefinition==G4Neutron::NeutronDefinition() || trackDefinition==G4Proton::ProtonDefinition())
       && trackKinE < cascadeMinEnergyPerNucleon) {
     if(!complainedAboutPreCompound) {
@@ -183,8 +197,6 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   }
 
   // Calculate the total four-momentum in the entrance channel
-  const G4int nucleusA = theNucleus.GetA_asInt();
-  const G4int nucleusZ = theNucleus.GetZ_asInt();
   const G4double theNucleusMass = theIonTable->GetIonMass(nucleusZ, nucleusA);
   const G4double theTrackMass = trackDefinition->GetPDGMass();
   const G4double theTrackEnergy = trackKinE + theTrackMass;
@@ -207,7 +219,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   G4Nucleus *theTargetNucleus = &theNucleus;
   if(inverseKinematics) {
     G4ParticleDefinition *oldTargetDef = theIonTable->GetIon(nucleusZ, nucleusA, 0);
-    const G4ParticleDefinition *oldProjectileDef = aTrack.GetDefinition();
+    const G4ParticleDefinition *oldProjectileDef = trackDefinition;
 
     if(oldProjectileDef != 0 && oldTargetDef != 0) {
       const G4int newTargetA = oldProjectileDef->GetAtomicMass();
@@ -349,7 +361,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
             << "\n                E* = " << excitationE << ", nuclearMass = " << nuclearMass
             << "\n                remnant i=" << i << ", nRemnants=" << eventInfo.nRemnants
             << "\n                Reaction was: " << aTrack.GetKineticEnergy()/MeV
-            << "-MeV " << aTrack.GetDefinition()->GetParticleName() << " + "
+            << "-MeV " << trackDefinition->GetParticleName() << " + "
             << theIonTable->GetIonName(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0)
             << ", in " << (inverseKinematics ? "inverse" : "direct") << " kinematics.";
           theInterfaceStore->EmitWarning(ss.str());
@@ -380,7 +392,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
       if(energyViolation > G4INCLXXInterfaceStore::GetInstance()->GetConservationTolerance()) {
         std::stringstream ss;
         ss << "energy conservation violated by " << energyViolation/MeV << " MeV in "
-          << aTrack.GetKineticEnergy()/MeV << "-MeV " << aTrack.GetDefinition()->GetParticleName()
+          << aTrack.GetKineticEnergy()/MeV << "-MeV " << trackDefinition->GetParticleName()
           << " + " << theIonTable->GetIonName(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0)
           << " inelastic reaction, in " << (inverseKinematics ? "inverse" : "direct") << " kinematics. Will resample.";
         theInterfaceStore->EmitWarning(ss.str());
@@ -394,7 +406,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
       } else if(momentumViolation > G4INCLXXInterfaceStore::GetInstance()->GetConservationTolerance()) {
         std::stringstream ss;
         ss << "momentum conservation violated by " << momentumViolation/MeV << " MeV in "
-          << aTrack.GetKineticEnergy()/MeV << "-MeV " << aTrack.GetDefinition()->GetParticleName()
+          << aTrack.GetKineticEnergy()/MeV << "-MeV " << trackDefinition->GetParticleName()
           << " + " << theIonTable->GetIonName(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0)
           << " inelastic reaction, in " << (inverseKinematics ? "inverse" : "direct") << " kinematics. Will resample.";
         theInterfaceStore->EmitWarning(ss.str());
@@ -421,8 +433,8 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   if(!eventIsOK) {
     std::stringstream ss;
     ss << "maximum number of tries exceeded for the proposed "
-    << aTrack.GetKineticEnergy()/MeV << "-MeV " << aTrack.GetDefinition()->GetParticleName()
-    << " + " << theIonTable->GetIonName(theNucleus.GetZ_asInt(), theNucleus.GetA_asInt(), 0)
+    << aTrack.GetKineticEnergy()/MeV << "-MeV " << trackDefinition->GetParticleName()
+    << " + " << theIonTable->GetIonName(nucleusZ, nucleusA, 0)
     << " inelastic reaction, in " << (inverseKinematics ? "inverse" : "direct") << " kinematics.";
     theInterfaceStore->EmitWarning(ss.str());
     theResult.SetStatusChange(isAlive);
@@ -487,8 +499,8 @@ G4INCL::ParticleSpecies G4INCLXXInterface::toINCLParticleSpecies(G4HadProjectile
   else {
     G4INCL::ParticleSpecies theSpecies;
     theSpecies.theType=theType;
-    theSpecies.theA=(G4int) pdef->GetBaryonNumber();
-    theSpecies.theZ=(G4int) pdef->GetPDGCharge();
+    theSpecies.theA=pdef->GetAtomicMass();
+    theSpecies.theZ=pdef->GetAtomicNumber();
     return theSpecies;
   }
 }

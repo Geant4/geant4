@@ -50,7 +50,6 @@
 #include "G4INCLIRandomGenerator.hh"
 #include "G4INCLThreeVector.hh"
 #include "G4INCLGlobals.hh"
-#include "G4INCLLogger.hh"
 #include "G4INCLConfig.hh"
 
 namespace G4INCL {

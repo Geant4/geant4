@@ -42,6 +42,7 @@
 #include "globals.hh"
 #include "Randomize.hh"
 
+#include "G4INCLLogger.hh"
 #include "G4INCLIRandomGenerator.hh"
 
 namespace G4INCL {

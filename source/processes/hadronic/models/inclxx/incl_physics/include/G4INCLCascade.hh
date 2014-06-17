@@ -77,7 +77,7 @@ namespace G4INCL {
           const G4int targetZ
           );
 
-      void finalizeGlobalInfo();
+      void finalizeGlobalInfo(Random::SeedVector const &initialSeeds);
       const GlobalInfo &getGlobalInfo() const { return theGlobalInfo; }
 
     private:
