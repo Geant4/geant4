@@ -9,6 +9,10 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13 June 2014 A. Dotti (MPI-V10-00-01)
+- Adding first version of G4RunMerger and 
+  G4ScorerMerger
+
 10 June 2014 A. Dotti (MPI-V10-00-00)
 - New CMake receipe: increase portability of the code
  

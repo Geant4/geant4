@@ -29,6 +29,8 @@ add_library(G4mpi
   src/G4UImpish.cc
   src/G4VMPIseedGenerator.cc
   src/G4VMPIsession.cc
+  src/G4MPIScorerMerger.cc
+  src/G4MPIRunMerger.cc
 )
 
 # headers
@@ -42,6 +44,8 @@ set(HEADERS
   include/G4UImpish.hh
   include/G4VMPIseedGenerator.hh
   include/G4VMPIsession.hh
+  include/G4MPIScorerMerger.hh
+  include/G4MPIRunMerger.hh
 )
 
 # install
