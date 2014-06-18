@@ -112,12 +112,13 @@ G4NuclNuclDiffuseElastic::G4NuclNuclDiffuseElastic()
   fCofDelta  = 0.04;
   fCofAlpha  = 0.095;
 
-  fNuclearRadius1 = fNuclearRadius2 = fNuclearRadiusSquare = fNuclearRadiusCof 
+  fNuclearRadius1 = fNuclearRadius2 = fNuclearRadiusSquare 
     = fRutherfordRatio = fCoulombPhase0 = fHalfRutThetaTg = fHalfRutThetaTg2 
     = fRutherfordTheta = fProfileLambda = fCofPhase = fCofFar = fCofAlphaMax 
     = fCofAlphaCoulomb = fSumSigma = fEtaRatio = fReZ = 0.0;
   fMaxL = 0;
 
+  fNuclearRadiusCof = 1.0;
 }
 
 //////////////////////////////////////////////////////////////////////////////
