@@ -26,6 +26,9 @@ else()
   add_definitions(-DG4_USE_HBOOK)  
 endif()
 
+#--- Enable Fortran ------------------------------------------------------------
+enable_language(Fortran)
+
 #----------------------------------------------------------------------------
 # Locate sources and headers for this project
 #
@@ -35,31 +38,16 @@ file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 #----------------------------------------------------------------------------
-# Build fortran sources from g4tools/hbook
+# Locate fortran sources 
 #
-
 if(HBOOK_FOUND)
-  add_custom_command(
-       OUTPUT  ${PROJECT_BINARY_DIR}/close.o
-       COMMAND gfortran
-       ARGS  -c ${Geant4_INCLUDE_DIR}/tools/hbook/close.f )
-
-  add_custom_command(
-       OUTPUT  ${PROJECT_BINARY_DIR}/setpawc.o
-       COMMAND gfortran
-       ARGS  -c ${Geant4_INCLUDE_DIR}/tools/hbook/setpawc.f )
-
-  add_custom_command(
-       OUTPUT  ${PROJECT_BINARY_DIR}/setntuc.o
-       COMMAND gfortran
-       ARGS  -c ${Geant4_INCLUDE_DIR}/tools/hbook/setntuc.f )
-  set(TOOLS_FORTRAN_OBJECTS close.o setpawc.o setntuc.o)
+  file(GLOB fortran_sources ${PROJECT_SOURCE_DIR}/src/*.f)
 endif()         
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(testAnalysis testAnalysis.cc ${sources} ${headers} ${TOOLS_FORTRAN_OBJECTS})
+add_executable(testAnalysis testAnalysis.cc ${sources} ${fortran_sources} ${headers})
 target_link_libraries(testAnalysis ${Geant4_LIBRARIES} ${HBOOK_LIBRARIES} )
 
 #----------------------------------------------------------------------------

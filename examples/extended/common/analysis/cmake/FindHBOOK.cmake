@@ -15,7 +15,7 @@ FIND_PACKAGE_HANDLE_STANDARD_ARGS(HBOOK DEFAULT_MSG PACKLIB_LIBRARY)
 
 if (HBOOK_FOUND)
   get_filename_component(CERNLIB_LIBRARY_DIR ${PACKLIB_LIBRARY} PATH)
-  set(HBOOK_LIBRARIES "-L${CERNLIB_LIBRARY_DIR} -lpacklib -lmathlib -lgfortran -lcrypt")
+  set(HBOOK_LIBRARIES "-L${CERNLIB_LIBRARY_DIR} -lpacklib -lmathlib -lgfortran -lcrypt -lkernlib")
 endif()    
 
 mark_as_advanced(HBOOK_FOUND HBOOK_LIBRARIES)
