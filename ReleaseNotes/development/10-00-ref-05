@@ -304,7 +304,7 @@ processes/hadronic
     by fetching from hadronic registry.
   o G4InuclNuclei:fix case of floating-point exception in                    (o)
     setExcitationEnergy() for zero Ekin.
-- models/coherent_elastic (hadr-cohe-V10-00-04)
+- models/coherent_elastic (hadr-cohe-V10-00-08)
   o New class G4hhElastic, implementation of the qQ-model with springy
     Pomeron for hadron-hadron elastic scattering.
   o G4LEpp: fixed incorrect use data array, used GetInvariantT()
