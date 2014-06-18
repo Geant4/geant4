@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
+ Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -73,7 +73,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -602,7 +602,7 @@ hPairProd:   for  pi-    SubType= 4
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 gamma of 6 MeV
- Dose in scoring volume : 50.9887 picoGy  +- 4.26027 picoGy 
+ Dose in scoring volume : 50.5734 picoGy  +- 4.23801 picoGy 
 ------------------------------------------------------------
 
 ### Run 1 starts.
@@ -619,7 +619,7 @@ hPairProd:   for  pi-    SubType= 4
 
 --------------------End of Global Run-----------------------
  The run consists of 1000 proton of 210 MeV
- Dose in scoring volume : 4.67373 nanoGy  +- 144.685 picoGy 
+ Dose in scoring volume : 4.69014 nanoGy  +- 146.833 picoGy 
 ------------------------------------------------------------
 
 Graphics systems deleted.

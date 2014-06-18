@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
+ Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,12 +13,12 @@
 
 ***** Table : Nb of materials = 7 *****
 
- Material: galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.837 pc 
+ Material: galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -64,41 +64,41 @@
  Material:   Carbon    density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.387 cm 
                        Imean:  81.000 eV 
 
-   --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:    12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:    13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm 
                        Imean: 286.000 eV 
 
-   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole
-         --->  Isotope:    54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
-         --->  Isotope:    56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
-         --->  Isotope:    57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
-         --->  Isotope:    58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.8   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material:      Tin    density:  7.310 g/cm3   RadL:   1.206 cm   Nucl.Int.Length:  23.531 cm 
                        Imean: 488.000 eV 
 
-   --->  Element: Tin ( )   Z = 50.0   N = 118.7   A = 118.70 g/mole
-         --->  Isotope:   112   Z = 50   N = 112   A = 111.90 g/mole   abundance:   0.97 %
-         --->  Isotope:   114   Z = 50   N = 114   A = 113.90 g/mole   abundance:   0.66 %
-         --->  Isotope:   115   Z = 50   N = 115   A = 114.90 g/mole   abundance:   0.34 %
-         --->  Isotope:   116   Z = 50   N = 116   A = 115.90 g/mole   abundance:  14.54 %
-         --->  Isotope:   117   Z = 50   N = 117   A = 116.90 g/mole   abundance:   7.68 %
-         --->  Isotope:   118   Z = 50   N = 118   A = 117.90 g/mole   abundance:  24.22 %
-         --->  Isotope:   119   Z = 50   N = 119   A = 118.90 g/mole   abundance:   8.59 %
-         --->  Isotope:   120   Z = 50   N = 120   A = 119.90 g/mole   abundance:  32.58 %
-         --->  Isotope:   122   Z = 50   N = 122   A = 121.90 g/mole   abundance:   4.63 %
-         --->  Isotope:   124   Z = 50   N = 124   A = 123.91 g/mole   abundance:   5.79 %
+   --->  Element: Sn (Sn)   Z = 50.0   N = 118.7   A = 118.70 g/mole
+         --->  Isotope: Sn112   Z = 50   N = 112   A = 111.90 g/mole   abundance:   0.97 %
+         --->  Isotope: Sn114   Z = 50   N = 114   A = 113.90 g/mole   abundance:   0.66 %
+         --->  Isotope: Sn115   Z = 50   N = 115   A = 114.90 g/mole   abundance:   0.34 %
+         --->  Isotope: Sn116   Z = 50   N = 116   A = 115.90 g/mole   abundance:  14.54 %
+         --->  Isotope: Sn117   Z = 50   N = 117   A = 116.90 g/mole   abundance:   7.68 %
+         --->  Isotope: Sn118   Z = 50   N = 118   A = 117.90 g/mole   abundance:  24.22 %
+         --->  Isotope: Sn119   Z = 50   N = 119   A = 118.90 g/mole   abundance:   8.59 %
+         --->  Isotope: Sn120   Z = 50   N = 120   A = 119.90 g/mole   abundance:  32.58 %
+         --->  Isotope: Sn122   Z = 50   N = 122   A = 121.90 g/mole   abundance:   4.63 %
+         --->  Isotope: Sn124   Z = 50   N = 124   A = 123.91 g/mole   abundance:   5.79 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:       HI    density:  2.800 g/cm3   RadL:   3.049 cm   Nucl.Int.Length:  60.888 cm 
+ Material:       HI    density:  2.800 g/cm3   RadL:   3.049 cm   Nucl.Int.Length:  60.880 cm 
                        Imean: 462.393 eV 
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -303,7 +303,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.55s Real=4.9s Sys=0.01s
+  User=3.69s Real=8.04s Sys=0s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -374,7 +374,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.34s Real=4.15s Sys=0s
+  User=3.72s Real=9.02s Sys=0s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
@@ -444,7 +444,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.44s Real=5.48s Sys=0s
+  User=3.53s Real=8.44s Sys=0s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 

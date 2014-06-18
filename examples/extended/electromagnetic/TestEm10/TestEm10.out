@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
+ Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
-G4Material WARNING: doublicate name of the new material CO2
+G4Material WARNING: duplicate name of material CO2
  hist file = g4.p11
  Nb of bins in Edep plot = 65
  Elow  in the  Edep plot = 0
@@ -60,7 +60,7 @@ compt:   for  gamma, applyCuts: 1     SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma, applyCuts: 1     SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -140,7 +140,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.09 s
+total time for build X-ray TR energy loss tables = 0.08 s
 
 SynRad:  Incoherent Synchrotron Radiation
       good description for long magnets at all energies
@@ -224,7 +224,7 @@ Lorentz Factor	XTR photon number
 8.085e+04	3.149
 9.283e+04	3.149
 
-total time for build X-ray TR energy loss tables = 0.09 s
+total time for build X-ray TR energy loss tables = 0.08 s
 
 msc:   for proton    SubType= 10
       RangeFactor= 0.2, stepLimitType: 0, latDisplacement: 1
@@ -396,7 +396,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.28s Real=2.59s Sys=0s
+  User=1.29s Real=3.46s Sys=0s
  ================== run summary =====================
  end of Run TotNbofEvents = 1000
     mean charged track length   in absorber=45.6176 +- 0.734311  mm  

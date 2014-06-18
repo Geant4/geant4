@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
+ Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -27,22 +27,22 @@ PhysicsList::AddPhysicsList: <emstandard_opt3>
 /run/initialize
 userDetector->Construct() start.
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.837 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material:  Silicon    density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.663 cm 
                        Imean: 173.000 eV 
 
-   --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole
-         --->  Isotope:    28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
-         --->  Isotope:    29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
-         --->  Isotope:    30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -453,13 +453,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.92s Real=6.44s Sys=0s
+  User=4.92s Real=12.73s Sys=0s
 
  ======================== run summary ======================
 
  The run was 100000 pi+ of 5 GeV through 20 um  of Silicon (density: 2.33 g/cm3 )
 
- Total energy deposit in absorber per event = 6.338 keV +- 16.12 eV 
+ Total energy deposit in absorber per event = 6.338 keV +- 16.13 eV 
 
  -----> Mean dE/dx = 3.169 MeV/cm	(1.36 MeV*cm2/g)
 
@@ -467,16 +467,16 @@ Run Summary
    restricted dEdx = 2.963 MeV/cm	(1.272 MeV*cm2/g)
    full dEdx       = 4.725 MeV/cm	(2.028 MeV*cm2/g)
 
- Leakage :  primary = 5 GeV +- 605.7 eV    secondaries = 2.706 keV +- 605 eV 
+ Leakage :  primary = 5 GeV +- 605.9 eV    secondaries = 2.719 keV +- 605.1 eV 
  Energy balance :  edep + eleak = 5 GeV
 
- Total track length (charged) in absorber per event = 20.26 um  +- 7.813 nm 
+ Total track length (charged) in absorber per event = 20.26 um  +- 7.822 nm 
  Total track length (neutral) in absorber per event = 5.395 Ang +- 2.944 Ang
 
- Number of steps (charged) in absorber per event = 1.215 +- 8.839e-06
- Number of steps (neutral) in absorber per event = 4e-05 +- 8.839e-06
+ Number of steps (charged) in absorber per event = 1.216 +- 8.844e-06
+ Number of steps (neutral) in absorber per event = 4e-05 +- 8.844e-06
 
- Number of secondaries per event : Gammas = 4e-05   electrons = 0.0166   positrons = 0
+ Number of secondaries per event : Gammas = 4e-05   electrons = 0.01662   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -485,13 +485,13 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 0.025 mrad (central part only)
+  rms proj angle of transmit primary particle = 0.02499 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02627 mrad
   central part defined as +- 0.0788 mrad   Tail ratio = 1.951 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1834153043, 2097034479
+ Current couple of seeds = 453465779, 585882367
 ----------------------------------------
 #
 /testem/det/setAbsMat Gold
@@ -510,20 +510,20 @@ Start re-initialization because
 has been modified since last Run.
 userDetector->Construct() start.
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.837 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material:     Gold    density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.540 cm 
                        Imean: 790.000 eV 
 
-   --->  Element: Gold ( )   Z = 79.0   N = 197.0   A = 196.97 g/mole
-         --->  Isotope:   197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.00 %
+   --->  Element: Au (Au)   Z = 79.0   N = 197.0   A = 196.97 g/mole
+         --->  Isotope: Au197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -911,7 +911,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1834153043, 2097034479
+ Current couple of seeds = 453465779, 585882367
 ----------------------------------------
 --> Event 0 starts.
 --> Event 10000 starts.
@@ -921,45 +921,45 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=4.18s Real=6.16s Sys=0s
+  User=4.21s Real=10.05s Sys=0s
 
  ======================== run summary ======================
 
  The run was 50000 e- of 15.7 MeV through 9.66 um  of Gold (density: 19.3 g/cm3 )
 
- Total energy deposit in absorber per event = 18.47 keV +- 64.17 eV 
+ Total energy deposit in absorber per event = 18.5 keV +- 66.05 eV 
 
- -----> Mean dE/dx = 19.12 MeV/cm	(0.9897 MeV*cm2/g)
+ -----> Mean dE/dx = 19.15 MeV/cm	(0.9913 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 17.91 MeV/cm	(0.9269 MeV*cm2/g)
    full dEdx       = 61.41 MeV/cm	(3.179 MeV*cm2/g)
 
- Leakage :  primary = 15.64 MeV +- 2.22 keV   secondaries = 41.39 keV +- 2.214 keV
+ Leakage :  primary = 15.64 MeV +- 2.267 keV   secondaries = 43.16 keV +- 2.259 keV
  Energy balance :  edep + eleak = 15.7 MeV
 
- Total track length (charged) in absorber per event = 9.915 um  +- 12.53 nm 
- Total track length (neutral) in absorber per event = 152.7 nm  +- 15.1 nm 
+ Total track length (charged) in absorber per event = 9.933 um  +- 14.15 nm 
+ Total track length (neutral) in absorber per event = 159.1 nm  +- 13.37 nm 
 
- Number of steps (charged) in absorber per event = 6.082 +- 1.583e-05
- Number of steps (neutral) in absorber per event = 0.02874 +- 1.583e-05
+ Number of steps (charged) in absorber per event = 6.099 +- 1.682e-05
+ Number of steps (neutral) in absorber per event = 0.03042 +- 1.682e-05
 
- Number of secondaries per event : Gammas = 0.02862   electrons = 0.02106   positrons = 0
+ Number of secondaries per event : Gammas = 0.03028   electrons = 0.02186   positrons = 0
 
  Number of events with the primary particle transmitted = 99.99 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 99.99 %
 
  Number of events with the primary particle reflected = 0.006 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.27 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.236 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 35.46 mrad (central part only)
+  rms proj angle of transmit primary particle = 35.48 mrad (central part only)
   computed theta0 (Highland formula)          = 35.1 mrad
-  central part defined as +- 105.3 mrad   Tail ratio = 2.901 %
+  central part defined as +- 105.3 mrad   Tail ratio = 2.892 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1756310718, 738943943
+ Current couple of seeds = 2114500074, 1194180567
 ----------------------------------------
 #
 /testem/phys/setCuts 10 um
@@ -978,16 +978,16 @@ Start re-initialization because
 has been modified since last Run.
 userDetector->Construct() start.
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.837 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material: G4_POLYETHYLENE (C_2H_4)_N-Polyethylene   density: 940.000 mg/cm3  RadL:  47.632 cm   Nucl.Int.Length:  72.089 cm 
+ Material: G4_POLYETHYLENE (C_2H_4)_N-Polyethylene   density: 940.000 mg/cm3  RadL:  47.632 cm   Nucl.Int.Length:  72.088 cm 
                        Imean:  57.400 eV 
 
    --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
@@ -1390,7 +1390,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1756310718, 738943943
+ Current couple of seeds = 2114500074, 1194180567
 ----------------------------------------
 --> Event 0 starts.
 --> Event 10000 starts.
@@ -1400,30 +1400,30 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=8.45s Real=13.55s Sys=0s
+  User=8.61s Real=22.22s Sys=0s
 
  ======================== run summary ======================
 
  The run was 50000 mu+ of 96.2 MeV through 4.74 mm  of G4_POLYETHYLENE (density: 940 mg/cm3)
 
- Total energy deposit in absorber per event = 1.048 MeV +- 998.6 eV 
+ Total energy deposit in absorber per event = 1.048 MeV +- 999.5 eV 
 
- -----> Mean dE/dx = 2.212 MeV/cm	(2.353 MeV*cm2/g)
+ -----> Mean dE/dx = 2.211 MeV/cm	(2.352 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 1.754 MeV/cm	(1.866 MeV*cm2/g)
    full dEdx       = 2.266 MeV/cm	(2.41 MeV*cm2/g)
 
- Leakage :  primary = 95.13 MeV +- 1.352 keV   secondaries = 26.33 keV +- 707.7 eV 
+ Leakage :  primary = 95.12 MeV +- 1.366 keV   secondaries = 27.29 keV +- 727 eV 
  Energy balance :  edep + eleak = 96.2 MeV
 
- Total track length (charged) in absorber per event = 5.172 mm  +- 3.785 um 
- Total track length (neutral) in absorber per event = 18.07 um  +- 1.97 um 
+ Total track length (charged) in absorber per event = 5.172 mm  +- 3.803 um 
+ Total track length (neutral) in absorber per event = 19.06 um  +- 2.134 um 
 
- Number of steps (charged) in absorber per event = 12.2 +- 0.0002751
- Number of steps (neutral) in absorber per event = 0.00964 +- 0.0002751
+ Number of steps (charged) in absorber per event = 12.22 +- 0.0002758
+ Number of steps (neutral) in absorber per event = 0.00962 +- 0.0002758
 
- Number of secondaries per event : Gammas = 0.00928   electrons = 4.034   positrons = 0
+ Number of secondaries per event : Gammas = 0.00928   electrons = 4.029   positrons = 0
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -1432,13 +1432,13 @@ Run Summary
  Number of events with at least  1 particle reflected (same charge as primary) = 0 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 7.316 mrad (central part only)
+  rms proj angle of transmit primary particle = 7.312 mrad (central part only)
   computed theta0 (Highland formula)          = 7.636 mrad
-  central part defined as +- 22.91 mrad   Tail ratio = 1.285 %
+  central part defined as +- 22.91 mrad   Tail ratio = 1.277 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1307449191, 1931259568
+ Current couple of seeds = 1976296543, 1348067374
 ----------------------------------------
 #
 /testem/phys/setCuts 1 mm
@@ -1457,20 +1457,20 @@ Start re-initialization because
 has been modified since last Run.
 userDetector->Construct() start.
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.837 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material: Aluminium    density:  2.700 g/cm3   RadL:   8.893 cm   Nucl.Int.Length:  38.879 cm 
                        Imean: 166.000 eV 
 
-   --->  Element: Aluminium ( )   Z = 13.0   N =  27.0   A =  26.98 g/mole
-         --->  Isotope:    27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -1868,7 +1868,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1307449191, 1931259568
+ Current couple of seeds = 1976296543, 1348067374
 ----------------------------------------
 --> Event 0 starts.
 --> Event 10000 starts.
@@ -1878,30 +1878,30 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=2.44s Real=4.8s Sys=0s
+  User=2.44s Real=5.47s Sys=0s
 
  ======================== run summary ======================
 
  The run was 50000 proton of 175 GeV through 8 mm  of Aluminium (density: 2.7 g/cm3 )
 
- Total energy deposit in absorber per event = 4.748 MeV +- 121.9 keV
+ Total energy deposit in absorber per event = 4.742 MeV +- 122.9 keV
 
- -----> Mean dE/dx = 5.933 MeV/cm	(2.197 MeV*cm2/g)
+ -----> Mean dE/dx = 5.924 MeV/cm	(2.194 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 4.024 MeV/cm	(1.49 MeV*cm2/g)
    full dEdx       = 6.049 MeV/cm	(2.24 MeV*cm2/g)
 
- Leakage :  primary = 174.7 GeV +- 121.9 keV   secondaries = 0 eV  +- 0 eV 
+ Leakage :  primary = 174.7 GeV +- 122.9 keV   secondaries = 0 eV  +- 0 eV 
  Energy balance :  edep + eleak = 174.7 GeV
 
  Total track length (charged) in absorber per event = 8.004 mm  +- 0 fm 
  Total track length (neutral) in absorber per event = 0 fm  +- 0 fm 
 
- Number of steps (charged) in absorber per event = 1.267 +- 0
+ Number of steps (charged) in absorber per event = 1.266 +- 0
  Number of steps (neutral) in absorber per event = 0 +- 0
 
- Number of secondaries per event : Gammas = 0   electrons = 0.2674   positrons = 0.00056
+ Number of secondaries per event : Gammas = 0   electrons = 0.2664   positrons = 0.00056
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -1912,11 +1912,11 @@ Run Summary
  MultipleScattering:
   rms proj angle of transmit primary particle = 0.02056 mrad (central part only)
   computed theta0 (Highland formula)          = 0.02111 mrad
-  central part defined as +- 0.06333 mrad   Tail ratio = 1.322 %
+  central part defined as +- 0.06333 mrad   Tail ratio = 1.32 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1953516295, 903829070
+ Current couple of seeds = 833855653, 110121237
 ----------------------------------------
 #
 /testem/det/setAbsMat Iron
@@ -1931,23 +1931,23 @@ Start re-initialization because
 has been modified since last Run.
 userDetector->Construct() start.
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.837 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm 
                        Imean: 286.000 eV 
 
-   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole
-         --->  Isotope:    54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
-         --->  Isotope:    56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
-         --->  Isotope:    57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
-         --->  Isotope:    58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+   --->  Element: Fe (Fe)   Z = 26.0   N =  55.8   A =  55.85 g/mole
+         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -2350,7 +2350,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1953516295, 903829070
+ Current couple of seeds = 833855653, 110121237
 ----------------------------------------
 --> Event 0 starts.
 --> Event 10000 starts.
@@ -2360,30 +2360,30 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=28.11s Real=46.89s Sys=0s
+  User=27.71s Real=62.28s Sys=0.01s
 
  ======================== run summary ======================
 
  The run was 50000 mu+ of 100 GeV through 1 m   of Iron (density: 7.87 g/cm3 )
 
- Total energy deposit in absorber per event = 2.156 GeV +- 15.26 MeV
+ Total energy deposit in absorber per event = 2.158 GeV +- 15.3 MeV
 
- -----> Mean dE/dx = 21.56 MeV/cm	(2.74 MeV*cm2/g)
+ -----> Mean dE/dx = 21.58 MeV/cm	(2.742 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 11.22 MeV/cm	(1.425 MeV*cm2/g)
    full dEdx       = 21.6 MeV/cm	(2.745 MeV*cm2/g)
 
- Leakage :  primary = 97.84 GeV +- 15.27 MeV   secondaries = 0 eV  +- 0 eV 
+ Leakage :  primary = 97.84 GeV +- 15.31 MeV   secondaries = 0 eV  +- 0 eV 
  Energy balance :  edep + eleak = 100 GeV
 
- Total track length (charged) in absorber per event = 100 cm  +- 6.052 um 
+ Total track length (charged) in absorber per event = 100 cm  +- 6.375 um 
  Total track length (neutral) in absorber per event = 0 fm  +- 0 fm 
 
- Number of steps (charged) in absorber per event = 47.94 +- 0.0003479
+ Number of steps (charged) in absorber per event = 47.94 +- 0.0003571
  Number of steps (neutral) in absorber per event = 0 +- 0
 
- Number of secondaries per event : Gammas = 0.04888   electrons = 46.34   positrons = 1.258
+ Number of secondaries per event : Gammas = 0.04894   electrons = 46.34   positrons = 1.257
 
  Number of events with the primary particle transmitted = 100 %
  Number of events with at least  1 particle transmitted (same charge as primary) = 100 %
@@ -2394,11 +2394,11 @@ Run Summary
  MultipleScattering:
   rms proj angle of transmit primary particle = 1.127 mrad (central part only)
   computed theta0 (Highland formula)          = 1.182 mrad
-  central part defined as +- 3.545 mrad   Tail ratio = 0.313 %
+  central part defined as +- 3.545 mrad   Tail ratio = 0.31 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 292017181, 1424117590
+ Current couple of seeds = 537404037, 344229254
 ----------------------------------------
 #
 G4 kernel has come to Quit state.

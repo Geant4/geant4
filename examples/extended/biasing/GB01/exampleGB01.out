@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
+ Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -76,7 +76,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1537,7 +1537,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      178        10        0        0         0   test.phys initStep
     1     1.06     4.13      194       7.9      2.1     17.4      17.4   test.phys eIoni
-    2    0.962     7.37      200      7.09    0.809     6.51      23.9       World Transportation
+    2    0.962     7.37      200      7.09    0.808     6.51      23.9       World Transportation
     3     -291  4.4e+03    1e+04      7.09 3.12e-22 1.07e+04  1.08e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -1558,7 +1558,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
     1   0.0225  -0.0175      144      86.2    0.649     4.05      4.05   test.phys eBrem
     2    0.759    0.949      181        81      4.5     36.9      40.9   test.phys eIoni
     3    0.996    0.884      185      80.1    0.573     4.02      44.9   test.phys eIoni
-    4     1.72    0.826      200      78.4      1.7       15      59.9       World Transportation
+    4     1.72    0.826      200      78.4      1.7     14.9      59.9       World Transportation
     5      238     -260    1e+04      78.4 3.53e-22 9.81e+03  9.87e+03  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -1595,7 +1595,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   0.0225  -0.0175      144     0.122        0        0         0   test.phys initStep
     1   -0.398      0.4      199     0.115        0     55.2      55.2   test.phys biasWrapper(compt)
-    2   -0.796     0.16      200     0.115        0    0.725      55.9       World Transportation
+    2   -0.796    0.161      200     0.115        0    0.724      55.9       World Transportation
     3 -7.01e+03 -4.22e+03    1e+04     0.115        0 1.28e+04  1.28e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -1939,7 +1939,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -24.8       10      123      1.43        0        0         0   test.phys initStep
     1     -117    -8.63      101     0.247        0     96.4      96.4   test.phys biasWrapper(compt)
-    2      122    -79.3 -1.42e-14     0.247        0      269       365       World Transportation
+    2      122    -79.3 1.42e-14     0.247        0      269       365       World Transportation
     3    1e+04   -3e+03 -4.16e+03     0.247        0 1.11e+04  1.15e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -2448,8 +2448,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   0.0067  -0.0915     6.62     0.875        0        0         0   test.phys initStep
-    1  0.00859   -0.118     6.63    0.0145    0.861   0.0285    0.0285   test.phys hIoni
-    2  0.00862   -0.119     6.63         0   0.0145 0.000727    0.0293   test.phys hIoni
+    1  0.00858   -0.118     6.63    0.0145    0.861   0.0285    0.0285   test.phys hIoni
+    2  0.00861   -0.119     6.63         0   0.0145 0.000727    0.0293   test.phys hIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N14,   Track ID = 2,   Parent ID = 1
@@ -2543,8 +2543,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0  0.00658  -0.0154     25.2     0.852        0        0         0   test.phys initStep
-    1   0.0172  -0.0401     25.2    0.0173    0.835   0.0274    0.0274   test.phys hIoni
-    2   0.0174  -0.0407     25.2         0   0.0173 0.000796    0.0282   test.phys hIoni
+    1   0.0173    -0.04     25.2    0.0173    0.835   0.0274    0.0274   test.phys hIoni
+    2   0.0176  -0.0406     25.2         0   0.0173 0.000796    0.0282   test.phys hIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N14,   Track ID = 2,   Parent ID = 1
@@ -2823,8 +2823,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    0.262  -0.0867      178     0.838        0        0         0   test.phys initStep
-    1    0.286  -0.0948      178     0.222    0.616   0.0267    0.0267   test.phys hIoni
-    2     0.29  -0.0962      178         0    0.222  0.00454    0.0313   test.phys hIoni
+    1    0.286  -0.0947      178     0.222    0.616   0.0267    0.0267   test.phys hIoni
+    2     0.29  -0.0961      178         0    0.222  0.00454    0.0313   test.phys hIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N14,   Track ID = 2,   Parent ID = 1
@@ -3033,8 +3033,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   0.0531  -0.0688    0.871     0.834        0        0         0   test.phys initStep
-    1   0.0678  -0.0875    0.859    0.0724    0.762   0.0265    0.0265   test.phys hIoni
-    2   0.0688  -0.0887    0.858         0   0.0724  0.00183    0.0283   test.phys hIoni
+    1   0.0679  -0.0873    0.859    0.0724    0.762   0.0265    0.0265   test.phys hIoni
+    2   0.0689  -0.0885    0.858         0   0.0724  0.00183    0.0283   test.phys hIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N14,   Track ID = 2,   Parent ID = 1
@@ -3078,8 +3078,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0   0.0859  -0.0226     51.4     0.941        0        0         0   test.phys initStep
-    1    0.101  -0.0276     51.4     0.224    0.717   0.0319    0.0319   test.phys hIoni
-    2    0.104  -0.0283     51.4         0    0.224  0.00458    0.0365   test.phys hIoni
+    1    0.102  -0.0273     51.4     0.224    0.717   0.0319    0.0319   test.phys hIoni
+    2    0.104  -0.0281     51.4         0    0.224  0.00458    0.0365   test.phys hIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 1,   Parent ID = 0
@@ -3114,8 +3114,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0  -0.0165   0.0811     93.6     0.895        0        0         0   test.phys initStep
-    1  -0.0228     0.11     93.6    0.0078    0.887   0.0296    0.0296   test.phys hIoni
-    2  -0.0229     0.11     93.6         0   0.0078 0.000547    0.0301   test.phys hIoni
+    1  -0.0229     0.11     93.6    0.0078    0.887   0.0296    0.0296   test.phys hIoni
+    2   -0.023     0.11     93.6         0   0.0078 0.000547    0.0301   test.phys hIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N14,   Track ID = 2,   Parent ID = 1
@@ -3149,28 +3149,28 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      109      55.6        0        0         0   test.phys initStep
     1     5.46     3.27      113      48.8     6.77     7.67      7.67   test.phys hIoni
-    2     9.89     5.88      116      43.2     5.58     6.11      13.8   test.phys hIoni
-    3     13.3      7.9      119      37.8     5.39     4.94      18.7   test.phys hIoni
-    4       16     9.65      121      33.2     4.62     3.92      22.6   test.phys hIoni
-    5       18       11      123      29.1     4.09     3.13      25.8   test.phys hIoni
-    6     19.7     12.1      125      25.7     3.47      2.5      28.3   test.phys hIoni
-    7     21.1     12.8      126      22.5     3.13     2.02      30.3   test.phys hIoni
-    8     22.2     13.5      127      19.7     2.87     1.63      31.9   test.phys hIoni
-    9     23.1     14.1      128      17.1     2.53     1.31      33.2   test.phys hIoni
-   10     23.8     14.5      128      14.8     2.33     1.06      34.3   test.phys hIoni
-   11     24.4     14.9      129      12.7     2.15    0.851      35.1   test.phys hIoni
-   12     24.8     15.2      129      10.7     1.96    0.681      35.8   test.phys hIoni
-   13     25.2     15.4      130      8.89      1.8    0.544      36.4   test.phys hIoni
-   14     25.5     15.6      130      7.21     1.68    0.434      36.8   test.phys hIoni
-   15     25.7     15.7      130      5.61      1.6    0.345      37.1   test.phys hIoni
-   16     25.9     15.9      130      4.01      1.6    0.272      37.4   test.phys hIoni
-   17       26       16      130      2.42     1.59    0.207      37.6   test.phys hIoni
-   18     26.1       16      131     0.493     1.93    0.135      37.8   test.phys hIoni
-   19     26.1       16      131    0.0253    0.468   0.0122      37.8   test.phys hIoni
-   20     26.1       16      131    0.0175  0.00778 0.000988      37.8   test.phys hIoni
-   21     26.1       16      131    0.0165  0.00103 0.000801      37.8   test.phys hIoni
-   22     26.1       16      131     0.005   0.0115 0.000776      37.8   test.phys hIoni
-   23     26.1       16      131         0    0.005 0.000438      37.8   test.phys hIoni
+    2     9.76     5.88      116      43.2     5.58     6.11      13.8   test.phys hIoni
+    3     13.1        8      119      37.8     5.39     4.94      18.7   test.phys hIoni
+    4     15.8     9.68      122      33.2     4.62     3.92      22.6   test.phys hIoni
+    5     17.9       11      123      29.1     4.09     3.13      25.8   test.phys hIoni
+    6     19.6       12      125      25.7     3.47      2.5      28.3   test.phys hIoni
+    7       21     12.8      126      22.5     3.13     2.02      30.3   test.phys hIoni
+    8       22     13.5      127      19.7     2.87     1.63      31.9   test.phys hIoni
+    9     22.9     14.1      128      17.1     2.53     1.31      33.2   test.phys hIoni
+   10     23.6     14.5      129      14.8     2.33     1.06      34.3   test.phys hIoni
+   11     24.2     14.9      129      12.7     2.15    0.851      35.1   test.phys hIoni
+   12     24.7     15.2      130      10.7     1.96    0.681      35.8   test.phys hIoni
+   13       25     15.4      130      8.89      1.8    0.544      36.4   test.phys hIoni
+   14     25.3     15.6      130      7.21     1.68    0.434      36.8   test.phys hIoni
+   15     25.6     15.7      130      5.61      1.6    0.345      37.1   test.phys hIoni
+   16     25.8     15.9      131      4.01      1.6    0.272      37.4   test.phys hIoni
+   17     25.9       16      131      2.42     1.59    0.207      37.6   test.phys hIoni
+   18       26       16      131     0.493     1.93    0.135      37.8   test.phys hIoni
+   19       26       16      131    0.0253    0.468   0.0122      37.8   test.phys hIoni
+   20       26       16      131    0.0175  0.00778 0.000988      37.8   test.phys hIoni
+   21       26       16      131    0.0165  0.00103 0.000801      37.8   test.phys hIoni
+   22       26       16      131     0.005   0.0115 0.000776      37.8   test.phys hIoni
+   23       26       16      131         0    0.005 0.000438      37.8   test.phys hIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 4,   Parent ID = 1
@@ -3410,12 +3410,12 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -30.1    -19.7      183        12        0        0         0   test.phys initStep
-    1    -30.4    -20.1      182        10     1.95     0.63      0.63   test.phys hIoni
-    2    -30.6    -20.4      182      8.26     1.74      0.5      1.13   test.phys hIoni
-    3    -30.8    -20.6      182      6.56      1.7    0.399      1.53   test.phys hIoni
+    1    -30.4      -20      182        10     1.95     0.63      0.63   test.phys hIoni
+    2    -30.7    -20.4      182      8.26     1.74      0.5      1.13   test.phys hIoni
+    3    -30.9    -20.6      182      6.56      1.7    0.399      1.53   test.phys hIoni
     4      -31    -20.8      182      4.96      1.6    0.314      1.84   test.phys hIoni
     5    -31.1    -20.9      181       3.4     1.56    0.245      2.09   test.phys hIoni
-    6    -31.2    -21.1      181      1.66     1.74    0.182      2.27   test.phys hIoni
+    6    -31.2      -21      181      1.66     1.74    0.182      2.27   test.phys hIoni
     7    -31.3    -21.1      181     0.126     1.53    0.079      2.35   test.phys hIoni
     8    -31.3    -21.1      181         0    0.126  0.00271      2.35   test.phys hIoni
 
@@ -3484,8 +3484,8 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0    -17.2      -44      146     0.511        0        0         0   test.phys initStep
-    1    -18.1    -37.8      150     0.271        0     7.95      7.95   test.phys biasWrapper(compt)
-    2     -217     93.2        0     0.271        0      282       289       World Transportation
+    1    -18.1    -37.7      150     0.271        0     7.95      7.95   test.phys biasWrapper(compt)
+    2     -217     93.2        0     0.271        0      282       290       World Transportation
     3   -1e+04 6.54e+03 -7.41e+03     0.271        0 1.39e+04  1.42e+04  OutOfWorld Transportation
 
 *********************************************************************************************************
@@ -3518,7 +3518,7 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 *********************************************************************************************************
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
-    0    -18.1    -37.8      150      0.24        0        0         0   test.phys initStep
+    0    -18.1    -37.7      150      0.24        0        0         0   test.phys initStep
     1    -17.9    -37.5      151         0     0.24    0.834     0.834   test.phys eIoni
 
 *********************************************************************************************************
@@ -3554,15 +3554,15 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0      150      16.3        0        0         0   test.phys initStep
-    1   -0.418    0.761      151        14     2.31    0.979     0.979   test.phys hIoni
-    2   -0.724     1.38      151      11.9     2.02    0.782      1.76   test.phys hIoni
-    3    -0.96     1.88      151        10      1.9    0.629      2.39   test.phys hIoni
-    4    -1.16     2.27      152      8.22     1.83    0.503      2.89   test.phys hIoni
-    5    -1.31     2.59      152      6.59     1.63    0.397      3.29   test.phys hIoni
-    6    -1.43     2.84      152      5.03     1.57    0.316      3.61   test.phys hIoni
-    7    -1.52     3.03      152      3.44     1.59    0.248      3.85   test.phys hIoni
-    8    -1.59     3.18      152      1.66     1.78    0.184      4.04   test.phys hIoni
-    9    -1.62     3.24      152         0     1.66    0.079      4.12   test.phys hIoni
+    1   -0.396    0.773      151        14     2.31    0.979     0.979   test.phys hIoni
+    2    -0.69      1.4      151      11.9     2.02    0.782      1.76   test.phys hIoni
+    3   -0.925     1.91      151        10      1.9    0.629      2.39   test.phys hIoni
+    4    -1.12      2.3      152      8.22     1.83    0.503      2.89   test.phys hIoni
+    5    -1.27     2.62      152      6.59     1.63    0.397      3.29   test.phys hIoni
+    6    -1.39     2.86      152      5.03     1.57    0.316      3.61   test.phys hIoni
+    7    -1.48     3.06      152      3.44     1.59    0.248      3.85   test.phys hIoni
+    8    -1.55     3.21      152      1.66     1.78    0.184      4.04   test.phys hIoni
+    9    -1.58     3.27      152         0     1.66    0.079      4.12   test.phys hIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 3,   Parent ID = 1
@@ -3802,11 +3802,11 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0        0        0     87.1      7.48        0        0         0   test.phys initStep
-    1   -0.243    0.127     87.3      5.83     1.65    0.359     0.359   test.phys hIoni
-    2   -0.437    0.219     87.5      4.23      1.6    0.281      0.64   test.phys hIoni
-    3   -0.593    0.282     87.6      2.64     1.59    0.216     0.855   test.phys hIoni
-    4   -0.702    0.321     87.7     0.747     1.89    0.147         1   test.phys hIoni
-    5   -0.719    0.327     87.7         0    0.747   0.0224      1.03   test.phys hIoni
+    1   -0.247     0.12     87.3      5.83     1.65    0.359     0.359   test.phys hIoni
+    2   -0.444    0.212     87.5      4.23      1.6    0.281      0.64   test.phys hIoni
+    3     -0.6    0.276     87.6      2.64     1.59    0.216     0.855   test.phys hIoni
+    4   -0.709    0.317     87.7     0.747     1.89    0.147         1   test.phys hIoni
+    5   -0.726    0.323     87.7         0    0.747   0.0224      1.03   test.phys hIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = neutron,   Track ID = 2,   Parent ID = 1
@@ -3886,9 +3886,9 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0  -0.0279  -0.0314      145      2.79        0        0         0   test.phys initStep
-    1  -0.0691  -0.0474      145     0.929     1.86    0.155     0.155   test.phys hIoni
-    2  -0.0779  -0.0501      145     0.117    0.812   0.0313     0.186   test.phys hIoni
-    3  -0.0787  -0.0503      145         0    0.117  0.00255     0.189   test.phys hIoni
+    1  -0.0658  -0.0444      145     0.929     1.86    0.155     0.155   test.phys hIoni
+    2  -0.0745  -0.0474      145     0.117    0.812   0.0313     0.186   test.phys hIoni
+    3  -0.0753  -0.0477      145         0    0.117  0.00255     0.189   test.phys hIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N15,   Track ID = 2,   Parent ID = 1
@@ -4269,29 +4269,29 @@ Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolu
 
 Step#    X(mm)    Y(mm)    Z(mm) KinE(MeV)  dE(MeV) StepLeng TrackLeng  NextVolume ProcName
     0  -0.0186  -0.0607     22.6       100        0        0         0   test.phys initStep
-    1   -0.829    -2.16     44.2        88     12.2     21.7      21.7   test.phys hIoni
-    2    -1.73    -3.88     61.4      77.6     10.4     17.3        39   test.phys hIoni
-    3    -2.07    -5.39     75.1      68.8     8.81     13.8      52.8   test.phys hIoni
-    4    -2.23    -6.96     86.2      60.7     8.05     11.2        64   test.phys hIoni
-    5     -2.4    -8.06     95.1      53.5     7.17     8.97        73   test.phys hIoni
-    6    -2.58    -8.97      102      47.3     6.23     7.18      80.1   test.phys hIoni
-    7    -2.74    -9.74      108      41.8     5.48     5.78      85.9   test.phys hIoni
-    8     -2.9    -10.4      113      36.8     5.02     4.66      90.6   test.phys hIoni
-    9    -3.01    -10.9      116      32.3     4.54     3.73      94.3   test.phys hIoni
-   10    -3.09    -11.3      119      28.4     3.92     2.98      97.3   test.phys hIoni
-   11    -3.19    -11.7      122      24.6      3.8     2.39      99.7   test.phys hIoni
-   12    -3.16      -12      123      21.4     3.21     1.88       102   test.phys hIoni
-   13    -3.21    -12.1      125      18.5     2.86      1.5       103   test.phys hIoni
-   14    -3.25    -12.3      126        16     2.48     1.19       104   test.phys hIoni
-   15    -3.27    -12.4      127      13.8     2.19    0.957       105   test.phys hIoni
-   16    -3.29    -12.5      128      11.7     2.14    0.771       106   test.phys hIoni
-   17    -3.31    -12.5      128      9.75     1.93    0.611       107   test.phys hIoni
-   18    -3.32    -12.6      129      8.05      1.7    0.485       107   test.phys hIoni
-   19    -3.33    -12.6      129      6.46      1.6    0.388       107   test.phys hIoni
-   20    -3.35    -12.7      130      4.86     1.59    0.309       108   test.phys hIoni
-   21    -3.37    -12.7      130      3.26      1.6    0.241       108   test.phys hIoni
-   22    -3.38    -12.7      130      1.51     1.75    0.176       108   test.phys hIoni
-   23    -3.39    -12.7      130         0     1.51   0.0678       108   test.phys hIoni
+    1   -0.961    -2.36     44.2        88     12.2     21.7      21.7   test.phys hIoni
+    2    -1.82    -4.33     61.3      77.6     10.4     17.3        39   test.phys hIoni
+    3    -2.24    -6.16       75      68.8     8.81     13.8      52.8   test.phys hIoni
+    4     -2.4    -7.53     86.1      60.7     8.05     11.2        64   test.phys hIoni
+    5    -2.58    -8.62       95      53.5     7.17     8.97        73   test.phys hIoni
+    6    -2.71    -9.51      102      47.3     6.23     7.18      80.1   test.phys hIoni
+    7    -2.84    -10.3      108      41.8     5.48     5.78      85.9   test.phys hIoni
+    8    -2.95    -10.9      112      36.8     5.02     4.66      90.6   test.phys hIoni
+    9    -3.05    -11.4      116      32.3     4.54     3.73      94.3   test.phys hIoni
+   10    -3.14    -11.8      119      28.4     3.92     2.98      97.3   test.phys hIoni
+   11    -3.14    -12.2      121      24.6      3.8     2.39      99.7   test.phys hIoni
+   12    -3.17    -12.4      123      21.4     3.21     1.88       102   test.phys hIoni
+   13    -3.22    -12.6      125      18.5     2.86      1.5       103   test.phys hIoni
+   14    -3.26    -12.7      126        16     2.48     1.19       104   test.phys hIoni
+   15    -3.29    -12.8      127      13.8     2.19    0.957       105   test.phys hIoni
+   16    -3.31    -12.9      128      11.7     2.14    0.771       106   test.phys hIoni
+   17    -3.33      -13      128      9.75     1.93    0.611       107   test.phys hIoni
+   18    -3.34      -13      129      8.05      1.7    0.485       107   test.phys hIoni
+   19    -3.36    -13.1      129      6.46      1.6    0.388       107   test.phys hIoni
+   20    -3.38    -13.1      130      4.86     1.59    0.309       108   test.phys hIoni
+   21     -3.4    -13.2      130      3.26      1.6    0.241       108   test.phys hIoni
+   22    -3.41    -13.2      130      1.51     1.75    0.176       108   test.phys hIoni
+   23    -3.41    -13.2      130         0     1.51   0.0678       108   test.phys hIoni
 
 *********************************************************************************************************
 * G4Track Information:   Particle = N14,   Track ID = 2,   Parent ID = 1

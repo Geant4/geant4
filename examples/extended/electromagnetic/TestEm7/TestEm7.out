@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
+ Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -38,7 +38,7 @@
 
 ***** Table : Nb of materials = 6 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.424 cm 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.375 cm 
                        Imean:  78.000 eV 
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -53,7 +53,7 @@
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.505 cm 
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.504 cm 
                        Imean:  78.000 eV 
 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -68,7 +68,7 @@
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.909 cm 
+ Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.908 cm 
                        Imean:  78.000 eV 
 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -113,12 +113,12 @@
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113728944.973 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -525,7 +525,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=18.96s Real=31.84s Sys=0s
+  User=18.84s Real=43.68s Sys=0.01s
 
  The run consists of 10000 proton of 160 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -584,7 +584,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=7.94s Real=13.29s Sys=0s
+  User=7.85s Real=19.65s Sys=0s
 
  The run consists of 1000 C12 of 3.5 GeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
@@ -613,7 +613,7 @@ Run Summary
 
 ***** Table : Nb of materials = 7 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.424 cm 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.375 cm 
                        Imean:  78.000 eV 
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -628,7 +628,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.505 cm 
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.504 cm 
                        Imean:  78.000 eV 
 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -643,7 +643,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.909 cm 
+ Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.908 cm 
                        Imean:  78.000 eV 
 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -688,12 +688,12 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113728944.973 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -1084,25 +1084,25 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.64s Real=5.77s Sys=0s
+  User=3.59s Real=9.25s Sys=0s
 
  The run consists of 1000 kaon+ of 100 MeV through 20 cm  of G4_Cu (density: 8.96 g/cm3 )
 
- Projected Range= 2.08179 cm    rms= 747.619 um 
- Mean number of primary steps = 19.851
- Total energy deposit= 283.68 MeV
- niel energy deposit = 2.20215 keV
+ Projected Range= 2.07893 cm    rms= 1.04666 mm 
+ Mean number of primary steps = 19.709
+ Total energy deposit= 289.25 MeV
+ niel energy deposit = 1.041 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 174182641, 146684950
+ Current couple of seeds = 110812017, 381278298
 ----------------------------------------
 /testem/det/setMat TechVacuum
 /testem/det/update
 
 ***** Table : Nb of materials = 7 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.424 cm 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.375 cm 
                        Imean:  78.000 eV 
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -1117,7 +1117,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.505 cm 
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.504 cm 
                        Imean:  78.000 eV 
 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -1132,7 +1132,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.909 cm 
+ Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.908 cm 
                        Imean:  78.000 eV 
 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -1177,12 +1177,12 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113728944.973 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -1571,32 +1571,32 @@ Index : 3     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 174182641, 146684950
+ Current couple of seeds = 110812017, 381278298
 ----------------------------------------
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 
  The run consists of 100 alpha of 265 eV  through 20 cm  of TechVacuum (density: 0.01 kg/m3 )
 
- Projected Range= 320.725 um    rms= 154.149 um 
- Mean number of primary steps = 5.83
- Total energy deposit= 264.969 eV 
- niel energy deposit = 206.074 eV 
+ Projected Range= 358.417 um    rms= 183.111 um 
+ Mean number of primary steps = 5.99
+ Total energy deposit= 264.963 eV 
+ niel energy deposit = 214.641 eV 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1315011045, 1673629496
+ Current couple of seeds = 1956314550, 1846131327
 ----------------------------------------
 /testem/det/setMat G4_WATER
 /testem/det/update
 
 ***** Table : Nb of materials = 7 *****
 
- Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.424 cm 
+ Material:    Water    density:  1.000 g/cm3   RadL:  36.084 cm   Nucl.Int.Length:  75.375 cm 
                        Imean:  78.000 eV 
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -1611,7 +1611,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.505 cm 
+ Material: G4_WATER H_2O   density:  1.000 g/cm3   RadL:  36.083 cm   Nucl.Int.Length:  75.504 cm 
                        Imean:  78.000 eV 
 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -1626,7 +1626,7 @@ Run Summary
           ElmMassFraction:  88.81 %  ElmAbundance  33.33 % 
 
 
- Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.909 cm 
+ Material: Water_1.05 H_2O   density:  1.050 g/cm3   RadL:  34.365 cm   Nucl.Int.Length:  71.908 cm 
                        Imean:  78.000 eV 
 
    --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -1671,12 +1671,12 @@ Run Summary
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113728944.973 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204322111.300 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -2065,25 +2065,25 @@ Index : 3     used in the geometry : No
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1315011045, 1673629496
+ Current couple of seeds = 1956314550, 1846131327
 ----------------------------------------
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.03s Real=0.07s Sys=0s
+  User=0.03s Real=0.1s Sys=0s
 
  The run consists of 100 alpha of 100 MeV through 20 cm  of G4_WATER (density: 1 g/cm3 )
 
- Projected Range= 6.44801 mm    rms= 51.8537 um 
- Mean number of primary steps = 36.64
+ Projected Range= 6.45668 mm    rms= 46.7966 um 
+ Mean number of primary steps = 36.67
  Total energy deposit= 100 MeV
- niel energy deposit = 11.1312 keV
+ niel energy deposit = 11.2122 keV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 522234422, 2086863702
+ Current couple of seeds = 527106226, 1669273728
 ----------------------------------------
 /testem/det/setMat G4_Si
 /gun/particle ion
@@ -2463,25 +2463,25 @@ Index : 4     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 522234422, 2086863702
+ Current couple of seeds = 527106226, 1669273728
 ----------------------------------------
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=8.8s Real=15.13s Sys=0.02s
+  User=8.58s Real=21.31s Sys=0.01s
 
  The run consists of 10 Xe131 of 1.217 GeV through 20 cm  of G4_Si (density: 2.33 g/cm3 )
 
- Projected Range= 96.9949 um    rms= 387.163 nm 
- Mean number of primary steps = 34157.9
+ Projected Range= 97.0046 um    rms= 667.006 nm 
+ Mean number of primary steps = 34288
  Total energy deposit= 1.21692 GeV
- niel energy deposit = 4.16152 MeV
+ niel energy deposit = 4.13218 MeV
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1940636758, 590745887
+ Current couple of seeds = 1147075570, 837022213
 ----------------------------------------
 /testem/det/setMat Water_1.05
 /gun/particle proton
@@ -2869,25 +2869,25 @@ Index : 5     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1940636758, 590745887
+ Current couple of seeds = 1147075570, 837022213
 ----------------------------------------
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=1.56s Real=1.96s Sys=0s
+  User=1.68s Real=4.11s Sys=0.01s
 
  The run consists of 1000 proton of 160 MeV through 20 cm  of Water_1.05 (density: 1.05 g/cm3 )
 
- Projected Range= 16.8955 cm    rms= 1.84621 mm 
- Mean number of primary steps = 178.026
+ Projected Range= 16.8923 cm    rms= 1.88553 mm 
+ Mean number of primary steps = 177.993
  Total energy deposit= 160 MeV
- niel energy deposit = 113.599 eV 
+ niel energy deposit = 114.09 eV 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1799432059, 705774750
+ Current couple of seeds = 1804741222, 611194379
 ----------------------------------------
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================

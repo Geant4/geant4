@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
+ Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,7 +13,7 @@
 
 ***** Table : Nb of materials = 11 *****
 
- Material:    Mylar    density:  1.390 g/cm3   RadL:  28.743 cm   Nucl.Int.Length:  56.337 cm 
+ Material:    Mylar    density:  1.390 g/cm3   RadL:  28.743 cm   Nucl.Int.Length:  56.319 cm 
                        Imean:  75.967 eV 
 
    --->  Element: Oxygen (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
@@ -33,7 +33,7 @@
           ElmMassFraction:   4.20 %  ElmAbundance  36.36 % 
 
 
- Material: Polypropelene    density: 910.000 mg/cm3  RadL:  49.214 cm   Nucl.Int.Length:  74.351 cm 
+ Material: Polypropelene    density: 910.000 mg/cm3  RadL:  49.214 cm   Nucl.Int.Length:  74.282 cm 
                        Imean:  56.518 eV 
 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
@@ -50,13 +50,13 @@
  Material:       Kr    density:  3.700 mg/cm3  RadL:  30.736 m    Nucl.Int.Length: 413.950 m  
                        Imean: 352.000 eV   temperature: 273.15 K  pressure:   1.00 atm
 
-   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole
-         --->  Isotope:    78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
-         --->  Isotope:    80   Z = 36   N =  80   A =  79.92 g/mole   abundance:   2.28 %
-         --->  Isotope:    82   Z = 36   N =  82   A =  81.91 g/mole   abundance:  11.58 %
-         --->  Isotope:    83   Z = 36   N =  83   A =  82.91 g/mole   abundance:  11.49 %
-         --->  Isotope:    84   Z = 36   N =  84   A =  83.91 g/mole   abundance:  57.00 %
-         --->  Isotope:    86   Z = 36   N =  86   A =  85.91 g/mole   abundance:  17.30 %
+   --->  Element: Kr (Kr)   Z = 36.0   N =  83.8   A =  83.80 g/mole
+         --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
+         --->  Isotope:  Kr80   Z = 36   N =  80   A =  79.92 g/mole   abundance:   2.28 %
+         --->  Isotope:  Kr82   Z = 36   N =  82   A =  81.91 g/mole   abundance:  11.58 %
+         --->  Isotope:  Kr83   Z = 36   N =  83   A =  82.91 g/mole   abundance:  11.49 %
+         --->  Isotope:  Kr84   Z = 36   N =  84   A =  83.91 g/mole   abundance:  57.00 %
+         --->  Isotope:  Kr86   Z = 36   N =  86   A =  85.91 g/mole   abundance:  17.30 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -113,16 +113,16 @@
  Material:    Xenon    density:  5.858 mg/cm3  RadL:  14.478 m    Nucl.Int.Length: 303.666 m  
                        Imean: 482.000 eV   temperature: 273.15 K  pressure:   1.00 atm
 
-   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole
-         --->  Isotope:   124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
-         --->  Isotope:   126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
-         --->  Isotope:   128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
-         --->  Isotope:   129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
-         --->  Isotope:   130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
-         --->  Isotope:   131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
-         --->  Isotope:   132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
-         --->  Isotope:   134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
-         --->  Isotope:   136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
+   --->  Element: Xe (Xe)   Z = 54.0   N = 131.3   A = 131.29 g/mole
+         --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
+         --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
+         --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
+         --->  Isotope: Xe129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
+         --->  Isotope: Xe130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
+         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
+         --->  Isotope: Xe132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
+         --->  Isotope: Xe134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
+         --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -144,16 +144,16 @@
  Material:  Xe20CO2    density:  5.082 mg/cm3  RadL:  17.750 m    Nucl.Int.Length: 323.032 m  
                        Imean: 412.598 eV   temperature: 273.15 K  pressure:   1.00 atm
 
-   --->  Element: Xenon ( )   Z = 54.0   N = 131.3   A = 131.29 g/mole
-         --->  Isotope:   124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
-         --->  Isotope:   126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
-         --->  Isotope:   128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
-         --->  Isotope:   129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
-         --->  Isotope:   130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
-         --->  Isotope:   131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
-         --->  Isotope:   132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
-         --->  Isotope:   134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
-         --->  Isotope:   136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
+   --->  Element: Xe (Xe)   Z = 54.0   N = 131.3   A = 131.29 g/mole
+         --->  Isotope: Xe124   Z = 54   N = 124   A = 123.91 g/mole   abundance:   0.09 %
+         --->  Isotope: Xe126   Z = 54   N = 126   A = 125.90 g/mole   abundance:   0.09 %
+         --->  Isotope: Xe128   Z = 54   N = 128   A = 127.90 g/mole   abundance:   1.92 %
+         --->  Isotope: Xe129   Z = 54   N = 129   A = 128.91 g/mole   abundance:  26.44 %
+         --->  Isotope: Xe130   Z = 54   N = 130   A = 129.90 g/mole   abundance:   4.08 %
+         --->  Isotope: Xe131   Z = 54   N = 131   A = 130.90 g/mole   abundance:  21.18 %
+         --->  Isotope: Xe132   Z = 54   N = 132   A = 131.90 g/mole   abundance:  26.89 %
+         --->  Isotope: Xe134   Z = 54   N = 134   A = 133.91 g/mole   abundance:  10.44 %
+         --->  Isotope: Xe136   Z = 54   N = 136   A = 135.91 g/mole   abundance:   8.87 %
           ElmMassFraction:  92.20 %  ElmAbundance  56.91 % 
 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
@@ -171,13 +171,13 @@
  Material:  Kr20CO2    density:  3.601 mg/cm3  RadL:  34.158 m    Nucl.Int.Length: 391.555 m  
                        Imean: 296.926 eV   temperature: 273.15 K  pressure:   1.00 atm
 
-   --->  Element: Kr ( )   Z = 36.0   N =  83.8   A =  83.80 g/mole
-         --->  Isotope:    78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
-         --->  Isotope:    80   Z = 36   N =  80   A =  79.92 g/mole   abundance:   2.28 %
-         --->  Isotope:    82   Z = 36   N =  82   A =  81.91 g/mole   abundance:  11.58 %
-         --->  Isotope:    83   Z = 36   N =  83   A =  82.91 g/mole   abundance:  11.49 %
-         --->  Isotope:    84   Z = 36   N =  84   A =  83.91 g/mole   abundance:  57.00 %
-         --->  Isotope:    86   Z = 36   N =  86   A =  85.91 g/mole   abundance:  17.30 %
+   --->  Element: Kr (Kr)   Z = 36.0   N =  83.8   A =  83.80 g/mole
+         --->  Isotope:  Kr78   Z = 36   N =  78   A =  77.92 g/mole   abundance:   0.35 %
+         --->  Isotope:  Kr80   Z = 36   N =  80   A =  79.92 g/mole   abundance:   2.28 %
+         --->  Isotope:  Kr82   Z = 36   N =  82   A =  81.91 g/mole   abundance:  11.58 %
+         --->  Isotope:  Kr83   Z = 36   N =  83   A =  82.91 g/mole   abundance:  11.49 %
+         --->  Isotope:  Kr84   Z = 36   N =  84   A =  83.91 g/mole   abundance:  57.00 %
+         --->  Isotope:  Kr86   Z = 36   N =  86   A =  85.91 g/mole   abundance:  17.30 %
           ElmMassFraction:  89.00 %  ElmAbundance  58.62 % 
 
    --->  Element: Carbon (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
@@ -273,7 +273,7 @@ compt:   for  gamma    SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -488,7 +488,7 @@ WARNING: Scene "none" not found.
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.03s Real=0.05s Sys=0s
+  User=0.03s Real=0.07s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Set field value to (0,0,1000) Gauss 
 
@@ -512,7 +512,7 @@ WARNING: Scene "none" not found.
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...
