@@ -47,7 +47,7 @@ analysis                                         analysis-V10-00-12
   Addressing problem report #1633.
 - Fixed Coverity defects.
 
-digits_hits                                      digits_hits-V10-00-02
+digits_hits                                      digits_hits-V10-00-07
 -----------
 - G4ScoringMessenger: fixed broadcast parameters of commands that should     (o)
   be used only by the master thread. Addressing problem report #1554.
