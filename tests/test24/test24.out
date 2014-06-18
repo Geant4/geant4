@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
+ Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -33,7 +33,7 @@ SimpleBox is now made of U
 /run/beamOn 20
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -402,7 +402,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.12s Real=5.96s Sys=0.02s
+  User=3.2s Real=6.81s Sys=0.02s
 #
 # neutron at 10 GeV in U
 #
@@ -440,7 +440,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.69s Real=4.94s Sys=0s
+  User=2.65s Real=7.22s Sys=0.01s
 #
 # pi+ at 10 GeV in U
 #
@@ -478,7 +478,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=2.81s Real=4.52s Sys=0s
+  User=2.78s Real=6.88s Sys=0.01s
 #
 # pi- at 10 GeV in U
 #
@@ -516,7 +516,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=3.45s Real=5.21s Sys=0.01s
+  User=3.43s Real=8.38s Sys=0.01s
 #
 # proton at 10 GeV in Cu
 #
@@ -527,7 +527,7 @@ SimpleBox is now made of Cu
 /run/beamOn 20
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -778,7 +778,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.86s Real=1.03s Sys=0.01s
+  User=0.86s Real=1.71s Sys=0s
 #
 # neutron at 10 GeV in Cu
 #
@@ -821,7 +821,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.74s Real=1.42s Sys=0s
+  User=0.71s Real=1.43s Sys=0s
 #
 # pi+ at 10 GeV in Cu
 #
@@ -864,7 +864,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.97s Real=1.69s Sys=0s
+  User=0.96s Real=1.92s Sys=0s
 #
 # pi- at 10 GeV in Cu
 #
@@ -907,7 +907,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.76s Real=1.43s Sys=0.01s
+  User=0.76s Real=1.53s Sys=0.01s
 #
 # proton at 10 GeV in Si
 #
@@ -918,7 +918,7 @@ SimpleBox is now made of Si
 /run/beamOn 20
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1174,7 +1174,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.32s Real=0.54s Sys=0s
+  User=0.32s Real=0.66s Sys=0s
 #
 # neutron at 10 GeV in Si
 #
@@ -1222,7 +1222,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.3s Real=0.61s Sys=0s
+  User=0.3s Real=0.8s Sys=0s
 #
 # pi+ at 10 GeV in Si
 #
@@ -1270,7 +1270,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.28s Real=0.52s Sys=0s
+  User=0.29s Real=0.6s Sys=0s
 #
 # pi- at 10 GeV in Si
 #
@@ -1318,7 +1318,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.27s Real=0.53s Sys=0s
+  User=0.28s Real=0.62s Sys=0s
 #
 # proton at 10 GeV in Carbon
 #
@@ -1330,7 +1330,7 @@ SimpleBox is now made of G4_C
 /run/beamOn 20
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1591,7 +1591,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.16s Real=0.33s Sys=0s
+  User=0.16s Real=0.35s Sys=0s
 #
 # neutron at 10 GeV in Carbon
 #
@@ -1645,7 +1645,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.17s Real=0.34s Sys=0s
+  User=0.16s Real=0.33s Sys=0s
 #
 # pi+ at 10 GeV in Carbon
 #
@@ -1699,7 +1699,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.18s Real=0.36s Sys=0s
+  User=0.19s Real=0.39s Sys=0s
 #
 # pi- at 10 GeV in Carbon
 #
@@ -1753,7 +1753,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.34s Sys=0s
+  User=0.19s Real=0.4s Sys=0s
 #
 # proton at 10 GeV in Beryllium
 #
@@ -1765,7 +1765,7 @@ SimpleBox is now made of G4_Be
 /run/beamOn 20
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -2031,7 +2031,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.18s Real=0.28s Sys=0s
+  User=0.18s Real=0.41s Sys=0s
 #
 # neutron at 10 GeV in Beryllium
 #
@@ -2090,7 +2090,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.17s Real=0.35s Sys=0s
+  User=0.17s Real=0.44s Sys=0s
 #
 # pi+ at 10 GeV in Beryllium
 #
@@ -2149,7 +2149,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.14s Real=0.29s Sys=0s
+  User=0.15s Real=0.41s Sys=0s
 #
 # pi- at 10 GeV in Beryllium
 #
@@ -2208,7 +2208,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.37s Sys=0s
+  User=0.21s Real=0.55s Sys=0s
 #
 # proton at 10 GeV in H
 #
@@ -2219,7 +2219,7 @@ SimpleBox is now made of H
 /run/beamOn 20
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -2490,7 +2490,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 # neutron at 10 GeV in H
 #

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
+ Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -34,7 +34,7 @@ SimpleBox is now made of U
 /run/beamOn 4
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -412,7 +412,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=23.96s Real=47.82s Sys=0s
+  User=24.35s Real=61.37s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -424,7 +424,7 @@ SimpleBox is now made of H
 /run/beamOn 16
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -687,7 +687,7 @@ SimpleBox is now made of Si
 /run/beamOn 16
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -943,7 +943,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=4.73s Real=9.47s Sys=0.01s
+  User=4.82s Real=10.71s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -955,7 +955,7 @@ SimpleBox is now made of H2O
 /run/beamOn 16
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1216,7 +1216,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=2.65s Real=5.33s Sys=0s
+  User=2.72s Real=5.78s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1379,7 +1379,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.8s Real=1.61s Sys=0s
+  User=0.82s Real=2.29s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1394,7 +1394,7 @@ SimpleBox is now made of Pb
 /run/beamOn 4
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1660,7 +1660,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=52.27s Real=99.11s Sys=0s
+  User=52.63s Real=118.69s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
+ Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -46,7 +46,7 @@ compt:   for  gamma, applyCuts: 1     SubType= 13
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
 conv:   for  gamma, applyCuts: 1     SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -630,45 +630,45 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=47.36s Real=76.45s Sys=0.04s
+  User=49.34s Real=121.82s Sys=0.03s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                           pi-
 Beam Energy(MeV)                        15000
 Number of events                        100
-Average number of MIPS (Edep < 0.8 GeV) 0.41
-Average number of steps                 1.747e+04
-Average number of neutron steps         7039
-Average number of hadron steps          2530
-Average number of gamma steps           1.056e+04
-Average number of e+- steps             2607
+Average number of MIPS (Edep < 0.8 GeV) 0.36
+Average number of steps                 1.727e+04
+Average number of neutron steps         7052
+Average number of hadron steps          2518
+Average number of gamma steps           1.036e+04
+Average number of e+- steps             2573
 ==============  ECAL  ====================================
-  1x1 (GeV) =       1.86 +-      0.188    RMS= 1.88
-  3x3 (GeV) =      2.914 +-     0.2918    RMS= 2.918
-  5x5 (GeV) =      3.256 +-     0.3223    RMS= 3.223
-  E1/E9     =      0.765 +-    0.01938    RMS= 0.1938
-  E1/E25    =     0.7183 +-    0.02211    RMS= 0.2211
-  E9/E25    =     0.9249 +-    0.00676    RMS= 0.0676
+  1x1 (GeV) =      1.869 +-     0.1859    RMS= 1.859
+  3x3 (GeV) =      3.031 +-     0.2925    RMS= 2.925
+  5x5 (GeV) =      3.413 +-     0.3255    RMS= 3.255
+  E1/E9     =     0.7418 +-    0.02066    RMS= 0.2066
+  E1/E25    =     0.6909 +-    0.02324    RMS= 0.2324
+  E9/E25    =     0.9159 +-   0.007231    RMS= 0.07231
 ==============  HCAL  ====================================
-Visible HCAL Edep(GeV)     =   0.07948
-Visible HCAL e-Edep(GeV)   =   0.03501
-Total HCAL Edep(GeV)       =   7.913 +- 0.1628
+Visible HCAL Edep(GeV)     =   0.07621
+Visible HCAL e-Edep(GeV)   =   0.03275
+Total HCAL Edep(GeV)       =   7.762 +- 0.1489
 ==========================================================
-Erec(GeV)   =       11.3 +-     0.2987    RMS= 2.987
-Etot(GeV)   =      11.21 +-     0.1628    RMS= 1.628
+Erec(GeV)   =      11.14 +-     0.3129    RMS= 3.129
+Etot(GeV)   =      11.22 +-     0.1489    RMS= 1.489
 ==========================================================
-Ecal/E0=   0.2151  RMS/E0(%)= 21.29
-Hcal/E0=       0.5226 +- 0.01075
-Erec/E0=       0.7465 +- 0.01973
-Etot/E0=       0.7406 +- 0.01075
+Ecal/E0=   0.2255  RMS/E0(%)= 21.5
+Hcal/E0=       0.5127 +- 0.009838
+Erec/E0=       0.7356 +- 0.02067
+Etot/E0=       0.7411 +- 0.009838
 ==========================================================
 
 #
 G4 kernel has come to Quit state.
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 0.96 Mb
+Dynamic pools deleted: 13 / Total memory freed: 0.97 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)
-User=49.23s Real=79.62s Sys=0.07s
+User=51.15s Real=127.83s Sys=0.05s

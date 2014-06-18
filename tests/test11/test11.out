@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
+ Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,20 +15,20 @@ SimpleBox is now made of Pb
 /run/setCut 1 m
 Tst11PhysicsList::SetCuts:CutLength : 1000 (mm)
 /run/initialize
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
 
 Neutron HP Thermal Scattering Data: Following material-element pairs and/or elements are registered.
 Element TS_H_of_Water,  internal thermal scattering id 0
@@ -80,7 +80,7 @@ Material G4_POLYETHYLENE - Element H,  internal thermal scattering id 2
 Material G4_BERYLLIUM_OXIDE - Element O,  internal thermal scattering id 4
 Material G4_BERYLLIUM_OXIDE - Element Be,  internal thermal scattering id 3
 
-/data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4
+/data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4
 Activate Fission Fragments Production for the target isotope of Z = 92, A = 238
 As the result, delayed neutrons are omitted and they should be taken care by RadioaActiveDecay.
 Activate Fission Fragments Production for the target isotope of Z = 92, A = 234
@@ -89,13 +89,13 @@ Activate Fission Fragments Production for the target isotope of Z = 92, A = 235
 As the result, delayed neutrons are omitted and they should be taken care by RadioaActiveDecay.
 Activate Fission Fragments Production for the target isotope of Z = 92, A = 238
 As the result, delayed neutrons are omitted and they should be taken care by RadioaActiveDecay.
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
 
 Cross Section Dump Through HPData->DumpPhysicsTable() 
 NeutronHP Elastic Cross Sections 
@@ -114,7 +114,7 @@ SimpleBox is now made of Pb
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -305,27 +305,27 @@ muPairProd:   for  mu-    SubType= 4
       Sampling table 17x1001 from 1 GeV to 10 TeV 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
           muPairProd :  Emin=        0 eV    Emax=       10 TeV
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
-NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
-NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/6_nat_Carbon
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/8_17_Oxygen
-NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
-NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
-NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/nightly/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 12 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/6_nat_Carbon
+NeutronHP: /Elastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/6_nat_Carbon
+NeutronHP: /Inelastic file for Z = 6, A = 13 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/6_nat_Carbon
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/8_17_Oxygen
+NeutronHP: /Capture file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Capture/CrossSection/8_17_Oxygen
+NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Elastic/CrossSection/8_17_Oxygen
+NeutronHP: /Inelastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.4/Inelastic/CrossSection/8_17_Oxygen
 
 Neutron HP Thermal Scattering Data: Following material-element pairs and/or elements are registered.
 Element TS_H_of_Water,  internal thermal scattering id 0
@@ -564,7 +564,7 @@ SimpleBox is now made of Al
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -864,7 +864,7 @@ SimpleBox is now made of Air
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1164,7 +1164,7 @@ SimpleBox is now made of G4_H
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1488,7 +1488,7 @@ SimpleBox is now made of G4_C
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -1812,7 +1812,7 @@ SimpleBox is now made of G4_Al
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -2136,7 +2136,7 @@ SimpleBox is now made of G4_Fe
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -2460,7 +2460,7 @@ SimpleBox is now made of G4_Ag
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -2784,7 +2784,7 @@ SimpleBox is now made of G4_Pb
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -3108,7 +3108,7 @@ SimpleBox is now made of G4_U
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -3432,7 +3432,7 @@ SimpleBox is now made of Hydrogen1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -3756,7 +3756,7 @@ SimpleBox is now made of Water_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -4080,7 +4080,7 @@ SimpleBox is now made of G4_WATER
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -4404,7 +4404,7 @@ SimpleBox is now made of Polyethylene_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -4728,7 +4728,7 @@ SimpleBox is now made of G4_POLYETHYLENE
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -5052,7 +5052,7 @@ SimpleBox is now made of Graphite_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -5376,7 +5376,7 @@ SimpleBox is now made of G4_GRAPHITE
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -5700,7 +5700,7 @@ SimpleBox is now made of Heavy_Water_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -6024,7 +6024,7 @@ SimpleBox is now made of Beryllium_Oxide_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -6348,7 +6348,7 @@ SimpleBox is now made of G4_BERYLLIUM_OXIDE
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -6672,7 +6672,7 @@ SimpleBox is now made of Be_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -6996,7 +6996,7 @@ SimpleBox is now made of Al_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -7320,7 +7320,7 @@ SimpleBox is now made of Fe_TS
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -7732,7 +7732,7 @@ SimpleBox is now made of 27Co58m1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -8056,7 +8056,7 @@ SimpleBox is now made of 47Ag110m1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -8380,7 +8380,7 @@ SimpleBox is now made of 48Cd115m1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -8704,7 +8704,7 @@ SimpleBox is now made of 52Te127m1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -9028,7 +9028,7 @@ SimpleBox is now made of 52Te129m1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -9352,7 +9352,7 @@ SimpleBox is now made of 61Pm148m1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -9676,7 +9676,7 @@ SimpleBox is now made of 67Ho166m1
 /run/beamOn 1
 
 conv:   for  gamma    SubType= 14
-      Lambda table from 1.022 MeV to 10 TeV in 49 bins, spline: 1
+      Lambda table from 1.022 MeV to 10 TeV in 140 bins, spline: 1
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         BetheHeitler :  Emin=        0 eV    Emax=       80 GeV
      BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
@@ -9993,5 +9993,5 @@ SimpleBox is now made of 67Ho166m1
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 48323436, 1148728713
+ Current couple of seeds = 1075027839, 1735007586
 ----------------------------------------

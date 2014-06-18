@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-01    (28-February-2014)
+ Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -28,22 +28,22 @@
 /run/initialize
 userDetector->Construct() start.
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.837 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material:  Silicon    density:  2.330 g/cm3   RadL:   9.368 cm   Nucl.Int.Length:  45.663 cm 
                        Imean: 173.000 eV 
 
-   --->  Element: Silicon ( )   Z = 14.0   N =  28.1   A =  28.09 g/mole
-         --->  Isotope:    28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
-         --->  Isotope:    29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
-         --->  Isotope:    30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
+   --->  Element: Si (Si)   Z = 14.0   N =  28.1   A =  28.09 g/mole
+         --->  Isotope:  Si28   Z = 14   N =  28   A =  27.98 g/mole   abundance:  92.23 %
+         --->  Isotope:  Si29   Z = 14   N =  29   A =  28.98 g/mole   abundance:   4.68 %
+         --->  Isotope:  Si30   Z = 14   N =  30   A =  29.97 g/mole   abundance:   3.09 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -481,7 +481,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=6.12s Real=6.13s Sys=0s
+  User=6.47s Real=15.1s Sys=0s
 
  ======================== run summary ======================
 
@@ -538,20 +538,20 @@ Start re-initialization because
 has been modified since last Run.
 userDetector->Construct() start.
 
- Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113804112.837 pc 
+ Material: Galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
                        Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
 
-   --->  Element: Galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
  Material:     Gold    density: 19.320 g/cm3   RadL:   3.344 mm   Nucl.Int.Length:  10.540 cm 
                        Imean: 790.000 eV 
 
-   --->  Element: Gold ( )   Z = 79.0   N = 197.0   A = 196.97 g/mole
-         --->  Isotope:   197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.00 %
+   --->  Element: Au (Au)   Z = 79.0   N = 197.0   A = 196.97 g/mole
+         --->  Isotope: Au197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.00 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
@@ -980,45 +980,45 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=7.07s Real=7.09s Sys=0s
+  User=8.05s Real=20.69s Sys=0s
 
  ======================== run summary ======================
 
  The run was 100000 e- of 15.7 MeV through 9.66 um  of Gold (density: 19.3 g/cm3 )
 
- Total energy deposit in absorber per event = 18.49 keV +- 45.57 eV 
+ Total energy deposit in absorber per event = 18.52 keV +- 45.75 eV 
 
- -----> Mean dE/dx = 19.15 MeV/cm	(0.9911 MeV*cm2/g)
+ -----> Mean dE/dx = 19.18 MeV/cm	(0.9925 MeV*cm2/g)
 
  From formulas :
    restricted dEdx = 17.91 MeV/cm	(0.927 MeV*cm2/g)
    full dEdx       = 61.45 MeV/cm	(3.181 MeV*cm2/g)
 
- Leakage :  primary = 15.64 MeV +- 1.533 keV   secondaries = 39.21 keV +- 1.53 keV
+ Leakage :  primary = 15.64 MeV +- 1.547 keV   secondaries = 40.6 keV +- 1.543 keV
  Energy balance :  edep + eleak = 15.7 MeV
 
- Total track length (charged) in absorber per event = 9.917 um  +- 8.885 nm 
- Total track length (neutral) in absorber per event = 131.2 nm  +- 6.055 nm 
+ Total track length (charged) in absorber per event = 9.929 um  +- 8.252 nm 
+ Total track length (neutral) in absorber per event = 136.3 nm  +- 6.738 nm 
 
- Number of steps (charged) in absorber per event = 6.766 +- 9.426e-06
- Number of steps (neutral) in absorber per event = 0.02784 +- 9.426e-06
+ Number of steps (charged) in absorber per event = 6.777 +- 9.084e-06
+ Number of steps (neutral) in absorber per event = 0.02854 +- 9.084e-06
 
- Number of secondaries per event : Gammas = 0.02774   electrons = 0.02186   positrons = 0
+ Number of secondaries per event : Gammas = 0.0284   electrons = 0.02219   positrons = 1e-05
 
- Number of events with the primary particle transmitted = 99.98 %
- Number of events with at least  1 particle transmitted (same charge as primary) = 99.98 %
+ Number of events with the primary particle transmitted = 99.99 %
+ Number of events with at least  1 particle transmitted (same charge as primary) = 99.99 %
 
- Number of events with the primary particle reflected = 0.015 %
- Number of events with at least  1 particle reflected (same charge as primary) = 0.256 %
+ Number of events with the primary particle reflected = 0.012 %
+ Number of events with at least  1 particle reflected (same charge as primary) = 0.296 %
 
  MultipleScattering:
-  rms proj angle of transmit primary particle = 35.48 mrad (central part only)
+  rms proj angle of transmit primary particle = 35.34 mrad (central part only)
   computed theta0 (Highland formula)          = 35.1 mrad
-  central part defined as +- 105.3 mrad   Tail ratio = 2.941 %
+  central part defined as +- 105.3 mrad   Tail ratio = 2.874 %
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 100566179, 1563787467
+ Current couple of seeds = 1551828291, 143843068
 ----------------------------------------
 #
 /testem/phys/setCuts 10 um
