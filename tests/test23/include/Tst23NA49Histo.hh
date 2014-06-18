@@ -41,7 +41,7 @@ private:
    TH2D* fHistoPTvsXFAntiProton;
    TH2D* fHistoPTvsXFPiMinus;
    TH2D* fHistoPTvsXFPiPlus;
-   TH2D* fHistoPTvsXFNeutron;
+//    TH2D* fHistoPTvsXFNeutron;
    
    std::vector<TH1D*> fHistoPTPiMinus;
    std::vector<TH1D*> fHistoPTPiPlus;

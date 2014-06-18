@@ -38,6 +38,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 June 2014 Julia Yarba (test23-V10-00-06)
+- Minor cleanup - comment out unsed data member in Tst23NA49
+
 3 June 2014 Julia Yarba (test23-V10-00-05)
 - Port several more HARP subsets (mainly proton+C)
 - Improve analysis of NA61 and HARP data and stat.testing vs simulated results
