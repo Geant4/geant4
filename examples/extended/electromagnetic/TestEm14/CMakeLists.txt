@@ -45,33 +45,17 @@ endif()
 #
 
 if (HBOOK_FOUND)
+  enable_language(Fortran)
   include_directories(
        ${PROJECT_SOURCE_DIR}/../../common/analysis/include)
-
   file(GLOB add_sources ${PROJECT_SOURCE_DIR}/../../common/analysis/src/*.cc)
-  list(APPEND sources ${add_sources})
-
-  add_custom_command(
-       OUTPUT  ${PROJECT_BINARY_DIR}/close.o
-       COMMAND gfortran
-       ARGS  -c ${Geant4_INCLUDE_DIR}/tools/hbook/close.f )
-
-  add_custom_command(
-       OUTPUT  ${PROJECT_BINARY_DIR}/setpawc.o
-       COMMAND gfortran
-       ARGS  -c ${Geant4_INCLUDE_DIR}/tools/hbook/setpawc.f )
-
-  add_custom_command(
-       OUTPUT  ${PROJECT_BINARY_DIR}/setntuc.o
-       COMMAND gfortran
-       ARGS  -c ${Geant4_INCLUDE_DIR}/tools/hbook/setntuc.f )
-  set(TOOLS_FORTRAN_OBJECTS close.o setpawc.o setntuc.o)       
+  file(GLOB fortran_sources ${PROJECT_SOURCE_DIR}/../../common/analysis/src/*.f)
 endif()       
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(TestEm14 TestEm14.cc ${sources} ${headers} ${TOOLS_FORTRAN_OBJECTS})
+add_executable(TestEm14 TestEm14.cc ${sources} ${fortran_sources} ${headers})
 target_link_libraries(TestEm14 ${Geant4_LIBRARIES} ${HBOOK_LIBRARIES})
 
 #----------------------------------------------------------------------------
