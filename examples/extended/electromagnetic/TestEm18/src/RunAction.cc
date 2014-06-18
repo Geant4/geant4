@@ -61,10 +61,8 @@ RunAction::~RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run* run)
+void RunAction::BeginOfRunAction(const G4Run*)
 {
-  G4cout << "### Run " << run->GetRunID() << " start." << G4endl;
-
   //initialisation
   //
   fEnergyDeposit = 0.;
@@ -106,7 +104,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4double ePrimary = fPrimary->GetParticleGun()->GetParticleEnergy();
   
   G4int prec = G4cout.precision(3);
-  G4cout << "\n ======================== run summary ======================\n";  
+  G4cout << "\n ======================== run summary ======================\n";
   G4cout << "\n The run was " << nbEvents << " " << partName << " of "
          << G4BestUnit(ePrimary,"Energy") << " through " 
          << G4BestUnit(length,"Length") << " of "

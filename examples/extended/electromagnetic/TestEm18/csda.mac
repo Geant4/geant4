@@ -9,7 +9,7 @@
 ###/testem/det/setMat Water_vapor
 /testem/det/setSize 1 cm
 #
-/testem/phys/setCuts 100 km
+/run/setCut 100 km
 #
 /run/initialize
 #

@@ -38,7 +38,6 @@
 #include "globals.hh"
 
 class RunAction;
-class EventMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -54,20 +53,12 @@ class EventAction : public G4UserEventAction
     
     void AddEnergyDeposit(G4double edep)   {fEnergyDeposit  += edep;};
     void AddSecondary(G4double ekin)     {fEnergySecondary  += ekin;};
-                                                 
-    void SetDrawFlag(G4String val)  {fDrawFlag = val;};
-    void SetPrintModulo(G4int val)  {fPrintModulo = val;};
         
   private:
     RunAction*    fRunAction;
     
     G4double      fEnergyDeposit;
-    G4double      fEnergySecondary;
-    
-    G4String      fDrawFlag;
-    G4int         fPrintModulo;
-    
-    EventMessenger* fEventMessenger;                    
+    G4double      fEnergySecondary;       
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
