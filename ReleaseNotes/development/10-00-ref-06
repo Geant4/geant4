@@ -212,6 +212,8 @@ examples                                         examples-V10-00-06
   o Removed PhysicsList::SetCuts().
 - extended/electromagnetic/TestEm16 (testem16-V10-00-00)
   o Suppressed EventAction and its messenger.
+- extended/electromagnetic/TestEm18 (testem18-V10-00-00)
+  o Removed PhysicsList::SetCuts().
 - extended/eventgenerator/HepMC/MCTruth (mctruthex-V10-00-00)
   o Changes to comply with coding conventions.
 - extended/eventgenerator/pythia/decayer6 (p6decayer-V10-00-01)
