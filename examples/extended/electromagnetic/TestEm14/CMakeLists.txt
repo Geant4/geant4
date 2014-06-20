@@ -29,30 +29,6 @@ file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
 #----------------------------------------------------------------------------
-# Find HBOOK (optional package)
-#
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../../common/analysis/cmake ${CMAKE_MODULE_PATH})
-find_package(HBOOK QUIET)
-if(NOT HBOOK_FOUND)
-  message(STATUS "G4 Examples: HBOOK package not found. --> TestEm14: g4tools/hbook analysis disabled")  
-else()
-  message(STATUS "G4 Examples: HBOOK package found. --> TestEm14: g4tools/hbook analysis enabled")  
-  add_definitions(-DG4_USE_HBOOK)  
-endif()
-
-#----------------------------------------------------------------------------
-# Add g4tools/hbook sources
-#
-
-if (HBOOK_FOUND)
-  enable_language(Fortran)
-  include_directories(
-       ${PROJECT_SOURCE_DIR}/../../common/analysis/include)
-  file(GLOB add_sources ${PROJECT_SOURCE_DIR}/../../common/analysis/src/*.cc)
-  file(GLOB fortran_sources ${PROJECT_SOURCE_DIR}/../../common/analysis/src/*.f)
-endif()       
-
-#----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(TestEm14 TestEm14.cc ${sources} ${fortran_sources} ${headers})

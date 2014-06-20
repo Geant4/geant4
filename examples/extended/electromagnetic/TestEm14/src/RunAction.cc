@@ -64,10 +64,8 @@ RunAction::~RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run* aRun)
+void RunAction::BeginOfRunAction(const G4Run*)
 {  
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-  
   // save Rndm status
   G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   CLHEP::HepRandom::showEngineStatus();
@@ -149,7 +147,7 @@ void RunAction::EndOfRunAction(const G4Run* aRun)
   G4cout << "\n mean energy of charged secondaries: " 
          << G4BestUnit(MeanTransfer, "Energy")
          << "\tmass_energy_transfer coef: "          
-	 << G4BestUnit(massTransfCoef, "Surface/Mass")
+         << G4BestUnit(massTransfCoef, "Surface/Mass")
          << G4endl;       
  
   //check cross section from G4EmCalculator

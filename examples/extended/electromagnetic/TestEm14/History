@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+20-06-14 mma (testem14-V10-00-02)
+- remove PhysicsList::SetCuts(). Update macros
+- suppress EventAction and its Messenger
+- remove hbook tools
 
 17-06-14 I. Hrivnacova (testem14-V10-00-01)
  - Fixed problems reported by Davide Mancusi:

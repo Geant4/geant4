@@ -50,12 +50,8 @@ PhysicsList::PhysicsList()
   fEmPhysicsList(0),
   fMessenger(0)
 {
-  G4LossTableManager::Instance();
-  
-  fCurrentDefaultCut   = 1.0*mm;
-  fCutForGamma         = fCurrentDefaultCut;
-  fCutForElectron      = fCurrentDefaultCut;
-  fCutForPositron      = fCurrentDefaultCut;
+  G4LossTableManager::Instance();  
+  SetDefaultCutValue(1.0*mm);
 
   fMessenger = new PhysicsListMessenger(this);
 
@@ -228,44 +224,3 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
-void PhysicsList::SetCuts()
-{
- // fixe lower limit for cut
- G4ProductionCutsTable::GetProductionCutsTable()->SetEnergyRange(100*eV, 1*GeV);
-  
- // set cut values for gamma at first and for e- second and next for e+,
- // because some processes for e+/e- need cut values for gamma
- SetCutValue(fCutForGamma, "gamma");
- SetCutValue(fCutForElectron, "e-");
- SetCutValue(fCutForPositron, "e+");
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForGamma(G4double cut)
-{
-  fCutForGamma = cut;
-  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForElectron(G4double cut)
-{
-  fCutForElectron = cut;
-  SetParticleCuts(fCutForElectron, G4Electron::Electron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForPositron(G4double cut)
-{
-  fCutForPositron = cut;
-  SetParticleCuts(fCutForPositron, G4Positron::Positron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

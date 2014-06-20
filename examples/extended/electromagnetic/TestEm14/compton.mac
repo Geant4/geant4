@@ -14,7 +14,7 @@
 #
 /run/initialize
 #
-/testem/phys/setCuts 1 nm
+/run/setCut 1 nm
 #
 /process/inactivate phot
 /process/inactivate conv
