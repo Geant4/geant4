@@ -20,6 +20,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ Jun 20, 2014  G.Cosmo                   geom-bool-V10-00-01
+ - Correction to G4MultiUnion::AddNode() for treatment of transformations.
+
  May 23, 2014  G.Cosmo                   geom-bool-V10-00-00
  - Enabled G4MultiUnion wrapper.
 

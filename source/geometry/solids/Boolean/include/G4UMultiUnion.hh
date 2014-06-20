@@ -65,7 +65,7 @@ class G4UMultiUnion : public G4USolid
     inline G4Transform3D* GetTransformation(G4int index) const;
     inline G4VSolid* GetSolid(G4int index) const;
     inline int GetNumberOfSolids()const;
-  
+    inline void Voxelize();
   public:  // without description
 
     G4UMultiUnion(__void__&);
@@ -92,15 +92,20 @@ inline UMultiUnion* G4UMultiUnion::GetShape() const
 
 inline void G4UMultiUnion::AddNode(G4VSolid& solid, G4Transform3D& trans)
 {
-  G4RotationMatrix rot = trans.getRotation();
-  G4ThreeVector transl = trans.getTranslation();
-  UTransform3D tr;
-  tr.fRot[0] = rot.xx(); tr.fRot[1] = rot.xy(); tr.fRot[2] = rot.xz();
-  tr.fRot[3] = rot.yx(); tr.fRot[4] = rot.yy(); tr.fRot[5] = rot.yz();
-  tr.fRot[6] = rot.zx(); tr.fRot[7] = rot.zy(); tr.fRot[8] = rot.zz();
-  tr.fTr = UVector3(transl.x(), transl.y(), transl.z());
+  HepGeom::Rotate3D rot;
+  HepGeom::Translate3D transl ;
+  HepGeom::Scale3D scale;
 
-  GetShape()->AddNode(*(static_cast<G4USolid&>(solid).GetSolid()), tr);
+  trans.getDecomposition(scale,rot,transl); 
+  G4ThreeVector pos = transl.getTranslation();
+    
+  UTransform3D* tr = new UTransform3D;
+  tr->fRot[0] = rot.xx(); tr->fRot[1] = rot.xy(); tr->fRot[2] = rot.xz();
+  tr->fRot[3] = rot.yx(); tr->fRot[4] = rot.yy(); tr->fRot[5] = rot.yz();
+  tr->fRot[6] = rot.zx(); tr->fRot[7] = rot.zy(); tr->fRot[8] = rot.zz();
+  tr->fTr = UVector3(pos.x(), pos.y(), pos.z());
+ 
+  GetShape()->AddNode(*(static_cast<G4USolid&>(solid).GetSolid()), *tr);
 }
 
 inline G4Transform3D* G4UMultiUnion::GetTransformation(G4int index) const
@@ -126,4 +131,8 @@ inline int  G4UMultiUnion::GetNumberOfSolids()const
   return GetShape()->GetNumberOfSolids();
 }
 
+inline void G4UMultiUnion::Voxelize()
+{
+  GetShape()->Voxelize();
+}
 #endif
