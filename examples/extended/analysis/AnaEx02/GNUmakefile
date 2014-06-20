@@ -16,11 +16,11 @@ all: lib bin
 
 setup:
 	@echo "Copying files from common"
-	@$(G4INSTALL)/examples/extended/common/scripts/copy_files.sh
+	../../common/scripts/copy_files.sh
 
 clean_setup:
 	@echo "Removing files copied from common"
-	@$(G4INSTALL)/examples/extended/common/scripts/clean_files.sh
+	../../common/scripts/clean_files.sh
 
 # ROOT support
 CPPFLAGS += -I$(shell root-config --incdir) 

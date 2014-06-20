@@ -4,7 +4,6 @@ SHARED_CLASSES_LIST
 DetectorConstruction
 DetectorMessenger
 EventAction
-PhysicsList
 PrimaryGeneratorAction
 RunAction
 SteppingAction
