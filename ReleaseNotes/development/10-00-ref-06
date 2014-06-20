@@ -40,6 +40,10 @@ externals                                        externals-V10-00-03
 - Updated to CLHEP-2.2.0.0: fixes for compilation warnings on clang and
   gcc-4.9 compilers for RanshiEngine and MTwistEngine.
 
+geometry/solids/Boolean                          geom-bool-V10-00-01
+-----------------------
+- Correction to G4MultiUnion::AddNode() for treatment of transformations.
+
 geometry/volumes                                 geomvol-V10-00-05
 ----------------
 - Corrected implementation of copy-constructor and assignment-operator
