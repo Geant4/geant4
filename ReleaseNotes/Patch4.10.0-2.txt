@@ -168,12 +168,12 @@ List of fixes included in this public patch since the public release 10.0.p01:
 
   o Interfaces:
     ----------
-    + G4UIterminal: fixed the problem that some commands could not be processed; (o)
+    + G4UIterminal: fixed the problem that some commands could not be processed;
       use substr() instead of () operator for the comparison of substrings.
 
   o Materials:
     ---------
-    + G4Material, G4Element: define default names and symbols for elements       (o)
+    + G4Material, G4Element: define default names and symbols for elements
       and isotopes when loaded from NIST and not explicitly defined by users.
       Fixes exporting of names in GDML when writing detector description.
     + G4Material: corrected initialisation of pointers in fake default
@@ -273,7 +273,7 @@ List of fixes included in this public patch since the public release 10.0.p01:
   o Processes - Hadronic:
     --------------------
     + models/binary_cascade:
-      o G4BinaryCasacde: improved calculation of mass, and of correction for     (o)
+      o G4BinaryCasacde: improved calculation of mass, and of correction for
         outgoing particles by always using GetIon() method; addresses potential
         crash for p+d seen in d+H in BIC.
       o G4{Proton,Neutron}Field.cc: protect against negative index into buffer.
