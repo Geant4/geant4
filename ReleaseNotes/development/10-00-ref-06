@@ -138,7 +138,8 @@ processes/hadronic
     reported by Coverity.
 - models/inclxx (hadr-inclxx-V10-00-08)
   o Fixed crash in p+He2 reactions.
-- models/management (hadr-modman-V10-00-03)
+- models/management (hadr-modman-V10-00-04)
+  o G4HadronicInteractionRegistry: added new method FindAllModels().
   o G4HadronicInteraction: removed unnecessary dependency on G4ReactionDynamics.
 - models/rpg (hadr-rpg-V10-00-02)
   o G4RPGInelastic: defined GHADLISTSIZE, now needed after removal of class
@@ -204,14 +205,17 @@ examples                                         examples-V10-00-06
   o Suppressed EventAction and its messenger.
 - extended/electromagnetic/TestEm7 (testem7-V10-00-01)
   o Removed SetCuts() method and corresponding UI commands,
-    updated all macro; applied code guiedlines.
+    updated all macros; applied code guiedlines.
 - extended/electromagnetic/TestEm8 (testem8-V10-00-03)
   o Applied code guidelines.
 - extended/electromagnetic/TestEm9 (testem9-V10-00-01)
   o Removed SetCuts() method and corresponding UI commands,
     applied code guiedlines.
-- extended/electromagnetic/TestEm14 (testem14-V10-00-01)
-  o Moved tools/hbook/*.f files in 'common' analysis module.
+- extended/electromagnetic/TestEm14 (testem14-V10-00-02)
+  o Removed SetCuts() method and corresponding UI commands,
+    updated all macros.
+  o Suppressed EventAction and its messenger.
+  o Removed hbook tools.
 - extended/electromagnetic/TestEm15 (testem15-V10-00-01)
   o Removed PhysicsList::SetCuts().
 - extended/electromagnetic/TestEm16 (testem16-V10-00-00)
