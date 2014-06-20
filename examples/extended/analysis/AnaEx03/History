@@ -15,9 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-02-04-13 I. Hrivnacova (AnaEx03-V09-06-00)
-- Create two ntuples instead of one in order to demonstrate 
-  how to do this with all tools.
+11-06-14 I. Hrivnacova (AnaEx03-V10-00-00)
+- Fixed path to copy_files.sh, clean_files.sh in GNUmalefile
+  (this makes GNUmake build working with Geant4 installation via
+   CMake)
+- Fixed SharedFilesList.txt - removed PhysicList class
+
+28-05-14 I. Hrivnacova
+- Use Geant4 physics list (FTFP_BERT) in AnaEx01,02,03, 
+  removed PhysicList class from shared
+  (tag in examples/analysis)
     
 13-11-12 I. Hrivnacova (AnaEx03-V09-05-05)   
 - Fixed order of instatiating G4VisExecutive and G4UIExecutive
