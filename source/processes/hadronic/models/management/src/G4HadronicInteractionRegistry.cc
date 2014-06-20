@@ -117,3 +117,20 @@ G4HadronicInteractionRegistry::FindModel(const G4String& name)
   }
   return model;
 }
+
+std::vector<G4HadronicInteraction*>
+G4HadronicInteractionRegistry::FindAllModels(const G4String& name)
+{
+  std::vector<G4HadronicInteraction*> models;
+
+  size_t nModels = allModels.size(); 
+  for (size_t i=0; i<nModels; ++i) {
+    G4HadronicInteraction* p = allModels[i]; 
+    if(p) {
+      if (p->GetModelName() == name) { 
+        models.push_back(p);
+      }
+    }
+  }
+  return models;
+}

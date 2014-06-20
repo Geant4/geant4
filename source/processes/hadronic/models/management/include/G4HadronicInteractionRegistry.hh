@@ -61,6 +61,9 @@ public:
   G4HadronicInteraction* FindModel(const G4String& name);
   // find existing hadronic interaction by name
 
+  std::vector<G4HadronicInteraction*> FindAllModels(const G4String& name);
+  // find all existing hadronic interactions by name
+
 private:
 
   G4HadronicInteractionRegistry();
