@@ -51,7 +51,13 @@
 #include "G4PhysicalConstants.hh"
 
 G4UCNMaterialPropertiesTable::G4UCNMaterialPropertiesTable()
-                             : G4MaterialPropertiesTable() {}
+                             : G4MaterialPropertiesTable() 
+{
+  theMicroRoughnessTable = NULL;
+  maxMicroRoughnessTable = NULL;
+  theMicroRoughnessTransTable = NULL;
+  maxMicroRoughnessTransTable = NULL;
+}
 
 G4UCNMaterialPropertiesTable::~G4UCNMaterialPropertiesTable()
 {
