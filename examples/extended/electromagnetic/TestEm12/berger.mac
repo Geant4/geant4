@@ -15,8 +15,7 @@
 /testem/phys/addPhysics  local	# em physics
 ###/testem/phys/addPhysics  emlivermore	# em physics
 #
-###/run/setCut 2 um	#will include cut for proton
-/testem/phys/setCuts 2 um
+/run/setCut 2 um
 #
 /run/initialize
 #

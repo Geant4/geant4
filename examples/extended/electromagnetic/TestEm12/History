@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22-06-14 mma (testem12-V10-00-02)
+- remove PhysicsList::SetCuts(). Update macros
+
 21-04-04 V.Ivanchenko (testem12-V10-00-01)
 - PhysicsList - added emlowenergy and dna_option1 physics lists 
      
