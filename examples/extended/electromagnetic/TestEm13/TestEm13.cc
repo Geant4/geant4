@@ -29,7 +29,7 @@
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "G4RunManager.hh"
 #include "G4UImanager.hh"
@@ -41,7 +41,6 @@
 #include "SteppingVerbose.hh"
 
 #include "RunAction.hh"
-#include "EventAction.hh"
 #include "SteppingAction.hh"
 
 #ifdef G4VIS_USE
@@ -75,7 +74,6 @@ int main(int argc,char** argv) {
   // set user action classes
   RunAction* run;  
   runManager->SetUserAction(run = new RunAction(det,prim)); 
-  runManager->SetUserAction(new EventAction);
   runManager->SetUserAction(new SteppingAction(run));
    
   // get the pointer to the User Interface manager 
@@ -113,4 +111,4 @@ int main(int argc,char** argv) {
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+21-06-14 mma (testem13-V10-00-00)
+- remove PhysicsList::SetCuts(). Update macros
+- suppress EventAction and its Messenger
 
 19-06-13 mma (testem13-V09-06-04)
 - SteppingVerbose: use G4Step::GetSecondaryInCurrentStep().

@@ -11,7 +11,7 @@
 #
 /run/initialize
 #
-/testem/phys/setCuts 200 um
+/run/setCut 200 um
 #
 /gun/particle proton
 /gun/energy 1 GeV
