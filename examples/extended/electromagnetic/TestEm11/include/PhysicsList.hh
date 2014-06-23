@@ -54,11 +54,6 @@ class PhysicsList: public G4VModularPhysicsList
    ~PhysicsList();
 
     virtual void ConstructParticle();
-    
-    virtual void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);        
         
     void AddPhysicsList(const G4String& name);
     virtual void ConstructProcess();
@@ -68,10 +63,6 @@ class PhysicsList: public G4VModularPhysicsList
     StepMax* GetStepMaxProcess() {return fStepMaxProcess;};
 
   private:
-    G4double fCutForGamma;
-    G4double fCutForElectron;
-    G4double fCutForPositron;
-       
     G4String               fEmName;
     G4VPhysicsConstructor* fEmPhysicsList;    
     static G4ThreadLocal StepMax* fStepMaxProcess;

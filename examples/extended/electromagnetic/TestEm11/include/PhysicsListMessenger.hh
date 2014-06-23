@@ -39,7 +39,6 @@
 
 class PhysicsList;
 class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -58,10 +57,6 @@ class PhysicsListMessenger: public G4UImessenger
     PhysicsList* fPhysicsList;
     
     G4UIdirectory*             fPhysDir;        
-    G4UIcmdWithADoubleAndUnit* fGammaCutCmd;
-    G4UIcmdWithADoubleAndUnit* fElectCutCmd;
-    G4UIcmdWithADoubleAndUnit* fProtoCutCmd;    
-    G4UIcmdWithADoubleAndUnit* fAllCutCmd;    
     G4UIcmdWithAString*        fListCmd;
     
 };

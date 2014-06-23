@@ -54,22 +54,17 @@ G4ThreadLocal StepMax* PhysicsList::fStepMaxProcess = 0;
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() : G4VModularPhysicsList(),
-  fEmPhysicsList(0),    
-  fMessenger(0)
+  fEmPhysicsList(0), fMessenger(0)
 {
-  G4LossTableManager::Instance();
-  defaultCutValue = 1.*mm;
-  fCutForGamma     = defaultCutValue;
-  fCutForElectron  = defaultCutValue;
-  fCutForPositron  = defaultCutValue;
-
   fMessenger = new PhysicsListMessenger(this);
 
   SetVerboseLevel(1);
 
   // EM physics
   fEmPhysicsList = new PhysListEmStandard(fEmName = "local");
-
+  
+  G4LossTableManager::Instance();
+  SetDefaultCutValue(1.*mm);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -327,50 +322,3 @@ void PhysicsList::AddStepMax()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4Gamma.hh"
-#include "G4Electron.hh"
-#include "G4Positron.hh"
-
-void PhysicsList::SetCuts()
-{ 
-  if (verboseLevel >0) {
-    G4cout << "PhysicsList::SetCuts:";
-    G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-  }
-
-  // set cut values for gamma at first and for e- second and next for e+,
-  // because some processes for e+/e- need cut values for gamma
-  SetCutValue(fCutForGamma, "gamma");
-  SetCutValue(fCutForElectron, "e-");
-  SetCutValue(fCutForPositron, "e+");
-
-  if (verboseLevel>0) DumpCutValuesTable();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForGamma(G4double cut)
-{
-  fCutForGamma = cut;
-  SetParticleCuts(fCutForGamma, G4Gamma::Gamma());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForElectron(G4double cut)
-{
-  fCutForElectron = cut;
-  SetParticleCuts(fCutForElectron, G4Electron::Electron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::SetCutForPositron(G4double cut)
-{
-  fCutForPositron = cut;
-  SetParticleCuts(fCutForPositron, G4Positron::Positron());
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

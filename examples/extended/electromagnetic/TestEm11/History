@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-     
+	 
+22-06-14 mma (testem11-V10-00-01)
+- remove PhysicsList::SetCuts(). Update macros
+
 17-12-13 mma (testem11-V10-00-00)
 - Run::SetPrimary(particle, ekin)
 - Run::EndOfRun()

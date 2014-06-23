@@ -19,7 +19,7 @@
 /run/initialize
 #
 # prevent any secondary production
-/testem/phys/setCuts 1 km
+/run/setCut 1 km
 #
 # eliminate straggling
 /process/inactivate msc
