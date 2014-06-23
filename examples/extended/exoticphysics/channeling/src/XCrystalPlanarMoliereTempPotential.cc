@@ -68,9 +68,9 @@ ComputeECForSinglePlane(G4double vX,
     for(unsigned int i=0;i<3;i++){
         G4double vTemp = 0.;
         vTemp += ( exp(-vX/ aTF * fBeta[i] ) *
-                  erfc((vTVA / aTF * fBeta[i] - vX/ vTVA) / pow(2.,0.5)) );
+                  (1.-erf((vTVA / aTF * fBeta[i] - vX/ vTVA) / pow(2.,0.5))) );
         vTemp += ( exp( vX/ aTF * fBeta[i] ) *
-                  erfc((vTVA / aTF * fBeta[i] + vX/ vTVA) / pow(2.,0.5)) );
+                  (1.-erf((vTVA / aTF * fBeta[i] + vX/ vTVA) / pow(2.,0.5))) );
         vValueForSinglePlane += ( vTemp * fGamma[i] * exp( vTau[i] ) /2.0);
     }
     

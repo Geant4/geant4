@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 21, 2014 E. Bagli (channelingExample-V10-00-10)
+- Changed erfc(x) to 1.-erf(x)
+
+June 20, 2014 E. Bagli (channelingExample-V10-00-09)
+- Modified channelling to channeling in CMakeLists.txt
+
 June 10, 2014 E. Bagli (channelingExample-V10-00-08)
 - Moved Channeling to channeling in CMakeLists.txt and CTestDefinitions.txt
 
