@@ -209,6 +209,9 @@ examples                                         examples-V10-00-06
 - extended/electromagnetic/TestEm8 (testem8-V10-00-03)
   o Applied code guidelines.
 - extended/electromagnetic/TestEm9 (testem9-V10-00-01)
+- extended/electromagnetic/TestEm11 (testem11-V10-00-01)
+- extended/electromagnetic/TestEm12 (testem12-V10-00-02)
+- extended/electromagnetic/TestEm13 (testem13-V10-00-00)
   o Removed SetCuts() method and corresponding UI commands,
     applied code guiedlines.
 - extended/electromagnetic/TestEm14 (testem14-V10-00-02)
@@ -227,7 +230,8 @@ examples                                         examples-V10-00-06
 - extended/eventgenerator/pythia/decayer6 (p6decayer-V10-00-01)
   o Fixed path to copy_files.sh, clean_files.sh in GNUmakefile.
 - extended/exoticphysics (exExoticphysics-V10-00-01)
-- extended/exoticphysics/channeling (channelingExample-V10-00-08)
+- extended/exoticphysics/channeling (channelingExample-V10-00-10)
+  o Changed erfc(x) to 1.-erf(x).
   o Corrections in CMake scripts.
 - extended/exoticphysics/ucn (ExUCN-V10-00-02)
   o New example demonstrating the functionality of UCN physics.
