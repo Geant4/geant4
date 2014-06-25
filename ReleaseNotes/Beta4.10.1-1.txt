@@ -101,6 +101,9 @@ List of features and fixes included in this Beta release since 10.0.p02:
   o Geometry:
     --------
     + navigation:
+      o Fix in G4MultiNavigator to properly set 'fIdNavLimiting' index to
+        navigator limiting the step, if only one navigator limits the step.
+        Addressing problem report #1634.
       o G4PropagatorInField: added new method GetCurrentEquationOfMotion().
       o Added internal method RecheckDistanceToCurrentBoundary() for
         G4SafetyHelper, G4Navigator and G4PathFinder, for checking a proposed
@@ -388,6 +391,7 @@ List of features and fixes included in this Beta release since 10.0.p02:
         physics vectors are managed by allocators.
       o G4ChipsHyperonElasticXS : avoid to exclude Sigma+ in the set of
         hyperons which can be treated by Chips elastic scattering.
+      o G4ChipsAntiBaryonElasticXS: include anti_Omega- in GetPTables().
     + management
       o G4HadronicProcess: added method GetHadronicInteractionList() allowing 
         access to the list of registered models, removed obsolete access methods
@@ -577,7 +581,10 @@ List of features and fixes included in this Beta release since 10.0.p02:
     + Updated reference outputs, macros and scripts.
     + advanced/air_shower
       o Follow migration of MT-ready GPS code.
-   + advanced/gammaknife
+    + advanced/amsEcal
+      o Added protection in RunAction against division by zero.
+        Addressing problem report #1522.
+    + advanced/gammaknife
       o Follow migration of MT-ready GPS code.
     + advanced/gammaray_telescope
       o Prepare code for migration to multi-threading.
@@ -700,6 +707,7 @@ List of features and fixes included in this Beta release since 10.0.p02:
         from an hadronic cascade.
     + extended/medical/electronScattering
       o Migration to multi-threading.
+      o Removed PhysicsList::SetCuts().
     + extended/medical/electronScattering2
       o Fixed memcheck errors: foil thickness now defined in Detector
         constructor.

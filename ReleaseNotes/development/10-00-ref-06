@@ -44,6 +44,12 @@ geometry/solids/Boolean                          geom-bool-V10-00-01
 -----------------------
 - Correction to G4MultiUnion::AddNode() for treatment of transformations.
 
+geometry/navigation                              geomnav-V10-00-07
+-------------------
+- Fix in G4MultiNavigator to properly set 'fIdNavLimiting' index to
+  navigator limiting the step, if only one navigator limits the step.
+  Addressing problem report #1634.
+
 geometry/volumes                                 geomvol-V10-00-05
 ----------------
 - Corrected implementation of copy-constructor and assignment-operator
@@ -126,9 +132,10 @@ processes/electromagnetic/utils                  emutils-V10-00-26
 
 processes/hadronic
 ------------------
-- cross_sections (hadr-cross-V10-00-06)
-  o G4ChipsHyperonElasticXS : avoid to exclude Sigma+ in the set of
+- cross_sections (hadr-cross-V10-00-07)
+  o G4ChipsHyperonElasticXS: avoid to exclude Sigma+ in the set of
     hyperons which can be treated by Chips elastic scattering.
+  o G4ChipsAntiBaryonElasticXS: include anti_Omega- in GetPTables().
 - models/coherent_elastic (hadr-cohe-V10-00-10)
   o G4NuclNuclDiffuseElastic: fix to nuclear radius (which was zero),
     Fixed deletion in destructor.
@@ -177,6 +184,9 @@ visualization                                   vis-V10-00-06
 examples                                         examples-V10-00-06
 --------
 - Updated reference outputs.
+- advanced/amsEcal (amsEcal-V10-00-01)
+  o Additional protection in RunAction against division by zero.
+    Addressing problem report #1522.
 - advanced/gammaray_telescope (gammaraytel-V10-00-05)
   o More adaptations for migration to MT.
 - advanced/xray_fluorescence (XrayFluo-V10-00-10)
@@ -230,7 +240,7 @@ examples                                         examples-V10-00-06
 - extended/eventgenerator/pythia/decayer6 (p6decayer-V10-00-01)
   o Fixed path to copy_files.sh, clean_files.sh in GNUmakefile.
 - extended/exoticphysics (exExoticphysics-V10-00-01)
-- extended/exoticphysics/channeling (channelingExample-V10-00-10)
+- extended/exoticphysics/channeling (channelingExample-V10-00-11)
   o Changed erfc(x) to 1.-erf(x).
   o Corrections in CMake scripts.
 - extended/exoticphysics/ucn (ExUCN-V10-00-02)
@@ -238,12 +248,13 @@ examples                                         examples-V10-00-06
 - extended/g3tog4 (g3tog4Tests-V10-00-01)
   o Moved data directory in clGeometry.
   o Fixed path to copy_files.sh, clean_files.sh in GNUmakefile.
-- extended/hadronic/FissionFragment (exExtHadFissFrag-V10-00-07)
+- extended/hadronic/FissionFragment (exExtHadFissFrag-V10-00-09)
   o New example to exercise fission fragmentation.
 - extended/hadronic/Hadr02 (exhadr02-V10-00-01)
   o Applied code guidelines and code cleanup.
-- extended/medical/electronScattering (electronScattering-V10-00-00)
+- extended/medical/electronScattering (electronScattering-V10-00-01)
   o Migration to multi-threading.
+  o Removed PhysicsList::SetCuts().
 - extended/medical/electronScattering2 (exampleES2-V10-00-02)
   o Applied code guidelines; added G4EmLowEPPhysics.
 - extended/medical/GammaTherapy (gtherapy-V10-00-00)
