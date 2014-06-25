@@ -14,8 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+24-06-14 mma (electronScattering-V10-00-01)
+- restaure scatter.mac
+- remove PhysicsList::SetCuts(). Update macros
 
-05-16-14 J.Jacquemier (electronScattering-V10-00-00)
+05-06-14 J.Jacquemier (electronScattering-V10-00-00)
 - Migrated to multi-threading: 
   - Add ActionInitialization
   - Add Run
