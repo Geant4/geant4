@@ -7,13 +7,19 @@
 //!
 //! \brief      Implementation of the FFDetectorConstruction class
 //!
-//! \details    The model simulated is based off the subcritical
-//!             assembly located at Idaho State University (ISU)
-//!             in the United States of America (USA)
+//! \details    The model simulated is based off a subcritical assembly design
+//!                 with 20% enriched meat
 //!
 //  ================ End Documentation Comments ================
 //
-//  Modified: 
+//  Modified:
+//
+//  23-06-14                                              BWendt
+//  Fixed issue with the automatic placement of the meat not working. Solution
+//      was to use the correct units "inch" in the y-direction as well.
+//  Coincidentally eliminated the need to using the 'std::abs()" from the
+//      "cmath" library.
+//  Implemented method "PlaceFuelPlates"
 //
 // -------------------------------------------------------------
 
@@ -35,6 +41,7 @@
 static const G4double inch = 2.54 * cm;
 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 FFDetectorConstruction::
 FFDetectorConstruction()
 :   G4VUserDetectorConstruction()
@@ -42,6 +49,7 @@ FFDetectorConstruction()
     DefineMaterials();
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VPhysicalVolume* FFDetectorConstruction::
 Construct()
 {
@@ -181,6 +189,7 @@ Construct()
     const G4double meatZ = 24.0 * inch;
     const G4double xSpacing = 5.0 * inch;
     const G4double ySpacing = 0.3 * inch;
+    const G4double plateRadius = 12.0 * inch;
     // Define the aluminim claddiing
     G4Box* const solidPlate
         = new G4Box("Plate_Cladding",                   // the name
@@ -214,28 +223,26 @@ Construct()
     // The plate will be centered in the z-direction within the water
     // Simulate a subcritical assembly loading within a radius of 12 inches
     bool placeMe;
-    char copyName[30];
-    unsigned int copyNumber = 0;
     
     position.setZ(0.0);
-    for(double x = -12.0 * inch;
-        x <= 12.0 * inch;
+    copyNumber = 0;
+    for(double x = 0.0;
+        x <= plateRadius;
         x += xSpacing)
     {
         // 5 rows of plates
-        for(double y = -ySpacing * 2.5;
-            y <= ySpacing * 2.5;
+        for(double y = 0.0;
+            y <= plateRadius;
             y += ySpacing)
         {
             placeMe = false;
             
             // Fuel plate must be completely within the radius to be placed
-            if(sqrt(x * x + y * y) < 12.0)
+            if(sqrt(x * x + y * y) < plateRadius)
             {
                 // Leave a 1 inch radius opening in the middle for the neutron
                 // source
-                if(abs(y) > 1.0 * inch
-                   && abs(x) > 1.0 * inch)
+                if(sqrt(x * x + y * y) > 1.0 * inch)
                 {
                     placeMe = true;
                 }
@@ -243,25 +250,27 @@ Construct()
             
             if(placeMe)
             {
-                position.setX(x);
-                position.setY(y);
-                
-                sprintf(copyName,
-                        "Plate@X:%.2fY:%.2f",
-                        x,
-                        y);
-                
-                new G4PVPlacement(NULL,                 // no rotation
-                                  position,             // position
-                                  logicalPlate,         // the logical volume
-                                  copyName,             // the name
-                                  logicalTankH2O,       // the mother volume
-                                  false,                // no boolean ops
-                                  copyNumber++,         // copy number
-                                  true);                // check for overlaps
+                PlaceFuelPlate(x,
+                               y,
+                               logicalPlate,
+                               logicalTankH2O);
+                PlaceFuelPlate(x,
+                               -y,
+                               logicalPlate,
+                               logicalTankH2O);
+                PlaceFuelPlate(-x,
+                               y,
+                               logicalPlate,
+                               logicalTankH2O);
+                PlaceFuelPlate(-x,
+                               -y,
+                               logicalPlate,
+                               logicalTankH2O);
             }
         }
     }
+    G4cout << copyNumber << " plates were added to the subcritical assembly"
+           << G4endl;
     
     //
     // Neutron Source
@@ -370,6 +379,7 @@ Construct()
     return physicalWorld;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void FFDetectorConstruction::
 DefineMaterials(void)
 {
@@ -400,7 +410,7 @@ DefineMaterials(void)
     G4Isotope* const iU235
         = new G4Isotope("iU235",                        // name
                         92,                             // ZZZ
-                        238,                            // AAA
+                        235,                            // AAA
                         235.053930 * (g / mole));       // molecular weight
     G4Isotope* const iU238
         = new G4Isotope("iU238",                        // name
@@ -495,6 +505,32 @@ DefineMaterials(void)
                         flourideMassFraction);          // mass fraction
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void FFDetectorConstruction::
+PlaceFuelPlate(double x,
+               double y,
+               G4LogicalVolume* const myLogicalVolume,
+               G4LogicalVolume* const parentLogicalVolume)
+{
+    char copyName[64];
+    G4ThreeVector position(x, y);
+    
+    sprintf(copyName,
+            "Plate@Location    X:%.2f    Y:%.2f",
+            x / inch,
+            y / inch);
+    
+    new G4PVPlacement(NULL,                 // no rotation
+                      position,             // position
+                      myLogicalVolume,      // the logical volume
+                      copyName,             // the name
+                      parentLogicalVolume,  // the mother volume
+                      false,                // no boolean ops
+                      copyNumber++,         // copy number
+                      true);                // check for overlaps
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 FFDetectorConstruction::
 ~FFDetectorConstruction()
 {

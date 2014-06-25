@@ -17,18 +17,20 @@
 //!
 //! \brief      Main program of the FissionFragment example
 //!
-//! \details    Application demonstrating the Fission Fragment
-//!             model as used within the neutron_hp model. It
-//!             demostrates the capability for fission product
-//!             containment by the cladding in a water moderated
-//!             sub-critical assembly.
-//!             It could also be further extended to calculate the
-//!             effective multiplication factor of the subcritical
-//!             assembly for various loading schemes.
+//! \details    Application demonstrating the Fission Fragment model as used
+//!                 within the neutron_hp model. It demostrates the capability
+//!                 for fission product containment by the cladding in a water
+//!                 moderated sub-critical assembly.
+//!             It could also be further extended to calculate the effective
+//!                 multiplication factor of the subcritical assembly for
+//!                 various loading schemes.
 //!
 //  ================ End Documentation Comments ================
 //
-//  Modified: 
+//  Modified:
+//
+//  23-06-14                                              BWendt
+//  Added check for NeutronHP fission generator environment variable
 //
 // -------------------------------------------------------------
 
@@ -57,6 +59,7 @@
 
 
 // Entry point
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 int main(int argc, char* argv[])
 {
     int result;
@@ -66,16 +69,33 @@ int main(int argc, char* argv[])
     G4String outputFileName = "FF_Neutron_HP.out";
     G4UImanager* UIManager = NULL;
     
+    char makeFissionFragments[] = "G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS";
+    char useWendtFission[] = "G4NEUTRON_HP_USE_WENDT_FISSION_MODEL";
+    
     // Indicate the example is starting
     G4cout << "####   Starting: " << argv[0] << "    ####" << G4endl;
     
+    // Verify that NeutronHP is going to create fission fragments
+    // Throw and error if it isn't.
+    if(getenv(makeFissionFragments) == NULL)
+    {
+        G4cerr << G4endl << "!!!!" << G4endl;
+        G4cerr << "!!!! Error in example" << argv[0] << G4endl;
+        G4cerr << "!!!! The \"" << makeFissionFragments << "\" "
+                  "environment variable is not set!" << G4endl;
+        G4cerr << "!!!! Please set it in order to use this example." << G4endl;
+        G4cerr << "!!!!" << G4endl << G4endl;
+        
+        return EXIT_FAILURE;
+    }
+    
     // We are trying to use the Wendt fission model in Neutron_HP
     // Warn the user if the appropriate environment variable is not set up
-    if(getenv("G4NEUTRON_HP_USE_WENDT_FISSION_MODEL") == NULL)
+    if(getenv(useWendtFission) == NULL)
     {
         G4cout << G4endl << "!!!!" << G4endl;
         G4cout << "!!!! Warning in example" << argv[0] << G4endl;
-        G4cout << "!!!! The \"G4NEUTRON_HP_USE_WENDT_FISSION_MODEL\" "
+        G4cout << "!!!! The \"" << useWendtFission << "\" "
                   "environment variable is not set!" << G4endl;
         G4cout << "!!!! Please set it if you wish to use this fission model, "
                   "otherwise the default fission model will be used" << G4endl;

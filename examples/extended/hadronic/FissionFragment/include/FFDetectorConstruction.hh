@@ -9,7 +9,10 @@
 //!
 //  ================ End Documentation Comments ================
 //
-//  Modified: 
+//  Modified:
+//
+//  23-06-14                                              BWendt
+//  Added method "PlaceFuelPlates"
 //
 // -------------------------------------------------------------
 
@@ -43,9 +46,14 @@ private:
     G4Material* polyethylene;
     G4Material* UO2_20E;
     G4Material* water;
+    unsigned int copyNumber;
 
 // Functions
     void DefineMaterials(void);
+    void PlaceFuelPlate(double x,
+                        double y,
+                        G4LogicalVolume* const myLogicalVolume,
+                        G4LogicalVolume* const parentLogicalVolume);
 };
 
 #endif //FFDETECTORCONSTRUCTION

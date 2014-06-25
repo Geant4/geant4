@@ -21,6 +21,8 @@
 //#include "FFEventAction.hh"
 //#include "FFSteppingAction.hh"
 
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 FFActionInitialization::
 FFActionInitialization()
 :   G4VUserActionInitialization(),
@@ -29,6 +31,7 @@ FFActionInitialization()
     // Nothing here
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void FFActionInitialization::
 Build(void) const
 {
@@ -48,12 +51,14 @@ Build(void) const
     //SetUserAction(new FFSteppingAction(eventAction));
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void FFActionInitialization::
 BuildForMaster(void) const
 {
     SetUserAction(masterRunAction);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 FFActionInitialization::
 ~FFActionInitialization()
 {

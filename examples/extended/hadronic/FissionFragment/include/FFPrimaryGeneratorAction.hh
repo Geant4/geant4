@@ -9,7 +9,10 @@
 //!
 //  ================ End Documentation Comments ================
 //
-//  Modified: 
+//  Modified:
+//
+//  23-06-14                                              BWendt
+//  Added function "GetNeutronSourceCenter()" and supporting class-level fields
 //
 // -------------------------------------------------------------
 
@@ -19,6 +22,7 @@
 #include "G4Event.hh"
 #include "G4ParticleGun.hh"
 #include "G4Tubs.hh"
+#include "G4VPhysicalVolume.hh"
 
 #include "G4VUserPrimaryGeneratorAction.hh"
 
@@ -38,8 +42,14 @@ public:
     
 private:
 // Fields
-    G4Tubs* neutronSource;
+    G4VPhysicalVolume* H2OPhysical;
+    G4VPhysicalVolume* neutronPhysical;
+    G4Tubs* neutronSolid;
     G4ParticleGun* const particleGun;
+    G4VPhysicalVolume* tankPhysical;
+    
+// Functions
+    G4ThreeVector GetNeutronSourceCenter(void);
 };
 
 #endif //FFPRIMARYGENERATORACTION

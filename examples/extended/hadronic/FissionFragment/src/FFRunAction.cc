@@ -21,6 +21,7 @@
 #include "FFRunAction.hh"
 
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 FFRunAction::
 FFRunAction()
 :   G4UserRunAction()
@@ -28,12 +29,14 @@ FFRunAction()
     // Nothing here
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void FFRunAction::
 BeginOfRunAction(const G4Run*)
 {
     G4RunManager::GetRunManager()->SetRandomNumberStore(false);
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 void FFRunAction::
 EndOfRunAction(const G4Run*)
 {
@@ -41,6 +44,7 @@ EndOfRunAction(const G4Run*)
     // TODO Implement detector tally here
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 FFRunAction::
 ~FFRunAction()
 {
