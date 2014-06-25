@@ -228,7 +228,7 @@ void RunAction::EndOfRunAction(const G4Run*)
     varianceEvis = meanEvis2 - meanEvis*meanEvis;
     rmsEvis = 0.;
     if (varianceEvis > 0.) rmsEvis = std::sqrt(varianceEvis);
-    resEvis = meanEvis ? 100*rmsEvis/meanEvis : 0.;
+	if (meanEvis > 0.) resEvis = 100*rmsEvis/meanEvis;
     histoManager->FillHisto(3, i1+0.5, meanEvis);
          
     //total energy
@@ -237,7 +237,7 @@ void RunAction::EndOfRunAction(const G4Run*)
     varianceEtot = meanEtot2 - meanEtot*meanEtot;
     rmsEtot = 0.;
     if (varianceEtot > 0.) rmsEtot = std::sqrt(varianceEtot);
-    resEtot = 100*rmsEtot/meanEtot;
+    if (meanEtot > 0.) resEtot = 100*rmsEtot/meanEtot;
     histoManager->FillHisto(4, i1+0.5, meanEtot);    
 
     //print
@@ -266,7 +266,7 @@ void RunAction::EndOfRunAction(const G4Run*)
   varianceEvis = meanEvis2 - meanEvis*meanEvis;
   rmsEvis = 0.;
   if (varianceEvis > 0.) rmsEvis = std::sqrt(varianceEvis);
-  resEvis = 100*rmsEvis/meanEvis;
+  if (meanEvis > 0.) resEvis = 100*rmsEvis/meanEvis;
   
   //calorimeter: total energy
   meanEtot  = calorEtot /nbEvents;
@@ -274,7 +274,7 @@ void RunAction::EndOfRunAction(const G4Run*)
   varianceEtot = meanEtot2 - meanEtot*meanEtot;
   rmsEtot = 0.;
   if (varianceEtot > 0.) rmsEtot = std::sqrt(varianceEtot);
-  resEtot = 100*rmsEtot/meanEtot;
+  if (meanEtot > 0.) resEtot = 100*rmsEtot/meanEtot;
     
   //print
   //

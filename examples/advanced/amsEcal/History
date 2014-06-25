@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+24-06-14 mma (amsEcal-V10-00-01)
+- Additional protection in RunAction against division by zero 
+(bug report 1522)
 
 16-12-13 L.Pandola (amsEcal-V10-00-00)
 - Add in RunAction a protection against division by zero 
