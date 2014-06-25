@@ -48,7 +48,6 @@ geometry/navigation                              geomnav-V10-00-07
 -------------------
 - Fix in G4MultiNavigator to properly set 'fIdNavLimiting' index to
   navigator limiting the step, if only one navigator limits the step.
-  Addressing problem report #1634.
 
 geometry/volumes                                 geomvol-V10-00-05
 ----------------
