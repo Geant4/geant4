@@ -229,7 +229,10 @@ GEANT4_ADD_TEST(example-ext-hadronic-FissionFragment
 						        -i ${CMAKE_SOURCE_DIR}/examples/extended/hadronic/FissionFragment/batch.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/hadronic/FissionFragment
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/hadronic/FissionFragment
-                  BUILD FissionFragment ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} G4NEUTRON_HP_USE_WENDT_FISSION_MODEL=1)
+                  BUILD FissionFragment 
+						ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} 
+						         G4NEUTRON_HP_USE_WENDT_FISSION_MODEL=1
+							      G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS=1)
 GEANT4_ADD_TEST(example-ext-medical-dicom 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/medical/DICOM/DICOM
                         ${CMAKE_SOURCE_DIR}/examples/extended/medical/DICOM/run.mac

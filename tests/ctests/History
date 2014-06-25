@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-10 25 June 2014 Gunter Folger
+- add G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS=1 for FissionFragment 
+    extended hadronic example 
+
 ctests-V10-00-09 13 June 2014 Gunter Folger
 - correct settings for FissionFragment extended hadronic example 
 
