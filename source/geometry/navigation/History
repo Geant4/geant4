@@ -16,32 +16,29 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-June  24, 2014 - G.Folger
+
+June  24, 2014 - G.Folger  (geomnav-V10-00-07)
 -------------------------
-G4MultiNavigator.cc
-  Set fIdNavLimiting index to navigator limiting the step, if only one navigator
-  limited the step. Fixes crash in RE05 on windows.
-  the fix is likely addressing this problem report: 
-    http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1634
+- G4MultiNavigator: set 'fIdNavLimiting' index to navigator limiting the step,
+  if only one navigator limited the step. Fixes crash in RE05 on Windows.
+  Likely addressing problem report #1634.
 
 May   27, 2014 - J.Apostolakis  (geomnav-V10-00-06)
 ------------------------------
-G4Navigator
-  Corrected saving/restoring of 'navigator state':
-  - Added bool sWasLimitedByGeometry to G4SaveNavigatorState struct
+- G4Navigator: corrected saving/restoring of 'navigator state':
+  * Added bool sWasLimitedByGeometry to G4SaveNavigatorState struct
      ( fixes side effect of call to ComputeSafety. )
-  - Corrected RestoreState() to reset the Safety Origin and Value
-  - ComputeSafety: If at endpoint of step, answer safety=0.0 quickly.
+  * Corrected RestoreState() to reset the Safety Origin and Value
+  * ComputeSafety: If at endpoint of step, answer safety=0.0 quickly.
        Do not save/restore state. 
-
-G4PropagatorInField
-  - Added new method GetCurrentEquationOfMotion() 
+- G4PropagatorInField:
+  * Added new method GetCurrentEquationOfMotion() 
 
 May   16, 2014 - J.Apostolakis  (geomnav-V10-00-05)
 ------------------------------
-- Fixed G4PathFinder::RecheckDistanceToCurrentBoundary
-    Compilation error identified error: return value from Navigator
-    was not used to accumulate method return value.
+- Fixed G4PathFinder::RecheckDistanceToCurrentBoundary():
+  A compilation error identified error: return value from Navigator
+  was not used to accumulate method return value.
 
 May   16, 2014 - J.Apostolakis  (geomnav-V10-00-04)
 ------------------------------
