@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+June 22, 2014 E. Bagli (channelingExample-V10-00-11)
+- CLHEP/Random/Stat.h added to XCrystalPlanarMoliereTempPotential.cc
+
 June 21, 2014 E. Bagli (channelingExample-V10-00-10)
 - Changed erfc(x) to 1.-erf(x)
 

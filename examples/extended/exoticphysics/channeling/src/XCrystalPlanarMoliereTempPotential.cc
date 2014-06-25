@@ -26,6 +26,7 @@
 
 #include "XCrystalPlanarMoliereTempPotential.hh"
 #include "G4PhysicalConstants.hh"
+#include "CLHEP/Random/Stat.h"
 
 XCrystalPlanarMoliereTempPotential::XCrystalPlanarMoliereTempPotential(){
     fAlfa[0] = 0.1;
