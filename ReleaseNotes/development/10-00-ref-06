@@ -183,7 +183,7 @@ visualization                                   vis-V10-00-06
 examples                                         examples-V10-00-06
 --------
 - Updated reference outputs.
-- advanced/amsEcal (amsEcal-V10-00-01)
+- advanced/amsEcal (amsEcal-V10-00-02)
   o Additional protection in RunAction against division by zero.
     Addressing problem report #1522.
 - advanced/gammaray_telescope (gammaraytel-V10-00-05)
