@@ -218,6 +218,7 @@ void RunAction::EndOfRunAction(const G4Run*)
 
   G4double meanEvis,meanEvis2,varianceEvis,rmsEvis,resEvis;
   G4double meanEtot,meanEtot2,varianceEtot,rmsEtot,resEtot;
+  resEtot=resEvis=0; 
   
   G4int n1pxl = detector->GetN1Pixels();
     
