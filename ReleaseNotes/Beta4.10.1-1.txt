@@ -103,7 +103,6 @@ List of features and fixes included in this Beta release since 10.0.p02:
     + navigation:
       o Fix in G4MultiNavigator to properly set 'fIdNavLimiting' index to
         navigator limiting the step, if only one navigator limits the step.
-        Addressing problem report #1634.
       o G4PropagatorInField: added new method GetCurrentEquationOfMotion().
       o Added internal method RecheckDistanceToCurrentBoundary() for
         G4SafetyHelper, G4Navigator and G4PathFinder, for checking a proposed
