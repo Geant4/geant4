@@ -405,7 +405,8 @@ G4double G4ChipsAntiBaryonElasticXS::GetPTables(G4double LP, G4double ILP, G4int
                             1.e10,1.1,3.4e6,6.8e6,0.};
   //                        -15-  -16-  -17-  -18- -19- -20-  -21-  -22-  -23- -24-
   //                        -25-  -26- -27- -28- -29- 
-  if(PDG>-3334 && PDG<-1111)
+  //AR-24Jun2014  if(PDG>-3334 && PDG<-1111)
+  if(PDG>-3335 && PDG<-1111)
   {
     // -- Total pp elastic cross section cs & s1/b1 (main), s2/b2 (tail1), s3/b3 (tail2) --
     //p2=p*p;p3=p2*p;sp=sqrt(p);p2s=p2*sp;lp=log(p);dl1=lp-(3.=par(3));p4=p2*p2; p=|3-mom|

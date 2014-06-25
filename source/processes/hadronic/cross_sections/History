@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+24 June 2014 A.Ribon (hadr-cross-V10-00-07)
+------------------------------------------
+- G4ChipsAntiBaryonElasticXS : include anti_Omega- in the method GetPTables.
+
 5 June 2014 A.Ribon (hadr-cross-V10-00-06)
 ------------------------------------------
 - G4ChipsHyperonElasticXS : avoid to exclude Sigma+ in the set of
