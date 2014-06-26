@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
+ Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -54,12 +54,6 @@ PhysicsList::SetCuts:CutLength : 700 um
 /gun/particle proton
 /gun/energy 100. MeV
 /run/beamOn 1
-G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 ========= Table of registered couples ==============================
 

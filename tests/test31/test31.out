@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
+ Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -179,9 +179,6 @@ The meanExc(eV)= 78
 /gun/particle ion
 /gun/ion 6 12 6
 /run/beamOn 1
-G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 154 bins 
@@ -564,7 +561,7 @@ test31Histo:  AbsThick(mm)= 10 Nabs= 60 zmax= 600 nHisto= 0
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0.01s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -683,9 +680,6 @@ Average number of pi+pi-       0
 #
 /gun/particle e-
 /run/beamOn 100
-G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 154 bins 
@@ -1074,7 +1068,7 @@ test31EventAction: Event # 100 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=12.2s Real=12.23s Sys=0s
+  User=11.63s Real=14.34s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1174,7 +1168,6 @@ G4EnergyLossForExtrapolator::ComputeElectronDEDX for e-
 G4EnergyLossForExtrapolator::ComputeElectronDEDX for e+
 G4EnergyLossForExtrapolator::ComputeMuonDEDX for mu+
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for proton
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for e-
 Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 751 Erec-E0(MeV)= 0.0132
 Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 721.5 Erec-E0(MeV)= -30.25
@@ -1198,7 +1191,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=10.34s Real=10.37s Sys=0s
+  User=10.51s Real=13.24s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1298,7 +1291,6 @@ G4EnergyLossForExtrapolator::ComputeElectronDEDX for e-
 G4EnergyLossForExtrapolator::ComputeElectronDEDX for e+
 G4EnergyLossForExtrapolator::ComputeMuonDEDX for mu+
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for proton
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for e-
 Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 778.4 Erec-E0(MeV)= 22.79
 Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 763.4 Erec-E0(MeV)= 7.474
@@ -1322,7 +1314,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=10.36s Real=10.39s Sys=0s
+  User=10.09s Real=11.99s Sys=0.01s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1422,7 +1414,6 @@ G4EnergyLossForExtrapolator::ComputeElectronDEDX for e-
 G4EnergyLossForExtrapolator::ComputeElectronDEDX for e+
 G4EnergyLossForExtrapolator::ComputeMuonDEDX for mu+
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for proton
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for e-
 Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 737.9 Erec-E0(MeV)= -0.3894
 Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 735.8 Erec-E0(MeV)= -2.387
@@ -1446,7 +1437,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.75s Real=5.77s Sys=0s
+  User=5.4s Real=6.62s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1546,7 +1537,6 @@ G4EnergyLossForExtrapolator::ComputeElectronDEDX for e-
 G4EnergyLossForExtrapolator::ComputeElectronDEDX for e+
 G4EnergyLossForExtrapolator::ComputeMuonDEDX for mu+
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for proton
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for e-
 Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 776.6 Erec-E0(MeV)= 21
 Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 761.9 Erec-E0(MeV)= 6.004
@@ -1569,7 +1559,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=10.28s Real=10.31s Sys=0s
+  User=9.48s Real=11.08s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1669,7 +1659,6 @@ G4EnergyLossForExtrapolator::ComputeElectronDEDX for e-
 G4EnergyLossForExtrapolator::ComputeElectronDEDX for e+
 G4EnergyLossForExtrapolator::ComputeMuonDEDX for mu+
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for proton
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for e-
 Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 659 Erec-E0(MeV)= 0.4095
 Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 664.2 Erec-E0(MeV)= 4.673
@@ -1693,7 +1682,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.8s Real=3.81s Sys=0.01s
+  User=3.65s Real=3.94s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1793,7 +1782,6 @@ G4EnergyLossForExtrapolator::ComputeElectronDEDX for e-
 G4EnergyLossForExtrapolator::ComputeElectronDEDX for e+
 G4EnergyLossForExtrapolator::ComputeMuonDEDX for mu+
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for proton
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for e-
 Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 742.4 Erec-E0(MeV)= 3.763
 Extrapolation of primary E0(MeV)= 1000 E1(MeV)= 738 Erec-E0(MeV)= -0.314
@@ -1817,7 +1805,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.78s Real=5.79s Sys=0s
+  User=5.51s Real=6.49s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1877,11 +1865,11 @@ Average number of pi+pi-       0
 
 =========   End of tets31Histo  ============================
 #
-  User=63.45s Real=63.66s Sys=0.04s
+  User=61.36s Real=73.38s Sys=0.04s
 G4 kernel has come to Quit state.
 Total navigation history collections cleaned: 124
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.6 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.61 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

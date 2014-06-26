@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
+ Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -457,7 +457,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=50.14s Real=50.45s Sys=0s
+  User=57.63s Real=72.58s Sys=0.02s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -988,7 +988,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=5.39s Real=5.41s Sys=0s
+  User=5.92s Real=6.03s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1285,7 +1285,7 @@ Warning: Bad energy non-conservation detected, will re-sample the interaction
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=2.42s Real=2.42s Sys=0s
+  User=2.76s Real=3.61s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1448,7 +1448,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.21s Real=0.21s Sys=0s
+  User=0.31s Real=0.31s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1729,7 +1729,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=39.65s Real=39.75s Sys=0s
+  User=42.91s Real=51.23s Sys=0.02s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

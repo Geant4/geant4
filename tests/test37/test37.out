@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
+ Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -15,12 +15,6 @@ PhysicsList::AddPhysicsList: <standardGS>
 PhysicsList::AddPhysicsList: <standardGS> is not defined
 ### G4EmConfigurator::AddModels n= 0
 PhysicsList::SetCuts:CutLength : 1 mm 
-G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -388,7 +382,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=12.04s Real=12.08s Sys=0s
+  User=12.35s Real=16.01s Sys=0s
 Thicknesses(mm)= 1.57423  1  1  
 Bins(R/R0)=      0.00738313  0  0  
  ----------------------------------------------------------

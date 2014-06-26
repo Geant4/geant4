@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
+ Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -33,12 +33,6 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT_EMV>  EMoption= 1
 /gun/particle pi-
 /gun/energy 15. GeV
 /run/beamOn 100
-G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma, applyCuts: 1     SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -759,46 +753,46 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=45.59s Real=45.91s Sys=0.03s
+  User=47.37s Real=56.36s Sys=0.04s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                           pi-
 Beam Energy(MeV)                        15000
 Number of events                        100
-Average number of MIPS (Edep < 0.8 GeV) 0.43
-Average number of steps                 1.735e+04
-Average number of neutron steps         6673
-Average number of hadron steps          2495
-Average number of gamma steps           1.068e+04
-Average number of e+- steps             2585
+Average number of MIPS (Edep < 0.8 GeV) 0.4
+Average number of steps                 1.744e+04
+Average number of neutron steps         6775
+Average number of hadron steps          2570
+Average number of gamma steps           1.056e+04
+Average number of e+- steps             2688
 ==============  ECAL  ====================================
-  1x1 (GeV) =      1.526 +-     0.1557    RMS= 1.557
-  3x3 (GeV) =       2.51 +-     0.2578    RMS= 2.578
-  5x5 (GeV) =      2.879 +-     0.2927    RMS= 2.927
-  E1/E9     =     0.7474 +-    0.02069    RMS= 0.2069
-  E1/E25    =     0.6921 +-    0.02347    RMS= 0.2347
-  E9/E25    =     0.9089 +-   0.008156    RMS= 0.08156
+  1x1 (GeV) =      2.091 +-     0.2123    RMS= 2.123
+  3x3 (GeV) =      3.235 +-     0.3135    RMS= 3.135
+  5x5 (GeV) =      3.572 +-     0.3415    RMS= 3.415
+  E1/E9     =     0.7606 +-    0.01886    RMS= 0.1886
+  E1/E25    =     0.7128 +-    0.02093    RMS= 0.2093
+  E9/E25    =     0.9263 +-   0.006428    RMS= 0.06428
 ==============  HCAL  ====================================
-Visible HCAL Edep(GeV)     =   0.08152
-Visible HCAL e-Edep(GeV)   =   0.03953
-Total HCAL Edep(GeV)       =   8.395 +- 0.3015
+Visible HCAL Edep(GeV)     =   0.07535
+Visible HCAL e-Edep(GeV)   =   0.03295
+Total HCAL Edep(GeV)       =   7.688 +- 0.15
 ==========================================================
-Erec(GeV)   =      11.12 +-     0.3812    RMS= 3.812
-Etot(GeV)   =      11.32 +-     0.3015    RMS= 3.015
+Erec(GeV)   =      11.21 +-     0.3051    RMS= 3.051
+Etot(GeV)   =       11.3 +-       0.15    RMS= 1.5
 ==========================================================
-Ecal/E0=   0.1902  RMS/E0(%)= 19.34
-Hcal/E0=       0.5545 +- 0.01992
-Erec/E0=       0.7343 +- 0.02518
-Etot/E0=       0.7475 +- 0.01992
+Ecal/E0=   0.236  RMS/E0(%)= 22.56
+Hcal/E0=       0.5078 +- 0.009905
+Erec/E0=       0.7407 +- 0.02015
+Etot/E0=       0.7465 +- 0.009905
 ==========================================================
 
 #
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 136
+Total navigation history collections cleaned: 145
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0
 Dynamic pools deleted: 13 / Total memory freed: 1.4 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)
-User=47.36s Real=48.53s Sys=0.06s
+User=49.24s Real=59.83s Sys=0.07s

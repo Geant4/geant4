@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
+ Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -41,12 +41,6 @@ physicsList->setCut() start.
 /mydet/SelectMaterial Th
 SimpleBox is now made of Th
 /run/beamOn 20
-G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -735,7 +729,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.51s Real=0.52s Sys=0.01s
+  User=0.5s Real=0.51s Sys=0s
 #
 # neutron at 1 GeV in Th
 #
@@ -773,7 +767,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.86s Real=0.87s Sys=0s
+  User=0.86s Real=0.98s Sys=0.01s
 #
 # pi+ at 1 GeV in Th
 #
@@ -811,7 +805,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.6s Real=0.61s Sys=0s
+  User=0.9s Real=0.99s Sys=0s
 #
 # pi- at 1 GeV in Th
 #
@@ -849,7 +843,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.53s Real=0.53s Sys=0.01s
+  User=0.68s Real=0.68s Sys=0s
 #
 # proton at 1 GeV in U
 #
@@ -858,12 +852,6 @@ Run Summary
 /mydet/SelectMaterial U
 SimpleBox is now made of U
 /run/beamOn 20
-G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -1240,7 +1228,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.39s Real=0.4s Sys=0s
+  User=0.46s Real=0.47s Sys=0s
 #
 # neutron at 1 GeV in U
 #
@@ -1283,7 +1271,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.57s Real=0.58s Sys=0s
+  User=0.6s Real=0.67s Sys=0s
 #
 # pi+ at 1 GeV in U
 #
@@ -1326,7 +1314,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.77s Real=0.78s Sys=0s
+  User=0.87s Real=0.92s Sys=0.01s
 #
 # pi- at 1 GeV in U
 #
@@ -1369,7 +1357,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.4s Real=0.4s Sys=0.01s
+  User=0.52s Real=0.52s Sys=0s
 #
 # proton at 1 GeV in Pb
 #
@@ -1378,12 +1366,6 @@ Run Summary
 /mydet/SelectMaterial Pb
 SimpleBox is now made of Pb
 /run/beamOn 20
-G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -1765,7 +1747,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.73s Real=0.73s Sys=0s
+  User=0.71s Real=0.71s Sys=0s
 #
 # neutron at 1 GeV in Pb
 #
@@ -1813,7 +1795,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.48s Real=0.49s Sys=0s
+  User=0.53s Real=0.53s Sys=0s
 #
 # pi+ at 1 GeV in Pb
 #
@@ -1861,7 +1843,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.33s Real=0.34s Sys=0s
+  User=0.48s Real=0.48s Sys=0.01s
 #
 # pi- at 1 GeV in Pb
 #
@@ -1909,7 +1891,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.39s Real=0.39s Sys=0s
+  User=0.55s Real=0.55s Sys=0s
 #
 # proton at 1 GeV in Cu
 #
@@ -1918,12 +1900,6 @@ Run Summary
 /mydet/SelectMaterial Cu
 SimpleBox is now made of Cu
 /run/beamOn 20
-G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -2310,7 +2286,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.2s Real=0.2s Sys=0.01s
+  User=0.2s Real=0.21s Sys=0s
 #
 # neutron at 1 GeV in Cu
 #
@@ -2363,7 +2339,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.2s Sys=0s
+  User=0.19s Real=0.27s Sys=0.01s
 #
 # pi+ at 1 GeV in Cu
 #
@@ -2416,7 +2392,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.16s Real=0.16s Sys=0.01s
+  User=0.15s Real=0.21s Sys=0s
 #
 # pi- at 1 GeV in Cu
 #
@@ -2469,7 +2445,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.1s Real=0.1s Sys=0s
+  User=0.11s Real=0.13s Sys=0s
 #
 # proton at 1 GeV in Si
 #
@@ -2478,12 +2454,6 @@ Run Summary
 /mydet/SelectMaterial Si
 SimpleBox is now made of Si
 /run/beamOn 20
-G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -2875,7 +2845,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.06s Sys=0s
+  User=0.06s Real=0.06s Sys=0s
 #
 # neutron at 1 GeV in Si
 #
@@ -2933,7 +2903,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.07s Real=0.07s Sys=0s
+  User=0.07s Real=0.09s Sys=0s
 #
 # pi+ at 1 GeV in Si
 #
@@ -2991,7 +2961,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.06s Sys=0s
+  User=0.06s Real=0.08s Sys=0s
 #
 # pi- at 1 GeV in Si
 #
@@ -3049,7 +3019,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.07s Real=0.07s Sys=0s
+  User=0.05s Real=0.07s Sys=0.01s
 #
 # proton at 1 GeV in C
 #
@@ -3058,12 +3028,6 @@ Run Summary
 /mydet/SelectMaterial C
 SimpleBox is now made of C
 /run/beamOn 20
-G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -3460,7 +3424,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.02s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # neutron at 1 GeV in C
 #
@@ -3586,7 +3550,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.02s Sys=0s
+  User=0.01s Real=0.03s Sys=0s
 #
 # pi- at 1 GeV in C
 #
@@ -3649,7 +3613,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0.02s Real=0.03s Sys=0s
 #
 # Deuteron at 1 GeV/nucleon on Pb
 #
@@ -3712,7 +3676,7 @@ Index : 5     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.83s Real=0.85s Sys=0s
+  User=0.8s Real=0.88s Sys=0s
 #
 # Alpha at 500 MeV/nucleon on Pb
 #
@@ -3776,7 +3740,7 @@ Index : 5     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.6s Real=0.6s Sys=0s
+  User=0.57s Real=0.63s Sys=0s
 #
 # Carbon at 290 MeV/nucleon on C
 #
@@ -3842,7 +3806,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.05s Sys=0s
+  User=0.04s Real=0.05s Sys=0s
 #
 # Carbon at 500 MeV/nucleon on Pb
 #
@@ -3905,7 +3869,7 @@ Index : 5     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.26s Real=0.26s Sys=0s
+  User=0.25s Real=0.33s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

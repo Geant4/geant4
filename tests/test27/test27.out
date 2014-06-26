@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
+ Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -449,7 +449,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=69.29s Real=69.98s Sys=0.04s
+  User=76.79s Real=100.37s Sys=0.05s
 #
 # and at 30 MeV
 /gun/energy 30 MeV
@@ -745,7 +745,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.04s Real=0.04s Sys=0s
+  User=0.04s Real=0.05s Sys=0s
 #
 # and at 30 MeV
 /gun/energy 30 MeV
@@ -784,7 +784,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.23s Real=0.23s Sys=0s
+  User=0.27s Real=0.27s Sys=0s
 #
 # deuteron at 1 GeV/nucleon on Silicon
 #
@@ -1051,7 +1051,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=20.64s Real=20.69s Sys=0.01s
+  User=21.25s Real=26.14s Sys=0s
 #
 # and at 30 MeV
 /gun/energy 30 MeV
@@ -1095,7 +1095,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.07s Real=0.06s Sys=0s
+  User=0.07s Real=0.1s Sys=0s
 #
 #
 # deuteron at 200 MeV in U
@@ -1144,7 +1144,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=2.77s Real=2.79s Sys=0s
+  User=2.8s Real=4.36s Sys=0s
 #
 # and at 30 MeV
 /gun/energy 30 MeV
@@ -1188,7 +1188,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.05s Real=0.04s Sys=0s
+  User=0.04s Real=0.07s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -1236,7 +1236,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.05s Real=0.05s Sys=0s
+  User=0.04s Real=0.03s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on Silicon
 #
@@ -1284,7 +1284,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.65s Real=1.66s Sys=0s
+  User=1.77s Real=2.49s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -1334,7 +1334,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=3.83s Real=3.84s Sys=0s
+  User=4.08s Real=5.16s Sys=0s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -1382,7 +1382,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.07s Real=0.07s Sys=0s
+  User=0.06s Real=0.07s Sys=0s
 #
 # alpha at 1 GeV/nucleon on Silicon
 #
@@ -1430,7 +1430,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.65s Real=1.65s Sys=0s
+  User=1.66s Real=2.41s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -1478,7 +1478,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.06s Real=0.06s Sys=0s
+  User=0.05s Real=0.09s Sys=0s
 #
 # alpha at 200 MeV/nucleon on H
 #
@@ -1526,7 +1526,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.51s Real=0.51s Sys=0s
+  User=0.52s Real=0.58s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon
 #
@@ -1574,7 +1574,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.11s Real=0.11s Sys=0s
+  User=0.11s Real=0.2s Sys=0s
 #
 #  .....end alpha............
 #
@@ -1625,7 +1625,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=3.3s Real=3.35s Sys=0s
+  User=3.28s Real=4.45s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -1674,7 +1674,7 @@ Index : 2     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.13s Real=0.13s Sys=0s
+  User=0.14s Real=0.21s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -1723,7 +1723,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=1.04s Real=1.04s Sys=0s
+  User=1.07s Real=1.45s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1996,7 +1996,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.88s Real=0.88s Sys=0s
+  User=0.93s Real=1.51s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -2051,7 +2051,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.05s Real=0.05s Sys=0s
+  User=0.06s Real=0.07s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
@@ -2105,7 +2105,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.51s Real=0.51s Sys=0s
+  User=0.56s Real=0.95s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -2159,7 +2159,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=0.1s Real=0.11s Sys=0s
+  User=0.11s Real=0.22s Sys=0s
 #
 #  .....end C(12,6)++............
 #
