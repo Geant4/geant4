@@ -740,7 +740,7 @@ List of features and fixes included in this Beta release since 10.0.p02:
     + extended/radioactivedecay/rdecay01
       o Enabled multi-threading; implemented required migration.
     + extended/visualization
-      o Mifrated 'userVisAction' example to multi-threading (based
+      o Migrated 'userVisAction' example to multi-threading (based
         on basic/B1 example).
 
  ----------------------------------------------------------------------------
