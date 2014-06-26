@@ -9,8 +9,13 @@
 
   o Multi-threading:
     + Adoption of c++11 standard in conjunction with new CLHEP version 2.2.
-  o [ -------------- ADD-TEXT-HERE ------------ ]
-  o 
+  o Reduction of memory leaked at exit with application of new pattern for
+    singletons dynamically allocated.
+  o A bug fix in the fragmentation of hadronic strings used by the FTF model
+    (G4LundStringFragmentation) affects the simulation of hadronic showers:
+    more neutral and less charged pions are now produced, increasing the
+    electromagnetic component, which makes the showers more compact and
+    with higher energy response.
   o New data sets G4EMLOW-6.39, PhotonEvaporation-3.1 and
     G4RadioactiveDecay-4.1 are required.
 
@@ -32,11 +37,11 @@
        * Multi-threading mode currently -not- supported on Windows.
 
   o More verified configurations:
-    + Linux, gcc-4.8.3, gcc-4.9.0
+    + Linux, gcc-4.7.2, gcc-4.8.1, gcc-4.9.0
     + Linux, Intel-icc 14.0.
     + Windows, Visual C++ 12.0.
 
-  o Geant4 10.1-beta-01 has been tested using CLHEP-2.2.0.0.
+  o Geant4 10.1-beta-01 has been tested using CLHEP-2.2.0.1.
 
  Please refer to the Geant4 User Documentation:
    http://cern.ch/geant4/support/userdocuments.shtml
@@ -461,7 +466,11 @@ List of features and fixes included in this Beta release since 10.0.p02:
         a track of the ExcitedString; needed for a correct processing of
         quark-exchange processes in FTF model.
       o Fix on the positions of the increment of the variables "StateQ++" and
-        "StateAQ" in G4LundStringFragmentation. Fixed Coverity defect.
+        "StateAQ" in G4LundStringFragmentation. This fix increases the
+        production of neutral pions, while decreasing the production of
+        charged pions. Therefore it affects the simulation of hadronic
+        showers by increasing the electromagnetic component, which makes 
+        the showers more compact and with higher energy response. 
     + models/pre_equilibrium
       o Added DeExciteModelDescription() to G4PreCompoundModel.
     + models/radioactive_decay
