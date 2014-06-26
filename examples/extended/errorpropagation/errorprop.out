@@ -4,13 +4,13 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
+ Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
 *************************************************************
 
- creating G4RunManagerKernel 0x239da40
+ creating G4RunManagerKernel 0x1ee0e60
 
 The materials defined are : 
 
@@ -79,15 +79,15 @@ List of instantiated particles ============================================
 e+ e- gamma geantino mu+ mu- pi+ pi- proton 
 physicsList->Construct() start.
  G4Transportation constructor> set fShortStepOptimisation to false
-0x2476490G4ErrorPhysicsList:: particle process manager e+ = 0x2478bb0
-0x2476280G4ErrorPhysicsList:: particle process manager e- = 0x247a230
-0x2475c00G4ErrorPhysicsList:: particle process manager gamma = 0x247a4a0
-0x2477a60G4ErrorPhysicsList:: particle process manager geantino = 0x247a6f0
-0x24766a0G4ErrorPhysicsList:: particle process manager mu+ = 0x247a940
-0x2476b20G4ErrorPhysicsList:: particle process manager mu- = 0x247ab90
-0x2476fa0G4ErrorPhysicsList:: particle process manager pi+ = 0x247ade0
-0x24773d0G4ErrorPhysicsList:: particle process manager pi- = 0x247b030
-0x2477800G4ErrorPhysicsList:: particle process manager proton = 0x247b280
+0x1fb9480G4ErrorPhysicsList:: particle process manager e+ = 0x1fbbba0
+0x1fb92f0G4ErrorPhysicsList:: particle process manager e- = 0x1fbd220
+0x1fb9030G4ErrorPhysicsList:: particle process manager gamma = 0x1fbd490
+0x1fbaa50G4ErrorPhysicsList:: particle process manager geantino = 0x1fbd6e0
+0x1fb9690G4ErrorPhysicsList:: particle process manager mu+ = 0x1fbd930
+0x1fb9b10G4ErrorPhysicsList:: particle process manager mu- = 0x1fbdb80
+0x1fb9f90G4ErrorPhysicsList:: particle process manager pi+ = 0x1fbddd0
+0x1fba3c0G4ErrorPhysicsList:: particle process manager pi- = 0x1fbe020
+0x1fba7f0G4ErrorPhysicsList:: particle process manager proton = 0x1fbe270
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
 
@@ -180,7 +180,6 @@ G4EnergyLossForExtrapolator::ComputeElectronDEDX for e-
 G4EnergyLossForExtrapolator::ComputeElectronDEDX for e+
 G4EnergyLossForExtrapolator::ComputeMuonDEDX for mu+
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for proton
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 G4EnergyLossForExtrapolator::ComputeProtonDEDX for e-
     1       50   0.0187        0  1.99e+04   0.0167       50        50        CDET Transportation
     2      150    0.169        0  1.99e+04   0.0334      100       150        CDET G4ErrorStepLengthLimit

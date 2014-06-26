@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
+ Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -63,12 +63,6 @@ Available colours:
 /event/verbose 1
 /tracking/verbose 1
 /run/beamOn 100
-G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 phot:   for  gamma    SubType= 12
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
@@ -13004,12 +12998,17 @@ Track (trackID 2645, parentID 185) is processed with stopping code 2
 
 *********************************************************************************************************
 * G4Track Information:   Particle = e-,   Track ID = 3015,   Parent ID = 2645
-*********************************************************************
+*********************************************************************************************************
+
+Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
+    0  -41.9 cm   1.26 m     -99 cm    690 keV     0 eV      0 fm      0 fm   caloLayer_phys    initStep
+    1  -41.9 cm   1.26 m     -99 cm    458 keV   232 keV   192 um    192 um   caloLayer_phys       eBrem
+    2  -41.9 cm   1.26 m     -99 cm      0 eV    4
 ============================================================================================
 ================= lines above cut to keep file within limits ===============================
 ============================================================================================
 
-  User=38.84s Real=45.69s Sys=3.44s
+  User=47.34s Real=68.85s Sys=6.06s
 ###/run/beamOn 40
 #
 G4 kernel has come to Quit state.
@@ -13021,14 +13020,14 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 G4SDManager deleted.
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- Maximum number of tracks in the urgent stack : 4453
+ Maximum number of tracks in the urgent stack : 4472
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 EventManager deleted.
 Units table cleared.
-Total navigation history collections cleaned: 491
+Total navigation history collections cleaned: 527
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 21 of which, static: 0
-Dynamic pools deleted: 21 / Total memory freed: 4.3 Mb
+Dynamic pools deleted: 21 / Total memory freed: 4.4 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

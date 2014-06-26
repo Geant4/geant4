@@ -9,7 +9,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
+ Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -359,7 +359,7 @@ WARNING: Scene "none" not found.
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.03
+Internal Real Elapsed Time is: 0.02
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.02
 ******************************************
@@ -498,11 +498,11 @@ ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
 number of event = 10
 Graphics systems deleted.
 Visualization Manager deleting...
-Internal Real Elapsed Time /event is: 0.0233333
+Internal Real Elapsed Time /event is: 0.0222222
 Total navigation history collections cleaned: 8
 
 ******************************************
-Total Real Elapsed Time is: 1.12
+Total Real Elapsed Time is: 1.09
 Total System Elapsed Time: 0.02
-Total GetUserElapsed Time: 1.09
+Total GetUserElapsed Time: 1.08
 ******************************************

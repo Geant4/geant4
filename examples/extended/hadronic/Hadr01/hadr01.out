@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
+ Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -54,12 +54,6 @@ PhysicsList::SetCuts:CutLength : 700 um
 /gun/particle proton
 /gun/energy 3. GeV
 /run/beamOn 100
-G4WentzelVIModel: anti_proton  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: e-  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: kaon+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: mu+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
-G4WentzelVIModel: pi+  1-cos(ThetaLimit)= 2 SingScatFactor= 1.25
 
 ====================================================================
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
@@ -403,38 +397,38 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.25s Real=0.25s Sys=0s
+  User=0.37s Real=0.52s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         65.56   RMS(MeV) 49.17
-Average number of steps              249.4
-Average number of gamma              2.3
-Average number of e-                 4.38
-Average number of e+                 0.09
-Average number of neutrons           1.27
-Average number of protons            1.17
+Average energy deposit (MeV)         62.1   RMS(MeV) 40.2
+Average number of steps              237.1
+Average number of gamma              1.94
+Average number of e-                 4.31
+Average number of e+                 0.07
+Average number of neutrons           1
+Average number of protons            1.11
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.33
-Average number of pi0                0.11
+Average number of pi+ & pi-          0.24
+Average number of pi0                0.12
 Average number of kaons              0
-Average number of muons              0.02
+Average number of muons              0
 Average number of deuterons+tritons  0.08
-Average number of He3+alpha          0.14
-Average number of ions               0.65
-Average number of forward neutrons   0.17
-Average number of reflected neutrons 0.98
+Average number of He3+alpha          0.15
+Average number of ions               0.54
+Average number of forward neutrons   0.04
+Average number of reflected neutrons 0.84
 Average number of leaked neutrons    0.07
-Average number of proton leak        0.52
-Average number of pion leak          0.27
+Average number of proton leak        0.5
+Average number of pion leak          0.22
 ========================================================
 
 #
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 20
+Total navigation history collections cleaned: 19
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 13 of which, static: 0
 Dynamic pools deleted: 13 / Total memory freed: 1.3 Mb

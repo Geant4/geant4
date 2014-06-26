@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-05    (31-May-2014)
+ Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -171,6 +171,11 @@ proton_G4DNAChargeDecrease:   for  proton    SubType= 56
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      100 MeV
 
+GenericIon_G4DNAIonisation:   for  GenericIon    SubType= 53
+ Total cross sections computed from DNARuddIonisationExtendedModel
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=        1 TeV   deltaRudd  FluoActive
+
 alpha_G4DNAExcitation:   for  alpha    SubType= 52
  Total cross sections computed from DNAMillerGreenExcitationModel
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
@@ -216,15 +221,14 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
-##### Create analysis manager   0x25b49b0
+##### Create analysis manager   0x22cf9b0
 Using Root analysis manager
 ... open Root analysis file : dna.root - done
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=13.38s Real=14s Sys=0.16s
+  User=13.86s Real=18.25s Sys=0.14s
 ... write Root file : dna.root - done
-... delete Root empty file : dna.root - done
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
