@@ -169,6 +169,7 @@ examples/extended
     channeling               bagli@fe.infn.it                Enrico Bagli
     monopole                 Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
     phonon                   asai@slac.stanford.edu          Makoto Asai         
+    ucn                      gum@triumf.ca                   Peter Gumplinger
   field:
     BlineTracer              desorgher@spaceit.ch            Laurent Desorgher
     field01,02,03            John.Apostolakis@cern.ch        John Apostolakis
@@ -178,6 +179,7 @@ examples/extended
   geometry
     transforms               Michel.Maire@lapp.in2p3.fr      Michel Maire
   hadronic:
+    FissionFragment          wendbryc@isu.edu                Brycen Wendt
     Hadr00                   Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
     Hadr01                   Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
     Hadr02                   Vladimir.Ivantchenko@cern.ch    Vladimir Ivantchenko
