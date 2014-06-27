@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-06-14    I.Hrivnacova        (exExtHadFissFrag-V10-00-11)
+- Fixed FFActionInitialization (compilation is squential mode)
+
 26-06-14    B. Wendt            (exExtHadFissFrag-V10-00-10)
 - Added README files for doxygen documentation
 - Updated class data members to follow coding guidelines

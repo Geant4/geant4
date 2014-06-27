@@ -39,7 +39,7 @@ Build(void) const
 #ifdef G4MULTITHREADED
     runAction = new FFRunAction();
 #else
-    runAction = masterRunAction;
+    runAction = fMasterRunAction;
 #endif // G4MULTITHREADED
 
     SetUserAction(runAction);
