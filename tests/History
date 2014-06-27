@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+tests-V10-00-06 27th June 2014  Gabriele Cosmo
+- Updated reference outputs according to reference tag geant4-10-00-ref-06.
+- Includes tags: test18-V10-00-00, test23-V10-00-06, ctests-V10-00-10.
+
 tests-V10-00-05 6th June 2014  Gabriele Cosmo
 - Updated reference outputs according to reference tag geant4-10-00-ref-05.
 - Includes tags: test11-V10-00-00, test23-V10-00-05, test46-V10-00-02,
