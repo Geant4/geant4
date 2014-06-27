@@ -8,7 +8,7 @@
 //! \brief      Implementation of the FFDetectorConstruction class
 //!
 //! \details    The model simulated is based off a subcritical assembly design
-//!                 with 20% enriched meat
+//!             with 20% enriched meat
 //!
 //  ================ End Documentation Comments ================
 //
@@ -65,7 +65,7 @@ Construct()
                                         worldSize);     // z size
     G4LogicalVolume* const logicalWorld
         = new G4LogicalVolume(solidWorld,               // the solid volume
-                              air,                      // the material
+                              fAir,                     // the material
                               solidWorld->GetName());   // the name
     // Center at the origin
     position.set(0.0, 0.0, 0.0); 
@@ -80,7 +80,7 @@ Construct()
                             true);                      // check for overlaps
     
     //
-    // Create the concrete floor
+    // Create the graphite pile that the subcritical assembly rests on.
     //
     const G4double floorH = 30.0 * inch;
     const G4ThreeVector floorPosition(0.0, 0.0, 0.0);
@@ -90,7 +90,7 @@ Construct()
                                         floorH * 0.5);  // z size
     G4LogicalVolume* const logicalFloor
         = new G4LogicalVolume(solidFloor,               // the solid volume
-                              concrete,                 // the material
+                              fGraphite,                // the material
                               solidFloor->GetName());   // the name
     // Shift down so the top is at the origin
     position.set(0.0, 0.0, -floorH * 0.5); 
@@ -118,7 +118,7 @@ Construct()
                      360.0 * deg);                      // end angle
     G4LogicalVolume* const logicalTank
         = new G4LogicalVolume(solidTank,                // the solid volume
-                              aluminum,                 // the material
+                              fAluminum,                // the material
                               solidTank->GetName());    // the name
     // Shift up so the base is at the origin
     position.set(0.0, 0.0, tankH * 0.5);
@@ -141,7 +141,7 @@ Construct()
                      360.0 * deg);                      // end angle
     G4LogicalVolume* const logicalTankAir
         = new G4LogicalVolume(solidTankAir,             // the solid volume
-                              air,                      // the material
+                              fAir,                     // the material
                               solidTankAir->GetName()); // the name
     // Shift up so that the top of the air is the same as the top of the tank
     position.set(0.0, 0.0, (tankH - tankAirH) * 0.5);
@@ -164,7 +164,7 @@ Construct()
                      360.0 * deg);                      // end angle
     G4LogicalVolume* const logicalTankH2O
         = new G4LogicalVolume(solidTankH2O,             // the solid volume
-                              aluminum,                 // the material
+                              fAluminum,                // the material
                               solidTankH2O->GetName()); // the name
     // Shift up so that the top of the water is at the bottom of the air
     const G4double centerOfH2O = (tankH - tankH2OH) * 0.5 - tankAirH;
@@ -198,7 +198,7 @@ Construct()
                     plateZ * 0.5);                      // z size
     G4LogicalVolume* const logicalPlate
         = new G4LogicalVolume(solidPlate,               // the solid volume
-                              aluminum,                 // the material
+                              fAluminum,                // the material
                               solidPlate->GetName());   // the name
     // Place the meat inside the cladding
     G4Box* const solidMeat
@@ -208,7 +208,7 @@ Construct()
                     meatZ * 0.5);                       // z size
     G4LogicalVolume* const logicalMeat
         = new G4LogicalVolume(solidMeat,                // the solid volume
-                              UO2_20E,                  // the material
+                              fUO2_20E,                 // the material
                               solidMeat->GetName());    // the name
     // The meat goes into the exact center of the plate
     position.set(0.0, 0.0, 0.0); 
@@ -225,7 +225,7 @@ Construct()
     bool placeMe;
     
     position.setZ(0.0);
-    copyNumber = 0;
+    fCopyNumber = 0;
     for(double x = 0.0;
         x <= plateRadius;
         x += xSpacing)
@@ -269,7 +269,7 @@ Construct()
             }
         }
     }
-    G4cout << copyNumber << " plates were added to the subcritical assembly"
+    G4cout << fCopyNumber << " plates were added to the subcritical assembly"
            << G4endl;
     
     //
@@ -289,7 +289,7 @@ Construct()
                      360.0 * deg);                      // end angle
     G4LogicalVolume* const logicalSource
         = new G4LogicalVolume(solidSource,              // the solid volume
-                              stainlessSteel,           // the material
+                              fStainlessSteel,          // the material
                               solidSource->GetName());  // the name
     // Place in the exact center of the water tank
     position.set(0.0, 0.0, 0.0);
@@ -314,7 +314,7 @@ Construct()
                     polyH);                             // z size
     G4LogicalVolume* const logicalPoly
         = new G4LogicalVolume(solidPoly,                // the solid volume
-                              polyethylene,             // the material
+                              fPolyethylene,            // the material
                               solidPoly->GetName());    // the name
     // The polyethylene detector tower goes just outside the tank at 45 deg
     G4double radiusToPolyCenter = (tankOR / sqrt(2.0)) + sqrt(2.0) * polyS;
@@ -339,7 +339,7 @@ Construct()
                      360.0 * deg);                      // end angle
     G4LogicalVolume* const logicalShell
         = new G4LogicalVolume(solidShell,               // the solid volume
-                              stainlessSteel,           // the material
+                              fStainlessSteel,          // the material
                               solidShell->GetName());   // the name
     // Place in the exact center of the polyethylene tower
     position.set(0.0, 0.0, 0.0);
@@ -363,7 +363,7 @@ Construct()
                      360.0 * deg);                      // end angle
     G4LogicalVolume* const logicalBF3
         = new G4LogicalVolume(solidBF3,                 // the solid volume
-                              BF3_96E,                  // the material
+                              fBF3_96E,                 // the material
                               solidBF3->GetName());     // the name
     // Place in the exact center of the shell
     position.set(0.0, 0.0, 0.0);
@@ -385,12 +385,12 @@ DefineMaterials(void)
 {
     static G4NistManager* const nist = G4NistManager::Instance();
     
-    air = nist->FindOrBuildMaterial("G4_AIR");
-    aluminum = nist->FindOrBuildMaterial("G4_Al");
-    concrete = nist->FindOrBuildMaterial("G4_CONCRETE");
-    polyethylene = nist->FindOrBuildMaterial("G4_POLYETHYLENE");
-    stainlessSteel = nist->FindOrBuildMaterial("G4_STAINLESS-STEEL");
-    water = nist->FindOrBuildMaterial("G4_WATER");
+    fAir = nist->FindOrBuildMaterial("G4_AIR");
+    fAluminum = nist->FindOrBuildMaterial("G4_Al");
+    fGraphite = nist->FindOrBuildMaterial("G4_GRAPHITE");
+    fPolyethylene = nist->FindOrBuildMaterial("G4_POLYETHYLENE");
+    fStainlessSteel = nist->FindOrBuildMaterial("G4_STAINLESS-STEEL");
+    fWater = nist->FindOrBuildMaterial("G4_WATER");
     
     /*// List available materials
     std::vector< G4String > materials = nist->GetNistMaterialNames();
@@ -442,15 +442,15 @@ DefineMaterials(void)
     const G4double oxygenMassFraction = (oxygen->GetA() * 2)
                                         / UO2MolecularWeight;
     // create the material and add the elements
-    UO2_20E = new G4Material("UO2_20E",                 // name
-                             10.97 * (g / cm3),         // density
-                             3);                        // number of components
-    UO2_20E->AddElement(U235,                           // element
-                        U235MassFraction);              // mass fraction
-    UO2_20E->AddElement(U238,                           // element
-                        U238MassFraction);              // mass fraction
-    UO2_20E->AddElement(oxygen,                         // element
-                        oxygenMassFraction);            // mass fraction
+    fUO2_20E = new G4Material("UO2_20E",                // name
+                              10.97 * (g / cm3),        // density
+                              3);                       // number of components
+    fUO2_20E->AddElement(U235,                          // element
+                         U235MassFraction);             // mass fraction
+    fUO2_20E->AddElement(U238,                          // element
+                         U238MassFraction);             // mass fraction
+    fUO2_20E->AddElement(oxygen,                        // element
+                         oxygenMassFraction);           // mass fraction
     
     //
     // Define the BF3
@@ -494,15 +494,15 @@ DefineMaterials(void)
     const G4double flourideMassFraction = (flouride->GetA() * 3)
                                           / BF3MolecularWeight;
     // create the material and add the elements
-    BF3_96E = new G4Material("BF3_96E",                 // name
-                             2.5 * (kg / m3),           // density
-                             3);                        // number of components
-    BF3_96E->AddElement(B10,                            // element
-                        B10MassFraction);               // mass fraction
-    BF3_96E->AddElement(B11,                            // element
-                        B11MassFraction);               // mass fraction
-    BF3_96E->AddElement(flouride,                       // element
-                        flourideMassFraction);          // mass fraction
+    fBF3_96E = new G4Material("BF3_96E",                // name
+                              2.5 * (kg / m3),          // density
+                              3);                       // number of components
+    fBF3_96E->AddElement(B10,                           // element
+                         B10MassFraction);              // mass fraction
+    fBF3_96E->AddElement(B11,                           // element
+                         B11MassFraction);              // mass fraction
+    fBF3_96E->AddElement(flouride,                      // element
+                         flourideMassFraction);         // mass fraction
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -526,7 +526,7 @@ PlaceFuelPlate(double x,
                       copyName,             // the name
                       parentLogicalVolume,  // the mother volume
                       false,                // no boolean ops
-                      copyNumber++,         // copy number
+                      fCopyNumber++,        // copy number
                       true);                // check for overlaps
 }
 

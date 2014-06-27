@@ -1,7 +1,7 @@
 // -------------------------------------------------------------
 //  =============== Begin Documentation Comments ===============
 //!
-//! \file       FFPrimaryGeneratorAction.hh
+//! \file       FFPrimaryGeneratorAction.cc
 //! \author     B. Wendt (brycen.linn.wendt@cern.ch)
 //! \date       June 06, 2014
 //!
@@ -9,7 +9,7 @@
 //!
 //! \details    Generates 4.5 MeV neutrons from the solid volume defined in
 //!             FFDetectorConstruction as "NeturonSource" and shoots them off
-//!             in a uniformly sampled direction over the surface of a sphere
+//!             in a isotropically sampled direction
 //!
 //  ================ End Documentation Comments ================
 //
@@ -41,15 +41,14 @@
 FFPrimaryGeneratorAction::
 FFPrimaryGeneratorAction()
 :   G4VUserPrimaryGeneratorAction(),
-    H2OPhysical(NULL),
-    neutronPhysical(NULL),
-    neutronSolid(NULL),
-    particleGun(new G4ParticleGun(1)),
-    tankPhysical(NULL)
+    fH2OPhysical(NULL),
+    fNeutronPhysical(NULL),
+    fNeutronSolid(NULL),
+    fParticleGun(new G4ParticleGun(1)),
+    fTankPhysical(NULL)
 {
-    particleGun->SetParticleDefinition(G4Neutron::Definition());
-    particleGun->SetParticleEnergy(4.5 * MeV);
-    //particleGun->SetParticleEnergy(10.5 * MeV);
+    fParticleGun->SetParticleDefinition(G4Neutron::Definition());
+    fParticleGun->SetParticleEnergy(4.5 * MeV);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -59,8 +58,8 @@ GeneratePrimaries(G4Event* event)
     const G4ThreeVector sourceCenter = GetNeutronSourceCenter();
     
     // Sample the neutron source location
-    const G4double radius = neutronSolid->GetOuterRadius();
-    const G4double z = neutronSolid->GetZHalfLength() * 2;
+    const G4double radius = fNeutronSolid->GetOuterRadius();
+    const G4double z = fNeutronSolid->GetZHalfLength() * 2;
     G4ThreeVector randomLocation;
     randomLocation.setRThetaPhi(radius * sqrt(G4UniformRand()),
                                 G4UniformRand() * 180 * deg,
@@ -79,9 +78,9 @@ GeneratePrimaries(G4Event* event)
     //G4cout << "Emission Direction: r: " << direction << G4endl;
     
     // Load the event
-    particleGun->SetParticlePosition(location);
-    particleGun->SetParticleMomentumDirection(direction);
-    particleGun->GeneratePrimaryVertex(event);
+    fParticleGun->SetParticlePosition(location);
+    fParticleGun->SetParticleMomentumDirection(direction);
+    fParticleGun->GeneratePrimaryVertex(event);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -89,16 +88,16 @@ G4ThreeVector FFPrimaryGeneratorAction::
 GetNeutronSourceCenter(void)
 {
     // Get the dimensions of the neutron source
-    if(neutronSolid == NULL)
+    if(fNeutronSolid == NULL)
     {
         G4LogicalVolume* temp
             = G4LogicalVolumeStore::GetInstance()->GetVolume("NeutronSource");
         if(temp != NULL)
         {
-            neutronSolid = dynamic_cast< G4Tubs* >(temp->GetSolid());
+            fNeutronSolid = dynamic_cast< G4Tubs* >(temp->GetSolid());
         }
         
-        if(neutronSolid == NULL)
+        if(fNeutronSolid == NULL)
         {
             G4Exception("FFPrimaryGeneratorAction::"
                             "GeneratePrimaries(G4Event*)",
@@ -109,13 +108,13 @@ GetNeutronSourceCenter(void)
     }
     
     // Get the position of the neutron source within the water
-    if(neutronPhysical == NULL)
+    if(fNeutronPhysical == NULL)
     {
-        neutronPhysical = G4PhysicalVolumeStore::GetInstance()
+        fNeutronPhysical = G4PhysicalVolumeStore::GetInstance()
             ->GetVolume("NeutronSource");
     }
     
-    if(neutronPhysical == NULL)
+    if(fNeutronPhysical == NULL)
     {
         G4Exception("FFPrimaryGeneratorAction::GetNeutronSourceCenter(void)",
                     "Neutron source physical volume not found",
@@ -124,12 +123,12 @@ GetNeutronSourceCenter(void)
     }
     
     // Get the position of the water within the tank
-    if(H2OPhysical == NULL)
+    if(fH2OPhysical == NULL)
     {
-        H2OPhysical = G4PhysicalVolumeStore::GetInstance()
+        fH2OPhysical = G4PhysicalVolumeStore::GetInstance()
             ->GetVolume("Tank_H2O");
     
-        if(H2OPhysical == NULL)
+        if(fH2OPhysical == NULL)
         {
             G4Exception("FFPrimaryGeneratorAction::"
                             "GetNeutronSourceCenter(void)",
@@ -140,12 +139,12 @@ GetNeutronSourceCenter(void)
     }
     
     // Get the position of the tank within the world
-    if(tankPhysical == NULL)
+    if(fTankPhysical == NULL)
     {
-        tankPhysical = G4PhysicalVolumeStore::GetInstance()
+        fTankPhysical = G4PhysicalVolumeStore::GetInstance()
             ->GetVolume("Tank_Wall");
     
-        if(tankPhysical == NULL)
+        if(fTankPhysical == NULL)
         {
             G4Exception("FFPrimaryGeneratorAction::"
                             "GetNeutronSourceCenter(void)",
@@ -155,16 +154,16 @@ GetNeutronSourceCenter(void)
         }
     }
     
-    return neutronPhysical->GetTranslation()
-               + H2OPhysical->GetTranslation()
-               + tankPhysical->GetTranslation();
+    return fNeutronPhysical->GetTranslation()
+               + fH2OPhysical->GetTranslation()
+               + fTankPhysical->GetTranslation();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 FFPrimaryGeneratorAction::
 ~FFPrimaryGeneratorAction()
 {
-    delete particleGun;
+    delete fParticleGun;
 }
 
 

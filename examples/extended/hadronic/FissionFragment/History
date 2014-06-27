@@ -14,11 +14,26 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-13-06-14 Gunter Folger    (exExtHadFissFrag-V10-00-07)
-                      (tag exExtHadFissFrag-V10-00-06 exists in tagsDB)
+26-06-14    B. Wendt            (exExtHadFissFrag-V10-00-10)
+- Added README files for doxygen documentation
+- Updated class data members to follow coding guidelines
+
+
+23-06-14    B. Wendt            (exExtHadFissFrag-V10-00-09)
+- Fixed fuel plate placement issue. Removed need for tag
+  "exExtHadFissFrag-V10-00-08"
+- Fixed sampling location for neutron source
+	
+	
+23-06-14    B. Wendt            (exExtHadFissFrag-V10-00-08)
+- Attempt to correct compilation warnings on gcc-4.1 regarding a call
+  to "int abs(int)" in FFDetectorConstruction.cc
+	
+	
+13-06-14    Gunter Folger       (exExtHadFissFrag-V10-00-07)
 - correct compilation warning on unused variable run in FFRunAction
 - add input file for testing: batch.in
 	
 	
-06-06-13 (exExtHadFissFrag-V10-00-05)
-First release
+06-06-13    B. Wendt            (exExtHadFissFrag-V10-00-06)
+- First release

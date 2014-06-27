@@ -26,7 +26,7 @@
 FFActionInitialization::
 FFActionInitialization()
 :   G4VUserActionInitialization(),
-    masterRunAction(new FFRunAction())
+    fMasterRunAction(new FFRunAction())
 {
     // Nothing here
 }
@@ -55,7 +55,7 @@ Build(void) const
 void FFActionInitialization::
 BuildForMaster(void) const
 {
-    SetUserAction(masterRunAction);
+    SetUserAction(fMasterRunAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -38,15 +38,15 @@ public:
 
 private:
 // Fields
-    G4Material* air;
-    G4Material* aluminum;
-    G4Material* BF3_96E;
-    G4Material* concrete;
-    G4Material* stainlessSteel;
-    G4Material* polyethylene;
-    G4Material* UO2_20E;
-    G4Material* water;
-    unsigned int copyNumber;
+    G4Material* fAir;
+    G4Material* fAluminum;
+    G4Material* fBF3_96E;
+    G4Material* fGraphite;
+    G4Material* fStainlessSteel;
+    G4Material* fPolyethylene;
+    G4Material* fUO2_20E;
+    G4Material* fWater;
+    unsigned int fCopyNumber;
 
 // Functions
     void DefineMaterials(void);

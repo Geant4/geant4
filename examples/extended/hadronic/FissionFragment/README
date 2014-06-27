@@ -1,0 +1,116 @@
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                  -------------------------
+                   FissionFragment Example
+
+                           B.Wendt        
+                  brycen.linn.wendt@cern.ch
+                  -------------------------
+
+ This example demonstrates an application of the fission fragment model in the
+ NeutronHP model. This example is capable of using both models, but is designed
+ around the Wendt Fission Model. A warning will be shown if the environment
+ variable that enables the Wendt fission model is not set.
+
+	
+ 1 - EXECUTION
+   
+   A - ENVIRONMENT
+     G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS - REQUIRED
+     The example requires this enviroment variable to be set. An error will be
+     displayed and the example will terminate if this environment variable is
+     not set.
+     
+     G4NEUTRON_HP_USE_WENDT_FISSION_MODEL - OPTIONAL
+     This environment variable enables the Wendt fission model contained
+     within the NeutronHP model for simulating fission events. The default model
+     will be used otherwise. A warning will be displayed if this environment
+     variable is not set.
+   
+   B - COMMAND LINE ARGUMENTS
+     The example can be run without any input arguments. However, a few options
+     are available:
+       -i ARG      : run in batch mode from script file ARG
+       -o ARG      : write output to file ARG
+                     (defaults to FF_Neutron_HP.out)
+       -n ARG      : multithreading with ARG number of threads
+                     (only works if Geant4 was compiled with multithreading
+                     enabled)
+     
+     No output is currently generated, although the argument is provided. It is
+     anticipated that future versions will provide some form of output
+     summarizing the results of the simulation.
+     
+   C - INTERACTIVE
+     No specialized UI commands are currently provided.
+     
+     To run the simulation, use the standard UI command:
+       /run/beamOn
+     
+ 
+ 2 - GEOMETRY
+	
+   The geometry is constructed in the FFDetectorConstruction class. The setup is
+   based on a subcritical assembly design.
+   
+   A - MATERIALS
+     This example requires a number of materials. They are loaded or constructed
+     in the "DefineMaterials" function. A few of the materials are obtained from
+     the NIST database (ref. Geant4 User's Guide for Application Developers,
+     Appendix: Geant4 Materials Database). These materials are:
+      - Air
+      - Aluminum
+      - Graphite
+      - Polyethylene
+      - Stainless steel
+      - Water
+      
+     Not all of the necessary materials were available from the NIST database,
+     and were constructed manually from the estimated isotopics. These materials
+     are:
+      - 20% U235 enriched uranium
+      - 93% B10 enriched BF3
+   
+   B - Volumes
+     The world is composed of air instead of a vacuum to provide room return.
+     
+     The subcritical assembly is a water-filled aluminum tank.
+     
+     The fuel plates are composed of aluminum-clad uranium meat, and are
+     completely submersed in the water of the subcritical assembly.
+     
+     An AmBe neutron source is placed in the exact center of the fuel plate
+     loading configuration. The material is currently modeled as steel until
+     more exact specifics of the AmBe isotopics can be obtained.
+     
+     The subcritical assembly rests on top of a graphite pile for moderation and
+     shielding.
+     
+
+ 3 - PHYSICS LIST
+ 
+   The particle's type and the physic processes which will be available
+   in this example are set in the QGSP_BIC_HP physics list.
+   
+  
+ 4 - PRIMARY GENERATOR
+  
+   The primary generator is defined in the FFPrimaryGeneratorAction class.
+   The default particle is a 4.5 MeV neutron originating from the
+   "NeutronSource" volume. The particles initial direction is isotropically
+   sampled.
+   
+ 
+ 5 - DETECTOR RESPONSE
+
+   The scoring method is yet to be implemented, although the BF3 detector is
+   already included in the detector construction.
+   
+ 
+ 6 - VISUALISATION
+   An example "vis.mac" will be included in a future release. For now, please
+   refer to other examples for a few suggestions.
+ 
+

@@ -42,11 +42,11 @@ public:
     
 private:
 // Fields
-    G4VPhysicalVolume* H2OPhysical;
-    G4VPhysicalVolume* neutronPhysical;
-    G4Tubs* neutronSolid;
-    G4ParticleGun* const particleGun;
-    G4VPhysicalVolume* tankPhysical;
+    G4VPhysicalVolume* fH2OPhysical;
+    G4VPhysicalVolume* fNeutronPhysical;
+    G4Tubs* fNeutronSolid;
+    G4ParticleGun* const fParticleGun;
+    G4VPhysicalVolume* fTankPhysical;
     
 // Functions
     G4ThreeVector GetNeutronSourceCenter(void);

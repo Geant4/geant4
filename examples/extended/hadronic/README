@@ -48,3 +48,17 @@ Hadr05
 
 This example demonstrates the usage of G4GenericPhysicsList to build 
 the concrente physics list at the run time.
+
+Hadr06
+------
+
+This example demonstrates survey of energy deposition and particle's flux from 
+a hadronic cascade.
+
+FissionFragment
+---------------
+This example demonstrates the Fission Fragment model as used within the
+neutron_hp model. It will demostrate the capability for fission product
+containmentby the cladding in a water moderated sub-critical assembly. It could
+also be further extended to calculate the effective multiplication factor of
+the subcritical assembly for various loading schemes.

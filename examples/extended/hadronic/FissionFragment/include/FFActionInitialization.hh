@@ -37,7 +37,7 @@ public:
     
 private:
 // Fields
-    FFRunAction* const masterRunAction;
+    FFRunAction* const fMasterRunAction;
 };
 
 #endif // FFACTIONINITIALIZATION
