@@ -2,8 +2,9 @@
 # Setup the project
 #
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
-project(channeling)
+include (CheckFunctionExists)
 
+project(channeling)
 #----------------------------------------------------------------------------
 # Find Geant4 package, activating all available UI and Vis drivers by default
 # You can set WITH_GEANT4_UIVIS to OFF via the command line or ccmake/cmake-gui
@@ -17,6 +18,11 @@ else()
   find_package(Geant4 REQUIRED)
 endif()
 
+CHECK_FUNCTION_EXISTS (erf HAS_ERF)
+if (NOT HAS_ERF)
+    message(STATUS "G4 Channeling example: function erf not found. --> Example disabled")
+    return()
+endif()
 #----------------------------------------------------------------------------
 # Setup Geant4 include directories and compile definitions
 # Setup include directory for this project
