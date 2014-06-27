@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th June 2014  Gabriele Cosmo (examples-V10-00-06)
+- Updated reference outputs according to reference tag geant4-10-00-ref-06.
+- Includes tags: doxygen-V10-00-00, amsEcal-V10-00-02, gammaraytel-V10-00-05,
+                 XrayFluo-V10-00-10, AnaEx01-V10-00-01, AnaEx02-V10-00-00,
+                 AnaEx03-V10-00-00, excommon-analysis-V10-00-02,
+                 testem1-V10-00-07, testem2-V10-00-04, testem3-V10-00-06,
+                 testem5-V10-00-07, testem6-V10-00-00, testem7-V10-00-01,
+                 testem8-V10-00-03, testem9-V10-00-01, testem11-V10-00-01,
+                 testem12-V10-00-02, testem13-V10-00-00, testem14-V10-00-02,
+                 testem15-V10-00-01, testem16-V10-00-00, testem18-V10-00-00,
+                 mctruthex-V10-00-00, p6decayer-V10-00-01,
+                 exExoticphysics-V10-00-01, channelingExample-V10-00-11,
+                 ExUCN-V10-00-02, g3tog4Tests-V10-00-01, exhadr02-V10-00-01,
+                 exExtHadFissFrag-V10-00-09, electronScattering-V10-00-01,
+                 exampleES2-V10-00-02, gtherapy-V10-00-00, MPI-V10-00-01,
+                 G01-V10-00-03, G04-V10-00-00, exampleP01-V10-00-01,
+                 exampleP02-V10-00-01.
+
 6th June 2014  Gabriele Cosmo (examples-V10-00-05)
 - Updated reference outputs according to reference tag geant4-10-00-ref-05.
 - Includes tags: air_shower-V10-00-00, gammaknife-V10-00-00,
