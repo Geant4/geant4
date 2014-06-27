@@ -104,7 +104,7 @@ G4ITPathFinder::G4ITPathFinder():
    kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
 
    fNoActiveNavigators= 0; 
-   for( register int num=0; num< G4ITNavigator::fMaxNav; ++num )
+   for( G4int num=0; num< G4ITNavigator::fMaxNav; ++num )
    {
       fpNavigator[num] =  0;   
    }
@@ -501,7 +501,7 @@ G4ITPathFinder::Locate( const   G4ThreeVector& position,
   }
 #endif
 
-  for ( register G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
+  for ( G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
   {
      //  ... who limited the step ....
 
@@ -707,7 +707,7 @@ void G4ITPathFinder::ReLocate( const G4ThreeVector& position )
   }
 #endif // G4DEBUG_PATHFINDER
 
-  for ( register G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
+  for ( G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
   {
      //  ... none limited the step
 
@@ -743,7 +743,7 @@ G4double  G4ITPathFinder::ComputeSafety( const G4ThreeVector& position )
    std::vector<G4ITNavigator*>::iterator pNavigatorIter;
    pNavigatorIter= fpTransportManager->GetActiveNavigatorsIterator();
 
-   for( register G4int num=0; num<fNoActiveNavigators; ++pNavigatorIter,++num )
+   for( G4int num=0; num<fNoActiveNavigators; ++pNavigatorIter,++num )
    {
       G4double safety = (*pNavigatorIter)->ComputeSafety( position,true );
       if( safety < minSafety ) { minSafety = safety; } 
@@ -811,7 +811,7 @@ G4ITPathFinder::DoNextLinearStep( const G4FieldTrack &initialState,
   G4double minSafety= kInfinity, minStep;
 
   const G4int IdTransport= 0;  // Id of Mass Navigator !!
-  register G4int num=0; 
+  G4int num=0; 
 
 #ifdef G4DEBUG_PATHFINDER
   if( fVerboseLevel > 2 )
@@ -1373,7 +1373,7 @@ void G4ITPathFinder::PushPostSafetyToPreSafety()
 {
   fPreSafetyLocation= fSafetyLocation;
   fPreSafetyMinValue= fMinSafety_atSafLocation;
-  for( register G4int nav=0; nav < fNoActiveNavigators; ++nav )
+  for( G4int nav=0; nav < fNoActiveNavigators; ++nav )
   {
      fPreSafetyValues[nav]= fNewSafetyComputed[nav];
   }

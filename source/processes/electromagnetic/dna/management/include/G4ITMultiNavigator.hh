@@ -90,7 +90,7 @@ public:
 		fMinSafety= -kInfinity;
 		fTrueMinStep= fMinStep= -kInfinity;
 
-		for(register int num=0; num< G4ITNavigator::fMaxNav; ++num )
+		for(G4int num=0; num< G4ITNavigator::fMaxNav; ++num )
 		{
 			fLimitTruth[num] = false;
 			fLimitedStep[num] = kUndefLimited;

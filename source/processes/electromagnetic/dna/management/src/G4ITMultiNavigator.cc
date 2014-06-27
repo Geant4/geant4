@@ -70,7 +70,7 @@ G4ITMultiNavigator::G4ITMultiNavigator()
 {
   fNoActiveNavigators= 0; 
 
-  for(register int num=0; num< fMaxNav; ++num )
+  for(G4int num=0; num< fMaxNav; ++num )
   {
     fpNavigator[num] =  0;   
   }
@@ -121,7 +121,7 @@ G4double G4ITMultiNavigator::ComputeStep(const G4ThreeVector &pGlobalPoint,
   G4ThreeVector initialPosition = pGlobalPoint;
   G4ThreeVector initialDirection= pDirection;
 
-  for( register int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
+  for( G4int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
   {
      safety= kInfinity;
 
@@ -281,7 +281,7 @@ void G4ITMultiNavigator::PrepareNavigators()
   }
 
   pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();
-  for( register int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
+  for( G4int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
   {
      fpNavigator[num] =  *pNavigatorIter;   
      fLimitTruth[num] = false;
@@ -344,7 +344,7 @@ G4ITMultiNavigator::LocateGlobalPointAndSetup(const G4ThreeVector& position,
   }
 #endif
 
-  for ( register int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
+  for ( G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
   {
      if( fWasLimitedByGeometry && fLimitTruth[num] )
      { 
@@ -409,7 +409,7 @@ G4ITMultiNavigator::LocateGlobalPointWithinVolume(const G4ThreeVector& position)
   }
 #endif
 
-  for ( register int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
+  for ( G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
   {
      //  ... none limited the step
 
@@ -439,7 +439,7 @@ G4double G4ITMultiNavigator::ComputeSafety( const G4ThreeVector& position,
     std::vector<G4ITNavigator*>::iterator pNavigatorIter;
     pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();
 
-    for( register int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
+    for( G4int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
     {
        safety = (*pNavigatorIter)->ComputeSafety( position, maxDistance, state);
        if( safety < minSafety ) { minSafety = safety; } 
@@ -508,7 +508,7 @@ void G4ITMultiNavigator::WhichLimited()
      shared= kSharedTransport;
   }
 
-  for ( register int num= 0; num < fNoActiveNavigators; num++ )
+  for ( G4int num= 0; num < fNoActiveNavigators; num++ )
   { 
     G4bool limitedStep;
 
@@ -566,7 +566,7 @@ G4ITMultiNavigator::PrintLimited()
   }
 #endif
 
-  for ( register int num= 0; num < fNoActiveNavigators; num++ )
+  for ( G4int num= 0; num < fNoActiveNavigators; num++ )
   { 
     G4double rawStep = fCurrentStepSize[num]; 
     G4double stepLen = fCurrentStepSize[num]; 
@@ -621,7 +621,7 @@ void G4ITMultiNavigator::ResetState()
    
    std::vector<G4ITNavigator*>::iterator pNavigatorIter;
    pNavigatorIter= pTransportManager-> GetActiveNavigatorsIterator();
-   for( register int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
+   for( G4int num=0; num< fNoActiveNavigators; ++pNavigatorIter,++num )
    {
        //  (*pNavigatorIter)->ResetState();  // KEEP THIS comment !!!
    } 
@@ -678,7 +678,7 @@ G4ITMultiNavigator::ResetHierarchyAndLocate(const G4ThreeVector &point,
    std::vector<G4ITNavigator*>::iterator pNavIter=
        pTransportManager->GetActiveNavigatorsIterator(); 
 
-   for ( register int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
+   for ( G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
    {
       G4bool relativeSearch, ignoreDirection; 
 
@@ -715,7 +715,7 @@ G4ITMultiNavigator::GetGlobalExitNormal(const G4ThreeVector &argPoint,
       std::vector<G4ITNavigator*>::iterator pNavIter=
         pTransportManager->GetActiveNavigatorsIterator(); 
 
-      for ( register int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
+      for ( G4int num=0; num< fNoActiveNavigators ; ++pNavIter,++num )
       {
         G4ThreeVector oneNormal;
         if( fLimitTruth[ num ] )  // Did this geometry limit the step ? 
