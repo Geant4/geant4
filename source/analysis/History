@@ -17,6 +17,9 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+June 27, 2014 G. Cosmo (analysis-V10-00-15)
+- Get rid of obsolete 'register' keyword in csz_inflate.cc..
+
 June 12, 2014 I. Hrivnacova (analysis-V10-00-14)
 - Added typedefs and functions for accessing iterators 
   over H1, H2, Ntuples;
