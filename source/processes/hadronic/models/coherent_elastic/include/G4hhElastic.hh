@@ -67,6 +67,10 @@ public:
 
   virtual ~G4hhElastic();
 
+  virtual G4bool IsApplicable(const G4HadProjectile &/*aTrack*/, 
+			      G4Nucleus & /*targetNucleus*/);
+
+
   void Initialise();
 
   void BuildTableT( G4ParticleDefinition* target, G4ParticleDefinition* projectile); // , G4double plab );
@@ -235,6 +239,23 @@ private:
 //////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////////////////////////
 ////////////////////////////////////////////////////////////////////////
+
+
+
+inline G4bool G4hhElastic::IsApplicable(const G4HadProjectile & projectile, 
+			      G4Nucleus & nucleus)
+{
+  if( ( projectile.GetDefinition() == G4Proton::Proton() ||
+        projectile.GetDefinition() == G4Neutron::Neutron() ||
+        projectile.GetDefinition() == G4PionPlus::PionPlus() ||
+        projectile.GetDefinition() == G4PionMinus::PionMinus() ||
+        projectile.GetDefinition() == G4KaonPlus::KaonPlus() ||
+        projectile.GetDefinition() == G4KaonMinus::KaonMinus() ) &&
+
+        nucleus.GetZ_asInt() < 2 ) return true;
+  else                              return false;
+}
+
 
 inline void G4hhElastic::SetParameters()
 {

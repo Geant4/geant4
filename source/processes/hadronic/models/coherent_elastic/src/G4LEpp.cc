@@ -41,27 +41,11 @@
 G4LEpp::G4LEpp():G4HadronElastic("G4LEpp")
 {
   SetMinEnergy(0.);
-  SetCoulombEffects(0);
+  SetMaxEnergy(5.*GeV);
 }
 
 G4LEpp::~G4LEpp()
-{
-  //    theParticleChange.Clear();
-}
-
-void
-G4LEpp::SetCoulombEffects(G4int State)
-{
-  if (0 == State) {
-    nenergy = NENERGYC;
-    elab = ElabCoul;
-    SetMaxEnergy(1.2*GeV);
-  } else {
-    nenergy = NENERGY;
-    elab = Elab;
-    SetMaxEnergy(5.*GeV);
-  }
-}
+{}
 
 G4HadFinalState*
 G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
@@ -151,7 +135,7 @@ G4LEpp::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& targetNucleus)
     if (px*px + py*py > 0) {
       G4double ph, cosp, sinp;
       cost = pz/p;
-      sint = (std::sqrt(std::fabs((1-cost)*(1+cost))) + std::sqrt(px*px+py*py)/p)/2;
+      sint = (std::sqrt((1-cost)*(1+cost)) + std::sqrt(px*px+py*py)/p)/2;
       py < 0 ? ph = 3*halfpi : ph = halfpi;
       if (std::fabs(px) > 0.000001*GeV) ph = std::atan2(py,px);
       cosp = std::cos(ph);
@@ -267,7 +251,7 @@ G4double G4LEpp::SampleInvariantT(const G4ParticleDefinition* p,
     // Find energy bin
 
   G4int je1 = 0;
-  G4int je2 = nenergy - 1;
+  G4int je2 = NENERGY - 1;
   ek /= GeV;
 
   do 
@@ -287,30 +271,20 @@ G4double G4LEpp::SampleInvariantT(const G4ParticleDefinition* p,
   G4int ke1 = 0;
   G4int ke2 = NANGLE - 1;
   G4double dsig, b, rc;
-  if(nenergy == NENERGY) { 
-    dsig = Sig[je2][0] - Sig[je1][0]; 
-    rc = dsig/delab;
-    b = Sig[je1][0] - rc*elab[je1];
-  } else {
-    dsig = SigCoul[je2][0] - SigCoul[je1][0]; 
-    rc = dsig/delab;
-    b = SigCoul[je1][0] - rc*elab[je1];
-  }
+
+  dsig = Sig[je2][0] - Sig[je1][0]; 
+  rc = dsig/delab;
+  b = Sig[je1][0] - rc*elab[je1];
+
   G4double sigint1 = rc*ek + b;
   G4double sigint2 = 0.;
 
   do
   {
       G4int midBin = (ke1 + ke2)/2;
-      if(nenergy == NENERGY) { 
-	dsig = Sig[je2][midBin] - Sig[je1][midBin]; 
-	rc = dsig/delab;
-	b = Sig[je1][midBin] - rc*elab[je1];
-      } else {
-	dsig = SigCoul[je2][midBin] - SigCoul[je1][midBin]; 
-	rc = dsig/delab;
-	b = SigCoul[je1][midBin] - rc*elab[je1];
-      }
+      dsig = Sig[je2][midBin] - Sig[je1][midBin]; 
+      rc = dsig/delab;
+      b = Sig[je1][midBin] - rc*elab[je1];
       G4double sigint = rc*ek + b;
 
       if (sample < sigint) 

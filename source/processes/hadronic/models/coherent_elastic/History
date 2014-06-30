@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 June 2014 - V.Ivanchenko (hadr-cohe-V10-00-11)
+-----------------------------------------------------------------
+- G4LEppData, G4LEpp - removed data with Coulomb correction and 
+    corresponding code due to reasons: not work properly, provides 
+    double counting with EM, code too complex.
+
 18 June 2014 - A.Ribon (hadr-cohe-V10-00-10)
 -----------------------------------------------------------------
 - G4NuclNuclDiffuseElastic : proper fix of the nuclear radius issue.

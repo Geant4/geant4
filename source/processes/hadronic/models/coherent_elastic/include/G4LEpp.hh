@@ -48,45 +48,34 @@
 #include "G4TrackStatus.hh"
 #include "G4HadronElastic.hh"
 
-
 class G4LEpp : public G4HadronElastic
 {
 private:
 
-  enum { NENERGY=40, NENERGYC=22, NANGLE=180 };
+  enum { NENERGY=40, NANGLE=180 };
 
 public:
 
   G4LEpp();
 
-  ~G4LEpp();
+  virtual ~G4LEpp();
  
   G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
   				 G4Nucleus& targetNucleus);
-
-  void SetCoulombEffects(G4int State);
 
   G4double SampleInvariantT(const G4ParticleDefinition* p, 
 			    G4double plab, G4int Z, G4int A);
   
 private:
 
-  G4int nenergy;
-  //const G4float * sig;
-  const G4float * elab;
-
   // The following arrays are declared static to allow the use of initializers.
   // They are initialized in G4LEppData.hh
 
   // Coulomb effects suppressed:
   static const G4float Sig[NENERGY][NANGLE];
-  static const G4float Pcm[NENERGY], Elab[NENERGY], 
-    dSigmax[NENERGY], Sigtot[NENERGY];
-
-  // Coulomb effects not suppressed:
-  static const G4float SigCoul[NENERGYC][NANGLE];
-  static const G4float PcmCoul[NENERGYC], ElabCoul[NENERGYC], 
-    dSigmaxCoul[NENERGYC], SigtotCoul[NENERGYC];
+  static const G4float elab[NENERGY]; 
+  static const G4float dSigmax[NENERGY];
+  static const G4float Sigtot[NENERGY];
 
 };
 
