@@ -161,7 +161,7 @@ G4double G4UCNMicroRoughnessHelper::IntIplus(G4double E, G4double fermipot,
   *max=0.;
 
   // max_theta_o saves the theta-position of the max probability,
-  // the previous value is saved in a_max_phi_o
+  // the previous value is saved in a_max_theta_o
 
   G4double a_max_theta_o, max_theta_o=theta_i, a_max_phi_o, max_phi_o=0.;
 

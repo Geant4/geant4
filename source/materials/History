@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27-06-14 P.Gumplinger (materials-V10-00-19)
+- fix Coverity error uninitilized non-static class members in
+  G4UCNMaterialPropertiesTable
+
 18-06-14 P.Gumplinger (materials-V10-00-18)
 - fix Valgrid uninitialised value error in G4UCNMaterialPropertiesTable
 

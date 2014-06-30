@@ -57,6 +57,23 @@ G4UCNMaterialPropertiesTable::G4UCNMaterialPropertiesTable()
   maxMicroRoughnessTable = NULL;
   theMicroRoughnessTransTable = NULL;
   maxMicroRoughnessTransTable = NULL;
+
+  theta_i_min =  0.*degree;
+  theta_i_max = 90.*degree;
+
+  Emin =    0.e-9*eV;
+  Emax = 1000.e-9*eV;
+
+  no_theta_i = 90;
+  noE = 100;
+
+  theta_i_step = (theta_i_max-theta_i_min)/(no_theta_i-1);
+  E_step = (Emax-Emin)/(noE-1);
+
+  b =  1*nm;
+  w = 30*nm;
+
+  AngCut = 0.01*degree;
 }
 
 G4UCNMaterialPropertiesTable::~G4UCNMaterialPropertiesTable()
@@ -236,10 +253,11 @@ G4double G4UCNMaterialPropertiesTable::
   // calculated, the probability is set to zero
 
   //G4cout << "theta_i: " << theta_i/degree << "degree"
-  //       << "theta_i_min: " << theta_i_min/degree << "degree"
-  //       << "theta_i_max: " << theta_i_max/degree << "degree"
-  //       << "Emin: " << Emin/(1.e-9*eV) << "neV"
-  //       << "Emax: " << Emax/(1.e-9*eV) << "neV" << G4endl;
+  //       << " theta_i_min: " << theta_i_min/degree << "degree"
+  //       << " theta_i_max: " << theta_i_max/degree << "degree"
+  //       << " Energy: " << Energy/(1.e-9*eV) << "neV"
+  //       << " Emin: " << Emin/(1.e-9*eV) << "neV"
+  //       << " Emax: " << Emax/(1.e-9*eV) << "neV" << G4endl;
 
   if (theta_i<theta_i_min || theta_i>theta_i_max || Energy<Emin || Energy>Emax)
      return 0.;
