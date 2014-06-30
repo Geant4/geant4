@@ -88,6 +88,9 @@ G4UCNBoundaryProcess::G4UCNBoundaryProcess(const G4String& processName,
   Material1 = NULL;
   Material2 = NULL;
 
+  aMaterialPropertiesTable1 = NULL;
+  aMaterialPropertiesTable2 = NULL;
+
   UseMicroRoughnessReflection = false;
   DoMicroRoughnessReflection  = false;
 
@@ -322,7 +325,7 @@ G4UCNBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
      if (verboseLevel > 0) G4cout << "G4UCNBoundaryProcess -> BELOW critical velocity" << G4endl;
 
-     // Loss on refection
+     // Loss on reflection
 
      if (Loss(pUpScatter, theVelocityNormal, FermiPotDiff)) {
 
@@ -363,7 +366,7 @@ G4UCNBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
 
         NewMomentum = Reflect(pDiffuse, OldMomentum, theGlobalNormal);
 
-        aParticleChange.ProposeMomentumDirection(NewMomentum);
+     aParticleChange.ProposeMomentumDirection(NewMomentum);
     
   } else {
 
@@ -598,8 +601,17 @@ G4ThreeVector G4UCNBoundaryProcess::MRreflectHigh(G4double pDiffuse,
 {
   // Only for Enormal > VFermi
 
-  G4double pSpecular = Reflectivity(Energy, FermiPot)*
+  G4double costheta = OldMomentum*Normal;
+
+  G4double Enormal = Energy * (costheta*costheta);
+
+  G4double pSpecular;
+
+  if ( Enormal > FermiPot )
+     pSpecular = Reflectivity(FermiPot,Enormal)*
                                          (1.-pDiffuse-pDiffuseTrans-pLoss);
+  else pSpecular = 0.;
+
   G4ThreeVector NewMomentum;
 
   G4double decide = G4UniformRand();
@@ -740,6 +752,9 @@ G4ThreeVector G4UCNBoundaryProcess::MRDiffRefl(G4ThreeVector Normal,
 
   G4ThreeVector localmomentum;
   localmomentum.setRThetaPhi(1., theta_o, phi_o);
+
+  ftheta_o = theta_o;
+  fphi_o = phi_o;
 
   // Get coordinate transform matrix
 

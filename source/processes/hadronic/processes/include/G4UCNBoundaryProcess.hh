@@ -119,8 +119,6 @@ public:
         G4VParticleChange* PostStepDoIt(const G4Track& aTrack,
                                         const G4Step&  aStep);
 
-        void SetMicroRoughness(G4bool );
-
 private:
 
         G4UCNBoundaryProcessMessenger* fMessenger;
@@ -160,12 +158,16 @@ private:
 
         G4ThreeVector LDiffRefl(G4ThreeVector );
 
+public:
+  
         G4ThreeVector MRreflect(G4double ,
                                 G4ThreeVector , G4ThreeVector ,
                                 G4double , G4double );
         G4ThreeVector MRreflectHigh(G4double , G4double , G4double ,
                                     G4ThreeVector , G4ThreeVector ,
                                     G4double , G4double , G4double& );
+
+private:
 
         G4ThreeVector MRDiffRefl(G4ThreeVector , G4double , G4double ,
                                  G4ThreeVector , G4double );
@@ -190,9 +192,24 @@ private:
         G4int nSnellTransmit, mSnellTransmit;
         G4int aMRDiffuseTransmit;
 
+        G4double ftheta_o, fphi_o;
+
 public:
 
+        void SetMicroRoughness(G4bool );
+
+        G4UCNBoundaryProcessStatus GetStatus() const;
+
         void BoundaryProcessSummary() const;
+
+        void SetMaterialPropertiesTable1(G4UCNMaterialPropertiesTable* MPT)
+             {aMaterialPropertiesTable1 = MPT;}
+
+        void SetMaterialPropertiesTable2(G4UCNMaterialPropertiesTable* MPT)
+             {aMaterialPropertiesTable2 = MPT;}
+
+        G4double GetTheta_o() {return ftheta_o;};
+        G4double GetPhi_o() {return fphi_o;};
 
 };
 
@@ -204,6 +221,12 @@ inline G4bool
 G4UCNBoundaryProcess::IsApplicable(const G4ParticleDefinition& aParticleType)
 {
   return ( &aParticleType == G4Neutron::NeutronDefinition() );
+}
+
+inline
+G4UCNBoundaryProcessStatus G4UCNBoundaryProcess::GetStatus() const
+{
+  return theStatus;
 }
 
 #endif /* G4UCNBOUNDARYPROCESS_HH */
