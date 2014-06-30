@@ -111,7 +111,7 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
 
   if(0 == nRegions) {
     SetDeexcitationActiveRegion("World",isActive,flagAuger,flagPIXE);
-    nRegions = 1;
+    nRegions = deRegions.size();
   }
 
   if(0 < verbose) {
@@ -176,6 +176,9 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
 						 G4bool valAuger,
 						 G4bool valPIXE)
 {
+  // no PIXE in parallel world
+  if(rname == "DefaultRegionForParallelWorld") { return; }
+
   G4String ss = rname;
   //G4cout << "### G4VAtomDeexcitation::SetDeexcitationActiveRegion " << ss 
   //	 << "  " << valDeexcitation << "  " << valAuger
@@ -201,6 +204,17 @@ G4VAtomDeexcitation::SetDeexcitationActiveRegion(const G4String& rname,
   deRegions.push_back(valDeexcitation);
   AugerRegions.push_back(valAuger);
   PIXERegions.push_back(valPIXE);
+
+  // if de-excitation defined fo rthe world volume 
+  // it should be active everywhere
+  if(ss == "DefaultRegionForTheWorld") {
+    G4RegionStore* regions = G4RegionStore::GetInstance();
+    G4int nn = regions->size();
+    for(G4int i=0; i<nn; ++i) {
+      SetDeexcitationActiveRegion((*regions)[i]->GetName(), valDeexcitation,
+                                  valAuger, valPIXE);
+    }
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

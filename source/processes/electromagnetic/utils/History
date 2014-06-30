@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 June 14: V.Ivant (emutils-V10-00-27)
+- G4VAtomDeexcitation - if de-excitation options are defined for the 
+    world G4Region, propagate these options to all G4Regions
+
 6 June 14: V.Ivant (emutils-V10-00-26)
 - G4VEmProcess, G4VEnergyLossProcess - fixed Coverity reports
 
