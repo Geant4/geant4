@@ -146,6 +146,8 @@ void G4HadronPhysicsShieldingM::CreateModels()
 
 G4HadronPhysicsShieldingM::~G4HadronPhysicsShieldingM()
 {
+  if (!tpdata) return;
+
   delete tpdata->theNeutrons;
   delete tpdata->theBertiniNeutron;
   delete tpdata->theFTFPNeutron;

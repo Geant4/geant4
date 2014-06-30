@@ -141,6 +141,8 @@ void G4HadronPhysicsFTF_BIC::CreateModels()
 
 G4HadronPhysicsFTF_BIC::~G4HadronPhysicsFTF_BIC() 
 {
+  if (!tpdata) return;
+
    delete tpdata->theFTFBinaryNeutron;
    delete tpdata->theBinaryNeutron;
    delete tpdata->theNeutrons;

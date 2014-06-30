@@ -155,6 +155,8 @@ void G4HadronPhysicsFTFP_BERT_TRV::CreateModels()
 
 G4HadronPhysicsFTFP_BERT_TRV::~G4HadronPhysicsFTFP_BERT_TRV()
 {
+  if (!tpdata) return;
+
   delete tpdata->theNeutrons;
   delete tpdata->theBertiniNeutron;
   delete tpdata->theFTFPNeutron;

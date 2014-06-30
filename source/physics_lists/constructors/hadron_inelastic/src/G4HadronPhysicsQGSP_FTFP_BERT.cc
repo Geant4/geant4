@@ -171,6 +171,8 @@ void G4HadronPhysicsQGSP_FTFP_BERT::CreateModels()
 
 G4HadronPhysicsQGSP_FTFP_BERT::~G4HadronPhysicsQGSP_FTFP_BERT()
 {
+  if (!tpdata) return;
+
    delete tpdata->theQGSPNeutron;
    delete tpdata->theFTFPNeutron;
    delete tpdata->theBertiniNeutron;

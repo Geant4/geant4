@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-June-2014, Michael Kelsey            (phys-ctor-hinelastic-V10-00-03)
+- Add "if (!tpdata) return;" to all dtors, to avoid segfaults.
+
 03-June-2014, Julia Yarba               (phys-ctor-hinelastic-V10-00-02)
 - Include ctor's for NuBeam and Shielding
 

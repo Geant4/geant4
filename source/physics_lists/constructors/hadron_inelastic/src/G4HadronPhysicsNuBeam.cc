@@ -153,6 +153,7 @@ void G4HadronPhysicsNuBeam::CreateModels()
 
 G4HadronPhysicsNuBeam::~G4HadronPhysicsNuBeam()
 {
+  if (!tpdata) return;
 
   delete tpdata->theNeutrons;
   delete tpdata->theBertiniNeutron;

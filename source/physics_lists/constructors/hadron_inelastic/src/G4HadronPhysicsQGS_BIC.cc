@@ -176,6 +176,8 @@ void G4HadronPhysicsQGS_BIC::CreateModels()
 
 G4HadronPhysicsQGS_BIC::~G4HadronPhysicsQGS_BIC() 
 {
+  if (!tpdata) return;
+
    delete tpdata->theBinaryNeutron;
    delete tpdata->theQGSBinaryNeutron;
    delete tpdata->theFTFBinaryNeutron;

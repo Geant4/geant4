@@ -103,7 +103,7 @@ G4HadronInelasticQBBC::G4HadronInelasticQBBC(const G4String& name, G4int ver,
 
 G4HadronInelasticQBBC::~G4HadronInelasticQBBC()
 {
-  delete theAntiNuclXS;
+  delete theAntiNuclXS; theAntiNuclXS=0;
 }
 
 void G4HadronInelasticQBBC::ConstructProcess()
