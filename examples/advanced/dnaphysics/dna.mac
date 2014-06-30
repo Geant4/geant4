@@ -13,6 +13,8 @@
 #/gun/particle alpha
 #/gun/particle alpha+
 #/gun/particle helium
+#/gun/particle ion
+#/gun/ion 14 28
 /gun/energy 1 keV
 
 /process/em/auger true

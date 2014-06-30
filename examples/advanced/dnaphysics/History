@@ -5,6 +5,9 @@
                        Package History file
                        --------------------
 
+30 June 2014 - tag dnaphysics-V10-00-00 - S. Incerti
+- Added lines for ion in dna.mac
+
 03 October 2013 - tag dnaphysics-V09-06-10 - S. Incerti
 - Updated CMakeLists.txt
 
