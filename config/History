@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+1st July 2014   Gabriele Cosmo  (config-V10-00-06)
+- Added 'particle_hp' module to binmake.gmk.
+
 8th April 2014   Gabriele Cosmo  (config-V10-00-05)
 - Added G4USE_STD11 flag for C++11 Standard.
 
