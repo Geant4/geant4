@@ -638,12 +638,16 @@ void G4HadronicProcessStore::PrintHtml(const G4ParticleDefinition* theParticle,
   G4HadronicProcess* theProcess;
   for (PDHPmap::iterator it = itpart.first; it != itpart.second; ++it) {
     theProcess = (*it).second;
-    outFile << "<br> &nbsp;&nbsp; <b><font color=\" 0000ff \">process : <a href=\"" 
-            << theProcess->GetProcessName() << ".html\"> "
-            << theProcess->GetProcessName() << "</a></font></b>\n";
+    //  description is inline
+    //outFile << "<br> &nbsp;&nbsp; <b><font color=\" 0000ff \">process : <a href=\""
+    //        << theProcess->GetProcessName() << ".html\"> "
+    //        << theProcess->GetProcessName() << "</a></font></b>\n";
+    outFile << "<br> &nbsp;&nbsp; <b><font color=\" 0000ff \">process : "
+            << theProcess->GetProcessName() << "</font></b>\n";
     outFile << "<ul>\n";
-    outFile << "  <li><b><font color=\" 00AA00 \">models : </font></b>\n";
-
+    outFile << "  <li>";
+   theProcess->ProcessDescription(outFile);
+   outFile << "  <li><b><font color=\" 00AA00 \">models : </font></b>\n";
     // Loop over models assigned to process
     std::pair<HPHImap::iterator, HPHImap::iterator> itmod =
                         m_map.equal_range(theProcess);
