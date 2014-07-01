@@ -57,12 +57,15 @@ public:
 public:
   void BeginOfRunAction(const G4Run*);
   void EndOfRunAction(const G4Run*);
-  std::ofstream* GetOutputFile(){return outFile;};
+  std::ofstream* GetOutputFile();
   
 
 private:
   std::ofstream* outFile;
   G4String fileName;
+
+  void OpenFile();
+  G4int fRunID;
 
 };
 

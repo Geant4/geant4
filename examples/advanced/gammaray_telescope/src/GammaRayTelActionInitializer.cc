@@ -56,5 +56,7 @@ void GammaRayTelActionInitializer::Build() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void GammaRayTelActionInitializer::BuildForMaster() const
-{;}
+{
+  SetUserAction(new GammaRayTelRunAction());
+}
 

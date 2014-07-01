@@ -9,6 +9,14 @@ $Id$
                           History file
                           ------------
 
+30.06.2014   L.Pandola, Tag gammaraytel-V10-00-06
+             Write separate files for each thread/run, if option 
+             G4STORE_DATA is active.
+             Move ordering of commands in macro: the generator action
+              is not instantiated before the run initialization
+             MT Migration: use G4MTRunManager if applicable
+             Set some volumes to invisible for faster visualization
+
 14.06.2014   L.Pandola, Tag  gammaraytel-V10-00-05
              Get rid of additional compiler warning from 
              GammaRayTelEventAction showing up when 

@@ -87,7 +87,7 @@ GammaRayTelPrimaryGeneratorMessenger::GammaRayTelPrimaryGeneratorMessenger
   SourceGenCmd->SetGuidance("  Choice : true(native), false(GPS)");
   SourceGenCmd->SetParameterName("choice",true);
   SourceGenCmd->SetDefaultValue((G4bool)true);
-  SourceGenCmd->AvailableForStates(G4State_PreInit);
+  SourceGenCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
 }
 

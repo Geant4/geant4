@@ -786,7 +786,9 @@ G4VPhysicalVolume* GammaRayTelDetectorConstruction::ConstructPayload()
   logicCAL->SetVisAttributes(G4VisAttributes::Invisible);
   logicCALLayerX->SetVisAttributes(G4VisAttributes::Invisible);
   logicCALLayerY->SetVisAttributes(G4VisAttributes::Invisible);
-  
+  logicTKRStripX->SetVisAttributes(G4VisAttributes::Invisible);
+  logicTKRStripY->SetVisAttributes(G4VisAttributes::Invisible);  
+
   // Some visualization styles
 
   G4VisAttributes* VisAtt1= new G4VisAttributes(G4Colour(0.3,0.8,0.1));

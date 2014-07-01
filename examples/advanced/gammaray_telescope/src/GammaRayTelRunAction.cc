@@ -50,9 +50,10 @@
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
+#include "G4Threading.hh"
 
 GammaRayTelRunAction::GammaRayTelRunAction() :
-  outFile(0),fileName("NULL")
+  outFile(0),fileName("NULL"),fRunID(-1)
 {;}
 
 
@@ -65,20 +66,14 @@ GammaRayTelRunAction::~GammaRayTelRunAction()
 
 void GammaRayTelRunAction::BeginOfRunAction(const G4Run* aRun)
 {  
-  G4cout << "Start of Run " << aRun->GetRunID() << G4endl;
+  fRunID = aRun->GetRunID();
 
-  // Open the file for the tracks of this run
-#ifdef G4STORE_DATA
-  char name[15];
-  sprintf(name,"Tracks_%d.dat",aRun->GetRunID());
-  if (!outFile)
-    {
-      outFile = new std::ofstream;
-      outFile->open(name);
-      fileName = G4String(name);
-    }
-#endif
-
+  //Master mode or sequential
+  if (IsMaster())    
+    G4cout << "### Run " << aRun->GetRunID() << " starts (master)." << G4endl;
+  else
+    G4cout << "### Run " << aRun->GetRunID() << " starts (worker)." << G4endl;
+ 
   // Prepare the visualization
   if (G4VVisManager::GetConcreteInstance())
     {
@@ -100,10 +95,13 @@ void GammaRayTelRunAction::EndOfRunAction(const G4Run* aRun)
 
   // Close the file with the hits information
 #ifdef G4STORE_DATA
-  G4cout << "File " << fileName << G4endl;
-  outFile->close();
-  delete outFile;
-  outFile = 0;
+  if (outFile)
+    {
+      G4cout << "File " << fileName << G4endl;
+      outFile->close();
+      delete outFile;
+      outFile = 0;
+    }
 #endif
 
   // If analysis is used, print out the histograms
@@ -114,9 +112,35 @@ void GammaRayTelRunAction::EndOfRunAction(const G4Run* aRun)
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 
+std::ofstream* GammaRayTelRunAction::GetOutputFile()
+{
+  if (!outFile)
+    OpenFile();
+  return outFile;
+}
 
-
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+void GammaRayTelRunAction::OpenFile()
+{
+  // Open the file for the tracks of this run
+#ifdef G4STORE_DATA
+  //check that we are in a worker: returns -1 in a master and -2 in sequential
+  //one file per thread is produced 
+  //Tracks_runR.N.dat, where R=run number, N=thread ID
+  char name[25];
+  if (G4Threading::G4GetThreadId() >= 0)          
+    sprintf(name,"Tracks_run%d.%d.dat",fRunID,
+	    G4Threading::G4GetThreadId());
+  else
+    sprintf(name,"Tracks_run%d.dat",fRunID);
+  if (!outFile)
+    {
+      outFile = new std::ofstream;
+      outFile->open(name);
+      fileName = G4String(name);
+    }
+  G4cout << "Open file: " << fileName << G4endl;
+#endif
+}
 
 

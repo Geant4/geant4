@@ -56,7 +56,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction()
-  :rndmFlag("off"),nSourceType(0),nSpectrumType(0)
+  :rndmFlag("off"),nSourceType(0),nSpectrumType(0),sourceGun(false)
 {
   GammaRayTelDetector = static_cast<const GammaRayTelDetectorConstruction*>
     (G4RunManager::GetRunManager()->GetUserDetectorConstruction());
@@ -68,7 +68,7 @@ GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction()
   G4int n_particle = 1;
 
   particleGun  = new G4ParticleGun(n_particle);     
-      // default particle kinematic
+  // default particle kinematic
   
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
@@ -87,10 +87,9 @@ GammaRayTelPrimaryGeneratorAction::GammaRayTelPrimaryGeneratorAction()
 
 GammaRayTelPrimaryGeneratorAction::~GammaRayTelPrimaryGeneratorAction()
 {
-  if (sourceGun)
-    delete particleGun;
-  else
-    delete particleSource;
+ 
+  delete particleGun;
+  delete particleSource;
 
   delete gunMessenger;
 }
