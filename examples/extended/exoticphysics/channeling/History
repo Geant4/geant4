@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+July 1,  2014 G.Folger (channelingExample-V10-00-14)
+-  revert change introduced with tag ...-12, CMakeLists.txt rev.82513
+
+June 30, 2014 E. Bagli (channelingExample-V10-00-13)
+- erf function modified to CLHEP::HepStat::erfQ
+
 June 26, 2014 G.Folger (channelingExample-V10-00-12)
 - Build example only if erf() is available on system.
    erf function misses on Windows up to VC11 (studio 2012) included.
