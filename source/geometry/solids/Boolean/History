@@ -20,6 +20,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ Jul 01, 2014  G.Cosmo                   geom-bool-V10-00-02
+ - Fixed assignment operator signature in G4UMultiUnion wrapper.
+
  Jun 20, 2014  G.Cosmo                   geom-bool-V10-00-01
  - Correction to G4MultiUnion::AddNode() for treatment of transformations.
 

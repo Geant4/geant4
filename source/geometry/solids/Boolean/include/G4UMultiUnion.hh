@@ -74,7 +74,7 @@ class G4UMultiUnion : public G4USolid
       // persistifiable objects.
 
     G4UMultiUnion( const G4UMultiUnion& source );
-    const G4UMultiUnion &operator=(const G4UMultiUnion& source);
+    G4UMultiUnion& operator=(const G4UMultiUnion& source);
       // Copy constructor and assignment operator.
 
     G4Polyhedron* CreatePolyhedron() const;

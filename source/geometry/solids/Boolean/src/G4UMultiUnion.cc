@@ -77,8 +77,7 @@ G4UMultiUnion::G4UMultiUnion(const G4UMultiUnion &source)
 //
 // Assignment operator
 //
-const G4UMultiUnion&
-G4UMultiUnion::operator=(const G4UMultiUnion &source)
+G4UMultiUnion& G4UMultiUnion::operator=(const G4UMultiUnion &source)
 {
   if (this == &source) return *this;
   
