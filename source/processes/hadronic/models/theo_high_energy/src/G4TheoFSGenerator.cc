@@ -53,15 +53,16 @@ G4TheoFSGenerator::~G4TheoFSGenerator()
 void G4TheoFSGenerator::ModelDescription(std::ostream& outFile) const
 {
   outFile << GetModelName() <<" consists of a " << theHighEnergyGenerator->GetModelName()
-		  << " string model and of "
-		  << ".\n"
+		  << " string model and a stage to de-excite the excited nuclear fragment."
+		  << "\n<p>"
 		  << "The string model simulates the interaction of\n"
           << "an incident hadron with a nucleus, forming \n"
           << "excited strings, decays these strings into hadrons,\n"
-          << "and leaves an excited nucleus.\n"
-          << "The string model:\n";
+          << "and leaves an excited nucleus. \n"
+          << "<p>The string model:\n";
   theHighEnergyGenerator->ModelDescription(outFile);
-//theTransport->IntraNuclearTransportDescription(outFile)
+  outFile <<"\n<p>";
+  theTransport->PropagateModelDescription(outFile);
 }
 
 

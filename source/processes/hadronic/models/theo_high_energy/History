@@ -13,6 +13,8 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+1-July-2014, Gunter Folger              (had-theo-HE-V10-00-04)
+- Updates to ModelDescription(); updated text and recurse to propagate.
 
 2-June-2014, Gunter Folger              (had-theo-HE-V10-00-03)
 - one extra G4ParticleDefinition* made const, even if not required.
