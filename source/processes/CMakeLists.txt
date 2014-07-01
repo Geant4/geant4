@@ -82,6 +82,7 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             hadronic/models/lepto_nuclear/sources.cmake
             hadronic/models/management/sources.cmake
             hadronic/models/neutron_hp/sources.cmake
+            hadronic/models/particle_hp/sources.cmake
             hadronic/models/parton_string/diffraction/sources.cmake
             hadronic/models/parton_string/hadronization/sources.cmake
             hadronic/models/parton_string/management/sources.cmake
