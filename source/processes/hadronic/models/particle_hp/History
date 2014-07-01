@@ -1,0 +1,30 @@
+-------------------------------------------------------------------
+
+          ==================================================
+          Geant4 - an Object-Oriented Toolkit for Simulation
+          ==================================================
+
+            History file for High Precision Neutron model
+            ---------------------------------------------
+
+This file should be used to summarize modifications introduced in the 
+code and to keep track of all tags.
+
+     ---------------------------------------------------------------
+     * Please list in reverse chronological order (last date on top)
+     ---------------------------------------------------------------
+
+10 June 2014  Tatsumi Koi 
+for Pedro Arce and Emilio Mendoza of CIEMAT (hadr-hpp-V10-00-00)
+---------------------------------------------------
+- Regenerate particle_hp codes from hadr-hpn-V10-00-12
+- Deleteing files related FissionFragment model
+- Deleteing G4InterpolationManager and so on to avoid duplication
+
+
+22 October 2012  Dennis Wright (hadr-hpp-V09-05-00)
+---------------------------------------------------
+- create particle_hp module for treatment of low energy charged particles
+- code developed by Pedro Arce and Emilio Mendoza of CIEMAT and based on
+  neutronHP
+
