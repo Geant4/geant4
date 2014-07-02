@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 1th, 2014, V. Ivanchenko (run-V10-00-12)
+- G4PhysicsListHelper - minor fix in the default list of processeses:
+    positron annihilation in muons and hadrons cannot be AtRest -
+    these are rare high energy discrete processes. Equivalent fix was 
+    for OrderingParameterTable (problem report #1598)
+
 June 4th, 2014, L. Desorgher (run-V10-00-11)
 - Changes in G4AdjointSimManager, G4AdjointSimMessenger, and G4AdjointPrimaryGeneratorAction
   to add fwd primary splitting in the G4RMC.
@@ -42,7 +48,7 @@ Apr 8th, 2014,  A. Dotti (run-V10-00-04,run-V10-00-05)
 - Protect against compilation error in WIN32 for pin-affinity
 
 Mar 28th, 2014, A. Dotti (run-V10-00-03)
-- Protect agains compilation worning for C90 standard
+- Protect agains compilation warning for C90 standard
 
 Mar 26th, 2014, A. Dotti (run-V10-00-02)
 - Introduced pin affinity functionalities
