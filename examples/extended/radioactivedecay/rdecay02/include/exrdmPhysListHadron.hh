@@ -62,7 +62,8 @@ class exrdmPhysListHadron : public G4VPhysicsConstructor
 
   private:
 
-  G4HadronElasticProcess  fTheElasticProcess;
+  G4HadronElasticProcess fTheElasticProcess;
+  G4HadronElasticProcess ionElasticProcess;
   G4ProtonInelasticProcess fTheProtonInelastic;
   G4NeutronInelasticProcess  fTheNeutronInelastic;
   G4HadronElasticProcess* fTheNeutronElasticProcess;
