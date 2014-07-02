@@ -70,7 +70,7 @@ G4bool G4RootFileManager::OpenFile(const G4String& fileName)
   if ( fFile ) delete fFile;
 
   // create new file
-  fFile = new tools::wroot::file(std::cout, name);
+  fFile = new tools::wroot::file(G4cout, name);
   fFile->add_ziper('Z',tools::gzip_buffer);
   fFile->set_compression(9);
   
@@ -126,7 +126,7 @@ G4bool G4RootFileManager::CloseFile()
 G4bool G4RootFileManager::OpenRFile(const G4String& fileName)
 {
   // create new file
-  tools::rroot::file* newFile = new tools::rroot::file(std::cout, fileName);
+  tools::rroot::file* newFile = new tools::rroot::file(G4cout, fileName);
   newFile->add_unziper('Z',tools::gunzip_buffer);
   
   if ( ! newFile->is_open() ) {

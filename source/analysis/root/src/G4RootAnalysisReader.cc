@@ -203,7 +203,7 @@ G4int G4RootAnalysisReader::GetH1Impl(const G4String& h1Name,
   }
   
   G4bool verbose = false;
-  tools::rroot::buffer buffer(std::cout, rfile->byte_swap(), size, charBuffer, 
+  tools::rroot::buffer buffer(G4cout, rfile->byte_swap(), size, charBuffer, 
                               key->key_length(), verbose);
   tools::histo::h1d* h1 = tools::rroot::TH1D_stream(buffer);
   G4int id = fH1Manager->AddH1(h1Name, h1);
@@ -268,7 +268,7 @@ G4int G4RootAnalysisReader::GetH2Impl(const G4String& h2Name,
   }
   
   G4bool verbose = false;
-  tools::rroot::buffer buffer(std::cout, rfile->byte_swap(), size, charBuffer, 
+  tools::rroot::buffer buffer(G4cout, rfile->byte_swap(), size, charBuffer, 
                               key->key_length(), verbose);
   tools::histo::h2d* h2 = tools::rroot::TH2D_stream(buffer);
   G4int id = fH2Manager->AddH2(h2Name, h2);  
@@ -296,9 +296,9 @@ G4int G4RootAnalysisReader::GetNtupleImpl(const G4String& ntupleName,
 
   if ( ! rfile ) {
 /*
-    std::cout << "go to open read file " << fileName << std::endl;
+    G4cout << "go to open read file " << fileName << std::endl;
     if ( ! fFileManager->OpenRFile(fileName) ) {
-      std::cout << "open read file failed !!" << std::endl;
+      G4cout << "open read file failed !!" << std::endl;
       // Add exception
       return -1;
     }
@@ -332,7 +332,7 @@ G4int G4RootAnalysisReader::GetNtupleImpl(const G4String& ntupleName,
   
   G4bool verbose = false;
   tools::rroot::buffer* buffer
-    = new tools::rroot::buffer(std::cout, rfile->byte_swap(), size, charBuffer, 
+    = new tools::rroot::buffer(G4cout, rfile->byte_swap(), size, charBuffer, 
                                key->key_length(), verbose);
   tools::rroot::fac* fac 
     = new tools::rroot::fac(*rfile);

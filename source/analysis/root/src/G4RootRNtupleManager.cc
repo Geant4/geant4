@@ -387,7 +387,7 @@ G4bool G4RootRNtupleManager::GetNtupleRow(G4int ntupleId)
       fState.GetVerboseL4()->Message("initialize", "ntuple", description);
     }  
 #endif
-    if ( ! ntuple->initialize(std::cout, *ntupleBinding) ) {
+    if ( ! ntuple->initialize(G4cout, *ntupleBinding) ) {
       G4ExceptionDescription description;
       description 
         << "      " 
