@@ -137,7 +137,7 @@ G4bool G4ParticleHPInelasticData::IsApplicable(const G4DynamicParticle*aP, const
 }
 */
 
-void G4ParticleHPInelasticData::BuildPhysicsTableHP(G4ParticleDefinition* projectile,const char* dataDirVariable)
+void G4ParticleHPInelasticData::BuildPhysicsTableHP(G4ParticleDefinition* projectile,const char* /* dataDirVariable */)
 {
   //  if(&projectile!=G4Neutron::Neutron()) 
   //     throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
@@ -163,7 +163,8 @@ void G4ParticleHPInelasticData::BuildPhysicsTableHP(G4ParticleDefinition* projec
   // make a PhysicsVector for each element
 
   G4ParticleHPData* hpData = new G4ParticleHPData(projectile); //NEW
-  static G4ThreadLocal G4ElementTable *theElementTable = G4Element::GetElementTable();
+  static G4ThreadLocal G4ElementTable *theElementTable  = 0 ;
+  if (!theElementTable) theElementTable= G4Element::GetElementTable();
   for( size_t i=0; i<numberOfElements; ++i )
   {
     //NEW    G4PhysicsVector* physVec = G4ParticleHPData::
@@ -195,7 +196,8 @@ void G4ParticleHPInelasticData::DumpPhysicsTable(const G4ParticleDefinition& pro
    G4cout << G4endl;
 
    size_t numberOfElements = G4Element::GetNumberOfElements();
-   static G4ThreadLocal G4ElementTable *theElementTable = G4Element::GetElementTable();
+   static G4ThreadLocal G4ElementTable *theElementTable  = 0 ;
+   if (!theElementTable) theElementTable= G4Element::GetElementTable();
 
    for ( size_t i = 0 ; i < numberOfElements ; ++i )
    {

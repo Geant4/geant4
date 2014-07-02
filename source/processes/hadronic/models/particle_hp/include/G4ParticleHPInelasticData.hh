@@ -101,7 +101,7 @@ class G4ParticleHPInelasticData : public G4VCrossSectionDataSet
       const G4Material* material_cache;
 
   G4ParticleDefinition* theProjectile;
-  char envVariable[500];
+  //char envVariable[500];
 };
 
 #endif

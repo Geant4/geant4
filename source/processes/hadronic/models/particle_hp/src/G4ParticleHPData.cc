@@ -33,7 +33,7 @@
 G4ParticleHPData::G4ParticleHPData(G4ParticleDefinition* projectile )
     : theProjectile(projectile)
 {
-  const char* theDataDirVariable;
+  //const char* theDataDirVariable;
   if( projectile == G4Neutron::Neutron() ) {
       theDataDirVariable = "G4NEUTRONHPDATA";
   }else if( projectile == G4Proton::Proton() ) {
