@@ -69,8 +69,7 @@ G4int G4MTcoutDestination::ReceiveG4cout(const G4String& msg)
     {
       G4AutoLock l(&coutm);
       finalcout<<prefix<<id
-    //         <<" "<<G4StateManager::GetStateManager()->GetStateString(sta)
-             <<" > "<<msg;
+	       <<" > "<<msg<<std::flush;
     }
   }
   //forward message to master G4coutDestination if set
@@ -92,7 +91,7 @@ G4int G4MTcoutDestination::ReceiveG4cerr(const G4String& msg)
   if( useBuffer )
   { cerr_buffer<<msg; }
   else
-  {   G4AutoLock l(&coutm); finalcerr<<prefix<<id<<" > "<<msg; }
+    {   G4AutoLock l(&coutm); finalcerr<<prefix<<id<<" > "<<msg<<std::flush; }
   //forward message to master G4coutDestination if set
     if ( masterG4coutDestination &&  !ignoreCout &&
         ( !ignoreInit || G4StateManager::GetStateManager()->GetCurrentState() != G4State_Idle )

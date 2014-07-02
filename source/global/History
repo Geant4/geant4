@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 1, 2014  A.Dotti (global-V10-00-26)
+- Add std::flush to receiving of G4MTcoutDestination (Bug #1644)
+
 June 13, 2014 A.Dotti (global-V10-00-25)
 - Bug fix in G4Threading::IsMultiThreadedApplication function
   for sequential mode.
