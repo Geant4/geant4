@@ -15,6 +15,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+02 July 2014  Alberto Ribon      (hadr-mod-util-V10-00-13)
+- G4ExcitedString.hh : minor clean-up of the previous, internal tag,
+  and propose for testing.
+
+25 May 2014   V. Uzhinsky        (hadr-mod-util-V10-00-12)
+- G4ExcitedString.hh is improved to treat a non-excited string when
+  it is given as a KineticTrack, especially to give its 4-momentum.
+
 08 May 2014   Gunter Folger      (hadr-mod-util-V10-00-11)
 - remove temp. method GetDefintion_asConst() from G4Nucleon.hh
 
