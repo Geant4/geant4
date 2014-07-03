@@ -9,6 +9,12 @@ $Id$
                        Package History file
                        --------------------
 
+03 Jul 2014 - tag nanobeam-V10-00-02 - S. Incerti, A. Dotti, B. Wendt
+- updated CMakeLists.txt
+
+28 Jui 2014 - tag nanobeam-V10-00-01 - B. Wendt
+- try to fix CMakeLists.txt in case of built-in CLHEP is used
+
 17 Dec 2013 - tag nanobeam-V10-00-00  - A. Dotti, S. Incerti
 - Made the code thread safe because of unsafe CLHEP matrix inversion
 (in RunAction.cc)
