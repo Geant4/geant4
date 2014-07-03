@@ -16,6 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+2 July 2014 Laurent Garnier (visexternal-V10-00-01)
+- add setExportImageFormat(format) method
+- change default options for generation gl2ps files
+ o allow transparency on volumes (for pdf)
+
 8 April 2014 Laurent Garnier (visexternal-V10-00-00)
 - Fix a bad text in G4OpenGL2PSAction
 
