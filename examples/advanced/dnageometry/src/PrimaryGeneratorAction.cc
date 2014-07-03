@@ -39,15 +39,16 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
-:Detector(DC)
+PrimaryGeneratorAction::PrimaryGeneratorAction()
+:G4VUserPrimaryGeneratorAction(),
+  fparticleGun(0)
 {
   G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
+  fparticleGun  = new G4ParticleGun(n_particle);
 
   // default gun parameters
-  particleGun->SetParticleEnergy(1.*MeV);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fparticleGun->SetParticleEnergy(1.*keV);
+  fparticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
   
 }
 
@@ -55,7 +56,7 @@ PrimaryGeneratorAction::PrimaryGeneratorAction(DetectorConstruction* DC)
 
 PrimaryGeneratorAction::~PrimaryGeneratorAction()
 {
-  delete particleGun;
+  delete fparticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -67,6 +68,6 @@ G4double x0,y0,z0;
 x0=((16.0*G4UniformRand())-8.0)*micrometer;
 y0=((8.0*G4UniformRand())-4.0)*micrometer;
 z0=-2.99*micrometer;
-  particleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fparticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+  fparticleGun->GeneratePrimaryVertex(anEvent);
 }

@@ -34,7 +34,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4RunManager.hh"
+#ifdef G4MULTITHREADED
+  #include "G4MTRunManager.hh"
+#else
+  #include "G4RunManager.hh"
+#endif
 
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
@@ -46,10 +50,7 @@
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "SteppingAction.hh"
-#include "HistoManager.hh"
+#include "ActionInitialization.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -60,7 +61,15 @@ int main(int argc,char** argv)
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+
+   // runManager->SetNumberOfThreads(2); // Is equal to 2 by default
+#else
+
   G4RunManager * runManager = new G4RunManager;
+#endif
+
 
   // Set mandatory user initialization classes
   DetectorConstruction* detector = new DetectorConstruction;
@@ -68,27 +77,21 @@ int main(int argc,char** argv)
   
   runManager->SetUserInitialization(new PhysicsList);
 
-  // Set mandatory user action classes
-  runManager->SetUserAction(new PrimaryGeneratorAction(detector));
-  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
+  // User action classes initialisation
 
-  HistoManager*  histo = new HistoManager();
+  runManager->SetUserInitialization(new ActionInitialization(detector));
 
-  // Set optional user action classes
-  RunAction* RunAct = new RunAction(detector,histo);
-  runManager->SetUserAction(RunAct);
+  // Initialize G4 kernel
 
-  runManager->SetUserAction(new SteppingAction(RunAct,detector,primary,histo));
+  runManager->Initialize();
   
 #ifdef G4VIS_USE
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
 #endif
    
-  // Initialize G4 kernel
-  runManager->Initialize();
     
-  remove ("geom_dna.root");  
+  remove ("dnageometry.root");
     
   // Get the pointer to the User Interface manager 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();  

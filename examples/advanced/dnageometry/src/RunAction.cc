@@ -33,13 +33,24 @@
 //
 #include "RunAction.hh"
 #include "G4Run.hh"
+#include "TrackingAction.hh"
 #include "G4ParticleDefinition.hh"
+#include "G4RunManager.hh"
+#include "Analysis.hh"
+#include "G4Threading.hh"
+
+
+
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-RunAction::RunAction(DetectorConstruction* det, HistoManager* his)
-    :Detector(det),Histo(his)
-{}
+RunAction::RunAction()
+{
+    fpTrackingAction = 0;
+    fInitialized = 0;
+    fDebug = false;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -48,16 +59,206 @@ RunAction::~RunAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void RunAction::BeginOfRunAction(const G4Run*)
+void RunAction::BeginOfRunAction(const G4Run* run)
 {  
-  // Histograms
-  Histo->book();
+
+    // In this example, we considered that the same class was
+    // used for both master and worker threads.
+    // However, in case the run action is long,
+    // for better code review, this practice is not recommanded.
+    //
+    // Please note, in the example provided with the Geant4 X beta version,
+    // this RunAction class were not used by the master thread.
+
+    if(isMaster) // WARNING : in sequential mode, isMaster == true
+    {
+        BeginMaster(run);
+    }
+    else BeginWorker(run);
 }
  
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void RunAction::EndOfRunAction(const G4Run*)
+void RunAction::EndOfRunAction(const G4Run* run)
 {
-  //save histograms      
-  Histo->save();
+
+    if(isMaster)
+    {
+        EndMaster(run);
+    }
+    else
+    {
+        EndWorker(run);
+    }
 }
+void RunAction::BeginMaster(const G4Run* run)
+{
+
+    bool sequential = (G4RunManager::GetRunManager()->GetRunManagerType() == G4RunManager::sequentialRM);
+
+    if(fDebug)
+    {
+        G4cout << "°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°" << G4endl;
+        if(!sequential)
+            G4cout << "°°°°°°°°°°°°°°°° RunAction::BeginMaster" << G4endl;
+        PrintRunInfo(run);
+        G4cout << "°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°" << G4endl;
+    }
+
+    if(sequential)
+    {
+        if(fInitialized == false)	InitializeWorker(run);
+        // Note: fpTrackingAction could be used as a flag for initialization instead
+
+        CreateHistogram();
+    }
+}
+
+void RunAction::BeginWorker(const G4Run* run)
+{
+    if(fDebug)
+    {
+        G4cout << "°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°" << G4endl;
+        G4cout << "°°°°°°°°°°°°°°°° RunAction::BeginWorker" << G4endl;
+        PrintRunInfo(run);
+        G4cout << "°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°" << G4endl;
+    }
+    if(fInitialized == false)	InitializeWorker(run);
+
+    CreateHistogram();
+}
+
+void RunAction::EndMaster(const G4Run* run)
+{
+    bool sequential = (G4RunManager::GetRunManager()->GetRunManagerType() == G4RunManager::sequentialRM);
+    if(sequential)
+    {
+        EndWorker(run);
+    }
+}
+
+void RunAction::EndWorker(const G4Run* run)
+{
+    if(fDebug)
+    {
+        PrintRunInfo(run);
+    }
+
+    G4int nofEvents = run->GetNumberOfEvent();
+    if ( nofEvents == 0 )
+    {
+        if(fDebug)
+        {
+            G4cout << "°°°°°°°°°°°°°°°° NO EVENTS TREATED IN THIS RUN ==> LEAVING RunAction::EndOfRunAction "<< G4endl;
+        }
+        return;
+    }
+
+    ///////////////
+    // Write Histo
+    //
+    WriteNtuple();
+
+    ///////////////
+    // Complete cleanup
+    //
+    delete G4AnalysisManager::Instance();
+
+    ///////////////
+    // Printouts
+    //
+
+
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void RunAction::InitializeWorker(const G4Run*)
+{
+    if (fpTrackingAction == 0)
+    {
+        fpTrackingAction = (TrackingAction*) G4RunManager::GetRunManager()->GetUserTrackingAction();
+
+        if(fpTrackingAction == 0 && isMaster == false)
+        {
+            G4ExceptionDescription exDescrption ;
+            exDescrption << "fpTrackingAction is a null pointer. Has it been correctly initialized ?";
+            G4Exception("RunAction::BeginOfRunAction","RunAction001",FatalException, exDescrption);
+        }
+    }
+
+    fInitialized = true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void RunAction::CreateHistogram()
+{
+    // Book histograms, ntuple
+
+    // Create analysis manager
+    // The choice of analysis technology is done via selection of a namespace
+    // in Analysis.hh
+
+    G4cout << "##### Create analysis manager " << "  " << this << G4endl;
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
+    G4cout << "Using " << analysisManager->GetType() << " analysis manager" << G4endl;
+
+    // Create directories
+
+//    analysisManager->SetHistoDirectoryName("histograms");
+//    analysisManager->SetNtupleDirectoryName("ntuple");
+    analysisManager->SetVerboseLevel(1);
+
+    // Open an output file
+
+    G4String fileName = "dnageometry";
+    analysisManager->OpenFile(fileName);
+
+
+
+
+    // Creating ntuple
+    analysisManager->CreateNtuple("ntuple", "geom_dna");
+    analysisManager->CreateNtupleDColumn("flagParticle");
+    analysisManager->CreateNtupleDColumn("flagProcess");
+    analysisManager->CreateNtupleDColumn("flagVolume");
+    analysisManager->CreateNtupleDColumn("x");
+    analysisManager->CreateNtupleDColumn("y");
+    analysisManager->CreateNtupleDColumn("z");
+    analysisManager->CreateNtupleDColumn("edep");
+    analysisManager->CreateNtupleDColumn("stepLength");
+
+    analysisManager->FinishNtuple();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void RunAction::WriteNtuple()
+{
+    // print ntuple statistics
+    //
+    G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
+    // save ntuple
+    //
+    analysisManager->Write();
+    analysisManager->CloseFile();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+void RunAction::PrintRunInfo(const G4Run* run)
+{
+    G4cout << "°°°°°°°°°°°°°°°° Run is = " << run->GetRunID() << G4endl;
+    G4cout << "°°°°°°°°°°°°°°°° Run type is = " << G4RunManager::GetRunManager()->GetRunManagerType() << G4endl;
+    G4cout << "°°°°°°°°°°°°°°°° Event processed = " << run->GetNumberOfEventToBeProcessed() << G4endl;
+    G4cout << "°°°°°°°°°°°°°°°° N° Event = " << run->GetNumberOfEvent() << G4endl;
+}
+
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+

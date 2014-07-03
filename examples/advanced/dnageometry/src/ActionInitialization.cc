@@ -23,37 +23,66 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// and the DNA geometry given in the Geom_DNA example 
+//This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software
+// and the DNA geometry given in the Geom_DNA example
 // shall cite the following Geant4-DNA collaboration publications:
 // [1] NIM B 298 (2013) 47-54
 // [2] Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//
 
-#ifndef PrimaryGeneratorAction_h
-#define PrimaryGeneratorAction_h 1
-
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ParticleGun.hh"
+#include "ActionInitialization.hh"
+#include "TrackingAction.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "SteppingAction.hh"
 #include "DetectorConstruction.hh"
+#include "G4RunManager.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+ActionInitialization::ActionInitialization(DetectorConstruction* detConstruction)
+: G4VUserActionInitialization(),
+  fDetectorConstruction(detConstruction)
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ActionInitialization::~ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
 {
-public:
+	// In MT mode, to be clearer, the RunAction class for the master thread might be
+	// different than the one used for the workers.
+	// This RunAction will be called before and after starting the
+	// workers.
+	// For more details, please refer to :
+	// https://twiki.cern.ch/twiki/bin/view/Geant4/Geant4MTForApplicationDevelopers
+	//
+	// RunAction* runAction= new RunAction(fDetectorConstruction);
+	// SetUserAction(runAction);
+}
 
-  PrimaryGeneratorAction();
-  ~PrimaryGeneratorAction();
-  
-  virtual void GeneratePrimaries(G4Event*);
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-private:
+void ActionInitialization::Build() const
+{
+	// G4cout << "Build for = "<< G4RunManager::GetRunManager()->GetRunManagerType() << G4endl;
 
-  G4ParticleGun*           fparticleGun;
+	SetUserAction(new PrimaryGeneratorAction);
 
-};
-#endif
+    TrackingAction* trackingAction = new TrackingAction(fDetectorConstruction);
+    SetUserAction(trackingAction);
+
+	RunAction* runAction= new RunAction();
+	SetUserAction(runAction);
+
+    SetUserAction(new SteppingAction());
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

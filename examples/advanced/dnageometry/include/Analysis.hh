@@ -24,36 +24,17 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// and the DNA geometry given in the Geom_DNA example 
+// Any report or published results obtained using the Geant4-DNA software
+// and the DNA geometry given in the Geom_DNA example
 // shall cite the following Geant4-DNA collaboration publications:
 // [1] NIM B 298 (2013) 47-54
 // [2] Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifndef PrimaryGeneratorAction_h
-#define PrimaryGeneratorAction_h 1
+#ifndef Analysis_h
+#define Analysis_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ParticleGun.hh"
-#include "DetectorConstruction.hh"
+#include "g4root.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
-{
-public:
-
-  PrimaryGeneratorAction();
-  ~PrimaryGeneratorAction();
-  
-  virtual void GeneratePrimaries(G4Event*);
-
-private:
-
-  G4ParticleGun*           fparticleGun;
-
-};
 #endif

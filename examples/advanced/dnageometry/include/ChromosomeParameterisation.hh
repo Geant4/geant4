@@ -54,6 +54,7 @@ class G4Hype;
 class G4Tubs;
 class G4Polycone;
 class G4Polyhedra;
+class G4Ellipsoid;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -82,6 +83,7 @@ private:  // Dummy declarations to get rid of warnings ...
   void ComputeDimensions (G4Hype&,const G4int,const G4VPhysicalVolume*) const {}
   void ComputeDimensions (G4Polycone&,const G4int,const G4VPhysicalVolume*) const {}
   void ComputeDimensions (G4Polyhedra&,const G4int,const G4VPhysicalVolume*) const {}
+  void ComputeDimensions (G4Ellipsoid&,const G4int,const G4VPhysicalVolume*) const {}
 
   std::vector<G4ThreeVector*> fPositions;
   std::vector<G4RotationMatrix*> fRotations;

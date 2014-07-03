@@ -34,20 +34,21 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "SteppingAction.hh"
+#include "Analysis.hh"
 #include "RunAction.hh"
 #include "DetectorConstruction.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "HistoManager.hh"
-
 #include "G4SystemOfUnits.hh"
 #include "G4SteppingManager.hh"
 #include "G4VTouchable.hh"
 #include "G4VPhysicalVolume.hh"
+#include "G4Threading.hh"
+
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-SteppingAction::SteppingAction(RunAction* run,DetectorConstruction* det,PrimaryGeneratorAction* pri, HistoManager* his)
-:Run(run),Detector(det),Primary(pri),Histo(his)
+SteppingAction::SteppingAction()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -66,6 +67,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
  G4double dE;
  
  dE=step->GetTotalEnergyDeposit()/eV;
+
  
  if (step->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "e-")       flagParticle = 10;    
  if (step->GetTrack()->GetDynamicParticle()->GetDefinition() ->GetParticleName() == "proton")   flagParticle = 20;
@@ -120,17 +122,20 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
    xp=step->GetPostStepPoint()->GetPosition().x()/nanometer;
    yp=step->GetPostStepPoint()->GetPosition().y()/nanometer;
    zp=step->GetPostStepPoint()->GetPosition().z()/nanometer;
+
+   // get analysis manager
+   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
+   analysisManager->FillNtupleDColumn(0, flagParticle);
+   analysisManager->FillNtupleDColumn(1, flagProcess);
+   analysisManager->FillNtupleDColumn(2, flagVolume);
+   analysisManager->FillNtupleDColumn(3, xp);
+   analysisManager->FillNtupleDColumn(4, yp);
+   analysisManager->FillNtupleDColumn(5, zp);
+   analysisManager->FillNtupleDColumn(6, dE );
+   analysisManager->FillNtupleDColumn(7, std::sqrt((x-xp)*(x-xp)+(y-yp)*(y-yp)+(z-zp)*(z-zp)));
    
-   Histo->FillNtupleDColumn(0, flagParticle);
-   Histo->FillNtupleDColumn(1, flagProcess);
-   Histo->FillNtupleDColumn(2, flagVolume);
-   Histo->FillNtupleDColumn(3, xp);
-   Histo->FillNtupleDColumn(4, yp);
-   Histo->FillNtupleDColumn(5, zp);
-   Histo->FillNtupleDColumn(6, dE );
-   Histo->FillNtupleDColumn(7, std::sqrt((x-xp)*(x-xp)+(y-yp)*(y-yp)+(z-zp)*(z-zp)));
-   
-   Histo->AddNtupleRow();   
+   analysisManager->AddNtupleRow();
  }
  
  

@@ -24,36 +24,42 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
-// and the DNA geometry given in the Geom_DNA example 
+// Any report or published results obtained using the Geant4-DNA software
+// and the DNA geometry given in the Geom_DNA example
 // shall cite the following Geant4-DNA collaboration publications:
 // [1] NIM B 298 (2013) 47-54
 // [2] Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifndef PrimaryGeneratorAction_h
-#define PrimaryGeneratorAction_h 1
+#ifndef TrackingAction_h
+#define TrackingAction_h
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ParticleGun.hh"
-#include "DetectorConstruction.hh"
+#include "G4UserTrackingAction.hh"
+#include <map>
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class G4ParticleDefinition;
+class DetectorConstruction;
+
+class TrackingAction : public G4UserTrackingAction
 {
 public:
+    TrackingAction(DetectorConstruction* detector = 0);
+    ~TrackingAction();
 
-  PrimaryGeneratorAction();
-  ~PrimaryGeneratorAction();
-  
-  virtual void GeneratePrimaries(G4Event*);
+
+    void SetDetector(DetectorConstruction* detector)
+    {
+        fDetector = detector;
+    }
+
 
 private:
+    DetectorConstruction* fDetector;
 
-  G4ParticleGun*           fparticleGun;
 
 };
+
+
 #endif

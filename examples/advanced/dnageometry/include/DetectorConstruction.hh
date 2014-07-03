@@ -31,7 +31,7 @@
 // [2] Med. Phys. 37 (2010) 4692-4708
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-//
+
 #ifndef DetectorConstruction_h
 #define DetectorConstruction_h 1
 

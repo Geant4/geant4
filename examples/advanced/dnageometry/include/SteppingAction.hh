@@ -38,10 +38,6 @@
 
 #include "G4UserSteppingAction.hh"
 
-class RunAction;
-class DetectorConstruction;
-class PrimaryGeneratorAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -49,17 +45,13 @@ class SteppingAction : public G4UserSteppingAction
 {
 public:
 
-  SteppingAction(RunAction*, DetectorConstruction*, PrimaryGeneratorAction*, HistoManager *);
+  SteppingAction();
   ~SteppingAction();
   
   void UserSteppingAction(const G4Step*);
   
 private:
 
-  RunAction*              Run;
-  DetectorConstruction*   Detector; 
-  PrimaryGeneratorAction* Primary;
-  HistoManager* 	  Histo;
       
 };
 #endif
