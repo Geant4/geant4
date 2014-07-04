@@ -49,6 +49,7 @@ UMultiUnion::UMultiUnion(const std::string& name)
   SetName(name);
   fSolids.clear();
   fTransforms.clear();
+  fTransformObjs.clear();
   fCubicVolume = 0;
   fSurfaceArea = 0;
 }
@@ -63,7 +64,8 @@ UMultiUnion::~UMultiUnion()
 void UMultiUnion::AddNode(VUSolid& solid, UTransform3D& trans)
 {
   fSolids.push_back(&solid);
-  fTransforms.push_back(&trans);
+  fTransformObjs.push_back(trans);  // Store a local copy of transformations
+  fTransforms.push_back(&fTransformObjs.back());
 }
 
 //______________________________________________________________________________

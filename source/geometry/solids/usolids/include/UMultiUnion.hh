@@ -130,6 +130,7 @@ class UMultiUnion : public VUSolid
 
     std::vector<VUSolid*> fSolids;
     std::vector<UTransform3D*> fTransforms;
+    std::vector<UTransform3D> fTransformObjs;
     UVoxelizer fVoxels;  // Pointer to the vozelized solid
     double       fCubicVolume;   // Cubic Volume
     double       fSurfaceArea;   // Surface Area

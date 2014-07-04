@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 4, 2014  G.Cosmo                     geom-usolids-V10-00-11
+- Added local cache for transformations in UMultiUnion, to avoid objects
+  going out of scope.
+
 May 23, 2014  T.Nikitina                  geom-usolids-V10-00-10
 - Fixed DistanceToOut() for UTubs, UCons, USphere, UVSCGfaceted and UPolycone, 
   DistanceToOut() return normal even for concave faces.
