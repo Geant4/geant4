@@ -20,6 +20,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ Jul 04, 2014  G.Cosmo                   geom-bool-V10-00-03
+ - Avoid leak in G4UMultiUnion::AddNode() for transformations being passed,
+   now that UMultiUnion is locally caching them.
+
  Jul 01, 2014  G.Cosmo                   geom-bool-V10-00-02
  - Fixed assignment operator signature in G4UMultiUnion wrapper.
 

@@ -99,13 +99,13 @@ inline void G4UMultiUnion::AddNode(G4VSolid& solid, G4Transform3D& trans)
   trans.getDecomposition(scale,rot,transl); 
   G4ThreeVector pos = transl.getTranslation();
     
-  UTransform3D* tr = new UTransform3D;
-  tr->fRot[0] = rot.xx(); tr->fRot[1] = rot.xy(); tr->fRot[2] = rot.xz();
-  tr->fRot[3] = rot.yx(); tr->fRot[4] = rot.yy(); tr->fRot[5] = rot.yz();
-  tr->fRot[6] = rot.zx(); tr->fRot[7] = rot.zy(); tr->fRot[8] = rot.zz();
-  tr->fTr = UVector3(pos.x(), pos.y(), pos.z());
+  UTransform3D tr;
+  tr.fRot[0] = rot.xx(); tr.fRot[1] = rot.xy(); tr.fRot[2] = rot.xz();
+  tr.fRot[3] = rot.yx(); tr.fRot[4] = rot.yy(); tr.fRot[5] = rot.yz();
+  tr.fRot[6] = rot.zx(); tr.fRot[7] = rot.zy(); tr.fRot[8] = rot.zz();
+  tr.fTr = UVector3(pos.x(), pos.y(), pos.z());
  
-  GetShape()->AddNode(*(static_cast<G4USolid&>(solid).GetSolid()), *tr);
+  GetShape()->AddNode(*(static_cast<G4USolid&>(solid).GetSolid()), tr);
 }
 
 inline G4Transform3D* G4UMultiUnion::GetTransformation(G4int index) const
