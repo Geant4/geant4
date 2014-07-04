@@ -15,6 +15,25 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+04-Jul-2014, A.Ribon       (had-hadronization-V10-00-06)
+- G4LundStringFragmentation.cc : brought back the Sample4Momentum method
+  as it was before to avoid crashes.
+
+02-Jul-2014, A.Ribon       (had-hadronization-V10-00-05)
+- G4ExcitedStringDecay.cc and G4LundStringFragmentation.cc : minor clean-up
+  of the previous, internal two tags, and propose for testing.
+
+30-May-2014, V. Uzhinsky   (had-hadronization-V10-00-04)
+- Bug is fixed in G4LundStringFragmentation.cc for anti-diquark-diquark strings.
+- Anisotropic decay is only left in G4LundStringFragmentation::Sample4Momentum for
+  a sampling of momenta of 2 last produced hadrons for all strings. Before this,
+  quark-diquark strings were decayed isotropically. It is improve a little bit 
+  proton spectra.
+
+25-May-2014, V. Uzhinsky   (had-hadronization-V10-00-03)
+- Parameters of G4LundStringFragmentation.cc were re-tuned.
+  Fragmentation function F(qq->B+anti-quark) was set to Z^2.
+
 22-May-2014, A.Ribon       (had-hadronization-V10-00-02)
 - Applied Coverity's suggestion to check that the vector index NumberOf_FS
   in G4LundStringFragmentation.cc does not exceed the allowed range.
