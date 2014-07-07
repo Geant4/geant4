@@ -39,7 +39,6 @@ public:
  G4OpenGL2PSAction();
  
  void setFileName(const char*);
- void setExportImageFormat(unsigned int);
  bool enableFileWriting();
   // return true if ok, false is an error occured
 
@@ -60,8 +59,6 @@ protected:
  GLint fViewport[4];
  GLint fBufferSize;
  GLint fBufferSizeLimit;
-private:
- unsigned int fExportImageFormat;
 };
 
 #endif

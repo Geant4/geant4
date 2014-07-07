@@ -56,7 +56,6 @@ G4OpenGL2PSAction::G4OpenGL2PSAction(
   fViewport[3] = 0;
   fBufferSize = 2048;
   fBufferSizeLimit = (std::numeric_limits<GLint>::max)();
-  fExportImageFormat = GL2PS_PDF;
   resetBufferSizeParameters();
 }
 
@@ -171,14 +170,18 @@ bool G4OpenGL2PSAction::G4gl2psBegin(
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
   if(!fFile) return false;
-  int options = 
-    GL2PS_BEST_ROOT | GL2PS_DRAW_BACKGROUND |GL2PS_USE_CURRENT_VIEWPORT;
+  int options = GL2PS_OCCLUSION_CULL | 
+    GL2PS_BEST_ROOT | GL2PS_DRAW_BACKGROUND | GL2PS_USE_CURRENT_VIEWPORT;
+//   int options = GL2PS_OCCLUSION_CULL | 
+//      GL2PS_BEST_ROOT | GL2PS_SILENT | GL2PS_DRAW_BACKGROUND;
   int sort = GL2PS_BSP_SORT;
-
+  //  int sort = GL2PS_SIMPLE_SORT;
+  
   glGetIntegerv(GL_VIEWPORT,fViewport);
-  GLint res = gl2psBeginPage("Geant4 output","Geant4",
+
+  GLint res = gl2psBeginPage("Geant4 output","Geant4", 
                  fViewport,
-                 fExportImageFormat,
+                 GL2PS_EPS, 
                  sort, 
                  options, 
                  GL_RGBA,0, NULL,0,0,0,
@@ -187,18 +190,8 @@ bool G4OpenGL2PSAction::G4gl2psBegin(
   if (res == GL2PS_ERROR) {
     return false;
   }
-  // enable blending for all
-  gl2psEnable(GL2PS_BLEND);
-  
   return true;
-}
 
-void G4OpenGL2PSAction::setExportImageFormat(unsigned int type){
-  if(!fFile) {
-    fExportImageFormat = type;
-  } else {
-    //  Could not change the file type at this step. Please change it before enableFileWriting()
-  }
 }
 
 
