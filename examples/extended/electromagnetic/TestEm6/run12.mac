@@ -18,6 +18,6 @@
 /gun/particle e+
 /gun/energy 250 GeV
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 #
 /run/beamOn 20000
