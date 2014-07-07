@@ -15,7 +15,7 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-July 4th, 2014 W. Pokorski (exampleP01-V10-00-02)
+July 4th, 2014 W. Pokorski (exampleP01-V10-00-02,03)
 - adding ExP01ClassesDict to the install targets so it is copied to the right place
 
 June 1th, 2014 W. Pokorski  (exampleP01-V10-00-01)
