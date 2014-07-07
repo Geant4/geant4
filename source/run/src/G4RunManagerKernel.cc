@@ -159,7 +159,10 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
 #endif
 
 #ifdef G4FPE_DEBUG
-    InvalidOperationDetection();
+   static G4Mutex aLocalMutex = G4MUTEX_INITIALIZER;
+   G4AutoLock l(&aLocalMutex);
+   InvalidOperationDetection();
+   l.unlock();
 #endif
     
     defaultExceptionHandler = new G4ExceptionHandler();
