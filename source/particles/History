@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 07 Jul. 2014 Makoto Asai (particles-V10-00-15)
+- G4IonTable.cc - Fill decay channels when an ion is created on 
+  the fly to avoid race condition issue in multithreaded mode.
+  Addressing to bug report #1651.
+
 - 14 Jun. 2014 Hisaya Kurashige (particles-V10-00-14)
 - fix problems in the three-body decay in G4PhaseSpaceDecayChannel
 
