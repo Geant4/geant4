@@ -34,16 +34,20 @@
 #include "globals.hh"
 
 class G4Run;
+class G4INCLXXVInterfaceTally;
 
 class Tst69RunAction : public G4UserRunAction
 {
   public:
-    Tst69RunAction();
+    Tst69RunAction(const char * const physList);
     virtual ~Tst69RunAction();
 
   public:
     virtual void BeginOfRunAction(const G4Run* aRun);
     virtual void EndOfRunAction(const G4Run* aRun);
+
+  protected:
+    G4INCLXXVInterfaceTally *theTally;
 
 };
 

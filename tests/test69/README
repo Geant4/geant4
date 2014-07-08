@@ -8,42 +8,24 @@ $Id$
                             Test69
                             ------
 
-Geant4 system test for the INCL++ cascade model and the QGSP_INCXX physics list.
+Geant4 system test for the INCL++ cascade model and the INCLXX-based physics lists.
 
-Test configurations for proton, neutron, pi+, and pi- projectiles and
-Th, U, Pb, Cu, Si and C targets:
+Test configurations:
 
-p    +  U    @ 1 GeV
-n    +  U    @ 1 GeV
-pi+  +  U    @ 1 GeV
-pi-  +  U    @ 1 GeV
+40-GeV p + mixed material
+12-GeV C12 + mixed material
 
-p    +  Th   @ 1 GeV
-n    +  Th   @ 1 GeV
-pi+  +  Th   @ 1 GeV
-pi-  +  Th   @ 1 GeV
+The material is a mixture of H, He, C, Si, Cu, Pb and U, with weight fractions
+proportional to A^(1/3). That should yield roughly the same mean free path for
+inelastic collisions of high-energy particles on all the components.
 
-p    +  Pb   @ 1 GeV
-n    +  Pb   @ 1 GeV
-pi+  +  Pb   @ 1 GeV
-pi-  +  Pb   @ 1 GeV
+The physics list to test is controlled by the TEST69_PHYSLIST envvar. Just set
+it to the name of whatever physics list you want to test.
 
-p    +  Cu   @ 1 GeV
-n    +  Cu   @ 1 GeV
-pi+  +  Cu   @ 1 GeV
-pi-  +  Cu   @ 1 GeV
+Coupling INCL++ with ABLA can be requested by defining the TEST69_USE_ABLA
+envvar.
 
-p    +  Si   @ 1 GeV
-n    +  Si   @ 1 GeV
-pi+  +  Si   @ 1 GeV
-pi-  +  Si   @ 1 GeV
-
-p    +  C    @ 1 GeV
-n    +  C    @ 1 GeV
-pi+  +  C    @ 1 GeV
-pi-  +  C    @ 1 GeV
-
-d    +  Pb   @ 1 AGeV
-a    +  Pb   @ 500 AMeV
-C12  +  C    @ 290 AMeV
-C12  +  Pb   @ 500 AMeV
+test69 can also produce ROOT files with histograms (and, optionally, ntuples)
+of the reactions treated by INCL++. Set the TEST69_TALLY envvar to "analysis"
+to use the G4Analysis-based tally, or to "root" to use the ROOT-based tally
+(does not produce any histogram, but rather a comprehensive ntuple).

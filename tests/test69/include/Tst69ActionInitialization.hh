@@ -35,13 +35,15 @@
 class Tst69ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    Tst69ActionInitialization();
+    Tst69ActionInitialization(const char * const physList);
     virtual ~Tst69ActionInitialization();
 
   public:
     virtual void Build() const;
     virtual void BuildForMaster() const;
 
+  protected:
+    const char * const physicsList;
 };
 
 #endif

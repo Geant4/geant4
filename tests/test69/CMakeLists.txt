@@ -3,12 +3,21 @@ project(test69)
 find_package(Geant4 REQUIRED ui_all vis_all)
 include(${Geant4_USE_FILE})
 
+find_package(ROOT QUIET)
+if(NOT ROOT_FOUND)
+  message(STATUS "G4 TESTS: ROOT package not found. --> ROOT tally disabled in test69")
+  return()
+else()
+  add_definitions(-DTEST69_HAS_ROOT)
+  include_directories(${ROOT_INCLUDE_DIR})
+endif()
+
 # write the location of the macros in the Tst69MacroLocation.hh header
 configure_file(${PROJECT_SOURCE_DIR}/include/Tst69MacroLocation.hh.in
                ${PROJECT_BINARY_DIR}/include/Tst69MacroLocation.hh)
 include_directories(BEFORE ${PROJECT_BINARY_DIR}/include)
 
-GEANT4_EXECUTABLE(test69 test69.cc src/*.cc)
+GEANT4_EXECUTABLE(test69 test69.cc src/*.cc LIBRARIES ${ROOT_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all macros to the build directory, i.e. the directory in which we

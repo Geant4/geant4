@@ -12,6 +12,17 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7 July 2014, Davide Mancusi (test69-V10-00-01, -02)
+- Add possibility to tally the INCL++ reactions. The tallies are disabled by
+  default and are controlled by the TEST69_TALLY envvar. A G4analysis-based
+  tally and a ROOT-based tally are available. The ROOT tally is more
+  sophisticated, but it requires ROOT (duh).
+- Adjust the abundances of the mixed material so that the mean free path is
+  roughly the same for all component nuclei.
+- Fix README file.
+- Fix coupling to ABLA -- previously only the first INCL++ model in the
+  G4HadronicInteractionRegistry was actually coupled to ABLA.
+
 16 May 2014, Davide Mancusi (test69-V10-00-00)
 - Extend test timeout to 1 hour.
 

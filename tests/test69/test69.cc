@@ -86,8 +86,11 @@ int main(int argc,char** argv) {
   G4VModularPhysicsList* phys = factory.GetReferencePhysList(physicsListName);
   runManager->SetUserInitialization(phys);
 
+  if(getenv("TEST69_USE_ABLA"))
+    physicsListName.append("_ABLA");
+
   // UserAction classes
-  runManager->SetUserInitialization(new Tst69ActionInitialization);
+  runManager->SetUserInitialization(new Tst69ActionInitialization(physicsListName));
 
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 

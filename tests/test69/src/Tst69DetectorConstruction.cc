@@ -131,23 +131,24 @@ void Tst69DetectorConstruction::SelectMaterialPointer()
   }
 
   if(!theMix) {
-    // A fictitious mixed material with element abundances roughly inversely
-    // proportional to the cross section seen by a high-energy proton
+    // A fictitious mixed material with weight fractions such that the mean
+    // free path for inelastic collisions with high-energy particles is roughly
+    // the same for all components
     G4Pow *g4pow = G4Pow::GetInstance();
     G4Element* elH  = new G4Element("Hydrogen", "H", 1., 1.*g/mole);
-    G4double weightH = 0.5/g4pow->A23(elH->GetA());
+    G4double weightH = 0.5*g4pow->A13(elH->GetA());
     G4Element* elHe = new G4Element("Helium", "He", 2., 4.*g/mole);
-    G4double weightHe = 1./g4pow->A23(elHe->GetA());
+    G4double weightHe = 1.*g4pow->A13(elHe->GetA());
     G4Element* elC  = new G4Element("Carbon", "C", 6., 12.*g/mole);
-    G4double weightC = 1./g4pow->A23(elC->GetA());
+    G4double weightC = 1.*g4pow->A13(elC->GetA());
     G4Element* elSi  = new G4Element("Silicon", "Si", 14., 28.*g/mole);
-    G4double weightSi = 1./g4pow->A23(elSi->GetA());
+    G4double weightSi = 1.*g4pow->A13(elSi->GetA());
     G4Element* elCu  = new G4Element("Copper", "Cu", 29., 63.*g/mole);
-    G4double weightCu = 1./g4pow->A23(elCu->GetA());
+    G4double weightCu = 1.*g4pow->A13(elCu->GetA());
     G4Element* elPb  = new G4Element("Lead", "Pb", 82., 208.*g/mole);
-    G4double weightPb = 1./g4pow->A23(elPb->GetA());
+    G4double weightPb = 1.*g4pow->A13(elPb->GetA());
     G4Element* elU  = new G4Element("Uranium", "U", 92., 238.*g/mole);
-    G4double weightU = 1./g4pow->A23(elU->GetA());
+    G4double weightU = 1.*g4pow->A13(elU->GetA());
 
     const G4double totalWeight = weightH + weightHe + weightC + weightSi + weightCu + weightPb + weightU;
     weightH /= totalWeight;

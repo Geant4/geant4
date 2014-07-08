@@ -33,7 +33,8 @@
 #include "Tst69PrimaryGeneratorAction.hh"
 #include "Tst69StackingAction.hh"
 
-Tst69ActionInitialization::Tst69ActionInitialization()
+Tst69ActionInitialization::Tst69ActionInitialization(const char * const physList)
+  : physicsList(physList)
 {
 }
 
@@ -42,11 +43,11 @@ Tst69ActionInitialization::~Tst69ActionInitialization()
 }
 
 void Tst69ActionInitialization::Build() const {
-  SetUserAction(new Tst69RunAction);
+  SetUserAction(new Tst69RunAction(physicsList));
   SetUserAction(new Tst69PrimaryGeneratorAction);
 }
 
 void Tst69ActionInitialization::BuildForMaster() const {
-  SetUserAction(new Tst69RunAction);
+  SetUserAction(new Tst69RunAction(physicsList));
 }
 
