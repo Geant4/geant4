@@ -38,6 +38,7 @@
 // 21.08.2008 J. M. Quesada add choice of options  
 // 20.08.2010 V.Ivanchenko added G4Pow and G4PreCompoundParameters pointers
 //                         use int Z and A and cleanup
+// 05.07.2013 J.M. Quesada FactorialFactor fixed
 //
 
 #include "G4PreCompoundAlpha.hh"
@@ -61,7 +62,7 @@ G4PreCompoundAlpha::~G4PreCompoundAlpha()
 
 G4double G4PreCompoundAlpha::FactorialFactor(G4int N, G4int P)
 {
-  return G4double((N-4)*(P-3)*(N-3)*(P-2)*(N-2)*(P-1)*(N-1)*P)/12.0;
+  return G4double((N-4)*(P-3)*(N-3)*(P-2))*G4double((N-2)*(P-1)*(N-1)*P)/144.0;
 }
   
 G4double G4PreCompoundAlpha::CoalescenceFactor(G4int A)
