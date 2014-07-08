@@ -13,11 +13,9 @@
 /gun/particle geantino
 /ams/gun/beam 10 mm	# +- 0.5*beam
 #
-/ams/histo/setFileName nradl/nradl.g3geom
-/ams/histo/setFileType hbook
+/analysis/setFileName nradl
+/analysis/h1/set 5 100  12. 22. none
 #
-/ams/histo/setHisto 5 100  12. 22. none
-#
-/ams/event/printModulo 4000
+/run/printProgress 4000
 #
 /run/beamOn 40000

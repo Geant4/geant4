@@ -16,13 +16,12 @@
 /gun/energy 100 GeV
 /ams/gun/beam 20 mm
 #
-/ams/histo/setFileName mips/100gev
-/ams/histo/setFileType hbook
+/analysis/setFileName mips
 #
-/ams/histo/setHisto 1 100  0. 50. MeV		#evis in ecal
-/ams/histo/setHisto 3 20  0. 20. none
-/ams/histo/setHisto 4 20  0. 20. none
+/analysis/h1/set 1 100  0. 50. MeV		#evis in ecal
+/analysis/h1/set 3 20  0. 20. none
+/analysis/h1/set 4 20  0. 20. none
 #
-/ams/event/printModulo 4000
+/run/printProgress 4000
 #
 /run/beamOn 40000

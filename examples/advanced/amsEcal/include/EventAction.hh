@@ -40,22 +40,17 @@
 class RunAction;
 class PrimaryGeneratorAction;
 class EventActionMessenger;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
   public:  
-    EventAction(DetectorConstruction*, RunAction*, PrimaryGeneratorAction*,
-                HistoManager*);
+    EventAction(DetectorConstruction*, RunAction*, PrimaryGeneratorAction*);
    ~EventAction();
 
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
-    
-    void SetDrawFlag   (G4String val)  {drawFlag    = val;};
-    void SetPrintModulo(G4int    val)  {printModulo = val;};
     
     void SumVisibleEnergy(G4int pixel, G4double de)
                                {visibleEnergy[pixel] += de;};
@@ -82,10 +77,7 @@ class EventAction : public G4UserEventAction
     
     G4bool                writeFile;
                     
-    G4String              drawFlag; 
-    G4int                 printModulo;         
     EventActionMessenger* eventMessenger;
-    HistoManager*         histoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

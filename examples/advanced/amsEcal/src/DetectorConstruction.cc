@@ -39,6 +39,7 @@
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"
 #include "G4PVReplica.hh"
+#include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
 
 #include "G4UniformMagField.hh"
@@ -69,11 +70,11 @@ DetectorConstruction::DetectorConstruction()
   nbOfFibers          = 490;		//490
   distanceInterFibers = 1.35*mm;	//1.35*mm
   layerThickness      = 1.73*mm;	//1.68*mm
-  milledLayer         = 1.00*mm;        //1.40*mm ?
-  nbOfLayers          = 10;		//10
-  nbOfModules         = 9;		//9
+  milledLayer         = 1.00*mm;    //1.40*mm ?
+  nbOfLayers          = 10;		    //10
+  nbOfModules         = 9;		    //9
      
-  fiberLength         = (nbOfFibers+1)*distanceInterFibers;	//658*mm
+  fiberLength         = (nbOfFibers+0.5)*distanceInterFibers;	//662.175*mm
       
   //pixels readout
   //
@@ -272,20 +273,16 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   //  
   Xcenter = -0.5*(calorThickness + moduleThickness);
   
-  //rotation matrix to place modules
-  G4RotationMatrix* rotm = 0;  
-  G4RotationMatrix* rotmX = new G4RotationMatrix();
-  rotmX->rotateX(90*deg);
-    
+
   for (G4int k=0; k<nbOfModules; k++) {
-    rotm = 0;
-    if ((k+1)%2 == 0) rotm = rotmX;
-    Xcenter += moduleThickness;    
-    new G4PVPlacement(rotm,		   		//rotation
-      		  G4ThreeVector(Xcenter,0.,0.),		//position
+    Xcenter += moduleThickness;		  
+    G4RotationMatrix rotm;                    //rotation matrix to place modules    
+    if ((k+1)%2 == 0) rotm.rotateX(90*deg);
+	G4Transform3D transform(rotm, G4ThreeVector(Xcenter,0.,0.));    
+    new G4PVPlacement(transform,		   		//rotation+position
                       lvol_module,	     		//logical volume	
-                      "module", 	   		//name
-                      lvol_calorimeter,        		//mother
+                      "module", 	   		    //name
+                      lvol_calorimeter,        	//mother
                       false,             		//no boulean operat
                       k);               		//copy number
   }

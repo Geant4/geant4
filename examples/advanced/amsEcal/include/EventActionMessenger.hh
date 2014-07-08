@@ -36,8 +36,6 @@
 
 class EventAction;
 class G4UIdirectory;
-class G4UIcmdWithAString;
-class G4UIcmdWithAnInteger;
 class G4UIcmdWithABool;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -54,8 +52,6 @@ class EventActionMessenger: public G4UImessenger
     EventAction*          eventAction;
     
     G4UIdirectory*        eventDir;         
-    G4UIcmdWithAString*   DrawCmd;
-    G4UIcmdWithAnInteger* PrintCmd;
     G4UIcmdWithABool*     WriteCmd;        
 };
 

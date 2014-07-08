@@ -41,16 +41,13 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::EventAction(DetectorConstruction* det, RunAction* run,
-                         PrimaryGeneratorAction* prim, HistoManager* hist)
-:detector(det), runAct(run), primary(prim), histoManager(hist)
+                         PrimaryGeneratorAction* prim)
+:detector(det), runAct(run), primary(prim)
 { 
   trigger = false;
   Eseuil  = 10*keV;
   
   writeFile = false;
-    
-  drawFlag = "none";
-  printModulo = 1000;
   eventMessenger = new EventActionMessenger(this);
 }
 
@@ -63,14 +60,8 @@ EventAction::~EventAction()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction(const G4Event* evt)
+void EventAction::BeginOfEventAction(const G4Event*)
 {   
-  G4int evtNb = evt->GetEventID();
-
-  //survey printing
-  if (evtNb%printModulo == 0)
-    G4cout << "\n---> Begin Of Event: " << evtNb << G4endl;
-    
   //initialize Energy per event
   //
   G4int nbOfPixels = detector->GetSizeVectorPixels();
@@ -127,14 +118,15 @@ void EventAction::EndOfEventAction(const G4Event* evt)
       calorEtot += totalEnergy[k];		      
     }      
     runAct->fillPerEvent_2(i1,layerEvis,layerEtot);
-    if (layerEvis > 0.) histoManager->FillNtuple(1, i1, layerEvis);
-    if (layerEtot > 0.) histoManager->FillNtuple(1, n1pxl+i1, layerEtot);
+    ////if (layerEvis > 0.) histoManager->FillNtuple(1, i1, layerEvis);
+    ////if (layerEtot > 0.) histoManager->FillNtuple(1, n1pxl+i1, layerEtot);
   }
   
-  histoManager->AddRowNtuple(1);
+  ////histoManager->AddRowNtuple(1);
   
-  if (calorEvis > 0.) histoManager->FillHisto(1,calorEvis);
-  if (calorEtot > 0.) histoManager->FillHisto(2,calorEtot);
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
+  if (calorEvis > 0.) analysisManager->FillH1(1,calorEvis);
+  if (calorEtot > 0.) analysisManager->FillH1(2,calorEtot);
   
   G4double Ebeam = primary->GetParticleGun()->GetParticleEnergy();
   G4double Eleak = Ebeam - calorEtot;
@@ -143,7 +135,7 @@ void EventAction::EndOfEventAction(const G4Event* evt)
   //nb of radiation lenght
   //
   runAct->fillNbRadLen(nbRadLen);  
-  if (nbRadLen > 0.) histoManager->FillHisto(5,nbRadLen);
+  if (nbRadLen > 0.) analysisManager->FillH1(5,nbRadLen);
   
   //write file of pixels
   //
@@ -168,9 +160,10 @@ void EventAction::WritePixels(const G4Event* evt)
 {
   // event is appended onto file created at BeginOfRun
   //
-  G4String name = histoManager->GetFileName(); 
-  G4String fileName = name + ".pixels.ascii";
-
+  ///G4String name = histoManager->GetFileName(); 
+  ///G4String fileName = name + ".pixels.ascii";
+  G4String fileName = "pixels.ascii";
+  
   std::ofstream File(fileName, std::ios::app);
   std::ios::fmtflags mode = File.flags();  
   File.setf( std::ios::scientific, std::ios::floatfield );

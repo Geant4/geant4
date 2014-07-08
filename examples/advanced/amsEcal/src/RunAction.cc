@@ -30,7 +30,7 @@
 
 #include "RunAction.hh"
 
-#include "PrimaryGeneratorAction.hh"
+#include "PrimaryGeneratorAction.hh" 
 #include "HistoManager.hh"
 
 #include "G4Run.hh"
@@ -42,24 +42,25 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim,
-                     HistoManager* hist)
-:detector(det), primary(prim), histoManager(hist)
+RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
+:detector(det), primary(prim), fHistoManager(0)
 {  
-  writeFile = false; 
+  writeFile = false;
+  // Book predefined histograms
+  fHistoManager = new HistoManager(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::~RunAction()
-{ }
+{
+  delete fHistoManager;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run* aRun)
+void RunAction::BeginOfRunAction(const G4Run*)
 {
-  G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
-
   // save Rndm status
   //
   G4RunManager::GetRunManager()->SetRandomNumberStore(true);
@@ -101,7 +102,10 @@ void RunAction::BeginOfRunAction(const G4Run* aRun)
                     
   //histograms
   //
-  histoManager->book();
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  if ( analysisManager->IsActive() ) {
+    analysisManager->OpenFile();
+  } 
   
   //create ascii file for pixels
   //
@@ -215,10 +219,11 @@ void RunAction::EndOfRunAction(const G4Run*)
   G4cout << "\n             " 
          << "visible Energy          (rms/mean)        "
          << "total Energy           (rms/mean)" << G4endl;
-
+  
+  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+  
   G4double meanEvis,meanEvis2,varianceEvis,rmsEvis,resEvis;
   G4double meanEtot,meanEtot2,varianceEtot,rmsEtot,resEtot;
-  resEtot=resEvis=0; 
   
   G4int n1pxl = detector->GetN1Pixels();
     
@@ -227,19 +232,19 @@ void RunAction::EndOfRunAction(const G4Run*)
     meanEvis  = layerEvis[i1] /nbEvents;
     meanEvis2 = layerEvis2[i1]/nbEvents;    
     varianceEvis = meanEvis2 - meanEvis*meanEvis;
-    rmsEvis = 0.;
+    resEvis = rmsEvis = 0.;
     if (varianceEvis > 0.) rmsEvis = std::sqrt(varianceEvis);
 	if (meanEvis > 0.) resEvis = 100*rmsEvis/meanEvis;
-    histoManager->FillHisto(3, i1+0.5, meanEvis);
+    analysisManager->FillH1(3, i1+0.5, meanEvis);
          
     //total energy
     meanEtot  = layerEtot[i1] /nbEvents;
     meanEtot2 = layerEtot2[i1]/nbEvents;    
     varianceEtot = meanEtot2 - meanEtot*meanEtot;
-    rmsEtot = 0.;
+    resEtot = rmsEtot = 0.;
     if (varianceEtot > 0.) rmsEtot = std::sqrt(varianceEtot);
     if (meanEtot > 0.) resEtot = 100*rmsEtot/meanEtot;
-    histoManager->FillHisto(4, i1+0.5, meanEtot);    
+    analysisManager->FillH1(4, i1+0.5, meanEtot);    
 
     //print
     //
@@ -265,7 +270,7 @@ void RunAction::EndOfRunAction(const G4Run*)
   meanEvis  = calorEvis /nbEvents;
   meanEvis2 = calorEvis2/nbEvents;
   varianceEvis = meanEvis2 - meanEvis*meanEvis;
-  rmsEvis = 0.;
+  resEvis = rmsEvis = 0.;
   if (varianceEvis > 0.) rmsEvis = std::sqrt(varianceEvis);
   if (meanEvis > 0.) resEvis = 100*rmsEvis/meanEvis;
   
@@ -273,7 +278,7 @@ void RunAction::EndOfRunAction(const G4Run*)
   meanEtot  = calorEtot /nbEvents;
   meanEtot2 = calorEtot2/nbEvents;
   varianceEtot = meanEtot2 - meanEtot*meanEtot;
-  rmsEtot = 0.;
+  resEtot = rmsEtot = 0.;
   if (varianceEtot > 0.) rmsEtot = std::sqrt(varianceEtot);
   if (meanEtot > 0.) resEtot = 100*rmsEtot/meanEtot;
     
@@ -309,7 +314,8 @@ void RunAction::EndOfRunAction(const G4Run*)
   
   G4double forward = 100*EdLeak[0]/(nbEvents*energy);
   G4double bakward = 100*EdLeak[1]/(nbEvents*energy);
-  G4double lateral = 100*EdLeak[2]/(nbEvents*energy);      
+  G4double lateral = 100*EdLeak[2]/(nbEvents*energy);
+        
   //print
   //
   G4cout
@@ -330,7 +336,11 @@ void RunAction::EndOfRunAction(const G4Run*)
   G4cout.precision(prec);
 
   //save histograms   
-  histoManager->save();
+  if ( analysisManager->IsActive() ) {    
+    analysisManager->Write();
+    analysisManager->CloseFile();
+  }  
+  
 
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
@@ -344,9 +354,10 @@ void RunAction::CreateFilePixels()
 {
   //create file and write run header
   //
-  G4String name = histoManager->GetFileName(); 
-  G4String fileName = name + ".pixels.ascii";
-  
+  ////G4String name = histoManager->GetFileName(); 
+  ////G4String fileName = name + ".pixels.ascii";
+  G4String fileName = "pixels.ascii";
+    
   std::ofstream File(fileName, std::ios::out);
 
   G4int n1pxl   = detector->GetN1Pixels();

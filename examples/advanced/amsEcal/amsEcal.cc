@@ -40,7 +40,6 @@
 #include "TrackingAction.hh"
 #include "SteppingAction.hh"
 #include "SteppingVerbose.hh"
-#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -68,17 +67,14 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList);
   
-  // histograms for this example 
-  HistoManager* histo = new HistoManager();
-  
   // primary generator
   PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(detector);
   runManager->SetUserAction(primary);
         
   // set user action classes
   //
-  RunAction*      runAct = new RunAction(detector,primary,histo);
-  EventAction*    evtAct = new EventAction(detector,runAct,primary,histo);
+  RunAction*      runAct = new RunAction(detector,primary);
+  EventAction*    evtAct = new EventAction(detector,runAct,primary);
   TrackingAction* trkAct = new TrackingAction(detector,runAct);
   SteppingAction* stpAct = new SteppingAction(detector,evtAct);
   
@@ -117,7 +113,6 @@ int main(int argc,char** argv) {
 
   // job termination
   //   
-  delete histo;
   delete runManager;
 
   return 0;

@@ -16,6 +16,6 @@
 /gun/energy 1 GeV
 /ams/gun/beam 1 cm
 #
-/ams/event/printModulo 1000
+/run/printProgress 1000
 #
 /run/beamOn 10000

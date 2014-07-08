@@ -32,8 +32,6 @@
 #include "EventAction.hh"
 
 #include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithABool.hh"
 #include "globals.hh"
 
@@ -44,20 +42,6 @@ EventActionMessenger::EventActionMessenger(EventAction* EvAct)
 {  
   eventDir = new G4UIdirectory("/ams/event/");
   eventDir->SetGuidance("event control");
-   
-  DrawCmd = new G4UIcmdWithAString("/ams/event/drawTracks",this);
-  DrawCmd->SetGuidance("Draw the tracks in the event");
-  DrawCmd->SetGuidance("  Choice : none, charged(default), all");
-  DrawCmd->SetParameterName("choice",true);
-  DrawCmd->SetDefaultValue("all");
-  DrawCmd->SetCandidates("none charged all");
-  DrawCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  
-  PrintCmd = new G4UIcmdWithAnInteger("/ams/event/printModulo",this);
-  PrintCmd->SetGuidance("Print events modulo n");
-  PrintCmd->SetParameterName("EventNb",false);
-  PrintCmd->SetRange("EventNb>0");
-  PrintCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
   
   WriteCmd = new G4UIcmdWithABool("/ams/event/writePixels",this);
   WriteCmd->SetGuidance("write ascii file of fired pixels");
@@ -69,23 +53,14 @@ EventActionMessenger::EventActionMessenger(EventAction* EvAct)
 
 EventActionMessenger::~EventActionMessenger()
 {
-  delete  DrawCmd;
-  delete PrintCmd;
   delete WriteCmd;  
   delete eventDir;             
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventActionMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{ 
-  if(command == DrawCmd)
-    {eventAction->SetDrawFlag(newValue);}
-    
-  if(command == PrintCmd)
-    {eventAction->SetPrintModulo(PrintCmd->GetNewIntValue(newValue));}
-    
+void EventActionMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{     
   if(command == WriteCmd)
     {eventAction->SetWriteFile(WriteCmd->GetNewBoolValue(newValue));}           
 }

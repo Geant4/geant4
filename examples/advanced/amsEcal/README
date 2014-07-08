@@ -74,10 +74,9 @@ $Id$
    
  5- HISTOGRAMS and NTUPLE
         
-  The Program contains 5 built-in 1D histograms, managed by HistoManager class 
-  and its Messenger. These histograms can be activated individually
-  with the command :
-  /ams/histo/setHisto id nbBins  valMin valMax unit 
+  The Program contains 5 built-in 1D histograms, managed by HistoManager class. 
+  These histograms can be activated individually with the command :
+  /analysis/h1/set id nbBins  valMin valMax unit 
   where unit is the desired unit for the histo (MeV, keV, etc..)
   (see the macros xxxx.mac).
  
@@ -87,11 +86,11 @@ $Id$
 	4	deposit energy per subModule (eg. longitudinal profile)
 	5	nb of radiation length seen by geantino	
 
-  Histograms can be viewed using ROOT or PAW. See below the note on AIDA.
+  Histograms can be viewed using ROOT.
  
   One can control the name and format of the histograms file with the command:
-  /ams/histo/setFileName  name  (default ecal)
-  /ams/histo/setFileType  type  (choice: hbook, root(default), XML)  
+  /analysis/setFileName  name  (default ecal)
+  /analysis/setFileType  type  (choice: root(default), XML)  
    
   It is also possible to print selected histograms on an ascii file:
   /ams/histo/printHisto id
@@ -100,13 +99,6 @@ $Id$
   An Ntuple is also predefined. It contains energies, visible and total,
   per subModule and per event.
   The Ntuple is activated with the command: /ams/histo/setNtuple 1  
- 	
-  Note that, by default, histograms are disabled. To activate them, uncomment 
-  the flag G4ANALYSIS_USE in GNUmakefile.
-
-  Before compilation of the example it is optimal to clean up old files:
-   gmake histclean
-   gmake
     				
  6- VISUALIZATION
  
@@ -145,9 +137,3 @@ $Id$
   is arbitrary). The seeds are stored in subdirectory random.
    
   Macro run2.mac shows how to start a run from one of these seeds. 
- 	   
- 9- USING HISTOGRAMS
-
-  To use histograms, at least one of the AIDA implementations should be 
-  available. See InstallAida.txt
-  

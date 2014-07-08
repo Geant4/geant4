@@ -51,7 +51,7 @@ class RunAction : public G4UserRunAction
 {
 public:
 
-  RunAction(DetectorConstruction*, PrimaryGeneratorAction*, HistoManager*);
+  RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
   ~RunAction();
 
   void BeginOfRunAction(const G4Run*);
@@ -70,7 +70,7 @@ private:
   
   DetectorConstruction*   detector;
   PrimaryGeneratorAction* primary;    
-  HistoManager*           histoManager;
+  HistoManager*           fHistoManager;
   
   std::vector<G4double> visibleEnergy, visibleEnergy2;
   std::vector<G4double>   totalEnergy,   totalEnergy2;
