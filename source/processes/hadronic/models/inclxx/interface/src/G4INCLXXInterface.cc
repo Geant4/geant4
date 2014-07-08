@@ -44,6 +44,7 @@
 #include "G4ReactionProductVector.hh"
 #include "G4ReactionProduct.hh"
 #include "G4INCLXXInterfaceStore.hh"
+#include "G4INCLXXVInterfaceTally.hh"
 #include "G4String.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -110,7 +111,7 @@ G4bool G4INCLXXInterface::AccurateProjectile(const G4HadProjectile &aTrack, cons
     ss << "the model does not know how to handle a collision between a "
       << projectileDef->GetParticleName() << " projectile and a Z="
       << theNucleus.GetZ_asInt() << ", A=" << theNucleus.GetA_asInt();
-    theInterfaceStore->EmitWarning(ss.str());
+    theInterfaceStore->EmitBigWarning(ss.str());
     return true;
   }
 
@@ -143,7 +144,7 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   G4ParticleDefinition const * const trackDefinition = aTrack.GetDefinition();
   const G4bool isIonTrack = trackDefinition->GetParticleType()==G4GenericIon::GenericIon()->GetParticleType();
   const G4int trackA = trackDefinition->GetAtomicMass();
-  const G4int trackZ = trackDefinition->GetAtomicNumber();
+  const G4int trackZ = (G4int) trackDefinition->GetPDGCharge();
   const G4int nucleusA = theNucleus.GetA_asInt();
   const G4int nucleusZ = theNucleus.GetZ_asInt();
 
@@ -469,6 +470,9 @@ G4HadFinalState* G4INCLXXInterface::ApplyYourself(const G4HadProjectile& aTrack,
   }
 
   remnants.clear();
+
+  if((theTally = theInterfaceStore->GetTally()))
+    theTally->Tally(aTrack, theNucleus, theResult);
 
   return &theResult;
 }

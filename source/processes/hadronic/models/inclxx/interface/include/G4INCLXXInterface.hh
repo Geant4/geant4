@@ -71,6 +71,7 @@
 using namespace std;
 
 class G4INCLXXInterfaceStore;
+class G4INCLXXVInterfaceTally;
 
 /** \brief INCL++ intra-nuclear cascade
  *
@@ -167,6 +168,7 @@ private:
   G4HadronicInteraction *theBackupModelNucleon;
 
   G4INCLXXInterfaceStore * const theInterfaceStore;
+  G4INCLXXVInterfaceTally * theTally;
 
   G4bool complainedAboutBackupModel;
   G4bool complainedAboutPreCompound;

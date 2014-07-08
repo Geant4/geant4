@@ -266,18 +266,6 @@ namespace G4INCL {
 
     G4bool getTryCompoundNucleus() { return tryCN; }
 
-    /// \brief Return the charge number of the projectile
-    G4int getProjectileChargeNumber() const { return projectileZ; }
-
-    /// \brief Return the mass number of the projectile
-    G4int getProjectileMassNumber() const { return projectileA; }
-
-    /// \brief Set the charge number of the projectile
-    void setProjectileChargeNumber(G4int n) { projectileZ=n; }
-
-    /// \brief Set the mass number of the projectile
-    void setProjectileMassNumber(G4int n) { projectileA=n; }
-
     /// \brief Get the transmission barrier
     G4double getTransmissionBarrier(Particle const * const p) {
       const G4double theTransmissionRadius = theDensity->getTransmissionRadius(p);

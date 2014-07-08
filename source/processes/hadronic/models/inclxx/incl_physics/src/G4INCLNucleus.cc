@@ -71,8 +71,6 @@ namespace G4INCL {
      remnant(true),
      initialEnergy(0.),
      tryCN(false),
-     projectileZ(0),
-     projectileA(0),
      theUniverseRadius(universeRadius),
      isNucleusNucleus(false),
      theProjectileRemnant(NULL),

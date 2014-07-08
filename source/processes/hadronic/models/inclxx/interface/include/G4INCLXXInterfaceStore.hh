@@ -52,6 +52,7 @@
 #include <sstream>
 
 class G4INCLXXInterfaceMessenger;
+class G4INCLXXVInterfaceTally;
 
 /** \class G4INCLXXInterfaceStore
  * \brief Singleton class for configuring the INCL++ Geant4 interface.
@@ -136,6 +137,12 @@ class G4INCLXXInterfaceStore {
      */
     void EmitBigWarning(const G4String &message) const;
 
+    /// \brief Getter for the interface tally
+    G4INCLXXVInterfaceTally *GetTally() const;
+
+    /// \brief Setter for the interface tally
+    void SetTally(G4INCLXXVInterfaceTally * const aTally);
+
   private:
 
     /** \brief Private constructor
@@ -169,6 +176,8 @@ class G4INCLXXInterfaceStore {
     G4INCLXXInterfaceMessenger *theINCLXXInterfaceMessenger;
 
     G4INCL::INCL *theINCLModel;
+
+    G4INCLXXVInterfaceTally *theTally;
 
     /// \brief Static warning counter
     G4int nWarnings;

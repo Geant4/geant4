@@ -53,6 +53,7 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_interface
     HEADERS
         G4INCLXXInterfaceStore.hh
+        G4INCLXXVInterfaceTally.hh
         G4INCLXXInterface.hh
         G4INCLXXInterfaceMessenger.hh
 

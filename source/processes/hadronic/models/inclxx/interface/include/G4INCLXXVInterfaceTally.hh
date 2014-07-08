@@ -34,5 +34,22 @@
 
 #include "globals.hh"
 
-#define G4INCL_VERSION_ID "v5.2.1-clean"
-#define G4INCL_GIT_HASH "71f2e3682b3e00b54ea0abd868c79c0a09afacd9"
+#ifndef G4INCLXXVInterfaceTally_hh
+#define G4INCLXXVInterfaceTally_hh 1
+
+#include "G4HadProjectile.hh"
+#include "G4Nucleus.hh"
+#include "G4HadFinalState.hh"
+
+class G4INCLXXVInterfaceTally {
+  public:
+    G4INCLXXVInterfaceTally() {}
+    virtual ~G4INCLXXVInterfaceTally() {}
+
+    virtual void Open() = 0;
+    virtual void Close() = 0;
+    virtual void Tally(G4HadProjectile const &aTrack, G4Nucleus const &theNucleus, G4HadFinalState const &result) = 0;
+};
+
+#endif
+

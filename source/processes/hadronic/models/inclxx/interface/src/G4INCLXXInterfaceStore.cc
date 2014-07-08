@@ -52,6 +52,7 @@ G4INCLXXInterfaceStore::G4INCLXXInterfaceStore() :
   cascadeMinEnergyPerNucleon(1.*MeV),
   conservationTolerance(5*MeV),
   theINCLModel(NULL),
+  theTally(NULL),
   nWarnings(0),
   maxWarnings(50)
 {
@@ -203,4 +204,8 @@ void G4INCLXXInterfaceStore::SetCascadeMinEnergyPerNucleon(const G4double anEner
 void G4INCLXXInterfaceStore::SetConservationTolerance(const G4double aTolerance) {
   conservationTolerance = aTolerance;
 }
+
+G4INCLXXVInterfaceTally *G4INCLXXInterfaceStore::GetTally() const { return theTally; }
+
+void G4INCLXXInterfaceStore::SetTally(G4INCLXXVInterfaceTally * const aTally) { theTally = aTally; }
 

@@ -16,6 +16,12 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+8 July 2014 - Davide Mancusi (hadr-inclxx-V10-00-09)
+---------------------------------------------------------------
+- INCL++ v5.2.1
+  o Add plumbing for tallying reactions treated by INCL++
+  o Minor clean-up
+
 16 June 2014 - Davide Mancusi (hadr-inclxx-V10-00-08)
 ---------------------------------------------------------------
 - Fix crash in p+He2 (!) reactions

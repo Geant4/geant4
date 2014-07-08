@@ -153,9 +153,6 @@ namespace G4INCL {
       if(theEntryAvatar) {
         theNucleus->getStore()->addParticleEntryAvatar(theEntryAvatar);
 
-        theNucleus->setProjectileChargeNumber(p->getZ());
-        theNucleus->setProjectileMassNumber(p->getA());
-
         return p->getTransversePosition().mag();
       } else {
         delete p;
@@ -230,10 +227,6 @@ namespace G4INCL {
 
       // Tell the Nucleus about the ProjectileRemnant
       theNucleus->setProjectileRemnant(pr);
-
-      // Set the number of projectile particles
-      theNucleus->setProjectileChargeNumber(pr->getZ());
-      theNucleus->setProjectileMassNumber(pr->getA());
 
       // Register the ParticleEntryAvatars
       theNucleus->getStore()->addParticleEntryAvatars(theAvatarList);
