@@ -125,7 +125,7 @@ protected:
 
 private:
 
-  G4double ComputeTransportXSectionPerVolume();
+  G4double ComputeTransportXSectionPerVolume(G4double cosTheta);
 
   G4double ComputeSecondMoment(const G4ParticleDefinition*,
 			       G4double kineticEnergy);

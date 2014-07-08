@@ -381,8 +381,10 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
   } else {
 
     // small step use only single scattering
-    static const G4double singleScatLimit = 1.0e-7;
-    if(geomStepLength < lambdaeff*singleScatLimit*(1.0 - cosTetMaxNuc)) {
+    ComputeTransportXSectionPerVolume(1.0);
+    //static const G4double singleScatLimit = 1.0e-7;
+    //if(geomStepLength < lambdaeff*singleScatLimit*(1.0 - cosTetMaxNuc)) {
+    if(geomStepLength*xtsec < 15.0) {
       //if(geomStepLength < lambdaeff*2.0e-7) {
       singleScatteringMode = true;
       zPathLength  = geomStepLength;
@@ -424,7 +426,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
   // anymore - cannot be applied for big steps
   if(cosThetaMin > cosTetMaxNuc) {
     // new computation
-    G4double cross = ComputeTransportXSectionPerVolume();
+    G4double cross = ComputeTransportXSectionPerVolume(cosThetaMin);
     //G4cout << "%%%% cross= " << cross << "  xtsec= " << xtsec << G4endl;
     if(cross <= 0.0) {
       singleScatteringMode = true;
@@ -663,7 +665,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
+G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume(G4double cosTheta)
 {
   // prepare recomputation of x-sections
   const G4ElementVector* theElementVector = currentMaterial->GetElementVector();
@@ -675,11 +677,10 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
     xsecn.resize(nelm);
     prob.resize(nelm);
   }
-  //  cosTetMaxNuc = wokvi->GetCosThetaNuc();
 
   // check consistency
   xtsec = 0.0;
-  if(cosTetMaxNuc >= cosThetaMin) { return 0.0; }
+  if(cosTetMaxNuc >= cosTheta) { return 0.0; }
 
   G4double cut = (*currentCuts)[currentMaterialIndex];
   if(fixedCut > 0.0) { cut = fixedCut; }
@@ -692,15 +693,15 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
     G4double density = theAtomNumDensityVector[i];
 
     G4double esec = 0.0;
-    if(costm < cosThetaMin) {  
+    if(costm < cosTheta) {  
 
       // recompute the transport x-section
-      if(1.0 > cosThetaMin) {
-	xs += density*wokvi->ComputeTransportCrossSectionPerAtom(cosThetaMin);
+      if(1.0 > cosTheta) {
+	xs += density*wokvi->ComputeTransportCrossSectionPerAtom(cosTheta);
       }
       // recompute the total x-section
-      G4double nucsec = wokvi->ComputeNuclearCrossSection(cosThetaMin, costm);
-      esec = wokvi->ComputeElectronCrossSection(cosThetaMin, costm);
+      G4double nucsec = wokvi->ComputeNuclearCrossSection(cosTheta, costm);
+      esec = wokvi->ComputeElectronCrossSection(cosTheta, costm);
       nucsec += esec;
       if(nucsec > 0.0) { esec /= nucsec; }
       xtsec += nucsec*density;
@@ -708,7 +709,7 @@ G4double G4WentzelVIModel::ComputeTransportXSectionPerVolume()
     xsecn[i] = xtsec;
     prob[i]  = esec;
     //G4cout << i << "  xs= " << xs << " xtsec= " << xtsec 
-    //       << " 1-cosThetaMin= " << 1-cosThetaMin 
+    //       << " 1-cosTheta= " << 1-cosTheta 
     //	   << " 1-cosTetMaxNuc2= " <<1-cosTetMaxNuc2<< G4endl;
   }
   

@@ -115,6 +115,9 @@ G4GoudsmitSaundersonMscModel::G4GoudsmitSaundersonMscModel(const G4String& nam)
   samplez=false;
   firstStep = true; 
 
+  currentCouple = 0;
+  fParticleChange = 0;  
+
   GSTable = new G4GoudsmitSaundersonTable();
 
   if(ener[0] < 0.0){ 

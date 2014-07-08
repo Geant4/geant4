@@ -18,6 +18,25 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+08 July 14: V.Ivanchenko (emstand-V10-00-32)
+- G4KleinNishinaModel - minor cleanup
+
+07 July 14: V.Ivanchenko (emstand-V10-00-31)
+- G4ComptonScattering - set startFromNull flag to "true" - for all
+    models forced to zero cross section for the low energy in the 
+    cross section table
+- G4KleinNishinaModel, G4KleinNishinaCompton, 
+  G4HeatedKleinNishinaCompton - do not sample final 
+    state below low limit of the model (default 100 eV); 
+    added protection to do/while loop; added check on secondary
+    energy of both gamma and electron using internal limit
+- G4HeatedKleinNishinaCompton - use inheritence from G4KleinNishinaCompton
+- G4WentzelVIModel - added more accurate transition to the single 
+    scattering mode
+- G4WentzelOKandVIxSection - return back method of 10.0 single 
+    scattering sampling
+- G4IonCoulombScatteringModel - fixed non-initialised (Coverity report)
+
 06 June 14: V.Ivanchenko (emstand-V10-00-30)
 - G4WentzelVIModel - removed extra printout at initialisation
 
@@ -55,7 +74,7 @@ committal in the CVS repository !
 
 02 May 14: V.Ivanchenko (emstand-V10-00-26)
 - G4WentzelVIModel, G4WentzelOKandVIxSection - a small optimisation
-    to address soem CPU penalty against previous reference tag
+    to address some CPU penalty against previous reference tag
 
 28 April 14: V.Ivanchenko (emstand-V10-00-25)
 - G4WentzelOKandVIxSection - fixed bug introduced in April tags

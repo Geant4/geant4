@@ -85,6 +85,7 @@ G4IonCoulombScatteringModel::G4IonCoulombScatteringModel(const G4String& nam)
   currentMaterial = 0;
   currentElement  = 0;
   currentCouple = 0;
+  fParticleChange = 0;
 
   lowEnergyLimit  = 100*eV;
   recoilThreshold = 0.*eV;

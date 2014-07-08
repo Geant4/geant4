@@ -74,7 +74,7 @@ G4ComptonScattering::G4ComptonScattering(const G4String& processName,
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
-  SetStartFromNullFlag(false);
+  SetStartFromNullFlag(true);
   SetBuildTableFlag(true);
   SetSecondaryParticle(G4Electron::Electron());
   SetProcessSubType(fComptonScattering);

@@ -89,7 +89,7 @@ protected:
   G4ParticleDefinition*     theGamma;
   G4ParticleDefinition*     theElectron;
   G4ParticleChangeForGamma* fParticleChange;
-  G4double                  lowestGammaEnergy;
+  G4double                  lowestSecondaryEnergy;
 
 private:
 

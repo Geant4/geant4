@@ -320,23 +320,16 @@ G4WentzelOKandVIxSection::SampleSingleScattering(G4double cosTMin,
   if(cost1 > cost2) {
     G4double w1 = 1. - cost1 + screenZ;
     G4double w2 = 1. - cost2 + screenZ;
-    G4double z1, z2, z3;
-    const G4double numl = 1.e-5;
-    do {
-      z1 = w1*w2/(w1 + G4UniformRand()*(w2 - w1)) - screenZ;
-      z2 = 1. - z1*factB + numl;
-      z3 = 1.0;
-      if(z3 > z2) {z3 *= G4UniformRand(); } 
-    } while(z3 > z2);
-    G4double fm =  1.0 + formf*z1;
-    G4double z4 = (1. + factB1*targetZ*sqrt(z1*factB)*(2 - z1)/z2)/
-      ( (1.0 + z1*factD)*fm*fm ) + numl;
-    z3 = 1.0;
-    if(z3 > z4) {z3 *= G4UniformRand(); } 
-    // exclude "false" scattering due to formfactor
-    if(z3 <= z4) { 
-      G4double cost = 1.0 - z1;
+    G4double z1 = w1*w2/(w1 + G4UniformRand()*(w2 - w1)) - screenZ;
 
+    G4double fm =  1.0 + formf*z1;
+    G4double grej = (1. - z1*factB + 
+		     factB1*targetZ*sqrt(z1*factB)*(2 - z1))
+                    /( (1.0 + z1*factD)*fm*fm );
+
+    if( G4UniformRand() < grej ) {
+      // exclude "false" scattering due to formfactor
+      G4double cost = 1.0 - z1;
       if(cost > 1.0)       { cost = 1.0; }
       else if(cost < -1.0) { cost =-1.0; }
       G4double sint = sqrt((1.0 - cost)*(1.0 + cost));
