@@ -26,6 +26,15 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+8th July 2014  Laurent Garnier (visman-V10-00-12)
+- G4VisCommandViewer : 
+  o Revert change to /vis/viewer/update in order not to failed with a Cerr in all examples. 
+  o Set verbosity on "/vis/viewer/update" to G4cout instead of G4cerr and change the message
+
+7th July 2014  Laurent Garnier (visman-V10-00-11)
+- Change some G4cout in G4err in case of error messages in
+  G4VisCommand, G4VisCommandSceneHandler, G4VisCommandViewer
+
 27th May 2014  John Allison (visman-V10-00-10)
 - /vis/specify and /vis/scene/add/logicalVolume:
   o Added flag for drawing/suppressing axes.

@@ -262,7 +262,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   G4VViewer* viewer = fpVisManager->GetCurrentViewer();
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
   "ERROR: No current viewer - \"/vis/viewer/list\" to see possibilities."
              << G4endl;
     }
@@ -272,7 +272,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: No current scene.  Please create one." << G4endl;
+      G4cerr << "ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
