@@ -29,6 +29,8 @@
 // 
 // G4OpenGLQtViewer : Class to provide WindowsNT specific
 //                       functionality for OpenGL in GEANT4
+//
+// 30/06/2014 : M.Kelsey : Change QPixmap objects to pointers
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
@@ -130,6 +132,8 @@ public:
                                 const G4Visible& visible);
   bool isTouchableVisible(int POindex);
   void clearTreeWidget();
+  bool exportImage(std::string name="", int width=-1, int height=-1);
+
 public:
   void G4MousePressEvent(QMouseEvent *event);
   void G4wheelEvent (QWheelEvent * event); 
@@ -280,7 +284,6 @@ private:
   bool fPVRootNodeCreate;
   QLineEdit* fHelpLine;
   QString fFileSavePath;
-  QString fDefaultSaveFileFormat;
   QPushButton* fViewerPropertiesButton;
   
   int fNbRotation ;
@@ -320,8 +323,10 @@ private:
   std::map <int, QTreeWidgetItem*>::const_iterator fOldLastSceneTreeWidgetAskForIteratorEnd;
 
   // icons
-  QPixmap fTreeIconOpen;
-  QPixmap fTreeIconClosed;
+  QPixmap* fTreeIconOpen;
+  QPixmap* fTreeIconClosed;
+
+  int fLastExportSliderValue;
 
 public Q_SLOTS :
   void startPauseVideo();

@@ -57,7 +57,11 @@ class G4OpenGLViewer: virtual public G4VViewer {
 public:
   void ClearView  ();
 //////////////////////////////Vectored PostScript production functions///
-  void printEPS();
+  bool printEPS();
+  virtual bool exportImage(std::string name="", int width=-1, int height=-1);
+
+  bool setExportImageFormat(std::string format,bool quiet = false);
+  // change the export image format according to thoses available for the current viewer
 
   // Special case for Wt, we want to have acces to the drawer
 #ifdef G4VIS_BUILD_OPENGLWT_DRIVER
@@ -66,6 +70,10 @@ public:
   // Associate the Wt drawer to the OpenGLViewer and the OpenGLSceneHandler
   void setWtDrawer(G4OpenGLWtDrawer* drawer);
   G4OpenGLWtDrawer* fWtDrawer;
+
+  inline bool isInitialized() {
+    return fGlViewInitialized;
+  }
 #endif
 
 protected:
@@ -97,14 +105,16 @@ protected:
   void rotateSceneToggle (G4double dx, G4double dy);
 //////////////////////////////Vectored PostScript production functions///
   // print EPS file. Depending of fVectoredPs, it will print Vectored or not
-  void setPrintSize(G4int,G4int);
+  void setExportSize(G4int,G4int);
   // set the new print size. 
   // -1 means 'print size' = 'window size'
   // Setting size greater than max OpenGL viewport size will set the size to
   // maximum
-  void setPrintFilename(G4String name,G4bool inc);
-  // set print filename. 
+  bool setExportFilename(G4String name,G4bool inc = true);
+  // set export filename.
   // if inc, then the filename will be increment by one each time
+  // try to guesss the correct format according to the extention
+
   std::string getRealPrintFilename();
   unsigned int getWinWidth() const;
   unsigned int getWinHeight() const;
@@ -113,9 +123,19 @@ protected:
   GLdouble getSceneNearWidth();
   GLdouble getSceneFarWidth();
   GLdouble getSceneDepth();
+  void addExportImageFormat(std::string format);
+  // add a image format to the available export format list
   G4bool isGl2psWriting();
   void g4GluPickMatrix(GLdouble x, GLdouble y, GLdouble width, GLdouble height,
                        GLint viewport[4]);
+  // MESA implementation of gluPickMatrix
+  
+  void g4GluLookAt( GLdouble eyex, GLdouble eyey, GLdouble eyez,
+                   GLdouble centerx, GLdouble centery, GLdouble
+                   centerz,
+                   GLdouble upx, GLdouble upy, GLdouble upz );
+  // MESA implementation of gluLookAt
+
   G4bool                            fPrintColour;
   G4bool                            fVectoredPs;
 
@@ -141,6 +161,12 @@ protected:
   G4double     fPan_sens;        // Translation sensibility
   unsigned int fWinSize_x;
   unsigned int fWinSize_y;
+  std::vector < std::string > fExportImageFormatVector;
+  std::string fDefaultExportImageFormat;
+  std::string fExportImageFormat;
+  int fExportFilenameIndex;
+  G4int fPrintSizeX;
+  G4int fPrintSizeY;
 
 public :
 #ifdef G4OPENGL_VERSION_2
@@ -184,21 +210,20 @@ public :
 #endif
   
 private :
-  static G4int                             fPrintSizeX;
-  static G4int                             fPrintSizeY;
-  static G4String                          fPrintFilename;
-  static int                               fPrintFilenameIndex;
-  G4float                           fPointSize;
+  G4float fPointSize;
+  G4String fExportFilename;
+  G4String fDefaultExportFilename;
   G4bool fSizeHasChanged;
   int fGl2psDefaultLineWith;
   int fGl2psDefaultPointSize;
-
+  bool fGlViewInitialized;
+  
   // size of the OpenGL frame
   void rotateSceneThetaPhi(G4double dx, G4double dy);
   void rotateSceneInViewDirection (G4double dx, G4double dy);
   bool printGl2PS();
-  G4int getRealPrintSizeX();
-  G4int getRealPrintSizeY();
+  G4int getRealExportWidth();
+  G4int getRealExportHeight();
   GLubyte* grabPixels (int inColor,
 		       unsigned int width,
 		       unsigned int height);

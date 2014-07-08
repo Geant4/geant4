@@ -77,12 +77,6 @@ class G4OpenGLQtExportDialog : public QDialog
       the original value  */
   int getHeight();
 
-  /** return the value of the transparency if format has a transparency, instead return -1 */
-  int getTransparency();
-
-  /** return the numbers of colors in the picture if format has a BW/Color widget, instead return -1 */
-  int getNbColor();
-
   /** return if vector EPS is checked, if button does'nt exist, return 0 */
   bool getVectorEPS();
 

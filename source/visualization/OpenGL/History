@@ -17,6 +17,46 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7nd July 2014  Laurent Garnier  (opengl-V10-00-11 needs visexternal-V10-00-02)
+- G4OpenGLViewer : 
+  o Fix a warning
+
+7nd July 2014  Laurent Garnier  (opengl-V10-00-10)
+- G4OpenGLViewer : 
+  o Replace deprecated gluLookAt by g4GluLookAt
+
+2nd July 2014  Laurent Garnier  (opengl-V10-00-09)
+- G4OpenGLQtExportDialog : Remove unused functions
+- G4OpenGLQtViewer : 
+  o Remove unused functions
+  o Factorisation of Qt save function and OGL save functions.
+- G4OpenGLViewer : 
+  o Move to private members from static members "fPrintSizeX", "fPrintSizeY", "fPrintFilename" and "fPrintFilenameIndex"
+  o Change default export format to "pdf" instead of "eps"
+  o Change default export name to "G4OpenGL-XXXX" where XXXX is the viewer_name
+  o Change method signature for printEPS(), now return false when failed
+  o printEPS() now deal with all gl2ps formats (eps/ps/pdf/svg)
+  o Add a exportImage(name, width, height) generic function with lots of formats available
+  o printGl2PS() : Better error messages
+  o Renaming :
+    o getRealPrintSizeX() to getRealExportSizeX()
+    o getRealPrintSizeY() to getRealExportSizeY()
+    o setPrintSize() to setExportSize()
+    o setPrintFilename() to setExportFilename()
+  o New methods :
+    o addExportImageFormat()
+    o setExportImageFormat()
+    o exportImage(name, width, height) generic function with lots of formats available
+    o isInitialized()
+- G4OpenGLViewerMessenger :
+  o Add new commands :
+    o /vis/ogl/set/exportFormat
+    o /vis/ogl/export
+
+30th June 2014  Michael Kelsey
+- G4OpenGLQtViewer:  Change QPixmap objects to be pointers; fixes fatal 
+  problem creating viewer in "batch" application without interactive GUI.
+
 6th June 2014  Laurent Garnier (opengl-V10-00-08)
 - G4OpenGLQtViewer: Fix a problem in viewer/set parameters
 

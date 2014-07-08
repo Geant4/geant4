@@ -54,6 +54,8 @@ private:
   G4UIcmdWithoutParameter* fpCommandPrintEPS;
   G4UIcommand* fpCommandPrintSize;
   G4UIcommand* fpCommandPrintFilename;
+  G4UIcommand* fpCommandExport;
+  G4UIcommand* fpCommandExportFormat;
   G4UIdirectory* fpDirectorySet;
   G4UIcommand* fpCommandDisplayHeadTime;
   G4UIcmdWithAnInteger* fpCommandDisplayListLimit;

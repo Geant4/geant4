@@ -62,11 +62,6 @@
 
 //#define G4DEBUG_VIS_OGL
 
-G4int G4OpenGLViewer::fPrintSizeX = -1;
-G4int G4OpenGLViewer::fPrintSizeY = -1;
-G4String G4OpenGLViewer::fPrintFilename = "G4OpenGL";
-int G4OpenGLViewer::fPrintFilenameIndex = 0;
-
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
 #ifdef G4VIS_BUILD_OPENGLWT_DRIVER
@@ -101,10 +96,17 @@ fRot_sens(1.),
 fPan_sens(0.01),
 fWinSize_x(0),
 fWinSize_y(0),
+fDefaultExportImageFormat("pdf"),
+fExportImageFormat("pdf"),
+fExportFilenameIndex(0),
+fPrintSizeX(-1),
+fPrintSizeY(-1),
 fPointSize (0),
+fDefaultExportFilename("G4OpenGL"),
 fSizeHasChanged(0),
 fGl2psDefaultLineWith(1),
-fGl2psDefaultPointSize(2)
+fGl2psDefaultPointSize(2),
+fGlViewInitialized(false)
 {
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer:: Creation\n");
@@ -115,6 +117,15 @@ fGl2psDefaultPointSize(2)
 
   fGL2PSAction = new G4OpenGL2PSAction();
 
+  // add supported export image format
+  addExportImageFormat("eps");
+  addExportImageFormat("ps");
+  addExportImageFormat("pdf");
+  addExportImageFormat("svg");
+
+  // Change the default name
+  fExportFilename += fDefaultExportFilename + "_" + GetShortName().data();
+  
   //  glClearColor (0.0, 0.0, 0.0, 0.0);
   //  glClearDepth (1.0);
   //  glDisable (GL_BLEND);
@@ -131,6 +142,8 @@ G4OpenGLViewer::~G4OpenGLViewer ()
 void G4OpenGLViewer::InitializeGLView () 
 {
 #ifdef G4OPENGL_VERSION_2
+
+#ifndef TEST_WT_EXAMPLE
 
   const char *fragmentShaderSrc =
   "#ifdef GL_ES\n"
@@ -212,6 +225,9 @@ void G4OpenGLViewer::InitializeGLView ()
   tMatrixUniform_  = glGetUniformLocation(shaderProgram_, "uTMatrix");
   
 #endif
+  // We have to set that in order to avoid calls on opengl commands before all is ready
+  fGlViewInitialized = true;
+#endif
 
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer::InitializeGLView\n");
@@ -222,8 +238,10 @@ void G4OpenGLViewer::InitializeGLView ()
 
   glClearColor (0.0, 0.0, 0.0, 0.0);
   glClearDepth (1.0);
+#ifndef G4OPENGL_VERSION_2
   glDisable (GL_LINE_SMOOTH);
   glDisable (GL_POLYGON_SMOOTH);
+#endif
 
 // clear the buffers and window?
   ClearView ();
@@ -385,10 +403,10 @@ void G4OpenGLViewer::SetView () {
   }
 
   const G4Point3D& pCamera = cameraPosition;  // An alias for brevity.
-  gluLookAt (pCamera.x(),  pCamera.y(),  pCamera.z(),       // Viewpoint.
-	     gltarget.x(), gltarget.y(), gltarget.z(),      // Target point.
-	     upVector.x(), upVector.y(), upVector.z());     // Up vector.
 
+  g4GluLookAt (pCamera.x(),  pCamera.y(),  pCamera.z(),       // Viewpoint.
+             gltarget.x(), gltarget.y(), gltarget.z(),      // Target point.
+             upVector.x(), upVector.y(), upVector.z());     // Up vector.
   // Light position is "true" light direction, so must come after gluLookAt.
   glLightfv (GL_LIGHT0, GL_POSITION, lightPosition);
 
@@ -518,7 +536,7 @@ G4String G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
   GLint viewport[4];
   glGetIntegerv(GL_VIEWPORT, viewport);
   // Define 5x5 pixel pick area
-  gluPickMatrix(x, viewport[3] - y, 5., 5., viewport);
+  g4GluPickMatrix(x, viewport[3] - y, 5., 5., viewport);
   glMultMatrixd(currentProjectionMatrix);
   glMatrixMode(GL_MODELVIEW);
   DrawView();
@@ -616,7 +634,7 @@ GLubyte* G4OpenGLViewer::grabPixels
   return buffer;
 }
 
-void G4OpenGLViewer::printEPS() {
+bool G4OpenGLViewer::printEPS() {
   bool res;
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer::printEPS file:%s Vec:%d Name:%s\n",getRealPrintFilename().c_str(),fVectoredPs,GetName().c_str());
@@ -629,10 +647,10 @@ void G4OpenGLViewer::printEPS() {
   if(oldLocale!=NULL) strncpy(oldLocale,setlocale(LC_NUMERIC,NULL),len);
   setlocale(LC_NUMERIC,"C");
 
-  if (fVectoredPs) {
-    res = printVectoredEPS();
-  } else {
+  if (((fExportImageFormat == "eps") || (fExportImageFormat == "ps")) && (!fVectoredPs)) {
     res = printNonVectoredEPS();
+  } else {
+    res = printVectoredEPS();
   }
 
   // restore the local
@@ -642,19 +660,21 @@ void G4OpenGLViewer::printEPS() {
   }
 
   if (res == false) {
-    G4cerr << "Error while saving file... "<<getRealPrintFilename().c_str()<< G4endl;
+    G4cerr << "Error saving file... " << getRealPrintFilename().c_str() << G4endl;
   } else {
-    G4cout << "File "<<getRealPrintFilename().c_str()<<" has been saved " << G4endl;
+    G4cout << "File " << getRealPrintFilename().c_str() << " size: " << getRealExportWidth() << "x" << getRealExportHeight() << " has been saved " << G4endl;
+
+    // increment index if necessary
+    if ( fExportFilenameIndex != -1) {
+      fExportFilenameIndex++;
+    }
   }
 
-  // increment index if necessary
-  if ( fPrintFilenameIndex != -1) {
-    fPrintFilenameIndex++;
-  }
 
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer::printEPS END\n");
 #endif
+  return res;
 }
 
 bool G4OpenGLViewer::printVectoredEPS() {
@@ -663,8 +683,8 @@ bool G4OpenGLViewer::printVectoredEPS() {
 
 bool G4OpenGLViewer::printNonVectoredEPS () {
 
-  int width = getRealPrintSizeX();
-  int height = getRealPrintSizeY();
+  int width = getRealExportWidth();
+  int height = getRealExportHeight();
 
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer::printNonVectoredEPS file:%s Vec:%d X:%d Y:%d col:%d fWinX:%d fWinY:%d\n",getRealPrintFilename().c_str(),fVectoredPs,width,height,fPrintColour,fWinSize_x,fWinSize_y);
@@ -825,11 +845,45 @@ void G4OpenGLViewer::ChangeLineWidth(G4double width) {
   }
 }
 
+/**
+ Export image with the given name with width and height
+ Several cases :
+ If name is "", filename will have the default value
+ If name is "toto.png", set the name to "toto" and the format to "png". No incremented suffix is added.
+ If name is "toto", set the name to "toto" and the format to default (or current format if specify).
+   Will also add an incremented suffix at the end of the file
+*/
+bool G4OpenGLViewer::exportImage(std::string name, int width, int height) {
+
+  if (! setExportFilename(name)) {
+    return false;
+  }
+
+  if ((width =! -1) && (height != -1)) {
+    setExportSize(width, height);
+  }
+
+  if (fExportImageFormat == "eps") {
+    fGL2PSAction->setExportImageFormat(GL2PS_EPS);
+  } else if (fExportImageFormat == "ps") {
+    fGL2PSAction->setExportImageFormat(GL2PS_PS);
+  } else if (fExportImageFormat == "svg") {
+    fGL2PSAction->setExportImageFormat(GL2PS_SVG);
+  } else if (fExportImageFormat == "pdf") {
+    fGL2PSAction->setExportImageFormat(GL2PS_PDF);
+  } else {
+    setExportImageFormat(fExportImageFormat,true); // will display a message if this format is not correct for the current viewer
+    return false;
+  }
+  return printEPS();
+}
+
 
 bool G4OpenGLViewer::printGl2PS() {
 
-  int width = getRealPrintSizeX();
-  int height = getRealPrintSizeY();
+  int width = getRealExportWidth();
+  int height = getRealExportHeight();
+  bool res = true;
 
   // no need to redraw at each new primitive for printgl2PS
   G4OpenGLSceneHandler& oglSceneHandler = dynamic_cast<G4OpenGLSceneHandler&>(fSceneHandler);
@@ -872,7 +926,6 @@ bool G4OpenGLViewer::printGl2PS() {
      if (beginWriteAction) {
        
        // Set the viewport
-       //    fGL2PSAction->setViewport(0, 0, getRealPrintSizeX(),getRealPrintSizeY());  
        // By default, we choose the line width (trajectories...)
        fGL2PSAction->setLineWidth(fGl2psDefaultLineWith);
        // By default, we choose the point size (markers...)
@@ -890,13 +943,16 @@ bool G4OpenGLViewer::printGl2PS() {
    fGL2PSAction->resetBufferSizeParameters();
 
    if (!extendBuffer ) {
-     G4cerr << "gl2ps buffer size is not big enough to print this geometry. Try to extend it. No output produced"<< G4endl;
+     G4cerr << "ERROR: gl2ps buffer size is not big enough to print this geometry. Try to extend it. No output produced"<< G4endl;
+     res = false;
    }
    if (!beginWriteAction ) {
-     G4cerr << "Error while writing in the file "<<getRealPrintFilename().c_str()<<". Check read/write access No output produced" << G4endl;
+     G4cerr << "ERROR: saving file "<<getRealPrintFilename().c_str()<<". Check read/write access. No output produced" << G4endl;
+     res = false;
    }
    if (!endWriteAction ) {
      G4cerr << "gl2ps error. No output produced" << G4endl;
+     res = false;
    }
   fWinSize_x = X;
   fWinSize_y = Y;
@@ -907,7 +963,7 @@ bool G4OpenGLViewer::printGl2PS() {
   //  fPrintSizeX = 0;
   //  fPrintSizeY = 0;
 
-  return true;
+  return res;
 }
 
 unsigned int G4OpenGLViewer::getWinWidth() const{
@@ -922,7 +978,7 @@ G4bool G4OpenGLViewer::sizeHasChanged() {
   return fSizeHasChanged;
 }
 
-G4int G4OpenGLViewer::getRealPrintSizeX() {
+G4int G4OpenGLViewer::getRealExportWidth() {
   if (fPrintSizeX == -1) {
     return fWinSize_x;
   }
@@ -941,7 +997,7 @@ G4int G4OpenGLViewer::getRealPrintSizeX() {
   return fPrintSizeX;
 }
 
-G4int G4OpenGLViewer::getRealPrintSizeY() {
+G4int G4OpenGLViewer::getRealExportHeight() {
   if (fPrintSizeY == -1) {
     return fWinSize_y;
   }
@@ -960,34 +1016,57 @@ G4int G4OpenGLViewer::getRealPrintSizeY() {
   return fPrintSizeY;
 }
 
-void G4OpenGLViewer::setPrintSize(G4int X, G4int Y) {
+void G4OpenGLViewer::setExportSize(G4int X, G4int Y) {
   fPrintSizeX = X;
   fPrintSizeY = Y;
 }
 
-void G4OpenGLViewer::setPrintFilename(G4String name,G4bool inc) {
-  if (name != "") {
-    fPrintFilename = name;
-  } else {
-    fPrintFilename = "G4OpenGL";  // by default
+/**
+ If name is "" or "!", filename and extension will have the default value.
+ If name is "toto.png", set the name to "toto" and the format to "png". No incremented suffix is added.
+ If name is "toto", set the name to "toto" and the format to default (or current format if specify).
+ If name is the same as previous, do not reset incremented suffix.
+*/
+bool G4OpenGLViewer::setExportFilename(G4String name,G4bool inc) {
+  if (name == "!") {
+    name = "";
   }
+
   if (inc) {
-    fPrintFilenameIndex=0;
+    if ((name != "") && (fExportFilename != name)) {
+      fExportFilenameIndex=0;
+    }
   } else {
-    fPrintFilenameIndex=-1;
+    fExportFilenameIndex=-1;
   }
+
+  if (name.size() == 0) {
+    name = getRealPrintFilename().c_str();
+  } else {
+    // guess format by extention
+    std::string extension = name.substr(name.find_last_of(".") + 1);
+    // no format
+    if (name.size() != extension.size()) {
+      if (! setExportImageFormat(extension, false)) {
+        return false;
+      }
+    }
+    // get the name
+    fExportFilename = name.substr(0,name.find_last_of("."));
+  }
+  return true;
 }
 
 std::string G4OpenGLViewer::getRealPrintFilename() {
-  std::string temp = fPrintFilename;
-  if (fPrintFilenameIndex != -1) {
+  std::string temp = fExportFilename;
+  if (fExportFilenameIndex != -1) {
     temp += std::string("_");
     std::ostringstream os;
-    os << fPrintFilenameIndex;
+    os << fExportFilenameIndex;
     std::string nb_str = os.str();
     temp += nb_str;
   }
-  temp += ".eps";
+  temp += "."+fExportImageFormat;
   return temp;
 }
 
@@ -1203,7 +1282,42 @@ void G4OpenGLViewer::rotateSceneInViewDirection(G4double dx, G4double dy)
    fVP.SetViewAndLights (viewPoint);
 }
 
-// 12/2013 : Not used for the moment
+
+void G4OpenGLViewer::addExportImageFormat(std::string format) {
+  fExportImageFormatVector.push_back(format);
+}
+
+bool G4OpenGLViewer::setExportImageFormat(std::string format, bool quiet) {
+  bool found = false;
+  std::string list;
+  for (unsigned int a=0; a<fExportImageFormatVector.size(); a++) {
+    list +=fExportImageFormatVector.at(a) + " ";
+
+    if (fExportImageFormatVector.at(a) == format) {
+      if (! quiet) {
+        G4cout << " Changing export format to \"" << format << "\"" << G4endl;
+      }
+      if (format != fExportImageFormat) {
+        fExportFilenameIndex = 0;
+        fExportImageFormat = format;
+      }
+      return true;
+    }
+  }
+  if (! found) {
+    if (format.size() == 0) {
+      G4cout << " Current formats availables are : " << list << G4endl;
+    } else {
+      G4cerr << " Format \"" << format << "\" is not available for the selected viewer. Current formats availables are : " << list << G4endl;
+    }
+  }
+  return false;
+}
+
+
+// From MESA implementation :
+// http://www.techques.com/question/1-8660454/gluPickMatrix-code-from-Mesa
+
 void G4OpenGLViewer::g4GluPickMatrix(GLdouble x, GLdouble y, GLdouble width, GLdouble height,
                      GLint viewport[4])
   {
@@ -1238,6 +1352,95 @@ void G4OpenGLViewer::g4GluPickMatrix(GLdouble x, GLdouble y, GLdouble width, GLd
     glMultMatrixf(mat);
 }
 
+
+
+
+
+// From MESA implementation :
+// https://github.com/jlamarche/iOS-OpenGLES-Stuff/blob/master/Wavefront%20OBJ%20Loader/Classes/gluLookAt.m
+// or http://www.daniweb.com/software-development/game-development/threads/308901/lookat-matrix-source-code
+
+void G4OpenGLViewer::g4GluLookAt( GLdouble eyex, GLdouble eyey, GLdouble eyez,
+                        GLdouble centerx, GLdouble centery, GLdouble
+                        centerz,
+                        GLdouble upx, GLdouble upy, GLdouble upz )
+{
+	GLfloat mat[16];
+	GLfloat x[3], y[3], z[3];
+	GLfloat mag;
+  
+	/* Make rotation matrix */
+  
+	/* Z vector */
+	z[0] = eyex - centerx;
+	z[1] = eyey - centery;
+	z[2] = eyez - centerz;
+	mag = sqrt(z[0] * z[0] + z[1] * z[1] + z[2] * z[2]);
+	if (mag) {			/* mpichler, 19950515 */
+		z[0] /= mag;
+		z[1] /= mag;
+		z[2] /= mag;
+	}
+  
+	/* Y vector */
+	y[0] = upx;
+	y[1] = upy;
+	y[2] = upz;
+  
+	/* X vector = Y cross Z */
+	x[0] = y[1] * z[2] - y[2] * z[1];
+	x[1] = -y[0] * z[2] + y[2] * z[0];
+	x[2] = y[0] * z[1] - y[1] * z[0];
+  
+	/* Recompute Y = Z cross X */
+	y[0] = z[1] * x[2] - z[2] * x[1];
+	y[1] = -z[0] * x[2] + z[2] * x[0];
+	y[2] = z[0] * x[1] - z[1] * x[0];
+  
+	/* mpichler, 19950515 */
+	/* cross product gives area of parallelogram, which is < 1.0 for
+	 * non-perpendicular unit-length vectors; so normalize x, y here
+	 */
+  
+	mag = sqrt(x[0] * x[0] + x[1] * x[1] + x[2] * x[2]);
+	if (mag) {
+		x[0] /= mag;
+		x[1] /= mag;
+		x[2] /= mag;
+	}
+  
+	mag = sqrt(y[0] * y[0] + y[1] * y[1] + y[2] * y[2]);
+	if (mag) {
+		y[0] /= mag;
+		y[1] /= mag;
+		y[2] /= mag;
+	}
+  
+#define M(row,col)  mat[col*4+row]
+	M(0, 0) = x[0];
+	M(0, 1) = x[1];
+	M(0, 2) = x[2];
+	M(0, 3) = 0.0;
+	M(1, 0) = y[0];
+	M(1, 1) = y[1];
+	M(1, 2) = y[2];
+	M(1, 3) = 0.0;
+	M(2, 0) = z[0];
+	M(2, 1) = z[1];
+	M(2, 2) = z[2];
+	M(2, 3) = 0.0;
+	M(3, 0) = 0.0;
+	M(3, 1) = 0.0;
+	M(3, 2) = 0.0;
+	M(3, 3) = 1.0;
+#undef M
+	glMultMatrixf(mat);
+  
+	/* Translate Eye to Origin */
+	glTranslatef(-eyex, -eyey, -eyez);
+}
+  
+  
 
 #ifdef G4VIS_BUILD_OPENGLWT_DRIVER
 

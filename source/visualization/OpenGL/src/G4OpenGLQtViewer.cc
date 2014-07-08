@@ -31,6 +31,7 @@
 //                     functionality for OpenGL in GEANT4
 //
 // 27/06/2003 : G.Barrand : implementation (at last !).
+// 30/06/2014 : M.Kelsey :  Change QPixmap objects to pointers
 
 #ifdef G4VIS_BUILD_OPENGLQT_DRIVER
 
@@ -243,6 +244,9 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fUiQt(NULL)
   ,signalMapperMouse(NULL)
   ,signalMapperSurface(NULL)
+  ,fTreeIconOpen(NULL)
+  ,fTreeIconClosed(NULL)
+  ,fLastExportSliderValue(80)
 {
 
   // launch Qt if not
@@ -263,7 +267,12 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
 
   // Set default path and format
   fFileSavePath = QDir::currentPath();
-  fDefaultSaveFileFormat = "png";
+
+  // add available export format
+  QList<QByteArray> formats =  QImageWriter::supportedImageFormats ();
+  for (int i = 0; i < formats.size(); ++i) {
+    addExportImageFormat(formats.at(i).data());
+  }
 
   const char * const icon1[]={
     /* columns rows colors chars-per-pixel */
@@ -416,8 +425,8 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
     
   };
   
-  fTreeIconOpen = QPixmap(icon1);
-  fTreeIconClosed = QPixmap(icon2);
+  fTreeIconOpen = new QPixmap(icon1);
+  fTreeIconClosed = new QPixmap(icon2);
 
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLQtViewer::G4OpenGLQtViewer END\n");
@@ -444,6 +453,11 @@ G4OpenGLQtViewer::~G4OpenGLQtViewer (
       fUISceneTreeComponentsTBWidget->removeTab(fUISceneTreeComponentsTBWidget->indexOf(fSceneTreeWidget));
     }
   }
+
+  // Delete the open/close icons
+  delete fTreeIconOpen;
+  delete fTreeIconClosed;
+
   G4cout <<removeTempFolder().toStdString().c_str() <<G4endl;
 }
 
@@ -954,19 +968,15 @@ void G4OpenGLQtViewer::savePPMToTemp() {
 
 void G4OpenGLQtViewer::actionSaveImage() {
   QString filters;
-  QList<QByteArray> formats =  QImageWriter::supportedImageFormats ();
-  for (int i = 0; i < formats.size(); ++i) {
-    filters +=formats.at(i) + ";;";
+  for (unsigned int i = 0; i < fExportImageFormatVector.size(); ++i) {
+    filters += QString("*.") + fExportImageFormatVector.at(i).c_str() + ";;";
   }
-  filters += "eps;;";
-  filters += "ps;;";
-  filters += "pdf";
 
-  QString* selectedFormat = new QString(fDefaultSaveFileFormat);
+  QString* selectedFormat = new QString(fDefaultExportImageFormat.c_str());
   QString qFilename;
   qFilename =  QFileDialog::getSaveFileName ( fGLWindow,
                                          tr("Save as ..."),
-                                         ".",
+                                         fFileSavePath,
                                          filters,
                                          selectedFormat );
 
@@ -979,79 +989,46 @@ void G4OpenGLQtViewer::actionSaveImage() {
   }
 
   fFileSavePath = QFileInfo(qFilename).path();
-  if (! qFilename.endsWith(QString(selectedFormat->toStdString().c_str()),Qt::CaseInsensitive)) {
-    name += "." + selectedFormat->toStdString();
+  
+  std::string format = selectedFormat->toLower().toStdString().c_str();
+  
+  // set the format to current
+  fExportImageFormat = format.substr(format.find_last_of(".") + 1);
+
+  std::string filename = name;
+  std::string extension = "";
+  if (name.find_last_of(".") != std::string::npos) {
+    filename = name.substr(0,name.find_last_of(".") + 1);
+    extension = name.substr(name.find_last_of(".") + 1);
+  } else {
+    extension = fExportImageFormat;
   }
   
-  QString format = selectedFormat->toLower();
+  filename+= "."+ extension;
   
-  // set the default format to current
-  fDefaultSaveFileFormat = format;
+  if (!setExportFilename(filename.c_str(),0)) {
+    return;
+  }
   
-  setPrintFilename(name.c_str(),0);
-  G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(fGLWindow,format,fWindow->height(),fWindow->width());
+  G4OpenGLQtExportDialog* exportDialog= new G4OpenGLQtExportDialog(fGLWindow,format.c_str(),fWindow->height(),fWindow->width());
   if(  exportDialog->exec()) {
 
-    QImage image;
-    bool res = false;
     if ((exportDialog->getWidth() !=fWindow->width()) ||
         (exportDialog->getHeight() !=fWindow->height())) {
-      setPrintSize(exportDialog->getWidth(),exportDialog->getHeight());
-      if ((format != QString("eps")) && (format != QString("ps"))) {
-        G4cerr << "Export->Change Size : This function is not implemented, to export in another size, please resize your frame to what you need" << G4endl;
+      setExportSize(exportDialog->getWidth(),exportDialog->getHeight());
       
-        //    rescaleImage(exportDialog->getWidth(),exportDialog->getHeight());// re-scale image
-        //      QGLWidget* glResized = fWindow;
-
-        // FIXME :
-        // L.Garnier : I've try to implement change size function, but the problem is 
-        // the renderPixmap function call the QGLWidget to resize and it doesn't draw
-        // the content of this widget... It only draw the background.
-
-        //      fWindow->renderPixmap (exportDialog->getWidth()*2,exportDialog->getHeight()*2,true );
-
-        //      QPixmap pixmap = fWindow->renderPixmap ();
-      
-        //      image = pixmap->toImage();
-        //      glResized->resize(exportDialog->getWidth()*2,exportDialog->getHeight()*2);
-        //      image = glResized->grabFrameBuffer();
-      }      
-    } else {
-      image = fWindow->grabFrameBuffer();
-    }    
-    if (format == QString("eps")) {
+    }
+    if (fExportImageFormat == "eps") {
       fVectoredPs = exportDialog->getVectorEPS();
-      printEPS();
-    } else if (format == "ps") {
+    } else if (fExportImageFormat == "ps") {
       fVectoredPs = true;
-      printEPS();
-    } else if (format == "pdf") {
-
-      res = printPDF(name,exportDialog->getNbColor(),image);
-
-    } else if ((format == "tif") ||
-               (format == "tiff") ||
-               (format == "jpg") ||
-               (format == "jpeg") ||
-               (format == "png") ||
-               (format == "pbm") ||
-               (format == "pgm") ||
-               (format == "ppm") ||
-               (format == "bmp") ||
-               (format == "xbm") ||
-               (format == "xpm")) {
-      res = image.save(QString(name.c_str()),0,exportDialog->getSliderValue());
-    } else {
-      G4cerr << "This version of G4UI Could not generate the selected format" << G4endl;
     }
-    if ((format == QString("eps")) && (format == QString("ps"))) {
-      if (res == false) {
-        G4cerr << "Error while saving file... "<<name.c_str()<< G4endl;
-      } else {
-        G4cout << "File "<<name.c_str()<<" has been saved " << G4endl;
-      }
+    fLastExportSliderValue = exportDialog->getSliderValue();
+
+    if (exportImage(filename + "." + fExportImageFormat)) {
+      // set the default format to current
+      fDefaultExportImageFormat = format;
     }
-    
   } else { // cancel selected
     return;
   }
@@ -1158,23 +1135,6 @@ void G4OpenGLQtViewer::showMovieParametersDialog() {
   }
   fMovieParametersDialog->show();
 }
-
-
-/*
-// http://www.google.com/codesearch?hl=en&q=+jpg+Qt+quality+QDialog+show:FZkUoth8oiw:TONpW2mR-_c:tyTfrKMO-xI&sa=N&cd=2&ct=rc&cs_p=http://soft.proindependent.com/src/qtiplot-0.8.9.zip&cs_f=qtiplot-0.8.9/qtiplot/src/application.cpp#a0
-
-void Graph::exportToSVG(const QString& fname)
-{
-// enable workaround for Qt3 misalignments
-QwtPainter::setSVGMode(true);
-QPicture picture;
-QPainter p(&picture);
-d_plot->print(&p, d_plot->rect());
-p.end();
-
-picture.save(fname, "svg");
-}
-*/
 
 
 
@@ -1486,55 +1446,6 @@ void G4OpenGLQtViewer::rescaleImage(
 }
 
 
-
-/**
-   Generate Postscript or PDF form image
-   @param aFilename : name of file
-   @param aInColor : numbers of colors : 1->BW 2->RGB
-   @param aImage : Image to print
-*/
-bool G4OpenGLQtViewer::printPDF (
- const std::string aFilename
- ,int aInColor
- ,QImage aImage
-)
-{
-
-  QPrinter printer;
-  //  printer.setPageSize(pageSize);
-
-  // FIXME : L. Garnier 4/12/07
-  // This is not working, it does nothing. Image is staying in color mode
-  // So I have desactivate the B/W button in GUI
-  if ((!aImage.isGrayscale ()) &&(aInColor ==1 )) {
-    aImage = aImage.convertToFormat ( aImage.format(), Qt::MonoOnly);
-  }
-
-
-  if (aFilename.substr(aFilename.size()-3) == ".ps") {
-#if QT_VERSION > 0x040200
-  #if QT_VERSION < 0x050000
-    printer.setOutputFormat(QPrinter::PostScriptFormat);
-  #else
-    G4cout << "Output in postscript not implemented in this Qt version" << G4endl;
-  #endif
-#else
-    G4cout << "Output in postscript not implemented in this Qt version" << G4endl;
-#endif
-  } else {
-#if QT_VERSION > 0x040100
-    printer.setOutputFormat(QPrinter::PdfFormat);
-#endif
-  }
-#if QT_VERSION > 0x040100
-  printer.setOutputFileName(QString(aFilename.c_str()));
-#endif
-  //  printer.setFullPage ( true);
-  QPainter paint(&printer);
-  paint.drawImage (0,0,aImage);
-  paint.end();
-  return true;
-}
 
 
 void G4OpenGLQtViewer::G4wheelEvent (QWheelEvent * evnt) 
@@ -2097,6 +2008,49 @@ QString G4OpenGLQtViewer::removeTempFolder() {
   return "Could not remove "+fMovieTempFolderPath+" because of the following errors :"+error;
 }
 
+/** 
+  Export image. Try to get the format according to the file extention.
+  If not present, the last one choosen by /vis/ogl/set/exportFormat
+  If not, will take the default format : eps
+  Best format actually available is pdf (vectored and allow transparency)
+  If name is not set, it will take the default name value given by /vis/ogl/set/printFilename
+ */
+bool G4OpenGLQtViewer::exportImage(std::string name, int width, int height) {
+
+  // If there is already an extention
+  bool increaseFileNumber = true;
+  // if
+  if (name.size() != name.substr(name.find_last_of(".") + 1).size()) {
+    increaseFileNumber = false;
+  }
+  if (! setExportFilename(name,increaseFileNumber)) {
+    return false;
+  }
+  if ((width !=-1) && (height != -1)) {
+    setExportSize(width, height);
+  }
+  // first, try to do it with generic function
+  if (G4OpenGLViewer::exportImage()) {
+    return true;
+
+  // Then try Qt saving functions
+  } else {
+    QImage image;
+    image = fWindow->grabFrameBuffer();
+
+    bool res = image.save(QString(getRealPrintFilename().c_str()),0,fLastExportSliderValue);
+    
+    if (!res) {
+      G4cerr << "Error saving file... " << getRealPrintFilename().c_str() << G4endl;
+      return false;
+    } else {
+      G4cout << "File " << getRealPrintFilename().c_str() << " size: " << fWindow->width() << "x" << fWindow->height() << " has been saved " << G4endl;
+      fExportFilenameIndex++;
+    }
+  }
+  return true;
+}
+
 
 
 bool G4OpenGLQtViewer::hasPendingEvents () {
@@ -2494,7 +2448,7 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   
   fViewerPropertiesButton = new QPushButton("Viewer properties");
   fViewerPropertiesButton->setStyleSheet ("text-align: left; padding: 5px ");
-  fViewerPropertiesButton->setIcon(fTreeIconClosed);
+  fViewerPropertiesButton->setIcon(*fTreeIconClosed);
   
   layoutSceneTreeComponentsTBWidget->addWidget(fViewerPropertiesButton);
   connect(fViewerPropertiesButton,SIGNAL(clicked()),this, SLOT(toggleSceneTreeComponentTreeWidgetInfos()));
@@ -4240,9 +4194,9 @@ void G4OpenGLQtViewer::updateSceneTreeComponentTreeWidgetInfos() {
 void G4OpenGLQtViewer::toggleSceneTreeComponentTreeWidgetInfos() {
   fSceneTreeComponentTreeWidgetInfos->setVisible(!fSceneTreeComponentTreeWidgetInfos->isVisible());
   if (fSceneTreeComponentTreeWidgetInfos->isVisible()) {
-    fViewerPropertiesButton->setIcon(fTreeIconOpen);
+    fViewerPropertiesButton->setIcon(*fTreeIconOpen);
   } else {
-    fViewerPropertiesButton->setIcon(fTreeIconClosed);
+    fViewerPropertiesButton->setIcon(*fTreeIconClosed);
   }
 }
 
