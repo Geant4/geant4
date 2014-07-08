@@ -73,24 +73,22 @@ G4PolarizedCompton::G4PolarizedCompton(const G4String& processName,
   buildAsymmetryTable(true),
   useAsymmetryTable(true),
   isInitialised(false),
-  selectedModel(0),
   mType(10),
-  theAsymmetryTable(NULL)
+  theAsymmetryTable(0)
 {
-  SetLambdaBinning(90);
-  SetMinKinEnergy(0.1*keV);
-  SetMaxKinEnergy(100.0*GeV);
+  SetStartFromNullFlag(true);
+  SetBuildTableFlag(true);
+  SetSecondaryParticle(G4Electron::Electron());
   SetProcessSubType(fComptonScattering);
-  emModel = 0;
+  SetMinKinEnergyPrim(1*MeV);
+  SetSplineFlag(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
  
 G4PolarizedCompton::~G4PolarizedCompton()
 {
-  if (theAsymmetryTable) {
-    delete theAsymmetryTable;
-  }
+  delete theAsymmetryTable;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -99,16 +97,14 @@ void G4PolarizedCompton::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-    SetBuildTableFlag(true);
-    SetSecondaryParticle(G4Electron::Electron());
-    G4double emin = MinKinEnergy();
-    G4double emax = MaxKinEnergy();
-    emModel = new G4PolarizedComptonModel();
-    if(0 == mType) selectedModel = new G4KleinNishinaCompton();
-    else if(10 == mType) selectedModel = emModel;
-    selectedModel->SetLowEnergyLimit(emin);
-    selectedModel->SetHighEnergyLimit(emax);
-    AddEmModel(1, selectedModel);
+    if(0 == mType) {
+      if(!EmModel(1)) { SetEmModel(new G4KleinNishinaCompton(), 1); }
+    } else {
+      if(!EmModel(1)) { SetEmModel(new G4PolarizedComptonModel(), 1); }
+    }
+    EmModel(1)->SetLowEnergyLimit(MinKinEnergy());
+    EmModel(1)->SetHighEnergyLimit(MaxKinEnergy());
+    AddEmModel(1, EmModel(1));
   } 
 }
 
@@ -118,7 +114,7 @@ void G4PolarizedCompton::PrintInfo()
 {
   G4cout << " Total cross sections has a good parametrisation"
          << " from 10 KeV to (100/Z) GeV" 
-         << "\n      Sampling according " << selectedModel->GetName() << " model" 
+         << "\n      Sampling according " <<  EmModel(1)->GetName() << " model" 
 	 << G4endl;
 }         
 

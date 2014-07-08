@@ -64,7 +64,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4ParticleDefinition;
-class G4VEmModel;
 class G4MaterialCutsCouple;
 class G4DynamicParticle;
 
@@ -123,7 +122,6 @@ private:
   G4bool          useAsymmetryTable;
 
   G4bool          isInitialised;
-  G4VEmModel*     selectedModel;
   G4int           mType;
 
   // added for polarization treatment:

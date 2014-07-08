@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 July 13: V.Ivanchenko (empolar-V10-00-01)
+- G4PolarizedCompton, G4PolarizedComptonModel - added startFromNull option
+    as for standard Compton process and add the same low-energy 
+    threshold to create secondary particle
+
 26 May 13: V.Ivanchenko (empolar-V10-00-00)
 - G4PolarizationMessenger - fixed coverity report on non-initialized members
 
