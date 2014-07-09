@@ -126,7 +126,7 @@ private:
 
   // added for polarization treatment:
   G4PolarizedComptonModel* emModel;
-  G4PhysicsTable* theAsymmetryTable;  // table for crosssection assymmetry
+  static G4PhysicsTable* theAsymmetryTable;  // table for crosssection assymmetry
   G4ThreeVector targetPolarization;
 };
 

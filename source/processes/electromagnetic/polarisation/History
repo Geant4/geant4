@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 July 13: V.Ivanchenko (empolar-V10-00-02)
+- G4PolarizedCompton - fixed initialisation, added sharing of
+    process table between threads
+
 08 July 13: V.Ivanchenko (empolar-V10-00-01)
 - G4PolarizedCompton, G4PolarizedComptonModel - added startFromNull option
     as for standard Compton process and add the same low-energy 
