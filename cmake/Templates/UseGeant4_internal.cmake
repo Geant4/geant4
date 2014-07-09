@@ -136,6 +136,7 @@ function(geant4_add_test test)
     endif()
     set(_cmd ${_prg} ${ARG_COMMAND})
     string(REPLACE ";" "#" _cmd "${_cmd}")
+    string(REPLACE "=" "@" _cmd "${_cmd}")
   endif()
 
   set(_command ${CMAKE_COMMAND} -DTST=${test} -DCMD=${_cmd})

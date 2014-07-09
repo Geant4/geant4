@@ -20,7 +20,8 @@ endif()
 # Message arguments
 #
 if(CMD)
-  string(REPLACE "#" ";" _cmd ${CMD})
+  string(REPLACE "#" ";" _cmd "${CMD}")
+  string(REPLACE "@" "=" _cmd "${_cmd}")
   if(DBG)
     set(_cmd gdb --args ${_cmd})
   endif()
