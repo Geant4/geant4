@@ -1,0 +1,158 @@
+OPTION(GEANT4_ENABLE_TESTING_MIC "Enable support for Testing on Xeon Phi" OFF)
+
+IF(GEANT4_ENABLE_TESTING AND GEANT4_ENABLE_TESTING_MIC)
+   SET(MIC_REMOTE_LAUNCHER "/usr/bin/ssh" CACHE FILEPATH "Command to connect on MIC card")
+   SET(MIC_LAUNCHER "/opt/intel/mic/bin/micnativeloadex" CACHE FILEPATH "Native MIC launcher")
+   SET(SINK_LD_LIBRARY_PATH  "/opt/intel/lib/mic" CACHE PATH "Default value for SINK_LD_LIBRARY_PATH")
+#   SET(MIC_TEST_ENV "G4NEUTRONHPDATA=/geant4-sw/data/G4NDL G4LEDATA=/geant4-sw/data/G4EMLOW G4LEVELGAMMADATA=/geant4-sw/data/PhotonEvaporation G4RADIOACTIVEDATA=/geant4-sw/data/RadioactiveDecay G4NEUTRONXSDATA=/geant4-sw/data/G4NEUTRONXS G4PIIDATA=/geant4-sw/data/G4PII G4REALSURFACEDATA=/geant4-sw/data/RealSurface G4SAIDXSDATA=/geant4-sw/data/G4SAIDDATA G4ABLADATA=/geant4-sw/data/G4ABLA" CACHE PATH  "DB Libraries as installed on MIC")
+   SET(MIC_TEST_ENV "" CACHE STRING "DB Libraries as installed on MIC")
+   IF("${MIC_TEST_ENV}" STREQUAL "")
+      SET(MIC_TEST_ENV "${GEANT4_TEST_ENVIRONMENT}")
+      STRING(REGEX REPLACE ";" " " MIC_TEST_ENV "${MIC_TEST_ENV}")
+   ENDIF()
+
+#function GEANT4_ADD_TEST_MIC(<name>
+#    COMMAND cmd
+#    [SOURCE_DIR dir]
+#    [BINARY_DIR dir]
+#    [CARD mic0]
+#    [DEPENDS smt ]
+#    [BUILD smt [PRO"G4NEUTRONHPDATA=/geant4-sw/data/G4NDL4.4 G4LEDATA=/geant4-sw/data/G4EMLOW6.39 G4LEVELGAMMADATA=/geant4-sw/data/PhotonEvaporation3.1 G4RADIOACTIVEDATA=/geant4-sw/data/RadioactiveDecay4.1 G4NEUTRONXSDATA=/geant4-sw/data/G4NEUTRONXS1.4 G4PIIDATA=/geant4-sw/data/G4PII1.3 G4REALSURFACEDATA=/geant4-sw/data/RealSurface1.0 G4SAIDXSDATA=/geant4-sw/data/G4SAIDDATA1.1 G4ABLADATA=/geant4-sw/data/G4ABLA3.0")JECT nn]]
+#    [TIMEOUT 750000]
+#    [ENVIRONMENT env [...]]
+#    [LAUNCHENVIRONMENT env]
+function(GEANT4_ADD_TEST_MIC testmic)
+   CMAKE_PARSE_ARGUMENTS(ARG "" "CARD;DEPENDS;TIMEOUT;BUILD;PROJECT;SOURCE_DIR;BINARY_DIR" "COMMAND;ENVIRONMENT;LAUNCHENVIRONMENT" ${ARGN})
+
+   IF(NOT CMAKE_GENERATOR MATCHES Makfiles)
+     SET(_cfg $<CONFIGURATION>/)
+   ENDIF()
+
+   #Handle command argument, 
+   #At the end of this block
+   #${_exe} will be the executable to launch
+   #${_params} will contain the command line parameters of the applicaiton
+   LIST(LENGTH ARG_COMMAND _len)
+   IF(_len LESS 1)
+     IF(NOT ARG_BUILD)
+          MESSAGE(FATAL_ERROR "GEANT4_ADD_TEST_MIC: COMMAND is mandatory (without build)")
+     ENDIF()
+   ELSE() #Command provided
+     LIST(GET ARG_COMMAND 0 _exe)
+     LIST(REMOVE_AT ARG_COMMAND 0)
+     IF(NOT IS_ABSOLUTE ${_exe})
+       SET(_exe ${CMAKE_CURRENT_BINARY_DIR}/${_cfg}${_exe})
+     ELIF(EXISTS ${_exe})
+     ELSE()
+     #    MESSAGE("QUI NO")
+     #    GET_FILENAME_COMPONENT(_path ${_exe} PATH)
+     #	 GET_FILENAME_COMPONENT(_file ${_exe} NAME)
+     #	 SET(_exe ${_path}/${_cfg}${_file})
+     ENDIF()
+     SET(_params ${ARG_COMMAND})
+   ENDIF()  
+   
+   #Handle Launch environment
+   #${_lenv)
+   SET(_lenv SINK_LD_LIBRARY_PATH=${SINK_LD_LIBRARY_PATH} ${ARG_LAUNCHENVIRONMENT})
+
+   LIST(LENGTH ARG_CARD _len)
+   IF(_len LESS 1)
+     SET(ARG_CARD mic0)
+     MESSAGE("${testmic} Using default card: ${ARG_CARD}")
+   ENDIF()
+   STRING(REGEX REPLACE "mic" "" ARG_CARD ${ARG_CARD})
+   LIST(LENGTH ARG_TIMEOUT _len)
+   IF(_len LESS 1)
+     SET(ARG_TIMEOUT 750000)
+     MESSAGE("${testmic} Using default timeout for mic: ${ARG_TIMEOUT}")
+   ENDIF()     
+
+   SET(_cmd ${MIC_LAUNCHER} ${_exe} -d ${ARG_CARD})
+   LIST(LENGTH _params _len)
+   IF(_len GREATER 0)
+     SET(_cmd ${_cmd} -a ${_params})
+   ENDIF()
+   LIST(LENGTH ARG_ENVIRONMENT _len)
+   IF(_len GREATER 0)
+     SET(_cmd ${_cmd} -e ${ARG_ENVIRONMENT})
+   ENDIF()
+
+   IF(ARG_BUILD) #Build
+     IF(NOT ARG_SOURCE_DIR)
+       MESSAGE(FATAL_ERROR "GEANT4_ADD_TEST_MIC: SOURCE_DIR is mandatory (with BUILD)")
+     ENDIF()
+     IF(NOT ARG_BINARY_DIR)
+       MESSAGE(FATAL_ERROR "GEANT4_ADD_TEST_MIC: BINARY_DIR is mandatory (with BUILD)")
+     ENDIF()
+     IF(ARG_PROJECT)
+       IF(ARG_DEPENDS)
+         GEANT4_ADD_TEST(${testmic} COMMAND ${_cmd} BUILD ${ARG_BUILD} PROJECT ${ARG_PROJECT} SOURCE_DIR ${ARG_SOURCE_DIR} BINARY_DIR ${ARG_BINARY_DIR} ENVIRONMENT ${_lenv} LABELS MIC TIMEOUT ${ARG_TIMEOUT} DEPENDS ${ARG_DEPENDS})
+       ELSE()
+         GEANT4_ADD_TEST(${testmic} COMMAND ${_cmd} BUILD ${ARG_BUILD} PROJECT ${ARG_PROJECT} SOURCE_DIR ${ARG_SOURCE_DIR} BINARY_DIR ${ARG_BINARY_DIR} ENVIRONMENT ${_lenv} LABELS MIC TIMEOUT ${ARG_TIMEOUT})
+       ENDIF()
+     ELSE()
+       IF(ARG_DEPENDS)
+         GEANT4_ADD_TEST(${testmic} COMMAND ${_cmd} BUILD ${ARG_BUILD} SOURCE_DIR ${ARG_SOURCE_DIR} BINARY_DIR ${ARG_BINARY_DIR} LABELS MIC TIMEOUT ${ARG_TIMEOUT} DEPENDS ${ARG_DEPENDS} ENVIRONMENT ${_lenv})
+       ELSE()
+         GEANT4_ADD_TEST(${testmic} COMMAND ${_cmd} BUILD ${ARG_BUILD} SOURCE_DIR ${ARG_SOURCE_DIR} BINARY_DIR ${ARG_BINARY_DIR} LABELS MIC TIMEOUT ${ARG_TIMEOUT} ENVIRONMENT ${_lenv})
+       ENDIF()
+     ENDIF()
+   ELSE() #No build
+       IF(ARG_DEPENDS)
+         GEANT4_ADD_TEST(${testmic} COMMAND ${_cmd} ENVIRONMENT ${_lenv} LABELS MIC TIMEOUT ${ARG_TIMEOUT} DEPENDS ${ARG_DEPENDS})
+       ELSE()
+         GEANT4_ADD_TEST(${testmic} COMMAND ${_cmd} ENVIRONMENT ${_lenv} LABELS MIC TIMEOUT ${ARG_TIMEOUT})
+       ENDIF()
+   ENDIF()
+endfunction()
+
+#function GEANT4_ADD_TEST_MIC_LAUNCHER(<name>
+#    COMMAND cmd
+#    [CARD mic0]
+#    [DEPENDS smt]
+#    [TIMEOUT 750000])
+function(GEANT4_ADD_TEST_MIC_LAUNCHER testmic)
+   CMAKE_PARSE_ARGUMENTS(ARG "" "COMMAND;CARD;DEPENDS;TIMEOUT" "" ${ARGN})
+   LIST(LENGTH ARG_COMMAND _len)
+   IF(_len LESS 1)
+     MESSAGE(FATAL_ERROR "GEANT4_ADD_TEST_MIC_LAUNCHER: COMMAND is mandatory")
+   ENDIF()
+   LIST(LENGTH ARG_CARD _len)
+   IF(_len LESS 1)
+     SET(ARG_CARD "mic0")
+     MESSAGE("Using default card: ${ARG_CARD}")
+   ENDIF()
+   LIST(LENGTH ARG_TIMEOUT _len)
+   IF(_len LESS 1)
+     SET(ARG_TIMEOUT 750000)
+     MESSAGE("Using default timeout for mic: ${ARG_TIMEOUT}")
+   ENDIF()
+   IF(ARG_DEPENDS)
+	GEANT4_ADD_TEST(${testmic} 
+		        COMMAND ${MIC_REMOTE_LAUNCHER} ${ARG_CARD} ${ARG_COMMAND} 
+                        DEPENDS ${ARG_DEPENDS} 
+                        LABELS MIC TIMEOUT ${ARG_TIMEOUT})   
+   ELSE()
+	GEANT4_ADD_TEST(${testmic} 
+		        COMMAND ${MIC_REMOTE_LAUNCHER} ${ARG_CARD} ${ARG_COMMAND} 
+                        LABELS MIC TIMEOUT ${ARG_TIMEOUT})
+   ENDIF()
+endfunction()
+
+
+
+GEANT4_ADD_TEST_MIC(example-bas-b5-mic COMMAND ${CMAKE_BINARY_DIR}/examples/basic/B5/exampleB5 ${CMAKE_SOURCE_DIR}/examples/basic/B5/exampleB5.in 
+		    SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/basic/B5
+              	    BINARY_DIR ${CMAKE_BINARY_DIR}/examples/basic/B5
+		    BUILD exampleB5 
+		    ENVIRONMENT "\"${MIC_TEST_ENV} G4FORCENUMBEROFTHREADS=60\"")
+
+
+#Testing MIC
+GEANT4_ADD_TEST_MIC_LAUNCHER(bench-calo-ParFullCMS-MIC
+			     COMMAND /geant4-sw/mic/ctest/runtest.sh
+		 	     DEPENDS bench-calo-ParFullCMS-build)
+
+
+ENDIF()

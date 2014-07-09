@@ -555,3 +555,8 @@ GEANT4_ADD_TEST(example-adv-lArCal
 include( ${CMAKE_SOURCE_DIR}/verification/SimplifiedCalorimeter/physval/CTestDefinitions.txt OPTIONAL)
 
 
+#-------------------------------------------------------------------------------------------------
+#---CTests for MIC (Intel Xeon Phi)
+#-------------------------------------------------------------------------------------------------
+include( ${CMAKE_SOURCE_DIR}/tests/ctests/CTests-mic.txt OPTIONAL)
+

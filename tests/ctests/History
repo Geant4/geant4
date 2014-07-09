@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-11 08 June 2014 Andrea Dotti
+- Adding first version of ctest on MIC (Intel Xeon Phi). To 
+  enable testing add -DGEANT4_ENABLE_TESTING_MIC=ON See
+  tests/ctest/CTests-mic.txt for further details
+
 ctests-V10-00-10 25 June 2014 Gunter Folger
 - add G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS=1 for FissionFragment 
     extended hadronic example 
