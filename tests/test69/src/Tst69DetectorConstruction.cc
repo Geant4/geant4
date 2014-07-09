@@ -196,7 +196,7 @@ G4VPhysicalVolume* Tst69DetectorConstruction::Construct()
 {
   SelectMaterialPointer();
 
-  G4Box * mySimpleBox = new G4Box("SBox",200*cm, 200*cm, 200*cm);
+  G4Box * mySimpleBox = new G4Box("SBox",20.*cm, 20.*cm, 20.*cm);
   simpleBoxLog = new G4LogicalVolume( mySimpleBox,
                                       selectedMaterial,"SLog",0,0,0);
   G4VPhysicalVolume* simpleBoxDetector = new G4PVPlacement(0,G4ThreeVector(),
