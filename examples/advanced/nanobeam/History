@@ -9,6 +9,9 @@ $Id$
                        Package History file
                        --------------------
 
+10 Jul 2014 - tag nanobeam-V10-00-03 - S. Incerti, A, Dotti, B. Wendt
+- updated CMakeLists.txt
+
 03 Jul 2014 - tag nanobeam-V10-00-02 - S. Incerti, A. Dotti, B. Wendt
 - updated CMakeLists.txt
 

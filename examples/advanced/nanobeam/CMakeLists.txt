@@ -20,8 +20,8 @@ endif()
 #
 include(${Geant4_USE_FILE})
 
-if(GEANT4_builtin_clhep_FOUND)
-  message(FATAL_ERROR "G4 Examples: nanobeam example requires system CLHEP --> nanobeam cannot be built")
+if(Geant4_builtin_clhep_FOUND)
+  message(WARNING "G4 Examples: nanobeam example requires system CLHEP --> nanobeam cannot be built")
   return()
 endif() 
 #----------------------------------------------------------------------------
