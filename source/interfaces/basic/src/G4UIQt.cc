@@ -505,7 +505,7 @@ bool G4UIQt::AddTabWidget(
 #endif
   
   if (fViewerTabWidget == NULL) {
-    fViewerTabWidget = new G4QTabWidget(fViewerTabHandleWidget, sizeX, sizeY);
+    fViewerTabWidget = new G4QTabWidget(NULL, sizeX, sizeY);
     #if QT_VERSION < 0x040500
 #else
     fViewerTabWidget->setTabsClosable (true); 

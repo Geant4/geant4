@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10th July 2014  Laurent Garnier  (interfaces-V10-00-07)
+- G4UIQt : BugFix #1604
+- G4UIWt : Minor things
+
 6th June 2014  Laurent Garnier  (interfaces-V10-00-06)
 - G4UIQt : 
   o Fix a Qt function that was only defined for Qt5

@@ -434,8 +434,8 @@ Wt::WTabWidget* G4UIWt::GetSceneTreeComponentsTBWidget(
 bool G4UIWt::AddTabWidget(
                           Wt::WWidget* aWidget
                           ,Wt::WString name
-                          ,int
-                          ,int
+                          ,int width
+                          ,int height
                           )
 {
 /*
@@ -473,6 +473,7 @@ bool G4UIWt::AddTabWidget(
     
   }
 
+
   if (!aWidget) {
     return false;
   }
@@ -486,7 +487,12 @@ bool G4UIWt::AddTabWidget(
   // Problems with resize. The widgets are not realy drawn at this step,
   // then we have to force them on order to check the size
 
+//  aWidget->resize(width,height);
+//  aWidget->resize(600,600);
+//  fViewerTabWidget->resize(620,621);
+  fViewerTabWidget->addTab(new Wt::WLabel("test"),"test1");
   fViewerTabWidget->addTab(aWidget,name);
+  fViewerTabWidget->addTab(new Wt::WLabel("test"),"test2");
 
   // Change Color
   aWidget->decorationStyle().setBackgroundColor (Wt::WColor(245,245,245));
