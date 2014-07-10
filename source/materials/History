@@ -16,7 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+     
+09-07-14 mma (materials-V10-00-20)
+- G4SandiaTable.cc : modify low limit in GetSandiaCofPerAtom() and Material.
+  
 27-06-14 P.Gumplinger (materials-V10-00-19)
 - fix Coverity error uninitilized non-static class members in
   G4UCNMaterialPropertiesTable

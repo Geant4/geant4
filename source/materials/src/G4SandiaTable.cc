@@ -38,7 +38,8 @@
 // 03.02.04 Update distructor V.Ivanchenko
 // 05.03.04 New methods for old sorting algorithm for PAI model. V.Grichine
 // 26.10.11 new scheme for G4Exception  (mma) 
-// 22.05.13 preparation of material table without dynamical arrays. V. Grichine 
+// 22.05.13 preparation of material table without dynamical arrays. V. Grichine
+// 09.07.14 modify low limit in GetSandiaCofPerAtom() and material.  mma   
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
 
@@ -138,7 +139,8 @@ G4SandiaTable::GetSandiaCofPerAtom(G4int Z, G4double energy,
   assert(4 <= coeff.size());
   G4double Emin  = fSandiaTable[fCumulInterval[Z-1]][0]*keV;
   G4double Iopot = fIonizationPotentials[Z]*eV;
-  if (Iopot > Emin) Emin = Iopot;
+  if (Emin  < Iopot) Emin = Iopot;  
+  if (energy < Emin) energy = Emin;
    
   G4int interval = fNbOfIntervals[Z] - 1;
   G4int row = fCumulInterval[Z-1] + interval;
@@ -146,19 +148,13 @@ G4SandiaTable::GetSandiaCofPerAtom(G4int Z, G4double energy,
     --interval;
     row = fCumulInterval[Z-1] + interval;
   }
-  if (energy >= Emin)
-    {        
-      G4double AoverAvo = Z*amu/fZtoAratio[Z];
+
+  G4double AoverAvo = Z*amu/fZtoAratio[Z];
          
-      coeff[0]=AoverAvo*funitc[1]*fSandiaTable[row][1];     
-      coeff[1]=AoverAvo*funitc[2]*fSandiaTable[row][2];     
-      coeff[2]=AoverAvo*funitc[3]*fSandiaTable[row][3];     
-      coeff[3]=AoverAvo*funitc[4]*fSandiaTable[row][4];
-    }
-  else 
-    {
-      coeff[0] = coeff[1] = coeff[2] = coeff[3] = 0.;
-    }                
+  coeff[0]=AoverAvo*funitc[1]*fSandiaTable[row][1];     
+  coeff[1]=AoverAvo*funitc[2]*fSandiaTable[row][2];     
+  coeff[2]=AoverAvo*funitc[3]*fSandiaTable[row][3];     
+  coeff[3]=AoverAvo*funitc[4]*fSandiaTable[row][4];              
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....
@@ -957,13 +953,13 @@ const G4double*
 G4SandiaTable::GetSandiaCofForMaterial(G4double energy) const
 {
   const G4double* x = fnulcof;
-  if (energy >= (*(*fMatSandiaMatrix)[0])[0]) {
-   
-    G4int interval = fMatNbOfIntervals - 1;
-    while ((interval>0)&&(energy<(*(*fMatSandiaMatrix)[interval])[0])) 
-      {interval--;} 
-    x = &((*(*fMatSandiaMatrix)[interval])[1]);
-  }
+  G4double Emin = (*(*fMatSandiaMatrix)[0])[0];
+  if (energy < Emin) energy = Emin;
+  G4int interval = fMatNbOfIntervals - 1;
+  while ((interval>0)&&(energy<(*(*fMatSandiaMatrix)[interval])[0])) 
+    {interval--;} 
+  x = &((*(*fMatSandiaMatrix)[interval])[1]);
+
   return x;
 }
 
