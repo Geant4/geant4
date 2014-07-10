@@ -4,6 +4,12 @@ $Id$
 History file for test/test202 subdirectory
 ------------------------------------------------
 
+9th July 2014 Laurent Garnier (test202-V10-00-30)
+- Change reference files because some options have changed in visexternal (gl2ps package)
+
+2nd June 2014 Laurent Garnier (test202-V10-00-29)
+- Fix sh comparison in xvfb.sh
+
 2nd June 2014 Laurent Garnier (test202-V10-00-28)
 - Fix sh comparison in xvfb.sh
 
