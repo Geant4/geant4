@@ -251,7 +251,7 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
 
   if (!nKeptEvents) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
 	"ERROR: G4VisCommandReviewKeptEvents::SetNewValue: No kept events,"
 	"\n  or kept events not accessible."
 	     << G4endl;

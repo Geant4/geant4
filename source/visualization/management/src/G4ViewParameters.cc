@@ -152,7 +152,7 @@ void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
     fCutawayPlanes.push_back (cutawayPlane);
   }
   else {
-    G4cout <<
+    G4cerr <<
       "ERROR: G4ViewParameters::AddCutawayPlane:"
       "\n  A maximum of 3 cutaway planes supported." << G4endl;
   }
@@ -161,7 +161,7 @@ void G4ViewParameters::AddCutawayPlane (const G4Plane3D& cutawayPlane) {
 void G4ViewParameters::ChangeCutawayPlane
 (size_t index, const G4Plane3D& cutawayPlane) {
   if (index >= fCutawayPlanes.size()) {
-    G4cout <<
+    G4cerr <<
       "ERROR: G4ViewParameters::ChangeCutawayPlane:"
       "\n  Plane " << index << " does not exist." << G4endl;
   } else {

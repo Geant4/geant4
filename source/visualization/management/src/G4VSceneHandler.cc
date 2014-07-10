@@ -494,7 +494,7 @@ void G4VSceneHandler::RequestPrimitives (const G4VSolid& solid) {
   else {
     G4VisManager::Verbosity verbosity = G4VisManager::GetVerbosity();
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
       "ERROR: G4VSceneHandler::RequestPrimitives"
       "\n  Polyhedron not available for " << solid.GetName () <<
       ".\n  This means it cannot be visualized on most systems."

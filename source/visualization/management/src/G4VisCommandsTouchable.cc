@@ -65,7 +65,7 @@ void G4VisCommandsTouchable::SetNewValue
   G4VPhysicalVolume* world = *(transportationManager->GetWorldsIterator());
   if (!world) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
       "ERROR: G4VisCommandsTouchable::SetNewValue:"
       "\n  No world.  Maybe the geometry has not yet been defined."
       "\n  Try \"/run/initialize\""
@@ -95,7 +95,7 @@ void G4VisCommandsTouchable::SetNewValue
   } else {
 
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
       "ERROR: G4VisCommandsTouchable::SetNewValue: unrecognised command."
       << G4endl;
     }

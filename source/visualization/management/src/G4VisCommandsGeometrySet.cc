@@ -56,7 +56,7 @@ void G4VVisCommandGeometrySet::Set
   }
   if (requestedName != "all" && !found) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: Logical volume \"" << requestedName
+      G4cerr << "ERROR: Logical volume \"" << requestedName
 	     << "\" not found in logical volume store." << G4endl;
     }
     return;

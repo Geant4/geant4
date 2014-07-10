@@ -166,7 +166,7 @@ void G4VisCommandsTouchableSet::SetNewValue
   G4VViewer* currentViewer = fpVisManager->GetCurrentViewer();
   if (!currentViewer) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
       "ERROR: G4VisCommandsTouchableSet::SetNewValue: no current viewer."
       << G4endl;
     }
@@ -288,7 +288,7 @@ void G4VisCommandsTouchableSet::SetNewValue
   
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
       "ERROR: G4VisCommandsTouchableSet::SetNewValue: unrecognised command."
       << G4endl;
     }

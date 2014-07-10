@@ -83,7 +83,7 @@ void G4VisCommandGeometryList::SetNewValue(G4UIcommand*, G4String newValue)
   }
   if (newValue != "all" && !found) {
     if (fpVisManager->GetVerbosity() >= G4VisManager::errors) {
-      G4cout << "ERROR: Logical volume \"" << newValue
+      G4cerr << "ERROR: Logical volume \"" << newValue
 	     << "\" not found in logical volume store." << G4endl;
     }
     return;
@@ -140,7 +140,7 @@ void G4VisCommandGeometryRestore::SetNewValue(G4UIcommand*, G4String newValue)
   }
   if (newValue != "all" && !found) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout << "ERROR: Logical volume \"" << newValue
+      G4cerr << "ERROR: Logical volume \"" << newValue
 	     << "\" not found in logical volume store." << G4endl;
     }
     return;

@@ -26,6 +26,11 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+9th July 2014  Laurent Garnier (visman-V10-00-13)
+- Change some G4cout in G4err in case of error messages in
+  G4VSceneHandler, G4ViewParameters, G4VisCommand, G4VisCommandGeometry, G4VisCommandGeometrySet, 
+  G4VisCommandsTouchable, G4VisCommandsTouchableSet, G4VisCommandViewerDefault, G4VisCommandsViewerSet
+
 8th July 2014  Laurent Garnier (visman-V10-00-12)
 - G4VisCommandViewer : 
   o Revert change to /vis/viewer/update in order not to failed with a Cerr in all examples. 
