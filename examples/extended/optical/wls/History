@@ -16,6 +16,10 @@ track of all tags.
  
      ----------------------------------------------------------
 
+July 11, 2014 P. Gumplinger (WLS-V10-00-02)
+- Use implicit dimensioning for all arrays and assert that they are the
+  same (thanks to M. Kelsey for suggesting this)
+
 June 06, 2014 A. Dotti (WLS-V10-00-01)
 - Migration to new GPS for MT
 
