@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 11, 2014 A. Dotti			   geommng-V10-00-02
+- Solves possible data-race condition in G4GeaomSplitter
+
 April 10, 2014 G.Cosmo                     geommng-V10-00-01
 - Get rid of deprecated 'register' storage class specifier in source files.
 
