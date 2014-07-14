@@ -47,21 +47,29 @@
 
 #include "globals.hh"
 #include "pwdefs.hh"
+#include "G4AutoLock.hh"
 
 template <class T>  // T is the private data from the object to be split
 class G4PDefSplitter
 {
   public:
 
-    G4PDefSplitter() : totalobj(0) {}
+    G4PDefSplitter() : totalobj(0) {
+    	G4MUTEXINIT(mutex);
+    }
 
     G4int CreateSubInstance()
       // Invoked by the master or work thread to create a new subinstance
       // whenever a new split class instance is created. For each worker
       // thread, ions are created dynamically.
     {
+      G4AutoLock l(&mutex);
       totalobj++;
-      if (totalobj > slavetotalspace)  { NewSubInstances(); }
+      if (totalobj > slavetotalspace)  {
+    	  l.unlock();
+    	  NewSubInstances();
+    	  l.lock();
+      }
       return (totalobj - 1);
     }
 
@@ -70,6 +78,7 @@ class G4PDefSplitter
       // initialize each new subinstance using a particular method defined
       // by the subclass.
     {
+      G4AutoLock l(&mutex);
       if (slavetotalspace  >= totalobj)  { return; }
       G4int originaltotalspace = slavetotalspace;
       slavetotalspace = totalobj + 512;
@@ -103,6 +112,7 @@ class G4PDefSplitter
   private:
 
     G4int totalobj;
+    G4Mutex mutex;
 };
 
 #endif
