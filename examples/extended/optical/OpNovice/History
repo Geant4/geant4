@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 11, 2014 P. Gumplinger (OpNovice-V10-00-05)
+- Use implicit dimensioning for all arrays in
+  OpNoviceDetectorConstruction.cc and assert that they are the
+  same (thanks to M. Kelsey for suggesting this)
+
 December 23, 2013 M. Asai (OpNovice-V10-00-04)
 - Limit invokation of static method only from master/sequential.
 

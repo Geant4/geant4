@@ -85,9 +85,7 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
 //
 // ------------ Generate & Add Material Properties Table ------------
 //
-  const G4int nEntries = 32;
-
-  G4double photonEnergy[nEntries] =
+  G4double photonEnergy[] =
             { 2.034*eV, 2.068*eV, 2.103*eV, 2.139*eV,
               2.177*eV, 2.216*eV, 2.256*eV, 2.298*eV,
               2.341*eV, 2.386*eV, 2.433*eV, 2.481*eV,
@@ -96,10 +94,13 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
               3.026*eV, 3.102*eV, 3.181*eV, 3.265*eV,
               3.353*eV, 3.446*eV, 3.545*eV, 3.649*eV,
               3.760*eV, 3.877*eV, 4.002*eV, 4.136*eV };
+
+  const G4int nEntries = sizeof(photonEnergy)/sizeof(G4double);
+
 //
 // Water
 //
-  G4double refractiveIndex1[nEntries] =
+  G4double refractiveIndex1[] =
             { 1.3435, 1.344,  1.3445, 1.345,  1.3455,
               1.346,  1.3465, 1.347,  1.3475, 1.348,
               1.3485, 1.3492, 1.35,   1.3505, 1.351,
@@ -108,7 +109,9 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
               1.3572, 1.358,  1.3585, 1.359,  1.3595,
               1.36,   1.3608};
 
-  G4double absorption[nEntries] =
+  assert(sizeof(refractiveIndex1) == sizeof(photonEnergy));
+
+  G4double absorption[] =
            {3.448*m,  4.082*m,  6.329*m,  9.174*m, 12.346*m, 13.889*m,
            15.152*m, 17.241*m, 18.868*m, 20.000*m, 26.316*m, 35.714*m,
            45.455*m, 47.619*m, 52.632*m, 52.632*m, 55.556*m, 52.632*m,
@@ -116,18 +119,25 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
            30.000*m, 28.500*m, 27.000*m, 24.500*m, 22.000*m, 19.500*m,
            17.500*m, 14.500*m };
 
-  G4double scintilFast[nEntries] =
+  assert(sizeof(absorption) == sizeof(photonEnergy));
+
+  G4double scintilFast[] =
             { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00 };
-  G4double scintilSlow[nEntries] =
+
+  assert(sizeof(scintilFast) == sizeof(photonEnergy));
+
+  G4double scintilSlow[] =
             { 0.01, 1.00, 2.00, 3.00, 4.00, 5.00, 6.00,
               7.00, 8.00, 9.00, 8.00, 7.00, 6.00, 4.00,
               3.00, 2.00, 1.00, 0.01, 1.00, 2.00, 3.00,
               4.00, 5.00, 6.00, 7.00, 8.00, 9.00, 8.00,
               7.00, 6.00, 5.00, 4.00 };
+
+  assert(sizeof(scintilSlow) == sizeof(photonEnergy));
 
   G4MaterialPropertiesTable* myMPT1 = new G4MaterialPropertiesTable();
 
@@ -146,9 +156,7 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   myMPT1->AddConstProperty("SLOWTIMECONSTANT",10.*ns);
   myMPT1->AddConstProperty("YIELDRATIO",0.8);
 
-  const G4int numentries_water = 60;
-
-  G4double energy_water[numentries_water] = {
+  G4double energy_water[] = {
      1.56962*eV, 1.58974*eV, 1.61039*eV, 1.63157*eV,
      1.65333*eV, 1.67567*eV, 1.69863*eV, 1.72222*eV,
      1.74647*eV, 1.77142*eV, 1.7971 *eV, 1.82352*eV,
@@ -166,8 +174,10 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
      5.39129*eV, 5.63635*eV, 5.90475*eV, 6.19998*eV
   };
 
+  const G4int numentries_water = sizeof(energy_water)/sizeof(G4double);
+
   //assume 100 times larger than the rayleigh scattering for now.
-  G4double mie_water[numentries_water] = {
+  G4double mie_water[] = {
      167024.4*m, 158726.7*m, 150742  *m,
      143062.5*m, 135680.2*m, 128587.4*m,
      121776.3*m, 115239.5*m, 108969.5*m,
@@ -190,6 +200,8 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
      1004.528*m, 833.9666*m, 686.1063*m
   };
 
+  assert(sizeof(mie_water) == sizeof(energy_water));
+
   // gforward, gbackward, forward backward ratio
   G4double mie_water_const[3]={0.99,0.99,0.8};
 
@@ -198,6 +210,9 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   myMPT1->AddConstProperty("MIEHG_FORWARD",mie_water_const[0]);
   myMPT1->AddConstProperty("MIEHG_BACKWARD",mie_water_const[1]);
   myMPT1->AddConstProperty("MIEHG_FORWARD_RATIO",mie_water_const[2]);
+
+  G4cout << "Water G4MaterialPropertiesTable" << G4endl;
+  myMPT1->DumpTable();
 
   water->SetMaterialPropertiesTable(myMPT1);
 
@@ -208,7 +223,7 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
 //
 // Air
 //
-  G4double refractiveIndex2[nEntries] =
+  G4double refractiveIndex2[] =
             { 1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
               1.00, 1.00, 1.00, 1.00, 1.00, 1.00, 1.00,
@@ -217,6 +232,9 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
 
   G4MaterialPropertiesTable* myMPT2 = new G4MaterialPropertiesTable();
   myMPT2->AddProperty("RINDEX", photonEnergy, refractiveIndex2, nEntries);
+
+  G4cout << "Air G4MaterialPropertiesTable" << G4endl;
+  myMPT2->DumpTable();
 
   air->SetMaterialPropertiesTable(myMPT2);
 
@@ -301,6 +319,9 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
   myST1->AddProperty("SPECULARSPIKECONSTANT", ephoton, specularSpike,   num);
   myST1->AddProperty("BACKSCATTERCONSTANT",   ephoton, backScatter,     num);
 
+  G4cout << "Water Surface G4MaterialPropertiesTable" << G4endl;
+  myST1->DumpTable();
+
   opWaterSurface->SetMaterialPropertiesTable(myST1);
 
   //OpticalAirSurface
@@ -311,6 +332,9 @@ G4VPhysicalVolume* OpNoviceDetectorConstruction::Construct()
 
   myST2->AddProperty("REFLECTIVITY", ephoton, reflectivity, num);
   myST2->AddProperty("EFFICIENCY",   ephoton, efficiency,   num);
+
+  G4cout << "Air Surface G4MaterialPropertiesTable" << G4endl;
+  myST2->DumpTable();
 
   opAirSurface->SetMaterialPropertiesTable(myST2);
 
