@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 14, 2014  G.Cosmo (global-V10-00-27)
+- Added symbol to exclusion list in windefs.h.
+
 July 1, 2014  A.Dotti (global-V10-00-26)
 - Add std::flush to receiving of G4MTcoutDestination (Bug #1644)
 
