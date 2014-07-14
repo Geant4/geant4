@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 11, 2014 P. Gumplinger (LXe-V10-00-04)
+- Use implicit dimensioning for all arrays and assert that they are the
+  same (thanks to M. Kelsey for suggesting this)
+
 June 2, 2014 A. Dotti (LXe-V10-00-03)
 - Remove shared process pointers between threads.
 
