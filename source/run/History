@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 11th, 2014 A.Dotti       (run-V10-00-15)
+- Fixing race condition in G4VUPLSplitter class
+
 July 5th, 2014 A. Dotti       (run-V10-00-14)
 - Fixing data-race condition in G4RunManagerKernel 
   when FPE is active
