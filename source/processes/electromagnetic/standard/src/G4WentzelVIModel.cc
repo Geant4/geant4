@@ -366,7 +366,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
   // initialisation of single scattering x-section
   xtsec = 0.0;
   cosThetaMin = 1.0;
-  /*        
+  /*
   G4cout << "ComputeTrueStepLength: Step= " << geomStepLength 
 	 << "  Lambda= " <<  lambdaeff 
   	 << " 1-cosThetaMaxNuc= " << 1 - cosTetMaxNuc << G4endl;
@@ -381,10 +381,11 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
   } else {
 
     // small step use only single scattering
-    ComputeTransportXSectionPerVolume(1.0);
+    ComputeTransportXSectionPerVolume(cosThetaMin);
     //static const G4double singleScatLimit = 1.0e-7;
     //if(geomStepLength < lambdaeff*singleScatLimit*(1.0 - cosTetMaxNuc)) {
-    if(geomStepLength*xtsec < 15.0) {
+    //G4cout << "xtsec= " << xtsec << "  Nav= " << geomStepLength*xtsec << G4endl;
+    if(geomStepLength*xtsec < 10.0) {
       //if(geomStepLength < lambdaeff*2.0e-7) {
       singleScatteringMode = true;
       zPathLength  = geomStepLength;
@@ -420,6 +421,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
   // define threshold angle between single and multiple scattering 
   if(!singleScatteringMode) { 
     cosThetaMin -= ssFactor*tPathLength/lambdaeff; 
+    xtsec = 0.0;
   }
 
   // recompute transport cross section - do not change energy
@@ -427,7 +429,8 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
   if(cosThetaMin > cosTetMaxNuc) {
     // new computation
     G4double cross = ComputeTransportXSectionPerVolume(cosThetaMin);
-    //G4cout << "%%%% cross= " << cross << "  xtsec= " << xtsec << G4endl;
+    //G4cout << "%%%% cross= " << cross << "  xtsec= " << xtsec 
+    //	   << " 1-cosTMin= " << 1.0 - cosThetaMin << G4endl;
     if(cross <= 0.0) {
       singleScatteringMode = true;
       tPathLength = zPathLength; 
@@ -543,7 +546,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
   G4double x2 = x0;
   G4double step, z;
   G4bool singleScat;
-  /*      
+  /*  
     G4cout << "Start of the loop x1(mm)= " << x1 << "  x2(mm)= " << x2 
     << " 1-cost1= " << 1 - cosThetaMin << " SSmode= " << singleScatteringMode 
 	   << " xtsec= " << xtsec << " Nst= "  << nMscSteps << G4endl;
@@ -640,7 +643,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
     
   dir.rotateUz(oldDirection);
 
-  //G4cout<<"G4WentzelVIModel sampling is done 1-cost= "<< 1.-dir.z()<<G4endl;
+  // G4cout<<"G4WentzelVIModel sampling is done 1-cost= "<< 1.-dir.z()<<G4endl;
   // end of sampling -------------------------------
 
   fParticleChange->ProposeMomentumDirection(dir);

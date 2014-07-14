@@ -18,6 +18,10 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+13 July 14: V.Ivanchenko (emstand-V10-00-33)
+- G4WentzelVIModel - fixed bug introduced in tag 31, which is
+    responsible for CPU increase in several tests
+
 08 July 14: V.Ivanchenko (emstand-V10-00-32)
 - G4KleinNishinaModel - minor cleanup
 
