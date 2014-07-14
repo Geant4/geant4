@@ -37,7 +37,6 @@
 #include "G4Proton.hh"
 
 // Available models
-#include "G4DNAEmfietzoglouExcitationModel.hh"
 #include "G4DNAMillerGreenExcitationModel.hh"
 #include "G4DNABornExcitationModel.hh"
 

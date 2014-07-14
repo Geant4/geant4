@@ -56,7 +56,6 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNASmoluchowskiReactionModel.hh
         G4DNADingfelderChargeDecreaseModel.hh
         G4DNADingfelderChargeIncreaseModel.hh
-        G4DNAEmfietzoglouExcitationModel.hh
         G4DNAMeltonAttachmentModel.hh
         G4DNAMillerGreenExcitationModel.hh
         G4DNAMolecularReaction.hh
@@ -77,7 +76,6 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNASmoluchowskiReactionModel.cc
         G4DNADingfelderChargeDecreaseModel.cc
         G4DNADingfelderChargeIncreaseModel.cc
-        G4DNAEmfietzoglouExcitationModel.cc
         G4DNAMeltonAttachmentModel.cc
         G4DNAMillerGreenExcitationModel.cc
         G4DNAMolecularReaction.cc

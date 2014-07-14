@@ -35,7 +35,6 @@
 
 #include "G4Proton.hh"
 #include "G4DNAGenericIonsManager.hh"
-#include "G4DNAEmfietzoglouExcitationModel.hh"
 #include "G4DNAWaterExcitationStructure.hh"
 #include "Randomize.hh"
 #include "G4NistManager.hh"

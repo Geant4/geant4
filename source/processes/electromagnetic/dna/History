@@ -14,6 +14,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+12-07-2014  SI, tag emdna-V10-00-31
+            Removed obsolete class for electron excitation
+
 27-06-2014  GCosmo, tag emdna-V10-00-30
 	    - Get rid of obsolete 'register' keyword in code.
 
