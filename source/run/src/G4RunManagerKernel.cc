@@ -159,10 +159,9 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
 #endif
 
 #ifdef G4FPE_DEBUG
-   static G4Mutex aLocalMutex = G4MUTEX_INITIALIZER;
-   G4AutoLock l(&aLocalMutex);
-   InvalidOperationDetection();
-   l.unlock();
+   if ( ! G4Threading::IsWorkerThread() ) {
+	   InvalidOperationDetection();
+   }
 #endif
     
     defaultExceptionHandler = new G4ExceptionHandler();
@@ -445,6 +444,8 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 {
   physicsList = uPhys;
 
+  if(runManagerKernelType==workerRMK) return;
+
   SetupPhysics();
   if(verboseLevel>2) G4ParticleTable::GetParticleTable()->DumpTable();
   if(verboseLevel>1)
@@ -468,8 +469,7 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 
 void G4RunManagerKernel::SetupPhysics()
 {
-    G4ParticleTable::GetParticleTable()->SetReadiness();
-    if(runManagerKernelType==workerRMK) return;
+	G4ParticleTable::GetParticleTable()->SetReadiness();
 
     physicsList->ConstructParticle();
 
@@ -532,9 +532,12 @@ void G4RunManagerKernel::InitializePhysics()
   physicsList->CheckParticleList();
     //Cannot assume that SetCuts and CheckRegions are thread safe. We need to mutex
     //Report from valgrind --tool=drd
-  if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
   G4AutoLock l(&initphysicsmutex);
-  physicsList->SetCuts();
+  if ( !G4Threading::IsWorkerThread() ) {
+	  if(verboseLevel>1) G4cout << "physicsList->setCut() start." << G4endl;
+	  physicsList->SetCuts();
+
+  }
   CheckRegions();
   l.unlock();
 

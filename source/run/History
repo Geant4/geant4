@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 14th, 2014 A.Dotti	      (run-V10-00-16)
+- Only master thread installs FPE handler
+- Worker threads return G4RunManagerKernel::SetPhysics method
+  just after setting PL pointer (e.g. no setup needed)
+- G4VUserPhysicsList::SetCuts is not called anymore by worker threads
+  during physics initialization
+
 July 11th, 2014 A.Dotti       (run-V10-00-15)
 - Fixing race condition in G4VUPLSplitter class
 
