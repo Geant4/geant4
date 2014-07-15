@@ -85,8 +85,6 @@ private:
 
   G4bool isInitialised;
   G4int verboseLevel;
-
-  G4double lowestEnergy;
   
   G4ParticleChangeForGamma* fParticleChange;
   G4VAtomDeexcitation*      fAtomDeexcitation;

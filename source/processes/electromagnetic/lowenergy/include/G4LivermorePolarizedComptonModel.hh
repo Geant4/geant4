@@ -78,9 +78,7 @@ protected:
 			   G4ForceCondition* condition);
 			   */
 private:
-
-  G4double lowEnergyLimit;  
-  G4double highEnergyLimit; 
+ 
   G4bool isInitialised;
   G4int verboseLevel;
 

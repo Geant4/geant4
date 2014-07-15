@@ -208,8 +208,6 @@ G4double G4LivermorePhotoElectricModel::ComputeCrossSectionPerAtom(
 	   << " Z= " << ZZ << "  R(keV)= " << energy/keV << G4endl;
   }
   G4double cs = 0.0;
-  G4double gammaEnergy = energy;
-
   G4int Z = G4lrint(ZZ);
   if(Z < 1 || Z >= maxZ) { return cs; }
 
@@ -221,28 +219,28 @@ G4double G4LivermorePhotoElectricModel::ComputeCrossSectionPerAtom(
   }
 
   G4int idx = fNShells[Z]*6 - 4;
-  if (gammaEnergy <= (*(fParam[Z]))[idx-1]) { return cs; }
+  if (energy < (*(fParam[Z]))[idx-1]) { energy = (*(fParam[Z]))[idx-1]; }
   
-  G4double x1 = 1.0/gammaEnergy;
+  G4double x1 = 1.0/energy;
   G4double x2 = x1*x1;
   G4double x3 = x2*x1;
 
   // parameterisation
-  if(gammaEnergy >= (*(fParam[Z]))[0]) {
+  if(energy >= (*(fParam[Z]))[0]) {
     G4double x4 = x2*x2;
     cs = x1*((*(fParam[Z]))[idx] + x1*(*(fParam[Z]))[idx+1]
 	     + x2*(*(fParam[Z]))[idx+2] + x3*(*(fParam[Z]))[idx+3] 
 	     + x4*(*(fParam[Z]))[idx+4]);
     // high energy part
-  } else if(gammaEnergy >= (*(fParam[Z]))[1]) {
-    cs = x3*(fCrossSection[Z])->Value(gammaEnergy);
+  } else if(energy >= (*(fParam[Z]))[1]) {
+    cs = x3*(fCrossSection[Z])->Value(energy);
 
     // low energy part
   } else {
-    cs = x3*(fCrossSectionLE[Z])->Value(gammaEnergy);
+    cs = x3*(fCrossSectionLE[Z])->Value(energy);
   }
   if (verboseLevel > 1) { 
-    G4cout << "LivermorePhotoElectricModel: E(keV)= " << gammaEnergy/keV
+    G4cout << "LivermorePhotoElectricModel: E(keV)= " << energy/keV
 	   << " Z= " << Z << " cross(barn)= " << cs/barn << G4endl;
   }
   return cs;

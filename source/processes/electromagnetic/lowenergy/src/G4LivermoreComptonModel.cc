@@ -69,9 +69,7 @@ static const G4double ln10 = G4Log(10.);
 G4LivermoreComptonModel::G4LivermoreComptonModel(const G4ParticleDefinition*, 
 						 const G4String& nam)
   : G4VEmModel(nam),isInitialised(false)
-{
-  lowestEnergy = 10 * eV;
-
+{  
   verboseLevel=1 ;
   // Verbosity scale:
   // 0 = nothing 
@@ -244,7 +242,7 @@ G4LivermoreComptonModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
   }
   G4double cs = 0.0; 
 
-  if (GammaEnergy < lowestEnergy) { return 0.0; }
+  if (GammaEnergy < LowEnergyLimit()) { return 0.0; }
 
   G4int intZ = G4lrint(Z);
   if(intZ < 1 || intZ > maxZ) { return cs; } 
@@ -302,15 +300,11 @@ void G4LivermoreComptonModel::SampleSecondaries(
 	   << photonEnergy0/MeV << " in " << couple->GetMaterial()->GetName() 
 	   << G4endl;
   }
-  
-  // low-energy gamma is absorpted by this process
-  if (photonEnergy0 <= lowestEnergy) 
-    {
-      fParticleChange->ProposeTrackStatus(fStopAndKill);
-      fParticleChange->SetProposedKineticEnergy(0.);
-      fParticleChange->ProposeLocalEnergyDeposit(photonEnergy0);
-      return ;
-    }
+
+  // do nothing below the threshold
+  // should never get here because the XS is zero below the limit
+  if (photonEnergy0 < LowEnergyLimit())     
+    return ;    
 
   G4double e0m = photonEnergy0 / electron_mass_c2 ;
   G4ParticleMomentum photonDirection0 = aDynamicGamma->GetMomentumDirection();

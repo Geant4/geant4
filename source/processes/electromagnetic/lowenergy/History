@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15.07.2014 V. Ivanchenko/L. Pandola, tag emlowen-V10-00-13
+           LivermorePhotoElectricModel - keep cross section const 
+           below lowest shell energy (as in Penelope model)
+	   Changed Livermore, LivemorePolarized, LivemoreModified and 
+           Penelope Compton to unify the treatment for 
+           energy < LowEnergyLimit(). Null cross 
+           section and no change in the gamma state. 
+
 03.06.2014 V. Ivanchenko tag emlowen-V10-00-12
            G4LowEWentzelVIModel - cosmetic change trying to avoid 
              compillation problem for strict compiler 
