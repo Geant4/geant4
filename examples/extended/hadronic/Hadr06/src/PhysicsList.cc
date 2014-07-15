@@ -48,16 +48,6 @@
 #include "G4DecayPhysics.hh"
 #include "G4RadioactiveDecayPhysics.hh"
 
-// particles
-
-#include "G4BosonConstructor.hh"
-#include "G4LeptonConstructor.hh"
-#include "G4MesonConstructor.hh"
-#include "G4BosonConstructor.hh"
-#include "G4BaryonConstructor.hh"
-#include "G4IonConstructor.hh"
-#include "G4ShortLivedConstructor.hh"
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
@@ -103,28 +93,6 @@ PhysicsList::PhysicsList()
 PhysicsList::~PhysicsList()
 { }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::ConstructParticle()
-{
-  G4BosonConstructor  pBosonConstructor;
-  pBosonConstructor.ConstructParticle();
-
-  G4LeptonConstructor pLeptonConstructor;
-  pLeptonConstructor.ConstructParticle();
-
-  G4MesonConstructor pMesonConstructor;
-  pMesonConstructor.ConstructParticle();
-
-  G4BaryonConstructor pBaryonConstructor;
-  pBaryonConstructor.ConstructParticle();
-
-  G4IonConstructor pIonConstructor;
-  pIonConstructor.ConstructParticle();
-
-  G4ShortLivedConstructor pShortLivedConstructor;
-  pShortLivedConstructor.ConstructParticle();  
-}
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::SetCuts()

@@ -44,7 +44,6 @@ public:
  ~PhysicsList();
 
 public:
-  virtual void ConstructParticle();
   virtual void SetCuts();
 };
 
