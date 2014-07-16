@@ -67,7 +67,7 @@ else
   echo "No GLX extension on Xvfb server"
   XVFB_PID="`pgrep -f "$XV_CMD"`"
   if [ XVFB_PID ]; then
-    kill -9 $XVFB_PID 2>&1
+    kill -9 $XVFB_PID 2>/dev/null
   fi
   exit 0
 fi

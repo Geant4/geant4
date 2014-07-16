@@ -4,11 +4,11 @@ $Id$
 History file for test/test202 subdirectory
 ------------------------------------------------
 
-9th July 2014 Laurent Garnier (test202-V10-00-30)
-- Change reference files because some options have changed in visexternal (gl2ps package)
+16th July 2014 Laurent Garnier (test202-V10-00-31)
+- Compare cerr to a reference file in order to avoid errors in CDash
 
-2nd June 2014 Laurent Garnier (test202-V10-00-29)
-- Fix sh comparison in xvfb.sh
+9th July 2014 Laurent Garnier (test202-V10-00-29 test202-V10-00-30)
+- Change reference files because some options have changed in visexternal (gl2ps package)
 
 2nd June 2014 Laurent Garnier (test202-V10-00-28)
 - Fix sh comparison in xvfb.sh

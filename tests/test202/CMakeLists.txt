@@ -35,7 +35,8 @@ if(XVFB_FOUND)
   GEANT4_ADD_TEST(test202-OGLIX COMMAND xvfb.sh ${CMAKE_CURRENT_BINARY_DIR}/test202 OGLIX
                               ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
                               DEPENDS test202-build
-										TIMEOUT 1500)
+			      TIMEOUT 1500
+			      ERROR expected_errors.txt)
 
     
 endif()
