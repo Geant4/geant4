@@ -29,6 +29,7 @@
 #include "Tst69DetectorConstruction.hh"
 #include "Tst69ActionInitialization.hh"
 #include "Tst69MacroLocation.hh"
+#include "G4StepLimiterPhysics.hh"
 
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
@@ -81,6 +82,7 @@ int main(int argc,char** argv) {
     physicsListName = physListEnvVar;
   G4PhysListFactory factory;
   G4VModularPhysicsList* phys = factory.GetReferencePhysList(physicsListName);
+  phys->RegisterPhysics(new G4StepLimiterPhysics());
   runManager->SetUserInitialization(phys);
 
   if(getenv("TEST69_USE_ABLA"))

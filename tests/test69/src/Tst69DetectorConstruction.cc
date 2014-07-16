@@ -43,9 +43,11 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4Pow.hh"
+#include "G4UserLimits.hh"
 
 Tst69DetectorConstruction::Tst69DetectorConstruction()
-  :simpleBoxLog(0),selectedMaterial(0),theH(0),theLi(0),theC(0),theSi(0),theCu(0),thePb(0),theU(0),theTh(0),theMix(0)
+  :simpleBoxLog(0),selectedMaterial(0),theH(0),theLi(0),theC(0),theSi(0),theCu(0),thePb(0),theU(0),theTh(0),theMix(0),
+  fStepLimit(0)
 {
   detectorMessenger = new Tst69DetectorMessenger(this);
   materialChoice = "mix";
@@ -53,6 +55,7 @@ Tst69DetectorConstruction::Tst69DetectorConstruction()
 
 Tst69DetectorConstruction::~Tst69DetectorConstruction()
 {
+  delete fStepLimit;
   delete detectorMessenger;
 }
 
@@ -74,7 +77,7 @@ void Tst69DetectorConstruction::SelectMaterialPointer()
   if(!theH)
   {
     a = 1.007940*g/mole;
-    G4Element* elH = new G4Element(name="Hydrogen", symbol="H", iz=1., a);
+    G4Element* elH = new G4Element(name="H", symbol="H", iz=1., a);
     density = 1.29e-03*g/cm3;
     theH = new G4Material(name="H", density, nel=1);
     theH->AddElement(elH, 1.0);
@@ -134,21 +137,26 @@ void Tst69DetectorConstruction::SelectMaterialPointer()
     // A fictitious mixed material with weight fractions such that the mean
     // free path for inelastic collisions with high-energy particles is roughly
     // the same for all components
+    G4ElementTable *elTable = G4Element::GetElementTable();
+    const int nElements = elTable->size();
+    for(int iEl=0; iEl<nElements; ++iEl) {
+      G4cout << "element " << iEl << ": " << (*elTable)[iEl]->GetName() << G4endl;
+    }
     G4Pow *g4pow = G4Pow::GetInstance();
-    G4Element* elH  = new G4Element("Hydrogen", "H", 1., 1.*g/mole);
-    G4double weightH = 0.5*g4pow->A13(elH->GetA());
+    G4Element* elH  = G4Element::GetElement("H");
+    G4double weightH = 0.5*g4pow->A13(elH->GetN());
     G4Element* elHe = new G4Element("Helium", "He", 2., 4.*g/mole);
-    G4double weightHe = 1.*g4pow->A13(elHe->GetA());
-    G4Element* elC  = new G4Element("Carbon", "C", 6., 12.*g/mole);
-    G4double weightC = 1.*g4pow->A13(elC->GetA());
-    G4Element* elSi  = new G4Element("Silicon", "Si", 14., 28.*g/mole);
-    G4double weightSi = 1.*g4pow->A13(elSi->GetA());
-    G4Element* elCu  = new G4Element("Copper", "Cu", 29., 63.*g/mole);
-    G4double weightCu = 1.*g4pow->A13(elCu->GetA());
-    G4Element* elPb  = new G4Element("Lead", "Pb", 82., 208.*g/mole);
-    G4double weightPb = 1.*g4pow->A13(elPb->GetA());
-    G4Element* elU  = new G4Element("Uranium", "U", 92., 238.*g/mole);
-    G4double weightU = 1.*g4pow->A13(elU->GetA());
+    G4double weightHe = 1.*g4pow->A13(elHe->GetN());
+    G4Element* elC  = G4Element::GetElement("C");
+    G4double weightC = 1.*g4pow->A13(elC->GetN());
+    G4Element* elSi  = G4Element::GetElement("Si");
+    G4double weightSi = 1.*g4pow->A13(elSi->GetN());
+    G4Element* elCu  = G4Element::GetElement("Cu");
+    G4double weightCu = 1.*g4pow->A13(elCu->GetN());
+    G4Element* elPb  = G4Element::GetElement("Pb");
+    G4double weightPb = 1.*g4pow->A13(elPb->GetN());
+    G4Element* elU  = G4Element::GetElement("U");
+    G4double weightU = 1.*g4pow->A13(elU->GetN());
 
     const G4double totalWeight = weightH + weightHe + weightC + weightSi + weightCu + weightPb + weightU;
     weightH /= totalWeight;
@@ -199,6 +207,9 @@ G4VPhysicalVolume* Tst69DetectorConstruction::Construct()
   G4Box * mySimpleBox = new G4Box("SBox",20.*cm, 20.*cm, 20.*cm);
   simpleBoxLog = new G4LogicalVolume( mySimpleBox,
                                       selectedMaterial,"SLog",0,0,0);
+  fStepLimit = new G4UserLimits;
+  fStepLimit->SetUserMinEkine(1.*MeV);
+  simpleBoxLog->SetUserLimits(fStepLimit);
   G4VPhysicalVolume* simpleBoxDetector = new G4PVPlacement(0,G4ThreeVector(),
                                         "SPhys",simpleBoxLog,0,false,0);
 

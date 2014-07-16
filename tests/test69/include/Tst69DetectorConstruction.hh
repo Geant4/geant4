@@ -33,6 +33,7 @@
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4Material;
+class G4UserLimits;
 class Tst69DetectorMessenger;
 
 #include "G4VUserDetectorConstruction.hh"
@@ -64,6 +65,7 @@ class Tst69DetectorConstruction : public G4VUserDetectorConstruction
      G4Material* theMix;
      G4String materialChoice;
      Tst69DetectorMessenger * detectorMessenger;
+     G4UserLimits* fStepLimit;
 };
 
 #endif

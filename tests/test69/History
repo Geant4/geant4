@@ -12,6 +12,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 July 2014, Davide Mancusi (test69-V10-00-05)
+- Add a step limiter (minimum KinE=1 MeV). This should prevent timeouts in
+  tests with *_HP physics lists.
+
 9 July 2014, Davide Mancusi (test69-V10-00-04)
 - Resize the target to 20x20x20 cm^3.
 - Revert the number of shots to 2500 for the normal physics lists and 100 for
