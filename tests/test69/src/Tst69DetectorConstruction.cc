@@ -137,11 +137,6 @@ void Tst69DetectorConstruction::SelectMaterialPointer()
     // A fictitious mixed material with weight fractions such that the mean
     // free path for inelastic collisions with high-energy particles is roughly
     // the same for all components
-    G4ElementTable *elTable = G4Element::GetElementTable();
-    const int nElements = elTable->size();
-    for(int iEl=0; iEl<nElements; ++iEl) {
-      G4cout << "element " << iEl << ": " << (*elTable)[iEl]->GetName() << G4endl;
-    }
     G4Pow *g4pow = G4Pow::GetInstance();
     G4Element* elH  = G4Element::GetElement("H");
     G4double weightH = 0.5*g4pow->A13(elH->GetN());

@@ -23,33 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: Tst69EventAction.hh 66512 2012-12-19 10:26:52Z gcosmo $
 //
-// $Id$
+/////////////////////////////////////////////////////////////////////////
 //
+// Tst69EventAction
+//
+// Created: 17.07.2014 D. Mancusi
+//
+// Modified:
+// 17.07.2014 Adapted from test46 (D. Mancusi)
+//
+////////////////////////////////////////////////////////////////////////
+// 
 
-#include "Tst69ActionInitialization.hh"
+#ifndef Tst69EventAction_h
+#define Tst69EventAction_h 1
 
-#include "Tst69RunAction.hh"
-#include "Tst69EventAction.hh"
-#include "Tst69PrimaryGeneratorAction.hh"
-#include "Tst69StackingAction.hh"
+#include "G4UserEventAction.hh"
+#include "globals.hh"
+#include <ctime>
 
-Tst69ActionInitialization::Tst69ActionInitialization(const char * const physList)
-  : physicsList(physList)
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+class G4Event;
+
+class Tst69EventAction : public G4UserEventAction
 {
-}
+  public:
 
-Tst69ActionInitialization::~Tst69ActionInitialization()
-{
-}
+    Tst69EventAction();
+    virtual ~Tst69EventAction();
 
-void Tst69ActionInitialization::Build() const {
-  SetUserAction(new Tst69RunAction(physicsList));
-  SetUserAction(new Tst69EventAction());
-  SetUserAction(new Tst69PrimaryGeneratorAction);
-}
+    void BeginOfEventAction(const G4Event*);
+    void   EndOfEventAction(const G4Event*);
 
-void Tst69ActionInitialization::BuildForMaster() const {
-  SetUserAction(new Tst69RunAction(physicsList));
-}
+    G4int GetEventPrintModulo() const { return eventPrintModulo; }
+    void SetEventPrintModulo(const G4int m) { eventPrintModulo = m; }
+
+  private:
+    clock_t actionStart;
+    clock_t currentEventStart;
+    clock_t lastEventStart;
+    clock_t lastEventPrint;
+    G4int lastEventIDPrint;
+    G4int eventPrintModulo;
+    G4int eventID;
+    static const G4int nSecondsPerEventMax = 60;
+    static const G4int nSecondsReport = 180;
+};
+
+#endif
+
 

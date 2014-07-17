@@ -12,6 +12,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 July 2014, Davide Mancusi (test69-V10-00-06)
+- Suppress some leftover debug statements.
+- Add some debug statements (so much for nothing).
+
 15 July 2014, Davide Mancusi (test69-V10-00-05)
 - Add a step limiter (minimum KinE=1 MeV). This should prevent timeouts in
   tests with *_HP physics lists.
