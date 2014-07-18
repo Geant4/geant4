@@ -54,9 +54,7 @@ public:
     mem::increment(s_class().c_str());
 #endif
   }
-  directory(ifile& a_file,
-            const std::string& a_name,
-            const std::string& a_title)
+  directory(ifile& a_file,const std::string& a_name,const std::string& a_title)
   :m_file(a_file)  
   ,m_parent(0)
   ,m_is_valid(false)
@@ -204,8 +202,7 @@ public:
   bool is_valid() const {return m_is_valid;}
   void set_seek_directory(seek a_seek) {m_seek_directory = a_seek;}
 
-  directory* mkdir(const std::string& a_name,
-                          const std::string& a_title = ""){
+  directory* mkdir(const std::string& a_name,const std::string& a_title = ""){
     // Create a sub-directory and return a pointer to the created directory.
     // Note that the directory name cannot contain slashes.
     if(a_name.empty()) {
@@ -386,10 +383,10 @@ protected:
   seek seek_keys() const {return m_seek_keys;}
 
   uint16 append_key(key* a_key){ //take ownership of a_key
-    tools_lforit(key*,m_keys,itk) {
-      if((*itk)->object_name()==a_key->object_name()) {
-        m_keys.insert(itk,a_key); //a_key will be before *itk.
-        return ((*itk)->cycle() + 1);
+    tools_lforit(key*,m_keys,it) {
+      if((*it)->object_name()==a_key->object_name()) {
+        m_keys.insert(it,a_key); //a_key will be before *it.
+        return ((*it)->cycle() + 1);
       }
     }
     // Not found :

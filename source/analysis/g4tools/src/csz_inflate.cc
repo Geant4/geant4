@@ -446,17 +446,18 @@ int csz__huft_build(unsigned *b, unsigned n, unsigned s, ush *d, ush *e, struct 
   unsigned f;                   /* i repeats in table every f entries */
   int g;                        /* maximum code length */
   int h;                        /* table level */
-  unsigned i;          /* counter, current code */
-  unsigned j;          /* counter */
-  int k;               /* number of bits in current code */
+  /*G.Barrand : comment out register keyword.*/
+  /*register*/ unsigned i;          /* counter, current code */
+  /*register*/ unsigned j;          /* counter */
+  /*register*/ int k;               /* number of bits in current code */
   int lx[BMAX+1];               /* memory for l[-1..BMAX-1] */
   int *l = lx+1;                /* stack of bits per table */
-  unsigned *p;         /* pointer into c[], b[], or v[] */
-  struct huft *q;      /* points to current table */
+  /*register*/ unsigned *p;         /* pointer into c[], b[], or v[] */
+  /*register*/ struct huft *q;      /* points to current table */
   struct huft r;                /* table entry for structure assignment */
   struct huft *u[BMAX];         /* table stack */
   static unsigned v[N_MAX];     /* values in order of bit length */
-  int w;               /* bits before this table == (l * h) */
+  /*register*/ int w;               /* bits before this table == (l * h) */
   unsigned x[BMAX+1];           /* bit offsets, then code stack */
   unsigned *xp;                 /* pointer into x */
   int y;                        /* number of dummy codes added */
@@ -627,7 +628,7 @@ int csz__huft_free(struct huft *t)
    list of the tables it made, with the links in a dummy first entry of
    each table. */
 {
-  struct huft *p, *q;
+  /*register*/ struct huft *p, *q;
 
 
   /* Go through linked list, freeing from the malloced (t[-1]) address. */
@@ -656,13 +657,13 @@ int csz__Inflate_codes(struct huft *tl, struct huft *td, int bl, int bd)
 /* inflate (decompress) the codes in a deflated (compressed) block.
    Return an error code or zero if it all goes ok. */
 {
-  unsigned e;  /* table entry flag/number of extra bits */
+  /*register*/ unsigned e;  /* table entry flag/number of extra bits */
   unsigned n, d;        /* length and index for copy */
   unsigned w;           /* current window position */
   struct huft *t;       /* pointer to table entry */
   unsigned ml, md;      /* masks for bl and bd bits */
-  ulg b;       /* bit buffer */
-  unsigned k;  /* number of bits in bit buffer */
+  /*register*/ ulg b;       /* bit buffer */
+  /*register*/ unsigned k;  /* number of bits in bit buffer */
 
 
   /* make local copies of globals */
@@ -765,8 +766,8 @@ int csz__Inflate_stored()
 {
   unsigned n;           /* number of bytes in block */
   unsigned w;           /* current window position */
-  ulg b;       /* bit buffer */
-  unsigned k;  /* number of bits in bit buffer */
+  /*register*/ ulg b;       /* bit buffer */
+  /*register*/ unsigned k;  /* number of bits in bit buffer */
 
 
   /* make local copies of globals */
@@ -886,8 +887,8 @@ int csz__Inflate_dynamic()
 #else
   static unsigned ll[286+30]; /* literal/length and distance code lengths */
 #endif
-  ulg b;       /* bit buffer */
-  unsigned k;  /* number of bits in bit buffer */
+  /*register*/ ulg b;       /* bit buffer */
+  /*register*/ unsigned k;  /* number of bits in bit buffer */
 
   static int qflag = 0; /*G.Barrand*/
 
@@ -953,8 +954,10 @@ int csz__Inflate_dynamic()
       NEEDBITS(2)
       j = 3 + ((unsigned)b & 3);
       DUMPBITS(2)
-      if ((unsigned)i + j > n)
+      if ((unsigned)i + j > n) {
+        csz__huft_free(tl); /*G.Barrand : quiet Coverity*/
         return 1;
+      }
       while (j--)
         ll[i++] = l;
     }
@@ -963,8 +966,10 @@ int csz__Inflate_dynamic()
       NEEDBITS(3)
       j = 3 + ((unsigned)b & 7);
       DUMPBITS(3)
-      if ((unsigned)i + j > n)
+      if ((unsigned)i + j > n){
+        csz__huft_free(tl); /*G.Barrand : quiet Coverity*/
         return 1;
+      }
       while (j--)
         ll[i++] = 0;
       l = 0;
@@ -974,8 +979,10 @@ int csz__Inflate_dynamic()
       NEEDBITS(7)
       j = 11 + ((unsigned)b & 0x7f);
       DUMPBITS(7)
-      if ((unsigned)i + j > n)
+      if ((unsigned)i + j > n) {
+        csz__huft_free(tl); /*G.Barrand : quiet Coverity*/
         return 1;
+      }
       while (j--)
         ll[i++] = 0;
       l = 0;
@@ -1037,8 +1044,8 @@ int csz__Inflate_block(int *e)
 /* decompress an inflated block */
 {
   unsigned t;           /* block type */
-  ulg b;       /* bit buffer */
-  unsigned k;  /* number of bits in bit buffer */
+  /*register*/ ulg b;       /* bit buffer */
+  /*register*/ unsigned k;  /* number of bits in bit buffer */
 
 
   /* make local bit buffer */

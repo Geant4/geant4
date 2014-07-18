@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 18, 2014 I. Hrivnacova (analysis-V10-00-17)
+- Updated to g4tools 1.11.0 (by G. Barrand):
+  See History_tools for complete list of modifications.
+
 July 02, 2014 I. Hrivnacova (analysis-V10-00-16)
 - Replaced use of std::cout with G4cout in Root managers 
   (to fix data race reported by A. Dotti)

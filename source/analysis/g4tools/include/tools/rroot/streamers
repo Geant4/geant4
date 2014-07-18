@@ -29,8 +29,8 @@
 namespace tools {
 namespace rroot {
 
-typedef tools::histo::histo_data<double,unsigned int,double> hd_data;
-typedef tools::histo::profile_data<double,unsigned int,double,double> pd_data;
+typedef tools::histo::histo_data<double,unsigned int,unsigned int,double> hd_data;
+typedef tools::histo::profile_data<double,unsigned int,unsigned int,double,double> pd_data;
 
 inline bool AttAxis_stream(buffer& a_buffer){
     int fNdivisions = 510;       //Number of divisions(10000*n3 + 100*n2 + n1)
@@ -89,7 +89,7 @@ protected:
   std::ostream& m_out;
 };
 
-inline bool Axis_stream(buffer& a_buffer,tools::histo::axis<double>& a_fAxis){
+inline bool Axis_stream(buffer& a_buffer,tools::histo::axis<double,unsigned int>& a_fAxis){
     // Version 6 streaming (ROOT/v3-00-6).
     short v;
     unsigned int s, c;
@@ -193,10 +193,10 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
       a_data.m_axes[1].m_offset = 
         a_data.m_axes[0].m_offset * (a_data.m_axes[0].bins()+2);
 
-      tools::histo::axis<double> dummy;
+      tools::histo::axis<double,unsigned int> dummy;
       if(!Axis_stream(a_buffer,dummy)) return false; //fZAxis
     } else {
-      tools::histo::axis<double> dummy;
+      tools::histo::axis<double,unsigned int> dummy;
       if(!Axis_stream(a_buffer,dummy)) return false; //fYAxis
       if(!Axis_stream(a_buffer,dummy)) return false; //fZAxis
     }
@@ -365,9 +365,9 @@ inline tools::histo::h1d* TH1F_stream(buffer& a_buffer,bool a_profile = false){
     data.m_bin_Sx2w.resize(binn,empty);    
     std::vector<int> is(data.m_dimension);
    {for(unsigned int index=0;index<binn;index++){
-      if(!data.is_out(index)) {
+      if(!histo::is_out(data.m_axes,index)) {
         float height = bins[index];
-        data.get_indices(index,is);
+        histo::get_indices(data.m_axes,index,is);
         for(unsigned int iaxis=0;iaxis<data.m_dimension;iaxis++) {
           double x = data.m_axes[iaxis].bin_center(is[iaxis]); 
           data.m_bin_Sxw[index][iaxis] = x * height;
@@ -419,7 +419,7 @@ inline tools::histo::h1d* TH1F_stream(buffer& a_buffer,bool a_profile = false){
     tools::histo::h1d* h = new tools::histo::h1d("",10,0,1);
     h->copy_from_data(data);
     h->update_fast_getters();
-    // We have now a valid HCL histogram.
+    // We have now a valid inlib histogram.
     return h; //give ownership to caller.
 }
 
@@ -477,9 +477,9 @@ inline tools::histo::h1d* TH1D_stream(buffer& a_buffer,bool a_profile = false){
     data.m_bin_Sx2w.resize(binn,empty);
     std::vector<int> is(data.m_dimension);
     for(unsigned int index=0;index<binn;index++){
-      if(!data.is_out(index)) {
+      if(!histo::is_out(data.m_axes,index)) {
         double height = bins[index];
-        data.get_indices(index,is);
+        histo::get_indices(data.m_axes,index,is);
         for(unsigned int iaxis=0;iaxis<data.m_dimension;iaxis++) {
           double x = data.m_axes[iaxis].bin_center(is[iaxis]); 
           data.m_bin_Sxw[index][iaxis] = x * height;
@@ -530,7 +530,7 @@ inline tools::histo::h1d* TH1D_stream(buffer& a_buffer,bool a_profile = false){
     tools::histo::h1d* h = new tools::histo::h1d("",10,0,1);
     h->copy_from_data(data);
     h->update_fast_getters();
-    // We have now a valid HCL histogram.
+    // We have now a valid inlib histogram.
 
     return h;
 }
@@ -589,9 +589,9 @@ inline tools::histo::h2d* TH2F_stream(buffer& a_buffer,bool a_profile = false){
     data.m_bin_Sx2w.resize(binn,empty);
     std::vector<int> is(data.m_dimension);
     for(unsigned int index=0;index<binn;index++){
-      if(!data.is_out(index)) {
+      if(!histo::is_out(data.m_axes,index)) {
         float height = bins[index];
-        data.get_indices(index,is);
+        histo::get_indices(data.m_axes,index,is);
         for(unsigned int iaxis=0;iaxis<data.m_dimension;iaxis++) {
           double x = data.m_axes[iaxis].bin_center(is[iaxis]); 
           data.m_bin_Sxw[index][iaxis] = x * height;
@@ -644,7 +644,7 @@ inline tools::histo::h2d* TH2F_stream(buffer& a_buffer,bool a_profile = false){
     tools::histo::h2d* h = new tools::histo::h2d("",10,0,1,10,0,1);
     h->copy_from_data(data);
     h->update_fast_getters();
-    // We have now a valid HCL histogram.
+    // We have now a valid inlib histogram.
 
     return h;
 }
@@ -703,9 +703,9 @@ inline tools::histo::h2d* TH2D_stream(buffer& a_buffer,bool a_profile = false){
     data.m_bin_Sx2w.resize(binn,empty);
     std::vector<int> is(data.m_dimension);
     for(unsigned int index=0;index<binn;index++){
-      if(!data.is_out(index)) {
+      if(!histo::is_out(data.m_axes,index)) {
         double height = bins[index];
-        data.get_indices(index,is);
+        histo::get_indices(data.m_axes,index,is);
         for(unsigned int iaxis=0;iaxis<data.m_dimension;iaxis++) {
           double x = data.m_axes[iaxis].bin_center(is[iaxis]); 
           data.m_bin_Sxw[index][iaxis] = x * height;
@@ -758,7 +758,7 @@ inline tools::histo::h2d* TH2D_stream(buffer& a_buffer,bool a_profile = false){
     tools::histo::h2d* h = new tools::histo::h2d("",10,0,1,10,0,1);
     h->copy_from_data(data);
     h->update_fast_getters();
-    // We have now a valid HCL histogram.
+    // We have now a valid inlib histogram.
 
     return h;
 }
@@ -771,9 +771,9 @@ inline tools::histo::p1d* TProfile_stream(buffer& a_buffer){
     // Version 3 streaming (ROOT/v3-00-6).
 
     //WARNING : the mapping tools::histo::p1d / TProfile is not obvious.
-    //HCL::m_bin_Svw  <---> TProfile::fArray
-    //HCL::m_bin_Sv2w <---> TProfile::fSumw2
-    //HCL::m_bin_Sw   <---> TProfile::fBinEntries
+    //p1d::m_bin_Svw  <---> TProfile::fArray
+    //p1d::m_bin_Sv2w <---> TProfile::fSumw2
+    //p1d::m_bin_Sw   <---> TProfile::fBinEntries
 
 
     tools::histo::h1d* h = TH1D_stream(a_buffer,true);

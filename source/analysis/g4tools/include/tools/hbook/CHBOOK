@@ -53,12 +53,6 @@ extern "C" rret __stdcall HI(int*,int*);
 extern "C" void __stdcall HXYIJ(int*,rarg*,rarg*,int*,int*);
 extern "C" rret __stdcall HMIN(int*);
 extern "C" rret __stdcall HMAX(int*);
-extern "C" int __stdcall HISID(int*);
-//extern "C" void __stdcall HGNF(int*,int*,rarg*,int*);
-//extern "C" void __stdcall HIDALL(int*,int*);
-//extern "C" void __stdcall HID1(int*,int*);
-//extern "C" void __stdcall HID2(int*,int*);
-//extern "C" int __stdcall HEXIST(int*);
 #else
 extern "C" void zitoh_(int*,int*,int*);
 extern "C" void rzink_(int*,int*,const char *,int);
@@ -81,12 +75,6 @@ extern "C" rret hi_(int*,int*);
 extern "C" void hxyij_(int*,rarg*,rarg*,int*,int*);
 extern "C" rret hmin_(int*);
 extern "C" rret hmax_(int*);
-extern "C" int hisid_(int*);
-//extern "C" void hgnf_(int*,int*,rarg*,int*);
-//extern "C" void hidall_(int*,int*);
-//extern "C" void hid1_(int*,int*);
-//extern "C" void hid2_(int*,int*);
-//extern "C" int hexist_(int*);
 #endif
 
 /////////////////////////////////////////////////////////////////
@@ -101,7 +89,6 @@ extern "C" void __stdcall HREND(DEFCHAR);
 extern "C" void __stdcall HROUT(int*,int*,DEFCHAR);
 extern "C" void __stdcall HGIVE(int*,DEFCHAR,int*,rarg*,rarg*,int*,rarg*,rarg*,int*,int*);
 extern "C" void __stdcall HGIVEN(int*,DEFCHAR,int*,DEFCHAR,rarg*,rarg*);
-extern "C" void __stdcall HNTVAR2(int*,int*,DEFCHAR,DEFCHAR,DEFCHAR,int*,int*,int*,int*);
 extern "C" void __stdcall HBNT(int*,DEFCHAR,DEFCHAR);
 extern "C" void __stdcall HBNAME(int*,DEFCHAR,int*,DEFCHAR);
 extern "C" void __stdcall HBNAM(int*,DEFCHAR,int*,DEFCHAR,int*);
@@ -130,7 +117,6 @@ extern "C" void hrend_(DEFCHAR,int);
 extern "C" void hrout_(int*,int*,DEFCHAR,int);
 extern "C" void hgive_(int*,DEFCHAR,int*,rarg*,rarg*,int*,rarg*,rarg*,int*,int*,int);
 extern "C" void hgiven_(int*,DEFCHAR,int*,DEFCHAR,rarg*,rarg*,int,int);
-extern "C" void hntvar2_(int*,int*,DEFCHAR,DEFCHAR,DEFCHAR,int*,int*,int*,int*,int,int,int);
 extern "C" void hbnt_(int*,DEFCHAR,DEFCHAR,int,int);
 extern "C" void hbname_(int*,DEFCHAR,int*,DEFCHAR,int,int);
 extern "C" void hbnam_(int*,DEFCHAR,int*,DEFCHAR,int*,int,int);
@@ -217,76 +203,6 @@ inline void CZITOH(int* a1,int* a2,int* a3) {
   zitoh_(a1,a2,a3);
 #endif
 }
-
-/*
-inline std::vector<int> CHIDALL() {
-  // We should use first a function getting the number of ids only.
-  // See hids.f in this directory and hidall.F code.
-  int ids[100000];
-  int n;
-#ifdef WIN32
-  HIDALL(ids,&n);
-#else
-  hidall_(ids,&n);
-#endif
-  std::vector<int> r;
-  r.resize(n,0);
-  for(int i=0;i<n;i++) r[i] = ids[i];
-  return r;
-}
-inline std::vector<int> CHID1() {
-  // We should use first a function getting the number of 1D ids only.
-  // See hids.f in this directory and hid1.F code.
-  int ids[100000];
-  int n;
-#ifdef WIN32
-  HID1(ids,&n);
-#else
-  hid1_(ids,&n);
-#endif
-  std::vector<int> r;
-  r.resize(n,0);
-  for(int i=0;i<n;i++) r[i] = ids[i];
-  return r;
-}
-inline std::vector<int> CHID2() {
-  // We should use first a function getting the number of 2D ids only.
-  // See hids.f in this directory and hid1.F code.
-  int ids[100000];
-  int n;
-#ifdef WIN32
-  HID2(ids,&n);
-#else
-  hid2_(ids,&n);
-#endif
-  std::vector<int> r;
-  r.resize(n,0);
-  for(int i=0;i<n;i++) r[i] = ids[i];
-  return r;
-}
-inline bool CHEXIST(int a_id) {
-  int id = a_id;
-  // What is the mapping of F77 LOGICAL to C ?
-#ifdef WIN32
-  logical l = HEXIST(&id);
-#else
-  logical l = hexist_(&id);
-#endif
-}
-
-inline void CHCLR() {
-  // Clear //PAWC structure.
-  //CHCDIR("//PAWC"," ");
-  std::vector<std::string> drs;
-  CHDIRS(true,drs);
- {std::vector<std::string>::iterator it;
-  for(it=drs.begin();it!=drs.end();++it){
-    std::string& dir = *it;
-    CHDDIR(dir);
-  }}
-  CHDELET(0);
-}
-*/
 
 inline int* get_pawc() {
 #ifdef WIN32
@@ -414,14 +330,6 @@ inline void CHDDIR(const std::string& a1) {
   HDDIR(PASSCHAR(a1.c_str()));
 #else
   hddir_(a1.c_str(),a1.size());
-#endif
-}
-
-inline bool CHISID(int a_id) {
-#ifdef WIN32
-  return (HISID(&a_id)==1?true:false);
-#else
-  return (hisid_(&a_id)==1?true:false);
 #endif
 }
 
@@ -805,52 +713,6 @@ inline void CHFNT(int a1) {
 #endif
 }
 
-inline void CHNTVAR2(
- int a1,int a2
-,std::string& a3,std::string& a4,std::string& a5
-,int& a6,int& a7,int& a8,int& a9) {
-
-  char name[32];
-  ::memset(name,' ',sizeof(name));
-  name[sizeof(name)-1] = 0;
-
-  char block[32];
-  ::memset(block,' ',sizeof(block));
-  block[sizeof(block)-1] = 0;
-
-  char fullname[64];
-  ::memset(fullname,' ',sizeof(fullname));
-  fullname[sizeof(fullname)-1]=0;
-
-  int v6,v7,v8,v9;
-#ifdef WIN32
-  HNTVAR2(&a1,&a2,PASSCHAR(name),PASSCHAR(fullname),PASSCHAR(block),&v6,&v7,&v8,&v9);
-#else
-  hntvar2_(&a1,&a2,name,fullname,block,&v6,&v7,&v8,&v9,32,64,32);
-#endif
-
-  int j;
-  for (j=30;j>0;j--) {
-    if (name[j] == ' ') name[j] = 0;
-  }
-  for (j=62;j>0;j--) {
-    if (fullname[j] == ' ') fullname[j] = 0;
-  }
-  for (j=30;j>0;j--) {
-    if (block[j] == ' ') block[j] = 0;
-    else break;
-  }
-
-  a3 = name;
-  a4 = fullname;
-  a5 = block;
-
-  a6 = v6;
-  a7 = v7;
-  a8 = v8;
-  a9 = v9;
-}
-
 inline int CHGIVEN(
  int a_id
 ,std::string& a_title
@@ -914,18 +776,6 @@ inline int CHGNT(int a_id,int a_row){
 #endif
   return ier;
 }
-
-//inline int CHGNF(int a_id,int aRow,rarg* aBuffer){
-//  int id = a_id;
-//  int row = aRow;
-//  int ier = 0;
-//#ifdef WIN32
-//  HGNF(&id,&row,aBuffer,&ier);
-//#else
-//  hgnf_(&id,&row,aBuffer,&ier);
-//#endif
-//  return ier;
-//}
 
 inline void CHOPERA(int a_id1,const std::string& a_opts,int a_id2,int a_id3,rarg a_c1,rarg a_c2) {
 #ifdef WIN32

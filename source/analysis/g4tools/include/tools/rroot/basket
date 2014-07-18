@@ -87,6 +87,8 @@ public:
     }
 
     if((flag%10)!=2) {
+      //due to the upper "G.Barrand if", flag is here in {1,11,41,51}
+
       if(!m_nev_buf_size) {
         m_file.out() << "tools::rroot::basket::stream :" 
                      << " m_nev_buf_size is zero." << std::endl; 
@@ -117,11 +119,13 @@ public:
           return false;
         }
       }
+/* Due to the upper "G.Barrand if", flag can't be in ]20,40[, then to quiet Coverity we comment the below test.
       if((20<flag)&&(flag<40)) {
         for(uint32 i=0;i<m_nev;i++){        
           m_entry_offset[i] &= ~kDisplacementMask();
         }
       }
+*/
       if(flag>40) {
         m_displacement = new int[m_nev_buf_size];
         uint32 n;

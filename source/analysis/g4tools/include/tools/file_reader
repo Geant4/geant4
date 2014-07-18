@@ -1,0 +1,27 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_file_reader
+#define tools_file_reader
+
+#include <string>
+#include <cstdio>
+
+namespace tools {
+namespace file {
+
+class reader {
+public:
+  virtual ~reader() {}
+public:
+  virtual bool open(const std::string&) = 0;
+  virtual void close() = 0;
+  virtual bool is_open() const = 0;
+  virtual bool read(char*,unsigned int,size_t&) = 0;
+  virtual bool get_line(char*,unsigned int) = 0;
+  virtual bool eof() const = 0;
+};
+
+}}
+
+#endif

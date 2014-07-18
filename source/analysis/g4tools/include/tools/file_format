@@ -1,0 +1,121 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_file_format
+#define tools_file_format
+
+#include "S_STRING"
+
+#include <string>
+#include <vector>
+
+namespace tools {
+namespace file {
+
+TOOLS_GLOBAL_STRING(format_guessed)
+TOOLS_GLOBAL_STRING(format_hdf5)
+TOOLS_GLOBAL_STRING(format_fits)
+TOOLS_GLOBAL_STRING(format_fog)
+TOOLS_GLOBAL_STRING(format_dot)
+TOOLS_GLOBAL_STRING(format_dcm)
+TOOLS_GLOBAL_STRING(format_iv)
+TOOLS_GLOBAL_STRING(format_jpeg)
+TOOLS_GLOBAL_STRING(format_png)
+TOOLS_GLOBAL_STRING(format_root)
+TOOLS_GLOBAL_STRING(format_csv)
+TOOLS_GLOBAL_STRING(format_hippo)
+TOOLS_GLOBAL_STRING(format_scenarios)
+TOOLS_GLOBAL_STRING(format_slides)
+TOOLS_GLOBAL_STRING(format_zvid)
+TOOLS_GLOBAL_STRING(format_exsg)
+TOOLS_GLOBAL_STRING(format_gdml)
+TOOLS_GLOBAL_STRING(format_mac)
+TOOLS_GLOBAL_STRING(format_cmnd)
+TOOLS_GLOBAL_STRING(format_aida)
+TOOLS_GLOBAL_STRING(format_bsg)
+
+#define TOOLS_GLOBAL_EXT(a_name)\
+inline const std::string& s_ext_##a_name() {\
+  static const std::string s_v("."+std::string(#a_name));\
+  return s_v;\
+}
+
+TOOLS_GLOBAL_EXT(hdf5)
+TOOLS_GLOBAL_EXT(fits)
+TOOLS_GLOBAL_EXT(fog)
+TOOLS_GLOBAL_EXT(dot)
+TOOLS_GLOBAL_EXT(dcm)
+TOOLS_GLOBAL_EXT(iv)
+TOOLS_GLOBAL_EXT(hiv)
+TOOLS_GLOBAL_EXT(jpg)
+TOOLS_GLOBAL_EXT(png)
+TOOLS_GLOBAL_EXT(root)
+TOOLS_GLOBAL_EXT(csv)
+TOOLS_GLOBAL_EXT(hiptxt)
+TOOLS_GLOBAL_EXT(tnt)
+TOOLS_GLOBAL_EXT(scenarios)
+TOOLS_GLOBAL_EXT(slides)
+TOOLS_GLOBAL_EXT(zvid)
+TOOLS_GLOBAL_EXT(exsg)
+TOOLS_GLOBAL_EXT(gdml)
+TOOLS_GLOBAL_EXT(mac)
+TOOLS_GLOBAL_EXT(cmnd)
+TOOLS_GLOBAL_EXT(aida)
+TOOLS_GLOBAL_EXT(bsg)
+
+#undef TOOLS_GLOBAL_EXT
+
+inline void formats(std::vector<std::string>& a_v) {
+  a_v.clear();
+  a_v.push_back(s_format_guessed());
+  a_v.push_back(s_format_hdf5());
+  a_v.push_back(s_format_fits());
+  a_v.push_back(s_format_fog());
+  a_v.push_back(s_format_dot());
+  a_v.push_back(s_format_dcm());
+  a_v.push_back(s_format_iv());
+  a_v.push_back(s_format_jpeg());
+  a_v.push_back(s_format_png());
+  a_v.push_back(s_format_root());
+  a_v.push_back(s_format_csv());
+  a_v.push_back(s_format_hippo());
+  a_v.push_back(s_format_scenarios());
+  a_v.push_back(s_format_slides());
+  a_v.push_back(s_format_zvid());
+  a_v.push_back(s_format_exsg());
+  a_v.push_back(s_format_bsg());
+  a_v.push_back(s_format_gdml());
+  a_v.push_back(s_format_mac());
+  a_v.push_back(s_format_cmnd());
+  a_v.push_back(s_format_aida());
+}
+
+inline std::string ext_fmt(const std::string& a_ext) {
+  if(a_ext==s_ext_fits()) return s_format_fits();
+  if(a_ext==s_ext_aida()) return s_format_aida();
+  if(a_ext==s_ext_root()) return s_format_root();
+  if(a_ext==s_ext_csv())  return s_format_csv();
+  if(a_ext==s_ext_tnt())  return s_format_hippo();
+  if(a_ext==s_ext_hiptxt()) return s_format_hippo();
+  if(a_ext==s_ext_hdf5()) return s_format_hdf5();
+  if(a_ext==s_ext_jpg()) return s_format_jpeg();
+  if(a_ext==s_ext_png()) return s_format_png();
+  if(a_ext==s_ext_fog()) return s_format_fog();
+  if(a_ext==s_ext_dot()) return s_format_dot();
+  if(a_ext==s_ext_dcm()) return s_format_dcm();
+  if(a_ext==s_ext_iv()) return s_format_iv();
+  if(a_ext==s_ext_hiv()) return s_format_iv();
+  if(a_ext==s_ext_exsg()) return s_format_exsg();
+  if(a_ext==s_ext_bsg()) return s_format_bsg();
+  if(a_ext==s_ext_scenarios()) return s_format_scenarios();
+  if(a_ext==s_ext_slides()) return s_format_slides();
+  if(a_ext==s_ext_zvid()) return s_format_zvid();
+  if(a_ext==s_ext_gdml()) return s_format_gdml();
+  if(a_ext==s_ext_mac()) return s_format_mac();
+  if(a_ext==s_ext_cmnd()) return s_format_cmnd();
+  return s_format_guessed();
+}
+
+}}
+
+#endif

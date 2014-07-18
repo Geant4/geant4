@@ -66,7 +66,11 @@ else
     if [ ${build_clang} = "yes" ] ; then
       G4_cppflags="-Wno-non-virtual-dtor -Wwrite-strings -Wpointer-arith -Woverloaded-virtual"
     else
-      G4_cppflags="-W -Wall -ansi -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual"
+      G4_cppflags="-W -Wall -pedantic -Wno-non-virtual-dtor -Wno-long-long -Wwrite-strings -Wpointer-arith -Woverloaded-virtual"
+      if [ `uname` != Darwin ] ; then
+        # now the default compiler is clang that does not support -ansi.
+        G4_cppflags="${G4_cppflags} -ansi"
+      fi
       G4_cppflags="${G4_cppflags} -Wshadow"
     fi
   fi

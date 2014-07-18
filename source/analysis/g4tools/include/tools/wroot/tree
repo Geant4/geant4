@@ -82,8 +82,8 @@ public: //itree
   virtual const idir& dir() const {return m_dir;}
 public:
   tree(idir& a_dir, //for branch/baskets(which are keys)
-              const std::string& a_name,
-              const std::string& a_title)
+       const std::string& a_name,
+       const std::string& a_title)
   :m_dir(a_dir)
   ,m_out(a_dir.file().out())
   ,m_name(a_name)

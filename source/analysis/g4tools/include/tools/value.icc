@@ -1,0 +1,3178 @@
+
+#include "sto"
+
+namespace tools {
+
+inline bool value::assign(value& aThis,const value& aV,std::string& aError){
+  if(aThis.m_type==aV.m_type) {
+    aThis.reset();
+    if(aV.m_type==value::STRING) {
+      aThis.u.m_string = new std::string(*aV.u.m_string);
+
+    //} else if(aV.m_type==value::ARRAY_UNSIGNED_CHAR) {
+    //  aThis.u.m_array_unsigned_char = 
+    //    new tools::array<unsigned char>(*aV.u.m_array_unsigned_char);
+    //} else if(aV.m_type==value::ARRAY_CHAR) {
+    //  aThis.u.m_array_char = new tools::array<char>(*aV.u.m_array_char);
+
+    } else if(aV.m_type==value::ARRAY_UNSIGNED_SHORT) {
+      aThis.u.m_array_unsigned_short = 
+        new tools::array<unsigned short>(*aV.u.m_array_unsigned_short);
+    } else if(aV.m_type==value::ARRAY_SHORT) {
+      aThis.u.m_array_short = new tools::array<short>(*aV.u.m_array_short);
+
+    } else if(aV.m_type==value::ARRAY_UNSIGNED_INT) {
+      aThis.u.m_array_unsigned_int = 
+        new tools::array<unsigned int>(*aV.u.m_array_unsigned_int);
+    } else if(aV.m_type==value::ARRAY_INT) {
+      aThis.u.m_array_int = new tools::array<int>(*aV.u.m_array_int);
+
+    } else if(aV.m_type==value::ARRAY_UNSIGNED_INT64) {
+      aThis.u.m_array_unsigned_int64 = 
+        new tools::array<uint64>(*aV.u.m_array_unsigned_int64);
+    } else if(aV.m_type==value::ARRAY_INT64) {
+      aThis.u.m_array_int64 = 
+        new tools::array<int64>(*aV.u.m_array_int64);
+
+    } else if(aV.m_type==value::ARRAY_FLOAT) {
+      aThis.u.m_array_float = new tools::array<float>(*aV.u.m_array_float);
+    } else if(aV.m_type==value::ARRAY_DOUBLE) {
+      aThis.u.m_array_double = new tools::array<double>(*aV.u.m_array_double);
+    } else if(aV.m_type==value::ARRAY_BOOL) {
+      aThis.u.m_array_bool = new tools::array<bool>(*aV.u.m_array_bool);
+
+    } else if(aV.m_type==value::ARRAY_STRING) {
+      aThis.u.m_array_string = 
+        new tools::array<std::string>(*aV.u.m_array_string);
+
+    } else {
+      aThis.u = aV.u;
+    }
+    return true;
+  } else {
+    switch(aThis.m_type) {
+    case value::INT:
+      break;
+    case value::DOUBLE:
+      switch(aV.m_type) {
+      case value::INT:
+        aThis.u.m_double = aV.u.m_int;
+        return true;
+      case value::UNSIGNED_SHORT :
+        aThis.u.m_double = aV.u.m_unsigned_short;
+        return true;
+      case value::UNSIGNED_INT:
+        aThis.u.m_double = aV.u.m_unsigned_int;
+        return true;
+      case value::NONE:
+      case value::DOUBLE:
+      case value::VOID_STAR:
+      case value::BOOL:
+      case value::SHORT:
+      case value::INT64:
+      case value::FLOAT:
+      //case value::UNSIGNED_CHAR:
+      //case value::CHAR:
+      case value::UNSIGNED_INT64 :
+      case value::DOUBLE_STAR:
+      case value::FLOAT_STAR:
+      case value::INT_STAR:
+      case value::STRING:
+      //case value::ARRAY_UNSIGNED_CHAR:
+      //case value::ARRAY_CHAR:
+      case value::ARRAY_UNSIGNED_SHORT:
+      case value::ARRAY_SHORT:
+      case value::ARRAY_UNSIGNED_INT:
+      case value::ARRAY_INT:
+      case value::ARRAY_UNSIGNED_INT64:
+      case value::ARRAY_INT64:
+      case value::ARRAY_FLOAT:
+      case value::ARRAY_DOUBLE:
+      case value::ARRAY_BOOL:
+      case value::ARRAY_STRING:
+        break;
+      }
+      break;
+    case value::STRING:
+      break;
+    case value::VOID_STAR:
+      break;
+    case value::UNSIGNED_INT:
+      break;
+    case value::BOOL:
+      break;
+    case value::SHORT:
+      switch(aV.m_type) {
+      case value::INT:
+        aThis.u.m_short = (short)aV.u.m_int;
+        return true;
+      case value::NONE:
+      case value::DOUBLE:
+      case value::VOID_STAR:
+      case value::BOOL:
+      case value::SHORT:
+      case value::INT64:
+      case value::FLOAT:
+      //case value::UNSIGNED_CHAR:
+      //case value::CHAR:
+      case value::UNSIGNED_SHORT :
+      case value::UNSIGNED_INT:
+      case value::UNSIGNED_INT64 :
+      case value::DOUBLE_STAR:
+      case value::FLOAT_STAR:
+      case value::INT_STAR:
+      case value::STRING:
+      //case value::ARRAY_UNSIGNED_CHAR:
+      //case value::ARRAY_CHAR:
+      case value::ARRAY_UNSIGNED_SHORT:
+      case value::ARRAY_SHORT:
+      case value::ARRAY_UNSIGNED_INT:
+      case value::ARRAY_INT:
+      case value::ARRAY_UNSIGNED_INT64:
+      case value::ARRAY_INT64:
+      case value::ARRAY_FLOAT:
+      case value::ARRAY_DOUBLE:
+      case value::ARRAY_BOOL:
+      case value::ARRAY_STRING:
+        break;
+      }
+      break;
+    case value::FLOAT:
+      switch(aV.m_type) {
+      case value::INT:
+        aThis.u.m_float = (float)aV.u.m_int;
+        return true;
+      case value::DOUBLE:
+        aThis.u.m_float = (float)aV.u.m_double;
+        return true;
+      case value::NONE:
+      case value::VOID_STAR:
+      case value::BOOL:
+      case value::SHORT:
+      case value::INT64:
+      case value::FLOAT:
+      //case value::UNSIGNED_CHAR:
+      //case value::CHAR:
+      case value::UNSIGNED_SHORT :
+      case value::UNSIGNED_INT:
+      case value::UNSIGNED_INT64 :
+      case value::DOUBLE_STAR:
+      case value::FLOAT_STAR:
+      case value::INT_STAR:
+      case value::STRING:
+      //case value::ARRAY_UNSIGNED_CHAR:
+      //case value::ARRAY_CHAR:
+      case value::ARRAY_UNSIGNED_SHORT:
+      case value::ARRAY_SHORT:
+      case value::ARRAY_UNSIGNED_INT:
+      case value::ARRAY_INT:
+      case value::ARRAY_UNSIGNED_INT64:
+      case value::ARRAY_INT64:
+      case value::ARRAY_FLOAT:
+      case value::ARRAY_DOUBLE:
+      case value::ARRAY_BOOL:
+      case value::ARRAY_STRING:
+        break;
+      }
+      break;
+/*
+    case value::UNSIGNED_CHAR:
+      switch(aV.m_type) {
+      case value::INT:
+        aThis.u.m_unsigned_char = (unsigned char)aV.u.m_int;
+        return true;
+      case value::NONE:
+      case value::DOUBLE:
+      case value::VOID_STAR:
+      case value::BOOL:
+      case value::SHORT:
+      case value::INT64:
+      case value::FLOAT:
+      case value::UNSIGNED_CHAR:
+      case value::CHAR:
+      case value::UNSIGNED_SHORT :
+      case value::UNSIGNED_INT:
+      case value::UNSIGNED_INT64 :
+      case value::DOUBLE_STAR:
+      case value::FLOAT_STAR:
+      case value::INT_STAR:
+      case value::STRING:
+      case value::ARRAY_UNSIGNED_CHAR:
+      case value::ARRAY_CHAR:
+      case value::ARRAY_UNSIGNED_SHORT:
+      case value::ARRAY_SHORT:
+      case value::ARRAY_UNSIGNED_INT:
+      case value::ARRAY_INT:
+      case value::ARRAY_UNSIGNED_INT64:
+      case value::ARRAY_INT64:
+      case value::ARRAY_FLOAT:
+      case value::ARRAY_DOUBLE:
+      case value::ARRAY_BOOL:
+      case value::ARRAY_STRING:
+        break;
+      }
+      break;
+    case value::CHAR:
+      switch(aV.m_type) {
+      case value::INT:
+        aThis.u.m_char = (char)aV.u.m_int;
+        return true;
+      case value::STRING:
+        if(aV.u.m_string->size()!=1) break;
+        aThis.u.m_char = (*aV.u.m_string)[0];
+        return true;
+      case value::NONE:
+      case value::DOUBLE:
+      case value::VOID_STAR:
+      case value::BOOL:
+      case value::SHORT:
+      case value::INT64:
+      case value::FLOAT:
+      case value::UNSIGNED_CHAR:
+      case value::CHAR:
+      case value::UNSIGNED_SHORT :
+      case value::UNSIGNED_INT:
+      case value::UNSIGNED_INT64 :
+      case value::DOUBLE_STAR:
+      case value::FLOAT_STAR:
+      case value::INT_STAR:
+      case value::ARRAY_UNSIGNED_CHAR:
+      case value::ARRAY_CHAR:
+      case value::ARRAY_UNSIGNED_SHORT:
+      case value::ARRAY_SHORT:
+      case value::ARRAY_UNSIGNED_INT:
+      case value::ARRAY_INT:
+      case value::ARRAY_UNSIGNED_INT64:
+      case value::ARRAY_INT64:
+      case value::ARRAY_FLOAT:
+      case value::ARRAY_DOUBLE:
+      case value::ARRAY_BOOL:
+      case value::ARRAY_STRING:
+        break;
+      }
+      break;
+*/
+    case value::NONE:
+    case value::INT64:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+      switch(aV.m_type) {
+      case value::INT:
+        aThis.u.m_int64 = aV.u.m_int;
+        return true;
+      case value::UNSIGNED_SHORT :
+        aThis.u.m_int64 = aV.u.m_unsigned_short;
+        return true;
+      case value::UNSIGNED_INT:
+        aThis.u.m_int64 = aV.u.m_unsigned_int;
+        return true;
+      case value::NONE:
+      case value::DOUBLE:
+      case value::VOID_STAR:
+      case value::BOOL:
+      case value::SHORT:
+      case value::INT64:
+      case value::FLOAT:
+      //case value::UNSIGNED_CHAR:
+      //case value::CHAR:
+      case value::UNSIGNED_INT64 :
+      case value::DOUBLE_STAR:
+      case value::FLOAT_STAR:
+      case value::INT_STAR:
+      case value::STRING:
+      //case value::ARRAY_UNSIGNED_CHAR:
+      //case value::ARRAY_CHAR:
+      case value::ARRAY_UNSIGNED_SHORT:
+      case value::ARRAY_SHORT:
+      case value::ARRAY_UNSIGNED_INT:
+      case value::ARRAY_INT:
+      case value::ARRAY_UNSIGNED_INT64:
+      case value::ARRAY_INT64:
+      case value::ARRAY_FLOAT:
+      case value::ARRAY_DOUBLE:
+      case value::ARRAY_BOOL:
+      case value::ARRAY_STRING:
+        break;
+      }
+      break;
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    aError = std::string("value::assign :")
+           + " unable to assign " + aV.stype() 
+           + " to " + aThis.stype();
+    aThis.set_none();
+    return false;
+  }
+}
+
+inline bool value::minus(value& aThis,std::string& aError){
+  value::e_type oType = aThis.m_type;
+  switch(aThis.m_type) {
+  case value::INT:
+    aThis.u.m_int = -aThis.u.m_int;
+    return true;
+  case value::DOUBLE:
+    aThis.u.m_double = -aThis.u.m_double;
+    return true;
+  case value::SHORT:
+    aThis.u.m_short = -aThis.u.m_short;
+    return true;
+  case value::INT64:
+    aThis.u.m_int64 = -aThis.u.m_int64;
+    return true;
+  case value::FLOAT:
+    aThis.u.m_float = -1.0F * aThis.u.m_float;
+    return true;
+  case value::ARRAY_DOUBLE:{
+    std::vector<double>& stdv = aThis.u.m_array_double->vector();
+    unsigned int number = stdv.size();
+    for(unsigned int index=0;index<number;index++) stdv[index] = -stdv[index];
+    return true;}
+  //case value::CHAR:
+  //  aThis.u.m_char = -aThis.u.m_char;
+  //  return true;
+  //case value::UNSIGNED_CHAR:{
+  //  char tmp = -1*aThis.u.m_unsigned_char;
+  //  aThis.set(tmp); //this becomes a value::CHAR.
+  //  return true;}
+  case value::UNSIGNED_SHORT:{
+    short tmp = -1*aThis.u.m_unsigned_short;
+    aThis.set(tmp); //this becomes a value::SHORT.
+    return true;}
+  case value::UNSIGNED_INT:{
+    int tmp = -1*aThis.u.m_unsigned_int;
+    aThis.set(tmp); //this becomes a value::INT.
+    return true;}
+  case value::UNSIGNED_INT64 :{
+    int64 tmp = -1*aThis.u.m_unsigned_int64;
+    aThis.set(tmp); //this becomes a value::INT64.
+    return true;}
+  case value::BOOL:
+  case value::NONE:
+  case value::STRING:
+  case value::VOID_STAR:
+  case value::DOUBLE_STAR:
+  case value::FLOAT_STAR:
+  case value::INT_STAR:
+  //case value::ARRAY_UNSIGNED_CHAR:
+  //case value::ARRAY_CHAR:
+  case value::ARRAY_UNSIGNED_SHORT:
+  case value::ARRAY_SHORT:
+  case value::ARRAY_UNSIGNED_INT:
+  case value::ARRAY_INT:
+  case value::ARRAY_UNSIGNED_INT64:
+  case value::ARRAY_INT64:
+  case value::ARRAY_FLOAT:
+  //case value::ARRAY_DOUBLE:
+  case value::ARRAY_BOOL:
+  case value::ARRAY_STRING:
+    break;
+  }
+  aError = std::string("value::minus :")
+         + " can't apply on type " + value::stype(oType);
+  aThis.set_none();
+  return false;
+}
+
+inline bool value::do_not(value& aThis,std::string& aError){
+  value::e_type oType = aThis.m_type;
+  switch(aThis.m_type) {
+  case value::BOOL:
+    aThis.u.m_bool = aThis.u.m_bool?false:true;
+    return true;
+  case value::INT:
+  case value::DOUBLE:
+  case value::STRING:
+  case value::VOID_STAR:
+  case value::UNSIGNED_SHORT :
+  case value::UNSIGNED_INT:
+  case value::SHORT:
+  case value::FLOAT:
+  //case value::UNSIGNED_CHAR:
+  //case value::CHAR:
+  case value::NONE:
+  case value::INT64:
+  case value::UNSIGNED_INT64 :
+  case value::DOUBLE_STAR:
+  case value::FLOAT_STAR:
+  case value::INT_STAR:
+  //case value::ARRAY_UNSIGNED_CHAR:
+  //case value::ARRAY_CHAR:
+  case value::ARRAY_UNSIGNED_SHORT:
+  case value::ARRAY_SHORT:
+  case value::ARRAY_UNSIGNED_INT:
+  case value::ARRAY_INT:
+  case value::ARRAY_UNSIGNED_INT64:
+  case value::ARRAY_INT64:
+  case value::ARRAY_FLOAT:
+  case value::ARRAY_DOUBLE:
+  case value::ARRAY_BOOL:
+  case value::ARRAY_STRING:
+    break;
+  }
+  aError = std::string("value::do_not :")
+         + " can't apply on type " + value::stype(oType);
+  aThis.set_none();
+  return false;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+inline bool value::add(value& aThis,const value& aV,std::string& aError){
+  value::e_type oType = aThis.m_type;
+  switch(aThis.m_type) {
+  case value::INT:
+    switch(aV.m_type) {
+    case value::INT:
+      aThis.u.m_int += aV.u.m_int;
+      return true;
+    case value::FLOAT:{
+      float tmp = aThis.u.m_int + aV.u.m_float;
+      aThis.set(tmp);
+      return true;}
+    case value::DOUBLE:{
+      double tmp = aThis.u.m_int + aV.u.m_double;
+      aThis.set(tmp);
+      return true;}
+    case value::ARRAY_DOUBLE:{
+      int tmp = aThis.u.m_int;
+      //In the below, this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      aThis.u.m_array_double->add(double(tmp));
+      return true;}
+    case value::NONE:
+    case value::STRING:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::UNSIGNED_INT:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::FLOAT:
+    switch(aV.m_type) {
+    case value::UNSIGNED_SHORT :
+      aThis.u.m_float += aV.u.m_unsigned_short;
+      return true;
+    case value::UNSIGNED_INT:
+      aThis.u.m_float += aV.u.m_unsigned_int;
+      return true;
+    case value::SHORT:
+      aThis.u.m_float += aV.u.m_short;
+      return true;
+    case value::INT:
+      aThis.u.m_float += aV.u.m_int;
+      return true;
+    case value::FLOAT:
+      aThis.u.m_float += aV.u.m_float;
+      return true;
+    case value::DOUBLE:
+      aThis.u.m_float += (float)aV.u.m_double;
+      return true;
+    case value::ARRAY_DOUBLE:{
+      double tmp = aThis.u.m_float;
+      //In the below this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      aThis.u.m_array_double->add(tmp);
+      return true;}
+    case value::NONE:
+    case value::STRING:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::DOUBLE:
+    switch(aV.m_type) {
+    case value::SHORT:
+      aThis.u.m_double += aV.u.m_short;
+      return true;
+    case value::INT:
+      aThis.u.m_double += aV.u.m_int;
+      return true;
+    case value::FLOAT:
+      aThis.u.m_double += aV.u.m_float;
+      return true;
+    case value::DOUBLE:
+      aThis.u.m_double += aV.u.m_double;
+      return true;
+    case value::UNSIGNED_SHORT :
+      aThis.u.m_double += aV.u.m_unsigned_short;
+      return true;
+    case value::UNSIGNED_INT:
+      aThis.u.m_double += aV.u.m_unsigned_int;
+      return true;
+    case value::ARRAY_DOUBLE:{
+      double tmp = aThis.u.m_double;
+      //In the below this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      aThis.u.m_array_double->add(tmp);
+      return true;}
+    case value::NONE:
+    case value::STRING:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::UNSIGNED_INT:
+    switch(aV.m_type) {
+    case value::UNSIGNED_INT:
+      aThis.u.m_unsigned_int += aV.u.m_unsigned_int;
+      return true;
+    case value::INT:{
+      int tmp = aThis.u.m_unsigned_int + aV.u.m_int;
+      aThis.set(tmp);
+      return true;}
+    case value::FLOAT:{
+      float tmp = float(aThis.u.m_unsigned_int) + aV.u.m_float;
+      aThis.set(tmp);
+      return true;}
+    case value::DOUBLE:{
+      double tmp = double(aThis.u.m_unsigned_int) + aV.u.m_double;
+      aThis.set(tmp);
+      return true;}
+    case value::ARRAY_DOUBLE:{
+      unsigned int tmp = aThis.u.m_unsigned_int;
+      //In the below this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      aThis.u.m_array_double->add(double(tmp));
+      return true;}
+    case value::NONE:
+    case value::STRING:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::STRING:
+    switch(aV.m_type) {
+    case value::STRING:
+      aThis.set((*aThis.u.m_string)+(*aV.u.m_string));
+      return true;
+    case value::NONE:
+    case value::INT:
+    case value::DOUBLE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    case value::FLOAT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::ARRAY_DOUBLE:
+    switch(aV.m_type) {
+    case value::INT:
+      aThis.u.m_array_double->add(aV.u.m_int);
+      return true;
+    case value::UNSIGNED_INT:
+      aThis.u.m_array_double->add(aV.u.m_unsigned_int);
+      return true;
+    case value::DOUBLE:
+      aThis.u.m_array_double->add(aV.u.m_double);
+      return true;
+    case value::ARRAY_DOUBLE:
+      if(aThis.u.m_array_double->orders()!=aV.u.m_array_double->orders()) {
+        aError = "Value::add : vector orders mismatch.";
+        aThis.set_none();
+        return false;
+      }
+      aThis.u.m_array_double->add(*aV.u.m_array_double);
+      return true;
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    case value::FLOAT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::NONE:
+  case value::VOID_STAR:
+  case value::BOOL:
+  case value::SHORT:
+  case value::INT64:
+  //case value::UNSIGNED_CHAR:
+  //case value::CHAR:
+  case value::UNSIGNED_SHORT :
+  case value::UNSIGNED_INT64 :
+  case value::DOUBLE_STAR:
+  case value::FLOAT_STAR:
+  case value::INT_STAR:
+  //case value::ARRAY_UNSIGNED_CHAR:
+  //case value::ARRAY_CHAR:
+  case value::ARRAY_UNSIGNED_SHORT:
+  case value::ARRAY_SHORT:
+  case value::ARRAY_UNSIGNED_INT:
+  case value::ARRAY_INT:
+  case value::ARRAY_UNSIGNED_INT64:
+  case value::ARRAY_INT64:
+  case value::ARRAY_FLOAT:
+  //case value::ARRAY_DOUBLE:
+  case value::ARRAY_BOOL:
+  case value::ARRAY_STRING:
+    break;
+  }
+  aError = std::string("Value::add :" )
+         + " can't apply on type " + value::stype(oType)
+         + " and type " + aV.stype();
+  aThis.set_none();
+  return false;
+}
+
+inline bool value::subtract(value& aThis,const value& aV,std::string& aError){
+  value::e_type oType = aThis.m_type;
+  switch(aThis.m_type) {
+  case value::INT:
+    switch(aV.m_type) {
+    case value::INT:
+      aThis.u.m_int -= aV.u.m_int;
+      return true;
+    case value::DOUBLE:{
+      double tmp = aThis.u.m_int - aV.u.m_double;
+      aThis.set(tmp);
+      return true;}
+    case value::FLOAT:{
+      float tmp = aThis.u.m_int - aV.u.m_float;
+      aThis.set(tmp);
+      return true;}
+    case value::ARRAY_DOUBLE:{
+      int tmp = aThis.u.m_int;
+      //In the below, this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      aThis.u.m_array_double->multiply(-1);
+      aThis.u.m_array_double->add(double(tmp));
+      return true;}
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::FLOAT:
+    switch(aV.m_type) {
+    case value::DOUBLE:
+      aThis.u.m_float -= (float)aV.u.m_double;
+      return true;
+    case value::UNSIGNED_SHORT :
+      aThis.u.m_float -= aV.u.m_unsigned_short;
+      return true;
+    case value::UNSIGNED_INT:
+      aThis.u.m_float -= aV.u.m_unsigned_int;
+      return true;
+    case value::ARRAY_DOUBLE:{
+      double tmp = aThis.u.m_float;
+      //In the below, this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      aThis.u.m_array_double->multiply(-1);
+      aThis.u.m_array_double->add(tmp);
+      return true;}
+    case value::NONE:
+    case value::INT:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    case value::FLOAT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::DOUBLE:
+    switch(aV.m_type) {
+    case value::DOUBLE:
+      aThis.u.m_double -= aV.u.m_double;
+      return true;
+    case value::UNSIGNED_SHORT :
+      aThis.u.m_double -= aV.u.m_unsigned_short;
+      return true;
+    case value::UNSIGNED_INT:
+      aThis.u.m_double -= aV.u.m_unsigned_int;
+      return true;
+    case value::ARRAY_DOUBLE:{
+      double tmp = aThis.u.m_double;
+      //In the below, this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      aThis.u.m_array_double->multiply(-1);
+      aThis.u.m_array_double->add(tmp);
+      return true;}
+    case value::NONE:
+    case value::INT:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    case value::FLOAT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::UNSIGNED_INT:
+    switch(aV.m_type) {
+//uuu
+    //case value::UNSIGNED_INT:
+    //  aThis.u.m_unsigned_int -= aV.u.m_unsigned_int;
+    //  return true;
+    case value::ARRAY_DOUBLE:{
+      unsigned int tmp = aThis.u.m_unsigned_int;
+      //In the below, this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      aThis.u.m_array_double->multiply(-1);
+      aThis.u.m_array_double->add(double(tmp));
+      return true;}
+    case value::DOUBLE:{
+      double d = double(aThis.u.m_unsigned_int) - aV.u.m_double;
+      aThis.set(d); //this becomes a value::DOUBLE.
+      return true;}
+    case value::NONE:
+    case value::INT:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    case value::FLOAT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::ARRAY_DOUBLE:
+    switch(aV.m_type) {
+    case value::INT:
+      aThis.u.m_array_double->add(-aV.u.m_int);
+      return true;
+    case value::UNSIGNED_INT:
+      aThis.u.m_array_double->add(-((double)aV.u.m_unsigned_int));
+      return true;
+    case value::DOUBLE:
+      aThis.u.m_array_double->add(-aV.u.m_double);
+      return true;
+    case value::ARRAY_DOUBLE:{
+      if(aThis.u.m_array_double->orders()!=aV.u.m_array_double->orders()) {
+        aError = "Value::subtract : vector orders mismatch.";
+        aThis.set_none();
+        return false;
+      }
+      std::vector<double>& stdv = aThis.u.m_array_double->vector();
+      const std::vector<double>& stdv2 = aV.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) { 
+        stdv[index] -= stdv2[index];
+      }
+      return true;}
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    case value::FLOAT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::NONE:
+  case value::VOID_STAR:
+  case value::BOOL:
+  case value::SHORT:
+  case value::INT64:
+  //case value::UNSIGNED_CHAR:
+  //case value::CHAR:
+  case value::UNSIGNED_SHORT :
+  case value::UNSIGNED_INT64 :
+  case value::DOUBLE_STAR:
+  case value::FLOAT_STAR:
+  case value::INT_STAR:
+  case value::STRING:
+  //case value::ARRAY_UNSIGNED_CHAR:
+  //case value::ARRAY_CHAR:
+  case value::ARRAY_UNSIGNED_SHORT:
+  case value::ARRAY_SHORT:
+  case value::ARRAY_UNSIGNED_INT:
+  case value::ARRAY_INT:
+  case value::ARRAY_UNSIGNED_INT64:
+  case value::ARRAY_INT64:
+  case value::ARRAY_FLOAT:
+  //case value::ARRAY_DOUBLE:
+  case value::ARRAY_BOOL:
+  case value::ARRAY_STRING:
+    break;
+  }
+  aError = std::string("Value::subtract :" )
+         + " can't apply on type " + value::stype(oType)
+         + " and type " + aV.stype();
+  aThis.set_none();
+  return false;
+}
+
+inline bool value::multiply(value& aThis,const value& aV,std::string& aError){
+  value::e_type oType = aThis.m_type;
+  switch(aThis.m_type) {
+  case value::INT:
+    switch(aV.m_type) {
+    case value::INT:
+      aThis.u.m_int *= aV.u.m_int;
+      return true;
+    case value::DOUBLE:
+      aThis.u.m_int *= (int)aV.u.m_double;
+      return true;
+    case value::FLOAT:
+      aThis.u.m_int *= (int)aV.u.m_float;
+      return true;
+    case value::ARRAY_DOUBLE:{
+      int tmp = aThis.u.m_int;
+      //In the below, this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      aThis.u.m_array_double->multiply(double(tmp));
+      return true;}
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::UNSIGNED_INT:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::FLOAT:
+    switch(aV.m_type) {
+    case value::SHORT:
+      aThis.u.m_float *= aV.u.m_short;
+      return true;
+    case value::INT:
+      aThis.u.m_float *= aV.u.m_int;
+      return true;
+    case value::FLOAT:
+      aThis.u.m_float *= aV.u.m_float;
+      return true;
+    case value::DOUBLE:
+      aThis.u.m_float *= (float)aV.u.m_double;
+      return true;
+    case value::UNSIGNED_SHORT :
+      aThis.u.m_float *= aV.u.m_unsigned_short;
+      return true;
+    case value::UNSIGNED_INT:
+      aThis.u.m_float *= aV.u.m_unsigned_int;
+      return true;
+    case value::ARRAY_DOUBLE:{
+      double tmp = aThis.u.m_float;
+      //In the below, this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      aThis.u.m_array_double->multiply(tmp);
+      return true;}
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::DOUBLE:
+    switch(aV.m_type) {
+    case value::SHORT:
+      aThis.u.m_double *= aV.u.m_short;
+      return true;
+    case value::INT:
+      aThis.u.m_double *= aV.u.m_int;
+      return true;
+    case value::INT64:
+      aThis.u.m_double *= aV.u.m_int64;
+      return true;
+    case value::FLOAT:
+      aThis.u.m_double *= aV.u.m_float;
+      return true;
+    case value::DOUBLE:
+      aThis.u.m_double *= aV.u.m_double;
+      return true;
+    case value::UNSIGNED_SHORT :
+      aThis.u.m_double *= aV.u.m_unsigned_short;
+      return true;
+    case value::UNSIGNED_INT:
+      aThis.u.m_double *= aV.u.m_unsigned_int;
+      return true;
+    case value::ARRAY_DOUBLE:{
+      double tmp = aThis.u.m_double;
+      //In the below, this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      aThis.u.m_array_double->multiply(tmp);
+      return true;}
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::UNSIGNED_INT:
+    switch(aV.m_type) {
+    case value::FLOAT:{
+      float tmp = aThis.u.m_unsigned_int * aV.u.m_float;
+      aThis.set(tmp); //this becomes a value::FLOAT.
+      return true;}
+    case value::DOUBLE:{
+      double tmp = aThis.u.m_unsigned_int * aV.u.m_double;
+      aThis.set(tmp); //this becomes a value::DOUBLE.
+      return true;}
+    case value::INT:{
+      int tmp = aThis.u.m_unsigned_int * aV.u.m_int;
+      aThis.set(tmp); //this becomes a value::INT.
+      return true;}
+    case value::INT64:{
+      int64 tmp = aThis.u.m_unsigned_int * aV.u.m_int64;
+      aThis.set(tmp); //this becomes a value::INT64.
+      return true;}
+    case value::UNSIGNED_INT:
+      aThis.u.m_unsigned_int *= aV.u.m_unsigned_int;
+      return true;
+    case value::ARRAY_DOUBLE:{
+      unsigned int tmp = aThis.u.m_unsigned_int;
+      //In the below, this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      aThis.u.m_array_double->multiply(double(tmp));
+      return true;}
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::ARRAY_DOUBLE:
+    switch(aV.m_type) {
+    case value::INT:
+      aThis.u.m_array_double->multiply(aV.u.m_int);
+      return true;
+    case value::UNSIGNED_INT:
+      aThis.u.m_array_double->multiply(aV.u.m_unsigned_int);
+      return true;
+    case value::DOUBLE:
+      aThis.u.m_array_double->multiply(aV.u.m_double);
+      return true;
+    case value::ARRAY_DOUBLE:{
+      if(aThis.u.m_array_double->orders()!=aV.u.m_array_double->orders()) {
+        aError = "Value::multiply : vector orders mismatch.";
+        aThis.set_none();
+        return false;
+      }
+      std::vector<double>& stdv = aThis.u.m_array_double->vector();
+      const std::vector<double>& stdv2 = aV.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) { 
+        stdv[index] *= stdv2[index];
+      }
+      return true;}
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    case value::FLOAT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::NONE:
+  case value::STRING:
+  case value::VOID_STAR:
+  case value::BOOL:
+  case value::SHORT:
+  case value::INT64:
+  //case value::UNSIGNED_CHAR:
+  //case value::CHAR:
+  case value::UNSIGNED_SHORT :
+  case value::UNSIGNED_INT64 :
+  case value::DOUBLE_STAR:
+  case value::FLOAT_STAR:
+  case value::INT_STAR:
+  //case value::ARRAY_UNSIGNED_CHAR:
+  //case value::ARRAY_CHAR:
+  case value::ARRAY_UNSIGNED_SHORT:
+  case value::ARRAY_SHORT:
+  case value::ARRAY_UNSIGNED_INT:
+  case value::ARRAY_INT:
+  case value::ARRAY_UNSIGNED_INT64:
+  case value::ARRAY_INT64:
+  case value::ARRAY_FLOAT:
+  //case value::ARRAY_DOUBLE:
+  case value::ARRAY_BOOL:
+  case value::ARRAY_STRING:
+    break;
+  }
+  aError = std::string("Value::multiply :" )
+         + " can't apply on type " + value::stype(oType)
+         + " and type " + aV.stype();
+  aThis.set_none();
+  return false;
+}
+
+inline bool value::divide(value& aThis,const value& aV,std::string& aError){
+  value::e_type oType = aThis.m_type;
+  switch(aThis.m_type) {
+  case value::INT:
+    switch(aV.m_type) {
+    case value::FLOAT:
+      if(aV.u.m_float==0.0F) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        float tmp = float(aThis.u.m_int)/aV.u.m_float;
+        aThis.set(tmp);
+        return true;
+      }
+    case value::DOUBLE:
+      if(aV.u.m_double==0) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        double tmp = double(aThis.u.m_int)/aV.u.m_double;
+        aThis.set(tmp);
+        return true;
+      }
+    case value::ARRAY_DOUBLE:{
+      int tmp = aThis.u.m_int;
+      //In the below, this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      if(!aThis.u.m_array_double->invert()) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      }
+      aThis.u.m_array_double->multiply((double)tmp);
+      return true;}
+    case value::NONE:
+    case value::INT:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::FLOAT:
+    switch(aV.m_type) {
+    case value::INT:
+      if(aV.u.m_int==0) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        aThis.u.m_float /= aV.u.m_int;
+        return true;
+      }
+    case value::FLOAT:
+      if(aV.u.m_float==0.0F) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        aThis.u.m_float /= aV.u.m_float;
+        return true;
+      }
+    case value::DOUBLE:
+      if(aV.u.m_float==0.0F) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        aThis.u.m_float /= (float)aV.u.m_double;
+        return true;
+      }
+    case value::UNSIGNED_INT:
+      if(aV.u.m_unsigned_int==0) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        aThis.u.m_float /= aV.u.m_unsigned_int;
+        return true;
+      }
+    case value::ARRAY_DOUBLE:{
+      double tmp = aThis.u.m_float;
+      //In the below, this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      if(!aThis.u.m_array_double->invert()) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      }
+      aThis.u.m_array_double->multiply(tmp);
+      return true;}
+
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::DOUBLE:
+    switch(aV.m_type) {
+    case value::SHORT:
+      if(aV.u.m_short==0) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        aThis.u.m_double /= aV.u.m_short;
+        return true;
+      }
+    case value::INT:
+      if(aV.u.m_int==0) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        aThis.u.m_double /= aV.u.m_int;
+        return true;
+      }
+    case value::FLOAT:
+      if(aV.u.m_float==0.0F) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        aThis.u.m_double /= aV.u.m_float;
+        return true;
+      }
+    case value::DOUBLE:
+      if(aV.u.m_double==0) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        aThis.u.m_double /= aV.u.m_double;
+        return true;
+      }
+    case value::UNSIGNED_INT:
+      if(aV.u.m_unsigned_int==0) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        aThis.u.m_double /= aV.u.m_unsigned_int;
+        return true;
+      }
+    case value::ARRAY_DOUBLE:{
+      double tmp = aThis.u.m_double;
+      //In the below, this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      if(!aThis.u.m_array_double->invert()) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      }
+      aThis.u.m_array_double->multiply(tmp);
+      return true;}
+
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::UNSIGNED_INT:
+    switch(aV.m_type) {
+    //case value::UNSIGNED_INT:
+    //  if(aV.u.m_unsigned_int==0) {
+    //    aError = value::error_div_zero();
+    //    aThis.set_none();
+    //    return false;
+    //  } else {
+    //    //FIXME : ???
+    //    aThis.set((double)(aThis.u.m_unsigned_int  / aV.u.m_unsigned_int ));
+    //    return true;
+    //  }
+    case value::ARRAY_DOUBLE:{
+      unsigned int tmp = aThis.u.m_unsigned_int;
+      //In the below, this becomes a value::ARRAY_DOUBLE.
+      aThis.set(aV.u.m_array_double->orders(),
+                aV.u.m_array_double->vector());
+      if(!aThis.u.m_array_double->invert()) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      }
+      aThis.u.m_array_double->multiply(double(tmp));
+      return true;}
+
+    case value::FLOAT:
+      if(aV.u.m_float==0) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        float d = float(aThis.u.m_unsigned_int)/aV.u.m_float;
+        aThis.set(d); //this becomes a value::FLOAT.
+        return true;
+      }
+    case value::DOUBLE:
+      if(aV.u.m_double==0) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        double d = double(aThis.u.m_unsigned_int)/aV.u.m_double;
+        aThis.set(d); //this becomes a value::DOUBLE.
+        return true;
+      }
+    case value::NONE:
+    case value::INT:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::ARRAY_DOUBLE:
+    switch(aV.m_type) {
+    case value::INT:
+      if(aV.u.m_int==0) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        double value = 1./aV.u.m_int;
+        aThis.u.m_array_double->multiply(value);
+        return true;
+      }
+    case value::UNSIGNED_INT:
+      if(aV.u.m_unsigned_int==0) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        double value = 1./aV.u.m_unsigned_int;
+        aThis.u.m_array_double->multiply(value);
+        return true;
+      }
+    case value::DOUBLE:
+      if(aV.u.m_double==0) {
+        aError = value::error_div_zero();
+        aThis.set_none();
+        return false;
+      } else {
+        aThis.u.m_array_double->multiply(1./aV.u.m_double);
+        return true;
+      }
+    case value::ARRAY_DOUBLE:{
+      if(aThis.u.m_array_double->orders()!=aV.u.m_array_double->orders()) {
+        aError = value::error_div_zero(); //FIXME : error_mismatch_orders
+        aThis.set_none();
+        return false;
+      }
+      std::vector<double>& stdv = aThis.u.m_array_double->vector();
+      const std::vector<double>& stdv2 = aV.u.m_array_double->vector();
+      bool has_div_zero = false;
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) { 
+        if(stdv2[index]==0) {
+          //FIXME : stdv[index] = nan;
+          stdv[index] = 0; //PAW convention.
+          has_div_zero = true;
+        } else {
+          stdv[index] /= stdv2[index];
+        }
+      }
+      if(has_div_zero) {
+        aError = value::error_div_zero();
+        // For OpenPAW/pasigm::SIGMA, continue anyway in case of /0 errors.
+        //aThis.set_none();
+        //return false; //FIXME : is so, then it will stop Processor.
+        return true; //FIXME : do we want that ?
+      }
+
+      return true;}
+
+    case value::NONE:
+    case value::STRING:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::FLOAT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::INT64:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+
+  case value::NONE:
+  case value::STRING:
+  case value::VOID_STAR:
+  case value::BOOL:
+  case value::SHORT:
+  //case value::UNSIGNED_CHAR:
+  //case value::CHAR:
+  case value::INT64:
+  case value::UNSIGNED_SHORT :
+  case value::UNSIGNED_INT64 :
+  case value::DOUBLE_STAR:
+  case value::FLOAT_STAR:
+  case value::INT_STAR:
+  //case value::ARRAY_UNSIGNED_CHAR:
+  //case value::ARRAY_CHAR:
+  case value::ARRAY_UNSIGNED_SHORT:
+  case value::ARRAY_SHORT:
+  case value::ARRAY_UNSIGNED_INT:
+  case value::ARRAY_INT:
+  case value::ARRAY_UNSIGNED_INT64:
+  case value::ARRAY_INT64:
+  case value::ARRAY_FLOAT:
+  //case value::ARRAY_DOUBLE:
+  case value::ARRAY_BOOL:
+  case value::ARRAY_STRING:
+    break;
+  }
+  aError = std::string("Value::divide :")
+         + " can't apply on type " + value::stype(oType)
+         + " and type " + aV.stype();
+  aThis.set_none();
+  return false;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////
+
+inline bool value::if_gt(value& aThis,const value& aV,std::string& aError){
+  value::e_type oType = aThis.m_type;
+  switch(aThis.m_type) {
+  case value::INT:
+    switch(aV.m_type) {
+    case value::INT:
+      aThis.set((bool)(aThis.u.m_int>aV.u.m_int?true:false));
+      return true;
+    case value::FLOAT:
+      aThis.set((bool)(aThis.u.m_int>aV.u.m_float?true:false));
+      return true;
+    case value::DOUBLE:
+      aThis.set((bool)(aThis.u.m_int>aV.u.m_double?true:false));
+      return true;
+    case value::UNSIGNED_SHORT :
+      aThis.set((bool)(aThis.u.m_int>(int)aV.u.m_unsigned_short?true:false));
+      return true;
+    case value::UNSIGNED_INT:
+      aThis.set((bool)(aThis.u.m_int>(int)aV.u.m_unsigned_int?true:false));
+      return true;
+    case value::ARRAY_DOUBLE:{
+      const std::vector<double>& stdv = aV.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(aThis.u.m_int<=stdv[index]) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::DOUBLE:
+    switch(aV.m_type) {
+    case value::DOUBLE:
+      aThis.set((bool)(aThis.u.m_double>aV.u.m_double?true:false));
+      return true;
+    case value::FLOAT:
+      aThis.set((bool)(aThis.u.m_double>aV.u.m_float?true:false));
+      return true;
+    case value::INT:
+      aThis.set((bool)(aThis.u.m_double>aV.u.m_int?true:false));
+      return true;
+    case value::UNSIGNED_SHORT :
+      aThis.set((bool)(aThis.u.m_double>aV.u.m_unsigned_short?true:false));
+      return true;
+    case value::UNSIGNED_INT:
+      aThis.set((bool)(aThis.u.m_double>aV.u.m_unsigned_int?true:false));
+      return true;
+    case value::ARRAY_DOUBLE:{
+      const std::vector<double>& stdv = aV.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(aThis.u.m_double<=stdv[index]) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::FLOAT:
+    switch(aV.m_type) {
+    case value::DOUBLE:
+      aThis.set((bool)(aThis.u.m_float>aV.u.m_double?true:false));
+      return true;
+    case value::FLOAT:
+      aThis.set((bool)(aThis.u.m_float>aV.u.m_float?true:false));
+      return true;
+    case value::INT:
+      aThis.set((bool)(aThis.u.m_float>aV.u.m_int?true:false));
+      return true;
+    case value::UNSIGNED_SHORT :
+      aThis.set((bool)(aThis.u.m_float>aV.u.m_unsigned_short?true:false));
+      return true;
+    case value::UNSIGNED_INT:
+      aThis.set((bool)(aThis.u.m_float>aV.u.m_unsigned_int?true:false));
+      return true;
+    case value::ARRAY_DOUBLE:{
+      const std::vector<double>& stdv = aV.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(aThis.u.m_float<=stdv[index]) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::VOID_STAR:
+    switch(aV.m_type) {
+    case value::VOID_STAR:
+      aThis.set((bool)(aThis.u.m_void_star>aV.u.m_void_star?true:false));
+      return true;
+    case value::NONE:
+    case value::INT:
+    case value::DOUBLE:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    case value::FLOAT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::UNSIGNED_INT:
+    switch(aV.m_type) {
+    case value::UNSIGNED_INT:
+      aThis.set((bool)(aThis.u.m_unsigned_int >aV.u.m_unsigned_int ?true:false));
+      return true;
+    case value::INT:
+      aThis.set((bool)((int)aThis.u.m_unsigned_int >aV.u.m_int?true:false));
+      return true;
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::DOUBLE:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    case value::FLOAT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::ARRAY_DOUBLE:
+    switch(aV.m_type) {
+    case value::INT:{
+      const std::vector<double>& stdv = aThis.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(stdv[index]<=aV.u.m_int) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::FLOAT:{
+      const std::vector<double>& stdv = aThis.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(stdv[index]<=aV.u.m_float) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::DOUBLE:{
+      const std::vector<double>& stdv = aThis.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(stdv[index]<=aV.u.m_double) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::UNSIGNED_INT:{
+      const std::vector<double>& stdv = aThis.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(stdv[index]<=aV.u.m_unsigned_int ) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::ARRAY_DOUBLE:{
+      const std::vector<double>& stdv = aThis.u.m_array_double->vector();
+      const std::vector<double>& stdv2 = aV.u.m_array_double->vector();
+      if(stdv.size()!=stdv2.size()) break;
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(stdv[index]<=stdv2[index]) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::NONE:
+  case value::BOOL:
+  case value::SHORT:
+  //case value::UNSIGNED_CHAR:
+  //case value::CHAR:
+  case value::STRING:
+  case value::INT64:
+  case value::UNSIGNED_SHORT :
+  case value::UNSIGNED_INT64 :
+  case value::DOUBLE_STAR:
+  case value::FLOAT_STAR:
+  case value::INT_STAR:
+  //case value::ARRAY_UNSIGNED_CHAR:
+  //case value::ARRAY_CHAR:
+  case value::ARRAY_UNSIGNED_SHORT:
+  case value::ARRAY_SHORT:
+  case value::ARRAY_UNSIGNED_INT:
+  case value::ARRAY_INT:
+  case value::ARRAY_UNSIGNED_INT64:
+  case value::ARRAY_INT64:
+  case value::ARRAY_FLOAT:
+//case value::ARRAY_DOUBLE:
+  case value::ARRAY_BOOL:
+  case value::ARRAY_STRING:
+    break;
+  }
+  aError = std::string("Value::if_gt() :")
+         + " can't compare type " + value::stype(oType) 
+         + " with type " + aV.stype();
+  aThis.set_none();
+  return false;
+}
+
+inline bool value::if_eq(value& aThis,const value& aV,std::string& aError){
+  value::e_type oType = aThis.m_type;
+  switch(aThis.m_type) {
+  case value::INT:
+    switch(aV.m_type) {
+    case value::INT:
+      aThis.set((bool)(aThis.u.m_int==aV.u.m_int?true:false));
+      return true;
+    case value::DOUBLE:
+      aThis.set((bool)(aThis.u.m_int==aV.u.m_double?true:false));
+      return true;
+    case value::FLOAT:
+      aThis.set((bool)(aThis.u.m_int==aV.u.m_float?true:false));
+      return true;
+    case value::UNSIGNED_SHORT :
+      aThis.set((bool)(aThis.u.m_int==(int)aV.u.m_unsigned_short?true:false));
+      return true;
+    case value::UNSIGNED_INT:
+      aThis.set((bool)(aThis.u.m_int==(int)aV.u.m_unsigned_int ?true:false));
+      return true;
+    case value::ARRAY_DOUBLE:{
+      const std::vector<double>& stdv = aV.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(aThis.u.m_int!=stdv[index]) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+
+    case value::NONE:
+    case value::STRING:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::FLOAT:
+    switch(aV.m_type) {
+    case value::FLOAT:
+      aThis.set((bool)(aThis.u.m_float==aV.u.m_float?true:false));
+      return true;
+    case value::DOUBLE:
+      aThis.set((bool)(aThis.u.m_float==aV.u.m_double?true:false));
+      return true;
+    case value::INT:
+      aThis.set((bool)(aThis.u.m_float==aV.u.m_int?true:false));
+      return true;
+    case value::UNSIGNED_SHORT :
+      aThis.set((bool)(aThis.u.m_float==aV.u.m_unsigned_short?true:false));
+      return true;
+    case value::UNSIGNED_INT:
+      aThis.set((bool)(aThis.u.m_float==aV.u.m_unsigned_int?true:false));
+      return true;
+    case value::ARRAY_DOUBLE:{
+      const std::vector<double>& stdv = aV.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(aThis.u.m_float!=stdv[index]) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::NONE:
+    case value::STRING:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::INT64:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::DOUBLE:
+    switch(aV.m_type) {
+    case value::DOUBLE:
+      aThis.set((bool)(aThis.u.m_double==aV.u.m_double?true:false));
+      return true;
+    case value::FLOAT:
+      aThis.set((bool)(aThis.u.m_double==aV.u.m_float?true:false));
+      return true;
+    case value::INT:
+      aThis.set((bool)(aThis.u.m_double==aV.u.m_int?true:false));
+      return true;
+    case value::UNSIGNED_SHORT :
+      aThis.set((bool)(aThis.u.m_double==aV.u.m_unsigned_short?true:false));
+      return true;
+    case value::UNSIGNED_INT:
+      aThis.set((bool)(aThis.u.m_double==aV.u.m_unsigned_int ?true:false));
+      return true;
+    case value::ARRAY_DOUBLE:{
+      const std::vector<double>& stdv = aV.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(aThis.u.m_double!=stdv[index]) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::NONE:
+    case value::STRING:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::INT64:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::STRING:
+    switch(aV.m_type) {
+    case value::STRING:
+      aThis.set((bool)((*aThis.u.m_string)==(*aV.u.m_string)?true:false));
+      return true;
+    case value::INT:
+     {int v;
+      if(!tools::to<int>(*aThis.u.m_string,v)) break;
+      aThis.set((bool)(v==aV.u.m_int?true:false));
+      return true;}
+    case value::FLOAT:
+     {float v;
+      if(!tools::to<float>(*aThis.u.m_string,v)) break;
+      aThis.set((bool)(v==aV.u.m_float?true:false));
+      return true;}
+    case value::DOUBLE:
+     {double v;
+      if(!tools::to<double>(*aThis.u.m_string,v)) break;
+      aThis.set((bool)(v==aV.u.m_double?true:false));
+      return true;}
+    case value::UNSIGNED_INT:
+     {typedef unsigned int uint_t;
+      uint_t v;
+      if(!tools::to<uint_t>(*aThis.u.m_string,v)) break;
+      aThis.set((bool)(v==aV.u.m_unsigned_int ?true:false));
+      return true;}
+    case value::BOOL:
+     {bool v;
+      if(!tools::to(*aThis.u.m_string,v)) break;
+      aThis.set((bool)(v==aV.u.m_bool?true:false));
+      return true;}
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::SHORT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::INT64:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::VOID_STAR:
+    switch(aV.m_type) {
+    case value::VOID_STAR:
+      aThis.set((bool)(aThis.u.m_void_star==aV.u.m_void_star?true:false));
+      return true;
+    case value::NONE:
+    case value::INT:
+    case value::DOUBLE:
+    case value::BOOL:
+    case value::SHORT:
+    case value::INT64:
+    case value::FLOAT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::UNSIGNED_INT:
+    switch(aV.m_type) {
+    case value::UNSIGNED_INT:
+      aThis.set((bool)(aThis.u.m_unsigned_int ==aV.u.m_unsigned_int ?true:false));
+      return true;
+    case value::INT:
+      aThis.set((bool)((int)aThis.u.m_unsigned_int ==aV.u.m_int?true:false));
+      return true;
+    case value::FLOAT:
+      aThis.set((bool)((int)aThis.u.m_unsigned_int ==aV.u.m_float?true:false));
+      return true;
+    case value::DOUBLE:
+      aThis.set((bool)((int)aThis.u.m_unsigned_int ==aV.u.m_double?true:false));
+      return true;
+    case value::ARRAY_DOUBLE:{
+      const std::vector<double>& stdv = aV.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(aThis.u.m_unsigned_int !=stdv[index]) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::NONE:
+    case value::BOOL:
+    case value::VOID_STAR:
+    case value::SHORT:
+    case value::INT64:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::BOOL:
+    switch(aV.m_type) {
+    case value::BOOL:
+      aThis.u.m_bool = ((aThis.u.m_bool==aV.u.m_bool)?true:false);
+      return true;
+    case value::NONE:
+    case value::INT:
+    case value::DOUBLE:
+    case value::VOID_STAR:
+    case value::SHORT:
+    case value::INT64:
+    case value::FLOAT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT:
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::STRING:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::ARRAY_DOUBLE:
+    switch(aV.m_type) {
+    case value::INT:{
+      const std::vector<double>& stdv = aThis.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(stdv[index]!=aV.u.m_int) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::FLOAT:{
+      const std::vector<double>& stdv = aThis.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(stdv[index]!=aV.u.m_float) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::DOUBLE:{
+      const std::vector<double>& stdv = aThis.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(stdv[index]!=aV.u.m_double) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::UNSIGNED_INT:{
+      const std::vector<double>& stdv = aThis.u.m_array_double->vector();
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(stdv[index]!=aV.u.m_unsigned_int ) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::ARRAY_DOUBLE:{
+      const std::vector<double>& stdv = aThis.u.m_array_double->vector();
+      const std::vector<double>& stdv2 = aV.u.m_array_double->vector();
+      if(stdv.size()!=stdv2.size()) {
+        aThis.set(false);
+        return true;
+      }
+      unsigned int number = stdv.size();
+      for(unsigned int index=0;index<number;index++) {
+        if(stdv[index]!=stdv2[index]) {
+          aThis.set(false);
+          return true;
+        }
+      }
+      aThis.set(true);
+      return true;
+    }
+    case value::NONE:
+    case value::VOID_STAR:
+    case value::BOOL:
+    case value::SHORT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::STRING:
+    case value::INT64:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    //case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::NONE:
+  case value::SHORT:
+  case value::INT64:
+  //case value::UNSIGNED_CHAR:
+  //case value::CHAR:
+  case value::UNSIGNED_SHORT :
+  case value::UNSIGNED_INT64 :
+  case value::DOUBLE_STAR:
+  case value::FLOAT_STAR:
+  case value::INT_STAR:
+  //case value::ARRAY_UNSIGNED_CHAR:
+  //case value::ARRAY_CHAR:
+  case value::ARRAY_UNSIGNED_SHORT:
+  case value::ARRAY_SHORT:
+  case value::ARRAY_UNSIGNED_INT:
+  case value::ARRAY_INT:
+  case value::ARRAY_UNSIGNED_INT64:
+  case value::ARRAY_INT64:
+  case value::ARRAY_FLOAT:
+//case value::ARRAY_DOUBLE:
+  case value::ARRAY_BOOL:
+  case value::ARRAY_STRING:
+    break;
+  }
+  aError = std::string("Value::if_eq() :")
+         + " can't compare type " + value::stype(oType) 
+         + " with type " + aV.stype();
+  aThis.set_none();
+  return false;
+}
+
+inline bool value::if_and(value& aThis,const value& aV,std::string& aError){
+  value::e_type oType = aThis.m_type;
+  switch(aThis.m_type) {
+  case value::BOOL:
+    switch(aV.m_type) {
+    case value::BOOL:
+      aThis.u.m_bool = ((aThis.u.m_bool && aV.u.m_bool)?true:false);
+      return true;
+    case value::INT:
+    case value::NONE:
+    case value::DOUBLE:
+    case value::STRING:
+    case value::VOID_STAR:
+    case value::SHORT:
+    case value::INT64:
+    case value::FLOAT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::UNSIGNED_INT:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::NONE:
+  case value::INT:
+  case value::DOUBLE:
+  case value::VOID_STAR:
+  case value::SHORT:
+  case value::INT64:
+  case value::FLOAT:
+  //case value::UNSIGNED_CHAR:
+  //case value::CHAR:
+  case value::UNSIGNED_SHORT :
+  case value::UNSIGNED_INT:
+  case value::UNSIGNED_INT64 :
+  case value::DOUBLE_STAR:
+  case value::FLOAT_STAR:
+  case value::INT_STAR:
+  case value::STRING:
+  //case value::ARRAY_UNSIGNED_CHAR:
+  //case value::ARRAY_CHAR:
+  case value::ARRAY_UNSIGNED_SHORT:
+  case value::ARRAY_SHORT:
+  case value::ARRAY_UNSIGNED_INT:
+  case value::ARRAY_INT:
+  case value::ARRAY_UNSIGNED_INT64:
+  case value::ARRAY_INT64:
+  case value::ARRAY_FLOAT:
+  case value::ARRAY_DOUBLE:
+  case value::ARRAY_BOOL:
+  case value::ARRAY_STRING:
+    break;
+  }
+  aError = std::string("Value::if_and :")
+         + " can't apply on type " + value::stype(oType) 
+         + " and type " + aV.stype();
+  aThis.set_none();
+  return false;
+}
+
+inline bool value::if_or(value& aThis,const value& aV,std::string& aError){
+  value::e_type oType = aThis.m_type;
+  switch(aThis.m_type) {
+  case value::BOOL:
+    switch(aV.m_type) {
+    case value::BOOL:
+      aThis.u.m_bool = ((aThis.u.m_bool || aV.u.m_bool)?true:false);
+      return true;
+    case value::INT:
+    case value::NONE:
+    case value::DOUBLE:
+    case value::STRING:
+    case value::VOID_STAR:
+    case value::SHORT:
+    case value::INT64:
+    case value::FLOAT:
+    //case value::UNSIGNED_CHAR:
+    //case value::CHAR:
+    case value::UNSIGNED_SHORT :
+    case value::UNSIGNED_INT64 :
+    case value::DOUBLE_STAR:
+    case value::FLOAT_STAR:
+    case value::INT_STAR:
+    case value::UNSIGNED_INT:
+    //case value::ARRAY_UNSIGNED_CHAR:
+    //case value::ARRAY_CHAR:
+    case value::ARRAY_UNSIGNED_SHORT:
+    case value::ARRAY_SHORT:
+    case value::ARRAY_UNSIGNED_INT:
+    case value::ARRAY_INT:
+    case value::ARRAY_UNSIGNED_INT64:
+    case value::ARRAY_INT64:
+    case value::ARRAY_FLOAT:
+    case value::ARRAY_DOUBLE:
+    case value::ARRAY_BOOL:
+    case value::ARRAY_STRING:
+      break;
+    }
+    break;
+  case value::NONE:
+  case value::INT:
+  case value::DOUBLE:
+  case value::VOID_STAR:
+  case value::SHORT:
+  case value::INT64:
+  case value::FLOAT:
+  //case value::UNSIGNED_CHAR:
+  //case value::CHAR:
+  case value::UNSIGNED_SHORT :
+  case value::UNSIGNED_INT:
+  case value::UNSIGNED_INT64 :
+  case value::DOUBLE_STAR:
+  case value::FLOAT_STAR:
+  case value::INT_STAR:
+  case value::STRING:
+  //case value::ARRAY_UNSIGNED_CHAR:
+  //case value::ARRAY_CHAR:
+  case value::ARRAY_UNSIGNED_SHORT:
+  case value::ARRAY_SHORT:
+  case value::ARRAY_UNSIGNED_INT:
+  case value::ARRAY_INT:
+  case value::ARRAY_UNSIGNED_INT64:
+  case value::ARRAY_INT64:
+  case value::ARRAY_FLOAT:
+  case value::ARRAY_DOUBLE:
+  case value::ARRAY_BOOL:
+  case value::ARRAY_STRING:
+    break;
+  }
+  aError = std::string("Value::if_or :")
+         + " can't apply on type " + value::stype(oType) 
+         + " and type " + aV.stype();
+  aThis.set_none();
+  return false;
+}
+
+inline bool value::to_double(const value& aThis,double& aValue){
+  switch(aThis.m_type) {
+  case value::INT:
+    aValue = aThis.u.m_int;
+    return true;
+  case value::DOUBLE:
+    aValue = aThis.u.m_double;
+    return true;
+  case value::UNSIGNED_SHORT:
+    aValue = aThis.u.m_unsigned_short;
+    return true;
+  case value::UNSIGNED_INT:
+    aValue = aThis.u.m_unsigned_int;
+    return true;
+  case value::SHORT:
+    aValue = aThis.u.m_short;
+    return true;
+  case value::INT64:
+    aValue = (double)aThis.u.m_int64;
+    return true;
+  case value::UNSIGNED_INT64:
+    aValue = (double)aThis.u.m_unsigned_int64;
+    return true;
+  case value::FLOAT:
+    aValue = aThis.u.m_float;
+    return true;
+  //case value::UNSIGNED_CHAR:
+  //  aValue = aThis.u.m_unsigned_char;
+  //  return true;
+  //case value::CHAR:
+  //  aValue = aThis.u.m_char;
+  //  return true;
+  case value::BOOL:
+    aValue = aThis.u.m_bool?1:0;
+    return true;
+  case value::NONE:
+  case value::STRING:
+  case value::VOID_STAR:
+  case value::DOUBLE_STAR:
+  case value::FLOAT_STAR:
+  case value::INT_STAR:
+  //case value::ARRAY_UNSIGNED_CHAR:
+  //case value::ARRAY_CHAR:
+  case value::ARRAY_UNSIGNED_SHORT:
+  case value::ARRAY_SHORT:
+  case value::ARRAY_UNSIGNED_INT:
+  case value::ARRAY_INT:
+  case value::ARRAY_UNSIGNED_INT64:
+  case value::ARRAY_INT64:
+  case value::ARRAY_FLOAT:
+  case value::ARRAY_DOUBLE:
+  case value::ARRAY_BOOL:
+  case value::ARRAY_STRING:
+    break;
+  }
+  aValue = 0;
+  return false;
+}
+
+inline bool value::cxx_type(const value& aThis,std::string& aValue){
+  switch(aThis.m_type) {
+  case value::INT: 
+    aValue = "int";
+    return true;
+  case value::DOUBLE: 
+    aValue = "double";
+    return true;
+  case value::STRING: 
+    aValue = "std::string";
+    return true;
+  case value::BOOL: 
+    aValue = "bool";
+    return true;
+  case value::SHORT: 
+    aValue = "short";
+    return true;
+  case value::FLOAT: 
+    aValue = "float";
+    return true;
+  //case value::CHAR: 
+  //  aValue = "char";
+  //  return true;
+  //case value::UNSIGNED_CHAR: 
+  //  aValue = "unsigned char";
+  //  return true;
+  case value::UNSIGNED_SHORT: 
+    aValue = "unsigned short";
+    return true;
+  case value::UNSIGNED_INT: 
+    aValue = "unsigned int";
+    return true;
+  case value::VOID_STAR: 
+    aValue = "void*";
+    return true;
+  case value::DOUBLE_STAR: 
+    aValue = "double*";
+    return true;
+  case value::FLOAT_STAR: 
+    aValue = "float*";
+    return true;
+  case value::INT_STAR: 
+    aValue = "int*";
+    return true;
+  case value::NONE:
+  case value::INT64:
+  case value::UNSIGNED_INT64:
+  //case value::ARRAY_UNSIGNED_CHAR:
+  //case value::ARRAY_CHAR:
+  case value::ARRAY_UNSIGNED_SHORT:
+  case value::ARRAY_SHORT:
+  case value::ARRAY_UNSIGNED_INT:
+  case value::ARRAY_INT:
+  case value::ARRAY_UNSIGNED_INT64:
+  case value::ARRAY_INT64:
+  case value::ARRAY_FLOAT:
+  case value::ARRAY_DOUBLE:
+  case value::ARRAY_BOOL:
+  case value::ARRAY_STRING:
+    aValue = "";
+    return false;
+  }
+  return false;
+}
+
+/*
+inline bool value::i_set(value& aThis,const Slash::Core::IValue& aValue){
+  aThis.reset();
+
+  aThis.m_type = aValue.type();
+
+  switch(aValue.type()) {
+  case value::NONE:
+    aThis.u.m_unsigned_int64 = 0;
+    return true;
+  case value::CHAR:
+    aThis.u.m_char = aValue.get_char();
+    return true;
+  case value::SHORT:
+    aThis.u.m_short = aValue.get_short();
+    return true;
+  case value::INT:
+    aThis.u.m_int = aValue.get_int();
+    return true;
+  case value::INT64:
+    aThis.u.m_int64 = aValue.get_int64();
+    return true;
+  case value::UNSIGNED_INT64:
+    aThis.u.m_unsigned_int64 = aValue.get_unsigned_int64();
+    return true;
+  //case value::UNSIGNED_CHAR:
+  //  aThis.u.m_unsigned_char = aValue.get_unsigned_char();
+  //  return true;
+  case value::UNSIGNED_SHORT:
+    aThis.u.m_unsigned_short  = aValue.get_unsigned_short();
+    return true;
+  case value::UNSIGNED_INT:
+    aThis.u.m_unsigned_int  = aValue.get_unsigned_int();
+    return true;
+  case value::DOUBLE_STAR:
+    aThis.u.m_double_star  = aValue.get_double_star();
+    return true;
+  case value::FLOAT_STAR:
+    aThis.u.m_float_star  = aValue.get_float_star();
+    return true;
+  case value::INT_STAR:
+    aThis.u.m_int_star  = aValue.get_int_star();
+    return true;
+  case value::FLOAT:
+    aThis.u.m_float = aValue.get_float();
+    return true;
+  case value::DOUBLE:
+    aThis.u.m_double = aValue.get_double();
+    return true;
+  case value::VOID_STAR:
+    aThis.u.m_void_star = aValue.get_void_star();
+    return true;
+  case value::BOOL:
+    aThis.u.m_bool = aValue.get_bool();
+    return true;
+  case value::STRING:
+    aThis.u.m_string = new std::string(aValue.get_string());
+    return true;
+
+  case value::ARRAY_UNSIGNED_CHAR:
+   {std::vector<unsigned int> is;
+    const std::vector<unsigned char>& vd = aValue.get_array_unsigned_char(is);
+    aThis.u.m_array_unsigned_char = new tools::array<unsigned char>();
+    if(!aThis.u.m_array_unsigned_char->configure(is)){
+      aThis.set_none();return false;
+    }
+    if(!aThis.u.m_array_unsigned_char->fill(vd)){aThis.set_none();return false;}
+    return true;}
+
+  case value::ARRAY_CHAR:
+   {std::vector<unsigned int> is;
+    const std::vector<char>& vd = aValue.get_array_char(is);
+    aThis.u.m_array_char = new tools::array<char>();
+    if(!aThis.u.m_array_char->configure(is)){
+      aThis.set_none();return false;
+    }
+    if(!aThis.u.m_array_char->fill(vd)){aThis.set_none();return false;}
+    return true;}
+  case value::ARRAY_UNSIGNED_SHORT:
+   {std::vector<unsigned int> is;
+    const std::vector<unsigned short>& vd = 
+      aValue.get_array_unsigned_short(is);
+    aThis.u.m_array_unsigned_short = new tools::array<unsigned short>();
+    if(!aThis.u.m_array_unsigned_short->configure(is)){
+      aThis.set_none();return false;
+    }
+    if(!aThis.u.m_array_unsigned_short->fill(vd)){
+      aThis.set_none();return false;
+    }
+    return true;}
+
+  case value::ARRAY_SHORT:
+   {std::vector<unsigned int> is;
+    const std::vector<short>& vd = aValue.get_array_short(is);
+    aThis.u.m_array_short = new tools::array<short>();
+    if(!aThis.u.m_array_short->configure(is)){aThis.set_none();return false;}
+    if(!aThis.u.m_array_short->fill(vd)){aThis.set_none();return false;}
+    return true;}
+
+  case value::ARRAY_UNSIGNED_INT:
+   {std::vector<unsigned int> is;
+    const std::vector<unsigned int>& vd = aValue.get_array_unsigned_int(is);
+    aThis.u.m_array_unsigned_int = new tools::array<unsigned int>();
+    if(!aThis.u.m_array_unsigned_int->configure(is)){
+      aThis.set_none();return false;
+    }
+    if(!aThis.u.m_array_unsigned_int->fill(vd)){
+      aThis.set_none();return false;
+    }
+    return true;}
+
+  case value::ARRAY_INT:
+   {std::vector<unsigned int> is;
+    const std::vector<int>& vd = aValue.get_array_int(is);
+    aThis.u.m_array_int = new tools::array<int>();
+    if(!aThis.u.m_array_int->configure(is)){aThis.set_none();return false;}
+    if(!aThis.u.m_array_int->fill(vd)){aThis.set_none();return false;}
+    return true;}
+
+  case value::ARRAY_UNSIGNED_INT64:
+   {std::vector<unsigned int> is;
+    const std::vector<uint64>& vd = aValue.get_array_unsigned_int64(is);
+    aThis.u.m_array_unsigned_int64 = new tools::array<uint64>();
+    if(!aThis.u.m_array_unsigned_int64->configure(is)){
+      aThis.set_none();return false;
+    }
+    if(!aThis.u.m_array_unsigned_int64->fill(vd)){
+      aThis.set_none();return false;
+    }
+    return true;}
+
+  case value::ARRAY_INT64:
+   {std::vector<unsigned int> is;
+    const std::vector<int64>& vd = aValue.get_array_int64(is);
+    aThis.u.m_array_int64 = new tools::array<int64>();
+    if(!aThis.u.m_array_int64->configure(is)){aThis.set_none();return false;}
+    if(!aThis.u.m_array_int64->fill(vd)){aThis.set_none();return false;}
+    return true;}
+
+  case value::ARRAY_FLOAT:
+   {std::vector<unsigned int> is;
+    const std::vector<float>& vd = aValue.get_array_float(is);
+    aThis.u.m_array_float = new tools::array<float>();
+    if(!aThis.u.m_array_float->configure(is)){aThis.set_none();return false;}
+    if(!aThis.u.m_array_float->fill(vd)){aThis.set_none();return false;}
+    return true;}
+
+  case value::ARRAY_DOUBLE:
+   {std::vector<unsigned int> is;
+    const std::vector<double>& vd = aValue.get_array_double(is);
+    aThis.u.m_array_double = new tools::array<double>();
+    if(!aThis.u.m_array_double->configure(is)){aThis.set_none();return false;}
+    if(!aThis.u.m_array_double->fill(vd)){aThis.set_none();return false;}
+    return true;}
+
+  case value::ARRAY_BOOL:
+   {std::vector<unsigned int> is;
+    const std::vector<bool>& vd = aValue.get_array_bool(is);
+    aThis.u.m_array_bool = new tools::array<bool>();
+    if(!aThis.u.m_array_bool->configure(is)){aThis.set_none();return false;}
+    if(!aThis.u.m_array_bool->fill(vd)){aThis.set_none();return false;}
+    return true;}
+
+  case value::ARRAY_STRING:
+   {std::vector<unsigned int> is;
+    const std::vector<std::string>& vd = aValue.get_array_string(is);
+    aThis.u.m_array_string = new tools::array<std::string>();
+    if(!aThis.u.m_array_string->configure(is)){aThis.set_none();return false;}
+    if(!aThis.u.m_array_string->fill(vd)){aThis.set_none();return false;}
+    return true;}
+
+  }
+
+  aThis.set_none();
+  return false;
+}
+*/
+
+inline std::string value::to_string(const value& aThis){
+  std::string s;
+  switch(aThis.m_type) {
+  case value::NONE:
+    tools::sprintf(s,5,"(nil)");
+    return s;
+  case value::INT:
+    tools::sprintf(s,16,"%d",aThis.u.m_int);
+    return s;
+  case value::DOUBLE:
+    tools::sprintf(s,16,"%g",aThis.u.m_double);
+    return s;
+  case value::VOID_STAR:
+    tools::sprintf(s,16,"0x%lx",(unsigned long)aThis.u.m_void_star);
+    return s;
+  case value::UNSIGNED_SHORT:
+    tools::sprintf(s,16,"%u",aThis.u.m_unsigned_short);
+    return s;
+  case value::UNSIGNED_INT:
+    tools::sprintf(s,16,"%u",aThis.u.m_unsigned_int);
+    return s;
+  case value::BOOL:
+    tools::sprintf(s,5,"%s",aThis.u.m_bool?"true":"false");
+    return s;
+  case value::SHORT:
+    tools::sprintf(s,16,"%d",aThis.u.m_short);
+    return s;
+  case value::INT64:{
+    tools::sprintf(s,16,tools::int64_format(),aThis.u.m_int64);
+   }return s;
+  case value::UNSIGNED_INT64:{
+    tools::sprintf(s,16,tools::int64_format(),aThis.u.m_unsigned_int64);
+   }return s;
+  case value::FLOAT:
+    tools::sprintf(s,16,"%g",aThis.u.m_float);
+    return s;
+  //case value::UNSIGNED_CHAR:
+  //  tools::sprintf(s,16,"%c",aThis.u.m_unsigned_char);
+  //  return s;
+  //case value::CHAR:
+  //  tools::sprintf(s,16,"%c",aThis.u.m_char);
+  //  return s;
+  case value::DOUBLE_STAR:
+    tools::sprintf(s,16,"0x%lx",(unsigned long)aThis.u.m_double_star);
+    return s;
+  case value::FLOAT_STAR:
+    tools::sprintf(s,16,"0x%lx",(unsigned long)aThis.u.m_float_star);
+    return s;
+  case value::INT_STAR:
+    tools::sprintf(s,16,"0x%lx",(unsigned long)aThis.u.m_int_star);
+    return s;
+  case value::STRING:
+    return *aThis.u.m_string;
+
+  //case value::ARRAY_UNSIGNED_CHAR:
+  //  return tools::tos<unsigned char>(aThis.u.m_array_unsigned_char->vector());
+  //case value::ARRAY_CHAR:
+  //  return tools::tos<char>(aThis.u.m_array_char->vector());
+  case value::ARRAY_UNSIGNED_SHORT:
+   return tools::tos<unsigned short>(aThis.u.m_array_unsigned_short->vector());
+  case value::ARRAY_SHORT:
+    return tools::tos<short>(aThis.u.m_array_short->vector());
+
+  case value::ARRAY_UNSIGNED_INT:
+    return tools::tos<unsigned int>(aThis.u.m_array_unsigned_int->vector());
+  case value::ARRAY_INT:
+    return tools::tos<int>(aThis.u.m_array_int->vector());
+
+  case value::ARRAY_UNSIGNED_INT64:
+    return tools::tos<uint64>(aThis.u.m_array_unsigned_int64->vector());
+  case value::ARRAY_INT64:
+    return tools::tos<int64>(aThis.u.m_array_int64->vector());
+
+  case value::ARRAY_FLOAT:
+    return tools::tos<float>(aThis.u.m_array_float->vector());
+  case value::ARRAY_DOUBLE:
+    return tools::tos<double>(aThis.u.m_array_double->vector());
+  case value::ARRAY_BOOL:
+    return tools::tos<bool>(aThis.u.m_array_bool->vector());
+  case value::ARRAY_STRING:
+    return tools::tos<std::string>(aThis.u.m_array_string->vector());
+  default:
+    return "unknow"; //it should not happen.
+  }
+}
+
+}

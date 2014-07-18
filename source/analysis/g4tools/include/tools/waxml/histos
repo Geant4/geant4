@@ -18,9 +18,9 @@ namespace tools {
 namespace waxml {
 
   inline std::string bin_to_string(int a_index) {
-    if(a_index==histo::axis<double>::UNDERFLOW_BIN) {
+    if(a_index==histo::axis_UNDERFLOW_BIN) {
       return "UNDERFLOW";
-    } else if(a_index==histo::axis<double>::OVERFLOW_BIN) {
+    } else if(a_index==histo::axis_OVERFLOW_BIN) {
       return "OVERFLOW";
     } else {
       std::ostringstream strm;
@@ -54,12 +54,12 @@ namespace waxml {
   }
   
   inline void write_axis(
-   const histo::axis<double>& aAxis
+   const histo::axis<double,unsigned int>& aAxis
   ,const std::string& aDirection
   ,std::ostream& a_writer
   ,int aShift
   ){
-    typedef histo::axis<double>::bn_t bn_t;
+    typedef histo::axis<double,unsigned int>::bn_t bn_t;
 
     std::string spaces;
     for(int i=0;i<aShift;i++) spaces += " ";
@@ -265,7 +265,7 @@ namespace waxml {
   ,const std::string& aName
   ,int aShift = 0
   ){
-    typedef histo::axis<double>::bn_t bn_t;
+    typedef histo::axis<double,unsigned int>::bn_t bn_t;
 
     std::ostream& writer = a_writer;
   
@@ -303,8 +303,8 @@ namespace waxml {
     for(bn_t index=0;index<xbins;index++)
       write_bin(writer,aObject,spaces,index);
   
-    write_bin(writer,aObject,spaces,histo::axis<double>::UNDERFLOW_BIN);
-    write_bin(writer,aObject,spaces,histo::axis<double>::OVERFLOW_BIN);
+    write_bin(writer,aObject,spaces,histo::axis_UNDERFLOW_BIN);
+    write_bin(writer,aObject,spaces,histo::axis_OVERFLOW_BIN);
   
     writer << spaces << "    </data1d>" << std::endl;
     writer << spaces << "  </histogram1d>" << std::endl;
@@ -319,7 +319,7 @@ namespace waxml {
   ,const std::string& aName
   ,int aShift = 0
   ){
-    typedef histo::axis<double>::bn_t bn_t;
+    typedef histo::axis<double,unsigned int>::bn_t bn_t;
 
     std::ostream& writer = a_writer;
   
@@ -369,22 +369,22 @@ namespace waxml {
     }
     
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::UNDERFLOW_BIN,histo::axis<double>::UNDERFLOW_BIN);
+                      histo::axis_UNDERFLOW_BIN,histo::axis_UNDERFLOW_BIN);
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::OVERFLOW_BIN,histo::axis<double>::UNDERFLOW_BIN);
+                      histo::axis_OVERFLOW_BIN,histo::axis_UNDERFLOW_BIN);
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::UNDERFLOW_BIN,histo::axis<double>::OVERFLOW_BIN);
+                      histo::axis_UNDERFLOW_BIN,histo::axis_OVERFLOW_BIN);
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::OVERFLOW_BIN,histo::axis<double>::OVERFLOW_BIN);
+                      histo::axis_OVERFLOW_BIN,histo::axis_OVERFLOW_BIN);
   
     for(indexX=0;indexX<xbins;indexX++){
-      write_bin(writer,aObject,spaces,indexX,histo::axis<double>::UNDERFLOW_BIN);
-      write_bin(writer,aObject,spaces,indexX,histo::axis<double>::OVERFLOW_BIN);
+      write_bin(writer,aObject,spaces,indexX,histo::axis_UNDERFLOW_BIN);
+      write_bin(writer,aObject,spaces,indexX,histo::axis_OVERFLOW_BIN);
     }
   
     for(indexY=0;indexY<ybins;indexY++){
-      write_bin(writer,aObject,spaces,histo::axis<double>::UNDERFLOW_BIN,indexY);
-      write_bin(writer,aObject,spaces,histo::axis<double>::OVERFLOW_BIN,indexY);
+      write_bin(writer,aObject,spaces,histo::axis_UNDERFLOW_BIN,indexY);
+      write_bin(writer,aObject,spaces,histo::axis_OVERFLOW_BIN,indexY);
     }
   
     writer << spaces << "    </data2d>" << std::endl;
@@ -400,7 +400,7 @@ namespace waxml {
   ,const std::string& aName
   ,int aShift = 0
   ){
-    typedef histo::axis<double>::bn_t bn_t;
+    typedef histo::axis<double,unsigned int>::bn_t bn_t;
     std::ostream& writer = a_writer;
   
     std::string spaces;
@@ -458,95 +458,95 @@ namespace waxml {
   
     // Corners :
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::UNDERFLOW_BIN,
-                      histo::axis<double>::UNDERFLOW_BIN,
-                      histo::axis<double>::UNDERFLOW_BIN);
+                      histo::axis_UNDERFLOW_BIN,
+                      histo::axis_UNDERFLOW_BIN,
+                      histo::axis_UNDERFLOW_BIN);
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::OVERFLOW_BIN,
-                      histo::axis<double>::UNDERFLOW_BIN,
-                      histo::axis<double>::UNDERFLOW_BIN);
+                      histo::axis_OVERFLOW_BIN,
+                      histo::axis_UNDERFLOW_BIN,
+                      histo::axis_UNDERFLOW_BIN);
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::UNDERFLOW_BIN,
-                      histo::axis<double>::OVERFLOW_BIN,
-                      histo::axis<double>::UNDERFLOW_BIN);
+                      histo::axis_UNDERFLOW_BIN,
+                      histo::axis_OVERFLOW_BIN,
+                      histo::axis_UNDERFLOW_BIN);
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::OVERFLOW_BIN,
-                      histo::axis<double>::OVERFLOW_BIN,
-                      histo::axis<double>::UNDERFLOW_BIN);
+                      histo::axis_OVERFLOW_BIN,
+                      histo::axis_OVERFLOW_BIN,
+                      histo::axis_UNDERFLOW_BIN);
     
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::UNDERFLOW_BIN,
-                      histo::axis<double>::UNDERFLOW_BIN,
-                      histo::axis<double>::OVERFLOW_BIN);
+                      histo::axis_UNDERFLOW_BIN,
+                      histo::axis_UNDERFLOW_BIN,
+                      histo::axis_OVERFLOW_BIN);
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::OVERFLOW_BIN,
-                      histo::axis<double>::UNDERFLOW_BIN,
-                      histo::axis<double>::OVERFLOW_BIN);
+                      histo::axis_OVERFLOW_BIN,
+                      histo::axis_UNDERFLOW_BIN,
+                      histo::axis_OVERFLOW_BIN);
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::UNDERFLOW_BIN,
-                      histo::axis<double>::OVERFLOW_BIN,
-                      histo::axis<double>::OVERFLOW_BIN);
+                      histo::axis_UNDERFLOW_BIN,
+                      histo::axis_OVERFLOW_BIN,
+                      histo::axis_OVERFLOW_BIN);
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::OVERFLOW_BIN,
-                      histo::axis<double>::OVERFLOW_BIN,
-                      histo::axis<double>::OVERFLOW_BIN);
+                      histo::axis_OVERFLOW_BIN,
+                      histo::axis_OVERFLOW_BIN,
+                      histo::axis_OVERFLOW_BIN);
   
   
     // Edges :
     for(indexX=0;indexX<xbins;indexX++){
       write_bin(writer,aObject,spaces,
                         indexX,
-                        histo::axis<double>::UNDERFLOW_BIN,
-                        histo::axis<double>::UNDERFLOW_BIN);
+                        histo::axis_UNDERFLOW_BIN,
+                        histo::axis_UNDERFLOW_BIN);
       write_bin(writer,aObject,spaces,
                         indexX,
-                        histo::axis<double>::OVERFLOW_BIN,
-                        histo::axis<double>::UNDERFLOW_BIN);
+                        histo::axis_OVERFLOW_BIN,
+                        histo::axis_UNDERFLOW_BIN);
       write_bin(writer,aObject,spaces,
                         indexX,
-                        histo::axis<double>::UNDERFLOW_BIN,
-                        histo::axis<double>::OVERFLOW_BIN);
+                        histo::axis_UNDERFLOW_BIN,
+                        histo::axis_OVERFLOW_BIN);
       write_bin(writer,aObject,spaces,
                         indexX,
-                        histo::axis<double>::OVERFLOW_BIN,
-                        histo::axis<double>::OVERFLOW_BIN);
+                        histo::axis_OVERFLOW_BIN,
+                        histo::axis_OVERFLOW_BIN);
     }
   
     for(indexY=0;indexY<ybins;indexY++){
       write_bin(writer,aObject,spaces,
-                        histo::axis<double>::UNDERFLOW_BIN,
+                        histo::axis_UNDERFLOW_BIN,
                         indexY,
-                        histo::axis<double>::UNDERFLOW_BIN);
+                        histo::axis_UNDERFLOW_BIN);
       write_bin(writer,aObject,spaces,
-                        histo::axis<double>::OVERFLOW_BIN,
+                        histo::axis_OVERFLOW_BIN,
                         indexY,
-                        histo::axis<double>::UNDERFLOW_BIN);
+                        histo::axis_UNDERFLOW_BIN);
       write_bin(writer,aObject,spaces,
-                        histo::axis<double>::UNDERFLOW_BIN,
+                        histo::axis_UNDERFLOW_BIN,
                         indexY,
-                        histo::axis<double>::OVERFLOW_BIN);
+                        histo::axis_OVERFLOW_BIN);
       write_bin(writer,aObject,spaces,
-                        histo::axis<double>::OVERFLOW_BIN,
+                        histo::axis_OVERFLOW_BIN,
                         indexY,
-                        histo::axis<double>::OVERFLOW_BIN);
+                        histo::axis_OVERFLOW_BIN);
     }
   
     for(indexZ=0;indexZ<zbins;indexZ++){
       write_bin(writer,aObject,spaces,
-                        histo::axis<double>::UNDERFLOW_BIN,
-                        histo::axis<double>::UNDERFLOW_BIN,
+                        histo::axis_UNDERFLOW_BIN,
+                        histo::axis_UNDERFLOW_BIN,
                         indexZ);
       write_bin(writer,aObject,spaces,
-                        histo::axis<double>::OVERFLOW_BIN,
-                        histo::axis<double>::UNDERFLOW_BIN,
+                        histo::axis_OVERFLOW_BIN,
+                        histo::axis_UNDERFLOW_BIN,
                         indexZ);
       write_bin(writer,aObject,spaces,
-                        histo::axis<double>::UNDERFLOW_BIN,
-                        histo::axis<double>::OVERFLOW_BIN,
+                        histo::axis_UNDERFLOW_BIN,
+                        histo::axis_OVERFLOW_BIN,
                         indexZ);
       write_bin(writer,aObject,spaces,
-                        histo::axis<double>::OVERFLOW_BIN,
-                        histo::axis<double>::OVERFLOW_BIN,
+                        histo::axis_OVERFLOW_BIN,
+                        histo::axis_OVERFLOW_BIN,
                         indexZ);
     }
   
@@ -555,25 +555,25 @@ namespace waxml {
     for(indexX=0;indexX<xbins;indexX++) {
       for(indexY=0;indexY<ybins;indexY++) {
         write_bin(writer,aObject,spaces,
-                          indexX,indexY,histo::axis<double>::UNDERFLOW_BIN);
+                          indexX,indexY,histo::axis_UNDERFLOW_BIN);
         write_bin(writer,aObject,spaces,
-                          indexX,indexY,histo::axis<double>::OVERFLOW_BIN);
+                          indexX,indexY,histo::axis_OVERFLOW_BIN);
       }
     }
     for(indexY=0;indexY<ybins;indexY++) {
       for(indexZ=0;indexZ<zbins;indexZ++) {
         write_bin(writer,aObject,spaces,
-                          histo::axis<double>::UNDERFLOW_BIN,indexY,indexZ);
+                          histo::axis_UNDERFLOW_BIN,indexY,indexZ);
         write_bin(writer,aObject,spaces,
-                          histo::axis<double>::OVERFLOW_BIN,indexY,indexZ);
+                          histo::axis_OVERFLOW_BIN,indexY,indexZ);
       }
     }
     for(indexX=0;indexX<xbins;indexX++) {
       for(indexZ=0;indexZ<zbins;indexZ++) {
         write_bin(writer,aObject,spaces,
-                          indexX,histo::axis<double>::UNDERFLOW_BIN,indexZ);
+                          indexX,histo::axis_UNDERFLOW_BIN,indexZ);
         write_bin(writer,aObject,spaces,
-                          indexX,histo::axis<double>::OVERFLOW_BIN,indexZ);
+                          indexX,histo::axis_OVERFLOW_BIN,indexZ);
       }
     }
   
@@ -590,7 +590,7 @@ namespace waxml {
   ,const std::string& aName
   ,int aShift = 0
   ){
-    typedef histo::axis<double>::bn_t bn_t;
+    typedef histo::axis<double,unsigned int>::bn_t bn_t;
     std::ostream& writer = a_writer;
   
     std::string spaces;
@@ -627,8 +627,8 @@ namespace waxml {
       write_bin(writer,aObject,spaces,index);
     }
   
-    write_bin(writer,aObject,spaces,histo::axis<double>::UNDERFLOW_BIN);
-    write_bin(writer,aObject,spaces,histo::axis<double>::OVERFLOW_BIN);
+    write_bin(writer,aObject,spaces,histo::axis_UNDERFLOW_BIN);
+    write_bin(writer,aObject,spaces,histo::axis_OVERFLOW_BIN);
     
     writer << spaces << "    </data1d>" << std::endl;
     writer << spaces << "  </profile1d>" << std::endl;
@@ -643,7 +643,7 @@ namespace waxml {
   ,const std::string& aName
   ,int aShift = 0
   ){
-    typedef histo::axis<double>::bn_t bn_t;
+    typedef histo::axis<double,unsigned int>::bn_t bn_t;
     std::ostream& writer = a_writer;
   
     std::string spaces;
@@ -690,22 +690,22 @@ namespace waxml {
     }}
     
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::UNDERFLOW_BIN,histo::axis<double>::UNDERFLOW_BIN);
+                      histo::axis_UNDERFLOW_BIN,histo::axis_UNDERFLOW_BIN);
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::OVERFLOW_BIN,histo::axis<double>::UNDERFLOW_BIN);
+                      histo::axis_OVERFLOW_BIN,histo::axis_UNDERFLOW_BIN);
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::UNDERFLOW_BIN,histo::axis<double>::OVERFLOW_BIN);
+                      histo::axis_UNDERFLOW_BIN,histo::axis_OVERFLOW_BIN);
     write_bin(writer,aObject,spaces,
-                      histo::axis<double>::OVERFLOW_BIN,histo::axis<double>::OVERFLOW_BIN);
+                      histo::axis_OVERFLOW_BIN,histo::axis_OVERFLOW_BIN);
   
     for(bn_t indexX=0;indexX<aObject.axis_x().bins();indexX++){
-      write_bin(writer,aObject,spaces,indexX,histo::axis<double>::UNDERFLOW_BIN);
-      write_bin(writer,aObject,spaces,indexX,histo::axis<double>::OVERFLOW_BIN);
+      write_bin(writer,aObject,spaces,indexX,histo::axis_UNDERFLOW_BIN);
+      write_bin(writer,aObject,spaces,indexX,histo::axis_OVERFLOW_BIN);
     }
   
     for(bn_t indexY=0;indexY<aObject.axis_y().bins();indexY++){
-      write_bin(writer,aObject,spaces,histo::axis<double>::UNDERFLOW_BIN,indexY);
-      write_bin(writer,aObject,spaces,histo::axis<double>::OVERFLOW_BIN,indexY);
+      write_bin(writer,aObject,spaces,histo::axis_UNDERFLOW_BIN,indexY);
+      write_bin(writer,aObject,spaces,histo::axis_OVERFLOW_BIN,indexY);
     }
   
     writer << spaces << "    </data2d>" << std::endl;
