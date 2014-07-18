@@ -43,6 +43,7 @@
 #include "G4Types.hh"
 #include "G4GDMLReadMaterials.hh"
 #include "G4ExtrudedSolid.hh"
+#include "G4MultiUnion.hh"
 
 class G4VSolid;
 class G4QuadrangularFacet;
@@ -75,6 +76,7 @@ class G4GDMLReadSolids : public G4GDMLReadMaterials
    void EltubeRead(const xercesc::DOMElement* const);
    void XtruRead(const xercesc::DOMElement* const);
    void HypeRead(const xercesc::DOMElement* const);
+   void MultiUnionNodeRead(const xercesc::DOMElement* const, G4MultiUnion* const);
    void MultiUnionRead(const xercesc::DOMElement* const);
    void OrbRead(const xercesc::DOMElement* const);
    void ParaRead(const xercesc::DOMElement* const);

@@ -43,6 +43,7 @@
 #include "G4Types.hh"
 
 #include "G4GDMLWriteMaterials.hh"
+#include "G4MultiUnion.hh"
 
 class G4BooleanSolid;
 class G4Box;
@@ -105,6 +106,7 @@ class G4GDMLWriteSolids : public G4GDMLWriteMaterials
    G4GDMLWriteSolids();
    virtual ~G4GDMLWriteSolids();
 
+   void MultiUnionWrite(xercesc::DOMElement* solElement, const G4MultiUnion* const);
    void BooleanWrite(xercesc::DOMElement*, const G4BooleanSolid* const);
    void BoxWrite(xercesc::DOMElement*, const G4Box* const);
    void ConeWrite(xercesc::DOMElement*, const G4Cons* const);

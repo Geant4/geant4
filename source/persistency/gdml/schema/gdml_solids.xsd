@@ -63,6 +63,7 @@
     <xs:complexContent>
       <xs:extension base="SolidType">
 	<xs:sequence>
+	  <xs:element name="solid" type="ReferenceType"></xs:element>
           <xs:choice minOccurs="0">
             <xs:element name="position" type="positionType"></xs:element>
             <xs:element name="positionref" type="ReferenceType"></xs:element>
@@ -72,7 +73,6 @@
             <xs:element name="rotationref" type="ReferenceType"></xs:element>
           </xs:choice>
 	</xs:sequence>
-        <xs:attribute name="solid" type="ExpressionOrIDREFType" use="required"></xs:attribute>
       </xs:extension>
     </xs:complexContent>
   </xs:complexType>
@@ -90,7 +90,7 @@
       <xs:complexContent>
 	<xs:extension base="SolidType">
 	  <xs:sequence>
-	    <xs:element name="node" minOccurs="1" maxOccurs="unbounded" type="multiUnionNode"/>	
+	    <xs:element name="multiUnionNode" minOccurs="1" maxOccurs="unbounded" type="multiUnionNode"/>	
 	  </xs:sequence>
 	 </xs:extension>
       </xs:complexContent>

@@ -535,11 +535,132 @@ void G4GDMLReadSolids::HypeRead(const xercesc::DOMElement* const hypeElement)
    new G4Hype(name,rmin,rmax,inst,outst,z);
 }
 
-void G4GDMLReadSolids::MultiUnionRead(const xercesc::DOMElement* const)
+void G4GDMLReadSolids::
+MultiUnionNodeRead(const xercesc::DOMElement* const unionNodeElement,
+                   G4MultiUnion* const multiUnionSolid)
 {
-   G4Exception("G4GDMLReadSolids::MultiUnionRead()",
-               "InvalidSetup", JustWarning,
-               "MultiUnion is not supported yet. Sorry!");
+   G4String name;
+   G4String solid;
+   G4ThreeVector position(0.0,0.0,0.0);
+   G4ThreeVector rotation(0.0,0.0,0.0);
+
+   const xercesc::DOMNamedNodeMap* const attributes
+         = unionNodeElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+        { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::MultiUnionNodeRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="name")  { name = GenerateName(attValue); }
+   }
+
+   for (xercesc::DOMNode* iter = unionNodeElement->getFirstChild();
+        iter != 0;iter = iter->getNextSibling())
+   {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE)  { continue; }
+
+      const xercesc::DOMElement* const child
+            = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadSolids::MultiUnionNodeRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
+      const G4String tag = Transcode(child->getTagName());
+
+      if (tag=="position") { VectorRead(child,position); } else
+      if (tag=="rotation") { VectorRead(child,rotation); } else
+      if (tag=="positionref")
+        { position = GetPosition(GenerateName(RefRead(child))); } else
+      if (tag=="rotationref")
+        { rotation = GetRotation(GenerateName(RefRead(child))); } else
+      if (tag=="solid") { solid = RefRead(child); }
+      else
+      {
+        G4String error_msg = "Unknown tag in MultiUnion structure: " + tag;
+        G4Exception("G4GDMLReadSolids::MultiUnionNodeRead()", "ReadError",
+                    FatalException, error_msg);
+      }
+   }
+   G4VSolid* solidNode = GetSolid(GenerateName(solid));
+   G4Transform3D transform(GetRotationMatrix(rotation),position);
+   multiUnionSolid->AddNode(*solidNode, transform);
+}
+
+void G4GDMLReadSolids::
+MultiUnionRead(const xercesc::DOMElement* const unionElement)
+{
+   G4String name;
+
+   const xercesc::DOMNamedNodeMap* const attributes
+         = unionElement->getAttributes();
+   XMLSize_t attributeCount = attributes->getLength();
+
+   for (XMLSize_t attribute_index=0;
+        attribute_index<attributeCount; attribute_index++)
+   {
+      xercesc::DOMNode* attribute_node = attributes->item(attribute_index);
+
+      if (attribute_node->getNodeType() != xercesc::DOMNode::ATTRIBUTE_NODE)
+        { continue; }
+
+      const xercesc::DOMAttr* const attribute
+            = dynamic_cast<xercesc::DOMAttr*>(attribute_node);   
+      if (!attribute)
+      {
+        G4Exception("G4GDMLReadSolids::MultiUnionRead()",
+                    "InvalidRead", FatalException, "No attribute found!");
+        return;
+      }
+      const G4String attName = Transcode(attribute->getName());
+      const G4String attValue = Transcode(attribute->getValue());
+
+      if (attName=="name")  { name = GenerateName(attValue); }
+   }
+
+   G4MultiUnion* multiUnion = new G4MultiUnion(name);
+
+   for (xercesc::DOMNode* iter = unionElement->getFirstChild();
+        iter != 0;iter = iter->getNextSibling())
+   {
+      if (iter->getNodeType() != xercesc::DOMNode::ELEMENT_NODE)  { continue; }
+
+      const xercesc::DOMElement* const child
+            = dynamic_cast<xercesc::DOMElement*>(iter);
+      if (!child)
+      {
+        G4Exception("G4GDMLReadSolids::MultiUnionRead()",
+                    "InvalidRead", FatalException, "No child found!");
+        return;
+      }
+      const G4String tag = Transcode(child->getTagName());
+
+      if (tag=="multiUnionNode") { MultiUnionNodeRead(child, multiUnion); }
+      else
+      {
+        G4String error_msg = "Unknown tag in MultiUnion structure: " + tag;
+        G4Exception("G4GDMLReadSolids::MultiUnionRead()", "ReadError",
+                    FatalException, error_msg);
+      }
+   }
+   multiUnion->Voxelize();
 }
 
 void G4GDMLReadSolids::OrbRead(const xercesc::DOMElement* const orbElement)
@@ -2214,7 +2335,7 @@ void G4GDMLReadSolids::SolidsRead(const xercesc::DOMElement* const solidsElement
       if (tag=="xtru") { XtruRead(child); } else
       if (tag=="hype") { HypeRead(child); } else
       if (tag=="intersection") { BooleanRead(child,INTERSECTION); } else
-      if (tag=="multiunion") { MultiUnionRead(child); } else
+      if (tag=="multiUnion") { MultiUnionRead(child); } else
       if (tag=="orb") { OrbRead(child); } else
       if (tag=="para") { ParaRead(child); } else
       if (tag=="paraboloid") { ParaboloidRead(child); } else

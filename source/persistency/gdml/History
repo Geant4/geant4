@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 July 2014 Gabriele Cosmo (gdml-V10-00-06)
+- Added implementation for import/export of Multi-Union (G4MultiUnion)
+  structures.
+  Requiring updated GDML schema for multiUnionNode entity (GDML version 3.1.1).
+- Updated internal schema to reflect new GDML schema release 3.1.1, for
+  updated gdml_solids.xsd module.
+
 21 May 2014 Gabriele Cosmo (gdml-V10-00-05)
 - Added better description to fatal exception in case document content
   imported happens to be empty in G4GDMLRead::Read().
