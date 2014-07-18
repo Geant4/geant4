@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+<gdml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://service-spi.web.cern.ch/service-spi/app/releases/GDML/schema/gdml.xsd">
+
+  <define>
+   <position name="union_position2" x="10" y="0" z="75.0" unit="mm"/>
+   <rotation name="union_rotation2" z="30" unit="deg"/>
+  </define>
+
+  <materials>
+    <material Z="13" name="ALU" state="solid">
+      <D unit="g/cm3" value="2.7"/>
+      <atom unit="g/mole" value="26.98"/>
+    </material>
+    <material Z="1" name="AIR" state="gas">
+      <D unit="g/cm3" value="1e-24"/>
+      <atom unit="g/mole" value="1.00794"/>
+    </material>
+  </materials>
+
+  <solids>
+   
+    <box lunit="mm" name="WorldBox" x="1000" y="1000" z="1000"/>
+    <box lunit="mm" name="box_first" x="1" y="5" z="20" />
+    <box lunit="mm" name="box_second" x="4" y="4.5" z="18" />
+    <multiUnion name="multiu" >
+      <multiUnionNode name="node-1">
+        <solid ref="box_first"/>
+      </multiUnionNode>
+      <multiUnionNode name="node-2">
+        <solid ref="box_second"/>
+        <positionref ref="union_position2" />
+        <rotationref ref="union_rotation2" />
+      </multiUnionNode>
+    </multiUnion>
+  </solids>
+
+  <structure>
+    <volume name="lvmultiunion">
+      <materialref ref="ALU"/>
+      <solidref ref="multiu"/>
+    </volume>
+   
+    <volume name="TOP">
+      <materialref ref="AIR"/>
+      <solidref ref="WorldBox"/>
+      <physvol name="lvCube_phys">
+        <volumeref ref="lvmultiunion"/>
+      </physvol>
+    </volume>
+  </structure>
+
+  <setup name="Default" version="1.0">
+    <world ref="TOP"/>
+  </setup>
+
+</gdml>

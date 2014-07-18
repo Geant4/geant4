@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-June 11th, 2014 Witek Pokorskki G01-V10-00-03
+July 18th, 2014 Gabriele Cosmo G01-V10-00-04
+- Added multiUnion.gdml sample demonstrating import and export of a
+  Multi-Union structure.
+
+June 11th, 2014 Witek Pokorski G01-V10-00-03
 - Changes to comply with coding conventions.
 
 April 23rd, 2014 Gabriele Cosmo G01-V10-00-02, G01-V10-00-01
