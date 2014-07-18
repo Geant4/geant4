@@ -12,9 +12,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-17 July 2014, Davide Mancusi (test69-V10-00-06)
+18 July 2014, Davide Mancusi (test69-V10-00-09)
+- Force number of threads using envvar (necessary to avoid out-of-memory errors
+  on MTmax builds).
+- Fix a compilation warning.
+
+17 July 2014, Davide Mancusi (test69-V10-00-06, -07, -08)
 - Suppress some leftover debug statements.
 - Add some debug statements (so much for nothing).
+- Compile and run the tests even if ROOT is not found.
+- Suppress the step limiter; should no longer be needed.
 
 15 July 2014, Davide Mancusi (test69-V10-00-05)
 - Add a step limiter (minimum KinE=1 MeV). This should prevent timeouts in

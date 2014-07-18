@@ -216,7 +216,7 @@ void Tst69INCLXXTallyAnalysis::Tally(G4HadProjectile const &aTrack, G4Nucleus co
       G4DynamicParticle const * const p = result.GetSecondary(i)->GetParticle();
       G4ParticleDefinition const * const pdef = p->GetDefinition();
       const G4int A = pdef->GetAtomicMass();
-      const G4int Z = pdef->GetPDGCharge();
+      const G4int Z = (G4int) pdef->GetPDGCharge();
 
       // Fill the histogram for the ejectile charges
       if(A>0)

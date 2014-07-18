@@ -1,7 +1,6 @@
 /control/verbose 2
 /run/verbose 2
 /run/setCut 1 m
-/run/numberOfThreads 4
 /run/initialize
 #
 # 40-GeV proton on mixed material

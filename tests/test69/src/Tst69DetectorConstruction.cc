@@ -43,11 +43,9 @@
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 #include "G4Pow.hh"
-#include "G4UserLimits.hh"
 
 Tst69DetectorConstruction::Tst69DetectorConstruction()
-  :simpleBoxLog(0),selectedMaterial(0),theH(0),theLi(0),theC(0),theSi(0),theCu(0),thePb(0),theU(0),theTh(0),theMix(0),
-  fStepLimit(0)
+  :simpleBoxLog(0),selectedMaterial(0),theH(0),theLi(0),theC(0),theSi(0),theCu(0),thePb(0),theU(0),theTh(0),theMix(0)
 {
   detectorMessenger = new Tst69DetectorMessenger(this);
   materialChoice = "mix";
@@ -55,7 +53,6 @@ Tst69DetectorConstruction::Tst69DetectorConstruction()
 
 Tst69DetectorConstruction::~Tst69DetectorConstruction()
 {
-  delete fStepLimit;
   delete detectorMessenger;
 }
 
@@ -202,9 +199,6 @@ G4VPhysicalVolume* Tst69DetectorConstruction::Construct()
   G4Box * mySimpleBox = new G4Box("SBox",20.*cm, 20.*cm, 20.*cm);
   simpleBoxLog = new G4LogicalVolume( mySimpleBox,
                                       selectedMaterial,"SLog",0,0,0);
-  fStepLimit = new G4UserLimits;
-  fStepLimit->SetUserMinEkine(1.*MeV);
-  simpleBoxLog->SetUserLimits(fStepLimit);
   G4VPhysicalVolume* simpleBoxDetector = new G4PVPlacement(0,G4ThreeVector(),
                                         "SPhys",simpleBoxLog,0,false,0);
 
