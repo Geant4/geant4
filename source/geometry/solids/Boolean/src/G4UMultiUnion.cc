@@ -38,7 +38,7 @@
 // Constructor (generic parameters)
 //
 G4UMultiUnion::G4UMultiUnion(const G4String& name)
-  : G4USolid("MultiUnion", new UMultiUnion(name))
+  : G4USolid(name, new UMultiUnion(name))
 { 
 }
 
@@ -60,6 +60,7 @@ G4UMultiUnion::G4UMultiUnion(__void__& a)
 //
 G4UMultiUnion::~G4UMultiUnion()
 {
+  fPolyhedron = 0;
 }
 
 

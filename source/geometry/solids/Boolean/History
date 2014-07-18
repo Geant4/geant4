@@ -20,6 +20,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ Jul 18, 2014  G.Cosmo                   geom-bool-V10-00-04
+ - G4UMultiUnion: correction in destructor to avoid deletion of polyhedron,
+   as not owned by the structure.
+   Corrected initialisation of base class name to adopt string provided as
+   input parameter instead of hard-coded name.
+   Adapted implementation of GetTransformation() to API correction in
+   UMultiUnion. Requires co-working tag "geom-usolids-V10-00-12" with
+   'usolids' module.
+
  Jul 04, 2014  G.Cosmo                   geom-bool-V10-00-03
  - Avoid leak in G4UMultiUnion::AddNode() for transformations being passed,
    now that UMultiUnion is locally caching them.
