@@ -18,6 +18,15 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+17 July 14: V.Ivanchenko (emstand-V10-00-36)
+17 July 14: V.Ivanchenko (emstand-V10-00-35)
+16 July 14: V.Ivanchenko (emstand-V10-00-34)
+- G4WentzelVIModel - define single scattering mode before 
+    transformation from true to geom step length to avoid
+    many smell steps for very low-energy particles
+- G4UrbanMscModel - fixed numerical problem for the case when 
+    range is nearly truePathLength
+
 13 July 14: V.Ivanchenko (emstand-V10-00-33)
 - G4WentzelVIModel - fixed bug introduced in tag 31, which is
     responsible for CPU increase in several tests

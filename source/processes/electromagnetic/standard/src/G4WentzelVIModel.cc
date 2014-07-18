@@ -71,6 +71,8 @@
 
 using namespace std;
 
+const G4int minNCollisions = 10;
+
 G4WentzelVIModel::G4WentzelVIModel(G4bool combined, const G4String& nam) :
   G4VMscModel(nam),
   ssFactor(1.05),
@@ -240,6 +242,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   G4StepPoint* sp = track.GetStep()->GetPreStepPoint();
   G4StepStatus stepStatus = sp->GetStepStatus();
   singleScatteringMode = false;
+
   //G4cout << "G4WentzelVIModel::ComputeTruePathLengthLimit stepStatus= " 
   //	 << stepStatus << "  " << track.GetDefinition()->GetParticleName() 
   //	 << G4endl;
@@ -251,10 +254,10 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
   lambdaeff = GetTransportMeanFreePath(particle,preKinEnergy);
   currentRange = GetRange(particle,preKinEnergy,currentCouple);
   cosTetMaxNuc = wokvi->SetupKinematic(preKinEnergy, currentMaterial);
-  /*  
-  G4cout << "lambdaeff= " << lambdaeff << " Range= " << currentRange
-  	 << " tlimit= " << tlimit << " 1-cost= " << 1 - cosTetMaxNuc << G4endl;
-  */
+  
+  //G4cout << "lambdaeff= " << lambdaeff << " Range= " << currentRange
+  //	 << " tlimit= " << tlimit << " 1-cost= " << 1 - cosTetMaxNuc << G4endl;
+  
   // extra check for abnormal situation
   // this check needed to run MSC with eIoni and eBrem inactivated
   if(tlimit > currentRange) { tlimit = currentRange; }
@@ -281,7 +284,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
       return ConvertTrueToGeom(tlimit, currentMinimalStep);
     }
   }
-  /*     
+  /*       
   G4cout << "e(MeV)= " << preKinEnergy/MeV
 	 << "  " << particle->GetParticleName() 
 	 << " CurLimit(mm)= " << tlimit/mm <<" safety(mm)= " << presafety/mm
@@ -318,7 +321,7 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
     G4double geomlimit = ComputeGeomLimit(track, presafety, currentRange);
     tlimit = std::min(tlimit, geomlimit/facgeom);
   } 
-  /*        
+  /*         
   G4cout << particle->GetParticleName() << " e= " << preKinEnergy
 	 << " L0= " << lambdaeff << " R= " << currentRange
 	 << " tlimit= " << tlimit  
@@ -331,15 +334,23 @@ G4double G4WentzelVIModel::ComputeTruePathLengthLimit(
 
 G4double G4WentzelVIModel::ComputeGeomPathLength(G4double truelength)
 {
-  tPathLength  = truelength;
-  zPathLength  = tPathLength;
+  zPathLength = tPathLength = truelength;
 
-  if(lambdaeff > 0.0 && lambdaeff != DBL_MAX) {
-    G4double tau = tPathLength/lambdaeff;
+  // small step use only single scattering
+  cosThetaMin = 1.0;
+  ComputeTransportXSectionPerVolume(cosThetaMin);
+  //G4cout << "xtsec= " << xtsec << "  Nav= " 
+  //	 << zPathLength*xtsec << G4endl;
+  if(0.0 >= lambdaeff || G4int(zPathLength*xtsec) < minNCollisions) {
+    singleScatteringMode = true;
+    lambdaeff = DBL_MAX;
+
+  } else {
     //G4cout << "ComputeGeomPathLength: tLength= " << tPathLength
-    //	   << " Leff= " << lambdaeff << " tau= " << tau << G4endl; 
+    //	   << " Leff= " << lambdaeff << G4endl; 
     // small step
-    if(tau < numlimit) {
+    if(tPathLength < numlimit*lambdaeff) {
+      G4double tau = tPathLength/lambdaeff;
       zPathLength *= (1.0 - 0.5*tau + tau*tau/6.0);
 
       // medium step
@@ -351,11 +362,15 @@ G4double G4WentzelVIModel::ComputeGeomPathLength(G4double truelength)
       effKinEnergy = 0.5*(e1 + preKinEnergy);
       cosTetMaxNuc = wokvi->SetupKinematic(effKinEnergy, currentMaterial);
       lambdaeff = GetTransportMeanFreePath(particle, effKinEnergy);
-      zPathLength = lambdaeff*(1.0 - G4Exp(-tPathLength/lambdaeff));
+      //G4cout << " tLength= "<< tPathLength<< " Leff= " << lambdaeff << G4endl;
+      zPathLength = lambdaeff;
+      if(tPathLength*numlimit < lambdaeff) {
+	zPathLength *= (1.0 - G4Exp(-tPathLength/lambdaeff));
+      }
     }
-  } else { lambdaeff = DBL_MAX; }
+  }
   //G4cout << "Comp.geom: zLength= "<<zPathLength<<" tLength= "
-  //     << tPathLength<<G4endl;
+  //	 << tPathLength<< " Leff= " << lambdaeff << G4endl;
   return zPathLength;
 }
 
@@ -364,93 +379,87 @@ G4double G4WentzelVIModel::ComputeGeomPathLength(G4double truelength)
 G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 {
   // initialisation of single scattering x-section
-  xtsec = 0.0;
-  cosThetaMin = 1.0;
   /*
   G4cout << "ComputeTrueStepLength: Step= " << geomStepLength 
+	 << "  geomL= " << zPathLength
 	 << "  Lambda= " <<  lambdaeff 
   	 << " 1-cosThetaMaxNuc= " << 1 - cosTetMaxNuc << G4endl;
   */
-  // pathalogical case
-  if(lambdaeff == DBL_MAX) { 
-    singleScatteringMode = true;
-    zPathLength  = geomStepLength;
-    tPathLength  = geomStepLength;
+  if(singleScatteringMode) {
+    zPathLength = tPathLength = geomStepLength;
 
-    // normal case
   } else {
 
-    // small step use only single scattering
-    ComputeTransportXSectionPerVolume(cosThetaMin);
-    //static const G4double singleScatLimit = 1.0e-7;
-    //if(geomStepLength < lambdaeff*singleScatLimit*(1.0 - cosTetMaxNuc)) {
-    //G4cout << "xtsec= " << xtsec << "  Nav= " << geomStepLength*xtsec << G4endl;
-    if(geomStepLength*xtsec < 10.0) {
-      //if(geomStepLength < lambdaeff*2.0e-7) {
-      singleScatteringMode = true;
-      zPathLength  = geomStepLength;
-      tPathLength  = geomStepLength;
-      lambdaeff = DBL_MAX;
+    // step defined by transportation
+    // change both geom and true step lengths 
+    if(geomStepLength < zPathLength) { 
 
-      // step defined by transportation 
-    } else if(geomStepLength != zPathLength) { 
+      // single scattering
+      if(G4int(geomStepLength*xtsec) < minNCollisions) {
+	zPathLength = tPathLength = geomStepLength;
+	lambdaeff = DBL_MAX;
+	singleScatteringMode = true;
 
-      // step defined by transportation 
-      zPathLength  = geomStepLength;
-      G4double tau = geomStepLength/lambdaeff;
-      tPathLength  = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); 
+	// multiple scattering
+      } else {
+	// small step
+	if(geomStepLength < numlimit*lambdaeff) {
+	  G4double tau = geomStepLength/lambdaeff;
+	  tPathLength = geomStepLength*(1.0 + 0.5*tau + tau*tau/3.0); 
 
-      // energy correction for a big step
-      if(tau > numlimit) {
-	G4double e1 = 0.0;
-	if(currentRange > tPathLength) {
-	  e1 = GetEnergy(particle,currentRange-tPathLength,currentCouple);
+	  // energy correction for a big step
+	} else {
+	  tPathLength *= geomStepLength/zPathLength;
+	  G4double e1 = 0.0;
+	  if(currentRange > tPathLength) {
+	    e1 = GetEnergy(particle,currentRange-tPathLength,currentCouple);
+	  }
+	  effKinEnergy = 0.5*(e1 + preKinEnergy);
+	  cosTetMaxNuc = wokvi->SetupKinematic(effKinEnergy, currentMaterial);
+	  lambdaeff = GetTransportMeanFreePath(particle, effKinEnergy);
+	  G4double tau = geomStepLength/lambdaeff;
+
+	  if(tau < 0.999999) { tPathLength = -lambdaeff*G4Log(1.0 - tau); } 
+	  else               { tPathLength = currentRange; }
 	}
-	effKinEnergy = 0.5*(e1 + preKinEnergy);
-	cosTetMaxNuc = wokvi->SetupKinematic(effKinEnergy, currentMaterial);
-	lambdaeff = GetTransportMeanFreePath(particle, effKinEnergy);
-	tau = zPathLength/lambdaeff;
-
-	if(tau < 0.999999) { tPathLength = -lambdaeff*G4Log(1.0 - tau); } 
-	else               { tPathLength = currentRange; }
+	zPathLength = geomStepLength;
       }
     }
   }
-
   // check of step length
   // define threshold angle between single and multiple scattering 
-  if(!singleScatteringMode) { 
+  if(!singleScatteringMode) {
     cosThetaMin -= ssFactor*tPathLength/lambdaeff; 
     xtsec = 0.0;
-  }
 
-  // recompute transport cross section - do not change energy
-  // anymore - cannot be applied for big steps
-  if(cosThetaMin > cosTetMaxNuc) {
-    // new computation
-    G4double cross = ComputeTransportXSectionPerVolume(cosThetaMin);
-    //G4cout << "%%%% cross= " << cross << "  xtsec= " << xtsec 
-    //	   << " 1-cosTMin= " << 1.0 - cosThetaMin << G4endl;
-    if(cross <= 0.0) {
-      singleScatteringMode = true;
-      tPathLength = zPathLength; 
-      lambdaeff = DBL_MAX;
-      cosThetaMin = 1.0;
-    } else if(xtsec > 0.0) {
-
-      lambdaeff = 1./cross; 
-      G4double tau = zPathLength*cross;
-      if(tau < numlimit) { 
-	tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); 
-      } else if(tau < 0.999999) { 
-	tPathLength = -lambdaeff*G4Log(1.0 - tau); 
-      } else { 
-	tPathLength = currentRange; 
+    // recompute transport cross section - do not change energy
+    // anymore - cannot be applied for big steps
+    if(cosThetaMin > cosTetMaxNuc) {
+      // new computation
+      G4double cross = ComputeTransportXSectionPerVolume(cosThetaMin);
+      //G4cout << "%%%% cross= " << cross << "  xtsec= " << xtsec 
+      //	   << " 1-cosTMin= " << 1.0 - cosThetaMin << G4endl;
+      if(cross <= 0.0) {
+	singleScatteringMode = true;
+	tPathLength = zPathLength; 
+	lambdaeff = DBL_MAX;
+	cosThetaMin = 1.0;
+      } else if(xtsec > 0.0) {
+	
+	lambdaeff = 1./cross; 
+	G4double tau = zPathLength*cross;
+	if(tau < numlimit) { 
+	  tPathLength = zPathLength*(1.0 + 0.5*tau + tau*tau/3.0); 
+	} else if(tau < 0.999999) { 
+	  tPathLength = -lambdaeff*G4Log(1.0 - tau); 
+	} else { 
+	  tPathLength = currentRange;
+	}
       }
     } 
   }
   tPathLength = std::min(tPathLength, currentRange);
-  /*        
+  /*      
   G4cout <<"Comp.true: zLength= "<<zPathLength<<" tLength= "<<tPathLength
 	 <<" Leff(mm)= "<<lambdaeff/mm<<" sig0(1/mm)= " << xtsec <<G4endl;
   G4cout << particle->GetParticleName() << " 1-cosThetaMin= " << 1-cosThetaMin

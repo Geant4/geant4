@@ -703,18 +703,25 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
   par1 = -1. ;  
   par2 = par3 = 0. ;  
 
+  // this correction needed to run MSC with eIoni and eBrem inactivated
+  // and makes no harm for a normal run
+  tPathLength = min(tPathLength,currentRange); 
+
   //  do the true -> geom transformation
   zPathLength = tPathLength;
 
   // z = t for very small tPathLength
   if(tPathLength < tlimitminfix2) return zPathLength;
 
-  // this correction needed to run MSC with eIoni and eBrem inactivated
-  // and makes no harm for a normal run
   // VI: it is already checked
   // if(tPathLength > currentRange)
   //  tPathLength = currentRange ;
-
+  /*
+  G4cout << "ComputeGeomPathLength: tpl= " <<  tPathLength
+	 << " R= " << currentRange << " L0= " << lambda0
+	 << " E= " << currentKinEnergy << "  " 
+	 << particle->GetParticleName() << G4endl;
+  */
   G4double tau = tPathLength/lambda0 ;
 
   if ((tau <= tausmall) || insideskin) {
@@ -736,17 +743,19 @@ G4double G4UrbanMscModel::ComputeGeomPathLength(G4double)
     }
 
   } else {
-    G4double T1 = GetEnergy(particle,currentRange-tPathLength,couple);
+    G4double rfin = max(currentRange-tPathLength, 0.01*currentRange);
+    G4double T1 = GetEnergy(particle,rfin,couple);
     G4double lambda1 = GetTransportMeanFreePath(particle,T1);
 
     par1 = (lambda0-lambda1)/(lambda0*tPathLength);
+    //G4cout << "par1= " << par1 << " L1= " << lambda1 << G4endl;
     par2 = 1./(par1*lambda0);
     par3 = 1.+par2 ;
     zPathLength = (1.-G4Exp(par3*G4Log(lambda1/lambda0)))/(par1*par3);
   }
 
   zPathLength = min(zPathLength, lambda0);
-  //G4cout<< "zPathLength= "<< zPathLength<< " lambda1= " << lambda0 << G4endl;
+  //G4cout<< "zPathLength= "<< zPathLength<< " L0= " << lambda0 << G4endl;
   return zPathLength;
 }
 
