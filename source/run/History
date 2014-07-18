@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 17th, 2014 A.Dotti       (run-V10-00-17)
+- Bug fix for bug #1657: /random/setSeeds not working
+
 July 14th, 2014 A.Dotti	      (run-V10-00-16)
 - Only master thread installs FPE handler
 - Worker threads return G4RunManagerKernel::SetPhysics method

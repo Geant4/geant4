@@ -222,8 +222,12 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   seedCmd->SetGuidance("Initialize the random number generator with integer seed stream.");
   seedCmd->SetGuidance("Number of integers should be more than 1.");
   seedCmd->SetGuidance("Actual number of integers to be used depends on the individual random number engine.");
+#ifdef G4MULTITHREADED
+  seedCmd->SetGuidance("This command sets the seeds for the master thread.");
+#endif
   seedCmd->SetParameterName("IntArray",false);
   seedCmd->AvailableForStates(G4State_PreInit,G4State_Idle,G4State_GeomClosed);
+  seedCmd->SetToBeBroadcasted(false);
   
   randDirCmd = new G4UIcmdWithAString("/random/setDirectoryName",this);
   randDirCmd->SetGuidance("Define the directory name of the rndm status files.");
@@ -430,7 +434,7 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     else
     {
       seeds[idx] = 0;
-      CLHEP::HepRandom::setTheSeeds(seeds);
+      G4Random::setTheSeeds(seeds);
     }
   }
   else if( command==randDirCmd )
