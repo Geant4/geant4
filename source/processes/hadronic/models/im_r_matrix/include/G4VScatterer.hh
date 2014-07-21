@@ -67,10 +67,10 @@ public:
   virtual ~G4VScatterer() {}
   
   virtual G4double GetTimeToInteraction(const G4KineticTrack& trk1, 
-					const G4KineticTrack& trk2) = 0;
+					const G4KineticTrack& trk2) const = 0;
   
   virtual G4KineticTrackVector* Scatter(const G4KineticTrack& trk1, 	
-					   const G4KineticTrack& trk2) = 0;
+					   const G4KineticTrack& trk2) const = 0;
   
 };
 

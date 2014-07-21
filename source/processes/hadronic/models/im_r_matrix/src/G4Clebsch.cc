@@ -208,7 +208,7 @@ G4double G4Clebsch::Wigner3J(G4double j1, G4double j2, G4double j3,
       sign *= (G4int) std::pow(-1.,sigma);
     }
 
-    const std::vector<G4double> logVector = GetLogs();
+    const std::vector<G4double>& logVector = logs;//GetLogs();
     size_t n1 = G4lrint(n[0]);
 
     // Some boundary checks

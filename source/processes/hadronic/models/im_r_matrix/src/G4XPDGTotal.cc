@@ -197,9 +197,9 @@ G4double G4XPDGTotal::CrossSection(const G4KineticTrack& trk1,
 	      // Total Cross-section fit, 1998 Review of Particle Properties, European Phys. J. 3(1998), 1
 	      
 	      // Parameters from the PDG fit
-	      const G4double epsilon = 0.095;
-	      const G4double eta1 = -0.34;
-	      const G4double eta2 = -0.55;
+	      static const G4double epsilon = 0.095;
+	      static const G4double eta1 = -0.34;
+	      static const G4double eta2 = -0.55;
 	      
 	      if (sqrtS < eMinFit || sqrtS > eMaxFit)
 	      {

@@ -334,7 +334,7 @@ G4bool G4ResonanceNames::operator!=(const G4ResonanceNames &right) const
 G4double G4ResonanceNames::MinMass(const G4String& name) 
 {
   // Cut, from UrQMD (reference still to be detailed)
-  const G4double coeff = 0.001;
+  static const G4double coeff = 0.001;
 
   G4double lowMass = 0.;
   

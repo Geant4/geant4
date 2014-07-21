@@ -188,7 +188,7 @@ G4double G4VCrossSectionSource::FcrossX(G4double e, G4double e0,
 G4double G4VCrossSectionSource::GetTransversePionMass() const
 {
   // Parameter from UrQMD
-  const G4double transversePionMass = 0.3 * GeV;
+  static const G4double transversePionMass = 0.3 * GeV;
   return transversePionMass;
 }
 
@@ -196,7 +196,7 @@ G4double G4VCrossSectionSource::GetTransversePionMass() const
 G4double G4VCrossSectionSource::GetMinStringMass() const
 {
   // Parameter from UrQMD
-  const G4double minStringMass = 0.52 * GeV;
+  static const G4double minStringMass = 0.52 * GeV;
   return minStringMass;
 }
 
