@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 July 2014, Davide Mancusi (test69-V10-00-10)
+- Reduce the number of shots to 1000 (avoids timeout in boundscheck build).
+
 18 July 2014, Davide Mancusi (test69-V10-00-09)
 - Force number of threads using envvar (necessary to avoid out-of-memory errors
   on MTmax builds).

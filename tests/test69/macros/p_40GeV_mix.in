@@ -8,4 +8,4 @@
 /gun/particle proton
 /gun/energy 40 GeV
 /mydet/SelectMaterial mix
-/run/beamOn 2500
+/run/beamOn 1000
