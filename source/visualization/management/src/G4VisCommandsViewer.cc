@@ -661,7 +661,7 @@ void G4VisCommandViewerCreate::SetNewValue (G4UIcommand*, G4String newValue) {
 
   // Now need to handle the possibility that the second string
   // contains embedded blanks within quotation marks...
-  char c;
+  char c = ' ';
   while (is.get(c) && c == ' '){}
   if (c == '"') {
     while (is.get(c) && c != '"') {newName += c;}

@@ -1535,26 +1535,26 @@ void G4VisManager::PrintAvailableColours (Verbosity) const {
 
 void G4VisManager::PrintInvalidPointers () const {
   if (fVerbosity >= errors) {
-    G4cout << "ERROR: G4VisManager::PrintInvalidPointers:";
+    G4cerr << "ERROR: G4VisManager::PrintInvalidPointers:";
     if (!fpGraphicsSystem) {
-      G4cout << "\n null graphics system pointer.";
+      G4cerr << "\n null graphics system pointer.";
     }
     else {
-      G4cout << "\n  Graphics system is " << fpGraphicsSystem -> GetName ()
+      G4cerr << "\n  Graphics system is " << fpGraphicsSystem -> GetName ()
 	     << " but:";
       if (!fpScene)
-	G4cout <<
+	G4cerr <<
 	  "\n  Null scene pointer. Use \"/vis/drawVolume\" or"
 	  " \"/vis/scene/create\".";
       if (!fpSceneHandler)
-	G4cout <<
+	G4cerr <<
 	  "\n  Null scene handler pointer. Use \"/vis/open\" or"
 	  " \"/vis/sceneHandler/create\".";
       if (!fpViewer )
-	G4cout <<
+	G4cerr <<
 	  "\n  Null viewer pointer. Use \"/vis/viewer/create\".";
     }
-    G4cout << G4endl;
+    G4cerr << G4endl;
   }
 }
 
@@ -2097,13 +2097,13 @@ G4VisManager::GetVerbosityValue(const G4String& verbosityString) {
     std::istringstream is(ss);
     is >> intVerbosity;
     if (!is) {
-      G4cout << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""
+      G4cerr << "ERROR: G4VisManager::GetVerbosityValue: invalid verbosity \""
 	     << verbosityString << "\"";
       for (size_t i = 0; i < VerbosityGuidanceStrings.size(); ++i) {
-	G4cout << '\n' << VerbosityGuidanceStrings[i];
+	G4cerr << '\n' << VerbosityGuidanceStrings[i];
       }
       verbosity = warnings;
-      G4cout << "\n  Returning " << VerbosityString(verbosity)
+      G4cerr << "\n  Returning " << VerbosityString(verbosity)
 	     << G4endl;
     }
     else {
@@ -2159,7 +2159,7 @@ G4bool G4VisManager::IsValidView () {
 
   if ((!fpScene) || (!fpSceneHandler) || (!fpViewer)) {
     if (fVerbosity >= errors) {
-      G4cout <<
+      G4cerr <<
 	"ERROR: G4VisManager::IsValidView(): Current view is not valid."
 	     << G4endl;
       PrintInvalidPointers ();
@@ -2169,7 +2169,7 @@ G4bool G4VisManager::IsValidView () {
 
   if (fpScene != fpSceneHandler -> GetScene ()) {
     if (fVerbosity >= errors) {
-      G4cout << "ERROR: G4VisManager::IsValidView ():";
+      G4cerr << "ERROR: G4VisManager::IsValidView ():";
       if (fpSceneHandler -> GetScene ()) {
 	G4cout <<
 	  "\n  The current scene \""
@@ -2205,7 +2205,7 @@ G4bool G4VisManager::IsValidView () {
   const G4ViewerList& viewerList = fpSceneHandler -> GetViewerList ();
   if (viewerList.size () == 0) {
     if (fVerbosity >= errors) {
-      G4cout <<
+      G4cerr <<
 	"ERROR: G4VisManager::IsValidView (): the current scene handler\n  \""
 	     << fpSceneHandler -> GetName ()
 	     << "\" has no viewers.  Do /vis/viewer/create."
@@ -2220,8 +2220,8 @@ G4bool G4VisManager::IsValidView () {
     G4bool successful = fpScene -> AddWorldIfEmpty (warn);
     if (!successful || fpScene -> IsEmpty ()) {        // If still empty...
       if (fVerbosity >= errors) {
-	G4cout << "ERROR: G4VisManager::IsViewValid ():";
-	G4cout <<
+	G4cerr << "ERROR: G4VisManager::IsViewValid ():";
+	G4cerr <<
 	  "\n  Attempt at some drawing operation when scene is empty."
 	  "\n  Maybe the geometry has not yet been defined."
 	  "  Try /run/initialize."

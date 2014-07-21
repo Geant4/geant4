@@ -96,7 +96,7 @@ void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -104,7 +104,7 @@ void G4VisCommandSceneActivateModel::SetNewValue (G4UIcommand*,
   G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
   if (!pSceneHandler) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
+      G4cerr <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
     }
     return;
   }
@@ -293,7 +293,7 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -301,7 +301,7 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
   if (!pSceneHandler) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
+      G4cerr <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
     }
     return;
   }
@@ -313,7 +313,7 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   else if (action == "refresh") {
     if (!pScene->GetRefreshAtEndOfRun()) {
       if (verbosity >= G4VisManager::errors) {
-	G4cout <<
+	G4cerr <<
 	  "ERROR: Cannot refresh events unless runs refresh too."
 	  "\n  Use \"/vis/scene/endOfRun refresh\"."
 	       << G4endl;
@@ -326,7 +326,7 @@ void G4VisCommandSceneEndOfEventAction::SetNewValue (G4UIcommand*,
   }
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
 	"ERROR: unrecognised parameter \"" << action << "\"."
              << G4endl;
     }
@@ -424,7 +424,7 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
   G4Scene* pScene = fpVisManager->GetCurrentScene();
   if (!pScene) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<	"ERROR: No current scene.  Please create one." << G4endl;
+      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
     }
     return;
   }
@@ -432,7 +432,7 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
   G4VSceneHandler* pSceneHandler = fpVisManager->GetCurrentSceneHandler();
   if (!pSceneHandler) {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
+      G4cerr <<	"ERROR: No current sceneHandler.  Please create one." << G4endl;
     }
     return;
   }
@@ -440,7 +440,7 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
   if (action == "accumulate") {
     if (pScene->GetRefreshAtEndOfEvent()) {
       if (verbosity >= G4VisManager::errors) {
-	G4cout <<
+	G4cerr <<
 	  "ERROR: Cannot accumulate runs unless events accumulate too."
 	  "\n  Use \"/vis/scene/endOfEventAction accumulate\"."
 	       << G4endl;
@@ -456,7 +456,7 @@ void G4VisCommandSceneEndOfRunAction::SetNewValue (G4UIcommand*,
   }
   else {
     if (verbosity >= G4VisManager::errors) {
-      G4cout <<
+      G4cerr <<
 	"ERROR: unrecognised parameter \"" << action << "\"."
              << G4endl;
     }

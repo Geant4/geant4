@@ -26,6 +26,14 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+19th July 2014  Laurent Garnier (visman-V10-00-15)
+- G4VisCommandsViewerSet : Fix a compilation problem
+
+18th July 2014  Laurent Garnier (visman-V10-00-14)
+- Change some G4cout in G4err in case of error messages in
+  G4VisCommandSceneAdd, G4VisCommandScene, G4VisManager,G4VisCommandsViewerSet
+- G4VisCommandViewer : Fix a possible uninitialized pointer
+
 9th July 2014  Laurent Garnier (visman-V10-00-13)
 - Change some G4cout in G4err in case of error messages in
   G4VSceneHandler, G4ViewParameters, G4VisCommand, G4VisCommandGeometry, G4VisCommandGeometrySet, 
