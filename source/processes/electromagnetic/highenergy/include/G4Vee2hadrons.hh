@@ -53,6 +53,8 @@
 
 #include "globals.hh"
 #include "G4ThreeVector.hh"
+#include "G4eeCrossSections.hh"
+#include "G4PhysicsLinearVector.hh"
 
 class G4DynamicParticle;
 class G4PhysicsVector;
@@ -62,29 +64,50 @@ class G4Vee2hadrons
 
 public:
 
-  G4Vee2hadrons() : lowEnergy(0.0), highEnergy(1.1*CLHEP::GeV) {};
+  //G4Vee2hadrons() : lowEnergy(0.0), highEnergy(1.1*CLHEP::GeV) {}; //nchikuma
+  G4Vee2hadrons(G4eeCrossSections* cr,
+		G4double vlowEnergy,
+		G4double vhighEnergy,
+		G4double vdelta) 
+  :cross(cr)
+  {
+	lowEnergy  = vlowEnergy;
+	highEnergy = vhighEnergy;
+	delta      = vdelta;
+  };
 
   virtual ~G4Vee2hadrons() {};
 
-  virtual G4double ThresholdEnergy() const = 0;
+  //virtual G4double ThresholdEnergy() const = 0;
 
   virtual G4double PeakEnergy() const = 0;
 
   virtual G4double ComputeCrossSection(G4double) const = 0;
 
-  virtual G4PhysicsVector* PhysicsVector(G4double, G4double) const = 0;
+  //virtual G4PhysicsVector* PhysicsVector(G4double, G4double) const = 0;
+  G4PhysicsVector* PhysicsVector() const
+  {
+    G4int nbins = (G4int)( highEnergy - lowEnergy )/delta;
+    G4PhysicsVector* pp = new G4PhysicsLinearVector(lowEnergy,highEnergy,nbins);
+    return pp;
+  };
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
 				 G4double, const G4ThreeVector&) = 0;
 
-  void SetLowEnergy(G4double val) {lowEnergy = val;};
+  //void SetLowEnergy(G4double val) {lowEnergy = val;};  //nchikuma
 
   G4double LowEnergy() const {return lowEnergy;};
 
-  void SetHighEnergy(G4double val) {highEnergy = val;};
+  //void SetHighEnergy(G4double val) {highEnergy = val;}; //nchikuma
 
   G4double HighEnergy() const {return highEnergy;};
 
+/*  inline G4double GetCrossSection(G4double energy){
+	return physVec->Value(energy);
+  };
+*/
+  
 private:
 
   // hide assignment operator
@@ -93,6 +116,13 @@ private:
 
   G4double lowEnergy;
   G4double highEnergy;
+  G4double delta;  //nchikuma
+
+  //G4PhysicsVector* physVec; //nchikuma
+
+protected:
+
+   G4eeCrossSections* cross;  //nchikuma
 
 };
 

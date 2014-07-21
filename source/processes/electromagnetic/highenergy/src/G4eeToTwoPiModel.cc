@@ -61,9 +61,16 @@
 
 using namespace std;
 
-G4eeToTwoPiModel::G4eeToTwoPiModel(G4eeCrossSections* cr):
-  cross(cr)
+G4eeToTwoPiModel::G4eeToTwoPiModel(G4eeCrossSections* cr,
+				   G4double maxkinEnergy,
+				   G4double binWidth)
+:   G4Vee2hadrons(cr,
+		  2.0*G4PionPlus::PionPlus()->GetPDGMass(),
+                  maxkinEnergy,
+		  binWidth)
 {
+  G4cout << "#####G4eeToTwoPiModel####" << G4endl;  
+
   massPi = G4PionPlus::PionPlus()->GetPDGMass();
   massRho = 775.5*MeV;
 }
@@ -72,13 +79,6 @@ G4eeToTwoPiModel::G4eeToTwoPiModel(G4eeCrossSections* cr):
 
 G4eeToTwoPiModel::~G4eeToTwoPiModel()
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eeToTwoPiModel::ThresholdEnergy() const
-{
-  return 2.0*massPi;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -91,21 +91,7 @@ G4double G4eeToTwoPiModel::PeakEnergy() const
 
 G4double G4eeToTwoPiModel::ComputeCrossSection(G4double e) const
 {
-  G4double ee = std::min(HighEnergy(),e);
-  return cross->CrossSection2pi(ee);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4PhysicsVector* G4eeToTwoPiModel::PhysicsVector(G4double emin, 
-                                                 G4double emax) const
-{
-  G4double tmin = std::max(emin, 2.0*massPi);
-  G4double tmax = std::max(tmin, emax);
-  G4int nbins = (G4int)((tmax - tmin)/(5.*MeV));
-  G4PhysicsVector* v = new G4PhysicsLinearVector(emin,emax,nbins);
-  v->SetSpline(true);
-  return v;
+  return cross->CrossSection2pi(e);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

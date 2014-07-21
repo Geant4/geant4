@@ -61,17 +61,13 @@ class G4ee2KNeutralModel : public G4Vee2hadrons
 
 public:
 
-  G4ee2KNeutralModel(G4eeCrossSections*);
+  G4ee2KNeutralModel(G4eeCrossSections*,G4double,G4double);
 
   virtual ~G4ee2KNeutralModel();
-
-  virtual G4double ThresholdEnergy() const;
 
   virtual G4double PeakEnergy() const;
 
   virtual G4double ComputeCrossSection(G4double) const;
-
-  virtual G4PhysicsVector* PhysicsVector(G4double, G4double) const;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
               G4double, const G4ThreeVector&);
@@ -81,8 +77,6 @@ private:
   // hide assignment operator
   G4ee2KNeutralModel & operator=(const  G4ee2KNeutralModel &right);
   G4ee2KNeutralModel(const  G4ee2KNeutralModel&);
-
-  G4eeCrossSections* cross;
 
   G4double massK;
   G4double massPhi;

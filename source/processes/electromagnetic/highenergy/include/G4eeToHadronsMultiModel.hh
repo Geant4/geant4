@@ -54,6 +54,8 @@
 #include "G4ParticleChangeForGamma.hh"
 #include "G4TrackStatus.hh"
 #include "Randomize.hh"
+#include "CLHEP/Units/SystemOfUnits.h"
+#include "CLHEP/Units/PhysicalConstants.h"
 #include <vector>
 
 class G4eeCrossSections;
@@ -102,7 +104,10 @@ public:
 
 private:
 
-  void AddEEModel(G4Vee2hadrons*);
+  void AddEEModel(G4Vee2hadrons*, const G4DataVector&);
+
+  //change incident e+ kinetic energy into CM total energy(sum of e+ and e-)  
+  inline G4double LabToCM(G4double);
 
   // hide assignment operator
   G4eeToHadronsMultiModel & operator=(const  G4eeToHadronsMultiModel &right);
@@ -110,6 +115,7 @@ private:
 
   G4eeCrossSections*               cross;
   G4ParticleChangeForGamma*        fParticleChange;
+  G4double 			   delta;  
 
   std::vector<G4eeToHadronsModel*> models;
 
@@ -129,16 +135,31 @@ private:
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+//change incident e+ kinetic energy into CM total energy(sum of e+ and e-)  
+inline G4double G4eeToHadronsMultiModel::LabToCM(G4double kinE_lab)
+{
+  G4double totE_CM = 0.0;
+  G4double mass = CLHEP::electron_mass_c2;
+  G4double totE_lab = kinE_lab + mass;
+  totE_CM = std::sqrt(2*mass*(mass+totE_lab));
+
+  return totE_CM;
+}
+
 inline G4double G4eeToHadronsMultiModel::ComputeCrossSectionPerElectron(
                                       const G4ParticleDefinition*,
 				      G4double kineticEnergy,
 				      G4double, G4double)
 {
   G4double res = 0.0;
-  if (kineticEnergy > thKineticEnergy) {
+
+  G4double energy = LabToCM(kineticEnergy);
+
+  if (energy > thKineticEnergy) {
     for(G4int i=0; i<nModels; i++) {
-      if(kineticEnergy >= ekinMin[i] && kineticEnergy <= ekinMax[i])
-        res += (models[i])->ComputeCrossSectionPerElectron(0,kineticEnergy);
+      if(energy >= ekinMin[i] && energy <= ekinMax[i]){
+        res += (models[i])->ComputeCrossSectionPerElectron(0,energy);
+      }
       cumSum[i] = res;
     }
   }
