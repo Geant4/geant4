@@ -47,7 +47,7 @@ class UMultiUnion : public VUSolid
     UMultiUnion& operator=(const UMultiUnion& rhs);
 
     // Accessors
-    inline UTransform3D GetTransformation(int index) const;
+    inline const UTransform3D& GetTransformation(int index) const;
     inline VUSolid* GetSolid(int index) const;
     inline int GetNumberOfSolids()const;
 
@@ -140,7 +140,7 @@ inline UVoxelizer&  UMultiUnion:: GetVoxels() const
 {
   return (UVoxelizer&)fVoxels;
 }
-inline UTransform3D UMultiUnion::GetTransformation(int index) const
+inline const UTransform3D& UMultiUnion::GetTransformation(int index) const
 {
   return fTransformObjs[index];
 }

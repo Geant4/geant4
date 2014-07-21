@@ -17,9 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 21, 2014  G.Cosmo                    geom-usolids-V10-00-13
+- Improved signature for UMultiUnion::GetTransformation() to return const
+  transformation.
+
 July 18, 2014  G.Cosmo                    geom-usolids-V10-00-12
-- Corrected signature for GetTransformation() to return copy instead of
-  temporary pointer to the transformation.
+- Corrected signature for UMultiUnion::GetTransformation() to return copy
+  instead of temporary pointer to the transformation.
 
 July 4, 2014  G.Cosmo                     geom-usolids-V10-00-11
 - Added local cache for transformations in UMultiUnion, to avoid objects
