@@ -126,6 +126,7 @@ class G4IonTable
    // All excited ions with long life time (>1.0*ns) will be created
    //  isomers are defined in G4VIsotopeTable
    
+   void PrepareNuclideTable();
    void PreloadNuclide();
    // All nuclide with a life time longer than certain value will be created
    // prior to the event loop.

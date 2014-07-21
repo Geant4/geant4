@@ -1523,14 +1523,19 @@ void G4IonTable::CreateAllIsomer()
   PreloadNuclide();
 }
 
+////////////////////
+void G4IonTable::PrepareNuclideTable()
+{
+  if(pNuclideTable==0) pNuclideTable = G4NuclideTable::GetNuclideTable();
+}
 
 ////////////////////
 void G4IonTable::PreloadNuclide()
 {
   if (isIsomerCreated) return;
 
-  if (pNuclideTable==0) {
-    pNuclideTable = G4NuclideTable::GetNuclideTable();
+  if (!pNuclideTable) {
+    PrepareNuclideTable();
     pNuclideTable->GenerateNuclide();
     RegisterIsotopeTable(pNuclideTable);
   }

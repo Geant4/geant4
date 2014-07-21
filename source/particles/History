@@ -17,6 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 18 Jul. 2014 Andrea Dotti (particles-V10-00-18)
+- Revert code changes in G4IonTable to logic of tag -16 
+  New logic is not clear, issues to be solved with time 
+  and we prefer to do it later. Keep previous bug-fix
+  code even if now has no effect.
+
+- 18 Jul. 2014 Andrea Dotti 
+- Bug fixing: ensure size methods  check null pointer condition 
+  for G4NuclideTable::fIsotopeList and return zero
+
+- 18 Jul. 2014 Makoto Asai (particles-V10-00-17)
+- G4IonTable - Introducing PrepareNuclideTable() method to allow
+  creating G4NuclideTable object without preloading any ions.
+
 - 11 Jul. 2014 Andrea Dotti (particles-V10-00-16)
 - Solve data-race condition in G4PDefSplitter
 

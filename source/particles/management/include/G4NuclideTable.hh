@@ -94,7 +94,7 @@ public:
   //Use GetIsotope(G4int Z, G4int A, G4double E)
   //void FillProperty(G4ParticleDefinition*);
 
-  size_t GetSizeOfIsotopeList(){ return fIsotopeList->size(); };
+  size_t GetSizeOfIsotopeList(){ return ( fIsotopeList ? fIsotopeList->size() : static_cast<size_t>(0)) ; };
   
   //
   // with description
@@ -157,13 +157,13 @@ private:
 inline
  size_t  G4NuclideTable::entries() const
 {
-  return fIsotopeList->size();
+  return (fIsotopeList ? fIsotopeList->size() : static_cast<size_t>(0) );
 }
 
 inline
   G4IsotopeProperty* G4NuclideTable::GetIsotopeByIndex(size_t idx) const
 {
-  if (idx<fIsotopeList->size()) return (*fIsotopeList)[idx];
+  if ( fIsotopeList && idx<fIsotopeList->size()) return (*fIsotopeList)[idx];
   else                          return 0;
 }
 #endif
