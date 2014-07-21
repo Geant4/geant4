@@ -541,8 +541,9 @@ void G4RunManagerKernel::InitializePhysics()
   CheckRegions();
   l.unlock();
 
+  //G4ParticleTable::GetParticleTable()->GetIonTable()->PrepareNuclideTable();
   static G4bool createIsomerOnlyOnce = false;
-  if(!G4Threading::IsWorkerThread())
+  if(/*G4Threading::IsMultithreadedApplication() &&*/ !G4Threading::IsWorkerThread())
   {
     if(!createIsomerOnlyOnce)
     {
