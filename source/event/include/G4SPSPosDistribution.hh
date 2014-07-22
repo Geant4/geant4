@@ -195,10 +195,10 @@ private:
   void GeneratePointSource(G4ThreeVector& outoutPos);
   void GeneratePointsInBeam(G4ThreeVector& outoutPos);
   void GeneratePointsInPlane(G4ThreeVector& outoutPos);
-  void GeneratePointsOnSurface();
-  void GeneratePointsInVolume();
+  void GeneratePointsOnSurface(G4ThreeVector& outputPos);
+  void GeneratePointsInVolume(G4ThreeVector& outputPos);
 
-  G4bool IsSourceConfined();
+  G4bool IsSourceConfined(G4ThreeVector& outputPos);
 
     void InitThreadLocalCache() const;
     void HandleThreadLocalCache( const G4ThreeVector& v1 , const G4ThreeVector& v2, const G4ThreeVector& v3 );

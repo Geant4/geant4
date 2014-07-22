@@ -549,7 +549,7 @@ void G4SPSPosDistribution::GeneratePointsInPlane(G4ThreeVector& pos)
     }
 }
 
-void G4SPSPosDistribution::GeneratePointsOnSurface()
+void G4SPSPosDistribution::GeneratePointsOnSurface(G4ThreeVector& pos)
 {
   //Private method to create points on a surface
   G4double theta, phi;
@@ -919,13 +919,13 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
   RandPos.setZ(z);
 
   // Translate
-  particle_position = CentreCoords + RandPos;
+  pos = CentreCoords + RandPos;
 
   if(verbosityLevel >= 1)
     {
       if(verbosityLevel == 2)
 	G4cout << "Rotated position " << RandPos << G4endl;
-      G4cout << "Rotated and translated position " << particle_position << G4endl;
+      G4cout << "Rotated and translated position " << pos << G4endl;
     }
   if(verbosityLevel == 2)
     {
@@ -933,7 +933,7 @@ void G4SPSPosDistribution::GeneratePointsOnSurface()
     }
 }
 
-void G4SPSPosDistribution::GeneratePointsInVolume()
+void G4SPSPosDistribution::GeneratePointsInVolume(G4ThreeVector& pos)
 {
   G4ThreeVector RandPos;
   G4double tempx, tempy, tempz;
@@ -1021,7 +1021,7 @@ void G4SPSPosDistribution::GeneratePointsInVolume()
   RandPos.setZ(tempz);
 
   // Translate
-  particle_position = CentreCoords + RandPos;
+  pos = CentreCoords + RandPos;
 
   if(verbosityLevel == 2)
     {
@@ -1029,7 +1029,7 @@ void G4SPSPosDistribution::GeneratePointsInVolume()
       G4cout << "Rotated position " << RandPos << G4endl;
     }
   if(verbosityLevel >= 1)
-    G4cout << "Rotated and translated position " << particle_position << G4endl;
+    G4cout << "Rotated and translated position " << pos << G4endl;
 
   // Cosine-law (not a good idea to use this here)
   G4ThreeVector zdash(tempx,tempy,tempz);
@@ -1044,7 +1044,7 @@ void G4SPSPosDistribution::GeneratePointsInVolume()
     } 
 }
 
-G4bool G4SPSPosDistribution::IsSourceConfined()
+G4bool G4SPSPosDistribution::IsSourceConfined(G4ThreeVector& pos)
 {
   // Method to check point is within the volume specified
   if(Confine == false)
@@ -1053,11 +1053,11 @@ G4bool G4SPSPosDistribution::IsSourceConfined()
   G4ThreeVector *ptr;
   ptr = &null;
 
-  // Check particle_position is within VolName, if so true, 
+  // Check position is within VolName, if so true,
   // else false
   G4VPhysicalVolume *theVolume;
   G4Navigator *gNavigator =G4TransportationManager::GetTransportationManager()->GetNavigatorForTracking();
-  theVolume=gNavigator->LocateGlobalPointAndSetup(particle_position,ptr,true);
+  theVolume=gNavigator->LocateGlobalPointAndSetup(pos,ptr,true);
   if(!theVolume) return(false);
   G4String theVolName = theVolume->GetName();
   if(theVolName == VolName)
@@ -1085,9 +1085,9 @@ G4ThreeVector G4SPSPosDistribution::GenerateOne()
       else if(SourcePosType == "Plane")
           GeneratePointsInPlane(localP);
       else if(SourcePosType == "Surface")
-          GeneratePointsOnSurface();
+          GeneratePointsOnSurface(localP);
       else if(SourcePosType == "Volume")
-          GeneratePointsInVolume();
+          GeneratePointsInVolume(localP);
       else
       {
           G4ExceptionDescription msg;
@@ -1098,7 +1098,7 @@ G4ThreeVector G4SPSPosDistribution::GenerateOne()
       }
       if(Confine == true)
       {
-          srcconf = IsSourceConfined();
+          srcconf = IsSourceConfined(localP);
           // if source in confined srcconf = true terminating the loop
           // if source isnt confined srcconf = false and loop continues
       }

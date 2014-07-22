@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 21st, 2014 A.Dotti (event-V10-00-06)
+- Fix for bug #1656: G4SPSPosDistribution::GenerateOne() not 
+  working correctly for GeneratePointsOnSurface() and
+  GeneratePointsInVolume()
+
 June 10th, 2014 A.Dotti (event-V10-00-05)
 - Removing data-race conditions in G4SPSEneDistribution class
 
