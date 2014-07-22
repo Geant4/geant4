@@ -9,6 +9,10 @@
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 July 2014 A. Dotti (MPI-V10-00-02)
+- Fixing bug for RNG seed distribution in MT compilations
+  (Bug #1653)
+
 13 June 2014 A. Dotti (MPI-V10-00-01)
 - Adding first version of G4RunMerger and 
   G4ScorerMerger

@@ -287,7 +287,7 @@ void G4MPImanager::ShowStatus()
 void G4MPImanager::DistributeSeeds()
 {
   std::vector<G4long> seed_list = seed_generator_-> GetSeedList();
-  CLHEP::HepRandom::setTheSeed(seed_list[rank_]);
+  G4Random::setTheSeed(seed_list[rank_]);
 }
 
 // --------------------------------------------------------------------------
@@ -298,7 +298,7 @@ void G4MPImanager::ShowSeeds()
   if ( is_master_ ) {
     // print master
     G4cout << "* rank= " << rank_
-           << " seed= " << CLHEP::HepRandom::getTheSeed()
+           << " seed= " << G4Random::getTheSeed()
            << G4endl;
     // receive from each slave
     for ( G4int islave = 1; islave < size_; islave++ ) {
@@ -308,7 +308,7 @@ void G4MPImanager::ShowSeeds()
              << G4endl;
     }
   } else { // slaves
-    buff = CLHEP::HepRandom::getTheSeed();
+    buff = G4Random::getTheSeed();
     COMM_G4COMMAND_.Send(&buff, 1, MPI::LONG, kRANK_MASTER, kTAG_G4SEED);
   }
 }
