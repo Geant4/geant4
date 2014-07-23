@@ -1,0 +1,1032 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_xml_tree
+#define tools_xml_tree
+
+#include "element"
+
+#include "../sout"
+#include "../strip"
+#include "../S_STRING"
+#include "../forit"
+
+#include <list>
+#include <ostream>
+
+namespace tools {
+namespace xml {
+
+//  A tree is :
+//    <tree atb1="" atb2="" ...>
+//      ...
+//      <tree...>
+//      </tree>
+//      ...
+//      <element atb1="" atb2="" ...> value </element>
+//      ...
+//    </tree>          
+//
+//   tree.attribute_value(<name>,s) 
+//     retrieve the value of atb <name> of a <tag>
+//   tree.attribute_value(<element>,<name>,s) 
+//     retrieve the value of an atb <name> of a <element> of a <tree>
+//
+
+class tree;
+
+class factory {
+public:
+  virtual ~factory(){}
+public:
+  typedef std::pair<std::string,std::string> atb;
+public:
+  virtual tree* create(const std::string& a_tag_name,const std::vector<atb>& a_atbs,tree* a_parent) = 0;
+};
+
+class tree : public virtual ielem {
+public:
+  TOOLS_SCLASS(tools::xml::tree)
+public:
+  static cid id_class() {return 1;}
+  virtual void* cast(cid a_class) const {
+    if(void* p = cmp_cast<tree>(this,a_class)) {return p;}
+    else return 0;
+  }
+public:
+  typedef std::pair<std::string,std::string> atb;
+  typedef bool (*exec_func)(tree&,void*);
+  enum copy_what { copy_attributes, copy_elements, copy_children, copy_all };
+public:
+  tree(const std::string& a_tag_name,factory& a_factory,tree* a_parent)
+  :m_tag_name(a_tag_name)
+  ,m_factory(a_factory)
+  ,m_parent(a_parent)
+  ,m_save(true)
+  ,m_data_1(0)
+  ,m_data_2(0)
+  ,m_data_int(0)
+  ,m_depth(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+
+  virtual ~tree(){
+    clear();
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+
+protected:
+  tree(const tree& a_from)
+  :ielem(a_from)
+  ,m_tag_name(a_from.m_tag_name)
+  ,m_factory(a_from.m_factory)
+  ,m_parent(0)
+  ,m_save(0)
+  ,m_data_1(0)
+  ,m_data_2(0)
+  ,m_data_int(0)
+  ,m_depth(0)
+  {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+
+  tree& operator=(const tree&){return *this;}
+
+public:
+  virtual bool invalidate() {return true;}
+
+  const std::list<ielem*>& childs() const {return m_childs;}
+
+  ///////////////////////////////////////////////////////
+  /// attributes ////////////////////////////////////////
+  ///////////////////////////////////////////////////////
+  const std::vector<atb>& attributes() const {return m_atbs;}
+  
+  void add_attribute(const std::string& a_name,const std::string& a_value){
+    // No check is done about an existing a_name.
+    m_atbs.push_back(atb(a_name,a_value));
+  }
+
+  bool is_attribute(const std::string& a_name) const {
+    unsigned int number = m_atbs.size();
+    for(unsigned int index=0;index<number;index++) {
+      if(m_atbs[index].first==a_name) return true;
+    }
+    return false;
+  }
+
+  void set_attributes(const std::vector<atb>& a_atbs) {
+    m_atbs = a_atbs; 
+  }
+  const std::string& tag_name() const {return m_tag_name;}
+  
+  bool attribute_value(const std::string& a_atb,std::string& a_value) const {
+    a_value.clear();
+    unsigned int linen = m_atbs.size();
+    for(unsigned int count=0;count<linen;count++) {
+      if(m_atbs[count].first==a_atb) {
+        a_value = m_atbs[count].second;
+        return true;
+      }
+    }
+    return false;
+  }
+  
+  template <class T>
+  bool attribute_value(const std::string& a_atb,T& a_value) const {
+    std::string sv;
+    if(!attribute_value(a_atb,sv)) {a_value=T();return false;}
+    return to<T>(sv,a_value);
+  }
+
+  void remove_attributes(const std::string& a_atb) {
+    std::vector<atb>::iterator it;
+    for(it=m_atbs.begin();it!=m_atbs.end();) {
+      if((*it).first==a_atb) {
+        it = m_atbs.erase(it);
+      } else { 
+        ++it;
+      }
+    }
+  }
+
+  bool remove_attribute(const std::string& a_name){
+    //TOOLS_STL : to be checked :
+    std::vector<atb>::iterator it = m_atbs.begin();
+    unsigned int linen = m_atbs.size();
+    for(unsigned int count=0;count<linen;count++,++it) {
+      if(m_atbs[count].first==a_name) {
+        m_atbs.erase(it);
+        return true; //Found and removed.
+      }
+    }
+    return false; //Not found.
+  }
+  
+  ///////////////////////////////////////////////////////
+  /// elements //////////////////////////////////////////
+  ///////////////////////////////////////////////////////
+  void add_element(const std::string& a_name,
+                   const std::vector<atb>& a_atbs,
+                   const std::string& a_value){
+    m_childs.push_back(new element(a_name,a_atbs,a_value));
+  }
+  
+  bool element_value(const std::string& a_name,std::string& a_value) const {
+    tools_lforcit(ielem*,m_childs,it) {
+      if(element* _elem = id_cast<ielem,element>(*(*it))) {
+        if(a_name==_elem->name()) {
+          a_value = _elem->value();
+          return true;
+        }
+      }
+    }
+    a_value.clear();
+    return false;
+  }
+
+/*
+  //NOTE : print is a Python keyword.
+  void dump(std::ostream& a_out){
+    a_out << "dump :" 
+          << " -----> " << this << " parent : " << m_parent << std::endl;
+    a_out << " data1 : " << m_data_1 
+          << " data2 : " << m_data_2 
+          << " dataInt : " << m_data_int
+          << std::endl;
+  
+   {unsigned int atbn = m_atbs.size();
+    for(unsigned int index=0;index<atbn;index++) {
+      a_out << " attribute : " << sout(m_atbs[index].first) << " " 
+            << sout(m_atbs[index].second) << std::endl;
+    }}
+  
+   {tools_lforit(element*,m_elems,it) {
+      a_out << " element : \"" << (*it)->name() << "\" \"" 
+            << (*it)->value() << "\"" << std::endl;
+    }}
+  
+   {tools_lforit(tree*,m_children,it) {
+      (*it)->dump(a_out);
+    }}
+  }
+  
+  const std::list<element*>& elements() const {return m_elems;}
+
+*/  
+
+  bool element_atb_value(const std::string& a_elem,
+                         const std::string& a_atb,
+                         std::string& a_value) const {
+    a_value.clear();
+    tools_lforcit(ielem*,m_childs,it) {
+      if(element* _elem = id_cast<ielem,element>(*(*it))) {
+        if(a_elem==_elem->name()) {
+          if(_elem->attribute_value(a_atb,a_value)) return true;
+        }
+      }
+    }
+    return false;
+  }
+  
+  template <class T>
+  bool element_atb_value(const std::string& a_elem,
+                         const std::string& a_atb,
+                         T& a_value) const {
+    std::string sv;
+    if(!element_atb_value(a_elem,a_atb,sv)) {a_value=T();return false;}
+    return to<T>(sv,a_value);
+  }
+
+  //////////////////////////////////////////////////
+  /// for osc //////////////////////////////////////
+  //////////////////////////////////////////////////
+  bool is_element(const std::string& a_name) const {
+    tools_lforcit(ielem*,m_childs,it) {
+      if(element* _elem = id_cast<ielem,element>(*(*it))) {
+        if(a_name==_elem->name()) return true;
+      }
+    }
+    return false;
+  }
+
+  bool set_element_value(const std::string& a_name,
+                         const std::string& a_value,int a_index = 0){
+    int index = 0;
+    tools_lforcit(ielem*,m_childs,it) {
+      if(element* _elem = id_cast<ielem,element>(*(*it))) {
+        if(a_name==_elem->name()) {
+          if(index==a_index) {
+            _elem->set_value(a_value);
+            return true;
+          } else {
+            index ++;
+          }
+        }
+      }
+    }
+    // Not found, add one :
+    std::vector<atb> atts;
+    add_element(a_name,atts,a_value);
+    return true;
+  }
+
+  bool set_attribute_value(const std::string& a_atb,
+                           const std::string& a_value) {
+    tools_vforit(atb,m_atbs,it) {
+      if((*it).first==a_atb) {
+        (*it).second = a_value;
+        return true;
+      }
+    }
+    // Not found, add one :
+    m_atbs.push_back(atb(a_atb,a_value));
+    return true;
+  }
+
+  bool has_empty_attribute_value(std::ostream& a_out) const{
+    empty_visitor visitor(a_out);
+    visitor.m_status = true;
+    const_cast<tree*>(this)->post_execute(check_item,&visitor);
+    return visitor.m_status;
+  }
+  
+  class empty_visitor {
+  public:
+    empty_visitor(std::ostream& a_out)
+    :f_out(a_out),m_status(true){}
+  public:
+    std::ostream& f_out;
+    bool m_status;
+  };
+  
+  void post_execute(exec_func a_function,void* a_tag) {
+    if(!a_function) return;
+    
+    if(!a_function(*this,a_tag)) return;
+  
+    tools_lforcit(ielem*,m_childs,it) {
+      if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+        _tree->post_execute(a_function,a_tag);
+      }
+    }
+  }
+  
+  static bool check_item(tree& a_tree,void* a_tag){
+    empty_visitor* visitor = (empty_visitor*)a_tag;
+  
+   {const std::vector<atb>& atbs = a_tree.attributes();
+    unsigned int atbn = atbs.size();       
+    for(unsigned int index=0;index<atbn;index++) {
+      const std::string& atb = atbs[index].first;
+      const std::string& atbv = atbs[index].second;
+      if(atbv.empty()) {
+        visitor->f_out << "check_item :"
+            << " for XML item " << sout(a_tree.tag_name())
+            << ", attribute " << sout(atb) << " has an empty value."
+            << std::endl;
+        visitor->m_status = false;
+      }
+    }}
+  
+   {tools_lforcit(ielem*,a_tree.m_childs,it) {
+    if(element* _elem = id_cast<ielem,element>(*(*it))) {
+      const std::vector<atb>& atbs = _elem->attributes();
+      unsigned int atbn = atbs.size();       
+      for(unsigned int index=0;index<atbn;index++) {
+        const std::string& atb = atbs[index].first;
+        const std::string& atbv = atbs[index].second;
+        if(atbv.empty()) {
+          visitor->f_out << "ItemM::check_item :"
+              << " for XML item " << sout(a_tree.tag_name())
+              << ", attribute " << sout(atb) << " has an empty value."
+              << std::endl;
+          visitor->m_status = false;
+        }
+      }
+    }}}
+  
+    return true;
+  }
+  
+  static void collect_by_tag(tree& a_tree,const std::string& a_tag,
+                             std::vector<tree*>& a_items) {
+    if(a_tree.tag_name()==a_tag) a_items.push_back(&a_tree);
+    tools_lforcit(ielem*,a_tree.m_childs,it) {
+      if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+        collect_by_tag(*_tree,a_tag,a_items);
+      }
+    }
+  }
+
+  tree* find_by_tag(const std::string& a_tag) const {
+    if(tag_name()==a_tag) return const_cast<tree*>(this);
+    // Look children :
+    tools_lforcit(ielem*,m_childs,it) {
+    if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+      tree* itemML = _tree->find_by_tag(a_tag);
+      if(itemML) return itemML;
+    }}
+    return 0;
+  }
+
+  static void unique(std::vector<tree*>& a_items) {
+    std::vector<tree*> items2;
+  
+    tools_vforcit(tree*,a_items,it) {
+      std::string name;
+      if(!(*it)->attribute_value("name",name)) continue;
+      if(name.empty()) continue;
+  
+      bool found = false;
+     {tools_vforit(tree*,items2,it2) {
+        std::string name2;
+        (*it2)->attribute_value("name",name2);
+        if(name2==name) {
+          found = true;
+          break;
+        }   
+      }}
+      if(!found) {
+        items2.push_back(*it);
+      }
+    }
+  
+    a_items = items2;
+  }
+
+  tree* find_item(const std::string& a_name) const {
+   {unsigned int linen = m_atbs.size();
+    for(unsigned int count=0;count<linen;count++) {
+      if(m_atbs[count].first=="name") {
+        if(m_atbs[count].second==a_name) return const_cast<tree*>(this);
+        break;
+      }
+    }}
+  
+    // Look children :
+    tools_lforcit(ielem*,m_childs,it) {
+    if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+      tree* item = _tree->find_item(a_name);
+      if(item) return item;
+    }}
+    return 0;
+  }
+  
+  tree* find_item_with_tag(const std::string& a_tag,
+                           const std::string& a_name) const {
+    if(a_tag==tag_name()) {
+      std::string s;
+      attribute_value("name",s);
+      if(a_name==s) return const_cast<tree*>(this);
+    }
+  
+    // Look children :
+    tools_lforcit(ielem*,m_childs,it) {
+    if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+      tree* item = _tree->find_item_with_tag(a_tag,a_name);
+      if(item) return item;
+    }}
+    return 0;
+  }
+  
+  void remove_elements(const std::string& a_name){
+    // TOOLS_STL : to be checked :
+    std::list<ielem*>::iterator it;
+    for(it=m_childs.begin();it!=m_childs.end();) {
+      if(element* _elem = id_cast<ielem,element>(*(*it))) {
+        if(a_name==_elem->name()) {
+          it = m_childs.erase(it);
+          delete _elem;
+        } else {
+          ++it;
+        }
+      } else {
+        ++it;
+      }
+    }
+  }
+	
+  void add_child(tree* a_tree) {m_childs.push_back(a_tree);}
+
+  tree* create_copy(tree* a_parent) {
+    tree* itemML = m_factory.create(m_tag_name,m_atbs,a_parent);
+    if(!itemML) return 0;
+    itemML->m_atbs = m_atbs;
+    //FIXME : m_save
+    
+   {tools_lforcit(ielem*,m_childs,it) {
+    if(element* _elem = id_cast<ielem,element>(*(*it))) {
+      itemML->m_childs.push_back(new element(*_elem));
+    }}}
+  
+   {tools_lforcit(ielem*,m_childs,it) {
+    if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+      //FIXME : could we have mismatch parent/child ?
+      tree* obj = _tree->create_copy(itemML);
+      if(!obj) {
+        delete itemML;
+        return 0;
+      }
+      itemML->add_child(obj);
+    }}}
+  
+    return itemML;
+  }
+  
+  bool copy(const tree& a_from,
+            copy_what a_what = copy_all,
+            bool a_clear = true){
+
+    // Copy data (atbs, propertis, children) of a_from onto this.
+    if((a_what==copy_all)||(a_what==copy_attributes)) {
+      if(a_clear) m_atbs.clear();
+      tools_vforcit(atb,a_from.m_atbs,it) m_atbs.push_back(*it);
+    }
+  
+    if((a_what==copy_all)||(a_what==copy_elements)) {
+      if(a_clear) delete_sub_elems();
+      tools_lforcit(ielem*,a_from.m_childs,it) {
+        if(element* _elem = id_cast<ielem,element>(*(*it))) {
+          m_childs.push_back(new element(*_elem));
+        }
+      }
+    }
+  
+    if((a_what==copy_all)||(a_what==copy_children)) {
+      if(a_clear) delete_sub_trees(); 
+      tools_lforcit(ielem*,a_from.m_childs,it) {
+        if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+          //FIXME : could we have mismatch parent/child ?
+          tree* obj = _tree->create_copy(this);
+          if(!obj) {
+            // Something wrong, cleanup this.
+            clear();
+            return false;
+          }
+          add_child(obj);
+        }
+      }
+    }
+  
+    //FIXME : m_save
+    
+    return true;
+  }
+  
+  
+  void replace(const std::string& a_old,const std::string& a_new) {
+    // Used by the obuild template system.
+   {unsigned int atbn = m_atbs.size();
+    for(unsigned int index=0;index<atbn;index++) {
+      std::string& value = m_atbs[index].second;
+      tools::replace(value,a_old,a_new);
+    }}
+  
+    tools_lforit(ielem*,m_childs,it) {
+      if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+        _tree->replace(a_old,a_new);
+      } else if(element* _elem = id_cast<ielem,element>(*(*it))) {
+        _elem->replace(a_old,a_new);
+      }
+    }
+  }
+
+  static void collect_by_attribute(tree& a_tree,
+                                   const std::string& a_tag,
+                                   std::vector<tree*>& a_items) {
+    std::string value;
+    if(a_tree.attribute_value(a_tag,value)) a_items.push_back(&a_tree);
+    tools_lforcit(ielem*,a_tree.m_childs,it) {
+      if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+        collect_by_attribute(*_tree,a_tag,a_items);
+      }
+    }
+  }
+
+  bool element_values(const std::string& a_name,
+                      std::vector<std::string>& a_values) const {
+    a_values.clear();
+    tools_lforcit(ielem*,m_childs,it) {
+      if(element* _elem = id_cast<ielem,element>(*(*it))) {
+        if(a_name==_elem->name()) {
+          a_values.push_back(_elem->value());
+        }
+      }
+    }
+    return true;
+  }
+
+  void post_execute_backward(exec_func a_function,void* a_tag){
+    if(!a_function) return;
+    tools_lforcit(ielem*,m_childs,it) {
+      if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+        _tree->post_execute_backward(a_function,a_tag);
+      }
+    }  
+    if(!a_function(*this,a_tag)) return;
+  }
+  
+  tree* find_by_attribute(const std::string& a_atb,const std::string& a_value,
+                        bool a_up_down = true,bool a_left_right = true) const {
+    if(a_up_down) {
+      std::string s;
+      attribute_value(a_atb,s);
+      if(s==a_value) return const_cast<tree*>(this);
+  
+      if(a_left_right) {
+        tools_lforcit(ielem*,m_childs,it) {
+          if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+            tree* itemML = 
+              _tree->find_by_attribute(a_atb,a_value,a_up_down,a_left_right);
+            if(itemML) return itemML;
+          }
+        }
+      } else {
+        std::list<ielem*>::const_reverse_iterator it;
+        for(it=m_childs.rbegin();it!=m_childs.rend();++it) {
+        if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+          tree* itemML = 
+            _tree->find_by_attribute(a_atb,a_value,a_up_down,a_left_right);
+          if(itemML) return itemML;
+        }}
+      }
+    } else {
+      if(a_left_right) {
+        tools_lforcit(ielem*,m_childs,it) {
+        if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+          tree* itemML = 
+            _tree->find_by_attribute(a_atb,a_value,a_up_down,a_left_right);
+          if(itemML) return itemML;
+        }}
+      } else {
+        std::list<ielem*>::const_reverse_iterator it;
+        for(it=m_childs.rbegin();it!=m_childs.rend();++it) {
+        if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+          tree* itemML = 
+            _tree->find_by_attribute(a_atb,a_value,a_up_down,a_left_right);
+          if(itemML) return itemML;
+        }}
+      }
+  
+      std::string s;
+      attribute_value(a_atb,s);
+      if(s==a_value) return const_cast<tree*>(this);
+  
+    }
+    return 0;
+  }
+  
+  void dump_xml(std::ostream& a_out,const std::string& a_spaces = "") {
+
+    // begin tag :
+    a_out << a_spaces << "<" << m_tag_name;
+   {unsigned int atbn = m_atbs.size();
+    for(unsigned int index=0;index<atbn;index++) {
+      a_out << " " << m_atbs[index].first << "="
+            << sout(m_atbs[index].second);
+    }}
+    a_out << ">" << std::endl;
+  
+   {tools_lforcit(ielem*,m_childs,it) {
+    if(element* _elem = id_cast<ielem,element>(*(*it))) {
+  
+      const std::vector<atb>& atbs = _elem->attributes();
+  
+      bool isCallback = false;
+  
+      a_out << a_spaces << "  <" << _elem->name();
+      unsigned int atbn = atbs.size();
+      for(unsigned int index=0;index<atbn;index++) {
+        a_out << " " << atbs[index].first << "="
+              << sout(atbs[index].second);
+        if(atbs[index].first=="exec") isCallback = true;
+      }
+      if(_elem->value().empty()) {
+        a_out << "/>" << std::endl;
+      } else {
+        a_out << ">";
+        std::string value = to_xml(_elem->value());
+        if(isCallback) {
+          if(value.find("\\n\\")==std::string::npos) {
+            a_out << value;
+          } else {
+            a_out << std::endl;
+            tools::replace(value,"\\n\\","@OnX@");
+            tools::replace(value,"@OnX@","\\n\\\n");
+            tools::strip(value,tools::trailing,' ');
+            a_out << value;
+            unsigned int l = value.size();
+            if(l && value[l-1]!='\n') a_out << std::endl;
+            a_out << a_spaces << "  ";
+          }
+        } else {
+          a_out << value;
+        }
+        a_out << "</" << _elem->name() << ">" << std::endl;
+      }
+    }}}
+  
+    // End tag :
+    a_out << a_spaces << "</" << m_tag_name << ">" << std::endl;
+  }
+
+  bool set_element_atb_value(const std::string& a_elem,
+                            const std::string& a_atb,
+                            const std::string& a_value,int a_index = 0){
+    if(a_elem.empty()) {
+      unsigned int linen = m_atbs.size();
+      for(unsigned int count=0;count<linen;count++) {
+        if(m_atbs[count].first==a_atb) {
+          m_atbs[count].second = a_value;
+          return true;
+        }
+      }
+      // Not found, add it :
+      m_atbs.push_back(atb(a_atb,a_value));
+      return true;
+    } else {
+      int index = 0;
+      tools_lforcit(ielem*,m_childs,it) {
+      if(element* _elem = id_cast<ielem,element>(*(*it))) {
+        if(a_elem==_elem->name()) {
+          if(index==a_index) {
+            _elem->set_attribute_value(a_atb,a_value);
+            return true;
+          } else { 
+            index++;
+          }
+        }
+      }}
+      return false;
+    }
+  }
+
+  // NOTE : used in osc. Should be removed.
+  void sub_trees(std::list<tree*>& a_list) const {
+    a_list.clear();
+    tools_lforcit(ielem*,m_childs,it) {
+    if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+      a_list.push_back(_tree);
+    }}
+  }
+  void sub_elems(std::list<element*>& a_list) const {
+    a_list.clear();
+    tools_lforcit(ielem*,m_childs,it) {
+    if(element* _elem = id_cast<ielem,element>(*(*it))) {
+      a_list.push_back(_elem);
+    }}
+  }
+
+  bool replace_child(tree* a_old,tree* a_new) {
+    tools_lforit(ielem*,m_childs,it) {
+    if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+      if(_tree==a_old) {
+        (*it) = a_new;
+        return true; //replacement done.
+      }
+    }}
+    return false; //no replacement done.
+  }
+  
+  // used in OnX/Widget.
+  virtual void* cast(const std::string& a_class) const {
+    if(void* p = cmp_cast<tree>(this,a_class)) {return p;}
+    else return 0;
+  }
+
+  void delete_element(const std::string& a_name) {
+    tools_lforit(ielem*,m_childs,it) {
+    if(element* _elem = id_cast<ielem,element>(*(*it))) {
+      if(a_name==_elem->name()) {
+        m_childs.erase(it);
+        delete _elem;
+        break;
+      }
+    }}
+  }
+  
+  void delete_element(element* a_element) {
+    tools_lforit(ielem*,m_childs,it) {
+    if(element* _elem = id_cast<ielem,element>(*(*it))) {
+      if(_elem==a_element) {
+        m_childs.erase(it);
+        delete _elem;
+        break;
+      }
+    }}
+  }
+
+  void delete_sub_trees(){
+    std::list<ielem*>::iterator it;
+    for(it=m_childs.begin();it!=m_childs.end();) {
+       if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+         it = m_childs.erase(it);
+         delete _tree;
+       } else {
+         it++;
+       }
+    }
+  }
+  
+  void delete_sub_elems(){
+    std::list<ielem*>::iterator it;
+    for(it=m_childs.begin();it!=m_childs.end();) {
+      if(element* _elem = id_cast<ielem,element>(*(*it))) {
+        it = m_childs.erase(it);
+        delete _elem;
+      } else {
+        it++;
+      }
+    }
+  }
+
+  const tree* find_by_element_in_same_level(const std::string& a_name,
+                                            const std::string& a_value) const {
+    // Look children :
+    tools_lforcit(ielem*,m_childs,it) {
+    if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+      std::string s;
+      if(_tree->element_value(a_name,s) && (a_value==s)) return _tree;
+    }}
+    return 0;
+  }
+  
+  bool element_value_boolean(const std::string& a_name,bool& a_value) const {
+    std::string value;
+    if(!element_value(a_name,value)) return false;
+    return tools::to(value,a_value);
+  }
+
+  void update_tree(const tree& a_old) {
+    // We map the opened elements in the old tree within this tree.
+    // Algorithm based on the existence of a "label" element.
+    tools_lforit(ielem*,m_childs,it) {
+    if(tree* _tree = id_cast<ielem,tree>(*(*it))) {
+      std::string slabel;
+      if(_tree->element_value("label",slabel)) {
+        // Try to find a same label in the same level :
+        const tree* item = 
+          a_old.find_by_element_in_same_level("label",slabel);
+        if(item) {
+          bool sopened;
+          if(item->element_value_boolean("opened",sopened) && sopened) {
+            _tree->set_element_value("opened","true");
+          }
+          if(a_old.number_of_trees()) _tree->update_tree(*item);
+        }
+      }
+    }}
+  }
+  
+  //////////////////////////////////////////////////
+  /// end osc //////////////////////////////////////
+  //////////////////////////////////////////////////
+  
+  ///////////////////////////////////////////////////////
+  /// sub trees /////////////////////////////////////////
+  ///////////////////////////////////////////////////////
+
+  tree* parent() const {return m_parent;}
+
+  void set_parent(tree* a_parent) {m_parent = a_parent;}
+  
+  unsigned int number_of_trees() const {
+    unsigned int number = 0;
+    tools_lforcit(ielem*,m_childs,it) {
+      if(id_cast<ielem,tree>(*(*it))) number++;
+    }
+    return number;
+  }
+
+  void remove_child(tree*& a_tree,bool a_delete = true){
+    m_childs.remove(a_tree);
+    if(a_delete) {
+      delete a_tree;
+      a_tree = 0;
+    }
+  }
+
+/*
+
+  bool is_first_child(const tree& a_tree) {
+    if(m_children.empty()) return false;
+    return ( (*(m_children.begin()))==&a_tree) ? true : false;
+  }
+  
+  bool is_last_child(const tree& a_tree) {
+    if(m_children.empty()) return false;
+    return ( m_children.back()==&a_tree) ? true : false;
+  }
+*/
+
+/* TOOLS_STL : no std::list::insert.
+  void add_after(tree* a_tree,tree* a_entry){
+    tools_lforit(tree*,m_children,it) {
+      if((*it)==a_tree) {
+        m_children.insert(it,a_entry);
+        return;
+      }
+    }
+  }
+
+  //TOOLS_STL : no std::list::iterator::operator--.
+
+  tree* previous_child(const tree& a_tree){
+    tools_lforit(tree*,m_children,it) {
+      if((*it)==&a_tree) {
+        if(it==m_children.begin()) return 0;
+        --it;
+        return *it;
+      }
+    }
+    return 0;
+  }
+
+  tree* next_child(const tree& a_tree){
+    tools_lforit(tree*,m_children,it) {
+      if((*it)==&a_tree) {
+        std::list<tree*>::iterator last = m_children.end();
+        --last;
+        if(it==last) return 0;
+        ++it;
+        return *it;
+      }
+    }
+    return 0;
+  }
+*/
+
+  void set_data(void* a_data_1,void* a_data_2,int a_data_int) {
+    m_data_1 = a_data_1;
+    m_data_2 = a_data_2;
+    m_data_int = a_data_int;
+  }
+  void get_data(void*& a_data_1,void*& a_data_2,int& a_data_int) const {
+    a_data_1 = m_data_1;
+    a_data_2 = m_data_2;
+    a_data_int = m_data_int;
+  }
+  void* get_data1() const {return m_data_1;}
+  void* get_data2() const {return m_data_2;}
+  int get_data_int() const {return m_data_int;}
+  void set_depth(unsigned int a_depth) {m_depth = a_depth;}
+  unsigned int depth() const {return m_depth;}
+  void set_save_flag(bool a_value) {m_save = a_value;}
+  bool save_flag() const {return m_save;}
+  void set_file(const std::string& a_file) {m_file = a_file;}
+  std::string file() const {return m_file;}
+  
+protected:
+  void clear(){
+    m_atbs.clear();
+  
+   // TOOLS_STL : no std::list::erase.
+   //{std::list<tree*>::iterator it;
+   // for(it=m_children.begin();
+   //     it!=m_children.end();
+   //     it = m_children.erase(it)) 
+   //   delete (*it);}
+   //
+   //{std::list<element*>::iterator it;
+   // for(it=m_elems.begin();it!=m_elems.end();it = m_elems.erase(it)) 
+   //   delete (*it);}
+  
+    while(!m_childs.empty()) {
+      ielem* item = m_childs.front();
+      m_childs.remove(item);
+      delete item;
+    }
+  }
+
+protected:
+  std::string m_tag_name;
+  factory& m_factory;
+  tree* m_parent;
+  //std::list<tree*> m_children;
+  //std::list<element*> m_elems;
+  std::list<ielem*> m_childs;
+  std::vector<atb> m_atbs;
+  std::string m_file;
+  bool m_save;
+  void* m_data_1;
+  void* m_data_2;
+  int m_data_int;
+  int m_depth;
+};
+
+class looper {
+public:
+  looper(const tree& a_tree)
+  :m_it(a_tree.childs().begin())
+  ,m_end(a_tree.childs().end())
+  {}
+  virtual ~looper(){}
+protected:
+  looper(const looper& a_from)
+  :m_it(a_from.m_it)
+  ,m_end(a_from.m_end)
+  {}
+  looper& operator=(const looper&){return *this;}
+public:
+  tree* next_tree() {
+    for(;m_it!=m_end;++m_it) {
+      tree* _tree = id_cast<ielem,tree>(*(*m_it));
+      if(_tree) {m_it++;return _tree;}
+    }
+    return 0;
+  }  
+  element* next_element() {
+    for(;m_it!=m_end;++m_it) {
+      element* _elem = id_cast<ielem,element>(*(*m_it));
+      if(_elem) {m_it++;return _elem;}
+    }
+    return 0;
+  }  
+protected:
+  std::list<ielem*>::const_iterator m_it;
+  std::list<ielem*>::const_iterator m_end;
+};
+
+class default_factory : public virtual factory {
+#ifdef TOOLS_MEM
+  TOOLS_SCLASS(tools::xml::default_factory)
+#endif
+public:
+  virtual tree* create(const std::string& a_tag_name,const std::vector<tree::atb>& a_atbs,tree* a_parent) {
+    // It does not add the new tree in parent.
+    tree* itemML = new tree(a_tag_name,*this,a_parent);
+    itemML->set_attributes(a_atbs);
+    return itemML;
+  }
+public:
+  default_factory(){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  virtual ~default_factory(){
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  default_factory(const default_factory& a_from)
+  :factory(a_from){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+  }
+  default_factory& operator=(const default_factory&){return *this;}
+};
+
+}}
+
+#endif

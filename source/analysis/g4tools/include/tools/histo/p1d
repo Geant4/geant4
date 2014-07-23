@@ -9,8 +9,8 @@
 namespace tools {
 namespace histo {
 
-class p1d : public p1<double,unsigned int,double,double,double> {
-  typedef p1<double,unsigned int,double,double,double> parent;
+class p1d : public p1<double,unsigned int,unsigned int,double,double,double> {
+  typedef p1<double,unsigned int,unsigned int,double,double,double> parent;
 public:
   static const std::string& s_class() {
     static const std::string s_v("tools::histo::p1d");
@@ -46,10 +46,6 @@ public:
     parent::operator=(a_from);
     return *this;
   }
-public:
-#ifdef __CINT__
-  bool fill(double aX,double aY,double aW = 1) {return parent::fill(aX,aY,aW);}
-#endif
 
 private:static void check_instantiation() {p1d p("",10,0,1);p.gather_bins(5);}
 };

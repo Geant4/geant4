@@ -158,6 +158,13 @@ inline bool AttMarker_stream(buffer& a_buffer) {
   return true;
 }
 
+inline bool Att3D_stream(buffer& a_buffer){
+  unsigned int c;
+  if(!a_buffer.write_version(1,c)) return false;
+  if(!a_buffer.set_byte_count(c)) return false;
+  return true;
+}
+
 //template <class T>
 //inline bool Array_stream(buffer& a_buffer,const std::vector<T>& a_v) {
 //  if(!a_buffer.write((int)a_v.size())) return false;

@@ -1,0 +1,1097 @@
+// Copyright (C) 2010, Guy Barrand. All rights reserved.
+// See the file tools.license for terms.
+
+#ifndef tools_value
+#define tools_value
+
+#include "array"
+#include "typedefs"
+#include "tos" //for tos
+
+#ifdef TOOLS_MEM
+#include "mem"
+#endif
+
+namespace tools {
+
+class value {
+  static const std::string& s_class() {
+    static const std::string s_v("tools::value");
+    return s_v;
+  }
+public:
+  enum e_type {
+    NONE = 0,
+    // integers :
+    //UNSIGNED_CHAR = 10,
+    //CHAR = 11,
+    UNSIGNED_SHORT = 12,
+    SHORT = 13,
+    UNSIGNED_INT = 14,
+    INT = 15,
+    UNSIGNED_INT64 = 16,
+    INT64 = 17,
+    // reals :
+    FLOAT = 30,
+    DOUBLE = 31,
+    // else :
+    BOOL = 50,
+    STRING = 51,
+    // pointers :
+    VOID_STAR = 100,
+    DOUBLE_STAR = 101,
+    FLOAT_STAR = 102,
+    INT_STAR = 103,
+
+    // multidimensional vectors (1000+base type) :
+    //ARRAY_UNSIGNED_CHAR = 1010,
+    //ARRAY_CHAR = 1011,
+    ARRAY_UNSIGNED_SHORT = 1012,
+    ARRAY_SHORT = 1013,
+    ARRAY_UNSIGNED_INT = 1014,
+    ARRAY_INT = 1015,
+    ARRAY_UNSIGNED_INT64 = 1016,
+    ARRAY_INT64 = 1017,
+    ARRAY_FLOAT = 1030,
+    ARRAY_DOUBLE = 1031,
+    ARRAY_BOOL = 1050,
+    ARRAY_STRING = 1051
+  };
+
+/*
+  static e_type type(unsigned short) {return UNSIGNED_SHORT;}
+  static e_type type(short)          {return SHORT;}
+  static e_type type(unsigned int)   {return UNSIGNED_INT;}
+  static e_type type(int)            {return INT;}
+  static e_type type(uint64)         {return UNSIGNED_INT64;}
+  static e_type type(int64)          {return INT64;}
+  static e_type type(float)          {return FLOAT;}
+  static e_type type(double)         {return DOUBLE;}
+  static e_type type(bool)           {return BOOL;}
+  static e_type type(void*)          {return VOID_STAR;}
+  static e_type type(double*)        {return DOUBLE_STAR;}
+  static e_type type(float*)         {return FLOAT_STAR;}
+  static e_type type(int*)           {return INT_STAR;}
+  //static e_type type(const std::string&) {return STRING;}
+*/
+public:
+  value():m_label(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = NONE;
+    u.m_unsigned_int64 = 0;
+  }
+
+  value(bool a_value):m_label(0) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = BOOL;
+    u.m_bool = a_value;
+  }
+//  value(char a_value):m_label(0) {
+//#ifdef TOOLS_MEM
+//    mem::increment(s_class().c_str());
+//#endif
+//    m_type = CHAR;
+//    u.m_char = a_value;
+//  }
+  value(short a_value):m_label(0) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = SHORT;
+    u.m_short = a_value;
+  }
+  value(int a_value):m_label(0) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = INT;
+    u.m_int = a_value;
+  }
+  value(int64 a_value):m_label(0) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = INT64;
+    u.m_int64 = a_value;
+  }
+  value(uint64 a_value):m_label(0) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = UNSIGNED_INT64;
+    u.m_unsigned_int64 = a_value;
+  }
+  value(float a_value):m_label(0) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = FLOAT;
+    u.m_float = a_value;
+  }
+  value(double a_value):m_label(0) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = DOUBLE;
+    u.m_double = a_value;
+  }
+
+//  value(unsigned char a_value):m_label(0) {
+//#ifdef TOOLS_MEM
+//    mem::increment(s_class().c_str());
+//#endif
+//    m_type = UNSIGNED_CHAR;
+//    u.m_unsigned_char = a_value;
+//  }
+  value(unsigned short a_value):m_label(0) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = UNSIGNED_SHORT;
+    u.m_unsigned_short = a_value;
+  }
+  value(unsigned int a_value):m_label(0) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = UNSIGNED_INT;
+    u.m_unsigned_int = a_value;
+  }
+  value(void* a_value):m_label(0) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = VOID_STAR;
+    u.m_void_star = a_value;
+  }
+  value(double* a_value):m_label(0) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = DOUBLE_STAR;
+    u.m_double_star = a_value;
+  }
+  value(float* a_value):m_label(0) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = FLOAT_STAR;
+    u.m_float_star = a_value;
+  }
+  value(int* a_value):m_label(0) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = INT_STAR;
+    u.m_int_star = a_value;
+  }
+
+  value(const char* a_value):m_label(0) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = STRING;
+    u.m_string = new std::string(a_value?a_value:"");
+  }
+  value(const std::string& a_value):m_label(0) {
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+    m_type = STRING;
+    u.m_string = new std::string(a_value);
+  }
+
+#ifdef TOOLS_MEM
+#define TOOLS_VALUE_CSTOR(a_what,a_m_what,a_type) \
+  value(const std::vector<a_what>& a_v){\
+    mem::increment(s_class().c_str());\
+    m_type = a_type;\
+    std::vector<unsigned int> is(1);\
+    is[0] = a_v.size();\
+    u.a_m_what = new tools::array<a_what>(is);\
+    u.a_m_what->fill(a_v);\
+  }
+#else
+#define TOOLS_VALUE_CSTOR(a_what,a_m_what,a_type) \
+  value(const std::vector<a_what>& a_v){\
+    m_type = a_type;\
+    std::vector<unsigned int> is(1);\
+    is[0] = a_v.size();\
+    u.a_m_what = new tools::array<a_what>(is);\
+    u.a_m_what->fill(a_v);\
+  }
+#endif
+
+//TOOLS_VALUE_CSTOR(unsigned char,m_array_unsigned_char,ARRAY_UNSIGNED_CHAR)
+//TOOLS_VALUE_CSTOR(char,m_array_char,ARRAY_CHAR)
+  TOOLS_VALUE_CSTOR(unsigned short,m_array_unsigned_short,ARRAY_UNSIGNED_SHORT)
+  TOOLS_VALUE_CSTOR(short,m_array_short,ARRAY_SHORT)
+  TOOLS_VALUE_CSTOR(unsigned int,m_array_unsigned_int,ARRAY_UNSIGNED_INT)
+  TOOLS_VALUE_CSTOR(int,m_array_int,ARRAY_INT)
+  TOOLS_VALUE_CSTOR(uint64,m_array_unsigned_int64,ARRAY_UNSIGNED_INT64)
+  TOOLS_VALUE_CSTOR(int64,m_array_int64,ARRAY_INT64)
+  TOOLS_VALUE_CSTOR(float,m_array_float,ARRAY_FLOAT)
+  TOOLS_VALUE_CSTOR(double,m_array_double,ARRAY_DOUBLE)
+  TOOLS_VALUE_CSTOR(bool,m_array_bool,ARRAY_BOOL)
+  TOOLS_VALUE_CSTOR(std::string,m_array_string,ARRAY_STRING)
+
+#undef TOOLS_VALUE_CSTOR
+
+  virtual ~value() {
+    delete m_label;
+    reset();
+#ifdef TOOLS_MEM
+    mem::decrement(s_class().c_str());
+#endif
+  }
+public:
+  value(const value& a_from):m_label(0){
+#ifdef TOOLS_MEM
+    mem::increment(s_class().c_str());
+#endif
+
+    if(a_from.m_label) m_label = new std::string(*a_from.m_label);
+    m_type = a_from.m_type;
+
+    if(a_from.m_type==STRING) {
+      u.m_string = new std::string(*a_from.u.m_string);
+
+    //} else if(a_from.m_type==ARRAY_UNSIGNED_CHAR) {
+    //  u.m_array_unsigned_char = 
+    //    new array<unsigned char>(*a_from.u.m_array_unsigned_char);
+
+    //} else if(a_from.m_type==ARRAY_CHAR) {
+    //  u.m_array_char = new array<char>(*a_from.u.m_array_char);
+
+    } else if(a_from.m_type==ARRAY_UNSIGNED_SHORT) {
+      u.m_array_unsigned_short = 
+        new array<unsigned short>(*a_from.u.m_array_unsigned_short);
+
+    } else if(a_from.m_type==ARRAY_SHORT) {
+      u.m_array_short = new array<short>(*a_from.u.m_array_short);
+
+    } else if(a_from.m_type==ARRAY_UNSIGNED_INT) {
+      u.m_array_unsigned_int = 
+        new array<unsigned int>(*a_from.u.m_array_unsigned_int);
+
+    } else if(a_from.m_type==ARRAY_INT) {
+      u.m_array_int = new array<int>(*a_from.u.m_array_int);
+
+    } else if(a_from.m_type==ARRAY_UNSIGNED_INT64) {
+      u.m_array_unsigned_int64 = 
+        new array<uint64>(*a_from.u.m_array_unsigned_int64);
+
+    } else if(a_from.m_type==ARRAY_INT64) {
+      u.m_array_int64 = new array<int64>(*a_from.u.m_array_int64);
+
+    } else if(a_from.m_type==ARRAY_FLOAT) {
+      u.m_array_float = new array<float>(*a_from.u.m_array_float);
+
+    } else if(a_from.m_type==ARRAY_DOUBLE) {
+      u.m_array_double = new array<double>(*a_from.u.m_array_double);
+
+    } else if(a_from.m_type==ARRAY_BOOL) {
+      u.m_array_bool = new array<bool>(*a_from.u.m_array_bool);
+
+    } else if(a_from.m_type==ARRAY_STRING) {
+      u.m_array_string = new array<std::string>(*a_from.u.m_array_string);
+
+    } else {
+      u = a_from.u;
+    }
+  }
+
+  value& operator=(const value& a_from) {
+    if(&a_from==this) return *this;
+
+    delete m_label;
+    m_label = 0;
+    if(a_from.m_label) m_label = new std::string(*a_from.m_label);
+    reset();
+
+    m_type = a_from.m_type;
+
+    if(a_from.m_type==STRING) {
+      u.m_string = new std::string(*a_from.u.m_string);
+
+    //} else if(a_from.m_type==ARRAY_UNSIGNED_CHAR) {
+    //  u.m_array_unsigned_char =
+    //    new array<unsigned char>(*a_from.u.m_array_unsigned_char);
+
+    //} else if(a_from.m_type==ARRAY_CHAR) {
+    //  u.m_array_char = new array<char>(*a_from.u.m_array_char);
+
+    } else if(a_from.m_type==ARRAY_UNSIGNED_SHORT) {
+      u.m_array_unsigned_short = 
+        new array<unsigned short>(*a_from.u.m_array_unsigned_short);
+
+    } else if(a_from.m_type==ARRAY_SHORT) {
+      u.m_array_short = new array<short>(*a_from.u.m_array_short);
+
+    } else if(a_from.m_type==ARRAY_UNSIGNED_INT) {
+      u.m_array_unsigned_int = 
+        new array<unsigned int>(*a_from.u.m_array_unsigned_int);
+
+    } else if(a_from.m_type==ARRAY_INT) {
+      u.m_array_int = new array<int>(*a_from.u.m_array_int);
+
+    } else if(a_from.m_type==ARRAY_UNSIGNED_INT64) {
+      u.m_array_unsigned_int64 = 
+        new array<uint64>(*a_from.u.m_array_unsigned_int64);
+
+    } else if(a_from.m_type==ARRAY_INT64) {
+      u.m_array_int64 = new array<int64>(*a_from.u.m_array_int64);
+
+    } else if(a_from.m_type==ARRAY_FLOAT) {
+      u.m_array_float = new array<float>(*a_from.u.m_array_float);
+
+    } else if(a_from.m_type==ARRAY_DOUBLE) {
+      u.m_array_double = new array<double>(*a_from.u.m_array_double);
+
+    } else if(a_from.m_type==ARRAY_BOOL) {
+      u.m_array_bool = new array<bool>(*a_from.u.m_array_bool);
+
+    } else if(a_from.m_type==ARRAY_STRING) {
+      u.m_array_string = new array<std::string>(*a_from.u.m_array_string);
+  
+    } else {
+      u = a_from.u;
+    }
+
+    return *this;
+  }
+/* for tests/symbolic.cpp.
+public:
+  value operator*(const value& a_from) const {   
+    value tmp(*this);
+    std::string serr;
+    multiply(tmp,a_from,serr);
+    return tmp;
+  }
+  value operator+(const value& a_from) const {   
+    value tmp(*this);
+    std::string serr;
+    add(tmp,a_from,serr);
+    return tmp;
+  }
+  value operator-(const value& a_from) const {   
+    value tmp(*this);
+    std::string serr;
+    subtract(tmp,a_from,serr);
+    return tmp;
+  }
+  value operator+=(const value& a_from) {   
+    value s = operator+(a_from);
+    *this = s;
+    return s;
+  }
+  value operator-=(const value& a_from) {   
+    value s = operator-(a_from);
+    *this = s;
+    return s;
+  }
+*/
+public:
+  void set_label(const std::string& a_s) {
+    delete m_label;
+    m_label = new std::string(a_s);
+  }
+  std::string label() const {return m_label?(*m_label):"";}
+
+  e_type type() const {return m_type;}
+  void set_type(e_type a_type) {
+    reset();
+    m_type = a_type;
+    switch(a_type) {
+    case NONE:      u.m_unsigned_int64 = 0;break;
+    //case UNSIGNED_CHAR:    u.m_unsigned_char = 0;break;
+    //case CHAR:      u.m_char = 0;break;
+    case UNSIGNED_SHORT:   u.m_unsigned_short = 0;break;
+    case SHORT:     u.m_short = 0;break;
+    case UNSIGNED_INT:     u.m_unsigned_int = 0;break;
+    case INT:       u.m_int = 0;break;
+    case UNSIGNED_INT64:   u.m_unsigned_int64 =0;break;
+    case INT64:     u.m_int64 = 0;break;
+    case FLOAT:     u.m_float = 0;break;
+    case DOUBLE:    u.m_double = 0;break;
+    case BOOL:      u.m_bool = false;break;
+    case VOID_STAR:        u.m_void_star = 0;break;
+    case DOUBLE_STAR:      u.m_double_star = 0;break;
+    case FLOAT_STAR:       u.m_float_star = 0;break;
+    case INT_STAR:         u.m_int_star = 0;break;
+    case STRING:       u.m_string = new std::string("");break;
+    //case ARRAY_UNSIGNED_CHAR:
+    //  u.m_array_unsigned_char = new tools::array<unsigned char>();break;
+    //case ARRAY_CHAR:u.m_array_char = new tools::array<char>();break;
+  
+    case ARRAY_UNSIGNED_SHORT:
+      u.m_array_unsigned_short = new tools::array<unsigned short>();break;
+    case ARRAY_SHORT:u.m_array_short = new tools::array<short>();break;
+  
+    case ARRAY_UNSIGNED_INT:
+      u.m_array_unsigned_int = new tools::array<unsigned int>();break;
+    case ARRAY_INT:u.m_array_int = new tools::array<int>();break;
+    case ARRAY_UNSIGNED_INT64:
+      u.m_array_unsigned_int64 = new tools::array<uint64>();break;
+    case ARRAY_INT64:u.m_array_int64 = new tools::array<int64>();break;
+  
+    case ARRAY_FLOAT:u.m_array_float = new tools::array<float>();break;
+    case ARRAY_DOUBLE:u.m_array_double = new tools::array<double>();break;
+    case ARRAY_BOOL:u.m_array_bool = new tools::array<bool>();break;
+    case ARRAY_STRING:u.m_array_string = new tools::array<std::string>();break;
+    }
+  }
+
+  void set_none() {
+    reset();
+    m_type = NONE;
+    u.m_unsigned_int64 = 0;
+  }
+  //void set(char a_value) {
+  //  reset();
+  //  m_type = CHAR;
+  //  u.m_char = a_value;
+  //}
+  //void set(unsigned char a_value) {
+  //  reset();
+  //  m_type = UNSIGNED_CHAR;
+  //  u.m_unsigned_char = a_value;
+  //}
+  void set(short a_value) {
+    reset();
+    m_type = SHORT;
+    u.m_short = a_value;
+  }
+  void set(unsigned short a_value) {
+    reset();
+    m_type = UNSIGNED_SHORT;
+    u.m_unsigned_short  = a_value;
+  }
+  void set(int a_value) {
+    reset();
+    m_type = INT;
+    u.m_int = a_value;
+  }
+  void set(unsigned int a_value) {
+    reset();
+    m_type = UNSIGNED_INT;
+    u.m_unsigned_int  = a_value;
+  }
+  void set(int64 a_value) {
+    reset();
+    m_type = INT64;
+    u.m_int64 = a_value;
+  }
+  void set(uint64 a_value) {
+    reset();
+    m_type = UNSIGNED_INT64;
+    u.m_unsigned_int64 = a_value;
+  }
+  void set(float a_value) {
+    reset();
+    m_type = FLOAT;
+    u.m_float = a_value;
+  }
+  void set(double a_value) {
+    reset();
+    m_type = DOUBLE;
+    u.m_double = a_value;
+  }
+  void set(bool a_value) {
+    reset();
+    m_type = BOOL;
+    u.m_bool = a_value;
+  }
+
+  void set(const std::string& a_value) {
+    reset();
+    m_type = STRING;
+    u.m_string = new std::string(a_value);
+  }
+  void set(const char* a_value) {
+    // To avoid the bool, const std::string& and passing "text" problem.
+    reset();
+    m_type = STRING;
+    u.m_string = new std::string(a_value);
+  }
+
+  void set(void* a_value) {
+    reset();
+    m_type = VOID_STAR;
+    u.m_void_star = a_value;
+  }
+
+  void set(double* a_value) {
+    reset();
+    m_type = DOUBLE_STAR;
+    u.m_double_star = a_value;
+  }
+  void set(float* a_value) {
+    reset();
+    m_type = FLOAT_STAR;
+    u.m_float_star = a_value;
+  }
+  void set(int* a_value) {
+    reset();
+    m_type = INT_STAR;
+    u.m_int_star = a_value;
+  }
+
+  unsigned char get_unsigned_char() const {return u.m_unsigned_char;}
+  char get_char() const {return u.m_char;}
+  unsigned int get_unsigned_int() const {return u.m_unsigned_int;}
+  int get_int() const {return u.m_int;}
+
+  int64 get_int64() const {return u.m_int64;}
+  uint64 get_unsigned_int64() const {return u.m_unsigned_int64;}
+
+  unsigned short get_unsigned_short() const{return u.m_unsigned_short;}
+  short get_short() const {return u.m_short;}
+  float get_float() const {return u.m_float;}
+  double get_double() const {return u.m_double;}
+  void* get_void_star() const {return u.m_void_star;}
+  double* get_double_star() const {return u.m_double_star;}
+  float* get_float_star() const {return u.m_float_star;}
+  int* get_int_star() const {return u.m_int_star;}
+  bool get_bool() const {return u.m_bool;}
+
+  const std::string& get_string() const {return *u.m_string;}
+  std::string get_string() {return *u.m_string;}
+
+#define TOOLS_VALUE_SET(a_what,a_m_what,a_type) \
+  void set(const std::vector<unsigned int>& a_orders,\
+           const std::vector<a_what>& a_v){\
+    reset();\
+    m_type = a_type;\
+    u.a_m_what = new tools::array<a_what>(a_orders);\
+    u.a_m_what->fill(a_v);\
+  }
+
+//TOOLS_VALUE_SET(unsigned char,m_array_unsigned_char,ARRAY_UNSIGNED_CHAR)
+//TOOLS_VALUE_SET(char,m_array_char,ARRAY_CHAR)
+  TOOLS_VALUE_SET(unsigned short,m_array_unsigned_short,ARRAY_UNSIGNED_SHORT)
+  TOOLS_VALUE_SET(short,m_array_short,ARRAY_SHORT)
+  TOOLS_VALUE_SET(unsigned int,m_array_unsigned_int,ARRAY_UNSIGNED_INT)
+  TOOLS_VALUE_SET(int,m_array_int,ARRAY_INT)
+  TOOLS_VALUE_SET(uint64,m_array_unsigned_int64,ARRAY_UNSIGNED_INT64)
+  TOOLS_VALUE_SET(int64,m_array_int64,ARRAY_INT64)
+  TOOLS_VALUE_SET(float,m_array_float,ARRAY_FLOAT)
+  TOOLS_VALUE_SET(double,m_array_double,ARRAY_DOUBLE)
+  TOOLS_VALUE_SET(bool,m_array_bool,ARRAY_BOOL)
+  TOOLS_VALUE_SET(std::string,m_array_string,ARRAY_STRING)
+
+#undef TOOLS_VALUE_SET
+
+#define TOOLS_VALUE_SET2(a_what,a_m_what,a_type) \
+  void set(const std::vector<a_what>& a_v){\
+    reset();\
+    m_type = a_type;\
+    std::vector<unsigned int> is(1);\
+    is[0] = a_v.size();\
+    u.a_m_what = new tools::array<a_what>(is);\
+    u.a_m_what->fill(a_v);\
+  }
+
+//TOOLS_VALUE_SET2(unsigned char,m_array_unsigned_char,ARRAY_UNSIGNED_CHAR)
+//TOOLS_VALUE_SET2(char,m_array_char,ARRAY_CHAR)
+  TOOLS_VALUE_SET2(unsigned short,m_array_unsigned_short,ARRAY_UNSIGNED_SHORT)
+  TOOLS_VALUE_SET2(short,m_array_short,ARRAY_SHORT)
+  TOOLS_VALUE_SET2(unsigned int,m_array_unsigned_int,ARRAY_UNSIGNED_INT)
+  TOOLS_VALUE_SET2(int,m_array_int,ARRAY_INT)
+  TOOLS_VALUE_SET2(uint64,m_array_unsigned_int64,ARRAY_UNSIGNED_INT64)
+  TOOLS_VALUE_SET2(int64,m_array_int64,ARRAY_INT64)
+  TOOLS_VALUE_SET2(float,m_array_float,ARRAY_FLOAT)
+  TOOLS_VALUE_SET2(double,m_array_double,ARRAY_DOUBLE)
+  TOOLS_VALUE_SET2(bool,m_array_bool,ARRAY_BOOL)
+  TOOLS_VALUE_SET2(std::string,m_array_string,ARRAY_STRING)
+
+#undef TOOLS_VALUE_SET2
+
+#define TOOLS_VALUE_GET(a_what,a_get_what,a_m_what) \
+  const std::vector<a_what>& a_get_what(std::vector<unsigned int>& a_orders) const {\
+    a_orders = u.a_m_what->orders();\
+    return u.a_m_what->vector();\
+  }
+
+//TOOLS_VALUE_GET(unsigned char,get_array_unsigned_char,m_array_unsigned_char)
+//TOOLS_VALUE_GET(char,get_array_char,m_array_char)
+  TOOLS_VALUE_GET(unsigned short,get_array_unsigned_short,m_array_unsigned_short)
+  TOOLS_VALUE_GET(short,get_array_short,m_array_short)
+  TOOLS_VALUE_GET(unsigned int,get_array_unsigned_int,m_array_unsigned_int)
+  TOOLS_VALUE_GET(int,get_array_int,m_array_int)
+  TOOLS_VALUE_GET(uint64,get_array_unsigned_int64,m_array_unsigned_int64)
+  TOOLS_VALUE_GET(int64,get_array_int64,m_array_int64)
+  TOOLS_VALUE_GET(float,get_array_float,m_array_float)
+  TOOLS_VALUE_GET(double,get_array_double,m_array_double)
+  TOOLS_VALUE_GET(bool,get_array_bool,m_array_bool)
+  TOOLS_VALUE_GET(std::string,get_array_string,m_array_string)
+
+#undef TOOLS_VALUE_GET
+
+
+public:
+  bool s_type(std::string& a_s) const {return s_type(m_type,a_s);}
+
+  static bool s_type(tools::value::e_type a_type,std::string& a_s){
+    switch(a_type) {
+    case NONE:a_s = "NONE";return true;
+    case INT:a_s = "INT";return true;
+    case INT64:a_s = "INT64";return true;
+    case DOUBLE:a_s = "DOUBLE";return true;
+    case STRING:a_s = "STRING";return true;
+    case VOID_STAR:a_s = "VOID_STAR";return true;
+    case DOUBLE_STAR:a_s = "DOUBLE_STAR";return true;
+    case FLOAT_STAR:a_s = "FLOAT_STAR";return true;
+    case INT_STAR:a_s = "INT_STAR";return true;
+    case BOOL:a_s = "BOOL";return true;
+    case SHORT:a_s = "SHORT";return true;
+    case FLOAT:a_s = "FLOAT";return true;
+    //case CHAR:a_s = "CHAR";return true;
+    //case UNSIGNED_CHAR:a_s = "UNSIGNED_CHAR";return true;
+    case UNSIGNED_SHORT:a_s = "UNSIGNED_SHORT";return true;
+    case UNSIGNED_INT:a_s = "UNSIGNED_INT";return true;
+    case UNSIGNED_INT64:a_s = "UNSIGNED_INT64";return true;
+    //case ARRAY_UNSIGNED_CHAR:a_s = "ARRAY_UNSIGNED_CHAR";return true;
+    //case ARRAY_CHAR:a_s = "ARRAY_CHAR";return true;
+    case ARRAY_UNSIGNED_SHORT:a_s = "ARRAY_UNSIGNED_SHORT";return true;
+    case ARRAY_SHORT:a_s = "ARRAY_SHORT";return true;
+    case ARRAY_UNSIGNED_INT:a_s = "ARRAY_UNSIGNED_INT";return true;
+    case ARRAY_INT:a_s = "ARRAY_INT";return true;
+    case ARRAY_UNSIGNED_INT64:a_s = "ARRAY_UNSIGNED_INT64";return true;
+    case ARRAY_INT64:a_s = "ARRAY_INT64";return true;
+    case ARRAY_FLOAT:a_s = "ARRAY_FLOAT";return true;
+    case ARRAY_DOUBLE:a_s = "ARRAY_DOUBLE";return true;
+    case ARRAY_BOOL:a_s = "ARRAY_BOOL";return true;
+    case ARRAY_STRING:a_s = "ARRAY_STRING";return true;
+    default:a_s.clear();return false;
+    }
+
+  }
+  bool tos(std::string& a_s) const {return tos(*this,a_s);}
+
+  static bool tos(const value& a_v,std::string& a_s){
+    switch(a_v.m_type) {
+    case NONE:
+      tools::sprintf(a_s,5,"(nil)");
+      return true;
+    case INT:
+      tools::sprintf(a_s,16,"%d",a_v.u.m_int);
+      return true;
+    case DOUBLE:
+      tools::sprintf(a_s,16,"%g",a_v.u.m_double);
+      return true;
+    case VOID_STAR:
+      tools::sprintf(a_s,16,"0x%lx",(unsigned long)a_v.u.m_void_star);
+      return true;
+    case UNSIGNED_SHORT:
+      tools::sprintf(a_s,16,"%u",a_v.u.m_unsigned_short);
+      return true;
+    case UNSIGNED_INT:
+      tools::sprintf(a_s,16,"%u",a_v.u.m_unsigned_int);
+      return true;
+    case BOOL:
+      tools::sprintf(a_s,5,"%s",a_v.u.m_bool?"true":"false");
+      return true;
+    case SHORT:
+      tools::sprintf(a_s,16,"%d",a_v.u.m_short);
+      return true;
+    case INT64:
+      tools::sprintf(a_s,16,tools::int64_format(),a_v.u.m_int64);
+      return true;
+    case UNSIGNED_INT64:
+      tools::sprintf(a_s,16,tools::int64_format(),a_v.u.m_unsigned_int64);
+      return true;
+    case FLOAT:
+      tools::sprintf(a_s,16,"%g",a_v.u.m_float);
+      return true;
+    //case UNSIGNED_CHAR:
+    //  tools::sprintf(a_s,16,"%c",a_v.u.m_unsigned_char);
+    //  return true;
+    //case CHAR:
+    //  tools::sprintf(a_s,16,"%c",a_v.u.m_char);
+    //  return true;
+    case DOUBLE_STAR:
+      tools::sprintf(a_s,16,"0x%lx",(unsigned long)a_v.u.m_double_star);
+      return true;
+    case FLOAT_STAR:
+      tools::sprintf(a_s,16,"0x%lx",(unsigned long)a_v.u.m_float_star);
+      return true;
+    case INT_STAR:
+      tools::sprintf(a_s,16,"0x%lx",(unsigned long)a_v.u.m_int_star);
+      return true;
+    case STRING:
+      a_s = *a_v.u.m_string;
+      return true;
+
+    //case ARRAY_UNSIGNED_CHAR:
+    //  a_s = tools::tos<unsigned char>(a_v.u.m_array_unsigned_char->vector());
+    //  return true;
+    //case ARRAY_CHAR:
+    //  a_s = tools::tos<char>(a_v.u.m_array_char->vector());
+    //  return true;
+  
+    case ARRAY_UNSIGNED_SHORT:
+      a_s = tools::tos<unsigned short>(a_v.u.m_array_unsigned_short->vector());
+      return true;
+    case ARRAY_SHORT:
+      a_s = tools::tos<short>(a_v.u.m_array_short->vector());
+      return true;
+  
+    case ARRAY_UNSIGNED_INT:
+      a_s = tools::tos<unsigned int>(a_v.u.m_array_unsigned_int->vector());
+      return true;
+    case ARRAY_INT:
+      a_s = tools::tos<int>(a_v.u.m_array_int->vector());
+      return true;
+  
+    case ARRAY_UNSIGNED_INT64:
+      a_s = tools::tos<uint64>(a_v.u.m_array_unsigned_int64->vector());
+      return true;
+    case ARRAY_INT64:
+      a_s = tools::tos<int64>(a_v.u.m_array_int64->vector());
+      return true;
+  
+    case ARRAY_FLOAT:
+      a_s = tools::tos<float>(a_v.u.m_array_float->vector());
+      return true;
+    case ARRAY_DOUBLE:
+      a_s = tools::tos<double>(a_v.u.m_array_double->vector());
+      return true;
+    case ARRAY_BOOL:
+      a_s = tools::tos<bool>(a_v.u.m_array_bool->vector());
+      return true;
+    case ARRAY_STRING:
+      a_s = tools::tos<std::string>(a_v.u.m_array_string->vector());
+      return true;
+    default:
+      a_s.clear();  
+      return false;
+    }
+  }
+
+  bool to_double(double& a_d) const {
+    switch(m_type) {
+    case INT:
+      a_d = u.m_int;
+      return true;
+    case DOUBLE:
+      a_d = u.m_double;
+      return true;
+    case UNSIGNED_SHORT:
+      a_d = u.m_unsigned_short;
+      return true;
+    case UNSIGNED_INT:
+      a_d = u.m_unsigned_int;
+      return true;
+    case SHORT:
+      a_d = u.m_short;
+      return true;
+    case INT64:
+      a_d = (double)u.m_int64;
+      return true;
+    case UNSIGNED_INT64:
+      a_d = (double)u.m_unsigned_int64;
+      return true;
+    case FLOAT:
+      a_d = u.m_float;
+      return true;
+    //case UNSIGNED_CHAR:
+    //  a_d = u.m_unsigned_char;
+    //  return true;
+    //case CHAR:
+    //  a_d = u.m_char;
+    //  return true;
+    case BOOL:
+      a_d = u.m_bool?1:0;
+      return true;
+    case NONE:
+    case STRING:
+    case VOID_STAR:
+    case DOUBLE_STAR:
+    case FLOAT_STAR:
+    case INT_STAR:
+    //case ARRAY_UNSIGNED_CHAR:
+    //case ARRAY_CHAR:
+    case ARRAY_UNSIGNED_SHORT:
+    case ARRAY_SHORT:
+    case ARRAY_UNSIGNED_INT:
+    case ARRAY_INT:
+    case ARRAY_UNSIGNED_INT64:
+    case ARRAY_INT64:
+    case ARRAY_FLOAT:
+    case ARRAY_DOUBLE:
+    case ARRAY_BOOL:
+    case ARRAY_STRING:
+      break;
+    }
+    a_d = 0;
+    return false;
+  }
+
+  bool is_array() const {
+    switch(m_type) {
+    case INT:
+    case DOUBLE:
+    case UNSIGNED_SHORT:
+    case UNSIGNED_INT:
+    case SHORT:
+    case INT64:
+    case UNSIGNED_INT64:
+    case FLOAT:
+    //case UNSIGNED_CHAR:
+    //case CHAR:
+    case BOOL:
+    case NONE:
+    case STRING:
+    case VOID_STAR:
+    case DOUBLE_STAR:
+    case FLOAT_STAR:
+    case INT_STAR:
+      return false;
+
+    //case ARRAY_UNSIGNED_CHAR:
+    //case ARRAY_CHAR:
+    case ARRAY_UNSIGNED_SHORT:
+    case ARRAY_SHORT:
+    case ARRAY_UNSIGNED_INT:
+    case ARRAY_INT:
+    case ARRAY_UNSIGNED_INT64:
+    case ARRAY_INT64:
+    case ARRAY_FLOAT:
+    case ARRAY_DOUBLE:
+    case ARRAY_BOOL:
+    case ARRAY_STRING:
+      return true;
+    }
+    return false;
+  }
+
+  unsigned int array_size() const {
+    switch(m_type) {
+    case INT:
+    case DOUBLE:
+    case UNSIGNED_SHORT:
+    case UNSIGNED_INT:
+    case SHORT:
+    case INT64:
+    case UNSIGNED_INT64:
+    case FLOAT:
+    //case UNSIGNED_CHAR:
+    //case CHAR:
+    case BOOL:
+    case NONE:
+    case STRING:
+    case VOID_STAR:
+    case DOUBLE_STAR:
+    case FLOAT_STAR:
+    case INT_STAR:
+      return 0;
+
+    //case ARRAY_UNSIGNED_CHAR:
+    //case ARRAY_CHAR:
+    case ARRAY_UNSIGNED_SHORT:
+      return u.m_array_unsigned_short->size();
+    case ARRAY_SHORT:
+      return u.m_array_short->size();
+    case ARRAY_UNSIGNED_INT:
+      return u.m_array_unsigned_int->size();
+    case ARRAY_INT:
+      return u.m_array_int->size();
+    case ARRAY_UNSIGNED_INT64:
+      return u.m_array_unsigned_int64->size();
+    case ARRAY_INT64:
+      return u.m_array_int64->size();
+    case ARRAY_FLOAT:
+      return u.m_array_float->size();
+    case ARRAY_DOUBLE:
+      return u.m_array_double->size();
+    case ARRAY_BOOL:
+      return u.m_array_bool->size();
+    case ARRAY_STRING:
+      return u.m_array_string->size();
+    }
+    return 0;
+  }
+
+#define TOOLS_ARRAY_VEC(a_what,a_get_what,a_m_what) \
+  const std::vector<a_what>& a_get_what() const {return u.a_m_what->vector();}\
+  std::vector<a_what>& a_get_what() {return u.a_m_what->vector();}
+
+//TOOLS_ARRAY_VEC(unsigned char,array_unsigned_char,m_array_unsigned_char)
+//TOOLS_ARRAY_VEC(char,array_char,m_array_char)
+  TOOLS_ARRAY_VEC(unsigned short,array_unsigned_short,m_array_unsigned_short)
+  TOOLS_ARRAY_VEC(short,array_short,m_array_short)
+  TOOLS_ARRAY_VEC(unsigned int,array_unsigned_int,m_array_unsigned_int)
+  TOOLS_ARRAY_VEC(int,array_int,m_array_int)
+  TOOLS_ARRAY_VEC(uint64,array_unsigned_int64,m_array_unsigned_int64)
+  TOOLS_ARRAY_VEC(int64,array_int64,m_array_int64)
+  TOOLS_ARRAY_VEC(float,array_float,m_array_float)
+  TOOLS_ARRAY_VEC(double,array_double,m_array_double)
+  TOOLS_ARRAY_VEC(bool,array_bool,m_array_bool)
+  TOOLS_ARRAY_VEC(std::string,array_string,m_array_string)
+
+#undef TOOLS_ARRAY_VEC
+
+public: // for valop :
+
+  std::string stype() const {
+    std::string s;
+    if(!s_type(s)) return "unknown";
+    return s;
+  }
+
+  static std::string stype(e_type a_type) {
+    std::string s;
+    if(!s_type(a_type,s)) return "unknown";
+    return s;
+  }
+
+  static std::string error_div_zero() {return "divide by zero.";}
+
+  static bool assign(value&,const value&,std::string&);
+
+  // operations in Expression.cxx :
+  static bool minus(value&,std::string&);
+  static bool do_not(value&,std::string&);
+
+  static bool add(value&,const value&,std::string&);
+  static bool subtract(value&,const value&,std::string&);
+  static bool multiply(value&,const value&,std::string&);
+  static bool divide(value&,const value&,std::string&);
+    
+  static bool if_gt(value&,const value&,std::string&);
+  static bool if_eq(value&,const value&,std::string&);
+
+  static bool if_ne(value& aThis,const value& aV,
+                           std::string& aError) {
+    if(!if_eq(aThis,aV,aError)) return false;
+    aThis.u.m_bool = (aThis.u.m_bool?false:true);
+    return true;
+  }
+  static bool if_ge(value& aThis,const value& aV,
+                           std::string& aError){
+    value tmp(aThis);
+    if(!if_eq(aThis,aV,aError)) return false;
+    if(aThis.u.m_bool) return true;
+    // then not equal, check gt :
+    if(!if_gt(tmp,aV,aError)) return false;
+    aThis.u.m_bool = tmp.u.m_bool;
+    return true;
+  }
+
+  static bool if_lt(value& aThis,const value& aV,
+                    std::string& aError){
+    if(!if_ge(aThis,aV,aError)) return false;
+    aThis.u.m_bool = (aThis.u.m_bool?false:true);  
+    return true;
+  }
+
+  static bool if_le(value& aThis,const value& aV,
+                    std::string& aError){
+    if(!if_gt(aThis,aV,aError)) return false;
+    aThis.u.m_bool = (aThis.u.m_bool?false:true);  
+    return true;
+  }
+
+  static bool if_and(value&,const value&,std::string&);
+  static bool if_or(value&,const value&,std::string&);
+
+  static bool to_double(const value&,double&);
+  static bool cxx_type(const value&,std::string&);
+
+  //static bool i_set(value&,const Slash::Core::Ivalue&);
+  static std::string to_string(const value&);
+
+protected:
+  void reset() {
+    if(m_type==STRING) {
+      delete u.m_string;
+      u.m_string = 0;
+  
+    //} else if(m_type==ARRAY_UNSIGNED_CHAR) {
+    //  delete u.m_array_unsigned_char;u.m_array_unsigned_char = 0;
+
+    //} else if(m_type==ARRAY_CHAR) {
+    //  delete u.m_array_char;u.m_array_char = 0;
+
+    } else if(m_type==ARRAY_UNSIGNED_SHORT) {
+      delete u.m_array_unsigned_short;u.m_array_unsigned_short = 0;
+
+    } else if(m_type==ARRAY_SHORT) {
+      delete u.m_array_short;u.m_array_short = 0;
+
+    } else if(m_type==ARRAY_UNSIGNED_INT) {
+      delete u.m_array_unsigned_int;u.m_array_unsigned_int = 0;
+
+    } else if(m_type==ARRAY_INT) {
+      delete u.m_array_int;u.m_array_int = 0;
+
+    } else if(m_type==ARRAY_UNSIGNED_INT64) {
+      delete u.m_array_unsigned_int64;u.m_array_unsigned_int64 = 0;
+
+    } else if(m_type==ARRAY_INT64) {
+      delete u.m_array_int64;u.m_array_int64 = 0;
+
+    } else if(m_type==ARRAY_FLOAT) {
+      delete u.m_array_float;u.m_array_float = 0;
+
+    } else if(m_type==ARRAY_DOUBLE) {
+      delete u.m_array_double;u.m_array_double = 0;
+
+    } else if(m_type==ARRAY_BOOL) {
+      delete u.m_array_bool;u.m_array_bool = 0;
+
+    } else if(m_type==ARRAY_STRING) {
+      delete u.m_array_string;u.m_array_string = 0;
+
+    } else {
+      u.m_unsigned_int64 = 0;
+    }
+  }
+protected:
+  std::string* m_label;
+  //unsigned int m_dim;
+protected:
+  e_type m_type;
+  union {
+    bool m_bool;
+    char m_char;
+    int m_int;
+    short m_short;
+    int64 m_int64;
+    float m_float;
+    double m_double;
+    unsigned char m_unsigned_char;
+    unsigned short m_unsigned_short;
+    unsigned int m_unsigned_int;
+    uint64 m_unsigned_int64;
+    void* m_void_star;
+    double* m_double_star;
+    float* m_float_star;
+    int* m_int_star;
+    std::string* m_string;
+
+    tools::array<unsigned char>* m_array_unsigned_char;
+    tools::array<char>* m_array_char;
+    tools::array<unsigned short>* m_array_unsigned_short;
+    tools::array<short>* m_array_short;
+    tools::array<uint64>* m_array_unsigned_int64;
+    tools::array<int64>* m_array_int64;
+    tools::array<unsigned int>* m_array_unsigned_int;
+    tools::array<int>* m_array_int;
+    tools::array<float>* m_array_float;
+    tools::array<double>* m_array_double;
+    tools::array<bool>* m_array_bool;
+    tools::array<std::string>* m_array_string;
+  } u;
+};
+
+}
+
+#include "value.icc"
+
+#endif

@@ -11,10 +11,8 @@
 namespace tools {
 namespace wroot {
 
-inline bool to(directory& a_dir,
-               const histo::h1d& a_histo,const std::string& a_name) {
-  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
-                          a_name,a_histo.title(),"TH1D");
+inline bool to(directory& a_dir,const histo::h1d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,a_name,a_histo.title(),"TH1D");
   if(!TH1D_stream(*bo,a_histo,a_name)) {
     a_dir.file().out() << "tools::wroot::to :"
                        << " TH1D_stream failed."
@@ -26,8 +24,20 @@ inline bool to(directory& a_dir,
   return true;
 }
 
-inline bool to(directory& a_dir,
-               const histo::h2d& a_histo,const std::string& a_name) {
+inline bool to(directory& a_dir,const histo::h1df& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,a_name,a_histo.title(),"TH1F");
+  if(!TH1F_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to :"
+                       << " TH1F_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to(directory& a_dir,const histo::h2d& a_histo,const std::string& a_name) {
   bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
                           a_name,a_histo.title(),"TH2D");
   if(!TH2D_stream(*bo,a_histo,a_name)) {
@@ -41,13 +51,66 @@ inline bool to(directory& a_dir,
   return true;
 }
 
-inline bool to(directory& a_dir,
-               const histo::p1d& a_histo,const std::string& a_name) {
+inline bool to(directory& a_dir,const histo::h2df& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,a_name,a_histo.title(),"TH2F");
+  if(!TH2F_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to :"
+                       << " TH2F_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to(directory& a_dir,const histo::h3d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),"TH3D");
+  if(!TH3D_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to :"
+                       << " TH3D_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to(directory& a_dir,const histo::h3df& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,a_name,a_histo.title(),"TH3F");
+  if(!TH3F_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to :"
+                       << " TH3F_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to(directory& a_dir,const histo::p1d& a_histo,const std::string& a_name) {
   bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
                           a_name,a_histo.title(),"TProfile");
   if(!TProfile_stream(*bo,a_histo,a_name)) {
     a_dir.file().out() << "tools::wroot::to :"
                        << " TProfile_stream failed."
+                       << std::endl;
+    delete bo;
+    return false;
+  }
+  a_dir.append_object(bo); //a_dir takes ownership of bo.
+  return true;
+}
+
+inline bool to(directory& a_dir,const histo::p2d& a_histo,const std::string& a_name) {
+  bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
+                          a_name,a_histo.title(),"TProfile2D");
+  if(!TProfile2D_stream(*bo,a_histo,a_name)) {
+    a_dir.file().out() << "tools::wroot::to :"
+                       << " TProfile2D_stream failed."
                        << std::endl;
     delete bo;
     return false;
@@ -64,8 +127,7 @@ inline bool to(directory& a_dir,
 namespace tools {
 namespace wroot {
 
-inline bool to_osc(directory& a_dir,
-                   const histo::h1d& a_histo,const std::string& a_name) {
+inline bool to_osc(directory& a_dir,const histo::h1d& a_histo,const std::string& a_name) {
   bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
                           a_name,a_histo.title(),osc::s_h1d());
 
@@ -85,8 +147,7 @@ inline bool to_osc(directory& a_dir,
   return true;
 }
 
-inline bool to_osc(directory& a_dir,
-                   const histo::h2d& a_histo,const std::string& a_name) {
+inline bool to_osc(directory& a_dir,const histo::h2d& a_histo,const std::string& a_name) {
   bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
                           a_name,a_histo.title(),osc::s_h2d());
 
@@ -106,8 +167,7 @@ inline bool to_osc(directory& a_dir,
   return true;
 }
 
-inline bool to_osc(directory& a_dir,
-                   const histo::h3d& a_histo,const std::string& a_name) {
+inline bool to_osc(directory& a_dir,const histo::h3d& a_histo,const std::string& a_name) {
   bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
                           a_name,a_histo.title(),osc::s_h3d());
 
@@ -127,8 +187,7 @@ inline bool to_osc(directory& a_dir,
   return true;
 }
 
-inline bool to_osc(directory& a_dir,
-                   const histo::p1d& a_histo,const std::string& a_name) {
+inline bool to_osc(directory& a_dir,const histo::p1d& a_histo,const std::string& a_name) {
   bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
                           a_name,a_histo.title(),osc::s_p1d());
 
@@ -148,8 +207,7 @@ inline bool to_osc(directory& a_dir,
   return true;
 }
 
-inline bool to_osc(directory& a_dir,
-                   const histo::p2d& a_histo,const std::string& a_name) {
+inline bool to_osc(directory& a_dir,const histo::p2d& a_histo,const std::string& a_name) {
   bufobj* bo = new bufobj(a_dir.file().out(),a_dir.file().byte_swap(),256,
                           a_name,a_histo.title(),osc::s_p2d());
 

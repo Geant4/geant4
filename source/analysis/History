@@ -17,6 +17,18 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 23, 2014 I. Hrivnacova (analysis-V10-00-18)
+- Updated to g4tools 1.11.1 (by G. Barrand):
+  Fixed problem on Windows with including windows.h. 
+
+July 23, 2014 I. Hrivnacova (analysis-V09-06-32)
+- Fixed applying unit to min, max values in H1, H2 managers
+- Fixed createH2/setH2 commands implementation
+
+July 18, 2014 I. Hrivnacova (analysis-V10-00-17)
+- Updated to g4tools 1.11.0 (by G. Barrand):
+  See History_tools for complete list of modifications.
+
 July 02, 2014 I. Hrivnacova (analysis-V10-00-16)
 - Replaced use of std::cout with G4cout in Root managers 
   (to fix data race reported by A. Dotti)

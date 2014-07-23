@@ -100,6 +100,12 @@ if [ ${exa} = "rroot" -o ${exa} = "rxrayfluo" ] ; then
     cfiles="${cfiles} ../../src/csz_inflate.cc"
   fi
 fi
+if [ ${exa} = "raxml" ] ; then
+  # it needs expat.
+  if [ ${build_cl_exe} != "yes" ] ; then
+    libs="${libs} -lexpat"
+  fi
+fi
 
 # let the freedom to some application to not use G4_cppflags.
 cppflags="${G4_cppflags} ${cppflags}"

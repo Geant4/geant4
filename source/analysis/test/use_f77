@@ -7,6 +7,9 @@ f77_compiler=gfortran
 if [ "`uname | grep CYGWIN`" != "" ] ; then
   f77_compiler=F77.EXE
   f77flags="/nologo /compile_only"
+elif [ `uname` = Darwin ] ; then
+  f77_compiler=/opt/local/bin/gfortran-mp-4.8
+  f77libs="/opt/local/lib/gcc48/libgfortran.dylib"
 fi
 
 if [ "`uname -n | grep lal.in2p3.fr | grep lx`" != "" ] ; then
