@@ -9,8 +9,8 @@
 namespace tools {
 namespace histo {
 
-class p2d : public p2<double,unsigned int,unsigned int,double,double,double> {
-  typedef p2<double,unsigned int,unsigned int,double,double,double> parent;
+class p2d : public p2<double,unsigned int,double,double,double> {
+  typedef p2<double,unsigned int,double,double,double> parent;
 public:
   static const std::string& s_class() {
     static const std::string s_v("tools::histo::p2d");

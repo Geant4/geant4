@@ -42,12 +42,12 @@ done
 . ${tools_mgr}/use_cpp
 . ${tools_mgr}/use_f77
 
-#if [ `uname` = Darwin ] ; then
-#  if [ "`sysctl hw.optional.x86_64 | grep 1`" != "" ] ; then
-#    # gfortran is 32 bits !
-#    cppflags="${cppflags} -m32"
-#  fi
-#fi
+if [ `uname` = Darwin ] ; then
+  if [ "`sysctl hw.optional.x86_64 | grep 1`" != "" ] ; then
+    # gfortran is 32 bits !
+    cppflags="${cppflags} -m32"
+  fi
+fi
 
 if [ ${build_cl_exe} = "yes" ] ; then
   # rm /MD

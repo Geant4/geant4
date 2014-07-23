@@ -10,39 +10,41 @@ namespace tools {
 namespace histo { //have that for h1 ?
 
 //TC is for a coordinate.
-//TO is for an offset used to identify a bin.
 //TN is for a number of entries.
 //TW is for a weight.
 //TH is for a height. Should be the same as TW.
 
-template <class TC,class TO,class TN,class TW,class TH>
-class h1 : public b1<TC,TO,TN,TW,TH> {
-  typedef b1<TC,TO,TN,TW,TH> parent;
+template <class TC,class TN,class TW,class TH>
+class h1 : public b1<TC,TN,TW,TH> {
+  typedef b1<TC,TN,TW,TH> parent;
 public:
-  typedef histo_data<TC,TO,TN,TW> hd_t;
-  typedef typename parent::bn_t bn_t;
-  typedef histo::axis<TC,TO> axis_t;
+  typedef typename b1<TC,TN,TW,TH>::bn_t bn_t;
 protected:
-  virtual TH get_bin_height(TO a_offset) const { //TH should be the same as TW
+  virtual TH get_bin_height(int a_offset) const { //TH should be the same as TW
     return parent::m_bin_Sw[a_offset];
   }
 public:
   virtual TH bin_error(int aI) const { //TH should be the same as TW
-    TO offset;
-    if(!parent::_find_offset(aI,offset)) return 0;
+    if(parent::m_bin_number==0) return 0;
+    bn_t offset;
+    if(!parent::m_axes[0].in_range_to_absolute_index(aI,offset)) return 0;
     return ::sqrt(parent::m_bin_Sw2[offset]);
   }
 
 public:
-  bool multiply(TW a_factor){
-    if(!parent::base_multiply(a_factor)) return false;
+  bool multiply(TW aFactor){
+    if(!parent::base_multiply(aFactor)) return false;
     parent::update_fast_getters();
     return true;
   }
-  bool scale(TW a_factor) {return multiply(a_factor);}
+  bool scale(TW aFactor) {return multiply(aFactor);}
 
-  void copy_from_data(const hd_t& a_from) {parent::base_from_data(a_from);}
-  hd_t get_histo_data() const {return parent::base_get_data();}
+  void copy_from_data(const histo_data<TC,TN,TW>& a_from) {
+    parent::base_from_data(a_from);
+  }
+  histo_data<TC,TN,TW> get_histo_data() const {
+    return parent::base_get_data();
+  }
 
   bool reset() {
     parent::base_reset();
@@ -51,11 +53,12 @@ public:
   }
 
   bool fill(TC aX,TW aWeight = 1) {
-    if(parent::m_dimension!=1) return false;
+    //m_coords[0] = aX;
+    //return fill_bin(m_coords,aWeight);
+    if(parent::m_dimension<=0) return false;
 
-    bn_t ibin;
-    if(!parent::m_axes[0].coord_to_absolute_index(aX,ibin)) return false;
-    TO offset = ibin;
+    bn_t offset;
+    if(!parent::m_axes[0].coord_to_absolute_index(aX,offset)) return false;
 
     parent::m_bin_entries[offset]++;
     parent::m_bin_Sw[offset] += aWeight;
@@ -96,7 +99,7 @@ public:
 
     // actual bin number must be a multiple of a_factor.
     
-    const axis_t& _axis = parent::axis();
+    const histo::axis<TC>& _axis = parent::axis();
 
     bn_t n = _axis.bins();
     if(!n) return false;
@@ -106,7 +109,8 @@ public:
 
     h1* new_h = 0;
     if(_axis.is_fixed_binning()) {
-      new_h = new h1(parent::m_title,new_n,_axis.lower_edge(),_axis.upper_edge());
+      new_h = new h1(parent::m_title,
+                     new_n,_axis.lower_edge(),_axis.upper_edge());
     } else {
       const std::vector<TC>& _edges = _axis.edges();
       std::vector<TC> new_edges(new_n+1);
@@ -118,7 +122,7 @@ public:
     }
     if(!new_h) return false;
 
-    TO offset,new_offset,offac;
+    bn_t offset,new_offset,offac;
     for(bn_t ibin=0;ibin<new_n;ibin++) {
       new_offset = ibin+1;
       offset = a_factor*ibin+1;

@@ -31,7 +31,6 @@
 #include <ctime>
 #include <cstdlib>
 
-
 int main(int argc,char** argv) {
 
   tools::args args(argc,argv);

@@ -38,10 +38,10 @@ if [ "${use_cernlib}" = "yes" ] ; then
       echo " We don't have cernlib on Mac 64 bits machines."
       echo " We try to use ourex/hbook/hdummy.c."
 
-      #cernlib_cflags="-m32"
-
+      # gfortran is 32 bits !
+      cernlib_cflags="-m32"
       obj="hdummy.o"
-      eval ${cc_compiler} -c ${ccflags0} ${cernlib_cflags} -o ${obj} ./hdummy.c
+      eval ${cc_compiler} -c ${ccflags0} ${cernlib_cflags} -o ${obj} ${tools_mgr}/../../src/hdummy.c
 
       objs="${objs} ${obj}"
       f77_objs="${f77_objs} ${obj}"
@@ -55,8 +55,7 @@ if [ "${use_cernlib}" = "yes" ] ; then
         cernlib_home=/cern/pro
       fi
     fi
-    #f77_for_C_libs="${f77libs} -lg2c"
-    f77_for_C_libs="${f77libs}"
+    f77_for_C_libs="-lgfortran -lg2c"
 
   elif [ ${on_lxplus} = "yes" ] ; then
     cernlib_home=/afs/cern.ch/sw/lcg/external/cernlib/2006a/x86_64-slc5-gcc43-opt

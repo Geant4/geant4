@@ -28,6 +28,8 @@
 #include <tools/randf>
 #include <tools/cmp>
 
+#include <cstdlib>
+
 #ifdef WIN32
 extern "C" int __stdcall SETPAWC();
 extern "C" int __stdcall SETNTUC();
@@ -37,7 +39,6 @@ extern "C" int setntuc_();
 #endif
 
 #include <iostream>
-#include <cstdlib>
 
 int main(int,char**) {
 

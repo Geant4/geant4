@@ -11,8 +11,8 @@ namespace histo {
 
 // d in h1d is for double (and not dimension).
 
-class h1d : public h1<double,unsigned int,unsigned int,double,double> {
-  typedef h1<double,unsigned int,unsigned int,double,double> parent;
+class h1d : public h1<double,unsigned int,double,double> {
+  typedef h1<double,unsigned int,double,double> parent;
 public:
   static const std::string& s_class() {
     static const std::string s_v("tools::histo::h1d");
@@ -32,6 +32,14 @@ public:
     parent::operator=(a_from);
     return *this;
   }
+public:
+#ifdef __CINT__
+  bool fill(double aX,double aW = 1) {return parent::fill(aX,aW);}
+  double mean() const {return parent::mean();}
+  double rms() const {return parent::rms();}
+  unsigned int entries() const {return parent::entries();}
+  void hprint(std::ostream& a_out) {parent::hprint(a_out);}
+#endif
 
 private:static void check_instantiation() {h1d h("",10,0,1);h.gather_bins(5);}
 };
