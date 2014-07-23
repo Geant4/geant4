@@ -41,8 +41,8 @@ G4ThreadLocal G4NuclearLevelStore* G4NuclearLevelStore::theInstance = 0;
 G4NuclearLevelStore* G4NuclearLevelStore::GetInstance()
 {
   if(!theInstance) {
-    static G4ThreadLocal G4NuclearLevelStore *store_G4MT_TLS_ = 0 ; if (!store_G4MT_TLS_) store_G4MT_TLS_ = new  G4NuclearLevelStore  ;  G4NuclearLevelStore &store = *store_G4MT_TLS_;
-    theInstance = &store;
+    static G4ThreadLocalSingleton<G4NuclearLevelStore> inst;
+    theInstance = inst.Instance();
   }
   return theInstance;
 }

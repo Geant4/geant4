@@ -42,11 +42,15 @@
 #include "G4NuclearLevelManager.hh"
 #include "G4LevelManager.hh"
 #include "G4LevelReader.hh"
+#include "G4ThreadLocalSingleton.hh"
 #include "globals.hh"
 #include <map>
 
 class G4NuclearLevelStore
 {
+
+friend class G4ThreadLocalSingleton<G4NuclearLevelStore>;
+
 private:
 
   G4NuclearLevelStore();
