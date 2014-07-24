@@ -1259,6 +1259,25 @@ G4EmCalculator::FindMscProcess(const G4ParticleDefinition* part,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4VProcess* G4EmCalculator::FindProcess(const G4ParticleDefinition* part,
+					const G4String& processName)
+{
+  G4VProcess* proc = 0;
+  const G4ProcessManager* procman = part->GetProcessManager();
+  G4ProcessVector* pv = procman->GetProcessList();
+  G4int nproc = pv->size();
+  for(G4int i=0; i<nproc; ++i) {
+    if(processName == (*pv)[i]->GetProcessName()) {
+      proc = (*pv)[i];
+      break;
+    }
+  }
+  return proc;
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4bool G4EmCalculator::ActiveForParticle(const G4ParticleDefinition* part,
 					 G4VProcess* proc)
 {

@@ -273,69 +273,80 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
 
 G4VEnergyLossProcess::~G4VEnergyLossProcess()
 {
-  /*    
+  /*
   G4cout << "** G4VEnergyLossProcess::~G4VEnergyLossProcess() for " 
-	 << GetProcessName() << " and " << particle->GetParticleName()
-	 << " isMaster: " << isMaster << G4endl;
+	 << GetProcessName() << " isMaster: " << isMaster
+	 << "  basePart: " << baseParticle 
+	 << G4endl;
   */
   Clean();
 
+  // G4cout << " isIonisation " << isIonisation << "  " 
+  //   << theDEDXTable << "  " <<  theIonisationTable << G4endl;
+
   if (isMaster && !baseParticle) {
-    //G4cout << " isIonisation " << isIonisation << "  " 
-    //	   << theDEDXTable << "  " <<  theIonisationTable << G4endl;
-    
     if(theDEDXTable) {
 
       //G4cout << " theIonisationTable " << theIonisationTable << G4endl;
       if(theIonisationTable == theDEDXTable) { theIonisationTable = 0; }
-      if(isIonisation) {
-	//G4cout << " theDEDXTable(0)= " << (*theDEDXTable)[0] << G4endl;
-	delete theDEDXTable;
-	theDEDXTable = 0;
-	if(theDEDXSubTable) {
-	  if(theIonisationSubTable == theDEDXSubTable) 
-	    { theIonisationSubTable = 0; }
-	  delete theDEDXSubTable;
-	  theDEDXSubTable = 0;
-	}
+      //G4cout << " delete theDEDXTable " << theDEDXTable << G4endl;
+      theDEDXTable->clearAndDestroy();
+      delete theDEDXTable;
+      theDEDXTable = 0;
+      if(theDEDXSubTable) {
+	if(theIonisationSubTable == theDEDXSubTable) 
+	  { theIonisationSubTable = 0; }
+	theDEDXSubTable->clearAndDestroy();
+	delete theDEDXSubTable;
+	theDEDXSubTable = 0;
       }
     }
     //G4cout << " theIonisationTable " << theIonisationTable << G4endl;
     if(theIonisationTable) {
+      //G4cout << " delete theIonisationTable " << theIonisationTable << G4endl;
+      theIonisationTable->clearAndDestroy();
       delete theIonisationTable;
       theIonisationTable = 0;
     }
     if(theIonisationSubTable) {
+      theIonisationSubTable->clearAndDestroy();
       delete theIonisationSubTable;
       theIonisationSubTable = 0;
     }
     if(theDEDXunRestrictedTable && isIonisation) {
+      theDEDXunRestrictedTable->clearAndDestroy();
       delete theDEDXunRestrictedTable;
       theDEDXunRestrictedTable = 0;
     }
     if(theCSDARangeTable && isIonisation) {
+      theCSDARangeTable->clearAndDestroy();
       delete theCSDARangeTable;
       theCSDARangeTable = 0;
     }
     //G4cout << "delete RangeTable: " << theRangeTableForLoss << G4endl;
     if(theRangeTableForLoss && isIonisation) {
+      theRangeTableForLoss->clearAndDestroy();
       delete theRangeTableForLoss;
       theRangeTableForLoss = 0;
     }
     //G4cout << "delete InvRangeTable: " << theInverseRangeTable << G4endl;
-    if(theInverseRangeTable && isIonisation && !isIon) {
+    if(theInverseRangeTable && isIonisation /*&& !isIon*/) {
+      theInverseRangeTable->clearAndDestroy();
       delete theInverseRangeTable;
       theInverseRangeTable = 0;
     }
     //G4cout << "delete LambdaTable: " << theLambdaTable << G4endl;
     if(theLambdaTable) {
+      theLambdaTable->clearAndDestroy();
       delete theLambdaTable;
       theLambdaTable = 0;
     }
     if(theSubLambdaTable) {
+      theSubLambdaTable->clearAndDestroy();
       delete theSubLambdaTable;
       theSubLambdaTable = 0;
     }
+    G4PhysicsModelCatalog::Destroy();
   }
  
   delete modelManager;
@@ -517,11 +528,13 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     if(theDEDXTable && isIonisation) {
       if(theIonisationTable && theDEDXTable != theIonisationTable) {
 	theDEDXTable->clearAndDestroy();
+        delete theDEDXTable;
 	theDEDXTable = theIonisationTable;
       }   
       if(theDEDXSubTable && theIonisationSubTable && 
 	 theDEDXSubTable != theIonisationSubTable) {
 	theDEDXSubTable->clearAndDestroy();
+	delete theDEDXSubTable;
 	theDEDXSubTable = theIonisationSubTable;
       }   
     }
@@ -557,7 +570,16 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 	G4PhysicsTableHelper::PreparePhysicsTable(theSubLambdaTable);
     }
   }
-
+  /*
+  G4cout << "** G4VEnergyLossProcess::PreparePhysicsTable() for " 
+	 << GetProcessName() << " and " << particle->GetParticleName()
+	 << " isMaster: " << isMaster << " isIonisation: " 
+	 << isIonisation << G4endl;
+  G4cout << " theDEDX: " << theDEDXTable 
+	 << " theRange: " << theRangeTableForLoss
+         << " theInverse: " << theInverseRangeTable
+	 << " theLambda: " << theLambdaTable << G4endl;
+  */
   // forced biasing
   if(biasManager) { 
     biasManager->Initialise(part,GetProcessName(),verboseLevel); 
@@ -644,7 +666,6 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
   G4bool verb =  false;
   if(1 < verboseLevel || verb) {
   
-    //if(1 < verboseLevel) {
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() for "
            << GetProcessName()
            << " and particle " << part.GetParticleName()
@@ -728,7 +749,16 @@ void G4VEnergyLossProcess::BuildPhysicsTable(const G4ParticleDefinition& part)
       if(atomDeexcitation->IsPIXEActive()) { useDeexcitation = true; } 
     }
   }
-
+  /*
+  G4cout << "** G4VEnergyLossProcess::BuildPhysicsTable() for " 
+	 << GetProcessName() << " and " << particle->GetParticleName()
+	 << " isMaster: " << isMaster << " isIonisation: " 
+	 << isIonisation << G4endl;
+  G4cout << " theDEDX: " << theDEDXTable 
+	 << " theRange: " << theRangeTableForLoss
+         << " theInverse: " << theInverseRangeTable
+	 << " theLambda: " << theLambdaTable << G4endl;
+  */
   //if(1 < verboseLevel || verb) {
   if(1 < verboseLevel) {
     G4cout << "### G4VEnergyLossProcess::BuildPhysicsTable() done for "

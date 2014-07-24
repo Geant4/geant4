@@ -224,7 +224,7 @@ public:
 		       const G4String&);
 
   //===========================================================================
-  // Methods to access particles, materials, regions
+  // Methods to access particles, materials, regions, processes
   //===========================================================================
 
   const G4ParticleDefinition* FindParticle(const G4String&);
@@ -237,6 +237,9 @@ public:
 
   const G4MaterialCutsCouple* FindCouple(const G4Material*, 
 					 const G4Region* r = 0);
+
+  G4VProcess* FindProcess(const G4ParticleDefinition* part,
+			  const G4String& processName);
 
   void SetVerbose(G4int val);
 

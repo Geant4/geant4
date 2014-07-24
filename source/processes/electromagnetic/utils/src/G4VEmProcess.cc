@@ -162,13 +162,14 @@ G4VEmProcess::~G4VEmProcess()
   }
   if(lManager->IsMaster()) {
     if(theLambdaTable) {
-      //theLambdaTable->clearAndDestroy();
+      theLambdaTable->clearAndDestroy();
       delete theLambdaTable;
     }
     if(theLambdaTablePrim) {
-      //theLambdaTablePrim->clearAndDestroy();
+      theLambdaTablePrim->clearAndDestroy();
       delete theLambdaTablePrim;
     }
+    G4PhysicsModelCatalog::Destroy();
   }
   delete modelManager;
   delete biasManager;

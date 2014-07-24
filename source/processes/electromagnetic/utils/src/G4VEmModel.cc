@@ -50,6 +50,7 @@
 //
 
 #include "G4VEmModel.hh"
+#include "G4ElementData.hh"
 #include "G4LossTableManager.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
@@ -115,8 +116,13 @@ G4VEmModel::~G4VEmModel()
   delete anglModel;
   
   if(localTable && xSectionTable) { 
-    //xSectionTable->clearAndDestroy();
-    delete xSectionTable; 
+    xSectionTable->clearAndDestroy();
+    delete xSectionTable;
+    xSectionTable = 0; 
+  }
+  if(isMaster && fElementData) {
+    delete fElementData;
+    fElementData = 0;
   }
   
   fManager->DeRegister(this);

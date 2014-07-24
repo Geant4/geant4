@@ -85,7 +85,11 @@ G4EmElementSelector::G4EmElementSelector(G4VEmModel* mod,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4EmElementSelector::~G4EmElementSelector()
-{}
+{
+  if(nElmMinusOne > 0) {
+    for(G4int i=0; i<=nElmMinusOne; ++i) { delete xSections[i]; }
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

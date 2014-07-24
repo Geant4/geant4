@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 July 14: V.Ivant (emutils-V10-00-28)
+- G4EmCorrections, G4EmElementSelector, G4LossTableManager,
+  G4VEmModel, G4VEmProcess, G4VEnergyLossProcess - introduced 
+    explicit delete of all PhysicsTables and PhysicsVectors at the 
+    end of job
+- G4EmCalculator - added public FindProcess() method 
+ 
 27 June 14: V.Ivant (emutils-V10-00-27)
 - G4VAtomDeexcitation - if de-excitation options are defined for the 
     world G4Region, propagate these options to all G4Regions

@@ -125,6 +125,7 @@ G4LossTableManager::~G4LossTableManager()
 {
   //G4cout << "### G4LossTableManager::~G4LossTableManager()" << G4endl;
   for (G4int i=0; i<n_loss; ++i) {
+    //G4cout << "### eloss #" << i << G4endl;
     if( loss_vector[i] ) { 
       delete loss_vector[i]; 
     }
