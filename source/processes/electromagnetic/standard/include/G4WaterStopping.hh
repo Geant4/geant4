@@ -68,7 +68,8 @@ private:
 
   void Initialise(G4EmCorrections*);
 
-  void AddData(G4double* energy, G4double* stoppower, G4double factor);
+  void AddData(const G4double* energy, const G4double* stoppower, 
+	       G4double factor);
 
   // hide assignment operator
   G4WaterStopping & operator=(const  G4WaterStopping &right);

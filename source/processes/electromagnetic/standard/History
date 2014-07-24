@@ -18,6 +18,22 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+21 July 14: V.Ivanchenko (emstand-V10-00-38)
+- G4ASTARStopping, G4PSTARStopping, G4BraggModel, G4BraggIonModel
+    restore functionality to access NIST stopping data via
+    chemical formula and not only by material name
+
+21 July 14: V.Ivanchenko (emstand-V10-00-37)
+- G4ASTARStopping, G4ESTARStopping, G4PSTARStopping, 
+  G4WaterStopping - reduced memory churn by using static data,
+    delete physics vectors at destruction 
+- G4ASTARStopping, G4PSTARStopping changed interface to be 
+    always const in run time (shared between threads)
+- G4BraggModel - use static pointer to G4PSTARStopping class,
+    which is initialized once 
+- G4BraggIonModel - use static pointer to G4ASTARStopping class,
+    which is initialized once 
+
 17 July 14: V.Ivanchenko (emstand-V10-00-36)
 17 July 14: V.Ivanchenko (emstand-V10-00-35)
 16 July 14: V.Ivanchenko (emstand-V10-00-34)

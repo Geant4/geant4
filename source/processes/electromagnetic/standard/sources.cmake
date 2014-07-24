@@ -74,6 +74,7 @@ GEANT4_DEFINE_MODULE(NAME G4emstandard
         G4ModifiedTsai.hh
         G4MollerBhabhaModel.hh
         G4MottCoefficients.hh
+        G4NISTStoppingData.hh
         G4NuclearStopping.hh
         G4PAIModel.hh
         G4PAIModelData.hh

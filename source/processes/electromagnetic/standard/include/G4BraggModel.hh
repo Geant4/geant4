@@ -157,7 +157,7 @@ private:
   const G4ParticleDefinition* particle;
   G4ParticleDefinition*       theElectron;
   G4ParticleChangeForLoss*    fParticleChange;
-  G4PSTARStopping             pstar;
+  static G4PSTARStopping*     fPSTAR;
 
   const G4Material*           currentMaterial;
 
