@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 21, 2014  V.Ivanchenko (global-V10-00-28)
+- G4PhysicsVector - removed G4Allocator
+- G4PhysicsModelCatalog - added destruction of catalog 
+
 July 14, 2014  G.Cosmo (global-V10-00-27)
 - Added symbol to exclusion list in windefs.h.
 

@@ -36,7 +36,7 @@
 modelCatalog* G4PhysicsModelCatalog::catalog = 0;
 
 G4PhysicsModelCatalog::G4PhysicsModelCatalog()
-{ catalog = new modelCatalog; }
+{ if(!catalog) { catalog = new modelCatalog; } }
 
 G4PhysicsModelCatalog::~G4PhysicsModelCatalog()
 { delete catalog; catalog = 0; }

@@ -41,10 +41,10 @@
 //
 //---------------------------------------------------------------
 
-extern G4GLOB_DLL G4ThreadLocal G4Allocator<G4PhysicsVector> *fpPVAllocator;
+//extern G4GLOB_DLL G4ThreadLocal G4Allocator<G4PhysicsVector> *fpPVAllocator;
 
 //---------------------------------------------------------------
-
+/*
 inline
  void* G4PhysicsVector::operator new(size_t)
 { 
@@ -59,7 +59,7 @@ inline
 {
   fpPVAllocator->FreeSingle((G4PhysicsVector*)aVector);
 }
-
+*/
 //---------------------------------------------------------------
 
 inline

@@ -56,7 +56,7 @@
 #include <iomanip>
 #include "G4PhysicsVector.hh"
 
-G4ThreadLocal G4Allocator<G4PhysicsVector> *fpPVAllocator = 0;
+//G4ThreadLocal G4Allocator<G4PhysicsVector> *fpPVAllocator = 0;
 
 // --------------------------------------------------------------
 
@@ -67,7 +67,7 @@ G4PhysicsVector::G4PhysicsVector(G4bool)
    dBin(0.), baseBin(0.),
    verboseLevel(0)
 {
-  if (!fpPVAllocator) fpPVAllocator = new G4Allocator<G4PhysicsVector>;
+  // if (!fpPVAllocator) fpPVAllocator = new G4Allocator<G4PhysicsVector>;
 }
 
 // --------------------------------------------------------------
@@ -80,8 +80,6 @@ G4PhysicsVector::~G4PhysicsVector()
 
 G4PhysicsVector::G4PhysicsVector(const G4PhysicsVector& right)
 {
-  //  g4pow = G4Pow::GetInstance();
-
   dBin         = right.dBin;
   baseBin      = right.baseBin;
   verboseLevel = right.verboseLevel;
@@ -137,17 +135,19 @@ void G4PhysicsVector::CopyData(const G4PhysicsVector& vec)
   useSpline = vec.useSpline;
 
   size_t i;
-  dataVector.clear();
-  for(i=0; i<(vec.dataVector).size(); i++){ 
-    dataVector.push_back( (vec.dataVector)[i] );
+  dataVector.resize(numberOfNodes);
+  for(i=0; i<numberOfNodes; ++i) { 
+    dataVector[i] = (vec.dataVector)[i];
   }
-  binVector.clear();
-  for(i=0; i<(vec.binVector).size(); i++){ 
-    binVector.push_back( (vec.binVector)[i] );
+  binVector.resize(numberOfNodes);
+  for(i=0; i<numberOfNodes; ++i) { 
+    binVector[i] = (vec.binVector)[i];
   }
-  secDerivative.clear();
-  for(i=0; i<(vec.secDerivative).size(); i++){ 
-    secDerivative.push_back( (vec.secDerivative)[i] );
+  if(0 < (vec.secDerivative).size()) {
+    secDerivative.resize(numberOfNodes);
+    for(i=0; i<numberOfNodes; ++i){ 
+      secDerivative[i] = (vec.secDerivative)[i];
+    }
   }
 }
 
@@ -468,20 +468,16 @@ G4bool G4PhysicsVector::SplinePossible()
   // or not ordered than spline cannot be applied
 {
   G4bool result = true;
-  secDerivative.clear();
-  secDerivative.reserve(numberOfNodes);
-  for(size_t j=0; j<numberOfNodes; ++j)
+  for(size_t j=1; j<numberOfNodes; ++j)
   {
-    secDerivative.push_back(0.0);
-    if(j > 0)
-    {
-      if(binVector[j]-binVector[j-1] <= 0.)  { 
-	result = false; 
-	secDerivative.clear();
-	break;
-      }
+    if(binVector[j] <= binVector[j-1])  { 
+      result = false; 
+      useSpline = false;
+      secDerivative.clear();
+      break;
     }
   }  
+  secDerivative.resize(numberOfNodes,0.0);
   return result;
 }
    
