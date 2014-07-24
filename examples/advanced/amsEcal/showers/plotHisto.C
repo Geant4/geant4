@@ -3,7 +3,7 @@
   
   // Draw histos filled by Geant4 simulation 
   //   
-  TFile f = TFile("e6gev.run1.root");  
+  TFile f = TFile("run2.root");  
   TCanvas* c1 = new TCanvas("c1", "  ");
   
   TH1D* hist1 = (TH1D*)f.Get("1");
@@ -17,9 +17,7 @@
   
   TH1D* hist4 = (TH1D*)f.Get("4");
   hist4->Draw("HIST");
-    
-  TTree* nt = (TTree*)f.Get("101");
-  c1->cd();
-  c1->Update(); 
-  nt->StartViewer();     
+  
+  TH1D* hist5 = (TH1D*)f.Get("5");
+  hist5->Draw("HIST");    
 }  

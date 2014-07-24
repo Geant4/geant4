@@ -52,41 +52,29 @@ class RunAction : public G4UserRunAction
 public:
 
   RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
-  ~RunAction();
+ ~RunAction();
 
   void BeginOfRunAction(const G4Run*);
   void   EndOfRunAction(const G4Run*);
-
-  void fillPerEvent_1(G4int,G4double,G4double);
-  void fillPerEvent_2(G4int,G4double,G4double);  
-  void fillPerEvent_3(G4double,G4double,G4double);
-  void fillDetailedLeakage(G4int,G4double);
-  void fillNbRadLen(G4double);
-      
-  void SetWriteFile(G4bool val)    {writeFile = val;};
-  void CreateFilePixels();
-      
+  
+  void SumEvents_1(G4int,G4double,G4double);
+  void SumEvents_2(G4double,G4double,G4double);  
+  void DetailedLeakage(G4int,G4double);
+          
 private:
   
   DetectorConstruction*   detector;
   PrimaryGeneratorAction* primary;    
   HistoManager*           fHistoManager;
+
+  G4int nbOfModules, nbOfLayers, kLayerMax;     
+  std::vector<G4double>   EtotLayer, Etot2Layer;
+  std::vector<G4double>   EvisLayer, Evis2Layer;
   
-  std::vector<G4double> visibleEnergy, visibleEnergy2;
-  std::vector<G4double>   totalEnergy,   totalEnergy2;
-  
-  std::vector<G4double> layerEvis, layerEvis2;
-  std::vector<G4double> layerEtot, layerEtot2;
-  
-  G4int    nbEvents;  
-  G4double calorEvis, calorEvis2;
-  G4double calorEtot, calorEtot2;
+  G4double EtotCalor, Etot2Calor;
+  G4double EvisCalor, Evis2Calor;
   G4double Eleak,     Eleak2;
   G4double EdLeak[3];
-  G4double nbRadLen, nbRadLen2;
-      
-  G4bool   writeFile;
-    
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

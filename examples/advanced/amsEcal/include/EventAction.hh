@@ -36,10 +36,10 @@
 #include "globals.hh"
 
 #include <vector>
+#include <map>
 
 class RunAction;
 class PrimaryGeneratorAction;
-class EventActionMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -52,32 +52,24 @@ class EventAction : public G4UserEventAction
     void BeginOfEventAction(const G4Event*);
     void   EndOfEventAction(const G4Event*);
     
-    void SumVisibleEnergy(G4int pixel, G4double de)
-                               {visibleEnergy[pixel] += de;};
+    void SumDeStep(G4int, G4int, G4int, G4double);
+	
+	void WriteFibers(const G4Event*);
 			         	    
-    void SumTotalEnergy  (G4int pixel, G4double de)
-                                 {totalEnergy[pixel] += de;};
-				 
-    void SumNbRadLength  (G4double dn)  {nbRadLen += dn;};
-    
-    void SetWriteFile(G4bool);    
-    void WritePixels(const G4Event*);
-    				         
+
   private:  
     DetectorConstruction*   detector;
     RunAction*              runAct;
     PrimaryGeneratorAction* primary;
-          
-    std::vector<G4double>   visibleEnergy;
-    std::vector<G4double>     totalEnergy;
-    G4double                nbRadLen;
-    
-    G4bool                trigger;
-    G4double              Eseuil;   
-    
-    G4bool                writeFile;
-                    
-    EventActionMessenger* eventMessenger;
+	
+	G4int nbOfModules, nbOfLayers, kLayerMax;     
+    std::vector<G4double>   EtotLayer;
+    std::vector<G4double>   EvisLayer;
+	
+	G4double EtotCalor;
+	G4double EvisCalor;
+	
+	std::map<G4int, G4double> EvisFiber;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -32,7 +32,6 @@
 
 #include "RunAction.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "EventActionMessenger.hh"
 #include "HistoManager.hh"
 
 #include "G4SystemOfUnits.hh"
@@ -43,126 +42,97 @@
 EventAction::EventAction(DetectorConstruction* det, RunAction* run,
                          PrimaryGeneratorAction* prim)
 :detector(det), runAct(run), primary(prim)
-{ 
-  trigger = false;
-  Eseuil  = 10*keV;
+{
+  nbOfModules = detector->GetNbModules();	 	
+  nbOfLayers  = detector->GetNbLayers();
+  kLayerMax = nbOfModules*nbOfLayers + 1;
   
-  writeFile = false;
-  eventMessenger = new EventActionMessenger(this);
+  EtotCalor = EvisCalor = 0.;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
 {
-  delete eventMessenger;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::BeginOfEventAction(const G4Event*)
-{   
-  //initialize Energy per event
-  //
-  G4int nbOfPixels = detector->GetSizeVectorPixels();
-  G4int size = totalEnergy.size();
-  if (size < nbOfPixels) {
-    visibleEnergy.resize(nbOfPixels);
-      totalEnergy.resize(nbOfPixels);
+{
+  EtotLayer.resize(kLayerMax);
+  EvisLayer.resize(kLayerMax);			
+  for (G4int k=0; k<kLayerMax; k++) {
+    EtotLayer[k] = EvisLayer[k] = 0.0;
   }
-
-  for (G4int k=0; k<nbOfPixels; k++) {
-    visibleEnergy[k] = totalEnergy[k] = 0.0;
-  }   
-  nbRadLen = 0.;
+  EtotCalor = EvisCalor = 0.;
+  EvisFiber.clear();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::EndOfEventAction(const G4Event* evt)
+void EventAction::SumDeStep(G4int iModule, G4int iLayer, G4int iFiber, G4double deStep )
 {
-  G4int n1pxl   = detector->GetN1Pixels();
-  G4int n2pxl   = detector->GetN2Pixels();
-  G4int n1shift = detector->GetN1Shift();
-        
-  // code for trigger conditions :
-  // 1 and only 1 pixel fired per layer
-  //
-  if (trigger) {
-    for (G4int i1=0; i1<n1pxl; i1++) {
-      //count number of pixels fired
-      G4int count = 0;  
-      for (G4int i2=0; i2<n2pxl; i2++) {
-        G4int k = i1*n1shift + i2;
-        if (visibleEnergy[k] > Eseuil) count++;	      
-      }
-      //if event killed --> skip EndOfEventAction          
-      if (count > 1) return;
-    }  
+  if (iModule > 0) EtotCalor += deStep;
+  		
+  G4int kLayer = 0; G4int kFiber = 0;
+  if (iLayer > 0) {
+	kLayer = (iModule-1)*nbOfLayers + iLayer;
+	EtotLayer[kLayer] += deStep;
   }
   
-  //pass informations to RunAction and HistoManager
-  //
-  G4double calorEvis = 0.;
-  G4double calorEtot = 0.;  
-  for (G4int i1=0; i1<n1pxl; i1++) {
-    //sum energy per readout layer  
-    G4double layerEvis = 0.;
-    G4double layerEtot = 0.;  
-    for (G4int i2=0; i2<n2pxl; i2++) {
-      G4int k = i1*n1shift + i2;
-      runAct->fillPerEvent_1(k,visibleEnergy[k],totalEnergy[k]);      
-      layerEvis += visibleEnergy[k];
-      layerEtot += totalEnergy[k];
-      calorEvis += visibleEnergy[k];
-      calorEtot += totalEnergy[k];		      
-    }      
-    runAct->fillPerEvent_2(i1,layerEvis,layerEtot);
-    ////if (layerEvis > 0.) histoManager->FillNtuple(1, i1, layerEvis);
-    ////if (layerEtot > 0.) histoManager->FillNtuple(1, n1pxl+i1, layerEtot);
+  if (iFiber > 0) {
+	EvisLayer[kLayer] += deStep;
+	EvisCalor += deStep;
+    kFiber = 1000*kLayer + iFiber;
+	EvisFiber[kFiber] += deStep;	  	
+  }	  
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void EventAction::EndOfEventAction(const G4Event*)
+{
+  //pass informations to RunAction
+  //	
+  for (G4int k=0; k<kLayerMax; k++) {
+     runAct->SumEvents_1(k,EtotLayer[k],EvisLayer[k]);   
   }
-  
-  ////histoManager->AddRowNtuple(1);
   
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
-  if (calorEvis > 0.) analysisManager->FillH1(1,calorEvis);
-  if (calorEtot > 0.) analysisManager->FillH1(2,calorEtot);
+  analysisManager->FillH1(1,EtotCalor);
+  analysisManager->FillH1(2,EvisCalor);
   
   G4double Ebeam = primary->GetParticleGun()->GetParticleEnergy();
-  G4double Eleak = Ebeam - calorEtot;
-  runAct->fillPerEvent_3(calorEvis,calorEtot,Eleak);
+  G4double Eleak = Ebeam - EtotCalor;
+  runAct->SumEvents_2(EtotCalor,EvisCalor,Eleak);
   
-  //nb of radiation lenght
-  //
-  runAct->fillNbRadLen(nbRadLen);  
-  if (nbRadLen > 0.) analysisManager->FillH1(5,nbRadLen);
   
-  //write file of pixels
+  std::map<G4int,G4double>::iterator it;         
+  for (it = EvisFiber.begin(); it != EvisFiber.end(); it++) {
+     G4int kFiber = it->first;
+	 G4int iFiber = kFiber%1000;
+     G4double Evis = it->second;
+	 analysisManager->FillH1(5,iFiber+0.5,Evis);
+  }
+    
+  //write fired fibers on a file
   //
-  if (writeFile) WritePixels(evt);
+  /// WriteFibers(evt); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::SetWriteFile(G4bool val)    
-{
-  writeFile = val;
-  runAct->SetWriteFile(val);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
         
 #include <fstream>
 #include "G4RunManager.hh"
-#include "G4Run.hh"
 
-void EventAction::WritePixels(const G4Event* evt)
+void EventAction::WriteFibers(const G4Event* evt)
 {
-  // event is appended onto file created at BeginOfRun
+  // event is appended on a file
   //
-  ///G4String name = histoManager->GetFileName(); 
-  ///G4String fileName = name + ".pixels.ascii";
-  G4String fileName = "pixels.ascii";
+  G4String name = G4AnalysisManager::Instance()->GetFileName();
+  G4String fileName = name + ".fibers.ascii";
   
   std::ofstream File(fileName, std::ios::app);
   std::ios::fmtflags mode = File.flags();  
@@ -180,22 +150,19 @@ void EventAction::WritePixels(const G4Event* evt)
   G4ThreeVector direction = gun->GetParticleMomentumDirection();
   G4ThreeVector position  = gun->GetParticlePosition();
   File << ekin << " " << direction << " " << position << G4endl;  
-    
-  //count nb of fired pixels
-  //
-  G4int firedPixels = 0;
-  G4int nbOfPixels = detector->GetSizeVectorPixels();  
-  for (G4int k=0; k<nbOfPixels; k++) {
-    if (totalEnergy[k] > 0.0) firedPixels++;
-  }         
-  File << firedPixels << G4endl;
   
-  //write pixels
+  //write fibers
   //
-  for (G4int k=0; k<nbOfPixels; k++) {
-    if (totalEnergy[k] > 0.0) 
-    File << k << " " << visibleEnergy[k] << " " << totalEnergy[k] << " "; 
-  }            
+  File << EvisFiber.size() << G4endl;
+  //
+  std::map<G4int,G4double>::iterator it;         
+  for (it = EvisFiber.begin(); it != EvisFiber.end(); it++) {
+     G4int kFiber = it->first;
+     G4double Evis = it->second;
+     File << " " << std::setw(7) << kFiber << " "<< std::setw(10) << Evis
+            << G4endl;
+  }
+           
   File << G4endl;
     
   // restaure default formats
@@ -204,5 +171,4 @@ void EventAction::WritePixels(const G4Event* evt)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 

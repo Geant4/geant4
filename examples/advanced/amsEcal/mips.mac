@@ -6,21 +6,23 @@
 /control/verbose 2
 /run/verbose 2
 #
-/ams/phys/addPhysics  emstandard_local
-/ams/phys/setCuts 1 mm
+/ams/phys/addPhysics  local
+/run/setCut 1 mm
 #
 /run/initialize
 #
 /ams/gun/setDefault
 /gun/particle proton
-/gun/energy 100 GeV
+/gun/energy 10 GeV
 /ams/gun/beam 20 mm
 #
 /analysis/setFileName mips
 #
-/analysis/h1/set 1 100  0. 50. MeV		#evis in ecal
-/analysis/h1/set 3 20  0. 20. none
-/analysis/h1/set 4 20  0. 20. none
+/analysis/h1/set 1 100  8. 12. GeV		#etot in ecal
+/analysis/h1/set 2 100  0. 50. MeV		#evis in ecal
+/analysis/h1/set 3 100  0. 100. none
+/analysis/h1/set 4 100  0. 100. none
+/analysis/h1/set 5 250  0. 500. none
 #
 /run/printProgress 4000
 #

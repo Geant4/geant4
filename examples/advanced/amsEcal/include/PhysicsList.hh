@@ -50,17 +50,7 @@ class PhysicsList: public G4VModularPhysicsList
     
     void AddPhysicsList(const G4String& name);
     
-    void SetCuts();
-    void SetCutForGamma(G4double);
-    void SetCutForElectron(G4double);
-    void SetCutForPositron(G4double);
-
-  private:
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
-    G4double currentDefaultCut;
-    
+  private:    
     G4VPhysicsConstructor*  emPhysicsList;
     G4String emName;
     

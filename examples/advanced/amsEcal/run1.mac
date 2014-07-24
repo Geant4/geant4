@@ -6,8 +6,8 @@
 /control/verbose 2
 /run/verbose 2
 #
-/ams/phys/addPhysics  emstandard_local
-/ams/phys/setCuts 1 km
+/ams/phys/addPhysics  local
+/run/setCut 1 km
 #
 /run/initialize
 #

@@ -6,27 +6,24 @@
 /control/verbose 2
 /run/verbose 2
 #
-/ams/phys/addPhysics  emstandard_local
-/ams/phys/setCuts 1 mm
+/ams/phys/addPhysics  local
+/run/setCut 1 mm
 #
 /run/initialize
 #
 /ams/gun/setDefault
 /gun/particle e-
-/gun/energy 10 GeV
+/gun/energy 1 GeV
 /ams/gun/beam 4 mm
 #
-/analysis/setFileName showers/10gev.run1
+/analysis/setFileName run2
 #
-/analysis/h1/set 1 100  0. 500. MeV		#evis in ecal
-/analysis/h1/set 2 100  4.   7. GeV		#edep in ecal
-/analysis/h1/set 3 20  0. 20. none
-/analysis/h1/set 4 20  0. 20. none
-###/analysis/setNtuple 1
+/analysis/h1/set 1 100  0. 2. GeV		#etot in ecal
+/analysis/h1/set 2 100  0. 100. MeV		#evis in ecal
+/analysis/h1/set 3 100  0. 100. none
+/analysis/h1/set 4 100  0. 100. none
+/analysis/h1/set 5 250  0. 500. none
 #
 /run/printProgress 100
 #
-# set rndm seed  
-/random/resetEngineFrom random/seed1
-#
-/run/beamOn 1000
+/run/beamOn 500

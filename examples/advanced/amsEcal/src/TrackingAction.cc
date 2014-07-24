@@ -74,7 +74,7 @@ void TrackingAction::PostUserTrackingAction(const G4Track* track)
      Eleak += 2*electron_mass_c2;
      
   //sum leakage
-  runAct->fillDetailedLeakage(icase,Eleak);         
+  runAct->DetailedLeakage(icase,Eleak);         
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

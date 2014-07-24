@@ -69,25 +69,12 @@ DetectorConstruction::DetectorConstruction()
   fiberDiameter       = 1.13*mm; 	//1.08*mm
   nbOfFibers          = 490;		//490
   distanceInterFibers = 1.35*mm;	//1.35*mm
-  layerThickness      = 1.73*mm;	//1.68*mm
+  layerThickness      = 1.73*mm;	//1.68*mm  
   milledLayer         = 1.00*mm;    //1.40*mm ?
   nbOfLayers          = 10;		    //10
   nbOfModules         = 9;		    //9
      
   fiberLength         = (nbOfFibers+0.5)*distanceInterFibers;	//662.175*mm
-      
-  //pixels readout
-  //
-  G4int nSubModul     = 2;			//2   
-  n1pxl               = nbOfModules*nSubModul;	//18
-  n2pxl	              = 72;			//72
-  
-  n1shift = 1;
-  if (n1pxl > 1)   n1shift = 10;
-  if (n1pxl > 10)  n1shift = 100;
-  if (n1pxl > 100) n1shift = 1000;        
-  
-  sizeVectorPxl    = n1pxl*n1shift;		//1800
   
   // create commands for interactive definition of the calorimeter
   detectorMessenger = new DetectorMessenger(this);   
@@ -216,7 +203,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                       "fiber",	   			//name
                       lvol_layer,        		//mother
                       false,             		//no boulean operat
-                      k);               		//copy number
+                      k+1);               		//copy number
 
   }
 				   
@@ -249,7 +236,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                       "layer",	   			//name
                       lvol_module,        		//mother
                       false,             		//no boulean operat
-                      k);               		//copy number
+                      k+1);               		//copy number
 
   }				   				   
 
@@ -284,7 +271,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
                       "module", 	   		    //name
                       lvol_calorimeter,        	//mother
                       false,             		//no boulean operat
-                      k);               		//copy number
+                      k+1);               		//copy number
   }
 
   // world
@@ -328,12 +315,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
   lvol_fiber->SetVisAttributes (G4VisAttributes::Invisible);  
   lvol_layer->SetVisAttributes (G4VisAttributes::Invisible);
   lvol_world->SetVisAttributes (G4VisAttributes::Invisible);
-  
-  // Pixels readout
-  //
-  d1pxl = calorThickness/n1pxl;
-  d2pxl = fiberLength/n2pxl;
-  
+    
   //always return the physical World
   //
   return pvol_world;

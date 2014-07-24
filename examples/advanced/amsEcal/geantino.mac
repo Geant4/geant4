@@ -2,8 +2,6 @@
 #
 # Macro file for "amsEcal.cc"
 #
-# Geantinos allows to measure nb of radLengths of calorimeter
-#
 /control/verbose 2
 /run/verbose 2
 #
@@ -11,11 +9,7 @@
 #
 /ams/gun/setDefault
 /gun/particle geantino
-/ams/gun/beam 10 mm	# +- 0.5*beam
 #
-/analysis/setFileName nradl
-/analysis/h1/set 5 100  12. 22. none
+/tracking/verbose 1
 #
-/run/printProgress 4000
-#
-/run/beamOn 40000
+/run/beamOn 

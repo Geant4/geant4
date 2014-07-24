@@ -66,12 +66,13 @@ void HistoManager::Book()
   const G4String id[] = {"0", "1", "2", "3" , "4", "5"};
   const G4String title[] = 
                 { "dummy",                    //0 
-				  "total Evis in Ecal",       //1
-                  "total Edep in Ecal",       //2
-                  "Evis profile",             //3
-                  "Edep profile",             //4
-                  "nb of radiation lenght"    //5
+				  "total Etot in Ecal",       //1
+                  "total Evis in Ecal",       //2
+                  "Etot profile",             //3
+                  "Evis profile",             //4
+                  "Evis per fiber"            //5					  
                  };
+				 
   // Default values (to be reset via /analysis/h1/set command)               
   G4int nbins = 100;
   G4double vmin = 0.;

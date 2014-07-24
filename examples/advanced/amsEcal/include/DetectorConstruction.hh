@@ -75,13 +75,6 @@ public:
   G4int              GetNbFibers()          {return nbOfFibers;};  
   G4int              GetNbLayers()          {return nbOfLayers;};    
   G4int              GetNbModules()         {return nbOfModules;};
-
-  G4int              GetN1Pixels()          {return n1pxl;};
-  G4int              GetN2Pixels()          {return n2pxl;};
-  G4double           GetD1Pixel()           {return d1pxl;};
-  G4double           GetD2Pixel()           {return d2pxl;};
-  G4int              GetN1Shift()           {return n1shift;};
-  G4int              GetSizeVectorPixels()  {return sizeVectorPxl;};
         			 
 private:
 
@@ -122,13 +115,6 @@ private:
   G4VPhysicalVolume* pvol_world;
   
   G4Material*        defaultMat;
-
-  //pixels readout
-  //
-  G4int            n1pxl, n2pxl;
-  G4double         d1pxl, d2pxl;
-  G4int            n1shift;
-  G4int            sizeVectorPxl;
               
   G4UniformMagField* magField;
   DetectorMessenger* detectorMessenger;

@@ -5,7 +5,7 @@
 /control/verbose 2
 /run/verbose 2
 #
-/ams/phys/setCuts 1 km
+/run/setCut 1 km
 #
 /run/initialize
 #

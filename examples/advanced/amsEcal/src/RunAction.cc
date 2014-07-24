@@ -36,7 +36,6 @@
 #include "G4Run.hh"
 #include "G4RunManager.hh"
 #include "G4UnitsTable.hh"
-#include "G4Geantino.hh"
 
 #include "Randomize.hh"
 
@@ -44,10 +43,14 @@
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
 :detector(det), primary(prim), fHistoManager(0)
-{  
-  writeFile = false;
+{
+  // from geometry
+  nbOfModules = detector->GetNbModules();	 	
+  nbOfLayers  = detector->GetNbLayers();
+  kLayerMax = nbOfModules*nbOfLayers + 1;
+    	  
   // Book predefined histograms
-  fHistoManager = new HistoManager(); 
+  fHistoManager = new HistoManager();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -63,91 +66,51 @@ void RunAction::BeginOfRunAction(const G4Run*)
 {
   // save Rndm status
   //
-  G4RunManager::GetRunManager()->SetRandomNumberStore(true);
+  G4RunManager::GetRunManager()->SetRandomNumberStore(false);
   CLHEP::HepRandom::showEngineStatus();
-
-  //initialize cumulative quantities
-  //
-  G4int nbPixels = detector->GetSizeVectorPixels();
-  G4int size = totalEnergy.size();
-  if (size < nbPixels) {
-    visibleEnergy.resize(nbPixels);  
-      totalEnergy.resize(nbPixels);     
-
-    visibleEnergy2.resize(nbPixels);
-      totalEnergy2.resize(nbPixels);
-  }
-  
-  for (G4int k=0; k<nbPixels; k++) {
-   visibleEnergy[k] = visibleEnergy2[k] = totalEnergy[k]= totalEnergy2[k] = 0.0;
-  }
-        
-  G4int n1pxl = detector->GetN1Pixels();
-  size = layerEtot.size();
-  if (size < n1pxl) {  
-    layerEvis.resize(n1pxl);
-    layerEtot.resize(n1pxl);
-    layerEvis2.resize(n1pxl);
-    layerEtot2.resize(n1pxl);
-  }
-  
-  for (G4int k=0; k<n1pxl; k++) {
-   layerEvis[k] = layerEvis2[k] = layerEtot[k]= layerEtot2[k] = 0.0;
-  }
-     
-  nbEvents = 0;  
-  calorEvis = calorEvis2 = calorEtot = calorEtot2 = Eleak = Eleak2 = 0.;
-  EdLeak[0] = EdLeak[1] = EdLeak[2] = 0.;
-  nbRadLen  = nbRadLen2 = 0.;
                     
   //histograms
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   if ( analysisManager->IsActive() ) {
     analysisManager->OpenFile();
-  } 
+  }
   
-  //create ascii file for pixels
+  //initialize vectors
   //
-  if (writeFile) CreateFilePixels();
+  EtotLayer.resize(kLayerMax); Etot2Layer.resize(kLayerMax);
+  EvisLayer.resize(kLayerMax); Evis2Layer.resize(kLayerMax);			
+  for (G4int k=0; k<kLayerMax; k++) {
+    EtotLayer[k] = Etot2Layer[k] = EvisLayer[k] = Evis2Layer[k] = 0.0;
+  }
+  
+  EtotCalor = Etot2Calor = EvisCalor = Evis2Calor = Eleak = Eleak2 = 0.;
+  EdLeak[0] = EdLeak[1] = EdLeak[2] = 0.; 
 }
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::fillPerEvent_1(G4int pixel, G4double Evis, G4double Etot)
-{
-  //accumulate statistic per pixel
-  //
-  visibleEnergy[pixel] += Evis;  visibleEnergy2[pixel] += Evis*Evis;
-    totalEnergy[pixel] += Etot;    totalEnergy2[pixel] += Etot*Etot;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::fillPerEvent_2(G4int layer, G4double Evis, G4double Etot)
+void RunAction::SumEvents_1(G4int layer, G4double Etot, G4double Evis)
 {
   //accumulate statistic per layer
   //
-  layerEvis[layer] += Evis;  layerEvis2[layer] += Evis*Evis;
-  layerEtot[layer] += Etot;  layerEtot2[layer] += Etot*Etot;
+  EtotLayer[layer] += Etot;  Etot2Layer[layer] += Etot*Etot;
+  EvisLayer[layer] += Evis;  Evis2Layer[layer] += Evis*Evis;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::fillPerEvent_3(G4double calEvis, G4double calEtot,
-                               G4double eleak)
+void RunAction::SumEvents_2(G4double etot, G4double evis, G4double eleak)
 {
-  //accumulate statistic
+  //accumulate statistic for full calorimeter
   //
-  nbEvents++;
-  calorEvis += calEvis;  calorEvis2 += calEvis*calEvis;
-  calorEtot += calEtot;  calorEtot2 += calEtot*calEtot;  
+  EtotCalor += etot;  Etot2Calor += etot*etot; 	
+  EvisCalor += evis;  Evis2Calor += evis*evis; 
   Eleak += eleak;  Eleak2 += eleak*eleak;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::fillDetailedLeakage(G4int icase, G4double energy)
+void RunAction::DetailedLeakage(G4int icase, G4double energy)
 {
   //forward, backward, lateral leakage
   //
@@ -156,149 +119,120 @@ void RunAction::fillDetailedLeakage(G4int icase, G4double energy)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::fillNbRadLen(G4double dn)
+void RunAction::EndOfRunAction(const G4Run* aRun)
 {
-  //total number of radiation length
-  //
-  nbRadLen += dn; nbRadLen2 += dn*dn;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-
-void RunAction::EndOfRunAction(const G4Run*)
-{ 
   //calorimeter
   //
   detector->PrintCalorParameters();
-      
+   
   //run conditions
   //   
   G4ParticleDefinition* particle = primary->GetParticleGun()
                                           ->GetParticleDefinition();
   G4String partName = particle->GetParticleName();
   G4double energy = primary->GetParticleGun()->GetParticleEnergy();
-
-  G4int prec = G4cout.precision(3);
+  G4int nbEvents = aRun->GetNumberOfEvent();
   
+  G4int prec = G4cout.precision(3);
+
   G4cout << " The run was " << nbEvents << " " << partName << " of "
          << G4BestUnit(energy,"Energy") << " through the calorimeter" << G4endl;
-	 
+ 
   G4cout << "------------------------------------------------------------"
          << G4endl;
-
+   
   //if no events, return
   //
   if (nbEvents == 0) return;
   
   //compute and print statistic
   //
-  std::ios::fmtflags mode = G4cout.flags();
-  
-  //number of radiation length
+  std::ios::fmtflags mode = G4cout.flags(); 
+   
+  // energy in layers
   //
-  if (particle == G4Geantino::Geantino() ) {
-    G4double meanNbRadL  = nbRadLen/ nbEvents;
-    G4double meanNbRadL2 = nbRadLen2/nbEvents;
-    G4double varNbRadL = meanNbRadL2 - meanNbRadL*meanNbRadL;
-    G4double rmsNbRadL = 0.;
-    if (varNbRadL > 0.) rmsNbRadL = std::sqrt(varNbRadL);
-    G4double effRadL = (detector->GetCalorThickness())/meanNbRadL;
-    G4cout.precision(5);
-    G4cout
-      << "\n Calor : mean number of Rad Length = " 
-      << meanNbRadL << " +- "<< rmsNbRadL
-      << "  --> Effective Rad Length = "
-      << G4BestUnit( effRadL,"Length") << G4endl;    
-    
-    G4cout << "------------------------------------------------------------"
-           << G4endl;        
-  }
-  
   G4cout.precision(prec);	 
   G4cout << "\n             " 
-         << "visible Energy          (rms/mean)        "
-         << "total Energy           (rms/mean)" << G4endl;
+         << "total Energy          (rms/mean)      "
+         << "visible Energy        (rms/mean)" << G4endl;
   
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   
+  G4double meanEtot,meanEtot2,varianceEtot,rmsEtot,resEtot;  
   G4double meanEvis,meanEvis2,varianceEvis,rmsEvis,resEvis;
-  G4double meanEtot,meanEtot2,varianceEtot,rmsEtot,resEtot;
   
-  G4int n1pxl = detector->GetN1Pixels();
-    
-  for (G4int i1=0; i1<n1pxl; i1++) {
-    //visible energy
-    meanEvis  = layerEvis[i1] /nbEvents;
-    meanEvis2 = layerEvis2[i1]/nbEvents;    
-    varianceEvis = meanEvis2 - meanEvis*meanEvis;
-    resEvis = rmsEvis = 0.;
-    if (varianceEvis > 0.) rmsEvis = std::sqrt(varianceEvis);
-	if (meanEvis > 0.) resEvis = 100*rmsEvis/meanEvis;
-    analysisManager->FillH1(3, i1+0.5, meanEvis);
-         
+  for (G4int i1=1; i1<kLayerMax; i1++) {
     //total energy
-    meanEtot  = layerEtot[i1] /nbEvents;
-    meanEtot2 = layerEtot2[i1]/nbEvents;    
+    meanEtot  = EtotLayer[i1] /nbEvents;
+    meanEtot2 = Etot2Layer[i1]/nbEvents;    
     varianceEtot = meanEtot2 - meanEtot*meanEtot;
     resEtot = rmsEtot = 0.;
     if (varianceEtot > 0.) rmsEtot = std::sqrt(varianceEtot);
     if (meanEtot > 0.) resEtot = 100*rmsEtot/meanEtot;
-    analysisManager->FillH1(4, i1+0.5, meanEtot);    
+    analysisManager->FillH1(3, i1+0.5, meanEtot);
+	    	  
+    //visible energy
+    meanEvis  = EvisLayer[i1] /nbEvents;
+    meanEvis2 = Evis2Layer[i1]/nbEvents;    
+    varianceEvis = meanEvis2 - meanEvis*meanEvis;
+    resEvis = rmsEvis = 0.;
+    if (varianceEvis > 0.) rmsEvis = std::sqrt(varianceEvis);
+	if (meanEvis > 0.) resEvis = 100*rmsEvis/meanEvis;
+    analysisManager->FillH1(4, i1+0.5, meanEvis);
 
     //print
     //
     G4cout
       << "\n   layer " << i1 << ": "
       << std::setprecision(5)
-      << std::setw(6) << G4BestUnit(meanEvis,"Energy") << " +- "
-      << std::setprecision(4)
-      << std::setw(5) << G4BestUnit( rmsEvis,"Energy") << "  ("
-      << std::setprecision(2) 
-      << std::setw(3) << resEvis  << " %)" 
-      << "     "
-      << std::setprecision(5)
       << std::setw(6) << G4BestUnit(meanEtot,"Energy") << " +- "
       << std::setprecision(4)
       << std::setw(5) << G4BestUnit( rmsEtot,"Energy") << "  ("
       << std::setprecision(2) 
-      << std::setw(3) << resEtot  << " %)"; 
+      << std::setw(3) << resEtot  << " %)" 
+      << "     "
+      << std::setprecision(5)
+      << std::setw(6) << G4BestUnit(meanEvis,"Energy") << " +- "
+      << std::setprecision(4)
+      << std::setw(5) << G4BestUnit( rmsEvis,"Energy") << "  ("
+      << std::setprecision(2) 
+      << std::setw(3) << resEvis  << " %)"; 
   }
   G4cout << G4endl;
   
-  //calorimeter: visible energy
-  meanEvis  = calorEvis /nbEvents;
-  meanEvis2 = calorEvis2/nbEvents;
-  varianceEvis = meanEvis2 - meanEvis*meanEvis;
-  resEvis = rmsEvis = 0.;
-  if (varianceEvis > 0.) rmsEvis = std::sqrt(varianceEvis);
-  if (meanEvis > 0.) resEvis = 100*rmsEvis/meanEvis;
-  
   //calorimeter: total energy
-  meanEtot  = calorEtot /nbEvents;
-  meanEtot2 = calorEtot2/nbEvents;
+  meanEtot  = EtotCalor /nbEvents;
+  meanEtot2 = Etot2Calor/nbEvents;
   varianceEtot = meanEtot2 - meanEtot*meanEtot;
   resEtot = rmsEtot = 0.;
   if (varianceEtot > 0.) rmsEtot = std::sqrt(varianceEtot);
   if (meanEtot > 0.) resEtot = 100*rmsEtot/meanEtot;
-    
+
+  //calorimeter: visible energy
+  meanEvis  = EvisCalor /nbEvents;
+  meanEvis2 = Evis2Calor/nbEvents;
+  varianceEvis = meanEvis2 - meanEvis*meanEvis;
+  resEvis = rmsEvis = 0.;
+  if (varianceEvis > 0.) rmsEvis = std::sqrt(varianceEvis);
+  if (meanEvis > 0.) resEvis = 100*rmsEvis/meanEvis;
+      
   //print
   //
   G4cout
     << "\n   total calor : "
     << std::setprecision(5)
-    << std::setw(6) << G4BestUnit(meanEvis,"Energy") << " +- "
-    << std::setprecision(4)
-    << std::setw(5) << G4BestUnit( rmsEvis,"Energy") << "  ("
-    << std::setprecision(2) 
-    << std::setw(3) << resEvis  << " %)" 
-    << "     "
-    << std::setprecision(5)
     << std::setw(6) << G4BestUnit(meanEtot,"Energy") << " +- "
     << std::setprecision(4)
     << std::setw(5) << G4BestUnit( rmsEtot,"Energy") << "  ("
     << std::setprecision(2) 
-    << std::setw(3) << resEtot  << " %)";
+    << std::setw(3) << resEtot  << " %)" 
+    << "     "
+    << std::setprecision(5)
+    << std::setw(6) << G4BestUnit(meanEvis,"Energy") << " +- "
+    << std::setprecision(4)
+    << std::setw(5) << G4BestUnit( rmsEvis,"Energy") << "  ("
+    << std::setprecision(2) 
+    << std::setw(3) << resEvis  << " %)";
                      
   G4cout << "\n------------------------------------------------------------"
          << G4endl;
@@ -331,44 +265,22 @@ void RunAction::EndOfRunAction(const G4Run*)
     << std::setw(4) << bakward  << " %;   lateral ="
     << std::setw(4) << lateral  << " %)"             
     << G4endl;
-
+  
   G4cout.setf(mode,std::ios::floatfield);
   G4cout.precision(prec);
 
-  //save histograms   
+  //normalize histograms
+  G4double factor = 1./nbEvents;
+  analysisManager->ScaleH1(5,factor);
+       	 
+  //save histograms
   if ( analysisManager->IsActive() ) {    
     analysisManager->Write();
     analysisManager->CloseFile();
   }  
   
-
   // show Rndm status
   CLHEP::HepRandom::showEngineStatus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-        
-#include <fstream>
-
-void RunAction::CreateFilePixels()
-{
-  //create file and write run header
-  //
-  ////G4String name = histoManager->GetFileName(); 
-  ////G4String fileName = name + ".pixels.ascii";
-  G4String fileName = "pixels.ascii";
-    
-  std::ofstream File(fileName, std::ios::out);
-
-  G4int n1pxl   = detector->GetN1Pixels();
-  G4int n2pxl   = detector->GetN2Pixels();
-  G4int n1shift = detector->GetN1Shift();    
-  G4int noEvents    = G4RunManager::GetRunManager()->GetCurrentRun()
-                     ->GetNumberOfEventToBeProcessed();
-  File << noEvents << " " << n1pxl << " " <<  n2pxl << " " << n1shift
-         << G4endl;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-

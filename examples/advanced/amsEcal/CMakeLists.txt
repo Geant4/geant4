@@ -41,7 +41,7 @@ target_link_libraries(amsEcal ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
 set(amsEcal_SCRIPTS
-    geantino.mac mips.mac rndmSeed.mac run0.mac run1.mac run1.out run2.mac vis.mac
+    geantino.mac mips.mac rndmSeed.mac run0.mac run1.mac run2.mac vis.mac
   )
 
 foreach(_script ${amsEcal_SCRIPTS})
