@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 July 2014: V.Ivant (emhighenergy-V10-00-03)
+24 July 2014: V.Ivant (emhighenergy-V10-00-02)
+- G4Vee2hadrons - fixed build for gcc 4.1
+
 18 July 2014: V.Ivant (emhighenergy-V10-00-01)
 - G4eeTo3PiModel - fixed sampling algorithm 
 
