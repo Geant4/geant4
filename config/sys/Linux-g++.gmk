@@ -7,6 +7,7 @@ ifeq ($(G4SYSTEM),Linux-g++)
   CXXFLAGS  += -Wwrite-strings -Wpointer-arith -Woverloaded-virtual -pipe
   CXXFLAGS  += -Wshadow
   ifdef G4USE_STD11
+    CPPFLAGS  += -std=c++11
     CXXFLAGS  += -std=c++11
   endif
 #

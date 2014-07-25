@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25th July 2014   Gabriele Cosmo  (config-V10-00-07)
+- Added flag for C++11 also to CPPFLAGS in Linus-g++.gmk when G4USE_STD11
+  is set.
+
 1st July 2014   Gabriele Cosmo  (config-V10-00-06)
 - Added 'particle_hp' module to binmake.gmk.
 
