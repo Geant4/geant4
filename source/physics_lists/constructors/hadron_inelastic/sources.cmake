@@ -100,7 +100,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4HadronPhysicsQGSP_FTFP_BERT.hh
         G4HadronPhysicsINCLXX.hh
         G4HadronPhysicsShielding.hh
-        G4HadronPhysicsShieldingM.hh
         G4VHadronPhysics.hh
     SOURCES
         G4HadronInelasticQBBC.cc
@@ -117,7 +116,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4HadronPhysicsQGSP_FTFP_BERT.cc
         G4HadronPhysicsINCLXX.cc
         G4HadronPhysicsShielding.cc
-        G4HadronPhysicsShieldingM.cc
         G4VHadronPhysics.cc
     GRANULAR_DEPENDENCIES
         G4baryons
