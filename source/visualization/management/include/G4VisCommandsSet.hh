@@ -50,18 +50,6 @@ private:
   G4UIcommand* fpCommand;
 };
 
-class G4VisCommandSetTextColour: public G4VVisCommand {
-public:
-  G4VisCommandSetTextColour ();
-  virtual ~G4VisCommandSetTextColour ();
-  G4String GetCurrentValue (G4UIcommand* command);
-  void SetNewValue (G4UIcommand* command, G4String newValue);
-private:
-  G4VisCommandSetTextColour (const G4VisCommandSetTextColour&);
-  G4VisCommandSetTextColour& operator = (const G4VisCommandSetTextColour&);
-  G4UIcommand* fpCommand;
-};
-
 class G4VisCommandSetLineWidth: public G4VVisCommand {
 public:
   G4VisCommandSetLineWidth ();
@@ -74,6 +62,18 @@ private:
   G4UIcmdWithADouble* fpCommand;
 };
 
+class G4VisCommandSetTextColour: public G4VVisCommand {
+public:
+  G4VisCommandSetTextColour ();
+  virtual ~G4VisCommandSetTextColour ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSetTextColour (const G4VisCommandSetTextColour&);
+  G4VisCommandSetTextColour& operator = (const G4VisCommandSetTextColour&);
+  G4UIcommand* fpCommand;
+};
+
 class G4VisCommandSetTextLayout: public G4VVisCommand {
 public:
   G4VisCommandSetTextLayout ();
@@ -84,6 +84,18 @@ private:
   G4VisCommandSetTextLayout (const G4VisCommandSetTextLayout&);
   G4VisCommandSetTextLayout& operator = (const G4VisCommandSetTextLayout&);
   G4UIcmdWithAString* fpCommand;
+};
+
+class G4VisCommandSetTextSize: public G4VVisCommand {
+public:
+  G4VisCommandSetTextSize ();
+  virtual ~G4VisCommandSetTextSize ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSetTextSize (const G4VisCommandSetTextSize&);
+  G4VisCommandSetTextSize& operator = (const G4VisCommandSetTextSize&);
+  G4UIcmdWithADouble* fpCommand;
 };
 
 class G4VisCommandSetTouchable: public G4VVisCommand {

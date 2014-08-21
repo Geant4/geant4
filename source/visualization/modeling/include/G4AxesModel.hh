@@ -51,7 +51,8 @@ public: // With description
    G4double arrowWidth = 1.,
    const G4String& colourString = "auto",
    const G4String& description = "",
-   G4bool withAnnotation = true
+   G4bool withAnnotation = true,
+   G4double textSize = 10.
    );
    
   virtual ~G4AxesModel ();

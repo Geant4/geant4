@@ -216,7 +216,12 @@ void G4OpenGLImmediateQtViewer::keyPressEvent (QKeyEvent * event)
   G4keyPressEvent(event);
 }
 
-void G4OpenGLImmediateQtViewer::wheelEvent (QWheelEvent * event) 
+void G4OpenGLImmediateQtViewer::keyReleaseEvent (QKeyEvent * event)
+{
+  G4keyReleaseEvent(event);
+}
+
+void G4OpenGLImmediateQtViewer::wheelEvent (QWheelEvent * event)
 {
   G4wheelEvent(event);
 }
@@ -236,9 +241,9 @@ void G4OpenGLImmediateQtViewer::mouseDoubleClickEvent(QMouseEvent *)
   G4MouseDoubleClickEvent();
 }
 
-void G4OpenGLImmediateQtViewer::mouseReleaseEvent(QMouseEvent *)
+void G4OpenGLImmediateQtViewer::mouseReleaseEvent(QMouseEvent *event)
 {
-  G4MouseReleaseEvent();
+  G4MouseReleaseEvent(event);
 }
 
 void G4OpenGLImmediateQtViewer::mouseMoveEvent(QMouseEvent *event)

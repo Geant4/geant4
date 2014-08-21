@@ -1595,7 +1595,7 @@ void G4VisCommandViewerUpdate::SetNewValue (G4UIcommand*, G4String newValue) {
   if (!viewer) {
     if (verbosity >= G4VisManager::errors) {
       G4cout <<
-	"WARNING: command \"/vis/viewer/update\" could not be apply: no current viewer."
+	"WARNING: command \"/vis/viewer/update\" could not be applied: no current viewer."
 	     << G4endl;
     }
     return;

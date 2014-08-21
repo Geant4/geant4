@@ -45,6 +45,58 @@ class G4Text;
 #include "G4OpenGLWtDrawer.hh"
 #endif
 
+class G4OpenGLViewerPickMap {
+  public :
+  inline void setName(G4String n) {
+    fName = n;
+  }
+  
+  inline void setHitNumber(G4int n) {
+    fHitNumber = n;
+  }
+
+  inline void setSubHitNumber(G4int n) {
+    fSubHitNumber = n;
+  }
+  inline void setPickName(G4int n) {
+    fPickName= n;
+  }
+
+  inline void addAttributes(G4String att) {
+    fAttributes.push_back(att);
+  }
+
+
+  inline G4String getName() {
+    return fName;
+  }
+  inline G4int getHitNumber() {
+    return fHitNumber;
+  }
+
+  inline G4int getSubHitNumber() {
+    return fSubHitNumber;
+  }
+
+  inline G4int getPickName() {
+    return fPickName;
+  }
+
+  inline std::vector <G4String > getAttributes() {
+    return fAttributes;
+  }
+
+  G4String print();
+  
+  private :
+  G4String fName;
+  G4int fHitNumber;
+  G4int fSubHitNumber;
+  G4int fPickName;
+  std::vector <G4String > fAttributes;
+
+};
+
 // Base class for various OpenGLView classes.
 class G4OpenGLViewer: virtual public G4VViewer {
 
@@ -100,6 +152,7 @@ protected:
   void ResizeGLView();
   void ResizeWindow(unsigned int, unsigned int);
   virtual G4String Pick(GLdouble x, GLdouble y);
+  std::vector < G4OpenGLViewerPickMap* > GetPickDetails(GLdouble x, GLdouble y);
   virtual void CreateFontLists () {}
   void rotateScene (G4double dx, G4double dy);
   void rotateSceneToggle (G4double dx, G4double dy);
@@ -232,6 +285,9 @@ private :
 
   bool printVectoredEPS();
   // print vectored EPS files
+  
+  bool fIsGettingPickInfos;
+  // Block SetView() during picking
 };
 
 #endif

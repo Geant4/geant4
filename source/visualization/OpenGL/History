@@ -17,7 +17,57 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-7nd July 2014  Laurent Garnier  (opengl-V10-00-11 needs visexternal-V10-00-02)
+4rd August 2014  Laurent Garnier
+- G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer, G4OpenGLQtViewer : 
+  o Add a keyReleaseEvent() method
+  o Allow rotation/move during picking
+- G4OpenGLQtViewer :
+  o Change cursor shape according to mouse operation
+  o Activate picking info widget when picking
+
+3rd August 2014  Laurent Garnier (opengl-V10-00-16)
+- G4OpenGLQtViewer : Fix a compilation error(missing change in G4OpenGLQtViewer.hh)
+
+1st August 2014  Laurent Garnier (opengl-V10-00-15)
+- G4OpenGLXViewer : Fix a compilation error
+
+30th July 2014  Laurent Garnier (opengl-V10-00-14)
+- G4OpenGLImmediateQtViewer/G4OpenGLStoredQtViewer :
+  o Add the "event" parameter to "mouseReleaseEvent" method
+- G4OpenGLQtViewer : 
+  o Move picking event from "mouse click" to "mouse release" function
+  o Fix a compilation problem with std::to_string
+- G4OpenGLViewer : 
+  o Fix a compilation problem with std::to_string
+
+30th July 2014  Laurent Garnier (opengl-V10-00-13)
+- G4OpenGLViewer : Fix a compilation error
+
+30th July 2014  Laurent Garnier (opengl-V10-00-12)
+- G4OpenGL.hh:
+  o Remove all references to glu.h
+- G4OpenGLXViewer :
+  o Replace gluGetError to avoid calling of glu function
+
+30th July 2014  Laurent Garnier
+- G4OpenGLStoredSceneHandler : Change some G4cout in G4err in case of error messages
+
+30th July 2014  Laurent Garnier
+- G4OpenGLQtViewer :
+  o Add a "picking info" component at bottom left inside the scene browser
+  o Add a horizontal splitter inside the scene browser
+  o Beginning of changing color of a picking item (need to be improved)
+  o Some renaming on signalMapper parameters
+  o Fix a bug : Previously when changing cursor to "Pick" on context menu, nothing was done.
+  o Change picking effect, instead of displaying in G4Cout, will now display all picking infos 
+    separate by "hit number" in another widget inside the scene browser
+  o New method "changeColorAndTransparency" to be able to change color and transparency on a PO index
+- G4OpenGLViewer : 
+  o Add a "fIsGettingPickInfos" parameter to avoid problems
+  o Split "Pick" function in 2 parts : "Pick" and "GetPickDetails"
+  o Add a inner class "G4OpenGLViewerPickMap"
+
+7nd July 2014  Laurent Garnier  (opengl-V10-00-11)
 - G4OpenGLViewer : 
   o Fix a warning
 

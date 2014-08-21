@@ -123,6 +123,7 @@ namespace G4TrajectoryDrawerUtils {
 	      validity = InvalidTimes;
 	    }
 	  }
+          delete trajectoryPointAttValues;  // (Must be deleted after use.)
 	}
 
 	const std::vector<G4ThreeVector>* auxiliaries

@@ -69,6 +69,7 @@
 #include "G4SmoothTrajectory.hh"
 #include "G4SmoothTrajectoryPoint.hh"
 #include "G4AttDef.hh"
+#include "G4AttCheck.hh"
 #include "G4Polyline.hh"
 #include "G4UnitsTable.hh"
 #include "G4PhysicalConstants.hh"
@@ -355,7 +356,8 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
   if (arrowWidth > length/50.) arrowWidth = length/50.;
 
   G4VModel* model = new G4AxesModel
-    (x0, y0, z0, length, arrowWidth, colourString, newValue, showText);
+    (x0, y0, z0, length, arrowWidth, colourString, newValue,
+     showText, fCurrentTextSize);
 
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
   const G4String& currentSceneName = pScene -> GetName ();
@@ -1065,7 +1067,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
     return;
   }
 
-  G4VModel* model = new G4LogicalVolumeModel
+  G4LogicalVolumeModel* model = new G4LogicalVolumeModel
     (pLV, requestedDepthOfDescent, booleans, voxels, readout);
   const G4String& currentSceneName = pScene -> GetName ();
   G4bool successful = pScene -> AddRunDurationModel (model, warn);
@@ -1083,6 +1085,13 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
       G4VModel* axesModel = new G4AxesModel(0.,0.,0.,axisLength,axisWidth);
       pScene -> AddRunDurationModel (axesModel, warn);
     }
+
+//    if (verbosity >= G4VisManager::warnings) {
+//      const std::map<G4String,G4AttDef>* attDefs = model->GetAttDefs();
+//      std::vector<G4AttValue>* attValues = model->CreateCurrentAttValues();
+//      G4cout << G4AttCheck(attValues, attDefs);
+//      delete attValues;
+//    }
 
     if (verbosity >= G4VisManager::confirmations) {
       G4cout << "Logical volume \"" << pLV -> GetName ()
@@ -1901,7 +1910,8 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   // Let's go ahead a construct a scale and a scale model.  Since the
   // placing is done here, this G4Scale is *not* auto-placed...
   G4Scale scale(length, annotation, scaleDirection,
-		false, xmid, ymid, zmid);
+		false, xmid, ymid, zmid,
+                fCurrentTextSize);
   G4VisAttributes* pVisAttr = new G4VisAttributes(G4Colour(red, green, blue));
   // Created of the heap because it needs a long lifetime.  This is a
   // mess.  The model determines the life but the vis atttributes are

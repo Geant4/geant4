@@ -82,6 +82,7 @@
 #include "G4Transform3D.hh"
 #include "G4AttHolder.hh"
 #include "G4AttDef.hh"
+#include "G4VVisCommand.hh"
 #include "G4PhysicalConstants.hh"
 
 G4VSceneHandler::G4VSceneHandler (G4VGraphicsSystem& system, G4int id, const G4String& name):
@@ -430,7 +431,7 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
   AddPrimitive(tick21.transform(transformation));
   AddPrimitive(tick22.transform(transformation));
   G4Text text(scale.GetAnnotation(),textPosition.transform(transformation));
-  text.SetScreenSize(12.);
+  text.SetScreenSize(scale.GetAnnotationSize());
   AddPrimitive(text);
 }
 

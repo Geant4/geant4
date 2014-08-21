@@ -26,6 +26,28 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+11th Aug 2014  John Allison  (visman-V10-00-16)
+- Needs modeling-V10-00-07.
+- G4VisManager.hh: Tidied.
+- G4VisManager.cc: Registered /vis/set/textSize.
+- G4VVisCommand.hh/.cc:
+  o Added some Get methods.
+  o Added G4double fCurrentTextSize (default 10 pixels).
+- G4VSceneHandler.cc:
+  o Modified AddPrimitive(const G4Scale& scale) to take a
+    variable text size.
+- G4VisCommandsSet.hh/.cc:
+  o Added /vis/set/textSize.  (Default 10 pixels.)  It is used
+    by future /vis/scene/add/ commands where relevant.
+- G4VisCommandsScene/Add.cc:
+  o /vis/scene/add/axes: Use text size set by /vis/set/textSize.
+  o /vis/scene/add/scale: Use text size set by /vis/set/textSize.
+  o /vis/scene/add/logicalVolume: Added code for dumping att values
+    (but code commented out pending discussion of merits).
+- G4VisCommandsGeometrySet.cc:
+  o Small code readability improvement.
+- G4VisCommandsViewer.cc: Fixed spelling mistake in message.
+
 19th July 2014  Laurent Garnier (visman-V10-00-15)
 - G4VisCommandsViewerSet : Fix a compilation problem
 

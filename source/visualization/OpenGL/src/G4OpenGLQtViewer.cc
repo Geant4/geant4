@@ -86,6 +86,10 @@
 #include <qmainwindow.h>
 #include <qtablewidget.h>
 #include <qheaderview.h>
+#include <qscrollarea.h>
+#include <qsplitter.h>
+#include <qcheckbox.h>
+#include <qcursor.h>
 
 //////////////////////////////////////////////////////////////////////////////
 void G4OpenGLQtViewer::CreateMainWindow (
@@ -236,17 +240,22 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fTouchableVolumes("Touchables")
   ,fShortcutsDialog(NULL)
   ,fSceneTreeComponentTreeWidgetInfos(NULL)
+  ,fSceneTreeComponentPickingInfos(NULL)
+  ,fSceneTreeComponentPickingScrollArea(NULL)
   ,fTreeWidgetInfosIgnoredCommands(0)
   ,fSceneTreeDepthSlider(NULL)
   ,fSceneTreeDepth(1)
   ,fModelShortNameItem(NULL)
   ,fMaxPOindexInserted(-1)
   ,fUiQt(NULL)
-  ,signalMapperMouse(NULL)
-  ,signalMapperSurface(NULL)
+  ,fSignalMapperMouse(NULL)
+  ,fSignalMapperSurface(NULL)
+  ,fSignalMapperPicking(NULL)
   ,fTreeIconOpen(NULL)
   ,fTreeIconClosed(NULL)
   ,fLastExportSliderValue(80)
+  ,fLastHighlightColor(G4Color(0,0,0,0))
+  ,fLastHighlightName(0)
 {
 
   // launch Qt if not
@@ -262,8 +271,8 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   initMovieParameters();
 
   fLastEventTime = new QTime();
-  signalMapperMouse = new QSignalMapper(this);
-  signalMapperSurface = new QSignalMapper(this);
+  fSignalMapperMouse = new QSignalMapper(this);
+  fSignalMapperSurface = new QSignalMapper(this);
 
   // Set default path and format
   fFileSavePath = QDir::currentPath();
@@ -471,11 +480,11 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 
   QMenu *mMouseAction = fContextMenu->addMenu("&Mouse actions");
 
-  fMouseRotateAction = mMouseAction->addAction("Rotate", signalMapperMouse, SLOT(map()));
-  fMouseMoveAction = mMouseAction->addAction("Move", signalMapperMouse, SLOT(map()));
-  fMousePickAction = mMouseAction->addAction("Pick", signalMapperMouse, SLOT(map()));
-  fMouseZoomOutAction = mMouseAction->addAction("Zoom out", signalMapperMouse, SLOT(map()));
-  fMouseZoomInAction = mMouseAction->addAction("Zoom in", signalMapperMouse, SLOT(map()));
+  fMouseRotateAction = mMouseAction->addAction("Rotate", fSignalMapperMouse, SLOT(map()));
+  fMouseMoveAction = mMouseAction->addAction("Move", fSignalMapperMouse, SLOT(map()));
+  fMousePickAction = mMouseAction->addAction("Pick", fSignalMapperMouse, SLOT(map()));
+  fMouseZoomOutAction = mMouseAction->addAction("Zoom out", fSignalMapperMouse, SLOT(map()));
+  fMouseZoomInAction = mMouseAction->addAction("Zoom in", fSignalMapperMouse, SLOT(map()));
   QAction *shortcutsAction = mMouseAction->addAction("Show shortcuts");
 
   fMouseRotateAction->setCheckable(true);
@@ -485,12 +494,12 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   fMouseZoomInAction->setCheckable(true);
   shortcutsAction->setCheckable(false);
 
-  connect(signalMapperMouse, SIGNAL(mapped(int)),this, SLOT(toggleMouseAction(int)));
-  signalMapperMouse->setMapping(fMouseRotateAction,1);
-  signalMapperMouse->setMapping(fMouseMoveAction,2);
-  signalMapperMouse->setMapping(fMousePickAction,3);
-  signalMapperMouse->setMapping(fMouseZoomOutAction,4);
-  signalMapperMouse->setMapping(fMouseZoomInAction,5);
+  connect(fSignalMapperMouse, SIGNAL(mapped(int)),this, SLOT(toggleMouseAction(int)));
+  fSignalMapperMouse->setMapping(fMouseRotateAction,1);
+  fSignalMapperMouse->setMapping(fMouseMoveAction,2);
+  fSignalMapperMouse->setMapping(fMousePickAction,3);
+  fSignalMapperMouse->setMapping(fMouseZoomOutAction,4);
+  fSignalMapperMouse->setMapping(fMouseZoomInAction,5);
 
   QObject::connect(shortcutsAction, 
                     SIGNAL(triggered(bool)),
@@ -502,8 +511,8 @@ void G4OpenGLQtViewer::createPopupMenu()    {
 
   QMenu *mProjection = mStyle->addMenu("&Projection");
 
-  fProjectionOrtho = mProjection->addAction("Orthographic", signalMapperSurface, SLOT(map()));
-  fProjectionPerspective = mProjection->addAction("Persepective", signalMapperSurface, SLOT(map()));
+  fProjectionOrtho = mProjection->addAction("Orthographic", fSignalMapperSurface, SLOT(map()));
+  fProjectionPerspective = mProjection->addAction("Persepective", fSignalMapperSurface, SLOT(map()));
 
  // INIT mProjection
   if (fVP.GetFieldHalfAngle() == 0) {
@@ -515,24 +524,24 @@ void G4OpenGLQtViewer::createPopupMenu()    {
   // === Drawing Menu ===
   QMenu *mDrawing = mStyle->addMenu("&Drawing");
 
-  fDrawingWireframe = mDrawing->addAction("Wireframe", signalMapperSurface, SLOT(map()));
+  fDrawingWireframe = mDrawing->addAction("Wireframe", fSignalMapperSurface, SLOT(map()));
 
-  fDrawingLineRemoval = mDrawing->addAction("Hidden line removal", signalMapperSurface, SLOT(map()));
+  fDrawingLineRemoval = mDrawing->addAction("Hidden line removal", fSignalMapperSurface, SLOT(map()));
 
-  fDrawingSurfaceRemoval = mDrawing->addAction("Hidden Surface removal", signalMapperSurface, SLOT(map()));
+  fDrawingSurfaceRemoval = mDrawing->addAction("Hidden Surface removal", fSignalMapperSurface, SLOT(map()));
 
-  fDrawingLineSurfaceRemoval = mDrawing->addAction("Hidden line and surface removal", signalMapperSurface, SLOT(map()));
+  fDrawingLineSurfaceRemoval = mDrawing->addAction("Hidden line and surface removal", fSignalMapperSurface, SLOT(map()));
 
   fDrawingWireframe->setCheckable(true);
   fDrawingLineRemoval->setCheckable(true);
   fDrawingSurfaceRemoval->setCheckable(true);
   fDrawingLineSurfaceRemoval->setCheckable(true);
 
-  connect(signalMapperSurface, SIGNAL(mapped(int)),this, SLOT(toggleSurfaceAction(int)));
-  signalMapperSurface->setMapping(fDrawingWireframe,1);
-  signalMapperSurface->setMapping(fDrawingLineRemoval,2);
-  signalMapperSurface->setMapping(fDrawingSurfaceRemoval,3);
-  signalMapperSurface->setMapping(fDrawingLineSurfaceRemoval,4);
+  connect(fSignalMapperSurface, SIGNAL(mapped(int)),this, SLOT(toggleSurfaceAction(int)));
+  fSignalMapperSurface->setMapping(fDrawingWireframe,1);
+  fSignalMapperSurface->setMapping(fDrawingLineRemoval,2);
+  fSignalMapperSurface->setMapping(fDrawingSurfaceRemoval,3);
+  fSignalMapperSurface->setMapping(fDrawingLineSurfaceRemoval,4);
 
 
   // Background Color
@@ -780,7 +789,7 @@ void G4OpenGLQtViewer::toggleMouseAction(int aAction) {
   } else  if (aAction == 2) {
     fUiQt->SetIconMoveSelected();
   } else  if (aAction == 3) {
-    fUiQt->SetIconPickSelected();
+    togglePicking();
   } else  if (aAction == 4) {
     fUiQt->SetIconZoomOutSelected();
   } else  if (aAction == 5) {
@@ -916,6 +925,29 @@ void G4OpenGLQtViewer::toggleAux(bool check) {
   updateToolbarAndMouseContextMenu();
   updateQWidget();
 }
+
+
+void G4OpenGLQtViewer::togglePicking() {
+  // FIXME : Not the good way to do, we should handle the multiple cases of Icon/ContextMenu and CheckBox in a better way
+  if (fUiQt) {
+    if (!fVP.IsPicking()) {
+      fUiQt->SetIconPickSelected();
+    } else {
+      fUiQt->SetIconRotateSelected();
+    }
+  }
+  
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if(UI != NULL)  {
+    if (!fVP.IsPicking()) {
+      UI->ApplyCommand(std::string("/vis/viewer/set/picking true"));
+    } else {
+      UI->ApplyCommand(std::string("/vis/viewer/set/picking false"));
+    }
+  }
+
+}
+
 
 /**
    SLOT Activate by a click on the hidden marker menu
@@ -1168,11 +1200,7 @@ void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *evnt)
     fLastEventTime->start();
     if (fUiQt != NULL) {
 
-      if (fVP.IsPicking()){  // pick
-        G4cout << Pick(evnt->pos().x(),evnt->pos().y()) << G4endl;
-        //        fWindow->setToolTip(pickToolTip);
- 
-      } else if (fUiQt->IsIconZoomInSelected()) {  // zoomIn
+      if (fUiQt->IsIconZoomInSelected()) {  // zoomIn
         // Move click point to center of OGL
 
         float deltaX = ((float)getWinWidth()/2-evnt->pos().x());
@@ -1195,6 +1223,18 @@ void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *evnt)
         fVP.SetZoomFactor(0.75 * fVP.GetZoomFactor());
         updateQWidget();
 
+      } else if (fUiQt->IsIconRotateSelected() ) {
+ 
+        if (fShiftKeyPress) { // move
+          fWindow->setCursor(QCursor(Qt::SizeAllCursor));
+
+        } else {  // rotate
+          fWindow->setCursor(QCursor(Qt::ClosedHandCursor));
+        }
+      } else if (fUiQt->IsIconMoveSelected()) {
+        fWindow->setCursor(QCursor(Qt::SizeAllCursor));
+      } else if (fUiQt->IsIconPickSelected()) {
+        fWindow->setCursor(QCursor(Qt::PointingHandCursor));
       }
     }
   }
@@ -1202,14 +1242,89 @@ void G4OpenGLQtViewer::G4MousePressEvent(QMouseEvent *evnt)
 
 /**
  */
-void G4OpenGLQtViewer::G4MouseReleaseEvent()
+void G4OpenGLQtViewer::G4MouseReleaseEvent(QMouseEvent *evnt)
 {
   fSpinningDelay = fLastEventTime->elapsed();
   QPoint delta = (fLastPos3-fLastPos1);
-  if ((delta.x() == 0) && (delta.y() == 0)) {
-    return;
-  }
-  if (fSpinningDelay < fLaunchSpinDelay ) {
+  
+  // reset cursor state
+  fWindow->setCursor(QCursor(Qt::ArrowCursor));
+  
+  if (fVP.IsPicking()){  // pick
+    if ((delta.x() != 0) || (delta.y() != 0)) {
+      return;
+    }
+    std::vector < G4OpenGLViewerPickMap* >  pickMap = GetPickDetails(evnt->pos().x(),evnt->pos().y());
+    
+    // remove all previous widgets
+    QLayoutItem * wItem;
+    while ((wItem = fSceneTreeComponentPickingInfos->layout()->takeAt(0)) != 0) {
+      delete wItem->widget();
+      delete wItem;
+    }
+    
+    // Create a new signalMapper
+    delete fSignalMapperPicking;
+    fSignalMapperPicking = new QSignalMapper(this);
+    
+    // parse all pick results
+    for (unsigned int a=0; a< pickMap.size(); a++) {
+      // Add a box inside the pick viewer box
+      std::ostringstream label;
+      label << "Hit number:" << a << ", PickName: " << pickMap[a]->getPickName();
+      
+      QPushButton* pickCoutButton = new QPushButton(label.str().c_str());
+      pickCoutButton->setStyleSheet ("text-align: left; padding: 1px; border: 0px;");
+      pickCoutButton->setIcon(*fTreeIconClosed);
+      fSceneTreeComponentPickingInfos->layout()->addWidget(pickCoutButton);
+      
+      QStringList newStr;
+      
+      // Add to stringList
+      newStr = QStringList(QString(pickMap[a]->print().data()).trimmed());
+      
+      QTextEdit* ed = new QTextEdit();
+      ed->setFontFamily("Courier");
+      ed->setFontPointSize(12);
+      ed->setReadOnly(true);
+      fSceneTreeComponentPickingInfos->layout()->addWidget(ed);
+      ed->setVisible((false));
+      ed->append(newStr.join(""));
+      
+      connect(pickCoutButton, SIGNAL(clicked()), fSignalMapperPicking, SLOT(map()));
+      fSignalMapperPicking->setMapping(pickCoutButton,fSceneTreeComponentPickingInfos->layout()->count()-1);
+    }
+    
+    connect(fSignalMapperPicking, SIGNAL(mapped(int)),this, SLOT(toggleSceneTreeComponentPickingCout(int)));
+    
+    // add a label to push everything up!
+    QLabel * pushUp = new QLabel("");
+    QSizePolicy vPolicy = QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
+    vPolicy.setVerticalStretch(10);
+    pushUp->setSizePolicy(vPolicy);
+    fSceneTreeComponentPickingInfos->layout()->addWidget(pushUp);
+    
+    // highlight the first one :
+    
+    // first un-highlight the last selected
+    changeColorAndTransparency(fLastHighlightName,fLastHighlightColor);
+    
+    if (pickMap.size() > 0 ) {
+      // get the new one
+      fLastHighlightName = pickMap[0]->getPickName();
+      fLastHighlightColor = getColorForPoIndex(fLastHighlightName);
+      // set the new one
+      changeColorAndTransparency(fLastHighlightName,G4Color(1,1,1,1));
+      updateQWidget();
+    }
+    // set picking cout visible
+    fSceneTreeComponentPickingScrollArea->setVisible(true);
+    
+  } else if (fSpinningDelay < fLaunchSpinDelay ) {
+    if ((delta.x() == 0) && (delta.y() == 0)) {
+      return;
+    }
+
     fAutoMove = true;
     QTime lastMoveTime;
     lastMoveTime.start();
@@ -1320,7 +1435,7 @@ void G4OpenGLQtViewer::G4MouseMoveEvent(QMouseEvent *evnt)
   } else {
     rotate = true;
   }
-  if (rotate) {  // rotate
+  if (!move) {  // rotate, pick, zoom...
     if (mButtons & Qt::LeftButton) {
       if (fNoKeyPress) {
         rotateQtScene(((float)deltaX),((float)deltaY));
@@ -1512,6 +1627,8 @@ void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * evnt)
 
   // Shift Modifier
   if (fShiftKeyPress) {
+    fWindow->setCursor(QCursor(Qt::SizeAllCursor));
+
     if (evnt->key() == Qt::Key_Down) { // rotate phi
       rotateQtScene(0,-fRot_sens);
     }
@@ -1532,6 +1649,8 @@ void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * evnt)
     // Alt Modifier
   }
   if ((fAltKeyPress)) {
+    fWindow->setCursor(QCursor(Qt::ClosedHandCursor));
+
     if (evnt->key() == Qt::Key_Down) { // rotate phi
       rotateQtSceneToggle(0,-fRot_sens);
     }
@@ -1570,7 +1689,13 @@ void G4OpenGLQtViewer::G4keyPressEvent (QKeyEvent * evnt)
   
   fHoldKeyEvent = false;
 }
-  
+
+
+void G4OpenGLQtViewer::G4keyReleaseEvent (QKeyEvent *)
+{
+  fWindow->setCursor(QCursor(Qt::ArrowCursor));
+}
+
 
 void  G4OpenGLQtViewer::updateKeyModifierState(const Qt::KeyboardModifiers& modifier) {
   // Check Qt Versions for META Keys
@@ -2358,18 +2483,23 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
 
 
 void G4OpenGLQtViewer::initSceneTreeComponent(){
+  fSceneTreeWidget = new QSplitter(Qt::Vertical);
+  
+  // Top widget
 
-  fSceneTreeWidget = new QWidget();
-  QVBoxLayout* layoutSceneTreeComponentsTBWidget = new QVBoxLayout();
-  fSceneTreeWidget->setLayout (layoutSceneTreeComponentsTBWidget);
+  QWidget* sceneTreeTopWidget = new QWidget();
+  QVBoxLayout* layoutSceneTreeTopWidgetLayout = new QVBoxLayout();
+  sceneTreeTopWidget->setLayout (layoutSceneTreeTopWidgetLayout);
 
   if (fUISceneTreeComponentsTBWidget != NULL) {
     fUISceneTreeComponentsTBWidget->addTab(fSceneTreeWidget,QString(GetName().data()));
   }
 
+  QSizePolicy vPolicy = QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
+  vPolicy.setVerticalStretch(1);
 
   // reduce margins
-  layoutSceneTreeComponentsTBWidget->setContentsMargins(5,5,5,5);
+  layoutSceneTreeTopWidgetLayout->setContentsMargins(5,5,5,5);
 
 
   fSceneTreeComponentTreeWidget = new QTreeWidget();
@@ -2382,7 +2512,8 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   //   data(1) : copy number
   //   data(2) : g4color
 
-  layoutSceneTreeComponentsTBWidget->addWidget(fSceneTreeComponentTreeWidget);
+  fSceneTreeComponentTreeWidget->setSizePolicy(vPolicy);
+  layoutSceneTreeTopWidgetLayout->addWidget(fSceneTreeComponentTreeWidget);
 
   connect(fSceneTreeComponentTreeWidget,SIGNAL(itemChanged(QTreeWidgetItem*, int)),SLOT(sceneTreeComponentItemChanged(QTreeWidgetItem*, int)));
   connect(fSceneTreeComponentTreeWidget,SIGNAL(itemSelectionChanged ()),SLOT(sceneTreeComponentSelected()));
@@ -2409,7 +2540,7 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   policy.setHorizontalStretch(1);
   select->setSizePolicy(policy);
   
-  layoutSceneTreeComponentsTBWidget->addWidget(helpWidget);
+  layoutSceneTreeTopWidgetLayout->addWidget(helpWidget);
   
 
   
@@ -2440,34 +2571,97 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   groupBoxLayout->addWidget(one);
 
   groupBox->setLayout(groupBoxLayout);
-  layoutSceneTreeComponentsTBWidget->addWidget(groupBox);
+
+  layoutSceneTreeTopWidgetLayout->addWidget(groupBox);
 
   connect( fSceneTreeDepthSlider, SIGNAL( valueChanged(int) ), this, SLOT( changeDepthInSceneTree(int) ) );
+
+  
+
+  // bottom widget
+  
+  QWidget* sceneTreeBottomWidget = new QWidget();
+  QVBoxLayout* layoutSceneTreeBottomWidgetLayout = new QVBoxLayout();
+  sceneTreeBottomWidget->setLayout (layoutSceneTreeBottomWidgetLayout);
 
   // add properties
   
   fViewerPropertiesButton = new QPushButton("Viewer properties");
-  fViewerPropertiesButton->setStyleSheet ("text-align: left; padding: 5px ");
+  fViewerPropertiesButton->setStyleSheet ("text-align: left; padding: 5px; border:0px; ");
   fViewerPropertiesButton->setIcon(*fTreeIconClosed);
   
-  layoutSceneTreeComponentsTBWidget->addWidget(fViewerPropertiesButton);
+  layoutSceneTreeBottomWidgetLayout->addWidget(fViewerPropertiesButton);
   connect(fViewerPropertiesButton,SIGNAL(clicked()),this, SLOT(toggleSceneTreeComponentTreeWidgetInfos()));
   
-  // add infos
+  // add properties content
   fSceneTreeComponentTreeWidgetInfos = new QTableWidget();
   fSceneTreeComponentTreeWidgetInfos->setVisible(false);
   fSceneTreeComponentTreeWidgetInfos->setStyleSheet ("padding: 0px ");
 
-  layoutSceneTreeComponentsTBWidget->addWidget(fSceneTreeComponentTreeWidgetInfos);
+  layoutSceneTreeBottomWidgetLayout->addWidget(fSceneTreeComponentTreeWidgetInfos);
   
   connect(fSceneTreeComponentTreeWidgetInfos, SIGNAL(itemChanged(QTableWidgetItem*)),this, SLOT(tableWidgetViewerSetItemChanged(QTableWidgetItem *)));
   
   updateSceneTreeComponentTreeWidgetInfos();
 
+  // add picking infos
+  
+  fViewerPickingButton = new QPushButton("Picking informations");
+  fViewerPickingButton->setStyleSheet ("text-align: left; padding: 5px; border:0px; ");
+  fViewerPickingButton->setIcon(*fTreeIconClosed);
+
+  layoutSceneTreeBottomWidgetLayout->addWidget(fViewerPickingButton);
+  connect(fViewerPickingButton,SIGNAL(clicked()),this, SLOT(toggleSceneTreeComponentPickingInfos()));
+
+  // add picking content
+  
+  fSceneTreeComponentPickingScrollArea = new QScrollArea();
+  fSceneTreeComponentPickingScrollArea->setWidgetResizable(true);
+
+  
+  fSceneTreeComponentPickingInfos = new QWidget();
+  fSceneTreeComponentPickingInfos->setStyleSheet ("padding: 0px ");
+  fSceneTreeComponentPickingScrollArea->setVisible(false);
+  fSceneTreeComponentPickingInfos->setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
+
+  
+  QVBoxLayout* vLayout = new QVBoxLayout();
+  fSceneTreeComponentPickingInfos->setLayout (vLayout);
+  fSceneTreeComponentPickingScrollArea->setWidget(fSceneTreeComponentPickingInfos);
+
+  // initialise picking infos
+  
+  QCheckBox * activatePicking = new QCheckBox("Picking mode active");
+  if (fVP.IsPicking()) {
+    activatePicking->setCheckState(Qt::Checked);
+  } else {
+    activatePicking->setCheckState(Qt::Unchecked);
+  }
+  activatePicking->setToolTip("Enable picking allow you to display properties of a selected object on the scene");
+  fSceneTreeComponentPickingInfos->layout()->addWidget(activatePicking);
+  connect(activatePicking, SIGNAL(clicked()), this, SLOT(togglePicking()));
+
+  //  fSceneTreeComponentPickingScrollArea->setSizePolicy(vPolicy);
+  layoutSceneTreeBottomWidgetLayout->addWidget(fSceneTreeComponentPickingScrollArea);
+  
   connect( fHelpLine, SIGNAL( returnPressed () ), this, SLOT(changeSearchSelection()));
   connect( select, SIGNAL( clicked () ), this, SLOT(changeSearchSelection()));
 
+  // policy
+  QSizePolicy bottomPolicy = QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
+  bottomPolicy.setVerticalStretch(1);
+  fViewerPropertiesButton->setSizePolicy(bottomPolicy);
+  fViewerPickingButton->setSizePolicy(bottomPolicy);
 
+  bottomPolicy.setVerticalStretch(100);
+  
+  fSceneTreeComponentTreeWidgetInfos->setSizePolicy(bottomPolicy);
+  fSceneTreeComponentPickingScrollArea->setSizePolicy(bottomPolicy);
+
+  
+  fSceneTreeWidget->addWidget(sceneTreeTopWidget);
+  fSceneTreeWidget->addWidget(sceneTreeBottomWidget);
+  
   fTreeItemModels.clear();
 
   fPVRootNodeCreate = false;
@@ -3319,36 +3513,42 @@ void G4OpenGLQtViewer::changeColorAndTransparency(QTreeWidgetItem* item,int) {
   
   if (color.isValid()) {
 
-    // change vis attributes to set new colour
-    G4int iPO = item->data(0,Qt::UserRole).toInt();
-    if (iPO >= 0 && fTreeItemModels.find(iPO) != fTreeItemModels.end()) {
-      const PVPath& fullPath = fTreeItemModels[iPO];
-      // If a physical volume
-      if (fullPath.size()) {
-      
-        // Instantiate a working copy of a G4VisAttributes object...
-        G4VisAttributes workingVisAtts;
-        // and set the colour.
-        G4Colour g4c(((G4double)color.red())/255,
-                     ((G4double)color.green())/255,
-                     ((G4double)color.blue())/255,
-                     ((G4double)color.alpha())/255);
-        workingVisAtts.SetColour(g4c);
-        
-        // Add a vis atts modifier to the view parameters...
-        fVP.AddVisAttributesModifier
-        (G4ModelingParameters::VisAttributesModifier
-         (workingVisAtts,
-          G4ModelingParameters::VASColour,
-          fullPath));
-        // G4ModelingParameters::VASColour tells G4PhysicalVolumeModel that it is
-        // the colour that should be picked out and merged with the touchable's
-        // normal vis attributes.
-      }
-    }
-    
+    changeColorAndTransparency(item->data(0,Qt::UserRole).toInt(),
+                               G4Colour (((G4double)color.red())/255,
+                                         ((G4double)color.green())/255,
+                                         ((G4double)color.blue())/255,
+                                         ((G4double)color.alpha())/255));
+
     // set scene tree parameters
     changeQColorForTreeWidgetItem(item,color);
+  }
+}
+
+
+void G4OpenGLQtViewer::changeColorAndTransparency(GLuint index, G4Color color) {
+
+  // change vis attributes to set new colour
+  G4int iPO = index;
+  if (iPO >= 0 && fTreeItemModels.find(iPO) != fTreeItemModels.end()) {
+    const PVPath& fullPath = fTreeItemModels[iPO];
+    // If a physical volume
+    if (fullPath.size()) {
+      
+      // Instantiate a working copy of a G4VisAttributes object...
+      G4VisAttributes workingVisAtts;
+      // and set the colour.
+      workingVisAtts.SetColour(color);
+      
+      // Add a vis atts modifier to the view parameters...
+      fVP.AddVisAttributesModifier
+      (G4ModelingParameters::VisAttributesModifier
+       (workingVisAtts,
+        G4ModelingParameters::VASColour,
+        fullPath));
+      // G4ModelingParameters::VASColour tells G4PhysicalVolumeModel that it is
+      // the colour that should be picked out and merged with the touchable's
+      // normal vis attributes.
+    }
   }
 }
 
@@ -4199,6 +4399,47 @@ void G4OpenGLQtViewer::toggleSceneTreeComponentTreeWidgetInfos() {
     fViewerPropertiesButton->setIcon(*fTreeIconClosed);
   }
 }
+
+
+void G4OpenGLQtViewer::toggleSceneTreeComponentPickingInfos() {
+  fSceneTreeComponentPickingScrollArea->setVisible(!fSceneTreeComponentPickingScrollArea->isVisible());
+  if (fViewerPickingButton->isVisible()) {
+    fViewerPickingButton->setIcon(*fTreeIconOpen);
+  } else {
+    fViewerPickingButton->setIcon(*fTreeIconClosed);
+  }
+}
+
+
+void G4OpenGLQtViewer::toggleSceneTreeComponentPickingCout(int pickItem) {
+
+  QWidget* w;
+  // close other items, it could take too much space
+  
+  for (int a=0; a<fSceneTreeComponentPickingInfos->layout()->count(); a++) {
+    w = fSceneTreeComponentPickingInfos->layout()->itemAt(a)->widget();
+    QTextEdit* ed = dynamic_cast<QTextEdit*>(w);
+    QPushButton* button;
+    if (ed) {
+      if (a == pickItem) {
+        w->setVisible(!w->isVisible());
+      } else {
+        w->setVisible(false);
+      }
+      if (a >= 1) {
+        button = dynamic_cast<QPushButton*>(fSceneTreeComponentPickingInfos->layout()->itemAt(a-1)->widget());
+        if (button) {
+          if (button->isVisible()) {
+            button->setIcon(*fTreeIconOpen);
+          } else {
+            button->setIcon(*fTreeIconClosed);
+          }
+        }
+      }
+    }
+  }
+}
+
 
 void G4OpenGLQtViewer::tableWidgetViewerSetItemChanged(QTableWidgetItem * item) {
   G4UImanager* UI = G4UImanager::GetUIpointer();

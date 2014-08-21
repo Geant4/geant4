@@ -59,6 +59,7 @@
 #include "Geant4_gl2ps.h"
 
 #include <sstream>
+#include <string>
 
 //#define G4DEBUG_VIS_OGL
 
@@ -106,7 +107,8 @@ fDefaultExportFilename("G4OpenGL"),
 fSizeHasChanged(0),
 fGl2psDefaultLineWith(1),
 fGl2psDefaultPointSize(2),
-fGlViewInitialized(false)
+fGlViewInitialized(false),
+fIsGettingPickInfos(false)
 {
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer:: Creation\n");
@@ -326,7 +328,9 @@ void G4OpenGLViewer::ResizeGLView()
 
 
 void G4OpenGLViewer::SetView () {
-
+  // if getting pick infos, should not resize the view.
+  if (fIsGettingPickInfos) return;
+  
   if (!fSceneHandler.GetScene()) {
     return;
   }
@@ -521,6 +525,22 @@ void G4OpenGLViewer::HaloingSecondPass () {
 
 G4String G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
 {
+  std::vector < G4OpenGLViewerPickMap* >  pickMap = GetPickDetails(x,y);
+  G4String txt = "";
+  if (pickMap.size() == 0) {
+    txt += "Too many hits.  Zoom in to reduce overlaps.";;
+  } else {
+    for (unsigned int a=0; a< pickMap.size(); a++) {
+      txt += pickMap[a]->print();
+    }
+  }
+  return txt;
+}
+
+std::vector < G4OpenGLViewerPickMap* > G4OpenGLViewer::GetPickDetails(GLdouble x, GLdouble y)
+{
+  std::vector < G4OpenGLViewerPickMap* > pickMapVector;
+  
   std::ostringstream oss;
   const G4int BUFSIZE = 512;
   GLuint selectBuffer[BUFSIZE];
@@ -535,18 +555,19 @@ G4String G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
   glLoadIdentity();
   GLint viewport[4];
   glGetIntegerv(GL_VIEWPORT, viewport);
+  fIsGettingPickInfos = true;
   // Define 5x5 pixel pick area
   g4GluPickMatrix(x, viewport[3] - y, 5., 5., viewport);
   glMultMatrixd(currentProjectionMatrix);
   glMatrixMode(GL_MODELVIEW);
   DrawView();
   GLint hits = glRenderMode(GL_RENDER);
-  if (hits < 0) {
-    G4cout << "Too many hits.  Zoom in to reduce overlaps." << G4endl;
-  } else if (hits > 0) {
-//    G4cout << hits << " hit(s)" << G4endl;
+  fIsGettingPickInfos = false;
+  if (hits > 0) {
+    
     GLuint* p = selectBuffer;
     for (GLint i = 0; i < hits; ++i) {
+      G4OpenGLViewerPickMap* pickMap = new G4OpenGLViewerPickMap();
       GLuint nnames = *p++;
       // This bit of debug code or...
       //GLuint zmin = *p++;
@@ -557,10 +578,10 @@ G4String G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
       p++;
       p++;
       for (GLuint j = 0; j < nnames; ++j) {
-	GLuint name = *p++;
-//	G4cout << "Hit: " << i
-//	       << ", Sub-hit: " << j
-//	       << ", PickName: " << name << G4endl;
+        GLuint name = *p++;
+        pickMap->setHitNumber(i);
+        pickMap->setSubHitNumber(j);
+        pickMap->setPickName(name);
 	std::map<GLuint, G4AttHolder*>::iterator iter =
 	  fOpenGLSceneHandler.fPickMap.find(name);
 	if (iter != fOpenGLSceneHandler.fPickMap.end()) {
@@ -570,17 +591,18 @@ G4String G4OpenGLViewer::Pick(GLdouble x, GLdouble y)
 		 iAtt < attHolder->GetAttDefs().size(); ++iAtt) {
 	      oss << G4AttCheck(attHolder->GetAttValues()[iAtt],
                                 attHolder->GetAttDefs()[iAtt]);
-	    }
-            oss << std::endl;
-	  }
-	}
+              pickMap->addAttributes(oss.str());
+            }
+          }
+        }
       }
+      pickMapVector.push_back(pickMap);
     }
   }
   glMatrixMode(GL_PROJECTION);
   glPopMatrix();
   glMatrixMode(GL_MODELVIEW);
-  return oss.str();
+  return pickMapVector;
 }
 
 GLubyte* G4OpenGLViewer::grabPixels
@@ -1454,5 +1476,19 @@ void G4OpenGLViewer::setWtDrawer(G4OpenGLWtDrawer* drawer) {
 }
 
 #endif
+
+
+G4String G4OpenGLViewerPickMap::print() {
+  std::ostringstream txt;
+
+  txt << fName;
+
+  txt << "Hit: " << fHitNumber << ", Sub-hit: " << fSubHitNumber << ", PickName: " << fPickName << "\n";
+  
+  for (unsigned int a=0; a<fAttributes.size(); a++) {
+    txt << fAttributes[a] << "\n";
+  }
+  return txt.str();
+}
 
 #endif

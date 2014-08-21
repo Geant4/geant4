@@ -77,6 +77,8 @@ class QSignalMapper;
 class G4UIQt;
 class QTableWidget;
 class QTableWidgetItem;
+class QScrollArea;
+class QSplitter;
 
 class G4OpenGLQtViewer: public QObject, virtual public G4OpenGLViewer {
 
@@ -138,8 +140,9 @@ public:
   void G4MousePressEvent(QMouseEvent *event);
   void G4wheelEvent (QWheelEvent * event); 
   void G4keyPressEvent (QKeyEvent * event); 
+  void G4keyReleaseEvent (QKeyEvent * event);
   void G4MouseDoubleClickEvent();
-  void G4MouseReleaseEvent();
+  void G4MouseReleaseEvent(QMouseEvent *evnt);
   void G4MouseMoveEvent(QMouseEvent *event);
 
 protected:
@@ -227,6 +230,7 @@ private:
 
   std::string parseSceneTreeElementAndSaveState(QTreeWidgetItem* item, unsigned int level);
   QString GetCommandParameterList (const G4UIcommand *aCommand);
+  void changeColorAndTransparency(GLuint index, G4Color color);
 
   QMenu *fContextMenu;
   QPoint fLastPos1;
@@ -280,17 +284,19 @@ private:
   QTreeWidget* fSceneTreeComponentTreeWidget;
   // This is only use to hold the old "expand" value, see file:///Developer/Documentation/Qt/html/qtreewidgetitem.html#setExpanded 
   QTreeWidget* fOldSceneTreeComponentTreeWidget;
-  QWidget* fSceneTreeWidget;
+  QSplitter* fSceneTreeWidget;
   bool fPVRootNodeCreate;
   QLineEdit* fHelpLine;
   QString fFileSavePath;
   QPushButton* fViewerPropertiesButton;
-  
+  QPushButton* fViewerPickingButton;
   int fNbRotation ;
   int fTimeRotation;
   QString fTouchableVolumes;
   QDialog* fShortcutsDialog;
   QTableWidget *fSceneTreeComponentTreeWidgetInfos;
+  QWidget* fSceneTreeComponentPickingInfos;
+  QScrollArea* fSceneTreeComponentPickingScrollArea;
   int fTreeWidgetInfosIgnoredCommands;
   QPushButton * fSceneTreeButtonApply;
   QTextEdit *fShortcutsDialogInfos;
@@ -311,8 +317,9 @@ private:
   int fNumber;
   int fMaxPOindexInserted;
   G4UIQt* fUiQt;
-  QSignalMapper *signalMapperMouse;
-  QSignalMapper *signalMapperSurface;
+  QSignalMapper *fSignalMapperMouse;
+  QSignalMapper *fSignalMapperSurface;
+  QSignalMapper *fSignalMapperPicking;
 
   // quick map index to find next item
   std::map <int, QTreeWidgetItem*>::const_iterator fLastSceneTreeWidgetAskForIterator;
@@ -327,6 +334,8 @@ private:
   QPixmap* fTreeIconClosed;
 
   int fLastExportSliderValue;
+  G4Color fLastHighlightColor;
+  GLuint fLastHighlightName;
 
 public Q_SLOTS :
   void startPauseVideo();
@@ -356,6 +365,9 @@ private Q_SLOTS :
   void processEncodeStdout();
   void sceneTreeComponentItemChanged(QTreeWidgetItem* item, int id);
   void toggleSceneTreeComponentTreeWidgetInfos();
+  void toggleSceneTreeComponentPickingInfos();
+  void toggleSceneTreeComponentPickingCout(int);
+  void togglePicking();
 
   // action trigger by a click on a component scene tree
   void sceneTreeComponentSelected();

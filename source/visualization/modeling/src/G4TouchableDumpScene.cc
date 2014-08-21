@@ -37,6 +37,7 @@
 #include "G4VPhysicalVolume.hh"
 #include "G4PhysicalVolumeModel.hh"
 
+#include "G4AttValue.hh"
 #include "G4AttCheck.hh"
 
 G4TouchableDumpScene::G4TouchableDumpScene
@@ -86,6 +87,7 @@ void G4TouchableDumpScene::ProcessVolume (const G4VSolid&) {
       const std::map<G4String,G4AttDef>* attDefs = fpPVModel->GetAttDefs();
       std::vector<G4AttValue>* attValues = fpPVModel->CreateCurrentAttValues();
       fos << G4AttCheck(attValues, attDefs);
+      delete attValues;
       fpPVModel->Abort();  // No need to look further.
     }
   }

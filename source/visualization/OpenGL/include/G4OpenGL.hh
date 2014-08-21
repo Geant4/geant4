@@ -41,17 +41,14 @@
 
  #ifdef G4VIS_BUILD_OPENGLX_DRIVER
  #  include <GL/gl.h>
- #  include <GL/glu.h>
  #endif
 
  #ifdef G4VIS_BUILD_OPENGLXM_DRIVER
  #    include <GL/gl.h>
- #    include <GL/glu.h>
  #endif
 
  #ifdef G4VIS_BUILD_OPENGLWIN32_DRIVER
  #    include <GL/gl.h>
- #    include <GL/glu.h>
  #endif
 //# Do NOT include glx Here ! It has to be done, after all <Qxx...> includes
 //#  include <GL/glx.h>
@@ -67,10 +64,8 @@
     #ifdef __MACH__
 //#  define G4OPENGL_VERSION_2 1
       #include <OpenGL/gl.h>
-      #include <OpenGL/glu.h>
     #else
       #include <GL/gl.h>
-      #include <GL/glu.h>
     #endif
     #include <qgl.h>
   #endif

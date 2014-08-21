@@ -24,6 +24,14 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+11th Aug 2014  John Allison  (vis-V10-00-08)
+- Re-tagged.  Needs greps-V10-00-06.
+
+11th Aug 2014  John Allison  (vis-V10-00-07)
+- modeling-V10-00-07: Added text size for axes labels.
+- visman-V10-00-16: Added text size control through /vis/set/textSize
+  for /vis/scene/add/axes and /vis/scene/add/scale.
+
 6th June 2014  Laurent Garnier (vis-V10-00-06)
 - opengl-V10-00-08 :
   o G4OpenGLQtViewer: Fix a problem in viewer/set parameters

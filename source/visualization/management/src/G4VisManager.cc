@@ -395,6 +395,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSetLineWidth);
   RegisterMessenger(new G4VisCommandSetTextColour);
   RegisterMessenger(new G4VisCommandSetTextLayout);
+  RegisterMessenger(new G4VisCommandSetTextSize);
   RegisterMessenger(new G4VisCommandSetTouchable);
   
   directory = new G4UIdirectory ("/vis/scene/");

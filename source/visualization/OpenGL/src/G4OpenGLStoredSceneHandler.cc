@@ -452,7 +452,7 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
 
   //  if ((glGetError() == GL_TABLE_TOO_LARGE) || (glGetError() == GL_OUT_OF_MEMORY)) {  // Could close?
   if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
-    G4cout <<
+    G4cerr <<
       "ERROR: G4OpenGLStoredSceneHandler::AddPrimitivePostamble: Failure"
       "  to allocate display List for fTopPODL - try OpenGL Immediated mode."
            << G4endl;
@@ -460,7 +460,7 @@ void G4OpenGLStoredSceneHandler::AddPrimitivePostamble()
   if (fMemoryForDisplayLists) {
     glEndList();
     if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
-      G4cout <<
+      G4cerr <<
         "ERROR: G4OpenGLStoredSceneHandler::AddPrimitivePostamble: Failure"
 	"  to allocate display List for fTopPODL - try OpenGL Immediated mode."
              << G4endl;
@@ -549,7 +549,7 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
   // Make a List which calls the other lists.
   fTopPODL = glGenLists (1);
   if (glGetError() == GL_OUT_OF_MEMORY) {  // Could pre-allocate?
-    G4cout <<
+    G4cerr <<
       "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
       "  display List for fTopPODL - try OpenGL Immediated mode."
 	   << G4endl;
@@ -569,7 +569,7 @@ void G4OpenGLStoredSceneHandler::EndModeling () {
     glEndList ();
 
     if (glGetError() == GL_OUT_OF_MEMORY) {  // Could close?
-      G4cout <<
+      G4cerr <<
         "ERROR: G4OpenGLStoredSceneHandler::EndModeling: Failure to allocate"
         "  display List for fTopPODL - try OpenGL Immediated mode."
              << G4endl;

@@ -98,7 +98,22 @@ void G4OpenGLXViewer::SetView () {
            << G4endl;
     GLint error = GL_NO_ERROR;
     while ((error = glGetError()) != GL_NO_ERROR) {
-      G4cout << "GL Error: " << gluErrorString(error) << G4endl;
+      switch (error) {
+      case GL_INVALID_ENUM :
+	G4cout << "GL Error: GL_INVALID_ENUM" << G4endl;break;
+      case GL_INVALID_VALUE :
+	G4cout << "GL Error: GL_INVALID_VALUE" << G4endl;break;
+      case GL_INVALID_OPERATION :
+	G4cout << "GL Error: GL_INVALID_OPERATION" << G4endl;break;
+      case GL_OUT_OF_MEMORY :
+	G4cout << "GL Error: GL_OUT_OF_MEMORY" << G4endl;break;
+      case GL_STACK_UNDERFLOW :
+	G4cout << "GL Error: GL_STACK_UNDERFLOW" << G4endl;break;
+      case GL_STACK_OVERFLOW :
+	G4cout << "GL Error: GL_STACK_OVERFLOW" << G4endl;break;
+      default :
+	G4cout << "GL Error: " << error << G4endl;break;
+      }
     }
     return;
   }
@@ -297,7 +312,22 @@ void G4OpenGLXViewer::CreateMainWindow () {
 	 << G4endl;
     GLint error = GL_NO_ERROR;
     while ((error = glGetError()) != GL_NO_ERROR) {
-      G4cout << "GL Error: " << gluErrorString(error) << G4endl;
+      switch (error) {
+      case GL_INVALID_ENUM :
+	G4cout << "GL Error: GL_INVALID_ENUM" << G4endl;break;
+      case GL_INVALID_VALUE :
+	G4cout << "GL Error: GL_INVALID_VALUE" << G4endl;break;
+      case GL_INVALID_OPERATION :
+	G4cout << "GL Error: GL_INVALID_OPERATION" << G4endl;break;
+      case GL_OUT_OF_MEMORY :
+	G4cout << "GL Error: GL_OUT_OF_MEMORY" << G4endl;break;
+      case GL_STACK_UNDERFLOW :
+	G4cout << "GL Error: GL_STACK_UNDERFLOW" << G4endl;break;
+      case GL_STACK_OVERFLOW :
+	G4cout << "GL Error: GL_STACK_OVERFLOW" << G4endl;break;
+      default :
+	G4cout << "GL Error: " << error << G4endl;break;
+      }
     }
     return;
   }

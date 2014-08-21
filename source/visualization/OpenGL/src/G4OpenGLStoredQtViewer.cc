@@ -333,11 +333,9 @@ void G4OpenGLStoredQtViewer::paintGL()
   // Ensure that we really draw the BACK buffer
   glDrawBuffer (GL_BACK);
 
-  if (! fVP.IsPicking ()) {
-    SetView();
+  SetView();
   
-    ClearView (); //ok, put the background correct
-  }
+  ClearView (); //ok, put the background correct
   ComputeView();
 
   fHasToRepaint = false;
@@ -367,7 +365,12 @@ void G4OpenGLStoredQtViewer::keyPressEvent (QKeyEvent * event)
   G4keyPressEvent(event);
 }
 
-void G4OpenGLStoredQtViewer::wheelEvent (QWheelEvent * event) 
+void G4OpenGLStoredQtViewer::keyReleaseEvent (QKeyEvent * event)
+{
+  G4keyReleaseEvent(event);
+}
+
+void G4OpenGLStoredQtViewer::wheelEvent (QWheelEvent * event)
 {
   G4wheelEvent(event);
 }
@@ -386,9 +389,9 @@ void G4OpenGLStoredQtViewer::mouseDoubleClickEvent(QMouseEvent *)
   G4MouseDoubleClickEvent();
 }
 
-void G4OpenGLStoredQtViewer::mouseReleaseEvent(QMouseEvent *)
+void G4OpenGLStoredQtViewer::mouseReleaseEvent(QMouseEvent *event)
 {
-  G4MouseReleaseEvent();
+  G4MouseReleaseEvent(event);
 }
 
 void G4OpenGLStoredQtViewer::mouseMoveEvent(QMouseEvent *event)

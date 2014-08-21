@@ -68,6 +68,7 @@ protected:
   void mouseReleaseEvent(QMouseEvent *event);
   void contextMenuEvent(QContextMenuEvent *e);
   void keyPressEvent (QKeyEvent * event); 
+  void keyReleaseEvent (QKeyEvent * event);
   void paintEvent(QPaintEvent *event);
 private:
   void ComputeView ();

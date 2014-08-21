@@ -87,11 +87,11 @@ void G4VVisCommandGeometrySet::SetLVVisAtts
 	   << "\nnow: " << *newVisAtts
 	   << G4endl;
   }
-  if (requestedDepth < 0 || depth++ < requestedDepth) {
+  if (requestedDepth < 0 || depth < requestedDepth) {
     G4int nDaughters = pLV->GetNoDaughters();
     for (G4int i = 0; i < nDaughters; ++i) {
       SetLVVisAtts(pLV->GetDaughter(i)->GetLogicalVolume(),
-		   setFunction, depth, requestedDepth);
+		   setFunction, ++depth, requestedDepth);
     }
   }
 }

@@ -308,6 +308,14 @@ public: // With description
   void GeometryHasChanged ();
   // Used by run manager to notify change.
 
+  void IgnoreStateChanges(G4bool);
+  // This method shoud be invoked by a class that has its own event loop,
+  // such as the RayTracer, material scanner, etc. If the argument is true,
+  // the following state changes among Idle, GeomClosed and EventProc are
+  // caused by such a class, and thus not by the ordinary event simulation.
+  // The same method with false should be invoked once such an event loop
+  // is over.
+
   void NotifyHandlers();
   // Notify scene handlers (G4VGraphicsScene objects) that the scene
   // has changed so that they may rebuild their graphics database, if
@@ -319,6 +327,11 @@ public: // With description
   G4bool FilterTrajectory(const G4VTrajectory&);
   G4bool FilterHit(const G4VHit&);
   G4bool FilterDigi(const G4VDigi&);
+
+#ifdef G4MULTITHREADED
+  virtual void SetUpForAThread();
+  // This method is invoked by G4WorkerRunManager
+#endif
 
   ////////////////////////////////////////////////////////////////////////
   // Administration routines.
@@ -490,6 +503,7 @@ private:
   G4ViewParameters      fDefaultViewParameters;
   G4bool                fIsDrawGroup;
   G4int                 fDrawGroupNestingDepth;
+  G4bool                fIgnoreStateChanges;
 
   // Trajectory draw model manager
   G4VisModelManager<G4VTrajectoryModel>* fpTrajDrawModelMgr;
@@ -502,16 +516,6 @@ private:
 
   // Digi filter model manager
   G4VisFilterManager<G4VDigi>* fpDigiFilterMgr;
-
-#ifdef G4MULTITHREADED
-public:
-  virtual void SetUpForAThread();
-#endif
-
-  virtual void IgnoreStateChanges(G4bool);
-
-protected:
-  G4bool fIgnoreStateChanges;
 };
 
 #include "G4VisManager.icc"
