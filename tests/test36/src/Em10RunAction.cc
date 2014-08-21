@@ -83,12 +83,6 @@ void Em10RunAction::BeginOfRunAction(const G4Run* aRun)
 {  
   G4cout << "### Run " << aRun->GetRunID() << " start." << G4endl;
   
-  // save Rndm status
-  if (saveRndm > 0)
-  { 
-      CLHEP::HepRandom::showEngineStatus();
-      CLHEP::HepRandom::saveEngineStatus("beginOfRun.rndm");
-  }  
   G4UImanager* UI = G4UImanager::GetUIpointer();
    
   G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
@@ -675,13 +669,6 @@ void Em10RunAction::EndOfRunAction(const G4Run*)
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
   }
 
-  // save Rndm status
-
-  if (saveRndm == 1)
-  { 
-    CLHEP::HepRandom::showEngineStatus();
-    CLHEP::HepRandom::saveEngineStatus("endOfRun.rndm");
-  }     
 }
 
 ///////////////////////////////////////////////////////////////////////////

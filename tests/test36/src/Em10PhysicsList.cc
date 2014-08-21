@@ -204,8 +204,7 @@ void Em10PhysicsList::ConstructProcess()
 #include "G4eBremsstrahlung.hh"
 #include "G4eplusAnnihilation.hh"
 #include "G4PAIModel.hh"
-#include "G4PAIPhotonModel.hh"
-// #include "G4PAIwithPhotons.hh"
+#include "G4PAIPhotModel.hh"
 
 #include "G4SynchrotronRadiation.hh"
 
@@ -390,7 +389,7 @@ void Em10PhysicsList::ConstructEM()
       theeminusStepCut = new Em10StepCut();
       
       theeminusIonisation = new G4eIonisation();
-      G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      G4PAIPhotModel*     pai = new G4PAIPhotModel(particle);
       theeminusIonisation->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddProcess(theeminusIonisation,-1,2,2);
@@ -423,7 +422,7 @@ void Em10PhysicsList::ConstructEM()
 
       theeplusStepCut = new Em10StepCut();
 
-      G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      G4PAIPhotModel*     pai = new G4PAIPhotModel(particle);
       theeplusIonisation->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddProcess(theeplusMultipleScattering,-1,1,1);
@@ -445,7 +444,7 @@ void Em10PhysicsList::ConstructEM()
 
       G4MuIonisation* themuIonisation = new G4MuIonisation() ;
 
-      G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      G4PAIPhotModel*     pai = new G4PAIPhotModel(particle);
       themuIonisation->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddProcess(new G4MuMultipleScattering(),-1,1,1);
@@ -472,7 +471,7 @@ void Em10PhysicsList::ConstructEM()
                         new G4hMultipleScattering() ;
 
 
-      G4PAIModel*     pai = new G4PAIModel(particle,"PAIModel");
+      G4PAIPhotModel*     pai = new G4PAIPhotModel(particle);
       thehIonisation->AddEmModel(0,pai,pai,gas);
 
       pmanager->AddProcess(thehMultipleScattering,-1,1,1);
