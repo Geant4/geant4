@@ -37,10 +37,17 @@ void drawMomSpectrum( std::string beam, std::string target,
    double ymin = 10000.; // something big... don't know if I can use FLT_MAX
    double ymax = -1. ;
    
+   float* SumErr =  new float[NPoints];
+   for ( int ii=0; ii<NPoints; ++ii )
+   {
+      float tmp = SecESigma[ii]*SecESigma[ii] + SecESys[ii]*SecESys[ii];
+      SumErr[ii] = std::sqrt( tmp );
+   }
+
    for ( int ip=0; ip<NPoints; ip++ )
    {
-      if ( (SecSigma[ip]+SecESigma[ip]) > ymax ) ymax = SecSigma[ip]+SecESigma[ip];
-      if ( (SecSigma[ip]-SecESigma[ip]) < ymin ) ymin = SecSigma[ip]-SecESigma[ip];
+      if ( (SecSigma[ip]+SumErr[ip]) > ymax ) ymax = SecSigma[ip]+SumErr[ip];
+      if ( (SecSigma[ip]-SumErr[ip]) < ymin ) ymin = SecSigma[ip]-SumErr[ip];
       if ( ymin < 0. ) ymin = 0.;
    }
    
@@ -73,21 +80,25 @@ void drawMomSpectrum( std::string beam, std::string target,
       {
          hi[m]->Draw();
 	 hi[m]->GetXaxis()->SetTitle("p, GeV/c");
+	 hi[m]->GetXaxis()->SetTitleSize(0.05);
+	 hi[m]->GetXaxis()->CenterTitle();
 	 hi[m]->GetYaxis()->SetTitle(YTitle);
-	 hi[m]->GetYaxis()->SetTitleOffset(1.5);
+	 hi[m]->GetYaxis()->SetTitleOffset(2.);
       }
       else hi[m]->Draw("same");     
    }
    
-   TLegend* leg = new TLegend(0.6, 0.70, 0.9, 0.9);
+   TLegend* leg = new TLegend(0.45, 0.70, 0.95, 0.9);
+   leg->SetTextSize(0.04);
    
    for ( int m=0; m<NModels; m++ )
    {
       hi[m]->GetYaxis()->SetRangeUser(ymin,ymax*1.5); // hi[m]->SetTitle("");
       leg->AddEntry( hi[m], ModelName[m].c_str(), "L" );
    }
-      
-   TGraph* gr = new TGraphErrors( NPoints, SecMom, SecSigma, 0, SecESigma );
+         
+//   TGraph* gr = new TGraphErrors( NPoints, SecMom, SecSigma, 0, SecESigma );
+   TGraph* gr = new TGraphErrors( NPoints, SecMom, SecSigma, 0, SumErr );
    // gr->GetYaxis()->SetRangeUser( 0., 0.02 );
    // gr->SetRangeUser( ymin, ymax*1.5 );
    gr->SetMarkerColor(kBlue);
@@ -101,6 +112,8 @@ void drawMomSpectrum( std::string beam, std::string target,
    leg->Draw();
    leg->SetFillColor(kWhite);
 
+   delete [] SumErr;
+   
    return ;
 
 }
@@ -160,13 +173,17 @@ void drawKPlus2PiPlusRatio( std::string beam, std::string target,
       {
          hi[m]->Draw();
 	 hi[m]->GetXaxis()->SetTitle("p, GeV/c");
+	 hi[m]->GetXaxis()->SetTitleSize(0.05);
+	 hi[m]->GetXaxis()->CenterTitle();
 	 hi[m]->GetYaxis()->SetTitle(YTitle);
+	 hi[m]->GetYaxis()->SetTitleSize(0.05);
 	 hi[m]->GetYaxis()->SetTitleOffset(1.5);
       }
       else hi[m]->Draw("same");     
    }
    
-   TLegend* leg = new TLegend(0.6, 0.70, 0.9, 0.9);
+   TLegend* leg = new TLegend(0.4, 0.70, 0.9, 0.9);
+   leg->SetTextSize(0.04);
    
    for ( int m=0; m<NModels; m++ )
    {
@@ -258,13 +275,17 @@ void drawKPlus2PiPlusRatioRegre( std::string beam, std::string target,
       {
          hi[m]->Draw();
 	 hi[m]->GetXaxis()->SetTitle("p, GeV/c");
+	 hi[m]->GetXaxis()->SetTitleSize(0.05);
+	 hi[m]->GetXaxis()->CenterTitle();
 	 hi[m]->GetYaxis()->SetTitle(YTitle);
+	 hi[m]->GetYaxis()->SetTitleSize(0.05);
 	 hi[m]->GetYaxis()->SetTitleOffset(1.5);
       }
       else hi[m]->Draw("same");     
    }
    
-   TLegend* leg = new TLegend(0.6, 0.70, 0.9, 0.9);
+   TLegend* leg = new TLegend(0.4, 0.70, 0.9, 0.9);
+   leg->SetTextSize(0.04);
    
    for ( int m=0; m<NVersions-1; m++ )
    {
@@ -310,10 +331,17 @@ void drawMomSpectrumRegre( std::string beam, std::string target,
    double ymin = 10000.; // something big... don't know if I can use FLT_MAX
    double ymax = -1. ;
    
+   float* SumErr =  new float[NPoints];
+   for ( int ii=0; ii<NPoints; ++ii )
+   {
+      float tmp = SecESigma[ii]*SecESigma[ii] + SecESys[ii]*SecESys[ii];
+      SumErr[ii] = std::sqrt( tmp );
+   }
+
    for ( int ip=0; ip<NPoints; ip++ )
    {
-      if ( (SecSigma[ip]+SecESigma[ip]) > ymax ) ymax = SecSigma[ip]+SecESigma[ip];
-      if ( (SecSigma[ip]-SecESigma[ip]) < ymin ) ymin = SecSigma[ip]-SecESigma[ip];
+      if ( (SecSigma[ip]+SumErr[ip]) > ymax ) ymax = SecSigma[ip]+SumErr[ip];
+      if ( (SecSigma[ip]-SumErr[ip]) < ymin ) ymin = SecSigma[ip]-SumErr[ip];
       if ( ymin < 0. ) ymin = 0.;
    }
    
@@ -358,9 +386,11 @@ void drawMomSpectrumRegre( std::string beam, std::string target,
       if ( iv == 0 ) 
       {
          hi[iv]->Draw();
-	 hi[iv]->GetXaxis()->SetTitle("xF");
+	 hi[iv]->GetXaxis()->SetTitle("p,GeV/c");
+	 hi[iv]->GetXaxis()->SetTitleSize(0.05);
+	 hi[iv]->GetXaxis()->CenterTitle();
 	 hi[iv]->GetYaxis()->SetTitle( YTitle );
-	 hi[iv]->GetYaxis()->SetTitleOffset(1.5);
+	 hi[iv]->GetYaxis()->SetTitleOffset(2.);
       }
       else hi[iv]->Draw("same");     
 
@@ -368,7 +398,8 @@ void drawMomSpectrumRegre( std::string beam, std::string target,
    
    std::cout << "now do TLegend" << std::endl;
 
-   TLegend* leg = new TLegend(0.6, 0.70, 0.9, 0.9);
+   TLegend* leg = new TLegend(0.45, 0.70, 0.95, 0.9);
+   leg->SetTextSize(0.04);
    
    for ( int iv=0; iv<NVersions; iv++ )
    {
@@ -376,7 +407,7 @@ void drawMomSpectrumRegre( std::string beam, std::string target,
       leg->AddEntry( hi[iv], Versions[iv].c_str(), "L" );
    }
       
-   TGraph* gr = new TGraphErrors( NPoints, SecMom, SecSigma, 0, SecESigma );
+   TGraph* gr = new TGraphErrors( NPoints, SecMom, SecSigma, 0, SumErr );
    // gr->GetYaxis()->SetRangeUser( 0., 0.02 );
    // gr->SetRangeUser( ymin, ymax*1.5 );
    gr->SetMarkerColor(kBlue);

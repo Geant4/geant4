@@ -57,7 +57,7 @@
 
 // experimental lists !!!
 #include "NuBeam.hh"
-#include "ShieldingM.hh"
+#include "Shielding.hh"
 
 
 #include "G4ParticleTable.hh"
@@ -206,7 +206,7 @@ int main(int argc, char** argv)
       }
       else if (  theConfigReader->GetPhysics() ==  "ShieldingM" )
       {
-         plist = new ShieldingM();
+         plist = new Shielding(1,"HP","M");
       }
       
       runManager->SetUserInitialization( plist );

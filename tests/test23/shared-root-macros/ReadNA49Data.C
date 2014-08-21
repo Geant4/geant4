@@ -130,7 +130,7 @@ void readDDiffSpectra( std::string beam, std::string target, std::string seconda
 	 DDiff_xF[counter] = atof(tokens[0].c_str());
 	 double x  = atof(tokens[1].c_str());
 	 double y  = atof(tokens[2].c_str());
-	 double ey =  atof(tokens[3].c_str()) * y ;
+	 double ey =  atof(tokens[3].c_str()); // *y/100. ;
 	 DDiffDataHolder[counter].Add( new TVector3( x, y, ey ) );
 	 	 
 	 continue;
@@ -141,7 +141,7 @@ void readDDiffSpectra( std::string beam, std::string target, std::string seconda
       DDiff_xF[counter] = atof(tokens[0].c_str());
       double x  = atof(tokens[1].c_str());
       double y  = atof(tokens[2].c_str());
-      double ey =  atof(tokens[3].c_str()) * y ;
+      double ey =  atof(tokens[3].c_str()); // * y/100. ; // are errors given in percent ???
       DDiffDataHolder[counter].Add( new TVector3( x, y, ey ) );
    }
 

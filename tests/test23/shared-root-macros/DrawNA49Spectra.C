@@ -174,9 +174,20 @@ void drawIntegratedSpectrum( std::string beam, std::string target,
       }
    
    }
-   
-   TLegend* leg = new TLegend(0.67, 0.74, 0.97, 0.99);
-   leg->SetTextSize(0.035);
+
+   TLegend* leg = 0;
+   if ( secondary == "neutron" )
+   {
+// for neutrons
+      leg = new TLegend(0.52, 0.74, 0.97, 0.94);
+      leg->SetTextSize(0.035);
+   }
+   else
+   {
+// for other secondaries   
+      leg = new TLegend(0.65, 0.7, 0.95, 0.95);
+      leg->SetTextSize(0.055);
+   }
    
    for ( int m=0; m<NModels; m++ )
    {
@@ -188,7 +199,7 @@ void drawIntegratedSpectrum( std::string beam, std::string target,
 
    // gr->GetYaxis()->SetRangeUser( 0., 2.5 );
    // gr->GetXaxis()->SetRangeUser( -0.3, 0.4 );
-   // gr->SetRangeUser( 0., 2.5 );
+   // gr->SetRangeUser( 0.5, 2. );
    gr->SetMarkerColor(kBlue);
    gr->SetMarkerStyle(22);
    gr->SetMarkerSize(1.0);
@@ -308,9 +319,7 @@ void drawIntSpectrumMC2Data( std::string beam, std::string target, std::string s
       {
 	 gr[m]->GetXaxis()->SetRangeUser(-0.55,0.55);
       }
-      
-      // if ( m==0 ) gr1->SetTitle(hi[m]->GetTitle());
-   
+      // if ( m==0 ) gr1->SetTitle(hi[m]->GetTitle());   
    }
    
    for ( int i=0; i<NPoints; i++ )
@@ -322,7 +331,7 @@ void drawIntSpectrumMC2Data( std::string beam, std::string target, std::string s
       if ( ymin < 0. ) ymin = 0.; 
    }
    TGraph* gr1 = new TGraphErrors( NPoints, xF, Value, 0, Error );
-   gr1->GetYaxis()->SetRangeUser( 0.5, 1.5 );
+   gr1->GetYaxis()->SetRangeUser( 0.2, 2.0 );
    // gr1->GetYaxis()->SetRangeUser( ymin, ymax );
    // gr1->GetXaxis()->SetRangeUser( -0.3, 0.4 );
    gr1->SetMarkerColor(kBlue);
@@ -338,13 +347,14 @@ void drawIntSpectrumMC2Data( std::string beam, std::string target, std::string s
    xaxis->SetTitleOffset(0.9);
    xaxis->CenterTitle();
    
+   if ( secondary == "piplus" || secondary == "piminus" || secondary == "antiproton" )
+   {
+         xaxis->SetLimits( -0.55, 0.55 );
+   }
+   
    if ( histo == "dNdxF" )
    {
       gr1->GetYaxis()->SetTitle("MC/Data (dN/dxF)");
-      if ( secondary == "piplus" || secondary == "piminus" || secondary == "antiproton" )
-      {
-         xaxis->SetLimits( -0.55, 0.55 );
-      }
    }
    else if ( histo == "pT" )
    {
@@ -353,8 +363,6 @@ void drawIntSpectrumMC2Data( std::string beam, std::string target, std::string s
    gr1->GetYaxis()->SetTitleSize(0.05);
 //   gr1->GetYaxis()->SetTitleOffset(1.5);
    gr1->GetYaxis()->CenterTitle();
-
-
 
    // gr1->GetYaxis()->SetRangeUser(ymin-0.1, ymax+0.2);  
    gr1->Draw("apl");
@@ -366,7 +374,19 @@ void drawIntSpectrumMC2Data( std::string beam, std::string target, std::string s
       gr[m]->Draw("lpsame");
    }
   
-   TLegend* leg = new TLegend(0.1, 0.15, 0.4, 0.35);   
+   TLegend* leg = 0;
+// for neutrons
+   if ( secondary == "neutron" )
+   {
+      leg = new TLegend(0.1, 0.1, 0.55, 0.3); 
+      leg->SetTextSize(0.035);
+   }  
+// for other secondaries
+   else
+   {
+      leg = new TLegend(0.1, 0.15, 0.45, 0.4); 
+      leg->SetTextSize(0.05);
+   }  
    
    for ( int m=0; m<NModels; m++ )
    {
@@ -382,7 +402,7 @@ void drawIntSpectrumMC2Data( std::string beam, std::string target, std::string s
 
 }
 
-void drawIntergratedSpectrumRegre( std::string beam, std::string target, std::string secondary, 
+void drawIntegratedSpectrumRegre( std::string beam, std::string target, std::string secondary, 
                                    std::string histo, std::string model )
 {
 
@@ -424,11 +444,11 @@ void drawIntergratedSpectrumRegre( std::string beam, std::string target, std::st
    }
    else if ( histo == "pT" )
    {
-      YTitle = "dpT/dxF, GeV/c";
+      YTitle = "d<pT>/dxF, GeV/c";
    }
    else if ( histo == "pT2" )
    {
-      YTitle = "dpT^2/dxF, (GeV/c)^2";
+      YTitle = "d<pT>^2/dxF, (GeV/c)^2";
    }
    
    for ( int iv=0; iv<NVersions; iv++ )
@@ -455,7 +475,7 @@ void drawIntergratedSpectrumRegre( std::string beam, std::string target, std::st
       
       hi[iv]->SetStats(0);
       hi[iv]->SetLineColor(ColorVersion[iv]);
-      hi[iv]->SetLineWidth(2);
+      hi[iv]->SetLineWidth(6-iv);
       int nx = hi[iv]->GetNbinsX();
       for (int k=1; k <= nx; k++) 
       {
@@ -465,20 +485,32 @@ void drawIntergratedSpectrumRegre( std::string beam, std::string target, std::st
       }
       if ( iv == 0 ) 
       {
-         hi[iv]->Draw("hist");
+         hi[iv]->Draw();
 	 hi[iv]->GetXaxis()->SetTitle("xF");
 	 hi[iv]->GetXaxis()->SetTitleSize(0.05);
 	 hi[iv]->GetXaxis()->SetTitleOffset(0.9);
 	 hi[iv]->GetXaxis()->CenterTitle();
 	 hi[iv]->GetYaxis()->SetTitle( YTitle.c_str() );
-	 hi[iv]->GetYaxis()->SetTitleOffset(1.5);
+	 // hi[iv]->GetYaxis()->SetTitleOffset(1.5);
+         hi[iv]->GetYaxis()->SetTitleSize(0.05);
+         hi[iv]->GetYaxis()->CenterTitle();
       }
-      else hi[iv]->Draw("samehist");     
+      else hi[iv]->Draw("same");     
 
    }
 
-   TLegend* leg = new TLegend(0.6, 0.70, 0.9, 0.9);
-   leg->SetTextSize(0.035);
+   TLegend* leg = new TLegend(0.6, 0.6, 0.98, 0.9);
+//   TLegend* leg = new TLegend(0.65, 0.70, 0.98, 0.95);
+   if ( secondary == "neutron" )
+   {
+// for neutrons
+      leg->SetTextSize(0.028);
+   }
+   else
+   {
+// for other particles
+      leg->SetTextSize(0.045);
+   }
    
    for ( int iv=0; iv<NVersions; iv++ )
    {
@@ -505,6 +537,211 @@ void drawIntergratedSpectrumRegre( std::string beam, std::string target, std::st
    leg->Draw();
    leg->SetFillColor(kWhite);   
 
+   return;
+
+}
+
+
+void drawIntSpectrumMC2DataRegre( std::string beam, std::string target, std::string secondary, 
+                                  std::string histo, std::string model )
+{
+
+   readIntegratedSpectra( beam, target, secondary );
+
+   double ymin = 10000.; // something big... don't know if I can use FLT_MAX
+   double ymax = -1. ;
+
+   float* Value = new float[NPoints];
+   float* Error = new float[NPoints];
+   
+   for ( int i=0; i<NPoints; i++ )
+   {
+      if ( histo == "dNdxF" )
+      {
+	 Value[i] = dNdxF[i];
+	 Error[i] = err_dNdxF[i];
+      }
+      else if ( histo == "pT" )
+      {
+	 Value[i] = pT[i];
+	 Error[i] = err_pT[i];
+      }
+      else if ( histo == "pT2" )
+      {
+	 Value[i] = pT2[i];
+	 Error[i] = err_pT2[i];
+      }
+   }
+
+   TH1F* hi[NVersions];
+   
+   float* MC2DataX = new float[NPoints];
+   float* MC2DataY = new float[NPoints];
+   float* DX = new float[NPoints];
+   float* DY = new float[NPoints];
+   int np = 0;
+   
+   TGraph* gr[NVersions];
+
+   for ( int m=0; m<NVersions; m++ )
+   {
+
+//      std::string histofile = "./na49-histo/" + beam + target + "158.0GeV" + model + ".root"; 
+      std::string histofile = "";
+      
+      if ( Versions[m] == CurrentVersion )
+      {
+         histofile = "./na49-histo/" + beam + target + "158.0GeV" + model;
+      }
+      else
+      {
+         histofile = Versions[m] + "/na49-histo/" + beam + target + "158.0GeV" + model;
+      }
+      histofile += ".root";
+
+      TFile* f = new TFile( histofile.c_str() );
+
+      std::string histoname = secondary + "_" + histo ;
+      
+      hi[m] = (TH1F*)f->Get( histoname.c_str() );
+      
+      int nx = hi[m]->GetNbinsX();
+      
+      np=0;
+      for ( int k=0; k<=nx; k++ ) 
+      {
+         double xx1 = hi[m]->GetBinLowEdge(k);
+	 double xx2 = hi[m]->GetBinWidth(k);
+	 for (int kk=0; kk<NPoints; kk++ )
+	 {
+	    if ( xx1 < xF[kk] && xx1+xx2 > xF[kk] )
+	    {
+	       double yy  = hi[m]->GetBinContent(k);
+	       double eyy = hi[m]->GetBinError(k);
+	       MC2DataX[np] = xF[kk];
+	       DX[np] = 0.;
+	       
+	       MC2DataY[np] = yy / Value[kk];
+	       // also need error calc here !...
+	       // DY[np]=0.;
+	       DY[np] = Error[kk]*MC2DataY[np] / Value[kk];
+	       //
+	       // the right way to do it is this:
+	       // enew2 = (e0**2 * c1**2 + e1**2 * c0**2) / c1**4
+	       // enew = sqrt( enew2 )
+	       //
+	       // but in our case of 1M beam events (~330K inelastic interactions)
+	       // the sim error will be about 5% vs 0.5-1.5% in the exp.data, 
+	       // thus the sim error will largely dominate... 
+	       // need to get at least 10 times more the statistics !...
+	       //
+	       // double etmp2 = ( eyy*eyy + Error[kk]*Error[kk]*MC2DataY[np]*MC2DataY[np] );
+	       // DY[np] = sqrt(etmp2) / Value[kk];
+	       //
+	       if ( (MC2DataY[np]+DY[np]) > ymax ) ymax = MC2DataY[np]+DY[np];
+	       if ( (MC2DataY[np]-DY[np]) < ymin ) ymin = MC2DataY[np]-DY[np];
+	       np++;
+	       break;
+	    }
+	 }
+      }
+      
+      gr[m] = new TGraphErrors( np, MC2DataX, MC2DataY, DX, DY );
+      // gr[m]->SetTitle(hi[m]->GetTitle());
+      gr[m]->SetTitle("");
+//      gr[m]->GetXaxis()->SetTitle("xF");
+//      gr[m]->GetYaxis()->SetTitle("MC/Data");
+      gr[m]->SetMarkerColor(ColorVersion[m]);  
+      gr[m]->SetMarkerStyle(SymbVersion[m]);
+//      gr[m]->SetMarkerStyle(22);
+      gr[m]->SetMarkerSize(1.2);
+      if ( secondary == "piplus" || secondary == "piminus" || secondary == "antiproton" )
+      {
+	 gr[m]->GetXaxis()->SetRangeUser(-0.55,0.55);
+      }
+      
+      // if ( m==0 ) gr1->SetTitle(hi[m]->GetTitle());
+   
+   }
+   
+   for ( int i=0; i<NPoints; i++ )
+   {
+      Error[i] /= Value[i];
+      Value[i] = 1.;
+      if ( Value[i]+Error[i] > ymax ) ymax = Value[i] + Error[i];
+      if ( Value[i]-Error[i] < ymin ) ymin = Value[i] - Error[i];
+      if ( ymin < 0. ) ymin = 0.; 
+   }
+   TGraph* gr1 = new TGraphErrors( NPoints, xF, Value, 0, Error );
+   gr1->GetYaxis()->SetRangeUser( 0.2, 2. );
+   // gr1->GetYaxis()->SetRangeUser( ymin, ymax );
+   // gr1->GetXaxis()->SetRangeUser( -0.3, 0.4 );
+   gr1->SetMarkerColor(kBlue);
+   gr1->SetMarkerStyle(22);
+   gr1->SetMarkerSize(1.0);
+   // gr1->SetMarkerSize(1.5);
+   gr1->SetTitle("");
+   
+   TAxis* xaxis = gr1->GetXaxis();
+   
+   xaxis->SetTitle("xF");
+   xaxis->SetTitleSize(0.05);
+   xaxis->SetTitleOffset(0.9);
+   xaxis->CenterTitle();
+   
+   if ( secondary == "piplus" || secondary == "piminus" || secondary == "antiproton" )
+   {
+         xaxis->SetLimits( -0.55, 0.55 );
+   }
+   if ( histo == "dNdxF" )
+   {
+      gr1->GetYaxis()->SetTitle("MC/Data (dN/dxF)");
+//      if ( secondary == "piplus" || secondary == "piminus" || secondary == "antiproton" )
+//      {
+//         xaxis->SetLimits( -0.55, 0.55 );
+//      }
+   }
+   else if ( histo == "pT" )
+   {
+      gr1->GetYaxis()->SetTitle("MC/Data (Average pT, GeV/c)" );
+   }
+   gr1->GetYaxis()->SetTitleSize(0.05);
+//   gr1->GetYaxis()->SetTitleOffset(1.5);
+   gr1->GetYaxis()->CenterTitle();
+
+
+
+   // gr1->GetYaxis()->SetRangeUser(ymin-0.1, ymax+0.2);  
+   gr1->Draw("apl");
+   // gr1->Draw("AC*");    
+   
+   for ( int m=0; m<NVersions; m++ )
+   {
+      // gr[m]->GetYaxis()->SetRangeUser( ymin-0.1, ymax+0.2 );
+      gr[m]->Draw("lpsame");
+   }
+  
+   TLegend* leg = 0;
+   if ( secondary == "neutron" )
+   {
+      leg = new TLegend(0.1, 0.65, 0.55, 0.9); 
+   }
+   else
+   { 
+      leg = new TLegend(0.1, 0.65, 0.5, 0.95);  
+   }
+   leg->SetTextSize(0.045); 
+   
+   for ( int m=0; m<NVersions; m++ )
+   {
+      leg->AddEntry( gr[m], Versions[m].c_str(), "p" );
+   }
+
+   leg->AddEntry( gr1, "exp.data", "p");
+
+   leg->Draw();
+   leg->SetFillColor(kWhite);
+   
    return;
 
 }
@@ -553,6 +790,7 @@ void drawStdDiffGraph( std::string beam, std::string target, std::string seconda
    {
 
       std::string histofile = "./na49-histo/" + beam + target + "158.0GeV" + ModelName[m] + ".root"; 
+
       TFile* f = new TFile( histofile.c_str() );
 
       std::string histoname = secondary + "_" + histo ;
@@ -747,7 +985,6 @@ void drawStdDiffHisto( std::string beam, std::string target, std::string seconda
    }
    
    TLegend* leg = new TLegend(0.1, 0.70, 0.45, 0.9);  
-   leg->SetTextSize(0.028); 
    
    for ( int m=0; m<NModels; ++m )
    {
@@ -836,6 +1073,9 @@ void draw1DDiffXSec( std::string beam, std::string target, std::string secondary
    double*    tmpPT    = new double[NPt];
    double*    tmpXSec  = new double[NPt];
    double*    tmpEXSec = new double[NPt];
+   
+   // std::cout << " icount = " << icount << " xF = " << DDiff_xF[icount] << std::endl;
+   
    for ( int i=0; i<NPt; ++i )
    {
       
@@ -843,6 +1083,7 @@ void draw1DDiffXSec( std::string beam, std::string target, std::string secondary
       tmpPT[i]    = tmpVec->x();
       tmpXSec[i]  = tmpVec->y();
       tmpEXSec[i] = tmpVec->z();
+      // std::cout << " pt, xsec, exsec = " << tmpPT[i] << " " << tmpXSec[i] << " " << tmpEXSec[i] << std::endl;
    }
    
    TGraph* gr = new TGraphErrors( NPt, tmpPT, tmpXSec, 0, tmpEXSec );

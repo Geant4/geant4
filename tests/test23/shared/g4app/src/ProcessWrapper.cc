@@ -31,11 +31,11 @@ G4VParticleChange* ProcessWrapper::PostStepDoIt( const G4Track& track, const G4S
   G4Nucleus* tNucleus = GetTargetNucleusPointer();
   tNucleus->ChooseParameters( mat );
     
-  G4HadronicInteraction* hint = ChooseHadronicInteraction( (track.GetDynamicParticle())->GetKineticEnergy(),
-                                                             mat, elm );  
-  if ( !hint ) return 0;
-
   G4HadProjectile proj(track);
+
+  G4HadronicInteraction* hint = ChooseHadronicInteraction( proj, *tNucleus, mat, elm );
+  
+  if ( !hint ) return 0;
   
   G4HadFinalState* result = hint->ApplyYourself( proj, *tNucleus );
 

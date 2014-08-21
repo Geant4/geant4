@@ -24,7 +24,7 @@ void ReadHARPData( std::string beam, std::string target, std::string energy,
 		   std::string region ) // should be either "FW" or "LA"
 {
 
-   std::string dirname = "./harp-exp-data/";
+   std::string dirname = "../test23/harp-exp-data/";
    
    std::string filename = beam + "_" + target + "_" + energy + "GeV_" + secondary + "_" + region + ".dat";
    

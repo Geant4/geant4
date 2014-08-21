@@ -22,6 +22,7 @@ float* SecMom     = 0;
 
 float* SecSigma   = 0; 
 float* SecESigma  = 0;
+float* SecESys    = 0;
 
 float* K2PiRatio  = 0;
 float* K2PiERatio = 0;
@@ -31,7 +32,7 @@ void readMomSpectrum( std::string beam, std::string target,
 		      std::string sec_angle_min, std::string sec_angle_max )
 {
 
-   std::string dirname = "./na61-exp-data/";
+   std::string dirname = "../test23/na61-exp-data/";
    std::string filename = beam + "_" + target + "_" + secondary;
    filename += "_" + sec_angle_min + "_" + sec_angle_max + ".dat";
    std::string file = dirname + filename;
@@ -54,10 +55,26 @@ void readMomSpectrum( std::string beam, std::string target,
    if ( SecESigma ) delete [] SecESigma;
    SecESigma = new float[NPoints];
    
+   if ( SecESys ) delete [] SecESys;
+   SecESys = new float[NPoints];
+   
    float pmin, pmax;
    for ( int i=0; i<NPoints; i++ )
    {  
-      infile >> pmin >> pmax >> SecSigma[i] >> SecESigma[i] ;
+      SecMom[i]    = 0.;
+      SecSigma[i]  = 0.;
+      SecESigma[i] = 0.;
+      SecESys[i]   = 0.;
+      
+      if ( secondary != "proton" ) // FIXME !!! TMP STUFF untill I frigure out
+                                   // about publication of the NA61's proton production data
+      {
+         infile >> pmin >> pmax >> SecSigma[i] >> SecESigma[i] >> SecESys[i];
+      }
+      else
+      {
+         infile >> pmin >> pmax >> SecSigma[i] >> SecESigma[i] ;
+      }
       SecMom[i] = 0.5 * ( pmin + pmax );
       // std::cout << SecMom[i] << " " << SecSigma[i] << " " << SecESigma[i] << std::endl;
       if ( secondary != "proton" )
@@ -66,9 +83,10 @@ void readMomSpectrum( std::string beam, std::string target,
 	 SecSigma[i]  /= 229.3 ; // 229.3 is production sxec, while inelastic xsec = 257.2 
 	                         // which one should be used for normalization ???        
          SecESigma[i] /= 229.3;
+         SecESys[i]   /= 229.3 ;
       }
    }
-   
+      
    infile.close();
    
    return;
@@ -79,7 +97,7 @@ void readKPlus2PiPlusRatio( std::string beam, std::string target,
 		            std::string sec_angle_min, std::string sec_angle_max )
 {
 
-   std::string dirname = "./na61/";
+   std::string dirname = "../test23/na61-exp-data/";
    std::string filename = beam + "_" + target + "_kplus2piplus";
    filename += "_" + sec_angle_min + "_" + sec_angle_max + ".dat";
    std::string file = dirname + filename;

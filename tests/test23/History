@@ -38,6 +38,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05 August 2014 Krzysztof Genser           (test23-V10-00-08)
+- Uses new implementation of ShieldingM
+- co-working with 
+                   phys-ctor-hinelastic-V10-00-04 
+                   phys-lists-V10-00-06
+
+01 August 2014 Alberto Ribon (test23-V10-00-07)
+- ProcessWrapper : updated the call to ChooseHadronicInteraction
+  according to its new signature.
+
 17 June 2014 Julia Yarba (test23-V10-00-06)
 - Minor cleanup - comment out unsed data member in Tst23NA49
 

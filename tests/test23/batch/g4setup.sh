@@ -13,8 +13,8 @@ export G4LIB_BUILD_SHARED=1
 export GLOBALLIBS=1
 
 export G4DATA=/home/g4p/pbs/download/g4data
-export G4LEDATA=${G4DATA}/G4EMLOW6.37
-export G4LEVELGAMMADATA=${G4DATA}/PhotonEvaporation3.0
+export G4LEDATA=${G4DATA}/G4EMLOW6.39
+export G4LEVELGAMMADATA=${G4DATA}/PhotonEvaporation3.1
 export G4NEUTRONHPDATA=${G4DATA}/G4NDL4.4
 export G4RADIOACTIVEDATA=${G4DATA}/RadioactiveDecay4.1
 export G4ABLADATA=${G4DATA}/G4ABLA3.0
