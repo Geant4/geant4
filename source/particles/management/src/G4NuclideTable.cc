@@ -64,7 +64,7 @@ G4NuclideTable::G4NuclideTable()
    fUserDefinedList(NULL), 
    fIsotopeList(0) 
 {
-  SetVerboseLevel(G4ParticleTable::GetParticleTable()->GetVerboseLevel());
+  //SetVerboseLevel(G4ParticleTable::GetParticleTable()->GetVerboseLevel());
   FillHardCodeList();
 }
 

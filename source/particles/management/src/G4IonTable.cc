@@ -139,6 +139,9 @@ G4IonTable::G4IonTable()
   {
     fIsotopeTableListShadow = fIsotopeTableList;
   }    
+
+  PrepareNuclideTable();
+  RegisterIsotopeTable(pNuclideTable);
 }
 
 // This method is used by each worker thread to copy the content
@@ -1532,13 +1535,9 @@ void G4IonTable::PrepareNuclideTable()
 ////////////////////
 void G4IonTable::PreloadNuclide()
 {
-  if (isIsomerCreated) return;
+  if ( isIsomerCreated || !G4Threading::IsMultithreadedApplication() ) return;
 
-  if (!pNuclideTable) {
-    PrepareNuclideTable();
-    pNuclideTable->GenerateNuclide();
-    RegisterIsotopeTable(pNuclideTable);
-  }
+  pNuclideTable->GenerateNuclide();
 
   for ( size_t i = 0 ; i != pNuclideTable->entries() ; i++ ) {
      const G4IsotopeProperty*  fProperty = pNuclideTable->GetIsotopeByIndex( i );

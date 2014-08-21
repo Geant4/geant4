@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 19 Aug. 2014 Makoto Asai (particles-V10-00-20)
+- Re-tag for testing.
+
+- 18 Aug. 2014 Makoto Asai (particles-V10-00-19)
+- Fix G4IonTable and G4NuclideTable so that now G4NuclideTable
+  object can be created without preloading any ion.
+
 - 18 Jul. 2014 Andrea Dotti (particles-V10-00-18)
 - Revert code changes in G4IonTable to logic of tag -16 
   New logic is not clear, issues to be solved with time 
