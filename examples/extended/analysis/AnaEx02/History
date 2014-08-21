@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-08-14 mma (AnaEx02-V10-00-02)
+- update Readme and .Readme again
+
+12-08-14 mma (AnaEx02-V10-00-01)
+- restaure calorimeter drawing in Readme and .Readme
+ 
 11-06-14 I. Hrivnacova (AnaEx02-V10-00-00)
 - Fixed path to copy_files.sh, clean_files.sh in GNUmalefile
   (this makes GNUmake build working with Geant4 installation via
