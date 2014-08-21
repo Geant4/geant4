@@ -14,7 +14,7 @@ $Id$
  
  The example is an adaptation of examples/novice/N03. It describes a simple 
  sampling calorimeter setup.
-	
+
  1- Detector description
  -----------------------
  
@@ -23,42 +23,33 @@ $Id$
  replicated.
  	
  Six parameters define the calorimeter :
- 	- the material of the absorber,
-	- the thickness of an absorber plate,
- 	- the material of the detection gap,
- 	- the thickness of a  gap,
- 	- the number of layers,
- 	- the transverse size of the calorimeter (the input face is a square). 
- 	
+    - the material of the absorber,
+    - the thickness of an absorber plate,
+    - the material of the detection gap,
+    - the thickness of a  gap,
+    - the number of layers,
+    - the transverse size of the calorimeter (the input face is a square). 
+
  The default geometry is constructed in DetectorConstruction class,
  but all of the above parameters can be modified interactively via
  the commands defined in the DetectorMessenger class.
 
+        |<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
+        |                       |                       |                       |
+        ==========================================================================
+        ||              |       ||              |       ||              |       ||
+        ||              |       ||              |       ||              |       ||
+ beam   ||   absorber   |  gap  ||   absorber   |  gap  ||   absorber   |  gap  ||
+======> ||              |       ||              |       ||              |       ||
+        ||              |       ||              |       ||              |       ||
+        ==========================================================================
 
-	|<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
-	|			|			|			|
-	==========================================================================
-	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
-	||   absorber 	|  gap	||   absorber 	|  gap	||   absorber 	|  gap	||
-	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
- beam	||		|	||		|	||		|	||
-======>	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
-	||    		| 	||    		| 	||    		| 	||
-	==========================================================================
-	
- 	    
  2- Physics list
- ------------------------------------
+ ---------------
  
    The particle's type and the physic processes which will be available
    in this example are set in the FTFP_BERT physics list.
- 	 
+ 
  3- An event : PrimaryGeneratorAction
  ------------------------------------
  
@@ -66,7 +57,6 @@ $Id$
  calorimeter perpendicular to the input face. The type of the particle
  and its energy are set in the PrimaryGeneratorAction class, and can
  be changed via the G4 build-in commands of ParticleGun class.
- 	
 
  4- Histograms
  ------------- 
@@ -97,7 +87,7 @@ $Id$
     
  Note that, by default, histograms are disabled. To activate them, uncomment
  the flag G4ANALYSIS_USE in GNUmakefile, *before* compilation.
-   
+  
  5- OpenScientist
  ----------------
 
