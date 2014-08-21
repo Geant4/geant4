@@ -14,6 +14,12 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+13-08-14 mma (fano-V10-00-02)
+- update Readme again
+
+12-08-14 mma (fano-V10-00-01)
+- restaure drawing in Readme
      
 21-03-14 mma (fano-V10-00-00)
 - RunAction: initialise fOldEmean and fOldDose
