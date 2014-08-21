@@ -14,7 +14,21 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+4 August 2014 Tatsumi Koi   (hadr-hpp-V10-00-03)
+---------------------------------------------------
+- G4ParticleHPElasticData, G4ParticleHPInelasticData, G4ParticleHPCaptureData,
+  G4ParticleHPFissionData, G4ParticleHPJENDLHEData: proper deletion of
+  physics vectors.
+
+
+25 July 2014  Tatsumi Koi (hadr-hpp-V10-00-02)
+---------------------------------------------------
+- Delete unused (and also uncompilable) header file.
+	G4ParticleHPPhotonXSection.hh
+
+
 1 July 2014  Tatsumi Koi (hadr-hpp-V10-00-01)
+---------------------------------------------------
 - Fix compilation warnings
 	include/G4ParticleHPInelasticData.hh
 	src/G4ParticleHPData.cc

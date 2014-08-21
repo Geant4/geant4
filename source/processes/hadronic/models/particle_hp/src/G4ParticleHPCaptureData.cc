@@ -62,11 +62,11 @@ G4ParticleHPCaptureData::G4ParticleHPCaptureData()
    
 G4ParticleHPCaptureData::~G4ParticleHPCaptureData()
 {
-   //This should be now avoided since contained object
-   //are managed by allocator 
-   //if ( theCrossSections != 0 ) theCrossSections->clearAndDestroy();
-
-   delete theCrossSections;
+   if ( theCrossSections != NULL ) {
+     theCrossSections->clearAndDestroy();
+     delete theCrossSections;
+     theCrossSections = NULL;
+   }
 }
    
 G4bool G4ParticleHPCaptureData::IsIsoApplicable( const G4DynamicParticle* dp , 

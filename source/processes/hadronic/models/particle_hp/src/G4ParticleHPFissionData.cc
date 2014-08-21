@@ -58,10 +58,11 @@ G4ParticleHPFissionData::G4ParticleHPFissionData()
    
 G4ParticleHPFissionData::~G4ParticleHPFissionData()
 {
-   //This should be now avoided in destructor because these are
-   //handled by allocators
-   //if ( theCrossSections != NULL ) theCrossSections->clearAndDestroy();
-   delete theCrossSections;
+   if ( theCrossSections != NULL ) {
+     theCrossSections->clearAndDestroy();
+     delete theCrossSections;
+     theCrossSections = NULL;
+   }
 }
 
 G4bool G4ParticleHPFissionData::IsIsoApplicable( const G4DynamicParticle* dp , 

@@ -91,10 +91,11 @@ G4ParticleHPInelasticData::G4ParticleHPInelasticData(G4ParticleDefinition* proje
    
 G4ParticleHPInelasticData::~G4ParticleHPInelasticData()
 {
-  //This should now be avoided in destructors because content of 
-   //theCrossSections is managed by allocators
-   //if ( theCrossSections != 0 ) theCrossSections->clearAndDestroy(); 
-   delete theCrossSections;
+   if ( theCrossSections != NULL ) {
+     theCrossSections->clearAndDestroy();
+     delete theCrossSections;
+     theCrossSections = NULL;
+   }
 }
 
 G4bool G4ParticleHPInelasticData::IsIsoApplicable( const G4DynamicParticle* dp , 

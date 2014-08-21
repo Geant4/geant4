@@ -61,10 +61,11 @@ G4ParticleHPElasticData::G4ParticleHPElasticData()
    
 G4ParticleHPElasticData::~G4ParticleHPElasticData()
 {
-   //This should be now avoided in destructor because these are
-   //handled by allocators
-   //if ( theCrossSections != 0 ) theCrossSections->clearAndDestroy();
-   delete theCrossSections;
+   if ( theCrossSections != NULL ) {
+     theCrossSections->clearAndDestroy();
+     delete theCrossSections;
+     theCrossSections = NULL;
+   }
 }
    
 G4bool G4ParticleHPElasticData::IsIsoApplicable( const G4DynamicParticle* dp , 

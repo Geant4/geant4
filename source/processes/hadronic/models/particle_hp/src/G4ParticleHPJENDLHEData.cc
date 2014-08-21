@@ -57,7 +57,23 @@ G4bool G4ParticleHPJENDLHEData::IsApplicable(const G4DynamicParticle*aP, const G
 
 G4ParticleHPJENDLHEData::G4ParticleHPJENDLHEData()
 {
-   ;
+  for ( std::map< G4int , std::map< G4int , G4PhysicsVector* >* >::iterator itZ = mIsotope.begin();
+        itZ != mIsotope.end(); ++itZ ) {
+    std::map< G4int , G4PhysicsVector* >* pointer_map = itZ->second;
+    if ( pointer_map ) {
+      for ( std::map< G4int , G4PhysicsVector* >::iterator itA = pointer_map->begin();
+            itA != pointer_map->end() ; ++itA ) {
+        G4PhysicsVector* pointerPhysicsVector = itA->second;
+        if ( pointerPhysicsVector ) {
+          delete pointerPhysicsVector;
+          itA->second = NULL;
+        }
+      }
+      delete pointer_map;
+      itZ->second = NULL;
+    }
+  }
+  mIsotope.clear();
 }
    
 

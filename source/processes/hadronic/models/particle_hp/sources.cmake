@@ -151,7 +151,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_par_hp
     G4ParticleHPPInelasticFS.hh
     G4ParticleHPPTInelasticFS.hh
     G4ParticleHPPhotonDist.hh
-    G4ParticleHPPhotonXSection.hh
+    #G4ParticleHPPhotonXSection.hh
     G4ParticleHPPolynomExpansion.hh
     G4ParticleHPSCFissionFS.hh
     G4ParticleHPSimpleEvapSpectrum.hh
