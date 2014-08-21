@@ -116,11 +116,9 @@ public:
   inline void AddDataSet(G4VCrossSectionDataSet * aDataSet)
   { theCrossSectionDataStore->AddDataSet(aDataSet);}
 
-  // access to the manager
+  // access to the list of hadronic interactions
   std::vector<G4HadronicInteraction*>& GetHadronicInteractionList()
   { return theEnergyRangeManager.GetHadronicInteractionList(); }
-  // inline G4EnergyRangeManager *GetManagerPointer()
-  //{ return &theEnergyRangeManager; }
           
   // get inverse cross section per volume
   G4double GetMeanFreePath(const G4Track &aTrack, G4double, 
@@ -141,8 +139,10 @@ protected:
   // generic method to choose secondary generator 
   // recommended for all derived classes
   inline G4HadronicInteraction* ChooseHadronicInteraction(
-      G4double kineticEnergy, G4Material* aMaterial, G4Element* anElement)
-  { return theEnergyRangeManager.GetHadronicInteraction(kineticEnergy,
+      const G4HadProjectile & aHadProjectile, G4Nucleus & aTargetNucleus,
+      G4Material* aMaterial, G4Element* anElement)
+  { return theEnergyRangeManager.GetHadronicInteraction(aHadProjectile, 
+                                                        aTargetNucleus,
 							aMaterial,anElement);
   }
 
@@ -177,20 +177,12 @@ public:
   //Request destructor to de-register this from
   //process store.
   //This should be called only by kernel.
-  inline void SetDeRegisterFlag( G4bool val )
-  { deRegister = val; }
+  //inline void SetDeRegisterFlag( G4bool val )
+  //{ deRegister = val; }
 protected:
 
   void DumpState(const G4Track&, const G4String&, G4ExceptionDescription&);
             
-  // obsolete method will be removed
-  //inline const G4EnergyRangeManager &GetEnergyRangeManager() const
-  //{ return theEnergyRangeManager; }
-    
-  // obsolete method will be removed
-  //inline void SetEnergyRangeManager( const G4EnergyRangeManager &value )
-  //{ theEnergyRangeManager = value; }
-
   // access to the chosen generator
   inline G4HadronicInteraction* GetHadronicInteraction() const
   { return theInteraction; }
@@ -228,11 +220,6 @@ protected:
   G4ParticleChange* theTotalResult; 
 
   G4int epReportLevel;
-
-  //The following flags controls if destrcutr de-register
-  // "this" from process store (default: true)
-  //Needed in MT for thread-local-singleton process store
-  G4bool deRegister;
 
 private:
     

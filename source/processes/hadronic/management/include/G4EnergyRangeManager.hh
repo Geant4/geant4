@@ -57,9 +57,16 @@ public:
     
   void RegisterMe( G4HadronicInteraction *a );
     
+  G4HadronicInteraction *GetHadronicInteraction(const G4HadProjectile & aHadProjectile, 
+                                                G4Nucleus & aTargetNucleus,
+						const G4Material *aMaterial,
+						const G4Element *anElement ) const;
+  // This is the new one to be used.
+
   G4HadronicInteraction *GetHadronicInteraction(const G4double kineticEnergy,
 						const G4Material *aMaterial,
 						const G4Element *anElement ) const;
+  // This is the old, deprecated one, which will be removed later on.
 
   std::vector<G4HadronicInteraction*>& GetHadronicInteractionList();
     

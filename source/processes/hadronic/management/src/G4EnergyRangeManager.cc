@@ -73,6 +73,109 @@ void G4EnergyRangeManager::RegisterMe(G4HadronicInteraction* a)
   ++theHadronicInteractionCounter;
 }
 
+
+G4HadronicInteraction*
+G4EnergyRangeManager::GetHadronicInteraction(const G4HadProjectile & aHadProjectile, 
+                                             G4Nucleus & aTargetNucleus,
+                                             const G4Material* aMaterial,
+                                             const G4Element* anElement) const
+{
+  if(0 == theHadronicInteractionCounter) {
+    throw G4HadronicException(__FILE__, __LINE__,
+			      "GetHadronicInteraction: NO MODELS STORED");
+  }
+
+  G4double kineticEnergy = aHadProjectile.GetKineticEnergy();
+  // For ions, get kinetic energy per nucleon
+  if ( aHadProjectile.GetDefinition()->GetBaryonNumber() > 1.5 ) {
+    kineticEnergy /= aHadProjectile.GetDefinition()->GetBaryonNumber();
+  }
+
+  G4int cou = 0, memory = 0, memor2 = 0;
+  G4double emi1 = 0.0, ema1 = 0.0, emi2 = 0.0, ema2 = 0.0;
+
+  for (G4int i = 0; i<theHadronicInteractionCounter; ++i) {
+    if ( theHadronicInteraction[i]->IsApplicable( aHadProjectile, aTargetNucleus ) ) {
+      G4double low  = theHadronicInteraction[i]->GetMinEnergy( aMaterial, anElement );
+      // Work-around for particles with 0 kinetic energy, which still
+      // require a model to return a ParticleChange
+      //if (low == 0.) low = -DBL_MIN;
+      G4double high = theHadronicInteraction[i]->GetMaxEnergy( aMaterial, anElement );
+      if (low <= kineticEnergy && high > kineticEnergy) {
+        ++cou;
+        emi2 = emi1;
+        ema2 = ema1;
+        emi1 = low;
+        ema1 = high;
+        memor2 = memory;
+        memory = i;
+      }
+    }
+  }
+
+  G4int mem = -1;
+  G4double rand;
+  switch (cou) {
+    case 0:
+       G4cout<<"G4EnergyRangeManager:GetHadronicInteraction: counter="
+	     <<theHadronicInteractionCounter<<", Ek="
+             <<kineticEnergy<<", Material = "<<aMaterial->GetName()
+	     <<", Element = "
+             <<anElement->GetName()<<G4endl;
+       for( G4int j=0; j<theHadronicInteractionCounter; ++j)
+       {
+         G4HadronicInteraction* HInt=theHadronicInteraction[j];
+         G4cout<<"*"<<j<<"* low=" <<HInt->GetMinEnergy(aMaterial,anElement)
+               <<", high="<<HInt->GetMaxEnergy(aMaterial,anElement)<<G4endl;
+       }
+       throw G4HadronicException(__FILE__, __LINE__,
+          "GetHadronicInteraction: No Model found");
+       return 0;
+    case 1:
+       mem = memory;
+       break;
+    case 2:
+       if( (emi2<=emi1 && ema2>=ema1) || (emi2>=emi1 && ema2<=ema1) )
+       {
+         G4cout<<"G4EnergyRangeManager:GetHadronicInteraction: counter="
+	       <<theHadronicInteractionCounter<<", Ek="
+               <<kineticEnergy<<", Material = "<<aMaterial->GetName()
+	       <<", Element = "
+               <<anElement->GetName()<<G4endl;
+         for( G4int j=0; j<theHadronicInteractionCounter; ++j)
+         {
+           G4HadronicInteraction* HInt=theHadronicInteraction[j];
+           G4cout<<"*"<<j<<"* low=" <<HInt->GetMinEnergy(aMaterial,anElement)
+               <<", high="<<HInt->GetMaxEnergy(aMaterial,anElement)<<G4endl;
+         }
+         throw G4HadronicException(__FILE__, __LINE__,
+         "GetHadronicInteraction: Energy ranges of two models fully overlapping");
+       }
+       rand = G4UniformRand();
+       if( emi1 < emi2 )
+       {
+         if( (ema1-kineticEnergy) < rand*(ema1-emi2) ) {
+           mem = memor2;
+         } else {
+           mem = memory;
+	 }
+       } else {
+         if( (ema2-kineticEnergy) < rand*(ema2-emi1) ) {
+           mem = memory;
+	 } else {
+           mem = memor2;
+	 }
+       }
+       break;
+    default:
+      throw G4HadronicException(__FILE__, __LINE__,
+      "GetHadronicInteraction: More than two competing models in this energy range");
+  }
+
+  return theHadronicInteraction[mem];
+} 
+
+
 G4HadronicInteraction*
 G4EnergyRangeManager::GetHadronicInteraction(const G4double kineticEnergy,
                                              const G4Material* aMaterial,
@@ -86,7 +189,7 @@ G4EnergyRangeManager::GetHadronicInteraction(const G4double kineticEnergy,
   G4double emi1 = 0.0, ema1 = 0.0, emi2 = 0.0, ema2 = 0.0;
 
   for (G4int i = 0; i<theHadronicInteractionCounter; ++i) {
-    G4double low  = theHadronicInteraction[i]->GetMinEnergy( aMaterial, anElement );
+      G4double low  = theHadronicInteraction[i]->GetMinEnergy( aMaterial, anElement );
     // Work-around for particles with 0 kinetic energy, which still
     // require a model to return a ParticleChange
     //if (low == 0.) low = -DBL_MIN;

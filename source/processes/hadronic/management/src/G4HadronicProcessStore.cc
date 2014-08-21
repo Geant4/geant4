@@ -86,29 +86,18 @@ void G4HadronicProcessStore::Clean()
   //	 << "  Nextra= " << n_extra << G4endl;
   for (i=0; i<n_proc; ++i) {
     if( process[i] ) {
-        //G4cout << "G4HadronicProcessStore::Clean() delete hadronic "
-        //  << i << "  " <<  process[i]->GetProcessName() << G4endl;
-	    G4HadronicProcess* p = process[i];
-        //Prevent de-registration
-        p->SetDeRegisterFlag(false);
-        //Stopping are registered ALSO in extra, remove it if found
-        for ( G4int j = 0 ; j<n_extra;++j) {
-            if ( extraProcess[j]==p) extraProcess[j]=0;
-        }
-        delete p;
-        process[i] = 0;
+      //G4cout << "G4HadronicProcessStore::Clean() delete hadronic "
+      //  << i << "  " <<  process[i]->GetProcessName() << G4endl;
+      G4HadronicProcess* p = process[i];
+      DeRegister(p);
+      delete p;
     }
   }
   for(i=0; i<n_extra; ++i) {
     if(extraProcess[i]) {
         // G4cout << "G4HadronicProcessStore::Clean() delete extra proc "
         //<< i << "  " << extraProcess[i]->GetProcessName() << G4endl;
-        G4VProcess* p = extraProcess[i];
-        //The following should not be needed, because it has already been
-        //done by previous for-loop.
-        if ( dynamic_cast<G4HadronicProcess*>(p) != NULL )
-            dynamic_cast<G4HadronicProcess*>(p)->SetDeRegisterFlag(false);
-        delete p;
+        delete extraProcess[i];
         extraProcess[i] = 0;
     }
   }
@@ -486,6 +475,7 @@ void G4HadronicProcessStore::DeRegister(G4HadronicProcess* proc)
   for(G4int i=0; i<n_proc; ++i) {
     if(process[i] == proc) {
       process[i] = 0;
+      DeRegisterExtraProcess((G4VProcess*)proc);      
       return;
     }
   }
@@ -500,11 +490,17 @@ void G4HadronicProcessStore::RegisterExtraProcess(G4VProcess* proc)
       if(extraProcess[i] == proc) { return; }
     }
   }
+  G4HadronicProcess* hproc = reinterpret_cast<G4HadronicProcess*>(proc);
+  if(hproc) {
+    for(G4int i=0; i<n_proc; ++i) {
+      if(process[i] == hproc) { return; }
+    }
+  }
   if(1 < verbose) {
     G4cout << "Extra Process: " << n_extra 
 	   << "  " <<  proc->GetProcessName() << G4endl;
   }
-  n_extra++;
+  ++n_extra;
   extraProcess.push_back(proc);
 }
 

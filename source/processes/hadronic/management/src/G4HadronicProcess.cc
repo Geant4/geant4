@@ -94,7 +94,6 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
   aScaleFactor = 1;
   xBiasOn = false;
   G4HadronicProcess_debug_flag = false;
-  deRegister = true;
   GetEnergyMomentumCheckEnvvars();
 }
 
@@ -114,15 +113,13 @@ G4HadronicProcess::G4HadronicProcess(const G4String& processName,
   aScaleFactor = 1;
   xBiasOn = false;
   G4HadronicProcess_debug_flag = false;
-  deRegister = true;
   GetEnergyMomentumCheckEnvvars();
 }
 
 
 G4HadronicProcess::~G4HadronicProcess()
 {
-  if ( deRegister )
-      G4HadronicProcessStore::Instance()->DeRegister(this);
+  G4HadronicProcessStore::Instance()->DeRegister(this);
   delete theTotalResult;
   delete theCrossSectionDataStore;
 }
@@ -260,19 +257,13 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
     return theTotalResult;
   }
 
-  // Go on to regular case
-  //
-  G4double originalEnergy = aParticle->GetKineticEnergy();
-  G4double kineticEnergy = originalEnergy;
-
-  // Get kinetic energy per nucleon for ions
-  if(aParticle->GetParticleDefinition()->GetBaryonNumber() > 1.5)
-          kineticEnergy/=aParticle->GetParticleDefinition()->GetBaryonNumber();
+  // Initialize the hadronic projectile from the track
+  thePro.Initialise(aTrack);
 
   try
   {
     theInteraction =
-      ChooseHadronicInteraction( kineticEnergy, aMaterial, anElement );
+      ChooseHadronicInteraction( thePro, targetNucleus, aMaterial, anElement );
   }
   catch(G4HadronicException & aE)
   {
@@ -287,8 +278,6 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 		ed);
   }
 
-  // Initialize the hadronic projectile from the track
-  thePro.Initialise(aTrack);
   G4HadFinalState* result = 0;
   G4int reentryCount = 0;
 

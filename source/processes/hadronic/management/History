@@ -13,6 +13,25 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+4 August 2014 V. Ivanchenko (hadr-man-V10-00-10)
+------------------------------------------------
+- G4HadronicProcessStore, G4HadronicProcess: simplified registration and 
+    de-registration; fixed Coverity report
+
+1 August 2014 Alberto Ribon (hadr-man-V10-00-09)
+------------------------------------------------
+- G4EnergyRangeManager, G4HadronicProcess: moved the computation of
+  the kinetic energy per nucleon (in the case of ion projectile)
+  from G4HadronicProcess to G4EnergyRangeManager.
+
+1 August 2014 Alberto Ribon (hadr-man-V10-00-08)
+------------------------------------------------
+- G4EnergyRangeManager : added a new method GetHadronicInteraction
+  which uses G4HadronicInteraction::IsApplicable.
+- G4HadronicProcess : replaced the old method of G4EnergyRangeManager
+  (still there but deprecated) with the new one.
+
 1 July 2014 Gunter Folger (hadr-man-V10-00-07)
 ----------------------------------------------
 - G4HadronicProcessStore::PrintHtml(): include ProcessDescription 
