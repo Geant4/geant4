@@ -541,28 +541,22 @@ void G4RunManagerKernel::InitializePhysics()
   CheckRegions();
   l.unlock();
 
-  //G4ParticleTable::GetParticleTable()->GetIonTable()->PrepareNuclideTable();
-  static G4bool createIsomerOnlyOnce = false;
-  if(/*G4Threading::IsMultithreadedApplication() &&*/ !G4Threading::IsWorkerThread())
-  {
-    if(!createIsomerOnlyOnce)
-    {
-      createIsomerOnlyOnce = true;
-      G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
-      if(gion)
-      {
-        G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
-        G4int gionId = gion->GetParticleDefinitionID();
-        G4ParticleTable::G4PTblDicIterator* pItr = G4ParticleTable::GetParticleTable()->GetIterator();
-        pItr->reset(false);
-        while( (*pItr)() )
-        {
-          G4ParticleDefinition* particle = pItr->value();
-          if(particle->IsGeneralIon()) particle->SetParticleDefinitionID(gionId);
-        }
-      }
-    }
-  }
+/*******************
+//  static G4bool createIsomerOnlyOnce = false;
+//  if(G4Threading::IsMultithreadedApplication() && !G4Threading::IsWorkerThread())
+//  {
+//    if(!createIsomerOnlyOnce)
+//    {
+//      createIsomerOnlyOnce = true;
+//      G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
+//      if(gion)
+//      {
+//        G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
+//        PropagateGenericIonID();
+//      }
+//    }
+//  }
+*********************/
 
   physicsInitialized = true;
   if(geometryInitialized && currentState!=G4State_Idle)
@@ -603,6 +597,7 @@ G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
 
   if(geometryNeedsToBeClosed) CheckRegularGeometry();
 
+  PropagateGenericIonID();
   SetupShadowProcess();
   UpdateRegion();
   BuildPhysicsTables(fakeRun);
@@ -623,6 +618,23 @@ G4bool G4RunManagerKernel::RunInitialization(G4bool fakeRun)
 
   stateManager->SetNewState(G4State_GeomClosed);
   return true;
+}
+
+void G4RunManagerKernel::PropagateGenericIonID()
+{
+  G4ParticleDefinition* gion = G4ParticleTable::GetParticleTable()->GetGenericIon();
+  if(gion)
+  {
+    //G4ParticleTable::GetParticleTable()->GetIonTable()->CreateAllIsomer();
+    G4int gionId = gion->GetParticleDefinitionID();
+    G4ParticleTable::G4PTblDicIterator* pItr = G4ParticleTable::GetParticleTable()->GetIterator();
+    pItr->reset(false);
+    while( (*pItr)() )
+    {
+      G4ParticleDefinition* particle = pItr->value();
+      if(particle->IsGeneralIon()) particle->SetParticleDefinitionID(gionId);
+    }
+  }
 }
 
 void G4RunManagerKernel::RunTermination()

@@ -226,6 +226,8 @@ protected:
     // This method will setup the G4VProcesses
     // instances to have a reference to the process instance
     // created by the master thread. See G4VProcess::GetMasterProcess
+
+    void PropagateGenericIonID();
 };
 
 #endif
