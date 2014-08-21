@@ -75,7 +75,8 @@ G4bool CheckNbins(G4int nbins)
 
 
 //_____________________________________________________________________________
-G4bool CheckMinMax(G4double xmin, G4double xmax, const G4String& binSchemeName)
+G4bool CheckMinMax(G4double xmin, G4double xmax, 
+                   const G4String& fcnName, const G4String& binSchemeName)
 {
   G4bool result = true;
   
@@ -89,10 +90,23 @@ G4bool CheckMinMax(G4double xmin, G4double xmax, const G4String& binSchemeName)
     result = false;
   }
   
-  if ( ( GetBinScheme(binSchemeName) == kLogBinScheme ) && ( xmin == 0 ) ) {
+  if ( ( fcnName != "none" ) && ( binSchemeName != "linear" ) ) {
     G4ExceptionDescription description;
     description 
-      << "    Illegal value of (xmin = 0) with logarithmic binning" << G4endl;
+      << "    Combining Function and Binning scheme is not supported." 
+      << G4endl;
+      G4Exception("G4VAnalysisManager::CheckMinMax",
+                  "Analysis_W013", JustWarning, description);
+                  
+    result = false;
+  }
+  
+  if ( ( GetBinScheme(binSchemeName) == kLogBinScheme ||
+         fcnName == "log" || fcnName == "log10" ) && ( xmin == 0 ) ) {
+    G4ExceptionDescription description;
+    description 
+      << "    Illegal value of (xmin = 0) with logarithmic function or binning" 
+      << G4endl;
       G4Exception("G4VAnalysisManager::CheckMinMax",
                   "Analysis_W013", JustWarning, description);
                   

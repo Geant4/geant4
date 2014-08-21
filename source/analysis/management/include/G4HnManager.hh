@@ -63,8 +63,24 @@ class G4HnManager : public G4BaseAnalysisManager
                           G4double xunit, G4double yunit, 
                           G4Fcn fx, G4Fcn fy,
                           G4BinScheme xBinScheme, G4BinScheme yBinScheme); 
+    void AddH3Information(const G4String& name,
+                          const G4String& xunitName, 
+                          const G4String& yunitName,
+                          const G4String& zunitName,
+                          const G4String& xfcnName,
+                          const G4String& yfcnName,
+                          const G4String& zfcnName,
+                          G4double xunit, G4double yunit, G4double zunit, 
+                          G4Fcn fx, G4Fcn fy, G4Fcn fz,
+                          G4BinScheme xBinScheme, G4BinScheme yBinScheme,
+                          G4BinScheme zBinScheme); 
     // Access methofd    
     G4HnInformation* GetHnInformation(G4int id,
+                          G4String functionName = "",
+                          G4bool warn = true) const;
+
+    G4HnDimensionInformation* GetHnDimensionInformation(G4int id,
+                          G4int dimension,
                           G4String functionName = "",
                           G4bool warn = true) const;
 
@@ -95,6 +111,7 @@ class G4HnManager : public G4BaseAnalysisManager
     G4String GetName(G4int id) const;
     G4double GetXUnit(G4int id) const;
     G4double GetYUnit(G4int id) const;
+    G4double GetZUnit(G4int id) const;
     G4bool   GetActivation(G4int id) const;
     G4bool   GetAscii(G4int id) const;
 

@@ -62,12 +62,14 @@ class G4RootFileManager : public G4VFileManager
     virtual G4bool OpenRFile(const G4String& fileName);
 
     G4bool CreateHistoDirectory();
+    G4bool CreateProfileDirectory();
     G4bool CreateNtupleDirectory();
     
     // Get methods
     // Output file
     tools::wroot::file* GetFile() const;
     tools::wroot::directory* GetHistoDirectory() const;
+    tools::wroot::directory* GetProfileDirectory() const;
     tools::wroot::directory* GetNtupleDirectory() const;
     // Input files
     tools::rroot::file* GetRFile(const G4String& fileName) const;
@@ -77,6 +79,7 @@ class G4RootFileManager : public G4VFileManager
     // output file
     tools::wroot::file*       fFile;
     tools::wroot::directory*  fHistoDirectory;
+    tools::wroot::directory*  fProfileDirectory;
     tools::wroot::directory*  fNtupleDirectory;
     // input files
     std::map<G4String, tools::rroot::file*> fRFiles;
@@ -89,6 +92,9 @@ inline tools::wroot::file* G4RootFileManager::GetFile() const
 
 inline tools::wroot::directory* G4RootFileManager::GetHistoDirectory() const
 { return fHistoDirectory; }
+
+inline tools::wroot::directory* G4RootFileManager::GetProfileDirectory() const
+{ return fProfileDirectory; }
 
 inline tools::wroot::directory* G4RootFileManager::GetNtupleDirectory() const
 { return fNtupleDirectory; }

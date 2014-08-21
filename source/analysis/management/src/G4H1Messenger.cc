@@ -120,13 +120,13 @@ void G4H1Messenger::CreateH1Cmd()
   h1ValMax0->SetDefaultValue(1.);
 
   G4UIparameter* h1ValUnit0 = new G4UIparameter("valUnit0", 's', true);
-  h1ValUnit0->SetGuidance("The unit of valMin0 and valMax0");
+  h1ValUnit0->SetGuidance("The unit applied to filled values and valMin0, valMax0");
   h1ValUnit0->SetDefaultValue("none");
   
   G4UIparameter* h1ValFcn0 = new G4UIparameter("valFcn0", 's', true);
   G4String fcnGuidance = "The function applied to filled values (log, log10, exp).\n";
   fcnGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnGuidance += "but none value should be used insted.";
+  fcnGuidance += "but none value should be used instead.";
   h1ValFcn0->SetGuidance(fcnGuidance);
   h1ValFcn0->SetParameterCandidates("log log10 exp none");
   h1ValFcn0->SetDefaultValue("none");
@@ -136,7 +136,7 @@ void G4H1Messenger::CreateH1Cmd()
   h1ValBinScheme0->SetParameterCandidates("linear log");
   binSchemeGuidance 
     += "Note that the unit and fcn parameters cannot be omitted in this case,\n";
-  binSchemeGuidance += "but none value should be used insted.";
+  binSchemeGuidance += "but none value should be used instead.";
   h1ValBinScheme0->SetGuidance(binSchemeGuidance);
   h1ValBinScheme0->SetDefaultValue("linear");
   
@@ -171,14 +171,14 @@ void G4H1Messenger::SetH1Cmd()
   h1ValMax->SetGuidance("Maximum value, expressed in unit");
   
   G4UIparameter* h1ValUnit = new G4UIparameter("valUnit", 's', true);
-  h1ValUnit->SetGuidance("The unit of valMin and valMax");
+  h1ValUnit->SetGuidance("The unit applied to filled values and valMin, valMax");
   h1ValUnit->SetDefaultValue("none");
 
   G4UIparameter* h1ValFcn = new G4UIparameter("valFcn", 's', true);
   h1ValFcn->SetParameterCandidates("log log10 exp none");
   G4String fcnGuidance = "The function applied to filled values (log, log10, exp, none).\n";
   fcnGuidance += "Note that the unit parameter cannot be omitted in this case,\n";
-  fcnGuidance += "but none value should be used insted.";
+  fcnGuidance += "but none value should be used instead.";
   h1ValFcn->SetGuidance(fcnGuidance);
   h1ValFcn->SetDefaultValue("none");
 
@@ -187,13 +187,13 @@ void G4H1Messenger::SetH1Cmd()
   G4String binSchemeGuidance = "The binning scheme (linear, log).\n";
   binSchemeGuidance 
     += "Note that the unit and fcn parameters cannot be omitted in this case,\n";
-  binSchemeGuidance += "but none value should be used insted.";
+  binSchemeGuidance += "but none value should be used instead.";
   h1ValBinScheme->SetGuidance(binSchemeGuidance);
   h1ValBinScheme->SetDefaultValue("linear");
  
   fSetH1Cmd = new G4UIcommand("/analysis/h1/set", this);
   fSetH1Cmd->SetGuidance("Set parameters for the 1D histogram of #Id :");
-  fSetH1Cmd->SetGuidance("  nbins; valMin; valMax; unit (of vmin and vmax)");
+  fSetH1Cmd->SetGuidance("  nbins; valMin; valMax; unit; function; binScheme");
   fSetH1Cmd->SetParameter(h1Id);
   fSetH1Cmd->SetParameter(h1Nbins);
   fSetH1Cmd->SetParameter(h1ValMin);

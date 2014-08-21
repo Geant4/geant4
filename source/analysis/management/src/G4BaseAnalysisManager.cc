@@ -37,7 +37,8 @@ G4BaseAnalysisManager::G4BaseAnalysisManager(
                          const G4AnalysisManagerState& state)
   : fState(state),
     fFirstId(0),
-    fLockFirstId(false)
+    fLockFirstId(false),
+    fWarn(true)
 {
 }
 
@@ -54,6 +55,8 @@ G4BaseAnalysisManager::~G4BaseAnalysisManager()
 void  G4BaseAnalysisManager::ExceptionForHistograms(
                                          const G4String& functionName) const
 {
+  if ( ! fWarn ) return;
+
   G4String inFunction = "G4";
   inFunction += fState.GetType();
   inFunction += "AnalysisManager::";
@@ -63,12 +66,39 @@ void  G4BaseAnalysisManager::ExceptionForHistograms(
   description << "      " 
               << "Histograms are not supported." ;
 
-  G4Exception(inFunction, "Analysis_W005", JustWarning, description);
+  G4Exception(inFunction, "Analysis_W016", JustWarning, description);
+  fWarn = false;
+}  
+
+//_____________________________________________________________________________
+void  G4BaseAnalysisManager::ExceptionForProfiles(
+                                         const G4String& functionName) const
+{
+  if ( ! fWarn ) return;
+
+  G4String inFunction = "G4";
+  inFunction += fState.GetType();
+  inFunction += "AnalysisManager::";
+  inFunction += functionName;
+
+  G4ExceptionDescription description;
+  description << "      " 
+              << "Profiles are not supported." ;
+
+  G4Exception(inFunction, "Analysis_W017", JustWarning, description);
+  fWarn = false;
 }  
 
 // 
 // public methods
 //
+
+//_____________________________________________________________________________
+G4bool G4BaseAnalysisManager::Reset()
+{
+  fWarn = true;
+  return true;
+}  
 
 //_____________________________________________________________________________
 G4bool G4BaseAnalysisManager::SetFirstId(G4int firstId) 

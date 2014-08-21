@@ -49,11 +49,13 @@ class G4VFileManager
     // Methods for handling files and directories names
     G4bool SetFileName(const G4String& fileName);
     G4bool SetHistoDirectoryName(const G4String& dirName);
+    G4bool SetProfileDirectoryName(const G4String& dirName);
     G4bool SetNtupleDirectoryName(const G4String& dirName);
     G4String GetFileName() const;
     G4String GetFullFileName(const G4String& baseFileName = "") const;
     G4String GetNtupleFileName(const G4String& ntupleName) const;
     G4String GetHistoDirectoryName() const;
+    G4String GetProfileDirectoryName() const;
     G4String GetNtupleDirectoryName() const;
 
     // The manager file type (starts with a lowercase letter)
@@ -64,9 +66,11 @@ class G4VFileManager
     const G4AnalysisManagerState& fState;
     G4String fFileName;
     G4String fHistoDirectoryName;
+    G4String fProfileDirectoryName;
     G4String fNtupleDirectoryName; 
     G4bool   fLockFileName;     
     G4bool   fLockHistoDirectoryName;     
+    G4bool   fLockProfileDirectoryName;     
     G4bool   fLockNtupleDirectoryName;
 };
 
@@ -78,6 +82,10 @@ inline G4String G4VFileManager::GetFileName() const {
 
 inline G4String G4VFileManager::GetHistoDirectoryName() const {
   return fHistoDirectoryName;
+}  
+
+inline G4String G4VFileManager::GetProfileDirectoryName() const {
+  return fProfileDirectoryName;
 }  
 
 inline G4String G4VFileManager::GetNtupleDirectoryName() const {

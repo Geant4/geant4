@@ -37,9 +37,11 @@ G4VFileManager::G4VFileManager(const G4AnalysisManagerState& state)
   : fState(state),
     fFileName(""), 
     fHistoDirectoryName(""), 
+    fProfileDirectoryName(""), 
     fNtupleDirectoryName(""),
     fLockFileName(false),
     fLockHistoDirectoryName(false), 
+    fLockProfileDirectoryName(false), 
     fLockNtupleDirectoryName(false)
 {
 }
@@ -82,6 +84,22 @@ G4bool G4VFileManager::SetHistoDirectoryName(const G4String& dirName)
   }              
 
   fHistoDirectoryName = dirName;
+  return true;
+}  
+
+//_____________________________________________________________________________
+G4bool G4VFileManager::SetProfileDirectoryName(const G4String& dirName) 
+{
+  if ( fLockProfileDirectoryName ) {
+    G4ExceptionDescription description;
+    description 
+      << "Cannot set Profile directory name as its value was already used.";
+    G4Exception("G4VFileManager::SetProfileDirectoryName()",
+                "Analysis_W009", JustWarning, description);
+    return false;
+  }              
+
+  fProfileDirectoryName = dirName;
   return true;
 }  
 

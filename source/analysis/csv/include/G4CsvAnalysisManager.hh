@@ -46,6 +46,9 @@
 
 class G4H1DummyManager;
 class G4H2DummyManager;
+class G4H3DummyManager;
+class G4P1DummyManager;
+class G4P2DummyManager;
 class G4CsvFileManager;
 class G4CsvNtupleManager;
 
@@ -88,6 +91,9 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
     //
     G4H1DummyManager*   fH1Manager;
     G4H2DummyManager*   fH2Manager;
+    G4H3DummyManager*   fH3Manager;
+    G4P1DummyManager*   fP1Manager;
+    G4P2DummyManager*   fP2Manager;
     G4CsvNtupleManager* fNtupleManager;
     G4CsvFileManager*   fFileManager;
 };

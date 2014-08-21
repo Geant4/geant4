@@ -35,6 +35,7 @@
 #define G4H2ToolsManager_h 1
 
 #include "G4VH2Manager.hh"
+#include "G4BaseToolsManager.hh"
 #include "G4HnManager.hh"
 #include "globals.hh"
 
@@ -176,6 +177,7 @@ class G4H2ToolsManager : public G4VH2Manager
                             
     // data members
     //
+    G4BaseToolsManager fBaseToolsManager;
     std::vector<tools::histo::h2d*>  fH2Vector;            
     std::map<G4String, G4int>  fH2NameIdMap;            
 };

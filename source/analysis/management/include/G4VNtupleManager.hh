@@ -73,7 +73,7 @@ class G4VNtupleManager : public G4BaseAnalysisManager
     G4bool SetFirstNtupleColumnId(G4int firstId); 
     G4int  GetFirstNtupleColumnId() const;
 
-    // Methods to fill histogrammes, ntuples
+    // Methods to fill ntuples
     // Methods for ntuple with id = FirstNtupleId                     
     virtual G4bool FillNtupleIColumn(G4int id, G4int value) = 0;
     virtual G4bool FillNtupleFColumn(G4int id, G4float value) = 0;

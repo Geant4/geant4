@@ -35,6 +35,7 @@
 #define G4H1ToolsManager_h 1
 
 #include "G4VH1Manager.hh"
+#include "G4BaseToolsManager.hh"
 #include "G4HnManager.hh"
 #include "G4BinScheme.hh"
 #include "globals.hh"
@@ -153,6 +154,7 @@ class G4H1ToolsManager : public G4VH1Manager
                             
     // data members
     //
+    G4BaseToolsManager fBaseToolsManager;
     std::vector<tools::histo::h1d*>  fH1Vector;            
     std::map<G4String, G4int>  fH1NameIdMap;            
 };

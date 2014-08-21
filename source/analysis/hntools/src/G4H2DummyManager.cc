@@ -118,11 +118,7 @@ G4bool G4H2DummyManager::FillH2(G4int /*id*/,
                                 G4double /*xvalue*/, G4double /*yvalue*/,
                                 G4double /*weight*/)
 {
-  G4ExceptionDescription description;
-  description << "      " 
-              << "Histograms are not supported." ;
-  G4Exception("G4H2DummyManager::FillH2()",
-            "Analysis_W007", JustWarning, description);
+  ExceptionForHistograms("FillH2");
   return false;
 }
 

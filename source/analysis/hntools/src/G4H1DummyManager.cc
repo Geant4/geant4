@@ -101,11 +101,7 @@ G4bool G4H1DummyManager::ScaleH1(G4int /*id*/, G4double /*factor*/)
 G4bool G4H1DummyManager::FillH1(G4int /*id*/, 
                                     G4double /*value*/, G4double /*weight*/)
 {
-  G4ExceptionDescription description;
-  description << "      " 
-              << "Histograms are not supported." ;
-  G4Exception("G4H1DummyManager::FillH1()",
-            "Analysis_W007", JustWarning, description);
+  ExceptionForHistograms("FillH1");
   return false;
 }
 
@@ -203,4 +199,3 @@ G4bool G4H1DummyManager::WriteOnAscii(std::ofstream& /*output*/)
   ExceptionForHistograms("GetH1YAxisTitle");
   return false;
 }
-

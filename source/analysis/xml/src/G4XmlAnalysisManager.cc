@@ -31,6 +31,9 @@
 #include "G4XmlFileManager.hh"
 #include "G4H1ToolsManager.hh"
 #include "G4H2ToolsManager.hh"
+#include "G4H3ToolsManager.hh"
+#include "G4P1ToolsManager.hh"
+#include "G4P2ToolsManager.hh"
 #include "G4XmlNtupleManager.hh"
 #include "G4AnalysisManagerState.hh"
 #include "G4Threading.hh"
@@ -45,6 +48,12 @@ namespace {
   G4Mutex mergeH1Mutex = G4MUTEX_INITIALIZER;
   //Mutex to lock master manager when merging H1 histograms 
   G4Mutex mergeH2Mutex = G4MUTEX_INITIALIZER;
+  //Mutex to lock master manager when merging H1 histograms 
+  G4Mutex mergeH3Mutex = G4MUTEX_INITIALIZER;
+  //Mutex to lock master manager when merging P1 profiles
+  G4Mutex mergeP1Mutex = G4MUTEX_INITIALIZER;
+  //Mutex to lock master manager when merging P2 profiles
+  G4Mutex mergeP2Mutex = G4MUTEX_INITIALIZER;
 }  
 
 G4XmlAnalysisManager* G4XmlAnalysisManager::fgMasterInstance = 0;
@@ -66,6 +75,9 @@ G4XmlAnalysisManager::G4XmlAnalysisManager(G4bool isMaster)
  : G4VAnalysisManager("Xml", isMaster),
    fH1Manager(0),
    fH2Manager(0),
+   fH3Manager(0),
+   fP1Manager(0),
+   fP2Manager(0),
    fNtupleManager(0),
    fFileManager(0)
 {
@@ -84,6 +96,9 @@ G4XmlAnalysisManager::G4XmlAnalysisManager(G4bool isMaster)
   // Create managers
   fH1Manager = new G4H1ToolsManager(fState);
   fH2Manager = new G4H2ToolsManager(fState);
+  fH3Manager = new G4H3ToolsManager(fState);
+  fP1Manager = new G4P1ToolsManager(fState);
+  fP2Manager = new G4P2ToolsManager(fState);
   fNtupleManager = new G4XmlNtupleManager(fState);
   fFileManager = new G4XmlFileManager(fState);
   fNtupleManager->SetFileManager(fFileManager);
@@ -92,6 +107,9 @@ G4XmlAnalysisManager::G4XmlAnalysisManager(G4bool isMaster)
   // Set managers to base class
   SetH1Manager(fH1Manager);
   SetH2Manager(fH2Manager);
+  SetH3Manager(fH3Manager);
+  SetP1Manager(fP1Manager);
+  SetP2Manager(fP2Manager);
   SetNtupleManager(fNtupleManager);
   SetFileManager(fFileManager);
 }
@@ -121,8 +139,8 @@ G4bool G4XmlAnalysisManager::WriteH1()
 
     for ( G4int i=0; i<G4int(h1Vector.size()); ++i ) {
       G4HnInformation* info = hnVector[i];
-      G4bool activation = info->fActivation;
-      G4String name = info->fName;
+      G4bool activation = info->GetActivation();
+      G4String name = info->GetName();
       // skip writing if activation is enabled and H1 is inactivated
       if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
       tools::histo::h1d* h1 = h1Vector[i];
@@ -171,8 +189,8 @@ G4bool G4XmlAnalysisManager::WriteH2()
     // h2 histograms
     for ( G4int i=0; i<G4int(h2Vector.size()); ++i ) {
       G4HnInformation* info = hnVector[i];
-      G4bool activation = info->fActivation;
-      G4String name = info->fName;
+      G4bool activation = info->GetActivation();
+      G4String name = info->GetName();
       // skip writing if inactivated
       if ( fState.GetIsActivation() && ( ! activation ) ) continue;
       tools::histo::h2d* h2 = h2Vector[i];
@@ -206,6 +224,154 @@ G4bool G4XmlAnalysisManager::WriteH2()
   return true;
 }
 
+//_____________________________________________________________________________
+G4bool G4XmlAnalysisManager::WriteH3()
+{
+  const std::vector<tools::histo::h3d*>& h3Vector
+    = fH3Manager->GetH3Vector();
+  const std::vector<G4HnInformation*>& hnVector
+    = fH3Manager->GetHnVector();
+
+  if ( ! h3Vector.size() ) return true;
+
+  if ( ! G4Threading::IsWorkerThread() )  {
+
+    // h3 histograms
+    for ( G4int i=0; i<G4int(h3Vector.size()); ++i ) {
+      G4HnInformation* info = hnVector[i];
+      G4bool activation = info->GetActivation();
+      G4String name = info->GetName();
+      // skip writing if inactivated
+      if ( fState.GetIsActivation() && ( ! activation ) ) continue;
+      tools::histo::h3d* h3 = h3Vector[i];
+#ifdef G4VERBOSE
+      if ( fState.GetVerboseL3() ) 
+        fState.GetVerboseL3()->Message("write", "h3d", name);
+#endif
+      G4String path = "/";
+      path.append(fFileManager->GetHistoDirectoryName());
+      std::ofstream* hnFile = fFileManager->GetHnFile();
+      G4bool result
+        = tools::waxml::write(*hnFile, *h3, path, name);
+      if ( ! result ) {
+        G4ExceptionDescription description;
+        description << "      " << "saving histogram " << name << " failed";
+        G4Exception("G4XmlAnalysisManager::Write()",
+                  "Analysis_W003", JustWarning, description);
+        return false;       
+      } 
+      fFileManager->LockHistoDirectoryName();
+    }
+  }  
+  else {
+    // The worker manager just adds its histograms to the master
+    // This operation needs a lock
+    G4AutoLock lH3(&mergeH3Mutex);
+    fgMasterInstance->fH3Manager->AddH3Vector(h3Vector);
+    lH3.unlock();
+  }  
+  
+  return true;
+}
+
+//_____________________________________________________________________________
+G4bool G4XmlAnalysisManager::WriteP1()
+{
+  const std::vector<tools::histo::p1d*>& p1Vector
+    = fP1Manager->GetP1Vector();
+  const std::vector<G4HnInformation*>& hnVector
+    = fP1Manager->GetHnVector();
+
+  if ( ! p1Vector.size() ) return true;
+
+  if ( ! G4Threading::IsWorkerThread() )  {
+  
+    for ( G4int i=0; i<G4int(p1Vector.size()); ++i ) {
+      G4HnInformation* info = hnVector[i];
+      G4bool activation = info->GetActivation();
+      G4String name = info->GetName();
+      // skip writing if activation is enabled and P1 is inactivated
+      if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
+      tools::histo::p1d* p1 = p1Vector[i];
+#ifdef G4VERBOSE
+      if ( fState.GetVerboseL3() ) 
+        fState.GetVerboseL3()->Message("write", "p1d", name);
+#endif
+      G4String path = "/";
+      path.append(fFileManager->GetProfileDirectoryName());
+      std::ofstream* hnFile = fFileManager->GetHnFile();
+      G4bool result
+        = tools::waxml::write(*hnFile, *p1, path, name);
+      if ( ! result ) {
+        G4ExceptionDescription description;
+        description << "      " << "saving profile " << name << " failed";
+        G4Exception("G4XmlAnalysisManager::Write()",
+                  "Analysis_W003", JustWarning, description);
+        return false;       
+      } 
+      fFileManager->LockProfileDirectoryName();
+    }
+  }
+  else {
+    // The worker manager just adds its profiles to the master
+    // This operation needs a lock
+    G4AutoLock lP1(&mergeP1Mutex);
+    fgMasterInstance->fP1Manager->AddP1Vector(p1Vector);
+    lP1.unlock();
+  }  
+  
+  return true;
+}
+    
+//_____________________________________________________________________________
+G4bool G4XmlAnalysisManager::WriteP2()
+{
+  const std::vector<tools::histo::p2d*>& p2Vector
+    = fP2Manager->GetP2Vector();
+  const std::vector<G4HnInformation*>& hnVector
+    = fP2Manager->GetHnVector();
+
+  if ( ! p2Vector.size() ) return true;
+
+  if ( ! G4Threading::IsWorkerThread() )  {
+  
+    for ( G4int i=0; i<G4int(p2Vector.size()); ++i ) {
+      G4HnInformation* info = hnVector[i];
+      G4bool activation = info->GetActivation();
+      G4String name = info->GetName();
+      // skip writing if activation is enabled and P2 is inactivated
+      if ( fState.GetIsActivation() && ( ! activation ) ) continue; 
+      tools::histo::p2d* p2 = p2Vector[i];
+#ifdef G4VERBOSE
+      if ( fState.GetVerboseL3() ) 
+        fState.GetVerboseL3()->Message("write", "p2d", name);
+#endif
+      G4String path = "/";
+      path.append(fFileManager->GetProfileDirectoryName());
+      std::ofstream* hnFile = fFileManager->GetHnFile();
+      G4bool result
+        = tools::waxml::write(*hnFile, *p2, path, name);
+      if ( ! result ) {
+        G4ExceptionDescription description;
+        description << "      " << "saving profile " << name << " failed";
+        G4Exception("G4XmlAnalysisManager::Write()",
+                  "Analysis_W003", JustWarning, description);
+        return false;       
+      } 
+      fFileManager->LockProfileDirectoryName();
+    }
+  }
+  else {
+    // The worker manager just adds its profiles to the master
+    // This operation needs a lock
+    G4AutoLock lP2(&mergeP2Mutex);
+    fgMasterInstance->fP2Manager->AddP2Vector(p2Vector);
+    lP2.unlock();
+  }  
+  
+  return true;
+}
+    
 //_____________________________________________________________________________
 G4bool G4XmlAnalysisManager::WriteNtuple()
 {
@@ -246,6 +412,15 @@ G4bool G4XmlAnalysisManager::Reset()
   finalResult = finalResult && result;
 
   result = fH2Manager->Reset();
+  finalResult = finalResult && result;
+  
+  result = fH3Manager->Reset();
+  finalResult = finalResult && result;
+  
+  result = fP1Manager->Reset();
+  finalResult = finalResult && result;
+  
+  result = fP2Manager->Reset();
   finalResult = finalResult && result;
   
   result = fNtupleManager->Reset();
@@ -309,7 +484,9 @@ G4bool G4XmlAnalysisManager::WriteImpl()
   WriteNtuple();
 
   if ( ! fgMasterInstance && 
-       ( ( ! fH1Manager->IsEmpty() ) || ( ! fH2Manager->IsEmpty() ) ) ) {
+       ( ( ! fH1Manager->IsEmpty() ) || ( ! fH2Manager->IsEmpty() ) || 
+         ( ! fH3Manager->IsEmpty() ) || ( ! fP1Manager->IsEmpty() ) ||
+         ( ! fP2Manager->IsEmpty() ) ) ) {
 
     G4ExceptionDescription description;
     description 
@@ -330,6 +507,18 @@ G4bool G4XmlAnalysisManager::WriteImpl()
 
   // H2
   result = WriteH2();
+  finalResult = finalResult && result;
+
+  // H3
+  result = WriteH3();
+  finalResult = finalResult && result;
+
+  // P1
+  result = WriteP1();
+  finalResult = finalResult && result;
+
+  // P2
+  result = WriteP2();
   finalResult = finalResult && result;
 
   // Write ASCII if activated
@@ -386,7 +575,8 @@ G4bool G4XmlAnalysisManager::CloseFileImpl()
   // delete files if empty
   // (ntuple files are created only if an ntuple is created)
   if ( fFileManager->GetHnFile() && 
-       fH1Manager->IsEmpty() && fH2Manager->IsEmpty() ) {
+       fH1Manager->IsEmpty() && fH2Manager->IsEmpty() && fH3Manager->IsEmpty() &&
+       fP1Manager->IsEmpty() && fP2Manager->IsEmpty() ) {
     result = ! std::remove(fFileManager->GetFullFileName());
     //  std::remove returns 0 when success
     if ( ! result ) {

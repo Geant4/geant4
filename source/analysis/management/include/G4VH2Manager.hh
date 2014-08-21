@@ -48,7 +48,7 @@ class G4VH2Manager : public G4BaseAnalysisManager
     G4VH2Manager(const G4AnalysisManagerState& state);
     virtual ~G4VH2Manager();
 
-    // Methods for handling histogrammes
+    // Methods for handling histograms
     virtual G4int CreateH2(const G4String& name, const G4String& title,
                            G4int nxbins, G4double xmin, G4double xmax, 
                            G4int nybins, G4double ymin, G4double ymax,

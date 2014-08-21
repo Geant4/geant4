@@ -33,6 +33,9 @@
 #include "G4HnManager.hh"
 #include "G4VH1Manager.hh"
 #include "G4VH2Manager.hh"
+#include "G4VH3Manager.hh"
+#include "G4VP1Manager.hh"
+#include "G4VP2Manager.hh"
 #include "G4VNtupleManager.hh"
 #include "G4VFileManager.hh"
 
@@ -46,8 +49,11 @@ G4VAnalysisManager::G4VAnalysisManager(const G4String& type, G4bool isMaster)
    fMessenger(0),
    fH1HnManager(0),
    fH2HnManager(0),
+   fP1HnManager(0),
    fVH1Manager(0),
    fVH2Manager(0),
+   fVP1Manager(0),
+   fVP2Manager(0),
    fVNtupleManager(0),
    fVFileManager(0)
 {
@@ -60,6 +66,9 @@ G4VAnalysisManager::~G4VAnalysisManager()
   delete fMessenger;
   delete fVH1Manager;
   delete fVH2Manager;
+  delete fVH3Manager;
+  delete fVP1Manager;
+  delete fVP2Manager;
   delete fVNtupleManager;
   delete fVFileManager;
 }
@@ -83,6 +92,30 @@ void G4VAnalysisManager::SetH2Manager(G4VH2Manager* h2Manager)
   fH2HnManager = h2Manager->fHnManager;
   fMessenger->SetH2HnManager(fH2HnManager);
 }  
+
+//_____________________________________________________________________________
+void G4VAnalysisManager::SetH3Manager(G4VH3Manager* h3Manager)
+{
+  fVH3Manager = h3Manager;
+  fH3HnManager = h3Manager->fHnManager;
+  fMessenger->SetH3HnManager(fH3HnManager);
+}  
+
+//_____________________________________________________________________________
+void G4VAnalysisManager::SetP1Manager(G4VP1Manager* p1Manager)
+{
+  fVP1Manager = p1Manager;
+  fP1HnManager = p1Manager->fHnManager;
+  fMessenger->SetP1HnManager(fP1HnManager);
+} 
+
+//_____________________________________________________________________________
+void G4VAnalysisManager::SetP2Manager(G4VP2Manager* p2Manager)
+{
+  fVP2Manager = p2Manager;
+  fP2HnManager = p2Manager->fHnManager;
+  fMessenger->SetP2HnManager(fP2HnManager);
+} 
 
 //_____________________________________________________________________________
 void G4VAnalysisManager::SetNtupleManager(G4VNtupleManager* ntupleManager)
@@ -129,6 +162,15 @@ G4bool G4VAnalysisManager::WriteAscii(const G4String& fileName)
   
   result = fVH2Manager->WriteOnAscii(output);
   finalResult = finalResult && result;  
+
+  result = fVH3Manager->WriteOnAscii(output);
+  finalResult = finalResult && result;  
+
+  //result = fVP1Manager->WriteOnAscii(output);
+  //finalResult = finalResult && result;  
+
+  //result = fVP2Manager->WriteOnAscii(output);
+  //finalResult = finalResult && result;  
 
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL1() ) 
@@ -217,7 +259,7 @@ G4int G4VAnalysisManager::CreateH1(const G4String& name,  const G4String& title,
 {
   if ( ! CheckName(name, "H1") ) return kInvalidId;
   if ( ! CheckNbins(nbins) ) return kInvalidId;
-  if ( ! CheckMinMax(xmin, xmax, binSchemeName) ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, fcnName, binSchemeName) ) return kInvalidId;
 
   return fVH1Manager->CreateH1(name, title, nbins, xmin, xmax, 
                                unitName, fcnName, binSchemeName);
@@ -247,10 +289,10 @@ G4int G4VAnalysisManager::CreateH2(const G4String& name,  const G4String& title,
   if ( ! CheckName(name, "H2") ) return kInvalidId;
   
   if ( ! CheckNbins(nxbins) ) return kInvalidId;
-  if ( ! CheckMinMax(xmin, xmax, xbinSchemeName) ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, xfcnName, xbinSchemeName) ) return kInvalidId;
 
   if ( ! CheckNbins(nybins) ) return kInvalidId;
-  if ( ! CheckMinMax(ymin, ymax, ybinSchemeName) ) return kInvalidId;
+  if ( ! CheckMinMax(ymin, ymax, yfcnName, ybinSchemeName) ) return kInvalidId;
 
   return fVH2Manager->CreateH2(name, title, 
                                nxbins, xmin, xmax, nybins, ymin, ymax, 
@@ -277,13 +319,69 @@ G4int G4VAnalysisManager::CreateH2(const G4String& name,  const G4String& title,
 }                                         
 
 //_____________________________________________________________________________
+G4int G4VAnalysisManager::CreateH3(const G4String& name,  const G4String& title,
+                               G4int nxbins, G4double xmin, G4double xmax,
+                               G4int nybins, G4double ymin, G4double ymax,
+                               G4int nzbins, G4double zmin, G4double zmax,
+                               const G4String& xunitName, const G4String& yunitName,
+                               const G4String& zunitName,
+                               const G4String& xfcnName, const G4String& yfcnName, 
+                               const G4String& zfcnName,
+                               const G4String& xbinSchemeName, 
+                               const G4String& ybinSchemeName,
+                               const G4String& zbinSchemeName)
+                               
+{
+  if ( ! CheckName(name, "H3") ) return kInvalidId;
+  
+  if ( ! CheckNbins(nxbins) ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, xfcnName, xbinSchemeName) ) return kInvalidId;
+
+  if ( ! CheckNbins(nybins) ) return kInvalidId;
+  if ( ! CheckMinMax(ymin, ymax, yfcnName, ybinSchemeName) ) return kInvalidId;
+
+  if ( ! CheckNbins(nzbins) ) return kInvalidId;
+  if ( ! CheckMinMax(zmin, zmax, zfcnName, zbinSchemeName) ) return kInvalidId;
+
+  return fVH3Manager->CreateH3(name, title, 
+                               nxbins, xmin, xmax, nybins, ymin, ymax, 
+                               nzbins, zmin, zmax,
+                               xunitName, yunitName, zunitName, 
+                               xfcnName, yfcnName, zfcnName,
+                               xbinSchemeName, ybinSchemeName, zbinSchemeName);
+}                                         
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::CreateH3(const G4String& name,  const G4String& title,
+                               const std::vector<G4double>& xedges,
+                               const std::vector<G4double>& yedges,
+                               const std::vector<G4double>& zedges,
+                               const G4String& xunitName, const G4String& yunitName,
+                               const G4String& zunitName,
+                               const G4String& xfcnName, const G4String& yfcnName, 
+                               const G4String& zfcnName)
+                               
+{
+  if ( ! CheckName(name, "H3") ) return kInvalidId;
+  
+  if ( ! CheckEdges(xedges) ) return kInvalidId;
+  if ( ! CheckEdges(yedges) ) return kInvalidId;
+  if ( ! CheckEdges(zedges) ) return kInvalidId;
+
+  return fVH3Manager->CreateH3(name, title, 
+                               xedges, yedges, zedges, 
+                               xunitName, yunitName, zunitName,
+                               xfcnName, yfcnName, zfcnName);
+}                                         
+
+//_____________________________________________________________________________
 G4bool G4VAnalysisManager::SetH1(G4int id,
                                 G4int nbins, G4double xmin, G4double xmax,
                                 const G4String& unitName, const G4String& fcnName,
                                 const G4String& binSchemeName)
 {                                
   if ( ! CheckNbins(nbins) ) return kInvalidId;
-  if ( ! CheckMinMax(xmin, xmax, binSchemeName) ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, fcnName, binSchemeName) ) return kInvalidId;
 
   return fVH1Manager->SetH1(id, nbins, xmin, xmax, unitName, fcnName, binSchemeName); 
 }
@@ -308,10 +406,10 @@ G4bool G4VAnalysisManager::SetH2(G4int id,
                                 const G4String& ybinSchemeName)
 {                                
   if ( ! CheckNbins(nxbins) ) return kInvalidId;
-  if ( ! CheckMinMax(xmin, xmax, xbinSchemeName) ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, xfcnName, xbinSchemeName) ) return kInvalidId;
 
   if ( ! CheckNbins(nybins) ) return kInvalidId;
-  if ( ! CheckMinMax(ymin, ymax, ybinSchemeName) ) return kInvalidId;
+  if ( ! CheckMinMax(ymin, ymax, yfcnName, ybinSchemeName) ) return kInvalidId;
 
   return fVH2Manager->SetH2(id, nxbins, xmin, xmax, nybins, ymin, ymax, 
                             xunitName, yunitName, xfcnName, yfcnName,
@@ -333,6 +431,55 @@ G4bool G4VAnalysisManager::SetH2(G4int id,
 }
                                   
 //_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetH3(G4int id,
+                                G4int nxbins, G4double xmin, G4double xmax, 
+                                G4int nybins, G4double ymin, G4double ymax,
+                                G4int nzbins, G4double zmin, G4double zmax,
+                                const G4String& xunitName, const G4String& yunitName,
+                                const G4String& zunitName,
+                                const G4String& xfcnName, const G4String& yfcnName, 
+                                const G4String& zfcnName,
+                                const G4String& xbinSchemeName, 
+                                const G4String& ybinSchemeName,
+                                const G4String& zbinSchemeName)
+{                                
+  if ( ! CheckNbins(nxbins) ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, xfcnName, xbinSchemeName) ) return kInvalidId;
+
+  if ( ! CheckNbins(nybins) ) return kInvalidId;
+  if ( ! CheckMinMax(ymin, ymax, yfcnName, ybinSchemeName) ) return kInvalidId;
+
+  if ( ! CheckNbins(nzbins) ) return kInvalidId;
+  if ( ! CheckMinMax(zmin, zmax, zfcnName, zbinSchemeName) ) return kInvalidId;
+
+  return fVH3Manager->SetH3(id, 
+                            nxbins, xmin, xmax, nybins, ymin, ymax, 
+                            nzbins, zmin, zmax,
+                            xunitName, yunitName, zunitName, 
+                            xfcnName, yfcnName, zfcnName,
+                            xbinSchemeName, ybinSchemeName, zbinSchemeName);
+}
+                                  
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetH3(G4int id,
+                                const std::vector<G4double>& xedges,
+                                const std::vector<G4double>& yedges,
+                                const std::vector<G4double>& zedges,
+                                const G4String& xunitName, const G4String& yunitName,
+                                const G4String& zunitName,
+                                const G4String& xfcnName, const G4String& yfcnName, 
+                                const G4String& zfcnName)
+{                                
+  if ( ! CheckEdges(xedges) ) return kInvalidId;
+  if ( ! CheckEdges(yedges) ) return kInvalidId;
+  if ( ! CheckEdges(zedges) ) return kInvalidId;
+
+  return fVH3Manager->SetH3(id, xedges, yedges, zedges,
+                            xunitName, yunitName, zunitName, 
+                            xfcnName, yfcnName, zfcnName);
+}
+                                  
+//_____________________________________________________________________________
 G4bool G4VAnalysisManager::ScaleH1(G4int id, G4double factor)
 {
   return fVH1Manager->ScaleH1(id, factor);
@@ -344,6 +491,174 @@ G4bool G4VAnalysisManager::ScaleH2(G4int id, G4double factor)
   return fVH2Manager->ScaleH2(id, factor);
 }  
                            
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::ScaleH3(G4int id, G4double factor)
+{
+  return fVH3Manager->ScaleH3(id, factor);
+}  
+                           
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::CreateP1(const G4String& name,  const G4String& title,
+                               G4int nbins, G4double xmin, G4double xmax,
+                               G4double ymin, G4double ymax,
+                               const G4String& xunitName, const G4String& yunitName,
+                               const G4String& xfcnName, const G4String& yfcnName,
+                               const G4String& xbinSchemeName)
+{
+  if ( ! CheckName(name, "P1") ) return kInvalidId;
+  if ( ! CheckNbins(nbins) ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, xfcnName, xbinSchemeName) ) return kInvalidId;
+  if ( ! CheckMinMax(ymin, ymax) ) return kInvalidId;
+
+  return fVP1Manager->CreateP1(name, title, nbins, xmin, xmax, ymin, ymax,
+                               xunitName, yunitName, xfcnName, yfcnName, 
+                               xbinSchemeName);
+}                                         
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::CreateP1(const G4String& name,  const G4String& title,
+                               const std::vector<G4double>& edges,
+                               G4double ymin, G4double ymax,
+                               const G4String& xunitName, const G4String& yunitName,
+                               const G4String& xfcnName, const G4String& yfcnName)
+{
+  if ( ! CheckName(name, "P1") ) return kInvalidId;
+  if ( ! CheckEdges(edges) ) return kInvalidId;
+
+  return fVP1Manager->CreateP1(name, title, edges, ymin, ymax, 
+                               xunitName, yunitName, xfcnName, yfcnName);
+}                                         
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::CreateP2(const G4String& name, const G4String& title,
+                              G4int nxbins, G4double xmin, G4double xmax,
+                              G4int nybins, G4double ymin, G4double ymax, 
+                              G4double zmin, G4double zmax,
+                              const G4String& xunitName, const G4String& yunitName,
+                              const G4String& zunitName,
+                              const G4String& xfcnName, const G4String& yfcnName,
+                              const G4String& zfcnName,
+                              const G4String& xbinSchemeName, 
+                              const G4String& ybinSchemeName)
+{
+  if ( ! CheckName(name, "P2") ) return kInvalidId;
+  if ( ! CheckNbins(nxbins) ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, xfcnName, xbinSchemeName) ) return kInvalidId;
+  if ( ! CheckMinMax(ymin, ymax, yfcnName, xbinSchemeName) ) return kInvalidId;
+  if ( ! CheckMinMax(zmin, zmax) ) return kInvalidId;
+
+  return fVP2Manager->CreateP2(name, title, 
+                               nxbins, xmin, xmax, nybins, ymin, ymax,
+                               zmin, zmax,
+                               xunitName, yunitName, zunitName,
+                               xfcnName, yfcnName, zfcnName,
+                               xbinSchemeName, ybinSchemeName);
+}                               
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::CreateP2(const G4String& name, const G4String& title,
+                              const std::vector<G4double>& xedges,
+                              const std::vector<G4double>& yedges,
+                              G4double zmin, G4double zmax,
+                              const G4String& xunitName, const G4String& yunitName,
+                              const G4String& zunitName,
+                              const G4String& xfcnName, const G4String& yfcnName,
+                              const G4String& zfcnName)
+{
+  if ( ! CheckName(name, "P2") ) return kInvalidId;
+  if ( ! CheckEdges(xedges) ) return kInvalidId;
+  if ( ! CheckEdges(yedges) ) return kInvalidId;
+
+  return fVP2Manager->CreateP2(name, title, xedges, yedges, zmin, zmax, 
+                               xunitName, yunitName, zunitName,
+                               xfcnName, yfcnName, zfcnName);
+}                                         
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetP1(G4int id,
+                                G4int nbins, G4double xmin, G4double xmax,
+                                G4double ymin, G4double ymax,
+                                const G4String& xunitName, const G4String& yunitName,
+                                const G4String& xfcnName, const G4String& yfcnName,
+                                const G4String& xbinSchemeName)
+{                                
+  if ( ! CheckNbins(nbins) ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, xfcnName, xbinSchemeName) ) return kInvalidId;
+
+  return fVP1Manager->SetP1(id, nbins, xmin, xmax, ymin, ymax, 
+                            xunitName, yunitName, xfcnName, yfcnName, 
+                            xbinSchemeName);
+}
+  
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetP1(G4int id,
+                                const std::vector<G4double>& edges,
+                                G4double ymin, G4double ymax,
+                                const G4String& xunitName, const G4String& yunitName,
+                                const G4String& xfcnName, const G4String& yfcnName)
+{                                
+  if ( ! CheckEdges(edges) ) return kInvalidId;
+
+  return fVP1Manager->SetP1(id, edges, ymin, ymax, 
+                            xunitName, yunitName, xfcnName, yfcnName); 
+}
+  
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetP2(G4int id,
+                              G4int nxbins, G4double xmin, G4double xmax, 
+                              G4int nybins, G4double ymin, G4double ymax, 
+                              G4double zmin, G4double zmax,
+                              const G4String& xunitName, const G4String& yunitName,
+                              const G4String& zunitName,
+                              const G4String& xfcnName, const G4String& yfcnName,
+                              const G4String& zfcnName,
+                              const G4String& xbinSchemeName, 
+                              const G4String& ybinSchemeName)
+{
+  if ( ! CheckNbins(nxbins) ) return kInvalidId;
+  if ( ! CheckNbins(nybins) ) return kInvalidId;
+  if ( ! CheckMinMax(xmin, xmax, xfcnName, xbinSchemeName) ) return kInvalidId;
+  if ( ! CheckMinMax(ymin, ymax, yfcnName, ybinSchemeName) ) return kInvalidId;
+
+  return fVP2Manager->SetP2(id, nxbins, xmin, xmax, nybins, ymin, ymax, 
+                            zmin, zmax,
+                            xunitName, yunitName, zunitName,
+                            xfcnName, yfcnName, zfcnName,
+                            xbinSchemeName, ybinSchemeName);
+}
+  
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetP2(G4int id,
+                              const std::vector<G4double>& xedges,
+                              const std::vector<G4double>& yedges,
+                              G4double zmin, G4double zmax,
+                              const G4String& xunitName, 
+                              const G4String& yunitName,
+                              const G4String& zunitName,
+                              const G4String& xfcnName, 
+                              const G4String& yfcnName,
+                              const G4String& zfcnName)
+{
+  if ( ! CheckEdges(xedges) ) return kInvalidId;
+  if ( ! CheckEdges(yedges) ) return kInvalidId;
+
+  return fVP2Manager->SetP2(id, xedges, yedges, zmin, zmax, 
+                            xunitName, yunitName, zunitName,
+                            xfcnName, yfcnName, zfcnName);
+}
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::ScaleP1(G4int id, G4double factor)
+{
+  return fVP1Manager->ScaleP1(id, factor);
+}  
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::ScaleP2(G4int id, G4double factor)
+{
+  return fVP2Manager->ScaleP2(id, factor);
+}  
+
 //_____________________________________________________________________________
 G4int G4VAnalysisManager::CreateNtuple(const G4String& name, 
                                           const G4String& title)
@@ -490,6 +805,9 @@ G4bool G4VAnalysisManager::SetFirstHistoId(G4int firstId)
   result = fH2HnManager->SetFirstId(firstId);
   finalResult = finalResult && result;
    
+  result = fH3HnManager->SetFirstId(firstId);
+  finalResult = finalResult && result;
+   
   return finalResult; 
 }  
 
@@ -516,6 +834,64 @@ G4bool G4VAnalysisManager::SetFirstH2Id(G4int firstId)
   result = fH2HnManager->SetFirstId(firstId);
   finalResult = finalResult && result;
    
+  return finalResult; 
+}  
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetFirstH3Id(G4int firstId) 
+{
+  G4bool finalResult = true;
+  G4bool result = fVH3Manager->SetFirstId(firstId);
+  finalResult = finalResult && result;
+
+  result = fH3HnManager->SetFirstId(firstId);
+  finalResult = finalResult && result;
+   
+  return finalResult; 
+}  
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetFirstProfileId(G4int firstId) 
+{
+  G4bool finalResult = true;
+  G4bool result = fVP1Manager->SetFirstId(firstId);
+  finalResult = finalResult && result;
+  
+  result = fP1HnManager->SetFirstId(firstId);
+  finalResult = finalResult && result;
+  
+  result = fVP2Manager->SetFirstId(firstId);
+  finalResult = finalResult && result;
+
+  result = fP2HnManager->SetFirstId(firstId);
+  finalResult = finalResult && result;
+   
+  return finalResult; 
+}  
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetFirstP1Id(G4int firstId) 
+{
+  G4bool finalResult = true;
+  G4bool result = fVP1Manager->SetFirstId(firstId);
+  finalResult = finalResult && result;
+  
+  result = fP1HnManager->SetFirstId(firstId);
+  finalResult = finalResult && result;
+  
+  return finalResult; 
+}  
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisManager::SetFirstP2Id(G4int firstId) 
+{
+  G4bool finalResult = true;
+  G4bool result = fVP2Manager->SetFirstId(firstId);
+  finalResult = finalResult && result;
+  
+  result = fP2HnManager->SetFirstId(firstId);
+  finalResult = finalResult && result;
+  
   return finalResult; 
 }  
 
@@ -575,6 +951,31 @@ G4int G4VAnalysisManager::GetFirstH2Id() const
 
   return fVH2Manager->GetFirstId();
 }  
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::GetFirstH3Id() const
+{
+// Return first H3 id
+
+  return fVH3Manager->GetFirstId();
+}  
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::GetFirstP1Id() const
+{
+// Return first P1 id
+
+  return fVP1Manager->GetFirstId();
+}  
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::GetFirstP2Id() const
+{
+// Return first P2 id
+
+  return fVP2Manager->GetFirstId();
+}  
+
 //_____________________________________________________________________________
 G4int G4VAnalysisManager::GetFirstNtupleId() const
 {
@@ -601,6 +1002,24 @@ G4int G4VAnalysisManager::GetNofH1s() const
 G4int G4VAnalysisManager::GetNofH2s() const
 {
   return fH2HnManager->GetNofHns();
+}  
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::GetNofH3s() const
+{
+  return fH3HnManager->GetNofHns();
+}  
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::GetNofP1s() const
+{
+  return fP1HnManager->GetNofHns();
+}  
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::GetNofP2s() const
+{
+  return fP2HnManager->GetNofHns();
 }  
 
 //_____________________________________________________________________________
@@ -653,6 +1072,72 @@ void  G4VAnalysisManager::SetH2Activation(G4bool activation)
 void  G4VAnalysisManager::SetH2Ascii(G4int id, G4bool ascii)
 {
   fH2HnManager->SetAscii(id, ascii);
+}    
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetH3Activation(G4int id, G4bool activation)
+{
+// Set activation to a given H3 object
+
+  fH3HnManager->SetActivation(id, activation);
+}    
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetH3Activation(G4bool activation)
+{
+// Set activation to all H3 objects
+
+  fH3HnManager->SetActivation(activation);
+}    
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetH3Ascii(G4int id, G4bool ascii)
+{
+  fH3HnManager->SetAscii(id, ascii);
+}    
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetP1Activation(G4int id, G4bool activation)
+{
+// Set activation to a given P1 object
+
+  fP1HnManager->SetActivation(id, activation);
+}    
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetP1Activation(G4bool activation)
+{
+// Set activation to all P1 objects
+
+  fP1HnManager->SetActivation(activation);
+}    
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetP1Ascii(G4int id, G4bool ascii)
+{
+  fP1HnManager->SetAscii(id, ascii);
+}    
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetP2Activation(G4int id, G4bool activation)
+{
+// Set activation to a given P2 object
+
+  fP2HnManager->SetActivation(id, activation);
+}    
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetP2Activation(G4bool activation)
+{
+// Set activation to all P2 objects
+
+  fP2HnManager->SetActivation(activation);
+}    
+
+//_____________________________________________________________________________
+void  G4VAnalysisManager::SetP2Ascii(G4int id, G4bool ascii)
+{
+  fP2HnManager->SetAscii(id, ascii);
 }    
 
 // Access methods in .icc

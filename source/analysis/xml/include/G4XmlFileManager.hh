@@ -57,6 +57,7 @@ class G4XmlFileManager : public G4VFileManager
     
     // Set methods
     void LockHistoDirectoryName();
+    void LockProfileDirectoryName();
     void LockNtupleDirectoryName();
     
     // Get methods
@@ -72,6 +73,9 @@ class G4XmlFileManager : public G4VFileManager
 
 inline void G4XmlFileManager::LockHistoDirectoryName()
 { fLockHistoDirectoryName = true; }
+
+inline void G4XmlFileManager::LockProfileDirectoryName()
+{ fLockProfileDirectoryName = true; }
 
 inline void G4XmlFileManager::LockNtupleDirectoryName()
 { fLockNtupleDirectoryName = true; }

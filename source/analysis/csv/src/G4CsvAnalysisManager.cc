@@ -31,6 +31,9 @@
 #include "G4CsvFileManager.hh"
 #include "G4H1DummyManager.hh"
 #include "G4H2DummyManager.hh"
+#include "G4H3DummyManager.hh"
+#include "G4P1DummyManager.hh"
+#include "G4P2DummyManager.hh"
 #include "G4CsvNtupleManager.hh"
 #include "G4AnalysisVerbose.hh"
 #include "G4AnalysisManagerState.hh"
@@ -57,6 +60,11 @@ G4CsvAnalysisManager* G4CsvAnalysisManager::Instance()
 //_____________________________________________________________________________
 G4CsvAnalysisManager::G4CsvAnalysisManager(G4bool isMaster)
  : G4VAnalysisManager("Csv", isMaster),
+   fH1Manager(0),
+   fH2Manager(0),
+   fH3Manager(0),
+   fP1Manager(0),
+   fP2Manager(0),
    fNtupleManager(0),
    fFileManager(0)
 {
@@ -75,6 +83,9 @@ G4CsvAnalysisManager::G4CsvAnalysisManager(G4bool isMaster)
   // Create managers
   fH1Manager = new G4H1DummyManager(fState);
   fH2Manager = new G4H2DummyManager(fState);
+  fH3Manager = new G4H3DummyManager(fState);
+  fP1Manager = new G4P1DummyManager(fState);
+  fP2Manager = new G4P2DummyManager(fState);
   fNtupleManager = new G4CsvNtupleManager(fState);
   fFileManager = new G4CsvFileManager(fState);
   fNtupleManager->SetFileManager(fFileManager);
@@ -83,6 +94,9 @@ G4CsvAnalysisManager::G4CsvAnalysisManager(G4bool isMaster)
   // Set managers to base class
   SetH1Manager(fH1Manager);
   SetH2Manager(fH2Manager);
+  SetH3Manager(fH3Manager);
+  SetP1Manager(fP1Manager);
+  SetP2Manager(fP2Manager);
   SetNtupleManager(fNtupleManager);
   SetFileManager(fFileManager);
 }
@@ -173,6 +187,21 @@ G4bool G4CsvAnalysisManager::CloseFileImpl()
   }  
 
   // reset data
+  result = fH1Manager->Reset();
+  finalResult = finalResult && result;
+    
+  result = fH2Manager->Reset();
+  finalResult = finalResult && result;
+    
+  result = fH3Manager->Reset();
+  finalResult = finalResult && result;
+    
+  result = fP1Manager->Reset();
+  finalResult = finalResult && result;
+    
+  result = fP2Manager->Reset();
+  finalResult = finalResult && result;
+  
   result = fNtupleManager->Reset();
   if ( ! result ) {
     G4ExceptionDescription description;
