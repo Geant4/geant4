@@ -34,7 +34,7 @@
 #include "ExTGDetectorConstructionWithSD.hh"
 #include "ExTGDetectorConstructionWithCpp.hh"
 #include "ExTGDetectorConstructionWithCuts.hh"
-#include "ExTGPhysicsList.hh"
+#include "G4GenericPhysicsList.hh"
 #include "ExTGPrimaryGeneratorAction.hh"
 #include "ExTGActionInitialization.hh"
 
@@ -72,7 +72,10 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(new ExTGDetectorConstruction);
 
   //
-  runManager->SetUserInitialization(new ExTGPhysicsList);
+  std::vector<G4String>* MyConstr = new std::vector<G4String>;
+  MyConstr->push_back("G4EmStandardPhysics");
+  G4VModularPhysicsList* phys = new G4GenericPhysicsList(MyConstr);
+  runManager->SetUserInitialization(phys);
 
   // User Action classes
   //
