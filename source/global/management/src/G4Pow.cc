@@ -44,7 +44,9 @@
 // -------------------------------------------------------------------
 
 #include "G4Pow.hh"
+#ifdef G4MULTITHREADED
 #include "G4Threading.hh"
+#endif
 
 G4Pow* G4Pow::fpInstance = 0;
 
@@ -54,7 +56,8 @@ G4Pow* G4Pow::GetInstance()
 {
   if (fpInstance == 0)
   {
-    fpInstance = new G4Pow;
+    static G4Pow geant4pow;
+    fpInstance = &geant4pow;
   }
   return fpInstance;
 }
@@ -63,13 +66,14 @@ G4Pow* G4Pow::GetInstance()
 
 G4Pow::G4Pow()
   : onethird(1.0/3.0), max2(5)
-{
+{  
+#ifdef G4MULTITHREADED
   if(G4Threading::IsWorkerThread())
   { 
     G4Exception ("G4Pow::G4Pow()", "InvalidSetup", FatalException, 
                  "Attempt to instantiate G4Pow in worker thread!");
   }
-
+#endif
   const G4int maxZ = 512; 
   const G4int maxZfact = 170; 
 
@@ -117,9 +121,7 @@ G4Pow::G4Pow()
 // -------------------------------------------------------------------
 
 G4Pow::~G4Pow()
-{
-  delete fpInstance; fpInstance = 0;
-}
+{}
 
 // -------------------------------------------------------------------
 

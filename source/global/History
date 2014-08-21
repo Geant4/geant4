@@ -17,6 +17,23 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 19, 2014 M. Asai (global-V10-00-32)
+- Recover G4PhysicsModelCatalog::Destroy() that has slipped out
+  from previous tag.
+
+August 19, 2014 K. Genser (global-V10-00-31)
+- G4PhysicsModelCatalog - made it more const, 
+    hide operator= and copy c'tor; 
+    co-works with track-V10-00-04
+
+August 5, 2014  V.Ivanchenko (global-V10-00-30)
+- G4PhysicsModelCatalog - make destructor public in order delete 
+    the class at exit
+- G4Pow - fixed destruction
+
+August 5, 2014  V.Ivanchenko (global-V10-00-29)
+- G4Pow - make destructor public in order delete the class at exit
+
 July 21, 2014  V.Ivanchenko (global-V10-00-28)
 - G4PhysicsVector - removed G4Allocator
 - G4PhysicsModelCatalog - added destruction of catalog 

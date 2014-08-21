@@ -59,6 +59,7 @@ class G4Pow
   public:
 
     static G4Pow* GetInstance();
+   ~G4Pow();
 
     // Fast computation of Z^1/3
     //
@@ -99,11 +100,8 @@ class G4Pow
   private:
 
     G4Pow();
-   ~G4Pow();
 
     inline G4double logBase(G4double x) const;
-
-  private:
 
     static G4Pow* fpInstance;
 
