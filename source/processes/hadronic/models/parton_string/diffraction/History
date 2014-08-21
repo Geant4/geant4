@@ -15,6 +15,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12-Aug-2014 A. Ribon       (hadr-string-diff-V10-00-03)
+-  Postponed the previous, internal tag made by V. Uzhinsky.
+-  G4FTFModel : factorized the longest method, PutOnMassShell, 
+   without changing the results for hadron-nucleus, nucleus-nucleus,
+   anti_baryon-nucleus, and light anti_ion-nucleus interactions.
+
+30-May-2014 V. Uzhinsky    (hadr-string-diff-V10-00-02)
+-  Intermediate variant of FTFmodel is saved. The variant contents a
+   partially tuned process cross sections for pp-, Kp- and Pi p interactions.
+   Description of Pi p interactions is still unsattisfactory. The variant
+   has to work with LundStringFragmentation where Z^2 fragmentation function
+   is implemented for qq-fragmentations.
+
 23-May-2014 A. Ribon       (hadr-string-diff-V10-00-01)
 -  Fix bug #1550 : extend the vectors CandAQ, CandQ of G4FTFAnnihilation
    in the case of one quark - anti-quark string, in order to correctly
