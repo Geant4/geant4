@@ -137,13 +137,18 @@ G4hhElastic::G4hhElastic( G4ParticleDefinition* target, G4ParticleDefinition* pr
 
 G4hhElastic::~G4hhElastic()
 {
-  if(fEnergyVector) delete fEnergyVector;
-
-  if( fTableT )
-  {
-      fTableT->clearAndDestroy();
-      delete fTableT ;
+  if ( fEnergyVector ) {
+    delete fEnergyVector;
+    fEnergyVector = 0;
   }
+
+  for ( std::vector<G4PhysicsTable*>::iterator it = fBankT.begin();
+        it != fBankT.end(); ++it ) {
+    if ( (*it) ) (*it)->clearAndDestroy();
+    delete *it;
+    *it = 0;
+  }
+  fTableT = 0;
 }
 
 /////////////////////////////////////////////////////////////////////////////

@@ -91,7 +91,7 @@ G4ChargeExchangeProcess::G4ChargeExchangeProcess(const G4String& procName)
 
 G4ChargeExchangeProcess::~G4ChargeExchangeProcess()
 {
-  delete factors;
+  if (factors) delete factors;
 }
 
 void G4ChargeExchangeProcess::
