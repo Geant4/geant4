@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-08-14  V.Ivanchenko (exhadr00-V10-00-01)
+- Reduced log output
+
 20-05-14  V.Ivanchenko (exhadr00-V10-00-00)
 - HistoManager - added histogram with cross section per volume
 
