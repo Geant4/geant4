@@ -13,6 +13,7 @@
 #
 /run/initialize
 #
+/process/eLoss/CSDARange true
 /process/eLoss/fluct false
 /process/eLoss/StepFunction 1 1 mm
 #

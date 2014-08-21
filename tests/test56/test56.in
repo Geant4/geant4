@@ -19,6 +19,7 @@
 /testem/stack/killSecondaries false
 #
 /run/initialize
+/process/eLoss/CSDARange true
 #/testem/phys/fluo true
 /process/em/deexcitation World true true true
 /process/em/fluo true

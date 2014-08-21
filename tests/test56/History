@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-08-14  V.Ivanchenko (test56-V10-00-00)
+- Removed warning on CSDA range
+
 21-11-13 A. Dotti    (test56-V09-06-04)
 - Use G4RunManager::ReinitializeGeometry()
 
