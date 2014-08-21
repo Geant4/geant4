@@ -95,12 +95,12 @@ G4HadFinalState * G4LENDInelastic::ApplyYourself(const G4HadProjectile& aTrack, 
          {
             if ( jA != 0 )
             {
-               theSec->SetDefinition( G4IonTable::GetIonTable()->FindIon( jZ , jA , jm ) );
+               theSec->SetDefinition( G4IonTable::GetIonTable()->GetIon( jZ , jA , jm ) );
                totN += jA;
             }
             else 
             {
-               theSec->SetDefinition( G4IonTable::GetIonTable()->FindIon( jZ , iA+1-totN , jm ) );
+               theSec->SetDefinition( G4IonTable::GetIonTable()->GetIon( jZ , iA+1-totN , jm ) );
             }
          } 
          else

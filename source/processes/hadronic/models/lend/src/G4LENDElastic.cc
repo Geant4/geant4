@@ -64,9 +64,10 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
 
 //G4cout << "iZ " << iZ << " iA " << iA  << G4endl;
 
-   G4ReactionProduct theTarget( G4IonTable::GetIonTable()->FindIon( iZ , iA , iM ) );
+   G4ParticleDefinition* pd = G4IonTable::GetIonTable()->GetIon( iZ , iA , iM );
+   G4ReactionProduct theTarget( pd );
 
-   G4double mass = G4IonTable::GetIonTable()->FindIon( iZ , iA , iM )->GetPDGMass();
+   G4double mass = pd->GetPDGMass();
 
 // add Thermal motion 
    G4double kT = k_Boltzmann*temp;
@@ -133,7 +134,7 @@ G4HadFinalState * G4LENDElastic::ApplyYourself(const G4HadProjectile& aTrack, G4
      G4DynamicParticle* theRecoil = new G4DynamicParticle;
 
 //     theRecoil->SetDefinition( ionTable->GetIon( iZ , iA ) ); 
-       theRecoil->SetDefinition( G4IonTable::GetIonTable()->FindIon( iZ, iA , iM ));
+       theRecoil->SetDefinition( G4IonTable::GetIonTable()->GetIon( iZ, iA , iM ));
      theRecoil->SetMomentum( theTarget.GetMomentum() );
 
      theResult->AddSecondary( theRecoil );

@@ -200,9 +200,10 @@ G4HadFinalState * G4LENDModel::ApplyYourself(const G4HadProjectile& aTrack, G4Nu
    theNeutron.SetMomentum( aTrack.Get4Momentum().vect() );
    theNeutron.SetKineticEnergy( ke );
 
-   G4ReactionProduct theTarget( G4IonTable::GetIonTable()->FindIon( iZ , iA , iM ) );
+   G4ParticleDefinition* pd = G4IonTable::GetIonTable()->GetIon( iZ , iA , iM );
+   G4ReactionProduct theTarget( pd );
 
-   G4double mass = G4IonTable::GetIonTable()->FindIon( iZ , iA , iM )->GetPDGMass();
+   G4double mass = pd->GetPDGMass();
 
 // add Thermal motion 
    G4double kT = k_Boltzmann*temp;
@@ -254,7 +255,7 @@ G4HadFinalState * G4LENDModel::ApplyYourself(const G4HadProjectile& aTrack, G4Nu
      theResult->SetMomentumChange(theNeutron.GetMomentum().unit());
      G4DynamicParticle* theRecoil = new G4DynamicParticle;
 
-     theRecoil->SetDefinition( G4IonTable::GetIonTable()->FindIon( iZ , iA , iM , iZ ) );
+     theRecoil->SetDefinition( G4IonTable::GetIonTable()->GetIon( iZ , iA , iM , iZ ) );
      theRecoil->SetMomentum( theTarget.GetMomentum() );
 
      theResult->AddSecondary( theRecoil );

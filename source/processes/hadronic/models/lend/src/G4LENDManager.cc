@@ -48,7 +48,7 @@ G4LENDManager::G4LENDManager()
 :verboseLevel( 0 )
 {
 
-   printBanner();
+   //printBanner();
 
    G4String xmcf;
    if( getenv("G4LENDDATA") == NULL ) {

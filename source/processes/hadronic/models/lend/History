@@ -15,6 +15,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 August 2014 Tatsumi Koi (hadr-lend-V10-00-06)
+-Turn off license banner
+	src/G4LENDManager.cc
+-Fix bug FindIon -> GetIon
+	src/G4LENDCapture.cc
+	src/G4LENDModel.cc
+	src/G4LENDInelastic.cc
+	src/G4LENDElastic.cc
+
+
 2 June 2014 Tatsumi Koi (hadr-lend-V10-00-05)
 -Protect divide overflow 
        src/tpia_misc.cc
