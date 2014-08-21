@@ -77,8 +77,7 @@ G4HadronStoppingProcess::G4HadronStoppingProcess(const G4String& name)
 
 G4HadronStoppingProcess::~G4HadronStoppingProcess()
 {
-  if ( deRegister )
-    G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
+  G4HadronicProcessStore::Instance()->DeRegisterExtraProcess(this);
   delete fElementSelector;
   // NOTE: fEmCascade and fEmBoundDecay owned by registry, not locally
 }
@@ -173,7 +172,7 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
     // select model
     G4HadronicInteraction* model = 0;
     try {
-      model = ChooseHadronicInteraction(0.0, track.GetMaterial(), elm);
+      model = ChooseHadronicInteraction(thePro, *nucleus, track.GetMaterial(), elm);
     }
     catch(G4HadronicException & aE) {
       G4ExceptionDescription ed;
