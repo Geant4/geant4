@@ -44,13 +44,11 @@
 #include "G4VCrossSectionDataSet.hh"
 #include "G4DynamicParticle.hh"
 #include "G4Element.hh"
-#include "G4MuonMinus.hh"
-#include "G4MuonPlus.hh"
-#include "G4NucleiProperties.hh"
-#include <vector>
+#include "G4PhysicsVector.hh"
 
+const G4int MAXZMUN = 93;
 
-class G4PhysicsTable;
+class G4PhysicsVector;
 
 class G4KokoulinMuonNuclearXS : public G4VCrossSectionDataSet
 {
@@ -66,29 +64,30 @@ public:
   G4double GetElementCrossSection(const G4DynamicParticle* particle,
 				  G4int Z, const G4Material*);
 
+  void BuildPhysicsTable(const G4ParticleDefinition&);
+
   void BuildCrossSectionTable();
 
   G4double
-  ComputeDDMicroscopicCrossSection(G4double incidentKE, G4double,
-                                   G4double AtomicWeight, G4double epsilon);
+  ComputeDDMicroscopicCrossSection(G4double incidentKE, G4double Z,
+                                   G4double A, G4double epsilon);
 
 private:
 
   G4double
-  ComputeMicroscopicCrossSection(G4double incidentKE,
-                                 G4double AtomicNumber, G4double AtomicWeight);
+  ComputeMicroscopicCrossSection(G4double incidentKE, G4double A);
 
   G4KokoulinMuonNuclearXS & operator=(const G4KokoulinMuonNuclearXS &right);
   G4KokoulinMuonNuclearXS(const G4KokoulinMuonNuclearXS&);
 
-  G4PhysicsTable* theCrossSectionTable;
+  static G4PhysicsVector* theCrossSection[MAXZMUN];
 
   G4double LowestKineticEnergy;
   G4double HighestKineticEnergy;
-  G4int TotBin;
+  G4int    TotBin;
   G4double CutFixed;
-
-  std::map<G4int,G4int> zelMap;
+  G4bool   isInitialized;
+  G4bool   isMaster;
 };
 
 #endif

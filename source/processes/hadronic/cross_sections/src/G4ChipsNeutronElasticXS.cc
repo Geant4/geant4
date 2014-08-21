@@ -154,12 +154,6 @@ G4double G4ChipsNeutronElasticXS::GetIsoCrossSection(const G4DynamicParticle* Pt
 // Make pMom in independent units ! (Now it is MeV)
 G4double G4ChipsNeutronElasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ, G4int tgN, G4int)
 {
-  static G4ThreadLocal std::vector <G4int>    *colN_G4MT_TLS_ = 0 ; if (!colN_G4MT_TLS_) colN_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colN = *colN_G4MT_TLS_;  // Vector of N for calculated nuclei (isotops)
-  static G4ThreadLocal std::vector <G4int>    *colZ_G4MT_TLS_ = 0 ; if (!colZ_G4MT_TLS_) colZ_G4MT_TLS_ = new  std::vector <G4int>     ;  std::vector <G4int>    &colZ = *colZ_G4MT_TLS_;  // Vector of Z for calculated nuclei (isotops)
-  static G4ThreadLocal std::vector <G4double> *colP_G4MT_TLS_ = 0 ; if (!colP_G4MT_TLS_) colP_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colP = *colP_G4MT_TLS_;  // Vector of last momenta for the reaction
-  static G4ThreadLocal std::vector <G4double> *colTH_G4MT_TLS_ = 0 ; if (!colTH_G4MT_TLS_) colTH_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colTH = *colTH_G4MT_TLS_; // Vector of energy thresholds for the reaction
-  static G4ThreadLocal std::vector <G4double> *colCS_G4MT_TLS_ = 0 ; if (!colCS_G4MT_TLS_) colCS_G4MT_TLS_ = new  std::vector <G4double>  ;  std::vector <G4double> &colCS = *colCS_G4MT_TLS_; // Vector of last cross sections for the reaction
-  // ***---*** End of the mandatory Static Definitions of the Associative Memory ***---***
 
   G4double pEn=pMom;
   onlyCS=false;
@@ -229,9 +223,7 @@ G4double G4ChipsNeutronElasticXS::GetChipsCrossSection(G4double pMom, G4int tgZ,
 G4double G4ChipsNeutronElasticXS::CalculateCrossSection(G4bool CS, G4int F,G4int I,
                                              G4int PDG, G4int tgZ, G4int tgN, G4double pIU)
 {
-  // *** Begin of Associative Memory DB for acceleration of the cross section calculations
-  static G4ThreadLocal std::vector <G4double>  *PIN_G4MT_TLS_ = 0 ; if (!PIN_G4MT_TLS_) PIN_G4MT_TLS_ = new  std::vector <G4double>   ;  std::vector <G4double>  &PIN = *PIN_G4MT_TLS_;   // Vector of max initialized log(P) in the table
-  // *** End of Static Definitions (Associative Memory Data Base) ***
+
   G4double pMom=pIU/GeV;                // All calculations are in GeV
   onlyCS=CS;                            // Flag to calculate only CS (not Si/Bi)
   lastLP=std::log(pMom);                // Make a logarithm of the momentum for calculation

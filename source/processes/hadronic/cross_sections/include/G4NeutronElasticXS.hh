@@ -49,6 +49,8 @@
 #include "globals.hh"
 #include <vector>
 
+const G4int MAXZEL = 93;
+
 class G4DynamicParticle;
 class G4ParticleDefinition;
 class G4Element;
@@ -89,11 +91,10 @@ private:
 
   const G4ParticleDefinition* proton;
 
-  std::vector<G4PhysicsVector*> data;
-  std::vector<G4double>         coeff;
-  G4int   maxZ;
+  static std::vector<G4PhysicsVector*>* data;
+  static G4double  coeff[MAXZEL];
 
-  G4bool  isInitialized;
+  G4bool  isMaster;
 
 };
 

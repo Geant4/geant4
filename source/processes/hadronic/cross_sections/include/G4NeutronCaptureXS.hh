@@ -104,9 +104,10 @@ private:
 
   G4double emax;
   G4double elimit;
-  G4bool   isInitialized;
 
-  G4ElementData data;
+  G4bool   isMaster;
+
+  static G4ElementData* data;
 
   std::vector<G4PhysicsVector*> work;
   std::vector<G4double>         temp;

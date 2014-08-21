@@ -14,6 +14,35 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+08 August 2014 W.Pokorski (hadr-cross-V10-00-13)
+------------------------------------------------
+- fixing one more memory leak in Chips cross sections
+
+07 August 2014 W.Pokorski (hadr-cross-V10-00-12)
+------------------------------------------------
+- replacing all the statics by regular class members in Chips cross sections
+
+06 August 2014 V.Ivanchenko (hadr-cross-V10-00-11)
+------------------------------------------------
+- G4NeutronElasticXS - fixed minor memory leak at the end of job
+
+27 July 2014 V.Ivanchenko (hadr-cross-V10-00-10)
+------------------------------------------------
+- G4KokoulinMuonNuclearXS - delete G4PhysicsVectors end of job;
+    share data between threads; use G4Exp, G4Log
+
+26 July 2014 V.Ivanchenko (hadr-cross-V10-00-09)
+------------------------------------------------
+- G4NeutronInelasticXS - fixed bug from previous tag
+
+26 July 2014 V.Ivanchenko (hadr-cross-V10-00-08)
+------------------------------------------------
+- G4NeutronCaptureXS, G4NeutronElasticXS, G4NeutronInelasticXS,
+  G4ComponentSAIDTotalXS, G4UPiNuclearCrossSection - delete 
+  G4PhysicsVectors end of job
+- G4NeutronCaptureXS, G4NeutronElasticXS, G4NeutronInelasticXS
+    share data between threads
+
 24 June 2014 A.Ribon (hadr-cross-V10-00-07)
 ------------------------------------------
 - G4ChipsAntiBaryonElasticXS : include anti_Omega- in the method GetPTables.
