@@ -53,6 +53,8 @@
 #include "G4Ions.hh"
 #include "G4ios.hh"
 
+#include "G4OpticalPhoton.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 DMXScintSD::DMXScintSD(G4String name) 
@@ -80,6 +82,12 @@ void DMXScintSD::Initialize(G4HCofThisEvent*)
 
 G4bool DMXScintSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
+
+  //need to know if this is an optical photon and exclude it:
+  if(aStep->GetTrack()->GetDefinition()
+     == G4OpticalPhoton::OpticalPhotonDefinition()) return false;
+
+  
   G4double edep = aStep->GetTotalEnergyDeposit();
   G4ParticleDefinition* particleType = aStep->GetTrack()->GetDefinition();
   G4String particleName = particleType->GetParticleName();

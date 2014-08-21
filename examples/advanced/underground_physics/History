@@ -9,6 +9,15 @@ $Id$
                       Category History file
                       ---------------------
 
+06.08.2014 - A. Howard (DMX-V10-00-06)
+	     Removed scintillator energy deposits from optical photons (double
+	     counting!).
+
+06.08.2014 - A. Howard (DMX-V10-00-05)
+	     Repaired the photocathode description such that photon hits are now
+	     registered - must have been broken for a while since EFFICIENCY
+	     was introduced to the optical boundary process.
+
 23.05.2014 - L. Pandola (DMX-V10-00-04)
 	     Actual MT migration. Use G4MTRunManager
 	     Added G4ShortLivedConstructor in the physics list, to 

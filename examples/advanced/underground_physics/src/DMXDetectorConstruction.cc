@@ -916,16 +916,32 @@ G4VPhysicalVolume* DMXDetectorConstruction::Construct() {
     ("phcath_surf", pmt_phys, phcath_phys, phcath_opsurf);
 
   G4double phcath_PP[NUM]   = { 6.00*eV, 7.50*eV };
-  G4double phcath_REFL[NUM] = { 0.0, 0.0};
-  G4MaterialPropertiesTable* phcath_mt = new G4MaterialPropertiesTable();
-  phcath_mt->AddProperty("REFLECTIVITY", phcath_PP, phcath_REFL, NUM);
-  phcath_opsurf->SetMaterialPropertiesTable(phcath_mt);
+  // G4double phcath_REFL[NUM] = { 0.0, 0.0};
+  // G4MaterialPropertiesTable* phcath_mt = new G4MaterialPropertiesTable();
+  // phcath_mt->AddProperty("REFLECTIVITY", phcath_PP, phcath_REFL, NUM);
+  // phcath_opsurf->SetMaterialPropertiesTable(phcath_mt);
+
+
+  //**Photocathode surface properties
+  G4double photocath_EFF[NUM]={1.,1.}; //Enables 'detection' of photons
+  G4double photocath_ReR[NUM]={1.92,1.92};
+  G4double photocath_ImR[NUM]={1.69,1.69};
+  G4MaterialPropertiesTable* photocath_mt = new G4MaterialPropertiesTable();
+  photocath_mt->AddProperty("EFFICIENCY",phcath_PP,photocath_EFF,NUM);
+  photocath_mt->AddProperty("REALRINDEX",phcath_PP,photocath_ReR,NUM);
+  photocath_mt->AddProperty("IMAGINARYRINDEX",phcath_PP,photocath_ImR,NUM);
+  G4OpticalSurface* photocath_opsurf=
+    new G4OpticalSurface("photocath_opsurf",glisur,polished,
+                         dielectric_metal);
+  photocath_opsurf->SetMaterialPropertiesTable(photocath_mt);
+
 
   G4VisAttributes* phcath_vat= new G4VisAttributes(lblue);
   phcath_vat->SetForceSolid(true);
   phcath_vat->SetVisibility(true);
   phcath_log->SetVisAttributes(phcath_vat);
 
+  new G4LogicalSkinSurface("photocath_surf",phcath_log,photocath_opsurf);
 
   // ......................................................................
   // attach user limits ...................................................
