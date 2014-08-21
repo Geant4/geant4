@@ -43,7 +43,7 @@
 
 PrimaryGeneratorAction::PrimaryGeneratorAction (DetectorConstruction* det)
 :G4VUserPrimaryGeneratorAction(), 
- fParticleGun(0),fDetector(det),fInitPos(true)
+ fParticleGun(0),fDetector(det)
 {
   G4int n_particle = 1;
   fParticleGun  = new G4ParticleGun(n_particle);
@@ -69,11 +69,8 @@ void PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
   //this function is called at the begin of event
   //
-  if (fInitPos) {
-    fInitPos = false;
-    G4double position = -0.5*(fDetector->GetfullLength());
-    fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));
-  }       
+  G4double position = -0.5*(fDetector->GetfullLength());
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.*cm,0.*cm,position));     
   fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 

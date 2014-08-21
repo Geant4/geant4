@@ -7,7 +7,6 @@
 #
 # EGS4 simulation: Particle Data Group - Phys.Rev.D 50-3 - August94
 #
-/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
 /run/verbose 2
 #
@@ -18,8 +17,6 @@
 /testem/phys/addPhysics  emstandard_opt3
 #
 /run/setCut 0.7 mm
-/process/em/verbose 1
-/process/em/workerVerbose 0
 #
 # histogram file
 /testem/histo/setFileName egs4/93ref0

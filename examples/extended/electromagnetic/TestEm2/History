@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+     
+28-07-14 mma (testem2-V10-00-05)
+- RunAction + Run: introduce profiles for histos 4 and 8
 	 
 13-06-14 mma (testem2-V10-00-04)
 - remove PhysicsList::SetCuts()

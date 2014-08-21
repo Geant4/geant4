@@ -149,6 +149,19 @@ void Run::FillPerEvent()
   analysisManager->FillH1(1, 100.*dLCumul/(Ekin+mass));
   analysisManager->FillH1(2, fChargTrLength/radl);
   analysisManager->FillH1(3, fNeutrTrLength/radl);
+
+  //profiles
+  G4double norm = 100./(Ekin+mass);    
+  G4double dLradl = fDet->GetdLradl();  
+  for (G4int i=0; i<f_nLbin; i++) {
+    G4double bin = (i+0.5)*dLradl;
+    analysisManager->FillP1(0, bin, norm*f_dEdL[i]/dLradl);
+  }
+  G4double dRradl = fDet->GetdRradl();  
+  for (G4int j=0; j<f_nRbin; j++) {
+    G4double bin = (j+0.5)*dRradl;
+    analysisManager->FillP1(1, bin, norm*f_dEdR[j]/dRradl);
+  }      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

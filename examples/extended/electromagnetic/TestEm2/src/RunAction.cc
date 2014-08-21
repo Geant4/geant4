@@ -53,6 +53,7 @@ RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* kin)
   fVerbose(0), fEdeptrue(1.), fRmstrue(1.), fLimittrue(DBL_MAX)
 {
   fRunMessenger = new RunActionMessenger(this);
+  fHistoName[0] = "testem2";
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -74,7 +75,7 @@ void RunAction::BookHisto()
     
   // Open an output file
   //
-  fHistoName[0] = "testem2";
+  ///fHistoName[0] = "testem2";
 
   fAnalysisManager->OpenFile(fHistoName[0]); 
 
@@ -103,19 +104,25 @@ void RunAction::BookHisto()
   fAnalysisManager->CreateH1( "h4","longit energy profile (% of E inc)",
                                     nLbin,0.,nLbin*dLradl);
                                     
+  fAnalysisManager->CreateP1( "p4","longit energy profile (% of E inc)",
+                                    nLbin,0.,nLbin*dLradl, 0., 1000.);
+                                    
   fAnalysisManager->CreateH1( "h5","rms on longit Edep (% of E inc)",
                                     nLbin,0.,nLbin*dLradl);
 
   G4double Zmin=0.5*dLradl, Zmax=Zmin+nLbin*dLradl;
   fAnalysisManager->CreateH1( "h6","cumul longit energy dep (% of E inc)",
-                                  nLbin,Zmin,Zmax);
+                                  nLbin,Zmin,Zmax);                          
                                     
   fAnalysisManager->CreateH1( "h7","rms on cumul longit Edep (% of E inc)",
                                   nLbin,Zmin,Zmax);
 
   fAnalysisManager->CreateH1( "h8","radial energy profile (% of E inc)",
                                   nRbin,0.,nRbin*dRradl);
-                                                                        
+                                  
+  fAnalysisManager->CreateP1( "p8","radial energy profile (% of E inc)",
+                                  nRbin,0.,nRbin*dRradl, 0., 1000.);
+                                  
   fAnalysisManager->CreateH1( "h9","rms on radial Edep (% of E inc)",
                                   nRbin,0.,nRbin*dRradl);            
 
