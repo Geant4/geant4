@@ -490,7 +490,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
   // use average kinetic energy over the step
   G4double cut = (*currentCuts)[currentMaterialIndex];
   if(fixedCut > 0.0) { cut = fixedCut; }
-  /*        
+  /*  
   G4cout <<"SampleScat: E0(MeV)= "<< preKinEnergy/MeV
   	 << " Leff= " << lambdaeff <<" sig0(1/mm)= " << xtsec 
  	 << " xmsc= " <<  tPathLength*invlambda 
@@ -555,7 +555,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
   G4double x2 = x0;
   G4double step, z;
   G4bool singleScat;
-  /*  
+  /* 
     G4cout << "Start of the loop x1(mm)= " << x1 << "  x2(mm)= " << x2 
     << " 1-cost1= " << 1 - cosThetaMin << " SSmode= " << singleScatteringMode 
 	   << " xtsec= " << xtsec << " Nst= "  << nMscSteps << G4endl;
@@ -564,7 +564,10 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
 
     //G4cout << "# x1(mm)= "<< x1<< " x2(mm)= "<< x2 << G4endl;
     // single scattering case
-    if(singleScatteringMode && x1 > x2) { break; }
+    if(singleScatteringMode && x1 > x2) { 
+      fDisplacement += x2*mscfac*dir;
+      break; 
+    }
 
     // what is next single of multiple?
     if(x1 <= x2) { 
@@ -597,6 +600,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
       // direction is changed
       temp.rotateUz(dir);
       dir = temp;
+      //G4cout << dir << G4endl;
 
       // new proposed step length
       x2 -= step; 
@@ -652,7 +656,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
     
   dir.rotateUz(oldDirection);
 
-  // G4cout<<"G4WentzelVIModel sampling is done 1-cost= "<< 1.-dir.z()<<G4endl;
+  //G4cout<<"G4WentzelVIModel sampling is done 1-cost= "<< 1.-dir.z()<<G4endl;
   // end of sampling -------------------------------
 
   fParticleChange->ProposeMomentumDirection(dir);
@@ -660,7 +664,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
   // lateral displacement  
   fDisplacement.rotateUz(oldDirection);
 
-  /*            
+  /*
 	 G4cout << " r(mm)= " << fDisplacement.mag() 
 		<< " safety= " << safety
 		<< " trueStep(mm)= " << tPathLength

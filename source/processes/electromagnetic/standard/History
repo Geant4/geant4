@@ -18,6 +18,19 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+12 August 14: V.Ivanchenko (emstand-V10-00-40)
+- G4WentzelVIModel - fixed bug in single scattering mode (recently 
+    introduced)
+
+08 August 14: V.Ivanchenko (emstand-V10-00-39)
+- G4PAIModel - updated sampling of delta electron energy
+- G4PAIModelData - proper deletion of physics vectors end of run,
+    use spline interpolation, fixed sampling of delta-electrons
+- G4DeltaAngle - added check on length of do/while loop 
+- G4PAIxSection - added protection to avoid division by zero
+- G4PAIxSection, G4PAIPhotData, G4PAIPhotModel - proper deletion
+    end of job  
+
 21 July 14: V.Ivanchenko (emstand-V10-00-38)
 - G4ASTARStopping, G4PSTARStopping, G4BraggModel, G4BraggIonModel
     restore functionality to access NIST stopping data via

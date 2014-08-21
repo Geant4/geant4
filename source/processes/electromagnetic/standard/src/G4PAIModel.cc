@@ -268,14 +268,15 @@ void G4PAIModel::SampleSecondaries(std::vector<G4DynamicParticle*>* vdp,
   G4double totalMomentum = sqrt(kineticEnergy*(totalEnergy+fMass));
 
   G4double deltaTkin = 
-    fModelData->SamplePostStepTransfer(coupleIndex, scaledTkin);
+    fModelData->SamplePostStepTransfer(coupleIndex, scaledTkin, tmax);
 
-  // G4cout<<"G4PAIModel::SampleSecondaries; deltaKIn = "<<deltaTkin/keV
-  // <<" keV "<<G4endl;
+  //G4cout<<"G4PAIModel::SampleSecondaries; deltaKIn = "<<deltaTkin/keV
+  //	<<" keV "<< " Escaled(MeV)= " << scaledTkin << G4endl;
 
-  if( deltaTkin <= 0. && fVerbose > 0) 
-  {
-    G4cout<<"G4PAIModel::SampleSecondary e- deltaTkin = "<<deltaTkin<<G4endl;
+  if( !(deltaTkin <= 0.) && !(deltaTkin > 0)) {
+    G4cout<<"G4PAIModel::SampleSecondaries; deltaKIn = "<<deltaTkin/keV
+	  <<" keV "<< " Escaled(MeV)= " << scaledTkin << G4endl;
+    return;
   }
   if( deltaTkin <= 0.) { return; }
 

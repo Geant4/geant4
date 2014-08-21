@@ -93,7 +93,8 @@ G4PAIPhotModel::G4PAIPhotModel(const G4ParticleDefinition* p, const G4String& na
 
 G4PAIPhotModel::~G4PAIPhotModel()
 {
-  if(IsMaster()) { delete fModelData; }
+  //G4cout << "G4PAIPhotModel::~G4PAIPhotModel() " << this << G4endl;
+  if(IsMaster()) { delete fModelData; fModelData = 0; }
 }
 
 ////////////////////////////////////////////////////////////////////////////

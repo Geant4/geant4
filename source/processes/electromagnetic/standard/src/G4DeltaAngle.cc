@@ -106,9 +106,16 @@ G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
   }
   G4double bindingEnergy = G4AtomicShells::GetBindingEnergy(Z, idx);
   G4double cost;
-
+  /*
+  G4cout << "E(keV)= " << kinEnergyFinal/keV 
+	 << " Ebind(keV)= " << bindingEnergy
+	 << " idx= " << idx << " nShells= " << nShells << G4endl;
+  */
+  G4int n = 0;
+  G4bool isOK = false;
+  static const G4int nmax = 100;
   do {
-  
+    ++n;
     // the atomic electron
     G4double x = -G4Log(G4UniformRand());
     G4double eKinEnergy = bindingEnergy*x;
@@ -129,14 +136,38 @@ G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
     G4double costet = 2*G4UniformRand() - 1;
     G4double sintet = sqrt((1 - costet)*(1 + costet));
 
-    cost = 2.0;
+    cost = 1.0;
+    if(n >= nmax) {
+      isOK = true;
+      G4ExceptionDescription ed;
+      ed << "### G4DeltaAngle Warning: " << n 
+	 << " iterations - stop the loop with cost= 1.0 " 
+	 << " for " << dp->GetDefinition()->GetParticleName() << "\n" 
+         << " Ekin(MeV)= " << dp->GetKineticEnergy()/MeV 
+         << " Efinal(MeV)= " << kinEnergyFinal/MeV 
+         << " Ebinding(MeV)= " << bindingEnergy/MeV; 
+      G4Exception("G4DeltaAngle::SampleDirection","em0044",
+                  JustWarning, ed,"");
+    }
+
     G4double x0 = p*(totMomentum + eTotMomentum*costet);
+    /*
+    G4cout << " x0= " << x0 << " p= " << p 
+	   << "  ptot= " << totMomentum << " pe= " <<  eTotMomentum
+	   << " e= " << e << " totMom= " <<  totMomentum
+	   << G4endl;
+    */
     if(x0 > 0.0) {
       G4double x1 = p*eTotMomentum*sintet;
       G4double x2 = totEnergy*(eTotEnergy - e) - e*eTotEnergy 
 	- totMomentum*eTotMomentum*costet + electron_mass_c2*electron_mass_c2;
       G4double y = -x2/x0;
-      if(std::fabs(y) <= 1.0) { cost = -(x2 + x1*sqrt(1. - y*y))/x0; }
+      if(std::fabs(y) <= 1.0) { 
+	cost = -(x2 + x1*sqrt(1. - y*y))/x0; 
+	if(std::fabs(cost) <= 1.0) { isOK = true; }
+        else { cost = 1.0; }
+      }
+
       /*
       G4cout << " Ekin(MeV)= " << dp->GetKineticEnergy() 
 	     << " e1(keV)= " <<  eKinEnergy/keV 
@@ -147,7 +178,7 @@ G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
       */
     }
 
-  } while(std::fabs(cost) > 1.0);
+  } while(!isOK);
 
   G4double sint = sqrt((1 - cost)*(1 + cost));
   G4double phi  = twopi*G4UniformRand(); 
