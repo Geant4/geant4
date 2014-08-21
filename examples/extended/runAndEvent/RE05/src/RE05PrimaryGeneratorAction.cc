@@ -48,7 +48,7 @@ RE05PrimaryGeneratorAction::RE05PrimaryGeneratorAction()
   if(!HEPEvt)
   {
     const char* filename = "pythia_event.data";
-    HEPEvt = new G4HEPEvtInterface(filename,2);
+    HEPEvt = new G4HEPEvtInterface(filename,1);
   }
 
   G4int n_particle = 1;
