@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 August 2014 Gunter Folger  (test65-V10-00-02)
+- Use datafile from geant4 download area; this tar file has symlink xmcf.n_1.map
+   replaced by a copy of 000_n_1.map.
+
 2 June 2014 Tatsumi Koi (test65-V10-00-01)
 Re-tag for testing 
 

@@ -7,15 +7,21 @@ include(${Geant4_USE_FILE})
 # Download the required dataset and update testing environment to use it
 #
 include(ExternalProject)
+
+#temporary replace by local download, original file has symlink, local not.
+#URL ftp://gdo-nuclear.ucllnl.org/pub/G4LEND/ENDF.B-VII.0.tar.gz
+
 ExternalProject_Add(test65-data
   PREFIX Data/tmp
   SOURCE_DIR Data/g4lend
-  URL ftp://gdo-nuclear.ucllnl.org/pub/G4LEND/ENDF.B-VII.0.tar.gz
+  URL http://geant4.cern.ch/support/source/ENDF.B-VII.0.tar.gz
   CONFIGURE_COMMAND ""
   BUILD_COMMAND ""
   INSTALL_COMMAND ""
   )
 
+#temporary replaced by local download:
+#URL ftp://gdo-nuclear.ucllnl.org/pub/G4LEND/ENDF.B-VII.0.tar.gz
 list(APPEND GEANT4_TEST_ENVIRONMENT "G4LENDDATA=${PROJECT_BINARY_DIR}/Data/g4lend")
 
 GEANT4_EXECUTABLE(test65 test65.cc src/*.cc)
