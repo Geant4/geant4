@@ -119,10 +119,15 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
       G4Exception("G4HadronElasticProcess::PostStepDoIt", "had003", 
 		  FatalException, ed);
     }
+
+  // Initialize the hadronic projectile from the track
+  //  G4cout << "track " << track.GetDynamicParticle()->Get4Momentum()<<G4endl;
+  G4HadProjectile theProj(track);
+
   G4HadronicInteraction* hadi = 0;
   try
     {
-      hadi = ChooseHadronicInteraction( kineticEnergy, material, elm );
+      hadi = ChooseHadronicInteraction( theProj, *targNucleus, material, elm );
     }
   catch(G4HadronicException & aE)
     {
@@ -142,9 +147,6 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 		     ->GetEnergyCutsVector(3)))[idx];
   hadi->SetRecoilEnergyThreshold(tcut);
 
-  // Initialize the hadronic projectile from the track
-  //  G4cout << "track " << track.GetDynamicParticle()->Get4Momentum()<<G4endl;
-  G4HadProjectile theProj(track);
   if(verboseLevel>1) {
     G4cout << "G4HadronElasticProcess::PostStepDoIt for " 
 	   << part->GetParticleName()

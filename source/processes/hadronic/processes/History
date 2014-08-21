@@ -16,6 +16,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+01 August 2014 Alberto Ribon (hadr-proc-V10-00-02)
+--------------------------------------------------
+- G4HadronElasticProcess : replaced the old method of G4EnergyRangeManager
+  (still there but deprecated) with the new one (which uses 
+  G4HadronicInteraction::IsApplicable). 
+
 27 June 2014 Peter Gumplinger (hadr-proc-V10-00-01)
 - fix bug in call to Reflectivity in MRreflectHigh:
   (1) the arguments were wrong/reversed - Reflectivity(Energy, FermiPot)
