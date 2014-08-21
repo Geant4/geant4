@@ -231,7 +231,7 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
     }
 
     // Force direction (random within half-angle) for "visible" daughters
-    // (applies to electrons, positrons, gammas, neutrons, or alphas)
+    // (applies to electrons, positrons, gammas, neutrons, protons or alphas)
 
     void BuildPhysicsTable(const G4ParticleDefinition &);
 
@@ -242,7 +242,7 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
 
     G4DecayProducts* DoDecay(G4ParticleDefinition& theParticleDef);
 
-    // Apply directional bias for "visible" daughters (e+-, gamma, n, alpha)
+    // Apply directional bias for "visible" daughters (e+-, gamma, n, p, alpha)
     void CollimateDecay(G4DecayProducts* products);
     void CollimateDecayProduct(G4DynamicParticle* product);
     G4ThreeVector ChooseCollimationDirection() const;

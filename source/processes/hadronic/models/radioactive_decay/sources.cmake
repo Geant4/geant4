@@ -64,6 +64,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4MshellECDecayChannel.hh
         G4NuclearDecayChannel.hh
         G4NucleusLimits.hh
+	G4ProtonDecayChannel.hh
         G4RIsotopeTable.hh
         G4RadioactiveDecay.hh
         G4RadioactiveDecayMode.hh
@@ -121,4 +122,3 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
 )
 
 # List any source specific properties here
-

@@ -14,6 +14,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+06 August 2014 Luis Sarmiento radioactive_decay-V10-00-04
+---------------------------------------------------------
+- proton decay added. It was coded mimicking the alpha decay.
+  The word in the data file is "Proton"
+- dummy double proton decay "Proton2" added for consistency with
+  the double beta decays
+
 12 June 2014  Dennis Wright radioactive_decay-V10-00-03
 -------------------------------------------------------
 - fix memory leak in dtor of G4RIsotopeTable.cc from bug report 1617

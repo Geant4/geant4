@@ -70,6 +70,7 @@
 #include "G4KshellECDecayChannel.hh"
 #include "G4LshellECDecayChannel.hh"
 #include "G4AlphaDecayChannel.hh"
+#include "G4ProtonDecayChannel.hh"
 */
 #include "G4ios.hh"
 #include "globals.hh"

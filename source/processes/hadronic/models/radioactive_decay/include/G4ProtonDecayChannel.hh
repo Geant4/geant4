@@ -23,14 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#ifndef G4RadioactiveDecayMode_h
-#define G4RadioactiveDecayMode_h 1
+#ifndef G4ProtonDecayChannel_h
+#define G4ProtonDecayChannel_h 1
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// MODULE:              RadioactiveDecayMode.hh
+// MODULE:              G4ProtonDecayChannel.hh
+// Author:              L.G. Sarmiento
 //
-// Version:             0.b.4
-// Date:                14/04/00
+//        Based almost one to one on G4AlphaDecayChannel
+//
+// Version:             0.b.3
+// Date:                29/02/00
 // Author:              F Lei & P R Truscott
 // Organisation:        DERA UK
 // Customer:            ESA/ESTEC, NOORDWIJK
@@ -38,41 +41,50 @@
 //
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 //
-// DESCRIPTION
-// -----------
-//
-// Identifies a type G4RadioactiveDecayMode to assign a specific decay mode
-// description to decay channels.
-//
-// %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-//
 // CHANGE HISTORY
 // --------------
+//
+// 28 July 2014, Created by L.G. Sarmiento based almost one to one on
+// G4AlphaDecayChannel
 //
 // 29 February 2000, P R Truscott, DERA UK
 // 0.b.3 release.
 //
-// 13 April 2000, F Lei, DERA UK
-// 0.b.4 release. No change to this file     
-//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ////////////////////////////////////////////////////////////////////////////////
 //
+#include <CLHEP/Units/SystemOfUnits.h>
+
 #include "globals.hh"
+#include "G4NuclearDecayChannel.hh"
+#include "G4RadioactiveDecayMode.hh"
 ////////////////////////////////////////////////////////////////////////////////
 //
-enum G4RadioactiveDecayMode
-  {RDM_ERROR=-1, IT=0, BetaMinus=1, BetaPlus=2, KshellEC=3, LshellEC=4, MshellEC=5, Alpha=6,
-   Proton=7, Beta2Minus=8, Beta2Plus=9, Proton2=10, SpFission=11};
-
-std::istream &operator >> (std::istream &s, G4RadioactiveDecayMode &q);
-
-////////////////////////////////////////////////////////////////////////////////
+class G4ProtonDecayChannel : public G4NuclearDecayChannel
+{
+  // class description
+  //
+  //   Derived class from G4NuclearDecayChannel.  It is specific for
+  //   Proton decay proceess. Based on the Alpha decay process.
+  //
+  // class  description - end
+  public:
+    G4ProtonDecayChannel (G4int Verbose,
+                         const G4ParticleDefinition *theParentNucleus,
+                         G4double theBR,
+                         G4double theEndPointEnergy=0.0,
+                         G4double theDaughterExcitation=0.0) :
+      G4NuclearDecayChannel (Proton, Verbose, theParentNucleus, theBR,
+                             theEndPointEnergy,
+                             (theParentNucleus->GetBaryonNumber())-1,
+                             int(theParentNucleus->GetPDGCharge()/CLHEP::eplus)-1,
+                             theDaughterExcitation, "proton")
+    {
+#ifdef G4VERBOSE
+      if (GetVerboseLevel()>1)
+        G4cout <<"G4ProtonDecayChannel constructor" << G4endl;
 #endif
-
-
-
-
-
-
-
+    }
+    ~G4ProtonDecayChannel () {;}
+};
+#endif
