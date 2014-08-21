@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-08-14 mma (AnaEx01-V10-00-03)
+- update Readme and .Readme again
+
+12-08-14 mma (AnaEx01-V10-00-02)
+- restaure calorimeter drawing in Readme and .Readme 
+
 17-06-14 I. Hrivnacova (AnaEx01-V10-00-01)
 - Fixed problems reported by Davide Mancusi:
   - Moving tools/hbook/*.f files in examples/extended/common/analysis/src 

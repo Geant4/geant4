@@ -23,44 +23,36 @@ $Id$
  replicated.
  	
  Six parameters define the calorimeter :
- 	- the material of the absorber,
-	- the thickness of an absorber plate,
- 	- the material of the detection gap,
- 	- the thickness of a  gap,
- 	- the number of layers,
- 	- the transverse size of the calorimeter (the input face is a square). 
- 	
+    - the material of the absorber,
+    - the thickness of an absorber plate,
+    - the material of the detection gap,
+    - the thickness of a  gap,
+    - the number of layers,
+    - the transverse size of the calorimeter (the input face is a square). 
+ 
  The default geometry is constructed in DetectorConstruction class,
  but all of the above parameters can be modified interactively via
  the commands defined in the DetectorMessenger class.
 
-
-	|<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
-	|			|			|			|
-	==========================================================================
-	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
-	||   absorber 	|  gap	||   absorber 	|  gap	||   absorber 	|  gap	||
-	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
- beam	||		|	||		|	||		|	||
-======>	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
-	||		|	||		|	||		|	||
-	||    		| 	||    		| 	||    		| 	||
-	==========================================================================
-	
- 	    
+        |<----layer 0---------->|<----layer 1---------->|<----layer 2---------->|
+        |                       |                       |                       |
+        ==========================================================================
+        ||              |       ||              |       ||              |       ||
+        ||              |       ||              |       ||              |       ||
+ beam   ||   absorber   |  gap  ||   absorber   |  gap  ||   absorber   |  gap  ||
+======> ||              |       ||              |       ||              |       ||
+        ||              |       ||              |       ||              |       ||
+        ==========================================================================
+   
+   
  2- Physics list
- ------------------------------------
+ ---------------
  
    The particle's type and the physic processes which will be available
    in this example are set in the FTFP_BERT physics list.
- 	 
+  
  3- Action Initialization
- ------------------------------------
+ ------------------------
 
    A newly introduced class, ActionInitialization, 
    instantiates and registers to Geant4 kernel all user action classes 
@@ -73,7 +65,7 @@ $Id$
      ActionInitialization::BuildForMaster().
    Note that ActionInitialization::Build() is also used to 
    instatiate user action clasess in sequential mode.
- 	 
+  
  4- An event : PrimaryGeneratorAction
  ------------------------------------
  
@@ -81,7 +73,6 @@ $Id$
  calorimeter perpendicular to the input face. The type of the particle
  and its energy are set in the PrimaryGeneratorAction class, and can
  be changed via the G4 build-in commands of ParticleGun class.
- 	
 
  5- Histograms
  ------------- 
