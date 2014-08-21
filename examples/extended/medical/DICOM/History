@@ -8,6 +8,13 @@ $Id$
                       Category History file
 
                       ---------------------
+29.07.2014 - Pedro Arce (DICOM-V10-00-02)
+           - Remove DicomPhysicsList
+
+25.07.2014 - Pedro Arce (DICOM-V10-00-01)
+           - Using G4GenericPhysicsList
+     	   - no std::cout 
+	   - no exit()
 
 03.12.2013 - Gabriele Cosmo (DICOM-V10-00-00)
            - Attempt to fix Valgrind run-time error from printout in

@@ -131,110 +131,116 @@ G4int DicomHandler::ReadFile(FILE* dicom, char* filename2)
 
     // Read information up to the pixel data
     while(true) {
-
-        //Reading groups and elements :
-        readGroupId = 0;
-        readElementId = 0;
-        // group ID
-        rflag = std::fread(buffer, 2, 1, dicom);
-        GetValue(buffer, readGroupId);
-        // element ID
-        rflag = std::fread(buffer, 2, 1, dicom);
-        GetValue(buffer, readElementId);
-
-        // Creating a tag to be identified afterward
-        G4int tagDictionary = readGroupId*0x10000 + readElementId;
-
-        // beginning of the pixels
-        if(tagDictionary == 0x7FE00010) {
-            // Folling 2 fread's are modifications to original DICOM example (Jonathan Madsen)
-            rflag = std::fread(buffer,2,1,dicom);   // Reserved 2 bytes (not used for pixels)
-            rflag = std::fread(buffer,4,1,dicom);   // Element Length   (not used for pixels)
-            break;      // Exit to ReadImageData()
-        }
-
-        // VR or element length
-        rflag = std::fread(buffer,2,1,dicom);
-        GetValue(buffer, elementLength2);
-
-        // If value representation (VR) is OB, OW, SQ, UN, added OF and UT
-        //the next length is 32 bits
-        if((elementLength2 == 0x424f ||     // "OB"
-            elementLength2 == 0x574f ||     // "OW"
-            elementLength2 == 0x464f ||     // "OF"
-            elementLength2 == 0x5455 ||     // "UT"
-            elementLength2 == 0x5153 ||     // "SQ"
-            elementLength2 == 0x4e55) &&    // "UN"
-           !fImplicitEndian ) {             // explicit VR
-
-            rflag = std::fread(buffer, 2, 1, dicom); // Skip 2 reserved bytes
-
-            // element length
-            rflag = std::fread(buffer, 4, 1, dicom);
-            GetValue(buffer, elementLength4);
-
-            if(elementLength2 == 0x5153)
+      
+      //Reading groups and elements :
+      readGroupId = 0;
+      readElementId = 0;
+      // group ID
+      rflag = std::fread(buffer, 2, 1, dicom);
+      GetValue(buffer, readGroupId);
+      // element ID
+      rflag = std::fread(buffer, 2, 1, dicom);
+      GetValue(buffer, readElementId);
+      
+      // Creating a tag to be identified afterward
+      G4int tagDictionary = readGroupId*0x10000 + readElementId;
+      
+      // beginning of the pixels
+      if(tagDictionary == 0x7FE00010) {
+        // Folling 2 fread's are modifications to original DICOM example (Jonathan Madsen)
+        rflag = std::fread(buffer,2,1,dicom);   // Reserved 2 bytes (not used for pixels)
+        rflag = std::fread(buffer,4,1,dicom);   // Element Length   (not used for pixels)
+        break;      // Exit to ReadImageData()
+      }
+      
+      // VR or element length
+      rflag = std::fread(buffer,2,1,dicom);
+      GetValue(buffer, elementLength2);
+      
+      // If value representation (VR) is OB, OW, SQ, UN, added OF and UT
+      //the next length is 32 bits
+      if((elementLength2 == 0x424f ||     // "OB"
+        elementLength2 == 0x574f ||     // "OW"
+        elementLength2 == 0x464f ||     // "OF"
+        elementLength2 == 0x5455 ||     // "UT"
+        elementLength2 == 0x5153 ||     // "SQ"
+        elementLength2 == 0x4e55) &&    // "UN"
+       !fImplicitEndian ) {             // explicit VR
+      
+      rflag = std::fread(buffer, 2, 1, dicom); // Skip 2 reserved bytes
+      
+      // element length
+      rflag = std::fread(buffer, 4, 1, dicom);
+      GetValue(buffer, elementLength4);
+      
+      if(elementLength2 == 0x5153)
+        {
+          if(elementLength4 == 0xFFFFFFFF)
             {
-                if(elementLength4 == 0xFFFFFFFF)
-                {
-                    read_undefined_nested( dicom );
-                    elementLength4=0;
-                }  else{
-                    if(read_defined_nested( dicom, elementLength4 )==0){
-                        G4cerr << "Function read_defined_nested() failed!" << G4endl;
-                        exit(-10);               }
-                }
-            } else  {
-                // Reading the information with data
-                rflag = std::fread(data, elementLength4,1,dicom);
+            read_undefined_nested( dicom );
+            elementLength4=0;
+            }  else{
+            if(read_defined_nested( dicom, elementLength4 )==0){
+            G4Exception("DicomHandler::ReadFile",
+                      "DICOM001",
+                      FatalException,
+                      "Function read_defined_nested() failed!");
             }
+          }
+        } else  {
+        // Reading the information with data
+        rflag = std::fread(data, elementLength4,1,dicom);
+      }
+      
+      
+      }  else {
 
-
-        }  else {
-
-            //  explicit with VR different than previous ones
-            if(!fImplicitEndian || readGroupId == 2) {
-
-                //G4cout << "Reading  DICOM files with Explicit VR"<< G4endl;
-                // element length (2 bytes)
-                rflag = std::fread(buffer, 2, 1, dicom);
-                GetValue(buffer, elementLength2);
-                elementLength4 = elementLength2;
-
-                rflag = std::fread(data, elementLength4, 1, dicom);
-
-            } else {                                  // Implicit VR
-
-                //G4cout << "Reading  DICOM files with Implicit VR"<< G4endl;
-
-                // element length (4 bytes)
-                if(std::fseek(dicom, -2, SEEK_CUR) != 0) {
-                    G4cerr << "[DicomHandler] fseek failed" << G4endl;
-                    exit(-10);}
-
-                rflag = std::fread(buffer, 4, 1, dicom);
-                GetValue(buffer, elementLength4);
-
-                //G4cout <<  std::hex<< elementLength4 << G4endl;
-
-                if(elementLength4 == 0xFFFFFFFF)
-                {
-                    read_undefined_nested(dicom);
-                    elementLength4=0;
-                }  else{
-                    rflag = std::fread(data, elementLength4, 1, dicom);
-                }
-
-            }
+      //  explicit with VR different than previous ones
+      if(!fImplicitEndian || readGroupId == 2) {
+        
+        //G4cout << "Reading  DICOM files with Explicit VR"<< G4endl;
+        // element length (2 bytes)
+        rflag = std::fread(buffer, 2, 1, dicom);
+        GetValue(buffer, elementLength2);
+        elementLength4 = elementLength2;
+        
+        rflag = std::fread(data, elementLength4, 1, dicom);
+        
+      } else {                                  // Implicit VR
+        
+        //G4cout << "Reading  DICOM files with Implicit VR"<< G4endl;
+        
+        // element length (4 bytes)
+        if(std::fseek(dicom, -2, SEEK_CUR) != 0) {
+          G4Exception("DicomHandler::ReadFile",
+                  "DICOM001",
+                  FatalException,
+                  "fseek failed");
         }
-
-        // NULL termination
-        data[elementLength4] = '\0';
-
-        // analyzing information
-        GetInformation(tagDictionary, data);
+    
+        rflag = std::fread(buffer, 4, 1, dicom);
+        GetValue(buffer, elementLength4);
+        
+        //G4cout <<  std::hex<< elementLength4 << G4endl;
+        
+        if(elementLength4 == 0xFFFFFFFF)
+          {
+            read_undefined_nested(dicom);
+            elementLength4=0;
+          }  else{
+          rflag = std::fread(data, elementLength4, 1, dicom);
+        }
+        
+      }
+      }
+      
+      // NULL termination
+      data[elementLength4] = '\0';
+      
+      // analyzing information
+      GetInformation(tagDictionary, data);
     }
-
+    
     G4String fnameG4DCM = G4String(filename2) + ".g4dcm";
 
     // Perform functions originally written straight to file
@@ -242,9 +248,9 @@ G4int DicomHandler::ReadFile(FILE* dicom, char* filename2)
 
     std::map<G4float,G4String>::const_iterator ite;
     for( ite = fMaterialIndices.begin(); ite != fMaterialIndices.end(); ++ite ){
-        zslice->AddMaterial(ite->second);
+      zslice->AddMaterial(ite->second);
     }
-
+    
     zslice->SetNoVoxelX(fColumns/fCompression);
     zslice->SetNoVoxelY(fRows/fCompression);
     zslice->SetNoVoxelZ(1);
@@ -822,9 +828,11 @@ void DicomHandler::ReadCalibration()
     valueCT = new G4double[nbrequali];
 
     if(!calibration) {
-        G4cerr << "@@@ No value to transform pixels in density!" << G4endl;
-        exit(1);
-
+      G4Exception("DicomHandler::ReadFile",
+              "DICOM001",
+              FatalException,
+              "@@@ No value to transform pixels in density!");
+      
     } else { // calibration was successfully opened
         for(G4int i = 0; i < nbrequali; i++) { // Loop to store all the pts in CT2Density.dat
             calibration >> valueCT[i] >> valuedensity[i];
@@ -875,15 +883,16 @@ void DicomHandler::CheckFileFormat()
 
     if(!(checkData.is_open())) { //Check existance of Data.dat
 
-        std::ostringstream message;
-        message << "\nDicomG4 needs Data.dat (or another driver file specified"
-                << " in command line):\n"
-                << "\tFirst line: number of image pixel for a voxel (G4Box)\n"
-                << "\tSecond line: number of images (CT slices) to read\n"
-                << "\tEach following line contains the name of a Dicom image"
-                << " except for the .dcm extension";
-        G4cout << message.str() << G4endl;
-        exit(0);
+      G4String message = "\nDicomG4 needs Data.dat (or another driver file specified";
+      message += " in command line):\n";
+      message += "\tFirst line: number of image pixel for a voxel (G4Box)\n";
+      message += "\tSecond line: number of images (CT slices) to read\n";
+      message += "\tEach following line contains the name of a Dicom image";
+      message += " except for the .dcm extension";
+      G4Exception("DicomHandler::ReadFile",
+              "DICOM001",
+              FatalException,
+              message.c_str());
     }
 
     checkData >> fCompression;
@@ -937,7 +946,7 @@ void DicomHandler::CheckFileFormat()
 
             rflag = std::fscanf(lecturePref,"%s",inputFile);
             std::sprintf(name,"%s.dcm",inputFile);
-            std::cout << "check 1: " << name << std::endl;
+            G4cout << "check 1: " << name << G4endl;
             //  Open input file and give it to gestion_dicom :
             std::printf("### Opening %s and reading :\n",name);
             dicom = std::fopen(name,"rb");

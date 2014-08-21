@@ -190,7 +190,7 @@ void DicomRun::Merge(const G4Run* aRun)
     unsigned ncopies = copy(fRunMap, localRun->fRunMap);
     // copy function returns the fRunMap size if all data is copied
     // so this loop isn't executed the first time around
-    std::cout << "DicomRun :: Num copies = " << ncopies << G4endl;
+    G4cout << "DicomRun :: Num copies = " << ncopies << G4endl;
     for(unsigned i = ncopies; i < fRunMap.size(); ++i) {
         *fRunMap[i] += *localRun->fRunMap[i];
     }

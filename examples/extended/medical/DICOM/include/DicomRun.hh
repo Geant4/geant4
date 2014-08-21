@@ -90,8 +90,6 @@ private:
 template <typename T>
 inline void copy(std::vector<T>& main, const std::vector<T>& data)
 {
-    //std::cout << "Main size :: " << main.size() << G4endl;
-    //std::cout << "Data size :: " << data.size() << G4endl;
     for(unsigned i = main.size(); i < data.size(); ++i) {
         main.push_back(data.at(i));
     }

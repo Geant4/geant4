@@ -55,7 +55,6 @@ public:
     // Public functions
     void AddZSlice(DicomPhantomZSliceHeader* val) {
         fSlices[val->GetSliceLocation()] = val;
-        //std::cout << "Slice Location : " << val->GetSliceLocation()/mm << " mm" << std::endl;
     }
 
     void CheckSlices();
