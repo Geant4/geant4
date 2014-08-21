@@ -63,13 +63,6 @@ G4bool G4Clebsch::operator!=(const G4Clebsch &right) const
 }
 
 
-const std::vector<G4double>& G4Clebsch::GetLogs() const
-{
-  return logs;
-}
-
-
-
 G4double G4Clebsch::Weight(G4int isoIn1,  G4int iso3In1, 
 			   G4int isoIn2,  G4int iso3In2, 
 			   G4int isoOut1, G4int isoOut2) const

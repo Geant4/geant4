@@ -73,8 +73,6 @@ public:
   G4double Wigner3J(G4double j1, G4double j2, G4double j3, 
 		    G4double m1, G4double m2, G4double m3) const;
   
-  const std::vector<G4double>& GetLogs() const;
-  
   // Calculates the normalized Clebsch-Gordan coefficient, that is the prob 
   // of isospin decomposition of (J,m) into J1, J2, m1, m2
   G4double NormalizedClebschGordan(G4int J, G4int m, 

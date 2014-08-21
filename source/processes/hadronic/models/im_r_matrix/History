@@ -14,6 +14,22 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11-August-2014 Gunter Folger             had-im_r-V10-00-08
+- Add protection for double delete, i.e. set pointers to 0 after delete
+  in G4VScatteringCollision.cc, G4ConcreteN*.cc.
+
+08-August-2014 Gunter Folger             had-im_r-V10-00-07
+- G4VScatteringCollision.cc, G4ConcreteN*.cc:
+  - dtor should delete and not new data member; may fix some leaks
+  - improve formatting
+  
+01-August-2014 Gunter Folger             had-im_r-V10-00-06
+- G4VCrossSectionSource: remove unused GetTransversePionMass() and
+  GetMinStringMass()
+- G4Clebsch: remove now unused GetLogs()
+- G4XResonance, G4XNNElasticLowE, G4XAnnihilationChannel, G4XnpTotalLowE, G4XnpElasticLowE:
+    delete PhysicsVector objects, due to drop of allocator in PhysicsVector.
+
 18-July-2014 Andrea Dotti	       had-im_r-V10-00-05
 - Improve thread safety (DRD) mark as static some "const" in src code
 - Fix data-race issue in G4CollisionComposite, when shared there 

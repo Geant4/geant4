@@ -77,12 +77,6 @@ protected:
 
   const G4ParticleDefinition * FindKeyParticle(const G4KineticTrack& trk1,const G4KineticTrack& trk2) const;
   
-  // Transverse pion mass
-  G4double GetTransversePionMass() const;
-
-  // Min string mass
-  G4double GetMinStringMass() const;
-
 private:  
 
   G4VCrossSectionSource(const G4VCrossSectionSource &right);

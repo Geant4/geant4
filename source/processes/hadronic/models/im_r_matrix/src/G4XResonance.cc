@@ -53,9 +53,7 @@ G4XResonance::G4XResonance(const G4ParticleDefinition* in1,
 
 G4XResonance::~G4XResonance() 
 {
-  //Do not delete phsyics vectors at exit since they are
-  //managed by allocators
-  //delete table;
+  delete table;
   table = 0;
 }
 

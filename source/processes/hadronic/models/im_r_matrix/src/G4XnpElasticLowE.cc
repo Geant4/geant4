@@ -111,9 +111,8 @@ G4XnpElasticLowE::G4XnpElasticLowE()
 
 G4XnpElasticLowE::~G4XnpElasticLowE()
 {
-    //Do not delete in constructor G4PhysicsVector: managed by allocators
-  //delete _sigma;
-    _sigma = 0;
+   delete _sigma;
+   _sigma = 0;
 }
 
 

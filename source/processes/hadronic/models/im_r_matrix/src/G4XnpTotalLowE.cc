@@ -111,9 +111,8 @@ G4XnpTotalLowE::G4XnpTotalLowE()
 
 G4XnpTotalLowE::~G4XnpTotalLowE()
 {
-    //Do not delete in constructor G4PhysicsVector: managed by allocators
-  //delete _sigma;
-    _sigma=0;
+  if (_sigma) delete _sigma;
+  _sigma=0;
 }
 
 

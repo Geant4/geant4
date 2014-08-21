@@ -53,6 +53,7 @@ G4VScatteringCollision::G4VScatteringCollision()
 G4VScatteringCollision::~G4VScatteringCollision()
 { 
   delete theAngularDistribution;
+  theAngularDistribution=0;
 }
 
 
@@ -176,6 +177,8 @@ double G4VScatteringCollision::SampleResonanceMass(const double poleMass,
   }
 }
 
-void G4VScatteringCollision::establish_G4MT_TLS_G4VScatteringCollision(){establish_G4MT_TLS_G4VCollision(); 
+void G4VScatteringCollision::establish_G4MT_TLS_G4VScatteringCollision()
+{
+  establish_G4MT_TLS_G4VCollision();
   theAngularDistribution = new G4AngularDistribution(true);
 }
