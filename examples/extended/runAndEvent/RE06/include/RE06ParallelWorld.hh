@@ -60,6 +60,7 @@ class RE06ParallelWorld : public G4VUserParallelWorld
     G4VPhysicalVolume* fLayerPhysical[3];
     G4String           fCalName[3];
     G4bool             fConstructed;
+    static G4ThreadLocal G4bool fSDConstructed;
     G4bool             fSerial;
     G4double           fTotalThickness;
     G4int              fNumberOfLayers;

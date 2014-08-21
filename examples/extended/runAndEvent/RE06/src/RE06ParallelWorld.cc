@@ -51,6 +51,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4ThreadLocal G4bool RE06ParallelWorld::fSDConstructed = false;
+
 RE06ParallelWorld::RE06ParallelWorld(G4String worldName)
 :G4VUserParallelWorld(worldName),
  fConstructed(false),
@@ -83,7 +85,6 @@ void RE06ParallelWorld::Construct()
   { 
     fConstructed = true;
     SetupGeometry();
-    //SetupDetectors();
   }
 }
 
@@ -91,7 +92,11 @@ void RE06ParallelWorld::Construct()
 
 void RE06ParallelWorld::ConstructSD()
 {
+  if(!fSDConstructed)
+  {
+    fSDConstructed = true;
     SetupDetectors();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
