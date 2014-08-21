@@ -2,7 +2,7 @@
 #
 # Macro file for "TestEm3.cc" 
 #
-# water 1 layer;
+#  1 layer;
 #
 /control/verbose 2
 #
@@ -15,6 +15,12 @@
 #
 /run/initialize
 #
+/globalField/setValue 0 0 10 tesla
+#
 /control/execute vis.mac
 #
 /testem/gun/setDefault
+/gun/particle proton
+/gun/energy 300 MeV
+#
+/run/beamOn 10
