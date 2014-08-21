@@ -66,15 +66,15 @@ int main(int argc,char** argv) {
   G4RunManager * runManager = new G4RunManager;
 
   //set mandatory initialization classes
-   DetectorConstruction* det;
+  DetectorConstruction* det;
   runManager->SetUserInitialization(det = new DetectorConstruction);
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserAction(new PrimaryGeneratorAction(det));
     
   //set user action classes
-   RunAction* RunAct;
+  RunAction* RunAct;
   
-  runManager->SetUserAction(RunAct = new RunAction); 
+  runManager->SetUserAction(RunAct = new RunAction(det)); 
   runManager->SetUserAction(new SteppingAction(RunAct));
   runManager->SetUserAction(new StackingAction);
 

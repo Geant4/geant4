@@ -23,76 +23,39 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm6/include/DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
+/// \file electromagnetic/TestEm8/include/StepMaxMessenger.hh
+/// \brief Definition of the StepMaxMessenger class
 //
-// $Id$
+// $Id: StepMaxMessenger.hh 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef DetectorConstruction_h
-#define DetectorConstruction_h 1
+#ifndef StepMaxMessenger_h
+#define StepMaxMessenger_h 1
 
-#include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include "G4UImessenger.hh"
 
-class G4LogicalVolume;
-class G4Material;
-class G4UniformMagField;
-class G4UserLimits;
-class DetectorMessenger;
+class StepMax;
+class G4UIcmdWithADoubleAndUnit;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction
+class StepMaxMessenger: public G4UImessenger
 {
-  public:
-  
-    DetectorConstruction();
-   ~DetectorConstruction();
+public:
 
-  public:
-  
-     virtual G4VPhysicalVolume* Construct();
-     
-     void SetSize        (G4double);              
-     void SetMaterial    (const G4String&);            
-     void SetMagField    (G4double);
-     void SetMaxStepSize (G4double);     
-
-     void UpdateGeometry();
-     
-  public:
-  
-     const
-     G4VPhysicalVolume* GetWorld()      {return fP_Box;};           
-                    
-     G4double           GetSize()       {return fBoxSize;};      
-     G4Material*        GetMaterial()   {return fMaterial;};
-     
-     void               PrintParameters();
-                       
-  private:
-  
-     G4VPhysicalVolume*    fP_Box;
-     G4LogicalVolume*      fL_Box;
-     
-     G4double              fBoxSize;
-     G4Material*           fMaterial;     
-     G4UniformMagField*    fMagField;
-     G4UserLimits*         fUserLimits;
-     
-     DetectorMessenger* fDetectorMessenger;
-
-  private:
+  StepMaxMessenger(StepMax*);
+  ~StepMaxMessenger();
     
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();     
+  virtual void SetNewValue(G4UIcommand*, G4String);
+    
+private:
+  StepMax* fStepMax;
+  G4UIcmdWithADoubleAndUnit* fStepMaxCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
 #endif
-

@@ -80,11 +80,18 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
                
  G4double xPlus = Eplus/EGamma, xMinus = Eminus/EGamma;
  G4double thetaPlus = PGamma.angle(Pplus), thetaMinus = PGamma.angle(Pminus);
- G4double GammaPlus=EGamma*xPlus/fMuonMass;
- G4double GammaMinus=EGamma*xMinus/fMuonMass;
+ G4double GammaPlus = Eplus/fMuonMass;
+ G4double GammaMinus= Eminus/fMuonMass;
  
  G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
+ if(0.0 == thetaPlus || 0.0 == thetaMinus) {
+   G4cout << "SteppingAction: "
+          << "thetaPlus= " << thetaPlus << " thetaMinus= " << thetaMinus
+          << " gamPlus= " << GammaPlus << " gamMinus= " <<  GammaMinus
+          << "  " << thetaPlus *GammaPlus - thetaMinus*GammaMinus << G4endl;
+   return;
+ }
  analysisManager->FillH1(1,1./(1.+std::pow(thetaPlus*GammaPlus,2)));
  analysisManager->FillH1(2,std::log10(thetaPlus*GammaPlus));
 
@@ -93,7 +100,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
                                               -thetaMinus*GammaMinus)));
  
  analysisManager->FillH1(5,xPlus);
- analysisManager->FillH1(6,xMinus); 
+ analysisManager->FillH1(6,xMinus);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

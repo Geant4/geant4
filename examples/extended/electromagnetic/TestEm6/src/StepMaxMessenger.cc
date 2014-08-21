@@ -23,76 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm6/include/DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
+/// \file electromagnetic/TestEm6/src/StepMaxMessenger.cc
+/// \brief Implementation of the StepMaxMessenger class
 //
-// $Id$
+// $Id: StepMaxMessenger.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef DetectorConstruction_h
-#define DetectorConstruction_h 1
+#include "StepMaxMessenger.hh"
 
-#include "G4VUserDetectorConstruction.hh"
+#include "StepMax.hh"
+#include "G4UIcmdWithADoubleAndUnit.hh"
 #include "globals.hh"
 
-class G4LogicalVolume;
-class G4Material;
-class G4UniformMagField;
-class G4UserLimits;
-class DetectorMessenger;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+StepMaxMessenger::StepMaxMessenger(StepMax* stepM)
+  :G4UImessenger(),fStepMax(stepM),fStepMaxCmd(0)
+{ 
+  fStepMaxCmd = new G4UIcmdWithADoubleAndUnit("/testem/stepmax",this);
+  fStepMaxCmd->SetGuidance("Set max allowed step length");
+  fStepMaxCmd->SetParameterName("mxStep",false);
+  fStepMaxCmd->SetRange("mxStep>0.");
+  fStepMaxCmd->SetUnitCategory("Length");
+  fStepMaxCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction
+StepMaxMessenger::~StepMaxMessenger()
 {
-  public:
-  
-    DetectorConstruction();
-   ~DetectorConstruction();
-
-  public:
-  
-     virtual G4VPhysicalVolume* Construct();
-     
-     void SetSize        (G4double);              
-     void SetMaterial    (const G4String&);            
-     void SetMagField    (G4double);
-     void SetMaxStepSize (G4double);     
-
-     void UpdateGeometry();
-     
-  public:
-  
-     const
-     G4VPhysicalVolume* GetWorld()      {return fP_Box;};           
-                    
-     G4double           GetSize()       {return fBoxSize;};      
-     G4Material*        GetMaterial()   {return fMaterial;};
-     
-     void               PrintParameters();
-                       
-  private:
-  
-     G4VPhysicalVolume*    fP_Box;
-     G4LogicalVolume*      fL_Box;
-     
-     G4double              fBoxSize;
-     G4Material*           fMaterial;     
-     G4UniformMagField*    fMagField;
-     G4UserLimits*         fUserLimits;
-     
-     DetectorMessenger* fDetectorMessenger;
-
-  private:
-    
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();     
-};
+  delete fStepMaxCmd;
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void StepMaxMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
+{ 
+  if (command == fStepMaxCmd)
+    { fStepMax->SetMaxStep(fStepMaxCmd->GetNewDoubleValue(newValue));}
+}
 
-#endif
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

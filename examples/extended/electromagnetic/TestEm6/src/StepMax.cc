@@ -23,76 +23,76 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm6/include/DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
+/// \file electromagnetic/TestEm6/src/StepMax.cc
+/// \brief Implementation of the StepMax class
 //
-// $Id$
+// $Id: StepMax.cc 67268 2013-02-13 11:38:40Z ihrivnac $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef DetectorConstruction_h
-#define DetectorConstruction_h 1
-
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
-
-class G4LogicalVolume;
-class G4Material;
-class G4UniformMagField;
-class G4UserLimits;
-class DetectorMessenger;
+#include "StepMax.hh"
+#include "StepMaxMessenger.hh"
+#include "G4VPhysicalVolume.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction
+StepMax::StepMax(const G4String& processName)
+  : G4VDiscreteProcess(processName),
+    fMaxChargedStep(DBL_MAX),
+    fMessenger(0)
 {
-  public:
-  
-    DetectorConstruction();
-   ~DetectorConstruction();
-
-  public:
-  
-     virtual G4VPhysicalVolume* Construct();
-     
-     void SetSize        (G4double);              
-     void SetMaterial    (const G4String&);            
-     void SetMagField    (G4double);
-     void SetMaxStepSize (G4double);     
-
-     void UpdateGeometry();
-     
-  public:
-  
-     const
-     G4VPhysicalVolume* GetWorld()      {return fP_Box;};           
-                    
-     G4double           GetSize()       {return fBoxSize;};      
-     G4Material*        GetMaterial()   {return fMaterial;};
-     
-     void               PrintParameters();
-                       
-  private:
-  
-     G4VPhysicalVolume*    fP_Box;
-     G4LogicalVolume*      fL_Box;
-     
-     G4double              fBoxSize;
-     G4Material*           fMaterial;     
-     G4UniformMagField*    fMagField;
-     G4UserLimits*         fUserLimits;
-     
-     DetectorMessenger* fDetectorMessenger;
-
-  private:
-    
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();     
-};
+  fMessenger = new StepMaxMessenger(this);
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+StepMax::~StepMax() 
+{ 
+  delete fMessenger; 
+}
 
-#endif
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4bool StepMax::IsApplicable(const G4ParticleDefinition& particle)
+{
+  return (particle.GetPDGCharge() != 0.);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void StepMax::SetMaxStep(G4double step) 
+{
+  fMaxChargedStep = step;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double 
+StepMax::PostStepGetPhysicalInteractionLength(const G4Track&,
+                                              G4double,
+                                              G4ForceCondition* condition)
+{
+  // condition is set to "Not Forced"
+  *condition = NotForced;
+  fProposedStep = fMaxChargedStep;
+
+  return fProposedStep;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VParticleChange* StepMax::PostStepDoIt(const G4Track& aTrack, const G4Step&)
+{
+  aParticleChange.Initialize(aTrack);
+  return &aParticleChange;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double StepMax::GetMeanFreePath(const G4Track&, G4double, G4ForceCondition*)
+{
+  return 0.;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

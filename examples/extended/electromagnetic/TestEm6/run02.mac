@@ -7,7 +7,7 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat Beryllium
+/testem/det/setMat G4_Be
 /testem/det/setSize 10 km
 #
 /run/initialize

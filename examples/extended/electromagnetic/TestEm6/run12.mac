@@ -7,8 +7,11 @@
 /control/verbose 2
 /run/verbose 2
 #
-/testem/det/setMat Carbon
+/testem/det/setMat G4_C
 /testem/det/setSize 18.5 cm
+#
+/testem/phys/addPhysics emstandard_opt1
+/run/setCut 1 km
 #
 /run/initialize
 #

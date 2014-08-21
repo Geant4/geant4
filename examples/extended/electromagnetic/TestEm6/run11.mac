@@ -7,6 +7,9 @@
 /control/verbose 2
 /run/verbose 2
 #
+/testem/phys/addPhysics emstandard_opt1
+/run/setCut 1 km
+#
 /run/initialize
 #
 /testem/phys/SetAnnihiToMuPairFac 10000

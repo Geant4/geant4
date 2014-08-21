@@ -40,6 +40,8 @@
 class PhysicsList;
 class G4UIdirectory;
 class G4UIcmdWithADouble;
+class G4UIcmdWithAString;
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -60,6 +62,8 @@ class PhysicsListMessenger: public G4UImessenger
     G4UIcmdWithADouble* fGammaToMuPairFacCmd;
     G4UIcmdWithADouble* fAnnihiToMuPairFacCmd;
     G4UIcmdWithADouble* fAnnihiToHadronFacCmd;    
+    G4UIcmdWithAString* fListCmd;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
