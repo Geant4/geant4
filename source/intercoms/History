@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 August, 2014 L. Garnier (intercoms-V10-00-08)
+- G4UImanager.hh : add "G4MTcoutDestination* GetThreadCout()" 
+  to get the cout destination of this thread
+
 4 May, 2014 M. Asai (intercoms-V10-00-07)
 - G4GenericMessenger.cc : Fix core dump when GetCurrentValue()
   method is invoked for a command defined by DeclareMethod().

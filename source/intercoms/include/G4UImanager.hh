@@ -287,6 +287,8 @@ class G4UImanager : public G4VStateDependent
       void SetThreadUseBuffer(G4bool flg = true);
       void SetThreadIgnore(G4int tid = 0);
       void SetThreadIgnoreInit(G4bool flg = true);
+      inline G4MTcoutDestination* GetThreadCout() {return threadCout;};
+ 
 };
 
 #endif

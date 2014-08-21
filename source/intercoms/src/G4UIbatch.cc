@@ -72,8 +72,8 @@ G4UIbatch::G4UIbatch(const char* fileName, G4UIsession* prevSession)
 {
   macroStream.open(fileName, std::ios::in);
   if(macroStream.fail()) {
-    G4cerr << "***** Can not open a macro file <"
-           << fileName << ">"
+    G4cerr << "ERROR: Can not open a macro file <"
+           << fileName << ">. Set macro path with \"/control/macroPath\" if needed."
            << G4endl;
   } else {
     isOpened= true;
