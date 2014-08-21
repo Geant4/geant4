@@ -39,13 +39,17 @@
 PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 :pPhysicsList(pPhys)
 {
+  amsDir = new G4UIdirectory("/ams/");
+  amsDir->SetGuidance("UI commands specific to this example");
+  	
   physDir = new G4UIdirectory("/ams/phys/");
   physDir->SetGuidance("physics list commands");
 
   pListCmd = new G4UIcmdWithAString("/ams/phys/addPhysics",this);  
   pListCmd->SetGuidance("Add modula physics list.");
   pListCmd->SetParameterName("PList",false);
-  pListCmd->AvailableForStates(G4State_PreInit);  
+  pListCmd->AvailableForStates(G4State_PreInit);
+  pListCmd->SetToBeBroadcasted(false);    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -53,7 +57,8 @@ PhysicsListMessenger::PhysicsListMessenger(PhysicsList* pPhys)
 PhysicsListMessenger::~PhysicsListMessenger()
 {
   delete pListCmd;
-  delete physDir;      
+  delete physDir;
+  delete amsDir;      
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

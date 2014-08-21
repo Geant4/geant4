@@ -38,7 +38,6 @@
 #include <vector>
 #include <map>
 
-class RunAction;
 class PrimaryGeneratorAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -46,7 +45,7 @@ class PrimaryGeneratorAction;
 class EventAction : public G4UserEventAction
 {
   public:  
-    EventAction(DetectorConstruction*, RunAction*, PrimaryGeneratorAction*);
+    EventAction(DetectorConstruction*, PrimaryGeneratorAction*);
    ~EventAction();
 
     void BeginOfEventAction(const G4Event*);
@@ -59,7 +58,6 @@ class EventAction : public G4UserEventAction
 
   private:  
     DetectorConstruction*   detector;
-    RunAction*              runAct;
     PrimaryGeneratorAction* primary;
 	
 	G4int nbOfModules, nbOfLayers, kLayerMax;     

@@ -52,7 +52,8 @@ class PhysicsListMessenger: public G4UImessenger
   private:
   
     PhysicsList*               pPhysicsList;
-    
+	
+    G4UIdirectory*             amsDir;        
     G4UIdirectory*             physDir;    
     G4UIcmdWithAString*        pListCmd;
     

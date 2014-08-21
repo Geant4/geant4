@@ -23,62 +23,62 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: ActionInitialization.cc 76346 2013-11-08 15:48:19Z maire $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.cc
+/// \brief Implementation of the ActionInitialization class
 
-#include "DetectorMessenger.hh"
-
+#include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithoutParameter.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "TrackingAction.hh"
+#include "SteppingAction.hh"
+#include "SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:Detector(Det)
-{ 
-  amsDir = new G4UIdirectory("/ams/");
-  amsDir->SetGuidance("UI commands specific to this example");
-  
-  detDir = new G4UIdirectory("/ams/det/");
-  detDir->SetGuidance("detector construction commands");
-  
-  MagFieldCmd = new G4UIcmdWithADoubleAndUnit("/ams/det/setField",this);  
-  MagFieldCmd->SetGuidance("Define magnetic field.");
-  MagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  MagFieldCmd->SetParameterName("Bz",false);
-  MagFieldCmd->SetUnitCategory("Magnetic flux density");
-  MagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-     
-  UpdateCmd = new G4UIcmdWithoutParameter("/ams/det/update",this);
-  UpdateCmd->SetGuidance("Update calorimeter geometry.");
-  UpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  UpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  UpdateCmd->AvailableForStates(G4State_Idle);
-}
+ActionInitialization::ActionInitialization(DetectorConstruction* det)
+ : G4VUserActionInitialization(),fDetector(det)
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::~DetectorMessenger()
+ActionInitialization::~ActionInitialization()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
 {
-  delete MagFieldCmd;
-  delete UpdateCmd;
-  delete detDir;  
-  delete amsDir;
+ SetUserAction(new RunAction(fDetector));
 }
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
+void ActionInitialization::Build() const
 {
-  if( command == MagFieldCmd )
-   { Detector->SetMagField(MagFieldCmd->GetNewDoubleValue(newValue));}
-           
-  if( command == UpdateCmd )
-   { Detector->UpdateGeometry();}
-}
+  PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(fDetector);
+  SetUserAction(primary);
+ 
+  RunAction* runaction = new RunAction(fDetector,primary);
+  SetUserAction(runaction); 
+  
+  EventAction* eventaction = new EventAction(fDetector,primary);
+  SetUserAction(eventaction);
+
+  SetUserAction(new TrackingAction(fDetector));
+
+  SetUserAction(new SteppingAction(fDetector,eventaction));
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
+{
+  return new SteppingVerbose();
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

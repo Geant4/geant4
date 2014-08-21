@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+05-08-14 mma (amsEcal-V10-00-06) 
+- DetectorConstruction::ConstructSDandField()
+	 
+31-07-14 mma (amsEcal-V10-00-05) 
+- migration to MT
+	 
 24-07-14 mma (amsEcal-V10-00-04) 
 - physicsList and messenger
 - DetectorConstruction. fibers, layers, modules : start copy number at 1

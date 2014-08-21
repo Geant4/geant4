@@ -29,7 +29,6 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "DetectorConstruction.hh"
-#include "DetectorMessenger.hh"
 
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
@@ -42,14 +41,10 @@
 #include "G4Transform3D.hh"
 #include "G4RotationMatrix.hh"
 
-#include "G4UniformMagField.hh"
-
 #include "G4GeometryManager.hh"
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
-
-#include "G4UnitsTable.hh"
 
 #include "G4VisAttributes.hh"
 
@@ -59,7 +54,7 @@
 DetectorConstruction::DetectorConstruction()
 :fiberMat(0),lvol_fiber(0), absorberMat(0),lvol_layer(0),
  moduleMat(0),lvol_module(0), calorimeterMat(0),lvol_calorimeter(0),
- worldMat(0),pvol_world(0), defaultMat(0), magField(0)
+ worldMat(0),pvol_world(0), defaultMat(0)
 {
   // materials
   DefineMaterials();
@@ -75,17 +70,12 @@ DetectorConstruction::DetectorConstruction()
   nbOfModules         = 9;		    //9
      
   fiberLength         = (nbOfFibers+0.5)*distanceInterFibers;	//662.175*mm
-  
-  // create commands for interactive definition of the calorimeter
-  detectorMessenger = new DetectorMessenger(this);   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 DetectorConstruction::~DetectorConstruction()
-{ 
-  delete detectorMessenger;
-}
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -323,6 +313,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructCalorimeter()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4UnitsTable.hh"
+
 void DetectorConstruction::PrintCalorParameters()
 {
   G4cout << "\n-------------------------------------------------------------"
@@ -359,35 +351,23 @@ void DetectorConstruction::PrintCalorParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "G4FieldManager.hh"
-#include "G4TransportationManager.hh"
+#include "G4GlobalMagFieldMessenger.hh"
+#include "G4AutoDelete.hh"
 
-void DetectorConstruction::SetMagField(G4double fieldValue)
+void DetectorConstruction::ConstructSDandField()
 {
-  //apply a global uniform magnetic field along Z axis
-  //
-  G4FieldManager* fieldMgr
-   = G4TransportationManager::GetTransportationManager()->GetFieldManager();
-
-  if(magField) delete magField;		//delete the existing magn field
-
-  if(fieldValue!=0.)			// create a new one if non nul
-  { magField = new G4UniformMagField(G4ThreeVector(0.,0.,fieldValue));
-    fieldMgr->SetDetectorField(magField);
-    fieldMgr->CreateChordFinder(magField);
-  } else {
-    magField = 0;
-    fieldMgr->SetDetectorField(magField);
-  }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4RunManager.hh"
-
-void DetectorConstruction::UpdateGeometry()
-{
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructCalorimeter());
+    if ( fFieldMessenger.Get() == 0 ) {
+        // Create global magnetic field messenger.
+        // Uniform magnetic field is then created automatically if
+        // the field value is not zero.
+        G4ThreeVector fieldValue = G4ThreeVector();
+        G4GlobalMagFieldMessenger* msg =
+        new G4GlobalMagFieldMessenger(fieldValue);
+        //msg->SetVerboseLevel(1);
+        G4AutoDelete::Register(msg);
+        fFieldMessenger.Put( msg );
+        
+    }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

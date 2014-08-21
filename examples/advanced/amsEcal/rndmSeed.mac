@@ -15,6 +15,9 @@
 /gun/energy 1 GeV
 /ams/gun/beam 1 cm
 #
+# inform the RunManager to systematically save the seed
+/random/setSavingFlag 1
+#
 /control/shell mkdir random
 #
 /run/beamOn 12

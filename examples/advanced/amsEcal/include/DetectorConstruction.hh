@@ -33,12 +33,12 @@
 
 #include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include "G4Cache.hh"
 
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4Material;
-class G4UniformMagField;
-class DetectorMessenger;
+class G4GlobalMagFieldMessenger;
             
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -51,11 +51,10 @@ public:
 
 public:
      
-  G4VPhysicalVolume* Construct();
+  virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
   
   void PrintCalorParameters();
-  void SetMagField(G4double);
-  void UpdateGeometry();
        
 public:
 
@@ -116,8 +115,7 @@ private:
   
   G4Material*        defaultMat;
               
-  G4UniformMagField* magField;
-  DetectorMessenger* detectorMessenger;
+  G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;  
       
 private:
 

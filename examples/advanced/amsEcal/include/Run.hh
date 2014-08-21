@@ -23,62 +23,58 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm11/include/Run.hh
+/// \brief Definition of the Run class
 //
-// $Id$
+// $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "TrackingAction.hh"
+#ifndef Run_h
+#define Run_h 1
 
-#include "DetectorConstruction.hh"
-#include "Run.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "EventAction.hh"
-#include "HistoManager.hh"
+#include "G4Run.hh"
+#include "globals.hh"
+#include <map>
 
-#include "G4RunManager.hh"
-#include "G4PhysicalConstants.hh"
-#include "G4Track.hh"
-#include "G4Positron.hh"
+class DetectorConstruction;
+class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-TrackingAction::TrackingAction(DetectorConstruction* det)
-:G4UserTrackingAction(),detector(det)
-{ }
- 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+class Run : public G4Run
+{
+  public:
+    Run(DetectorConstruction*);
+   ~Run();
 
-void TrackingAction::PreUserTrackingAction(const G4Track*)
-{ }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void TrackingAction::PostUserTrackingAction(const G4Track* track)
-{ 
-  //compute leakage
-  //
-  // if not at World boundaries, return
-  if (track->GetVolume() != detector->GetPvolWorld()) return;
+  public:
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
+	
+    void SumEvents_1(G4int,G4double,G4double);
+    void SumEvents_2(G4double,G4double,G4double);  
+    void DetailedLeakage(G4int,G4double);
+                
+    virtual void Merge(const G4Run*);
+    void EndOfRun();
      
-  //get position
-  G4double x = (track->GetPosition()).x();
-  G4double xlimit = 0.5*(detector->GetCalorThickness());
-  G4int icase = 2;
-  if (x >= xlimit) icase = 0;
-  else if (x <= -xlimit) icase = 1;
+  private:
+    DetectorConstruction*  fDetector;
+    G4ParticleDefinition*  fParticle;
+    G4double  fEkin;
+	
+    G4int nbOfModules, nbOfLayers, kLayerMax;     
+    std::vector<G4double>   EtotLayer, Etot2Layer;
+    std::vector<G4double>   EvisLayer, Evis2Layer;
   
-  //get particle energy
-  G4double Eleak = track->GetKineticEnergy();
-  if (track->GetDefinition() == G4Positron::Positron())
-     Eleak += 2*electron_mass_c2;
-     
-  //sum leakage
-  Run* run = static_cast<Run*>(
-             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
-  run->DetailedLeakage(icase,Eleak);         
-}
+    G4double EtotCalor, Etot2Calor;
+    G4double EvisCalor, Evis2Calor;
+    G4double Eleak,     Eleak2;
+    G4double EdLeak[3];
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+#endif
 

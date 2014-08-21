@@ -30,18 +30,18 @@
 
 #include "EventAction.hh"
 
-#include "RunAction.hh"
+#include "Run.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
 
+#include "G4RunManager.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Event.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(DetectorConstruction* det, RunAction* run,
-                         PrimaryGeneratorAction* prim)
-:detector(det), runAct(run), primary(prim)
+EventAction::EventAction(DetectorConstruction* det,PrimaryGeneratorAction* prim)
+:detector(det), primary(prim)
 {
   nbOfModules = detector->GetNbModules();	 	
   nbOfLayers  = detector->GetNbLayers();
@@ -71,7 +71,8 @@ void EventAction::BeginOfEventAction(const G4Event*)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::SumDeStep(G4int iModule, G4int iLayer, G4int iFiber, G4double deStep )
+void EventAction::SumDeStep(G4int iModule, G4int iLayer, G4int iFiber,
+                            G4double deStep )
 {
   if (iModule > 0) EtotCalor += deStep;
   		
@@ -93,10 +94,13 @@ void EventAction::SumDeStep(G4int iModule, G4int iLayer, G4int iFiber, G4double 
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
-  //pass informations to RunAction
-  //	
+  //pass informations to Run
+  //
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  	
   for (G4int k=0; k<kLayerMax; k++) {
-     runAct->SumEvents_1(k,EtotLayer[k],EvisLayer[k]);   
+     run->SumEvents_1(k,EtotLayer[k],EvisLayer[k]);   
   }
   
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();    
@@ -105,7 +109,7 @@ void EventAction::EndOfEventAction(const G4Event*)
   
   G4double Ebeam = primary->GetParticleGun()->GetParticleEnergy();
   G4double Eleak = Ebeam - EtotCalor;
-  runAct->SumEvents_2(EtotCalor,EvisCalor,Eleak);
+  run->SumEvents_2(EtotCalor,EvisCalor,Eleak);
   
   
   std::map<G4int,G4double>::iterator it;         
@@ -122,10 +126,8 @@ void EventAction::EndOfEventAction(const G4Event*)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
         
 #include <fstream>
-#include "G4RunManager.hh"
 
 void EventAction::WriteFibers(const G4Event* evt)
 {

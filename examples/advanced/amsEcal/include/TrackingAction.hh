@@ -35,14 +35,13 @@
 #include "globals.hh"
 
 class DetectorConstruction;
-class RunAction;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class TrackingAction : public G4UserTrackingAction {
 
   public:  
-    TrackingAction(DetectorConstruction*,RunAction*);
+    TrackingAction(DetectorConstruction*);
     
    ~TrackingAction() {};
    
@@ -51,7 +50,6 @@ class TrackingAction : public G4UserTrackingAction {
     
   private:
     DetectorConstruction*   detector;
-    RunAction*              runAct;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm5/include/RunAction.hh
+/// \brief Definition of the RunAction class
+//
 // $Id$
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -31,50 +34,36 @@
 #ifndef RunAction_h
 #define RunAction_h 1
 
-#include "DetectorConstruction.hh"
-
 #include "G4UserRunAction.hh"
 #include "globals.hh"
 
-#include <vector>
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+class Run;
+class DetectorConstruction;
 class PrimaryGeneratorAction;
 class HistoManager;
-
-class G4Run;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class RunAction : public G4UserRunAction
 {
+
 public:
 
-  RunAction(DetectorConstruction*, PrimaryGeneratorAction*);
- ~RunAction();
+    RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim=0);
+   ~RunAction();
+   
+    virtual G4Run* GenerateRun();    
+    virtual void BeginOfRunAction(const G4Run*);
+    virtual void   EndOfRunAction(const G4Run*);
 
-  void BeginOfRunAction(const G4Run*);
-  void   EndOfRunAction(const G4Run*);
-  
-  void SumEvents_1(G4int,G4double,G4double);
-  void SumEvents_2(G4double,G4double,G4double);  
-  void DetailedLeakage(G4int,G4double);
-          
-private:
-  
-  DetectorConstruction*   detector;
-  PrimaryGeneratorAction* primary;    
-  HistoManager*           fHistoManager;
 
-  G4int nbOfModules, nbOfLayers, kLayerMax;     
-  std::vector<G4double>   EtotLayer, Etot2Layer;
-  std::vector<G4double>   EvisLayer, Evis2Layer;
-  
-  G4double EtotCalor, Etot2Calor;
-  G4double EvisCalor, Evis2Calor;
-  G4double Eleak,     Eleak2;
-  G4double EdLeak[3];
+  private:
+    DetectorConstruction*   fDetector;
+    PrimaryGeneratorAction* fPrimary;
+    Run*                    fRun;        
+    HistoManager*           fHistoManager;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

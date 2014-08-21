@@ -18,8 +18,8 @@
 #
 /analysis/setFileName mips
 #
-/analysis/h1/set 1 100  8. 12. GeV		#etot in ecal
-/analysis/h1/set 2 100  0. 50. MeV		#evis in ecal
+/analysis/h1/set 1 100  0. 200. MeV		#etot in ecal
+/analysis/h1/set 2 100  0.  50. MeV		#evis in ecal
 /analysis/h1/set 3 100  0. 100. none
 /analysis/h1/set 4 100  0. 100. none
 /analysis/h1/set 5 250  0. 500. none

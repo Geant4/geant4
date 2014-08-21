@@ -23,42 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: ActionInitialization.hh 76346 2013-11-08 15:48:19Z maire $
 //
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
-#ifndef DetectorMessenger_h
-#define DetectorMessenger_h 1
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+#include "G4VUserActionInitialization.hh"
 
 class DetectorConstruction;
-class G4UIdirectory;
-class G4UIcmdWithADoubleAndUnit;
-class G4UIcmdWithoutParameter;
+class G4VSteppingVerbose;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Action initialization class.
+///
 
-class DetectorMessenger: public G4UImessenger
+class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    DetectorMessenger(DetectorConstruction* );
-   ~DetectorMessenger();
+    ActionInitialization(DetectorConstruction*);
+    virtual ~ActionInitialization();
 
-    void SetNewValue(G4UIcommand*, G4String);
-
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+    
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+    
   private:
-    DetectorConstruction* Detector;
+    DetectorConstruction* fDetector;
 
-    G4UIdirectory*             amsDir;
-    G4UIdirectory*             detDir;
-    G4UIcmdWithADoubleAndUnit* MagFieldCmd;
-    G4UIcmdWithoutParameter*   UpdateCmd;
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
+    
