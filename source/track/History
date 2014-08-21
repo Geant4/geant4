@@ -17,6 +17,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+- August 19, 2014 K. Genser (track-V10-00-04)
+- Removed non cost requirement when using G4PhysicsModelCatalog getters and moved 
+   implementations to icc file (requires global-V10-00-31)
+
 - May  21,  2014 J.Apostolakis (track-V10-00-03)
 - Fix G4FieldTrackUpdator to energy/momentum passed to field integration: 
    first set rest mass, then update kinetic energy. Problem affects 
