@@ -80,7 +80,7 @@ public:
   G4double GetPhotonEnergy( const G4Track& trackData,
                                const G4Step&  stepData      );
 
-  G4double GetRandomEnergySR( G4double, G4double );
+  G4double GetRandomEnergySR( G4double, G4double, G4double );
 
   G4double InvSynFracInt(G4double x);
   G4double Chebyshev(G4double a,G4double b,const G4double c[],
@@ -100,11 +100,6 @@ private:
   G4VEmAngularDistribution*   genAngle;
 
   G4ParticleDefinition*       theGamma;
-  const G4ParticleDefinition* theElectron;
-  const G4ParticleDefinition* thePositron;
-
-  G4double fLambdaConst;
-  G4double fEnergyConst;
 
   G4PropagatorInField* fFieldPropagator;
   G4bool FirstTime;

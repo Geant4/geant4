@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01 Aug 14: V.Ivanchenko (xrays-V10-00-02)
+- G4SynchrotronRadiation - H.Burkhardt extend model from e+, e- to be 
+    universal - applicable for all relativistic charged particles 
+
 07 Jan 14: P.Gumplinger (xrays-V10-00-01)
 - make all static 'Set/Add/Remove' methods non-inline in G4Scintillation
   and G4Cerenkov
