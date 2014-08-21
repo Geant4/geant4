@@ -37,33 +37,36 @@
 #include "G4VUserPhysicsList.hh"
 #include "globals.hh"
 
-class PhysicsListMessenger;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class PhysicsListMessenger;
+class G4SynchrotronRadiation;
 
 class PhysicsList: public G4VUserPhysicsList
 {
 public:
   PhysicsList();
- ~PhysicsList();
+  virtual ~PhysicsList();
 
   // Construct particles
   virtual void ConstructParticle();
-  void ConstructBosons();
-  void ConstructLeptons();
-
-  virtual void SetCuts();
-  void SetAnalyticSR(G4bool val) {fSRType = val;};
 
   // Construct processes and register them
   virtual void ConstructProcess();
-  void ConstructGeneral();
-  void ConstructEM();
+
+  inline void SetAnalyticSR(G4bool val) {fSRType = val;};
 
 private:
 
-  G4bool                 fSRType;
-  PhysicsListMessenger*  fMess;
+  void ConstructBosons();
+  void ConstructLeptons();
+
+  void ConstructGeneral();
+  void ConstructEM();
+
+  G4bool                  fSRType;
+  PhysicsListMessenger*   fMess;
+  G4SynchrotronRadiation* fSync;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

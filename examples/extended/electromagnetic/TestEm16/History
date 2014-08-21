@@ -14,6 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+01-08-14 V.Ivant (testem16-V10-00-01)
+- PhysicsList - removed SetCut() method, added Synchrotron radiation
+   to all charged particles
 	 
 09-06-14 mma (testem16-V10-00-00)
 - suppress EventAction and its messenger

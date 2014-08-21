@@ -26,8 +26,9 @@ $Id$
 
  2- PHYSICS LIST
 
-     The particle list is the one of novice/exampleN03 and TestEm6
-     with in addition synchrotron radiation.
+     The particle list include EM processes for gamma, e+, e-, mu+, mu-,
+     and protons, for the rest of particles only transportation. 
+     Synchrotron radiation is added to all charged particles.
      To make the synchrotron radiation easily visible, a very low
      pressure "vaccuum" and a magnetic field of by default 1 Tesla
      in z-direction is used.
