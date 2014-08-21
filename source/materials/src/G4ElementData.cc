@@ -60,15 +60,16 @@ G4ElementData::G4ElementData()
 G4ElementData::~G4ElementData()
 {
   for(G4int i=0; i<maxNumElements; ++i) {
-    //delete elmData[i];
+    delete elmData[i];
     delete elm2Data[i];
-    /*
-    if(compLength[i] > 0) {
-      for(size_t j=0; j<compLength[i]; ++j) {
+    size_t n = compLength[i]; 
+    //G4cout << "Z= " << i << " L= " << n << G4endl;
+    if(n > 0) {
+      for(size_t j=0; j<n; ++j) {
+        //G4cout << "j= " << j << "  " << (compData[i])[j] << G4endl;
         delete (compData[i])[j];
       }
     }
-    */
   }
 }
 
@@ -108,10 +109,13 @@ void G4ElementData::InitialiseForComponent(G4int Z, G4int nComponents)
     return;
   }
 
-  // only one initialisation is allowed
-  if(0 != compLength[Z]) { return; }
-
   // reserve a new structure
+  size_t n = compLength[Z];
+  if(0 < n) { 
+    for(size_t i=0; i<n; ++i) { delete (compData[Z])[i]; }
+    (compData[Z]).clear();
+    (compID[Z]).clear();
+  }
   (compData[Z]).reserve(nComponents);
   (compID[Z]).reserve(nComponents);
 }

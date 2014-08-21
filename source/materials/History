@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-08-14 V.Ivanchenko (materials-V10-00-23)
+- G4SandiaData - proper deletion of G4PhysicsVectors end of job
+
+24-07-14 V.Ivanchenko (materials-V10-00-22)
+- G4ElementData, G4IonStoppingData - proper deletion of G4PhysicsVectors
+    end of job
+
 10-07-14 V.Ivanchenko (materials-V10-00-21)
 - G4SandiaTable.cc : modify low limit for water (similar to previous tag)
     and clean-up the class.

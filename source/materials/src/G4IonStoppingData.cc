@@ -70,7 +70,7 @@ G4IonStoppingData::G4IonStoppingData(const G4String& leDirectory) :
 
 G4IonStoppingData::~G4IonStoppingData() {
 
-  //  ClearTable();
+  ClearTable();
 }
 
 // #########################################################################
