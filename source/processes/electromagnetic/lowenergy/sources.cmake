@@ -114,7 +114,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4MicroElecInelastic.hh
         G4MicroElecInelasticModel.hh
         G4MicroElecSiStructure.hh
-        G4MirandaLiXsModel.hh
         G4MuElecCrossSectionDataSet.hh
         G4MuElecElastic.hh
         G4MuElecElasticModel.hh
@@ -230,7 +229,6 @@ GEANT4_DEFINE_MODULE(NAME G4emlowenergy
         G4MicroElecInelastic.cc
         G4MicroElecInelasticModel.cc
         G4MicroElecSiStructure.cc
-        G4MirandaLiXsModel.cc
         G4MuElecCrossSectionDataSet.cc
         G4MuElecElastic.cc
         G4MuElecElasticModel.cc

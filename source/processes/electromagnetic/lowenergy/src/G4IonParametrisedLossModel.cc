@@ -167,8 +167,21 @@ G4IonParametrisedLossModel::~G4IonParametrisedLossModel() {
   LossTableList::iterator iterTables = lossTableList.begin();
   LossTableList::iterator iterTables_end = lossTableList.end();
 
-  for(;iterTables != iterTables_end; iterTables++) delete *iterTables;
+  for(;iterTables != iterTables_end; ++iterTables) { delete *iterTables; }
   lossTableList.clear();
+
+  // range table
+  RangeEnergyTable::iterator itr = r.begin();
+  RangeEnergyTable::iterator itr_end = r.end();
+  for(;itr != itr_end; ++itr) { delete itr->second; }
+  r.clear();
+
+  // inverse range
+  EnergyRangeTable::iterator ite = E.begin();
+  EnergyRangeTable::iterator ite_end = E.end();
+  for(;ite != ite_end; ++ite) { delete ite->second; }
+  E.clear();
+
 }
 
 // #########################################################################
@@ -276,13 +289,17 @@ void G4IonParametrisedLossModel::Initialise(
   RangeEnergyTable::iterator iterRange = r.begin();
   RangeEnergyTable::iterator iterRange_end = r.end();
 
-  for(;iterRange != iterRange_end; iterRange++) delete iterRange -> second;
+  for(;iterRange != iterRange_end; iterRange++) { 
+    delete iterRange->second; 
+  }
   r.clear();
 
   EnergyRangeTable::iterator iterEnergy = E.begin();
   EnergyRangeTable::iterator iterEnergy_end = E.end();
 
-  for(;iterEnergy != iterEnergy_end; iterEnergy++) delete iterEnergy -> second;
+  for(;iterEnergy != iterEnergy_end; iterEnergy++) { 
+    delete iterEnergy->second;
+  }
   E.clear();
 
   // The cut energies are (re)loaded

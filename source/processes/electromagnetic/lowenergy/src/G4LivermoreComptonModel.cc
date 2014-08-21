@@ -98,6 +98,12 @@ G4LivermoreComptonModel::~G4LivermoreComptonModel()
     shellData = 0;
     delete profileData;
     profileData = 0;
+    for(G4int i=0; i<maxZ; ++i) {
+      if(data[i]) { 
+	delete data[i];
+	data[i] = 0;
+      }
+    }
   }
 }
 

@@ -100,6 +100,11 @@ G4LivermorePhotoElectricModel::~G4LivermorePhotoElectricModel()
     delete fShellCrossSection;
     for(G4int i=0; i<maxZ; ++i) { 
       delete fParam[i];
+      fParam[i] = 0;
+      delete fCrossSection[i];
+      fCrossSection[i] = 0;
+      delete fCrossSectionLE[i];
+      fCrossSectionLE[i] = 0;
     }
   }
 }

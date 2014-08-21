@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07.08.2014 S. Incerti, tag emlowen-V10-00-15
+           Removed unused code for atomic deexcitation.  
+
+30.07.2014 V. Ivanchenko, tag emlowen-V10-00-14
+           G4LivermorePhotoElectricModel, G4LivermoreGammaConversionModel,
+           G4LivermoreRayleighModel, G4LivermoreComptonModel,
+           G4IonParameterisedLossModel - added proper deletion
+             of G4PhysicsVectors end of run
+
 15.07.2014 V. Ivanchenko/L. Pandola, tag emlowen-V10-00-13
            LivermorePhotoElectricModel - keep cross section const 
            below lowest shell energy (as in Penelope model)

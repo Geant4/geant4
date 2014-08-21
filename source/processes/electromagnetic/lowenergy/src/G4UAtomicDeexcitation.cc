@@ -113,11 +113,6 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
     {
       SetPIXECrossSectionModel("Empirical");
     }
-  else if (PIXECrossSectionModel() == "Empirical_Miranda" ||
-	   PIXECrossSectionModel() == "empirical_miranda" ) 
-    {
-      SetPIXECrossSectionModel("Empirical_Miranda");
-    }
   else if (PIXECrossSectionModel() == "ECPSSR_Analytical" ||
 	   PIXECrossSectionModel() == "Analytical" || 
 	   PIXECrossSectionModel() == "analytical") 
@@ -154,11 +149,6 @@ void G4UAtomicDeexcitation::InitialiseForNewRun()
     if (PIXECrossSectionModel() == "Empirical")
       {
 	PIXEshellCS = new G4empCrossSection("Empirical");
-      }
-
-    if (PIXECrossSectionModel() == "Empirical_Miranda")
-      {
-	PIXEshellCS = new G4empCrossSection("Empirical_Miranda");
       }
 
     if (PIXECrossSectionModel() == "ECPSSR_FormFactor")
