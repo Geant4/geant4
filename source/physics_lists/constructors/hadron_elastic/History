@@ -14,6 +14,17 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-Aug-2014, Alberto Ribon          (phys-ctor-helastic-V10-00-05)
+- G4HadronHElasticPhysics: for proton, neutron, pion+ and pion-
+  elastic scattering introduced the Chips model on Hydrogen, while
+  kept G4DiffuseElastic for all other elements.
+
+31-Jul-2014, Alberto Ribon          (phys-ctor-helastic-V10-00-04)
+- G4HadronHElasticPhysics: to ensure reproducibility, use a different
+  instance of G4DiffuseElastic for each particle type (p, n, pi+, pi-),
+  and disable G4NuclNuclDiffuseElastic, using Gheisha elastic model
+  for light ions (nothing else is available for heavy ions).
+
 06-Jun-2014, Alberto Ribon          (phys-ctor-helastic-V10-00-03)
 - G4HadronHElasticPhysics: use G4NuclNuclDiffuseElastic model
   (instead of the Gheisha-based G4HadronElastic) for all ions.
