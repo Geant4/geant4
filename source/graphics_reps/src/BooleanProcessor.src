@@ -2021,9 +2021,9 @@ HepPolyhedron BooleanProcessor::execute(int op,
   ifaces1 = faces.size(); takePolyhedron(a,0,0,0);
   ifaces2 = faces.size(); takePolyhedron(b,0,0,0);
 
-  if (processor_error) {             // corrapted polyhedron
+  if (processor_error) {             // corrupted polyhedron
     G4cerr
-      << "BooleanProcessor: corrapted input polyhedron"
+      << "BooleanProcessor: corrupted input polyhedron"
       << G4endl;
     err = processor_error; //G.Barrand
     return HepPolyhedron();

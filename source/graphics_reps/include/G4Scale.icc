@@ -36,6 +36,11 @@ inline G4double G4Scale::GetLength() const {
 inline const G4String& G4Scale::GetAnnotation() const {
   return fAnnotation;
 }
+
+inline G4double G4Scale::GetAnnotationSize() const {
+  return fAnnotationSize;
+}
+
 inline G4Scale::Direction G4Scale::GetDirection() const {
   return fDirection;
 }

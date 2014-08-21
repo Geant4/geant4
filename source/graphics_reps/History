@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+History file for graphics_reps category
+---------------------------------------
+
+14th August 2014  John Allison  (greps-V10-00-07)
+- HepPolyhedron::SetReferences: Protected against a null pointer.
+- BooleanProcessor::execute: Corrected spelling mistake in message.
+- G4Scale: Changed default annotation size to 12 pixels.
+
+11th August 2014  John Allison  (greps-V10-00-06)
+- G4Scale: Added annotation size (text size).
+
 4th February 2014  John Allison  (greps-V10-00-05)
 - Replaced tabs by 8 spaces.
 

@@ -44,13 +44,15 @@ public: // With description
   G4Scale (G4double length, const G4String& annotation = "",
            Direction direction = x,
            G4bool autoPlacing = true,
-           G4double xmid = 0., G4double ymid = 0., G4double zmid = 0.);
+           G4double xmid = 0., G4double ymid = 0., G4double zmid = 0.,
+           G4double annotationSize = 12.);
   // This creates a representation of annotated line in the specified
   // direction with tick marks at the end.  If autoPlacing is true it
   // is required to be centred at the front, right, bottom corner of
   // the world space, comfortably outside the existing bounding
   // box/sphere so that existing objects do not obscure it.  Otherwise
   // it is required to be drawn with mid-point at (xmid, ymid, zmid).
+  // Annotation size is size of text labels in pixels.
   //
   // The auto placing algorithm might be:
   //   x = xmin + (1 + comfort) * (xmax - xmin)
@@ -66,6 +68,7 @@ public: // With description
 
   G4double        GetLength() const;
   const G4String& GetAnnotation() const;
+  G4double        GetAnnotationSize() const;
   Direction       GetDirection() const;
   G4bool          GetAutoPlacing() const;
   G4double        GetXmid() const;
@@ -78,6 +81,7 @@ private:
 
   G4double fLength;
   G4String fAnnotation;
+  G4double fAnnotationSize;
   Direction fDirection;
   G4bool fAutoPlacing;
   G4double fXmid, fYmid, fZmid;

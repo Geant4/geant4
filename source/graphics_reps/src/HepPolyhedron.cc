@@ -721,6 +721,12 @@ void HepPolyhedron::SetReferences()
       cur = headList[k1];
       if (cur == 0) {
         headList[k1] = freeList;
+        if (!freeList) {
+          std::cerr
+          << "Polyhedron::SetReferences: bad link "
+          << std::endl;
+          break;
+        }
         freeList = freeList->next;
         cur = headList[k1];
         cur->next = 0;
@@ -756,6 +762,12 @@ void HepPolyhedron::SetReferences()
         cur = prev->next;
         if (cur == 0) {
           prev->next = freeList;
+          if (!freeList) {
+            std::cerr
+            << "Polyhedron::SetReferences: bad link "
+            << std::endl;
+            break;
+          }
           freeList = freeList->next;
           cur = prev->next;
           cur->next = 0;
