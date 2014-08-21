@@ -32,9 +32,12 @@
 
 // 121031 First implementation done by T. Koi (SLAC/PPA)
 //
+#include <map>
 #include "globals.hh"
 
 #include "G4NeutronHPReactionWhiteBoard.hh"
+
+class G4NeutronHPMessenger;
 
 class G4NeutronHPManager 
 {
@@ -56,12 +59,37 @@ class G4NeutronHPManager
       void CloseReactionWhiteBoard(){delete RWB; RWB=NULL;};
 
       void GetDataStream( G4String , std::istringstream& iss );
+      void GetDataStream2( G4String , std::istringstream& iss );
       void SetVerboseLevel( G4int i ); 
       G4int GetVerboseLevel() {return verboseLevel; }; 
 
+      void DumpDataSource();
+
+      G4bool GetUseOnlyPhotoEvaporation() { return USE_ONLY_PHOTONEVAPORATION; };
+      void SetUseOnlyPhotoEvaporation( G4bool val ) { USE_ONLY_PHOTONEVAPORATION = val; };
+      G4bool GetSkipMissingIsotopes() { return SKIP_MISSING_ISOTOPES; };
+      G4bool GetNeglectDoppler() { return NEGLECT_DOPPLER; };
+      G4bool GetDoNotAdjustFinalState() { return DO_NOT_ADJUST_FINAL_STATE; };
+      G4bool GetProduceFissionFragments() { return PRODUCE_FISSION_FRAGMENTS; };
+
+      void SetSkipMissingIsotopes( G4bool val ) { SKIP_MISSING_ISOTOPES = val; };
+      void SetNeglectDoppler( G4bool val ) { NEGLECT_DOPPLER = val; };
+      void SetDoNotAdjustFinalState( G4bool val ) { DO_NOT_ADJUST_FINAL_STATE = val; };
+      void SetProduceFissionFragments( G4bool val ) { PRODUCE_FISSION_FRAGMENTS = val; };
+
    private:
+      void register_data_file( G4String , G4String );
+      std::map<G4String,G4String> mDataEvaluation;
       G4NeutronHPReactionWhiteBoard* RWB;
 
       G4int verboseLevel;
+
+      G4NeutronHPMessenger* messenger;
+      G4bool USE_ONLY_PHOTONEVAPORATION;
+      G4bool SKIP_MISSING_ISOTOPES;
+      G4bool NEGLECT_DOPPLER;
+      G4bool DO_NOT_ADJUST_FINAL_STATE;
+      G4bool PRODUCE_FISSION_FRAGMENTS;
+ 
 };
 #endif

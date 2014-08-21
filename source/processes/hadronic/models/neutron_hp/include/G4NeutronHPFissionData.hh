@@ -87,6 +87,8 @@ class G4NeutronHPFissionData : public G4VCrossSectionDataSet
       G4double xs_cache;
       const G4Element* element_cache;
       const G4Material* material_cache;
+
+      G4bool onFlightDB;
 };
 
 #endif

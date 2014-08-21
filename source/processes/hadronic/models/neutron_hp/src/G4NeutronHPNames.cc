@@ -62,7 +62,6 @@
 
   G4String G4NeutronHPNames::GetName(G4int i) { return theString[i]; }
 
-//G4NeutronHPDataUsed G4NeutronHPNames::GetName(G4int A, G4int Z, G4String base, G4String rest, G4bool & aFlag)
 G4NeutronHPDataUsed G4NeutronHPNames::GetName(G4int A, G4int Z, G4int M, G4String base, G4String rest, G4bool & aFlag)
 {
 
@@ -132,7 +131,7 @@ if(getenv("NeutronHPNames")) G4cout <<"HPWD 1 "<<*theName<<G4endl;
 
        //check = new std::ifstream(*theName);
        check = new std::istringstream(std::ios::in);
-       G4NeutronHPManager::GetInstance()->GetDataStream(*theName,*check);
+       G4NeutronHPManager::GetInstance()->GetDataStream2(*theName,*check);
        if ( !(*check) ) 
        {
 	  //check->close();
@@ -155,7 +154,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 2 "<<*theName<<G4endl;
              result.SetM(M);
              //check = new std::ifstream(*theName);
              check = new std::istringstream(std::ios::in);
-             G4NeutronHPManager::GetInstance()->GetDataStream(*theName,*check);
+             G4NeutronHPManager::GetInstance()->GetDataStream2(*theName,*check);
              if ( !(*check) ) 
              {
                 //check->close();
@@ -214,7 +213,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4a "<<*theName<<G4endl;
              fileName = base+"/"+rest+"/"+itoa(myZ)+"_"+itoa(myA)+sM+"_"+theString[myZ-1];
              //file = new std::ifstream(fileName);
              file = new std::istringstream(std::ios::in);
-             G4NeutronHPManager::GetInstance()->GetDataStream(fileName,*file);
+             G4NeutronHPManager::GetInstance()->GetDataStream2(fileName,*file);
 
              if ( *file )
              {
@@ -231,7 +230,7 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b1 "<<*theName<<G4endl;
                 delete file;
                 //file = new std::ifstream(fileName);
                 file = new std::istringstream(std::ios::in);
-                G4NeutronHPManager::GetInstance()->GetDataStream(fileName,*file);
+                G4NeutronHPManager::GetInstance()->GetDataStream2(fileName,*file);
                 if ( *file )
                 {
 
@@ -347,7 +346,8 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
           G4String reac = base;
           G4String dir = getenv("G4NEUTRONHPDATA"); 
           reac.erase ( 0 , dir.length() );
-          if ( getenv ( "G4NEUTRONHP_SKIP_MISSING_ISOTOPES" ) && !( Z == result.GetZ() && result.IsThisNaturalAbundance() ) )
+          //if ( getenv ( "G4NEUTRONHP_SKIP_MISSING_ISOTOPES" ) && !( Z == result.GetZ() && result.IsThisNaturalAbundance() ) )
+          if ( G4NeutronHPManager::GetInstance()->GetSkipMissingIsotopes() && !( Z == result.GetZ() && result.IsThisNaturalAbundance() ) )
           {
              if ( verboseLevel > 0 ) {
                 G4cout << "NeutronHP: " << reac << " file for Z = " << Z << ", A = " << A << " is not found and CrossSection set to 0." << G4endl;
@@ -384,4 +384,5 @@ if(getenv("NeutronHPNames"))    G4cout <<"HPWD 4b2c "<<*theName<<G4endl;
       check = NULL;
     }
     return result;
-  }
+
+}

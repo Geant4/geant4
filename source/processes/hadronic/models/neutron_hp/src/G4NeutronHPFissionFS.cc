@@ -31,6 +31,7 @@
 // 07-Sep-11 M. Kelsey -- Follow change to G4HadFinalState interface
 
 #include "G4NeutronHPFissionFS.hh"
+#include "G4NeutronHPManager.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4Nucleus.hh"
 #include "G4DynamicParticleVector.hh"
@@ -47,7 +48,8 @@
     theLC.Init(A, Z, M, dirName, aFSType);
 
     theFF.Init(A, Z, M, dirName, aFSType);
-    if ( getenv("G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS") && theFF.HasFSData() ) 
+    //if ( getenv("G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS") && theFF.HasFSData() ) 
+    if ( G4NeutronHPManager::GetInstance()->GetProduceFissionFragments() && theFF.HasFSData() ) 
     {
        G4cout << "Activate Fission Fragments Production for the target isotope of " 
        << "Z = " << (G4int)Z
@@ -61,6 +63,10 @@
  }
  G4HadFinalState * G4NeutronHPFissionFS::ApplyYourself(const G4HadProjectile & theTrack)
  {  
+
+    //Because it may change by UI command 
+    produceFissionFragments=G4NeutronHPManager::GetInstance()->GetProduceFissionFragments(); 
+
  //G4cout << "G4NeutronHPFissionFS::ApplyYourself " << G4endl;
 // prepare neutron
    theResult.Clear();

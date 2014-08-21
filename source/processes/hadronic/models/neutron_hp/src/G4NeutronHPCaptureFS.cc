@@ -75,7 +75,8 @@
 // dice the photons
 
     G4ReactionProductVector * thePhotons = 0;
-    if ( HasFSData() && !getenv ( "G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION" ) ) 
+    //if ( HasFSData() && !getenv ( "G4NEUTRONHP_USE_ONLY_PHOTONEVAPORATION" ) ) 
+    if ( HasFSData() && !G4NeutronHPManager::GetInstance()->GetUseOnlyPhotoEvaporation() ) 
     { 
        //NDL has final state data
        if ( hasExactMF6 )

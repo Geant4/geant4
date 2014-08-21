@@ -763,6 +763,11 @@ E_isoAng G4NeutronHPThermalScattering::create_E_isoAng_from_energy ( G4double en
       panEPM_T_EL = *iv;
    } 
 
+   //checking isoAng has proper values or not 
+   //   Inelastic/FS, the first and last entries of *vEPM has all zero values.
+   if ( ! ( check_E_isoAng (panEPM_T_EL) ) ) panEPM_T_EL= panEPM_T_EH;
+   if ( ! ( check_E_isoAng (panEPM_T_EH) ) ) panEPM_T_EH= panEPM_T_EL;
+
    if ( panEPM_T_EL->n == panEPM_T_EH->n ) 
    {
       anEPM_T_E.energy = energy; 
@@ -1053,4 +1058,18 @@ void G4NeutronHPThermalScattering::AddUserThermalScatteringFile( G4String nameG4
    names.AddThermalElement( nameG4Element , filename );
    theXSection->AddUserThermalScatteringFile( nameG4Element , filename );
    buildPhysicsTable();
+}
+
+G4bool G4NeutronHPThermalScattering::check_E_isoAng( E_isoAng* anE_IsoAng )
+{
+   G4bool result=false;
+
+   G4int n = anE_IsoAng->n;
+   G4double sum=0.0;
+   for ( G4int i = 0 ; i < n ; i++ ) {
+      sum += anE_IsoAng->isoAngle[ i ];
+   }
+   if ( sum != 0.0 ) result = true;
+
+   return result;
 }

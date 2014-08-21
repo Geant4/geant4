@@ -31,6 +31,8 @@
 #ifndef G4NeutronHPFinalState_h
 #define G4NeutronHPFinalState_h
 
+#include "G4NeutronHPManager.hh"
+
 #include "G4Material.hh"
 #include "G4FastVector.hh"
 #include "G4HadFinalState.hh"
@@ -107,7 +109,8 @@ public:
 //080721
    protected:
       void adjust_final_state ( G4LorentzVector );
-      G4bool DoNotAdjustFinalState(){ return adjustResult; };
+      //G4bool DoNotAdjustFinalState(){ return adjustResult; };
+      G4bool DoNotAdjustFinalState(){ return !G4NeutronHPManager::GetInstance()->GetDoNotAdjustFinalState(); };
       G4int theNDLDataZ;
       G4int theNDLDataA;
       G4int theNDLDataM;

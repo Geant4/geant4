@@ -128,6 +128,7 @@ class G4NeutronHPThermalScattering : public G4HadronicInteraction
 
       size_t sizeOfMaterialTable;
 
+      G4bool check_E_isoAng( E_isoAng* );
 };
 
 #endif

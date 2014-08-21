@@ -14,14 +14,67 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18 August 2014 Tatsumi Koi   (hadr-hpn-V10-00-17)
+-Adding UI commands for controlling options of HP package
+	include/G4NeutronHPFinalState.hh
+	include/G4NeutronHPFissionData.hh
+	include/G4NeutronHPManager.hh
+	src/G4NeutronHPCaptureData.cc
+	src/G4NeutronHPNames.cc
+	src/G4NeutronHPFinalState.cc
+	src/G4NeutronHPFissionFS.cc
+	src/G4NeutronHPFissionData.cc
+	src/G4NeutronHPInelasticData.cc
+	src/G4NeutronHPCaptureFS.cc
+	src/G4NeutronHPManager.cc
+	src/G4NeutronHPElasticData.cc
+-Adding G4NeutronHPMessenger class
+	sources.cmake 
+	include/G4NeutronHPMessenger.hh  
+	src/G4NeutronHPMessenger.cc
+
+
+14 August 2014 Tatsumi Koi   (hadr-hpn-V10-00-16)
+-Adding information of data source to each data file 
+	G4NDL4.5
+- Migrate G4NDL4.5 
+  Reading and storing source information
+	include/G4NeutronHPManager.hh
+	src/G4NeutronHPNames.cc
+	src/G4NeutronHPManager.cc
+
+
+6 August 2014 Tatsumi Koi   (hadr-hpn-V10-00-15)
+-Fix rare core dump caused by angular parameter being all zero.
+ The angular parameters of the first and last seoncondary energy 
+in ThermalScattering/Inelastic/FS have all zero elements
+	include/G4NeutronHPThermalScattering.hh
+       	src/G4NeutronHPThermalScattering.cc
+-Uncomment out para and ortho hydrogen and liquid and solid methane
+       	src/G4NeutronHPThermalScatteringNames.cc
+
+
+30 July 2014 Alberto Ribon   (hadr-hpn-V10-00-14)
+- G4NeutronHPElasticData, G4NeutronHPInelasticData, G4NeutronHPCaptureData,
+  G4NeutronHPFissionData, G4NeutronHPJENDLHEData: proper deletion of
+  physics vectors.
+
+
+25 July 2014 Tatsumi Koi     (hadr-hpn-V10-00-13)
+- Delete unused (and also uncompilable) header file.
+	G4NeutronHPPhotonXSection.hh
+
+
 21 May 2014 Andrea Dotti     (hadr-hpn-V10-00-12)
 - Change deleting of maps in G4NeutronHPFFFissionFS destructor.
+
 
 21 May 2014 Andrea Dotti     (hadr-hpn-V10-00-11)
 - Do not call G4PhysicsTable::clearAndDestroy() in destructors of 
   G4NeutronHPCaptureData, G4NeutronHPElasticData, G4NeutronHPFissionData
   G4NeutronHPInelasticData. Because G4PhysicsTable content are manged by
   allocators
+
 
 20 May 2014 Tatsumi Koi      (hadr-hpn-V10-00-10)
 -Fix bug in kinematics of residual nucleus 

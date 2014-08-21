@@ -40,7 +40,8 @@ void G4NeutronHPFinalState::adjust_final_state ( G4LorentzVector init_4p_lab )
 
    G4double minimum_energy = 1*keV;
 
-   if ( adjustResult != true ) return;
+   //if ( adjustResult != true ) return;
+   if ( G4NeutronHPManager::GetInstance()->GetDoNotAdjustFinalState() ) return;
 
    G4int nSecondaries = theResult.GetNumberOfSecondaries();
 
