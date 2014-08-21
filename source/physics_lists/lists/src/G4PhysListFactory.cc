@@ -33,6 +33,9 @@
 //
 // Modified:
 //
+// 2014.08.05 K.L.Genser used provision for Hadronic Physics Variant M in 
+//            Shielding for ShieldingM
+//
 //----------------------------------------------------------------------------
 //
 
@@ -54,7 +57,6 @@
 #include "QGSP_INCLXX.hh"
 #include "QGSP_INCLXX_HP.hh"
 #include "Shielding.hh"
-#include "ShieldingM.hh"
 #include "NuBeam.hh"
 
 #include "G4EmStandardPhysics.hh"
@@ -158,7 +160,7 @@ G4PhysListFactory::GetReferencePhysList(const G4String& name)
   else if(had_name == "QGS_BIC")        {p = new QGS_BIC(verbose);}
   else if(had_name == "Shielding")      {p = new Shielding(verbose);}
   else if(had_name == "ShieldingLEND")  {p = new Shielding(verbose,"LEND");}
-  else if(had_name == "ShieldingM")     {p = new ShieldingM(verbose);}
+  else if(had_name == "ShieldingM")     {p = new Shielding(verbose,"HP","M");}
   else if(had_name == "NuBeam")         {p = new NuBeam(verbose);}
   else {
     G4cout << "### G4PhysListFactory WARNING: "

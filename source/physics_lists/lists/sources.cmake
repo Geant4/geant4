@@ -142,8 +142,6 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         FTFP_INCLXX_HP.hh
 	Shielding.hh
 	Shielding.icc
-	ShieldingM.hh
-	ShieldingM.icc
     SOURCES
         G4PhysListFactory.cc
         QBBC.cc
