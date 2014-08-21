@@ -17,6 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11th August 2014  Laurent Garnier  (interfaces-V10-00-09)
+- G4UIQt :
+  o Fix a bug for single threading output in last tag
+  o Add a "SetViewerFirstPageHTMLText" method to be able to set the first tab widget text.
+    This could be used to make some kind of a start page to display useful informations
+
+7th August 2014  Laurent Garnier  (interfaces-V10-00-08)
+- G4UIQt :
+  o Add Mutilthreading outputs
+  o New cout internal management
+  o Add a filter on thread in output
+
+1th August 2014  Laurent Garnier
+- G4UIQt : Change UI look by moving "search" at the top of the G4cout area
+
 10th July 2014  Laurent Garnier  (interfaces-V10-00-07)
 - G4UIQt : BugFix #1604
 - G4UIWt : Minor things

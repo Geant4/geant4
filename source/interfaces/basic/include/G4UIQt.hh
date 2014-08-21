@@ -55,6 +55,8 @@ class QStringList;
 class QSplitter;
 class QToolBar;
 class QTableWidget;
+class QPixmap;
+class QComboBox;
 
 // Class description :
 //
@@ -96,6 +98,16 @@ public :
     return QSize(fPreferedSizeX, fPreferedSizeY);
   }
 };
+
+class G4UIOutputString {
+  public :
+  G4UIOutputString(QString text,G4String thread = "",G4String outputstream= "info");
+  inline QString GetOutputList() { return " all info warning error ";};
+  QString fText;
+  G4String fThread;
+  G4String fOutputStream; // Error, Warning, Info
+};
+
 
 class G4UIQt : public QObject, public G4VBasicShell, public G4VInteractiveSession {
   Q_OBJECT
@@ -163,7 +175,15 @@ public: // With description
   inline QMainWindow * GetMainWindow() {
     return fMainWindow;
   };
+  
+  inline QPixmap* getSearchIcon() { return fSearchIcon;};
+  // return the "search" icon pixmap
+  inline QPixmap* getClearIcon() { return fClearIcon;};
+  // return the "clear" icon pixmap
 
+  void SetViewerFirstPageHTMLText(const std::string&);
+  // Set the HTML text on the first page of the viewer. If "", will take the last value as default
+  
 public:
   ~G4UIQt();
   void Prompt(G4String);
@@ -204,6 +224,12 @@ private:
   G4bool IsGUICommand(const G4UIcommand*);
   bool CreateVisCommandGroupAndToolBox(G4UIcommand*, QWidget*, int, bool isDialog);
   bool CreateCommandWidget(G4UIcommand* command, QWidget* parent, bool isDialog);
+#ifdef G4MULTITHREADED
+  void UpdateCoutThreadFilter();
+#endif
+  void FilterAllOutputTextArea();
+  QString FilterOutput(const G4UIOutputString&,const QString&,const QString&);
+  G4String GetThreadPrefix();
 
 private:
 
@@ -212,7 +238,7 @@ private:
   QLineEdit * fCommandArea;
   QTextEdit *fCoutTBTextArea;
   QTabWidget* fUITabWidget;
-  QStringList fG4cout;
+  std::vector <G4UIOutputString> fG4OutputString;
   QLineEdit * fCoutFilter;
 
   QListWidget *fHistoryTBTableList;
@@ -224,7 +250,7 @@ private:
   QLineEdit* fHelpLine;
   G4QTabWidget* fViewerTabWidget;
   QString fCoutText;
-  QLabel *fEmptyViewerTabLabel;
+  QLabel *fEmptyViewerWidget;
   QSplitter * fMainSplitterWidget;
   QSplitter* fRightSplitterWidget;
   QWidget* fLeftSplitterWidget;
@@ -238,6 +264,11 @@ private:
   QString fStringSeparator;
   G4String fLastErrMessage;
   QString fLastOpenPath;
+  
+  QPixmap* fSearchIcon;
+  QPixmap* fClearIcon;
+  QComboBox* fThreadsFilterComboBox;
+  std::string fDefaultViewerFirstPageHTMLText;
   
   bool fMoveSelected;
   bool fRotateSelected;
@@ -259,6 +290,7 @@ private Q_SLOTS :
   void UpdateTabWidget(int);
   void ResizeTabWidget( QResizeEvent* );
   void CoutFilterCallback(const QString&);
+  void ThreadComboBoxCallback(int);
   void TabCloseCallback(int);
   void ToolBoxActivated(int);
   void VisParameterCallback(QWidget*);

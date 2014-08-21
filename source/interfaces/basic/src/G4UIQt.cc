@@ -39,7 +39,7 @@
 #include "G4StateManager.hh"
 #include "G4UIcommandTree.hh"
 #include "G4UIcommandStatus.hh"
-
+#include "G4MTcoutDestination.hh"
 #include "G4Qt.hh"
 
 #include <qapplication.h>
@@ -115,7 +115,6 @@ G4UIQt::G4UIQt (
 ,fCommandArea(NULL)
 ,fCoutTBTextArea(NULL)
 ,fUITabWidget(NULL)
-,fG4cout("")
 ,fCoutFilter(NULL)
 ,fHistoryTBTableList(NULL)
 ,fHelpTreeWidget(NULL)
@@ -126,7 +125,7 @@ G4UIQt::G4UIQt (
 ,fHelpLine(NULL)
 ,fViewerTabWidget(NULL)
 ,fCoutText("Output")
-,fEmptyViewerTabLabel(NULL)
+,fEmptyViewerWidget(NULL)
 ,fMainSplitterWidget(NULL)
 ,fRightSplitterWidget(NULL)
 ,fLeftSplitterWidget(NULL)
@@ -138,6 +137,12 @@ G4UIQt::G4UIQt (
 ,fToolbarUser(NULL)
 ,fStringSeparator("__$$$@%%###__")
 ,fLastOpenPath("")
+,fSearchIcon(NULL)
+,fClearIcon(NULL)
+#ifdef G4MULTITHREADED
+,fThreadsFilterComboBox(NULL)
+#endif
+,fDefaultViewerFirstPageHTMLText("")
 ,fMoveSelected(false)
 ,fRotateSelected(true)
 ,fPickSelected(false)
@@ -193,6 +198,9 @@ G4UIQt::G4UIQt (
 
   if(UI!=NULL) UI->SetCoutDestination(this);  // TO KEEP
 
+  // explicitly request that cout/cerr messages from threads are ALSO propagated to the master.
+  masterG4coutDestination = this;
+  
   fMainWindow->setWindowTitle(QFileInfo( QCoreApplication::applicationFilePath() ).fileName()); 
   fMainWindow->move(QPoint(50,50));
 
@@ -202,6 +210,9 @@ G4UIQt::G4UIQt (
   fMainWindow->resize(fLeftSplitterWidget->width()+fRightSplitterWidget->width()+20,
                       fLeftSplitterWidget->height()+fRightSplitterWidget->height()+20);
   
+  // set last focus on command line
+  fCommandArea->setFocus(Qt::TabFocusReason);
+
   // Set not visible until session start
  #if QT_VERSION < 0x040200
   fMainWindow->hide();
@@ -219,7 +230,8 @@ G4UIQt::~G4UIQt(
   if(UI!=NULL) {  // TO KEEP
     UI->SetSession(NULL);  // TO KEEP
     UI->SetG4UIWindow(NULL);
-    UI->SetCoutDestination(NULL);  // TO KEEP
+    UI->SetCoutDestination(0);  // TO KEEP
+    masterG4coutDestination = 0; // set to cout when UI is deleted
   }
   
   if (fMainWindow!=NULL) {
@@ -280,8 +292,9 @@ QWidget* G4UIQt::CreateHelpTBWidget(
   
   QSizePolicy policy = QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
   policy.setVerticalStretch(4);
-  fHelpTreeWidget->setSizePolicy(policy);
-  
+  if (fHelpTreeWidget) {
+    fHelpTreeWidget->setSizePolicy(policy);
+  }
   policy = QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Preferred);
   policy.setVerticalStretch(1);
   fParameterHelpLabel->setSizePolicy(policy);
@@ -303,6 +316,76 @@ QWidget* G4UIQt::CreateHelpTBWidget(
 QWidget* G4UIQt::CreateCoutTBWidget(
 ) 
 {
+  const char * const search[]  = {
+    /* columns rows colors chars-per-pixel */
+    "19 19 8 1",
+    "  c #5C5C5C",
+    ". c #7D7D7D",
+    "X c #9B9B9B",
+    "o c #C3C3C3",
+    "O c None",
+    "+ c #000000",
+    "@ c #000000",
+    "# c None",
+    /* pixels */
+    "OOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOo.  .oOOOOOO",
+    "OOOOOOX      XOOOOO",
+    "OOOOOo  XOOX  oOOOO",
+    "OOOOO. XOOOOX .OOOO",
+    "OOOOO  OOOOOO  OOOO",
+    "OOOOO  OOOOOO  OOOO",
+    "OOOOO. XOOOOo .OOOO",
+    "OOOOOo  oOOo  oOOOO",
+    "OOOOOOX       XOOOO",
+    "OOOOOOOo.  .   XOOO",
+    "OOOOOOOOOOOOO.  XOO",
+    "OOOOOOOOOOOOOO. XOO",
+    "OOOOOOOOOOOOOOOoOOO",
+    "OOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOOOOOOOOOOOOO"
+  };
+
+  const char * const clear[]  = {
+    /* columns rows colors chars-per-pixel */
+    "20 20 8 1",
+    "  c #020202",
+    ". c #202020",
+    "X c #2C2C2C",
+    "o c #797979",
+    "O c None",
+    "+ c #797979",
+    "@ c #797979",
+    "# c #797979",
+    /* pixels */
+    "OOOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOo    oOOOOOOO",
+    "OOOOOXX      XXOOOOO",
+    "OOOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOOOOOOOOOOOOOO",
+    "OOOO XXXXXXXXXX OOOO",
+    "OOO XOOOOOOOOOO  OOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOooOooOooO OOOO",
+    "OOOOXOOOOOOOOOO OOOO",
+    "OOOOOooooooooooOOOOO",
+    "OOOOOO........OOOOOO"
+  };
+
+  fSearchIcon = new QPixmap(search);
+  fClearIcon = new QPixmap(clear);
+  
   fCoutTBWidget = new QGroupBox("Output");
 
   QVBoxLayout *layoutCoutTB = new QVBoxLayout();
@@ -314,11 +397,21 @@ QWidget* G4UIQt::CreateCoutTBWidget(
   fCoutTBTextArea->setFontPointSize(12);
 
   fCoutFilter = new QLineEdit();
-  QLabel* coutFilterLabel = new QLabel("Filter : ");
-  coutFilterLabel->setToolTip("filter output by...");
+  fCoutFilter->setToolTip("Filter output by...");
+  
+#if QT_VERSION > 0x050100
+  fCoutFilter->addAction(*fSearchIcon,QLineEdit::TrailingPosition);
+  fCoutFilter->setStyleSheet ("border-radius:7px;");
+#else
+  QPushButton *coutTBFilterButton = new QPushButton();
+  coutTBFilterButton->setIcon(*fSearchIcon);
+  coutTBFilterButton->setStyleSheet ("padding-left: 0px; border:0px;");
+  fCoutFilter->setStyleSheet ("padding-right: 0px;");
+#endif
 
-  QPushButton *coutTBClearButton = new QPushButton("clear output");
-  coutTBClearButton->setToolTip("clear output");
+  QPushButton *coutTBClearButton = new QPushButton();
+  coutTBClearButton->setIcon(*fClearIcon);
+  coutTBClearButton->setToolTip("Clear console output");
   connect(coutTBClearButton, SIGNAL(clicked()), SLOT(ClearButtonCallback()));
   connect(fCoutFilter, SIGNAL(textEdited ( const QString &)), SLOT(CoutFilterCallback( const QString &)));
 
@@ -327,15 +420,31 @@ QWidget* G4UIQt::CreateCoutTBWidget(
   QWidget* coutButtonWidget = new QWidget();
   QHBoxLayout* layoutCoutTBButtons = new QHBoxLayout();
   layoutCoutTBButtons->addWidget(coutTBClearButton);
-  layoutCoutTBButtons->addWidget(coutFilterLabel);
+  
+#ifdef G4MULTITHREADED
+  // add all candidates to widget
+  fThreadsFilterComboBox = new QComboBox();
+  fThreadsFilterComboBox->setInsertPolicy(QComboBox::InsertAlphabetically);
+  connect(fThreadsFilterComboBox, SIGNAL(activated(int)), this, SLOT(ThreadComboBoxCallback(int)));
+
+  UpdateCoutThreadFilter();
+
+  fThreadsFilterComboBox->setToolTip("Thread selection in output");
+  layoutCoutTBButtons->addWidget(new QLabel(" Threads:"));
+  layoutCoutTBButtons->addWidget(fThreadsFilterComboBox);
+#endif
+
   layoutCoutTBButtons->addWidget(fCoutFilter);
+#if QT_VERSION <= 0x050100
+  layoutCoutTBButtons->addWidget(coutTBFilterButton);
+#endif
   coutButtonWidget->setLayout(layoutCoutTBButtons);
 
   // reduce margins
   layoutCoutTBButtons->setContentsMargins(3,3,3,0);
 
-  layoutCoutTB->addWidget(fCoutTBTextArea);
   layoutCoutTB->addWidget(coutButtonWidget);
+  layoutCoutTB->addWidget(fCoutTBTextArea);
 
   fCoutTBWidget->setLayout(layoutCoutTB);
 
@@ -426,10 +535,26 @@ QWidget* G4UIQt::CreateRightSplitterWidget(){
   layoutCommandLine->addWidget(fCommandArea);
 
   commandLineWidget->setLayout(layoutCommandLine);
+  
+  SetViewerFirstPageHTMLText(std::string("<div style='background:white; border: 1px solid #ccc; border-radius: 20px;'><b>Tooltips :</b><ul>")+
+                             "<li><b>Start a new viewer :</b><br />"+
+                             "<i>/vis/open/...</i></li>"+
+                             "<li><b>Get the viewer list :</b><br />"+
+                             "<i>/vis/list</i></li>"+
+                             "</ul></div>"+
+                             
+                             "<div style='background:white; border: 1px solid #ccc; border-radius: 20px;'><b>Documentation :</b><ul>"+
+                             "<li><b>Visualisation publication :</b><br />"+
+                             "<i><a href='http://www.worldscientific.com/doi/abs/10.1142/S1793962313400011'>The Geant4 Visualization System - A Multi-Driver Graphics System</b><br />,  Allison, J. et al., International Journal of Modeling, Simulation, and Scientific Computing, Vol. 4, Suppl. 1 (2013) 1340001</a></i></li>"+
+                             "<li><b>Visualization tutorial :</b><br />"+
+                             "<i><a href='http://geant4.in2p3.fr/spip.php?article60&lang=en'>Geant4 Qt User Interface tutorial </a></i></li>"+
+                             "</ul></div>"+
 
-  fEmptyViewerTabLabel = new QLabel("If you want to have a Viewer, please use /vis/open commands.");
-
-
+                             "<div style='background:white; border: 1px solid #ccc; border-radius: 20px;'><b>Getting Help :</b><ul>"+
+                             "<li><b>As problems arise, try <a href='http://geant4-hn.slac.stanford.edu:5090/Geant4-HyperNews/index'>browsing the user forum</a> to see whether or not your problem has already been encountered.<br /> If it hasn't, you can post it and Geant4 developers will do their best to find a solution. This is also a good place to discuss Geant4 topics in general.</b><br />"+
+                             "<li><b>Get a look at <a href='http://geant4.kek.jp/geant4/support/index.shtml'>Geant4 User support pages</a></b></li>"+
+                             "</ul></div>"
+                             );
 
 
   // fill right splitter
@@ -437,7 +562,7 @@ QWidget* G4UIQt::CreateRightSplitterWidget(){
   //  Create an widget to handle OGL widget and label
   fViewerTabHandleWidget = new QWidget();
   QVBoxLayout * viewerTabHandleLayout = new QVBoxLayout();
-  viewerTabHandleLayout->addWidget(fEmptyViewerTabLabel);
+  viewerTabHandleLayout->addWidget(fEmptyViewerWidget);
   fViewerTabHandleWidget->setLayout(viewerTabHandleLayout);
 
 
@@ -533,13 +658,13 @@ bool G4UIQt::AddTabWidget(
 
   // L.Garnier 26/05/2010 : not exactly the same in qt3. Could cause some
   // troubles
-  if (fEmptyViewerTabLabel != NULL) {
+  if (fEmptyViewerWidget != NULL) {
     int index = -1;
-    index = fViewerTabHandleWidget->layout()->indexOf(fEmptyViewerTabLabel);
+    index = fViewerTabHandleWidget->layout()->indexOf(fEmptyViewerWidget);
     if ( index != -1) {
-      fViewerTabHandleWidget->layout()->removeWidget(fEmptyViewerTabLabel);
-      delete fEmptyViewerTabLabel;
-      fEmptyViewerTabLabel = NULL;
+      fViewerTabHandleWidget->layout()->removeWidget(fEmptyViewerWidget);
+      delete fEmptyViewerWidget;
+      fEmptyViewerWidget = NULL;
       
       fViewerTabHandleWidget->layout()->addWidget(fViewerTabWidget);
     }
@@ -582,6 +707,20 @@ bool G4UIQt::AddTabWidget(
   fMainWindow->resize(winWidth-oldTabWidth+newTabWidth,
                       winHeight-oldTabHeight+newTabHeight);
   return true;
+}
+
+
+void G4UIQt::SetViewerFirstPageHTMLText(
+const std::string& text)
+{
+  if (text != "") {
+    fDefaultViewerFirstPageHTMLText = text;
+  }
+  if (!fEmptyViewerWidget) {
+    fEmptyViewerWidget = new QLabel();
+    fEmptyViewerWidget->setTextFormat(Qt::RichText);
+  }
+  fEmptyViewerWidget->setText(fDefaultViewerFirstPageHTMLText.c_str());
 }
 
 
@@ -729,20 +868,27 @@ G4int G4UIQt::ReceiveG4cout (
   
   QStringList newStr;
   
-  // Add to stringList
-  newStr = QStringList(QString((char*)aString.data()).trimmed());
-  fG4cout += newStr;
+  // Add to string
+  G4UIOutputString txt = G4UIOutputString(QString((char*)aString.data()).trimmed(),GetThreadPrefix());
+  fG4OutputString.push_back(txt);
 
-  QStringList result = newStr.filter(fCoutFilter->text());
+#ifdef G4MULTITHREADED
+  QString result = FilterOutput(txt,fThreadsFilterComboBox->currentText(),fCoutFilter->text());
+#else
+  QString result = FilterOutput(txt,"",fCoutFilter->text());
+#endif
 
-  if (result.join("").isEmpty()) {
+  if (result.isEmpty()) {
     return 0;
   }
-  fCoutTBTextArea->append(result.join(""));
+  fCoutTBTextArea->append(result);
   fCoutTBTextArea->repaint();
 
   fCoutTBTextArea->verticalScrollBar()->setSliderPosition(fCoutTBTextArea->verticalScrollBar()->maximum());
 
+#ifdef G4MULTITHREADED
+  UpdateCoutThreadFilter();
+#endif
   return 0;
 }
 
@@ -760,11 +906,21 @@ G4int G4UIQt::ReceiveG4cerr (
 
   QStringList newStr;
 
-  // Add to stringList
-  newStr = QStringList(QString((char*)aString.data()).trimmed());
-  fG4cout += newStr;
+  // Add to string
+
+  G4UIOutputString txt = G4UIOutputString(QString((char*)aString.data()).trimmed(),
+                                          GetThreadPrefix(),
+                                          "error");
+  fG4OutputString.push_back(txt);
  
-  QStringList result = newStr.filter(fCoutFilter->text());
+#ifdef G4MULTITHREADED
+  QString result = FilterOutput(txt,fThreadsFilterComboBox->currentText(),fCoutFilter->text());
+#else
+  QString result = FilterOutput(txt,"",fCoutFilter->text());
+#endif
+  if (result.isEmpty()) {
+    return 0;
+  }
 
   // Suppress space, \n,\t,\r...
   if (QString(aString.data()).trimmed() != "") {
@@ -776,7 +932,7 @@ G4int G4UIQt::ReceiveG4cerr (
   }
   QColor previousColor = fCoutTBTextArea->textColor();
   fCoutTBTextArea->setTextColor(Qt::red);
-  fCoutTBTextArea->append(result.join("\n"));
+  fCoutTBTextArea->append(result);
   fCoutTBTextArea->setTextColor(previousColor);
   fCoutTBTextArea->verticalScrollBar()->setSliderPosition(fCoutTBTextArea->verticalScrollBar()->maximum());
   fCoutTBTextArea->repaint();
@@ -784,9 +940,54 @@ G4int G4UIQt::ReceiveG4cerr (
   if (QString(aString.data()).trimmed() != "") {
     fLastErrMessage = aString;
   }
+#ifdef G4MULTITHREADED
+  UpdateCoutThreadFilter();
+#endif
   return 0;
 }
 
+
+G4String G4UIQt::GetThreadPrefix() {
+  G4String threadPrefix = "";
+#ifdef G4MULTITHREADED
+/*  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if(UI==NULL) return "";
+  
+  if (UI->GetThreadCout() != NULL) {
+    threadPrefix = UI->GetThreadCout()->GetPrefixString().data();
+  }
+*/
+  threadPrefix = "G4WT";
+#endif
+  return threadPrefix;
+}
+
+
+#ifdef G4MULTITHREADED
+void G4UIQt::UpdateCoutThreadFilter() {
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if(UI==NULL) return;
+
+  // add "All" and "Master"
+  if (fThreadsFilterComboBox->count() < 2) {
+    if ( fThreadsFilterComboBox->findText("All", Qt::MatchExactly) == -1) {
+      fThreadsFilterComboBox->addItem("All");
+    }
+  }
+  if (fThreadsFilterComboBox->count() < 2) {
+    if ( fThreadsFilterComboBox->findText("Master", Qt::MatchExactly) == -1) {
+      fThreadsFilterComboBox->addItem("Master");
+    }
+  }
+  // Add current Cout
+  G4String prefix = GetThreadPrefix();
+  if (prefix != "") {
+    if ( fThreadsFilterComboBox->findText(prefix.data(), Qt::MatchExactly) == -1) {
+      fThreadsFilterComboBox->addItem(prefix.data());
+    }
+  }
+}
+#endif
 
 
 /**
@@ -2716,7 +2917,7 @@ void G4UIQt::ClearButtonCallback (
 )
 {
   fCoutTBTextArea->clear();
-  fG4cout.clear();
+  fG4OutputString.clear();
 }
 
 /**   Called when user exit session
@@ -2988,16 +3189,76 @@ void G4UIQt::CommandHistoryCallback(
 }
 
 
-void G4UIQt::CoutFilterCallback(
-const QString & text) {
+void G4UIQt::ThreadComboBoxCallback(int) {
+  CoutFilterCallback("");
+}
 
-  QStringList result = fG4cout.filter(text);
-  fCoutTBTextArea->setPlainText(result.join("\n"));
+
+void G4UIQt::CoutFilterCallback(
+const QString &) {
+
+  FilterAllOutputTextArea();
 
   fCoutTBTextArea->repaint();
   fCoutTBTextArea->verticalScrollBar()->setSliderPosition(fCoutTBTextArea->verticalScrollBar()->maximum());
 
  }
+
+
+QString G4UIQt::FilterOutput(
+ const G4UIOutputString& output
+,const QString& currentThread
+,const QString& filter
+) {
+  
+#ifdef G4MULTITHREADED
+  if ((currentThread == "All") ||
+      (currentThread == output.fThread)) {
+#else
+    if (currentThread == "") {
+#endif
+    if (output.fText.contains(QRegExp(filter))) {
+      return output.fText;
+    }
+  }
+  return "";
+}
+
+
+void G4UIQt::FilterAllOutputTextArea() {
+  
+  QString currentThread = "";
+#ifdef G4MULTITHREADED
+  currentThread = fThreadsFilterComboBox->currentText();
+  if (currentThread == "Master") {
+    currentThread = "";
+  }
+#endif
+  QString filter = fCoutFilter->text();
+  G4String previousOutputStream = "";
+
+  fCoutTBTextArea->clear();
+  fCoutTBTextArea->setTextColor(QColor(Qt::black));
+
+  for (unsigned int a=0; a<fG4OutputString.size(); a++) {
+    G4UIOutputString out = fG4OutputString[a];
+    if (FilterOutput(out,currentThread,filter) != "") {
+
+      // changing color ?
+      if (out.fOutputStream != previousOutputStream) {
+        previousOutputStream = out.fOutputStream;
+        if (out.fOutputStream == "info") {
+          fCoutTBTextArea->setTextColor(QColor(Qt::black));
+        } else {
+          fCoutTBTextArea->setTextColor(QColor(Qt::red));
+        }
+      }
+      fCoutTBTextArea->append(out.fText);
+    }
+  }
+  fCoutTBTextArea->setTextColor(QColor(Qt::black));
+}
+
 
 /**   Callback called when user give a new string to look for<br>
    Display a list of matching commands descriptions. If no string is set,
@@ -3651,7 +3912,22 @@ G4QTabWidget::G4QTabWidget(
 }
 
 
-  
+G4UIOutputString::G4UIOutputString(
+QString text,
+G4String origine,
+G4String outputStream
+):
+ fText(text)
+,fThread(origine)
+{
+  if (!GetOutputList().contains(QString(" ")+outputStream+" ")) {
+    fOutputStream = "info";
+  } else {
+    fOutputStream = outputStream;
+  }
+}
+      
+
 #if QT_VERSION < 0x040500
 void G4UIQt::TabCloseCallback(int){
 #else
@@ -3671,15 +3947,15 @@ void G4UIQt::TabCloseCallback(int a){
 
   // if there is no more tab inside the tab widget
   if (fViewerTabWidget->count() == 0) {
-    if (fEmptyViewerTabLabel == NULL) {
-      fEmptyViewerTabLabel = new QLabel("If you want to have a Viewer, please use /vis/open commands.");
+    if (fEmptyViewerWidget == NULL) {
+      SetViewerFirstPageHTMLText(fDefaultViewerFirstPageHTMLText);
     }
     
     fViewerTabHandleWidget->layout()->removeWidget(fViewerTabWidget);
     
-    fViewerTabHandleWidget->layout()->addWidget(fEmptyViewerTabLabel);
+    fViewerTabHandleWidget->layout()->addWidget(fEmptyViewerWidget);
     
-    fEmptyViewerTabLabel->show();
+    fEmptyViewerWidget->show();
   }
 #endif
 }
