@@ -842,6 +842,7 @@ void G4RunManager::GeometryHasBeenModified(G4bool prop)
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
+#include "G4RegionStore.hh"
 
 void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
 {
@@ -858,6 +859,25 @@ void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
     G4PhysicalVolumeStore::GetInstance()->Clean();
     G4LogicalVolumeStore::GetInstance()->Clean();
     G4SolidStore::GetInstance()->Clean();
+
+    // remove all logical volume pointers from regions
+    // exception: world logical volume pointer must be kept
+    G4RegionStore* regionStore = G4RegionStore::GetInstance();
+    std::vector<G4Region*>::iterator rItr;
+    for(rItr = regionStore->begin();rItr != regionStore->end(); rItr++)
+    {
+      if((*rItr)->GetName()=="DefaultRegionForTheWorld") continue;
+      //if((*rItr)->GetName()=="DefaultRegionForParallelWorld") continue;
+      std::vector<G4LogicalVolume*>::iterator lvItr
+        = (*rItr)->GetRootLogicalVolumeIterator();
+      for(size_t iRLV = 0;iRLV < (*rItr)->GetNumberOfRootVolumes(); iRLV++)
+      {
+        (*rItr)->RemoveRootLogicalVolume(*lvItr,false);
+        lvItr++;
+      }
+      if(verboseLevel>0)
+      { G4cout<<"#### Region <"<<(*rItr)->GetName()<<"> is cleared."<<G4endl; }
+    }
   }
   if(prop)
   { G4UImanager::GetUIpointer()->ApplyCommand("/run/reinitializeGeometry"); }

@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 21st, 2014 M.Asai (run-V10-00-25)
+- Clean up previous tag. Addressing to bug report #1665.
+
+August 21st, 2014 M.Asai (run-V10-00-24)
+- Clear root logical volume pointers in G4Region when geometry is
+  rebuilt from scratch.
+
 August 19th, 2014 M.Asai (run-V10-00-23)
 - Preloading ions is now optional once again.
 
