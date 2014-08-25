@@ -109,6 +109,9 @@ void G4WorkerRunManager::InitializeGeometry() {
                     FatalException, "G4VUserDetectorConstruction is not defined!");
         return;
     }
+    if(fGeometryHasBeenDestroyed) 
+    { G4TransportationManager::GetTransportationManager()->ClearParallelWorlds(); }
+
     //Step1: Get pointer to the physiWorld (note: needs to get the "super pointer, i.e. the one shared by all threads"
     G4RunManagerKernel* masterKernel = G4MTRunManager::GetMasterRunManagerKernel();
     G4VPhysicalVolume* worldVol = masterKernel->GetCurrentWorld();

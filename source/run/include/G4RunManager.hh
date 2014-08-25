@@ -567,6 +567,10 @@ public: // with description
     //disable assignment and copy constructors
     G4RunManager(const G4RunManager&) {}
     G4RunManager& operator=(const G4RunManager&) { return *this; }
+
+  protected:
+    // This boolean flag has to be shared by all G4RunManager objects
+    static G4bool fGeometryHasBeenDestroyed;
 };
 
 #endif

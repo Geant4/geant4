@@ -65,6 +65,8 @@ using namespace CLHEP;
 
 G4ThreadLocal G4RunManager* G4RunManager::fRunManager = 0;
 
+G4bool G4RunManager::fGeometryHasBeenDestroyed = false;
+
 //The following lines are needed since G4VUserPhysicsList
 //uses a #define theParticleIterator
 #ifdef theParticleIterator
@@ -412,6 +414,7 @@ void G4RunManager::TerminateEventLoop()
     G4cout << "  "  << *timer << G4endl;
   }
   ////////////////  G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
+  fGeometryHasBeenDestroyed = false;
 }
 
 G4Event* G4RunManager::GenerateEvent(G4int i_event)
@@ -878,6 +881,10 @@ void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
       if(verboseLevel>0)
       { G4cout<<"#### Region <"<<(*rItr)->GetName()<<"> is cleared."<<G4endl; }
     }
+
+    // clear transportation manager
+    fGeometryHasBeenDestroyed = true;
+    G4TransportationManager::GetTransportationManager()->ClearParallelWorlds();
   }
   if(prop)
   { G4UImanager::GetUIpointer()->ApplyCommand("/run/reinitializeGeometry"); }

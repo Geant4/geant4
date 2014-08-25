@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 22nd, 2014 M.Asai (run-V10-00-26)
+- G4TransportationManager is cleaned when geometry is rebuilt from
+  scratch. Addressing further to bug report #1665. Co-working with
+  geomnav-V10-00-08.
+
 August 21st, 2014 M.Asai (run-V10-00-25)
 - Clean up previous tag. Addressing to bug report #1665.
 
