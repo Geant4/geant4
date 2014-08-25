@@ -332,10 +332,12 @@ private:
   // icons
   QPixmap* fTreeIconOpen;
   QPixmap* fTreeIconClosed;
+  QPixmap* fSearchIcon;
 
   int fLastExportSliderValue;
   G4Color fLastHighlightColor;
   GLuint fLastHighlightName;
+  bool fIsDeleting;
 
 public Q_SLOTS :
   void startPauseVideo();

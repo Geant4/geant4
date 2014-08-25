@@ -256,6 +256,7 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
   ,fLastExportSliderValue(80)
   ,fLastHighlightColor(G4Color(0,0,0,0))
   ,fLastHighlightName(0)
+  ,fIsDeleting(false)
 {
 
   // launch Qt if not
@@ -434,6 +435,40 @@ G4OpenGLQtViewer::G4OpenGLQtViewer (
     
   };
   
+  const char * const search[]  = {
+    /* columns rows colors chars-per-pixel */
+    "19 19 8 1",
+    "  c #5C5C5C",
+    ". c #7D7D7D",
+    "X c #9B9B9B",
+    "o c #C3C3C3",
+    "O c None",
+    "+ c #000000",
+    "@ c #000000",
+    "# c None",
+    /* pixels */
+    "OOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOo.  .oOOOOOO",
+    "OOOOOOX      XOOOOO",
+    "OOOOOo  XOOX  oOOOO",
+    "OOOOO. XOOOOX .OOOO",
+    "OOOOO  OOOOOO  OOOO",
+    "OOOOO  OOOOOO  OOOO",
+    "OOOOO. XOOOOo .OOOO",
+    "OOOOOo  oOOo  oOOOO",
+    "OOOOOOX       XOOOO",
+    "OOOOOOOo.  .   XOOO",
+    "OOOOOOOOOOOOO.  XOO",
+    "OOOOOOOOOOOOOO. XOO",
+    "OOOOOOOOOOOOOOOoOOO",
+    "OOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOOOOOOOOOOOOO",
+    "OOOOOOOOOOOOOOOOOOO"
+  };
+  
+  fSearchIcon = new QPixmap(search);
   fTreeIconOpen = new QPixmap(icon1);
   fTreeIconClosed = new QPixmap(icon2);
 
@@ -448,6 +483,8 @@ G4OpenGLQtViewer::~G4OpenGLQtViewer (
 //////////////////////////////////////////////////////////////////////////////
 //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!//
 {
+  fIsDeleting = true;
+  
   // remove scene tree from layout
   // Delete all the existing buttons in the layout
   QLayoutItem *wItem;
@@ -1369,6 +1406,11 @@ void G4OpenGLQtViewer::G4MouseReleaseEvent(QMouseEvent *evnt)
         } else {
           rotate = true;
         }
+        // prevent from closing widget when rotating (cause a crash)
+        if (fIsDeleting) {
+          return;
+        }
+        
         if (rotate) {  // rotate
           if (fNoKeyPress) {
             rotateQtScene(((float)delta.x())/correctionFactor,((float)delta.y())/correctionFactor);
@@ -1424,16 +1466,11 @@ void G4OpenGLQtViewer::G4MouseMoveEvent(QMouseEvent *evnt)
   int deltaX = fLastPos2.x()-fLastPos1.x();
   int deltaY = fLastPos2.y()-fLastPos1.y();
 
-  bool rotate = false;
   bool move = false;
   if (fUiQt != NULL) {
-    if (fUiQt->IsIconRotateSelected()) {  // rotate
-      rotate = true;
-    } else if (fUiQt->IsIconMoveSelected()) {  // move
+    if (fUiQt->IsIconMoveSelected()) {  // move
       move = true;
     }
-  } else {
-    rotate = true;
   }
   if (!move) {  // rotate, pick, zoom...
     if (mButtons & Qt::LeftButton) {
@@ -2519,34 +2556,10 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   connect(fSceneTreeComponentTreeWidget,SIGNAL(itemSelectionChanged ()),SLOT(sceneTreeComponentSelected()));
   connect(fSceneTreeComponentTreeWidget,SIGNAL(itemDoubleClicked ( QTreeWidgetItem*, int)),SLOT(changeColorAndTransparency( QTreeWidgetItem*, int)));
 
-  // Search line
-  QWidget *helpWidget = new QWidget();
-  QHBoxLayout *helpLayout = new QHBoxLayout();
-  QPushButton* select = new QPushButton("select item(s)");
-  fHelpLine = new QLineEdit();
-  helpLayout->addWidget(fHelpLine);
-  helpLayout->addWidget(select);
-  helpWidget->setLayout(helpLayout);
-  helpLayout->setContentsMargins(0,0,0,0);
-  
-  // set a minimum size
-  fHelpLine->setMinimumWidth (20);
-  
-  QSizePolicy policy = fHelpLine->sizePolicy();
-  policy.setHorizontalStretch(10);
-  fHelpLine->setSizePolicy(policy);
-  
-  policy = select->sizePolicy();
-  policy.setHorizontalStretch(1);
-  select->setSizePolicy(policy);
-  
-  layoutSceneTreeTopWidgetLayout->addWidget(helpWidget);
-  
-
   
   // Depth slider
-  QLabel *depth = new QLabel();
-  depth->setText("Depth :");
+  QWidget *helpWidget = new QWidget();
+  QHBoxLayout *helpLayout = new QHBoxLayout();
 
   QWidget* depthWidget = new QWidget();
   QGroupBox *groupBox = new QGroupBox(tr("Touchables slider"),depthWidget);
@@ -2572,7 +2585,27 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
 
   groupBox->setLayout(groupBoxLayout);
 
-  layoutSceneTreeTopWidgetLayout->addWidget(groupBox);
+  helpLayout->addWidget(groupBox);
+  helpWidget->setLayout(helpLayout);
+  helpLayout->setContentsMargins(0,0,0,0);
+
+  // Search line
+  fHelpLine = new QLineEdit();
+  fHelpLine->setToolTip("Filter output by...");
+#if QT_VERSION > 0x050100
+  
+  fHelpLine->addAction(*fSearchIcon,QLineEdit::TrailingPosition);
+  fHelpLine->setStyleSheet ("border-radius:7px;");
+#else
+  QPushButton *coutTBFilterButton = new QPushButton();
+  coutTBFilterButton->setIcon(*fSearchIcon);
+  coutTBFilterButton->setStyleSheet ("padding-left: 0px; border:0px;");
+  fHelpLine->setStyleSheet ("padding-right: 0px;");
+#endif
+  
+  helpLayout->addWidget(fHelpLine);
+
+  layoutSceneTreeTopWidgetLayout->addWidget(helpWidget);
 
   connect( fSceneTreeDepthSlider, SIGNAL( valueChanged(int) ), this, SLOT( changeDepthInSceneTree(int) ) );
 
@@ -2643,9 +2676,7 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
 
   //  fSceneTreeComponentPickingScrollArea->setSizePolicy(vPolicy);
   layoutSceneTreeBottomWidgetLayout->addWidget(fSceneTreeComponentPickingScrollArea);
-  
-  connect( fHelpLine, SIGNAL( returnPressed () ), this, SLOT(changeSearchSelection()));
-  connect( select, SIGNAL( clicked () ), this, SLOT(changeSearchSelection()));
+  connect( fHelpLine, SIGNAL( textEdited ( const QString &) ), this, SLOT(changeSearchSelection()));
 
   // policy
   QSizePolicy bottomPolicy = QSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
