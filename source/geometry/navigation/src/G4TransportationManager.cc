@@ -451,7 +451,8 @@ void G4TransportationManager::DeRegisterWorld( G4VPhysicalVolume* aWorld )
 //
 // Clear collection of navigators and delete allocated objects associated with
 // parallel worlds.
-// Called only by the RunManager when the entire geometry is rebuilt from scratch.
+// Called only by the RunManager when the entire geometry is rebuilt from
+// scratch.
 //
 void G4TransportationManager::ClearParallelWorlds()
 {
@@ -459,16 +460,16 @@ void G4TransportationManager::ClearParallelWorlds()
    G4Navigator* trackingNavigator = *pNav;
    for (pNav=fNavigators.begin(); pNav!=fNavigators.end(); pNav++)
    {
-     if(*pNav != trackingNavigator) delete *pNav;
+     if (*pNav != trackingNavigator)  { delete *pNav; }
    }
    fNavigators.clear();
    fActiveNavigators.clear();
    fWorlds.clear();
 
-   //////trackingNavigator->SetWorldVolume(0);
+   // trackingNavigator->SetWorldVolume(0);
    fNavigators.push_back(trackingNavigator);
    fActiveNavigators.push_back(trackingNavigator);
-   //////fWorlds.push_back(trackingNavigator->GetWorldVolume()); // NULL registered
+   // fWorlds.push_back(trackingNavigator->GetWorldVolume()); // NULL registered
    fWorlds.push_back(0); // NULL registered
 }
 

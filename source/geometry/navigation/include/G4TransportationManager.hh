@@ -108,6 +108,13 @@ class G4TransportationManager
        // Methods for handling navigators. Navigator for tracking is always the
        // first, i.e. position 0 in the collection and cannot be de-registered
 
+  public:  // without description
+
+     void ClearParallelWorlds();
+       // Clear collection of navigators and delete allocated objects
+       // associated with parallel worlds. Internal method called only
+       // by the RunManager when the entire geometry is rebuilt from scratch.
+
   protected:
 
      G4TransportationManager();
@@ -137,9 +144,6 @@ class G4TransportationManager
      G4SafetyHelper*         fSafetyHelper;
 
      static G4ThreadLocal G4TransportationManager*  fTransportationManager;
-
-  public:
-     void ClearParallelWorlds();
 };
 
 #include "G4TransportationManager.icc"

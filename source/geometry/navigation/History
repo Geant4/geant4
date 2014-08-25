@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 25, 2014 - G.Cosmo  (geomnav-V10-00-10)
+-------------------------
+- Minor code cleanup.
+
 August 22, 2014 - M.Asai  (geomnav-V10-00-08 and geomnav-V10-00-09)
 ------------------------
 - G4TransportationManager: Add ClearParallelWorlds() method. This method is
