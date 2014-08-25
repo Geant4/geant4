@@ -109,6 +109,10 @@ private:
   G4HadronicInteraction* fEmCascade;
   G4HadronicInteraction* fBoundDecay;
 
+  const G4int emcID;
+  const G4int ncID;
+  const G4int dioID;
+
   // This is shadowing "result" in the cc file and
   // looks to be unnecessary.  Removed by DHW, 12 June 2012   
   // G4HadFinalState result;   
@@ -136,9 +140,3 @@ G4HadronStoppingProcess::SetBoundDecay(G4HadronicInteraction* ptr)
 }
 
 #endif
- 
-
-
-
-
-

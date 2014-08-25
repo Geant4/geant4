@@ -61,15 +61,18 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4HadronStoppingProcess::G4HadronStoppingProcess(const G4String& name)
-  : G4HadronicProcess(name, fHadronAtRest)
+    : G4HadronicProcess(name, fHadronAtRest),
+      fElementSelector(new G4ElementSelector()),
+      fEmCascade(new G4EmCaptureCascade()),  // Owned by InteractionRegistry
+      fBoundDecay(0x0),
+      emcID(G4PhysicsModelCatalog::Register(G4String((name + "_EMCascade")))),
+      ncID(G4PhysicsModelCatalog::Register(G4String((name + "_NuclearCapture")))),
+      dioID(G4PhysicsModelCatalog::Register(G4String((name + "_DIO"))))
 {
   // Modify G4VProcess flags to emulate G4VRest instead of G4VDiscrete
   enableAtRestDoIt = true;
   enablePostStepDoIt = false;
 
-  fElementSelector = new G4ElementSelector();
-  fEmCascade = new G4EmCaptureCascade();	// Owned by InteractionRegistry
-  fBoundDecay = 0;
   G4HadronicProcessStore::Instance()->RegisterExtraProcess(this);
 }
 
@@ -146,6 +149,7 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
   G4double ebound = result->GetLocalEnergyDeposit(); 
   G4double edep = 0.0; 
   G4int nSecondaries = result->GetNumberOfSecondaries();
+  G4int nEmCascaceSec = nSecondaries;
 
   // Try decay from bound level 
   // For mu- the time of projectile should be changed.
@@ -250,6 +254,16 @@ G4VParticleChange* G4HadronStoppingProcess::AtRestDoIt(const G4Track& track,
 			     time, 
 			     track.GetPosition());
     t->SetWeight(w*sec->GetWeight());
+
+    // use SetCreatorModelIndex to "label" the track
+    if (i<nEmCascaceSec) {
+      t->SetCreatorModelIndex(emcID);
+    } else if (nuclearCapture) {
+      t->SetCreatorModelIndex(ncID);
+    } else {
+      t->SetCreatorModelIndex(dioID);
+    }
+
     t->SetTouchableHandle(track.GetTouchableHandle());
     theTotalResult->AddSecondary(t);
   }
