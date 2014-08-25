@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 22, 2014 - M.Asai  (geomnav-V10-00-08 and geomnav-V10-00-09)
+------------------------
+- G4TransportationManager: Add ClearParallelWorlds() method. This method is
+  invoked by G4RunManager when user destroys all the geometry and rebuild
+  from scratch.
+
 June  24, 2014 - G.Folger  (geomnav-V10-00-07)
 -------------------------
 - G4MultiNavigator: set 'fIdNavLimiting' index to navigator limiting the step,

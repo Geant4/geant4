@@ -137,6 +137,9 @@ class G4TransportationManager
      G4SafetyHelper*         fSafetyHelper;
 
      static G4ThreadLocal G4TransportationManager*  fTransportationManager;
+
+  public:
+     void ClearParallelWorlds();
 };
 
 #include "G4TransportationManager.icc"
