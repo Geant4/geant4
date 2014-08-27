@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 26th, 2014 M.Asai (run-V10-00-28)
+- All the G4ParallelWorldProcess objects of all threads update their
+  corresponding world volumes when the entire geometry has been
+  destroyed and rebuilt from scratch. Addressing further to bug 
+  report #1665. Co-working with procscore-V10-00-00.
+
+August 25th, 2014 M.Asai (run-V10-00-27)
+- G4VScoringMesh is cleaned when geometry is rebuilt from
+  scratch. Addressing further to bug report #1665. Co-working with
+  digits_hits-V10-00-08.
+
 August 22nd, 2014 M.Asai (run-V10-00-26)
 - G4TransportationManager is cleaned when geometry is rebuilt from
   scratch. Addressing further to bug report #1665. Co-working with

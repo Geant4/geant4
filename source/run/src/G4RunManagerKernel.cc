@@ -49,6 +49,7 @@
 #include "G4ProductionCuts.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4SDManager.hh"
+#include "G4ParallelWorldProcessStore.hh"
 #include "G4UImanager.hh"
 #include "G4VVisManager.hh"
 #include "G4UnitsTable.hh"
@@ -269,6 +270,8 @@ G4RunManagerKernel::~G4RunManagerKernel()
   G4GeometryManager::GetInstance()->OpenGeometry();
 
   // deletion of Geant4 kernel classes
+  G4ParallelWorldProcessStore* pwps = G4ParallelWorldProcessStore::GetInstanceIfExist();
+  if(pwps) delete pwps;
   G4SDManager* fSDM = G4SDManager::GetSDMpointerIfExist();
   if(fSDM)
   {

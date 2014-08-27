@@ -58,6 +58,8 @@
 #include "G4SDManager.hh"
 #include "G4UImanager.hh"
 #include "G4ProductionCutsTable.hh"
+#include "G4ParallelWorldProcessStore.hh"
+
 #include "G4ios.hh"
 #include <sstream>
 
@@ -66,6 +68,7 @@ using namespace CLHEP;
 G4ThreadLocal G4RunManager* G4RunManager::fRunManager = 0;
 
 G4bool G4RunManager::fGeometryHasBeenDestroyed = false;
+G4bool G4RunManager::IfGeometryHasBeenDestroyed() { return fGeometryHasBeenDestroyed; }
 
 //The following lines are needed since G4VUserPhysicsList
 //uses a #define theParticleIterator
@@ -310,6 +313,8 @@ void G4RunManager::RunInitialization()
 
   if(currentRun) delete currentRun;
   currentRun = 0;
+
+  if(fGeometryHasBeenDestroyed) G4ParallelWorldProcessStore::GetInstance()->UpdateWorlds();
 
   if(userRunAction) currentRun = userRunAction->GenerateRun();
   if(!currentRun) currentRun = new G4Run();
@@ -688,6 +693,7 @@ void G4RunManager::ConstructScoringWorlds()
   for(G4int iw=0;iw<nPar;iw++)
   {
     G4VScoringMesh* mesh = ScM->GetMesh(iw);
+    if(fGeometryHasBeenDestroyed) mesh->GeometryHasBeenDestroyed();
 
     G4VPhysicalVolume* pWorld
        = G4TransportationManager::GetTransportationManager()
@@ -699,20 +705,27 @@ void G4RunManager::ConstructScoringWorlds()
       pWorld->SetName(ScM->GetWorldName(iw));
 
       G4ParallelWorldProcess* theParallelWorldProcess
-        = new G4ParallelWorldProcess(ScM->GetWorldName(iw));
-      theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw));
+        = mesh->GetParallelWorldProcess();
+      if(theParallelWorldProcess)
+      { theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw)); }
+      else
+      {
+        theParallelWorldProcess = new G4ParallelWorldProcess(ScM->GetWorldName(iw));
+        mesh->SetParallelWorldProcess(theParallelWorldProcess);
+        theParallelWorldProcess->SetParallelWorld(ScM->GetWorldName(iw));
 
-      theParticleIterator->reset();
-      while( (*theParticleIterator)() ){
-        G4ParticleDefinition* particle = theParticleIterator->value();
-        G4ProcessManager* pmanager = particle->GetProcessManager();
-        if(pmanager)
-        {
-          pmanager->AddProcess(theParallelWorldProcess);
-          if(theParallelWorldProcess->IsAtRestRequired(particle))
-          { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9999); }
-          pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
-          pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9999);
+        theParticleIterator->reset();
+        while( (*theParticleIterator)() ){
+          G4ParticleDefinition* particle = theParticleIterator->value();
+          G4ProcessManager* pmanager = particle->GetProcessManager();
+          if(pmanager)
+          {
+            pmanager->AddProcess(theParallelWorldProcess);
+            if(theParallelWorldProcess->IsAtRestRequired(particle))
+            { pmanager->SetProcessOrdering(theParallelWorldProcess, idxAtRest, 9999); }
+            pmanager->SetProcessOrderingToSecond(theParallelWorldProcess, idxAlongStep);
+            pmanager->SetProcessOrdering(theParallelWorldProcess, idxPostStep, 9999);
+          }
         }
       }
     }
@@ -854,9 +867,7 @@ void G4RunManager::ReinitializeGeometry(G4bool destroyFirst, G4bool prop)
     if(verboseLevel>0)
     { 
       G4cout<<"#### G4PhysicalVolumeStore, G4LogicalVolumeStore and G4SolidStore\n"
-            <<"#### are wiped out. Command-based scorer, layerd mass geometry,\n"
-            <<"#### biasing with parallel world, etc. are not functioning any longer."
-            <<G4endl;
+            <<"#### are wiped out."<<G4endl; 
     }
     G4GeometryManager::GetInstance()->OpenGeometry();
     G4PhysicalVolumeStore::GetInstance()->Clean();

@@ -571,6 +571,8 @@ public: // with description
   protected:
     // This boolean flag has to be shared by all G4RunManager objects
     static G4bool fGeometryHasBeenDestroyed;
+  public:
+    static G4bool IfGeometryHasBeenDestroyed();
 };
 
 #endif
