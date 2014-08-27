@@ -17,6 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th August 2014  Gabriele Cosmo (examples-V10-00-07)
+- Updated reference outputs according to reference tag geant4-10-00-ref-07.
+- Includes tags: amsEcal-V10-00-06, dnageometry-V10-00-00, dnaphysics-V10-00-00,
+                 gammaraytel-V10-00-06, nanobeam-V10-00-03, DMX-V10-00-06,
+                 exampleB4-V10-00-01, AnaEx01-V10-00-03, AnaEx02-V10-00-02,
+                 AnaEx03-V10-00-02, testem2-V10-00-05, testem3-V10-00-10,
+                 testem5-V10-00-08, testem6-V10-00-02, testem16-V10-00-01,
+                 channelingExample-V10-00-14, ExUCN-V10-00-03, LXe-V10-00-04,
+                 exHadronic-V10-00-00, exExtHadFissFrag-V10-00-11,
+                 exhadr00-V10-00-01, exhadr06-V10-00-04, DICOM-V10-00-02,
+                 fano-V10-00-02, OpNovice-V10-00-05, rdecay02-V10-00-02,
+                 WLS-V10-00-02, MPI-V10-00-02, G01-V10-00-04, fano2-V10-00-01,
+                 exampleP01-V10-00-03, exampleP03-V10-00-03,
+                 exampleRE05-V10-00-00, exampleRE06-V10-00-00.
+
 27th June 2014  Gabriele Cosmo (examples-V10-00-06)
 - Updated reference outputs according to reference tag geant4-10-00-ref-06.
 - Includes tags: doxygen-V10-00-00, amsEcal-V10-00-02, gammaraytel-V10-00-05,
