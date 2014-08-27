@@ -9,7 +9,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
+ Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -361,7 +361,7 @@ WARNING: Scene "none" not found.
 ******************************************
 Internal Real Elapsed Time is: 0.02
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.02
+Internal GetUserElapsed Time: 0.03
 ******************************************
  ------ ExGflashEventAction::End of event nr. 0  -----
   11901 hits are stored in ExGflashHitsCollection 
@@ -389,7 +389,7 @@ Internal GetUserElapsed Time: 0.02
 ******************************************
 Internal Real Elapsed Time is: 0.02
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.02
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 2  -----
   11907 hits are stored in ExGflashHitsCollection 
@@ -485,7 +485,7 @@ Internal GetUserElapsed Time: 0.02
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.02
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.02
 ******************************************
@@ -494,15 +494,15 @@ Internal GetUserElapsed Time: 0.02
    e1  12.0902   e3x3  48.2959   GeV  e5x5  48.7777
  Total energy deposited in the calorimeter: 49.8706 (GeV)
     0 trajectories stored in this event.
-ERROR: G4VisCommandsViewerUpdate::SetNewValue: no current viewer.
+WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 number of event = 10
 Graphics systems deleted.
 Visualization Manager deleting...
-Internal Real Elapsed Time /event is: 0.0222222
+Internal Real Elapsed Time /event is: 0.0211111
 Total navigation history collections cleaned: 8
 
 ******************************************
-Total Real Elapsed Time is: 1.09
-Total System Elapsed Time: 0.02
-Total GetUserElapsed Time: 1.08
+Total Real Elapsed Time is: 0.98
+Total System Elapsed Time: 0.01
+Total GetUserElapsed Time: 0.96
 ******************************************

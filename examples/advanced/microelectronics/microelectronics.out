@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
+ Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -67,8 +67,9 @@ msc:   for e-    SubType= 10
       ===== EM models for the G4Region  Target ======
             UrbanMsc :  Emin=      100 MeV   Emax=       10 TeV  Table with 35 bins Emin=    100 MeV   Emax=     10 TeV
 
-### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+### ===  Deexcitation model UAtomDeexcitation is activated for 2 regions:
           DefaultRegionForTheWorld
+          Target
 
 ### === G4UAtomicDeexcitation::InitialiseForNewRun()
 ### ===  PIXE model for hadrons: Empirical  1
@@ -184,13 +185,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 0 starts.
-##### Create analysis manager   0x2251380
+##### Create analysis manager   0x24a8780
 Using Root analysis manager
 ... open Root analysis file : microelectronics.root - done
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.36s Real=0.71s Sys=0s
+  User=0.36s Real=0.54s Sys=0s
 ... write Root file : microelectronics.root - done
 Number and type of particles created outside region "Target" :
 _______________________
@@ -236,7 +237,7 @@ Index : 1     used in the geometry : Yes
 ====================================================================
 
 ### Run 1 starts.
-##### Create analysis manager   0x2251380
+##### Create analysis manager   0x24a8780
 Using Root analysis manager
 ... open Root analysis file : microelectronics.root - done
 Run terminated.
@@ -261,8 +262,8 @@ EventManager deleted.
 Units table cleared.
 Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.06 Mb
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.011 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

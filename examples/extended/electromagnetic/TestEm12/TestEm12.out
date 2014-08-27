@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
+ Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -113,24 +113,24 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.59s Real=4.71s Sys=0s
+  User=3.17s Real=3.18s Sys=0s
 
  ======================== run summary =====================
 
  The run is 10000 e- of 4.00 MeV through 3.00 cm  of G4_WATER (density: 1.00 g/cm3 )
 
- Total Energy deposited        = 3.945 MeV +- 217.727 keV
+ Total Energy deposited        = 3.945 MeV +- 218.780 keV
 
- Track length of primary track = 2.037 cm  +- 2.814 mm 
+ Track length of primary track = 2.037 cm  +- 2.781 mm 
  Range from EmCalculator = 2.037 cm  (from full dE/dx)
 
- Projected range               = 1.320 cm  +- 3.588 mm 
+ Projected range               = 1.320 cm  +- 3.568 mm 
 
- Nb of steps of primary track  = 16.24 +- 3.01	 Step size= 1.292 mm  +- 280.166 um 
+ Nb of steps of primary track  = 16.26 +- 3.00	 Step size= 1.290 mm  +- 278.208 um 
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 23083363, 2018357790
+ Current couple of seeds = 1915494626, 1332455131
 ----------------------------------------
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -143,8 +143,8 @@ EventManager deleted.
 Units table cleared.
 Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.15 Mb
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.022 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

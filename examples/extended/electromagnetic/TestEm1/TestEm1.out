@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
+ Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -290,7 +290,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 2000
-  User=4.47s Real=4.51s Sys=0s
+  User=3.93s Real=3.95s Sys=0s
 
  ======================== run summary ======================
 
@@ -298,13 +298,13 @@ Run Summary
 
  total energy deposit: 99.813 MeV
 
- nb tracks/event   neutral:  25.308   charged:  138.33
- nb  steps/event   neutral:  131.25   charged:  204.35
+ nb tracks/event   neutral:  25.308   charged:  137.84
+ nb  steps/event   neutral:  131.25   charged:  203.85
 
  Process calls frequency :
           CoulombScat=      2        Transportation=   1837               annihil=   2818
                 compt= 211883                  conv=   2818                 eBrem=  46007
-                eIoni= 359311                   msc=    550                  phot=  45963
+                eIoni= 358318                   msc=    550                  phot=  45963
 
 
 ---------------------------------------------------------
@@ -325,7 +325,7 @@ Run Summary
 G4 kernel has come to Quit state.
 Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.18 Mb
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.062 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
+ Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -215,12 +215,12 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=10.92s Real=11.79s Sys=0s
+  User=9.65s Real=9.69s Sys=0s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         33.02
+Average number of e-                         32.96
 Average number of gamma                      19.59
 Average number of e+                         0.7687
 Average number of steps in the phantom       11.66
@@ -228,7 +228,7 @@ Average number of e- steps in the target     18.12
 Average number of g  produced in the target  18.76
 Average number of e- produced in the target  20.96
 Average number of g produced in the phantom  0.4921
-Average number of e- produced in the phantom 5.928
+Average number of e- produced in the phantom 5.899
 Total fGamma fluence in front of the phantom 8.009 MeV 
 ========================================================
 
@@ -237,7 +237,7 @@ Total fGamma fluence in front of the phantom 8.009 MeV
 G4 kernel has come to Quit state.
 Total navigation history collections cleaned: 21
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.38 Mb
+Number of memory pools allocated: 10 of which, static: 0
+Dynamic pools deleted: 10 / Total memory freed: 0.052 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

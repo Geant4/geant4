@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
+ Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -53,11 +53,12 @@ pol-phot:   for  gamma    SubType= 12
 Polarized-PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
 
 pol-compt:   for  gamma    SubType= 13
-      Lambda table from 100 eV  to 100 GeV in 74 bins, spline: 1
+      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
  Total cross sections has a good parametrisation from 10 KeV to (100/Z) GeV
       Sampling according Polarized-Compton model
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-   Polarized-Compton :  Emin=        0 eV    Emax=      100 GeV
+   Polarized-Compton :  Emin=        0 eV    Emax=       10 TeV
 
 pol-conv:   for  gamma    SubType= 14
       Lambda table from 1.022 MeV to 100 GeV in 46 bins, spline: 1
@@ -146,39 +147,39 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.19s Real=0.19s Sys=0s
+  User=0.31s Real=0.31s Sys=0s
 
  The run consists of 10000 gamma of 10 MeV through 1.75 mm  of G4_Fe (density: 7.874 g/cm3 )
 
 --------- Ranlux engine status ---------
  Initial seed = 9876
- float_seed_table[] = 0.924382 0.803328 0.371718 0.186175 0.862962 0.0658415 0.769384 0.626088 0.25515 0.470038 0.409505 0.308751 0.656637 0.692615 0.930418 0.767187 0.841708 0.930066 0.523852 0.648662 0.972198 0.467372 0.48009 0.106155 
- i_lag = 23, j_lag = 9
- carry = 5.96046e-08, count24 = 13
+ float_seed_table[] = 0.984862 0.107409 0.281534 0.908344 0.348342 0.0887923 0.464827 0.734204 0.910975 0.335883 0.163929 0.693369 0.550888 0.587273 0.427032 0.230195 0.378275 0.384351 0.410801 0.48763 0.695364 0.193833 0.591132 0.578719 
+ i_lag = 5, j_lag = 15
+ carry = 5.96046e-08, count24 = 2
  luxury = 3 nskip = 199
 ----------------------------------------
 
  Process calls frequency --->
-	Transportation = 31308
-	pol-compt = 315
-	pol-eBrem = 366
-	msc = 2611
-	pol-eIoni = 684
-	pol-conv = 231
-	pol-phot = 155
-	pol-annihil = 72
+	Transportation = 31252
+	pol-compt = 299
+	pol-eBrem = 355
+	msc = 2506
+	pol-eIoni = 661
+	pol-conv = 222
+	pol-phot = 153
+	pol-annihil = 71
  Gamma: 
-Mean Number per Event :1.012
-Mean Energy :9.5213 MeV +- 2.0264 MeV
-Mean Polarization :-0.95882 +- 0.19614
+Mean Number per Event :1.0116
+Mean Energy :9.54 MeV +- 1.9908 MeV
+Mean Polarization :-0.96012 +- 0.19359
  Electron: 
-Mean Number per Event :0.0375
-Mean Energy :5.1806 MeV +- 2.5775 MeV
-Mean Polarization :-0.71335 +- 0.30874
+Mean Number per Event :0.0359
+Mean Energy :5.1817 MeV +- 2.5654 MeV
+Mean Polarization :-0.71524 +- 0.30892
  Positron: 
-Mean Number per Event :0.0159
-Mean Energy :4.257 MeV +- 2.0083 MeV
-Mean Polarization :-0.613 +- 0.29971
+Mean Number per Event :0.0151
+Mean Energy :4.3332 MeV +- 1.9949 MeV
+Mean Polarization :-0.62052 +- 0.29724
 #
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
@@ -190,8 +191,8 @@ EventManager deleted.
 Units table cleared.
 Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.022 Mb
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.012 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.
