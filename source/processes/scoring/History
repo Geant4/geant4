@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 26, 2014, M.Asai (procscore-V10-00-00)
+- Introducing G4ParallelWorldProcessStore to allow all the
+  G4ParallelWorldProcess objects of all threads could update their
+  corresponding world volumes when the entire geometry has been
+  destroyed and rebuilt from scratch.
+
 November 18, 2013, M.Asai (procscore-V09-06-03)
 - Remove unnecessary G4cout.
 
