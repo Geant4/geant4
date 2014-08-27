@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
+ Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -146,7 +146,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.49s Real=0.57s Sys=0s
+  User=0.47s Real=0.49s Sys=0s
 
  The run consists of 1 e- of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -173,7 +173,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.39s Real=0.39s Sys=0s
+  User=0.4s Real=0.4s Sys=0s
 
  The run consists of 1 proton of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -200,7 +200,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.38s Real=0.38s Sys=0s
+  User=0.39s Real=0.4s Sys=0s
 
  The run consists of 1 hydrogen of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -227,7 +227,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.89s Real=0.89s Sys=0s
+  User=0.94s Real=0.93s Sys=0s
 
  The run consists of 1 alpha of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -254,7 +254,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.9s Real=0.96s Sys=0s
+  User=0.94s Real=0.94s Sys=0s
 
  The run consists of 1 alpha+ of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -281,7 +281,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.89s Real=1.41s Sys=0s
+  User=0.93s Real=0.94s Sys=0s
 
  The run consists of 1 helium of 10 keV through 1 m   of G4_WATER (density: 1 g/cm3 )
 
@@ -296,8 +296,8 @@ G4DNAMolecularMaterial::Notify ---> received G4State_Quit
 G4DNAChemistryManager::Notify ---> received G4State_Quit
 Total navigation history collections cleaned: 4
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.28 Mb
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.28 Mb
 ============================================================
 Deleting G4DNAMolecularMaterial
 RunManagerKernel is deleted. Good bye :)

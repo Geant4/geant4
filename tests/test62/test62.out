@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
+ Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -388,10 +388,33 @@ hPairProd:   for  pi-    SubType= 4
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
 
 ---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: neutronInelastic
+        Model:                      QGSP: 15 GeV ---> 100 TeV
+        Model:                     PRECO: 0 eV  ---> 2 MeV
+        Model:             INCL++ v5.2.1: 1 MeV ---> 20 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
+
+  Process: nKiller
+
+---------------------------------------------------
                            Hadronic Processes for GenericIon
 
   Process: ionInelastic
-        Model:               INCL++ v5.2: 0 eV  ---> 54 GeV
+        Model:             INCL++ v5.2.1: 0 eV  ---> 54 GeV
         Model:                      FTFP: 53.9 GeV ---> 1 TeV
      Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -400,7 +423,7 @@ hPairProd:   for  pi-    SubType= 4
                            Hadronic Processes for He3
 
   Process: He3Inelastic
-        Model:               INCL++ v5.2: 0 eV  ---> 9 GeV
+        Model:             INCL++ v5.2.1: 0 eV  ---> 9 GeV
         Model:                      FTFP: 8.9 GeV ---> 1 TeV
      Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -413,7 +436,7 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: alphaInelastic
-        Model:               INCL++ v5.2: 0 eV  ---> 12 GeV
+        Model:             INCL++ v5.2.1: 0 eV  ---> 12 GeV
         Model:                      FTFP: 11.9 GeV ---> 1 TeV
      Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -518,7 +541,7 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: dInelastic
-        Model:               INCL++ v5.2: 0 eV  ---> 6 GeV
+        Model:             INCL++ v5.2.1: 0 eV  ---> 6 GeV
         Model:                      FTFP: 5.9 GeV ---> 1 TeV
      Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -608,27 +631,6 @@ hPairProd:   for  pi-    SubType= 4
   Process: muMinusCaptureAtRest
 
 ---------------------------------------------------
-                           Hadronic Processes for neutron
-
-  Process: hadElastic
-        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
-     Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
-
-  Process: neutronInelastic
-        Model:                      QGSP: 15 GeV ---> 100 TeV
-        Model:                     PRECO: 0 eV  ---> 2 MeV
-        Model:               INCL++ v5.2: 1 MeV ---> 20 GeV
-     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
-     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
-
-  Process: nCapture
-        Model:               nRadCapture: 0 eV  ---> 100 TeV
-     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
-
----------------------------------------------------
                            Hadronic Processes for pi+
 
   Process: hadElastic
@@ -639,7 +641,7 @@ hPairProd:   for  pi-    SubType= 4
 
   Process: pi+Inelastic
         Model:                      QGSP: 15 GeV ---> 100 TeV
-        Model:               INCL++ v5.2: 0 eV  ---> 20 GeV
+        Model:             INCL++ v5.2.1: 0 eV  ---> 20 GeV
      Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
                            below 91 GeV, Glauber-Gribov above 
@@ -656,7 +658,7 @@ hPairProd:   for  pi-    SubType= 4
 
   Process: pi-Inelastic
         Model:                      QGSP: 15 GeV ---> 100 TeV
-        Model:               INCL++ v5.2: 0 eV  ---> 20 GeV
+        Model:             INCL++ v5.2.1: 0 eV  ---> 20 GeV
      Cr_sctns:   G4PiNuclearCrossSection: 0 eV  ---> 99.9 TeV
      Cr_sctns:      G4CrossSectionPairGG: 0 eV  ---> 100 TeV
                          G4CrossSectionPairGG: G4PiNuclearCrossSection cross sections 
@@ -676,7 +678,7 @@ hPairProd:   for  pi-    SubType= 4
   Process: protonInelastic
         Model:                      QGSP: 15 GeV ---> 100 TeV
         Model:                     PRECO: 0 eV  ---> 2 MeV
-        Model:               INCL++ v5.2: 1 MeV ---> 20 GeV
+        Model:             INCL++ v5.2.1: 1 MeV ---> 20 GeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -689,7 +691,7 @@ hPairProd:   for  pi-    SubType= 4
      Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
 
   Process: tInelastic
-        Model:               INCL++ v5.2: 0 eV  ---> 9 GeV
+        Model:             INCL++ v5.2.1: 0 eV  ---> 9 GeV
         Model:                      FTFP: 8.9 GeV ---> 1 TeV
      Cr_sctns: Glauber-Gribov nucleus nucleus: 0 eV  ---> 2.88022e+295 J  
      Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
@@ -729,7 +731,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.5s Real=0.51s Sys=0s
+  User=0.41s Real=0.41s Sys=0s
 #
 # neutron at 1 GeV in Th
 #
@@ -767,7 +769,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.86s Real=0.98s Sys=0.01s
+  User=0.65s Real=0.65s Sys=0s
 #
 # pi+ at 1 GeV in Th
 #
@@ -805,7 +807,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.9s Real=0.99s Sys=0s
+  User=0.39s Real=0.4s Sys=0s
 #
 # pi- at 1 GeV in Th
 #
@@ -843,7 +845,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.68s Real=0.68s Sys=0s
+  User=0.9s Real=0.9s Sys=0s
 #
 # proton at 1 GeV in U
 #
@@ -1228,7 +1230,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.46s Real=0.47s Sys=0s
+  User=0.44s Real=0.44s Sys=0s
 #
 # neutron at 1 GeV in U
 #
@@ -1271,7 +1273,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.6s Real=0.67s Sys=0s
+  User=0.85s Real=0.86s Sys=0s
 #
 # pi+ at 1 GeV in U
 #
@@ -1314,7 +1316,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.87s Real=0.92s Sys=0.01s
+  User=0.33s Real=0.33s Sys=0s
 #
 # pi- at 1 GeV in U
 #
@@ -1357,7 +1359,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.52s Real=0.52s Sys=0s
+  User=0.53s Real=0.53s Sys=0s
 #
 # proton at 1 GeV in Pb
 #
@@ -1747,7 +1749,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.71s Real=0.71s Sys=0s
+  User=0.58s Real=0.59s Sys=0.01s
 #
 # neutron at 1 GeV in Pb
 #
@@ -1795,7 +1797,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.53s Real=0.53s Sys=0s
+  User=0.58s Real=0.6s Sys=0s
 #
 # pi+ at 1 GeV in Pb
 #
@@ -1843,7 +1845,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.48s Real=0.48s Sys=0.01s
+  User=0.83s Real=1.04s Sys=0.01s
 #
 # pi- at 1 GeV in Pb
 #
@@ -1891,7 +1893,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.55s Real=0.55s Sys=0s
+  User=0.41s Real=0.42s Sys=0s
 #
 # proton at 1 GeV in Cu
 #
@@ -2339,7 +2341,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.19s Real=0.27s Sys=0.01s
+  User=0.25s Real=0.25s Sys=0s
 #
 # pi+ at 1 GeV in Cu
 #
@@ -2392,7 +2394,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.15s Real=0.21s Sys=0s
+  User=0.15s Real=0.15s Sys=0s
 #
 # pi- at 1 GeV in Cu
 #
@@ -2445,7 +2447,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.11s Real=0.13s Sys=0s
+  User=0.16s Real=0.16s Sys=0s
 #
 # proton at 1 GeV in Si
 #
@@ -2845,7 +2847,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.06s Sys=0s
+  User=0.06s Real=0.07s Sys=0.01s
 #
 # neutron at 1 GeV in Si
 #
@@ -2903,7 +2905,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.07s Real=0.09s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 #
 # pi+ at 1 GeV in Si
 #
@@ -2961,7 +2963,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.06s Real=0.08s Sys=0s
+  User=0.05s Real=0.05s Sys=0s
 #
 # pi- at 1 GeV in Si
 #
@@ -3019,7 +3021,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.07s Sys=0.01s
+  User=0.05s Real=0.06s Sys=0s
 #
 # proton at 1 GeV in C
 #
@@ -3424,7 +3426,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.02s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 # neutron at 1 GeV in C
 #
@@ -3487,7 +3489,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.02s Sys=0s
+  User=0.03s Real=0.02s Sys=0s
 #
 # pi+ at 1 GeV in C
 #
@@ -3550,7 +3552,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.03s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # pi- at 1 GeV in C
 #
@@ -3613,7 +3615,7 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.02s Real=0.03s Sys=0s
+  User=0.02s Real=0.02s Sys=0s
 #
 # Deuteron at 1 GeV/nucleon on Pb
 #
@@ -3676,7 +3678,7 @@ Index : 5     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.8s Real=0.88s Sys=0s
+  User=0.74s Real=0.74s Sys=0s
 #
 # Alpha at 500 MeV/nucleon on Pb
 #
@@ -3736,11 +3738,11 @@ Index : 5     used in the geometry : No
 ====================================================================
 
 ### Run 25 starts.
-[INCL++] Warning: energy conservation violated by 34.1006 MeV in 1434.69-MeV alpha + Pb208 inelastic reaction, in direct kinematics. Will resample.
+[INCL++] Warning: energy conservation violated by 36.3182 MeV in 1472.41-MeV alpha + Pb206 inelastic reaction, in direct kinematics. Will resample.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.57s Real=0.63s Sys=0s
+  User=0.82s Real=0.87s Sys=0s
 #
 # Carbon at 290 MeV/nucleon on C
 #
@@ -3801,12 +3803,10 @@ Index : 5     used in the geometry : Yes
 ====================================================================
 
 ### Run 26 starts.
-[INCL++] Warning: energy conservation violated by 36.3181 MeV in 609.726-MeV alpha + C12 inelastic reaction, in direct kinematics. Will resample.
-[INCL++] Warning: energy conservation violated by 36.3181 MeV in 1039.24-MeV alpha + C12 inelastic reaction, in direct kinematics. Will resample.
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.04s Real=0.05s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # Carbon at 500 MeV/nucleon on Pb
 #
@@ -3869,7 +3869,7 @@ Index : 5     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.25s Real=0.33s Sys=0s
+  User=1s Real=1.01s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.
@@ -3878,10 +3878,10 @@ UserPrimaryGenerator deleted.
 RunManager is deleting RunManagerKernel.
 EventManager deleted.
 Units table cleared.
-Total navigation history collections cleaned: 6
+Total navigation history collections cleaned: 5
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 8.8 Mb
+Number of memory pools allocated: 11 of which, static: 0
+Dynamic pools deleted: 11 / Total memory freed: 0.069 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

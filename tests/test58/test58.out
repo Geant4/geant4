@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
+ Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -331,7 +331,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.08s Real=1.09s Sys=0.01s
+  User=1.16s Real=1.17s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -432,7 +432,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.27s Real=3.2s Sys=0s
+  User=2.54s Real=2.67s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -445,23 +445,23 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 99.97 um  +- 2.829 nm 
+ 99.97 um  +- 3.267 nm 
 
  Mean Number of Steps :
- 3348 +/- 6.208
+ 3351 +/- 6.073
 
  Mean Free Path :
- 29.86 nm  +/- 5.538e+04 fm 
+ 29.84 nm  +/- 5.408e+04 fm 
 
  Mean Cross Section :
- 6.703e+06 barn   +/- 1.243e+04 barn  
+ 6.709e+06 barn   +/- 1.216e+04 barn  
 
  Mean scattering angle :
- 5.454 mrad +/- 0.326 mrad
+ 5.431 mrad +/- 0.3241 mrad
 
  Total energy deposit in absorber:
- 1.852 MeV +/- 8.248 keV
------> dE/dx total= 185.3 MeV/cm	(79.51 MeV*cm2/g)
+ 1.852 MeV +/- 8.368 keV
+-----> dE/dx total= 185.3 MeV/cm	(79.52 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
  0 eV  +/- 0 eV 
@@ -481,7 +481,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1855922113, 1772404544
+ Current couple of seeds = 1181209750, 266975600
 ----------------------------------------
 
  ===========================================================
@@ -527,14 +527,14 @@ Index : 1     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1855922113, 1772404544
+ Current couple of seeds = 1181209750, 266975600
 ----------------------------------------
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.36s Real=3.22s Sys=0s
+  User=2.64s Real=2.65s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -547,23 +547,23 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 99.97 um  +- 3.327 nm 
+ 99.97 um  +- 2.919 nm 
 
  Mean Number of Steps :
- 2892 +/- 4.881
+ 2889 +/- 4.854
 
  Mean Free Path :
- 34.57 nm  +/- 5.835e+04 fm 
+ 34.61 nm  +/- 5.816e+04 fm 
 
  Mean Cross Section :
- 5.791e+06 barn   +/- 9774 barn  
+ 5.784e+06 barn   +/- 9721 barn  
 
  Mean scattering angle :
- 7.926 mrad +/- 0.5282 mrad
+ 8.298 mrad +/- 0.5189 mrad
 
  Total energy deposit in absorber:
- 90.36 MeV +/- 97.21 keV
------> dE/dx total= 9039 MeV/cm	(3879 MeV*cm2/g)
+ 90.38 MeV +/- 93.56 keV
+-----> dE/dx total= 9041 MeV/cm	(3880 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
  0 eV  +/- 0 eV 
@@ -583,7 +583,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 515805611, 1564166025
+ Current couple of seeds = 1765703227, 84495582
 ----------------------------------------
 
  ===========================================================
@@ -629,14 +629,14 @@ Index : 1     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 515805611, 1564166025
+ Current couple of seeds = 1765703227, 84495582
 ----------------------------------------
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.21s Real=3.36s Sys=0.01s
+  User=2.42s Real=2.51s Sys=0s
 
  ======================== run summary ======================
 
@@ -649,23 +649,23 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 99.96 um  +- 5.736 nm 
+ 99.96 um  +- 4.763 nm 
 
  Mean Number of Steps :
- 2508 +/- 4.941
+ 2512 +/- 5.285
 
  Mean Free Path :
- 39.85 nm  +/- 7.853e+04 fm 
+ 39.79 nm  +/- 8.371e+04 fm 
 
  Mean Cross Section :
- 5.022e+06 barn   +/- 9897 barn  
+ 5.031e+06 barn   +/- 1.058e+04 barn  
 
  Mean scattering angle :
- 10.1 mrad +/- 1.152 mrad
+ 10.89 mrad +/- 1.253 mrad
 
  Total energy deposit in absorber:
- 277.5 MeV +/- 693.3 keV
------> dE/dx total= 2.777e+04 MeV/cm	(1.192e+04 MeV*cm2/g)
+ 277.1 MeV +/- 665.2 keV
+-----> dE/dx total= 2.772e+04 MeV/cm	(1.19e+04 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
  0 eV  +/- 0 eV 
@@ -685,7 +685,7 @@ Run Summary
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1598359840, 480119534
+ Current couple of seeds = 678185416, 862537318
 ----------------------------------------
 
  ===========================================================
@@ -730,14 +730,14 @@ Index : 1     used in the geometry : Yes
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1598359840, 480119534
+ Current couple of seeds = 678185416, 862537318
 ----------------------------------------
 
 ---> Begin of Event: 0
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.98s Real=7.56s Sys=0.01s
+  User=4.92s Real=5.3s Sys=0.02s
 
  ======================== run summary ======================
 
@@ -750,43 +750,43 @@ Run Summary
  ============= Primary particle statistics ==============
 
  Total track length in absorber:
- 99.53 um  +- 50.62 nm 
+ 99.55 um  +- 42.04 nm 
 
  Mean Number of Steps :
- 212 +/- 1.326
+ 210.3 +/- 1.359
 
  Mean Free Path :
- 469.4 nm  +/- 2.946 nm 
+ 473.3 nm  +/- 3.065 nm 
 
  Mean Cross Section :
- 4.264e+05 barn   +/- 2676 barn  
+ 4.229e+05 barn   +/- 2739 barn  
 
  Mean scattering angle :
- 0.004081 mrad +/- 0.00266 mrad
+ 0.0016 mrad +/- 0.0003998 mrad
 
  Total energy deposit in absorber:
- 1.858 MeV +/- 1.808 MeV
------> dE/dx total= 186.7 MeV/cm	(80.11 MeV*cm2/g)
+ 452.9 keV +/- 417.1 keV
+-----> dE/dx total= 45.5 MeV/cm	(19.53 MeV*cm2/g)
 
  Nuclear energy deposit in absorber:
- 1.819 MeV +/- 1.808 MeV
------> dE/dx  nucl = 182.8 MeV/cm	(78.44 MeV*cm2/g)
+ 419.4 keV +/- 417.2 keV
+-----> dE/dx  nucl = 42.13 MeV/cm	(18.08 MeV*cm2/g)
 
  NIEL in absorber (Th>21 eV):
- 1.843e-09 eV  +/- 9.61e-10 eV 
------> NIEL = 1.852e-13 MeV/cm	(7.949e-14 MeV*cm2/g)
+ 1.797e-09 eV  +/- 9.609e-10 eV 
+-----> NIEL = 1.805e-13 MeV/cm	(7.746e-14 MeV*cm2/g)
 
 ----------------------------------------------------------------
 
- Total Number of primary knock-on atoms: PKA = 20143
- Mean Kinetic Energy of PKA = 0.1454 eV  +/- 0.1221 eV 
- Total Frenkel-pairs Concentration: FP = 3.528e-07 #/cm3
+ Total Number of primary knock-on atoms: PKA = 20022
+ Mean Kinetic Energy of PKA = 0.1436 eV  +/- 0.1229 eV 
+ Total Frenkel-pairs Concentration: FP = 3.438e-07 #/cm3
 
 ----------------------------------------------------------------
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1696250718, 168364527
+ Current couple of seeds = 450129485, 85929206
 ----------------------------------------
 
  ===========================================================
@@ -801,8 +801,8 @@ EventManager deleted.
 Units table cleared.
 Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.42 Mb
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.12 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.

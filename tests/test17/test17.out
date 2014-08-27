@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
+ Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -580,7 +580,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.72s Real=4.73s Sys=0s
+  User=3.81s Real=3.81s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -624,7 +624,7 @@ EvtNo= 318  length= 0.0115412  xend= 0.00163869
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.4s Real=5.57s Sys=0s
+  User=4.53s Real=4.55s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 999 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -1437,7 +1437,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.18s Real=6.85s Sys=0s
+  User=5.33s Real=5.34s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -1843,7 +1843,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.08s Real=5.8s Sys=0s
+  User=5.38s Real=5.4s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -1863,7 +1863,7 @@ Average Number photons per event   = 0.024
 G4 kernel has come to Quit state.
 Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.44 Mb
+Number of memory pools allocated: 9 of which, static: 0
+Dynamic pools deleted: 9 / Total memory freed: 0.15 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
+ Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -380,6 +380,28 @@ hPairProd:   for  pi-    SubType= 4
                   HADRONIC PROCESSES SUMMARY (verbose level 1)
 
 ---------------------------------------------------
+                           Hadronic Processes for neutron
+
+  Process: hadElastic
+        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
+     Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
+
+  Process: neutronInelastic
+        Model:                      FTFP: 4 GeV ---> 100 TeV
+        Model:            BertiniCascade: 0 eV  ---> 5 GeV
+     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
+     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
+
+  Process: nCapture
+        Model:               nRadCapture: 0 eV  ---> 100 TeV
+     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
+     Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
+
+  Process: nKiller
+
+---------------------------------------------------
                            Hadronic Processes for GenericIon
 
   Process: ionInelastic
@@ -598,26 +620,6 @@ hPairProd:   for  pi-    SubType= 4
   Process: muMinusCaptureAtRest
 
 ---------------------------------------------------
-                           Hadronic Processes for neutron
-
-  Process: hadElastic
-        Model:             hElasticCHIPS: 0 eV  ---> 100 TeV
-     Cr_sctns:     ChipsNeutronElasticXS: 0 eV  ---> 100 TeV
-     Cr_sctns:            GheishaElastic: 0 eV  ---> 100 TeV
-
-  Process: neutronInelastic
-        Model:                      FTFP: 4 GeV ---> 100 TeV
-        Model:            BertiniCascade: 0 eV  ---> 5 GeV
-     Cr_sctns:      G4NeutronInelasticXS: 0 eV  ---> 100 TeV
-     Cr_sctns:       Barashenkov-Glauber: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaInelastic: 0 eV  ---> 100 TeV
-
-  Process: nCapture
-        Model:               nRadCapture: 0 eV  ---> 100 TeV
-     Cr_sctns:        G4NeutronCaptureXS: 0 eV  ---> 100 TeV
-     Cr_sctns:          GheishaCaptureXS: 0 eV  ---> 100 TeV
-
----------------------------------------------------
                            Hadronic Processes for pi+
 
   Process: hadElastic
@@ -753,7 +755,7 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=47.37s Real=56.36s Sys=0.04s
+  User=46.97s Real=47.17s Sys=0.02s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
@@ -761,38 +763,38 @@ Beam particle                           pi-
 Beam Energy(MeV)                        15000
 Number of events                        100
 Average number of MIPS (Edep < 0.8 GeV) 0.4
-Average number of steps                 1.744e+04
-Average number of neutron steps         6775
-Average number of hadron steps          2570
-Average number of gamma steps           1.056e+04
-Average number of e+- steps             2688
+Average number of steps                 1.747e+04
+Average number of neutron steps         6625
+Average number of hadron steps          2599
+Average number of gamma steps           1.074e+04
+Average number of e+- steps             2751
 ==============  ECAL  ====================================
-  1x1 (GeV) =      2.091 +-     0.2123    RMS= 2.123
-  3x3 (GeV) =      3.235 +-     0.3135    RMS= 3.135
-  5x5 (GeV) =      3.572 +-     0.3415    RMS= 3.415
-  E1/E9     =     0.7606 +-    0.01886    RMS= 0.1886
-  E1/E25    =     0.7128 +-    0.02093    RMS= 0.2093
-  E9/E25    =     0.9263 +-   0.006428    RMS= 0.06428
+  1x1 (GeV) =      2.287 +-     0.2282    RMS= 2.282
+  3x3 (GeV) =      3.477 +-     0.3245    RMS= 3.245
+  5x5 (GeV) =      3.845 +-     0.3554    RMS= 3.554
+  E1/E9     =      0.766 +-     0.0198    RMS= 0.198
+  E1/E25    =     0.7225 +-    0.02191    RMS= 0.2191
+  E9/E25    =     0.9306 +-   0.005744    RMS= 0.05744
 ==============  HCAL  ====================================
-Visible HCAL Edep(GeV)     =   0.07535
-Visible HCAL e-Edep(GeV)   =   0.03295
-Total HCAL Edep(GeV)       =   7.688 +- 0.15
+Visible HCAL Edep(GeV)     =   0.07253
+Visible HCAL e-Edep(GeV)   =   0.03438
+Total HCAL Edep(GeV)       =   7.359 +- 0.1573
 ==========================================================
-Erec(GeV)   =      11.21 +-     0.3051    RMS= 3.051
-Etot(GeV)   =       11.3 +-       0.15    RMS= 1.5
+Erec(GeV)   =      11.21 +-     0.2793    RMS= 2.793
+Etot(GeV)   =      11.24 +-     0.1573    RMS= 1.573
 ==========================================================
-Ecal/E0=   0.236  RMS/E0(%)= 22.56
-Hcal/E0=       0.5078 +- 0.009905
-Erec/E0=       0.7407 +- 0.02015
-Etot/E0=       0.7465 +- 0.009905
+Ecal/E0=   0.254  RMS/E0(%)= 23.47
+Hcal/E0=       0.4861 +- 0.01039
+Erec/E0=       0.7407 +- 0.01845
+Etot/E0=       0.7426 +- 0.01039
 ==========================================================
 
 #
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 145
+Total navigation history collections cleaned: 172
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 1.4 Mb
+Number of memory pools allocated: 12 of which, static: 0
+Dynamic pools deleted: 12 / Total memory freed: 0.61 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)
-User=49.24s Real=59.83s Sys=0.07s
+User=48.6s Real=50.22s Sys=0.04s

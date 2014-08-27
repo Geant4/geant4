@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-06    (27-June-2014)
+ Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -457,7 +457,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=57.63s Real=72.58s Sys=0.02s
+  User=52.64s Real=52.88s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -988,7 +988,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=5.92s Real=6.03s Sys=0s
+  User=5.62s Real=5.67s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1285,7 +1285,7 @@ Warning: Bad energy non-conservation detected, will re-sample the interaction
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=2.76s Real=3.61s Sys=0s
+  User=2.59s Real=2.6s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1394,7 +1394,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.01s Real=0.01s Sys=0s
+  User=0.01s Real=0.02s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on Silicon
 #
@@ -1448,7 +1448,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.31s Real=0.31s Sys=0s
+  User=0.28s Real=0.27s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1729,7 +1729,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=42.91s Real=51.23s Sys=0.02s
+  User=41.36s Real=41.48s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
@@ -1746,8 +1746,8 @@ EventManager deleted.
 Units table cleared.
 Total navigation history collections cleaned: 6
 ================== Deleting memory pools ===================
-Number of memory pools allocated: 13 of which, static: 0
-Dynamic pools deleted: 13 / Total memory freed: 1.3 Mb
+Number of memory pools allocated: 12 of which, static: 0
+Dynamic pools deleted: 12 / Total memory freed: 0.12 Mb
 ============================================================
 G4Allocator objects are deleted.
 UImanager deleted.
