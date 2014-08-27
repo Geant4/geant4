@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Aug 25, 2014, M.Asai (digits_hits-V10-00-08)
+- G4VScoringMesh, G4ScoringBox, G4ScoringCylinder : fix Construct()
+  to make it work when the entire geometry has been destroyed.
+  Addressing to bug report #1665.
+
 May 26, 2014, M.Asai (digits_hits-V10-00-07)
 - G4ScoringMessenger.cc : fix broadcast parameters of the commands
   that should be used only by the master threads. Addressing to

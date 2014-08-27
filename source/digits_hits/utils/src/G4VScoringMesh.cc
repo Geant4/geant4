@@ -47,7 +47,8 @@ G4VScoringMesh::G4VScoringMesh(const G4String& wName)
   : fWorldName(wName),fCurrentPS(0),fConstructed(false),fActive(true),fShape(undefinedMesh),
     fRotationMatrix(0), fMFD(new G4MultiFunctionalDetector(wName)),
     verboseLevel(0),sizeIsSet(false),nMeshIsSet(false),
-    fDrawUnit(""), fDrawUnitValue(1.), fMeshElementLogical(0)
+    fDrawUnit(""), fDrawUnitValue(1.), fMeshElementLogical(0),
+    fParallelWorldProcess(0), fGeometryHasBeenDestroyed(false)
 {
   G4SDManager::GetSDMpointer()->AddNewDetector(fMFD);
 
@@ -332,9 +333,31 @@ void G4VScoringMesh::Accumulate(G4THitsMap<G4double> * map)
   }
 }
 
+void G4VScoringMesh::Construct(G4VPhysicalVolume* fWorldPhys)
+{
+  if(fConstructed) {
+    if(fGeometryHasBeenDestroyed) {
+      SetupGeometry(fWorldPhys);
+      fGeometryHasBeenDestroyed = false;
+    }
+    if(verboseLevel > 0)
+      G4cout << fWorldPhys->GetName() << " --- All quantities are reset."
+      << G4endl;
+    ResetScore();
+  }
+  else {
+    fConstructed = true;
+    SetupGeometry(fWorldPhys);
+  }
+}
+
 void G4VScoringMesh::WorkerConstruct(G4VPhysicalVolume* fWorldPhys)
 {
   if(fConstructed) {
+    if(fGeometryHasBeenDestroyed) {
+      fMeshElementLogical->SetSensitiveDetector(fMFD);
+      fGeometryHasBeenDestroyed = false;
+    }
 
     if(verboseLevel > 0)
       G4cout << fWorldPhys->GetName() << " --- All quantities are reset." << G4endl;

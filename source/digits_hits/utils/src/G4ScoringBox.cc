@@ -62,21 +62,6 @@ G4ScoringBox::~G4ScoringBox()
 {
 }
 
-void G4ScoringBox::Construct(G4VPhysicalVolume* fWorldPhys)
-{
-  if(fConstructed) {
-    
-    if(verboseLevel > 0)
-      G4cout << fWorldPhys->GetName() << " --- All quantities are reset."
-      << G4endl;
-    ResetScore();
-    
-  } else {
-    fConstructed = true;
-    SetupGeometry(fWorldPhys);
-  }
-}
-
 void G4ScoringBox::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
   
   if(verboseLevel > 9) G4cout << "G4ScoringBox::SetupGeometry() ..." << G4endl;

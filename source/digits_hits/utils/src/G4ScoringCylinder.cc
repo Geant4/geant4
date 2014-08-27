@@ -65,20 +65,6 @@ G4ScoringCylinder::G4ScoringCylinder(G4String wName)
 G4ScoringCylinder::~G4ScoringCylinder()
 {;}
 
-void G4ScoringCylinder::Construct(G4VPhysicalVolume* fWorldPhys)
-{
-  if(fConstructed) {
-
-    if(verboseLevel > 0) 
-      G4cout << fWorldPhys->GetName() << " --- All quantities are reset." << G4endl;
-    ResetScore();
-
-  } else {
-    fConstructed = true;
-    SetupGeometry(fWorldPhys);
-  }
-}
-
 void G4ScoringCylinder::SetupGeometry(G4VPhysicalVolume * fWorldPhys) {
 
   if(verboseLevel > 9) G4cout << "G4ScoringCylinder::SetupGeometry() ..." << G4endl;

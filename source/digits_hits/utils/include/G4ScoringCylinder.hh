@@ -44,9 +44,10 @@ class G4ScoringCylinder : public G4VScoringMesh
       G4ScoringCylinder(G4String wName);
       ~G4ScoringCylinder();
 
-  public:
-      virtual void Construct(G4VPhysicalVolume* fWorldPhys);
+  protected:
+      virtual void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
 
+  public:
       virtual void List() const;
       virtual void Draw(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, G4int axflg=111);
       virtual void DrawColumn(std::map<G4int, G4double*> * map, G4VScoreColorMap* colorMap, 
@@ -66,8 +67,6 @@ public:
   //enum IDX {IR, IZ, IPHI};
   enum IDX {IZ, IPHI, IR};
 
-private:  
-  void SetupGeometry(G4VPhysicalVolume * fWorldPhys);
 };
 
 

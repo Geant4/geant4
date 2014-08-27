@@ -40,6 +40,7 @@ class G4MultiFunctionalDetector;
 class G4VPrimitiveScorer;
 class G4VSDFilter;
 class G4VScoreColorMap;
+class G4ParallelWorldProcess;
 
 #include <map>
 
@@ -58,10 +59,14 @@ class G4VScoringMesh
 
   public: // with description
   // a pure virtual function to construct this mesh geometry
-  virtual void Construct(G4VPhysicalVolume* fWorldPhys)=0;
+  void Construct(G4VPhysicalVolume* fWorldPhys);
 
-  virtual void WorkerConstruct(G4VPhysicalVolume* fWorldPhys);
+  void WorkerConstruct(G4VPhysicalVolume* fWorldPhys);
 
+  protected:
+  virtual void SetupGeometry(G4VPhysicalVolume * fWorldPhys) = 0;
+
+  public: // with description
   // list infomration of this mesh 
   virtual void List() const;
   
@@ -196,6 +201,20 @@ public:
   { fMeshElementLogical = val; }
   inline G4LogicalVolume* GetMeshElementLogical() const
   { return fMeshElementLogical; }
+
+protected:
+  G4ParallelWorldProcess* fParallelWorldProcess;
+  G4bool fGeometryHasBeenDestroyed;
+public:
+  inline void SetParallelWorldProcess(G4ParallelWorldProcess* proc)
+  { fParallelWorldProcess = proc; }
+  inline G4ParallelWorldProcess* GetParallelWorldProcess() const
+  { return fParallelWorldProcess; }
+  inline void GeometryHasBeenDestroyed()
+  {
+    fGeometryHasBeenDestroyed = true;
+    fMeshElementLogical = 0;
+  }
 };
 
 #endif
