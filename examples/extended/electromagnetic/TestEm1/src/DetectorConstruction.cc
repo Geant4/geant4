@@ -168,6 +168,19 @@ void DetectorConstruction::DefineMaterials()
  ArButane->AddMaterial(argonGas, fractionmass=70*perCent);
  ArButane->AddMaterial(butane ,  fractionmass=30*perCent);
 
+ G4NistManager* man = G4NistManager::Instance();
+ 
+ G4bool isotopes = false;
+ 
+ ///G4Element*  O = man->FindOrBuildElement("O" , isotopes); 
+ G4Element* Si = man->FindOrBuildElement("Si", isotopes);
+ G4Element* Lu = man->FindOrBuildElement("Lu", isotopes);  
+ 
+ G4Material* LSO = new G4Material("Lu2SiO5", 7.4*g/cm3, 3);
+ LSO->AddElement(Lu, 2);
+ LSO->AddElement(Si, 1);
+ LSO->AddElement(O , 5);
+   
   G4cout << *(G4Material::GetMaterialTable()) << G4endl;
 }
 
