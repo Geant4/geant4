@@ -80,6 +80,7 @@ processes                    John Apostolakis                John Apostolakis
 "/"/"/fission                verbeke2@llnl.gov               Jerome Verbeke
 "/"/"/management             Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/neutron_hp             tkoi@slac.stanford.edu          Tatsumi Koi
+"/"/"/particle_hp            tkoi@slac.stanford.edu          Tatsumi Koi
 "/"/"/parton_string/diffraction    Gunter.Folger@cern.ch     Gunter Folger
 "/"/"/"/hadronization        Gunter.Folger@cern.ch           Gunter Folger
 "/"/"/"/management           Gunter.Folger@cern.ch           Gunter Folger
