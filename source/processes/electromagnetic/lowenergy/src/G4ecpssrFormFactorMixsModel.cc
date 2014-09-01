@@ -149,7 +149,7 @@ G4double G4ecpssrFormFactorMixsModel::CalculateMiCrossSection(G4int zTarget,G4do
     else if (massIncident == aAlpha->GetPDGMass())
       {
         sigma = alphaMiXsVector[mShellIndex][zTarget]->FindValue(energyIncident/MeV); 
-        if (sigma !=0 && energyIncident > protonMiXsVector[mShellIndex][zTarget]->GetEnergies(0).back()*MeV) return 0.;
+        if (sigma !=0 && energyIncident > alphaMiXsVector[mShellIndex][zTarget]->GetEnergies(0).back()*MeV) return 0.;
       }
     else
       { 

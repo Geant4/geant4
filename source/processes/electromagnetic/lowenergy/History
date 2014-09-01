@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28.08.2014 S. Incerti, tag emlowen-V10-00-16
+           Coverity fix. 
+
 07.08.2014 S. Incerti, tag emlowen-V10-00-15
            Removed unused code for atomic deexcitation.  
 
