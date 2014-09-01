@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+August 29, 2014 A. Dotti (global-V10-00-33)
+- Coverity fix #58649
+
 August 19, 2014 M. Asai (global-V10-00-32)
 - Recover G4PhysicsModelCatalog::Destroy() that has slipped out
   from previous tag.

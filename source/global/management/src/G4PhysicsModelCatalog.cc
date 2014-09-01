@@ -48,7 +48,7 @@ G4PhysicsModelCatalog::~G4PhysicsModelCatalog()
 
 G4int G4PhysicsModelCatalog::Register(const G4String& name)
 {
-  if(!catalog) { G4PhysicsModelCatalog(); }
+  G4PhysicsModelCatalog();
   G4int idx = GetIndex(name);
   if(idx>=0) return idx;
 #ifdef G4MULTITHREADED
