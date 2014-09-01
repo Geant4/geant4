@@ -57,7 +57,7 @@ void G4EllipticalTube::SetDx( const G4double newDx )
 {
   dx = newDx;
   fCubicVolume = 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline
@@ -65,7 +65,7 @@ void G4EllipticalTube::SetDy( const G4double newDy )
 {
   dy = newDy;
   fCubicVolume = 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline
@@ -73,7 +73,7 @@ void G4EllipticalTube::SetDz( const G4double newDz )
 {
   dz = newDz;
   fCubicVolume = 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
   
 inline

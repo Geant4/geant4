@@ -199,8 +199,8 @@ class G4Hype : public G4VSolid
 
   G4double fHalfTol;
 
+  mutable G4bool fRebuildPolyhedron;
   mutable G4Polyhedron* fpPolyhedron;
-
 };
 
 #include "G4Hype.icc"

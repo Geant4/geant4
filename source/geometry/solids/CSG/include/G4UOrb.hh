@@ -94,7 +94,7 @@ inline G4double G4UOrb::GetRadius() const
 inline void G4UOrb::SetRadius(G4double newRmax)
 {
   GetShape()->SetRadius(newRmax);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 #endif

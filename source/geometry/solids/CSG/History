@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 1, 2014  G.Cosmo               geom-csg-V10-00-04
+- Fixed use of polyhedron pointer, to avoid race condition in MT
+  when parameterised volumes are visualised.
+
 March 5, 2014  G.Cosmo                   geom-csg-V10-00-03
 - Fixed proper handling of polyhedron pointer in solids, to avoid memory
   leak for visualization of parameterised volumes.

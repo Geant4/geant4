@@ -78,6 +78,6 @@ void G4Polycone::SetOriginalParameters(G4PolyconeHistorical* pars)
                 FatalException, "NULL pointer to parameters!");
   *original_parameters = *pars;
   fCubicVolume = 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 

@@ -60,7 +60,6 @@ G4UMultiUnion::G4UMultiUnion(__void__& a)
 //
 G4UMultiUnion::~G4UMultiUnion()
 {
-  fPolyhedron = 0;
 }
 
 

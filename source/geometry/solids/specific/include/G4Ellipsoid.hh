@@ -133,6 +133,7 @@ class G4Ellipsoid : public G4VSolid
     G4ThreeVectorList* CreateRotatedVertices(const G4AffineTransform& pT,
                                                    G4int& noPV) const;
 
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 
   private:

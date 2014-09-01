@@ -180,6 +180,7 @@ class G4USolid : public G4VSolid
   protected:  // data
 
     VUSolid* fShape;
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fPolyhedron;
 };
 

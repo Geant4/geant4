@@ -128,27 +128,27 @@ inline G4double G4UTubs::GetDeltaPhiAngle() const
 inline void G4UTubs::SetInnerRadius(G4double newRMin)
 {
   GetShape()->SetInnerRadius(newRMin);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 inline void G4UTubs::SetOuterRadius(G4double newRMax)
 {
   GetShape()->SetOuterRadius(newRMax);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 inline void G4UTubs::SetZHalfLength(G4double newDz)
 {
   GetShape()->SetZHalfLength(newDz);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 inline void G4UTubs::SetStartPhiAngle(G4double newSPhi, G4bool trig)
 {
   GetShape()->SetStartPhiAngle(newSPhi, trig);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 inline void G4UTubs::SetDeltaPhiAngle(G4double newDPhi)
 {
   GetShape()->SetDeltaPhiAngle(newDPhi);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 #endif

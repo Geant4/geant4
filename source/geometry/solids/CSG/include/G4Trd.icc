@@ -70,7 +70,7 @@ void G4Trd::SetXHalfLength1(G4double val)
   fDx1= val;
   fCubicVolume= 0.;
   fSurfaceArea=0;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline
@@ -79,7 +79,7 @@ void G4Trd::SetXHalfLength2(G4double val)
   fDx2= val;
   fCubicVolume= 0.;
   fSurfaceArea=0;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline
@@ -88,7 +88,7 @@ void G4Trd::SetYHalfLength1(G4double val)
   fDy1= val;
   fCubicVolume= 0.;
   fSurfaceArea=0;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline
@@ -97,7 +97,7 @@ void G4Trd::SetYHalfLength2(G4double val)
   fDy2= val;
   fCubicVolume= 0.;
   fSurfaceArea=0;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline
@@ -106,7 +106,7 @@ void G4Trd::SetZHalfLength(G4double val)
   fDz= val;
   fCubicVolume= 0.;
   fSurfaceArea=0;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline

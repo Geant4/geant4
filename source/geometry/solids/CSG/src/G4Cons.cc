@@ -132,7 +132,6 @@ G4Cons::G4Cons( __void__& a )
     cosHDPhiIT(0.), sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.),
     fPhiFullCone(false), halfCarTolerance(0.), halfRadTolerance(0.),
     halfAngTolerance(0.)
-
 {
 }
 
@@ -160,7 +159,6 @@ G4Cons::G4Cons(const G4Cons& rhs)
     halfRadTolerance(rhs.halfRadTolerance),
     halfAngTolerance(rhs.halfAngTolerance)
 {
-   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -192,7 +190,6 @@ G4Cons& G4Cons::operator = (const G4Cons& rhs)
    halfCarTolerance = rhs.halfCarTolerance;
    halfRadTolerance = rhs.halfRadTolerance;
    halfAngTolerance = rhs.halfAngTolerance;
-   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

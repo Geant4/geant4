@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 1, 2014  G.Cosmo                geom-usolids-V10-00-14
+- Fix in G4USolid for use of polyhedron, to avoid race condition in MT
+  when parameterised volumes are visualised.
+
 July 21, 2014  G.Cosmo                    geom-usolids-V10-00-13
 - Improved signature for UMultiUnion::GetTransformation() to return const
   transformation.

@@ -107,7 +107,7 @@ void G4Trd::CheckAndSetAllParameters ( G4double pdx1,  G4double pdx2,
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 ///////////////////////////////////////////////////////////////////////
@@ -136,7 +136,6 @@ G4Trd::G4Trd(const G4Trd& rhs)
   : G4CSGSolid(rhs), fDx1(rhs.fDx1), fDx2(rhs.fDx2),
     fDy1(rhs.fDy1), fDy2(rhs.fDy2), fDz(rhs.fDz)
 {
-   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -158,7 +157,6 @@ G4Trd& G4Trd::operator = (const G4Trd& rhs)
    fDx1 = rhs.fDx1; fDx2 = rhs.fDx2;
    fDy1 = rhs.fDy1; fDy2 = rhs.fDy2;
    fDz = rhs.fDz;
-   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

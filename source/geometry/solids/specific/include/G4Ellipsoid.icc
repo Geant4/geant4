@@ -65,7 +65,7 @@ void G4Ellipsoid::SetSemiAxis (G4double newxSemiAxis,
   if (zSemiAxis > semiAxisMax) { semiAxisMax= zSemiAxis; }
   if (zBottomCut < -zSemiAxis) { zBottomCut = -zSemiAxis; }
   if (zTopCut > +zSemiAxis) { zTopCut = +zSemiAxis; }
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline
@@ -80,7 +80,7 @@ void G4Ellipsoid::SetZCuts (G4double newzBottomCut, G4double newzTopCut)
     { zTopCut = +zSemiAxis; }
   else
     { zTopCut = newzTopCut; }
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 inline

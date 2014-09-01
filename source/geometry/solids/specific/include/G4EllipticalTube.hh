@@ -148,8 +148,8 @@ class G4EllipticalTube : public G4VSolid
 
     G4double fCubicVolume;
     G4double fSurfaceArea;
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
-
 };
 
 #include "G4EllipticalTube.icc"

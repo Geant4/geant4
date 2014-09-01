@@ -428,7 +428,8 @@ void G4Polycone::CopyStuff( const G4Polycone &source )
   //
   enclosingCylinder = new G4EnclosingCylinder( *source.enclosingCylinder );
 
-  fpPolyhedron = GetPolyhedron();
+  fRebuildPolyhedron = false;
+  fpPolyhedron = 0;
 }
 
 

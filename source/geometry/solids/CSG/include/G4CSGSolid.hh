@@ -77,6 +77,7 @@ class G4CSGSolid : public G4VSolid
 
     G4double fCubicVolume;
     G4double fSurfaceArea;
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 };
 

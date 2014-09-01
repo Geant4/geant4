@@ -131,7 +131,6 @@ G4OTubs::G4OTubs(const G4OTubs& rhs)
     halfRadTolerance(rhs.halfRadTolerance),
     halfAngTolerance(rhs.halfAngTolerance)
 {
-   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -161,7 +160,6 @@ G4OTubs& G4OTubs::operator = (const G4OTubs& rhs)
    halfCarTolerance = rhs.halfCarTolerance;
    halfRadTolerance = rhs.halfRadTolerance;
    halfAngTolerance = rhs.halfAngTolerance;
-   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

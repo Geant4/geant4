@@ -92,6 +92,13 @@
 #include "G4VGraphicsScene.hh"
 #include "G4VisExtent.hh"
 
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+}
+
 using namespace std;
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -172,7 +179,8 @@ void G4TessellatedSolid::Initialize()
 {
   kCarToleranceHalf = 0.5*kCarTolerance;
 
-  fpPolyhedron = 0; fCubicVolume = 0.; fSurfaceArea = 0.;
+  fRebuildPolyhedron = false; fpPolyhedron = 0;
+  fCubicVolume = 0.; fSurfaceArea = 0.;
 
   fGeometryType = "G4TessellatedSolid";
   fSolidClosed  = false;
@@ -211,7 +219,6 @@ void G4TessellatedSolid::CopyObjects (const G4TessellatedSolid &ts)
     AddFacet(facetClone);
   }
   if (ts.GetSolidClosed()) SetSolidClosed(true);
-  fpPolyhedron = GetPolyhedron();
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -1765,11 +1772,15 @@ G4Polyhedron *G4TessellatedSolid::CreatePolyhedron () const
 G4Polyhedron* G4TessellatedSolid::GetPolyhedron () const
 {
   if (!fpPolyhedron ||
-    fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
-    fpPolyhedron->GetNumberOfRotationSteps())
+      fRebuildPolyhedron ||
+      fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
+      fpPolyhedron->GetNumberOfRotationSteps())
   {
+    G4AutoLock l(&polyhedronMutex);
     delete fpPolyhedron;
     fpPolyhedron = CreatePolyhedron();
+    fRebuildPolyhedron = false;
+    l.unlock();
   }
   return fpPolyhedron;
 }

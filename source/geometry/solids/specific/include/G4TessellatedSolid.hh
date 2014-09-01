@@ -266,6 +266,7 @@ class G4TessellatedSolid : public G4VSolid
 
   private:
 
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 
     std::vector<G4VFacet *>  fFacets;
