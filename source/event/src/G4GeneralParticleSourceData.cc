@@ -64,7 +64,7 @@ namespace
 
 //G4GeneralParticleSourceData* G4GeneralParticleSourceData::theInstance = 0;
 
-G4GeneralParticleSourceData::G4GeneralParticleSourceData() : flat_sampling(false), normalised(false)
+G4GeneralParticleSourceData::G4GeneralParticleSourceData() : flat_sampling(false), normalised(false),currentSourceIdx(0)
 {
     G4MUTEXINIT(mutex);
     

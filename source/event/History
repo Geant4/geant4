@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Aug 29th, 2014  A.Dotti (event-V10-00-07)
+- Coverity fix #56594
+
 July 21st, 2014 A.Dotti (event-V10-00-06)
 - Fix for bug #1656: G4SPSPosDistribution::GenerateOne() not 
   working correctly for GeneratePointsOnSurface() and
