@@ -97,23 +97,19 @@ G4PenelopeRayleighModel::~G4PenelopeRayleighModel()
 {
   if (IsMaster() || fLocalTable)
     {
-      //std::map <G4int,G4PhysicsFreeVector*>::iterator i;
+      std::map <G4int,G4PhysicsFreeVector*>::iterator i;
       if (logAtomicCrossSection)
 	{
-	  /*
-	    for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
+	  for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
 	    if (i->second) delete i->second;
-	  */
+	  
 	  delete logAtomicCrossSection;
 	  logAtomicCrossSection = 0;
 	}    
-      //std::map <G4int,G4PhysicsFreeVector*>::iterator i;
       if (atomicFormFactor)
-	{
-	  /*
-	    for (i=atomicFormFactor->begin();i != atomicFormFactor->end();i++)
-	    if (i->second) delete i->second;
-	  */
+	{	  
+	  for (i=atomicFormFactor->begin();i != atomicFormFactor->end();i++)
+	    if (i->second) delete i->second;	  
 	  delete atomicFormFactor;
 	  atomicFormFactor = 0;
 	}
@@ -132,24 +128,20 @@ void G4PenelopeRayleighModel::ClearTables()
 		"em0100",FatalException,"Worker thread in this method");    
   */
 
-  //std::map <const G4Material*,G4PhysicsFreeVector*>::iterator i;  
+  std::map <const G4Material*,G4PhysicsFreeVector*>::iterator i;  
 
    if (logFormFactorTable)
-     {
-       /*
+     {       
        for (i=logFormFactorTable->begin(); i != logFormFactorTable->end(); i++)
-	 if (i->second) delete i->second;
-       */
+	 if (i->second) delete i->second;       
        delete logFormFactorTable;
        logFormFactorTable = 0; //zero explicitely
      }
 
    if (pMaxTable)
-     {
-       /*
+     {       
        for (i=pMaxTable->begin(); i != pMaxTable->end(); i++)
-	 if (i->second) delete i->second;
-       */
+	 if (i->second) delete i->second;       
        delete pMaxTable;
        pMaxTable = 0; //zero explicitely
      }

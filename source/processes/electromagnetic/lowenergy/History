@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+02.09.2014 L. Pandola, tag emlowen-V10-00-17
+	   Coverity fix. Restored deletion of G4Physics*Vector 
+            objects at the destructor (as for ref-07)
+
 28.08.2014 S. Incerti, tag emlowen-V10-00-16
            Coverity fix. 
 

@@ -89,12 +89,10 @@ G4PenelopeGammaConversionModel::~G4PenelopeGammaConversionModel()
   if (IsMaster() || fLocalTable)
     {      
       if (logAtomicCrossSection)
-	{
-	  /*
-	    std::map <G4int,G4PhysicsFreeVector*>::iterator i;
-	    for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
-	    if (i->second) delete i->second;
-	  */
+	{	  
+	  std::map <G4int,G4PhysicsFreeVector*>::iterator i;
+	  for (i=logAtomicCrossSection->begin();i != logAtomicCrossSection->end();i++)
+	    if (i->second) delete i->second;	  
 	  delete logAtomicCrossSection;
 	}
       if (fEffectiveCharge)
