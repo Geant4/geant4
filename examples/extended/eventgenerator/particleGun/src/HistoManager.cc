@@ -29,7 +29,7 @@
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "HistoManager.hh"
 #include "G4UnitsTable.hh"
@@ -65,15 +65,15 @@ void HistoManager::Book()
   const G4int kMaxHisto = 9;
   const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7" , "8" };
   const G4String title[] = 
-       { "dummy",                                            //0
-         "energy spectrum dN/dE = f(E)",                     //1 for GunAction#2
-         "moment dir: angular distr dN/dOmega = f(alpha) ",  //2 for GunAction#2
-         "moment dir: angular distr dN/dOmega = f(psi) ",    //3 for GunAction#2
-         "vertex posi: radial  distr dN/dv = f(r)",          //4 for GunAction#3
-         "vertex posi: angular distr dN/dv = f(theta)",      //5 for GunAction#3
-         "vertex posi: angular distr dN/dv = f(phi)",        //6 for GunAction#3
-         "moment dir: angular distr dN/dOmega = f(alpha) ",  //7 for GunAction#3
-         "moment dir: angular distr dN/dOmega = f(psi) "     //8 for GunAction#3
+       { "dummy",                                    //0
+         "energy spectrum dN/dE = f(E)",             //1 for GunAction#2
+         "particle dir: angular distr cos(alpha)",   //2 for GunAction#3
+         "particle dir: angular distr psi",          //3 for GunAction#3
+         "vertex posi: radial  distr dN/dv = f(r)",  //4 for GunAction#4
+         "vertex posi: angular distr cos(theta)",    //5 for GunAction#4
+         "vertex posi: angular distr phi",           //6 for GunAction#4
+         "particle dir: angular distr cos(alpha)",   //7 for GunAction#4
+         "particle dir: angular distr psi "          //8 for GunAction#4
        };  
 
   // Default values (to be reset via /analysis/h1/set command)               

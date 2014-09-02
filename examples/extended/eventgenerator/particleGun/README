@@ -120,13 +120,13 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
   particleGun.root by default.
 
       1 : energy spectrum dN/dE = f(E)
-      2 : momentum direction: angular distr dN/dOmega = f(alpha)
-      3 : momentum direction: angular distr dN/dOmega = f(psi)      
+      2 : particle direction: angular distr cos(alpha)
+      3 : particle direction: angular distr psi      
       4 : vertex position: radial  distr dN/dv = f(r)
-      5 : vertex position: angular distr dN/dv = f(theta)
-      6 : vertex position: angular distr dN/dv = f(phi)
-      7 : momentum direction: angular distr dN/dOmega = f(alpha)
-      8 : momentum direction: angular distr dN/dOmega = f(psi)
+      5 : vertex position: angular distr cos(theta)
+      6 : vertex position: angular distr phi
+      7 : particle direction: angular distr cos(alpha)
+      8 : particle direction: angular distr psi
 
   Please note that histogram 1 will be filled only if you use 
   PrimaryGeneratorAction2, histos 2,3 with PrimaryGeneratorAction3

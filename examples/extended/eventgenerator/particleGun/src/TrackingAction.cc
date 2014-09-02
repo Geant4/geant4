@@ -30,7 +30,7 @@
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "TrackingAction.hh"
 #include "PrimaryGeneratorAction.hh"
@@ -50,12 +50,6 @@ TrackingAction::TrackingAction(PrimaryGeneratorAction* prim)
 { 
  // parameters for generator action #3
   fNewUz = fPrimary->GetAction3()->GetNewUz();
-
- // parameters for generator action #4
-  fDeltaR3 = 
-    (fPrimary->GetAction4()->GetRmax3() - fPrimary->GetAction4()->GetRmin3())/3.;
-  fCosAlphaMin = fPrimary->GetAction4()->GetCosAlphaMin();
-  fCosAlphaMax = fPrimary->GetAction4()->GetCosAlphaMax();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,16 +69,14 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
  }
  else if(selectedGeneratorAction==3)
  {
-  //momentum direction : angular distr dN/dOmega = f(alpha)
+  //particle direction. angular distr: cos(alpha)
   //
   id = 2;
   G4ThreeVector um = track->GetMomentumDirection();
-  G4double alpha  = std::acos(fNewUz*um);
-  G4double dalfa  = analysis->GetH1Width(id);
-  G4double dOmega = twopi*std::sin(alpha)*dalfa;     
-  if (dOmega > 0.) analysis->FillH1(id, alpha, 1./dOmega);
-    
-  //momentum direction : angular distr dN/dOmega = f(psi)
+  G4double cosalpha  = fNewUz*um;
+  analysis->FillH1(id, cosalpha);
+      
+  //particle direction. angular distr: psi
   //
   id = 3;
   // complete local frame
@@ -93,10 +85,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   //  
   G4double psi = std::atan2(u2*um, u1*um);
   if (psi < 0.) psi += twopi;    
-  G4double dpsi  = analysis->GetH1Width(id);
-  G4double alphaMax = fPrimary->GetAction3()->GetAlphaMax();    
-  dOmega = (1. - std::cos(alphaMax))*dpsi;     
-  if (dOmega > 0.) analysis->FillH1(id, psi, 1./dOmega);  
+  analysis->FillH1(id, psi);  
  }
  else if(selectedGeneratorAction==4)
  {
@@ -106,40 +95,34 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   //local frame : new uz = ur
   G4ThreeVector ur   = vertex/r;
 
-  //vertex position: radial distribution : dN/dv = f(r)
+  //vertex position. radial distribution dN/dv = f(r)
   //
   id = 4;
   G4double dr = analysis->GetH1Width(id);
   G4double dv = 2*twopi*r*r*dr;
   if (dv > 0.) analysis->FillH1(id, r, 1./dv);
 
-  //vertex position: angular distribution : dN/dv = f(theta)
+  //vertex position. angular distribution: cos(theta)
   //
   id = 5;
-  G4double theta  = std::acos(ur.z());
-  G4double dteta  = analysis->GetH1Width(id);
-  dv = fDeltaR3*twopi*std::sin(theta)*dteta;
-  if (dv > 0.) analysis->FillH1(id, theta, 1./dv);
+  G4double costheta  = ur.z();
+  analysis->FillH1(id, costheta);
 
-  //vertex position: angular distribution : dN/dv = f(phi)
+  //vertex position. angular distribution: phi
   //
   id = 6;
   G4double phi  = std::atan2(ur.y(), ur.x());
   if (phi < 0.) phi += twopi;
-  G4double dphi  = analysis->GetH1Width(id);
-  dv = 2*fDeltaR3*dphi;
-  if (dv > 0.) analysis->FillH1(id, phi, 1./dv);
+  analysis->FillH1(id, phi);
 
-  //momentum direction : angular distr dN/dOmega = f(alpha)
+  //particle direction. angular distr: cos(alpha)
   //
   id = 7;
   G4ThreeVector um = track->GetMomentumDirection();
-  G4double alpha  = std::acos(ur*um);
-  G4double dalfa  = analysis->GetH1Width(id);
-  G4double dOmega = twopi*std::sin(alpha)*dalfa;
-  if (dOmega > 0.) analysis->FillH1(id, alpha, 1./dOmega);
+  G4double cosalpha  = ur*um;
+  analysis->FillH1(id, cosalpha);
 
-  //momentum direction : angular distr dN/dOmega = f(psi)
+  //particle direction. angular distr: psi
   //
   id = 8;
   // complete local frame
@@ -148,9 +131,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   //
   G4double psi = std::atan2(u2*um, u1*um);
   if (psi < 0.) psi += twopi;
-  G4double dpsi  = analysis->GetH1Width(id);
-  dOmega = (fCosAlphaMin - fCosAlphaMax)*dpsi;
-  if (dOmega > 0.) analysis->FillH1(id, psi, 1./dOmega);
+  analysis->FillH1(id, psi);
  }
 }
 

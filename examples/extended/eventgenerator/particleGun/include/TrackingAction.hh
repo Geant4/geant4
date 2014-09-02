@@ -30,7 +30,7 @@
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef TrackingAction_h
 #define TrackingAction_h 1
@@ -57,12 +57,6 @@ class TrackingAction : public G4UserTrackingAction {
 
    // parameters for generator action #3
     G4ThreeVector fNewUz;
-
-   // parameters for generator action #4
-    G4double fDeltaR3;
-    G4double fCosAlphaMin; 
-    G4double fCosAlphaMax;  //opening angle
-
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
