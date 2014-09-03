@@ -4,6 +4,9 @@ $Id$
 History file for test/test202 subdirectory
 ------------------------------------------------
 
+1st September 2014 Laurent Garnier (test202-V10-00-32)
+- Fix new default text size to 10 (previous was 12)
+
 16th July 2014 Laurent Garnier (test202-V10-00-31)
 - Compare cerr to a reference file in order to avoid errors in CDash
 
