@@ -55,13 +55,27 @@ struct G4HnDimensionInformation
       
   G4HnDimensionInformation(const G4HnDimensionInformation& rhs) 
     : fUnitName(rhs.fUnitName), 
-      fFcnName(rhs.fName),
+      fFcnName(rhs.fFcnName),
       fUnit(rhs.fUnit), 
       fFcn(rhs.fFcn),
       fBinScheme(rhs.fBinScheme)
       {}
+      
+  G4HnDimensionInformation& operator=(const G4HnDimensionInformation& rhs) 
+    {
+      // check assignment to self
+      if (this == &rhs) return *this;
+    
+      fUnitName = rhs.fUnitName; 
+      fFcnName  = rhs.fFcnName;
+      fUnit = rhs.fUnit; 
+      fFcn  = rhs.fFcn;
+      fBinScheme = rhs.fBinScheme;
+      
+      return *this;
+    }  
 
-  G4String fName;
+  //G4String fName;
   G4String fUnitName;
   G4String fFcnName;
   G4double fUnit;  

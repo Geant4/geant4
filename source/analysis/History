@@ -17,6 +17,12 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 02, 2014 I. Hrivnacova (analysis-V10-00-21)
+- Fixed Coverity defects:
+  - Initialization of data members in G4VAnalysisManager
+  - Provided assignment operator for G4HnDimensionInformation
+- Removed unused data member in G4HnDimensionInformation   
+
 July 28, 2014 I. Hrivnacova (analysis-V10-00-20)
 - Removed unsused data member in G4P1DummyManager
 
