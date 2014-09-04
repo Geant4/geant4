@@ -636,7 +636,7 @@ double UCons::DistanceToIn(const UVector3& p,
             }
           }
         }
-        if (sd > 0)    // If 'forwards'. Check z intersection
+        if (sd >= 0)    // If 'forwards'. Check z intersection
         {
           if (sd > dRmax) // Avoid rounding errors due to precision issues on
           {
@@ -2116,9 +2116,9 @@ UVector3 UCons::GetPointOnSurface() const
   phi   = UUtils::Random(fSPhi, fSPhi + fDPhi);
   cosu   = std::cos(phi);
   sinu = std::sin(phi);
-  rRand1 = UUtils::GetRadiusInRing(fRmin1, fRmin2);
-  rRand2 = UUtils::GetRadiusInRing(fRmax1, fRmax2);
-
+  rRand1 = UUtils::GetRadiusInRing(fRmin1, fRmax1);
+  rRand2 = UUtils::GetRadiusInRing(fRmin2, fRmax2);
+ 
   if ((fSPhi == 0.) && fPhiFullCone)
   {
     Afive = 0.;
