@@ -14,7 +14,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4ProtonInelasticCrossSection.hh"
 #include "G4BGGNucleonInelasticXS.hh"
 
 G4QGSPLundStrFragmProtonBuilder::

@@ -36,8 +36,6 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
-#include "G4PiNuclearCrossSection.hh"
-#include "G4CrossSectionPairGG.hh"
 #include "G4ChipsKaonMinusInelasticXS.hh"
 #include "G4ChipsKaonPlusInelasticXS.hh"
 #include "G4ChipsKaonZeroInelasticXS.hh"

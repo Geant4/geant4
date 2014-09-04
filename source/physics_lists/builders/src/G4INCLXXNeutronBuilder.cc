@@ -32,6 +32,7 @@
 #include "G4PreCompoundModel.hh"
 #include "G4HadronicInteraction.hh"
 #include "G4HadronicInteractionRegistry.hh"
+#include "G4NeutronInelasticProcess.hh"
 
 G4INCLXXNeutronBuilder::
 G4INCLXXNeutronBuilder() 

@@ -18,7 +18,6 @@
 #include "G4ProtonInelasticProcess.hh"
 #include "G4VProtonBuilder.hh"
 
-#include "G4NeutronInelasticCrossSection.hh"
 #include "G4TheoFSGenerator.hh"
 #include "G4GeneratorPrecompoundInterface.hh"
 #include "G4QGSModel.hh"

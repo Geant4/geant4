@@ -53,8 +53,6 @@
 #include "G4NeutronCaptureXS.hh"
 
 #include "G4CrossSectionInelastic.hh"
-#include "G4ProtonInelasticCrossSection.hh"
-#include "G4NeutronInelasticCrossSection.hh"
 #include "G4PiNuclearCrossSection.hh"
 #include "G4ComponentAntiNuclNuclearXS.hh"
 #include "G4CrossSectionPairGG.hh"

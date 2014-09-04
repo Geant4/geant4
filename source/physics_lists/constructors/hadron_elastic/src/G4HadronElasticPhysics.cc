@@ -65,14 +65,12 @@
 
 #include "G4BGGNucleonElasticXS.hh"
 #include "G4BGGPionElasticXS.hh"
-#include "G4NeutronElasticXS.hh"
 
 #include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4ChipsProtonElasticXS.hh"
 #include "G4ChipsNeutronElasticXS.hh"
 
-#include "G4ComponentAntiNuclNuclearXS.hh"  
 #include "G4CrossSectionElastic.hh"
 
 // factory

@@ -72,7 +72,6 @@
 #include "G4ChipsKaonZeroElasticXS.hh"
 #include "G4ChipsHyperonElasticXS.hh"
 #include "G4ChipsAntiBaryonElasticXS.hh"
-#include "G4ComponentAntiNuclNuclearXS.hh"
 #include "G4ComponentGGNuclNuclXsc.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 
