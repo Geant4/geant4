@@ -48,7 +48,7 @@
 #include "G4QMDParticipant.hh"
 
 #include "G4IonsShenCrossSection.hh"
-#include "G4GeneralSpaceNNCrossSection.hh"
+//#include "G4GeneralSpaceNNCrossSection.hh"
 #include "G4PiNuclearCrossSection.hh"
 
 #include "G4HadronicInteraction.hh"
