@@ -1,8 +1,8 @@
 // Copyright (C) 2010, Guy Barrand. All rights reserved.
 // See the file tools.license for terms.
 
-#ifndef tools_rroot_member_writer
-#define tools_rroot_member_writer
+#ifndef tools_rroot_member_reader
+#define tools_rroot_member_reader
 
 #include "../store/iobj_visitor"
 

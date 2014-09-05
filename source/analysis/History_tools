@@ -1,5 +1,46 @@
- 1.11.1 :
- - wroot/date : WIN32 : Since including windows.h poses problem to G4, we use time.h and localtime().
+ 1.14.0 :
+ Changes to extend the "fast getters" logic to 1D histo and profile in order
+ that .root streaming of them be strictly compatible wiht the TProfile ones :
+ - test/cpp/wroot.cpp : have a 2D profile example. Add more verbose comments.
+ - test/cpp/rroot.cpp : have hard coded reading example (in particular of profiles) in case
+   the file is the pawdemo.root one or the out.root one produced by wroot.
+ - rroot/streamers : revisit to use at the end the m_in_range_xxx fields in mean,rms().
+ - rroot/cids, clss, streamers, rall : read TProfile2D.
+ - rroot/named : in ObjArray, List : add a lacking "delete obj" in case the read object is of bad type.
+ - wroot/infos, streamers : TProfile : pass from version 3 to version 4. TProfile2D from version 4 to 5.
+ - raxml : update_fast_getters() done on the hdata.
+ - store/osc_streamers : update_fast_getters() done on the hdata.
+ - histo/slice : update_fast_getters() done on the hdata.
+ - histo/h1, h2, h3, p1,p2 : fille() : update the m_in_range_xxx fields.
+ - histo/b1,b2,b3 : rm update_fast_getters() methods. mean,rms() use now the m_in_range fields.
+ - histo/base_histo : all_entries() uses now the m_all_entries fast getter.
+ - histo/histo_data : reset_fast_getters(), update_fast_getters().
+ - histo/histo_data : new fields : m_all_entries, m_in_range_entries, m_in_range_Sw, m_in_range_Sw2.
+ Changes in rroot to read streamers infos :
+ - rroot/file : read_streamer_infos().
+ - rroot/info : new file.
+ Others :
+ - cmathT : have "const type&" in args.
+ - forit : tools_typename_vforcit() cpp macro, but it is not yet used in this release.
+
+ 1.13.0 :
+ - test/cpp/wcsv_histo.cpp : example of changing the comment and separator characters.
+ - test/cpp/raxml.cpp : example of ntuple reading by using a ntuple_binding.
+ - tools/aida_ntuple : set_binding() logic.
+ - tools/wcsv_histo : be able to change the comment character for the header.
+ - tools/wcsv_histo : cpp tools_wcsv_ntuple -> tools_wcsv_histo.
+ - tools/rroot/rall : key_to_h1d() : to ease histogram reading knowing the name of the key.
+ - tools/rroot/rall : find_TDirectory() : to ease searching of a directory in a directory.
+ - tools/rroot/directory : file() method.
+ - tools/rroot/member_reader : cpp tools_rroot_member_writer -> tools_rroot_member_reader.
+ - tools/wroot/date : WIN32 : rm include windows.h and then stay with the not thread safe localtime() on Windows.
+ - mgr/build : do not bring wroot/date from inlib.
+
+ 1.12.0 :
+ - tools/histo/h[1,2,3],p[1,2] : s_cls() method to write class name in a csv histo file.
+ - tools/wcsv_histo, test/cpp/wcsv_histo.cpp.
+ - tools/wroot/streamers : do not use get_histo_data() since now h[1,2,3] inherits histo_data.
+ - src/setpawc.f, setntuc.f in test/cpp.
 
  1.11.0 :
  - modifs to build rcsv.cpp example :

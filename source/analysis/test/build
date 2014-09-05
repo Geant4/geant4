@@ -102,7 +102,16 @@ if [ ${exa} = "rroot" -o ${exa} = "rxrayfluo" ] ; then
 fi
 if [ ${exa} = "raxml" ] ; then
   # it needs expat.
-  if [ ${build_cl_exe} != "yes" ] ; then
+  if [ ${build_cl_exe} = "yes" ] ; then
+    expat_home=../../../../inexlib/ourex/expat
+    if [ ! -d "${expat_home}" ] ; then
+      echo "can't build raxml, expat not found at ${expat_home}."
+      exit
+    fi
+    cflags="${cflags} -DTOOLS_USE_OUREX_EXPAT /I${expat_home}/include"
+    cppflags="${cppflags} -DTOOLS_USE_OUREX_EXPAT /I${expat_home}/include"
+    libs="${libs} ${expat_home}/bin_visual/libourex_expat.a"
+  else
     libs="${libs} -lexpat"
   fi
 fi

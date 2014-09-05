@@ -28,11 +28,7 @@ public:
   }
 
 public:
-  bool multiply(TW a_factor){
-    if(!parent::base_multiply(a_factor)) return false;
-    parent::update_fast_getters();
-    return true;
-  }
+  bool multiply(TW a_factor){return parent::base_multiply(a_factor);}
   bool scale(TW a_factor) {return multiply(a_factor);}
 
   void copy_from_data(const hd_t& a_from) {parent::base_from_data(a_from);}
@@ -40,7 +36,6 @@ public:
 
   bool reset() {
     parent::base_reset();
-    parent::update_fast_getters();
     return true;
   }
 
@@ -82,18 +77,20 @@ public:
     if(kbin==0) inRange = false;
     else if(kbin==(parent::m_axes[2].m_number_of_bins+1)) inRange = false;
   
+    parent::m_all_entries++;
     if(inRange) {
       parent::m_in_range_entries++;
       parent::m_in_range_Sw += aWeight;
+      parent::m_in_range_Sw2 += aWeight*aWeight;
   
-      parent::m_in_range_Sxw += xw;
-      parent::m_in_range_Sx2w += x2w;
-  
-      parent::m_in_range_Syw += yw;
-      parent::m_in_range_Sy2w += y2w;
-  
-      parent::m_in_range_Szw += zw;
-      parent::m_in_range_Sz2w += z2w;
+      parent::m_in_range_Sxw[0] += xw;
+      parent::m_in_range_Sx2w[0] += x2w;
+
+      parent::m_in_range_Sxw[1] += yw;
+      parent::m_in_range_Sx2w[1] += y2w;
+
+      parent::m_in_range_Sxw[2] += zw;
+      parent::m_in_range_Sx2w[2] += z2w;
     }
    
     return true;
@@ -101,25 +98,19 @@ public:
 
   bool add(const h3& a_histo){
     parent::base_add(a_histo);
-    parent::update_fast_getters();
     return true;
   }
   bool subtract(const h3& a_histo){
     parent::base_subtract(a_histo);
-    parent::update_fast_getters();
     return true;
   }
 
   bool multiply(const h3& a_histo) {  
-    if(!parent::base_multiply(a_histo)) return false;
-    parent::update_fast_getters();
-    return true;
+    return parent::base_multiply(a_histo);
   }
   
   bool divide(const h3& a_histo) {
-    if(!parent::base_divide(a_histo)) return false;
-    parent::update_fast_getters();
-    return true;
+    return parent::base_divide(a_histo);
   }
 
 public:

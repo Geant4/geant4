@@ -76,8 +76,7 @@ class rbuf {
   typedef void (*r_4_func)(char*,char*);
   typedef void (*r_8_func)(char*,char*);
 public:
-  rbuf(std::ostream& a_out,bool a_byte_swap,
-              const char* a_eob,char*& a_pos)
+  rbuf(std::ostream& a_out,bool a_byte_swap,const char* a_eob,char*& a_pos)
   :m_out(a_out)
   ,m_byte_swap(a_byte_swap)
   ,m_eob(a_eob)

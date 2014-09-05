@@ -15,6 +15,7 @@
 #include <tools/histo/h1d>
 #include <tools/histo/h2d>
 #include <tools/histo/p1d>
+#include <tools/histo/p2d>
 #include <tools/wroot/ntuple>
 
 #include <tools/randd>
@@ -32,6 +33,8 @@
 int main(int argc,char** argv) {
 
   tools::args args(argc,argv);
+
+  bool verbose = args.is_arg("-verbose");
 
   //////////////////////////////////////////////////////////
   /// create a .root file : ////////////////////////////////
@@ -69,45 +72,69 @@ int main(int argc,char** argv) {
   tools::rbwd rbw(0,1);
 
  {tools::histo::h1d h("Gauss",100,-5,5);
-  for(unsigned int count=0;count<entries;count++) {
-    h.fill(rg.shoot(),1.4);
-  }
+  for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),1.4);
   // plotting hints :
   h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
   h.add_annotation(tools::histo::key_axis_y_title(),"1.4*entries");
+  if(verbose) {
+    std::cout << "h1d : rg"
+              << ", all entries " << h.all_entries()
+              << ", entries " << h.entries()
+              << ", mean " << h.mean() << ", rms " << h.rms()
+              << std::endl;
+  }
   // write :
   if(!tools::wroot::to(*dir,h,"rg")) return EXIT_FAILURE;}
 
  {tools::histo::p1d h("Profile",100,-5,5,-2,2);
-  for(unsigned int count=0;count<entries;count++) {
-    h.fill(rg.shoot(),rbw.shoot(),1);
+  for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),rbw.shoot(),1);
+  if(verbose) {
+    std::cout << "p1d : prof"
+              << ", all entries " << h.all_entries()
+              << ", entries " << h.entries()
+              << ", mean " << h.mean() << ", rms " << h.rms()
+              << std::endl;
   }
   if(!tools::wroot::to(*dir,h,"prof")) return EXIT_FAILURE;}
 
  {tools::histo::h2d h("Gauss_BW",20,-5,5,20,-2,2);
-  for(unsigned int count=0;count<entries;count++) {
-    h.fill(rg.shoot(),rbw.shoot(),0.8);
-  }
+  for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),rbw.shoot(),0.8);
   //plotting hints :
   h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
   h.add_annotation(tools::histo::key_axis_y_title(),"rand bw");
   h.add_annotation(tools::histo::key_axis_z_title(),"0.8*entries");
+  if(verbose) {
+    std::cout << "h2d : rgbw"
+              << ", all entries " << h.all_entries()
+              << ", entries " << h.entries()
+              << ", mean_x " << h.mean_x() << ", rms_x " << h.rms_x()
+              << ", mean_y " << h.mean_y() << ", rms_y " << h.rms_y()
+              << std::endl;
+  }
   // write :
   if(!tools::wroot::to(*dir,h,"rgbw")) return EXIT_FAILURE;}
+
+ {tools::histo::p2d h("Profile2D",100,-5,5,100,-5,5,-2,2);
+  for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),rg.shoot(),rbw.shoot(),1);
+  if(verbose) {
+    std::cout << "p2d : prof2D"
+              << ", all entries " << h.all_entries()
+              << ", entries " << h.entries()
+              << ", mean_x " << h.mean_x() << ", rms_x " << h.rms_x()
+              << ", mean_y " << h.mean_y() << ", rms_y " << h.rms_y()
+              << std::endl;
+  }
+  if(!tools::wroot::to(*dir,h,"prof2D")) return EXIT_FAILURE;}
 
   //////////////////////////////////////////////////////////
   /// create and fill a ntuple : ///////////////////////////
   //////////////////////////////////////////////////////////
  {//WARNING : the ntuple can't be on the stack. It is owned
   //          by the directory.
-  tools::wroot::ntuple* ntu = 
-    new tools::wroot::ntuple(rfile.dir(),"rg_rbw","Randoms");
-  tools::wroot::ntuple::column<int>* col_index =
-    ntu->create_column<int>("index");
-  tools::wroot::ntuple::column<double>* col_rgauss =
-    ntu->create_column<double>("rgauss");
-  tools::wroot::ntuple::column<float>* col_rbw =
-    ntu->create_column<float>("rbw");
+  tools::wroot::ntuple* ntu = new tools::wroot::ntuple(rfile.dir(),"rg_rbw","Randoms");
+  tools::wroot::ntuple::column<int>* col_index = ntu->create_column<int>("index");
+  tools::wroot::ntuple::column<double>* col_rgauss = ntu->create_column<double>("rgauss");
+  tools::wroot::ntuple::column<float>* col_rbw = ntu->create_column<float>("rbw");
 
   std::vector<float> user_vec_f;
   ntu->create_column<float>("vec_float",user_vec_f); //pass the ref of user_vec_f.

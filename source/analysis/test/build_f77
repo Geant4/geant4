@@ -143,14 +143,14 @@ cppflags="${cppflags} -I../include" # if within G4.
 
 if [ ${build_cl_exe} = "yes" ] ; then
   ${f77_compiler} ${f77flags} /object=close.o "${src_dir}\close.f"
-  ${f77_compiler} ${f77flags} /object=setpawc.o "${src_dir}\setpawc.f"
+  ${f77_compiler} ${f77flags} /object=setpawc.o ".\setpawc.f"
 
   ${cpp_compiler} /c ${cppflags} /Fochbook.o chbook.cpp
 
   eval ${link_cmd} /nologo /out:tools_test_chbook.exe chbook.o close.o setpawc.o ${objs} ${libs}
 else
   ${f77_compiler} ${f77flags} -c -o close.o ${src_dir}/close.f
-  ${f77_compiler} ${f77flags} -c -o setpawc.o ${src_dir}/setpawc.f
+  ${f77_compiler} ${f77flags} -c -o setpawc.o ./setpawc.f
 
   cppflags="${cppflags} ${G4_cppflags}"
 
@@ -164,14 +164,14 @@ fi
 echo "build whbook.cpp ..."
 
 if [ ${build_cl_exe} = "yes" ] ; then
-  ${f77_compiler} ${f77flags} /object=setntuc.o "${src_dir}\setntuc.f"
+  ${f77_compiler} ${f77flags} /object=setntuc.o ".\setntuc.f"
 
   ${cpp_compiler} /c ${cppflags} /Fowhbook.o whbook.cpp
 
   eval ${link_cmd} /nologo /out:tools_test_whbook.exe whbook.o setntuc.o setpawc.o close.o ${objs} ${libs}
 
 else
-  ${f77_compiler} ${f77flags} -c -o setntuc.o ${src_dir}/setntuc.f
+  ${f77_compiler} ${f77flags} -c -o setntuc.o ./setntuc.f
   ${cpp_compiler} -c ${cppflags} -o whbook.o whbook.cpp
   ${cpp_compiler} ${cppflags} -o ./tools_test_whbook whbook.o setntuc.o setpawc.o close.o ${objs} ${libs}
 fi

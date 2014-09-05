@@ -441,8 +441,8 @@ public: //used in BatchLab::XML_DataReader.
         hdl = new tools::handle<tools::histo::p1d>(histo);
         sclass = tools::histo::p1d::s_class();
 
+        hd.update_fast_getters();
         histo->copy_from_data(hd);
-        histo->update_fast_getters();
 
       } else if(a_dim==2) {
         tools::histo::p2d* histo = 0;
@@ -470,8 +470,8 @@ public: //used in BatchLab::XML_DataReader.
         hdl = new tools::handle<tools::histo::p2d>(histo);
         sclass = tools::histo::p2d::s_class();
 
+        hd.update_fast_getters();
         histo->copy_from_data(hd);
-        histo->update_fast_getters();
       }
     } else {
       if(a_dim==1) {
@@ -498,8 +498,8 @@ public: //used in BatchLab::XML_DataReader.
         hdl = new tools::handle<tools::histo::h1d>(histo);
         sclass = tools::histo::h1d::s_class();
 
+        hd.update_fast_getters();
         histo->copy_from_data(hd);
-        histo->update_fast_getters();
 
       } else if(a_dim==2) {
         tools::histo::h2d* histo = 0;
@@ -527,8 +527,8 @@ public: //used in BatchLab::XML_DataReader.
         hdl = new tools::handle<tools::histo::h2d>(histo);
         sclass = tools::histo::h2d::s_class();
 
+        hd.update_fast_getters();
         histo->copy_from_data(hd);
-        histo->update_fast_getters();
 
       } else if(a_dim==3) {
         tools::histo::h3d* histo = 0;
@@ -557,8 +557,8 @@ public: //used in BatchLab::XML_DataReader.
         hdl = new tools::handle<tools::histo::h3d>(histo);
         sclass = tools::histo::h3d::s_class();
 
+        hd.update_fast_getters();
         histo->copy_from_data(hd);
-        histo->update_fast_getters();
 
       }
     }

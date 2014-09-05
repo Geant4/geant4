@@ -26,6 +26,10 @@ public:
   histo_data()
   :m_dimension(0)
   ,m_bin_number(0)
+  ,m_all_entries(0)
+  ,m_in_range_entries(0)
+  ,m_in_range_Sw(0)
+  ,m_in_range_Sw2(0)
   {}
 public:
   histo_data(const histo_data& a_from)
@@ -39,6 +43,12 @@ public:
   ,m_bin_Sx2w(a_from.m_bin_Sx2w)
   ,m_axes(a_from.m_axes)
   ,m_annotations(a_from.m_annotations)
+  ,m_all_entries(a_from.m_all_entries)
+  ,m_in_range_entries(a_from.m_in_range_entries)
+  ,m_in_range_Sw(a_from.m_in_range_Sw)
+  ,m_in_range_Sw2(a_from.m_in_range_Sw2)
+  ,m_in_range_Sxw(a_from.m_in_range_Sxw)
+  ,m_in_range_Sx2w(a_from.m_in_range_Sx2w)
   {}
 
   histo_data& operator=(const histo_data& a_from) {
@@ -52,6 +62,12 @@ public:
     m_bin_Sx2w = a_from.m_bin_Sx2w;
     m_axes = a_from.m_axes;
     m_annotations = a_from.m_annotations;
+    m_all_entries = a_from.m_all_entries;
+    m_in_range_entries = a_from.m_in_range_entries;
+    m_in_range_Sw = a_from.m_in_range_Sw;
+    m_in_range_Sw2 = a_from.m_in_range_Sw2;
+    m_in_range_Sxw = a_from.m_in_range_Sxw;
+    m_in_range_Sx2w = a_from.m_in_range_Sx2w;
     return *this;
   }
 
@@ -67,6 +83,12 @@ public:
         sw += m_bin_Sw[ibin];
       }
     }
+    return sw;
+  }
+/*
+  TW get_all_Sw() const {
+    TW sw = 0;
+    for(TO ibin=0;ibin<m_bin_number;ibin++) sw += m_bin_Sw[ibin];
     return sw;
   }
   TN get_all_entries() const {
@@ -87,6 +109,7 @@ public:
     }
     return number;
   }
+*/
 
   TW get_Sw2() const {
     TW sw2 = 0;
@@ -120,6 +143,32 @@ public:
     return true;
   }
 
+protected:
+  void reset_fast_getters(){
+    m_all_entries = 0;
+    m_in_range_entries = 0;
+    m_in_range_Sw = 0;
+    m_in_range_Sw2 = 0;
+    m_in_range_Sxw.resize(m_dimension,0);
+    m_in_range_Sx2w.resize(m_dimension,0);
+  }
+public:
+  void update_fast_getters() {
+    reset_fast_getters();
+   {for(TO ibin=0;ibin<m_bin_number;ibin++) {
+      if(!histo::is_out(m_axes,ibin)) {
+        m_in_range_entries += m_bin_entries[ibin];
+        m_in_range_Sw += m_bin_Sw[ibin];
+        m_in_range_Sw2 += m_bin_Sw2[ibin];
+        for(dim_t iaxis=0;iaxis<m_dimension;iaxis++) {
+           m_in_range_Sxw[iaxis] += m_bin_Sxw[ibin][iaxis];
+           m_in_range_Sx2w[iaxis] += m_bin_Sx2w[ibin][iaxis];
+        }
+      }
+      m_all_entries += m_bin_entries[ibin];
+    }}
+  }
+
 public:
   // General :
   std::string m_title;
@@ -135,6 +184,13 @@ public:
   std::vector<axis_t> m_axes;
   // etc :
   std::map<std::string,std::string> m_annotations;
+  // fast getters :
+  TN m_all_entries; //used if reading from a ROOT file.
+  TN m_in_range_entries;
+  TW m_in_range_Sw;
+  TW m_in_range_Sw2;
+  std::vector<TC> m_in_range_Sxw;
+  std::vector<TC> m_in_range_Sx2w;
 };
 
 }}

@@ -31,7 +31,12 @@ inline const std::string& TH2D_cls(){
 
 inline const std::string& TProfile_cls(){
   static const std::string s_v("TProfile");
-  return s_v;  
+  return s_v;
+}
+
+inline const std::string& TProfile2D_cls(){
+  static const std::string s_v("TProfile2D");
+  return s_v;
 }
 
 inline const std::string& TDirectory_cls(){
@@ -42,6 +47,11 @@ inline const std::string& TDirectory_cls(){
 inline const std::string& TGeoManager_cls(){
   static const std::string s_v("TGeoManager");
   return s_v;  
+}
+
+inline const std::string& TList_cls(){
+  static const std::string s_v("TList");
+  return s_v;
 }
 
 }}

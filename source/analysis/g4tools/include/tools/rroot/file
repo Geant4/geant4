@@ -106,22 +106,25 @@ public: //ifile
     return true;
   }
 
+  virtual key& sinfos_key() {return m_streamer_info_key;}
+
 public:
-  file(std::ostream& a_out,
-              const std::string& a_path,
-              bool a_verbose = false)
+  file(std::ostream& a_out,const std::string& a_path,bool a_verbose = false)
   :m_out(a_out)
   ,m_path(a_path)
   ,m_verbose(a_verbose)
   ,m_file(not_open())
   ,m_bytes_read(0)
   ,m_root_directory(*this)
+  ,m_streamer_info_key(*this)
   // begin of record :
   ,m_version(0)
   ,m_BEGIN(0)
   ,m_END(0)
   ,m_seek_free(0)
+  ,m_seek_info(0)
   ,m_nbytes_free(0)
+  ,m_nbytes_info(0)
   ,m_nbytes_name(0)
   {
 #ifdef TOOLS_MEM
@@ -151,9 +154,10 @@ public:
   }
 protected:
   file(const file& a_from)
-  : ifile(a_from)
+  :ifile(a_from)
   ,m_out(a_from.m_out)
   ,m_root_directory(*this)
+  ,m_streamer_info_key(*this)
   { 
 #ifdef TOOLS_MEM
     mem::increment(s_class().c_str());
@@ -324,6 +328,23 @@ protected:
             << std::endl;
       return false;
     }
+
+    // Create StreamerInfo index
+    if(m_seek_info > m_BEGIN) {
+      if(!read_streamer_infos()) {
+        m_out << "tools::rroot::file::initialize :"
+              << " read_streamer_infos() failed."
+              << std::endl;
+        return false;
+      }
+    } else {
+      m_out << "tools::rroot::file::initialize :"
+            << " file " << sout(m_path)
+            << " probably not closed."
+            << std::endl;
+      return false;
+    }
+
     return true;
   }
   bool read_header() {
@@ -378,20 +399,40 @@ protected:
     if(!rb.read(v)) return false;
     m_nbytes_name = v;}
     //m_out << "debug : 1002 " << m_nbytes_name << std::endl;
-/*
-    if(!rb.read(fUnits )) return false;
-    if(!rb.read(fCompress)) return false;
-    if(fVersion>1000000) {
-      if(!rb.read(fSeekInfo)) return false;
+   {char fUnits;
+    if(!rb.read(fUnits)) return false;}
+   {int fCompress;
+    if(!rb.read(fCompress)) return false;}
+    if(m_version>1000000) {
+      if(!rb.read(m_seek_info)) return false;
     } else {
-     {Seek32 i;
+     {seek32 i;
       if(!rb.read(i)) return false;
-      fSeekInfo = i;}
+      m_seek_info = i;}
     }
-    if(!rb.read(fNbytesInfo)) return false;
-*/
+    if(!rb.read(m_nbytes_info)) return false;
+    //m_out << "debug : seek_info " << m_seek_info << " nbytes_info " << m_nbytes_info << std::endl;
     return true;
   }
+
+  bool read_streamer_infos() {
+    // Read the list of StreamerInfo from this file
+    // The key with name holding the list of TStreamerInfo objects is read.
+    // The corresponding TClass objects are updated.
+    if(m_seek_info<=0) return false;
+    if(m_seek_info>=m_END) return false;
+    if(!set_pos(m_seek_info)) return false;
+    char* buffer = new char[m_nbytes_info+1];
+    if(!read_buffer(buffer,m_nbytes_info)) {delete [] buffer;return false;}
+    char* buf = buffer;
+    if(!m_streamer_info_key.from_buffer(buffer+m_nbytes_info,buf)) {
+      delete [] buffer;
+      return false;
+    }
+    delete [] buffer;
+    return true;
+  }
+
 
 #if defined(__sun) && !defined(__linux__) && (__SUNPRO_CC > 0x420)
   int error_number() {return ::errno;}
@@ -408,16 +449,19 @@ protected:
   int m_file;
   tools::uint64 m_bytes_read; //Number of bytes read from this file
   directory m_root_directory;
+  key m_streamer_info_key;
   std::map<char,unzip_func> m_unzipers;
   std::string m_title;
   // begin of record :
-  uint32 m_version;          //File format version
+  uint32 m_version;       //File format version
   seek m_BEGIN;           //First used byte in file
   seek m_END;             //Last used byte in file
   seek m_seek_free;       //Location on disk of free segments structure
-  uint32 m_nbytes_free;      //Number of bytes for free segments structure
+  seek m_seek_info;       //Location on disk of StreamerInfo record
+  uint32 m_nbytes_free;   //Number of bytes for free segments structure
+  uint32 m_nbytes_info;   //Number of bytes for StreamerInfo record
   //int nfree
-  uint32 m_nbytes_name;      //Number of bytes in TNamed at creation time
+  uint32 m_nbytes_name;   //Number of bytes in TNamed at creation time
 };
 
 
@@ -459,60 +503,3 @@ protected:
 //            33->33 fUnits      = Number of bytes for file pointers
 //            34->37 fCompress   = Zip compression level
 //
-
-/*
-void TFile::ReadStreamerInfo()
-{
-// Read the list of StreamerInfo from this file
-// The key with name holding the list of TStreamerInfo objects is read.
-// The corresponding TClass objects are updated.
-
-   TList *list = 0;
-   if (fSeekInfo > 0 && fSeekInfo < fEND) {
-      TKey *key = new TKey();
-      char *buffer = new char[fNbytesInfo+1];
-      char *buf    = buffer;
-      Seek(fSeekInfo);
-      ReadBuffer(buf,fNbytesInfo);
-      key->ReadBuffer(buf);
-      TFile *filesave = gFile;
-      gFile = this; // used in ReadObj
-      list = (TList*)key->ReadObj();
-      if (!list) {
-         gDirectory->GetListOfKeys()->Remove(key);
-         MakeZombie();
-      }
-      gFile = filesave;
-      delete [] buffer;
-      delete key;
-   } else {
-      list = (TList*)Get("StreamerInfo"); //for versions 2.26 (never released)
-   }
-
-   if (list == 0) return;
-   if (gDebug > 0) Info("ReadStreamerInfo", "called for file %s",GetName());
-
-   // loop on all TStreamerInfo classes
-   TStreamerInfo *info;
-   TIter next(list);
-   while ((info = (TStreamerInfo*)next())) {
-      if (info->IsA() != TStreamerInfo::Class()) {
-         Warning("ReadStreamerInfo","%s: not a TStreamerInfo object", GetName());
-         continue;
-      }
-      info->BuildCheck();
-      Int_t uid = info->GetNumber();
-      Int_t asize = fClassIndex->GetSize();
-      if (uid >= asize && uid <100000) fClassIndex->Set(2*asize);
-      if (uid >= 0 && uid < fClassIndex->GetSize()) fClassIndex->fArray[uid] = 1;
-      else {
-         printf("ReadStreamerInfo, class:%s, illegal uid=%d\n",info->GetName(),uid);
-      }
-      if (gDebug > 0) printf(" -class: %s version: %d info read at slot %d\n",info->GetName(), info->GetClassVersion(),uid);
-   }
-   fClassIndex->fArray[0] = 0;
-   list->Clear();  //this will delete all TStreamerInfo objects with kCanDelete bit set
-   delete list;
-}
-
-*/

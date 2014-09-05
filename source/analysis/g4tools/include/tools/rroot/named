@@ -335,11 +335,13 @@ public:
         if(!(*it)) {
           std::vector<T*>::push_back(0);
         } else {
-          T* obj = safe_cast<iro,T>(*((*it)->copy()));
+          iro* _obj = (*it)->copy();
+          T* obj = safe_cast<iro,T>(*_obj);
           if(!obj) {
             //a_buffer.out() << "tools::rroot::ObjArray::ObjArray :"
             //               << " inlib::cast failed."
             //               << std::endl;
+            delete _obj;
           } else {
             std::vector<T*>::push_back(obj);
           }
@@ -362,11 +364,13 @@ public:
         if(!(*it)) {
           std::vector<T*>::push_back(0);
         } else {
-          T* obj = safe_cast<iro,T>(*((*it)->copy()));
+          iro* _obj = (*it)->copy();
+          T* obj = safe_cast<iro,T>(*_obj);
           if(!obj) {
             //a_buffer.out() << "tools::rroot::ObjArray::operator= :"
             //               << " inlib::cast failed."
             //               << std::endl;
+            delete _obj;
           } else {
             std::vector<T*>::push_back(obj);
           }
@@ -381,8 +385,7 @@ public:
 public:
   void cleanup() {_clear();}
 public:
-  bool stream(buffer& a_buffer,
-              const ifac::args& a_args,bool a_accept_null = false) {
+  bool stream(buffer& a_buffer,const ifac::args& a_args,bool a_accept_null = false) {
     _clear();
 
     short v;
@@ -419,7 +422,9 @@ public:
         if(!to) {
           a_buffer.out() << "tools::rroot::ObjArray::stream :"
                          << " inlib::cast failed."
+                         << " " << obj->s_cls() << " is not a " << T::s_class() << "."
                          << std::endl;
+          delete obj;
         } else {
           std::vector<T*>::push_back(to);
         }

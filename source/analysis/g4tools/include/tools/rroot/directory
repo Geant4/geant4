@@ -49,6 +49,8 @@ protected:
   }
   directory& operator=(const directory &){return *this;}
 public:
+  ifile& file() {return m_file;}
+
   const std::vector<key*>& keys() const {return m_keys;}
   std::vector<key*>& keys() {return m_keys;}
 

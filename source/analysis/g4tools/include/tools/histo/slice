@@ -56,8 +56,8 @@ inline bool fill_slice_x(const h2<TC,TO,TN,TW,TH>& a_from,
       hdata.m_bin_Sx2w[aoffset][0] += af_bin_Sx2w[offset][0];
     }
   }
+  hdata.update_fast_getters();
   a_to.copy_from_data(hdata);
-  a_to.update_fast_getters();
   return true;
 }
 
@@ -123,8 +123,8 @@ inline bool fill_slice_y(const h2<TC,TO,TN,TW,TH>& a_from,
       hdata.m_bin_Sx2w[aoffset][0] += af_bin_Sx2w[offset][1];
     }
   }
+  hdata.update_fast_getters();
   a_to.copy_from_data(hdata);
-  a_to.update_fast_getters();  
   return true;
 }
 
@@ -201,8 +201,8 @@ inline bool fill_slice_yz(const h3<TC,TO,TN,TW,TH>& a_from,
       }
     }
   }
+  hdata.update_fast_getters();
   a_to.copy_from_data(hdata);
-  a_to.update_fast_getters();
   return true;
 }
 
@@ -262,8 +262,8 @@ inline bool fill_slice_xy(const h3<TC,TO,TN,TW,TH>& a_from,
       }
     }
   }
+  hdata.update_fast_getters();
   a_to.copy_from_data(hdata);
-  a_to.update_fast_getters();
   return true;
 }
 
@@ -323,8 +323,8 @@ inline bool fill_slice_xz(const h3<TC,TO,TN,TW,TH>& a_from,
     }
   }
   
+  hdata.update_fast_getters();
   a_to.copy_from_data(hdata);
-  a_to.update_fast_getters();
 
   return true;
 }

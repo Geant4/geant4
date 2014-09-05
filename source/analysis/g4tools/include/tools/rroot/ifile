@@ -10,6 +10,8 @@
 namespace tools {
 namespace rroot {
 
+class key;
+
 class ifile {
 public:
   virtual ~ifile(){}
@@ -29,6 +31,8 @@ public:
   virtual bool read_buffer(char*,uint32) = 0;
 
   virtual bool unziper(char,unzip_func&) const = 0;
+
+  virtual key& sinfos_key() = 0;
 };
 
 }}

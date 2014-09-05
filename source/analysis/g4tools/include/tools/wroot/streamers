@@ -198,9 +198,9 @@ inline bool TH_write_1D(buffer& a_buffer,
     if(!a_buffer.write((short)(1000 * 0.25))) return false; //fBarOffset
     if(!a_buffer.write((short)(1000 * 0.5))) return false; //fBarWidth
 
-    if(!a_buffer.write((double)a_data.get_entries())) return false;
-    if(!a_buffer.write(a_data.get_Sw())) return false;
-    if(!a_buffer.write(a_data.get_Sw2())) return false;
+    if(!a_buffer.write((double)a_data.m_all_entries)) return false;
+    if(!a_buffer.write(a_data.m_in_range_Sw)) return false;
+    if(!a_buffer.write(a_data.m_in_range_Sw2)) return false;
 
    {double value;
     a_data.get_ith_axis_Sxw(0,value);  
@@ -286,9 +286,8 @@ inline bool TH1F_stream(buffer& a_buffer,
                         const histo::h1df& a_h,
                         const std::string& a_name) {
   if(!a_buffer.write_version(1)) return false;
-  hf_data data = a_h.get_histo_data();
-  if(!TH_write_1D(a_buffer,data,a_name)) return false;
-  if(!a_buffer.write_array(data.m_bin_Sw)) return false;
+  if(!TH_write_1D(a_buffer,a_h,a_name)) return false;
+  if(!a_buffer.write_array(a_h.m_bin_Sw)) return false;
   return true;
 }
 
@@ -296,9 +295,8 @@ inline bool TH1F_stream(buffer& a_buffer,
                         const histo::h1d& a_h,
                         const std::string& a_name) {
   if(!a_buffer.write_version(1)) return false;
-  hd_data data = a_h.get_histo_data();
-  if(!TH_write_1D(a_buffer,data,a_name)) return false;
-  if(!a_buffer.write_array(convert<double,float>(data.m_bin_Sw))) return false;
+  if(!TH_write_1D(a_buffer,a_h,a_name)) return false;
+  if(!a_buffer.write_array(convert<double,float>(a_h.m_bin_Sw))) return false;
   return true;
 }
 
@@ -306,9 +304,8 @@ inline bool TH1D_stream(buffer& a_buffer,
                         const histo::h1d& a_h,
                         const std::string& a_name) {
   if(!a_buffer.write_version(1)) return false;
-  hd_data data = a_h.get_histo_data();
-  if(!TH_write_1D(a_buffer,data,a_name)) return false;
-  if(!a_buffer.write_array(data.m_bin_Sw)) return false; //fArray TArrayD
+  if(!TH_write_1D(a_buffer,a_h,a_name)) return false;
+  if(!a_buffer.write_array(a_h.m_bin_Sw)) return false; //fArray TArrayD
   return true;
 }
 
@@ -316,10 +313,8 @@ inline bool TH2F_stream(buffer& a_buffer,
                         const histo::h2d& a_h,
                         const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  hd_data data = a_h.get_histo_data();
-  if(!TH_write_2D(a_buffer,data,a_name)) return false;
-  if(!a_buffer.write_array(convert<double,float>(data.m_bin_Sw)))
-    return false; //fArray TArrayF
+  if(!TH_write_2D(a_buffer,a_h,a_name)) return false;
+  if(!a_buffer.write_array(convert<double,float>(a_h.m_bin_Sw))) return false; //fArray TArrayF
   return true;
 }
 
@@ -327,9 +322,8 @@ inline bool TH2F_stream(buffer& a_buffer,
                         const histo::h2df& a_h,
                         const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  hf_data data = a_h.get_histo_data();
-  if(!TH_write_2D(a_buffer,data,a_name)) return false;
-  if(!a_buffer.write_array(data.m_bin_Sw)) return false;
+  if(!TH_write_2D(a_buffer,a_h,a_name)) return false;
+  if(!a_buffer.write_array(a_h.m_bin_Sw)) return false;
   return true;
 }
 
@@ -337,69 +331,55 @@ inline bool TH2D_stream(buffer& a_buffer,
                         const histo::h2d& a_h,
                         const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  hd_data data = a_h.get_histo_data();
-  if(!TH_write_2D(a_buffer,data,a_name)) return false;
-  if(!a_buffer.write_array(data.m_bin_Sw)) return false; //fArray TArrayD
+  if(!TH_write_2D(a_buffer,a_h,a_name)) return false;
+  if(!a_buffer.write_array(a_h.m_bin_Sw)) return false; //fArray TArrayD
   return true;
 }
 
 inline bool TH3F_stream(buffer& a_buffer,const histo::h3d& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  hd_data data = a_h.get_histo_data();
-  if(!TH_write_3D(a_buffer,data,a_name)) return false;
-  if(!a_buffer.write_array(convert<double,float>(data.m_bin_Sw))) return false; //fArray TArrayF
+  if(!TH_write_3D(a_buffer,a_h,a_name)) return false;
+  if(!a_buffer.write_array(convert<double,float>(a_h.m_bin_Sw))) return false; //fArray TArrayF
   return true;
 }
 
 inline bool TH3F_stream(buffer& a_buffer,const histo::h3df& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  hf_data data = a_h.get_histo_data();
-  if(!TH_write_3D(a_buffer,data,a_name)) return false;
-  if(!a_buffer.write_array(data.m_bin_Sw)) return false; //fArray TArrayF
+  if(!TH_write_3D(a_buffer,a_h,a_name)) return false;
+  if(!a_buffer.write_array(a_h.m_bin_Sw)) return false; //fArray TArrayF
   return true;
 }
 
 inline bool TH3D_stream(buffer& a_buffer,const histo::h3d& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  hd_data data = a_h.get_histo_data();
-  if(!TH_write_3D(a_buffer,data,a_name)) return false;
-  if(!a_buffer.write_array(data.m_bin_Sw)) return false; //fArray TArrayD
+  if(!TH_write_3D(a_buffer,a_h,a_name)) return false;
+  if(!a_buffer.write_array(a_h.m_bin_Sw)) return false; //fArray TArrayD
   return true;
 }
 
 inline bool TProfile_stream(buffer& a_buffer,
                             const histo::p1d& a_p,
                             const std::string& a_name){
-    if(!a_buffer.write_version(3)) return false;
+    if(!a_buffer.write_version(4)) return false;
 
     //WARNING : the mapping histo::p1d / TProfile is not obvious.
     //p1d::m_bin_Svw  <---> TProfile::fArray
     //p1d::m_bin_Sv2w <---> TProfile::fSumw2
     //p1d::m_bin_Sw   <---> TProfile::fBinEntries
 
+    double Svw = a_p.get_Svw();
+    double Sv2w = a_p.get_Sv2w();
+
     pd_data data = a_p.get_histo_data();
     //NOTE : histo.m_bin_Sw <---> TH1D::TArrayD::fArray
     //       then have to copy histo.m_bin_Svw on histo.m_bin_Sw
     //       before streaming.
 
-    //save histo.m_bin_Sw on a ::Rio::Array_double :
-    std::vector<double> vbins;
-   {unsigned int binn = data.m_bin_number;
-    vbins.resize(binn);
-    for(unsigned int index=0;index<binn;index++){
-      vbins[index] = data.m_bin_Sw[index];
-    }}
-
-    // copy histo.m_bin_Svw on histo.m_bin_Sw :
+    std::vector<double> vbins = data.m_bin_Sw;
     data.m_bin_Sw = data.m_bin_Svw;    
-
-    //WARNING : should create a valid Rio::TH1D::fHistogram
-    //          being a histo::h1d.
-    //          But the histo::p1d does not inherit histo::h1d.
 
     histo::h1d h("",10,0,1);
     h.copy_from_data(data);
-    h.update_fast_getters();
     if(!TH1D_stream(a_buffer,h,a_name)) return false;
 
     //TProfile specific :
@@ -410,40 +390,34 @@ inline bool TProfile_stream(buffer& a_buffer,
     if(!a_buffer.write(data.m_min_v)) return false;
     if(!a_buffer.write(data.m_max_v)) return false;
 
+    // version 4 :
+    if(!a_buffer.write(Svw)) return false;              //Double_t fTsumwy;  //Total Sum of weight*Y
+    if(!a_buffer.write(Sv2w)) return false;             //Double_t fTsumwy2; //Total Sum of weight*Y*Y
+
     return true;
 }
 
 inline bool TProfile2D_stream(buffer& a_buffer,const histo::p2d& a_p,const std::string& a_name){
-  if(!a_buffer.write_version(4)) return false;
+  if(!a_buffer.write_version(5)) return false;
 
   //WARNING : the mapping histo::p2d / TProfile2D is not obvious.
   //p2d::m_bin_Svw  <---> TProfile2D::fArray
   //p2d::m_bin_Sv2w <---> TProfile2D::fSumw2
   //p2d::m_bin_Sw   <---> TProfile2D::fBinEntries
 
+  double Svw = a_p.get_Svw();
+  double Sv2w = a_p.get_Sv2w();
+
   pd_data data = a_p.get_histo_data();
   //NOTE : histo.m_bin_Sw <---> TH2D::TArrayD::fArray
   //       then have to copy histo.m_bin_Svw on histo.m_bin_Sw
   //       before streaming.
 
-  //save histo.m_bin_Sw on a ::Rio::Array_double :
-  std::vector<double> vbins;
- {unsigned int binn = data.m_bin_number;
-  vbins.resize(binn);
-  for(unsigned int index=0;index<binn;index++){
-    vbins[index] = data.m_bin_Sw[index];
-  }}
-
-  // copy histo.m_bin_Svw on histo.m_bin_Sw :
+  std::vector<double> vbins = data.m_bin_Sw;
   data.m_bin_Sw = data.m_bin_Svw;
-
-  //WARNING : should create a valid Rio::TH2D::fHistogram
-  //          being a histo::h2d.
-  //          But the histo::p2d does not inherit histo::h2d.
 
   histo::h2d h("",10,0,1,10,0,1);
   h.copy_from_data(data);
-  h.update_fast_getters();
   if(!TH2D_stream(a_buffer,h,a_name)) return false;
 
   //TProfile2D specific :
@@ -453,6 +427,10 @@ inline bool TProfile2D_stream(buffer& a_buffer,const histo::p2d& a_p,const std::
   if(!a_buffer.write(errorMode)) return false;    //fErrorMode
   if(!a_buffer.write(data.m_min_v)) return false; //fZmin
   if(!a_buffer.write(data.m_max_v)) return false; //fZmax
+
+  // version 5 :
+  if(!a_buffer.write(Svw)) return false;              //Double_t fTsumwz;  //Total Sum of weight*Z
+  if(!a_buffer.write(Sv2w)) return false;             //Double_t fTsumwz2; //Total Sum of weight*Z*Z
 
   return true;
 }

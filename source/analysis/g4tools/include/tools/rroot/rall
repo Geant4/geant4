@@ -17,6 +17,42 @@
 namespace tools {
 namespace rroot {
 
+inline tools::rroot::TDirectory* find_dir(tools::rroot::directory& a_dir,const std::string& a_name) {
+  std::ostream& out = a_dir.file().out();
+  tools::rroot::key* k = a_dir.find_key(a_name);
+  if(!k) {
+    //out << "tools::rroot::find_dir :"
+    //    << " " << a_name << " not a key."
+    //    << std::endl;
+    return 0;
+  }
+
+  if(k->object_class()!=tools::rroot::TDirectory_cls()) {
+    out << "tools::rroot::find_dir :"
+        << " key " << a_name << " not a TDirectory."
+        << std::endl;
+    return 0;
+  }
+  uint32 sz;
+  char* buf = k->get_object_buffer(sz); //we don't have ownership of buf.
+  if(!buf) {
+    out  << "tools::rroot::find_dir :"
+         << " can't get directory data buffer."
+         << std::endl;
+    return 0;
+  }
+  tools::rroot::buffer b(out,a_dir.file().byte_swap(),sz,buf,k->key_length(),false);
+  tools::rroot::TDirectory* tdir = new tools::rroot::TDirectory(a_dir.file());
+  if(!tdir) return 0;
+  if(!tdir->stream(b)) {
+    out << "tools::rroot::find_dir :"
+        << " can't stream TDirectory."
+        << std::endl;
+    return 0;
+  }
+  return tdir;
+}
+
 inline bool read_key(std::ostream& a_out,
                      tools::rroot::key& a_key,
                      bool a_dump){
@@ -85,6 +121,17 @@ inline bool read_key(std::ostream& a_out,
     if(!p) {
       a_out << "tools::rroot::read_key :"
             << " TProfile streaming failed"
+            << std::endl;
+    } else {
+      if(a_dump) p->hprint(a_out);
+    }
+    delete p;
+
+  } else if(a_key.object_class()==tools::rroot::TProfile2D_cls()) {
+    tools::histo::p2d* p = tools::rroot::TProfile2D_stream(b);
+    if(!p) {
+      a_out << "tools::rroot::read_key :"
+            << " TProfile2D streaming failed"
             << std::endl;
     } else {
       if(a_dump) p->hprint(a_out);
@@ -202,6 +249,92 @@ inline bool read_key(std::ostream& a_out,
           << std::endl;
   }
   return true;
+}
+
+inline tools::histo::h1d* key_to_h1d(tools::rroot::key& a_key){
+  std::ostream& out = a_key.file().out();
+  if((a_key.object_class()!=tools::rroot::TH1D_cls())&&
+     (a_key.object_class()!=tools::rroot::TH1F_cls())
+  ) {
+    out << "tools::rroot::from(h1d) :"
+        << " key not a TH1D and not a TH1F."
+        << std::endl;
+    return 0;
+  }
+  unsigned int sz;
+  char* buf = a_key.get_object_buffer(sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::from(h1d) :"
+        << " can't get data buffer of " << a_key.object_name() << "."
+        << std::endl;
+    return 0;
+  }
+  tools::rroot::buffer b(out,a_key.file().byte_swap(),sz,buf,a_key.key_length(),false);
+  if(a_key.object_class()==tools::rroot::TH1D_cls()) {
+    return tools::rroot::TH1D_stream(b);
+  } else {
+    return tools::rroot::TH1F_stream(b);
+  }
+}
+
+inline tools::histo::h2d* key_to_h2d(tools::rroot::key& a_key){
+  std::ostream& out = a_key.file().out();
+  if(a_key.object_class()!=tools::rroot::TH2D_cls()) {
+    out << "tools::rroot::from(h1d) :"
+        << " key not a TH2D."
+        << std::endl;
+    return 0;
+  }
+  unsigned int sz;
+  char* buf = a_key.get_object_buffer(sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::from(h2d) :"
+        << " can't get data buffer of " << a_key.object_name() << "."
+        << std::endl;
+    return 0;
+  }
+  tools::rroot::buffer b(out,a_key.file().byte_swap(),sz,buf,a_key.key_length(),false);
+  return tools::rroot::TH2D_stream(b);
+}
+
+inline tools::histo::p1d* key_to_p1d(tools::rroot::key& a_key){
+  std::ostream& out = a_key.file().out();
+  if(a_key.object_class()!=tools::rroot::TProfile_cls()) {
+    out << "tools::rroot::from(p1d) :"
+        << " key not a TProfile."
+        << std::endl;
+    return 0;
+  }
+  unsigned int sz;
+  char* buf = a_key.get_object_buffer(sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::from(p1d) :"
+        << " can't get data buffer of " << a_key.object_name() << "."
+        << std::endl;
+    return 0;
+  }
+  tools::rroot::buffer b(out,a_key.file().byte_swap(),sz,buf,a_key.key_length(),false);
+  return tools::rroot::TProfile_stream(b);
+}
+
+inline tools::histo::p2d* key_to_p2d(tools::rroot::key& a_key){
+  std::ostream& out = a_key.file().out();
+  if(a_key.object_class()!=tools::rroot::TProfile2D_cls()) {
+    out << "tools::rroot::from(p2d) :"
+        << " key not a TProfile2D."
+        << std::endl;
+    return 0;
+  }
+  unsigned int sz;
+  char* buf = a_key.get_object_buffer(sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::from(p2d) :"
+        << " can't get data buffer of " << a_key.object_name() << "."
+        << std::endl;
+    return 0;
+  }
+  tools::rroot::buffer b(out,a_key.file().byte_swap(),sz,buf,a_key.key_length(),false);
+  return tools::rroot::TProfile2D_stream(b);
 }
 
 inline void read(std::ostream& a_out,

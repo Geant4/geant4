@@ -22,21 +22,24 @@ public:
 public:
   virtual TH bin_error(int) const = 0; //for print
 public:
-  void update_fast_getters(){}
-
   // Partition :
   int coord_to_index(TC aCoord) const {
     return axis().coord_to_index(aCoord);
   }
   TC mean() const {
-    TC value;
-    parent::get_ith_axis_mean(AxisX,value); //can return false.
-    return value;
+    //TC value;
+    //parent::get_ith_axis_mean(AxisX,value); //can return false.
+    //return value;
+    if(parent::m_in_range_Sw==0) return 0;
+    return parent::m_in_range_Sxw[0]/parent::m_in_range_Sw;
   }
   TC rms() const {
-    TC value;
-    parent::get_ith_axis_rms(AxisX,value); //can return false.
-    return value;
+    //TC value;
+    //parent::get_ith_axis_rms(AxisX,value); //can return false.
+    //return value;
+    if(parent::m_in_range_Sw==0) return 0;
+    TC _mean = parent::m_in_range_Sxw[0]/parent::m_in_range_Sw;
+    return ::sqrt(::fabs((parent::m_in_range_Sx2w[0] / parent::m_in_range_Sw) - _mean * _mean));
   }
 
   // bins :
@@ -143,7 +146,7 @@ public:
       << std::endl;
   }
 protected:
-  b1(const std::string& a_title,bn_t aXnumber,TC aXmin,TC aXmax){
+  b1(const std::string& a_title,bn_t aXnumber,TC aXmin,TC aXmax) {
     parent::m_title = a_title;
     std::vector<bn_t> nbins;
     nbins.push_back(aXnumber);
@@ -162,15 +165,8 @@ protected:
 
   virtual ~b1(){}
 protected:
-  b1(const b1& a_from): parent(a_from) {
-    update_fast_getters();
-  }
-  b1& operator=(const b1& a_from) {
-    parent::operator=(a_from);
-    update_fast_getters();
-    return *this;
-  }
-
+  b1(const b1& a_from):parent(a_from){}
+  b1& operator=(const b1& a_from) {parent::operator=(a_from);return *this;}
 public:
   bool configure(bn_t aXnumber,TC aXmin,TC aXmax){
     std::vector<bn_t> nbins;
@@ -194,7 +190,6 @@ protected:
     a_offset = ibin;
     return true;
   }
-
 };
 
 }}

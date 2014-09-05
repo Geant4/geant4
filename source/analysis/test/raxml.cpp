@@ -6,11 +6,11 @@
 // for example to read file produced by :
 //   inlib/example/cpp/tools_test_waxml.
 
-#include <tools/args>
 #include <tools/raxml>
+#include <tools/ntuple_binding>
 
 //#include <tools/gzip>
-
+#include <tools/args>
 #include <iostream>
 
 int main(int argc,char** argv) {
@@ -68,6 +68,50 @@ int main(int argc,char** argv) {
       std::cout << "---------------------------------" << std::endl;
       std::cout << "ntuple : title " << nt->title() << std::endl;
       std::cout << "ntuple : rows " << nt->rows() << std::endl;
+     {const std::vector<tools::aida::base_col*>& cols = nt->cols();
+      std::vector<tools::aida::base_col*>::const_iterator itc;
+      for(itc=cols.begin();itc!=cols.end();++itc) {
+	tools::aida::aida_base_col* acol = tools::safe_cast<tools::aida::base_col,tools::aida::aida_base_col>(*(*itc));
+        if(acol) {
+          std::cout << "ntuple : col name=" << (*itc)->name() << ", aida_type=" << acol->aida_type() << std::endl;
+        } else {
+          std::cout << "ntuple : col name=" << (*itc)->name() << std::endl;
+        }
+      }}
+      //if from inlib/examples/cpp/waxml out.aida file.
+      tools::aida::aida_col<double>* col = nt->find_column<double>("rgauss");
+      if(col) {
+        nt->start();
+        for(unsigned int row=0;row<5;row++) {
+          if(!nt->next()) break;
+          double v;
+          if(!col->get_entry(v)) {}
+          std::cout << " " << v << std::endl;
+        }
+      }
+
+      ///////////////////////////////////////////////////////
+      /// read by using variable column binding : ///////////
+      ///////////////////////////////////////////////////////
+     {tools::ntuple_binding nbd;
+      double rgauss;
+      nbd.add_column("rgauss",rgauss);
+      if(!nt->set_binding(std::cout,nbd)) {
+        std::cout << "set ntuple binding failed." << std::endl;
+        return EXIT_FAILURE;
+      }
+      tools::histo::h1d h("rgauss",100,-2,2);
+      nt->start();
+      while(nt->next()){
+        if(!nt->get_row()) {
+          std::cout << "get_row() failed." << std::endl;
+          return EXIT_FAILURE;
+        }
+        //std::cout << energy << std::endl;
+        h.fill(rgauss);
+      }
+      h.hprint(std::cout);}
+
     }
   }}
 

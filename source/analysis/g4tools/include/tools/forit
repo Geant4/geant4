@@ -12,6 +12,10 @@
   for(std::vector< a__T >::iterator (a__it) = (a__v).begin();\
       (a__it)!=(a__v).end();++(a__it))
 
+#define tools_typename_vforcit(a__T,a__v,a__it_t,a__it) \
+  typedef typename std::vector< a__T >::const_iterator a__it_t;\
+  for(a__it_t (a__it) = (a__v).begin();(a__it)!=(a__v).end();++(a__it))
+
 #define tools_sforcit(a__s,a__it) \
   for(std::string::const_iterator (a__it) = (a__s).begin();\
       (a__it)!=(a__s).end();++(a__it))

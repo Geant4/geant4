@@ -74,14 +74,13 @@ public:
   bool set_title(const std::string& a_title){parent::m_title = a_title;return true;}
   dim_t dimension() const {return parent::m_dimension;}
 
-  TN entries() const { return parent::get_entries();}
-  TN all_entries() const {
-    TN number = 0;
-    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
-      number += parent::m_bin_entries[ibin];
-    }
-    return number;
+  TN entries() const {
+    return parent::m_in_range_entries; //not set if reading a TH from a ROOT file.
   }
+  TN all_entries() const {
+    return parent::m_all_entries; //works also is reading histo from a ROOT file.
+  }
+/*
   TN extra_entries() const {
     TN number = 0;
     for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
@@ -91,6 +90,7 @@ public:
     }
     return number;
   }
+*/
   TW equivalent_bin_entries() const {
     TW sw = 0;
     TW sw2 = 0;
@@ -103,7 +103,6 @@ public:
     if(sw2==0) return 0;
     return (sw * sw)/sw2;
   }
-  
   TH sum_bin_heights() const {
     TH sh = 0;
     for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
@@ -113,7 +112,6 @@ public:
     }
     return sh;
   }
-
   TH sum_all_bin_heights() const {
     TH sh = 0;
     for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
@@ -165,7 +163,6 @@ public:
     }
     return value;
   }
-
 protected:
   enum {AxisX=0,AxisY=1,AxisZ=2};
 
@@ -183,6 +180,12 @@ protected:
     parent::m_bin_number = 0;
     parent::m_dimension = 0;
     parent::m_annotations.clear();
+    parent::m_all_entries = 0;
+    parent::m_in_range_entries = 0;
+    parent::m_in_range_Sw = 0;
+    parent::m_in_range_Sw2 = 0;
+    parent::m_in_range_Sxw.resize(a_dim,0);
+    parent::m_in_range_Sx2w.resize(a_dim,0);
     
     // Some checks :
     if(!a_dim) return false;
@@ -218,6 +221,12 @@ protected:
     parent::m_bin_number = 0;
     parent::m_dimension = 0;
     parent::m_annotations.clear();
+    parent::m_all_entries = 0;
+    parent::m_in_range_entries = 0;
+    parent::m_in_range_Sw = 0;
+    parent::m_in_range_Sw2 = 0;
+    parent::m_in_range_Sxw.resize(a_dim,0);
+    parent::m_in_range_Sx2w.resize(a_dim,0);
 
     // Some checks :
     if(!a_dim) return false;
@@ -249,6 +258,7 @@ protected:
       }
     }
     //profile not done here.
+    parent::reset_fast_getters();
   }
 
 protected:
@@ -328,6 +338,7 @@ protected:
         parent::m_bin_Sx2w[ibin][iaxis] += a_histo.m_bin_Sx2w[ibin][iaxis];
       }
     }
+    parent::update_fast_getters();
   }
 
   void base_subtract(const base_histo& a_histo) {
@@ -344,6 +355,7 @@ protected:
         parent::m_bin_Sx2w[ibin][iaxis] -= a_histo.m_bin_Sx2w[ibin][iaxis];
       }
     }
+    parent::update_fast_getters();
   }
 
   bool base_multiply(const base_histo& a_histo) {  
@@ -373,9 +385,11 @@ protected:
         parent::m_bin_Sx2w[ibin][iaxis] = x * x * sw;
       }
     }
+
+    parent::update_fast_getters();
     return true;
   }
-  
+
   bool base_divide(const base_histo& a_histo) {
     //ill-defined operation. We keep that because of the "ill-defined past".
   
@@ -414,6 +428,7 @@ protected:
         }
       }
     }
+    parent::update_fast_getters();
     return true;
   }
 
@@ -428,6 +443,7 @@ protected:
         parent::m_bin_Sx2w[ibin][iaxis] *= a_factor;
       }
     }
+    parent::update_fast_getters();
     return true;
   }
 

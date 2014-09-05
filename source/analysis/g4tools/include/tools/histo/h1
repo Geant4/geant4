@@ -34,11 +34,7 @@ public:
   }
 
 public:
-  bool multiply(TW a_factor){
-    if(!parent::base_multiply(a_factor)) return false;
-    parent::update_fast_getters();
-    return true;
-  }
+  bool multiply(TW a_factor){return parent::base_multiply(a_factor);}
   bool scale(TW a_factor) {return multiply(a_factor);}
 
   void copy_from_data(const hd_t& a_from) {parent::base_from_data(a_from);}
@@ -46,7 +42,6 @@ public:
 
   bool reset() {
     parent::base_reset();
-    parent::update_fast_getters();
     return true;
   }
 
@@ -65,30 +60,39 @@ public:
     TC x2w = aX * xw;
     parent::m_bin_Sxw[offset][0] += xw;
     parent::m_bin_Sx2w[offset][0] += x2w;
+
+    bool inRange = true;
+    if(ibin==0) inRange = false;
+    else if(ibin==(parent::m_axes[0].m_number_of_bins+1)) inRange = false;
+
+    parent::m_all_entries++;
+    if(inRange) {
+      parent::m_in_range_entries++;
+      parent::m_in_range_Sw += aWeight;
+      parent::m_in_range_Sw2 += aWeight*aWeight;
+
+      parent::m_in_range_Sxw[0] += xw;
+      parent::m_in_range_Sx2w[0] += x2w;
+    }
+
     return true;
   }
 
   bool add(const h1& a_histo){
     parent::base_add(a_histo);
-    parent::update_fast_getters();
     return true;
   }
   bool subtract(const h1& a_histo){
     parent::base_subtract(a_histo);
-    parent::update_fast_getters();
     return true;
   }
 
   bool multiply(const h1& a_histo) {  
-    if(!parent::base_multiply(a_histo)) return false;
-    parent::update_fast_getters();
-    return true;
+    return parent::base_multiply(a_histo);
   }
   
   bool divide(const h1& a_histo) {
-    if(!parent::base_divide(a_histo)) return false;
-    parent::update_fast_getters();
-    return true;
+    return parent::base_divide(a_histo);
   }
 
   bool gather_bins(unsigned int a_factor) { //for exa 2,3.
@@ -163,7 +167,7 @@ public:
 
   virtual ~h1(){}
 public:
-  h1(const h1& a_from): parent(a_from){}
+  h1(const h1& a_from):parent(a_from){}
   h1& operator=(const h1& a_from){
     parent::operator=(a_from);
     return *this;

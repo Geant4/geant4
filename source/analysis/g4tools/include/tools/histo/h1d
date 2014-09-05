@@ -18,6 +18,7 @@ public:
     static const std::string s_v("tools::histo::h1d");
     return s_v;
   }
+  const std::string& s_cls() const {return s_class();}
 public:
   h1d(const std::string& a_title,unsigned int aXnumber,double aXmin,double aXmax)
   :parent(a_title,aXnumber,aXmin,aXmax){}
@@ -27,7 +28,7 @@ public:
 
   virtual ~h1d(){}
 public:
-  h1d(const h1d& a_from): parent(a_from){}
+  h1d(const h1d& a_from):parent(a_from){}
   h1d& operator=(const h1d& a_from){
     parent::operator=(a_from);
     return *this;

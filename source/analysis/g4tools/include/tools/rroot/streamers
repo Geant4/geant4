@@ -9,6 +9,8 @@
 #include "directory"
 #include "graph"
 #include "clss"
+#include "info"
+#include "dummy"
 
 #include "../sout"
 #include "../vmanip"
@@ -20,11 +22,11 @@
 #include "../histo/h2d"
 //#include "../histo/h3d"
 #include "../histo/p1d"
-//#include "../histo/p2d"
+#include "../histo/p2d"
 
 #include <list>
 #include <cmath> //::log10, ::fabs.
-#include "../rtausmed"
+//#include "../rtausmed"
 
 namespace tools {
 namespace rroot {
@@ -68,9 +70,41 @@ inline bool AttAxis_stream(buffer& a_buffer){
 
 class dummy_fac : public virtual ifac {
 public: //ifac
-  virtual iro* create(const std::string& a_class,const args&) {
-    if(a_class=="TGraph") { //for TH_read_1D/List.
+  virtual iro* create(const std::string& a_class,const args& a_args) {
+    if(tools::rcmp(a_class,"TGraph")) { //for TH_read_1D/List.
       return new graph();
+
+    // for read_sinfos() :
+    } else if(tools::rcmp(a_class,"TStreamerInfo")) {
+      return new StreamerInfo(*this);
+    } else if(tools::rcmp(a_class,"TObjArray")) {
+      std::string* sc = ifac::arg_class(a_args);
+      if(sc) {
+        if((*sc)==streamer_element::s_class()){
+          return new ObjArray<streamer_element>(*this,true);
+        } else {
+          m_out << "tools::rroot::dummy_fac::create :"
+                << " Can't create TObjArray of " << *sc << "."
+                << std::endl;
+          return 0;
+        }
+      } else {
+        return new iros(*this,true);
+      }
+
+    } else if(tools::rcmp(a_class,"TStreamerBase")
+            ||tools::rcmp(a_class,"TStreamerBasicType")
+            ||tools::rcmp(a_class,"TStreamerBasicPointer")
+            ||tools::rcmp(a_class,"TStreamerObjectAny")
+            ||tools::rcmp(a_class,"TStreamerObject")
+            ||tools::rcmp(a_class,"TStreamerObjectPointer")
+            ||tools::rcmp(a_class,"TStreamerString")
+            ||tools::rcmp(a_class,"TStreamerSTL")
+            ||tools::rcmp(a_class,"TStreamerLoop")
+            ||tools::rcmp(a_class,"TList")
+             ) {
+      return new dummy_streamer_element();
+
     } else {
       m_out << "tools::rroot::dummy_fac::create :"
             << " dummy. Can't create object of class " << sout(a_class) << "."
@@ -157,9 +191,12 @@ inline bool null_epsil(double a_1,double a_2,double a_prec = -5) {
 }
 
 inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
-                       double& a_fEntries,double& a_fSw){
-    a_fEntries = 0;
-    a_fSw = 0;
+                       double& a_entries,double& a_Sw,double& a_Sw2,double& a_Sxw,double& a_Sx2w){
+    a_entries = 0;
+    a_Sw = 0;
+    a_Sw2 = 0;
+    a_Sxw = 0;
+    a_Sx2w = 0;
 
     unsigned int s, c;
     short vers;
@@ -207,20 +244,17 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
     short barWidth;
     if(!a_buffer.read(barWidth)) return false;
 
-    if(!a_buffer.read(a_fEntries)) return false;
+    if(!a_buffer.read(a_entries)) return false;
 
-    if(!a_buffer.read(a_fSw)) return false; //fTsumw
+    if(!a_buffer.read(a_Sw)) return false; //fTsumw
     //printf("debug : BatchLab::Rio::TH::streamTH1 : \"%s\" %g %g\n",
-      //a_data.m_title.c_str(),fEntries,fSw);
+    //       a_data.m_title.c_str(),fEntries,fSw);
 
-    double sw2;
-    if(!a_buffer.read(sw2)) return false;
+    if(!a_buffer.read(a_Sw2)) return false;
 
-    double xSxw;
-    if(!a_buffer.read(xSxw)) return false;
+    if(!a_buffer.read(a_Sxw)) return false;
 
-    double xSx2w;
-    if(!a_buffer.read(xSx2w)) return false;
+    if(!a_buffer.read(a_Sx2w)) return false;
 
     double max;
     if(!a_buffer.read(max)) return false;
@@ -262,6 +296,12 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
       if(!dummy_array_stream<double>(a_buffer,BufferSize)) return false;
     }
 
+    if(vers>=7) {
+      //EBinErrorOpt  fBinStatErrOpt;
+      int dummy;
+      if(!a_buffer.read(dummy)) return false;
+    }
+
     // Add two for outflows.
     if(a_data.m_dimension==1) {
       a_data.m_bin_number = a_data.m_axes[0].m_number_of_bins + 2;
@@ -286,7 +326,8 @@ inline bool TH_read_1D(buffer& a_buffer,hd_data& a_data,
 
 
 inline bool TH_read_2D(buffer& a_buffer,hd_data& a_data,
-                       double& a_fEntries,double& a_fSw){
+                       double& a_entries,double& a_Sw,double& a_Sw2,
+                       double& a_Sxw,double& a_Sx2w,double& a_Syw,double& a_Sy2w){
     unsigned int s, c;
     short v;
     if(!a_buffer.read_version(v,s,c)) return false;
@@ -295,14 +336,17 @@ inline bool TH_read_2D(buffer& a_buffer,hd_data& a_data,
  
     // Version 3 streaming (ROOT/v3-00-6).
 
-    if(!TH_read_1D(a_buffer,a_data,a_fEntries,a_fSw)) return false;
+    if(!TH_read_1D(a_buffer,a_data,a_entries,a_Sw,a_Sw2,a_Sxw,a_Sx2w)) return false;
+    // the upper set :
+    //data.m_title
+    //data.m_bin_number
+    //data.m_axes
+    //data.m_bin_Sw2
 
     double ScaleFactor;
     if(!a_buffer.read(ScaleFactor)) return false;
-    double Tsumwy;
-    if(!a_buffer.read(Tsumwy)) return false;
-    double Tsumwy2;
-    if(!a_buffer.read(Tsumwy2)) return false;
+    if(!a_buffer.read(a_Syw)) return false;
+    if(!a_buffer.read(a_Sy2w)) return false;
     double Tsumwxy;
     if(!a_buffer.read(Tsumwxy)) return false;
   
@@ -311,7 +355,7 @@ inline bool TH_read_2D(buffer& a_buffer,hd_data& a_data,
     return true;
 }
 
-inline tools::histo::h1d* TH1F_stream(buffer& a_buffer,bool a_profile = false){
+inline tools::histo::h1d* TH1F_stream(buffer& a_buffer){
     unsigned int s, c;
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
@@ -328,102 +372,49 @@ inline tools::histo::h1d* TH1F_stream(buffer& a_buffer,bool a_profile = false){
     //data.m_ints.resize(data.m_dimension,0);
     data.m_axes.resize(1);
 
-    double fEntries;
-    double fSw;
-    if(!TH_read_1D(a_buffer,data,fEntries,fSw)) return 0;
+    double fEntries; //in range + outflow.
+    double fSw;      //in range.
+    double fSw2;     //in range.
+    double fSxw;     //in range.
+    double fSx2w;    //in range.
+    if(!TH_read_1D(a_buffer,data,fEntries,fSw,fSw2,fSxw,fSx2w)) return 0;
+    // the upper set :
+    //data.m_title
+    //data.m_bin_number
+    //data.m_axes
+    //data.m_bin_Sw2
 
     std::vector<float> bins; //fArray TArrayF
     if(!Array_stream<float>(a_buffer,bins)) return 0; 
+    if(!a_buffer.check_byte_count(s,c,"TH1F")) return 0;
 
     unsigned int binn = data.m_bin_number;
     //printf("debug : BatchLab::Rio::TH1F::stream : histo bins %d\n",binn);
     data.m_bin_Sw.resize(binn,0);
-    double asw = 0;
    {for(unsigned int index=0;index<binn;index++){
-      double h = double(bins[index]);
-      data.m_bin_Sw[index] = h;
-      asw += h;
-     }}
-    if(!a_profile) {
-      double sw = data.get_Sw();
-      if(!null_epsil(sw,fSw)) {
-        a_buffer.out() << "tools::rroot::TH1F::stream : "
-            << " WARNING : inconsistent total weight" 
-            << " for histo with title " << sout(data.m_title) << " :"
-            << std::endl
-            << " read fSw is " << fSw  
-            << " whilst sum of in-range bins weight is " << sw
-            << " (diff is " << (sw-fSw) << ")."
-            << std::endl;
-      }
-    }
-
-    // Fill Sxw and Sx2w by using in range bins :
-    std::vector<double> empty;
-    empty.resize(1,0);
-    data.m_bin_Sxw.resize(binn,empty);
-    data.m_bin_Sx2w.resize(binn,empty);    
-    std::vector<int> is(data.m_dimension);
-   {for(unsigned int index=0;index<binn;index++){
-      if(!histo::is_out(data.m_axes,index)) {
-        float height = bins[index];
-        histo::get_indices(data.m_axes,index,is);
-        for(unsigned int iaxis=0;iaxis<data.m_dimension;iaxis++) {
-          double x = data.m_axes[iaxis].bin_center(is[iaxis]); 
-          data.m_bin_Sxw[index][iaxis] = x * height;
-          data.m_bin_Sx2w[index][iaxis] = x * x * height;
-        }
-      }
+      data.m_bin_Sw[index] = double(bins[index]);
     }}
 
-    //ROOT does not store the number of entries per bin.
-    // We have the global number of entries and weight ; with that
-    // we do our best....
     data.m_bin_entries.resize(binn,0);
-    if(!a_profile && asw) {
-      for(unsigned int index=0;index<binn;index++){
-        float height = bins[index];
-        int number = (int)((fEntries * height) / asw);
-        if(number<0) {
-        } else {
-          data.m_bin_entries[index] = number;
-        }
-      }
-      int allEntries = data.get_all_entries();
-      if(allEntries<int(fEntries)) { //FIXME
-        //Correct some bins randomly (beurk, do you have a better idea ?) :
-        int diff = int(fEntries)-allEntries;
-        unsigned int nx = data.m_axes[0].m_number_of_bins;
-        rtausmed r;
-        for(int i=0;i<diff;i++) {
-          // ibin in [1,nx-1]
-          int ibin = int((nx-1) * r.shoot()) + 1;
-          int offset = ibin;
-          data.m_bin_entries[offset]++;
-        }
-      } else if(allEntries>int(fEntries)) { //FIXME
-        a_buffer.out() << "tools::rroot::TH1F::stream : "
-            << " WARNING : can't reemulate number of entries per bin " 
-            << " for histo with title " << sout(data.m_title) << " :"
-            << std::endl
-            << " read fEntries (a double) is " << fEntries  
-            << " whilst corrected bin entries is " << allEntries
-            << " (diff is " << (allEntries-int(fEntries)) << ")."
-            << std::endl;
-      } else {
-      }
-    }
-
-    if(!a_buffer.check_byte_count(s,c,"TH1F")) return 0;
+   {std::vector<double> empty;
+    empty.resize(1,0);
+    data.m_bin_Sxw.resize(binn,empty);
+    data.m_bin_Sx2w.resize(binn,empty);}
+    data.m_all_entries = fEntries;
+    data.m_in_range_entries = 0;
+    data.m_in_range_Sw = fSw;
+    data.m_in_range_Sw2 = fSw2;
+    data.m_in_range_Sxw.resize(1,0);
+    data.m_in_range_Sx2w.resize(1,0);
+    data.m_in_range_Sxw[0] = fSxw;
+    data.m_in_range_Sx2w[0] = fSx2w;
 
     tools::histo::h1d* h = new tools::histo::h1d("",10,0,1);
     h->copy_from_data(data);
-    h->update_fast_getters();
-    // We have now a valid inlib histogram.
     return h; //give ownership to caller.
 }
 
-inline tools::histo::h1d* TH1D_stream(buffer& a_buffer,bool a_profile = false){
+inline tools::histo::h1d* TH1D_stream(buffer& a_buffer){
     unsigned int s, c;
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
@@ -436,106 +427,48 @@ inline tools::histo::h1d* TH1D_stream(buffer& a_buffer,bool a_profile = false){
     hd_data data;
 
     data.m_dimension = 1;
-    //data.m_coords.resize(data.m_dimension,0);
-    //data.m_ints.resize(data.m_dimension,0);
     data.m_axes.resize(1);
 
-    double fEntries;
-    double fSw;
-    if(!TH_read_1D(a_buffer,data,fEntries,fSw)) return 0;
+    double fEntries; //in range + outflow.
+    double fSw;      //in range.
+    double fSw2;     //in range.
+    double fSxw;     //in range.
+    double fSx2w;    //in range.
+    if(!TH_read_1D(a_buffer,data,fEntries,fSw,fSw2,fSxw,fSx2w)) return 0;
+    // the upper set :
+    //data.m_title
+    //data.m_bin_number
+    //data.m_axes
+    //data.m_bin_Sw2
 
     std::vector<double> bins; //fArray TArrayD
     if(!Array_stream<double>(a_buffer,bins)) return 0; 
+    if(!a_buffer.check_byte_count(s,c,"TH1D")) return 0;
 
     unsigned int binn = data.m_bin_number;
-    //printf("debug : BatchLab::Rio::TH1D::stream : histo bins %d\n",binn);
-    data.m_bin_Sw.resize(binn,0);
-    double asw = 0;
-   {for(unsigned int index=0;index<binn;index++){
-      double h = bins[index];
-      data.m_bin_Sw[index] = h;
-      asw += h;
-    }}
-    if(!a_profile) {
-      double sw = data.get_Sw();
-      if(!null_epsil(sw,fSw)) {
-        a_buffer.out() << "tools::rroot::TH1D::stream : "
-            << " WARNING : inconsistent total weight" 
-            << " for histo with title " << sout(data.m_title) << " :"
-            << std::endl
-            << " read fSw is " << fSw  
-            << " whilst sum of in-range bins weight is " << sw
-            << " (diff is " << (sw-fSw) << ")."
-            << std::endl;
-      }
-    }
+    data.m_bin_Sw = bins;
 
-    // Fill Sxw and Sx2w by using in range bins :
-    std::vector<double> empty;
+    data.m_bin_entries.resize(binn,0);
+   {std::vector<double> empty;
     empty.resize(1,0);
     data.m_bin_Sxw.resize(binn,empty);
-    data.m_bin_Sx2w.resize(binn,empty);
-    std::vector<int> is(data.m_dimension);
-    for(unsigned int index=0;index<binn;index++){
-      if(!histo::is_out(data.m_axes,index)) {
-        double height = bins[index];
-        histo::get_indices(data.m_axes,index,is);
-        for(unsigned int iaxis=0;iaxis<data.m_dimension;iaxis++) {
-          double x = data.m_axes[iaxis].bin_center(is[iaxis]); 
-          data.m_bin_Sxw[index][iaxis] = x * height;
-          data.m_bin_Sx2w[index][iaxis] = x * x * height;
-        }
-      }
-    }
+    data.m_bin_Sx2w.resize(binn,empty);}
 
-    //ROOT does not store the number of entries per bin.
-    // We have the global number of entries and weight ; with that
-    // we do our best....
-    data.m_bin_entries.resize(binn,0);
-    if(!a_profile && asw) {
-      for(unsigned int index=0;index<binn;index++){
-        double height = bins[index];
-        int number = (int)((fEntries * height) / asw);        
-        if(number<0) {
-        } else {
-          data.m_bin_entries[index] = number;
-        }
-      }
-      int allEntries = data.get_all_entries();
-      if(allEntries<int(fEntries)) { //FIXME
-        //Correct some bins randomly (beurk, do you have a better idea ?) :
-        int diff = int(fEntries)-allEntries;
-        unsigned int nx = data.m_axes[0].m_number_of_bins;
-        rtausmed r;
-        for(int i=0;i<diff;i++) {
-          int ibin = int((nx-1) * r.shoot()) + 1;
-          int offset = ibin;
-          data.m_bin_entries[offset]++;
-        }
-      } else if(allEntries>int(fEntries)) { //FIXME
-        a_buffer.out() << "tools::rroot::TH1D::stream : "
-            << " WARNING : can't reemulate number of entries per bin " 
-            << " for histo with title " << sout(data.m_title) << " :"
-            << std::endl
-            << " read fEntries (a double) is " << fEntries  
-            << " whilst corrected bin entries is " << allEntries
-            << " (diff is " << (allEntries-int(fEntries)) << ")."
-            << std::endl;
-      } else {
-      }
-    }
-
-    if(!a_buffer.check_byte_count(s,c,"TH1D")) return 0;
+    data.m_all_entries = fEntries;
+    data.m_in_range_entries = 0;
+    data.m_in_range_Sw = fSw;
+    data.m_in_range_Sw2 = fSw2;
+    data.m_in_range_Sxw.resize(1,0);
+    data.m_in_range_Sx2w.resize(1,0);
+    data.m_in_range_Sxw[0] = fSxw;
+    data.m_in_range_Sx2w[0] = fSx2w;
 
     tools::histo::h1d* h = new tools::histo::h1d("",10,0,1);
     h->copy_from_data(data);
-    h->update_fast_getters();
-    // We have now a valid inlib histogram.
-
     return h;
 }
 
-inline tools::histo::h2d* TH2F_stream(buffer& a_buffer,bool a_profile = false){
+inline tools::histo::h2d* TH2F_stream(buffer& a_buffer){
     unsigned int s, c;
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
@@ -552,104 +485,54 @@ inline tools::histo::h2d* TH2F_stream(buffer& a_buffer,bool a_profile = false){
     //data.m_ints.resize(data.m_dimension,0);
     data.m_axes.resize(2);
 
-    double fEntries;
-    double fSw;
-    if(!TH_read_2D(a_buffer,data,fEntries,fSw)) return 0;
+    double fEntries; //in range + outflow.
+    double fSw;      //in range.
+    double fSw2;     //in range.
+    double fSxw;     //in range.
+    double fSx2w;    //in range.
+    double fSyw;     //in range.
+    double fSy2w;    //in range.
+    if(!TH_read_2D(a_buffer,data,fEntries,fSw,fSw2,fSxw,fSx2w,fSyw,fSy2w)) return 0;
+    // the upper set :
+    //data.m_title
+    //data.m_bin_number
+    //data.m_axes
+    //data.m_bin_Sw2
 
     std::vector<float> bins; //fArray TArrayF
     if(!Array_stream<float>(a_buffer,bins)) return 0; 
+    if(!a_buffer.check_byte_count(s,c,"TH2F")) return 0;
 
     //printf("debug : BatchLab::Rio::TH2F::stream : histo bins %d\n",n);
     unsigned int binn = data.m_bin_number;
     data.m_bin_Sw.resize(binn,0);
-    double asw = 0;
    {for(unsigned int index=0;index<binn;index++){
-      double h = double(bins[index]);
-      data.m_bin_Sw[index] = h;
-      asw += h;
+      data.m_bin_Sw[index] = double(bins[index]);
     }}
-    if(!a_profile) {
-      double sw = data.get_Sw();
-      if(!null_epsil(sw,fSw)) {
-        a_buffer.out() << "tools::rroot::TH2F::stream : "
-            << " WARNING : inconsistent total weight" 
-            << " for histo with title " << sout(data.m_title) << " :"
-            << std::endl
-            << " read fSw is " << fSw  
-            << " whilst sum of in-range bins weight is " << sw
-            << " (diff is " << (sw-fSw) << ")."
-            << std::endl;
-      }
-    }
 
-    // Fill Sxw and Sx2w by using in range bins :
-    std::vector<double> empty;
+    data.m_bin_entries.resize(binn,0);
+   {std::vector<double> empty;
     empty.resize(2,0);
     data.m_bin_Sxw.resize(binn,empty);
-    data.m_bin_Sx2w.resize(binn,empty);
-    std::vector<int> is(data.m_dimension);
-    for(unsigned int index=0;index<binn;index++){
-      if(!histo::is_out(data.m_axes,index)) {
-        float height = bins[index];
-        histo::get_indices(data.m_axes,index,is);
-        for(unsigned int iaxis=0;iaxis<data.m_dimension;iaxis++) {
-          double x = data.m_axes[iaxis].bin_center(is[iaxis]); 
-          data.m_bin_Sxw[index][iaxis] = x * height;
-          data.m_bin_Sx2w[index][iaxis] = x * x * height;
-        }
-      }
-    }
+    data.m_bin_Sx2w.resize(binn,empty);}
 
-    //ROOT does not store the number of entries per bin.
-    // We have the global number of entries and weight ; with that
-    // we do our best....
-    data.m_bin_entries.resize(binn,0);
-    if(!a_profile && asw) {
-      for(unsigned int index=0;index<binn;index++){
-        float height = bins[index];
-        int number = (int)((fEntries * height) / asw);
-        if(number<0) {
-        } else {
-          data.m_bin_entries[index] = number;
-        } 
-      }
-      int allEntries = data.get_all_entries();
-      if(allEntries<(int)fEntries) { //FIXME
-        //Correct some bins randomly (beurk, do you have a better idea ?) :
-        int diff = int(fEntries-allEntries);
-        unsigned int nx = data.m_axes[0].m_number_of_bins;
-        unsigned int ny = data.m_axes[1].m_number_of_bins;
-        rtausmed r;
-        for(int i=0;i<diff;i++) {
-          int ibin = int((nx-1) * r.shoot()) + 1;
-          int jbin = int((ny-1) * r.shoot()) + 1;
-          int offset = ibin + jbin * data.m_axes[1].m_offset;
-          data.m_bin_entries[offset]++;
-        }
-      } else if(allEntries>int(fEntries)) { //FIXME
-        a_buffer.out() << "tools::rroot::TH2F::stream : "
-            << " WARNING : can't reemulate number of entries per bin " 
-            << " for histo with title " << sout(data.m_title) << " :"
-            << std::endl
-            << " read fEntries (a double) is " << fEntries  
-            << " whilst corrected bin entries is " << allEntries
-            << " (diff is " << (allEntries-int(fEntries)) << ")."
-            << std::endl;
-      } else {
-      }
-    }
+    data.m_all_entries = fEntries;
+    data.m_in_range_entries = 0;
+    data.m_in_range_Sw = fSw;
+    data.m_in_range_Sw2 = fSw2;
+    data.m_in_range_Sxw.resize(2,0);
+    data.m_in_range_Sx2w.resize(2,0);
+    data.m_in_range_Sxw[0] = fSxw;
+    data.m_in_range_Sx2w[0] = fSx2w;
+    data.m_in_range_Sxw[1] = fSyw;
+    data.m_in_range_Sx2w[1] = fSy2w;
     
-    if(!a_buffer.check_byte_count(s,c,"TH2F")) return 0;
-
     tools::histo::h2d* h = new tools::histo::h2d("",10,0,1,10,0,1);
     h->copy_from_data(data);
-    h->update_fast_getters();
-    // We have now a valid inlib histogram.
-
     return h;
 }
 
-inline tools::histo::h2d* TH2D_stream(buffer& a_buffer,bool a_profile = false){
+inline tools::histo::h2d* TH2D_stream(buffer& a_buffer){
     unsigned int s, c;
     short v;
     if(!a_buffer.read_version(v,s,c)) return 0;
@@ -666,100 +549,46 @@ inline tools::histo::h2d* TH2D_stream(buffer& a_buffer,bool a_profile = false){
     //data.m_ints.resize(data.m_dimension,0);
     data.m_axes.resize(2);
 
-    double fEntries;
-    double fSw;
-    if(!TH_read_2D(a_buffer,data,fEntries,fSw)) return 0;
+    double fEntries; //in range + outflow.
+    double fSw;      //in range.
+    double fSw2;     //in range.
+    double fSxw;     //in range.
+    double fSx2w;    //in range.
+    double fSyw;     //in range.
+    double fSy2w;    //in range.
+    if(!TH_read_2D(a_buffer,data,fEntries,fSw,fSw2,fSxw,fSx2w,fSyw,fSy2w)) return 0;
+    // the upper set :
+    //data.m_title
+    //data.m_bin_number
+    //data.m_axes
+    //data.m_bin_Sw2
 
     std::vector<double> bins; //fArray TArrayD
     if(!Array_stream<double>(a_buffer,bins)) return 0; 
-
-    //printf("debug : BatchLab::Rio::TH2D::stream : histo bins %d\n",n);
-    unsigned int binn = data.m_bin_number;
-    data.m_bin_Sw.resize(binn,0);
-    double asw = 0;
-   {for(unsigned int index=0;index<binn;index++){
-      double h = bins[index];
-      data.m_bin_Sw[index] = h;
-      asw += h;
-     }}
-    if(!a_profile) {
-      double sw = data.get_Sw();
-      if(!null_epsil(sw,fSw)) {
-        a_buffer.out() << "tools::rroot::TH2D::stream : "
-            << " WARNING : inconsistent total weight" 
-            << " for histo with title " << sout(data.m_title) << " :"
-            << std::endl
-            << " read fSw is " << fSw  
-            << " whilst sum of in-range bins weight is " << sw
-            << " (diff is " << (sw-fSw) << ")."
-            << std::endl;
-      }
-    }
-
-    // Fill Sxw and Sx2w by using in range bins :
-    std::vector<double> empty;
-    empty.resize(2,0);
-    data.m_bin_Sxw.resize(binn,empty);
-    data.m_bin_Sx2w.resize(binn,empty);
-    std::vector<int> is(data.m_dimension);
-    for(unsigned int index=0;index<binn;index++){
-      if(!histo::is_out(data.m_axes,index)) {
-        double height = bins[index];
-        histo::get_indices(data.m_axes,index,is);
-        for(unsigned int iaxis=0;iaxis<data.m_dimension;iaxis++) {
-          double x = data.m_axes[iaxis].bin_center(is[iaxis]); 
-          data.m_bin_Sxw[index][iaxis] = x * height;
-          data.m_bin_Sx2w[index][iaxis] = x * x * height;
-        }
-      }
-    }
-
-    //ROOT does not store the number of entries per bin.
-    // We have the global number of entries and weight ; with that
-    // we do our best....
-    data.m_bin_entries.resize(binn,0);
-    if(!a_profile && asw) {
-      for(unsigned int index=0;index<binn;index++){
-        double height = bins[index];
-        int number = (int)((fEntries * height) / asw);
-        if(number<0) {
-        } else {
-          data.m_bin_entries[index] = number;
-        } 
-      }
-      int allEntries = data.get_all_entries();
-      if(allEntries<(int)fEntries) { //FIXME
-        //Correct some bins randomly (beurk, do you have a better idea ?) :
-        int diff = int(fEntries-allEntries);
-        unsigned int nx = data.m_axes[0].m_number_of_bins;
-        unsigned int ny = data.m_axes[1].m_number_of_bins;
-        rtausmed r;
-        for(int i=0;i<diff;i++) {
-          int ibin = int((nx-1) * r.shoot()) + 1;
-          int jbin = int((ny-1) * r.shoot()) + 1;
-          int offset = ibin + jbin * data.m_axes[1].m_offset;
-          data.m_bin_entries[offset]++;
-        }
-      } else if(allEntries>int(fEntries)) { //FIXME
-        a_buffer.out() << "tools::rroot::TH2D::stream : "
-            << " WARNING : can't reemulate number of entries per bin " 
-            << " for histo with title " << sout(data.m_title) << " :"
-            << std::endl
-            << " read fEntries (a double) is " << fEntries  
-            << " whilst corrected bin entries is " << allEntries
-            << " (diff is " << (allEntries-int(fEntries)) << ")."
-            << std::endl;
-      } else {
-      }
-    }
-    
     if(!a_buffer.check_byte_count(s,c,"TH2D")) return 0;
 
+    unsigned int binn = data.m_bin_number;
+    data.m_bin_Sw = bins;
+
+    data.m_bin_entries.resize(binn,0);
+   {std::vector<double> empty;
+    empty.resize(2,0);
+    data.m_bin_Sxw.resize(binn,empty);
+    data.m_bin_Sx2w.resize(binn,empty);}
+
+    data.m_all_entries = fEntries;
+    data.m_in_range_entries = 0;
+    data.m_in_range_Sw = fSw;
+    data.m_in_range_Sw2 = fSw2;
+    data.m_in_range_Sxw.resize(2,0);
+    data.m_in_range_Sx2w.resize(2,0);
+    data.m_in_range_Sxw[0] = fSxw;
+    data.m_in_range_Sx2w[0] = fSx2w;
+    data.m_in_range_Sxw[1] = fSyw;
+    data.m_in_range_Sx2w[1] = fSy2w;
+    
     tools::histo::h2d* h = new tools::histo::h2d("",10,0,1,10,0,1);
     h->copy_from_data(data);
-    h->update_fast_getters();
-    // We have now a valid inlib histogram.
-
     return h;
 }
 
@@ -775,15 +604,10 @@ inline tools::histo::p1d* TProfile_stream(buffer& a_buffer){
     //p1d::m_bin_Sv2w <---> TProfile::fSumw2
     //p1d::m_bin_Sw   <---> TProfile::fBinEntries
 
-
-    tools::histo::h1d* h = TH1D_stream(a_buffer,true);
+    tools::histo::h1d* h = TH1D_stream(a_buffer);
     if(!h) return 0;
 
     //NOTE : histo.m_bin_Sw <---> TH1D::TArrayD::fArray
-
-    //WARNING : should have a valid Rio::TH1D::fHistogram
-    //          being a tools::histo::h1d.
-    //          But the tools::histo::p1d does not inherit tools::histo::h1d.
 
     pd_data data(h->get_histo_data());
     delete h;
@@ -802,9 +626,13 @@ inline tools::histo::p1d* TProfile_stream(buffer& a_buffer){
       if(!a_buffer.read(sumwy)) return 0;
       double   sumwy2;
       if(!a_buffer.read(sumwy2)) return 0;
+    }
+    if(v>=5) {
       std::vector<double> bins_sumw2; //fBinSumw2 TArrayD
       if(!Array_stream<double>(a_buffer,bins_sumw2)) return 0;
     }
+
+    if(!a_buffer.check_byte_count(s,c,"TProfile")) return 0;
 
     data.m_is_profile = true;
     data.m_cut_v = true;
@@ -818,20 +646,83 @@ inline tools::histo::p1d* TProfile_stream(buffer& a_buffer){
     for(unsigned int index=0;index<binn;index++){
       double svw = data.m_bin_Sw[index];
       double sw = bins[index];
-      data.m_bin_entries[index] = (int)sw; //FIXME : ok for w = 1 only !
+    //data.m_bin_entries[index] = (int)sw; //FIXME : ok for w = 1 only !
       data.m_bin_Sw[index] = (double)sw;
       //FIXME : data.m_bin_Sxw
       //FIXME : data.m_bin_Sx2w
       data.m_bin_Svw[index] = svw;
-      data.m_bin_Sv2w[index] = 0; //FIXME
+    //data.m_bin_Sv2w[index] = 0; //FIXME
     }
-
-    if(!a_buffer.check_byte_count(s,c,"TProfile")) return 0;
 
     tools::histo::p1d* p = new tools::histo::p1d("",10,0,1);
     p->copy_from_data(data);
-    p->update_fast_getters();
     // We have now a valid tools::histo::p1d.
+    return p;
+}
+
+inline tools::histo::p2d* TProfile2D_stream(buffer& a_buffer){
+    unsigned int s, c;
+    short v;
+    if(!a_buffer.read_version(v,s,c)) return 0;
+
+    // Version 3 streaming (ROOT/v3-00-6).
+
+    //WARNING : the mapping tools::histo::p1d / TProfile is not obvious.
+    //p1d::m_bin_Svw  <---> TProfile::fArray
+    //p1d::m_bin_Sv2w <---> TProfile::fSumw2
+    //p1d::m_bin_Sw   <---> TProfile::fBinEntries
+
+    tools::histo::h2d* h = TH2D_stream(a_buffer);
+    if(!h) return 0;
+
+    //NOTE : histo.m_bin_Sw <---> TH2D::TArrayD::fArray
+
+    pd_data data(h->get_histo_data());
+    delete h;
+
+    std::vector<double> bins; //fBinEntries TArrayD
+    if(!Array_stream<double>(a_buffer,bins)) return 0;
+    int errorMode;
+    if(!a_buffer.read(errorMode)) return 0;
+    double zmin;
+    if(!a_buffer.read(zmin)) return 0;
+    double zmax;
+    if(!a_buffer.read(zmax)) return 0;
+
+    if(v>=5) {
+      double  sumwz;
+      if(!a_buffer.read(sumwz)) return 0;
+      double   sumwz2;
+      if(!a_buffer.read(sumwz2)) return 0;
+    }
+    if(v>=7) {
+      std::vector<double> bins_sumw2; //fBinSumw2 TArrayD
+      if(!Array_stream<double>(a_buffer,bins_sumw2)) return 0;
+    }
+    if(!a_buffer.check_byte_count(s,c,"TProfile2D")) return 0;
+
+    data.m_is_profile = true;
+    data.m_cut_v = true;
+    data.m_min_v = zmin;
+    data.m_max_v = zmax;
+
+    unsigned int binn = data.m_bin_number;
+    data.m_bin_Svw.resize(binn,0);
+    data.m_bin_Sv2w.resize(binn,0);
+
+    for(unsigned int index=0;index<binn;index++){
+      double svw = data.m_bin_Sw[index];
+      double sw = bins[index];
+    //data.m_bin_entries[index] = (int)sw; //FIXME : ok for w = 1 only !
+      data.m_bin_Sw[index] = (double)sw;
+      //FIXME : data.m_bin_Sxw
+      //FIXME : data.m_bin_Sx2w
+      data.m_bin_Svw[index] = svw;
+    //data.m_bin_Sv2w[index] = 0; //FIXME
+    }
+
+    tools::histo::p2d* p = new tools::histo::p2d("",10,0,1,10,0,1);
+    p->copy_from_data(data);
     return p;
 }
 
@@ -845,7 +736,7 @@ public:
   virtual ~TDirectory(){}
 protected:
   TDirectory(const TDirectory& a_from)
-  : tools::rroot::directory(a_from)
+  :tools::rroot::directory(a_from)
   {}
   TDirectory& operator=(const TDirectory&){return *this;}
 public:
@@ -956,6 +847,36 @@ inline void dump(std::ostream& a_out,
     }
   }}
 }
+
+inline bool read_sinfos(tools::rroot::ifile& a_file){
+  key& k = a_file.sinfos_key();
+  std::ostream& out = k.file().out();
+  if(k.object_class()!=tools::rroot::TList_cls()) {
+    out << "tools::rroot::read_sinfos :"
+        << " key not a TList."
+        << std::endl;
+    return false;
+  }
+  unsigned int sz;
+  char* buf = k.get_object_buffer(sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::read_sinfos :"
+        << " can't get data buffer of " << k.object_name() << "."
+        << std::endl;
+    return false;
+  }
+  tools::rroot::buffer b(out,k.file().byte_swap(),sz,buf,k.key_length(),false);
+  dummy_fac fac(out);
+  List infos(fac,true);
+  if(!infos.stream(b)) return false;
+  tools_vforcit(iro*,infos,it) {
+    StreamerInfo* info = tools::safe_cast<iro,StreamerInfo>(*(*it));
+    if(!info) return false;
+    info->out(out);
+  }
+  return true;
+}
+
 
 }}
 

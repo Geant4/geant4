@@ -16,6 +16,7 @@
 #include "typedefs"
 #include "scast"
 #include "forit"
+#include "ntuple_binding"
 
 #include <string>
 #include <vector>
@@ -39,6 +40,9 @@ public:
   virtual uint64 num_elems() const = 0;
   virtual bool add() = 0;
   virtual bool reset() = 0;
+  //binded column reading API :
+  virtual bool fetch_entry() const = 0;
+  virtual void set_user_variable(void*) = 0;
 protected:
   base_col(std::ostream& a_out,const std::string& a_name)
   :m_out(a_out)
@@ -197,7 +201,6 @@ public:
     }
     return status;
   }
-
 public:
   base_col* find_column(const std::string& a_name){
     return find_named<base_col>(m_cols,a_name);
@@ -312,12 +315,12 @@ public:
   virtual bool s_fill(const std::string&) = 0;
 public:
   aida_base_col(std::ostream& a_out,const std::string& a_name)
-  : base_col(a_out,a_name){}
+  :base_col(a_out,a_name){}
 public:
   virtual ~aida_base_col(){}
 public:
   aida_base_col(const aida_base_col& a_from)
-  : base_col(a_from)
+  :base_col(a_from)
   {}
   aida_base_col& operator=(const aida_base_col& a_from){
     base_col::operator=(a_from);
@@ -413,19 +416,24 @@ public:
     }
     return true;
   }
+
+  virtual void set_user_variable(void* a_user_var) {m_user_var = (T*)a_user_var;} //not owner.
 public:
   aida_col(std::ostream& a_out,const std::string& a_name,const T& a_def)
-  : aida_base_col(a_out,a_name)
+  :aida_base_col(a_out,a_name)
   ,m_default(a_def)
-  ,m_tmp(a_def){}
+  ,m_tmp(a_def)
+  ,m_user_var(0) //not owner
+  {}
 public:
   virtual ~aida_col(){}
 public:
   aida_col(const aida_col& a_from)
-  : aida_base_col(a_from)
+  :aida_base_col(a_from)
   ,m_data(a_from.m_data)
   ,m_default(a_from.m_default)
   ,m_tmp(a_from.m_tmp)
+  ,m_user_var(a_from.m_user_var)
   {}
   aida_col& operator=(const aida_col& a_from){
     aida_base_col::operator=(a_from);
@@ -433,6 +441,7 @@ public:
     m_data = a_from.m_data;
     m_default = a_from.m_default;
     m_tmp = a_from.m_tmp;
+    m_user_var = a_from.m_user_var;
     return *this;
   }
 public:
@@ -451,10 +460,26 @@ public:
     a_v = m_data[sz_t(m_index)];
     return true;
   }
+  virtual bool fetch_entry() const {
+    //NOTE : it is ok to have a NULL m_user_var.
+    if(m_index>=m_data.size()) {
+      m_out << s_class() << "::get_entry :"
+            << " bad index " << m_index
+            << ". Vec size is " << m_data.size() << "."
+            << "."
+            << std::endl;
+      if(m_user_var) *m_user_var = T();
+      return false;
+    }
+    typedef typename std::vector<T>::size_type sz_t;
+    if(m_user_var) *m_user_var = m_data[sz_t(m_index)];
+    return true;
+  }
 protected:
   std::vector<T> m_data;
   T m_default;
   T m_tmp;
+  T* m_user_var;
 };
 
 class ntuple : public base_ntu {
@@ -469,7 +494,7 @@ public:
   }
 public:
   ntuple(std::ostream& a_out,const std::string& a_title)
-  : base_ntu(a_out,a_title)
+  :base_ntu(a_out,a_title)
   {}
   virtual ~ntuple() {}
 public:
@@ -480,8 +505,7 @@ public:
   }
 public:
   template <class T>
-  aida_col<T>* create_col(const std::string& a_name,
-                                 const T& a_def = T()) {
+  aida_col<T>* create_col(const std::string& a_name,const T& a_def = T()) {
     if(find_named<base_col>(m_cols,a_name)) {
       m_out << s_class() << "::create_col :"
             << " a column with name " << sout(a_name) << " already exists."
@@ -505,6 +529,34 @@ public:
     if(!col) return 0;
     return safe_cast<base_col, aida_col<T> >(*col);
   }
+
+  bool get_row() const {
+    bool status = true;
+    tools_vforcit(base_col*,m_cols,it) {
+      if(!(*it)->fetch_entry()) status = false;
+    }
+    return status;
+  }
+
+  bool set_binding(std::ostream& a_out,const ntuple_binding& a_bd = ntuple_binding()) {
+    tools_vforcit(column_binding,a_bd.columns(),itb) {
+      bool found = false;
+      tools_vforcit(base_col*,m_cols,itc) {
+        if((*itc)->name()==(*itb).name()) {
+          (*itc)->set_user_variable((*itb).user_obj());
+          found = true;
+        }
+      }
+      if(!found) {
+        a_out << "tools::aida::ntuple :"
+              << " binding name " << sout((*itb).name()) << " does not match any ntuple column."
+              << std::endl;
+        return false;
+      }
+    }
+    return true;
+  }
+
 };
 
 ////////////////////////////////////////////////////////////
@@ -540,20 +592,38 @@ public:
     return &(m_data[sz_t(m_index)]);
   }
 
+  virtual void set_user_variable(void* a_user_var) {m_user_var = (ntuple*)a_user_var;} //not owner.
+  virtual bool fetch_entry() const {
+    if(m_index>=m_data.size()) {
+      m_out << s_class() << "::fetch_entry :"
+            << " bad index " << m_index
+            << ". Vec size is " << m_data.size() << "."
+            << "."
+            << std::endl;
+      if(m_user_var) *m_user_var = ntuple(m_out,"");
+      return false;
+    }
+    typedef std::vector<ntuple>::size_type sz_t;
+    if(m_user_var) *m_user_var = m_data[sz_t(m_index)];
+    return true;
+  }
+
   virtual base_ntu* get_to_fill() {return &m_tmp;}
 public:
   aida_col_ntu(std::ostream& a_out,const std::string& a_name)
-  : base_col(a_out,a_name)
+  :base_col(a_out,a_name)
   ,m_tmp(a_out,"tmp")
+  ,m_user_var(0) //not owner
   {}
 public:
   virtual ~aida_col_ntu(){}
 public:
   aida_col_ntu(const aida_col_ntu& a_from)
-  : base_col(a_from)
+  :base_col(a_from)
   ,m_data(a_from.m_data)
 
   ,m_tmp(a_from.m_tmp)
+  ,m_user_var(a_from.m_user_var)
   {}
   aida_col_ntu& operator=(const aida_col_ntu& a_from){
     base_col::operator=(a_from);
@@ -561,11 +631,13 @@ public:
     m_data = a_from.m_data;
 
     m_tmp = a_from.m_tmp;
+    m_user_var = a_from.m_user_var;
     return *this;
   }
 protected:
   std::vector<ntuple> m_data;
   ntuple m_tmp;
+  ntuple* m_user_var;
 };
 
 inline bool create_cols_from_vals(ntuple& a_ntu,
@@ -1216,8 +1288,7 @@ inline bool column_infos(base_ntu& a_ntu,
   return true;
 }
 
-inline base_col* find_leaf_column(const base_ntu& a_ntu,
-                              const std::string& a_name){
+inline base_col* find_leaf_column(const base_ntu& a_ntu,const std::string& a_name){
   const std::vector<base_col*>& cols = a_ntu.cols();
   tools_vforcit(base_col*,cols,it) {
     aida_col_ntu* col = safe_cast<base_col,aida_col_ntu>(*(*it));

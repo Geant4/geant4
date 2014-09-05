@@ -19,6 +19,7 @@ public:
     static const std::string s_v("tools::histo::h2df");
     return s_v;
   }
+  const std::string& s_cls() const {return s_class();}
 public:
   h2df(const std::string& a_title,
       unsigned int aXnumber,float aXmin,float aXmax,

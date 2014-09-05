@@ -16,6 +16,7 @@ class p2 : public b2<TC,TO,TN,TW,TH> {
 public:
   typedef profile_data<TC,TO,TN,TW,TV> pd_t;
   typedef typename parent::bn_t bn_t;
+  typedef std::vector<TV> vs_t;
 protected:
   virtual TH get_bin_height(TO a_offset) const {
     return (parent::m_bin_Sw[a_offset] ? (m_bin_Svw[a_offset]/parent::m_bin_Sw[a_offset]):0);
@@ -55,7 +56,6 @@ public:
     for(bn_t ibin=0;ibin<parent::m_bin_number;ibin++) {
       m_bin_Svw[ibin] *= a_factor;
     }
-    parent::update_fast_getters();
     return true;
   }
   bool scale(TW a_factor) {return multiply(a_factor);}
@@ -77,7 +77,6 @@ public:
       m_bin_Svw[ibin] = 0;
       m_bin_Sv2w[ibin] = 0;
     }
-    parent::update_fast_getters();
     return true;
   }
 
@@ -135,15 +134,17 @@ public:
     if(jbin==0) inRange = false;
     else if(jbin==(parent::m_axes[1].m_number_of_bins+1)) inRange = false;
   
+    parent::m_all_entries++;
     if(inRange) {
       parent::m_in_range_entries++;
       parent::m_in_range_Sw += aWeight;
+      parent::m_in_range_Sw2 += aWeight*aWeight;
   
-      parent::m_in_range_Sxw += xw;
-      parent::m_in_range_Sx2w += x2w;
-  
-      parent::m_in_range_Syw += yw;
-      parent::m_in_range_Sy2w += y2w;
+      parent::m_in_range_Sxw[0] += xw;
+      parent::m_in_range_Sx2w[0] += x2w;
+
+      parent::m_in_range_Sxw[1] += yw;
+      parent::m_in_range_Sx2w[1] += y2w;
     }
    
     // Profile part :
@@ -172,7 +173,6 @@ public:
       m_bin_Svw[ibin] += a_histo.m_bin_Svw[ibin];      
       m_bin_Sv2w[ibin] += a_histo.m_bin_Sv2w[ibin];      
     }
-    parent::update_fast_getters();
     return true;
   }
   bool subtract(const p2& a_histo){
@@ -181,7 +181,6 @@ public:
       m_bin_Svw[ibin] -= a_histo.m_bin_Svw[ibin];      
       m_bin_Sv2w[ibin] -= a_histo.m_bin_Sv2w[ibin];      
     }
-    parent::update_fast_getters();
     return true;
   }
 
@@ -296,14 +295,33 @@ public:
     return true;
   }
 public:
-  const std::vector<TV>& bins_sum_vw() const {return m_bin_Svw;}
-  const std::vector<TV>& bins_sum_v2w() const {return m_bin_Sv2w;}
+  const vs_t& bins_sum_vw() const {return m_bin_Svw;}
+  const vs_t& bins_sum_v2w() const {return m_bin_Sv2w;}
+
+  TW get_Svw() const {
+    TW sw = 0;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin)) {
+        sw += m_bin_Svw[ibin];
+      }
+    }
+    return sw;
+  }
+  TW get_Sv2w() const {
+    TW sw = 0;
+    for(TO ibin=0;ibin<parent::m_bin_number;ibin++) {
+      if(!histo::is_out(parent::m_axes,ibin)) {
+        sw += m_bin_Sv2w[ibin];
+      }
+    }
+    return sw;
+  }
 protected:
   bool m_cut_v;
   TV m_min_v;
   TV m_max_v;
-  std::vector<TV> m_bin_Svw;
-  std::vector<TV> m_bin_Sv2w;
+  vs_t m_bin_Svw;
+  vs_t m_bin_Sv2w;
 };
 
 }}
