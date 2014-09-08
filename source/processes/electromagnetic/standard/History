@@ -18,6 +18,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+5 September 14: V.Ivanchenko (emstand-V10-00-41)
+- G4PAIxSection - fixed memory leak reported by Coverity
+
 12 August 14: V.Ivanchenko (emstand-V10-00-40)
 - G4WentzelVIModel - fixed bug in single scattering mode (recently 
     introduced)

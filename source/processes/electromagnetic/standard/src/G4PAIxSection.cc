@@ -46,8 +46,6 @@
 // 11.06.97 V. Grichine, 1st version 
 //
 
-
-
 #include "G4PAIxSection.hh"
 
 #include "globals.hh"
@@ -133,7 +131,10 @@ G4PAIxSection::G4PAIxSection(G4MaterialCutsCouple* matCC)
   fDensity       = matCC->GetMaterial()->GetDensity();
   G4int matIndex = matCC->GetMaterial()->GetIndex();
   fMaterialIndex = matIndex;   
-  fSandia        = new G4SandiaTable(matIndex);
+
+  const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
+  fSandia = (*theMaterialTable)[matIndex]->GetSandiaTable();
+
   fVerbose = 0;
 
   G4int i, j; 
