@@ -231,10 +231,14 @@ protected:
 
   G4ParticleChange fParticleChange;
 
-  // G4double fEnergyForAngle;
-  // G4PhysicsLinearVector* fAngleVector;
   G4PhysicsTable*                    fAngleForEnergyTable;
   std::vector<G4PhysicsTable*>       fAngleBank;
+
+private:
+
+  // copy constructor and hide assignment operator
+  G4VXTRenergyLoss(G4VXTRenergyLoss &);
+  G4VXTRenergyLoss & operator=(const G4VXTRenergyLoss &right);
 
 };
 

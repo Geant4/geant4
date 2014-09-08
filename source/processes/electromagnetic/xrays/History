@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05 Sept 14: V.Ivanchenko (xrays-V10-00-03)
+- G4VXTRenergyLoss - fixed Coverity reports
+
 01 Aug 14: V.Ivanchenko (xrays-V10-00-02)
 - G4SynchrotronRadiation - H.Burkhardt extend model from e+, e- to be 
     universal - applicable for all relativistic charged particles 

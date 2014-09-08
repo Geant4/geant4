@@ -92,7 +92,6 @@ G4VXTRenergyLoss::G4VXTRenergyLoss(G4LogicalVolume *anEnvelope,
   fTotBin         = 50;
 
   // Proton energy vector initialization
-
   fProtonEnergyVector = new G4PhysicsLogVector(fMinProtonTkin,
 					       fMaxProtonTkin,
 					       fTotBin  );
@@ -169,9 +168,18 @@ G4VXTRenergyLoss::~G4VXTRenergyLoss()
   if(fEnvelope) delete fEnvelope;
   delete fProtonEnergyVector;
   delete fXTREnergyVector;
-  delete fEnergyDistrTable;
-  if(fAngleRadDistr) delete fAngleDistrTable;
-  delete fAngleForEnergyTable;
+  if(fEnergyDistrTable) { 
+    fEnergyDistrTable->clearAndDestroy(); 
+    delete fEnergyDistrTable;
+  }
+  if(fAngleRadDistr) {
+    fAngleDistrTable->clearAndDestroy();
+    delete fAngleDistrTable;
+  }
+  if(fAngleForEnergyTable) {
+    fAngleForEnergyTable->clearAndDestroy();
+    delete fAngleForEnergyTable;
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
