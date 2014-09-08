@@ -127,13 +127,15 @@ class G4GammaConversionToMuons : public G4VDiscreteProcess
 
   private:
 
+     G4double Mmuon;
+     G4double Rc;
      G4double LowestEnergyLimit ;     // low  energy limit of the tables
      G4double HighestEnergyLimit ;    // high energy limit of the tables
 
      G4double MeanFreePath;           // actual MeanFreePath (current medium)
      G4double CrossSecFactor;         // factor to artificially increase
                                       // the cross section
-
+     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

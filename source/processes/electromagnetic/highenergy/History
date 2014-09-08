@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 Sept 2014: V.Ivant (emhighenergy-V10-00-04)
+- G4GammaConversionToMuons - added protection agains infinite loop
+    at the reaction threashold; removed G4ThreadLocal variables;
+    introduced G4Exp, G4Log and nist functions; added counters
+    limiting do/while loops
+
 24 July 2014: V.Ivant (emhighenergy-V10-00-03)
 24 July 2014: V.Ivant (emhighenergy-V10-00-02)
 - G4Vee2hadrons - fixed build for gcc 4.1
