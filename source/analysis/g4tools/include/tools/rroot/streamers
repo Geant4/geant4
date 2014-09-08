@@ -400,7 +400,7 @@ inline tools::histo::h1d* TH1F_stream(buffer& a_buffer){
     empty.resize(1,0);
     data.m_bin_Sxw.resize(binn,empty);
     data.m_bin_Sx2w.resize(binn,empty);}
-    data.m_all_entries = fEntries;
+    data.m_all_entries = static_cast<unsigned int>(fEntries);
     data.m_in_range_entries = 0;
     data.m_in_range_Sw = fSw;
     data.m_in_range_Sw2 = fSw2;
@@ -454,7 +454,7 @@ inline tools::histo::h1d* TH1D_stream(buffer& a_buffer){
     data.m_bin_Sxw.resize(binn,empty);
     data.m_bin_Sx2w.resize(binn,empty);}
 
-    data.m_all_entries = fEntries;
+    data.m_all_entries = static_cast<unsigned int>(fEntries);
     data.m_in_range_entries = 0;
     data.m_in_range_Sw = fSw;
     data.m_in_range_Sw2 = fSw2;
@@ -516,7 +516,7 @@ inline tools::histo::h2d* TH2F_stream(buffer& a_buffer){
     data.m_bin_Sxw.resize(binn,empty);
     data.m_bin_Sx2w.resize(binn,empty);}
 
-    data.m_all_entries = fEntries;
+    data.m_all_entries = static_cast<unsigned int>(fEntries);
     data.m_in_range_entries = 0;
     data.m_in_range_Sw = fSw;
     data.m_in_range_Sw2 = fSw2;
@@ -576,7 +576,7 @@ inline tools::histo::h2d* TH2D_stream(buffer& a_buffer){
     data.m_bin_Sxw.resize(binn,empty);
     data.m_bin_Sx2w.resize(binn,empty);}
 
-    data.m_all_entries = fEntries;
+    data.m_all_entries = static_cast<unsigned int>(fEntries);
     data.m_in_range_entries = 0;
     data.m_in_range_Sw = fSw;
     data.m_in_range_Sw2 = fSw2;

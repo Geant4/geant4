@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 08, 2014 I. Hrivnacova (analysis-V10-00-23)
+- Updated to g4tools 1.14.0 (by G. Barrand):
+  Fixed compiler warning (converting to unsigned int from double)
+
 September 04, 2014 I. Hrivnacova (analysis-V10-00-22)
 - Updated to g4tools 1.14.0 (by G. Barrand):
   See History_tools for complete list of modifications.
