@@ -182,7 +182,6 @@ private:
 
   // flags
   G4bool   use_completescreening;
-  G4bool   isInitialised;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

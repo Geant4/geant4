@@ -18,6 +18,11 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+8 September 14: V.Ivanchenko (emstand-V10-00-42)
+- G4PairProductionRelModel, G4eBremsstrahlungRelModel - added 
+    protection at initialisation for the case when user artifitially
+    reducing high energy limit of the model (bug #1670)
+
 5 September 14: V.Ivanchenko (emstand-V10-00-41)
 - G4PAIxSection - fixed memory leak reported by Coverity
 
