@@ -66,8 +66,7 @@ class G4VPartonStringModel : public G4VHighEnergyGenerator
       G4KineticTrackVector * Scatter(const G4Nucleus &theNucleus, const G4DynamicParticle &thePrimary);
       virtual G4V3DNucleus * GetWoundedNucleus() const = 0;
       virtual void ModelDescription(std::ostream& outFile) const;
-//      virtual G4V3DNucleus * GetProjectileNucleus() const = 0; // Uzhi Nov. 2012
-      virtual G4V3DNucleus * GetProjectileNucleus() const; // Uzhi Nov. 2012
+      virtual G4V3DNucleus * GetProjectileNucleus() const;
   protected:
         
       virtual void Init(const G4Nucleus &theNucleus, const G4DynamicParticle &thePrimary) = 0;

@@ -36,13 +36,16 @@
 
 #include "G4InteractionContent.hh"
 
+#include "G4PhysicalConstants.hh"       // Uzhi 8.09.2014
+#include "G4SystemOfUnits.hh"           // Uzhi 8.09.2014
+
 G4InteractionContent::G4InteractionContent(G4VSplitableHadron *aPrimaryParticipant)
       : theNumberOfHard(0), theNumberOfSoft(0), theNumberOfDiffractive(0),
         theInteractionTime(0.), curStatus(0)
 {
 	theProjectile=aPrimaryParticipant;
 	theTarget=0;
-	theProjectileNucleon=0; // Uzhi Nov. 2012
+	theProjectileNucleon=0;
 	theTargetNucleon=0;
 }
 
