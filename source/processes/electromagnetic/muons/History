@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8 September 14: V.Ivanchenko (emmuons-V10-00-00)
+- G4MuPairProductionModel, G4MuBremsstrahlungModel -
+    protection at initialisation for the case when user artifitially
+    reducing high energy limit of the model (bug #1670)
+
 28 October 13: V.Ivanchenko (emmuons-V09-06-24)
 - G4EnergyLossForExtrapolator - substitute G4eBremsstrahlungModel 
     by G4SeltzerBergerModel

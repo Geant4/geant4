@@ -151,10 +151,12 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
 {
   if(p) { SetParticle(p); }
 
-  if(IsMaster() && p == particle) { InitialiseElementSelectors(p, cuts); }
-
   // define pointer to G4ParticleChange
   if(!fParticleChange) { fParticleChange = GetParticleChangeForLoss(); }
+
+  if(IsMaster() && p == particle && lowestKinEnergy < HighEnergyLimit()) { 
+    InitialiseElementSelectors(p, cuts); 
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -162,7 +164,7 @@ void G4MuBremsstrahlungModel::Initialise(const G4ParticleDefinition* p,
 void G4MuBremsstrahlungModel::InitialiseLocal(const G4ParticleDefinition* p,
 					      G4VEmModel* masterModel)
 {
-  if(p == particle) {
+  if(p == particle && lowestKinEnergy < HighEnergyLimit()) {
     SetElementSelectors(masterModel->GetElementSelectors());
   }
 }
