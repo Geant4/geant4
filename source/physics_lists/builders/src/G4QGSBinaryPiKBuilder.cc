@@ -51,7 +51,7 @@
 G4QGSBinaryPiKBuilder::
 G4QGSBinaryPiKBuilder(G4bool quasiElastic) 
 {
-  thePiData = new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV);
+  thePiData = new G4CrossSectionPairGG((G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*GeV);
 
   theMin = 12*GeV;
   theModel = new G4TheoFSGenerator("QGSB");

@@ -209,7 +209,7 @@ void G4HadronHElasticPhysics::ConstructProcess() {
 
     } else if ( pname == "neutron" ) {   
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
-      hel->AddDataSet( new G4NeutronElasticXS() );
+      hel->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronElasticXS::Default_Name()) );
       // To preserve reproducibility, a different instance of
       // G4DiffuseElastic must be used for each particle type.
       G4DiffuseElastic* neutronDiffuseElastic = new G4DiffuseElastic();

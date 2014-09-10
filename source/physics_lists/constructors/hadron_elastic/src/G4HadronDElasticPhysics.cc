@@ -185,7 +185,7 @@ void G4HadronDElasticPhysics::ConstructProcess()
     } else if(pname == "neutron") {   
 
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
-      hel->AddDataSet(new G4NeutronElasticXS());
+      hel->AddDataSet(G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronElasticXS::Default_Name()));
       model = new G4DiffuseElastic();
       hel->RegisterMe(lhep1);
       hel->RegisterMe(model);

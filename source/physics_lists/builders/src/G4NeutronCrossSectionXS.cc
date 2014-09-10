@@ -51,7 +51,7 @@
 #include "G4HadronicProcessType.hh"
 
 #include "G4Neutron.hh"
-
+#include "G4CrossSectionDataSetRegistry.hh"
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -75,8 +75,8 @@ void G4NeutronCrossSectionXS::ConstructParticle()
 void G4NeutronCrossSectionXS::ConstructProcess() 
 {
 
-  G4NeutronInelasticXS* xinel = new G4NeutronInelasticXS();
-  G4NeutronCaptureXS* xcap = new G4NeutronCaptureXS();
+  G4NeutronInelasticXS* xinel = (G4NeutronInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronInelasticXS::Default_Name());
+    G4NeutronCaptureXS* xcap = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
 
   const G4ParticleDefinition* neutron = G4Neutron::Neutron();
   if(verbose > 1) {

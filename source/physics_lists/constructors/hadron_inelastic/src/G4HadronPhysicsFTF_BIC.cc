@@ -56,6 +56,8 @@
 #include "G4NeutronInelasticXS.hh"
 #include "G4NeutronCaptureXS.hh"
 
+#include "G4CrossSectionDataSetRegistry.hh"
+
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -163,9 +165,6 @@ G4HadronPhysicsFTF_BIC::~G4HadronPhysicsFTF_BIC()
    delete tpdata->theAntiBaryon;
    delete tpdata->theFTFPAntiBaryon;
 
-   delete tpdata->xsNeutronInelasticXS;
-   delete tpdata->xsNeutronCaptureXS; 
-
    delete tpdata; tpdata = 0;
 }
 
@@ -196,7 +195,7 @@ void G4HadronPhysicsFTF_BIC::ConstructProcess()
   tpdata->theAntiBaryon->Build();
 
   // --- Neutrons ---
-  tpdata->xsNeutronInelasticXS = new G4NeutronInelasticXS();  
+  tpdata->xsNeutronInelasticXS = (G4NeutronInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronInelasticXS::Default_Name());
   G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(tpdata->xsNeutronInelasticXS);
 
   G4HadronicProcess* capture = 0;
@@ -211,7 +210,7 @@ void G4HadronPhysicsFTF_BIC::ConstructProcess()
     capture = new G4HadronCaptureProcess("nCapture");
     pmanager->AddDiscreteProcess(capture);
   }
-  tpdata->xsNeutronCaptureXS = new G4NeutronCaptureXS();
+  tpdata->xsNeutronCaptureXS = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
   capture->AddDataSet(tpdata->xsNeutronCaptureXS);
   capture->RegisterMe(new G4NeutronRadCapture());
 }

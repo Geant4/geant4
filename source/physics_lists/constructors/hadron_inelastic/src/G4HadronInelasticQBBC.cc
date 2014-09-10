@@ -175,12 +175,12 @@ void G4HadronInelasticQBBC::ConstructProcess()
 
     } else if(pname == "neutron") {
       G4HadronicProcess* hp = FindInelasticProcess(particle);
-      hp->AddDataSet(new G4NeutronInelasticXS());
+      hp->AddDataSet((G4NeutronInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronInelasticXS::Default_Name()));
       //hp->RegisterMe(theQGSP);
       hp->RegisterMe(theFTFP);
        
       G4HadronicProcess* capture = FindCaptureProcess();
-      capture->AddDataSet(new G4NeutronCaptureXS());
+      capture->AddDataSet((G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name()));
       hp->RegisterMe(theBERT);
       hp->RegisterMe(theBIC);
       capture->RegisterMe(new G4NeutronRadCapture());
@@ -188,7 +188,7 @@ void G4HadronInelasticQBBC::ConstructProcess()
     } else if(pname == "pi-" || pname == "pi+") {
       G4HadronicProcess* hp = FindInelasticProcess(particle);
 //      hp->AddDataSet(new G4BGGPionInelasticXS(particle));
-      hp->AddDataSet(new G4CrossSectionPairGG(new G4PiNuclearCrossSection(), 91*GeV));
+      hp->AddDataSet(new G4CrossSectionPairGG((G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*GeV));
       //hp->RegisterMe(theQGSP);
       hp->RegisterMe(theFTFP);
       hp->RegisterMe(theBERT1);

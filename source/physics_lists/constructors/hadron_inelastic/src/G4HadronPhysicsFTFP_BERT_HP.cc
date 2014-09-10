@@ -157,8 +157,6 @@ G4HadronPhysicsFTFP_BERT_HP::~G4HadronPhysicsFTFP_BERT_HP()
   delete tpdata->theAntiBaryon;
   delete tpdata->theFTFPAntiBaryon;
 
-  delete tpdata->xsNeutronCaptureXS;
-
   delete tpdata; tpdata = 0;
 } 
 
@@ -212,7 +210,7 @@ void G4HadronPhysicsFTFP_BERT_HP::ConstructProcess()
     capture = new G4HadronCaptureProcess("nCapture");
     pmanager->AddDiscreteProcess(capture);
   }
-  tpdata->xsNeutronCaptureXS = new G4NeutronCaptureXS();
+  tpdata->xsNeutronCaptureXS = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
   capture->AddDataSet(tpdata->xsNeutronCaptureXS);
   capture->AddDataSet( new G4NeutronHPCaptureData );
   G4NeutronRadCapture* theNeutronRadCapture = new G4NeutronRadCapture(); 

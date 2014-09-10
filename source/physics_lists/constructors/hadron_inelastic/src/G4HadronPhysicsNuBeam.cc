@@ -172,9 +172,6 @@ G4HadronPhysicsNuBeam::~G4HadronPhysicsNuBeam()
   delete tpdata->theAntiBaryon;
   delete tpdata->theFTFPAntiBaryon;
 
-  delete tpdata->xsNeutronInelasticXS;
-  delete tpdata->xsNeutronCaptureXS;
-
 }
 
 void G4HadronPhysicsNuBeam::ConstructParticle()
@@ -221,7 +218,7 @@ void G4HadronPhysicsNuBeam::ConstructProcess()
 
   // --- Neutrons ---
   //
-  tpdata->xsNeutronInelasticXS = new G4NeutronInelasticXS();  
+  tpdata->xsNeutronInelasticXS = (G4NeutronInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronInelasticXS::Default_Name());  
   G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(tpdata->xsNeutronInelasticXS);  
   
   G4HadronicProcess* capture = 0;
@@ -238,7 +235,7 @@ void G4HadronPhysicsNuBeam::ConstructProcess()
     capture = new G4HadronCaptureProcess("nCapture");
     pmanager->AddDiscreteProcess(capture);
   }
-  tpdata->xsNeutronCaptureXS = new G4NeutronCaptureXS();
+  tpdata->xsNeutronCaptureXS = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
   capture->AddDataSet(tpdata->xsNeutronCaptureXS);
   capture->RegisterMe(new G4NeutronRadCapture());
   

@@ -42,11 +42,12 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
+#include "G4CrossSectionDataSetRegistry.hh"
 
 G4BertiniPionBuilder::
 G4BertiniPionBuilder() 
  {
-   thePiData = new G4PiNuclearCrossSection;
+   thePiData = (G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name());
    theMin = 0*GeV;
    theMax = 9.9*GeV;
    theModel = new G4CascadeInterface;

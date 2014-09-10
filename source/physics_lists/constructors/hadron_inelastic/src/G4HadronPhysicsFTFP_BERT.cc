@@ -161,9 +161,6 @@ G4HadronPhysicsFTFP_BERT::~G4HadronPhysicsFTFP_BERT()
   delete tpdata->theAntiBaryon;
   delete tpdata->theFTFPAntiBaryon;
  
-  delete tpdata->xsNeutronInelasticXS;
-  delete tpdata->xsNeutronCaptureXS; 
- 
   //Note that here we need to set to 0 the pointer
   //since tpdata is static and if thread are "reused"
   //it can be problematic
@@ -205,7 +202,7 @@ void G4HadronPhysicsFTFP_BERT::ConstructProcess()
   tpdata->theAntiBaryon->Build();
 
   // --- Neutrons ---
-  tpdata->xsNeutronInelasticXS = new G4NeutronInelasticXS();  
+    tpdata->xsNeutronInelasticXS = (G4NeutronInelasticXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronInelasticXS::Default_Name());
   G4PhysListUtil::FindInelasticProcess(G4Neutron::Neutron())->AddDataSet(tpdata->xsNeutronInelasticXS);
 
   G4HadronicProcess* capture = 0;
@@ -220,7 +217,7 @@ void G4HadronPhysicsFTFP_BERT::ConstructProcess()
     capture = new G4HadronCaptureProcess("nCapture");
     pmanager->AddDiscreteProcess(capture);
   }
-  tpdata->xsNeutronCaptureXS = new G4NeutronCaptureXS();
+  tpdata->xsNeutronCaptureXS = (G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name());
   capture->AddDataSet(tpdata->xsNeutronCaptureXS);
   capture->RegisterMe(new G4NeutronRadCapture());
 }

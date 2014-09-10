@@ -628,7 +628,7 @@ template<class T> TLBE<T>::~TLBE()
   theBERTModel1->SetMinEnergy( theBERTMin1 );
   theBERTModel1->SetMaxEnergy( theBERTMax );
 
-  G4VCrossSectionDataSet * thePiData = new G4CrossSectionPairGG( new G4PiNuclearCrossSection, 91*GeV );
+  G4VCrossSectionDataSet * thePiData = new G4CrossSectionPairGG( (G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name()), 91*GeV );
   G4VCrossSectionDataSet * theAntiNucleonData = new G4CrossSectionInelastic( new G4ComponentAntiNuclNuclearXS );
   G4VCrossSectionDataSet * theGGNuclNuclData = G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4GGNuclNuclCrossSection::Default_Name());
 
@@ -797,7 +797,7 @@ template<class T> TLBE<T>::~TLBE()
 	theCaptureProcess->RegisterMe( theNeutronCaptureHPModel );
 	theCaptureProcess->RegisterMe( theNeutronRadCapture);
 	theCaptureProcess->AddDataSet( new G4NeutronHPCaptureData );
-	theCaptureProcess->AddDataSet( new G4NeutronCaptureXS);
+	theCaptureProcess->AddDataSet((G4NeutronCaptureXS*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4NeutronCaptureXS::Default_Name()));
 	pmanager->AddDiscreteProcess(theCaptureProcess);
       }
       else if (particleName == "anti_neutron") 
