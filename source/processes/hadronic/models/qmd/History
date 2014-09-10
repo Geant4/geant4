@@ -13,6 +13,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+09 September 2014 Witek Pokorski (hadr-qmd-V10-00-03)
+- update to use G4CrossSectionDataSetRegistry
+
 04 September 2014 Witek Pokorski (hadr-qmd-V10-00-02)
 - Commenting out obsolete include of a cross section header file.
 

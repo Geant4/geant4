@@ -42,6 +42,8 @@
 #include "G4SystemOfUnits.hh"
 #include "G4NistManager.hh"
 
+#include "G4CrossSectionDataSetRegistry.hh"
+
 G4QMDReaction::G4QMDReaction()
 : G4HadronicInteraction("QMDModel")
 , system ( NULL )
@@ -55,7 +57,7 @@ G4QMDReaction::G4QMDReaction()
    //090331
    shenXS = new G4IonsShenCrossSection();
    //genspaXS = new G4GeneralSpaceNNCrossSection();
-   piNucXS = new G4PiNuclearCrossSection();
+   piNucXS = (G4PiNuclearCrossSection*)G4CrossSectionDataSetRegistry::Instance()->GetCrossSectionDataSet(G4PiNuclearCrossSection::Default_Name());
    meanField = new G4QMDMeanField();
    collision = new G4QMDCollision();
 
