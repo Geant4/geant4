@@ -70,6 +70,10 @@ G4_REFERENCE_XS_FACTORY(G4GlauberGribovCrossSection);
 G4_REFERENCE_XS_FACTORY(G4GGNuclNuclCrossSection);
 G4_REFERENCE_XS_FACTORY(G4ElectroNuclearCrossSection);
 G4_REFERENCE_XS_FACTORY(G4PhotoNuclearCrossSection);
+G4_REFERENCE_XS_FACTORY(G4PiNuclearCrossSection);
+G4_REFERENCE_XS_FACTORY(G4NeutronInelasticXS);
+G4_REFERENCE_XS_FACTORY(G4NeutronElasticXS);
+G4_REFERENCE_XS_FACTORY(G4NeutronCaptureXS);
 
 
 G4ThreadLocal G4CrossSectionDataSetRegistry* G4CrossSectionDataSetRegistry::theInstance = 0;

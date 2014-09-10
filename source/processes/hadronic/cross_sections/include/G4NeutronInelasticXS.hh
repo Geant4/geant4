@@ -67,6 +67,8 @@ public:
 
   virtual ~G4NeutronInelasticXS();
 
+  static const char* Default_Name() {return "G4NeutronInelasticXS";}
+    
   virtual
   G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,
 			     const G4Material*);

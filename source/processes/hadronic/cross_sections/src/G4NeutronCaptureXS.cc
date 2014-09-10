@@ -49,6 +49,11 @@
 #include "G4DynamicParticle.hh"
 #include "Randomize.hh"
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4NeutronCaptureXS);
+
 using namespace std;
 
 const G4int G4NeutronCaptureXS::amin[] = {
@@ -79,7 +84,7 @@ const G4int G4NeutronCaptureXS::amax[] = {
 G4ElementData* G4NeutronCaptureXS::data = 0;
 
 G4NeutronCaptureXS::G4NeutronCaptureXS() 
- : G4VCrossSectionDataSet("G4NeutronCaptureXS"),
+ : G4VCrossSectionDataSet(Default_Name()),
    emax(20*MeV),elimit(1.0e-10*eV)
 {
   //  verboseLevel = 0;

@@ -53,13 +53,18 @@
 #include <fstream>
 #include <sstream>
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4NeutronElasticXS);
+
 using namespace std;
 
 std::vector<G4PhysicsVector*>* G4NeutronElasticXS::data = 0;
 G4double G4NeutronElasticXS::coeff[] = {0.0};
 
 G4NeutronElasticXS::G4NeutronElasticXS() 
- : G4VCrossSectionDataSet("G4NeutronElasticXS"),
+ : G4VCrossSectionDataSet(Default_Name()),
    proton(G4Proton::Proton())
 {
   //  verboseLevel = 0;

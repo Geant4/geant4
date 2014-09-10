@@ -40,6 +40,8 @@ class G4PiNuclearCrossSection : public G4VCrossSectionDataSet
   
     G4PiNuclearCrossSection();
     virtual ~G4PiNuclearCrossSection();
+    
+    static const char* Default_Name() {return "G4PiNuclearCrossSection";}
 
     virtual
     G4bool IsElementApplicable(const G4DynamicParticle* aParticle,

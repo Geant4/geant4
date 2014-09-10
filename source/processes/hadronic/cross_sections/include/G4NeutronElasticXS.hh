@@ -65,6 +65,8 @@ public: // With Description
   G4NeutronElasticXS();
 
   virtual ~G4NeutronElasticXS();
+    
+  static const char* Default_Name() {return "G4NeutronElasticXS";}
 
   virtual
   G4bool IsElementApplicable(const G4DynamicParticle*, 

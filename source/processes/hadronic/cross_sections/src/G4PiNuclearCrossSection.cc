@@ -30,6 +30,12 @@
 #include "G4HadronicException.hh"
 #include "G4HadTmpUtil.hh"
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4PiNuclearCrossSection);
+
+
 // by J.P Wellisch, Sun Sep 15 2002.
 // corrected G.Folger 17-8-2006: inel. Ca pim was missing two number, 
 // + formatting
@@ -379,7 +385,7 @@
 
 
 G4PiNuclearCrossSection::G4PiNuclearCrossSection()
- : G4VCrossSectionDataSet("G4PiNuclearCrossSection"),
+ : G4VCrossSectionDataSet(Default_Name()),
    fTotalXsc(0.0), fElasticXsc(0.0)
 {
   SetMinKinEnergy(0.0);

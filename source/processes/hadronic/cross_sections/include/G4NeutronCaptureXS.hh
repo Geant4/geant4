@@ -65,6 +65,8 @@ public: // With Description
   G4NeutronCaptureXS();
 
   virtual ~G4NeutronCaptureXS();
+    
+  static const char* Default_Name() {return "G4NeutronCaptureXS";}
 
   virtual
   G4bool IsElementApplicable(const G4DynamicParticle*, G4int Z,

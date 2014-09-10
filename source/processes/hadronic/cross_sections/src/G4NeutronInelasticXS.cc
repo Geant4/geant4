@@ -54,6 +54,11 @@
 #include <fstream>
 #include <sstream>
 
+// factory
+#include "G4CrossSectionFactory.hh"
+//
+G4_DECLARE_XS_FACTORY(G4NeutronInelasticXS);
+
 using namespace std;
 
 const G4int G4NeutronInelasticXS::amin[] = {
@@ -86,7 +91,7 @@ G4double G4NeutronInelasticXS::coeff[] = {1.0};
 G4ElementData* G4NeutronInelasticXS::data = 0;
 
 G4NeutronInelasticXS::G4NeutronInelasticXS() 
-  : G4VCrossSectionDataSet("G4NeutronInelasticXS"),
+  : G4VCrossSectionDataSet(Default_Name()),
     proton(G4Proton::Proton())
 {
   //  verboseLevel = 0;
