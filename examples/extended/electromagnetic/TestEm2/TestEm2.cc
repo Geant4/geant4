@@ -59,12 +59,8 @@ int main(int argc,char** argv) {
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
 #ifdef G4MULTITHREADED  
-  G4MTRunManager * runManager = new G4MTRunManager(); 
-  // Number of threads can be defined via 3rd argument
-  if (argc==3) {
-    G4int nThreads = G4UIcommand::ConvertToInt(argv[2]);
-    if (nThreads > 0) runManager->SetNumberOfThreads(nThreads);
-  }
+  G4MTRunManager * runManager = new G4MTRunManager();
+  runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores()); 
 #else
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
   G4RunManager * runManager = new G4RunManager(); 
