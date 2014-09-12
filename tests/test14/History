@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10 Sep 2014 - G.Folger,       tag test14-V10-00-03
+              CMakeLists.txt: update to correspond to defautl setup, 
+				  run test using 3 input files.
+				  
 27 Jan 2014 - V. Ivantchenko, tag test14-V10-00-02
               extra trivial fix for clang compillation warning 
 
