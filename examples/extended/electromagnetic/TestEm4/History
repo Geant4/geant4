@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+10-09-14 mma (testem4-V10-00-01)
+- TestEm4.cc : SetNumberOfThreads( G4Threading::G4GetNumberOfCores() )
      
 15-12-13 mma (testem4-V10-00-00)     
 - update vis.mac
