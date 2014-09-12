@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 12 Sep. 2014 Hisaya Kurashige (particles-V10-00-21)
+- Update mass, width and lifetime according to PDG2014
+
 - 19 Aug. 2014 Makoto Asai (particles-V10-00-20)
 - Re-tag for testing.
 

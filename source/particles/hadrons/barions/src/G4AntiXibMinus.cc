@@ -70,7 +70,7 @@ G4AntiXibMinus* G4AntiXibMinus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,      5.7911*GeV,   0.42e-9*MeV,   +1.*eplus,
+                 name,      5.7949*GeV,   0.42e-9*MeV,   +1.*eplus,
                     1,              +1,             0,
                     1,              +1,             0,
              "baryon",               0,            -1,       -5132,

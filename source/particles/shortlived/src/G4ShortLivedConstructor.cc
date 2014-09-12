@@ -89,84 +89,84 @@ void G4ShortLivedConstructor::ConstructQuarks()
   particle->SetAntiPDGEncoding(21);
   // u-quark
   particle = new G4Quarks(            
-	    "u_quark",         2.3*MeV,       0.0*MeV,   2./3.*eplus, 
+	    "u_quark",         2.3*MeV,       0.0*keV,   2./3.*eplus, 
                     1,              +1,             0,          
                     1,              +1,             0,             
              "quarks",               0,             0,           2,
 		 true,            -1.0,          NULL);
   // d-quark
   particle = new G4Quarks(            
-	    "d_quark",         4.8*MeV,       0.0*MeV,  -1./3.*eplus, 
+	    "d_quark",         4.8*MeV,       0.0*keV,  -1./3.*eplus, 
                     1,              +1,             0,          
                     1,              -1,             0,             
              "quarks",               0,             0,           1,
 		 true,            -1.0,          NULL);
   // s-quark
   particle = new G4Quarks(            
-	    "s_quark",        95.0*MeV,       0.0*MeV,  -1./3.*eplus, 
+	    "s_quark",        95.0*MeV,       0.0*keV,  -1./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,           3,
 		 true,            -1.0,          NULL);
   // c-quark
   particle = new G4Quarks(            
-	    "c_quark",       1.275*GeV,       0.0*MeV,  +2./3.*eplus, 
+	    "c_quark",       1.275*GeV,       0.0*keV,  +2./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,           4,
 		 true,            -1.0,          NULL);
   // b-quark
   particle = new G4Quarks(            
-	    "b_quark",        4.18*GeV,       0.0*MeV,  -1./3.*eplus, 
+	    "b_quark",        4.18*GeV,       0.0*keV,  -1./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,           5,
 		 true,            -1.0,          NULL);
   // t-quark
   particle = new G4Quarks(            
-	    "t_quark",      173.07*GeV,       2.0*GeV,  +2./3.*eplus, 
+	    "t_quark",      173.21*GeV,       2.0*GeV,  +2./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,           6,
 		 true,            -1.0,          NULL);
   // anti u-quark
   particle = new G4Quarks(            
-       "anti_u_quark",         2.3*MeV,       0.0*MeV,   -2./3.*eplus, 
+       "anti_u_quark",         2.3*MeV,       0.0*keV,   -2./3.*eplus, 
                     1,              +1,             0,          
                     1,              -1,             0,             
              "quarks",               0,             0,          -2,
 		 true,            -1.0,          NULL);
   // anti d-quark
   particle = new G4Quarks(            
-       "anti_d_quark",         4.8*MeV,       0.0*MeV,   1./3.*eplus, 
+       "anti_d_quark",         4.8*MeV,       0.0*keV,   1./3.*eplus, 
                     1,              +1,             0,          
                     1,              +1,             0,             
              "quarks",               0,             0,          -1,
 		 true,            -1.0,          NULL);
   // anti s-quark
   particle = new G4Quarks(            
-       "anti_s_quark",        95.0*MeV,       0.0*MeV,   1./3.*eplus, 
+       "anti_s_quark",        95.0*MeV,       0.0*keV,   1./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,          -3,
 		 true,            -1.0,          NULL);
   // anti c-quark
   particle = new G4Quarks(            
-       "anti_c_quark",       1.275*GeV,       0.0*MeV,  -2./3.*eplus, 
+       "anti_c_quark",       1.275*GeV,       0.0*keV,  -2./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,          -4,
 		 true,            -1.0,          NULL);
   // anti b-quark
   particle = new G4Quarks(            
-       "anti_b_quark",        4.18*GeV,       0.0*MeV,   1./3.*eplus, 
+       "anti_b_quark",        4.18*GeV,       0.0*keV,   1./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,          -5,
 		 true,            -1.0,          NULL);
   // anti t-quark
   particle = new G4Quarks(            
-       "anti_t_quark",      173.07*GeV,       2.0*GeV,  -2./3.*eplus, 
+       "anti_t_quark",      173.21*GeV,       2.0*GeV,  -2./3.*eplus, 
                     1,              +1,             0,          
                     0,               0,             0,             
              "quarks",               0,             0,          -6,
@@ -604,7 +604,7 @@ void G4ShortLivedConstructor::ConstructMesons()
 
   // phi
   particle = new G4ExcitedMesons(            
-	        "phi",     1019.46*MeV,      4.26*MeV,    +0.0*eplus, 
+	        "phi",     1019.46*MeV,     4.266*MeV,    +0.0*eplus, 
                     2,              -1,            -1,          
                     0,              +0,            -1,             
               "meson",               0,             0,           333,
@@ -831,7 +831,7 @@ void G4ShortLivedConstructor::ConstructMesons()
 
   // f0(1710)
   particle = new G4ExcitedMesons(            
-           "f0(1710)",      1720.0*MeV,     135.0*MeV,           0.0,
+           "f0(1710)",      1722.0*MeV,     135.0*MeV,           0.0,
                     0,              +1,            +1,          
                     0,               0,            +1,             
               "meson",               0,             0,         10331,

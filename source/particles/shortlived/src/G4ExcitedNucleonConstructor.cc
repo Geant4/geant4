@@ -549,13 +549,13 @@ const char* G4ExcitedNucleonConstructor::name[] = {
 };
 
 const G4double G4ExcitedNucleonConstructor::mass[] = {
-  1.440*GeV, 1.520*GeV, 1.535*GeV, 1.655*GeV,  1.675*GeV, 
+  1.430*GeV, 1.515*GeV, 1.535*GeV, 1.655*GeV,  1.675*GeV, 
   1.685*GeV, 1.700*GeV, 1.710*GeV, 1.720*GeV,  1.900*GeV, 
   1.950*GeV, 2.080*GeV, 2.190*GeV, 2.250*GeV,  2.275*GeV
 };
 
 const G4double G4ExcitedNucleonConstructor::width[] = {
-  300.0*MeV, 115.0*MeV, 150.0*MeV, 150.0*MeV, 150.0*MeV,
+  350.0*MeV, 115.0*MeV, 150.0*MeV, 140.0*MeV, 150.0*MeV,
   130.0*MeV, 150.0*MeV, 100.0*MeV, 250.0*MeV, 500.0*MeV,
   555.0*MeV, 350.0*MeV, 500.0*MeV, 400.0*MeV, 500.0*MeV
 };

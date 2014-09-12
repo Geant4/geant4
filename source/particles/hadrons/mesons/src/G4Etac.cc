@@ -70,7 +70,7 @@ G4Etac* G4Etac::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,      2.9837*GeV,      32.0*MeV,         0.0,
+                 name,      2.9836*GeV,      32.2*MeV,         0.0,
                     0,              -1,            +1,
                     0,               0,            +1,
               "meson",               0,             0,         441,

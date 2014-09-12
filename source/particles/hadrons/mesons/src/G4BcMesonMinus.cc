@@ -64,7 +64,7 @@ G4BcMesonMinus* G4BcMesonMinus::Definition()
   //             shortlived      subType    anti_encoding
 
    anInstance = new G4ParticleDefinition(
-                 name,      6.2745*GeV,  1.460e-9*MeV,   -1.*eplus,
+                 name,      6.2756*GeV,  1.460e-9*MeV,   -1.*eplus,
                     0,              -1,             0,
                     0,               0,             0,
               "meson",               0,             0,        -541,
