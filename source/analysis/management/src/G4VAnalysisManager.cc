@@ -796,19 +796,14 @@ void G4VAnalysisManager::FinishNtuple(G4int ntupleId)
 G4bool G4VAnalysisManager::SetFirstHistoId(G4int firstId) 
 {
   G4bool finalResult = true;
-  G4bool result = fVH1Manager->SetFirstId(firstId);
+
+  G4bool result = SetFirstH1Id(firstId);
   finalResult = finalResult && result;
   
-  result = fH1HnManager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-  
-  result = fVH2Manager->SetFirstId(firstId);
+  result = SetFirstH2Id(firstId);
   finalResult = finalResult && result;
 
-  result = fH2HnManager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-   
-  result = fH3HnManager->SetFirstId(firstId);
+  result = SetFirstH3Id(firstId);
   finalResult = finalResult && result;
    
   return finalResult; 
@@ -857,16 +852,11 @@ G4bool G4VAnalysisManager::SetFirstH3Id(G4int firstId)
 G4bool G4VAnalysisManager::SetFirstProfileId(G4int firstId) 
 {
   G4bool finalResult = true;
-  G4bool result = fVP1Manager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-  
-  result = fP1HnManager->SetFirstId(firstId);
-  finalResult = finalResult && result;
-  
-  result = fVP2Manager->SetFirstId(firstId);
-  finalResult = finalResult && result;
 
-  result = fP2HnManager->SetFirstId(firstId);
+  G4bool result = SetFirstP1Id(firstId);
+  finalResult = finalResult && result;
+  
+  result = SetFirstP2Id(firstId);
   finalResult = finalResult && result;
    
   return finalResult; 

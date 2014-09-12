@@ -39,6 +39,7 @@ GEANT4_DEFINE_MODULE(NAME G4root
         G4RootFileManager.hh
         G4RootNtupleDescription.hh
         G4RootNtupleManager.hh
+        G4RootRFileManager.hh
         G4RootRNtupleDescription.hh
         G4RootRNtupleManager.hh
        g4root_defs.hh
@@ -48,6 +49,7 @@ GEANT4_DEFINE_MODULE(NAME G4root
         G4RootAnalysisReader.cc
         G4RootFileManager.cc
         G4RootNtupleManager.cc
+        G4RootRFileManager.cc
         G4RootRNtupleManager.cc
     GRANULAR_DEPENDENCIES
         G4globman

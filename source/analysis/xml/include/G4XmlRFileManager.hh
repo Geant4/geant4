@@ -23,69 +23,40 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootFileManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
+// $Id: G4XmlRFileManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
-// The manager for Root output file operations.
+// The manager for Xml file input operations.
 
-// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 10/09/2014  (ivana@ipno.in2p3.fr)
 
-#ifndef G4RootFileManager_h
-#define G4RootFileManager_h 1
+#ifndef G4XmlRFileManager_h
+#define G4XmlRFileManager_h 1
 
-#include "G4VFileManager.hh"
+#include "G4BaseFileManager.hh"
 #include "globals.hh"
 
-#include <map>
+#include <tools/raxml>
 
-namespace tools {
-namespace wroot { 
-class file; 
-class directory;
-}
-}  
+#include <fstream>
 
-class G4RootFileManager : public G4VFileManager
+class G4AnalysisManagerState;
+
+class G4XmlRFileManager : public G4BaseFileManager
 {
   public:
-    G4RootFileManager(const G4AnalysisManagerState& state);
-    virtual ~G4RootFileManager();
+    G4XmlRFileManager(const G4AnalysisManagerState& state);
+    ~G4XmlRFileManager();
 
-    // Methods to manipulate file
-    virtual G4bool OpenFile(const G4String& fileName);
-    virtual G4bool WriteFile();
-    virtual G4bool CloseFile(); 
+    // Methods to manipulate input files
+    virtual G4bool OpenRFile(const G4String& fileName);
 
-    G4bool CreateHistoDirectory();
-    G4bool CreateProfileDirectory();
-    G4bool CreateNtupleDirectory();
+    // Specific methods for files per objects
+    tools::raxml* GetRFile(const G4String& fileName) const;
     
-    // Get methods
-    tools::wroot::file* GetFile() const;
-    tools::wroot::directory* GetHistoDirectory() const;
-    tools::wroot::directory* GetProfileDirectory() const;
-    tools::wroot::directory* GetNtupleDirectory() const;
-
-  private:
+   private:
     // data members
-    tools::wroot::file*       fFile;
-    tools::wroot::directory*  fHistoDirectory;
-    tools::wroot::directory*  fProfileDirectory;
-    tools::wroot::directory*  fNtupleDirectory;
+    tools::xml::default_factory*  fReadFactory;
+    std::map<G4String, tools::raxml*> fRFiles;
 };
 
-// inline functions
-
-inline tools::wroot::file* G4RootFileManager::GetFile() const
-{ return fFile; }
-
-inline tools::wroot::directory* G4RootFileManager::GetHistoDirectory() const
-{ return fHistoDirectory; }
-
-inline tools::wroot::directory* G4RootFileManager::GetProfileDirectory() const
-{ return fProfileDirectory; }
-
-inline tools::wroot::directory* G4RootFileManager::GetNtupleDirectory() const
-{ return fNtupleDirectory; }
-
 #endif
-

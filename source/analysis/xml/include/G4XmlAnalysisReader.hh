@@ -23,15 +23,15 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootAnalysisReader.hh 74257 2013-10-02 14:24:55Z gcosmo $
+// $Id: G4XmlAnalysisReader.hh 74257 2013-10-02 14:24:55Z gcosmo $
 
-// The main manager for Root analysis reader.
+// The main manager for Xml analysis reader.
 // It delegates most of functions to the object specific managers. 
 
-// Author: Ivana Hrivnacova, 09/04/2014 (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 25/07/2014 (ivana@ipno.in2p3.fr)
 
-#ifndef G4RootAnalysisReader_h
-#define G4RootAnalysisReader_h 1
+#ifndef G4XmlAnalysisReader_h
+#define G4XmlAnalysisReader_h 1
 
 #include "G4VAnalysisReader.hh"
 #include "globals.hh"
@@ -41,33 +41,33 @@
 #include "tools/histo/h3d" 
 #include "tools/histo/p1d" 
 #include "tools/histo/p2d" 
-#include "tools/rroot/ntuple"
+#include "tools/raxml"
 
-class G4RootRFileManager;
+class G4XmlRFileManager;
 class G4H1ToolsManager;
 class G4H2ToolsManager;
 class G4H3ToolsManager;
 class G4P1ToolsManager;
 class G4P2ToolsManager;
-class G4RootRNtupleManager;
+class G4XmlRNtupleManager;
   
-class G4RootAnalysisReader : public G4VAnalysisReader
+class G4XmlAnalysisReader : public G4VAnalysisReader
 {
   public:
-    G4RootAnalysisReader(G4bool isMaster = true);
-    virtual ~G4RootAnalysisReader();
+    G4XmlAnalysisReader(G4bool isMaster = true);
+    virtual ~G4XmlAnalysisReader();
     
     // static methods
-    static G4RootAnalysisReader* Instance();
-    
+    static G4XmlAnalysisReader* Instance();
+
     // Access methods
     tools::histo::h1d*  GetH1(G4int id, G4bool warn = true) const;
     tools::histo::h2d*  GetH2(G4int id, G4bool warn = true) const;
     tools::histo::h3d*  GetH3(G4int id, G4bool warn = true) const;
     tools::histo::p1d*  GetP1(G4int id, G4bool warn = true) const;
     tools::histo::p2d*  GetP2(G4int id, G4bool warn = true) const;
-    tools::rroot::ntuple* GetNtuple() const;
-    tools::rroot::ntuple* GetNtuple(G4int ntupleId) const;
+    tools::aida::ntuple* GetNtuple() const;
+    tools::aida::ntuple* GetNtuple(G4int ntupleId) const;
     using G4VAnalysisReader::GetNtuple;
     
   protected:
@@ -90,17 +90,17 @@ class G4RootAnalysisReader : public G4VAnalysisReader
     virtual G4int  ReadNtupleImpl(const G4String& ntupleName, 
                               const G4String& fileName,
                               G4bool isUserFileName);
- 
+
   private:
     // static data members
-    static G4RootAnalysisReader* fgMasterInstance;
-    static G4ThreadLocal G4RootAnalysisReader* fgInstance;    
+    static G4XmlAnalysisReader* fgMasterInstance;
+    static G4ThreadLocal G4XmlAnalysisReader* fgInstance;    
 
     // methods
-    //    
-    tools::rroot::buffer* GetBuffer(
-                             const G4String& fileName,
-                             const G4String& name,
+    tools::raxml_out* GetHandler(
+                             const G4String& fileName, 
+                             const G4String& objectName,
+                             const G4String& objectType,
                              const G4String& inFunction);
     G4bool Reset();
 
@@ -110,11 +110,11 @@ class G4RootAnalysisReader : public G4VAnalysisReader
     G4H3ToolsManager*     fH3Manager;
     G4P1ToolsManager*     fP1Manager;
     G4P2ToolsManager*     fP2Manager;
-    G4RootRNtupleManager* fNtupleManager;
-    G4RootRFileManager*   fFileManager;
+    G4XmlRNtupleManager*  fNtupleManager;
+    G4XmlRFileManager*    fFileManager;
 };
 
-#include "G4RootAnalysisReader.icc"
+#include "G4XmlAnalysisReader.icc"
 
 #endif
 

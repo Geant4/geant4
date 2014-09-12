@@ -23,78 +23,70 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4VFileManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
+// $Id: G4BaseFileManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
-// Base class for File manager.
+// Base class for analysis file managers.
 //
 // Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
 
-#ifndef G4VFileManager_h
-#define G4VFileManager_h 1
+#ifndef G4BaseFileManager_h
+#define G4BaseFileManager_h 1
 
-#include "G4BaseFileManager.hh"
+#include "G4AnalysisManagerState.hh"
 #include "globals.hh"
 
-class G4VFileManager : public G4BaseFileManager
+class G4BaseFileManager
 {
   public:
-    G4VFileManager(const G4AnalysisManagerState& state);
-    virtual ~G4VFileManager();
-   
-    // Methods to manipulate files
-    virtual G4bool OpenFile(const G4String& fileName) = 0;
-    virtual G4bool WriteFile() = 0;
-    virtual G4bool CloseFile() = 0; 
-    
-    // Methods for handling files and directories names
-    //
-    void LockHistoDirectoryName();
-    void LockProfileDirectoryName();
-    void LockNtupleDirectoryName();
+    G4BaseFileManager(const G4AnalysisManagerState& state);
+    virtual ~G4BaseFileManager();
 
     virtual G4bool SetFileName(const G4String& fileName);
+      // Set the base file name (without extension)
+      // If the current file name is already in use
+      // setting is not performed and false is returned
     
-    G4bool SetHistoDirectoryName(const G4String& dirName);
-    G4bool SetProfileDirectoryName(const G4String& dirName);
-    G4bool SetNtupleDirectoryName(const G4String& dirName); 
+    G4String GetFileName() const;
+      // Return the base file name (without extension)
 
-    G4String GetHistoDirectoryName() const;
-    G4String GetProfileDirectoryName() const;
-    G4String GetNtupleDirectoryName() const;
+    G4String GetFullFileName(const G4String& baseFileName = "",
+                           G4bool isPerThread = true) const;
+      // Compose and return the full file name:
+      // - add _tN suffix to the file base name if isPerThread
+      // - add file extension if not present
+
+    G4String GetHnFileName(const G4String& hnType, 
+                           const G4String& hnName) const;
+      // Compose and return the histogram or profile specific file name:
+      // - add _hn_hnName suffix to the file base name
+      // - add file extension if not present
+
+    G4String GetNtupleFileName(const G4String& ntupleName) const;
+      // Compose and return the ntuple specific file name:
+      // - add _nt_ntupleName suffix to the file base name
+      // - add _tN suffix if called on thread worker
+      // - add file extension if not present
+    
+    G4String GetFileType() const;                 
+     // Return the manager file type (starts with a lowercase letter)
 
   protected:
+    // utility function
+    G4String TakeOffExtension(G4String& name) const;
+  
     // data members
-    G4String fHistoDirectoryName;
-    G4String fProfileDirectoryName;
-    G4String fNtupleDirectoryName; 
-    G4bool   fLockFileName;     
-    G4bool   fLockHistoDirectoryName;     
-    G4bool   fLockProfileDirectoryName;     
-    G4bool   fLockNtupleDirectoryName;
+    const G4AnalysisManagerState& fState;
+    G4String fFileName;
 };
 
-// inline functions
-
-inline void G4VFileManager::LockHistoDirectoryName()
-{ fLockHistoDirectoryName = true; }
-
-inline void G4VFileManager::LockProfileDirectoryName()
-{ fLockProfileDirectoryName = true; }
-
-inline void G4VFileManager::LockNtupleDirectoryName()
-{ fLockNtupleDirectoryName = true; }
-
-
-inline G4String G4VFileManager::GetHistoDirectoryName() const {
-  return fHistoDirectoryName;
+inline G4bool G4BaseFileManager::SetFileName(const G4String& fileName) {
+  fFileName = fileName;
+  return true;
 }  
 
-inline G4String G4VFileManager::GetProfileDirectoryName() const {
-  return fProfileDirectoryName;
-}  
-
-inline G4String G4VFileManager::GetNtupleDirectoryName() const {
-  return fNtupleDirectoryName;
+inline G4String G4BaseFileManager::GetFileName() const {
+  return fFileName;
 }  
   
 #endif
+

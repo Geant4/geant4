@@ -17,6 +17,26 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 12, 2014 I. Hrivnacova (analysis-V10-00-25)
+- Fixes in XML reader:
+  - Added expat includes and libraries in xml sources.cmake
+  - Removed unused function from G4XmlAnalysisReader
+
+September 11, 2014 I. Hrivnacova (analysis-V10-00-24)
+- Adding histograms and profiles support in Csv
+- Finalized G4VAnalysisReader interface:
+  - Added reading P1, P2, H3
+  - Modifications to fit to all outputs
+  - Support for both user defined file names and "generic" file names
+    (generated automatically by G4AnalysisManager from the base name) 
+- Introduced G4BaseFileManager and separated implementation for
+  output/input file managers
+- Implemented reading P1, P2 in G4RootAnalysisReader; 
+  prepared code for H3 which reading is not yet available in tools
+- Implemented G4XmlAnalysisReader (complete)
+- Fixed writing ntuples when more than one ntuple is defined (Xml)
+- Do not overwrite user defined file extension
+
 September 08, 2014 I. Hrivnacova (analysis-V10-00-23)
 - Updated to g4tools 1.14.0 (by G. Barrand):
   Fixed compiler warning (converting to unsigned int from double)

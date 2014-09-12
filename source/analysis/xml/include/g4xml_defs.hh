@@ -32,8 +32,12 @@
 
 #include "tools/histo/h1d"
 #include "tools/histo/h2d"
+#include "tools/histo/h3d"
+#include "tools/histo/p1d"
+#include "tools/histo/p2d"
 #include "tools/waxml/ntuple"
 #include "G4XmlAnalysisManager.hh"
+#include "G4XmlAnalysisReader.hh"
 
 namespace G4Xml {
 
@@ -49,13 +53,32 @@ namespace G4Xml {
   typedef std::vector<tools::histo::h2d*>::iterator  G4H2Iterator;
   typedef std::vector<tools::histo::h2d*>::const_iterator  G4H2ConstIterator;
 
+  // H3 types
+  typedef tools::histo::h3d  G4H3;    
+  typedef std::vector<tools::histo::h3d*>::iterator  G4H3Iterator;
+  typedef std::vector<tools::histo::h3d*>::const_iterator  G4H3ConstIterator;
+
+  // P1 types
+  typedef tools::histo::p1d  G4P1;
+  typedef std::vector<tools::histo::p1d*>::iterator  G4P1Iterator;
+  typedef std::vector<tools::histo::p1d*>::const_iterator  G4P1ConstIterator;
+
+  // P2 types
+  typedef tools::histo::p2d  G4P2;    
+  typedef std::vector<tools::histo::p2d*>::iterator  G4P2Iterator;
+  typedef std::vector<tools::histo::p2d*>::const_iterator  G4P2ConstIterator;
+
   // Ntuple types
   typedef tools::waxml::ntuple  G4Ntuple; 
   typedef std::vector<tools::waxml::ntuple*>::iterator  G4NtupleIterator;
   typedef std::vector<tools::waxml::ntuple*>::const_iterator  G4NtupleConstIterator;
 
+  // RNtuple types
+  typedef tools::aida::ntuple  G4RNtuple; 
+
   // Managers
   typedef G4XmlAnalysisManager G4AnalysisManager; 
+  typedef G4XmlAnalysisReader  G4AnalysisReader; 
 }  
 
 #endif

@@ -91,11 +91,6 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     std::vector<tools::histo::h3d*>::iterator EndH3();
     std::vector<tools::histo::h3d*>::const_iterator BeginConstH3() const;
     std::vector<tools::histo::h3d*>::const_iterator EndConstH3() const;
-    
-    std::vector<tools::waxml::ntuple*>::iterator BeginNtuple();
-    std::vector<tools::waxml::ntuple*>::iterator EndNtuple();
-    std::vector<tools::waxml::ntuple*>::const_iterator BeginConstNtuple() const;
-    std::vector<tools::waxml::ntuple*>::const_iterator EndConstNtuple() const;
 
     std::vector<tools::histo::p1d*>::iterator BeginP1();
     std::vector<tools::histo::p1d*>::iterator EndP1();
@@ -106,6 +101,11 @@ class G4XmlAnalysisManager : public G4VAnalysisManager
     std::vector<tools::histo::p2d*>::iterator EndP2();
     std::vector<tools::histo::p2d*>::const_iterator BeginConstP2() const;
     std::vector<tools::histo::p2d*>::const_iterator EndConstP2() const;
+
+    std::vector<tools::waxml::ntuple*>::iterator BeginNtuple();
+    std::vector<tools::waxml::ntuple*>::iterator EndNtuple();
+    std::vector<tools::waxml::ntuple*>::const_iterator BeginConstNtuple() const;
+    std::vector<tools::waxml::ntuple*>::const_iterator EndConstNtuple() const;
     
   protected:
     // virtual methods from base class

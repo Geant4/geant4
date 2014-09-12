@@ -23,69 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4RootFileManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
+// $Id$
 
-// The manager for Root output file operations.
+// Structure containing the information related to rroot ntuple
+//
+// Author: Ivana Hrivnacova, 09/04/2014 (ivana@ipno.in2p3.fr)
 
-// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
+#ifndef G4XmlRNtupleDescription_h
+#define G4XmlRNtupleDescription_h 1
 
-#ifndef G4RootFileManager_h
-#define G4RootFileManager_h 1
+#include "tools/raxml"
+#include "tools/ntuple_binding"
 
-#include "G4VFileManager.hh"
-#include "globals.hh"
-
-#include <map>
-
-namespace tools {
-namespace wroot { 
-class file; 
-class directory;
+namespace tools { 
+class ntuple_binding;
 }
-}  
 
-class G4RootFileManager : public G4VFileManager
+struct G4XmlRNtupleDescription
 {
-  public:
-    G4RootFileManager(const G4AnalysisManagerState& state);
-    virtual ~G4RootFileManager();
+  G4XmlRNtupleDescription(
+    tools::aida::ntuple* rntuple) 
+    :  fNtuple(rntuple),
+       fNtupleBinding(new tools::ntuple_binding()),
+       fIsInitialized(false) {}
 
-    // Methods to manipulate file
-    virtual G4bool OpenFile(const G4String& fileName);
-    virtual G4bool WriteFile();
-    virtual G4bool CloseFile(); 
+  ~G4XmlRNtupleDescription()
+      { 
+        delete fNtupleBinding;
+        delete fNtuple;   // CHECK
+      }
 
-    G4bool CreateHistoDirectory();
-    G4bool CreateProfileDirectory();
-    G4bool CreateNtupleDirectory();
-    
-    // Get methods
-    tools::wroot::file* GetFile() const;
-    tools::wroot::directory* GetHistoDirectory() const;
-    tools::wroot::directory* GetProfileDirectory() const;
-    tools::wroot::directory* GetNtupleDirectory() const;
-
+  tools::aida::ntuple* fNtuple; 
+  tools::ntuple_binding* fNtupleBinding;
+  G4bool fIsInitialized;
+  
   private:
-    // data members
-    tools::wroot::file*       fFile;
-    tools::wroot::directory*  fHistoDirectory;
-    tools::wroot::directory*  fProfileDirectory;
-    tools::wroot::directory*  fNtupleDirectory;
+    // disabled (not implemented) copy constructor
+    G4XmlRNtupleDescription(const G4XmlRNtupleDescription& rhs);
+    // disabled (not implemented) assignement operator
+    G4XmlRNtupleDescription& operator=(G4XmlRNtupleDescription& rhs);
 };
 
-// inline functions
-
-inline tools::wroot::file* G4RootFileManager::GetFile() const
-{ return fFile; }
-
-inline tools::wroot::directory* G4RootFileManager::GetHistoDirectory() const
-{ return fHistoDirectory; }
-
-inline tools::wroot::directory* G4RootFileManager::GetProfileDirectory() const
-{ return fProfileDirectory; }
-
-inline tools::wroot::directory* G4RootFileManager::GetNtupleDirectory() const
-{ return fNtupleDirectory; }
-
-#endif
+#endif  
 

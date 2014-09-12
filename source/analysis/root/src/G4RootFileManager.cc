@@ -43,8 +43,7 @@ G4RootFileManager::G4RootFileManager(const G4AnalysisManagerState& state)
    fFile(0),
    fHistoDirectory(0),
    fProfileDirectory(0),
-   fNtupleDirectory(0),
-   fRFiles()
+   fNtupleDirectory(0)
 {
 }
 
@@ -52,9 +51,6 @@ G4RootFileManager::G4RootFileManager(const G4AnalysisManagerState& state)
 G4RootFileManager::~G4RootFileManager()
 {  
   delete fFile;
-  for (G4int i=0; i<G4int(fRFiles.size()); ++i) { 
-    delete fRFiles[i];
-  }    
 }
 
 //
@@ -125,36 +121,6 @@ G4bool G4RootFileManager::CloseFile()
   return true;
 } 
    
-//_____________________________________________________________________________
-G4bool G4RootFileManager::OpenRFile(const G4String& fileName)
-{
-  // create new file
-  tools::rroot::file* newFile = new tools::rroot::file(G4cout, fileName);
-  newFile->add_unziper('Z',tools::gunzip_buffer);
-  
-  if ( ! newFile->is_open() ) {
-    G4ExceptionDescription description;
-    description << "      " << "Cannot open file " << fileName;
-    G4Exception("G4RootRFileManager::OpenFile()",
-                "Analysis_W001", JustWarning, description);
-    delete newFile;
-    return false;
-  }
-
-  // add file in a map and delete the previous file if it exists
-  std::map<G4String, tools::rroot::file*>::iterator it
-    = fRFiles.find(fileName);
-  if ( it != fRFiles.end() ) { 
-    delete it->second;
-    it->second = newFile;
-  }
-  else {
-    fRFiles[fileName] = newFile;
-  }    
-
-  return true;
-}  
-  
 //_____________________________________________________________________________
 G4bool G4RootFileManager::CreateHistoDirectory()
 {
@@ -255,17 +221,4 @@ G4bool G4RootFileManager::CreateNtupleDirectory()
   }    
 #endif
   return true;
-}
-
-//_____________________________________________________________________________
-tools::rroot::file* G4RootFileManager::GetRFile(const G4String& fileName) const
-{ 
-  std::map<G4String, tools::rroot::file*>::const_iterator it
-    = fRFiles.find(fileName);
-  if  ( it != fRFiles.end() )
-    return it->second;
-  else {
-    // TO DO add warning
-    return 0;
-  }     
 }

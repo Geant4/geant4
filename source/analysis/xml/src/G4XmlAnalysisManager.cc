@@ -530,7 +530,7 @@ G4bool G4XmlAnalysisManager::WriteImpl()
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL1() ) 
     fState.GetVerboseL1()
-      ->Message("write", "files", fFileManager->GetFullFileName(), finalResult);
+      ->Message("write", "file", fFileManager->GetFullFileName(), finalResult);
 #endif
 
   return finalResult;
@@ -595,9 +595,9 @@ G4bool G4XmlAnalysisManager::CloseFileImpl()
   }
   else {
 #ifdef G4VERBOSE
-    if ( fState.GetVerboseL1() ) 
-      fState.GetVerboseL1()
-        ->Message("close", "files", fFileManager->GetFullFileName());
+    if ( fState.GetVerboseL2() ) 
+      fState.GetVerboseL2()
+        ->Message("close", "files", "");
 #endif
   }
 

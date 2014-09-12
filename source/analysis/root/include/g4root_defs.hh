@@ -32,6 +32,9 @@
 
 #include "tools/histo/h1d"
 #include "tools/histo/h2d"
+#include "tools/histo/h3d"
+#include "tools/histo/p1d"
+#include "tools/histo/p2d"
 #include "tools/wroot/ntuple"
 #include "tools/rroot/ntuple"
 #include "G4RootAnalysisManager.hh"
@@ -50,6 +53,21 @@ namespace G4Root {
   typedef tools::histo::h2d  G4H2;    
   typedef std::vector<tools::histo::h2d*>::iterator  G4H2Iterator;
   typedef std::vector<tools::histo::h2d*>::const_iterator  G4H2ConstIterator;
+
+  // H3 types
+  typedef tools::histo::h3d  G4H3;    
+  typedef std::vector<tools::histo::h3d*>::iterator  G4H3Iterator;
+  typedef std::vector<tools::histo::h3d*>::const_iterator  G4H3ConstIterator;
+
+  // P1 types
+  typedef tools::histo::p1d  G4P1;
+  typedef std::vector<tools::histo::p1d*>::iterator  G4P1Iterator;
+  typedef std::vector<tools::histo::p1d*>::const_iterator  G4P1ConstIterator;
+
+  // P2 types
+  typedef tools::histo::p2d  G4P2;    
+  typedef std::vector<tools::histo::p2d*>::iterator  G4P2Iterator;
+  typedef std::vector<tools::histo::p2d*>::const_iterator  G4P2ConstIterator;
 
   // Ntuple types
   typedef tools::wroot::ntuple  G4Ntuple; 

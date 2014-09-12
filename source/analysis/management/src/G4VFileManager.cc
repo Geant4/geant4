@@ -34,8 +34,7 @@
 
 //_____________________________________________________________________________
 G4VFileManager::G4VFileManager(const G4AnalysisManagerState& state)
-  : fState(state),
-    fFileName(""), 
+  : G4BaseFileManager(state),
     fHistoDirectoryName(""), 
     fProfileDirectoryName(""), 
     fNtupleDirectoryName(""),
@@ -67,8 +66,7 @@ G4bool G4VFileManager::SetFileName(const G4String& fileName)
     return false;
   }              
 
-  fFileName = fileName;
-  return true;
+  return G4BaseFileManager::SetFileName(fileName);
 }  
 
 //_____________________________________________________________________________
@@ -118,57 +116,3 @@ G4bool G4VFileManager::SetNtupleDirectoryName(const G4String& dirName)
   fNtupleDirectoryName = dirName;
   return true;
 }  
-
-//_____________________________________________________________________________
-G4String G4VFileManager::GetFullFileName(const G4String& baseFileName) const 
-{  
-  G4String name(baseFileName);
-  if ( name == "" ) name = fFileName;
- 
-  // Add thread Id to a file name if MT processing
-  if ( ! fState.GetIsMaster() ) {
-    std::ostringstream os;
-    os << G4Threading::G4GetThreadId();
-    name.append("_t");
-    name.append(os.str());
-  }  
-  // Add file extension .root if no extension is given
-  if ( name.find(".") == std::string::npos ) { 
-    name.append(".");
-    name.append(GetFileType());
-  }  
-
-  return name;
-}  
-
-//_____________________________________________________________________________
-G4String G4VFileManager::GetNtupleFileName(const G4String& ntupleName) const 
-{  
-  G4String name(fFileName);
-  // Add ntupleName
-  name.append("_");
-  name.append(ntupleName);
-  // Add thread Id to a file name if MT processing
-  if ( ! fState.GetIsMaster() ) {
-    std::ostringstream os;
-    os << G4Threading::G4GetThreadId();
-    name.append("_t");
-    name.append(os.str());
-  }  
-  // Add file extension .xml if no extension is given
-  if ( name.find(".") == std::string::npos ) { 
-    name.append(".");
-    name.append(GetFileType());
-  }
-  return name;
-}  
-
-//_____________________________________________________________________________
-G4String G4VFileManager::GetFileType() const 
-{
-  G4String fileType = fState.GetType();
-  fileType.toLower();
-  return fileType;
-}                 
-
-

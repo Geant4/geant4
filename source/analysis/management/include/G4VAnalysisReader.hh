@@ -46,10 +46,13 @@
 
 
 class G4HnManager;
+class G4BaseFileManager;
 class G4VH1Manager;
 class G4VH2Manager;
+class G4VH3Manager;
+class G4VP1Manager;
+class G4VP2Manager;
 class G4VRNtupleManager;
-class G4VFileManager;
 
 class G4VAnalysisReader
 {
@@ -58,15 +61,18 @@ class G4VAnalysisReader
     virtual ~G4VAnalysisReader();
    
     // Methods for handling files 
-    G4bool OpenFile(const G4String& fileName = "");
+    // G4bool OpenFile(const G4String& fileName = "");
 
     // Methods for handling files and directories names  
-    G4bool SetFileName(const G4String& fileName);
+    void SetFileName(const G4String& fileName);
     G4String GetFileName() const;
     
     // Methods to read histograms from a file
-    G4int GetH1(const G4String& h1Name, const G4String& fileName = "");
-    G4int GetH2(const G4String& h2Name, const G4String& fileName = "");
+    G4int ReadH1(const G4String& h1Name, const G4String& fileName = "");
+    G4int ReadH2(const G4String& h2Name, const G4String& fileName = "");
+    G4int ReadH3(const G4String& h3Name, const G4String& fileName = "");
+    G4int ReadP1(const G4String& h1Name, const G4String& fileName = "");
+    G4int ReadP2(const G4String& h2Name, const G4String& fileName = "");
                            
     // The ids of histograms and ntuples are generated automatically
     // starting from 0; with following functions it is possible to
@@ -74,6 +80,10 @@ class G4VAnalysisReader
     G4bool SetFirstHistoId(G4int firstId);
     G4bool SetFirstH1Id(G4int firstId);
     G4bool SetFirstH2Id(G4int firstId);
+    G4bool SetFirstH3Id(G4int firstId);
+    G4bool SetFirstProfileId(G4int firstId);
+    G4bool SetFirstP1Id(G4int firstId);
+    G4bool SetFirstP2Id(G4int firstId);
     G4bool SetFirstNtupleId(G4int firstId);
 
     // Methods to read ntuple from a file
@@ -117,19 +127,25 @@ class G4VAnalysisReader
     // Access methods
     G4int GetNofH1s() const;
     G4int GetNofH2s() const;
+    G4int GetNofH3s() const;
+    G4int GetNofP1s() const;
+    G4int GetNofP2s() const;
     G4int GetNofNtuples() const;
 
     // Access methods via names
     G4int GetH1Id(const G4String& name, G4bool warn = true) const;
     G4int GetH2Id(const G4String& name, G4bool warn = true) const;
+    G4int GetH3Id(const G4String& name, G4bool warn = true) const;
+    G4int GetP1Id(const G4String& name, G4bool warn = true) const;
+    G4int GetP2Id(const G4String& name, G4bool warn = true) const;
     
-    // Access to H1 parameters
+    // Access to histogram & profiles parameters
+    //
     G4int    GetH1Nbins(G4int id) const;
     G4double GetH1Xmin(G4int id) const;
     G4double GetH1Xmax(G4int id) const;
     G4double GetH1Width(G4int id) const;
-    
-    // Access to H2 parameters
+    //
     G4int    GetH2Nxbins(G4int id) const;
     G4double GetH2Xmin(G4int id) const;
     G4double GetH2Xmax(G4int id) const;
@@ -138,37 +154,63 @@ class G4VAnalysisReader
     G4double GetH2Ymin(G4int id) const;
     G4double GetH2Ymax(G4int id) const;
     G4double GetH2YWidth(G4int id) const;
+    //
+    G4int    GetH3Nxbins(G4int id) const;
+    G4double GetH3Xmin(G4int id) const;
+    G4double GetH3Xmax(G4int id) const;
+    G4double GetH3XWidth(G4int id) const;
+    G4int    GetH3Nybins(G4int id) const;
+    G4double GetH3Ymin(G4int id) const;
+    G4double GetH3Ymax(G4int id) const;
+    G4double GetH3YWidth(G4int id) const;
+    G4int    GetH3Nzbins(G4int id) const;
+    G4double GetH3Zmin(G4int id) const;
+    G4double GetH3Zmax(G4int id) const;
+    G4double GetH3ZWidth(G4int id) const;
+    //
+    G4int    GetP1Nbins(G4int id) const;
+    G4double GetP1Xmin(G4int id) const;
+    G4double GetP1Xmax(G4int id) const;
+    G4double GetP1XWidth(G4int id) const;
+    G4double GetP1Ymin(G4int id) const;
+    G4double GetP1Ymax(G4int id) const;
+    //
+    G4int    GetP2Nxbins(G4int id) const;
+    G4double GetP2Xmin(G4int id) const;
+    G4double GetP2Xmax(G4int id) const;
+    G4double GetP2XWidth(G4int id) const;
+    G4int    GetP2Nybins(G4int id) const;
+    G4double GetP2Ymin(G4int id) const;
+    G4double GetP2Ymax(G4int id) const;
+    G4double GetP2YWidth(G4int id) const;
+    G4double GetP2Zmin(G4int id) const;
+    G4double GetP2Zmax(G4int id) const;
 
-    // Access to H1 additional information
-    G4String GetH1Name(G4int id) const;
-    G4double GetH1Unit(G4int id) const;
-    G4bool   GetH1Activation(G4int id) const;
-    G4bool   GetH1Ascii(G4int id) const;
-
-    // Access to H2 additional information
-    G4String GetH2Name(G4int id) const;
-    G4double GetH2XUnit(G4int id) const;
-    G4double GetH2YUnit(G4int id) const;
-    G4bool   GetH2Activation(G4int id) const;
-    G4bool   GetH2Ascii(G4int id) const;
-    
-    // Setters for attributes for plotting
-    G4bool SetH1Title(G4int id, const G4String& title);
-    G4bool SetH1XAxisTitle(G4int id, const G4String& title);
-    G4bool SetH1YAxisTitle(G4int id, const G4String& title);
-    G4bool SetH2Title(G4int id, const G4String& title);
-    G4bool SetH2XAxisTitle(G4int id, const G4String& title);
-    G4bool SetH2YAxisTitle(G4int id, const G4String& title);
-    G4bool SetH2ZAxisTitle(G4int id, const G4String& title);
-
-    // Access attributes for plotting
+    // Access histogram & profiles attributes for plotting
+    //
     G4String GetH1Title(G4int id) const;
     G4String GetH1XAxisTitle(G4int id) const;
     G4String GetH1YAxisTitle(G4int id) const;
+    //
     G4String GetH2Title(G4int id) const;
     G4String GetH2XAxisTitle(G4int id) const;
     G4String GetH2YAxisTitle(G4int id) const;
     G4String GetH2ZAxisTitle(G4int id) const;
+    //
+    G4String GetH3Title(G4int id) const;
+    G4String GetH3XAxisTitle(G4int id) const;
+    G4String GetH3YAxisTitle(G4int id) const;
+    G4String GetH3ZAxisTitle(G4int id) const;
+    //
+    G4String GetP1Title(G4int id) const;
+    G4String GetP1XAxisTitle(G4int id) const;
+    G4String GetP1YAxisTitle(G4int id) const;
+    G4String GetP1ZAxisTitle(G4int id) const;
+    //
+    G4String GetP2Title(G4int id) const;
+    G4String GetP2XAxisTitle(G4int id) const;
+    G4String GetP2YAxisTitle(G4int id) const;
+    G4String GetP2ZAxisTitle(G4int id) const;
 
     // Verbosity
     void  SetVerboseLevel(G4int verboseLevel);
@@ -181,32 +223,46 @@ class G4VAnalysisReader
    
   protected:
     // virtual methods
-    virtual G4bool OpenFileImpl(const G4String& fileName) = 0;
-
-    virtual G4int  GetH1Impl(const G4String& /*h1Name*/, 
-                             const G4String& /*fileName*/) { return false; }
-    virtual G4int  GetH2Impl(const G4String& /*h2Name*/, 
-                             const G4String& /*fileName*/) { return false; }
-    virtual G4int  GetNtupleImpl(const G4String& /*ntupleName*/, 
-                             const G4String& /*fileName*/) { return false; }
+    virtual G4int  ReadH1Impl(const G4String& /*h1Name*/, 
+                              const G4String& /*fileName*/,
+                              G4bool /*isUserFileName*/) { return false; }
+    virtual G4int  ReadH2Impl(const G4String& /*h2Name*/, 
+                              const G4String& /*fileName*/,
+                              G4bool /*isUserFileName*/) { return false; }
+    virtual G4int  ReadH3Impl(const G4String& /*h2Name*/, 
+                              const G4String& /*fileName*/,
+                              G4bool /*isUserFileName*/) { return false; }
+    virtual G4int  ReadP1Impl(const G4String& /*h1Name*/, 
+                              const G4String& /*fileName*/,
+                              G4bool /*isUserFileName*/) { return false; }
+    virtual G4int  ReadP2Impl(const G4String& /*h2Name*/, 
+                              const G4String& /*fileName*/,
+                              G4bool /*isUserFileName*/) { return false; }
+    virtual G4int  ReadNtupleImpl(const G4String& /*ntupleName*/, 
+                              const G4String& /*fileName*/,
+                              G4bool /*isUserFileName*/) { return false; }
  
     // methods
     void SetH1Manager(G4VH1Manager* h1Manager);
     void SetH2Manager(G4VH2Manager* h2Manager);
+    void SetH3Manager(G4VH3Manager* h3Manager);
+    void SetP1Manager(G4VP1Manager* p1Manager);
+    void SetP2Manager(G4VP2Manager* p2Manager);
     void SetNtupleManager(G4VRNtupleManager* ntupleManager);
-    void SetFileManager(G4VFileManager* fileManager);
+    void SetFileManager(G4BaseFileManager* fileManager);
 
     // data members
     G4AnalysisManagerState fState;
 
   private:
     // data members
-    G4HnManager*      fH1HnManager;
-    G4HnManager*      fH2HnManager;
     G4VH1Manager*     fVH1Manager;
     G4VH2Manager*     fVH2Manager;
+    G4VH3Manager*     fVH3Manager;
+    G4VP1Manager*     fVP1Manager;
+    G4VP2Manager*     fVP2Manager;
     G4VRNtupleManager* fVNtupleManager;
-    G4VFileManager*    fVFileManager;
+    G4BaseFileManager* fFileManager;
 };
 
 // inline functions

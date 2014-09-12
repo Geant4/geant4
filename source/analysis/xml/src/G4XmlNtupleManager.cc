@@ -169,6 +169,7 @@ void G4XmlNtupleManager::CreateNtuplesFromBooking()
        return;
   }          
   
+  G4int ntupleId = fFirstId;
   std::vector<G4XmlNtupleDescription*>::iterator itn;  
   for (itn = fNtupleDescriptionVector.begin(); itn != fNtupleDescriptionVector.end(); itn++ ) {
 
@@ -218,7 +219,7 @@ void G4XmlNtupleManager::CreateNtuplesFromBooking()
         }
       }
     }
-    FinishNtuple();
+    FinishNtuple(ntupleId++);
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL3() ) 
       fState.GetVerboseL3()
@@ -525,10 +526,12 @@ void G4XmlNtupleManager::FinishNtuple(G4int ntupleId)
 { 
   G4XmlNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "FinishNtuple");
-  tools::ntuple_booking* ntupleBooking
-    = ntupleDescription->fNtupleBooking;  
+  tools::ntuple_booking* ntupleBooking = 0;
+  if ( ntupleDescription )  {
+    ntupleBooking = ntupleDescription->fNtupleBooking; 
+  }   
 
-  if ( ! ntupleBooking ) {
+  if ( ( ! ntupleDescription ) || ( ! ntupleBooking ) ) {
     G4ExceptionDescription description;
     description << "      " 
                 << "Ntuple " << ntupleId << " has to be created first. ";
@@ -551,7 +554,6 @@ void G4XmlNtupleManager::FinishNtuple(G4int ntupleId)
     path.append(fFileManager->GetNtupleDirectoryName());
     ntupleDescription->fNtuple
       ->write_header(path, ntupleBooking->name(), ntupleBooking->title());  
-
     fFileManager->LockNtupleDirectoryName();
   }  
 
