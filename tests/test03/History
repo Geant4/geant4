@@ -1,0 +1,27 @@
+$Id: History 66370 2012-12-18 09:25:03Z gcosmo $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                    Test 03 History file
+                    --------------------
+This file should be used by the test developer to briefly
+summarize all major modifications introduced in the code and keep
+track of all tags.
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+12 Sep 2014, Ivana Hrivnacova (test03-V10-00-02)
+   No changes since previous tag, which was rejected due to compiler
+   error & warning in analysis tag
+
+11 Sep 2014, Ivana Hrivnacova (test03-V10-00-01)
+   - Finalized test code.
+   - Added read test for Root and Xml.
+
+10 Sep 2014, Gunter Folger  (test03-V10-00-00)
+   Add test for analysis provided by Ivana.

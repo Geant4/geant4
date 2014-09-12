@@ -1,0 +1,9 @@
+# Macro file for testing p1 in testAnalysis
+
+# test set command
+
+# p1
+/analysis/p1/set 1 20 0. 300. none none linear 0 10. MeV none
+/analysis/p1/setTitle 1 "New Pseudo Profile"
+/analysis/p1/setXaxis 1 "L [mm]"
+/analysis/p1/setYaxis 1 "Edep/L [MeV/mm]"

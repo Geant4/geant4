@@ -1,0 +1,9 @@
+# Macro file for testing h2 in testAnalysis
+
+# test set command
+
+# h2
+/analysis/h2/set 1 10 -10. 10. MeV none linear 10 -10. 10. MeV none linear 
+/analysis/h2/setTitle 1 "New PxPy"
+/analysis/h2/setXaxis 1 "Px [MeV]"
+/analysis/h2/setYaxis 1 "Py [MeV]"

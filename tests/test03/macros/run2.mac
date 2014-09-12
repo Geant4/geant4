@@ -1,0 +1,10 @@
+# Macro file for testAnalysis
+# 
+# Default kinemtics: 
+# electron 50 MeV in direction (0.,0.,1.)
+# 1000 events
+#
+
+/run/printProgress 100
+/run/beamOn 1000
+

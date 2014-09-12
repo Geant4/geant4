@@ -1,0 +1,9 @@
+# Macro file for testing h1 in testAnalysis
+
+# test set command
+
+# h1
+/analysis/h1/set 11 10 -10. 10. MeV none linear
+/analysis/h1/setTitle 11 "New Px"
+/analysis/h1/setXaxis 11 "Px [MeV]"
+

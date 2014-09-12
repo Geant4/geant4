@@ -1,0 +1,10 @@
+# Macro file for testing h3 in testAnalysis
+
+# test set command
+
+# h3
+/analysis/h3/set 1 10 -10. 10. MeV none linear 10 -10. 10. MeV none linear 10 -10. 10. MeV none linear
+/analysis/h3/setTitle 1 "New PxPyPz"
+/analysis/h3/setXaxis 1 "Px [MeV]"
+/analysis/h3/setYaxis 1 "Py [MeV]"
+/analysis/h3/setZaxis 1 "Pz [MeV]"

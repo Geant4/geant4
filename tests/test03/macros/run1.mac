@@ -1,0 +1,38 @@
+# Macro file for example B4
+# 
+# Can be run in batch, without graphic
+# or interactively: Idle> /control/execute run1.mac
+#
+# Default kinematics: 
+# electron 50 MeV in direction (0.,0.,1.)
+# 1 event with tracking/verbose
+#
+/tracking/verbose 1
+/run/beamOn 1
+#
+#
+# muon 300 MeV in direction (0.,0.,1.)
+# 3 events
+#
+/gun/particle mu+
+/gun/energy 3 MeV
+/run/beamOn 3
+#
+# 20 events
+#
+/tracking/verbose 0
+/run/printProgress 5
+/run/beamOn 20
+#
+# Magnetic field
+# 
+/globalField/setValue 0.2 0 0 tesla
+/run/beamOn 3
+#
+# Activate/inactivate physics processes
+#
+/process/list
+/process/inactivate eBrem
+#
+/run/beamOn 20
+#
