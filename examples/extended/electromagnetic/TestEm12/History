@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+11-09-14 mma (testem12-V10-00-03)
+- TestEm12.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
 
 22-06-14 mma (testem12-V10-00-02)
 - remove PhysicsList::SetCuts(). Update macros
