@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
+
+13-09-14 mma (electonScattering-V10-00-02)
+- electronScttering.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
+
 24-06-14 mma (electronScattering-V10-00-01)
 - restaure scatter.mac
 - remove PhysicsList::SetCuts(). Update macros
