@@ -160,6 +160,9 @@ public: // With description
 
   virtual void ModelDescription(std::ostream& outFile) const ; //=0;
 
+  // Initialisation before run
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&){;};
+
 private:
     
   G4HadronicInteraction(const G4HadronicInteraction &right );
@@ -190,6 +193,7 @@ protected:
   G4double theMaxEnergy;
 
   G4bool isBlocked;
+
 
 private:       
     
