@@ -13,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+15-09-14 I. Hrivnacova (exhadr04-V10-00-04)
+- Fixed test in envHadronic.sh
      
 09-05-14 mma (exhadr04-V10-00-03)
 - NeutronHPphysics: check for pre-existing processes
