@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+12 September 2014 Luis Sarmiento radioactive_decay-V10-00-05
+------------------------------------------------------------
+- Fixed file missing in commit that enables the proton decay
+
 06 August 2014 Luis Sarmiento radioactive_decay-V10-00-04
 ---------------------------------------------------------
 - proton decay added. It was coded mimicking the alpha decay.
