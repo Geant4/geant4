@@ -13,6 +13,13 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+12 September 2014 Tatsumi Koi (hadr-man-V10-00-11)
+------------------------------------------------
+- Add BuildPhysics method for Initialisation of models before run
+	Co working with hadr-modman-V10-00-05
+	include/G4EnergyRangeManager.hh
+	src/G4EnergyRangeManager.cc
+	src/G4HadronicProcess.cc
 
 4 August 2014 V. Ivanchenko (hadr-man-V10-00-10)
 ------------------------------------------------

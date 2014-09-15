@@ -71,6 +71,8 @@ public:
   std::vector<G4HadronicInteraction*>& GetHadronicInteractionList();
     
   void Dump( G4int verbose = 0 ); 
+
+  void BuildPhysicsTable(const G4ParticleDefinition&);
     
 private:
      

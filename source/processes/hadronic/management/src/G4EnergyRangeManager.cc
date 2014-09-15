@@ -289,5 +289,14 @@ void G4EnergyRangeManager::Dump( G4int verbose )
     }
   }
 }
+
+void
+G4EnergyRangeManager::BuildPhysicsTable(const G4ParticleDefinition& aParticleType)
+{
+   for ( std::vector<G4HadronicInteraction*>::iterator 
+         it = theHadronicInteraction.begin() ; it != theHadronicInteraction.end() ; it++ ) {
+      (*it)->BuildPhysicsTable( aParticleType );
+   }
+}
  /* end of file */
  

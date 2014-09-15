@@ -166,6 +166,7 @@ void G4HadronicProcess::BuildPhysicsTable(const G4ParticleDefinition& p)
   try
   {
     theCrossSectionDataStore->BuildPhysicsTable(p);
+    theEnergyRangeManager.BuildPhysicsTable(p);
   }
   catch(G4HadronicException aR)
   {
