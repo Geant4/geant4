@@ -13,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+11-09-14 mma (exhadr04-V10-00-05)
+- Hadr04.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
 
 15-09-14 I. Hrivnacova (exhadr04-V10-00-04)
 - Fixed test in envHadronic.sh
