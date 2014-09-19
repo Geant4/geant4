@@ -152,7 +152,8 @@ void G4DiffractiveSplitableHadron::SetSecondParton( G4int PDGcode ) {
 void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
                                                      G4int* bEnd ) const {
   const G4double udspin1 = 1.0/6.0;
-  const G4double uuspin1 = 1.0/3.0;
+  //const G4double uuspin1 = 1.0/3.0;
+  const G4double uuspin1 = 0.0;  // AR-17Sep2014: Uzhinsky's instanton idea
   //const G4double udspin0 = 1.0/2.0;
 
   G4int absPDGcode = std::abs( PDGcode );

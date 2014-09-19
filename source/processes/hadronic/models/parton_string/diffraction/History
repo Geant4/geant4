@@ -15,6 +15,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+17-Sep-2014 A. Ribon       (hadr-string-diff-V10-00-04)
+-  G4DiffractiveSplitableHadron : trying out Uzhinsky's idea, inspired
+   from instantons, of setting to 0 the probability of (uu)-diquark.
+
 12-Aug-2014 A. Ribon       (hadr-string-diff-V10-00-03)
 -  Postponed the previous, internal tag made by V. Uzhinsky.
 -  G4FTFModel : factorized the longest method, PutOnMassShell, 
