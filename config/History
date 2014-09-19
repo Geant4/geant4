@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17th September 2014   Gabriele Cosmo  (config-V10-00-08)
+- Added flags in geomconf.gmk for added USolids shapes UExtrudedSolid,
+  UGenericTrap and UTrap.
+
 25th July 2014   Gabriele Cosmo  (config-V10-00-07)
 - Added flag for C++11 also to CPPFLAGS in Linus-g++.gmk when G4USE_STD11
   is set.
