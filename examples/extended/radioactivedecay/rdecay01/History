@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+18-09-14 mma (rdecay01-V10-00-03)
+- rdecay01.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
      
 11-12-13 mma (rdecay01-V10-00-02)
 - MT: move histo normalization in Run::EndOfRun()
