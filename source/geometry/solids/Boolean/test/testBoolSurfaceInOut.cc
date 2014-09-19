@@ -227,7 +227,7 @@ G4ThreeVector GetVectorOnSphere(G4Sphere& sphere)
   G4double part = 1./6.;
   G4double rand = G4UniformRand();
 
-  G4double pRmin  = sphere.GetInsideRadius();
+  G4double pRmin  = sphere.GetInnerRadius();
   G4double pRmax  = sphere.GetOuterRadius();
   G4double phi1   = sphere.GetStartPhiAngle();
   G4double phi2   = phi1 + sphere.GetDeltaPhiAngle();
@@ -722,8 +722,6 @@ int main(void)
 #ifdef NDEBUG
     G4Exception("FAIL: *** Assertions must be compiled in! ***");
 #endif
-
-    G4ThreeVector p1, p2;
   
   // Check box tracking function 
 

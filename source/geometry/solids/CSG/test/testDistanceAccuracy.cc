@@ -220,7 +220,7 @@ G4ThreeVector GetVectorOnSphere(G4Sphere& sphere)
   G4double part = 1./6.;
   G4double rand = G4UniformRand();
 
-  G4double pRmin  = sphere.GetInsideRadius();
+  G4double pRmin  = sphere.GetInnerRadius();
   G4double pRmax  = sphere.GetOuterRadius();
   G4double phi1   = sphere.GetStartPhiAngle();
   G4double phi2   = phi1 + sphere.GetDeltaPhiAngle();
@@ -889,15 +889,15 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
         {
           for( j = 0; j < jMax; j++ )
           {
-            G4ThreeVector v = GetRandomUnitVector();
+            G4ThreeVector v1 = GetRandomUnitVector();
 
-            distIn   = b1.DistanceToIn(p,v);
+            distIn   = b1.DistanceToIn(p,v1);
 
 	    if(distIn != kInfinity)
 	    {
               iIn++;
               
-              surfaceP = b1.Inside(p + distIn*v);
+              surfaceP = b1.Inside(p + distIn*v1);
 
               if(surfaceP != kSurface )
 	      {
@@ -907,7 +907,7 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
               // G4cout<<"location p: "; // << G4endl;
               // G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
               // G4cout<<" direction v: "; // << G4endl; 
-              // G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+              // G4cout<<"( "<<v1.x()<<", "<<v1.y()<<", "<<v1.z()<<" ); "<<G4endl<<G4endl;
 	      }
             }
 	  }
@@ -918,10 +918,10 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
           {
             iOut++;
 
-            G4ThreeVector v = GetRandomUnitVector();
+            G4ThreeVector v2 = GetRandomUnitVector();
           
-            distOut  = b1.DistanceToOut(p,v,calcNorm,pgoodNorm,pNorm); 
-            surfaceP = b1.Inside(p + distOut*v);
+            distOut  = b1.DistanceToOut(p,v2,calcNorm,pgoodNorm,pNorm); 
+            surfaceP = b1.Inside(p + distOut*v2);
 
             if(surfaceP != kSurface )
 	    {
@@ -931,12 +931,11 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
               // G4cout<<"location p: "; // << G4endl;
               // G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
               // G4cout<<" direction v: "; // << G4endl; 
-              // G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+              // G4cout<<"( "<<v2.x()<<", "<<v2.y()<<", "<<v2.z()<<" ); "<<G4endl<<G4endl;
 	    }
           }
         }
       }
-
     }
     G4cout<<"iIn = "<<iIn<<";     iOut = "<<iOut<<G4endl;
     G4cout<<"iInNoSurf = "<<iInNoSurf<<";    iOutNoSurf = "<<iOutNoSurf<<G4endl;
@@ -1077,15 +1076,15 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
         {
           for( j = 0; j < jMax; j++ )
           {
-            G4ThreeVector v = GetRandomUnitVector();
+            G4ThreeVector v3 = GetRandomUnitVector();
 
-            distIn   = st.DistanceToIn(p,v);
+            distIn   = st.DistanceToIn(p,v3);
 
 	    if(distIn != kInfinity)
 	    {
               iIn++;
               
-              surfaceP = st.Inside(p + distIn*v);
+              surfaceP = st.Inside(p + distIn*v3);
 
               if(surfaceP != kSurface )
 	      {
@@ -1095,7 +1094,7 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
               // G4cout<<"location p: "; // << G4endl;
               // G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
               // G4cout<<" direction v: "; // << G4endl; 
-              // G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+              // G4cout<<"( "<<v3.x()<<", "<<v3.y()<<", "<<v3.z()<<" ); "<<G4endl<<G4endl;
 	      }
             }
 	  }
@@ -1106,10 +1105,10 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
           {
             iOut++;
 
-            G4ThreeVector v = GetRandomUnitVector();
+            G4ThreeVector v4 = GetRandomUnitVector();
           
-            distOut  = st.DistanceToOut(p,v,calcNorm,pgoodNorm,pNorm); 
-            surfaceP = st.Inside(p + distOut*v);
+            distOut  = st.DistanceToOut(p,v4,calcNorm,pgoodNorm,pNorm); 
+            surfaceP = st.Inside(p + distOut*v4);
 
             if(surfaceP != kSurface )
 	    {
@@ -1119,12 +1118,11 @@ int test_one_solid ( Esolid useCase,  int num_points, int directions_per_point )
               // G4cout<<"location p: "; // << G4endl;
               // G4cout<<"( "<<p.x()<<", "<<p.y()<<", "<<p.z()<<" ); "<<G4endl;
               // G4cout<<" direction v: "; // << G4endl; 
-              // G4cout<<"( "<<v.x()<<", "<<v.y()<<", "<<v.z()<<" ); "<<G4endl<<G4endl;
+              // G4cout<<"( "<<v4.x()<<", "<<v4.y()<<", "<<v4.z()<<" ); "<<G4endl<<G4endl;
 	    }
           }
         }
       }
-
     }
     G4cout<<"iIn = "<<iIn<<";     iOut = "<<iOut<<G4endl;
     G4cout<<"iInNoSurf = "<<iInNoSurf<<";    iOutNoSurf = "<<iOutNoSurf<<G4endl;

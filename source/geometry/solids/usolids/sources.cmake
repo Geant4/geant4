@@ -38,8 +38,12 @@ GEANT4_DEFINE_MODULE(NAME G4geomUSolids
         UCons.hh
         UCons.icc
         UEnclosingCylinder.hh
+        UExtrudedSolid.hh
+        UExtrudedSolid.icc
         UGenericPolycone.hh
         UGenericPolycone.icc
+        UGenericTrap.hh
+        UGenericTrap.icc
         UIntersectingCone.hh
         UMultiUnion.hh
         UOrb.hh
@@ -51,12 +55,18 @@ GEANT4_DEFINE_MODULE(NAME G4geomUSolids
         UPolyhedraSide.hh
         UPolyPhiFace.hh
         UPolyPhiFace.icc
+        UQuadrangularFacet.hh
         UReduciblePolygon.hh
         USphere.hh
+        UTessellatedGeometryAlgorithms.hh
+        UTessellatedSolid.hh
         UTet.hh
         UTransform3D.hh
+        UTrap.hh
+        UTrap.icc
         UTrd.hh
         UTrd.icc
+        UTriangularFacet.hh
         UTubs.hh
         UTubs.icc
         UTypes.hh
@@ -75,7 +85,9 @@ GEANT4_DEFINE_MODULE(NAME G4geomUSolids
         UBox.cc
         UCons.cc
         UEnclosingCylinder.cc
+        UExtrudedSolid.cc
         UGenericPolycone.cc
+        UGenericTrap.cc
         UIntersectingCone.cc
         UMultiUnion.cc
         UOrb.cc
@@ -84,11 +96,16 @@ GEANT4_DEFINE_MODULE(NAME G4geomUSolids
         UPolyhedra.cc
         UPolyhedraSide.cc
         UPolyPhiFace.cc
+        UQuadrangularFacet.cc
         UReduciblePolygon.cc
         USphere.cc
+        UTessellatedGeometryAlgorithms.cc
+        UTessellatedSolid.cc
         UTet.cc
         UTransform3D.cc
+        UTrap.cc
         UTrd.cc
+        UTriangularFacet.cc
         UTubs.cc
         UUtils.cc
         UVCSGfaceted.cc

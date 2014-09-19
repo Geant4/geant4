@@ -17,6 +17,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 17, 2014  G.Cosmo               geom-usolids-V10-00-16
+- Added shapes from the USolids library: UExtrudedSolid, UGenericTrap,
+  UTessellatedSolid (together with UQuadrangularFacet, UTriangularFacet
+  and UTessellatedGeometryAlgorithms utility classes) and UTrap.
+- Modified original UExtrudedSolid, UGenericTrap and UTrap classes to
+  provide deferred initialisation through default constructor.
+  Added public accessors to UGenericTrap and UTrap.
+  Code cleanup in also in UTessellatedSolid to remove G4 types code blocks
+  and flags and make use of UUtils::Exception where commented.
+- Minor fix in UVector2 to replace use of 's' with 's1' as parameter in
+  copy constructor.
+- Removed references to G4 types in several classes.
+- Corrected treatment of transformations in UMultiUnion and
+  UVoxelizer (T.Nikitina).
+
 September 4, 2014  T.Nikitina             geom-usolids-V10-00-15
 - UCons: fixed typo error in GetPointOnSurface() in the call
   to GetRadiusInRing(). Responsible for occasionally wrong reports

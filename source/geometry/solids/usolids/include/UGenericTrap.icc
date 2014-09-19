@@ -1,0 +1,126 @@
+//
+// ********************************************************************
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
+// ********************************************************************
+//
+// $Id:$
+//
+// --------------------------------------------------------------------
+//
+// UGenericTrap.icc
+//
+// 21.10.13 Tatiana Nikitina, CERN; Ivana Hrivnacova, IPN Orsay
+//          Adapted from Root Arb8 implementation
+// --------------------------------------------------------------------
+
+inline
+double UGenericTrap::GetZHalfLength() const
+{
+  return fDz;
+}
+
+inline
+void UGenericTrap::SetZHalfLength(double halfZ)
+{
+  fDz = halfZ;
+}
+
+// --------------------------------------------------------------------
+
+inline
+int UGenericTrap::GetNofVertices() const
+{
+  return fVertices.size();
+}
+
+// --------------------------------------------------------------------
+
+inline
+UVector2 UGenericTrap::GetVertex(int index) const
+{
+  if (index < 0 || index >= int(fVertices.size()))
+  {
+    UUtils::Exception("UGenericTrap::GetVertex()", "GeomSolids0003",
+                      FatalError, 1, "Index outside range.");
+  }
+  return fVertices[index];
+}
+
+// --------------------------------------------------------------------
+
+inline
+const std::vector<UVector2>& UGenericTrap::GetVertices() const
+{
+  return fVertices;
+}
+
+// --------------------------------------------------------------------
+
+inline
+
+double UGenericTrap::GetTwistAngle(int index) const
+{
+  if ((index < 0) || (index >= int(fVertices.size())))
+  {
+    UUtils::Exception ("UGenericTrap::GetTwistAngle()", "GeomSolids0003",
+                       FatalError, 1, "Index outside range.");
+  }
+  return fTwist[index];
+}
+
+// --------------------------------------------------------------------
+
+inline
+bool UGenericTrap::IsTwisted() const
+{
+  return fIsTwisted;
+}
+
+// --------------------------------------------------------------------
+
+inline
+void UGenericTrap::SetTwistAngle(int index, double twist)
+{
+  if ((index < 0) || (index >= int(fVertices.size())))
+  {
+    UUtils::Exception ("UGenericTrap::SetTwistAngle()", "GeomSolids0003",
+                       FatalError, 1, "Index outside range.");
+  }
+  fTwist[index] = twist;
+}
+
+// --------------------------------------------------------------------
+
+inline
+int UGenericTrap::GetVisSubdivisions()const
+{
+  return fVisSubdivisions;
+}
+
+// --------------------------------------------------------------------
+
+inline
+void UGenericTrap::SetVisSubdivisions(int subdiv)
+{
+  fVisSubdivisions = subdiv;
+}
+
+// --------------------------------------------------------------------
+
+inline
+UVector3 UGenericTrap::GetMinimumBBox() const
+{
+  return fMinBBoxVector;
+}
+
+// --------------------------------------------------------------------
+
+inline
+UVector3 UGenericTrap::GetMaximumBBox() const
+{
+  return fMaxBBoxVector;
+}
+
+// --------------------------------------------------------------------
+

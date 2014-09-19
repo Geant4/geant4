@@ -8,9 +8,9 @@
 #/mydet/SelectDetector Torus
 #/mydet/SelectDetector Box
 #/mydet/SelectDetector Sphere
-#/mydet/SelectDetector Tube
+#/mydet/SelectDetector Tubs
 #/mydet/SelectDetector Orb
-#/mydet/SelectDetector Cone
+#/mydet/SelectDetector Cons
 /mydet/SelectDetector Paraboloid
 #/mydet/SelectDetector TwistedTubs 
 #/mydet/SelectDetector TwistedBox

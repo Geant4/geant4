@@ -35,12 +35,15 @@
 // Author: Ivana Hrivnacova, IPN Orsay
 // --------------------------------------------------------------------
 
+#include "G4ExtrudedSolid.hh"
+
+#if !defined(G4GEOM_USE_UEXTRUDEDSOLID)
+
 #include <set>
 #include <algorithm>
 #include <cmath>
 #include <iomanip>
 
-#include "G4ExtrudedSolid.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4VFacet.hh"
@@ -906,3 +909,5 @@ std::ostream& G4ExtrudedSolid::StreamInfo(std::ostream &os) const
 
   return os;
 }  
+
+#endif

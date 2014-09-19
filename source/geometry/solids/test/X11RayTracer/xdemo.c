@@ -44,7 +44,7 @@ void init_x () {
   XMapRaised ( dis , win );
   XFlush ( dis );
 
-  buffer = ( char * ) malloc ( 4*W*H );
+  buffer = malloc ( 4*W*H );
   xim = XCreateImage ( dis , CopyFromParent , depth , ZPixmap , 0 ,
 		       buffer , W , H , 32 , W*4 );
 

@@ -72,7 +72,6 @@
 #include "G4SubtractionSolid.hh"
 #include "G4ReflectedSolid.hh"
 
-#include "G4BREPSolidBox.hh"
 #include "G4TwoVector.hh"
 #include "G4TriangularFacet.hh"
 #include "G4QuadrangularFacet.hh"
@@ -101,8 +100,7 @@
  
 DetectorConstruction::DetectorConstruction()
 :solidWorld(0),  logicWorld(0),  physiWorld(0),
- logicTracker(0),physiTracker(0), 
- fWorldLength(0.)
+ physiTracker(0), fWorldLength(0.)
 {
     detectorMessenger = new DetectorMessenger(this);
 }

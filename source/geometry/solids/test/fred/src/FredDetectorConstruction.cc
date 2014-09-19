@@ -53,13 +53,13 @@
 #include "G4Para.hh"
 #include "G4Cons.hh"
 #include "G4Sphere.hh"
-#include "G4BREPSolidPCone.hh"
 #include "G4Polyhedra.hh"
 #include "G4Polycone.hh"
 #include "G4Ellipsoid.hh"
 #include "G4EllipticalCone.hh"
 #include "G4EllipticalTube.hh"
 #include "G4ExtrudedSolid.hh"
+#include "G4TessellatedSolid.hh"
 #include "G4Hype.hh"
 #include "G4QuadrangularFacet.hh"
 #include "G4Tet.hh"
@@ -598,26 +598,41 @@ G4VPhysicalVolume* FredDetectorConstruction::Construct()
       break;
   
     case TESSEL2: {
+/*
       G4ExtrudedSolid* xtru2 = CreateExtrudedSolid2();
       testVolume = new G4TessellatedSolid(*xtru2);
       testVolume->SetName("test_tessel2"); 
-      delete xtru2;  
+      delete xtru2;
+*/
+      G4ExtrudedSolid* xtru2 = CreateExtrudedSolid2();
+      testVolume = xtru2;
+      testVolume->SetName("test_tessel2"); 
       }                   
       break;
   
     case TESSEL3: {
+/*
       G4ExtrudedSolid* xtru3 = CreateExtrudedSolid3();
       testVolume = new G4TessellatedSolid(*xtru3);
       testVolume->SetName("test_tessel3"); 
       delete xtru3;
+*/
+      G4ExtrudedSolid* xtru3 = CreateExtrudedSolid3();
+      testVolume = xtru3;
+      testVolume->SetName("test_tessel3"); 
       }                     
       break;
   
     case TESSEL4: {
+/*
       G4ExtrudedSolid* xtru4 = CreateExtrudedSolid4();
       testVolume = new G4TessellatedSolid(*xtru4);
       testVolume->SetName("test_tessel4"); 
       delete xtru4;
+*/
+      G4ExtrudedSolid* xtru4 = CreateExtrudedSolid4();
+      testVolume = xtru4;
+      testVolume->SetName("test_tessel4"); 
       }                     
       break;
  

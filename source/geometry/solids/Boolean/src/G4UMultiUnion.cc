@@ -32,6 +32,8 @@
 
 #include "G4UMultiUnion.hh"
 #include "G4Polyhedron.hh"
+#include "G4DisplacedSolid.hh"
+#include "G4RotationMatrix.hh"
 
 ////////////////////////////////////////////////////////////////////////
 //
@@ -60,6 +62,7 @@ G4UMultiUnion::G4UMultiUnion(__void__& a)
 //
 G4UMultiUnion::~G4UMultiUnion()
 {
+  fPolyhedron = 0;
 }
 
 
@@ -100,8 +103,12 @@ G4Polyhedron* G4UMultiUnion::CreatePolyhedron() const
    
    for(G4int i=1; i<GetNumberOfSolids(); ++i)
    {
-     const G4VSolid* solidB = GetSolid(i);
-     G4Polyhedron* operand = solidB->GetPolyhedron();
+     G4VSolid* solidB = GetSolid(i);
+     const G4Transform3D* transform=GetTransformation(i);
+     G4RotationMatrix rot=(*transform).getRotation();
+     const  G4ThreeVector transl = (*transform).getTranslation();
+     G4DisplacedSolid dispSolidB("placedB",solidB,&rot,transl);
+     G4Polyhedron* operand = dispSolidB.GetPolyhedron();
      processor.push_back (operation, *operand);
    }
    if (processor.execute(*top)) { return top; }

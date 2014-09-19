@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-Sep-2014  G.Cosmo               (geom-specific-V10-00-11)
+- Added wrappers for UExtrudedSolid and UGenericTrap; adapted switches to
+  original G4 types accordingly. Requires tag "geom-usolids-V10-00-16".
+
 01-Sep-2014  G.Cosmo               (geom-specific-V10-00-10)
 - Fixed use of polyhedron pointer, to avoid race condition in MT
   when parameterised volumes are visualised.

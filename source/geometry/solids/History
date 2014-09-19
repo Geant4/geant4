@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September, 17th, 2014,  G.Cosmo         -  geomsolids-V10-00-01
+- Includes tags on top of geomsolids-V10-00-00: geom-usolids-V10-00-16,
+  geom-csg-V10-00-06, geom-bool-V10-00-06 and geom-specific-V10-00-11.
+- Added shapes from the USolids library: UExtrudedSolid, UGenericTrap and
+  UTrap with related wrappers.
+- Updated unit tests for compilation errors and warnings...
+
 September, 1st, 2014,  G.Cosmo          -  geomsolids-V10-00-00
 - Includes tags on top of geant4-10-00-ref-07: geom-usolids-V10-00-14,
   geom-bool-V10-00-05, geom-csg-V10-00-04 and geom-specific-V10-00-10.

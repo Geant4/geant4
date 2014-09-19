@@ -68,8 +68,6 @@ UPolycone::UPolycone(const std::string& name,
             << "to Polycone with (Rmin,Rmaz,Z) parameters! Use GenericPolycone" ;
     UUtils::Exception("UPolycone::UPolycone()", "GeomSolids0002",
                       FatalError, 1, message.str().c_str());
-    // JustWarning, message, "Use G4GenericPolycone instead!");
-
   }
   else
   {
@@ -1538,7 +1536,7 @@ bool  UPolycone::SetOriginalParameters(UReduciblePolygon* rz)
     std::ostringstream message;
     message << "Polycone " << GetName() << std::endl
             << "cannot be converted to Polycone with (Rmin,Rmaz,Z) parameters!";
-    UUtils::Exception("G4Polycone::SetOriginalParameters()", "GeomSolids0002",
+    UUtils::Exception("UPolycone::SetOriginalParameters()", "GeomSolids0002",
                       Warning, 1, "can not convert");
 
     fOriginalParameters = new UPolyconeHistorical;

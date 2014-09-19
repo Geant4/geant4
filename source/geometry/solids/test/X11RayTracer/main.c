@@ -78,7 +78,7 @@ void refresh () {
   double d;
   static int t=1;
 
-  double zoom = 0.20 + 0.01*t;
+/*  double zoom = 0.20 + 0.01*t; */
   double theta = 0.15 + 0.05*t;
 
   Intersect Inter ;

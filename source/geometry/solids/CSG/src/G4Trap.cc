@@ -48,6 +48,9 @@
 //////////////////////////////////////////////////////////////////////////////////// 
 
 #include "G4Trap.hh"
+
+#if !defined(G4GEOM_USE_UTRAP)
+
 #include "globals.hh"
 
 #include "G4VoxelLimits.hh"
@@ -1966,3 +1969,5 @@ G4Polyhedron* G4Trap::CreatePolyhedron () const
                               fDy1, fDx1, fDx2, alpha1,
                               fDy2, fDx3, fDx4, alpha2);
 }
+
+#endif

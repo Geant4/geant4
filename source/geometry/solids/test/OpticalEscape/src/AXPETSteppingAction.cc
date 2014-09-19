@@ -53,13 +53,10 @@
 #include "G4VSolid.hh"
 #include "G4RotationMatrix.hh"
 #include "G4AffineTransform.hh"
-AXPETSteppingAction::AXPETSteppingAction(AXPETDetectorConstruction* DET,
-                                         AXPETRunAction* RA)
-:detector (DET), runaction (RA)
-{
 
-  G4cout << "Costructor of the Stepping Action class " << G4endl;
-  
+AXPETSteppingAction::AXPETSteppingAction(AXPETDetectorConstruction* DET)
+  : detector (DET)
+{
 }
 
 

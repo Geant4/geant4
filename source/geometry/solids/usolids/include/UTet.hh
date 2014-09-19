@@ -69,7 +69,7 @@ class UTet : public VUSolid
   
     void ComputeBBox(UBBox* /*aBox*/, bool /*aStore = false*/) {}
 
-    //G4Visualisation
+    // Visualisation
     void GetParametersList(int aNumber, double* aArray) const;
 
     VUSolid* Clone() const;
@@ -79,7 +79,7 @@ class UTet : public VUSolid
 
   public:   // without description
 
-    //UTet(__void__&);
+    UTet(__void__&);
     // Fake default constructor for usage restricted to direct object
     // persistency for clients requiring preallocation of memory for
     // persistifiable objects.
@@ -88,14 +88,6 @@ class UTet : public VUSolid
     UTet& operator=(const UTet& rhs);
     // Copy constructor and assignment operator.
 
-    const char* CVSHeaderVers()
-    {
-      return "$Id: G4Tet.hh 66356 2012-12-18 09:02:32Z gcosmo $";
-    }
-    const char* CVSFileVers()
-    {
-      return CVSVers;
-    }
     void PrintWarnings(bool flag)
     {
       warningFlag = flag;
@@ -107,13 +99,6 @@ class UTet : public VUSolid
     std::vector<UVector3> GetVertices() const;
     // Return the four vertices of the shape.
 
-  protected:  // with description
-
-    /*  UVectorList*
-      CreateRotatedVertices(const G4AffineTransform& pTransform) const;
-        // Create the List of transformed vertices in the format required
-        // for G4VSolid:: ClipCrossSection and ClipBetweenSections.
-        */
   private:
 
     double fCubicVolume, fSurfaceArea;

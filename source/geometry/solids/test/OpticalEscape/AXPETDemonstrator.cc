@@ -92,10 +92,10 @@ int main(int argc,char** argv)
   AXPETRunAction* run_action = new AXPETRunAction;
   runManager->SetUserAction(run_action);
   //
-  AXPETEventAction* event_action = new AXPETEventAction(run_action);
+  AXPETEventAction* event_action = new AXPETEventAction();
   runManager->SetUserAction(event_action);
   //
-  AXPETSteppingAction* step_action = new AXPETSteppingAction(detector,run_action);
+  AXPETSteppingAction* step_action = new AXPETSteppingAction(detector);
   runManager->SetUserAction(step_action);
   
   // Initialize G4 kernel

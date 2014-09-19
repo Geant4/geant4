@@ -1270,8 +1270,9 @@ void G4InteractiveSolid::MakeMeATessellatedSolid2( G4String values )
                 
                 G4ExtrudedSolid* xtru
                   = new G4ExtrudedSolid("interactiveTessellatedSolid", polygon, zsections); 
-                solid = new G4TessellatedSolid(*xtru);
-                delete xtru;
+//                solid = new G4TessellatedSolid(*xtru);
+//                delete xtru;
+                solid = xtru;
                                                        
 	}
 	else

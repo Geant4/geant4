@@ -980,10 +980,10 @@ G4cout<<"Error:c9.Out((1e3*kRadTolerance,0,50),vx2mz,...) = " <<dist << G4endl;
 	// if (OutRange(dist,kInfinity))
 	    G4cout << "ctest10.DistanceToIn(pt10s2,vt10d) = " << dist << G4endl;
 
-	    G4double rad = 90.;
+	    G4double arad = 90.;
 
-  G4ThreeVector pct10phi1r( rad*std::cos(10.*degree),  rad*std::sin(10*degree), 0);
-  G4ThreeVector pct10phi2r( rad*std::cos(50.*degree), -rad*std::sin(50*degree), 0);
+  G4ThreeVector pct10phi1r( arad*std::cos(10.*degree),  arad*std::sin(10*degree), 0);
+  G4ThreeVector pct10phi2r( arad*std::cos(50.*degree), -arad*std::sin(50*degree), 0);
 
 	dist = ctest10.DistanceToIn(pct10phi1r,vmy);
 	// if (OutRange(dist,kInfinity))

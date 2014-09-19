@@ -20,6 +20,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ September 18, 2014  T.Nikitina          geom-bool-V10-00-06
+ - Corrected implementation of CreatePolyhedron() in G4UMultiUnion wrapper.
+
  September 1, 2014  G.Cosmo              geom-bool-V10-00-05
  - Fixed use of polyhedron pointer, to avoid race condition in MT
    when parameterised volumes are visualised.

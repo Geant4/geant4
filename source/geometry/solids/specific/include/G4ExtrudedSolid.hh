@@ -62,6 +62,15 @@
 #ifndef G4ExtrudedSolid_HH
 #define G4ExtrudedSolid_HH
 
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UEXTRUDEDSOLID 1
+#endif
+
+#if defined(G4GEOM_USE_UEXTRUDEDSOLID)
+  #define G4UExtrudedSolid G4ExtrudedSolid
+  #include "G4UExtrudedSolid.hh"
+#else
+
 #include <vector>
 
 #include "G4TwoVector.hh"
@@ -178,5 +187,7 @@ class G4ExtrudedSolid : public G4TessellatedSolid
 };    
 
 #include "G4ExtrudedSolid.icc"
+
+#endif
 
 #endif

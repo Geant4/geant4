@@ -89,7 +89,9 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4TwistedTrap.hh
         G4TwistedTrd.hh
         G4TwistedTubs.hh
+        G4UExtrudedSolid.hh
         G4UGenericPolycone.hh
+        G4UGenericTrap.hh
         G4UPolycone.hh
         G4UPolyhedra.hh
         G4UTet.hh
@@ -140,7 +142,9 @@ GEANT4_DEFINE_MODULE(NAME G4specsolids
         G4TwistedTrap.cc
         G4TwistedTrd.cc
         G4TwistedTubs.cc
+        G4UExtrudedSolid.cc
         G4UGenericPolycone.cc
+        G4UGenericTrap.cc
         G4UPolycone.cc
         G4UPolyhedra.cc
         G4UTet.cc

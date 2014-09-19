@@ -79,7 +79,6 @@ class AXPETDetectorConstruction: public G4VUserDetectorConstruction
  private: 
  G4Material* air;
  G4Material* lyso;
- G4Material* al;
  G4Material* vacuum;
  
  G4Box*		       WorldVolume;

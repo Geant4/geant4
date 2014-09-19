@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 17, 2014  G.Cosmo              geom-csg-V10-00-06
+- Added wrapper for UTrap shape; adapted switch to original G4Trap accordingly.
+  Requires tag "geom-usolids-V10-00-16".
+
 September 4, 2014  T.Nikitina            geom-csg-V10-00-05
 - G4Cons: fixed typo error in GetPointOnSurface() in the call
   to GetRadiusInRing(). Responsible for occasionally wrong reports

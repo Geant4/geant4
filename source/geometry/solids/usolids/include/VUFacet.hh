@@ -29,11 +29,11 @@
 //
 // Author: Marek Gayer, started from original implementation by P R Truscott, 2004
 //
-////
+//
 // Class description:
 //
 //   Base class defining the facets which are components of a
-//   G4TessellatedSolid shape.
+//   UTessellatedSolid shape.
 //
 ///////////////////////////////////////////////////////////////////////////////
 

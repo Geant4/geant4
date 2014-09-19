@@ -13,19 +13,20 @@ include $(G4INSTALL)/config/architecture.gmk
 
 # Override some variables for binmake.gmk.
 #
-INCFLAGS := -I$(G4BASE)/geometry/management/include \
-            -I$(G4BASE)/geometry/volumes/include \
-            -I$(G4BASE)/geometry/navigation/include \
-            -I$(G4BASE)/geometry/solids/CSG/include \
-            -I$(G4BASE)/geometry/solids/Boolean/include \
-            -I$(G4BASE)/geometry/solids/specific/include \
-            -I$(G4BASE)/global/management/include \
-            -I$(G4BASE)/global/HEPRandom/include \
-            -I$(G4BASE)/global/HEPNumerics/include \
-            -I$(G4BASE)/global/HEPGeometry/include \
-            -I$(G4BASE)/graphics_reps/include
+#INCFLAGS := -I$(G4BASE)/geometry/management/include \
+#            -I$(G4BASE)/geometry/volumes/include \
+#            -I$(G4BASE)/geometry/navigation/include \
+#            -I$(G4BASE)/geometry/solids/CSG/include \
+#            -I$(G4BASE)/geometry/solids/Boolean/include \
+#            -I$(G4BASE)/geometry/solids/specific/include \
+#            -I$(G4BASE)/geometry/solids/usolids/include \
+#            -I$(G4BASE)/global/management/include \
+#            -I$(G4BASE)/global/HEPRandom/include \
+#            -I$(G4BASE)/global/HEPNumerics/include \
+#            -I$(G4BASE)/global/HEPGeometry/include \
+#            -I$(G4BASE)/graphics_reps/include
 
-### LDLIBS   := -lG4geomBoolean -lG4specsolids -lG4csg -lG4navigation \
+### LDLIBS   := -lG4geomBoolean -lG4specsolids -lG4csg -lG4geomUSolids -lG4navigation \
 ###             -lG4volumes -lG4geometrymng \
 ###             -lG4graphics_reps -lG4hepnumerics\
 ###             -lG4magneticfield -lG4intercoms\

@@ -91,15 +91,15 @@ void SCPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   G4ThreeVector aSurfacePoint (GetSurfacePoint(u,v)) ;  // point A on surface
   G4ThreeVector aNormal(1,0,0) ;  // normal vector
 
-  G4ThreeVector m = (aSurfacePoint-VertexPosition).unit() ;  // direction
+  G4ThreeVector md = (aSurfacePoint-VertexPosition).unit() ;  // direction
 
   G4double distance = ( aSurfacePoint - VertexPosition ).mag() ;
-  G4double theta = std::acos(m.unit()*aNormal) ;
+  G4double theta = std::acos(md.unit()*aNormal) ;
 
   spoint.SetSurfacePoint(aSurfacePoint) ;
   
   G4PrimaryParticle* aPrimaryParticle =
-    new G4PrimaryParticle(aParticleDefinition, m.x(), m.y(), m.z());
+    new G4PrimaryParticle(aParticleDefinition, md.x(), md.y(), md.z());
   aPrimaryParticle->SetMass (0.);
 
   aVertex->SetPrimary( aPrimaryParticle );
@@ -108,7 +108,7 @@ void SCPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 	  << "Vertex "  << VertexPosition << " " << u << " " << v <<  G4endl 
 	  << "Surface "  << aSurfacePoint << G4endl 
 	  << "Distance " << distance << G4endl 
-	  << "Momentum "  << m << G4endl 
+	  << "Momentum "  << md << G4endl 
           << "Angle " << theta 
 	  << G4endl ;
 

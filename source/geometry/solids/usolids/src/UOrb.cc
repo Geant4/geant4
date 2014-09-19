@@ -32,7 +32,7 @@ UOrb::UOrb(const std::string& name, double r)
   //
   if (r < 10 * VUSolid::fgTolerance) // cartesian tolerance
   {
-    UUtils::Exception("G4Orb::G4Orb()", "InvalidSetup", FatalErrorInArguments, 1, "Invalid radius > 10*kCarTolerance.");
+    UUtils::Exception("UOrb::UOrb()", "InvalidSetup", FatalErrorInArguments, 1, "Invalid radius > 10*kCarTolerance.");
   }
   // VUSolid::fRTolerance is radial tolerance (note: half of G4 tolerance)
   fRTolerance =  max(VUSolid::frTolerance, epsilon * r);
@@ -105,8 +105,8 @@ double UOrb::DistanceToIn(const UVector3& p,
 
   // Outer spherical shell intersection
   // - Only if outside tolerant fR
-  // - Check for if inside and outer G4Orb heading through solid (-> 0)
-  // - No intersect -> no intersection with G4Orb
+  // - Check for if inside and outer UOrb heading through solid (-> 0)
+  // - No intersect -> no intersection with UOrb
   //
   // Shell eqn: x^2+y^2+z^2 = RSPH^2
   //
@@ -123,7 +123,7 @@ double UOrb::DistanceToIn(const UVector3& p,
   {
     if (c > fRTolerance * fR)
     {
-      // If outside tolerant boundary of outer G4Orb in terms of c
+      // If outside tolerant boundary of outer UOrb in terms of c
       // [ should be sqrt(rad2) - fR > fRTolerance*0.5 ]
 
       d2 = pDotV3d * pDotV3d - c;

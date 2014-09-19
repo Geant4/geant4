@@ -1,0 +1,64 @@
+//
+// ********************************************************************
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
+// ********************************************************************
+//
+// $Id:$
+//
+// --------------------------------------------------------------------
+//
+// UExtrudedSolid.icc
+//
+// Implementation of inline methods of UExtrudedSolid
+//
+// 13.08.13 Tatiana Nikitina
+//          Created from original implementation in Geant4
+// --------------------------------------------------------------------
+
+inline
+int UExtrudedSolid::GetNofVertices() const
+{
+  return fNv;
+}
+
+inline UVector2 UExtrudedSolid::GetVertex(int index) const
+{
+  if (index < 0 || index >= fNv)
+  {
+    UUtils::Exception ("UExtrudedSolid::GetVertex()", "GeomSolids0003",
+                       FatalError, 1, "Index outside range.");
+    return UVector2();
+  }
+  return fPolygon[index];
+}
+
+inline
+std::vector<UVector2> UExtrudedSolid::GetPolygon() const
+{
+  return fPolygon;
+}
+
+inline
+int  UExtrudedSolid::GetNofZSections() const
+{
+  return fNz;
+}
+
+inline
+UExtrudedSolid::ZSection UExtrudedSolid::GetZSection(int index) const
+{
+  if (index < 0 || index >= fNz)
+  {
+    UUtils::Exception ("UExtrudedSolid::GetZSection()", "GeomSolids0003",
+                       FatalError, 1, "Index outside range.");
+    return ZSection(0.0, UVector2(), 0.0);
+  }
+  return fZSections[index];
+}
+
+inline
+std::vector<UExtrudedSolid::ZSection> UExtrudedSolid::GetZSections() const
+{
+  return fZSections;
+}

@@ -117,15 +117,15 @@ int main()
     for(scale=2; scale>=0.00096; scale /=2){
       G4double sum = 0;
       G4double std = 0;
-      G4double s;
+      G4double surf;
       G4double rep = 20;
       for(G4int p=0; p<rep;p++)
       {
          sol2.SetAreaStatistics(N);     // Inside loop to force area
          sol2.SetAreaAccuracy(scale*R); // recomputation for calculating
-         s = sol2.GetSurfaceArea();     // average result ...
-         sum =sum+s;
-         std =std+(exsurf-s)*(exsurf-s);
+         surf = sol2.GetSurfaceArea();  // average result ...
+         sum =sum+surf;
+         std =std+(exsurf-surf)*(exsurf-surf);
       }
     G4double avsurf = sum/rep;
     std = std::sqrt(std/(rep-1));

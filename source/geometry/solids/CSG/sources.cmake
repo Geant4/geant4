@@ -62,6 +62,7 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4UCons.hh
         G4UOrb.hh
         G4USphere.hh
+        G4UTrap.hh
         G4UTrd.hh
         G4UTubs.hh
     SOURCES
@@ -81,6 +82,7 @@ GEANT4_DEFINE_MODULE(NAME G4csg
         G4UCons.cc
         G4UOrb.cc
         G4USphere.cc
+        G4UTrap.cc
         G4UTrd.cc
         G4UTubs.cc
     GRANULAR_DEPENDENCIES

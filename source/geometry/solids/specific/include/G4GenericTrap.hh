@@ -67,6 +67,15 @@
 #ifndef G4GenericTrap_HH
 #define G4GenericTrap_HH
 
+#if defined(G4GEOM_USE_USOLIDS)
+#define G4GEOM_USE_UGENERICTRAP 1
+#endif
+
+#if defined(G4GEOM_USE_UGENERICTRAP)
+  #define G4UGenericTrap G4GenericTrap
+  #include "G4UGenericTrap.hh"
+#else
+
 #include <vector>
 
 #include "G4TwoVector.hh"
@@ -220,5 +229,7 @@ class G4GenericTrap : public G4VSolid
 };    
 
 #include "G4GenericTrap.icc"
+
+#endif
 
 #endif

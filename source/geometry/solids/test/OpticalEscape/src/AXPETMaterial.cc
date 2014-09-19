@@ -88,7 +88,7 @@ void AXPETMaterial::DefineMaterials()
   // AIR
   d = 1.290*mg/cm3;
   nComponents = 2;
-  G4Material* matAir = new G4Material("AIR", d, nComponents);
+  matAir = new G4Material("AIR", d, nComponents);
   matAir -> AddElement(elN,0.7);
   matAir -> AddElement(elO,0.3);
 

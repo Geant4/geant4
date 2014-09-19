@@ -55,7 +55,7 @@ unsigned long        winMask;
 XSizeHints           winHint;
 
 XImage               *xim;
-unsigned char        *buffer;
+char                 *buffer;
 
 GC                   gc;
 XGCValues            gcVal;

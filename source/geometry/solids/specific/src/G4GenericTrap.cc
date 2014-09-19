@@ -41,9 +41,12 @@
 //                to CreatePolyhedron() for Visualisation of Boolean       
 // --------------------------------------------------------------------
 
+#include "G4GenericTrap.hh"
+
+#if !defined(G4GEOM_USE_UGENERICTRAP)
+
 #include <iomanip>
 
-#include "G4GenericTrap.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4TessellatedSolid.hh"
@@ -2253,3 +2256,5 @@ G4Polyhedron* G4GenericTrap::CreatePolyhedron() const
 }
 
 // --------------------------------------------------------------------
+
+#endif
