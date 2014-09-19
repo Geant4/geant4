@@ -101,7 +101,7 @@ G4DNABrownianTransportation::G4DNABrownianTransportation(const G4String& aName, 
 {
 
 	fpState.reset(new G4ITBrownianState());
-	G4cout << fpState->GetType() << G4endl;
+	// G4cout << fpState->GetType() << G4endl;
 	//assert(fpBrownianState);
 	//G4cout << fpBrownianState->GetType() << G4endl;
 //	assert(fTransportationState);
@@ -355,7 +355,7 @@ void G4DNABrownianTransportation::Diffusion(
 		G4cout<< "Step Number :" << track.GetCurrentStepNumber() <<G4endl;
 
 		fParticleChange.ProposeEnergy(0.) ;
-		fParticleChange.ProposeTrackStatus(fStopButAlive);
+		fParticleChange.ProposeTrackStatus(fStopAndKill);//(fStopButAlive);
 
 		// Got pb with :
 		// fParticleChange.ProposeTrackStatus(fStopAndKill);

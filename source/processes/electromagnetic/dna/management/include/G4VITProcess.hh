@@ -211,6 +211,9 @@ protected:  // with description
 
     G4::shared_ptr<G4ProcessState> fpState;
 
+    void virtual SubtractNumberOfInteractionLengthLeft(
+                                      G4double previousStepSize);
+
     inline virtual void ClearInteractionTimeLeft();
 
     inline virtual void ClearNumberOfInteractionLengthLeft();
@@ -275,5 +278,33 @@ inline const size_t& G4VITProcess::GetMaxProcessIndex()
 {
     if (!fNbProcess) fNbProcess = new size_t ( 0);
     return *fNbProcess ;
+}
+
+inline
+void G4VITProcess::SubtractNumberOfInteractionLengthLeft(
+                                  G4double previousStepSize )
+{
+  if (fpState->currentInteractionLength>0.0) {
+    fpState->theNumberOfInteractionLengthLeft -= previousStepSize/fpState->currentInteractionLength;
+    if(fpState->theNumberOfInteractionLengthLeft<0.) {
+      fpState->theNumberOfInteractionLengthLeft=CLHEP::perMillion;
+    }
+
+  } else {
+#ifdef G4VERBOSE
+    if (verboseLevel>0) {
+      G4cerr << "G4VITProcess::SubtractNumberOfInteractionLengthLeft()";
+      G4cerr << " [" << theProcessName << "]" <<G4endl;
+      G4cerr << " currentInteractionLength = " << fpState->currentInteractionLength << " [mm]";
+      G4cerr << " previousStepSize = " << previousStepSize << " [mm]";
+      G4cerr << G4endl;
+    }
+#endif
+    G4String msg = "Negative currentInteractionLength for ";
+    msg +=      theProcessName;
+    G4Exception("G4VITProcess::SubtractNumberOfInteractionLengthLeft()",
+                "ProcMan201",EventMustBeAborted,
+                msg);
+  }
 }
 #endif // G4VITProcess_H
