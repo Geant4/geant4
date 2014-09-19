@@ -37,6 +37,8 @@
 
 #include <iostream>
 
+using namespace G4Analysis;
+
 namespace {
 
 void Exception(G4UIcommand* command, G4int nofParameters)
@@ -429,21 +431,25 @@ void G4H3Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     G4String xsunit = parameters[counter++];
     G4String xsfcn = parameters[counter++];
     G4String xsbinScheme = parameters[counter++];
+    G4double xunit = GetUnitValue(xsunit);
     G4int ynbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
     G4double yvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
     G4double yvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
     G4String ysunit = parameters[counter++];
     G4String ysfcn = parameters[counter++];
     G4String ysbinScheme = parameters[counter++];
+    G4double yunit = GetUnitValue(ysunit);
     G4int znbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
     G4double zvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
     G4double zvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
     G4String zsunit = parameters[counter++];
     G4String zsfcn = parameters[counter++];
     G4String zsbinScheme = parameters[counter++];
+    G4double zunit = GetUnitValue(zsunit);
     fManager->CreateH3(name, title, 
-                       xnbins, xvmin, xvmax, ynbins, yvmin, yvmax, 
-                       znbins, zvmin, zvmax, 
+                       xnbins, xvmin*xunit, xvmax*xunit,
+                       ynbins, yvmin*yunit, yvmax*yunit, 
+                       znbins, zvmin*zunit, zvmax*zunit, 
                        xsunit, ysunit, zsunit, xsfcn, ysfcn, zsfcn,
                        xsbinScheme, ysbinScheme, zsbinScheme);     
   }
@@ -456,21 +462,25 @@ void G4H3Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     G4String xsunit = parameters[counter++];
     G4String xsfcn = parameters[counter++];
     G4String xsbinScheme = parameters[counter++];
+    G4double xunit = GetUnitValue(xsunit);
     G4int ynbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
     G4double yvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
     G4double yvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
     G4String ysunit = parameters[counter++];
     G4String ysfcn = parameters[counter++];
     G4String ysbinScheme = parameters[counter++];
+    G4double yunit = GetUnitValue(ysunit);
     G4int znbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
     G4double zvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
     G4double zvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
     G4String zsunit = parameters[counter++];
     G4String zsfcn = parameters[counter++];
     G4String zsbinScheme = parameters[counter++];
+    G4double zunit = GetUnitValue(zsunit);
     fManager->SetH3(id, 
-                    xnbins, xvmin, xvmax, ynbins, yvmin, yvmax, 
-                    znbins, zvmin, zvmax, 
+                    xnbins, xvmin*xunit, xvmax*xunit,
+                    ynbins, yvmin*yunit, yvmax*yunit, 
+                    znbins, zvmin*zunit, zvmax*zunit, 
                     xsunit, ysunit, zsunit, xsfcn, ysfcn, zsfcn,
                     xsbinScheme, ysbinScheme, zsbinScheme);     
   }

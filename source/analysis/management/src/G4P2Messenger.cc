@@ -37,6 +37,8 @@
 
 #include <iostream>
 
+using namespace G4Analysis;
+
 namespace {
 
 void Exception(G4UIcommand* command, G4int nofParameters)
@@ -370,7 +372,6 @@ void G4P2Messenger::SetP2ZAxisCmd()
   p2ZAxis->SetDefaultValue("none");
 
   fSetP2ZAxisCmd = new G4UIcommand("/analysis/p2/setZaxis", this);
-  fSetP2ZAxisCmd->SetGuidance("Set z-axis title for the 2D profile of #Id");
   fSetP2ZAxisCmd->SetParameter(p2Id);
   fSetP2ZAxisCmd->SetParameter(p2ZAxis);
   fSetP2ZAxisCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
@@ -403,18 +404,23 @@ void G4P2Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     G4String xsunit = parameters[counter++];
     G4String xsfcn = parameters[counter++];
     G4String xsbinScheme = parameters[counter++];
+    G4double xunit = GetUnitValue(xsunit);
     G4int ynbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
     G4double yvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
     G4double yvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
     G4String ysunit = parameters[counter++];
     G4String ysfcn = parameters[counter++];
     G4String ysbinScheme = parameters[counter++];
+    G4double yunit = GetUnitValue(ysunit);
     G4double zvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
     G4double zvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
     G4String zsunit = parameters[counter++];
     G4String zsfcn = parameters[counter++];
+    G4double zunit = GetUnitValue(zsunit);
     fManager->CreateP2(name, title, 
-                       xnbins, xvmin, xvmax, ynbins, yvmin, yvmax, zvmin, zvmax, 
+                       xnbins, xvmin*xunit, xvmax*xunit,
+                       ynbins, yvmin*yunit, yvmax*yunit, 
+                       zvmin*zunit, zvmax*zunit, 
                        xsunit, ysunit, zsunit, xsfcn, ysfcn, zsfcn,
                        xsbinScheme, ysbinScheme);     
   }
@@ -427,18 +433,23 @@ void G4P2Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     G4String xsunit = parameters[counter++];
     G4String xsfcn = parameters[counter++];
     G4String xsbinScheme = parameters[counter++];
+    G4double xunit = GetUnitValue(xsunit);
     G4int ynbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
     G4double yvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
     G4double yvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
     G4String ysunit = parameters[counter++];
     G4String ysfcn = parameters[counter++];
     G4String ysbinScheme = parameters[counter++];
+    G4double yunit = GetUnitValue(ysunit);
     G4double zvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
     G4double zvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
     G4String zsunit = parameters[counter++];
     G4String zsfcn = parameters[counter++];
+    G4double zunit = GetUnitValue(zsunit);
     fManager->SetP2(id, 
-                    xnbins, xvmin, xvmax, ynbins, yvmin, yvmax, zvmin, zvmax, 
+                    xnbins, xvmin*xunit, xvmax*xunit,
+                    ynbins, yvmin*yunit, yvmax*yunit, 
+                    zvmin*zunit, zvmax*zunit, 
                     xsunit, ysunit, zsunit, xsfcn, ysfcn, zsfcn,     
                     xsbinScheme, ysbinScheme);     
   }

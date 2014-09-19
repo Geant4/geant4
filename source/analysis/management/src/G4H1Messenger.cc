@@ -43,6 +43,8 @@
 #include <iostream>
 #include <vector>
 
+using namespace G4Analysis;
+
 namespace {
 
 void Exception(G4UIcommand* command, G4int nofParameters)
@@ -285,7 +287,8 @@ void G4H1Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     G4String sunit = parameters[counter++];
     G4String sfcn = parameters[counter++];
     G4String sbinScheme = parameters[counter++];
-    fManager->CreateH1(name, title, nbins, vmin, vmax, sunit, sfcn, sbinScheme); 
+    G4double unit = GetUnitValue(sunit);
+    fManager->CreateH1(name, title, nbins, vmin*unit, vmax*unit, sunit, sfcn, sbinScheme); 
   }
   else if ( command == fSetH1Cmd ) {
     G4int counter = 0;
@@ -296,7 +299,8 @@ void G4H1Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     G4String sunit = parameters[counter++];
     G4String sfcn = parameters[counter++];
     G4String sbinScheme = parameters[counter++];
-    fManager->SetH1(id, nbins, vmin, vmax, sunit, sfcn, sbinScheme); 
+    G4double unit = GetUnitValue(sunit);
+    fManager->SetH1(id, nbins, vmin*unit, vmax*unit, sunit, sfcn, sbinScheme); 
   }
   else if ( command == fSetH1TitleCmd ) {
     G4int counter = 0;

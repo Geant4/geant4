@@ -37,6 +37,8 @@
 
 #include <iostream>
 
+using namespace G4Analysis;
+
 namespace {
 
 void Exception(G4UIcommand* command, G4int nofParameters)
@@ -360,14 +362,17 @@ void G4H2Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     G4String xsunit = parameters[counter++];
     G4String xsfcn = parameters[counter++];
     G4String xsbinScheme = parameters[counter++];
+    G4double xunit = GetUnitValue(xsunit);
     G4int ynbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
     G4double yvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
     G4double yvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
     G4String ysunit = parameters[counter++];
     G4String ysfcn = parameters[counter++];
     G4String ysbinScheme = parameters[counter++];
+    G4double yunit = GetUnitValue(ysunit);
     fManager->CreateH2(name, title, 
-                       xnbins, xvmin, xvmax, ynbins, yvmin, yvmax, 
+                       xnbins, xvmin*xunit, xvmax*xunit, 
+                       ynbins, yvmin*yunit, yvmax*yunit, 
                        xsunit, ysunit, xsfcn, ysfcn, xsbinScheme, ysbinScheme);     
   }
   else if ( command == fSetH2Cmd ) {
@@ -379,14 +384,17 @@ void G4H2Messenger::SetNewValue(G4UIcommand* command, G4String newValues)
     G4String xsunit = parameters[counter++];
     G4String xsfcn = parameters[counter++];
     G4String xsbinScheme = parameters[counter++];
+    G4double xunit = GetUnitValue(xsunit);
     G4int ynbins = G4UIcommand::ConvertToInt(parameters[counter++]); 
     G4double yvmin = G4UIcommand::ConvertToDouble(parameters[counter++]); 
     G4double yvmax = G4UIcommand::ConvertToDouble(parameters[counter++]); ; 
     G4String ysunit = parameters[counter++];
     G4String ysfcn = parameters[counter++];
     G4String ysbinScheme = parameters[counter++];
+    G4double yunit = GetUnitValue(ysunit);
     fManager->SetH2(id, 
-                    xnbins, xvmin, xvmax, ynbins, yvmin, yvmax, 
+                    xnbins, xvmin*xunit, xvmax*xunit,
+                    ynbins, yvmin*yunit, yvmax*yunit, 
                     xsunit, ysunit, xsfcn, ysfcn, xsbinScheme, ysbinScheme);     
   }
   else if ( command == fSetH2TitleCmd ) {

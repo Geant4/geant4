@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 18, 2014 I. Hrivnacova (analysis-V10-00-27)
+- Fixed units in /analysis/[h|p]n/create and /analysis/[h|p]n/set
+  commands
+
 September 12, 2014 G. Cosmo (analysis-V10-00-26)
 - Fixed xml/GNUmakefile to add missing dependency on expat, to
   cover cases when internal expat is used or for WIN32 builds.
