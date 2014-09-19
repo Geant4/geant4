@@ -13,6 +13,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+18-09-14 mma (exhadr03-V10-00-05)
+- Hadr03.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
+- Fixed test in envHadronic.sh
      
 07-04-14 mma (exhadr03-V10-00-04)
 - Register RunMessenger in RunAction instead of Run
