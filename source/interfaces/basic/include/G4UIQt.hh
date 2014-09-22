@@ -40,6 +40,7 @@
 #include <qmap.h>
 #include <qstringlist.h>
 #include <qtabwidget.h>
+#include <qdockwidget.h>
 
 class QMainWindow;
 class QLineEdit;
@@ -106,6 +107,13 @@ class G4UIOutputString {
   QString fText;
   G4String fThread;
   G4String fOutputStream; // Error, Warning, Info
+};
+
+
+class G4UIDockWidget : public QDockWidget {
+public:
+  G4UIDockWidget(QString txt);
+  void closeEvent(QCloseEvent *);
 };
 
 
@@ -212,12 +220,11 @@ private:
 
   QWidget* CreateVisParametersTBWidget();
   QWidget* CreateHelpTBWidget();
-  QWidget* CreateCoutTBWidget();
+  G4UIDockWidget* CreateCoutTBWidget();
   QWidget* CreateHistoryTBWidget();
-  QWidget* CreateUITabWidget();
+  G4UIDockWidget* CreateUITabWidget();
   QWidget* CreateSceneTreeComponentsTBWidget();
-  QWidget* CreateRightSplitterWidget();
-  QWidget* CreateLeftSplitterWidget();
+  QWidget* CreateViewerWidget();
   void OpenHelpTreeOnCommand(const QString &);
   QString GetShortCommandPath(QString);
   QString GetLongCommandPath(QTreeWidgetItem*);
@@ -245,15 +252,13 @@ private:
   QTreeWidget *fHelpTreeWidget;
   QWidget* fHelpTBWidget;
   QWidget* fHistoryTBWidget;
-  QWidget* fCoutTBWidget;
+  G4UIDockWidget* fCoutDockWidget;
+  G4UIDockWidget* fUIDockWidget;
   QTabWidget* fSceneTreeComponentsTBWidget;
   QLineEdit* fHelpLine;
   G4QTabWidget* fViewerTabWidget;
   QString fCoutText;
   QLabel *fEmptyViewerWidget;
-  QSplitter * fMainSplitterWidget;
-  QSplitter* fRightSplitterWidget;
-  QWidget* fLeftSplitterWidget;
   QSplitter * fHelpVSplitter;
   QWidget* fViewerTabHandleWidget;
   QTextEdit* fParameterHelpLabel;

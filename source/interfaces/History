@@ -17,6 +17,30 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19th August 2014  Laurent Garnier (interfaces-V10-00-10)
+- G4UIQt :
+  o Fix the Dock output panel on the bottom right on the window
+
+18th August 2014  Laurent Garnier
+- G4UIQt :
+  o Fix a problem with closing dockable widgets
+
+14th August 2014  Laurent Garnier
+- G4UIQt :
+  o Begginning of adding dockable widgets. Still problems on :
+    - cout (should be on the right)
+    - Dock titles
+
+13th August 2014  Laurent Garnier
+- G4UIQt :
+  o Fix a bug introduced in interfaces-V10-00-07. The first time we open the viewer, is was small and dark.
+    Note: Perhaps this fix will create (in some cases) a widget outside of UI for a really short moment.
+
+13th August 2014  Laurent Garnier
+- G4UIQt :
+  o Fix a typo in SetViewerFirstPageHTMLText text
+  o Add better implementation of thread prefix before "GetPrefixString()" is implemented
+
 11th August 2014  Laurent Garnier  (interfaces-V10-00-09)
 - G4UIQt :
   o Fix a bug for single threading output in last tag

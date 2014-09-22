@@ -120,15 +120,13 @@ G4UIQt::G4UIQt (
 ,fHelpTreeWidget(NULL)
 ,fHelpTBWidget(NULL)
 ,fHistoryTBWidget(NULL)
-,fCoutTBWidget(NULL)
+,fCoutDockWidget(NULL)
+,fUIDockWidget(NULL)
 ,fSceneTreeComponentsTBWidget(NULL)
 ,fHelpLine(NULL)
 ,fViewerTabWidget(NULL)
 ,fCoutText("Output")
 ,fEmptyViewerWidget(NULL)
-,fMainSplitterWidget(NULL)
-,fRightSplitterWidget(NULL)
-,fLeftSplitterWidget(NULL)
 ,fHelpVSplitter(NULL)
 ,fViewerTabHandleWidget(NULL)
 ,fParameterHelpLabel(NULL)
@@ -183,18 +181,16 @@ G4UIQt::G4UIQt (
   }
   fMainWindow = new QMainWindow();
 
-  // the splitter
-  fMainSplitterWidget = new QSplitter(Qt::Horizontal);
+  fMainWindow->setCorner( Qt::TopLeftCorner, Qt::LeftDockWidgetArea );
+  fMainWindow->setCorner( Qt::TopRightCorner, Qt::RightDockWidgetArea );
+  fMainWindow->setCorner( Qt::BottomLeftCorner, Qt::LeftDockWidgetArea );
+  fMainWindow->setCorner( Qt::BottomRightCorner, Qt::RightDockWidgetArea );
+  
+  fMainWindow->setCentralWidget(CreateViewerWidget());
+  fMainWindow->addDockWidget(Qt::LeftDockWidgetArea, CreateUITabWidget());
+  fMainWindow->addDockWidget(Qt::BottomDockWidgetArea, CreateCoutTBWidget());
 
-  fMainSplitterWidget->addWidget(CreateLeftSplitterWidget());
-  fMainSplitterWidget->addWidget(CreateRightSplitterWidget());
   
-  QSizePolicy policy = QSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
-  policy = QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Minimum);
-  policy.setHorizontalStretch(1);
-  fLeftSplitterWidget->setSizePolicy(policy);
-  
-  fMainWindow->setCentralWidget(fMainSplitterWidget);
 
   if(UI!=NULL) UI->SetCoutDestination(this);  // TO KEEP
 
@@ -207,8 +203,8 @@ G4UIQt::G4UIQt (
   // force the size at be correct at the beggining
   // because the widget is not realized yet, the size of the main window is not up to date. But
   // we need it in order to add some viewer inside
-  fMainWindow->resize(fLeftSplitterWidget->width()+fRightSplitterWidget->width()+20,
-                      fLeftSplitterWidget->height()+fRightSplitterWidget->height()+20);
+  fMainWindow->resize(fUIDockWidget->width()+fCoutDockWidget->width()+20,
+                      fUIDockWidget->height()+fCoutDockWidget->height()+20);
   
   // set last focus on command line
   fCommandArea->setFocus(Qt::TabFocusReason);
@@ -313,7 +309,7 @@ QWidget* G4UIQt::CreateHelpTBWidget(
 
 /** Create the Cout ToolBox Widget
  */
-QWidget* G4UIQt::CreateCoutTBWidget(
+G4UIDockWidget* G4UIQt::CreateCoutTBWidget(
 ) 
 {
   const char * const search[]  = {
@@ -386,7 +382,7 @@ QWidget* G4UIQt::CreateCoutTBWidget(
   fSearchIcon = new QPixmap(search);
   fClearIcon = new QPixmap(clear);
   
-  fCoutTBWidget = new QGroupBox("Output");
+  QWidget* coutTBWidget = new QWidget();
 
   QVBoxLayout *layoutCoutTB = new QVBoxLayout();
 
@@ -446,11 +442,45 @@ QWidget* G4UIQt::CreateCoutTBWidget(
   layoutCoutTB->addWidget(coutButtonWidget);
   layoutCoutTB->addWidget(fCoutTBTextArea);
 
-  fCoutTBWidget->setLayout(layoutCoutTB);
+  coutTBWidget->setLayout(layoutCoutTB);
 
   fCoutTBTextArea->setMinimumSize(100,100);
   
-  return fCoutTBWidget;
+  // Command line :
+  QWidget* commandLineWidget = new QWidget();
+  QHBoxLayout *layoutCommandLine = new QHBoxLayout();
+  
+  // fill them
+  
+  fCommandLabel = new QLabel("");
+  
+  fCommandArea = new QLineEdit();
+  fCommandArea->installEventFilter(this);
+  fCommandArea->activateWindow();
+  
+  fCommandArea->setFocusPolicy ( Qt::StrongFocus );
+  fCommandArea->setFocus(Qt::TabFocusReason);
+  fCommandArea->setToolTip("Apply command");
+  
+  
+  layoutCommandLine->addWidget(fCommandLabel);
+  layoutCommandLine->addWidget(fCommandArea);
+  
+  // Connect signal
+  connect(fCommandArea, SIGNAL(returnPressed()), SLOT(CommandEnteredCallback()));
+  connect(fCommandArea, SIGNAL(textEdited(const QString &)), SLOT(CommandEditedCallback(const QString &)));
+  
+
+  commandLineWidget->setLayout(layoutCommandLine);
+  commandLineWidget->setMinimumSize(50,50);
+
+  layoutCoutTB->addWidget(commandLineWidget);
+
+  fCoutDockWidget = new G4UIDockWidget ("Output");
+  fCoutDockWidget->setAllowedAreas(Qt::TopDockWidgetArea | Qt::BottomDockWidgetArea);
+  
+  fCoutDockWidget->setWidget(coutTBWidget);
+  return fCoutDockWidget;
 }
 
 
@@ -465,12 +495,12 @@ QWidget* G4UIQt::CreateVisParametersTBWidget(
 
 /** Create the VisParameters ToolBox Widget
  */
-QWidget* G4UIQt::CreateUITabWidget(
+G4UIDockWidget* G4UIQt::CreateUITabWidget(
 ) 
 {
   fUITabWidget = new QTabWidget();
 
-  // the right splitter 
+  // the left dock
   fUITabWidget->addTab(CreateSceneTreeComponentsTBWidget(),"Scene tree");
   fUITabWidget->addTab(CreateHelpTBWidget(),"Help");
   fUITabWidget->addTab(CreateHistoryTBWidget(),"History");
@@ -478,7 +508,12 @@ QWidget* G4UIQt::CreateUITabWidget(
 
   connect(fUITabWidget, SIGNAL(currentChanged(int)), SLOT(ToolBoxActivated(int)));
 
-  return fUITabWidget;
+  fUIDockWidget = new G4UIDockWidget ("Scene tree, Help, History");
+  fUIDockWidget->setAllowedAreas(Qt::LeftDockWidgetArea | Qt::RightDockWidgetArea);
+
+  fUIDockWidget->setWidget(fUITabWidget);
+
+  return fUIDockWidget;
 }
 
 
@@ -496,62 +531,27 @@ QWidget* G4UIQt::CreateSceneTreeComponentsTBWidget(){
 }
 
 
-QWidget* G4UIQt::CreateLeftSplitterWidget(){
-
-  fLeftSplitterWidget = new QWidget();
-  QVBoxLayout * layoutLeftSplitterWidget = new QVBoxLayout();
-  layoutLeftSplitterWidget->addWidget(CreateUITabWidget());
-
-  fLeftSplitterWidget->setLayout(layoutLeftSplitterWidget);
-
-  fLeftSplitterWidget->resize(200,200);
-
-  return fLeftSplitterWidget;
-}
-
-
-QWidget* G4UIQt::CreateRightSplitterWidget(){
-
-  fRightSplitterWidget = new QSplitter(Qt::Vertical);
+QWidget* G4UIQt::CreateViewerWidget(){
 
   // Set layouts
-  QWidget* commandLineWidget = new QWidget();
-  QHBoxLayout *layoutCommandLine = new QHBoxLayout();
-
-  // fill them
-
-  fCommandLabel = new QLabel("");
-
-  fCommandArea = new QLineEdit();
-  fCommandArea->installEventFilter(this);
-  fCommandArea->activateWindow();
-
-  fCommandArea->setFocusPolicy ( Qt::StrongFocus );
-  fCommandArea->setFocus(Qt::TabFocusReason);
-  fCommandArea->setToolTip("Apply command");
-
-
-  layoutCommandLine->addWidget(fCommandLabel);
-  layoutCommandLine->addWidget(fCommandArea);
-
-  commandLineWidget->setLayout(layoutCommandLine);
   
   SetViewerFirstPageHTMLText(std::string("<div style='background:white; border: 1px solid #ccc; border-radius: 20px;'><b>Tooltips :</b><ul>")+
                              "<li><b>Start a new viewer :</b><br />"+
-                             "<i>/vis/open/...</i></li>"+
+                             "<i>'/vis/open/...'<br />"+
+                             "For example '/vis/open OGL'</i></li>"+
                              "<li><b>Get the viewer list :</b><br />"+
-                             "<i>/vis/list</i></li>"+
+                             "<i>'/vis/list'</i></li>"+
                              "</ul></div>"+
                              
                              "<div style='background:white; border: 1px solid #ccc; border-radius: 20px;'><b>Documentation :</b><ul>"+
-                             "<li><b>Visualisation publication :</b><br />"+
-                             "<i><a href='http://www.worldscientific.com/doi/abs/10.1142/S1793962313400011'>The Geant4 Visualization System - A Multi-Driver Graphics System</b><br />,  Allison, J. et al., International Journal of Modeling, Simulation, and Scientific Computing, Vol. 4, Suppl. 1 (2013) 1340001</a></i></li>"+
                              "<li><b>Visualization tutorial :</b><br />"+
                              "<i><a href='http://geant4.in2p3.fr/spip.php?article60&lang=en'>Geant4 Qt User Interface tutorial </a></i></li>"+
+                             "<li><b>Visualisation publication :</b><br />"+
+                             "<i><a href='http://www.worldscientific.com/doi/abs/10.1142/S1793962313400011'>The Geant4 Visualization System - A Multi-Driver Graphics System</b><br />,  Allison, J. et al., International Journal of Modeling, Simulation, and Scientific Computing, Vol. 4, Suppl. 1 (2013) 1340001</a></i></li>"+
                              "</ul></div>"+
 
                              "<div style='background:white; border: 1px solid #ccc; border-radius: 20px;'><b>Getting Help :</b><ul>"+
-                             "<li><b>As problems arise, try <a href='http://geant4-hn.slac.stanford.edu:5090/Geant4-HyperNews/index'>browsing the user forum</a> to see whether or not your problem has already been encountered.<br /> If it hasn't, you can post it and Geant4 developers will do their best to find a solution. This is also a good place to discuss Geant4 topics in general.</b><br />"+
+                             "<li><b>If problems arise, try <a href='http://geant4-hn.slac.stanford.edu:5090/Geant4-HyperNews/index'>browsing the user forum</a> to see whether or not your problem has already been encountered.<br /> If it hasn't, you can post it and Geant4 developers will do their best to find a solution. This is also a good place to discuss Geant4 topics in general.</b><br />"+
                              "<li><b>Get a look at <a href='http://geant4.kek.jp/geant4/support/index.shtml'>Geant4 User support pages</a></b></li>"+
                              "</ul></div>"
                              );
@@ -566,10 +566,6 @@ QWidget* G4UIQt::CreateRightSplitterWidget(){
   fViewerTabHandleWidget->setLayout(viewerTabHandleLayout);
 
 
-  fRightSplitterWidget->addWidget(fViewerTabHandleWidget);
-  fRightSplitterWidget->addWidget(CreateCoutTBWidget());
-  fRightSplitterWidget->addWidget(commandLineWidget);
-
 // set the QGLWidget size policy
   QSizePolicy policy = QSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
   policy.setVerticalStretch(4);
@@ -577,14 +573,7 @@ QWidget* G4UIQt::CreateRightSplitterWidget(){
   
   fViewerTabHandleWidget->setMinimumSize(40,40);
   
-  commandLineWidget->setMinimumSize(50,50);
-
-  // Connect signal
-  connect(fCommandArea, SIGNAL(returnPressed()), SLOT(CommandEnteredCallback()));
-  connect(fCommandArea, SIGNAL(textEdited(const QString &)), SLOT(CommandEditedCallback(const QString &)));
-
-  fRightSplitterWidget->resize(200,200);
-  return fRightSplitterWidget;
+  return fViewerTabHandleWidget;
 }
 
 
@@ -630,7 +619,7 @@ bool G4UIQt::AddTabWidget(
 #endif
   
   if (fViewerTabWidget == NULL) {
-    fViewerTabWidget = new G4QTabWidget(NULL, sizeX, sizeY);
+    fViewerTabWidget = new G4QTabWidget(fViewerTabHandleWidget, sizeX, sizeY);
     #if QT_VERSION < 0x040500
 #else
     fViewerTabWidget->setTabsClosable (true); 
@@ -652,6 +641,9 @@ bool G4UIQt::AddTabWidget(
     return false;
   }
 // Has to be added before we put it into the fViewerTabHandleWidget widget
+  aWidget->setParent(fViewerTabWidget); // Will create in some cases widget outside
+  // of UI for a really short moment
+  
   fViewerTabWidget->addTab(aWidget,name);
 
   // Remove QLabel
@@ -689,14 +681,13 @@ bool G4UIQt::AddTabWidget(
   QSize s = QSize(sizeX,sizeY);
   
   QRect screen = QApplication::desktop()->screenGeometry();
-  
-  if (fMainWindow->width()-fViewerTabWidget->width()+sizeX > screen.width()) {
-    s.setWidth(screen.width()-fMainWindow->width()+fViewerTabWidget->width());
+  if (fMainWindow->width()-fViewerTabWidget->width()+sizeX + fMainWindow->geometry().x() > screen.width()) {
+    s.setWidth(screen.width()-fMainWindow->geometry().x());
   }
-  if (fMainWindow->height()-fViewerTabWidget->height()+sizeY > screen.height()-24) { // 24 is the menuBar height on mac
-    s.setHeight(screen.height()-fMainWindow->height()+fViewerTabWidget->height()-24);
+  if (fMainWindow->height()-fMainWindow->centralWidget()->height()+sizeY + fMainWindow->geometry().y()> screen.height()-24) { // 24 is the menuBar height on mac
+    s.setHeight(screen.height()-24-fMainWindow->geometry().y());
   }
-  int winWidth = fMainWindow->width();
+/*  int winWidth = fMainWindow->width();
   int winHeight = fMainWindow->height();
   int oldTabWidth = fViewerTabWidget->width();
   int oldTabHeight = fViewerTabWidget->height();
@@ -706,6 +697,7 @@ bool G4UIQt::AddTabWidget(
   fViewerTabWidget->setPreferredSize(s);
   fMainWindow->resize(winWidth-oldTabWidth+newTabWidth,
                       winHeight-oldTabHeight+newTabHeight);
+*/
   return true;
 }
 
@@ -950,14 +942,19 @@ G4int G4UIQt::ReceiveG4cerr (
 G4String G4UIQt::GetThreadPrefix() {
   G4String threadPrefix = "";
 #ifdef G4MULTITHREADED
-/*  G4UImanager* UI = G4UImanager::GetUIpointer();
+  G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI==NULL) return "";
-  
+  /*
   if (UI->GetThreadCout() != NULL) {
     threadPrefix = UI->GetThreadCout()->GetPrefixString().data();
   }
 */
-  threadPrefix = "G4WT";
+  if (UI->threadID != -1) {
+    std::ostringstream os;
+    os << "G4WT" ;
+    os << UI->threadID ;
+    threadPrefix = os.str();
+  }
 #endif
   return threadPrefix;
 }
@@ -4001,6 +3998,19 @@ QPaintEvent *
       setTabSelected(false);
     }
   }
+}
+
+  
+G4UIDockWidget::G4UIDockWidget(QString txt):
+  QDockWidget(txt)
+{}
+  
+  
+void G4UIDockWidget::closeEvent(QCloseEvent *event) {
+  setFloating (false);
+  
+  //prevent from closing
+  event->ignore();
 }
 
 #endif
