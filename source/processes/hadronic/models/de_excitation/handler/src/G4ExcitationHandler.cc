@@ -99,6 +99,7 @@ G4ExcitationHandler::G4ExcitationHandler():
   thePool = G4FermiFragmentsPool::Instance();
   SetParameters();
   G4Pow::GetInstance();
+  G4cout << "### New Excitation handler" << G4endl;
 }
 
 G4ExcitationHandler::~G4ExcitationHandler()
