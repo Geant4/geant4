@@ -297,12 +297,7 @@ void UTessellatedSolid::PrecalculateInsides()
         {
           for (int i = 0; i <= 2; ++i) point[i] = fVoxels.GetBoundary(i)[voxel[i]];
           bool inside = (bool)(InsideNoVoxels(point) == eInside);
-          int n = SetAllUsingStack(voxel, maxVoxels, inside, checked);
-#ifdef USPECSDEBUG
-          cout << "SetAllUsingStack " << n << " items with status " << inside << "\n";
-#else
-          n = abs(0); // fix so that gcc would not make stupid warning
-#endif
+          SetAllUsingStack(voxel, maxVoxels, inside, checked);
         }
         else checked.SetBitNumber(index);
       }
@@ -1332,6 +1327,14 @@ double UTessellatedSolid::DistanceToInCore(const UVector3& aPoint, const UVector
   }
 
   return minDistance;
+}
+
+///////////////////////////////////////////////////////////////////////////////
+//
+bool UTessellatedSolid::CompareSortedVoxel(const std::pair<int, double>& l,
+                                           const std::pair<int, double>& r)
+{
+  return l.second < r.second;
 }
 
 ///////////////////////////////////////////////////////////////////////////////

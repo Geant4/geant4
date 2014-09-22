@@ -1532,11 +1532,11 @@ void UTrap::Extent(UVector3& aMin, UVector3& aMax) const
 {
   aMin.z = -fDz;
   aMax.z = fDz;
-  double min12 = 0, max12, min34 = 0, max34;
+  double min12 = 0, min34 = 0;
   if (fDx1 > fDx2)
-    min12 = fDx2, max12 = fDx1;
+    min12 = fDx2;
   if (fDx3 > fDx4)
-    min34 = fDx3, max34 = fDx4;
+    min34 = fDx3;
   aMax.x = (min12 < min34) ? min12 : min34;
   aMin.x = -aMax.x;
   aMax.y = (fDy1 > fDy2) ? fDy1 : fDy2;

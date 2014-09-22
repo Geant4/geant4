@@ -104,17 +104,9 @@ class UGenericTrap : public VUSolid
     double SurfaceArea() ;
     VUSolid* Clone() const ;
 
-    UGeometryType GetEntityType() const
-    {
-      return "GenericTrap";
-    }
-    void    ComputeBBox(UBBox* /*aBox*/, bool /*aStore = false*/) {}
-
-    void GetParametersList(int aNumber, double* aArray) const
-    {
-      aNumber = 0;
-      aArray = 0;
-    }
+    inline UGeometryType GetEntityType() const { return "GenericTrap"; }
+    inline void ComputeBBox(UBBox* /*aBox*/, bool /*aStore = false*/) {}
+    inline void GetParametersList(int /*aNumber*/, double* /*aArray*/) const {}
 
     UVector3 GetPointOnSurface() const;
 

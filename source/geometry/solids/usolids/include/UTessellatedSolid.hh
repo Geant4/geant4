@@ -81,7 +81,6 @@
 #include "VUSolid.hh"
 #include "VUFacet.hh"
 #include "UVoxelizer.hh"
-#include "UTessellatedSolid.hh"
 
 struct UVertexInfo
 {
@@ -92,7 +91,7 @@ struct UVertexInfo
 class UVertexComparator
 {
   public:
-    bool operator()(const UVertexInfo& l, const UVertexInfo& r)
+    bool operator()(const UVertexInfo& l, const UVertexInfo& r) const
     {
       return l.mag2 == r.mag2 ? l.id < r.id : l.mag2 < r.mag2;
     }
@@ -100,7 +99,7 @@ class UVertexComparator
 
 class UTessellatedSolid : public VUSolid
 {
-  public:  // with description
+  public:
 
     UTessellatedSolid();
     virtual ~UTessellatedSolid();
@@ -117,10 +116,7 @@ class UTessellatedSolid : public VUSolid
     UTessellatedSolid& operator+= (const UTessellatedSolid& right);
 
     bool AddFacet(VUFacet* aFacet);
-    inline VUFacet* GetFacet(int i) const
-    {
-      return fFacets[i];
-    }
+    inline VUFacet* GetFacet(int i) const  { return fFacets[i]; }
     int GetNumberOfFacets() const;
 
     virtual double GetSurfaceArea();
@@ -142,28 +138,15 @@ class UTessellatedSolid : public VUSolid
 
     virtual std::ostream& StreamInfo(std::ostream& os) const;
 
-    virtual double Capacity()
-    {
-      return 0;
-    }
-
-    virtual double SurfaceArea()
-    {
-      return GetSurfaceArea();
-    }
+    virtual double Capacity()  { return 0; }
+    virtual double SurfaceArea()  { return GetSurfaceArea(); }
 
     inline virtual void GetParametersList(int /*aNumber*/, double* /*aArray*/) const {}
     inline virtual void ComputeBBox(UBBox* /*aBox*/, bool /*aStore = false*/) {}
 
-    inline void SetMaxVoxels(int max)
-    {
-      fVoxels.SetMaxVoxels(max);
-    }
+    inline void SetMaxVoxels(int max)  { fVoxels.SetMaxVoxels(max); }
 
-    inline UVoxelizer& GetVoxels()
-    {
-      return fVoxels;
-    }
+    inline UVoxelizer& GetVoxels()  { return fVoxels; }
 
     virtual VUSolid* Clone() const;
 
@@ -174,17 +157,18 @@ class UTessellatedSolid : public VUSolid
     double      GetMinZExtent() const;
     double      GetMaxZExtent() const;
 
-    virtual inline double DistanceToIn(const UVector3& p, const UVector3& v, double aPstep = UUtils::kInfinity) const
+    virtual double DistanceToIn(const UVector3& p, const UVector3& v,
+                                double aPstep = UUtils::kInfinity) const
     {
       return DistanceToInCore(p, v, aPstep);
     }
 
-    virtual inline double DistanceToOut(const UVector3& p,
-                                        const UVector3& v,
-                                        UVector3&       aNormalVector,
-                                        bool&           aConvex,
-                                        double aPstep = UUtils::kInfinity
-                                       ) const
+    virtual double DistanceToOut(const UVector3& p,
+                                 const UVector3& v,
+                                       UVector3& aNormalVector,
+                                       bool&     aConvex,
+                                       double aPstep = UUtils::kInfinity
+                                ) const
     {
       return DistanceToOutCore(p, v, aNormalVector, aConvex, aPstep);
     }
@@ -199,21 +183,18 @@ class UTessellatedSolid : public VUSolid
 
     double DistanceToOutNoVoxels(const UVector3& p,
                                  const UVector3& v,
-                                 UVector3&       aNormalVector,
-                                 bool&           aConvex,
+                                       UVector3& aNormalVector,
+                                       bool&     aConvex,
                                  double aPstep = UUtils::kInfinity
                                 ) const;
 
     double DistanceToInCandidates(const std::vector<int>& candidates, const UVector3& aPoint, const UVector3& aDirection /*, double aPstep, const UBits &bits*/) const;
-
     void DistanceToOutCandidates(const std::vector<int >& candidates, const UVector3& aPoint, const UVector3& direction, double& minDist, UVector3& minNormal, int& minCandidate/*, double aPstep*/ /*,  UBits &bits*/) const;
-
     double DistanceToInNoVoxels(const UVector3& p, const UVector3& v, double aPstep = UUtils::kInfinity) const;
 
     void SetExtremeFacets();
 
     VUSolid::EnumInside InsideNoVoxels(const UVector3& p) const;
-
     VUSolid::EnumInside InsideVoxels(const UVector3& aPoint) const;
 
     void Voxelize();
@@ -224,24 +205,24 @@ class UTessellatedSolid : public VUSolid
 
     void SetRandomVectors();
 
-    double DistanceToInCore(const UVector3& p, const UVector3& v, double aPstep = UUtils::kInfinity) const;
-
+    double DistanceToInCore(const UVector3& p,
+                            const UVector3& v,
+                                  double aPstep = UUtils::kInfinity) const;
     double DistanceToOutCore(const UVector3& p,
                              const UVector3& v,
-                             UVector3&       aNormalVector,
-                             bool&           aConvex,
-                             double aPstep = UUtils::kInfinity
-                            ) const;
+                                   UVector3& aNormalVector,
+                                   bool&     aConvex,
+                                   double aPstep = UUtils::kInfinity) const;
 
-    int SetAllUsingStack(const std::vector<int>& voxel, const std::vector<int>& max, bool status, UBits& checked);
+    int SetAllUsingStack(const std::vector<int>& voxel,
+                         const std::vector<int>& max,
+                               bool status, UBits& checked);
 
     void DeleteObjects();
     void CopyObjects(const UTessellatedSolid& s);
 
-    static bool CompareSortedVoxel(const std::pair<int, double>& l, const std::pair<int, double>& r)
-    {
-      return l.second < r.second;
-    }
+    static bool CompareSortedVoxel(const std::pair<int, double>& l,
+                                   const std::pair<int, double>& r);
 
     double MinDistanceFacet(const UVector3& p, bool simple, VUFacet*& facet) const;
 
@@ -258,6 +239,7 @@ class UTessellatedSolid : public VUSolid
 
     std::vector<VUFacet*>  fFacets;
     std::set<VUFacet*> fExtremeFacets;  // Does all other facets lie on or behind this surface?
+
     UGeometryType          fGeometryType;
     double                 fCubicVolume;
     double                 fSurfaceArea;
