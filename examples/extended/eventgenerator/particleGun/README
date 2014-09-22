@@ -68,7 +68,7 @@ $Id$
  RotateUz() transforms uz to newUz. It is composition of two simple rotations:
  theta around oy, then phi around oz (non commutative).
 http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
- Histograms 2,3 show momentum direction in local frame.
+ Histograms 5,6 show momentum direction in local frame.
   
  3.4- Shooting primaries in spherical coordinates with rotation matrix
       ----------------------------------------------------------------
@@ -79,7 +79,7 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
  One wishes to shoot uniformly within a spherical shell.
  One works in spherical coordinates. One uses inverse cumulative method with
  analytical formulae.
- Histograms 4,5,6 demonstrate uniform distribution of vertex position.
+ Histograms 2,3,4 demonstrate uniform distribution of vertex position.
 
  b) Momentum direction
  One wants to limit particle direction uniformly within (alphaMin, alphaMax).
@@ -88,7 +88,7 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
  RotateUz() transforms uz to ur. It is composition of two elementary rotations:
  theta around oy, then phi around oz (non commutative).
 http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
- Histograms 7,8 show momentum direction in vertex_position frame.
+ Histograms 5,6 show momentum direction in vertex_position frame.
 
  4- Visualisation
     -------------
@@ -108,7 +108,7 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
  	% particleGun
  	....
  	Idle>      ---> type your commands. For instance:
-        Idle> /gunExample/selectGunAction 1
+    Idle> /gunExample/selectGunAction 1
 	Idle> /run/beamOn 10
 	....
  	Idle> exit
@@ -120,29 +120,27 @@ http://proj-clhep.web.cern.ch/proj-clhep/manual/UserGuide/VectorDefs/node49.html
   particleGun.root by default.
 
       1 : energy spectrum dN/dE = f(E)
-      2 : particle direction: angular distr cos(alpha)
-      3 : particle direction: angular distr psi      
-      4 : vertex position: radial  distr dN/dv = f(r)
-      5 : vertex position: angular distr cos(theta)
-      6 : vertex position: angular distr phi
-      7 : particle direction: angular distr cos(alpha)
-      8 : particle direction: angular distr psi
+      2 : vertex position: radial  distr dN/dv = f(r)
+      3 : vertex position: angular distr cos(theta)
+      4 : vertex position: angular distr phi
+      5 : particle direction in local frame: angular distr cos(alpha)
+      6 : particle direction in local frame: angular distr psi
 
   Please note that histogram 1 will be filled only if you use 
-  PrimaryGeneratorAction2, histos 2,3 with PrimaryGeneratorAction3
-  and 4 through 8 will be filled with PrimaryGeneratorAction4.
+  PrimaryGeneratorAction2, histos 5,6 with PrimaryGeneratorAction3
+  and 2 through 6 will be filled with PrimaryGeneratorAction4.
 
   The histograms are managed by the HistoManager class and its Messenger. 
   The histos can be individually activated with the command :
-  /gunExample/histo/setHisto id nbBins  valMin valMax unit 
+  /analysis/h1/set id nbBins  valMin valMax unit 
   where unit is the desired unit for the histo (MeV or keV, deg or mrad, etc..)
    
   One can control the name of the histograms file with the command:
-  /gunExample/histo/setFileName  name  (default particleGun)
+  /analysis/h1/setFileName  name  (default particleGun)
    
    It is possible to choose the format of the histogram file : root (default),
-   hbook, xml, csv, by using namespace in HistoManager.hh
+   xml, csv, by using namespace in HistoManager.hh
    
    It is also possible to print selected histograms on an ascii file:
-   /gunExample/histo/printHisto id
+   /analysis/h1/setAscii id
    All selected histos will be written on a file name.ascii (default gunExample)

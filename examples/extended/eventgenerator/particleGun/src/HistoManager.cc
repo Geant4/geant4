@@ -62,18 +62,16 @@ void HistoManager::Book()
   analysisManager->SetActivation(true);     //enable inactivation of histograms
   
   // Define histograms start values
-  const G4int kMaxHisto = 9;
-  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6", "7" , "8" };
+  const G4int kMaxHisto = 7;
+  const G4String id[] = { "0", "1", "2", "3", "4", "5", "6" };
   const G4String title[] = 
        { "dummy",                                    //0
-         "energy spectrum dN/dE = f(E)",             //1 for GunAction#2
-         "particle dir: angular distr cos(alpha)",   //2 for GunAction#3
-         "particle dir: angular distr psi",          //3 for GunAction#3
-         "vertex posi: radial  distr dN/dv = f(r)",  //4 for GunAction#4
-         "vertex posi: angular distr cos(theta)",    //5 for GunAction#4
-         "vertex posi: angular distr phi",           //6 for GunAction#4
-         "particle dir: angular distr cos(alpha)",   //7 for GunAction#4
-         "particle dir: angular distr psi "          //8 for GunAction#4
+         "energy spectrum dN/dE = f(E)",             //1
+         "vertex posi: radial  distr dN/dv = f(r)",  //2
+         "vertex posi: angular distr cos(theta)",    //3
+         "vertex posi: angular distr phi",           //4
+         "particle dir in local frame: angular distr cos(alpha)",   //5
+         "particle dir in local frame: angular distr psi"           //6
        };  
 
   // Default values (to be reset via /analysis/h1/set command)               

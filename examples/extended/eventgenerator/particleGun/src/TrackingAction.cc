@@ -69,16 +69,16 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
  }
  else if(selectedGeneratorAction==3)
  {
-  //particle direction. angular distr: cos(alpha)
+  //particle direction. angular distr in local frame: cos(alpha)
   //
-  id = 2;
+  id = 5;
   G4ThreeVector um = track->GetMomentumDirection();
   G4double cosalpha  = fNewUz*um;
   analysis->FillH1(id, cosalpha);
       
-  //particle direction. angular distr: psi
+  //particle direction. angular distr in local frame: psi
   //
-  id = 3;
+  id = 6;
   // complete local frame
   G4ThreeVector u1(1.,0.,0.);  u1.rotateUz(fNewUz);
   G4ThreeVector u2(0.,1.,0.);  u2.rotateUz(fNewUz);  
@@ -97,34 +97,34 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
 
   //vertex position. radial distribution dN/dv = f(r)
   //
-  id = 4;
+  id = 2;
   G4double dr = analysis->GetH1Width(id);
   G4double dv = 2*twopi*r*r*dr;
   if (dv > 0.) analysis->FillH1(id, r, 1./dv);
 
   //vertex position. angular distribution: cos(theta)
   //
-  id = 5;
+  id = 3;
   G4double costheta  = ur.z();
   analysis->FillH1(id, costheta);
 
   //vertex position. angular distribution: phi
   //
-  id = 6;
+  id = 4;
   G4double phi  = std::atan2(ur.y(), ur.x());
   if (phi < 0.) phi += twopi;
   analysis->FillH1(id, phi);
 
-  //particle direction. angular distr: cos(alpha)
+  //particle direction. angular distr in local frame: cos(alpha)
   //
-  id = 7;
+  id = 5;
   G4ThreeVector um = track->GetMomentumDirection();
   G4double cosalpha  = ur*um;
   analysis->FillH1(id, cosalpha);
 
-  //particle direction. angular distr: psi
+  //particle direction. angular distr in local frame: psi
   //
-  id = 8;
+  id = 6;
   // complete local frame
   G4ThreeVector u1(1.,0.,0.);  u1.rotateUz(ur);
   G4ThreeVector u2(0.,1.,0.);  u2.rotateUz(ur);
