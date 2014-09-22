@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-12 21 Sept 2014 Andrea Dotti
+- Renaming ParFullCMS script test for MIC
+
 ctests-V10-00-11 08 June 2014 Andrea Dotti
 - Adding first version of ctest on MIC (Intel Xeon Phi). To 
   enable testing add -DGEANT4_ENABLE_TESTING_MIC=ON See

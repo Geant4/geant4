@@ -151,7 +151,7 @@ GEANT4_ADD_TEST_MIC(example-bas-b5-mic COMMAND ${CMAKE_BINARY_DIR}/examples/basi
 
 #Testing MIC
 GEANT4_ADD_TEST_MIC_LAUNCHER(bench-calo-ParFullCMS-MIC
-			     COMMAND /geant4-sw/mic/ctest/runtest.sh
+			     COMMAND /geant4-sw/mic/ctest/runtest.ParFullCMS.sh
 		 	     DEPENDS bench-calo-ParFullCMS-build)
 
 
