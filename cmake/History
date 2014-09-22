@@ -30,6 +30,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+
+26th August 2014 - Gunter Folger (cmake-V10-00-23)
+-  Modules/Geant4CTest.cmake: Add variable for reference files for testing
+
 26th August 2014 - Ben Morgan (cmake-V10-00-22)
 - Modules/Geant4MacroLibraryTargets.cmake : Remove any self-links
   from internal library link list when building global libraries.
