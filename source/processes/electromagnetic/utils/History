@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 September 14: V.Ivant (emutils-V10-00-29)
+- G4VEmProcess, G4VEnergyLossProcess - fixed model type definition
+    for secondary particle production (fluoresence, PIXE, splitting)
+
 21 July 14: V.Ivant (emutils-V10-00-28)
 - G4EmCorrections, G4EmElementSelector, G4LossTableManager,
   G4VEmModel, G4VEmProcess, G4VEnergyLossProcess - introduced 

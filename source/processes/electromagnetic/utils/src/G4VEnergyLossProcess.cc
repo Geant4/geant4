@@ -1049,7 +1049,7 @@ void G4VEnergyLossProcess::ActivateSubCutoff(G4bool val, const G4Region* r)
 
 void G4VEnergyLossProcess::StartTracking(G4Track* track)
 {
-  /*    
+  /*      
     G4cout << track->GetDefinition()->GetParticleName() 
 	   << " e(MeV)= " << track->GetKineticEnergy()
 	   << "  baseParticle " << baseParticle << " proc " << this;
@@ -1103,8 +1103,9 @@ G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
     if(fRange > finR) { 
       x = fRange*dRoverRange + finR*(1.0 - dRoverRange)*(2.0 - finR/fRange); 
     }
+    
+   // if(particle->GetPDGMass() > 0.9*GeV)
     /*
-    if(particle->GetPDGMass() > 0.9*GeV)
     G4cout<<GetProcessName()<<": e= "<<preStepKinEnergy
 	  <<" range= "<<fRange << " idx= " << basedCoupleIndex
     	  << " finR= " << finR
@@ -1497,8 +1498,7 @@ G4VEnergyLossProcess::FillSecondariesAlongStep(G4double&, G4double& weight)
     if(t) {
       t->SetWeight(weight); 
       pParticleChange->AddSecondary(t);
-      if(i < n0) { t->SetCreatorModelIndex(secID); }
-      else       { t->SetCreatorModelIndex(biasID); }
+      if(i >= n0) { t->SetCreatorModelIndex(biasID); }
       //G4cout << "Secondary(along step) has weight " << t->GetWeight() 
       //<< ", kenergy " << t->GetKineticEnergy()/MeV << " MeV" <<G4endl;
     }

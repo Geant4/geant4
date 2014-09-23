@@ -434,7 +434,6 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
     }
   } else { isActive = false; }
   
-  
   //if(currParticle->GetPDGMass() > GeV)    
   /*
   G4cout << "MSC::AlongStepGPIL: Ekin= " << ekin

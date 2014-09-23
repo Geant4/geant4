@@ -323,16 +323,14 @@ void G4VEmProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
     biasFlag = false; 
   }
   // defined ID of secondary particles
-  if(isMaster) {
-    G4String nam1 = GetProcessName();
-    G4String nam2 = nam1 + "_fluo" ;
-    G4String nam3 = nam1 + "_auger";
-    G4String nam4 = nam1 + "_split";
-    secID   = G4PhysicsModelCatalog::Register(nam1); 
-    fluoID  = G4PhysicsModelCatalog::Register(nam2); 
-    augerID = G4PhysicsModelCatalog::Register(nam3); 
-    biasID  = G4PhysicsModelCatalog::Register(nam4); 
-  }
+  G4String nam1 = GetProcessName();
+  G4String nam2 = nam1 + "_fluo" ;
+  G4String nam3 = nam1 + "_auger";
+  G4String nam4 = nam1 + "_split";
+  secID   = G4PhysicsModelCatalog::Register(nam1); 
+  fluoID  = G4PhysicsModelCatalog::Register(nam2); 
+  augerID = G4PhysicsModelCatalog::Register(nam3); 
+  biasID  = G4PhysicsModelCatalog::Register(nam4); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
