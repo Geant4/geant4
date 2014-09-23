@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23 September, 2014 G. Cosmo (intercoms-V10-00-11)
+- G4UImanager.hh : Renamed getThreadId() method to GetThreadId() and made
+  post-const...
+
+23 September, 2014 L. Garnier (intercoms-V10-00-10)
+- G4UImanager.hh : Add getThreadId() method instead of a public member
+
+23 September, 2014 L. Garnier (intercoms-V10-00-09)
+- G4UImanager.hh : Change threadId from private to public
+
 12 August, 2014 L. Garnier (intercoms-V10-00-08)
 - G4UImanager.hh : add "G4MTcoutDestination* GetThreadCout()" 
   to get the cout destination of this thread

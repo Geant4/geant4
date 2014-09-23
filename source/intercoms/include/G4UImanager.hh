@@ -272,8 +272,9 @@ class G4UImanager : public G4VStateDependent
       std::vector<G4String>* GetCommandStack();
       void RegisterBridge(G4UIbridge* brg);
 
-  public: 
       void SetUpForAThread(G4int tId);
+      inline G4int GetThreadID() const
+      { return threadID; }
 
   private:
       G4int threadID;
