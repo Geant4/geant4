@@ -23,58 +23,66 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/particleGun/src/PrimaryGeneratorMessenger.cc
-/// \brief Implementation of the PrimaryGeneratorMessenger class
+/// \file eventgenerator/particleGun/src/PrimaryGeneratorAction0.cc
+/// \brief Implementation of the PrimaryGeneratorAction0 class
 //
-// $Id$
 //
+// $Id: PrimaryGeneratorAction0.cc 83872 2014-09-20 22:23:50Z maire $
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "PrimaryGeneratorMessenger.hh"
+#include "PrimaryGeneratorAction0.hh"
 #include "PrimaryGeneratorAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAnInteger.hh"
+
+#include "G4Event.hh"
+#include "G4ParticleGun.hh"
+#include "G4SystemOfUnits.hh"
+#include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorMessenger::PrimaryGeneratorMessenger
-                                                  (PrimaryGeneratorAction* Gun)
-:G4UImessenger(),
- Action(Gun),
- fDir(0), 
- fSelectActionCmd(0)
+PrimaryGeneratorAction0::PrimaryGeneratorAction0(G4ParticleGun* gun)
+: fParticleGun(gun)
 {
-  fDir = new G4UIdirectory("/gunExample/");
-  fDir->SetGuidance("this example");
-
-fSelectActionCmd = new G4UIcmdWithAnInteger("/gunExample/selectGunAction",this);
-  fSelectActionCmd->SetGuidance("Select primary generator action");
-  fSelectActionCmd->SetGuidance("0 uniform in a given solid angle");
-  fSelectActionCmd->SetGuidance("1 several vertices and particles per event");
-  fSelectActionCmd->SetGuidance("2 Show how to sample a tabulated function"); 
-  fSelectActionCmd->SetGuidance("3 Divergent beam in an arbitrary direction");
-  fSelectActionCmd->SetGuidance("4 spherical coordinates with rotation matrix");
-  fSelectActionCmd->SetParameterName("id",false);
-  fSelectActionCmd->SetRange("id>=0 && id<5");
+  //solid angle
+  //
+  G4double alphaMin =  0*deg;      //alpha in [0,pi]
+  G4double alphaMax = 60*deg;
+  fCosAlphaMin = std::cos(alphaMin);
+  fCosAlphaMax = std::cos(alphaMax);
+  
+  fPsiMin = 0*deg;       //psi in [0, 2*pi]
+  fPsiMax = 360*deg;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
-{
-  delete fSelectActionCmd;
-  delete fDir;
-}
+PrimaryGeneratorAction0::~PrimaryGeneratorAction0()
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
-                                               G4String newValue)
-{ 
-  if (command == fSelectActionCmd)
-    Action->SelectAction(fSelectActionCmd->GetNewIntValue(newValue));      
+void PrimaryGeneratorAction0::GeneratePrimaries(G4Event* anEvent)
+{  
+  //vertex position fixed
+  //
+  G4double x0 = 0*mm, y0 = 0*mm, z0 = 0*mm;
+  fParticleGun->SetParticlePosition(G4ThreeVector(x0,y0,z0));
+
+  //direction uniform in solid angle
+  //
+  G4double cosAlpha = fCosAlphaMin-G4UniformRand()*(fCosAlphaMin-fCosAlphaMax);
+  G4double sinAlpha = std::sqrt(1. - cosAlpha*cosAlpha);
+  G4double psi = fPsiMin + G4UniformRand()*(fPsiMax - fPsiMin);
+
+  G4double ux = sinAlpha*std::cos(psi),
+           uy = sinAlpha*std::sin(psi),
+           uz = cosAlpha;
+
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(ux,uy,uz));
+  
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-

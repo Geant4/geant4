@@ -67,11 +67,11 @@ void HistoManager::Book()
   const G4String title[] = 
        { "dummy",                                    //0
          "energy spectrum dN/dE = f(E)",             //1
-         "vertex posi: radial  distr dN/dv = f(r)",  //2
-         "vertex posi: angular distr cos(theta)",    //3
-         "vertex posi: angular distr phi",           //4
-         "particle dir in local frame: angular distr cos(alpha)",   //5
-         "particle dir in local frame: angular distr psi"           //6
+         "vertex position: dN/dv = f(r)",            //2
+         "vertex position: cos(theta)",              //3
+         "vertex position: phi",                     //4
+         "particle direction in local frame: cos(alpha)",   //5
+         "particle direction in local frame: psi"           //6
        };  
 
   // Default values (to be reset via /analysis/h1/set command)               

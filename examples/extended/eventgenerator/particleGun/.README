@@ -9,8 +9,9 @@
  - 10-06-2010 : Makoto Asai - merge into one example
  - 13-05-2010 : Michel Maire - create as three examples
   
- This example demonstrates 4 ways of the usage of G4ParticleGun shooting
+ This example demonstrates 5 ways of the usage of G4ParticleGun shooting
  primary particles in different cases. These are
+ -#  uniform particle direction in a given solid angle
  -#  Generate several vertices and particles per event
  -#  Show how to sample a tabulated function (eg. energy spectrum)  
  -#  Divergent beam in an arbitrary direction 
@@ -32,13 +33,18 @@ PhysicsList.cc defines only geantino and transportation process.
          	
 \section ParticleGun_s3 Primary generator
 
- There are 4 concrete primary generator action classes
- (PrimaryGeneratorActionN, N=1,2,3,4) which can be used as an independent sample
+ There are 5 concrete primary generator action classes
+ (PrimaryGeneratorActionN, N=0,1,2,3,4) which can be used as an independent sample
  code. 
  PrimaryGeneratorAction is the class which uses and switches between these 
- 4 concrete action classes. Each concrete generator action shoots geantinoes
+ 5 concrete action classes. Each concrete generator action shoots geantinoes
  in a distribution decribed below.
+ 
+\subsection ParticleGun_sub_s31 0. Uniform particle direction in a given solid angle
 
+ spherical angles (alpha,psi) respective to z axis
+ Histograms 5,6 show momentum direction in master frame.
+ 
 \subsection ParticleGun_sub_s31 1. Generate several vertices and particles per event
 
  - particle 1 : a geantino uniformly randomized on a cylinder surface.
@@ -118,14 +124,14 @@ Idle> exit
   particleGun.root by default.
 
     - 1 : energy spectrum dN/dE = f(E)
-    - 2 : vertex position: radial  distr dN/dv = f(r)
-    - 3 : vertex position: angular distr cos(theta)
-    - 4 : vertex position: angular distr phi
-    - 5 : particle direction in local frame: angular distr cos(alpha)
-    - 6 : particle direction in local frame: angular distr psi      
+    - 2 : vertex position: radial distr dN/dv = f(r)
+    - 3 : vertex position: cos(theta)
+    - 4 : vertex position: phi
+    - 5 : particle direction in local frame: cos(alpha)
+    - 6 : particle direction in local frame: psi      
 
   Please note that histogram 1 will be filled only if you use 
-  PrimaryGeneratorAction2, histos 5,6 with PrimaryGeneratorAction3
+  PrimaryGeneratorAction2, histos 5,6 with PrimaryGeneratorAction0 and 3
   and 2 through 6 will be filled with PrimaryGeneratorAction4.
 
   The histograms are managed by the HistoManager class and its Messenger. 

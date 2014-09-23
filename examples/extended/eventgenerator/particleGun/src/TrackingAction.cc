@@ -67,16 +67,33 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   id = 1;   
   analysis->FillH1(id, track->GetKineticEnergy());
  }
+ 
+ else if(selectedGeneratorAction==0)
+ {
+  //particle direction: cos(alpha)
+  //
+  id = 5;
+  G4ThreeVector um = track->GetMomentumDirection();
+  G4double cosalpha  = um.z();
+  analysis->FillH1(id, cosalpha);
+      
+  //particle direction: psi
+  //
+  id = 6;
+  G4double psi = std::atan2(um.y(), um.x());
+  if (psi < 0.) psi += twopi;    
+  analysis->FillH1(id, psi);  
+ }
  else if(selectedGeneratorAction==3)
  {
-  //particle direction. angular distr in local frame: cos(alpha)
+  //particle direction in local frame: cos(alpha)
   //
   id = 5;
   G4ThreeVector um = track->GetMomentumDirection();
   G4double cosalpha  = fNewUz*um;
   analysis->FillH1(id, cosalpha);
       
-  //particle direction. angular distr in local frame: psi
+  //particle direction in local frame: psi
   //
   id = 6;
   // complete local frame
@@ -87,6 +104,7 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   if (psi < 0.) psi += twopi;    
   analysis->FillH1(id, psi);  
  }
+
  else if(selectedGeneratorAction==4)
  {
   G4ThreeVector vertex   = track->GetVertexPosition();
@@ -102,27 +120,27 @@ void TrackingAction::PreUserTrackingAction(const G4Track* track)
   G4double dv = 2*twopi*r*r*dr;
   if (dv > 0.) analysis->FillH1(id, r, 1./dv);
 
-  //vertex position. angular distribution: cos(theta)
+  //vertex position: cos(theta)
   //
   id = 3;
   G4double costheta  = ur.z();
   analysis->FillH1(id, costheta);
 
-  //vertex position. angular distribution: phi
+  //vertex position: phi
   //
   id = 4;
   G4double phi  = std::atan2(ur.y(), ur.x());
   if (phi < 0.) phi += twopi;
   analysis->FillH1(id, phi);
 
-  //particle direction. angular distr in local frame: cos(alpha)
+  //particle direction in local frame: cos(alpha)
   //
   id = 5;
   G4ThreeVector um = track->GetMomentumDirection();
   G4double cosalpha  = ur*um;
   analysis->FillH1(id, cosalpha);
 
-  //particle direction. angular distr in local frame: psi
+  //particle direction in local frame: psi
   //
   id = 6;
   // complete local frame

@@ -13,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
 	 
+22-09-14 mma (particleGunExample-V10-00-02) 
+- add PrimaryGeneratorAction0 class and run0.mac
+
 21-09-14 mma (particleGunExample-V10-00-01) 
 - simplify histograms
 

@@ -23,58 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file eventgenerator/particleGun/src/PrimaryGeneratorMessenger.cc
-/// \brief Implementation of the PrimaryGeneratorMessenger class
+/// \file eventgenerator/particleGun/include/PrimaryGeneratorAction0.hh
+/// \brief Definition of the PrimaryGeneratorAction0 class
 //
-// $Id$
 //
+// $Id: PrimaryGeneratorAction0.hh 67332 2013-02-14 17:12:13Z ihrivnac $
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "PrimaryGeneratorMessenger.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAnInteger.hh"
+#ifndef PrimaryGeneratorAction0_h
+#define PrimaryGeneratorAction0_h 1
+
+#include "G4VUserPrimaryGeneratorAction.hh"
+#include "globals.hh"
+
+class G4ParticleGun;
+class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PrimaryGeneratorMessenger::PrimaryGeneratorMessenger
-                                                  (PrimaryGeneratorAction* Gun)
-:G4UImessenger(),
- Action(Gun),
- fDir(0), 
- fSelectActionCmd(0)
+class PrimaryGeneratorAction0
 {
-  fDir = new G4UIdirectory("/gunExample/");
-  fDir->SetGuidance("this example");
+  public:
+    PrimaryGeneratorAction0(G4ParticleGun*);    
+   ~PrimaryGeneratorAction0();
 
-fSelectActionCmd = new G4UIcmdWithAnInteger("/gunExample/selectGunAction",this);
-  fSelectActionCmd->SetGuidance("Select primary generator action");
-  fSelectActionCmd->SetGuidance("0 uniform in a given solid angle");
-  fSelectActionCmd->SetGuidance("1 several vertices and particles per event");
-  fSelectActionCmd->SetGuidance("2 Show how to sample a tabulated function"); 
-  fSelectActionCmd->SetGuidance("3 Divergent beam in an arbitrary direction");
-  fSelectActionCmd->SetGuidance("4 spherical coordinates with rotation matrix");
-  fSelectActionCmd->SetParameterName("id",false);
-  fSelectActionCmd->SetRange("id>=0 && id<5");
-}
+  public:
+    void GeneratePrimaries(G4Event*);
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+  private:
+   G4double fCosAlphaMin, fCosAlphaMax;      //solid angle
+   G4double fPsiMin, fPsiMax;
+   
 
-PrimaryGeneratorMessenger::~PrimaryGeneratorMessenger()
-{
-  delete fSelectActionCmd;
-  delete fDir;
-}
+    G4ParticleGun*  fParticleGun;
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrimaryGeneratorMessenger::SetNewValue(G4UIcommand* command,
-                                               G4String newValue)
-{ 
-  if (command == fSelectActionCmd)
-    Action->SelectAction(fSelectActionCmd->GetNewIntValue(newValue));      
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
+#endif

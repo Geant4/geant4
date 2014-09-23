@@ -30,7 +30,7 @@
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #ifndef PrimaryGeneratorAction_h
 #define PrimaryGeneratorAction_h 1
@@ -38,6 +38,7 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 #include "globals.hh"
 
+class PrimaryGeneratorAction0;
 class PrimaryGeneratorAction1;
 class PrimaryGeneratorAction2;
 class PrimaryGeneratorAction3;
@@ -62,7 +63,9 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleGun* GetParticleGun() { return fParticleGun; };
     
     void SelectAction(G4int i) { fSelectedAction = i; };    
-    G4int GetSelectedAction()  { return fSelectedAction; };    
+    G4int GetSelectedAction()  { return fSelectedAction; };
+
+    PrimaryGeneratorAction0*  GetAction0() { return fAction0; };
     PrimaryGeneratorAction1*  GetAction1() { return fAction1; };
     PrimaryGeneratorAction2*  GetAction2() { return fAction2; };
     PrimaryGeneratorAction3*  GetAction3() { return fAction3; };
@@ -70,6 +73,8 @@ class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     
   private:
     G4ParticleGun*           fParticleGun;
+
+    PrimaryGeneratorAction0* fAction0;
     PrimaryGeneratorAction1* fAction1;
     PrimaryGeneratorAction2* fAction2;
     PrimaryGeneratorAction3* fAction3;
