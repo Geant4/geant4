@@ -125,6 +125,10 @@ $Id$
 	13	"(transmit, charged) : projected angle at exit of world"
 	14	"(transmit, charged) : projected position at exit of world"
 	15	"(transmit, charged) : radius at exit of world"	
+        16      "energy of Auger e- at creation"
+        17      "energy of fluorescence gamma at creation"
+        18      "energy of Auger e- at creation (log scale)"
+        19      "energy of fluorescence gamma at creation (log scale)"
 	20	"(transmit, neutral) : kinetic energy at exit of world"
 	21	"(transmit, neutral) : ener fluence: dE(MeV)/dOmega"	
 	22	"(transmit, neutral) : space angle dN/dOmega"
@@ -137,6 +141,10 @@ $Id$
 	41	"(reflect , neutral) : ener fluence: dE(MeV)/dOmega"	
 	42	"(reflect , neutral) : space angle dN/dOmega"
 	43	"(reflect , neutral) : projected angle at exit of world"
+        44      "energy of PIXE Auger e- at creation"
+        45      "energy of PIXE gamma at creation"
+        46      "energy of PIXE Auger e- at creation (log scale)"
+        47      "energy of PIXE gamma at creation (log scale)"
 
  The histograms can be viewed using ROOT or PAW.
  

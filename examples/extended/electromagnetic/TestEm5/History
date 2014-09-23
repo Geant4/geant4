@@ -14,6 +14,14 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+03-05-14 V.Ivant (testem5-V10-00-10)
+- TestEm5.cc - added possibility to change number on threads by
+    2nd parameter in command line, by default Michel's mechanism
+    of usage of all cores is applied (previous tag); added
+    printout of number of threads 
+- StackingAction, HistoManager - added histograms for energy of
+    gamma and Auger electrons per de-excitation model
 	 
 10-09-14 mma (testem5-V10-00-09)
 - TestEm5.cc : SetNumberOfThreads( G4Threading::G4GetNumberOfCores() )

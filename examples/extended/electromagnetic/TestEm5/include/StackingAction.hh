@@ -57,6 +57,14 @@ class StackingAction : public G4UserStackingAction
     
     G4int               fKillSecondary;
     StackingMessenger*  fStackMessenger;
+
+    G4int               fPhotoGamma;
+    G4int               fComptGamma;
+    G4int               fPhotoAuger;
+    G4int               fComptAuger;
+    G4int               fPixeGamma;
+    G4int               fPixeAuger;
+    G4bool              fIDdefined;
         
 };
 

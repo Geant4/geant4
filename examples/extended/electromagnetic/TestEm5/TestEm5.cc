@@ -64,7 +64,18 @@ int main(int argc,char** argv) {
   // Construct the default run manager
 #ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
-  runManager->SetNumberOfThreads( G4Threading::G4GetNumberOfCores() );
+  // Number of threads can be defined via 3rd argument
+  G4int nThreads = -1;
+  if (argc==3) {
+    nThreads = G4UIcommand::ConvertToInt(argv[2]);
+    if (nThreads > 0) { runManager->SetNumberOfThreads(nThreads); }
+  }
+  // Number of thread are defined centrally
+  if (nThreads < 0) {
+    runManager->SetNumberOfThreads( G4Threading::G4GetNumberOfCores() );
+  }
+  G4cout << "===== TestEm5 is started with " 
+         <<  runManager->GetNumberOfThreads() << " threads =====" << G4endl;
 #else
   G4VSteppingVerbose::SetInstance(new SteppingVerbose);
   G4RunManager* runManager = new G4RunManager;
