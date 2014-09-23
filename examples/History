@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26th August 2014  Gabriele Cosmo (examples-V10-00-08)
+- Updated reference outputs according to reference tag geant4-10-00-ref-08.
+- Includes tags: gammaraytel-V10-00-07, testem1-V10-00-08, testem2-V10-00-06,
+                 testem3-V10-00-11, testem4-V10-00-01, testem5-V10-00-10,
+                 testem11-V10-00-02, testem12-V10-00-03, ExUCN-V10-00-04,
+                 particleGunExample-V10-00-02, exhadr03-V10-00-05,
+                 exhadr04-V10-00-05, exhadr06-V10-00-06, rdecay01-V10-00-03,
+                 electronScattering-V10-00-02. 
+
 27th August 2014  Gabriele Cosmo (examples-V10-00-07)
 - Updated reference outputs according to reference tag geant4-10-00-ref-07.
 - Includes tags: amsEcal-V10-00-06, dnageometry-V10-00-00, dnaphysics-V10-00-00,
