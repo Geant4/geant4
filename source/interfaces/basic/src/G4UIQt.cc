@@ -4006,11 +4006,11 @@ G4UIDockWidget::G4UIDockWidget(QString txt):
 {}
   
   
-void G4UIDockWidget::closeEvent(QCloseEvent *event) {
+void G4UIDockWidget::closeEvent(QCloseEvent *aEvent) {
   setFloating (false);
   
   //prevent from closing
-  event->ignore();
+  aEvent->ignore();
 }
 
 #endif

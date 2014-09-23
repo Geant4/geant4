@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19th August 2014  Laurent Garnier (interfaces-V10-00-11)
+- G4UIQt :
+  o Fix a shadow variable declaration
+
 19th August 2014  Laurent Garnier (interfaces-V10-00-10)
 - G4UIQt :
   o Fix the Dock output panel on the bottom right on the window
