@@ -17,44 +17,48 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-August 29, 2014 A. Dotti (global-V10-00-33)
-- Coverity fix #58649
+September 23, 2014 G.Cosmo (global-V10-00-34)
+- Use G4Exp, G4Log and G4Pow to speedup G4JTPolynomialSolver.
+- Updated dates and tag-ID.
 
-August 19, 2014 M. Asai (global-V10-00-32)
+August 29, 2014 A.Dotti (global-V10-00-33)
+- Coverity fix #58649.
+
+August 19, 2014 M.Asai (global-V10-00-32)
 - Recover G4PhysicsModelCatalog::Destroy() that has slipped out
   from previous tag.
 
-August 19, 2014 K. Genser (global-V10-00-31)
-- G4PhysicsModelCatalog - made it more const, 
-    hide operator= and copy c'tor; 
-    co-works with track-V10-00-04
+August 19, 2014 K.Genser (global-V10-00-31)
+- G4PhysicsModelCatalog: made it more const; hide operator= and copy c'tor.
+  Co-works with tag "track-V10-00-04"
 
-August 5, 2014  V.Ivanchenko (global-V10-00-30)
-- G4PhysicsModelCatalog - make destructor public in order delete 
-    the class at exit
-- G4Pow - fixed destruction
+August 5, 2014 V.Ivanchenko (global-V10-00-30)
+- G4PhysicsModelCatalog: make destructor public in order delete the class
+  at exit.
+- G4Pow: fixed destruction.
 
-August 5, 2014  V.Ivanchenko (global-V10-00-29)
-- G4Pow - make destructor public in order delete the class at exit
+August 5, 2014 V.Ivanchenko (global-V10-00-29)
+- G4Pow: make destructor public in order delete the class at exit.
 
-July 21, 2014  V.Ivanchenko (global-V10-00-28)
-- G4PhysicsVector - removed G4Allocator
-- G4PhysicsModelCatalog - added destruction of catalog 
+July 21, 2014 V.Ivanchenko (global-V10-00-28)
+- G4PhysicsVector: removed G4Allocator.
+- G4PhysicsModelCatalog: added destruction of catalog.
 
-July 14, 2014  G.Cosmo (global-V10-00-27)
+July 14, 2014 G.Cosmo (global-V10-00-27)
 - Added symbol to exclusion list in windefs.h.
 
-July 1, 2014  A.Dotti (global-V10-00-26)
-- Add std::flush to receiving of G4MTcoutDestination (Bug #1644)
+July 1, 2014 A.Dotti (global-V10-00-26)
+- Added std::flush to receiving of G4MTcoutDestination.
+  Addressing problem report #1644.
 
 June 13, 2014 A.Dotti (global-V10-00-25)
 - Bug fix in G4Threading::IsMultiThreadedApplication function
   for sequential mode.
 
 June 12, 2014 A.Dotti (global-V10-00-23,global-V10-00-24)
-- Add forward of cout and cerr in MT to master G4coutDestination
+- Added forward of cout and cerr in MT to master G4coutDestination
   if setup in client derived classes. To be used by special
-  sessions (e.g. GUI) that want to intercept thread cout/cerr
+  sessions (e.g. GUI) that want to intercept thread cout/cerr.
 
 May 21, 2014 G.Cosmo (global-V10-00-22)
 - Correction in G4Exp::G4Expf() to remove 2nd order term contribution
