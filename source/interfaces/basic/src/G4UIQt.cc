@@ -949,10 +949,10 @@ G4String G4UIQt::GetThreadPrefix() {
     threadPrefix = UI->GetThreadCout()->GetPrefixString().data();
   }
 */
-  if (UI->threadID != -1) {
+  if (UI->GetThreadID() != -1) {
     std::ostringstream os;
     os << "G4WT" ;
-    os << UI->threadID ;
+    os << UI->GetThreadID() ;
     threadPrefix = os.str();
   }
 #endif
