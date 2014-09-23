@@ -43,7 +43,6 @@
 //      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
 //      Modified Element Name for Z>103  06 Apr. 01 H.Kurashige
 //      Remove test of cuts in SetCuts   16 Jan  03 V.Ivanchenko
-//      Add G4IsomerTable                        5 May. 2013  H.Kurashige
 
 #include <iostream>               
 #include <iomanip>               
@@ -64,7 +63,6 @@
 
 #include "G4IsotopeProperty.hh"
 #include "G4VIsotopeTable.hh"
-#include "G4IsomerTable.hh"
 #include "G4NuclideTable.hh"
 
 // It is very important for multithreaded Geant4 to keep only one copy of the
@@ -118,7 +116,7 @@ G4Mutex G4IonTable::ionTableMutex = G4MUTEX_INITIALIZER;
 
 ////////////////////
 G4IonTable::G4IonTable()
-  : pIsomerTable(0),pNuclideTable(0),
+  : pNuclideTable(0),
     isIsomerCreated(false),
     n_error(0)
 {

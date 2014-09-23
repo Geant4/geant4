@@ -43,7 +43,6 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4HyperNucleiProperties.hh
         G4IonTable.hh
         G4Ions.hh
-	G4IsomerTable.hh
         G4IsotopeProperty.hh
         G4KL3DecayChannel.hh
         G4MuonDecayChannel.hh
@@ -88,8 +87,6 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4HyperNucleiProperties.cc
         G4IonTable.cc
         G4Ions.cc
-	G4IsomerTable.cc
-	G4IsomerTable2.cc
         G4IsotopeProperty.cc
         G4KL3DecayChannel.cc
         G4MuonDecayChannel.cc

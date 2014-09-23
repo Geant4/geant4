@@ -42,7 +42,6 @@
 //      New design using G4VIsotopeTable          5 Oct. 99 H.Kurashige
 //      Add GetNucleusEncoding according PDG 2006 9 Oct. 2006 H.Kurashige
 //      Use STL map                              30 Jul. 2009 H.Kurashige
-//      Add G4IsomerTable                        5 May. 2013  H.Kurashige
 //      Add GetIsomerMass                       25 July 2013  H.Kurashige
 //
 #ifndef G4IonTable_h
@@ -61,7 +60,6 @@
 class G4ParticleTable;
 class G4VIsotopeTable; 
 class G4IsotopeProperty;
-class G4IsomerTable; 
 class G4NuclideTable; 
 
 class G4IonTable
@@ -281,7 +279,6 @@ class G4IonTable
    // get Verbose Level defined in G4ParticleTable
 
  private:
-   G4IsomerTable* pIsomerTable;
    G4NuclideTable* pNuclideTable;
    G4bool         isIsomerCreated;
    // Isomer table and flag of creation    

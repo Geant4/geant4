@@ -61,12 +61,14 @@ class    G4ParticleTable;
 /////@@      daughters = 0;
 /////@@      parent_mass = 0.0;
 /////@@      daughters_mass = 0;
+/////@@      daughters_width = 0;
 /////@@    }
 /////@@
 /////@@    G4ParticleDefinition*  parent;
 /////@@    G4ParticleDefinition** daughters;
 /////@@    G4double               parent_mass;
 /////@@    G4double*              daughters_mass;
+/////@@    G4double*              daughters_width;
 /////@@};
 /////@@
 /////@@// The type G4DecayChannelManager is introduced to encapsulate the methods used
@@ -97,6 +99,7 @@ class    G4ParticleTable;
 /////@@#define G4MT_daughters ((G4VDecayChannel::subInstanceManager.offset[instanceID]).daughters)
 /////@@#define G4MT_parent_mass ((G4VDecayChannel::subInstanceManager.offset[instanceID]).parent_mass)
 /////@@#define G4MT_daughters_mass ((G4VDecayChannel::subInstanceManager.offset[instanceID]).daughters_mass)
+/////@@#define G4MT_daughters_width ((G4VDecayChannel::subInstanceManager.offset[instanceID]).daughters_width)
 /////@@
 class G4VDecayChannel
 {
