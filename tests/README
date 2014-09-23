@@ -1,4 +1,4 @@
-$Id: README 74985 2013-10-25 10:21:54Z gcosmo $
+$Id: README 83936 2014-09-23 13:48:54Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -25,7 +25,7 @@ test01 ## Geometry - CSG solids and navigator:
        ## including Boolean, assemblies, reflection and calorimeter benchmark.
 test02 ## FTFP_BERT_HP Physics Lists
        ## test02.in (em test) is obsolete; hadron test is the main
-test03 ## Free slot
+test03 ## Analysis tools.
 test04 ## Free slot
 test05 ## Geometry - Tessellated solids and General Particle Source.
        ## (Action? Eventually add CAD input setup.)
@@ -53,7 +53,7 @@ test25 ## Classical cascade hadronic model.
 test26 ## Free slot
 test27 ## Binary cascade for light ions (G4BinaryLightIonReaction).
 test28 ## Hadronic abrasion/ablation and em-dissociation.
-test29 ## Free slot
+test29 ## Fission fragment model
 test30 ## Hadronic generators test versus thin target data E<3 GeV (not for stt).
 test31 ## Test of stopping powers and energy loss for EM physics (not for stt) .
 test32 ## Test of hadronic cross sections (not for stt)
