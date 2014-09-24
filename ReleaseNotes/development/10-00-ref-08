@@ -7,6 +7,7 @@ Major development/fixes included since the last development tag are:
  o Completed implementation of G4XmlAnalysisReader; now requiring Expat parser.
    Finalized G4VAnalysisReader interface: added reading P1, P2, H3.
  o Added shapes from the USolids library: UExtrudedSolid, UGenericTrap, UTrap.
+ o Updated mass, width and lifetime of particles according to PDG-2014.
  o Re-tuned parameters of G4LundStringFragmentation; fragmentation function
    F(qq->B+anti-quark) set to Z^2. Fix for anti-diquark-diquark strings.
  o Setting to zero the probability of (uu)-diquark in FTF, based on Instantons
