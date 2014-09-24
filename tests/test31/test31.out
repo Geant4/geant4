@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
+ Geant4 version Name: geant4-10-00-ref-08    (26-September-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -1068,7 +1068,7 @@ test31EventAction: Event # 100 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=11.88s Real=11.94s Sys=0s
+  User=12.44s Real=12.47s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1191,7 +1191,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=9.98s Real=10.02s Sys=0s
+  User=11.07s Real=11.1s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1314,7 +1314,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=9.06s Real=9.08s Sys=0s
+  User=9.71s Real=9.74s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1437,7 +1437,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.36s Real=5.37s Sys=0s
+  User=5.62s Real=5.64s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1560,7 +1560,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=9.26s Real=9.31s Sys=0s
+  User=9.96s Real=9.99s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1683,7 +1683,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.7s Real=3.72s Sys=0s
+  User=3.63s Real=3.64s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1806,7 +1806,7 @@ test31EventAction: Event # 1000 started
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.63s Real=5.64s Sys=0s
+  User=5.49s Real=5.51s Sys=0s
 test31RunAction: End of run actions are started
 test31Histo: End of run actions
 ====================================================================
@@ -1866,7 +1866,7 @@ Average number of pi+pi-       0
 
 =========   End of tets31Histo  ============================
 #
-  User=59.66s Real=59.96s Sys=0.04s
+  User=62.76s Real=62.98s Sys=0.03s
 G4 kernel has come to Quit state.
 Total navigation history collections cleaned: 157
 ================== Deleting memory pools ===================

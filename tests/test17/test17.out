@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
+ Geant4 version Name: geant4-10-00-ref-08    (26-September-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -580,7 +580,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.81s Real=3.81s Sys=0s
+  User=3.48s Real=3.49s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -624,7 +624,7 @@ EvtNo= 318  length= 0.0115412  xend= 0.00163869
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.53s Real=4.55s Sys=0s
+  User=4.07s Real=4.08s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 999 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -1025,7 +1025,7 @@ EvtNo= 191  length= 0.00770475  xend= 0.00172987
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.12s Real=0.12s Sys=0s
+  User=0.1s Real=0.11s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 999 for C12 with Ekin = 6 MeV p= 366.244 MeV/c
@@ -1437,7 +1437,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.33s Real=5.34s Sys=0s
+  User=4.53s Real=4.55s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -1843,7 +1843,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.38s Real=5.4s Sys=0s
+  User=4.52s Real=4.53s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c

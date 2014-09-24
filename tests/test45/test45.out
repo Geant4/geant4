@@ -5,7 +5,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
+ Geant4 version Name: geant4-10-00-ref-08    (26-September-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -61,6 +61,7 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 
 
 
+### New Excitation handler
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 #
 /gun/particle proton
@@ -741,7 +742,7 @@ EventAction: Event # 0 started
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=18.94s Real=19.16s Sys=0s
+  User=18.13s Real=18.36s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================

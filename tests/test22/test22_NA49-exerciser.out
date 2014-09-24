@@ -1,6 +1,7 @@
 ========================================================
 ======              FTF Test Start              ========
 ========================================================
+### New Excitation handler
 Generator <ftfp> is not included in the  list SetModels.csh, so is ignored!
 Use #run command to overcome this limitation 
 ###### Start new run # 0   for 100000 events  #####
@@ -126,7 +127,7 @@ Events start 100000
 ### 97000-th event start 1.580000e+02
 ### 98000-th event start 1.580000e+02
 ### 99000-th event start 1.580000e+02
-  User=7.508000e+01s Real=7.536000e+01s Sys=2.000000e-02s
+  User=7.455000e+01s Real=7.589000e+01s Sys=2.000000e-02s
 ***********************************************************
 nevt Ninel 100000 100000
 Plab 1.580000e+02 SigIn 2.516647e+02
