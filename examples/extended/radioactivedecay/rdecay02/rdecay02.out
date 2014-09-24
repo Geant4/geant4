@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
+ Geant4 version Name: geant4-10-00-ref-08    (26-September-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -92,6 +92,7 @@ Available colours:
 
 
 ----> The target has been changed to 3 cm of Lead
+### New Excitation handler
 NeutronHP: /Elastic file for Z = 8, A = 18 is not found and NeutronHP will use /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.5/Elastic/CrossSection/8_17_Oxygen
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 /data/G4-builds/release/slc6-gcc48-RelWithDebInfo/build/data/G4NDL4.5
@@ -496,4 +497,4 @@ ROOT: files closing...
 exrdmAnalysisManager: Histograms have been saved!
 Graphics systems deleted.
 Visualization Manager deleting...
-Total navigation history collections cleaned: 17
+Total navigation history collections cleaned: 16

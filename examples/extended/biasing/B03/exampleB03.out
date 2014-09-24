@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
+ Geant4 version Name: geant4-10-00-ref-08    (26-September-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -65,6 +65,9 @@ DoIt Vector:
 ================================================
  GeomSampler Configured!!! 
  Running in singlethreaded mode!!! 
+### New Excitation handler
+### New Excitation handler
+### New Excitation handler
 B03PhysicsList::SetCuts:CutLength : 1 (mm)
  ghost world: ParallelBiasingWorld
  adding cell: 1 replica: 0 name: cell_01

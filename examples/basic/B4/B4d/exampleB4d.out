@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
+ Geant4 version Name: geant4-10-00-ref-08    (26-September-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -60,6 +60,7 @@ New sensitive detector <Absorber> is registored at /
 G4SDManager::AddNewCollection : the collection <Gap/Edep> is registered at 3
 G4SDManager::AddNewCollection : the collection <Gap/TrackLength> is registered at 4
 New sensitive detector <Gap> is registored at /
+### New Excitation handler
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 Visualization Manager instantiating with verbosity "warnings (3)"...
 Visualization Manager initialising...
@@ -1136,10 +1137,10 @@ hPairProd:   for  pi-    SubType= 4
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 280.29 MeV rms = 0 eV 
- EGap : mean = 17.8857 MeV rms = 0 eV 
- LAbs : mean = 20.308 cm  rms = 0 fm 
- LGap : mean = 8.36022 cm  rms = 0 fm 
+ EAbs : mean = 555.13 MeV rms = 392.517 MeV
+ EGap : mean = 32.8929 MeV rms = 23.1696 MeV
+ LAbs : mean = 39.4781 cm  rms = 27.9036 cm 
+ LGap : mean = 15.8093 cm  rms = 11.1603 cm 
 ... write Root file : B4.root - done
 
 phot:   for  gamma    SubType= 12
@@ -1492,10 +1493,10 @@ hPairProd:   for  pi-    SubType= 4
 
  ----> print histograms statistic for the entire run 
 
- EAbs : mean = 430.3 MeV rms = 0 eV 
- EGap : mean = 30.8539 MeV rms = 0 eV 
- LAbs : mean = 30.9356 cm  rms = 0 fm 
- LGap : mean = 15.5479 cm  rms = 0 fm 
+ EAbs : mean = 985.43 MeV rms = 794.867 MeV
+ EGap : mean = 63.7468 MeV rms = 50.6614 MeV
+ LAbs : mean = 70.4137 cm  rms = 56.7554 cm 
+ LGap : mean = 31.3572 cm  rms = 24.8225 cm 
 ... write Root file : B4.root - done
 Graphics systems deleted.
 Visualization Manager deleting...

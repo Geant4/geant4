@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
+ Geant4 version Name: geant4-10-00-ref-08    (26-September-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -148,6 +148,7 @@ G4Material WARNING: duplicate name of material MWPCArCO2
 G4Material WARNING: duplicate name of material ShieldingConcrete
 G4Material WARNING: duplicate name of material StainlessSteel
 ********* Number of Rods in FCAL2 : 2546
+### New Excitation handler
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 
 phot:   for  gamma    SubType= 12
@@ -947,13 +948,13 @@ Start closing geometry.
 G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   389 kByte
-    Total CPU time elapsed for geometry optimisation: 0.66 seconds
+    Total CPU time elapsed for geometry optimisation: 0.49 seconds
 
     Voxelisation: top CPU users:
     Percent   Total CPU    System CPU       Memory  Volume
     -------   ----------   ----------     --------  ----------
-      86.36         0.57         0.00          148k EmModuleLogical
-      13.64         0.09         0.00          236k HadModuleLogical
+      87.76         0.43         0.00          148k EmModuleLogical
+      12.24         0.06         0.00          236k HadModuleLogical
        0.00         0.00         0.00            4k Mother
        0.00         0.00         0.00            0k CryostatLogical
        0.00         0.00         0.00            0k LArgLogical
@@ -964,8 +965,8 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Voxelisation: top memory users:
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
-      60.56        235k      1361     2360       3772         0.09    HadModuleLogical
-      38.11        148k      1077     1143       2440         0.57    EmModuleLogical
+      60.56        235k      1361     2360       3772         0.06    HadModuleLogical
+      38.11        148k      1077     1143       2440         0.43    EmModuleLogical
        0.94          3k         8       42        146         0.00    Mother
        0.11          0k         1        6          8         0.00    SolidWLogical
        0.11          0k         1        6          8         0.00    CuPlateLogical
@@ -1367,7 +1368,7 @@ Edep in FCAL1 FCAl2 : 19855.2 0
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=29.16s Real=31.02s Sys=0.05s
+  User=30.68s Real=32.9s Sys=0.03s
 WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

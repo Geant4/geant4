@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-07    (31-July-2014)
+ Geant4 version Name: geant4-10-00-ref-08    (26-September-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -47,6 +47,7 @@ G4VModularPhysicsList::ReplacePhysics: ionInelasticFTFP_BICwith type : 8  is rep
 
 
 
+### New Excitation handler
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 /run/setCut 1 km
 /gun/particle ion
@@ -743,34 +744,34 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.43s Real=0.72s Sys=0.01s
+  User=0.33s Real=0.34s Sys=0.01s
 RunAction: End of run action is starting
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        S32
 Beam Energy(GeV)                     200
 Number of events                     100
-Average energy deposit (GeV)         6.591   RMS(GeV) 4.342
-Average number of steps              56.03
-Average number of gamma              2.32
+Average energy deposit (GeV)         7.019   RMS(GeV) 4.244
+Average number of steps              59.72
+Average number of gamma              2.5
 Average number of e-                 0
 Average number of e+                 0
-Average number of neutrons           12.24
-Average number of protons            13.2
+Average number of neutrons           12.55
+Average number of protons            11.57
 Average number of antiprotons        0
-Average number of pi+ & pi-          7.12
-Average number of pi0                4.11
-Average number of kaons              0.05
+Average number of pi+ & pi-          6.83
+Average number of pi0                3.71
+Average number of kaons              0.16
 Average number of muons              0
-Average number of deuterons+tritons  1.43
-Average number of He3+alpha          1.14
-Average number of ions               0.7
+Average number of deuterons+tritons  1.29
+Average number of He3+alpha          1.03
+Average number of ions               0.62
 ========================================================
 
 G4 kernel has come to Quit state.
 Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.087 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.084 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)
