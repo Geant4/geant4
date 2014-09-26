@@ -30,17 +30,20 @@
 // $Id$
 // 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo...... 
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+ 
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#else
 #include "G4RunManager.hh"
+#endif
+
 #include "G4UImanager.hh"
 #include "Randomize.hh"
 
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "TrackingAction.hh"
+#include "ActionInitialization.hh"
 #include "SteppingVerbose.hh"
 
 #ifdef G4VIS_USE
@@ -57,29 +60,25 @@ int main(int argc,char** argv) {
  
   //choose the Random engine
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
-
-  //my Verbose output class
-  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
   
   // Construct the default run manager
-  G4RunManager * runManager = new G4RunManager;
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = new G4MTRunManager;
+  runManager->SetNumberOfThreads(G4Threading::G4GetNumberOfCores());
+#else
+  //my Verbose output class
+  G4VSteppingVerbose::SetInstance(new SteppingVerbose);
+  G4RunManager* runManager = new G4RunManager;
+#endif
 
   // set mandatory initialization classes
   //
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList);
-      
-  // set user action classes
-  // 
-  RunAction*              run   = new RunAction();
-  PrimaryGeneratorAction* prim  = new PrimaryGeneratorAction();
-  TrackingAction*         track = new TrackingAction(prim);
-        
-  runManager->SetUserAction(run);
-  runManager->SetUserAction(prim);  
-  runManager->SetUserAction(track);
-    
+  
+  runManager->SetUserInitialization(new ActionInitialization);        
+   
   //Initialize G4 kernel
   runManager->Initialize();
     
