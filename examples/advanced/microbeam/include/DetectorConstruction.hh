@@ -42,7 +42,6 @@
 #include "G4PVPlacement.hh"
 #include "G4UserLimits.hh"
 #include "G4PVParameterised.hh"
-#include "PhantomConfiguration.hh"
 #include "CellParameterisation.hh"
 
 #include "EMField.hh"
@@ -81,6 +80,15 @@ public:
   G4LogicalVolume* GetLogicalCollDetGap4() {return fLogic4Gap;};
   G4LogicalVolume* GetLogicalPolyprop() {return fLogicBoite3;};
   G4LogicalVolume* GetLogicalKgm() {return fLogicKgm;};
+  
+  G4Material * GetNucleusMaterial1() {return  fNucleusMaterial1;};
+  G4Material * GetNucleusMaterial2() {return  fNucleusMaterial2;};
+  G4Material * GetNucleusMaterial3() {return  fNucleusMaterial3;};
+  G4Material * GetCytoplasmMaterial1() {return  fCytoplasmMaterial1;};
+  G4Material * GetCytoplasmMaterial2() {return  fCytoplasmMaterial2;};
+  G4Material * GetCytoplasmMaterial3() {return  fCytoplasmMaterial3;};
+  
+  CellParameterisation * GetCellParameterisation() {return fMyCellParameterisation;};
   
 private:
 
@@ -202,10 +210,9 @@ private:
   G4LogicalVolume*   fLogicPhantom;  
   G4Box*             fSolidPhantom; 
 
+  CellParameterisation * fMyCellParameterisation;
+  
   //
-
-  PhantomConfiguration fMyPhantomConfiguration;
-  CellParameterisation* fPhantomParam ; 
   
   static G4ThreadLocal EMField * fField;
 

@@ -9,6 +9,9 @@ $Id: History 70524 2013-05-31 16:36:26Z gcosmo $
                        Package History file
                        --------------------
 
+24 Sep 2014 - S. Incerti - tag microbeam-V10-00-00
+- Switched to singleton for handling of cell phantom
+
 03 Oct 2013 - S. Incerti - tag microbeam-V09-06-07
 - Updated for changes in analysis:
 

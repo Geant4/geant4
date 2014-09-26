@@ -45,7 +45,7 @@ class CellParameterisation : public G4VPVParameterisation
   public:
   
     CellParameterisation
-    (G4int NoBoxes, G4float DimBoxX, G4float DimBoxY, G4float DimBoxZ,
+    (/*G4int NoBoxes, G4float DimBoxX, G4float DimBoxY, G4float DimBoxZ,*/
      G4Material* nucleus1, G4Material* cytoplasm1,
      G4Material* nucleus2, G4Material* cytoplasm2,
      G4Material* nucleus3, G4Material* cytoplasm3
@@ -107,18 +107,37 @@ class CellParameterisation : public G4VPVParameterisation
                                    const G4int,
                                    const G4VPhysicalVolume *) const {}
 
-    G4int GetNoBoxes() {return fNoCellBoxes;}
+    G4int GetNoBoxes() {return fPhantomTotalPixels;}
 
     G4Material* ComputeMaterial(const G4int copyNo,
                                       G4VPhysicalVolume* physVol,
                                 const G4VTouchable*);
 
-  private:
+   // NEW
+   
+   G4int   GetPhantomTotalPixels()   {return fPhantomTotalPixels;}  
+   G4int   GetNucleusTotalPixels()   {return fNucleusTotalPixels;}  
+   G4int   GetCytoplasmTotalPixels() {return fCytoplasmTotalPixels;}  
+   G4float GetPixelSizeX() {return fDimCellBoxX;}  
+   G4float GetPixelSizeY() {return fDimCellBoxY;}  
+   G4float GetPixelSizeZ() {return fDimCellBoxZ;}  
+   G4float GetCytoplasmMass() {return fCytoplasmMass;}  
+   G4float GetNucleusMass()   {return fNucleusMass;}  
 
-    G4int   fNoCellBoxes;
-    G4float fDimCellBoxX;
-    G4float fDimCellBoxY;
-    G4float fDimCellBoxZ;
+   G4ThreeVector GetVoxelThreeVector(G4int i) {return fMapCell[i];}
+   G4float GetMaterialVector(G4int i) {return fMaterial[i];}
+   G4float GetMassVector(G4int i) {return fMass[i];}
+   G4int GetTissueType(G4int i) {return fTissueType[i];}
+
+//SINGLETON
+
+   static CellParameterisation * Instance()
+   {
+     return gInstance; 
+   }
+//
+   
+  private:
 
     G4Material * fNucleusMaterial1;
     G4Material * fCytoplasmMaterial1;
@@ -137,6 +156,18 @@ class CellParameterisation : public G4VPVParameterisation
     G4ThreeVector * fMapCell ; // VOXEL COORDINATES
     G4float * fMaterial      ; // MATERIAL 
     G4float * fMass          ; // DENSITY REGION
+    G4float * fTissueType    ; // DENSITY REGION
+
+    G4int fPhantomTotalPixels;
+    G4int fNucleusTotalPixels;
+    G4int fCytoplasmTotalPixels;
+    G4float fDimCellBoxX;
+    G4float fDimCellBoxY;
+    G4float fDimCellBoxZ;
+    G4float fNucleusMass;
+    G4float fCytoplasmMass;
+    
+    static CellParameterisation* gInstance;
       
 };
 

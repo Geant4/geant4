@@ -609,32 +609,23 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
   // CELL PHANTOM
   // ************
 
+  fMyCellParameterisation = new CellParameterisation
+        (fNucleusMaterial1,fCytoplasmMaterial1,
+	 fNucleusMaterial2,fCytoplasmMaterial2,
+	 fNucleusMaterial3,fCytoplasmMaterial3);
+
   fSolidPhantom = new G4Box("Phantom", 
-  	fMyPhantomConfiguration.GetPixelSizeX()/2, 
-	fMyPhantomConfiguration.GetPixelSizeY()/2, 
-	fMyPhantomConfiguration.GetPixelSizeZ()/2); 
+  	fMyCellParameterisation->GetPixelSizeX()/2, 
+	fMyCellParameterisation->GetPixelSizeY()/2, 
+	fMyCellParameterisation->GetPixelSizeZ()/2); 
   
   fLogicPhantom = new G4LogicalVolume(fSolidPhantom,fDefaultMaterial,"Phantom",0,0,0);
     
-  // PHANTOM MASSES
+  SetNbOfPixelsInPhantom (fMyCellParameterisation->GetPhantomTotalPixels());
 
-  SetNbOfPixelsInPhantom (fMyPhantomConfiguration.GetPhantomTotalPixels());
+  SetMassNucleus(fMyCellParameterisation->GetNucleusMass());
 
-  SetMassNucleus(fMyPhantomConfiguration.GetNucleusMass());
-
-  SetMassCytoplasm(fMyPhantomConfiguration.GetCytoplasmMass());
-
-  // PHANTOM
-
-  fPhantomParam = new CellParameterisation
-  	(fMyPhantomConfiguration.GetPhantomTotalPixels(),
-	 fMyPhantomConfiguration.GetPixelSizeX()/2,
-	 fMyPhantomConfiguration.GetPixelSizeY()/2,
-	 fMyPhantomConfiguration.GetPixelSizeZ()/2,
-	 fNucleusMaterial1,fCytoplasmMaterial1,
-	 fNucleusMaterial2,fCytoplasmMaterial2,
-	 fNucleusMaterial3,fCytoplasmMaterial3
-	 );
+  SetMassCytoplasm(fMyCellParameterisation->GetCytoplasmMass());
 
   fPhysiPhantom = new G4PVParameterised(
                             "Phantom",        // their name
@@ -642,11 +633,15 @@ G4VPhysicalVolume* DetectorConstruction::ConstructLine()
                             //logicCyto,      // Mother logical volume is Cyto
                             fLogicKgm,        // Mother logical volume is Kgm
 			    kUndefined,       // Are placed along this axis 
-                            fPhantomParam->GetNoBoxes(),    // Number of boxes
-                            fPhantomParam,false);   // The parametrisation
+                            fMyCellParameterisation->GetPhantomTotalPixels(),    // Number of boxes
+                            fMyCellParameterisation,false);   // The parametrisation
 
-  G4cout << " ==========> The phantom contains " 
-    << fMyPhantomConfiguration.GetPhantomTotalPixels() << " voxels " << G4endl;		    
+  G4cout << " ==========> The phantom contains " << fMyCellParameterisation->GetPhantomTotalPixels() << " voxels " << G4endl;		    
+  G4cout << " ==========> Nucleus mass (kg)=" << fMyCellParameterisation->GetNucleusMass() / kg << G4endl;
+  G4cout << " ==========> Cytoplasm mass (kg)=" << fMyCellParameterisation->GetCytoplasmMass()/ kg << G4endl;
+  G4cout << " ==========> Voxel size X (um)=" << fMyCellParameterisation->GetPixelSizeX()/um << G4endl;
+  G4cout << " ==========> Voxel size Y (um)=" << fMyCellParameterisation->GetPixelSizeY()/um << G4endl;
+  G4cout << " ==========> Voxel size Z (um)=" << fMyCellParameterisation->GetPixelSizeZ()/um << G4endl; 
   G4cout << G4endl; 
 				    		    
   // USER LIMITS ON STEP LENGTH

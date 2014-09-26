@@ -85,7 +85,7 @@ public:
 private:
 
   DetectorConstruction* fDetector;    
-  PhantomConfiguration  fMyPhantomConfiguration;  
+  CellParameterisation * fMyCellParameterisation;  
 
   G4int fSaveRndm;
   G4int fNumEvent;

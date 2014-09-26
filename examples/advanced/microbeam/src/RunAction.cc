@@ -58,7 +58,9 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {  
- 
+  // Read phantom - Singleton
+  fMyCellParameterisation = CellParameterisation::Instance(); 
+  
   // Histograms
   // Get/create analysis manager
   G4cout << "##### Create analysis manager " << "  " << this << G4endl;
@@ -145,9 +147,8 @@ void RunAction::BeginOfRunAction(const G4Run*)
 
   for (G4int i=0; i<fNbOfPixels; i++)
   {
-  	fMapVoxels [i]=fMyPhantomConfiguration.GetVoxelThreeVector(i);
+	fMapVoxels [i]=fMyCellParameterisation->GetVoxelThreeVector(i);
   	fDose3DDose[i]=0;
-	G4ThreeVector v=fMapVoxels[i];
   }
   
 }
