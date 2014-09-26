@@ -67,7 +67,7 @@
     G4ThreeVector neutronVelocity = 1./G4Neutron::Neutron()->GetPDGMass()*theNeutron.GetMomentum();
     G4double temperature = theTrack.GetMaterial()->GetTemperature();
     theTarget = aNucleus.GetBiasedThermalNucleus(targetMass, neutronVelocity, temperature);
-   theTarget.SetDefinition( G4ParticleTable::GetParticleTable()->GetIon( G4int(theBaseZ), G4int(theBaseA) , 0.0 ) );  //TESTPHP
+    theTarget.SetDefinition( G4IonTable::GetIonTable()->GetIon( G4int(theBaseZ), G4int(theBaseA) , 0.0 ) );  //TESTPHP
 
 // go to nucleus rest system
     theNeutron.Lorentz(theNeutron, -1*theTarget);

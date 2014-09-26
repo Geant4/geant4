@@ -33,7 +33,7 @@
 #include "G4LorentzRotation.hh"
 #include "G4LorentzVector.hh"
 #include "G4RotationMatrix.hh"
-#include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 
 G4ReactionProduct * G4ParticleHPEnAngCorrelation::SampleOne(G4double anEnergy)
 { 
@@ -125,7 +125,7 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
     if( bAdjustFinalState ) {
       if ( (sumZ != targetZ || sumA != targetA ) && 
 	   (sumZ > targetZ || sumA > targetA  
-	    || ! G4ParticleTable::GetParticleTable()->GetIon ( int(targetZ - sumZ), (int)(targetA - sumA), 0.0 ) ) ){  // e.g. Z=3, A=2
+	    || ! G4IonTable::GetIonTable()->GetIon ( int(targetZ - sumZ), (int)(targetA - sumA), 0.0 ) ) ){  // e.g. Z=3, A=2
 	bNPOK = false;
 	nParticles.clear();
 #ifdef G4PHPDEBUG

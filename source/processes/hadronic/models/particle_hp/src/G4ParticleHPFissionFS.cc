@@ -76,7 +76,7 @@
    G4double targetMass = theFS.GetMass();
    G4ThreeVector neuVelo = (1./incidentParticle->GetDefinition()->GetPDGMass())*theNeutron.GetMomentum();
    theTarget = aNucleus.GetBiasedThermalNucleus( targetMass, neuVelo, theTrack.GetMaterial()->GetTemperature());
-   theTarget.SetDefinition( G4ParticleTable::GetParticleTable()->GetIon( G4int(theBaseZ), G4int(theBaseA) , 0.0 ) );  //TESTPHP
+   theTarget.SetDefinition( G4IonTable::GetIonTable()->GetIon( G4int(theBaseZ), G4int(theBaseA) , 0.0 ) );  //TESTPHP
 // set neutron and target in the FS classes 
   theFS.SetNeutronRP(theNeutron);
   theFS.SetTarget(theTarget);
