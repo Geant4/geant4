@@ -62,7 +62,6 @@ G4UMultiUnion::G4UMultiUnion(__void__& a)
 //
 G4UMultiUnion::~G4UMultiUnion()
 {
-  fPolyhedron = 0;
 }
 
 
@@ -96,21 +95,29 @@ G4UMultiUnion& G4UMultiUnion::operator=(const G4UMultiUnion &source)
 //
 G4Polyhedron* G4UMultiUnion::CreatePolyhedron() const
 {
-   HepPolyhedronProcessor processor;
-   HepPolyhedronProcessor::Operation operation = HepPolyhedronProcessor::UNION;
 
-   G4Polyhedron* top = GetSolid(0)->GetPolyhedron();
+  HepPolyhedronProcessor processor;
+  HepPolyhedronProcessor::Operation operation = HepPolyhedronProcessor::UNION;
+
+  G4VSolid* solidA = GetSolid(0);
+  const G4Transform3D* transform0=GetTransformation(0);
+  G4RotationMatrix rot0=(*transform0).getRotation();
+  const  G4ThreeVector transl0 = (*transform0).getTranslation();
+  G4DisplacedSolid dispSolidA("placedA",solidA,&rot0,transl0);
+
+  G4Polyhedron* top = new G4Polyhedron(*dispSolidA.GetPolyhedron());
+    
+  for(G4int i=1; i<GetNumberOfSolids(); ++i)
+  {
+    G4VSolid* solidB = GetSolid(i);
+    const G4Transform3D* transform=GetTransformation(i);
+    G4RotationMatrix rot=(*transform).getRotation();
+    const  G4ThreeVector transl = (*transform).getTranslation();
+    G4DisplacedSolid dispSolidB("placedB",solidB,&rot,transl);
+    G4Polyhedron* operand = dispSolidB.GetPolyhedron();
+    processor.push_back (operation, *operand);
+  }
    
-   for(G4int i=1; i<GetNumberOfSolids(); ++i)
-   {
-     G4VSolid* solidB = GetSolid(i);
-     const G4Transform3D* transform=GetTransformation(i);
-     G4RotationMatrix rot=(*transform).getRotation();
-     const  G4ThreeVector transl = (*transform).getTranslation();
-     G4DisplacedSolid dispSolidB("placedB",solidB,&rot,transl);
-     G4Polyhedron* operand = dispSolidB.GetPolyhedron();
-     processor.push_back (operation, *operand);
-   }
-   if (processor.execute(*top)) { return top; }
-   else { return 0; }  
+  if (processor.execute(*top)) { return top; }
+  else { return 0; } 
 }
