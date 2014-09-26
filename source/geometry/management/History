@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 25, 2014 W. Pokorski             geommng-V10-00-03
+- Some fixes in the default constructor for the geometry ROOT I/O
+
 July 11, 2014 A. Dotti			   geommng-V10-00-02
 - Solves possible data-race condition in G4GeaomSplitter
 

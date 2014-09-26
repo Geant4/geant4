@@ -183,14 +183,10 @@ G4LogicalVolume::G4LogicalVolume( __void__& )
 {
   instanceID = subInstanceManager.CreateSubInstance();
   
-  // G4MT_solid = 0, 
-  SetSolid(0); 
   SetSensitiveDetector(0);    // G4MT_sdetector = 0;
   SetFieldManager(0, false);  // G4MT_fmanager = 0;
-  SetMaterial(0);   // G4MT_material = 0;
-  // this->SetMass(0);       //
+
   G4MT_mass = 0.;
-  // this->SetCutsCouple(0);
   G4MT_ccouple = 0;
   
   // Add to store

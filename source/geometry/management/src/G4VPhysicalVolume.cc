@@ -106,9 +106,6 @@ G4VPhysicalVolume::G4VPhysicalVolume( __void__& )
   //
   instanceID = subInstanceManager.CreateSubInstance();
 
-  this->SetRotation( 0 );                             // G4MT_rot = 0; 
-  this->SetTranslation( G4ThreeVector(0., 0., 0.) );  // G4MT_trans = ...
-
   G4PhysicalVolumeStore::Register(this);
 }
 

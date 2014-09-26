@@ -65,6 +65,8 @@ class G4PVData
   //  and must have a per-thread state.
 
   public:
+    G4PVData():frot(0) {}
+
     void initialize() {
       frot = 0;
       ftrans = G4ThreeVector(0,0,0);
