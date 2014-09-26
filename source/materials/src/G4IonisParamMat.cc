@@ -109,6 +109,8 @@ G4IonisParamMat::G4IonisParamMat(__void__&)
   fBirks = 0.0;
   fMeanEnergyPerIon = 0.0;
   twoln10 = 2.*G4Pow::GetInstance()->logZ(10);
+
+  if(!fDensityData) { fDensityData = new G4DensityEffectData(); }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.... ....oooOO0OOooo....

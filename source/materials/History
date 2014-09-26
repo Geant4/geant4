@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-09-14 W.Pokorski (materials-V10-00-24)
+- G4IonisParamMat - adding initialization of G4DensityEffectData in the default constructor
+
 05-08-14 V.Ivanchenko (materials-V10-00-23)
 - G4SandiaData - proper deletion of G4PhysicsVectors end of job
 
