@@ -16,6 +16,11 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+26 September 2014 - Davide Mancusi (hadr-inclxx-V10-00-11)
+---------------------------------------------------------------
+- INCL++ v5.2.2
+  o Fix Coverity warning + minor clean-up
+
 8 July 2014 - Davide Mancusi (hadr-inclxx-V10-00-09, -10)
 ---------------------------------------------------------------
 - INCL++ v5.2.1

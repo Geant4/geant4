@@ -53,6 +53,21 @@ namespace G4INCL {
       const G4double gcdfa5 =  1.061405429;
       const G4double gcdfp  =  0.3275911;
 
+      // constants for the inverse Gaussian CDF approximation
+      const G4double igcdfc1 = 2.515517;
+      const G4double igcdfc2 = 0.802853;
+      const G4double igcdfc3 = 0.010328;
+      const G4double igcdfd1 = 1.432788;
+      const G4double igcdfd2 = 0.189269;
+      const G4double igcdfd3 = 0.001308;
+
+      G4double inverseGaussianCDFRational(const G4double t) {
+        // Abramowitz and Stegun formula 26.2.23.
+        // The absolute value of the error should be less than 4.5 e-4.
+        return t - ((igcdfc3*t + igcdfc2)*t + igcdfc1) /
+          (((igcdfd3*t + igcdfd2)*t + igcdfd1)*t + 1.0);
+      }
+
     }
 
     G4double gaussianCDF(const G4double x)
@@ -70,6 +85,13 @@ namespace G4INCL {
 
     G4double gaussianCDF(const G4double x, const G4double x0, const G4double sigma) {
       return gaussianCDF((x-x0)/sigma);
+    }
+
+    G4double inverseGaussianCDF(G4double x) {
+      if (x < 0.5)
+        return -inverseGaussianCDFRational( std::sqrt(-2.0*std::log(x)) );
+      else
+        return inverseGaussianCDFRational( std::sqrt(-2.0*std::log(1.-x)) );
     }
 
     G4double arcSin(const G4double x) {

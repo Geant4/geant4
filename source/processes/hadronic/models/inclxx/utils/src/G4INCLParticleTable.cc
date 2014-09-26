@@ -243,8 +243,8 @@ namespace G4INCL {
 
       G4ThreadLocal G4double rpCorrelationCoefficient[UnknownParticle];
 
-      G4ThreadLocal G4double neutronSkinThickness = 0.0;
-      G4ThreadLocal G4double neutronSkinAdditionalDiffuseness = 0.0;
+      G4ThreadLocal G4double neutronSkin = 0.0;
+      G4ThreadLocal G4double neutronHalo = 0.0;
 
 #ifdef INCLXX_IN_GEANT4_MODE
       G4ThreadLocal G4IonTable *theG4IonTable;
@@ -347,8 +347,8 @@ namespace G4INCL {
 
       // Initialise the neutron-skin parameters
       if(theConfig) {
-        neutronSkinThickness = theConfig->getNeutronSkinThickness();
-        neutronSkinAdditionalDiffuseness = theConfig->getNeutronSkinAdditionalDiffuseness();
+        neutronSkin = theConfig->getNeutronSkin();
+        neutronHalo = theConfig->getNeutronHalo();
       }
 
     }
@@ -633,7 +633,7 @@ namespace G4INCL {
         // phenomenological radius fit
         G4double r0 = (2.745e-4 * A + 1.063) * std::pow(A, 1.0/3.0);
         if(t==Neutron)
-          r0 += neutronSkinThickness;
+          r0 += neutronSkin;
         return r0;
       } else if(A < 6 && A >= 2) {
         if(Z<clusterTableZSize && Z>=0) {
@@ -677,7 +677,7 @@ namespace G4INCL {
       if(A >= 28) {
         G4double a = 1.63e-4 * A + 0.510;
         if(t==Neutron)
-          a += neutronSkinAdditionalDiffuseness;
+          a += neutronHalo;
         return a;
       } else if(A < 28 && A >= 19) {
         return mediumDiffuseness[A-1];
@@ -815,9 +815,9 @@ namespace G4INCL {
       return rpCorrelationCoefficient[t];
     }
 
-    G4double getNeutronSkinThickness() { return neutronSkinThickness; }
+    G4double getNeutronSkin() { return neutronSkin; }
 
-    G4double getNeutronSkinAdditionalDiffuseness() { return neutronSkinAdditionalDiffuseness; }
+    G4double getNeutronHalo() { return neutronHalo; }
 
     G4ThreadLocal G4double minDeltaMass = 0.;
     G4ThreadLocal G4double minDeltaMass2 = 0.;

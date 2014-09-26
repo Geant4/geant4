@@ -45,15 +45,7 @@
 #include <sstream>
 // #include <cassert>
 
-#if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
-#include <boost/program_options/options_description.hpp>
-#include <boost/program_options/parsers.hpp>
-#include <boost/program_options/variables_map.hpp>
-#include <fstream>
-#include <cstdlib>
-
-namespace po = boost::program_options;
-#endif
+class ConfigParser;
 
 namespace G4INCL {
 
@@ -68,20 +60,6 @@ namespace G4INCL {
   public:
     /// \brief Default constructor
     Config();
-
-    /**
-     * Constructor for INCL++ with specified target A, Z, projectile
-     * type and energy. All other options are the default ones.
-     */
-    Config(G4int, G4int, ParticleSpecies, G4double);
-
-    /** \brief Constructor based on command-line and config-file options.
-     *
-     * \param argc command-line parameters
-     * \param argv command-line parameters
-     * \param isFullRun is this a real calculation: true = yes; false = no, it's just a unit test
-     */
-    Config(G4int argc, char *argv[], G4bool isFullRun);
 
     /// \brief Default destructor
     ~Config();
@@ -219,6 +197,9 @@ namespace G4INCL {
     /// \brief Set whether to use real masses
     void setUseRealMasses(G4bool use) { useRealMasses = use; }
 
+    /// \brief Set the INCLXX datafile path
+    void setINCLXXDataFilePath(std::string const &s) { INCLXXDataFilePath=s; }
+
     std::string const &getINCLXXDataFilePath() const {
       return INCLXXDataFilePath;
     }
@@ -293,16 +274,16 @@ namespace G4INCL {
     }
 
     /// \brief Get the neutron-skin thickness
-    G4double getNeutronSkinThickness() const { return neutronSkinThickness; }
+    G4double getNeutronSkin() const { return neutronSkin; }
 
     /// \brief Set the neutron-skin thickness
-    void setNeutronSkinThickness(const G4double d) { neutronSkinThickness=d; }
+    void setNeutronSkin(const G4double d) { neutronSkin=d; }
 
-    /// \brief Get the neutron-skin additional diffuseness
-    G4double getNeutronSkinAdditionalDiffuseness() const { return neutronSkinAdditionalDiffuseness; }
+    /// \brief Get the neutron-halo size
+    G4double getNeutronHalo() const { return neutronHalo; }
 
     /// \brief Set the neutron-skin additional diffuseness
-    void setNeutronSkinAdditionalDiffuseness(const G4double d) { neutronSkinAdditionalDiffuseness=d; }
+    void setNeutronHalo(const G4double d) { neutronHalo=d; }
 
     /// \brief True if we should use refraction
     G4bool getRefraction() const { return refraction; }
@@ -334,22 +315,7 @@ namespace G4INCL {
     /// \brief Set the Cross Section type
     void setCrossSectionsType(CrossSectionsType const c) { crossSectionsType=c; }
 
-#if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
-    /// \brief Echo the input options.
-    std::string const echo() const;
-#endif
-
   private:
-
-#if defined(HAS_BOOST_PROGRAM_OPTIONS) && !defined(INCLXX_IN_GEANT4_MODE)
-    std::string echoOptionsDescription(const po::options_description &aDesc) const;
-
-    po::options_description runOptDesc;
-    po::options_description hiddenOptDesc;
-    po::options_description genericOptDesc;
-    po::options_description physicsOptDesc;
-    po::variables_map variablesMap;
-#endif
 
     G4int verbosity;
     std::string inputFileName;
@@ -372,7 +338,6 @@ namespace G4INCL {
 
     std::string randomSeeds;
     Random::SeedVector randomSeedVector;
-    static const G4int randomSeedMin, randomSeedMax;
 
     std::string pauliString;
     PauliType pauliType;
@@ -439,8 +404,8 @@ namespace G4INCL {
     G4double rpCorrelationCoefficientProton;
     G4double rpCorrelationCoefficientNeutron;
 
-    G4double neutronSkinThickness;
-    G4double neutronSkinAdditionalDiffuseness;
+    G4double neutronSkin;
+    G4double neutronHalo;
 
     G4bool refraction;
 
@@ -454,6 +419,8 @@ namespace G4INCL {
 
     std::string crossSectionsString;
     CrossSectionsType crossSectionsType;
+
+    friend class ::ConfigParser;
   };
 
 }

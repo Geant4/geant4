@@ -250,11 +250,11 @@ namespace G4INCL {
      */
     G4double getRPCorrelationCoefficient(const ParticleType t);
 
-    /// \brief Get the value of the neutron skin thickness
-    G4double getNeutronSkinThickness();
+    /// \brief Get the thickness of the neutron skin
+    G4double getNeutronSkin();
 
-    /// \brief Get the value of the additional neutron skin diffuseness
-    G4double getNeutronSkinAdditionalDiffuseness();
+    /// \brief Get the size of the neutron halo
+    G4double getNeutronHalo();
 
     /// \brief Get the type of pion
     ParticleType getPionType(const G4int isosp);

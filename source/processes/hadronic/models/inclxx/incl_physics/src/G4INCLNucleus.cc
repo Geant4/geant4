@@ -491,8 +491,6 @@ namespace G4INCL {
     // We should be here only if the nucleus contains only one nucleon
 // assert(theStore->getParticles().size()==1);
 
-    INCL_ERROR("Computing one-nucleon recoil kinematics. We should never be here nowadays, cascade should stop earlier than this." << '\n');
-
     // No excitation energy!
     theExcitationEnergy = 0.0;
 

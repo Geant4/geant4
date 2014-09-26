@@ -137,6 +137,16 @@ namespace G4INCL {
      */
     G4double gaussianCDF(const G4double x, const G4double x0, const G4double sigma);
 
+    /** \brief Inverse cumulative distribution function for Gaussian
+     *
+     * A public-domain approximation taken from Abramowitz and Stegun. Applies
+     * to a Gaussian with mean=0 and sigma=1.
+     *
+     * \param x a uniform variate
+     * \return a Gaussian variate
+     */
+    G4double inverseGaussianCDF(const G4double x);
+
     /// \brief Calculates arcsin with some tolerance on illegal arguments
     G4double arcSin(const G4double x);
 

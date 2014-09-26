@@ -56,6 +56,7 @@ G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
   theINCLModel(NULL),
   thePreCompoundModel(aPreCompound),
   theInterfaceStore(G4INCLXXInterfaceStore::GetInstance()),
+  theTally(NULL),
   complainedAboutBackupModel(false),
   complainedAboutPreCompound(false),
   theIonTable(G4IonTable::GetIonTable())

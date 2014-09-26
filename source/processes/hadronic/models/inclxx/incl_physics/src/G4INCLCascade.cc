@@ -419,6 +419,9 @@ namespace G4INCL {
         theEventInfo.nUnmergedSpectators = makeProjectileRemnant();
 
         // Compute recoil momentum, energy and spin of the nucleus
+        if(nucleus->getA()==1 && minRemnantSize>1) {
+          INCL_ERROR("Computing one-nucleon recoil kinematics. We should never be here nowadays, cascade should stop earlier than this." << '\n');
+        }
         nucleus->computeRecoilKinematics();
 
 #ifndef INCLXX_IN_GEANT4_MODE
