@@ -195,6 +195,7 @@ G4RunManager::~G4RunManager()
   delete runMessenger;
   G4ParticleTable::GetParticleTable()->DeleteMessenger();
   G4ProcessTable::GetProcessTable()->DeleteMessenger();
+  CleanUpPreviousEvents();
   delete previousEvents;
 
   //The following will work for all RunManager types
@@ -332,7 +333,8 @@ void G4RunManager::RunInitialization()
   randomNumberStatusForThisRun = oss.str();
   currentRun->SetRandomNumberStatus(randomNumberStatusForThisRun);
   
-  previousEvents->clear();
+  //previousEvents->clear();
+  CleanUpPreviousEvents();
   for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
   { previousEvents->push_back((G4Event*)0); }
 
@@ -474,14 +476,31 @@ void G4RunManager::RunTermination()
 {
   if(!fakeRun)
   {
-    for(size_t itr=0;itr<previousEvents->size();itr++)
+    //for(size_t itr=0;itr<previousEvents->size();itr++)
+    //{
+    //  G4Event* prevEv =  (*previousEvents)[itr];
+    //  if((prevEv) && !(prevEv->ToBeKept())) delete prevEv;
+    //}
+    //previousEvents->clear();
+    //for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
+    //{ previousEvents->push_back((G4Event*)0); }
+    std::vector<G4Event*>::iterator evItr = previousEvents->begin();
+    while(evItr!=previousEvents->end())
     {
-      G4Event* prevEv =  (*previousEvents)[itr];
-      if((prevEv) && !(prevEv->ToBeKept())) delete prevEv;
+      G4Event* evt = *evItr;
+      if(evt)
+      {
+        if(evt->GetNumberOfGrips()==0)
+        {
+          previousEvents->erase(evItr);
+          delete evt; 
+        }
+        else
+        { evItr++; }
+      }
+      else
+      { previousEvents->erase(evItr); }
     }
-    previousEvents->clear();
-    for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
-    { previousEvents->push_back((G4Event*)0); }
 
     if(userRunAction) userRunAction->EndOfRunAction(currentRun);
 
@@ -493,19 +512,44 @@ void G4RunManager::RunTermination()
   kernel->RunTermination();
 }
 
+void G4RunManager::CleanUpPreviousEvents()
+{
+    std::vector<G4Event*>::iterator evItr = previousEvents->begin();
+    while(evItr!=previousEvents->end())
+    {
+      G4Event* evt = *evItr;
+      previousEvents->erase(evItr); 
+      if(evt) delete evt;
+    }
+}
+
 void G4RunManager::StackPreviousEvent(G4Event* anEvent)
 {
   if(anEvent->ToBeKept()) currentRun->StoreEvent(anEvent);
-  G4Event* evt;
+  
   if(n_perviousEventsToBeStored==0)
-  { evt = anEvent; }
-  else
   {
-    previousEvents->insert(previousEvents->begin(),anEvent);
-    evt = previousEvents->back();
-    previousEvents->pop_back();
+    if(anEvent->GetNumberOfGrips()==0) 
+    { if(!(anEvent->ToBeKept())) delete anEvent; }
+    else
+    { previousEvents->push_back(anEvent); }
   }
-  if(evt && !(evt->ToBeKept())) delete evt;
+
+  std::vector<G4Event*>::iterator itr = previousEvents->begin();
+  while(G4int(previousEvents->size())>n_perviousEventsToBeStored)
+  {
+    G4Event* evt = *itr;
+    if(!evt)
+    { previousEvents->erase(itr); }
+    else if(evt->GetNumberOfGrips()==0)
+    {
+      previousEvents->erase(itr);
+      if(!(evt->ToBeKept())) delete evt;
+    }
+    else
+    { itr++; }
+    if(itr==previousEvents->end()) break;
+  }
 }
 
 void G4RunManager::Initialize()

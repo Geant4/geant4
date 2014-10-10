@@ -260,6 +260,7 @@ public: // with description
     // If the pointer is NULL, all regions are shown.
 
   protected:
+    void CleanUpPreviousEvents();
     void StackPreviousEvent(G4Event* anEvent);
 
   public:

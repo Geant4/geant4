@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 1st, 2015 M.Asai (run-V10-00-29)
+- Introduing the mechanism of G4Event not to be deleted until it is
+  visualized by the other thread.
+
 August 26th, 2014 M.Asai (run-V10-00-28)
 - All the G4ParallelWorldProcess objects of all threads update their
   corresponding world volumes when the entire geometry has been
