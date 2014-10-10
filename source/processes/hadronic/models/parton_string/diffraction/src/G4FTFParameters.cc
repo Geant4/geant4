@@ -503,18 +503,27 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
   //G4cout << "Param ProjectilePDGcode " << ProjectilePDGcode << G4endl;
 
   if ( ProjectilePDGcode > 1000 ) {  // Projectile is baryon
-
     //        Proc#   A1      B1            A2       B2   A3   Atop       Ymin
-    SetParams( 0,     13.71, 1.75,        -214.4  , 4.25, 0.0, 0.632,     1.45 );  // Qexchange without Exc.
-    SetParams( 1,       0.2, 0.0 ,         - 3.289, 2.0 , 0.0, 0.0  ,     1.40 );  // Qexchange with    Exc.
-    SetParams( 2, 6.0/Xinel, 0.0 , -6.0/Xinel*8.48, 2.25, 0.0, 0.0  ,     0.95 );  // Projectile diffraction
-    SetParams( 3, 6.0/Xinel, 0.0 , -6.0/Xinel*8.48, 2.25, 0.0, 0.0  ,     0.95 );  // Target diffraction
+    SetParams( 0,     13.71, 1.75,          -93.99, 3.5 , 0.0, 0.5  ,     1.5 );  // Qexchange without Exc.
+    SetParams( 1,       0.3, 0.5 ,          -1.927, 2.5 , 0.0, 0.0  ,     0.93 );  // Qexchange with    Exc.
+    SetParams( 2, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93 );  // Projectile diffraction
+    SetParams( 3, 6.0/Xinel, 0.0 ,-6.0/Xinel*16.28, 3.0 , 0.0, 0.0  ,     0.93 );  // Target diffraction
 
-    SetParams( 1,       0.3, 0.5 ,         - 3.289, 2.0 , 0.0, 0.0  ,     1.40 );  // Qexchange with    Exc.
+/*
+    //        Proc#   A1      B1            A2       B2   A3   Atop       Ymin
+    SetParams( 0,     0.,     0.,           0.,      0.,  0.,   0.,       1.45 ); 
+    SetParams( 1,     0.,     0.,           0.,      0.,  0.,   0.,       1.45 ); 
+    SetParams( 2,     0.,     0.,           0.,      0.,  0.,   0.,       1.45 ); 
+    SetParams( 3,     0.,     0.,           0.,      0.,  0.,   0.,       1.45 ); 
+
+//    SetParams( 3,     0.,     0.,           0.,      0.,  1.,   1.,       1.45 );  //PrD
+*/
+//
     if ( AbsProjectileBaryonNumber > 1  ||  NumberOfTargetNucleons > 1 ) {
       SetParams( 2,       0.0, 0.0 ,           0.0  , 0.0 , 0.0, 0.0   , -100.0  );  // Projectile diffraction
-      SetParams( 3,       0.0, 0.0 ,           0.0  , 0.0 , 0.0, 0.0   , -100.0  );  // Target diffraction
+//      SetParams( 3,       0.0, 0.0 ,           0.0  , 0.0 , 0.0, 0.0   , -100.0  );  // Target diffraction
     }
+//
     SetDeltaProbAtQuarkExchange( 0.0 );
     if ( NumberOfTargetNucleons > 26 ) {
       SetProbOfSameQuarkExchange( 1.0);
@@ -526,7 +535,7 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
     SetTarMinDiffMass( 1.16 );      // GeV
     SetTarMinNonDiffMass( 1.16 );   // GeV 
     SetAveragePt2( 0.3 );           // GeV^2
-    SetProbLogDistr(0.5 );
+    SetProbLogDistr(0.5 );          
 
   } else if( ProjectilePDGcode < -1000 ) {  // Projectile is anti_baryon
 
@@ -622,8 +631,10 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
   //G4cout << "Param Get Min Dif " << GetProjMinNonDiffMass() << G4endl;
 
   // Set parameters of a string kink
-  SetPt2Kink( 6.0*GeV*GeV );
+//  SetPt2Kink( 6.0*GeV*GeV );
+SetPt2Kink( 0.0*GeV*GeV );                                                            // Uzhi to switch off kinky strings
   G4double Puubar( 1.0/3.0 ), Pddbar( 1.0/3.0 ), Pssbar( 1.0/3.0 );  // SU(3) symmetry
+//  G4double Puubar( 1.0/2.0 ), Pddbar( 1.0/2.0 ), Pssbar( 0.0 );                         // Uzhi
   //G4double Puubar( 0.41 ), Pddbar( 0.41 ), Pssbar( 0.18 );  // Broken SU(3) symmetry
   SetQuarkProbabilitiesAtGluonSplitUp( Puubar, Pddbar, Pssbar );
 
@@ -693,10 +704,10 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
 
  //SetMaxNumberOfCollisions( Plab, 6.0 ); //(4.0*(Plab + 0.01), Plab); // 6.0 );
  //SetAveragePt2( 0.15 );
- //G4cout << "Cnd " << GetCofNuclearDestruction() << G4endl;
- //SetCofNuclearDestruction( 0.4 );                                    // (0.2) // (0.4)                  
- //SetExcitationEnergyPerWoundedNucleon( 0.0*MeV );                    // (75.0*MeV) 
- //SetDofNuclearDestruction( 0.0 );                  
+// G4cout << "Cnd " << GetCofNuclearDestruction() << G4endl;
+//SetCofNuclearDestruction( 0.75 );                                    // (0.2) // (0.4)   0.5               
+//SetExcitationEnergyPerWoundedNucleon( 0.0*MeV );                    // (75.0*MeV) 
+//SetDofNuclearDestruction( 0.5 );                                     // 0.3
  //SetPt2ofNuclearDestruction( 0.0*GeV*GeV );                          // (0.168*GeV*GeV) 
  //G4cout << "Pt2 " << GetPt2ofNuclearDestruction()/GeV/GeV << G4endl;
  //G4int Uzhi; G4cin >> Uzhi;

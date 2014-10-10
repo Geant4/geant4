@@ -103,7 +103,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron* projecti
   G4int absProjectilePDGcode = std::abs( ProjectilePDGcode );
 
   G4bool PutOnMassShell( false );
-  //G4double M0projectile = projectile->GetDefinition()->GetPDGMass(); // With de-excitation
+//  G4double M0projectile = projectile->GetDefinition()->GetPDGMass(); // With de-excitation
   G4double M0projectile = Pprojectile.mag();                           // Without de-excitation
   if ( M0projectile < projectile->GetDefinition()->GetPDGMass() ) {
     PutOnMassShell = true;
@@ -920,10 +920,10 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron* projecti
       }
       Qminus = PMinusNew - Pprojectile.minus();
       TPlusMin = std::sqrt( TargMassT2 + PZcms2 ) - PZcms;
-      TPlusMax = SqrtS - PMinusNew;                   
-      //TPlusMax = SqrtS - ProjMassT;  // To study an extreme case  
+//      TPlusMax = SqrtS - PMinusNew;                   
+      TPlusMax = SqrtS - ProjMassT;                        // Uzhi 18 Sept. 2014
 
-      if ( G4UniformRand() < 0.5 ) {  //ProbLogDistr) // Uzhi 29.05.2012 0.5)
+      if ( G4UniformRand() < ProbLogDistr ) {
         TPlusNew = ChooseP( TPlusMin, TPlusMax );
       } else {
         TPlusNew = ( TPlusMax - TPlusMin )*G4UniformRand() + TPlusMin;
@@ -1060,7 +1060,10 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
     if ( W > Wmin ) {  // Kink is possible
       if ( hadron->GetStatus() == 0 ) {  // VU 10.04.2012
         G4double Pt2kink = theParameters->GetPt2Kink(); // For non-diffractive
-        Pt = std::sqrt( Pt2kink * ( std::pow( W2/16.0/Pt2kink + 1.0, G4UniformRand() ) - 1.0 ) );
+//        Pt = std::sqrt( Pt2kink * ( std::pow( W2/16.0/Pt2kink + 1.0, G4UniformRand() ) - 1.0 ) ); // Uzhi 18 Sept. 2014
+        if(Pt2kink)                                                                                 // Uzhi 18 Sept. 2014
+        {Pt = std::sqrt( Pt2kink * ( std::pow( W2/16.0/Pt2kink + 1.0, G4UniformRand() ) - 1.0 ) );} // Uzhi 18 Sept. 2014
+        else {Pt=0.;}                                                                               // Uzhi 18 Sept. 2014
       } else {
         Pt = 0.0;
       }
@@ -1131,7 +1134,8 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
             if ( isProjectile ) {
               Rotate.rotateY( Psi );
             } else {
-              Rotate.rotateY( pi - Psi );
+              Rotate.rotateY( pi + Psi );                  // Uzhi 18 Sept. 2014
+//            Rotate.rotateY( pi - Psi );                  // Uzhi 18 Sept. 2014
             }                   
             Rotate.rotateZ( twopi * G4UniformRand() );
             Pstart *= Rotate;
@@ -1170,7 +1174,11 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
     G4LorentzRotation toCMS( -1 * Phadron.boostVector() );
     G4LorentzRotation toLab( toCMS.inverse() );
     //G4cout << "Pstart " << Pstart << G4endl;
-    //G4cout << "Pend   " << Pend << G4endl;
+//G4cout << "Pend   " << Pend << G4endl;
+//G4cout << "Kink1  " <<PkinkQ1<<G4endl;
+//G4cout << "Kink2  " <<PkinkQ2<<G4endl;
+//G4cout << "Pstart " << Pstart << G4endl<<G4endl;
+
     Pstart.transform( toLab );  start->Set4Momentum( Pstart );
     PkinkQ1.transform( toLab );
     PkinkQ2.transform( toLab );
@@ -1215,13 +1223,24 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
         }
       }
     } else {  // Baryon/AntiBaryon
+
+//G4cout<<"isProjectile "<<isProjectile<<G4endl;
+//G4cout<<"end "<<end->GetDefinition()->GetPDGEncoding()<<" "<<end->Get4Momentum()<<G4endl;
+//G4cout<<PkinkQ1<<G4endl;
+//G4cout<<PkinkQ2<<G4endl;
+//G4cout<<"start "<<start->GetDefinition()->GetPDGEncoding()<<" "<<start->Get4Momentum()<<G4endl;
+//G4int Uzhi; G4cin>>Uzhi;
       if ( isProjectile ) {  // Projectile
         if ( end->GetDefinition()->GetParticleType() == "diquarks"  &&
              end->GetDefinition()->GetPDGEncoding() > 0 ) {  // DiQuark on the end
-          FirstString  = new G4ExcitedString( end        , Gquark, +1 );
-          SecondString = new G4ExcitedString( Ganti_quark, start , +1 );
+          FirstString  = new G4ExcitedString( end        , Gquark, +1 );  // Open Vova
+          SecondString = new G4ExcitedString( Ganti_quark, start , +1 );  // Open Vova
           Gquark->Set4Momentum( PkinkQ1 );
           Ganti_quark->Set4Momentum( PkinkQ2 );
+
+//          FirstString  = new G4ExcitedString( Gquark,        end, +1 );   // Uzhi 18 Sept. 2014
+//          SecondString = new G4ExcitedString(  start, Ganti_quark, +1 );  // Uzhi 18 Sept. 2014
+
         } else {                            // Anti_DiQuark on the end or quark
           FirstString  = new G4ExcitedString( end   , Ganti_quark, +1 );
           SecondString = new G4ExcitedString( Gquark, start      , +1 );
@@ -1231,12 +1250,16 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
       } else {  // Target
         if ( end->GetDefinition()->GetParticleType() == "diquarks"  &&
              end->GetDefinition()->GetPDGEncoding() > 0 ) {  // DiQuark on the end
-          FirstString  = new G4ExcitedString( Gquark, end        , -1 );
-          SecondString = new G4ExcitedString( start , Ganti_quark, -1 );
+//          FirstString  = new G4ExcitedString( Gquark, end        , -1 );
+//          SecondString = new G4ExcitedString( start , Ganti_quark, -1 );
           Gquark->Set4Momentum( PkinkQ1 );
           Ganti_quark->Set4Momentum( PkinkQ2 );
+
+          FirstString  = new G4ExcitedString(         end, Gquark, -1 );
+          SecondString = new G4ExcitedString( Ganti_quark,  start, -1 );
+
         } else {  // Anti_DiQuark on the end or Q
-          FirstString  = new G4ExcitedString( Ganti_quark, end   , -1 );
+          FirstString  = new G4ExcitedString( Ganti_quark, end   , -1 );  // Vova ?????
           SecondString = new G4ExcitedString( start      , Gquark, -1 );
           Gquark->Set4Momentum( PkinkQ2 );
           Ganti_quark->Set4Momentum( PkinkQ1 );
@@ -1253,11 +1276,16 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
 
     //G4cout << start << " " << start->GetPDGcode() << " " << end << " " << end->GetPDGcode() 
     //       << G4endl;
+/*                                                         // Uzhi 18 Sept. 2014
     if ( isProjectile ) {
       FirstString = new G4ExcitedString( end, start, +1 );
     } else {
       FirstString = new G4ExcitedString( start, end, -1 );
     }
+*/                                                         // Uzhi 18 Sept. 2014
+
+    FirstString = new G4ExcitedString( end, start, +1 );   // Uzhi 18 Sept. 2014
+
     FirstString->SetTimeOfCreation( hadron->GetTimeOfCreation() );
     FirstString->SetPosition( hadron->GetPosition() );
     SecondString = 0;

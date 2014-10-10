@@ -151,11 +151,6 @@ void G4DiffractiveSplitableHadron::SetSecondParton( G4int PDGcode ) {
 
 void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
                                                      G4int* bEnd ) const {
-  const G4double udspin1 = 1.0/6.0;
-  //const G4double uuspin1 = 1.0/3.0;
-  const G4double uuspin1 = 0.0;  // AR-17Sep2014: Uzhinsky's instanton idea
-  //const G4double udspin0 = 1.0/2.0;
-
   G4int absPDGcode = std::abs( PDGcode );
 
   if ( absPDGcode < 1000 ) {  //--------------------  Meson -------------
@@ -177,7 +172,48 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
     G4int j1000 = PDGcode/1000;
     G4int j100  = (PDGcode % 1000)/100;
     G4int j10   = (PDGcode % 100)/10;
-    G4double random = G4UniformRand();
+
+    G4double SuppresUUDDSS=1.0/2.0;
+    if((j1000 == j100) && (j1000 == j10)) SuppresUUDDSS=1.; 
+
+//
+    do
+    {
+      G4double random = G4UniformRand();
+
+      if(random < 0.33333)
+      {
+        if(( j100 == j10 ) && ( G4UniformRand() > SuppresUUDDSS )) continue;
+        *aEnd = j1000;
+        if( j100 == j10 )             {*bEnd = Diquark( j100, j10, 1 );}
+        else
+          if( G4UniformRand() > 0.25) {*bEnd = Diquark( j100, j10, 0 );}
+          else                        {*bEnd = Diquark( j100, j10, 1 );}
+        break;
+       }
+       else if(random < 0.66667)
+       {
+        if(( j1000 == j10 ) && ( G4UniformRand() > SuppresUUDDSS )) continue;
+        *aEnd = j100;
+        if( j1000 == j10 )            {*bEnd = Diquark( j1000, j10, 1 );}
+        else
+          if( G4UniformRand() > 0.25) {*bEnd = Diquark( j1000, j10, 0 );}
+          else                        {*bEnd = Diquark( j1000, j10, 1 );}
+        break;
+       }
+       else
+       {
+        if(( j1000 == j100 ) && ( G4UniformRand() > SuppresUUDDSS )) continue;
+        *aEnd = j10;
+        if( j1000 == j100 )           {*bEnd = Diquark( j1000, j100, 1 );}
+        else
+          if( G4UniformRand() > 0.25) {*bEnd = Diquark( j1000, j100, 0 );}
+          else                        {*bEnd = Diquark( j1000, j100, 1 );}
+        break;
+       }
+    } while(true);  
+//
+/*
     if ( std::abs( j100 ) >= std::abs( j10 ) ) {
       if ( random < udspin1 ) {
         *aEnd = j1000;
@@ -204,8 +240,8 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
         *bEnd = Diquark( j1000, j10, 1 );
       }
     }
+*/
   }
-
 }
 
 
