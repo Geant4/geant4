@@ -4,8 +4,16 @@ include(CMakeDependentOption)
 set(name ChargeExchangeMC)
 project(${name})
 
+
+find_package(Geant4 REQUIRED)
+
 # the project requires Geant4 GDML support!
-find_package(Geant4 REQUIRED COMPONENTS gdml)
+find_package(gdml QUIET)
+if(NOT gdml_FOUND)
+  message(STATUS "G4 Examples: GDML package not found. --> ChargeExchangeMC example disabled"
+)  
+  return()
+endif()
 
 # if CEXMC_USE_TCSH is 'yes' then tcsh session support will be built
 option(CEXMC_USE_TCSH
