@@ -64,6 +64,9 @@ public:
 		    G4KineticTrackVector * LeftVector,
 		    G4KineticTrackVector * RightVector);
 
+   virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay, // Uzhi June 2014
+                                         G4ParticleDefinition *&created);
+
   private:
     // model parameters
     const G4double arho; 

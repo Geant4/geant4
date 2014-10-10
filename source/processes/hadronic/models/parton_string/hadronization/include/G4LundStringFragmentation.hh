@@ -81,6 +81,10 @@ private:
 
    G4double lambda(G4double s, G4double m1_Sqr, G4double m2_Sqr);
 
+   virtual G4ParticleDefinition * DiQuarkSplitup(G4ParticleDefinition* decay, // Uzhi June 2014
+                                         G4ParticleDefinition *&created);
+
+
 private:
    // Internal methods introduced to improve the code structure (AR Nov 2011)
 

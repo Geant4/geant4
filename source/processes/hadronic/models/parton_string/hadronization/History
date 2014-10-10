@@ -14,6 +14,22 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+29 Sept. 2014 V. Uzhinsky (had-hadronization-V10-00-07)
+- Essential inprovement of hadronization. ---------------
+
+- Parameters and string fragmentation functions of G4LundStringFragmentation.cc
+  were tuned in an assumption that the weight of uu-diquarks in protons = 1/6.
+
+- Threatment of string decay direction was improved in G4FragmentingString.cc
+  and G4LundStringFragmentation.cc
+
+- EnergyAndMomentumCorrector was improved in G4ExcitedStringDecay.cc
+
+- The method DiQuarkSplitUp in G4VLongitudinalStringDecay.cc is turned to virtual,
+  and the corresponding methods were introduced in G4LundStringFragmentation.cc
+  and G4QGSMFragmentation.cc
+
+- Debuging possibilities are impruved.
 
 04-Jul-2014, A.Ribon       (had-hadronization-V10-00-06)
 - G4LundStringFragmentation.cc : brought back the Sample4Momentum method

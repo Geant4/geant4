@@ -88,7 +88,9 @@ G4FragmentingString::G4FragmentingString(const G4ExcitedString &excited)
 	Pminus=P.e() - P.pz();
 	theStableParton=0;
 	theDecayParton=0;
-	decaying=None;
+//	decaying=None;                                   // Uzhi 19.06.2014
+        if(excited.GetDirection() > 0) {decaying=Left; } // Uzhi 20.06.2014
+        else                           {decaying=Right;} // Uzhi 20.06.2014
 }
 
 //---------------------------------------------------------------------------------
@@ -107,6 +109,7 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 		Ptleft.setZ(0.);
 		theDecayParton=GetLeftParton();
 		theStableParton=GetRightParton();
+		decaying=Left;                      // Uzhi 19.06.2014
 	} else if ( old.decaying == Right )
 	{
 		RightParton = newdecay;
@@ -116,6 +119,7 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 		Ptleft      = old.Ptleft;
 		theDecayParton=GetRightParton();
 		theStableParton=GetLeftParton();
+		decaying=Right;                    // Uzhi 19.06.2014
 	} else
 	{
 		throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::G4FragmentingString: no decay Direction defined");
@@ -135,19 +139,21 @@ G4FragmentingString::G4FragmentingString(const G4FragmentingString &old,
 {                                                                         
 	decaying=None;                                                    
 
-        Ptleft.setX(0.);  Ptleft.setY(0.);  Ptleft.setZ(0.);  // Uzhi 25.02.2011
-        Ptright.setX(0.); Ptright.setY(0.); Ptright.setZ(0.); // Uzhi 25.02.2011
-        Pplus=0.; Pminus=0.;                                  // Uzhi 25.02.2011
-        theStableParton=0; theDecayParton=0;                  // Uzhi 25.02.2011
+        Ptleft.setX(0.);  Ptleft.setY(0.);  Ptleft.setZ(0.);
+        Ptright.setX(0.); Ptright.setY(0.); Ptright.setZ(0.);
+        Pplus=0.; Pminus=0.;                               
+        theStableParton=0; theDecayParton=0;              
 
 	if ( old.decaying == Left )                                       
 	{                                                                 
 		RightParton= old.RightParton;                             
 		LeftParton = newdecay;                                    
+                decaying=Left;                               // Uzhi 19.06.2014
 	} else if ( old.decaying == Right )                               
 	{                                                                 
 		RightParton = newdecay;                                   
 		LeftParton  = old.LeftParton;                             
+                decaying=Right;                             // Uzhi 19.06.2014
 	} else                                                            
 	{
 		throw G4HadronicException(__FILE__, __LINE__, "G4FragmentingString::G4FragmentingString: no decay Direction defined");

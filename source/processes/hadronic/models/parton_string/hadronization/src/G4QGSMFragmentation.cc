@@ -346,3 +346,62 @@ void G4QGSMFragmentation::Sample4Momentum(G4LorentzVector* Mom, G4double Mass, G
 
     
 //*********************************************************************************************
+// Uzhi June 2014 Insert from G4ExcitedStringDecay.cc
+//-----------------------------------------------------------------------------
+
+G4ParticleDefinition *G4QGSMFragmentation::DiQuarkSplitup(
+                                                          G4ParticleDefinition* decay,
+                                                          G4ParticleDefinition *&created)
+{
+   //... can Diquark break or not?
+   if (G4UniformRand() < DiquarkBreakProb ){
+   //... Diquark break
+
+      G4int stableQuarkEncoding = decay->GetPDGEncoding()/1000;
+      G4int decayQuarkEncoding = (decay->GetPDGEncoding()/100)%10;
+      if (G4UniformRand() < 0.5)
+         {
+         G4int Swap = stableQuarkEncoding;
+         stableQuarkEncoding = decayQuarkEncoding;
+         decayQuarkEncoding = Swap;
+         }
+
+      G4int IsParticle=(decayQuarkEncoding>0) ? -1 : +1;
+                        // if we have a quark, we need antiquark)
+//G4cout<<"StrangeSuppress "<<StrangeSuppress<<" "<<GetStrangeSuppress()<<G4endl;
+//StrangeSuppress=0.34;
+//G4cout<<"StrangeSuppress "<<StrangeSuppress<<G4endl;
+      pDefPair QuarkPair = CreatePartonPair(IsParticle,false);  // no diquarks wanted
+//StrangeSuppress=0.47;
+//G4cout<<"StrangeSuppress "<<StrangeSuppress<<G4endl;
+      //... Build new Diquark
+      G4int QuarkEncoding=QuarkPair.second->GetPDGEncoding();
+      G4int i10  = std::max(std::abs(QuarkEncoding), std::abs(stableQuarkEncoding));
+      G4int i20  = std::min(std::abs(QuarkEncoding), std::abs(stableQuarkEncoding));
+      G4int spin = (i10 != i20 && G4UniformRand() <= 0.5)? 1 : 3;
+      G4int NewDecayEncoding = -1*IsParticle*(i10 * 1000 + i20 * 100 + spin);
+      created = FindParticle(NewDecayEncoding);
+      G4ParticleDefinition * decayQuark=FindParticle(decayQuarkEncoding);
+      G4ParticleDefinition * had=hadronizer->Build(QuarkPair.first, decayQuark);
+      return had;
+//      return hadronizer->Build(QuarkPair.first, decayQuark);
+
+   } else {
+   //... Diquark does not break
+
+      G4int IsParticle=(decay->GetPDGEncoding()>0) ? +1 : -1;
+                        // if we have a diquark, we need quark)
+G4double StrSup=GetStrangeSuppress();
+StrangeSuppress=0.42; //0.41;
+      pDefPair QuarkPair = CreatePartonPair(IsParticle,false);  // no diquarks wanted
+StrangeSuppress=StrSup;
+//StrangeSuppress=0.47;
+      created = QuarkPair.second;
+
+      G4ParticleDefinition * had=hadronizer->Build(QuarkPair.first, decay);
+      return had;
+//      return G4ParticleDefinition * had=hadronizer->Build(QuarkPair.first, decay);
+   }
+}
+// Uzhi June 2014 End of the inserting
+
