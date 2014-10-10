@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 9, 2014 A. Dotti (global-V10-00-35)
+- Adding methods G4MTcoutDestination::GetPrefixString() and
+  G4MTcoutDestination::GetFullPrefixString() that return the
+  thread cout identification prefix respectively without and
+  with thread ID. Requested by visualization
+
 September 23, 2014 G.Cosmo (global-V10-00-34)
 - Use G4Exp, G4Log and G4Pow to speedup G4JTPolynomialSolver.
 - Updated dates and tag-ID.
