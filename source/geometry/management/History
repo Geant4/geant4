@@ -17,11 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 3, 2014 G.Cosmo                    geommng-V10-00-04
+- Moved constructor for partial voxels refinements from protected to public.
+
 September 25, 2014 W. Pokorski             geommng-V10-00-03
-- Some fixes in the default constructor for the geometry ROOT I/O
+- Some fixes in the default constructor for Root-I/O persistency.
 
 July 11, 2014 A. Dotti			   geommng-V10-00-02
-- Solves possible data-race condition in G4GeaomSplitter
+- Solves possible data-race condition in G4GeaomSplitter.
 
 April 10, 2014 G.Cosmo                     geommng-V10-00-01
 - Get rid of deprecated 'register' storage class specifier in source files.
