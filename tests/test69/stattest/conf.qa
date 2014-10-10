@@ -1,0 +1,17 @@
+Binned = {
+    'DefaultTestName' : 'BinnedWeighted1DChi2Test',
+    'DefaultThresholds' : [ 0.1,0.5],
+
+    'Histos' : [
+        #Group 1
+        {
+            'Name' : '.*',
+        },        
+        ] #End of Histos defintion
+
+    } #End of configuration
+
+#No TTrees to check
+UnBinned = {
+'DataSet' : [ {'Name':''} ]
+    } 

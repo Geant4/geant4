@@ -12,6 +12,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+3 October 2014, Davide Mancusi (test69-V10-00-12)
+- Add some output statements about mean and RMS energies of outgoing particles.
+
+26 September 2014, Davide Mancusi (test69-V10-00-11)
+- Introduce PhysicsChecks.
+
 21 July 2014, Davide Mancusi (test69-V10-00-10)
 - Reduce the number of shots to 1000 (avoids timeout in boundscheck build).
 

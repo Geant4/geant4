@@ -33,11 +33,15 @@ set(TEST69_SHORT_MACROS
   C12_12GeV_mix_short.in
   )
 
+set(TEST69_LONG_MACROS
+  p_40GeV_mix_long.in
+  )
+
 set(TEST69_AUXILIARY_MACROS
   vis.mac
   )
 
-foreach(_macro ${TEST69_MACROS} ${TEST69_SHORT_MACROS} ${TEST69_AUXILIARY_MACROS})
+foreach(_macro ${TEST69_MACROS} ${TEST69_SHORT_MACROS} ${TEST69_LONG_MACROS} ${TEST69_AUXILIARY_MACROS})
   configure_file(
     ${PROJECT_SOURCE_DIR}/macros/${_macro}
     ${PROJECT_BINARY_DIR}/macros/${_macro}
@@ -90,10 +94,26 @@ foreach(_macro ${TEST69_SHORT_MACROS})
   endforeach()
 endforeach()
 
-GEANT4_ADD_TEST(test69-p_40GeV_mix-FTFP_INCLXX_ABLA
-  COMMAND test69 ${PROJECT_BINARY_DIR}/macros/p_40GeV_mix.in
+
+# PhysicsChecks tests
+
+GEANT4_ADD_TEST(test69-p_40GeV_mix-FTFP_INCLXX-physics
+  COMMAND test69 ${PROJECT_BINARY_DIR}/macros/p_40GeV_mix_long.in
   DEPENDS test69-build
-  LABELS Nightly Continuous
-  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} "TEST69_PHYSLIST=FTFP_INCLXX" "TEST69_USE_ABLA=1"
+  LABELS PhysicsChecks
+  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT} "TEST69_PHYSLIST=FTFP_INCLXX" "TEST69_TALLY=analysis"
   TIMEOUT 3600)
+
+FIND_PACKAGE(StatTest QUIET) 
+
+if(STATTEST_FOUND)      
+  STATTEST_ADD_TEST(test69-p_40GeV_mix-FTFP_INCLXX-physicschecks
+    G4TEST test69-p_40GeV_mix-FTFP_INCLXX-physics
+    CONFIG "${PROJECT_SOURCE_DIR}/stattest/conf.qa"
+    REFERENCE "${GEANT4_TEST_REFERENCES_URL}/tests/test69/test69_tally_FTFP_INCLXX-current.root"
+    INPUT "${PROJECT_BINARY_DIR}/test69_tally_FTFP_INCLXX.root"
+    IMG "test69_tally_FTFP_INCLXX-physicschecks.pdf"
+    LABELS PhysicsChecks
+    )
+endif(STATTEST_FOUND)
 

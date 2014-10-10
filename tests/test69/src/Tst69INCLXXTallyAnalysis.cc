@@ -42,10 +42,10 @@ const char *Tst69INCLXXTallyAnalysis::eSliceDict[nESlice] = {
 };
 
 const G4float Tst69INCLXXTallyAnalysis::eSliceLow[nESlice+1] = {
-  0.*MeV,
-  200.*MeV,
-  3000.*MeV,
-  20000*MeV
+  0.,
+  200.,
+  3000.,
+  20000
 };
 
 const G4int Tst69INCLXXTallyAnalysis::nBins = 60;
@@ -151,8 +151,8 @@ void Tst69INCLXXTallyAnalysis::Open() {
       hDescription = ss.str();
 
       G4cout << "Creating histogram " << hName << " with description: " << hDescription << G4endl;
-          hID_i[iIncPart] =
-            analysisManager->CreateH1(hName, hDescription, nBins, 0., 1.1*eSliceLow[nESlice]);
+      hID_i[iIncPart] =
+        analysisManager->CreateH1(hName, hDescription, nBins, 0., 1.1*eSliceLow[nESlice]);
 
     }
   }
@@ -164,6 +164,26 @@ void Tst69INCLXXTallyAnalysis::Open() {
 void Tst69INCLXXTallyAnalysis::Close() {
   if(factoryOn) {
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
+
+    if(withHistos) {
+      for(int iIncPart=0; iIncPart<nIncPart; ++iIncPart) {
+        for(int iESlice=0; iESlice<nESlice; ++iESlice) {
+          for(int iOutPart=0; iOutPart<nOutPart; ++iOutPart) {
+            tools::histo::h1d *histo = analysisManager->GetH1(hID_ioe[iIncPart][iOutPart][iESlice]);
+            const double mean = histo->mean();
+            const double rms = histo->rms();
+            G4cout
+              << outPartLongDict[iOutPart] << " from "
+              << incPartLongDict[iIncPart]
+              << "-induced reactions (" << eSliceLow[iESlice]
+              << "-" << eSliceLow[iESlice+1]
+              << " MeV): " << mean << " +- " << rms << " MeV"
+              << G4endl;
+          }
+        }
+      }
+    }
+
     analysisManager->Write();
     analysisManager->CloseFile();
     G4cout << "\n----> Tree is saved in " << filename << G4endl;
