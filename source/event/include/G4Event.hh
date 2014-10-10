@@ -109,6 +109,7 @@ class G4Event
 
       // Flag to keep the event until the end of run
       G4bool keepTheEvent;
+      mutable G4int grips;
 
   public:
       inline void SetEventID(G4int i)
@@ -135,6 +136,16 @@ class G4Event
       { keepTheEvent = vl; }
       inline G4bool ToBeKept() const
       { return keepTheEvent; }
+      inline void KeepForPostProcessing()
+      { grips++; }
+      inline void PostProcessingFinished()
+      { grips--;
+        if(grips<0)
+        { G4Exception("G4Event::Release()","EVENT91001",FatalException,
+                      "Number of grips becames negative. This cannot be correct."); }
+      }
+      inline G4int GetNumberOfGrips() const
+      { return grips; }
 
   public: // with description
       inline G4int GetEventID() const

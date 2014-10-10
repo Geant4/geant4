@@ -60,6 +60,7 @@
 #include "G4Geantino.hh"
 #include "G4ThreeVector.hh"
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
@@ -1676,7 +1677,7 @@ void G4GeneralParticleSourceMessenger::IonCommand(G4String newValues)
       }
     }
     G4ParticleDefinition* ion;
-    ion =  particleTable->GetIon( fAtomicNumber, fAtomicMass, fIonExciteEnergy);
+    ion =  G4IonTable::GetIonTable()->GetIon( fAtomicNumber, fAtomicMass, fIonExciteEnergy);
     if (ion==0)
     {
       G4cout << "Ion with Z=" << fAtomicNumber;
@@ -1718,7 +1719,7 @@ void G4GeneralParticleSourceMessenger::IonLvlCommand(G4String newValues)
     }
 
     G4ParticleDefinition* ion;
-    ion = particleTable->GetIon(fAtomicNumberL, fAtomicMassL, fIonEnergyLevel);
+    ion =  G4IonTable::GetIonTable()->GetIon(fAtomicNumberL, fAtomicMassL, fIonEnergyLevel);
     if (ion == 0) {
       G4cout << "Ion with Z=" << fAtomicNumberL;
       G4cout << " A=" << fAtomicMass << "is not be defined" << G4endl;

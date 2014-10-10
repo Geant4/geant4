@@ -45,7 +45,7 @@ G4Event::G4Event()
  HC(0),DC(0),trajectoryContainer(0),eventAborted(false),userInfo(0),
  randomNumberStatus(0),validRandomNumberStatus(false),
  randomNumberStatusForProcessing(0),validRandomNumberStatusForProcessing(false),
- keepTheEvent(false)
+ keepTheEvent(false),grips(0)
 {
 }
 
@@ -55,7 +55,7 @@ G4Event::G4Event(G4int evID)
  HC(0),DC(0),trajectoryContainer(0),eventAborted(false),userInfo(0),
  randomNumberStatus(0),validRandomNumberStatus(false),
  randomNumberStatusForProcessing(0),validRandomNumberStatusForProcessing(false),
- keepTheEvent(false)
+ keepTheEvent(false),grips(0)
 {
 }
 

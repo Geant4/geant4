@@ -174,13 +174,16 @@ void G4GeneralParticleSource::GeneratePrimaryVertex(G4Event* evt)
             //Try to minimize locks
             if (! normalised ) {
                 //According to local variable, normalization is needed
-                //Check with underlying (shared resource), actually another
+                //Check with underlying (shared resource), another
                 //thread could have already normalized this
                 GPSData->Lock();
-                G4bool normNeeded = GPSData->Normalised();
-                if (normNeeded) {
+                G4bool norm = GPSData->Normalised();
+                if (!norm) {
                     IntensityNormalization();
                 }
+                //This takes care of the case in which the local variable
+                //is False and the underlying source is.
+                normalised = GPSData->Normalised();
                 GPSData->Unlock();
             }
             G4double rndm = G4UniformRand();

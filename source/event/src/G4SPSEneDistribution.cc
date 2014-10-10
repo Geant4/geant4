@@ -56,9 +56,11 @@
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
 #include "G4AutoLock.hh"
+#include "G4Threading.hh"
 
 G4SPSEneDistribution::G4SPSEneDistribution(): eneRndm(0), Splinetemp(0)
 {
+    G4MUTEXINIT(mutex);
 	//
 	// Initialise all variables
 	particle_energy = 1.0 * MeV;

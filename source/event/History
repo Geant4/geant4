@@ -17,6 +17,19 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 8th, 2014  A.Dotti (event-V10-00-11 and -12)
+- Correction in logic of normalization of sources for
+  GPS.
+- Initialize mutex for G4SPSEneDistribution class
+
+October 1st, 2014  M.Asai (event-V10-00-09 and -10)
+- Introduing the mechanism of G4Event not to be deleted until it is
+  visualized by the other thread.
+
+September 25th, 2014  M.Asai (event-V10-00-08)
+- G4GeneralParticleSourceMessenger.cc : Change G4ParticleTable::GetIon()
+  to G4IonTable::GetIon().
+
 Aug 29th, 2014  A.Dotti (event-V10-00-07)
 - Coverity fix #56594
 
