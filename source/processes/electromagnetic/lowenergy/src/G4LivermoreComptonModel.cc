@@ -508,12 +508,28 @@ void G4LivermoreComptonModel::SampleSecondaries(
       size_t nafter = fvect->size();
       if(nafter > nbefore) {
 	for (size_t i=nbefore; i<nafter; ++i) {
-	  bindingE -= ((*fvect)[i])->GetKineticEnergy();
+          //Check if there is enough residual energy 
+          if (bindingE >= ((*fvect)[i])->GetKineticEnergy())
+           {
+             //Ok, this is a valid secondary: keep it
+	     bindingE -= ((*fvect)[i])->GetKineticEnergy();
+           }
+          else
+           {
+ 	     //Invalid secondary: not enough energy to create it!
+ 	     //Keep its energy in the local deposit
+             delete (*fvect)[i]; 
+             (*fvect)[i]=0;
+           }
 	} 
       }
     }
   }
-  if(bindingE < 0.0) { bindingE = 0.0; }
+  //This should never happen
+  if(bindingE < 0.0) 
+     G4Exception("G4LivermoreComptonModel::SampleSecondaries()",
+                 "em2050",FatalException,"Negative local energy deposit");	 
+ 
   fParticleChange->ProposeLocalEnergyDeposit(bindingE);
 }
 
