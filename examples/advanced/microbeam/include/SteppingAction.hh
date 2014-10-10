@@ -53,7 +53,6 @@ public:
 private:
   RunAction*            fRun;
   DetectorConstruction* fDetector;
-  G4float               fMassPhantom;
   CellParameterisation * fMyCellParameterisation;  
 
 };

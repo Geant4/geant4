@@ -92,7 +92,6 @@ public:
   
 private:
 
-  G4float fMassPhantom;
   G4float fMassNucleus;
   G4float fMassCytoplasm;
 
@@ -221,7 +220,9 @@ private:
   G4EqMagElectricField * fEquation;
   G4MagInt_Driver * fIntgrDriver;
   G4ChordFinder * fChordFinder ;
-  G4PropagatorInField * fPropInField;
+  
+  // FROM NANOBEAM EX. TUNINGS
+  // G4PropagatorInField * fPropInField;
 
   //
   

@@ -156,11 +156,12 @@ class CellParameterisation : public G4VPVParameterisation
     G4ThreeVector * fMapCell ; // VOXEL COORDINATES
     G4float * fMaterial      ; // MATERIAL 
     G4float * fMass          ; // DENSITY REGION
-    G4float * fTissueType    ; // DENSITY REGION
+    G4int * fTissueType    ; // DENSITY REGION
 
     G4int fPhantomTotalPixels;
     G4int fNucleusTotalPixels;
     G4int fCytoplasmTotalPixels;
+    
     G4float fDimCellBoxX;
     G4float fDimCellBoxY;
     G4float fDimCellBoxZ;

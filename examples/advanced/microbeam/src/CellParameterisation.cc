@@ -60,6 +60,7 @@ CellParameterisation::CellParameterisation
    G4float x,y,z,mat,den,tmp,density;  
    G4float denCyto1, denCyto2, denCyto3, denNucl1, denNucl2, denNucl3;
    
+   density=0;
    denCyto1=0;
    denCyto2=0;
    denCyto3=0;
@@ -85,7 +86,7 @@ CellParameterisation::CellParameterisation
 	fMapCell  = new G4ThreeVector[fPhantomTotalPixels];
         fMaterial = new G4float[fPhantomTotalPixels];
         fMass     = new G4float[fPhantomTotalPixels];
-        fTissueType = new G4float[fPhantomTotalPixels];
+        fTissueType = new G4int[fPhantomTotalPixels];
       }
       
       if (nlines == 1)

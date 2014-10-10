@@ -91,23 +91,13 @@ private:
   G4int fNumEvent;
   G4int fNbOfPixels;
   G4int fNbOfHitsGas;
-  G4float fSP;
-  G4float fR;
-  G4float fRnElec;
-  G4float fRcElec;
+
   G4float fDoseN;
   G4float fDoseC;
-  G4float fDoseNElec;
-  G4float fDoseCElec;
-  G4float fMassPhantom;
   G4float fMassCytoplasm;
   G4float fMassNucleus;
-  G4bool fBoolSP;
-  
-  G4int * fX3DDose;
-  G4int * fY3DDose;
-  G4int * fZ3DDose;
   G4float * fDose3DDose;
+
   G4ThreeVector * fMapVoxels;
 
 };

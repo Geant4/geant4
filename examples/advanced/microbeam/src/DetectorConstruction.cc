@@ -730,15 +730,16 @@ void DetectorConstruction::ConstructSDandField()
   if(!fField) fField = new EMField(); 
   
   fEquation = new G4EqMagElectricField(fField);
-  fStepper = new G4ClassicalRK4 (fEquation);
+  fStepper = new G4ClassicalRK4 (fEquation,8);
   fFieldMgr = G4TransportationManager::GetTransportationManager()->GetFieldManager();
   fIntgrDriver = new G4MagInt_Driver(0.000001*mm,fStepper,fStepper->GetNumberOfVariables() );
   fChordFinder = new G4ChordFinder(fIntgrDriver);
   fFieldMgr->SetChordFinder(fChordFinder);
   fFieldMgr->SetDetectorField(fField);
-      
+
   // FOLLOWING PARAMETERS TUNED FROM RAY-TRACING SIMULATIONS OF THE AIFIRA NANOBEAM LINE
-      
+  
+  /*  
   fFieldMgr->GetChordFinder()->SetDeltaChord(1e-9*m);
   fFieldMgr->SetDeltaIntersection(1e-9*m);
   fFieldMgr->SetDeltaOneStep(1e-9*m);     
@@ -747,5 +748,6 @@ void DetectorConstruction::ConstructSDandField()
     G4TransportationManager::GetTransportationManager()->GetPropagatorInField();
   fPropInField->SetMinimumEpsilonStep(1e-11);
   fPropInField->SetMaximumEpsilonStep(1e-10);
+  */
 
 }
