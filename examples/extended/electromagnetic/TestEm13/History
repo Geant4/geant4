@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+04-10-14 mma (testem13-V10-00-02)
+- TestEm13.cc : use G4Random
+	 
+03-10-14 mma (testem13-V10-00-01)
+- MT migration
+
 21-06-14 mma (testem13-V10-00-00)
 - remove PhysicsList::SetCuts(). Update macros
 - suppress EventAction and its Messenger

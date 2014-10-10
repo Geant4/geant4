@@ -23,68 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm13/include/DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
+/// \file electromagnetic/TestEm11/include/Run.hh
+/// \brief Definition of the Run class
 //
-// $Id$
-// 
+// $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $
+//
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef DetectorConstruction_h
-#define DetectorConstruction_h 1
+#ifndef Run_h
+#define Run_h 1
 
-#include "G4VUserDetectorConstruction.hh"
+#include "G4Run.hh"
 #include "globals.hh"
+#include <map>
 
-class G4LogicalVolume;
-class G4Material;
-class DetectorMessenger;
+class DetectorConstruction;
+class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction
+class Run : public G4Run
 {
   public:
-  
-    DetectorConstruction();
-   ~DetectorConstruction();
+    Run(DetectorConstruction*);
+   ~Run();
 
   public:
-  
-     virtual G4VPhysicalVolume* Construct();
-     
-     void SetSize     (G4double);              
-     void SetMaterial (G4String);            
-
-  public:
-  
-     const
-     G4VPhysicalVolume* GetWorld()      {return fPBox;};           
-                    
-     G4double           GetSize()       {return fBoxSize;};      
-     G4Material*        GetMaterial()   {return fMaterial;};
-     
-     void               PrintParameters();
-                       
-  private:
-  
-     G4VPhysicalVolume*    fPBox;
-     G4LogicalVolume*      fLBox;
-     
-     G4double              fBoxSize;
-     G4Material*           fMaterial;     
-     
-     DetectorMessenger* fDetectorMessenger;
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
+    void CountProcesses(G4String procName);            
+    virtual void Merge(const G4Run*);
+    void EndOfRun();
 
   private:
-    
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();     
+    DetectorConstruction*  fDetector;
+    G4ParticleDefinition*  fParticle;
+    G4double  fEkin;
+
+    std::map<G4String,G4int>    fProcCounter;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 #endif
 

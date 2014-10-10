@@ -14,6 +14,7 @@
 /testem/phys/addPhysics standard
 #
 /run/initialize
+/run/printProgress 100000
 #
 /gun/particle gamma
 /gun/energy 100 keV
