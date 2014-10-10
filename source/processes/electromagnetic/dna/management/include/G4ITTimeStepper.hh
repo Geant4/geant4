@@ -16,6 +16,7 @@ class G4VITStepModel;
 class G4ITModelHandler;
 class G4UserTimeStepAction;
 class G4ITGun;
+class G4ITTrackingInteractivity;
 
 class G4ITTimeStepper
 {
@@ -26,9 +27,11 @@ private:
 	static G4ThreadLocal G4ITTimeStepper* fpInstance;
 
 public:
-	static G4ITTimeStepper* Instance(){return fpInstance;}
+	static G4ITTimeStepper* Instance();
 	virtual void Initialize(){;}
 	virtual void Reset(){;}
+
+	virtual void SetVerbose(int){;}
 
 	virtual void SetGun(G4ITGun*){;}
 
@@ -48,8 +51,9 @@ public:
 	virtual int GetMaxZeroTimeAllowed() const{return -1;}
 
 	virtual void     SetTimeSteps(std::map<double,double>*){;}
-	virtual void		SetDefaultTimeStep(double){;}
-	virtual double GetLimitingTimeStep() const{return -1;}
+	virtual void     AddTimeStep(double /*startingTime*/, double /*timeStep*/){;}
+	virtual void     SetDefaultTimeStep(double){;}
+	virtual double   GetLimitingTimeStep() const{return -1;}
 	virtual G4int    GetNbSteps() const{return -1;}
 	virtual void     SetMaxNbSteps(G4int){;}
 	virtual G4int    GetMaxNbSteps() const{return 0;}
@@ -62,6 +66,8 @@ public:
 	virtual void SetUserAction(G4UserTimeStepAction*){;}
 	virtual G4UserTimeStepAction* GetUserReactionAction() const{return 0;}
 
+        virtual void SetInteractivity(G4ITTrackingInteractivity*){;}
+        virtual G4ITTrackingInteractivity* GetInteractivity(){return 0;}
 };
 
 

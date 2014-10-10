@@ -54,3 +54,8 @@ void G4UserTimeStepAction::SetMinimumTimeSteps(std::map<double, double>* timeSte
 {
 	G4ITTimeStepper::Instance()-> SetTimeSteps(timeSteps);
 }
+
+void G4UserTimeStepAction::AddTimeStep(double startingTime, double timeStep)
+{
+  G4ITTimeStepper::Instance()-> AddTimeStep(startingTime,timeStep);
+}

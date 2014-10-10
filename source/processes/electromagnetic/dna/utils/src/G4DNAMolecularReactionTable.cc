@@ -280,7 +280,7 @@ void G4DNAMolecularReactionTable::PrintTable(G4VDNAReactionModel* pReactionModel
 
     map<G4Molecule*,map<G4Molecule*, G4bool> > alreadyPrint;
 
-    G4cout<<"Nombre particules intervenants dans les reactions = "<< fReactivesMV.size() <<G4endl;
+    G4cout<<"Number of chemical species involved in reactions = "<< fReactivesMV.size() <<G4endl;
 
     G4int nbPrintable = fReactivesMV.size()*fReactivesMV.size();
 

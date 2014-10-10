@@ -14,6 +14,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+10-10-2014  MK, tag emdna-V10-00-35
+	    Avoid use of std::map at the application level in TimeStepAction
+
+07-10-2014  MK, tag emdna-V10-00-34
+	    G4MolecularReactionTable : translate from french to english
+	    G4DNAChemistryManager : remove usage of G4ITStepManager
+	    G4ITTimeStepper : use temporally as interface to G4ITStepManager
+
+07-10-2014  MK, tag emdna-V10-00-33
+	    Initialize G4ITStepManager in G4DNAChemistryManager
+
 17-09-2014  MK, tag emdna-V10-00-32
             Add G4ITStepManager + messenger
 	    Tag before architecture change

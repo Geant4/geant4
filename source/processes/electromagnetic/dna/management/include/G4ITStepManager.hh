@@ -119,6 +119,7 @@ public :
 
 	inline G4ITModelHandler* GetModelHandler();
 	inline void     SetTimeSteps(std::map<double,double>*);
+	inline void     AddTimeStep(double,double);
 	inline void		SetDefaultTimeStep(double);
 	double GetLimitingTimeStep() const;
 	inline G4int    GetNbSteps() const;
@@ -262,6 +263,17 @@ void G4ITStepManager::SetTimeSteps(std::map<double,double>* steps)
 {
 	fUsePreDefinedTimeSteps = true;
 	fpUserTimeSteps = steps ;
+}
+
+inline void
+G4ITStepManager::AddTimeStep(double startingTime, double timeStep)
+{
+  if(fpUserTimeSteps == 0)
+  {
+    fpUserTimeSteps = new std::map<double,double>();
+  }
+
+  (*fpUserTimeSteps)[startingTime] = timeStep;
 }
 
 inline G4int G4ITStepManager::GetNbSteps() const
