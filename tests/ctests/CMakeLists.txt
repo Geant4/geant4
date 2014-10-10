@@ -434,12 +434,40 @@ include( ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/channeling/CTestDef
 #-------------------------------------------------------------------------------------------------
 #---Advanced--------------------------------------------------------------------------------------
 #-------------------------------------------------------------------------------------------------
+GEANT4_ADD_TEST(example-adv-air_shower 
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/air_shower/Ultra
+                        ${CMAKE_SOURCE_DIR}/examples/advanced/air_shower/UltraMacro.mac
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/air_shower
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/air_shower
+                BUILD Ultra PROJECT air_shower
+		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-amsEcal 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/amsEcal/amsEcal 
                         ${CMAKE_SOURCE_DIR}/examples/advanced/amsEcal/run1.mac
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/amsEcal
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/amsEcal
                 BUILD amsEcal ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-adv-brachytherapy 
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/brachytherapy/Brachy 
+                        ${CMAKE_SOURCE_DIR}/examples/advanced/brachytherapy/IridiumSourceMacro.mac
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/brachytherapy
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/brachytherapy
+                BUILD Brachy PROJECT Brachy
+		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-adv-ChargeExchangeMC-build
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/ChargeExchangeMC
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/ChargeExchangeMC
+                BUILD ChargeExchangeMC)
+GEANT4_ADD_TEST(example-adv-composite_calorimeter-build
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/composite_calorimeter
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/composite_calorimeter
+                BUILD CompositeCalorimeter)
+GEANT4_ADD_TEST(example-adv-dnageometry
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/dnageometry/dnageometry
+                        ${CMAKE_SOURCE_DIR}/examples/advanced/dnageometry/dnageometry.mac
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/dnageometry
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/dnageometry
+                BUILD dnageometry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-dnaphysics 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/dnaphysics/dnaphysics 
                         ${CMAKE_SOURCE_DIR}/examples/advanced/dnaphysics/dna.mac
@@ -467,6 +495,12 @@ GEANT4_ADD_TEST(example-adv-gammaray_telescope
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/gammaray_telescope
                 BUILD GammaRayTel  PROJECT gammaray_telescope
 		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-adv-microbeam
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/microbeam/microbeam
+                        ${CMAKE_SOURCE_DIR}/examples/advanced/microbeam/microbeam.mac
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/microbeam
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/microbeam
+                BUILD microbeam ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-microdosimetry 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/microdosimetry/microdosimetry 
                         ${CMAKE_SOURCE_DIR}/examples/advanced/microdosimetry/microdosimetry.mac
@@ -487,14 +521,6 @@ if(GEANT4_USE_SYSTEM_CLHEP)
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/nanobeam
                   BUILD nanobeam  ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 endif()
-
-GEANT4_ADD_TEST(example-adv-air_shower 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/air_shower/Ultra
-                        ${CMAKE_SOURCE_DIR}/examples/advanced/air_shower/UltraMacro.mac
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/air_shower
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/air_shower
-                BUILD Ultra PROJECT air_shower
-		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-hadrontherapy 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/hadrontherapy/hadrontherapy
                         ${CMAKE_SOURCE_DIR}/examples/advanced/hadrontherapy/batch.mac
@@ -513,6 +539,12 @@ GEANT4_ADD_TEST(example-adv-purging_magnet
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/purging_magnet
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/purging_magnet
                 BUILD PurgMag PROJECT purging_magnet ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-adv-radioprotection
+                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/radioprotection/radioprotection
+                        ${CMAKE_SOURCE_DIR}/examples/advanced/radioprotection/run.mac
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/radioprotection
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/radioprotection
+                BUILD radioprotection ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-xray_fluorescence
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/xray_fluorescence/XrayFluo livermore.mac 1
                 WORKING_DIRECTORY  ${CMAKE_SOURCE_DIR}/examples/advanced/xray_fluorescence
