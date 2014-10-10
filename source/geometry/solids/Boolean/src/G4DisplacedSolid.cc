@@ -46,13 +46,6 @@
 #include "G4VGraphicsScene.hh"
 #include "G4Polyhedron.hh"
 
-#include "G4AutoLock.hh"
-
-namespace
-{
-  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
-}
-
 ////////////////////////////////////////////////////////////////
 //
 // Constructor for transformation like rotation of frame then translation 
@@ -470,11 +463,8 @@ G4Polyhedron* G4DisplacedSolid::GetPolyhedron () const
       fpPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fpPolyhedron->GetNumberOfRotationSteps())
     {
-      G4AutoLock l(&polyhedronMutex);
-      delete fpPolyhedron;
       fpPolyhedron = CreatePolyhedron();
       fRebuildPolyhedron = false;
-      l.unlock();
     }
   return fpPolyhedron;
 }
