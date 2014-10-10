@@ -23,46 +23,25 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phonon/include/XDetectorConstruction.hh
-/// \brief Definition of the XDetectorConstruction class
+/// \file exoticphysics/phonon/include/XActionInitialization.hh
+/// \brief Definition of the XActionInitialization class
 //
 // $Id$
 //
 
-#ifndef XDetectorConstruction_h
-#define XDetectorConstruction_h 1
+#ifndef XActionInitialization_h
+#define XActionInitialization_h 1
 
-#include "G4VUserDetectorConstruction.hh"
 #include "globals.hh"
+#include "G4VUserActionInitialization.hh"
 
-class G4Material;
-class G4VPhysicalVolume;
 
-class XDetectorConstruction : public G4VUserDetectorConstruction {
+class XActionInitialization : public G4VUserActionInitialization {
 public:
-  XDetectorConstruction();
-  virtual ~XDetectorConstruction();
-  
-public:
-  virtual G4VPhysicalVolume* Construct();
-  virtual void ConstructSDandField();
-  
-private:
-  void DefineMaterials();
-  void SetupGeometry();
-  
-private:
-  G4Material* fLiquidHelium;
-  G4Material* fGermanium;
-  G4Material* fAluminum;
-  G4Material* fTungsten;
-  G4VPhysicalVolume* fWorldPhys;
-  G4bool fConstructed;
-  G4bool fIfField;
-  
-public:
-  inline void Field(G4bool bl) { fIfField = bl; }
+  XActionInitialization() {;}
+  virtual ~XActionInitialization() {;}
+
+  virtual void Build() const;
 };
 
-#endif
-
+#endif  /* XActionInitialization_h */

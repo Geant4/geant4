@@ -23,46 +23,22 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file exoticphysics/phonon/include/XDetectorConstruction.hh
-/// \brief Definition of the XDetectorConstruction class
+/// \file exoticphysics/phonon/src/XActionInitialization.cc
+/// \brief Implementation of the XActionInitialization class
 //
 // $Id$
-//
 
-#ifndef XDetectorConstruction_h
-#define XDetectorConstruction_h 1
+#include "XActionInitialization.hh"
+#include "XPrimaryGeneratorAction.hh"
+#include "XPhononStackingAction.hh"
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
 
-class G4Material;
-class G4VPhysicalVolume;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class XDetectorConstruction : public G4VUserDetectorConstruction {
-public:
-  XDetectorConstruction();
-  virtual ~XDetectorConstruction();
-  
-public:
-  virtual G4VPhysicalVolume* Construct();
-  virtual void ConstructSDandField();
-  
-private:
-  void DefineMaterials();
-  void SetupGeometry();
-  
-private:
-  G4Material* fLiquidHelium;
-  G4Material* fGermanium;
-  G4Material* fAluminum;
-  G4Material* fTungsten;
-  G4VPhysicalVolume* fWorldPhys;
-  G4bool fConstructed;
-  G4bool fIfField;
-  
-public:
-  inline void Field(G4bool bl) { fIfField = bl; }
-};
+void XActionInitialization::Build() const
+{
+  SetUserAction(new XPrimaryGeneratorAction);
+  SetUserAction(new XPhononStackingAction);
+}  
 
-#endif
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

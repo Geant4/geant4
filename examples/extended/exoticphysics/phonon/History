@@ -15,6 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+08 October 2014:  M. Kelsey (phononExample-V10-00-02)
+- XAluminumElectrodeHit:  G4Allocator must be thread local.
+
+06 October 2014:  M. Kelsey (phononExample-V10-00-01)
+Migration for MT compatibility:
+- XGeBox.cc:  Add XActionInitialization, use of G4MTRunManager.
+- XActionInitialization:  Move generator and stacking action here.
+- XGeneratorConstruction:  Move SD instantiation to new function.
+- sources.cmake:  Add new XActionInitialization.hh,cc
+
 06 February 2014:  J. Allison (phononExample-V10-00-00)
 - CMakeLists.txt: Added CrystalMaps to list copied to build directory.
 

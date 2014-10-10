@@ -28,6 +28,7 @@
 //
 // $Id$
 //
+// 20141008  Allocators must be thread-local, and must be pointers
 
 #include "XAluminumElectrodeHit.hh"
 
@@ -45,7 +46,7 @@
 #include "G4VisAttributes.hh"
 #include "G4SystemOfUnits.hh"
 
-G4Allocator<XAluminumElectrodeHit> XAluminumElectrodeHitAllocator;
+G4ThreadLocal G4Allocator<XAluminumElectrodeHit>* XAluminumElectrodeHitAllocator = 0;
 
 XAluminumElectrodeHit::XAluminumElectrodeHit()
 {
