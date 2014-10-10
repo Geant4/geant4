@@ -48,6 +48,7 @@ enum G4MscStepLimitType
 {
   fMinimal = 0,
   fUseSafety,
+  fUseSafetyPlus,
   fUseDistanceToBoundary
 };
 #endif

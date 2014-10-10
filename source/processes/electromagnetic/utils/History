@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 October 14: L.Urban (emutils-V10-00-30)
+- G4MscStepLimitType, G4EnergyLossMessenger - added new step limit 
+    type for msc: UseSafetyPlus
+
 22 September 14: V.Ivant (emutils-V10-00-29)
 - G4VEmProcess, G4VEnergyLossProcess - fixed model type definition
     for secondary particle production (fluoresence, PIXE, splitting)

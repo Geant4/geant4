@@ -496,6 +496,9 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     else if(newValue == "UseSafety")
       opt->SetMscStepLimitation(fUseSafety);
 
+    else if(newValue == "UseSafetyPlus")
+      opt->SetMscStepLimitation(fUseSafetyPlus);
+
     else {
       G4cout << "### G4EnergyLossMessenger WARNING: StepLimit type <" 
 	     << newValue << "> unknown!" << G4endl;
