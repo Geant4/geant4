@@ -81,23 +81,23 @@ private:
 
   G4Tubs*            solidBoxros;
   G4VPhysicalVolume* physiBox[48];
-  G4VPhysicalVolume* physiBoxros[48];
+//  G4VPhysicalVolume* physiBoxros[48];
   G4LogicalVolume*   logicBoxros;
 
-  G4RotationMatrix*  rotTrap;
+//  G4RotationMatrix*  rotTrap;
   G4ThreeVector      posTrap;
 
-  G4VPhysicalVolume* physiEnv;
+//  G4VPhysicalVolume* physiEnv;
   G4LogicalVolume*   logicEnv;
 
   G4LogicalVolume*   logicHistone;
   G4Tubs*            solidHistone;
 
-  G4VPhysicalVolume* physiBp1[200];
+//  G4VPhysicalVolume* physiBp1[200];
   G4LogicalVolume*   logicBp1;
   G4Orb*             solidBp1;
 
-  G4VPhysicalVolume* physiBp2[200];
+//  G4VPhysicalVolume* physiBp2[200];
   G4LogicalVolume*   logicBp2;
   G4Orb*             solidBp2;
 

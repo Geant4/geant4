@@ -43,6 +43,8 @@
 #include <vector>
 #include "G4SystemOfUnits.hh"
 
+#include <sstream>
+
 #define countof(x) (sizeof(x) / sizeof(x[0]))
 
 using namespace std;
@@ -102,7 +104,7 @@ void DetectorConstruction::LoadChromosome(const char* filename, G4VPhysicalVolum
 
 G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 {
-  char name[256];
+  G4String name;
 
   /**************************************************************************************************************/
   //                                            World
@@ -135,7 +137,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
   //                                    Chromosomes territories
   /*************************************************************************************************************/
   // NOTE: The only supported values for the rotation are 0 and 90 degrees on the Y axis.
-  float chromosomePositionSizeRotation[][7] = {
+  G4double chromosomePositionSizeRotation[][7] = {
     {4.467, 2.835, 0, 1.557, 1.557, 1.557, 90},
     {-4.467, 2.835, 0, 1.557, 1.557, 1.557, 0},
     {4.423, -2.831, 0, 1.553, 1.553, 1.553, 90},
@@ -188,13 +190,19 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 
   for (unsigned int i = 0; i < countof(chromosomePositionSizeRotation); i++)
   {
-    float* p = &chromosomePositionSizeRotation[i][0];
-    float* size = &chromosomePositionSizeRotation[i][3];
-    float rotation = chromosomePositionSizeRotation[i][6];
+    G4double* p = &chromosomePositionSizeRotation[i][0];
+    G4double* size = &chromosomePositionSizeRotation[i][3];
+    G4double rotation = chromosomePositionSizeRotation[i][6];
     G4ThreeVector pos(p[0] * micrometer, p[1] * micrometer, p[2] * micrometer);
     G4RotationMatrix* rot = rotation == 0 ? 0 : rotch;
 
-    snprintf(name, countof(name), "box%d%c", (i / 2) + 1, i % 2 ? 'l' : 'r');
+    ostringstream ss;
+    ss << "box" << (i / 2) + 1 << (i % 2 ? 'l' : 'r');
+    name = ss.str();
+    ss.str("");
+    ss.clear();
+
+//    snprintf(name, countof(name), "box%d%c", (i / 2) + 1, i % 2 ? 'l' : 'r');
     G4Box* solidBox = new G4Box(name, size[0] * micrometer, size[1] * micrometer, size[2] * micrometer);
     G4LogicalVolume* logicBox = new G4LogicalVolume(solidBox, waterMaterial, name);
     physiBox[i] = new G4PVPlacement(rot, pos, "chromo", logicBox, physiNucleus, false, 0);
@@ -239,14 +247,14 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 **********************************************************************************************************************/
 	for(G4int n=2;n<200;n++)
 		{
-		G4float SP1[2][3]={{(-0.6*nanometer)*cos(n*0.26),0,(0.6*nanometer)*sin(n*0.26)},{(0.6*nanometer)*cos(n*0.26),0,(-0.6*nanometer)*sin(0.26*n)}};
-		G4float matriceSP1[3][3]={{cos(n*0.076),-sin(n*0.076),0},{sin(n*0.076),cos(n*0.076),0},{0,0,1}};
-		G4float matriceSP2[2][3];
+        G4double SP1[2][3]={{(-0.6*nanometer)*cos(n*0.26),0,(0.6*nanometer)*sin(n*0.26)},{(0.6*nanometer)*cos(n*0.26),0,(-0.6*nanometer)*sin(0.26*n)}};
+        G4double matriceSP1[3][3]={{cos(n*0.076),-sin(n*0.076),0},{sin(n*0.076),cos(n*0.076),0},{0,0,1}};
+        G4double matriceSP2[2][3];
 
 			for(G4int i=0;i<3;i++)
 			{
-			G4float sumSP1=0;
-			G4float sumSP2=0;
+            G4double sumSP1=0;
+            G4double sumSP2=0;
 				for(G4int j=0;j<3;j++)
 				{
 				sumSP1+=matriceSP1[i][j]*SP1[0][j];
@@ -255,7 +263,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 			matriceSP2[0][i] = sumSP1;
 			matriceSP2[1][i] = sumSP2;
 			}
-		G4float heliceSP[3]={(4.85*nanometer)*cos(n*0.076),(4.85*nanometer)*sin(n*0.076),(n*0.026*nanometer)};
+        G4double heliceSP[3]={(4.85*nanometer)*cos(n*0.076),(4.85*nanometer)*sin(n*0.076),(n*0.026*nanometer)};
 			for(G4int i=0;i<3;i++)
 			{
 			matriceSP2[0][i]+=heliceSP[i];
@@ -264,11 +272,23 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 			G4ThreeVector posSugar1(matriceSP2[0][2],matriceSP2[0][1],(matriceSP2[0][0])-(4.25*nanometer));
 			G4ThreeVector posSugar2(matriceSP2[1][2],matriceSP2[1][1],(matriceSP2[1][0])-(5.45*nanometer));
 
-    snprintf(name, countof(name), "sugar %d", n);
+ostringstream ss;
+    ss <<"sugar "<< n;
+    name = ss.str().c_str();
+     ss.str("");
+     ss.clear();
+
+//    snprintf(name, countof(name), "sugar %d", n);
     solidSphere3 = new G4Orb(name, 0.48*nanometer);
     uniDNA = new G4UnionSolid("move", uniDNA, solidSphere3, 0, posSugar1);
 
-    snprintf(name, countof(name), "sugar %d", n);
+
+    ss <<"sugar " << n;
+    name = ss.str().c_str();
+     ss.str("");
+     ss.clear();
+
+//   snprintf(name, countof(name), "sugar %d", n);
     solidSphere4 = new G4Orb(name, 0.48*nanometer);
     uniDNA2 = new G4UnionSolid("move2", uniDNA2, solidSphere4, 0, posSugar2);
 }
@@ -280,14 +300,14 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 **********************************************************************************************************************/
 	for(G4int n=0;n<200;n++)
 		{
-		G4float bp1[2][3]={{(-0.34*nanometer)*cos(n*0.26),0,(0.34*nanometer)*sin(n*0.26)},{(0.34*nanometer)*cos(n*0.26),0,(-0.34*nanometer)*sin(0.26*n)}};
-		G4float matriceBP1[3][3]={{cos(n*0.076),-sin(n*0.076),0},{sin(n*0.076),cos(n*0.076),0},{0,0,1}};
-		G4float matriceBP2[2][3];
+        G4double bp1[2][3]={{(-0.34*nanometer)*cos(n*0.26),0,(0.34*nanometer)*sin(n*0.26)},{(0.34*nanometer)*cos(n*0.26),0,(-0.34*nanometer)*sin(0.26*n)}};
+        G4double matriceBP1[3][3]={{cos(n*0.076),-sin(n*0.076),0},{sin(n*0.076),cos(n*0.076),0},{0,0,1}};
+        G4double matriceBP2[2][3];
 
 			for(G4int i=0;i<3;i++)
 			{
-			G4float sumBP1=0;
-			G4float sumBP2=0;
+            G4double sumBP1=0;
+            G4double sumBP2=0;
 				for(G4int j=0;j<3;j++)
 				{
 				sumBP1+=matriceBP1[i][j]*bp1[0][j];
@@ -296,7 +316,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 			matriceBP2[0][i] = sumBP1;
 			matriceBP2[1][i] = sumBP2;
 			}
-		G4float heliceBP[3]={(4.8*nanometer)*cos(n*0.076),(4.8*nanometer)*sin(n*0.076),n*0.026*nanometer};
+        G4double heliceBP[3]={(4.8*nanometer)*cos(n*0.076),(4.8*nanometer)*sin(n*0.076),n*0.026*nanometer};
 
 			for(G4int i=0;i<3;i++)
 			{
@@ -306,8 +326,8 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 			G4ThreeVector position1(matriceBP2[0][2],matriceBP2[0][1],matriceBP2[0][0]-(4.25*nanometer));
 			G4ThreeVector position2(matriceBP2[1][2],matriceBP2[1][1],matriceBP2[1][0]-(5.45*nanometer));
 
-		 physiBp1[n] = new G4PVPlacement(0,position1,logicBp1,"physi blue sphere",logicSphere3,false,0);
-		 physiBp2[n] = new G4PVPlacement(0,position2,logicBp2,"physi pink sphere",logicSphere4,false,0);
+//		 physiBp1[n] = new G4PVPlacement(0,position1,logicBp1,"physi blue sphere",logicSphere3,false,0);
+//		 physiBp2[n] = new G4PVPlacement(0,position2,logicBp2,"physi pink sphere",logicSphere4,false,0);
 }
 
 
@@ -330,21 +350,21 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
     rotFiber->rotateY(i *25.72*degree);
     G4ThreeVector posFiber = G4ThreeVector(0, 152*nanometer, 0);
     posFiber.rotateZ(i*25.72*degree);
-    new G4PVPlacement(rotFiber, posFiber, logicEnv, "physi env", logicBoxros, false, 0);
+//    new G4PVPlacement(rotFiber, posFiber, logicEnv, "physi env", logicBoxros, false, 0);
 
     rotFiber = new G4RotationMatrix;
     rotFiber->rotateX(90 * degree);
     rotFiber->rotateY((7 + i) * 25.72 *degree);
     posFiber = G4ThreeVector(0, 152 *nanometer, 0);
     posFiber.rotateZ((7 + i) * 25.72*degree);
-    new G4PVPlacement(rotFiber, posFiber, logicEnv, "physi env", logicBoxros, false, 0);
+//    new G4PVPlacement(rotFiber, posFiber, logicEnv, "physi env", logicBoxros, false, 0);
 
     rotFiber = new G4RotationMatrix;
     rotFiber->rotateX(90 * degree);
     rotFiber->rotateY((25.72 + (i - 14) * 51.43) * degree);
     posFiber = G4ThreeVector(-36.5 * nanometer, 312 * nanometer, 0);
     posFiber.rotateZ((i - 14) * 51.43 * degree);
-    new G4PVPlacement(rotFiber, posFiber, logicEnv, "physi env", logicBoxros, false, 0);
+//    new G4PVPlacement(rotFiber, posFiber, logicEnv, "physi env", logicBoxros, false, 0);
 
     rotFiber = new G4RotationMatrix;
     rotFiber->rotateX(90 * degree);
@@ -352,7 +372,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
     rotFiber->rotateY((i - 21) * 51.43 * degree);
     posFiber = G4ThreeVector(-103 * nanometer, 297 * nanometer, 0);
     posFiber.rotateZ((i - 21) * 51.43 * degree);
-    new G4PVPlacement(rotFiber, posFiber, logicEnv, "physi env", logicBoxros, false, 0);
+//    new G4PVPlacement(rotFiber, posFiber, logicEnv, "physi env", logicBoxros, false, 0);
 
 
   }
@@ -365,30 +385,35 @@ G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
     			rotStrand1->rotateZ(j*-51.43*degree);
 		G4ThreeVector posStrand1(-2.7*nanometer,9.35*nanometer,(-69.9*nanometer)+(j*1.67*nanometer));
     			posStrand1.rotateZ(j*51.43*degree);
-		new G4PVPlacement(rotStrand1,posStrand1,logicSphere3,"physi sugar 2",logicEnv,false,0);
+//		new G4PVPlacement(rotStrand1,posStrand1,logicSphere3,"physi sugar 2",logicEnv,false,0);
 
 		G4RotationMatrix* rotStrand2 = new G4RotationMatrix;
     			rotStrand2->rotateZ(j* -51.43*degree);
 		G4ThreeVector posStrand2(-2.7*nanometer,9.35*nanometer,(-68.7*nanometer)+(j*1.67*nanometer));
     			posStrand2.rotateZ(j*51.43*degree);
-		new G4PVPlacement(rotStrand2,posStrand2,logicSphere4,"physi sugar 4",logicEnv,false,0);
+//		new G4PVPlacement(rotStrand2,posStrand2,logicSphere4,"physi sugar 4",logicEnv,false,0);
 	
     // histones
     		G4RotationMatrix* rotHistone = new G4RotationMatrix;
     		rotHistone->rotateY(90*degree);
-    		rotHistone->rotateX(j*(-51.43*degree));
+            rotHistone->rotateX(j*(-51.43*degree));
     		G4ThreeVector posHistone(0.0,9.35 *nanometer,(-74.15+ j*1.67)*nanometer);
    		 posHistone.rotateZ(j*51.43*degree);
-    		new G4PVPlacement(rotHistone, posHistone, logicHistone, "PV histone", logicEnv, false, 0);
+//    		new G4PVPlacement(rotHistone, posHistone, logicHistone, "PV histone", logicEnv, false, 0);
 				}
 
 //Loading flower box position for each chromosome territory
 
   for (int k = 0; k < 22; k++)
   {
-    snprintf(name, countof(name), "chromo%d.dat", k + 1);
-    LoadChromosome(name, physiBox[k * 2]);
-    LoadChromosome(name, physiBox[k * 2 + 1]);
+      ostringstream oss;
+      oss << "chromo" << k + 1 << ".dat";
+      name  = oss.str();
+      oss.str("");
+      oss.clear();
+    //snprintf(name, countof(name), "chromo%d.dat", k + 1);
+    LoadChromosome(name.c_str(), physiBox[k * 2]);
+    LoadChromosome(name.c_str(), physiBox[k * 2 + 1]);
   }
 
   LoadChromosome("chromoY.dat", physiBox[44]);

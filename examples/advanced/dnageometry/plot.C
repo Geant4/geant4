@@ -12,6 +12,7 @@ Double_t scale;
 	
 c1 = new TCanvas ("c1","",20,20,1000,500);
 
+
 TFile f("dnageometry.root"); 
 
 TNtuple* ntuple;

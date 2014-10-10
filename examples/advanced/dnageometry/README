@@ -24,7 +24,7 @@ shall cite the following Geant4-DNA collaboration publications:
 The dnageometry example offers the basic tools to simulate the track structure of different charge particles within a
 simplified geometrical model of the DNA molecule contained in a cell nucleus. 
 In this example, the DetectorConstruction file contains the placement of the 6 Gbp (base-pairs) of a human cell respecting five compaction levels in the structure of the DNA molecule: double helix, nucleosome, chromatin fiber, simple chromatin fiber loop and complex chromatin fiber loops.
-These complex chromatin fiber loops are then used to fill the chromosome territories using a constant density (~30-31 kbp/µm3).
+These complex chromatin fiber loops are then used to fill the chromosome territories using a constant density (~30-31 kbp/µm3.
 Even though this geometry defines different volumes for the DNA base, the back-bone region or the histone proteins, the material filling all these volumes in the simulation is liquid water (“G4_WATER”)
 
 In order to simulate all the energy transfer points of the track at nanometric level, the Geant4-DNA physics processes and models are used. 
@@ -34,8 +34,9 @@ http://geant4-dna.org
 ---->1. GEOMETRY SET-UP.
  
 As indicated in the introduction, the whole DNA molecule contained in a human cell with 5 different compaction levels is described in this geometry. In order to place the complex chromatin loops in each of the 43 chromosome territories, the files called “chromo-number.dat” are needed. 
-These 46 chromosome territories are then placed in an ellipsoid that has the typical dimensions of a human fibroblast cell nucleus.
-All the volumes in the geometry are made of liquid water (G4_WATER material) despite of what they geometrically represent.
+These 43 chromosome territories are then placed in an ellipsoid that has the typical dimensions of a human fibroblast cell nucleus.
+All the volumes in the geometry are made of liquid water (G4_WATER
+material) despite of what they geometrically represent.
 Particles are shot from a random (x,y)position covering the main central part of the cell nucleus and at z=2.99 µm from the center of the nucleus. This value allows the primary particle to be either inside the cell nucleus, either not far from the entrance surface so its energy loss before the cell nucleus entrance is negligible. 
 
 ---->2. SET-UP 
@@ -53,12 +54,9 @@ In interactive mode, run:
 > $G4WORDIR/bin/$G4SYSTEM/dnageometry
 
 The macro dnageometry.mac is executed by default. A proton of 0.1 MeV is shot. This energy has been chosen because only a few minutes are needed for the proton to lose all its energy and thus the event to finish. Nevertheless, one should keep in mind that for this energy, protons do not traverse the whole cell nucleus width. 
-The example is prepared for Multithreaded mode (uncomment the construction of the G4MTRunManager in the dnageometry.cc main )
-Visualization (OPEN GL) is not activated by default in dnageometry.mac. 
-To get visualization, make sure to uncomment the #/control/execute vis.mac.
-Warning: Because of the complexity of the dnageometry DetectorConstruction, its complete visualtisation is not possible, even using the false option in the visualisation attributes.
-If one whish to visualize the different elements in the geometry, one should choose different volumes to visualize and comment the PVPlacement of the rest of the volumes.
 
+Visualization (DAWN) is not activated by default in dnageometry.mac. To get visualization, make sure to uncomment the #/control/execute vis.mac.
+We would like to warn the users that the time to visualize the whole DNA structure is extremely long.
 
 ---->4. PHYSICS
 

@@ -1,4 +1,3 @@
-#/control/execute vis.mac
 /tracking/verbose 0 
 #/run/numberOfThreads 2 #if MT is activated
 /gun/particle proton

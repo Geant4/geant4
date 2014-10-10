@@ -34,11 +34,11 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifdef G4MULTITHREADED
+/*#ifdef G4MULTITHREADED
   #include "G4MTRunManager.hh"
-#else
-  #include "G4RunManager.hh"
-#endif
+#else*/
+#include "G4RunManager.hh"
+//#endif
 
 #include "G4UImanager.hh"
 #include "G4UIterminal.hh"
@@ -61,14 +61,14 @@ int main(int argc,char** argv)
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
 
   // Construct the default run manager
-#ifdef G4MULTITHREADED
+/*#ifdef G4MULTITHREADED
   G4MTRunManager* runManager = new G4MTRunManager;
 
    // runManager->SetNumberOfThreads(2); // Is equal to 2 by default
-#else
+#else*/
 
   G4RunManager * runManager = new G4RunManager;
-#endif
+// #endif
 
 
   // Set mandatory user initialization classes
