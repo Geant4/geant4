@@ -32,14 +32,14 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "SteppingAction.hh"
-#include "RunAction.hh"
+#include "Run.hh"
 #include "HistoManager.hh"
 #include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-SteppingAction::SteppingAction(RunAction* RuAct)
-:G4UserSteppingAction(),fRunAction(RuAct)
+SteppingAction::SteppingAction()
+:G4UserSteppingAction()
 { }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -52,14 +52,18 @@ SteppingAction::~SteppingAction()
 void SteppingAction::UserSteppingAction(const G4Step* aStep)
 {
   const G4StepPoint* endPoint = aStep->GetPostStepPoint();
-  G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();     
+  G4String procName = endPoint->GetProcessDefinedStep()->GetProcessName();
+  
+  Run* run = static_cast<Run*>(
+             G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  
   G4bool transmit = (endPoint->GetStepStatus() <= fGeomBoundary);  
-  if (transmit) { fRunAction->CountProcesses(procName); }
+  if (transmit) { run->CountProcesses(procName); }
   else {                         
     //count real processes and sum track length
     G4double stepLength = aStep->GetStepLength();
-    fRunAction->CountProcesses(procName);  
-    fRunAction->SumTrack(stepLength);
+    run->CountProcesses(procName);  
+    run->SumTrack(stepLength);
   }
   
   //plot final state
@@ -95,7 +99,7 @@ void SteppingAction::UserSteppingAction(const G4Step* aStep)
     analysisManager->FillH1(id,costeta);
       
     //energy tranferred to charged secondaries
-    if (charge != 0.) { fRunAction->SumeTransf(energy); }         
+    if (charge != 0.) { run->SumeTransf(energy); }         
   }
          
   // kill event after first interaction

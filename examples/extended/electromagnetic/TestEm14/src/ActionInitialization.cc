@@ -23,70 +23,57 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm14/src/DetectorMessenger.cc
-/// \brief Implementation of the DetectorMessenger class
+// $Id: ActionInitialization.cc 76346 2013-11-08 15:48:19Z maire $
 //
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.cc
+/// \brief Implementation of the ActionInitialization class
 
-#include "DetectorMessenger.hh"
-
+#include "ActionInitialization.hh"
 #include "DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "SteppingAction.hh"
+#include "SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:G4UImessenger(),fDetector(Det),
- fTestemDir(0),
- fDetDir(0),    
- fMaterCmd(0),
- fSizeCmd(0)
-{ 
-  fTestemDir = new G4UIdirectory("/testem/");
-  fTestemDir->SetGuidance("commands specific to this example");
-  
-  fDetDir = new G4UIdirectory("/testem/det/");
-  fDetDir->SetGuidance("detector construction");
-  
-  fMaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
-  fMaterCmd->SetGuidance("Select material of the box.");
-  fMaterCmd->SetParameterName("choice",false);
-  fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  fMaterCmd->SetToBeBroadcasted(false);
-  
-  fSizeCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSize",this);
-  fSizeCmd->SetGuidance("Set size of the box");
-  fSizeCmd->SetParameterName("Size",false);
-  fSizeCmd->SetRange("Size>0.");
-  fSizeCmd->SetUnitCategory("Length");
-  fSizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  fSizeCmd->SetToBeBroadcasted(false);
-}
+ActionInitialization::ActionInitialization(DetectorConstruction* det)
+ : G4VUserActionInitialization(),fDetector(det)
+{ }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::~DetectorMessenger()
+ActionInitialization::~ActionInitialization()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
 {
-  delete fMaterCmd;
-  delete fSizeCmd; 
-  delete fDetDir;  
-  delete fTestemDir;
+ SetUserAction(new RunAction(fDetector,0));
+}
+
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::Build() const
+{
+  
+  PrimaryGeneratorAction* prim = new PrimaryGeneratorAction(fDetector);
+  SetUserAction(prim);
+
+  RunAction* run = new RunAction(fDetector,prim);
+  SetUserAction(run); 
+
+  SetUserAction(new SteppingAction());
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{ 
-  if( command == fMaterCmd )
-   { fDetector->SetMaterial(newValue);}
-   
-  if( command == fSizeCmd )
-   { fDetector->SetSize(fSizeCmd->GetNewDoubleValue(newValue));}
-}
+G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
+{
+  return new SteppingVerbose();
+}  
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

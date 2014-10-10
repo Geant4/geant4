@@ -199,13 +199,15 @@ void DetectorConstruction::PrintParameters()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#include "G4RunManager.hh"
+
 void DetectorConstruction::SetMaterial(G4String materialChoice)
 {
   // search the material by its name
   G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
   if (pttoMaterial) {
    fMaterial = pttoMaterial;
-   UpdateGeometry();
+   G4RunManager::GetRunManager()->PhysicsHasBeenModified();
   } else {
     G4cout << "\n--> warning from DetectorConstruction::SetMaterial : "
            << materialChoice << " not found" << G4endl;  
@@ -217,17 +219,7 @@ void DetectorConstruction::SetMaterial(G4String materialChoice)
 void DetectorConstruction::SetSize(G4double value)
 {
   fBoxSize = value;
-  UpdateGeometry();  
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-#include "G4RunManager.hh"
-
-void DetectorConstruction::UpdateGeometry()
-{
-  if (fPBox) 
-  G4RunManager::GetRunManager()->DefineWorldVolume(ConstructVolumes());
+  G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

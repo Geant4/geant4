@@ -23,70 +23,53 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm14/src/DetectorMessenger.cc
-/// \brief Implementation of the DetectorMessenger class
+/// \file electromagnetic/TestEm11/include/Run.hh
+/// \brief Definition of the Run class
 //
-// $Id$
+// $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "DetectorMessenger.hh"
+#ifndef Run_h
+#define Run_h 1
 
-#include "DetectorConstruction.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4Run.hh"
+#include "globals.hh"
+#include <map>
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
-:G4UImessenger(),fDetector(Det),
- fTestemDir(0),
- fDetDir(0),    
- fMaterCmd(0),
- fSizeCmd(0)
-{ 
-  fTestemDir = new G4UIdirectory("/testem/");
-  fTestemDir->SetGuidance("commands specific to this example");
-  
-  fDetDir = new G4UIdirectory("/testem/det/");
-  fDetDir->SetGuidance("detector construction");
-  
-  fMaterCmd = new G4UIcmdWithAString("/testem/det/setMat",this);
-  fMaterCmd->SetGuidance("Select material of the box.");
-  fMaterCmd->SetParameterName("choice",false);
-  fMaterCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  fMaterCmd->SetToBeBroadcasted(false);
-  
-  fSizeCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setSize",this);
-  fSizeCmd->SetGuidance("Set size of the box");
-  fSizeCmd->SetParameterName("Size",false);
-  fSizeCmd->SetRange("Size>0.");
-  fSizeCmd->SetUnitCategory("Length");
-  fSizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-  fSizeCmd->SetToBeBroadcasted(false);
-}
+class DetectorConstruction;
+class G4ParticleDefinition;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-DetectorMessenger::~DetectorMessenger()
+class Run : public G4Run
 {
-  delete fMaterCmd;
-  delete fSizeCmd; 
-  delete fDetDir;  
-  delete fTestemDir;
-}
+  public:
+    Run(DetectorConstruction*);
+   ~Run();
+
+  public:
+    void SetPrimary(G4ParticleDefinition* particle, G4double energy);
+    void CountProcesses(G4String procName);
+    void SumTrack (G4double track); 
+    void SumeTransf (G4double energy);            
+    virtual void Merge(const G4Run*);
+    void EndOfRun();
+
+  private:
+    DetectorConstruction*  fDetector;
+    G4ParticleDefinition*  fParticle;
+    G4double  fEkin;
+
+    std::map<G4String,G4int>    fProcCounter;
+    G4int    fTotalCount;   //all processes counter
+    G4double fSumTrack;     //sum of trackLength
+    G4double fSumTrack2;    //sum of trackLength*trackLength
+    G4double fEnTransfer;   //energy transfered to charged secondaries
+};
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void DetectorMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
-{ 
-  if( command == fMaterCmd )
-   { fDetector->SetMaterial(newValue);}
-   
-  if( command == fSizeCmd )
-   { fDetector->SetSize(fSizeCmd->GetNewDoubleValue(newValue));}
-}
+#endif
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

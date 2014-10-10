@@ -23,48 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm1/include/RunAction.hh
-/// \brief Definition of the RunAction class
+// $Id: ActionInitialization.hh 76346 2013-11-08 15:48:19Z maire $
 //
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
-#ifndef RunAction_h
-#define RunAction_h 1
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "G4UserRunAction.hh"
-#include "globals.hh"
+#include "G4VUserActionInitialization.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-class Run;
 class DetectorConstruction;
-class PrimaryGeneratorAction;
-class HistoManager;
+class G4VSteppingVerbose;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Action initialization class.
+///
 
-class RunAction : public G4UserRunAction
+class ActionInitialization : public G4VUserActionInitialization
 {
   public:
-    RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim=0);
-   ~RunAction();
+    ActionInitialization(DetectorConstruction*);
+    virtual ~ActionInitialization();
 
-  public:
-    virtual G4Run* GenerateRun();    
-    virtual void BeginOfRunAction(const G4Run*);
-    virtual void   EndOfRunAction(const G4Run*);
-                                  
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+    
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+    
   private:
-    DetectorConstruction*   fDetector;
-    PrimaryGeneratorAction* fPrimary;
-    Run*                    fRun;        
-    HistoManager*           fHistoManager;
-};
+    DetectorConstruction* fDetector;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+};
 
 #endif
 
+    
