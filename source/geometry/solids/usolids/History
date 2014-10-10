@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 10, 2014  G.Cosmo                 geom-usolids-V10-00-19
+- UMultiUnion: simplified and optimised use of transformations; removed
+  no longer necessary vector of pointers.
+
+September 24, 2014  T.Nikitina
+- Fixed use of kInfinity in UGenericTrap implementation.
+
 September 22, 2014  G.Cosmo               geom-usolids-V10-00-18
 - Correction to UTessellatedSolid to define post-const attribute for
   UVertexComparator::operator()(), to resolve compilation error on

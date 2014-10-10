@@ -129,7 +129,6 @@ class UMultiUnion : public VUSolid
     double DistanceToInCandidates(const UVector3& aPoint, const UVector3& aDirection, double aPstep, std::vector<int>& candidates, UBits& bits) const;
 
     std::vector<VUSolid*> fSolids;
-    std::vector<UTransform3D*> fTransforms;
     std::vector<UTransform3D> fTransformObjs;
     UVoxelizer fVoxels;  // Pointer to the vozelized solid
     double       fCubicVolume;   // Cubic Volume

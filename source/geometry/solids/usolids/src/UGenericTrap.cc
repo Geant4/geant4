@@ -528,12 +528,14 @@ bool UGenericTrap::Normal(const UVector3& p, UVector3& aNormal) const
   //
   if (noSurfaces == 0)
   {
+    #ifdef UDEBUG
     UUtils::Exception("UGenericTrap::SurfaceNormal(p)", "GeomSolids1002",
                       Warning, 1, "Point p is not on surface !?");
     if (Inside(p) != eSurface)
     {
       std::cout << "Point is not on Surface, confirmed by Inside()" << p << std::endl;
     }
+    #endif
     sumnorm = apprnorm;
     // Add Approximative Surface Normal Calculation
   }
@@ -694,14 +696,14 @@ double  UGenericTrap::DistToPlane(const UVector3& p,
   double  b = dxs * v.y - dys * v.x + (dtx * p.y - dty * p.x + ty2 * xs1 - ty1 * xs2
                                        + tx1 * ys2 - tx2 * ys1) * v.z;
   double  c = dxs * p.y - dys * p.x + xs1 * ys2 - xs2 * ys1;
-  double  q = UUtils::Infinity();
+  double  q = UUtils::kInfinity;
   double  x1, x2, y1, y2, xp, yp, zi;
 
   if (std::fabs(a) < VUSolid::fgTolerance)
   {
     if (std::fabs(b) < VUSolid::fgTolerance)
     {
-      return UUtils::Infinity();
+      return UUtils::kInfinity;
     }
     q = -c / b;
 
@@ -720,7 +722,7 @@ double  UGenericTrap::DistToPlane(const UVector3& p,
         }
         else
         {
-          return UUtils::Infinity();
+          return UUtils::kInfinity;
         }
       }
 
@@ -742,7 +744,7 @@ double  UGenericTrap::DistToPlane(const UVector3& p,
         }
       }
     }
-    return UUtils::Infinity();
+    return UUtils::kInfinity;
   }
   double  d = b * b - 4 * a * c;
   if (d >= 0)
@@ -769,7 +771,7 @@ double  UGenericTrap::DistToPlane(const UVector3& p,
             return 0.;
           }
         }
-        else  // Check second root; return UUtils::Infinity()
+        else  // Check second root; return UUtils::kInfinity
         {
           if (a > 0)
           {
@@ -781,7 +783,7 @@ double  UGenericTrap::DistToPlane(const UVector3& p,
           }
           if (q <= halfCarTolerance)
           {
-            return UUtils::Infinity();
+            return UUtils::kInfinity;
           }
         }
       }
@@ -825,7 +827,7 @@ double  UGenericTrap::DistToPlane(const UVector3& p,
             return 0.;
           }
         }
-        else   // Check second root; return UUtils::Infinity().
+        else   // Check second root; return UUtils::kInfinity.
         {
           if (a > 0)
           {
@@ -837,7 +839,7 @@ double  UGenericTrap::DistToPlane(const UVector3& p,
           }
           if (q <= halfCarTolerance)
           {
-            return UUtils::Infinity();
+            return UUtils::kInfinity;
           }
         }
       }
@@ -860,7 +862,7 @@ double  UGenericTrap::DistToPlane(const UVector3& p,
       }
     }
   }
-  return UUtils::Infinity();
+  return UUtils::kInfinity;
 }
 
 // --------------------------------------------------------------------
@@ -874,7 +876,7 @@ double  UGenericTrap::DistanceToIn(const UVector3& p,
     return fTessellatedSolid->DistanceToIn(p, v);
   }
 #endif
-  if (fBoundBox->DistanceToIn(p, v) == UUtils::Infinity())return UUtils::Infinity();
+  if (fBoundBox->DistanceToIn(p, v) == UUtils::kInfinity)return UUtils::kInfinity;
   static const double  halfCarTolerance = VUSolid::fgTolerance * 0.5;
 
   double  dist[5];
@@ -890,7 +892,7 @@ double  UGenericTrap::DistanceToIn(const UVector3& p,
 
   // Check Z planes
   //
-  dist[4] = UUtils::Infinity();
+  dist[4] = UUtils::kInfinity;
   if (std::fabs(p.z) > fDz - halfCarTolerance)
   {
     if (v.z)
@@ -906,7 +908,7 @@ double  UGenericTrap::DistanceToIn(const UVector3& p,
       }
       if (dist[4] < -halfCarTolerance)
       {
-        dist[4] = UUtils::Infinity();
+        dist[4] = UUtils::kInfinity;
       }
       else
       {
@@ -926,13 +928,13 @@ double  UGenericTrap::DistanceToIn(const UVector3& p,
           }
           else
           {
-            dist[4] = UUtils::Infinity();
+            dist[4] = UUtils::kInfinity;
           }
         }
         pt = p + dist[4] * v;
         if (Inside(pt) == eOutside)
         {
-          dist[4] = UUtils::Infinity();
+          dist[4] = UUtils::kInfinity;
         }
       }
     }
@@ -1037,7 +1039,7 @@ UGenericTrap::DistToTriangle(const UVector3& p,
     //
     if ((std::fabs(xb - xc) + std::fabs(yb - yc)) < halfCarTolerance)
     {
-      return UUtils::Infinity();
+      return UUtils::kInfinity;
     }
   }
   double  a = (yb - ya) * zac - (yc - ya) * zab;
@@ -1054,7 +1056,7 @@ UGenericTrap::DistToTriangle(const UVector3& p,
   {
     if (NormalToPlane(p, ipl).Dot(v) < VUSolid::fgTolerance)
     {
-      t = UUtils::Infinity();
+      t = UUtils::kInfinity;
     }
     else
     {
@@ -1063,7 +1065,7 @@ UGenericTrap::DistToTriangle(const UVector3& p,
   }
   if (Inside(p + v * t) != eSurface)
   {
-    t = UUtils::Infinity();
+    t = UUtils::kInfinity;
   }
 
   return t;
@@ -1103,7 +1105,7 @@ double UGenericTrap::DistanceToOut(const UVector3& p, const UVector3&  v,
     }
     else
     {
-      distmin = UUtils::Infinity();
+      distmin = UUtils::kInfinity;
     }
   }
 
@@ -1152,7 +1154,7 @@ double UGenericTrap::DistanceToOut(const UVector3& p, const UVector3&  v,
     double  b = dxs * v.y - dys * v.x + (dtx * p.y - dty * p.x + ty2 * xs1 - ty1 * xs2
                                          + tx1 * ys2 - tx2 * ys1) * v.z;
     double  c = dxs * p.y - dys * p.x + xs1 * ys2 - xs2 * ys1;
-    double  q = UUtils::Infinity();
+    double  q = UUtils::kInfinity;
 
     if (std::fabs(a) < VUSolid::fgTolerance)
     {
@@ -1268,7 +1270,7 @@ double UGenericTrap::DistanceToOut(const UVector3& p, const UVector3&  v,
   }
   if (!lateral_cross)  // Make sure that track crosses the top or bottom
   {
-    if (distmin >= UUtils::Infinity())
+    if (distmin >= UUtils::kInfinity)
     {
       distmin = VUSolid::fgTolerance;
     }
