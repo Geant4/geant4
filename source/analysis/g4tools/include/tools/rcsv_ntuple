@@ -73,49 +73,6 @@ public: //read::intuple
   }
 
   virtual const std::vector<read::icol*>& columns() const {return m_cols;}
-protected:
-  static bool _read(std::istream& a_reader,
-                           char,std::streampos,
-                           double& a_v) {
-    a_reader >> a_v;
-    if(a_reader.tellg()==std::streampos(-1)) {a_v = 0;return false;}
-    //std::cout << "debug : _read(double) " << a_v << std::endl;
-    return true;
-  }
-  static bool _read(std::istream& a_reader,
-                           char a_sep,std::streampos a_sz,
-                           time_t& a_v) {
-    std::string s;
-    char c;
-    while(true){
-      if(a_reader.tellg()>=a_sz) break;
-      a_reader.get(c);
-      if((c==a_sep)||(c==CR())||(c==LF())) {
-        a_reader.putback(c);
-        break;
-      }
-      s += c;
-    }
-    if(!s2time(s,a_v)) return false;
-    return true;
-  }
-  static bool _read(std::istream& a_reader,
-                           char a_sep,std::streampos a_sz,
-                           std::string& a_v) {
-    a_v.clear();
-    char c;
-    while(true){
-      if(a_reader.tellg()>=a_sz) break;
-      a_reader.get(c);
-      if((c==a_sep)||(c==CR())||(c==LF())) {
-        a_reader.putback(c);
-        break;
-      }
-      a_v += c;
-    }
-    return true;
-  }
-
 public:
   template <class T>
   class column : public virtual read::icolumn<T> {
@@ -465,6 +422,7 @@ protected:
     return col;
   }
 
+protected:
   static bool read_line(std::istream& a_reader,std::streampos a_sz,
                                std::string& a_s){
     a_s.clear();
@@ -504,6 +462,49 @@ protected:
     }
   }
 
+  static bool _read(std::istream& a_reader,
+                           char,std::streampos,
+                           double& a_v) {
+    a_reader >> a_v;
+    if(a_reader.tellg()==std::streampos(-1)) {a_v = 0;return false;}
+    //std::cout << "debug : _read(double) " << a_v << std::endl;
+    return true;
+  }
+  static bool _read(std::istream& a_reader,
+                           char a_sep,std::streampos a_sz,
+                           time_t& a_v) {
+    std::string s;
+    char c;
+    while(true){
+      if(a_reader.tellg()>=a_sz) break;
+      a_reader.get(c);
+      if((c==a_sep)||(c==CR())||(c==LF())) {
+        a_reader.putback(c);
+        break;
+      }
+      s += c;
+    }
+    if(!s2time(s,a_v)) return false;
+    return true;
+  }
+  static bool _read(std::istream& a_reader,
+                           char a_sep,std::streampos a_sz,
+                           std::string& a_v) {
+    a_v.clear();
+    char c;
+    while(true){
+      if(a_reader.tellg()>=a_sz) break;
+      a_reader.get(c);
+      if((c==a_sep)||(c==CR())||(c==LF())) {
+        a_reader.putback(c);
+        break;
+      }
+      a_v += c;
+    }
+    return true;
+  }
+
+protected:
   bool _read_line() {
     // have to loop on all columns !
     typedef read::icol icol_t;

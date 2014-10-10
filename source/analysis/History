@@ -17,6 +17,15 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 30, 2014 I. Hrivnacova (analysis-V10-00-29)
+- Updated to g4tools 1.15.1 (by G. Barrand)
+  Fixed reading histograms with titles of more words;
+  see History_tools for complete list of modifications.
+
+September 30, 2014 I. Hrivnacova (analysis-V10-00-28)
+- Updated to g4tools 1.15.0 (by G. Barrand)
+  See History_tools for complete list of modifications.
+
 September 18, 2014 I. Hrivnacova (analysis-V10-00-27)
 - Fixed units in /analysis/[h|p]n/create and /analysis/[h|p]n/set
   commands

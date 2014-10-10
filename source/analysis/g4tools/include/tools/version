@@ -5,13 +5,13 @@
 #define tools_version
 
 #define TOOLS_MAJOR_VERSION 1
-#define TOOLS_MINOR_VERSION 14
+#define TOOLS_MINOR_VERSION 15
 #define TOOLS_PATCH_VERSION 1
-#define TOOLS_VERSION "1.14.1"
-#define TOOLS_VERSION_VRP "v1r14p1"
+#define TOOLS_VERSION "1.15.1"
+#define TOOLS_VERSION_VRP "v1r15p1"
 
 namespace tools {
-inline unsigned int version() {return 11401;}
+inline unsigned int version() {return 11501;}
 }
 
 #endif

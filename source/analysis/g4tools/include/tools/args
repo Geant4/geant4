@@ -9,6 +9,7 @@
 #include "words"
 #include "sto"
 #include "forit"
+#include "mnmx"
 
 #include <ostream>
 
@@ -500,9 +501,16 @@ inline void window_size_from_args(const args& a_args,
     }
   }
   if(a_args.is_arg("-land")){
-    unsigned int tmp = a_ww;
-    a_ww = a_wh;
-    a_wh = tmp;
+    unsigned int _ww = a_ww;
+    unsigned int _wh = a_wh;
+    a_ww = mx(_ww,_wh);
+    a_wh = mn(_ww,_wh);
+  }
+  if(a_args.is_arg("-portrait")){
+    unsigned int _ww = a_ww;
+    unsigned int _wh = a_wh;
+    a_ww = mn(_ww,_wh);
+    a_wh = mx(_ww,_wh);
   }
 }
 

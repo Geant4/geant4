@@ -650,16 +650,20 @@ inline bool create_cols_from_vals(ntuple& a_ntu,
                       << " ITuple : " << (*it).label() << " : begin "
                       << std::endl;
         }
-        std::vector<value>* vars = 
-          (std::vector<value>*)(*it).get_void_star();
+        std::vector<value>* vars = (std::vector<value>*)(*it).get_void_star();
 
         aida_col_ntu* col_ntu = new aida_col_ntu(a_ntu.out(),(*it).label());
-        // create sub columns on the the "fillable" of col_ntu :
+        // create sub columns on the "fillable" of col_ntu :
         base_ntu* sub_base_ntu = col_ntu->get_to_fill();
-        if(!sub_base_ntu) return false;
-        ntuple* sub_aida =
-          safe_cast<base_ntu,ntuple>(*sub_base_ntu);
-        if(!sub_aida) return false;
+        if(!sub_base_ntu) {
+          delete col_ntu;
+          return false;
+        }
+        ntuple* sub_aida = safe_cast<base_ntu,ntuple>(*sub_base_ntu);
+        if(!sub_aida) {
+          delete col_ntu;
+          return false;
+        }
 
         if(!create_cols_from_vals(*sub_aida,*vars,a_verbose)) {
           delete col_ntu;

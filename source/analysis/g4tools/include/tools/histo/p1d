@@ -18,9 +18,8 @@ public:
   }
   const std::string& s_cls() const {return s_class();}
 public:
-  p1d(const std::string& a_title,
-      unsigned int aXnumber,double aXmin,double aXmax)
-  : parent(a_title,aXnumber,aXmin,aXmax)
+  p1d(const std::string& a_title,unsigned int aXnumber,double aXmin,double aXmax)
+  :parent(a_title,aXnumber,aXmin,aXmax)
   {}
 
   p1d(const std::string& a_title,

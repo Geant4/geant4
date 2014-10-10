@@ -52,6 +52,7 @@ public:
   {}
 
   histo_data& operator=(const histo_data& a_from) {
+    if(&a_from==this) return *this;
     m_title = a_from.m_title;
     m_dimension = a_from.m_dimension;
     m_bin_number = a_from.m_bin_number;

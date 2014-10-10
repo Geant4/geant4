@@ -57,6 +57,7 @@ public:
   profile_data& operator=(const histo_data<TC,TO,TN,TW>& a_from) {
     //for Rio_THisogram.
     histo_data<TC,TO,TN,TW>::operator=(a_from);
+    if(&a_from==this) return *this;
     m_is_profile = false;
     m_bin_Svw.clear();
     m_bin_Sv2w.clear();

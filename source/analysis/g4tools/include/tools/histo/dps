@@ -53,6 +53,7 @@ public:
 #endif
   }
   measurement& operator=(const measurement& a_from) {
+    if(&a_from==this) return *this;
     m_value = a_from.m_value;
     m_error_plus = a_from.m_error_plus;
     m_error_minus = a_from.m_error_minus;
@@ -96,6 +97,7 @@ public:
 #endif
   }
   data_point& operator=(const data_point& a_from) {
+    if(&a_from==this) return *this;
     m_measurements = a_from.m_measurements;
     return *this;
   }
@@ -133,6 +135,13 @@ public:
   ,m_dim(a_from.m_dim)
   ,m_points(a_from.m_points)
   {}
+  dps& operator=(const dps& a_from) {
+    if(&a_from==this) return *this;
+    m_title = a_from.m_title;
+    m_dim = a_from.m_dim;
+    m_points = a_from.m_points;
+    return *this;
+  }
 
 public:
   const std::string& title() const {return m_title;}

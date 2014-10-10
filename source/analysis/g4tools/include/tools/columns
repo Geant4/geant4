@@ -43,6 +43,7 @@ public:
 #endif
   }
   tree& operator=(const tree& a_from) {
+    if(&a_from==this) return *this;
     m_dcl = a_from.m_dcl;
     m_sub = a_from.m_sub;
     m_parent = a_from.m_parent;

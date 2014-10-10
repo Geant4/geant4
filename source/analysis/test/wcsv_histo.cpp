@@ -52,11 +52,12 @@ int wcsv_histo(int argc,char** argv) {
 
  {std::ofstream writer("out_h1d.csv");
   if(writer.fail()) {std::cout << "can't open out_h1d.csv." << std::endl;return EXIT_FAILURE;}
-  tools::histo::h1d h("Gauss",100,-5,5);
+  tools::histo::h1d h("Rand gauss",100,-5,5);
   for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),1.4);
   // plotting hints :
   h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
   h.add_annotation(tools::histo::key_axis_y_title(),"1.4*entries");
+  h.add_annotation("empty","");
   // write :
   if(!tools::wcsv::hto(writer,h.s_cls(),h,sep,hc)) return EXIT_FAILURE;
   writer.close();}
@@ -106,6 +107,20 @@ int wcsv_histo(int argc,char** argv) {
   h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
   h.add_annotation(tools::histo::key_axis_y_title(),"rand gauss");
   h.add_annotation(tools::histo::key_axis_z_title(),"rand bw");
+  if(!tools::wcsv::hto(writer,h.s_cls(),h,sep,hc)) return EXIT_FAILURE;
+  writer.close();}
+
+ {std::ofstream writer("out_h1d_edges.csv");
+  if(writer.fail()) {std::cout << "can't open out_h1d.csv." << std::endl;return EXIT_FAILURE;}
+  std::vector<double> edges;
+  double width = (5.0-(-5.0))/100;
+  for(unsigned int index=0;index<=100;index++) edges.push_back(-5+index*width);
+  tools::histo::h1d h("Gauss",edges);
+  for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),1.4);
+  // plotting hints :
+  h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
+  h.add_annotation(tools::histo::key_axis_y_title(),"1.4*entries");
+  // write :
   if(!tools::wcsv::hto(writer,h.s_cls(),h,sep,hc)) return EXIT_FAILURE;
   writer.close();}
 

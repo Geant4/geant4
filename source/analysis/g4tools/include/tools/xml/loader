@@ -209,7 +209,7 @@ protected:
     do {
       size_t len = tools::mn<unsigned int>(l,BUFSIZ); //BUFSIZ in cstdio
       done = len < BUFSIZ ? 1 : 0;
-      if (!XML_Parse(_parser, buf, len, done)) {
+      if(XML_Parse(_parser, buf, len, done)==XML_STATUS_ERROR) {
         m_out << "parse_buffer :" 
             << " " << XML_ErrorString(XML_GetErrorCode(_parser)) 
             << " at line " << (int)XML_GetCurrentLineNumber(_parser) 
@@ -321,7 +321,7 @@ protected:
         return false;
       }
       done = len < sizeof(buf) ? 1 : 0;
-      if (!XML_Parse(_parser, buf, len, done)) {
+      if(XML_Parse(_parser, buf, len, done)==XML_STATUS_ERROR) {
         m_out << "parse_file :" 
             << " in file " << tools::sout(a_file)
             << " " << XML_ErrorString(XML_GetErrorCode(_parser)) 

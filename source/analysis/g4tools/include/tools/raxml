@@ -117,9 +117,7 @@ public:
         return false;
       } else {
         raxml_out ro = rder(*_tree,m_out,m_verbose,m_read_tag);
-        if(ro.object()) {
-          m_objects.push_back(ro);
-        }
+        if(ro.object()) m_objects.push_back(ro);
       }
 
     }}
@@ -267,42 +265,33 @@ protected:
     add_reader(s_dataPointSet(),read_dps);
   //add_reader(s_function(),read_Function);
   }
-  static raxml_out read_h1d(tools::xml::tree& a_tree,
-                         std::ostream& a_out,bool a_verbose,void*) {
+  static raxml_out read_h1d(tools::xml::tree& a_tree,std::ostream& a_out,bool a_verbose,void*) {
     return read_histo(a_tree,a_out,a_verbose,1,false);
   }
-  static raxml_out read_h2d(tools::xml::tree& a_tree,
-                         std::ostream& a_out,bool a_verbose,void*) {
+  static raxml_out read_h2d(tools::xml::tree& a_tree,std::ostream& a_out,bool a_verbose,void*) {
     return read_histo(a_tree,a_out,a_verbose,2,false);
   }
-  static raxml_out read_h3d(tools::xml::tree& a_tree,
-                         std::ostream& a_out,bool a_verbose,void*) {
+  static raxml_out read_h3d(tools::xml::tree& a_tree,std::ostream& a_out,bool a_verbose,void*) {
     return read_histo(a_tree,a_out,a_verbose,3,false);
   }
-  static raxml_out read_p1d(tools::xml::tree& a_tree,
-                         std::ostream& a_out,bool a_verbose,void*) {
+  static raxml_out read_p1d(tools::xml::tree& a_tree,std::ostream& a_out,bool a_verbose,void*) {
     return read_histo(a_tree,a_out,a_verbose,1,true);
   }
-  static raxml_out read_p2d(tools::xml::tree& a_tree,
-                         std::ostream& a_out,bool a_verbose,void*) {
+  static raxml_out read_p2d(tools::xml::tree& a_tree,std::ostream& a_out,bool a_verbose,void*) {
     return read_histo(a_tree,a_out,a_verbose,2,true);
   }
 
-  static raxml_out read_cloud1d(tools::xml::tree& a_tree,
-                         std::ostream& a_out,bool a_verbose,void*) {
+  static raxml_out read_cloud1d(tools::xml::tree& a_tree,std::ostream& a_out,bool a_verbose,void*) {
     return read_cloud(a_tree,a_out,a_verbose,1);
   }
-  static raxml_out read_cloud2d(tools::xml::tree& a_tree,
-                         std::ostream& a_out,bool a_verbose,void*) {
+  static raxml_out read_cloud2d(tools::xml::tree& a_tree,std::ostream& a_out,bool a_verbose,void*) {
     return read_cloud(a_tree,a_out,a_verbose,2);
   }
-  static raxml_out read_cloud3d(tools::xml::tree& a_tree,
-                         std::ostream& a_out,bool a_verbose,void*) {
+  static raxml_out read_cloud3d(tools::xml::tree& a_tree,std::ostream& a_out,bool a_verbose,void*) {
     return read_cloud(a_tree,a_out,a_verbose,3);
   }
 
-  static raxml_out read_dps(tools::xml::tree& a_tree,
-                            std::ostream& a_out,bool a_verbose,void*) {
+  static raxml_out read_dps(tools::xml::tree& a_tree,std::ostream& a_out,bool a_verbose,void*) {
     std::string sname;
     a_tree.attribute_value(s_name(),sname);
   
@@ -388,9 +377,7 @@ public: //used in BatchLab::XML_DataReader.
       double mn,mx;
       std::vector<double> borders;
       bool variableBins;
-      if(!read_axis(*_tree,a_dim,
-                            iaxis,num,mn,mx,borders,variableBins,a_out)) 
-        return raxml_out();
+      if(!read_axis(*_tree,a_dim,iaxis,num,mn,mx,borders,variableBins,a_out)) return raxml_out();
       if(iaxis!=not_found) {
         if((iaxis<0)||(iaxis>=(int)a_dim)) return raxml_out();
         bins[iaxis] = num;
@@ -449,9 +436,7 @@ public: //used in BatchLab::XML_DataReader.
         if(isVariableBins) {
           histo = new tools::histo::p2d(stitle,edges[0],edges[1]);
         } else {
-          histo = new tools::histo::p2d(stitle,
-                                  bins[0],mns[0],mxs[0],
-                                  bins[1],mns[1],mxs[1]);
+          histo = new tools::histo::p2d(stitle,bins[0],mns[0],mxs[0],bins[1],mns[1],mxs[1]);
         }
 
         pd_data hd = histo->get_histo_data();
@@ -506,9 +491,7 @@ public: //used in BatchLab::XML_DataReader.
         if(isVariableBins) {
           histo = new tools::histo::h2d(stitle,edges[0],edges[1]);
         } else {
-          histo = new tools::histo::h2d(stitle,
-                                  bins[0],mns[0],mxs[0],
-                                  bins[1],mns[1],mxs[1]);
+          histo = new tools::histo::h2d(stitle,bins[0],mns[0],mxs[0],bins[1],mns[1],mxs[1]);
         }
 
         pd_data hd(histo->get_histo_data());
@@ -535,10 +518,9 @@ public: //used in BatchLab::XML_DataReader.
         if(isVariableBins) {
           histo = new tools::histo::h3d(stitle,edges[0],edges[1],edges[2]);
         } else {
-          histo = new tools::histo::h3d(stitle,
-                                  bins[0],mns[0],mxs[0],
-                                  bins[1],mns[1],mxs[1],
-                                  bins[2],mns[2],mxs[2]);
+          histo = new tools::histo::h3d(stitle,bins[0],mns[0],mxs[0],
+                                               bins[1],mns[1],mxs[1],
+                                               bins[2],mns[2],mxs[2]);
         }
 
         pd_data hd(histo->get_histo_data());
@@ -575,9 +557,7 @@ public: //used in BatchLab::XML_DataReader.
     return raxml_out(hdl,sclass,spath,sname);
   }
 
-  static raxml_out read_cloud(tools::xml::tree& a_tree,
-                              std::ostream& a_out,bool a_verbose,
-			      int a_dim){
+  static raxml_out read_cloud(tools::xml::tree& a_tree,std::ostream& a_out,bool a_verbose,int a_dim){
 
     std::string sname;
     a_tree.attribute_value(s_name(),sname);
@@ -734,8 +714,7 @@ protected:
   
     return true;
   }
-  static bool to_double(const std::string& a_s,double& a_v,
-                               std::ostream& a_out,const std::string& a_what) {
+  static bool to_double(const std::string& a_s,double& a_v,std::ostream& a_out,const std::string& a_what) {
     if(!tools::to<double>(a_s,a_v)) {
       a_out << "tools::raxml::read_bins :"
             << " problem converting a " << a_what
@@ -747,8 +726,7 @@ protected:
     return true;
   }
 
-  static bool read_bins(tools::xml::tree& a_tree,
-                        pd_data& aData,std::ostream& a_out,bool a_is_prof){
+  static bool read_bins(tools::xml::tree& a_tree,pd_data& aData,std::ostream& a_out,bool a_is_prof){
     const std::string& tagName = a_tree.tag_name();
   
     std::string svalue;
@@ -1077,8 +1055,7 @@ protected:
     return false;
   }
 
-  static bool axis_index(unsigned int a_dim,const std::string& a_axis,
-                                int& a_index) {
+  static bool axis_index(unsigned int a_dim,const std::string& a_axis,int& a_index) {
     if(a_dim==1) {
       if(a_axis=="x") {a_index = 0;return true;}
     } else if(a_dim==2) {
@@ -1111,6 +1088,7 @@ protected:
     {}
 
     colbook& operator=(const colbook& a_from){
+      if(&a_from==this) return *this;
       m_type = a_from.m_type;
       m_name = a_from.m_name;
       m_def_or_bkg = a_from.m_def_or_bkg;
@@ -1332,9 +1310,7 @@ protected:
     return false;
   }
 
-  static raxml_out read_ntu(tools::xml::tree& a_tree,
-                                   std::ostream& a_out,
-                                   bool a_verbose,void*){
+  static raxml_out read_ntu(tools::xml::tree& a_tree,std::ostream& a_out,bool a_verbose,void*){
     std::string sname;
     a_tree.attribute_value(s_name(),sname);
   
@@ -1379,6 +1355,7 @@ protected:
                                (*it).name(),
                                (*it).def_or_bkg(),
                                (*it).is_ntu())){
+        delete ntu;
         return raxml_out();
       }
     }}
@@ -1415,8 +1392,7 @@ protected:
     }
     
     std::string sclass = tools::aida::ntuple::s_class();
-    return raxml_out
-             (new tools::handle<tools::aida::ntuple>(ntu),sclass,spath,sname);
+    return raxml_out(new tools::handle<tools::aida::ntuple>(ntu),sclass,spath,sname);
   }
 
   ///////////////////////////////////////////////////////////////

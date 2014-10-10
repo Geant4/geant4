@@ -48,13 +48,13 @@ inline bool hto(std::ostream& a_writer,const std::string& a_class,const HDATA& a
     annotations_to(a_writer,a_data.m_annotations,a_hc);
     a_writer << a_hc << "bin_number " << a_data.m_bin_number << std::endl;
   }
- {a_writer << "entries" << a_sep << "Sw" << a_sep << "Sw2" << a_sep << "Svw" << a_sep << "Sv2w";
+ {a_writer << "entries" << a_sep << "Sw" << a_sep << "Sw2";
   for(unsigned int iaxis=0;iaxis<a_data.m_dimension;iaxis++) {
     a_writer << a_sep << "Sxw" << iaxis << a_sep << "Sx2w" << iaxis;
   }
   a_writer << std::endl;}
   for(unsigned int i=0;i<a_data.m_bin_number;i++) {
-    a_writer        << a_data.m_bin_entries[i]
+    a_writer << a_data.m_bin_entries[i]
              << a_sep << a_data.m_bin_Sw[i]
              << a_sep << a_data.m_bin_Sw2[i];
     for(unsigned int iaxis=0;iaxis<a_data.m_dimension;iaxis++) {
@@ -96,7 +96,7 @@ inline bool pto(std::ostream& a_writer,const std::string& a_class,const PROF& a_
   const vs_t& Svw = a_prof.bins_sum_vw();
   const vs_t& Sv2w = a_prof.bins_sum_v2w();
   for(unsigned int i=0;i<a_prof.m_bin_number;i++) {
-    a_writer        << a_prof.m_bin_entries[i]
+    a_writer << a_prof.m_bin_entries[i]
              << a_sep << a_prof.m_bin_Sw[i]
              << a_sep << a_prof.m_bin_Sw2[i]
              << a_sep << Svw[i]

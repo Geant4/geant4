@@ -1,3 +1,21 @@
+ 1.15.1 :
+ - test/cpp/wcsv_histo.cpp : write an histo with variable edge bins.
+ - test/cpp/wcsv_histo.cpp : h1d : add a title with two words (to test the csv reading).
+ - test/cpp/wcsv_histo.cpp : h1d : add an annotation with an empty value (to test the csv reading).
+ - tools/rcsv_histo : if verbose, dump annotations.
+ - tools/rcsv_histo : #title : read the "rest of line".
+ - tools/rcsv_histo : add reading of axis with variable edge bins.
+
+ 1.15.0 :
+ - tools/rcsv_histo, test/cpp/rcsv_histo.cpp : to read histo at csv format.
+ - tools/wcsv_histo : for non-profile, correct the labels to remove Svw,Sv2w.
+ - tools/rcsv_ntuple : cosmetic.
+ - tools/xml/loader : if(!XML_Parse()) -> if(XML_Parse()==XML_STATUS_ERROR) : seen by Coverity.
+ - tools/xml/element : correction for Coverity.
+ - tools/aida_ntuple, columns, raxml : correction for Coverity.
+ - tools/histo/histo_data, dps, profile_data : correction for Coverity.
+ - src/csz_inflate.c : correction for Coverity.
+
  1.14.1 :
  - rroot/streamers : static_cast<unsigned int> fEntries to data.m_all_entries.
 

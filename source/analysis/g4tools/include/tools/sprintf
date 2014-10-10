@@ -57,6 +57,18 @@ inline bool sprintf(std::string& a_string,
   return true;
 }
 
+template <class MATRIX> //for example : MATRIX = mat<symbol,4>
+inline void set_matrix(MATRIX& a_matrix,const std::string& a_fmt) {
+  unsigned int DR = a_matrix.rows();
+  unsigned int DC = a_matrix.cols();
+  std::string ss;
+  for(unsigned int i=0;i<DR;i++) {
+    for(unsigned int j=0;j<DC;j++) {
+      tools::sprintf(ss,128,a_fmt.c_str(),i,j);
+      a_matrix.set_value(i,j,ss);
+    }
+  }
+}
 
 }
 
