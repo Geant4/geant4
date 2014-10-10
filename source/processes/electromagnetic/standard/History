@@ -18,6 +18,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+06 October 14: L. Urban (emstand-V10-00-43)
+- G4UrbanMscModel - added new step limit type UseSafetyPlus 
+
 8 September 14: V.Ivanchenko (emstand-V10-00-42)
 - G4PairProductionRelModel, G4eBremsstrahlungRelModel - added 
     protection at initialisation for the case when user artifitially

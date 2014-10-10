@@ -175,6 +175,9 @@ private:
   G4bool   insideskin;
 
   G4bool   latDisplasmentbackup ;
+
+  G4double rangecut;
+  G4double drr,finalr;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

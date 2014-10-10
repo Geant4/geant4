@@ -149,6 +149,10 @@ G4UrbanMscModel::G4UrbanMscModel(const G4String& nam)
   insideskin    = false;
   latDisplasmentbackup = false;
 
+  rangecut = geombig;
+  drr      = 0.35 ;
+  finalr   = 10.*um ;
+
   skindepth = skin*stepmin;
 
   mass = proton_mass_c2;
@@ -662,6 +666,98 @@ G4double G4UrbanMscModel::ComputeTruePathLengthLimit(
       }
       else { tPathLength = min(tPathLength, tlimit); }
     }
+  // new stepping mode UseSafetyPlus
+    else if(steppingAlgorithm == fUseSafetyPlus)
+    {
+      if(currentRange < presafety)
+        {
+          inside = true;
+          latDisplasment = false;
+          return ConvertTrueToGeom(tPathLength, currentMinimalStep);
+        }
+      else if(stepStatus != fGeomBoundary)  {
+        presafety = ComputeSafety(sp->GetPosition(),tPathLength);
+      }
+      /*
+      G4cout << "presafety= " << presafety
+             << " firstStep= " << firstStep
+             << " stepStatus= " << stepStatus
+             << G4endl;
+      */
+      // is far from boundary
+      if(currentRange < presafety)
+        {
+          inside = true;
+          latDisplasment = false;
+          return ConvertTrueToGeom(tPathLength, currentMinimalStep);
+        }
+
+      if(firstStep || stepStatus == fGeomBoundary)
+      {
+        rangeinit = currentRange;
+        fr = facrange;
+        rangecut = geombig;
+        if(mass < masslimite)
+        {
+          G4int index = 1;
+          if(charge > 0.) index = 2;
+          rangecut = couple->GetProductionCuts()->GetProductionCut(index);
+          if(lambda0 > lambdalimit) {
+            fr *= (0.84+0.16*lambda0/lambdalimit);
+          }
+        }
+
+        //lower limit for tlimit
+        G4double rat = currentKinEnergy/MeV;
+        rat = 1.e-3/(rat*(10 + rat)) ;
+        stepmin = lambda0*rat;
+        tlimitmin = max(10*stepmin, tlimitminfix);
+      }
+      //step limit
+      tlimit = max(fr*rangeinit, facsafety*presafety);
+
+      //lower limit for tlimit
+      tlimit = max(tlimit, tlimitmin);
+
+      // condition for tPathLength from drr and finalr
+      if(currentRange > finalr) {
+        G4double tmax = drr*currentRange+
+                        finalr*(1.-drr)*(2.-finalr/currentRange);
+        if(tPathLength > tmax)
+          tPathLength = tmax;
+      }
+
+      // condition safety
+      if(currentRange > rangecut) {
+        if(firstStep) {
+          if(tPathLength > facsafety*presafety)
+            tPathLength = facsafety*presafety;
+        }
+      else if(stepStatus != fGeomBoundary) {
+        if(presafety > stepmin) {
+          if(tPathLength > presafety)
+            tPathLength = presafety;
+          }
+        }
+      } 
+
+      if(firstStep || stepStatus == fGeomBoundary)
+      {
+        G4double temptlimit = tlimit;
+        if(temptlimit > tlimitmin)
+        {
+          do {
+            temptlimit = G4RandGauss::shoot(tlimit,0.3*tlimit);
+          } while ((temptlimit < tlimitmin) ||
+                   (temptlimit > 2.*tlimit-tlimitmin));
+        }
+        else { temptlimit = tlimitmin; }
+
+        tPathLength = min(tPathLength, temptlimit);
+      }
+      else { tPathLength = min(tPathLength, tlimit); }
+    }
+
   // version similar to 7.1 (needed for some experiments)
   else
     {
