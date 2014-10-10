@@ -14,8 +14,10 @@
 # include directories to those of the directory in which this file is
 # included.
 #
-# The recommended Geant4 compiler flags are also added to CMAKE_CXX_FLAGS
-# but duplicated flags are NOT removed.
+# The recommended Geant4 compiler flags are also prepended to
+# CMAKE_CXX_FLAGS but duplicated flags are NOT removed. This permits
+# client of UseGeant4 to override Geant4's recommended flags if required
+# and at their own risk.
 #
 # Advanced users requiring special sets of flags, or the removal of
 # duplicate flags should therefore *not* use this file, preferring the
@@ -35,14 +37,16 @@ include_directories(${Geant4_INCLUDE_DIRS})
 #-----------------------------------------------------------------------
 # Because Geant4 is sensitive to the compiler flags, let's set the base
 # set here. This reproduces as far as possible the behaviour of the
-# original makefile system.
+# original makefile system. However, we append any existing CMake flags in
+# case the user wishes to override these (at their own risk).
+# Though this may lead to duplication, that should not affect behaviour.
 #
-set(CMAKE_CXX_FLAGS                "${Geant4_CXX_FLAGS}")
-set(CMAKE_CXX_FLAGS_DEBUG          "${Geant4_CXX_FLAGS_DEBUG}")
-set(CMAKE_CXX_FLAGS_MINSIZEREL     "${Geant4_CXX_FLAGS_MINSIZEREL}")
-set(CMAKE_CXX_FLAGS_RELEASE        "${Geant4_CXX_FLAGS_RELEASE}")
-set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${Geant4_CXX_FLAGS_RELWITHDEBINFO}")
-set(CMAKE_EXE_LINKER_FLAGS         "${Geant4_EXE_LINKER_FLAGS}")
+set(CMAKE_CXX_FLAGS                "${Geant4_CXX_FLAGS} ${CMAKE_CXX_FLAGS}")
+set(CMAKE_CXX_FLAGS_DEBUG          "${Geant4_CXX_FLAGS_DEBUG} ${CMAKE_CXX_FLAGS_DEBUG}")
+set(CMAKE_CXX_FLAGS_MINSIZEREL     "${Geant4_CXX_FLAGS_MINSIZEREL} ${CMAKE_CXX_FLAGS_MINSIZEREL}")
+set(CMAKE_CXX_FLAGS_RELEASE        "${Geant4_CXX_FLAGS_RELEASE} ${CMAKE_CXX_FLAGS_RELEASE}")
+set(CMAKE_CXX_FLAGS_RELWITHDEBINFO "${Geant4_CXX_FLAGS_RELWITHDEBINFO} ${CMAKE_CXX_FLAGS_RELWITHDEBINFO}")
+set(CMAKE_EXE_LINKER_FLAGS         "${Geant4_EXE_LINKER_FLAGS} ${CMAKE_EXE_LINKER_FLAGS}")
 
 #-----------------------------------------------------------------------
 # Locate ourselves

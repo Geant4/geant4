@@ -58,37 +58,14 @@
 macro(_g4tc_shell_setup SHELL_FAMILY)
   if(${SHELL_FAMILY} STREQUAL "bourne")
     set(GEANT4_TC_SHELL_PROGRAM "/bin/sh")
-    set(GEANT4_TC_SCRIPT_HEAD "#!/bin/sh")
     set(GEANT4_TC_SHELL_FAMILY "Bourne shell")
     set(GEANT4_TC_UNSET_COMMAND "unset")
-    set(GEANT4_TC_SHELL_EXTENSION "make.sh")
+    set(GEANT4_TC_SHELL_EXTENSION ".sh")
   elseif(${SHELL_FAMILY} STREQUAL "cshell")
     set(GEANT4_TC_SHELL_PROGRAM "/bin/csh")
-    set(GEANT4_TC_SCRIPT_HEAD "#!/bin/csh")
     set(GEANT4_TC_SHELL_FAMILY "C shell")
     set(GEANT4_TC_UNSET_COMMAND "unsetenv")
-    set(GEANT4_TC_SHELL_EXTENSION "make.csh")
-  elseif(${SHELL_FAMILY} STREQUAL "modulefile")
-    set(GEANT4_TC_SCRIPT_HEAD "#%Module -*- tcl -*-
-##
-## modulefile
-##
-
-global env
-eval set  [ array get env HOME ]
-set loginname $env(USER)
-
-proc ModulesHelp { } {
-        puts stderr \"\\tAdds Geant4-@Geant4_VERSION@ to your environment variables\"
-}
-
-module-whatis \"\\tAdds Geant4-@Geant4_VERSION@ to your environment variables\"
-    
-    ")
-    set(GEANT4_TC_SHELL_PROGRAM "")
-    set(GEANT4_TC_SHELL_FAMILY "Modulefile")
-    set(GEANT4_TC_UNSET_COMMAND "unsetenv")
-    set(GEANT4_TC_SHELL_EXTENSION "-${Geant4_VERSION}")
+    set(GEANT4_TC_SHELL_EXTENSION ".csh")
   else()
     message(FATAL_ERROR "Unsupported shell '${SHELL_FAMILY}'")
   endif()
@@ -102,17 +79,7 @@ endmacro()
 #          value of the shell variable name.
 #
 function(_g4tc_selflocate TEMPLATE_NAME SHELL_FAMILY SCRIPT_NAME LOCATION_VARIABLE)
-
-  # ---- 
-  # MODULEFILE
-  if(${SHELL_FAMILY} STREQUAL "modulefile")
-    set(${TEMPLATE_NAME} "" PARENT_SCOPE)
-    set(GEANT4_TC_IF_SELFLOCATED "" PARENT_SCOPE)
-    set(GEANT4_TC_ENDIF_SELFLOCATED "" PARENT_SCOPE)
-    
-  # ---- 
-  # BOURNE
-  elseif(${SHELL_FAMILY} STREQUAL "bourne") 
+  if(${SHELL_FAMILY} STREQUAL "bourne")
     set(${TEMPLATE_NAME}
       "# Self locate script when sourced
 if [ -z \"\$BASH_VERSION\" ]; then
@@ -136,8 +103,7 @@ fi
     set(GEANT4_TC_IF_SELFLOCATED "" PARENT_SCOPE)
     set(GEANT4_TC_ENDIF_SELFLOCATED "" PARENT_SCOPE)
 
-  # ---- 
-  # CSHELL
+
   elseif(${SHELL_FAMILY} STREQUAL "cshell")
     set(${TEMPLATE_NAME}
       "# Self locate script when sourced
@@ -217,12 +183,6 @@ function(_g4tc_setenv_command TEMPLATE_NAME SHELL_FAMILY VARIABLE_NAME VARIABLE_
       "setenv ${VARIABLE_NAME} ${VARIABLE_VALUE}"
       PARENT_SCOPE
       )
-      
-  elseif(${SHELL_FAMILY} STREQUAL "modulefile")
-    set(${TEMPLATE_NAME}
-      "setenv ${VARIABLE_NAME} ${VARIABLE_VALUE}"
-      PARENT_SCOPE
-      )
   endif()
 endfunction()
 
@@ -233,7 +193,6 @@ endfunction()
 #          variable is not already set
 #
 function(_g4tc_setenv_ifnotset_command TEMPLATE_NAME SHELL_FAMILY VARIABLE_NAME VARIABLE_VALUE)
-
   # -- bourne
   if(${SHELL_FAMILY} STREQUAL "bourne")
     # Have to make this section verbatim to get correct formatting
@@ -256,13 +215,6 @@ endif
 "
        PARENT_SCOPE
        )
-  # -- MODULEFILE
-  elseif(${SHELL_FAMILY} STREQUAL "modulefile")     
-         set(${TEMPLATE_NAME} "    
-if { ![info exists env(${VARIABLE_NAME})] } {
-  setenv ${VARIABLE_NAME} ${VARIABLE_VALUE}
-}         
-         " PARENT_SCOPE)
   endif()
 endfunction()
 
@@ -274,19 +226,8 @@ endfunction()
 #
 function(_g4tc_prepend_path TEMPLATE_NAME SHELL_FAMILY PATH_VARIABLE
   APPEND_VARIABLE)
-  
-  # -- modulefile block
-  
-  if(${SHELL_FAMILY} STREQUAL "modulefile")
-      set(${TEMPLATE_NAME}
-    "
-prepend-path ${PATH_VARIABLE} ${APPEND_VARIABLE}
-"
-    PARENT_SCOPE
-    )
-  
   # -- bourne block
-  elseif(${SHELL_FAMILY} STREQUAL "bourne")
+  if(${SHELL_FAMILY} STREQUAL "bourne")
     # We have to make this section verbatim
     set(${TEMPLATE_NAME}
     "
@@ -327,17 +268,16 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
 
   # - Locate self
   _g4tc_selflocate(GEANT4_TC_LOCATE_SELF_COMMAND ${SHELL_FAMILY} ${SCRIPT_NAME} geant4make_root)
-  
+
+
   # - Standard Setup and Paths
   _g4tc_setenv_command(GEANT4_TC_G4SYSTEM ${SHELL_FAMILY} G4SYSTEM ${G4SYSTEM})
   _g4tc_setenv_command(GEANT4_TC_G4INSTALL ${SHELL_FAMILY} G4INSTALL ${G4INSTALL})
-  _g4tc_setenv_command(GEANT4_TC_G4BUILD ${SHELL_FAMILY} G4BUILD ${G4BUILD})
   _g4tc_setenv_command(GEANT4_TC_G4INCLUDE ${SHELL_FAMILY} G4INCLUDE ${G4INCLUDE})
 
   _g4tc_prepend_path(GEANT4_TC_G4BIN_PATH_SETUP ${SHELL_FAMILY} PATH ${G4BIN_DIR})
 
   _g4tc_setenv_command(GEANT4_TC_G4LIB ${SHELL_FAMILY} G4LIB ${G4LIB})
-  _g4tc_setenv_command(GEANT4_TC_G4RUN ${SHELL_FAMILY} G4RUN ${G4RUN})
 
   if(${CMAKE_SYSTEM_NAME} STREQUAL "Darwin")
     _g4tc_prepend_path(GEANT4_TC_G4LIB_PATH_SETUP ${SHELL_FAMILY} DYLD_LIBRARY_PATH ${G4LIB_DIR})
@@ -345,18 +285,9 @@ macro(_g4tc_configure_tc_variables SHELL_FAMILY SCRIPT_NAME)
     _g4tc_prepend_path(GEANT4_TC_G4LIB_PATH_SETUP ${SHELL_FAMILY} LD_LIBRARY_PATH ${G4LIB_DIR})
   endif()
 
-  if(${SHELL_FAMILY} STREQUAL "modulefile")
-    _g4tc_setenv_ifnotset_command(GEANT4_TC_G4WORKDIR_SETUP ${SHELL_FAMILY} G4WORKDIR ${G4WORKDIR_MODULEFILE_DEFAULT})
-    _g4tc_prepend_path(GEANT4_TC_G4WORKDIR_PATH_SETUP ${SHELL_FAMILY} PATH
-    \$::env\(G4WORKDIR\)/bin/\$::env\(G4SYSTEM\))
-  else()
-    _g4tc_setenv_ifnotset_command(GEANT4_TC_G4WORKDIR_SETUP ${SHELL_FAMILY} G4WORKDIR ${G4WORKDIR_DEFAULT})
-    _g4tc_prepend_path(GEANT4_TC_G4WORKDIR_PATH_SETUP ${SHELL_FAMILY} PATH
-    \${G4WORKDIR}/bin/\${G4SYSTEM})
-  endif()
-
-  _g4tc_prepend_path(GEANT4_TC_G4RUN_PATH_SETUP ${SHELL_FAMILY} PATH 
-                        ${G4RUN})
+  _g4tc_setenv_ifnotset_command(GEANT4_TC_G4WORKDIR_SETUP ${SHELL_FAMILY} G4WORKDIR ${G4WORKDIR_DEFAULT})
+  _g4tc_prepend_path(GEANT4_TC_G4WORKDIR_PATH_SETUP ${SHELL_FAMILY} PATH
+  \${G4WORKDIR}/bin/\${G4SYSTEM})
 
   # - Geant4 Library build setup
   # We prefer shared libs if these are built, otherwise fall back to static
@@ -537,10 +468,10 @@ endmacro()
 #
 macro(_g4tc_configure_build_tree_scripts SCRIPT_NAME)
   # Need to process for bourne and cshell families
-  foreach(_shell bourne;cshell;modulefile)    
-	# Generate the variables
+  foreach(_shell bourne;cshell)
+    # Generate the variables
     _g4tc_configure_tc_variables(${_shell} ${SCRIPT_NAME})
-     
+
     # Configure the file - goes straight into the binary dir
     configure_file(
       ${CMAKE_SOURCE_DIR}/cmake/Templates/geant4make-skeleton.in
@@ -550,6 +481,7 @@ macro(_g4tc_configure_build_tree_scripts SCRIPT_NAME)
   endforeach()
 endmacro()
 
+
 #-----------------------------------------------------------------------
 # macro _g4tc_configure_install_tree_script()
 #       Macro to configure toolchain compatibility scripts for the
@@ -557,7 +489,7 @@ endmacro()
 #
 macro(_g4tc_configure_install_tree_scripts CONFIGURE_DESTINATION SCRIPT_NAME INSTALL_DESTINATION)
   # Need to process for bourne and cshell families
-  foreach(_shell bourne;cshell;modulefile)
+  foreach(_shell bourne;cshell)
     # Generate the variables
     _g4tc_configure_tc_variables(${_shell} ${SCRIPT_NAME})
 
@@ -596,14 +528,11 @@ endmacro()
 #
 set(G4SYSTEM  "${GEANT4_SYSTEM}-${GEANT4_COMPILER}")
 set(G4INSTALL ${PROJECT_SOURCE_DIR})
-set(G4BUILD ${PROJECT_BINARY_DIR})
 set(G4INCLUDE ${PROJECT_SOURCE_DIR}/this_is_a_deliberate_dummy_path)
 set(G4BIN_DIR ${PROJECT_BINARY_DIR})
 set(G4LIB ${PROJECT_BINARY_DIR}/outputs/library)
-set(G4RUN ${PROJECT_BINARY_DIR}/outputs/runtime)
 set(G4LIB_DIR ${CMAKE_LIBRARY_OUTPUT_DIRECTORY})
 set(G4WORKDIR_DEFAULT "\$HOME/geant4_workdir")
-set(G4WORKDIR_MODULEFILE_DEFAULT "\$::env(HOME)/geant4_workdir")
 
 # - Data
 geant4_get_datasetnames(GEANT4_EXPORTED_DATASETS)
@@ -615,7 +544,8 @@ endforeach()
 
 
 # - Configure the shell scripts for the BUILD TREE
-_g4tc_configure_build_tree_scripts(geant4)
+_g4tc_configure_build_tree_scripts(geant4make)
+
 
 #-----------------------------------------------------------------------
 # Configure shell scripts for INSTALL TREE
@@ -684,6 +614,7 @@ _g4tc_configure_install_tree_scripts(
     geant4make
     ${CMAKE_INSTALL_DATAROOTDIR}/Geant4-${Geant4_VERSION}/geant4make
     )
+
 
 # - For install tree, we also need to install the config directory
 #   which contains all the old toolchain scripts, and to create a
