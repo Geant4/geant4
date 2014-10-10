@@ -323,6 +323,29 @@ G4double G4UCNMaterialPropertiesTable::
   return *(maxMicroRoughnessTable+E_pos+theta_i_pos*noE);
 }
 
+void G4UCNMaterialPropertiesTable::
+       SetMRMaxProbability(G4double theta_i, G4double Energy, G4double value)
+{
+  if (maxMicroRoughnessTable) {
+
+     if (theta_i<theta_i_min || theta_i>theta_i_max || 
+         Energy<Emin || Energy>Emax) {
+     } else {
+
+         // Determines the nearest cell in the lookup table which contains
+         // the probability
+ 
+         G4int theta_i_pos = G4int((theta_i-theta_i_min)/theta_i_step+0.5);
+         G4int E_pos = G4int((Energy-Emin)/E_step+0.5);
+
+         // lookup table is onedimensional (1 row), energy is in rows,
+         // theta_i in columns
+
+         *(maxMicroRoughnessTable+E_pos+theta_i_pos*noE) = value;
+     }
+  }
+}
+
 G4double G4UCNMaterialPropertiesTable::
                   GetMRMaxTransProbability(G4double theta_i, G4double Energy)
 {
@@ -344,6 +367,29 @@ G4double G4UCNMaterialPropertiesTable::
   // theta_i in columns
 
   return *(maxMicroRoughnessTransTable+E_pos+theta_i_pos*noE);
+}
+
+void G4UCNMaterialPropertiesTable::
+     SetMRMaxTransProbability(G4double theta_i, G4double Energy, G4double value)
+{
+  if (maxMicroRoughnessTransTable) {
+
+     if (theta_i<theta_i_min || theta_i>theta_i_max ||
+         Energy<Emin || Energy>Emax) {
+     } else {
+
+         // Determines the nearest cell in the lookup table which contains
+         // the probability
+
+         G4int theta_i_pos = G4int((theta_i-theta_i_min)/theta_i_step+0.5);
+         G4int E_pos = G4int((Energy-Emin)/E_step+0.5);
+ 
+         // lookup table is onedimensional (1 row), energy is in rows,
+         // theta_i in columns
+
+         *(maxMicroRoughnessTransTable+E_pos+theta_i_pos*noE) = value;
+     }
+  }
 }
 
 G4double G4UCNMaterialPropertiesTable::
@@ -391,7 +437,7 @@ G4bool G4UCNMaterialPropertiesTable::TransConditionsValid(G4double E,
   G4double k2   = 2*neutron_mass_c2*E      / hbarc_squared;
   G4double k_l2 = 2*neutron_mass_c2*VFermi / hbarc_squared;
 
-  if (E < VFermi) return false;
+  if (E*(cos(theta_i)*cos(theta_i)) < VFermi) return false;
 
   G4double kS2 = k_l2 - k2;
 

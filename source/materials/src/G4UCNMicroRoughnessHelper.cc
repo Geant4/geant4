@@ -295,7 +295,7 @@ G4double G4UCNMicroRoughnessHelper::IntIminus(G4double E, G4double fermipot,
   *max = 0.;
   G4double wkeit=0.;
 
-  if (E < fermipot) return wkeit;
+  if (E*costheta_i_squared < fermipot) return wkeit;
 
   //k_l^4/4
   G4double kl4d4=neutron_mass_c2/hbarc_squared*neutron_mass_c2/

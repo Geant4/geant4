@@ -77,6 +77,9 @@ public:
   // returns the maximum prob. value for a theta_i - E pair
   G4double GetMRMaxProbability (G4double, G4double);
 
+  // sets the maximum prob. value for a theta_i - E pair
+  void SetMRMaxProbability (G4double, G4double, G4double);
+
   // returns the mr-prob.
 
   // arguments:
@@ -93,6 +96,9 @@ public:
 
   // returns the maximum transmission prob. for a theta_i - E pair
   G4double GetMRMaxTransProbability (G4double, G4double);
+
+  // sets the maximum prob. value for a theta_i - E pair
+  void SetMRMaxTransProbability (G4double, G4double, G4double);
 
   // returns the mr-transmission-prob.
 
