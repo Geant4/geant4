@@ -110,14 +110,13 @@ protected:
   int buildFromFile();
 
 protected:
-
   ////////////////////////////////////////////////////////////////
   //Data Members
 
   G4String detectorName;                //Detector name
   G4String fileName;                    //File name from it will be read
-  static G4String pathName;             //Path in which to look for files
-  
+  G4String pathName;             //Path in which to look for files
+
   CCalDetectorTable theDetectorsInside; //A collection of CCalDetectors inside
 
   int constructFlag;                    //True if this detector is to be built

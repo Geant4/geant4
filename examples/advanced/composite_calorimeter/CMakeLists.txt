@@ -21,16 +21,7 @@ endif()
 #
 include(${Geant4_USE_FILE})
 
-find_package(AIDA QUIET)
-if(NOT AIDA_FOUND)
-  message(STATUS "G4 Examples: AIDA package not found. --> CompositeCalorimeter example disabled")  
-  return()
-else()
-  add_definitions(-DG4ANALYSIS_USE) 
-endif()
-
-
-include_directories(${PROJECT_SOURCE_DIR}/include ${AIDA_INCLUDE_DIR})
+include_directories(${PROJECT_SOURCE_DIR}/include)
 
 
 #----------------------------------------------------------------------------
@@ -44,7 +35,7 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(CompositeCalorimeter CompositeCalorimeter.cc ${sources} ${headers})
-target_link_libraries(CompositeCalorimeter ${Geant4_LIBRARIES} ${AIDA_LIBRARIES})
+target_link_libraries(CompositeCalorimeter ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
 # Copy all scripts to the build directory, i.e. the directory in which we
@@ -56,6 +47,17 @@ set(EXAMPLECOMPOSITECALORIMETER_SCRIPTS
   test.g4mac
   vis.mac
   icons.mac
+  dataconf/g4testbeamhcal96.conf
+  dataconf/testbeamhcal96.conf
+  datageom/tbhcal96.geom
+  datageom/tbhcal96hcal.geom
+  datageom/tbhcal96xtal.geom
+  dataglobal/fmap.tb96
+  dataglobal/material.cms
+  dataglobal/rotation.cms
+  datavis/tbhcal96hcal.vis
+  datavis/tbhcal96.vis
+  datavis/tbhcal96xtal.vis
   )
 
 foreach(_script ${EXAMPLECOMPOSITECALORIMETER_SCRIPTS})

@@ -39,9 +39,17 @@
 //Comment/Uncomment to hide/show some more debug information
 //#define ddebug
 
-G4String CCalDetector::pathName = getenv("CCAL_GEOMPATH");
 
-CCalDetector::CCalDetector(const G4String &name): detectorName(name) {
+
+CCalDetector::CCalDetector(const G4String &name): detectorName(name) 
+{
+  if (getenv("CCAL_GEOMPATH"))    
+      pathName = getenv("CCAL_GEOMPATH");
+  else
+    G4Exception("CCalDetector::CCalDetector","ccal001",
+		FatalException,
+		"Environment variable CCAL_GEOMPATH not defined");
+      
 #ifdef ddebug
     G4cout << "CCAL_GEOMPATH=" << pathName << G4endl;
 #endif

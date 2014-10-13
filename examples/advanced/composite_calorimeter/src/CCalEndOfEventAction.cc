@@ -48,9 +48,7 @@
 #include <vector>
 #include <map>
 
-#ifdef G4ANALYSIS_USE
 #include "CCalAnalysis.hh"
-#endif
 
 //#define debug
 //#define ddebug
@@ -212,7 +210,6 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
 
   delete[] edep;
 
-#ifdef G4ANALYSIS_USE
   G4ThreeVector pos = primaryGenerator->GetParticlePosition();
   float ener = primaryGenerator->GetParticleEnergy()/GeV;
   float x    = pos.x()/mm;
@@ -242,7 +239,6 @@ void CCalEndOfEventAction::EndOfEventAction(const G4Event* evt){
       }
     }
   }
-#endif
 }
 
 

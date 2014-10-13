@@ -9,6 +9,10 @@ $Id$
                       Example History file
                       ---------------------
 
+13.10.2014 - L.Pandola Tag ccal-V10-00-00
+- Migrated to G4analysis tools (get rid of the AIDA dependency)
+- Remove exit() and make consistent use of G4Exception()
+
 17.07.2013 - A.Dotti Tag (ccal-V09-06-01)
 - Fixed correct search of AIDA
 

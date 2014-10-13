@@ -68,10 +68,12 @@ void CCalVisualisable::setColor(visType v, double r, double g, double b){
 void CCalVisualisable::setPath() {
   pathName = getenv(visEnvName);
   if (!pathName) {
-    G4cerr << "ERROR: " << visEnvName << " environmental variable not set!" 
-	 << G4endl;
-    G4cerr << "       Set it and restart." << G4endl;
-    exit(-333);
+     G4ExceptionDescription ed;
+     ed << "ERROR: " << visEnvName << " environmental variable not set!" 
+	<< G4endl;
+     ed << "       Set it and restart." << G4endl;
+     G4Exception("CCalVisualisable::setPath()","ccal007",
+		 FatalException,ed);
   }
 }
 

@@ -36,9 +36,7 @@
 #include "G4VVisManager.hh"
 #include "G4ios.hh"
 
-#ifdef G4ANALYSIS_USE
 #include "CCalAnalysis.hh"
-#endif
 
 
 void CCalRunAction::BeginOfRunAction(const G4Run* aRun) {
@@ -51,10 +49,9 @@ void CCalRunAction::BeginOfRunAction(const G4Run* aRun) {
     UI->ApplyCommand("/vis/scene/notifyHandlers");
   } 
 
-#ifdef G4ANALYSIS_USE  
   CCalAnalysis* analysis = CCalAnalysis::getInstance();
   analysis->BeginOfRun(aRun->GetRunID());
-#endif
+
   
 }
 
@@ -68,10 +65,8 @@ void CCalRunAction::EndOfRunAction(const G4Run* aRun) {
      G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
   }
 
-#ifdef G4ANALYSIS_USE  
   CCalAnalysis* analysis = CCalAnalysis::getInstance();
   analysis->EndOfRun(aRun->GetRunID());
-#endif
 
 }   
 

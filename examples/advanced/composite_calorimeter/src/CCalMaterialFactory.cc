@@ -126,8 +126,10 @@ G4Material* CCalMaterialFactory::findMaterial(const G4String & mat) const {
       for(G4int i=0; i<CCalmat->NElements(); i++) {
 	G4Element* elem = findElement(CCalmat->Element(i));
 	if (!elem) {
-	  G4cerr << "       Could not build material " << mat << "." << G4endl;
-	  exit(-10);
+	  G4ExceptionDescription ed;
+	  ed << "   Could not build material " << mat << "." << G4endl;
+	  G4Exception("CCalMaterialFactory::findMaterial()","ccal001",
+		      FatalException,ed);
 	}
 	G4Mat->AddElement(elem, CCalmat->Weight(i));
       }
@@ -187,7 +189,10 @@ G4Material* CCalMaterialFactory::addMaterial(const G4String& name,
 
 void CCalMaterialFactory::readElements(const G4String& matfile) {
 
-  G4String path = getenv("CCAL_GLOBALPATH");
+  G4String path = "NULL";
+  if (getenv("CCAL_GLOBALPATH"))
+    path = getenv("CCAL_GLOBALPATH");
+
   G4cout << " ==> Opening file " << matfile << " to read elements..." << G4endl;
   std::ifstream is;
   bool ok = openGeomFile(is, path, matfile);
@@ -207,7 +212,10 @@ void CCalMaterialFactory::readElements(const G4String& matfile) {
 
 void CCalMaterialFactory::readMaterials(const G4String& matfile) {
 
-  G4String path = getenv("CCAL_GLOBALPATH");
+  G4String path = "NULL";
+  if (getenv("CCAL_GLOBALPATH"))
+    path = getenv("CCAL_GLOBALPATH");
+
   G4cout << " ==> Opening file " << matfile << " to read materials..." << G4endl;
   std::ifstream is;
   bool ok = openGeomFile(is, path, matfile);
