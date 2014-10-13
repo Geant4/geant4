@@ -4,6 +4,8 @@
  
  Data, input (kind of "macro") files, ROOT macros, and shell scripts
  are not in this directory, but in: verification/hadronic/test22 .
+ Exception: the shell script  make_test22_4CMake.sh  is useful
+ to build all the 47 test22_* executables, when CMake is used.
 
  Contents of  subdirectories "src" and "include" are based on test30.
 

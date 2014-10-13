@@ -32,6 +32,7 @@
 #include "G4ComponentAntiNuclNuclearXS.hh"   // Uzhi
 
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4ParticleChange.hh"
 #include "G4DynamicParticle.hh"
 #include "G4AntiProton.hh"

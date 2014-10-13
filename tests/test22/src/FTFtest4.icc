@@ -39,7 +39,7 @@
       if(part) energy=std::sqrt(sqr(Plab)+sqr(part->GetPDGMass()))-
                            part->GetPDGMass();
     } else {
-      part = (G4ParticleTable::GetParticleTable())->GetIon(ionZ, ionA, 0.);
+      part = (G4IonTable::GetIonTable())->GetIon(ionZ, ionA, 0.);
       if(part) energy=std::sqrt(sqr(Plab)+sqr(940.*MeV))-940.*MeV;
     }
     if (!part) {
