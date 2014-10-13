@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 October 2014:  M. Kelsey (phononExample-V10-00-03)
+- caustic.out-MT-*, timing.out-MT-*:  Remove platform-specific reference files.
+- caustic.out-MT, timing.out-MT:  Add new references for MT jobs; output is
+  different than sequential build.
+- CTestDefinitions.txt:  Use new platform-independent MT reference files.
+
 08 October 2014:  M. Kelsey (phononExample-V10-00-02)
 - XAluminumElectrodeHit:  G4Allocator must be thread local.
 

@@ -13,18 +13,18 @@ set(_causticRef ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/caust
 set(_timingRef ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/phonon/timing.out)
 
 #Check if specific OS references are available, if not use default
-if(EXISTS ${_causticRef}${_MTsuffix}-${CMAKE_SYSTEM_NAME})
-	  set(_causticRef ${_causticRef}${_MTsuffix}-${CMAKE_SYSTEM_NAME})
+if(EXISTS ${_causticRef}${_MTsuffix})
+   set(_causticRef ${_causticRef}${_MTsuffix})
 else()
-	message("-- G4 Examples: example-ext-exoticphysics-phonons, cannot find"
-		    " caustic.out${_MTsuffix}-${CMAKE_SYSTEM_NAME} references, using default caustic.out")
+   message("-- G4 Examples: example-ext-exoticphysics-phonons, cannot find"
+	   " caustic.out${_MTsuffix} references, using default caustic.out")
 endif()
 
-if(EXISTS ${_timingRef}${_MTsuffix}-${CMAKE_SYSTEM_NAME})
-	  set(_timingRef ${_timingRef}${_MTsuffix}-${CMAKE_SYSTEM_NAME})
+if(EXISTS ${_timingRef}${_MTsuffix})
+   set(_timingRef ${_timingRef}${_MTsuffix})
 else()
-	message("-- G4 Examples: example-ext-exoticphysics-phonons, cannot find"
-		    " timing.out${_MTsuffix}-${CMAKE_SYSTEM_NAME} references, using default timing.out")
+   message("-- G4 Examples: example-ext-exoticphysics-phonons, cannot find"
+	   " timing.out${_MTsuffix} references, using default timing.out")
 endif()
 
 
