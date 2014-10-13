@@ -96,8 +96,8 @@
 /////////////////////
 
 enum G4OpBoundaryProcessStatus {  Undefined,
-                                  FresnelRefraction, FresnelReflection,
-                                  TotalInternalReflection,
+                                  Transmission, FresnelRefraction,
+                                  FresnelReflection, TotalInternalReflection,
                                   LambertianReflection, LobeReflection,
                                   SpikeReflection, BackScattering,
                                   Absorption, Detection, NotAtBoundary,

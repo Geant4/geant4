@@ -16,6 +16,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+9th October 2014 P. Gumplinger (op-V10-00-05)
+- G4OpBoundaryProcess allow for a Transmittance, Reflectivity and
+  Absorption on dielectric_dielectric and dielectric_metal boundaries 
+
 10th June 2014 P. Gumplinger (op-V10-00-04)
 - G4OpWLS always rebuild theIntegralTable in BuildPhysicsTable method
 - G4OpRayleigh always rebuild thePhysicsTable in BuildPhysicsTable method
