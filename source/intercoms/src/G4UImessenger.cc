@@ -36,13 +36,13 @@
 #include <sstream>
 
 G4UImessenger::G4UImessenger()
-  : baseDir(NULL), baseDirName("")
+  : baseDir(NULL), baseDirName(""), commandsShouldBeInMaster(false)
 { 
 }
 
 G4UImessenger::G4UImessenger(const G4String& path, const G4String& dsc,
                              G4bool commandsToBeBroadcasted)
-  : baseDir(NULL), baseDirName("")
+  : baseDir(NULL), baseDirName(""), commandsShouldBeInMaster(false)
 {
   CreateDirectory(path, dsc, commandsToBeBroadcasted);
 }

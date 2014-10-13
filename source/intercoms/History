@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+8 October, 2014 M. Asai (intercoms-V10-00-12, -13)
+- Adding a mechanism to make UI commands defined in a worker thread
+to be registered to the G4UImanager of the master thread.
+
 23 September, 2014 G. Cosmo (intercoms-V10-00-11)
 - G4UImanager.hh : Renamed getThreadId() method to GetThreadId() and made
   post-const...

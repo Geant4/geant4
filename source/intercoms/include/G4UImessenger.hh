@@ -89,6 +89,11 @@ class G4UImessenger
       template <typename T> T* CreateCommand(const G4String& cname, 
                                              const G4String& dsc);
 
+  protected:
+      G4bool commandsShouldBeInMaster;
+  public:
+      G4bool CommandsShouldBeInMaster() const
+      { return commandsShouldBeInMaster; }
 };
 
 template <typename T>
