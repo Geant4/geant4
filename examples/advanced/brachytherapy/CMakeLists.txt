@@ -1,6 +1,7 @@
 #----------------------------------------------------------------------------
 # Setup the project
 cmake_minimum_required(VERSION 2.6 FATAL_ERROR)
+
 project(Brachy)
 
 #----------------------------------------------------------------------------
@@ -30,6 +31,12 @@ endif()
 #
 include_directories(${PROJECT_SOURCE_DIR}/include  
                      ${Geant4_INCLUDE_DIR} )
+
+if(WITH_ANALYSIS_USE)
+	EXECUTE_PROCESS(COMMAND root-config --cflags OUTPUT_VARIABLE ROOT_CXX_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
+	set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${ROOT_CXX_FLAGS}")
+endif(WITH_ANALYSIS_USE) 
+
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
@@ -37,6 +44,12 @@ file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 # Add the executable, and link it to the Geant4 libraries
 #
 add_executable(Brachy Brachy.cc ${sources} ${headers})
+
+if(WITH_ANALYSIS_USE)
+	EXECUTE_PROCESS(COMMAND root-config --libs OUTPUT_VARIABLE ROOT_LD_FLAGS OUTPUT_STRIP_TRAILING_WHITESPACE)
+	set(CMAKE_EXE_LINKER_FLAGS ${ROOT_LD_FLAGS})
+endif(WITH_ANALYSIS_USE)
+
 target_link_libraries(Brachy ${Geant4_LIBRARIES})
 
 #----------------------------------------------------------------------------
@@ -44,6 +57,7 @@ target_link_libraries(Brachy ${Geant4_LIBRARIES})
 # build basic_brachy. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
+
 set(brachy_SCRIPTS
    IridiumSourceMacro.mac IodiumSourceMacro.mac  LeipzigSourceMacro.mac VisualisationMacro.mac
    macro.C iridium_source_primary.mac iodine_source_primary.mac iridium_source_leipzig_primary.mac

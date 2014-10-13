@@ -40,12 +40,11 @@
 #include "G4VUserPrimaryGeneratorAction.hh"
 
 class G4GeneralParticleSource;
-class BrachyAnalysisManager;
 
 class BrachyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 {
  public:
-   BrachyPrimaryGeneratorAction(BrachyAnalysisManager*);
+   BrachyPrimaryGeneratorAction();
    ~BrachyPrimaryGeneratorAction();
 
  public:
@@ -53,6 +52,5 @@ class BrachyPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
 
  private:
   G4GeneralParticleSource* gun;
-  BrachyAnalysisManager* analysis;
 };
 #endif

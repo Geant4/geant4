@@ -35,103 +35,69 @@ Author: Susanna Guatelli
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
+BrachyAnalysisManager* BrachyAnalysisManager::instance = 0;
+
 BrachyAnalysisManager::BrachyAnalysisManager()
 {
-
-factoryOn = false;
-
-// Initialization
-// histograms
-for (G4int k=0; k<MaxHisto; k++) fHistId[k] = 0;
-
-// Initialization ntuple
-  for (G4int k=0; k<MaxNtCol; k++) {
-    fNtColId[k] = 0;
-  }  
-
-primaryParticleSpectrum = 0;
-
+#ifdef ANALYSIS_USE
+ theTFile = 0;
+ histo = 0;
+ ntuple = 0; 
+#endif
 }
 
 BrachyAnalysisManager::~BrachyAnalysisManager() 
 { 
+#ifdef G4ANALYSIS_USE
+ delete theTFile; theTFile = 0;
+ delete histo; histo = 0;
+ delete ntuple; ntuple = 0; 
+#endif
+
+}
+
+BrachyAnalysisManager* BrachyAnalysisManager::GetInstance()
+{
+	if (instance == 0) instance = new BrachyAnalysisManager;
+	return instance;
 }
 
 void BrachyAnalysisManager::book() 
 {  
-  G4AnalysisManager* AnalysisManager = G4AnalysisManager::Instance();
-  
-  AnalysisManager->SetVerboseLevel(2);
+#ifdef ANALYSIS_USE
+ delete theTFile;
+ theTFile = new TFile("brachytherapy.root", "RECREATE");
  
-  // Create a root file
-  G4String fileName = "brachytherapy.root";
+ histo = new TH1F("h10","energy spectrum", 800, 0., 800);
+ ntuple =  new TNtuple("ntuple","edep3D","xx:yy:zz:edep");
+#endif 
+ }
 
-  // Create directories  
-  AnalysisManager->SetHistoDirectoryName("brachy_histo");
-  AnalysisManager->SetNtupleDirectoryName("brachy_ntuple");
-  
-
-  G4bool fileOpen = AnalysisManager->OpenFile(fileName);
-  if (!fileOpen) {
-    G4cout << "\n---> HistoManager::book(): cannot open " 
-           << fileName[1] 
-           << G4endl;
-    return;
-  }
-
-//creating a 1D histograms
-  AnalysisManager->SetFirstHistoId(1);
-  
-  // Histogram containing the primary particle energy (MeV) 
-  fHistId[1]  = AnalysisManager -> CreateH1("1", 
-                                            "Initial energy", 
-                                            1000, 0., 1000.);
-
-  //Parameters of CreateH1: histoID, histo name, bins' number, xmin, xmax 
-  
-  primaryParticleSpectrum = AnalysisManager-> GetH1(fHistId[1]);
-  
-  //creating a ntuple, containg 3D energy deposition in the phantom
-  AnalysisManager -> CreateNtuple("1", "3Dedep");
-  fNtColId[0] = AnalysisManager->CreateNtupleDColumn("xx");
-  fNtColId[1] = AnalysisManager->CreateNtupleDColumn("yy");
-  fNtColId[2] = AnalysisManager->CreateNtupleDColumn("zz");
-  fNtColId[3] = AnalysisManager->CreateNtupleDColumn("edep");
-  AnalysisManager->FinishNtuple();
-  
- factoryOn = true;    
-}
-
-void BrachyAnalysisManager::FillPrimaryParticleHistogram(G4double primaryParticleEnergy)
-{
- // 1DHistogram: energy spectrum of primary particles  
-  primaryParticleSpectrum -> fill(primaryParticleEnergy);
-}
- 
+#ifdef ANALYSIS_USE
 void BrachyAnalysisManager::FillNtupleWithEnergyDeposition(G4double xx,
                                                      G4double yy, 
                                                      G4double zz,
                                                      G4double energyDep)
 {
-  G4AnalysisManager* AnalysisManager = G4AnalysisManager::Instance();
-  AnalysisManager->FillNtupleDColumn(fNtColId[0], xx);
-  AnalysisManager->FillNtupleDColumn(fNtColId[1], yy);
-  AnalysisManager->FillNtupleDColumn(fNtColId[2], zz);
-  AnalysisManager->FillNtupleDColumn(fNtColId[3], energyDep);
-  AnalysisManager->AddNtupleRow();  
+  ntuple -> Fill(xx, yy, zz, energyDep);
 }
+
+void BrachyAnalysisManager::FillPrimaryParticleHistogram(G4double primaryParticleEnergy)
+{
+ // 1DHistogram: energy spectrum of primary particles  
+  histo-> Fill(primaryParticleEnergy);
+}
+#endif 
 
 void BrachyAnalysisManager::save() 
 {  
- if (factoryOn) 
-   {
-    G4AnalysisManager* AnalysisManager = G4AnalysisManager::Instance();    
-    AnalysisManager->Write();
-    AnalysisManager->CloseFile();  
-      
-    delete G4AnalysisManager::Instance();
-    factoryOn = false;
-   }
+#ifdef ANALYSIS_USE
+ if (theTFile)
+    {
+	theTFile -> Write(); 
+	theTFile -> Close();
+    }
+#endif
 }
 
 

@@ -34,18 +34,13 @@
 
 #include "G4UserSteppingAction.hh"
 
-class BrachyAnalysisManager;
-
 class BrachySteppingAction: public G4UserSteppingAction
 {
 public:
 
-  BrachySteppingAction(BrachyAnalysisManager* analysis);
+  BrachySteppingAction();
   ~BrachySteppingAction();
   
   void UserSteppingAction(const G4Step*);
-  
-private:
-  BrachyAnalysisManager* analysis;
 };
 #endif

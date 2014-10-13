@@ -62,9 +62,11 @@ By default, the example has no analysis component.
 To compile and use the application with the analysis on, build the example with the following command:
 cmake -DWITH_ANALYSIS_USE=ON -DGeant4_DIR=/path/to/Geant4_installation /path/to/brachytherapy_example                                                     
           
+The installation of ROOT is required (http://root.cern.ch/drupal/).
+
 macro.C and plot_primary.C are provided to plot the results of the simulation, contained
-in the brachytherapy.root file. If the user intends to use this macro, ROOT must be installed 
-(http://root.cern.ch/drupal/).
+in the brachytherapy.root file. 
+
 ------------------------------------------------------------------------
 ----> 3.How to run the example.                                         
 

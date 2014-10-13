@@ -48,7 +48,10 @@
 #include "G4UIExecutive.hh"
 #include "BrachyFactoryIr.hh"
 #include "BrachyActionInitialization.hh"
+
+#ifdef ANALYSIS_USE
 #include "BrachyAnalysisManager.hh"
+#endif
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -89,8 +92,7 @@ int main(int argc ,char ** argv)
 
 
   // Overwrite the default output file with user-defined one 
-  BrachyAnalysisManager* analysis = new BrachyAnalysisManager();
-  scoringManager->SetScoreWriter(new BrachyUserScoreWriter(analysis));
+  scoringManager->SetScoreWriter(new BrachyUserScoreWriter());
 
   // Initialize the physics component
   pRunManager -> SetUserInitialization(new BrachyPhysicsList);
@@ -101,12 +103,13 @@ int main(int argc ,char ** argv)
 
 //  Analysis Manager
 #ifdef ANALYSIS_USE
-analysis -> book();
+  BrachyAnalysisManager* analysis = BrachyAnalysisManager::GetInstance();
+  analysis -> book();
 #endif
 
   // User action initialization  
 
-  BrachyActionInitialization* actions = new BrachyActionInitialization(analysis);
+  BrachyActionInitialization* actions = new BrachyActionInitialization();
   pRunManager->SetUserInitialization(actions);
  
   //Initialize G4 kernel
@@ -146,10 +149,8 @@ analysis -> book();
 #ifdef ANALYSIS_USE
 // Close the output ROOT file with the results
    analysis -> save(); 
-#endif
-
   delete analysis;
-
+#endif
 
   delete pRunManager;
 

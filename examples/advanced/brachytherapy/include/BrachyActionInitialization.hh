@@ -29,21 +29,20 @@
 #define BrachyActionInitialization_h 1
 
 #include "G4VUserActionInitialization.hh"
-#include "BrachyAnalysisManager.hh"
 
-class BrachyAnalysisManager;
+class G4GeneralParticleSource;
 
 class BrachyActionInitialization: public G4VUserActionInitialization
 {
   public:
-    BrachyActionInitialization(BrachyAnalysisManager* analysis);
+    BrachyActionInitialization();
     virtual ~BrachyActionInitialization();
 
     virtual void BuildForMaster() const;
     virtual void Build() const;
 
-private:
-    BrachyAnalysisManager* analysis;
+ private:
+ G4GeneralParticleSource* masterGPS;
 };
 
 #endif

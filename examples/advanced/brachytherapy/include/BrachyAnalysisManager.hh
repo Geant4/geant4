@@ -23,56 +23,59 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/*
+Author: Susanna Guatelli
+
+The class BrachyAnalysisManager creates and manages histograms and ntuples
+*/
 
 #ifndef BrachyAnalysisManager_HH
 #define BrachyAnalysisManager_HH
 
 #include "globals.hh"
-#include "g4root.hh"
 
-/*
-Author: Susanna Guatelli
+#ifdef ANALYSIS_USE
+#include "TROOT.h"
+#include "TFile.h"
+#include "TNtuple.h"
+#include "TH1F.h"
+#endif
 
-The class BrachyAnalysisManager creates and manages histograms and ntuples
-
-This class was developed following the extended Geant4 example analysis/AnaEx01
-
-1 ntuple is created.
-*/
-// Define the total number of histograms
-
-// Define the total number of columns in the ntuple
-const G4int MaxHisto = 1;
-const G4int MaxNtCol = 4;
 
 class BrachyAnalysisManager
 {
+private:
+  BrachyAnalysisManager();
 
 public:
-  BrachyAnalysisManager();
   ~BrachyAnalysisManager();
-  
+  static BrachyAnalysisManager* GetInstance();
 
   void book();
   // Create the output ROOT file 
   // Create the ntuple and histograms
 
+#ifdef ANALYSIS_USE
   void FillNtupleWithEnergyDeposition(G4double,G4double,G4double,G4double);
   // Method to fill the ntuple with the energy deposition, integrated over a run, in each voxel
   // of the scoring mesh
 
   void FillPrimaryParticleHistogram(G4double);
   // Energy spectrum of primary particles
+#endif
 
   void save();
  // This method if called at the end of the run to store the 
  // results in the ROOT file
 
 private:
-    G4bool factoryOn; 
-    G4int         fHistId[MaxHisto];
-    G4int         fNtColId[MaxNtCol];
-    G4AnaH1*      primaryParticleSpectrum;
+    static BrachyAnalysisManager* instance;
+ 
+#ifdef ANALYSIS_USE
+    TFile* theTFile;
+    TH1F* histo;
+    TNtuple* ntuple;
+#endif
 };
 #endif
 

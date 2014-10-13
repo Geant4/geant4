@@ -29,7 +29,6 @@
 
 #include "globals.hh"
 #include "G4VScoreWriter.hh"
-#include "BrachyAnalysisManager.hh"
 /*
 // Code developed by:
 // S.Guatelli, susanna@uow.edu.au
@@ -45,15 +44,12 @@ Original code from geant4/examples/extended/runAndEvent/RE03,
 class BrachyUserScoreWriter:public G4VScoreWriter
 {
 public:
-  BrachyUserScoreWriter(BrachyAnalysisManager* analysis);
+  BrachyUserScoreWriter();
   virtual ~BrachyUserScoreWriter();
   // store a quantity into a file
   void DumpQuantityToFile(const G4String & psName, 
                           const G4String & fileName, 
                           const G4String & option);
-
-private:
-  BrachyAnalysisManager* analysis;
 };
 #endif
 

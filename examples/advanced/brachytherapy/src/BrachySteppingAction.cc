@@ -41,11 +41,15 @@
 #include "G4TrackStatus.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4Gamma.hh"
+
+#ifdef ANALYSIS_USE
 #include "BrachyAnalysisManager.hh"
+#endif
+
 #include "BrachySteppingAction.hh"
 #include "G4SystemOfUnits.hh"
 
-BrachySteppingAction::BrachySteppingAction(BrachyAnalysisManager* analysisMan):analysis(analysisMan)
+BrachySteppingAction::BrachySteppingAction()
 { 
 
 }
@@ -84,6 +88,7 @@ void BrachySteppingAction::UserSteppingAction(const G4Step* aStep)
         if (process == "RadioactiveDecay")
          {
 #ifdef ANALYSIS_USE  
+          BrachyAnalysisManager* analysis = BrachyAnalysisManager::GetInstance();
           G4double energy = (*fSecondary)[lp1]  -> GetKineticEnergy();
           // Store the initial energy of particles in a 1D histogram
           analysis -> FillPrimaryParticleHistogram(energy/keV);
