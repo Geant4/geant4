@@ -18,6 +18,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 9, 2014, S. Guatelli tag human_phantom-V10-00-01
+- warning in running time deleted
+
 May 4, 2014, A. Dotti tag human_phantom-V10-00-00
 - migration to new GPS MT-ready
 

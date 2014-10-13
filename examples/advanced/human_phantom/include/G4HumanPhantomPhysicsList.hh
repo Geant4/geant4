@@ -28,11 +28,11 @@
 //
 // Authors: S. Guatelli, G. Guerrieri and M. G. Pia 
 //
-//    **********************************
-//    *                                *
+//    ******************************************
+//    *                                        *
 //    *      G4HumanPhantomPhysicsList.hh      *
-//    *                                *
-//    **********************************
+//    *                                        *
+//    ******************************************
 
 #ifndef G4HumanPhantomPhysicsList_h
 #define G4HumanPhantomPhysicsList_h 1
@@ -54,6 +54,7 @@ protected:
 
 private:
   G4VPhysicsConstructor* emPhysicsList;
+  G4VPhysicsConstructor* decPhysicsList;
 };
 #endif
 
