@@ -462,13 +462,10 @@ if (gdml_FOUND)
                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/ChargeExchangeMC
                  BUILD ChargeExchangeMC PROJECT ChargeExchangeMC)
 endif() 
-# CompositeCalorimeter depends on AIDA
-if (AIDA_FOUND)
- GEANT4_ADD_TEST(example-adv-composite_calorimeter-build
+GEANT4_ADD_TEST(example-adv-composite_calorimeter-build
                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/composite_calorimeter
                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/composite_calorimeter
                  BUILD CompositeCalorimeter PROJECT CompositeCalorimeter)
-endif()
 GEANT4_ADD_TEST(example-adv-dnageometry
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/dnageometry/dnageometry
                         ${CMAKE_SOURCE_DIR}/examples/advanced/dnageometry/dnageometry.mac
