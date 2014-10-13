@@ -12,6 +12,7 @@ endif()
 #---Need to see if ROOT is available to enable some of the tests
 find_package(ROOT QUIET)
 find_package(AIDA QUIET)
+find_package(gdml QUIET)
 
 #-------------------------------------------------------------------------------------------------
 #---Consistency-----------------------------------------------------------------------------------
@@ -454,14 +455,20 @@ GEANT4_ADD_TEST(example-adv-brachytherapy
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/brachytherapy
                 BUILD Brachy PROJECT Brachy
 		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-GEANT4_ADD_TEST(example-adv-ChargeExchangeMC-build
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/ChargeExchangeMC
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/ChargeExchangeMC
-                BUILD ChargeExchangeMC)
-GEANT4_ADD_TEST(example-adv-composite_calorimeter-build
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/composite_calorimeter
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/composite_calorimeter
-                BUILD CompositeCalorimeter)
+# ChargeExchangeMC has a mandatory GDML dependency
+if (gdml_FOUND)
+ GEANT4_ADD_TEST(example-adv-ChargeExchangeMC-build
+                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/ChargeExchangeMC
+                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/ChargeExchangeMC
+                 BUILD ChargeExchangeMC PROJECT ChargeExchangeMC)
+endif() 
+# CompositeCalorimeter depends on AIDA
+if (AIDA_FOUND)
+ GEANT4_ADD_TEST(example-adv-composite_calorimeter-build
+                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/composite_calorimeter
+                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/composite_calorimeter
+                 BUILD CompositeCalorimeter PROJECT CompositeCalorimeter)
+endif()
 GEANT4_ADD_TEST(example-adv-dnageometry
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/dnageometry/dnageometry
                         ${CMAKE_SOURCE_DIR}/examples/advanced/dnageometry/dnageometry.mac
@@ -582,10 +589,10 @@ GEANT4_ADD_TEST(example-adv-lArCal
 		ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 
 #-------------------------------------------------------------------------------------------------
-#---Simplified Calorimeter-----------------------------------------------------------------------------
+#---Simplified Calorimeter and other PhysicsChecks tests----------------------------------------------------
 #-------------------------------------------------------------------------------------------------
 include( ${CMAKE_SOURCE_DIR}/verification/SimplifiedCalorimeter/physval/CTestDefinitions.txt OPTIONAL)
-
+include( ${CMAKE_SOURCE_DIR}/examples/extended/eventgenerator/exgps/CTestsDefinition.txt OPTIONAL)
 
 #-------------------------------------------------------------------------------------------------
 #---CTests for MIC (Intel Xeon Phi)
