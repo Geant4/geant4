@@ -46,6 +46,7 @@
 //      implement new version for using STL map instaed of 
 //      RW PtrHashedDictionary           28 Oct., 99  H.Kurashige
 //      remove G4ShortLivedTable         25 July, 13 H.Kurashige
+//      remove FindIon/GetIon            25 Sep. 14 H.Kurashige
 // 
 
 #include "globals.hh"
@@ -468,83 +469,6 @@ G4ParticleDefinition* G4ParticleTable::Remove(G4ParticleDefinition* particle)
   return particle;
 }
 
-///////////////////////////////////////////////////////////////////////
-// NOTE ::
-//  Following FindIon/GetIon methods will be removed in future relases
-//  Use  FindIon/GetIon methods of G4IonTable instead
-//
-////////////////////
-G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int , G4int )
-{
-   G4Exception("G4ParticleTable::FindIon()","PART11117",JustWarning,
-   "This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().");
-   CheckReadiness();
-   if (Z<=0) return 0;
-   if (A<Z) return 0;
-   return fIonTable->GetIon(Z, A);
-}
-
-////////////////////
-G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4double E)
-{
-   G4Exception("G4ParticleTable::FindIon()","PART11117",JustWarning,
-   "This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().");
-   CheckReadiness();
-   if (Z<=0) return 0;
-   if (A<Z) return 0;
-   if (E<0.) return 0;
-   return fIonTable->GetIon(Z, A, E);
-}
-
-////////////////////
-G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4int L, G4double E)
-{
-   G4Exception("G4ParticleTable::GetIon()","PART11117",JustWarning,
-   "This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().");
-   CheckReadiness();
-   if (Z<=0) return 0;
-   if (A-L<Z) return 0;
-   if (L<0) return 0; 
-   if (E<0.) return 0;
-   return fIonTable->GetIon(Z, A, L, E);
-}
-
-G4ParticleDefinition* G4ParticleTable::GetIon(G4int Z, G4int A, G4int level)
-{
-   G4Exception("G4ParticleTable::GetIon()","PART11117",JustWarning,
-   "This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().");
-   CheckReadiness();
-   if (Z <= 0) return 0;
-   if (A < Z) return 0;
-   if (level < 0) return 0;
-   return fIonTable->GetIon(Z, A, level);
-}
-
-////////////////////
-G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4double E)
-{
-   G4Exception("G4ParticleTable::FindIon()","PART11117",JustWarning,
-   "This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().");
-   CheckReadiness();
-   if (Z<=0) return 0;
-   if (A<Z) return 0;
-   if (E<0.) return 0;
-   return fIonTable->FindIon(Z, A, E);
-}
-
-////////////////////
-G4ParticleDefinition* G4ParticleTable::FindIon(G4int Z, G4int A, G4int L, G4double E)
-{
-   G4Exception("G4ParticleTable::FindIon()","PART11117",JustWarning,
-   "This method is obsolete and will be dropped from v10.0. Use G4IonTable::FindIon().");
-   CheckReadiness();
-   if (Z<=0) return 0;
-   if (A-L<Z) return 0;
-   if (L<0) return 0;
-   if (E<0.) return 0;
-   return fIonTable->FindIon(Z, A, L, E);
-}
-/////////////////////////////////////////////////////////////////////
 
 ////////////////////
 G4ParticleDefinition* G4ParticleTable::GetParticle(G4int index) const

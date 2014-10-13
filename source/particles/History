@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 11 Oct. 2014 Hisaya Kurashige (particles-V10-00-23)
+- Remove FindIon/GetIon methods from G4ParticleTable
+
 - 23 Sep. 2014 Hisaya Kurashige (particles-V10-00-22)
 - Remove unused class of G4IsomerTable (G4NuclideTable is used)
 
