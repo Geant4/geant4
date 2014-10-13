@@ -35,7 +35,7 @@
 #include "g4root.hh"
 
 // Define the total number of columns in the ntuple
-const G4int MaxNtCol = 3;
+const G4int MaxNtCol = 5;
 
 class AnalysisManager
 { 

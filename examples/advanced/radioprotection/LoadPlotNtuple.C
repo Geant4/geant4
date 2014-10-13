@@ -4,9 +4,9 @@
 TFile f("radioprotection_NEW.root");
 TDirectory* dir = f.Get("radioprotection_ntuple"); 
 
-//TNtuple * ntuple1 = (TNtuple*)dir->Get("101");   
+TNtuple * ntuple1 = (TNtuple*)dir->Get("101");   
 TNtuple * ntuple2 = (TNtuple*)dir->Get("102"); 
-//TNtuple * ntuple3 = (TNtuple*)dir->Get("103"); 
+TNtuple * ntuple3 = (TNtuple*)dir->Get("103"); 
 
 int numberOfBinsX = 500;
 int numberOfBinsY = 500;
@@ -40,9 +40,9 @@ TH3F* edep3DDistribution = new TH3F("h3", "3Dedep; Edep (keV) ; A; Z",
 
 
 //Plot Primary Energy of Incident Particle
-//ntuple1.Draw("Ek>>h0","","");
+ntuple1.Draw("Ek>>h0","","");
 //Plot Energy Deposition within SV
-ntuple2.Draw("edep>>h1", "", "");
+//ntuple2.Draw("edep>>h1", "", "");
 //Plot 2D/3D Histogram of energy with particle type using A and Z
 //ntuple3.Draw("Z:edep>>h2", "", "");
 //ntuple3.Draw("Z:A:edep>>h3", "", "");

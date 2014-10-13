@@ -8,6 +8,13 @@ $Id$
 
                       Category History file
                       ---------------------
+
+13.10.2014 - S. Guatelli. tag radioprotection-V10-00-01
+             compilation warning with CLANG deleted (Run Action)
+
+09.10.2014 - S. Guatelli. tag radioprotection-V10-00-00
+             compilation errors and warning on cdash deleted
+
 08.11.2013 - S. Guatelli. tag radioprotection-V09-06-03
              MT mode + analysis working
 

@@ -37,16 +37,24 @@
 
 class RunAction : public G4UserRunAction
 {
-  public:
+public:
+#ifdef ANALYSIS_USE
     RunAction(AnalysisManager* analysis);
+#else
+    RunAction();
+#endif
+
    ~RunAction();
 
-  public:
+public:
     void BeginOfRunAction(const G4Run*);
     void EndOfRunAction(const G4Run*);
-   
+
 private:
-   AnalysisManager* analysisMan;
+#ifdef ANALYSIS_USE
+ AnalysisManager* analysisMan;
+#endif
+
 };
 #endif
 

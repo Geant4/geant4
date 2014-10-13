@@ -33,12 +33,17 @@
 #include "G4ios.hh"
 #include "G4Run.hh"
 
-
+#ifdef ANALYSIS_USE
 RunAction::RunAction(AnalysisManager* analysis)
-:analysisMan(analysis)
 { 
- 
+
+  analysisMan = analysis;
+
 }
+#else
+RunAction::RunAction()
+{ }
+#endif
 
 RunAction::~RunAction()
 {

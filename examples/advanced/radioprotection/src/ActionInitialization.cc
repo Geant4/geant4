@@ -33,16 +33,20 @@
 #include "G4RunManager.hh"
 #include "AnalysisManager.hh"
 #include "RunAction.hh"
+#include "G4GeneralParticleSource.hh"
 
 ActionInitialization::ActionInitialization(AnalysisManager* analysisMan):
 G4VUserActionInitialization()
 {
-analysis = analysisMan;
+ masterGPS = new G4GeneralParticleSource();
+ analysis = analysisMan;
 }
 
 
 ActionInitialization::~ActionInitialization()
-{}
+{
+ delete masterGPS;
+}
 
 void ActionInitialization::BuildForMaster() const
 {
@@ -60,7 +64,12 @@ void ActionInitialization::Build() const
 PrimaryGeneratorAction* primary = new PrimaryGeneratorAction(analysis);
 SetUserAction(primary); 
 
-RunAction* run = new RunAction(analysis);
+#ifdef ANALYSIS_USE
+ RunAction* run = new RunAction(analysis);
+#else
+ RunAction* run = new RunAction();
+#endif
+
 SetUserAction(run); 
 
 SteppingAction* stepping = new SteppingAction(analysis);
