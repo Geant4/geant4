@@ -9,6 +9,9 @@ $Id$
                       Category History file
                       ---------------------
 
+11.10.2014 - M. Asai (DMX-V10-00-07)
+	     Replace obsolete G4ParticleTable::GetIon() with G4IonTable::GetIon().
+
 06.08.2014 - A. Howard (DMX-V10-00-06)
 	     Removed scintillator energy deposits from optical photons (double
 	     counting!).

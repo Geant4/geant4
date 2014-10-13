@@ -54,6 +54,7 @@
 #include "G4Geantino.hh"
 #include "G4ThreeVector.hh"
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAString.hh"
@@ -299,7 +300,7 @@ void DMXParticleSourceMessenger::SetNewValue
       }
       
       G4ParticleDefinition* ion;
-      ion =  particleTable->GetIon(fAtomicNumber,fAtomicMass,fIonExciteEnergy);
+      ion =  G4IonTable::GetIonTable()->GetIon(fAtomicNumber,fAtomicMass,fIonExciteEnergy);
       if (ion==0) {
 	G4cout << "Ion with Z=" << fAtomicNumber;
 	G4cout << " A=" << fAtomicMass << "is not be defined" << G4endl;    
