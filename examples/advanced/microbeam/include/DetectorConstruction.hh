@@ -222,7 +222,8 @@ private:
   G4ChordFinder * fChordFinder ;
   
   // FROM NANOBEAM EX. TUNINGS
-  // G4PropagatorInField * fPropInField;
+  
+  G4PropagatorInField * fPropInField;
 
   //
   

@@ -739,7 +739,6 @@ void DetectorConstruction::ConstructSDandField()
 
   // FOLLOWING PARAMETERS TUNED FROM RAY-TRACING SIMULATIONS OF THE AIFIRA NANOBEAM LINE
   
-  /*  
   fFieldMgr->GetChordFinder()->SetDeltaChord(1e-9*m);
   fFieldMgr->SetDeltaIntersection(1e-9*m);
   fFieldMgr->SetDeltaOneStep(1e-9*m);     
@@ -748,6 +747,5 @@ void DetectorConstruction::ConstructSDandField()
     G4TransportationManager::GetTransportationManager()->GetPropagatorInField();
   fPropInField->SetMinimumEpsilonStep(1e-11);
   fPropInField->SetMaximumEpsilonStep(1e-10);
-  */
 
 }
