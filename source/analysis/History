@@ -17,6 +17,18 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 13, 2014 I. Hrivnacova (analysis-V10-00-32)
+- Fixed variable initialization in G4CsvAnalysisReader
+
+October 13, 2014 I. Hrivnacova (analysis-V10-00-31)
+- Do not include G4CsvRNtupleManager, which is not yet commited.
+
+October 07, 2014 I. Hrivnacova (analysis-V10-00-30)
+- Implemented G4CsvAnalysisReader: reading all histograms and profiles;
+  ntuples noy yet done
+- Updated to g4tools 1.15.2 (by G. Barrand)
+  Fixed reading csv histograms and profiles (rcsv_histo) 
+
 September 30, 2014 I. Hrivnacova (analysis-V10-00-29)
 - Updated to g4tools 1.15.1 (by G. Barrand)
   Fixed reading histograms with titles of more words;

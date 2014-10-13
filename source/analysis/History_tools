@@ -1,3 +1,6 @@
+ 1.15.2 :
+ - tools/rcsv_histo : correct m_bin_Sxw,Sx2w reading for [2,3] dimensions.
+
  1.15.1 :
  - test/cpp/wcsv_histo.cpp : write an histo with variable edge bins.
  - test/cpp/wcsv_histo.cpp : h1d : add a title with two words (to test the csv reading).

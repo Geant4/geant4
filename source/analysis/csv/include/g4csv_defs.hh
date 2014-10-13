@@ -37,6 +37,7 @@
 #include "tools/histo/p2d"
 #include "tools/wcsv_ntuple"
 #include "G4CsvAnalysisManager.hh"
+#include "G4CsvAnalysisReader.hh"
 
 namespace G4Csv {
 
@@ -74,6 +75,7 @@ namespace G4Csv {
 
   // Managers
   typedef G4CsvAnalysisManager G4AnalysisManager; 
+  typedef G4CsvAnalysisReader  G4AnalysisReader; 
 }  
 
 #endif

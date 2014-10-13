@@ -77,7 +77,7 @@ int main(int argc,char** argv) {
   h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
   h.add_annotation(tools::histo::key_axis_y_title(),"1.4*entries");
   if(verbose) {
-    std::cout << "h1d : rg"
+    std::cout << "h1d : " << h.title()
               << ", all entries " << h.all_entries()
               << ", entries " << h.entries()
               << ", mean " << h.mean() << ", rms " << h.rms()
@@ -89,7 +89,7 @@ int main(int argc,char** argv) {
  {tools::histo::p1d h("Profile",100,-5,5,-2,2);
   for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),rbw.shoot(),1);
   if(verbose) {
-    std::cout << "p1d : prof"
+    std::cout << "p1d : " << h.title()
               << ", all entries " << h.all_entries()
               << ", entries " << h.entries()
               << ", mean " << h.mean() << ", rms " << h.rms()
@@ -104,7 +104,7 @@ int main(int argc,char** argv) {
   h.add_annotation(tools::histo::key_axis_y_title(),"rand bw");
   h.add_annotation(tools::histo::key_axis_z_title(),"0.8*entries");
   if(verbose) {
-    std::cout << "h2d : rgbw"
+    std::cout << "h2d : " << h.title()
               << ", all entries " << h.all_entries()
               << ", entries " << h.entries()
               << ", mean_x " << h.mean_x() << ", rms_x " << h.rms_x()
@@ -117,7 +117,7 @@ int main(int argc,char** argv) {
  {tools::histo::p2d h("Profile2D",100,-5,5,100,-5,5,-2,2);
   for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),rg.shoot(),rbw.shoot(),1);
   if(verbose) {
-    std::cout << "p2d : prof2D"
+    std::cout << "p2d : " << h.title()
               << ", all entries " << h.all_entries()
               << ", entries " << h.entries()
               << ", mean_x " << h.mean_x() << ", rms_x " << h.rms_x()

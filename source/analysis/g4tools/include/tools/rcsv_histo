@@ -335,11 +335,11 @@ public:
         _bin_Sv2w.push_back(vals[ival++]);
       }
      {for(unsigned int iaxis=0;iaxis<hdata.m_dimension;iaxis++) {
-        bin_Sxw[iaxis] = vals[ival+iaxis*2+0];
-        bin_Sx2w[iaxis] = vals[ival+iaxis*2+1];
-        hdata.m_bin_Sxw.push_back(bin_Sxw);
-        hdata.m_bin_Sx2w.push_back(bin_Sx2w);
+        bin_Sxw[iaxis] = vals[ival++];
+        bin_Sx2w[iaxis] = vals[ival++];
       }}
+      hdata.m_bin_Sxw.push_back(bin_Sxw);
+      hdata.m_bin_Sx2w.push_back(bin_Sx2w);
       nline++;
     }
     if(nline!=hdata.m_bin_number) {
@@ -382,7 +382,14 @@ public:
       }
       tools::histo::h1d* h = new tools::histo::h1d("",10,0,1);
       h->copy_from_data(hdata);
-      if(a_verbose) h->hprint(a_out);
+      //if(a_verbose) h->hprint(a_out);
+      if(a_verbose) {
+        a_out << "h1d : " << h->title()
+              << ", all entries " << h->all_entries()
+              << ", entries " << h->entries()
+              << ", mean " << h->mean() << ", rms " << h->rms()
+              << std::endl;
+      }
       a_class = _class;
       a_obj = h;
 
@@ -395,7 +402,15 @@ public:
       }
       tools::histo::h2d* h = new tools::histo::h2d("",10,0,1,10,0,1);
       h->copy_from_data(hdata);
-      if(a_verbose) h->hprint(a_out);
+      //if(a_verbose) h->hprint(a_out);
+      if(a_verbose) {
+        a_out << "h2d : " << h->title()
+              << ", all entries " << h->all_entries()
+              << ", entries " << h->entries()
+              << ", mean_x " << h->mean_x() << ", rms_x " << h->rms_x()
+              << ", mean_y " << h->mean_y() << ", rms_y " << h->rms_y()
+              << std::endl;
+      }
       a_class = _class;
       a_obj = h;
 
@@ -408,7 +423,16 @@ public:
       }
       tools::histo::h3d* h = new tools::histo::h3d("",10,0,1,10,0,1,10,0,1);
       h->copy_from_data(hdata);
-      if(a_verbose) h->hprint(a_out);
+      //if(a_verbose) h->hprint(a_out);
+      if(a_verbose) {
+        a_out << "h3d : " << h->title()
+              << ", all entries " << h->all_entries()
+              << ", entries " << h->entries()
+              << ", mean_x " << h->mean_x() << ", rms_x " << h->rms_x()
+              << ", mean_y " << h->mean_y() << ", rms_y " << h->rms_y()
+              << ", mean_z " << h->mean_z() << ", rms_z " << h->rms_z()
+              << std::endl;
+      }
       a_class = _class;
       a_obj = h;
 
@@ -421,7 +445,14 @@ public:
       }
       tools::histo::p1d* h = new tools::histo::p1d("",10,0,1);
       h->copy_from_data(pdata);
-      if(a_verbose) h->hprint(a_out);
+      //if(a_verbose) h->hprint(a_out);
+      if(a_verbose) {
+        a_out << "p1d : " << h->title()
+              << ", all entries " << h->all_entries()
+              << ", entries " << h->entries()
+              << ", mean " << h->mean() << ", rms " << h->rms()
+              << std::endl;
+      }
       a_class = _class;
       a_obj = h;
 
@@ -434,7 +465,15 @@ public:
       }
       tools::histo::p2d* h = new tools::histo::p2d("",10,0,1,10,0,1);
       h->copy_from_data(pdata);
-      if(a_verbose) h->hprint(a_out);
+      //if(a_verbose) h->hprint(a_out);
+      if(a_verbose) {
+        a_out << "p2d : " << h->title()
+              << ", all entries " << h->all_entries()
+              << ", entries " << h->entries()
+              << ", mean_x " << h->mean_x() << ", rms_x " << h->rms_x()
+              << ", mean_y " << h->mean_y() << ", rms_y " << h->rms_y()
+              << std::endl;
+      }
       a_class = _class;
       a_obj = h;
 

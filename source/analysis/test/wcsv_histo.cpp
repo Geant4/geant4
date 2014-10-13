@@ -38,6 +38,8 @@ int wcsv_histo(int argc,char** argv) {
 #endif //TOOLS_MEM
   tools::args args(argc,argv);
 
+  bool verbose = args.is_arg("-verbose");
+
   //////////////////////////////////////////////////////////
   /// create some histos : /////////////////////////////////
   //////////////////////////////////////////////////////////
@@ -58,6 +60,13 @@ int wcsv_histo(int argc,char** argv) {
   h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
   h.add_annotation(tools::histo::key_axis_y_title(),"1.4*entries");
   h.add_annotation("empty","");
+  if(verbose) {
+    std::cout << "h1d : " << h.title()
+              << ", all entries " << h.all_entries()
+              << ", entries " << h.entries()
+              << ", mean " << h.mean() << ", rms " << h.rms()
+              << std::endl;
+  }
   // write :
   if(!tools::wcsv::hto(writer,h.s_cls(),h,sep,hc)) return EXIT_FAILURE;
   writer.close();}
@@ -70,6 +79,13 @@ int wcsv_histo(int argc,char** argv) {
   // plotting hints :
   h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
   h.add_annotation(tools::histo::key_axis_y_title(),"1.4*entries");
+  if(verbose) {
+    std::cout << "h1df : " << h.title()
+              << ", all entries " << h.all_entries()
+              << ", entries " << h.entries()
+              << ", mean " << h.mean() << ", rms " << h.rms()
+              << std::endl;
+  }
   // write :
   if(!tools::wcsv::hto(writer,h.s_cls(),h,sep,hc)) return EXIT_FAILURE;
   writer.close();}
@@ -78,6 +94,13 @@ int wcsv_histo(int argc,char** argv) {
   if(writer.fail()) {std::cout << "can't open out_p1d.csv." << std::endl;return EXIT_FAILURE;}
   tools::histo::p1d h("Profile",100,-5,5,-2,2);
   for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),rbw.shoot(),1);
+  if(verbose) {
+    std::cout << "p1d : " << h.title()
+              << ", all entries " << h.all_entries()
+              << ", entries " << h.entries()
+              << ", mean " << h.mean() << ", rms " << h.rms()
+              << std::endl;
+  }
   if(!tools::wcsv::pto(writer,h.s_cls(),h,sep,hc)) return EXIT_FAILURE;
   writer.close();}
 
@@ -89,6 +112,14 @@ int wcsv_histo(int argc,char** argv) {
   h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
   h.add_annotation(tools::histo::key_axis_y_title(),"rand bw");
   h.add_annotation(tools::histo::key_axis_z_title(),"0.8*entries");
+  if(verbose) {
+    std::cout << "h2d : " << h.title()
+              << ", all entries " << h.all_entries()
+              << ", entries " << h.entries()
+              << ", mean_x " << h.mean_x() << ", rms_x " << h.rms_x()
+              << ", mean_y " << h.mean_y() << ", rms_y " << h.rms_y()
+              << std::endl;
+  }
   if(!tools::wcsv::hto(writer,h.s_cls(),h,sep,hc)) return EXIT_FAILURE;
   writer.close();}
 
@@ -96,6 +127,14 @@ int wcsv_histo(int argc,char** argv) {
   if(writer.fail()) {std::cout << "can't open out_p2d.csv." << std::endl;return EXIT_FAILURE;}
   tools::histo::p2d h("Profile2D",100,-5,5,100,-5,5,-2,2);
   for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),rg.shoot(),rbw.shoot(),1);
+  if(verbose) {
+    std::cout << "p2d : " << h.title()
+              << ", all entries " << h.all_entries()
+              << ", entries " << h.entries()
+              << ", mean_x " << h.mean_x() << ", rms_x " << h.rms_x()
+              << ", mean_y " << h.mean_y() << ", rms_y " << h.rms_y()
+              << std::endl;
+  }
   if(!tools::wcsv::pto(writer,h.s_cls(),h,sep,hc)) return EXIT_FAILURE;
   writer.close();}
 
@@ -107,6 +146,15 @@ int wcsv_histo(int argc,char** argv) {
   h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
   h.add_annotation(tools::histo::key_axis_y_title(),"rand gauss");
   h.add_annotation(tools::histo::key_axis_z_title(),"rand bw");
+  if(verbose) {
+    std::cout << "h3d : " << h.title()
+              << ", all entries " << h.all_entries()
+              << ", entries " << h.entries()
+              << ", mean_x " << h.mean_x() << ", rms_x " << h.rms_x()
+              << ", mean_y " << h.mean_y() << ", rms_y " << h.rms_y()
+              << ", mean_z " << h.mean_z() << ", rms_z " << h.rms_z()
+              << std::endl;
+  }
   if(!tools::wcsv::hto(writer,h.s_cls(),h,sep,hc)) return EXIT_FAILURE;
   writer.close();}
 
@@ -120,6 +168,13 @@ int wcsv_histo(int argc,char** argv) {
   // plotting hints :
   h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
   h.add_annotation(tools::histo::key_axis_y_title(),"1.4*entries");
+  if(verbose) {
+    std::cout << "h1d : edges : " << h.title()
+              << ", all entries " << h.all_entries()
+              << ", entries " << h.entries()
+              << ", mean " << h.mean() << ", rms " << h.rms()
+              << std::endl;
+  }
   // write :
   if(!tools::wcsv::hto(writer,h.s_cls(),h,sep,hc)) return EXIT_FAILURE;
   writer.close();}

@@ -33,6 +33,7 @@ GEANT4_DEFINE_MODULE(NAME G4csv
     HEADERS
         G4CsvAnalysisManager.hh
         G4CsvAnalysisManager.icc
+        G4CsvAnalysisReader.hh
         G4CsvFileManager.hh
         G4CsvNtupleDescription.hh
         G4CsvNtupleManager.hh
@@ -40,6 +41,7 @@ GEANT4_DEFINE_MODULE(NAME G4csv
         g4csv.hh
     SOURCES
         G4CsvAnalysisManager.cc
+        G4CsvAnalysisReader.cc
         G4CsvFileManager.cc
         G4CsvNtupleManager.cc
     GRANULAR_DEPENDENCIES
