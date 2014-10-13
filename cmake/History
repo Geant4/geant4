@@ -31,6 +31,11 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+10th October 2014 - Andrea Dotti (cmake-V10-00-26)
+- Modules/FindROOT.cmake add ROOT_BIN_DIR variable to point to the
+  path of root executables. Needed to use hadd application for
+  physics testings (merging of output files for MT) 
+
 08th October 2014 - Ben Morgan (cmake-V10-00-25)
 - Templates/UseGeant4.cmake : BUGFIX #1663, Append existing CMake 
   CXX/EXE_LINKER flags to Geant4 flags when setting overall CMake flags.
