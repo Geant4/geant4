@@ -12,6 +12,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10/10/2014 A.Dotti (exgps-V10-00-04)
+- Migrated to new messenger strategy. Requires event-V10-00-14
+- Adding ctest example for PhysicsChecks group. Requires
+  ctest-V10-00-17, cmake-V10-00-26 and stattest-V10-00-V10-00-03
+  for test to be active. 
+
 4/06/2014 A. Dotti (exgps-V10-00-03)
 - Correct macros to use /run/printProgress instead of /event/printModulo
 
