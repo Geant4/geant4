@@ -70,25 +70,33 @@
 #include "G4Threading.hh"
 #include "G4AutoLock.hh"
 
+namespace {
+    G4Mutex messangerInit = G4MUTEX_INITIALIZER;
+}
+
 G4GeneralParticleSource::G4GeneralParticleSource() : multiple_vertex(false), flat_sampling(false),normalised(false),
     theMessenger(0)
 {
     GPSData = G4GeneralParticleSourceData::Instance();
     currentSource = GPSData->GetCurrentSource();
     currentSourceIdx = G4int(GPSData->GetSourceVectorSize() - 1);
-    //Messemgers are not needed for workers
-    // Normalizatio is needed only in master thread
-    if ( G4Threading::G4GetThreadId() < 0 ) {
-        theMessenger = new G4GeneralParticleSourceMessenger(this);
+
+    //Messenger is special, only a worker should instantiate it. Singleton pattern
+    theMessenger = G4GeneralParticleSourceMessenger::GetInstance(this);
+    //Some initialization should be done only once
+    G4AutoLock l(&messangerInit);
+    static G4bool onlyOnce = false;
+    if ( !onlyOnce ) {
         theMessenger->SetParticleGun(currentSource);
         IntensityNormalization();
+        onlyOnce = true;
     }
 
 }
 
 G4GeneralParticleSource::~G4GeneralParticleSource()
 {
-    delete theMessenger;
+    theMessenger->Destroy();
 }
 
 void G4GeneralParticleSource::AddaSource(G4double aV)

@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 10th, 2014 A.Dotti (event-V10-00-14)
+- New strategy for GPS messenger: it is instantiated w/ singleton
+  pattern. UI commands are created in a worker thread, but commands
+  are executed by master. Requires intercoms-V10-00-13
+
+October 10th, 2014 A.Dotti (event-V10-00-13)
+- Fix for unitialized array in G4SPSEneDistribution
+
 October 8th, 2014  A.Dotti (event-V10-00-11 and -12)
 - Correction in logic of normalization of sources for
   GPS.

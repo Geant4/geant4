@@ -76,12 +76,45 @@
 #include "G4SingleParticleSource.hh"
 #include "G4GeneralParticleSource.hh"
 
+#include "G4AutoLock.hh"
+
+namespace {
+    G4Mutex creationM = G4MUTEX_INITIALIZER;
+    G4GeneralParticleSourceMessenger* theInstance = 0;
+}
+
+G4GeneralParticleSourceMessenger* G4GeneralParticleSourceMessenger::GetInstance(G4GeneralParticleSource* ps)
+{
+    G4AutoLock l(&creationM);
+    if ( theInstance == 0 ) theInstance = new G4GeneralParticleSourceMessenger(ps);
+    return theInstance;
+}
+
+void G4GeneralParticleSourceMessenger::Destroy() {
+    G4AutoLock l(&creationM);
+    if ( theInstance != 0 ) {
+        delete theInstance;
+        theInstance = 0;
+    }
+}
 ///////////////////////////////////////////////////////////////////////////////
 //
 G4GeneralParticleSourceMessenger::G4GeneralParticleSourceMessenger
   (G4GeneralParticleSource *fPtclGun) 
     : fGPS(fPtclGun),fShootIon(false)
 {
+  //A.Dotti - 10th October 2014
+  //This messenger is special: it is instantiated in a user action but
+  //the UI commands it defines should be executed by the master thread.
+  //To achieve this behavior we set to true a base calss protected
+  //data member. Since it makes no sense to have more than one instance
+  //of the messenger we check that we actually have only one.
+  //Note that the logic of implementing, in a given worker thread only one
+  //messenger is deletefated to the creator
+  commandsShouldBeInMaster = true;
+
+  
+    
   particleTable = G4ParticleTable::GetParticleTable();
   histtype = "biasx";
 
@@ -952,7 +985,7 @@ G4GeneralParticleSourceMessenger::~G4GeneralParticleSourceMessenger()
   delete flatsamplingCmd;
 
   delete gpsDirectory;
-  
+  theInstance = 0;
 }
 
 void G4GeneralParticleSourceMessenger::SetNewValue(G4UIcommand *command, G4String newValues)
