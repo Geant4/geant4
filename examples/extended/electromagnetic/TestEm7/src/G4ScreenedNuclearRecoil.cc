@@ -95,6 +95,7 @@ const char* G4ScreenedCoulombCrossSectionInfo::CVSFileVers() { return
 
 #include "G4ParticleTypes.hh"
 #include "G4ParticleTable.hh"
+#include "G4IonTable.hh"
 #include "G4VParticleChange.hh"
 #include "G4ParticleChangeForLoss.hh"
 #include "G4DataVector.hh"
@@ -239,7 +240,7 @@ G4ScreenedCoulombCrossSection::SelectRandomUnweightedTarget(
         if (p != targetMap.end()) {
                 target=(*p).second;
         } else{
-                target=G4ParticleTable::GetParticleTable()->GetIon(Z, N, 0.0); 
+                target=G4IonTable::GetIonTable()->GetIon(Z, N, 0.0); 
                 targetMap[Z*1000+N]=target;
         }
         return target;

@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-10-14 M.Asai (testem7-V10-00-02)
+- Replace obsolete G4particleTable::getIon() with 
+G4IonTable::GetIon().
+
 11-06-14 V.Ivant (testem7-V10-00-01)
 - removed SetCuts method and corresponding UI commands,
   updated all macro; applied code guidlines, in particular,
