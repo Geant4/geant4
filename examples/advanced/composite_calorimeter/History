@@ -9,6 +9,11 @@ $Id$
                       Example History file
                       ---------------------
 
+14.10.2014 - L.Pandola Tag ccal-V10-00-01
+- Updated README
+- Get rid of compiler warnings which caused rejection of ccal-V10-00-00
+- Remove #ifdef debug in the analysis class
+
 13.10.2014 - L.Pandola Tag ccal-V10-00-00
 - Migrated to G4analysis tools (get rid of the AIDA dependency)
 - Remove exit() and make consistent use of G4Exception()

@@ -40,6 +40,15 @@ CCalAnalysis::CCalAnalysis() :
   energy(0), hcalE(0), ecalE(0), timeHist(0), lateralProfile(0),
   timeProfile(0)
 {
+
+#ifdef debug
+  fVerbosity = 1;
+#else
+  fVerbosity = 0;  
+#endif
+
+  numberOfTimeSlices = 200;
+
   // Create analysis manager
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   analysisManager->SetVerboseLevel(1);
@@ -99,7 +108,7 @@ CCalAnalysis::CCalAnalysis() :
 	ecalE = histoID;
     }
   // Total energy deposit
-  energy = analysisManager->CreateH1("h4000", "Total energy deposited   in GeV", 
+  energy = analysisManager->CreateH1("h4000", "Total energy deposited in GeV", 
 				     100, 0., 100.0);
 
   // Time slices	  
@@ -149,23 +158,21 @@ CCalAnalysis* CCalAnalysis::getInstance() {
 void CCalAnalysis::InsertEnergyHcal(float* v) 
 {
   G4AnalysisManager* man = G4AnalysisManager::Instance();
-
-#ifdef debug
-  double totalFilledEnergyHcal = 0.0;
-#endif      
+  G4double totalFilledEnergyHcal = 0.0;
   for (int i=0; i<28; i++) {
     G4double x = v[i];
     man->FillH1(hcalE+i,x);
-#ifdef debug
-      G4cout << "Fill Hcal histo " << i << " with " << x << G4endl;
-      totalFilledEnergyHcal += x;
-#endif      
+    if (fVerbosity)
+      {
+	G4cout << "Fill Hcal histo " << i << " with " << x << G4endl;
+	totalFilledEnergyHcal += x;
+      }
   }  
 
-#ifdef debug
-  G4cout << "CCalAnalysis::InsertEnergyHcal: Total filled Energy Hcal histo " 
-	 << totalFilledEnergyHcal << G4endl;
-#endif      
+  if (fVerbosity)
+    G4cout << 
+      "CCalAnalysis::InsertEnergyHcal: Total filled Energy Hcal histo " 
+	   << totalFilledEnergyHcal << G4endl;
 }
 
 
@@ -174,21 +181,21 @@ void CCalAnalysis::InsertEnergyEcal(float* v)
 {
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   
-#ifdef debug
-  double totalFilledEnergyEcal = 0.0;
-#endif      
-  for (int i=0; i<49; i++) {    
+  G4double totalFilledEnergyEcal = 0.0;
+
+  for (G4int i=0; i<49; i++) {    
     G4double x = v[i];
     man->FillH1(ecalE+i,x);
-#ifdef debug
-    G4cout << "Fill Ecal histo " << i << " with " << x << G4endl;
-    totalFilledEnergyEcal += x;
-#endif    
+    if (fVerbosity)
+      {
+	G4cout << "Fill Ecal histo " << i << " with " << x << G4endl;
+	totalFilledEnergyEcal += x;
+      }
   }
-#ifdef debug
-  G4cout << "CCalAnalysis::InsertEnergyEcal: Total filled Energy Ecal histo " 
-	 << totalFilledEnergyEcal << G4endl;
-#endif      
+  if (fVerbosity)
+    G4cout << 
+      "CCalAnalysis::InsertEnergyEcal: Total filled Energy Ecal histo " 
+	   << totalFilledEnergyEcal << G4endl;
 }
 
 
@@ -196,23 +203,20 @@ void CCalAnalysis::InsertEnergyEcal(float* v)
 void CCalAnalysis::InsertLateralProfile(float* v) 
 {
   G4AnalysisManager* man = G4AnalysisManager::Instance();
+  G4double totalFilledProfileHcal = 0.0;
 
-#ifdef debug
-  double totalFilledProfileHcal = 0.0;
-#endif
-  for (int i=0; i<70; i++) {    
+  for (G4int i=0; i<70; i++) {    
       G4double x = v[i];
       man->FillH1(lateralProfile+1,x);
-#ifdef debug
-      G4cout << "Fill Profile Hcal histo " << i << " with " << x << G4endl;
-      totalFilledProfileHcal += x;
-#endif
-    
+      if (fVerbosity)
+	{
+	  G4cout << "Fill Profile Hcal histo " << i << " with " << x << G4endl;
+	  totalFilledProfileHcal += x;
+	}    
   }
-#ifdef debug
-  G4cout << "CCalAnalysis::InsertLateralProfile: Total filled Profile Hcal"
-	 << " histo " << totalFilledProfileHcal << G4endl;
-#endif      
+  if (fVerbosity)
+    G4cout << "CCalAnalysis::InsertLateralProfile: Total filled Profile Hcal"
+	   << " histo " << totalFilledProfileHcal << G4endl;
 }
 
 
@@ -222,10 +226,9 @@ void CCalAnalysis::InsertEnergy(float v)
  
   G4double x = v;
   G4AnalysisManager::Instance()->FillH1(energy,x);
-#ifdef debug
+  if (fVerbosity)
     G4cout << "CCalAnalysis::InsertEnergy: Fill Total energy Hcal histo with " 
 	   << x << G4endl;
-#endif  
 }
 
 
@@ -233,30 +236,26 @@ void CCalAnalysis::InsertEnergy(float v)
 void CCalAnalysis::InsertTime(float* v) 
 {
   G4AnalysisManager* man = G4AnalysisManager::Instance();
+  
+  G4double totalFilledTimeProfile = 0.0;
+  for (G4int j=0; j<numberOfTimeSlices; j++) 
+    {
+      G4double x = v[j];
+      man->FillH1(timeHist+j,x);
+      if (fVerbosity)
+	{
+	  G4cout << "Fill Time slice histo " << j << " with " << x << G4endl;
+	  totalFilledTimeProfile += x;
+	}    
 
-#ifdef debug
-  double totalFilledTimeProfile = 0.0;
-#endif
-  for (int j=0; j<numberOfTimeSlices; j++) 
-{
-  G4double x = v[j];
-  man->FillH1(timeHist+j,x);
-#ifdef debug
-  G4cout << "Fill Time slice histo " << j << " with " << x << G4endl;
-  totalFilledTimeProfile += x;
-#endif
-
-  G4double t = j + 0.5;
-  man->FillH1(timeProfile+1,t,x);
-#ifdef debug
-  G4cout << "Fill Time profile histo 1 with " << t << " " << x << G4endl;
-#endif
-}
-
-#ifdef debug
-  G4cout << "CCalAnalysis::InsertTime: Total filled Time profile histo " 
-	 << totalFilledTimeProfile << G4endl;
-#endif      
+      G4double t = j + 0.5;
+      man->FillH1(timeProfile+1,t,x);
+      if (fVerbosity)
+	G4cout << "Fill Time profile histo 1 with " << t << " " << x << G4endl;
+    }
+  if (fVerbosity)
+    G4cout << "CCalAnalysis::InsertTime: Total filled Time profile histo " 
+	   << totalFilledTimeProfile << G4endl;
 }
 
 
@@ -266,12 +265,9 @@ void CCalAnalysis::InsertTimeProfile(int hit, double time, double edep)
   G4AnalysisManager* man = G4AnalysisManager::Instance();
   man->FillH1(timeProfile,time,edep);
 
-#ifdef debug
+  if (fVerbosity)
     G4cout << "CCalAnalysis:: Fill Time Profile with Hit " << hit
 	   << " Edeposit " << edep << " Gev at " << time << " ns" << G4endl;
-#else
-    hit=0;  // Just to avoid compiler warning!
-#endif
 }
 
 
@@ -302,9 +298,8 @@ void CCalAnalysis::setNtuple(float* HCalE, float* ECalE, float elab,
 
   man->AddNtupleRow();  
 
-#ifdef debug
+  if (fVerbosity)
     G4cout << "CCalAnalysis:: Fill Ntuple " << G4endl;
-#endif  
 }
 
 

@@ -57,6 +57,8 @@ private:
   G4double*  pos;              // Position
   G4double*  slope;            // Slope
   G4double*  intercept;        // Intercept
+  
+  G4int fVerbosity;
 };
 
 #endif

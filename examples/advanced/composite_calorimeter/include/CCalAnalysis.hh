@@ -32,11 +32,14 @@
 #ifndef CCalAnalysis_h 
 #define CCalAnalysis_h 1
 
-#include "G4ThreeVector.hh"
 #include "globals.hh"
-#include <vector>
 
+//! Defines the format which is used for the output file
+//! default is a ROOT file. Comment the g4root and un-comment
+//! one of the others, to change the output format
 #include "g4root.hh"
+//! Alternative here is a XML file
+//#include "g4xml.hh"
 
 class CCalAnalysis {
 public:
@@ -70,7 +73,10 @@ private:
 private:
   static CCalAnalysis* instance;
 
-  enum {numberOfTimeSlices = 200}; 
+  G4int fVerbosity;
+
+  G4int numberOfTimeSlices;
+  //enum {numberOfTimeSlices = 200}; 
 
   //
   //Id of the histograms (first of each block). Used internally for a 

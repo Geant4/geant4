@@ -40,22 +40,29 @@
 //Constructor and destructor:
 
 CCalMagneticField::CCalMagneticField(const G4String &filename) :
-  fval(0), pos(0), slope(0), intercept(0) {
+  fval(0), pos(0), slope(0), intercept(0) 
+{
+#ifdef debug
+  fVerbosity = 1;
+#else
+  fVerbosity = 0;
+#endif
 
   //Let's open the file
   G4cout << " ==> Opening file " << filename << " to read magnetic field..."
-       << G4endl;
+	 << G4endl;
   G4String pathName = getenv("CCAL_GLOBALPATH");
   std::ifstream is;
   bool ok = openGeomFile(is, pathName, filename);
-
+  
   if (ok) {
     findDO(is, G4String("FLDM"));
     is >> fval >> npts >> xoff;
-#ifdef debug
-    G4cout << "Field value " << fval << " # points " << npts << " offset in x "
-	 << xoff*mm << G4endl;
-#endif
+
+    if (fVerbosity)
+      G4cout << "Field value " << fval << " # points " << npts << 
+	" offset in x "
+	     << xoff*mm << G4endl;
 
     if (npts > 0) {
       pos       = new G4double[npts];
@@ -64,10 +71,9 @@ CCalMagneticField::CCalMagneticField(const G4String &filename) :
 
       for (G4int i = 0; i < npts; i++) {
 	is >> pos[i] >> slope[i] >> intercept[i];
-#ifdef debug
-	G4cout << tab << "Position " << i << " " << pos[i] << " Slope "
-	     << slope[i] << " Intercept " << intercept[i] << G4endl;
-#endif
+	if (fVerbosity)
+	  G4cout << tab << "Position " << i << " " << pos[i] << " Slope "
+		 << slope[i] << " Intercept " << intercept[i] << G4endl;
       }
     }
 
@@ -91,14 +97,15 @@ CCalMagneticField::~CCalMagneticField() {
 
 // Member functions
 
-void CCalMagneticField::MagneticField(const double x[3], double B[3]) const {
-
+void CCalMagneticField::MagneticField(const double x[3], double B[3]) const 
+{
   G4int i=0;
   for (i=0; i<2; i++) {
     B[i]   = 0*kilogauss;
   }
 
-  G4double m1=0, c1=0;
+  G4double m1=0;
+  G4double c1=0;
   G4double xnew = x[0]/mm + xoff;
   if (npts > 0) {
     for (i=0; i<npts; i++) {
@@ -113,11 +120,15 @@ void CCalMagneticField::MagneticField(const double x[3], double B[3]) const {
   if (scor > 1.) scor = 1.0;
 
   B[2] = scor*fval*kilogauss;
-#ifdef ddebug
-  G4cout << "Field at x: " << x[0]/mm << "mm (" << xnew << ") = " << B[2]/tesla
-	 << "T (m = " << m1 << ", c = " << c1 << ", scale = " << scor << ")"
-	 << G4endl;
-#endif
+  if (fVerbosity)
+    {
+
+      G4cout << "Field at x: " << x[0]/mm << "mm (" << xnew << ") = " << 
+	B[2]/tesla
+	     << "T (m = " << m1 << ", c = " << 
+	c1 << ", scale = " << scor << ")"
+	     << G4endl;
+    }
 }
 
 
