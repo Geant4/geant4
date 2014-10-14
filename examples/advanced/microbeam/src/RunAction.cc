@@ -143,7 +143,7 @@ void RunAction::BeginOfRunAction(const G4Run*)
   fNbOfPixels = fDetector->GetNbOfPixelsInPhantom();
   
   fMapVoxels = new G4ThreeVector[fNbOfPixels];
-  fDose3DDose = new G4float[fNbOfPixels];
+  fDose3DDose = new G4double[fNbOfPixels];
 
   for (G4int i=0; i<fNbOfPixels; i++)
   {

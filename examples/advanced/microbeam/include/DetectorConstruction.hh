@@ -64,11 +64,11 @@ public:
   
   void ConstructSDandField();
      
-  void SetMassNucleus(G4float mN){ fMassNucleus = mN;}
-  G4float GetMassNucleus(){return fMassNucleus;}          
+  void SetMassNucleus(G4double mN){ fMassNucleus = mN;}
+  G4double GetMassNucleus(){return fMassNucleus;}          
 
-  void SetMassCytoplasm(G4float mC){ fMassCytoplasm = mC;}
-  G4float GetMassCytoplasm(){return fMassCytoplasm;}          
+  void SetMassCytoplasm(G4double mC){ fMassCytoplasm = mC;}
+  G4double GetMassCytoplasm(){return fMassCytoplasm;}          
 
   void SetNbOfPixelsInPhantom(G4int nP){ fNbOfPixelsInPhantom = nP;}
   G4int GetNbOfPixelsInPhantom(){return fNbOfPixelsInPhantom;}          
@@ -92,8 +92,8 @@ public:
   
 private:
 
-  G4float fMassNucleus;
-  G4float fMassCytoplasm;
+  G4double fMassNucleus;
+  G4double fMassCytoplasm;
 
   G4double fDensityPhantom;
   G4double fDensityNucleus;

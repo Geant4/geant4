@@ -57,8 +57,8 @@ CellParameterisation::CellParameterisation
 
    G4int ncols,nlines;
    G4int shiftX, shiftY, shiftZ;
-   G4float x,y,z,mat,den,tmp,density;  
-   G4float denCyto1, denCyto2, denCyto3, denNucl1, denNucl2, denNucl3;
+   G4double x,y,z,mat,den,tmp,density;  
+   G4double denCyto1, denCyto2, denCyto3, denNucl1, denNucl2, denNucl3;
    
    density=0;
    denCyto1=0;
@@ -84,14 +84,14 @@ CellParameterisation::CellParameterisation
       {
         ncols = fscanf(fMap,"%i %i %i",&fPhantomTotalPixels,&fNucleusTotalPixels,&fCytoplasmTotalPixels);
 	fMapCell  = new G4ThreeVector[fPhantomTotalPixels];
-        fMaterial = new G4float[fPhantomTotalPixels];
-        fMass     = new G4float[fPhantomTotalPixels];
+        fMaterial = new G4double[fPhantomTotalPixels];
+        fMass     = new G4double[fPhantomTotalPixels];
         fTissueType = new G4int[fPhantomTotalPixels];
       }
       
       if (nlines == 1)
       { 
-        ncols = fscanf(fMap,"%f %f %f",&fDimCellBoxX,&fDimCellBoxY,&fDimCellBoxZ);
+        ncols = fscanf(fMap,"%lf %lf %lf",&fDimCellBoxX,&fDimCellBoxY,&fDimCellBoxZ);
         
 	fDimCellBoxX=fDimCellBoxX*micrometer;
         fDimCellBoxY=fDimCellBoxY*micrometer;
@@ -100,11 +100,11 @@ CellParameterisation::CellParameterisation
 
       if (nlines == 2) ncols = fscanf(fMap,"%i %i %i",&shiftX,&shiftY,&shiftZ); // VOXEL SHIFT IN Z ASSUMED TO BE NEGATIVE
       
-      if (nlines == 3) ncols = fscanf(fMap,"%f %f %f",&denCyto1, &denCyto2, &denCyto3);
+      if (nlines == 3) ncols = fscanf(fMap,"%lf %lf %lf",&denCyto1, &denCyto2, &denCyto3);
       
-      if (nlines == 4) ncols = fscanf(fMap,"%f %f %f",&denNucl1, &denNucl2, &denNucl3);
+      if (nlines == 4) ncols = fscanf(fMap,"%lf %lf %lf",&denNucl1, &denNucl2, &denNucl3);
       
-      if (nlines >  4) ncols = fscanf(fMap,"%f %f %f %f %f %f",&x,&y,&z,&mat,&den,&tmp);
+      if (nlines >  4) ncols = fscanf(fMap,"%lf %lf %lf %lf %lf %lf",&x,&y,&z,&mat,&den,&tmp);
       
       if (ncols  <  0) break;
 

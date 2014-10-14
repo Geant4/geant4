@@ -45,8 +45,7 @@ class CellParameterisation : public G4VPVParameterisation
   public:
   
     CellParameterisation
-    (/*G4int NoBoxes, G4float DimBoxX, G4float DimBoxY, G4float DimBoxZ,*/
-     G4Material* nucleus1, G4Material* cytoplasm1,
+    (G4Material* nucleus1, G4Material* cytoplasm1,
      G4Material* nucleus2, G4Material* cytoplasm2,
      G4Material* nucleus3, G4Material* cytoplasm3
      );
@@ -118,15 +117,15 @@ class CellParameterisation : public G4VPVParameterisation
    G4int   GetPhantomTotalPixels()   {return fPhantomTotalPixels;}  
    G4int   GetNucleusTotalPixels()   {return fNucleusTotalPixels;}  
    G4int   GetCytoplasmTotalPixels() {return fCytoplasmTotalPixels;}  
-   G4float GetPixelSizeX() {return fDimCellBoxX;}  
-   G4float GetPixelSizeY() {return fDimCellBoxY;}  
-   G4float GetPixelSizeZ() {return fDimCellBoxZ;}  
-   G4float GetCytoplasmMass() {return fCytoplasmMass;}  
-   G4float GetNucleusMass()   {return fNucleusMass;}  
+   G4double GetPixelSizeX() {return fDimCellBoxX;}  
+   G4double GetPixelSizeY() {return fDimCellBoxY;}  
+   G4double GetPixelSizeZ() {return fDimCellBoxZ;}  
+   G4double GetCytoplasmMass() {return fCytoplasmMass;}  
+   G4double GetNucleusMass()   {return fNucleusMass;}  
 
    G4ThreeVector GetVoxelThreeVector(G4int i) {return fMapCell[i];}
-   G4float GetMaterialVector(G4int i) {return fMaterial[i];}
-   G4float GetMassVector(G4int i) {return fMass[i];}
+   G4double GetMaterialVector(G4int i) {return fMaterial[i];}
+   G4double GetMassVector(G4int i) {return fMass[i];}
    G4int GetTissueType(G4int i) {return fTissueType[i];}
 
 //SINGLETON
@@ -154,19 +153,19 @@ class CellParameterisation : public G4VPVParameterisation
     G4VisAttributes * fCytoplasmAttributes3;
     
     G4ThreeVector * fMapCell ; // VOXEL COORDINATES
-    G4float * fMaterial      ; // MATERIAL 
-    G4float * fMass          ; // DENSITY REGION
+    G4double * fMaterial      ; // MATERIAL 
+    G4double * fMass          ; // DENSITY REGION
     G4int * fTissueType    ; // DENSITY REGION
 
     G4int fPhantomTotalPixels;
     G4int fNucleusTotalPixels;
     G4int fCytoplasmTotalPixels;
     
-    G4float fDimCellBoxX;
-    G4float fDimCellBoxY;
-    G4float fDimCellBoxZ;
-    G4float fNucleusMass;
-    G4float fCytoplasmMass;
+    G4double fDimCellBoxX;
+    G4double fDimCellBoxY;
+    G4double fDimCellBoxZ;
+    G4double fNucleusMass;
+    G4double fCytoplasmMass;
     
     static CellParameterisation* gInstance;
       
