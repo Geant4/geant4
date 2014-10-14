@@ -122,7 +122,7 @@ void EventAction::EndOfEventAction(const G4Event*)
     
   //write fired fibers on a file
   //
-  /// WriteFibers(evt); 
+  //// WriteFibers(evt); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
