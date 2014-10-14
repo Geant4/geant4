@@ -50,7 +50,8 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-PurgMagSteppingAction::PurgMagSteppingAction(PurgMagDetectorConstruction* det)
+PurgMagSteppingAction::PurgMagSteppingAction(const 
+					     PurgMagDetectorConstruction* det)
 :Detector(det)
 { }
 

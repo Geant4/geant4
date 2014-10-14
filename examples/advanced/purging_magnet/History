@@ -9,6 +9,12 @@ $Id$
                       Category History file
                       ---------------------
 
+14.10.2014 - Luciano Pandola (purmag-V10-00-00)
+- Added ActionInitialization class (first step for MT migration)
+- Add const qualifiers for methods of DetectorConstruction
+- Changed signature of SteppingAction, to get a const pointer to 
+ geometry
+
 30.07.2013 - Andrea Dotti   (purmag-V09-06-02)
 - Bug fixing for unused variables (compilation warning clang32)
 

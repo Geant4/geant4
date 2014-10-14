@@ -23,47 +23,34 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Code developed by:
-//  S.Larsson
+// $Id: PurgMagActionInitializer.hh 66241 2012-12-13 18:34:42Z gunter $
+// GEANT4 tag $Name:  $
 //
-//    ***********************************
-//    *                                 *
-//    *    PurgMagSteppingAction.hh     *
-//    *                                 *
-//    ***********************************
-//
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PurgMagSteppingAction_h
-#define PurgMagSteppingAction_h 1
+#ifndef PurgMagActionInitializer_h
+#define PurgMagActionInitializer_h 1
 
-#include "G4UserSteppingAction.hh"
-#include "G4VPVParameterisation.hh"
-#include "G4PVParameterised.hh"
-#include "G4Tubs.hh"
+#include "G4VUserActionInitialization.hh"
+#include "G4VSteppingVerbose.hh"
+#include "globals.hh"
 
-class PurgMagDetectorConstruction;
-class PurgMagAnalysisManager;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-class PurgMagSteppingAction : public G4UserSteppingAction
+class PurgMagActionInitializer : public G4VUserActionInitialization
 {
 public:
-  PurgMagSteppingAction(const PurgMagDetectorConstruction*);
-  ~PurgMagSteppingAction();
+
+  PurgMagActionInitializer();
+  ~PurgMagActionInitializer(){;};
   
-  void UserSteppingAction(const G4Step*);
-  
-private:
-  const PurgMagDetectorConstruction* Detector; 
-  
+  void Build() const;
+  void BuildForMaster() const;
+  G4VSteppingVerbose* InitializeSteppingVerbose() const;
 };
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 #endif
-
-
-
 
