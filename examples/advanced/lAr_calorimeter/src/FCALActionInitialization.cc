@@ -23,51 +23,52 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Author: Patricia Mendez (patricia.mendez@cern.ch)
+// $Id: FCALActionInitialization.cc 68058 2013-03-13 14:47:43Z gcosmo $
 //
-// History:
-// -----------
-//  14 Feb 2003  Patricia Mendez   Created
-//
-// -------------------------------------------------------------------
+/// \file FCALActionInitialization.cc
+/// \brief Implementation of the FCALActionInitialization class
 
+#include "FCALActionInitialization.hh"
+#include "FCALPrimaryGeneratorAction.hh"
+#include "FCALRunAction.hh"
+#include "FCALSteppingAction.hh"
+#include "FCALTBEventAction.hh"
+#include "FCALSteppingVerbose.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+FCALActionInitialization::FCALActionInitialization()
+ : G4VUserActionInitialization()
+{}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef FCALRunActionMessenger_h
-#define FCALRunActionMessenger_h 1
+FCALActionInitialization::~FCALActionInitialization()
+{}
 
-#include "globals.hh"
-#include "G4UImessenger.hh"
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-
-class FCALRunAction;
-class G4UIdirectory;
-class G4UIcmdWithAString;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-
-class G4UIcmdWithAString;
-class FCALRunActionMessenger: public G4UImessenger
-
+void FCALActionInitialization::BuildForMaster() const
 {
-public:
-  FCALRunActionMessenger(FCALRunActionManager* );
-  ~FCALRunActionMessenger();
-  
-  void SetNewValue(G4UIcommand*, G4String);
-  
-private:
+  SetUserAction(new FCALRunAction);
+}
 
-  //pointer to FCALAnalysisManager
-  FCALRunAction* fRunAction;
-  G4UIdirectory* FCALAnalysisDir;
-  G4UIcmdWithAString* ouputFileCommand;
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-};
-#endif
+void FCALActionInitialization::Build() const
+{
+  SetUserAction(new FCALPrimaryGeneratorAction);
+  SetUserAction(new FCALRunAction);
+    FCALSteppingAction* sa = new FCALSteppingAction;
+    SetUserAction(sa);
+    SetUserAction(new FCALTBEventAction(sa));
+  //SetUserAction(new FCALEventAction);
+}  
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+G4VSteppingVerbose* FCALActionInitialization::InitializeSteppingVerbose() const
+{
+    return new FCALSteppingVerbose;
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

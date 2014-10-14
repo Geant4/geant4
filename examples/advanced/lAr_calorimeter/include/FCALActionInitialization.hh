@@ -23,64 +23,32 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// Author: Patricia Mendez (patricia.mendez@cern.ch)
+// $Id: FCALActionInitialization.hh 68058 2013-03-13 14:47:43Z gcosmo $
 //
-// History:
-// -----------
-// 14 Feb 2003 Patricia Mendez     Created
-//--------------------------------------------------------------------------
+/// \file FCALActionInitialization.hh
+/// \brief Definition of the FCALActionInitialization class
 
-#ifdef G4ANALYSIS_USE
-#include "FCALRunAction.hh"
+#ifndef FCALActionInitialization_h
+#define FCALActionInitialization_h 1
 
-#include "FCALRunActionManager.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithAString.hh"
+#include "G4VUserActionInitialization.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+/// Action initialization class.
 
-FCALRunActionMessenger::FCALRunActionMessenger(FCALRunAction* theRunAction)
-  :fRunAction(theRunAction)
-
-{ 
-  FCALRunActionDir = new G4UIdirectory("/analysis/");
-  FCALRunActionDir->SetGuidance("analysis control.");
-
-  ouputFileCommand = new G4UIcmdWithAString("/analysis/outputFile",this);
-  ouputFileCommand->SetGuidance("specify the name of the output file");
-  ouputFileCommand->SetParameterName("choice",true);
-  ouputFileCommand->SetDefaultValue("fcal.root");
-  ouputFileCommand->AvailableForStates(G4State_Idle);
-  
-}
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-FCALRunActionMessenger::~FCALRunActionMessenger()
+class FCALActionInitialization : public G4VUserActionInitialization
 {
-  delete FCALRunActionDir; 
-}
+  public:
+    FCALActionInitialization();
+    virtual ~FCALActionInitialization();
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
 
-void FCALRunActionMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
-  if(command == ouputFileCommand)
-    fRunAction->SetOutputFileName(newValue);
-}
+};
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
 
-
-
-
-
-
-
-
-
-
-
-
-
+    

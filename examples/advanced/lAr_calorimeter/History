@@ -9,6 +9,9 @@ $Id$
                       Category History file
                       ---------------------
 
+13.10.2014 - A.Dotti Tag (lAr_calorimeter-V10-00-00)
+	     Migration to MT
+
 30.07.2013 - A.Dotti Tag (lAr_calorimeter-V09-06-05)
              Bug fixing for clang32 compilation warnings
 

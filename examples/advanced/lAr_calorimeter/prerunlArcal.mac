@@ -4,6 +4,7 @@
 # Sets some default verbose
 # and initializes the graphic.
 #
+/run/initialize
 /control/verbose 2
 /control/saveHistory
 /run/verbose 2

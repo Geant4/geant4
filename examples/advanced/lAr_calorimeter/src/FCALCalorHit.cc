@@ -32,7 +32,7 @@
 
 #include "FCALCalorHit.hh"
 
-G4Allocator<FCALCalorHit> FCALCalorHitAllocator;
+G4ThreadLocal G4Allocator<FCALCalorHit>* FCALCalorHitAllocator = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

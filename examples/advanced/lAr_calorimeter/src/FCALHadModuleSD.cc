@@ -31,7 +31,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include <iostream>
-#include <fstream>
+
 
 #include "FCALHadModuleSD.hh"
 
@@ -55,13 +55,22 @@
 FCALHadModuleSD::FCALHadModuleSD(G4String name) : G4VSensitiveDetector(name),
 						  InitF2(0)
 {
-   HadModule = new FCALHadModule(); 
+   HadModule = new FCALHadModule();
+    std::ostringstream os;
+    os << "HadModule_802_1mm.da";
+#ifdef G4MULTITHREADED
+    os<<"_Thread"<<G4Threading::G4GetThreadId();
+#endif
+    os <<".dat";
+    HadDatafile.open(os.str(),std::ios::out);
+    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FCALHadModuleSD::~FCALHadModuleSD()
 {
+      HadDatafile.close();
   delete HadModule;
 }
 
@@ -118,23 +127,11 @@ void FCALHadModuleSD::EndOfEvent(G4HCofThisEvent*)
 
   // Write data in File
   //-------------------
-  G4String FileName = "HadModule_802_1mm.dat";
-  std::ios::openmode iostemp;
-  if(InitF2 == 1) {
-    iostemp = std::ios::out;
-    InitF2++;
-  } else {
-    iostemp = std::ios::out|std::ios::app; // std::ios::app;  
-  };
-  
-  std::ofstream HadDatafile(FileName, iostemp);
-  // EmDatafile.precision(5);
-
   HadDatafile << NF2Tile << std::endl;
   for (i=1; i <= NF2Tile; i++) {
     HadDatafile << AddTileP[i] << " " << EvisTileP[i]/MeV << std::endl;
   }
-  HadDatafile.close();
+
 
 
 

@@ -53,21 +53,9 @@ public:
   void SetVerbosity(G4int ver){fVerbosity = ver;};
 
 private:
-  void ReadKinematicFromFile(G4double energy);
-  
   G4ParticleGun*  particleGun;	  //pointer a to G4 service class
   
-  G4DataVector* fX;
-  G4DataVector* fY;
-  G4DataVector* fZ;
-  G4DataVector* fCosX;
-  G4DataVector* fCosY;
-  G4DataVector* fCosZ;
-  
-  G4bool isFileRead;
   G4int fVerbosity;
-  
-  size_t nEvent;
   
 };
 

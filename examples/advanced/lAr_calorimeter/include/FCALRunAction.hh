@@ -52,10 +52,6 @@ public:
   
   void EndOfRunAction(const G4Run*);
   
-  void SetOutputFileName(G4String name){fOutputFileName = name;};
-
-private:
-  G4String fOutputFileName;
 };
 
 

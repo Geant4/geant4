@@ -1,6 +1,8 @@
 #
 # (can be run in batch, without graphic)
 #
+#/run/numberOfThreads 8
+/run/initialize
 /process/verbose  0
 /tracking/verbose 0
 /run/verbose      2

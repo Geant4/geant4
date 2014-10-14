@@ -64,7 +64,6 @@ class FCALTestbeamSetupSD : public G4VSensitiveDetector
   //      FCALTestbeamSetup* Detector;
   //   G4int*                   HitID;
   
-  G4int InitBeam;
 
 public:
   
@@ -74,7 +73,6 @@ public:
   G4int TailCatcherID;
   G4double ETailVis[8], ETailDep[7];
   
-
 };
 
 #endif

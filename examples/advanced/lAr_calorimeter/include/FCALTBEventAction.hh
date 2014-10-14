@@ -63,7 +63,8 @@ class FCALTBEventAction : public G4UserEventAction
     FCALTBEventActionMessenger*  eventMessenger;
 
   private:
-  G4double NTracksOutOfWorld, NSecondaries, Init1, Init2, Init3;
+  G4double NTracksOutOfWorld, NSecondaries;
+    
   };
 
 #endif    
