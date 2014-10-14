@@ -32,7 +32,7 @@
 /testem/det/setMat Vacuum
 /testem/det/update
 # very weak magnetic field, increase step length
-/testem/det/setField 0.5 gauss
+/globalField/setValue 0 0 0.5 gauss
 /testem/tracking/setMaxStepLength 100 km
 #
 /run/beamOn 1000

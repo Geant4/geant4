@@ -48,10 +48,8 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
  fTrackdir(0),
  fMaterCmd(0),
  fSizeCmd(0),
- fMagFieldCmd(0),
  fMaxStepCmd(0),
- fMaxStepLength(0),
- fUpdateCmd(0)
+ fMaxStepLength(0)
 {
   fTestemDir = new G4UIdirectory("/testem/");
   fTestemDir->SetGuidance(" detector control.");
@@ -71,19 +69,6 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
   fSizeCmd->SetUnitCategory("Length");
   fSizeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
-  fMagFieldCmd = new G4UIcmdWithADoubleAndUnit("/testem/det/setField",this);
-  fMagFieldCmd->SetGuidance("Define magnetic field.");
-  fMagFieldCmd->SetGuidance("Magnetic field will be in Z direction.");
-  fMagFieldCmd->SetParameterName("Bz",false);
-  fMagFieldCmd->SetUnitCategory("Magnetic flux density");
-  fMagFieldCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
-  fUpdateCmd = new G4UIcmdWithoutParameter("/testem/det/update",this);
-  fUpdateCmd->SetGuidance("Update calorimeter geometry.");
-  fUpdateCmd->SetGuidance("This command MUST be applied before \"beamOn\" ");
-  fUpdateCmd->SetGuidance("if you changed geometrical value(s).");
-  fUpdateCmd->AvailableForStates(G4State_Idle);
-
   fMaxStepCmd = new G4UIcmdWithADoubleAndUnit("/testem/tracking/stepMax",this);
   fMaxStepCmd->SetGuidance("Set max allowed step size");
   fMaxStepCmd->SetParameterName("Size",false);
@@ -93,7 +78,8 @@ DetectorMessenger::DetectorMessenger(DetectorConstruction * Det)
 
   fTrackdir = new G4UIdirectory("/testem/tracking/");
   fTrackdir->SetGuidance("step length");
-  fMaxStepLength= new G4UIcmdWithADoubleAndUnit("/testem/tracking/setMaxStepLength",this);
+  fMaxStepLength = 
+        new G4UIcmdWithADoubleAndUnit("/testem/tracking/setMaxStepLength",this);
   fMaxStepLength->SetGuidance("Set the maximum length of tracking step");
   fMaxStepLength->SetGuidance("when integrating magnetic field line.");
   fMaxStepLength->SetParameterName("Size",false);
@@ -108,8 +94,6 @@ DetectorMessenger::~DetectorMessenger()
 {
   delete fMaterCmd;
   delete fSizeCmd;
-  delete fMagFieldCmd;
-  delete fUpdateCmd;
   delete fMaxStepCmd;
   delete fMaxStepLength;
   delete fDetDir;
@@ -126,12 +110,6 @@ void DetectorMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 
   if( command == fSizeCmd )
    { fDetector->SetSize(fSizeCmd->GetNewDoubleValue(newValue));}
-
-  if( command == fMagFieldCmd )
-   { fDetector->SetMagField(fMagFieldCmd->GetNewDoubleValue(newValue));}
-
-  if( command == fUpdateCmd )
-   { fDetector->UpdateGeometry(); }
 
   if( command == fMaxStepCmd )
    { fDetector->SetMaxStepSize(fMaxStepCmd->GetNewDoubleValue(newValue));}

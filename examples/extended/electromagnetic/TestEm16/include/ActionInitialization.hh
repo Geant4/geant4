@@ -23,75 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm16/include/DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
+// $Id: ActionInitialization.hh 76346 2013-11-08 15:48:19Z maire $
 //
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.hh
+/// \brief Definition of the ActionInitialization class
 
-#ifndef DetectorConstruction_h
-#define DetectorConstruction_h 1
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
-#include "G4Cache.hh"
+#include "G4VUserActionInitialization.hh"
 
-class G4Material;
-class G4UserLimits;
-class DetectorMessenger;
-class G4GlobalMagFieldMessenger;
+class DetectorConstruction;
+class G4VSteppingVerbose;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// Action initialization class.
+///
 
-class DetectorConstruction : public G4VUserDetectorConstruction
+class ActionInitialization : public G4VUserActionInitialization
 {
   public:
+    ActionInitialization(DetectorConstruction*);
+    virtual ~ActionInitialization();
 
-    DetectorConstruction();
-   ~DetectorConstruction();
-
-  public:
-
-     virtual G4VPhysicalVolume* Construct();
-     virtual void ConstructSDandField();
-
-     void SetSize        (G4double);
-     void SetMaterial    (G4String);
-     void SetMaxStepSize (G4double);
-     void SetMaxStepLength (G4double);
-
-  public:
-
-     const
-     G4VPhysicalVolume* GetWorld()      {return fBox;};
-
-     G4double           GetSize()       {return fBoxSize;};
-     G4Material*        GetMaterial()   {return fMaterial;};
-
-     void               PrintParameters();
-
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
+    
+    virtual G4VSteppingVerbose* InitializeSteppingVerbose() const;
+    
   private:
+    DetectorConstruction* fDetector;
 
-     G4LogicalVolume*    fLBox;
-     G4VPhysicalVolume*  fBox;
-
-     G4double            fBoxSize;
-     G4Material*         fMaterial;
-     G4UserLimits*       fUserLimits;
-
-     DetectorMessenger*  fDetectorMessenger;
-     G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
-
-  private:
-
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();
 };
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 #endif
 
+    

@@ -65,12 +65,13 @@
 #include "G4StepLimiter.hh"
 
 #include "G4SystemOfUnits.hh"
+#include "G4AutoDelete.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
 : G4VUserPhysicsList(),
-  fMess(0),fSync(0)
+  fMess(0)
 {
   SetDefaultCutValue(1.*km);
   
@@ -83,7 +84,6 @@ PhysicsList::PhysicsList()
 PhysicsList::~PhysicsList()
 { 
   delete fMess;
-  delete fSync;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -153,11 +153,11 @@ void PhysicsList::ConstructProcess()
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 void PhysicsList::ConstructEM()
 {
   theParticleIterator->reset();
-  fSync = new G4SynchrotronRadiation();
+  G4SynchrotronRadiation* fSync = new G4SynchrotronRadiation();
+    G4AutoDelete::Register(fSync);
   while( (*theParticleIterator)() ){
     G4ParticleDefinition* particle = theParticleIterator->value();
     G4ProcessManager* pmanager = particle->GetProcessManager();

@@ -23,7 +23,7 @@
 /process/inactivate conv
 /process/inactivate Rayl
 #
-/testem/det/setField 1 tesla
+/globalField/setValue 0 0 1 tesla
 #
 /gun/particle e-
 /gun/energy 9.9994890009 GeV

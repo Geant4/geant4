@@ -23,75 +23,74 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm16/include/DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
+/// \file electromagnetic/TestEm11/src/Run.cc
+/// \brief Implementation of the Run class
 //
-// $Id$
-//
+// $Id: Run.cc 71376 2013-06-14 07:44:50Z maire $
+// 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef DetectorConstruction_h
-#define DetectorConstruction_h 1
+#include "Run.hh"
 
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
-#include "G4Cache.hh"
+#include "G4UnitsTable.hh"
+#include "G4SystemOfUnits.hh"
 
-class G4Material;
-class G4UserLimits;
-class DetectorMessenger;
-class G4GlobalMagFieldMessenger;
+#include <iomanip>
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction
+Run::Run()
+: G4Run(),
+  f_n_gam_sync(0),
+  f_e_gam_sync(0.),
+  f_e_gam_sync2(0.),
+  f_e_gam_sync_max(0.),
+  f_lam_gam_sync(0.)
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+Run::~Run()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::Merge(const G4Run* run)
 {
-  public:
+  const Run* localRun = static_cast<const Run*>(run);
+  
+  // accumulate sums
+  //
+  f_n_gam_sync += localRun->f_n_gam_sync;
+  f_e_gam_sync += localRun->f_e_gam_sync;
+  f_e_gam_sync2 += localRun->f_e_gam_sync2;
+  f_e_gam_sync_max += localRun->f_e_gam_sync_max;
+  f_lam_gam_sync += localRun->f_lam_gam_sync;
 
-    DetectorConstruction();
-   ~DetectorConstruction();
-
-  public:
-
-     virtual G4VPhysicalVolume* Construct();
-     virtual void ConstructSDandField();
-
-     void SetSize        (G4double);
-     void SetMaterial    (G4String);
-     void SetMaxStepSize (G4double);
-     void SetMaxStepLength (G4double);
-
-  public:
-
-     const
-     G4VPhysicalVolume* GetWorld()      {return fBox;};
-
-     G4double           GetSize()       {return fBoxSize;};
-     G4Material*        GetMaterial()   {return fMaterial;};
-
-     void               PrintParameters();
-
-  private:
-
-     G4LogicalVolume*    fLBox;
-     G4VPhysicalVolume*  fBox;
-
-     G4double            fBoxSize;
-     G4Material*         fMaterial;
-     G4UserLimits*       fUserLimits;
-
-     DetectorMessenger*  fDetectorMessenger;
-     G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
-
-  private:
-
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();
-};
+  G4Run::Merge(run); 
+} 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void Run::EndOfRun()
+{
+    if (f_n_gam_sync > 0)
+    {
+      G4double Emean = f_e_gam_sync/f_n_gam_sync;
+      G4double E_rms = std::sqrt(f_e_gam_sync2/f_n_gam_sync - Emean*Emean);
+      G4cout
+      << "Summary for synchrotron radiation :" << '\n' << std::setprecision(4)
+      << "  Number of photons = " << f_n_gam_sync << '\n'
+      << "  Emean             = " << Emean/keV << " +/- "
+      << E_rms/(keV * std::sqrt((G4double) f_n_gam_sync)) << " keV" << '\n'
+      << "  E_rms             = " << G4BestUnit(E_rms,"Energy") << '\n'
+      << "  Energy Max / Mean = " << f_e_gam_sync_max / Emean << '\n'
+      << "  MeanFreePath      = " << G4BestUnit(f_lam_gam_sync/f_n_gam_sync,
+                                            "Length")
+      << G4endl;
+    }
 
-#endif
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

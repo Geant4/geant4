@@ -23,75 +23,55 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm16/include/DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
+// $Id: ActionInitialization.cc 76346 2013-11-08 15:48:19Z maire $
 //
-// $Id$
-//
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+/// \file ActionInitialization.cc
+/// \brief Implementation of the ActionInitialization class
 
-#ifndef DetectorConstruction_h
-#define DetectorConstruction_h 1
-
-#include "G4VUserDetectorConstruction.hh"
-#include "globals.hh"
-#include "G4Cache.hh"
-
-class G4Material;
-class G4UserLimits;
-class DetectorMessenger;
-class G4GlobalMagFieldMessenger;
+#include "ActionInitialization.hh"
+#include "DetectorConstruction.hh"
+#include "PrimaryGeneratorAction.hh"
+#include "RunAction.hh"
+#include "SteppingAction.hh"
+#include "SteppingVerbose.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction
+ActionInitialization::ActionInitialization(DetectorConstruction* det)
+ : G4VUserActionInitialization(),fDetector(det)
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+ActionInitialization::~ActionInitialization()
+{ }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::BuildForMaster() const
 {
-  public:
-
-    DetectorConstruction();
-   ~DetectorConstruction();
-
-  public:
-
-     virtual G4VPhysicalVolume* Construct();
-     virtual void ConstructSDandField();
-
-     void SetSize        (G4double);
-     void SetMaterial    (G4String);
-     void SetMaxStepSize (G4double);
-     void SetMaxStepLength (G4double);
-
-  public:
-
-     const
-     G4VPhysicalVolume* GetWorld()      {return fBox;};
-
-     G4double           GetSize()       {return fBoxSize;};
-     G4Material*        GetMaterial()   {return fMaterial;};
-
-     void               PrintParameters();
-
-  private:
-
-     G4LogicalVolume*    fLBox;
-     G4VPhysicalVolume*  fBox;
-
-     G4double            fBoxSize;
-     G4Material*         fMaterial;
-     G4UserLimits*       fUserLimits;
-
-     DetectorMessenger*  fDetectorMessenger;
-     G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
-
-  private:
-
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();
-};
+ SetUserAction(new RunAction());
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void ActionInitialization::Build() const
+{
 
-#endif
+  PrimaryGeneratorAction* prim = new PrimaryGeneratorAction(fDetector);
+  SetUserAction(prim);
 
+  RunAction* run = new RunAction();
+  SetUserAction(run); 
+
+  SetUserAction(new SteppingAction());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4VSteppingVerbose* ActionInitialization::InitializeSteppingVerbose() const
+{
+  return new SteppingVerbose();
+}  
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

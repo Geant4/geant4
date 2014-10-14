@@ -63,10 +63,8 @@ private:
   G4UIdirectory*             fTrackdir;
   G4UIcmdWithAString*        fMaterCmd;
   G4UIcmdWithADoubleAndUnit* fSizeCmd;
-  G4UIcmdWithADoubleAndUnit* fMagFieldCmd;
   G4UIcmdWithADoubleAndUnit* fMaxStepCmd;
   G4UIcmdWithADoubleAndUnit* fMaxStepLength;
-  G4UIcmdWithoutParameter*   fUpdateCmd;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

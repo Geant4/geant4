@@ -66,7 +66,6 @@ private:
 
   G4bool                  fSRType;
   PhysicsListMessenger*   fMess;
-  G4SynchrotronRadiation* fSync;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

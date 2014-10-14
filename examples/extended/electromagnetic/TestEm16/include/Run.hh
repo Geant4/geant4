@@ -23,75 +23,42 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm16/include/DetectorConstruction.hh
-/// \brief Definition of the DetectorConstruction class
+/// \file electromagnetic/TestEm11/include/Run.hh
+/// \brief Definition of the Run class
 //
-// $Id$
+// $Id: Run.hh 71375 2013-06-14 07:39:33Z maire $
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef DetectorConstruction_h
-#define DetectorConstruction_h 1
+#ifndef Run_h
+#define Run_h 1
 
-#include "G4VUserDetectorConstruction.hh"
+#include "G4Run.hh"
 #include "globals.hh"
-#include "G4Cache.hh"
+#include <map>
 
-class G4Material;
-class G4UserLimits;
-class DetectorMessenger;
-class G4GlobalMagFieldMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class DetectorConstruction : public G4VUserDetectorConstruction
+class Run : public G4Run
 {
   public:
-
-    DetectorConstruction();
-   ~DetectorConstruction();
-
-  public:
-
-     virtual G4VPhysicalVolume* Construct();
-     virtual void ConstructSDandField();
-
-     void SetSize        (G4double);
-     void SetMaterial    (G4String);
-     void SetMaxStepSize (G4double);
-     void SetMaxStepLength (G4double);
+    Run();
+   ~Run();
 
   public:
+    virtual void Merge(const G4Run*);
+    void EndOfRun();
 
-     const
-     G4VPhysicalVolume* GetWorld()      {return fBox;};
-
-     G4double           GetSize()       {return fBoxSize;};
-     G4Material*        GetMaterial()   {return fMaterial;};
-
-     void               PrintParameters();
-
-  private:
-
-     G4LogicalVolume*    fLBox;
-     G4VPhysicalVolume*  fBox;
-
-     G4double            fBoxSize;
-     G4Material*         fMaterial;
-     G4UserLimits*       fUserLimits;
-
-     DetectorMessenger*  fDetectorMessenger;
-     G4Cache<G4GlobalMagFieldMessenger*> fFieldMessenger;
-
-  private:
-
-     void               DefineMaterials();
-     G4VPhysicalVolume* ConstructVolumes();
+  public:
+    G4int    f_n_gam_sync;     // nb of synchrotron radiation photons generated
+    G4double f_e_gam_sync, f_e_gam_sync2; // energy of synchrotron
+    G4double f_e_gam_sync_max;            // radiation photons generated
+    G4double f_lam_gam_sync;   // step length between synchr radiation photons
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 
 #endif
 
