@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-Oct-2014, Gabriele Cosmo             (phys-ctor-hinelastic-V10-00-05)
+- Added dependency to 'de_excitation/fission' module in GNUMakefile
+  and sources.cmake, now required by INCLXX.
+
 05-Aug-2014, Krzysztof Genser           (phys-ctor-hinelastic-V10-00-04)
 - Extended Shielding code to also include ShieldingM variant
 
