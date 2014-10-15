@@ -38,6 +38,7 @@
 // Class Description - End
 //
 // 02.05.14 V. Grichine - 1-st implementation
+// 10.10.14 V. Grichine - change to combine with low mass diffraction
 
 #ifndef G4hhElastic_h
 #define G4hhElastic_h 1
@@ -49,6 +50,7 @@
 #include "G4HadronElastic.hh"
 #include "G4HadProjectile.hh"
 #include "G4Nucleus.hh"
+#include "G4HadronNucleonXsc.hh"
 
 using namespace std;
 
@@ -64,6 +66,8 @@ public:
   // test constructor
   G4hhElastic( G4ParticleDefinition* target, G4ParticleDefinition* projectile, 
                     G4double plab );
+  // constructor used for low mass diffraction
+  G4hhElastic( G4ParticleDefinition* target, G4ParticleDefinition* projectile);
 
   virtual ~G4hhElastic();
 
@@ -89,6 +93,10 @@ private:
 
   G4ParticleDefinition* fTarget;
   G4ParticleDefinition* fProjectile;
+  G4ParticleDefinition* theProton;
+  G4ParticleDefinition* theNeutron;
+  G4ParticleDefinition* thePionPlus;
+  G4ParticleDefinition* thePionMinus;
 
 
   G4double lowEnergyRecoilLimit;  
@@ -180,6 +188,8 @@ public:  // Gauss model methods
   void SetEta(G4double E){fEta = E;};
   void SetCofF2(G4double f){fCofF2 = f;};
   void SetCofF3(G4double f){fCofF3 = f;};
+  G4double GetCofF2(){return fCofF2;};
+  G4double GetCofF3(){return fCofF3;};
 
   G4double GetRA(){ return fRA;};
   G4double GetRq(){ return fRq;};
@@ -234,6 +244,7 @@ private:
   G4double fOldTkin;
   static const G4double theNuclNuclData[18][6];
   static const G4double thePiKaNuclData[8][6];
+  G4HadronNucleonXsc* fHadrNuclXsc;
 };
 
 //////////////////////////////////////////////////////////////////////
@@ -305,8 +316,17 @@ inline void G4hhElastic::SetParameters()
 inline void G4hhElastic::SetParametersCMS(G4double plab)
 {
   G4int i;
-  G4double trMass = 900.*CLHEP::MeV;
+  G4double trMass = 900.*CLHEP::MeV, Tkin;
   G4double sl, sh, ds, rAl, rAh, drA, rBl, rBh, drB, bql, bqh, dbq, bQl, bQh, dbQ, cIl, cIh, dcI;
+
+  Tkin = std::sqrt(fMassProj*fMassProj + plab*plab) - fMassProj;
+
+  G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(fProjectile,
+                                              G4ParticleMomentum(0.,0.,1.),
+                                              Tkin);
+  fSigmaTot = fHadrNuclXsc->GetHadronNucleonXscNS( theDynamicParticle, fTarget );
+
+  delete theDynamicParticle;
 
   fSpp  = fMassProj*fMassProj + fMassTarg*fMassTarg + 2.*fMassTarg*std::sqrt(plab*plab + fMassProj*fMassProj);
   fPcms = std::sqrt( (fSpp - fMassSum2)*(fSpp - fMassDif2)/4./fSpp);

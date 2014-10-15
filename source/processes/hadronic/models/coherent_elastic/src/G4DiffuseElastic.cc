@@ -68,7 +68,7 @@
 G4DiffuseElastic::G4DiffuseElastic() 
   : G4HadronElastic("DiffuseElastic"), fParticle(0)
 {
-  SetMinEnergy( 0.01*GeV );
+  SetMinEnergy( 0.01*MeV ); // 0.01*GeV );
   SetMaxEnergy( 1.*TeV );
   verboseLevel = 0;
   lowEnergyRecoilLimit = 100.*keV;  

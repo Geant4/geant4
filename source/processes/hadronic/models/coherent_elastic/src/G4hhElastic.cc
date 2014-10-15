@@ -83,6 +83,7 @@ G4hhElastic::G4hhElastic()
 
   fTarget  = G4Proton::Proton();
   fProjectile  = 0;
+  fHadrNuclXsc = new G4HadronNucleonXsc();
 
   fEnergyBin = 200;
   fBinT  = 514; // 514; // 500; // 200;
@@ -116,6 +117,11 @@ G4hhElastic::G4hhElastic( G4ParticleDefinition* target, G4ParticleDefinition* pr
 
   fTarget      = target;
   fProjectile  = projectile;
+  fMassTarg   = fTarget->GetPDGMass();
+  fMassProj   = fProjectile->GetPDGMass();
+  fMassSum2   = (fMassTarg+fMassProj)*(fMassTarg+fMassProj);
+  fMassDif2   = (fMassTarg-fMassProj)*(fMassTarg-fMassProj);
+  fHadrNuclXsc = new G4HadronNucleonXsc();
 
   fEnergyBin = 200;
   fBinT      = 514; // 200;
@@ -127,6 +133,50 @@ G4hhElastic::G4hhElastic( G4ParticleDefinition* target, G4ParticleDefinition* pr
 
   SetParameters();
   SetParametersCMS( plab);
+}
+
+
+/////////////////////////////////////////////////////////////////////////
+//
+// constructor used for low mass diffraction
+
+
+G4hhElastic::G4hhElastic( G4ParticleDefinition* target, G4ParticleDefinition* projectile) 
+  : G4HadronElastic("HadrHadrElastic")
+{
+  SetMinEnergy( 1.*GeV );
+  SetMaxEnergy( 10000.*TeV );
+  verboseLevel = 0;
+  lowEnergyRecoilLimit = 100.*keV;  
+  lowEnergyLimitQ  = 0.0*GeV;  
+  lowEnergyLimitHE = 0.0*GeV;  
+  lowestEnergyLimit= 0.0*keV;  
+  plabLowLimit     = 20.0*MeV;
+
+  fTarget = target; // later vmg
+  fProjectile = projectile;
+  theProton   = G4Proton::Proton();
+  theNeutron  = G4Neutron::Neutron();
+  thePionPlus = G4PionPlus::PionPlus();
+  thePionMinus= G4PionMinus::PionMinus();
+
+  fTarget  = G4Proton::Proton(); // later vmg
+  // fProjectile  = 0;
+  fMassTarg   = fTarget->GetPDGMass();
+  fMassProj   = fProjectile->GetPDGMass();
+  fMassSum2   = (fMassTarg+fMassProj)*(fMassTarg+fMassProj);
+  fMassDif2   = (fMassTarg-fMassProj)*(fMassTarg-fMassProj);
+  fHadrNuclXsc = new G4HadronNucleonXsc();
+
+  fEnergyBin = 200;
+  fBinT  = 514; // 514; // 500; // 200;
+
+  fEnergyVector =  new G4PhysicsLogVector( theMinEnergy, theMaxEnergy, fEnergyBin );
+
+  fTableT = 0;
+  fOldTkin = 0.;
+
+  SetParameters();
 }
 
 
@@ -149,6 +199,7 @@ G4hhElastic::~G4hhElastic()
     *it = 0;
   }
   fTableT = 0;
+  if(fHadrNuclXsc) delete fHadrNuclXsc;
 }
 
 /////////////////////////////////////////////////////////////////////////////
@@ -197,17 +248,17 @@ void G4hhElastic::BuildTableT( G4ParticleDefinition* target, G4ParticleDefinitio
   fMassDif2   = (fMassTarg-fMassProj)*(fMassTarg-fMassProj);
 
   G4Integrator<G4hhElastic,G4double(G4hhElastic::*)(G4double)> integral;
-  G4HadronNucleonXsc*          hnXsc = new G4HadronNucleonXsc();
+  // G4HadronNucleonXsc*          hnXsc = new G4HadronNucleonXsc();
   fTableT = new G4PhysicsTable(fEnergyBin);
 
   for( iTkin = 0; iTkin < fEnergyBin; iTkin++)
   {
     Tkin  = fEnergyVector->GetLowEdgeEnergy(iTkin);
     plab  = std::sqrt( Tkin*( Tkin + 2*fMassProj ) );
-    G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(projectile,
-                                              G4ParticleMomentum(0.,0.,1.),
-                                              Tkin);
-    fSigmaTot = hnXsc->GetHadronNucleonXscNS( theDynamicParticle, target );
+    // G4DynamicParticle*  theDynamicParticle = new G4DynamicParticle(projectile,
+    //                                           G4ParticleMomentum(0.,0.,1.),
+    //                                           Tkin);
+    // fSigmaTot = fHadrNuclXsc->GetHadronNucleonXscNS( theDynamicParticle, target );
 
     SetParametersCMS( plab );
 
@@ -240,9 +291,9 @@ void G4hhElastic::BuildTableT( G4ParticleDefinition* target, G4ParticleDefinitio
     }
     // vectorT->PutValue( fBinT-1, dt*(fBinT-1), 0. ); // t2
     fTableT->insertAt( iTkin, vectorT );
-    delete theDynamicParticle;
+    // delete theDynamicParticle;
   }
-  delete hnXsc;
+  // delete hnXsc;
 
   return;
 }
