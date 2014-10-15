@@ -12,6 +12,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 October 2014, Jean-Christophe David (test69-V10-00-13)
+- Add PhysicsChecks label to test69-build.
+
 3 October 2014, Davide Mancusi (test69-V10-00-12)
 - Add some output statements about mean and RMS energies of outgoing particles.
 

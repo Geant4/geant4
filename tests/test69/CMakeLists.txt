@@ -62,7 +62,7 @@ set(TEST69_HP_PHYSLISTS
 #---Test definitions----------------------------------------------------------------------------------
 # We define a test69-build test that only builds the executable.
 # We also define a normal test for each existing .in file.
-GEANT4_ADD_TEST(test69-build BUILD test69 LABELS Nightly Continuous) 
+GEANT4_ADD_TEST(test69-build BUILD test69 LABELS Nightly Continuous PhysicsChecks) 
 
 foreach(_macro ${TEST69_MACROS})
   get_filename_component(_macro_name ${_macro} NAME_WE)
