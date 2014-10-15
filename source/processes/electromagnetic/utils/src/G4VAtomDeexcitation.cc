@@ -80,6 +80,7 @@ G4VAtomDeexcitation::G4VAtomDeexcitation(const G4String& modname,
   if(pixeIDg < 0) { pixeIDg = G4PhysicsModelCatalog::Register(gg); }
   if(pixeIDe < 0) { pixeIDe = G4PhysicsModelCatalog::Register(ee); }
   gamma = G4Gamma::Gamma();
+  theParameters = G4EmParameters::Instance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

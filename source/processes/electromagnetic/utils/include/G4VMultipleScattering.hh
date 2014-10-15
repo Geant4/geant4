@@ -79,6 +79,7 @@
 #include "G4Step.hh"
 #include "G4EmModelManager.hh"
 #include "G4VMscModel.hh"
+#include "G4EmParameters.hh"
 #include "G4MscStepLimitType.hh"
 
 class G4ParticleDefinition;
@@ -198,22 +199,22 @@ public:
   //------------------------------------------------------------------------
 
   void SetIonisation(G4VEnergyLossProcess*);
-
+  
   inline G4bool LateralDisplasmentFlag() const;
   inline void SetLateralDisplasmentFlag(G4bool val);
 
   inline G4double Skin() const;
   inline void SetSkin(G4double val);
-
+  
   inline G4double RangeFactor() const;
   inline void SetRangeFactor(G4double val);
-
+  
   inline G4double GeomFactor() const;
-  inline void SetGeomFactor(G4double val);
-
+  //inline void SetGeomFactor(G4double val);
+ 
   inline G4double PolarAngleLimit() const;
-  inline void SetPolarAngleLimit(G4double val);
-
+  // inline void SetPolarAngleLimit(G4double val);
+ 
   inline G4MscStepLimitType StepLimitType() const;
   inline void SetStepLimitType(G4MscStepLimitType val);
 
@@ -222,7 +223,7 @@ public:
 
   inline const G4ParticleDefinition* FirstParticle() const;
 
-  inline void SetDisplacementBeyondSafety(G4bool val);
+  //inline void SetDisplacementBeyondSafety(G4bool val);
 
   //------------------------------------------------------------------------
   // Run time methods
@@ -251,6 +252,7 @@ private:
 
   G4EmModelManager*           modelManager;
   G4LossTableManager*         emManager;
+  G4EmParameters*             theParameters;  
 
   // ======== Parameters of the class fixed at initialisation =======
 
@@ -264,14 +266,17 @@ private:
 
   G4MscStepLimitType          stepLimit;
 
-  G4double                    skin;
+  //  G4double                    skin;
   G4double                    facrange;
-  G4double                    facgeom;
-  G4double                    polarAngleLimit;
+  // G4double                    facgeom;
+  //G4double                    polarAngleLimit;
   G4double                    lowestKinEnergy;
 
-  G4bool                      latDisplasment;
+  G4bool                      latDisplacement;
   G4bool                      isIon;
+  G4bool                      actStepLimit;
+  G4bool                      actFacRange;
+  G4bool                      actLatDisp;
 
   // ======== Cashed values - may be state dependent ================
 
@@ -310,29 +315,29 @@ G4VMultipleScattering::SelectModel(G4double kinEnergy, size_t coupleIndex)
 
 inline  G4bool G4VMultipleScattering::LateralDisplasmentFlag() const
 {
-  return latDisplasment;
+  return latDisplacement;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline  void G4VMultipleScattering::SetLateralDisplasmentFlag(G4bool val)
 {
-  latDisplasment = val;
+  latDisplacement = val;
+  actLatDisp = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline  G4double G4VMultipleScattering::Skin() const
 {
-  return skin;
+  return theParameters->MscSkin();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline  void G4VMultipleScattering::SetSkin(G4double val)
 {
-  if(val < 1.0) { skin = 0.0; }
-  else          { skin = val; }
+  theParameters->SetMscSkin(val);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -346,39 +351,42 @@ inline  G4double G4VMultipleScattering::RangeFactor() const
 
 inline  void G4VMultipleScattering::SetRangeFactor(G4double val)
 {
-  if(val > 0.0) facrange = val;
+  if(val > 0.0 && val < 1.0) {
+    facrange = val;
+    actFacRange = true;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline  G4double G4VMultipleScattering::GeomFactor() const
 {
-  return facgeom;
+  return theParameters->MscGeomFactor();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+/*
 inline  void G4VMultipleScattering::SetGeomFactor(G4double val)
 {
   if(val > 0.0) facgeom = val;
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline  G4double G4VMultipleScattering::PolarAngleLimit() const
 {
-  return polarAngleLimit;
+  return theParameters->MscThetaLimit();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+/*
 inline  void G4VMultipleScattering::SetPolarAngleLimit(G4double val)
 {
   if(val < 0.0)            { polarAngleLimit = 0.0; }
   else if(val > CLHEP::pi) { polarAngleLimit = CLHEP::pi; }
   else                     { polarAngleLimit = val; }
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4MscStepLimitType G4VMultipleScattering::StepLimitType() const
@@ -391,7 +399,11 @@ inline G4MscStepLimitType G4VMultipleScattering::StepLimitType() const
 inline void G4VMultipleScattering::SetStepLimitType(G4MscStepLimitType val) 
 {
   stepLimit = val;
-  if(val == fMinimal) { facrange = 0.2; }
+  if(val == fMinimal) { 
+    facrange = 0.2; 
+    actFacRange = true;
+  }
+  actStepLimit = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -416,12 +428,12 @@ inline const G4ParticleDefinition* G4VMultipleScattering::FirstParticle() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+/*
 inline void G4VMultipleScattering::SetDisplacementBeyondSafety(G4bool val)
 {
   fDispBeyondSafety = val;
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif

@@ -660,8 +660,10 @@ void G4EmModelManager::FillLambdaVector(G4PhysicsVector* aVector,
            << " in " << couple->GetMaterial()->GetName()
 	   << " Emin(MeV)= " << aVector->Energy(0)
 	   << " Emax(MeV)= " << aVector->GetMaxEnergy()
+	   << " cut= " << cut
 	   << " Type " << tType   
 	   << " nmod= " << nmod
+           << " theSubCuts " << theSubCuts
            << G4endl;
   }
 

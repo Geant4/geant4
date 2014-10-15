@@ -75,7 +75,9 @@
 
 G4EnergyLossMessenger::G4EnergyLossMessenger()
 {
+  
   opt = 0;
+  /*
   eLossDirectory = new G4UIdirectory("/process/eLoss/");
   eLossDirectory->SetGuidance("Commands for EM processes.");
   mscDirectory = new G4UIdirectory("/process/msc/");
@@ -94,18 +96,18 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   EnlossFlucCmd->SetParameterName("choice",true);
   EnlossFlucCmd->SetDefaultValue(true);
   EnlossFlucCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  */
   SubSecCmd = new G4UIcmdWithABool("/process/eLoss/subsec",this);
   SubSecCmd->SetGuidance("Switch true/false the subcutoff generation.");
   SubSecCmd->SetParameterName("choice",true);
   SubSecCmd->SetDefaultValue(true);
   SubSecCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  /*
   MinSubSecCmd = new G4UIcmdWithADouble("/process/eLoss/minsubsec",this);
   MinSubSecCmd->SetGuidance("Set the ratio subcut/cut ");
   MinSubSecCmd->SetParameterName("rcmin",true);
   MinSubSecCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  */
   StepFuncCmd = new G4UIcommand("/process/eLoss/StepFunction",this);
   StepFuncCmd->SetGuidance("Set the energy loss step limitation parameters.");
   StepFuncCmd->SetGuidance("  dRoverR   : max Range variation per step");
@@ -130,7 +132,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
 
   StepFuncCmd->SetParameter(unitPrm);
   StepFuncCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  /*
   MinEnCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/minKinEnergy",this);
   MinEnCmd->SetGuidance("Set the min kinetic energy");
   MinEnCmd->SetParameterName("emin",true);
@@ -142,13 +144,13 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   MaxEnCmd->SetParameterName("emax",true);
   MaxEnCmd->SetUnitCategory("Energy");
   MaxEnCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  */
   IntegCmd = new G4UIcmdWithABool("/process/eLoss/integral",this);
   IntegCmd->SetGuidance("Switch true/false the integral option");
   IntegCmd->SetParameterName("integ",true);
   IntegCmd->SetDefaultValue(true);
   IntegCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  /*
   rangeCmd = new G4UIcmdWithABool("/process/eLoss/CSDARange",this);
   rangeCmd->SetGuidance("Switch true/false the CSDA range calculation");
   rangeCmd->SetParameterName("range",true);
@@ -190,7 +192,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   pixeCmd->SetParameterName("pixeFlag",true);
   pixeCmd->SetDefaultValue(false);
   pixeCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  */
   pixeXsCmd = new G4UIcmdWithAString("/process/em/pixeXSmodel",this);
   pixeXsCmd->SetGuidance("The name of PIXE cross section");
   pixeXsCmd->SetParameterName("pixeXS",true);
@@ -219,13 +221,13 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
 
   G4UIparameter* flagPIXE = new G4UIparameter("flagPIXE",'s',false);
   deexCmd->SetParameter(flagPIXE);
-
+  /*
   dcutCmd = new G4UIcmdWithABool("/process/em/deexcitationIgnoreCut",this);
   dcutCmd->SetGuidance("The flag to disable cuts in de-excitation module");
   dcutCmd->SetParameterName("deexcut",true);
   dcutCmd->SetDefaultValue(false);
   dcutCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+ 
   dedxCmd = new G4UIcmdWithAnInteger("/process/eLoss/binsDEDX",this);
   dedxCmd->SetGuidance("Set number of bins for DEDX tables");
   dedxCmd->SetParameterName("binsDEDX",true);
@@ -255,7 +257,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   ver2Cmd->SetParameterName("verb2",true);
   ver2Cmd->SetDefaultValue(1);
   ver2Cmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  
   lllCmd = new G4UIcmdWithADouble("/process/eLoss/linLossLimit",this);
   lllCmd->SetGuidance("Set linearLossLimit parameter");
   lllCmd->SetParameterName("linlim",true);
@@ -314,7 +316,7 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
   angCmd->SetParameterName("theta",true);
   angCmd->SetUnitCategory("Angle");
   angCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
-
+  */
   bfCmd = new G4UIcommand("/process/em/setBiasingFactor",this);
   bfCmd->SetGuidance("Set factor for the process cross section.");
   bfCmd->SetGuidance("  procName   : process name");
@@ -386,11 +388,14 @@ G4EnergyLossMessenger::G4EnergyLossMessenger()
 G4EnergyLossMessenger::~G4EnergyLossMessenger()
 {
   delete opt;
+  /*
   delete RndmStepCmd;
   delete EnlossFlucCmd;
+  */
   delete SubSecCmd;
-  delete MinSubSecCmd;
+  //delete MinSubSecCmd;
   delete StepFuncCmd;
+  /*
   delete dcutCmd;
   delete deexCmd;
   delete eLossDirectory;
@@ -398,7 +403,9 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete emDirectory;
   delete MinEnCmd;
   delete MaxEnCmd;
+  */
   delete IntegCmd;
+  /*
   delete rangeCmd;
   delete lpmCmd;
   delete splCmd;
@@ -413,8 +420,10 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete deCmd;
   delete auCmd;
   delete pixeCmd;
+  */
   delete pixeXsCmd;
   delete pixeeXsCmd;
+  /*
   delete frCmd;
   delete fgCmd;
   delete lllCmd;
@@ -423,6 +432,7 @@ G4EnergyLossMessenger::~G4EnergyLossMessenger()
   delete skinCmd;
   delete angCmd;
   delete mscfCmd;
+  */
   delete bfCmd;
   delete fiCmd;
   delete brCmd;
@@ -434,16 +444,21 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
 {
   if(!opt) { opt = new G4EmProcessOptions(); }
 
+  /*
   if (command == RndmStepCmd) {
     opt->SetRandomStep(RndmStepCmd->GetNewBoolValue(newValue));
   } else if (command == EnlossFlucCmd) {
     opt->SetLossFluctuations(EnlossFlucCmd->GetNewBoolValue(newValue));
   } else if(command == SubSecCmd) {
+  */
+  if(command == SubSecCmd) {
     opt->SetSubCutoff(SubSecCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+    /*
   } else if (command == MinSubSecCmd) {
     opt->SetMinSubRange(MinSubSecCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+    */
   } else if (command == StepFuncCmd) {
     G4double v1,v2;
     G4String unt;
@@ -461,6 +476,7 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
     if(s4 == "true") { b4 = true; }
     opt->SetDeexcitationActiveRegion(s1,b2,b3,b4);
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+    /*
   } else if (command == deCmd) {
     opt->SetFluo(deCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
@@ -470,6 +486,7 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   } else if (command == pixeCmd) {
     opt->SetPIXE(pixeCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+    */
   } else if (command == pixeXsCmd) {
     G4String name;
     if (newValue == "ecpssr_analytical") 
@@ -483,6 +500,7 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   } else if (command == pixeeXsCmd) {
     opt->SetPIXEElectronCrossSectionModel(newValue);
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+    /*
   } else if (command == dcutCmd) {
     opt->SetDeexcitationIgnoreCuts(dcutCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
@@ -511,8 +529,10 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   } else if (command == MaxEnCmd) { 
     opt->SetMaxEnergy(MaxEnCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+    */
   } else if (command == IntegCmd) {
     opt->SetIntegral(IntegCmd->GetNewBoolValue(newValue));
+    /*
   } else if (command == rangeCmd) {
     opt->SetBuildCSDARange(rangeCmd->GetNewBoolValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
@@ -561,6 +581,7 @@ void G4EnergyLossMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
   } else if (command == angCmd) { 
     opt->SetPolarAngleLimit(angCmd->GetNewDoubleValue(newValue));
     G4UImanager::GetUIpointer()->ApplyCommand("/run/physicsModified");
+    */
   } else if (command == bfCmd) {
     G4double v1(1.0);
     G4String s0(""),s1("");

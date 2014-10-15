@@ -84,20 +84,24 @@ public:   // with description
 private:
 
   G4EmProcessOptions*        opt;
-
+  /*
   G4UIdirectory*             eLossDirectory;
   G4UIdirectory*             mscDirectory;
   G4UIdirectory*             emDirectory;
   G4UIcmdWithABool*          RndmStepCmd;
   G4UIcmdWithABool*          EnlossFlucCmd;
+  */
   G4UIcmdWithABool*          SubSecCmd;
-  G4UIcmdWithADouble*        MinSubSecCmd;
+  //G4UIcmdWithADouble*        MinSubSecCmd;
   G4UIcommand*               StepFuncCmd;
   G4UIcommand*               deexCmd;
+  /*
   G4UIcmdWithAString*        mscCmd;
   G4UIcmdWithADoubleAndUnit* MinEnCmd;
   G4UIcmdWithADoubleAndUnit* MaxEnCmd;
+  */
   G4UIcmdWithABool*          IntegCmd;
+  /*
   G4UIcmdWithABool*          rangeCmd;
   G4UIcmdWithABool*          lpmCmd;
   G4UIcmdWithABool*          latCmd;
@@ -108,8 +112,10 @@ private:
   G4UIcmdWithABool*          auCmd;
   G4UIcmdWithABool*          pixeCmd;
   G4UIcmdWithABool*          dcutCmd;
+  */
   G4UIcmdWithAString*        pixeXsCmd;
   G4UIcmdWithAString*        pixeeXsCmd;
+  /*
   G4UIcmdWithAnInteger*      verCmd;
   G4UIcmdWithAnInteger*      ver1Cmd;
   G4UIcmdWithAnInteger*      ver2Cmd;
@@ -122,6 +128,7 @@ private:
   G4UIcmdWithADouble*        fgCmd;
   G4UIcmdWithADouble*        mscfCmd;
   G4UIcmdWithADoubleAndUnit* angCmd;
+  */
   G4UIcommand*               bfCmd;
   G4UIcommand*               fiCmd;
   G4UIcommand*               brCmd;

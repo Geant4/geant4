@@ -23,13 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4EmManagerMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
+// $Id: G4EmParametersMessenger.hh 66241 2012-12-13 18:34:42Z gunter $
 //
 // -------------------------------------------------------------------
 //
 // GEANT4 Class file
 //
-// File name:     G4EmManagerMessenger
+// File name:     G4EmParametersMessenger
 //
 // Author:        Vladimir Ivanchenko created from G4EnergyLossMessenger
 //
@@ -48,8 +48,8 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#ifndef G4EmManagerMessenger_h
-#define G4EmManagerMessenger_h 1
+#ifndef G4EmParametersMessenger_h
+#define G4EmParametersMessenger_h 1
 
 #include "globals.hh"
 #include "G4UImessenger.hh"
@@ -61,64 +61,62 @@ class G4UIcmdWithAnInteger;
 class G4UIcmdWithADouble;
 class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAString;
-class G4EmManager;
+class G4EmParameters;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class G4EmManagerMessenger: public G4UImessenger
+class G4EmParametersMessenger: public G4UImessenger
 {
 public:   // with description
   
-  G4EmManagerMessenger(G4EmManager*);
-  virtual ~G4EmManagerMessenger();
+  G4EmParametersMessenger(G4EmParameters*);
+  virtual ~G4EmParametersMessenger();
 
   virtual void SetNewValue(G4UIcommand*, G4String);
 
 private:
 
-  G4EmManager*               theManager;
+  G4EmParameters*            theParameters;
 
   G4UIdirectory*             eLossDirectory;
   G4UIdirectory*             mscDirectory;
   G4UIdirectory*             emDirectory;
-  G4UIcmdWithABool*          RndmStepCmd;
-  G4UIcmdWithABool*          EnlossFlucCmd;
-  G4UIcmdWithABool*          SubSecCmd;
-  G4UIcmdWithADouble*        MinSubSecCmd;
-  G4UIcommand*               StepFuncCmd;
-  G4UIcmdWithADoubleAndUnit* MinEnCmd;
-  G4UIcmdWithADoubleAndUnit* MaxEnCmd;
-  G4UIcmdWithABool*          IntegCmd;
+
+  G4UIcmdWithABool*          flucCmd;
   G4UIcmdWithABool*          rangeCmd;
   G4UIcmdWithABool*          lpmCmd;
   G4UIcmdWithABool*          splCmd;
-  /*
-  G4UIcommand*               deexCmd;
+  G4UIcmdWithABool*          rsCmd;
   G4UIcmdWithABool*          aplCmd;
   G4UIcmdWithABool*          deCmd;
   G4UIcmdWithABool*          auCmd;
   G4UIcmdWithABool*          pixeCmd;
-  G4UIcmdWithAString*        pixeXsCmd;
-  G4UIcmdWithAString*        pixeeXsCmd;
-  G4UIcmdWithAnInteger*      verCmd;
-  G4UIcmdWithAnInteger*      ver1Cmd;
-*/
-  G4UIcmdWithAnInteger*      dedxCmd;
-  G4UIcmdWithAnInteger*      lamCmd;
-  G4UIcmdWithADouble*        lllCmd;
-  /*
-  G4UIcmdWithAString*        mscCmd;
-  G4UIcmdWithADouble*        labCmd;
+  G4UIcmdWithABool*          dcutCmd;
   G4UIcmdWithABool*          latCmd;
-  G4UIcmdWithADouble*        skinCmd;
-  G4UIcmdWithADouble*        frCmd;
-  G4UIcmdWithADouble*        fgCmd;
+  G4UIcmdWithABool*          mulatCmd;
+  G4UIcmdWithABool*          catCmd;
+
+  G4UIcmdWithADouble*        minSubSecCmd;
+  G4UIcmdWithADoubleAndUnit* minEnCmd;
+  G4UIcmdWithADoubleAndUnit* maxEnCmd;
+  G4UIcmdWithADoubleAndUnit* cenCmd;
+  G4UIcmdWithADouble*        lllCmd;
+  G4UIcmdWithADoubleAndUnit* brCmd;
+  G4UIcmdWithADouble*        labCmd;
   G4UIcmdWithADouble*        mscfCmd;
   G4UIcmdWithADoubleAndUnit* angCmd;
-  G4UIcommand*               bfCmd;
-  G4UIcommand*               fiCmd;
-  G4UIcommand*               brCmd;
-*/
+  G4UIcmdWithADouble*        frCmd;
+  G4UIcmdWithADouble*        fgCmd;
+  G4UIcmdWithADouble*        skinCmd;
+
+  G4UIcmdWithAnInteger*      dedxCmd;
+  G4UIcmdWithAnInteger*      lamCmd;
+  G4UIcmdWithAnInteger*      amCmd;
+  G4UIcmdWithAnInteger*      verCmd;
+  G4UIcmdWithAnInteger*      ver1Cmd;
+  G4UIcmdWithAnInteger*      ver2Cmd;
+
+  G4UIcmdWithAString*        mscCmd;
 };
 
 #endif

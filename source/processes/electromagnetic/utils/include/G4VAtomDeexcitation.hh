@@ -50,6 +50,7 @@
 #define G4VAtomDeexcitation_h 1
 
 #include "globals.hh"
+#include "G4EmParameters.hh"
 #include "G4AtomicShell.hh"
 #include "G4AtomicShellEnumerator.hh"
 #include "G4ProductionCutsTable.hh"
@@ -174,6 +175,7 @@ private:
   G4VAtomDeexcitation(G4VAtomDeexcitation &);
   G4VAtomDeexcitation & operator=(const G4VAtomDeexcitation &right);
 
+  G4EmParameters*             theParameters;  
   const G4ParticleDefinition* gamma;
 
   G4ProductionCutsTable* theCoupleTable;
@@ -203,6 +205,7 @@ private:
 inline void G4VAtomDeexcitation::SetFluo(G4bool val)
 {
   isActive = val;
+  theParameters->SetFluo(val);
 }
 
 inline G4bool G4VAtomDeexcitation::IsFluoActive() const
@@ -214,6 +217,7 @@ inline void G4VAtomDeexcitation::SetAuger(G4bool val)
 {
   flagAuger = val;
   if(val) { isActive = true; }
+  theParameters->SetAuger(val);
 }
 
 inline G4bool G4VAtomDeexcitation::IsAugerActive() const
@@ -225,6 +229,7 @@ inline void G4VAtomDeexcitation::SetPIXE(G4bool val)
 {
   flagPIXE = val;
   if(val) { isActive = true; }
+  theParameters->SetPixe(val);
 }
 
 inline G4bool G4VAtomDeexcitation::IsPIXEActive() const

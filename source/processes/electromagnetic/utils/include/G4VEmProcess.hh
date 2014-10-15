@@ -77,6 +77,7 @@
 #include "G4UnitsTable.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleChangeForGamma.hh"
+#include "G4EmParameters.hh"
 
 class G4Step;
 class G4VEmModel;
@@ -181,18 +182,15 @@ public:
 
   // Binning for lambda table
   void SetLambdaBinning(G4int nbins);
-  inline G4int LambdaBinning() const;
 
   // Min kinetic energy for tables
   void SetMinKinEnergy(G4double e);
-  inline G4double MinKinEnergy() const;
-
-  // Max kinetic energy for tables
-  void SetMaxKinEnergy(G4double e);
-  inline G4double MaxKinEnergy() const;
 
   // Min kinetic energy for high energy table
   void SetMinKinEnergyPrim(G4double e);
+
+  // Max kinetic energy for tables
+  void SetMaxKinEnergy(G4double e);
 
   // Cross section table pointers
   inline G4PhysicsTable* LambdaTable() const;
@@ -249,17 +247,11 @@ public:
   void ActivateSecondaryBiasing(const G4String& region, G4double factor,
           G4double energyLimit);
           
-
-  // Single scattering parameters
-  void SetPolarAngleLimit(G4double a);
-  inline G4double PolarAngleLimit() const;
-
-  void SetLambdaFactor(G4double val);
+  // void SetLambdaFactor(G4double val);
 
   inline void SetIntegral(G4bool val);
-  inline G4bool IsIntegral() const;
 
-  inline void SetApplyCuts(G4bool val);
+  // inline void SetApplyCuts(G4bool val);
 
   inline void SetBuildTableFlag(G4bool val);
 
@@ -274,6 +266,18 @@ protected:
 			   G4ForceCondition* condition);
 
   G4PhysicsVector* LambdaPhysicsVector(const G4MaterialCutsCouple*);
+
+  inline G4int LambdaBinning() const;
+
+  inline G4double MinKinEnergy() const;
+
+  inline G4double MaxKinEnergy() const;
+
+  // Single scattering parameters
+  // void SetPolarAngleLimit(G4double a);
+  inline G4double PolarAngleLimit() const;
+
+  inline G4bool IsIntegral() const;
 
   inline G4double RecalculateLambda(G4double kinEnergy,
  				    const G4MaterialCutsCouple* couple);
@@ -325,6 +329,7 @@ private:
   // ======== Parameters of the class fixed at construction =========
 
   G4LossTableManager*          lManager;
+  G4EmParameters*              theParameters;  
   G4EmModelManager*            modelManager;
   G4EmBiasingManager*          biasManager;
   const G4ParticleDefinition*  theGamma;
@@ -361,13 +366,16 @@ private:
   G4double                     minKinEnergyPrim;
   G4double                     maxKinEnergy;
   G4double                     lambdaFactor;
-  G4double                     polarAngleLimit;
   G4double                     biasFactor;
 
   G4bool                       integral;
   G4bool                       applyCuts;
   G4bool                       startFromNull;
   G4bool                       splineFlag;
+  G4bool                       actMinKinEnergy;
+  G4bool                       actMaxKinEnergy;
+  G4bool                       actBinning;
+  G4bool                       actSpline;
 
   // ======== Cashed values - may be state dependent ================
 
@@ -568,7 +576,7 @@ inline G4double G4VEmProcess::MaxKinEnergy() const
 
 inline G4double G4VEmProcess::PolarAngleLimit() const
 {
-  return polarAngleLimit;
+  return theParameters->MscThetaLimit();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -621,12 +629,12 @@ inline G4bool G4VEmProcess::IsIntegral() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+/*
 inline void G4VEmProcess::SetApplyCuts(G4bool val)
 {
   applyCuts = val;
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEmProcess::SetBuildTableFlag(G4bool val)
@@ -668,6 +676,7 @@ inline void G4VEmProcess::SetStartFromNullFlag(G4bool val)
 inline void G4VEmProcess::SetSplineFlag(G4bool val)
 {
   splineFlag = val;
+  actSpline = true;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

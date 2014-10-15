@@ -83,6 +83,7 @@
 
 #include "G4LossTableManager.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4EmParameters.hh"
 #include "G4EnergyLossMessenger.hh"
 #include "G4PhysicsTable.hh"
 #include "G4ParticleDefinition.hh"
@@ -168,6 +169,7 @@ G4LossTableManager::~G4LossTableManager()
 
 G4LossTableManager::G4LossTableManager()
 {
+  theParameters = G4EmParameters::Instance();
   n_loss = 0;
   run = -1;
   startInitialisation = false;
@@ -175,39 +177,38 @@ G4LossTableManager::G4LossTableManager()
   currentLoss = 0;
   currentParticle = 0;
   firstParticle = 0;
-  lossFluctuationFlag = true;
+  //lossFluctuationFlag = true;
   subCutoffFlag = false;
-  rndmStepFlag = false;
-  minSubRange = 0.0;
+  //rndmStepFlag = false;
+  //minSubRange = 0.0;
   maxRangeVariation = 1.0;
   maxFinalStep = 0.0;
-  minKinEnergy = 0.1*keV;
-  maxKinEnergy = 10.0*TeV;
-  nbinsLambda  = 77;
-  nbinsPerDecade = 7;
-  maxKinEnergyForMuons = 10.*TeV;
+  //minKinEnergy = 0.1*keV;
+  //maxKinEnergy = 10.0*TeV;
+  //nbinsLambda  = 77;
+  //nbinsPerDecade = 7;
+  //maxKinEnergyForMuons = 10.*TeV;
   integral = true;
   integralActive = false;
-  buildCSDARange = false;
-  minEnergyActive = false;
-  maxEnergyActive = false;
-  maxEnergyForMuonsActive = false;
-  stepFunctionActive = false;
-  flagLPM = true;
-  splineFlag = true;
+  //buildCSDARange = false;
+  //minEnergyActive = false;
+  //maxEnergyActive = false;
+  //maxEnergyForMuonsActive = false;
+  //stepFunctionActive = false;
+  //flagLPM = true;
+  //splineFlag = true;
   isMaster = true;
-  bremsTh = DBL_MAX;
-  factorForAngleLimit = 1.0;
-  verbose = 1;
+  //bremsTh = DBL_MAX;
+  //factorForAngleLimit = 1.0;
+  verbose = theParameters->Verbose();
   theMessenger = new G4EnergyLossMessenger();
   theElectron  = G4Electron::Electron();
   theGenericIon= 0;
   if(G4Threading::IsWorkerThread()) { 
-    verbose = 0;
+    verbose = theParameters->WorkerVerbose();
     isMaster = false;
   }  
   tableBuilder = new G4LossTableBuilder();
-  tableBuilder->SetSplineFlag(splineFlag);
   emCorrections= new G4EmCorrections(verbose);
   emSaturation = 0;
   emConfigurator = 0;
@@ -260,14 +261,37 @@ void G4LossTableManager::Register(G4VEnergyLossProcess* p)
   tables_are_built.push_back(false);
   isActive.push_back(true);
   all_tables_are_built = false;
-  if(!lossFluctuationFlag) { p->SetLossFluctuations(false); }
+  //  if(!lossFluctuationFlag) { p->SetLossFluctuations(false); }
   if(subCutoffFlag)        { p->ActivateSubCutoff(true); }
-  if(rndmStepFlag)         { p->SetRandomStep(true); }
+  // if(rndmStepFlag)         { p->SetRandomStep(true); }
   if(stepFunctionActive)   { p->SetStepFunction(maxRangeVariation, 
 						maxFinalStep); }
   if(integralActive)       { p->SetIntegral(integral); }
-  if(minEnergyActive)      { p->SetMinKinEnergy(minKinEnergy); }
-  if(maxEnergyActive)      { p->SetMaxKinEnergy(maxKinEnergy); }
+  // if(minEnergyActive)      { p->SetMinKinEnergy(minKinEnergy); }
+  // if(maxEnergyActive)      { p->SetMaxKinEnergy(maxKinEnergy); }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void G4LossTableManager::ResetParameters()
+{
+  verbose = theParameters->Verbose();
+  if(!isMaster) {
+    verbose = theParameters->WorkerVerbose();
+  }
+  tableBuilder->SetSplineFlag(theParameters->Spline());
+  tableBuilder->SetInitialisationFlag(false); 
+  emCorrections->SetVerbose(verbose); 
+  if(emSaturation) { emSaturation->SetVerbose(verbose); } 
+  if(emConfigurator) { emConfigurator->SetVerbose(verbose); };
+  if(emElectronIonPair) { emElectronIonPair->SetVerbose(verbose); };
+  if(atomDeexcitation) {
+    atomDeexcitation->SetVerboseLevel(verbose);
+    atomDeexcitation->SetFluo(theParameters->Fluo());
+    atomDeexcitation->SetAuger(theParameters->Auger());
+    atomDeexcitation->SetPIXE(theParameters->Pixe());
+    atomDeexcitation->SetIgnoreCuts(theParameters->DeexcitationIgnoreCut());
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -419,7 +443,7 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
   isMaster = theMaster;
 
   if(!startInitialisation) { 
-    tableBuilder->SetInitialisationFlag(false); 
+    ResetParameters();
     if (1 < verbose) {
       G4cout << "====== G4LossTableManager::PreparePhysicsTable start ====="
 	     << G4endl;
@@ -457,7 +481,7 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
   isMaster = theMaster;
 
   if(!startInitialisation) { 
-    tableBuilder->SetInitialisationFlag(false); 
+    ResetParameters(); 
     if (1 < verbose) {
       G4cout << "====== G4LossTableManager::PreparePhysicsTable start ====="
 	     << G4endl;
@@ -487,7 +511,7 @@ G4LossTableManager::PreparePhysicsTable(const G4ParticleDefinition* particle,
   isMaster = theMaster;
 
   if(!startInitialisation) { 
-    tableBuilder->SetInitialisationFlag(false); 
+    ResetParameters();
     if (1 < verbose) {
       G4cout << "====== G4LossTableManager::PreparePhysicsTable start ====="
 	     << G4endl;
@@ -831,7 +855,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
     G4cout << "G4LossTableManager::BuildTables() start to build range tables"
            << " and the sum of " << n_dedx << " processes"
            << " iem= " << iem << " em= " << em->GetProcessName()
-           << " buildCSDARange= " << buildCSDARange
+           << " buildCSDARange= " << theParameters->BuildCSDARange()
 	   << " nSubRegions= " << nSubRegions;
     if(subcutProducer) { 
       G4cout << " SubCutProducer " << subcutProducer->GetName(); 
@@ -899,7 +923,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
 	if(p != em) { em->AddCollaborativeProcess(p); }
       }
     }
-    if(buildCSDARange) { 
+    if(theParameters->BuildCSDARange()) { 
       dedx = p->BuildDEDXTable(fTotal);
       p->SetDEDXTable(dedx,fTotal);
       listCSDA.push_back(dedx); 
@@ -916,7 +940,7 @@ G4VEnergyLossProcess* G4LossTableManager::BuildTables(
       em->SetDEDXTable(dedxSub, fSubRestricted);
     }
   }
-  if(buildCSDARange) {
+  if(theParameters->BuildCSDARange()) {
     G4PhysicsTable* dedxCSDA = em->DEDXunRestrictedTable();
     if (1 < n_dedx) {
       dedxCSDA = 0;
@@ -963,17 +987,19 @@ void G4LossTableManager::ParticleHaveNoLoss(
 
 G4bool G4LossTableManager::BuildCSDARange() const
 {
-  return buildCSDARange;
+  return theParameters->BuildCSDARange();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetLossFluctuations(G4bool val)
+void G4LossTableManager::SetLossFluctuations(G4bool /*val*/)
 {
+  /*
   lossFluctuationFlag = val;
   for(G4int i=0; i<n_loss; ++i) {
     if(loss_vector[i]) { loss_vector[i]->SetLossFluctuations(val); }
   }
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -1003,30 +1029,36 @@ void G4LossTableManager::SetIntegral(G4bool val)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetMinSubRange(G4double val)
+void G4LossTableManager::SetMinSubRange(G4double /*val*/)
 {
+  /*
   if(1.e-18 < val && val < 1.e+50) { 
     minSubRange = val;
     for(G4int i=0; i<n_loss; ++i) {
       if(loss_vector[i]) { loss_vector[i]->SetMinSubRange(val); }
     }
   }
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetRandomStep(G4bool val)
+void G4LossTableManager::SetRandomStep(G4bool /*val*/)
 {
+  /*
   rndmStepFlag = val;
   for(G4int i=0; i<n_loss; ++i) {
     if(loss_vector[i]) { loss_vector[i]->SetRandomStep(val); }
   }
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4LossTableManager::SetMinEnergy(G4double val)
 {
+  theParameters->SetMinEnergy(val);
+  /*
   if(1.e-18 < val && val < maxKinEnergy) { 
     minEnergyActive = true;
     minKinEnergy = val;
@@ -1038,12 +1070,15 @@ void G4LossTableManager::SetMinEnergy(G4double val)
       if(emp_vector[k]) { emp_vector[k]->SetMinKinEnergy(val); }
     }
   } else { PrintEWarning("SetMinEnergy", val); } 
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4LossTableManager::SetMaxEnergy(G4double val)
 {
+  theParameters->SetMaxEnergy(val);
+  /*
   if(minKinEnergy < val && val < 1.e+50) { 
     maxEnergyActive = true;
     maxKinEnergy = val;
@@ -1055,33 +1090,42 @@ void G4LossTableManager::SetMaxEnergy(G4double val)
       if(emp_vector[k]) { emp_vector[k]->SetMaxKinEnergy(val); }
     }
   } else { PrintEWarning("SetMaxEnergy", val); } 
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4LossTableManager::SetMaxEnergyForCSDARange(G4double val)
 {
+  theParameters->SetMaxEnergyForCSDARange(val);
+  /*
   if(minKinEnergy < val && val < 1.e+50) { 
     for(G4int i=0; i<n_loss; ++i) {
       if(loss_vector[i]) { loss_vector[i]->SetMaxKinEnergyForCSDARange(val); }
     }
   } else { PrintEWarning("SetMaxEnergyForCSDARange", val); } 
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void G4LossTableManager::SetMaxEnergyForMuons(G4double val)
 {
+  theParameters->SetMaxEnergy(val);
+  /*
   if(minKinEnergy < val && val < 1.e+50) { 
     maxEnergyForMuonsActive = true;
     maxKinEnergyForMuons = val;
   } else { PrintEWarning("SetMaxEnergyForMuons", val); } 
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetDEDXBinning(G4int n)
+void G4LossTableManager::SetDEDXBinning(G4int val)
 {
+  theParameters->SetNumberOfBins(val);
+  /*
   if(2 < n && n < 1000000000) { 
     for(G4int i=0; i<n_loss; ++i) {
       if(loss_vector[i]) { loss_vector[i]->SetDEDXBinning(n); }
@@ -1090,12 +1134,14 @@ void G4LossTableManager::SetDEDXBinning(G4int n)
     G4double e = G4double(n);
     PrintEWarning("SetDEDXBinning", e); 
   }
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetDEDXBinningForCSDARange(G4int n)
+void G4LossTableManager::SetDEDXBinningForCSDARange(G4int /*n*/)
 {
+  /*
   if(2 < n && n < 1000000000) { 
     for(G4int i=0; i<n_loss; ++i) {
       if(loss_vector[i]) { loss_vector[i]->SetDEDXBinningForCSDARange(n); }
@@ -1104,12 +1150,15 @@ void G4LossTableManager::SetDEDXBinningForCSDARange(G4int n)
     G4double e = G4double(n);
     PrintEWarning("SetDEDXBinningForCSDARange", e); 
   }
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetLambdaBinning(G4int n)
+void G4LossTableManager::SetLambdaBinning(G4int val)
 {
+  theParameters->SetNumberOfBins(val);
+  /*
   if(2 < n && n < 1000000000) { 
     nbinsLambda = n;
     nbinsPerDecade = 1;
@@ -1123,19 +1172,21 @@ void G4LossTableManager::SetLambdaBinning(G4int n)
     G4double e = G4double(n);
     PrintEWarning("SetLambdaBinning", e); 
   }
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4int G4LossTableManager::GetNumberOfBinsPerDecade() const
 {
-  return nbinsPerDecade;
+  return theParameters->NumberOfBinsPerDecade();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetVerbose(G4int val)
+void G4LossTableManager::SetVerbose(G4int /*val*/)
 {
+  /*
   verbose = val;
   for(G4int i=0; i<n_loss; ++i) {
     if(loss_vector[i]) { loss_vector[i]->SetVerboseLevel(val); }
@@ -1153,6 +1204,7 @@ void G4LossTableManager::SetVerbose(G4int val)
   if(emSaturation) { emSaturation->SetVerbose(val); }
   if(emElectronIonPair) { emElectronIonPair->SetVerbose(val); }
   if(atomDeexcitation) { atomDeexcitation->SetVerboseLevel(val); }
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -1175,39 +1227,43 @@ void G4LossTableManager::SetStepFunction(G4double v1, G4double v2)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetLinearLossLimit(G4double val)
+void G4LossTableManager::SetLinearLossLimit(G4double /*val*/)
 {
+  /*
   if(0.0 < val && val < 1.0) { 
     for(G4int i=0; i<n_loss; ++i) {
       if(loss_vector[i]) { loss_vector[i]->SetLinearLossLimit(val); }
     }
   }
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetBuildCSDARange(G4bool val)
+void G4LossTableManager::SetBuildCSDARange(G4bool /*val*/)
 {
-  buildCSDARange = val;
+  //  buildCSDARange = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 void 
-G4LossTableManager::SetParameters(const G4ParticleDefinition* aParticle,
+G4LossTableManager::SetParameters(const G4ParticleDefinition* /*aParticle*/,
 				  G4VEnergyLossProcess* p)
 {
   if(stepFunctionActive) { 
     p->SetStepFunction(maxRangeVariation, maxFinalStep); 
   }
   if(integralActive)     { p->SetIntegral(integral); }
-  if(minEnergyActive)    { p->SetMinKinEnergy(minKinEnergy); }
-  if(maxEnergyActive)    { p->SetMaxKinEnergy(maxKinEnergy); }
+  // if(minEnergyActive)    { p->SetMinKinEnergy(minKinEnergy); }
+  // if(maxEnergyActive)    { p->SetMaxKinEnergy(maxKinEnergy); }
   // p->SetVerboseLevel(verbose);
+  /*
   if(maxEnergyForMuonsActive) {
     G4double dm = std::abs(aParticle->GetPDGMass() - 105.7*MeV);
     if(dm < 5.*MeV) { p->SetMaxKinEnergy(maxKinEnergyForMuons); }
   }
+  */
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -1235,31 +1291,31 @@ G4LossTableManager::GetMultipleScatteringVector()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetLPMFlag(G4bool val)
+void G4LossTableManager::SetLPMFlag(G4bool /*val*/)
 {
-  flagLPM = val;
+  //  flagLPM = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4bool G4LossTableManager::LPMFlag() const
 {
-  return flagLPM;
+  return theParameters->LPM();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetSplineFlag(G4bool val)
+void G4LossTableManager::SetSplineFlag(G4bool /*val*/)
 {
-  splineFlag = val;
-  tableBuilder->SetSplineFlag(splineFlag);
+  //  splineFlag = val;
+  //  tableBuilder->SetSplineFlag(splineFlag);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
 G4bool G4LossTableManager::SplineFlag() const
 {
-  return splineFlag;
+  return theParameters->Spline();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -1271,44 +1327,44 @@ G4bool G4LossTableManager::IsMaster() const
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LossTableManager::SetBremsstrahlungTh(G4double val) 
+void G4LossTableManager::SetBremsstrahlungTh(G4double /*val*/) 
 {
-  bremsTh = val;
+  //  bremsTh = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LossTableManager::BremsstrahlungTh() const
 {
-  return bremsTh;
+  return theParameters->BremsstrahlungTh();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LossTableManager::SetFactorForAngleLimit(G4double val) 
+void G4LossTableManager::SetFactorForAngleLimit(G4double /*val*/) 
 {
-  if(val > 0.0) { factorForAngleLimit = val; }
+  //  if(val > 0.0) { factorForAngleLimit = val; }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4LossTableManager::FactorForAngleLimit() const
 {
-  return factorForAngleLimit;
+  return theParameters->FactorForAngleLimit();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4LossTableManager::MinKinEnergy() const
 {
-  return minKinEnergy;
+  return theParameters->MinKinEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 G4double G4LossTableManager::MaxKinEnergy() const
 {
-  return maxKinEnergy;
+  return theParameters->MaxKinEnergy();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -1500,16 +1556,18 @@ G4double G4LossTableManager::GetDEDXDispersion(
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4LossTableManager::PrintEWarning(G4String tit, G4double val)
+void G4LossTableManager::PrintEWarning(G4String tit, G4double /*val*/)
 {
   G4String ss = "G4LossTableManager::" + tit; 
   G4ExceptionDescription ed;
+  /*
   ed << "Parameter is out of range: " << val 
      << " it will have no effect!\n" << " ## " 
      << " nbins= " << nbinsLambda 
      << " nbinsPerDecade= " << nbinsPerDecade 
      << " Emin(keV)= " << minKinEnergy/keV 
      << " Emax(GeV)= " << maxKinEnergy/GeV;
+  */
   G4Exception(ss, "em0044", JustWarning, ed);
 }
 

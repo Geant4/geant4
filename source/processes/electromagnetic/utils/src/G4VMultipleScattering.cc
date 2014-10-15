@@ -98,13 +98,14 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   firstParticle(0),
   currParticle(0),
   stepLimit(fUseSafety),
-  skin(1.0),
+  //  skin(1.0),
   facrange(0.04),
-  facgeom(2.5),
-  latDisplasment(true),
+  // facgeom(2.5),
+  latDisplacement(true),
   isIon(false),
   fDispBeyondSafety(false)
 {
+  theParameters = G4EmParameters::Instance();
   SetVerboseLevel(1);
   SetProcessSubType(fMultipleScattering);
   if("ionmsc" == name) { firstParticle = G4GenericIon::GenericIon(); }
@@ -112,7 +113,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   lowestKinEnergy = 10*CLHEP::eV;
 
   // default limit on polar angle
-  polarAngleLimit = 0.0;
+  // polarAngleLimit = 0.0;
 
   physStepLimit = gPathLength = tPathLength = 0.0;
   fIonisation = 0;
@@ -121,6 +122,9 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   safetyHelper = 0;
   fPositionChanged = false;
   isActive = false;
+  actStepLimit = false;
+  actFacRange = false;
+  actLatDisp = false;
   
   currentModel = 0;
   modelManager = new G4EmModelManager();
@@ -231,7 +235,26 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
 
   if(firstParticle == &part) {
 
+    // initialise process
     InitialiseProcess(firstParticle);
+    if(part.GetPDGMass() > MeV) {
+      if(!actStepLimit) { stepLimit = fMinimal; }
+      if(!actFacRange)  { facrange = 0.2; }
+      if(!actLatDisp) { 
+	latDisplacement = theParameters->MuHadLateralDisplacement();
+      }
+    } else {
+      if(!actStepLimit) { stepLimit = theParameters->MscStepLimitType(); }
+      if(!actFacRange)  { facrange = theParameters->MscRangeFactor(); }
+      if(!actLatDisp) { 
+	latDisplacement = theParameters->LateralDisplacement();
+      }
+    }
+    if(latDisplacement) { 
+      fDispBeyondSafety = theParameters->LatDisplacementBeyondSafety();
+    }
+    if(master) { SetVerboseLevel(theParameters->Verbose()); }
+    else {  SetVerboseLevel(theParameters->WorkerVerbose()); }
 
     // initialisation of models
     numberOfModels = modelManager->NumberOfModels();
@@ -240,20 +263,14 @@ G4VMultipleScattering::PreparePhysicsTable(const G4ParticleDefinition& part)
       msc->SetIonisation(0, firstParticle);
       msc->SetMasterThread(master);
       if(0 == i) { currentModel = msc; }
-      if(isIon) {
-	msc->SetStepLimitType(fMinimal);
-	msc->SetLateralDisplasmentFlag(false);
-	msc->SetRangeFactor(0.2);
-      } else {
-	msc->SetStepLimitType(StepLimitType());
-	msc->SetLateralDisplasmentFlag(LateralDisplasmentFlag());
-	msc->SetSkin(Skin());
-	msc->SetRangeFactor(RangeFactor());
-	msc->SetGeomFactor(GeomFactor());
-      }
-      msc->SetPolarAngleLimit(polarAngleLimit);
+      msc->SetStepLimitType(stepLimit);
+      msc->SetLateralDisplasmentFlag(latDisplacement);
+      msc->SetSkin(theParameters->MscSkin());
+      msc->SetRangeFactor(facrange);
+      msc->SetGeomFactor(theParameters->MscGeomFactor());
+      msc->SetPolarAngleLimit(theParameters->MscThetaLimit());
       G4double emax = 
-	std::min(msc->HighEnergyLimit(),emManager->MaxKinEnergy());
+	std::min(msc->HighEnergyLimit(),theParameters->MaxKinEnergy());
       msc->SetHighEnergyLimit(emax);
     }
 

@@ -105,6 +105,7 @@
 #include "G4EmTableType.hh"
 #include "G4PhysicsTable.hh"
 #include "G4PhysicsVector.hh"
+#include "G4EmParameters.hh"
 
 class G4Step;
 class G4ParticleDefinition;
@@ -351,8 +352,8 @@ public:
   // particle production in vicinity of the geometry boundary
   void AddCollaborativeProcess(G4VEnergyLossProcess*);
 
-  inline void SetLossFluctuations(G4bool val);
-  inline void SetRandomStep(G4bool val);
+  //inline void SetLossFluctuations(G4bool val);
+  //inline void SetRandomStep(G4bool val);
 
   inline void SetIntegral(G4bool val);
   inline G4bool IsIntegral() const;
@@ -363,8 +364,8 @@ public:
 
   // Redefine parameteters for stepping control
   void SetLinearLossLimit(G4double val);
-  void SetMinSubRange(G4double val);
-  void SetLambdaFactor(G4double val);
+  // void SetMinSubRange(G4double val);
+  // void SetLambdaFactor(G4double val);
   void SetStepFunction(G4double v1, G4double v2);
   void SetLowestEnergyLimit(G4double);
 
@@ -385,10 +386,10 @@ public:
 
   // Binning for dEdx, range, inverse range and labda tables
   void SetDEDXBinning(G4int nbins);
-  void SetLambdaBinning(G4int nbins);
+  // void SetLambdaBinning(G4int nbins);
 
   // Binning for dEdx, range, and inverse range tables
-  void SetDEDXBinningForCSDARange(G4int nbins);
+  // void SetDEDXBinningForCSDARange(G4int nbins);
 
   // Min kinetic energy for tables
   void SetMinKinEnergy(G4double e);
@@ -399,7 +400,7 @@ public:
   inline G4double MaxKinEnergy() const;
 
   // Max kinetic energy for tables
-  void SetMaxKinEnergyForCSDARange(G4double e);
+  //void SetMaxKinEnergyForCSDARange(G4double e);
 
   // Biasing parameters
   inline G4double CrossSectionBiasingFactor() const;
@@ -481,6 +482,7 @@ private:
   G4EmModelManager*           modelManager;
   G4EmBiasingManager*         biasManager;
   G4SafetyHelper*             safetyHelper;
+  G4EmParameters*             theParameters;  
 
   const G4ParticleDefinition* secondaryParticle;
   const G4ParticleDefinition* theElectron;
@@ -548,7 +550,7 @@ private:
   G4double maxKinEnergyCSDA;
 
   G4double linLossLimit;
-  G4double minSubRange;
+  //  G4double minSubRange;
   G4double dRoverRange;
   G4double finalRange;
   G4double lambdaFactor;
@@ -565,6 +567,10 @@ private:
   G4bool   biasFlag;
   G4bool   weightFlag;
   G4bool   isMaster;
+  G4bool   actLinLossLimit;
+  G4bool   actBinning;
+  G4bool   actMinKinEnergy;
+  G4bool   actMaxKinEnergy;
 
 protected:
 
@@ -939,7 +945,7 @@ G4VEnergyLossProcess::SecondaryParticle() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+/*
 inline void G4VEnergyLossProcess::SetLossFluctuations(G4bool val)
 {
   lossFluctuationFlag = val;
@@ -951,7 +957,7 @@ inline void G4VEnergyLossProcess::SetRandomStep(G4bool val)
 {
   rndmStepFlag = val;
 }
-
+*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEnergyLossProcess::SetIntegral(G4bool val)

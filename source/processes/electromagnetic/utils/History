@@ -17,6 +17,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 October 14: V.Ivant (emutils-V10-00-34)
+- fixed G4VMultipleScattering
+
+14 October 14: V.Ivant (emutils-V10-00-33)
+- fixed logic of sub-cutoff mechnism
+
+13 October 14: V.Ivant (emutils-V10-00-32)
+- fixed typo
+
+13 October 14: V.Ivant (emutils-V10-00-31)
+- G4EmParameters, G4EmParametersMessenger - new classes for 
+    keeping EM parameters static for run time
+- G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering,
+    G4EmProcessOptions, G4VAtomDeexcitation - changed initialisation
+    logic - use G4EmParameters class, fixed problem #1670
+
 06 October 14: L.Urban (emutils-V10-00-30)
 - G4MscStepLimitType, G4EnergyLossMessenger - added new step limit 
     type for msc: UseSafetyPlus
