@@ -408,6 +408,7 @@ G4UIDockWidget* G4UIQt::CreateCoutTBWidget(
   QPushButton *coutTBClearButton = new QPushButton();
   coutTBClearButton->setIcon(*fClearIcon);
   coutTBClearButton->setToolTip("Clear console output");
+  coutTBClearButton->setStyleSheet ("border-radius:7px;");
   connect(coutTBClearButton, SIGNAL(clicked()), SLOT(ClearButtonCallback()));
   connect(fCoutFilter, SIGNAL(textEdited ( const QString &)), SLOT(CoutFilterCallback( const QString &)));
 
@@ -551,7 +552,7 @@ QWidget* G4UIQt::CreateViewerWidget(){
                              "</ul></div>"+
 
                              "<div style='background:white; border: 1px solid #ccc; border-radius: 20px;'><b>Getting Help :</b><ul>"+
-                             "<li><b>If problems arise, try <a href='http://geant4-hn.slac.stanford.edu:5090/Geant4-HyperNews/index'>browsing the user forum</a> to see whether or not your problem has already been encountered.<br /> If it hasn't, you can post it and Geant4 developers will do their best to find a solution. This is also a good place to discuss Geant4 topics in general.</b><br />"+
+                             "<li><b>If problems arise, try <a href='http://geant4-hn.slac.stanford.edu:5090/Geant4-HyperNews/index'>browsing the user forum</a> to see whether or not your problem has already been encountered.<br /> If it hasn't, you can post it and Geant4 developers will do their best to find a solution. This is also a good place to<br /> discuss Geant4 topics in general.</b><br />"+
                              "<li><b>Get a look at <a href='http://geant4.kek.jp/geant4/support/index.shtml'>Geant4 User support pages</a></b></li>"+
                              "</ul></div>"
                              );
@@ -687,17 +688,6 @@ bool G4UIQt::AddTabWidget(
   if (fMainWindow->height()-fMainWindow->centralWidget()->height()+sizeY + fMainWindow->geometry().y()> screen.height()-24) { // 24 is the menuBar height on mac
     s.setHeight(screen.height()-24-fMainWindow->geometry().y());
   }
-/*  int winWidth = fMainWindow->width();
-  int winHeight = fMainWindow->height();
-  int oldTabWidth = fViewerTabWidget->width();
-  int oldTabHeight = fViewerTabWidget->height();
-  int newTabWidth = fViewerTabWidget->sizeHint().width();
-  int newTabHeight = fViewerTabWidget->sizeHint().height();
-
-  fViewerTabWidget->setPreferredSize(s);
-  fMainWindow->resize(winWidth-oldTabWidth+newTabWidth,
-                      winHeight-oldTabHeight+newTabHeight);
-*/
   return true;
 }
 
@@ -711,6 +701,7 @@ const std::string& text)
   if (!fEmptyViewerWidget) {
     fEmptyViewerWidget = new QLabel();
     fEmptyViewerWidget->setTextFormat(Qt::RichText);
+    fEmptyViewerWidget->setContentsMargins(5,5,5,5);
   }
   fEmptyViewerWidget->setText(fDefaultViewerFirstPageHTMLText.c_str());
 }
@@ -873,10 +864,13 @@ G4int G4UIQt::ReceiveG4cout (
   if (result.isEmpty()) {
     return 0;
   }
+  QColor previousColor = fCoutTBTextArea->textColor();
+  fCoutTBTextArea->setTextColor(Qt::black);
   fCoutTBTextArea->append(result);
-  fCoutTBTextArea->repaint();
+  fCoutTBTextArea->setTextColor(previousColor);
 
   fCoutTBTextArea->verticalScrollBar()->setSliderPosition(fCoutTBTextArea->verticalScrollBar()->maximum());
+  fCoutTBTextArea->repaint();
 
 #ifdef G4MULTITHREADED
   UpdateCoutThreadFilter();
@@ -944,16 +938,8 @@ G4String G4UIQt::GetThreadPrefix() {
 #ifdef G4MULTITHREADED
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI==NULL) return "";
-  /*
   if (UI->GetThreadCout() != NULL) {
-    threadPrefix = UI->GetThreadCout()->GetPrefixString().data();
-  }
-*/
-  if (UI->GetThreadID() != -1) {
-    std::ostringstream os;
-    os << "G4WT" ;
-    os << UI->GetThreadID() ;
-    threadPrefix = os.str();
+    threadPrefix = UI->GetThreadCout()->GetFullPrefixString().data();
   }
 #endif
   return threadPrefix;
@@ -2960,7 +2946,9 @@ void G4UIQt::CommandEnteredCallback (
       }
     }
   }
-  
+  // set the focus to the command line
+  fCommandArea->setFocus();
+
   // Rebuild help tree
   FillHelpTree();
   
@@ -3623,7 +3611,7 @@ void G4UIQt::ChangePerspectiveOrtho(const QString& action) {
 
   // Theses actions should be in the app toolbar
 
-  if (fToolbarApp == NULL) return; 
+  if (fToolbarApp == NULL) return;
   QList<QAction *> list = fToolbarApp->actions ();
   QString checked = "";
   for (int i = 0; i < list.size(); ++i) {
