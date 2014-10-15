@@ -51,6 +51,14 @@ PurgMagTabulatedField3D::PurgMagTabulatedField3D( const char* filename, double z
   G4cout << "\n ---> " "Reading the field grid from " << filename << " ... " << endl; 
   ifstream file( filename ); // Open the file for reading.
   
+  if (!file.is_open())
+    {
+      G4ExceptionDescription ed;
+      ed << "Could not open input file " << filename << G4endl;
+      G4Exception("PurgMagTabulatedField3D::PurgMagTabulatedField3D",
+		  "pugmag001",FatalException,ed);
+    }
+
   // Ignore first blank line
   char buffer[256];
   file.getline(buffer,256);

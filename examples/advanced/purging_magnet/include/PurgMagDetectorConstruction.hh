@@ -44,6 +44,8 @@
 #include "globals.hh"
 #include "G4ThreeVector.hh"
 #include "G4RotationMatrix.hh"
+#include "G4Cache.hh"
+#include "G4MagneticField.hh"
 
 
 class G4Box;
@@ -65,6 +67,7 @@ public:
 public:  
      
   G4VPhysicalVolume* Construct();
+  void ConstructSDandField();
      
 public:
 
@@ -137,10 +140,12 @@ private:
   G4Material*        WorldMaterial;
   G4Material*        GapMaterial;
 
-
+  G4Cache<G4MagneticField*> fField;  //pointer to the thread-local fields
 
 private:
-    
+  
+
+
   void DefineMaterials();
   G4VPhysicalVolume* ConstructCalorimeter();     
 };

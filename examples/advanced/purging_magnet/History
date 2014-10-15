@@ -9,6 +9,12 @@ $Id$
                       Category History file
                       ---------------------
 
+15.10.2014 - Luciano Pandola (purmag-V10-00-01)
+- Added ConstructSDandField() and registered magnetic field in a 
+ G4Cache
+- Added a protection in the case the input field file is not found
+- Registered RunAction in master and workers
+
 14.10.2014 - Luciano Pandola (purmag-V10-00-00)
 - Added ActionInitialization class (first step for MT migration)
 - Add const qualifiers for methods of DetectorConstruction

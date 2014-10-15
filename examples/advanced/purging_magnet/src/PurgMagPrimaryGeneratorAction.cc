@@ -47,7 +47,8 @@
 #include "G4ParticleGun.hh"
 #include "G4ParticleTable.hh"
 #include "G4ParticleDefinition.hh"
-#include "Randomize.hh"
+#include "G4Electron.hh"
+
 
 //Print position of primaries.
 #define POSITION 0
@@ -62,9 +63,8 @@ PurgMagPrimaryGeneratorAction::PurgMagPrimaryGeneratorAction()
   particleGun  = new G4ParticleGun(n_particle);
   
   G4ParticleDefinition* particle
-    =
-    
-    G4ParticleTable::GetParticleTable()->FindParticle("e-");
+    = G4Electron::Definition();
+
   particleGun->SetParticleDefinition(particle);
   particleGun->SetParticleEnergy(50.*MeV);
 

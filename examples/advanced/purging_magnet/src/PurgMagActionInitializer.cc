@@ -66,7 +66,9 @@ void PurgMagActionInitializer::Build() const
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PurgMagActionInitializer::BuildForMaster() const
-{;}
+{
+  SetUserAction(new PurgMagRunAction());
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 G4VSteppingVerbose* PurgMagActionInitializer::InitializeSteppingVerbose() const
