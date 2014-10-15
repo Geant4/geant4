@@ -98,9 +98,11 @@ void AddH1Annotation(tools::histo::h1d* h1d,
 //_____________________________________________________________________________
 tools::histo::h1d* CreateToolsH1(const G4String& title,
                                  G4int nbins, G4double xmin, G4double xmax, 
+                                 const G4String& unitName,
                                  const G4String& fcnName,
                                  const G4String& binSchemeName)
 {
+  G4double unit = GetUnitValue(unitName);
   G4Fcn fcn = GetFunction(fcnName);
   G4BinScheme binScheme = GetBinScheme(binSchemeName);
   
@@ -115,12 +117,12 @@ tools::histo::h1d* CreateToolsH1(const G4String& title,
       G4Exception("G4H1ToolsManager::CreateH1",
                 "Analysis_W013", JustWarning, description);
     }              
-    return new tools::histo::h1d(title, nbins, fcn(xmin), fcn(xmax));
+    return new tools::histo::h1d(title, nbins, fcn(xmin/unit), fcn(xmax/unit));
   }
   else {
     // Compute edges
     std::vector<G4double> edges;
-    ComputeEdges(nbins, xmin, xmax, fcn, binScheme, edges);
+    ComputeEdges(nbins, xmin, xmax, unit, fcn, binScheme, edges);
     return new tools::histo::h1d(title, edges); 
   }
 }     
@@ -128,13 +130,15 @@ tools::histo::h1d* CreateToolsH1(const G4String& title,
 //_____________________________________________________________________________
 tools::histo::h1d* CreateToolsH1(const G4String& title,
                                  const std::vector<G4double>& edges,
+                                 const G4String& unitName,
                                  const G4String& fcnName)
 {
+  G4double unit = GetUnitValue(unitName);
   G4Fcn fcn = GetFunction(fcnName);
 
   // Apply function 
   std::vector<G4double> newEdges;
-  ComputeEdges(edges, fcn, newEdges);
+  ComputeEdges(edges, unit, fcn, newEdges);
   
   return new tools::histo::h1d(title, newEdges); 
 }  
@@ -142,9 +146,11 @@ tools::histo::h1d* CreateToolsH1(const G4String& title,
 //_____________________________________________________________________________
 void ConfigureToolsH1(tools::histo::h1d* h1d,
                        G4int nbins, G4double xmin, G4double xmax,  
+                       const G4String& unitName,
                        const G4String& fcnName,
                        const G4String& binSchemeName)
 {
+  G4double unit = GetUnitValue(unitName);
   G4Fcn fcn = GetFunction(fcnName);
   G4BinScheme binScheme = GetBinScheme(binSchemeName);
 
@@ -159,12 +165,12 @@ void ConfigureToolsH1(tools::histo::h1d* h1d,
       G4Exception("G4H1ToolsManager::SetH1",
                 "Analysis_W013", JustWarning, description);
     }              
-    h1d->configure(nbins, fcn(xmin), fcn(xmax));
+    h1d->configure(nbins, fcn(xmin/unit), fcn(xmax/unit));
   }
   else {
     // Compute bins
     std::vector<G4double> edges;
-    ComputeEdges(nbins, xmin, xmax, fcn, binScheme, edges);
+    ComputeEdges(nbins, xmin, xmax, unit, fcn, binScheme, edges);
     h1d->configure(edges);
   }
 }     
@@ -172,12 +178,14 @@ void ConfigureToolsH1(tools::histo::h1d* h1d,
 //_____________________________________________________________________________
 void ConfigureToolsH1(tools::histo::h1d* h1d,
                       const std::vector<G4double>& edges,
+                      const G4String& unitName,
                       const G4String& fcnName)
 {
   // Apply function to edges
+  G4double unit = GetUnitValue(unitName);
   G4Fcn fcn = GetFunction(fcnName);
   std::vector<G4double> newEdges;
-  ComputeEdges(edges, fcn, newEdges);
+  ComputeEdges(edges, unit, fcn, newEdges);
 
   h1d->configure(newEdges);
 }
@@ -251,7 +259,7 @@ G4int G4H1ToolsManager::CreateH1(const G4String& name,  const G4String& title,
     fState.GetVerboseL4()->Message("create", "H1", name);
 #endif
   tools::histo::h1d* h1d
-    = CreateToolsH1(title, nbins, xmin, xmax, fcnName, binSchemeName);
+    = CreateToolsH1(title, nbins, xmin, xmax, unitName, fcnName, binSchemeName);
     
   // Add annotation
   AddH1Annotation(h1d, unitName, fcnName);        
@@ -280,7 +288,7 @@ G4int G4H1ToolsManager::CreateH1(const G4String& name,  const G4String& title,
     fState.GetVerboseL4()->Message("create", "H1", name);
 #endif
   tools::histo::h1d* h1d 
-    = CreateToolsH1(title, edges, fcnName);
+    = CreateToolsH1(title, edges,  unitName, fcnName);
     
   // Add annotation
   AddH1Annotation(h1d, unitName, fcnName);        
@@ -314,7 +322,7 @@ G4bool G4H1ToolsManager::SetH1(G4int id,
 #endif
 
   // Configure tools h1
-  ConfigureToolsH1(h1d, nbins, xmin, xmax, fcnName, binSchemeName);
+  ConfigureToolsH1(h1d, nbins, xmin, xmax, unitName, fcnName, binSchemeName);
 
   // Add annotation
   AddH1Annotation(h1d, unitName, fcnName);        
@@ -345,7 +353,7 @@ G4bool G4H1ToolsManager::SetH1(G4int id,
 #endif
 
   // Configure tools h1
-  ConfigureToolsH1(h1d, edges, fcnName);
+  ConfigureToolsH1(h1d, edges, unitName, fcnName);
       
   // Add annotation
   AddH1Annotation(h1d, unitName, fcnName);        

@@ -193,7 +193,7 @@ void G4H1Messenger::SetH1Cmd()
  
   fSetH1Cmd = new G4UIcommand("/analysis/h1/set", this);
   fSetH1Cmd->SetGuidance("Set parameters for the 1D histogram of #Id :");
-  fSetH1Cmd->SetGuidance("  nbins; valMin; valMax; unit (of vmin and vmax)");
+  fSetH1Cmd->SetGuidance("  nbins; valMin; valMax; unit; function; binScheme");
   fSetH1Cmd->SetParameter(h1Id);
   fSetH1Cmd->SetParameter(h1Nbins);
   fSetH1Cmd->SetParameter(h1ValMin);

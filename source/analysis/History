@@ -17,6 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+July 23, 2014 I. Hrivnacova (analysis-V09-06-32)
+- Fixed applying unit to min, max values in H1, H2 managers
+- Fixed createH2/setH2 commands implementation
+
 June 03, 2014 I. Hrivnacova (analysis-V09-06-31)
 - Do not remove Root base file if ntuples are in use
   (this addresses problem report #1633)

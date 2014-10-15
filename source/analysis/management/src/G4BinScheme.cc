@@ -54,24 +54,29 @@ G4BinScheme GetBinScheme(const G4String& binSchemeName)
 
 //_____________________________________________________________________________
 void ComputeEdges(G4int nbins, G4double xmin, G4double xmax, 
-                  G4Fcn fcn, G4BinScheme binScheme,
+                  G4double unit, G4Fcn fcn, G4BinScheme binScheme,
                   std::vector<G4double>& edges)
 {
 // Compute edges from parameters
 
+  // Apply units
+  G4double xumin = xmin/unit;
+  G4double xumax = xmax/unit;
+
   if ( binScheme == kLinearBinScheme ) {
-    G4double dx = (xmax - xmin ) / nbins;
-    G4double binValue = xmin;
+    G4double dx = (fcn(xumax) - fcn(xumin) ) / nbins;
+    G4double binValue = fcn(xumin);
     while ( G4int(edges.size()) <= nbins ) {
       edges.push_back(binValue);
       binValue += dx;
     }
   }  
   else if ( binScheme == kLogBinScheme ) {
+    // do not apply fcn 
     G4double dlog 
-      = (std::log10(fcn(xmax)) - std::log10(fcn(xmin)))/ nbins;
+      = (std::log10(xumax) - std::log10(xumin))/ nbins;
     G4double dx = std::pow(10, dlog);
-    G4double binValue = fcn(xmin);
+    G4double binValue = xumin;
     while ( G4int(edges.size()) <= nbins ) {
       edges.push_back(binValue);
       binValue *= dx;
@@ -91,13 +96,13 @@ void ComputeEdges(G4int nbins, G4double xmin, G4double xmax,
 
 //_____________________________________________________________________________
 void ComputeEdges(const std::vector<G4double>& edges, 
-                  G4Fcn fcn, 
+                  G4double unit, G4Fcn fcn, 
                   std::vector<G4double>& newBins)
 {
 // Apply function to defined edges
   std::vector<G4double>::const_iterator it;
   for (it = edges.begin(); it != edges.end(); it++ ) {
-    newBins.push_back(fcn(*it));
+    newBins.push_back(fcn((*it)/unit));
   }
 }
     
