@@ -60,6 +60,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/cascade
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/coherent_elastic/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/evaporation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fermi_breakup/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/fission/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/handler/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/de_excitation/multifragmentation/include)
@@ -243,6 +244,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4hadronic_coherent_elastic
         G4hadronic_deex_evaporation
         G4hadronic_deex_fermi_breakup
+        G4hadronic_deex_fission
         G4hadronic_deex_handler
         G4hadronic_deex_management
         G4hadronic_deex_multifragmentation
