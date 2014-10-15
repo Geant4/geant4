@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+13-10-14 V.Ivanchenko (materials-V10-00-26)
+- G4SandiaData - optimized run time methods
+
 06-10-14 P.Gumplinger (materials-V10-00-25)
 - add methods SetMRMaxProbability and SetMRMaxTransProbability in 
   G4UCNMaterialPropertiesTable
@@ -25,7 +28,8 @@ committal in the CVS repository !
   and G4UCNMaterialPropertiesTable::TransConditionsValid
 
 25-09-14 W.Pokorski (materials-V10-00-24)
-- G4IonisParamMat - adding initialization of G4DensityEffectData in the default constructor
+- G4IonisParamMat - adding initialization of G4DensityEffectData in
+  the default constructor
 
 05-08-14 V.Ivanchenko (materials-V10-00-23)
 - G4SandiaData - proper deletion of G4PhysicsVectors end of job

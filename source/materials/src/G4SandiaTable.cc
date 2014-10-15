@@ -140,14 +140,19 @@ G4SandiaTable::GetSandiaCofPerAtom(G4int Z, G4double energy,
   assert(4 <= coeff.size());
   G4double Emin  = fSandiaTable[fCumulInterval[Z-1]][0]*keV;
   //G4double Iopot = fIonizationPotentials[Z]*eV;
-  //if (Emin  < Iopot) Emin = Iopot;  
-  if (energy < Emin) { energy = Emin; }
-   
-  G4int interval = fNbOfIntervals[Z] - 1;
-  G4int row = fCumulInterval[Z-1] + interval;
-  while ((interval>0) && (energy<fSandiaTable[row][0]*keV)) {
-    --interval;
+  //if (Emin  < Iopot) Emin = Iopot;
+
+  G4int row = 0;  
+  if (energy <= Emin) { 
+    energy = Emin; 
+
+  } else {   
+    G4int interval = fNbOfIntervals[Z] - 1;
     row = fCumulInterval[Z-1] + interval;
+    while ((interval>0) && (energy<fSandiaTable[row][0]*keV)) {
+      --interval;
+      row = fCumulInterval[Z-1] + interval;
+    }
   }
 
   G4double AoverAvo = Z*amu/fZtoAratio[Z];
@@ -165,11 +170,12 @@ G4SandiaTable::GetSandiaCofWater(G4double energy,
 				 std::vector<G4double>& coeff) const
 {
   assert(4 <= coeff.size());
-  G4double Emin  = fH2OlowerI1[0][0]*keV;
-  if(energy < Emin) { energy = Emin; }  
-  G4int i = fH2OlowerInt - 1;
-  for(; i>0; --i) {
-    if(energy >= fH2OlowerI1[i][0]*keV) { break; }
+  G4int i = 0;
+  if(energy > fH2OlowerI1[0][0]*keV) {   
+    i = fH2OlowerInt - 1;
+    for(; i>0; --i) {
+      if(energy >= fH2OlowerI1[i][0]*keV) { break; }
+    }
   }
   coeff[0]=funitc[1]*fH2OlowerI1[i][1];     
   coeff[1]=funitc[2]*fH2OlowerI1[i][2];     
@@ -951,15 +957,13 @@ G4SandiaTable::GetSandiaCofForMaterial(G4int interval, G4int j) const
 const G4double* 
 G4SandiaTable::GetSandiaCofForMaterial(G4double energy) const
 {
-  const G4double* x = fnulcof;
-  G4double Emin = (*(*fMatSandiaMatrix)[0])[0];
-  if (energy < Emin) { energy = Emin; }
-  G4int interval = fMatNbOfIntervals - 1;
-  while ((interval>0)&&(energy<(*(*fMatSandiaMatrix)[interval])[0])) 
-    {--interval;} 
-  x = &((*(*fMatSandiaMatrix)[interval])[1]);
-
-  return x;
+  G4int interval = 0;
+  if (energy > (*(*fMatSandiaMatrix)[0])[0]) { 
+    interval = fMatNbOfIntervals - 1;
+    while ((interval>0)&&(energy<(*(*fMatSandiaMatrix)[interval])[0])) 
+      { --interval; }
+  } 
+  return &((*(*fMatSandiaMatrix)[interval])[1]);
 }
 
 ////////////////////////////////////////////////////////////////////////////////
