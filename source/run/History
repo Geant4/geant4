@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Aug 21st, 2014, M. Asai (run-V09-06-143)
+- Fix /random/setSeeds UI command not working in MT mode.
+  Addressing to bug report #1657.
+- Clear root logical volume pointers in G4Region when geometry is
+  rebuilt from scratch. Addressing to bug report #1665.
+
 Jan 21st, 2014, M. Asai (run-V09-06-142)
 - Making sure worker threads re-build physics tables as well when the
   master thread is requested to rebuild.
