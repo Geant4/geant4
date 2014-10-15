@@ -58,6 +58,7 @@
 #include "G4VAtomDeexcitation.hh"
 #include "G4LossTableManager.hh"
 #include "G4SauterGavrilaAngularDistribution.hh"
+#include "G4ProductionCutsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -91,6 +92,14 @@ void G4PEEffectFluoModel::Initialise(const G4ParticleDefinition*,
 {
   fAtomDeexcitation = G4LossTableManager::Instance()->AtomDeexcitation();
   if(!fParticleChange) { fParticleChange = GetParticleChangeForGamma(); }
+  const G4ProductionCutsTable* theCoupleTable=
+    G4ProductionCutsTable::GetProductionCutsTable();
+  size_t nCouples = theCoupleTable->GetTableSize();
+  fMatEnergyTh.resize(nCouples, 0.0);
+  for(size_t i=0; i<nCouples; ++i) { 
+    fMatEnergyTh[i] = theCoupleTable->GetMaterialCutsCouple(i)->GetMaterial()
+      ->GetSandiaTable()->GetSandiaCofForMaterial(0, 0);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
@@ -103,7 +112,6 @@ G4PEEffectFluoModel::ComputeCrossSectionPerAtom(const G4ParticleDefinition*,
 {
   // This method may be used only if G4MaterialCutsCouple pointer
   //   has been set properly
-
   CurrentCouple()->GetMaterial()
     ->GetSandiaTable()->GetSandiaCofPerAtom((G4int)Z, energy, fSandiaCof);
 
@@ -123,6 +131,9 @@ G4PEEffectFluoModel::CrossSectionPerVolume(const G4Material* material,
 					   G4double energy,
 					   G4double, G4double)
 {
+  // This method may be used only if G4MaterialCutsCouple pointer
+  //   has been set properly
+  energy = std::max(energy, fMatEnergyTh[CurrentCouple()->GetIndex()]);
   const G4double* SandiaCof = 
     material->GetSandiaTable()->GetSandiaCofForMaterial(energy);
 				

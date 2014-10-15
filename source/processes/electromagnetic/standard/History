@@ -18,6 +18,14 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+14 October 14: V.Ivanchenko (emstand-V10-00-44)
+- G4PEEffectFluoModel - fixed threshold cross section
+- G4GammaConversion - minor fix of initialisation
+
+07 October 14: L.Urban
+- G4UrbanMscModel corrs to speed up (if --> min,max,
+  random numbers using rndmEngineMod pointer) 
+
 06 October 14: L. Urban (emstand-V10-00-43)
 - G4UrbanMscModel - added new step limit type UseSafetyPlus 
 

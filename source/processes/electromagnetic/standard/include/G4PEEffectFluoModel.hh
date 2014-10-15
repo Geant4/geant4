@@ -97,6 +97,7 @@ private:
 
   G4double                  fminimalEnergy;
   std::vector<G4double>     fSandiaCof;
+  std::vector<G4double>     fMatEnergyTh;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

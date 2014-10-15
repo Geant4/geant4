@@ -251,10 +251,10 @@ G4double G4UrbanMscModel::SimpleScattering(G4double xmeanth, G4double x2meanth)
 
   // sampling
   G4double cth = 1.;
-  if(G4UniformRand() < prob) {
-    cth = -1.+2.*G4Exp(G4Log(G4UniformRand())/(a+1.));
+  if(rndmEngineMod->flat() < prob) {
+    cth = -1.+2.*G4Exp(G4Log(rndmEngineMod->flat())/(a+1.));
   } else {
-    cth = -1.+2.*G4UniformRand();
+    cth = -1.+2.*rndmEngineMod->flat();
   }
   return cth;
 }
