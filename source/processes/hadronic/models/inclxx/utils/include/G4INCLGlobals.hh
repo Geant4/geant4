@@ -55,12 +55,6 @@ namespace G4INCL {
     const G4double Pf = 1.37*hc;
     //  const G4double Pf = 1.36828*hc;
 
-    /// \brief Fermi momentum squared [(MeV/c)^2]
-    const G4double PfSquared = Pf*Pf;
-
-    /// \brief Fermi momentum cubed [(MeV/c)^3]
-    const G4double PfCubed = Pf*PfSquared;
-
     /** \brief Coulomb conversion factor [MeV*fm]
      *
      * \f[ e^2/(4 pi epsilon_0) \f]

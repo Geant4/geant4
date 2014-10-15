@@ -39,6 +39,8 @@
 #include "G4INCLParticleSpecies.hh"
 #include "G4INCLParticleTable.hh"
 #include "G4INCLGlobals.hh"
+#include <cerrno>
+#include <cstdlib>
 
 namespace G4INCL {
 
@@ -66,6 +68,8 @@ namespace G4INCL {
     physicsOptDesc("Physics options"),
     naturalTarget(false)
   {
+    init();
+
     const std::string suggestHelpMsg("You might want to run `INCLCascade --help' to get a help message.\n");
 
     // Define the names of the de-excitation models
@@ -219,7 +223,7 @@ namespace G4INCL {
         ("back-to-spectator", po::value<G4bool>(&backToSpectator)->default_value("true"), "whether to use back-to-spectator:\n  \ttrue, 1 (default)\n  \tfalse, 0")
         ("use-real-masses", po::value<G4bool>(&useRealMasses)->default_value("true"), "whether to use real masses for the outgoing particle energies:\n  \ttrue, 1 (default)\n  \tfalse, 0")
         ("separation-energies", po::value<std::string>(&separationEnergyString)->default_value("INCL"), "how to assign the separation energies of the INCL nucleus:\n  \tINCL (default)\n  \treal\n  \treal-light")
-        ("fermi-momentum", po::value<std::string>(&fermiMomentumString)->default_value("constant"), "how to assign the Fermi momentum of the INCL nucleus:\n  \tconstant (default)\n  \tconstant-light\n  \tmass-dependent")
+        ("fermi-momentum", po::value<std::string>(&fermiMomentumString)->default_value("constant"), "how to assign the Fermi momentum of the INCL nucleus:\n  \tconstant (default)\n  \tconstant-light\n  \tmass-dependent\n  \t[a positive value]")
         ("cutNN", po::value<G4double>(&cutNN)->default_value(1910.), "minimum CM energy for nucleon-nucleon collisions, in MeV. Default: 1910.")
         ("rp-correlation", po::value<G4double>(&rpCorrelationCoefficient)->default_value(1.), "correlation coefficient for the r-p correlation. Default: 1 (full correlation).")
         ("rp-correlation-p", po::value<G4double>(&rpCorrelationCoefficientProton)->default_value(1.), "correlation coefficient for the proton r-p correlation. Overrides the value specified using the rp-correlation option. Default: 1 (full correlation).")
@@ -621,13 +625,26 @@ namespace G4INCL {
         else if(fermiMomentumNorm=="mass-dependent")
           fermiMomentumType = MassDependentFermiMomentum;
         else {
-          std::cerr << "Unrecognized fermi-momentum option. "
-            << "Must be one of:" << std::endl
-            << "  constant (default)" << std::endl
-            << "  constant-light" << std::endl
-            << "  mass-dependent" << std::endl;
-          std::cerr << suggestHelpMsg;
-          std::exit(EXIT_FAILURE);
+          // Try to convert the option value to a G4float, and bomb out on failure
+          errno = 0;
+          char *tail;
+          fermiMomentum = strtod(fermiMomentumNorm.c_str(), &tail);
+          if(errno || *tail!='\0') {
+            std::cerr << "Unrecognized fermi-momentum option. "
+              << "Must be one of:" << std::endl
+              << "  constant (default)" << std::endl
+              << "  constant-light" << std::endl
+              << "  mass-dependent" << std::endl
+              << "  [a postiive value]" << std::endl;
+            std::cerr << suggestHelpMsg;
+            std::exit(EXIT_FAILURE);
+          }
+          if(fermiMomentum<=0.) {
+            std::cerr << "Values passed to fermi-momentum must be positive." << std::endl;
+            std::cerr << suggestHelpMsg;
+            std::exit(EXIT_FAILURE);
+          }
+          fermiMomentumType = ConstantFermiMomentum;
         }
       } else {
         fermiMomentumType = ConstantFermiMomentum;
@@ -797,6 +814,7 @@ namespace G4INCL {
       separationEnergyType = INCLSeparationEnergy;
       fermiMomentumString = "constant";
       fermiMomentumType = ConstantFermiMomentum;
+      fermiMomentum = -1.;
       cutNN = 1910.;
 #ifdef INCL_DEEXCITATION_FERMI_BREAKUP
       maxMassFermiBreakUp = 18;

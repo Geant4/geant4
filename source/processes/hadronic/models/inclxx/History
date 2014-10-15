@@ -16,6 +16,12 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+11 July 2014 - Davide Mancusi (hadr-inclxx-V09-06-51)
+---------------------------------------------------------------
+- INCL++ v5.1.14.9
+  o Fix a bug in Coulomb deflection for negative incident particles.
+  o Avoid negative Fermi energies for deltas.
+
 13 March 2014 - Gabriele Cosmo (hadr-inclxx-V09-06-50)
 ---------------------------------------------------------------
 - Fixed use of inline keyword for method getPhaseSpace() defined in

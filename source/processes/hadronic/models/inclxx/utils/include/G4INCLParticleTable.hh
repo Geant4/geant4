@@ -213,10 +213,7 @@ namespace G4INCL {
     typedef G4double (*FermiMomentumFn)(const G4int, const G4int);
     extern G4ThreadLocal FermiMomentumFn getFermiMomentum;
 
-    /** \brief Return the constant value of the Fermi momentum
-     *
-     * This function should always return PhysicalConstants::Pf.
-     */
+    /// \brief Return the constant value of the Fermi momentum
     G4double getFermiMomentumConstant(const G4int /*A*/, const G4int /*Z*/);
 
     /** \brief Return the constant value of the Fermi momentum - special for light
