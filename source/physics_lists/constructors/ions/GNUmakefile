@@ -51,6 +51,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/evaporation/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/fermi_breakup/include \
+            -I$(G4BASE)/processes/hadronic/models/de_excitation/fission/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/handler/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/management/include \
             -I$(G4BASE)/processes/hadronic/models/de_excitation/multifragmentation/include \
