@@ -50,6 +50,10 @@
 #include "G4SystemOfUnits.hh"
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4INCLVersion.hh"
+#include "G4VEvaporation.hh"
+#include "G4VEvaporationChannel.hh"
+#include "G4CompetitiveFission.hh"
+#include "G4FissionLevelDensityParameterINCLXX.hh"
 
 G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
   G4VIntraNuclearTransportModel(G4INCLXXInterfaceStore::GetInstance()->getINCLXXVersionName()),
@@ -59,7 +63,9 @@ G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
   theTally(NULL),
   complainedAboutBackupModel(false),
   complainedAboutPreCompound(false),
-  theIonTable(G4IonTable::GetIonTable())
+  theIonTable(G4IonTable::GetIonTable()),
+  theINCLXXLevelDensity(NULL),
+  theINCLXXFissionProbability(NULL)
 {
   if(!thePreCompoundModel) {
     G4HadronicInteraction* p =
@@ -78,6 +84,21 @@ G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
       G4HadronicInteractionRegistry::Instance()->FindModel("PRECO");
     theDeExcitation = static_cast<G4VPreCompoundModel*>(p);
     if(!theDeExcitation) { theDeExcitation = new G4PreCompoundModel; }
+
+    // set the fission parameters for G4ExcitationHandler
+//    G4VEvaporationChannel * const theFissionChannel =
+//      theDeExcitation->GetExcitationHandler()->GetEvaporation()->GetFissionChannel();
+//    G4CompetitiveFission * const theFissionChannelCast = dynamic_cast<G4CompetitiveFission *>(theFissionChannel);
+//    if(theFissionChannelCast) {
+//      theINCLXXLevelDensity = new G4FissionLevelDensityParameterINCLXX;
+//      theFissionChannelCast->SetLevelDensityParameter(theINCLXXLevelDensity);
+//      theINCLXXFissionProbability = new G4FissionProbability;
+//      theINCLXXFissionProbability->SetFissionLevelDensityParameter(theINCLXXLevelDensity);
+//      theFissionChannelCast->SetEmissionStrategy(theINCLXXFissionProbability);
+//      theInterfaceStore->EmitBigWarning("INCL++/G4ExcitationHandler uses its own level-density parameter for fission");
+//    } else {
+//      theInterfaceStore->EmitBigWarning("INCL++/G4ExcitationHandler could not use its own level-density parameter for fission");
+//    }
   }
 
   // use the envvar G4INCLXX_DUMP_REMNANT to dump information about the
@@ -93,6 +114,8 @@ G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
 
 G4INCLXXInterface::~G4INCLXXInterface()
 {
+  delete theINCLXXLevelDensity;
+  delete theINCLXXFissionProbability;
 }
 
 G4bool G4INCLXXInterface::AccurateProjectile(const G4HadProjectile &aTrack, const G4Nucleus &theNucleus) const {
@@ -567,9 +590,10 @@ void G4INCLXXInterface::ModelDescription(std::ostream& outFile) const {
      << "lead to the emission of energetic particles and to the formation of an\n"
      << "excited thermalised nucleus (remnant). The de-excitation of the remnant is\n"
      << "outside the scope of INCL++ and is typically described by another model.\n\n"
-     << "INCL++ has been reasonably well tested for projectiles up to A=18,\n"
-     << "energies from ~10 AMeV to ~3 AGeV and target nuclei close to the\n"
-     << "stability valley, with mass numbers between 4 and 250.\n\n"
+     << "INCL++ has been reasonably well tested for nucleon (~50 MeV to ~15 GeV),\n"
+     << "pion (idem) and light-ion projectiles (up to A=18, ~10A MeV to 1A GeV).\n"
+     << "Most tests involved target nuclei close to the stability valley, with\n"
+     << "numbers between 4 and 250.\n\n"
      << "Reference: A. Boudard et al., Phys. Rev. C87 (2013) 014606\n\n";
 }
 

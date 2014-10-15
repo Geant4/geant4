@@ -41,6 +41,7 @@
 #include "G4INCLNucleus.hh"
 #include "G4INCLIChannel.hh"
 #include "G4INCLFinalState.hh"
+#include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
   class DeltaProductionChannel : public IChannel {
@@ -48,7 +49,7 @@ namespace G4INCL {
     DeltaProductionChannel(Particle *, Particle *);
     virtual ~DeltaProductionChannel();
 
-    FinalState* getFinalState();
+    void fillFinalState(FinalState *fs);
 
   private:
     G4double sampleDeltaMass(G4double ecm);
@@ -56,6 +57,7 @@ namespace G4INCL {
     Particle *particle1, *particle2;
 
     static const G4int maxTries;
+    INCL_DECLARE_ALLOCATION_POOL(DeltaProductionChannel);
   };
 }
 

@@ -37,6 +37,7 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLIChannel.hh"
 #include "G4INCLNucleus.hh"
+#include "G4INCLAllocationPool.hh"
 
 #ifndef REFLECTIONCHANNEL_HH_
 #define REFLECTIONCHANNEL_HH_
@@ -48,7 +49,7 @@ namespace G4INCL {
     ReflectionChannel(Nucleus *n, Particle *p);
     virtual ~ReflectionChannel();
 
-    FinalState* getFinalState();
+    void fillFinalState(FinalState *fs);
 
   private:
     /** \brief Sine^2 of the smallest acceptable reflection angle / 4
@@ -65,6 +66,8 @@ namespace G4INCL {
     static const G4double positionScalingFactor;
     Nucleus *theNucleus;
     Particle *theParticle;
+
+    INCL_DECLARE_ALLOCATION_POOL(ReflectionChannel);
   };
 }
 #endif //REFLECTIONCHANNEL_HH_

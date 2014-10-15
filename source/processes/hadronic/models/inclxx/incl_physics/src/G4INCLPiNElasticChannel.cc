@@ -53,9 +53,7 @@ namespace G4INCL {
 
     }
 
-    FinalState* PiNElasticChannel::getFinalState() {
-        FinalState *fs = new FinalState;
-
+    void PiNElasticChannel::fillFinalState(FinalState *fs) {
         Particle * nucleon;
         Particle * pion;
         if(particle1->isNucleon()) {
@@ -152,7 +150,6 @@ namespace G4INCL {
 
         fs->addModifiedParticle(nucleon);
         fs->addModifiedParticle(pion);
-        return fs;
     }
 
 }

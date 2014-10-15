@@ -68,7 +68,7 @@ namespace G4INCL {
     InteractionAvatar::preInteraction();
   }
 
-  FinalState *DecayAvatar::postInteraction(FinalState *fs) {
+  void DecayAvatar::postInteraction(FinalState *fs) {
     // Make sure we have at least two particles in the final state
 // assert(fs->getModifiedParticles().size() + fs->getCreatedParticles().size() - fs->getDestroyedParticles().size() >= 2);
 
@@ -76,7 +76,7 @@ namespace G4INCL {
 
       // Call the postInteraction method of the parent class
       // (provides Pauli blocking and enforces energy conservation)
-      fs = InteractionAvatar::postInteraction(fs);
+      InteractionAvatar::postInteraction(fs);
 
       if(fs->getValidity() == PauliBlockedFS)
         /* If the decay was Pauli-blocked, make sure the propagation model
@@ -108,12 +108,11 @@ namespace G4INCL {
           for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
             delete *i;
 
-          FinalState *fsBlocked = new FinalState;
-          delete fs;
-          fsBlocked->makeNoEnergyConservation();
-          fsBlocked->setTotalEnergyBeforeInteraction(0.0);
+          fs->reset();
+          fs->makeNoEnergyConservation();
+          fs->setTotalEnergyBeforeInteraction(0.0);
 
-          return fsBlocked; // Interaction is blocked. Return an empty final state.
+          return; // Interaction is blocked. Return an empty final state.
         } else {
           // If there is no nucleus we have to continue anyway, even if energy
           // conservation failed. We cannot afford producing unphysical
@@ -125,12 +124,6 @@ namespace G4INCL {
       }
 
       if(theNucleus) {
-        // Copy the final state, but don't include the pion (as if it had been
-        // emitted right away).
-        FinalState *emissionFS = new FinalState;
-        for(ParticleIter i=modified.begin(), e=modified.end(); i!=e; ++i)
-          emissionFS->addModifiedParticle(*i);
-
         // Test CDPP blocking
         G4bool isCDPPBlocked = Pauli::isCDPPBlocked(created, theNucleus);
 
@@ -144,20 +137,13 @@ namespace G4INCL {
           for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
             delete *i;
 
-          FinalState *fsBlocked = new FinalState;
-          delete fs;
-	  delete emissionFS;
+          fs->reset();
+          fs->makePauliBlocked();
+          fs->setTotalEnergyBeforeInteraction(0.0);
 
-          fsBlocked->makePauliBlocked();
-          fsBlocked->setTotalEnergyBeforeInteraction(0.0);
-
-          return fsBlocked; // Interaction is blocked. Return an empty final state.
+          return; // Interaction is blocked. Return an empty final state.
         }
         INCL_DEBUG("CDPP: Allowed!" << '\n');
-
-        // If all went well (energy conservation enforced and CDPP satisfied),
-        // delete the auxiliary final state
-        delete emissionFS;
 
       }
     }
@@ -176,7 +162,7 @@ namespace G4INCL {
           theNucleus->getStore()->getBook().incrementAcceptedDecays();
       }
     }
-    return fs;
+    return;
   }
 
   std::string DecayAvatar::dump() const {

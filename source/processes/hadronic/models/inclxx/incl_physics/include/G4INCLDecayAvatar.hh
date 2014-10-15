@@ -41,6 +41,7 @@
 #include "G4INCLIChannel.hh"
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
+#include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
 
@@ -55,11 +56,11 @@ namespace G4INCL {
     DecayAvatar(G4INCL::Particle *aParticle, G4double time, G4INCL::Nucleus *aNucleus, G4bool force=false);
     virtual ~DecayAvatar();
 
-    G4INCL::IChannel* getChannel();
-    G4INCL::FinalState* getFinalState();
+    IChannel* getChannel();
+    void fillFinalState(FinalState *fs);
 
     virtual void preInteraction();
-    virtual FinalState *postInteraction(FinalState *);
+    virtual void postInteraction(FinalState *fs);
 
     ParticleList getParticles() const {
       ParticleList theParticleList;
@@ -71,6 +72,8 @@ namespace G4INCL {
   private:
     G4bool forced;
     ThreeVector const incidentDirection;
+
+    INCL_DECLARE_ALLOCATION_POOL(DecayAvatar);
   };
 
 }

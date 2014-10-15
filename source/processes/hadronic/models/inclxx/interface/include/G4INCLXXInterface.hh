@@ -65,6 +65,10 @@
 // G4IonTable
 #include "G4IonTable.hh"
 
+// fission
+#include "G4VLevelDensityParameter.hh"
+#include "G4FissionProbability.hh"
+
 #include <fstream>
 #include <iostream>
 
@@ -176,6 +180,9 @@ private:
   G4IonTable * const theIonTable;
 
   G4bool dumpRemnantInfo;
+
+  G4VLevelDensityParameter *theINCLXXLevelDensity;
+  G4FissionProbability *theINCLXXFissionProbability;
 };
 
 #endif

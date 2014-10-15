@@ -37,6 +37,7 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLIChannel.hh"
 #include "G4INCLNucleus.hh"
+#include "G4INCLAllocationPool.hh"
 
 #ifndef G4INCLParticleEntry_hh
 #define G4INCLParticleEntry_hh 1
@@ -49,7 +50,7 @@ namespace G4INCL {
     ParticleEntryChannel(Nucleus *n, Particle *p);
     virtual ~ParticleEntryChannel();
 
-    FinalState* getFinalState();
+    void fillFinalState(FinalState *fs);
 
   private:
     /** \brief Modify particle that enters the nucleus.
@@ -63,6 +64,8 @@ namespace G4INCL {
 
     Nucleus *theNucleus;
     Particle *theParticle;
+
+    INCL_DECLARE_ALLOCATION_POOL(ParticleEntryChannel);
   };
 }
 

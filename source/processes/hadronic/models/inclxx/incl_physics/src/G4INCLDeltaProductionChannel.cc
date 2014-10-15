@@ -91,7 +91,7 @@ namespace G4INCL {
     return x;
   }
 
-  FinalState* DeltaProductionChannel::getFinalState() {
+  void DeltaProductionChannel::fillFinalState(FinalState *fs) {
     /**
      * Delta production
      *
@@ -235,9 +235,7 @@ namespace G4INCL {
     if(particle1->isDelta()) particle1->setMass(xmdel);
     if(particle2->isDelta()) particle2->setMass(xmdel);
 
-    FinalState *fs = new FinalState;
     fs->addModifiedParticle(particle1);
     fs->addModifiedParticle(particle2);
-    return fs;
   }
 }

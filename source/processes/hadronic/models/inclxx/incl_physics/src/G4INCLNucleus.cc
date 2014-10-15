@@ -182,6 +182,9 @@ namespace G4INCL {
         insertParticle(*iter);
         totalEnergy += (*iter)->getEnergy() - (*iter)->getPotentialEnergy();
       }
+
+      // actually perform the removal of the scheduled avatars
+      theStore->removeScheduledAvatars();
     } else if(validity == ParticleBelowFermiFS || validity == ParticleBelowZeroFS) {
       INCL_DEBUG("A Particle is entering below the Fermi sea:" << '\n' << finalstate->print() << '\n');
       tryCN = true;

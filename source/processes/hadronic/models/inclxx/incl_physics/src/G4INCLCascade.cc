@@ -306,7 +306,7 @@ namespace G4INCL {
   }
 
   void INCL::cascade() {
-    FinalState *finalState = NULL;
+    FinalState *finalState = new FinalState;
 
     do {
       // Run book keeping actions that should take place before propagation:
@@ -316,8 +316,7 @@ namespace G4INCL {
       // to that point in time.
       IAvatar *avatar = propagationModel->propagate(finalState);
 
-      delete finalState;
-      finalState = NULL;
+      finalState->reset();
 
       // Run book keeping actions that should take place after propagation:
       cascadeAction->afterPropagationAction(propagationModel, avatar);
@@ -334,7 +333,7 @@ namespace G4INCL {
       // channels.
       // The handling of the channel is transparent to the API.
       // Final state tells what changed...
-      finalState = avatar->getFinalState();
+      avatar->fillFinalState(finalState);
 
       // Run book keeping actions that should take place after avatar:
       cascadeAction->afterAvatarAction(avatar, nucleus, finalState);
@@ -347,7 +346,6 @@ namespace G4INCL {
     } while(continueCascade());
 
     delete finalState;
-
   }
 
   void INCL::postCascade() {

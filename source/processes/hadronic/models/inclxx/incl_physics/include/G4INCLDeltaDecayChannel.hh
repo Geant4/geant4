@@ -42,6 +42,7 @@
 #include "G4INCLNucleus.hh"
 #include "G4INCLIChannel.hh"
 #include "G4INCLFinalState.hh"
+#include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
   class DeltaDecayChannel : public IChannel {
@@ -49,14 +50,16 @@ namespace G4INCL {
     DeltaDecayChannel(Particle *, ThreeVector const &);
     virtual ~DeltaDecayChannel();
 
-    static G4double computeDecayTime(Particle *p, const G4bool isDeltaFixed);
-    FinalState* getFinalState();
+    static G4double computeDecayTime(Particle *p);
+    void fillFinalState(FinalState *fs);
 
   private:
     void sampleAngles(G4double*, G4double*, G4double*);
 
     Particle *theParticle;
     ThreeVector const incidentDirection;
+
+    INCL_DECLARE_ALLOCATION_POOL(DeltaDecayChannel);
   };
 }
 

@@ -69,7 +69,7 @@ namespace G4INCL {
   {
   }
 
-  FinalState* RecombinationChannel::getFinalState()
+  void RecombinationChannel::fillFinalState(FinalState *fs)
   {
     // Compute the total available energy in the CM
     const G4double sqrts = KinematicsUtils::totalEnergyInCM(theDelta, theNucleon);
@@ -112,11 +112,8 @@ namespace G4INCL {
     theNucleon->adjustEnergyFromMomentum();
 
     // Create the final state
-    FinalState *fs = new FinalState();
     fs->addModifiedParticle(theDelta);
     fs->addModifiedParticle(theNucleon);
-
-    return fs;
 
   }
 

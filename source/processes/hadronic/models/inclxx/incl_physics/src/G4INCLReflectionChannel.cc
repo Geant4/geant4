@@ -54,9 +54,7 @@ namespace G4INCL {
   {
   }
 
-  FinalState* ReflectionChannel::getFinalState()
-  {
-    FinalState *fs = new FinalState(); // Create final state for the output
+  void ReflectionChannel::fillFinalState(FinalState *fs) {
     fs->setTotalEnergyBeforeInteraction(theParticle->getEnergy() - theParticle->getPotentialEnergy());
 
     const ThreeVector &oldMomentum = theParticle->getMomentum();
@@ -85,7 +83,6 @@ namespace G4INCL {
 
     theParticle->thawPropagation();
     fs->addModifiedParticle(theParticle);
-    return fs;
   }
 }
 

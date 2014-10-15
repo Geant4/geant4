@@ -263,10 +263,10 @@ namespace G4INCL {
     InteractionAvatar::preInteraction();
   }
 
-  FinalState *BinaryCollisionAvatar::postInteraction(FinalState *fs) {
+  void BinaryCollisionAvatar::postInteraction(FinalState *fs) {
     // Call the postInteraction method of the parent class
     // (provides Pauli blocking and enforces energy conservation)
-    fs = InteractionAvatar::postInteraction(fs);
+    InteractionAvatar::postInteraction(fs);
 
     switch(fs->getValidity()) {
       case PauliBlockedFS:
@@ -302,7 +302,7 @@ namespace G4INCL {
           theBook.setFirstCollisionIsElastic(isElastic);
         }
     }
-    return fs;
+    return;
   }
 
   std::string BinaryCollisionAvatar::dump() const {

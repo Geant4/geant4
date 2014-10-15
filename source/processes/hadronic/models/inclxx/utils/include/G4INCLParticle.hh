@@ -35,7 +35,7 @@
 #include "globals.hh"
 
 /*
- * Particle.hh
+ * G4INCLParticle.hh
  *
  *  \date Jun 5, 2009
  * \author Pekka Kaitaniemi
@@ -49,46 +49,14 @@
 #include "G4INCLParticleType.hh"
 #include "G4INCLParticleSpecies.hh"
 #include "G4INCLLogger.hh"
-#include <vector>
+#include "G4INCLUnorderedVector.hh"
+#include "G4INCLAllocationPool.hh"
 #include <sstream>
 #include <string>
-#include <algorithm>
 
 namespace G4INCL {
 
   class Particle;
-
-  template<class T>
-    class UnorderedVector : private std::vector<T> {
-      public:
-        UnorderedVector() {}
-        using std::vector<T>::push_back;
-        using std::vector<T>::pop_back;
-        using std::vector<T>::size;
-        using std::vector<T>::begin;
-        using std::vector<T>::end;
-        using std::vector<T>::rbegin;
-        using std::vector<T>::rend;
-        using std::vector<T>::front;
-        using std::vector<T>::back;
-        using std::vector<T>::clear;
-        using std::vector<T>::empty;
-        using std::vector<T>::insert;
-        using std::vector<T>::erase;
-        using std::vector<T>::operator[];
-        using std::vector<T>::reserve;
-        using std::vector<T>::resize;
-        using typename std::vector<T>::iterator;
-        using typename std::vector<T>::reverse_iterator;
-        using typename std::vector<T>::const_iterator;
-        using typename std::vector<T>::const_reverse_iterator;
-        void remove(const T &t) {
-          const typename std::vector<T>::iterator removeMe = std::find(begin(), end(), t);
-// assert(removeMe!=end());
-          *removeMe = back();
-          pop_back();
-        }
-    };
 
   class ParticleList : public UnorderedVector<Particle*> {
     public:
@@ -670,11 +638,6 @@ namespace G4INCL {
     /** \brief Recompute the energy to match the momentum. */
     G4double adjustEnergyFromMomentum();
 
-    /** \brief Check if the particle belongs to a given list **/
-    G4bool isInList(ParticleList const &l) const {
-      return (std::find(l.begin(), l.end(), this)!=l.end());
-    }
-
     G4bool isCluster() const {
       return (theType == Composite);
     }
@@ -841,7 +804,14 @@ namespace G4INCL {
     G4double theMass;
     static G4ThreadLocal long nextID;
 
+    INCL_DECLARE_ALLOCATION_POOL(Particle);
   };
 }
+
+#ifndef NDEBUG
+// Force instantiation of all the std::vector<Particle*> methods for debugging
+// purposes
+template class std::vector<G4INCL::Particle*>;
+#endif
 
 #endif /* PARTICLE_HH_ */

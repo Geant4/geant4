@@ -108,8 +108,7 @@ namespace G4INCL {
     theParticle->adjustMomentumFromEnergy();
   }
 
-  FinalState* TransmissionChannel::getFinalState() {
-    FinalState *fs = new FinalState;
+  void TransmissionChannel::fillFinalState(FinalState *fs) {
     G4double initialEnergy = 0.0;
     initialEnergy = theParticle->getEnergy() - theParticle->getPotentialEnergy();
 
@@ -123,6 +122,5 @@ namespace G4INCL {
 
     fs->setTotalEnergyBeforeInteraction(initialEnergy);
     fs->addOutgoingParticle(theParticle); // We write the particle down as outgoing
-    return fs;
   }
 }

@@ -56,10 +56,12 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLNaturalIsotopicDistributions.hh
         G4INCLHornerFormEvaluator.hh
         G4INCLHashing.hh
+        G4INCLUnorderedVector.hh
         G4INCLLogger.hh
         G4INCLGlobalInfo.hh
         G4INCLNuclearMassTable.hh
         G4INCLGlobals.hh
+        G4INCLAllocationPool.hh
         G4INCLRandomSeedVector.hh
         G4INCLParticleType.hh
         G4INCLBook.hh
@@ -97,6 +99,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_utils
         G4INCLRootFinder.cc
         G4INCLRanecu.cc
         G4INCLRandomSeedVector.cc
+        G4INCLIChannel.cc
         G4INCLRandom.cc
         G4INCLFinalState.cc
         G4INCLNaturalIsotopicDistributions.cc

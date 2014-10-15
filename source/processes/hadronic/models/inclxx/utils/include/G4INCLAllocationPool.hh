@@ -34,69 +34,78 @@
 
 #include "globals.hh"
 
-/*
- * G4INCLIChannel.h
+/** \file G4INCLAllocationPool.hh
+ * \brief Singleton for recycling allocation of instances of a given class
  *
- *  \date Jun 5, 2009
- * \author Pekka Kaitaniemi
+ * \date 2nd October 2014
+ * \author Davide Mancusi
  */
 
-#ifndef G4INCLFINALSTATE_H_
-#define G4INCLFINALSTATE_H_
+#ifndef G4INCLALLOCATIONPOOL_HH
+#define G4INCLALLOCATIONPOOL_HH
 
-#include "G4INCLParticle.hh"
-#include <string>
+#include <stack>
+#include <new>
+#include <cstddef>
 
 namespace G4INCL {
 
-  enum FinalStateValidity {
-    ValidFS,
-    PauliBlockedFS,
-    NoEnergyConservationFS,
-    ParticleBelowFermiFS,
-    ParticleBelowZeroFS
-  };
+  template<typename T>
+    class AllocationPool {
+      public:
+        static AllocationPool &getInstance() {
+          if(!theInstance)
+            theInstance = new AllocationPool<T>;
+          return *theInstance;
+        }
 
-  /**
-   * Final state of an interaction
-   */
-  class FinalState {
-  public:
-    FinalState();
-    virtual ~FinalState();
+        T *getObject() {
+          if(theStack.empty())
+            return static_cast<T*>(::operator new(sizeof(T)));
+          else {
+            T *t = theStack.top();
+            theStack.pop();
+            return t;
+          }
+        }
 
-    void reset();
+        void recycleObject(T *t) {
+          theStack.push(t);
+        }
 
-    void setTotalEnergyBeforeInteraction(G4double E) { totalEnergyBeforeInteraction = E; };
-    G4double getTotalEnergyBeforeInteraction() const { return totalEnergyBeforeInteraction; };
+        void clear() {
+          while(!theStack.empty()) {
+            ::operator delete(theStack.top());
+            theStack.pop();
+          }
+        }
 
-    void addModifiedParticle(Particle *p);
-    void addOutgoingParticle(Particle *p);
-    void addDestroyedParticle(Particle *p);
-    void addCreatedParticle(Particle *p);
-    void addEnteringParticle(Particle *p);
+      protected:
+        AllocationPool() {}
+        virtual ~AllocationPool() {
+          clear();
+        }
 
-    ParticleList const &getModifiedParticles() const;
-    ParticleList const &getOutgoingParticles() const;
-    ParticleList const &getDestroyedParticles() const;
-    ParticleList const &getCreatedParticles() const;
-    ParticleList const &getEnteringParticles() const;
+        static G4ThreadLocal AllocationPool *theInstance;
 
-    FinalStateValidity getValidity() const { return validity; }
-    void makeValid() { validity = ValidFS; }
-    void makePauliBlocked() { validity = PauliBlockedFS; }
-    void makeNoEnergyConservation() { validity = NoEnergyConservationFS; }
-    void makeParticleBelowFermi() { validity = ParticleBelowFermiFS; }
-    void makeParticleBelowZero() { validity = ParticleBelowZeroFS; }
+        std::stack<T*> theStack;
 
-    std::string print() const;
+    };
 
-  private:
-    ParticleList outgoing, created, destroyed, modified, entering;
-    G4double totalEnergyBeforeInteraction;
-    FinalStateValidity validity;
-  };
+  template<typename T>
+    G4ThreadLocal AllocationPool<T> *AllocationPool<T>::theInstance = 0;
 
 }
 
-#endif /* G4INCLFINALSTATE_H_ */
+#define INCL_DECLARE_ALLOCATION_POOL(T) \
+  public: \
+    static void *operator new(size_t /* s */) { \
+      ::G4INCL::AllocationPool<T> &allocator = ::G4INCL::AllocationPool<T>::getInstance(); \
+      return allocator.getObject(); \
+    } \
+    static void operator delete(void *a, size_t /* s */) { \
+      ::G4INCL::AllocationPool<T> &allocator = ::G4INCL::AllocationPool<T>::getInstance(); \
+      allocator.recycleObject(static_cast<T *>(a)); \
+    }
+
+#endif // G4INCLALLOCATIONPOOL_HH

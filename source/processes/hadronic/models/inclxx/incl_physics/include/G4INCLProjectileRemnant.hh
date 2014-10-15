@@ -46,6 +46,7 @@
 
 #include "G4INCLCluster.hh"
 #include "G4INCLRandom.hh"
+#include "G4INCLAllocationPool.hh"
 #include <vector>
 #include <map>
 #include <numeric>
@@ -278,6 +279,7 @@ namespace G4INCL {
     /// \brief Ground-state energies for any number of nucleons
     EnergyLevels theGroundStateEnergies;
 
+    INCL_DECLARE_ALLOCATION_POOL(ProjectileRemnant);
   };
 }
 

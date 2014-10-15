@@ -40,6 +40,7 @@
 #include "G4INCLIAvatar.hh"
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
+#include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
   class ParticleEntryAvatar: public G4INCL::IAvatar {
@@ -54,12 +55,14 @@ namespace G4INCL {
     };
 
     virtual void preInteraction() {};
-    virtual FinalState *postInteraction(FinalState *);
+    virtual void postInteraction(FinalState *);
 
     std::string dump() const;
   private:
     Nucleus *theNucleus;
     Particle *theParticle;
+
+    INCL_DECLARE_ALLOCATION_POOL(ParticleEntryAvatar);
   };
 }
 

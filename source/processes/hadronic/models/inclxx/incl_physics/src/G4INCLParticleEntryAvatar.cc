@@ -63,9 +63,8 @@ namespace G4INCL {
     return ss.str();
   }
 
-  FinalState* ParticleEntryAvatar::postInteraction(FinalState *fs) {
+  void ParticleEntryAvatar::postInteraction(FinalState * /* fs */) {
     theParticle->rpCorrelate();
-    return fs;
   }
 
   IChannel* ParticleEntryAvatar::getChannel() {

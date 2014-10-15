@@ -40,6 +40,7 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLIChannel.hh"
 #include "G4INCLFinalState.hh"
+#include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
   class NNToMultiPionsChannel : public IChannel {
@@ -47,7 +48,7 @@ namespace G4INCL {
       NNToMultiPionsChannel(const G4int, Particle *, Particle *);
       virtual ~NNToMultiPionsChannel();
 
-      FinalState* getFinalState();
+      void fillFinalState(FinalState *fs);
 
     private:
       G4int npion;
@@ -114,6 +115,8 @@ namespace G4INCL {
       void nn_pnPipPi0PimPim();
       void pn_ppPipPi0PimPim();
       void isospinRepartition();
+
+      INCL_DECLARE_ALLOCATION_POOL(NNToMultiPionsChannel);
   };
 }
 

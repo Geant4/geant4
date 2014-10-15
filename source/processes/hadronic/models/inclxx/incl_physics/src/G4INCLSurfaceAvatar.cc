@@ -162,20 +162,20 @@ namespace G4INCL {
     }
   }
 
-  G4INCL::FinalState* SurfaceAvatar::getFinalState() {
-    return getChannel()->getFinalState();
+  void SurfaceAvatar::fillFinalState(FinalState *fs) {
+    getChannel()->fillFinalState(fs);
   }
 
   void SurfaceAvatar::preInteraction() {}
 
-  FinalState *SurfaceAvatar::postInteraction(FinalState *fs) {
+  void SurfaceAvatar::postInteraction(FinalState *fs) {
     ParticleList const &outgoing = fs->getOutgoingParticles();
     if(!outgoing.empty()) { // Transmission
 // assert(outgoing.size()==1);
       Particle *out = outgoing.front();
       out->rpCorrelate();
       if(out->isCluster()) {
-	Cluster *clusterOut = dynamic_cast<Cluster*>(out);
+        Cluster *clusterOut = dynamic_cast<Cluster*>(out);
         ParticleList const &components = clusterOut->getParticles();
         for(ParticleIter i=components.begin(), e=components.end(); i!=e; ++i) {
           if(!(*i)->isTargetSpectator())
@@ -186,7 +186,6 @@ namespace G4INCL {
         theNucleus->getStore()->getBook().decrementCascading();
       }
     }
-    return fs;
   }
 
   std::string SurfaceAvatar::dump() const {

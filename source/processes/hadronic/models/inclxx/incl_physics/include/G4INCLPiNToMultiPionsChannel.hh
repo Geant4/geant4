@@ -40,6 +40,7 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLIChannel.hh"
 #include "G4INCLFinalState.hh"
+#include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
   class PiNToMultiPionsChannel : public IChannel {
@@ -47,7 +48,7 @@ namespace G4INCL {
       PiNToMultiPionsChannel(const G4int, Particle *, Particle *);
       virtual ~PiNToMultiPionsChannel();
 
-      FinalState* getFinalState();
+      void fillFinalState(FinalState *fs);
 
     private:
       G4int npion;
@@ -58,6 +59,8 @@ namespace G4INCL {
       static const G4double angularSlope;
 
       void isospinRepartition(G4int ipi);
+
+      INCL_DECLARE_ALLOCATION_POOL(PiNToMultiPionsChannel);
   };
 }
 

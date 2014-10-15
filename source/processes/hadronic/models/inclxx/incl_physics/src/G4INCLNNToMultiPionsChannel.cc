@@ -61,9 +61,7 @@ namespace G4INCL {
 
   }
 
-  FinalState* NNToMultiPionsChannel::getFinalState() {
-    FinalState *fs = new FinalState;
-
+  void NNToMultiPionsChannel::fillFinalState(FinalState *fs) {
 // assert(npion > 0 && npion < 5);
 
       iso1=ParticleTable::getIsospin(particle1->getType());
@@ -96,7 +94,6 @@ namespace G4INCL {
       G4int biasIndex = ((Random::shoot()<0.5) ? 0 : 1);
       PhaseSpaceGenerator::generateBiased(sqrtS, list, biasIndex, angularSlope);
 
-      return fs;
   }
 
     void NNToMultiPionsChannel::isospinRepartition() {

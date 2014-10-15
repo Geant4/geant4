@@ -35,68 +35,57 @@
 #include "globals.hh"
 
 /*
- * G4INCLIChannel.h
+ * \file G4INCLUnorderedVector.hh
  *
- *  \date Jun 5, 2009
- * \author Pekka Kaitaniemi
+ * \date 2nd October 2014
+ * \author Davide Mancusi
  */
 
-#ifndef G4INCLFINALSTATE_H_
-#define G4INCLFINALSTATE_H_
+#ifndef G4INCLUNORDEREDVECTOR_HH_
+#define G4INCLUNORDEREDVECTOR_HH_
 
-#include "G4INCLParticle.hh"
-#include <string>
+#include <vector>
+#include <algorithm>
 
 namespace G4INCL {
 
-  enum FinalStateValidity {
-    ValidFS,
-    PauliBlockedFS,
-    NoEnergyConservationFS,
-    ParticleBelowFermiFS,
-    ParticleBelowZeroFS
-  };
+  template<class T>
+    class UnorderedVector : private std::vector<T> {
+      public:
+        UnorderedVector() {}
+        using std::vector<T>::push_back;
+        using std::vector<T>::pop_back;
+        using std::vector<T>::size;
+        using std::vector<T>::begin;
+        using std::vector<T>::end;
+        using std::vector<T>::rbegin;
+        using std::vector<T>::rend;
+        using std::vector<T>::front;
+        using std::vector<T>::back;
+        using std::vector<T>::clear;
+        using std::vector<T>::empty;
+        using std::vector<T>::insert;
+        using std::vector<T>::erase;
+        using std::vector<T>::operator[];
+        using std::vector<T>::reserve;
+        using std::vector<T>::resize;
+        using typename std::vector<T>::iterator;
+        using typename std::vector<T>::reverse_iterator;
+        using typename std::vector<T>::const_iterator;
+        using typename std::vector<T>::const_reverse_iterator;
 
-  /**
-   * Final state of an interaction
-   */
-  class FinalState {
-  public:
-    FinalState();
-    virtual ~FinalState();
+        void remove(const T &t) {
+          const typename std::vector<T>::iterator removeMe = std::find(begin(), end(), t);
+// assert(removeMe!=end());
+          *removeMe = back();
+          pop_back();
+        }
 
-    void reset();
-
-    void setTotalEnergyBeforeInteraction(G4double E) { totalEnergyBeforeInteraction = E; };
-    G4double getTotalEnergyBeforeInteraction() const { return totalEnergyBeforeInteraction; };
-
-    void addModifiedParticle(Particle *p);
-    void addOutgoingParticle(Particle *p);
-    void addDestroyedParticle(Particle *p);
-    void addCreatedParticle(Particle *p);
-    void addEnteringParticle(Particle *p);
-
-    ParticleList const &getModifiedParticles() const;
-    ParticleList const &getOutgoingParticles() const;
-    ParticleList const &getDestroyedParticles() const;
-    ParticleList const &getCreatedParticles() const;
-    ParticleList const &getEnteringParticles() const;
-
-    FinalStateValidity getValidity() const { return validity; }
-    void makeValid() { validity = ValidFS; }
-    void makePauliBlocked() { validity = PauliBlockedFS; }
-    void makeNoEnergyConservation() { validity = NoEnergyConservationFS; }
-    void makeParticleBelowFermi() { validity = ParticleBelowFermiFS; }
-    void makeParticleBelowZero() { validity = ParticleBelowZeroFS; }
-
-    std::string print() const;
-
-  private:
-    ParticleList outgoing, created, destroyed, modified, entering;
-    G4double totalEnergyBeforeInteraction;
-    FinalStateValidity validity;
-  };
+        G4bool contains(const T &t) const {
+          return (std::find(begin(), end(), t)!=end());
+        }
+    };
 
 }
 
-#endif /* G4INCLFINALSTATE_H_ */
+#endif // G4INCLUNORDEREDVECTOR_HH_

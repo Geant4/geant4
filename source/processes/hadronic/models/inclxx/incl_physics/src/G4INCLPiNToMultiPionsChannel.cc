@@ -60,8 +60,7 @@ namespace G4INCL {
 
   }
 
-  FinalState* PiNToMultiPionsChannel::getFinalState() {
-    FinalState *fs = new FinalState;
+  void PiNToMultiPionsChannel::fillFinalState(FinalState *fs) {
 
 // assert(npion > 1 && npion < 5);
 
@@ -102,7 +101,6 @@ namespace G4INCL {
       const G4double sqrtS = KinematicsUtils::totalEnergyInCM(nucleon, pion);
       PhaseSpaceGenerator::generateBiased(sqrtS, list, 0, angularSlope);
 
-      return fs;
   }
 
     void PiNToMultiPionsChannel::isospinRepartition(G4int ipi) {

@@ -35,18 +35,20 @@
 #include "globals.hh"
 
 /*
- * G4INCLIChannel.h
+ * G4INCLIChannel.hh
  *
  *  \date Jun 5, 2009
  * \author Pekka Kaitaniemi
  */
 
-#include "G4INCLFinalState.hh"
-
 #ifndef G4INCLICHANNEL_H_
 #define G4INCLICHANNEL_H_
 
+#include "G4INCLAllocationPool.hh"
+
 namespace G4INCL {
+
+  class FinalState;
 
   /**
    * Channel generates a final state of an avatar.
@@ -56,7 +58,10 @@ namespace G4INCL {
     IChannel() {}
     virtual ~IChannel() {}
 
-    virtual G4INCL::FinalState* getFinalState() = 0;
+    FinalState *getFinalState();
+    virtual void fillFinalState(FinalState *fs) = 0;
+
+    INCL_DECLARE_ALLOCATION_POOL(IChannel);
   };
 
 }

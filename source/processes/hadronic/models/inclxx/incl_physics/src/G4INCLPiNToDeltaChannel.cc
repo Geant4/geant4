@@ -53,9 +53,7 @@ namespace G4INCL {
 
   }
 
-  FinalState* PiNToDeltaChannel::getFinalState() {
-    FinalState *fs = new FinalState;
-
+  void PiNToDeltaChannel::fillFinalState(FinalState *fs) {
     Particle * nucleon;
     Particle * pion;
     if(particle1->isNucleon()) {
@@ -96,7 +94,6 @@ namespace G4INCL {
 
     fs->addModifiedParticle(nucleon); // nucleon became a delta
     fs->addDestroyedParticle(pion);  // pion was removed
-    return fs;
   }
 
 }

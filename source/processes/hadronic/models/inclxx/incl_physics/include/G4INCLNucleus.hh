@@ -415,6 +415,7 @@ namespace G4INCL {
     /// \brief Pointer to the NuclearPotential object
     NuclearPotential::INuclearPotential const *thePotential;
 
+    INCL_DECLARE_ALLOCATION_POOL(Nucleus);
   };
 
 }

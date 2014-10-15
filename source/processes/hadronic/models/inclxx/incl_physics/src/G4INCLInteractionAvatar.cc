@@ -160,7 +160,7 @@ namespace G4INCL {
       return false;
   }
 
-  FinalState *InteractionAvatar::postInteraction(FinalState *fs) {
+  void InteractionAvatar::postInteraction(FinalState *fs) {
     INCL_DEBUG("postInteraction: final state: " << '\n' << fs->print() << '\n');
     modified = fs->getModifiedParticles();
     created = fs->getCreatedParticles();
@@ -171,7 +171,7 @@ namespace G4INCL {
     modifiedAndCreated.boost(-boostVector);
 
     // If there is no Nucleus, just return
-    if(!theNucleus) return fs;
+    if(!theNucleus) return;
 
     // Mark pions that have been created outside their well (we will force them
     // to be emitted later).
@@ -197,12 +197,11 @@ namespace G4INCL {
       for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
         delete *i;
 
-      FinalState *fsBlocked = new FinalState;
-      delete fs;
-      fsBlocked->makeNoEnergyConservation();
-      fsBlocked->setTotalEnergyBeforeInteraction(0.0);
+      fs->reset();
+      fs->makeNoEnergyConservation();
+      fs->setTotalEnergyBeforeInteraction(0.0);
 
-      return fsBlocked; // Interaction is blocked. Return an empty final state.
+      return; // Interaction is blocked. Return an empty final state.
     }
     INCL_DEBUG("Enforcing energy conservation: success!" << '\n');
 
@@ -222,12 +221,11 @@ namespace G4INCL {
         for(ParticleIter j=created.begin(), end=created.end(); j!=end; ++j )
           delete *j;
 
-        FinalState *fsBlocked = new FinalState;
-        delete fs;
-        fsBlocked->makeNoEnergyConservation();
-        fsBlocked->setTotalEnergyBeforeInteraction(0.0);
+        fs->reset();
+        fs->makeNoEnergyConservation();
+        fs->setTotalEnergyBeforeInteraction(0.0);
 
-        return fsBlocked; // Interaction is blocked. Return an empty final state.
+        return; // Interaction is blocked. Return an empty final state.
       }
 
     INCL_DEBUG("Random seeds before Pauli blocking: " << Random::getSeeds() << '\n');
@@ -244,12 +242,11 @@ namespace G4INCL {
       for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
         delete *i;
 
-      FinalState *fsBlocked = new FinalState;
-      delete fs;
-      fsBlocked->makePauliBlocked();
-      fsBlocked->setTotalEnergyBeforeInteraction(0.0);
+      fs->reset();
+      fs->makePauliBlocked();
+      fs->setTotalEnergyBeforeInteraction(0.0);
 
-      return fsBlocked; // Interaction is blocked. Return an empty final state.
+      return; // Interaction is blocked. Return an empty final state.
     }
     INCL_DEBUG("Pauli: Allowed!" << '\n');
 
@@ -266,12 +263,11 @@ namespace G4INCL {
       for(ParticleIter i=created.begin(), e=created.end(); i!=e; ++i )
         delete *i;
 
-      FinalState *fsBlocked = new FinalState;
-      delete fs;
-      fsBlocked->makePauliBlocked();
-      fsBlocked->setTotalEnergyBeforeInteraction(0.0);
+      fs->reset();
+      fs->makePauliBlocked();
+      fs->setTotalEnergyBeforeInteraction(0.0);
 
-      return fsBlocked; // Interaction is blocked. Return an empty final state.
+      return; // Interaction is blocked. Return an empty final state.
     }
     INCL_DEBUG("CDPP: Allowed!" << '\n');
 
@@ -325,7 +321,7 @@ namespace G4INCL {
       if(!(*i)->isTargetSpectator())
         theNucleus->getStore()->getBook().decrementCascading();
 
-    return fs;
+    return;
   }
 
   void InteractionAvatar::restoreParticles() const {

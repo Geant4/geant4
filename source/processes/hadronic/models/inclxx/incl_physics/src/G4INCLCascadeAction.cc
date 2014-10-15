@@ -112,14 +112,14 @@ namespace G4INCL {
     INCL_DEBUG("Random seeds after avatar " << a->getID() << ": "
           << G4INCL::Random::getSeeds() << '\n');
 
-    ParticleList modified = fs->getModifiedParticles();
+    ParticleList const &modified = fs->getModifiedParticles();
     for(ParticleIter p=modified.begin(), e=modified.end(); p!=e; ++p )
       if(a->isACollision())
         (*p)->incrementNumberOfCollisions();
       else if(a->isADecay())
         (*p)->incrementNumberOfDecays();
 
-    ParticleList created = fs->getCreatedParticles();
+    ParticleList const &created = fs->getCreatedParticles();
     for(ParticleIter p=created.begin(), e=created.end(); p!=e; ++p )
       if(a->isACollision())
         (*p)->incrementNumberOfCollisions();

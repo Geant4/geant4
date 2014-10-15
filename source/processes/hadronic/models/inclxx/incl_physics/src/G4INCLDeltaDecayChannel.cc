@@ -48,12 +48,11 @@ namespace G4INCL {
 
   DeltaDecayChannel::~DeltaDecayChannel() {}
 
-  G4double DeltaDecayChannel::computeDecayTime(Particle *p, const G4bool isDeltaFixed) {
+  G4double DeltaDecayChannel::computeDecayTime(Particle *p) {
     const G4double m = p->getMass();
     const G4double g0 = 115.0;
     G4double gg = g0;
     if(m > 1500.0) gg = 200.0;
-    if (isDeltaFixed) gg = 200.0;
     const G4double geff = p->getEnergy()/m;
     const G4double qqq = KinematicsUtils::momentumInCM(m, ParticleTable::effectiveNucleonMass, ParticleTable::effectivePionMass);
     const G4double psf = std::pow(qqq, 3)/(std::pow(qqq, 3) + 5832000.0);
@@ -72,7 +71,7 @@ namespace G4INCL {
     (*phi_par) = Math::twoPi * Random::shoot();
   }
 
-  FinalState* DeltaDecayChannel::getFinalState() {
+  void DeltaDecayChannel::fillFinalState(FinalState *fs) {
     //      SUBROUTINE DECAY2(P1,P2,P3,WP,ij,
     //     s       X1,X2,hel,B1,B2,B3)
 
@@ -177,7 +176,6 @@ namespace G4INCL {
     theParticle->setMomentum(-pionMomentum);
     theParticle->adjustEnergyFromMomentum();
 
-    FinalState *fs = new FinalState;
     fs->addModifiedParticle(theParticle);
     fs->addCreatedParticle(pion);
     //      call loren(q1,q2,q3,b1,b2,b3,wq)
@@ -189,6 +187,5 @@ namespace G4INCL {
     //      ym(ij)=xi
     //      RETURN                                                            P-N21120
     //      END                                                               P-N21130
-    return fs;
   }
 }

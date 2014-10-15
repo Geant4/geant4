@@ -39,6 +39,7 @@
 #include "G4INCLNucleus.hh"
 #include "G4INCLIChannel.hh"
 #include "G4INCLFinalState.hh"
+#include "G4INCLAllocationPool.hh"
 
 #ifndef G4INCLElasticChannel_HH_
 #define G4INCLElasticChannel_HH_ 1
@@ -50,10 +51,12 @@ namespace G4INCL {
     ElasticChannel(Particle *p1, Particle *p2);
     virtual ~ElasticChannel();
 
-    FinalState* getFinalState();
+    void fillFinalState(FinalState *fs);
 
   private:
     Particle *particle1, *particle2;
+
+    INCL_DECLARE_ALLOCATION_POOL(ElasticChannel);
   };
 
 }

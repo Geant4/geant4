@@ -48,6 +48,7 @@
 #include "G4INCLNucleus.hh"
 #include "G4INCLFinalState.hh"
 #include "G4INCLInteractionAvatar.hh"
+#include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
 
@@ -64,7 +65,7 @@ namespace G4INCL {
     };
 
     virtual void preInteraction();
-    virtual FinalState *postInteraction(FinalState *);
+    virtual void postInteraction(FinalState *);
 
     std::string dump() const;
 
@@ -84,6 +85,8 @@ namespace G4INCL {
     G4bool isParticle1Spectator;
     G4bool isParticle2Spectator;
     G4bool isElastic;
+
+    INCL_DECLARE_ALLOCATION_POOL(BinaryCollisionAvatar);
   };
 
 }

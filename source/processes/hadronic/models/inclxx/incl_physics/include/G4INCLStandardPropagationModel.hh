@@ -167,7 +167,7 @@ namespace G4INCL {
        * \param particles list of particles to (possibly) generate decays for
        * \param isDeltaFixed whether the delta has to be given a fixed width
        */
-      void generateDecays(const ParticleList &particles, const G4bool isDeltaFixed);
+      void generateDecays(const ParticleList &particles);
 
       /**
        * Update all avatars related to a particle.

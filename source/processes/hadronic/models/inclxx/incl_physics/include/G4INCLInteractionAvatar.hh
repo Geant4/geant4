@@ -53,6 +53,7 @@
 #include "G4INCLFinalState.hh"
 #include "G4INCLRootFinder.hh"
 #include "G4INCLKinematicsUtils.hh"
+#include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
 
@@ -90,7 +91,7 @@ namespace G4INCL {
       void preInteractionBlocking();
 
       void preInteraction();
-      FinalState *postInteraction(FinalState *);
+      void postInteraction(FinalState *);
 
       /** \brief Restore the state of both particles.
        *
@@ -219,6 +220,7 @@ namespace G4INCL {
 
       ParticleList modified, created, modifiedAndCreated;
 
+      INCL_DECLARE_ALLOCATION_POOL(InteractionAvatar);
   };
 
 }

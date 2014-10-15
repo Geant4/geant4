@@ -66,6 +66,7 @@ namespace G4INCL {
   }
 
   IAvatar::~IAvatar() {
+    INCL_DEBUG("destroying avatar " << this << std::endl);
   }
 
   std::string IAvatar::toString() {
@@ -85,21 +86,24 @@ namespace G4INCL {
     return entry.str();
   }
 
-  G4INCL::FinalState* IAvatar::getFinalState()
-  {
+  FinalState *IAvatar::getFinalState() {
+    FinalState *fs = new FinalState;
+    fillFinalState(fs);
+    return fs;
+  }
+
+  void IAvatar::fillFinalState(FinalState *fs) {
     INCL_DEBUG("Random seeds before preInteraction: " << Random::getSeeds() << '\n');
     preInteraction();
     INCL_DEBUG("Random seeds before getChannel: " << Random::getSeeds() << '\n');
     IChannel *c = getChannel();
-    if( !c ) {
-      return NULL;
-    }
+    if( !c )
+      return;
     INCL_DEBUG("Random seeds before getFinalState: " << Random::getSeeds() << '\n');
-    FinalState *fs = c->getFinalState();
+    c->fillFinalState(fs);
     INCL_DEBUG("Random seeds before postInteraction: " << Random::getSeeds() << '\n');
-    fs = postInteraction(fs);
+    postInteraction(fs);
     delete c;
-    return fs;
   }
 
 }

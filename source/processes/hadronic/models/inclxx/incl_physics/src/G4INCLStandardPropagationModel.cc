@@ -382,7 +382,7 @@ namespace G4INCL {
            * is not one of the updated particles.
            * The criterion makes sure that you don't generate avatars between
            * updated particles. */
-          if((*particle)->isInList(updatedParticles)) continue;
+          if(updatedParticles.contains(*particle)) continue;
 
           registerAvatar(generateBinaryCollisionAvatar(*particle,*updated));
         }
@@ -411,7 +411,7 @@ namespace G4INCL {
         for(++p2; p2 != particles.end(); ++p2)
         {
           // Skip the collision if both particles must be excluded
-          if(haveExcept && (*p1)->isInList(except) && (*p2)->isInList(except)) continue;
+          if(haveExcept && except.contains(*p1) && except.contains(*p2)) continue;
 
           registerAvatar(generateBinaryCollisionAvatar(*p1,*p2));
         }
@@ -432,12 +432,13 @@ namespace G4INCL {
     void StandardPropagationModel::generateAllAvatars() {
       ParticleList const &particles = theNucleus->getStore()->getParticles();
 // assert(!particles.empty());
+      G4double time;
       for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i) {
-        G4double time = this->getReflectionTime(*i);
+        time = this->getReflectionTime(*i);
         if(time <= maximumTime) registerAvatar(new SurfaceAvatar(*i, time, theNucleus));
       }
       generateCollisions(particles);
-      generateDecays(particles,false);
+      generateDecays(particles);
     }
 
 #ifdef INCL_REGENERATE_AVATARS
@@ -452,14 +453,14 @@ namespace G4INCL {
       ParticleList const &entering = fs->getEnteringParticles();
       except.insert(except.end(), entering.begin(), entering.end());
       generateCollisions(particles,except);
-      generateDecays(particles,fs->getDeltaFixed());
+      generateDecays(particles);
     }
 #endif
 
-    void StandardPropagationModel::generateDecays(const ParticleList &particles, const G4bool isDeltaFixed = false) {
+    void StandardPropagationModel::generateDecays(const ParticleList &particles) {
       for(ParticleIter i=particles.begin(), e=particles.end(); i!=e; ++i) {
 	if((*i)->isDelta()) {
-      G4double decayTime = DeltaDecayChannel::computeDecayTime((*i), isDeltaFixed);
+          G4double decayTime = DeltaDecayChannel::computeDecayTime((*i));
 	  G4double time = currentTime + decayTime;
 	  if(time <= maximumTime) {
 	    registerAvatar(new DecayAvatar((*i), time, theNucleus));
@@ -483,21 +484,27 @@ namespace G4INCL {
           generateAllAvatarsExceptUpdated(fs);
         }
 #else
-        ParticleList updatedParticles = fs->getModifiedParticles();
+        ParticleList const &updatedParticles = fs->getModifiedParticles();
         if(fs->getValidity()==PauliBlockedFS) {
           // This final state might represents the outcome of a Pauli-blocked delta
           // decay
 // assert(updatedParticles.empty() || (updatedParticles.size()==1 && updatedParticles.front()->isResonance()));
 // assert(fs->getEnteringParticles().empty() && fs->getCreatedParticles().empty() && fs->getOutgoingParticles().empty() && fs->getDestroyedParticles().empty());
-          generateDecays(updatedParticles,fs->getDeltaFixed());
+          generateDecays(updatedParticles);
         } else {
           ParticleList const &entering = fs->getEnteringParticles();
-          updatedParticles.insert(updatedParticles.end(), entering.begin(), entering.end());
-          generateDecays(updatedParticles,fs->getDeltaFixed());
+          generateDecays(updatedParticles);
+          generateDecays(entering);
 
           ParticleList const &created = fs->getCreatedParticles();
-          updatedParticles.insert(updatedParticles.end(), created.begin(), created.end());
-          updateAvatars(updatedParticles);
+          if(created.empty() && entering.empty())
+            updateAvatars(updatedParticles);
+          else {
+            ParticleList updatedParticlesCopy = updatedParticles;
+            updatedParticlesCopy.insert(updatedParticlesCopy.end(), entering.begin(), entering.end());
+            updatedParticlesCopy.insert(updatedParticlesCopy.end(), created.begin(), created.end());
+            updateAvatars(updatedParticlesCopy);
+          }
         }
 #endif
       }

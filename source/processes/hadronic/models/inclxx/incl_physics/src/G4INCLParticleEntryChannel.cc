@@ -48,7 +48,7 @@ namespace G4INCL {
   ParticleEntryChannel::~ParticleEntryChannel()
   {}
 
-  FinalState* ParticleEntryChannel::getFinalState() {
+  void ParticleEntryChannel::fillFinalState(FinalState *fs) {
     // Behaves slightly differency if a third body (the projectile) is present
     G4bool isNN = theNucleus->isNucleusNucleusCollision();
 
@@ -149,7 +149,6 @@ namespace G4INCL {
 
     const G4double energyBefore = theParticle->getEnergy() - theCorrection;
     G4bool success = particleEnters(theCorrection);
-    FinalState *fs = new FinalState();
     fs->addEnteringParticle(theParticle);
 
     if(!success) {
@@ -162,7 +161,6 @@ namespace G4INCL {
     }
 
     fs->setTotalEnergyBeforeInteraction(energyBefore);
-    return fs;
   }
 
   G4bool ParticleEntryChannel::particleEnters(const G4double theQValueCorrection) {

@@ -48,6 +48,7 @@
 #include "G4INCLIChannel.hh"
 #include "G4INCLParticle.hh"
 #include "G4INCLNucleus.hh"
+#include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
 
@@ -62,11 +63,11 @@ namespace G4INCL {
     SurfaceAvatar(G4INCL::Particle *aParticle, G4double time, G4INCL::Nucleus *aNucleus);
     virtual ~SurfaceAvatar();
 
-    G4INCL::IChannel* getChannel();
-    G4INCL::FinalState* getFinalState();
+    IChannel* getChannel();
+    void fillFinalState(FinalState *fs);
 
     virtual void preInteraction();
-    virtual FinalState *postInteraction(FinalState *);
+    virtual void postInteraction(FinalState *);
 
     ParticleList getParticles() const {
       ParticleList theParticleList;
@@ -104,6 +105,8 @@ namespace G4INCL {
     G4double cosRefractionAngle;
     G4double refractionIndexRatio;
     G4bool internalReflection;
+
+    INCL_DECLARE_ALLOCATION_POOL(SurfaceAvatar);
   };
 
 }

@@ -38,13 +38,22 @@
 
 namespace G4INCL {
 
-  FinalState::FinalState() :
-    totalEnergyBeforeInteraction(0.0), validity(ValidFS), isDeltaFixed(false)
-  {
+  FinalState::FinalState() {
+    reset();
   }
 
   FinalState::~FinalState()
   {
+  }
+
+  void FinalState::reset() {
+    totalEnergyBeforeInteraction = 0.0;
+    validity = ValidFS;
+    outgoing.clear();
+    created.clear();
+    destroyed.clear();
+    modified.clear();
+    entering.clear();
   }
 
   void FinalState::addModifiedParticle(Particle *p)
@@ -96,17 +105,6 @@ namespace G4INCL {
   {
     return entering;
   }
-
-  void FinalState::setDeltaFixed(const G4bool f)
-  {
-    isDeltaFixed=f;
-  }
-
-    G4bool FinalState::getDeltaFixed() const
-  {
-    return isDeltaFixed;
-  }
-
 
   std::string FinalState::print() const {
     std::stringstream ss;

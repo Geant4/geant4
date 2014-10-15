@@ -40,6 +40,7 @@
 #include "G4INCLParticle.hh"
 #include "G4INCLNuclearDensityFactory.hh"
 #include "G4INCLParticleSampler.hh"
+#include "G4INCLAllocationPool.hh"
 
 namespace G4INCL {
 
@@ -443,6 +444,7 @@ namespace G4INCL {
     ThreeVector theSpin;
     ParticleSampler *theParticleSampler;
 
+    INCL_DECLARE_ALLOCATION_POOL(Cluster);
   };
 
 }
