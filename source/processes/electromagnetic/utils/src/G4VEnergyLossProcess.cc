@@ -213,7 +213,8 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   nBins            = 77;
   maxKinEnergyCSDA = 1.0*GeV;
   nBinsCSDA        = 35;
-  actMinKinEnergy = actMaxKinEnergy = actBinning = actLinLossLimit = false;
+  actMinKinEnergy = actMaxKinEnergy = actBinning = actLinLossLimit 
+    = actLossFluc = false;
 
   // default linear loss limit for spline
   linLossLimit  = 0.01;
@@ -526,7 +527,7 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
 
   // parameters of the process
   //  minSubRange = theParameters->MinSubRange();
-  lossFluctuationFlag = theParameters->LossFluctuation();
+  if(!actLossFluc) { lossFluctuationFlag = theParameters->LossFluctuation(); }
   rndmStepFlag = theParameters->UseCutAsFinalRange();
   if(!actMinKinEnergy) { minKinEnergy = theParameters->MinKinEnergy(); }
   if(!actMaxKinEnergy) { maxKinEnergy = theParameters->MaxKinEnergy(); }
@@ -632,7 +633,6 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
       mod->SetHighEnergyLimit(maxKinEnergy);
     }
   }
-
   theCuts = modelManager->Initialise(particle, secondaryParticle, 
 				     theParameters->MinSubRange(), 
 				     verboseLevel);

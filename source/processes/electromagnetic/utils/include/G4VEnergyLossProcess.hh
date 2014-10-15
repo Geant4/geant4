@@ -352,7 +352,7 @@ public:
   // particle production in vicinity of the geometry boundary
   void AddCollaborativeProcess(G4VEnergyLossProcess*);
 
-  //inline void SetLossFluctuations(G4bool val);
+  inline void SetLossFluctuations(G4bool val);
   //inline void SetRandomStep(G4bool val);
 
   inline void SetIntegral(G4bool val);
@@ -568,6 +568,7 @@ private:
   G4bool   weightFlag;
   G4bool   isMaster;
   G4bool   actLinLossLimit;
+  G4bool   actLossFluc;
   G4bool   actBinning;
   G4bool   actMinKinEnergy;
   G4bool   actMaxKinEnergy;
@@ -945,14 +946,14 @@ G4VEnergyLossProcess::SecondaryParticle() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
+
 inline void G4VEnergyLossProcess::SetLossFluctuations(G4bool val)
 {
   lossFluctuationFlag = val;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+/*
 inline void G4VEnergyLossProcess::SetRandomStep(G4bool val)
 {
   rndmStepFlag = val;

@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 October 14: V.Ivant (emutils-V10-00-36)
+15 October 14: V.Ivant (emutils-V10-00-35)
+- fixed G4VEnergyLossProcess
+
 14 October 14: V.Ivant (emutils-V10-00-34)
 - fixed G4VMultipleScattering
 
