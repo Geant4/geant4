@@ -43,6 +43,9 @@
 
 #include "globals.hh"
 #include "G4Fragment.hh"
+#include "G4VEvaporationFactory.hh"
+#include "G4VEvaporationChannel.hh"
+#include <vector>
 
 class G4VEvaporationChannel;
 
@@ -67,6 +70,7 @@ public:
   virtual void SetPhotonEvaporation(G4VEvaporationChannel* ptr);
 
   inline G4VEvaporationChannel* GetPhotonEvaporation();
+  inline G4VEvaporationChannel* GetFissionChannel();
 
   // for inverse cross section choice
   inline void SetOPTxs(G4int opt) { OPTxs = opt;} 
@@ -80,11 +84,24 @@ protected:
   G4int OPTxs;
   G4bool useSICB;
 
+  std::vector<G4VEvaporationChannel*> * theChannels;
+  G4VEvaporationFactory * theChannelFactory;
+
 };
 
 inline G4VEvaporationChannel* G4VEvaporation::GetPhotonEvaporation()
 {
   return thePhotonEvaporation;
+}
+
+inline G4VEvaporationChannel* G4VEvaporation::GetFissionChannel()
+{
+  for(std::vector<G4VEvaporationChannel*>::const_iterator iC = theChannels->begin(),
+      eC = theChannels->end(); iC!=eC; ++iC) {
+    if((*iC)->GetName() == "fission")
+      return *iC;
+  }
+  return 0;
 }
 
 #endif

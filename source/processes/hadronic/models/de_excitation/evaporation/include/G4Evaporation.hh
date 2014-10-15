@@ -36,6 +36,10 @@
 // 22/04/2011 V.Ivanchenko - added maxZ and maxA for FermiBreakUp model
 // 23/01/2012 V.Ivanchenko added pointer of G4VPhotonEvaporation to the constructor
 // 06/05/2013 V.Ivanchenko added pointer to ion table
+// 04/10/2014 D. Mancusi Moved theChannels and theChannelFactory to the base
+//                       class, since they seem to be common to all classes
+//                       derived from G4VEvaporation.
+//
 
 #ifndef G4Evaporation_h
 #define G4Evaporation_h 1
@@ -85,9 +89,7 @@ private:
   G4bool operator==(const G4Evaporation &right) const;
   G4bool operator!=(const G4Evaporation &right) const;
 
-  std::vector<G4VEvaporationChannel*>* theChannels;
   std::vector<G4double>   probabilities;
-  G4VEvaporationFactory* theChannelFactory;
   size_t   nChannels;
   G4int    maxZforFBU;
   G4int    maxAforFBU;

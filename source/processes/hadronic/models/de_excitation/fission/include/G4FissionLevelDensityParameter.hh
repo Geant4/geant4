@@ -26,7 +26,7 @@
 //
 // $Id$
 //
-// Hadronic Process: Nuclear De-excitations
+// Hadronic Process: Nuclear De-excitation
 // by V. Lara (Oct 1998) 
 //
 

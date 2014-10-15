@@ -62,7 +62,7 @@
 #include "G4IonTable.hh"
 
 G4Evaporation::G4Evaporation()  
-  : theChannels(0),nChannels(0)
+  : nChannels(0)
 {
   SetPhotonEvaporation(new G4PhotonEvaporation());
   theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
@@ -72,7 +72,7 @@ G4Evaporation::G4Evaporation()
 }
 
 G4Evaporation::G4Evaporation(G4VEvaporationChannel* photoEvaporation)  
-  : theChannels(0),nChannels(0)
+  : nChannels(0)
 {
   if(photoEvaporation) { SetPhotonEvaporation(photoEvaporation); }
   else                 { SetPhotonEvaporation(new G4PhotonEvaporation()); }

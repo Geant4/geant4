@@ -23,37 +23,47 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+//
+// $Id: G4FissionLevelDensityParameterINCLXX.cc 67983 2013-03-13 10:42:03Z gcosmo $
 //
 // Hadronic Process: Nuclear De-excitations
-// by V. Lara (Oct 1998) writen from G4Evaporation.cc (May 1998)
+// by D. Mancusi (6th October 2014)
 //
-// Modifications:
-//
-// 23 January 2012 V.Ivanchenko added pointer of G4VPhotonEvaporation 
 
-#include "G4VEvaporation.hh"
-#include "G4VEvaporationChannel.hh"
+#include "G4FissionLevelDensityParameterINCLXX.hh"
+#include "G4HadronicException.hh"
 
-G4VEvaporation::G4VEvaporation()
-  :thePhotonEvaporation(0),OPTxs(3),useSICB(false)
-   ,theChannels(0),theChannelFactory(0)
-{}
 
-G4VEvaporation::~G4VEvaporation() 
-{}
-
-void G4VEvaporation::Initialise()
-{}
-
-void G4VEvaporation::SetPhotonEvaporation(G4VEvaporationChannel* ptr)
+G4FissionLevelDensityParameterINCLXX::G4FissionLevelDensityParameterINCLXX() :
+  afanLow(1.02),
+  afanHigh(1.04),
+  ZLow(84),
+  ZHigh(89)
 {
-  if(thePhotonEvaporation != ptr) {
-    delete thePhotonEvaporation;
-    thePhotonEvaporation = ptr;
-  }
+  UpdateAfanSlope();
 }
 
+G4FissionLevelDensityParameterINCLXX::~G4FissionLevelDensityParameterINCLXX()
+{}
 
 
+G4double G4FissionLevelDensityParameterINCLXX::
+LevelDensityParameter(G4int A, G4int Z, G4double U) const 
+{
+  G4double EvapLDP = 
+    theEvaporationLevelDensityParameter.LevelDensityParameter(A,Z,U);
 
+  if(Z >= ZHigh)     { EvapLDP *= afanHigh; }
+  else if(Z <= ZLow) { EvapLDP *= afanLow; }
+  else               { EvapLDP *= (afanLow + afanSlope*(Z-ZLow)); }
+
+  return EvapLDP;
+
+}
+
+void G4FissionLevelDensityParameterINCLXX::UpdateAfanSlope() {
+  if(ZHigh!=ZLow)
+    afanSlope = (afanHigh-afanLow)/((double)(ZHigh-ZLow));
+  else
+    afanSlope = 0.;
+}

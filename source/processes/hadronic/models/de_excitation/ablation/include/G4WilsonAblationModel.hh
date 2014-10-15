@@ -64,20 +64,21 @@
 // version 9.2.r9, just in cases there's any subtle differences.  See .cc
 // file comments to see impact of the rest of the changes.
 //
+// 04 October 2014, D Mancusi
+// Moved theChannels and theChannelFactory to the base class, since they seem
+// to be common to all classes derived from G4VEvaporation.
+//
 // %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 ////////////////////////////////////////////////////////////////////////////////
 //
 #include "G4VEvaporation.hh"
-#include "G4VEvaporationChannel.hh"
 #include "G4Fragment.hh"
 #include "G4FragmentVector.hh"
 #include "G4ParticleDefinition.hh"
 #include "globals.hh"
-#include "G4VEvaporationFactory.hh"
 #include "G4EvaporationFactory.hh"
 
 
-#include <vector>
 ////////////////////////////////////////////////////////////////////////////////
 //
 class G4WilsonAblationModel : public G4VEvaporation
@@ -107,9 +108,6 @@ class G4WilsonAblationModel : public G4VEvaporation
     G4ParticleDefinition  *fragType[6];
     G4FragmentVector      *fragmentVector;
     VectorOfFragmentTypes  evapType;
-
-    std::vector<G4VEvaporationChannel*> * theChannels;
-    G4VEvaporationFactory * theChannelFactory;
 
 };
 ////////////////////////////////////////////////////////////////////////////////
