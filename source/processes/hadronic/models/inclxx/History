@@ -16,6 +16,11 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+15 October 2014 - Gabriele Cosmo (hadr-inclxx-V10-00-13)
+---------------------------------------------------------------
+- Corrected dependecy list in GNUMakefile and sources.cmake for 'interface'
+  module; added dependency to 'de_excitation/fission'.
+
 14 October 2014 - Davide Mancusi (hadr-inclxx-V10-00-12)
 ---------------------------------------------------------------
 - INCL++ v5.2.3
