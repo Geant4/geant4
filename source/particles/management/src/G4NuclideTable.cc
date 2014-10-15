@@ -374,7 +374,7 @@ void G4NuclideTable::GenerateNuclide()
          G4int    ionJ     = (G4int)(exciteStateTable[i][idxSpin]);
          G4double ionMu    = exciteStateTable[i][idxMu]*(joule/tesla);
 
-         if (( ionLife < 0.0 || ionLife > threshold_of_half_life )
+         if (( ionLife < 0.0 || ionLife*ionLife*std::log(2.0) > threshold_of_half_life )
            && (ionE > levelTolerance+previousE)) {
             previousE = ionE;
             iLevel++;
@@ -410,6 +410,7 @@ void G4NuclideTable::GenerateNuclide()
       if ( !path ) {
          G4Exception("G4NuclideTable", "PART70000",
                   FatalException, "G4ENSDFSTATEDATA environment variable must be set");
+	 return;
       }
    
       std::fstream ifs;
@@ -421,6 +422,7 @@ void G4NuclideTable::GenerateNuclide()
       if ( !ifs.good() ) {
          G4Exception("G4NuclideTable", "PART70001",
                   FatalException, "ENSDFSTATE.dat is not found.");
+	 return;
       }
      
 

@@ -327,6 +327,19 @@ G4ParticleDefinition* G4IonTable::CreateIon(G4int Z, G4int A, G4double E)
   // Add process manager to the ion
   AddProcessManager(ion);
  
+#ifdef G4MULTITHREADED
+  // Fill decay channels if this method is invoked from worker
+  if(G4Threading::IsWorkerThread())
+  {
+    if(!stable && decayTable)
+    {
+      G4int nCh = decayTable->entries();
+      for(G4int iCh=0;iCh<nCh;iCh++)
+      { decayTable->GetDecayChannel(iCh)->GetDaughter(0); }
+    }
+  }
+#endif
+
   return ion;
 }
 
