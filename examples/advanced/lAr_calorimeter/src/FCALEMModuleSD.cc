@@ -57,24 +57,12 @@ FCALEMModuleSD::FCALEMModuleSD(G4String name) : G4VSensitiveDetector(name),
 						Init_state(0)
 {
   EmModule = new FCALEMModule();
-    // Write in File
-    //--------------
-    std::ostringstream os;
-    os<<"EmModule_802_1mm";
-#ifdef G4MULTITHREADED
-    os<<"_Thread"<<G4Threading::G4GetThreadId();
-#endif
-    os<<".dat";
-    std::ios::openmode iostemp = std::ios::out;
-    EmDatafile.open(os.str(), iostemp);
-
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FCALEMModuleSD::~FCALEMModuleSD()
 {
-      EmDatafile.close();
   delete EmModule;
 }
 
@@ -130,13 +118,6 @@ void FCALEMModuleSD::EndOfEvent(G4HCofThisEvent*)
   }
 
   G4cout << "Number of F1 Tiles with Positive energy : " << NF1Tile <<  G4endl;
-
-  // EmDatafile.precision(5);
-
-  EmDatafile << NF1Tile << std::endl;
-  for (i=1; i <= NF1Tile; i++) {
-    EmDatafile << AddTileP[i] << " " << EvisTileP[i]/MeV << std::endl;
-  }
 
 
 }

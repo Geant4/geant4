@@ -37,7 +37,6 @@
 #include "globals.hh"
 #include "G4Event.hh"
 #include "FCALCalorHit.hh"
-#include <fstream>
 
 class FCALTestbeamSetup;
 class FCALEMModule;
@@ -69,7 +68,6 @@ class FCALEMModuleSD : public G4VSensitiveDetector
   //   G4int*                   HitID;
   FCALEMModule* EmModule;
   G4int Init_state;
-    std::ofstream EmDatafile;
   public:
 
   G4double EvisF1Tile[1131];

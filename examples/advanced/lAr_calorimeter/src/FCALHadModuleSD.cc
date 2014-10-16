@@ -56,21 +56,12 @@ FCALHadModuleSD::FCALHadModuleSD(G4String name) : G4VSensitiveDetector(name),
 						  InitF2(0)
 {
    HadModule = new FCALHadModule();
-    std::ostringstream os;
-    os << "HadModule_802_1mm.da";
-#ifdef G4MULTITHREADED
-    os<<"_Thread"<<G4Threading::G4GetThreadId();
-#endif
-    os <<".dat";
-    HadDatafile.open(os.str(),std::ios::out);
-    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 FCALHadModuleSD::~FCALHadModuleSD()
 {
-      HadDatafile.close();
   delete HadModule;
 }
 
@@ -125,17 +116,6 @@ void FCALHadModuleSD::EndOfEvent(G4HCofThisEvent*)
 
   G4cout << "Number of F2 tiles with Positive energy : " << NF2Tile <<  G4endl;
 
-  // Write data in File
-  //-------------------
-  HadDatafile << NF2Tile << std::endl;
-  for (i=1; i <= NF2Tile; i++) {
-    HadDatafile << AddTileP[i] << " " << EvisTileP[i]/MeV << std::endl;
-  }
-
-
-
-
-    
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

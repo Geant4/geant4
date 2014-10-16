@@ -33,7 +33,6 @@
 #ifndef FCALHadModuleSD_h
 #define FCALHadModuleSD_h 1
 
-#include <fstream>
 #include "G4VSensitiveDetector.hh"
 #include "globals.hh"
 #include "FCALCalorHit.hh"
@@ -67,7 +66,6 @@ class FCALHadModuleSD : public G4VSensitiveDetector
   //   G4int*                   HitID;
       FCALHadModule* HadModule;
       G4int InitF2;
-    std::ofstream HadDatafile;
 public:
 
   G4double EvisF2Tile[2330];
