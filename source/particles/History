@@ -17,14 +17,20 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- 08. Jul. 2014  Makoto Asai (particles-V09-06-67)
-- G4ElectronOccupancy.cc : Add G4Exception to protect against unphysical
-  orbits.
-- G4NuclideTable : Fix missing Cl35 ground state in NuclideTable2 and
-  missing "*std::log(2.0)" in some comparison of threshold time.
+- 11 Jul. 2014 Andrea Dotti (particles-V09-06-68)
+- Solve data-race condition in G4PDefSplitter
+
+- 07. Jul. 2014  Makoto Asai (particles-V09-06-67)
 - G4IonTable.cc : Fill decay channels when an ion is created on
   the fly to avoid race condition issue in multithreaded mode.
   Addressing to bug report #1651.
+
+- 26. Mar. 2014 Tatsumi Koi
+- Fix lack of Cl35 ground state in NuclideTable2
+- Fix lack of "*std::log(2.0)" in some comparison of threshold time
+
+- 25. Feb. 2014 Hisaya Kurashige
+- Add G4Exception in G4ElectronOcuppancy::AddElectron()
 
 - 22. Feb. 2014  Makoto Asai (particles-V09-06-66)
 - Fixed properties for heavy anti-baryons G4AntiLambdab, G4AntiSigmabZero
