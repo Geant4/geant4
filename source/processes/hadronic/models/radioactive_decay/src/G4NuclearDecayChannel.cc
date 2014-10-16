@@ -80,29 +80,23 @@
 #include "G4AtomicShells.hh"
 #include "G4LossTableManager.hh"
 
-//#include "G4AtomicTransitionManager.hh"
-//#include "G4AtomicShell.hh"
-//#include "G4AtomicDeexcitation.hh"
-
 //Model const parameters
 const G4double G4NuclearDecayChannel:: pTolerance = 0.001;
 const G4double G4NuclearDecayChannel:: levelTolerance = 2.0*keV;
 //const G4bool G4NuclearDecayChannel:: FermiOn = true;
 
-//These are a kind of "cache"
+//This is a kind of "cache"
 G4ThreadLocal G4DynamicParticle* G4NuclearDecayChannel::dynamicDaughter = 0;
 
-// Constructor for one decay product (the nucleus).
-//
+// Constructor for one decay product (the nucleus)
 G4NuclearDecayChannel::
 G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode,
                       G4int Verbose,
                       const G4ParticleDefinition* theParentNucleus,
-                      G4double theBR,
-                      G4double theQtransition,
-                      G4int A,
-                      G4int Z,
-                      G4double theDaughterExcitation)
+                      const G4double theBR,
+                      const G4double theQtransition,
+                      const G4int A, const G4int Z,
+                      const G4double theDaughterExcitation)
  :G4GeneralPhaseSpaceDecay(Verbose), decayMode(theMode),
   Qtransition(theQtransition), RandomEnergy(0)
 {
@@ -129,12 +123,11 @@ G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode,
 G4NuclearDecayChannel::
 G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode,
                       G4int Verbose,
-                      const G4ParticleDefinition *theParentNucleus,
-                      G4double theBR,
-                      G4double theQtransition,
-                      G4int A,
-                      G4int Z,
-                      G4double theDaughterExcitation,
+                      const G4ParticleDefinition* theParentNucleus,
+                      const G4double theBR,
+                      const G4double theQtransition,
+                      const G4int A, const G4int Z,
+                      const G4double theDaughterExcitation,
                       const G4String theDaughterName1)
  :G4GeneralPhaseSpaceDecay(Verbose), decayMode(theMode),
   Qtransition(theQtransition), RandomEnergy(0)
@@ -164,14 +157,13 @@ G4NuclearDecayChannel::
 G4NuclearDecayChannel(const G4RadioactiveDecayMode &theMode,
                       G4int Verbose,
                       const G4ParticleDefinition *theParentNucleus,
-                      G4double theBR,
+                      const G4double theBR,
                       G4double /* theFFN */,
 		      G4bool /* betaS */, 
 		      G4RandGeneral* randBeta,
-                      G4double theQtransition,
-                      G4int A,
-                      G4int Z,
-                      G4double theDaughterExcitation,
+                      const G4double theQtransition,
+                      const G4int A, const G4int Z,
+                      const G4double theDaughterExcitation,
                       const G4String theDaughterName1,
                       const G4String theDaughterName2)
  :G4GeneralPhaseSpaceDecay(Verbose), decayMode(theMode),
@@ -203,7 +195,7 @@ G4NuclearDecayChannel::~G4NuclearDecayChannel()
 {} 
 
 void G4NuclearDecayChannel::FillDaughterNucleus(G4int index, G4int A, G4int Z,
-                                                G4double theDaughterExcitation)
+                                                const G4double theDaughterExcitation)
 {
   // Determine if the proposed daughter nucleus has a sensible A, Z and
   // excitation energy.
@@ -504,7 +496,7 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
 	  G4cout <<"                 The binding energy =  " << bindingEnergy << G4endl;              
 	  G4cout <<"  Total ARM particle kinetic energy =  " << tARMEnergy << G4endl;              
 	}
-#endif   
+#endif
 
       delete armProducts;
       delete atomDeex;

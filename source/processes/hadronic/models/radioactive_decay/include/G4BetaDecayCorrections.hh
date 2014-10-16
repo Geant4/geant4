@@ -36,7 +36,7 @@
 class G4BetaDecayCorrections
 {
   public:
-    G4BetaDecayCorrections(G4int Z, G4int A);
+    G4BetaDecayCorrections(const G4int Z, const G4int A);
     
     ~G4BetaDecayCorrections() {};
 
@@ -49,8 +49,8 @@ class G4BetaDecayCorrections
     G4double ModSquared(const G4double& x, const G4double& y);
     G4double Gamma(const G4double& arg);
 
-    G4int Z;
-    G4int A;
+    const G4int Z;
+    const G4int A;
     G4double alphaZ;
     G4double Rnuc;    // Nuclear radius  
     G4double V0;      // Electron screening potential  

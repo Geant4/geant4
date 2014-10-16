@@ -55,16 +55,20 @@ class G4NuclearDecayChannel : public G4GeneralPhaseSpaceDecay
     : G4GeneralPhaseSpaceDecay(Verbose), decayMode(theMode),Qtransition(0) {;}
     // default constructor
 
+    // Decay channel ctor with one decay product
     G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode, G4int Verbose,
                           const G4ParticleDefinition* theParentNucleus, 
-                          G4double theBR, G4double theQtransition, G4int A,
-                          G4int Z, G4double theDaughterExcitation);
-    // constructor decay channel with one decay product
+                          const G4double theBR,
+                          const G4double theQtransition,
+                          const G4int A, const G4int Z, 
+                          const G4double theDaughterExcitation);
 
     G4NuclearDecayChannel(const G4RadioactiveDecayMode& theMode, G4int Verbose,
                           const G4ParticleDefinition* theParentNucleus,
-                          G4double theBR, G4double theQtransition, G4int A,
-                          G4int Z, G4double theDaughterExcitation,
+                          G4double theBR, 
+                          const G4double theQtransition,
+                          const G4int A, const G4int Z,
+                          const G4double theDaughterExcitation,
                           const G4String theDaughterName1);
     // constructor decay channel with two decay products
   
@@ -72,8 +76,9 @@ class G4NuclearDecayChannel : public G4GeneralPhaseSpaceDecay
                           const G4ParticleDefinition* theParentNucleus,
                           G4double theBR, G4double theFFN,
                           G4bool betaS, G4RandGeneral* randBeta,
-                          G4double theQtransition, G4int A, G4int Z,
-                          G4double theDaughterExcitation,
+                          const G4double theQtransition,
+                          const G4int A, const G4int Z,
+                          const G4double theDaughterExcitation,
                           const G4String theDaughterName1,
                           const G4String theDaughterName2);
     // constructor decay channel with three decay product
@@ -123,7 +128,7 @@ class G4NuclearDecayChannel : public G4GeneralPhaseSpaceDecay
                           const G4String& theDaughterName3 = "");
 
     void FillDaughterNucleus(G4int index, G4int A, G4int Z,
-                             G4double theDaughterExcitation);
+                             const G4double theDaughterExcitation);
 
     G4DecayProducts* BetaDecayIt();
     // to replace the ThreeBodyDecayIt() to generate the correct beta spectrum

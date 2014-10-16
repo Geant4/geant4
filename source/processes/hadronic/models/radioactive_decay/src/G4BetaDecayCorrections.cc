@@ -29,7 +29,7 @@
 #include "G4BetaDecayType.hh"
 #include "G4BetaDecayCorrections.hh"
 
-G4BetaDecayCorrections::G4BetaDecayCorrections(G4int theZ, G4int theA)
+G4BetaDecayCorrections::G4BetaDecayCorrections(const G4int theZ, const G4int theA)
  : Z(theZ), A(theA)
 {
   // alphaZ = fine_structure_const*std::abs(Z);

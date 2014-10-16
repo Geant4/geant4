@@ -243,7 +243,7 @@ G4bool G4RadioactiveDecay::IsApplicable(const G4ParticleDefinition& aParticle)
   return true;
 }
 
-G4DecayTable* G4RadioactiveDecay::GetDecayTable(G4ParticleDefinition* aNucleus)
+G4DecayTable* G4RadioactiveDecay::GetDecayTable(const G4ParticleDefinition* aNucleus)
 {
   G4String key = aNucleus->GetParticleName();
   DecayTableMap::iterator table_ptr = dkmap->find(key);
@@ -573,7 +573,7 @@ G4double G4RadioactiveDecay::GetMeanLifeTime(const G4Track& theTrack,
   G4double meanlife = 0.;
   if (AnalogueMC) {
     const G4DynamicParticle* theParticle = theTrack.GetDynamicParticle();
-    G4ParticleDefinition* theParticleDef = theParticle->GetDefinition();
+    const G4ParticleDefinition* theParticleDef = theParticle->GetDefinition();
     G4double theLife = theParticleDef->GetPDGLifeTime();
 
 #ifdef G4VERBOSE
@@ -610,7 +610,7 @@ G4double G4RadioactiveDecay::GetMeanFreePath (const G4Track& aTrack, G4double,
                                               G4ForceCondition*)
 {
   const G4DynamicParticle* aParticle = aTrack.GetDynamicParticle();
-  G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
+  const G4ParticleDefinition* aParticleDef = aParticle->GetDefinition();
   G4double tau = aParticleDef->GetPDGLifeTime();
   G4double aMass = aParticle->GetMass();
 
@@ -694,7 +694,7 @@ G4Mutex G4RadioactiveDecay::radioactiveDecayMutex = G4MUTEX_INITIALIZER;
 #endif
 
 G4DecayTable*
-G4RadioactiveDecay::LoadDecayTable(G4ParticleDefinition& theParentNucleus)
+G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
 {
   // Generate input data file name using Z and A of the parent nucleus
   // file containing radioactive decay data.
@@ -1487,7 +1487,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
   fParticleChangeForRadDecay.Initialize(theTrack);
   const G4DynamicParticle* theParticle = theTrack.GetDynamicParticle();
 
-  G4ParticleDefinition* theParticleDef = theParticle->GetDefinition();
+  const G4ParticleDefinition* theParticleDef = theParticle->GetDefinition();
 
   // First check whether RDM applies to the current logical volume
   if (!isAllVolumesMode) {
@@ -1817,7 +1817,7 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
 
 
 G4DecayProducts*
-G4RadioactiveDecay::DoDecay(G4ParticleDefinition& theParticleDef)
+G4RadioactiveDecay::DoDecay(const G4ParticleDefinition& theParticleDef)
 {
   G4DecayProducts* products = 0;
   G4DecayTable* theDecayTable = GetDecayTable(&theParticleDef);
@@ -1841,8 +1841,7 @@ G4RadioactiveDecay::DoDecay(G4ParticleDefinition& theParticleDef)
       G4cerr << theDecayChannel << G4endl;
     }
 #endif
-    G4double tempmass = theParticleDef.GetPDGMass();
-    products = theDecayChannel->DecayIt(tempmass);
+    products = theDecayChannel->DecayIt(theParticleDef.GetPDGMass() );
 
     // Apply directional bias if requested by user
     CollimateDecay(products);
