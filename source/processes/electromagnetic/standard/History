@@ -18,6 +18,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+08 August 14: V.Ivanchenko (emstand-V09-06-83)
+- G4PAIxSection - added protection to avoid division by zero; bug #1677
+
 27 May 14: V.Ivanchenko (emstand-V09-06-82)
 - G4IonCoulombCrossSection - tunned computation of the screen 
     factor 
