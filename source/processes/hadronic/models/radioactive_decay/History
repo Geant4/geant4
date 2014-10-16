@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+12 June 2014  Dennis Wright radioactive_decay-V09-06-24
+-------------------------------------------------------
+- fix memory leak in dtor of G4RIsotopeTable.cc from bug report 1617
+
 6 February 2014  Dennis Wright radioactive_decay-V09-06-23
 ----------------------------------------------------------
 - G4NuclearDecayChannel::DecayIt: remove enforcement of single gamma emission
