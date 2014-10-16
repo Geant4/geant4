@@ -39,9 +39,13 @@
 #include "G4VFermiFragment.hh"
 #include "G4FermiConfiguration.hh"
 #include <vector>
+#include "G4ThreadLocalSingleton.hh"
 
 class G4FermiFragmentsPool
 {
+
+friend class G4ThreadLocalSingleton<G4FermiFragmentsPool>;
+
 public:
 
   static G4FermiFragmentsPool* Instance();
@@ -51,11 +55,11 @@ public:
   const std::vector<G4FermiConfiguration*>* 
   GetConfigurationList(G4int Z, G4int A, G4double mass);
 
-  const G4VFermiFragment* GetFragment(G4int Z, G4int A);
+  const G4VFermiFragment* GetFragment(G4int Z, G4int A) const;
 
-  inline G4int GetMaxZ() const;
+  G4int GetMaxZ() const;
 
-  inline G4int GetMaxA() const;
+  G4int GetMaxA() const;
   
 private:
 
@@ -63,11 +67,11 @@ private:
 
   void Initialise();
 
-  G4bool IsExist(G4int Z, G4int A, std::vector<const G4VFermiFragment*>&);
+  G4bool IsExist(G4int Z, G4int A, std::vector<const G4VFermiFragment*>&) const;
 
-  inline G4bool IsAvailable(G4int Z, G4int A);
+  G4bool IsAvailable(G4int Z, G4int A) const;
 
-  static G4FermiFragmentsPool* theInstance;
+  static G4ThreadLocal G4FermiFragmentsPool* theInstance;
 
   std::vector<const G4VFermiFragment*> fragment_pool;
 
@@ -83,26 +87,6 @@ private:
   // list of exotic configurations
   std::vector<G4FermiConfiguration*> listextra;
 };
-
-inline G4bool G4FermiFragmentsPool::IsAvailable(G4int Z, G4int A)
-{
-  G4bool res = true;
-  if     (2 == Z && 5 == A) { res = false; }
-  else if(3 == Z && 5 == A) { res = false; }
-  else if(4 == Z && 8 == A) { res = false; }
-  else if(5 == Z && 9 == A) { res = false; }
-  return res;
-}
-
-inline G4int G4FermiFragmentsPool::GetMaxZ() const
-{
-  return maxZ;
-}
-
-inline G4int G4FermiFragmentsPool::GetMaxA() const
-{
-  return maxA;
-}
 
 #endif
 

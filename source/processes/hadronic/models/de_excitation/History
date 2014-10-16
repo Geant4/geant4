@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+22 September 2014 Vladimir Ivanchenko (hadr-deex-V09-06-29)
+----------------------------------------------------------
+- G4FermiFragmentsPool - make this class to be G4ThreadLocalSingleton, 
+    this modification fixing data race due to lazy initialisation but 
+    increase memory per thread; this tag does not change physics
+
 07 February 2014 Vladimir Ivanchenko (hadr-deex-V09-06-28)
 ----------------------------------------------------------
 - G4NuclearLevelManager - trivial fix of Coverity report
