@@ -20,12 +20,15 @@ code and to keep track of all tags.
 ---------------------------------------------------------------
 - INCL++ v5.1.14.9
   o Fix a bug in Coulomb deflection for negative incident particles.
-  o Avoid negative Fermi energies for deltas.
 
 13 March 2014 - Gabriele Cosmo (hadr-inclxx-V09-06-50)
 ---------------------------------------------------------------
 - Fixed use of inline keyword for method getPhaseSpace() defined in
   ClusteringModelIntercomparison.cc.
+
+5 March 2014 - Davide Mancusi
+---------------------------------------------------------------
+- Fix: avoid negative Fermi energies for delta resonances
 
 9 January 2014 - Davide Mancusi (hadr-inclxx-V09-06-49)
 ---------------------------------------------------------------
