@@ -63,6 +63,9 @@ private:
   G4StepLimiterPhysics & operator=(const G4StepLimiterPhysics &right);
   G4StepLimiterPhysics(const G4StepLimiterPhysics&);
 
+  G4StepLimiter* fStepLimiter;
+  G4UserSpecialCuts* fUserSpecialCuts;
+
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
