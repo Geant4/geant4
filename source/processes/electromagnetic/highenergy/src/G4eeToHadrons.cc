@@ -63,7 +63,7 @@ G4eeToHadrons::G4eeToHadrons(const G4String& name)
     csFactor(1.0), 
     isInitialised(false)
 {
-  SetVerboseLevel(1);
+  //SetVerboseLevel(2);
   SetProcessSubType(fAnnihilationToHadrons);
 }
 
@@ -85,7 +85,8 @@ void G4eeToHadrons::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-
+SetVerboseLevel(1);
+G4cout << "G4eeToHadrons::InitialiseProcess verbose= " << verboseLevel << G4endl;
     SetBuildTableFlag(false);
     SetIntegral(true);
     SetMaxKinEnergy(10.0*TeV);

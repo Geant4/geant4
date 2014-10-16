@@ -62,17 +62,13 @@ class G4eeToPGammaModel : public G4Vee2hadrons
 
 public:
 
-  G4eeToPGammaModel(G4eeCrossSections*, const G4String&);
+  G4eeToPGammaModel(G4eeCrossSections*, const G4String&,G4double,G4double);
 
   virtual ~G4eeToPGammaModel();
-
-  virtual G4double ThresholdEnergy() const;
 
   virtual G4double PeakEnergy() const;
 
   virtual G4double ComputeCrossSection(G4double) const;
-
-  virtual G4PhysicsVector* PhysicsVector(G4double, G4double) const;
 
   virtual void SampleSecondaries(std::vector<G4DynamicParticle*>*,
               G4double, const G4ThreeVector&);
@@ -82,8 +78,6 @@ private:
   // hide assignment operator
   G4eeToPGammaModel & operator=(const  G4eeToPGammaModel &right);
   G4eeToPGammaModel(const  G4eeToPGammaModel&);
-
-  G4eeCrossSections* cross;
 
   G4ParticleDefinition* particle;
   G4ParticleDefinition* pi0;

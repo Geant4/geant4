@@ -62,9 +62,18 @@
 
 using namespace std;
 
-G4eeToPGammaModel::G4eeToPGammaModel(G4eeCrossSections* cr, const G4String& npart):
-  cross(cr)
+G4eeToPGammaModel::G4eeToPGammaModel(G4eeCrossSections* cr,
+	 			     const G4String& npart,
+				     G4double maxkinEnergy,
+				     G4double binWidth)
+: G4Vee2hadrons(cr,
+		npart=="pi0" ? 782.62*MeV:1019.46*MeV,	
+		maxkinEnergy,
+		binWidth)
 {
+  G4cout << "####G4eeToPGammaModel & particle:" << npart 
+	 << "####" << G4endl; 
+
   pi0 = G4PionZero::PionZero();
   if(npart == "pi0") {
     massR = 782.62*MeV;
@@ -74,19 +83,13 @@ G4eeToPGammaModel::G4eeToPGammaModel(G4eeCrossSections* cr, const G4String& npar
     particle = G4Eta::Eta();
   }
   massP = particle->GetPDGMass();
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4eeToPGammaModel::~G4eeToPGammaModel()
 {}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4eeToPGammaModel::ThresholdEnergy() const
-{
-  return LowEnergy();
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -99,24 +102,10 @@ G4double G4eeToPGammaModel::PeakEnergy() const
 
 G4double G4eeToPGammaModel::ComputeCrossSection(G4double e) const
 {
-  G4double ee = std::min(HighEnergy(),e);
   G4double xs;
-  if(particle == pi0) xs = cross->CrossSectionPi0G(ee);
-  else                xs = cross->CrossSectionEtaG(ee);
+  if(particle == pi0) xs = cross->CrossSectionPi0G(e);
+  else                xs = cross->CrossSectionEtaG(e);
   return xs;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4PhysicsVector* G4eeToPGammaModel::PhysicsVector(G4double emin, 
-						  G4double emax) const
-{
-  G4double tmin = std::max(emin, ThresholdEnergy());
-  G4double tmax = std::max(tmin, emax);
-  G4int nbins = (G4int)((tmax - tmin)/(5.*MeV));
-  G4PhysicsVector* v = new G4PhysicsLinearVector(emin,emax,nbins);
-  v->SetSpline(true);
-  return v;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

@@ -63,15 +63,21 @@
 
 using namespace std;
 
-G4eeTo3PiModel::G4eeTo3PiModel(G4eeCrossSections* cr):
-  cross(cr)
+G4eeTo3PiModel::G4eeTo3PiModel(G4eeCrossSections* cr,
+			       G4double maxkinEnergy,
+			       G4double binWidth)
+:  G4Vee2hadrons(cr,
+	         0.41612*GeV,	 //threshold
+		 maxkinEnergy,
+		 binWidth)
 {
+  G4cout << "####G4eeTo3PiModel####" << G4endl;
+
   massPi  = G4PionPlus::PionPlus()->GetPDGMass();
   massPi0 = G4PionZero::PionZero()->GetPDGMass();
   massOm  = 782.62*MeV;
   massPhi = 1019.46*MeV;
-  gcash   = 0.0;
-  gmax    = 1.0;
+  gmax    = 1.5e-8;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -81,17 +87,10 @@ G4eeTo3PiModel::~G4eeTo3PiModel()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-G4double G4eeTo3PiModel::ThresholdEnergy() const
-{
-  return std::max(LowEnergy(),2.0*massPi + massPi0);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
 G4double G4eeTo3PiModel::PeakEnergy() const
 {
   G4double e = massOm;
-  if(HighEnergy() > massPhi) e = massPhi; 
+  if(HighEnergy() > massPhi) { e = massPhi; } 
   return e;
 }
 
@@ -99,21 +98,7 @@ G4double G4eeTo3PiModel::PeakEnergy() const
 
 G4double G4eeTo3PiModel::ComputeCrossSection(G4double e) const
 {
-  G4double ee = std::min(HighEnergy(),e);
-  return cross->CrossSection3pi(ee);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4PhysicsVector* G4eeTo3PiModel::PhysicsVector(G4double emin, 
-					       G4double emax) const
-{
-  G4double tmin = std::max(emin, ThresholdEnergy());
-  G4double tmax = std::max(tmin, emax);
-  G4int nbins = (G4int)((tmax - tmin)/(1.*MeV));
-  G4PhysicsVector* v = new G4PhysicsLinearVector(emin,emax,nbins);
-  v->SetSpline(true);
-  return v;
+  return cross->CrossSection3pi(e);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -121,7 +106,6 @@ G4PhysicsVector* G4eeTo3PiModel::PhysicsVector(G4double emin,
 void G4eeTo3PiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
 	    G4double e, const G4ThreeVector& direction) 
 {
-  if(e < ThresholdEnergy()) return;
 
   G4double x0 = massPi0/e;
   G4double x1 = massPi/e;
@@ -133,10 +117,13 @@ void G4eeTo3PiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
   // max pi0 energy
   G4double edel  = 0.5*e*(1.0 + x0*x0 - 4.0*x1*x1) - massPi0;
 
+  const G4int nmax = 200;
+  G4int nn = 0;
   do {
+    ++nn;
     // pi0 sample
     e0 = edel*G4UniformRand() + massPi0;
-    p0 = sqrt(e0 - massPi0*massPi0);
+    p0 = sqrt(e0*e0 - massPi0*massPi0);
     dir0 = G4RandomDirection();
     w0 = G4LorentzVector(p0*dir0.x(),p0*dir0.y(),p0*dir0.z(),e0);
 
@@ -149,13 +136,16 @@ void G4eeTo3PiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
     p = sqrt(e2 - massPi*massPi);
     dir1 = G4RandomDirection();
     w2 = G4LorentzVector(p*dir1.x(),p*dir1.y(),p*dir1.z(),sqrt(e2));
-    w2.boost(bst);
+    // pi- 
+    w1.set(-w2.px(), -w2.py(), -w2.pz(), w2.e());
+
+    w1.boost(-bst);
+    w2.boost(-bst);
+
     G4double px2 = w2.x();
     G4double py2 = w2.y();
     G4double pz2 = w2.z();
 
-    // pi- 
-    w1 -= w2;
     G4double px1 = w1.x();
     G4double py1 = w1.y();
     G4double pz1 = w1.z();
@@ -171,13 +161,14 @@ void G4eeTo3PiModel::SampleSecondaries(std::vector<G4DynamicParticle*>* newp,
     gg = (px*px + py*py + pz*pz)*
       norm( 1.0/cross->DpRho(m01) +  1.0/cross->DpRho(m02)
 	    + 1.0/cross->DpRho(m12) );
+
     if(gg > gmax) {
       G4cout << "G4eeTo3PiModel::SampleSecondaries WARNING matrix element g= "
 	     << gg << " > " << gmax << " (majoranta)" << G4endl;
+      gmax = gg;
     }
-    if(gg > gcash) gcash = gg;
     
-  } while( gmax*G4UniformRand() > gg );
+  } while( gmax*G4UniformRand() > gg || nn < nmax);
 
   w0.rotateUz(direction);
   w1.rotateUz(direction);
