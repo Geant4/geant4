@@ -644,7 +644,7 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processTypeName = "AnnihToMuMu";
   tmp.processType     = 2;
   tmp.processSubType  =  6;
-  tmp.ordering[0]     =  6;
+  tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     =  6;
   tmp.isDuplicable =  false;
@@ -654,7 +654,7 @@ void G4PhysicsListHelper::ReadInDefaultOrderingParameter()
   tmp.processTypeName = "AnnihToHad";
   tmp.processType     = 2;
   tmp.processSubType  =  7;
-  tmp.ordering[0]     =  7;
+  tmp.ordering[0]     = -1;
   tmp.ordering[1]     = -1;
   tmp.ordering[2]     =  7;
   tmp.isDuplicable =  false;

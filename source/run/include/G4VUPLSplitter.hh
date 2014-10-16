@@ -47,7 +47,7 @@
 
 #include "globals.hh"
 #include "rundefs.hh"
-
+#include "G4AutoLock.hh"
 //
 // This class implements the split-mechanism for shared objects.
 // Let's see how it works.
@@ -73,7 +73,9 @@ class G4VUPLSplitter
 {
   public:
 
-    G4VUPLSplitter() : totalobj(0),totalspace(0),sharedOffset(0) {}
+    G4VUPLSplitter() : totalobj(0),totalspace(0),sharedOffset(0) {
+    	G4MUTEXINIT(mutex);
+    }
 
     G4int CreateSubInstance()
       // Invoked by the master thread to create a new subinstance
@@ -81,11 +83,16 @@ class G4VUPLSplitter
       // This is called by constructor of shared classes, thus only master thread
       // calls this
     {
+    	G4AutoLock l(&mutex);
         //One more instance
         totalobj++;
         //If the number of objects is larger than the available spaces,
         //a re-allocation is needed
-        if (totalobj > slavetotalspace)  { NewSubInstances(); }
+        if (totalobj > slavetotalspace)  {
+        	l.unlock();
+        	NewSubInstances();
+        	l.lock();
+        }
         //Since this is called by Master thread, we can remember this
         totalspace = slavetotalspace;
         sharedOffset = offset;
@@ -97,7 +104,8 @@ class G4VUPLSplitter
       // initialize each new subinstance using a particular method defined
       // by the subclass.
     {
-        if (slavetotalspace  >= totalobj)  { return; }
+    	G4AutoLock l(&mutex);
+    	if (slavetotalspace  >= totalobj)  { return; }
         //Remember current large size
         G4int originaltotalspace = slavetotalspace;
         //Increase its size by some value (purely arbitrary)
@@ -133,6 +141,7 @@ class G4VUPLSplitter
         //Since this is called by worker threds, totalspace is some valid number > 0
         //Remember totalspace is the number of availabel slots from master.
         //We are sure that it has valid data
+    	G4AutoLock l(&mutex);
         offset = (T *)realloc(offset,totalspace * sizeof(T));
         if (offset == 0)
         {
@@ -145,14 +154,14 @@ class G4VUPLSplitter
     }
   public:
 
-    G4RUN_DLL static G4ThreadLocal G4int slavetotalspace; //Per-thread available number of slots
-    G4RUN_DLL static G4ThreadLocal T* offset; //Pointer to first instance of an array
+    G4RUN_DLL G4ThreadLocalStatic G4int slavetotalspace; //Per-thread available number of slots
+    G4RUN_DLL G4ThreadLocalStatic T* offset; //Pointer to first instance of an array
 
   private:
-
     G4int totalobj; //Total number of instances from master thread
     G4int totalspace; // Available number of "slots"
     T* sharedOffset;
+    G4Mutex mutex;
 };
 
 #endif
