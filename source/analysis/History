@@ -17,8 +17,10 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-July 23, 2014 I. Hrivnacova (analysis-V09-06-32)
+July 24, 2014 I. Hrivnacova (analysis-V09-06-32)
 - Fixed applying unit to min, max values in H1, H2 managers
+
+July 23, 2014 I. Hrivnacova
 - Fixed createH2/setH2 commands implementation
 
 June 03, 2014 I. Hrivnacova (analysis-V09-06-31)
