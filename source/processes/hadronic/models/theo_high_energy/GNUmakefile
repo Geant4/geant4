@@ -30,6 +30,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
 			-I$(G4BASE)/processes/hadronic/models/im_r_matrix/include \
 			-I$(G4BASE)/processes/hadronic/models/pre_equilibrium/include \
 			-I$(G4BASE)/processes/hadronic/models/quasi_elastic/include \
+			-I$(G4BASE)/processes/hadronic/models/coherent_elastic/include \
             -I$(G4BASE)/particles/management/include \
             -I$(G4BASE)/particles/leptons/include \
             -I$(G4BASE)/particles/bosons/include \

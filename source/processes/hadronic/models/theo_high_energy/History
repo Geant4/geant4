@@ -13,6 +13,11 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+
+15-Oct-2014, V. Grichine:               (had-theo-HE-V10-00-05)
+- G4LMsdGenerator and G4LMsdChannel were added 
+  to provide interface to inelastic single diffraction dissociation
+
 1-July-2014, Gunter Folger              (had-theo-HE-V10-00-04)
 - Updates to ModelDescription(); updated text and recurse to propagate.
 
