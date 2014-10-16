@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 23, 2014 G.Cosmo (global-V09-06-85)
+- Use G4Exp, G4Log and G4Pow to speedup G4JTPolynomialSolver.
+
+July 14, 2014 G.Cosmo
+- Added symbol to exclusion list in windefs.h.
+
 May 21, 2014 G.Cosmo (global-V09-06-84)
 - Correction in G4Exp::G4Expf() to remove 2nd order term contribution
   repeated twice by mistake. Correction included in VDT 0.3.7 library,

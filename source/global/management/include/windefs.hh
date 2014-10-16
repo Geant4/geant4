@@ -44,7 +44,8 @@
     #undef pascal         // trick to overcome redefinition of 'pascal'
     #undef scr1
     #undef scr2
-	#undef rad2
+    #undef rad1
+    #undef rad2
     #undef small
     #undef ABSOLUTE
     #undef RELATIVE
