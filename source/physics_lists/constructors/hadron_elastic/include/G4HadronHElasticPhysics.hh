@@ -41,12 +41,14 @@
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
+#include "G4LMsdGenerator.hh"
+#include "G4LMsdChannel.hh"
 
 class G4HadronHElasticPhysics : public G4VPhysicsConstructor
 {
 public: 
 
-  G4HadronHElasticPhysics(G4int ver = 0); 
+  G4HadronHElasticPhysics(G4int ver = 0, G4bool diffraction=false); 
 
   virtual ~G4HadronHElasticPhysics();
 
@@ -59,12 +61,17 @@ public:
   // registered to the process manager of each particle type 
   virtual void ConstructProcess();
 
+  void SetDiffraction(G4bool val){fDiffraction = val;};
+
 private:
 
   G4HadronHElasticPhysics(G4HadronHElasticPhysics &);
   G4HadronHElasticPhysics & operator=(const G4HadronHElasticPhysics &right);
 
   G4int    verbose;
+  G4bool fDiffraction;
+  G4LMsdGenerator* fLMsdGenerator;
+  G4LMsdChannel* fLMsdChannel;
   static G4ThreadLocal G4bool   wasActivated;
 };
 

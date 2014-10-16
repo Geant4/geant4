@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-Oct-2014, V. Ivanchenko          (phys-ctor-helastic-V10-00-06)
+- G4HadronHElasticPhysics V. Grichine activates diffraction 
+    dissociation process
+
 01-Aug-2014, Alberto Ribon          (phys-ctor-helastic-V10-00-05)
 - G4HadronHElasticPhysics: for proton, neutron, pion+ and pion-
   elastic scattering introduced the Chips model on Hydrogen, while

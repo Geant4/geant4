@@ -83,8 +83,9 @@ G4_DECLARE_PHYSCONSTR_FACTORY( G4HadronHElasticPhysics );
 G4ThreadLocal G4bool G4HadronHElasticPhysics::wasActivated = false;
 
 
-G4HadronHElasticPhysics::G4HadronHElasticPhysics( G4int ver )
-  : G4VPhysicsConstructor( "hElastic_BEST" ), verbose( ver ) {
+G4HadronHElasticPhysics::G4HadronHElasticPhysics( G4int ver, G4bool diffraction)
+  : G4VPhysicsConstructor( "hElastic_BEST" ), verbose( ver ), fDiffraction(diffraction) 
+{
   if ( verbose > 1 ) { 
     G4cout << "### G4HadronHElasticPhysics: " << GetPhysicsName() << G4endl; 
   }
@@ -206,6 +207,11 @@ void G4HadronHElasticPhysics::ConstructProcess() {
 	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
 	       << " added for " << particle->GetParticleName() << G4endl;
       }
+      if ( fDiffraction ) {
+	fLMsdGenerator = new G4LMsdGenerator("LMsdDiffraction");
+	fLMsdChannel = new G4LMsdChannel;
+	fLMsdGenerator->SetLMsdChannel(fLMsdChannel);
+     }
 
     } else if ( pname == "neutron" ) {   
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();
