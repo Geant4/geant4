@@ -25,15 +25,6 @@
 /run/initialize
 
 
-##########################
-# Set here the cut and the step max for the tracking. 
-# Suggested values of cut and step:
-#
-# Set cuts ONLY inside the detector
-/Physics/setDetectorCuts 0.01 mm
-
-# Set cuts OUTSIDE the detector 
-/Physics/setCuts 1 mm
 
 /Step/waterPhantomStepMax 0.01 mm 
 

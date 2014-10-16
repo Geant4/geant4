@@ -23,37 +23,50 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+// Code developed by:
+//  S.Larsson and J. Generowicz.
 //
-// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
-// the *COMPLETE* version of this program, together with its documentation;
-// Hadrontherapy (both basic and full version) are supported by the Italian INFN
-// Institute in the framework of the MC-INFN Group
+//    *************************************
+//    *                                   *
+//    *    HadrontherapyMagneticField3D.hh     *
+//    *                                   *
+//    *************************************
+//
+// $Id$
 //
 
-#ifndef LOCALINCLIONINELASTICPHYSIC_H
-#define LOCALINCLIONIONINELASTICPHYSIC_H 1
+#include "globals.hh"
+#include "G4MagneticField.hh"
+#include "G4ios.hh"
 
-#include "G4VPhysicsConstructor.hh"
-#include "globals.hh" 
+#include <fstream>
+#include <vector>
+#include <cmath>
 
-class LocalINCLIonIonInelasticPhysic: public G4VPhysicsConstructor 
+using namespace std;
+
+class HadrontherapyMagneticField3D
+#ifndef STANDALONE
+ : public G4MagneticField
+#endif
 {
- public:
-  LocalINCLIonIonInelasticPhysic (const G4String& name = "local_ion_ion_inelastic");
-   virtual ~LocalINCLIonIonInelasticPhysic();
+  
+  // Storage space for the table
+  vector< vector< vector< double > > > xField;
+  vector< vector< vector< double > > > yField;
+  vector< vector< vector< double > > > zField;
+  // The dimensions of the table
+  int nx,ny,nz; 
+  // The physical limits of the defined region
+  double minx, maxx, miny, maxy, minz, maxz;
+  // The physical extent of the defined region
+  double dx, dy, dz;
+  double fXoffset;
+  bool invertX, invertY, invertZ;
 
- protected:
-   void ConstructParticle(){};
-   void ConstructProcess();
+public:
+  HadrontherapyMagneticField3D(const char* filename, double xOffset );
+  void  GetFieldValue( const  double Point[4],
+		       double *Bfield          ) const;
 };
-#endif 
-
-
-
-
-
-
-
 

@@ -35,24 +35,28 @@
 #ifndef HadrontherapyDetectorHit_h
 #define HadrontherapyDetectorHit_h 1
 
+
 #include "G4VHit.hh"
 #include "G4THitsCollection.hh"
 #include "G4Allocator.hh"
+
 
 class HadrontherapyDetectorHit : public G4VHit
 {
 public:
   HadrontherapyDetectorHit();
-  ~HadrontherapyDetectorHit();
+  HadrontherapyDetectorHit(const HadrontherapyDetectorHit&);
+  virtual ~HadrontherapyDetectorHit();
  
-  HadrontherapyDetectorHit(const HadrontherapyDetectorHit &right);
  
-  const HadrontherapyDetectorHit& operator = (const HadrontherapyDetectorHit &right);
+  const HadrontherapyDetectorHit& operator=(const HadrontherapyDetectorHit&);
  
-  int operator == (const HadrontherapyDetectorHit &right) const;
+  G4int operator==(const HadrontherapyDetectorHit&) const;
 
-  inline void *operator new(size_t);
-  inline void operator delete(void *aHit);
+//******************************MT
+inline void* operator new(size_t);
+inline void operator delete(void*);
+//******************************MT
 
 private:
   G4int xHitID; // Hit x voxel 
@@ -89,19 +93,29 @@ public:
 };
 
 typedef G4THitsCollection<HadrontherapyDetectorHit> HadrontherapyDetectorHitsCollection;
-extern G4Allocator<HadrontherapyDetectorHit> HadrontherapyDetectorHitAllocator;
+//******************************MT
+extern G4ThreadLocal G4Allocator<HadrontherapyDetectorHit>* HadrontherapyDetectorHitAllocator;
+//******************************MT
 
 inline void* HadrontherapyDetectorHit::operator new(size_t)
 {
-  void *aHit;
-  aHit = (void *) HadrontherapyDetectorHitAllocator.MallocSingle();
-  return aHit;
+ 
+  
+ if(!HadrontherapyDetectorHitAllocator) 
+  HadrontherapyDetectorHitAllocator= new G4Allocator<HadrontherapyDetectorHit>;
+ void *aHit;
+
+ aHit = (void *) HadrontherapyDetectorHitAllocator->MallocSingle();
+ return aHit;
+
 }
 
 inline void HadrontherapyDetectorHit::operator delete(void *aHit)
 {
-  HadrontherapyDetectorHitAllocator.FreeSingle((HadrontherapyDetectorHit*) aHit);
+if(!HadrontherapyDetectorHitAllocator) 
+  HadrontherapyDetectorHitAllocator= new G4Allocator<HadrontherapyDetectorHit>;
+
+HadrontherapyDetectorHitAllocator->FreeSingle((HadrontherapyDetectorHit*) aHit);
 }
+
 #endif
-
-

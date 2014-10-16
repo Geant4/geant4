@@ -23,45 +23,36 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
-//
-// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
-// the *COMPLETE* version of this program, together with its documentation;
-// Hadrontherapy (both basic and full version) are supported by the Italian INFN
-// Institute in the framework of the MC-INFN Group
+// This example is provided by the Geant4-DNA collaboration
+// Any report or published results obtained using the Geant4-DNA software 
+// shall cite the following Geant4-DNA collaboration publication:
+// Med. Phys. 37 (2010) 4692-4708
+// The Geant4-DNA web site is available at http://geant4-dna.org
 //
 
-#include "HadrontherapyPhysicsListMessenger.hh"
-#include "HadrontherapyPhysicsList.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithAString.hh"
+#ifndef HadrontherapyActionInitialization_h
+#define HadrontherapyActionInitialization_h 1
 
-/////////////////////////////////////////////////////////////////////////////
-HadrontherapyPhysicsListMessenger::HadrontherapyPhysicsListMessenger(HadrontherapyPhysicsList* pPhys)
-:pPhysicsList(pPhys)
+#include "G4VUserActionInitialization.hh"
+
+class HadrontherapyDetectorConstruction;
+class G4GeneralParticleSource;
+
+class HadrontherapyActionInitialization : public G4VUserActionInitialization
 {
-  physDir = new G4UIdirectory("/Physics/");
-  physDir->SetGuidance("Commands to activate physics models and set cuts");
-  
-  pListCmd = new G4UIcmdWithAString("/Physics/addPhysics",this);  
-  pListCmd->SetGuidance("Add physics list.");
-  pListCmd->SetParameterName("PList",false);
-  pListCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-}
+  public:
+    HadrontherapyActionInitialization(/*HadrontherapyDetectorConstruction*/);
+    virtual ~HadrontherapyActionInitialization();
 
-/////////////////////////////////////////////////////////////////////////////
-HadrontherapyPhysicsListMessenger::~HadrontherapyPhysicsListMessenger()
-{
-   delete physDir;
-}
+    virtual void BuildForMaster() const;
+    virtual void Build() const;
 
-/////////////////////////////////////////////////////////////////////////////
-void HadrontherapyPhysicsListMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{
-       if( command == pListCmd )
-   { pPhysicsList->AddPhysicsList(newValue);}
-}
+  private:
+   // G4VUserDetectorConstruction* fDetectorConstruction;
+ G4GeneralParticleSource* masterGPS;
 
+};
+
+#endif
+
+    

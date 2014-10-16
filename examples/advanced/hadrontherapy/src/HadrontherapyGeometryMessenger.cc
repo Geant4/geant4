@@ -23,42 +23,56 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// This is the *BASIC* version of Hadrontherapy, a Geant4-based application
-// See more at: http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
+// Hadrontherapy development is supported by the
+// Italian Institute for Nuclear Physics (INFN)
+// in the framework of the MC-INFN Project
 //
-// Visit the Hadrontherapy web site (http://www.lns.infn.it/link/Hadrontherapy) to request 
-// the *COMPLETE* version of this program, together with its documentation;
-// Hadrontherapy (both basic and full version) are supported by the Italian INFN
-// Institute in the framework of the MC-INFN Group
+// Contact persons: Pablo Cirrone (INFN-LNS)    - pablo.cirrone@lns.infn.it
+//                  Francesco Romano (INFN-LNS) - francesco.romano@lns.infn.it
 //
-
 #include "HadrontherapyGeometryMessenger.hh"
 #include "HadrontherapyGeometryController.hh"
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
 #include "G4UIcmdWithAString.hh"
 
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyGeometryMessenger::HadrontherapyGeometryMessenger(HadrontherapyGeometryController* controller)
-  :hadrontherapyGeometryController(controller)
+:hadrontherapyGeometryController(controller)
 
 {
-  changeTheGeometryDir = new G4UIdirectory("/geometrySetup/");
-  changeTheGeometryDir -> SetGuidance("Geometry setup");
-
-  changeTheGeometryCmd = new G4UIcmdWithAString("/geometrySetup/selectGeometry",this);
-  changeTheGeometryCmd -> SetGuidance("Select the geometry you wish to use");
-  changeTheGeometryCmd -> SetParameterName("Geometry",false);
-  changeTheGeometryCmd -> AvailableForStates(G4State_PreInit); 
+    changeTheGeometryDir = new G4UIdirectory("/geometrySetup/");
+    changeTheGeometryDir -> SetGuidance("Geometry setup");
+    
+    changeTheGeometryCmd = new G4UIcmdWithAString("/geometrySetup/selectGeometry",this);
+    changeTheGeometryCmd -> SetGuidance("Select the geometry you wish to use");
+    changeTheGeometryCmd -> SetParameterName("Geometry",false);
+    changeTheGeometryCmd -> AvailableForStates(G4State_PreInit);
+    
+    /*  changeTheDetectorCmd = new G4UIcmdWithAString("/geometrySetup/selectDetector",this);
+    changeTheDetectorCmd -> SetGuidance("Select the detector you wish to use");
+    changeTheDetectorCmd -> SetParameterName("Detector",false);
+    changeTheDetectorCmd -> AvailableForStates(G4State_PreInit);*/
 }
 
+/////////////////////////////////////////////////////////////////////////////
 HadrontherapyGeometryMessenger::~HadrontherapyGeometryMessenger()
-{ 
-  delete changeTheGeometryDir;
-  delete changeTheGeometryCmd;
+{
+    delete changeTheGeometryDir;
+    delete changeTheGeometryCmd;
+    // delete changeTheDetectorCmd;
 }
 
+/////////////////////////////////////////////////////////////////////////////
 void HadrontherapyGeometryMessenger::SetNewValue(G4UIcommand* command,G4String newValue)
-{ 
-  if( command == changeTheGeometryCmd )
-    { hadrontherapyGeometryController -> SetGeometry (newValue);}
+{
+  /* if( command == changeTheDetectorCmd )
+      {
+        hadrontherapyGeometryController -> SetDetector (newValue);
+    }
+    else*/
+ if( command == changeTheGeometryCmd )
+    {
+        hadrontherapyGeometryController -> SetGeometry (newValue);
+    }
 }

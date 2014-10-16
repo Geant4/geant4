@@ -32,36 +32,54 @@
 // Institute in the framework of the MC-INFN Group
 //
 
-#include "HadrontherapyPhysicsListMessenger.hh"
-#include "HadrontherapyPhysicsList.hh"
-#include "G4UIdirectory.hh"
-#include "G4UIcmdWithADoubleAndUnit.hh"
-#include "G4UIcmdWithAString.hh"
+#ifndef LaserDrivenBeamLineMessenger_h
+#define LaserDrivenBeamLineMessenger_h 1
 
-/////////////////////////////////////////////////////////////////////////////
-HadrontherapyPhysicsListMessenger::HadrontherapyPhysicsListMessenger(HadrontherapyPhysicsList* pPhys)
-:pPhysicsList(pPhys)
+#include "globals.hh"
+#include "G4UImessenger.hh"
+
+class LaserDrivenBeamLine;
+class G4UIdirectory;
+class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithAString;
+class G4UIcmdWithoutParameter;
+
+class LaserDrivenBeamLineMessenger: public G4UImessenger
 {
-  physDir = new G4UIdirectory("/Physics/");
-  physDir->SetGuidance("Commands to activate physics models and set cuts");
-  
-  pListCmd = new G4UIcmdWithAString("/Physics/addPhysics",this);  
-  pListCmd->SetGuidance("Add physics list.");
-  pListCmd->SetParameterName("PList",false);
-  pListCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
-}
+public:
+  LaserDrivenBeamLineMessenger(LaserDrivenBeamLine*);
+	~LaserDrivenBeamLineMessenger();
+    
+    void SetNewValue(G4UIcommand*, G4String);
+    
+private:
+	
+	// Pointer to the detector component
+	LaserDrivenBeamLine *laserDrivenMessengerPointer;
+	
+  G4UIdirectory *laserDrivenDir;
+  G4UIdirectory *energySelectorDir;
+  G4UIdirectory *FcollimatorDir;
+  G4UIdirectory *ScollimatorDir;
+  G4UIdirectory *slitDir;
+  G4UIdirectory *quadrupoleDir;
+  G4UIdirectory *relativePosDir;
 
-/////////////////////////////////////////////////////////////////////////////
-HadrontherapyPhysicsListMessenger::~HadrontherapyPhysicsListMessenger()
-{
-   delete physDir;
-}
+  G4UIcmdWithoutParameter *DisableESSCmd;
 
-/////////////////////////////////////////////////////////////////////////////
-void HadrontherapyPhysicsListMessenger::SetNewValue(G4UIcommand* command,
-                                          G4String newValue)
-{
-       if( command == pListCmd )
-   { pPhysicsList->AddPhysicsList(newValue);}
-}
+  G4UIcmdWithADoubleAndUnit *FcollimatorRadiusCmd;
+  G4UIcmdWithADoubleAndUnit *FcollimatorThicknessCmd;
+  G4UIcmdWithADoubleAndUnit *FcollimatorZpositionCmd;
+  G4UIcmdWithADoubleAndUnit *ScollimatorRadiusCmd;
+  G4UIcmdWithADoubleAndUnit *ScollimatorThicknessCmd;
+  G4UIcmdWithADoubleAndUnit *ScollimatorZpositionCmd;
 
+  G4UIcmdWithADoubleAndUnit *SlitThicknessCmd;
+  G4UIcmdWithADoubleAndUnit *holeSlitDimensionYCmd;
+  G4UIcmdWithADoubleAndUnit *holeSlitDimensionZCmd;
+  G4UIcmdWithADoubleAndUnit *slitHolePositionZCmd;
+
+  G4UIcmdWithoutParameter *DisableQuadsCmd;
+
+};
+#endif

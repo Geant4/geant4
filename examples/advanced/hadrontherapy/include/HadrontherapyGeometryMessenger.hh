@@ -58,7 +58,7 @@ private:
   HadrontherapyGeometryController* hadrontherapyGeometryController;
 
   G4UIdirectory *changeTheGeometryDir;      ///> UI directory for the geometry control
-  G4UIcmdWithAString *changeTheGeometryCmd; ///> Select the geometry
+  G4UIcmdWithAString *changeTheGeometryCmd;//, *changeTheDetectorCmd; ///> Select the geometry and the detector
 };
 #endif
 

@@ -40,6 +40,7 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4SystemOfUnits.hh"
 
+
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDetectorConstruction* detector)
   :hadrontherapyDetector(detector)
@@ -114,7 +115,8 @@ HadrontherapyDetectorMessenger::HadrontherapyDetectorMessenger(HadrontherapyDete
     changeTheDetectorVoxelCmd -> SetDefaultUnit("mm");
     changeTheDetectorVoxelCmd -> SetUnitCandidates("nm um mm cm");
     changeTheDetectorVoxelCmd -> AvailableForStates(G4State_Idle);
-   }
+
+}
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyDetectorMessenger::~HadrontherapyDetectorMessenger()
@@ -127,7 +129,7 @@ HadrontherapyDetectorMessenger::~HadrontherapyDetectorMessenger()
     delete changeTheDetectorDir; 
     delete changeTheDetectorSizeCmd; 
     delete changeTheDetectorToPhantomPositionCmd; 
-    delete changeTheDetectorVoxelCmd; 
+    delete changeTheDetectorVoxelCmd;
 }
 
 /////////////////////////////////////////////////////////////////////////////

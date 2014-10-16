@@ -57,7 +57,7 @@ private:
   // Pointer to the phantom/detector 
   HadrontherapyDetectorConstruction* hadrontherapyDetector;
 
-  G4UIdirectory *changeThePhantomDir,  *changeTheDetectorDir; 
+  G4UIdirectory *changeThePhantomDir,  *changeTheDetectorDir;
 
   G4UIcmdWithoutParameter   *updateCmd;
   G4UIcmdWithAString        *changeThePhantomMaterialCmd; 

@@ -34,9 +34,13 @@
 
 #include "HadrontherapyDetectorHit.hh"
 
-G4Allocator<HadrontherapyDetectorHit> HadrontherapyDetectorHitAllocator;
+
+//**********************MT
+G4ThreadLocal G4Allocator<HadrontherapyDetectorHit>* HadrontherapyDetectorHitAllocator=0;
+//**********************MT
 
 HadrontherapyDetectorHit::HadrontherapyDetectorHit()
+: G4VHit()
 {
  energyDeposit = 0;
 }
@@ -45,7 +49,7 @@ HadrontherapyDetectorHit::~HadrontherapyDetectorHit()
 {
 }
 
-HadrontherapyDetectorHit::HadrontherapyDetectorHit(const HadrontherapyDetectorHit &right)
+HadrontherapyDetectorHit::HadrontherapyDetectorHit(const HadrontherapyDetectorHit& right)
   : G4VHit()
 {
  xHitID = right.xHitID;
@@ -54,7 +58,7 @@ HadrontherapyDetectorHit::HadrontherapyDetectorHit(const HadrontherapyDetectorHi
  energyDeposit = right.energyDeposit;
 }
 
-const HadrontherapyDetectorHit& HadrontherapyDetectorHit::operator=(const HadrontherapyDetectorHit &right)
+const HadrontherapyDetectorHit& HadrontherapyDetectorHit::operator=(const HadrontherapyDetectorHit& right)
 {
  xHitID = right.xHitID;
  zHitID = right.zHitID;
@@ -63,9 +67,7 @@ const HadrontherapyDetectorHit& HadrontherapyDetectorHit::operator=(const Hadron
  return *this;
 }
 
-int HadrontherapyDetectorHit::operator==(const HadrontherapyDetectorHit &right) const
+G4int HadrontherapyDetectorHit::operator==(const HadrontherapyDetectorHit& right) const
 {
  return((xHitID==right.xHitID)&&(zHitID==right.zHitID)&&(yHitID==right.yHitID));
 }
-
-
