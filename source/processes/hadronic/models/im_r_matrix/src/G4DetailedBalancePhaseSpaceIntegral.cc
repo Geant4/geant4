@@ -147,7 +147,7 @@ GetPhaseSpaceIntegral(G4double sqs)
 {
   G4double result = 0;
   G4int it=0;
-  for(G4int ie=0; ie<120; ie++)
+  for(G4int ie=0; ie<119; ie++)
   {
     if(sqrts[ie]*GeV>sqs) break;
     it = ie;

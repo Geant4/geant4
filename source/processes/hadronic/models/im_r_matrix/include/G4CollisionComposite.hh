@@ -50,6 +50,7 @@
 #include "G4CrossSectionBuffer.hh"
 #include "G4Pair.hh"
 #include "G4ParticleTable.hh"
+#include "G4Threading.hh"
 
 class G4KineticTrack;
 class G4VCrossSectionSource;
@@ -123,6 +124,7 @@ private:
   static const G4int nPoints;
   static const G4double theT[];
   
+  mutable G4Mutex bufferMutex; //Protects concurrent access to theBuffer in MT
 };
 
 #endif

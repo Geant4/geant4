@@ -35,6 +35,7 @@
 #include "G4KineticTrackVector.hh"
 #include "G4VCrossSectionSource.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4AutoLock.hh"
 
 const G4int G4CollisionComposite::nPoints = 32;
 
@@ -43,6 +44,7 @@ const G4double G4CollisionComposite::theT[nPoints] =
 
 G4CollisionComposite::G4CollisionComposite()
 { 
+G4MUTEXINIT( bufferMutex );
 }
 
 
@@ -64,6 +66,7 @@ G4double G4CollisionComposite::CrossSection(const G4KineticTrack& trk1,
   }
   else
   {
+    G4AutoLock l(&bufferMutex);
     // waiting for mutable to enable buffering.
     const_cast<G4CollisionComposite *>(this)->BufferCrossSection(trk1.GetDefinition(), trk2.GetDefinition());
 //    G4cerr << "Buffer filled, reying with sqrts = "<< (trk1.Get4Momentum()+trk2.Get4Momentum()).mag() <<G4endl;
