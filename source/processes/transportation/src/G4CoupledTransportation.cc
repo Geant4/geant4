@@ -58,6 +58,7 @@
 
 class G4VSensitiveDetector;
 
+G4bool G4CoupledTransportation::fUseMagneticMoment=false;
 //////////////////////////////////////////////////////////////////////////
 //
 // Constructor
@@ -78,7 +79,6 @@ G4CoupledTransportation::G4CoupledTransportation( G4int verbosity )
     fThresholdTrials( 10 ), 
     fNoLooperTrials( 0 ),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
-    fUseMagneticMoment( false ),  
     fVerboseLevel( verbosity )
 {
   // set Process Sub Type
@@ -994,4 +994,13 @@ ReportInexactEnergy(G4double startEnergy, G4double endEnergy)
       }
     }
   }
+}
+
+#include "G4Transportation.hh"
+G4bool G4CoupledTransportation::EnableUseMagneticMoment(G4bool useMoment)
+{
+  G4bool lastValue= fUseMagneticMoment;
+  fUseMagneticMoment= useMoment;
+  G4Transportation::fUseMagneticMoment= useMoment;
+  return lastValue;
 }

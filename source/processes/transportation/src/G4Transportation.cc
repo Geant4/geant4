@@ -71,6 +71,7 @@
 
 class G4VSensitiveDetector;
 
+G4bool G4Transportation::fUseMagneticMoment=false;
 //////////////////////////////////////////////////////////////////////////
 //
 // Constructor
@@ -96,7 +97,6 @@ G4Transportation::G4Transportation( G4int verbosity )
     fNoLooperTrials( 0 ),
     fSumEnergyKilled( 0.0 ), fMaxEnergyKilled( 0.0 ), 
     fShortStepOptimisation( false ), // Old default: true (=fast short steps)
-    fUseMagneticMoment( false ),
     fVerboseLevel( verbosity )
 {
   // set Process Sub Type
@@ -810,4 +810,13 @@ G4Transportation::StartTracking(G4Track* aTrack)
   // Update the current touchable handle  (from the track's)
   //
   fCurrentTouchableHandle = aTrack->GetTouchableHandle();
+}
+
+#include "G4CoupledTransportation.hh"
+G4bool G4Transportation::EnableUseMagneticMoment(G4bool useMoment)
+{
+  G4bool lastValue= fUseMagneticMoment;
+  fUseMagneticMoment= useMoment;
+  G4CoupledTransportation::fUseMagneticMoment= useMoment;
+  return lastValue;
 }
