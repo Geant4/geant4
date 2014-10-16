@@ -21,7 +21,6 @@ June  24, 2014 - G.Folger  (geomnav-V09-06-23)
 -------------------------
 - G4MultiNavigator: set 'fIdNavLimiting' index to navigator limiting the step,
   if only one navigator limited the step. Fixes crash in RE05 on Windows.
-  The fix is likely addressing problem report #1634.
 
 May 27, 2014 - J.Apostolakis  (geomnav-V09-06-22)
 ----------------------------
