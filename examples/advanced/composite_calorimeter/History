@@ -9,6 +9,9 @@ $Id$
                       Example History file
                       ---------------------
 
+15.10.2014 - L.Pandola Tag ccal-V10-00-02
+- Explicitly delete G4analysis object at the end of the job
+
 14.10.2014 - L.Pandola Tag ccal-V10-00-01
 - Updated README
 - Get rid of compiler warnings which caused rejection of ccal-V10-00-00

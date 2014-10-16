@@ -137,8 +137,9 @@ CCalAnalysis::CCalAnalysis() :
 }
 
 
-CCalAnalysis::~CCalAnalysis() {
+CCalAnalysis::~CCalAnalysis() {  
   Finish();
+  delete G4AnalysisManager::Instance();
 }
 
 
