@@ -42,8 +42,11 @@
 #include <vector>
 #include "G4ThreeVector.hh"
 
+//!Uncomment #include to switch to ROOT or XML output file
 //#include "g4root.hh"
 //#include "g4xml.hh"
+
+//! Default here is a CSV file
 #include "g4csv.hh"
 
 

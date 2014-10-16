@@ -37,8 +37,14 @@
 
 #include "PurgMagTabulatedField3D.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AutoLock.hh"
 
-PurgMagTabulatedField3D::PurgMagTabulatedField3D( const char* filename, double zOffset ) 
+namespace{
+  G4Mutex myPurgMagTabulatedField3DLock = G4MUTEX_INITIALIZER;
+}
+
+PurgMagTabulatedField3D::PurgMagTabulatedField3D(const char* filename, 
+						 double zOffset ) 
   :fZoffset(zOffset),invertX(false),invertY(false),invertZ(false)
 {    
  
@@ -49,6 +55,12 @@ PurgMagTabulatedField3D::PurgMagTabulatedField3D( const char* filename, double z
 	 << "\n-----------------------------------------------------------";
     
   G4cout << "\n ---> " "Reading the field grid from " << filename << " ... " << endl; 
+
+  //
+  //This is a thread-local class and we have to avoid that all workers open the 
+  //file at the same time
+  G4AutoLock lock(&myPurgMagTabulatedField3DLock);
+
   ifstream file( filename ); // Open the file for reading.
   
   if (!file.is_open())
@@ -112,6 +124,8 @@ PurgMagTabulatedField3D::PurgMagTabulatedField3D( const char* filename, double z
     }
   }
   file.close();
+
+  lock.unlock();
 
   maxx = xval * lenUnit;
   maxy = yval * lenUnit;

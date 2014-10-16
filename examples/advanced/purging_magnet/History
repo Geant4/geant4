@@ -9,6 +9,11 @@ $Id$
                       Category History file
                       ---------------------
 
+16.10.2014 - Luciano Pandola (purmag-V10-00-02)
+- Prevent the threads to read the B-map file at the same time
+- Clean-up the analysis singleton.
+- Actual MT migration: use G4MTRunManager, if applicable
+
 15.10.2014 - Luciano Pandola (purmag-V10-00-01)
 - Added ConstructSDandField() and registered magnetic field in a 
  G4Cache
