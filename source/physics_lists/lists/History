@@ -14,6 +14,12 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-Oct-2014, Alex Howard           (phys-lists-V10-00-07)
+- Bugfix 1591 for LBE 
+- removed Bertini Cascade from alphas, deuterons and tritons and replaced with 
+  BinaryLightIonReaction
+- Replaced G4MuonMinusCaptureAtRest with G4MuonMinusCapture
+
 05-Aug-2014, Krzysztof Genser           (phys-lists-V10-00-06)
 - Extended Shielding code to also include ShieldingM variant
 
