@@ -161,6 +161,7 @@ class G4DisplacedSolid : public G4VSolid
     G4VSolid* fPtrSolid ;
     G4AffineTransform* fPtrTransform ;
     G4AffineTransform* fDirectTransform ;
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 } ;
 
