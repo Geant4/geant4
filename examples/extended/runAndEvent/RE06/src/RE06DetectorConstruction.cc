@@ -63,13 +63,14 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+G4ThreadLocal G4bool RE06DetectorConstruction::fConstructedSDandField = false;
+
 RE06DetectorConstruction::RE06DetectorConstruction()
 : G4VUserDetectorConstruction(),
   fNumberOfLayers(40),
   fTotalThickness (2.0*m),
   fLayerThickness(0.),
   fConstructed(false),
-  fConstructedSDandField(false),
   fWorldMaterial(0),
   fAbsorberMaterial(0),
   fGapMaterial(0),
@@ -107,12 +108,11 @@ RE06DetectorConstruction::~RE06DetectorConstruction()
 
 G4VPhysicalVolume* RE06DetectorConstruction::Construct()
 {
-//  if(!fConstructed)
+  if(!fConstructed)
   {
     fConstructed = true;
     DefineMaterials();
     SetupGeometry();
-    SetupDetectors();
   }
   if (GetVerboseLevel()>0) {
     PrintCalorParameters();
@@ -122,7 +122,7 @@ G4VPhysicalVolume* RE06DetectorConstruction::Construct()
 
 void RE06DetectorConstruction::ConstructSDandField() {
 
-//  if(!fConstructedSDandField)
+  if(!fConstructedSDandField)
   {
     fConstructedSDandField = true;
     SetupDetectors();

@@ -79,7 +79,7 @@ class RE06DetectorConstruction : public G4VUserDetectorConstruction
     G4double           fLayerThickness; ///< = fTotalThickness / fNumberOfLayers
 
     G4bool             fConstructed;
-    G4bool             fConstructedSDandField;
+    static G4ThreadLocal G4bool fConstructedSDandField;
   
     G4String           fCalName[3];
 
