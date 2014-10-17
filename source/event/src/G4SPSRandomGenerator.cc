@@ -91,6 +91,7 @@ G4SPSRandomGenerator::G4SPSRandomGenerator()
 }
 
 G4SPSRandomGenerator::~G4SPSRandomGenerator() {
+    G4MUTEXDESTROY(mutex);
 }
 
 //G4SPSRandomGenerator* G4SPSRandomGenerator::getInstance ()

@@ -97,6 +97,7 @@ G4SingleParticleSource::~G4SingleParticleSource() {
 	delete posGenerator;
 	delete angGenerator;
 	delete eneGenerator;
+    G4MUTEXDESTROY(mutex);
 }
 
 void G4SingleParticleSource::SetVerbosity(int vL) {

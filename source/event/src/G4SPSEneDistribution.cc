@@ -118,6 +118,7 @@ G4SPSEneDistribution::G4SPSEneDistribution(): eneRndm(0), Splinetemp(0)
 
 G4SPSEneDistribution::~G4SPSEneDistribution()
 {
+    G4MUTEXDESTROY(mutex);
     if(Arb_grad_cept_flag)
     {
         delete[] Arb_grad;

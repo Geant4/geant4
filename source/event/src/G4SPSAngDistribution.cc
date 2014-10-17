@@ -82,7 +82,9 @@ G4SPSAngDistribution::G4SPSAngDistribution()
 }
 
 G4SPSAngDistribution::~G4SPSAngDistribution()
-{}
+{
+    G4MUTEXDESTROY(mutex);
+}
 
 //
 void G4SPSAngDistribution::SetAngDistType(G4String atype)

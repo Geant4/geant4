@@ -95,6 +95,7 @@ G4SPSPosDistribution::G4SPSPosDistribution()
 
 G4SPSPosDistribution::~G4SPSPosDistribution()
 {
+  G4MUTEXDESTROY(mutex);
 }
 
 void G4SPSPosDistribution::SetPosDisType(G4String PosType)

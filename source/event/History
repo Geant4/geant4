@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 16th, 2014 A.Dotti (event-V10-00-15)
+- Adding G4MUTEXDESTROY for GPS classes
+
 October 10th, 2014 A.Dotti (event-V10-00-14)
 - New strategy for GPS messenger: it is instantiated w/ singleton
   pattern. UI commands are created in a worker thread, but commands

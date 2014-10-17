@@ -81,6 +81,7 @@ G4GeneralParticleSourceData::G4GeneralParticleSourceData() : flat_sampling(false
 
 G4GeneralParticleSourceData::~G4GeneralParticleSourceData()
 {
+  G4MUTEXDESTROY(mutex);
   for ( std::vector<G4SingleParticleSource*>::const_iterator it = sourceVector.begin() ;
 	it != sourceVector.end() ; ++it ) { delete *it; }
   sourceVector.clear();
