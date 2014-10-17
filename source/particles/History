@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-- 11 Jul. 2014 Andrea Dotti (particles-V09-06-68)
+- 11 Jul. 2014 Andrea Dotti (particles-V09-06-69, 68)
 - Solve data-race condition in G4PDefSplitter
 
 - 07. Jul. 2014  Makoto Asai (particles-V09-06-67)
