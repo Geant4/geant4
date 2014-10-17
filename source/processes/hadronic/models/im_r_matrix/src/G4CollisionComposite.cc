@@ -49,7 +49,8 @@ G4CollisionComposite::G4CollisionComposite()
 
 
 G4CollisionComposite::~G4CollisionComposite()
-{ 
+{
+  G4MUTEXDESTROY(bufferMutex);
   std::for_each(components.begin(), components.end(), G4Delete());
 }
 
