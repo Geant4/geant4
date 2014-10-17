@@ -69,6 +69,7 @@
 
     // Macro to iniaizlie a Mutex
     #define G4MUTEXINIT(mutex) pthread_mutex_init( &mutex , NULL);
+    #define G4MUTEXDESTROY(mutex) pthread_mutex_destroy( &mutex );
 
     // Macro to create a G4Thread object
     //
@@ -123,6 +124,7 @@
 
     // #define G4MUTEXINIT(mutex) InitializeCriticalSection( &mutex );
     #define G4MUTEXINIT(mutex);
+    #define G4MUTEXDESTROY(mutex);
 
     // Not clear why following two lines are needed...
     //
@@ -161,6 +163,7 @@
   #define G4MUTEX_INITIALIZER 1
   G4int fake_mutex_lock_unlock( G4Mutex* );// { return 0; }
   #define G4MUTEXINIT(mutex) ;;
+  #define G4MUTEXDESTROY(mutex) ;;
   #define G4MUTEXLOCK fake_mutex_lock_unlock
   #define G4MUTEXUNLOCK fake_mutex_lock_unlock
   #define G4THREADCREATE( worker , func , arg ) ;;
