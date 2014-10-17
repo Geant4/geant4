@@ -156,7 +156,7 @@ void ExExChPhysListEmStandardSS::ConstructProcess()
             ecs->AddEmModel(0, ecsmodel);
             XWrapperDiscreteProcess *ecs_wrapper =
                 new XWrapperDiscreteProcess();
-            ecs_wrapper->RegisterProcess(ecs,1);
+            ecs_wrapper->RegisterProcess(ecs,0);
             pmanager->AddDiscreteProcess(ecs_wrapper);
             
         } else if (particleName == "e+") {
@@ -195,7 +195,7 @@ void ExExChPhysListEmStandardSS::ConstructProcess()
             ecs->AddEmModel(0, ecsmodel);
             XWrapperDiscreteProcess *ecs_wrapper =
                 new XWrapperDiscreteProcess();
-            ecs_wrapper->RegisterProcess(ecs,1);
+            ecs_wrapper->RegisterProcess(ecs,0);
             pmanager->AddDiscreteProcess(ecs_wrapper,1);
             
         } else if ((particleName == "mu+" ||
@@ -231,7 +231,7 @@ void ExExChPhysListEmStandardSS::ConstructProcess()
             ecs->AddEmModel(0, ecsmodel);
             XWrapperDiscreteProcess *ecs_wrapper =
                 new XWrapperDiscreteProcess();
-            ecs_wrapper->RegisterProcess(ecs,1);
+            ecs_wrapper->RegisterProcess(ecs,0);
             pmanager->AddDiscreteProcess(ecs_wrapper);
             
         } else if ((particleName == "alpha" || particleName == "He3") ) {
@@ -248,7 +248,7 @@ void ExExChPhysListEmStandardSS::ConstructProcess()
             ecs->SetBuildTableFlag(false);
             XWrapperDiscreteProcess *ecs_wrapper =
                 new XWrapperDiscreteProcess();
-            ecs_wrapper->RegisterProcess(ecs,1);
+            ecs_wrapper->RegisterProcess(ecs,0);
             pmanager->AddDiscreteProcess(ecs_wrapper);
             
         } else if (particleName == "GenericIon"  ) {
@@ -265,7 +265,7 @@ void ExExChPhysListEmStandardSS::ConstructProcess()
             ecs->SetBuildTableFlag(false);
             XWrapperDiscreteProcess *ecs_wrapper =
                 new XWrapperDiscreteProcess();
-            ecs_wrapper->RegisterProcess(ecs,1);
+            ecs_wrapper->RegisterProcess(ecs,0);
             pmanager->AddDiscreteProcess(ecs_wrapper);
             
         } else if ((!particle->IsShortLived()) &&
@@ -285,7 +285,7 @@ void ExExChPhysListEmStandardSS::ConstructProcess()
             ecs->SetBuildTableFlag(false);
             XWrapperDiscreteProcess *ecs_wrapper =
                 new XWrapperDiscreteProcess();
-            ecs_wrapper->RegisterProcess(ecs,1);
+            ecs_wrapper->RegisterProcess(ecs,0);
             pmanager->AddDiscreteProcess(ecs_wrapper);
             
         }

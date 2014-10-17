@@ -178,13 +178,6 @@ void ExExChProcessChanneling::UpdatePosition(const G4Track& aTrack){
         G4double vXposition = G4UniformRand() *
             GetXPhysicalLattice(aTrack)->ComputeInterplanarPeriod();
         
-        //if the particle is negative we move to the second half
-        //of the potential well
-        if(ParticleIsNegative(aTrack)){
-            vXposition +=
-            ( GetXPhysicalLattice(aTrack)->ComputeInterplanarPeriod() * 0.5 );
-        }
-        
         //initial position in the channel is stored
         GetInfo(aTrack)->SetPositionChanneledInitial(G4ThreeVector(vXposition,
                                                                    0.,
@@ -199,7 +192,7 @@ void ExExChProcessChanneling::UpdatePosition(const G4Track& aTrack){
         
         //if the particle has been under channeling the position
         //for the measurement of the apparent centrifugal force is reset
-        if(GetInfo(aTrack)->HasBeenUnderCoherentEffect() != 0){
+        if(GetInfo(aTrack)->HasBeenUnderCoherentEffect() == 1){
             GetInfo(aTrack)->SetPositionChanneled(G4ThreeVector(0.,0.,0.));
         }
         else{
@@ -321,21 +314,31 @@ ComputeChannelingOutgoingMomentum(const G4Track& aTrack){
     
     G4double vTotalEnergy = vStepPre->GetTotalEnergy();
     
-    G4double vMaximumEnergy = ComputeCriticalEnergyMaximum(aTrack);
-    G4double vMinimumEnergy = ComputeCriticalEnergyMinimum(aTrack);
+    G4double vTransverseEnergyX = fabs(ComputeTransverseEnergy(aTrack).x());
+    G4double vTransverseEnergyY = fabs(ComputeTransverseEnergy(aTrack).y());
+    double vPotentialEnergyX = 0.;
+    double vPotentialEnergyY = 0.;
     
-    G4double vTransverseEnergyX =
-        fabs(ComputeTransverseEnergy(aTrack).x() - vMinimumEnergy);
-    G4double vTransverseEnergyY =
-        fabs(ComputeTransverseEnergy(aTrack).y() - vMinimumEnergy);
-    
-    if(vTransverseEnergyX > (vMaximumEnergy - vMinimumEnergy)){
-        vTransverseEnergyX = vMaximumEnergy - vMinimumEnergy;
-    }
-    if(vTransverseEnergyY > (vMaximumEnergy - vMinimumEnergy)){
-        vTransverseEnergyY = vMaximumEnergy - vMinimumEnergy;
-    }
-    
+    bool bExit = false;
+    do{
+        G4double vXposition = G4UniformRand() *
+        GetXPhysicalLattice(aTrack)->ComputeInterplanarPeriod();
+        
+        GetInfo(aTrack)->SetPositionChanneledInitial(G4ThreeVector(vXposition,
+                                                                   0.,
+                                                                   0.));
+        
+        vPotentialEnergyX = ComputePotentialEnergy(aTrack).x();
+        vPotentialEnergyY = ComputePotentialEnergy(aTrack).y();
+        if(vPotentialEnergyX<=vTransverseEnergyX &&
+           vPotentialEnergyY<=vTransverseEnergyY){
+            bExit = true;
+        }
+    } while(bExit == false);
+
+    vTransverseEnergyX-=vPotentialEnergyX;
+    vTransverseEnergyY-=vPotentialEnergyY;
+
     G4double vChAngleX = pow(+ 2. * fabs(vTransverseEnergyX)
                              / vTotalEnergy , 0.5);
     G4double vChAngleY = pow(+ 2. * fabs(vTransverseEnergyY)
@@ -375,10 +378,8 @@ ComputeVolumeReflectionOutgoingMomentum(const G4Track& aTrack){
         G4double vEnergyRMS =
             fabs(ComputeCentrifugalEnergyMaximumVariation(aTrack).x());
         
-        G4double vEnergyMin = (vEnergyMax - vEnergyRMS);
-        
         G4double vTransverseEnergy =
-            vEnergyMin + (G4UniformRand() * fabs(vEnergyRMS) );
+            vEnergyMax + (G4UniformRand() * fabs(vEnergyRMS) );
         
         vVrAngle = - fabs(vRadiusX)/vRadiusX *
             pow(+ 2. * fabs(vTransverseEnergy) / vTotalEnergy , 0.5);
@@ -395,9 +396,8 @@ ComputeVolumeReflectionOutgoingMomentum(const G4Track& aTrack){
         G4double vAngleRatio =
             (vMomentumChanneled.x()/vTotalEnergy)/ComputeCriticalAngle(aTrack);
         
-        if(fabs(vAngleRatio)<1.){
-            //vVrAngle *= (0.5 * (vAngleRatio + 1.));
-            vVrAngle *= (-0.5*(vAngleRatio - 1.));
+        if(fabs(vAngleRatio)<1.5){
+            vVrAngle *= (-(fabs(vAngleRatio) - 1.5)/3.);
         }
     }
     
@@ -566,30 +566,23 @@ IsUnderCoherentEffect(const G4Track& aTrack){
             + GetInfo(aTrack)->GetPositionChanneledInitial();
         vTransverseEnergy += fabs(ComputeCentrifugalEnergy(aTrack,
                                                 vPositionInTheCrystal).x());
-        
-        G4double vEnergyMaxVR = vEnergyMax
-            + ComputeCentrifugalEnergyMaximumVariation(aTrack).x();
-        G4bool bNotBoundary = ParticleIsNotOnBoundary(aTrack);
-        G4bool bTangentToPlane = ParticleIsTangentToBentPlane(aTrack);
-        
         if(vTransverseEnergy <= vEnergyMax){
             // the particle is in channeling
             GetInfo(aTrack)->SetCoherentEffect(1);
             return true;
         }
-        else if(vTransverseEnergy <= vEnergyMaxVR &&
-                GetInfo(aTrack)->HasBeenUnderCoherentEffect() != 2){
-            // the particle is in volume reflection
-            GetInfo(aTrack)->SetCoherentEffect(2);
-            return true;
-        }
-        else if(bTangentToPlane == true &&
-                bNotBoundary == true &&
-                GetInfo(aTrack)->HasBeenUnderCoherentEffect() != 2){
-            // the particle is in volume reflection
-            GetInfo(aTrack)->SetCoherentEffect(2);
-            return true;
-        }
+        else{
+            G4bool bNotBoundary = ParticleIsNotOnBoundary(aTrack);
+            G4bool bTangentToPlane = ParticleIsTangentToBentPlane(aTrack);
+
+            if(bTangentToPlane == true &&
+               bNotBoundary == true &&
+               GetInfo(aTrack)->HasBeenUnderCoherentEffect() != 2){
+                    // the particle is in volume reflection
+                    GetInfo(aTrack)->SetCoherentEffect(2);
+                    return true;
+                }
+            }
     }
     
     // the particle is not under coherent effect
@@ -787,11 +780,6 @@ ComputeCentrifugalEnergy(const G4Track& aTrack,G4ThreeVector vPosition){
         aTrack.GetStep()->GetPreStepPoint()->GetTotalEnergy();
     
     G4double vPositionX = vPosition.x();
-    
-    if(ParticleIsNegative(aTrack) && false){
-        vPositionX -=
-            GetXPhysicalLattice(aTrack)->ComputeInterplanarPeriod() * 0.5;
-    }
     
     G4ThreeVector vEnergyVariation =
         G4ThreeVector(vTotalEnergy * vPositionX /
@@ -1099,11 +1087,13 @@ ParticleIsTangentToBentPlane(const G4Track& aTrack){
                 GetPostStepPoint()->GetMomentum(),vPositionPost);
     
     if(vMomentumPost.x()<0. &&
-       vMomentumPre.x()>0.){
+       vMomentumPre.x()>0. &&
+       GetXPhysicalLattice(aTrack)->GetCurvatureRadius().x() < 0.){
         return true;
     }
     if(vMomentumPost.x()>0. &&
-       vMomentumPre.x()<0.){
+       vMomentumPre.x()<0. &&
+       GetXPhysicalLattice(aTrack)->GetCurvatureRadius().x() > 0.){
         return true;
     }
     

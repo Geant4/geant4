@@ -1,4 +1,4 @@
-$Id: $
+ $Id: $
 -------------------------------------------------------------------
 
      =========================================================
@@ -14,6 +14,11 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+October 16, 2014 E. Bagli (channelingExample-V10-00-15)
+- minor modification to condition for vr
+- minor modification to computation of channeling outgoing angle
+- changed nuclei density to electron and nuclei density for ss cross section computation
+
 July 1,  2014 G.Folger (channelingExample-V10-00-14)
 -  revert change introduced with tag ...-12, CMakeLists.txt rev.82513
 
