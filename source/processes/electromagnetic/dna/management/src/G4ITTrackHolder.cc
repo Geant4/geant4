@@ -61,7 +61,3 @@ void G4ITTrackHolder::PushTrack(G4Track* track)
     delete track;
 }
 
-double G4ITTrackHolder::GetTimeStep() const
-{
-    return 0;
-}

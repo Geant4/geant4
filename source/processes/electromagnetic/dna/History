@@ -14,6 +14,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+17-10-2014  MK, tag emdna-V10-00-36
+            - Call G4ITTimeStepper in ChemMan::InitMaster
+            - Remove inappropriate method in G4ITTrackHolder
+            - G4DNASecondOrderReaction uses G4ITTimeStepper::GetTimeStep
+
 10-10-2014  MK, tag emdna-V10-00-35
 	    Avoid use of std::map at the application level in TimeStepAction
 
