@@ -17,6 +17,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18-08-14 M.Asai (exampleRE05-V09-06-10)
+- Reduce the amount of print-out.
+
 27-11-13 G.Folger (exampleRE05-V09-06-09)
 - remove setting number of threads from macro file
 
