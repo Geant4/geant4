@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15-Oct-2014, Alex Howard           (phys-lists-V10-00-08)
+- Increased cuts in LBE physics list to 1 micrometer (from 1 nanometer).
+
 15-Oct-2014, Alex Howard           (phys-lists-V10-00-07)
 - Bugfix 1591 for LBE 
 - removed Bertini Cascade from alphas, deuterons and tritons and replaced with 

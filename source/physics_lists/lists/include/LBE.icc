@@ -77,11 +77,13 @@ template<class T> TLBE<T>::TLBE() :T()
   G4cout <<G4endl<<G4endl;
   this->defaultCutValue     = 1.0*CLHEP::micrometer; //
   cutForGamma         = this->defaultCutValue;
-  cutForElectron      = 1.0*CLHEP::nanometer;
+//  cutForElectron      = 1.0*CLHEP::nanometer;
+  cutForElectron      = 1.0*CLHEP::micrometer;
   cutForPositron      = this->defaultCutValue;
-  cutForProton        = this->defaultCutValue;
-  cutForAlpha         = 1.0*CLHEP::nanometer;
-  cutForGenericIon    = 1.0*CLHEP::nanometer;
+  //not used:
+  // cutForProton        = this->defaultCutValue;
+  // cutForAlpha         = 1.0*CLHEP::nanometer;
+  // cutForGenericIon    = 1.0*CLHEP::nanometer;
 
   stoppingPhysics = new G4StoppingPhysics;
 
