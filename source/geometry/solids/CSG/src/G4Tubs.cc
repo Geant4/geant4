@@ -128,7 +128,6 @@ G4Tubs::G4Tubs( __void__& a )
     sinSPhi(0.), cosSPhi(0.), sinEPhi(0.), cosEPhi(0.),
     fPhiFullTube(false), halfCarTolerance(0.), halfRadTolerance(0.),
     halfAngTolerance(0.)
-
 {
 }
 
@@ -157,7 +156,6 @@ G4Tubs::G4Tubs(const G4Tubs& rhs)
     halfRadTolerance(rhs.halfRadTolerance),
     halfAngTolerance(rhs.halfAngTolerance)
 {
-   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -187,7 +185,6 @@ G4Tubs& G4Tubs::operator = (const G4Tubs& rhs)
    halfCarTolerance = rhs.halfCarTolerance;
    halfRadTolerance = rhs.halfRadTolerance;
    halfAngTolerance = rhs.halfAngTolerance;
-   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

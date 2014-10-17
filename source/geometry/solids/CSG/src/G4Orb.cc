@@ -114,7 +114,6 @@ G4Orb::~G4Orb()
 G4Orb::G4Orb(const G4Orb& rhs)
   : G4CSGSolid(rhs), fRmax(rhs.fRmax), fRmaxTolerance(rhs.fRmaxTolerance)
 {
-   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -135,7 +134,6 @@ G4Orb& G4Orb::operator = (const G4Orb& rhs)
    //
    fRmax = rhs.fRmax;
    fRmaxTolerance = rhs.fRmaxTolerance;
-   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }

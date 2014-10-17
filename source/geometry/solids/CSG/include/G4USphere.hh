@@ -131,32 +131,32 @@ inline G4double G4USphere::GetDeltaThetaAngle() const
 inline void G4USphere::SetInnerRadius(G4double newRMin)
 {
   GetShape()->SetInnerRadius(newRMin);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 inline void G4USphere::SetOuterRadius(G4double newRmax)
 {
   GetShape()->SetOuterRadius(newRmax);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 inline void G4USphere::SetStartPhiAngle(G4double newSphi, G4bool trig)
 {
   GetShape()->SetStartPhiAngle(newSphi, trig);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 inline void G4USphere::SetDeltaPhiAngle(G4double newDphi)
 {
   GetShape()->SetDeltaPhiAngle(newDphi);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 inline void G4USphere::SetStartThetaAngle(G4double newSTheta)
 {
   GetShape()->SetStartThetaAngle(newSTheta);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 inline void G4USphere::SetDeltaThetaAngle(G4double newDTheta)
 {
   GetShape()->SetDeltaThetaAngle(newDTheta);
-  delete fPolyhedron; fPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }
 
 #endif

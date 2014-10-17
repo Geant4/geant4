@@ -100,7 +100,6 @@ G4Box::~G4Box()
 G4Box::G4Box(const G4Box& rhs)
   : G4CSGSolid(rhs), fDx(rhs.fDx), fDy(rhs.fDy), fDz(rhs.fDz), delta(rhs.delta)
 {
-   fpPolyhedron = GetPolyhedron();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -123,7 +122,6 @@ G4Box& G4Box::operator = (const G4Box& rhs)
    fDy = rhs.fDy;
    fDz = rhs.fDz;
    delta = rhs.delta;
-   fpPolyhedron = GetPolyhedron();
 
    return *this;
 }
@@ -147,7 +145,7 @@ void G4Box::SetXHalfLength(G4double dx)
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 } 
 
 void G4Box::SetYHalfLength(G4double dy) 
@@ -167,7 +165,7 @@ void G4Box::SetYHalfLength(G4double dy)
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 } 
 
 void G4Box::SetZHalfLength(G4double dz) 
@@ -187,7 +185,7 @@ void G4Box::SetZHalfLength(G4double dz)
   }
   fCubicVolume= 0.;
   fSurfaceArea= 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 } 
 
 ////////////////////////////////////////////////////////////////////////

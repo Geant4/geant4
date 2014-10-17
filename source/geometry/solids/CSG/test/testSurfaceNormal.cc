@@ -232,7 +232,7 @@ G4ThreeVector GetVectorOnSphere(G4Sphere& sphere)
   G4double kCarTolerance = G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();
   G4double kAngTolerance = G4GeometryTolerance::GetInstance()->GetAngularTolerance();
 
-  G4double pRmin  = sphere.GetInsideRadius();
+  G4double pRmin  = sphere.GetInnerRadius();
   G4double pRmax  = sphere.GetOuterRadius();
   G4double phi1   = sphere.GetStartPhiAngle();
   G4double phi2   = phi1 + sphere.GetDeltaPhiAngle();
