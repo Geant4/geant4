@@ -45,7 +45,7 @@
 G4GMocrenFile::G4GMocrenFile ()
  : G4VGraphicsSystem ("gMocrenFile", "gMocrenFile",
 		      "A gMocren file driver (ver.4)",
-                      G4VGraphicsSystem::fileWriter),
+                      G4VGraphicsSystem::threeD),
 		      //GMOCRENFILE_FEATURES, G4VGraphicsSystem::threeD),
    kViewer(NULL), kSceneHandler(NULL), kMessenger(new G4GMocrenMessenger()) {
   ;
