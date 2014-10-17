@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 16, 2014  I.Hrivnacova (exerrprop-V10-00-00)
+- Fixed coding guidelines (long lines) in errprop.cc, ExErrorDetectorConstruction.cc
+
 Feb 13, 2013  I.Hrivnacova (exerrprop-V09-06-00)
 - Applied coding guidelines (virtual keyword, data member initialization)
 
