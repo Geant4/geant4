@@ -116,7 +116,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 
   pBox = new G4PVPlacement(0,                             //no rotation
                            G4ThreeVector(),               //at (0,0,0)
-                           lBox,                          //its logical volume                           
+                           lBox,                          //its logical volume
                            aMaterial->GetName(),          //its name
                            lWorld,                        //its mother  volume
                            false,                         //no boolean operation

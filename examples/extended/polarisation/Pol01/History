@@ -16,6 +16,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16-10-14 I.Hrivnacova (expol01-V10-00-00)
+- Fixed coding guidelines (long lines) in DetectorConstruction.cc
+
 02-11-13 V.Ivanchenko (expol01-V09-06-02)
 - tag resubmitted
 
