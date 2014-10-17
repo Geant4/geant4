@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16 October 2014  Ivana Hrivnacova  (rdecay02-V10-00-03)
+------------------------------------------------
+- Fixed coding guidelines (long lines) in exrdmDetectorConstruction.cc
+
 1 July 2014  Dennis Wright  (rdecay02-V10-00-02)
 ------------------------------------------------
 - fix bug 1461: no elastic cross section found for generic ions

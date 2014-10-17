@@ -135,7 +135,7 @@ G4VPhysicalVolume* exrdmDetectorConstruction::Construct()
   fLogicTarget = new G4LogicalVolume(fSolidTarget,fTargetMater,"Target",0,0,0);
   fPhysiTarget = new G4PVPlacement(0,              // no rotation
                                   positionTarget,  // at (x,y,z)
-                                  fLogicTarget,    // its logical volume                                  
+                                  fLogicTarget,    // its logical volume
                                   "Target",        // its name
                                   fLogicWorld,     // its mother  volume
                                   false,           // no boolean operations
@@ -156,7 +156,7 @@ G4VPhysicalVolume* exrdmDetectorConstruction::Construct()
                                                                       "Detector",0,0,0);
   fPhysiDetector = new G4PVPlacement(0,             // no rotation
                                   positionDetector, // at (x,y,z)
-                                  fLogicDetector,   // its logical volume                                  
+                                  fLogicDetector,   // its logical volume
                                   "Detector",       // its name
                                   fLogicWorld,      // its mother  volume
                                   false,            // no boolean operations
