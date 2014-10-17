@@ -14,6 +14,17 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-Oct-2014, V.Ivanchenko (phys-ctor-em-V10-00-14)
+- Use G4EmParameters used in all standard constructors
+  G4EmStandardPhysics_option3,4 - use G4GeneratorBS angular generator
+    for bremsstrahlung
+  G4EmStandardPhysics_option4 - use RangeFactor = 0.02 (instead of 0.01);
+    use G4DeltaAngle angular generator for all ionisation models
+  G4EmStandardPhysicsSS, G4EmStandardPhysicsWVI - new constructors
+
+07-Jul-2014, M. Karamitros (phys-ctor-em-V10-00-13)
+- Add G4EmDNAChemistry
+
 05-Jun-2014, S. Incerti (phys-ctor-em-V10-00-12)
 - Updated G4EmDNAPhysics to G4GenericIon usage for Z>2
 

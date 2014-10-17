@@ -68,6 +68,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/tracking/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
     HEADERS
+	G4EmDNAChemistry.hh
 	G4EmDNAPhysics.hh
 	G4EmDNAPhysics_option1.hh
 	G4EmLivermorePhysics.hh
@@ -75,6 +76,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
 	G4EmLowEPPhysics.hh
 	G4EmPenelopePhysics.hh
 	G4EmStandardPhysics.hh
+	G4EmStandardPhysicsSS.hh
+	G4EmStandardPhysicsWVI.hh
 	G4EmStandardPhysics_option1.hh
 	G4EmStandardPhysics_option2.hh
 	G4EmStandardPhysics_option3.hh
@@ -83,6 +86,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
 	G4OpticalPhysicsMessenger.hh
         G4OpticalProcessIndex.hh
     SOURCES
+	G4EmDNAChemistry.cc
 	G4EmDNAPhysics.cc
 	G4EmDNAPhysics_option1.cc
 	G4EmLivermorePhysics.cc
@@ -90,6 +94,8 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
 	G4EmLowEPPhysics.cc
 	G4EmPenelopePhysics.cc
 	G4EmStandardPhysics.cc
+	G4EmStandardPhysicsSS.cc
+	G4EmStandardPhysicsWVI.cc
 	G4EmStandardPhysics_option1.cc
 	G4EmStandardPhysics_option2.cc
 	G4EmStandardPhysics_option3.cc

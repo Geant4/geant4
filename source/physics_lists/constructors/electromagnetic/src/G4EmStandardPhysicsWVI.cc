@@ -23,11 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4EmStandardPhysicsWVI.cc 78932 2014-02-04 12:30:52Z vnivanch $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   G4EmStandardPhysics
+// ClassName:   G4EmStandardPhysicsWVI
 //
 // Author:      V.Ivanchenko 09.11.2005
 //
@@ -42,11 +42,12 @@
 //----------------------------------------------------------------------------
 //
 
-#include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysicsWVI.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleDefinition.hh"
 #include "G4EmParameters.hh"
 #include "G4LossTableManager.hh"
+//#include "G4EmProcessOptions.hh"
 
 #include "G4ComptonScattering.hh"
 #include "G4GammaConversion.hh"
@@ -56,9 +57,9 @@
 #include "G4MuMultipleScattering.hh"
 #include "G4hMultipleScattering.hh"
 #include "G4CoulombScattering.hh"
-#include "G4eCoulombScatteringModel.hh"
+//#include "G4eCoulombScatteringModel.hh"
 #include "G4WentzelVIModel.hh"
-#include "G4UrbanMscModel.hh"
+//#include "G4UrbanMscModel.hh"
 
 #include "G4MuBremsstrahlungModel.hh"
 #include "G4MuPairProductionModel.hh"
@@ -103,12 +104,12 @@
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
-G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysics);
+G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysicsWVI);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics::G4EmStandardPhysics(G4int ver)
-  : G4VPhysicsConstructor("G4EmStandard"), verbose(ver)
+G4EmStandardPhysicsWVI::G4EmStandardPhysicsWVI(G4int ver)
+  : G4VPhysicsConstructor("G4EmStandardWVI"), verbose(ver)
 {
   G4EmParameters::Instance()->SetVerbose(verbose);
   SetPhysicsType(bElectromagnetic);
@@ -116,21 +117,12 @@ G4EmStandardPhysics::G4EmStandardPhysics(G4int ver)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4EmStandardPhysics::G4EmStandardPhysics(G4int ver, const G4String&)
-  : G4VPhysicsConstructor("G4EmStandard"), verbose(ver)
-{
-  G4EmParameters::Instance()->SetVerbose(verbose);
-  SetPhysicsType(bElectromagnetic);
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-G4EmStandardPhysics::~G4EmStandardPhysics()
+G4EmStandardPhysicsWVI::~G4EmStandardPhysicsWVI()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmStandardPhysics::ConstructParticle()
+void G4EmStandardPhysicsWVI::ConstructParticle()
 {
   // gamma
   G4Gamma::Gamma();
@@ -161,7 +153,7 @@ void G4EmStandardPhysics::ConstructParticle()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4EmStandardPhysics::ConstructProcess()
+void G4EmStandardPhysicsWVI::ConstructProcess()
 {
   if(verbose > 1) {
     G4cout << "### " << GetPhysicsName() << " Construct Processes " << G4endl;
@@ -180,25 +172,22 @@ void G4EmStandardPhysics::ConstructProcess()
 
   // muon & hadron multiple scattering
   G4MuMultipleScattering* mumsc = new G4MuMultipleScattering();
-  mumsc->AddEmModel(0, new G4WentzelVIModel());
+  mumsc->SetEmModel(new G4WentzelVIModel());
   G4CoulombScattering* muss = new G4CoulombScattering();
 
   G4MuMultipleScattering* pimsc = new G4MuMultipleScattering();
-  pimsc->AddEmModel(0, new G4WentzelVIModel());
+  pimsc->SetEmModel(new G4WentzelVIModel());
   G4CoulombScattering* piss = new G4CoulombScattering();
 
   G4MuMultipleScattering* kmsc = new G4MuMultipleScattering();
-  kmsc->AddEmModel(0, new G4WentzelVIModel());
+  kmsc->SetEmModel(new G4WentzelVIModel());
   G4CoulombScattering* kss = new G4CoulombScattering();
 
   G4MuMultipleScattering* pmsc = new G4MuMultipleScattering();
-  pmsc->AddEmModel(0, new G4WentzelVIModel());
+  pmsc->SetEmModel(new G4WentzelVIModel());
   G4CoulombScattering* pss = new G4CoulombScattering();
 
   G4hMultipleScattering* hmsc = new G4hMultipleScattering("ionmsc");
-
-  // high energy limit for e+- scattering models
-  G4double highEnergyLimit = 100*MeV;
 
   // Add standard EM Processes
   aParticleIterator->reset();
@@ -215,19 +204,8 @@ void G4EmStandardPhysics::ConstructProcess()
     } else if (particleName == "e-") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering;
-      G4UrbanMscModel* msc1 = new G4UrbanMscModel();
-      G4WentzelVIModel* msc2 = new G4WentzelVIModel();
-      msc1->SetHighEnergyLimit(highEnergyLimit);
-      msc2->SetLowEnergyLimit(highEnergyLimit);
-      msc->AddEmModel(0, msc1);
-      msc->AddEmModel(0, msc2);
-
-      G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
+      msc->SetEmModel(new G4WentzelVIModel());
       G4CoulombScattering* ss = new G4CoulombScattering();
-      ss->SetEmModel(ssm, 1); 
-      ss->SetMinKinEnergy(highEnergyLimit);
-      ssm->SetLowEnergyLimit(highEnergyLimit);
-      ssm->SetActivationLowEnergyLimit(highEnergyLimit);
 
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(new G4eIonisation(), particle);
@@ -237,19 +215,8 @@ void G4EmStandardPhysics::ConstructProcess()
     } else if (particleName == "e+") {
 
       G4eMultipleScattering* msc = new G4eMultipleScattering;
-      G4UrbanMscModel* msc1 = new G4UrbanMscModel();
-      G4WentzelVIModel* msc2 = new G4WentzelVIModel();
-      msc1->SetHighEnergyLimit(highEnergyLimit);
-      msc2->SetLowEnergyLimit(highEnergyLimit);
-      msc->AddEmModel(0, msc1);
-      msc->AddEmModel(0, msc2);
-
-      G4eCoulombScatteringModel* ssm = new G4eCoulombScatteringModel(); 
+      msc->SetEmModel(new G4WentzelVIModel());
       G4CoulombScattering* ss = new G4CoulombScattering();
-      ss->SetEmModel(ssm, 1); 
-      ss->SetMinKinEnergy(highEnergyLimit);
-      ssm->SetLowEnergyLimit(highEnergyLimit);
-      ssm->SetActivationLowEnergyLimit(highEnergyLimit);
 
       ph->RegisterProcess(msc, particle);
       ph->RegisterProcess(new G4eIonisation(), particle);
