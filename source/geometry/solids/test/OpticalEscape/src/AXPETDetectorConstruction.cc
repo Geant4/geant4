@@ -78,7 +78,6 @@
 #include "G4SubtractionSolid.hh"
 #include "G4ReflectedSolid.hh"
 #include "G4RotationMatrix.hh"
-#include "G4BREPSolidBox.hh"
 //
 #include "G4LogicalVolume.hh"
 #include "G4PVPlacement.hh"

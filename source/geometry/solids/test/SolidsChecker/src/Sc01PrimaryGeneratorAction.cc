@@ -84,11 +84,11 @@ void Sc01PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
   for( int i=0; i<NumberOfParticlesToBeGenerated; i++ )
   {
     //	G4ThreeVector m = GetRandomDirection();
-		G4ThreeVector m(0.,1.,0.);
+    G4ThreeVector rm(0.,1.,0.);
     G4PrimaryParticle* aPrimaryParticle =
-      new G4PrimaryParticle(aParticleDefinition, m.x(), m.y(), m.z());
+      new G4PrimaryParticle(aParticleDefinition, rm.x(), rm.y(), rm.z());
     aPrimaryParticle->SetMass (0);
-    G4ThreeVector p = GetRandomPolarization ( m );
+    G4ThreeVector p = GetRandomPolarization ( rm );
     aPrimaryParticle->SetPolarization(p.x(),p.y(),p.z());
     aVertex->SetPrimary( aPrimaryParticle );
   }

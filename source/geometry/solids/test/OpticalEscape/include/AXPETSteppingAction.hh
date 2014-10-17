@@ -41,20 +41,17 @@
 #include "globals.hh"
 
 class AXPETDetectorConstruction;
-class AXPETRunAction;
 
 class AXPETSteppingAction : public G4UserSteppingAction
 {
   public:
-    AXPETSteppingAction(AXPETDetectorConstruction*,
-                        AXPETRunAction* );
+    AXPETSteppingAction(AXPETDetectorConstruction*);
    ~AXPETSteppingAction();
 
     void UserSteppingAction(const G4Step*);
 
   private:
     AXPETDetectorConstruction* detector;
-    AXPETRunAction*            runaction;
 
   private:
   //Store Previous step x,y,z

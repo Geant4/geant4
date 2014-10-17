@@ -36,12 +36,10 @@
 #include "G4UserEventAction.hh"
 #include "globals.hh"
 
-class AXPETRunAction;
-
 class AXPETEventAction : public G4UserEventAction
 {
   public:
-    AXPETEventAction(AXPETRunAction* RA);
+    AXPETEventAction();
    ~AXPETEventAction();
 
   public:
@@ -54,7 +52,6 @@ class AXPETEventAction : public G4UserEventAction
     void SetPrintModulo(G4int val)  {printModulo = val;};
         
   private:
-    AXPETRunAction* runaction;
     G4int verboselevel;
     
     G4String drawFlag;

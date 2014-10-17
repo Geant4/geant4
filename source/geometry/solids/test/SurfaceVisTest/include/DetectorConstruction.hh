@@ -70,7 +70,6 @@ class DetectorConstruction : public G4VUserDetectorConstruction
      G4VPhysicalVolume* physiWorld;    // pointer to the physical envelope
      G4VSolid* aVolume;
 
-     G4LogicalVolume*   logicTracker;  // pointer to the logical Tracker
      G4VPhysicalVolume* physiTracker;  // pointer to the physical Tracker
      
  

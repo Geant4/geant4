@@ -43,9 +43,8 @@
 #include "G4UnitsTable.hh"
 #include "Randomize.hh"
 
-AXPETEventAction::AXPETEventAction(AXPETRunAction* RA)
- :runaction(RA), verboselevel(1),
-   drawFlag("all"), printModulo(10000)
+AXPETEventAction::AXPETEventAction()
+ : verboselevel(1), drawFlag("all"), printModulo(10000)
 {
   ;
 }
