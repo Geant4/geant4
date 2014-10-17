@@ -51,7 +51,8 @@ G3toG4DetectorConstruction::G3toG4DetectorConstruction(G4String inFile)
   : G4VUserDetectorConstruction(),
     fInFile(inFile)
 {
-        G4cout << "Instantiated G3toG4DetectorConstruction using call list file \"" << fInFile << "\"" << G4endl;
+  G4cout << "Instantiated G3toG4DetectorConstruction using call list file \"" 
+         << fInFile << "\"" << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
