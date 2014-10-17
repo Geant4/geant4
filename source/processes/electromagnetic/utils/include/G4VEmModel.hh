@@ -84,6 +84,7 @@
 #include "G4Material.hh"
 #include "G4Element.hh"
 #include "G4ElementVector.hh"
+#include "G4Isotope.hh"
 #include "G4DataVector.hh"
 #include "G4VEmFluctuationModel.hh"
 #include "G4VEmAngularDistribution.hh"
@@ -355,6 +356,8 @@ public:
 
   inline const G4Element* GetCurrentElement() const;
 
+  inline const G4Isotope* GetCurrentIsotope() const;
+
 protected:
 
   inline const G4MaterialCutsCouple* CurrentCouple() const;
@@ -411,6 +414,7 @@ private:
   G4LossTableManager*         fManager;
   const G4MaterialCutsCouple* fCurrentCouple;
   const G4Element*            fCurrentElement;
+  const G4Isotope*            fCurrentIsotope;
 
   G4int                  nsec;
   std::vector<G4double>  xsec;
@@ -436,6 +440,7 @@ inline const G4MaterialCutsCouple* G4VEmModel::CurrentCouple() const
 inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
 {
   fCurrentElement = elm;
+  fCurrentIsotope = 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -443,6 +448,13 @@ inline void G4VEmModel::SetCurrentElement(const G4Element* elm)
 inline const G4Element* G4VEmModel::GetCurrentElement() const
 {
   return fCurrentElement;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline const G4Isotope* G4VEmModel::GetCurrentIsotope() const
+{
+  return fCurrentIsotope;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -524,6 +536,7 @@ G4VEmModel::SelectRandomAtom(const G4MaterialCutsCouple* couple,
     fCurrentElement = SelectRandomAtom(couple->GetMaterial(),part,kinEnergy,
 				       cutEnergy,maxEnergy);
   }
+  fCurrentIsotope = 0;
   return fCurrentElement;
 }
 
@@ -555,6 +568,7 @@ inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
   SetCurrentElement(elm);
   G4int N = G4lrint(elm->GetN());
   G4int ni = elm->GetNumberOfIsotopes();
+  fCurrentIsotope = 0;
   if(ni > 0) {
     G4int idx = 0;
     if(ni > 1) {
@@ -566,7 +580,8 @@ inline G4int G4VEmModel::SelectIsotopeNumber(const G4Element* elm)
       }
       if(idx >= ni) { idx = ni - 1; }
     }
-    N = elm->GetIsotope(idx)->GetN();
+    fCurrentIsotope = elm->GetIsotope(idx);
+    N = fCurrentIsotope->GetN();
   }
   return N;
 }

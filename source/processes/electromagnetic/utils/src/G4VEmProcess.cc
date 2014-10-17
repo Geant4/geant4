@@ -528,18 +528,23 @@ void G4VEmProcess::PrintInfoProcess(const G4ParticleDefinition& part)
     if(applyCuts) { G4cout << ", applyCuts: 1 "; }
     G4cout << "    SubType= " << GetProcessSubType();;
     if(biasFactor != 1.0) { G4cout << "   BiasingFactor= " << biasFactor; }
+    G4cout << "  BuildTable= " << buildLambdaTable;
     G4cout << G4endl;
     if(buildLambdaTable) {
       size_t length = theLambdaTable->length();
       for(size_t i=0; i<length; ++i) {
         G4PhysicsVector* v = (*theLambdaTable)[i];
         if(v) { 
-	  G4cout << "      Lambda table from "
-		 << G4BestUnit(v->Energy(0),"Energy") 
-		 << " to "
-		 << G4BestUnit(v->GetMaxEnergy(),"Energy")
-		 << " in " << v->GetVectorLength()-1
-		 << " bins, spline: " 
+	  G4cout << "      Lambda table from ";
+          G4double emin = v->Energy(0);
+          G4double emax = v->GetMaxEnergy();
+          G4int nbin = v->GetVectorLength() - 1;
+          if(emin > minKinEnergy) { G4cout << "threshold "; }
+          else { G4cout << G4BestUnit(emin,"Energy"); } 
+          G4cout << " to "
+		 << G4BestUnit(emax,"Energy")
+		 << ", " << G4lrint(nbin/std::log10(emax/emin))
+		 << " bins per decade, spline: " 
 		 << splineFlag
 		 << G4endl;
 	  break;

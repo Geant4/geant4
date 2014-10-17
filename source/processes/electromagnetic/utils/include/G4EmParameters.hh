@@ -108,6 +108,9 @@ public:
   void SetLatDisplacementBeyondSafety(G4bool val);
   G4bool LatDisplacementBeyondSafety() const;
 
+  void ActivateAngularGeneratorForIonisation(G4bool val);
+  G4bool UseAngularGeneratorForIonisation() const;
+
   void SetMinSubRange(G4double val);
   G4double MinSubRange() const;
 
@@ -182,6 +185,7 @@ private:
   G4bool lateralDisplacement;
   G4bool muhadLateralDisplacement;
   G4bool latDisplacementBeyondSafety;
+  G4bool useAngGeneratorForIonisation;
 
   G4double minSubRange;
   G4double minKinEnergy;

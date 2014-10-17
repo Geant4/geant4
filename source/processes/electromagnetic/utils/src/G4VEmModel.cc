@@ -80,7 +80,7 @@ G4VEmModel::G4VEmModel(const G4String& nam):
   theLPMflag(false),flagDeexcitation(false),flagForceBuildTable(false),
   isMaster(true),fElementData(0),pParticleChange(0),xSectionTable(0),
   theDensityFactor(0),theDensityIdx(0),fCurrentCouple(0),fCurrentElement(0),
-  nsec(5) 
+  fCurrentIsotope(0),nsec(5) 
 {
   xsec.resize(nsec);
   nSelectors = 0;

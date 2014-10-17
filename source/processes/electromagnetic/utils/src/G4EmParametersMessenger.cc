@@ -149,10 +149,16 @@ G4EmParametersMessenger::G4EmParametersMessenger(G4EmParameters* ptr)
   catCmd->SetDefaultValue(true);
   catCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
+  delCmd = new G4UIcmdWithABool("/process/eLoss/UseAngularGenerator",this);
+  delCmd->SetGuidance("Enable usage of angular generator");
+  delCmd->SetParameterName("del",true);
+  delCmd->SetDefaultValue(false);
+  delCmd->AvailableForStates(G4State_PreInit);
+
   minSubSecCmd = new G4UIcmdWithADouble("/process/eLoss/minsubsec",this);
   minSubSecCmd->SetGuidance("Set the ratio subcut/cut ");
   minSubSecCmd->SetParameterName("rcmin",true);
-  minSubSecCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  minSubSecCmd->AvailableForStates(G4State_PreInit);
 
   minEnCmd = new G4UIcmdWithADoubleAndUnit("/process/eLoss/minKinEnergy",this);
   minEnCmd->SetGuidance("Set the min kinetic energy for EM tables");
@@ -283,6 +289,7 @@ G4EmParametersMessenger::~G4EmParametersMessenger()
   delete latCmd;
   delete mulatCmd;
   delete catCmd;
+  delete delCmd;
 
   delete minSubSecCmd;
   delete minEnCmd;
@@ -351,9 +358,11 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     theParameters->SetLatDisplacementBeyondSafety(catCmd->GetNewBoolValue(newValue));
     physicsModified = true;
 
+  } else if (command == catCmd) {
+    theParameters->SetLatDisplacementBeyondSafety(catCmd->GetNewBoolValue(newValue));
+
   } else if (command == minSubSecCmd) {
     theParameters->SetMinSubRange(minSubSecCmd->GetNewDoubleValue(newValue));
-    physicsModified = true;
   } else if (command == minEnCmd) {
     theParameters->SetMinEnergy(minEnCmd->GetNewDoubleValue(newValue));
     physicsModified = true;
@@ -365,13 +374,10 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     physicsModified = true;
   } else if (command == lllCmd) { 
     theParameters->SetLinearLossLimit(lllCmd->GetNewDoubleValue(newValue));
-    physicsModified = true;
   } else if (command == brCmd) { 
     theParameters->SetBremsstrahlungTh(brCmd->GetNewDoubleValue(newValue));
-    physicsModified = true;
   } else if (command == labCmd) {
     theParameters->SetLambdaFactor(labCmd->GetNewDoubleValue(newValue));
-    physicsModified = true;
   } else if (command == mscfCmd) {
     theParameters->SetFactorForAngleLimit(mscfCmd->GetNewDoubleValue(newValue));
     physicsModified = true;
@@ -399,13 +405,10 @@ void G4EmParametersMessenger::SetNewValue(G4UIcommand* command,
     physicsModified = true;
   } else if (command == verCmd) {
     theParameters->SetVerbose(verCmd->GetNewIntValue(newValue));
-    physicsModified = true;
   } else if (command == ver1Cmd) {
     theParameters->SetVerbose(ver1Cmd->GetNewIntValue(newValue));
-    physicsModified = true;
   } else if (command == ver2Cmd) {
     theParameters->SetWorkerVerbose(ver2Cmd->GetNewIntValue(newValue));
-    physicsModified = true;
 
   } else if (command == mscCmd) {
     G4MscStepLimitType msctype = fUseSafety;

@@ -95,6 +95,7 @@ private:
   G4UIcmdWithABool*          latCmd;
   G4UIcmdWithABool*          mulatCmd;
   G4UIcmdWithABool*          catCmd;
+  G4UIcmdWithABool*          delCmd;
 
   G4UIcmdWithADouble*        minSubSecCmd;
   G4UIcmdWithADoubleAndUnit* minEnCmd;

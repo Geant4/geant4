@@ -91,6 +91,7 @@ G4EmParameters::G4EmParameters()
   lateralDisplacement = true;
   muhadLateralDisplacement = true;
   latDisplacementBeyondSafety = false;
+  useAngGeneratorForIonisation = false;
 
   minSubRange = DBL_MAX;
   minKinEnergy = 0.1*keV;
@@ -259,6 +260,16 @@ void G4EmParameters::SetLatDisplacementBeyondSafety(G4bool val)
 G4bool G4EmParameters::LatDisplacementBeyondSafety() const
 {
   return latDisplacementBeyondSafety;
+}
+
+void G4EmParameters::ActivateAngularGeneratorForIonisation(G4bool val)
+{
+  useAngGeneratorForIonisation = val;
+}
+
+G4bool G4EmParameters::UseAngularGeneratorForIonisation() const
+{
+  return useAngGeneratorForIonisation;
 }
 
 void G4EmParameters::SetMinSubRange(G4double val)

@@ -247,11 +247,7 @@ public:
   void ActivateSecondaryBiasing(const G4String& region, G4double factor,
           G4double energyLimit);
           
-  // void SetLambdaFactor(G4double val);
-
   inline void SetIntegral(G4bool val);
-
-  // inline void SetApplyCuts(G4bool val);
 
   inline void SetBuildTableFlag(G4bool val);
 
@@ -274,7 +270,6 @@ protected:
   inline G4double MaxKinEnergy() const;
 
   // Single scattering parameters
-  // void SetPolarAngleLimit(G4double a);
   inline G4double PolarAngleLimit() const;
 
   inline G4bool IsIntegral() const;
@@ -297,6 +292,10 @@ protected:
   inline void SetStartFromNullFlag(G4bool val);
 
   inline void SetSplineFlag(G4bool val);
+
+  inline const G4Element* GetTargetElement() const;
+
+  inline const G4Isotope* GetTargetIsotope() const;
 
 private:
 
@@ -677,6 +676,20 @@ inline void G4VEmProcess::SetSplineFlag(G4bool val)
 {
   splineFlag = val;
   actSpline = true;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline const G4Element* G4VEmProcess::GetTargetElement() const
+{
+  return currentModel->GetCurrentElement();
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+inline const G4Isotope* G4VEmProcess::GetTargetIsotope() const
+{
+  return currentModel->GetCurrentIsotope();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

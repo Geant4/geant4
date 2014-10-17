@@ -629,6 +629,8 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   for(G4int i=0; i<nmod; ++i) {
     G4VEmModel* mod = modelManager->GetModel(i);
     mod->SetMasterThread(isMaster);
+    mod->SetAngularGeneratorFlag(
+      theParameters->UseAngularGeneratorForIonisation());
     if(mod->HighEnergyLimit() > maxKinEnergy) {
       mod->SetHighEnergyLimit(maxKinEnergy);
     }
@@ -975,7 +977,8 @@ G4VEnergyLossProcess::PrintInfoDefinition(const G4ParticleDefinition& part)
            << " in " << nBins << " bins" << G4endl
            << "      Lambda tables from threshold to "
            << G4BestUnit(maxKinEnergy,"Energy")
-           << " in " << nBins << " bins, spline: " 
+           << ", " << theParameters->NumberOfBinsPerDecade() 
+	   << " bins per decade, spline: " 
 	   << lManager->SplineFlag()
            << G4endl;
     if(theRangeTableForLoss && isIonisation) {
