@@ -16,6 +16,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+16th October 2014 P. Gumplinger (op-V10-00-07)
+- previous tag was committed only to /include directory
+
+10th October 2014 P. Gumplinger (op-V10-00-06)
+- G4OpRayleigh Process: This version calculates the Rayleigh scattering
+  length for more materials than just Water (although the Water default
+  is kept). To do this the user would need to specify the
+  ISOTHERMAL_COMPRESSIBILITY as a material property and optionally an
+  RS_SCALE_LENGTH (useful for testing). Code comes from Philip Graham
+  (Queen Mary University of London).
+
 9th October 2014 P. Gumplinger (op-V10-00-05)
 - G4OpBoundaryProcess allow for a Transmittance, Reflectivity and
   Absorption on dielectric_dielectric and dielectric_metal boundaries 

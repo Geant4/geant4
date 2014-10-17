@@ -36,7 +36,8 @@
 // Version:     1.0
 // Created:     1996-05-31
 // Author:      Juliet Armstrong
-// Updated:     2005-07-28 add G4ProcessType to constructor
+// Updated:     2014-08-20 allow for more material types
+//              2005-07-28 add G4ProcessType to constructor
 //              1999-10-29 add method and class descriptors
 //              1997-04-09 by Peter Gumplinger
 //              > new physics/tracking scheme
@@ -130,8 +131,13 @@ private:
         // Helper Functions
         /////////////////////
 
-	G4PhysicsOrderedFreeVector* RayleighAttenuationLengthGenerator(
-					G4MaterialPropertiesTable *aMPT);
+        /// Calculates the mean free paths for a material as a function of 
+        /// photon energy
+        ///
+        /// @param[in] material information
+        /// @return the mean free path vector
+        G4PhysicsOrderedFreeVector* 
+        CalculateRayleighMeanFreePaths( const G4Material* material ) const;
 
         ///////////////////////
         // Class Data Members
@@ -145,9 +151,6 @@ protected:
         //  purposes).
 
 private:
-
-        G4bool DefaultWater;
-
 };
 
 ////////////////////
