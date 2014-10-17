@@ -273,7 +273,7 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      G4double       lengthAlongCurve ;
      G4double       restMass = fParticleDef->GetPDGMass() ;
 
-     G4ChargeState chargeState(particleElectricCharge,             // The charge can change (dynamic)
+     G4ChargeState chargeState(particleElectricCharge,  // The charge can change (dynamic)
                                fParticleDef->GetPDGSpin(),
                                0,   //  Magnetic moment:  pParticleDef->GetMagneticMoment(),
                                0,   //  Electric Dipole moment - not in Particle Definition 
@@ -283,9 +283,10 @@ AlongStepGetPhysicalInteractionLength( const G4Track&  track,
      (fFieldPropagator->GetChordFinder()->GetIntegrationDriver()->GetStepper())
      ->GetEquationOfMotion();
 
-     equationOfMotion->SetChargeMomentumMass( chargeState,       //  Was particleMagneticCharge - in Mev/c 
-                                              momentumMagnitude, //  Was particleElectricCharge 
-                                              restMass ) ;  
+     equationOfMotion
+       ->SetChargeMomentumMass( chargeState,       //  Was particleMagneticCharge - in Mev/c
+                                momentumMagnitude, //  Was particleElectricCharge 
+                                restMass ) ;  
      // SetChargeMomentumMass now passes both the electric and magnetic charge - in chargeState
 
      G4ThreeVector spin        = track.GetPolarization() ;
@@ -610,8 +611,10 @@ G4VParticleChange* G4MonopoleTransportation::PostStepDoIt( const G4Track& track,
   // ( <const_cast> pNewMaterial ) ;
   // ( <const_cast> pNewSensitiveDetector) ;
 
-  fParticleChange.SetMaterialInTouchable( (G4Material *) pNewMaterial ) ;
-  fParticleChange.SetSensitiveDetectorInTouchable( (G4VSensitiveDetector *) pNewSensitiveDetector ) ;
+  fParticleChange.SetMaterialInTouchable( 
+                     (G4Material *) pNewMaterial ) ;
+  fParticleChange.SetSensitiveDetectorInTouchable( 
+                     (G4VSensitiveDetector *) pNewSensitiveDetector ) ;
 
   const G4MaterialCutsCouple* pNewMaterialCutsCouple = 0;
   if( pNewVol != 0 )
@@ -619,7 +622,8 @@ G4VParticleChange* G4MonopoleTransportation::PostStepDoIt( const G4Track& track,
     pNewMaterialCutsCouple=pNewVol->GetLogicalVolume()->GetMaterialCutsCouple();
   }
 
-  if( pNewVol!=0 && pNewMaterialCutsCouple!=0 && pNewMaterialCutsCouple->GetMaterial()!=pNewMaterial )
+  if( pNewVol!=0 && pNewMaterialCutsCouple!=0 && 
+      pNewMaterialCutsCouple->GetMaterial()!=pNewMaterial )
   {
     // for parametrized volume
     //
