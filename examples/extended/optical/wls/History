@@ -16,6 +16,9 @@ track of all tags.
  
      ----------------------------------------------------------
 
+October 16, 2014 P. Gumplinger (WLS-V10-00-03)
+- fix coding guideline 1.4 in WLSDetectorMessenger
+
 July 11, 2014 P. Gumplinger (WLS-V10-00-02)
 - Use implicit dimensioning for all arrays and assert that they are the
   same (thanks to M. Kelsey for suggesting this)
