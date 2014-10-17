@@ -17,6 +17,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 16, 2014 I. Hrivnacova (exampleRE06-V10-00-01)
+- Fixed coding guidelines (long lines) in RE06SteppingVerbose.cc
+
 Aug 20, 2014 M.Asai (exampleRE06-V10-00-00)
 - fix boolean protection in ConstructSD methods for MT.
 
