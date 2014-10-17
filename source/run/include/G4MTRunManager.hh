@@ -63,7 +63,7 @@ public:
     //The following do not do anything for this runmanager
     virtual void TerminateOneEvent();
     virtual void ProcessOneEvent(G4int i_event);
-    virtual void TerminateEventLoop();
+    ////virtual void TerminateEventLoop();
     virtual void ConstructScoringWorlds();
     virtual void InitializePhysics();
     virtual void RunTermination();
