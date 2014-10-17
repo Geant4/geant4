@@ -464,7 +464,8 @@ void G4Polyhedra::CopyStuff( const G4Polyhedra &source )
   //
   enclosingCylinder = new G4EnclosingCylinder( *source.enclosingCylinder );
 
-  fpPolyhedron = GetPolyhedron();
+  fRebuildPolyhedron = false;
+  fpPolyhedron = 0;
 }
 
 

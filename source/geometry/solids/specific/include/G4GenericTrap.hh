@@ -188,6 +188,7 @@ class G4GenericTrap : public G4VSolid
                                 const G4ThreeVector& p3) const;
   protected:
 
+     mutable G4bool fRebuildPolyhedron;
      mutable G4Polyhedron*   fpPolyhedron;
 
   private:

@@ -153,6 +153,7 @@ class G4Tet : public G4VSolid
 
     G4double fCubicVolume, fSurfaceArea;
 
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 
     G4ThreeVector GetPointOnFace(G4ThreeVector p1, G4ThreeVector p2, 

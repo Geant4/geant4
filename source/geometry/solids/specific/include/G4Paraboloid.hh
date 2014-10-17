@@ -137,6 +137,7 @@ class G4Paraboloid : public G4VSolid
 
   protected:  // without description
  
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 
   private:

@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+01-Sep-2014  G.Cosmo               (geom-specific-V09-06-40)
+- Fixed use of polyhedron pointer, to avoid race condition in MT
+  when parameterised volumes are visualised.
+
 22-May-2014  G.Cosmo               (geom-specific-V09-06-39)
 - Added protection in generic constructor of G4Polyhedra for the case when
   improper number of sides is given as input.

@@ -239,6 +239,7 @@ class G4TwistedTubs : public G4VSolid
   G4double fCubicVolume;       // Cached value for cubic volume
   G4double fSurfaceArea;       // Cached value for surface area
 
+  mutable G4bool fRebuildPolyhedron;
   mutable G4Polyhedron* fpPolyhedron;  // pointer to polyhedron for vis
 
   class LastState              // last Inside result

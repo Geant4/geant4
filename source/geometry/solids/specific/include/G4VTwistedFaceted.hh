@@ -157,6 +157,7 @@ class G4VTwistedFaceted: public G4VSolid
       // Create the List of transformed vertices in the format required
       // for G4VSolid:: ClipCrossSection and ClipBetweenSections.
 
+  mutable G4bool fRebuildPolyhedron;
   mutable G4Polyhedron* fpPolyhedron;  // pointer to polyhedron for vis
 
  private:

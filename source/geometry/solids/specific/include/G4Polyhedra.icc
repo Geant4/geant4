@@ -92,5 +92,5 @@ void G4Polyhedra::SetOriginalParameters(G4PolyhedraHistorical* pars)
   }
   *original_parameters = *pars;
   fCubicVolume = 0.;
-  delete fpPolyhedron; fpPolyhedron = 0;
+  fRebuildPolyhedron = true;
 }

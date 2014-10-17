@@ -120,6 +120,7 @@ class G4VCSGfaceted : public G4VSolid
     G4VCSGface **faces;
     G4double fCubicVolume;
     G4double fSurfaceArea;
+    mutable G4bool fRebuildPolyhedron;
     mutable G4Polyhedron* fpPolyhedron;
 
     virtual G4double DistanceTo( const G4ThreeVector &p,

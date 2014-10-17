@@ -245,9 +245,9 @@ G4VSolid* createSolid3(std::vector<G4ThreeVector>& inside_points,
 
   return extruded;
 
-  G4TessellatedSolid* tessellated
-    = new G4TessellatedSolid(*extruded);
-   return tessellated;
+//  G4TessellatedSolid* tessellated
+//    = new G4TessellatedSolid(*extruded);
+//   return tessellated;
 }  
   
 
