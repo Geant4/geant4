@@ -98,7 +98,7 @@ public:
     DicomPhantomZSliceHeader operator+( const DicomPhantomZSliceHeader& rhs );
     // add two slices that have the same dimensions, merging them in Z
     
-    //===========================================================================================
+    //========================================================================================
     //  NEW REVISION ( Jonathan Madsen - jonathan.madsen@cern.ch )
     //  December 2012
     //
@@ -117,15 +117,20 @@ public:
     
     const G4double& GetSliceLocation() const { return fSliceLocation; }
     
-    void AddRow() { fValues.push_back(std::vector<G4double>(0)); fMateIDs.push_back(std::vector<G4int>(0)); }
+    void AddRow() { fValues.push_back(std::vector<G4double>(0)); 
+                    fMateIDs.push_back(std::vector<G4int>(0)); }
 
-    void AddValue(G4double val) { (fValues.size() > 0) ? fValues.back().push_back(val) : fValues.push_back(std::vector<G4double>(1,val)); }
+    void AddValue(G4double val) { (fValues.size() > 0) ? 
+                                   fValues.back().push_back(val) : 
+                                   fValues.push_back(std::vector<G4double>(1,val)); }
     void AddValue(const std::vector<G4double>& val) { fValues.push_back(val); }
     void AddValue(const std::vector<std::vector<G4double> >& val) {
         for(unsigned int i = 0; i < val.size(); ++i) { fValues.push_back(val.at(i)); }
     }
     
-    void AddMateID(G4int val) { (fMateIDs.size() > 0) ? fMateIDs.back().push_back(val) : fMateIDs.push_back(std::vector<G4int>(1,val)); }
+    void AddMateID(G4int val) { (fMateIDs.size() > 0) ? 
+                                 fMateIDs.back().push_back(val) : 
+                                 fMateIDs.push_back(std::vector<G4int>(1,val)); }
     void AddMateID(const std::vector<G4int>& val) { fMateIDs.push_back(val); }
     void AddMateID(const std::vector<std::vector<G4int> >& val) {
         for(unsigned int i = 0; i < val.size(); ++i) { fMateIDs.push_back(val.at(i)); }
@@ -137,13 +142,16 @@ public:
     void DumpToFile();
     void ReadDataFromFile();
     
-    void DumpExcessMemory() { if(fFilename.length() != 0) { fValues.clear(); fMateIDs.clear(); } }
+    void DumpExcessMemory() { 
+          if(fFilename.length() != 0) { fValues.clear(); fMateIDs.clear(); } }
     
     void FlipData();
     
 private:
     inline G4bool IsInteger(const G4String&);
-    template <typename T> inline void print(std::ostream&, const std::vector<T>&, const G4String&, G4int breakLine = -1);
+    template <typename T> 
+    inline void print(std::ostream&, const std::vector<T>&, const G4String&, 
+                      G4int breakLine = -1);
     template <typename T> inline T g4s2n(const G4String&);
     template <typename T> inline bool CheckConsistency(const T&, const T&, G4String);
     //
@@ -192,9 +200,11 @@ inline T DicomPhantomZSliceHeader::g4s2n(const G4String& str)
 }
 //===========================================================================================
 template <typename T>
-inline bool DicomPhantomZSliceHeader::CheckConsistency(const T& val1, const T& val2, G4String category) {
+inline bool DicomPhantomZSliceHeader::CheckConsistency(const T& val1, const T& val2, 
+                                                       G4String category) {
     if(val1 != val2) {
-        G4Exception("DicomPhantomSliceZHeader::CheckConsistency", "Consistency Mismatch : Keeping previous value if nonzero",
+        G4Exception("DicomPhantomSliceZHeader::CheckConsistency", 
+                    "Consistency Mismatch : Keeping previous value if nonzero",
                     JustWarning, category.c_str());
         return false;
     }
@@ -202,7 +212,8 @@ inline bool DicomPhantomZSliceHeader::CheckConsistency(const T& val1, const T& v
 }
 //===========================================================================================
 template <typename T>
-inline void DicomPhantomZSliceHeader::print(std::ostream& out, const std::vector<T>& val, const G4String& delim, G4int breakLine)
+inline void DicomPhantomZSliceHeader::print(std::ostream& out, const std::vector<T>& val, 
+                                            const G4String& delim, G4int breakLine)
 {
     for(unsigned int i = 0; i < val.size(); ++i) {
         out << val.at(i);

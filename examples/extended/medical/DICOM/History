@@ -8,6 +8,11 @@ $Id$
                       Category History file
 
                       ---------------------
+                      
+16.10.2014 - Ivana Hrivnacova (DICOM-V10-00-03)
+           - Fixed coding guidelines (long lines) in 
+             DicomPartialDetectorConstruction.hh, DicomPhantomZSliceHeader.hh
+
 29.07.2014 - Pedro Arce (DICOM-V10-00-02)
            - Remove DicomPhysicsList
 
