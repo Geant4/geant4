@@ -1,16 +1,13 @@
 
-	     =========================================================
+ 	     =========================================================
                      Text version of the iort_therapy README file
              =========================================================
 
-First revision: G.Russo, C.Casarino, G.A.P. Cirrone, F.Romano, September 2011;
-Released with the Geant4 9.5 version 
+Last revision: C.Casarino, October 2014;
+Released with the Geant4 10.0 version (December 2013)
+ 
 
 
-------------------------------------------------------------------------------------------------
-ADVERTISEMENT: this is the text version of the README file of the 'basic' iort_therapy, 
-as it should be released in the official Geant4 9.5 release
--------------------------------------------------------------------------------------------------
 
              =========================================================
                                        iort_therapy
@@ -43,9 +40,9 @@ iort_therapy:
 
 WHAT IT IS, WHAT IT DOES AND WHAT IT WILL PROVIDE          
 
-iort_therapy is a Geant4-based application specifically developed to address typical needs related to the Intra-Operative Radio-Therapy (IORT) technique. The application presents the main structure and facilities of the Hadrontherapy advanced example (developed by the G.A.P. Cirrone team).
+iort_therapy is a Geant4-based application specifically developed to address typical needs related to the Intra-Operative Radio-Therapy (IORT) technique. 
  
-This is the first BETA release. At this time iort_therapy is capable to simulate a well specified intra-operative electron radio-therapy facility: the collimator beam line system of a typical medical mobile linac and the relative target (water-phantom). iort_therapy application is currently used by the G.Russo team in clinical and research activities carried out in Fondazione Istituto San Raffaele G.Giglio Hospital (Cefalù, Italy) where a NOVAC7 linac is installed.
+iort_therapy is capable to simulate a well specified intra-operative electron radio-therapy facility: the collimator beam line system of a typical medical mobile linac and the relative target (water-phantom). iort_therapy application is currently used by the G.Russo team in clinical and research activities carried out in Fondazione Istituto San Raffaele G.Giglio Hospital (Cefalù, Italy) where a NOVAC7 linac is installed.
 
 iort_therapy, is flexible and show many capabilities. Its geometrical set-up, for example, is completely interchangeable permitting a simple switch between different geometrical collimator system configurations; the possibility to simulate a composite metallic shielding disc inside the water-phantom was also implemented.
 
@@ -69,96 +66,11 @@ iort_therapy source code is released inside the official distribution of the Gea
 To run iort_therapy you must first install the Geant4 package. Once Geant4 is installed the example must be first compiled (with the command gmake inside the
 ../iort_therapy folder). When compilation is completed the program can be executed.
 
+A CMakeLists.txt file is provided together with a standard GNUmakefile for compilation. 
+
 A complete guide for the Geant4 installation in different operating systems can be found inside the official installation Geant4 pages.
 
 If you have troubles with the Geant4 installation please send an e-mail to us.
-
-SISTEM SET-UP: environment variables
-
-A standard Geant4 example GNUmakefile is provided                                                         
-
-The following section reports the environment variables that are necessary for the run of iort_therapy.
-#-------------------------------------
-#    SET UP LINUX  GCC
-#-------------------------------------
-
-VERSION="geant4-09-05"
-
-# Path to the directory in which you have put data files and CLHEP
-LIBPATH=$HOME/Geant4Library
-
-export G4SYSTEM=Linux-g++
-
-# Path to the directory in which you put your Geant4 installation
-export G4INSTALL=$HOME/${VERSION}
-
-export G4LIB=$G4INSTALL/lib
-export G4WORKDIR=$G4INSTALL/workdir
-export G4EXE=$G4WORKDIR/bin/$G4SYSTEM
-
-export CLHEP_BASE_DIR=$LIBPATH/CLHEP2.0.4.5
-export G4LEDATA=$LIBPATH/G4EMLOW6.9
-export G4LEVELGAMMADATA=$LIBPATH/PhotonEvaporation2.0
-export G4NEUTRONHPDATA=$LIBPATH/G4NDL3.13
-export G4RADIOACTIVEDATA=$LIBPATH/RadioactiveDecay3.2
-export G4ABLADATA=$LIBPATH/G4ABLA3.0
-
-export LD_LIBRARY_PATH=$CLHEP_BASE_DIR/lib:$LD_LIBRARY_PATH
-
-# For the generation .root file directly using the ROOT (if ROOT is
-# installed in your machine)
-export G4ANALYSIS_USE_ROOT=1
-export LD_LIBRARY_PATH=$ROOTSYS/lib:$LD_LIBRARY_PATH
-
-#-------------------------------------
-#    SET UP    VRML VIEW
-#-------------------------------------
-export G4VIS_BUILD_VRML_DRIVER=1
-export G4VIS_USE_VRML=1
-export G4VIS_USE_VRMLFILE=1
-export G4VRMLFILE_MAX_FILE_NUM=100
-export G4VRMLFILE_VIEWER=vrmlview    #if installed
-
-# Add path to your VRML installation 
-export PATH=$PATH:~/VRML
-
-#-------------------------------------
-#    SET UP    OpenGL o Mesa
-#-------------------------------------
-export G4VIS_BUILD_OPENGLX_DRIVER=1
-export G4VIS_USE_OPENGLX=1
-     
-# Add path to your OpenGL installation
-#export OGLHOME=/usr/lib
-
-
-#-------------------------------------
-#    SET UP    DAWN (if installed)
-#-------------------------------------
-export G4VIS_BUILD_DAWN_DRIVER=1
-export G4VIS_BUILD_DOWNFILE_DRIVER=1
-export G4VIS_USE_DAWN=1
-export G4VIS_USE_DAWNFILE=1
-# Add path to your DAWN installation
-# export PATH=$PATH:~/dawn_3_86a
-
-# VARIOUS USER INTERFACES
-export G4UI_USE_XM=1
-export G4UI_USE_TCSH=1
-export G4UI_BUILD_QT_SESSION=1
-export G4UI_USE_QT=1
-
-# VARIOUS GRPHICAL USER INTERFACES
-export G4VIS_BUILD_QT_SESSION=1
-export G4VIS_BUILD_OPENGLQT_DRIVER=1
-export G4VIS_USE_OPENGLQT=1
-
-# If the QT libraries want be used for the User interfaces than the
-# correct path must be addressed
-
-export QTHOME=/usr/lib/qt4
-export PATH=$PATH:/usr/lib/qt4/include/
-export PATH=$PATH:/usr/lib/qt4/
 
 
 
