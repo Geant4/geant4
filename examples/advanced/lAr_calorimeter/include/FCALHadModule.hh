@@ -90,3 +90,4 @@ private:
 };
 
 #endif  /* FCALHadModule.hh */
+

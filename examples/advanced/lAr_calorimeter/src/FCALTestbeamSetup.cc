@@ -432,3 +432,4 @@ void FCALTestbeamSetup::ConstructSDandField()
     SetSensitiveDetector("LogicalConcWallIns",FCALTBSetupSD);
     SetSensitiveDetector("MuContrLogical",FCALTBSetupSD);
 }
+

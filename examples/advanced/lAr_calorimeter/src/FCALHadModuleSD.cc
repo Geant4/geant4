@@ -103,15 +103,10 @@ G4bool FCALHadModuleSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 void FCALHadModuleSD::EndOfEvent(G4HCofThisEvent*)
 {
   G4int NF2Tile = 0;
-  G4int AddTileP[300];
-  G4double EvisTileP[300];
   G4int i=0;
-
   for (i=0; i<2330; i++){
     if(EvisF2Tile[i] > 0.) {
       NF2Tile++;
-      AddTileP[NF2Tile] = i;
-      EvisTileP[NF2Tile] = EvisF2Tile[i];
     };};
 
   G4cout << "Number of F2 tiles with Positive energy : " << NF2Tile <<  G4endl;

@@ -9,6 +9,9 @@ $Id$
                       Category History file
                       ---------------------
 
+16.10.2014 - A.Dotti Tag (lAr_calorimeter-V10-00-02, lAr_calorimeter-V10-00-03)
+             Bug fixing for clang warnings	     
+
 15.10.2014 - A.Dotti Tag (lAr_calorimeter-V10-00-01)
              Removing output to txt file (non thread safe)
              and redundant with cout

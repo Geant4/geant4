@@ -106,14 +106,10 @@ G4bool FCALEMModuleSD::ProcessHits(G4Step* aStep,G4TouchableHistory*)
 void FCALEMModuleSD::EndOfEvent(G4HCofThisEvent*)
 {
   G4int NF1Tile = 0;
-  G4int AddTileP[300];
-  G4double EvisTileP[300];
   G4int i=0;
   for (i=1; i <= 1130; i++){
     if(EvisF1Tile[i] > 0.) {
       NF1Tile++;
-      AddTileP[NF1Tile] = i;
-      EvisTileP[NF1Tile] = EvisF1Tile[i];
     }
   }
 
