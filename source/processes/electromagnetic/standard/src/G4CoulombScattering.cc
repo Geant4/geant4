@@ -67,7 +67,6 @@ G4CoulombScattering::G4CoulombScattering(const G4String& name)
   SetIntegral(true);
   SetSecondaryParticle(G4Proton::Proton());
   SetProcessSubType(fCoulombScattering);
-  SetSplineFlag(true);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -160,6 +159,7 @@ G4double G4CoulombScattering::MinPrimaryEnergy(const G4ParticleDefinition* part,
 
   // Coulomb scattering combined with multiple or hadronic scattering
   G4double theta = PolarAngleLimit();
+
   if(0.0 < theta) {
     G4double p2 = q2Max*mat->GetIonisation()->GetInvA23()/(1.0 - cos(theta));
     G4double mass = part->GetPDGMass();

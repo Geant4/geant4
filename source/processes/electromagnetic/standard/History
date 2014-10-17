@@ -18,6 +18,11 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+16 October 14: V.Ivanchenko (emstand-V10-00-45)
+- G4eIonisation, G4hIonisation, G4ionIonisation, G4eBremsstrahlung,
+  G4GammaConversion, G4ComptonScattering, G4PhotoElectricEffect
+    - use G4EmParameterisation at initialisation
+
 14 October 14: V.Ivanchenko (emstand-V10-00-44)
 - G4PEEffectFluoModel - fixed threshold cross section
 - G4GammaConversion - minor fix of initialisation

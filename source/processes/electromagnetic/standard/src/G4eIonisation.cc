@@ -77,6 +77,7 @@
 #include "G4UniversalFluctuation.hh"
 #include "G4BohrFluctuations.hh"
 #include "G4UnitsTable.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -124,9 +125,10 @@ void G4eIonisation::InitialiseEnergyLossProcess(
 {
   if(!isInitialised) {
     if(part != theElectron) { isElectron = false; }
-    if (!EmModel()) { SetEmModel(new G4MollerBhabhaModel()); }
-    EmModel()->SetLowEnergyLimit (MinKinEnergy());
-    EmModel()->SetHighEnergyLimit(MaxKinEnergy());
+    if (!EmModel(1)) { SetEmModel(new G4MollerBhabhaModel()); }
+    G4EmParameters* param = G4EmParameters::Instance();
+    EmModel(1)->SetLowEnergyLimit(param->MinKinEnergy());
+    EmModel(1)->SetHighEnergyLimit(param->MaxKinEnergy());
     if (!FluctModel()) { SetFluctModel(new G4UniversalFluctuation()); }
                 
     AddEmModel(1, EmModel(), FluctModel());
