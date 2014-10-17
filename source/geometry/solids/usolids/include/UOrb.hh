@@ -66,7 +66,7 @@ class UOrb : public VUSolid
    
     void ComputeBBox(UBBox* /*aBox*/, bool /*aStore = false*/) {}
 
-    //G4Visualisation
+    // Visualisation
     void GetParametersList(int /*aNumber*/, double* /*aArray*/) const;
 
     VUSolid* Clone() const;

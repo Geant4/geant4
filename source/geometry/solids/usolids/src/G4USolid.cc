@@ -41,19 +41,26 @@
 #include "G4VisExtent.hh"
 #include "G4PhysicalConstants.hh"
 
+#include "G4AutoLock.hh"
+
+namespace
+{
+  G4Mutex polyhedronMutex = G4MUTEX_INITIALIZER;
+}
+
 G4USolid::G4USolid(const G4String& name, VUSolid* s) :
-  G4VSolid(name), fShape(s), fPolyhedron(0)
+  G4VSolid(name), fShape(s), fRebuildPolyhedron(false), fPolyhedron(0)
 {
 }
 
 G4USolid::G4USolid(__void__& a)
-  : G4VSolid(a), fShape(0), fPolyhedron(0)
+  : G4VSolid(a), fShape(0), fRebuildPolyhedron(false), fPolyhedron(0)
 {
 }
 
 G4USolid::~G4USolid()
 {
-  delete fPolyhedron;
+  delete fPolyhedron; fPolyhedron = 0;
 }
 
 G4bool G4USolid::operator==(const G4USolid& s) const
@@ -363,10 +370,9 @@ std::ostream& G4USolid::StreamInfo(std::ostream& os) const
 }
 
 G4USolid::G4USolid(const G4USolid& rhs)
-  : G4VSolid(rhs), fPolyhedron(0)
+  : G4VSolid(rhs), fRebuildPolyhedron(false), fPolyhedron(0)
 {
   fShape = rhs.fShape->Clone();
-  fPolyhedron = GetPolyhedron();
 }
 
 G4USolid& G4USolid::operator=(const G4USolid& rhs)
@@ -385,7 +391,8 @@ G4USolid& G4USolid::operator=(const G4USolid& rhs)
   // Copy data
   //
   fShape = rhs.fShape->Clone();
-  delete fPolyhedron; fPolyhedron = 0; fPolyhedron = GetPolyhedron();
+  fRebuildPolyhedron = false;
+  delete fPolyhedron; fPolyhedron = 0;
 
   return *this;
 }
@@ -551,11 +558,15 @@ G4Polyhedron* G4USolid::CreatePolyhedron() const
 G4Polyhedron* G4USolid::GetPolyhedron() const
 {
   if (!fPolyhedron ||
+      fRebuildPolyhedron ||
       fPolyhedron->GetNumberOfRotationStepsAtTimeOfCreation() !=
       fPolyhedron->GetNumberOfRotationSteps())
   {
+    G4AutoLock l(&polyhedronMutex);
     delete fPolyhedron;
     fPolyhedron = CreatePolyhedron();
+    fRebuildPolyhedron = false;
+    l.unlock();
   }
   return fPolyhedron;
 }

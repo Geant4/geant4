@@ -29,7 +29,7 @@ using namespace std;
 // This class is implemented separately from general polyhedra,
 // because the simplex geometry can be computed very quickly,
 // which may become important in situations imported from mesh generators,
-// in which a very large number of G4Tets are created.
+// in which a very large number of UTets are created.
 // A Tet has all of its geometrical information precomputed
 
 UTet::UTet(const std::string& name,
@@ -129,6 +129,15 @@ UTet::UTet(const std::string& name,
   fCdotN234 = fCenter234.Dot(fNormal234);
 }
 
+//////////////////////////////////////////////////////////////////////////
+//
+// Fake default constructor - sets only member data and allocates memory
+//                            for usage restricted to object persistency.
+//
+UTet::UTet( __void__& )
+  : VUSolid()
+{
+}
 
 //////////////////////////////////////////////////////////////////////////
 //
@@ -136,7 +145,6 @@ UTet::UTet(const std::string& name,
 
 UTet::~UTet()
 {
-  ;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -244,6 +252,7 @@ VUSolid::EnumInside UTet::Inside(const UVector3& p) const
 // If two sides are equidistant, normal of first side (x/y/z)
 // encountered returned.
 // This assumes that we are looking from the inside!
+
 bool UTet::Normal(const UVector3& p, UVector3& n) const
 {
   double r123 = std::fabs(p.Dot(fNormal123) - fCdotN123);

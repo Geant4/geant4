@@ -106,4 +106,3 @@ bool VUFacet::IsInside (const UVector3 &p) const
 
 const double VUFacet::dirTolerance = 1.0E-14;
 const double VUFacet::kCarTolerance = VUSolid::Tolerance();
-// G4GeometryTolerance::GetInstance()->GetSurfaceTolerance();

@@ -17,6 +17,26 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+September 18, 2014  T.Nikitina            geom-usolids-V09-06-16
+- Fixed typo error in USphere::SafetyFromInside().
+
+September 17, 2014  G.Cosmo
+- Minor fix in UVector2 to replace use of 's' with 's1' as parameter in
+  copy constructor.
+- Removed references to G4 types in several classes.
+- Corrected treatment of transformations in UVoxelizer (T.Nikitina).
+
+September 4, 2014  T.Nikitina
+- UCons: fixed typo error in GetPointOnSurface() in the call
+  to GetRadiusInRing(). Responsible for occasionally wrong reports
+  when checking for overlaps.
+  Fix in DistanceToIn(p,v) for points on the Surface, to resolve
+  error reported in unit testing by the OpticalEscape test.
+
+September 1, 2014  G.Cosmo
+- Fix in G4USolid for use of polyhedron, to avoid race condition in MT
+  when parameterised volumes are visualised.
+
 May 23, 2014  T.Nikitina                  geom-usolids-V09-06-15
 - Fixed DistanceToOut() for UTubs, UCons, USphere, UVSCGfaceted and UPolycone, 
   DistanceToOut() return normal even for concave faces.

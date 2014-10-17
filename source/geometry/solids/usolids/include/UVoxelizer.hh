@@ -65,7 +65,7 @@ class UVoxelizer
     }
 
 #ifdef USOLIDSONLY
-    void Voxelize(std::vector<VUSolid*>& solids, std::vector<UTransform3D*>& transforms);
+    void Voxelize(std::vector<VUSolid*>& solids, std::vector<UTransform3D>& transforms);
 #endif // USOLIDSONLY
 
     void Voxelize(std::vector<VUFacet*>& facets);
@@ -263,7 +263,7 @@ class UVoxelizer
     void BuildReduceVoxels2(std::vector<double> fBoundaries[], UVector3 reductionRatio);
 
 #ifdef USOLIDSONLY
-    void BuildVoxelLimits(std::vector<VUSolid*>& solids, std::vector<UTransform3D*>& transforms);
+    void BuildVoxelLimits(std::vector<VUSolid*>& solids, std::vector<UTransform3D>& transforms);
 #endif // USOLIDSONLY
 
     void BuildVoxelLimits(std::vector<VUFacet*>& facets);
