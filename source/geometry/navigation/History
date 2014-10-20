@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 20, 2014 - G.Cosmo (geomnav-V10-00-12)
+--------------------------
+- Leave out changes in G4FieldPropagation.cc laying on the trunk...
+
+October 18, 2014 - A.Dotti (geomnav-V10-00-11)
+------------------------
+- Code cleanup: removed unnecessary G4ThreadLocal in G4ReplicaNavigation.
+
 August 25, 2014 - G.Cosmo  (geomnav-V10-00-10)
 -------------------------
 - Minor code cleanup.
