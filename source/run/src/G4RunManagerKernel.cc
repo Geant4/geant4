@@ -436,6 +436,8 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 {
   physicsList = uPhys;
 
+  if(runManagerKernelType==workerRMK) return;
+
   SetupPhysics();
   if(verboseLevel>2) G4ParticleTable::GetParticleTable()->DumpTable();
   if(verboseLevel>1)
@@ -460,7 +462,6 @@ void G4RunManagerKernel::SetPhysics(G4VUserPhysicsList* uPhys)
 void G4RunManagerKernel::SetupPhysics()
 {
     G4ParticleTable::GetParticleTable()->SetReadiness();
-    if(runManagerKernelType==workerRMK) return;
 
     physicsList->ConstructParticle();
 
