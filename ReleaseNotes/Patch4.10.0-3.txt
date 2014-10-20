@@ -6,6 +6,14 @@
 
 List of fixes included in this public patch since the public release 10.0.p02:
 
+  o Configuration:
+    -------------
+    + CMake:
+      o Append existing CMake CXX/EXE_LINKER flags to Geant4 flags when
+        setting overall CMake flags. This allows users to override the base
+        set if needed, at their own risk.
+        Addressing problem report #1663.
+
   o Analysis:
     --------
     + Fixed applying unit to min, max values in H1, H2 managers.
@@ -127,6 +135,8 @@ List of fixes included in this public patch since the public release 10.0.p02:
       rebuilt from scratch. Addressing problem report #1665.
     + G4MTRunManager: make sure G4RunManager::TerminateEventLoop() is
       invoked at the end of run.
+    + Addressing possible data-race in G4RunManagerKernel::SetupPhysics()
+      when calling G4ParticleTable::SetReadiness().
 
   o Visualization:
     -------------
