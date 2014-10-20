@@ -31,6 +31,12 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+08th October 2014 - Ben Morgan (cmake-V09-06-50)
+- Templates/UseGeant4.cmake : BUGFIX #1663, Append existing CMake 
+  CXX/EXE_LINKER flags to Geant4 flags when setting overall CMake flags.
+  This allows users to override the base set if needed, at their own
+  risk.
+
 06th June 2014 - Ben Morgan (cmake-V09-06-49)
 - Templates/geant4-config.in : Add zlib and g3tog4 to list of features
   that --has-feature recognizes and can query (Patch from Ivana
