@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct  18th, 2014 A.Dotti                   - geomvol-V10-00-06
+- Corrected possible data race (reported by DRD) in 
+  G4PVReplica::InitialiseWorker 
+
 June 11th, 2014 G.Cosmo                   - geomvol-V10-00-05
 - Corrected implementation of copy-constructor and assignment-operator
   for G4NavigationHistory, to provide exact copy for size of the
