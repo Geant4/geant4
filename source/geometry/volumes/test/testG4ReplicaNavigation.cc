@@ -61,9 +61,11 @@ public:
   G4double DistanceToOut(const G4VPhysicalVolume *pVol,
 			 const G4int replicaNo,
 			 const G4ThreeVector &localPoint,
-			 const G4ThreeVector &) const
+			 const G4ThreeVector &localDirection,
+                               G4ExitNormal& candidateNormal) const
   {
-      return nav.DistanceToOut(pVol,replicaNo,localPoint);//,localDirection);
+    return nav.DistanceToOut(pVol,replicaNo,localPoint,
+                             localDirection,candidateNormal);
   }
 
 private:
@@ -244,100 +246,106 @@ G4bool testG4ReplicaNavigation()
   assert( Dist - (std::sqrt(2.*441.)-20.) < 1.e-14 );
   // assert(ApproxEqual(Dist, std::sqrt(2.*441.)-20.));
 
-
+  G4ExitNormal enormal;
   Dist=repNav.DistanceToOut(&xRep,0,G4ThreeVector(0,0,0),
-			    G4ThreeVector(1,0,0));
+			    G4ThreeVector(1,0,0),enormal);
   assert(ApproxEqual(Dist,20));
   Dist=repNav.DistanceToOut(&xRep,0,G4ThreeVector(0,0,0),
-			    G4ThreeVector(-1,0,0));
+			    G4ThreeVector(-1,0,0),enormal);
   assert(ApproxEqual(Dist,20));
   Dist=repNav.DistanceToOut(&xRep,0,G4ThreeVector(20,0,0),
-			    G4ThreeVector(1,0,0));
+			    G4ThreeVector(1,0,0),enormal);
   assert(ApproxEqual(Dist,0));
   Dist=repNav.DistanceToOut(&xRep,0,G4ThreeVector(20,0,0),
-			    G4ThreeVector(-1,0,0));
+			    G4ThreeVector(-1,0,0),enormal);
   assert(ApproxEqual(Dist,40));
   Dist=repNav.DistanceToOut(&xRep,0,G4ThreeVector(21,0,0),
-			    G4ThreeVector(1,0,0));
+			    G4ThreeVector(1,0,0),enormal);
   assert(Dist==0);
   Dist=repNav.DistanceToOut(&xRep,0,G4ThreeVector(20,0,0),
-			    G4ThreeVector(-1/std::sqrt(2.),-1/std::sqrt(2.),0));
+			    G4ThreeVector(-1/std::sqrt(2.),
+                            -1/std::sqrt(2.),0),enormal);
   assert(ApproxEqual(Dist,40*std::sqrt(2.)));
   Dist=repNav.DistanceToOut(&xRep,0,G4ThreeVector(20,0,0),
-			    G4ThreeVector(0,1,0));
+			    G4ThreeVector(0,1,0),enormal);
   assert(Dist==kInfinity);
 
 
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(0,0,0),
-			    G4ThreeVector(1,0,0));
+			    G4ThreeVector(1,0,0),enormal);
   assert(Dist==kInfinity);
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(-1,0,0),
-			    G4ThreeVector(1,0,0));
+			    G4ThreeVector(1,0,0),enormal);
   assert(Dist==kInfinity);
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(0,-1,0),
-			    G4ThreeVector(1,0,0));
+			    G4ThreeVector(1,0,0),enormal);
   assert(Dist==kInfinity);
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(0,1,0),
-			    G4ThreeVector(1,0,0));
+			    G4ThreeVector(1,0,0),enormal);
   assert(Dist==kInfinity);
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(-1,0,0),
-			    G4ThreeVector(-1,0,0));
+			    G4ThreeVector(-1,0,0),enormal);
   assert(Dist==0);
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(0,-1,0),
-			    G4ThreeVector(-1,0,0));
+			    G4ThreeVector(-1,0,0),enormal);
 //  assert(Dist==0);
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(0,1,0),
-			    G4ThreeVector(-1,0,0));
+			    G4ThreeVector(-1,0,0),enormal);
   assert(Dist==0);
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(0,0,0),
-			    G4ThreeVector(-1,0,0));
+			    G4ThreeVector(-1,0,0),enormal);
   assert(ApproxEqual(Dist,0));
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(10,0,0),
-			    G4ThreeVector(-1,0,0));
+			    G4ThreeVector(-1,0,0),enormal);
   assert(ApproxEqual(Dist,10));
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(10,0,0),
-			    G4ThreeVector(0,1,0));
+			    G4ThreeVector(0,1,0),enormal);
   assert(ApproxEqual(Dist,10));
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(10,0,0),
-			    G4ThreeVector(0,-1,0));
+			    G4ThreeVector(0,-1,0),enormal);
   assert(ApproxEqual(Dist,10));
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(10,0,0),
-			    G4ThreeVector(-1/std::sqrt(2.),1/std::sqrt(2.),0));
+			    G4ThreeVector(-1/std::sqrt(2.),1/std::sqrt(2.),0),
+                            enormal);
   assert(ApproxEqual(Dist,10*std::sin(pi*0.25)));
   Dist=repNav.DistanceToOut(&phiRep,0,G4ThreeVector(10,0,0),
-			    G4ThreeVector(-1/std::sqrt(2.),-1/std::sqrt(2.),0));
+			    G4ThreeVector(-1/std::sqrt(2.),-1/std::sqrt(2.),0),
+                            enormal);
   assert(ApproxEqual(Dist,10*std::sin(pi*0.25)));
 
 
   Dist=repNav.DistanceToOut(&radRep,0,G4ThreeVector(0,0,0),
-			    G4ThreeVector(1,0,0));
+			    G4ThreeVector(1,0,0),enormal);
   assert(ApproxEqual(Dist,20));
   Dist=repNav.DistanceToOut(&radRep,0,G4ThreeVector(0,0,0),
-			    G4ThreeVector(-1,0,0));
+			    G4ThreeVector(-1,0,0),enormal);
   assert(ApproxEqual(Dist,20));
   Dist=repNav.DistanceToOut(&radRep,0,G4ThreeVector(0,0,0),
-			    G4ThreeVector(-1/std::sqrt(2.),-1/std::sqrt(2.),0));
+			    G4ThreeVector(-1/std::sqrt(2.),
+                            -1/std::sqrt(2.),0),enormal);
   assert(ApproxEqual(Dist,20));
   Dist=repNav.DistanceToOut(&radRep,0,G4ThreeVector(std::sqrt(200.),std::sqrt(200.),0),
-			    G4ThreeVector(-1/std::sqrt(2.),-1/std::sqrt(2.),0));
+			    G4ThreeVector(-1/std::sqrt(2.),
+                            -1/std::sqrt(2.),0),enormal);
   assert(ApproxEqual(Dist,40));
   Dist=repNav.DistanceToOut(&radRep,0,G4ThreeVector(std::sqrt(200.),std::sqrt(200.),0),
-			    G4ThreeVector(1/std::sqrt(2.),1/std::sqrt(2.),0));
+			    G4ThreeVector(1/std::sqrt(2.),
+                            1/std::sqrt(2.),0),enormal);
   assert(ApproxEqual(Dist,0));
   Dist=repNav.DistanceToOut(&radRep,0,G4ThreeVector(std::sqrt(200.),std::sqrt(200.),0),
-			    G4ThreeVector(0,0,1));
+			    G4ThreeVector(0,0,1),enormal);
   assert(Dist==kInfinity);
   Dist=repNav.DistanceToOut(&radRep,0,G4ThreeVector(21,0,0),
-			    G4ThreeVector(1,0,0));
+			    G4ThreeVector(1,0,0),enormal);
   assert(Dist==0);
   Dist=repNav.DistanceToOut(&radRep,1,G4ThreeVector(20,0,0),
-			    G4ThreeVector(1,0,0));
+			    G4ThreeVector(1,0,0),enormal);
   assert(ApproxEqual(Dist,20));
   Dist=repNav.DistanceToOut(&radRep,1,G4ThreeVector(20,0,0),
-			    G4ThreeVector(-1,0,0));
+			    G4ThreeVector(-1,0,0),enormal);
   assert(ApproxEqual(Dist,0));
   Dist=repNav.DistanceToOut(&radRep,1,G4ThreeVector(20,0,0),
-			    G4ThreeVector(0,-1,0));
+			    G4ThreeVector(0,-1,0),enormal);
   assert(ApproxEqual(Dist,std::sqrt(40.*40.-20.*20.)));
 
 
