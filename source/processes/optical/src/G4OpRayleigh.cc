@@ -293,7 +293,7 @@ G4OpRayleigh::CalculateRayleighMeanFreePaths( const G4Material* material ) const
   if( material->GetName() == "Water" )
     temperature = 283.15*kelvin; // Temperature of water is 10 degrees celsius
   else
-    material->GetTemperature();
+    temperature = material->GetTemperature();
 
   G4PhysicsOrderedFreeVector* rayleighMeanFreePaths =
                                              new G4PhysicsOrderedFreeVector();

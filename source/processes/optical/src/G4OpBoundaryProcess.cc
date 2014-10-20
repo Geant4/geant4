@@ -117,6 +117,8 @@ G4OpBoundaryProcess::G4OpBoundaryProcess(const G4String& processName,
         theEfficiency   =  0.;
         theTransmittance = 0.;
 
+        theSurfaceRoughness = 0.;
+
         prob_sl = 0.;
         prob_ss = 0.;
         prob_bs = 0.;
@@ -298,6 +300,8 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
         theEfficiency   =  0.;
         theTransmittance = 0.;
 
+        theSurfaceRoughness = 0.;
+
         theModel = glisur;
         theFinish = polished;
 
@@ -392,6 +396,11 @@ G4OpBoundaryProcess::PostStepDoIt(const G4Track& aTrack, const G4Step& aStep)
                       theTransmittance =
                       PropertyPointer->Value(thePhotonMomentum);
               }
+
+              if (aMaterialPropertiesTable->
+                                     ConstPropertyExists("SURFACEROUGHNESS"))
+                 theSurfaceRoughness = aMaterialPropertiesTable->
+                                         GetConstProperty("SURFACEROUGHNESS");
 
 	      if ( theModel == unified ) {
 	        PropertyPointer =
@@ -919,6 +928,15 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	G4bool Inside = false;
 	G4bool Swap = false;
 
+        G4bool SurfaceRoughnessCriterionPass = 1;
+        if (theSurfaceRoughness != 0. && Rindex1 > Rindex2) {
+           G4double wavelength = h_Planck*c_light/thePhotonMomentum;
+           G4double SurfaceRoughnessCriterion =
+             exp(-pow((4*pi*theSurfaceRoughness*Rindex1*cost1/wavelength),2));
+           SurfaceRoughnessCriterionPass = 
+                                     G4BooleanRand(SurfaceRoughnessCriterion);
+        }
+
 	leap:
 
         G4bool Through = false;
@@ -962,6 +980,9 @@ void G4OpBoundaryProcess::DielectricDielectric()
 	      if (Swap) Swap = !Swap;
 
               theStatus = TotalInternalReflection;
+
+              if ( !SurfaceRoughnessCriterionPass ) theStatus =
+                                                       LambertianReflection;
 
 	      if ( theModel == unified && theFinish != polished )
 						     ChooseReflection();
@@ -1034,6 +1055,9 @@ void G4OpBoundaryProcess::DielectricDielectric()
                  if (Swap) Swap = !Swap;
 
 		 theStatus = FresnelReflection;
+
+                 if ( !SurfaceRoughnessCriterionPass ) theStatus =
+                                                          LambertianReflection;
 
 		 if ( theModel == unified && theFinish != polished )
 						     ChooseReflection();

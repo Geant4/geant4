@@ -244,6 +244,9 @@ private:
 	G4double theReflectivity;
 	G4double theEfficiency;
         G4double theTransmittance;
+
+        G4double theSurfaceRoughness;
+
 	G4double prob_sl, prob_ss, prob_bs;
 
         G4int iTE, iTM;

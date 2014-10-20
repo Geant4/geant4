@@ -16,6 +16,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+
+17th October 2014 P. Gumplinger (op-V10-00-08)
+- fix G4OpRayleigh.cc to actually set the temperature for materials other
+  than Water
+- G4OpBoundaryProcess: Add a ConstProperty "SURFACEROUGHNESS". If set,
+  the reflectivity at dielectric_dielectric surface is angular dependent
+  and calculated from:
+  exp(-pow((4*pi*theSurfaceroughness*Rindex1*cost1/wavelength),2))
+  for Rindex1 > Rindex2. Thanks to M. van Dijk (Bristol University).
+
 16th October 2014 P. Gumplinger (op-V10-00-07)
 - previous tag was committed only to /include directory
 
