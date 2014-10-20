@@ -14,12 +14,7 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-18-July-2014 Andrea Dotti               hadr-im_r-V09-06-06
-- Fix data-race issue in G4CollisionComposite, when shared there 
-  are concurrent accesses to G4CollisionBuffer. The simplest solution
-  is to add a lock on a mutex. 
-
-10-June-2014 Gunter Folger             
+10-June-2014 Gunter Folger              hadr-im_r-V09-06-07
 - Fix out of bound error in G4DetailedBalancePhaseSpaceIntegral, reported by
   coverity.
 
