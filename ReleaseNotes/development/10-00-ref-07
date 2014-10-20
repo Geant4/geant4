@@ -23,6 +23,8 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 10.0.p03
+
 Summarised, the list of changes is the following:
 
 cmake                                            cmake-V10-00-20
@@ -40,8 +42,8 @@ analysis                                         analysis-V10-00-20
 --------
 - Updated to g4tools 1.11.1
   See History_tools for complete list of modifications.
-- Fixed applying unit to min, max values in H1, H2 managers.
-- Fixed createH2/setH2 commands implementation.
+- Fixed applying unit to min, max values in H1, H2 managers.                 (+)
+- Fixed createH2/setH2 commands implementation.                              (+)
 - Replaced use of std::cout with G4cout in Root managers 
   to fix potential data race among threads.
 - Get rid of obsolete 'register' keyword in csz_inflate.cc..
@@ -53,9 +55,9 @@ event                                            event-V10-00-06
   correctly for GeneratePointsOnSurface() and GeneratePointsInVolume().
   Addressing problem report #1656.
 
-geometry/managment                               geommng-V10-00-02
+geometry/managment                               geommng-V10-00-02           (+)
 ------------------
-- Fixed possible data-race condition among threads in G4GeaomSplitter.
+- Fixed possible data-race condition among threads in G4GeomSplitter.
 
 geometry/navigation                              geomnav-V10-00-10
 -------------------
@@ -89,13 +91,13 @@ global                                           global-V10-00-32
 - G4Pow: modified definition of singleton to avoid resources leak at exit.
 - Added std::flush to receiving of G4MTcoutDestination.
   Addressing problem report #1644.
-- Added symbol to exclusion list in windefs.h.
+- Added symbol to exclusion list in windefs.h.                               (+)
 
 graphics_reps                                    greps-V10-00-07
 -------------
 - G4Scale: added annotation size; set default annotation size to 12 pixels.
-- HepPolyhedron::SetReferences(): added protection against a null pointer.
-- BooleanProcessor::execute(): corrected spelling mistake in message.
+- HepPolyhedron::SetReferences(): added protection against a null pointer.   (+)
+- BooleanProcessor::execute(): corrected spelling mistake in message.        (+)
 
 intercoms                                        intercoms-V10-00-08
 ---------
@@ -125,12 +127,12 @@ materials                                        materials-V10-00-23
 
 particles                                        particles-V10-00-20
 ---------
-- G4IonTable: fill decay channels when an ion is created on the fly to
+- G4IonTable: fill decay channels when an ion is created on the fly to       (+)
   avoid race condition issue in multi-threaded mode.
   Addressing problem report #1651.
-  Introducing PrepareNuclideTable() method to allow creating G4NuclideTable
-  object without preloading any ions.
-- Fix for possible race condition among threads in G4PDefSplitter.
+- Introducing PrepareNuclideTable() method in G4IonTable to allow creating
+  G4NuclideTable object without preloading any ions.
+- Fix for possible race condition among threads in G4PDefSplitter.           (+)
 
 persistency/gdml                                 gdml-V10-00-06
 ----------------
@@ -154,9 +156,9 @@ physics_lists
   o Including constructors for NuBeam and Shielding.
     Extended Shielding code to also include ShieldingM variant.
   o Added protection in all destructors to avoid double deletes. 
-- constructors/limiters (phys-ctor-limiters-V10-00-03)
-  o G4NeurtonTrackingCut: register G4NeutronKiller in G4HadronicProcessStore;
-    improved log and process deleted at exit.
+- constructors/limiters (phys-ctor-limiters-V10-00-03)                       (+)
+  o G4NeutronTrackingCut: register G4NeutronKiller in
+    G4HadronicProcessStore; improved log and process deleted at exit.
   o Fixed possible data-race condition among threads in G4NeutronTrackingCut
     when calling G4MTcout (defect spotted with DRD).
 - lists (phys-lists-V10-00-06)
@@ -167,7 +169,7 @@ processes/electromagnetic/dna                    emdna-V10-00-31
 - Removed obsolete class for electron excitation.
 - Get rid of obsolete 'register' keyword in code.
 
-processes/electromagnetic/highenergy             emhighenergy-V10-00-03
+processes/electromagnetic/highenergy             emhighenergy-V10-00-03      (+)
 ------------------------------------
 - Verified and updated positron annihilation models (G4Vee2hadrons,
   G4ee2KChargedModel, G4ee2KNeutralModel, G4eeTo3PiModel,
@@ -227,7 +229,7 @@ processes/electromagnetic/standard               emstand-V10-00-40
   classes, which are initialized once.
 - G4PAIModel: updated sampling of delta electron energy.
 - G4DeltaAngle: added check on length of do/while loop.
-- G4PAIxSection: added protection to avoid potential division by zero.
+- G4PAIxSection: added protection to avoid potential division by zero.       (+)
 - G4PAIxSection, G4PAIPhotData, G4PAIPhotModel: proper deletion at destruction.
 - G4PAIModelData: proper deletion of physics vectors at destruction; use
   Spline interpolation; fixed sampling of delta-electrons.
@@ -289,7 +291,7 @@ processes/hadronic
     G4XnpElasticLowE: delete physics vectors at destruction.
   o Sharing of static tables among threads in G4Scatterer.
   o Overall improved thread safety; marked as static some "const" data.
-  o Fix for data-race issue in G4CollisionComposite, when shared there 
+  o Fix for data-race issue in G4CollisionComposite, when shared there
     are concurrent accesses to G4CollisionBuffer. The simplest solution
     is to add a lock on a mutex.
 - models/inclxx (hadr-inclxx-V10-00-10)
@@ -326,9 +328,9 @@ processes/hadronic
   o G4PreCompoundIon: cleanup transition probability computation.
   o G4PreCompoundAlpha, G4PreCompoundHe3, G4PreCompoundTriton: fixed
     FactorialFactor() method; corrected denominator.
-  o G4PreCompoundAlpha: fixed integer overflow.
+  o G4PreCompoundAlpha: fixed integer overflow.                              (+)
     Addressing problem report #1646.
-- models/quasi_elastic (hadr-qelastic-V10-00-00)
+- models/quasi_elastic (hadr-qelastic-V10-00-00)                             (+)
   o Removed potential data-race condition among threads.
     Addressing problem report #1652.
 - models/radioactive_decay (radioactive_decay-V10-00-04)
@@ -340,7 +342,7 @@ processes/hadronic
     nuclide with very short lifetime or that was not listed in G4NuclideTable.
     In that case, set pathlength to DBL_MIN.
     Addressing problem report #1582.
-  o Fixed memory leak in destructor of G4RIsotopeTable.
+  o Fixed memory leak in destructor of G4RIsotopeTable.                      (+)
     Addressing problem report #1617.
 - models/theo_high_energy (had-theo-HE-V10-00-04)
   o Updated ModelDescription(); updated text and recurse to propagate.
@@ -366,10 +368,10 @@ processes/hadronic
 
 run                                             run-V10-00-26
 ---
-- Fixed data-race condition among threads when creating RNG for workers.
-  Fixed '/random/setSeeds' command not working properly.
+- Fixed data-race condition among threads when creating RNG for workers.     (+)
+- Fixed '/random/setSeeds' command not working properly.                     (+)
   Addressing problem report #1657.
-- Fixed potential race condition among threads in G4VUPLSplitter class.
+- Fixed potential race condition among threads in G4VUPLSplitter class.      (+)
 - Fixed data-race condition in G4RunManagerKernel when FPE is active.
   Only master thread installs FPE handler.
 - Worker threads return G4RunManagerKernel::SetPhysics() method
@@ -378,18 +380,19 @@ run                                             run-V10-00-26
   during physics initialization.
 - Avoid pre-creation of all ions in sequential mode.
   Preloading ions is now optional.
-- G4PhysicsListHelper: minor fix in the default list of processeses:
+- G4PhysicsListHelper: minor fix in the default list of processes:           (+)
   positron annihilation in muons and hadrons cannot be AtRest; these are
   rare high energy discrete processes. Equivalent fix done for
   OrderingParameterTable().
   Addressiong problem report #1598.
-- Clear root logical volume pointers in G4Region when geometry is
-  rebuilt from scratch. G4TransportationManager is cleaned when geometry
+- Clear root logical volume pointers in G4Region when geometry is            (+)
+  rebuilt from scratch. Addressing problem report #1665.
+- G4TransportationManager is cleaned when geometry
   is rebuilt from scratch.Addressing problem report #1665.
 
 track                                           track-V10-00-04
 -----
-- Removed non cost requirement when using G4PhysicsModelCatalog getters
+- Removed non const requirement when using G4PhysicsModelCatalog getters
   and moved implementations to .icc file.
 
 visualization                                   vis-V10-00-08
@@ -446,7 +449,7 @@ examples                                         examples-V10-00-07
   o Migration to g4tools for histograms.
   o Migrated to multi-threading.
 - advanced/dnageometry (dnageometry-V10-00-00)
-  o Migrated to multi=threading.
+  o Migrated to multi-threading.
   o Updated visualization setup.
 - advanced/dnaphysics (dnaphysics-V10-00-00)
   o Added lines for ion in dna.mac.
@@ -520,9 +523,9 @@ examples                                         examples-V10-00-07
     Assigned model G4NuclNuclDiffuseElastic and cross-section
     G4GGNuclNuclCrossSection to generic ions in exrdmPhysListHadron.
     Addressing problem report #1461.
-- extended/runAndEvent/RE05 (exampleRE05-V10-00-00)
+- extended/runAndEvent/RE05 (exampleRE05-V10-00-00)                          (+)
   o Reduced amount of print-out.
-- extended/runAndEvent/RE06 (exampleRE06-V10-00-00)
+- extended/runAndEvent/RE06 (exampleRE06-V10-00-00)                          (+)
   o Added Boolean protection in ConstructSD methods for MT.
 
 tests                                            tests-V10-00-07

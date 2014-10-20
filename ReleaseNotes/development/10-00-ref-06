@@ -17,6 +17,7 @@ Major development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (o)  Fixes included in release 10.0.p02
+(+)  Fixes included in release 10.0.p03
 
 Summarised, the list of changes is the following:
 
@@ -46,7 +47,7 @@ geometry/solids/Boolean                          geom-bool-V10-00-01
 
 geometry/navigation                              geomnav-V10-00-07
 -------------------
-- Fix in G4MultiNavigator to properly set 'fIdNavLimiting' index to
+- Fix in G4MultiNavigator to properly set 'fIdNavLimiting' index to          (+)
   navigator limiting the step, if only one navigator limits the step.
 
 geometry/volumes                                 geomvol-V10-00-05
@@ -140,7 +141,7 @@ processes/hadronic
     Fixed deletion in destructor.
   o G4DiffuseElastic: fixed deletion in destructor.
 - models/im_r_matrix (had-im_r-V10-00-03)
-  o Fixed out of bound error in G4DetailedBalancePhaseSpaceIntegral,
+  o Fixed out of bound error in G4DetailedBalancePhaseSpaceIntegral,         (+)
     reported by Coverity.
 - models/inclxx (hadr-inclxx-V10-00-08)
   o Fixed crash in p+He2 reactions.
@@ -174,7 +175,7 @@ visualization                                   vis-V10-00-06
   o /vis/specify and /vis/scene/add/logicalVolume: added flag for
     drawing/suppressing axes.
 - gMocren:
-  o Fixed memory leak in G4GMocrenFile. Addressing problem report #1585.
+  o Fixed memory leak in G4GMocrenFile. Addressing problem report #1585.     (+)
 - OpenGL:
   o New Viewer parameters info panel.
   o G4OpenGLQtViewer: fixed problem in viewer/set parameters.

@@ -16,6 +16,8 @@ Major development/fixes included since the last development tag are:
 
 ---------- Reference-tag 'Release Notes' -----------
 
+(+)  Fixes included in release 10.0.p03
+
 Summarised, the list of changes is the following:
 
 cmake                                            cmake-V10-00-23
@@ -60,38 +62,38 @@ event                                            event-V10-00-07
 
 geometry/solids                                  geomsolids-V10-00-01
 ---------------
-- Fixed use of polyhedron pointer, to avoid race condition in MT
+- Fixed use of polyhedron pointer, to avoid race condition in MT             (+)
   when parameterised volumes are visualised.
 - Updated unit tests to fix compilation errors and warnings.
 - Boolean (geom-bool-V10-00-06):
   o Corrected implementation of CreatePolyhedron() in G4UMultiUnion wrapper.
-- CSG ():
-  o G4Cons: fixed typo error in GetPointOnSurface() in the call
+- CSG (geom-csg-V10-00-06):
+  o G4Cons: fixed typo error in GetPointOnSurface() in the call              (+)
     to GetRadiusInRing(). Responsible for occasionally wrong reports
     when checking for overlaps.
-  o G4Cons: fix in DistanceToIn(p,v) for points on the Surface, to resolve
+  o G4Cons: fix in DistanceToIn(p,v) for points on the Surface, to resolve   (+)
     error reported in unit testing by the OpticalEscape test.
   o Added wrapper for UTrap shape; adapted switch for G4Trap accordingly.
-- specific ():
+- specific (geom-specific-V10-00-11):
   o Added wrappers for UExtrudedSolid and UGenericTrap; adapted switches for
     G4 types accordingly.
 - usolids (geom-usolids-V10-00-13)
-  o UCons: fixed typo error in GetPointOnSurface() in the call
+  o UCons: fixed typo error in GetPointOnSurface() in the call               (+)
     to GetRadiusInRing(). Responsible for occasionally wrong reports
     when checking for overlaps.
     Fix in DistanceToIn(p,v) for points on the Surface, to resolve
     error reported in unit testing by the OpticalEscape test.
-  o USphere: fixed typo in SafetyFromInside().
+  o USphere: fixed typo in SafetyFromInside().                               (+)
   o Corrected treatment of transformations in UMultiUnion and UVoxelizer.
   o Added shapes from the USolids library: UExtrudedSolid, UGenericTrap,
     UTessellatedSolid (together with UQuadrangularFacet, UTriangularFacet
     and UTessellatedGeometryAlgorithms utility classes) and UTrap.
-  o Minor fix in UVector2 for variable shadowing.
+  o Minor fix in UVector2 for variable shadowing.                            (+)
   o Removed references to G4 types in several classes and some code cleanup.
 
 global                                           global-V10-00-34
 ------
-- Use G4Exp, G4Log and G4Pow to speedup G4JTPolynomialSolver.
+- Use G4Exp, G4Log and G4Pow to speedup G4JTPolynomialSolver.                (+)
 - Fixed coverity defects.
 
 intercoms                                        intercoms-V10-00-11
@@ -160,7 +162,7 @@ processes/hadronic
   o Added BuildPhysics() method for initialisation of models before run;
     modified G4EnergyRangeManager and G4HadronicProcess.
 - models/de_excitation (hadr-deex-V10-00-08)
-  o Converted G4FermiFragmentsPool to be a G4ThreadLocalSingleton, to fix
+  o Converted G4FermiFragmentsPool to be a G4ThreadLocalSingleton, to fix    (+)
     cases of data race due to lazy initialisation. Effects: sligthly increase
     of memory per thread; no effects in physics.
 - models/management (hadr-modman-V10-00-05)
