@@ -14,6 +14,7 @@ Major development/fixes included since the last development tag are:
 (+)  Fixes included in release 9.6.p03
 (*)  Fixes included in release 10.0.p01
 (o)  Fixes included in release 10.0.p02
+(x)  Fixes included in release 10.0.p03
 
 Summarised, the list of changes is the following:
 
@@ -101,7 +102,7 @@ materials                                        materials-V10-00-00
 particles                                        particles-V10-00-04
 ---------
 - Updated particle properties to PDG-2013.
-- Added G4Exception in G4ElectronOcuppancy::AddElectron()
+- Added G4Exception in G4ElectronOcuppancy::AddElectron()                    (x)
 - Compute life time from mass width for pi0 and sigma0.
   Addressing problem report #1570.
 - G4ParticleDefinition::DumpTable() displays correct stability information   (*)

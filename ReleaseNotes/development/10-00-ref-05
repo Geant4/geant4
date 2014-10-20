@@ -21,6 +21,7 @@ Major development/fixes included since the last development tag are:
 ---------- Reference-tag 'Release Notes' -----------
 
 (o)  Fixes included in release 10.0.p02
+(+)  Fixes included in release 10.0.p03
 
 Summarised, the list of changes is the following:
 
@@ -47,7 +48,7 @@ analysis                                         analysis-V10-00-12
   Addressing problem report #1633.
 - Fixed Coverity defects.
 
-digits_hits                                      digits_hits-V10-00-02
+digits_hits                                      digits_hits-V10-00-07
 -----------
 - G4ScoringMessenger: fixed broadcast parameters of commands that should     (o)
   be used only by the master thread. Addressing problem report #1554.
@@ -190,7 +191,7 @@ physics_lists
 - constructors/ions (phys-ctor-ions-V10-00-02)
   o Reuse G4PreCompoundModel and not create a new local in ion physics
     classes, should reduce memory churn.
-- constructors/limiters (phys-ctor-limiters-V10-00-01)
+- constructors/limiters (phys-ctor-limiters-V10-00-01)                       (+)
   o G4StepLimiterPhysics: fixed minor memory leak reported by Coverity.
 - lists (phys-lists-V10-00-02)
   o Added experimental physics lists ShieldingM and NuBeam.
@@ -304,7 +305,7 @@ processes/hadronic
     by fetching from hadronic registry.
   o G4InuclNuclei:fix case of floating-point exception in                    (o)
     setExcitationEnergy() for zero Ekin.
-- models/coherent_elastic (hadr-cohe-V10-00-04)
+- models/coherent_elastic (hadr-cohe-V10-00-08)
   o New class G4hhElastic, implementation of the qQ-model with springy
     Pomeron for hadron-hadron elastic scattering.
   o G4LEpp: fixed incorrect use data array, used GetInvariantT()

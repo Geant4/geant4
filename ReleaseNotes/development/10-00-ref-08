@@ -1,0 +1,243 @@
+
+                       geant4-10-00-ref-08
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Completed implementation of G4XmlAnalysisReader; now requiring Expat parser.
+   Finalized G4VAnalysisReader interface: added reading P1, P2, H3.
+ o Added shapes from the USolids library: UExtrudedSolid, UGenericTrap, UTrap.
+ o Updated mass, width and lifetime of particles according to PDG-2014.
+ o Re-tuned parameters of G4LundStringFragmentation; fragmentation function
+   F(qq->B+anti-quark) set to Z^2. Fix for anti-diquark-diquark strings.
+ o Setting to zero the probability of (uu)-diquark in FTF, based on Instantons
+   theory.
+ o New data set G4EMLOW-6.40.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(+)  Fixes included in release 10.0.p03
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V10-00-23
+-----
+- Removing any self-links from internal library link list when building
+  global libraries.
+- Updated data sets to G4EMLOW-6.40.
+
+config                                           config-V10-00-08
+-----
+- Added flags in geomconf.gmk for added USolids shapes.
+
+analysis                                         analysis-V10-00-27
+--------
+- Updated to g4tools 1.14.0
+  See History_tools for complete list of modifications.
+- Added histograms and profiles support in Csv.
+- Finalized G4VAnalysisReader interface: added reading P1, P2, H3;
+  modifications to fit to all outputs; support for both user defined file
+  names and "generic" file names (generated automatically by G4AnalysisManager
+  from the base name).
+- Introduced G4BaseFileManager and separated implementation for
+  output/input file managers
+- Implemented reading P1, P2 in G4RootAnalysisReader; prepared code for H3
+  which reading is not yet available in tools.
+- Completed implementation of G4XmlAnalysisReader; now requiring Expat parser.
+- Fixed writing ntuples when more than one ntuple is defined (Xml).
+- Do not overwrite user defined file extension.
+- Fixed units in /analysis/[h|p]n/create and /analysis/[h|p]n/set commands.
+- Fixed Coverity defects: initialization of data members in G4VAnalysisManager;
+  provided assignment operator for G4HnDimensionInformation.
+
+digits_hits                                      digits_hits-V10-00-08
+-----------
+- G4VScoringMesh, G4ScoringBox, G4ScoringCylinder: fixed Construct()
+  to make it work when the entire geometry has been destroyed.
+  Addressing problem report #1665.
+
+event                                            event-V10-00-07
+-----
+- Fixes for Coverity defects.
+
+geometry/solids                                  geomsolids-V10-00-01
+---------------
+- Fixed use of polyhedron pointer, to avoid race condition in MT             (+)
+  when parameterised volumes are visualised.
+- Updated unit tests to fix compilation errors and warnings.
+- Boolean (geom-bool-V10-00-06):
+  o Corrected implementation of CreatePolyhedron() in G4UMultiUnion wrapper.
+- CSG (geom-csg-V10-00-06):
+  o G4Cons: fixed typo error in GetPointOnSurface() in the call              (+)
+    to GetRadiusInRing(). Responsible for occasionally wrong reports
+    when checking for overlaps.
+  o G4Cons: fix in DistanceToIn(p,v) for points on the Surface, to resolve   (+)
+    error reported in unit testing by the OpticalEscape test.
+  o Added wrapper for UTrap shape; adapted switch for G4Trap accordingly.
+- specific (geom-specific-V10-00-11):
+  o Added wrappers for UExtrudedSolid and UGenericTrap; adapted switches for
+    G4 types accordingly.
+- usolids (geom-usolids-V10-00-13)
+  o UCons: fixed typo error in GetPointOnSurface() in the call               (+)
+    to GetRadiusInRing(). Responsible for occasionally wrong reports
+    when checking for overlaps.
+    Fix in DistanceToIn(p,v) for points on the Surface, to resolve
+    error reported in unit testing by the OpticalEscape test.
+  o USphere: fixed typo in SafetyFromInside().                               (+)
+  o Corrected treatment of transformations in UMultiUnion and UVoxelizer.
+  o Added shapes from the USolids library: UExtrudedSolid, UGenericTrap,
+    UTessellatedSolid (together with UQuadrangularFacet, UTriangularFacet
+    and UTessellatedGeometryAlgorithms utility classes) and UTrap.
+  o Minor fix in UVector2 for variable shadowing.                            (+)
+  o Removed references to G4 types in several classes and some code cleanup.
+
+global                                           global-V10-00-34
+------
+- Use G4Exp, G4Log and G4Pow to speedup G4JTPolynomialSolver.                (+)
+- Fixed coverity defects.
+
+intercoms                                        intercoms-V10-00-11
+---------
+- Defined accessor GetThreadId() and moved related data to private.
+
+interfaces                                       interfaces-V10-00-13
+----------
+- G4UIQt : 
+  o Fixed Dock output panel on the bottom right of window.
+
+particles                                        particles-V10-00-22
+---------
+- Updated mass, width and lifetime of particles according to PDG-2014.
+- Removed unused class G4IsomerTable; G4NuclideTable is now used.
+
+physics_lists                                    physics_lists-V10-00-01
+-------------
+- Replaced explicite instantiation of cross-sections by calls
+  to G4CrossSectionDataSetRegistry using factory approach.
+- Removed inclusions of obsolete cross-section headers.
+
+processes/electromagnetic/dna                    emdna-V10-00-32
+-----------------------------
+- Added G4ITStepManager class and related messenger.
+
+processes/electromagnetic/highenergy             emhighenergy-V10-00-04
+------------------------------------
+- G4GammaConversionToMuons: added protection against infinite loop at the
+  reaction threshold; removed G4ThreadLocal variables; introduced G4Exp,
+  G4Log and NIST functions; added counters limiting do/while loops.
+
+processes/electromagnetic/lowenergy              emlowen-V10-00-17
+-----------------------------------
+- Restored deletion of physics-vectors at destruction.
+- Fixes for Coverity defects.
+
+processes/electromagnetic/muons                  emmuons-V10-00-00
+-------------------------------
+- G4MuPairProductionModel, G4MuBremsstrahlungModel: added protection at
+  initialisation for the case when user artificially reduces high energy
+  limit of the model. Addressing problem report #1670.
+
+processes/electromagnetic/standard               emstand-V10-00-42
+----------------------------------
+- G4PairProductionRelModel, G4eBremsstrahlungRelModel: added protection at
+  initialisation for the case when user artificially reduces high energy
+  limit of the model. Addressing problem report #1670.
+- Fixed memory leak in G4PAIxSection.
+
+processes/electromagnetic/utils                  emutils-V10-00-29
+-------------------------------
+- G4VEmProcess, G4VEnergyLossProcess: fixed model type definition
+  for secondary particle production (fluorescence, PIXE, splitting).
+
+processes/electromagnetic/xrays                  xrays-V10-00-03
+-------------------------------
+- Fixes for Coverity defects in G4VXTRenergyLoss.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V10-00-14)
+  o Added missing factories to G4NeutronCaptureXS, G4NeutronElasticXS, 
+    G4NeutronInelasticXS, G4PiNuclearCrossSection.
+- management (hadr-man-V10-00-11)
+  o Added BuildPhysics() method for initialisation of models before run;
+    modified G4EnergyRangeManager and G4HadronicProcess.
+- models/de_excitation (hadr-deex-V10-00-08)
+  o Converted G4FermiFragmentsPool to be a G4ThreadLocalSingleton, to fix    (+)
+    cases of data race due to lazy initialisation. Effects: sligthly increase
+    of memory per thread; no effects in physics.
+- models/management (hadr-modman-V10-00-05)
+  o Added BuildPhysics() method for initialisation of models before run;
+    modified G4HadronicInteraction.
+- models/parton_string/diffraction (hadr-string-diff-V10-00-04)
+  o G4DiffractiveSplitableHadron: setting to zero the probability of
+    (uu)-diquark, based on Instantons theory.
+- models/parton_string/management (hadr-partonstring-mgt-V10-00-03)
+  o Code cleanup in G4InteractionContent, G4VParticipants, G4VSplitableHadron.
+    Added debugging option in G4VPartonStringModel.
+- models/parton_string/hadronization (had-hadronization-V10-00-06)
+  o Re-tuned parameters of G4LundStringFragmentation; fragmentation function
+    F(qq->B+anti-quark) set to Z^2. Fix for anti-diquark-diquark strings.
+  o Some code cleanup.
+- models/qmd (hadr-qmd-V10-00-03)
+  o Updated to use G4CrossSectionDataSetRegistry. Removed inclusions of
+    obsolete cross-section headers.
+- models/radioactive_decay (radioactive_decay-V10-00-05)
+  o Fix to add missing code that enables proton decay.
+
+processes/scoring                                procscore-V10-00-00
+-----------------
+- Introducing G4ParallelWorldProcessStore to allow G4ParallelWorldProcess
+  objects of all threads to update their corresponding world volumes when
+  entire geometry is destroyed and rebuilt between runs.
+
+run                                              run-V10-00-28
+---
+- G4VScoringMesh is cleaned when geometry is rebuilt from scratch.
+  G4ParallelWorldProcess objects of all threads now update their corresponding
+  world volumes when the entire geometry is destroyed and rebuilt between runs.
+  Addressing problem report #1665.
+
+examples                                         examples-V10-00-08
+--------
+- Updated reference outputs.
+- advanced/gammaray_telescope (gammaraytel-V10-00-07)
+  o Corrected compilation error in GammaRayTelIonPhysics.
+- xtended/electromagnetic/TestEm1 (testem1-V10-00-08)
+- extended/electromagnetic/TestEm2 (testem2-V10-00-06)
+- extended/electromagnetic/TestEm3 (testem3-V10-00-11)
+- extended/electromagnetic/TestEm4 (testem4-V10-00-01)
+  o Set number of threads as number of cores in main().
+- extended/electromagnetic/TestEm5 (testem5-V10-00-10)
+  o StackingAction, HistoManager: added histograms for energy of
+    gamma and Auger electrons per de-excitation model.
+  o Set number of threads as number of cores in main(). Added possibility
+    to change number on threads by 2nd parameter in command line.
+- extended/electromagnetic/TestEm11 (testem11-V10-00-02)
+- extended/electromagnetic/TestEm12 (testem12-V10-00-03)
+  o Set number of threads as number of cores in main().
+- extended/eventgenerator/particleGun (particleGunExample-V10-00-02)
+  o Modified plots of angles and simplified histograms.
+  o Added PrimaryGeneratorAction0 class and run0.mac.
+- extended/exoticphysics/ucn (ExUCN-V10-00-04)
+  o Improved formatting in .README.
+- extended/hadronic/Hadr03 (exhadr03-V10-00-05)
+- extended/hadronic/Hadr04 (exhadr04-V10-00-05)
+- extended/hadronic/Hadr06 (exhadr06-V10-00-04)
+  o Fixed test in envHadronic.sh macro.
+  o Set number of threads as number of cores in main().
+- extended/medical/electronScattering (electronScattering-V10-00-02)
+- extended/radioactivedecay/rdecay01 (rdecay01-V10-00-03)
+  o Set number of threads as number of cores in main().
+
+tests                                            tests-V10-00-08
+-----
+- Updated reference outputs and tools.
+- tests/test03 (test03-V10-00-02)
+  o New test for analysis tools.
+- tests/test14 (test14-V10-00-03)
+  o Updated CMake script to correspond to default setup with 3 input files.
+- tests/test65 (test65-V10-00-03)
+  o Disabled test on Windows, as LEND not supported.
+  o Revert back to original download URL.
+- tests/test202 (test202-V10-00-32)
+  o Fix new default text size to 10 (previous was 12).

@@ -1,0 +1,279 @@
+
+                       geant4-10-00-ref-06
+                       ===================
+
+Major development/fixes included since the last development tag are:
+
+ o Updated internal CLHEP module to CLHEP-2.2.0.0.
+   Now requiring new external library CLHEP-2.2.0.0 version for coherency.
+ o New classes for UCN processes, storage  microroughness probability values
+   and calculation of microroughness in materials.
+   Implemented full UNIFIED reflectivity probabilities when a dichroic
+   surface reflects.
+ o Removed obsolete G4ReactionKinematics and G4ReactionDynamics classes.
+ o Improved version of elastic, used temporarily only in FTFP_BERT_TRV
+   as playground before becoming the default in all physics lists.
+
+---------- Reference-tag 'Release Notes' -----------
+
+(o)  Fixes included in release 10.0.p02
+(+)  Fixes included in release 10.0.p03
+
+Summarised, the list of changes is the following:
+
+cmake                                            cmake-V10-00-18
+-----
+- Added zlib and g3tog4 to list of features that --has-feature               (o)
+  recognizes and can query.
+
+analysis                                         analysis-V10-00-14
+--------
+- Added typedefs and functions for accessing iterators over H1, H2, Ntuples.
+- Added G4AnalysisManager functions to access FirstIds.
+- Restored hbook files lost with moving to g4tools 1.9.4.
+
+event                                            event-V10-00-05
+-----
+- Removing data-race conditions in G4SPSEneDistribution class.
+
+externals                                        externals-V10-00-03
+---------
+- Updated to CLHEP-2.2.0.0: fixes for compilation warnings on clang and
+  gcc-4.9 compilers for RanshiEngine and MTwistEngine.
+
+geometry/solids/Boolean                          geom-bool-V10-00-01
+-----------------------
+- Correction to G4MultiUnion::AddNode() for treatment of transformations.
+
+geometry/navigation                              geomnav-V10-00-07
+-------------------
+- Fix in G4MultiNavigator to properly set 'fIdNavLimiting' index to          (+)
+  navigator limiting the step, if only one navigator limits the step.
+
+geometry/volumes                                 geomvol-V10-00-05
+----------------
+- Corrected implementation of copy-constructor and assignment-operator
+  for G4NavigationHistory, to provide exact copy for size of the
+  histories-level vector. Avoid un-necessary clearing of navigation
+  history levels in destructor.
+
+global                                           global-V10-00-25
+------
+- Added forward of cout and cerr in MT to master G4coutDestination
+  if setup in client derived classes. To be used by special
+  sessions (e.g. GUI) that want to intercept thread cout/cerr.
+- Bug fix in G4Threading::IsMultiThreadedApplication() function
+  for sequential mode.
+
+interfaces                                       interfaces-V10-00-06
+----------
+- G4UIQt : 
+  o Changed help display to render parameters in a QTableView.
+  o Changed window expanding policy. Now when expanding main window, it
+    will keep the size of the viewer.
+  o When choosing "pick" icon, it will now apply picking to true.
+  o Fixed a Qt function that was only defined for Qt5.
+
+materials                                        materials-V10-00-18
+---------
+- New classes G4UCNMaterialPropertiesTable and G4UCNMicroRoughnessHelper
+  for microroughness probability values and calculation of microroughness
+  in materials.
+
+particles                                        particles-V10-00-14
+---------
+- Fixed bug in G4PhaseSpaceDecayChannel for momentum non-conservation
+  in the two-body decay, introduced in the previous tag.
+  Fixed problem in the three-body decay as well.
+- Fixed bug for mass width in G4VDecayChannelFillDaughters.
+
+physics_lists
+-------------
+- builders (phys-builders-V10-00-04)
+  o In all builders do not create a new instance of G4PreCompoundModel
+    and G4ExcitationHandler to reduce number of its instances.
+  o Avoid deleting models cross-sections in destructors of builders.
+- constructors/electromagnetic (phys-ctor-em-V10-00-12)
+  o Updated G4EmDNAPhysics to G4GenericIon usage for Z>4.
+- constructors/hadron_elastic (phys-ctor-helastic-V10-00-03)
+  o G4HadronHElasticPhysics: use G4NuclNuclDiffuseElastic model
+    instead of the Gheisha-based G4HadronElastic for all ions.
+    Improved version of elastic, used temporarily only in FTFP_BERT_TRV
+    as playground before becoming the default in all physics lists.
+- lists (phys-lists-V10-00-05)
+  o Added ShieldingM and NuBeam to G4PhysListFactory.
+  o FTFP_BERT_TRV: use (temporary) G4HadronHElasticPhysics in order
+    to allow testing of improvements in elastic.
+  o FTFP_BERT_HP, QGSP_BIC_HP, QGSP_BERT_HP: set cut on proton to 
+    zero to simulate all recoils from elastic scattering.
+  o INCLXXPhysicsListHelper: for the case of HP set cut on proton to         (o)
+    zero to simulate all recoils from elastic scattering.
+
+processes/electromagnetic/dna                    emdna-V10-00-29
+-----------------------------
+- Updated G4DNAIonisation and G4DNARuddIonisationExtendModel for
+  G4GenericIon usage.
+- Fixed header inclusion in G4DNAMillerGreenExcitationModel header.
+
+processes/electromagnetic/standard               emstand-V10-00-30
+----------------------------------
+- G4WentzelVIModel: removed extra printout at initialisation.
+
+processes/electromagnetic/utils                  emutils-V10-00-26
+-------------------------------
+- G4EmSaturation: moved check on existence of e- and proton from run time
+  to initialisation (i.e. it is now done only once).
+- G4LossTableManager, G4VEnergyLossProcess, G4VEmProcess: improved
+  initialisation; moved modifiers for parameters from inline to source and
+  added extra check on parameter value; throw warnings if parameters are
+  out of range.
+- G4LossTableManager: helper classes are instantiated only if user requests
+  via access method.
+
+processes/hadronic
+------------------
+- cross_sections (hadr-cross-V10-00-07)
+  o G4ChipsHyperonElasticXS: avoid to exclude Sigma+ in the set of
+    hyperons which can be treated by Chips elastic scattering.
+  o G4ChipsAntiBaryonElasticXS: include anti_Omega- in GetPTables().
+- models/coherent_elastic (hadr-cohe-V10-00-10)
+  o G4NuclNuclDiffuseElastic: fix to nuclear radius (which was zero),
+    Fixed deletion in destructor.
+  o G4DiffuseElastic: fixed deletion in destructor.
+- models/im_r_matrix (had-im_r-V10-00-03)
+  o Fixed out of bound error in G4DetailedBalancePhaseSpaceIntegral,         (+)
+    reported by Coverity.
+- models/inclxx (hadr-inclxx-V10-00-08)
+  o Fixed crash in p+He2 reactions.
+- models/management (hadr-modman-V10-00-04)
+  o G4HadronicInteractionRegistry: added new method FindAllModels().
+  o G4HadronicInteraction: removed unnecessary dependency on G4ReactionDynamics.
+- models/rpg (hadr-rpg-V10-00-02)
+  o G4RPGInelastic: defined GHADLISTSIZE, now needed after removal of class
+    G4ReactionDynamics.
+- processes (hadr-proc-V10-00-00)
+  o Added new G4UCN* processes and utility classes.
+- util (hadr-util-V10-00-06)
+  o Removed obsolete G4ReactionKinematics and G4ReactionDynamics classes. 
+
+processes/management                            procman-V10-00-02
+--------------------
+- Add new process type for UCN processes in G4ProcessType.
+
+processes/optical                               op-V10-00-04
+-----------------
+- Implemented full UNIFIED reflectivity probabilities when a dichroic
+  surface reflects.
+- G4OpWLS, G4OpRayleigh: always rebuild the integral-table in
+  BuildPhysicsTable() method.
+
+visualization                                   vis-V10-00-06
+-------------
+- externals:
+  o Fixed bad text in G4OpenGL2PS action.                                    (o)
+- management:
+  o /vis/specify and /vis/scene/add/logicalVolume: added flag for
+    drawing/suppressing axes.
+- gMocren:
+  o Fixed memory leak in G4GMocrenFile. Addressing problem report #1585.     (+)
+- OpenGL:
+  o New Viewer parameters info panel.
+  o G4OpenGLQtViewer: fixed problem in viewer/set parameters.
+  o Speed improvements by avoiding a dynamic_cast.
+
+examples                                         examples-V10-00-06
+--------
+- Updated reference outputs.
+- advanced/amsEcal (amsEcal-V10-00-02)
+  o Additional protection in RunAction against division by zero.
+    Addressing problem report #1522.
+- advanced/gammaray_telescope (gammaraytel-V10-00-05)
+  o More adaptations for migration to MT.
+- advanced/xray_fluorescence (XrayFluo-V10-00-10)
+  o Changed verbosity in livermore.mac to reduce output.
+- extended/analysis/AnaEx01 (AnaEx01-V10-00-01)
+  o Moved tools/hbook/*.f files in 'common' module to avoid their retrieval
+    from Geant4 source/includes which causes problem when building examples
+    against Geant4 build directory. 
+  o Added -lkernlib to list of libraries (required with Debian cernlib
+    distribution 20061220).
+- extended/analysis/AnaEx02 (AnaEx02-V10-00-00)
+- extended/analysis/AnaEx03 (AnaEx03-V10-00-00)
+  o Create two ntuples instead of one in order to demonstrate 
+    how to do this with all tools.
+- extended/common/analysis (excommon-analysis-V10-00-02)
+  o Updated for changes in analysis category: ntuple columns of vectors
+    (disabled), changes in ntuple_booking. Updated to g4tools-1.10.0.
+  o Added typedefs and functions for accessing iterators over H1, H2, Ntuples.
+  o Imported tools/hbook/*.f files from analysis examples.
+- extended/electromagnetic/TestEm1 (testem1-V10-00-07)
+- extended/electromagnetic/TestEm2 (testem2-V10-00-02)
+- extended/electromagnetic/TestEm3 (testem3-V10-00-06)
+- extended/electromagnetic/TestEm5 (testem5-V10-00-07)
+  o Removed PhysicsList::SetCuts().
+- extended/electromagnetic/TestEm6 (testem6-V10-00-00)
+  o Suppressed EventAction and its messenger.
+- extended/electromagnetic/TestEm7 (testem7-V10-00-01)
+  o Removed SetCuts() method and corresponding UI commands,
+    updated all macros; applied code guiedlines.
+- extended/electromagnetic/TestEm8 (testem8-V10-00-03)
+  o Applied code guidelines.
+- extended/electromagnetic/TestEm9 (testem9-V10-00-01)
+- extended/electromagnetic/TestEm11 (testem11-V10-00-01)
+- extended/electromagnetic/TestEm12 (testem12-V10-00-02)
+- extended/electromagnetic/TestEm13 (testem13-V10-00-00)
+  o Removed SetCuts() method and corresponding UI commands,
+    applied code guiedlines.
+- extended/electromagnetic/TestEm14 (testem14-V10-00-02)
+  o Removed SetCuts() method and corresponding UI commands,
+    updated all macros.
+  o Suppressed EventAction and its messenger.
+  o Removed hbook tools.
+- extended/electromagnetic/TestEm15 (testem15-V10-00-01)
+  o Removed PhysicsList::SetCuts().
+- extended/electromagnetic/TestEm16 (testem16-V10-00-00)
+  o Suppressed EventAction and its messenger.
+- extended/electromagnetic/TestEm18 (testem18-V10-00-00)
+  o Removed PhysicsList::SetCuts().
+- extended/eventgenerator/HepMC/MCTruth (mctruthex-V10-00-00)
+  o Changes to comply with coding conventions.
+- extended/eventgenerator/pythia/decayer6 (p6decayer-V10-00-01)
+  o Fixed path to copy_files.sh, clean_files.sh in GNUmakefile.
+- extended/exoticphysics (exExoticphysics-V10-00-01)
+- extended/exoticphysics/channeling (channelingExample-V10-00-11)
+  o Changed erfc(x) to 1.-erf(x).
+  o Corrections in CMake scripts.
+- extended/exoticphysics/ucn (ExUCN-V10-00-02)
+  o New example demonstrating the functionality of UCN physics.
+- extended/g3tog4 (g3tog4Tests-V10-00-01)
+  o Moved data directory in clGeometry.
+  o Fixed path to copy_files.sh, clean_files.sh in GNUmakefile.
+- extended/hadronic/FissionFragment (exExtHadFissFrag-V10-00-09)
+  o New example to exercise fission fragmentation.
+- extended/hadronic/Hadr02 (exhadr02-V10-00-01)
+  o Applied code guidelines and code cleanup.
+- extended/medical/electronScattering (electronScattering-V10-00-01)
+  o Migration to multi-threading.
+  o Removed PhysicsList::SetCuts().
+- extended/medical/electronScattering2 (exampleES2-V10-00-02)
+  o Applied code guidelines; added G4EmLowEPPhysics.
+- extended/medical/GammaTherapy (gtherapy-V10-00-00)
+  o Applied code guidelines.
+- extended/parallel/MPI (MPI-V10-00-01)
+  o Added first version of G4RunMerger and G4ScorerMerger.
+  o New CMake configuration.
+- extended/persistency/gdml/G01 (G01-V10-00-03)
+- extended/persistency/gdml/G04 (G04-V10-00-00)
+- extended/persistency/P01 (exampleP01-V10-00-01)
+  o Applied code guidelines.
+- extended/persistency/P02 (exampleP02-V10-00-01)
+  o Added missing line in selection.xml.
+  o Applied code guidelines.
+
+tests                                            tests-V10-00-06
+-----
+- Updated reference outputs and tools.
+- tests/test18 (test18-V10-00-00)
+  o Tst18RunAction: limit output at end of run.
+- tests/test23 (test23-V10-00-06)
+  o Minor code cleanup.
