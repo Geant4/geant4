@@ -63,6 +63,7 @@ public:
     //Returns 0 if commands are executed corrected, otherwise returns error code (see G4UImanager::ApplyCommand)
     //In case of error currentCmd is set to the command that gave the problem
     virtual void RunTermination();
+    virtual void TerminateEventLoop();
 protected:
     virtual void ConstructScoringWorlds();
     virtual void StoreRNGStatus(const G4String& filenamePrefix );

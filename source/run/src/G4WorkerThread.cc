@@ -238,8 +238,8 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
     // (note that all the stuff after this will reset SD and Field
     typedef std::map<G4LogicalVolume*,std::pair<G4VSensitiveDetector*,G4FieldManager*> > LV2SDFM;
     LV2SDFM lvmap;
-    typedef std::map<G4LogicalVolume*,std::pair<G4Region*,G4bool> > LV2Region;
-    LV2Region lv2rmap;
+//    typedef std::map<G4LogicalVolume*,std::pair<G4Region*,G4bool> > LV2Region;
+//    LV2Region lv2rmap;
     typedef std::map<G4Region*,std::pair<G4FastSimulationManager*,G4UserSteppingAction*> > R2FSM;
     R2FSM rgnmap;
     G4LogicalVolumeStore* mLogVolStore = G4LogicalVolumeStore::GetInstance();
@@ -265,9 +265,9 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
         if ( lv->GetMasterSensitiveDetector() != 0 ) sd = lv->GetSensitiveDetector();
         if ( lv->GetMasterFieldManager() != 0 ) fmgr = lv->GetFieldManager();
         if ( sd || fmgr ) lvmap[lv] = std::make_pair(sd,fmgr);
-        G4Region* rgn = lv->GetRegion();
-        G4bool isRoot = lv->IsRootRegion();
-        if ( rgn || isRoot ) lv2rmap[lv] = std::make_pair(rgn,isRoot);
+//        G4Region* rgn = lv->GetRegion();
+//        G4bool isRoot = lv->IsRootRegion();
+//        if ( rgn || isRoot ) lv2rmap[lv] = std::make_pair(rgn,isRoot);
     }
     G4RegionStore* mRegStore = G4RegionStore::GetInstance();
     for(size_t ir=0; ir<mRegStore->size(); ir++)
@@ -312,14 +312,17 @@ void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
         if(fmgr) lv->SetFieldManager(fmgr, false); //What should be the second parameter? We use always false for MT mode
         if(sd) lv->SetSensitiveDetector(sd);
     }
-    for ( LV2Region::const_iterator it2 = lv2rmap.begin() ; it2 != lv2rmap.end() ; it2++ )
-    {
-        G4LogicalVolume* lv2 = it2->first;
-        G4Region* rgn = (it2->second).first;
-        if(rgn) lv2->SetRegion(rgn);
-        G4bool isRoot = (it2->second).second;
-        lv2->SetRegionRootFlag(isRoot);
-    }
+    
+//    for ( LV2Region::const_iterator it2 = lv2rmap.begin() ; it2 != lv2rmap.end() ; it2++ )
+//    {
+//        G4LogicalVolume* lv2 = it2->first;
+//        G4Region* rgn = (it2->second).first;
+//        if(rgn) lv2->SetRegion(rgn);
+//        G4bool isRoot = (it2->second).second;
+//        lv2->SetRegionRootFlag(isRoot);
+//    }
+
+    
     for ( R2FSM::const_iterator it3 = rgnmap.begin() ; it3 != rgnmap.end() ; it3++ )
     {
         G4Region* reg = it3->first;

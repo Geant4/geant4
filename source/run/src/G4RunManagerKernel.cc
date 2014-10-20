@@ -642,7 +642,8 @@ void G4RunManagerKernel::PropagateGenericIonID()
 
 void G4RunManagerKernel::RunTermination()
 {
-  G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
+  if ( runManagerKernelType != workerRMK )
+      G4ProductionCutsTable::GetProductionCutsTable()->PhysicsTableUpdated();
   G4StateManager::GetStateManager()->SetNewState(G4State_Idle); 
 }
 

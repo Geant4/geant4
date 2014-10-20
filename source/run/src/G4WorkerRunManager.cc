@@ -45,6 +45,7 @@
 #include "G4VVisManager.hh"
 #include "G4SDManager.hh"
 #include "G4VScoringMesh.hh"
+#include "G4Timer.hh"
 #include <sstream>
 
 G4WorkerRunManager* G4WorkerRunManager::GetWorkerRunManager()
@@ -363,6 +364,21 @@ void G4WorkerRunManager::RunTermination()
   //Note this will return only whan all threads reach this point
   G4MTRunManager::GetMasterRunManager()->ThisWorkerEndEventLoop();
 
+}
+
+void G4WorkerRunManager::TerminateEventLoop()
+{
+    if(verboseLevel>0)
+    {
+        timer->Stop();
+        G4cout << "Run terminated." << G4endl;
+        G4cout << "Run Summary" << G4endl;
+        if(runAborted)
+        { G4cout << "  Run Aborted after " << numberOfEventProcessed << " events processed." << G4endl; }
+        else
+        { G4cout << "  Number of events processed : " << numberOfEventProcessed << G4endl; }
+        G4cout << "  "  << *timer << G4endl;
+    }
 }
 
 /****************************

@@ -17,7 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-October 14th, 2015 M.Asai (run-V10-00-30)
+October 17th, 2014 A.Dotti (run-V10-00-31)
+- G4RunManagerKernel::RunTermination() workers do not
+  call G4ProductionCutsTable::PhysicsTableUpdated()
+- G4WorkerRunManager::TermianteEventLoop() implemented
+  in workerd and avoid data-race on shared 
+  resource fGeometryHasBeenDestroyed
+- G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster
+  remove mechanism of copying pointer of region that is 
+  not needed
+
+October 14th, 2014 M.Asai (run-V10-00-30)
 - G4MTRunManager : Make sure G4RunManager::TerminateEventLoop() is
   invoked at the end of run.
 
