@@ -469,7 +469,7 @@ void G4VXTRenergyLoss::BuildAngleForEnergyBank()
 	  <<timer.GetUserElapsed()<<" s"<<G4endl;
   }
   fGamma = 0.;
-  return;
+  delete energyVector;
 }
 
 ////////////////////////////////////////////////////////////////////////

@@ -146,7 +146,17 @@ G4Scintillation::~G4Scintillation()
 
 void G4Scintillation::BuildPhysicsTable(const G4ParticleDefinition&)
 {
-   if (!fFastIntegralTable || !fSlowIntegralTable) BuildThePhysicsTable();
+    if (fFastIntegralTable != NULL) {
+       fFastIntegralTable->clearAndDestroy();
+       delete fFastIntegralTable;
+       fFastIntegralTable = NULL;
+    }
+    if (fSlowIntegralTable != NULL) {
+       fSlowIntegralTable->clearAndDestroy();
+       delete fSlowIntegralTable;
+       fSlowIntegralTable = NULL;
+    }
+    BuildThePhysicsTable();
 }
 
 

@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17 Oct 14: P.Gumplinger (xrays-V10-00-05)
+- address problem report 1678 for BuildPhysicsTable in G4Scintillation
+
+07 Sept 14: V.Ivanchenko (xrays-V10-00-04)
+- G4VXTRenergyLoss - fixed remaining Coverity reports
+
 05 Sept 14: V.Ivanchenko (xrays-V10-00-03)
 - G4VXTRenergyLoss - fixed Coverity reports
 
