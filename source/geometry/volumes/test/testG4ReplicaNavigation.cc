@@ -61,9 +61,9 @@ public:
   G4double DistanceToOut(const G4VPhysicalVolume *pVol,
 			 const G4int replicaNo,
 			 const G4ThreeVector &localPoint,
-			 const G4ThreeVector &localDirection) const
+			 const G4ThreeVector &) const
   {
-    return nav.DistanceToOut(pVol,replicaNo,localPoint,localDirection);
+      return nav.DistanceToOut(pVol,replicaNo,localPoint);//,localDirection);
   }
 
 private:
