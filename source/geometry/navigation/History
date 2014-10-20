@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 20, 2014 - G.Cosmo (geomnav-V09-06-24)
+--------------------------
+- Leave out changes in G4FieldPropagation.cc laying on the trunk...
+
+October 18, 2014 - A.Dotti
+--------------------------
+- Code cleanup: removed unnecessary G4ThreadLocal in G4ReplicaNavigation.
+
 June  24, 2014 - G.Folger  (geomnav-V09-06-23)
 -------------------------
 - G4MultiNavigator: set 'fIdNavLimiting' index to navigator limiting the step,
