@@ -268,8 +268,8 @@ G4bool G4ExcitedStringDecay::EnergyAndMomentumCorrector
     }
 
 #ifdef debug_G4ExcitedStringCorr
-G4cout<<"Sum part mom "<<SumMom<<" "<<SumMom.mag()<<G4endl
-      <<"Sum str  mom "<<TotalCollisionMom<<" "<<TotalCollisionMom.mag()<<G4endl;
+   G4cout<<"Sum part mom "<<SumMom<<" "<<SumMom.mag()<<G4endl
+         <<"Sum str  mom "<<TotalCollisionMom<<" "<<TotalCollisionMom.mag()<<G4endl;
    G4cout<<"SumMass TotalCollisionMass "<<SumMass<<" "<<TotalCollisionMass<<G4endl;
 #endif
 

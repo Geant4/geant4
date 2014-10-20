@@ -146,8 +146,7 @@ void G4VLongitudinalStringDecay::SetMassCut(G4double aValue){MassCut=aValue;}
 G4KineticTrackVector* G4VLongitudinalStringDecay::LightFragmentationTest(const
 		G4ExcitedString * const string)
 {
-   // Check string decay threshold
-		
+   // Check string decay threshold	
 	G4KineticTrackVector * result=0;  // return 0 when string exceeds the mass cut
 	
 	pDefPair hadrons((G4ParticleDefinition *)0,(G4ParticleDefinition *)0);
@@ -208,6 +207,7 @@ G4KineticTrackVector* G4VLongitudinalStringDecay::LightFragmentationTest(const
                G4ThreeVector Velocity = string->Get4Momentum().boostVector();
                result->Boost(Velocity);          
 	}
+
 	return result;
 	
 }
@@ -218,7 +218,6 @@ G4double G4VLongitudinalStringDecay::FragmentationMass(
             const G4FragmentingString *	const string,
 		Pcreate build, pDefPair * pdefs       )
 {
-	
         G4double mass;
         static G4ThreadLocal G4bool NeedInit(true);
 	static G4ThreadLocal std::vector<double> *nomix_G4MT_TLS_ = 0 ; if (!nomix_G4MT_TLS_) nomix_G4MT_TLS_ = new  std::vector<double>  ;  std::vector<double> &nomix = *nomix_G4MT_TLS_;
@@ -246,7 +245,8 @@ G4double G4VLongitudinalStringDecay::FragmentationMass(
 
 // Uzhi 20.06.2014
 #ifdef debug_VStringDecay
-  G4cout<<"(G4VLongitudinalStringDecay) Hadron "<<Hadron1->GetParticleName()<<G4endl;
+  G4cout<<"Quarks at the string ends "<<string->GetLeftParton()->GetParticleName()<<" "<<string->GetRightParton()->GetParticleName()<<G4endl;
+  G4cout<<"(G4VLongitudinalStringDecay) Hadron "<<Hadron1->GetParticleName()<<" "<<Hadron1->GetPDGMass()<<G4endl;
 #endif
            mass= (Hadron1)->GetPDGMass();
         } else
@@ -323,6 +323,7 @@ G4KineticTrack * G4VLongitudinalStringDecay::Splitup(
                              <<string->GetRightParton()->GetPDGEncoding()<<" "
         <<"Direction "       <<string->GetDecayDirection()<<G4endl;
 #endif
+
        //... random choice of string end to use for creating the hadron (decay)   
        G4int SideOfDecay = (G4UniformRand() < 0.5)? 1: -1;
        if (SideOfDecay < 0)

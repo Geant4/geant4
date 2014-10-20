@@ -570,16 +570,12 @@ G4KineticTrackVector* G4LundStringFragmentation::FragmentString(const G4ExcitedS
   G4cout<<"aligCMS Left  mom "<<theStringInCMS->GetLeftParton()->Get4Momentum()<<G4endl;
   G4cout<<"aligCMS Right mom "<<theStringInCMS->GetRightParton()->Get4Momentum()<<G4endl;
   G4cout<<G4endl<<"LUND StringFragm: String Mass "
-                             <<theStringInCMS->Get4Momentum().mag()<<" Pz "
+                             <<theStringInCMS->Get4Momentum().mag()<<" Pz Lab "
                              <<theStringInCMS->Get4Momentum().pz()
                              <<"------------------------------------"<<G4endl;
-  G4cout<<G4endl<<"LUND StringFragm: String Mass "
-                             <<(toCms.inverse()*theStringInCMS->Get4Momentum()).mag()<<" Pz "
-                             <<(toCms.inverse()*theStringInCMS->Get4Momentum()).pz()
-                             <<"------------------------------------"<<G4endl;
-  G4cout<<"String ends Direct "<<theStringInCMS->GetLeftParton()->GetPDGcode()<<" "
-                               <<theStringInCMS->GetRightParton()->GetPDGcode()<<" "
-                               <<theStringInCMS->GetDirection()<< G4endl;
+  G4cout<<"String ends and Direction "<<theStringInCMS->GetLeftParton()->GetPDGcode()<<" "
+                                      <<theStringInCMS->GetRightParton()->GetPDGcode()<<" "
+                                      <<theStringInCMS->GetDirection()<< G4endl;
 #endif
         G4bool success = Loop_toFragmentString(theStringInCMS, LeftVector, RightVector);
 
@@ -831,7 +827,8 @@ G4LorentzVector * G4LundStringFragmentation::SplitEandP(G4ParticleDefinition * p
                                                         G4FragmentingString * newString)
 { 
 	G4LorentzVector String4Momentum=string->Get4Momentum();
-	G4double StringMT2=string->Get4Momentum().mt2();
+	G4double StringMT2=string->MassT2();
+	G4double StringMT =std::sqrt(StringMT2);
 
 	G4double HadronMass = pHadron->GetPDGMass();
 
@@ -845,7 +842,7 @@ G4LorentzVector * G4LundStringFragmentation::SplitEandP(G4ParticleDefinition * p
         <<String4Momentum.mag()<<" "<<HadronMass+MinimalStringMass<<G4endl;
 #endif
 
-	if(HadronMass + MinimalStringMass > String4Momentum.mag()) 
+	if(HadronMass + MinimalStringMass > string->Mass()) 
 	{
 #ifdef debug_LUNDfragmentation                          // Uzhi 20.06.2014
   G4cout<<"Mass of the string is not sufficient to produce the hadron!"<<G4endl;
@@ -857,19 +854,26 @@ G4LorentzVector * G4LundStringFragmentation::SplitEandP(G4ParticleDefinition * p
 	G4ThreeVector StringPt=String4Momentum.vect();
 
 	// calculate and assign hadron transverse momentum component HadronPx and HadronPy
-	G4ThreeVector thePt;
-	thePt=SampleQuarkPt();
+	G4ThreeVector HadronPt    , RemSysPt; 
+	G4double      HadronMassT2, ResidualMassT2;
 
-	G4ThreeVector HadronPt = thePt +string->DecayPt();
-	HadronPt.setZ(0);
+        //...  sample Pt of the hadron
+        G4int attempt=0;
+        do
+        {
+         attempt++; if(attempt > StringLoopInterrupt) return 0;
 
-	G4ThreeVector RemSysPt = StringPt - HadronPt;
+         HadronPt =SampleQuarkPt()  + string->DecayPt();	
+         HadronPt.setZ(0);
+         RemSysPt = StringPt - HadronPt;
+
+         HadronMassT2 = sqr(HadronMass) + HadronPt.mag2();
+         ResidualMassT2=sqr(MinimalStringMass) + RemSysPt.mag2();
+
+        } while(std::sqrt(HadronMassT2) + std::sqrt(ResidualMassT2) > StringMT);
 
 	//...  sample z to define hadron longitudinal momentum and energy
 	//... but first check the available phase space
-
-	G4double HadronMassT2 = sqr(HadronMass) + HadronPt.mag2();
-	G4double ResidualMassT2=sqr(MinimalStringMass) + RemSysPt.mag2();
 
 	G4double Pz2 = (sqr(StringMT2 - HadronMassT2 - ResidualMassT2) -
 			4*HadronMassT2 * ResidualMassT2)/4./StringMT2;
