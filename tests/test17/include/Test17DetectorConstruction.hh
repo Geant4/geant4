@@ -62,14 +62,14 @@ class Test17DetectorConstruction : public G4VUserDetectorConstruction
 
   public:
      
-     void SetAbsorberMaterial (G4String);     
+     void SetAbsorberMaterial (const G4String&);     
      void SetNumberOfAbsorbers (G4int);     
      void SetAbsorberThickness(G4double);     
      void SetAbsorberSizeYZ   (G4double);          
       
      void SetAbsorberXpos(G4double);
 
-     void SetWorldMaterial(G4String);
+     void SetWorldMaterial(const G4String&);
      void SetWorldSizeX   (G4double);
      void SetWorldSizeYZ  (G4double);
 
@@ -132,7 +132,6 @@ class Test17DetectorConstruction : public G4VUserDetectorConstruction
     
      void DefineMaterials();
      void ComputeCalorParameters();
-     G4VPhysicalVolume* ConstructCalorimeter();     
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

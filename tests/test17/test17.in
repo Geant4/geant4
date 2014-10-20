@@ -4,9 +4,11 @@
 #
 /control/verbose 2
 /run/verbose 1
-/tracking/verbose 0
+#/tracking/verbose 1
 /testem/phys/addPhysics emstandard_opt4
-/testem/phys/setCuts 0.001 mm
+#/testem/phys/addPhysics emstandardWVI
+/testem/phys/addPhysics elastic
+/run/setCut 0.001 mm
 #
 /run/initialize
 # 
@@ -19,7 +21,7 @@
 /gun/particle anti_proton
 /run/beamOn 1000
 #
-/testem/phys/setCuts 0.003 mm
+/run/setCut 0.003 mm
 /gun/particle ion
 /gun/ion 6 12 6
 /gun/energy 6000 keV
@@ -29,7 +31,7 @@
 /process/em/fluo true
 /process/em/auger false
 /process/em/pixe true
-/testem/phys/setCuts 0.001 mm
+/run/setCut 0.001 mm
 /run/initialize
 /gun/particle proton
 /gun/energy 500 keV

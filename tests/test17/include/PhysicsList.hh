@@ -23,7 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+/// \file electromagnetic/TestEm7/include/PhysicsList.hh
+/// \brief Definition of the PhysicsList class
+//
 // $Id$
+//
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//
+// 14.10.02 (V.Ivanchenko) provide modular list on base of old PhysicsList
 //
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -35,6 +42,7 @@
 #include "globals.hh"
 
 class G4VPhysicsConstructor;
+class StepMax;
 class PhysicsListMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -42,34 +50,31 @@ class PhysicsListMessenger;
 class PhysicsList: public G4VModularPhysicsList
 {
 public:
-  PhysicsList();
-  virtual ~PhysicsList();
 
-  void ConstructParticle();
-        
+  PhysicsList();
+ ~PhysicsList();
+
+  virtual void ConstructParticle();
+    
   void AddPhysicsList(const G4String& name);
+  virtual void ConstructProcess();
     
-  void ConstructProcess();    
-  void AddDecay();
   void AddStepMax();       
-    
-  void SetCuts();
-  void SetCutForGamma(G4double);
-  void SetCutForElectron(G4double);
-  void SetCutForPositron(G4double);
-    
+  StepMax* GetStepMaxProcess() {return fStepMaxProcess;};
+
 private:
 
-  PhysicsListMessenger* pMessenger; 
-
-  G4String emName;
-  G4VPhysicsConstructor*  emPhysicsList;
+  G4bool   fHelIsRegisted;
+  G4bool   fBicIsRegisted;
+  G4bool   fBiciIsRegisted;
     
-  G4double cutForGamma;
-  G4double cutForElectron;
-  G4double cutForPositron;    
-  G4double cutForProton;    
-
+  G4String                             fEmName;
+  G4VPhysicsConstructor*               fEmPhysicsList;
+  G4VPhysicsConstructor*               fDecPhysicsList;
+  std::vector<G4VPhysicsConstructor*>  fHadronPhys;    
+  StepMax*                             fStepMaxProcess;
+    
+  PhysicsListMessenger*  fMessenger;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

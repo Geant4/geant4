@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19 October 2014, V.Ivanchenko (test17-V10-00-01)
+             Use PhysicsList from EM examples, added hadron elastic
+             and Binary physics
+
 14 January 2014, V.Ivanchenko (test17-V10-00-00)
              Added Opt4 PhysicsList and use it by default
 
