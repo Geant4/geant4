@@ -52,6 +52,10 @@
 //
 G4_DECLARE_XS_FACTORY(G4ChipsProtonElasticXS);
 
+namespace {
+    G4double mProt;
+    G4double mProt2;
+}
 
 G4ChipsProtonElasticXS::G4ChipsProtonElasticXS():G4VCrossSectionDataSet(Default_Name()), nPoints(128), nLast(nPoints-1)
 {
@@ -92,6 +96,11 @@ G4ChipsProtonElasticXS::G4ChipsProtonElasticXS():G4VCrossSectionDataSet(Default_
   lastTH=0.;  // Last threshold momentum
   lastCS=0.;  // Last value of the Cross Section
   lastI=0;    // The last position in the DAMDB
+    
+    mProt= G4Proton::Proton()->GetPDGMass()*.001; // MeV to GeV
+    mProt2= mProt*mProt;
+
+    
 }
 
 
@@ -838,8 +847,6 @@ G4double G4ChipsProtonElasticXS::GetTabValues(G4double lp, G4int PDG, G4int tgZ,
 G4double G4ChipsProtonElasticXS::GetQ2max(G4int PDG, G4int tgZ, G4int tgN,
                                                 G4double pP)
 {
-  static const G4double mProt= G4Proton::Proton()->GetPDGMass()*.001; // MeV to GeV
-  static const G4double mProt2= mProt*mProt;
 
   G4double pP2=pP*pP;                                 // squared momentum of the projectile
   if(tgZ==1 && tgN==0)
