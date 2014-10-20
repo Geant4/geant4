@@ -940,7 +940,6 @@ void WLSDetectorConstruction::SetXYRatio(G4double r)
   G4RunManager::GetRunManager()->ReinitializeGeometry();
 }
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void WLSDetectorConstruction::SetBarLength (G4double length)

@@ -88,4 +88,4 @@ void WLSActionInitialization::Build() const
 G4VSteppingVerbose* WLSActionInitialization::InitializeSteppingVerbose() const
 {
   return new WLSSteppingVerbose();
-}  
+}

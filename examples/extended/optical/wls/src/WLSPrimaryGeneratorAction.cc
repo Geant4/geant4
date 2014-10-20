@@ -160,7 +160,6 @@ void WLSPrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
      BuildEmissionSpectrum();
   }
 
-
 #ifdef use_sampledEnergy
   const G4MaterialTable* theMaterialTable = G4Material::GetMaterialTable();
 
