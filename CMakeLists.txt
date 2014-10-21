@@ -23,6 +23,23 @@ endif()
 # - Define CMake requirements and override make rules as needed
 #
 cmake_minimum_required(VERSION 2.6.4 FATAL_ERROR)
+
+# If Policy CMP0022 exists, use OLD because Geant4 still needs
+# to support versions < 2.8.12.
+# This relates to LINK_INTERFACE_LIBRARIES and can be removed once
+# minimum required CMake version reaches 2.8.12
+if(POLICY CMP0022)
+  cmake_policy(SET CMP0022 OLD)
+endif()
+
+# If Policy CMP0043 exists, use OLD because Geant4 still needs
+# to support Geant4 =< 2.8.12.
+# This relates to the use of generator expressions to set COMPILE_DEFINITIONS
+# and can be removed once the minimum required CMake version reaches 2.8.10.
+if(POLICY CMP0043)
+  cmake_policy(SET CMP0043 OLD)
+endif()
+
 set(CMAKE_USER_MAKE_RULES_OVERRIDE_CXX
    ${CMAKE_SOURCE_DIR}/cmake/Modules/Geant4MakeRules_cxx.cmake)
 
