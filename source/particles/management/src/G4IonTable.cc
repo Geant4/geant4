@@ -1735,8 +1735,8 @@ G4double G4IonTable::GetLifeTime(const G4ParticleDefinition* particle) const
   if(!(particle->IsGeneralIon())) return particle->GetPDGLifeTime();
 
   const G4Ions* ion = static_cast<const G4Ions*>(particle);
-  G4double Z = ion->GetAtomicNumber();
-  G4double A = ion->GetAtomicMass();
+  G4int Z = ion->GetAtomicNumber();
+  G4int A = ion->GetAtomicMass();
   G4double E = ion->GetExcitationEnergy();
 
   if(!pNuclideTable)
