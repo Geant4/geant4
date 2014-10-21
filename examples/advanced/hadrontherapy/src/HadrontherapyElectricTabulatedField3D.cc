@@ -118,9 +118,9 @@ void HadrontherapyElectricTabulatedField3D::GetFieldValue(const G4double Epoint[
   G4double z1 = Epoint[2] + feZoffset;
 
   // Check that the point is within the defined region 
-  if ( x1>=Eminx && x1<=Emaxx &&
-       y1>=Eminy && y1<=Emaxy && 
-       z1>=Eminz && z1<=Emaxz ) {
+  if ( x1>=Eminx && x1<Emaxx &&
+       y1>=Eminy && y1<Emaxy && 
+       z1>=Eminz && z1<Emaxz ) {
     
     // Position of given point within region, normalized to the range
     // [0,1]

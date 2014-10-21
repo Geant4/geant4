@@ -82,7 +82,6 @@
 #include "HadrontherapyElectricTabulatedField3D.hh"
 
 #include "HadrontherapyMagneticField3D.hh"
-//#include "FaradayCup.hh"
 //
 //G4bool LaserDrivenBeamLine::doCalculation = false;
 /////////////////////////////////////////////////////////////////////////////
@@ -791,7 +790,7 @@ void LaserDrivenBeamLine::ConstructSDandField()
     G4int nvar = 8;
 
  //....oooOO0OOooo..........ENERGY SELECTOR SYSTEM FIELD..........oooOO0OOooo....        
-     G4double xOffset =(internalChamberXSize/2.0)+externalSlitXPosition;
+     if(logicInternalChamber){G4double xOffset =(internalChamberXSize/2.0)+externalSlitXPosition;
      PurgMagField = new HadrontherapyMagneticField3D("field/Mappa32shift25Dip.TABLE", xOffset);
      pFieldMgr =new G4FieldManager();  
      pFieldMgr -> SetDetectorField(PurgMagField);  
@@ -807,10 +806,10 @@ void LaserDrivenBeamLine::ConstructSDandField()
      pFieldMgr->SetMinimumEpsilonStep(minEps);
      pFieldMgr->SetMaximumEpsilonStep(maxEps);
      pFieldMgr->SetDeltaOneStep(0.5e-3*mm);//default value of DeltaChord is 0.25 mm
-     if(logicInternalChamber){logicInternalChamber -> SetFieldManager(pFieldMgr, allLocal);} 
+     logicInternalChamber -> SetFieldManager(pFieldMgr, allLocal);} 
  //....oooOO0OOooo..........QUADS FIELDS..........oooOO0OOooo....  
  //....oooOO0OOooo..........FOURTH QUAD FIELD..........oooOO0OOooo....        
-     G4double xOffsetFQ =-(QuadChamberWallPosX+FourthQuadXPosition);
+     if(LFourthTriplet){G4double xOffsetFQ =-(QuadChamberWallPosX+FourthQuadXPosition);
      PurgMagFieldQuadFourth = new HadrontherapyMagneticField3D("field/MappaQuad80NoF90deg.TABLE", xOffsetFQ);
      pFieldMgrQuadFourth =  new G4FieldManager();
      pFieldMgrQuadFourth -> SetDetectorField(PurgMagFieldQuadFourth);
@@ -825,9 +824,9 @@ void LaserDrivenBeamLine::ConstructSDandField()
      pFieldMgrQuadFourth->SetMinimumEpsilonStep(minEps);
      pFieldMgrQuadFourth->SetMaximumEpsilonStep(maxEps);
      pFieldMgrQuadFourth->SetDeltaOneStep(0.5e-3*mm);//default value of DeltaChord is 0.25 mm
-     if(LFourthTriplet){ LFourthTriplet -> SetFieldManager(pFieldMgrQuadFourth, allLocal);}
+      LFourthTriplet -> SetFieldManager(pFieldMgrQuadFourth, allLocal);}
  //....oooOO0OOooo..........THIRD QUAD FIELD..........oooOO0OOooo....           
-     G4double xOffsetTQ =-(QuadChamberWallPosX+ThirdQuadXPosition);
+    if(LThirdTriplet){ G4double xOffsetTQ =-(QuadChamberWallPosX+ThirdQuadXPosition);
      PurgMagFieldQuadThird = new HadrontherapyMagneticField3D("field/MappaQuadNoF.TABLE", xOffsetTQ);
      pFieldMgrQuadThird =  new G4FieldManager();
      pFieldMgrQuadThird -> SetDetectorField(PurgMagFieldQuadThird);     
@@ -841,9 +840,9 @@ void LaserDrivenBeamLine::ConstructSDandField()
      pFieldMgrQuadThird->SetMinimumEpsilonStep(minEps);
      pFieldMgrQuadThird->SetMaximumEpsilonStep(maxEps);
      pFieldMgrQuadThird->SetDeltaOneStep(0.5e-3*mm);//default value of DeltaChord is 0.25 mm
-     if(LThirdTriplet){LThirdTriplet -> SetFieldManager(pFieldMgrQuadThird, allLocal);}
+     LThirdTriplet -> SetFieldManager(pFieldMgrQuadThird, allLocal);}
  //....oooOO0OOooo..........SECOND QUAD FIELD..........oooOO0OOooo....        
-     G4double xOffsetSQ =-(QuadChamberWallPosX+SecondQuadXPosition);
+     if(LSecondTriplet){G4double xOffsetSQ =-(QuadChamberWallPosX+SecondQuadXPosition);
      PurgMagFieldQuadSecond = new HadrontherapyMagneticField3D("field/MappaQuadNoF.TABLE", xOffsetSQ);
      pFieldMgrQuadSecond =  new G4FieldManager();
      pFieldMgrQuadSecond -> SetDetectorField(PurgMagFieldQuadSecond);     
@@ -857,9 +856,9 @@ void LaserDrivenBeamLine::ConstructSDandField()
      pFieldMgrQuadSecond->SetMinimumEpsilonStep(minEps);
      pFieldMgrQuadSecond->SetMaximumEpsilonStep(maxEps);
      pFieldMgrQuadSecond->SetDeltaOneStep(0.5e-3*mm);//default value of DeltaChord is 0.25 mm
-        if(LSecondTriplet){LSecondTriplet -> SetFieldManager(pFieldMgrQuadSecond, allLocal);}
+     LSecondTriplet -> SetFieldManager(pFieldMgrQuadSecond, allLocal);}
  //....oooOO0OOooo..........FIRST QUAD FIELD..........oooOO0OOooo....           
-     G4double xOffsetFirstQ =-(QuadChamberWallPosX+FirstQuadXPosition);
+     if(LFirstTriplet) {G4double xOffsetFirstQ =-(QuadChamberWallPosX+FirstQuadXPosition);
      PurgMagFieldQuadFirst = new HadrontherapyMagneticField3D("field/MappaQuad80NoF90deg.TABLE", xOffsetFirstQ);
      pFieldMgrQuadFirst =  new G4FieldManager();
      pFieldMgrQuadFirst -> SetDetectorField(PurgMagFieldQuadFirst);     
@@ -873,9 +872,9 @@ void LaserDrivenBeamLine::ConstructSDandField()
      pFieldMgrQuadFirst->SetMinimumEpsilonStep(minEps);
      pFieldMgrQuadFirst->SetMaximumEpsilonStep(maxEps);
      pFieldMgrQuadFirst->SetDeltaOneStep(0.5e-3*mm);//default value of DeltaChord is 0.25 mm
-      if(LFirstTriplet){LFirstTriplet -> SetFieldManager(pFieldMgrQuadFirst, allLocal);}
+    LFirstTriplet -> SetFieldManager(pFieldMgrQuadFirst, allLocal);}
  //....oooOO0OOooo..........FARADAY CUP FIELD..........oooOO0OOooo....        
-    G4double exOffset= -20*cm;
+     if(logicVirtualMag) {G4double exOffset= -20*cm;
     G4double eyOffset= 0*cm;
     G4double ezOffset= 0*cm;
     G4FieldManager *pEFieldmanager = new G4FieldManager();      
@@ -898,7 +897,7 @@ void LaserDrivenBeamLine::ConstructSDandField()
    pEFieldmanager->SetMaximumEpsilonStep(maxEps);
    pEFieldmanager->SetDeltaOneStep( 0.5e-3 * mm );   
    //pEFieldmanager -> SetFieldChangesEnergy(true);    
-    logicVirtualMag -> SetFieldManager(pEFieldmanager, allLocal);
+    logicVirtualMag -> SetFieldManager(pEFieldmanager, allLocal);}
  //....oooOO0OOooo....................oooOO0OOooo....        
   G4cout<<" //....oooOO0OOooo.......... FIELDS HAVE BEEN IMPLEMENTED..........oooOO0OOooo...."<<G4endl;
   return; 
@@ -909,8 +908,8 @@ void LaserDrivenBeamLine::FaradayCup()
 {
 /// FC sizes ///
 
-G4double InnerRadiusFC=45*mm;
-G4double OuterRadiusFC=50*mm;
+G4double InnerRadiusFC=25*mm;
+G4double OuterRadiusFC=45*mm;
 G4double MassRingThickness=5*mm;
 G4double GuardRingThickness=180*mm;
 G4double FaradayCupBottomThickness=120*mm;

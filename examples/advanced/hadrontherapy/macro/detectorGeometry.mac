@@ -24,8 +24,8 @@
 # Initialize graphic system #     
 #############################
 # 
-/vis/scene/create
-/vis/open OGL
+#/vis/scene/create
+#/vis/open OGL
 /vis/viewer/flush
 /vis/viewer/set/viewpointThetaPhi 30 140 deg
 /vis/scene/add/trajectories

@@ -82,7 +82,7 @@
 
 #include "G4ScoringManager.hh"
 #include "G4ParallelWorldPhysics.hh"
-
+#include <time.h>
 
 //************************MT*********************
 #ifdef G4MULTITHREADED

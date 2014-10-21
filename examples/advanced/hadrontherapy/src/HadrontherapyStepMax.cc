@@ -64,7 +64,7 @@ G4double HadrontherapyStepMax::PostStepGetPhysicalInteractionLength(const G4Trac
   
   G4double ProposedStep = DBL_MAX;
 if((MaxChargedStep > 0.) &&
-   (aTrack.GetVolume() != 0) && ((aTrack.GetVolume()->GetName() == "DetectorPhys")|| (aTrack.GetVolume()->GetName() == "physicalTreatmentRoom")||(aTrack.GetVolume()->GetName() == "InternalChamber")||(aTrack.GetVolume()->GetName() == "CollimatorHole")||(aTrack.GetVolume()->GetName() == "PhysFourthTQuad")||(aTrack.GetVolume()->GetName() == "PhysThirdTQuad")||(aTrack.GetVolume()->GetName() == "PhysSecondTQuad")||(aTrack.GetVolume()->GetName() == "PhysFirstTQuad")||(aTrack.GetVolume()->GetName() =="physQuadChamber")||(aTrack.GetVolume()->GetName() =="PVirtualMag")||(aTrack.GetVolume()->GetName() =="PhysicCup")))
+   (aTrack.GetVolume() != 0) && ((aTrack.GetVolume()->GetName() == "DetectorPhys")||(aTrack.GetVolume()->GetName() == "InternalChamber")||(aTrack.GetVolume()->GetName() == "CollimatorHole")||(aTrack.GetVolume()->GetName() == "PhysFourthTQuad")||(aTrack.GetVolume()->GetName() == "PhysThirdTQuad")||(aTrack.GetVolume()->GetName() == "PhysSecondTQuad")||(aTrack.GetVolume()->GetName() == "PhysFirstTQuad")||(aTrack.GetVolume()->GetName() =="physQuadChamber")||(aTrack.GetVolume()->GetName() =="PVirtualMag")||(aTrack.GetVolume()->GetName() =="PhysicCup")))
 
      ProposedStep = MaxChargedStep;
 

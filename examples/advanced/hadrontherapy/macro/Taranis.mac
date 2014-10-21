@@ -157,19 +157,19 @@
 ###/gps/ene/max 12. MeV
 ###/gps/ene/ezero 2.272727273
 ###################################################################### 
-/vis/open OGL 900x900-0+0 
-/vis/scene/create 1
-/vis/drawVolume
+/vis/scene/create 
+/vis/open OGL 
 /vis/viewer/set/background white
-/vis/viewer/set/viewpointThetaPhi 70 130
-/vis/viewer/zoom 1
+/vis/viewer/set/viewpointThetaPhi 60 130
+/vis/viewer/zoom 1.0
 /vis/viewer/panTo -.27 -.0
 /vis/scene/add/axes 0 0 0 1 m
-/tracking/storeTrajectory 1
 /vis/scene/add/trajectories
 /vis/scene/endOfRunAction accumulate 
 /vis/modeling/trajectories/create/drawByCharge
 /vis/scene/endOfEventAction accumulate -1
+/vis/viewer/update
+
 ################# change first collimator #################
 ##/LaserDriven/EnergySelector/FirstCollimator/Radius 10.0 mm
 ##/LaserDriven/EnergySelector/FirstCollimator/Thickness 20.0 mm
@@ -197,14 +197,14 @@
 # Set cuts ONLY inside the detector
 #/run/setCutForRegion DetectorLog 0.1 mm
 
-/Step/waterPhantomStepMax 2 mm 
+/Step/waterPhantomStepMax 1 mm 
 ############################################################################################################################## 
 # 							 DETECTOR DESCRIPTION
 ###################################################
 # USE THE FOLLOWING FOR A VOXELLIZED DETECTOR
 ###################################################
 #
-/changePhantom/position 200 100 0 cm
+/changePhantom/position 100 100 0 cm
 /changePhantom/size 40 40 40  cm
 /changeDetector/size 4 4 4 cm
 /changeDetector/voxelSize 1 40 40 mm
@@ -212,5 +212,6 @@
 #
 /changeDetector/displacement 0 18 18 cm
 /changePhantom/update
+/event/printEventNumber 100
 
-/run/beamOn 1000
+/run/beamOn 2000

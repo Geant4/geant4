@@ -146,9 +146,9 @@ void HadrontherapyMagneticField3D::GetFieldValue(const double point[4],
   double z = point[2];
 
   // Check that the point is within the defined region 
-  if ( x>=minx && x<=maxx &&
-       y>=miny && y<=maxy && 
-       z>=minz && z<=maxz ) {
+  if ( x>=minx && x<maxx &&
+       y>=miny && y<maxy && 
+       z>=minz && z<maxz ) {
     // Position of given point within region, normalized to the range
     // [0,1]
     double xfraction = (x - minx) / dx;

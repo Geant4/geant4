@@ -262,7 +262,6 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
       hadronPhys.push_back( new G4IonBinaryCascadePhysics());
       hadronPhys.push_back( new G4NeutronTrackingCut());
       hadronPhys.push_back( new G4DecayPhysics());
-
     }   
      else {
         G4cout << "PhysicsList::AddPhysicsList: <" << name << ">"
@@ -293,6 +292,7 @@ void HadrontherapyPhysicsList::AddStepMax()
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyPhysicsList::SetCuts()
 {
+
     if (verboseLevel >0){
         G4cout << "PhysicsList::SetCuts:";
         G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
@@ -303,6 +303,9 @@ void HadrontherapyPhysicsList::SetCuts()
     // '/run/setCutForRegion <G4Region name> <cut value>'
     // must be defined here
     //
+  SetCutValue(cutForGamma, "gamma");
+  SetCutValue(cutForElectron, "e-");
+  SetCutValue(cutForPositron, "e+");
     // At moment, only 'DetectorLog' is defined as G4Region
     //
     G4String regName[] = {"DetectorLog"};

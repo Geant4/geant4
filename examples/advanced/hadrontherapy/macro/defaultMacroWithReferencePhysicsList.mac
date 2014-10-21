@@ -78,7 +78,7 @@
 # the beam energy is in gaussian profile
 #
 /gps/ene/type Gauss
-/gps/ene/mono 63.4 MeV
+/gps/ene/mono 62 MeV
 /gps/ene/sigma 0.3 MeV
 
 ########################################################
@@ -118,7 +118,7 @@
 # Default material is water liquid
 #/changePhantom/material G4_PLEXIGLASS
 
-/run/beamOn 1
+/run/beamOn 10
 
 # The folder 'SimulationOutputs/proton/BraggPeak' must be created before to use the following command
 /control/shell mv DoseDistribution.root SimulationOutputs/proton/BraggPeak/protonBraggPeak.root

@@ -19,7 +19,7 @@
 ##########################################################################################################
 ##########Cut ##########
 
-/run/setCut 0.0001 mm
+/run/setCut 0.01 mm
 
 # Set cuts ONLY inside the detector
 #
@@ -33,7 +33,7 @@
 /gps/particle proton
 /gps/pos/type Beam 
 /gps/pos/shape Circle
-/gps/pos/centre -175. 0.0 -42 mm
+/gps/pos/centre -175. 0.0 0.0 mm
 /gps/pos/radius 1.5 mm
 
 #/gps/ang/rot1 0 0 1
@@ -102,44 +102,29 @@
 
 
 ############################################## 
-##/vis/open OGL 900x900-0+0 
-#/vis/scene/create 1
-#/vis/drawVolume
-#/vis/viewer/set/background white
-#/vis/viewer/disable
-#/vis/viewer/set/viewpointThetaPhi 70 130
-#/vis/viewer/set/style surface 
-#/vis/viewer/set/style wireframe
-#/vis/viewer/set/hiddenEdge 1
-#/vis/viewer/zoom 1
-#/vis/viewer/panTo -.27 -.0
-#/vis/viewer/set/viewpointThetaPhi 0 0
-#/vis/ogl/printEPS
-#/vis/scene/add/axes 0 0 0 1 m
-#/tracking/storeTrajectory 1
-#/vis/scene/add/trajectories
-#/vis/scene/endOfRunAction accumulate 
-#/vis/modeling/trajectories/create/drawByCharge
-#/vis/modeling/trajectories/drawByCharge-0/default/setDrawStepPts true
-#/vis/modeling/trajectories/drawByCharge-0/default/setStepPtsSize 3
-#/vis/modeling/trajectories/create/drawByParticleID
-#/vis/modeling/trajectories/drawByParticleID-0/set proton blue 
-#/vis/modeling/trajectories/drawByParticleID-0/set neutron green 
-#/vis/modeling/trajectories/drawByParticleID-0/set  gamma red 
-#/vis/filtering/trajectories/create/particleFilter
-#/vis/filtering/trajectories/particleFilter-0/add proton
-#/vis/scene/endOfEventAction accumulate -1
-#/vis/viewer/set/hiddenMarker 1
+/vis/scene/create 
+/vis/open OGL 
+/vis/viewer/set/background white
+/vis/viewer/set/viewpointThetaPhi 60 130
+/vis/viewer/zoom 1.0
+/vis/viewer/panTo -.27 -.0
+/vis/scene/add/axes 0 0 0 1 m
+/vis/scene/add/trajectories
+/vis/scene/endOfRunAction accumulate 
+/vis/modeling/trajectories/create/drawByCharge
+/vis/scene/endOfEventAction accumulate -1
+/vis/viewer/update
 
 ###################################################
 #
-/changePhantom/position 200 100 0 cm
+/changePhantom/position 100 100 0 cm
 /changePhantom/size 40 40 40  cm
 /changeDetector/size 4 4 4 cm
 /changeDetector/voxelSize 1 40 40 mm
 
 /changeDetector/displacement 0 18 18 cm
 /changePhantom/update
+/event/printEventNumber 10
 
 /run/beamOn 100
 

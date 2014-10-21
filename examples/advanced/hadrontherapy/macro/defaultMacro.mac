@@ -58,12 +58,11 @@
 
 #---------------------------gps-----------------
 /gps/pos/shape Circle
-/gps/pos/centre -310. 0. -4.25 cm
-#/gps/pos/centre 308 -5 0 mm
+/gps/pos/centre -310. 0. 0. cm
 /gps/pos/radius 0. mm
-#/gps/pos/sigma_r 2. mm
+/gps/pos/sigma_r 2. mm
 /gps/particle proton
-#/gps/pos/type Beam
+/gps/pos/type Beam
 
 # the incident surface is in the y-z plane
 #
@@ -72,19 +71,17 @@
 
 # the beam is travelling along the x-axis without any angular dispersion (angular despersion set to 0.0)
 #
+
 /gps/ang/rot1 0 0 1
 /gps/ang/rot2 0 1 0 
-/gps/direction -1 0 0 
-#/gps/ang/type beam1d 
-#/gps/ang/sigma_r 0.1 deg
-
+/gps/ang/type beam1d 
+/gps/ang/sigma_r 0. deg
 
 # the beam energy is in gaussian profile
 #
-#/gps/ene/type Gauss
-#/gps/ene/mono 700 eV
-/gps/ene/mono 63.4 MeV
-#/gps/ene/sigma 0.3 MeV
+/gps/ene/type Gauss
+/gps/ene/mono 62 MeV
+/gps/ene/sigma 0.3 MeV
 
 
 ###################################################
@@ -97,12 +94,7 @@
 #/changePhantom/update
 
 /changePhantom/size 40 40 40  cm
-#/changePhantom/position 20 0 0 cm
-
-#####CHANGE PHANTOM POSITION TO USE FARADAY CUP ####
-
-/changePhantom/position 200 100 0 cm
-
+/changePhantom/position 20 0 0 cm
 
 ###################################################
 # USE THE FOLLOWING FOR A VOXELLIZED DETECTOR

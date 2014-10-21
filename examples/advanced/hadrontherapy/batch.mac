@@ -24,7 +24,7 @@
 #
 /run/initialize
 
-
+#/run/setCut 1 mm
 
 /Step/waterPhantomStepMax 0.01 mm 
 
@@ -67,5 +67,5 @@
 # Display the event number
 # during the run
 # 
-/event/printEventNumber 100
-/run/beamOn 1000
+/event/printEventNumber 10
+/run/beamOn 500
