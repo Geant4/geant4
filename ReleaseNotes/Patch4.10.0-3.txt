@@ -94,6 +94,9 @@ List of fixes included in this public patch since the public release 10.0.p02:
         This includes addition of extra inline methods to convert from Lab
         to CM, to initialise models with more correct thresholds.
       o G4eeTo3PiModel: fixed sampling algorithm.
+    + Low Energy:
+      o Fixed cases of energy violation in G4LivermoreComptonModel and
+        atomic de-excitation. Addressing problem report #1612.
     + Standard:
       o G4PAIxSection: added protection to avoid division by zero.
         Addressing problem report #1677.
