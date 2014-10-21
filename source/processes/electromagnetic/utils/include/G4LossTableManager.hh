@@ -353,28 +353,15 @@ private:
   G4bool all_tables_are_built;
   G4bool startInitialisation;
 
-  //G4bool lossFluctuationFlag;
   G4bool subCutoffFlag;
-  //G4bool rndmStepFlag;
   G4bool integral;
   G4bool integralActive;
   G4bool buildCSDARange;
-  //G4bool minEnergyActive;
-  //G4bool maxEnergyActive;
-  //G4bool maxEnergyForMuonsActive;
   G4bool stepFunctionActive;
-  //G4bool flagLPM;
-  //G4bool splineFlag;
   G4bool isMaster;
 
-  //G4double minSubRange;
   G4double maxRangeVariation;
   G4double maxFinalStep;
-  //G4double minKinEnergy;
-  //G4double maxKinEnergy;
-  //G4double maxKinEnergyForMuons;
-  //G4double bremsTh;
-  //G4double factorForAngleLimit;
 
   G4LossTableBuilder*         tableBuilder;
   G4EnergyLossMessenger*      theMessenger;
@@ -387,8 +374,6 @@ private:
 
   G4EmParameters* theParameters;
 
-  //G4int nbinsLambda;
-  //G4int nbinsPerDecade;
   G4int verbose;
 
 };

@@ -266,10 +266,7 @@ private:
 
   G4MscStepLimitType          stepLimit;
 
-  //  G4double                    skin;
   G4double                    facrange;
-  // G4double                    facgeom;
-  //G4double                    polarAngleLimit;
   G4double                    lowestKinEnergy;
 
   G4bool                      latDisplacement;
@@ -365,28 +362,12 @@ inline  G4double G4VMultipleScattering::GeomFactor() const
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-inline  void G4VMultipleScattering::SetGeomFactor(G4double val)
-{
-  if(val > 0.0) facgeom = val;
-}
-*/
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline  G4double G4VMultipleScattering::PolarAngleLimit() const
 {
   return theParameters->MscThetaLimit();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-inline  void G4VMultipleScattering::SetPolarAngleLimit(G4double val)
-{
-  if(val < 0.0)            { polarAngleLimit = 0.0; }
-  else if(val > CLHEP::pi) { polarAngleLimit = CLHEP::pi; }
-  else                     { polarAngleLimit = val; }
-}
-*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline G4MscStepLimitType G4VMultipleScattering::StepLimitType() const
@@ -427,13 +408,6 @@ inline const G4ParticleDefinition* G4VMultipleScattering::FirstParticle() const
   return firstParticle;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-inline void G4VMultipleScattering::SetDisplacementBeyondSafety(G4bool val)
-{
-  fDispBeyondSafety = val;
-}
-*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #endif

@@ -98,9 +98,7 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   firstParticle(0),
   currParticle(0),
   stepLimit(fUseSafety),
-  //  skin(1.0),
   facrange(0.04),
-  // facgeom(2.5),
   latDisplacement(true),
   isIon(false),
   fDispBeyondSafety(false)
@@ -111,9 +109,6 @@ G4VMultipleScattering::G4VMultipleScattering(const G4String& name,
   if("ionmsc" == name) { firstParticle = G4GenericIon::GenericIon(); }
 
   lowestKinEnergy = 10*CLHEP::eV;
-
-  // default limit on polar angle
-  // polarAngleLimit = 0.0;
 
   physStepLimit = gPathLength = tPathLength = 0.0;
   fIonisation = 0;
@@ -500,9 +495,8 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
     tPathLength = currentModel->ComputeTrueStepLength(geomLength);
   
     // protection against wrong t->g->t conversion
-    
-    //if(currParticle->GetPDGMass() > GeV)    
-    /*
+    /*    
+    if(currParticle->GetPDGMass() > 0.9*GeV)    
     G4cout << "G4VMsc::AlongStepDoIt: GeomLength= " 
 	   << geomLength 
 	   << " tPathLength= " << tPathLength
@@ -519,14 +513,15 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 	step.GetPostStepPoint()->GetMomentumDirection(),minSafety);
 
       G4double r2 = displacement.mag2();
-
+      //G4cout << "    R= " << sqrt(r2) << " Rmin= " << sqrt(minDisplacement2)
+      //     << " flag= " << fDispBeyondSafety << G4endl;
       if(r2 > minDisplacement2) {
 
 	fPositionChanged = true;
         const G4double sFact = 0.99;
 	G4double postSafety = 
 	  sFact*(step.GetPreStepPoint()->GetSafety() - geomLength); 
-	//G4cout<<"R= "<<sqrt(r2)<<" postSafety= "<<postSafety<<G4endl;
+	//G4cout<<"    R= "<<sqrt(r2)<<" postSafety= "<<postSafety<<G4endl;
 
 	// far away from geometry boundary
         if(postSafety > 0.0 && r2 <= postSafety*postSafety) {
@@ -538,6 +533,7 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 	    sFact*safetyHelper->ComputeSafety(fNewPosition, dispR); 
 
 	  // displaced point is definitely within the volume
+	  //G4cout<<"    R= "<<dispR<<" postSafety= "<<postSafety<<G4endl;
 	  if(dispR < postSafety) {
 	    fNewPosition += displacement;
 

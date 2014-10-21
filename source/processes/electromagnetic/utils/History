@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 October 14: V.Ivant (emutils-V10-00-38)
+- G4LossTableManager - fixed non-initilized variable
+- G4VMultipleScattering - coherent definition of lateral 
+    displacement flag
+
 17 October 14: V.Ivant (emutils-V10-00-37)
 - G4VEmProcess, G4VEnergyLossProcess - improved printout at 
     initialisation, added extra initialisation
