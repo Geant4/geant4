@@ -69,6 +69,8 @@ class G4XmlRNtupleManager : public G4VRNtupleManager
                             G4float& value);
     virtual G4bool SetNtupleDColumn(const G4String& columnName, 
                             G4double& value);
+    virtual G4bool SetNtupleSColumn(const G4String& columnName, 
+                            G4String& value);
     // Bind the ntuple columns of vector type
     virtual G4bool SetNtupleIColumn(const G4String& columnName, 
                             std::vector<G4int>& vector);
@@ -83,6 +85,8 @@ class G4XmlRNtupleManager : public G4VRNtupleManager
                             const G4String& columnName, G4float& value);
     virtual G4bool SetNtupleDColumn(G4int ntupleId, 
                             const G4String& columnName, G4double& value);
+    virtual G4bool SetNtupleSColumn(G4int ntupleId, 
+                            const G4String& columnName, G4String& value);
     // Bind the ntuple columns of vector type
     virtual G4bool SetNtupleIColumn(G4int ntupleId, const G4String& columnName, 
                             std::vector<G4int>& vector);

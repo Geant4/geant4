@@ -155,10 +155,37 @@ public:
 
   std::istream& istrm() {return m_reader;}
 
+  static bool is_hippo(std::ostream& a_out,std::istream& a_reader) {
+    // analyse two first data line.
+
+    a_reader.clear();
+    a_reader.seekg(0,std::ios::end);
+    std::streampos sz = a_reader.tellg();
+    a_reader.seekg(0,std::ios::beg);
+    if(!sz) {
+      a_out << "tools::rcsv::ntuple::is_hippo :"
+            << " stream is empty."
+            << std::endl;
+      return false;
+    } //file empty.
+
+    std::string title;
+    if(!read_line(a_reader,sz,title)) return false;
+    std::string s;
+    if(!read_line(a_reader,sz,s)) return false;
+    if(s.find('\t')==std::string::npos) return false;
+/*
+    std::vector<std::string> labels;
+    tools::words(s,"\t",false,labels);
+    return labels.size()?true:false;
+*/
+    return true;
+  }
+
   static bool find_sep(std::ostream& a_out,
-                              std::istream& a_reader,bool a_hippo,
-                              bool a_verbose,
-                              char& a_sep){
+                       std::istream& a_reader,bool a_hippo,
+                       bool a_verbose,
+                       char& a_sep){
     // analyse first data line to find the char separator.
 
     a_reader.clear();
@@ -231,9 +258,9 @@ public:
 
 public:
   bool initialize(std::ostream& a_out,
-                         char a_sep = 0, //guessed
-                         const std::string& a_suffix = "x", //col suffix
-                         bool a_verbose = false) {
+                  char a_sep = 0, //guessed
+                  const std::string& a_suffix = "x", //col suffix
+                  bool a_verbose = false) {
     tools::clear<read::icol>(m_cols);
     m_sep = 0;
     m_sz = 0;

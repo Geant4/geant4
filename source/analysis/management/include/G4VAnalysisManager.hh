@@ -280,6 +280,7 @@ class G4VAnalysisManager
     G4int CreateNtupleIColumn(const G4String& name);
     G4int CreateNtupleFColumn(const G4String& name);
     G4int CreateNtupleDColumn(const G4String& name);
+    G4int CreateNtupleSColumn(const G4String& name);
 
     // Create columns of vector in the last created ntuple
     G4int CreateNtupleIColumn(
@@ -294,6 +295,7 @@ class G4VAnalysisManager
     G4int CreateNtupleIColumn(G4int ntupleId, const G4String& name);
     G4int CreateNtupleFColumn(G4int ntupleId, const G4String& name);
     G4int CreateNtupleDColumn(G4int ntupleId, const G4String& name);
+    G4int CreateNtupleSColumn(G4int ntupleId, const G4String& name);
 
     // Create columns of vector in the ntuple with given id
     G4int CreateNtupleIColumn(G4int ntupleId, 
@@ -337,11 +339,13 @@ class G4VAnalysisManager
     G4bool FillNtupleIColumn(G4int id, G4int value);
     G4bool FillNtupleFColumn(G4int id, G4float value);
     G4bool FillNtupleDColumn(G4int id, G4double value);
+    G4bool FillNtupleSColumn(G4int id, const G4String& value);
     G4bool AddNtupleRow();
     // Methods for ntuple with id > FirstNtupleId (when more ntuples exist)                      
     G4bool FillNtupleIColumn(G4int ntupleId, G4int columnId, G4int value);
     G4bool FillNtupleFColumn(G4int ntupleId, G4int columnId, G4float value);
     G4bool FillNtupleDColumn(G4int ntupleId, G4int columnId, G4double value);
+    G4bool FillNtupleSColumn(G4int ntupleId, G4int id, const G4String& value);
     G4bool AddNtupleRow(G4int ntupleId);
     
     // Activation option

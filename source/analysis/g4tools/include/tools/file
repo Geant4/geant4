@@ -216,6 +216,7 @@ inline bool is_aida(const std::string& a_file,bool& a_is){
 
 // NOTE : take care of the open in exlib/app/Wt/main_cpp which can't work
 //        by using suffix.
+// NOTE : the below is_csv() does not take into account a column with strings.
 
 inline bool is_csv(const std::vector<std::string>& a_txt,bool& a_is){
   //a_sep = 0;

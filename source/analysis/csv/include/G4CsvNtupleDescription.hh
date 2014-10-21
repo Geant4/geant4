@@ -34,6 +34,7 @@
 
 #include "tools/wcsv_ntuple"
 
+#include <string>
 #include <fstream>
 #include <map>
 
@@ -49,7 +50,8 @@ struct G4CsvNtupleDescription
        fNtupleBooking(0),
        fNtupleIColumnMap(),
        fNtupleFColumnMap(),
-       fNtupleDColumnMap() {}
+       fNtupleDColumnMap(),
+       fNtupleSColumnMap() {}
 
   ~G4CsvNtupleDescription()
       {  delete fFile;
@@ -63,6 +65,7 @@ struct G4CsvNtupleDescription
   std::map<G4int, tools::wcsv::ntuple::column<int>* >    fNtupleIColumnMap;           
   std::map<G4int, tools::wcsv::ntuple::column<float>* >  fNtupleFColumnMap;           
   std::map<G4int, tools::wcsv::ntuple::column<double>* > fNtupleDColumnMap;           
+  std::map<G4int, tools::wcsv::ntuple::column<std::string>* > fNtupleSColumnMap;           
 };
 
 #endif  

@@ -47,7 +47,8 @@ struct G4RootNtupleDescription
        fNtupleBooking(0),
        fNtupleIColumnMap(),
        fNtupleFColumnMap(),
-       fNtupleDColumnMap() {}
+       fNtupleDColumnMap(),
+       fNtupleSColumnMap() {}
 
   ~G4RootNtupleDescription()
       { 
@@ -60,6 +61,7 @@ struct G4RootNtupleDescription
   std::map<G4int, tools::wroot::ntuple::column<int>* >    fNtupleIColumnMap;           
   std::map<G4int, tools::wroot::ntuple::column<float>* >  fNtupleFColumnMap;           
   std::map<G4int, tools::wroot::ntuple::column<double>* > fNtupleDColumnMap;           
+  std::map<G4int, tools::wroot::ntuple::column_string* >  fNtupleSColumnMap;           
 };
 
 #endif  

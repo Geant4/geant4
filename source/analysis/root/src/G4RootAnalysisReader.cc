@@ -274,11 +274,11 @@ G4int G4RootAnalysisReader::ReadH2Impl(const G4String& h2Name,
 }  
 
 //_____________________________________________________________________________
-G4int G4RootAnalysisReader::ReadH3Impl(const G4String& /*h3Name*/, 
-                                       const G4String& /*fileName*/,
+G4int G4RootAnalysisReader::ReadH3Impl(const G4String& h3Name, 
+                                       const G4String& fileName,
                                        G4bool /*isUserFileName*/)
 {
-/*
+
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
     fState.GetVerboseL4()->Message("read", "h3", h3Name);
@@ -300,7 +300,7 @@ G4int G4RootAnalysisReader::ReadH3Impl(const G4String& /*h3Name*/,
     return kInvalidId;
   }  
   
-  G4int id = fH2Manager->AddH2(h3Name, h3);
+  G4int id = fH3Manager->AddH3(h3Name, h3);
   
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
@@ -308,9 +308,10 @@ G4int G4RootAnalysisReader::ReadH3Impl(const G4String& /*h3Name*/,
 #endif
   
   return id;  
-*/  
+/* 
   // not yet available
   return kInvalidId;
+*/
 }  
 
 //_____________________________________________________________________________

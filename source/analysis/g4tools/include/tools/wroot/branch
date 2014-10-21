@@ -161,9 +161,14 @@ public:
   void set_basket_size(uint32 a_size) {m_basket_size = a_size;}
 
   template <class T>
-  leaf<T>* create_leaf(const std::string& a_name,
-                              const std::string& a_title){
+  leaf<T>* create_leaf(const std::string& a_name,const std::string& a_title){
     leaf<T>* lf = new leaf<T>(m_out,*this,a_name,a_title);
+    m_leaves.push_back(lf);
+    return lf;
+  }
+
+  leaf_string* create_leaf_string(const std::string& a_name,const std::string& a_title){
+    leaf_string* lf = new leaf_string(m_out,*this,a_name,a_title);
     m_leaves.push_back(lf);
     return lf;
   }

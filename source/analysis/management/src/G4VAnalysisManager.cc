@@ -696,6 +696,14 @@ G4int G4VAnalysisManager::CreateNtupleDColumn(const G4String& name)
 }  
 
 //_____________________________________________________________________________
+G4int G4VAnalysisManager::CreateNtupleSColumn(const G4String& name)
+{
+  if ( ! CheckName(name, "NtupleSColumn") ) return kInvalidId;
+
+  return fVNtupleManager->CreateNtupleSColumn(name);
+}  
+
+//_____________________________________________________________________________
 G4int G4VAnalysisManager::CreateNtupleIColumn(const G4String& name, 
                                               std::vector<int>& vector)
 {
@@ -754,6 +762,15 @@ G4int G4VAnalysisManager::CreateNtupleDColumn(G4int ntupleId,
   if ( ! CheckName(name, "NtupleDColumn") ) return kInvalidId;
 
   return fVNtupleManager->CreateNtupleDColumn(ntupleId, name, 0);
+}                                         
+
+//_____________________________________________________________________________
+G4int G4VAnalysisManager::CreateNtupleSColumn(G4int ntupleId, 
+                                              const G4String& name)   
+{
+  if ( ! CheckName(name, "NtupleSColumn") ) return kInvalidId;
+
+  return fVNtupleManager->CreateNtupleSColumn(ntupleId, name);
 }                                         
 
 //_____________________________________________________________________________

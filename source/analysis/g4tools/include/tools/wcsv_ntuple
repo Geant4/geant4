@@ -107,6 +107,8 @@ public:
         create_column<float>((*it).name());
       } else if((*it).cls_id()==_cid(double(0))) {
         create_column<double>((*it).name());
+      } else if((*it).cls_id()==_cid(std::string())) {
+        create_column<std::string>((*it).name());
 
       } else if((*it).cls_id()==_cid(byte(0))) {
         create_column<byte>((*it).name());
@@ -138,12 +140,24 @@ protected:
   ntuple(const ntuple& a_from)
   :m_writer(a_from.m_writer)
   ,m_sep(a_from.m_sep)
+  ,m_title(a_from.m_title)
   {}
   ntuple& operator=(const ntuple& a_from){
     m_sep = a_from.m_sep;
+    m_title = a_from.m_title;
     return *this;
   }
 public:
+  void write_hippo_header() {
+    m_writer << m_title << std::endl;
+    std::vector<icol*>::const_iterator it;
+    for(it=m_cols.begin();it!=m_cols.end();++it){
+      if(it!=m_cols.begin()) m_writer << '\t';
+      m_writer << (*it)->name();
+    }
+    m_writer << std::endl;
+  }
+
   template <class T>
   column<T>* create_column(const std::string& a_name,const T& a_def = T()) {
     if(find_named<icol>(m_cols,a_name)) return 0;
@@ -175,9 +189,13 @@ public:
   }
 
   const std::vector<icol*>& columns() const {return m_cols;}
+
+  void set_title(const std::string& a_value) {m_title = a_value;}
+  const std::string& title() const {return m_title;}
 protected:
   std::ostream& m_writer;
   char m_sep;
+  std::string m_title;
   std::vector<icol*> m_cols;
 };
 

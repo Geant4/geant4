@@ -34,8 +34,15 @@ int main(int argc,char** argv) {
   /// - data at csv format. ////////////////////////////////
   //////////////////////////////////////////////////////////
   bool is_hippo = false;
-  if((tools::suffix(file)=="hiptxt")||
-     (tools::suffix(file)=="tnt")) is_hippo = true;
+  if(args.is_arg("-hippo")) {
+    is_hippo = true;
+  } else {
+    if((tools::suffix(file)=="hiptxt")||(tools::suffix(file)=="tnt")) {
+      is_hippo = true;
+    } else {
+      is_hippo = tools::rcsv::ntuple::is_hippo(std::cout,reader);
+    }
+  }
 
   if(is_hippo) std::cout << "hippodraw file." << std::endl;
 
@@ -65,22 +72,40 @@ int main(int argc,char** argv) {
   std::string scol;
   if(args.find("-col",scol)) {
 
-    typedef tools::read::icolumn<double> cold_t;
+   {typedef tools::read::icolumn<double> cold_t;
     cold_t* col = ntu.find_column<double>(scol);
-    if(!col) {
-      std::cout << "column " << scol << " not found." << std::endl;
-      return EXIT_FAILURE;
-    }
-
-    ntu.start();
-    while(ntu.next()){
-      double v;
-      if(!col->get_entry(v)) {
-        std::cout << "get_entry(double) failed." << std::endl;
-        return EXIT_FAILURE;
+    if(col) {
+      ntu.start();
+      while(ntu.next()){
+        double v;
+        if(!col->get_entry(v)) {
+          std::cout << "get_entry(double) failed." << std::endl;
+          return EXIT_FAILURE;
+        }
+        std::cout << v << std::endl;
       }
-      std::cout << v << std::endl;
-    }
+      reader.close();
+      return EXIT_SUCCESS;
+    }}
+
+   {typedef tools::read::icolumn<std::string> cols_t;
+    cols_t* col = ntu.find_column<std::string>(scol);
+    if(col) {
+      ntu.start();
+      while(ntu.next()){
+	std::string v;
+        if(!col->get_entry(v)) {
+          std::cout << "get_entry(std::string) failed." << std::endl;
+          return EXIT_FAILURE;
+        }
+        std::cout << v << std::endl;
+      }
+      reader.close();
+      return EXIT_SUCCESS;
+    }}
+
+    std::cout << "column " << scol << " not found." << std::endl;
+    return EXIT_FAILURE;
 
   } else { // read all
 

@@ -372,6 +372,13 @@ G4bool G4VAnalysisReader::SetNtupleDColumn(const G4String& columnName,
 }                                              
 
 //_____________________________________________________________________________
+G4bool G4VAnalysisReader::SetNtupleSColumn(const G4String& columnName, 
+                                            G4String& value)
+{
+  return fVNtupleManager->SetNtupleSColumn(columnName, value);
+}                                              
+
+//_____________________________________________________________________________
 G4bool G4VAnalysisReader::SetNtupleIColumn(const G4String& columnName, 
                                             std::vector<int>& vector)
 {
@@ -414,6 +421,14 @@ G4bool G4VAnalysisReader::SetNtupleDColumn(G4int ntupleId,
                                             G4double& value)
 {
   return fVNtupleManager->SetNtupleDColumn(ntupleId, columnName, value);
+}                                              
+
+//_____________________________________________________________________________
+G4bool G4VAnalysisReader::SetNtupleSColumn(G4int ntupleId,
+                                            const G4String& columnName, 
+                                            G4String& value)
+{
+  return fVNtupleManager->SetNtupleSColumn(ntupleId, columnName, value);
 }                                              
 
 //_____________________________________________________________________________

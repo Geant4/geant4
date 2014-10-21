@@ -14,9 +14,12 @@
 
 #include <tools/histo/h1d>
 #include <tools/histo/h2d>
+#include <tools/histo/h3d>
 #include <tools/histo/p1d>
 #include <tools/histo/p2d>
 #include <tools/wroot/ntuple>
+
+#include <tools/histo/h1df>
 
 #include <tools/randd>
 #include <tools/randf>
@@ -49,6 +52,8 @@ int main(int argc,char** argv) {
     rfile.set_compression(9);
   }
 #endif
+
+  bool osc_stream = args.is_arg("-osc");
 
   tools::wroot::directory* dir = rfile.dir().mkdir("histo");
   if(!dir) {
@@ -84,7 +89,27 @@ int main(int argc,char** argv) {
               << std::endl;
   }
   // write :
-  if(!tools::wroot::to(*dir,h,"rg")) return EXIT_FAILURE;}
+  if(osc_stream) {
+    if(!tools::wroot::to_osc(*dir,h,"rg")) return EXIT_FAILURE;
+  } else {
+    if(!tools::wroot::to(*dir,h,"rg")) return EXIT_FAILURE;
+  }}
+
+ {tools::rgaussf rf(1,2);
+  tools::histo::h1df h("GaussF",100,-5,5);
+  for(unsigned int count=0;count<entries;count++) h.fill(rf.shoot(),1.4F);
+  // plotting hints :
+  h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
+  h.add_annotation(tools::histo::key_axis_y_title(),"1.4*entries");
+  if(verbose) {
+    std::cout << "h1df : " << h.title()
+              << ", all entries " << h.all_entries()
+              << ", entries " << h.entries()
+              << ", mean " << h.mean() << ", rms " << h.rms()
+              << std::endl;
+  }
+  // write :
+  if(!tools::wroot::to(*dir,h,"rf")) return EXIT_FAILURE;}
 
  {tools::histo::p1d h("Profile",100,-5,5,-2,2);
   for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),rbw.shoot(),1);
@@ -95,7 +120,11 @@ int main(int argc,char** argv) {
               << ", mean " << h.mean() << ", rms " << h.rms()
               << std::endl;
   }
-  if(!tools::wroot::to(*dir,h,"prof")) return EXIT_FAILURE;}
+  if(osc_stream) {
+    if(!tools::wroot::to_osc(*dir,h,"prof")) return EXIT_FAILURE;
+  } else {
+    if(!tools::wroot::to(*dir,h,"prof")) return EXIT_FAILURE;
+  }}
 
  {tools::histo::h2d h("Gauss_BW",20,-5,5,20,-2,2);
   for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),rbw.shoot(),0.8);
@@ -112,7 +141,11 @@ int main(int argc,char** argv) {
               << std::endl;
   }
   // write :
-  if(!tools::wroot::to(*dir,h,"rgbw")) return EXIT_FAILURE;}
+  if(osc_stream) {
+    if(!tools::wroot::to_osc(*dir,h,"rgbw")) return EXIT_FAILURE;
+  } else {
+    if(!tools::wroot::to(*dir,h,"rgbw")) return EXIT_FAILURE;
+  }}
 
  {tools::histo::p2d h("Profile2D",100,-5,5,100,-5,5,-2,2);
   for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),rg.shoot(),rbw.shoot(),1);
@@ -124,7 +157,33 @@ int main(int argc,char** argv) {
               << ", mean_y " << h.mean_y() << ", rms_y " << h.rms_y()
               << std::endl;
   }
-  if(!tools::wroot::to(*dir,h,"prof2D")) return EXIT_FAILURE;}
+  if(osc_stream) {
+    if(!tools::wroot::to_osc(*dir,h,"prof2D")) return EXIT_FAILURE;
+  } else {
+    if(!tools::wroot::to(*dir,h,"prof2D")) return EXIT_FAILURE;
+  }}
+
+ {tools::histo::h3d h("Gauss_Gauss_BW",20,-5,5,20,-5,5,20,-2,2);
+  for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),rg.shoot(),rbw.shoot(),0.8);
+  //plotting hints :
+  h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
+  h.add_annotation(tools::histo::key_axis_y_title(),"rand gauss");
+  h.add_annotation(tools::histo::key_axis_z_title(),"rand bw");
+  if(verbose) {
+    std::cout << "h3d : " << h.title()
+              << ", all entries " << h.all_entries()
+              << ", entries " << h.entries()
+              << ", mean_x " << h.mean_x() << ", rms_x " << h.rms_x()
+              << ", mean_y " << h.mean_y() << ", rms_y " << h.rms_y()
+              << ", mean_z " << h.mean_z() << ", rms_z " << h.rms_z()
+              << std::endl;
+  }
+  // write :
+  if(osc_stream) {
+    if(!tools::wroot::to_osc(*dir,h,"rggbw")) return EXIT_FAILURE;
+  } else {
+    if(!tools::wroot::to(*dir,h,"rggbw")) return EXIT_FAILURE;
+  }}
 
   //////////////////////////////////////////////////////////
   /// create and fill a ntuple : ///////////////////////////
@@ -135,6 +194,7 @@ int main(int argc,char** argv) {
   tools::wroot::ntuple::column<int>* col_index = ntu->create_column<int>("index");
   tools::wroot::ntuple::column<double>* col_rgauss = ntu->create_column<double>("rgauss");
   tools::wroot::ntuple::column<float>* col_rbw = ntu->create_column<float>("rbw");
+  tools::wroot::ntuple::column_string* col_str = ntu->create_column_string("strings");
 
   std::vector<float> user_vec_f;
   ntu->create_column<float>("vec_float",user_vec_f); //pass the ref of user_vec_f.
@@ -159,6 +219,10 @@ int main(int argc,char** argv) {
     }
     if(!col_rbw->fill(rbwf.shoot())) {
       std::cout << "col_rbw fill failed." << std::endl;
+      break;
+    }
+    if(!col_str->fill("str "+tools::to(count))) {
+      std::cout << "col_str fill failed." << std::endl;
       break;
     }
 
@@ -187,15 +251,15 @@ int main(int argc,char** argv) {
  {tools::ntuple_booking nbk("rg_rbw_2","Randoms");
   nbk.add_column<double>("rgauss");
   nbk.add_column<float>("rbw");
+  nbk.add_column<std::string>("strings");
   //nbk.add_column<bool>("not_handled");
 
   tools::wroot::ntuple* ntu = new tools::wroot::ntuple(rfile.dir(),nbk);
   if(ntu->columns().size()) {
 
-    tools::wroot::ntuple::column<double>* col_rgauss =
-      ntu->find_column<double>("rgauss");
-    tools::wroot::ntuple::column<float>* col_rbw =
-      ntu->find_column<float>("rbw");
+    tools::wroot::ntuple::column<double>* col_rgauss = ntu->find_column<double>("rgauss");
+    tools::wroot::ntuple::column<float>* col_rbw = ntu->find_column<float>("rbw");
+    tools::wroot::ntuple::column_string* col_str = ntu->find_column_string("strings");
 
     tools::rbwf rbwf(0,1);
     for(unsigned int count=0;count<1000;count++) {    
@@ -205,6 +269,10 @@ int main(int argc,char** argv) {
       }
       if(!col_rbw->fill(rbwf.shoot())) {
         std::cout << "col_rbw fill failed." << std::endl;
+        break;
+      }
+      if(!col_str->fill("str "+tools::to(count))) {
+        std::cout << "col_str fill failed." << std::endl;
         break;
       }
       if(!ntu->add_row()) {
@@ -217,8 +285,7 @@ int main(int argc,char** argv) {
   //////////////////////////////////////////////////////////
   /// consistency check : create an empty ntuple : /////////
   //////////////////////////////////////////////////////////
- {tools::wroot::ntuple* ntu = 
-    new tools::wroot::ntuple(rfile.dir(),"empty","empty");
+ {tools::wroot::ntuple* ntu = new tools::wroot::ntuple(rfile.dir(),"empty","empty");
   ntu->create_column<int>("empty");}
 
   //////////////////////////////////////////////////////////

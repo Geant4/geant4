@@ -34,6 +34,7 @@
 
 #include "tools/waxml/ntuple"
 
+#include <string>
 #include <fstream>
 #include <map>
 
@@ -49,7 +50,8 @@ struct G4XmlNtupleDescription
        fNtupleBooking(0),
        fNtupleIColumnMap(),
        fNtupleFColumnMap(),
-       fNtupleDColumnMap() {}
+       fNtupleDColumnMap(),
+       fNtupleSColumnMap() {}
        
   ~G4XmlNtupleDescription() 
      { delete fFile;  
@@ -63,6 +65,7 @@ struct G4XmlNtupleDescription
   std::map<G4int, tools::waxml::ntuple::column<int>* >    fNtupleIColumnMap;           
   std::map<G4int, tools::waxml::ntuple::column<float>* >  fNtupleFColumnMap;           
   std::map<G4int, tools::waxml::ntuple::column<double>* > fNtupleDColumnMap;           
+  std::map<G4int, tools::waxml::ntuple::column<std::string>* > fNtupleSColumnMap;           
 };
 
 #endif  

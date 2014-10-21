@@ -10,6 +10,7 @@
 
 #include <tools/randd>
 #include <tools/randf>
+#include <tools/sto>
 
 #include <fstream>
 
@@ -38,18 +39,19 @@ int main(int,char**) {
   tools::wcsv::ntuple ntu(writer); //default sep is ','
 
   // create some columns with basic types :
-  tools::wcsv::ntuple::column<unsigned int>* col_index =
-    ntu.create_column<unsigned int>("index");
-  tools::wcsv::ntuple::column<double>* col_rgauss =
-    ntu.create_column<double>("rgauss");
-  tools::wcsv::ntuple::column<float>* col_rbw =
-    ntu.create_column<float>("rbw");
+  tools::wcsv::ntuple::column<unsigned int>* col_index = ntu.create_column<unsigned int>("index");
+  tools::wcsv::ntuple::column<double>* col_rgauss = ntu.create_column<double>("rgauss");
+  tools::wcsv::ntuple::column<float>* col_rbw = ntu.create_column<float>("rbw");
+  tools::wcsv::ntuple::column<std::string>* col_str = ntu.create_column<std::string>("strings");
+
+  //ntu.write_hippo_header();
 
   // fill :
   for(unsigned int count=0;count<entries;count++) {    
     col_index->fill(count);
     col_rgauss->fill(rg.shoot());
     col_rbw->fill(rbw.shoot());
+    col_str->fill("str "+tools::to(count));
     ntu.add_row(); // it will write columns data as a row in the file.
   }
 

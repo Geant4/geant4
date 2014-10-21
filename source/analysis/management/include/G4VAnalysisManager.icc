@@ -99,6 +99,13 @@ G4bool G4VAnalysisManager::FillNtupleDColumn(G4int columnId, G4double value)
 
 //_____________________________________________________________________________
 inline 
+G4bool G4VAnalysisManager::FillNtupleSColumn(G4int columnId, const G4String& value)
+{
+  return fVNtupleManager->FillNtupleSColumn(columnId, value);
+}                                         
+
+//_____________________________________________________________________________
+inline 
 G4bool G4VAnalysisManager::AddNtupleRow()
 { 
   return fVNtupleManager->AddNtupleRow();
@@ -125,6 +132,14 @@ G4bool G4VAnalysisManager::FillNtupleDColumn(G4int ntupleId, G4int columnId,
                                                G4double value)
 {
   return fVNtupleManager->FillNtupleDColumn(ntupleId, columnId, value);
+}                                         
+
+//_____________________________________________________________________________
+inline 
+G4bool G4VAnalysisManager::FillNtupleSColumn(G4int ntupleId, G4int columnId, 
+                                               const G4String& value)
+{
+  return fVNtupleManager->FillNtupleSColumn(ntupleId, columnId, value);
 }                                         
 
 //_____________________________________________________________________________

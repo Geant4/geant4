@@ -57,6 +57,8 @@ class G4VRNtupleManager : public G4BaseAnalysisManager
                             G4float& value)= 0;
     virtual G4bool SetNtupleDColumn(const G4String& columnName, 
                             G4double& value)= 0;
+    virtual G4bool SetNtupleSColumn(const G4String& /*columnName*/, 
+                            G4String& /*value*/) { return false; }
     // Bind the ntuple columns of vector type
     virtual G4bool SetNtupleIColumn(const G4String& columnName, 
                             std::vector<G4int>& vector) = 0;
@@ -71,6 +73,8 @@ class G4VRNtupleManager : public G4BaseAnalysisManager
                             const G4String& columnName, G4float& value)= 0;
     virtual G4bool SetNtupleDColumn(G4int ntupleId, 
                             const G4String& columnName, G4double& value)= 0;
+    virtual G4bool SetNtupleSColumn(G4int /*ntupleId*/, 
+                            const G4String& /*columnName*/, G4String& /*value*/) { return false; }
     // Bind the ntuple columns of vector type
     virtual G4bool SetNtupleIColumn(G4int ntupleId, const G4String& columnName, 
                             std::vector<G4int>& vector) = 0;

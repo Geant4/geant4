@@ -85,7 +85,7 @@ tools::wroot::ntuple::column<float>*
 G4RootNtupleManager::GetNtupleFColumn(G4int ntupleId, G4int columnId) const
 {
   G4RootNtupleDescription* ntupleDecription
-    = GetNtupleInFunction(ntupleId, "GetNtupleIColumn");
+    = GetNtupleInFunction(ntupleId, "GetNtupleFColumn");
   if ( ! ntupleDecription ) return 0;
 
   std::map<G4int, tools::wroot::ntuple::column<float>* >& ntupleFColumnMap
@@ -111,7 +111,7 @@ tools::wroot::ntuple::column<double>*
 G4RootNtupleManager::GetNtupleDColumn(G4int ntupleId, G4int columnId) const
 {
   G4RootNtupleDescription* ntupleDecription
-    = GetNtupleInFunction(ntupleId, "GetNtupleIColumn");
+    = GetNtupleInFunction(ntupleId, "GetNtupleDColumn");
   if ( ! ntupleDecription ) return 0;
 
   std::map<G4int, tools::wroot::ntuple::column<double>* >& ntupleDColumnMap
@@ -124,6 +124,31 @@ G4RootNtupleManager::GetNtupleDColumn(G4int ntupleId, G4int columnId) const
     description << "      "  << "ntupleId " << ntupleId
                 << " columnId " << columnId << " does not exist.";
     G4Exception("G4RootNtupleManager::GetNtupleDColumn()",
+                "Analysis_W009", JustWarning, description);
+    return 0;
+  }
+  
+  return it->second;
+}  
+ 
+//_____________________________________________________________________________
+tools::wroot::ntuple::column_string* 
+G4RootNtupleManager::GetNtupleSColumn(G4int ntupleId, G4int columnId) const
+{
+  G4RootNtupleDescription* ntupleDecription
+    = GetNtupleInFunction(ntupleId, "GetNtupleSColumn");
+  if ( ! ntupleDecription ) return 0;
+
+  std::map<G4int, tools::wroot::ntuple::column_string* >& ntupleSColumnMap
+    = ntupleDecription->fNtupleSColumnMap;
+  std::map<G4int, tools::wroot::ntuple::column_string* >::const_iterator it
+    = ntupleSColumnMap.find(columnId);
+    
+  if ( it == ntupleSColumnMap.end() ) {
+    G4ExceptionDescription description;
+    description << "      "  << "ntupleId " << ntupleId
+                << " columnId " << columnId << " does not exist.";
+    G4Exception("G4RootNtupleManager::GetNtupleSColumn()",
                 "Analysis_W009", JustWarning, description);
     return 0;
   }
@@ -196,6 +221,10 @@ void G4RootNtupleManager::CreateNtuplesFromBooking()
         else if ( it->cls_id()== tools::_cid(double(0))) {
           (*itn)->fNtupleDColumnMap[index++] 
             = (*itn)->fNtuple->find_column<double>(it->name());
+        }
+        else if ( it->cls_id()== tools::_cid(std::string(""))) {
+          (*itn)->fNtupleSColumnMap[index++] 
+            = (*itn)->fNtuple->find_column_string(it->name());
         }
         else {
           G4ExceptionDescription description;
@@ -316,6 +345,13 @@ G4int G4RootNtupleManager::CreateNtupleDColumn(const G4String& name,
 {
   G4int ntupleId = fNtupleDescriptionVector.size() + fFirstId - 1;
   return CreateNtupleDColumn(ntupleId, name, vector);
+}  
+
+//_____________________________________________________________________________
+G4int G4RootNtupleManager::CreateNtupleSColumn(const G4String& name)
+{
+  G4int ntupleId = fNtupleDescriptionVector.size() + fFirstId - 1;
+  return CreateNtupleSColumn(ntupleId, name);
 }  
 
 //_____________________________________________________________________________
@@ -511,6 +547,58 @@ G4int G4RootNtupleManager::CreateNtupleDColumn(G4int ntupleId,
 }                                         
 
 //_____________________________________________________________________________
+G4int G4RootNtupleManager::CreateNtupleSColumn(G4int ntupleId, 
+                                               const G4String& name)
+{
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) {
+    G4ExceptionDescription description;
+    description << name << " ntupleId " << ntupleId; 
+    fState.GetVerboseL4()->Message("create", "ntuple S column", description);
+  }  
+#endif
+
+  G4RootNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "CreateNtupleSColumn");
+  if ( ! ntupleDescription )  return -1;   
+
+  tools::ntuple_booking* ntupleBooking
+    = ntupleDescription->fNtupleBooking;  
+
+  if ( ! ntupleBooking ) {
+    G4ExceptionDescription description;
+    description << "      " 
+                << "Ntuple " << ntupleId << " has to be created first. ";
+    G4Exception("G4RootNtupleManager::CreateNtupleSColumn()",
+                "Analysis_W005", JustWarning, description);
+    return -1;       
+  }
+
+  // Save column info in booking
+  G4int index = ntupleBooking->columns().size();
+  ntupleBooking->add_column<std::string>(name);  
+ 
+  // Create column if ntuple already exists
+  if ( ntupleDescription->fNtuple ) {
+    tools::wroot::ntuple::column_string* column
+      = ntupleDescription->fNtuple->create_column_string(name);
+    ntupleDescription->fNtupleSColumnMap[index] = column;
+  }  
+  
+  fLockFirstNtupleColumnId = true;
+
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL2() ) {
+    G4ExceptionDescription description;
+    description << name << " ntupleId " << ntupleId; 
+    fState.GetVerboseL2()->Message("create", "ntuple S column", description);
+  }  
+#endif
+
+  return index + fFirstNtupleColumnId;       
+}                                         
+
+//_____________________________________________________________________________
 void G4RootNtupleManager::FinishNtuple(G4int /*ntupleId*/)
 { 
   // nothing to be done here
@@ -532,6 +620,13 @@ G4bool G4RootNtupleManager::FillNtupleFColumn(G4int columnId, G4float value)
 G4bool G4RootNtupleManager::FillNtupleDColumn(G4int columnId, G4double value)
 {
   return FillNtupleDColumn(fFirstId, columnId, value);
+}                                         
+
+//_____________________________________________________________________________
+G4bool G4RootNtupleManager::FillNtupleSColumn(G4int columnId, 
+                                              const G4String& value)
+{
+  return FillNtupleSColumn(fFirstId, columnId, value);
 }                                         
 
 //_____________________________________________________________________________
@@ -592,6 +687,7 @@ G4bool G4RootNtupleManager::FillNtupleFColumn(G4int ntupleId, G4int columnId,
 #endif
   return true;       
 }                                         
+
 //_____________________________________________________________________________
 G4bool G4RootNtupleManager::FillNtupleDColumn(G4int ntupleId, G4int columnId, 
                                                 G4double value)
@@ -619,6 +715,32 @@ G4bool G4RootNtupleManager::FillNtupleDColumn(G4int ntupleId, G4int columnId,
   return true;       
 }                                         
 
+//_____________________________________________________________________________
+G4bool G4RootNtupleManager::FillNtupleSColumn(G4int ntupleId, G4int columnId, 
+                                                const G4String& value)
+{
+  tools::wroot::ntuple::column_string* column 
+    = GetNtupleSColumn(ntupleId, columnId);
+  if ( ! column ) {
+    G4ExceptionDescription description;
+    description << "      " << "ntupleId " <<  ntupleId
+                << " columnId " << columnId << " does not exist.";
+    G4Exception("G4RootNtupleManager::FillNtupleSColumn()",
+                "Analysis_W009", JustWarning, description);
+    return false;
+  }  
+  
+  column->fill(value);
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) {
+    G4ExceptionDescription description;
+    description << " ntupleId " << ntupleId  
+                << " columnId " << columnId << " value " << value;
+    fState.GetVerboseL4()->Message("fill", "ntuple S column", description);
+  }  
+#endif
+  return true;       
+}                                         
 //_____________________________________________________________________________
 G4bool G4RootNtupleManager::AddNtupleRow(G4int ntupleId)
 { 

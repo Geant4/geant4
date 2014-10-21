@@ -142,6 +142,13 @@ G4bool G4XmlRNtupleManager::SetNtupleDColumn(const G4String& columnName,
 }
 
 //_____________________________________________________________________________
+G4bool G4XmlRNtupleManager::SetNtupleSColumn(const G4String& columnName, 
+                                             G4String& value)
+{                                             
+  return SetNtupleSColumn(fFirstId, columnName, value);
+}
+
+//_____________________________________________________________________________
 G4bool G4XmlRNtupleManager::SetNtupleIColumn(const G4String& columnName, 
                                              std::vector<G4int>& vector)
 {
@@ -252,6 +259,38 @@ G4bool G4XmlRNtupleManager::SetNtupleDColumn(G4int ntupleId,
     G4ExceptionDescription description;
     description << " ntupleId " << ntupleId << " " << columnName;  
     fState.GetVerboseL2()->Message("set", "ntuple D colum", description, true);
+  }  
+#endif
+
+  return true;
+}
+
+//_____________________________________________________________________________
+G4bool G4XmlRNtupleManager::SetNtupleSColumn(G4int ntupleId, 
+                                             const G4String& columnName, 
+                                             G4String& value)
+{                                             
+// Add protection if ntuple is initialized
+
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) {
+    G4ExceptionDescription description;
+    description << " ntupleId " << ntupleId << " " << columnName;  
+    fState.GetVerboseL4()->Message("set", "ntuple S column", description);
+  }  
+#endif
+
+  G4int index = ntupleId - fFirstId;
+  // add check index
+  
+  tools::ntuple_binding* ntupleBinding = fNtupleVector[index]->fNtupleBinding;
+  ntupleBinding->add_column(columnName, value);
+
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL2() ) {
+    G4ExceptionDescription description;
+    description << " ntupleId " << ntupleId << " " << columnName;  
+    fState.GetVerboseL2()->Message("set", "ntuple S colum", description, true);
   }  
 #endif
 

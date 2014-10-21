@@ -29,6 +29,11 @@ inline const std::string& TH2D_cls(){
   return s_v;  
 }
 
+inline const std::string& TH3D_cls(){
+  static const std::string s_v("TH3D");
+  return s_v;
+}
+
 inline const std::string& TProfile_cls(){
   static const std::string s_v("TProfile");
   return s_v;

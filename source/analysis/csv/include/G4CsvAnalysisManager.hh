@@ -111,6 +111,9 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
     std::vector<tools::wcsv::ntuple*>::iterator EndNtuple();
     std::vector<tools::wcsv::ntuple*>::const_iterator BeginConstNtuple() const;
     std::vector<tools::wcsv::ntuple*>::const_iterator EndConstNtuple() const;
+    
+    // Csv format specific option
+    void SetIsHippoHeader(G4bool isHippoHeader);
 
   protected:
     // virtual methods from base class

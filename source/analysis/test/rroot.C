@@ -75,6 +75,8 @@ void rroot() {
   std::vector<double>* vd = new std::vector<double>();
   tree->SetBranchAddress("vec_double",&vd);
 
+  TLeafC* leaf_string = (TLeafC*)tree->GetLeaf("strings");
+
   int num = tree->GetEntries();  
   std::cout << "number of events = " << num << std::endl;
 
@@ -93,6 +95,12 @@ void rroot() {
       break;
     }
   //std::cout << "debug : " << rgauss << std::endl;
+
+    if(leaf_string && (index<20)) {
+      char* rstr = leaf_string->GetValueString();
+      std::cout << "rstr : index = " << index << ", string = " << std::string(rstr) << std::endl;
+    }
+
     hrg->Fill(rgauss,1);
 
     h_nvf->Fill(vf->size(),1);

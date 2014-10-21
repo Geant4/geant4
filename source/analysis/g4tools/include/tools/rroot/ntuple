@@ -114,7 +114,7 @@ public:
     virtual ~column_string(){}
   protected:
     column_string(const column_string& a_from)
-    : read::icol(a_from)
+    :read::icol(a_from)
     ,m_leaf(a_from.m_leaf) 
     ,m_index(a_from.m_index)
     {}

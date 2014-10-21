@@ -124,7 +124,8 @@ inline std::string axis_title(const HDATA& a_data,
 template <class HDATA>
 inline bool TH_write_1D(buffer& a_buffer,
                         const HDATA& a_data,
-                        const std::string& a_name) {
+                        const std::string& a_name,
+                        const std::vector<double>& a_bin_Sw2) {
 
     if(!a_buffer.write_version(3)) return false;
 
@@ -140,56 +141,38 @@ inline bool TH_write_1D(buffer& a_buffer,
     if(a_data.m_dimension==3) {
 
      {histo::axis<double,unsigned int> haxis(a_data.m_axes[0]);
-      if(!axis_stream(a_buffer,haxis,"xaxis",
-            axis_title(a_data,histo::key_axis_x_title())))
-        return false;}
+      if(!axis_stream(a_buffer,haxis,"xaxis",axis_title(a_data,histo::key_axis_x_title()))) return false;}
 
      {histo::axis<double,unsigned int> haxis(a_data.m_axes[1]);
-      if(!axis_stream(a_buffer,haxis,"yaxis",
-            axis_title(a_data,histo::key_axis_y_title())))
-        return false;}
+      if(!axis_stream(a_buffer,haxis,"yaxis",axis_title(a_data,histo::key_axis_y_title()))) return false;}
 
      {histo::axis<double,unsigned int> haxis(a_data.m_axes[2]);
-      if(!axis_stream(a_buffer,haxis,"zaxis",
-            axis_title(a_data,histo::key_axis_z_title())))
-        return false;}
+      if(!axis_stream(a_buffer,haxis,"zaxis",axis_title(a_data,histo::key_axis_z_title()))) return false;}
 
     } else if(a_data.m_dimension==2) {
 
      {histo::axis<double,unsigned int> haxis(a_data.m_axes[0]);
-      if(!axis_stream(a_buffer,haxis,"xaxis",
-            axis_title(a_data,histo::key_axis_x_title())))
-        return false;}
+      if(!axis_stream(a_buffer,haxis,"xaxis",axis_title(a_data,histo::key_axis_x_title()))) return false;}
 
      {histo::axis<double,unsigned int> haxis(a_data.m_axes[1]);
-      if(!axis_stream(a_buffer,haxis,"yaxis",
-            axis_title(a_data,histo::key_axis_y_title())))
-        return false;}
+      if(!axis_stream(a_buffer,haxis,"yaxis",axis_title(a_data,histo::key_axis_y_title()))) return false;}
 
      {histo::axis<double,unsigned int> dummy;
       dummy.configure(1,0,1);
-      if(!axis_stream(a_buffer,dummy,"zaxis",
-            axis_title(a_data,histo::key_axis_z_title())))
-        return false;}
+      if(!axis_stream(a_buffer,dummy,"zaxis",axis_title(a_data,histo::key_axis_z_title()))) return false;}
 
     } else if(a_data.m_dimension==1) {
 
      {histo::axis<double,unsigned int> haxis(a_data.m_axes[0]);
-      if(!axis_stream(a_buffer,haxis,"xaxis",
-            axis_title(a_data,histo::key_axis_x_title())))
-        return false;}
+      if(!axis_stream(a_buffer,haxis,"xaxis",axis_title(a_data,histo::key_axis_x_title()))) return false;}
 
      {histo::axis<double,unsigned int> dummy;
       dummy.configure(1,0,1);
-      if(!axis_stream(a_buffer,dummy,"yaxis",
-            axis_title(a_data,histo::key_axis_y_title())))
-        return false;}
+      if(!axis_stream(a_buffer,dummy,"yaxis",axis_title(a_data,histo::key_axis_y_title()))) return false;}
 
      {histo::axis<double,unsigned int> dummy;
       dummy.configure(1,0,1);
-      if(!axis_stream(a_buffer,dummy,"zaxis",
-            axis_title(a_data,histo::key_axis_z_title())))
-        return false;}
+      if(!axis_stream(a_buffer,dummy,"zaxis",axis_title(a_data,histo::key_axis_z_title()))) return false;}
 
     } else {
       return false;
@@ -199,8 +182,8 @@ inline bool TH_write_1D(buffer& a_buffer,
     if(!a_buffer.write((short)(1000 * 0.5))) return false; //fBarWidth
 
     if(!a_buffer.write((double)a_data.m_all_entries)) return false;
-    if(!a_buffer.write(a_data.m_in_range_Sw)) return false;
-    if(!a_buffer.write(a_data.m_in_range_Sw2)) return false;
+    if(!a_buffer.write((double)a_data.m_in_range_Sw)) return false;  //enforce double in case h1df
+    if(!a_buffer.write((double)a_data.m_in_range_Sw2)) return false; //idem
 
    {double value;
     a_data.get_ith_axis_Sxw(0,value);  
@@ -214,10 +197,9 @@ inline bool TH_write_1D(buffer& a_buffer,
     if(!a_buffer.write((double)-1111)) return false; //fMinimum
     if(!a_buffer.write((double)0)) return false; //NormFactor
 
-    if(!a_buffer.write_array(std::vector<double>()))
-      return false; //fContour TArrayD
+    if(!a_buffer.write_array(std::vector<double>())) return false; //fContour TArrayD
 
-    if(!a_buffer.write_array(a_data.m_bin_Sw2)) return false; //fSumw2 TArrayD
+    if(!a_buffer.write_array(a_bin_Sw2)) return false; //fSumw2 TArrayD
 
     // store annotation on fOption    
     // but try to fool ROOT in order that it does not
@@ -236,9 +218,10 @@ inline bool TH_write_1D(buffer& a_buffer,
 template <class HDATA>
 inline bool TH_write_2D(buffer& a_buffer,
                         const HDATA& a_data,
-                        const std::string& a_name) {
+                        const std::string& a_name,
+                        const std::vector<double>& a_bin_Sw2) {
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_1D(a_buffer,a_data,a_name)) return false;
+  if(!TH_write_1D(a_buffer,a_data,a_name,a_bin_Sw2)) return false;
   if(!a_buffer.write((double)1)) return false; //ScaleFactor
 
  {double value;
@@ -255,9 +238,12 @@ inline bool TH_write_2D(buffer& a_buffer,
 }
 
 template <class HDATA>
-inline bool TH_write_3D(buffer& a_buffer,const HDATA& a_data,const std::string& a_name) {
+inline bool TH_write_3D(buffer& a_buffer,
+                        const HDATA& a_data,
+                        const std::string& a_name,
+                        const std::vector<double>& a_bin_Sw2) {
   if(!a_buffer.write_version(4)) return false;
-  if(!TH_write_1D(a_buffer,a_data,a_name)) return false;
+  if(!TH_write_1D(a_buffer,a_data,a_name,a_bin_Sw2)) return false;
   if(!Att3D_stream(a_buffer)) return false;
 
  {double value;
@@ -286,7 +272,7 @@ inline bool TH1F_stream(buffer& a_buffer,
                         const histo::h1df& a_h,
                         const std::string& a_name) {
   if(!a_buffer.write_version(1)) return false;
-  if(!TH_write_1D(a_buffer,a_h,a_name)) return false;
+  if(!TH_write_1D(a_buffer,a_h,a_name,convert<float,double>(a_h.m_bin_Sw2))) return false;
   if(!a_buffer.write_array(a_h.m_bin_Sw)) return false;
   return true;
 }
@@ -295,7 +281,7 @@ inline bool TH1F_stream(buffer& a_buffer,
                         const histo::h1d& a_h,
                         const std::string& a_name) {
   if(!a_buffer.write_version(1)) return false;
-  if(!TH_write_1D(a_buffer,a_h,a_name)) return false;
+  if(!TH_write_1D(a_buffer,a_h,a_name,a_h.m_bin_Sw2)) return false;
   if(!a_buffer.write_array(convert<double,float>(a_h.m_bin_Sw))) return false;
   return true;
 }
@@ -304,7 +290,7 @@ inline bool TH1D_stream(buffer& a_buffer,
                         const histo::h1d& a_h,
                         const std::string& a_name) {
   if(!a_buffer.write_version(1)) return false;
-  if(!TH_write_1D(a_buffer,a_h,a_name)) return false;
+  if(!TH_write_1D(a_buffer,a_h,a_name,a_h.m_bin_Sw2)) return false;
   if(!a_buffer.write_array(a_h.m_bin_Sw)) return false; //fArray TArrayD
   return true;
 }
@@ -313,7 +299,7 @@ inline bool TH2F_stream(buffer& a_buffer,
                         const histo::h2d& a_h,
                         const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_2D(a_buffer,a_h,a_name)) return false;
+  if(!TH_write_2D(a_buffer,a_h,a_name,a_h.m_bin_Sw2)) return false;
   if(!a_buffer.write_array(convert<double,float>(a_h.m_bin_Sw))) return false; //fArray TArrayF
   return true;
 }
@@ -322,7 +308,7 @@ inline bool TH2F_stream(buffer& a_buffer,
                         const histo::h2df& a_h,
                         const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_2D(a_buffer,a_h,a_name)) return false;
+  if(!TH_write_2D(a_buffer,a_h,a_name,convert<float,double>(a_h.m_bin_Sw2))) return false;
   if(!a_buffer.write_array(a_h.m_bin_Sw)) return false;
   return true;
 }
@@ -331,28 +317,28 @@ inline bool TH2D_stream(buffer& a_buffer,
                         const histo::h2d& a_h,
                         const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_2D(a_buffer,a_h,a_name)) return false;
+  if(!TH_write_2D(a_buffer,a_h,a_name,a_h.m_bin_Sw2)) return false;
   if(!a_buffer.write_array(a_h.m_bin_Sw)) return false; //fArray TArrayD
   return true;
 }
 
 inline bool TH3F_stream(buffer& a_buffer,const histo::h3d& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_3D(a_buffer,a_h,a_name)) return false;
+  if(!TH_write_3D(a_buffer,a_h,a_name,a_h.m_bin_Sw2)) return false;
   if(!a_buffer.write_array(convert<double,float>(a_h.m_bin_Sw))) return false; //fArray TArrayF
   return true;
 }
 
 inline bool TH3F_stream(buffer& a_buffer,const histo::h3df& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_3D(a_buffer,a_h,a_name)) return false;
+  if(!TH_write_3D(a_buffer,a_h,a_name,convert<float,double>(a_h.m_bin_Sw2))) return false;
   if(!a_buffer.write_array(a_h.m_bin_Sw)) return false; //fArray TArrayF
   return true;
 }
 
 inline bool TH3D_stream(buffer& a_buffer,const histo::h3d& a_h,const std::string& a_name){
   if(!a_buffer.write_version(3)) return false;
-  if(!TH_write_3D(a_buffer,a_h,a_name)) return false;
+  if(!TH_write_3D(a_buffer,a_h,a_name,a_h.m_bin_Sw2)) return false;
   if(!a_buffer.write_array(a_h.m_bin_Sw)) return false; //fArray TArrayD
   return true;
 }

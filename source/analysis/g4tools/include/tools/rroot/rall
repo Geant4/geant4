@@ -116,6 +116,17 @@ inline bool read_key(std::ostream& a_out,
     }
     delete h;
 
+  } else if(a_key.object_class()==tools::rroot::TH3D_cls()) {
+    tools::histo::h3d* h = tools::rroot::TH3D_stream(b); //we get ownership of h.
+    if(!h) {
+      a_out << "tools::rroot::read_key :"
+            << " TH3D streaming failed"
+            << std::endl;
+    } else {
+      if(a_dump) h->hprint(a_out);
+    }
+    delete h;
+
   } else if(a_key.object_class()==tools::rroot::TProfile_cls()) {
     tools::histo::p1d* p = tools::rroot::TProfile_stream(b);
     if(!p) {
@@ -295,6 +306,26 @@ inline tools::histo::h2d* key_to_h2d(tools::rroot::key& a_key){
   }
   tools::rroot::buffer b(out,a_key.file().byte_swap(),sz,buf,a_key.key_length(),false);
   return tools::rroot::TH2D_stream(b);
+}
+
+inline tools::histo::h3d* key_to_h3d(tools::rroot::key& a_key){
+  std::ostream& out = a_key.file().out();
+  if(a_key.object_class()!=tools::rroot::TH3D_cls()) {
+    out << "tools::rroot::from(h1d) :"
+        << " key not a TH3D."
+        << std::endl;
+    return 0;
+  }
+  unsigned int sz;
+  char* buf = a_key.get_object_buffer(sz); //we don't have ownership of buf.
+  if(!buf) {
+    out << "tools::rroot::from(h3d) :"
+        << " can't get data buffer of " << a_key.object_name() << "."
+        << std::endl;
+    return 0;
+  }
+  tools::rroot::buffer b(out,a_key.file().byte_swap(),sz,buf,a_key.key_length(),false);
+  return tools::rroot::TH3D_stream(b);
 }
 
 inline tools::histo::p1d* key_to_p1d(tools::rroot::key& a_key){

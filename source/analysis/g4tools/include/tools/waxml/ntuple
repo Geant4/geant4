@@ -70,6 +70,10 @@ protected:
     static const std::string s_v("double");
     return s_v;
   }
+  static const std::string& s_aida_type(const std::string&) {
+    static const std::string s_v("string");
+    return s_v;
+  }
 
 public:
   template <class T>
@@ -273,6 +277,8 @@ public:
         create_column<float>((*it).name());
       } else if((*it).cls_id()==_cid(double(0))) {
         create_column<double>((*it).name());
+      } else if((*it).cls_id()==_cid(std::string())) {
+        create_column<std::string>((*it).name());
 
       } else if((*it).cls_id()==_cid_std_vector<int>()) {
         std::vector<int>* vec = (std::vector<int>*)(*it).user_obj();

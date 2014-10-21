@@ -93,6 +93,7 @@ class G4VAnalysisReader
     G4bool SetNtupleIColumn(const G4String& columnName, G4int& value);
     G4bool SetNtupleFColumn(const G4String& columnName, G4float& value);
     G4bool SetNtupleDColumn(const G4String& columnName, G4double& value);
+    G4bool SetNtupleSColumn(const G4String& columnName, G4String& value);
     // Bind the ntuple colums of vector type
     G4bool SetNtupleIColumn(const G4String& columnName, 
                             std::vector<int>& vector);
@@ -107,6 +108,8 @@ class G4VAnalysisReader
                             G4float& value);
     G4bool SetNtupleDColumn(G4int ntupleId, const G4String& columnName, 
                             G4double& value);
+    G4bool SetNtupleSColumn(G4int ntupleId, const G4String& columnName, 
+                            G4String& value);
     // Bind the ntuple colums of vector type
     G4bool SetNtupleIColumn(G4int ntupleId, const G4String& columnName, 
                             std::vector<int>& vector);

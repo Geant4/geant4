@@ -1,4 +1,18 @@
+ 1.16.0 : write/read ntuple with std::string columns. Some important modifs in wroot/streamers to
+   stream properly TH[1,2,3]F histos.
+ - tools/cpp/raxml.cpp, rcsv.cpp, rroot.C, rroot.cpp : examples to read an ntuple std::column.
+ - tools/cpp/waxml.cpp, wcsv.cpp, wroot.cpp : examples to write an ntuple std::string column.
+ - rcsv_ntuple : is_hippo() method : to detect if a file is at the hippodraw format.
+ - rroot/clss, rall, streamers : modifs to read TH3D histos.
+ - wroot/ntuple : class column_string + modifs to write an ntuple string column.
+ - wroot/branch : create_leaf_string() : to create an std::string column.
+ - wroot/leaf : leaf_string : to write an ntuple string column.
+ - wroot/streamers : modifs to stream properly TH[1,2,3]F histos.
+ - wcsv_ntuple : modifs to write std::string columns.
+ - waxml/ntuple : modifs to write std::string columns.
+
  1.15.2 :
+ - test/cpp/[w,r]csv_histo.cpp : -verbose : change output to easily compare writing and reading mean,rms axes.
  - tools/rcsv_histo : correct m_bin_Sxw,Sx2w reading for [2,3] dimensions.
 
  1.15.1 :

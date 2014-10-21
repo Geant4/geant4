@@ -4,7 +4,7 @@
 //exlib_build_use exlib inlib expat
 
 // for example to read file produced by :
-//   inlib/example/cpp/tools_test_waxml.
+//   inlib/example/cpp/waxml.cpp.
 
 #include <tools/raxml>
 #include <tools/ntuple_binding>
@@ -41,6 +41,7 @@ int main(int argc,char** argv) {
 
  {std::vector<tools::raxml_out>::const_iterator it;
   for(it=objs.begin();it!=objs.end();++it) {
+    std::cout << "---------------------------------" << std::endl;
     std::cout << " obj = " << (*it).object() << std::endl;
     std::cout << " class = " << (*it).cls() << std::endl;
     std::cout << " path = " << (*it).path() << std::endl;
@@ -50,22 +51,21 @@ int main(int argc,char** argv) {
  {std::vector<tools::raxml_out>::const_iterator it;
   for(it=objs.begin();it!=objs.end();++it) {
     const tools::raxml_out& raxml_out = *it;
+    std::cout << "---------------------------------" << std::endl;
+    std::cout << "obj name = " << (*it).name() << std::endl;
     if(raxml_out.cls()==tools::histo::h1d::s_class()) {
       tools::histo::h1d* h = (tools::histo::h1d*)raxml_out.object();
-      std::cout << "---------------------------------" << std::endl;
       std::cout << "h1d : title " << h->title() << std::endl;
       std::cout << "h1d : entries " << h->entries() << std::endl;
       std::cout << "h1d : mean " << h->mean() << " rms " << h->rms() << std::endl;
     } else if(raxml_out.cls()==tools::histo::h2d::s_class()) {
       tools::histo::h2d* h = (tools::histo::h2d*)raxml_out.object();
-      std::cout << "---------------------------------" << std::endl;
       std::cout << "h2d : title " << h->title() << std::endl;
       std::cout << "h2d : entries " << h->entries() << std::endl;
       std::cout << "h2d : mean_x " << h->mean_x() << " rms_x " << h->rms_x() << std::endl;
       std::cout << "h2d : mean_y " << h->mean_y() << " rms_y " << h->rms_y() << std::endl;
     } else if(raxml_out.cls()==tools::aida::ntuple::s_class()) {
       tools::aida::ntuple* nt = (tools::aida::ntuple*)raxml_out.object();
-      std::cout << "---------------------------------" << std::endl;
       std::cout << "ntuple : title " << nt->title() << std::endl;
       std::cout << "ntuple : rows " << nt->rows() << std::endl;
      {const std::vector<tools::aida::base_col*>& cols = nt->cols();
@@ -79,7 +79,7 @@ int main(int argc,char** argv) {
         }
       }}
       //if from inlib/examples/cpp/waxml out.aida file.
-      tools::aida::aida_col<double>* col = nt->find_column<double>("rgauss");
+     {tools::aida::aida_col<double>* col = nt->find_column<double>("rgauss");
       if(col) {
         nt->start();
         for(unsigned int row=0;row<5;row++) {
@@ -88,7 +88,17 @@ int main(int argc,char** argv) {
           if(!col->get_entry(v)) {}
           std::cout << " " << v << std::endl;
         }
-      }
+      }}
+     {tools::aida::aida_col<std::string>* col = nt->find_column<std::string>("strings");
+      if(col) {
+        nt->start();
+        for(unsigned int row=0;row<5;row++) {
+          if(!nt->next()) break;
+	  std::string v;
+          if(!col->get_entry(v)) {}
+          std::cout << "row = " << row << ", string = " << v << std::endl;
+        }
+      }}
 
       ///////////////////////////////////////////////////////
       /// read by using variable column binding : ///////////
@@ -96,6 +106,8 @@ int main(int argc,char** argv) {
      {tools::ntuple_binding nbd;
       double rgauss;
       nbd.add_column("rgauss",rgauss);
+      std::string sval;
+      nbd.add_column("strings",sval);
       if(!nt->set_binding(std::cout,nbd)) {
         std::cout << "set ntuple binding failed." << std::endl;
         return EXIT_FAILURE;
@@ -108,6 +120,7 @@ int main(int argc,char** argv) {
           return EXIT_FAILURE;
         }
         //std::cout << energy << std::endl;
+        //std::cout << "string : " << sval << std::endl;
         h.fill(rgauss);
       }
       h.hprint(std::cout);}

@@ -265,3 +265,10 @@ G4CsvAnalysisManager::EndConstNtuple() const
 {
   return fNtupleManager->EndConstNtuple();
 }  
+
+//_____________________________________________________________________________
+inline
+void G4CsvAnalysisManager::SetIsHippoHeader(G4bool isHippoHeader)
+{
+  fNtupleManager->SetIsHippoHeader(isHippoHeader);
+}  

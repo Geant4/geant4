@@ -34,9 +34,7 @@ int main(int,char**) {
   unsigned int entries = 1000000;
 
  {tools::histo::h1d h("Gauss",100,-5,5);
-  for(unsigned int count=0;count<entries;count++) {
-    h.fill(rg.shoot(),1.4);
-  }
+  for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),1.4);
   // plotting hints :
   h.add_annotation(tools::histo::key_axis_x_title(),"rand gauss");
   h.add_annotation(tools::histo::key_axis_y_title(),"1.4*entries");
@@ -47,9 +45,7 @@ int main(int,char**) {
   }}
 
  {tools::histo::p1d h("Profile",100,-5,5,-2,2);
-  for(unsigned int count=0;count<entries;count++) {
-    h.fill(rg.shoot(),rbw.shoot(),1);
-  }
+  for(unsigned int count=0;count<entries;count++) h.fill(rg.shoot(),rbw.shoot(),1);
   if(!tools::waxml::write(writer,h,"/histo","prof")) {
     std::cout << "can't write prof." << std::endl;
     return EXIT_FAILURE;
@@ -82,10 +78,9 @@ int main(int,char**) {
  {tools::waxml::ntuple ntu(writer);
 
   // create some columns with basic types :
-  tools::waxml::ntuple::column<double>* col_rgauss =
-    ntu.create_column<double>("rgauss");
-  tools::waxml::ntuple::column<double>* col_rbw =
-    ntu.create_column<double>("rbw");
+  tools::waxml::ntuple::column<double>* col_rgauss = ntu.create_column<double>("rgauss");
+  tools::waxml::ntuple::column<double>* col_rbw = ntu.create_column<double>("rbw");
+  tools::waxml::ntuple::column<std::string>* col_str = ntu.create_column<std::string>("strings");
 
   ntu.write_header("/tuple","rg_rbw","Randoms");
 
@@ -93,6 +88,7 @@ int main(int,char**) {
   for(unsigned int count=0;count<10000;count++) {    
     col_rgauss->fill(rg.shoot());
     col_rbw->fill(rbw.shoot());
+    col_str->fill("str "+tools::to(count));
     ntu.add_row(); // it will write columns data as a <row> in the file.
   }
   ntu.write_trailer();}
@@ -103,16 +99,16 @@ int main(int,char**) {
  {tools::ntuple_booking nbk;
   nbk.add_column<double>("rgauss");
   nbk.add_column<double>("rbw");
+  nbk.add_column<std::string>("strings");
   std::vector<double> user_vec_d;
   nbk.add_column<double>("vec_d",user_vec_d);
 
   tools::waxml::ntuple ntu(writer,std::cout,nbk);
   if(ntu.columns().size()) {
 
-    tools::waxml::ntuple::column<double>* col_rgauss =
-      ntu.find_column<double>("rgauss");
-    tools::waxml::ntuple::column<double>* col_rbw =
-      ntu.find_column<double>("rbw");
+    tools::waxml::ntuple::column<double>* col_rgauss = ntu.find_column<double>("rgauss");
+    tools::waxml::ntuple::column<double>* col_rbw = ntu.find_column<double>("rbw");
+    tools::waxml::ntuple::column<std::string>* col_str = ntu.find_column<std::string>("strings");
 
     ntu.write_header("/tuple","rg_rbw_2","Randoms");
 
@@ -120,6 +116,7 @@ int main(int,char**) {
     for(unsigned int count=0;count<100;count++) {    
       col_rgauss->fill(rg.shoot());
       col_rbw->fill(rbw.shoot());
+      col_str->fill("str_"+tools::to(count));
      {user_vec_d.clear();
       unsigned int number = count%5;
       for(unsigned int i=0;i<number;i++) {
