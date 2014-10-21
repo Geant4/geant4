@@ -28,9 +28,9 @@
 /gps/pos/type Beam
 /gps/pos/shape Circle
 
-/gps/pos/centre -71.3 0.0 0.0 cm   
+/gps/pos/centre -171.3 0.0 0.0 cm   
 /gps/pos/radius 0.0 mm   
-/gps/pos/sigma_r 0.07 mm  
+/gps/pos/sigma_r 0.1 mm  
 
 /gps/ang/rot1 0 0 1
 /gps/ang/rot2 0 1 0
@@ -38,7 +38,7 @@
 /gps/pos/rot2 0 1 0
 # ###########the beam energy is in gaussian profile
 #/gps/ene/type Gauss
-#/gps/ene/mono 5 MeV  
+#/gps/ene/mono 7 MeV  
 #/gps/ene/sigma 0.0 MeV
 #/gps/ang/type iso
 #/gps/ang/mintheta 0 deg 
@@ -60,8 +60,8 @@
 ###/gps/ene/ezero 2.272727273
 
 ######################################################################
-/vis/scene/create 
-/vis/open OGL 
+#/vis/scene/create 
+#/vis/open OGL 
 /vis/viewer/set/background white
 /vis/viewer/set/viewpointThetaPhi 60 130
 /vis/viewer/zoom 1.0
@@ -88,7 +88,7 @@
 /LaserDriven/EnergySelector/Slit/HolePositionZ 35. mm
 #
 #/LaserDriven/EnergySelector/Disable
-/LaserDriven/Quadrupoles/DisableQuads
+#/LaserDriven/Quadrupoles/DisableQuads
 #############################################################################################
 # CUT AND STEP MAX 
 # Suggested values of cut and step:
@@ -118,4 +118,4 @@
 /changePhantom/update
 /event/printEventNumber 100
 
-/run/beamOn 1000
+/run/beamOn 500

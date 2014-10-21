@@ -4,14 +4,15 @@
 HadrontherapyElectricTabulatedField3D::HadrontherapyElectricTabulatedField3D( const char* filename, G4double exOffset, G4double eyOffset, G4double ezOffset) 
   :feXoffset(exOffset),feYoffset(eyOffset),feZoffset(ezOffset),einvertX(false),einvertY(false),einvertZ(false)
 {    
- 
+   //The format file is: X Y Z Ex Ey Ez
+
   G4double ElenUnit= cm;
   G4double EfieldUnit= volt/m; 
   G4cout << "\n-----------------------------------------------------------"
 	 << "\n      Electric field"
 	 << "\n-----------------------------------------------------------";
     
-  G4cout << "\n ---> " "Reading the field grid from " << filename << " ... " << endl; 
+  G4cout << "\n ---> " "Reading the field grid from " << filename << " ... " << endl;
 
   ifstream file( filename ); // Open the file for reading.
   
@@ -41,14 +42,7 @@ HadrontherapyElectricTabulatedField3D::HadrontherapyElectricTabulatedField3D( co
       zEField[ix][iy].resize(Enz);
     }
   }
-  
-  // Ignore other header information    
-  // The first line whose second character is '0' is considered to
-  // be the last line of the header.
-  do {
-    file.getline(ebuffer,256);
-  } while ( ebuffer[1]!='0');
-  
+
   // Read in the data
   G4double Exval=0.;
   G4double Eyval=0.;

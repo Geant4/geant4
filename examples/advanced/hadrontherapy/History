@@ -7,7 +7,8 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
          ====================================================
              History file of the Hadrontherapy application
          ====================================================	    
-
+21.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-04
+           - Testing of the laser driven beam line.
 20.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-03
            - Fixed timeout problem and other things which caused failure of tag V10-00-02
 16.10.2014 G.A.P. Cirrone; F. Romano; A. Tramontana; Tag: hadrontherapy-V10-00-02

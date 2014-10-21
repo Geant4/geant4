@@ -37,7 +37,8 @@
 HadrontherapyMagneticField3D::HadrontherapyMagneticField3D( const char* filename, double xOffset ) 
   :fXoffset(xOffset),invertX(false),invertY(false),invertZ(false)
 {    
- 
+   //The format file is: X Y Z Ex Ey Ez
+
   double lenUnit= meter; 
   double fieldUnit= tesla;  
   G4cout << "\n-----------------------------------------------------------"
@@ -74,13 +75,7 @@ HadrontherapyMagneticField3D::HadrontherapyMagneticField3D( const char* filename
       zField[ix][iy].resize(nz);
     }
   }
-  // Ignore other header information    
-  // The first line whose second character is '0' is considered to
-  // be the last line of the header.
-  do {
-    file.getline(buffer,256);
-  } while ( buffer[1]!='0');
-  
+
   // Read in the data
   G4double xval=0.;
   G4double yval=0.;
