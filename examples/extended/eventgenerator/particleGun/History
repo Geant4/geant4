@@ -13,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
 	 
+20-10-14 mma (particleGunExample-V10-00-04) 
+- particleGun.cc: nThreads via commands
+
 26-09-14 mma (particleGunExample-V10-00-03) 
 - migration to MT: add class ActionInitialization
 	 
