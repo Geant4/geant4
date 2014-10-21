@@ -1,0 +1,5 @@
+/control/echo {startTime} ps
+#/vis/ogl/set/startTime {startTime}-0.1 ps
+/vis/ogl/set/endTime {startTime} ps
+#/vis/ogl/printEPS
+# {timeRange} ps
