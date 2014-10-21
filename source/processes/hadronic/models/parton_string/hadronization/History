@@ -14,33 +14,36 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
-15 Oct. 2014 V. Uzhinsky (had-hadronization-V10-00-08)
-- Essential inprovement of QGS hadronization. ---------------
+
+20-Oct-2014 A.Ribon        (had-hadronization-V10-00-09) 
+- G4VLongitudinalStringDecay.cc : mixing between the vector mesons
+  rho0 and omega have been changed from 50% (rho0) - 50% (omega) to
+  100% (rho0) - 0% (omega), in order to reduce the pi0 production. 
+  Expected little effects in thin-target, and significant effects
+  in hadronic showers in calorimeters.
+
+15-Oct-2014 V.Uzhinsky     (had-hadronization-V10-00-08)
+- Essential improvement of QGS hadronization.
   Fragmentation functions of quarks and di-quarks are closed to Kaidalov's
   and Shabelskii's ones. G4QGSMFragmentation::GetLightConeZ was almost
   re-written. Ionk algorithm is inserted for sampling light-cone momentum
   fraction, z. Parameters of the fragmentation were tuned. They will be
   improved after a revision of the QGSM string creation algorithm.
+- The algorith of G4QGSMFragmentation::SplitEandP was improved. It is 
+  faster now.
 
-  The algorith of G4QGSMFragmentation::SplitEandP was improved. It is more
-  fast now.
-
-29 Sept. 2014 V. Uzhinsky (had-hadronization-V10-00-07)
-- Essential inprovement of hadronization. ---------------
-
-- Parameters and string fragmentation functions of G4LundStringFragmentation.cc
-  were tuned in an assumption that the weight of uu-diquarks in protons = 1/6.
-
+29-Sep-2014, V.Uzhinsky    (had-hadronization-V10-00-07)
+- Essential improvement of hadronization.
+- Parameters and string fragmentation functions of 
+  G4LundStringFragmentation.cc were tuned, assuming that the weight of
+  uu-diquarks in protons is 1/6.
 - Threatment of string decay direction was improved in G4FragmentingString.cc
   and G4LundStringFragmentation.cc
-
 - EnergyAndMomentumCorrector was improved in G4ExcitedStringDecay.cc
-
-- The method DiQuarkSplitUp in G4VLongitudinalStringDecay.cc is turned to virtual,
-  and the corresponding methods were introduced in G4LundStringFragmentation.cc
-  and G4QGSMFragmentation.cc
-
-- Debuging possibilities are impruved.
+- The method DiQuarkSplitUp in G4VLongitudinalStringDecay.cc is turned to
+  virtual, and the corresponding methods were introduced in
+  G4LundStringFragmentation.cc and G4QGSMFragmentation.cc
+- Debugging possibilities are improved.
 
 04-Jul-2014, A.Ribon       (had-hadronization-V10-00-06)
 - G4LundStringFragmentation.cc : brought back the Sample4Momentum method
@@ -50,7 +53,7 @@ code and to keep track of all tags.
 - G4ExcitedStringDecay.cc and G4LundStringFragmentation.cc : minor clean-up
   of the previous, internal two tags, and propose for testing.
 
-30-May-2014, V. Uzhinsky   (had-hadronization-V10-00-04)
+30-May-2014, V.Uzhinsky    (had-hadronization-V10-00-04)
 - Bug is fixed in G4LundStringFragmentation.cc for anti-diquark-diquark strings.
 - Anisotropic decay is only left in G4LundStringFragmentation::Sample4Momentum for
   a sampling of momenta of 2 last produced hadrons for all strings. Before this,

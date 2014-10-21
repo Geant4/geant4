@@ -83,9 +83,9 @@ G4VLongitudinalStringDecay::G4VLongitudinalStringDecay()
 
    //... vectorMesonMix[] is quark mixing parameters for vector mesons (Variable spin = 3)
    vectorMesonMix.resize(6);
-   vectorMesonMix[0] = 0.5;
+   vectorMesonMix[0] = 0.0;  //AR-20Oct2014 : it was 0.5
    vectorMesonMix[1] = 0.0;
-   vectorMesonMix[2] = 0.5;
+   vectorMesonMix[2] = 0.0;  //AR-20Oct2014 : it was 0.5
    vectorMesonMix[3] = 0.0;
    vectorMesonMix[4] = 1.0;
    vectorMesonMix[5] = 1.0; 
