@@ -12,6 +12,40 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20.10.2014 M.K                  tag test70-V10-00-07
+-----------------------------------------------------
+- Reactivate test70: migrate to new dna design
+
+15.05.2014 M.K                  tag test70-V10-00-06
+-----------------------------------------------------
+- Add a check for GCC
+
+15.05.2014 M.K                  tag test70-V10-00-05
+-----------------------------------------------------
+- Test where UOM is accepted
+
+15.05.2014 M.K                  tag test70-V10-00-03/04
+-----------------------------------------------------
+Compilation will crash !
+Find a way to use std::unordered_map with most supported compilers
+Add a flag for clang
+
+15.05.2014 M.K                  tag test70-V10-00-02
+-----------------------------------------------------
+- Crash this test : how to use way unordered_map
+on all compilers ?
+- Add clang flag
+
+14.05.2014 M.K                  tag test70-V10-00-01
+-----------------------------------------------------
+- Crash this test : how to use way unordered_map
+on all compilers ?
+
+13.05.2014 M.K                  tag test70-V10-00-00
+-----------------------------------------------------
+- Crash this test : how to use way unordered_map
+on all compilers ?
+
 11.11.2013 M.K                  tag test70-V09-06-06
 -----------------------------------------------------
 - Remove test70 from tests

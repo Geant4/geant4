@@ -36,33 +36,22 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class PhysicsList: public G4VModularPhysicsList
+class G4EmDNAChemistry;
+
+class PhysicsList : public G4VModularPhysicsList
 {
 public:
 
-    PhysicsList();
-    virtual ~PhysicsList();
-
-    inline void SetChemistryFlag(G4bool flag)
-    {
-        chemistryFlag = flag;
-    }
+  PhysicsList();
+  virtual ~PhysicsList();
 
 public:
-    // Construct particle and physics
-    void ConstructParticle();
-    void ConstructProcess();
-
-    // set cuts
-    void SetCuts();
+  // Construct particle and physics
+  void ConstructParticle();
+  void ConstructProcess();
 
 private:
-    G4double cutForGamma;
-    G4double cutForElectron;
-    G4double cutForPositron;
-    G4double cutForProton;
-    G4bool chemistryFlag;
-    G4VPhysicsConstructor*               emDNAPhysicsList;
+  G4EmDNAChemistry* fpChemList;
 };
 
 #endif

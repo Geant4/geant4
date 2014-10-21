@@ -58,103 +58,88 @@
 
 #include "G4Threading.hh"
 
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-ActionInitialization::ActionInitialization()
-: G4VUserActionInitialization()
-{}
+ActionInitialization::ActionInitialization() :
+    G4VUserActionInitialization()
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ActionInitialization::~ActionInitialization()
-{}
+{
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::BuildForMaster() const
 {
-	// In MT mode, to be clearer, the RunAction class for the master thread might be
-	// different than the one used for the workers.
-	// This RunAction will be called before and after starting the
-	// workers.
-	// For more details, please refer to :
-	// https://twiki.cern.ch/twiki/bin/view/Geant4/Geant4MTForApplicationDevelopers
-	//
-	// RunAction* runAction= new RunAction();
-	// SetUserAction(runAction);
+  // In MT mode, to be clearer, the RunAction class for the master thread might be
+  // different than the one used for the workers.
+  // This RunAction will be called before and after starting the
+  // workers.
+  // For more details, please refer to :
+  // https://twiki.cern.ch/twiki/bin/view/Geant4/Geant4MTForApplicationDevelopers
+  //
+  // RunAction* runAction= new RunAction();
+  // SetUserAction(runAction);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void ActionInitialization::Build() const
 {
-	// G4cout << "Build for = "<< G4RunManager::GetRunManager()->GetRunManagerType() << G4endl;
+  // G4cout << "Build for = "
+//  << G4RunManager::GetRunManager()->GetRunManagerType() << G4endl;
 
-	PrimaryGeneratorAction* primGenAction = new PrimaryGeneratorAction;
-	SetUserAction(primGenAction);
+  PrimaryGeneratorAction* primGenAction = new PrimaryGeneratorAction;
+  SetUserAction(primGenAction);
 
-    //------------------------------------------------------------------
-    // Set optional user action classes
+  //------------------------------------------------------------------
+  // Set optional user action classes
 
-	bool chemistryFlag = G4DNAChemistryManager::Instance()->IsChemistryActived();
+  bool chemistryFlag =
+      G4DNAChemistryManager::Instance()->IsChemistryActivated();
 
-    SetUserAction(new RunAction());
-    SetUserAction(new TrackingAction());
-    SetUserAction(new SteppingAction(primGenAction));
-    SetUserAction(new StackingAction());
-    if(chemistryFlag)
-    {
+  SetUserAction(new RunAction());
+  SetUserAction(new TrackingAction());
+  SetUserAction(new SteppingAction(primGenAction));
+  SetUserAction(new StackingAction());
+  if (chemistryFlag)
+  {
 //    	G4cout << "OK" << G4Threading::G4GetThreadId()<< G4endl;
 //    	G4Exception("","",FatalException,"");
-        G4ITStepManager::Instance()->SetUserAction(new ReactionAction());
-        G4ITStepManager::Instance()->SetVerbose(1);
+    G4ITStepManager::Instance()->SetUserAction(new ReactionAction());
+    G4ITStepManager::Instance()->SetVerbose(1);
 
-        ITTrackingInteractivity* itInteractivity = new ITTrackingInteractivity();
-        itInteractivity ->SetUserAction(new ITSteppingAction);
-        itInteractivity ->SetUserAction(new ITTrackingAction);
-        G4ITStepManager::Instance()->SetInteractivity(itInteractivity);
+    ITTrackingInteractivity* itInteractivity = new ITTrackingInteractivity();
+    itInteractivity->SetUserAction(new ITSteppingAction);
+    itInteractivity->SetUserAction(new ITTrackingAction);
+    G4ITStepManager::Instance()->SetInteractivity(itInteractivity);
+  }
 
-    	//__________________________________________________________________
-    	std::map<double,double>* steps = new std::map<double, double> ;
+  G4String fileName("output");
 
-    	/**
-    	 * Give to G4ITStepManager the user defined time steps
-    	 * eg : from 1 picosecond to 10 picosecond, the minimum time
-    	 * step that the TimeStepper can returned is 0.1 picosecond.
-    	 * Those time steps are used for the chemistry of G4DNA
-    	 */
+  if (G4RunManager::GetRunManager()->GetRunManagerType()
+      == G4RunManager::sequentialRM)
+  {
+    // write initial situation at 1 picosecond
+    G4DNAChemistryManager::Instance()->WriteInto(fileName + ".txt");
+  }
+  else
+  {
+    G4int id = G4Threading::G4GetThreadId();
 
-    	(*steps)[1*picosecond] = 0.1*picosecond;
-    	(*steps)[10*picosecond] = 1*picosecond;
-    	(*steps)[100*picosecond] = 3*picosecond;
-    	(*steps)[1000*picosecond] = 10*picosecond;
-    	(*steps)[10000*picosecond] = 100*picosecond;
+    G4String fileName_mt = fileName;
+    fileName_mt += G4UIcommand::ConvertToString(id);
+    fileName_mt += ".txt";
 
-    	G4ITStepManager::Instance()-> SetTimeSteps(steps);
-    	G4ITStepManager::Instance()->Initialize();
-    }
+    G4cout << "chosen file name : " << fileName_mt << G4endl;
+    // G4Exception("","",FatalException,"");
 
-    G4String fileName ("output");
-
-    if(G4RunManager::GetRunManager()->GetRunManagerType() == G4RunManager::sequentialRM)
-    {
-    	// write initial situation at 1 picosecond
-    	G4DNAChemistryManager::Instance()->WriteInto(fileName + ".txt");
-    }
-    else
-    {
-    	G4int id = G4Threading::G4GetThreadId();
-
-    	G4String fileName_mt = fileName;
-    	fileName_mt += G4UIcommand::ConvertToString(id);
-    	fileName_mt += ".txt";
-
-    	G4cout << "chosen file name : " << fileName_mt << G4endl;
-    	// G4Exception("","",FatalException,"");
-
-    	G4DNAChemistryManager::Instance()->WriteInto(fileName_mt);
-    }
-}  
+    G4DNAChemistryManager::Instance()->WriteInto(fileName_mt);
+  }
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

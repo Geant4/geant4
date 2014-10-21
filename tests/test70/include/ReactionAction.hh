@@ -39,7 +39,7 @@ class ReactionAction : public G4UserTimeStepAction
         virtual void TimeStepAction();
 
         virtual void UserReactionAction(const G4Track&,const G4Track&,
-                                  const G4TrackFastVector&, G4int);
+                                  const std::vector<G4Track*>&);
 };
 
 #endif // ITACTION_H

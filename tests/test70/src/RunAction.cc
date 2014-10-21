@@ -30,7 +30,7 @@
 #include "G4RunManager.hh"
 #include "RunAction.hh"
 #include "G4Run.hh"
-
+#include "G4DNAChemistryManager.hh"
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 RunAction::RunAction()
@@ -45,7 +45,7 @@ RunAction::~RunAction()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
-
+   G4DNAChemistryManager::Instance()->InitializeMaster();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

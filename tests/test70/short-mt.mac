@@ -3,4 +3,4 @@
 /IT/verbose 0
 /IT/endTime 10 nanosecond
 /IT/timeTolerance 0.1 picosecond
-/run/beamOn 10
+/run/beamOn 4

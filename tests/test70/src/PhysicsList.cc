@@ -32,7 +32,7 @@
 #include "PhysicsList.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4UnitsTable.hh"
-#include "G4EmDNAPhysicsChemistry.hh"
+#include "G4EmDNAChemistry.hh"
 #include "G4EmDNAPhysics.hh"
 #include "G4ITStepManager.hh"
 #include "G4DNAChemistryManager.hh"
@@ -41,71 +41,49 @@
 
 using namespace std;
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-PhysicsList::PhysicsList():  G4VModularPhysicsList()
+PhysicsList::PhysicsList() :
+    G4VModularPhysicsList(), fpChemList(0)
 {
-	defaultCutValue = 1*nanometer;
-	cutForGamma     = defaultCutValue;
-	cutForElectron  = defaultCutValue;
-	cutForPositron  = defaultCutValue;
-	cutForProton    = defaultCutValue;
+  defaultCutValue = 1 * nanometer;
 
-	SetVerboseLevel(1);
+  SetVerboseLevel(1);
+  RegisterPhysics(new G4EmDNAPhysics());
+
+  if (G4DNAChemistryManager::Instance()->IsChemistryActivated())
+  {
+    fpChemList = new G4EmDNAChemistry();
+    G4DNAChemistryManager::Instance()->SetChemistryList(fpChemList);
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 PhysicsList::~PhysicsList()
 {
-	delete emDNAPhysicsList;
-	G4ITStepManager::DeleteInstance();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void PhysicsList::ConstructParticle()
 {
-	if(G4DNAChemistryManager::Instance()->IsChemistryActived())
-	{
-		emDNAPhysicsList = new G4EmDNAPhysicsChemistry();
-	}
-	else
-		emDNAPhysicsList = new G4EmDNAPhysics();
-
-	emDNAPhysicsList->ConstructParticle();
+  if (G4DNAChemistryManager::Instance()->IsChemistryActivated())
+  {
+    fpChemList->ConstructMolecule();
+  }
+  G4VModularPhysicsList::ConstructParticle();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void PhysicsList::ConstructProcess()
 {
-	AddTransportation();
-	emDNAPhysicsList->ConstructProcess();
+  G4VModularPhysicsList::ConstructProcess();
+  if (G4DNAChemistryManager::Instance()->IsChemistryActivated())
+  {
+    fpChemList->ConstructProcess();
+  }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PhysicsList::SetCuts()
-{
-	if (verboseLevel >0)
-	{
-		G4cout << "PhysicsList::SetCuts:";
-		G4cout << "CutLength : " << G4BestUnit(defaultCutValue,"Length") << G4endl;
-	}
-
-	// set cut values for gamma at first and for e- second and next for e+,
-	// because some processes for e+/e- need cut values for gamma
-	SetCutValue(cutForGamma, "gamma");
-	SetCutValue(cutForElectron, "e-");
-	SetCutValue(cutForPositron, "e+");
-
-	// set cut values for proton and anti_proton before all other hadrons
-	// because some processes for hadrons need cut values for proton/anti_proton
-	SetCutValue(cutForProton, "proton");
-	SetCutValue(cutForProton, "anti_proton");
-
-	if (verboseLevel>0) DumpCutValuesTable();
-}
-
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

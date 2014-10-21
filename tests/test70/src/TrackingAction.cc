@@ -26,26 +26,28 @@
 #include "TrackingAction.hh"
 #include "G4SystemOfUnits.hh"
 
-TrackingAction::TrackingAction(): G4UserTrackingAction()
+TrackingAction::TrackingAction() :
+    G4UserTrackingAction()
 {
-    ;
+  ;
 }
 
 TrackingAction::~TrackingAction()
 {
-    ;
+  ;
 }
 
 void TrackingAction::PreUserTrackingAction(const G4Track* /*track*/)
 {
-    ;
+  ;
 }
 
 void TrackingAction::PostUserTrackingAction(const G4Track* track)
 {
-    if(track->GetTrackID() == 1)
-    {
-        G4cout<<"End of tracking primary particle, its final energy is :" << track->GetKineticEnergy() /keV << G4endl;
-    }
+  if (track->GetTrackID() == 1)
+  {
+    G4cout << "End of tracking primary particle, its final energy is :"
+    << track->GetKineticEnergy() / keV << G4endl;
+  }
 }
 
