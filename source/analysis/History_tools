@@ -1,3 +1,10 @@
+ 1.16.1 :
+ - tools/rroot/ntuple/column_string : implement the find_entry() method. It permits to read std::string
+   column by using the ntuple_binding way.
+ - test/cpp/rroot.cpp : example of ntuple_binding(std::string) usage.
+ - tools/histo/h[1,2,3] : set_bin_content() method.
+ - tools/wcsv_ntuple : set the title if creating from a booking.
+
  1.16.0 : write/read ntuple with std::string columns. Some important modifs in wroot/streamers to
    stream properly TH[1,2,3]F histos.
  - tools/cpp/raxml.cpp, rcsv.cpp, rroot.C, rroot.cpp : examples to read an ntuple std::column.

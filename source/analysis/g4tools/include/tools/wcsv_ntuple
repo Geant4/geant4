@@ -92,7 +92,9 @@ public:
          const ntuple_booking& a_bkg,
          char a_sep = ',')
   :m_writer(a_writer)
-  ,m_sep(a_sep){  
+  ,m_sep(a_sep)
+  ,m_title(a_bkg.title())
+  {
     const std::vector<column_booking>& cols = a_bkg.columns();
     std::vector<column_booking>::const_iterator it;
     for(it=cols.begin();it!=cols.end();++it){

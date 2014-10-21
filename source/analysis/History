@@ -17,6 +17,12 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 21, 2014 I. Hrivnacova (analysis-V10-00-34)
+- Updated to g4tools 1.16.1 (by G. Barrand):
+  Fixed reading root ntuple with column of std::string type 
+  by using ntuple_binding.
+  see History_tools for complete list of modifications.
+  
 October 20, 2014 I. Hrivnacova (analysis-V10-00-33)
 - Updated to g4tools 1.16.0 (by G. Barrand)
   Write/read ntuple with std::string columns,

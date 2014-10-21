@@ -32,12 +32,6 @@ inline const std::string& s_##a_name() {\
   return s_v;\
 }
 
-#define TOOLS_GLOBAL_ARG(a_name)\
-inline const std::string& s_##a_name() {\
-  static const std::string s_v(std::string("-")+std::string(#a_name));\
-  return s_v;\
-}
-
 #define TOOLS_SCLASS(a_name)\
 static const std::string& s_class() {\
   static const std::string s_v(#a_name);\

@@ -36,6 +36,7 @@ public:
     fac = _sqrt(-REAL(2)*_log(r)/r);
     return (v2 * fac) * m_std_dev + m_mean;
   }
+  FLAT& flat() {return m_flat;}
 protected:
   FLAT& m_flat;
   REAL m_mean;
@@ -64,6 +65,7 @@ public:
     REAL displ = (REAL(1)/REAL(2)) * m_gamma * _tan(rval * m_half_pi);
     return m_mean + displ;
   }
+  FLAT& flat() {return m_flat;}
 protected:
   FLAT& m_flat;
   REAL m_mean;
@@ -87,6 +89,7 @@ public:
     } while(v<=REAL(0));
     return -_log(v)/m_rate;
   }
+  FLAT& flat() {return m_flat;}
 protected:
   FLAT& m_flat;
   REAL m_rate;

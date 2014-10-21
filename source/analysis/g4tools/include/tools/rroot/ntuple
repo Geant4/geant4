@@ -107,9 +107,21 @@ public:
     virtual cid id_cls() const {return id_class();}
     virtual const std::string& name() const {return m_leaf.name();}
   public:
-    column_string(leaf_string& a_leaf,int64& a_index)
+    virtual bool fetch_entry() const {
+      //NOTE : it is ok to have a NULL m_user_var.
+      unsigned int n;
+      if(!m_leaf.branch().find_entry(uint32(m_index),n)) {
+        if(m_user_var) *m_user_var = std::string();
+        return false;
+      }
+      if(m_user_var) *m_user_var = m_leaf.value();
+      return true;
+    }
+  public:
+    column_string(leaf_string& a_leaf,int64& a_index,std::string* a_user_var = 0)
     :m_leaf(a_leaf)
     ,m_index(a_index) //WARNING : we keep the ref !
+    ,m_user_var(a_user_var) //not owner
     {}
     virtual ~column_string(){}
   protected:
@@ -117,11 +129,17 @@ public:
     :read::icol(a_from)
     ,m_leaf(a_from.m_leaf) 
     ,m_index(a_from.m_index)
+    ,m_user_var(a_from.m_user_var)
     {}
-    column_string& operator=(const column_string&){return *this;}
+    column_string& operator=(const column_string& a_from){
+      if(&a_from==this) return *this;
+      m_user_var = a_from.m_user_var;
+      return *this;
+    }
   protected:
     leaf_string& m_leaf;
     int64& m_index; //WARNING : a ref.
+    std::string* m_user_var;
   };
 
   template <class RT,class T>
@@ -252,7 +270,7 @@ public:
 
       } else if(leaf_string* ls = safe_cast<base_leaf, leaf_string >(*bl) ){
 
-        column_string* col = new column_string(*ls,m_index);
+        column_string* col = new column_string(*ls,m_index,a_bd.find_variable<std::string>(bl->name()));
         m_cols.push_back(col);
 
       } else if(leaf_element* le = safe_cast<base_leaf,leaf_element>(*bl) ){

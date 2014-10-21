@@ -10,6 +10,9 @@
 #include <tools/rroot/file>
 #include <tools/rroot/rall>
 
+#include <tools/rroot/ntuple>
+#include <tools/ntuple_binding>
+
 #ifdef TOOLS_DONT_HAVE_ZLIB
 #else
 #include <tools/gzip_buffer>
@@ -159,6 +162,31 @@ int main(int argc,char** argv) {
         return EXIT_FAILURE;
       }
     }}
+
+    // read with the flat ntuple API :
+   {tools::rroot::ntuple ntu(tree); //use the flat ntuple API.
+    tools::ntuple_binding nbd;
+    double v_rgauss;
+    nbd.add_column("rgauss",v_rgauss);
+    std::string v_string;
+    nbd.add_column("strings",v_string);
+    if(!ntu.initialize(std::cout,nbd)) {
+      std::cout << "can't initialize ntuple with ntuple_binding." << std::endl;
+      return EXIT_FAILURE;
+    }
+    tools::histo::h1d hg("rgauss",100,-5,5);
+    ntu.start();
+    unsigned int count = 0;
+    while(ntu.next()){
+      if(!ntu.get_row()) {
+        std::cout << "get_row() failed." << std::endl;
+        return EXIT_FAILURE;
+      }
+      hg.fill(v_rgauss);
+      if(count<5) std::cout << "v_string " << v_string << std::endl;
+      count++;
+    }
+    std::cout << "ntuple_binding(rgauss) : " << hg.mean() << " " << hg.rms() << std::endl;}
 
   }}
 

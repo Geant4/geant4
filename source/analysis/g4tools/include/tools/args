@@ -61,8 +61,7 @@ public:
   bool is_empty() const {return m_args.size()?false:true;}
   unsigned int size() const {return m_args.size();}
   unsigned int number() const {return m_args.size();} //back comp.
-  bool find(const std::string& a_key,std::string& a_value,
-            const std::string& a_def = "") const {
+  bool find(const std::string& a_key,std::string& a_value,const std::string& a_def = "") const {
     tools_vforcit(arg,m_args,it) {
       if((*it).first==a_key) {
         a_value = (*it).second;
@@ -79,15 +78,13 @@ public:
     }
     return vals;
   }
-  bool find(const std::string& a_string,bool& a_value,
-            const bool& a_def = false) const {
+  bool find(const std::string& a_string,bool& a_value,const bool& a_def = false) const {
     std::string s;
     if(!find(a_string,s)) {a_value = a_def;return false;}
     return to(s,a_value,a_def);
   }
   template <class aT>
-  bool find(const std::string& a_string,aT& a_value,
-            const aT& a_def = aT()) const {
+  bool find(const std::string& a_string,aT& a_value,const aT& a_def = aT()) const {
     std::string _s;
     if(!find(a_string,_s)) {a_value = a_def;return false;}
     return to<aT>(_s,a_value,a_def);
@@ -145,8 +142,7 @@ public:
     }
   }
 
-  void add_keyvals(const std::vector<std::string>& a_args,
-                   bool a_strip = false) {
+  void add_keyvals(const std::vector<std::string>& a_args,bool a_strip = false) {
     //a_args must contain an even number of strings.
     unsigned int sz_half = a_args.size()/2;
     if((2*sz_half)!=a_args.size()) return;
@@ -187,6 +183,13 @@ public:
     return true;
   }
   
+  bool prog_name(std::string& a_value){
+    if(m_args.empty()) {a_value.clear();return false;}
+    if(m_args[0].second.size()) {a_value.clear();return false;}
+    a_value = m_args[0].first;
+    return true;
+  }
+
   bool file(std::string& a_file) const {
     std::string slast;
     std::string s;
@@ -464,8 +467,7 @@ inline std::string gui_toolkit(args& a_args,bool a_rm_in_args){
   return driver;
 }
 
-inline void window_size_from_args(const args& a_args,
-                                  unsigned int& a_ww,unsigned int& a_wh) {
+inline void window_size_from_args(const args& a_args,unsigned int& a_ww,unsigned int& a_wh) {
   // return some common window size (in pixels).
   if(a_args.is_arg("-iPod")||a_args.is_arg("-iPhone")) {
     a_ww = 320;
