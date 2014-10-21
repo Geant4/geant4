@@ -48,6 +48,7 @@
 # configuration.
 #
 
+
 #-----------------------------------------------------------------------
 # - Functions and Macros to help configuration of shell scripts.
 #-----------------------------------------------------------------------
@@ -731,4 +732,8 @@ foreach(_shell bourne;cshell)
     COMPONENT Runtime
     )
 endforeach()
+
+# - TEMP hack to get modulefile support in
+include(Geant4ConfigureModulefile)
+geant4_configure_modulefile()
 
