@@ -41,9 +41,7 @@
 
 class G4LogicalVolume;
 class G4Material;
-class G4UniformMagField;
 class DetectorMessenger;
-class FieldMessenger;
 class G4GlobalMagFieldMessenger;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+20-10-14 mma (testem1-V10-00-09)
+- PhysicsList : added G4EmStandardPhysicsSS
+- TestEm1.cc : option set nThreads via command
+	 
 26-08-14 mma (testem1-V10-00-08)
 - TestEm1.cc : SetNumberOfThreads( G4Threading::G4GetNumberOfCores() )
 	 
