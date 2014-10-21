@@ -36,8 +36,8 @@ GEANT4_ADD_TEST(test03-Csv-write
                 DEPENDS test03-Csv-build
                 )
 						
-#GEANT4_ADD_TEST(test03-Csv-read 
-#                COMMAND test03-Csv  -m run2.mac -read on
-#                ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
-#                DEPENDS test03-Csv-write
-#                )	
+GEANT4_ADD_TEST(test03-Csv-read 
+                COMMAND test03-Csv  -m run2.mac -read on
+                ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT}
+                DEPENDS test03-Csv-write
+                )      

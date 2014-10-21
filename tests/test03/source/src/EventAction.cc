@@ -121,6 +121,10 @@ void EventAction::EndOfEventAction(const G4Event* event)
     PrintEventStatistics(absoHit->GetEdep(), absoHit->GetTrackLength());
   }  
   
+  // Generate label for this event
+  std::ostringstream label;
+  label << "event" << eventID;
+
   // Fill histograms, ntuple
   //
 
@@ -136,6 +140,8 @@ void EventAction::EndOfEventAction(const G4Event* event)
   // fill ntuple
   if ( TestNtuple ) { 
     analysisManager->FillNtupleDColumn(0, 0, absoHit->GetEdep());
+    analysisManager->FillNtupleDColumn(0, 1, absoHit->GetTrackLength());
+    analysisManager->FillNtupleSColumn(0, 2, label.str());
     analysisManager->AddNtupleRow();  
     analysisManager->FillNtupleDColumn(1, 0, absoHit->GetTrackLength());
     analysisManager->AddNtupleRow(1); 

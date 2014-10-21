@@ -84,7 +84,7 @@ void RunAction::TestWriting() const
   if ( TestH1 ) {
     // ID = 0
     analysisManager->CreateH1("Edep","Edep in absorber", 
-                              100, 0., 100*MeV);  
+                               100, 0., 100*MeV);  
     // ID = 1
     analysisManager->CreateH1("1_TrackL",
                               "TrackL",
@@ -156,7 +156,7 @@ void RunAction::TestWriting() const
   if ( TestP1 ) {
     // 1D profiles
     //
-    analysisManager->CreateP1("Edep Vs Z", "Longit Edep pseudo-profile",      // ID = 0
+    analysisManager->CreateP1("Edep_Vs_Z", "Longit Edep pseudo-profile",      // ID = 0
                               NofZLayers, 0, NofZLayers*LayerZSize, 0., 10.*GeV);
     analysisManager->CreateP1("Edep_Vs_Z_set", "Longit Edep pseudo-profile",  // ID = 1
                             NofZLayers, 0, NofZLayers*LayerZSize, 0., 10.*GeV);
@@ -164,7 +164,7 @@ void RunAction::TestWriting() const
   
   if ( TestP2 ) {
     // 2D profiles
-    analysisManager->CreateP2("Edep Vs XY", "Longit Edep pseudo-profile",      // ID = 0
+    analysisManager->CreateP2("Edep_Vs_XY", "Longit Edep pseudo-profile",      // ID = 0
                               NofXYLayers, - NofXYLayers*LayerXYSize/2, NofXYLayers*LayerXYSize/2,
                               NofXYLayers, - NofXYLayers*LayerXYSize/2, NofXYLayers*LayerXYSize/2,
                               0, 10*GeV);
@@ -191,11 +191,13 @@ void RunAction::TestWriting() const
 
   if ( TestNtuple ) {
     // Creating ntuples
-    //
-    analysisManager->CreateNtuple("EDep", "Edep");
+    // ntupleId = 0
+    analysisManager->CreateNtuple("EDep", "Edep and Track Length");
     analysisManager->CreateNtupleDColumn("Eabs");
+    analysisManager->CreateNtupleDColumn("Labs");
+    analysisManager->CreateNtupleSColumn("Label");
     analysisManager->FinishNtuple();
-
+    // ntupleId = 1
     analysisManager->CreateNtuple("TrackL", "Track Length");
     analysisManager->CreateNtupleDColumn("Labs");
     analysisManager->FinishNtuple();
@@ -206,7 +208,6 @@ void RunAction::TestWriting() const
 
 void RunAction::TestReading() const
 {
-#ifndef TEST_ANALYSIS_CSV  
   // Read something from another analysis file
   G4AnalysisReader* analysisReader = G4AnalysisReader::Instance();
   analysisReader->SetVerboseLevel(1);
@@ -239,7 +240,6 @@ void RunAction::TestReading() const
      }           
   }    
 
-#ifndef TEST_ANALYSIS_ROOT 
   if ( TestH3 ) {
      G4int h3Id = analysisReader->ReadH3("PX_PY_PZ");
      if ( h3Id >= 0 ) {
@@ -255,10 +255,9 @@ void RunAction::TestReading() const
        }
      }
   }  
-#endif
 
   if ( TestP1 ) {
-     G4int p1Id = analysisReader->ReadP1("Edep Vs Z");
+     G4int p1Id = analysisReader->ReadP1("Edep_Vs_Z");
      if ( p1Id >= 0 ) {
        G4P1* p1 =  analysisReader->GetP1(p1Id);
        if ( p1 ) {
@@ -270,7 +269,7 @@ void RunAction::TestReading() const
   }   
 
   if ( TestP2 ) {
-     G4int p2Id = analysisReader->ReadP2("Edep Vs XY");
+     G4int p2Id = analysisReader->ReadP2("Edep_Vs_XY");
      if ( p2Id >= 0 ) {
        G4P2* p2 =  analysisReader->GetP2(p2Id);
        if ( p2 ) {
@@ -283,7 +282,9 @@ void RunAction::TestReading() const
      }           
    }  
 
+#ifndef TEST_ANALYSIS_CSV  
   if ( TestNtuple ) {
+    // TrackL
     G4int ntupleId; 
     if ( ! G4Threading::IsMultithreadedApplication() ||
          ( G4Threading::IsMultithreadedApplication() && ! isMaster ) ) {
@@ -310,12 +311,49 @@ void RunAction::TestReading() const
       G4double trackL;
       analysisReader->SetNtupleDColumn("Labs", trackL);
       G4int counter = 0;
+      G4cout << "Ntuple TrackL, reading selected column Labs" << G4endl;
       while ( analysisReader->GetNtupleRow() && counter < 10 ) {
         G4cout << counter++ << "th entry: "
                << "  TrackL: " << trackL << std::endl;
       }
     }
-  }  
+
+    // EDep
+    // Read column of string type
+    // Note when handlind more than one ntuple, ntupleId has to be passed
+    // to SetNtupleSColumn(..) and GetNtupleRow(..) calls
+    if ( ! G4Threading::IsMultithreadedApplication() ||
+         ( G4Threading::IsMultithreadedApplication() && ! isMaster ) ) {
+         // In MT application only ntuples are written only on workers
+      ntupleId 
+        = analysisReader->GetNtuple("EDep");
+            // file name can be omitted then the file name will be
+            // define from the base file name like in writing phase
+    }
+    else {        
+      // In MT application on master thread 
+      // test reading from a file with explicitly given name
+      // (specific to the output format)
+#ifdef TEST_ANALYSIS_ROOT 
+      ntupleId 
+        = analysisReader->GetNtuple("EDep", "testAnalysis_t1");
+#endif
+#ifdef TEST_ANALYSIS_XML 
+      ntupleId 
+        = analysisReader->GetNtuple("EDep", "testAnalysis_nt_EDep_t1");
+#endif
+    }
+    if ( ntupleId >= 0 ) {
+      G4String label;
+      analysisReader->SetNtupleSColumn(ntupleId, "Label", label);
+      G4int counter = 0;
+      G4cout << "Ntuple EDep, reading selected column Label" << G4endl;
+      while ( analysisReader->GetNtupleRow(ntupleId) && counter < 10 ) {
+        G4cout << counter++ << "th entry: "
+               << "  Label: " << label << std::endl;
+      }
+    }
+ }  
 #endif
 }
 
@@ -325,7 +363,6 @@ void RunAction::PrintStatistics() const
 {
   // print histogram statistics
 
-#ifndef TEST_ANALYSIS_CSV  
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
   if(isMaster) {
@@ -380,7 +417,6 @@ void RunAction::PrintStatistics() const
       }
     }  
   }
-#endif  
 }    
 
 
