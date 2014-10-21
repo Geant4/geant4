@@ -42,287 +42,291 @@ G4ThreadLocal G4ITMANAGER * G4ITMANAGER::fInstance(0);
 TEMPLATE
 G4ITMANAGER * G4ITMANAGER::Instance()
 {
-	if(!fInstance)
-		fInstance = new G4ITManager();
+  if (!fInstance) fInstance = new G4ITManager();
 
-	return fInstance;
+  return fInstance;
 }
 
-TEMPLATE
-G4ITMANAGER::G4ITManager() : G4VITManager()
+TEMPLATE G4ITMANAGER::G4ITManager() :
+    G4VITManager()
 {
-	fType =  T::ITType();
-	SetVerboseLevel(G4AllITManager::Instance()->GetVerboseLevel());
-	G4AllITManager::Instance()->RegisterManager(this);
+  fType = T::ITType();
+  SetVerboseLevel(G4AllITManager::Instance()->GetVerboseLevel());
+  G4AllITManager::Instance()->RegisterManager(this);
 }
 
-TEMPLATE
-G4ITMANAGER::~G4ITManager()
+TEMPLATE G4ITMANAGER::~G4ITManager()
 {
-	Clear();
-	fInstance = 0;
+  Clear();
+  fInstance = 0;
 }
 
 TEMPLATE
 void G4ITMANAGER::Clear()
 {
-	{
-		typename BoxMap::iterator it;
+  {
+    typename BoxMap::iterator it;
 
-		for(it = fBox.begin() ; it != fBox.end() ; it++)
-		{
-			if(it->second)
-				delete it->second;
-		}
-		fBox.clear();
-	}
-	{
+    for (it = fBox.begin(); it != fBox.end(); it++)
+    {
+      if (it->second) delete it->second;
+    }
+    fBox.clear();
+  }
+  {
 
-		typename TreeMap::iterator it;
+    typename TreeMap::iterator it;
 
-		for(it = fTree.begin() ; it != fTree.end() ; it++)
-		{
-			if(it->second)
-				delete it->second;
-		}
+    for (it = fTree.begin(); it != fTree.end(); it++)
+    {
+      if (it->second) delete it->second;
+    }
 
-		fTree.clear();
-	}
+    fTree.clear();
+  }
 }
 
 TEMPLATE
 void G4ITMANAGER::iUpdatePositionMap()
 {
-	fInstance->UpdatePositionMap();
+  fInstance->UpdatePositionMap();
 }
 
 TEMPLATE
 void G4ITMANAGER::Push(G4Track* track)
 {
-	G4IT* aIT = GetIT(track) ;
-	aIT->RecordCurrentPositionNTime();
+  G4IT* aIT = GetIT(track);
+  aIT->RecordCurrentPositionNTime();
 
-	const T& key = dynamic_cast<const T&>(*aIT);
+  const T& key = dynamic_cast<const T&>(*aIT);
 
-	typename BoxMap::iterator it = fBox.find(key);
+  typename BoxMap::iterator it = fBox.find(key);
 
-	if(it != fBox.end())
-	{
-		G4ITBox* theBox = it->second;
-		theBox->Push(aIT);
-	}
-	else
-	{
-		G4ITBox * itBox = new G4ITBox();
-		std::pair<typename BoxMap::iterator,bool> ret = fBox.insert(std::make_pair (T(key), itBox)) ;
+  if (it != fBox.end())
+  {
+    G4ITBox* theBox = it->second;
+    theBox->Push(aIT);
+  }
+  else
+  {
+    G4ITBox * itBox = new G4ITBox();
+    std::pair<typename BoxMap::iterator, bool> ret = fBox.insert(
+        std::make_pair(T(key), itBox));
 
-		typename BoxMap::iterator box_placement = ret.first;
-		typename BoxMap::iterator last_placement = fBox.end();
-		last_placement--;
+    typename BoxMap::iterator box_placement = ret.first;
+    typename BoxMap::iterator last_placement = fBox.end();
+    last_placement--;
 
-		if(box_placement != fBox.begin())
-		{
-			typename BoxMap::iterator previous_placement = ret.first;
-			previous_placement--;
-			G4ITBox* previous_box = previous_placement->second;
-			if(previous_box)
-			{
-				itBox->SetPreviousBox(previous_box);
-				previous_box->SetNextBox(itBox);
-			}
-		}
-		if(box_placement != last_placement)
-		{
-			typename BoxMap::iterator next_placement = ret.first;
-			next_placement++;
-			G4ITBox* next_box = next_placement->second;
-			if(next_box)
-			{
-				itBox->SetNextBox(next_placement->second);
-				next_box->SetPreviousBox(itBox);
-			}
-		}
+    if (box_placement != fBox.begin())
+    {
+      typename BoxMap::iterator previous_placement = ret.first;
+      previous_placement--;
+      G4ITBox* previous_box = previous_placement->second;
+      if (previous_box)
+      {
+        itBox->SetPreviousBox(previous_box);
+        previous_box->SetNextBox(itBox);
+      }
+    }
+    if (box_placement != last_placement)
+    {
+      typename BoxMap::iterator next_placement = ret.first;
+      next_placement++;
+      G4ITBox* next_box = next_placement->second;
+      if (next_box)
+      {
+        itBox->SetNextBox(next_placement->second);
+        next_box->SetPreviousBox(itBox);
+      }
+    }
 
-		itBox -> Push(aIT);
-	}
+    itBox->Push(aIT);
+  }
 
-	if(!(aIT->GetNode()))
-	{
-		G4KDNode_Base* node =  0;
+  if (!(aIT->GetNode()))
+  {
+    G4KDNode_Base* node = 0;
 
-		typename TreeMap::iterator it_fTree = fTree.find(key);
+    typename TreeMap::iterator it_fTree = fTree.find(key);
 
-		if(it_fTree != fTree.end())
-		{
-			node=it_fTree->second->Insert(aIT);
-		}
-		else
-		{
-			G4KDTree* aTree = new G4KDTree() ;
-			fTree.insert(std::make_pair(T(key),aTree));
-			node = aTree->Insert(aIT);
-		}
+    if (it_fTree != fTree.end())
+    {
+      node = it_fTree->second->Insert(aIT);
+    }
+    else
+    {
+      G4KDTree* aTree = new G4KDTree();
+      fTree.insert(std::make_pair(T(key), aTree));
+      node = aTree->Insert(aIT);
+    }
 
-		aIT->SetNode(node);
-	}
+    aIT->SetNode(node);
+  }
 
 }
 
 TEMPLATE
 void G4ITMANAGER::EraseABox(T* aIT)
 {
-	//    G4cout<<"G4ITMANAGER::EraseABox : " << aIT->GetName()<<G4endl;
+  //    G4cout<<"G4ITMANAGER::EraseABox : " << aIT->GetName()<<G4endl;
 
-	const T& key = dynamic_cast<const T&>(*aIT);
-	typename BoxMap::iterator it = fBox.find(key);
-	if(it != fBox.end())
-	{
-		fBox.erase(it);
-	}
+  const T& key = dynamic_cast<const T&>(*aIT);
+  typename BoxMap::iterator it = fBox.find(key);
+  if (it != fBox.end())
+  {
+    fBox.erase(it);
+  }
 }
 
 TEMPLATE
 void G4ITMANAGER::EraseABox(G4ITBox* aStack)
 {
-	typename BoxMap::iterator it;
+  typename BoxMap::iterator it;
 
-	for ( it=fBox.begin() ; it != fBox.end(); it++)
-	{
-		if(it->second == aStack)
-		{
-			break;
-		}
-	}
-	fBox.erase(it);
+  for (it = fBox.begin(); it != fBox.end(); it++)
+  {
+    if (it->second == aStack)
+    {
+      break;
+    }
+  }
+  fBox.erase(it);
 }
 
 TEMPLATE
 G4int G4ITMANAGER::NbElements(const G4IT* aIT)
 {
-	const T& key = dynamic_cast<const T&>(*aIT);
-	typename BoxMap::iterator it = fBox.find(key);
-	if(it != fBox.end())  return it->second->GetNTrack();
-	return -1;
+  const T& key = dynamic_cast<const T&>(*aIT);
+  typename BoxMap::iterator it = fBox.find(key);
+  if (it != fBox.end()) return it->second->GetNTrack();
+  return -1;
 }
 
-
 TEMPLATE
-G4KDTreeResultHandle G4ITMANAGER::FindNearest(const G4ThreeVector& position, const T* key)
+G4KDTreeResultHandle G4ITMANAGER::FindNearest(const G4ThreeVector& position,
+                                              const T* key)
 {
-	typename TreeMap::iterator it = fTree.find(*key);
-	if(it!= fTree.end())
-		return it->second->Nearest(position);
-	else
-	{
-		return 0;
-	}
-	return 0;
+  typename TreeMap::iterator it = fTree.find(*key);
+  if (it != fTree.end()) return it->second->Nearest(position);
+  else
+  {
+    return 0;
+  }
+  return 0;
 }
 
 TEMPLATE
 G4KDTreeResultHandle G4ITMANAGER::FindNearest(const T* point0, const T* key)
 {
-	if(*point0 == *key)
-	{
-		// DEBUG
-		//        G4cout << "Equal keys !"<< G4endl;
-		G4KDNode_Base* node0 = point0->GetNode() ;
+  if (*point0 == *key)
+  {
+    // DEBUG
+    // G4cout << "Equal keys !"<< G4endl;
+    G4KDNode_Base* node0 = point0->GetNode();
 
-		if(node0 == 0)
-		{
-			G4ExceptionDescription exceptionDescription
-			("Bad request : no node found in the IT you are searching closest neighbourg for");
-			G4Exception("G4ITManager::FindNearest","ITManager002",
-					FatalErrorInArgument,exceptionDescription);
-			return 0; // coverity
-		}
+    if (node0 == 0)
+    {
+      G4ExceptionDescription exceptionDescription(
+          "Bad request : no node found in the IT you are searching "
+          "closest neighbourg for");
+      G4Exception("G4ITManager::FindNearest", "ITManager002",
+                  FatalErrorInArgument, exceptionDescription);
+      return 0; // coverity
+    }
 
-		typename TreeMap::iterator it = fTree.find(*key);
-		if(it!= fTree.end())
-		{
-			G4KDTreeResultHandle output(it->second->Nearest(node0));
+    typename TreeMap::iterator it = fTree.find(*key);
+    if (it != fTree.end())
+    {
+      G4KDTreeResultHandle output(it->second->Nearest(node0));
 
-			if(!output)
-			{
-				//                G4cout << "NO OUTPUT " << point0->GetName() << " " << key -> GetName() << G4endl;
-				return 0;
-			}
-			//                G4cout << "OUTPUT" << G4endl;
-			return output;
-		}
-		else
-		{
-			// DEBUG
-			//            G4cout << "Pas trouve dans la map"<< key->GetName() << G4endl;
-			return 0;
-		}
-	}
-	else
-	{
-		// DEBUG
-		//        G4cout << "Not equal keys !"<< G4endl;
-		//        const G4ThreeVector& position = point0->GetTrack()->GetPosition() ;
-		typename TreeMap::iterator it = fTree.find(*key);
-		if(it!= fTree.end())
-		{
-			G4KDTreeResultHandle output(it->second->Nearest(*point0));
-			if(!output)
-			{
-				//                G4cout << "NO OUTPUT" << G4endl;
-				return 0;
-			}
+      if (!output)
+      {
+        /*
+         * G4cout << "NO OUTPUT "
+         * << point0->GetName()
+         * << " " << key -> GetName()
+         * << G4endl;
+         */
+        return 0;
+      }
+      // G4cout << "OUTPUT" << G4endl;
+      return output;
+    }
+    else
+    {
+      // DEBUG
+      // G4cout << "Pas trouve dans la map"<< key->GetName() << G4endl;
+      return 0;
+    }
+  }
+  else
+  {
+    // DEBUG
+    // G4cout << "Not equal keys !"<< G4endl;
+    // const G4ThreeVector& position = point0->GetTrack()->GetPosition() ;
+    typename TreeMap::iterator it = fTree.find(*key);
+    if (it != fTree.end())
+    {
+      G4KDTreeResultHandle output(it->second->Nearest(*point0));
+      if (!output)
+      {
+        //                G4cout << "NO OUTPUT" << G4endl;
+        return 0;
+      }
 
-			//                G4cout << "OUTPUT" << G4endl;
-			return output;
-		}
-		else
-		{
-			// DEBUG
-			//            G4cout << "Pas trouve dans la map : "<< key->GetName() << G4endl;
-			return 0;
-		}
-	}
-	return 0;
+      //                G4cout << "OUTPUT" << G4endl;
+      return output;
+    }
+    else
+    {
+      // DEBUG
+      // G4cout << "Pas trouve dans la map : "<< key->GetName() << G4endl;
+      return 0;
+    }
+  }
+  return 0;
 }
 
 TEMPLATE
-G4KDTreeResultHandle G4ITMANAGER::FindNearestInRange(const G4ThreeVector& position, const T* key, G4double R)
+G4KDTreeResultHandle
+G4ITMANAGER::FindNearestInRange(const G4ThreeVector& position,
+                                                     const T* key,
+                                                     G4double R)
 {
-	typename TreeMap::iterator it = fTree.find(*key);
-	if(it!= fTree.end())
-		return it->second->NearestInRange(position, R);
-	else
-	{
-		return 0;
-	}
-	return 0;
+  typename TreeMap::iterator it = fTree.find(*key);
+  if (it != fTree.end()) return it->second->NearestInRange(position, R);
+  else
+  {
+    return 0;
+  }
+  return 0;
 }
 
 TEMPLATE
-G4KDTreeResultHandle G4ITMANAGER::FindNearestInRange(const T* point0, const T* key, G4double R)
+G4KDTreeResultHandle G4ITMANAGER::FindNearestInRange(const T* point0,
+                                                     const T* key,
+                                                     G4double R)
 {
-	if(*point0 == *key)
-	{
-		G4KDNode_Base* node0 = point0->GetNode() ;
-		typename TreeMap::iterator it = fTree.find(*key);
-		if(it!= fTree.end())
-			return it->second->NearestInRange(node0, R);
-		else
-		{
-			return 0;
-		}
-	}
-	else
-	{
-		typename TreeMap::iterator it = fTree.find(*key);
-		if(it!= fTree.end())
-			return it->second->NearestInRange(*point0, R);
-		else
-		{
-			return 0;
-		}
-	}
-	return 0;
+  if (*point0 == *key)
+  {
+    G4KDNode_Base* node0 = point0->GetNode();
+    typename TreeMap::iterator it = fTree.find(*key);
+    if (it != fTree.end()) return it->second->NearestInRange(node0, R);
+    else
+    {
+      return 0;
+    }
+  }
+  else
+  {
+    typename TreeMap::iterator it = fTree.find(*key);
+    if (it != fTree.end()) return it->second->NearestInRange(*point0, R);
+    else
+    {
+      return 0;
+    }
+  }
+  return 0;
 }
 
 //#define DEBUG_MEM
@@ -335,123 +339,134 @@ using namespace G4MemStat;
 TEMPLATE
 void G4ITMANAGER::UpdatePositionMap()
 {
-	G4ITBox* currentBox = 0 ;
-	G4KDTree* currentTree = 0;
-	G4IT* currentIT = 0 ;
-	G4KDNode_Base* currentNode = 0;
+  G4ITBox* currentBox = 0;
+  G4KDTree* currentTree = 0;
+  G4IT* currentIT = 0;
+  G4KDNode_Base* currentNode = 0;
 
 #if defined (DEBUG_MEM)
-	MemStat mem_first, mem_second, mem_diff;
+  MemStat mem_first, mem_second, mem_diff;
 #endif
 
 #if defined (DEBUG_MEM)
-	mem_first = MemoryUsage();
+  mem_first = MemoryUsage();
 #endif
 
-	typename TreeMap::iterator it_Tree ;
-	typename BoxMap::iterator it_Box = fBox.begin();
+  typename TreeMap::iterator it_Tree;
+  typename BoxMap::iterator it_Box = fBox.begin();
 
-	for(;it_Box != fBox.end();it_Box++)
-	{
-		currentTree = 0 ;
-		currentBox =  it_Box->second;
-		const T& key = dynamic_cast<const T&>(it_Box->first);
-		it_Tree = fTree.find(key);
+  for (; it_Box != fBox.end(); it_Box++)
+  {
+    currentTree = 0;
+    currentBox = it_Box->second;
+    const T& key = dynamic_cast<const T&>(it_Box->first);
+    it_Tree = fTree.find(key);
 
-		//		G4cout << "Box : " << it_Box->first.GetName() << G4endl;
-		//		G4cout << "N tracks : " << currentBox->GetNTrack() << G4endl;
+    // G4cout << "Box : " << it_Box->first.GetName() << G4endl;
+    // G4cout << "N tracks : " << currentBox->GetNTrack() << G4endl;
 
-		//		G4cout << "Will update : " << it_Box->first.GetName() <<G4endl;
+    // G4cout << "Will update : " << it_Box->first.GetName() <<G4endl;
 
-		if(currentBox->Empty())
-		{
-//			typename BoxMap::iterator tmp_it_Box = it_Box;
-			//			G4cout << "Box erased" << G4endl;
-			//			fBox.erase(tmp_it_Box);
-			if(it_Tree != fTree.end())
-			{
-				//				fTree.erase(it_Tree);
-				currentTree = it_Tree ->second ;
-				if(currentTree)
-				{
-					currentTree->Clear();
-				}
-			}
+    if (currentBox->Empty())
+    {
+//      typename BoxMap::iterator tmp_it_Box = it_Box;
+      // G4cout << "Box erased" << G4endl;
+      // fBox.erase(tmp_it_Box);
+      if (it_Tree != fTree.end())
+      {
+        // fTree.erase(it_Tree);
+        currentTree = it_Tree->second;
+        if (currentTree)
+        {
+          currentTree->Clear();
+        }
+      }
 
 #if defined (DEBUG_MEM)
-			mem_second = MemoryUsage();
-			mem_diff = mem_second-mem_first;
-			G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || In if(currentBox->Empty()), diff is : " << mem_diff << G4endl;
+      mem_second = MemoryUsage();
+      mem_diff = mem_second-mem_first;
+      G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || "
+          "In if(currentBox->Empty()), diff is : " << mem_diff << G4endl;
 #endif
 
-			continue;
-		}
-		else
-		{
-			if(it_Tree != fTree.end())
-			{
-				currentTree = it_Tree ->second ;
-				if(currentTree)
-				{
-					currentTree->Clear();
-					//delete currentTree;
-					//currentTree = 0;
+      continue;
+    }
+    else
+    {
+      if (it_Tree != fTree.end())
+      {
+        currentTree = it_Tree->second;
+        if (currentTree)
+        {
+          currentTree->Clear();
+          //delete currentTree;
+          //currentTree = 0;
 
 #if defined (DEBUG_MEM)
-			mem_second = MemoryUsage();
-			mem_diff = mem_second-mem_first;
-			G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || after currentTree->Clear(), diff is : " << mem_diff << G4endl;
+          mem_second = MemoryUsage();
+          mem_diff = mem_second-mem_first;
+          G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || "
+              "after currentTree->Clear(), diff is : " << mem_diff << G4endl;
 #endif
-				}
-			}
-			if(currentTree == 0)
-			{
-				currentTree = new G4KDTree();
-				fTree[key] = currentTree ;
+        }
+      }
+      if (currentTree == 0)
+      {
+        currentTree = new G4KDTree();
+        fTree[key] = currentTree;
 
-				G4cout << "**** " << "Create new tree for : " << key.GetName() << G4endl;
+//        G4cout << "**** " << "Create new tree for : " << key.GetName()
+//        << G4endl;
 
 #if defined (DEBUG_MEM)
-			mem_second = MemoryUsage();
-			mem_diff = mem_second-mem_first;
-			G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || after creating tree, diff is : " << mem_diff << G4endl;
+        mem_second = MemoryUsage();
+        mem_diff = mem_second-mem_first;
+        G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || "
+            "after creating tree, diff is : " << mem_diff << G4endl;
 #endif
-			}
+      }
 
-			currentIT = currentBox->GetFirstIT();
-			//			int i = 0;
+      currentIT = currentBox->GetFirstIT();
+      // int i = 0;
 
-			//			G4cout << "Box : " << key.GetName() << G4endl;
-			//			G4cout << "N tracks : " << currentBox->GetNTrack() << G4endl;
+      // G4cout << "Box : " << key.GetName() << G4endl;
+      // G4cout << "N tracks : " << currentBox->GetNTrack() << G4endl;
 
-			for(;currentIT!=0;currentIT = currentIT->GetNext() ) //, i++)
-			{
-				//				G4cout << i << G4endl;
-				//				G4cout << "track "<< currentIT->GetTrack()->GetTrackID() << G4endl;
-				currentNode = currentTree->Insert(currentIT);
-				//        G4KDNode_Base* currentNode = currentTree->InsertMap(currentIT);
+      for (; currentIT != 0; currentIT = currentIT->GetNext()) //, i++)
+      {
+        // G4cout << i << G4endl;
+        // G4cout << "track "
+        //        << currentIT->GetTrack()->GetTrackID()
+        //        << G4endl;
+         currentNode = currentTree->Insert(currentIT);
+        /*G4KDNode_Base* */
+//        currentNode = currentTree->InsertMap(currentIT);
 
-//				if(currentIT->GetNode())
-//				{
-//					delete currentIT->GetNode();
-//				}
+//        if(currentIT->GetNode())
+//        {
+//          delete currentIT->GetNode();
+            // No need: deleted when tree is cleared
+//        }
 
-				currentIT->SetNode(currentNode);
+        currentIT->SetNode(currentNode);
 
 #if defined (DEBUG_MEM)
-			mem_second = MemoryUsage();
-			mem_diff = mem_second-mem_first;
-			G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || after currentIT->SetNode(currentNode), diff is : " << mem_diff << G4endl;
+        mem_second = MemoryUsage();
+        mem_diff = mem_second-mem_first;
+        G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || "
+            "after currentIT->SetNode(currentNode), diff is : "
+            << mem_diff << G4endl;
 #endif
-			}
+      }
 
 #if defined (DEBUG_MEM)
-			mem_second = MemoryUsage();
-			mem_diff = mem_second-mem_first;
-			G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || In else{...}, diff is : " << mem_diff << G4endl;
+      mem_second = MemoryUsage();
+      mem_diff = mem_second-mem_first;
+      G4cout << "\t || MEM || G4ITMANAGER::UpdatePositionMap || "
+          "In else{...}, diff is : " << mem_diff << G4endl;
 #endif
 
-		}
-		// currentTree->Build();
-	}
+    }
+//    currentTree->Build();
+  }
 }

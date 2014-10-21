@@ -28,24 +28,25 @@
 #include "G4VMolecularDissociationDisplacer.hh"
 #include "G4Molecule.hh"
 
-/*G4ThreadLocal*/ DisplacementType *G4VMolecularDecayDisplacer::Last = 0;
-const DisplacementType G4VMolecularDecayDisplacer::NoDisplacement = G4VMolecularDecayDisplacer::AddDisplacement();
+/*G4ThreadLocal*/DisplacementType *G4VMolecularDecayDisplacer::Last = 0;
+const DisplacementType G4VMolecularDecayDisplacer::NoDisplacement =
+    G4VMolecularDecayDisplacer::AddDisplacement();
 
 G4VMolecularDecayDisplacer::G4VMolecularDecayDisplacer()
 {
-    if (!Last) Last = new DisplacementType ( 0) ;
-    fVerbose = 0;
+  if (!Last) Last = new DisplacementType(0);
+  fVerbose = 0;
 }
 
 G4VMolecularDecayDisplacer::~G4VMolecularDecayDisplacer()
 {
-    ;
+  ;
 }
 
 DisplacementType G4VMolecularDecayDisplacer::AddDisplacement()
 {
-    if (!Last) Last = new DisplacementType ( 0) ;
-    DisplacementType output = *Last;
-    (*Last)++;
-    return output;
+  if (!Last) Last = new DisplacementType(0);
+  DisplacementType output = *Last;
+  (*Last)++;
+  return output;
 }

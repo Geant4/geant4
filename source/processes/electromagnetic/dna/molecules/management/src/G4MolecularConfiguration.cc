@@ -45,444 +45,502 @@ using namespace std;
 #define __func__ __FUNCTION__
 #endif
 
-//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+//______________________________________________________________
 // G4MolecularConfigurationManager
 typedef G4MolecularConfiguration::G4MolecularConfigurationManager MolecularConfigurationManager;
 
-MolecularConfigurationManager* G4MolecularConfiguration::fgManager = 0 ;
+MolecularConfigurationManager* G4MolecularConfiguration::fgManager = 0;
 
 G4Mutex MolecularConfigurationManager::fManagerCreationMutex;
 
 G4MolecularConfiguration::G4MolecularConfigurationManager*
 G4MolecularConfiguration::GetManager()
 {
-	if(!fgManager)
-	{
-		G4AutoLock lock(&MolecularConfigurationManager::fManagerCreationMutex);
-		if(!fgManager) // double check for MT
-		{
-			fgManager = new G4MolecularConfiguration::G4MolecularConfigurationManager;
-		}
-		lock.unlock();
-	}
+  if (!fgManager)
+  {
+    G4AutoLock lock(&MolecularConfigurationManager::fManagerCreationMutex);
+    if (!fgManager) // double check for MT
+    {
+      fgManager = new G4MolecularConfiguration::G4MolecularConfigurationManager;
+    }
+    lock.unlock();
+  }
 
-	return fgManager;
+  return fgManager;
 }
 
-G4MolecularConfiguration::G4MolecularConfigurationManager::~G4MolecularConfigurationManager()
+G4MolecularConfiguration::
+G4MolecularConfigurationManager::~G4MolecularConfigurationManager()
 {
-	G4MolecularConfigurationManager::MolecularConfigurationTable::iterator it1;
-	std::map<G4ElectronOccupancy, G4MolecularConfiguration*, comparator>::iterator it2;
+  G4cout << "Does G4AllocatorList exists= ";
+  G4cout << (G4AllocatorList::GetAllocatorListIfExist() ? "true":"false")
+      << G4endl;
 
-	for(it1 = fTable.begin() ; it1 != fTable.end() ; it1++)
-	{
-		for(it2=it1->second.begin(); it2!=it1->second.end(); it2++)
-		{
-			if(it2->second)
-			{
-				delete it2->second;
-			}
-		}
-	}
+  G4MolecularConfigurationManager::MolecularConfigurationTable::iterator it1;
+  std::map<G4ElectronOccupancy, G4MolecularConfiguration*, comparator>::iterator it2;
+
+  for (it1 = fTable.begin(); it1 != fTable.end(); it1++)
+  {
+    for (it2 = it1->second.begin(); it2 != it1->second.end(); it2++)
+    {
+      if (it2->second)
+      {
+        delete it2->second;
+      }
+    }
+  }
+  fTable.clear();
+  fgManager = 0;
 }
 
-//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+//______________________________________________________________
 // G4MolecularConfigurationManager
-G4int
-G4MolecularConfiguration::G4MolecularConfigurationManager::SetMolecularConfiguration(const G4MoleculeDefinition* molDef,
-		const G4ElectronOccupancy& eOcc,
-		G4MolecularConfiguration* molConf)
+G4int G4MolecularConfiguration::
+G4MolecularConfigurationManager::
+SetMolecularConfiguration(const G4MoleculeDefinition* molDef,
+                          const G4ElectronOccupancy& eOcc,
+                          G4MolecularConfiguration* molConf)
 {
-	G4AutoLock lock(&fMoleculeCreationMutex);
-	fTable[molDef][eOcc] = molConf;
-	fLastMoleculeID++;
-	lock.unlock();
-	return fLastMoleculeID;
+  G4AutoLock lock(&fMoleculeCreationMutex);
+  fTable[molDef][eOcc] = molConf;
+  fLastMoleculeID++;
+  lock.unlock();
+  return fLastMoleculeID;
 }
 
 const G4ElectronOccupancy*
-G4MolecularConfiguration::G4MolecularConfigurationManager::FindCommonElectronOccupancy(const G4MoleculeDefinition* molDef,
-		const G4ElectronOccupancy& eOcc)
+G4MolecularConfiguration::G4MolecularConfigurationManager::
+FindCommonElectronOccupancy(
+    const G4MoleculeDefinition* molDef,
+    const G4ElectronOccupancy& eOcc)
 {
-	std::map<G4ElectronOccupancy, G4MolecularConfiguration*, comparator>::iterator it ;
-	G4AutoLock lock(&fMoleculeCreationMutex);
-	it = fTable[molDef].find(eOcc);
-	lock.unlock();
+  std::map<G4ElectronOccupancy, G4MolecularConfiguration*, comparator>::iterator it;
+  G4AutoLock lock(&fMoleculeCreationMutex);
+  it = fTable[molDef].find(eOcc);
+  lock.unlock();
 
-	if(it==fTable[molDef].end())
-	{
-		// TODO = handle exception ?
-		return 0;
-	}
+  if (it == fTable[molDef].end())
+  {
+    // TODO = handle exception ?
+    return 0;
+  }
 
-	return &(it->first);
+  return &(it->first);
 }
 
 G4MolecularConfiguration*
-G4MolecularConfiguration::G4MolecularConfigurationManager::GetMolecularConfiguration(const G4MoleculeDefinition* molDef,
-		const G4ElectronOccupancy& eOcc)
+G4MolecularConfiguration::G4MolecularConfigurationManager::
+GetMolecularConfiguration(const G4MoleculeDefinition* molDef,
+                          const G4ElectronOccupancy& eOcc)
 {
-	G4AutoLock lock(&fMoleculeCreationMutex);
-	G4MolecularConfiguration* output = fTable[molDef][eOcc];
-	lock.unlock();
-	return output;
+  G4AutoLock lock(&fMoleculeCreationMutex);
+  G4MolecularConfiguration* output = fTable[molDef][eOcc];
+  lock.unlock();
+  return output;
 }
 
-
-G4int G4MolecularConfiguration::G4MolecularConfigurationManager::SetMolecularConfiguration(
-		const G4MoleculeDefinition* molDef, int charge,
-		G4MolecularConfiguration* molConf)
+G4int G4MolecularConfiguration::G4MolecularConfigurationManager::
+SetMolecularConfiguration(const G4MoleculeDefinition* molDef,
+                          int charge,
+                          G4MolecularConfiguration* molConf)
 {
-	G4AutoLock lock(&fMoleculeCreationMutex);
-	fChargeTable[molDef][charge] = molConf;
-	fLastMoleculeID++;
-	lock.unlock();
-	return fLastMoleculeID;
+  G4AutoLock lock(&fMoleculeCreationMutex);
+  fChargeTable[molDef][charge] = molConf;
+  fLastMoleculeID++;
+  lock.unlock();
+  return fLastMoleculeID;
 }
 
-G4MolecularConfiguration* G4MolecularConfiguration::G4MolecularConfigurationManager::GetMolecularConfiguration(
-		const G4MoleculeDefinition* molDef, int charge)
+G4MolecularConfiguration*
+G4MolecularConfiguration::G4MolecularConfigurationManager::
+GetMolecularConfiguration(const G4MoleculeDefinition* molDef,
+                          int charge)
 {
-	G4AutoLock lock(&fMoleculeCreationMutex);
-	G4MolecularConfiguration* output = fChargeTable[molDef][charge];
-	lock.unlock();
-	return output;
+  G4AutoLock lock(&fMoleculeCreationMutex);
+  G4MolecularConfiguration* output = fChargeTable[molDef][charge];
+  lock.unlock();
+  return output;
 }
 
-//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+//______________________________________________________________
 // Static method in G4MolecularConfiguration
 G4MolecularConfiguration* G4MolecularConfiguration::GetMolecularConfiguration(const G4MoleculeDefinition* molDef)
 {
-	if(molDef->GetGroundStateElectronOccupancy())
-	{
-		const G4ElectronOccupancy& elecOcc = *molDef->GetGroundStateElectronOccupancy();
-		G4MolecularConfiguration* molConf = GetManager()->GetMolecularConfiguration(molDef,elecOcc);
+  if (molDef->GetGroundStateElectronOccupancy())
+  {
+    const G4ElectronOccupancy& elecOcc = *molDef
+        ->GetGroundStateElectronOccupancy();
+    G4MolecularConfiguration* molConf = GetManager()->GetMolecularConfiguration(
+        molDef, elecOcc);
 
-		if(molConf)
-		{
-			return molConf;
-		}
-		else
-		{
-			G4MolecularConfiguration* newConf = new G4MolecularConfiguration(molDef, elecOcc);
-			return newConf ;
-		}
-	}
-	else
-	{
-		return GetMolecularConfiguration(molDef,molDef->GetCharge());
-	}
+    if (molConf)
+    {
+      return molConf;
+    }
+    else
+    {
+      G4MolecularConfiguration* newConf = new G4MolecularConfiguration(molDef,
+                                                                       elecOcc);
+      return newConf;
+    }
+  }
+  else
+  {
+    return GetMolecularConfiguration(molDef, molDef->GetCharge());
+  }
 }
 
-G4MolecularConfiguration* G4MolecularConfiguration::GetMolecularConfiguration(const G4MoleculeDefinition* molDef,
-		const G4ElectronOccupancy& elecOcc )
+G4MolecularConfiguration*
+G4MolecularConfiguration::
+GetMolecularConfiguration(const G4MoleculeDefinition* molDef,
+                          const G4ElectronOccupancy& elecOcc)
 {
-	G4MolecularConfiguration* molConf = GetManager()->GetMolecularConfiguration(molDef,elecOcc);
+  G4MolecularConfiguration* molConf = GetManager()->GetMolecularConfiguration(
+      molDef, elecOcc);
 
-	if(molConf)
-	{
-		return molConf;
-	}
-	else
-	{
-		G4MolecularConfiguration* newConf = new G4MolecularConfiguration(molDef, elecOcc);
-		return newConf ;
-	}
+  if (molConf)
+  {
+    return molConf;
+  }
+  else
+  {
+    G4MolecularConfiguration* newConf = new G4MolecularConfiguration(molDef,
+                                                                     elecOcc);
+    return newConf;
+  }
 }
 
-G4MolecularConfiguration* G4MolecularConfiguration::GetMolecularConfiguration(
-		const G4MoleculeDefinition* molDef, int charge)
+G4MolecularConfiguration*
+G4MolecularConfiguration::GetMolecularConfiguration(const G4MoleculeDefinition* molDef,
+                                                    int charge)
 {
-	G4MolecularConfiguration* molConf = GetManager()->GetMolecularConfiguration(molDef,charge);
+  G4MolecularConfiguration* molConf = GetManager()->GetMolecularConfiguration(
+      molDef, charge);
 
-	if(molConf)
-	{
-		return molConf;
-	}
-	else
-	{
-		G4MolecularConfiguration* newConf = new G4MolecularConfiguration(molDef, charge);
-		return newConf ;
-	}
+  if (molConf)
+  {
+    return molConf;
+  }
+  else
+  {
+    G4MolecularConfiguration* newConf = new G4MolecularConfiguration(molDef,
+                                                                     charge);
+    return newConf;
+  }
 }
 
 void G4MolecularConfiguration::DeleteManager()
 {
-	G4AutoLock lock(&MolecularConfigurationManager::fManagerCreationMutex);
-	if(fgManager) delete fgManager;
-	fgManager = 0;
-	lock.unlock();
+  G4AutoLock lock(&MolecularConfigurationManager::fManagerCreationMutex);
+  if (fgManager) delete fgManager;
+  fgManager = 0;
+  lock.unlock();
 }
 
-//°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°°
+//______________________________________________________________
 // G4MolecularConfiguration
 G4MolecularConfiguration::G4MolecularConfiguration(const G4MoleculeDefinition* moleculeDef,
-		const G4ElectronOccupancy& elecOcc)
+                                                   const G4ElectronOccupancy& elecOcc)
 {
-	fMoleculeDefinition = moleculeDef ;
+  fMoleculeDefinition = moleculeDef;
 
-	fMoleculeID = GetManager()->SetMolecularConfiguration(moleculeDef,elecOcc,this);
-	fElectronOccupancy = GetManager()->FindCommonElectronOccupancy(moleculeDef,elecOcc);
+  fMoleculeID = GetManager()->SetMolecularConfiguration(moleculeDef, elecOcc,
+                                                        this);
+  fElectronOccupancy = GetManager()->FindCommonElectronOccupancy(moleculeDef,
+                                                                 elecOcc);
 
-	/*
-    fgManager->fTable[fMoleculeDefinition][elecOcc] = this;
-    std::map<G4ElectronOccupancy, G4MolecularConfiguration*, comparator>::iterator it ;
-    it = fgManager->fTable[moleculeDef].find(elecOcc);
-    fElectronOccupancy = &(it->first);
-	 */
+  /*
+   fgManager->fTable[fMoleculeDefinition][elecOcc] = this;
+   std::map<G4ElectronOccupancy, G4MolecularConfiguration*, comparator>::iterator it ;
+   it = fgManager->fTable[moleculeDef].find(elecOcc);
+   fElectronOccupancy = &(it->first);
+   */
 
-	fDynCharge = fMoleculeDefinition->GetNbElectrons()-fElectronOccupancy->GetTotalOccupancy()+moleculeDef->GetCharge();
-	fDynMass = fMoleculeDefinition->GetMass() ;
+  fDynCharge = fMoleculeDefinition->GetNbElectrons()
+      - fElectronOccupancy->GetTotalOccupancy()
+               + moleculeDef->GetCharge();
+  fDynMass = fMoleculeDefinition->GetMass();
 
-	fDynDiffusionCoefficient = fMoleculeDefinition->GetDiffusionCoefficient() ;
-	fDynVanDerVaalsRadius = fMoleculeDefinition->GetVanDerVaalsRadius() ;
-	fDynDecayTime = fMoleculeDefinition->GetDecayTime() ;
+  fDynDiffusionCoefficient = fMoleculeDefinition->GetDiffusionCoefficient();
+  fDynVanDerVaalsRadius = fMoleculeDefinition->GetVanDerVaalsRadius();
+  fDynDecayTime = fMoleculeDefinition->GetDecayTime();
 }
 
 G4MolecularConfiguration::G4MolecularConfiguration(const G4MoleculeDefinition* moleculeDef,
-		int charge)
+                                                   int charge)
 {
-	fMoleculeDefinition = moleculeDef ;
+  fMoleculeDefinition = moleculeDef;
 
-	fMoleculeID = GetManager()->SetMolecularConfiguration(moleculeDef,charge,this);
-	fElectronOccupancy = 0;
+  fMoleculeID = GetManager()->SetMolecularConfiguration(moleculeDef, charge,
+                                                        this);
+  fElectronOccupancy = 0;
 
-	fDynCharge = charge;
-	fDynMass = fMoleculeDefinition->GetMass() ;
+  fDynCharge = charge;
+  fDynMass = fMoleculeDefinition->GetMass();
 
-	fDynDiffusionCoefficient = fMoleculeDefinition->GetDiffusionCoefficient() ;
-	fDynVanDerVaalsRadius = fMoleculeDefinition->GetVanDerVaalsRadius() ;
-	fDynDecayTime = fMoleculeDefinition->GetDecayTime() ;
+  fDynDiffusionCoefficient = fMoleculeDefinition->GetDiffusionCoefficient();
+  fDynVanDerVaalsRadius = fMoleculeDefinition->GetVanDerVaalsRadius();
+  fDynDecayTime = fMoleculeDefinition->GetDecayTime();
 }
 
 G4MolecularConfiguration::~G4MolecularConfiguration()
 {
-	if(G4AllocatorList::GetAllocatorListIfExist())
-	{
-		if(fElectronOccupancy)
-		{
-			delete fElectronOccupancy;
-			fElectronOccupancy = 0;
-		}
-	}
+  if (fgManager) fgManager->RemoveMolecularConfigurationFromTable(this);
+
+//  if (G4AllocatorList::GetAllocatorListIfExist())
+//  {
+//    if (fElectronOccupancy)
+//    {
+//      delete fElectronOccupancy;
+//      fElectronOccupancy = 0;
+//    }
+//  }
 }
 
 G4MolecularConfiguration* G4MolecularConfiguration::ChangeConfiguration(const G4ElectronOccupancy& newElectronOccupancy)
 {
-	G4MolecularConfiguration* output = GetManager()->GetMolecularConfiguration(fMoleculeDefinition,newElectronOccupancy);
+  G4MolecularConfiguration* output = GetManager()->GetMolecularConfiguration(
+      fMoleculeDefinition, newElectronOccupancy);
 
-	if(! output)
-	{
-		output = new G4MolecularConfiguration(fMoleculeDefinition, newElectronOccupancy);
-	}
-	return output ;
+  if (!output)
+  {
+    output = new G4MolecularConfiguration(fMoleculeDefinition,
+                                          newElectronOccupancy);
+  }
+  return output;
 }
-
 
 G4MolecularConfiguration* G4MolecularConfiguration::ChangeConfiguration(int charge)
 {
-	G4MolecularConfiguration* output = GetManager()->GetMolecularConfiguration(fMoleculeDefinition,charge) ;
+  G4MolecularConfiguration* output = GetManager()->GetMolecularConfiguration(
+      fMoleculeDefinition, charge);
 
-	if(! output)
-	{
-		output = new G4MolecularConfiguration(fMoleculeDefinition, charge);
-	}
-	return output ;
+  if (!output)
+  {
+    output = new G4MolecularConfiguration(fMoleculeDefinition, charge);
+  }
+  return output;
 }
 
 G4MolecularConfiguration& G4MolecularConfiguration::operator=(G4MolecularConfiguration& right)
 {
-	if (&right==this) return *this;
-	return *this;
+  if (&right == this) return *this;
+  return *this;
 }
-
 
 /** Method used in Geant4-DNA to excite water molecules
  */
 G4MolecularConfiguration* G4MolecularConfiguration::ExciteMolecule(G4int ExcitedLevel)
 {
-	CheckElectronOccupancy(__func__);
-	G4ElectronOccupancy newElectronOccupancy (*fElectronOccupancy);
+  CheckElectronOccupancy(__func__);
+  G4ElectronOccupancy newElectronOccupancy(*fElectronOccupancy);
 
-	newElectronOccupancy.RemoveElectron(ExcitedLevel,1);
-	newElectronOccupancy.AddElectron(5,1);
+  newElectronOccupancy.RemoveElectron(ExcitedLevel, 1);
+  newElectronOccupancy.AddElectron(5, 1);
 
-	return ChangeConfiguration(newElectronOccupancy);
+  return ChangeConfiguration(newElectronOccupancy);
 }
 
 /** Method used in Geant4-DNA to ionize water molecules
  */
 G4MolecularConfiguration* G4MolecularConfiguration::IonizeMolecule(G4int IonizedLevel)
 {
-	CheckElectronOccupancy(__func__);
-	G4ElectronOccupancy newElectronOccupancy(*fElectronOccupancy);
+  CheckElectronOccupancy(__func__);
+  G4ElectronOccupancy newElectronOccupancy(*fElectronOccupancy);
 
-	if(newElectronOccupancy.GetOccupancy(IonizedLevel) != 0)
-	{
-		newElectronOccupancy.RemoveElectron(IonizedLevel,1);
-	}
-	else
-	{
-		G4String errMsg = "There is no electron on the orbit " + G4UIcommand::ConvertToString(IonizedLevel) +
-				" you want to free. The molecule's name you want to ionized is "+ GetName();
-		G4Exception("G4Molecule::IonizeMolecule","",FatalErrorInArgument, errMsg);
-		PrintState();
-	}
+  if (newElectronOccupancy.GetOccupancy(IonizedLevel) != 0)
+  {
+    newElectronOccupancy.RemoveElectron(IonizedLevel, 1);
+  }
+  else
+  {
+    G4String errMsg = "There is no electron on the orbit "
+        + G4UIcommand::ConvertToString(IonizedLevel)
+        + " you want to free. The molecule's name you want to ionized is "
+        + GetName();
+    G4Exception("G4Molecule::IonizeMolecule", "", FatalErrorInArgument, errMsg);
+    PrintState();
+  }
 
-	// DEBUG
-	// PrintState();
+  // DEBUG
+  // PrintState();
 
-	return ChangeConfiguration(newElectronOccupancy);
+  return ChangeConfiguration(newElectronOccupancy);
 }
 
-G4MolecularConfiguration* G4MolecularConfiguration::AddElectron(G4int orbit, G4int number)
+G4MolecularConfiguration* G4MolecularConfiguration::AddElectron(G4int orbit,
+                                                                G4int number)
 {
-	CheckElectronOccupancy(__func__);
-	G4ElectronOccupancy newElectronOccupancy(*fElectronOccupancy);
-	newElectronOccupancy.AddElectron(orbit, number);
-	return ChangeConfiguration(newElectronOccupancy);
+  CheckElectronOccupancy(__func__);
+  G4ElectronOccupancy newElectronOccupancy(*fElectronOccupancy);
+  newElectronOccupancy.AddElectron(orbit, number);
+  return ChangeConfiguration(newElectronOccupancy);
 }
 
-G4MolecularConfiguration* G4MolecularConfiguration::RemoveElectron(G4int orbit,G4int number)
+G4MolecularConfiguration* G4MolecularConfiguration::RemoveElectron(G4int orbit,
+                                                                   G4int number)
 {
-	CheckElectronOccupancy(__func__);
-	G4ElectronOccupancy newElectronOccupancy (*fElectronOccupancy);
+  CheckElectronOccupancy(__func__);
+  G4ElectronOccupancy newElectronOccupancy(*fElectronOccupancy);
 
-	if(newElectronOccupancy.GetOccupancy(orbit) != 0)
-	{
-		newElectronOccupancy.RemoveElectron(orbit, number );
-	}
-	else
-	{
-		G4String errMsg = "There is already no electron into the orbit " + G4UIcommand::ConvertToString(orbit) +
-				" you want to free. The molecule's name is "+ GetName();
-		G4Exception("G4Molecule::RemoveElectron","",JustWarning, errMsg);
-		PrintState();
-	}
+  if (newElectronOccupancy.GetOccupancy(orbit) != 0)
+  {
+    newElectronOccupancy.RemoveElectron(orbit, number);
+  }
+  else
+  {
+    G4String errMsg = "There is already no electron into the orbit "
+        + G4UIcommand::ConvertToString(orbit)
+        + " you want to free. The molecule's name is " + GetName();
+    G4Exception("G4Molecule::RemoveElectron", "", JustWarning, errMsg);
+    PrintState();
+  }
 
-	return ChangeConfiguration(newElectronOccupancy);
+  return ChangeConfiguration(newElectronOccupancy);
 }
 
-G4MolecularConfiguration* G4MolecularConfiguration::MoveOneElectron(G4int orbitToFree,G4int orbitToFill)
+G4MolecularConfiguration* G4MolecularConfiguration::MoveOneElectron(G4int orbitToFree,
+                                                                    G4int orbitToFill)
 {
-	CheckElectronOccupancy(__func__);
-	G4ElectronOccupancy newElectronOccupancy (*fElectronOccupancy);
+  CheckElectronOccupancy(__func__);
+  G4ElectronOccupancy newElectronOccupancy(*fElectronOccupancy);
 
-	if(newElectronOccupancy . GetOccupancy(orbitToFree)>=1)
-	{
-		newElectronOccupancy . RemoveElectron(orbitToFree,1);
-		newElectronOccupancy . AddElectron(orbitToFill,1);
-	}
-	else
-	{
-		G4String errMsg = "There is no electron on the orbit " + G4UIcommand::ConvertToString(orbitToFree) +
-				" you want to free. The molecule's name is "+ GetName();
-		G4Exception("G4Molecule::MoveOneElectron","",FatalErrorInArgument, errMsg);
-		PrintState();
-	}
+  if (newElectronOccupancy.GetOccupancy(orbitToFree) >= 1)
+  {
+    newElectronOccupancy.RemoveElectron(orbitToFree, 1);
+    newElectronOccupancy.AddElectron(orbitToFill, 1);
+  }
+  else
+  {
+    G4String errMsg = "There is no electron on the orbit "
+        + G4UIcommand::ConvertToString(orbitToFree)
+        + " you want to free. The molecule's name is " + GetName();
+    G4Exception("G4Molecule::MoveOneElectron", "", FatalErrorInArgument,
+                errMsg);
+    PrintState();
+  }
 
-	return ChangeConfiguration(newElectronOccupancy);
+  return ChangeConfiguration(newElectronOccupancy);
 }
 
 const G4String& G4MolecularConfiguration::GetName() const
 {
-	if(fName.isNull())
-	{
-		fName = fMoleculeDefinition->GetName();
-		fName+= "^";
-		// fName+= "{";
-		fName+= G4UIcommand::ConvertToString(fDynCharge);
-		// fName+= "}";
-	}
-	return fName;
+  if (fName.isNull())
+  {
+    fName = fMoleculeDefinition->GetName();
+    fName += "^";
+    // fName+= "{";
+    fName += G4UIcommand::ConvertToString(fDynCharge);
+    // fName+= "}";
+  }
+  return fName;
 }
 
 const G4String& G4MolecularConfiguration::GetFormatedName() const
 {
-	if(fFormatedName.isNull())
-	{
-		fFormatedName = fMoleculeDefinition->GetFormatedName();
-		fFormatedName+= "^";
-		fFormatedName+= "{";
-		fFormatedName+= G4UIcommand::ConvertToString(fDynCharge);
-		fFormatedName+= "}";
-	}
-	return fFormatedName;
+  if (fFormatedName.isNull())
+  {
+    fFormatedName = fMoleculeDefinition->GetFormatedName();
+    fFormatedName += "^";
+    fFormatedName += "{";
+    fFormatedName += G4UIcommand::ConvertToString(fDynCharge);
+    fFormatedName += "}";
+  }
+  return fFormatedName;
 }
 
 G4int G4MolecularConfiguration::GetAtomsNumber() const
 {
-	return fMoleculeDefinition->GetAtomsNumber();
+  return fMoleculeDefinition->GetAtomsNumber();
 }
 
 G4double G4MolecularConfiguration::GetNbElectrons() const
 {
-	CheckElectronOccupancy(__func__);
-	return fElectronOccupancy->GetTotalOccupancy();
+  CheckElectronOccupancy(__func__);
+  return fElectronOccupancy->GetTotalOccupancy();
 }
 
 void G4MolecularConfiguration::PrintState() const
 {
-	if(fElectronOccupancy)
-	{
-		G4cout<<"--------------Print electronic state of "<<GetName()<<"---------------"<<G4endl;
-		fElectronOccupancy->DumpInfo();
-		if(fElectronOccupancy==fMoleculeDefinition->GetGroundStateElectronOccupancy())
-		{
-			G4cout<<"At ground state"<<G4endl;
-		}
-		else
-		{
-			if(fMoleculeDefinition->GetDecayTable())
-				G4cout<<"Transition :"<<(fMoleculeDefinition->GetDecayTable())->GetExcitedState(fElectronOccupancy)<<G4endl;
-		}
-	}
-	else
-	{
-		G4cout<<"--- No electron occupancy set up ---"<<G4endl;
-	}
+  if (fElectronOccupancy)
+  {
+    G4cout << "--------------Print electronic state of " << GetName()
+           << "---------------" << G4endl;
+    fElectronOccupancy->DumpInfo();
+    if(fElectronOccupancy==fMoleculeDefinition->GetGroundStateElectronOccupancy())
+    {
+      G4cout<<"At ground state"<<G4endl;
+    }
+    else
+    {
+      if(fMoleculeDefinition->GetDecayTable())
+      G4cout<<"Transition :"<<(fMoleculeDefinition->GetDecayTable())->GetExcitedState(fElectronOccupancy)<<G4endl;
+    }
+  }
+  else
+  {
+    G4cout<<"--- No electron occupancy set up ---"<<G4endl;
+  }
 }
 
 // added - to be transformed in a "Decay method"
-const vector <const G4MolecularDissociationChannel*>* G4MolecularConfiguration::GetDecayChannel() const
+const vector<const G4MolecularDissociationChannel*>* G4MolecularConfiguration::GetDecayChannel() const
 {
-	if(fElectronOccupancy == 0) return 0;
-	return fMoleculeDefinition-> GetDecayChannels(fElectronOccupancy);
+  if (fElectronOccupancy == 0) return 0;
+  return fMoleculeDefinition->GetDecayChannels(fElectronOccupancy);
 }
 
 G4int G4MolecularConfiguration::GetFakeParticleID() const
 {
-	if(fMoleculeDefinition)
-		return fMoleculeDefinition->GetPDGEncoding();
-	else
-		G4Exception("G4Molecule::GetMoleculeID","",FatalErrorInArgument, "You should first enter a molecule defintion");
+  if (fMoleculeDefinition) return fMoleculeDefinition->GetPDGEncoding();
+  else G4Exception("G4Molecule::GetMoleculeID", "", FatalErrorInArgument,
+                   "You should first enter a molecule defintion");
 
-	return INT_MAX;
+  return INT_MAX;
 }
 
 const char* removePath(const char* path)
 {
-	const char* pDelimeter = strrchr (path, '\\');
-	if (pDelimeter)
-		path = pDelimeter+1;
+  const char* pDelimeter = strrchr(path, '\\');
+  if (pDelimeter) path = pDelimeter + 1;
 
-	pDelimeter = strrchr (path, '/');
-	if (pDelimeter)
-		path = pDelimeter+1;
+  pDelimeter = strrchr(path, '/');
+  if (pDelimeter) path = pDelimeter + 1;
 
-	return path;
+  return path;
 }
 
 void G4MolecularConfiguration::CheckElectronOccupancy(const char* function) const
 {
-	if(fElectronOccupancy == 0)
-	{
-		G4String functionName(function);
-		G4ExceptionDescription description;
-		description << "No G4ElectronOccupancy was defined for molecule definition : "
-				<< fMoleculeDefinition->GetName()
-				<< ". The definition was probably defined using the charge state, rather than electron state.";
+  if (fElectronOccupancy == 0)
+  {
+    G4String functionName(function);
+    G4ExceptionDescription description;
+    description
+        << "No G4ElectronOccupancy was defined for molecule definition : "
+        << fMoleculeDefinition->GetName()
+        << ". The definition was probably defined using the charge state, rather than electron state.";
 
-		G4Exception(functionName,"",FatalErrorInArgument, description);
-	}
+    G4Exception(functionName, "", FatalErrorInArgument, description);
+  }
+}
+
+void G4MolecularConfiguration::G4MolecularConfigurationManager::
+RemoveMolecularConfigurationFromTable(G4MolecularConfiguration* configuration)
+{
+  MolecularConfigurationTable::iterator it1 = fTable.find(
+      configuration->GetDefinition());
+  MolecularConfigurationTable::iterator end = fTable.end();
+
+  if (it1 == end) return;
+
+  std::map<G4ElectronOccupancy, G4MolecularConfiguration*, comparator>::iterator it2 =
+      it1->second.find(*configuration->GetElectronOccupancy());
+
+  if (it2 == it1->second.end()) return;
+
+  it2->second = 0;
+//  it1->second.erase(it2);
+
+  configuration->fElectronOccupancy = 0;
 }

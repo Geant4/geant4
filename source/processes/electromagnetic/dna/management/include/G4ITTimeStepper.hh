@@ -21,54 +21,57 @@ class G4ITTrackingInteractivity;
 class G4ITTimeStepper
 {
 protected:
-	G4ITTimeStepper();
-	virtual ~G4ITTimeStepper();
+  G4ITTimeStepper();
+  virtual ~G4ITTimeStepper();
 private:
-	static G4ThreadLocal G4ITTimeStepper* fpInstance;
+  static G4ThreadLocal G4ITTimeStepper* fpInstance;
 
 public:
-	static G4ITTimeStepper* Instance();
-	virtual void Initialize(){;}
-	virtual void Reset(){;}
+  static G4ITTimeStepper* Instance();
+  virtual void Initialize(){;}
+  virtual void Reset(){;}
 
-	virtual void SetVerbose(int){;}
+  virtual void SetVerbose(int){;}
 
-	virtual void SetGun(G4ITGun*){;}
+  virtual void SetGun(G4ITGun*){;}
 
-	virtual void Process(){;}
+  virtual void Process()
+  {;}
 
-	virtual G4ITModelHandler* GetModelHandler(){return 0;}
-	virtual void RegisterModel(G4VITStepModel*, double){;}
+  virtual G4bool IsRunning(){ return false; }
 
-	virtual void SetEndTime(const double){;}
+  virtual G4ITModelHandler* GetModelHandler(){ return 0; }
 
-	virtual void SetTimeTolerance(double){;}
-	// Two tracks below the time tolerance are supposed to be
-	// in the same time slice
-	virtual double GetTimeTolerance() const{return -1;}
+  virtual void RegisterModel(G4VITStepModel*, double){;}
 
-	virtual void SetMaxZeroTimeAllowed(int){;}
-	virtual int GetMaxZeroTimeAllowed() const{return -1;}
+  virtual void SetEndTime(const double){;}
 
-	virtual void     SetTimeSteps(std::map<double,double>*){;}
-	virtual void     AddTimeStep(double /*startingTime*/, double /*timeStep*/){;}
-	virtual void     SetDefaultTimeStep(double){;}
-	virtual double   GetLimitingTimeStep() const{return -1;}
-	virtual G4int    GetNbSteps() const{return -1;}
-	virtual void     SetMaxNbSteps(G4int){;}
-	virtual G4int    GetMaxNbSteps() const{return 0;}
-	virtual G4double GetStartTime() const{return -1;}
-	virtual G4double GetEndTime() const{return -1;}
-	virtual G4double GetTimeStep() const{return -1;}
-	virtual G4double GetPreviousTimeStep() const { return -1;}
-	virtual G4double GetGlobalTime() const { return -1;}
+  virtual void SetTimeTolerance(double){;}
+  // Two tracks below the time tolerance are supposed to be
+  // in the same time slice
+  virtual double GetTimeTolerance() const{ return -1;}
 
-	virtual void SetUserAction(G4UserTimeStepAction*){;}
-	virtual G4UserTimeStepAction* GetUserReactionAction() const{return 0;}
+  virtual void SetMaxZeroTimeAllowed(int){;}
+  virtual int GetMaxZeroTimeAllowed() const{ return -1;}
 
-        virtual void SetInteractivity(G4ITTrackingInteractivity*){;}
-        virtual G4ITTrackingInteractivity* GetInteractivity(){return 0;}
+  virtual void SetTimeSteps(std::map<double, double>*){;}
+  virtual void AddTimeStep(double /*startingTime*/, double /*timeStep*/){;}
+  virtual void SetDefaultTimeStep(double){;}
+  virtual double GetLimitingTimeStep() const {return -1;}
+  virtual G4int GetNbSteps() const {return -1;}
+  virtual void SetMaxNbSteps(G4int) {;}
+  virtual G4int GetMaxNbSteps() const {return 0;}
+  virtual G4double GetStartTime() const {return -1;}
+  virtual G4double GetEndTime() const {return -1;}
+  virtual G4double GetTimeStep() const {return -1;}
+  virtual G4double GetPreviousTimeStep() const {return -1;}
+  virtual G4double GetGlobalTime() const {return -1;}
+
+  virtual void SetUserAction(G4UserTimeStepAction*) {;}
+  virtual G4UserTimeStepAction* GetUserReactionAction() const {return 0;}
+
+  virtual void SetInteractivity(G4ITTrackingInteractivity*){;}
+  virtual G4ITTrackingInteractivity* GetInteractivity() {return 0;}
 };
-
 
 #endif /* G4ITTIMESTEPPER_HH_ */

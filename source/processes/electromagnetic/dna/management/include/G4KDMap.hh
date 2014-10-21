@@ -32,12 +32,12 @@
 // In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
 // If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
 //
-// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
 // we ask that you please cite the following papers reference papers on chemistry:
 //
-// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
-// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
+// J. Comput. Phys. 274 (2014) 841-882
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
 #ifndef G4ITMAPROOM_HH
 #define G4ITMAPROOM_HH
@@ -55,6 +55,7 @@ class __1DSortOut
 {
 public :
     __1DSortOut(size_t dimension);
+    __1DSortOut(const __1DSortOut& right);
     int GetDimension();
     G4KDNode_Base* GetMidle(int& /*G4KDNode_deque*/);
 
@@ -62,6 +63,10 @@ public :
     G4KDNode_Base* PopOutMiddle();
     void Sort();
     void Erase(std::deque<G4KDNode_Base*>::iterator &);
+    size_t Size()
+    {
+      return fContainer.size();
+    }
 
 protected :
     struct sortOutNDim
@@ -81,13 +86,13 @@ protected :
 class G4KDMap
 {
 public:
-    G4KDMap(size_t dimensions) : fSortOut(dimensions)
+    G4KDMap(size_t dimensions) : fSortOut(dimensions, __1DSortOut(dimensions))
     {
         fIsSorted = false;
-        for(size_t i = 0 ; i < dimensions ; i++)
-        {
-            fSortOut[i] = new __1DSortOut(i);
-        }
+//        for(size_t i = 0 ; i < dimensions ; i++)
+//        {
+//            fSortOut[i] = new __1DSortOut(i);
+//        }
     }
 
     void Insert(G4KDNode_Base* pos);
@@ -106,7 +111,7 @@ public:
 
 private:
     bool fIsSorted;
-    std::vector<__1DSortOut*> fSortOut;
+    std::vector<__1DSortOut> fSortOut;
     std::map<G4KDNode_Base*, std::vector<std::deque<G4KDNode_Base*>::iterator > > fMap;
 
     // A mettre directement dans G4KDNode

@@ -30,17 +30,18 @@
 //
 // The code is developed in the framework of the ESA AO7146
 //
-// We would be very happy hearing from you, so do not hesitate to send us your feedback!
+// We would be very happy hearing from you, send us your feedback! :)
 //
 // In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
-// If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
+// If you use Geant4-DNA chemistry and you publish papers about your software, 
+// in addition to the general paper on Geant4-DNA:
 //
-// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
 // we ask that you please cite the following reference papers on chemistry:
 //
-// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
-// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
+// J. Comput. Phys. 274 (2014) 841-882
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 //
 // ---------------------------------------------------------------------
 //	GEANT 4 class header file
@@ -78,8 +79,8 @@ class G4MoleculeDefinition;
 class G4MolecularDissociationChannel;
 class G4DynamicParticle;
 
-G4Molecule* GetMolecule(const G4Track& track) ;
-G4Molecule* GetMolecule(const G4Track* track) ;
+G4Molecule* GetMolecule(const G4Track& track);
+G4Molecule* GetMolecule(const G4Track* track);
 
 /** Class Description
  *  The dynamic molecule holds all the data that change for a molecule
@@ -90,179 +91,182 @@ G4Molecule* GetMolecule(const G4Track* track) ;
 class G4Molecule : public G4IT
 {
 
-public: // With Description
+public:
+  // With Description
 
-    ITDef(G4Molecule)
+ITDef(G4Molecule)
 
-    //From G4VUserTrackInformation
-    void Print() const;
+  //From G4VUserTrackInformation
+  void Print() const;
 
-    //  new/delete operators are overloded to use G4Allocator
-    inline void *operator new(size_t);
+  //  new/delete operators are overloded to use G4Allocator
+  inline void *operator new(size_t);
 #ifdef __IBMCPP__
-    inline void *operator new(size_t sz, void* p) { return p; }
+  inline void *operator new(size_t sz, void* p)
+  { return p;}
 #endif
-    inline void operator delete(void*);
+  inline void operator delete(void*);
 
-    G4Molecule(const G4Molecule&);
-    G4Molecule & operator=(const G4Molecule &right);
-    G4bool operator==(const G4Molecule &right) const;
-    G4bool operator!=(const G4Molecule &right) const;
-    G4bool operator<(const G4Molecule &right) const;
+  G4Molecule(const G4Molecule&);
+  G4Molecule & operator=(const G4Molecule &right);
+  G4bool operator==(const G4Molecule &right) const;
+  G4bool operator!=(const G4Molecule &right) const;
+  G4bool operator<(const G4Molecule &right) const;
 
-    virtual G4ITType GetITSubType() const
-    {
-    	return GetMoleculeID();
-    }
+  virtual G4ITType GetITSubType() const
+  {
+    return GetMoleculeID();
+  }
 
 public:
-    //------ Constructors --------------------------
-    /** To build a molecule at ground state according to a given
-     * G4MoleculeDefinition that can be obtained from G4GenericMoleculeManager
-     */
-    G4Molecule(G4MoleculeDefinition * molecule);
+  //------ Constructors --------------------------
+  /** To build a molecule at ground state according to a given
+   * G4MoleculeDefinition that can be obtained from G4GenericMoleculeManager
+   */
+  G4Molecule(G4MoleculeDefinition * molecule);
 
-    G4Molecule(G4MoleculeDefinition* molDef, int charge);
+  G4Molecule(G4MoleculeDefinition* molDef, int charge);
 
-    /** To build a molecule at a specific excitation/ionisation state according
-     * to a ground state that can be obtained from G4GenericMoleculeManager
-     */
-    G4Molecule(G4MoleculeDefinition * molecule, G4int, G4int);
+  /** To build a molecule at a specific excitation/ionisation state according
+   * to a ground state that can be obtained from G4GenericMoleculeManager
+   */
+  G4Molecule(G4MoleculeDefinition * molecule, G4int, G4int);
 
-    /** Specific builder for water molecules to be used in Geant4-DNA,
-     * the last option Excitation is true if the molecule is excited, is
-     * false is the molecule is ionized.
-     */
-    G4Molecule(G4MoleculeDefinition * molecule, G4int, G4bool);
+  /** Specific builder for water molecules to be used in Geant4-DNA,
+   * the last option Excitation is true if the molecule is excited, is
+   * false is the molecule is ionized.
+   */
+  G4Molecule(G4MoleculeDefinition * molecule, G4int, G4bool);
 
-    virtual ~G4Molecule();
+  virtual ~G4Molecule();
 
-    //-------- Methods -------------------------------
-    //Get from static definition
-    /** Returns the name of the molecule
-     */
-    const G4String& GetName() const;
+  //-------- Methods -------------------------------
+  //Get from static definition
+  /** Returns the name of the molecule
+   */
+  const G4String& GetName() const;
 
-    /** Returns the formated name of the molecule
-     */
-    const G4String& GetFormatedName() const;
+  /** Returns the formated name of the molecule
+   */
+  const G4String& GetFormatedName() const;
 
-    /** Returns the nomber of atoms compouning the molecule
-     */
-    G4int GetAtomsNumber() const;
+  /** Returns the nomber of atoms compouning the molecule
+   */
+  G4int GetAtomsNumber() const;
 
-    /** Will set up the correct molecularConfiguration given
-      * an electron configuration
-      */
-    void SetElectronOccupancy(const G4ElectronOccupancy*);
+  /** Will set up the correct molecularConfiguration given
+   * an electron configuration
+   */
+  void SetElectronOccupancy(const G4ElectronOccupancy*);
 
-    /** Method used in Geant4-DNA to excite water molecules
-    */
-    void ExciteMolecule(G4int);
+  /** Method used in Geant4-DNA to excite water molecules
+   */
+  void ExciteMolecule(G4int);
 
-    /** Method used in Geant4-DNA to ionize water molecules
-     */
-    void IonizeMolecule(G4int);
+  /** Method used in Geant4-DNA to ionize water molecules
+   */
+  void IonizeMolecule(G4int);
 
-    /** Add n electrons to a given orbit.
-     * Note : You can add as many electrons to a given orbit, the result
-     * may be unrealist.
-     */
-    void AddElectron(G4int orbit, G4int n =1);
+  /** Add n electrons to a given orbit.
+   * Note : You can add as many electrons to a given orbit, the result
+   * may be unrealist.
+   */
+  void AddElectron(G4int orbit, G4int n = 1);
 
-    /** Remove n electrons to a given orbit.
-     */
-    void RemoveElectron(G4int,G4int number=1);
+  /** Remove n electrons to a given orbit.
+   */
+  void RemoveElectron(G4int, G4int number = 1);
 
-    /** Move one electron from an orbit to another.
-    */
-    void MoveOneElectron(G4int /*orbit*/,G4int /*orbit*/);
+  /** Move one electron from an orbit to another.
+   */
+  void MoveOneElectron(G4int /*orbit*/, G4int /*orbit*/);
 
-    /** Returns the number of electron.
-    */
-    G4double GetNbElectrons() const; //This method can be used to check if the electron s number is physical
+  /** Returns the number of electron.
+   */
+  G4double GetNbElectrons() const; //This method can be used to check if the electron s number is physical
 
-    /** Show the electronic state of the molecule.
-    */
-    void PrintState() const;
+  /** Show the electronic state of the molecule.
+   */
+  void PrintState() const;
 
-    G4Track * BuildTrack(G4double globalTime, const G4ThreeVector& Position);
+  G4Track * BuildTrack(G4double globalTime, const G4ThreeVector& Position);
 
-    G4double GetKineticEnergy() const;
+  G4double GetKineticEnergy() const;
 
-    G4double GetDiffusionVelocity() const;
+  G4double GetDiffusionVelocity() const;
 
-    const std::vector <const G4MolecularDissociationChannel*>* GetDecayChannel() const;
+  const std::vector<const G4MolecularDissociationChannel*>* GetDecayChannel() const;
 
-    G4int GetFakeParticleID() const;
-    G4int GetMoleculeID() const;
+  G4int GetFakeParticleID() const;
+  G4int GetMoleculeID() const;
 
-    //-------------Inline functions ---------------------
-    /**  Get molecule definition. This G4MoleculeDefinition has the ground
-     * electronic state of the molecule.
-     */
-    const G4MoleculeDefinition* GetDefinition() const;
+  //-------------Inline functions ---------------------
+  /**  Get molecule definition. This G4MoleculeDefinition has the ground
+   * electronic state of the molecule.
+   */
+  const G4MoleculeDefinition* GetDefinition() const;
 
-    //methods to set/get changing parameters
+  //methods to set/get changing parameters
 
 /////////////////////////////////////////////////////////////////////////////
-    /** Sets the diffusion coefficient D of the molecule used in diffusion
-     * processes to calculate the mean square jump distance between two
-     * changes of direction. In three dimension : <x^2> = 6 D t where t is
-     * the mean jump time between two changes of direction.
-     */
-    void SetDiffusionCoefficient(G4double);
+  /** Sets the diffusion coefficient D of the molecule used in diffusion
+   * processes to calculate the mean square jump distance between two
+   * changes of direction. In three dimension : <x^2> = 6 D t where t is
+   * the mean jump time between two changes of direction.
+   */
+  void SetDiffusionCoefficient(G4double);
 
-    /** Returns the diffusion coefficient D.
-       */
-    G4double GetDiffusionCoefficient() const;
+  /** Returns the diffusion coefficient D.
+   */
+  G4double GetDiffusionCoefficient() const;
 
-    /** Set the decay time of the molecule.
-    */
-    void SetDecayTime(G4double);
+  /** Set the decay time of the molecule.
+   */
+  void SetDecayTime(G4double);
 
-    /** Returns the decay time of the molecule.
-     */
-    G4double GetDecayTime() const;
+  /** Returns the decay time of the molecule.
+   */
+  G4double GetDecayTime() const;
 
-    /** The Van Der Valls Radius of the molecule
-     */
-    void SetVanDerVaalsRadius(G4double);
-    G4double GetVanDerVaalsRadius() const ;
+  /** The Van Der Valls Radius of the molecule
+   */
+  void SetVanDerVaalsRadius(G4double);
+  G4double GetVanDerVaalsRadius() const;
 
-    /** Returns the object ElectronOccupancy describing the electronic
-     * configuration of the molecule.
-     */
-    const G4ElectronOccupancy* GetElectronOccupancy() const;
+  /** Returns the object ElectronOccupancy describing the electronic
+   * configuration of the molecule.
+   */
+  const G4ElectronOccupancy* GetElectronOccupancy() const;
 
-    /** Returns the charge of molecule.
-     */
-    G4int GetCharge() const;
+  /** Returns the charge of molecule.
+   */
+  G4int GetCharge() const;
 
-    /** Set the total mass of the molecule.
-     */
-    void SetMass(G4double);
+  /** Set the total mass of the molecule.
+   */
+  void SetMass(G4double);
 
-    /** Returns the total mass of the molecule.
-     */
-    G4double GetMass() const;
+  /** Returns the total mass of the molecule.
+   */
+  G4double GetMass() const;
 ////////////////////////////////////////////////////////////////////////
 
-    G4MolecularConfiguration* GetMolecularConfiguration() const;
+  G4MolecularConfiguration* GetMolecularConfiguration() const;
 
-    static void SetGlobalTemperature(G4double);
-    static G4double GetGlobalTemperature();
+  static void SetGlobalTemperature(G4double);
+  static G4double GetGlobalTemperature();
+
+  static G4Molecule* GetMolecule(const G4Track*);
 
 private:
-    /** Default molecule builder
-     */
-    G4Molecule();
+  /** Default molecule builder
+   */
+  G4Molecule();
 
-    G4MolecularConfiguration* fpMolecularConfiguration;
+  G4MolecularConfiguration* fpMolecularConfiguration;
 
-    static /*G4ThreadLocal*/ double fgTemperature;
+  static /*G4ThreadLocal*/double fgTemperature;
 };
-
 
 #if defined G4EM_ALLOC_EXPORT
 extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator;
@@ -270,20 +274,19 @@ extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator;
 extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4Molecule> *aMoleculeAllocator;
 #endif
 
-
 //////////////////////////
 inline void * G4Molecule::operator new(size_t)
 //////////////////////////
 {
-    if (!aMoleculeAllocator)  aMoleculeAllocator = new G4Allocator<G4Molecule>;
-    return (void *) aMoleculeAllocator->MallocSingle();
+  if (!aMoleculeAllocator) aMoleculeAllocator = new G4Allocator<G4Molecule>;
+  return (void *) aMoleculeAllocator->MallocSingle();
 }
 
 //////////////////////////
 inline void G4Molecule::operator delete(void * aMolecule)
 //////////////////////////
 {
-    aMoleculeAllocator->FreeSingle((G4Molecule *) aMolecule);
+  aMoleculeAllocator->FreeSingle((G4Molecule *) aMolecule);
 }
 
 #endif

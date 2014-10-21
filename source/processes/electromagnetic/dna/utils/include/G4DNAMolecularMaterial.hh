@@ -34,12 +34,12 @@
 // In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
 // If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
 //
-// The Geant4-DNA project, S. Incerti et al., Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
+// Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
 // we ask that you please cite the following papers reference papers on chemistry:
 //
-// Diﬀusion-controlled reactions modelling in Geant4-DNA, M. Karamitros et al., 2014 (submitted)
-// Modeling Radiation Chemistry in the Geant4 Toolkit, M. Karamitros et al., Prog. Nucl. Sci. Tec. 2 (2011) 503-508
+// J. Comput. Phys. 274 (2014) 841-882
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
 #ifndef G4DNAMolecularMaterial_HH
 #define G4DNAMolecularMaterial_HH
@@ -54,68 +54,77 @@ class G4Material;
 
 struct CompareMaterial
 {
-    // If the materials derives from a base material,
-    // it should be able to find the derived material using the base material.
-    bool operator() (const G4Material* mat1, const G4Material* mat2) const;
+  // If the materials derives from a base material,
+  // it should be able to find the derived material using the base material.
+  bool operator()(const G4Material* mat1, const G4Material* mat2) const;
 };
 
-typedef std::map<const G4Material*, double,CompareMaterial> ComponentMap;
+typedef std::map<const G4Material*, double, CompareMaterial> ComponentMap;
 
 // G4DNAMolecularMaterial is initialized when G4ApplicationState == G4State_Idle
 
 class G4DNAMolecularMaterial : public G4VStateDependent
 {
 public:
-    static G4DNAMolecularMaterial* Instance();
-    static void DeleteInstance();
-    void Initialize();
-    void Clear();
+  static G4DNAMolecularMaterial* Instance();
+  static void DeleteInstance();
+  void Initialize();
+  void Clear();
 
-    virtual G4bool Notify(G4ApplicationState requestedState) ;
+  virtual G4bool Notify(G4ApplicationState requestedState);
 
-    inline const std::vector<ComponentMap>* GetMassFractionTable() const;
-    inline const std::vector<ComponentMap>* GetDensityTable() const;
+  inline const std::vector<ComponentMap>* GetMassFractionTable() const;
+  inline const std::vector<ComponentMap>* GetDensityTable() const;
 //    const std::vector<double>* GetMassFractionTableFor(const G4Material*) const;
-    const std::vector<double>* GetDensityTableFor(const G4Material*) const;
-    const std::vector<double>* GetNumMolPerVolTableFor(const G4Material*) const;
+  const std::vector<double>* GetDensityTableFor(const G4Material*) const;
+  const std::vector<double>* GetNumMolPerVolTableFor(const G4Material*) const;
 
-protected :
-    static G4DNAMolecularMaterial* fInstance;
+protected:
+  static G4DNAMolecularMaterial* fInstance;
 //    static G4ThreadLocal G4DNAMolecularMaterial* fInstance;
-    G4DNAMolecularMaterial();
-    G4DNAMolecularMaterial(const G4DNAMolecularMaterial& right);
-    G4DNAMolecularMaterial& operator=(const G4DNAMolecularMaterial&);
-    virtual ~G4DNAMolecularMaterial();
-    void Create();
-    void InitializeNumMolPerVol();
-    void InitializeDensity();
-    void RecordMolecularMaterial(G4Material* parentMaterial, G4Material* molecularMaterial, G4double fraction);
-    void SearchMolecularMaterial(G4Material* parentMaterial, G4Material* material, double currentFraction);
+  G4DNAMolecularMaterial();
+  G4DNAMolecularMaterial(const G4DNAMolecularMaterial& right);
+  G4DNAMolecularMaterial& operator=(const G4DNAMolecularMaterial&);
+  virtual ~G4DNAMolecularMaterial();
+  void Create();
+  void InitializeNumMolPerVol();
+  void InitializeDensity();
+  void RecordMolecularMaterial(G4Material* parentMaterial,
+                               G4Material* molecularMaterial,
+                               G4double fraction);
+  void SearchMolecularMaterial(G4Material* parentMaterial,
+                               G4Material* material,
+                               double currentFraction);
 
-    void AddMaterial(const G4Material*, double fraction);
+  void AddMaterial(const G4Material*, double fraction);
 
-    void PrintNotAMolecularMaterial(const char* methodName, const G4Material* lookForMaterial) const;
+  void PrintNotAMolecularMaterial(const char* methodName,
+                                  const G4Material* lookForMaterial) const;
 
-    std::vector<ComponentMap>* fpCompFractionTable;
-    std::vector<ComponentMap>* fpCompDensityTable;
-    std::vector<ComponentMap>* fpCompNumMolPerVolTable;
+  std::vector<ComponentMap>* fpCompFractionTable;
+  std::vector<ComponentMap>* fpCompDensityTable;
+  std::vector<ComponentMap>* fpCompNumMolPerVolTable;
 
-    mutable std::map<const G4Material*,std::vector<double>*,CompareMaterial> fAskedDensityTable;
-    mutable std::map<const G4Material*,std::vector<double>*,CompareMaterial> fAskedNumPerVolTable;
-    mutable std::map<const G4Material*,bool,CompareMaterial> fWarningPrinted;
+  mutable std::map<const G4Material*, std::vector<double>*, CompareMaterial>
+            fAskedDensityTable;
+  mutable std::map<const G4Material*, std::vector<double>*, CompareMaterial>
+            fAskedNumPerVolTable;
+  mutable std::map<const G4Material*, bool, CompareMaterial> fWarningPrinted;
 
-    G4bool fIsInitialized;
-    size_t fNMaterials;
+  G4bool fIsInitialized;
+  size_t fNMaterials;
 };
 
-inline const std::vector<ComponentMap> *G4DNAMolecularMaterial::GetMassFractionTable() const
+inline const std::vector<ComponentMap>*
+G4DNAMolecularMaterial::GetMassFractionTable() const
 {
-    return fpCompFractionTable;
+  return fpCompFractionTable;
 }
 
-inline const std::vector<ComponentMap>* G4DNAMolecularMaterial::GetDensityTable() const
+inline const std::vector<ComponentMap>*
+G4DNAMolecularMaterial::GetDensityTable() const
 {
-    return fpCompDensityTable;
+  return fpCompDensityTable;
 }
 
 #endif // G4DNAMolecularMaterial_HH
