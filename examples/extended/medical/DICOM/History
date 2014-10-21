@@ -8,6 +8,8 @@ $Id$
                       Category History file
 
                       ---------------------
+21.10.2014 - Pedro Arce (DICOM-V10-00-04)
+           - Fixed coding guidelines (long lines) 
                       
 16.10.2014 - Ivana Hrivnacova (DICOM-V10-00-03)
            - Fixed coding guidelines (long lines) in 

@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+//$Id:DicomPhantomParameterisationColour.cc 74592 2013-10-15 21:20:11Z jmadsen $
 //
 /// \file DicomPhantomParameterisationColour.cc
 /// \brief Implementation of the DicomPhantomParameterisationColour class
@@ -86,11 +86,13 @@ ComputeMaterial(const G4int copyNo, G4VPhysicalVolume * physVol, const G4VToucha
         if( iuu != std::string::npos ) {
             mateName = mateName.substr( 0, iuu );
         }
-        std::map<G4String,G4VisAttributes*>::const_iterator ite = fColours.find(mateName);
+        std::map<G4String,G4VisAttributes*>::const_iterator ite =
+          fColours.find(mateName);
         if( ite != fColours.end() ){
             physVol->GetLogicalVolume()->SetVisAttributes( (*ite).second );
         } else {
-            physVol->GetLogicalVolume()->SetVisAttributes( (*(fColours.begin()) ).second );
+            physVol->GetLogicalVolume()->SetVisAttributes( 
+                                  (*(fColours.begin()) ).second );
             // set it as unseen
         }
     }
