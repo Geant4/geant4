@@ -244,6 +244,29 @@ GEANT4_ADD_TEST(example-ext-medical-fanoCavity2
 GEANT4_ADD_TEST(example-ext-medical-GammaTherapy 
                 COMMAND ${BINDIR}/GammaTherapy ${SRCDIR}/extended/medical/GammaTherapy/GammaTherapy.in
                 BUILD ${SRCDIR}/extended/medical/GammaTherapy)
+
+set(DNA_EXAMPLE_SRC_DIR ${SRCDIR}/examples/extended/medical/dna)
+
+# GEANT4_ADD_TEST(example-ext-medical-dna-dnaphysics 
+#                 COMMAND ${BINDIR}/dnaphysics ${DNA_EXAMPLE_SRC_DIR}/dnaphysics/dnaphysics.in
+#                 BUILD ${DNA_EXAMPLE_SRC_DIR}/dnaphysics)
+# 
+# GEANT4_ADD_TEST(example-ext-medical-dna-microdosimetry
+#                 COMMAND ${BINDIR}/microdosimetry ${DNA_EXAMPLE_SRC_DIR}/microdosimetry/microdosimetry.in
+#                 BUILD ${DNA_EXAMPLE_SRC_DIR}/microdosimetry)
+
+foreach(_i 1 2 3)                
+GEANT4_ADD_TEST(example-ext-medical-dna-chem${_i}
+                COMMAND ${BINDIR}/chem${_i} ${DNA_EXAMPLE_SRC_DIR}/chem${_i}/beam.in
+                BUILD ${DNA_EXAMPLE_SRC_DIR}/chem${_i})
+endforeach()
+
+# GEANT4_ADD_TEST(example-ext-medical-dna-wholeNuclearDNA
+#                 COMMAND ${BINDIR}/wholeNuclearDNA
+#                         ${DNA_EXAMPLE_SRC_DIR}/wholeNuclearDNA/wholeNuclearDNA.in
+#                 BUILD wholeNuclearDNA ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+
+
 GEANT4_ADD_TEST(example-ext-optical-opnovice 
                 COMMAND ${BINDIR}/OpNovice -m ${SRCDIR}/extended/optical/OpNovice/OpNovice.in
                 BUILD ${SRCDIR}/extended/optical/OpNovice)

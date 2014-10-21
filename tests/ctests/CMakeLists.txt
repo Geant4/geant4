@@ -425,12 +425,45 @@ foreach(_i 1 2)
 endforeach()
 include( ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/channeling/CTestDefinitions.txt)
 
-  GEANT4_ADD_TEST(example-ext-exoticphysics-ExUCN
+GEANT4_ADD_TEST(example-ext-exoticphysics-ExUCN
                   COMMAND ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/ucn/ExUCN
                           -m ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/ucn/ExUCN.in
                   SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/exoticphysics/ucn
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/ucn
                   BUILD ExUCN ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+
+set(DNA_EXAMPLE_SOURCE_DIR ${CMAKE_BINARY_DIR}/examples/extended/medical/dna)
+set(DNA_EXAMPLE_BIN_DIR ${CMAKE_BINARY_DIR}/examples/extended/medical/dna)
+
+# GEANT4_ADD_TEST(example-ext-medical-dna-wholeNuclearDNA
+#                 COMMAND ${DNA_EXAMPLE_BIN_DIR}/wholeNuclearDNA/wholeNuclearDNA
+#                         ${DNA_EXAMPLE_SOURCE_DIR}/wholeNuclearDNA/wholeNuclearDNA.in
+#                 SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/wholeNuclearDNA
+#                 BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/wholeNuclearDNA
+#                 BUILD wholeNuclearDNA ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+#                 
+# GEANT4_ADD_TEST(example-ext-medical-dna-dnaphysics 
+#                 COMMAND ${DNA_EXAMPLE_BIN_DIR}/dnaphysics/dnaphysics 
+#                         ${DNA_EXAMPLE_SOURCE_DIR}/dnaphysics/dnaphysics.in
+#                 SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/dnaphysics
+#                 BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/dnaphysics
+#                 BUILD dnaphysics ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+#                 
+# GEANT4_ADD_TEST(example-ext-medical-dna-microdosimetry 
+#                 COMMAND ${DNA_EXAMPLE_BIN_DIR}/microdosimetry/microdosimetry 
+#                         ${DNA_EXAMPLE_SOURCE_DIR}/microdosimetry/microdosimetry.in
+#                 SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/microdosimetry
+#                 BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/microdosimetry
+#                 BUILD microdosimetry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                
+foreach(_i 1 2 3)                
+GEANT4_ADD_TEST(example-ext-medical-dna-chem${_i}
+                COMMAND ${DNA_EXAMPLE_BIN_DIR}/chem${_i}/chem${_i}
+                        ${DNA_EXAMPLE_SOURCE_DIR}/chem${_i}/beam.in
+                SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/chem${_i}
+                BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/chem${_i}
+                BUILD chem${_i} ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+endforeach()
 
 #-------------------------------------------------------------------------------------------------
 #---Advanced--------------------------------------------------------------------------------------
@@ -466,18 +499,6 @@ GEANT4_ADD_TEST(example-adv-composite_calorimeter-build
                  SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/composite_calorimeter
                  BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/composite_calorimeter
                  BUILD CompositeCalorimeter PROJECT CompositeCalorimeter)
-GEANT4_ADD_TEST(example-adv-dnageometry
-                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/dnageometry/dnageometry
-                        ${CMAKE_SOURCE_DIR}/examples/advanced/dnageometry/dnageometry.mac
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/dnageometry
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/dnageometry
-                BUILD dnageometry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-GEANT4_ADD_TEST(example-adv-dnaphysics 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/dnaphysics/dnaphysics 
-                        ${CMAKE_SOURCE_DIR}/examples/advanced/dnaphysics/dna.mac
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/dnaphysics
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/dnaphysics
-                BUILD dnaphysics ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-eRosita 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/eRosita/eRosita 
                         ${CMAKE_SOURCE_DIR}/examples/advanced/eRosita/eRosita.in
@@ -505,12 +526,6 @@ GEANT4_ADD_TEST(example-adv-microbeam
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/microbeam
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/microbeam
                 BUILD microbeam ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-GEANT4_ADD_TEST(example-adv-microdosimetry 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/microdosimetry/microdosimetry 
-                        ${CMAKE_SOURCE_DIR}/examples/advanced/microdosimetry/microdosimetry.mac
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/advanced/microdosimetry
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/advanced/microdosimetry
-                BUILD microdosimetry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 GEANT4_ADD_TEST(example-adv-microelectronics 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/advanced/microelectronics/microelectronics 
                         ${CMAKE_SOURCE_DIR}/examples/advanced/microelectronics/microelectronics.in

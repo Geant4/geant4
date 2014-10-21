@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-19 -- 20 October 2014 Mathieu Karamitros
+- Add chem1, chem2, chem3
+
 ctests-V10-00-18 13 October 2014 Luciano Pandola
 - Removed AIDA dependency for example-adv-composite_calorimeter-build
 
