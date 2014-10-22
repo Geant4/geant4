@@ -20,7 +20,8 @@
 /testem/event/printModulo 100
 #
 # Acceptance printout is activated
-/testem/det/acceptance  0.95140202  0.0082 4.0
+#/testem/det/acceptance  0.95140202  0.0082 4.0
+/testem/det/acceptance  0.9538  0.0075 4.0
 #
 /gun/particle e-
 /gun/energy 5 GeV

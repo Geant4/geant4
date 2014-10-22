@@ -15,6 +15,15 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11-01-14 V.Ivanchenko (test40-V09-06-10)
+- RunAction - fixed bug for the case when Geant4 is compiled for MT
+    but is runned sequentially
+- test40.in, test40.large_N.in - tuned acceptance parameters 
+
+11-12-13 V.Ivanchenko
+- ActionInitialisation - added Autolock into Build() method to
+   initialise RunAction properly
+
 21-11-13 A.Dotti (test40-V09-06-09)
 - Using G4GlobalMagFieldMessneger
 
