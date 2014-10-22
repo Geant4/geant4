@@ -32,6 +32,14 @@ if(POLICY CMP0022)
   cmake_policy(SET CMP0022 OLD)
 endif()
 
+# If Policy CMP0038 exists, use OLD because Geant4 still needs
+# to support versions < 2.8.4.
+# This relates to LINK_INTERFACE_LIBRARIES and can be removed once
+# minimum required CMake version reaches 2.8.4
+if(POLICY CMP0038)
+  cmake_policy(SET CMP0038 OLD)
+endif()
+
 # If Policy CMP0043 exists, use OLD because Geant4 still needs
 # to support Geant4 =< 2.8.12.
 # This relates to the use of generator expressions to set COMPILE_DEFINITIONS
