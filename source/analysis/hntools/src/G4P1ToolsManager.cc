@@ -485,7 +485,7 @@ G4int  G4P1ToolsManager::GetP1Id(const G4String& name, G4bool warn) const
       description << "      " << "profile " << name << " does not exist.";
       G4Exception(inFunction, "Analysis_W007", JustWarning, description);
     }
-    return -1;         
+    return kInvalidId;         
   }
   return it->second;
 }  

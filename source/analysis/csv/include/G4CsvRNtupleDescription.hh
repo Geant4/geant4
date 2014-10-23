@@ -23,50 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BaseAnalysisManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
+// $Id$
 
-// Base class for the object managers.
-// It handles first object ID and its lock and provides common utility methods.
+// Structure containing the information related to rroot ntuple
+//
+// Author: Ivana Hrivnacova, 09/04/2014 (ivana@ipno.in2p3.fr)
 
-// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
+#ifndef G4CsvRNtupleDescription_h
+#define G4CsvRNtupleDescription_h 1
 
-#ifndef G4BaseAnalysisManager_h
-#define G4BaseAnalysisManager_h 1
+#include "tools/rcsv_ntuple"
+#include "tools/ntuple_binding"
 
-#include "G4Fcn.hh"
-#include "G4BinScheme.hh"
-#include "globals.hh"
+namespace tools { 
+class ntuple_binding;
+}
 
-class G4AnalysisManagerState;
-
-class G4BaseAnalysisManager
+struct G4CsvRNtupleDescription
 {
-  public:
-    G4BaseAnalysisManager(const G4AnalysisManagerState& state);
-    virtual ~G4BaseAnalysisManager();
-    
-    // methods
+  G4CsvRNtupleDescription(
+    tools::rcsv::ntuple* rntuple) 
+    :  fNtuple(rntuple),
+       fNtupleBinding(new tools::ntuple_binding()),
+       fIsInitialized(false) {}
 
-    // The ids of objects are generated automatically
-    // starting from 0; with the following function it is possible to
-    // change the first Id to start from other value
-    G4bool SetFirstId(G4int firstId);
+  ~G4CsvRNtupleDescription()
+      { 
+        delete fNtupleBinding;
+        delete fNtuple;   // CHECK
+      }
 
-    // Access method
-    G4int GetFirstId() const;
-    
-  protected:
-    // data members
-    const G4AnalysisManagerState& fState;
-    G4int    fFirstId;
-    G4bool   fLockFirstId; 
+  tools::rcsv::ntuple* fNtuple; 
+  tools::ntuple_binding* fNtupleBinding;
+  G4bool fIsInitialized;
+  
+  private:
+    // disabled (not implemented) copy constructor
+    G4CsvRNtupleDescription(const G4CsvRNtupleDescription& rhs);
+    // disabled (not implemented) assignement operator
+    G4CsvRNtupleDescription& operator=(G4CsvRNtupleDescription& rhs);
 };
 
-// inline functions
-
-inline G4int G4BaseAnalysisManager::GetFirstId() const {
-  return fFirstId;
-}  
-
-#endif
-
+#endif  

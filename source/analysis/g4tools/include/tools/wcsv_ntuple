@@ -20,6 +20,11 @@ namespace tools {
 namespace wcsv {
 
 class ntuple {
+public:
+  static const std::string& s_class() {
+    static const std::string s_v("tools::wcsv::ntuple");
+    return s_v;
+  }
 protected:
   class icol {
   public:
@@ -158,6 +163,26 @@ public:
       m_writer << (*it)->name();
     }
     m_writer << std::endl;
+  }
+
+  bool write_commented_header(std::ostream& a_out) {
+    // commented header similar to the histo case.
+    m_writer << "#class " << s_class() << std::endl;
+    m_writer << "#title " << m_title << std::endl;
+    m_writer << "#separator " << (unsigned int)m_sep << std::endl;
+    bool status = true;
+   {for(unsigned int count=0;count<m_cols.size();count++) {
+       icol* _col = m_cols[count];
+       std::string sid;
+       if(!cid2s(_col->id_cls(),sid)) {
+         a_out << "tools::wcsv::ntuple::write_commented_header :"
+               << " unknow column type id " << _col->id_cls() << std::endl;
+         status = false; //but we continue.
+       } else {
+         m_writer << "#column " << sid << " " << _col->name() << std::endl;
+       }
+    }}
+    return status;
   }
 
   template <class T>

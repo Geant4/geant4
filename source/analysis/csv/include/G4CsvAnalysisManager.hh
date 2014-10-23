@@ -113,6 +113,7 @@ class G4CsvAnalysisManager : public G4VAnalysisManager
     std::vector<tools::wcsv::ntuple*>::const_iterator EndConstNtuple() const;
     
     // Csv format specific option
+    void SetIsCommentedHeader(G4bool isCommentedHeader);
     void SetIsHippoHeader(G4bool isHippoHeader);
 
   protected:

@@ -43,13 +43,13 @@
 #include "tools/histo/p2d" 
 #include "tools/rcsv_ntuple"
 
-class G4BaseFileManager;
 class G4H1ToolsManager;
 class G4H2ToolsManager;
 class G4H3ToolsManager;
 class G4P1ToolsManager;
 class G4P2ToolsManager;
-class G4XmlRNtupleManager;
+class G4CsvRNtupleManager;
+class G4CsvRFileManager;
   
 class G4CsvAnalysisReader : public G4VAnalysisReader
 {
@@ -110,8 +110,8 @@ class G4CsvAnalysisReader : public G4VAnalysisReader
     G4H3ToolsManager*     fH3Manager;
     G4P1ToolsManager*     fP1Manager;
     G4P2ToolsManager*     fP2Manager;
-    //G4XmlRNtupleManager*  fNtupleManager;
-    G4BaseFileManager*    fFileManager;
+    G4CsvRNtupleManager*  fNtupleManager;
+    G4CsvRFileManager*    fFileManager;
 };
 
 #include "G4CsvAnalysisReader.icc"

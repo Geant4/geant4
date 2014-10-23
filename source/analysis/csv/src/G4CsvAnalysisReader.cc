@@ -28,14 +28,14 @@
 // Author: Ivana Hrivnacova, 05/09/2014 (ivana@ipno.in2p3.fr)
 
 #include "G4CsvAnalysisReader.hh"
-#include "G4BaseFileManager.hh"
+#include "G4CsvRFileManager.hh"
 #include "G4H1ToolsManager.hh"
 #include "G4H2ToolsManager.hh"
 #include "G4H3ToolsManager.hh"
 #include "G4P1ToolsManager.hh"
 #include "G4P2ToolsManager.hh"
-//#include "G4CsvRNtupleManager.hh"
-//#include "G4CsvRNtupleDescription.hh"
+#include "G4CsvRNtupleManager.hh"
+#include "G4CsvRNtupleDescription.hh"
 #include "G4AnalysisVerbose.hh"
 #include "G4AnalysisUtilities.hh"
 #include "G4Threading.hh"
@@ -113,7 +113,7 @@ G4CsvAnalysisReader::G4CsvAnalysisReader(G4bool isMaster)
    fH3Manager(0),
    fP1Manager(0),
    fP2Manager(0),
-   //fNtupleManager(0),
+   fNtupleManager(0),
    fFileManager(0)
 {
   if ( ( isMaster && fgMasterInstance ) || ( fgInstance ) ) {
@@ -134,8 +134,8 @@ G4CsvAnalysisReader::G4CsvAnalysisReader(G4bool isMaster)
   fH3Manager = new G4H3ToolsManager(fState);
   fP1Manager = new G4P1ToolsManager(fState);
   fP2Manager = new G4P2ToolsManager(fState);
-  //fNtupleManager = new G4XmlRNtupleManager(fState);
-  fFileManager = new G4BaseFileManager(fState);
+  fNtupleManager = new G4CsvRNtupleManager(fState);
+  fFileManager = new G4CsvRFileManager(fState);
       // The managers will be deleted by the base class
   
   // Set managers to base class
@@ -144,7 +144,7 @@ G4CsvAnalysisReader::G4CsvAnalysisReader(G4bool isMaster)
   SetH3Manager(fH3Manager);
   SetP1Manager(fP1Manager);
   SetP2Manager(fP2Manager);
-  //SetNtupleManager(fNtupleManager);
+  SetNtupleManager(fNtupleManager);
   SetFileManager(fFileManager);
 }
 
@@ -187,8 +187,8 @@ G4bool G4CsvAnalysisReader::Reset()
   result = fH2Manager->Reset();
   finalResult = finalResult && result;
   
-  //result = fNtupleManager->Reset();
-  //finalResult = finalResult && result;
+  result = fNtupleManager->Reset();
+  finalResult = finalResult && result;
   
   return finalResult;
 }  
@@ -426,32 +426,20 @@ G4int G4CsvAnalysisReader::ReadNtupleImpl(const G4String& ntupleName,
     fullFileName = fFileManager->GetNtupleFileName(ntupleName);
   }  
 
-  std::ifstream ntupleFile(fullFileName);
-  if ( ! ntupleFile.is_open() ) {
-    G4ExceptionDescription description;
-    description << "      " << "Cannot open file " << fullFileName;
-    G4Exception("G4CsvAnalysisReader::ReadNtupleImpl()",
-                "Analysis_W001", JustWarning, description);
-    return kInvalidId;
-  }
-#ifdef G4VERBOSE
-  if ( fState.GetVerboseL1() ) 
-    fState.GetVerboseL1()
-      ->Message("open", "read file", fullFileName);
-#endif
-
-  // not yet available
-  //tools::rcsv::ntuple* rntuple 
-  //  = new tools::rcsv::ntuple(ntupleFile, ntupleName);
-  //G4int id 
-  //  = fNtupleManager->SetNtuple(new G4CsvRNtupleDescription(rntuple));
-  G4int id = kInvalidId;
+  // Open file
+  if ( ! fFileManager->OpenRFile(fullFileName) ) return kInvalidId;
+  std::ifstream* ntupleFile 
+    = fFileManager->GetRFile(fullFileName);
+  
+  // Create ntuple 
+  tools::rcsv::ntuple* rntuple = new tools::rcsv::ntuple(*ntupleFile);
+  G4int id 
+    = fNtupleManager->SetNtuple(new G4CsvRNtupleDescription(rntuple));
   
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL2() ) 
     fState.GetVerboseL2()->Message("read", "ntuple", ntupleName, id > kInvalidId);
 #endif
   
-  //return id;
   return id;
 }  

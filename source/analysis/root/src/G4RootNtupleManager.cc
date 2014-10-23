@@ -30,8 +30,11 @@
 #include "G4RootNtupleManager.hh"
 #include "G4RootNtupleDescription.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
 
 #include "tools/wroot/file"
+
+using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4RootNtupleManager::G4RootNtupleManager(const G4AnalysisManagerState& state)
@@ -375,7 +378,7 @@ G4int G4RootNtupleManager::CreateNtupleIColumn(G4int ntupleId,
   
   G4RootNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "CreateNtupleIColumn");
-  if ( ! ntupleDescription )  return -1;   
+  if ( ! ntupleDescription )  return kInvalidId;   
     
   tools::ntuple_booking* ntupleBooking
     = ntupleDescription->fNtupleBooking;
@@ -385,7 +388,7 @@ G4int G4RootNtupleManager::CreateNtupleIColumn(G4int ntupleId,
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4RootNtupleManager::CreateNtupleIColumn()",
                 "Analysis_W005", JustWarning, description);
-    return -1;       
+    return kInvalidId;       
   }
 
   // Save column info in booking
@@ -436,7 +439,7 @@ G4int G4RootNtupleManager::CreateNtupleFColumn(G4int ntupleId,
 
   G4RootNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "CreateNtupleFColumn");
-  if ( ! ntupleDescription )  return -1;   
+  if ( ! ntupleDescription )  return kInvalidId;   
 
   tools::ntuple_booking* ntupleBooking
     = ntupleDescription->fNtupleBooking;  
@@ -447,7 +450,7 @@ G4int G4RootNtupleManager::CreateNtupleFColumn(G4int ntupleId,
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4RootNtupleManager::CreateNtupleFColumn()",
                 "Analysis_W005", JustWarning, description);
-    return -1;       
+    return kInvalidId;       
   }
 
   // Save column info in booking
@@ -499,7 +502,7 @@ G4int G4RootNtupleManager::CreateNtupleDColumn(G4int ntupleId,
 
   G4RootNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "CreateNtupleDColumn");
-  if ( ! ntupleDescription )  return -1;   
+  if ( ! ntupleDescription )  return kInvalidId;   
 
   tools::ntuple_booking* ntupleBooking
     = ntupleDescription->fNtupleBooking;  
@@ -510,7 +513,7 @@ G4int G4RootNtupleManager::CreateNtupleDColumn(G4int ntupleId,
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4RootNtupleManager::CreateNtupleDColumn()",
                 "Analysis_W005", JustWarning, description);
-    return -1;       
+    return kInvalidId;       
   }
 
   // Save column info in booking
@@ -560,7 +563,7 @@ G4int G4RootNtupleManager::CreateNtupleSColumn(G4int ntupleId,
 
   G4RootNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "CreateNtupleSColumn");
-  if ( ! ntupleDescription )  return -1;   
+  if ( ! ntupleDescription )  return kInvalidId;   
 
   tools::ntuple_booking* ntupleBooking
     = ntupleDescription->fNtupleBooking;  
@@ -571,7 +574,7 @@ G4int G4RootNtupleManager::CreateNtupleSColumn(G4int ntupleId,
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4RootNtupleManager::CreateNtupleSColumn()",
                 "Analysis_W005", JustWarning, description);
-    return -1;       
+    return kInvalidId;       
   }
 
   // Save column info in booking

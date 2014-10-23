@@ -1,3 +1,9 @@
+ 1.16.2 :
+ - test/cpp/rcsv.cpp : modifs for example code to init and read by using ntuple_binding.
+ - tools/rcsv_ntuple, cids : modifs to init and read by using ntuple_binding.
+ - test/cpp/wcsv.cpp : produce a commented header.
+ - tools/wcsv_ntuple : write a "commented header" with columns descriptor.
+
  1.16.1 :
  - tools/rroot/ntuple/column_string : implement the find_entry() method. It permits to read std::string
    column by using the ntuple_binding way.

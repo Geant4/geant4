@@ -23,50 +23,38 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4BaseAnalysisManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
+// $Id: G4CsvRFileManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
-// Base class for the object managers.
-// It handles first object ID and its lock and provides common utility methods.
+// The manager for Csv file input operations.
 
-// Author: Ivana Hrivnacova, 18/06/2013  (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 21/10/2014  (ivana@ipno.in2p3.fr)
 
-#ifndef G4BaseAnalysisManager_h
-#define G4BaseAnalysisManager_h 1
+#ifndef G4CsvRFileManager_h
+#define G4CsvRFileManager_h 1
 
-#include "G4Fcn.hh"
-#include "G4BinScheme.hh"
+#include "G4BaseFileManager.hh"
 #include "globals.hh"
+
+#include <fstream>
+#include <map>
 
 class G4AnalysisManagerState;
 
-class G4BaseAnalysisManager
+class G4CsvRFileManager : public G4BaseFileManager
 {
   public:
-    G4BaseAnalysisManager(const G4AnalysisManagerState& state);
-    virtual ~G4BaseAnalysisManager();
-    
-    // methods
+    G4CsvRFileManager(const G4AnalysisManagerState& state);
+    ~G4CsvRFileManager();
 
-    // The ids of objects are generated automatically
-    // starting from 0; with the following function it is possible to
-    // change the first Id to start from other value
-    G4bool SetFirstId(G4int firstId);
+    // Methods to manipulate input files
+    virtual G4bool OpenRFile(const G4String& fileName);
 
-    // Access method
-    G4int GetFirstId() const;
+    // Specific methods for files per objects
+    std::ifstream* GetRFile(const G4String& fileName) const;
     
-  protected:
+   private:
     // data members
-    const G4AnalysisManagerState& fState;
-    G4int    fFirstId;
-    G4bool   fLockFirstId; 
+    std::map<G4String, std::ifstream*> fRFiles;
 };
 
-// inline functions
-
-inline G4int G4BaseAnalysisManager::GetFirstId() const {
-  return fFirstId;
-}  
-
 #endif
-

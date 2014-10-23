@@ -174,8 +174,6 @@ G4bool G4RootRNtupleManager::SetNtupleIColumn(G4int ntupleId,
                                              const G4String& columnName, 
                                              G4int& value)
 {
-// Add protection if ntuple is initialized
-
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) {
     G4ExceptionDescription description;
@@ -184,10 +182,11 @@ G4bool G4RootRNtupleManager::SetNtupleIColumn(G4int ntupleId,
   }  
 #endif
 
-  G4int index = ntupleId - fFirstId;
-  // add check index
+  G4RootRNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "SetNtupleIColumn");
+  if ( ! ntupleDescription )  return false;   
   
-  tools::ntuple_binding* ntupleBinding = fNtupleVector[index]->fNtupleBinding;
+  tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
   ntupleBinding->add_column(columnName, value);
 
 #ifdef G4VERBOSE
@@ -206,8 +205,6 @@ G4bool G4RootRNtupleManager::SetNtupleFColumn(G4int ntupleId,
                                              const G4String& columnName, 
                                              G4float& value)
 {                                             
-// Add protection if ntuple is initialized
-
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) {
     G4ExceptionDescription description;
@@ -216,10 +213,11 @@ G4bool G4RootRNtupleManager::SetNtupleFColumn(G4int ntupleId,
   }  
 #endif
 
-  G4int index = ntupleId - fFirstId;
-  // add check index
+  G4RootRNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "SetNtupleFColumn");
+  if ( ! ntupleDescription )  return false;   
   
-  tools::ntuple_binding* ntupleBinding = fNtupleVector[index]->fNtupleBinding;
+  tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
   ntupleBinding->add_column(columnName, value);
 
 #ifdef G4VERBOSE
@@ -238,8 +236,6 @@ G4bool G4RootRNtupleManager::SetNtupleDColumn(G4int ntupleId,
                                              const G4String& columnName, 
                                              G4double& value)
 {                                             
-// Add protection if ntuple is initialized
-
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) {
     G4ExceptionDescription description;
@@ -248,10 +244,11 @@ G4bool G4RootRNtupleManager::SetNtupleDColumn(G4int ntupleId,
   }  
 #endif
 
-  G4int index = ntupleId - fFirstId;
-  // add check index
+  G4RootRNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "SetNtupleDColumn");
+  if ( ! ntupleDescription )  return false;   
   
-  tools::ntuple_binding* ntupleBinding = fNtupleVector[index]->fNtupleBinding;
+  tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
   ntupleBinding->add_column(columnName, value);
 
 #ifdef G4VERBOSE
@@ -270,8 +267,6 @@ G4bool G4RootRNtupleManager::SetNtupleSColumn(G4int ntupleId,
                                              const G4String& columnName, 
                                              G4String& value)
 {                                             
-// Add protection if ntuple is initialized
-
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) {
     G4ExceptionDescription description;
@@ -280,10 +275,11 @@ G4bool G4RootRNtupleManager::SetNtupleSColumn(G4int ntupleId,
   }  
 #endif
 
-  G4int index = ntupleId - fFirstId;
-  // add check index
+  G4RootRNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "SetNtupleSColumn");
+  if ( ! ntupleDescription )  return false;   
   
-  tools::ntuple_binding* ntupleBinding = fNtupleVector[index]->fNtupleBinding;
+  tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
   ntupleBinding->add_column(columnName, value);
 
 #ifdef G4VERBOSE
@@ -302,8 +298,6 @@ G4bool G4RootRNtupleManager::SetNtupleIColumn(G4int ntupleId,
                                              const G4String& columnName, 
                                              std::vector<G4int>& vector)
 {
-// Add protection if ntuple is initialized
-
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) {
     G4ExceptionDescription description;
@@ -312,10 +306,11 @@ G4bool G4RootRNtupleManager::SetNtupleIColumn(G4int ntupleId,
   }  
 #endif
 
-  G4int index = ntupleId - fFirstId;
-  // add check index
+  G4RootRNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "SetNtupleIColumn");
+  if ( ! ntupleDescription )  return false;   
   
-  tools::ntuple_binding* ntupleBinding = fNtupleVector[index]->fNtupleBinding;
+  tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
   ntupleBinding->add_column(columnName, vector);
 
 #ifdef G4VERBOSE
@@ -334,8 +329,6 @@ G4bool G4RootRNtupleManager::SetNtupleFColumn(G4int ntupleId,
                                              const G4String& columnName, 
                                              std::vector<G4float>& vector)
 {
-// Add protection if ntuple is initialized
-
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) {
     G4ExceptionDescription description;
@@ -344,10 +337,11 @@ G4bool G4RootRNtupleManager::SetNtupleFColumn(G4int ntupleId,
   }  
 #endif
 
-  G4int index = ntupleId - fFirstId;
-  // add check index
+  G4RootRNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "SetNtupleFColumn");
+  if ( ! ntupleDescription )  return false;   
   
-  tools::ntuple_binding* ntupleBinding = fNtupleVector[index]->fNtupleBinding;
+  tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
   ntupleBinding->add_column(columnName, vector);
 
 #ifdef G4VERBOSE
@@ -366,8 +360,6 @@ G4bool G4RootRNtupleManager::SetNtupleDColumn(G4int ntupleId,
                                              const G4String& columnName, 
                                              std::vector<G4double>& vector)
 {
-// Add protection if ntuple is initialized
-
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) {
     G4ExceptionDescription description;
@@ -376,10 +368,11 @@ G4bool G4RootRNtupleManager::SetNtupleDColumn(G4int ntupleId,
   }  
 #endif
 
-  G4int index = ntupleId - fFirstId;
-  // add check index
+  G4RootRNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "SetNtupleDColumn");
+  if ( ! ntupleDescription )  return false;   
   
-  tools::ntuple_binding* ntupleBinding = fNtupleVector[index]->fNtupleBinding;
+  tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
   ntupleBinding->add_column(columnName, vector);
 
 #ifdef G4VERBOSE
@@ -410,13 +403,14 @@ G4bool G4RootRNtupleManager::GetNtupleRow(G4int ntupleId)
   }  
 #endif
 
-  G4int index = ntupleId - fFirstId;
-  // add check index
+  G4RootRNtupleDescription* ntupleDescription
+    = GetNtupleInFunction(ntupleId, "GetNtupleRow");
+  if ( ! ntupleDescription )  return false;   
   
-  tools::rroot::ntuple* ntuple = fNtupleVector[index]->fNtuple;
-  tools::ntuple_binding* ntupleBinding = fNtupleVector[index]->fNtupleBinding;
+  tools::rroot::ntuple* ntuple = ntupleDescription->fNtuple;
+  tools::ntuple_binding* ntupleBinding = ntupleDescription->fNtupleBinding;
 
-  G4bool isInitialized = fNtupleVector[index]->fIsInitialized;
+  G4bool isInitialized = ntupleDescription->fIsInitialized;
   if ( ! isInitialized ) {
 
 #ifdef G4VERBOSE
@@ -435,7 +429,7 @@ G4bool G4RootRNtupleManager::GetNtupleRow(G4int ntupleId)
                   "Analysis_WR003", JustWarning, description);
       return false;
     }
-    fNtupleVector[index]->fIsInitialized = true;
+    ntupleDescription->fIsInitialized = true;
     ntuple->start();
   }
 

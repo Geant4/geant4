@@ -17,6 +17,21 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 22, 2014 I. Hrivnacova (analysis-V10-00-36)
+- Updated to g4tools 1.16.2 (by G. Barrand):
+  modifs for example code to read csv ntuple by using ntuple_binding  
+  see History_tools for complete list of modifications.
+- Added writing commented header (default) for csv ntuple 
+- Implemented reading csv ntuples
+- Removed H1, H2, P1 dummy manager classes and H3, P3 moved in
+  hbook implementation in examples
+- Use kInvalidId instead of -1
+- Added checks for ntupleId in RNtupleManager classes
+
+October 22, 2014 I. Hrivnacova (analysis-V10-00-35)
+- Fixed compiler warning in tools/wroot/leaf: 
+  base class tools::wroot::ibo should be explicitly initialized in the copy constructor
+
 October 21, 2014 I. Hrivnacova (analysis-V10-00-34)
 - Updated to g4tools 1.16.1 (by G. Barrand):
   Fixed reading root ntuple with column of std::string type 

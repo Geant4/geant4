@@ -37,6 +37,7 @@ int main(int,char**) {
   //////////////////////////////////////////////////////////
   //tools::wcsv::ntuple ntu(writer,'\t');
   tools::wcsv::ntuple ntu(writer); //default sep is ','
+  ntu.set_title("csv ntuple");
 
   // create some columns with basic types :
   tools::wcsv::ntuple::column<unsigned int>* col_index = ntu.create_column<unsigned int>("index");
@@ -45,6 +46,9 @@ int main(int,char**) {
   tools::wcsv::ntuple::column<std::string>* col_str = ntu.create_column<std::string>("strings");
 
   //ntu.write_hippo_header();
+  if(!ntu.write_commented_header(std::cout)) {
+    std::cout << "problem when writing the commented header (column type unknow?)." << std::endl;
+  }
 
   // fill :
   for(unsigned int count=0;count<entries;count++) {    

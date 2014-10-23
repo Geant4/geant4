@@ -72,7 +72,8 @@ public:
   }
   virtual ~leaf(){}
 protected:
-  leaf(const leaf& a_from):parent(a_from){}
+  leaf(const leaf& a_from)
+  :ibo(a_from),parent(a_from){}
   leaf& operator=(const leaf&){return *this;}
 public:
   void fill(const T& a_value) {m_value = a_value;}
@@ -124,7 +125,8 @@ public:
   }
   virtual ~leaf_string(){}
 protected:
-  leaf_string(const leaf_string& a_from):parent(a_from){}
+  leaf_string(const leaf_string& a_from)
+  :ibo(a_from),parent(a_from){}
   leaf_string& operator=(const leaf_string&){return *this;}
 public:
   void fill(const std::string& a_value) {m_value = a_value;}

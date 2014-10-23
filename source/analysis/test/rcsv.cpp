@@ -7,6 +7,7 @@
 #include <tools/scast>
 #include <tools/args>
 #include <tools/path>
+#include <tools/histo/h1d>
 
 #include <iostream>
 #include <cstdlib>
@@ -26,7 +27,7 @@ int main(int argc,char** argv) {
     std::cout << "can't open " << file << std::endl;
     return EXIT_FAILURE;
   }
-
+/*
   //////////////////////////////////////////////////////////
   /// hippodraw flavour ? //////////////////////////////////
   /// - one header line for the ntuple title. //////////////
@@ -107,6 +108,33 @@ int main(int argc,char** argv) {
     std::cout << "column " << scol << " not found." << std::endl;
     return EXIT_FAILURE;
 
+  } else if(args.is_arg("-bind")) {
+*/
+    tools::rcsv::ntuple ntu(reader);
+    // read with binding :
+    tools::ntuple_binding nbd;
+    double v_rgauss;
+    nbd.add_column("rgauss",v_rgauss);
+    std::string v_string;
+    nbd.add_column("strings",v_string);
+    if(!ntu.initialize(std::cout,nbd)) {
+      std::cout << "can't initialize ntuple with ntuple_binding." << std::endl;
+      return EXIT_FAILURE;
+    }
+    tools::histo::h1d h("rgauss",100,-5,5);
+    ntu.start();
+    unsigned int count = 0;
+    while(ntu.next()){
+      if(!ntu.get_row()) {
+        std::cout << "get_row() failed." << std::endl;
+        return EXIT_FAILURE;
+      }
+      h.fill(v_rgauss);
+      if(count<5) std::cout << "v_string " << v_string << std::endl;
+      count++;
+    }
+    std::cout << " h " << h.mean() << " " << h.rms() << std::endl;
+/*
   } else { // read all
 
     typedef tools::read::icol icol_t;
@@ -148,8 +176,9 @@ int main(int argc,char** argv) {
       }
       std::cout << std::endl;
     }
-  }
 
+  }
+*/
   //////////////////////////////////////////////////////////
   /// close file : /////////////////////////////////////////
   //////////////////////////////////////////////////////////

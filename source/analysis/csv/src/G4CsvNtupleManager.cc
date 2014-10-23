@@ -31,9 +31,13 @@
 #include "G4CsvNtupleDescription.hh"
 #include "G4CsvFileManager.hh"
 #include "G4AnalysisManagerState.hh"
+#include "G4AnalysisUtilities.hh"
+
 #include "G4Threading.hh"
 
 #include <iostream>
+
+using namespace G4Analysis;
 
 //_____________________________________________________________________________
 G4CsvNtupleManager::G4CsvNtupleManager(const G4AnalysisManagerState& state)
@@ -41,7 +45,8 @@ G4CsvNtupleManager::G4CsvNtupleManager(const G4AnalysisManagerState& state)
    fFileManager(0),
    fNtupleDescriptionVector(),
    fNtupleVector(),
-   fIsHippoHeader(true)
+   fIsCommentedHeader(true),
+   fIsHippoHeader(false)
 {
 }
 
@@ -64,10 +69,7 @@ G4CsvNtupleManager::GetNtupleIColumn(G4int ntupleId, G4int columnId) const
 {
   G4CsvNtupleDescription* ntupleDecription
     = GetNtupleInFunction(ntupleId, "GetNtupleIColumn");
-  if ( ! ntupleDecription ) {
-    // add exception
-    return 0;
-  }    
+  if ( ! ntupleDecription ) return 0;
 
   std::map<G4int, tools::wcsv::ntuple::column<int>* >& ntupleIColumnMap
     = ntupleDecription->fNtupleIColumnMap;
@@ -91,10 +93,7 @@ G4CsvNtupleManager::GetNtupleFColumn(G4int ntupleId, G4int columnId) const
 {
   G4CsvNtupleDescription* ntupleDecription
     = GetNtupleInFunction(ntupleId, "GetNtupleFColumn");
-  if ( ! ntupleDecription ) {
-    // add exception
-    return 0;
-  }    
+  if ( ! ntupleDecription ) return 0;
 
   std::map<G4int, tools::wcsv::ntuple::column<float>* >& ntupleFColumnMap
     = ntupleDecription->fNtupleFColumnMap;
@@ -119,10 +118,7 @@ G4CsvNtupleManager::GetNtupleDColumn(G4int ntupleId, G4int columnId) const
 {
   G4CsvNtupleDescription* ntupleDecription
     = GetNtupleInFunction(ntupleId, "GetNtupleDColumn");
-  if ( ! ntupleDecription ) {
-    // add exception
-    return 0;
-  }    
+  if ( ! ntupleDecription ) return 0;
 
   std::map<G4int, tools::wcsv::ntuple::column<double>* >& ntupleDColumnMap
     = ntupleDecription->fNtupleDColumnMap;
@@ -146,10 +142,7 @@ G4CsvNtupleManager::GetNtupleSColumn(G4int ntupleId, G4int columnId) const
 {
   G4CsvNtupleDescription* ntupleDecription
     = GetNtupleInFunction(ntupleId, "GetNtupleSColumn");
-  if ( ! ntupleDecription ) {
-    // add exception
-    return 0;
-  }    
+  if ( ! ntupleDecription ) return 0;
 
   std::map<G4int, tools::wcsv::ntuple::column<std::string>* >& ntupleSColumnMap
     = ntupleDecription->fNtupleSColumnMap;
@@ -187,6 +180,27 @@ G4CsvNtupleDescription* G4CsvNtupleManager::GetNtupleInFunction(G4int id,
   return fNtupleDescriptionVector[index];
 }
   
+//_____________________________________________________________________________
+G4bool G4CsvNtupleManager::WriteHeader(tools::wcsv::ntuple* ntuple) const
+{
+// Write header if ntuple already exists and if this option is activated.
+// When both Hippo and Commented headers are selected, only Commented
+// header, which reading is supported.
+// Return false only if an error occurred. 
+
+  if ( fIsCommentedHeader ) {
+    return ntuple->write_commented_header(G4cout);
+  }
+  
+  // write hippo header (if activated and if not commented header)
+  if ( fIsHippoHeader ) {
+    ntuple->write_hippo_header();
+    return true;
+  }
+  
+  return true;
+}
+
 // 
 // protected methods
 //
@@ -221,14 +235,16 @@ void G4CsvNtupleManager::CreateNtuplesFromBooking()
     // create ntuple
     (*itn)->fNtuple
       = new tools::wcsv::ntuple(*((*itn)->fFile), G4cerr, *ntupleBooking);
-    ((*itn)->fNtuple)
-      ->set_title(ntupleBooking->title());
     fNtupleVector.push_back((*itn)->fNtuple);  
   
-    // write hippo header (if activated)
-    if ( fIsHippoHeader ) {
-      (*itn)->fNtuple->write_hippo_header();
-    }  
+    // write header (if activated)
+    if ( ! WriteHeader((*itn)->fNtuple) ) {
+       G4ExceptionDescription description;
+       description << "      " 
+                   << "Writing ntuple header has failed. ";
+       G4Exception("G4CsvNtupleManager::CreateNtupleFromBooking()",
+                   "Analysis_W016", JustWarning, description);
+    }
 
     if ( ntupleBooking->columns().size() ) {
       // store ntuple columns in local maps
@@ -413,7 +429,7 @@ G4int G4CsvNtupleManager::CreateNtupleIColumn(G4int ntupleId,
 
   G4CsvNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "CreateNtupleIColumn");
-  if ( ! ntupleDescription )  return -1;   
+  if ( ! ntupleDescription )  return kInvalidId;   
 
   tools::ntuple_booking* ntupleBooking
     = ntupleDescription->fNtupleBooking;  
@@ -424,7 +440,7 @@ G4int G4CsvNtupleManager::CreateNtupleIColumn(G4int ntupleId,
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4CsvNtupleManager::CreateNtupleIColumn()",
                 "Analysis_W005", JustWarning, description);
-    return -1;       
+    return kInvalidId;       
   }
 
   // Save column info in booking
@@ -475,7 +491,7 @@ G4int G4CsvNtupleManager::CreateNtupleFColumn(G4int ntupleId,
 
   G4CsvNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "CreateNtupleFColumn");
-  if ( ! ntupleDescription )  return -1;   
+  if ( ! ntupleDescription )  return kInvalidId;   
 
   tools::ntuple_booking* ntupleBooking
     = ntupleDescription->fNtupleBooking;  
@@ -486,7 +502,7 @@ G4int G4CsvNtupleManager::CreateNtupleFColumn(G4int ntupleId,
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4CsvNtupleManager::CreateNtupleFColumn()",
                 "Analysis_W005", JustWarning, description);
-    return -1;       
+    return kInvalidId;       
   }
 
   // Save column info in booking
@@ -537,7 +553,7 @@ G4int G4CsvNtupleManager::CreateNtupleDColumn(G4int ntupleId,
 
   G4CsvNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "CreateNtupleDColumn");
-  if ( ! ntupleDescription )  return -1;   
+  if ( ! ntupleDescription )  return kInvalidId;   
 
   tools::ntuple_booking* ntupleBooking
     = ntupleDescription->fNtupleBooking;  
@@ -548,7 +564,7 @@ G4int G4CsvNtupleManager::CreateNtupleDColumn(G4int ntupleId,
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4CsvNtupleManager::CreateNtupleDColumn()",
                 "Analysis_W005", JustWarning, description);
-    return -1;       
+    return kInvalidId;       
   }
 
   // Save column info in booking
@@ -599,7 +615,7 @@ G4int G4CsvNtupleManager::CreateNtupleSColumn(G4int ntupleId,
 
   G4CsvNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "CreateNtupleSColumn");
-  if ( ! ntupleDescription )  return -1;   
+  if ( ! ntupleDescription )  return kInvalidId;   
 
   tools::ntuple_booking* ntupleBooking
     = ntupleDescription->fNtupleBooking;  
@@ -610,7 +626,7 @@ G4int G4CsvNtupleManager::CreateNtupleSColumn(G4int ntupleId,
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4CsvNtupleManager::CreateNtupleSColumn()",
                 "Analysis_W005", JustWarning, description);
-    return -1;       
+    return kInvalidId;       
   }
 
   // Save column info in booking
@@ -641,15 +657,19 @@ G4int G4CsvNtupleManager::CreateNtupleSColumn(G4int ntupleId,
 void G4CsvNtupleManager::FinishNtuple(G4int ntupleId)
 { 
   // nothing to be done if hippo header is inactivated
-  if ( ! fIsHippoHeader ) return;
-   
   G4CsvNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "FinishNtuple");
   if ( ! ntupleDescription )  return;
 
   // Write hippo header if ntuple already exists
   if ( ntupleDescription->fNtuple ) {
-    (ntupleDescription->fNtuple)->write_hippo_header();
+    if ( ! WriteHeader(ntupleDescription->fNtuple) ) {
+       G4ExceptionDescription description;
+       description << "      " 
+                   << "Writing ntuple header has failed. ";
+       G4Exception("G4CsvNtupleManager::Finish()",
+                   "Analysis_W016", JustWarning, description);
+    }
   }
 }
      

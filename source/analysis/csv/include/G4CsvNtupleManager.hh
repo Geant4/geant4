@@ -118,6 +118,7 @@ class G4CsvNtupleManager : public G4VNtupleManager
     virtual G4int GetNofNtuples() const;
 
     // Csv format specific option
+    void SetIsCommentedHeader(G4bool isCommentedHeader);
     void SetIsHippoHeader(G4bool isHippoHeader);
     
   private:
@@ -137,11 +138,14 @@ class G4CsvNtupleManager : public G4VNtupleManager
                                         G4bool warn = true,
                                         G4bool onlyIfActive = true) const;
 
+    G4bool WriteHeader(tools::wcsv::ntuple* ntuple) const;
+
     // data members
     //
     G4CsvFileManager*  fFileManager;
     std::vector<G4CsvNtupleDescription*> fNtupleDescriptionVector;
     std::vector<tools::wcsv::ntuple*> fNtupleVector;
+    G4bool  fIsCommentedHeader;
     G4bool  fIsHippoHeader;
 };
 
@@ -172,6 +176,9 @@ inline G4int G4CsvNtupleManager::GetNofNtuples() const
 inline const std::vector<G4CsvNtupleDescription*>& 
 G4CsvNtupleManager::GetNtupleDescriptionVector() const
 { return fNtupleDescriptionVector; }
+
+inline void G4CsvNtupleManager::SetIsCommentedHeader(G4bool isCommentedHeader)
+{ fIsCommentedHeader = isCommentedHeader; }
 
 inline void G4CsvNtupleManager::SetIsHippoHeader(G4bool isHippoHeader)
 { fIsHippoHeader = isHippoHeader; }

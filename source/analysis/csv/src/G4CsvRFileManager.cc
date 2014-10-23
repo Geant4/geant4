@@ -23,62 +23,78 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4CsvAnalysisReader.hh 70604 2013-06-03 11:27:06Z ihrivnac $
+// $Id: G4CsvRFileManager.cc 70604 2013-06-03 11:27:06Z ihrivnac $
 
-// Author: Ivana Hrivnacova, 05/09/2014 (ivana@ipno.in2p3.fr)
+// Author: Ivana Hrivnacova, 21/10/2014  (ivana@ipno.in2p3.fr)
 
-#include "G4H1ToolsManager.hh"
-#include "G4H2ToolsManager.hh"
-#include "G4H3ToolsManager.hh"
-#include "G4P1ToolsManager.hh"
-#include "G4P2ToolsManager.hh"
-#include "G4CsvRNtupleManager.hh"
+#include "G4CsvRFileManager.hh"
+#include "G4AnalysisManagerState.hh"
 
 //_____________________________________________________________________________
-inline 
-tools::histo::h1d*  G4CsvAnalysisReader::GetH1(G4int id, G4bool warn) const 
+G4CsvRFileManager::G4CsvRFileManager(const G4AnalysisManagerState& state)
+ : G4BaseFileManager(state),
+   fRFiles()
 {
-  return fH1Manager->GetH1(id, warn, false);
 }
 
 //_____________________________________________________________________________
-inline 
-tools::histo::h2d*  G4CsvAnalysisReader::GetH2(G4int id, G4bool warn) const 
-{
-  return fH2Manager->GetH2(id, warn, false);
+G4CsvRFileManager::~G4CsvRFileManager()
+{  
+  for (G4int i=0; i<G4int(fRFiles.size()); ++i) { 
+    delete fRFiles[i];
+  }   
 }
 
-//_____________________________________________________________________________
-inline 
-tools::histo::h3d*  G4CsvAnalysisReader::GetH3(G4int id, G4bool warn) const 
-{
-  return fH3Manager->GetH3(id, warn, false);
-}
+// 
+// public methods
+//
 
 //_____________________________________________________________________________
-inline 
-tools::histo::p1d*  G4CsvAnalysisReader::GetP1(G4int id, G4bool warn) const 
+G4bool G4CsvRFileManager::OpenRFile(const G4String& fileName)
 {
-  return fP1Manager->GetP1(id, warn, false);
-}
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL4() ) 
+    fState.GetVerboseL4()->Message("open", "read analysis file", fileName);
+#endif
 
-//_____________________________________________________________________________
-inline 
-tools::histo::p2d*  G4CsvAnalysisReader::GetP2(G4int id, G4bool warn) const 
-{
-  return fP2Manager->GetP2(id, warn, false);
-}
+  // create new file
+  std::ifstream* newFile = new std::ifstream(fileName);
+  if ( ! newFile->is_open() ) {
+    G4ExceptionDescription description;
+    description << "      " << "Cannot open file " << fileName;
+    G4Exception("G4CsvAnalysisReader::OpenRFile()",
+                "Analysis_W004", JustWarning, description);
+    return false;
+  }
 
-//_____________________________________________________________________________
-inline
-tools::rcsv::ntuple* G4CsvAnalysisReader::GetNtuple() const
-{
-  return fNtupleManager->GetNtuple();
+  // add file in a map and delete the previous file if it exists
+  std::map<G4String, std::ifstream*>::iterator it
+    = fRFiles.find(fileName);
+  if ( it != fRFiles.end() ) { 
+    delete it->second;
+    it->second = newFile;
+  }
+  else {
+    fRFiles[fileName] = newFile;
+  }   
+
+#ifdef G4VERBOSE
+  if ( fState.GetVerboseL1() ) 
+    fState.GetVerboseL1()
+      ->Message("open", "read analysis file", fileName);
+#endif
+
+  return true;
 }  
-
+  
 //_____________________________________________________________________________
-inline
-tools::rcsv::ntuple* G4CsvAnalysisReader::GetNtuple(G4int ntupleId) const
-{
-  return fNtupleManager->GetNtuple(ntupleId);
-}  
+std::ifstream* G4CsvRFileManager::GetRFile(const G4String& fileName) const
+{ 
+  std::map<G4String, std::ifstream*>::const_iterator it
+    = fRFiles.find(fileName);
+  if  ( it != fRFiles.end() )
+    return it->second;
+  else {
+    return 0;
+  }     
+}
