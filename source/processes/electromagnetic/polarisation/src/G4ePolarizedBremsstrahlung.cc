@@ -30,7 +30,7 @@
 // GEANT4 Class file
 //
 //
-// File name:     G4eBremsstrahlung
+// File name:     G4ePolarizedBremsstrahlung
 //
 // Author:        Karim Laihem
 //
@@ -54,6 +54,7 @@
 
 #include "G4ProductionCutsTable.hh"
 #include "G4MaterialCutsCouple.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
  
@@ -62,8 +63,9 @@ G4ePolarizedBremsstrahlung::G4ePolarizedBremsstrahlung(const G4String& name):
 {}
 
 
-void G4ePolarizedBremsstrahlung::InitialiseEnergyLossProcess(const G4ParticleDefinition*,
-                                                             const G4ParticleDefinition*)
+void G4ePolarizedBremsstrahlung::InitialiseEnergyLossProcess(
+            const G4ParticleDefinition*,
+            const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;

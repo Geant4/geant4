@@ -36,6 +36,7 @@
 #include "G4PolarizedPhotoElectricEffect.hh"
 #include "G4PolarizedPEEffectModel.hh"
 #include "G4Electron.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -45,6 +46,8 @@ G4PolarizedPhotoElectricEffect::G4PolarizedPhotoElectricEffect(const G4String& p
   G4ProcessType type):G4VEmProcess (processName, type),
     isInitialised(false)
 {
+  SetBuildTableFlag(false);
+  SetSecondaryParticle(G4Electron::Electron());
   SetProcessSubType(fPhotoElectricEffect);
 }
 
@@ -59,11 +62,10 @@ void G4PolarizedPhotoElectricEffect::InitialiseProcess(const G4ParticleDefinitio
 {
   if(!isInitialised) {
     isInitialised = true;
-    SetBuildTableFlag(false);
-    SetSecondaryParticle(G4Electron::Electron());
     if(!EmModel()) SetEmModel(new G4PolarizedPEEffectModel);
-    EmModel()->SetLowEnergyLimit(MinKinEnergy());
-    EmModel()->SetHighEnergyLimit(MaxKinEnergy());
+    G4EmParameters* param = G4EmParameters::Instance();
+    EmModel()->SetLowEnergyLimit(param->MinKinEnergy());
+    EmModel()->SetHighEnergyLimit(param->MaxKinEnergy());
     AddEmModel(1, EmModel());
   }
 }
@@ -71,12 +73,7 @@ void G4PolarizedPhotoElectricEffect::InitialiseProcess(const G4ParticleDefinitio
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void G4PolarizedPhotoElectricEffect::PrintInfo()
-{
-  G4cout
-    << " Total cross sections from Sandia parametrisation. "
-    << "\n      Sampling according " << EmModel()->GetName() << " model"  
-    << G4endl;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 #endif // NOIONIZATIONAS

@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 October 13: V.Ivanchenko (empolar-V10-00-03)
+- G4PolarizedCompton, G4PolarizedGammaConversion, 
+  G4PolarizedPhotoElectricEffect, G4ePolarizedBremsstrahlung,
+  G4ePolarizedIonisation - use G4EmParameters
+
 08 July 13: V.Ivanchenko (empolar-V10-00-02)
 - G4PolarizedCompton - fixed initialisation, added sharing of
     process table between threads
