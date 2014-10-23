@@ -617,7 +617,7 @@ inline const G4ParticleDefinition* G4VEmProcess::SecondaryParticle() const
 
 inline void G4VEmProcess::SetIntegral(G4bool val)
 {
-  if(particle && particle != theGamma) { integral = val; }
+  integral = val; 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -627,13 +627,6 @@ inline G4bool G4VEmProcess::IsIntegral() const
   return integral;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-inline void G4VEmProcess::SetApplyCuts(G4bool val)
-{
-  applyCuts = val;
-}
-*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEmProcess::SetBuildTableFlag(G4bool val)

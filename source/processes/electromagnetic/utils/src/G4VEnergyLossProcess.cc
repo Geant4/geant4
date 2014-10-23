@@ -184,7 +184,6 @@ G4VEnergyLossProcess::G4VEnergyLossProcess(const G4String& name,
   theDensityFactor(0),
   theDensityIdx(0),
   baseParticle(0),
-  //  minSubRange(0.1),
   lossFluctuationFlag(true),
   rndmStepFlag(false),
   tablesAreBuilt(false),
@@ -526,7 +525,6 @@ G4VEnergyLossProcess::PreparePhysicsTable(const G4ParticleDefinition& part)
   theCrossSectionMax.resize(n, DBL_MAX);
 
   // parameters of the process
-  //  minSubRange = theParameters->MinSubRange();
   if(!actLossFluc) { lossFluctuationFlag = theParameters->LossFluctuation(); }
   rndmStepFlag = theParameters->UseCutAsFinalRange();
   if(!actMinKinEnergy) { minKinEnergy = theParameters->MinKinEnergy(); }
@@ -1112,7 +1110,7 @@ G4double G4VEnergyLossProcess::AlongStepGetPhysicalInteractionLength(
 {
   G4double x = DBL_MAX;
   *selection = aGPILSelection;
-  if(isIonisation) {
+  if(isIonisation && currentModel->IsActive(preStepScaledEnergy)) {
     fRange = GetScaledRangeForScaledEnergy(preStepScaledEnergy)*reduceFactor;
     x = fRange;
     G4double finR = finalRange;
@@ -1159,6 +1157,7 @@ G4double G4VEnergyLossProcess::PostStepGetPhysicalInteractionLength(
   SelectModel(preStepScaledEnergy);
 
   if(!currentModel->IsActive(preStepScaledEnergy)) { 
+    theNumberOfInteractionLengthLeft = -1.0;
     currentInteractionLength = DBL_MAX;
     return x; 
   }
@@ -2334,22 +2333,6 @@ void G4VEnergyLossProcess::SetIonisation(G4bool val)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
- void G4VEnergyLossProcess::SetMinSubRange(G4double val)
-{
-  if(1.e-18 < val && val < 1.e+50) { minSubRange = val; }
-  else { PrintWarning("SetMinSubRange", val); }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
- void G4VEnergyLossProcess::SetLambdaFactor(G4double val)
-{
-  if(val > 0.0 && val <= 1.0) { lambdaFactor = val; }
-  else { PrintWarning("SetLambdaFactor", val); }
-}
-*/
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLossProcess::SetStepFunction(G4double v1, G4double v2)
 {
@@ -2385,28 +2368,6 @@ void G4VEnergyLossProcess::SetDEDXBinning(G4int n)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-void G4VEnergyLossProcess::SetLambdaBinning(G4int n)
-{
-  if(2 < n && n < 1000000000) { nBins = n; }
-  else { 
-    G4double e = (G4double)n;
-    PrintWarning("SetLambdaBinning", e); 
-  } 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEnergyLossProcess::SetDEDXBinningForCSDARange(G4int n)
-{
-  if(2 < n && n < 1000000000) { nBinsCSDA = n; }
-  else { 
-    G4double e = (G4double)n;
-    PrintWarning("SetDEDXBinningForCSDARange", e); 
-  } 
-}
-*/
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLossProcess::SetMinKinEnergy(G4double e)
 {
@@ -2427,14 +2388,6 @@ void G4VEnergyLossProcess::SetMaxKinEnergy(G4double e)
   } else { PrintWarning("SetMaxKinEnergy", e); } 
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-void G4VEnergyLossProcess::SetMaxKinEnergyForCSDARange(G4double e)
-{
-  if(1.e-18 < e && e < 1.e+50) { maxKinEnergyCSDA = e; }
-  else { PrintWarning("SetMaxKinEnergyForCSDARange", e); } 
-}
-*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4VEnergyLossProcess::PrintWarning(G4String tit, G4double val)

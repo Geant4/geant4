@@ -122,7 +122,6 @@ G4VEmProcess::G4VEmProcess(const G4String& name, G4ProcessType type):
   lambdaFactor  = 0.8;
 
   // default limit on polar angle
-  // polarAngleLimit = 0.0;
   biasFactor = fFactor = 1.0;
 
   // particle types
@@ -611,6 +610,7 @@ G4double G4VEmProcess::PostStepGetPhysicalInteractionLength(
   SelectModel(preStepKinEnergy, currentCoupleIndex);
 
   if(!currentModel->IsActive(preStepKinEnergy)) { 
+    theNumberOfInteractionLengthLeft = -1.0;
     currentInteractionLength = DBL_MAX;
     return x; 
   }
@@ -1196,26 +1196,8 @@ void G4VEmProcess::SetMinKinEnergyPrim(G4double e)
   else { PrintWarning("SetMinKinEnergyPrim", e); } 
 }
 
-/*
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-void G4VEmProcess::SetPolarAngleLimit(G4double val)
-{
-  if(val < 0.0)            { polarAngleLimit = 0.0; }
-  else if(val > CLHEP::pi) { polarAngleLimit = CLHEP::pi;  }
-  else                     { polarAngleLimit = val; }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4VEmProcess::SetLambdaFactor(G4double val)
-{
-  if(val > 0.0 && val <= 1.0) { lambdaFactor = val; }
-  else { PrintWarning("SetLambdaFactor", val); } 
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-*/
 void G4VEmProcess::PrintWarning(G4String tit, G4double val)
 {
   G4String ss = "G4VEmProcess::" + tit;

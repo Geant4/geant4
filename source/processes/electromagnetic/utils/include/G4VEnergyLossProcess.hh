@@ -386,10 +386,6 @@ public:
 
   // Binning for dEdx, range, inverse range and labda tables
   void SetDEDXBinning(G4int nbins);
-  // void SetLambdaBinning(G4int nbins);
-
-  // Binning for dEdx, range, and inverse range tables
-  // void SetDEDXBinningForCSDARange(G4int nbins);
 
   // Min kinetic energy for tables
   void SetMinKinEnergy(G4double e);
@@ -398,9 +394,6 @@ public:
   // Max kinetic energy for tables
   void SetMaxKinEnergy(G4double e);
   inline G4double MaxKinEnergy() const;
-
-  // Max kinetic energy for tables
-  //void SetMaxKinEnergyForCSDARange(G4double e);
 
   // Biasing parameters
   inline G4double CrossSectionBiasingFactor() const;
@@ -952,13 +945,6 @@ inline void G4VEnergyLossProcess::SetLossFluctuations(G4bool val)
   lossFluctuationFlag = val;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-/*
-inline void G4VEnergyLossProcess::SetRandomStep(G4bool val)
-{
-  rndmStepFlag = val;
-}
-*/
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 inline void G4VEnergyLossProcess::SetIntegral(G4bool val)

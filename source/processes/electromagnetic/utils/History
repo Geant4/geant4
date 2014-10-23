@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+23 October 14: V.Ivant (emutils-V10-00-40)
+- G4VEmProcess, G4VEnergyLossProcess - set step limit to DBL_MAX if
+    selected model is inactive at such energy; addresses bug 1674
+- G4EmConfigurator - set high energy activation limit for a new
+    model not more than high energy limit (needed for DNA models) 
+
+22 October 14: V.Ivant (emutils-V10-00-39)
+- G4VEmProcess - fixed definition of integral option
+
 20 October 14: V.Ivant (emutils-V10-00-38)
 - G4LossTableManager - fixed non-initilized variable
 - G4VMultipleScattering - coherent definition of lateral 
