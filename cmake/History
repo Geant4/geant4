@@ -30,6 +30,9 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+22nd October 2014 - Gunter Folger (cmake-V10-00-28)
+- Modules/Geant4DatasetDefinitions.cmake: G4EMLOW.6.41
+
 21st October 2014 - Ben Morgan (cmake-V10-00-27)
 - Modules/Geant4ConfigureModulefile.cmake : New file to configure
   and install a basic Environment Modules modulefile for Geant4.
