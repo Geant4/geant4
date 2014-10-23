@@ -36,7 +36,7 @@
 
 G4FissionLevelDensityParameterINCLXX::G4FissionLevelDensityParameterINCLXX() :
   afanLow(1.02),
-  afanHigh(1.04),
+  afanHigh(1.02),
   ZLow(84),
   ZHigh(89)
 {
