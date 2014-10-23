@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 October 14: V.Ivanchenko (emmuons-V10-00-01)
+- G4MuPairProductionModel, G4MuBremsstrahlungModel, G4MuIonisation
+    used G4EmParameters
+
 8 September 14: V.Ivanchenko (emmuons-V10-00-00)
 - G4MuPairProductionModel, G4MuBremsstrahlungModel -
     protection at initialisation for the case when user artifitially

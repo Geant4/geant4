@@ -74,7 +74,7 @@
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
 #include "G4ParticleChangeForLoss.hh"
-#include "G4LossTableManager.hh"
+//#include "G4LossTableManager.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
 

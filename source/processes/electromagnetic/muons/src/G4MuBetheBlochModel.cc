@@ -225,11 +225,6 @@ G4double G4MuBetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
   G4double eexc  = material->GetIonisation()->GetMeanExcitationEnergy();
   G4double eexc2 = eexc*eexc;
-  //G4double cden  = material->GetIonisation()->GetCdensity();
-  //G4double mden  = material->GetIonisation()->GetMdensity();
-  //G4double aden  = material->GetIonisation()->GetAdensity();
-  //G4double x0den = material->GetIonisation()->GetX0density();
-  //G4double x1den = material->GetIonisation()->GetX1density();
 
   G4double eDensity = material->GetElectronDensity();
 
@@ -242,10 +237,6 @@ G4double G4MuBetheBlochModel::ComputeDEDXPerVolume(const G4Material* material,
 
   // density correction
   G4double x = G4Log(bg2)/twoln10;
-  //if ( x >= x0den ) {
-  //  dedx -= twoln10*x - cden ;
-  //  if ( x < x1den ) dedx -= aden*pow((x1den-x),mden) ;
-  //}
   dedx -= material->GetIonisation()->DensityCorrection(x);
 
   // shell correction
