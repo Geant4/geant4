@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 Oct 2014: V.Ivant (emhighenergy-V10-00-05)
+- G4eeToHadrons, G4hBremsstrahlung, G4hPairProduction, 
+  G4hhIonisation, G4mplIonisation - use G4EmParameters
+
 07 Sept 2014: V.Ivant (emhighenergy-V10-00-04)
 - G4GammaConversionToMuons - added protection agains infinite loop
     at the reaction threashold; removed G4ThreadLocal variables;

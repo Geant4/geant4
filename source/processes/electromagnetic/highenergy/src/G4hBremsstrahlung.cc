@@ -47,6 +47,7 @@
 #include "G4hBremsstrahlung.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4hBremsstrahlungModel.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -80,8 +81,9 @@ void G4hBremsstrahlung::InitialiseEnergyLossProcess(
     if (!EmModel()) { SetEmModel(new G4hBremsstrahlungModel()); }
 
     G4VEmFluctuationModel* fm = 0;
-    EmModel()->SetLowEnergyLimit(MinKinEnergy());
-    EmModel()->SetHighEnergyLimit(MaxKinEnergy());
+    G4EmParameters* param = G4EmParameters::Instance();
+    EmModel()->SetLowEnergyLimit(param->MinKinEnergy());
+    EmModel()->SetHighEnergyLimit(param->MaxKinEnergy());
     AddEmModel(1, EmModel(), fm);
   }
 }

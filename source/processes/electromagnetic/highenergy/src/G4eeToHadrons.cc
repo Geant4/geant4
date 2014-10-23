@@ -65,6 +65,9 @@ G4eeToHadrons::G4eeToHadrons(const G4String& name)
 {
   //SetVerboseLevel(2);
   SetProcessSubType(fAnnihilationToHadrons);
+  SetBuildTableFlag(false);
+  SetIntegral(true);
+  SetSecondaryParticle(G4Gamma::Gamma());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -85,13 +88,7 @@ void G4eeToHadrons::InitialiseProcess(const G4ParticleDefinition*)
 {
   if(!isInitialised) {
     isInitialised = true;
-SetVerboseLevel(1);
-G4cout << "G4eeToHadrons::InitialiseProcess verbose= " << verboseLevel << G4endl;
-    SetBuildTableFlag(false);
-    SetIntegral(true);
-    SetMaxKinEnergy(10.0*TeV);
 
-    SetSecondaryParticle(G4Gamma::Gamma());
     SetParticle(G4Positron::Positron());
 
     multimodel = new G4eeToHadronsMultiModel(verboseLevel);
