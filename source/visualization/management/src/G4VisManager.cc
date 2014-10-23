@@ -1003,7 +1003,7 @@ void G4VisManager::CreateViewer
 
   if (!p) {
     if (fVerbosity >= errors) {
-      G4cout << "ERROR in G4VisManager::CreateViewer during "
+      G4cerr << "ERROR in G4VisManager::CreateViewer during "
 	     << fpGraphicsSystem -> GetName ()
 	     << " viewer creation.\n  No action taken."
 	     << G4endl;
@@ -1013,7 +1013,7 @@ void G4VisManager::CreateViewer
 
   if (p -> GetViewId() < 0) {
     if (fVerbosity >= errors) {
-      G4cout << "ERROR in G4VisManager::CreateViewer during "
+      G4cerr << "ERROR in G4VisManager::CreateViewer during "
 	     << fpGraphicsSystem -> GetName ()
 	     << " viewer initialisation.\n  No action taken."
 	     << G4endl;
@@ -1380,6 +1380,14 @@ void G4VisManager::SetCurrentViewer (G4VViewer* pViewer) {
 	   << G4endl;
   }
   fpSceneHandler = fpViewer -> GetSceneHandler ();
+  if (!fpSceneHandler) {
+    if (fVerbosity >= warnings) {
+      G4cout <<
+      "WARNING: No scene handler for this viewer - please create one."
+      << G4endl;
+    }
+    return;
+  }
   fpSceneHandler -> SetCurrentViewer (pViewer);
   fpScene = fpSceneHandler -> GetScene ();
   fpGraphicsSystem = fpSceneHandler -> GetGraphicsSystem ();
@@ -1839,82 +1847,9 @@ void G4VisManager::EndOfEvent ()
   const G4Event* currentEvent = eventManager->GetConstCurrentEvent();
   if (!currentEvent) return;
 
-  G4RunManager* runManager = G4RunManager::GetRunManager();
-  const G4Run* currentRun = runManager->GetCurrentRun();
-  if (!currentRun) return;
-
   //G4cout << "G4VisManager::EndOfEvent" << G4endl;
 
-  // We are about to draw the event (trajectories, etc.), but first we
-  // have to clear the previous event(s) if necessary.  If this event
-  // needs to be drawn afresh, e.g., the first event or any event when
-  // "accumulate" is not requested, the old event has to be cleared.
-  // We have postponed this so that, for normal viewers like OGL, the
-  // previous event(s) stay on screen until this new event comes
-  // along.  For a file-writing viewer the geometry has to be drawn.
-  // See, for example, G4HepRepFileSceneHandler::ClearTransientStore.
-  ClearTransientStoreIfMarked();
-
-  // Now draw the event...
-  fpSceneHandler->DrawEvent(currentEvent);
-
-  G4int nEventsToBeProcessed = 0;
-  G4int nKeptEvents = 0;
-  G4int eventID = -2;  // (If no run manager, triggers ShowView as normal.)
-  if (currentRun) {
-    nEventsToBeProcessed = currentRun->GetNumberOfEventToBeProcessed();
-    eventID = currentEvent->GetEventID();
-    const std::vector<const G4Event*>* events =
-      currentRun->GetEventVector();
-    if (events) nKeptEvents = events->size();
-  }
-
-  if (fpScene->GetRefreshAtEndOfEvent()) {
-
-    // Unless last event (in which case wait end of run)...
-    if (eventID < nEventsToBeProcessed - 1) {
-      // ShowView guarantees the view comes to the screen.  No action
-      // is taken for passive viewers like OGL*X (without picking enabled),
-      // but it passes control to interactive viewers, such as OGL*X (with
-      // picking enabled) or OGL*Xm, and allows file-writing viewers to
-      // close the file.
-      fpViewer->ShowView();
-      fpSceneHandler->SetMarkForClearingTransientStore(true);
-    } else {  // Last event...
-      // Keep, but only if user has not kept any...
-      if (!nKeptEvents) {
-        eventManager->KeepTheCurrentEvent();
-        fNKeepRequests++;
-	fKeptLastEvent = true;
-      }
-    }
-
-  } else {  //  Accumulating events...
-
-    G4int maxNumberOfKeptEvents = fpScene->GetMaxNumberOfKeptEvents();
-    if (maxNumberOfKeptEvents > 0 && fNKeepRequests >= maxNumberOfKeptEvents) {
-      fEventKeepingSuspended = true;
-      static G4bool warned = false;
-      if (!warned) {
-	if (fVerbosity >= warnings) {
-	  G4cout <<
- "WARNING: G4VisManager::EndOfEvent: Automatic event keeping suspended."
- "\n  The number of events exceeds the maximum, "
-		 << maxNumberOfKeptEvents <<
- ", that may be kept by\n  the vis manager."
-		 << G4endl;
-	}
-	warned = true;
-      }
-    } else if (maxNumberOfKeptEvents != 0) {
-      // If not disabled nor suspended.
-      if (GetConcreteInstance() && !fEventKeepingSuspended) {
-//        G4cout << "Requesting keeping event " << currentEvent->GetEventID() << G4endl;
-        eventManager->KeepTheCurrentEvent();
-        fNKeepRequests++;
-      }
-    }
-  }
+  DrawEvent(currentEvent);
 }
 
 void G4VisManager::EndOfRun ()
@@ -2008,6 +1943,86 @@ void G4VisManager::EndOfRun ()
     }
   }
   fEventRefreshing = false;
+}
+
+void G4VisManager::DrawEvent(const G4Event* event)
+{
+  G4EventManager* eventManager = G4EventManager::GetEventManager();
+  
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+  const G4Run* currentRun = runManager->GetCurrentRun();
+  if (!currentRun) return;
+
+  // We are about to draw the event (trajectories, etc.), but first we
+  // have to clear the previous event(s) if necessary.  If this event
+  // needs to be drawn afresh, e.g., the first event or any event when
+  // "accumulate" is not requested, the old event has to be cleared.
+  // We have postponed this so that, for normal viewers like OGL, the
+  // previous event(s) stay on screen until this new event comes
+  // along.  For a file-writing viewer the geometry has to be drawn.
+  // See, for example, G4HepRepFileSceneHandler::ClearTransientStore.
+  ClearTransientStoreIfMarked();
+
+  // Now draw the event...
+  fpSceneHandler->DrawEvent(event);
+
+  G4int nEventsToBeProcessed = 0;
+  G4int nKeptEvents = 0;
+  G4int eventID = -2;  // (If no run manager, triggers ShowView as normal.)
+  if (currentRun) {
+    nEventsToBeProcessed = currentRun->GetNumberOfEventToBeProcessed();
+    eventID = event->GetEventID();
+    const std::vector<const G4Event*>* events =
+    currentRun->GetEventVector();
+    if (events) nKeptEvents = events->size();
+  }
+
+  if (fpScene->GetRefreshAtEndOfEvent()) {
+
+    // Unless last event (in which case wait end of run)...
+    if (eventID < nEventsToBeProcessed - 1) {
+      // ShowView guarantees the view comes to the screen.  No action
+      // is taken for passive viewers like OGL*X (without picking enabled),
+      // but it passes control to interactive viewers, such as OGL*X (with
+      // picking enabled) or OGL*Xm, and allows file-writing viewers to
+      // close the file.
+      fpViewer->ShowView();
+      fpSceneHandler->SetMarkForClearingTransientStore(true);
+    } else {  // Last event...
+              // Keep, but only if user has not kept any...
+      if (!nKeptEvents) {
+        eventManager->KeepTheCurrentEvent();
+        fNKeepRequests++;
+        fKeptLastEvent = true;
+      }
+    }
+
+  } else {  //  Accumulating events...
+
+    G4int maxNumberOfKeptEvents = fpScene->GetMaxNumberOfKeptEvents();
+    if (maxNumberOfKeptEvents > 0 && fNKeepRequests >= maxNumberOfKeptEvents) {
+      fEventKeepingSuspended = true;
+      static G4bool warned = false;
+      if (!warned) {
+        if (fVerbosity >= warnings) {
+          G4cout <<
+          "WARNING: G4VisManager::EndOfEvent: Automatic event keeping suspended."
+          "\n  The number of events exceeds the maximum, "
+          << maxNumberOfKeptEvents <<
+          ", that may be kept by\n  the vis manager."
+          << G4endl;
+        }
+        warned = true;
+      }
+    } else if (maxNumberOfKeptEvents != 0) {
+      // If not disabled nor suspended.
+      if (GetConcreteInstance() && !fEventKeepingSuspended) {
+        //        G4cout << "Requesting keeping event " << event->GetEventID() << G4endl;
+        eventManager->KeepTheCurrentEvent();
+        fNKeepRequests++;
+      }
+    }
+  }
 }
 
 #endif  // End of sequential versions of Begin/EndOfRun/Event.

@@ -39,8 +39,8 @@
 G4Colour                   G4VVisCommand::fCurrentColour = G4Colour::White();
 G4Colour                   G4VVisCommand::fCurrentTextColour = G4Colour::Blue();
 G4Text::Layout             G4VVisCommand::fCurrentTextLayout = G4Text::left;
-G4double                   G4VVisCommand::fCurrentTextSize = 10.;
-G4double                   G4VVisCommand::fCurrentLineWidth = 1.;
+G4double                   G4VVisCommand::fCurrentTextSize = 12.;  // pixels
+G4double                   G4VVisCommand::fCurrentLineWidth = 1.;  // pixels
 // Not yet used: G4VisAttributes::LineStyle G4VVisCommand::fCurrentLineStyle = G4VisAttributes::unbroken;
 // Not yet used: G4VMarker::FillStyle       G4VVisCommand::fCurrentFillStyle = G4VMarker::filled;
 // Not yet used: G4VMarker::SizeType        G4VVisCommand::fCurrentSizeType = G4VMarker::screen;

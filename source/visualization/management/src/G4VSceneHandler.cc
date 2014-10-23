@@ -398,9 +398,9 @@ void G4VSceneHandler::AddPrimitive (const G4Scale& scale) {
       rotation = G4RotateY3D(piBy2);
       break;
     }
-    G4double sxmid(scale.GetXmid());
-    G4double symid(scale.GetYmid());
-    G4double szmid(scale.GetZmid());
+    G4double sxmid;
+    G4double symid;
+    G4double szmid;
     sxmid = xmin + oneMinusMargin * (xmax - xmin);
     symid = ymin + margin * (ymax - ymin);
     szmid = zmin + oneMinusMargin * (zmax - zmin);
@@ -925,13 +925,12 @@ G4int G4VSceneHandler::GetNoOfSides(const G4VisAttributes* pVisAttribs)
   if (pVisAttribs) {
     if (pVisAttribs->IsForceLineSegmentsPerCircle())
       lineSegmentsPerCircle = pVisAttribs->GetForcedLineSegmentsPerCircle();
-    const G4int nSegmentsMin = 12;
-    if (lineSegmentsPerCircle < nSegmentsMin) {
-      lineSegmentsPerCircle = nSegmentsMin;
+    if (lineSegmentsPerCircle < pVisAttribs->GetMinLineSegmentsPerCircle()) {
+      lineSegmentsPerCircle = pVisAttribs->GetMinLineSegmentsPerCircle();
       G4cout <<
 	"G4VSceneHandler::GetNoOfSides: attempt to set the"
-	"\nnumber of line segements per circle < " << nSegmentsMin
-	     << "; forced to " << lineSegmentsPerCircle << G4endl;
+	"\nnumber of line segements per circle < " << lineSegmentsPerCircle
+	     << "; forced to " << pVisAttribs->GetMinLineSegmentsPerCircle() << G4endl;
     }
   }
   return lineSegmentsPerCircle;

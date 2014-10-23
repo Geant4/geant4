@@ -26,7 +26,25 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
-11th Aug 2014  John Allison  (visman-V10-00-16)
+22th October 2014  Laurent Garnier  (visman-V10-00-19 require greps-V10-00-08)
+- G4VSceneHandler.cc, G4ViewParameters.cc
+  o Change contant in .cc nSegmentsMin by GetMinLineSegmentsPerCircle() in the G4VisAttribute
+
+1st October 2014  John Allison  (visman-V10-00-18)
+- G4VisManager: Added DrawEvent.  Code split out of EndOfEvent in preparation
+  for calling from special vis sub-thread in multi-threading mode.
+
+1st October 2014  Laurent Garnier
+-G4VSceneHandler.cc:
+  o AddPrimitive (const G4Scale& scale) : Remove unnecessary initialization
+-G4VisManager : 
+  o Change G4cerr instead of G4cout on some error messages
+  o Add a warning in SetCurrentViewer() when no scene handler present
+
+14th August 2014  John Allison  (visman-V10-00-17)
+- Changed default text size to 12 pixels.
+
+11th August 2014  John Allison  (visman-V10-00-16)
 - Needs modeling-V10-00-07.
 - G4VisManager.hh: Tidied.
 - G4VisManager.cc: Registered /vis/set/textSize.

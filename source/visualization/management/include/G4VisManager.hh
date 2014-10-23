@@ -355,6 +355,8 @@ private:
 
   void EndOfRun ();
 
+  void DrawEvent (const G4Event*);
+
 public: // With description
 
   /////////////////////////////////////////////////////////////////////

@@ -274,9 +274,9 @@ G4VisCommandSetTextSize::G4VisCommandSetTextSize ()
   G4bool omitable;
   fpCommand = new G4UIcmdWithADouble("/vis/set/textSize", this);
   fpCommand->SetGuidance
-  ("Defines text size for future \"/vis/scene/add/\" commands.");
+  ("Defines text size (pixels) for future \"/vis/scene/add/\" commands.");
   fpCommand->SetParameterName ("textSize", omitable = true);
-  fpCommand->SetDefaultValue (10.);
+  fpCommand->SetDefaultValue (12.);  // pixels
   fpCommand->SetRange("textSize >= 1.");
 }
 

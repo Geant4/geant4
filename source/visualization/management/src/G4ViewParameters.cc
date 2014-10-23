@@ -187,7 +187,7 @@ void G4ViewParameters::SetVisibleDensity (G4double visibleDensity) {
 }
 
 G4int G4ViewParameters::SetNoOfSides (G4int nSides) {
-  const G4int  nSidesMin = 12;
+  const G4int nSidesMin = fDefaultVisAttributes.GetMinLineSegmentsPerCircle();
   if (nSides < nSidesMin) {
     nSides = nSidesMin;
     G4cout << "G4ViewParameters::SetNoOfSides: attempt to set the"
