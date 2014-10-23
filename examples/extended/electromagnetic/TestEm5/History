@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+	 
+21-10-14 mma (testem5-V10-00-11)
+- PhysicsList : added G4EmStandardPhysicsSS, WVI
 
 03-05-14 V.Ivant (testem5-V10-00-10)
 - TestEm5.cc - added possibility to change number on threads by
