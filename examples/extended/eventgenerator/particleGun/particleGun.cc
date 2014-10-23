@@ -79,11 +79,8 @@ int main(int argc,char** argv) {
   runManager->SetUserInitialization(detector);
   runManager->SetUserInitialization(new PhysicsList);
   
-  runManager->SetUserInitialization(new ActionInitialization);        
-   
-  //Initialize G4 kernel
-  runManager->Initialize();
-    
+  runManager->SetUserInitialization(new ActionInitialization);
+
   // get the pointer to the User Interface manager 
     G4UImanager* UI = G4UImanager::GetUIpointer();  
 

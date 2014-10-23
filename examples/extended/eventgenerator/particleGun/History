@@ -13,6 +13,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
 	 
+21-10-14 mma (particleGunExample-V10-00-05) 
+- mv /run/initialize in macros
+
 20-10-14 mma (particleGunExample-V10-00-04) 
 - particleGun.cc: nThreads via commands
 
