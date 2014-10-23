@@ -245,7 +245,7 @@ GEANT4_ADD_TEST(example-ext-medical-GammaTherapy
                 COMMAND ${BINDIR}/GammaTherapy ${SRCDIR}/extended/medical/GammaTherapy/GammaTherapy.in
                 BUILD ${SRCDIR}/extended/medical/GammaTherapy)
 
-set(DNA_EXAMPLE_SRC_DIR ${SRCDIR}/examples/extended/medical/dna)
+set(DNA_EXAMPLE_SRC_DIR ${SRCDIR}/extended/medical/dna)
 
 # GEANT4_ADD_TEST(example-ext-medical-dna-dnaphysics 
 #                 COMMAND ${BINDIR}/dnaphysics ${DNA_EXAMPLE_SRC_DIR}/dnaphysics/dnaphysics.in

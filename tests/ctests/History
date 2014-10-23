@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-21 -- 23 October 2014 Mathieu Karamitros
+- Correct path in GNUMakeTestfile.cmake
+
+ctests-V10-00-20 -- 22 October 2014 Mathieu Karamitros
+- Correct a typo in CMakeLists.txt
+
 ctests-V10-00-19 -- 20 October 2014 Mathieu Karamitros
 - Add chem1, chem2, chem3
 

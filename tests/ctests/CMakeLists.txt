@@ -432,7 +432,7 @@ GEANT4_ADD_TEST(example-ext-exoticphysics-ExUCN
                   BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/exoticphysics/ucn
                   BUILD ExUCN ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 
-set(DNA_EXAMPLE_SOURCE_DIR ${CMAKE_BINARY_DIR}/examples/extended/medical/dna)
+set(DNA_EXAMPLE_SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/medical/dna)
 set(DNA_EXAMPLE_BIN_DIR ${CMAKE_BINARY_DIR}/examples/extended/medical/dna)
 
 # GEANT4_ADD_TEST(example-ext-medical-dna-wholeNuclearDNA
