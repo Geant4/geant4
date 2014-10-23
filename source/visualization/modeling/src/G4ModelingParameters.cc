@@ -125,7 +125,7 @@ void G4ModelingParameters::SetVisibleDensity (G4double visibleDensity) {
 }
 
 G4int G4ModelingParameters::SetNoOfSides (G4int nSides) {
-  const G4int  nSidesMin = 12;
+  const G4int  nSidesMin = fpDefaultVisAttributes->GetMinLineSegmentsPerCircle();
   if (nSides < nSidesMin) {
     nSides = nSidesMin;
     if (fWarning)

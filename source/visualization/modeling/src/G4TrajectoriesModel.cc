@@ -35,6 +35,7 @@
 #include "G4ModelingParameters.hh"
 #include "G4VGraphicsScene.hh"
 #include "G4RunManager.hh"
+#include "G4MTRunManager.hh"
 #include "G4Run.hh"
 #include "G4Event.hh"
 #include "G4AttDefStore.hh"
@@ -60,7 +61,12 @@ void G4TrajectoriesModelDebugG4AttValues(const G4VTrajectory*);
 #include "G4VVisManager.hh"
 void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
-  const G4Run* currentRun = G4RunManager::GetRunManager()->GetCurrentRun();
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager = G4MTRunManager::GetMasterRunManager();
+#else
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+#endif
+  const G4Run* currentRun = runManager->GetCurrentRun();
   if (currentRun) {
     fRunID = currentRun->GetRunID();
   } else {

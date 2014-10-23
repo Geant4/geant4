@@ -20,6 +20,13 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+22nd October 2014  Laurent Garnier  (modeling-V10-00-09 require greps-V10-00-08)
+- G4ModelingParameters.cc
+  o Change constant in .cc nSidesMin by GetMinLineSegmentsPerCircle() in the G4VisAttribute
+
+22nd October 2014  John Allison  (modeling-V10-00-08)
+- G4TrajectoriesModel.cc: Get appropriate run manager in MT mode.
+
 11th August 2014  John Allison  (modeling-V10-00-07)
 - Corrected date. modeling-V10-00-06 should be August.
 
