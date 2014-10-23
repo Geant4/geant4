@@ -44,6 +44,7 @@ fForceDrawingStyle   (va.fForceDrawingStyle),
 fForcedStyle         (va.fForcedStyle),
 fForceAuxEdgeVisible (va.fForceAuxEdgeVisible),
 fForcedLineSegmentsPerCircle (va.fForcedLineSegmentsPerCircle),
+fMinLineSegmentsPerCircle (va.fMinLineSegmentsPerCircle),
 fStartTime           (va.fStartTime),
 fEndTime             (va.fEndTime),
 // AttValues are created afresh for each object (using the
@@ -65,6 +66,7 @@ fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
 fForceAuxEdgeVisible (false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
+fMinLineSegmentsPerCircle (3),
 fStartTime           (-DBL_MAX),
 fEndTime             (DBL_MAX),
 fAttValues           (0),
@@ -81,6 +83,7 @@ fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
 fForceAuxEdgeVisible (false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
+fMinLineSegmentsPerCircle (3),
 fStartTime           (-DBL_MAX),
 fEndTime             (DBL_MAX),
 fAttValues           (0),
@@ -97,6 +100,7 @@ fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
 fForceAuxEdgeVisible (false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
+fMinLineSegmentsPerCircle (3),
 fStartTime           (-DBL_MAX),
 fEndTime             (DBL_MAX),
 fAttValues           (0),
@@ -114,6 +118,7 @@ fForceDrawingStyle   (false),
 fForcedStyle         (wireframe),
 fForceAuxEdgeVisible (false),
 fForcedLineSegmentsPerCircle (0),  // <=0 means not forced.
+fMinLineSegmentsPerCircle (3),
 fStartTime           (-DBL_MAX),
 fEndTime             (DBL_MAX),
 fAttValues           (0),
@@ -136,6 +141,7 @@ G4VisAttributes& G4VisAttributes::operator= (const G4VisAttributes& rhs)
   fForcedStyle         = rhs.fForcedStyle;
   fForceAuxEdgeVisible = rhs.fForceAuxEdgeVisible;
   fForcedLineSegmentsPerCircle = rhs.fForcedLineSegmentsPerCircle;
+  fMinLineSegmentsPerCircle = rhs.fMinLineSegmentsPerCircle,
   fStartTime           = rhs.fStartTime;
   fEndTime             = rhs.fEndTime;
   // AttValues are created afresh for each object (using the
@@ -185,6 +191,7 @@ std::ostream& operator << (std::ostream& os, const G4VisAttributes& a) {
     default: os << "unrecognised"; break;
     }
     os << ", line width: " << a.fLineWidth;
+    os << ", min line segments per circle: " << a.fMinLineSegmentsPerCircle;
     os << "\n  drawing style: ";
     if (a.fForceDrawingStyle) {
       os << "forced to: ";
@@ -237,6 +244,7 @@ G4bool G4VisAttributes::operator != (const G4VisAttributes& a) const {
       (fForceDrawingStyle  != a.fForceDrawingStyle)  ||
       (fForceAuxEdgeVisible!= a.fForceAuxEdgeVisible)||
       (fForcedLineSegmentsPerCircle != a.fForcedLineSegmentsPerCircle) ||
+      (fMinLineSegmentsPerCircle != a.fMinLineSegmentsPerCircle) ||
       (fStartTime          != a.fStartTime)          ||
       (fEndTime            != a.fEndTime)            ||
       (fAttValues          != a.fAttValues)          ||
