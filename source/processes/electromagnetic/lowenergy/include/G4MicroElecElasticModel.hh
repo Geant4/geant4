@@ -101,6 +101,8 @@ private:
 
   G4double Theta(G4ParticleDefinition * aParticleDefinition, G4double k, G4double integrDiff);
 
+  G4double LinLinInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
+
   G4double LogLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
    
   G4double LinLogInterpolate(G4double e1, G4double e2, G4double e, G4double xs1, G4double xs2);
@@ -142,7 +144,7 @@ inline void G4MicroElecElasticModel::SetKillBelowThreshold (G4double threshold)
     if (threshold < 5*CLHEP::eV)
     {
        G4Exception ("*** WARNING : the G4MicroElecElasticModel class is not validated below 5 eV !","",JustWarning,"") ;
-       threshold = 0.025*CLHEP::eV;
+       threshold = 5*CLHEP::eV;
     }
              
 }		 

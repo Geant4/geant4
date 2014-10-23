@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22.10.2014 M. Karamitros (committer), M.Raine (author), tag emlowen-V10-00-19
+	   G4MicroElecElasticModel from M. Raine:
+	   - uses cumulated cross-sections
+           - MT compatibility improved
+           - uses LinLinInterpolate instead of LinLog
+           Should use G4EMLOW6.41
+
 01.10.2014 L. Pandola et al, tag emlowen-V10-00-18
 	   Fix of bugzilla 1612
 

@@ -71,7 +71,7 @@ G4MicroElecElasticModel::G4MicroElecElasticModel(const G4ParticleDefinition*,
     G4cout << "MicroElec Elastic model is constructed " << G4endl
            << "Energy range: "
            << lowEnergyLimit / eV << " eV - "
-           << highEnergyLimit / keV << " keV"
+           << highEnergyLimit / MeV << " MeV"
            << G4endl;
   }
   fParticleChangeForGamma = 0;
@@ -151,12 +151,23 @@ void G4MicroElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*
     }
 
     std::ostringstream eFullFileName;
-    eFullFileName << path << "/microelec/sigmadiff_elastic_e_Si.dat";
+    eFullFileName << path << "/microelec/sigmadiff_cumulated_elastic_e_Si.dat";
     std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
      
     if (!eDiffCrossSection) 
-	G4Exception("G4MicroElecElasticModel::Initialise","em0003",FatalException,"Missing data file: /microelec/sigmadiff_elastic_e_Si.dat");
-      
+	G4Exception("G4MicroElecElasticModel::Initialise","em0003",FatalException,"Missing data file: /microelec/sigmadiff_cumulated_elastic_e_Si.dat");
+    
+
+    // October 21th, 2014 - Melanie Raine
+    // Added clear for MT
+
+    eTdummyVec.clear();
+    eVecm.clear();
+    eDiffCrossSectionData.clear();
+
+    //
+
+  
     eTdummyVec.push_back(0.);
 
     while(!eDiffCrossSection.eof())
@@ -166,6 +177,7 @@ void G4MicroElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*
 	eDiffCrossSection>>tDummy>>eDummy;
 
 	// SI : mandatory eVecm initialization
+
         if (tDummy != eTdummyVec.back()) 
         { 
           eTdummyVec.push_back(tDummy); 
@@ -173,9 +185,6 @@ void G4MicroElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*
         }
 	  
         eDiffCrossSection>>eDiffCrossSectionData[tDummy][eDummy];
-
-	// SI : only if not end of file reached !
-        if (!eDiffCrossSection.eof()) eDiffCrossSectionData[tDummy][eDummy]*=scaleFactor;
 	  
         if (eDummy != eVecm[tDummy].back()) eVecm[tDummy].push_back(eDummy);
           
@@ -191,7 +200,7 @@ void G4MicroElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*
     G4cout << "MicroElec Elastic model is initialized " << G4endl
            << "Energy range: "
            << LowEnergyLimit() / eV << " eV - "
-           << HighEnergyLimit() / keV << " keV"
+           << HighEnergyLimit() / MeV << " MeV"
            << G4endl;
   }
 
@@ -199,7 +208,6 @@ void G4MicroElecElasticModel::Initialise(const G4ParticleDefinition* /*particle*
   fParticleChangeForGamma = GetParticleChangeForGamma();
   isInitialised = true;
 
-  // InitialiseElementSelectors(particle,cuts);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -226,7 +234,7 @@ G4double G4MicroElecElasticModel::CrossSectionPerVolume(const G4Material* materi
   if (ekin < highEnergyLimit)
   {
       //SI : XS must not be zero otherwise sampling of secondaries method ignored
-      if (ekin < lowEnergyLimitOfModel) ekin = lowEnergyLimitOfModel;
+      if (ekin < killBelowEnergy) return DBL_MAX;
       //      
       
 	std::map< G4String,G4MicroElecCrossSectionDataSet*,std::less<G4String> >::iterator pos;
@@ -274,6 +282,7 @@ void G4MicroElecElasticModel::SampleSecondaries(std::vector<G4DynamicParticle*>*
   
   if (electronEnergy0 < killBelowEnergy)
   {
+    fParticleChangeForGamma->SetProposedKineticEnergy(0.);
     fParticleChangeForGamma->ProposeTrackStatus(fStopAndKill);
     fParticleChangeForGamma->ProposeLocalEnergyDeposit(electronEnergy0);
     return ;
@@ -375,6 +384,20 @@ G4double G4MicroElecElasticModel::LinLogInterpolate(G4double e1,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
+G4double G4MicroElecElasticModel::LinLinInterpolate(G4double e1, 
+						        G4double e2, 
+						        G4double e, 
+						        G4double xs1, 
+						        G4double xs2)
+{
+  G4double d1 = xs1;
+  G4double d2 = xs2;
+  G4double value = (d1 + (d2 - d1)*(e - e1)/ (e2 - e1));
+  return value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
 G4double G4MicroElecElasticModel::LogLogInterpolate(G4double e1, 
 						        G4double e2, 
 						        G4double e, 
@@ -397,10 +420,24 @@ G4double G4MicroElecElasticModel::QuadInterpolator(G4double e11, G4double e12,
 						       G4double t1, G4double t2, 
 						       G4double t, G4double e)
 {
-// Lin-Log
+ // Log-Log
+/*
+  G4double interpolatedvalue1 = LogLogInterpolate(e11, e12, e, xs11, xs12);
+  G4double interpolatedvalue2 = LogLogInterpolate(e21, e22, e, xs21, xs22);
+  G4double value = LogLogInterpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
+
+
+  // Lin-Log
   G4double interpolatedvalue1 = LinLogInterpolate(e11, e12, e, xs11, xs12);
   G4double interpolatedvalue2 = LinLogInterpolate(e21, e22, e, xs21, xs22);
   G4double value = LinLogInterpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
+*/
+
+  // Lin-Lin
+  G4double interpolatedvalue1 = LinLinInterpolate(e11, e12, e, xs11, xs12);
+  G4double interpolatedvalue2 = LinLinInterpolate(e21, e22, e, xs21, xs22);
+  G4double value = LinLinInterpolate(t1, t2, t, interpolatedvalue1, interpolatedvalue2);
+
   return value;
 }
 
