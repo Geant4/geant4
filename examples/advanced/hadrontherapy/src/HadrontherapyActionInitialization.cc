@@ -46,18 +46,13 @@ HadrontherapyActionInitialization::HadrontherapyActionInitialization(/*G4VUserDe
 : G4VUserActionInitialization()//,
  // fDetectorConstruction(detConstruction)
 {
-//AND->3June2014, temporary to take into account new GPS
-   //Create an instance of GPS in master so shared resources and messenger
-   //exist in master.
-  masterGPS = new G4GeneralParticleSource();
-   //AND<-3June2014
+
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 HadrontherapyActionInitialization::~HadrontherapyActionInitialization()
 {
-  delete masterGPS;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

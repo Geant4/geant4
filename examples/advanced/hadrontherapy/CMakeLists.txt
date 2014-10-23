@@ -73,7 +73,7 @@ set(EXAMPLEhadrontherapy_SCRIPTS
   macro/stoppingPowers.mac
   macro/visualisationMacro.mac
   macro/voxellizedPhantom.mac
-  macro/energyselector.mac
+  macro/laserDrivenBeamline.mac
   macro/defaultMacroWithReferencePhysicsList.mac
   macro/defaultMacro.mac
   macro/Taranis.mac

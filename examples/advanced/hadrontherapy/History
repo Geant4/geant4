@@ -7,6 +7,8 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
          ====================================================
              History file of the Hadrontherapy application
          ====================================================	    
+22.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-05
+           - Bug solved. Removed MasterGPS in HadrontherapyActionInitialization.cc
 21.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-04
            - Testing of the laser driven beam line.
 20.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-03
