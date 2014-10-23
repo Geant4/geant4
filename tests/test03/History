@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22 Oct 2014, Ivana Hrivnacova (test03-V10-00-05)
+  - Activated reading Csv ntuple
+
 20 Oct 2014, Ivana Hrivnacova (test03-V10-00-04)
   - Added an ntuple column of std::string type
   - Added reading of Edep ntuple to demonstrate
@@ -22,7 +25,7 @@ track of all tags.
     - reading an ntuple when more than one ntuple are read
 
 07 Oct 2014, Ivana Hrivnacova (test03-V10-00-03)
-   UPdated test for reading Csv histograms and profiles.
+   Updated test for reading Csv histograms and profiles.
 
 12 Sep 2014, Ivana Hrivnacova (test03-V10-00-02)
    No changes since previous tag, which was rejected due to compiler

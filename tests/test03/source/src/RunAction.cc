@@ -282,7 +282,6 @@ void RunAction::TestReading() const
      }           
    }  
 
-#ifndef TEST_ANALYSIS_CSV  
   if ( TestNtuple ) {
     // TrackL
     G4int ntupleId; 
@@ -303,6 +302,10 @@ void RunAction::TestReading() const
         = analysisReader->GetNtuple("TrackL", "testAnalysis_t1");
 #endif
 #ifdef TEST_ANALYSIS_XML 
+      ntupleId 
+        = analysisReader->GetNtuple("TrackL", "testAnalysis_nt_TrackL_t1");
+#endif
+#ifdef TEST_ANALYSIS_CSV 
       ntupleId 
         = analysisReader->GetNtuple("TrackL", "testAnalysis_nt_TrackL_t1");
 #endif
@@ -342,6 +345,10 @@ void RunAction::TestReading() const
       ntupleId 
         = analysisReader->GetNtuple("EDep", "testAnalysis_nt_EDep_t1");
 #endif
+#ifdef TEST_ANALYSIS_CSV
+      ntupleId 
+        = analysisReader->GetNtuple("EDep", "testAnalysis_nt_EDep_t1");
+#endif
     }
     if ( ntupleId >= 0 ) {
       G4String label;
@@ -353,8 +360,7 @@ void RunAction::TestReading() const
                << "  Label: " << label << std::endl;
       }
     }
- }  
-#endif
+  }  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
