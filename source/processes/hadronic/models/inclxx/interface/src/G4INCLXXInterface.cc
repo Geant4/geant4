@@ -24,11 +24,12 @@
 // ********************************************************************
 //
 // INCL++ intra-nuclear cascade model
-// Pekka Kaitaniemi, CEA and Helsinki Institute of Physics
-// Davide Mancusi, CEA
-// Alain Boudard, CEA
-// Sylvie Leray, CEA
-// Joseph Cugnon, University of Liege
+// Alain Boudard, CEA-Saclay, France
+// Joseph Cugnon, University of Liege, Belgium
+// Jean-Christophe David, CEA-Saclay, France
+// Pekka Kaitaniemi, CEA-Saclay, France, and Helsinki Institute of Physics, Finland
+// Sylvie Leray, CEA-Saclay, France
+// Davide Mancusi, CEA-Saclay, France
 //
 #define INCLXX_IN_GEANT4_MODE 1
 
@@ -86,19 +87,19 @@ G4INCLXXInterface::G4INCLXXInterface(G4VPreCompoundModel * const aPreCompound) :
     if(!theDeExcitation) { theDeExcitation = new G4PreCompoundModel; }
 
     // set the fission parameters for G4ExcitationHandler
-//    G4VEvaporationChannel * const theFissionChannel =
-//      theDeExcitation->GetExcitationHandler()->GetEvaporation()->GetFissionChannel();
-//    G4CompetitiveFission * const theFissionChannelCast = dynamic_cast<G4CompetitiveFission *>(theFissionChannel);
-//    if(theFissionChannelCast) {
-//      theINCLXXLevelDensity = new G4FissionLevelDensityParameterINCLXX;
-//      theFissionChannelCast->SetLevelDensityParameter(theINCLXXLevelDensity);
-//      theINCLXXFissionProbability = new G4FissionProbability;
-//      theINCLXXFissionProbability->SetFissionLevelDensityParameter(theINCLXXLevelDensity);
-//      theFissionChannelCast->SetEmissionStrategy(theINCLXXFissionProbability);
-//      theInterfaceStore->EmitBigWarning("INCL++/G4ExcitationHandler uses its own level-density parameter for fission");
-//    } else {
-//      theInterfaceStore->EmitBigWarning("INCL++/G4ExcitationHandler could not use its own level-density parameter for fission");
-//    }
+    G4VEvaporationChannel * const theFissionChannel =
+      theDeExcitation->GetExcitationHandler()->GetEvaporation()->GetFissionChannel();
+    G4CompetitiveFission * const theFissionChannelCast = dynamic_cast<G4CompetitiveFission *>(theFissionChannel);
+    if(theFissionChannelCast) {
+      theINCLXXLevelDensity = new G4FissionLevelDensityParameterINCLXX;
+      theFissionChannelCast->SetLevelDensityParameter(theINCLXXLevelDensity);
+      theINCLXXFissionProbability = new G4FissionProbability;
+      theINCLXXFissionProbability->SetFissionLevelDensityParameter(theINCLXXLevelDensity);
+      theFissionChannelCast->SetEmissionStrategy(theINCLXXFissionProbability);
+      theInterfaceStore->EmitBigWarning("INCL++/G4ExcitationHandler uses its own level-density parameter for fission");
+    } else {
+      theInterfaceStore->EmitBigWarning("INCL++/G4ExcitationHandler could not use its own level-density parameter for fission");
+    }
   }
 
   // use the envvar G4INCLXX_DUMP_REMNANT to dump information about the
