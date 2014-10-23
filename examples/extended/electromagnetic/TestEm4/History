@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+21-10-14 mma (testem4-V10-00-02)
+- TestEm2.cc : option set nThreads via command
+
 10-09-14 mma (testem4-V10-00-01)
 - TestEm4.cc : SetNumberOfThreads( G4Threading::G4GetNumberOfCores() )
      
