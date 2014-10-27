@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+23-10-14 ma (testem4-V10-00-03)
+- improved output MT
+ 
 21-10-14 mma (testem4-V10-00-02)
 - TestEm2.cc : option set nThreads via command
 

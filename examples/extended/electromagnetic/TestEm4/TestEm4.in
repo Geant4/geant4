@@ -5,6 +5,7 @@
 # (can be run in batch, without graphic)
 #
 /control/verbose  2
+/control/cout/ignoreThreadsExcept 0
 /run/verbose 2
 #
 /run/printProgress 10000
