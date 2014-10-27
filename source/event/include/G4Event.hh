@@ -136,9 +136,9 @@ class G4Event
       { keepTheEvent = vl; }
       inline G4bool ToBeKept() const
       { return keepTheEvent; }
-      inline void KeepForPostProcessing()
+      inline void KeepForPostProcessing() const
       { grips++; }
-      inline void PostProcessingFinished()
+      inline void PostProcessingFinished() const
       { grips--;
         if(grips<0)
         { G4Exception("G4Event::Release()","EVENT91001",FatalException,

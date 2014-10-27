@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 22nd, 2014 M.Asai (event-V10-00-16)
+- G4Event.hh: Added const-qualifiers forgot with V10-00-10 tag.
+
 October 16th, 2014 A.Dotti (event-V10-00-15)
 - Adding G4MUTEXDESTROY for GPS classes
 
