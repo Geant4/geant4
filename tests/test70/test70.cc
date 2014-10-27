@@ -36,7 +36,7 @@ using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-Parser* parser = 0;
+CommandLineParser* parser = 0;
 LaunchG4 *g4 = 0; // Must be created before calling parser->Parse(argc,argv);
 G4int seed = 0;
 
@@ -48,7 +48,7 @@ unsigned TokenizeString(const std::string& i_source,
 
 int main(int argc, char* argv[])
 {
-  parser = Parser::GetParser();
+  parser = CommandLineParser::GetParser();
   g4 = new LaunchG4(); // Must be created before calling parser->Parse(argc,argv);
 
   G4bool g4session = false;
@@ -73,7 +73,7 @@ int main(int argc, char* argv[])
 
   if (parser->Parse(argc, argv) != 0) // First initialize LaunchG4 and root then parse options
   {
-    Parser::DeleteInstance();
+    CommandLineParser::DeleteInstance();
     delete g4;
     std::exit(0);
   }

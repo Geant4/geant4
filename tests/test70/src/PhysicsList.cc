@@ -34,7 +34,7 @@
 #include "G4UnitsTable.hh"
 #include "G4EmDNAChemistry.hh"
 #include "G4EmDNAPhysics.hh"
-#include "G4ITStepManager.hh"
+//#include "G4ITScheduler.hh"
 #include "G4DNAChemistryManager.hh"
 #include "G4DNAMolecularStepByStepModel.hh"
 #include "G4DNASmoluchowskiReactionModel.hh"

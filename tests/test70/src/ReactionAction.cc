@@ -25,7 +25,7 @@
 //
 #include "ReactionAction.hh"
 #include "G4IT.hh"
-#include "G4ITStepManager.hh"
+//#include "G4ITScheduler.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 

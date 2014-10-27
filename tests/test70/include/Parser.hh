@@ -13,7 +13,7 @@ enum CommandType
 
 struct Command
 {
-    friend class Parser;
+    friend class CommandLineParser;
     CommandType fType;
     G4String fOption;
     G4bool fActive;
@@ -31,9 +31,9 @@ public :
     const G4String& GetOptionName()               {return fOptionName;}
 };
 
-class Parser
+class CommandLineParser
 {
-    static Parser* fpInstance;
+    static CommandLineParser* fpInstance;
     std::map<G4String, Command*> fCommandMap;
     G4bool fOptionsWereSetup;
     G4int fMaxMarkerLength;
@@ -41,9 +41,9 @@ class Parser
     G4int fVerbose;
 
 public:
-    static Parser* GetParser();
-    Parser();
-    ~Parser();
+    static CommandLineParser* GetParser();
+    CommandLineParser();
+    ~CommandLineParser();
     static void DeleteInstance();
     int Parse(int& argc, char **argv);
     void PrintHelp();

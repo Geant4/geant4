@@ -106,7 +106,7 @@ void LaunchG4::Initialize(G4bool chemistryFlag)
 #endif
 
   Command* commandLine = 0;
-  if ((commandLine = Parser::GetParser()->GetCommandIfActive("-mt")))
+  if ((commandLine = CommandLineParser::GetParser()->GetCommandIfActive("-mt")))
   {
 
 #ifdef G4MULTITHREADED

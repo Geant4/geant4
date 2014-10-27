@@ -44,8 +44,7 @@
 #include "TrackingAction.hh"
 #include "StackingAction.hh"
 #include "ReactionAction.hh"
-#include "G4AllITManager.hh"
-#include "G4ITStepManager.hh"
+#include "G4ITScheduler.hh"
 #include "G4DNAChemistryManager.hh"
 #include "ITTrackingInteractivity.hh"
 #include "ITSteppingAction.hh"
@@ -110,13 +109,13 @@ void ActionInitialization::Build() const
   {
 //    	G4cout << "OK" << G4Threading::G4GetThreadId()<< G4endl;
 //    	G4Exception("","",FatalException,"");
-    G4ITStepManager::Instance()->SetUserAction(new ReactionAction());
-    G4ITStepManager::Instance()->SetVerbose(1);
+    G4ITScheduler::Instance()->SetUserAction(new ReactionAction());
+    G4ITScheduler::Instance()->SetVerbose(1);
 
     ITTrackingInteractivity* itInteractivity = new ITTrackingInteractivity();
     itInteractivity->SetUserAction(new ITSteppingAction);
     itInteractivity->SetUserAction(new ITTrackingAction);
-    G4ITStepManager::Instance()->SetInteractivity(itInteractivity);
+    G4ITScheduler::Instance()->SetInteractivity(itInteractivity);
   }
 
   G4String fileName("output");
