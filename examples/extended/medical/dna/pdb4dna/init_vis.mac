@@ -1,0 +1,12 @@
+# Macro file for the initialization phase
+#
+# Sets some default verbose
+#
+
+/run/initialize
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
+#
+# Visualization setting
+/control/execute vis.mac

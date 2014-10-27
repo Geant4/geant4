@@ -1,0 +1,9 @@
+# Macro file for the initialization phase
+# when running in interactive mode without visualization
+#
+# Set some default verbose
+#
+/run/initialize
+/control/verbose 2
+/control/saveHistory
+/run/verbose 2
