@@ -38,7 +38,6 @@
 #include "StackingAction.hh"
 #include "G4StackManager.hh"
 #include "G4DNAChemistryManager.hh"
-#include "G4ITStepManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

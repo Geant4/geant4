@@ -30,48 +30,74 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
+// Author: Mathieu Karamitros
+//
 // $Id$
 //
-/// \file ActionInitialization.cc
-/// \brief Implementation of the ActionInitialization class
+/// \file CommandLineParser.hh
+/// \brief Definition of the CommandLineParser class
 
-#include "ActionInitialization.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "StackingAction.hh"
-#include "G4DNAChemistryManager.hh"
-//#include "G4VScheduler.hh"
+#ifndef COMMANDLINEPARSER_HH
+#define COMMANDLINEPARSER_HH
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "globals.hh"
+#include <map>
 
-ActionInitialization::ActionInitialization() : G4VUserActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ActionInitialization::BuildForMaster() const
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ActionInitialization::Build() const
+namespace G4DNAPARSER
 {
-  PrimaryGeneratorAction* primGenAction = new PrimaryGeneratorAction;
-  SetUserAction(primGenAction);
-  SetUserAction(new StackingAction());
+class Command
+{
+public:
+  enum Type
+  {
+    WithOption,
+    WithoutOption,
+    OptionNotCompulsory
+  };
 
-/*
-  // Set optional user action classes
-  bool chemistryFlag =
-      G4DNAChemistryManager::Instance()->IsChemistryActivated();
+  const G4String& GetOption() {return fOption;}
+  Command::Type GetType() {return fType;}
+  G4bool IsActive() {return fActive;}
+  const G4String& GetDescription() {return fDescription;}
+  const G4String& GetOptionName() {return fOptionName;}
 
-  // Chemistry part
-  if(chemistryFlag){
-    G4VScheduler::Instance()->SetVerbose(4);
-  }
-*/
-}  
+private:
+  friend class CommandLineParser;
+  Type fType;
+  G4String fOption;
+  G4bool fActive;
+  G4String fDescription;
+  G4String fOptionName;
+
+  Command(Type, const G4String &description = "",
+          const G4String &optionName ="optionName");
+  ~Command(){;}
+};
+
+class CommandLineParser
+{
+    static CommandLineParser* fpInstance;
+    std::map<G4String, Command*> fCommandMap;
+    G4bool fOptionsWereSetup;
+    G4int fMaxMarkerLength;
+    G4int fMaxOptionNameLength;
+    G4int fVerbose;
+
+public:
+    static CommandLineParser* GetParser();
+    CommandLineParser();
+    ~CommandLineParser();
+    static void DeleteInstance();
+    int Parse(int& argc, char **argv);
+    void PrintHelp();
+    bool CheckIfNotHandledOptionsExists(int& argc, char** argv);
+    void CorrectRemainingOptions(int& argc, char **argv);
+    void AddCommand(const G4String & marker,Command::Type,
+                    const G4String& description = "",
+                    const G4String& optionName = "");
+    Command* FindCommand(const G4String &marker);
+    Command* GetCommandIfActive(const G4String &marker);
+    G4bool WereOptionsSetup(){return fOptionsWereSetup;}
+};
+}
+#endif // PARSER_HH

@@ -14,6 +14,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24.10.2014 M.K                  tag chem1-V10-00-02
+-----------------------------------------------------
+- G4ITTimeStepper --> G4VScheduler
+
+24.10.2014 M.K                  tag chem1-V10-00-01
+-----------------------------------------------------
+- CommandLineParser added
+
 20.10.2014 M.K                  tag chem1-V10-00-00
 -----------------------------------------------------
 - chem1 added
