@@ -26,11 +26,10 @@
 #include "PhysicsList.hh"
 #include "PhysicsListMessenger.hh"
 
-#include "PhysListEmStandardSS.hh"
-#include "PhysListEmStandardIG.hh"
-
 #include "G4SystemOfUnits.hh"
 #include "G4EmStandardPhysics.hh"
+#include "G4EmStandardPhysicsSS.hh"
+#include "G4EmStandardPhysicsWVI.hh"
 #include "G4EmStandardPhysics_option1.hh"
 #include "G4EmStandardPhysics_option2.hh"
 #include "G4EmStandardPhysics_option3.hh"
@@ -135,13 +134,13 @@ void PhysicsList::AddPhysicsList(const G4String& name)
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardSS(name);
+    emPhysicsList = new G4EmStandardPhysicsSS();
 
   } else if (name == "emstandardWVI") {
 
     emName = name;
     delete emPhysicsList;
-    emPhysicsList = new PhysListEmStandardIG(name);
+    emPhysicsList = new G4EmStandardPhysicsWVI();
 
   } else if (name == "emstandardGS") {
 

@@ -6,8 +6,8 @@
 /testem/det/setThick1  203 um
 /testem/det/setNbOfLayers1 100 
 
-/testem/phys/addPhysics  standardGS
-#/testem/phys/addPhysics  standard
+#/testem/phys/addPhysics  emstandardGS
+/testem/phys/addPhysics  emstandardWVI
 #/testem/phys/addPhysics  emstandard
 #/testem/phys/addPhysics  emstandard_opt1
 #/testem/phys/addPhysics  emstandard_opt2

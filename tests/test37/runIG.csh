@@ -18,6 +18,7 @@ ln -s $VFEM/test37/$2/*3.* ./
 ln -s $VFEM/test37/$2/*K.* ./
 
 $G4MY/reader_test37 Al     $1
+$G4MY/reader_test37 Be     $1
 $G4MY/reader_test37 Mo     $1
 $G4MY/reader_test37 Ta     $1
 $G4MY/reader_test37 TaAl   $1
