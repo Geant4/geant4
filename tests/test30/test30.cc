@@ -76,7 +76,10 @@
 #include "G4BGGPionElasticXS.hh"
 #include "G4BGGNucleonInelasticXS.hh"
 #include "G4BGGPionInelasticXS.hh"
-
+#include "G4NeutronInelasticXS.hh"
+#include "G4NeutronElasticXS.hh"
+#include "G4CrossSectionInelastic.hh"
+#include "G4ComponentGGNuclNuclXsc.hh"
 #include "G4ChipsNeutronElasticXS.hh"
 #include "G4ChipsProtonElasticXS.hh"
 
@@ -616,8 +619,8 @@ int main(int argc, char** argv)
     }
 
     // ------- Define target A
-    G4int Z = (G4int)(elm->GetZ()+0.5);
-    G4int A = (G4int)(elm->GetN()+0.5);
+    G4int Z = G4lrint(elm->GetZ());
+    G4int A = G4lrint(elm->GetN());
     if(targetA > 0) { A = targetA; }
     phys->SetA(targetA);
 
@@ -792,8 +795,9 @@ int main(int argc, char** argv)
 	if(xsbgg)        { cs = new G4BGGNucleonElasticXS(part); }
 	else if(xschips) { cs = new G4ChipsProtonElasticXS(); }
       } else if(part == neutron) {
-	if(xsbgg)        { cs = new G4BGGNucleonElasticXS(part); }
-	else if(xschips) { cs = new G4ChipsNeutronElasticXS(); }
+        cs = new G4NeutronElasticXS();
+	//if(xsbgg)        { cs = new G4BGGNucleonElasticXS(part); }
+	//else if(xschips) { cs = new G4ChipsNeutronElasticXS(); }
       } else if(part == pip) {
 	if(xsbgg)        { cs = new G4BGGPionElasticXS(part); }
 	else if(xschips) { cs = new G4ChipsPionPlusElasticXS(); }
@@ -828,9 +832,10 @@ int main(int argc, char** argv)
       else if(Z > 1) { cs = new G4ProtonInelasticCrossSection(); }
       else           { cs = new G4HadronInelasticDataSet(); }
     } else if(part == neutron) {
-      if(xsbgg)      { cs = new G4BGGNucleonInelasticXS(part); }
-      else if(Z > 1) { cs = new G4NeutronInelasticCrossSection(); }
-      else           { cs = new G4HadronInelasticDataSet(); }
+      cs = new G4NeutronInelasticXS();
+      //if(xsbgg)      { cs = new G4BGGNucleonInelasticXS(part); }
+      //else if(Z > 1) { cs = new G4NeutronInelasticCrossSection(); }
+      //else           { cs = new G4HadronInelasticDataSet(); }
     } else if(part == pin || part == pip) {
       if(xsbgg)      { cs = new G4BGGPionInelasticXS(part); }
       else if(Z > 1) { cs = new G4PiNuclearCrossSection(); }
@@ -843,22 +848,9 @@ int main(int argc, char** argv)
         cs = new G4IonProtonCrossSection();
         G4cout << "Using Axen-Wellisch Cross section for Ions" << G4endl;
       }
-      /*
       if(!cs) {
-	cs = new G4TripathiLightCrossSection();
-	if(cs->IsElementApplicable(&dParticle,Z)) {
-	  G4cout << "Using Tripathi Light Cross section for Ions" << G4endl;
-	} else { cs = 0; }
-      }
-      if(!cs) {
-	cs = new G4TripathiCrossSection();
-	if(cs->IsElementApplicable(&dParticle,Z)) {
-	  G4cout << "Using Tripathi Cross section for Ions" << G4endl;
-	} else { cs = 0;}
-      }
-      */
-      if(!cs) {
-	cs = new G4IonsShenCrossSection();
+	cs = new G4CrossSectionInelastic(new G4ComponentGGNuclNuclXsc());
+	//cs = new G4IonsShenCrossSection();
 	if(cs->IsElementApplicable(&dParticle,Z)) {
 	  G4cout << "Using Shen Cross section for Ions" << G4endl;
 	} else {
@@ -1058,7 +1050,12 @@ int main(int argc, char** argv)
         amass = phys->GetNucleusMass();
 	aChange = proc->PostStepDoIt(*gTrack,*step); 
       }
-
+      /*
+      G4cout << "Mnuc= " << amass/GeV << " GeV"
+	     << " From prop: " 
+	     << G4NucleiProperties::GetNuclearMass(A, Z)/GeV << " GeV" 
+	     << G4endl;
+      */
       labv = G4LorentzVector(0.0, 0.0, std::sqrt(e0*(e0 + 2.*mass)), 
 			     e0 + mass + amass);
       G4ThreeVector bst = labv.boostVector();
@@ -1067,6 +1064,7 @@ int main(int argc, char** argv)
       G4double de = aChange->GetLocalEnergyDeposit();
       G4LorentzVector dee = G4LorentzVector(0.0, 0.0, 0.0, de); 
       labv -= dee;
+      //G4cout << " deltaE= " << de/MeV << G4endl;
 
       G4int n = aChange->GetNumberOfSecondaries();
 
@@ -1096,6 +1094,7 @@ int main(int argc, char** argv)
 	// electron can come only from internal conversion
 	// its mass should be added to initial state
         if(pd == electron) { 
+	  //G4cout << "+e- " << G4endl;
 	  labv += G4LorentzVector(0.0,0.0,0.0,electron_mass_c2); 
 	}
 

@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+test30-V10-00-01  27 October 2014 V.Ivanchenko
+- Cleanup for 10.1, added testFTFP.in, use cross sections from 
+    FTFP_BERT PhysicsList
+
 test30-V10-00-00  26 March 2014 G.Folger
 - CMakeLists.txt: allow to build test30 standalone, 
     without GEANT4_ENABLE_TESTING=ON
