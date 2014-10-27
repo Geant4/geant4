@@ -435,31 +435,41 @@ GEANT4_ADD_TEST(example-ext-exoticphysics-ExUCN
 set(DNA_EXAMPLE_SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/medical/dna)
 set(DNA_EXAMPLE_BIN_DIR ${CMAKE_BINARY_DIR}/examples/extended/medical/dna)
 
-# GEANT4_ADD_TEST(example-ext-medical-dna-wholeNuclearDNA
-#                 COMMAND ${DNA_EXAMPLE_BIN_DIR}/wholeNuclearDNA/wholeNuclearDNA
-#                         ${DNA_EXAMPLE_SOURCE_DIR}/wholeNuclearDNA/wholeNuclearDNA.in
-#                 SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/wholeNuclearDNA
-#                 BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/wholeNuclearDNA
-#                 BUILD wholeNuclearDNA ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-#                 
-# GEANT4_ADD_TEST(example-ext-medical-dna-dnaphysics 
-#                 COMMAND ${DNA_EXAMPLE_BIN_DIR}/dnaphysics/dnaphysics 
-#                         ${DNA_EXAMPLE_SOURCE_DIR}/dnaphysics/dnaphysics.in
-#                 SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/dnaphysics
-#                 BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/dnaphysics
-#                 BUILD dnaphysics ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-#                 
-# GEANT4_ADD_TEST(example-ext-medical-dna-microdosimetry 
-#                 COMMAND ${DNA_EXAMPLE_BIN_DIR}/microdosimetry/microdosimetry 
-#                         ${DNA_EXAMPLE_SOURCE_DIR}/microdosimetry/microdosimetry.in
-#                 SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/microdosimetry
-#                 BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/microdosimetry
-#                 BUILD microdosimetry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+GEANT4_ADD_TEST(example-ext-medical-dna-pdb4dna
+                COMMAND ${DNA_EXAMPLE_BIN_DIR}/pdb4dna/pdb4dna
+                        -m ${DNA_EXAMPLE_SOURCE_DIR}/pdb4dna/pdb4dna.in
+                SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/pdb4dna
+                BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/pdb4dna
+                BUILD pdb4dna ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+
+GEANT4_ADD_TEST(example-ext-medical-dna-wholeNuclearDNA
+                COMMAND ${DNA_EXAMPLE_BIN_DIR}/wholeNuclearDNA/wholeNuclearDNA
+                        ${DNA_EXAMPLE_SOURCE_DIR}/wholeNuclearDNA/wholeNuclearDNA.in
+                SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/wholeNuclearDNA
+                BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/wholeNuclearDNA
+                BUILD wholeNuclearDNA ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                 
+GEANT4_ADD_TEST(example-ext-medical-dna-dnaphysics 
+                COMMAND ${DNA_EXAMPLE_BIN_DIR}/dnaphysics/dnaphysics 
+                        ${DNA_EXAMPLE_SOURCE_DIR}/dnaphysics/dnaphysics.in
+                SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/dnaphysics
+                BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/dnaphysics
+                BUILD dnaphysics ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                 
+GEANT4_ADD_TEST(example-ext-medical-dna-microdosimetry 
+                COMMAND ${DNA_EXAMPLE_BIN_DIR}/microdosimetry/microdosimetry 
+                        ${DNA_EXAMPLE_SOURCE_DIR}/microdosimetry/microdosimetry.in
+                SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/microdosimetry
+                BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/microdosimetry
+                BUILD microdosimetry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
                 
-foreach(_i 1 2 3)                
+foreach(_i 1 2 3)          
+# flag -mt always ON if G4MULTITHREADED is not defined, it will
+# run in sequential mode      
 GEANT4_ADD_TEST(example-ext-medical-dna-chem${_i}
-                COMMAND ${DNA_EXAMPLE_BIN_DIR}/chem${_i}/chem${_i}
-                        ${DNA_EXAMPLE_SOURCE_DIR}/chem${_i}/beam.in
+                COMMAND ${DNA_EXAMPLE_BIN_DIR}/chem${_i}/chem${_i} 
+                        -mac ${DNA_EXAMPLE_SOURCE_DIR}/chem${_i}/beam.in 
+                        -mt
                 SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/chem${_i}
                 BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/chem${_i}
                 BUILD chem${_i} ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})

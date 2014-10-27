@@ -17,6 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-27 -- 26 October 2014 Mathieu Karamitros
+- fix paths for wholeNuclearDNA & pdb4dna in GNUMakeTestfile.cmake
+
+ctests-V10-00-26 -- 25 October 2014 Mathieu Karamitros
+- Correct execution command of pdb4dna
+
+ctests-V10-00-25 -- 24 October 2014 Mathieu Karamitros
+- add command line options to chem1,2,3
+
+ctests-V10-00-24 -- 24 October 2014 Mathieu Karamitros
+- add pdb4dna + wholeNuclearDNA for testing
+
+ctests-V10-00-23 -- 23 October 2014 Mathieu Karamitros
+- Add extended/dnaphysics for testing
+
+ctests-V10-00-22 -- 23 October 2014 Mathieu Karamitros
+- Add extended/microdosimetry to tests
+
 ctests-V10-00-21 -- 23 October 2014 Mathieu Karamitros
 - Correct path in GNUMakeTestfile.cmake
 
