@@ -38,7 +38,7 @@
 #include "TimeStepAction.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4ITTimeStepper.hh"
+#include "G4ITScheduler.hh"
 //#include "G4Molecule.hh"
 
 TimeStepAction::TimeStepAction() : G4UserTimeStepAction()
@@ -87,13 +87,14 @@ TimeStepAction::operator=(const TimeStepAction& rhs)
 void TimeStepAction::UserPostTimeStepAction()
 {
   //    G4cout << "_________________" << G4endl;
+  /*
   G4cout << "Time Step : "
-      << G4BestUnit(G4ITTimeStepper::Instance()->GetTimeStep(),
+      << G4BestUnit(G4ITScheduler::Instance()->GetTimeStep(),
           "Time")
           << G4endl;
-  /*
+
   G4cout <<  "End of step: "
-      << G4BestUnit(G4ITTimeStepper::Instance()->GetGlobalTime(),
+      << G4BestUnit(G4ITScheduler::Instance()->GetGlobalTime(),
                             "Time")
       << G4endl;
    */

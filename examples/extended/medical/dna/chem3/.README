@@ -27,9 +27,12 @@
  	 
 \section Chem3_s4 AN EVENT: THE PRIMARY GENERATOR
  
-  The primary kinematic consists of a single particle starting at the center 
-  of the box. The type of the particle and its energy are set in the 
-  PrimaryGeneratorAction class.
+  The primary kinematic consists of a single particle starting at the center of 
+  the sphere. The type of the particle and its energy are set in the 
+  PrimaryGeneratorAction class, and can be changed via the G4 build-in commands 
+  of G4ParticleGun class.
+  The chemistry module is triggered in the StackingAction class when all 
+  physical tracks have been processed.
 
  \section Chem3_s4 HOW TO START ?
 

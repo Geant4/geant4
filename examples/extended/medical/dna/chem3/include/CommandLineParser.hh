@@ -30,37 +30,74 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
+// Author: Mathieu Karamitros
+//
 // $Id$
 //
-/// \file TrackingAction.hh
-/// \brief Implementation of the TrackingAction class
+/// \file CommandLineParser.hh
+/// \brief Definition of the CommandLineParser class
 
-#include "TrackingAction.hh"
-#include "G4SystemOfUnits.hh"
-#include "G4Track.hh"
-#include "G4UnitsTable.hh"
+#ifndef COMMANDLINEPARSER_HH
+#define COMMANDLINEPARSER_HH
 
-TrackingAction::TrackingAction(): G4UserTrackingAction()
-{}
+#include "globals.hh"
+#include <map>
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-TrackingAction::~TrackingAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void
-TrackingAction::PreUserTrackingAction(const G4Track* /*track*/)
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void TrackingAction::PostUserTrackingAction(const G4Track* track)
+namespace G4DNAPARSER
 {
-    if(track->GetTrackID() == 1)
-    {
-        G4cout<<"End of tracking primary particle, its final energy is :"
-            << G4BestUnit(track->GetKineticEnergy(), "Energy")<< G4endl;
-    }
+class Command
+{
+public:
+  enum Type
+  {
+    WithOption,
+    WithoutOption,
+    OptionNotCompulsory
+  };
+
+  const G4String& GetOption() {return fOption;}
+  Command::Type GetType() {return fType;}
+  G4bool IsActive() {return fActive;}
+  const G4String& GetDescription() {return fDescription;}
+  const G4String& GetOptionName() {return fOptionName;}
+
+private:
+  friend class CommandLineParser;
+  Type fType;
+  G4String fOption;
+  G4bool fActive;
+  G4String fDescription;
+  G4String fOptionName;
+
+  Command(Type, const G4String &description = "",
+          const G4String &optionName ="optionName");
+  ~Command(){;}
+};
+
+class CommandLineParser
+{
+    static CommandLineParser* fpInstance;
+    std::map<G4String, Command*> fCommandMap;
+    G4bool fOptionsWereSetup;
+    G4int fMaxMarkerLength;
+    G4int fMaxOptionNameLength;
+    G4int fVerbose;
+
+public:
+    static CommandLineParser* GetParser();
+    CommandLineParser();
+    ~CommandLineParser();
+    static void DeleteInstance();
+    int Parse(int& argc, char **argv);
+    void PrintHelp();
+    bool CheckIfNotHandledOptionsExists(int& argc, char** argv);
+    void CorrectRemainingOptions(int& argc, char **argv);
+    void AddCommand(const G4String & marker,Command::Type,
+                    const G4String& description = "",
+                    const G4String& optionName = "");
+    Command* FindCommand(const G4String &marker);
+    Command* GetCommandIfActive(const G4String &marker);
+    G4bool WereOptionsSetup(){return fOptionsWereSetup;}
+};
 }
+#endif // PARSER_HH

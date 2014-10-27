@@ -36,6 +36,8 @@
 /// \brief Implementation of the DetectorConstruction class
 
 #include "ActionInitialization.hh"
+
+#include "G4VScheduler.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "SteppingAction.hh"
@@ -47,7 +49,6 @@
 #include "RunAction.hh"
 #include "SteppingAction.hh"
 
-#include "G4ITTimeStepper.hh"
 #include "G4DNAChemistryManager.hh"
 
 #include "G4SystemOfUnits.hh"
@@ -104,21 +105,21 @@ void ActionInitialization::Build() const
 
   // chemistry part
   if(chemistryFlag){
-    G4ITTimeStepper::Instance()->SetUserAction(new TimeStepAction());
+    G4VScheduler::Instance()->SetUserAction(new TimeStepAction());
 
     // Uncomment and set to stop chemistry stage after:
     // ...given number of time steps
-    //G4ITTimeStepper::Instance()->SetMaxNbSteps(1000);
+    //G4VScheduler::Instance()->SetMaxNbSteps(1000);
 
     // ...OR reaching this time
-    G4ITTimeStepper::Instance()->SetEndTime(100*nanosecond);
+    G4VScheduler::Instance()->SetEndTime(100*nanosecond);
 
-    G4ITTimeStepper::Instance()->SetVerbose(1);
+    G4VScheduler::Instance()->SetVerbose(1);
 
     ITTrackingInteractivity* itInteractivity = new ITTrackingInteractivity();
     itInteractivity->SetUserAction(new ITSteppingAction);
     itInteractivity->SetUserAction(new ITTrackingAction);
-    G4ITTimeStepper::Instance()->SetInteractivity(itInteractivity);
+    G4VScheduler::Instance()->SetInteractivity(itInteractivity);
   }
 /*
   // To output the pre-chemical stage
