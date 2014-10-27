@@ -181,7 +181,7 @@ G4bool G4CsvAnalysisManager::WriteH1()
         G4ExceptionDescription description;
         description << "      " << "saving histogram " << name << " failed";
         G4Exception("G4CsvAnalysisManager::Write()",
-                  "Analysis_W003", JustWarning, description);
+                  "Analysis_W022", JustWarning, description);
         return false;       
       } 
       hnFile.close();
@@ -231,7 +231,7 @@ G4bool G4CsvAnalysisManager::WriteH2()
         G4ExceptionDescription description;
         description << "      " << "saving histogram " << name << " failed";
         G4Exception("G4CsvAnalysisManager::Write()",
-                  "Analysis_W003", JustWarning, description);
+                  "Analysis_W022", JustWarning, description);
         return false;       
       } 
       hnFile.close();
@@ -281,7 +281,7 @@ G4bool G4CsvAnalysisManager::WriteH3()
         G4ExceptionDescription description;
         description << "      " << "saving histogram " << name << " failed";
         G4Exception("G4CsvAnalysisManager::Write()",
-                  "Analysis_W003", JustWarning, description);
+                  "Analysis_W022", JustWarning, description);
         return false;       
       } 
       hnFile.close();
@@ -330,7 +330,7 @@ G4bool G4CsvAnalysisManager::WriteP1()
         G4ExceptionDescription description;
         description << "      " << "saving profile " << name << " failed";
         G4Exception("G4CsvAnalysisManager::Write()",
-                  "Analysis_W003", JustWarning, description);
+                  "Analysis_W022", JustWarning, description);
         return false;       
       } 
       hnFile.close();
@@ -379,7 +379,7 @@ G4bool G4CsvAnalysisManager::WriteP2()
         G4ExceptionDescription description;
         description << "      " << "saving profile " << name << " failed";
         G4Exception("G4CsvAnalysisManager::Write()",
-                  "Analysis_W003", JustWarning, description);
+                  "Analysis_W022", JustWarning, description);
         return false;       
       } 
       hnFile.close();
@@ -473,7 +473,7 @@ G4bool G4CsvAnalysisManager::WriteImpl()
       << G4endl 
       << "      " << "Histogram data will not be merged.";
       G4Exception("G4CsvAnalysisManager::Write()",
-                "Analysis_W014", JustWarning, description);
+                "Analysis_W031", JustWarning, description);
   }
 
   // H1
@@ -540,7 +540,7 @@ G4bool G4CsvAnalysisManager::CloseFileImpl()
     G4ExceptionDescription description;
     description << "      " << "Resetting data failed";
     G4Exception("G4CsvAnalysisManager::CloseFile()",
-              "Analysis_W002", JustWarning, description);
+              "Analysis_W021", JustWarning, description);
     result = false;       
   } 
   finalResult = finalResult && result;

@@ -86,7 +86,7 @@ G4bool G4XmlRFileManager::OpenRFile(const G4String& fileName)
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " << name;
     G4Exception("G4XmlRFileManager::OpenRFile()",
-                "Analysis_W001", JustWarning, description);
+                "Analysis_WR001", JustWarning, description);
     delete newFile;
     return false;
   }

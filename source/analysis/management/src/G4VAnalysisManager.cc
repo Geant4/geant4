@@ -155,7 +155,7 @@ G4bool G4VAnalysisManager::WriteAscii(const G4String& fileName)
     description 
       << "Cannot open file. File name is not defined.";
     G4Exception("G4VAnalysisManager::WriteAscii()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W001", JustWarning, description);
     return false;
   }
   output.setf( std::ios::scientific, std::ios::floatfield );
@@ -199,7 +199,7 @@ G4bool G4VAnalysisManager::OpenFile(const G4String& fileName)
       description 
         << "Cannot open file. File name is not defined.";
       G4Exception("G4VFileManager::OpenFile()",
-                  "Analysis_W009", JustWarning, description);
+                  "Analysis_W001", JustWarning, description);
       return false;
     }           
     return OpenFileImpl(fVFileManager->GetFileName());

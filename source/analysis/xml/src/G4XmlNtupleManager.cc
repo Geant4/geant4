@@ -81,7 +81,7 @@ G4XmlNtupleManager::GetNtupleIColumn(G4int ntupleId, G4int columnId) const
     description << "      "  << "ntupleId " << ntupleId
                 << " columnId " << columnId << " does not exist.";
     G4Exception("G4XmlNtupleManager::GetNtupleIColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return 0;
   }
   
@@ -105,7 +105,7 @@ G4XmlNtupleManager::GetNtupleFColumn(G4int ntupleId, G4int columnId) const
     description << "      "  << "ntupleId " << ntupleId
                 << " columnId " << columnId << " does not exist.";
     G4Exception("G4XmlNtupleManager::GetNtupleFColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return 0;
   }
   
@@ -129,7 +129,7 @@ G4XmlNtupleManager::GetNtupleDColumn(G4int ntupleId, G4int columnId) const
     description << "      "  << "ntupleId " << ntupleId
                 << " columnId " << columnId << " does not exist.";
     G4Exception("G4XmlNtupleManager::GetNtupleFColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return 0;
   }
   
@@ -153,7 +153,7 @@ G4XmlNtupleManager::GetNtupleSColumn(G4int ntupleId, G4int columnId) const
     description << "      "  << "ntupleId " << ntupleId
                 << " columnId " << columnId << " does not exist.";
     G4Exception("G4XmlNtupleManager::GetNtupleSColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return 0;
   }
   
@@ -172,7 +172,7 @@ G4XmlNtupleDescription* G4XmlNtupleManager::GetNtupleInFunction(G4int id,
       inFunction += functionName;
       G4ExceptionDescription description;
       description << "      " << "ntuple " << id << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
     }
     return 0;         
   }
@@ -246,7 +246,7 @@ void G4XmlNtupleManager::CreateNtuplesFromBooking()
           description << "      " 
                       << "Unsupported column type " << it->name();
           G4Exception("G4XmlNtupleManager::CreateNtuplesFromBooking()",
-                    "Analysis_W004", JustWarning, description);
+                    "Analysis_W002", JustWarning, description);
         }
       }
     }
@@ -401,7 +401,7 @@ G4int G4XmlNtupleManager::CreateNtupleIColumn(G4int ntupleId,
     description << "      " 
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4XmlNtupleManager::CreateNtupleIColumn()",
-                "Analysis_W005", JustWarning, description);
+                "Analysis_W002", JustWarning, description);
     return kInvalidId;       
   }
 
@@ -462,7 +462,7 @@ G4int G4XmlNtupleManager::CreateNtupleFColumn(G4int ntupleId,
     description << "      " 
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4XmlNtupleManager::CreateNtupleFColumn()",
-                "Analysis_W005", JustWarning, description);
+                "Analysis_W002", JustWarning, description);
     return kInvalidId;       
   }
 
@@ -523,7 +523,7 @@ G4int G4XmlNtupleManager::CreateNtupleDColumn(G4int ntupleId,
     description << "      "
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4XmlNtupleManager::CreateNtupleDColumn()",
-                "Analysis_W005", JustWarning, description);
+                "Analysis_W002", JustWarning, description);
     return kInvalidId;       
   }
 
@@ -583,7 +583,7 @@ G4int G4XmlNtupleManager::CreateNtupleSColumn(G4int ntupleId,
     description << "      "
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4XmlNtupleManager::CreateNtupleSColumn()",
-                "Analysis_W005", JustWarning, description);
+                "Analysis_W002", JustWarning, description);
     return kInvalidId;       
   }
 
@@ -626,7 +626,7 @@ void G4XmlNtupleManager::FinishNtuple(G4int ntupleId)
     description << "      " 
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4XmlNtupleManager::CreateNtupleDColumn()",
-                "Analysis_W005", JustWarning, description);
+                "Analysis_W002", JustWarning, description);
     return;       
   }
 
@@ -690,7 +690,7 @@ G4bool G4XmlNtupleManager::FillNtupleIColumn(G4int ntupleId, G4int columnId,
     G4ExceptionDescription description;
     description << "      " << " columnId " << columnId << " does not exist.";
     G4Exception("G4XmlNtupleManager::FillNtupleIColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return false;
   }  
   
@@ -715,7 +715,7 @@ G4bool G4XmlNtupleManager::FillNtupleFColumn(G4int ntupleId, G4int columnId,
     G4ExceptionDescription description;
     description << "      " << " columnId " << columnId << " does not exist.";
     G4Exception("G4XmlNtupleManager::FillNtupleFColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return false;
   }  
   
@@ -741,7 +741,7 @@ G4bool G4XmlNtupleManager::FillNtupleDColumn(G4int ntupleId, G4int columnId,
     G4ExceptionDescription description;
     description << "      " << " columnId " << columnId << " does not exist.";
     G4Exception("G4XmlNtupleManager::FillNtupleDColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return false;
   }  
   
@@ -767,7 +767,7 @@ G4bool G4XmlNtupleManager::FillNtupleSColumn(G4int ntupleId, G4int columnId,
     G4ExceptionDescription description;
     description << "      " << " columnId " << columnId << " does not exist.";
     G4Exception("G4XmlNtupleManager::FillNtupleSColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return false;
   }  
   
@@ -808,7 +808,7 @@ G4bool G4XmlNtupleManager::AddNtupleRow(G4int ntupleId)
     G4ExceptionDescription description;
     description << "      " << "ntuple does not exist. ";
     G4Exception("G4XmlNtupleManager::AddNtupleRow()",
-                "Analysis_W008", JustWarning, description);
+                "Analysis_W022", JustWarning, description);
     return false;
   }  
   

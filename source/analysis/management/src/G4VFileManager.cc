@@ -62,7 +62,7 @@ G4bool G4VFileManager::SetFileName(const G4String& fileName)
     description 
       << "Cannot set File name as its value was already used.";
     G4Exception("G4VFileManager::SetFileName()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W012", JustWarning, description);
     return false;
   }              
 
@@ -77,7 +77,7 @@ G4bool G4VFileManager::SetHistoDirectoryName(const G4String& dirName)
     description 
       << "Cannot set Histo directory name as its value was already used.";
     G4Exception("G4VFileManager::SetHistoDirectoryName()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W012", JustWarning, description);
     return false;
   }              
 
@@ -93,7 +93,7 @@ G4bool G4VFileManager::SetProfileDirectoryName(const G4String& dirName)
     description 
       << "Cannot set Profile directory name as its value was already used.";
     G4Exception("G4VFileManager::SetProfileDirectoryName()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W012", JustWarning, description);
     return false;
   }              
 
@@ -109,7 +109,7 @@ G4bool G4VFileManager::SetNtupleDirectoryName(const G4String& dirName)
     description 
       << "Cannot set Ntuple directory name as its value was already used.";
     G4Exception("G4VFileManager::SetNtupleDirectoryName()",
-                "Analysis_W010", JustWarning, description);
+                "Analysis_W012", JustWarning, description);
     return false;
   }              
 

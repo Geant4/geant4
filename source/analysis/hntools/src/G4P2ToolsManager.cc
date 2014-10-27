@@ -305,7 +305,7 @@ tools::histo::p2d*  G4P2ToolsManager::GetP2InFunction(G4int id,
       inFunction += functionName;
       G4ExceptionDescription description;
       description << "      " << "profile " << id << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
     }
     return 0;         
   }
@@ -586,7 +586,7 @@ G4int  G4P2ToolsManager::GetP2Id(const G4String& name, G4bool warn) const
       G4String inFunction = "G4P2ToolsManager::GetP2Id";
       G4ExceptionDescription description;
       description << "      " << "profile " << name << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
     }
     return kInvalidId;         
   }

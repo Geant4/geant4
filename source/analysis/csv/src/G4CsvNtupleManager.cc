@@ -80,7 +80,7 @@ G4CsvNtupleManager::GetNtupleIColumn(G4int ntupleId, G4int columnId) const
     description << "      "  << "ntupleId " << ntupleId
                 << " columnId " << columnId << " does not exist.";
     G4Exception("G4CsvNtupleManager::GetNtupleIColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return 0;
   }
   
@@ -104,7 +104,7 @@ G4CsvNtupleManager::GetNtupleFColumn(G4int ntupleId, G4int columnId) const
     description << "      "  << "ntupleId " << ntupleId
                 << " columnId " << columnId << " does not exist.";
     G4Exception("G4CsvNtupleManager::GetNtupleFColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return 0;
   }
   
@@ -129,7 +129,7 @@ G4CsvNtupleManager::GetNtupleDColumn(G4int ntupleId, G4int columnId) const
     description << "      "  << "ntupleId " << ntupleId
                 << " columnId " << columnId << " does not exist.";
     G4Exception("G4CsvNtupleManager::GetNtupleDColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return 0;
   }
   
@@ -153,7 +153,7 @@ G4CsvNtupleManager::GetNtupleSColumn(G4int ntupleId, G4int columnId) const
     description << "      "  << "ntupleId " << ntupleId
                 << " columnId " << columnId << " does not exist.";
     G4Exception("G4CsvNtupleManager::GetNtupleSColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return 0;
   }
   
@@ -172,7 +172,7 @@ G4CsvNtupleDescription* G4CsvNtupleManager::GetNtupleInFunction(G4int id,
       inFunction += functionName;
       G4ExceptionDescription description;
       description << "      " << "ntuple " << id << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
     }
     return 0;         
   }
@@ -243,7 +243,7 @@ void G4CsvNtupleManager::CreateNtuplesFromBooking()
        description << "      " 
                    << "Writing ntuple header has failed. ";
        G4Exception("G4CsvNtupleManager::CreateNtupleFromBooking()",
-                   "Analysis_W016", JustWarning, description);
+                   "Analysis_W021", JustWarning, description);
     }
 
     if ( ntupleBooking->columns().size() ) {
@@ -274,7 +274,7 @@ void G4CsvNtupleManager::CreateNtuplesFromBooking()
           description << "      " 
                       << "Unsupported column type " << it->cls_id();
           G4Exception("G4CsvNtupleManager::CreateNtupleFromBooking()",
-                      "Analysis_W004", JustWarning, description);
+                      "Analysis_W002", JustWarning, description);
         }
       }
     }
@@ -415,7 +415,7 @@ G4int G4CsvNtupleManager::CreateNtupleIColumn(G4int ntupleId,
     description << "      " 
                 << "Ntuple columns of vector are not supported." ;
     G4Exception("G4CsvAnalysisManager::CreateNtupleIColumn", 
-                "Analysis_W005", JustWarning, description);
+                "Analysis_W002", JustWarning, description);
     return 0;
   }                
 
@@ -439,7 +439,7 @@ G4int G4CsvNtupleManager::CreateNtupleIColumn(G4int ntupleId,
     description << "      " 
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4CsvNtupleManager::CreateNtupleIColumn()",
-                "Analysis_W005", JustWarning, description);
+                "Analysis_W002", JustWarning, description);
     return kInvalidId;       
   }
 
@@ -477,7 +477,7 @@ G4int G4CsvNtupleManager::CreateNtupleFColumn(G4int ntupleId,
     description << "      " 
                 << "Ntuple columns of vector are not supported." ;
     G4Exception("G4CsvAnalysisManager::CreateNtupleFColumn", 
-                "Analysis_W005", JustWarning, description);
+                "Analysis_W002", JustWarning, description);
     return 0;
   }                
 
@@ -501,7 +501,7 @@ G4int G4CsvNtupleManager::CreateNtupleFColumn(G4int ntupleId,
     description << "      " 
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4CsvNtupleManager::CreateNtupleFColumn()",
-                "Analysis_W005", JustWarning, description);
+                "Analysis_W002", JustWarning, description);
     return kInvalidId;       
   }
 
@@ -539,7 +539,7 @@ G4int G4CsvNtupleManager::CreateNtupleDColumn(G4int ntupleId,
     description << "      " 
                 << "Ntuple columns of vector are not supported." ;
     G4Exception("G4CsvAnalysisManager::CreateNtupleDColumn", 
-                "Analysis_W005", JustWarning, description);
+                "Analysis_W002", JustWarning, description);
     return 0;
   }                
 
@@ -563,7 +563,7 @@ G4int G4CsvNtupleManager::CreateNtupleDColumn(G4int ntupleId,
     description << "      " 
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4CsvNtupleManager::CreateNtupleDColumn()",
-                "Analysis_W005", JustWarning, description);
+                "Analysis_W002", JustWarning, description);
     return kInvalidId;       
   }
 
@@ -601,7 +601,7 @@ G4int G4CsvNtupleManager::CreateNtupleSColumn(G4int ntupleId,
     description << "      " 
                 << "Ntuple columns of vector are not supported." ;
     G4Exception("G4CsvAnalysisManager::CreateNtupleSColumn", 
-                "Analysis_W005", JustWarning, description);
+                "Analysis_W002", JustWarning, description);
     return 0;
   }                
 */
@@ -625,7 +625,7 @@ G4int G4CsvNtupleManager::CreateNtupleSColumn(G4int ntupleId,
     description << "      " 
                 << "Ntuple " << ntupleId << " has to be created first. ";
     G4Exception("G4CsvNtupleManager::CreateNtupleSColumn()",
-                "Analysis_W005", JustWarning, description);
+                "Analysis_W002", JustWarning, description);
     return kInvalidId;       
   }
 
@@ -668,7 +668,7 @@ void G4CsvNtupleManager::FinishNtuple(G4int ntupleId)
        description << "      " 
                    << "Writing ntuple header has failed. ";
        G4Exception("G4CsvNtupleManager::Finish()",
-                   "Analysis_W016", JustWarning, description);
+                   "Analysis_W022", JustWarning, description);
     }
   }
 }
@@ -715,7 +715,7 @@ G4bool G4CsvNtupleManager::FillNtupleIColumn(G4int ntupleId, G4int columnId,
     description << "      " << "ntupleId " <<  ntupleId
                 << " columnId " << columnId << " does not exist.";
     G4Exception("G4CsvNtupleManager::FillNtupleIColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return false;
   }  
   
@@ -741,7 +741,7 @@ G4bool G4CsvNtupleManager::FillNtupleFColumn(G4int ntupleId, G4int columnId,
     description << "      " << "ntupleId " <<  ntupleId
                 << " columnId " << columnId << " does not exist.";
     G4Exception("G4CsvNtupleManager::FillNtupleFColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return false;
   }  
   
@@ -768,7 +768,7 @@ G4bool G4CsvNtupleManager::FillNtupleDColumn(G4int ntupleId, G4int columnId,
     description << "      " << "ntupleId " <<  ntupleId
                 << " columnId " << columnId << " does not exist.";
     G4Exception("G4CsvNtupleManager::FillNtupleDColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return false;
   }  
   
@@ -795,7 +795,7 @@ G4bool G4CsvNtupleManager::FillNtupleSColumn(G4int ntupleId, G4int columnId,
     description << "      " << "ntupleId " <<  ntupleId
                 << " columnId " << columnId << " does not exist.";
     G4Exception("G4CsvNtupleManager::FillNtupleSColumn()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return false;
   }  
   
@@ -830,7 +830,7 @@ G4bool G4CsvNtupleManager::AddNtupleRow(G4int ntupleId)
     G4ExceptionDescription description;
     description << "      " << "ntuple does not exist. ";
     G4Exception("G4CsvNtupleManager::AddNtupleRow()",
-                "Analysis_W008", JustWarning, description);
+                "Analysis_W022", JustWarning, description);
     return false;
   }  
   

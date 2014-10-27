@@ -63,7 +63,7 @@ G4bool G4CsvRFileManager::OpenRFile(const G4String& fileName)
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " << fileName;
     G4Exception("G4CsvAnalysisReader::OpenRFile()",
-                "Analysis_W004", JustWarning, description);
+                "Analysis_WR001", JustWarning, description);
     return false;
   }
 

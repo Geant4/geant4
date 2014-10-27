@@ -74,7 +74,7 @@ void*  ReadObject(std::istream& hnFile,
       << "Cannot get "<< objectType << " in file " << fileName; 
     G4String inFunctionFull = "G4CsvAnalysisReader::";
     inFunctionFull.append(inFunction);
-    G4Exception(inFunctionFull, "Analysis_WR002", JustWarning, description);
+    G4Exception(inFunctionFull, "Analysis_WR011", JustWarning, description);
     return 0;
   }
   if ( objectTypeInFile != objectType ) {
@@ -85,7 +85,7 @@ void*  ReadObject(std::istream& hnFile,
       << " does not match" << G4endl; 
     G4String inFunctionFull = "G4CsvAnalysisReader::";
     inFunctionFull.append(inFunction);
-    G4Exception(inFunctionFull, "Analysis_WR002", JustWarning, description);
+    G4Exception(inFunctionFull, "Analysis_WR011", JustWarning, description);
     return 0;
   }
   
@@ -214,7 +214,7 @@ G4int G4CsvAnalysisReader::ReadH1Impl(const G4String& h1Name,
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " << h1FileName;
     G4Exception("G4CsvAnalysisReader::ReadH1Impl()",
-                "Analysis_W001", JustWarning, description);
+                "Analysis_WR001", JustWarning, description);
     return kInvalidId;
   }
 #ifdef G4VERBOSE
@@ -256,7 +256,7 @@ G4int G4CsvAnalysisReader::ReadH2Impl(const G4String& h2Name,
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " << h2FileName;
     G4Exception("G4CsvAnalysisReader::ReadH2Impl()",
-                "Analysis_W001", JustWarning, description);
+                "Analysis_WR001", JustWarning, description);
     return kInvalidId;
   }
 #ifdef G4VERBOSE
@@ -298,7 +298,7 @@ G4int G4CsvAnalysisReader::ReadH3Impl(const G4String& h3Name,
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " << h3FileName;
     G4Exception("G4CsvAnalysisReader::ReadH3Impl()",
-                "Analysis_W001", JustWarning, description);
+                "Analysis_WR001", JustWarning, description);
     return kInvalidId;
   }
 #ifdef G4VERBOSE
@@ -340,7 +340,7 @@ G4int G4CsvAnalysisReader::ReadP1Impl(const G4String& p1Name,
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " << p1FileName;
     G4Exception("G4CsvAnalysisReader::ReadP1Impl()",
-                "Analysis_W001", JustWarning, description);
+                "Analysis_WR001", JustWarning, description);
     return kInvalidId;
   }
 #ifdef G4VERBOSE
@@ -382,7 +382,7 @@ G4int G4CsvAnalysisReader::ReadP2Impl(const G4String& p2Name,
     G4ExceptionDescription description;
     description << "      " << "Cannot open file " << p2FileName;
     G4Exception("G4CsvAnalysisReader::ReadP2Impl()",
-                "Analysis_W001", JustWarning, description);
+                "Analysis_WR001", JustWarning, description);
     return kInvalidId;
   }
 #ifdef G4VERBOSE

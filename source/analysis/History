@@ -17,6 +17,9 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 27, 2014 I. Hrivnacova (analysis-V10-00-38)
+- Revised (and simplified) numbering of warnings in exception messages 
+
 October 25, 2014 I. Hrivnacova (analysis-V10-00-37)
 - Updated to g4tools 1.16.3 (by G. Barrand):
   Fixed problem with csv reading on windoes;

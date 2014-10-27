@@ -58,7 +58,7 @@ G4bool G4BaseAnalysisManager::SetFirstId(G4int firstId)
     description 
       << "Cannot set FirstId as its value was already used.";
     G4Exception("G4BaseAnalysisManager::SetFirstId()",
-                "Analysis_W009", JustWarning, description);
+                "Analysis_W013", JustWarning, description);
     return false;
   }              
 

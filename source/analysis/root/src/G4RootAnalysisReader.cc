@@ -154,7 +154,7 @@ tools::rroot::buffer* G4RootAnalysisReader::GetBuffer(
     description 
       << "      " 
       << "Cannot get " << objectName << " in file " << fileName; 
-    G4Exception(inFunction, "Analysis_WR002", JustWarning, description);
+    G4Exception(inFunction, "Analysis_WR011", JustWarning, description);
     return 0;
   }  
 
@@ -218,7 +218,7 @@ G4int G4RootAnalysisReader::ReadH1Impl(const G4String& h1Name,
       << "      " 
       << "Streaming " << h1Name << " in file " << fileName << " failed."; 
     G4Exception("G4RootAnalysisReader::ReadH1Impl", 
-                "Analysis_WR002", JustWarning, description);
+                "Analysis_WR011", JustWarning, description);
     return kInvalidId;
   }  
   
@@ -259,7 +259,7 @@ G4int G4RootAnalysisReader::ReadH2Impl(const G4String& h2Name,
       << "      " 
       << "Streaming " << h2Name << " in file " << fileName << " failed."; 
     G4Exception("G4RootAnalysisReader::ReadH2Impl", 
-                "Analysis_WR002", JustWarning, description);
+                "Analysis_WR011", JustWarning, description);
     return kInvalidId;
   }  
   
@@ -296,7 +296,7 @@ G4int G4RootAnalysisReader::ReadH3Impl(const G4String& h3Name,
       << "      " 
       << "Streaming " << h3Name << " in file " << fileName << " failed."; 
     G4Exception("G4RootAnalysisReader::ReadH3Impl", 
-                "Analysis_WR002", JustWarning, description);
+                "Analysis_WR011", JustWarning, description);
     return kInvalidId;
   }  
   
@@ -336,7 +336,7 @@ G4int G4RootAnalysisReader::ReadP1Impl(const G4String& p1Name,
       << "      " 
       << "Streaming " << p1Name << " in file " << fileName << " failed."; 
     G4Exception("G4RootAnalysisReader::ReadP1Impl", 
-                "Analysis_WR002", JustWarning, description);
+                "Analysis_WR011", JustWarning, description);
     return kInvalidId;
   }  
   
@@ -373,7 +373,7 @@ G4int G4RootAnalysisReader::ReadP2Impl(const G4String& p2Name,
       << "      " 
       << "Streaming " << p2Name << " in file " << fileName << " failed."; 
     G4Exception("G4RootAnalysisReader::ReadP2Impl", 
-                "Analysis_WR002", JustWarning, description);
+                "Analysis_WR011", JustWarning, description);
     return kInvalidId;
   }  
   
@@ -417,7 +417,7 @@ G4int G4RootAnalysisReader::ReadNtupleImpl(const G4String& ntupleName,
       << "      " 
       << "Key " << ntupleName << " for Ntuple not found in file " << fileName; 
     G4Exception("G4RootAnalysisReader::ReadNtupleImpl()",
-                "Analysis_WR002", JustWarning, description);
+                "Analysis_WR011", JustWarning, description);
     return kInvalidId;
   }
 
@@ -429,7 +429,7 @@ G4int G4RootAnalysisReader::ReadNtupleImpl(const G4String& ntupleName,
       << "      " 
       << "Cannot get data buffer for Ntuple " << ntupleName << " in file " << fileName; 
     G4Exception("G4RootAnalysisReader::ReadNtupleImpl()",
-                "Analysis_WR002", JustWarning, description);
+                "Analysis_WR021", JustWarning, description);
     return kInvalidId;
   }
   
@@ -448,7 +448,7 @@ G4int G4RootAnalysisReader::ReadNtupleImpl(const G4String& ntupleName,
       << "      " 
       << "TTree streaming failed for Ntuple " << ntupleName << " in file " << fileName; 
     G4Exception("G4RootAnalysisReader::ReadNtupleImpl()",
-                "Analysis_WR002", JustWarning, description);
+                "Analysis_WR021", JustWarning, description);
                 
     delete buffer;
     delete tree;    

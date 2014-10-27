@@ -152,7 +152,7 @@ tools::raxml_out* G4XmlAnalysisReader::GetHandler(
       << "Cannot get "<< objectName << " in file " << fileName; 
     G4String inFunctionFull = "G4XmlAnalysisReader::";
     inFunctionFull.append(inFunction);
-    G4Exception(inFunctionFull, "Analysis_WR002", JustWarning, description);
+    G4Exception(inFunctionFull, "Analysis_WR011", JustWarning, description);
     return 0;
   }
   

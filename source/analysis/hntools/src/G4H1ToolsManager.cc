@@ -207,7 +207,7 @@ tools::histo::h1d*  G4H1ToolsManager::GetH1InFunction(G4int id,
       inFunction += functionName;
       G4ExceptionDescription description;
       description << "      " << "histogram " << id << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
     }
     return 0;         
   }
@@ -413,7 +413,7 @@ G4int  G4H1ToolsManager::GetH1Id(const G4String& name, G4bool warn) const
       G4String inFunction = "G4H1ToolsManager::GetH1Id";
       G4ExceptionDescription description;
       description << "      " << "histogram " << name << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
     }
     return kInvalidId;         
   }

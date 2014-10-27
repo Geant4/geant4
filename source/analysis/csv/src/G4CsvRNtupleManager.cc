@@ -62,7 +62,7 @@ G4CsvRNtupleDescription* G4CsvRNtupleManager::GetNtupleInFunction(G4int id,
       inFunction += functionName;
       G4ExceptionDescription description;
       description << "      " << "ntuple " << id << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+      G4Exception(inFunction, "Analysis_WR011", JustWarning, description);
     }
     return 0;         
   }
@@ -419,7 +419,7 @@ G4bool G4CsvRNtupleManager::GetNtupleRow(G4int ntupleId)
         << "      " 
         << "Ntuple initialization failed !!"; 
       G4Exception("G4CsvRNtuple::GetNtupleRow()",
-                  "Analysis_WR003", JustWarning, description);
+                  "Analysis_WR021", JustWarning, description);
       return false;
     }
     ntupleDescription->fIsInitialized = true;
@@ -434,7 +434,7 @@ G4bool G4CsvRNtupleManager::GetNtupleRow(G4int ntupleId)
         << "      " 
         << "Ntuple get_row() failed !!"; 
       G4Exception("G4CsvRNtuple::GetNtupleRow()",
-                  "Analysis_WR003", JustWarning, description);
+                  "Analysis_WR021", JustWarning, description);
       return false;
     }
   }  

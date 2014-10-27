@@ -160,7 +160,7 @@ G4bool G4RootAnalysisManager::WriteH1()
         G4ExceptionDescription description;
         description << "      " << "saving histogram " <<  name << " failed";
         G4Exception("G4RootAnalysisManager::Write()",
-                  "Analysis_W003", JustWarning, description);
+                  "Analysis_W022", JustWarning, description);
         return false;       
       } 
     }
@@ -207,7 +207,7 @@ G4bool G4RootAnalysisManager::WriteH2()
         G4ExceptionDescription description;
         description << "      " << "saving histogram " << name << " failed";
         G4Exception("G4RootAnalysisManager::Write()",
-                  "Analysis_W003", JustWarning, description);
+                  "Analysis_W022", JustWarning, description);
         return false;       
       } 
     }
@@ -254,7 +254,7 @@ G4bool G4RootAnalysisManager::WriteH3()
         G4ExceptionDescription description;
         description << "      " << "saving histogram " << name << " failed";
         G4Exception("G4RootAnalysisManager::Write()",
-                  "Analysis_W003", JustWarning, description);
+                  "Analysis_W022", JustWarning, description);
         return false;       
       } 
     }
@@ -301,7 +301,7 @@ G4bool G4RootAnalysisManager::WriteP1()
         G4ExceptionDescription description;
         description << "      " << "saving profile " <<  name << " failed";
         G4Exception("G4RootAnalysisManager::Write()",
-                  "Analysis_W003", JustWarning, description);
+                  "Analysis_W022", JustWarning, description);
         return false;       
       } 
     }
@@ -348,7 +348,7 @@ G4bool G4RootAnalysisManager::WriteP2()
         G4ExceptionDescription description;
         description << "      " << "saving profile " <<  name << " failed";
         G4Exception("G4RootAnalysisManager::Write()",
-                  "Analysis_W003", JustWarning, description);
+                  "Analysis_W022", JustWarning, description);
         return false;       
       } 
     }
@@ -439,7 +439,7 @@ G4bool G4RootAnalysisManager::WriteImpl()
       << G4endl 
       << "      " << "Histogram/profile data will not be merged.";
       G4Exception("G4RootAnalysisManager::Write()",
-                "Analysis_W014", JustWarning, description);
+                "Analysis_W031", JustWarning, description);
   }
   
   // H1
@@ -492,7 +492,7 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
       G4ExceptionDescription description;
       description << "      " << "Resetting data failed";
       G4Exception("G4RootAnalysisManager::Write()",
-                "Analysis_W002", JustWarning, description);
+                "Analysis_W021", JustWarning, description);
   } 
   finalResult = finalResult && result;
 
@@ -514,7 +514,7 @@ G4bool G4RootAnalysisManager::CloseFileImpl()
       description << "      " << "Removing file " 
                   << fFileManager->GetFullFileName() << " failed";
       G4Exception("G4XmlAnalysisManager::CloseFile()",
-                "Analysis_W002", JustWarning, description);
+                "Analysis_W021", JustWarning, description);
     }            
     finalResult = finalResult && result;
 #ifdef G4VERBOSE

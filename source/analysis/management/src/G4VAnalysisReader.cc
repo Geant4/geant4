@@ -141,7 +141,7 @@ G4int G4VAnalysisReader::ReadH1(const G4String& h1Name,
       description 
         << "Cannot get H1. File name has to be set first.";
       G4Exception("G4VAnalysisReader::ReadH1()",
-                  "Analysis_WR001", JustWarning, description);
+                  "Analysis_WR011", JustWarning, description);
       return kInvalidId;
     }           
     return ReadH1Impl(h1Name, fFileManager->GetFileName(), false);
@@ -161,7 +161,7 @@ G4int G4VAnalysisReader::ReadH2(const G4String& h2Name,
       description 
         << "Cannot get H2. File name has to be set first.";
       G4Exception("G4VAnalysisReader::ReadH2()",
-                  "Analysis_WR001", JustWarning, description);
+                  "Analysis_WR011", JustWarning, description);
       return kInvalidId;
     }           
     return ReadH2Impl(h2Name, fFileManager->GetFileName(), false);
@@ -181,7 +181,7 @@ G4int G4VAnalysisReader::ReadH3(const G4String& h3Name,
       description 
         << "Cannot get H3. File name has to be set first.";
       G4Exception("G4VAnalysisReader::ReadH2()",
-                  "Analysis_WR001", JustWarning, description);
+                  "Analysis_WR011", JustWarning, description);
       return kInvalidId;
     }           
     return ReadH3Impl(h3Name, fFileManager->GetFileName(), false);
@@ -201,7 +201,7 @@ G4int G4VAnalysisReader::ReadP1(const G4String& p1Name,
       description 
         << "Cannot get P1. File name has to be set first.";
       G4Exception("G4VAnalysisReader::ReadP1()",
-                  "Analysis_WR001", JustWarning, description);
+                  "Analysis_WR011", JustWarning, description);
       return kInvalidId;
     }           
     return ReadP1Impl(p1Name, fFileManager->GetFileName(), false);
@@ -221,7 +221,7 @@ G4int G4VAnalysisReader::ReadP2(const G4String& p2Name,
       description 
         << "Cannot get P2. File name has to be set first.";
       G4Exception("G4VAnalysisReader::ReadP2()",
-                  "Analysis_WR001", JustWarning, description);
+                  "Analysis_WR011", JustWarning, description);
       return kInvalidId;
     }           
     return ReadP2Impl(p2Name, fFileManager->GetFileName(), false);
@@ -343,7 +343,7 @@ G4int G4VAnalysisReader::GetNtuple(const G4String& ntupleName,
       description 
         << "Cannot get Ntuple. File name has to be set first.";
       G4Exception("G4VAnalysisReader::GetNtuple()",
-                  "Analysis_WR001", JustWarning, description);
+                  "Analysis_WR011", JustWarning, description);
       return kInvalidId;
     }           
     return ReadNtupleImpl(ntupleName, fFileManager->GetFileName(), false);

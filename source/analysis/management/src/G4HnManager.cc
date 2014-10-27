@@ -134,7 +134,7 @@ G4HnInformation* G4HnManager::GetHnInformation(G4int id,
       G4ExceptionDescription description;
       description << "      " << fHnType << " histogram " << id 
                   << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
     }  
     return 0;         
   }

@@ -142,7 +142,7 @@ G4bool G4RootFileManager::CreateHistoDirectory()
     description << "      " 
                 << "cannot create directory " << fHistoDirectoryName;
     G4Exception("G4RootFileManager::CreateHistoDirectory()",
-              "Analysis_W002", JustWarning, description);
+              "Analysis_W001", JustWarning, description);
     return false;       
   }       
 #ifdef G4VERBOSE
@@ -176,7 +176,7 @@ G4bool G4RootFileManager::CreateProfileDirectory()
     description << "      " 
                 << "cannot create directory " << fProfileDirectoryName;
     G4Exception("G4RootFileManager::CreateProfileDirectory()",
-              "Analysis_W002", JustWarning, description);
+              "Analysis_W001", JustWarning, description);
     return false;       
   }       
 #ifdef G4VERBOSE
@@ -210,7 +210,7 @@ G4bool G4RootFileManager::CreateNtupleDirectory()
     description << "      " 
                 << "cannot create directory " << fNtupleDirectoryName;
     G4Exception("G4RootFileManager::CreateNtupleDirectory()",
-                "Analysis_W002", JustWarning, description);
+                "Analysis_W001", JustWarning, description);
     return false;       
   }       
 #ifdef G4VERBOSE
