@@ -5,8 +5,9 @@
 #
 # PbWO4 L = 20 radl  R = 5 radl; electron 5 GeV
 #
-/control/cout/ignoreThreadsExcept 0
 /control/verbose 1
+/control/cout/ignoreThreadsExcept 0
+/run/numberOfThreads 2
 /run/verbose 1
 #
 /testem/det/setMat G4_PbWO4
