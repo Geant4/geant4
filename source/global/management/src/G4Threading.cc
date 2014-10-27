@@ -51,7 +51,7 @@
 
 namespace
 {
-   G4ThreadLocal G4int G4ThreadID = -1;
+   G4ThreadLocal G4int G4ThreadID = G4Threading::MASTER_ID;
    G4bool isMTAppType = false;
 }
 
@@ -124,7 +124,7 @@ G4Pid_t G4Threading::G4GetPidId()
 }
 
 G4int G4Threading::G4GetNumberOfCores() { return 1; }
-G4int G4Threading::G4GetThreadId() { return -2; }
+G4int G4Threading::G4GetThreadId() { return G4Threading::SEQUENTIAL_ID; }
 G4bool G4Threading::IsWorkerThread() { return false; }
 void G4Threading::G4SetThreadId(G4int) {}
 

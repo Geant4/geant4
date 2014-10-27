@@ -68,8 +68,9 @@ G4int G4MTcoutDestination::ReceiveG4cout(const G4String& msg)
        G4StateManager::GetStateManager()->GetCurrentState() != G4State_Idle )
     {
       G4AutoLock l(&coutm);
-      finalcout<<prefix<<id
-	       <<" > "<<msg<<std::flush;
+        finalcout<<prefix;
+        if ( id!=G4Threading::GENERICTHREAD_ID ) finalcout<<id;
+        finalcout<<" > "<<msg<<std::flush;
     }
   }
   //forward message to master G4coutDestination if set
@@ -78,8 +79,10 @@ G4int G4MTcoutDestination::ReceiveG4cout(const G4String& msg)
     ){
         G4AutoLock l(&coutm);
         std::stringstream ss;
-        ss<<prefix<<id<<" > "<<msg;
-        masterG4coutDestination->ReceiveG4cout(ss.str());
+      ss<<prefix;
+      if ( id!=G4Threading::GENERICTHREAD_ID ) ss<<id;
+      ss<<" > "<<msg;
+      masterG4coutDestination->ReceiveG4cout(ss.str());
     }
   return 0;
 }
@@ -91,14 +94,20 @@ G4int G4MTcoutDestination::ReceiveG4cerr(const G4String& msg)
   if( useBuffer )
   { cerr_buffer<<msg; }
   else
-    {   G4AutoLock l(&coutm); finalcerr<<prefix<<id<<" > "<<msg<<std::flush; }
+    {   G4AutoLock l(&coutm);
+        finalcerr<<prefix;
+        if ( id!=G4Threading::GENERICTHREAD_ID ) finalcerr<<id;
+        finalcerr<<" > "<<msg<<std::flush;
+    }
   //forward message to master G4coutDestination if set
     if ( masterG4coutDestination &&  !ignoreCout &&
         ( !ignoreInit || G4StateManager::GetStateManager()->GetCurrentState() != G4State_Idle )
     ){
         G4AutoLock l(&coutm);
         std::stringstream ss;
-        ss<<prefix<<id<<" > "<<msg;
+        ss<<prefix;
+        if ( id!=G4Threading::GENERICTHREAD_ID ) ss<<id;
+        ss<<" > "<<msg;
         masterG4coutDestination->ReceiveG4cerr(ss.str());
     }
   return 0;

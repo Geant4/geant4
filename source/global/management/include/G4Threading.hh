@@ -183,6 +183,12 @@
 
 namespace G4Threading
 {
+  enum {
+        SEQUENTIAL_ID = -2,
+        MASTER_ID = -1,
+        WORKER_ID = 0,
+        GENERICTHREAD_ID = -1000
+    };
   G4Pid_t G4GetPidId();
   G4int G4GetNumberOfCores();
   G4int G4GetThreadId();

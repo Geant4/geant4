@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Octover 16, 2014 A. Dotti (global-V10-00-37)
+October 24, 2014 A. Dotti (global-V10-00-38)
+- Introduced G4Threading enum to hold thread IDs constants
+- G4MTcoutDestination now supports special non-worker threads for
+  which the ID makes no sense.
+
+October 16, 2014 A. Dotti (global-V10-00-37)
 - Fixing G4ThreadLocalSingleton destructor
 
 October 16, 2014 A. Dotti (global-V10-00-36)
