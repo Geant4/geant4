@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+23-10-14 mma (testem1-V10-00-11)
+- in TestEm1.in : /run/numberOfThreads 2
+
+23-10-14 mma (testem1-V10-00-10)
+- PhysListEmStandard : msc algorithm fUseSafetyPlus
+
 20-10-14 mma (testem1-V10-00-09)
 - PhysicsList : added G4EmStandardPhysicsSS
 - TestEm1.cc : option set nThreads via command
