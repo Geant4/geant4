@@ -15,6 +15,20 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 Oct 2014 Davide Mancusi (exampleB5-V10-00-01)
+- Switch off primary randomization in gui.mac (needed for the /gun/ UI commands
+  to work)
+
+16 Sept 2014 Andrea Dotti
+- Removing test code introduced in previous tag. Previous
+  tag has been rejected as planned.
+
+15 July 2014 Andrea Dotti (exampleB5-V10-00-00)
+- This tag is intentionally WRONG: it introduces an
+  FPE violation (division by zero) at event 1. It is
+  used yo verify correct behavior of FPE detection in MT.
+  When tests will be over, changes will be reverted.
+
 02 December 2013 Ivana Hrivnacova 
 - Fixed gui.mac:
   corrected wireframe parameter, removed run2.mac from gui 
