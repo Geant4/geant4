@@ -435,7 +435,7 @@ G4double G4VMultipleScattering::AlongStepGetPhysicalInteractionLength(
   }
   // msc is active is model is active, energy above the limit,
   // and step size is above the limit;
-  // if it is active msc may limit teh step
+  // if it is active msc may limit the step
   if(currentModel->IsActive(ekin) && tPathLength > geomMin
      && ekin >= lowestKinEnergy) {
     isActive = true;
@@ -571,6 +571,7 @@ G4VMultipleScattering::AlongStepDoIt(const G4Track& track, const G4Step& step)
 		G4double tnew = tPathLength*(1.0 + dist/geomLength);
 		if(tnew >= 0.0 && tnew < physStepLimit) {
 		  tPathLength = tnew;
+		  fNewPosition += dist*fNewDirection; 
 		} else { 
 		  fNewPosition += displacement*(postSafety/dispR - 1.0); 
 		}
