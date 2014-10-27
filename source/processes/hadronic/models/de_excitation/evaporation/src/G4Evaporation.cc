@@ -64,6 +64,7 @@
 G4Evaporation::G4Evaporation()  
   : nChannels(0)
 {
+  thePool = G4FermiFragmentsPool::Instance();
   SetPhotonEvaporation(new G4PhotonEvaporation());
   theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
   SetParameters();
@@ -77,6 +78,7 @@ G4Evaporation::G4Evaporation(G4VEvaporationChannel* photoEvaporation)
   if(photoEvaporation) { SetPhotonEvaporation(photoEvaporation); }
   else                 { SetPhotonEvaporation(new G4PhotonEvaporation()); }
 
+  thePool = G4FermiFragmentsPool::Instance();
   theChannelFactory = new G4EvaporationDefaultGEMFactory(thePhotonEvaporation);
   SetParameters();
   InitialiseEvaporation();
@@ -100,8 +102,8 @@ void G4Evaporation::SetParameters()
 {
   nist = G4NistManager::Instance();
   minExcitation = CLHEP::keV;
-  maxZforFBU = G4FermiFragmentsPool::Instance()->GetMaxZ();
-  maxAforFBU = G4FermiFragmentsPool::Instance()->GetMaxA();
+  maxZforFBU = thePool->GetMaxZ();
+  maxAforFBU = thePool->GetMaxA();
   probabilities.reserve(68);
 }
 
@@ -170,13 +172,17 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     // g,n,p and light fragments - evaporation is finished
     G4int Z = theResidualNucleus->GetZ_asInt();
     G4int A = theResidualNucleus->GetA_asInt();
+    G4double Eex = theResidualNucleus->GetExcitationEnergy();
+    G4double mass = theResidualNucleus->GetGroundStateMass();
 
     // stop deecitation loop if can be deexcited by FBU
-    if(maxZforFBU > Z && maxAforFBU >= A) {
-      theResult->push_back(theResidualNucleus);
-      return theResult;
+    
+    if(maxZforFBU > Z && maxAforFBU > A && Z > 0 && A > Z) {
+      if((thePool->GetConfigurationList(Z, A, mass+Eex))->size() > 0) {
+	theResult->push_back(theResidualNucleus);
+	return theResult;
+      }
     }
-
     // check if it is stable, then finish evaporation
     G4double abun = nist->GetIsotopeAbundance(Z, A); 
     /*
@@ -186,7 +192,6 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     	   << " aban= " << abun << G4endl;
     */
     // stop deecitation loop in the case of the cold stable fragment 
-    G4double Eex = theResidualNucleus->GetExcitationEnergy();
     if(Eex <= minExcitation && abun > 0.0) {
       theResult->push_back(theResidualNucleus);
       return theResult;

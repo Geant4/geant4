@@ -32,6 +32,7 @@
 // 01.04.2011 General cleanup by V.Ivanchenko: integer Z and A, constructor
 
 #include "G4UnstableFermiFragment.hh"
+#include "G4FermiFragmentsPool.hh"
 
 G4UnstableFermiFragment::G4UnstableFermiFragment(G4int anA, G4int aZ, 
 						 G4int Pol, G4double ExE)
@@ -46,7 +47,10 @@ G4UnstableFermiFragment::~G4UnstableFermiFragment()
 G4FragmentVector * 
 G4UnstableFermiFragment::GetFragment(const G4LorentzVector& aMomentum) const
 {
-  std::vector<G4LorentzVector*> * P = thePhaseSpace.Decay(aMomentum.m(), Masses);
+  const G4FermiPhaseSpaceDecay* thePhaseSpace
+    = G4FermiFragmentsPool::Instance()->GetFermiPhaseSpaceDecay();
+ 
+  std::vector<G4LorentzVector*> * P = thePhaseSpace->Decay(aMomentum.m(), Masses);
 
   G4ThreeVector Beta = aMomentum.boostVector();
 

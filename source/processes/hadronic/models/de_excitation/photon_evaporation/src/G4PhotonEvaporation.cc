@@ -68,6 +68,7 @@
 #include "G4ContinuumGammaDeexcitation.hh"
 #include "G4DiscreteGammaDeexcitation.hh"
 #include "G4E1Probability.hh"
+#include "G4NuclearLevelStore.hh"
 
 G4PhotonEvaporation::G4PhotonEvaporation(const G4String & aName,
 					 G4EvaporationChannelType timeType)
@@ -300,16 +301,22 @@ G4FragmentVector* G4PhotonEvaporation::BreakItUp(const G4Fragment& aNucleus)
 G4double 
 G4PhotonEvaporation::GetEmissionProbability(G4Fragment* theNucleus)
 {
-  nucleus = theNucleus;
-  G4double prob = 
-    probAlgorithm->EmissionProbability(*nucleus, nucleus->GetExcitationEnergy());
+  G4double prob = 0.0;
+  G4int Z = theNucleus->GetZ_asInt();
+  G4int A = theNucleus->GetA_asInt();
+  if(0 < Z && Z < A) {
+    if(G4NuclearLevelStore::GetInstance()->GetManager(Z,A)) {
+      nucleus = theNucleus;
+      prob = 
+	probAlgorithm->EmissionProbability(*nucleus, nucleus->GetExcitationEnergy());
+    }
+  }
   return prob;
 }
 
 void 
 G4PhotonEvaporation::SetEmissionStrategy(G4VEmissionProbability * alg)
 {
-  // CD - not sure about always wanting to delete this pointer....
   if(myOwnProbAlgorithm) { delete probAlgorithm; }
   probAlgorithm = alg;
   myOwnProbAlgorithm = false;

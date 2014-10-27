@@ -33,16 +33,17 @@
 // 23.04.2011 V.Ivanchenko: make this class to be responsible for
 //            selection of decay channel and decay
 
-#include <set>
-
 #include "G4FermiConfigurationList.hh"
 #include "G4FermiFragmentsPool.hh"
 #include "G4PhysicalConstants.hh"
 #include "Randomize.hh"
 #include "G4Pow.hh"
 
-const G4double G4FermiConfigurationList::Kappa = 6.0;
-const G4double G4FermiConfigurationList::r0 = 1.3*CLHEP::fermi;
+// Kappa = V/V_0 it is used in calculation of Coulomb energy
+const G4double Kappa = 6.0;
+// Nuclear radius r0 (is a model parameter)
+const G4double r0 = 1.3*CLHEP::fermi;
+const G4double sqrtpi = std::sqrt(CLHEP::pi);
 
 G4FermiConfigurationList::G4FermiConfigurationList()
 {
@@ -51,9 +52,12 @@ G4FermiConfigurationList::G4FermiConfigurationList()
   Coef = 0.6*(CLHEP::elm_coupling/r0)/g4pow->Z13(1+G4int(Kappa));
   ConstCoeff = g4pow->powN(r0/hbarc,3)*Kappa*std::sqrt(2.0/pi)/3.0;
 
-  // 16 is the max number
-  nmax = 50;
+  thePhaseSpace = thePool->GetFermiPhaseSpaceDecay();
+
+  nmax = 16;
   NormalizedWeights.resize(nmax,0.0);
+  massRes.reserve(4);
+  frag.resize(4, 0);
 }
 
 G4FermiConfigurationList::~G4FermiConfigurationList()
@@ -61,16 +65,16 @@ G4FermiConfigurationList::~G4FermiConfigurationList()
 
 G4double 
 G4FermiConfigurationList::CoulombBarrier(
-  const std::vector<const G4VFermiFragment*>& conf)
+  const std::vector<const G4VFermiFragment*>* conf)
 {
   //  Calculates Coulomb Barrier (MeV) for given channel with K fragments.
   G4int SumA = 0;
   G4int SumZ = 0;
   G4double CoulombEnergy = 0.;
-  size_t nn = conf.size();
+  size_t nn = conf->size();
   for (size_t i=0; i<nn; ++i) {
-    G4int z = conf[i]->GetZ();
-    G4int a = conf[i]->GetA();
+    G4int z = (*conf)[i]->GetZ();
+    G4int a = (*conf)[i]->GetA();
     CoulombEnergy += G4double(z*z)/g4pow->Z13(a);
     SumA += a;
     SumZ += z;
@@ -81,92 +85,87 @@ G4FermiConfigurationList::CoulombBarrier(
 
 G4double 
 G4FermiConfigurationList::DecayProbability(G4int A, G4double TotalE, 
-					   G4FermiConfiguration* conf)
+					   const G4FermiConfiguration* conf)
   // Decay probability  for a given channel with K fragments
 {
   // A: Atomic Weight
   // TotalE: Total energy of nucleus
 
-  G4double KineticEnergy = TotalE; // MeV
-  G4double ProdMass = 1.0;
-  G4double SumMass = 0.0;
-  G4double S_n = 1.0;
-  std::set<G4int>      combSet;
-  std::multiset<G4int> combmSet;
-
-  const std::vector<const G4VFermiFragment*> flist = 
+  G4double KineticEnergy = TotalE; 
+  const std::vector<const G4VFermiFragment*>* flist = 
     conf->GetFragmentList();
 
   // Number of fragments
-  G4int K = flist.size();
+  size_t K = flist->size();
+  if(K > frag.size()) { frag.resize(K, 0); }
 
-  for (G4int i=0; i<K; ++i) {
-    G4int a = flist[i]->GetA();
-    combSet.insert(a);
-    combmSet.insert(a);
-    G4double mass = flist[i]->GetFragmentMass();
-    ProdMass *= mass;
-    SumMass += mass;
-    // Spin factor S_n
-    S_n *= flist[i]->GetPolarization();
-    KineticEnergy -= mass + flist[i]->GetExcitationEnergy();
+  for (size_t i=0; i<K; ++i) {
+    frag[i] = (*flist)[i];
+    KineticEnergy -= 
+      ((*flist)[i]->GetFragmentMass() + (*flist)[i]->GetExcitationEnergy());
   }
 
   // Check that there is enough energy to produce K fragments
   KineticEnergy -= CoulombBarrier(flist);
   if (KineticEnergy <= 0.0) { return 0.0; }
 
+  // Spin factor S_n
+  G4double S_n = 1.0;
+
+  // mass factors
+  G4double ProdMass = 1.0;
+  G4double SumMass = 0.0;
+
+  for (size_t i=0; i<K; ++i) {
+    G4double mass = (*flist)[i]->GetFragmentMass();
+    ProdMass *= mass;
+    SumMass += mass;
+    S_n *= (*flist)[i]->GetPolarization();
+  }
+
   G4double MassFactor = ProdMass/SumMass;
   MassFactor *= std::sqrt(MassFactor);  
   
-  // This is the constant (doesn't depend on nucleus) part
   G4double Coeff = g4pow->powN(ConstCoeff*A, K-1);
 
   //JMQ 111009 Bug fixed: gamma function for odd K was wrong  by a factor 2
-  // new implementation explicitely according to standard properties of Gamma function
-  // Calculation of 1/Gamma(3(k-1)/2)
+  //VI  251014 Use G4Pow
   G4double Gamma = 1.0;
-  //  G4double arg = 3.0*(K-1)/2.0 - 1.0;
-  //  while (arg > 1.1) 
-  //    {
-  //      Gamma *= arg; 
-  //      arg--;
-  //    }
-  //  if ((K-1)%2 == 1) Gamma *= std::sqrt(pi);
+  G4double Energ = twopi*KineticEnergy;
 
-  if ((K-1)%2 != 1)
-
-    {
-      G4double arg = 3.0*(K-1)/2.0 - 1.0;
-      while (arg > 1.1) 
-	{
-	  Gamma *= arg; 
-	  arg--;
-	}
-    }
-  else   { 
-    G4double 	n= 3.0*K/2.0-2.0;
-    G4double arg2=2*n-1;
-    while (arg2>1.1)
-      {
-	Gamma *= arg2;
-	arg2  -= 2;
-      }
-    Gamma *= std::sqrt(pi)/g4pow->powZ(2,n);
+  // integer argument of Gamma function
+  if ((K-1)%2 != 1) {
+    G4int N = 3*(K-1)/2;
+    Gamma = g4pow->factorial(N - 1);
+    Energ = g4pow->powN(Energ, N);
+    
+    // n + 1/2 argument of Gamma function
+    // http://en.wikipedia.org/wiki/Gamma_function
+  } else   { 
+    G4int n2 = 3*K - 4;
+    G4int n1 = n2/2;
+    Gamma = sqrtpi*g4pow->factorial(n2)/
+      (g4pow->powN(4.0,n1)*g4pow->factorial(n1));
+    Energ = g4pow->powN(Energ, n1)*sqrt(Energ);
   }
-  // end of new implementation of Gamma function
-  
   
   // Permutation Factor G_n
+  // search for identical fragments
   G4double G_n = 1.0;
-  for (std::set<G4int>::iterator itr = combSet.begin(); 
-       itr != combSet.end(); ++itr)
-    {
-      for (G4int ni = combmSet.count(*itr); ni > 1; ni--) { G_n *= ni; }
+  for(size_t i=0; i<K-1; ++i) {
+    if(frag[i]) {
+      G4int nf = 1;
+      for(size_t j=i+1; j<K; ++j) {
+        if(frag[i] == frag[j]) {
+	  ++nf;
+          frag[j] = 0;
+	}
+      }
+      if(1 < nf) { G_n *= g4pow->factorial(nf); }
     }
+  }
 
-  G4double Weight = Coeff * MassFactor * (S_n / G_n) / Gamma;
-  Weight *=  std::sqrt(g4pow->powN(KineticEnergy,3*(K-1)))/KineticEnergy;
+  G4double Weight = Coeff*MassFactor*S_n*Energ/(G_n*Gamma*KineticEnergy);
 
   return Weight; 
 }
@@ -180,24 +179,40 @@ G4FermiConfigurationList::GetFragments(const G4Fragment& theNucleus)
     SelectConfiguration(theNucleus.GetZ_asInt(), 
 			theNucleus.GetA_asInt(), M);
 
-
   G4FragmentVector* theResult = new G4FragmentVector();
-  size_t nn = conf->size();
-  if(1 >= nn) {
+  if(!conf) { 
     theResult->push_back(new G4Fragment(theNucleus));
-    delete conf;
+    return theResult; 
+  }
+
+  size_t nn = conf->size();
+  if(1 == nn) {
+    theResult->push_back(new G4Fragment(theNucleus));
+    //delete conf;
     return theResult; 
   }
 
   G4ThreeVector boostVector = theNucleus.GetMomentum().boostVector();  
-  std::vector<G4double> mr;
-  mr.reserve(nn);
-  for(size_t i=0; i<nn; ++i) {
-    mr.push_back( (*conf)[i]->GetTotalEnergy() );
+  std::vector<G4LorentzVector*>* mom = 0;
+
+  // one unstable fragment
+  if(1 == nn) {
+    mom = new std::vector<G4LorentzVector*>;
+    G4LorentzVector* lv = 
+      new G4LorentzVector(0.0, 0.0, 0.0, (*conf)[0]->GetTotalEnergy()); 
+    mom->push_back(lv);
+
+    // Fermi BreakUp
+  } else {
+    massRes.clear();
+    for(size_t i=0; i<nn; ++i) {
+      massRes.push_back( (*conf)[i]->GetTotalEnergy() );
+    }
+    mom = thePhaseSpace->Decay(M, massRes);
   }
-  std::vector<G4LorentzVector*>* mom = thePhaseSpace.Decay(M,mr);
   if(!mom) { 
-    delete conf;
+    theResult->push_back(new G4Fragment(theNucleus));
+    //delete conf;
     return theResult; 
   }
 
@@ -221,16 +236,16 @@ G4FermiConfigurationList::GetFragments(const G4Fragment& theNucleus)
   }
   
   delete mom;
-  delete conf;
+  //delete conf;
   return theResult;
 }
 
 const std::vector<const G4VFermiFragment*>* 
 G4FermiConfigurationList::SelectConfiguration(G4int Z, G4int A, G4double mass)
 {
-  std::vector<const G4VFermiFragment*>* res = 
-    new std::vector<const G4VFermiFragment*>;  
-  const std::vector<G4FermiConfiguration*>* conflist = 
+  const std::vector<const G4VFermiFragment*>* res = 0;
+  //   new std::vector<const G4VFermiFragment*>;  
+  const std::vector<const G4FermiConfiguration*>* conflist = 
     thePool->GetConfigurationList(Z, A, mass);
   if(!conflist) { return res; }
   size_t nn = conflist->size();
@@ -251,10 +266,10 @@ G4FermiConfigurationList::SelectConfiguration(G4int Z, G4int A, G4double mass)
 	if(NormalizedWeights[idx] >= prob) { break; }
       }
     }
-    const std::vector<const G4VFermiFragment*> flist = 
-      (*conflist)[idx]->GetFragmentList();
-    size_t nf = flist.size();
-    for(size_t i=0; i<nf; ++i) { res->push_back(flist[i]); }
+    //const std::vector<const G4VFermiFragment*> flist = 
+    res = (*conflist)[idx]->GetFragmentList();
+    //size_t nf = flist.size();
+    //for(size_t i=0; i<nf; ++i) { res->push_back(flist[i]); }
     //G4cout << "FermiBreakUp: " << nn << " conf; selected idx= " 
     //	 << idx << "  Nprod= " << nf << G4endl; 
   }

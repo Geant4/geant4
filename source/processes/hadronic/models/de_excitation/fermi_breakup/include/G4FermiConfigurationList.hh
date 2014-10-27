@@ -56,9 +56,9 @@ public:
   
 private:
 
-  G4double CoulombBarrier(const std::vector<const G4VFermiFragment*>& v);
+  G4double CoulombBarrier(const std::vector<const G4VFermiFragment*>* v);
 
-  G4double DecayProbability(G4int A, G4double TotalE, G4FermiConfiguration*);
+  G4double DecayProbability(G4int A, G4double TotalE, const G4FermiConfiguration*);
 
   const std::vector<const G4VFermiFragment*>*
   SelectConfiguration(G4int Z, G4int A, G4double mass);
@@ -72,20 +72,15 @@ private:
 
   std::vector<G4double> NormalizedWeights;
   
-  // Kappa = V/V_0 it is used in calculation of Coulomb energy
-  static const G4double Kappa;
-  
-  // Nuclear radius r0 (is a model parameter)
-  static const G4double r0;
-
   G4double Coef;
   G4double ConstCoeff;
   size_t   nmax;
   
   G4Pow* g4pow;
 
-  G4FermiPhaseSpaceDecay thePhaseSpace;
-
+  const G4FermiPhaseSpaceDecay* thePhaseSpace;
+  std::vector<G4double>         massRes;
+  std::vector<const G4VFermiFragment*> frag;  
 };
 
 

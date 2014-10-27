@@ -53,8 +53,6 @@ private:
   const G4UnstableFermiFragment & operator=(const G4UnstableFermiFragment &right);
   G4bool operator==(const G4UnstableFermiFragment &right) const;
   G4bool operator!=(const G4UnstableFermiFragment &right) const;
-
-  G4FermiPhaseSpaceDecay thePhaseSpace;
   
 protected:
 

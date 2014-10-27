@@ -14,6 +14,26 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26 Sept 2014 Vladimir Ivanchenko (hadr-deex-V10-00-13)
+----------------------------------------------------------
+- G4ExcitationHandler - fixed problem in isomere production providing
+    energy non-concervation on level of 1 MeV
+
+25 Sept 2014 Vladimir Ivanchenko (hadr-deex-V10-00-12)
+----------------------------------------------------------
+- G4ExcitationHandler, G4Evaporation, G4PhotonEvaporation - added 
+    protection against abnormal fragments 
+
+25 Sept 2014 Vladimir Ivanchenko (hadr-deex-V10-00-11)
+----------------------------------------------------------
+- G4FermiFragmentsPool - is made pure static singletone, all methods
+    and data const in run time, no decay of exotic states
+- G4FermiConfigurationList - reduced memory churn by reusing 
+    vectors which are members of the class; improved and verified 
+    computation of probabilities; public methods are const
+- G4FermiConfiguration, G4UnstableFermiFragment - removed unused 
+    members; make all methods be const
+
 22 October 2014 Davide Mancusi (hadr-deex-V10-00-10)
 ----------------------------------------------------------
 - Set af/an parameter for INCL++ to 1.02 for all nuclei.

@@ -44,13 +44,11 @@ public:
 
   ~G4FermiConfiguration();
 
-  G4FragmentVector* GetFragments(const G4Fragment & theNucleus);
-
   inline G4int GetA() const;
   inline G4int GetZ() const;
   inline G4double GetMass() const;
   
-  inline const std::vector<const G4VFermiFragment*>& GetFragmentList();
+  inline const std::vector<const G4VFermiFragment*>* GetFragmentList() const;
 
 private:
 
@@ -83,10 +81,10 @@ inline G4double G4FermiConfiguration::GetMass() const
   return totalMass;
 }
 
-inline const std::vector<const G4VFermiFragment*>& 
-G4FermiConfiguration::GetFragmentList()
+inline const std::vector<const G4VFermiFragment*>* 
+G4FermiConfiguration::GetFragmentList() const
 {
-  return Configuration;
+  return &Configuration;
 }
 
 #endif

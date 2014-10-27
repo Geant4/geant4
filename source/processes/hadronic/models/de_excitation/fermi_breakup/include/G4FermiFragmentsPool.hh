@@ -38,24 +38,23 @@
 #include "globals.hh"
 #include "G4VFermiFragment.hh"
 #include "G4FermiConfiguration.hh"
+#include "G4FermiPhaseSpaceDecay.hh"
 #include <vector>
-#include "G4ThreadLocalSingleton.hh"
 
 class G4FermiFragmentsPool
 {
-
-friend class G4ThreadLocalSingleton<G4FermiFragmentsPool>;
-
 public:
 
   static G4FermiFragmentsPool* Instance();
 
   ~G4FermiFragmentsPool();
 
-  const std::vector<G4FermiConfiguration*>* 
-  GetConfigurationList(G4int Z, G4int A, G4double mass);
+  const std::vector<const G4FermiConfiguration*>* 
+  GetConfigurationList(G4int Z, G4int A, G4double mass) const;
 
   const G4VFermiFragment* GetFragment(G4int Z, G4int A) const;
+
+  const G4FermiPhaseSpaceDecay* GetFermiPhaseSpaceDecay() const;
 
   G4int GetMaxZ() const;
 
@@ -71,7 +70,7 @@ private:
 
   G4bool IsAvailable(G4int Z, G4int A) const;
 
-  static G4ThreadLocal G4FermiFragmentsPool* theInstance;
+  static G4FermiFragmentsPool* theInstance;
 
   std::vector<const G4VFermiFragment*> fragment_pool;
 
@@ -80,12 +79,12 @@ private:
   G4int verbose;
  
   // list of configuration sorted by A for 1, 2, 3, 4 final fragments
-  std::vector<G4FermiConfiguration*> list1[17]; 
-  std::vector<G4FermiConfiguration*> list2[17]; 
-  std::vector<G4FermiConfiguration*> list3[17];
-  std::vector<G4FermiConfiguration*> list4[17];
-  // list of exotic configurations
-  std::vector<G4FermiConfiguration*> listextra;
+  std::vector<const G4FermiConfiguration*> list1[17]; 
+  std::vector<const G4FermiConfiguration*> list2[17]; 
+  std::vector<const G4FermiConfiguration*> list3[17];
+  std::vector<const G4FermiConfiguration*> list4[17];
+
+  G4FermiPhaseSpaceDecay thePhaseSpace;
 };
 
 #endif

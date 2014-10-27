@@ -90,7 +90,7 @@ G4VGammaTransition* G4ContinuumGammaDeexcitation::CreateTransition()
 	   << "  "  << _levelManager
 	   << G4endl;
   }
-  G4VGammaTransition* gt =  
+  G4VGammaTransition* gt = 
     new G4ContinuumGammaTransition(_levelManager,Z,A,excitation,_verbose );
 
   return gt;

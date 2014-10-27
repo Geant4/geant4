@@ -222,11 +222,11 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 	  }
 	}
     }
-  /*
-  G4cout << "## After first step " << theEvapList.size() << " for evap;  "
-   << thePhotoEvapList.size() << " for photo-evap; " 
-   << theResults.size() << " results. " << G4endl; 
-  */
+  
+  //G4cout << "## After first step " << theEvapList.size() << " for evap;  "
+  // << thePhotoEvapList.size() << " for photo-evap; " 
+  // << theResults.size() << " results. " << G4endl; 
+  
   // -----------------------------------
   // FermiBreakUp and De-excitation loop
   // -----------------------------------
@@ -241,7 +241,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 	  
       // Fermi Break-Up 
       G4bool wasFBU = false;
-      if (A < maxAForFermiBreakUp && Z < maxZForFermiBreakUp) 
+      if (A < maxAForFermiBreakUp && Z < maxZForFermiBreakUp && Z > 0 && A > Z) 
 	{
 	  theTempResult = theFermiModel->BreakItUp(*(*iList));
 	  wasFBU = true; 
@@ -249,6 +249,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
           if(1 == theTempResult->size()) {
             delete *(theTempResult->begin());
             delete theTempResult;
+	    //G4cout << "start evaporation Z= "<< Z << "  A= " << A << G4endl;
 	    theTempResult = theEvaporation->BreakItUp(*(*iList)); 
 	  }
 	}
@@ -372,6 +373,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
       theFragmentA = (*i)->GetA_asInt();
       theFragmentZ = (*i)->GetZ_asInt();
       G4double etot= (*i)->GetMomentum().e();
+      G4double eexc = 0.0;
       const G4ParticleDefinition* theKindOfFragment = 0;
       if (theFragmentA == 0) {       // photon or e-
 	theKindOfFragment = (*i)->GetParticleDefinition();   
@@ -389,65 +391,52 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState) const
 	theKindOfFragment = G4Alpha::AlphaDefinition();;
       } else {
 
-	// ground state by default
-        G4double eexc = (*i)->GetExcitationEnergy();
-        G4double excitation = eexc;
-
-	G4int level = 0;
+	// fragment
+        eexc = (*i)->GetExcitationEnergy();
 	theKindOfFragment = 
-	  theTableOfIons->GetIon(theFragmentZ,theFragmentA,level);
-	/*
+	  theTableOfIons->GetIon(theFragmentZ,theFragmentA,eexc);
+	/*	
 	G4cout << "### Find ion Z= " << theFragmentZ << " A= " << theFragmentA
-	       << " Eexc(MeV)= " << excitation/MeV << "  " 
-	       << theKindOfFragment << G4endl;
+	       << " Eexc(MeV)= " << eexc/MeV << "  " << theKindOfFragment << G4endl;
 	*/
-	// production of an isomer
-        if(eexc > minExcitation) {
-          G4double elevel1 = 0.0;
-          G4double elevel2 = 0.0;
-	  const G4ParticleDefinition* ion = 0;
-          for(level=1; level<9; ++level) {
-	    ion = theTableOfIons->GetIon(theFragmentZ,theFragmentA,level);
-            //G4cout << level << "  " << ion << G4endl;
-            if(ion) {
-	      const G4Ions* ip = dynamic_cast<const G4Ions*>(ion);
-	      if(ip) {
-		elevel2 = ip->GetExcitationEnergy();
-		//G4cout<<"   Level "<<level<<" E(MeV)= "<<elevel2/MeV<<G4endl;
-		// close level
-		if(std::fabs(eexc - elevel2) < minExcitation) {
-		  excitation = eexc - elevel2;
-		  theKindOfFragment = ion;
-		  break;
-		  // previous level was closer
-		} else if(elevel2 - eexc >= eexc - elevel1) {
-		  excitation = eexc - elevel1;
-		  break;
-		  // will check next level and save current
-		} else {
-		  theKindOfFragment = ion;
-		  excitation = eexc - elevel2;
-		  elevel1 = elevel2;
-		}
-	      }
-	    } else {
-	      break;
-	    }
-	  }
-	}
-	// correction of total energy for ground state isotopes
-	etot += excitation;
-        G4double ionmass = theKindOfFragment->GetPDGMass();
-        if(etot < ionmass) { etot = ionmass; }
       }
-      if (theKindOfFragment != 0) 
-	{
+      // fragment identified
+      if(theKindOfFragment) {
+	G4ReactionProduct * theNew = new G4ReactionProduct(theKindOfFragment);
+	theNew->SetMomentum((*i)->GetMomentum().vect());
+	theNew->SetTotalEnergy(etot);
+	theNew->SetFormationTime((*i)->GetCreationTime());
+	theReactionProductVector->push_back(theNew);
+
+	// fragment not found out ground state is created
+      } else { 
+	theKindOfFragment = 
+	  theTableOfIons->GetIon(theFragmentZ,theFragmentA,0.0);
+	if(theKindOfFragment) {
+	  G4ThreeVector mom(0.0,0.0,0.0); 
+	  G4double ionmass = theKindOfFragment->GetPDGMass();
+	  if(etot <= ionmass) {
+	    etot = ionmass;
+	  } else {
+	    G4double ptot = sqrt((etot - ionmass)*(etot + ionmass));
+	    mom = ((*i)->GetMomentum().vect().unit())*ptot;
+	  }
 	  G4ReactionProduct * theNew = new G4ReactionProduct(theKindOfFragment);
-	  theNew->SetMomentum((*i)->GetMomentum().vect());
+	  theNew->SetMomentum(mom);
 	  theNew->SetTotalEnergy(etot);
 	  theNew->SetFormationTime((*i)->GetCreationTime());
 	  theReactionProductVector->push_back(theNew);
+	  /*	
+	  G4cout << "### Find ion Z= " << theFragmentZ << " A= " << theFragmentA
+	  << " ground state, energy corrected  " << theKindOfFragment << G4endl;
+	  */
+	} else {
+	  /*	
+		G4cout << "### Find ion Z= " << theFragmentZ 
+		<< " A= " << theFragmentA << " failed  " << G4endl;
+	  */
 	}
+      }
       delete (*i);
     }
 

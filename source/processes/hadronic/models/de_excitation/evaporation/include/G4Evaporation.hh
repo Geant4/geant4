@@ -55,6 +55,7 @@
 class G4VEvaporationFactory;
 class G4NistManager;
 class G4IonTable;
+class G4FermiFragmentsPool;
 
 class G4Evaporation : public G4VEvaporation
 {
@@ -97,7 +98,7 @@ private:
   G4NistManager* nist;
   G4IonTable*    theTableOfIons;
   G4UnstableFragmentBreakUp unstableBreakUp;
-    
+  G4FermiFragmentsPool* thePool;   
 };
 
 #endif
