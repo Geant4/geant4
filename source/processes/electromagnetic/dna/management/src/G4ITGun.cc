@@ -19,5 +19,5 @@ G4ITGun::~G4ITGun() {
 
 void G4ITGun::PushTrack(G4Track* track)
 {
-	G4ITTrackHolder::Instance()->PushTrack(track);
+	G4VITTrackHolder::Instance()->Push(track);
 }

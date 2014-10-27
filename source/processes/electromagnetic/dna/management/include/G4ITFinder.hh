@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ITManager.hh 84670 2014-10-17 15:23:24Z matkara $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -44,34 +44,94 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
+#ifndef G4ITManager_hh
+#define G4ITManager_hh 1
 
-#ifndef G4ITMODELMANAGER_H
-#define G4ITMODELMANAGER_H
+#include <G4AllITFinder.hh>
 
 #include "globals.hh"
 #include <map>
-#include "G4VITStepModel.hh"
+#include "G4KDTree.hh"
+#include "G4KDTreeResult.hh"
+#include "G4Track.hh"
+#include "G4ITTrackHolder.hh"
 
-/**
-  * G4ITModelManager chooses which model to use according
-  * to the global simulation time.
-  */
-class G4ITModelManager
+class G4VITFinder
 {
-
 public:
-    G4ITModelManager();
-    ~G4ITModelManager();
-    void Initialize();
-    G4ITModelManager(const G4ITModelManager& other);
-    G4ITModelManager& operator=(const G4ITModelManager& rhs);
-    void SetModel(G4VITStepModel* aModel, G4double startingTime);
-    G4VITStepModel* GetModel(const G4double globalTime);
-
-protected :
-    typedef std::map<G4double /*startingTime*/, G4VITStepModel* /*aModel*/>  mapModels ;
-    mapModels fModels ;
-    G4bool fIsInitialized ;
+  G4VITFinder();
+  virtual ~G4VITFinder(){;}
+  virtual void Clear() = 0;
+  virtual void SetVerboseLevel(G4int level) = 0;
+  virtual G4int GetVerboseLevel() = 0;
+  virtual void Push(G4Track* track) = 0;
+  virtual G4ITType GetITType() = 0;
+  virtual void UpdatePositionMap() = 0;
 };
 
-#endif // G4ITMODELMANAGER_H
+/**
+ * Localize the nearest neighbor
+ * For now, G4KDTree is used
+ */
+
+template<class T>//, class SearcherT = G4KDTree>
+class G4ITFinder: public G4VITFinder
+{
+  static G4ThreadLocal G4ITFinder * fInstance;
+  G4ITFinder();
+
+  typedef std::map<int, G4KDTree*> TreeMap;
+  TreeMap fTree;
+
+  int fVerbose;
+
+public:
+  static G4ITFinder * Instance();
+  virtual ~G4ITFinder();
+  virtual void Clear();
+
+  virtual void SetVerboseLevel(G4int level)
+  {
+    fVerbose = level;
+  }
+
+  virtual G4int GetVerboseLevel()
+  {
+    return fVerbose;
+  }
+
+  virtual void Push(G4Track* track);
+
+  virtual G4ITType GetITType()
+  {
+    return T::ITType();
+  }
+
+  virtual void UpdatePositionMap();
+  static void iUpdatePositionMap();
+
+  G4KDTreeResultHandle FindNearestInRange(const T* point /*from this point*/,
+                                          const T* key /*for this type*/,
+                                          G4double /*range*/);
+  G4KDTreeResultHandle FindNearest(const G4ThreeVector&,
+                                   const T* /*for this type*/);
+  G4KDTreeResultHandle FindNearest(const T* /*from this point*/,
+                                   const T* /*for this type*/);
+  G4KDTreeResultHandle FindNearestInRange(const G4ThreeVector& /*from this point*/,
+                                          const T* /*for this type*/,
+                                          G4double /*range*/);
+};
+
+#ifdef TEMPLATE
+#undef TEMPLATE
+#endif
+
+#define TEMPLATE template<class T>
+#define G4ITMANAGER G4ITFinder<T>
+
+#include "G4ITFinder.icc"
+
+#undef TEMPLATE
+#undef G4ITMANAGER
+
+#endif

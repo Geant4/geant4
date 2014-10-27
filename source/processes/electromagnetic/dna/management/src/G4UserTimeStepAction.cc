@@ -33,8 +33,8 @@
 //
 // -------------------------------------------------------------------
 
+#include <G4VScheduler.hh>
 #include "G4UserTimeStepAction.hh"
-#include "G4ITTimeStepper.hh"
 
 G4UserTimeStepAction::G4UserTimeStepAction()
 {;}
@@ -52,10 +52,10 @@ G4UserTimeStepAction& G4UserTimeStepAction::operator=(const G4UserTimeStepAction
 
 void G4UserTimeStepAction::SetMinimumTimeSteps(std::map<double, double>* timeSteps)
 {
-	G4ITTimeStepper::Instance()-> SetTimeSteps(timeSteps);
+	G4VScheduler::Instance()-> SetTimeSteps(timeSteps);
 }
 
 void G4UserTimeStepAction::AddTimeStep(double startingTime, double timeStep)
 {
-  G4ITTimeStepper::Instance()-> AddTimeStep(startingTime,timeStep);
+  G4VScheduler::Instance()-> AddTimeStep(startingTime,timeStep);
 }

@@ -23,28 +23,43 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ITTrackHolder.cc 84650 2014-10-17 11:47:17Z matkara $
 //
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
+//
+// WARNING : This class is released as a prototype.
 //
 // History:
 // -----------
-// 10 Oct 2011 M.Karamitros created
+// 16 Mai 2012 M.Karamitros created
 //
 // -------------------------------------------------------------------
 
-#include "G4ITManager.hh"
+#include "G4VITTrackHolder.hh"
+#include "G4ITTrackHolder.hh"
+#include "G4Track.hh"
+#include "G4Types.hh"
 
+G4ThreadLocal G4VITTrackHolder* G4VITTrackHolder::fInstance(0);
 
-//Definitons of G4ITManager<IT>::const_iterator	
-
-
-G4VITManager::const_iterator::const_iterator(G4ITBox* box) :
-                                G4VITManager::iterator(box)
-{;}
-//_____________________________________________________________________
-
-const G4IT* G4VITManager::const_iterator::operator*()
+G4VITTrackHolder::G4VITTrackHolder()
 {
-        return fNextIT;
+  fInstance = this;
 }
+
+G4VITTrackHolder::~G4VITTrackHolder()
+{
+  fInstance = 0;
+}
+
+G4VITTrackHolder* G4VITTrackHolder::Instance()
+{
+  if (fInstance == 0) fInstance = new G4ITTrackHolder();
+  return fInstance;
+}
+
+void G4VITTrackHolder::Push(G4Track* track)
+{
+  delete track;
+}
+

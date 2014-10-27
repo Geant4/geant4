@@ -41,12 +41,12 @@ include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4emdna-man
     HEADERS
         AddClone_def.hh
-        G4AllITManager.hh
+        G4AllITFinder.hh
         G4ITBox.hh
         G4IT.hh
         G4ITGun.hh
-        G4ITManager.hh
-        G4ITManager.icc
+        G4ITFinder.hh
+        G4ITFinder.icc
         G4ITModelHandler.hh
         G4ITModelManager.hh
         G4ITModelProcessor.hh
@@ -54,17 +54,16 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITNavigator.hh
         G4ITNavigator1.hh
         G4ITNavigator1.icc
-	G4ITNavigator2.hh
-	G4ITNavigator2.icc
-	G4ITPathFinder.hh
+        G4ITNavigator2.hh
+        G4ITNavigator2.icc
+        G4ITPathFinder.hh
         G4ITReactionChange.hh
         G4ITReactionTable.hh
         G4ITSafetyHelper.hh
-        G4ITStepManager.hh
-        G4ITSteppingMessenger.hh
+        G4ITScheduler.hh
+        G4ITSchedulerMessenger.hh
         G4ITStepProcessor.hh
         G4ITStepStatus.hh
-        G4ITTimeStepper.hh
         G4ITTrackHolder.hh
         G4ITTrackingInteractivity.hh
         G4ITTrackingManager.hh
@@ -79,9 +78,9 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4MemStat.hh
         G4ReferenceCast.hh
         G4memory.hh
-	G4TrackingInformation.hh
+        G4TrackingInformation.hh
         G4TrackList.hh
-	G4TrackState.hh
+        G4TrackState.hh
         G4UserTimeStepAction.hh
         G4VITProcess.hh
         G4VITReactionProcess.hh
@@ -89,15 +88,14 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4VITRestProcess.hh
         G4VITStepModel.hh
         G4VITTimeStepComputer.hh
+        G4VITTrackHolder.hh
+        G4VScheduler.hh
     SOURCES
-        G4AllITManager.cc
+        G4AllITFinder.cc
         G4ITBox.cc
         G4IT.cc
         G4ITGun.cc
-        G4ITManager_allbox_iterator.cc
-        G4ITManager.cc
-        G4ITManager_const_iterator.cc
-        G4ITManager_iterator.cc
+        G4ITFinder.cc
         G4ITModelHandler.cc
         G4ITModelManager.cc
         G4ITModelProcessor.cc
@@ -109,15 +107,13 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITReactionChange.cc
         G4ITReactionTable.cc
         G4ITSafetyHelper.cc
-        G4ITStepManager.cc
-        G4ITSteppingMessenger.cc
+        G4ITScheduler.cc
+        G4ITSchedulerMessenger.cc
         G4ITStepProcessor2.cc
         G4ITStepProcessor.cc
-        G4ITTimeStepper.cc
         G4ITTrackHolder.cc
         G4ITTrackingInteractivity.cc
         G4ITTrackingManager.cc
-	G4TrackState.cc
         G4ITTransportation.cc
         G4ITTransportationManager.cc
         G4ITType.cc
@@ -136,6 +132,8 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4VITRestProcess.cc
         G4VITStepModel.cc
         G4VITTimeStepComputer.cc
+        G4VITTrackHolder.cc
+        G4VScheduler.cc
     GRANULAR_DEPENDENCIES
         G4detector
         G4geometrymng

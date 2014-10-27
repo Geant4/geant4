@@ -14,6 +14,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+25-10-2014  MK, tag emdna-V10-00-43
+- remove useless G4VITScheduler
+
+25-10-2014  MK, tag emdna-V10-00-42
+- correct warnings
+
+24-10-2014  MK, tag emdna-V10-00-41
+- G4ITTimeStepper-->G4VScheduler
+- G4ITStepManager-->G4ITScheduler
+- G4ITStepManager-->G4ITSchedulerMessenger
+- G4AllITManager & G4ITManager deleted
+- G4ITFinder added
+- G4VITTrackHolder added
+- G4ITTrackHolder implemented
+- code cleaned + useless classes removed
+
+24-10-2014  MK, tag emdna-V10-00-40
+- G4ITStepManager: remove verbose at closure time
+
 21-10-2014  MK, tag emdna-V10-00-39
 - try to solve crash at closure time
 

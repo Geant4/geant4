@@ -18,16 +18,16 @@ class G4UserTimeStepAction;
 class G4ITGun;
 class G4ITTrackingInteractivity;
 
-class G4ITTimeStepper
+class G4VScheduler
 {
 protected:
-  G4ITTimeStepper();
-  virtual ~G4ITTimeStepper();
+  G4VScheduler();
+  virtual ~G4VScheduler();
 private:
-  static G4ThreadLocal G4ITTimeStepper* fpInstance;
+  static G4ThreadLocal G4VScheduler* fpInstance;
 
 public:
-  static G4ITTimeStepper* Instance();
+  static G4VScheduler* Instance();
   virtual void Initialize(){;}
   virtual void Reset(){;}
 

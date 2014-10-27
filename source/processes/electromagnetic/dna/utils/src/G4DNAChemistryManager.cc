@@ -37,23 +37,24 @@
 // -------------------------------------------------------------------
 
 #include "G4DNAChemistryManager.hh"
+
+#include <G4VScheduler.hh>
 #include "G4SystemOfUnits.hh"
 #include "G4Molecule.hh"
-#include "G4ITTrackHolder.hh"
+#include "G4VITTrackHolder.hh"
 #include "G4H2O.hh"
 #include "G4DNAMolecularReactionTable.hh"
 #include "G4DNAWaterExcitationStructure.hh"
 #include "G4DNAWaterIonisationStructure.hh"
 #include "G4Electron_aq.hh"
-#include "G4ITManager.hh"
 #include "G4MolecularConfiguration.hh"
 #include "G4MoleculeCounter.hh"
-#include "G4ITTimeStepper.hh"
 #include "G4VUserChemistryList.hh"
 #include "G4AutoLock.hh"
 #include "G4UIcmdWithABool.hh"
 #include "G4GeometryManager.hh"
 #include "G4StateManager.hh"
+#include "G4MoleculeFinder.hh"
 
 using namespace std;
 
@@ -76,6 +77,7 @@ G4DNAChemistryManager::G4DNAChemistryManager() :
   fGeometryClosed = false;
   fPhysicsTableBuilt = false;
   fForceThreadReinitialization = false;
+  fFileInitialized = false;
 }
 
 G4DNAChemistryManager*
@@ -214,7 +216,7 @@ void G4DNAChemistryManager::Run()
                   description);
     }
 
-    G4ITTimeStepper::Instance()->Process();
+    G4VScheduler::Instance()->Process();
     CloseFile();
   }
 }
@@ -222,14 +224,14 @@ void G4DNAChemistryManager::Run()
 void G4DNAChemistryManager::Gun(G4ITGun* gun, bool physicsTableToBuild)
 {
   fBuildPhysicsTable = physicsTableToBuild;
-  G4ITTimeStepper::Instance()->SetGun(gun);
+  G4VScheduler::Instance()->SetGun(gun);
 }
 
 void G4DNAChemistryManager::InitializeMaster()
 {
   if (fMasterInitialized == false)
   {
-    G4ITTimeStepper::Instance(); // initialize the time stepper
+    G4VScheduler::Instance(); // initialize the time stepper
 
     if (fpUserChemistryList)
     {
@@ -263,7 +265,7 @@ void G4DNAChemistryManager::InitializeThread()
         if (fGeometryClosed == false)
         {
           G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
-          G4cout << "Start closing geometry." << G4endl;
+          // G4cout << "Start closing geometry." << G4endl;
           geomManager->OpenGeometry();
           geomManager->CloseGeometry(true, true);
           fGeometryClosed = true;
@@ -273,7 +275,7 @@ void G4DNAChemistryManager::InitializeThread()
       }
       fpUserChemistryList->ConstructTimeStepModel(
           G4DNAMolecularReactionTable::GetReactionTable());
-      G4ITTimeStepper::Instance()->Initialize();
+      G4VScheduler::Instance()->Initialize();
       fpgThreadInitialized_tl = new G4bool(true);
     }
     else
@@ -284,7 +286,7 @@ void G4DNAChemistryManager::InitializeThread()
                   FatalException, description);
     }
 
-    G4MoleculeCounter::Instance()->Initialize();
+    G4MoleculeCounter::InitializeInstance();
   }
 
   InitializeFile();
@@ -292,7 +294,10 @@ void G4DNAChemistryManager::InitializeThread()
 
 void G4DNAChemistryManager::InitializeFile()
 {
-  if (fpgOutput_tl == 0 || fWriteFile == false) return;
+  if (fpgOutput_tl == 0 || fWriteFile == false || fFileInitialized)
+  {
+    return;
+  }
 
   *fpgOutput_tl << std::setprecision(6) << std::scientific;
   *fpgOutput_tl << setw(11) << left << "#Parent ID" << setw(10) << "Molecule"
@@ -301,11 +306,13 @@ void G4DNAChemistryManager::InitializeFile()
                 << "Y pos of parent [nm]" << setw(22) << "Z pos of parent [nm]"
                 << setw(14) << "X pos [nm]" << setw(14) << "Y pos [nm]"
                 << setw(14) << "Z pos [nm]" << G4endl<< setw(21) << "#"
-  << setw(13) << "1)io/ex=0/1"
-  << G4endl
-  << setw(21) << "#"
-  << setw(13) << "2)level=0...5"
-  << G4endl;
+                << setw(13) << "1)io/ex=0/1"
+                << G4endl
+                << setw(21) << "#"
+                << setw(13) << "2)level=0...5"
+                << G4endl;
+
+  fFileInitialized = true;
 }
 
 void G4DNAChemistryManager::WriteInto(const G4String& output,
@@ -314,19 +321,17 @@ void G4DNAChemistryManager::WriteInto(const G4String& output,
   fpgOutput_tl = new std::ofstream();
   fpgOutput_tl->open(output.data(), mode);
   fWriteFile = true;
+  fFileInitialized = false;
 }
 
 void G4DNAChemistryManager::CloseFile()
 {
-
-  if (fpgOutput_tl == 0 || fWriteFile == false) return;
+  if (fpgOutput_tl == 0) return;
 
   if (fpgOutput_tl->is_open())
   {
     fpgOutput_tl->close();
   }
-
-  fWriteFile = false;
 }
 
 G4DNAWaterExcitationStructure*
@@ -355,12 +360,14 @@ void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modificat
 {
   if (fWriteFile)
   {
+    if(!fFileInitialized) InitializeFile();
+
     G4double energy = -1.;
 
     switch (modification)
     {
       case eDissociativeAttachment:
-        energy = -1;
+        energy = 0;
         break;
       case eExcitedMolecule:
         energy = GetExcitationLevel()->ExcitationEnergy(electronicLevel);
@@ -408,7 +415,7 @@ void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modificat
     H2OTrack -> SetTrackStatus(fStopButAlive);
     H2OTrack -> SetKineticEnergy(0.);
 
-    G4ITTrackHolder::Instance()->PushTrack(H2OTrack);
+    G4VITTrackHolder::Instance()->Push(H2OTrack);
   }
 }
 
@@ -418,6 +425,8 @@ void G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* theIncomingTra
 {
   if (fWriteFile)
   {
+    if(!fFileInitialized) InitializeFile();
+
     *fpgOutput_tl << setw(11) << theIncomingTrack->GetTrackID() << setw(10)
                   << "e_aq" << setw(14) << -1 << std::setprecision(2)
                   << std::fixed << setw(13)
@@ -453,8 +462,7 @@ void G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* theIncomingTra
     }
     e_aqTrack -> SetTrackStatus(fAlive);
     e_aqTrack -> SetParentID(theIncomingTrack->GetTrackID());
-    G4ITTrackHolder::Instance()->PushTrack(e_aqTrack);
-    G4ITManager<G4Molecule>::Instance()->Push(e_aqTrack);
+    G4VITTrackHolder::Instance()->Push(e_aqTrack);
   }
 }
 
@@ -465,6 +473,8 @@ void G4DNAChemistryManager::PushMolecule(G4Molecule*& molecule,
 {
   if (fWriteFile)
   {
+    if(!fFileInitialized) InitializeFile();
+
     *fpgOutput_tl << setw(11) << parentID << setw(10) << molecule->GetName()
                   << setw(14) << -1 << std::setprecision(2) << std::fixed
                   << setw(13) << -1 << std::setprecision(6) << std::scientific
@@ -479,8 +489,7 @@ void G4DNAChemistryManager::PushMolecule(G4Molecule*& molecule,
     G4Track* track = molecule->BuildTrack(time,position);
     track -> SetTrackStatus(fAlive);
     track -> SetParentID(parentID);
-    G4ITTrackHolder::Instance()->PushTrack(track);
-    G4ITManager<G4Molecule>::Instance()->Push(track);
+    G4VITTrackHolder::Instance()->Push(track);
   }
   else
   {
@@ -494,6 +503,8 @@ void G4DNAChemistryManager::PushMoleculeAtParentTimeAndPlace(G4Molecule*& molecu
 {
   if (fWriteFile)
   {
+    if(!fFileInitialized) InitializeFile();
+
     *fpgOutput_tl << setw(11) << theIncomingTrack->GetTrackID() << setw(10)
                   << molecule->GetName() << setw(14) << -1
                   << std::setprecision(2) << std::fixed << setw(13)
@@ -509,11 +520,11 @@ void G4DNAChemistryManager::PushMoleculeAtParentTimeAndPlace(G4Molecule*& molecu
 
   if(fActiveChemistry)
   {
-    G4Track* track = molecule->BuildTrack(theIncomingTrack->GetGlobalTime(),theIncomingTrack->GetPosition());
+    G4Track* track = molecule->BuildTrack(theIncomingTrack->GetGlobalTime(),
+                                          theIncomingTrack->GetPosition());
     track -> SetTrackStatus(fAlive);
     track -> SetParentID(theIncomingTrack->GetTrackID());
-    G4ITTrackHolder::Instance()->PushTrack(track);
-    G4ITManager<G4Molecule>::Instance()->Push(track);
+    G4VITTrackHolder::Instance()->Push(track);
   }
   else
   {

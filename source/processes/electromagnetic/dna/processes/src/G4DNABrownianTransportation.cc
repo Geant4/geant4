@@ -42,6 +42,8 @@
 #include <CLHEP/Random/Stat.h>
 
 #include "G4DNABrownianTransportation.hh"
+
+#include <G4VScheduler.hh>
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh"
@@ -53,7 +55,6 @@
 #include "G4UnitsTable.hh"
 #include "G4NistManager.hh"
 #include "G4DNAMolecularMaterial.hh"
-#include "G4ITTimeStepper.hh"
 #include "G4ITNavigator.hh"
 
 using namespace std;
@@ -481,8 +482,8 @@ AlongStepGetPhysicalInteractionLength(const G4Track& track,
     }
 
     double minTimeStepAllowed =
-        G4ITTimeStepper::Instance()->GetLimitingTimeStep();
-    double currentMinTimeStep = G4ITTimeStepper::Instance()->GetTimeStep();
+        G4VScheduler::Instance()->GetLimitingTimeStep();
+    double currentMinTimeStep = G4VScheduler::Instance()->GetTimeStep();
 
     if (State(theInteractionTimeLeft) < minTimeStepAllowed && State(
         theInteractionTimeLeft)

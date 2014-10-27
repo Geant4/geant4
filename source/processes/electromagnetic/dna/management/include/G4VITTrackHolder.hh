@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ITTrackHolder.hh 84650 2014-10-17 11:47:17Z matkara $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -45,33 +45,33 @@
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
 
-#ifndef G4ITMODELMANAGER_H
-#define G4ITMODELMANAGER_H
+#ifndef G4VITTRACKHOLDER_HH
+#define G4VITTRACKHOLDER_HH
 
-#include "globals.hh"
-#include <map>
-#include "G4VITStepModel.hh"
+#include "G4Types.hh"
+
+class G4Track;
 
 /**
-  * G4ITModelManager chooses which model to use according
-  * to the global simulation time.
+  * G4ITTrackHolder is an empty interface that permits to push tracks to the IT system
+  * without actually depending on the IT tracking system.
+  * However, G4ITTrackHolder does not permit to retrieve any track.
   */
-class G4ITModelManager
+
+class G4VITTrackHolder
 {
+protected :
+    G4VITTrackHolder();
+    virtual ~G4VITTrackHolder();
+    static G4ThreadLocal G4VITTrackHolder* fInstance;
 
 public:
-    G4ITModelManager();
-    ~G4ITModelManager();
-    void Initialize();
-    G4ITModelManager(const G4ITModelManager& other);
-    G4ITModelManager& operator=(const G4ITModelManager& rhs);
-    void SetModel(G4VITStepModel* aModel, G4double startingTime);
-    G4VITStepModel* GetModel(const G4double globalTime);
-
-protected :
-    typedef std::map<G4double /*startingTime*/, G4VITStepModel* /*aModel*/>  mapModels ;
-    mapModels fModels ;
-    G4bool fIsInitialized ;
+    static G4VITTrackHolder* Instance();
+    virtual void Push(G4Track*);
+    inline virtual size_t GetNTracks()
+    {
+      return 0;
+    }
 };
 
-#endif // G4ITMODELMANAGER_H
+#endif // G4ITTRACKHOLDER_HH

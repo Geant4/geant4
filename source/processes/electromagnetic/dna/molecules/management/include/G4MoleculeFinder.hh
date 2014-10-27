@@ -23,65 +23,29 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITSteppingMessenger.hh 60427 2012-07-11 16:34:35Z matkara $
-//
-// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
-//
-// WARNING : This class is released as a prototype.
-// It might strongly evolve or even disapear in the next releases.
+// $Id: G4ITManager.hh 84670 2014-10-17 15:23:24Z matkara $
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
 // The code is developed in the framework of the ESA AO7146
 //
-// We would be very happy hearing from you, so do not hesitate to send us your feedback!
+// We would be very happy hearing from you, send us your feedback! :)
 //
-// In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
-// If you use Geant4-DNA chemistry and you publish papers about your software, in addition to the general paper on Geant4-DNA:
+// In order for Geant4-DNA to be maintained and still open-source,
+// article citations are crucial.
+// If you use Geant4-DNA chemistry and you publish papers about your software,
+// in addition to the general paper on Geant4-DNA:
 //
 // Int. J. Model. Simul. Sci. Comput. 1 (2010) 157–178
 //
-// we ask that you please cite the following papers reference papers on chemistry:
+// we would be very happy if you could please also cite the following
+// reference papers on chemistry:
 //
 // J. Comput. Phys. 274 (2014) 841-882
-// Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
+// Prog. Nucl. Sci. Tec. 2 (2011) 503-508
 
-#ifndef G4ITSTEPPINGMESSENGER_H
-#define G4ITSTEPPINGMESSENGER_H
-
-class G4ITStepManager;
-class G4UIdirectory;
-class G4UIcmdWithoutParameter;
-class G4UIcmdWithAnInteger;
-class G4UIcommand;
-class G4UIcmdWithADoubleAndUnit;
-
-#include "G4UImessenger.hh"
-#include "globals.hh"
-
-class G4ITSteppingMessenger: public G4UImessenger
-{
-  public:
-    G4ITSteppingMessenger(G4ITStepManager* runMgr);
-    ~G4ITSteppingMessenger();
-
-  public:
-    void SetNewValue(G4UIcommand * command,G4String newValues);
-    G4String GetCurrentValue(G4UIcommand * command);
-
-  private:
-    G4ITStepManager * fITStepManager;
-
-  private: //commands
-    G4UIdirectory*              fITDirectory;
-
-    G4UIcmdWithADoubleAndUnit*  fEndTime;
-    G4UIcmdWithADoubleAndUnit*  fTimeTolerance;
-    G4UIcmdWithAnInteger*       fVerboseCmd;
-    G4UIcmdWithAnInteger*       fMaxStepNumber;
-    G4UIcmdWithoutParameter*    fInitCmd;
-    G4UIcmdWithoutParameter*    fProcessCmd;
-    G4UIcmdWithAnInteger*       fMaxNULLTimeSteps;
-};
-
-#endif // G4ITSTEPPINGMESSENGER_H
+#ifndef G4MoleculeFinder_hh
+#define G4MoleculeFinder_hh 1
+#include "G4ITFinder.hh"
+typedef G4ITFinder<G4Molecule> G4MoleculeFinder;
+#endif

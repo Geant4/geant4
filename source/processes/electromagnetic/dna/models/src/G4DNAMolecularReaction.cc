@@ -39,7 +39,7 @@
 #include "G4DNAMolecularReaction.hh"
 #include "G4DNAMolecularReactionTable.hh"
 #include "G4VDNAReactionModel.hh"
-#include "G4ITManager.hh"
+#include "G4MoleculeFinder.hh"
 #include "G4UnitsTable.hh"
 
 using namespace std;
@@ -201,7 +201,8 @@ G4ITReactionChange* G4DNAMolecularReaction::MakeReaction(const G4Track& trackA, 
             productTrack->SetTrackStatus(fAlive);
 
             fpChanges->AddSecondary(productTrack);
-            G4ITManager<G4Molecule>::Instance()->Push(productTrack);
+            G4MoleculeFinder::Instance()->Push(productTrack);
+//            G4ITManager<G4Molecule>::Instance()->Push(productTrack);
         }
     }
 

@@ -26,13 +26,14 @@
 // $Id$
 //
 #include "G4DNASecondOrderReaction.hh"
+
+#include <G4VScheduler.hh>
 #include "G4SystemOfUnits.hh"
 #include "G4Molecule.hh"
 #include "G4DNAMolecularMaterial.hh"
 #include "G4MolecularConfiguration.hh"
 #include "G4DNADamages.hh"
 #include "G4UnitsTable.hh"
-#include "G4ITTimeStepper.hh"
 
 #ifndef State
 #define State(theXInfo) (GetState<SecondOrderReactionState>()->theXInfo)
@@ -155,9 +156,9 @@ G4double G4DNASecondOrderReaction::PostStepGetPhysicalInteractionLength(const G4
       State(fIsInGoodMaterial) = false;
     }
 
-    //        G4cout << " Material " << fpMaterial->GetName() << " not found "
-    //               <<" | name of current material : " << material->GetName()
-    //               << G4endl;
+    // G4cout << " Material " << fpMaterial->GetName() << " not found "
+    //        <<" | name of current material : " << material->GetName()
+    //        << G4endl;
 
     return DBL_MAX; // Becareful return here !!
   }
@@ -228,7 +229,7 @@ G4double G4DNASecondOrderReaction::PostStepGetPhysicalInteractionLength(const G4
   }
 #endif
 
-  //    G4cout << "currentInteractionLength : " << fpState->currentInteractionLength << G4endl;
+//  G4cout << "currentInteractionLength : " << fpState->currentInteractionLength << G4endl;
 //  G4cout << "Material : " << fpMaterial->GetName()
 //      << "ID: " << track.GetTrackID()
 //      << " Returned time : " << G4BestUnit(value,"Time") << G4endl;
@@ -249,7 +250,7 @@ G4VParticleChange* G4DNASecondOrderReaction::PostStepDoIt(const G4Track& track,c
     G4cout << "___________" << G4endl;
     G4cout << ">>> Beginning of G4DNASecondOrderReaction verbose" << G4endl;
     G4cout << ">>> Returned value : " << G4BestUnit(fReturnedValue,"Time") << G4endl;
-    G4cout << ">>> Time Step : " << G4BestUnit(G4ITTimeStepper::Instance()->GetTimeStep(),"Time") << G4endl;
+    G4cout << ">>> Time Step : " << G4BestUnit(G4VScheduler::Instance()->GetTimeStep(),"Time") << G4endl;
     G4cout << ">>> Reaction : " << molecule->GetName() << " + " << fpMaterial->GetName() << G4endl;
     G4cout << ">>> End of G4DNASecondOrderReaction verbose <<<" << G4endl;
   }

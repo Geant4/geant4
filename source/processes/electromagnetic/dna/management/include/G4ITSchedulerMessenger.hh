@@ -23,7 +23,12 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id$
+// $Id: G4ITSteppingMessenger.hh 60427 2012-07-11 16:34:35Z matkara $
+//
+// Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
+//
+// WARNING : This class is released as a prototype.
+// It might strongly evolve or even disapear in the next releases.
 //
 // Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
@@ -44,34 +49,42 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
+#ifndef G4ITSTEPPINGMESSENGER_H
+#define G4ITSTEPPINGMESSENGER_H
 
-#ifndef G4ITMODELMANAGER_H
-#define G4ITMODELMANAGER_H
+class G4ITScheduler;
+class G4UIdirectory;
+class G4UIcmdWithoutParameter;
+class G4UIcmdWithAnInteger;
+class G4UIcommand;
+class G4UIcmdWithADoubleAndUnit;
 
+#include "G4UImessenger.hh"
 #include "globals.hh"
-#include <map>
-#include "G4VITStepModel.hh"
 
-/**
-  * G4ITModelManager chooses which model to use according
-  * to the global simulation time.
-  */
-class G4ITModelManager
+class G4ITSchedulerMessenger: public G4UImessenger
 {
+  public:
+    G4ITSchedulerMessenger(G4ITScheduler* runMgr);
+    ~G4ITSchedulerMessenger();
 
-public:
-    G4ITModelManager();
-    ~G4ITModelManager();
-    void Initialize();
-    G4ITModelManager(const G4ITModelManager& other);
-    G4ITModelManager& operator=(const G4ITModelManager& rhs);
-    void SetModel(G4VITStepModel* aModel, G4double startingTime);
-    G4VITStepModel* GetModel(const G4double globalTime);
+  public:
+    void SetNewValue(G4UIcommand * command,G4String newValues);
+    G4String GetCurrentValue(G4UIcommand * command);
 
-protected :
-    typedef std::map<G4double /*startingTime*/, G4VITStepModel* /*aModel*/>  mapModels ;
-    mapModels fModels ;
-    G4bool fIsInitialized ;
+  private:
+    G4ITScheduler * fITStepManager;
+
+  private: //commands
+    G4UIdirectory*              fITDirectory;
+
+    G4UIcmdWithADoubleAndUnit*  fEndTime;
+    G4UIcmdWithADoubleAndUnit*  fTimeTolerance;
+    G4UIcmdWithAnInteger*       fVerboseCmd;
+    G4UIcmdWithAnInteger*       fMaxStepNumber;
+    G4UIcmdWithoutParameter*    fInitCmd;
+    G4UIcmdWithoutParameter*    fProcessCmd;
+    G4UIcmdWithAnInteger*       fMaxNULLTimeSteps;
 };
 
-#endif // G4ITMODELMANAGER_H
+#endif // G4ITSTEPPINGMESSENGER_H

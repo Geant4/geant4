@@ -41,42 +41,39 @@
 // ######################################################################
 // ###                         Hydrogen                               ###
 // ######################################################################
-/*G4ThreadLocal*/ G4Hydrogen* G4Hydrogen::theInstance = 0;
+G4Hydrogen* G4Hydrogen::theInstance = 0;
 
 G4Hydrogen* G4Hydrogen::Definition()
 {
-    if (theInstance !=0) return theInstance;
-    const G4String name = "H";
-    // search in particle table]
-    G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-    G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-    if (anInstance ==0)
-    {
-		// create molecule
-		//
-		//    	G4MoleculeDefinition(const G4String& name,
-		//    			G4double mass,
-		//    			G4double diffCoeff,
-		//    			G4int 	 charge = 0,
-		//    			G4int    electronicLevels = 0,
-		//    			G4double radius = -1,
-		//    			G4int    atomsNumber = -1,
-		//    			G4double lifetime = -1,
-		//    			G4String aType = "",
-		//    			G4FakeParticleID ID = G4FakeParticleID::Create()
-		//    	);
+  if (theInstance != 0) return theInstance;
+  const G4String name = "H";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance == 0)
+  {
+    // create molecule
+    //
+    //      G4MoleculeDefinition(const G4String& name,
+    //          G4double mass,
+    //          G4double diffCoeff,
+    //          G4int    charge = 0,
+    //          G4int    electronicLevels = 0,
+    //          G4double radius = -1,
+    //          G4int    atomsNumber = -1,
+    //          G4double lifetime = -1,
+    //          G4String aType = "",
+    //          G4FakeParticleID ID = G4FakeParticleID::Create()
+    //      );
 
+    G4double mass = 1.0079 * g / Avogadro * c_squared;
+    anInstance = new G4MoleculeDefinition(name, mass, 7e-9 * (m * m / s), 0, // charge
+                                          1, // number of occupancies
+                                          0.5 * angstrom); //radius has to be checked
 
-        G4double mass = 1.0079*g/Avogadro* c_squared;
-        anInstance = new G4MoleculeDefinition(name, mass,
-        									  7e-9*(m*m/s),
-                                              0, // charge
-                                              1, // number of occupancies
-                                              0.5*angstrom) ; //radius has to be checked
-
-        ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0,1);
-        ((G4MoleculeDefinition*) anInstance)->SetFormatedName("H");
-    }
-    theInstance = reinterpret_cast<G4Hydrogen*>(anInstance);
-    return theInstance;
+    ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0, 1);
+    ((G4MoleculeDefinition*) anInstance)->SetFormatedName("H");
+  }
+  theInstance = reinterpret_cast<G4Hydrogen*>(anInstance);
+  return theInstance;
 }

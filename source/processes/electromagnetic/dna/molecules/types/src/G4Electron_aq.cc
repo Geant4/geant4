@@ -41,45 +41,42 @@
 // ######################################################################
 // ###                         Electron_aq                            ###
 // ######################################################################
-/*G4ThreadLocal*/ G4Electron_aq* G4Electron_aq::theInstance = 0;
+G4Electron_aq* G4Electron_aq::theInstance = 0;
 
 G4Electron_aq* G4Electron_aq::Definition()
 {
-	if (theInstance !=0) return theInstance;
-	const G4String name = "e_aq";
-	// search in particle table]
-	G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
-	G4ParticleDefinition* anInstance = pTable->FindParticle(name);
-	if (anInstance ==0)
-	{
+  if (theInstance != 0) return theInstance;
+  const G4String name = "e_aq";
+  // search in particle table]
+  G4ParticleTable* pTable = G4ParticleTable::GetParticleTable();
+  G4ParticleDefinition* anInstance = pTable->FindParticle(name);
+  if (anInstance == 0)
+  {
 
-		const G4String formatedName = "e_{aq}";
-		// create molecule
-		//
-		//    	G4MoleculeDefinition(const G4String& name,
-		//    			G4double mass,
-		//    			G4double diffCoeff,
-		//    			G4int 	 charge = 0,
-		//    			G4int    electronicLevels = 0,
-		//    			G4double radius = -1,
-		//    			G4int    atomsNumber = -1,
-		//    			G4double lifetime = -1,
-		//    			G4String aType = "",
-		//    			G4FakeParticleID ID = G4FakeParticleID::Create()
-		//    	);
+    const G4String formatedName = "e_{aq}";
+    // create molecule
+    //
+    //      G4MoleculeDefinition(const G4String& name,
+    //          G4double mass,
+    //          G4double diffCoeff,
+    //          G4int    charge = 0,
+    //          G4int    electronicLevels = 0,
+    //          G4double radius = -1,
+    //          G4int    atomsNumber = -1,
+    //          G4double lifetime = -1,
+    //          G4String aType = "",
+    //          G4FakeParticleID ID = G4FakeParticleID::Create()
+    //      );
 
-		G4double mass = 1*g/Avogadro * c_squared;
-		anInstance = new G4MoleculeDefinition(name,
-				mass,
-				4.9e-9*(m*m/s),
-				1, 1,
-				0.23* nm);
-		// radius from K.D. Jordan, Sciencem vol. 306 p.618
+    G4double mass = 1 * g / Avogadro * c_squared;
+    anInstance = new G4MoleculeDefinition(name, mass, 4.9e-9 * (m * m / s), 1,
+                                          1, 0.23 * nm);
+    // radius from K.D. Jordan, Sciencem vol. 306 p.618
 
-		((G4MoleculeDefinition*) anInstance) -> SetLevelOccupation(0,1);
-		((G4MoleculeDefinition*) anInstance) -> SetFormatedName(formatedName);
+    ((G4MoleculeDefinition*) anInstance)->SetLevelOccupation(0, 1);
+    ((G4MoleculeDefinition*) anInstance)->SetFormatedName(formatedName);
 
-	}
-	theInstance = reinterpret_cast<G4Electron_aq*>(anInstance);
-	return theInstance;
+  }
+  theInstance = reinterpret_cast<G4Electron_aq*>(anInstance);
+  return theInstance;
 }

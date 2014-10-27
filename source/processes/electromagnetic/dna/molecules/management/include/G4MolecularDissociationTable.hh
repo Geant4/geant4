@@ -32,7 +32,8 @@
 //
 // We would be very happy hearing from you, send us your feedback! :)
 //
-// In order for Geant4-DNA to be maintained and still open-source, article citations are crucial. 
+// In order for Geant4-DNA to be maintained and still open-source,
+// article citations are crucial. 
 // If you use Geant4-DNA chemistry and you publish papers about your software, 
 // in addition to the general paper on Geant4-DNA:
 //

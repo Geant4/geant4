@@ -23,6 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id: G4AllITFinder.cc 80074 2014-04-01 13:35:04Z matkara $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr) 
 //
@@ -32,9 +33,74 @@
 //
 // -------------------------------------------------------------------
 
-#include "G4ITManager.hh"
+#include "G4ITFinder.hh"
 
-G4VITManager::G4VITManager()
+using namespace std;
+
+G4ThreadLocal G4AllITFinder* G4AllITFinder::fpInstance = 0;
+
+G4AllITFinder::G4AllITFinder()
 {
-    fVerbose = 0;
+  fVerbose = 0;
 }
+
+G4AllITFinder* G4AllITFinder::Instance()
+{
+  if (!fpInstance) fpInstance = new G4AllITFinder();
+  return fpInstance;
+}
+
+void G4AllITFinder::DeleteInstance()
+{
+  if (fpInstance)
+  {
+    delete fpInstance;
+    fpInstance = 0;
+  }
+
+}
+
+G4AllITFinder::~G4AllITFinder()
+{
+  std::map<G4ITType, G4VITFinder*>::iterator it;
+  std::map<G4ITType, G4VITFinder*>::iterator it_tmp;
+
+  for (it = fITSubManager.begin(); it != fITSubManager.end();)
+  {
+    if (it->second) delete it->second;
+    it_tmp = it;
+    it++;
+    fITSubManager.erase(it_tmp);
+  }
+  fpInstance = 0;
+}
+
+void G4AllITFinder::UpdatePositionMap()
+{
+  std::map<G4ITType, G4VITFinder*>::iterator it = fITSubManager.begin();
+
+  for (; it != fITSubManager.end(); it++)
+  {
+    it->second->UpdatePositionMap();
+  }
+}
+
+G4VITFinder* G4AllITFinder::GetInstance(G4ITType type)
+{
+  map<G4ITType, G4VITFinder*>::iterator it = fITSubManager.find(type);
+
+  if (it == fITSubManager.end()) return 0;
+
+  return it->second;
+}
+
+void G4AllITFinder::RegisterManager(G4VITFinder* manager)
+{
+  fITSubManager[manager->GetITType()] = manager;
+}
+
+void G4AllITFinder::Push(G4Track* track)
+{
+  fITSubManager[GetIT(track)->GetITType()]->Push(track);
+}
+

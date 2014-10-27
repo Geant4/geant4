@@ -44,7 +44,7 @@
 // WARNING : This class is released as a prototype.
 // It might strongly evolve or even disapear in the next releases.
 //
-// We would be very happy hearing from you, so do not hesitate to send us your feedback!
+// We would be very happy hearing from you, send us your feedback! :)
 //
 // History:
 // - Created.                                  Paul Kent,     Jul 95/96

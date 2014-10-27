@@ -40,7 +40,6 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Track.hh"
 #include "G4Molecule.hh"
-#include "G4ITManager.hh"
 #include "G4ParticleChange.hh"
 
 using namespace std;
@@ -98,6 +97,7 @@ G4bool G4DNAMolecularDissociation::IsApplicable(const G4ParticleDefinition& aPar
   if (aParticleType.GetParticleType() == "Molecule")
   {
 #ifdef G4VERBOSE
+
     if (fVerbose > 1)
     {
       G4cout << "G4MolecularDecay::IsApplicable(";
@@ -105,7 +105,7 @@ G4bool G4DNAMolecularDissociation::IsApplicable(const G4ParticleDefinition& aPar
       G4cout << aParticleType.GetParticleType() << ")" << G4endl;
     }
 #endif
-    return(true);
+    return (true);
   }
   else
   {
@@ -244,7 +244,6 @@ G4VParticleChange* G4DNAMolecularDissociation::DecayIt(const G4Track& track,
 #endif
         // add the secondary track in the List
         aParticleChange.G4VParticleChange::AddSecondary(secondary);
-        G4ITManager<G4Molecule>::Instance()->Push(secondary);
       }
 #ifdef G4VERBOSE
       if (fVerbose) G4cout << "-------------" << G4endl;
