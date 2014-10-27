@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-	 
+
+24-10-14 mma (testem16-V10-00-04)
+- in TestEm16.in : /run/numberOfThreads 2
+
 13-10-14 adotti (testem16-V10-00-03  )
 - Fix thread safety in class PhysicsList
 

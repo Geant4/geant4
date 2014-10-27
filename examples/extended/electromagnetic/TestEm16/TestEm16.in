@@ -5,7 +5,9 @@
 #
 #
 /control/verbose 2
-/run/verbose 2
+/control/cout/ignoreThreadsExcept 0
+/run/numberOfThreads 2
+/run/verbose 1
 #
 /testem/det/setMat Vacuum
 #
