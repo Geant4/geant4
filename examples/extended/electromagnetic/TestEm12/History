@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+24-10-14 mma (testem12-V10-00-04)
+- PhysListEmStandard : fUseSafetyPlus
+- use G4EmStandardPhysicsSS and WVI
+- TestEm12.in : /run/numberOfThreads 2
+
 11-09-14 mma (testem12-V10-00-03)
 - TestEm12.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
 

@@ -3,6 +3,8 @@
 # limit the step size from histos 1 and 8
 #
 /control/verbose 2
+/control/cout/ignoreThreadsExcept 0
+/run/numberOfThreads 2
 /run/verbose 2
 #
 /testem/det/setMat G4_WATER
