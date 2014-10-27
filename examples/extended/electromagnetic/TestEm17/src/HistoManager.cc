@@ -178,7 +178,7 @@ void HistoManager::SetHisto(G4int ih,
   }
 
   fExist[ih] = true;
-  fLabel[ih] = id[ih];
+  fLabel[ih] = "h"+id[ih];
   fTitle[ih] = titl;
   fNbins[ih] = nbins;
   fVmin[ih]  = vmin;

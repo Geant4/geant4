@@ -5,13 +5,14 @@
 #
 /control/verbose 2
 /run/verbose 2
+/tracking/verbose 0
 #
 /testem/det/setMat Iron
 /testem/det/setSize 1 m
 #
-/testem/phys/addPhysics standard
+/testem/phys/addPhysics emstandard_opt0
 #
-/testem/phys/setCuts 1 mm
+/run/setCut 1 mm
 #
 /run/initialize
 #
@@ -25,6 +26,6 @@
 /testem/histo/setFileName pair
 /testem/histo/setHisto 2 100 -10. 0.
 #
-/testem/event/printModulo 1000
+/run/printProgress 1000
 #
 /run/beamOn 10000
