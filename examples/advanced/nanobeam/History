@@ -9,6 +9,12 @@ $Id$
                        Package History file
                        --------------------
 
+25 Oct 2014 - tag nanobeam-V10-00-06 - L. Garnier
+- Fix CMakeLists.txt error
+
+24 Oct 2014 - tag nanobeam-V10-00-04/nanobeam-V10-00-05 - L. Garnier
+- Fix CMakeLists.txt to not crash compilation when Geant4_builtin_clhep FOUND
+
 10 Jul 2014 - tag nanobeam-V10-00-03 - S. Incerti, A, Dotti, B. Wendt
 - updated CMakeLists.txt
 
