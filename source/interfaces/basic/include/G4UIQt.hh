@@ -144,7 +144,7 @@ public: // With description
   // Fourth argument is the path to the icon file if "user_icon" selected
   // Ex : AddButton("change background color","../background.xpm"," /vis/viewer/set/background"); 
 
-  bool AddTabWidget(QWidget*,QString,int,int);
+  bool AddTabWidget(QWidget*,QString);
   // To add a tab for vis openGL Qt driver
   
   QTabWidget* GetSceneTreeComponentsTBWidget();
@@ -183,15 +183,39 @@ public: // With description
   inline QMainWindow * GetMainWindow() {
     return fMainWindow;
   };
+  // Return the main window
   
   inline QPixmap* getSearchIcon() { return fSearchIcon;};
   // return the "search" icon pixmap
   inline QPixmap* getClearIcon() { return fClearIcon;};
   // return the "clear" icon pixmap
 
-  void SetViewerFirstPageHTMLText(const std::string&);
-  // Set the HTML text on the first page of the viewer. If "", will take the last value as default
+  void SetStartPage(const std::string&);
+  // Set the text on the first page of the viewer. If "", will take the last value as default
+  // Note: Qt Rich text format could be used, see link for example :
+  // https://qt-project.org/doc/qt-4.8/richtext-html-subset.html#table-cell-attributes
+
+  inline G4UIDockWidget* GetCoutWidget() {
+    return fCoutDockWidget;
+  };
+  // Return the G4cout widget
+
+  inline G4UIDockWidget* GetUserInterfaceWidget() {
+    return fUIDockWidget;
+  };
+  // Return the UserInterface widget (including scene tree, help and History widgets)
+
+  inline QTabWidget* GetViewersWidget() {
+    return fUITabWidget;
+  }
+  // return the viewer widget including all viewers
+
+  bool AddViewerTab(QWidget* w, std::string title);
+  // Add a new tab in the viewer, could be used to add your own component
   
+  bool AddViewerTabFromFile(std::string fileName, std::string title);
+  // Add a new tab in the viewer containing the content of the file in a QLabel
+
 public:
   ~G4UIQt();
   void Prompt(G4String);
@@ -258,9 +282,8 @@ private:
   QLineEdit* fHelpLine;
   G4QTabWidget* fViewerTabWidget;
   QString fCoutText;
-  QLabel *fEmptyViewerWidget;
+  QTextEdit *fStartPage;
   QSplitter * fHelpVSplitter;
-  QWidget* fViewerTabHandleWidget;
   QTextEdit* fParameterHelpLabel;
   QTableWidget* fParameterHelpTable;
 

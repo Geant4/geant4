@@ -17,6 +17,37 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+22th October 2014  Laurent Garnier (interfaces-V10-00-15)
+- G4UIQt : 
+  o Remove viewer size parameter (it was no longer used)
+  o Add the ability to have HTML tags inside the file given by AddViewerTabFromFile. 
+    This will allow to include for example a README file with an <img> or other HTML tags
+    Ex :
+         =====================  README  ==============================
+         <p align="center">
+         <img src="exampleB1.jpg" width="300">
+         </p>
+   And the code to be place in main() function :
+      UIQt->AddViewerTabFromFile("README", "README from my own example");
+
+21th October 2014  Laurent Garnier
+- G4UIQt : 
+  o Do not remove the first tab widget when creating a viewer
+  o add new method AddViewerTab(QWidget*, std::string), this will allow users to define their
+    own tab.
+  o Add new method AddViewerTabFromFile(std::string, std::string): add a tab in the viewer from
+    a file
+  o Fix a problem with updating viewer
+  o Activate Help Widget at the beginning instead of sceneTree
+  o Move clear G4cout icon on the right side
+  o Add left panel tab tooltips
+  o Change text on StartPage
+
+14th October 2014  Laurent Garnier
+- G4UIQt : 
+  o Add methods GetCoutWidget(), GetUserInterfaceWidget(), GetViewersWidget()
+  o Rename SetViewerFirstPageHTMLText() to SetStartPage()
+
 14th October 2014  Laurent Garnier (interfaces-V10-00-14 need global-V10-00-35)
 - G4UIQt : 
   o Revert mdi/tabbed widgets to old tab style : It was not working so good. In tabbed mode, some

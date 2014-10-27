@@ -126,9 +126,8 @@ G4UIQt::G4UIQt (
 ,fHelpLine(NULL)
 ,fViewerTabWidget(NULL)
 ,fCoutText("Output")
-,fEmptyViewerWidget(NULL)
+,fStartPage(NULL)
 ,fHelpVSplitter(NULL)
-,fViewerTabHandleWidget(NULL)
 ,fParameterHelpLabel(NULL)
 ,fParameterHelpTable(NULL)
 ,fToolbarApp(NULL)
@@ -285,7 +284,9 @@ QWidget* G4UIQt::CreateHelpTBWidget(
   }
   fHelpVSplitter->addWidget(fParameterHelpLabel);
   fHelpVSplitter->addWidget(fParameterHelpTable);
-  
+
+  fParameterHelpLabel->setVisible(false);
+  fParameterHelpTable->setVisible(false);
   QSizePolicy policy = QSizePolicy(QSizePolicy::Maximum,QSizePolicy::Maximum);
   policy.setVerticalStretch(4);
   if (fHelpTreeWidget) {
@@ -416,7 +417,6 @@ G4UIDockWidget* G4UIQt::CreateCoutTBWidget(
 
   QWidget* coutButtonWidget = new QWidget();
   QHBoxLayout* layoutCoutTBButtons = new QHBoxLayout();
-  layoutCoutTBButtons->addWidget(coutTBClearButton);
   
 #ifdef G4MULTITHREADED
   // add all candidates to widget
@@ -435,6 +435,7 @@ G4UIDockWidget* G4UIQt::CreateCoutTBWidget(
 #if QT_VERSION <= 0x050100
   layoutCoutTBButtons->addWidget(coutTBFilterButton);
 #endif
+  layoutCoutTBButtons->addWidget(coutTBClearButton);
   coutButtonWidget->setLayout(layoutCoutTBButtons);
 
   // reduce margins
@@ -505,8 +506,11 @@ G4UIDockWidget* G4UIQt::CreateUITabWidget(
   fUITabWidget->addTab(CreateSceneTreeComponentsTBWidget(),"Scene tree");
   fUITabWidget->addTab(CreateHelpTBWidget(),"Help");
   fUITabWidget->addTab(CreateHistoryTBWidget(),"History");
-  //  fUITabWidget->setCurrentWidget(fSceneTreeComponentsTBWidget);
+  fUITabWidget->setCurrentWidget(fHelpTBWidget);
 
+  fUITabWidget->setTabToolTip (0,"Scene component tree. Only available in Stored mode");
+  fUITabWidget->setTabToolTip (1,"Help widget");
+  fUITabWidget->setTabToolTip (2,"All commands history");
   connect(fUITabWidget, SIGNAL(currentChanged(int)), SLOT(ToolBoxActivated(int)));
 
   fUIDockWidget = new G4UIDockWidget ("Scene tree, Help, History");
@@ -535,46 +539,63 @@ QWidget* G4UIQt::CreateSceneTreeComponentsTBWidget(){
 QWidget* G4UIQt::CreateViewerWidget(){
 
   // Set layouts
-  
-  SetViewerFirstPageHTMLText(std::string("<div style='background:white; border: 1px solid #ccc; border-radius: 20px;'><b>Tooltips :</b><ul>")+
+
+  SetStartPage(std::string("<table width='100%'><tr><td width='30%'></td><td><div ")+
+                             "style='color: rgb(140, 31, 31); font-size: xx-large; font-family: Garamond, serif; padding-bottom: 0px; font-weight: normal'>Geant4: "+
+                             QApplication::applicationName ().toStdString()+
+                             "</div></td><td width='40%'>&nbsp;<br/><i>http://geant4.web.cern.ch/geant4/</i></td></tr></table>"+
+                             "<p>&nbsp;</p>"+
+                             "<div style='background:#EEEEEE;'><b>Tooltips :</b><ul>"+
                              "<li><b>Start a new viewer :</b><br />"+
                              "<i>'/vis/open/...'<br />"+
                              "For example '/vis/open OGL'</i></li>"+
-                             "<li><b>Get the viewer list :</b><br />"+
-                             "<i>'/vis/list'</i></li>"+
+                             "<li><b>Execute a macro file :</b><br />"+
+                             "<i>'/control/execute my_macro_file'</i></li>"+
                              "</ul></div>"+
                              
-                             "<div style='background:white; border: 1px solid #ccc; border-radius: 20px;'><b>Documentation :</b><ul>"+
+                             "<div style='background:#EEEEEE;'><b>Documentation :</b><ul>"+
                              "<li><b>Visualization tutorial :</b><br />"+
-                             "<i><a href='http://geant4.in2p3.fr/spip.php?article60&lang=en'>Geant4 Qt User Interface tutorial </a></i></li>"+
+                             "<i><a href='http://geant4.in2p3.fr/spip.php?article60&lang=en'>Geant4 Qt User Interface tutorial </a>: http://geant4.in2p3.fr/spip.php?article60&lang=en</i></li>"+
                              "<li><b>Visualisation publication :</b><br />"+
-                             "<i><a href='http://www.worldscientific.com/doi/abs/10.1142/S1793962313400011'>The Geant4 Visualization System - A Multi-Driver Graphics System</b><br />,  Allison, J. et al., International Journal of Modeling, Simulation, and Scientific Computing, Vol. 4, Suppl. 1 (2013) 1340001</a></i></li>"+
+                             "<i><a href='http://www.worldscientific.com/doi/abs/10.1142/S1793962313400011'>The Geant4 Visualization System - A Multi-Driver Graphics System</b><br />,  Allison, J. et al., International Journal of Modeling, Simulation, and Scientific Computing, Vol. 4, Suppl. 1 (2013) 1340001</a>:<br/> http://www.worldscientific.com/doi/abs/10.1142/S1793962313400011</i></li>"+
                              "</ul></div>"+
 
-                             "<div style='background:white; border: 1px solid #ccc; border-radius: 20px;'><b>Getting Help :</b><ul>"+
-                             "<li><b>If problems arise, try <a href='http://geant4-hn.slac.stanford.edu:5090/Geant4-HyperNews/index'>browsing the user forum</a> to see whether or not your problem has already been encountered.<br /> If it hasn't, you can post it and Geant4 developers will do their best to find a solution. This is also a good place to<br /> discuss Geant4 topics in general.</b><br />"+
-                             "<li><b>Get a look at <a href='http://geant4.kek.jp/geant4/support/index.shtml'>Geant4 User support pages</a></b></li>"+
+                             "<div style='background:#EEEEEE;'><b>Getting Help :</b><ul>"+
+                             "<li><b>If problems arise, try <a href='http://geant4-hn.slac.stanford.edu:5090/Geant4-HyperNews/index'>browsing the user forum</a> to see whether or not your problem has already been encountered.<br /> If it hasn't, you can post it and Geant4 developers will do their best to find a solution. This is also a good place to<br /> discuss Geant4 topics in general.</b> http://geant4-hn.slac.stanford.edu:5090/Geant4-HyperNews/index"+
+                             "<li><b>Get a look at <a href='http://geant4.kek.jp/geant4/support/index.shtml'>Geant4 User support pages</a>: <i>http://geant4.kek.jp/geant4/support/index.shtml</i></b></li>"+
                              "</ul></div>"
                              );
 
 
   // fill right splitter
+  if (fViewerTabWidget == NULL) {
+    fViewerTabWidget = new G4QTabWidget();
+#if QT_VERSION < 0x040500
+#else
+    fViewerTabWidget->setTabsClosable (true);
+#endif
     
-  //  Create an widget to handle OGL widget and label
-  fViewerTabHandleWidget = new QWidget();
-  QVBoxLayout * viewerTabHandleLayout = new QVBoxLayout();
-  viewerTabHandleLayout->addWidget(fEmptyViewerWidget);
-  fViewerTabHandleWidget->setLayout(viewerTabHandleLayout);
-
+#if QT_VERSION < 0x040200
+#else
+    fViewerTabWidget->setUsesScrollButtons (true);
+#endif
+    
+#if QT_VERSION < 0x040500
+#else
+    connect(fViewerTabWidget,   SIGNAL(tabCloseRequested(int)), this, SLOT(TabCloseCallback(int)));
+#endif
+    connect(fViewerTabWidget, SIGNAL(currentChanged ( int ) ), SLOT(UpdateTabWidget(int)));
+  }
+  AddTabWidget(fStartPage,"Useful tips");
 
 // set the QGLWidget size policy
   QSizePolicy policy = QSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
   policy.setVerticalStretch(4);
-  fViewerTabHandleWidget->setSizePolicy(policy);
+  fViewerTabWidget->setSizePolicy(policy);
   
-  fViewerTabHandleWidget->setMinimumSize(40,40);
+  fViewerTabWidget->setMinimumSize(40,40);
   
-  return fViewerTabHandleWidget;
+  return fViewerTabWidget;
 }
 
 
@@ -587,14 +608,60 @@ QTabWidget* G4UIQt::GetSceneTreeComponentsTBWidget(
 }
 
 
+
+
+/**   Add a new tab in the viewer
+ */
+bool G4UIQt::AddViewerTab(
+                          QWidget* aWidget
+                          ,std::string title
+                          )
+{
+  if (fViewerTabWidget == NULL) {
+    return false;
+  }
+  fViewerTabWidget->addTab(aWidget,title.c_str());
+
+  return true;
+}
+
+
+/**   Add a new tab in the viewer
+ */
+bool G4UIQt::AddViewerTabFromFile(
+                         std::string fileName
+                         ,std::string title
+                          )
+{
+  if (fViewerTabWidget == NULL) {
+    return false;
+  }
+
+  std::ifstream file(fileName.c_str());
+  if (file) {
+    
+    std::string content( (std::istreambuf_iterator<char>(file) ),
+                        (std::istreambuf_iterator<char>()    ) );
+    
+    QTextEdit* text = new QTextEdit();
+    text->setAcceptRichText (true);
+    text->setContentsMargins(5,5,5,5);
+    text->setText(QString("<pre>")+content.c_str()+"</pre>");
+
+    fViewerTabWidget->addTab(text,title.c_str());
+  } else {
+    return false;
+  }
+  return true;
+}
+
+
 /**   Add a new tab widget.
   Create the tab if it was not done
 */
 bool G4UIQt::AddTabWidget(
  QWidget* aWidget
 ,QString name
-,int sizeX
-,int sizeY
 )
 {
   // Special case for Qt version between 5.0 and 5.1 on Mac OSX
@@ -620,8 +687,8 @@ bool G4UIQt::AddTabWidget(
 #endif
   
   if (fViewerTabWidget == NULL) {
-    fViewerTabWidget = new G4QTabWidget(fViewerTabHandleWidget, sizeX, sizeY);
-    #if QT_VERSION < 0x040500
+    fViewerTabWidget = new G4QTabWidget();
+#if QT_VERSION < 0x040500
 #else
     fViewerTabWidget->setTabsClosable (true); 
 #endif
@@ -641,29 +708,11 @@ bool G4UIQt::AddTabWidget(
   if (!aWidget) {
     return false;
   }
-// Has to be added before we put it into the fViewerTabHandleWidget widget
+// Has to be added before we put it into the fViewerTabWidget widget
   aWidget->setParent(fViewerTabWidget); // Will create in some cases widget outside
   // of UI for a really short moment
   
   fViewerTabWidget->addTab(aWidget,name);
-
-  // Remove QLabel
-
-  // L.Garnier 26/05/2010 : not exactly the same in qt3. Could cause some
-  // troubles
-  if (fEmptyViewerWidget != NULL) {
-    int index = -1;
-    index = fViewerTabHandleWidget->layout()->indexOf(fEmptyViewerWidget);
-    if ( index != -1) {
-      fViewerTabHandleWidget->layout()->removeWidget(fEmptyViewerWidget);
-      delete fEmptyViewerWidget;
-      fEmptyViewerWidget = NULL;
-      
-      fViewerTabHandleWidget->layout()->addWidget(fViewerTabWidget);
-    }
-  }
-
-
 
   fViewerTabWidget->setCurrentIndex(fViewerTabWidget->count()-1);
 
@@ -674,36 +723,22 @@ bool G4UIQt::AddTabWidget(
    fViewerTabWidget->setLastTabCreated(fViewerTabWidget->currentIndex());
  #endif
 
-  // Problems with resize. The widgets are not realy drawn at this step,
-  // then we have to force them on order to check the size.
-  // try to computer new size in order not to go out of the screen
-  
-  // size of current tab
-  QSize s = QSize(sizeX,sizeY);
-  
-  QRect screen = QApplication::desktop()->screenGeometry();
-  if (fMainWindow->width()-fViewerTabWidget->width()+sizeX + fMainWindow->geometry().x() > screen.width()) {
-    s.setWidth(screen.width()-fMainWindow->geometry().x());
-  }
-  if (fMainWindow->height()-fMainWindow->centralWidget()->height()+sizeY + fMainWindow->geometry().y()> screen.height()-24) { // 24 is the menuBar height on mac
-    s.setHeight(screen.height()-24-fMainWindow->geometry().y());
-  }
   return true;
 }
 
 
-void G4UIQt::SetViewerFirstPageHTMLText(
+void G4UIQt::SetStartPage(
 const std::string& text)
 {
   if (text != "") {
     fDefaultViewerFirstPageHTMLText = text;
   }
-  if (!fEmptyViewerWidget) {
-    fEmptyViewerWidget = new QLabel();
-    fEmptyViewerWidget->setTextFormat(Qt::RichText);
-    fEmptyViewerWidget->setContentsMargins(5,5,5,5);
+  if (!fStartPage) {
+    fStartPage = new QTextEdit();
+    fStartPage->setAcceptRichText (true);
+    fStartPage->setContentsMargins(5,5,5,5);
   }
-  fEmptyViewerWidget->setText(fDefaultViewerFirstPageHTMLText.c_str());
+  fStartPage->setText(fDefaultViewerFirstPageHTMLText.c_str());
 }
 
 
@@ -3124,6 +3159,7 @@ void G4UIQt::HelpTreeClicCallback (
     if ( path) {
       // this is not a command, this is a sub directory
       // We display the Title
+      fParameterHelpLabel->setVisible(true);
       fParameterHelpLabel->setText(path->GetTitle().data());
       fParameterHelpTable->setVisible(false);
     }
@@ -3929,19 +3965,6 @@ void G4UIQt::TabCloseCallback(int a){
 
   // delete the widget
   delete temp;
-
-  // if there is no more tab inside the tab widget
-  if (fViewerTabWidget->count() == 0) {
-    if (fEmptyViewerWidget == NULL) {
-      SetViewerFirstPageHTMLText(fDefaultViewerFirstPageHTMLText);
-    }
-    
-    fViewerTabHandleWidget->layout()->removeWidget(fViewerTabWidget);
-    
-    fViewerTabHandleWidget->layout()->addWidget(fEmptyViewerWidget);
-    
-    fEmptyViewerWidget->show();
-  }
 #endif
 }
 
@@ -3975,10 +3998,13 @@ QPaintEvent *
       QString text = tabText (currentIndex());
 
       if (fLastCreated == -1) {
-        QString paramSelect = QString("/vis/viewer/select ")+text;
-        G4UImanager* UI = G4UImanager::GetUIpointer();
-        if(UI != NULL)  {
-          UI->ApplyCommand(paramSelect.toStdString().c_str());
+        QTextEdit* edit = dynamic_cast<QTextEdit*>(currentWidget());
+        if (!edit){
+          QString paramSelect = QString("/vis/viewer/select ")+text;
+          G4UImanager* UI = G4UImanager::GetUIpointer();
+          if(UI != NULL)  {
+            UI->ApplyCommand(paramSelect.toStdString().c_str());
+          }
         }
       } else {
         fLastCreated = -1;
