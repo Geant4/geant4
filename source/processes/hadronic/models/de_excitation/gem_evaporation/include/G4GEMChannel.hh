@@ -42,9 +42,10 @@
 #include "G4NucleiProperties.hh"
 #include "Randomize.hh"
 #include "G4ParticleTable.hh"
-#include "G4IonTable.hh"
+//#include "G4IonTable.hh"
 
 class G4Pow;
+class G4PairingCorrection;
 
 class G4GEMChannel : public G4VEvaporationChannel
 {
@@ -59,6 +60,8 @@ public:
     
   virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
 
+  virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
+
   virtual G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
 
   inline void SetLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
@@ -67,20 +70,20 @@ public:
     theLevelDensityPtr = aLevelDensity;
     MyOwnLevelDensity = false;
   }
-
+  /*
   inline G4double GetMaximalKineticEnergy(void) const
   { return MaximalKineticEnergy; }
-  
+  */
 private: 
-    
+  /*
   // Calculate Binding Energy for separate fragment from nucleus
   G4double CalcBindingEnergy(G4int anA, G4int aZ);
 
   // Calculate maximal kinetic energy that can be carried by fragment (in MeV)
   G4double CalcMaximalKineticEnergy(G4double U);
-
+  */
   // Samples fragment kinetic energy.
-  G4double CalcKineticEnergy(const G4Fragment & fragment);
+  G4double SampleKineticEnergy(const G4Fragment & fragment);
 
   // This has to be removed and put in Random Generator
   G4ThreeVector IsotropicVector(G4double Magnitude  = 1.0);
@@ -117,6 +120,8 @@ private:
   // For Coulomb Barrier calculation
   G4VCoulombBarrier * theCoulombBarrierPtr;
   G4double CoulombBarrier;
+
+  G4PairingCorrection* pairingCorrection;
     
   //---------------------------------------------------
     
@@ -135,8 +140,6 @@ private:
 
   // Maximal Kinetic Energy that can be carried by fragment
   G4double MaximalKineticEnergy;
-
-
 };
 
 

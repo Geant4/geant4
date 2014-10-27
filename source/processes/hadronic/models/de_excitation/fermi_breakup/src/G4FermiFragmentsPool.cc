@@ -444,6 +444,46 @@ void G4FermiFragmentsPool::Initialise()
   }
 }
 
+G4bool G4FermiFragmentsPool::IsApplicable(G4int Z, G4int A, G4double mass) const
+{
+  // look into pair list
+  size_t nz = list2[A].size();
+  if(0 < nz) {
+    for(size_t j=0; j<nz; ++j) {
+      const G4FermiConfiguration* conf = (list2[A])[j];
+      if(Z == conf->GetZ() && mass >= conf->GetMass()) { return true; }
+    }
+  }
+  // look into triple list
+  nz = list3[A].size();
+  if(0 < nz) {
+    for(size_t j=0; j<nz; ++j) {
+      const G4FermiConfiguration* conf = (list3[A])[j];
+      if(Z == conf->GetZ() && mass >= conf->GetMass()) { return true; }
+    }
+  }
+  // look into quartet list
+  nz = list4[A].size();
+  if(0 < nz) {
+    for(size_t j=0; j<nz; ++j) {
+      const G4FermiConfiguration* conf = (list4[A])[j];
+      if(Z == conf->GetZ() && mass >= conf->GetMass()) { return true; }
+    }
+  }
+
+  // search in the pool and if found then return vector with one element
+  nz = list1[A].size();
+  if(0 < nz) {
+    for(size_t j=0; j<nz; ++j) {
+      const G4FermiConfiguration* conf = (list1[A])[j];
+      if(Z == conf->GetZ() && mass >= conf->GetMass()) {
+	if(!(*(conf->GetFragmentList()))[0]->IsStable()) { return true; }
+      }
+    }
+  }
+  return false;
+}
+
 const std::vector<const G4FermiConfiguration*>* 
 G4FermiFragmentsPool::GetConfigurationList(G4int Z, G4int A, G4double mass) const
 {

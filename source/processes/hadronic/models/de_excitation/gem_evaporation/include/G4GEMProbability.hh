@@ -70,7 +70,7 @@ public:
 
   inline G4double GetSpin(void) const;
 
-  inline G4double GetNormalization(void) const;
+  //  inline G4double GetNormalization(void) const;
     
   inline void SetCoulomBarrier(const G4VCoulombBarrier * aCoulombBarrierStrategy);
 
@@ -116,7 +116,7 @@ private:
   const G4VCoulombBarrier * theCoulombBarrierPtr;
   
   // Normalization
-  G4double Normalization;
+  //  G4double Normalization;
 
 protected:
 
@@ -157,12 +157,12 @@ inline G4double G4GEMProbability::GetSpin(void) const
 { 
   return Spin; 
 }
-
+/*
 inline G4double G4GEMProbability::GetNormalization(void) const 
 { 
   return Normalization; 
 }
-    
+*/  
 inline void 
 G4GEMProbability::SetCoulomBarrier(const G4VCoulombBarrier * aCoulombBarrierStrategy)
 {

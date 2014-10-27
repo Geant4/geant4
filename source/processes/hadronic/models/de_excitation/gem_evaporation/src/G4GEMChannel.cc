@@ -60,6 +60,7 @@ G4GEMChannel::G4GEMChannel(G4int theA, G4int theZ, const G4String & aName,
   ResidualMass = CoulombBarrier = 0.0;
   fG4pow = G4Pow::GetInstance(); 
   ResidualZ = ResidualA = 0;
+  pairingCorrection = G4PairingCorrection::GetInstance();
 }
 
 G4GEMChannel::~G4GEMChannel()
@@ -77,105 +78,97 @@ G4double G4GEMChannel::GetEmissionProbability(G4Fragment* fragment)
   //	   << " Zres= " << ResidualZ << " Ares= " << ResidualA << G4endl; 
 
   // We only take into account channels which are physically allowed
-  if (ResidualA <= 0 || ResidualZ <= 0 || ResidualA < ResidualZ ||
-      (ResidualA == ResidualZ && ResidualA > 1)) 
-    {
-      CoulombBarrier = 0.0;
-      MaximalKineticEnergy = -CLHEP::GeV;
-      EmissionProbability = 0.0;
-    } 
-  else 
-    {
-      // Effective excitation energy
-      // JMQ 071009: pairing in ExEnergy should be the one of parent compound nucleus 
-      // FIXED the bug causing reported crash by VI (negative Probabilities 
-      // due to inconsistency in Coulomb barrier calculation (CoulombBarrier and -Beta 
-      // param for protons must be the same)   
-      //    G4double ExEnergy = fragment.GetExcitationEnergy() -
-      //    G4PairingCorrection::GetInstance()->GetPairingCorrection(ResidualA,ResidualZ);
-      G4double ExEnergy = fragment->GetExcitationEnergy() -
-	G4PairingCorrection::GetInstance()->GetPairingCorrection(anA,aZ);
+  EmissionProbability = 0.0;
 
-      //G4cout << "Eexc(MeV)= " << ExEnergy/MeV << G4endl;
+  // Only channels which are physically allowed are taken into account 
+  if (ResidualA >= ResidualZ && ResidualZ > 0 && ResidualA >= A) {
+  
+    //Effective excitation energy
+    G4double ExEnergy = fragment->GetExcitationEnergy() - 
+      pairingCorrection->GetPairingCorrection(anA, aZ);
+    ResidualMass = G4NucleiProperties::GetNuclearMass(ResidualA, ResidualZ);
+    G4double FragmentMass = fragment->GetGroundStateMass();
+    G4double Etot = FragmentMass + ExEnergy;
+  
+    //G4cout << "Eexc(MeV)= " << ExEnergy/MeV << G4endl;
 
-      if( ExEnergy <= 0.0) {
-	CoulombBarrier = 0.0;
-	MaximalKineticEnergy = -1000.0*MeV;
-	EmissionProbability = 0.0;
+    if(Etot > ResidualMass + EvaporatedMass) {
+  
+      // Maximal Kinetic Energy
+      MaximalKineticEnergy = ((Etot-ResidualMass)*(Etot+ResidualMass) 
+	    + EvaporatedMass*EvaporatedMass)/(2.0*Etot) - EvaporatedMass;
 
-      } else {
+      // Coulomb Barrier calculation
+      CoulombBarrier = 
+	theCoulombBarrierPtr->GetCoulombBarrier(ResidualA,ResidualZ,ExEnergy);
+      //G4cout << "CBarrier(MeV)= " << CoulombBarrier/MeV << G4endl;
 
-	ResidualMass = G4NucleiProperties::GetNuclearMass(ResidualA, ResidualZ);
-
-        // Coulomb Barrier calculation
-	CoulombBarrier = theCoulombBarrierPtr->GetCoulombBarrier(ResidualA,ResidualZ,ExEnergy);
-	//G4cout << "CBarrier(MeV)= " << CoulombBarrier/MeV << G4endl;
-
-	//Maximal kinetic energy (JMQ : at the Coulomb barrier)
-	MaximalKineticEnergy = 
-	  CalcMaximalKineticEnergy(fragment->GetGroundStateMass()+ExEnergy);
-	//G4cout << "MaxE(MeV)= " << MaximalKineticEnergy/MeV << G4endl;
-		
-	// Emission probability
-	if (MaximalKineticEnergy <= 0.0) 
-	  {
-	    EmissionProbability = 0.0;
-	  }
-	else 
-	  { 
-	    // Total emission probability for this channel
-	    EmissionProbability = 
-	      theEvaporationProbabilityPtr->EmissionProbability(*fragment,
-								MaximalKineticEnergy);
-	  }
+      if (MaximalKineticEnergy > CoulombBarrier) { 
+	// Total emission probability for this channel
+	EmissionProbability = theEvaporationProbabilityPtr->
+          EmissionProbability(*fragment, MaximalKineticEnergy - CoulombBarrier);
       }
-    }   
+    }
+  }   
   //G4cout << "Prob= " << EmissionProbability << G4endl;
   return EmissionProbability;
 }
 
+G4Fragment* G4GEMChannel::EmittedFragment(G4Fragment* theNucleus)
+{
+  G4Fragment* evFragment = 0;
+  G4double evEnergy = SampleKineticEnergy(*theNucleus) + EvaporatedMass;
+
+  G4ThreeVector momentum(IsotropicVector
+    (std::sqrt((evEnergy - EvaporatedMass)*(evEnergy + EvaporatedMass))));
+  
+  G4LorentzVector EvaporatedMomentum(momentum, evEnergy);
+  G4LorentzVector ResidualMomentum = theNucleus->GetMomentum();
+  EvaporatedMomentum.boost(ResidualMomentum.boostVector());
+  
+  evFragment = new G4Fragment(A, Z, EvaporatedMomentum);
+  ResidualMomentum -= EvaporatedMomentum;
+  theNucleus->SetZandA_asInt(ResidualZ, ResidualA);
+  theNucleus->SetMomentum(ResidualMomentum);
+
+  return evFragment; 
+} 
+
 G4FragmentVector * G4GEMChannel::BreakUp(const G4Fragment & theNucleus)
 {
-  G4double EvaporatedKineticEnergy = CalcKineticEnergy(theNucleus);
-  G4double EvaporatedEnergy = EvaporatedKineticEnergy + EvaporatedMass;
+  G4double evKineticEnergy = SampleKineticEnergy(theNucleus);
+  G4double evEnergy = evKineticEnergy + EvaporatedMass;
   
-  G4ThreeVector momentum(IsotropicVector(std::sqrt(EvaporatedKineticEnergy*
-						   (EvaporatedKineticEnergy+2.0*EvaporatedMass))));
+  G4ThreeVector momentum(
+    IsotropicVector(std::sqrt(evKineticEnergy*(evKineticEnergy+2.0*EvaporatedMass))));
     
-  momentum.rotateUz(theNucleus.GetMomentum().vect().unit());
+  G4LorentzVector evMomentum(momentum, evEnergy);
+  G4ThreeVector boost = theNucleus.GetMomentum().boostVector();
+  evMomentum.boost(boost);
+  G4Fragment * EvaporatedFragment = new G4Fragment(A, Z, evMomentum);
 
-  G4LorentzVector EvaporatedMomentum(momentum,EvaporatedEnergy);
-  EvaporatedMomentum.boost(theNucleus.GetMomentum().boostVector());
-  G4Fragment * EvaporatedFragment = new G4Fragment(A,Z,EvaporatedMomentum);
-  // ** And now the residual nucleus ** 
-  G4double theExEnergy = theNucleus.GetExcitationEnergy();
-  G4double theMass = theNucleus.GetGroundStateMass();
-  G4double ResidualEnergy = 
-    theMass + (theExEnergy - EvaporatedKineticEnergy) - EvaporatedMass;
-	
-  G4LorentzVector ResidualMomentum(-momentum,ResidualEnergy);
-  ResidualMomentum.boost(theNucleus.GetMomentum().boostVector());
-	
-  G4Fragment * ResidualFragment = new G4Fragment( ResidualA, ResidualZ, ResidualMomentum );
+  // And now the residual nucleus 
+  G4LorentzVector ResidualMomentum = theNucleus.GetMomentum() - evMomentum;	
+  G4Fragment* ResidualFragment = 
+    new G4Fragment(ResidualA, ResidualZ, ResidualMomentum);
     
-  G4FragmentVector * theResult = new G4FragmentVector;
-    
+  G4FragmentVector* theResult = new G4FragmentVector;
   theResult->push_back(EvaporatedFragment);
   theResult->push_back(ResidualFragment);
   return theResult; 
 } 
-
-G4double G4GEMChannel::CalcMaximalKineticEnergy(const G4double NucleusTotalE)
+/*
+G4double G4GEMChannel::CalcMaximalKineticEnergy(G4double NucleusTotalE)
 // Calculate maximal kinetic energy that can be carried by fragment.
-//JMQ this is not the assimptotic kinetic energy but the one at the Coulomb barrier
+// JMQ this is not the assimptotic kinetic energy but the one at the Coulomb barrier
 {
-  G4double T = (NucleusTotalE*NucleusTotalE + EvaporatedMass*EvaporatedMass - ResidualMass*ResidualMass)/
-    (2.0*NucleusTotalE) - EvaporatedMass - CoulombBarrier;
-	
+  G4double T = (NucleusTotalE*NucleusTotalE + EvaporatedMass*EvaporatedMass 
+		- ResidualMass*ResidualMass)/(2.0*NucleusTotalE) 
+                - EvaporatedMass - CoulombBarrier;
   return T;
 }
-
-G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
+*/
+G4double G4GEMChannel::SampleKineticEnergy(const G4Fragment & fragment)
 // Samples fragment kinetic energy.
 {
   G4double U = fragment.GetExcitationEnergy();
@@ -183,11 +176,9 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
   G4double Alpha = theEvaporationProbabilityPtr->CalcAlphaParam(fragment);
   G4double Beta = theEvaporationProbabilityPtr->CalcBetaParam(fragment);
 
-  G4double Normalization = theEvaporationProbabilityPtr->GetNormalization();
-
   //                       ***RESIDUAL***
   //JMQ (September 2009) the following quantities  refer to the RESIDUAL:
-  G4double delta0 = G4PairingCorrection::GetInstance()->GetPairingCorrection(ResidualA,ResidualZ);
+  G4double delta0 = pairingCorrection->GetPairingCorrection(ResidualA,ResidualZ);
   G4double Ux = (2.5 + 150.0/ResidualA)*MeV;
   G4double Ex = Ux + delta0;
   G4double InitialLevelDensity;
@@ -196,11 +187,11 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
   //                       ***PARENT***
   //JMQ (September 2009) the following quantities   refer to the PARENT:
   
-  G4double deltaCN = 
-    G4PairingCorrection::GetInstance()->GetPairingCorrection(fragment.GetA_asInt(),
+  G4double deltaCN = pairingCorrection->GetPairingCorrection(fragment.GetA_asInt(),
 							     fragment.GetZ_asInt());
   G4double aCN = theLevelDensityPtr->LevelDensityParameter(fragment.GetA_asInt(),
-							   fragment.GetZ_asInt(),U-deltaCN);   
+							   fragment.GetZ_asInt(),
+							   U-deltaCN);   
   G4double UxCN = (2.5 + 150.0/G4double(fragment.GetA_asInt()))*MeV;
   G4double ExCN = UxCN + deltaCN;
   G4double TCN = 1.0/(std::sqrt(aCN/UxCN) - 1.5/UxCN);
@@ -218,11 +209,9 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
       G4double x  = U-deltaCN;
       G4double x1 = std::sqrt(aCN*x);
       InitialLevelDensity = (pi/12.0)*G4Exp(2*x1)/(x*std::sqrt(x1));
-      //InitialLevelDensity = 
-      //(pi/12.0)*std::exp(2*std::sqrt(aCN*(U-deltaCN)))/std::pow(aCN*std::pow(U-deltaCN,5.0),1.0/4.0);
     }
   
-  const G4double Spin = theEvaporationProbabilityPtr->GetSpin();
+  G4double Spin = theEvaporationProbabilityPtr->GetSpin();
   //JMQ  BIG BUG fixed: hbarc instead of hbar_Planck !!!!
   //     it was fixed in total probability (for this channel) but remained still here!!
   //    G4double g = (2.0*Spin+1.0)*NuclearMass/(pi2* hbar_Planck*hbar_Planck);
@@ -235,9 +224,7 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
     {
       G4double Ad = fG4pow->Z13(ResidualA);
       G4double Aj = fG4pow->Z13(A);
-      //        RN = 1.12*(R1 + R2) - 0.86*((R1+R2)/(R1*R2));
-      Rb = 1.12*(Aj + Ad) - 0.86*((Aj+Ad)/(Aj*Ad))+2.85;
-      Rb *= fermi;
+      Rb = (1.12*(Aj + Ad) - 0.86*((Aj+Ad)/(Aj*Ad))+2.85)*fermi;
     }
   else if (A>1)
     {
@@ -250,44 +237,37 @@ G4double G4GEMChannel::CalcKineticEnergy(const G4Fragment & fragment)
       G4double Ad = fG4pow->Z13(ResidualA);
       Rb = 1.5*Ad*fermi;
     }
-  //   G4double GeometricalXS = pi*RN*RN*std::pow(G4double(fragment.GetA()-A),2./3.); 
   G4double GeometricalXS = pi*Rb*Rb; 
     
-  G4double ConstantFactor = gg*GeometricalXS*Alpha/InitialLevelDensity;
-  ConstantFactor *= pi/12.0;
+  G4double ConstantFactor = gg*GeometricalXS*Alpha*pi/(InitialLevelDensity*12);
   //JMQ : this is the assimptotic maximal kinetic energy of the ejectile 
   //      (obtained by energy-momentum conservation). 
   //      In general smaller than U-theSeparationEnergy 
-  G4double theEnergy = MaximalKineticEnergy + CoulombBarrier;
   G4double KineticEnergy;
   G4double Probability;
 
-  do 
-    {
-      KineticEnergy =  CoulombBarrier + G4UniformRand()*MaximalKineticEnergy;
-      Probability = ConstantFactor*(KineticEnergy + Beta);
-      G4double a = 
-	theLevelDensityPtr->LevelDensityParameter(ResidualA,ResidualZ,theEnergy-KineticEnergy-delta0);
-      G4double T = 1.0/(std::sqrt(a/Ux) - 1.5/Ux);
-      //JMQ fix in units
+  do {
+    KineticEnergy =  CoulombBarrier + 
+      G4UniformRand()*(MaximalKineticEnergy - CoulombBarrier);
+    G4double edelta = MaximalKineticEnergy-KineticEnergy-delta0;
+    Probability = ConstantFactor*(KineticEnergy + Beta);
+    G4double a = theLevelDensityPtr->LevelDensityParameter(
+         ResidualA,ResidualZ,edelta);
+    G4double T = 1.0/(std::sqrt(a/Ux) - 1.5/Ux);
+    //JMQ fix in units
 	
-      if ( theEnergy-KineticEnergy < Ex) 
-	{
-	  G4double E0 = Ex - T*(G4Log(T/MeV) - G4Log(a*MeV)/4.0 
-				- 1.25*G4Log(Ux/MeV) + 2.0*std::sqrt(a*Ux));
-	  Probability *= G4Exp((theEnergy-KineticEnergy-E0)/T)/T;
-	} 
-      else 
-	{
-	  Probability *= G4Exp(2*std::sqrt(a*(theEnergy-KineticEnergy-delta0)))/
-	    std::pow(a*fG4pow->powN(theEnergy-KineticEnergy-delta0,5), 0.25);
-	}
+    if (MaximalKineticEnergy - KineticEnergy < Ex || edelta < 0.0) {
+      G4double E0 = Ex - T*(G4Log(T/MeV) - G4Log(a*MeV)/4.0 
+			    - 1.25*G4Log(Ux/MeV) + 2.0*std::sqrt(a*Ux));
+      Probability *= G4Exp((MaximalKineticEnergy-KineticEnergy-E0)/T)/T;
+    } else {
+      Probability *= 
+	G4Exp(2*std::sqrt(a*edelta))/std::pow(a*fG4pow->powN(edelta,5), 0.25);
     }
-  while (Normalization*G4UniformRand() > Probability);
+  } while (EmissionProbability*G4UniformRand() >= Probability);
     
   return KineticEnergy;
 } 
-
 
 G4ThreeVector G4GEMChannel::IsotropicVector(const G4double Magnitude)
     // Samples a isotropic random vectorwith a magnitud given by Magnitude.

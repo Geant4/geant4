@@ -155,7 +155,9 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 {
   G4FragmentVector * theResult = new G4FragmentVector;
   G4FragmentVector * theTempResult;
-  static const G4double Elimit = 3*MeV;
+
+  // protection of GEM model
+  //  static const G4double Elimit = 3*MeV;
 
   // The residual nucleus (after evaporation of each fragment)
   G4Fragment* theResidualNucleus = new G4Fragment(theNucleus);
@@ -175,23 +177,22 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     G4double Eex = theResidualNucleus->GetExcitationEnergy();
     G4double mass = theResidualNucleus->GetGroundStateMass();
 
-    // stop deecitation loop if can be deexcited by FBU
-    
+    // stop deecitation loop if residual can be deexcited by FBU    
     if(maxZforFBU > Z && maxAforFBU > A && Z > 0 && A > Z) {
-      if((thePool->GetConfigurationList(Z, A, mass+Eex))->size() > 0) {
+      if(thePool->IsApplicable(Z, A, mass+Eex)) {
 	theResult->push_back(theResidualNucleus);
 	return theResult;
       }
     }
     // check if it is stable, then finish evaporation
     G4double abun = nist->GetIsotopeAbundance(Z, A); 
-    /*
+    /*    
     G4cout << "### G4Evaporation::BreakItUp step " << ia << " Z= " << Z
     	   << " A= " << A << " Eex(MeV)= " 
     	   << theResidualNucleus->GetExcitationEnergy()
     	   << " aban= " << abun << G4endl;
     */
-    // stop deecitation loop in the case of the cold stable fragment 
+    // stop deecitation loop in the case of a cold stable fragment 
     if(Eex <= minExcitation && abun > 0.0) {
       theResult->push_back(theResidualNucleus);
       return theResult;
@@ -210,6 +211,7 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
 
       totprob += prob;
       probabilities[i] = totprob;
+
       // if two recent probabilities are near zero stop computations
       if(i>=8) {
 	if(prob <= totprob*1.e-8 && oldprob <= totprob*1.e-8) {
@@ -219,10 +221,12 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
       }
       oldprob = prob;
       // protection for very excited fragment - avoid GEM
+      /*
       if(7 == i && Eex > Elimit*A) {
         maxchannel = 8;
         break;
       }
+      */
     }
 
     // photon evaporation in the case of no other channels available
@@ -240,7 +244,7 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
       totprob = 0.0;
     }
 
-    // stable fragnent - evaporation is finished
+    // stable fragment - evaporation is finished
     if(0.0 == totprob) {
 
       // if fragment is exotic, then force its decay 
@@ -269,7 +273,6 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
     // this should not happen
     if(i >= nChannels) { i = nChannels - 1; }
 
-
     // single photon evaporation, primary pointer is kept
     if(0 == i) {
       //G4cout << "Single gamma" << G4endl;
@@ -295,23 +298,35 @@ G4FragmentVector * G4Evaporation::BreakItUp(const G4Fragment &theNucleus)
       // other channels
     } else {
       //G4cout << "Channel # " << i << G4endl;
+      G4Fragment* frag = (*theChannels)[i]->EmittedFragment(theResidualNucleus);
+      if(frag) { theResult->push_back(frag); }
+      /*        
+       }
       theTempResult = (*theChannels)[i]->BreakUp(*theResidualNucleus);
       if(theTempResult) {
 	size_t nsec = theTempResult->size();
         if(nsec > 0) {
-          --nsec;
+          G4bool deletePrim = true;
+	  G4Fragment* frag = 0;
+	  G4Fragment* newres = 0;
 	  for(size_t j=0; j<nsec; ++j) {
-	    theResult->push_back((*theTempResult)[j]);
+            frag = (*theTempResult)[j];
+	    if(theResidualNucleus != frag) { 
+	      theResult->push_back(frag);
+              newres = frag;
+	    } else {
+	      deletePrim = false;
+	    }
 	  }
 	  // if the residual change its pointer 
 	  // then delete previous residual fragment and update to the new
-          if(theResidualNucleus != (*theTempResult)[nsec] ) { 
+          if(deletePrim) { 
 	    delete theResidualNucleus; 
-	    theResidualNucleus = (*theTempResult)[nsec];
+	    theResidualNucleus = newres;
 	  }
 	}
-        delete theTempResult;
-      }
+        delete theTempResult; // end of BreakUp
+       */
     }
   }
 

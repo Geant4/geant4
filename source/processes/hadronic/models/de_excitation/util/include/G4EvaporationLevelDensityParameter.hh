@@ -35,7 +35,6 @@
 #define G4EvaporationLevelDensityParameter_h 1
 
 #include "G4VLevelDensityParameter.hh"
-//#include "G4CameronTruranHilfShellCorrections.hh"
 
 class G4EvaporationLevelDensityParameter : public G4VLevelDensityParameter
 {
@@ -45,11 +44,7 @@ public:
 
   virtual ~G4EvaporationLevelDensityParameter();
 
-  inline 
-  G4double LevelDensityParameter(G4int A, G4int/*Z*/, G4double /*U*/) const
-  {
-    return static_cast<G4double>(A)/10.;
-  }
+  G4double LevelDensityParameter(G4int A, G4int Z, G4double U) const;
 
 private:  
 	
@@ -59,22 +54,6 @@ private:
   G4bool operator==(const G4EvaporationLevelDensityParameter &right) const;
   G4bool operator!=(const G4EvaporationLevelDensityParameter &right) const;
   
-  /*
-private:
-  inline G4double ShellCorrection(G4int Z, G4int N) const
-  { 
-    return SPtr->GetShellZ(Z) + SPtr->GetShellN(N);
-  }
-
-  static const G4double ConstEvapLevelDensityParameter;
-  static const G4double alpha;
-  static const G4double beta;
-  static const G4double gamma;
-  static const G4double Bs;
-
-  G4CameronTruranHilfShellCorrections* SPtr;
-  */	  		
-
 };
 
 #endif
