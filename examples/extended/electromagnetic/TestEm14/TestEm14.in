@@ -6,6 +6,8 @@
 # all processes
 #
 /control/verbose 2
+/control/cout/ignoreThreadsExcept 0
+/run/numberOfThreads 2
 /run/verbose 2
 #
 /testem/det/setMat Water
