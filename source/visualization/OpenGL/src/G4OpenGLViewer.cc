@@ -50,9 +50,9 @@
 #include "G4AttCheck.hh"
 #include "G4Text.hh"
 
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+#ifdef G4OPENGL_VERSION_2
 // We need to have a Wt gl drawer because we will draw inside the WtGL component (ImmediateWtViewer)
-#include "G4OpenGLWtDrawer.hh"
+#include "G4OpenGLVboDrawer.hh"
 #endif
 
 // GL2PS
@@ -61,12 +61,12 @@
 #include <sstream>
 #include <string>
 
-//#define G4DEBUG_VIS_OGL
+//#define G4DEBUG_VIS_OGL 1
 
 G4OpenGLViewer::G4OpenGLViewer (G4OpenGLSceneHandler& scene):
 G4VViewer (scene, -1),
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
-fWtDrawer(NULL),
+#ifdef G4OPENGL_VERSION_2
+fVboDrawer(NULL),
 #endif
 fPrintColour (true),
 fVectoredPs (true),
@@ -109,6 +109,15 @@ fGl2psDefaultLineWith(1),
 fGl2psDefaultPointSize(2),
 fGlViewInitialized(false),
 fIsGettingPickInfos(false)
+#ifdef G4OPENGL_VERSION_2
+,fShaderProgram(0)
+,fVertexPositionAttribute(0)
+,fVertexNormalAttribute(0)
+,fpMatrixUniform(0)
+,fcMatrixUniform(0)
+,fmvMatrixUniform(0)
+,fnMatrixUniform(0)
+#endif
 {
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer:: Creation\n");
@@ -144,93 +153,53 @@ G4OpenGLViewer::~G4OpenGLViewer ()
 void G4OpenGLViewer::InitializeGLView () 
 {
 #ifdef G4OPENGL_VERSION_2
-
-#ifndef TEST_WT_EXAMPLE
-
-  const char *fragmentShaderSrc =
-  "#ifdef GL_ES\n"
-  "precision highp float;\n"
-  "#endif\n"
-  "\n"
-  "varying vec3 vLightWeighting;\n"
-  "uniform vec4 uPointColor; // Point Color\n"
-  "\n"
-  "void main(void) {\n"
-  "  vec4 matColor = uPointColor;\n"
-  "  gl_FragColor = vec4(matColor.rgb, matColor.a);\n"
-  "}\n";
-  
-  
-  
-  const char *vertexShaderSrc =
-  "attribute vec3 aVertexPosition;\n"
-  "attribute vec3 aVertexNormal;\n"
-  "\n"
-  "uniform mat4 uMVMatrix; // [M]odel[V]iew matrix\n"
-  "uniform mat4 uCMatrix;  // Client-side manipulated [C]amera matrix\n"
-  "uniform mat4 uPMatrix;  // Perspective [P]rojection matrix\n"
-  "uniform mat4 uNMatrix;  // [N]ormal transformation\n"
-  "// uNMatrix is the transpose of the inverse of uCMatrix * uMVMatrix\n"
-  "uniform mat4 uTMatrix;  // [T]ransformation  matrix\n"
-  "uniform float uPointSize;  // Point size\n"
-  "\n"
-  "varying vec3 vLightWeighting;\n"
-  "\n"
-  "void main(void) {\n"
-  "  // Calculate the position of this vertex\n"
-  "  gl_Position = uPMatrix * uCMatrix * uMVMatrix * uTMatrix * vec4(aVertexPosition, 1.0);\n"
-  "\n"
-  "  // Phong shading\n"
-  "  vec3 transformedNormal = normalize((uNMatrix * vec4(normalize(aVertexNormal), 0)).xyz);\n"
-  "  vec3 lightingDirection = normalize(vec3(1, 1, 1));\n"
-  "  float directionalLightWeighting = max(dot(transformedNormal, lightingDirection), 0.0);\n"
-  "  vec3 uAmbientLightColor = vec3(0.2, 0.2, 0.2);\n"
-  "  vec3 uDirectionalColor = vec3(0.8, 0.8, 0.8);\n"
-  "  gl_PointSize = uPointSize;\n"
-  "  vLightWeighting = uAmbientLightColor + uDirectionalColor * directionalLightWeighting;\n"
-  "}\n";
-  
-  vertexShader_ = vertexShaderSrc;
-  fragmentShader_ = fragmentShaderSrc;
-
-  
-  
-  // First, load a simple shader
-  Shader fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-  const char *frag = fragmentShader_.c_str();
-  glShaderSource(fragmentShader, 1, &frag, NULL);
-  glCompileShader(fragmentShader);
-  Shader vertexShader = glCreateShader(GL_VERTEX_SHADER);
-  const char *vert = vertexShader_.c_str();
-  glShaderSource(vertexShader, 1, &vert, NULL);
-  glCompileShader(vertexShader);
-  shaderProgram_ = glCreateProgram();
-  glAttachShader(shaderProgram_, vertexShader);
-  glAttachShader(shaderProgram_, fragmentShader);
-  glLinkProgram(shaderProgram_);
-  glUseProgram(shaderProgram_);
-  
-  //   UniformLocation uColor = getUniformLocation(shaderProgram_, "uColor");
-  //   uniform4fv(uColor, [0.0, 0.3, 0.0, 1.0]);
-  
-  // Extract the references to the attributes from the shader.
-
-  vertexPositionAttribute_ =
-  glGetAttribLocation(shaderProgram_, "aVertexPosition");
-  glEnableVertexAttribArray(vertexPositionAttribute_);
-  
-  // Extract the references the uniforms from the shader
-  pMatrixUniform_  = glGetUniformLocation(shaderProgram_, "uPMatrix");
-  cMatrixUniform_  = glGetUniformLocation(shaderProgram_, "uCMatrix");
-  mvMatrixUniform_ = glGetUniformLocation(shaderProgram_, "uMVMatrix");
-  nMatrixUniform_  = glGetUniformLocation(shaderProgram_, "uNMatrix");
-  tMatrixUniform_  = glGetUniformLocation(shaderProgram_, "uTMatrix");
-  
+  if (fVboDrawer) {
+    
+    // First, load a simple shader
+    fShaderProgram = glCreateProgram();
+    Shader vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    const char * vSrc = fVboDrawer->getVertexShaderSrc();
+    glShaderSource(vertexShader, 1, &vSrc, NULL);
+    glCompileShader(vertexShader);
+    glAttachShader(fShaderProgram, vertexShader);
+    
+    Shader fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    const char * fSrc = fVboDrawer->getFragmentShaderSrc();
+    glShaderSource(fragmentShader, 1, &fSrc, NULL);
+    glCompileShader(fragmentShader);
+    
+    glAttachShader(fShaderProgram, fragmentShader);
+    glLinkProgram(fShaderProgram);
+    glUseProgram(fShaderProgram);
+    
+    //   UniformLocation uColor = getUniformLocation(fShaderProgram, "uColor");
+    //   uniform4fv(uColor, [0.0, 0.3, 0.0, 1.0]);
+    
+    // Extract the references to the attributes from the shader.
+    
+    fVertexPositionAttribute =
+    glGetAttribLocation(fShaderProgram, "aVertexPosition");
+    
+    
+    glEnableVertexAttribArray(fVertexPositionAttribute);
+    
+    // Extract the references the uniforms from the shader
+    fpMatrixUniform  = glGetUniformLocation(fShaderProgram, "uPMatrix");
+    fcMatrixUniform  = glGetUniformLocation(fShaderProgram, "uCMatrix");
+    fmvMatrixUniform = glGetUniformLocation(fShaderProgram, "uMVMatrix");
+    fnMatrixUniform  = glGetUniformLocation(fShaderProgram, "uNMatrix");
+    ftMatrixUniform  = glGetUniformLocation(fShaderProgram, "uTMatrix");
+    
+    /*    glUniformMatrix4fv(fcMatrixUniform, 1, 0, identity);
+     glUniformMatrix4fv(fpMatrixUniform, 1, 0, identity);
+     glUniformMatrix4fv(ftMatrixUniform, 1, 0, identity);
+     glUniformMatrix4fv(fmvMatrixUniform, 1, 0, identity);
+     */
+    // We have to set that in order to avoid calls on opengl commands before all is ready
+    fGlViewInitialized = true;
+  }
 #endif
-  // We have to set that in order to avoid calls on opengl commands before all is ready
-  fGlViewInitialized = true;
-#endif
-
+  
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLViewer::InitializeGLView\n");
 #endif
@@ -815,8 +784,7 @@ void G4OpenGLViewer::DrawText(const G4Text& g4text)
     G4Point3D position = g4text.GetPosition();
 
     G4String textString = g4text.GetText();
-    const char* textCString = textString.c_str();
-
+    
     glRasterPos3d(position.x(),position.y(),position.z());
     GLint align = GL2PS_TEXT_B;
 
@@ -826,7 +794,7 @@ void G4OpenGLViewer::DrawText(const G4Text& g4text)
     case G4Text::right: align = GL2PS_TEXT_BR;
     }
     
-    gl2psTextOpt(textCString,"Times-Roman",GLshort(size),align,0);
+    gl2psTextOpt(textString.c_str(),"Times-Roman",GLshort(size),align,0);
 
   } else {
 
@@ -1220,7 +1188,7 @@ void G4OpenGLViewer::rotateSceneThetaPhi(G4double dx, G4double dy)
   new_vp = std::cos(delta_alpha) * vp + std::sin(delta_alpha) * zprime;
   
   // to avoid z rotation flipping
-  // to allow more than 360° rotation
+  // to allow more than 360âˆž rotation
 
   if (fVP.GetLightsMoveWithCamera()) {
     new_up = (new_vp.cross(yprime)).unit();
@@ -1461,17 +1429,17 @@ void G4OpenGLViewer::g4GluLookAt( GLdouble eyex, GLdouble eyey, GLdouble eyez,
 	/* Translate Eye to Origin */
 	glTranslatef(-eyex, -eyey, -eyez);
 }
-  
-  
 
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
 
-// Associate the Wt drawer to the OpenGLViewer and the OpenGLSceneHandler
-void G4OpenGLViewer::setWtDrawer(G4OpenGLWtDrawer* drawer) {
-  fWtDrawer = drawer;
+
+#ifdef G4OPENGL_VERSION_2
+
+// Associate the VBO drawer to the OpenGLViewer and the OpenGLSceneHandler
+void G4OpenGLViewer::setVboDrawer(G4OpenGLVboDrawer* drawer) {
+  fVboDrawer = drawer;
   try {
     G4OpenGLSceneHandler& sh = dynamic_cast<G4OpenGLSceneHandler&>(fSceneHandler);
-    sh.setWtDrawer(fWtDrawer);
+    sh.setVboDrawer(fVboDrawer);
   } catch(std::bad_cast exp) { }
 }
 

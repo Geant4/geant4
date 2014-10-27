@@ -171,8 +171,8 @@ protected:
   int fRecordFrameNumber;
 
   bool fHasToRepaint;
-  bool fReadyToPaint;
-  bool fIsRepainting;
+  bool fQGLWidgetInitialiseCompleted;
+  bool fPaintEventLock;
 
 private:
   enum RECORDING_STEP {WAIT,START,PAUSE,CONTINUE,STOP,READY_TO_ENCODE,ENCODING,FAILED,SUCCESS,BAD_ENCODER,BAD_OUTPUT,BAD_TMP,SAVE}; 

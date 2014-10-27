@@ -138,7 +138,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
 
         glWidget->resize(fWinSize_x,fWinSize_y);
 
-        isTabbedView = fUiQt->AddTabWidget((QWidget*)fWindow,name,getWinWidth(),getWinHeight());
+        isTabbedView = fUiQt->AddTabWidget((QWidget*)fWindow,name);
         fUISceneTreeComponentsTBWidget = fUiQt->GetSceneTreeComponentsTBWidget();
         isTabbedView = true;
       }
@@ -3585,7 +3585,7 @@ void G4OpenGLQtViewer::changeColorAndTransparency(GLuint index, G4Color color) {
 
 
 G4Colour G4OpenGLQtViewer::getColorForPoIndex(int poIndex) {
-
+  // FIXME 09/2014 : Could be optimize by searching in a tab instead of item->data
   QTreeWidgetItem* item = getTreeWidgetItem(poIndex);
 
   if (item != NULL) {

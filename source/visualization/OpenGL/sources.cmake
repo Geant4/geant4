@@ -214,6 +214,7 @@ if(GEANT4_USE_QT)
         G4OpenGLQt.hh
         G4OpenGLQtExportDialog.hh
         G4OpenGLQtMovieDialog.hh
+        G4OpenGLVboDrawer.hh
         G4OpenGLQtViewer.hh
         G4OpenGLStoredQt.hh
         G4OpenGLStoredQtSceneHandler.hh
@@ -225,6 +226,7 @@ if(GEANT4_USE_QT)
         G4OpenGLQt.cc
         G4OpenGLQtExportDialog.cc
         G4OpenGLQtMovieDialog.cc
+        G4OpenGLVboDrawer.cc
         G4OpenGLQtViewer.cc
         G4OpenGLStoredQt.cc
         G4OpenGLStoredQtSceneHandler.cc
@@ -263,13 +265,13 @@ if(GEANT4_USE_WT)
     list(APPEND G4VIS_MODULE_OPENGL_HEADERS
         G4OpenGLImmediateWt.hh
         G4OpenGLImmediateWtViewer.hh
-        G4OpenGLWtDrawer.hh
+        G4OpenGLVboDrawer.hh
         G4OpenGLWtViewer.hh)
 
     list(APPEND G4VIS_MODULE_OPENGL_SOURCES
         G4OpenGLImmediateWt.cc
         G4OpenGLImmediateWtViewer.cc
-        G4OpenGLWtDrawer.cc
+        G4OpenGLVboDrawer.cc
         G4OpenGLWtViewer.cc)
 
     # Must have Wt includes...

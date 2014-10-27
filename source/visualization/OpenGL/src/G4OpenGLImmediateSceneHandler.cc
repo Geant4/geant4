@@ -248,14 +248,18 @@ void G4OpenGLImmediateSceneHandler::BeginPrimitives2D
   glMatrixMode (GL_PROJECTION);
   glPushMatrix();
   glLoadIdentity();
+#ifndef G4OPENGL_VERSION_2
   glOrtho (-1., 1., -1., 1., -G4OPENGL_FLT_BIG, G4OPENGL_FLT_BIG);
+#endif
   glMatrixMode (GL_MODELVIEW);
   glPushMatrix();
   glLoadIdentity();
   G4OpenGLTransform3D oglt (objectTransformation);
   glMultMatrixd (oglt.GetGLMatrix ());
   glDisable(GL_DEPTH_TEST);  // But see parent scene handler!!  In
+#ifndef G4OPENGL_VERSION_2
   glDisable (GL_LIGHTING);   // some cases, we need to re-iterate this.
+#endif
 }
 
 void G4OpenGLImmediateSceneHandler::EndPrimitives2D()

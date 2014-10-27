@@ -1170,6 +1170,7 @@ void G4OpenGLWtViewer::G4MouseDoubleClickEvent()
   fLastPos2 = fLastPos1;
   fLastPos1 = Wt::WPoint(event->widget().x, event->widget().y);
 
+  printf("G4OpenGLWtViewer move :%d %d\n",event->widget().x, event->widget().y);
   int deltaX = fLastPos2.x()-fLastPos1.x();
   int deltaY = fLastPos2.y()-fLastPos1.y();
 

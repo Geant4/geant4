@@ -56,8 +56,6 @@
  #ifdef G4VIS_BUILD_OPENGLWT_DRIVER
  #  include <Wt/WGLWidget>
  #  define G4OPENGL_VERSION_2 1
- // include all redefinitions of gl functions for Wt
- #  include "G4OpenGLWtDrawer.hh"
  #endif
  #ifdef  G4VIS_BUILD_OPENGLQT_DRIVER
   #ifndef G4VIS_BUILD_OPENGLX_DRIVER
@@ -69,6 +67,12 @@
     #endif
     #include <qgl.h>
   #endif
+#endif
+
+#ifdef G4OPENGL_VERSION_2
+#  undef G4VIS_BUILD_OPENGL_GL2PS
+// include all redefinitions of openGl functions for Vertex Buffer Objects
+#  include "G4OpenGLVboDrawer.hh"
 #endif
 
 #define G4OPENGL_FLT_BIG 1.e20

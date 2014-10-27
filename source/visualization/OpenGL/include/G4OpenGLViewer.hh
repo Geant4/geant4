@@ -37,13 +37,13 @@
 
 #include "G4VViewer.hh"
 #include "G4OpenGL.hh"
+#ifdef G4OPENGL_VERSION_2
+#include "G4OpenGLVboDrawer.hh"
+#endif
 
 class G4OpenGLSceneHandler;
 class G4OpenGL2PSAction;
 class G4Text;
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
-#include "G4OpenGLWtDrawer.hh"
-#endif
 
 class G4OpenGLViewerPickMap {
   public :
@@ -116,12 +116,12 @@ public:
   // change the export image format according to thoses available for the current viewer
 
   // Special case for Wt, we want to have acces to the drawer
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
-  inline G4OpenGLWtDrawer* getWtDrawer() {return fWtDrawer;}
+#ifdef G4OPENGL_VERSION_2
+  inline G4OpenGLVboDrawer* getWtDrawer() {return fVboDrawer;}
   
   // Associate the Wt drawer to the OpenGLViewer and the OpenGLSceneHandler
-  void setWtDrawer(G4OpenGLWtDrawer* drawer);
-  G4OpenGLWtDrawer* fWtDrawer;
+  void setVboDrawer(G4OpenGLVboDrawer* drawer);
+  G4OpenGLVboDrawer* fVboDrawer;
 
   inline bool isInitialized() {
     return fGlViewInitialized;
@@ -221,47 +221,7 @@ protected:
   G4int fPrintSizeX;
   G4int fPrintSizeY;
 
-public :
-#ifdef G4OPENGL_VERSION_2
-  // define the shaders for vertex and fragment in plain text format
-  std::string vertexShader_;
-  std::string fragmentShader_;
 
-
-  // define the keyword shader to handle it in a better way for OpenGL and WebGL
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
-  #define Shader Wt::WGLWidget::Shader
-#else
-  #define Shader GLuint
-#endif
-  
-  // define some attributes and variables for OpenGL and WebGL
-#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
-  Wt::WGLWidget::Program shaderProgram_;
-
-  // Program and related variables
-  Wt::WGLWidget::AttribLocation vertexPositionAttribute_;
-  Wt::WGLWidget::AttribLocation vertexNormalAttribute_;
-  Wt::WGLWidget::UniformLocation pMatrixUniform_;
-  Wt::WGLWidget::UniformLocation cMatrixUniform_;
-  Wt::WGLWidget::UniformLocation mvMatrixUniform_;
-  Wt::WGLWidget::UniformLocation nMatrixUniform_;
-  Wt::WGLWidget::UniformLocation tMatrixUniform_;
-#else
-  GLuint shaderProgram_;
-
-  // Program and related variables
-  GLuint vertexPositionAttribute_;
-  GLuint vertexNormalAttribute_;
-  GLuint pMatrixUniform_;
-  GLuint cMatrixUniform_;
-  GLuint mvMatrixUniform_;
-  GLuint nMatrixUniform_;
-  GLuint tMatrixUniform_;
-#endif
-  
-#endif
-  
 private :
   G4float fPointSize;
   G4String fExportFilename;
@@ -288,6 +248,69 @@ private :
   
   bool fIsGettingPickInfos;
   // Block SetView() during picking
+  
+#ifdef G4OPENGL_VERSION_2
+public:
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+  inline Wt::WGLWidget::Program getShaderProgram() {
+    return fShaderProgram;
+  }
+  inline Wt::WGLWidget::UniformLocation getShaderProjectionMatrix() {
+    return fpMatrixUniform;
+  }
+  inline Wt::WGLWidget::UniformLocation getShaderTransformMatrix() {
+    return ftMatrixUniform;
+  }
+#else
+  inline GLuint getShaderProgram() {
+    return fShaderProgram;
+  }
+  inline GLuint getShaderProjectionMatrix() {
+    return fpMatrixUniform;
+  }
+  inline GLuint getShaderTransformMatrix() {
+    return ftMatrixUniform;
+  }
+  inline GLuint getShaderViewModelMatrix() {
+    return fmvMatrixUniform;
+  }
+#endif
+
+protected :
+  
+  // define the keyword shader to handle it in a better way for OpenGL and WebGL
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+#define Shader Wt::WGLWidget::Shader
+#else
+#define Shader GLuint
+#endif
+  
+  // define some attributes and variables for OpenGL and WebGL
+#ifdef G4VIS_BUILD_OPENGLWT_DRIVER
+  Wt::WGLWidget::Program fShaderProgram;
+  
+  // Program and related variables
+  Wt::WGLWidget::AttribLocation fVertexPositionAttribute;
+  Wt::WGLWidget::AttribLocation fVertexNormalAttribute;
+  Wt::WGLWidget::UniformLocation fpMatrixUniform;
+  Wt::WGLWidget::UniformLocation fcMatrixUniform;
+  Wt::WGLWidget::UniformLocation fmvMatrixUniform;
+  Wt::WGLWidget::UniformLocation fnMatrixUniform;
+  Wt::WGLWidget::UniformLocation ftMatrixUniform;
+#else
+  GLuint fShaderProgram;
+  
+  // Program and related variables
+  GLuint fVertexPositionAttribute;
+  GLuint fVertexNormalAttribute;
+  GLuint fpMatrixUniform;
+  GLuint fcMatrixUniform;
+  GLuint fmvMatrixUniform;
+  GLuint fnMatrixUniform;
+  GLuint ftMatrixUniform;
+#endif
+  
+#endif
 };
 
 #endif

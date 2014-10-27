@@ -54,7 +54,7 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
 
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
   fHasToRepaint = false;
-  fIsRepainting = false;
+  fPaintEventLock = false;
 
   resize(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
 
@@ -74,12 +74,12 @@ void G4OpenGLStoredQtViewer::Initialise() {
   printf("G4OpenGLStoredQtViewer::Initialise 1\n");
 #endif
   hide();
-  fReadyToPaint = false;
+  fQGLWidgetInitialiseCompleted = false;
   CreateMainWindow (this,QString(GetName()));
 
   glDrawBuffer (GL_BACK);
+  fQGLWidgetInitialiseCompleted = true;
 
-  fReadyToPaint = true;
 }
 
 void G4OpenGLStoredQtViewer::initializeGL () {
@@ -293,10 +293,10 @@ void G4OpenGLStoredQtViewer::paintGL()
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL \n");
 #endif
-  if (fIsRepainting) {
+  if (fPaintEventLock) {
     //    return ;
   }
-  fIsRepainting = true;
+  fPaintEventLock = true;
   if ((getWinWidth() == 0) && (getWinHeight() == 0)) {
     return;
   }
@@ -304,8 +304,8 @@ void G4OpenGLStoredQtViewer::paintGL()
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL ready:%d fHasTo:%d??\n",fReadyToPaint,fHasToRepaint);
 #endif
-  if (!fReadyToPaint) {
-    fReadyToPaint= true;
+  if (!fQGLWidgetInitialiseCompleted) {
+    fPaintEventLock = false;
     return;
   }
   // DO NOT RESIZE IF SIZE HAS NOT CHANGE :
@@ -343,11 +343,11 @@ void G4OpenGLStoredQtViewer::paintGL()
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLStoredQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n",fReadyToPaint);
 #endif
-  fIsRepainting = false;
+  fPaintEventLock = false;
 }
 
 void G4OpenGLStoredQtViewer::paintEvent(QPaintEvent *) {
-  if (!fReadyToPaint) {
+  if (! fQGLWidgetInitialiseCompleted) {
     return;
   }
   if ( fHasToRepaint) {

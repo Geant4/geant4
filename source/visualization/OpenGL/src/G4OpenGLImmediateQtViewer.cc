@@ -38,6 +38,12 @@
 #include "G4ios.hh"
 
 #include <qapplication.h>
+#include <qevent.h>
+
+#ifdef G4OPENGL_VERSION_2
+#include <qglshaderprogram.h>
+#endif
+
 
 G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
 (G4OpenGLImmediateSceneHandler& sceneHandler,
@@ -50,8 +56,14 @@ G4OpenGLImmediateQtViewer::G4OpenGLImmediateQtViewer
 
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
   fHasToRepaint = false;
-  fIsRepainting = false;
+  fPaintEventLock = false;
 
+  // Create a new drawer
+  // register the QtDrawer to the OpenGLViewer
+#ifdef G4OPENGL_VERSION_2
+  setVboDrawer(new G4OpenGLVboDrawer(this,"OGL-VBO"));
+#endif
+  
   resize(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
 
   if (fViewId < 0) return;  // In case error in base class instantiation.
@@ -65,16 +77,53 @@ void G4OpenGLImmediateQtViewer::Initialise() {
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::Initialise \n");
 #endif
-  fReadyToPaint = false;
+  fQGLWidgetInitialiseCompleted = false;
   CreateMainWindow (this,QString(GetName()));
   CreateFontLists ();
 
-  fReadyToPaint = true;
+  fQGLWidgetInitialiseCompleted = true;
 }
 
 void G4OpenGLImmediateQtViewer::initializeGL () {
 
+#ifndef G4OPENGL_VERSION_2
   InitializeGLView ();
+#else
+    QGLShaderProgram *aQGLShaderProgram = new QGLShaderProgram (context());
+    fShaderProgram = aQGLShaderProgram->programId ();
+    
+    aQGLShaderProgram->addShaderFromSourceCode(QGLShader::Vertex,
+                                               fVboDrawer->getVertexShaderSrc());
+  
+    aQGLShaderProgram->addShaderFromSourceCode(QGLShader::Fragment,
+                                               fVboDrawer->getFragmentShaderSrc());
+
+    aQGLShaderProgram->link();
+    aQGLShaderProgram->bind();
+    
+    fVertexPositionAttribute =  glGetAttribLocation(fShaderProgram, "aVertexPosition");
+    fcMatrixUniform =  glGetUniformLocation(fShaderProgram, "uCMatrix");
+    fpMatrixUniform =  glGetUniformLocation(fShaderProgram, "uPMatrix");
+    ftMatrixUniform =  glGetUniformLocation(fShaderProgram, "uTMatrix");
+    fmvMatrixUniform = glGetUniformLocation(fShaderProgram, "uMVMatrix");
+  
+  // Load identity at beginning
+  float identity[16] = {
+    1.0f, 0, 0, 0,
+    0, 1.0f, 0, 0,
+    0, 0, 1.0f, 0,
+    0, 0, 0, 1.0f
+  };
+  glUniformMatrix4fv (fcMatrixUniform, 1, 0, identity);
+  glUniformMatrix4fv (fpMatrixUniform, 1, 0, identity);
+  glUniformMatrix4fv (ftMatrixUniform, 1, 0, identity);
+  glUniformMatrix4fv(fmvMatrixUniform, 1, 0, identity);
+
+  glUseProgram(fShaderProgram);
+
+  setInitialized();  // Should be removed when fuse Wt and Qt
+
+#endif
 
   // If a double buffer context has been forced upon us, ignore the
   // back buffer for this OpenGLImmediate view.
@@ -156,11 +205,11 @@ void G4OpenGLImmediateQtViewer::paintGL()
 {
   updateToolbarAndMouseContextMenu();
 
-  if (fIsRepainting) {
+  if (fPaintEventLock) {
     //    return ;
   }
-  if (!fReadyToPaint) {
-    fReadyToPaint= true;
+  if (!fQGLWidgetInitialiseCompleted) {
+    fQGLWidgetInitialiseCompleted= true;
     return;
   }
   if ((getWinWidth() == 0) && (getWinHeight() == 0)) {
@@ -203,7 +252,7 @@ void G4OpenGLImmediateQtViewer::paintGL()
 #ifdef G4DEBUG_VIS_OGL
   printf("G4OpenGLImmediateQtViewer::paintGL ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ ready %d\n\n\n",fReadyToPaint);
 #endif
-  fIsRepainting = false;
+  fPaintEventLock = false;
 }
 
 void G4OpenGLImmediateQtViewer::mousePressEvent(QMouseEvent *event)

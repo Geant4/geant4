@@ -17,6 +17,79 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24th October 2014  Laurent Garnier (opengl-V10-00-20 require interfaces-V10-00-15)
+G4OpenGLImmediateSceneHandler, G4OpenGLSceneHandler :
+  o Improvements for OpenGL VBO
+G4OpenGLQtViewer:
+  o Suppress sizeX, sizeY when calling AddTabWidget (needs interfaces-V10-00-15)
+
+22nd October 2014  John Allison  (opengl-V10-00-19)
+- Tagged.
+
+9th October 2014  Laurent Garnier
+- G4OpenGL.hh :
+  o Remove specific include for Wt
+- G4OpenGLQtViewer, G4OpenGLStoredQtViewer, G4OpenGLImmediateQtViewer :
+  o Rename fReadyToPaint to fQGLWidgetInitialiseCompleted
+  o Rename fIsRepainting to fPaintEventLock
+- G4OpenGLSceneHandler : 
+  o Change specific things from Wt viewers to all OpenGL2
+- Rename G4OpenGLVBOViewer files to G4OpenGLVboDrawer
+- G4OpenGLViewer
+  o Move OpenGL2 specific things outside (in G4OpenGLVboDrawer)
+  o Move Wt specific things now available for all OpenGL2
+  o Avoid a warning from coverity in DrawText
+- G4OpenGLImmediateQtViewer
+  o Add some work about OpenGL2 (not yet finished)
+
+10th September 2014  Laurent Garnier
+- Renaming G4OpenGLWtDrawer => G4OpenGLVboDrawer  to be able to add Wt/Qt inside
+- G4OpenGLImmediateWtViewer, G4OpenGLSceneHandler : Renaming + remove unuseful thing
+
+10th September 2014  Laurent Garnier
+- G4OpenGLWtDrawer, G4OpenGLViewer : Enhancements for OpenGL VBO
+
+4th September 2014  Laurent Garnier
+- G4OpenGLStoredViewer :
+  o Remove unnecessary call to :
+   glEnable (GL_DEPTH_TEST) and glDepthFunc (GL_LEQUAL)
+   glColor4d()
+- G4OpenGLStoredSceneHandler : Remove glDrawBuffer(GL_BACK)
+- G4OpenGLStoredQtViewer : Optimizations
+- G4OpenGLSceneHandler :
+  o Remove unnecessary glEdgeFlag (GL_TRUE)
+  o lineWidth(), markerSize()
+  o Little work for Vertex Buffer Object
+- G4OpenGLImmediateQtViewer : Avoid paintEvent() at initialisation
+
+28th August 2014  Laurent Garnier
+- G4OpenGLImmediateQtViewer, G4OpenGLStoredQtViewer :
+  o Rename to avoid confusion :
+    - fIsRepainting -> fPaintEventLock : Could not have another paintEvent() inside 
+      a PaintEvent()
+    - fReadyToPaint -> fQGLWidgetInitialiseCompleted : Wait for complete Initialization
+      before drawing anything
+  o Call ClearViewWithoutFlush() instead of ClearView() : Avoid a unnecessary flush()
+- G4OpenGLQtViewer : 
+  o Do not trigger a resizeEvent before adding viewer to the MDIArea
+  o FinishView() : Nothing to do (instead of a glFlush() )
+- G4OpenGLStoredQtViewer : 
+  o Remove makeCurrent() at beginning of Initialie(), not useful
+  o Remove setVisible() in InitializedGL() : do not set this component visible until 
+    it is totally realized
+    (normally done by G4UIQt::AddTab() )
+  o Remove sendPostedEvents () in InitializedGL() : Not useful and cause the mainWindow 
+    to be redraw before the session_start()
+  o Remove makeCurrent() in ComputeView ()  
+  o Call ClearViewWithoutFlush() instead of ClearView() : Avoid a unnecessary flush()
+  o In ResizeGL() : Now call the Clear-Set-Draw sequence
+  o Move half of painGL() in paintEvent(). The paintGL() function now does only the 
+    Set-Clear-Compute sequence.
+  o showEvent() does now only repaint visible windows
+  o Remove glFlush() in DrawView(). Avoid flickering
+- G4OpenGLViewer :
+  o Add a new function ClearViewWithoutFlush(): Avoid a unnecessary flush()
+
 22th August 2014  Laurent Garnier (opengl-V10-00-18)
 - G4OpenGLQtViewer :
   o Fix a crash when closing a tab viewer when auto rotating
