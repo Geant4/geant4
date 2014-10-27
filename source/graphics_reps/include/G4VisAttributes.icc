@@ -136,10 +136,6 @@ inline G4int G4VisAttributes::GetForcedLineSegmentsPerCircle () const {
   return fForcedLineSegmentsPerCircle;
 }
 
-inline G4int G4VisAttributes::GetMinLineSegmentsPerCircle () const {
-  return fMinLineSegmentsPerCircle;
-}
-
 inline G4double G4VisAttributes::GetStartTime() const {
   return fStartTime;
 }

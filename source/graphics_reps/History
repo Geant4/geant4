@@ -20,7 +20,16 @@ committal in the CVS repository !
 History file for graphics_reps category
 ---------------------------------------
 
-22th August 2014  John Allison  (greps-V10-00-08)
+24th August 2014  Laurent Garnier (greps-V10-00-10)
+- G4VisAttributes: Fix the fMinLineSegmentsPerCircle for SetForceLineSegmentsPerCircle
+
+23th August 2014  Laurent Garnier (greps-V10-00-09)
+- G4VisAttributes: Better implementation of fMinLineSegmentsPerCircle
+
+23th August 2014  Laurent Garnier
+- G4VisAttributes: Change fMinLineSegmentsPerCircleto a static member
+
+22th August 2014  Laurent Garnier  (greps-V10-00-08)
 - G4VisAttributes: Add fMinLineSegmentsPerCircle parameter
 
 14th August 2014  John Allison  (greps-V10-00-07)
