@@ -18,6 +18,16 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+24 October 14: V.Ivanchenko (emstand-V10-00-47)
+- G4DeltaAngle - comment out warning happens frequently for 
+    low-enegry electrons
+
+24 October 14: V.Ivanchenko (emstand-V10-00-46)
+- G4CoulombScattering - use G4EmParameters
+- G4WentzelVIModel - refinment of lateral displacement
+- G4UrbanMscModel - refinment of lateral displacement 
+- G4WentzelOKandVIxSection - fixed sampling in single scattering
+
 16 October 14: V.Ivanchenko (emstand-V10-00-45)
 - G4eIonisation, G4hIonisation, G4ionIonisation, G4eBremsstrahlung,
   G4GammaConversion, G4ComptonScattering, G4PhotoElectricEffect

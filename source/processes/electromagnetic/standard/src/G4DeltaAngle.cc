@@ -137,18 +137,21 @@ G4DeltaAngle::SampleDirection(const G4DynamicParticle* dp,
     G4double sintet = sqrt((1 - costet)*(1 + costet));
 
     cost = 1.0;
-    if(n >= nmax) {
-      isOK = true;
+    if(n >= nmax) { 
+      /*
       G4ExceptionDescription ed;
       ed << "### G4DeltaAngle Warning: " << n 
 	 << " iterations - stop the loop with cost= 1.0 " 
 	 << " for " << dp->GetDefinition()->GetParticleName() << "\n" 
-         << " Ekin(MeV)= " << dp->GetKineticEnergy()/MeV 
-         << " Efinal(MeV)= " << kinEnergyFinal/MeV 
-         << " Ebinding(MeV)= " << bindingEnergy/MeV; 
+	 << " Ekin(MeV)= " << dp->GetKineticEnergy()/MeV 
+	 << " Efinal(MeV)= " << kinEnergyFinal/MeV 
+	 << " Ebinding(MeV)= " << bindingEnergy/MeV; 
       G4Exception("G4DeltaAngle::SampleDirection","em0044",
                   JustWarning, ed,"");
-    }
+      */
+      if(0.0 ==  bindingEnergy) { isOK = true; }
+      bindingEnergy = 0.0; 
+    } 
 
     G4double x0 = p*(totMomentum + eTotMomentum*costet);
     /*

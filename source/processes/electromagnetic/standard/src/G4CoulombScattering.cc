@@ -52,7 +52,7 @@
 #include "G4eCoulombScatteringModel.hh"
 #include "G4IonCoulombScatteringModel.hh"
 #include "G4Proton.hh"
-#include "G4LossTableManager.hh"
+#include "G4EmParameters.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -90,10 +90,10 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
   // after first initialisation
   if(isInitialised) { return; }
 
-  G4double a = G4LossTableManager::Instance()->FactorForAngleLimit()
-    *CLHEP::hbarc/CLHEP::fermi;
+  G4EmParameters* param = G4EmParameters::Instance();
+  G4double a = param->FactorForAngleLimit()*CLHEP::hbarc/CLHEP::fermi;
   q2Max = 0.5*a*a;
-  G4double theta = PolarAngleLimit();
+  G4double theta = param->MscThetaLimit();
 
   // restricted or non-restricted cross section table
   G4bool yes = false;
@@ -107,17 +107,6 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
 	 << " nbins= " << LambdaBinning()
 	 << " theta= " << theta
 	 << G4endl;
-  */
-  /*
-  // second initialisation
-  if(isInitialised) {
-    G4VEmModel* mod = EmModel(1);
-    mod->SetPolarAngleLimit(theta);
-    mod = GetModelByIndex(1);
-    if(mod) { mod->SetPolarAngleLimit(theta); }
-
-    // first initialisation
-  } else {
   */
 
   isInitialised = true;
@@ -141,8 +130,8 @@ void G4CoulombScattering::InitialiseProcess(const G4ParticleDefinition* p)
     else    { SetEmModel(new G4IonCoulombScatteringModel(), 1); }
   }
   G4VEmModel* model = EmModel(1);
-  G4double emin = std::max(MinKinEnergy(),model->LowEnergyLimit());
-  G4double emax = std::min(MaxKinEnergy(),model->HighEnergyLimit());
+  G4double emin = std::max(param->MinKinEnergy(),model->LowEnergyLimit());
+  G4double emax = std::min(param->MaxKinEnergy(),model->HighEnergyLimit());
   model->SetPolarAngleLimit(theta);
   model->SetLowEnergyLimit(emin);
   model->SetHighEnergyLimit(emax);
@@ -158,7 +147,7 @@ G4double G4CoulombScattering::MinPrimaryEnergy(const G4ParticleDefinition* part,
   G4double emin = 0.0;
 
   // Coulomb scattering combined with multiple or hadronic scattering
-  G4double theta = PolarAngleLimit();
+  G4double theta = G4EmParameters::Instance()->MscThetaLimit();
 
   if(0.0 < theta) {
     G4double p2 = q2Max*mat->GetIonisation()->GetInvA23()/(1.0 - cos(theta));
@@ -173,7 +162,7 @@ G4double G4CoulombScattering::MinPrimaryEnergy(const G4ParticleDefinition* part,
 
 void G4CoulombScattering::PrintInfo()
 {
-  G4cout << "      " << PolarAngleLimit()/degree
+  G4cout << "      " << G4EmParameters::Instance()->MscThetaLimit()/degree
 	 << " < Theta(degree) < 180";
 
   if(q2Max < DBL_MAX) { G4cout << "; pLimit(GeV^1)= " << sqrt(q2Max)/GeV; }

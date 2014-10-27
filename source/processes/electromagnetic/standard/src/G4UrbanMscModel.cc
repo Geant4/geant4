@@ -900,7 +900,7 @@ G4double G4UrbanMscModel::ComputeTrueStepLength(G4double geomStepLength)
 
 G4ThreeVector& 
 G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
-				  G4double safety)
+				  G4double /*safety*/)
 {
   fDisplacement.set(0.0,0.0,0.0);
   G4double kineticEnergy = currentKinEnergy;
@@ -916,10 +916,7 @@ G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
   G4double cth = SampleCosineTheta(tPathLength,kineticEnergy);
 
   // protection against 'bad' cth values
-  if(std::fabs(cth) > 1.) { 
-    latDisplasment = latDisplasmentbackup;
-    return fDisplacement; 
-  }
+  if(std::fabs(cth) >= 1.0) { return fDisplacement; } 
 
   /*
   if(cth < 1.0 - 1000*tPathLength/lambda0 && cth < 0.5 &&
@@ -948,8 +945,9 @@ G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
 	 << G4endl;
   */
 
-  if (latDisplasment && safety > tlimitminfix2 && currentTau >= tausmall &&
-      !insideskin) {
+  //if (latDisplasment && safety > tlimitminfix2 && currentTau >= tausmall &&
+  //    !insideskin) {
+  if (latDisplasment && currentTau >= tausmall) {
     //sample displacement r
     G4double rmax = sqrt((tPathLength-zPathLength)*(tPathLength+zPathLength));
     G4double r = rmax*G4Exp(G4Log(rndmEngineMod->flat())*third);
@@ -973,6 +971,8 @@ G4UrbanMscModel::SampleScattering(const G4ThreeVector& oldDirection,
           Phi  = twopi*rndmEngineMod->flat();
         else
         {
+	  //G4cout << "latcorr= " << latcorr << "  r*sth= " << r*sth 
+	  //	 << " ratio= " << latcorr/(r*sth) <<  G4endl;
           G4double psi = std::acos(latcorr/(r*sth));
           if(rndmEngineMod->flat() < 0.5)
             Phi = phi+psi;

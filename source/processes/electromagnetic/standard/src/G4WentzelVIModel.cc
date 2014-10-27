@@ -474,7 +474,7 @@ G4double G4WentzelVIModel::ComputeTrueStepLength(G4double geomStepLength)
 
 G4ThreeVector& 
 G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
-				   G4double safety)
+				   G4double /*safety*/)
 {
   fDisplacement.set(0.0,0.0,0.0);
   //G4cout << "!##! G4WentzelVIModel::SampleScattering for " 
@@ -512,7 +512,8 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
       G4double z2 = SecondMoment(particle, currentCouple, effKinEnergy);
       prob2 = (z2 - z1)/(1.5*z1 - z2);
     }
-    if(z0 > zzmin && safety > tlimitminfix) { 
+    //    if(z0 > zzmin && safety > tlimitminfix) { 
+    if(z0 > zzmin) { 
       x0 *= 0.5; 
       z0 *= 0.5;
       nMscSteps = 2;
@@ -555,7 +556,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
   G4double x2 = x0;
   G4double step, z;
   G4bool singleScat;
-  /* 
+  /*   
     G4cout << "Start of the loop x1(mm)= " << x1 << "  x2(mm)= " << x2 
     << " 1-cost1= " << 1 - cosThetaMin << " SSmode= " << singleScatteringMode 
 	   << " xtsec= " << xtsec << " Nst= "  << nMscSteps << G4endl;
@@ -631,7 +632,7 @@ G4WentzelVIModel::SampleScattering(const G4ThreeVector& oldDirection,
       G4double vy1 = sint*sin(phi);
 
       // lateral displacement  
-      if (latDisplasment && safety > tlimitminfix) {
+      if (latDisplasment) {
 	G4double rms = invsqrt12*sqrt(2*z0);
 	G4double r   = x0*mscfac;
 	G4double dx  = r*(0.5*vx1 + rms*G4RandGauss::shoot(0.0,1.0));
