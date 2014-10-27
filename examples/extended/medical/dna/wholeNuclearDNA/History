@@ -1,0 +1,24 @@
+     =========================================================
+ 		      Geant4 - dnageometry example
+     =========================================================
+
+                       Package History file
+                       --------------------
+
+22 Oct 2014 - M. Karamitros - tag wholeNuclearDNA-V10-00-04
+- Change tag name (previous name: dnageometry)
+- Adapt CMakeLists.txt to the new example name
+
+22 Oct 2014 - M. Karamitros - tag dnageometry-V10-00-03
+- Migration to extended
+- Apply coding guidelines
+- Add a flags to construct or not the entire geometry
+
+07 Oct 2014 - C. Villagrasa - tag dnageometry-V10-00-02
+
+26 Nov 2013 - L. Pandola, C. Villagrasa - tag dnageometry-V09-06-01
+- Updated README
+
+17 Sep 2013 - C. Villagrasa, S.Incerti - tag dnageometry-V09-06-00
+- Created example
+
