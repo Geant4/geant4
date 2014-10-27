@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 October 14: V.Ivanchenko (emmuons-V10-00-02)
+- G4TablesForExtrapolator - a new class which store EM tables 
+    shared between threads
+- G4EnergyLossForExtrapolator - data moved to the new class
+
 22 October 14: V.Ivanchenko (emmuons-V10-00-01)
 - G4MuPairProductionModel, G4MuBremsstrahlungModel, G4MuIonisation
     used G4EmParameters
