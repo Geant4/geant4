@@ -50,7 +50,6 @@
 class G4Step;
 class G4TouchableHistory;
 class G4HCofThisEvent;
-class HistoManager;
 
 class TargetSD : public G4VSensitiveDetector
 {
@@ -67,7 +66,6 @@ public: // Without description
 
 private:
 
-  HistoManager* fHisto;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

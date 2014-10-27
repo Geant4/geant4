@@ -23,14 +23,14 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/src/RunAction.cc
-/// \brief Implementation of the RunAction class
+/// \file electromagnetic/TestEm8/src/TestParameters.cc
+/// \brief Implementation of the TestParameters class
 //
-// $Id$
+// $Id: TestParameters.cc 78707 2014-01-17 16:02:01Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
-// ClassName:   RunAction
+// ClassName:   TestParameters
 //
 // Author:      V.Ivanchenko 01.09.2010
 //
@@ -40,110 +40,114 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#include "RunAction.hh"
-#include "Run.hh"
 #include "TestParameters.hh"
-#include "G4Run.hh"
-#include "G4RunManager.hh"
-#include "G4UImanager.hh"
-#include "G4VVisManager.hh"
+#include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::RunAction()
-  : G4UserRunAction(), fAnalysisManager(0), fRun(0), fHistName("testem8")
+TestParameters* TestParameters::fManager = 0;
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+TestParameters* TestParameters::GetPointer()
+{
+  if(!fManager) {
+    fManager = new TestParameters();
+  }
+  return fManager;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+TestParameters::TestParameters()
+{
+  fMaxEnergy   = 100.*keV;
+  fBinsE       = 100;
+  fBinsCluster = 1500;
+
+  fPositionZ   = 0.0;
+
+  // normalisation to PAI
+  fFactorALICE = 325;
+
+  // normalisation to Opt0
+  //fFactorALICE = 275;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+TestParameters::~TestParameters()
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-RunAction::~RunAction()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void RunAction::Book()
+void TestParameters::SetMaxEnergy(G4double value)
 {
-  // Always creating analysis manager
-  fAnalysisManager = G4AnalysisManager::Instance();
-  fAnalysisManager->SetActivation(true);
-  fAnalysisManager->SetVerboseLevel(1);
-
-  // Open file histogram file
-  fAnalysisManager->OpenFile(fHistName);
-  fAnalysisManager->SetFirstHistoId(1);
-
-  TestParameters* param = TestParameters::GetPointer();
-  G4int nBinsE = param->GetNumberBins();
-  G4int nBinsCluster = param->GetNumberBinsCluster();
-  G4double maxEnergy = param->GetMaxEnergy();
-  G4double factorALICE = param->GetFactorALICE();
-
-  // Creating an 1-dimensional histograms in the root directory of the tree
-  fAnalysisManager->CreateH1("h1","Energy deposition in detector (keV)",
-                             nBinsE,0.0,maxEnergy/keV);
-  fAnalysisManager->CreateH1("h2","Number of primary clusters",
-                             nBinsE,-0.5,G4double(nBinsCluster)-0.5);
-  fAnalysisManager->CreateH1("h3","Energy deposition in detector (ADC)",
-                             nBinsE,0.0,maxEnergy* factorALICE/keV);
+  fMaxEnergy = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4Run* RunAction::GenerateRun()
-{ 
-  fRun = new Run(); 
-  return fRun;
+G4double TestParameters::GetMaxEnergy() const
+{
+  return fMaxEnergy;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::BeginOfRunAction(const G4Run* aRun)
+void TestParameters::SetNumberBins(G4int value)
 {
-  G4int id = aRun->GetRunID();
-  G4cout << "### Run " << id << " start" << G4endl;
-
-  fRun->BeginOfRun();
-  //histograms
-  //
-  Book();
-
-#ifdef G4VIS_USE
-  G4UImanager* UI = G4UImanager::GetUIpointer();
-
-  G4VVisManager* pVVisManager = G4VVisManager::GetConcreteInstance();
-
-  if(pVVisManager)
-    {
-      UI->ApplyCommand("/vis/scene/notifyHandlers");
-    }
-#endif
+  fBinsE = value;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndOfRunAction(const G4Run*)
+G4int TestParameters::GetNumberBins() const
 {
-  // print Run summary
-  G4cout << "RunAction: End of run actions are started " << isMaster 
-         << "  Nevt=  " << fRun->GetNumberOfEvent() 
-         << "  Edep= " << fRun->GetStat()->mean() << G4endl;
-  if (isMaster) {
-    fRun->EndOfRun(); 
-  }
-  // save histos and close analysis
+  return fBinsE;
+}
 
-  if(fAnalysisManager->IsActive()) {
-    fAnalysisManager->Write();
-    fAnalysisManager->CloseFile();
-    delete fAnalysisManager;
-  }
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifdef G4VIS_USE
-  if (G4VVisManager::GetConcreteInstance()) {
-    G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
-  }
-#endif
+void TestParameters::SetNumberBinsCluster(G4int value)
+{
+  fBinsCluster = value;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4int TestParameters::GetNumberBinsCluster() const
+{
+  return fBinsCluster;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void TestParameters::SetEnergyPerChannel(G4double value)
+{
+  if(value > 0.0) { fFactorALICE = 1./value; }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double TestParameters::GetFactorALICE() const
+{
+  return fFactorALICE;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void TestParameters::SetPositionZ(G4double val)
+{
+  fPositionZ = val;
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+G4double TestParameters::GetPositionZ() const
+{
+  return fPositionZ;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

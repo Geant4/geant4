@@ -40,16 +40,17 @@
 // 
 
 #include "TargetSD.hh"
+#include "Run.hh"
 #include "globals.hh"
-#include "HistoManager.hh"
 #include "G4HCofThisEvent.hh"
 #include "G4TouchableHistory.hh"
 #include "G4Step.hh"
+#include "G4RunManager.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 TargetSD::TargetSD(const G4String& name)
- : G4VSensitiveDetector(name), fHisto(HistoManager::GetPointer())
+  : G4VSensitiveDetector(name)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -67,7 +68,9 @@ void TargetSD::Initialize(G4HCofThisEvent*)
 G4bool TargetSD::ProcessHits(G4Step* aStep, G4TouchableHistory*)
 {
   G4double edep = aStep->GetTotalEnergyDeposit();
-  fHisto->AddEnergy(edep, aStep); 
+  Run* fRun
+    = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());  
+  fRun->AddEnergy(edep, aStep); 
   return true;
 }
 

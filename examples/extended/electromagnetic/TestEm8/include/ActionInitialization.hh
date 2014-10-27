@@ -23,58 +23,37 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/include/PrimaryGeneratorAction.hh
-/// \brief Definition of the PrimaryGeneratorAction class
 //
+// $Id: ActionInitialization.hh 66241 2012-12-13 18:34:42Z gunter $
 //
-// $Id$
-//
-/////////////////////////////////////////////////////////////////////////
-//
-// TestEm8: Gaseous detector
-//
-// Created: 31.08.2010 V.Ivanchenko
-//
-// Modified:
-//
-////////////////////////////////////////////////////////////////////////
-//
+// 
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PrimaryGeneratorAction_h
-#define PrimaryGeneratorAction_h 1
+#ifndef ActionInitialization_h
+#define ActionInitialization_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ParticleGun.hh"
-#include "globals.hh"
+#include "G4VUserActionInitialization.hh"
 
-class G4Event;
-class TestParameters;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class ActionInitialization : public G4VUserActionInitialization
 {
 public:
+  
+  ActionInitialization();
+  virtual ~ActionInitialization();
 
-  PrimaryGeneratorAction();
-  virtual ~PrimaryGeneratorAction();
+  virtual void Build() const;
 
-  virtual void GeneratePrimaries(G4Event*);
+  virtual void BuildForMaster() const;
 
 private:
 
-  PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
-  PrimaryGeneratorAction(const PrimaryGeneratorAction&);
-
-  G4ParticleGun*    fParticleGun;
-  TestParameters*   fParam;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #endif
-
-

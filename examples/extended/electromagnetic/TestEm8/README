@@ -71,7 +71,9 @@ $Id$
  5- HOW TO START ?
  
  	- execute TestEm8 in 'batch' mode from macro files e.g.
- 		% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm8  TestEm8.in
+ 		% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm8  TestEm8.in N
+          here N means number of threads in multi-threaded mode, by
+          default 2 threads are used
 		
  	- execute TestEm8 in 'interactive' mode with visualization e.g.
  		% $(G4INSTALL)/bin/$(G4SYSTEM)/TestEm8

@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+25-10-13 V.Ivant (testem8-V10-00-05)
+- RunAction - fixed compillation warning
+
+24-10-13 V.Ivant (testem8-V10-00-04)
+- Migrated to MT mode (A.Bagulya)
+  removed Histo, HistoManager, HistoMessenger classes
+  added ActionInitialization, Run, TestParameters classes
+
 12-06-14 V.Ivant (testem8-V10-00-03)
 - applied code guidlines
 

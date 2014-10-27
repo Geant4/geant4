@@ -23,57 +23,113 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/include/PrimaryGeneratorAction.hh
-/// \brief Definition of the PrimaryGeneratorAction class
+/// \file electromagnetic/TestEm2/include/Run.hh
+/// \brief Definition of the Run class
 //
+// $Id: Run.hh 75565 2013-11-04 11:24:11Z vnivanch $
 //
-// $Id$
-//
-/////////////////////////////////////////////////////////////////////////
-//
-// TestEm8: Gaseous detector
-//
-// Created: 31.08.2010 V.Ivanchenko
-//
-// Modified:
-//
-////////////////////////////////////////////////////////////////////////
-//
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#ifndef PrimaryGeneratorAction_h
-#define PrimaryGeneratorAction_h 1
+#ifndef Run_h
+#define Run_h 1
 
-#include "G4VUserPrimaryGeneratorAction.hh"
-#include "G4ParticleGun.hh"
-#include "globals.hh"
+#include "G4Run.hh"
+#include "G4DataVector.hh"
+#include "G4StatDouble.hh"
 
-class G4Event;
+#include "g4root.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+class G4Step;
+class G4ElectronIonPair;
 class TestParameters;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class PrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
+class Run : public G4Run
 {
 public:
 
-  PrimaryGeneratorAction();
-  virtual ~PrimaryGeneratorAction();
+  Run();
+  virtual ~Run();
 
-  virtual void GeneratePrimaries(G4Event*);
+  virtual void Merge(const G4Run*);
+
+  void BeginOfRun();
+  void EndOfRun();
+
+  void BeginOfEvent();
+  void EndOfEvent();
+
+  void AddEnergy(G4double edep, const G4Step*);
+
+  inline void SetVerbose(G4int value);
+
+  inline G4int GetVerbose() const;
+
+  inline G4double GetTotStepGas() const;
+
+  inline G4double GetTotCluster() const;
+
+  inline G4double GetMeanCluster() const;
+
+  inline const G4StatDouble* GetStat() const;
 
 private:
 
-  PrimaryGeneratorAction & operator=(const PrimaryGeneratorAction &right);
-  PrimaryGeneratorAction(const PrimaryGeneratorAction&);
+  G4int fVerbose;
+  G4int fNbins;
+  G4double fStepGas;
+  G4double fMaxEnergy;
+  G4double fCluster;
+  G4double fTotStepGas;
+  G4double fTotCluster;
+  G4double fMeanCluster;
+  G4double fFactorALICE;
+  G4double fEvt;
 
-  G4ParticleGun*    fParticleGun;
-  TestParameters*   fParam;
+  G4double fTotEdep;
+  G4StatDouble fEdep;
+  G4double fOverflow;
+  G4DataVector fEgas;
+
+  G4ElectronIonPair* fElIonPair;
+  TestParameters* fParam;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+inline void Run::SetVerbose(G4int value)
+{
+  fVerbose = value;
+}
+
+inline G4int Run::GetVerbose() const
+{
+  return fVerbose;
+}
+
+inline G4double Run::GetTotStepGas() const
+{
+  return fTotStepGas;
+}
+
+inline G4double Run::GetTotCluster() const
+{
+  return fTotCluster;
+} 
+
+inline G4double Run::GetMeanCluster() const
+{
+  return fMeanCluster;
+}
+
+inline const G4StatDouble* Run::GetStat() const
+{
+  return &fEdep;
+}
 
 #endif
 

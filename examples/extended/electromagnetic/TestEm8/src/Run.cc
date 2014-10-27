@@ -23,131 +23,72 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/src/HistoManager.cc
-/// \brief Implementation of the HistoManager class
+/// \file electromagnetic/TestEm2/src/Run.cc
+/// \brief Implementation of the Run class
 //
-// $Id$
-//
-//---------------------------------------------------------------------------
-//
-// ClassName:   HistoManager
-//
-// Author:      V.Ivanchenko 01.09.2010
-//
-//----------------------------------------------------------------------------
-//
+// $Id: Run.cc 75577 2013-11-04 12:03:26Z vnivanch $
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-#include "HistoManager.hh"
-#include "G4UnitsTable.hh"
-#include "Histo.hh"
+#include "Run.hh"
 #include "G4Step.hh"
+#include "G4Run.hh"
 #include "G4LossTableManager.hh"
 #include "G4ElectronIonPair.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4PhysicalConstants.hh"
+#include "TestParameters.hh"
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager* HistoManager::fManager = 0;
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-HistoManager* HistoManager::GetPointer()
+Run::Run()
+ : G4Run(), fElIonPair(0), fParam(TestParameters::GetPointer())
 {
-  if(!fManager) {
-    fManager = new HistoManager();
-  }
-  return fManager;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-HistoManager::HistoManager()
- : fHisto(0),
-   fElIonPair(0)
-{
-  fNHisto      = 2;
-  fVerbose     = 1;
-  fMaxEnergy   = 100.*keV;
-  fBinsE       = 100;
-  fBinsCluster = 200;
-
-  // normalisation to PAI
-  fFactorALICE = 325;
-
-  // normalisation to Opt0
-  //fFactorALICE = 275;
-
-  fEvt = 0.0;
-  fTotStepGas = 0.0;
-  fTotCluster = 0.0;
-  fMeanCluster= 0.0;
-  fOverflow   = 0.0;
-
-  fTotEdep = 0.0;
-  fStepGas = 0;
-  fCluster = 0;
-
-  fHistoBooked = false;
-
-  fHisto     = new Histo();
   fElIonPair = G4LossTableManager::Instance()->ElectronIonPair();
+  fTotStepGas = fTotCluster = fMeanCluster = fOverflow = fTotEdep 
+    = fStepGas = fCluster = fMaxEnergy = 0.0; 
+  fEvt = fNbins = 0;
+  fFactorALICE = fParam->GetFactorALICE();
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-HistoManager::~HistoManager()
-{
-  delete fHisto;
-}
+Run::~Run()
+{}
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::BeginOfRun()
+void Run::BeginOfRun()
 {
   // initilise scoring
-  fEvt = 0.0;
-  fTotStepGas = 0.0;
-  fTotCluster = 0.0;
-  fMeanCluster= 0.0;
-  fOverflow   = 0.0;
+  fTotStepGas = fTotCluster = fMeanCluster = fOverflow = fTotEdep 
+    = fStepGas = fCluster = 0.0; 
+  fEvt = 0;
+ 
+  SetVerbose(1);
 
-  if(fHisto->IsActive() && !fHistoBooked) { 
-
-    fHisto->Add1D("10","Energy deposition in detector (keV)",
-                  fBinsE,0.0,fMaxEnergy/keV,1.0);
-    fHisto->Add1D("11","Number of primary clusters",
-                  fBinsCluster,-0.5,fBinsCluster-0.5,1.0);
-    fHisto->Add1D("12","Energy deposition in detector (ADC)",
-                  200,0.0,2000,1.0);
-
-    fHisto->Activate(0, true); 
-    fHisto->Activate(1, true); 
-    fHisto->Activate(2, true); 
-  }
-  fHisto->Book();
-
-  fEgas.resize(fBinsE,0.0);
+  fNbins = fParam->GetNumberBins();
+  fMaxEnergy = fParam->GetMaxEnergy();
+  
+  fEgas.resize(fNbins,0.0);
   fEdep.reset();
 
   if(fVerbose > 0) {
-    G4cout << "HistoManager: Histograms are booked and run has been started"
-           << G4endl;
-    G4cout << " BinsCluster= " << fBinsCluster << "    BinsE= " <<  fBinsE
+    G4int binsCluster = fParam->GetNumberBinsCluster();
+    G4cout << " BinsCluster= " << binsCluster << "    BinsE= " <<  fNbins
            << "   Emax(keV)= " << fMaxEnergy/keV << G4endl;
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::EndOfRun()
+void Run::EndOfRun()
 {
-  G4double norm = fEvt;
-  if(fEvt > 0.0) { norm = 1.0/norm; }
-
+  G4int nEvt = GetNumberOfEvent();
+  G4double norm = nEvt;
+  if(nEvt > 0) { norm = 1.0/norm; }
+  //G4cout << "nEvt = " << nEvt << " norm = " << norm << G4endl;   
   fTotStepGas  *= norm;
   fTotCluster  *= norm;
   fMeanCluster *= norm;
@@ -156,25 +97,21 @@ void HistoManager::EndOfRun()
   G4double y1 = fEdep.mean();
   G4double y2 = sqrt(fEdep.rms());
 
-  G4double de = fMaxEnergy/G4double(fBinsE);  
+  G4double de = fMaxEnergy/G4double(fNbins);  
   G4double x1 = -de*0.5; 
+
+  fFactorALICE = fParam->GetFactorALICE();
   
   G4cout << " ================== run summary =====================" << G4endl;
   G4int prec = G4cout.precision(5);
   G4cout << "   End of Run TotNbofEvents    = " 
-         << G4int(fEvt) << G4endl;
+         << nEvt << G4endl;
   G4cout << "   Energy(keV) per ADC channel = " 
          << 1.0/(keV*fFactorALICE) << G4endl;
-  /*
-  G4double p1 = 1*GeV;
-  G4double p2 = 3*GeV;
-  G4double mass = proton_mass_c2;
-  G4cout << sqrt(p1*p1 + mass*mass) - mass << "   " 
-         << sqrt(p2*p2 + mass*mass) - mass << G4endl; 
-  */
+
   G4cout << G4endl;
   G4cout << "   Mean energy deposit in absorber = " <<
-           y1/keV << " +- " << y2*std::sqrt(norm)/keV << " keV; ";
+    y1/keV << " +- " << y2*std::sqrt(norm)/keV << " keV; ";
   if(y1 > 0.0) { G4cout << "   RMS/Emean = " << y2/y1; }
   G4cout << G4endl;
   G4cout << "   Mean number of steps in absorber= " 
@@ -192,9 +129,9 @@ void HistoManager::EndOfRun()
 
   x1 = 0.0;
 
-  fileOut << fBinsE << G4endl;
+  fileOut << fNbins << G4endl;
  
-  for(G4int j=0; j<fBinsE; ++j) 
+  for(G4int j=0; j<fNbins; ++j) 
   {
     G4cout << std::setw(5) << j << std::setw(10) << x1/keV 
            << std::setw(12) << fEgas[j] << std::setw(12) << fEgas[j]*norm 
@@ -203,54 +140,79 @@ void HistoManager::EndOfRun()
     x1 += de;
   }
   G4cout.precision(prec);
-
-  // normalise histograms
-  if(fHisto->IsActive() && !fHistoBooked) { 
-    fHisto->ScaleH1(0,norm);
-    fHisto->ScaleH1(1,norm);
-    //    fHisto->ScaleH1(2,0.05);
-    fHisto->ScaleH1(2,0.1);
-    fHisto->Save();
-  }
+ 
+  G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
+  // normalize histograms
+  fAnalysisManager->ScaleH1(1,norm);
+  fAnalysisManager->ScaleH1(2,norm);
+  fAnalysisManager->ScaleH1(3,0.1);
+  fAnalysisManager->SetH1Ascii(1,true);
+  fAnalysisManager->SetH1Ascii(2,true);
+  fAnalysisManager->SetH1Ascii(3,true);
+ 
   G4cout << " ================== run end ==========================" << G4endl;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::BeginOfEvent()
+void Run::BeginOfEvent()
 {
-  fEvt += 1.0;
   fTotEdep = 0.0;
   fStepGas = 0;
   fCluster = 0;
+  ++fEvt;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::EndOfEvent()
+void Run::EndOfEvent()
 {
   fTotStepGas += fStepGas;
   fTotCluster += fCluster;
-  
-  G4int idx = G4int(fTotEdep*fBinsE/fMaxEnergy);
-  if(idx < 0) { idx = 0; }
-  if(idx >= fBinsE) { fOverflow += 1.0; }
+
+  G4int idx = G4int(fTotEdep*fNbins/fMaxEnergy);
+
+  if(idx < 0) { fEgas[0] += 1.0; }
+  if(idx >= fNbins) { fOverflow += 1.0; }
   else { fEgas[idx] += 1.0; }
-
+  
+  G4AnalysisManager* fAnalysisManager = G4AnalysisManager::Instance();
   // fill histo
-  fHisto->Fill(0,fTotEdep/keV,1.0);
-  fHisto->Fill(1,fCluster,1.0);
-  fHisto->Fill(2,fTotEdep*fFactorALICE/keV,1.0);
-
+  fAnalysisManager->FillH1(1,fTotEdep/keV,1.0);
+  fAnalysisManager->FillH1(2,fCluster,1.0);
+  fAnalysisManager->FillH1(3,fTotEdep*fFactorALICE/keV,1.0);
   fEdep.fill(fTotEdep, 1.0);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void HistoManager::AddEnergy(G4double edep, const G4Step* step)
+void Run::Merge(const G4Run* run)
+{
+  const Run* localRun = static_cast<const Run*>(run);
+
+  fTotStepGas  += localRun->fTotStepGas;
+  fTotCluster  += localRun->fTotCluster;
+  fMeanCluster += localRun->fMeanCluster;
+  fOverflow    += localRun->fOverflow;
+
+  G4StatDouble* stat = const_cast<G4StatDouble*>(localRun->GetStat());
+
+  fEdep.add(stat);
+ 
+  for(G4int j=0; j<fNbins; ++j)
+  {
+    fEgas[j] += localRun->fEgas[j]; 
+  }
+  
+  G4Run::Merge(run);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void Run::AddEnergy(G4double edep, const G4Step* step)
 {
   if(1 < fVerbose) {
-    G4cout << "HistoManager::AddEnergy: e(keV)= " << edep/keV
+    G4cout << "Run::AddEnergy: e(keV)= " << edep/keV
            << G4endl;
   }
   fTotEdep += edep;
@@ -262,5 +224,4 @@ void HistoManager::AddEnergy(G4double edep, const G4Step* step)
   }
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

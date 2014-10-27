@@ -40,7 +40,11 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "EventAction.hh"
-#include "HistoManager.hh"
+
+#include "Run.hh"
+#include "G4Event.hh"
+#include "G4RunManager.hh"
+#include "G4UnitsTable.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -57,14 +61,19 @@ EventAction::~EventAction()
 
 void EventAction::BeginOfEventAction(const G4Event*)
 {
-  HistoManager::GetPointer()->BeginOfEvent();
+//additional initializations 
+  Run* run  
+    = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  run->BeginOfEvent();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
-  HistoManager::GetPointer()->EndOfEvent();
+  Run* run 
+    = static_cast<Run*>(G4RunManager::GetRunManager()->GetNonConstCurrentRun());
+  run->EndOfEvent();   
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

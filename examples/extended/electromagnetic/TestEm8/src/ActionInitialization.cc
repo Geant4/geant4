@@ -23,52 +23,45 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-/// \file electromagnetic/TestEm8/include/HistoMessenger.hh
-/// \brief Definition of the HistoMessenger class
 //
+// $Id: ActionInitialization.cc 66241 2012-12-13 18:34:42Z gunter $
 //
-// $Id$
-//
-//
+// 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "ActionInitialization.hh"
 
-#ifndef HistoMessenger_h
-#define HistoMessenger_h 1
-
-#include "G4UImessenger.hh"
-#include "globals.hh"
+#include "RunAction.hh"
+#include "EventAction.hh"
+#include "StackingAction.hh"
+#include "PrimaryGeneratorAction.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class Histo;
-class G4UIdirectory;
-class G4UIcommand;
-class G4UIcmdWithAString;
+ActionInitialization::ActionInitialization()
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-class HistoMessenger: public G4UImessenger
+ActionInitialization::~ActionInitialization()
+{}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ActionInitialization::Build() const
 {
-public:
+  SetUserAction(new PrimaryGeneratorAction());
 
-  HistoMessenger(Histo* );
-  ~HistoMessenger();
-
-  virtual void SetNewValue(G4UIcommand* ,G4String );
-
-private:
-
-  Histo*                  fHisto;
-   
-  G4UIdirectory*          fHistoDir;   
-  G4UIcmdWithAString*     fFactoryCmd;
-  G4UIcmdWithAString*     fFileCmd;
-  G4UIcommand*            fHistoCmd;
-
-};
+  SetUserAction(new RunAction());
+  SetUserAction(new EventAction());
+  SetUserAction(new StackingAction());
+}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-#endif
+void ActionInitialization::BuildForMaster() const
+{
+  SetUserAction(new RunAction());
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

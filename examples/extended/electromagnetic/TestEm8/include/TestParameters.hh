@@ -26,7 +26,7 @@
 /// \file electromagnetic/TestEm8/include/HistoManager.hh
 /// \brief Definition of the HistoManager class
 //
-// $Id$
+// $Id: HistoManager.hh 78549 2014-01-07 09:42:35Z gcosmo $
 //
 //---------------------------------------------------------------------------
 //
@@ -44,8 +44,8 @@
 //----------------------------------------------------------------------------
 //
 
-#ifndef HistoManager_h
-#define HistoManager_h 1
+#ifndef TestParameters_h
+#define TestParameters_h 1
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -55,105 +55,59 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-class Histo;
-class G4Step;
-class G4ElectronIonPair;
+//class RunAction;
+//class G4Step;
 
-class HistoManager
+class TestParameters
 {
 
 public:
   // With description
 
-  static HistoManager* GetPointer();
+  static TestParameters* GetPointer();
 
 private:
 
-  HistoManager();
+  TestParameters();
 
 public: // Without description
 
-  ~HistoManager();
+  ~TestParameters();
 
-  void BeginOfRun();
-  void EndOfRun();
+  void SetMaxEnergy(G4double value);
 
-  void BeginOfEvent();
-  void EndOfEvent();
+  G4double GetMaxEnergy() const;
 
-  void AddEnergy(G4double edep, const G4Step*);
+  void SetNumberBins(G4int value);
 
-  inline void SetMaxEnergy(G4double value);
+  G4int GetNumberBins() const;
 
-  inline void SetNumberBins(G4int value);
+  void SetNumberBinsCluster(G4int value);
 
-  inline void SetNumberBinsCluster(G4int value);
+  G4int GetNumberBinsCluster() const;
 
-  inline void SetEnergyPerChannel(G4double value);
+  void SetEnergyPerChannel(G4double value);
 
-  inline void SetVerbose(G4int value);
+  G4double GetFactorALICE() const;
 
-  inline G4int GetVerbose() const;
+  void SetPositionZ(G4double val);
+
+  G4double GetPositionZ() const;
 
 private:
 
   // MEMBERS
-  static HistoManager* fManager;
+  static TestParameters* fManager;
 
-  G4int fNHisto;
-  G4int fVerbose;
+  //  G4int fNHisto;
+  //  G4int fVerbose;
 
   G4double fMaxEnergy;
-  G4double fStepGas;
-  G4double fCluster;
-  G4double fTotStepGas;
-  G4double fTotCluster;
-  G4double fMeanCluster;
   G4double fFactorALICE;
-  G4double fEvt;
+  G4double fPositionZ;
 
   G4int fBinsE; 
   G4int fBinsCluster;
-
-  G4bool fHistoBooked;
-
-  G4double fTotEdep;
-  G4StatDouble fEdep;
-  G4double fOverflow;
-  G4DataVector fEgas;
-
-  Histo*   fHisto;
-  G4ElectronIonPair* fElIonPair;
 };
-
-inline void HistoManager::SetMaxEnergy(G4double value)
-{
-  fMaxEnergy = value;
-}
-
-inline void HistoManager::SetNumberBins(G4int value)
-{
-  fBinsE = value;
-}
-
-inline void HistoManager::SetNumberBinsCluster(G4int value)
-{
-  fBinsCluster = value;
-}
-
-inline void HistoManager::SetEnergyPerChannel(G4double value)
-{
-  if(value > 0.0) { fFactorALICE = 1./value; }
-}
-
-inline void HistoManager::SetVerbose(G4int value)
-{
-  fVerbose = value;
-}
-
-inline G4int HistoManager::GetVerbose() const
-{
-  return fVerbose;
-}
 
 #endif

@@ -43,8 +43,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 #include "G4UserEventAction.hh"
-#include "G4Event.hh"
 #include "globals.hh"
+
+class G4Event;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -59,9 +60,6 @@ public: // Without description
 
   virtual void BeginOfEventAction(const G4Event*);
   virtual void   EndOfEventAction(const G4Event*);
-
-private:
-
 };
 
 #endif

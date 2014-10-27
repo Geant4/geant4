@@ -52,16 +52,16 @@ class TargetSD;
 class G4VPhysicalVolume;
 class G4LogicalVolume;
 class G4ProductionCuts;
-class PrimaryGeneratorAction;
 
 class DetectorConstruction : public G4VUserDetectorConstruction
 {
 public:
   
-  DetectorConstruction(PrimaryGeneratorAction*);
+  DetectorConstruction();
   virtual ~DetectorConstruction();
      
   virtual G4VPhysicalVolume* Construct();
+  virtual void ConstructSDandField();
 
   void SetGasMaterial (const G4String&);     
   void SetContainerMaterial (const G4String&);     
@@ -83,7 +83,7 @@ private:
 
   G4Material*        fWindowMat;
   G4double           fWindowThick;
- 
+
   G4Material*        fWorldMaterial;
             
   G4VPhysicalVolume* fPhysWorld;
@@ -96,8 +96,6 @@ private:
   G4ProductionCuts*  fGasDetectorCuts;
   G4Region*          fRegGasDet;
 
-  PrimaryGeneratorAction* fPrimaryGenerator;
-      
 };
 
 #endif
