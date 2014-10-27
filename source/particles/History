@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 23 Oct. 2014 Andrea Dotti - John Apostolakis (particles-V10-00-24)
+- Introduced workspace class for particle definition
+- Revised G4PDefSplitter class to add utility methods  
+
 - 11 Oct. 2014 Hisaya Kurashige (particles-V10-00-23)
 - Remove FindIon/GetIon methods from G4ParticleTable
 

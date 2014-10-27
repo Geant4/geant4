@@ -104,6 +104,44 @@ class G4PDefSplitter
       offset = 0;
     }
 
+    
+    T*   GetOffset() { return offset; }
+    
+    void UseWorkArea( T* newOffset ) // ,  G4int numObjects, G4int numSpace)
+    {
+        // Use recycled work area - which was created previously
+        if( offset && offset!=newOffset )
+        {
+            if( newOffset != offset )
+            {
+                G4Exception("G4PDefSplitter::UseWorkspace()",
+                            "TwoWorkspaces", FatalException,
+                            "Thread already has workspace - cannot use another.");
+            }
+            else
+            {
+                G4Exception("G4PDefSplitter::UseWorkspace()",
+                            "TwoWorkspaces", JustWarning,
+                            "Thread already has a workspace - trying to set the same again.");
+            }
+        }
+        offset= newOffset;
+        // totalobj= numObjects;
+        // totalspace= numSpace;
+    }
+    
+    T* FreeWorkArea() // G4int* numObjects, G4int* numSpace)
+    {
+        // Detach this thread from this Location
+        // The object which calls this method is responsible for it.
+        //
+        T* offsetRet= offset;
+        
+        offset= 0;
+        
+        return offsetRet;
+    }
+    
   public:
 
     G4PART_DLL G4ThreadLocalStatic G4int slavetotalspace;
