@@ -53,6 +53,8 @@
 #include "G4VisExecutive.hh"
 #endif
 
+#include "CommandLineParser.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 /*
@@ -64,18 +66,45 @@
  * code has started
  */
 
+using namespace G4DNAPARSER;
+CommandLineParser* parser(0);
+
+void Parse(int& argc, char** argv);
+
 int main(int argc, char** argv)
 {
-  G4RunManager * runManager;
-  G4bool isMT(false);
+  //////////
+  // Parse options given in commandLine
+  //
+  Parse(argc, argv);
 
-  if (isMT == true)
+  //////////
+  // Construct the run manager according to whether MT is activated or not
+  //
+  G4RunManager* runManager(0);
+  Command* commandLine(0);
+
+  if ((commandLine = parser->GetCommandIfActive("-mt")))
   {
 #ifdef G4MULTITHREADED
+
     runManager= new G4MTRunManager;
-    ((G4MTRunManager*)runManager)->SetNumberOfThreads(2);
+
+    if(commandLine->GetOption().empty())
+    {
+      ((G4MTRunManager*)runManager)->SetNumberOfThreads(1);
+    }
+    else
+    {
+      int nThreads = G4UIcommand::ConvertToInt(commandLine->GetOption());
+      ((G4MTRunManager*)runManager)->SetNumberOfThreads(nThreads);
+    }
 #else
+    G4cout << "WARNING : the -mt command line option has not effect since you "
+        "seam to have compile Geant4 without the G4MULTITHREADED flag"
+           << G4endl;
     runManager = new G4RunManager();
+
 #endif
   }
   else
@@ -83,14 +112,26 @@ int main(int argc, char** argv)
     runManager = new G4RunManager;
   }
 
-  // activate chemistry
-  G4bool chemistryFlag(true);
-  G4DNAChemistryManager::Instance()->SetChemistryActivation(chemistryFlag);
+  //////////
+  // Activate or not the chemistry module (activated by default)
+  //
+  if ((commandLine = parser->GetCommandIfActive("-chemOFF")))
+  {
+    G4DNAChemistryManager::Instance()->SetChemistryActivation(false);
+  }
+  else
+  {
+    // chemistry activated by default
+    G4DNAChemistryManager::Instance()->SetChemistryActivation(true);
+  }
 
+  //////////
   // Set mandatory user initialization classes
+  //
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserInitialization(detector);
+
   G4DNAChemistryManager::Instance()->InitializeMaster();
   runManager->SetUserInitialization(new ActionInitialization());
 
@@ -100,31 +141,100 @@ int main(int argc, char** argv)
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (argc != 1)
+#ifdef G4VIS_USE
+  // Initialize visualization
+  G4VisManager* visManager = new G4VisExecutive;
+  // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
+  // G4VisManager* visManager = new G4VisExecutive("Quiet");
+  visManager->Initialize();
+#endif
+
+  if ((commandLine = parser->GetCommandIfActive("-mac")))
   {
     // batch mode
     G4String command = "/control/execute ";
     G4String fileName = argv[1];
-    UImanager->ApplyCommand(command + fileName);
+    UImanager->ApplyCommand(command + commandLine->GetOption());
   }
   else
   {
     // interactive mode : define UI session
-//#ifdef G4UI_USE
-//    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-//#endif
-
-    UImanager->ApplyCommand("/control/execute beam.in");
-
-//#if G4UI_USE
-//    ui->SessionStart();
-//    delete ui;
-//#endif
+#ifdef G4UI_USE
+    if ((commandLine = parser->GetCommandIfActive("-gui")))
+    {
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
+#ifdef G4VIS_USE
+      UImanager->ApplyCommand("/control/execute vis.mac");
+#endif
+      ui->SessionStart();
+      delete ui;
+    }
+    else
+    {
+      UImanager->ApplyCommand("/control/execute beam.in");
+    }
+#else
+      UImanager->ApplyCommand("/control/execute beam.in");
+#endif
   }
 
+  // Job termination
+  // Free the store: user actions, physics_list and detector_description are
+  // owned and deleted by the run manager, so they should not be deleted
+  // in the main() program !
+
+#ifdef G4VIS_USE
+  delete visManager;
+#endif
+
   delete runManager;
+
+  CommandLineParser::DeleteInstance();
+
   return 0;
 }
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+void Parse(int& argc, char** argv)
+{
+  //////////
+  // Parse options given in commandLine
+  //
+  parser = CommandLineParser::GetParser();
+#ifdef G4UI_USE
+  parser->AddCommand(
+      "-gui", Command::OptionNotCompulsory,
+      "Select geant4 UI or just launch a geant4 terminal session", "qt");
+#endif
+  parser->AddCommand("-mac", Command::WithOption, "Give a mac file to execute",
+                     "macFile.mac");
+// You cann your own command, as for instance:
+//  parser->AddCommand("-seed", Command::WithOption,
+//                     "Give a seed value in argument to be tested", "seed");
+// it is then up to you to manage this option
+  parser->AddCommand("-mt", Command::OptionNotCompulsory,
+                     "Launch in MT mode (events computed in parallel,"
+                     " NOT RECOMMANDED WITH CHEMISTRY)");
+  parser->AddCommand("-chemOFF", Command::WithoutOption,
+                     "Deactivate chemistry");
 
+  //////////
+  // If -h or --help is given in option : print help and exit
+  //
+  if (parser->Parse(argc, argv) != 0) // help is being printed
+  {
+    // if you are using ROOT, create a TApplication in this condition in order
+    // to print the help from ROOT as well
+    CommandLineParser::DeleteInstance();
+    std::exit(0);
+  }
+
+  ///////////
+  // Kill application if wrong argument in command line
+  //
+  if (parser->CheckIfNotHandledOptionsExists(argc, argv))
+  {
+    // if you are using ROOT, you should initialise your TApplication
+    // before this condition
+    abort();
+  }
+}

@@ -38,7 +38,7 @@
 #include "TimeStepAction.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
-//#include "G4ITStepManager.hh"
+//#include "G4ITScheduler.hh"
 //#include "G4Molecule.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,7 +93,7 @@ TimeStepAction::operator=(const TimeStepAction& rhs)
 void TimeStepAction::StartProcessing()
 {
 // You want to know why the simulation stopped ?
-// G4ITStepManager::Instance()->WhyDoYouStop();
+// G4ITScheduler::Instance()->WhyDoYouStop();
 // At the end of the simulation, information will be printed
 // It is better to place this command before the simulation starts
 }
