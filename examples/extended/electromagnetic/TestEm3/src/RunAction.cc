@@ -38,14 +38,15 @@
 #include "RunActionMessenger.hh"
 #include "HistoManager.hh"
 #include "Run.hh"
-
+#include "G4Timer.hh"
+#include "G4RunManager.hh"
 #include "Randomize.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction(DetectorConstruction* det, PrimaryGeneratorAction* prim)
 :G4UserRunAction(), fDetector(det), fPrimary(prim), fRun(0), fRunMessenger(0),
- fHistoManager(0)
+ fHistoManager(0), fTimer(0)
 {
   fRunMessenger = new RunActionMessenger(this);
   fHistoManager = new HistoManager();
@@ -70,10 +71,6 @@ G4Run* RunAction::GenerateRun()
 
 void RunAction::BeginOfRunAction(const G4Run*)
 {
-  // save Rndm status
-  ////G4RunManager::GetRunManager()->SetRandomNumberStore(true);
-  if (isMaster) G4Random::showEngineStatus();
-  
   // keep run condition
   if ( fPrimary ) { 
     G4ParticleDefinition* particle 
@@ -86,6 +83,13 @@ void RunAction::BeginOfRunAction(const G4Run*)
   //
   G4AnalysisManager* analysis = G4AnalysisManager::Instance();
   if (analysis->IsActive()) analysis->OpenFile();
+
+  // save Rndm status and open the timer
+  if (isMaster) {
+    G4Random::showEngineStatus();
+    fTimer = new G4Timer();
+    fTimer->Start();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -93,8 +97,17 @@ void RunAction::BeginOfRunAction(const G4Run*)
 void RunAction::EndOfRunAction(const G4Run*)
 {
   // compute and print statistic 
-  if (isMaster) fRun->EndOfRun();
-  
+  if (isMaster) {
+    fTimer->Stop();
+    if(!((G4RunManager::GetRunManager()->GetRunManagerType() ==
+          G4RunManager::sequentialRM))) {
+      G4cout << "\n" << "Total number of events:  "  
+             << fRun->GetNumberOfEvent() << G4endl;
+      G4cout << "Master thread time:  "  << *fTimer << G4endl;
+    }
+    delete fTimer;
+    fRun->EndOfRun();
+  }
   //save histograms
   G4AnalysisManager* analysis = G4AnalysisManager::Instance();   
   if (analysis->IsActive()) {   

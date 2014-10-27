@@ -14,7 +14,16 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+
+23-10-14 V.Ivant (testem3-V10-00-15)
+- disable extra printout for sequential 
 	 
+23-10-14 V.Ivant (testem3-V10-00-14)
+- improved output MT 
+	 
+23-10-14 mma (testem3-V10-00-13)
+- PhysListEmStandard : msc algorithm fUseSafetyPlus
+
 21-10-14 mma (testem3-V10-00-12)
 - PhysicsList : added G4EmStandardPhysicsSS
 - TestEm3.cc : option set nThreads via command
