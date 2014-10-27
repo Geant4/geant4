@@ -17,6 +17,11 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 25, 2014 I. Hrivnacova (analysis-V10-00-37)
+- Updated to g4tools 1.16.3 (by G. Barrand):
+  Fixed problem with csv reading on windoes;
+  see History_tools for complete list of modifications.
+
 October 22, 2014 I. Hrivnacova (analysis-V10-00-36)
 - Updated to g4tools 1.16.2 (by G. Barrand):
   modifs for example code to read csv ntuple by using ntuple_binding  

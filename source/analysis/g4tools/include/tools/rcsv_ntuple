@@ -77,6 +77,18 @@ public: //read::intuple
 public:
   template <class T>
   class column : public virtual read::icolumn<T> {
+    typedef read::icolumn<T> parent;
+  public:
+    static cid id_class() {
+      static const T s_v = T(); //do that for T = std::string.
+      return 200+_cid(s_v);
+    }
+  public: //icol
+    virtual void* cast(cid a_class) const {
+      if(void* p = cmp_cast<column>(this,a_class)) {return p;}
+      return parent::cast(a_class);
+    }
+    virtual cid id_cls() const {return id_class();}
   public: //icol
     virtual const std::string& name() const {return m_name;}
     virtual bool fetch_entry() const {
@@ -97,7 +109,7 @@ public:
     virtual ~column(){}
   protected:
     column(const column& a_from)
-    :read::intuple(a_from),read::icolumn<T>(a_from)
+    :read::intuple(a_from),parent(a_from)
     ,m_name(a_from.m_name) 
     ,m_tmp(a_from.m_tmp)
     ,m_user_var(a_from.m_user_var)
@@ -380,6 +392,7 @@ public:
           a_out << "tools::rcsv::ntuple::initialize :"
                 << " empty word."
                 << std::endl;
+          tools::clear<read::icol>(m_cols);
           m_sep = 0;
           m_sz = 0;
           return false;
@@ -422,18 +435,50 @@ public:
   }
 
   static const std::string& s_cid(cid a_id) {
-    if(a_id==_cid(double())) {
+    if(a_id==column<char>::id_class()) {
+      static const std::string s_v("char");
+      return s_v;
+    } else if(a_id==column<short>::id_class()) {
+      static const std::string s_v("short");
+      return s_v;
+    } else if(a_id==column<int>::id_class()) {
+      static const std::string s_v("int");
+      return s_v;
+    } else if(a_id==column<float>::id_class()) {
+      static const std::string s_v("float");
+      return s_v;
+    } else if(a_id==column<double>::id_class()) {
       static const std::string s_v("double");
-      return s_v;      
-    } else if(a_id==_cid(csv_time())) {
-      static const std::string s_v("time");
-      return s_v;      
-    } else if(a_id==_cid(std::string())) {
+      return s_v;
+    } else if(a_id==column<std::string>::id_class()) {
       static const std::string s_v("string");
-      return s_v;      
+      return s_v;
+
+    } else if(a_id==column<unsigned char>::id_class()) {
+      static const std::string s_v("uchar");
+      return s_v;
+    } else if(a_id==column<unsigned short>::id_class()) {
+      static const std::string s_v("ushort");
+      return s_v;
+    } else if(a_id==column<unsigned int>::id_class()) {
+      static const std::string s_v("uint");
+      return s_v;
+    } else if(a_id==column<bool>::id_class()) {
+      static const std::string s_v("bool");
+      return s_v;
+    } else if(a_id==column<int64>::id_class()) {
+      static const std::string s_v("int64");
+      return s_v;
+    } else if(a_id==column<uint64>::id_class()) {
+      static const std::string s_v("uint64");
+      return s_v;
+    } else if(a_id==column<csv_time>::id_class()) {
+      static const std::string s_v("time");
+      return s_v;
+
     } else {
       static const std::string s_v("unknown");
-      return s_v;      
+      return s_v;
     }
   }
 

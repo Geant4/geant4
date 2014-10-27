@@ -27,7 +27,7 @@ int main(int argc,char** argv) {
     std::cout << "can't open " << file << std::endl;
     return EXIT_FAILURE;
   }
-/*
+
   //////////////////////////////////////////////////////////
   /// hippodraw flavour ? //////////////////////////////////
   /// - one header line for the ntuple title. //////////////
@@ -109,8 +109,7 @@ int main(int argc,char** argv) {
     return EXIT_FAILURE;
 
   } else if(args.is_arg("-bind")) {
-*/
-    tools::rcsv::ntuple ntu(reader);
+
     // read with binding :
     tools::ntuple_binding nbd;
     double v_rgauss;
@@ -134,7 +133,7 @@ int main(int argc,char** argv) {
       count++;
     }
     std::cout << " h " << h.mean() << " " << h.rms() << std::endl;
-/*
+
   } else { // read all
 
     typedef tools::read::icol icol_t;
@@ -178,7 +177,7 @@ int main(int argc,char** argv) {
     }
 
   }
-*/
+
   //////////////////////////////////////////////////////////
   /// close file : /////////////////////////////////////////
   //////////////////////////////////////////////////////////

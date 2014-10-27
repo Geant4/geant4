@@ -1,3 +1,10 @@
+ 1.16.3 :
+ - tools/rroot/ntuple : add also "id casting" in tools::rroot::ntuple::column<T> and column_element<T>.
+ - tools/rcsv_ntuple : Windows : rcsv.cpp crashed. It came from a lack of "id casting" in the
+   tools::rcsv::ntuple::column<T> class. (This induced bad pointers in _read_line()).
+ - wroot/leaf : add iro(a_from) in the copy constructors.
+ - tools/rcsv_ntuple/s_cid() : be compleete (compare to types handled in _read_line()).
+
  1.16.2 :
  - test/cpp/rcsv.cpp : modifs for example code to init and read by using ntuple_binding.
  - tools/rcsv_ntuple, cids : modifs to init and read by using ntuple_binding.
