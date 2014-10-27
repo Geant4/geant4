@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 24th, 2014 M.Asai (run-V10-00-33)
+- Fix cleaning up of kept events when Vis thread keeps events.
+
+October 23rd, 2014 A.Dotti J.Apostolakis (run-V10-00-32)
+- Enable use of G4ParticlesWorkspace. Requires particles-V10-00-24
+
 October 17th, 2014 A.Dotti (run-V10-00-31)
 - G4RunManagerKernel::RunTermination() workers do not
   call G4ProductionCutsTable::PhysicsTableUpdated()

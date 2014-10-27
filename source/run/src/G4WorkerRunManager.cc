@@ -150,6 +150,7 @@ void G4WorkerRunManager::RunInitialization()
 
   const G4UserWorkerInitialization* uwi
        = G4MTRunManager::GetMasterRunManager()->GetUserWorkerInitialization();
+  CleanUpPreviousEvents();
   if(currentRun) delete currentRun;
   currentRun = 0;
 
@@ -173,7 +174,6 @@ void G4WorkerRunManager::RunInitialization()
   randomNumberStatusForThisRun = oss.str();
   currentRun->SetRandomNumberStatus(randomNumberStatusForThisRun);
 
-  previousEvents->clear();
   for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
   { previousEvents->push_back((G4Event*)0); }
 

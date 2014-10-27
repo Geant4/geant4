@@ -190,12 +190,12 @@ G4RunManager::~G4RunManager()
      pStateManager->SetNewState(G4State_Quit);
   }
 
+  CleanUpPreviousEvents();
   if(currentRun) delete currentRun;
   delete timer;
   delete runMessenger;
   G4ParticleTable::GetParticleTable()->DeleteMessenger();
   G4ProcessTable::GetProcessTable()->DeleteMessenger();
-  CleanUpPreviousEvents();
   delete previousEvents;
 
   //The following will work for all RunManager types
@@ -312,6 +312,7 @@ void G4RunManager::RunInitialization()
   if(!(kernel->RunInitialization(fakeRun))) return;
   if(fakeRun) return;
 
+  CleanUpPreviousEvents();
   if(currentRun) delete currentRun;
   currentRun = 0;
 
@@ -334,7 +335,6 @@ void G4RunManager::RunInitialization()
   currentRun->SetRandomNumberStatus(randomNumberStatusForThisRun);
   
   //previousEvents->clear();
-  CleanUpPreviousEvents();
   for(G4int i_prev=0;i_prev<n_perviousEventsToBeStored;i_prev++)
   { previousEvents->push_back((G4Event*)0); }
 
@@ -519,7 +519,7 @@ void G4RunManager::CleanUpPreviousEvents()
     {
       G4Event* evt = *evItr;
       previousEvents->erase(evItr); 
-      if(evt) delete evt;
+      if(evt && !(evt->ToBeKept())) delete evt;
     }
 }
 
