@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+23 October, 2014 A. Dotti (intercoms-V10-00-14)
+- Add G4cout support for generic (non worker) threads via new method:
+  G4UImanger::SetUpForSpecialThread(G4String prefix)
+  Requires global-V10-00-38
 
 8 October, 2014 M. Asai (intercoms-V10-00-12, -13)
 - Adding a mechanism to make UI commands defined in a worker thread

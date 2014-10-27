@@ -273,6 +273,9 @@ class G4UImanager : public G4VStateDependent
       void RegisterBridge(G4UIbridge* brg);
 
       void SetUpForAThread(G4int tId);
+      //Setups as before but for a non-worker thread (e.g. vis)
+      void SetUpForSpecialThread(G4String aPrefix);
+    
       inline G4int GetThreadID() const
       { return threadID; }
 
