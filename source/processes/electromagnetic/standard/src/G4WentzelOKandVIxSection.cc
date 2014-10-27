@@ -51,7 +51,7 @@
 #include "G4Electron.hh"
 #include "G4Positron.hh"
 #include "G4Proton.hh"
-#include "G4LossTableManager.hh"
+#include "G4EmParameters.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
 
@@ -132,7 +132,7 @@ void G4WentzelOKandVIxSection::Initialise(const G4ParticleDefinition* p,
   // cosThetaMax is below 1.0 only when MSC is combined with SS
   if(isCombined) { cosThetaMax = cosThetaLim; }
   
-  G4double a = G4LossTableManager::Instance()->FactorForAngleLimit()
+  G4double a = G4EmParameters::Instance()->FactorForAngleLimit()
     *CLHEP::hbarc/CLHEP::fermi;
   factorA2 = 0.5*a*a;
   currentMaterial = 0;

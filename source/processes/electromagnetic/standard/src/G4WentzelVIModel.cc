@@ -63,7 +63,6 @@
 #include "G4PhysicsTableHelper.hh"
 #include "G4ElementVector.hh"
 #include "G4ProductionCutsTable.hh"
-#include "G4LossTableManager.hh"
 #include "G4Log.hh"
 #include "G4Exp.hh"
 
@@ -96,7 +95,6 @@ G4WentzelVIModel::G4WentzelVIModel(G4bool combined, const G4String& nam) :
   nelments = 5;
   xsecn.resize(nelments);
   prob.resize(nelments);
-  theManager = G4LossTableManager::Instance();
   wokvi = new G4WentzelOKandVIxSection(combined);
   fixedCut = -1.0;
 

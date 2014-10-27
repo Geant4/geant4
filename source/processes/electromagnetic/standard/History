@@ -18,6 +18,13 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+27 October 14: V.Ivanchenko (emstand-V10-00-49)
+- G4GoudsmitSaundersonMscModel - fixed rare division by zero
+
+27 October 14: V.Ivanchenko (emstand-V10-00-48)
+- G4WentzelVIModel, G4WentzelOKandVIxSection, G4WentzelVIRelXSection
+    use G4EmParameters class for initialisation
+
 24 October 14: V.Ivanchenko (emstand-V10-00-47)
 - G4DeltaAngle - comment out warning happens frequently for 
     low-enegry electrons

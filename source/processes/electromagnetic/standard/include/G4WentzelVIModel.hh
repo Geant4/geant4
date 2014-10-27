@@ -61,8 +61,6 @@
 #include "G4MaterialCutsCouple.hh"
 #include "G4WentzelOKandVIxSection.hh"
 
-class G4LossTableManager;
-
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class G4WentzelVIModel : public G4VMscModel
@@ -165,7 +163,6 @@ protected:
 
 private:
 
-  G4LossTableManager*       theManager;
   G4ParticleChangeForMSC*   fParticleChange;
   const G4DataVector*       currentCuts;
 
