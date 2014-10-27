@@ -1,5 +1,8 @@
 #include "HadrontherapyElectricTabulatedField3D.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AutoLock.hh"
+
+namespace{  G4Mutex MyHadrontherapyLockEField=G4MUTEX_INITIALIZER;  }
 
 HadrontherapyElectricTabulatedField3D::HadrontherapyElectricTabulatedField3D( const char* filename, G4double exOffset, G4double eyOffset, G4double ezOffset) 
   :feXoffset(exOffset),feYoffset(eyOffset),feZoffset(ezOffset),einvertX(false),einvertY(false),einvertZ(false)
@@ -13,6 +16,7 @@ HadrontherapyElectricTabulatedField3D::HadrontherapyElectricTabulatedField3D( co
 	 << "\n-----------------------------------------------------------";
     
   G4cout << "\n ---> " "Reading the field grid from " << filename << " ... " << endl;
+  G4AutoLock lock(&MyHadrontherapyLockEField);
 
   ifstream file( filename ); // Open the file for reading.
   
@@ -67,6 +71,7 @@ HadrontherapyElectricTabulatedField3D::HadrontherapyElectricTabulatedField3D( co
     }
   }
   file.close();
+  lock.unlock();
 
   Emaxx = Exval * ElenUnit;
   Emaxy = Eyval * ElenUnit;

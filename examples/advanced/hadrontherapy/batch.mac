@@ -46,9 +46,6 @@
 /gps/hist/point 12. 1
 /gps/direction 1 0 0
 
-/LaserDriven/EnergySelector/Slit/HoleDimensionY 8. mm
-/LaserDriven/EnergySelector/Slit/HoleDimensionZ 1. mm
-/LaserDriven/EnergySelector/Slit/HolePositionZ 35. mm
 
 /Step/waterPhantomStepMax 1 mm 
 

@@ -7,6 +7,10 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
          ====================================================
              History file of the Hadrontherapy application
          ====================================================	    
+27.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-07
+           - Lock for the file reading, to avoid simultaneous accesses.
+24.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-06
+           - Removed /vis/ command call for batch mode.
 22.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-05
            - Bug solved. Removed MasterGPS in HadrontherapyActionInitialization.cc
 21.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-04

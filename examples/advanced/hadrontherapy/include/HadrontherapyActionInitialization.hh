@@ -49,6 +49,7 @@ class HadrontherapyActionInitialization : public G4VUserActionInitialization
 
   private:
    // G4VUserDetectorConstruction* fDetectorConstruction;
+  //  G4GeneralParticleSource *masterGPS;
 
 };
 

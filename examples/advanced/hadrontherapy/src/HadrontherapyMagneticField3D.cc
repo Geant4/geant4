@@ -33,6 +33,9 @@
 
 #include "HadrontherapyMagneticField3D.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4AutoLock.hh"
+
+namespace{  G4Mutex MyHadrontherapyLock=G4MUTEX_INITIALIZER;  }
 
 HadrontherapyMagneticField3D::HadrontherapyMagneticField3D( const char* filename, double xOffset ) 
   :fXoffset(xOffset),invertX(false),invertY(false),invertZ(false)
@@ -47,6 +50,8 @@ HadrontherapyMagneticField3D::HadrontherapyMagneticField3D( const char* filename
 
 
   G4cout << "\n ---> " "Reading the field grid from " << filename << " ... " << endl; 
+  G4AutoLock lock(&MyHadrontherapyLock);
+
   ifstream file( filename ); // Open the file for reading.
   
   // Ignore first blank line
@@ -100,6 +105,8 @@ HadrontherapyMagneticField3D::HadrontherapyMagneticField3D( const char* filename
     }
   }
   file.close();
+
+  lock.unlock();
 
   maxx = xval * lenUnit;
   maxy = yval * lenUnit;

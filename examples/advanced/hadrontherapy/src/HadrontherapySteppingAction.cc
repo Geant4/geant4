@@ -105,33 +105,11 @@ G4double PosZ = aStep->GetTrack()->GetPosition().z();
 G4String material= aStep -> GetTrack() -> GetMaterial() -> GetName();
 G4String volume=  aStep->GetTrack()->GetVolume()->GetName();
 G4Track* theTrack = aStep->GetTrack();	
-const G4ThreeVector & position = aStep->GetPreStepPoint() ->GetPosition();
 
  if((namePre== "collimator")||(namePre== "PhysicExternalMagnet_1Down")||(namePre== "PhysicExternalMagnet_1")||(namePre== "PhysicMagnet_1Right")||(namePre== "PhysicMagnet_1Left")||(namePre== "PhysicExternalMagnet_2")||(namePre== "PhysicExternalMagnet_2Down")||(namePre== "PhysicMagnet_2Right")||(namePre== "PhysicMagnet_2Left")||(namePre== "PhysicExternalMagnet_3")||(namePre== "PhysicExternalMagnet_3Down")||(namePre== "PhysicMagnet_3Right")||(namePre== "PhysicMagnet_3Left")||(namePre== "PhysicExternalMagnet_4")||(namePre== "PhysicExternalMagnet_4Down")||(namePre=="physQuadChamberWall")||(namePre== "PhysicMagnet_4Right")||(namePre== "PhysicMagnet_4Left")||(namePre=="ExternalChamber")||(namePre=="collimatorFinal")||(namePre=="ExternalSlit")||(namePre=="PhysFourthQuad")||(namePre=="PhysThirdQuad")||(namePre=="PhysSecondQuad")||(namePre=="PhysFirstQuad")) 
      {
        theTrack -> SetTrackStatus(fKillTrackAndSecondaries);	        
     }
-
-
-
-  if (aStep->GetTrack()->GetDefinition()->GetParticleName() == "e-")
-{
-  //     G4Track* theTrack = aStep->GetTrack();
-          
-        
-       
-	   std::ofstream EnergiaCinetica("e1keVy9z0x200.out", std::ios::app);
-	   EnergiaCinetica	<<     eventNum       << '\t' << "   "
-			<<   position.x()       << '\t' << "   "
-			<<   position.y()       << '\t' << "   "
-			<<   position.z()       << '\t' << "   "
-			<<    eKin   << '\t' << "    "
-			<< G4endl;
-
-	   //theTrack -> SetTrackStatus(fKillTrackAndSecondaries);
-	   
-}
-
  
  // G4TransportationManager* tManager = G4TransportationManager::GetTransportationManager();
   //G4VPhysicalVolume* pW = tManager->GetParallelWorld ("DetectorROGeometry");

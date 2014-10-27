@@ -110,14 +110,15 @@ int main(int argc ,char ** argv)
     CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine());
    
   // Only if an initial random seed is needed
-  G4int seed = time(0);
+    G4int seed =1414159599;// time(0);
   CLHEP::HepRandom::setTheSeed(seed);    
-    
+  // G4cout << "******************************************************************"<< seed << G4endl;
+
     //************************MT*********************
 #ifdef G4MULTITHREADED
     
     G4MTRunManager* runManager = new G4MTRunManager;
-    runManager->SetNumberOfThreads(2); // Is equal to 2 by default, it can be setted also with the macro command: /run/numberOfThread 2
+    //runManager->SetNumberOfThreads(2); // Is equal to 2 by default, it can be setted also with the macro command: /run/numberOfThread 2
 #else
     G4RunManager* runManager = new G4RunManager;
 #endif

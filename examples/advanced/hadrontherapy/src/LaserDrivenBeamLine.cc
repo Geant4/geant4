@@ -1999,8 +1999,9 @@ void LaserDrivenBeamLine::RemoveESS()
     G4cout << "************ The ESS has been disabled *************"  << G4endl;
     G4cout << "****************************************************" << G4endl;
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-    G4UImanager::GetUIpointer() ->ApplyCommand("/vis/viewer/refresh"); 
-    
+        #ifdef G4VIS_USE
+	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #endif    
 }
 // Change via external macro command the diameter of the first collimator
 void LaserDrivenBeamLine::SetFirstCollimatorRadius(G4double valueR)
@@ -2008,7 +2009,9 @@ void LaserDrivenBeamLine::SetFirstCollimatorRadius(G4double valueR)
     G4double radius = valueR;
     solidCollimatorHole -> SetOuterRadius(radius);
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #ifdef G4VIS_USE
+	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #endif
     G4cout << "The first collimator aperture has been modified to "<< valueR/mm <<"mm in diameter" << G4endl;
 }
 /////////////////////////////////////////////////////////////////////////////
@@ -2019,7 +2022,9 @@ void LaserDrivenBeamLine::SetFirstCollimatorThickness(G4double valueC)
     solidCollimator -> SetXHalfLength(thickness);
     solidCollimatorHole -> SetZHalfLength(thickness);
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #ifdef G4VIS_USE
+	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #endif
     G4cout << "The first collimator thickness has been modified to "<< valueC/mm <<" mm in thickness" << G4endl;
 }
 
@@ -2028,7 +2033,9 @@ void LaserDrivenBeamLine::SetFirstCollimatorPositionZ(G4double valueQ)
 {
     physicCollimatorHole -> SetTranslation(G4ThreeVector(0., 0., valueQ));
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #ifdef G4VIS_USE
+	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #endif
     G4cout << "The first collimator has been translated to "<< valueQ/mm <<"mm (along the z axis)" << G4endl;
 }
 
@@ -2038,7 +2045,9 @@ void LaserDrivenBeamLine::SetSecondCollimatorRadius(G4double value)
     G4double radius = value;
     solidFinalCollimatorHole -> SetOuterRadius(radius);
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #ifdef G4VIS_USE
+	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #endif
     G4cout << "The second collimator aperture has been modified to "<< value/mm <<"mm in diameter" << G4endl;
 }
 
@@ -2050,7 +2059,9 @@ void LaserDrivenBeamLine::SetSecondCollimatorThickness(G4double value)
     solidFinalCollimator -> SetXHalfLength(thickness);
     solidFinalCollimatorHole -> SetZHalfLength(thickness);
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #ifdef G4VIS_USE
+	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #endif
     G4cout << "The second collimator thickness has been modified to "<< value/mm <<" mm in thickness" << G4endl;
 }
 
@@ -2059,7 +2070,9 @@ void LaserDrivenBeamLine::SetSecondCollimatorPositionZ(G4double value)
 {
     physicFinalCollimatorHole -> SetTranslation(G4ThreeVector(0., 0., value));
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #ifdef G4VIS_USE
+	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #endif
     G4cout << "The second collimator has been translated to "<< value/mm <<"mm (along the z axis)" << G4endl;
 }
 // THE SLIT MESSENGERS
@@ -2082,7 +2095,9 @@ void LaserDrivenBeamLine::SetThicknessSlit(G4double value)
         solidExternalSlit -> SetXHalfLength(dimension);
         solidInternalSlit -> SetXHalfLength(dimension);
         G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-        G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #ifdef G4VIS_USE
+	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #endif
         G4cout <<"The thickness of the slit is:" << ((solidExternalSlit -> GetXHalfLength())*2.)/mm
         << G4endl;
     }
@@ -2094,7 +2109,9 @@ void LaserDrivenBeamLine::SetSlitHoleDimensionY(G4double value)
     G4double hole = value/2;
     solidInternalSlit -> SetYHalfLength(hole);
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #ifdef G4VIS_USE
+	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #endif
     G4cout << "The hole of the Slit has been changed in the Y direction to "<< value/mm <<" mm" <<G4endl;
 }
 
@@ -2105,7 +2122,9 @@ void LaserDrivenBeamLine::SetSlitHoleDimensionZ(G4double value)
     G4double hole = value/2;
     solidInternalSlit -> SetZHalfLength(hole);
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #ifdef G4VIS_USE
+	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #endif
     G4cout << "The hole of the Slit has been changed in the Z direction to "<< value/mm <<" mm" <<G4endl;
 }
 /////////////////////////////////////////////////////////////////////////////
@@ -2114,7 +2133,9 @@ void LaserDrivenBeamLine::SetSlitHolePositionZ(G4double value)
 {
     physicInternalSlit -> SetTranslation(G4ThreeVector(0., 0., value));
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-    G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #ifdef G4VIS_USE
+	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #endif
     G4cout << "The hole of the slit has been translated to "<< value/mm <<" mm (along the Z axis)" <<G4endl;
 }
 
@@ -2141,7 +2162,8 @@ void LaserDrivenBeamLine::RemoveQuads()
     G4cout << "************ The Quadrupoles system has been disabled *************"  << G4endl;
     G4cout << "******************************************************************" << G4endl;
     G4RunManager::GetRunManager() -> GeometryHasBeenModified();
-    G4UImanager::GetUIpointer() ->ApplyCommand("/vis/viewer/refresh"); 
-
+        #ifdef G4VIS_USE
+	G4UImanager::GetUIpointer() -> ApplyCommand("/vis/viewer/flush");
+        #endif
 }
 
