@@ -77,11 +77,22 @@ vis_libs="-lG4Tree \
 cflags="@CMAKE_CXX_FLAGS@"
 feature_list=""
 
+# - CXX Standard
+geant4_cxx_std="@GEANT4_BUILD_CXXSTD@"
+
+# - static libs
+have_staticlibs="@G4_BUILTWITH_STATICLIBS@"
+feature_list="${feature_list} staticlibs[${have_staticlibs}]"
+# No action as yet
+
 # - multithreading
 have_multithreading="@G4_BUILTWITH_MULTITHREADING@"
 feature_list="${feature_list} multithreading[${have_multithreading}]"
 if test "x${have_multithreading}" = "xyes" ; then
+  geant4_tls_model="@GEANT4_BUILD_TLS_MODEL@"
   cflags="${cflags} -DG4MULTITHREADED"
+else
+  geant4_tls_model=""
 fi
 
 # - Includes and Libs
@@ -420,6 +431,8 @@ help()
 Usage: geant4-config [OPTION...]
   --prefix                output installation prefix of Geant4
   --version               output version for Geant4
+  --cxxstd                C++ Standard compiled against
+  --tls-model             Thread Local Storage model used
   --libs                  output all linker flags
   --cflags                output all preprocessor
                           and compiler flags
@@ -497,6 +510,14 @@ while test $# -gt 0 ; do
       echo ${version}
       ;;
 
+    --cxxstd)
+      echo ${geant4_cxx_std}
+      ;;
+
+    --tls-model)
+      echo ${geant4_tls_model}
+      ;;
+
     --libs)
       echo "-L${libdir}" ${vis_libs} ${libs}
       ;;
@@ -517,6 +538,9 @@ while test $# -gt 0 ; do
       shift
 
       case "$1" in
+        static)
+          echo ${have_staticlibs}
+          ;;
         multithreading)
           echo ${have_multithreading}
           ;;

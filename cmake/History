@@ -30,6 +30,18 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+23rd October 2014 - Ben Morgan (cmake-V10-00-29)
+- Templates/geant4-config.in : Add command line arguments to report
+  C++ standard compiled against and TLS model used if multithreading
+  support available.
+  Add presence of static libs as a feature argument that can be checked.
+- Modules/Geant4ConfigureConfigScript.cmake : Export yes/no value
+  indicating presence of static libraries to config script.
+- Templates/Geant4Config.cmake.in : Add variables to indicate C++
+  standard compiled against and TLS model used. Latter is only set
+  if multithreading support is available.
+- Modules/
+
 22nd October 2014 - Gunter Folger (cmake-V10-00-28)
 - Modules/Geant4DatasetDefinitions.cmake: G4EMLOW.6.41
 

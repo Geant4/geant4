@@ -11,6 +11,9 @@
 #  Geant4_CXX_FLAGS_<CONFIG> - Recommended CXX flags for build mode CONFIG.
 #  Geant4_USE_FILE     - path to a CMake module which may be included to
 #                        help setup CMake variables
+#  Geant4_CXXSTD       - C++ Standard used to compile Geant4, e.g. c++98
+#  Geant4_TLS_MODEL    - Thread Local Storage model used. Only set if
+#                        the install provides multithreading support.
 #
 # You may supply a version number through find_package which will be checked
 # against the version of this build. Standard CMake logic is used so that
@@ -153,6 +156,9 @@ get_filename_component(_thisdir "${CMAKE_CURRENT_LIST_FILE}" PATH)
 # It's up to the user what to do with these
 @GEANT4_COMPILER_FLAG_HINTS@
 
+# - Provide variable indicating C++ Standard we were compiled against
+set(Geant4_CXXSTD "@GEANT4_BUILD_CXXSTD@")
+
 #-----------------------------------------------------------------------
 # Set the base compile definitions required to use Geant4 if the variable
 # does not exist (we do this to ensure multiple calls to find_package
@@ -261,6 +267,9 @@ set(Geant4_multithreaded_FOUND @GEANT4_BUILD_MULTITHREADED@)
 if(Geant4_multithreaded_FOUND)
   list(REMOVE_ITEM Geant4_FIND_COMPONENTS multithreaded)
   list(APPEND Geant4_DEFINITIONS -DG4MULTITHREADED)
+
+  # - Define variable to indicate TLS model used
+  set(Geant4_TLS_MODEL "@GEANT4_BUILD_TLS_MODEL@")
 endif()
 
 # - GDML

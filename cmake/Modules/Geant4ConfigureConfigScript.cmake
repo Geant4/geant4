@@ -77,6 +77,13 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
   get_system_include_dirs(_cxx_compiler_dirs)
 
   # Setup variables needed for expansion in configuration file
+  # - Static libs
+  if(BUILD_STATIC_LIBS)
+    set(G4_BUILTWITH_STATICLIBS "yes")
+  else()
+    set(G4_BUILTWITH_STATICLIBS "no")
+  endif()
+
   # - Multithreading
   if(GEANT4_BUILD_MULTITHREADED)
     set(G4_BUILTWITH_MULTITHREADING "yes")
