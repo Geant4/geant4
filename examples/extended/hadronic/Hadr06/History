@@ -14,6 +14,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+26-10-14 mma (hadr06-V10-00-07)
+- PhysicsList : activate G4RadioactivedecayPhysics
+- Hadr06.cc : option set nThreads via command
+
 18-09-14 mma (exhadr06-V10-00-06)
 - Hadr06.cc : SetNumberOfThreads(G4Threading::G4GetNumberOfCores())
 
