@@ -16,6 +16,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 October 2014 A. Dotti (op-V10-00-09)
+- Address problem #1675, this requires re engineering of 
+  all UI commands related to optical processes and created
+  in G4OpticalPhysics.
+- Co-working tags: xrays-V10-00-06, op-V10-00-09, phys-ctor-em-V10-00-17
 
 17th October 2014 P. Gumplinger (op-V10-00-08)
 - fix G4OpRayleigh.cc to actually set the temperature for materials other

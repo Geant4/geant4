@@ -61,8 +61,6 @@
         // static data members
         //////////////////////
 
-G4VWLSTimeGeneratorProfile* G4OpWLS::WLSTimeGeneratorProfile = 0;
-
 /////////////////
 // Constructors
 /////////////////
@@ -74,8 +72,8 @@ G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
 
   theIntegralTable = NULL;
 
-  if(!WLSTimeGeneratorProfile)
-  { WLSTimeGeneratorProfile = new G4WLSTimeGeneratorProfileDelta("WLSTimeGeneratorProfileDelta"); }
+
+  WLSTimeGeneratorProfile = new G4WLSTimeGeneratorProfileDelta("WLSTimeGeneratorProfileDelta");
  
   if (verboseLevel>0) {
     G4cout << GetProcessName() << " is created " << G4endl;
@@ -417,14 +415,8 @@ G4double G4OpWLS::GetMeanFreePath(const G4Track& aTrack,
   return AttenuationLength;
 }
 
-#include "G4AutoLock.hh"
-namespace {
- G4Mutex wlsCmdHandlingMutex = G4MUTEX_INITIALIZER;
-}
-
 void G4OpWLS::UseTimeProfile(const G4String name)
 {
-  G4AutoLock l(&wlsCmdHandlingMutex);
   if (name == "delta")
     {
       delete WLSTimeGeneratorProfile;

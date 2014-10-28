@@ -129,12 +129,12 @@ public:
         void DumpPhysicsTable() const;
         // Prints the WLS integral table.
 
-        static void UseTimeProfile(const G4String name);
+        void UseTimeProfile(const G4String name);
         // Selects the time profile generator
 
 protected:
 
-        static G4VWLSTimeGeneratorProfile* WLSTimeGeneratorProfile;
+        G4VWLSTimeGeneratorProfile* WLSTimeGeneratorProfile;
         G4PhysicsTable* theIntegralTable;
 
 };
