@@ -14,6 +14,120 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+
+27 October 2014 Tatsumi Koi   (hadr-hpn-V10-00-29)
+Additional fix for problem on prvious tag on non multi thread library
+	include/G4NeutronHPPhotonDist.hh
+	src/G4NeutronHPPhotonDist.cc
+
+
+26 October 2014 Tatsumi Koi   (hadr-hpn-V10-00-28)
+Additional fix for problem on prvious tag on gcc4.4.7 compilers 
+
+
+23 October 2014 Tatsumi Koi   (hadr-hpn-V10-00-27)
+Avoid issuing Hash of NeutronHPVector from worker threads
+	include/G4NeutronHPProduct.hh
+	include/G4NeutronHPPartial.hh
+	src/G4NeutronHPElasticFS.cc
+Fix problem on prvious tag
+	include/G4NeutronHPManager.hh
+
+
+19 October 2014 Tatsumi Koi   (hadr-hpn-V10-00-26)
+Migration of sharing final state data among worker threads
+        include/G4NeutronHPArbitaryTab.hh
+	include/G4NeutronHPContAngularPar.hh
+	include/G4NeutronHPContEnergyAngular.hh
+	include/G4NeutronHPIsoData.hh
+	include/G4NeutronHPPartial.hh
+	include/G4NeutronHPPhotonDist.hh
+	include/G4NeutronHPVector.hh
+	src/G4NeutronHPContAngularPar.cc
+	src/G4NeutronHPContEnergyAngular.cc
+	src/G4NeutronHPPhotonDist.cc
+	src/G4NeutronHPVector.cc
+
+
+17 October 2014 Tatsumi Koi   (hadr-hpn-V10-00-25)
+Adjust A and Z in the case of miss much between selected data and target nucleus
+	src/G4NeutronHPInelasticBaseFS.cc
+	src/G4NeutronHPInelasticCompFS.cc
+
+
+18 September 2014 Tatsumi Koi   (hadr-hpn-V10-00-24)
+Final state data is shared among worker threads.
+	include/G4NeutronHPFinalState.hh
+	include/G4NeutronHPManager.hh
+	src/G4NeutronHPCapture.cc
+	src/G4NeutronHPChannel.cc
+	src/G4NeutronHPElastic.cc
+	src/G4NeutronHPFinalState.cc
+	src/G4NeutronHPFission.cc
+	src/G4NeutronHPInelastic.cc
+	src/G4NeutronHPManager.cc
+
+
+16 September 2014 Tatsumi Koi   (hadr-hpn-V10-00-23)
+Use BuildPhysicsTable
+Co-working with hadr-modman-V10-00-05 and hadr-man-V10-00-11
+	include/G4NeutronHPCapture.hh
+	include/G4NeutronHPElastic.hh
+	include/G4NeutronHPFission.hh
+	include/G4NeutronHPInelastic.hh
+	src/G4NeutronHPCapture.cc
+	src/G4NeutronHPFission.cc
+	src/G4NeutronHPInelastic.cc
+	src/G4NeutronHPThermalScattering.cc
+	src/G4NeutronHPElastic.cc
+
+
+
+15 September 2014 Tatsumi Koi   (hadr-hpn-V10-00-22)
+Use BuildPhysicsTable
+Co-working with hadr-modman-V10-00-05 and hadr-man-V10-00-11
+	include/G4NeutronHPThermalScattering.hh
+	src/G4NeutronHPThermalScattering.cc
+
+
+12 September 2014 Tatsumi Koi   (hadr-hpn-V10-00-21)
+Thermal scattering final state data is shared among worker threads.
+	include/G4NeutronHPThermalScattering.hh
+	include/G4NeutronHPManager.hh
+	src/G4NeutronHPManager.cc
+	src/G4NeutronHPThermalScattering.cc
+
+
+10 September 2014 Tatsumi Koi   (hadr-hpn-V10-00-20)
+Thermal scattering cross section data is shared among worker threads.
+	include/G4NeutronHPThermalScatteringData.hh
+	include/G4NeutronHPManager.hh
+	src/G4NeutronHPManager.cc
+	src/G4NeutronHPThermalScatteringData.cc
+
+
+5 September 2014 Tatsumi Koi   (hadr-hpn-V10-00-19)
+Cross section data is shared among worker threads.
+	include/G4NeutronHPManager.hh
+	src/G4NeutronHPCaptureData.cc
+	src/G4NeutronHPFissionData.cc
+	src/G4NeutronHPInelasticData.cc
+	src/G4NeutronHPManager.cc
+	src/G4NeutronHPElasticData.cc
+
+
+25 August 2014 Tatsumi Koi   (hadr-hpn-V10-00-18)
+-Delete unnecessary issue of BuildPhysicTable 
+	src/G4NeutronHPThermalScattering.cc
+-Introducing ThreadLocalManager 
+for storing information related to each individual reactions
+        sources.cmake
+        include/G4NeutronHPThreadLocalManager.hh
+        include/G4NeutronHPManager.hh
+        src/G4NeutronHPThreadLocalManager.cc
+        src/G4NeutronHPManager.cc
+
+
 18 August 2014 Tatsumi Koi   (hadr-hpn-V10-00-17)
 -Adding UI commands for controlling options of HP package
 	include/G4NeutronHPFinalState.hh

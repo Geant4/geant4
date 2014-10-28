@@ -74,6 +74,9 @@
   G4NeutronHPContAngularPar::Sample(G4double anEnergy, G4double massCode, G4double /*targetMass*/, 
                                     G4int angularRep, G4int /*interpolE*/ )
   {
+
+      if ( fCache.Get() == NULL ) cacheInit();
+
     G4ReactionProduct * result = new G4ReactionProduct;
     G4int Z = static_cast<G4int>(massCode/1000);
     G4int A = static_cast<G4int>(massCode-1000*Z);
@@ -126,19 +129,19 @@
 
 //1st check remaining_energy 
 //	if this is the first set it. (How?)
-         if ( fresh == true ) 
+         if ( fCache.Get()->fresh == true ) 
          { 
             //Discrete Lines, larger energies come first 
             //Continues Emssions, low to high                                      LAST  
-            remaining_energy = std::max ( theAngular[0].GetLabel() , theAngular[nEnergies-1].GetLabel() );
-            fresh = false; 
+            fCache.Get()->remaining_energy = std::max ( theAngular[0].GetLabel() , theAngular[nEnergies-1].GetLabel() );
+            fCache.Get()->fresh = false; 
          }
 
          //Cheating for small remaining_energy 
          //TEMPORAL SOLUTION
          if ( nDiscreteEnergies == nEnergies )
          {
-            remaining_energy = std::max ( remaining_energy , theAngular[nDiscreteEnergies-1].GetLabel() ); //Minimum Line
+            fCache.Get()->remaining_energy = std::max ( fCache.Get()->remaining_energy , theAngular[nDiscreteEnergies-1].GetLabel() ); //Minimum Line
          }
          else
          {
@@ -150,7 +153,7 @@
                cont_min = theAngular[j].GetLabel();   
                if ( theAngular[j].GetValue(0) != 0.0 ) break;  
             }
-            remaining_energy = std::max ( remaining_energy , std::min ( theAngular[nDiscreteEnergies-1].GetLabel() , cont_min ) );   //Minimum Line or grid 
+            fCache.Get()->remaining_energy = std::max ( fCache.Get()->remaining_energy , std::min ( theAngular[nDiscreteEnergies-1].GetLabel() , cont_min ) );   //Minimum Line or grid 
          }
 //
 	 G4double random = G4UniformRand();
@@ -161,7 +164,7 @@
          for ( G4int j = 0 ; j < nDiscreteEnergies ; j++ ) 
          {
             G4double delta = 0.0;
-            if ( theAngular[j].GetLabel() <= remaining_energy ) delta = theAngular[i].GetValue(0);
+            if ( theAngular[j].GetLabel() <= fCache.Get()->remaining_energy ) delta = theAngular[i].GetValue(0);
             running[j+1] = running[j] + delta;
          }
          G4double tot_prob_DIS = running[ nDiscreteEnergies ];
@@ -171,7 +174,7 @@
             G4double delta = 0.0;
             G4double e_low = 0.0;
             G4double e_high = 0.0;
-            if ( theAngular[j].GetLabel() <= remaining_energy ) delta = theAngular[j].GetValue(0);
+            if ( theAngular[j].GetLabel() <= fCache.Get()->remaining_energy ) delta = theAngular[j].GetValue(0);
 
             //To calculate Prob. e_low and e_high should be in eV 
             //There are two case
@@ -291,7 +294,7 @@
         }
 
          //TK080711
-         remaining_energy -= fsEnergy;
+         fCache.Get()->remaining_energy -= fsEnergy;
          //TK080711
 
          //080801b
@@ -303,10 +306,10 @@
          // Only continue, TK will clean up 
 
          //080714 
-         if ( fresh == true )
+         if ( fCache.Get()->fresh == true )
          {
-            remaining_energy = theAngular[ nEnergies-1 ].GetLabel();
-            fresh = false;
+            fCache.Get()->remaining_energy = theAngular[ nEnergies-1 ].GetLabel();
+            fCache.Get()->fresh = false;
          }
          //080714 
          G4double random = G4UniformRand();
@@ -329,7 +332,7 @@
 */
 
              running[i]=running[i-1];
-             if ( remaining_energy >= theAngular[i].GetLabel() )
+             if ( fCache.Get()->remaining_energy >= theAngular[i].GetLabel() )
              {
                 running[i] += theInt.GetBinIntegral(theManager.GetScheme(i-1),
                                  theAngular[i-1].GetLabel(), theAngular[i].GetLabel(),
@@ -342,10 +345,10 @@
          // cash the mean energy in this distribution
          //080409 TKDB
          if ( nEnergies == 1 || running[nEnergies-1] == 0 )  
-            currentMeanEnergy = 0.0;
+            fCache.Get()->currentMeanEnergy = 0.0;
          else
          { 
-            currentMeanEnergy = weighted/running[nEnergies-1];
+            fCache.Get()->currentMeanEnergy = weighted/running[nEnergies-1];
          }
          
          //080409 TKDB
@@ -426,7 +429,7 @@
          delete [] running;
 
          //080714
-         remaining_energy -= fsEnergy;
+         fCache.Get()->remaining_energy -= fsEnergy;
          //080714
       }
    }
@@ -451,9 +454,9 @@
       //080409 TKDB
       //currentMeanEnergy = weighted/running[nEnergies-1];
       if ( nEnergies == 1 )
-         currentMeanEnergy = 0.0;
+         fCache.Get()->currentMeanEnergy = 0.0;
       else
-        currentMeanEnergy = weighted/running[nEnergies-1];
+         fCache.Get()->currentMeanEnergy = weighted/running[nEnergies-1];
       
       G4int itt(0);
       G4double randkal = G4UniformRand();
@@ -526,9 +529,9 @@
        // cash the mean energy in this distribution
       //currentMeanEnergy = weighted/running[nEnergies-1];
       if ( nEnergies == 1 )  
-         currentMeanEnergy = 0.0;
+         fCache.Get()->currentMeanEnergy = 0.0;
       else
-         currentMeanEnergy = weighted/running[nEnergies-1];
+         fCache.Get()->currentMeanEnergy = weighted/running[nEnergies-1];
       
       //080409 TKDB
       if ( nEnergies == 1 ) it = 0; 

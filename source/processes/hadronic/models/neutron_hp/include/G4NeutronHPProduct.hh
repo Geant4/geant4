@@ -70,6 +70,7 @@ class G4NeutronHPProduct
     theGroundStateQValue*= CLHEP::eV;
     theActualStateQValue*= CLHEP::eV;
     theYield.Init(aDataFile, CLHEP::eV);
+    theYield.Hash();
     if(theDistLaw==0)
     {
       // distribution not known, use E-independent, isotropic angular distribution

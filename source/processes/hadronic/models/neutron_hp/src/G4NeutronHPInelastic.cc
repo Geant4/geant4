@@ -43,9 +43,12 @@
 
   G4NeutronHPInelastic::G4NeutronHPInelastic()
     :G4HadronicInteraction("NeutronHPInelastic")
+  ,theInelastic(NULL)
+  ,numEle(0)
   {
     SetMinEnergy( 0.0 );
     SetMaxEnergy( 20.*MeV );
+/*
 
     G4int istatus; 
 #if defined WIN32-VC
@@ -65,6 +68,7 @@
     G4String tString = "/Inelastic";
     dirName = dirName + tString;
     numEle = G4Element::GetNumberOfElements();
+*/
 /*
     theInelastic = new G4NeutronHPChannelList[numEle];
     for (G4int i=0; i<numEle; i++)
@@ -128,6 +132,7 @@
       }
     }
 */
+/*
 
     for (G4int i=0; i<numEle; i++)
     { 
@@ -190,24 +195,25 @@
       }
 
     }
+*/
   }
 
   G4NeutronHPInelastic::~G4NeutronHPInelastic()
   {
 //    delete [] theInelastic;
      for ( std::vector<G4NeutronHPChannelList*>::iterator 
-           it = theInelastic.begin() ; it != theInelastic.end() ; it++ )
+           it = (*theInelastic).begin() ; it != (*theInelastic).end() ; it++ )
      {
         delete *it;
      }
-     theInelastic.clear();
+     (*theInelastic).clear();
   }
   
   #include "G4NeutronHPThermalBoost.hh"
   
   G4HadFinalState * G4NeutronHPInelastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus )
   {
-    if ( numEle < (G4int)G4Element::GetNumberOfElements() ) addChannelForNewElement();
+    //if ( numEle < (G4int)G4Element::GetNumberOfElements() ) addChannelForNewElement();
     G4NeutronHPManager::GetInstance()->OpenReactionWhiteBoard();
     const G4Material * theMaterial = aTrack.GetMaterial();
     G4int n = theMaterial->GetNumberOfElements();
@@ -226,7 +232,7 @@
         index = theMaterial->GetElement(i)->GetIndex();
         rWeight = NumAtomsPerVolume[i];
         //xSec[i] = theInelastic[index].GetXsec(aThermalE.GetThermalEnergy(aTrack,
-        xSec[i] = (*theInelastic[index]).GetXsec(aThermalE.GetThermalEnergy(aTrack,
+        xSec[i] = (*(*theInelastic)[index]).GetXsec(aThermalE.GetThermalEnergy(aTrack,
   		                                                         theMaterial->GetElement(i),
     								         theMaterial->GetTemperature()));
         xSec[i] *= rWeight;
@@ -246,7 +252,7 @@
     }
 
     //return theInelastic[index].ApplyYourself(theMaterial->GetElement(it), aTrack);
-    G4HadFinalState* result = (*theInelastic[index]).ApplyYourself(theMaterial->GetElement(it), aTrack);
+    G4HadFinalState* result = (*(*theInelastic)[index]).ApplyYourself(theMaterial->GetElement(it), aTrack);
 
     //Overwrite target parameters
     aNucleus.SetParameters(G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA(),G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargZ());
@@ -275,6 +281,7 @@ const std::pair<G4double, G4double> G4NeutronHPInelastic::GetFatalEnergyCheckLev
       return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
 }
 
+/*
 void G4NeutronHPInelastic::addChannelForNewElement()
 {
    for ( G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements() ; i++ ) 
@@ -342,6 +349,7 @@ void G4NeutronHPInelastic::addChannelForNewElement()
 
    numEle = (G4int)G4Element::GetNumberOfElements();
 }
+*/
 
 G4int G4NeutronHPInelastic::GetVerboseLevel() const
 {
@@ -350,4 +358,93 @@ G4int G4NeutronHPInelastic::GetVerboseLevel() const
 void G4NeutronHPInelastic::SetVerboseLevel( G4int newValue ) 
 {
    G4NeutronHPManager::GetInstance()->SetVerboseLevel(newValue);
+}
+void G4NeutronHPInelastic::BuildPhysicsTable(const G4ParticleDefinition&)
+{
+   G4NeutronHPManager* hpmanager = G4NeutronHPManager::GetInstance();
+
+   theInelastic = hpmanager->GetInelasticFinalStates();
+
+   if ( !G4Threading::IsWorkerThread() ) {
+
+      if ( theInelastic == NULL ) theInelastic = new std::vector<G4NeutronHPChannelList*>;
+
+      if ( numEle == (G4int)G4Element::GetNumberOfElements() ) return;
+
+      if ( theInelastic->size() == G4Element::GetNumberOfElements() ) {
+         numEle = G4Element::GetNumberOfElements();
+         return;
+      }
+
+      if ( !getenv("G4NEUTRONHPDATA") ) 
+         throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
+      dirName = getenv("G4NEUTRONHPDATA");
+      G4String tString = "/Inelastic";
+      dirName = dirName + tString;
+
+      for (G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements() ; i++)
+      { 
+         (*theInelastic).push_back( new G4NeutronHPChannelList );
+         (*(*theInelastic)[i]).Init((*(G4Element::GetElementTable()))[i], dirName);
+         G4int itry = 0;
+         do
+         {
+	(*(*theInelastic)[i]).Register(&theNFS,    "F01"); // has
+	(*(*theInelastic)[i]).Register(&theNXFS,    "F02");
+	(*(*theInelastic)[i]).Register(&the2NDFS,    "F03");
+    	(*(*theInelastic)[i]).Register(&the2NFS, "F04"); // has, E Done
+    	(*(*theInelastic)[i]).Register(&the3NFS, "F05"); // has, E Done
+     	(*(*theInelastic)[i]).Register(&theNAFS, "F06");
+	(*(*theInelastic)[i]).Register(&theN3AFS,    "F07");
+	(*(*theInelastic)[i]).Register(&the2NAFS,    "F08");
+	(*(*theInelastic)[i]).Register(&the3NAFS,    "F09");
+	(*(*theInelastic)[i]).Register(&theNPFS,    "F10");
+	(*(*theInelastic)[i]).Register(&theN2AFS,    "F11");
+	(*(*theInelastic)[i]).Register(&the2N2AFS,    "F12");
+	(*(*theInelastic)[i]).Register(&theNDFS,    "F13");
+	(*(*theInelastic)[i]).Register(&theNTFS,    "F14");
+	(*(*theInelastic)[i]).Register(&theNHe3FS,    "F15");
+	(*(*theInelastic)[i]).Register(&theND2AFS,    "F16");
+	(*(*theInelastic)[i]).Register(&theNT2AFS,    "F17");
+	(*(*theInelastic)[i]).Register(&the4NFS,    "F18"); // has, E Done
+	(*(*theInelastic)[i]).Register(&the2NPFS,    "F19");
+	(*(*theInelastic)[i]).Register(&the3NPFS,    "F20");
+	(*(*theInelastic)[i]).Register(&theN2PFS,    "F21");
+	(*(*theInelastic)[i]).Register(&theNPAFS,    "F22");
+     	(*(*theInelastic)[i]).Register(&thePFS, "F23");
+	(*(*theInelastic)[i]).Register(&theDFS,    "F24");
+	(*(*theInelastic)[i]).Register(&theTFS,    "F25");
+	(*(*theInelastic)[i]).Register(&theHe3FS,    "F26");
+	(*(*theInelastic)[i]).Register(&theAFS,    "F27");
+	(*(*theInelastic)[i]).Register(&the2AFS,    "F28");
+	(*(*theInelastic)[i]).Register(&the3AFS,    "F29");
+	(*(*theInelastic)[i]).Register(&the2PFS,    "F30");
+	(*(*theInelastic)[i]).Register(&thePAFS,    "F31");
+	(*(*theInelastic)[i]).Register(&theD2AFS,    "F32");
+	(*(*theInelastic)[i]).Register(&theT2AFS,    "F33");
+	(*(*theInelastic)[i]).Register(&thePDFS,    "F34");
+	(*(*theInelastic)[i]).Register(&thePTFS,    "F35");
+	(*(*theInelastic)[i]).Register(&theDAFS,    "F36");
+	(*(*theInelastic)[i]).RestartRegistration();
+           itry++;
+         }
+         while( !(*(*theInelastic)[i]).HasDataInAnyFinalState() && itry < 6 );
+                                                                 // 6 is corresponding to the value(5) of G4NeutronHPChannel. TK  
+
+         if ( itry == 6 ) 
+         {
+            // No Final State at all.
+            G4bool exceptional = false;
+            if ( (*(G4Element::GetElementTable()))[i]->GetNumberOfIsotopes() == 1 )
+            {
+               if ( (*(G4Element::GetElementTable()))[i]->GetIsotope( 0 )->GetZ() == 1 && (*(G4Element::GetElementTable()))[i]->GetIsotope( 0 )->GetN() == 1 ) exceptional = true;  //1H
+            } 
+            if ( !exceptional ) throw G4HadronicException(__FILE__, __LINE__, "Channel: Do not know what to do with this element");
+         }
+
+      }
+      hpmanager->RegisterInelasticFinalStates( theInelastic );
+
+   }
+   numEle = G4Element::GetNumberOfElements();
 }

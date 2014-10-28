@@ -35,10 +35,15 @@
 #include "G4NeutronHPElasticFS.hh"
 #include "G4NeutronHPManager.hh"
 
+#include "G4Threading.hh"
+
   G4NeutronHPElastic::G4NeutronHPElastic()
     :G4HadronicInteraction("NeutronHPElastic")
+  ,theElastic(NULL)
+  ,numEle(0)
   {
     overrideSuspension = false;
+/*
     G4NeutronHPElasticFS * theFS = new G4NeutronHPElasticFS;
     if(!getenv("G4NEUTRONHPDATA")) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
@@ -60,12 +65,14 @@
        while(!(*theElastic[i]).Register(theFS)) ;
     }
     delete theFS;
+*/
     SetMinEnergy(0.*eV);
     SetMaxEnergy(20.*MeV);
   }
   
   G4NeutronHPElastic::~G4NeutronHPElastic()
   {
+     /*
      //delete [] theElastic;
      for ( std::vector<G4NeutronHPChannel*>::iterator 
            it = theElastic.begin() ; it != theElastic.end() ; it++ )
@@ -73,6 +80,7 @@
         delete *it;
      }
      theElastic.clear();
+     */
   }
   
   #include "G4NeutronHPThermalBoost.hh"
@@ -80,7 +88,9 @@
   G4HadFinalState * G4NeutronHPElastic::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus )
   {
 
-    if ( numEle < (G4int)G4Element::GetNumberOfElements() ) addChannelForNewElement();
+//G4cout << "TKDB::G4NeutronHPElastic::ApplyYourself this " << this << " numEle " << numEle << " &numEle " << &numEle << " G4Element::GetNumberOfElements() " <<G4Element::GetNumberOfElements() << G4endl;
+
+    //if ( numEle < (G4int)G4Element::GetNumberOfElements() ) addChannelForNewElement();
 
     G4NeutronHPManager::GetInstance()->OpenReactionWhiteBoard();
     const G4Material * theMaterial = aTrack.GetMaterial();
@@ -99,7 +109,7 @@
         index = theMaterial->GetElement(i)->GetIndex();
         rWeight = NumAtomsPerVolume[i];
         //xSec[i] = theElastic[index].GetXsec(aThermalE.GetThermalEnergy(aTrack,
-        xSec[i] = (*theElastic[index]).GetXsec(aThermalE.GetThermalEnergy(aTrack,
+        xSec[i] = (*(*theElastic)[index]).GetXsec(aThermalE.GetThermalEnergy(aTrack,
   		                                                     theMaterial->GetElement(i),
   								     theMaterial->GetTemperature()));
         xSec[i] *= rWeight;
@@ -118,7 +128,7 @@
       // it is element-wise initialised.
     }
     //G4HadFinalState* finalState = theElastic[index].ApplyYourself(aTrack);
-    G4HadFinalState* finalState = (*theElastic[index]).ApplyYourself(aTrack);
+    G4HadFinalState* finalState = (*(*theElastic)[index]).ApplyYourself(aTrack);
     if (overrideSuspension) finalState->SetStatusChange(isAlive);
 
     //Overwrite target parameters
@@ -145,6 +155,7 @@ const std::pair<G4double, G4double> G4NeutronHPElastic::GetFatalEnergyCheckLevel
    return std::pair<G4double, G4double>(10*perCent,DBL_MAX);
 }
 
+/*
 void G4NeutronHPElastic::addChannelForNewElement()
 {
    G4NeutronHPElasticFS* theFS = new G4NeutronHPElasticFS;
@@ -158,6 +169,7 @@ void G4NeutronHPElastic::addChannelForNewElement()
    delete theFS;
    numEle = (G4int)G4Element::GetNumberOfElements();
 }
+*/
 
 G4int G4NeutronHPElastic::GetVerboseLevel() const 
 {
@@ -166,4 +178,42 @@ G4int G4NeutronHPElastic::GetVerboseLevel() const
 void G4NeutronHPElastic::SetVerboseLevel( G4int newValue ) 
 {
    G4NeutronHPManager::GetInstance()->SetVerboseLevel(newValue);
+}
+
+void G4NeutronHPElastic::BuildPhysicsTable(const G4ParticleDefinition&)
+{
+
+   G4NeutronHPManager* hpmanager = G4NeutronHPManager::GetInstance();
+
+   theElastic = hpmanager->GetElasticFinalStates();
+
+   if ( !G4Threading::IsWorkerThread() ) {
+
+      if ( theElastic == NULL ) theElastic = new std::vector<G4NeutronHPChannel*>;
+
+      if ( numEle == (G4int)G4Element::GetNumberOfElements() ) return;
+
+      if ( theElastic->size() == G4Element::GetNumberOfElements() ) {
+         numEle = G4Element::GetNumberOfElements();
+         return;
+      }
+
+      G4NeutronHPElasticFS * theFS = new G4NeutronHPElasticFS;
+      if(!getenv("G4NEUTRONHPDATA")) 
+         throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
+      dirName = getenv("G4NEUTRONHPDATA");
+      G4String tString = "/Elastic";
+      dirName = dirName + tString;
+      for ( G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements() ; i++ ) {
+         (*theElastic).push_back( new G4NeutronHPChannel );
+         (*(*theElastic)[i]).Init((*(G4Element::GetElementTable()))[i], dirName);
+         while(!(*(*theElastic)[i]).Register(theFS)) ;
+      }
+      delete theFS;
+
+      hpmanager->RegisterElasticFinalStates( theElastic );
+
+   }
+
+   numEle = G4Element::GetNumberOfElements();
 }

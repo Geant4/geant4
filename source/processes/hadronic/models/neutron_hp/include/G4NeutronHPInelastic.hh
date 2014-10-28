@@ -98,15 +98,16 @@ class G4NeutronHPInelastic : public G4HadronicInteraction
    public:
       G4int GetVerboseLevel() const;
       void SetVerboseLevel( G4int );
+      void BuildPhysicsTable(const G4ParticleDefinition&);
 
   private:
   
   G4double * xSec;
   //G4NeutronHPChannelList * theInelastic; // one List per element
-      std::vector<G4NeutronHPChannelList*> theInelastic; // one List per element
+      std::vector<G4NeutronHPChannelList*>* theInelastic; // one List per element
   G4String dirName;
   G4int numEle;
-      void addChannelForNewElement();
+      //void addChannelForNewElement();
   
   private:
   

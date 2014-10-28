@@ -117,6 +117,7 @@
           theProbArray->SetX(i, ii, costh);
           theProbArray->SetY(i, ii, prob);
         }
+        theProbArray->DoneSetXY( i );
       }
     }
     else if ( repFlag==3 )
@@ -173,6 +174,7 @@
              theProbArray->SetX( i , ii , costh );
              theProbArray->SetY( i , ii , prob );
           }
+          theProbArray->DoneSetXY( i );
        }
     }
     else if (repFlag==0)
@@ -190,7 +192,8 @@
   G4HadFinalState * G4NeutronHPElasticFS::ApplyYourself(const G4HadProjectile & theTrack)
   {  
 //    G4cout << "G4NeutronHPElasticFS::ApplyYourself+"<<G4endl;
-    theResult.Clear();
+   if ( theResult.Get() == NULL ) theResult.Put( new G4HadFinalState );
+   theResult.Get()->Clear();
     G4double eKinetic = theTrack.GetKineticEnergy();
     const G4HadProjectile *incidentParticle = &theTrack;
     G4ReactionProduct theNeutron( incidentParticle->GetDefinition() );
@@ -360,8 +363,8 @@ G4cout << "after " <<  ( n4p.e() - n4p.m() ) / eV<< G4endl;
     }
     // now all in Lab
 // nun den recoil generieren...und energy change, momentum change angeben.
-    theResult.SetEnergyChange(theNeutron.GetKineticEnergy());
-    theResult.SetMomentumChange(theNeutron.GetMomentum().unit());
+    theResult.Get()->SetEnergyChange(theNeutron.GetKineticEnergy());
+    theResult.Get()->SetMomentumChange(theNeutron.GetMomentum().unit());
     G4DynamicParticle* theRecoil = new G4DynamicParticle;
     if(targetMass<4.5)
     {
@@ -399,9 +402,9 @@ G4cout << "after " <<  ( n4p.e() - n4p.m() ) / eV<< G4endl;
                                ->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0 ));
     }
     theRecoil->SetMomentum(theTarget.GetMomentum());
-    theResult.AddSecondary(theRecoil);
+    theResult.Get()->AddSecondary(theRecoil);
 //    G4cout << "G4NeutronHPElasticFS::ApplyYourself 10+"<<G4endl;
     // postpone the tracking of the primary neutron
-     theResult.SetStatusChange(suspend);
-    return &theResult;
+     theResult.Get()->SetStatusChange(suspend);
+    return theResult.Get();
   }

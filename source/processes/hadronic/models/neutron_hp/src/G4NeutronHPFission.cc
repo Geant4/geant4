@@ -37,9 +37,12 @@
 
   G4NeutronHPFission::G4NeutronHPFission()
     :G4HadronicInteraction("NeutronHPFission")
+  ,theFission(NULL)
+  ,numEle(0)
   {
     SetMinEnergy( 0.0 );
     SetMaxEnergy( 20.*MeV );
+/*
     if(!getenv("G4NEUTRONHPDATA")) 
        throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
     dirName = getenv("G4NEUTRONHPDATA");
@@ -67,24 +70,25 @@
        (*theFission[i]).Register(&theFS);
       }
     }
+*/
   }
   
   G4NeutronHPFission::~G4NeutronHPFission()
   {
     //delete [] theFission;
      for ( std::vector<G4NeutronHPChannel*>::iterator 
-           it = theFission.begin() ; it != theFission.end() ; it++ )
+           it = (*theFission).begin() ; it != (*theFission).end() ; it++ )
      {
         delete *it;
      }
-     theFission.clear();
+     (*theFission).clear();
   }
   
   #include "G4NeutronHPThermalBoost.hh"
   G4HadFinalState * G4NeutronHPFission::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus& aNucleus )
   {
 
-    if ( numEle < (G4int)G4Element::GetNumberOfElements() ) addChannelForNewElement();
+    //if ( numEle < (G4int)G4Element::GetNumberOfElements() ) addChannelForNewElement();
 
     G4NeutronHPManager::GetInstance()->OpenReactionWhiteBoard();
     const G4Material * theMaterial = aTrack.GetMaterial();
@@ -102,7 +106,7 @@
       {
         index = theMaterial->GetElement(i)->GetIndex();
         rWeight = NumAtomsPerVolume[i];
-        xSec[i] = (*theFission[index]).GetXsec(aThermalE.GetThermalEnergy(aTrack,
+        xSec[i] = (*(*theFission)[index]).GetXsec(aThermalE.GetThermalEnergy(aTrack,
   		                                                      theMaterial->GetElement(i),
   								      theMaterial->GetTemperature()));
         xSec[i] *= rWeight;
@@ -120,7 +124,7 @@
       delete [] xSec;
     }
     //return theFission[index].ApplyYourself(aTrack);                 //-2:Marker for Fission
-    G4HadFinalState* result = (*theFission[index]).ApplyYourself(aTrack,-2);
+    G4HadFinalState* result = (*(*theFission)[index]).ApplyYourself(aTrack,-2);
 
     //Overwrite target parameters
     aNucleus.SetParameters(G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargA(),G4NeutronHPManager::GetInstance()->GetReactionWhiteBoard()->GetTargZ());
@@ -148,7 +152,7 @@ const std::pair<G4double, G4double> G4NeutronHPFission::GetFatalEnergyCheckLevel
 }
 
 
-
+/*
 void G4NeutronHPFission::addChannelForNewElement()
 {
    for ( G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements() ; i++ ) 
@@ -163,6 +167,7 @@ void G4NeutronHPFission::addChannelForNewElement()
    }
    numEle = (G4int)G4Element::GetNumberOfElements();
 }
+*/
 
 G4int G4NeutronHPFission::GetVerboseLevel() const
 {
@@ -171,4 +176,40 @@ G4int G4NeutronHPFission::GetVerboseLevel() const
 void G4NeutronHPFission::SetVerboseLevel( G4int newValue ) 
 {
    G4NeutronHPManager::GetInstance()->SetVerboseLevel(newValue);
+}
+void G4NeutronHPFission::BuildPhysicsTable(const G4ParticleDefinition&)
+{
+   G4NeutronHPManager* hpmanager = G4NeutronHPManager::GetInstance();
+
+   theFission = hpmanager->GetFissionFinalStates();
+
+   if ( !G4Threading::IsWorkerThread() ) {
+
+      if ( theFission == NULL ) theFission = new std::vector<G4NeutronHPChannel*>;
+
+      if ( numEle == (G4int)G4Element::GetNumberOfElements() ) return;
+
+      if ( theFission->size() == G4Element::GetNumberOfElements() ) {
+         numEle = G4Element::GetNumberOfElements();
+         return;
+      }
+
+      if ( !getenv("G4NEUTRONHPDATA") ) 
+          throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
+      dirName = getenv("G4NEUTRONHPDATA");
+      G4String tString = "/Fission";
+      dirName = dirName + tString;
+
+      for ( G4int i = numEle ; i < (G4int)G4Element::GetNumberOfElements() ; i++ ) {
+         (*theFission).push_back( new G4NeutronHPChannel );
+         if ((*(G4Element::GetElementTable()))[i]->GetZ()>87) { //TK modified for ENDF-VII
+            (*(*theFission)[i]).Init((*(G4Element::GetElementTable()))[i], dirName);
+            (*(*theFission)[i]).Register(&theFS);
+         }
+      }
+
+      hpmanager->RegisterFissionFinalStates( theFission );
+
+   }
+   numEle = G4Element::GetNumberOfElements();
 }

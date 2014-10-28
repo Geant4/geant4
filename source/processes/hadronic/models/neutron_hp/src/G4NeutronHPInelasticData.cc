@@ -123,6 +123,11 @@ void G4NeutronHPInelasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
       onFlightDB = false;
    }    
 
+   if ( G4Threading::IsWorkerThread() ) {
+      theCrossSections = G4NeutronHPManager::GetInstance()->GetInelasticCrossSections();
+      return;
+   }
+
   size_t numberOfElements = G4Element::GetNumberOfElements();
 //  theCrossSections = new G4PhysicsTable( numberOfElements );
 // TKDB
@@ -142,6 +147,7 @@ void G4NeutronHPInelasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
       Instance()->MakePhysicsVector((*theElementTable)[i], this);
      theCrossSections->push_back(physVec);
   }
+   G4NeutronHPManager::GetInstance()->RegisterInelasticCrossSections(theCrossSections);
 }
 
 void G4NeutronHPInelasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)

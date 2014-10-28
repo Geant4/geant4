@@ -23,35 +23,41 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// neutron_hp -- source file
-// J.P. Wellisch, Nov-1996
-// A prototype of the low energy neutron transport model.
+#ifndef G4NeutronHPThreadLocalManager_h
+#define G4NeutronHPThreadLocalManager_h 1
+
+// Class Description
+// ThreadLocalManager of NeutronHP 
+// Class Description - End
+
+// 140825 First implementation done by T. Koi (SLAC/PPA)
 //
-#include "G4NeutronHP3NInelasticFS.hh"
-#include "G4Nucleus.hh"
-#include "G4Alpha.hh"
+#include "globals.hh"
 
-G4HadFinalState * G4NeutronHP3NInelasticFS::ApplyYourself(const G4HadProjectile & theTrack)
+class G4NeutronHPReactionWhiteBoard;
+
+class G4NeutronHPThreadLocalManager 
 {
-// these are the particle types in the final state
+   public:
+      static G4NeutronHPThreadLocalManager* GetInstance() {
+         if ( instance == NULL) instance = new G4NeutronHPThreadLocalManager();
+         return instance;
+      };
 
-  G4ParticleDefinition * theDefs[3];
-  theDefs[0] = G4Neutron::Neutron();
-  theDefs[1] = G4Neutron::Neutron();
-  theDefs[2] = G4Neutron::Neutron();
-  
-// fill the final state  
-  G4NeutronHPInelasticBaseFS::BaseApply(theTrack, theDefs, 3);
-  
-// return the result
-   return theResult.Get();
-}
+   private: 
+      G4NeutronHPThreadLocalManager();
+      G4NeutronHPThreadLocalManager( const G4NeutronHPThreadLocalManager& ){};
+      ~G4NeutronHPThreadLocalManager();
+      static G4ThreadLocal G4NeutronHPThreadLocalManager* instance;
 
-void G4NeutronHP3NInelasticFS::
-Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType)
-{
-   G4NeutronHPInelasticBaseFS::Init(A, Z, M, dirName, aFSType);
-   G4double ResidualA = A-2;
-   G4double ResidualZ = Z;
-   G4NeutronHPInelasticBaseFS::InitGammas(ResidualA, ResidualZ);
-}
+   public:
+      G4NeutronHPReactionWhiteBoard* GetReactionWhiteBoard();
+      void OpenReactionWhiteBoard();
+      //void CloseReactionWhiteBoard(){delete RWB; RWB=NULL;};
+      void CloseReactionWhiteBoard();
+
+   private:
+      G4NeutronHPReactionWhiteBoard* RWB;
+ 
+};
+#endif
