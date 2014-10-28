@@ -61,10 +61,10 @@ void G4TrajectoriesModelDebugG4AttValues(const G4VTrajectory*);
 #include "G4VVisManager.hh"
 void G4TrajectoriesModel::DescribeYourselfTo (G4VGraphicsScene& sceneHandler)
 {
-#ifdef G4MULTITHREADED
-  G4MTRunManager* runManager = G4MTRunManager::GetMasterRunManager();
-#else
   G4RunManager* runManager = G4RunManager::GetRunManager();
+#ifdef G4MULTITHREADED
+  if(runManager->GetRunManagerType()==G4RunManager::workerRM)
+  { runManager = G4MTRunManager::GetMasterRunManager(); }
 #endif
   const G4Run* currentRun = runManager->GetCurrentRun();
   if (currentRun) {
