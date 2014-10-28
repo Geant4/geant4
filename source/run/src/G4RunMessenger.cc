@@ -102,14 +102,22 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
 
   nThreadsCmd = new G4UIcmdWithAnInteger("/run/numberOfThreads",this);
   nThreadsCmd->SetGuidance("Set the number of threads to be used.");
-  nThreadsCmd->SetGuidance("This command is valid only for multi-threaded mode.");
   nThreadsCmd->SetGuidance("This command works only in PreInit state.");
+  nThreadsCmd->SetGuidance("This command is valid only for multi-threaded mode.");
   nThreadsCmd->SetGuidance("The command is ignored if it is issued in sequential mode.");
   nThreadsCmd->SetParameterName("nThreads",true);
   nThreadsCmd->SetDefaultValue(2);
   nThreadsCmd->SetRange("nThreads >0");
   nThreadsCmd->SetToBeBroadcasted(false);
   nThreadsCmd->AvailableForStates(G4State_PreInit);
+
+  maxThreadsCmd = new G4UIcmdWithoutParameter("/run/useMaximumLogicalCores",this);
+  maxThreadsCmd->SetGuidance("Set the number of threads to be the number of available logical cores.");
+  maxThreadsCmd->SetGuidance("This command works only in PreInit state.");
+  maxThreadsCmd->SetGuidance("This command is valid only for multi-threaded mode.");
+  maxThreadsCmd->SetGuidance("The command is ignored if it is issued in sequential mode.");
+  maxThreadsCmd->SetToBeBroadcasted(false);
+  maxThreadsCmd->AvailableForStates(G4State_PreInit);
 
   pinAffinityCmd = new G4UIcmdWithAnInteger("/run/pinAffinity",this);
   pinAffinityCmd->SetGuidance("Locks each thread to a specific logical core. Workers are locked in round robin to logical cores.");
@@ -290,6 +298,7 @@ G4RunMessenger::~G4RunMessenger()
   delete verboseCmd;
   delete printProgCmd;
   delete nThreadsCmd;
+  delete maxThreadsCmd;
   delete evModCmd;
   delete optCmd;
   delete dumpRegCmd;
@@ -352,6 +361,25 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     {
       G4Exception("G4RunMessenger::ApplyNewCommand","Run0901",FatalException,
       "/run/numberOfThreads command is issued to local thread.");
+    }
+  }
+  else if( command==maxThreadsCmd)
+  {
+    G4RunManager::RMType rmType = runManager->GetRunManagerType();
+    if( rmType==G4RunManager::masterRM )
+    {
+      static_cast<G4MTRunManager*>(runManager)->SetNumberOfThreads(
+       G4Threading::G4GetNumberOfCores() );
+    }
+    else if ( rmType==G4RunManager::sequentialRM )
+    {
+      G4cout<<"*** /run/useMaximumLogicalCores command is issued in sequential mode."
+            <<"\nCommand is ignored."<<G4endl;
+    }
+    else
+    {
+      G4Exception("G4RunMessenger::ApplyNewCommand","Run0901",FatalException,
+      "/run/useMaximumLogicalCores command is issued to local thread.");
     }
   }
   else if ( command == pinAffinityCmd )

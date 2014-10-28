@@ -37,7 +37,7 @@
 #include "G4Types.hh"
 #include "G4String.hh"
 
-#include "G4Threading.hh"///AAADEBUG
+#include "G4Threading.hh"
 
 class G4WorkerThread {
 public:

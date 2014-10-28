@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 27th, 2014 M.Asai (run-V10-00-35)
+- Introduced /run/useMaximumLogicalCores UI command.
+
+October 24th, 2014 J.Apostolakis,A.Dotti (run-V10-00-34)
+- Introduced workspace for physics list split-classes
+- Improved workspace from particledefinition split-class
+- Requires global-V10-00-40 and particles-V10-00-25
+
 October 24th, 2014 M.Asai (run-V10-00-33)
 - Fix cleaning up of kept events when Vis thread keeps events.
 

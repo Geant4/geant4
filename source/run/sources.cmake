@@ -77,6 +77,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4MaterialScanner.hh
 	G4PhysicsListHelper.hh
 	G4PhysicsListOrderingParameter.hh
+        G4PhysicsListWorkspace.hh
         G4Run.hh
         G4RunManager.hh
 	G4MTRunManager.hh
@@ -111,6 +112,7 @@ GEANT4_DEFINE_MODULE(NAME G4run
         G4MaterialScanner.cc
 	G4PhysicsListHelper.cc
 	G4PhysicsListOrderingParamater.cc
+        G4PhysicsListWorkspace.cc
         G4Run.cc
         G4RunManager.cc
 	G4MTRunManager.cc

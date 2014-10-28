@@ -41,7 +41,7 @@
 #define G4MT_physicsVector ((G4VMPLsubInstanceManager.offset[g4vmplInstanceID]).physicsVector)
 
 template <class G4VMPLData> G4ThreadLocal
-G4int G4VUPLSplitter<G4VMPLData>::slavetotalspace = 0;
+G4int G4VUPLSplitter<G4VMPLData>::workertotalspace = 0;
 
 template <class G4VMPLData> G4ThreadLocal
 G4VMPLData* G4VUPLSplitter<G4VMPLData>::offset = 0;

@@ -47,47 +47,24 @@ G4int G4WorkerThread::GetNumberThreads() const
     return numThreads;
 }
 
-//TODO: refactorize? Parts of these delegated to correct classes?
-#include "G4LogicalVolume.hh"
-#include "G4VPhysicalVolume.hh"
-#include "G4PVReplica.hh"
-#include "G4ParticleDefinition.hh"
-#include "G4Region.hh"
-#include "G4Material.hh"
-#include "G4PhysicsVector.hh"
-/////@@#include "G4VDecayChannel.hh"
-#include "G4PhysicalVolumeStore.hh"
-#include "G4LogicalVolumeStore.hh"
-#include "G4MaterialTable.hh"
-#include "G4PolyconeSide.hh"
-#include "G4PolyhedraSide.hh"
-#include "G4PVParameterised.hh"
-#include "G4Threading.hh"
-#include "G4AutoLock.hh"
-#include "G4VUserPhysicsList.hh"
-#include "G4VPhysicsConstructor.hh"
-#include "G4VModularPhysicsList.hh"
 #include "G4GeometryWorkspace.hh"
 #include "G4GeometryWorkspacePool.hh"
 #include "G4SolidsWorkspace.hh"
 #include "G4SolidsWorkspacePool.hh"
 #include "G4ParticlesWorkspace.hh"
-#include "G4ParticlesWorkspacePool.hh"
-
-//namespace  {
-//    G4Mutex solidclone = G4MUTEX_INITIALIZER;
-//}
+#include "G4PhysicsListWorkspace.hh"
 
 void G4WorkerThread::BuildGeometryAndPhysicsVector()
 {
     // Initialise all split classes in the geometry with copy of data from master thread
     G4GeometryWorkspacePool::GetInstance()->CreateAndUseWorkspace();
     G4SolidsWorkspacePool::GetInstance()->CreateAndUseWorkspace();
-    G4ParticlesWorkspacePool::GetInstance()->CreateAndUseWorkspace();
-    
-    const_cast<G4VUPLManager&>(G4VUserPhysicsList::GetSubInstanceManager()).NewSubInstances();
-    const_cast<G4VPCManager&>(G4VPhysicsConstructor::GetSubInstanceManager()).NewSubInstances();
-    const_cast<G4VMPLManager&>(G4VModularPhysicsList::GetSubInstanceManager()).SlaveCopySubInstanceArray();
+
+    G4ParticlesWorkspace::GetPool()->CreateAndUseWorkspace();
+    G4PhysicsListWorkspace::GetPool()->CreateAndUseWorkspace();
+//    const_cast<G4VUPLManager&>(G4VUserPhysicsList::GetSubInstanceManager()).NewSubInstances();
+//    const_cast<G4VPCManager&>(G4VPhysicsConstructor::GetSubInstanceManager()).NewSubInstances();
+//    const_cast<G4VMPLManager&>(G4VModularPhysicsList::GetSubInstanceManager()).WorkerCopySubInstanceArray();
 }
 
 void G4WorkerThread::DestroyGeometryAndPhysicsVector()
@@ -103,16 +80,23 @@ void G4WorkerThread::DestroyGeometryAndPhysicsVector()
     // G4GeometryWorkspacePool::GetInstance()->ReleaseAndDestroyMyWorkspace();
     G4GeometryWorkspacePool::GetInstance()->GetWorkspace()->DestroyWorkspace();
     G4SolidsWorkspacePool::GetInstance()->GetWorkspace()->DestroyWorkspace();
-    G4ParticlesWorkspacePool::GetInstance()->GetWorkspace()->DestroyWorkspace();
+    G4ParticlesWorkspace::GetPool()->GetWorkspace()->DestroyWorkspace();
+    
+    G4PhysicsListWorkspace::GetPool()->GetWorkspace()->DestroyWorkspace();
 #endif
 
-    const_cast<G4VUPLManager&>(G4VUserPhysicsList::GetSubInstanceManager()).FreeSlave();
-    const_cast<G4VPCManager&>(G4VPhysicsConstructor::GetSubInstanceManager()).FreeSlave();
-    const_cast<G4VMPLManager&>(G4VModularPhysicsList::GetSubInstanceManager()).FreeSlave();
+//    const_cast<G4VUPLManager&>(G4VUserPhysicsList::GetSubInstanceManager()).FreeWorker();
+//    const_cast<G4VPCManager&>(G4VPhysicsConstructor::GetSubInstanceManager()).FreeWorker();
+//    const_cast<G4VMPLManager&>(G4VModularPhysicsList::GetSubInstanceManager()).FreeWorker();
 }
 
 #include "G4Region.hh"
 #include "G4RegionStore.hh"
+#include "G4LogicalVolume.hh"
+#include "G4Region.hh"
+#include "G4PhysicalVolumeStore.hh"
+#include "G4LogicalVolumeStore.hh"
+
 
 void G4WorkerThread::UpdateGeometryAndPhysicsVectorFromMaster()
 {

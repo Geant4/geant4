@@ -82,7 +82,7 @@
 // size of G4VUPLData instances.
 //
 template <class G4VUPLData> G4ThreadLocal
-G4int G4VUPLSplitter<G4VUPLData>::slavetotalspace = 0;
+G4int G4VUPLSplitter<G4VUPLData>::workertotalspace = 0;
 
 // This static member is thread local. For each thread, it points to the
 // array of G4VUPLData instances.
