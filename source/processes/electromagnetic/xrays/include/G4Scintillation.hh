@@ -151,12 +151,12 @@ public:
 
         // These are the methods implementing the scintillation process.
 
-	static void SetTrackSecondariesFirst(const G4bool state);
+        void SetTrackSecondariesFirst(const G4bool state);
         // If set, the primary particle tracking is interrupted and any
         // produced scintillation photons are tracked next. When all 
         // have been tracked, the tracking of the primary resumes.
 
-        static void SetFiniteRiseTime(const G4bool state);
+        void SetFiniteRiseTime(const G4bool state);
         // If set, the G4Scintillation process expects the user to have
         // set the constant material property FAST/SLOWSCINTILLATIONRISETIME.
 
@@ -166,7 +166,7 @@ public:
         G4bool GetFiniteRiseTime() const;
         // Returns the boolean flag for a finite scintillation rise time.
 	
-        static void SetScintillationYieldFactor(const G4double yieldfactor);
+        void SetScintillationYieldFactor(const G4double yieldfactor);
         // Called to set the scintillation photon yield factor, needed when
         // the yield is different for different types of particles. This
         // scales the yield obtained from the G4MaterialPropertiesTable.
@@ -174,7 +174,7 @@ public:
         G4double GetScintillationYieldFactor() const;
         // Returns the photon yield factor.
 
-        static void SetScintillationExcitationRatio(const G4double ratio);
+        void SetScintillationExcitationRatio(const G4double ratio);
         // Called to set the scintillation exciation ratio, needed when
         // the scintillation level excitation is different for different
         // types of particles. This overwrites the YieldRatio obtained
@@ -189,16 +189,16 @@ public:
         G4PhysicsTable* GetSlowIntegralTable() const;
         // Returns the address of the slow scintillation integral table.
 
-        static void AddSaturation(G4EmSaturation* );
+        void AddSaturation(G4EmSaturation* );
         // Adds Birks Saturation to the process.
 
-        static void RemoveSaturation();
+        void RemoveSaturation();
         // Removes the Birks Saturation from the process.
 
         G4EmSaturation* GetSaturation() const { return fEmSaturation; }
         // Returns the Birks Saturation.
 
-        static void SetScintillationByParticleType(const G4bool );
+        void SetScintillationByParticleType(const G4bool );
         // Called by the user to set the scintillation yield as a function
         // of energy deposited by particle type
 
@@ -225,14 +225,14 @@ protected:
 
 private:
 
-        static G4bool fTrackSecondariesFirst;
-        static G4bool fFiniteRiseTime;
+        G4bool fTrackSecondariesFirst;
+        G4bool fFiniteRiseTime;
 
-        static G4double fYieldFactor;
+        G4double fYieldFactor;
 
-        static G4double fExcitationRatio;
+        G4double fExcitationRatio;
 
-        static G4bool fScintillationByParticleType;
+        G4bool fScintillationByParticleType;
 
 #ifdef G4DEBUG_SCINTILLATION
         G4double ScintTrackEDep, ScintTrackYield;
@@ -244,7 +244,7 @@ private:
         // emission time distribution when there is a finite rise time
         G4double sample_time(G4double tau1, G4double tau2);
 
-        static G4EmSaturation* fEmSaturation;
+        G4EmSaturation* fEmSaturation;
 
 };
 

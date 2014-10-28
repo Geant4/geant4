@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 Oct 14: A.Dotti (xrays-V10-00-06)
+- Address problem #1675, this requires re engineering of 
+  all UI commands related to optical processes and created
+  in G4OpticalPhysics.
+- Co-working tags: xrays-V10-00-06, op-V10-00-09, phys-ctor-em-V10-00-17
+
+
 17 Oct 14: P.Gumplinger (xrays-V10-00-05)
 - address problem report 1678 for BuildPhysicsTable in G4Scintillation
 

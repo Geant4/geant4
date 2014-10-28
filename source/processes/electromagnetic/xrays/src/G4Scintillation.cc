@@ -86,12 +86,12 @@
         //////////////////////
 
 
-G4bool G4Scintillation::fTrackSecondariesFirst = false;
-G4bool G4Scintillation::fFiniteRiseTime = false;
-G4double G4Scintillation::fYieldFactor = 1.0;
-G4double G4Scintillation::fExcitationRatio = 1.0;
-G4bool G4Scintillation::fScintillationByParticleType = false;
-G4EmSaturation* G4Scintillation::fEmSaturation = NULL;
+//G4bool G4Scintillation::fTrackSecondariesFirst = false;
+//G4bool G4Scintillation::fFiniteRiseTime = false;
+//G4double G4Scintillation::fYieldFactor = 1.0;
+//G4double G4Scintillation::fExcitationRatio = 1.0;
+//G4bool G4Scintillation::fScintillationByParticleType = false;
+//G4EmSaturation* G4Scintillation::fEmSaturation = NULL;
 
         //////////////
         // Operators
@@ -107,7 +107,13 @@ G4EmSaturation* G4Scintillation::fEmSaturation = NULL;
 
 G4Scintillation::G4Scintillation(const G4String& processName,
                                        G4ProcessType type)
-                  : G4VRestDiscreteProcess(processName, type)
+                  : G4VRestDiscreteProcess(processName, type) ,
+    fTrackSecondariesFirst(false),
+    fFiniteRiseTime(false),
+    fYieldFactor(1.0),
+    fExcitationRatio(1.0),
+    fScintillationByParticleType(false),
+    fEmSaturation(0)
 {
         SetProcessSubType(fScintillation);
 
