@@ -266,12 +266,12 @@ endforeach()
 GEANT4_ADD_TEST(example-ext-medical-dna-wholeNuclearDNA
                 COMMAND ${BINDIR}/wholeNuclearDNA
                         ${DNA_EXAMPLE_SRC_DIR}/wholeNuclearDNA/wholeNuclearDNA.in
-                BUILD ${DNA_EXAMPLE_SRC_DIR}/wholeNuclearDNA ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD ${DNA_EXAMPLE_SRC_DIR}/wholeNuclearDNA)
 
 GEANT4_ADD_TEST(example-ext-medical-dna-pdb4dna
                 COMMAND ${BINDIR}/pdb4dna
                         -m ${DNA_EXAMPLE_SRC_DIR}/pdb4dna/pdb4dna.in
-                BUILD ${DNA_EXAMPLE_SRC_DIR}/pdb4dna ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+                BUILD ${DNA_EXAMPLE_SRC_DIR}/pdb4dna)
 
 GEANT4_ADD_TEST(example-ext-optical-opnovice 
                 COMMAND ${BINDIR}/OpNovice -m ${SRCDIR}/extended/optical/OpNovice/OpNovice.in

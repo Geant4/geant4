@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-28 -- 28 October 2014 Mathieu Karamitros
+- remove incorrect environment for pdb4dna & wholeNuclearDNA
+
 ctests-V10-00-27 -- 26 October 2014 Mathieu Karamitros
 - fix paths for wholeNuclearDNA & pdb4dna in GNUMakeTestfile.cmake
 
