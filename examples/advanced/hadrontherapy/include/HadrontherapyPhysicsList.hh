@@ -53,7 +53,6 @@ public:
     void AddPhysicsList(const G4String& name);
     void ConstructProcess();
     void AddStepMax();
-    HadrontherapyStepMax* GetStepMaxProcess() {return stepMaxProcess;};
     void AddPackage(const G4String& name);
     
 private:
@@ -71,9 +70,7 @@ private:
     G4VPhysicsConstructor* radioactiveDecay_List;
     
     std::vector<G4VPhysicsConstructor*>  hadronPhys;
-    
-    HadrontherapyStepMax* stepMaxProcess;
-    
+        
     HadrontherapyPhysicsListMessenger* pMessenger;
 };
 

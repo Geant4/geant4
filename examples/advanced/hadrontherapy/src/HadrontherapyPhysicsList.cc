@@ -70,6 +70,7 @@
 #include "G4EmProcessOptions.hh"
 #include "G4ParallelWorldPhysics.hh"
 #include "G4EmLivermorePhysics.hh"
+#include "G4AutoDelete.hh"
 
 /////////////////////////////////////////////////////////////////////////////
 HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
@@ -80,7 +81,6 @@ HadrontherapyPhysicsList::HadrontherapyPhysicsList() : G4VModularPhysicsList()
     cutForElectron  = defaultCutValue;
     cutForPositron  = defaultCutValue;
     
-    stepMaxProcess  = 0;
     pMessenger = new HadrontherapyPhysicsListMessenger(this);
     
     SetVerboseLevel(1);
@@ -274,19 +274,22 @@ void HadrontherapyPhysicsList::AddPhysicsList(const G4String& name)
 /////////////////////////////////////////////////////////////////////////////
 void HadrontherapyPhysicsList::AddStepMax()
 {
-    // Step limitation seen as a process
-    stepMaxProcess = new HadrontherapyStepMax();
-    
-    theParticleIterator->reset();
-    while ((*theParticleIterator)()){
-        G4ParticleDefinition* particle = theParticleIterator->value();
-        G4ProcessManager* pmanager = particle->GetProcessManager();
-        
-        if (stepMaxProcess->IsApplicable(*particle) && pmanager)
-        {
-            pmanager ->AddDiscreteProcess(stepMaxProcess);
-        }
-    }
+  // Step limitation seen as a process
+  // This process must exist in all threads.
+  //
+  HadrontherapyStepMax* stepMaxProcess  = new HadrontherapyStepMax();
+  G4AutoDelete::Register( stepMaxProcess );
+  
+  theParticleIterator->reset();
+  while ((*theParticleIterator)()){
+    G4ParticleDefinition* particle = theParticleIterator->value();
+    G4ProcessManager* pmanager = particle->GetProcessManager();
+
+    if (stepMaxProcess->IsApplicable(*particle) && pmanager)
+      {
+	pmanager ->AddDiscreteProcess(stepMaxProcess);
+      }
+  }
 }
 
 /////////////////////////////////////////////////////////////////////////////

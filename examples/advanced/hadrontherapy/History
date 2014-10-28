@@ -7,7 +7,9 @@ http://g4advancedexamples.lngs.infn.it/Examples/hadrontherapy
          ====================================================
              History file of the Hadrontherapy application
          ====================================================	    
-27.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-07
+27.10.2014 L. Pandola, A. Tramontana Tag: hadrontherapy-V10-00-08
+           - Local definition of Step Max process.
+27.10.2014 L. Pandola, A. Tramontana, Tag: hadrontherapy-V10-00-07
            - Lock for the file reading, to avoid simultaneous accesses.
 24.10.2014 A. Tramontana, Tag: hadrontherapy-V10-00-06
            - Removed /vis/ command call for batch mode.
