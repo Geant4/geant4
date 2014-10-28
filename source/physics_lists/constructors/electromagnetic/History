@@ -14,6 +14,12 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27 Oct 14: A.Dotti ( phys-ctor-em-V10-00-17)
+- Address problem #1675, this requires re engineering of 
+  all UI commands related to optical processes and created
+  in G4OpticalPhysics.
+- Co-working tags: xrays-V10-00-06, op-V10-00-09, phys-ctor-em-V10-00-17
+
 23-Oct-2014, M. Karamitros (phys-ctor-em-V10-00-16)
 - G4EmDNAChemistry: correct H3O+ settings
 

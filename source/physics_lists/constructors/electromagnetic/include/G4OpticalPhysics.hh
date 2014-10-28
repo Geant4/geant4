@@ -83,9 +83,6 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
     // configure G4OpticalPhysics builder
     void Configure(G4OpticalProcessIndex, G4bool );
 
-    // set methods
-    void SetProcessVerbose(G4int , G4int );
-
     void SetMaxNumPhotonsPerStep(G4int );
     void SetMaxBetaChangePerStep(G4double );
     void SetScintillationYieldFactor(G4double );
@@ -93,7 +90,7 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
     void SetWLSTimeProfile(G4String );
     void SetScintillationByParticleType(G4bool );
-    void AddScintillationSaturation(G4EmSaturation* );
+    //void AddScintillationSaturation(G4EmSaturation* );
 
     void SetTrackSecondariesFirst(G4OpticalProcessIndex, G4bool );
     void SetFiniteRiseTime(G4bool );
@@ -108,9 +105,6 @@ class G4OpticalPhysics : public G4VPhysicsConstructor
 
     // The vector of process configuration
     std::vector<G4bool>         fProcessUse;
-
-    // The vector of process verbose level
-    std::vector<G4int>          fProcessVerbose;
 
     // The vector of track secondaries options;
     // the option to track secondaries before finishing their parent track

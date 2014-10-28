@@ -55,21 +55,20 @@ class G4UIcmdWithABool;
 class G4UIcmdWithADouble;
 class G4UIcmdWithAString;
 class G4UIcmdWithAnInteger;
+class G4UIcommand;
 
 // Messenger class that defines commands for the optical physics
 //
 // Implements commands:
-// - /optics_engine/selectOpProcess  processName
-// - /optics_engine/setOpProcessUse  true|false
-// - /optics_engine/setOpProcessVerbose  verboseLevel
-// - /optics_engine/setCerenkovMaxPhotons maxNofPhotons
-// - /optics_engine/setCerenkovMaxBetaChange maxBetaChange
-// - /optics_engine/setScintillationYieldFactor yieldFactor
-// - /optics_engine/setScintillationByParticleType true|false
-// - /optics_engine/setOpticalSurfaceModel glisur|unified
-// - /optics_engine/setWLSTimeProfile delta|exponential
-// - /optics_engine/setTrackSecondariesFirst true|false
-// - /optics_engine/setFiniteRiseTime true|false
+// - /process/optical/processActivation proc_name flag
+// - /process/optical/verbose level
+// - /process/optical/setTrackSecondariesFirst proc_name flag
+// - /process/optical/defaults/cerenkov/setMaxPhotons val
+// - /process/optical/defaults/cerenkov/setMaxBetaChange val
+// - /process/optical/defaults/scintillation/setYieldFactor val
+// - /process/optical/defaults/scintillation/setByParticleType val
+// - /process/optical/defaults/scintillation/setFiniteRiseTime val
+// - /process/optical/defaults/wls/setTimeProfile val
 
 class G4OpticalPhysicsMessenger: public G4UImessenger
 {
@@ -97,15 +96,14 @@ private:
 
   /// command directory
   G4UIdirectory*         fDir;
+  G4UIdirectory*         fDir2;
 
   /// selected optical process
   G4OpticalProcessIndex  fSelectedProcessIndex;
 
   /// selectOpProcess command
-  G4UIcmdWithAString*    fSelectOpProcessCmd;
+  G4UIcommand*    fActivateProcessCmd;
 
-  /// setProcessUse command
-  G4UIcmdWithABool*      fSetOpProcessUseCmd;
 
   /// setProcessVerbose command
   G4UIcmdWithAnInteger*  fSetOpProcessVerboseCmd;
@@ -129,7 +127,7 @@ private:
   G4UIcmdWithAString*    fSetWLSTimeProfileCmd;
 
   /// setTrackSecondariesFirst command
-  G4UIcmdWithABool*      fSetTrackSecondariesFirstCmd;
+  G4UIcommand*      fSetTrackSecondariesFirstCmd;
 
   /// setFiniteRiseTime command
   G4UIcmdWithABool*      fSetFiniteRiseTimeCmd;

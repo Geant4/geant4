@@ -49,6 +49,7 @@
 #include "G4UIcmdWithADouble.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIparameter.hh"
 
 #include "G4ParticleTable.hh"
 #include "G4ProcessManager.hh"
@@ -61,117 +62,104 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
   : G4UImessenger(),
     fOpticalPhysics(opticalPhysics),
     fSelectedProcessIndex(kNoProcess),
-    fSelectOpProcessCmd(0),
-    fSetOpProcessUseCmd(0),
+    fActivateProcessCmd(0),
     fSetOpProcessVerboseCmd(0),
     fSetCerenkovMaxPhotonsCmd(0),
     fSetCerenkovMaxBetaChangeCmd(0),
     fSetScintillationYieldFactorCmd(0),
     fSetScintillationByParticleTypeCmd(0),
-//    fSetOpticalSurfaceModelCmd(0),
     fSetWLSTimeProfileCmd(0),
     fSetTrackSecondariesFirstCmd(0),
     fSetFiniteRiseTimeCmd(0)
 {
-  fDir = new G4UIdirectory("/optics_engine/");
-  fDir->
-    SetGuidance("Commands related to the optical physics simulation engine.");
+    G4bool toBeBroadcasted = false;
+    fDir = new G4UIdirectory("/process/optical/defaults",toBeBroadcasted);
+    fDir->SetGuidance("Commands related to the optical physics simulation engine.");
+    fDir2 = new G4UIdirectory("/process/optical",toBeBroadcasted);
+    fDir2->SetGuidance("Commands related to the optical physics simulation engine.");
 
-  fSelectOpProcessCmd
-   = new G4UIcmdWithAString("/optics_engine/selectOpProcess", this);
-  fSelectOpProcessCmd
-   ->SetGuidance("Select optical process for applying use/verbose/trackfirst commands");
-  fSelectOpProcessCmd->SetParameterName("OpProcess", false);
-  G4String candidates;
-  for ( G4int i=0; i<kNoProcess; i++ ) {
-      candidates += G4OpticalProcessName(i);
-      candidates += G4String(" ");
-  }
-  fSelectOpProcessCmd->SetCandidates(candidates);
-  fSelectOpProcessCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fActivateProcessCmd= new G4UIcommand("/process/optical/processActivation", this);
+    fActivateProcessCmd->SetGuidance("Activate/deactivate the specified optical process");
+    G4UIparameter* par = new G4UIparameter("proc_name",'s',false);
+    G4String candidates;
+    for ( G4int i=0; i<kNoProcess; i++ ) {
+        candidates += G4OpticalProcessName(i);
+        candidates += G4String(" ");
+    }
+    par->SetParameterCandidates(candidates);
+    par->SetGuidance("the process name");
+    fActivateProcessCmd->SetParameter(par);
+    par = new G4UIparameter("flag",'b',true);
+    par->SetDefaultValue(true);
+    par->SetGuidance("activation flag");
+    fActivateProcessCmd->SetParameter(par);
+    fActivateProcessCmd->AvailableForStates(G4State_PreInit);
 
-  fSetOpProcessUseCmd
-   = new G4UIcmdWithABool("/optics_engine/setOpProcessUse", this);
-  fSetOpProcessUseCmd->SetGuidance("Use/Not use selected optical process");
-  fSetOpProcessUseCmd->SetParameterName("OpProcessUse", false);
-  fSetOpProcessUseCmd->AvailableForStates(G4State_PreInit);
 
-  fSetOpProcessVerboseCmd
-    = new G4UIcmdWithAnInteger("/optics_engine/setOpProcessVerbose", this);
-  fSetOpProcessVerboseCmd->SetGuidance("Set verbosity level for selected optical process");
-  fSetOpProcessVerboseCmd->SetParameterName("OpProcessVerbose", true);
-  fSetOpProcessVerboseCmd->SetDefaultValue(1);
-  fSetOpProcessVerboseCmd->SetRange("OpProcessVerbose>=0");
-  fSetOpProcessVerboseCmd->AvailableForStates(G4State_PreInit);
+    fSetOpProcessVerboseCmd = new G4UIcmdWithAnInteger("/process/optical/verbose", this);
+    fSetOpProcessVerboseCmd->SetGuidance("Set default verbosity level for optical processes");
+    fSetOpProcessVerboseCmd->SetParameterName("ver", true);
+    fSetOpProcessVerboseCmd->SetDefaultValue(1);
+    fSetOpProcessVerboseCmd->SetRange("ver>=0");
+    fSetOpProcessVerboseCmd->AvailableForStates(G4State_PreInit);
 
-  fSetCerenkovMaxPhotonsCmd
-    = new G4UIcmdWithAnInteger("/optics_engine/setCerenkovMaxPhotons", this);
-  fSetCerenkovMaxPhotonsCmd->SetGuidance("Set maximum number of photons per step");
-  fSetCerenkovMaxPhotonsCmd->SetParameterName("CerenkovMaxPhotons", false);
-  fSetCerenkovMaxPhotonsCmd->SetRange("CerenkovMaxPhotons>=0");
-  fSetCerenkovMaxPhotonsCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+    
+    fSetTrackSecondariesFirstCmd = new G4UIcommand("/process/optical/setTrackSecondariesFirst", this);
+    fSetTrackSecondariesFirstCmd->SetGuidance("Activate/deactivate tracking of secondaries before finishing their parent track");
+    par = new G4UIparameter("proc_name",'s',false);
+    par->SetParameterCandidates(candidates);
+    fSetTrackSecondariesFirstCmd->SetParameter(par);
+    par = new G4UIparameter("flag",'b',false);
+    par->SetDefaultValue(true);
+    fSetTrackSecondariesFirstCmd->SetParameter(par);
+    fSetTrackSecondariesFirstCmd->AvailableForStates(G4State_PreInit);
 
-  fSetCerenkovMaxBetaChangeCmd
-    = new G4UIcmdWithADouble("/optics_engine/setCerenkovMaxBetaChange", this);
-  fSetCerenkovMaxBetaChangeCmd
-    ->SetGuidance("Set maximum change of beta of parent particle per step");
-  fSetCerenkovMaxBetaChangeCmd->
-                             SetParameterName("CerenkovMaxBetaChange", false);
-  fSetCerenkovMaxBetaChangeCmd->SetRange("CerenkovMaxBetaChange>=0");
-  fSetCerenkovMaxBetaChangeCmd->
-                            AvailableForStates(G4State_PreInit, G4State_Idle);
+    //This are repetition of process specific ui commands needed by ATLICE and VMC
+    //(UI messages needed to exist in PreInit state before actual processes are instantiated)
+    fSetCerenkovMaxPhotonsCmd = new G4UIcmdWithAnInteger("/process/optical/defaults/cerenkov/setMaxPhotons", this);
+    fSetCerenkovMaxPhotonsCmd->SetGuidance("Set default maximum number of photons per step");
+    fSetCerenkovMaxPhotonsCmd->SetGuidance("Note this command is used to set the default value,");
+    fSetCerenkovMaxPhotonsCmd->SetGuidance("if process is not active command will not have effect.");
+    fSetCerenkovMaxPhotonsCmd->SetParameterName("CerenkovMaxPhotons", false);
+    fSetCerenkovMaxPhotonsCmd->SetRange("CerenkovMaxPhotons>=0");
+    fSetCerenkovMaxPhotonsCmd->AvailableForStates(G4State_PreInit);
 
-  fSetScintillationYieldFactorCmd
-   = new G4UIcmdWithADouble("/optics_engine/setScintillationYieldFactor", this);
-  fSetScintillationYieldFactorCmd->
-                                SetGuidance("Set scintillation yield factor");
-  fSetScintillationYieldFactorCmd->
-                          SetParameterName("ScintillationYieldFactor", false);
-  fSetScintillationYieldFactorCmd->SetRange("ScintillationYieldFactor>=0");
-  fSetScintillationYieldFactorCmd->
-                            AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetCerenkovMaxBetaChangeCmd = new G4UIcmdWithADouble("/process/optical/defaults/cerenkov/setMaxBetaChange", this);
+    fSetCerenkovMaxBetaChangeCmd->SetGuidance("Set default maximum change of beta of parent particle per step");
+    fSetCerenkovMaxBetaChangeCmd->SetGuidance("Note this command is used to set the default value,");
+    fSetCerenkovMaxBetaChangeCmd->SetGuidance("if process is not active command will not have effect.");
+    fSetCerenkovMaxBetaChangeCmd->SetParameterName("CerenkovMaxBetaChange", false);
+    fSetCerenkovMaxBetaChangeCmd->SetRange("CerenkovMaxBetaChange>=0");
+    fSetCerenkovMaxBetaChangeCmd->AvailableForStates(G4State_PreInit);
 
-  fSetScintillationByParticleTypeCmd
-  = new G4UIcmdWithABool("/optics_engine/setScintillationByParticleType", this);
-  fSetScintillationByParticleTypeCmd->
-    SetGuidance("Activate/Inactivate scintillation process by particle type");
-  fSetScintillationByParticleTypeCmd->
-             SetParameterName("ScintillationByParticleTypeActivation", false);
-  fSetScintillationByParticleTypeCmd->
-                            AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetScintillationYieldFactorCmd = new G4UIcmdWithADouble("/process/optical/defaults/scintillation/setYieldFactor", this);
+    fSetScintillationYieldFactorCmd->SetGuidance("Set scintillation yield factor");
+    fSetScintillationYieldFactorCmd->SetGuidance("Note this command is used to set the default value,");
+    fSetScintillationYieldFactorCmd->SetGuidance("if process is not active command will not have effect.");
+    fSetScintillationYieldFactorCmd->SetParameterName("ScintillationYieldFactor", false);
+    fSetScintillationYieldFactorCmd->SetRange("ScintillationYieldFactor>=0");
+    fSetScintillationYieldFactorCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
-//  fSetOpticalSurfaceModelCmd
-//    = new G4UIcmdWithAString("/optics_engine/setOpticalSurfaceModel", this);
-//  fSetOpticalSurfaceModelCmd
-//    ->SetGuidance("Set optical surface model (glisur or unified)");
-//  fSetOpticalSurfaceModelCmd->SetParameterName("OpticalSurfaceModel", false);
-//  fSetOpticalSurfaceModelCmd->SetCandidates("glisur unified");
-//  fSetOpticalSurfaceModelCmd->
-//                             AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetScintillationByParticleTypeCmd = new G4UIcmdWithABool("/process/optical/defaults/scintillation/setByParticleType", this);
+    fSetScintillationByParticleTypeCmd->SetGuidance("Activate/Inactivate scintillation process by particle type");
+    fSetScintillationByParticleTypeCmd->SetGuidance("Note this command is used to set the default value,");
+    fSetScintillationByParticleTypeCmd->SetGuidance("if process is not active command will not have effect.");
+    fSetScintillationByParticleTypeCmd->SetParameterName("ScintillationByParticleTypeActivation", false);
+    fSetScintillationByParticleTypeCmd->AvailableForStates(G4State_PreInit);
 
-  fSetWLSTimeProfileCmd
-    = new G4UIcmdWithAString("/optics_engine/setWLSTimeProfile", this);
-  fSetWLSTimeProfileCmd
-    ->SetGuidance("Set the WLS time profile (delta or exponential)");
-  fSetWLSTimeProfileCmd->SetParameterName("WLSTimeProfile", false);
-  fSetWLSTimeProfileCmd->SetCandidates("delta exponential");
-  fSetWLSTimeProfileCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetFiniteRiseTimeCmd = new G4UIcmdWithABool("/process/optical/defaults/scintillation/setFiniteRiseTime", this);
+    fSetFiniteRiseTimeCmd->SetGuidance("Set option of a finite rise-time for G4Scintillation");
+    fSetFiniteRiseTimeCmd->SetGuidance("If set, the G4Scintillation process expects the user to have set the constant material property FAST/SLOWSCINTILLATIONRISETIME");
+    fSetFiniteRiseTimeCmd->SetGuidance("Note this command is used to set the default value,");
+    fSetFiniteRiseTimeCmd->SetGuidance("if process is not active command will not have effect.");
+    fSetFiniteRiseTimeCmd->SetParameterName("FiniteRiseTime", false);
+    fSetFiniteRiseTimeCmd->AvailableForStates(G4State_PreInit);
 
-  fSetTrackSecondariesFirstCmd
-    = new G4UIcmdWithABool("/optics_engine/setTrackSecondariesFirst", this);
-  fSetTrackSecondariesFirstCmd
-    ->SetGuidance("Set option to track secondaries before finishing their parent track");
-  fSetTrackSecondariesFirstCmd->
-                             SetParameterName("TrackSecondariesFirst", false);
-  fSetTrackSecondariesFirstCmd->
-                            AvailableForStates(G4State_PreInit, G4State_Idle);
-
-  fSetFiniteRiseTimeCmd
-    = new G4UIcmdWithABool("/optics_engine/setFiniteRiseTime", this);
-  fSetFiniteRiseTimeCmd
-     ->SetGuidance("Set option of a finite rise-time for G4Scintillation - If set, the G4Scintillation process expects the user to have set the constant material property FAST/SLOWSCINTILLATIONRISETIME");
-  fSetFiniteRiseTimeCmd->SetParameterName("FiniteRiseTime", false);
-  fSetFiniteRiseTimeCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
+    fSetWLSTimeProfileCmd = new G4UIcmdWithAString("/process/optical/defaults/wls/setTimeProfile", this);
+    fSetWLSTimeProfileCmd->SetGuidance("Set the WLS time profile (delta or exponential)");
+    fSetWLSTimeProfileCmd->SetParameterName("WLSTimeProfile", false);
+    fSetWLSTimeProfileCmd->SetCandidates("delta exponential");
+    fSetWLSTimeProfileCmd->AvailableForStates(G4State_PreInit);
 }
 
 G4OpticalPhysicsMessenger::~G4OpticalPhysicsMessenger()
@@ -179,57 +167,69 @@ G4OpticalPhysicsMessenger::~G4OpticalPhysicsMessenger()
 // Destructor
 
   delete fDir;
-  delete fSelectOpProcessCmd;
-  delete fSetOpProcessUseCmd;
+  delete fDir2;
+  delete fActivateProcessCmd;
   delete fSetOpProcessVerboseCmd;
   delete fSetCerenkovMaxPhotonsCmd;
   delete fSetCerenkovMaxBetaChangeCmd;
   delete fSetScintillationYieldFactorCmd;
   delete fSetScintillationByParticleTypeCmd;
-//  delete fSetOpticalSurfaceModelCmd;
   delete fSetWLSTimeProfileCmd;
-  delete fSetTrackSecondariesFirstCmd;
   delete fSetFiniteRiseTimeCmd;
 }
 
+#include <iostream>
 void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command,
                                             G4String newValue)
 {
 /// Apply command to the associated object.
-
-  if (command == fSelectOpProcessCmd) {
-    if      ( newValue == "Cerenkov" )        {
-            fSelectedProcessIndex = kCerenkov;
+  if (command == fActivateProcessCmd) {
+    std::istringstream is(newValue.data());
+    G4String pn;
+    G4int flag;
+    is >> pn >> flag;
+    if  ( newValue == "Cerenkov" )        {
+        fSelectedProcessIndex = kCerenkov;
     } else if ( newValue == "Scintillation" ) {
-            fSelectedProcessIndex = kScintillation;
+        fSelectedProcessIndex = kScintillation;
     } else if ( newValue == "OpAbsorption" )  {
-            fSelectedProcessIndex = kAbsorption;
+        fSelectedProcessIndex = kAbsorption;
     } else if ( newValue == "OpRayleigh" )    {
-            fSelectedProcessIndex = kRayleigh;
+        fSelectedProcessIndex = kRayleigh;
     } else if ( newValue == "OpMieHG" )       {
-            fSelectedProcessIndex = kMieHG;
+        fSelectedProcessIndex = kMieHG;
     } else if ( newValue == "OpBoundary" )    {
-           fSelectedProcessIndex = kBoundary;
+        fSelectedProcessIndex = kBoundary;
     } else if ( newValue == "OpWLS" )         {
-           fSelectedProcessIndex = kWLS;
+        fSelectedProcessIndex = kWLS;
     }
+    fOpticalPhysics->Configure(fSelectedProcessIndex,flag);
   }
-  else if (command == fSetOpProcessUseCmd) {
-    fOpticalPhysics->
-       Configure(fSelectedProcessIndex,
-                 fSetOpProcessUseCmd->GetNewBoolValue(newValue));
+  else if (command == fSetTrackSecondariesFirstCmd )
+  {
+      std::istringstream is(newValue.data());
+      G4String pn;
+      G4int flag;
+      is >> pn >> flag;
+      if ( newValue == "Cerenkov" )        {
+        fSelectedProcessIndex = kCerenkov;
+      } else if ( newValue == "Scintillation" ) {
+        fSelectedProcessIndex = kScintillation;
+      } else if ( newValue == "OpAbsorption" )  {
+        fSelectedProcessIndex = kAbsorption;
+      } else if ( newValue == "OpRayleigh" )    {
+        fSelectedProcessIndex = kRayleigh;
+      } else if ( newValue == "OpMieHG" )       {
+        fSelectedProcessIndex = kMieHG;
+      } else if ( newValue == "OpBoundary" )    {
+        fSelectedProcessIndex = kBoundary;
+      } else if ( newValue == "OpWLS" )         {
+        fSelectedProcessIndex = kWLS;
+      }
+      fOpticalPhysics->SetTrackSecondariesFirst(fSelectedProcessIndex,flag);
   }
   else if (command == fSetOpProcessVerboseCmd) {
-    if ( fSelectedProcessIndex < kNoProcess ) {
-       fOpticalPhysics->
-          SetProcessVerbose(fSelectedProcessIndex,
-                            fSetOpProcessVerboseCmd->GetNewIntValue(newValue));
-    } else {
-      for ( G4int i=0; i<kNoProcess; i++ ) {
-        fOpticalPhysics->
-        SetProcessVerbose(i,fSetOpProcessVerboseCmd->GetNewIntValue(newValue));
-      }
-    }
+        fOpticalPhysics->SetVerboseLevel(fSetOpProcessVerboseCmd->GetNewIntValue(newValue));
   }
   else if (command == fSetCerenkovMaxPhotonsCmd) {
     fOpticalPhysics
@@ -256,28 +256,7 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command,
       ->SetFiniteRiseTime(
          fSetFiniteRiseTimeCmd->GetNewBoolValue(newValue));
   }
-//  else if (command == fSetOpticalSurfaceModelCmd) {
-//    if ( newValue == "glisur" ) {
-//      fOpticalPhysics
-//        ->SetOpticalSurfaceModel(glisur);
-//    }
-//    if ( newValue == "unified" ) {
-//      fOpticalPhysics
-//        ->SetOpticalSurfaceModel(unified);
-//    }
-//  }
   else if (command == fSetWLSTimeProfileCmd) {
-    if ( newValue == "delta" ) {
-      fOpticalPhysics
-        ->SetWLSTimeProfile("delta");     }
-    if ( newValue == "exponential" ) {
-      fOpticalPhysics
-        ->SetWLSTimeProfile("exponential");
-    }
-  }
-  else if (command == fSetTrackSecondariesFirstCmd) {
-    fOpticalPhysics->SetTrackSecondariesFirst(fSelectedProcessIndex,
-                                              fSetTrackSecondariesFirstCmd->
-                                                    GetNewBoolValue(newValue));
+      fOpticalPhysics->SetWLSTimeProfile(newValue);
   }
 }
