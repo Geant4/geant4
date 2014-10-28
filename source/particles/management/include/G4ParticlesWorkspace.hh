@@ -49,9 +49,12 @@
 
 #include "G4ParticleDefinition.hh"
 
+#include "G4TWorkspacePool.hh"
+
 class G4ParticlesWorkspace
 {
-  public: 
+  public:
+    typedef G4TWorkspacePool<G4ParticlesWorkspace> pool_type;
       G4ParticlesWorkspace(G4bool verbose=false);
      ~G4ParticlesWorkspace();
 
@@ -65,6 +68,7 @@ class G4ParticlesWorkspace
      void   SetVerbose(G4bool v) { fVerbose=v; } 
      G4bool GetVerbose()  { return fVerbose;   } 
   
+    static pool_type* GetPool();
  protected:  // Implementation methods
       void   InitialiseParticles();
 

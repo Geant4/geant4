@@ -68,7 +68,6 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4ParticleTableIterator.hh
         G4ParticleWithCuts.hh
         G4ParticlesWorkspace.hh
-        G4ParticlesWorkspacePool.hh
         G4PhaseSpaceDecayChannel.hh
         G4PionRadiativeDecayChannel.hh
         G4PrimaryParticle.hh
@@ -110,7 +109,6 @@ GEANT4_DEFINE_MODULE(NAME G4partman
         G4ParticlePropertyTable.cc
         G4ParticleTable.cc
         G4ParticlesWorkspace.cc
-        G4ParticlesWorkspacePool.cc
         G4PhaseSpaceDecayChannel.cc
         G4PionRadiativeDecayChannel.cc
         G4PrimaryParticle.cc

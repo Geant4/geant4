@@ -23,11 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-
 #include "G4ParticlesWorkspace.hh"
 
+//Note: G4ParticlesWorkspacePool is typedef to G4TWorkspacePool<G4ParticlesWorkspace>
+template<> G4ThreadLocal G4ParticlesWorkspace* G4ParticlesWorkspace::pool_type::fMyWorkspace = 0;
 
-#include "G4AutoLock.hh"
+namespace {
+    G4ParticlesWorkspace::pool_type thePool;
+}
+
+G4ParticlesWorkspace::pool_type*
+G4ParticlesWorkspace::GetPool() { return &thePool; }
 
 G4ParticlesWorkspace::G4ParticlesWorkspace(G4bool verbose)
    : fVerbose(verbose)
