@@ -62,6 +62,7 @@ class OpNovicePhysicsList : public G4VUserPhysicsList
   private:
     G4int                fVerboseLebel;
     OpNovicePhysicsListMessenger* fMessenger;
+    G4int fMaxNumPhotonStep;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

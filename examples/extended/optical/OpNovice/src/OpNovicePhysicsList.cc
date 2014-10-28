@@ -59,16 +59,8 @@
 
 OpNovicePhysicsList::OpNovicePhysicsList() 
  : G4VUserPhysicsList(),
-   fVerboseLebel(1)
+   fVerboseLebel(1), fMaxNumPhotonStep(20)
 {
-  // default values.
-  G4Cerenkov::SetMaxNumPhotonsPerStep(20);
-  G4Cerenkov::SetMaxBetaChangePerStep(10.0);
-  G4Cerenkov::SetTrackSecondariesFirst(true);
-
-  G4Scintillation::SetScintillationYieldFactor(1.);
-  G4Scintillation::SetTrackSecondariesFirst(true);
-
   fMessenger = new OpNovicePhysicsListMessenger(this);
 }
 
@@ -213,7 +205,12 @@ void OpNovicePhysicsList::ConstructEM()
 void OpNovicePhysicsList::ConstructOp()
 {
   G4Cerenkov* cerenkovProcess = new G4Cerenkov("Cerenkov");
+  cerenkovProcess->SetMaxNumPhotonsPerStep(fMaxNumPhotonStep);
+  cerenkovProcess->SetMaxBetaChangePerStep(10.0);
+  cerenkovProcess->SetTrackSecondariesFirst(true);
   G4Scintillation* scintillationProcess = new G4Scintillation("Scintillation");
+  scintillationProcess->SetScintillationYieldFactor(1.);
+  scintillationProcess->SetTrackSecondariesFirst(true);
   G4OpAbsorption* absorptionProcess = new G4OpAbsorption();
   G4OpRayleigh* rayleighScatteringProcess = new G4OpRayleigh();
   G4OpMieHG* mieHGScatteringProcess = new G4OpMieHG();
@@ -231,7 +228,7 @@ void OpNovicePhysicsList::ConstructOp()
   {
     G4EmSaturation* emSaturation =
               G4LossTableManager::Instance()->EmSaturation();
-    G4Scintillation::AddSaturation(emSaturation);
+      scintillationProcess->AddSaturation(emSaturation);
   }
 
   theParticleIterator->reset();
@@ -269,7 +266,7 @@ void OpNovicePhysicsList::SetVerbose(G4int verbose)
 
 void OpNovicePhysicsList::SetNbOfPhotonsCerenkov(G4int MaxNumber)
 {
-  G4Cerenkov::SetMaxNumPhotonsPerStep(MaxNumber);
+    fMaxNumPhotonStep = MaxNumber;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

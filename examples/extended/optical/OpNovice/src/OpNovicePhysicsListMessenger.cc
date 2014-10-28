@@ -61,7 +61,7 @@ OpNovicePhysicsListMessenger::
   fCerenkovCmd->SetGuidance("set max nb of photons per step");
   fCerenkovCmd->SetParameterName("MaxNumber",false);
   fCerenkovCmd->SetRange("MaxNumber>=0");
-  fCerenkovCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
+  fCerenkovCmd->AvailableForStates(G4State_PreInit);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 27, 2014 A. Dotti (OpNovice-V10-00-06)
+- Migration to new UI system. Requires:
+  xrays-V10-00-06, op-V10-00-09, phys-ctro-em-V10-00-17
+
 July 11, 2014 P. Gumplinger (OpNovice-V10-00-05)
 - Use implicit dimensioning for all arrays in
   OpNoviceDetectorConstruction.cc and assert that they are the
