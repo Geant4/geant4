@@ -131,3 +131,8 @@ G4FissLib::ApplyYourself(const G4HadProjectile& aTrack, G4Nucleus&)
   return theFission[index].ApplyYourself(aTrack);
 }
 
+const std::pair<G4double, G4double> G4FissLib::GetFatalEnergyCheckLevels() const
+{
+  // max energy non-conservation is mass of heavy nucleus (taken from G4LFission)
+  return std::pair<G4double, G4double>(5*perCent,250*GeV);
+}
