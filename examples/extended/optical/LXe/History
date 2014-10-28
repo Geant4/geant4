@@ -14,6 +14,9 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+October 27, 2014 A. Dotti  (LXe-V10-00-05)
+- New UI commands structure. Requires 
+  xrays-V10-00-06, op-V10-00-09, phys-ctor-em-V10-00-17
 
 July 11, 2014 P. Gumplinger (LXe-V10-00-04)
 - Use implicit dimensioning for all arrays and assert that they are the

@@ -8,18 +8,13 @@
 #/control/verbose 1
 #/tracking/verbose 1
 #/LXe/detector/MainScintYield 100
-#/optics_engine/selectOpProcess OpBoundary
-#/optics_engine/setOpProcessVerbose 1
-#/optics_engine/selectOpProcess Scintillation
-#/optics_engine/setOpProcessVerbose 1
-/optics_engine/selectOpProcess Cerenkov
-/optics_engine/setOpProcessUse false
+#/process/optical/verbose 1
+/process/optical/processActivation Cerenkov false
 /run/initialize
 /LXe/saveThreshold 1000
 /LXe/pmtThreshold 2
 /LXe/eventVerbose 1
 #/LXe/forceDrawPhotons true #/LXe/forceDrawNoPhotons false
 /run/beamOn 1
-/optics_engine/selectOpProcess Scintillation
-/optics_engine/setTrackSecondariesFirst false
+/process/optical/scintillation/setTrackSecondariesFirst false
 /run/beamOn 1
