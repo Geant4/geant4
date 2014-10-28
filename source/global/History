@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 24, 2014 J. Apostolakis A. Dotti (global-V10-00-39,-40)
+- Adding template class G4TWorkspacePool
+
 October 24, 2014 A. Dotti (global-V10-00-38)
 - Introduced G4Threading enum to hold thread IDs constants
 - G4MTcoutDestination now supports special non-worker threads for

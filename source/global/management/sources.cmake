@@ -100,6 +100,7 @@ GEANT4_DEFINE_MODULE(NAME G4globman
 	G4Cache.hh
 	G4ThreadLocalSingleton.hh
 	G4AutoDelete.hh
+        G4TWorkspacePool.hh
     SOURCES
         G4Allocator.cc
         G4AllocatorPool.cc
