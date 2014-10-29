@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
+ Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -453,7 +453,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.92s Real=12.73s Sys=0s
+  User=4.49s Real=4.62s Sys=0.01s
 
  ======================== run summary ======================
 
@@ -921,7 +921,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=4.21s Real=10.05s Sys=0s
+  User=3.67s Real=3.7s Sys=0s
 
  ======================== run summary ======================
 
@@ -1400,7 +1400,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=8.61s Real=22.22s Sys=0s
+  User=7.5s Real=7.88s Sys=0s
 
  ======================== run summary ======================
 
@@ -1878,7 +1878,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=2.44s Real=5.47s Sys=0s
+  User=2.29s Real=2.32s Sys=0s
 
  ======================== run summary ======================
 
@@ -2360,7 +2360,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 50000
-  User=27.71s Real=62.28s Sys=0.01s
+  User=25.84s Real=25.94s Sys=0.01s
 
  ======================== run summary ======================
 

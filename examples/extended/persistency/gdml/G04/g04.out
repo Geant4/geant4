@@ -1,13 +1,13 @@
 
 Usage: gdml_det <intput_gdml_file:mandatory>
 
-G4GDML: Reading '/ec/G4-builds/release/slc6-gcc48-RelWithDebInfo/geant4-10-00-patch-02_cand-01/examples/extended/persistency/gdml/G04/auxiliary.gdml'...
+G4GDML: Reading '/ec/G4-builds/release/slc6-gcc48-RelWithDebInfo/geant4-10-00-patches_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml'...
 G4GDML: Reading definitions...
 G4GDML: Reading materials...
 G4GDML: Reading solids...
 G4GDML: Reading structure...
 G4GDML: Reading setup...
-G4GDML: Reading '/ec/G4-builds/release/slc6-gcc48-RelWithDebInfo/geant4-10-00-patch-02_cand-01/examples/extended/persistency/gdml/G04/auxiliary.gdml' done!
+G4GDML: Reading '/ec/G4-builds/release/slc6-gcc48-RelWithDebInfo/geant4-10-00-patches_branch/examples/extended/persistency/gdml/G04/auxiliary.gdml' done!
 Stripping off GDML names of materials, solids and volumes ...
 
         ############################################
@@ -15,7 +15,7 @@ Stripping off GDML names of materials, solids and volumes ...
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
+ Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -333,7 +333,7 @@ Processing hits ....
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /gun/direction 0 0 -1
 /run/beamOn 20
 
@@ -585,7 +585,7 @@ Processing hits ....
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.03s Sys=0s
+  User=0.01s Real=0s Sys=0s
 /tracking/verbose 0
 /gun/direction 0.3 0.2 1
 /run/beamOn 20
@@ -638,7 +638,7 @@ Processing hits ....
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 /gun/direction 0.3 -0.2 1
 /run/beamOn 20
 

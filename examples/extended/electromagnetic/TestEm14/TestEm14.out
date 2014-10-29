@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
+ Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -471,7 +471,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=20.13s Real=45.83s Sys=0s
+  User=16.47s Real=16.56s Sys=0s
 
  The run consists of 1000000 gamma of 100 keV through 100 m   of Water (density: 1 g/cm3 )
 
@@ -549,7 +549,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000000
-  User=18.25s Real=40.7s Sys=0.01s
+  User=15.43s Real=15.53s Sys=0s
 
  The run consists of 1000000 e- of 100 MeV through 100 m   of Water (density: 1 g/cm3 )
 
