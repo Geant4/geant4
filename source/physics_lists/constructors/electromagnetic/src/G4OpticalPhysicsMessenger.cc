@@ -73,9 +73,9 @@ G4OpticalPhysicsMessenger::G4OpticalPhysicsMessenger(
     fSetFiniteRiseTimeCmd(0)
 {
     G4bool toBeBroadcasted = false;
-    fDir = new G4UIdirectory("/process/optical/defaults",toBeBroadcasted);
+    fDir = new G4UIdirectory("/process/optical/defaults/",toBeBroadcasted);
     fDir->SetGuidance("Commands related to the optical physics simulation engine.");
-    fDir2 = new G4UIdirectory("/process/optical",toBeBroadcasted);
+    fDir2 = new G4UIdirectory("/process/optical/",toBeBroadcasted);
     fDir2->SetGuidance("Commands related to the optical physics simulation engine.");
 
     fActivateProcessCmd= new G4UIcommand("/process/optical/processActivation", this);

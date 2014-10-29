@@ -14,6 +14,12 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-Oct-2014, A. Dotti (phys-ctor-em-V10-00-19)
+- Add trailing '/' at end of new UI optical directories
+
+28-Oct-2014, P. Arce (phys-ctor-em-V10-00-18)
+- Add G4EmLEPTSPhysics
+
 27 Oct 14: A.Dotti ( phys-ctor-em-V10-00-17)
 - Address problem #1675, this requires re engineering of 
   all UI commands related to optical processes and created

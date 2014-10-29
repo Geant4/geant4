@@ -71,6 +71,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
 	G4EmDNAChemistry.hh
 	G4EmDNAPhysics.hh
 	G4EmDNAPhysics_option1.hh
+        G4EmLEPTSPhysics.hh
 	G4EmLivermorePhysics.hh
 	G4EmLivermorePolarizedPhysics.hh
 	G4EmLowEPPhysics.hh
@@ -89,6 +90,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_em
 	G4EmDNAChemistry.cc
 	G4EmDNAPhysics.cc
 	G4EmDNAPhysics_option1.cc
+        G4EmLEPTSPhysics.cc
 	G4EmLivermorePhysics.cc
 	G4EmLivermorePolarizedPhysics.cc
 	G4EmLowEPPhysics.cc
