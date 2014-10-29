@@ -54,6 +54,9 @@ void G4VEvaporation::SetPhotonEvaporation(G4VEvaporationChannel* ptr)
   }
 }
 
+void G4VEvaporation::BreakFragment(G4FragmentVector*, G4Fragment*)
+{}
+
 
 
 

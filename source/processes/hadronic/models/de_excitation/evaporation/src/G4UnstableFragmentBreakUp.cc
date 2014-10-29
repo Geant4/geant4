@@ -75,6 +75,14 @@ G4FragmentVector* G4UnstableFragmentBreakUp::BreakUpFragment(G4Fragment* nucleus
 {
   //G4cout << "G4UnstableFragmentBreakUp::BreakUpFragment" << G4endl;
   G4FragmentVector * theResult = new G4FragmentVector();
+  BreakUpChain(theResult, nucleus);
+  return theResult;
+}
+
+G4bool G4UnstableFragmentBreakUp::BreakUpChain(G4FragmentVector* theResult, 
+					       G4Fragment* nucleus)
+{
+  //G4cout << "G4UnstableFragmentBreakUp::BreakUpChain" << G4endl;
 
   G4int Z = nucleus->GetZ_asInt();
   G4int A = nucleus->GetA_asInt();
@@ -136,13 +144,10 @@ G4FragmentVector* G4UnstableFragmentBreakUp::BreakUpFragment(G4Fragment* nucleus
     A  -= Afr[index];
   }
 
-  // updated fragment
-  if( theResult->size() > 0) {
-    nucleus->SetZandA_asInt(Z, A);
-    nucleus->SetMomentum(lv);
-  }
-
-  return theResult;
+  nucleus->SetZandA_asInt(Z, A);
+  nucleus->SetMomentum(lv);
+  theResult->push_back(nucleus);
+  return false;
 }
 
 G4FragmentVector* G4UnstableFragmentBreakUp::BreakUp(const G4Fragment&)

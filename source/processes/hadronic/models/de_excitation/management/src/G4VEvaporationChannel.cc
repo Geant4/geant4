@@ -44,6 +44,9 @@ G4VEvaporationChannel::G4VEvaporationChannel(const G4String & aName,
 G4VEvaporationChannel::~G4VEvaporationChannel() 
 {}
 
+void G4VEvaporationChannel::Initialise()
+{}
+
 G4double G4VEvaporationChannel::GetLifeTime(G4Fragment*)
 {
   return 0.0;
@@ -57,4 +60,9 @@ G4Fragment* G4VEvaporationChannel::EmittedFragment(G4Fragment*)
 G4FragmentVector* G4VEvaporationChannel::BreakUpFragment(G4Fragment*)
 {
   return 0;
+}
+
+G4bool G4VEvaporationChannel::BreakUpChain(G4FragmentVector*, G4Fragment*)
+{
+  return false;
 }

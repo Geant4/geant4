@@ -57,8 +57,8 @@
 #include "G4Exp.hh"
 
 G4GEMProbability:: G4GEMProbability(G4int anA, G4int aZ, G4double aSpin) : 
-  theA(anA), theZ(aZ), Spin(aSpin), theCoulombBarrierPtr(0), 
-  Normalization(1.0)
+  theA(anA), theZ(aZ), Spin(aSpin), theCoulombBarrierPtr(0)
+  //  Normalization(1.0)
 {
   theEvapLDPptr = new G4EvaporationLevelDensityParameter;
   fG4pow = G4Pow::GetInstance(); 
@@ -104,7 +104,7 @@ G4double G4GEMProbability::EmissionProbability(const G4Fragment & fragment,
       Spin = SavedSpin;
     }
   }
-  Normalization = probability;
+  //  Normalization = probability;
   return probability;
 }
 

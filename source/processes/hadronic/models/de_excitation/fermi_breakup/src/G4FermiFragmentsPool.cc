@@ -239,11 +239,13 @@ void G4FermiFragmentsPool::Initialise()
   fragment_pool.push_back(new G4StableFermiFragment( 16, 8,  3,  7.116850*MeV )); 
 
   G4int nfrag = fragment_pool.size();
+  std::vector<const G4VFermiFragment*> newvec;
+  newvec.reserve(4);
 
   // list of fragments ordered by A
+  newvec.resize(1);
   for(G4int i=0; i<nfrag; ++i) {
-    std::vector<const G4VFermiFragment*> newvec;
-    newvec.push_back(fragment_pool[i]);
+    newvec[0] = fragment_pool[i];
     const G4FermiConfiguration* conf = new G4FermiConfiguration(newvec);
     G4int A = fragment_pool[i]->GetA();
     list1[A].push_back(conf);
@@ -263,6 +265,7 @@ void G4FermiFragmentsPool::Initialise()
   // list of fragment pairs ordered by A
   G4int counter = 0;
   G4int tot = 0;
+  newvec.resize(2);
   for(G4int i=0; i<nfrag; ++i) {
     G4int Z1 = fragment_pool[i]->GetZ();
     G4int A1 = fragment_pool[i]->GetA();
@@ -273,9 +276,8 @@ void G4FermiFragmentsPool::Initialise()
       G4int A = A1 + A2;
       if(Z < maxZ && A < maxA) {
         if(IsAvailable(Z, A)){
-	  std::vector<const G4VFermiFragment*> newvec;
-          newvec.push_back(fragment_pool[i]);
-          newvec.push_back(fragment_pool[j]);
+	  newvec[0] = fragment_pool[i];
+	  newvec[1] = fragment_pool[j];
 	  if(!IsExist(Z, A, newvec)) { 
 	    const G4FermiConfiguration* conf = new G4FermiConfiguration(newvec);
 	    list2[A].push_back(conf); 
@@ -308,6 +310,7 @@ void G4FermiFragmentsPool::Initialise()
   // list of fragment triples ordered by A
   tot += counter;
   counter = 0;
+  newvec.resize(3);
   for(G4int A1=2; A1<maxA; ++A1) {
     size_t nz = list2[A1].size();
     for(size_t idx=0; idx<nz; ++idx) {
@@ -320,10 +323,9 @@ void G4FermiFragmentsPool::Initialise()
 	G4int Z = Z1 + Z2;
 	G4int A = A1 + A2;
 	if(Z < maxZ && A < maxA) {
-	  std::vector<const G4VFermiFragment*>  newvec;
-	  newvec.push_back((*vec2)[0]);
-	  newvec.push_back((*vec2)[1]);
-	  newvec.push_back(fragment_pool[j]);
+	  newvec[0] = (*vec2)[0];
+	  newvec[1] = (*vec2)[1];
+	  newvec[2] = fragment_pool[j];
 	  if(!IsExist(Z, A, newvec)) { 
 	    const G4FermiConfiguration* conf3 = new G4FermiConfiguration(newvec);
 	    list3[A].push_back(conf3);
@@ -358,6 +360,7 @@ void G4FermiFragmentsPool::Initialise()
   // list of fragment quartets (3 + 1) ordered by A
   tot += counter;
   counter = 0;
+  newvec.resize(4);
   for(G4int A1=3; A1<maxA; ++A1) {
     size_t nz = list3[A1].size();
     for(size_t idx=0; idx<nz; ++idx) {
@@ -370,11 +373,10 @@ void G4FermiFragmentsPool::Initialise()
 	G4int Z = Z1 + Z2;
 	G4int A = A1 + A2;
 	if(Z < maxZ && A < maxA) {
-	  std::vector<const G4VFermiFragment*>  newvec;
-	  newvec.push_back((*vec3)[0]);
-	  newvec.push_back((*vec3)[1]);
-	  newvec.push_back((*vec3)[2]);
-	  newvec.push_back(fragment_pool[j]);
+	  newvec[0] = (*vec3)[0];
+	  newvec[1] = (*vec3)[1];
+	  newvec[2] = (*vec3)[2];
+	  newvec[3] = fragment_pool[j];
 	  if(!IsExist(Z, A, newvec)) { 
 	    const G4FermiConfiguration* conf4 = new G4FermiConfiguration(newvec);
 	    list4[A].push_back(conf4);
@@ -400,11 +402,10 @@ void G4FermiFragmentsPool::Initialise()
 	  G4int Z = Z1 + Z2;
 	  G4int A = A1 + A2;
 	  if(Z < maxZ && A < maxA) {
-	    std::vector<const G4VFermiFragment*>  newvec;
-	    newvec.push_back((*vec1)[0]);
-	    newvec.push_back((*vec1)[1]);
-	    newvec.push_back((*vec2)[0]);
-	    newvec.push_back((*vec2)[1]);
+	    newvec[0] = (*vec1)[0];
+	    newvec[1] = (*vec1)[1];
+	    newvec[2] = (*vec2)[0];
+	    newvec[3] = (*vec2)[1];
 	    if(!IsExist(Z, A, newvec)) { 
 	      const G4FermiConfiguration* conf4 = new G4FermiConfiguration(newvec);
 	      list4[A].push_back(conf4);
@@ -442,6 +443,46 @@ void G4FermiFragmentsPool::Initialise()
     }
     G4cout << "Total number: " << tot << G4endl;
   }
+}
+
+G4bool G4FermiFragmentsPool::IsApplicable(G4int Z, G4int A, G4double mass) const
+{
+  // look into pair list
+  size_t nz = list2[A].size();
+  if(0 < nz) {
+    for(size_t j=0; j<nz; ++j) {
+      const G4FermiConfiguration* conf = (list2[A])[j];
+      if(Z == conf->GetZ() && mass >= conf->GetMass()) { return true; }
+    }
+  }
+  // look into triple list
+  nz = list3[A].size();
+  if(0 < nz) {
+    for(size_t j=0; j<nz; ++j) {
+      const G4FermiConfiguration* conf = (list3[A])[j];
+      if(Z == conf->GetZ() && mass >= conf->GetMass()) { return true; }
+    }
+  }
+  // look into quartet list
+  nz = list4[A].size();
+  if(0 < nz) {
+    for(size_t j=0; j<nz; ++j) {
+      const G4FermiConfiguration* conf = (list4[A])[j];
+      if(Z == conf->GetZ() && mass >= conf->GetMass()) { return true; }
+    }
+  }
+
+  // search in the pool and if found then return vector with one element
+  nz = list1[A].size();
+  if(0 < nz) {
+    for(size_t j=0; j<nz; ++j) {
+      const G4FermiConfiguration* conf = (list1[A])[j];
+      if(Z == conf->GetZ() && mass >= conf->GetMass()) {
+	if(!(*(conf->GetFragmentList()))[0]->IsStable()) { return true; }
+      }
+    }
+  }
+  return false;
 }
 
 const std::vector<const G4FermiConfiguration*>* 

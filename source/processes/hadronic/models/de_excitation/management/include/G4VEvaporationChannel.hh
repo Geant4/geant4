@@ -61,6 +61,9 @@ public:
 			G4EvaporationChannelType timeType = fDelayedEmission);
   virtual ~G4VEvaporationChannel();
 
+  // option definition
+  virtual void Initialise();
+
   // return level life time, by default zero
   virtual G4double GetLifeTime(G4Fragment* theNucleus);
 
@@ -71,6 +74,12 @@ public:
   // return vector of emitted fragments, initial fragment is modified
   // but not included in this vector
   virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
+
+  // returns "true" if primary fragment is decayed and deleted
+  // returns "false" if primary fragment is modified but stay alive
+  // emitted fragments are added to the vector of results
+  virtual G4bool 
+  BreakUpChain(G4FragmentVector* theResult, G4Fragment* theNucleus);
 
   // old method initial fragment is not modified, its copy included 
   // in the list of emitted fragments
@@ -99,9 +108,6 @@ private:
   const G4VEvaporationChannel & operator=(const G4VEvaporationChannel & right);
   G4bool operator==(const G4VEvaporationChannel & right) const;
   G4bool operator!=(const G4VEvaporationChannel & right) const;
-
-  
-
 };
 
 

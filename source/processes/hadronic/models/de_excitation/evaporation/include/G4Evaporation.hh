@@ -68,7 +68,14 @@ public:
 
   virtual void Initialise();
 
+  // primary fragment is copied, the copy is deleted 
+  // or is added to the list of products 
   G4FragmentVector * BreakItUp(const G4Fragment &theNucleus);
+
+  // new interface - vector of products is added to the provided vector
+  // primary fragment is deleted or is modified and added to the list
+  // of products 
+  void BreakFragment(G4FragmentVector*, G4Fragment* theNucleus);
 
   void SetDefaultChannel();
   void SetGEMChannel();
