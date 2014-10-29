@@ -20,10 +20,6 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
-27th October 2014  Makoto Asai (modeling-V10-00-10)
-- G4TrajectoriesModel.cc: Protect against incorrect casting if G4RunManager
-  base class is used in multithreaded Geant4 installation.
-
 22nd October 2014  Laurent Garnier  (modeling-V10-00-09 require greps-V10-00-08)
 - G4ModelingParameters.cc
   o Change constant in .cc nSidesMin by GetMinLineSegmentsPerCircle() in the G4VisAttribute
