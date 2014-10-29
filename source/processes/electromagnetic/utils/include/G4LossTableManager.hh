@@ -232,15 +232,7 @@ public:
 
   void SetBuildCSDARange(G4bool val);
 
-  void SetLPMFlag(G4bool val);
-
-  void SetSplineFlag(G4bool val);
-
   void SetLinearLossLimit(G4double val);
-
-  void SetBremsstrahlungTh(G4double val);
-
-  void SetFactorForAngleLimit(G4double val);
 
   void SetVerbose(G4int val);
 
@@ -256,15 +248,7 @@ public:
 
   G4bool BuildCSDARange() const;
 
-  G4bool LPMFlag() const;
-
-  G4bool SplineFlag() const;
-
   G4bool IsMaster() const;
-
-  G4double BremsstrahlungTh() const;
-
-  G4double FactorForAngleLimit() const;
 
   G4double MinKinEnergy() const;
 

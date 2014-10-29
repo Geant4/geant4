@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28 October 14: V.Ivant (emutils-V10-00-43)
+- removed old commented code
+
 23 October 14: V.Ivant (emutils-V10-00-42)
 - G4VMultipleScattering - fixed displacement at boundary algorithm
 

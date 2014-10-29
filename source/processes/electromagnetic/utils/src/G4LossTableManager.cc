@@ -1141,64 +1141,9 @@ G4LossTableManager::GetMultipleScatteringVector()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
 
-void G4LossTableManager::SetLPMFlag(G4bool /*val*/)
-{
-  //  flagLPM = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-G4bool G4LossTableManager::LPMFlag() const
-{
-  return theParameters->LPM();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-void G4LossTableManager::SetSplineFlag(G4bool /*val*/)
-{
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
-G4bool G4LossTableManager::SplineFlag() const
-{
-  return theParameters->Spline();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
-
 G4bool G4LossTableManager::IsMaster() const
 {
   return isMaster;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4LossTableManager::SetBremsstrahlungTh(G4double /*val*/) 
-{
-  //  bremsTh = val;
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4LossTableManager::BremsstrahlungTh() const
-{
-  return theParameters->BremsstrahlungTh();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void G4LossTableManager::SetFactorForAngleLimit(G4double /*val*/) 
-{
-  //  if(val > 0.0) { factorForAngleLimit = val; }
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-G4double G4LossTableManager::FactorForAngleLimit() const
-{
-  return theParameters->FactorForAngleLimit();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

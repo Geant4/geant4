@@ -834,7 +834,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildDEDXTable(G4EmTableType tType)
   if(!table) { return table; }
 
   G4LossTableBuilder* bld = lManager->GetTableBuilder();
-  G4bool splineFlag = lManager->SplineFlag();
+  G4bool splineFlag = theParameters->Spline();
   G4PhysicsLogVector* aVector = 0;
   G4PhysicsLogVector* bVector = 0;
 
@@ -913,7 +913,7 @@ G4PhysicsTable* G4VEnergyLossProcess::BuildLambdaTable(G4EmTableType tType)
   theDensityFactor = bld->GetDensityFactors();
   theDensityIdx = bld->GetCoupleIndexes();
 
-  G4bool splineFlag = lManager->SplineFlag();
+  G4bool splineFlag = theParameters->Spline();
   G4PhysicsLogVector* aVector = 0;
   G4double scale = G4Log(maxKinEnergy/minKinEnergy);
 
@@ -977,7 +977,7 @@ G4VEnergyLossProcess::PrintInfoDefinition(const G4ParticleDefinition& part)
            << G4BestUnit(maxKinEnergy,"Energy")
            << ", " << theParameters->NumberOfBinsPerDecade() 
 	   << " bins per decade, spline: " 
-	   << lManager->SplineFlag()
+	   << theParameters->Spline()
            << G4endl;
     if(theRangeTableForLoss && isIonisation) {
       G4cout << "      finalRange(mm)= " << finalRange/mm
@@ -1897,7 +1897,7 @@ G4VEnergyLossProcess::RetrieveTable(const G4ParticleDefinition* part,
     if(aTable->ExistPhysicsTable(filename)) {
       if(G4PhysicsTableHelper::RetrievePhysicsTable(aTable,filename,ascii)) {
 	isRetrieved = true;
-	if(lManager->SplineFlag()) {
+	if(theParameters->Spline()) {
 	  size_t n = aTable->length();
 	  for(size_t i=0; i<n; ++i) {
 	    if((*aTable)[i]) { (*aTable)[i]->SetSpline(true); }
@@ -2012,7 +2012,7 @@ G4VEnergyLossProcess::LambdaPhysicsVector(const G4MaterialCutsCouple*,
 {
   G4PhysicsVector* v = 
     new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nBins);
-  v->SetSpline(lManager->SplineFlag());
+  v->SetSpline(theParameters->Spline());
   return v;
 }
 

@@ -910,7 +910,7 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 	       << filename << ">"
 	       << G4endl;
       }
-      if(lManager->SplineFlag()) {
+      if(theParameters->Spline()) {
 	size_t n = theLambdaTable->length();
 	for(size_t i=0; i<n; ++i) {
 	  if((* theLambdaTable)[i]) {
@@ -937,7 +937,7 @@ G4bool G4VEmProcess::RetrievePhysicsTable(const G4ParticleDefinition* part,
 	       << filename << ">"
 	       << G4endl;
       }
-      if(lManager->SplineFlag()) {
+      if(theParameters->Spline()) {
 	size_t n = theLambdaTablePrim->length();
 	for(size_t i=0; i<n; ++i) {
 	  if((* theLambdaTablePrim)[i]) {
@@ -1074,7 +1074,7 @@ G4VEmProcess::LambdaPhysicsVector(const G4MaterialCutsCouple*)
 {
   G4PhysicsVector* v = 
     new G4PhysicsLogVector(minKinEnergy, maxKinEnergy, nLambdaBins);
-  v->SetSpline(lManager->SplineFlag());
+  v->SetSpline(theParameters->Spline());
   return v;
 }
 
