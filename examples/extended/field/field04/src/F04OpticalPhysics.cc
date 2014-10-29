@@ -74,6 +74,10 @@ void F04OpticalPhysics::ConstructProcess()
            << G4endl;
 
   G4Scintillation* theScintProcess = new G4Scintillation();
+  theScintProcess->SetScintillationYieldFactor(1.);
+  theScintProcess->SetScintillationExcitationRatio(0.0);
+  theScintProcess->SetTrackSecondariesFirst(true);
+    
   G4Cerenkov* theCerenkovProcess= new G4Cerenkov();
 
   G4OpAbsorption* theAbsorptionProcess= new G4OpAbsorption();
@@ -81,6 +85,7 @@ void F04OpticalPhysics::ConstructProcess()
   G4OpMieHG* theMieHGScatteringProcess = new G4OpMieHG();
   G4OpBoundaryProcess* theBoundaryProcess = new G4OpBoundaryProcess();
   G4OpWLS* theWLSProcess=new G4OpWLS();
+  theWLSProcess->UseTimeProfile("delta");
 
   G4ProcessManager* pManager =
                 G4OpticalPhoton::OpticalPhoton()->GetProcessManager();
@@ -99,16 +104,6 @@ void F04OpticalPhysics::ConstructProcess()
   pManager->AddDiscreteProcess(theBoundaryProcess);
 
   pManager->AddDiscreteProcess(theWLSProcess);
-
-  if(!G4Threading::IsWorkerThread())
-  {
-    G4OpWLS::UseTimeProfile("delta");
-//  G4OpWLS::UseTimeProfile("exponential");
-
-    G4Scintillation::SetScintillationYieldFactor(1.);
-    G4Scintillation::SetScintillationExcitationRatio(0.0);
-    G4Scintillation::SetTrackSecondariesFirst(true);
-  }
 
   aParticleIterator->reset();
 

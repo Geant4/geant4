@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 28, 2014 A. Dotti - (fieldex04-V10-00-10)
+- Proting to new optical phsyics processes API 
+  (no statics), requires: xrays-V10-00-06, op-V10-00-09, 
+  phys-ctor-em-V10-00-18 
+
 February 28, 2014 G. Cosmo - (fieldex04-V10-00-09)
 - Corrected mismatch for delete/new of fFp pointer array in Clear()...
 
