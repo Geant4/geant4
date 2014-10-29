@@ -54,9 +54,6 @@ public:
 
   virtual void BuildForMaster() const;
   virtual void Build() const;
-
-private:
-  DetectorConstruction* fpDetector;
 };
 
 #endif

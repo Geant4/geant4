@@ -85,12 +85,12 @@ public:
   string fMolName;   //!< Molecule name
   int fMolNum;       //!< Molecule number
 
-  float fMinGlobZ;   //Cylinder length => min Z
-  float fMaxGlobZ;
-  float fMinGlobX;   //Radius => min X
-  float fMaxGlobX;
-  float fMinGlobY;   //=> min Y
-  float fMaxGlobY;
+  double fMinGlobZ;   //Cylinder length => min Z
+  double fMaxGlobZ;
+  double fMinGlobX;   //Radius => min X
+  double fMaxGlobX;
+  double fMinGlobY;   //=> min Y
+  double fMaxGlobY;
 
   int fCenterX;      //!< "X center" of this Molecule (for rotation...)
   int fCenterY;      //!< "Y center" of this Molecule (for rotation...)

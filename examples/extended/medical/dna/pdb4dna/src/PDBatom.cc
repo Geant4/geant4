@@ -42,9 +42,9 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Atom::Atom(int s,string n,string rN,int numInRes,int rS,
-      float xInit,float yInit,float zInit,
-      float radius,
-      float o, float tF, string e)
+      double xInit,double yInit,double zInit,
+      double radius,
+      double o, double tF, string e)
 {
   fSerial=s;
   fName=n;//!< Atom name
@@ -70,21 +70,21 @@ Atom *Atom::GetNext()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-float Atom::GetX()
+double Atom::GetX()
 {
   return fX;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-float Atom::GetY()
+double Atom::GetY()
 {
   return fY;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-float Atom::GetZ()
+double Atom::GetZ()
 {
   return fZ;
 }
@@ -112,7 +112,7 @@ string Atom::GetElementName()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-float Atom::GetVanDerWaalsRadius()
+double Atom::GetVanDerWaalsRadius()
 {
   return fVdwRadius;
 }

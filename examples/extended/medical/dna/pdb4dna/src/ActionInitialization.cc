@@ -46,7 +46,7 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 ActionInitialization::ActionInitialization()
-: G4VUserActionInitialization(), fpDetector(0)
+: G4VUserActionInitialization()
 {
 }
 

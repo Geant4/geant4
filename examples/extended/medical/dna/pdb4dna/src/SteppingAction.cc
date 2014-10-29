@@ -114,13 +114,13 @@ G4bool SteppingAction::CheckAndProcessDNAHit(G4double x,G4double y, G4double z,
   int numStrand=0;
   int numNucl=0;
   int intResidue=-1; // 0 for Phospat, 1 for Sugar, 2 for Base
-  int hit = (fpDetector->GetPDBlib()).ComputeMatchEdepDNA(
+  unsigned short int hit = (fpDetector->GetPDBlib()).ComputeMatchEdepDNA(
       fpDetector->GetBarycenterList(),
       fpDetector->GetMoleculeList(),
       x*10., y*10., z*10.,// x10 => angstrom<->nm
       numStrand, numNucl, intResidue);
 
-  if(hit)
+  if (hit==1)
   {
     if ((intResidue==0)||(intResidue==1)) //Edep in Phosphate or Sugar
     {

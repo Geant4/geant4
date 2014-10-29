@@ -111,7 +111,7 @@ void DetectorConstruction::ConstructMaterials()
   nistManager->FindOrBuildMaterial("G4_WATER", fromIsotopes);
   fpWaterMaterial = G4Material::GetMaterial("G4_WATER");
 
-  //[Vacuum
+  //[Vacuum]
   G4double a;  // mass of a mole;
   G4double z;  // z=mean number of protons;
   G4double density;
@@ -124,7 +124,7 @@ void DetectorConstruction::ConstructMaterials()
 
 void DetectorConstruction::CheckMaterials()
 {
-  if ( ! fpDefaultMaterial || ! fpWaterMaterial )
+  if ( !fpDefaultMaterial || !fpWaterMaterial )
   {
     G4cerr << "Cannot retrieve materials already defined. " << G4endl;
     G4cerr << "Exiting application " << G4endl;
@@ -139,7 +139,7 @@ G4VPhysicalVolume* DetectorConstruction::ConstructWorld()
   // Geometry parameters
   G4double worldSize  = 1000*1*angstrom;
 
-  if (! fpDefaultMaterial )
+  if ( !fpDefaultMaterial )
   {
     G4cerr << "Cannot retrieve materials already defined. " << G4endl;
     G4cerr << "Exiting application " << G4endl;
@@ -206,22 +206,25 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes(G4String filename,
   fpMoleculeList=NULL;
   fpBarycenterList=NULL;
 
-  //'pdblib.load' is currently done for each 'DefineVolumes' call.
+  //'fPDBlib.load' is currently done for each 'DefineVolumes' call.
   int verbosity=0;  //To be implemented
   unsigned short int isDNA;
-  fpMoleculeList = fPdblib.Load( filename,isDNA,verbosity);
+  fpMoleculeList = fPDBlib.Load(filename,isDNA,verbosity);
   if (fpMoleculeList!=NULL && isDNA==1)
   {
-    fPdblib.ComputeNbNucleotidsPerStrand( fpMoleculeList );
-    fpBarycenterList=fPdblib.ComputeNucleotideBarycenters( fpMoleculeList );
+    fPDBlib.ComputeNbNucleotidsPerStrand(fpMoleculeList );
+    fpBarycenterList=fPDBlib.ComputeNucleotideBarycenters(fpMoleculeList );
     G4cout<<"This PDB file is DNA."<<G4endl;
   }
 
-  if (fpMoleculeList!=NULL) fPdbFileStatus=1;
+  if (fpMoleculeList!=NULL)
+    {
+    fPdbFileStatus=1;
+    }
 
   if (option==1)
   {
-    AtomisticView( worldLV,fpMoleculeList,1.0 );
+    AtomisticView( worldLV,fpMoleculeList,1.0);
   }
   else
     if (option==2)
@@ -236,7 +239,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes(G4String filename,
       else
         if (option==10)
         {
-          DrawBoundingVolume( worldLV,fpMoleculeList );
+          DrawBoundingVolume( worldLV,fpMoleculeList);
         }
         else
           if (option==11)
@@ -265,7 +268,7 @@ G4VPhysicalVolume* DetectorConstruction::DefineVolumes(G4String filename,
 
 PDBlib DetectorConstruction::GetPDBlib()
 {
-  return fPdblib;
+  return fPDBlib;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -288,18 +291,18 @@ Molecule *DetectorConstruction::GetMoleculeList()
 ///////////////// BEGIN atomistic representation
 //
 void DetectorConstruction::AtomisticView(G4LogicalVolume* worldLV,
-    Molecule *moleculeListTemp, float atomSizeFactor)
+    Molecule *moleculeListTemp, double atomSizeFactor)
 {
   CheckMaterials();
 
-  float minminX,minminY,minminZ;//minimum minimorum
-  float maxmaxX,maxmaxY,maxmaxZ;//maximum maximorum
-  minminX=numeric_limits<float>::max();
-  minminY=numeric_limits<float>::max();
-  minminZ=numeric_limits<float>::max();
-  maxmaxX=numeric_limits<float>::min();
-  maxmaxY=numeric_limits<float>::min();
-  maxmaxZ=numeric_limits<float>::min();
+  double minminX,minminY,minminZ;//minimum minimorum
+  double maxmaxX,maxmaxY,maxmaxZ;//maximum maximorum
+  minminX=numeric_limits<double>::max();
+  minminY=numeric_limits<double>::max();
+  minminZ=numeric_limits<double>::max();
+  maxmaxX=numeric_limits<double>::min();
+  maxmaxY=numeric_limits<double>::min();
+  maxmaxZ=numeric_limits<double>::min();
   Molecule *moleculeListTempSauv=moleculeListTemp;
   while (moleculeListTempSauv)
   {
@@ -783,9 +786,9 @@ void DetectorConstruction::DrawBoundingVolume(G4LogicalVolume* worldLV,
 {
   CheckMaterials();
 
-  float dX,dY,dZ;//Dimensions for bounding volume
-  float tX,tY,tZ;//Translation for bounding volume
-  fPdblib.ComputeBoundingVolumeParams(moleculeListTemp,
+  double dX,dY,dZ;//Dimensions for bounding volume
+  double tX,tY,tZ;//Translation for bounding volume
+  fPDBlib.ComputeBoundingVolumeParams(moleculeListTemp,
                                       dX, dY, dZ,
                                       tX, tY, tZ);
 

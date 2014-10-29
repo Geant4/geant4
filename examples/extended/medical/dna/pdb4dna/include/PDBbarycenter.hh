@@ -57,10 +57,10 @@ public:
   //! First constructor
   Barycenter();
   //! Second constructor
-  Barycenter(int bNum,float x,float y, float z,//Nucleotide bar. coordinates
-      float Bx,float By, float Bz, //Base bar. coordinates
-      float Sx,float Sy, float Sz, //Sugar bar. coordinates
-      float Px,float Py, float Pz);//Phosphate bar. coordinates
+  Barycenter(int bNum,double x,double y, double z,//Nucleotide bar. coordinates
+      double Bx,double By, double Bz, //Base bar. coordinates
+      double Sx,double Sy, double Sz, //Sugar bar. coordinates
+      double Px,double Py, double Pz);//Phosphate bar. coordinates
   //! Destructor
   ~Barycenter() {};
 
@@ -73,33 +73,33 @@ public:
   //! Set the next Barycenter
   void SetNext(Barycenter *);
   //! Set the distance between atom i and nucleotide barycenter
-  void SetDistance(int i, float);
+  void SetDistance(int i, double);
   //! Get the distance between atom i and nucleotide barycenter
-  float GetDistance(int i);
+  double GetDistance(int i);
   //! Set the distance between the farther atom and nucleotide barycenter
-  void SetRadius(float );
+  void SetRadius(double );
   //! Get the distance between the farther atom and nucleotide barycenter
-  float GetRadius();
+  double GetRadius();
 
   int fBaryNum;//!< Barycenter number
-  float fDistanceTab[33];//!< distance table [0..32] (11 hydrogens!)
-  float fRadius;
+  double fDistanceTab[33];//!< distance table [0..32] (11 hydrogens!)
+  double fRadius;
 
-  float fCenterX;            //!< "X coordinate" of this nucelotide Barycenter
-  float fCenterY;            //!< "Y coordinate" of this nucelotide Barycenter
-  float fCenterZ;            //!< "Z coordinate" of this nucelotide Barycenter
+  double fCenterX;            //!< "X coordinate" of this nucelotide Barycenter
+  double fCenterY;            //!< "Y coordinate" of this nucelotide Barycenter
+  double fCenterZ;            //!< "Z coordinate" of this nucelotide Barycenter
 
-  float fCenterBaseX;        //!< "X coordinate" of this Base Barycenter
-  float fCenterBaseY;        //!< "Y coordinate" of this Base Barycenter
-  float fCenterBaseZ;        //!< "Z coordinate" of this Base Barycenter
+  double fCenterBaseX;        //!< "X coordinate" of this Base Barycenter
+  double fCenterBaseY;        //!< "Y coordinate" of this Base Barycenter
+  double fCenterBaseZ;        //!< "Z coordinate" of this Base Barycenter
 
-  float fCenterSugarX;       //!< "X coordinate" of this Sugar Barycenter
-  float fCenterSugarY;       //!< "Y coordinate" of this Sugar Barycenter
-  float fCenterSugarZ;       //!< "Z coordinate" of this Sugar Barycenter
+  double fCenterSugarX;       //!< "X coordinate" of this Sugar Barycenter
+  double fCenterSugarY;       //!< "Y coordinate" of this Sugar Barycenter
+  double fCenterSugarZ;       //!< "Z coordinate" of this Sugar Barycenter
 
-  float fCenterPhosphateX;   //!< "X coordinate" of this Phosphate Barycenter
-  float fCenterPhosphateY;   //!< "Y coordinate" of this Phosphate Barycenter
-  float fCenterPhosphateZ;   //!< "Z coordinate" of this Phosphate Barycenter
+  double fCenterPhosphateX;   //!< "X coordinate" of this Phosphate Barycenter
+  double fCenterPhosphateY;   //!< "Y coordinate" of this Phosphate Barycenter
+  double fCenterPhosphateZ;   //!< "Z coordinate" of this Phosphate Barycenter
 
 private:
   Barycenter *fpNext;    //!< Header of the next Molecule (usage before vector)

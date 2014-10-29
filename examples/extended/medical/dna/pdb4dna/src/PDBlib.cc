@@ -38,6 +38,7 @@
 /// \brief Implementation file for PDBlib class
 
 #include "PDBlib.hh"
+//Specific to Geant4, globals.hh is used for G4cout
 #include "globals.hh"
 #include <fstream>
 #include <iostream>
@@ -46,14 +47,6 @@
 #include <sstream>
 #include <string>
 #include <stdlib.h>
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-typedef std::pair<float,int> mypair;
-bool comparator ( const mypair& l, const mypair& r)
-{
-  return l.first < r.first;
-}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -80,13 +73,14 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
   infile.open(filename.c_str());
   if (!infile)
   {
+    //Specific to Geant4, use std::cout instead
     G4cout<<"PDBlib::load >> file "<<filename<<" not found !!!!"<<G4endl;
   }
   else
   {
     int nbAtomTot=0;        // total number of atoms
     int nbAtom=0;           // total number of atoms in a residue
-    int numAtomInRes;       // number of an atom in a residue
+    int numAtomInRes=0;     // number of an atom in a residue
     int nbResidue=0;        // total number of residues
     int nbMolecule=0;       // total number of molecule
 
@@ -97,8 +91,8 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
     string atomName;    //Atom name
     string element;     //Element Symbol
     string resName;     //Residue name for this atom
-    float x,y,z;        //Orthogonal coordinates in Angstroms
-    float occupancy;    //Occupancy
+    double x,y,z;        //Orthogonal coordinates in Angstroms
+    double occupancy;    //Occupancy
 
     Residue * residueOld = NULL;
     Residue * residueFirst = NULL;
@@ -111,24 +105,24 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
     /////////////////////////////////
     //NEW variable to draw a fitting cylinder if z oriented
     //=> fitting box
-    float minGlobZ,maxGlobZ;
-    float minGlobX,maxGlobX;
-    float minGlobY,maxGlobY;
-    minGlobZ=numeric_limits<float>::min();
-    minGlobX=numeric_limits<float>::min();
-    minGlobY=numeric_limits<float>::min();
-    maxGlobZ=numeric_limits<float>::max();
-    maxGlobX=numeric_limits<float>::max();
-    maxGlobY=numeric_limits<float>::max();
+    double minGlobZ,maxGlobZ;
+    double minGlobX,maxGlobX;
+    double minGlobY,maxGlobY;
+    minGlobZ=numeric_limits<double>::min();
+    minGlobX=numeric_limits<double>::min();
+    minGlobY=numeric_limits<double>::min();
+    maxGlobZ=numeric_limits<double>::max();
+    maxGlobX=numeric_limits<double>::max();
+    maxGlobY=numeric_limits<double>::max();
 
     /////////////////////////////////
-    float minX,maxX,minY,maxY,minZ,maxZ; //Sort of 'mother volume' box
-    minX=numeric_limits<float>::min();
-    minY=numeric_limits<float>::min();
-    minZ=numeric_limits<float>::min();
-    maxX=numeric_limits<float>::max();
-    maxY=numeric_limits<float>::max();
-    maxZ=numeric_limits<float>::max();
+    double minX,maxX,minY,maxY,minZ,maxZ; //Sort of 'mother volume' box
+    minX=numeric_limits<double>::min();
+    minY=numeric_limits<double>::min();
+    minZ=numeric_limits<double>::min();
+    maxX=numeric_limits<double>::max();
+    maxY=numeric_limits<double>::max();
+    maxZ=numeric_limits<double>::max();
     /////////////////////////////////
 
     int lastResSeq=-1;
@@ -145,7 +139,6 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
     int terMax=numeric_limits<int>::max();
     if (!infile.eof())
     {
-      //PDB file must have a header line
       getline(infile, sLine);
       std::size_t found = sLine.find("DNA");
       if (found!=std::string::npos)
@@ -155,6 +148,16 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
       }
       else
         isDNA=0;
+      //If PDB file have not a header line
+      found = sLine.find("HEADER");
+      if (found==std::string::npos)
+      {
+        infile.close();
+        infile.open(filename.c_str());
+        //Specific to Geant4, use std::cout instead
+        G4cout<<"PDBlib::load >> No header found !!!!"<<G4endl;
+      }
+
     }
 
     while (!infile.eof())
@@ -162,7 +165,7 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
       getline(infile, sLine);
       //In the case of several models
       if ((sLine.substr(0,6)).compare("NUMMDL") == 0)
-      {;
+      {
       istringstream ((sLine.substr(10,4))) >> numModel;
       }
       if ((numModel > 0) && ( (sLine.substr(0,6)).compare("MODEL ") == 0))
@@ -230,18 +233,18 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
         moleculeOld->fMaxGlobY = maxGlobY;
         moleculeOld->fMinGlobY = minGlobY;
 
-        minGlobZ=numeric_limits<float>::min();
-        minGlobX=numeric_limits<float>::min();
-        minGlobY=numeric_limits<float>::min();
-        maxGlobZ=numeric_limits<float>::max();
-        maxGlobX=numeric_limits<float>::max();
-        maxGlobY=numeric_limits<float>::max();
-        minX=numeric_limits<float>::min();
-        minY=numeric_limits<float>::min();
-        minZ=numeric_limits<float>::min();
-        maxX=numeric_limits<float>::max();
-        maxY=numeric_limits<float>::max();
-        maxZ=numeric_limits<float>::max();
+        minGlobZ=numeric_limits<double>::min();
+        minGlobX=numeric_limits<double>::min();
+        minGlobY=numeric_limits<double>::min();
+        maxGlobZ=numeric_limits<double>::max();
+        maxGlobX=numeric_limits<double>::max();
+        maxGlobY=numeric_limits<double>::max();
+        minX=numeric_limits<double>::min();
+        minY=numeric_limits<double>::min();
+        minZ=numeric_limits<double>::min();
+        maxX=numeric_limits<double>::max();
+        maxY=numeric_limits<double>::max();
+        maxZ=numeric_limits<double>::max();
 
         nbAtom=0;
         numAtomInRes=0;
@@ -270,7 +273,7 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
           element=sLine.substr(12,1);
 
         // set Van der Waals radius expressed in Angstrom
-        float vdwRadius;
+        double vdwRadius;
         if(element=="H")
         {
           vdwRadius=1.2;
@@ -460,10 +463,10 @@ Barycenter * PDBlib::ComputeNucleotideBarycenters(Molecule * moleculeListTemp)
       }
 
       //Barycenter computation
-      float baryX=0.,baryY=0.,baryZ=0.;
-      float baryBaseX=0.,baryBaseY=0.,baryBaseZ=0.;
-      float barySugX=0.,barySugY=0.,barySugZ=0.;
-      float baryPhosX=0.,baryPhosY=0.,baryPhosZ=0.;
+      double baryX=0.,baryY=0.,baryZ=0.;
+      double baryBaseX=0.,baryBaseY=0.,baryBaseZ=0.;
+      double barySugX=0.,barySugY=0.,barySugZ=0.;
+      double baryPhosX=0.,baryPhosY=0.,baryPhosZ=0.;
       unsigned short int nbAtomInBase=0;
 
       for (int i=0 ; i < residueListTemp->fNbAtom ; i++)
@@ -526,9 +529,9 @@ Barycenter * PDBlib::ComputeNucleotideBarycenters(Molecule * moleculeListTemp)
         AtomTemp=AtomTemp->GetNext();
       }//end of for (  i=0 ; i < residueListTemp->nbAtom ; i++)
 
-      baryX = baryX / residueListTemp->fNbAtom;
-      baryY = baryY / residueListTemp->fNbAtom;
-      baryZ = baryZ / residueListTemp->fNbAtom;
+      baryX = baryX / (double)residueListTemp->fNbAtom;
+      baryY = baryY / (double)residueListTemp->fNbAtom;
+      baryZ = baryZ / (double)residueListTemp->fNbAtom;
 
       if (residueListTemp->fResSeq != 1) //Special case first Phosphate
       {
@@ -539,9 +542,9 @@ Barycenter * PDBlib::ComputeNucleotideBarycenters(Molecule * moleculeListTemp)
       barySugX = barySugX / 7.;
       barySugY = barySugY / 7.;
       barySugZ = barySugZ / 7.;
-      baryBaseX = baryBaseX / nbAtomInBase;
-      baryBaseY = baryBaseY / nbAtomInBase;
-      baryBaseZ = baryBaseZ / nbAtomInBase;
+      baryBaseX = baryBaseX / (double)nbAtomInBase;
+      baryBaseY = baryBaseY / (double)nbAtomInBase;
+      baryBaseZ = baryBaseZ / (double)nbAtomInBase;
 
       //Barycenter creation:
       if (BarycenterOld == NULL)
@@ -566,8 +569,8 @@ Barycenter * PDBlib::ComputeNucleotideBarycenters(Molecule * moleculeListTemp)
       //distance computation between all atoms inside
       //a residue and the barycenter
       AtomTemp=residueListTemp->GetFirst();
-      float dT3Dp;
-      float max=0;
+      double dT3Dp;
+      double max=0.;
       for (int ii=0 ; ii < residueListTemp->fNbAtom ; ii++)
       {
         dT3Dp = DistanceTwo3Dpoints(AtomTemp->fX,BarycenterOld->fCenterX,
@@ -578,7 +581,7 @@ Barycenter * PDBlib::ComputeNucleotideBarycenters(Molecule * moleculeListTemp)
         AtomTemp=AtomTemp->GetNext();
       }//end of for (  i=0 ; i < residueListTemp->nbAtom ; i++)
 
-      BarycenterOld->SetRadius(max+0.9);
+      BarycenterOld->SetRadius(max+1.8);
       residueListTemp=residueListTemp->GetNext();
 
     }//end of while sur residueListTemp
@@ -590,7 +593,10 @@ Barycenter * PDBlib::ComputeNucleotideBarycenters(Molecule * moleculeListTemp)
     moleculeListTemp=moleculeListTemp->GetNext();
   }//end of while sur moleculeListTemp
 
-  BarycenterNext -> SetNext(NULL);
+  if(BarycenterNext!=NULL)
+  {
+    BarycenterNext -> SetNext(NULL);
+  }
 
   return BarycenterFirst;
 }
@@ -603,17 +609,17 @@ Barycenter * PDBlib::ComputeNucleotideBarycenters(Molecule * moleculeListTemp)
  *            to build a box from atoms coordinates
  */
 void PDBlib::ComputeBoundingVolumeParams(Molecule *moleculeListTemp,
-    float &dX,float &dY,float &dZ,  //Dimensions for bounding volume
-    float &tX,float &tY,float &tZ)  //Translation for bounding volume
+    double &dX,double &dY,double &dZ,  //Dimensions for bounding volume
+    double &tX,double &tY,double &tZ)  //Translation for bounding volume
 {
-  float minminX,minminY,minminZ;    //minimum minimorum
-  float maxmaxX,maxmaxY,maxmaxZ;    //maximum maximorum
-  minminX=numeric_limits<float>::max();
-  minminY=numeric_limits<float>::max();
-  minminZ=numeric_limits<float>::max();
-  maxmaxX=numeric_limits<float>::min();
-  maxmaxY=numeric_limits<float>::min();
-  maxmaxZ=numeric_limits<float>::min();
+  double minminX,minminY,minminZ;    //minimum minimorum
+  double maxmaxX,maxmaxY,maxmaxZ;    //maximum maximorum
+  minminX=numeric_limits<double>::max();
+  minminY=numeric_limits<double>::max();
+  minminZ=numeric_limits<double>::max();
+  maxmaxX=numeric_limits<double>::min();
+  maxmaxY=numeric_limits<double>::min();
+  maxmaxZ=numeric_limits<double>::min();
 
   while (moleculeListTemp)
   {
@@ -699,7 +705,7 @@ void PDBlib::ComputeNbNucleotidsPerStrand(Molecule * moleculeListTemp)
  */
 unsigned short int PDBlib::ComputeMatchEdepDNA(Barycenter *BarycenterList,
     Molecule *moleculeListTemp,
-    float x, float y,float z,
+    double x, double y,double z,
     int &numStrand, int &numNucleotid, int &codeResidue)
 {
   unsigned short int matchFound=0;
@@ -707,14 +713,14 @@ unsigned short int PDBlib::ComputeMatchEdepDNA(Barycenter *BarycenterList,
   Molecule *mLTsavedPointer = moleculeListTemp;
   Barycenter *BLsavedPointer = BarycenterList;
 
-  short int strandNum;//Strand number
-  int residueNum;//Residue (nucleotide) number
+  short int strandNum=0;//Strand number
+  int residueNum=1;//Residue (nucleotide) number
   string baseName;//Base name [A,C,T,G]
-  unsigned short int BSP;//Base, Sugar, Phosphat
+  unsigned short int BSP=2;//Base (default value), Sugar, Phosphat
 
-  float smallestDist;//smallest dist Atom <-> edep coordinates
-  float distEdepDNA;
-  float distEdepAtom;
+  double smallestDist;//smallest dist Atom <-> edep coordinates
+  double distEdepDNA;
+  double distEdepAtom;
 
   //Residue (Base, Phosphate,suggar) list
   Residue *residueListTemp;
@@ -806,8 +812,8 @@ unsigned short int PDBlib::ComputeMatchEdepDNA(Barycenter *BarycenterList,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-float PDBlib::DistanceTwo3Dpoints(float xA,float xB,float yA,float yB,
-    float zA,float zB)
+double PDBlib::DistanceTwo3Dpoints(double xA,double xB,double yA,double yB,
+    double zA,double zB)
 {
   return sqrt ( (xA-xB)*(xA-xB) + (yA-yB)*(yA-yB) + (zA-zB)*(zA-zB) );
 }

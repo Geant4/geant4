@@ -73,22 +73,22 @@ public:
 
   //! Compute the corresponding bounding volume parameters
   void ComputeBoundingVolumeParams(Molecule *moleculeListTemp,
-      float &dX,float &dY,float &dZ,        //Dimensions for bounding volume
-      float &tX,float &tY,float &tZ);       //Translation for bounding volume
+      double &dX,double &dY,double &dZ,       //Dimensions for bounding volume
+      double &tX,double &tY,double &tZ);      //Translation for bounding volume
 
   //! Compute number of nucleotide per strand
   void ComputeNbNucleotidsPerStrand(Molecule * moleculeListTemp);
 
   //! Compute if energy is deposited in per atom
   unsigned short int ComputeMatchEdepDNA(Barycenter *,Molecule *,
-      float x, float y,float z,
+      double x, double y,double z,
       int &numStrand, int &numNucleotid, int &codeResidue);
 
 private:
   //! return distance between two 3D points
-  float DistanceTwo3Dpoints(float xA,float xB,
-      float yA,float yB,
-      float zA,float zB);
+  double DistanceTwo3Dpoints(double xA,double xB,
+      double yA,double yB,
+      double zA,double zB);
 
   //! Number of nucleotid per strand
   int fNbNucleotidsPerStrand;

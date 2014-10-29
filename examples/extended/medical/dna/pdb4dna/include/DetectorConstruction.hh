@@ -77,7 +77,7 @@ private:
   //! Check if PDB file loaded
   unsigned short int fPdbFileStatus;
 
-  PDBlib fPdblib;
+  PDBlib fPDBlib;
   Molecule *fpMoleculeList;
   Barycenter *fpBarycenterList;
   G4Material *fpDefaultMaterial;
@@ -88,7 +88,7 @@ private:
   G4VPhysicalVolume* ConstructWorld();
   G4VPhysicalVolume* DefineVolumes(G4String filename,unsigned short int option);
 
-  void AtomisticView(G4LogicalVolume*,Molecule *,float atomSizeFactor);
+  void AtomisticView(G4LogicalVolume*,Molecule *,double atomSizeFactor);
   void BarycenterView(G4LogicalVolume* ,Barycenter *);
   void ResiduesView(G4LogicalVolume* ,Barycenter *);
   void DrawBoundingVolume(G4LogicalVolume* ,Molecule *);

@@ -103,15 +103,15 @@ void EventAction::EndOfEventAction( const G4Event*)
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
 
-  if(fTotalEnergyDeposit>0.)
+  if ( fTotalEnergyDeposit>0. )
   {
     analysisManager->FillH1(1,fTotalEnergyDeposit);
   }
-  if(sb[0]>0)
+  if ( sb[0]>0 )
   {
     analysisManager->FillH1(2,sb[0]);
   }
-  if(sb[1]>0)
+  if ( sb[1]>0 )
   {
     analysisManager->FillH1(3,sb[1]);
   }

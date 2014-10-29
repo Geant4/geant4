@@ -59,9 +59,9 @@ class Atom
 public:
   //! constructor with initialization
   Atom(int serial,string name,string resName,int numInRes,int resSeq,
-      float xInit,float yInit,float zInit,
-      float radius,
-      float occupancy, float tempFactor, string element);
+      double xInit,double yInit,double zInit,
+      double radius,
+      double occupancy, double tempFactor, string element);
   //! Empty destructor
   ~Atom()
   {
@@ -70,11 +70,11 @@ public:
   //! Returns the next Atom
   Atom *GetNext();
   //! Return the X position for the Atom
-  float GetX();
+  double GetX();
   //! Return the Y position for the Atom
-  float GetY();
+  double GetY();
   //! Return the Z position for the Atom
-  float GetZ();
+  double GetZ();
   //! Return the Atom's ID
   int GetID();
   //! Return name of the atom
@@ -82,7 +82,7 @@ public:
   //! Return name of the element
   string GetElementName();
   //! Return name of the atom
-  float GetVanDerWaalsRadius();
+  double GetVanDerWaalsRadius();
   //! Set the next atom
   void SetNext(Atom *);
 
@@ -91,13 +91,13 @@ public:
   string fName;      //!< Atom name
   string fResName;   //!< Residue name
   int fResSeq;       //!< Residue sequence number
-  float fX;          //!< X orthogonal coordinates in Angstroms
-  float fY;          //!< Y orthogonal coordinates in Angstroms
-  float fZ;          //!< Z orthogonal coordinates in Angstroms
-  float fVdwRadius;  // Vand der Waals Radius in Angstrom
-  float fOccupancy;  //!< Occupancy for the Atom
+  double fX;          //!< X orthogonal coordinates in Angstroms
+  double fY;          //!< Y orthogonal coordinates in Angstroms
+  double fZ;          //!< Z orthogonal coordinates in Angstroms
+  double fVdwRadius;  // Vand der Waals Radius in Angstrom
+  double fOccupancy;  //!< Occupancy for the Atom
   string fElement;   //!< Element symbol extracted from 'atom name'
-  float fTempFactor; //!< Temperature factor for the Atom
+  double fTempFactor; //!< Temperature factor for the Atom
 
 private:
   Atom * fpNext;       //!< Pointer to the next Atom
