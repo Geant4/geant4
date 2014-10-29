@@ -126,98 +126,115 @@ void G4MicroElecInelasticModel::Initialise(const G4ParticleDefinition* particle,
   char *path = getenv("G4LEDATA");
 
   // *** ELECTRON
-    electron = electronDef->GetParticleName();
-
-    tableFile[electron] = fileElectron;
-
-    lowEnergyLimit[electron] = 16.7 * eV; 
-    highEnergyLimit[electron] = 100.0 * MeV;
-
-    // Cross section
-    
-    G4MicroElecCrossSectionDataSet* tableE = new G4MicroElecCrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
-    tableE->LoadData(fileElectron);
-      
-    tableData[electron] = tableE;
-    
-    // Final state
-    
-    std::ostringstream eFullFileName;
-    eFullFileName << path << "/microelec/sigmadiff_inelastic_e_Si.dat";
-    std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
-
-    if (!eDiffCrossSection)
-    { 
-            G4Exception("G4MicroElecInelasticModel::Initialise","em0003",FatalException,"Missing data file:/microelec/sigmadiff_inelastic_e_Si.dat");
-    }
-      
-    eTdummyVec.push_back(0.);
-    while(!eDiffCrossSection.eof())
-    {
-      double tDummy;
-      double eDummy;
-      eDiffCrossSection>>tDummy>>eDummy;
-      if (tDummy != eTdummyVec.back()) eTdummyVec.push_back(tDummy);
-      for (int j=0; j<6; j++)
-      {
-        eDiffCrossSection>>eDiffCrossSectionData[j][tDummy][eDummy];
-
-        // SI - only if eof is not reached !
-        if (!eDiffCrossSection.eof()) eDiffCrossSectionData[j][tDummy][eDummy]*=scaleFactor;
-
-        eVecm[tDummy].push_back(eDummy);
-
-      }
-    }
-    //
-
-  // *** PROTON
-
-    proton = protonDef->GetParticleName();
-
-    tableFile[proton] = fileProton;
-
-    lowEnergyLimit[proton] = 50. * keV;
-    highEnergyLimit[proton] = 10. * GeV;
-
-    // Cross section
-    
-    G4MicroElecCrossSectionDataSet* tableP = new G4MicroElecCrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
-    tableP->LoadData(fileProton);
-      
-    tableData[proton] = tableP;
-    
-    // Final state
-
-    std::ostringstream pFullFileName;
-    pFullFileName << path << "/microelec/sigmadiff_inelastic_p_Si.dat";
-    std::ifstream pDiffCrossSection(pFullFileName.str().c_str());
-    
-    if (!pDiffCrossSection)
-    { 
-            G4Exception("G4MicroElecInelasticModel::Initialise","em0003",FatalException,"Missing data file:/microelec/sigmadiff_inelastic_p_Si.dat");
-    }
-      
-    pTdummyVec.push_back(0.);
-    while(!pDiffCrossSection.eof())
-    {
-      double tDummy;
-      double eDummy;
-      pDiffCrossSection>>tDummy>>eDummy;
-      if (tDummy != pTdummyVec.back()) pTdummyVec.push_back(tDummy);
-      for (int j=0; j<6; j++)
-      {
-        pDiffCrossSection>>pDiffCrossSectionData[j][tDummy][eDummy];
-
-        // SI - only if eof is not reached !
-        if (!pDiffCrossSection.eof()) pDiffCrossSectionData[j][tDummy][eDummy]*=scaleFactor;
-
-        pVecm[tDummy].push_back(eDummy); 
-      }
-    }
+  electron = electronDef->GetParticleName();
   
-
-  if (particle==electronDef) 
+  tableFile[electron] = fileElectron;
+  
+  lowEnergyLimit[electron] = 16.7 * eV;
+  highEnergyLimit[electron] = 100.0 * MeV;
+  
+  // Cross section
+  
+  G4MicroElecCrossSectionDataSet* tableE = new G4MicroElecCrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
+  tableE->LoadData(fileElectron);
+  
+  tableData[electron] = tableE;
+  
+  // Final state
+  
+  std::ostringstream eFullFileName;
+  eFullFileName << path << "/microelec/sigmadiff_inelastic_e_Si.dat";
+  std::ifstream eDiffCrossSection(eFullFileName.str().c_str());
+  
+  if (!eDiffCrossSection)
+  {
+    G4Exception("G4MicroElecInelasticModel::Initialise","em0003",FatalException,"Missing data file:/microelec/sigmadiff_inelastic_e_Si.dat");
+  }
+  
+  //
+  
+  // Clear the arrays for re-initialization case (MT mode)
+  // Octobre 22nd, 2014 - Melanie Raine
+  
+  eTdummyVec.clear();
+  pTdummyVec.clear();
+  
+  eVecm.clear();
+  pVecm.clear();
+  
+  eDiffCrossSectionData->clear();
+  pDiffCrossSectionData->clear();
+  
+  //
+  
+  
+  eTdummyVec.push_back(0.);
+  while(!eDiffCrossSection.eof())
+  {
+    double tDummy;
+    double eDummy;
+    eDiffCrossSection>>tDummy>>eDummy;
+    if (tDummy != eTdummyVec.back()) eTdummyVec.push_back(tDummy);
+    for (int j=0; j<6; j++)
+    {
+      eDiffCrossSection>>eDiffCrossSectionData[j][tDummy][eDummy];
+      
+      // SI - only if eof is not reached !
+      if (!eDiffCrossSection.eof()) eDiffCrossSectionData[j][tDummy][eDummy]*=scaleFactor;
+      
+      eVecm[tDummy].push_back(eDummy);
+      
+    }
+  }
+  //
+  
+  // *** PROTON
+  
+  proton = protonDef->GetParticleName();
+  
+  tableFile[proton] = fileProton;
+  
+  lowEnergyLimit[proton] = 50. * keV;
+  highEnergyLimit[proton] = 10. * GeV;
+  
+  // Cross section
+  
+  G4MicroElecCrossSectionDataSet* tableP = new G4MicroElecCrossSectionDataSet(new G4LogLogInterpolation, eV,scaleFactor );
+  tableP->LoadData(fileProton);
+  
+  tableData[proton] = tableP;
+  
+  // Final state
+  
+  std::ostringstream pFullFileName;
+  pFullFileName << path << "/microelec/sigmadiff_inelastic_p_Si.dat";
+  std::ifstream pDiffCrossSection(pFullFileName.str().c_str());
+  
+  if (!pDiffCrossSection)
+  {
+    G4Exception("G4MicroElecInelasticModel::Initialise","em0003",FatalException,"Missing data file:/microelec/sigmadiff_inelastic_p_Si.dat");
+  }
+  
+  pTdummyVec.push_back(0.);
+  while(!pDiffCrossSection.eof())
+  {
+    double tDummy;
+    double eDummy;
+    pDiffCrossSection>>tDummy>>eDummy;
+    if (tDummy != pTdummyVec.back()) pTdummyVec.push_back(tDummy);
+    for (int j=0; j<6; j++)
+    {
+      pDiffCrossSection>>pDiffCrossSectionData[j][tDummy][eDummy];
+      
+      // SI - only if eof is not reached !
+      if (!pDiffCrossSection.eof()) pDiffCrossSectionData[j][tDummy][eDummy]*=scaleFactor;
+      
+      pVecm[tDummy].push_back(eDummy);
+    }
+  }
+  
+  
+  if (particle==electronDef)
   {
     SetLowEnergyLimit(lowEnergyLimit[electron]);
     SetHighEnergyLimit(highEnergyLimit[electron]);
@@ -232,13 +249,13 @@ void G4MicroElecInelasticModel::Initialise(const G4ParticleDefinition* particle,
   if( verboseLevel>0 ) 
   { 
     G4cout << "MicroElec Inelastic model is initialized " << G4endl
-           << "Energy range: "
-           << LowEnergyLimit() / eV << " eV - "
-           << HighEnergyLimit() / keV << " keV for "
-           << particle->GetParticleName()
+    << "Energy range: "
+    << LowEnergyLimit() / keV << " keV - "
+    << HighEnergyLimit() / MeV << " MeV for "
+    << particle->GetParticleName()
 	   << " with mass (amu) " << particle->GetPDGMass()/proton_mass_c2
 	   << " and charge " << particle->GetPDGCharge()
-           << G4endl << G4endl ;
+    << G4endl << G4endl ;
   }
   
   //
@@ -254,121 +271,121 @@ void G4MicroElecInelasticModel::Initialise(const G4ParticleDefinition* particle,
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 G4double G4MicroElecInelasticModel::CrossSectionPerVolume(const G4Material* material,
-					   const G4ParticleDefinition* particleDefinition,
-					   G4double ekin,
-					   G4double,
-					   G4double)
+                                                          const G4ParticleDefinition* particleDefinition,
+                                                          G4double ekin,
+                                                          G4double,
+                                                          G4double)
 {
   if (verboseLevel > 3)
     G4cout << "Calling CrossSectionPerVolume() of G4MicroElecInelasticModel" << G4endl;
-
+  
   G4double density = material->GetTotNbOfAtomsPerVolume();
-
- /* if (
-      particleDefinition != G4Proton::ProtonDefinition()
-      &&
-      particleDefinition != G4Electron::ElectronDefinition()
-      &&
-      particleDefinition != G4GenericIon::GenericIonDefinition()
-     )
-   	    
-    return 0;*/
+  
+  /* if (
+   particleDefinition != G4Proton::ProtonDefinition()
+   &&
+   particleDefinition != G4Electron::ElectronDefinition()
+   &&
+   particleDefinition != G4GenericIon::GenericIonDefinition()
+   )
+   
+   return 0;*/
   
   // Calculate total cross section for model
-
+  
   G4double lowLim = 0;
   G4double highLim = 0;
   G4double sigma=0;
-
+  
   const G4String& particleName = particleDefinition->GetParticleName();
   G4String nameLocal = particleName ;
-
+  
   G4double Zeff2 = 1.0;
   G4double Mion_c2 = particleDefinition->GetPDGMass();
-
+  
   if (Mion_c2 > proton_mass_c2)
   {
-    G4ionEffectiveCharge EffCharge ; 
+    G4ionEffectiveCharge EffCharge ;
     G4double Zeff = EffCharge.EffectiveCharge(particleDefinition, material,ekin);
     Zeff2 = Zeff*Zeff;
-
-    if (verboseLevel > 3) 
-    G4cout << "Before scaling : " << G4endl
-    << "Particle : " << nameLocal << ", mass : " << Mion_c2/proton_mass_c2 << "*mp, charge " << Zeff 
-    << ", Ekin (eV) = " << ekin/eV << G4endl ;
-
+    
+    if (verboseLevel > 3)
+      G4cout << "Before scaling : " << G4endl
+      << "Particle : " << nameLocal << ", mass : " << Mion_c2/proton_mass_c2 << "*mp, charge " << Zeff
+      << ", Ekin (eV) = " << ekin/eV << G4endl ;
+    
     ekin *= proton_mass_c2/Mion_c2 ;
     nameLocal = "proton" ;
-
-    if (verboseLevel > 3) 
-    G4cout << "After scaling : " << G4endl
-     << "Particle : " << nameLocal  << ", Ekin (eV) = " << ekin/eV << G4endl ;
+    
+    if (verboseLevel > 3)
+      G4cout << "After scaling : " << G4endl
+      << "Particle : " << nameLocal  << ", Ekin (eV) = " << ekin/eV << G4endl ;
   }
-
+  
   if (material == nistSi || material->GetBaseMaterial() == nistSi)
   {
-
+    
     std::map< G4String,G4double,std::less<G4String> >::iterator pos1;
     pos1 = lowEnergyLimit.find(nameLocal);
     if (pos1 != lowEnergyLimit.end())
     {
       lowLim = pos1->second;
     }
-  
+    
     std::map< G4String,G4double,std::less<G4String> >::iterator pos2;
     pos2 = highEnergyLimit.find(nameLocal);
     if (pos2 != highEnergyLimit.end())
     {
       highLim = pos2->second;
     }
-
+    
     if (ekin >= lowLim && ekin < highLim)
     {
       std::map< G4String,G4MicroElecCrossSectionDataSet*,std::less<G4String> >::iterator pos;
       pos = tableData.find(nameLocal);
-	
+      
       if (pos != tableData.end())
       {
         G4MicroElecCrossSectionDataSet* table = pos->second;
         if (table != 0)
         {
-	  sigma = table->FindValue(ekin);
+          sigma = table->FindValue(ekin);
         }
       }
       else
       {
-	G4Exception("G4MicroElecInelasticModel::CrossSectionPerVolume","em0002",FatalException,"Model not applicable to particle type.");
+        G4Exception("G4MicroElecInelasticModel::CrossSectionPerVolume","em0002",FatalException,"Model not applicable to particle type.");
       }
     }
-    else 
+    else
     {
-	if (nameLocal!="e-")
-	{
-		// G4cout << "Particle : " << nameLocal << ", Ekin (eV) = " << ekin/eV << G4endl;
-		// G4cout << "### Warning: particle energy out of bounds! ###" << G4endl;
-	}
+      if (nameLocal!="e-")
+      {
+        // G4cout << "Particle : " << nameLocal << ", Ekin (eV) = " << ekin/eV << G4endl;
+        // G4cout << "### Warning: particle energy out of bounds! ###" << G4endl;
+      }
     }
-
+    
     if (verboseLevel > 3)
     {
       G4cout << "---> Kinetic energy (eV)=" << ekin/eV << G4endl;
       G4cout << " - Cross section per Si atom (cm^2)=" << sigma*Zeff2/cm2 << G4endl;
       G4cout << " - Cross section per Si atom (cm^-1)=" << sigma*density*Zeff2/(1./cm) << G4endl;
-    } 
- 
+    }
+    
   } // if (SiMaterial)
- return sigma*density*Zeff2;
-	   
-
+  return sigma*density*Zeff2;
+  
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void G4MicroElecInelasticModel::SampleSecondaries(std::vector<G4DynamicParticle*>* fvect,
-					      const G4MaterialCutsCouple* /*couple*/,
-					      const G4DynamicParticle* particle,
-					      G4double,
-					      G4double)
+                                                  const G4MaterialCutsCouple* /*couple*/,
+                                                  const G4DynamicParticle* particle,
+                                                  G4double,
+                                                  G4double)
 {
 
   if (verboseLevel > 3)
@@ -407,117 +424,117 @@ void G4MicroElecInelasticModel::SampleSecondaries(std::vector<G4DynamicParticle*
   {
     highLim = pos2->second;
   }
-
+  
   if (k >= lowLim && k < highLim)
   {
     G4ParticleMomentum primaryDirection = particle->GetMomentumDirection();
     G4double totalEnergy = ekin + particleMass;
     G4double pSquare = ekin * (totalEnergy + particleMass);
     G4double totalMomentum = std::sqrt(pSquare);
-
+    
     G4int Shell = RandomSelect(k,nameLocal2);
     G4double bindingEnergy = SiStructure.Energy(Shell);
     if (verboseLevel > 3)
     {
-	G4cout << "---> Kinetic energy (eV)=" << k/eV << G4endl ;
-	G4cout << "Shell: " << Shell << ", energy: " << bindingEnergy/eV << G4endl;
+      G4cout << "---> Kinetic energy (eV)=" << k/eV << G4endl ;
+      G4cout << "Shell: " << Shell << ", energy: " << bindingEnergy/eV << G4endl;
     }
-
-   // sample deexcitation
-
-    G4int secNumberInit = 0;  // need to know at a certain point the energy of secondaries   
+    
+    // sample deexcitation
+    
+    G4int secNumberInit = 0;  // need to know at a certain point the energy of secondaries
     G4int secNumberFinal = 0; // So I'll make the difference and then sum the energies
-
+    
     if(fAtomDeexcitation && Shell > 2) {
       G4int Z = 14;
       G4AtomicShellEnumerator as = fKShell;
-
-      if (Shell == 4) 
-	{
-	  as = G4AtomicShellEnumerator(1);
-	}
+      
+      if (Shell == 4)
+      {
+        as = G4AtomicShellEnumerator(1);
+      }
       else if (Shell == 3)
-	{
-	  as = G4AtomicShellEnumerator(3);
-	}
-
-      const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);    
+      {
+        as = G4AtomicShellEnumerator(3);
+      }
+      
+      const G4AtomicShell* shell = fAtomDeexcitation->GetAtomicShell(Z, as);
       secNumberInit = fvect->size();
       fAtomDeexcitation->GenerateParticles(fvect, shell, Z, 0, 0);
       secNumberFinal = fvect->size();
     }
-
+    
     G4double secondaryKinetic = RandomizeEjectedElectronEnergy(PartDef,k,Shell);
-
+    
     if (verboseLevel > 3)
     {
-	G4cout << "Ionisation process" << G4endl;
-	G4cout << "Shell: " << Shell << " Kin. energy (eV)=" << k/eV 
-	<< " Sec. energy (eV)=" << secondaryKinetic/eV << G4endl;
+      G4cout << "Ionisation process" << G4endl;
+      G4cout << "Shell: " << Shell << " Kin. energy (eV)=" << k/eV
+      << " Sec. energy (eV)=" << secondaryKinetic/eV << G4endl;
     }
-
+    
     G4double cosTheta = 0.;
-    G4double phi = 0.; 
+    G4double phi = 0.;
     RandomizeEjectedElectronDirection(PartDef, k, secondaryKinetic, cosTheta, phi);
-
+    
     G4double sinTheta = std::sqrt(1.-cosTheta*cosTheta);
     G4double dirX = sinTheta*std::cos(phi);
     G4double dirY = sinTheta*std::sin(phi);
     G4double dirZ = cosTheta;
     G4ThreeVector deltaDirection(dirX,dirY,dirZ);
     deltaDirection.rotateUz(primaryDirection);
-
+    
     //if (particle->GetDefinition() == G4Electron::ElectronDefinition())
     //{
-      G4double deltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic + 2.*electron_mass_c2 ));
-
-      G4double finalPx = totalMomentum*primaryDirection.x() - deltaTotalMomentum*deltaDirection.x();
-      G4double finalPy = totalMomentum*primaryDirection.y() - deltaTotalMomentum*deltaDirection.y();
-      G4double finalPz = totalMomentum*primaryDirection.z() - deltaTotalMomentum*deltaDirection.z();
-      G4double finalMomentum = std::sqrt(finalPx*finalPx + finalPy*finalPy + finalPz*finalPz);
-      finalPx /= finalMomentum;
-      finalPy /= finalMomentum;
-      finalPz /= finalMomentum;
+    G4double deltaTotalMomentum = std::sqrt(secondaryKinetic*(secondaryKinetic + 2.*electron_mass_c2 ));
     
-      G4ThreeVector direction;
-      direction.set(finalPx,finalPy,finalPz);
+    G4double finalPx = totalMomentum*primaryDirection.x() - deltaTotalMomentum*deltaDirection.x();
+    G4double finalPy = totalMomentum*primaryDirection.y() - deltaTotalMomentum*deltaDirection.y();
+    G4double finalPz = totalMomentum*primaryDirection.z() - deltaTotalMomentum*deltaDirection.z();
+    G4double finalMomentum = std::sqrt(finalPx*finalPx + finalPy*finalPy + finalPz*finalPz);
+    finalPx /= finalMomentum;
+    finalPy /= finalMomentum;
+    finalPz /= finalMomentum;
     
-      fParticleChangeForGamma->ProposeMomentumDirection(direction.unit()) ;
+    G4ThreeVector direction;
+    direction.set(finalPx,finalPy,finalPz);
+    
+    fParticleChangeForGamma->ProposeMomentumDirection(direction.unit()) ;
     //}
     //else fParticleChangeForGamma->ProposeMomentumDirection(primaryDirection) ;
-
+    
     // note that secondaryKinetic is the energy of the delta ray, not of all secondaries.
     G4double deexSecEnergy = 0;
     for (G4int j=secNumberInit; j < secNumberFinal; j++) {
-      deexSecEnergy = deexSecEnergy + (*fvect)[j]->GetKineticEnergy();} 
-
+      deexSecEnergy = deexSecEnergy + (*fvect)[j]->GetKineticEnergy();}
+    
     fParticleChangeForGamma->SetProposedKineticEnergy(ekin-bindingEnergy-secondaryKinetic);
     fParticleChangeForGamma->ProposeLocalEnergyDeposit(bindingEnergy-deexSecEnergy);
-
+    
     G4DynamicParticle* dp = new G4DynamicParticle (G4Electron::Electron(),deltaDirection,secondaryKinetic) ;
     fvect->push_back(dp);
-
+    
   }
-
+  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4MicroElecInelasticModel::RandomizeEjectedElectronEnergy(G4ParticleDefinition* particleDefinition, 
-G4double k, G4int shell)
+G4double G4MicroElecInelasticModel::RandomizeEjectedElectronEnergy(G4ParticleDefinition* particleDefinition,
+                                                                   G4double k, G4int shell)
 {
-  if (particleDefinition == G4Electron::ElectronDefinition()) 
+  if (particleDefinition == G4Electron::ElectronDefinition())
   {
     G4double maximumEnergyTransfer=0.;
     if ((k+SiStructure.Energy(shell))/2. > k) maximumEnergyTransfer=k;
     else maximumEnergyTransfer = (k+SiStructure.Energy(shell))/2.;
-
+    
     G4double crossSectionMaximum = 0.;
-
+    
     G4double minEnergy = SiStructure.Energy(shell);
     G4double maxEnergy = maximumEnergyTransfer;
     G4int nEnergySteps = 100;
-
+    
     G4double value(minEnergy);
     G4double stpEnergy(std::pow(maxEnergy/value, 1./static_cast<G4double>(nEnergySteps-1)));
     G4int step(nEnergySteps);
@@ -528,20 +545,20 @@ G4double k, G4int shell)
       if(differentialCrossSection >= crossSectionMaximum) crossSectionMaximum = differentialCrossSection;
       value*=stpEnergy;
     }
-
- 
+    
+    
     G4double secondaryElectronKineticEnergy=0.;
-    do 
+    do
     {
       secondaryElectronKineticEnergy = G4UniformRand() * (maximumEnergyTransfer-SiStructure.Energy(shell));
     } while(G4UniformRand()*crossSectionMaximum >
-      DifferentialCrossSection(particleDefinition, k/eV,(secondaryElectronKineticEnergy+SiStructure.Energy(shell))/eV,shell));
-
+            DifferentialCrossSection(particleDefinition, k/eV,(secondaryElectronKineticEnergy+SiStructure.Energy(shell))/eV,shell));
+    
     return secondaryElectronKineticEnergy;
- 
+    
   }
-
-  if (particleDefinition == G4Proton::ProtonDefinition()) 
+  
+  if (particleDefinition == G4Proton::ProtonDefinition())
   {
     G4double maximumEnergyTransfer = 4.* (electron_mass_c2 / proton_mass_c2) * k;
     G4double crossSectionMaximum = 0.;
@@ -564,24 +581,24 @@ G4double k, G4int shell)
     do
     {
       secondaryElectronKineticEnergy = G4UniformRand() * (maximumEnergyTransfer-SiStructure.Energy(shell));
-
-    } while(G4UniformRand()*crossSectionMaximum >= 
-	      DifferentialCrossSection(particleDefinition, k/eV,(secondaryElectronKineticEnergy+SiStructure.Energy(shell))/eV,shell));
+      
+    } while(G4UniformRand()*crossSectionMaximum >=
+            DifferentialCrossSection(particleDefinition, k/eV,(secondaryElectronKineticEnergy+SiStructure.Energy(shell))/eV,shell));
     return secondaryElectronKineticEnergy;
   }
- 
+  
   return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void G4MicroElecInelasticModel::RandomizeEjectedElectronDirection(G4ParticleDefinition* particleDefinition, 
-								   G4double k, 
-								   G4double secKinetic, 
-								   G4double & cosTheta, 
-								   G4double & phi )
+void G4MicroElecInelasticModel::RandomizeEjectedElectronDirection(G4ParticleDefinition* particleDefinition,
+                                                                  G4double k,
+                                                                  G4double secKinetic,
+                                                                  G4double & cosTheta,
+                                                                  G4double & phi )
 {
-  if (particleDefinition == G4Electron::ElectronDefinition()) 
+  if (particleDefinition == G4Electron::ElectronDefinition())
   {
     phi = twopi * G4UniformRand();
     G4double sin2O = (1.-secKinetic/k) / (1.+secKinetic/(2.*electron_mass_c2));
@@ -605,13 +622,13 @@ void G4MicroElecInelasticModel::RandomizeEjectedElectronDirection(G4ParticleDefi
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-double G4MicroElecInelasticModel::DifferentialCrossSection(G4ParticleDefinition * particleDefinition, 
-							    G4double k, 
-							    G4double energyTransfer, 
-							    G4int LevelIndex)
+double G4MicroElecInelasticModel::DifferentialCrossSection(G4ParticleDefinition * particleDefinition,
+                                                           G4double k,
+                                                           G4double energyTransfer,
+                                                           G4int LevelIndex)
 {
   G4double sigma = 0.;
-
+  
   if (energyTransfer >= SiStructure.Energy(LevelIndex))
   {
     G4double valueT1 = 0;
@@ -620,16 +637,16 @@ double G4MicroElecInelasticModel::DifferentialCrossSection(G4ParticleDefinition 
     G4double valueE22 = 0;
     G4double valueE12 = 0;
     G4double valueE11 = 0;
-
-    G4double xs11 = 0;   
-    G4double xs12 = 0; 
-    G4double xs21 = 0; 
-    G4double xs22 = 0; 
-
-    if (particleDefinition == G4Electron::ElectronDefinition()) 
+    
+    G4double xs11 = 0;
+    G4double xs12 = 0;
+    G4double xs21 = 0;
+    G4double xs22 = 0;
+    
+    if (particleDefinition == G4Electron::ElectronDefinition())
     {
       // k should be in eV and energy transfer eV also
-
+      
       std::vector<double>::iterator t2 = std::upper_bound(eTdummyVec.begin(),eTdummyVec.end(), k);
       std::vector<double>::iterator t1 = t2-1;
       // SI : the following condition avoids situations where energyTransfer >last vector element
@@ -655,9 +672,9 @@ double G4MicroElecInelasticModel::DifferentialCrossSection(G4ParticleDefinition 
       }
 
     }
-  
-   if (particleDefinition == G4Proton::ProtonDefinition()) 
-   {
+    
+    if (particleDefinition == G4Proton::ProtonDefinition())
+    {
       // k should be in eV and energy transfer eV also
       std::vector<double>::iterator t2 = std::upper_bound(pTdummyVec.begin(),pTdummyVec.end(), k);
       std::vector<double>::iterator t1 = t2-1;
@@ -680,32 +697,32 @@ double G4MicroElecInelasticModel::DifferentialCrossSection(G4ParticleDefinition 
         xs12 = pDiffCrossSectionData[LevelIndex][valueT1][valueE12];
         xs21 = pDiffCrossSectionData[LevelIndex][valueT2][valueE21];
         xs22 = pDiffCrossSectionData[LevelIndex][valueT2][valueE22];
-	  }
-   }
-
-   G4double xsProduct = xs11 * xs12 * xs21 * xs22;
-   if (xsProduct != 0.)
-   {
-     sigma = QuadInterpolator(     valueE11, valueE12, 
-				   valueE21, valueE22, 
-				   xs11, xs12, 
-				   xs21, xs22, 
-				   valueT1, valueT2, 
-				   k, energyTransfer);
-   }
-
- }
+      }
+    }
+    
+    G4double xsProduct = xs11 * xs12 * xs21 * xs22;
+    if (xsProduct != 0.)
+    {
+      sigma = QuadInterpolator(     valueE11, valueE12,
+                               valueE21, valueE22,
+                               xs11, xs12,
+                               xs21, xs22,
+                               valueT1, valueT2,
+                               k, energyTransfer);
+    }
+    
+  }
   
   return sigma;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4MicroElecInelasticModel::LogLogInterpolate(G4double e1, 
-						       G4double e2, 
-						       G4double e, 
-						       G4double xs1, 
-						       G4double xs2)
+G4double G4MicroElecInelasticModel::LogLogInterpolate(G4double e1,
+                                                      G4double e2,
+                                                      G4double e,
+                                                      G4double xs1,
+                                                      G4double xs2)
 {
   G4double a = (std::log10(xs2)-std::log10(xs1)) / (std::log10(e2)-std::log10(e1));
   G4double b = std::log10(xs2) - a*std::log10(e2);
@@ -716,12 +733,12 @@ G4double G4MicroElecInelasticModel::LogLogInterpolate(G4double e1,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-G4double G4MicroElecInelasticModel::QuadInterpolator(G4double e11, G4double e12, 
-						      G4double e21, G4double e22, 
-						      G4double xs11, G4double xs12, 
-						      G4double xs21, G4double xs22, 
-						      G4double t1, G4double t2, 
-						      G4double t, G4double e)
+G4double G4MicroElecInelasticModel::QuadInterpolator(G4double e11, G4double e12,
+                                                     G4double e21, G4double e22,
+                                                     G4double xs11, G4double xs12,
+                                                     G4double xs21, G4double xs22,
+                                                     G4double t1, G4double t2,
+                                                     G4double t, G4double e)
 {
   G4double interpolatedvalue1 = LogLogInterpolate(e11, e12, e, xs11, xs12);
   G4double interpolatedvalue2 = LogLogInterpolate(e21, e22, e, xs21, xs22);
@@ -751,9 +768,9 @@ G4int G4MicroElecInelasticModel::RandomSelect(G4double k, const G4String& partic
 	    
       while (i>0)
       { 
-	i--;
-	valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
-	value += valuesBuffer[i];
+        i--;
+        valuesBuffer[i] = table->GetComponent(i)->FindValue(k);
+        value += valuesBuffer[i];
       }
 	    
       value *= G4UniformRand();
@@ -769,7 +786,7 @@ G4int G4MicroElecInelasticModel::RandomSelect(G4double k, const G4String& partic
           delete[] valuesBuffer;
           return i;
         }
-	value -= valuesBuffer[i];
+        value -= valuesBuffer[i];
       }
 	    
       if (valuesBuffer) delete[] valuesBuffer;
@@ -780,10 +797,11 @@ G4int G4MicroElecInelasticModel::RandomSelect(G4double k, const G4String& partic
   {
     G4Exception("G4MicroElecInelasticModel::RandomSelect","em0002",FatalException,"Model not applicable to particle type.");
   }
-      
+  
   return level;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 
 

@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28.10.2014 G4MicroElecInelastic and G4MicroElecInelasticModel from M. Raine, tag emlowen-V10-00-20
+           - better treatment of GenericIon
+           - MT compatibility improved
+
 22.10.2014 M. Karamitros (committer), M.Raine (author), tag emlowen-V10-00-19
 	   G4MicroElecElasticModel from M. Raine:
 	   - uses cumulated cross-sections
