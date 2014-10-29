@@ -14,7 +14,10 @@ track of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+	 
+28-10-14 mma (testem3-V10-00-16)
+- in macros : /run/numberOfThreads 2
+ 
 23-10-14 V.Ivant (testem3-V10-00-15)
 - disable extra printout for sequential 
 	 

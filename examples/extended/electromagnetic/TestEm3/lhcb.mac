@@ -5,7 +5,9 @@
 # LHCB ECAL model
 #
 /control/verbose 2
-/run/verbose 1
+/control/cout/ignoreThreadsExcept 0
+/run/verbose 2
+/run/numberOfThreads 2
 #
 /testem/det/setNbOfLayers 66
 /testem/det/setNbOfAbsor  2
@@ -14,6 +16,8 @@
 /testem/det/setSizeYZ 20 cm
 #
 /testem/phys/addPhysics  emstandard_opt0
+#
+/run/initialize
 #
 /gun/particle e-
 /gun/energy 10 GeV

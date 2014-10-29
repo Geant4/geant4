@@ -5,9 +5,10 @@
 #
 # Lead-liquidArgon 50 layers; electron 1 GeV
 #
-/control/cout/ignoreThreadsExcept 0
 /control/verbose 2
+/control/cout/ignoreThreadsExcept 0
 /run/verbose 2
+/run/numberOfThreads 2
 #
 /testem/phys/addPhysics  emstandard_opt0
 #

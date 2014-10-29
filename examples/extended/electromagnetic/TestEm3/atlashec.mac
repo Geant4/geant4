@@ -5,7 +5,9 @@
 # Atlas HEC model;
 #
 /control/verbose 2
-/run/verbose 1
+/control/cout/ignoreThreadsExcept 0
+/run/verbose 2
+/run/numberOfThreads 2
 #
 /testem/det/setNbOfLayers 25
 /testem/det/setNbOfAbsor  2
