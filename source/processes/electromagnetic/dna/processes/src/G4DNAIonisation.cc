@@ -26,10 +26,12 @@
 // $Id$
 
 #include "G4DNAIonisation.hh"
+#include "G4LEPTSIonisationModel.hh"
 #include "G4SystemOfUnits.hh"
 
 //SEB
 #include "G4GenericIon.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,7 +58,8 @@ G4bool G4DNAIonisation::IsApplicable(const G4ParticleDefinition& p)
 
   return 
   (
-      &p == G4Electron::Electron() 
+   &p == G4Electron::Electron() 
+   || &p == G4Positron::Positron()
    || &p == G4Proton::Proton() 
    || &p == instance->GetIon("hydrogen")
    || &p == instance->GetIon("alpha++")
@@ -86,6 +89,13 @@ void G4DNAIonisation::InitialiseProcess(const G4ParticleDefinition* p)
     {
       if(!EmModel()) SetEmModel(new G4DNABornIonisationModel);
       EmModel()->SetLowEnergyLimit(11.*eV);
+      EmModel()->SetHighEnergyLimit(1.*MeV);
+
+      AddEmModel(1, EmModel());   
+    } else if(name == "e+")
+    {
+      if(!EmModel()) SetEmModel(new G4LEPTSIonisationModel);
+      EmModel()->SetLowEnergyLimit(1.*eV);
       EmModel()->SetHighEnergyLimit(1.*MeV);
 
       AddEmModel(1, EmModel());   

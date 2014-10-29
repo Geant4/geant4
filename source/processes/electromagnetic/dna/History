@@ -14,6 +14,21 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+28-10-2014  PA, tag emdna-V10-00-48
+- correct compilation warnings
+
+28-10-2014  PA, tag emdna-V10-00-47
+- correct compilation warnings
+
+28-10-2014  PA, tag emdna-V10-00-46
+- correction in sources.cmake
+
+28-10-2014  PA, tag emdna-V10-00-45
+- retag to add LEPTS
+
+28-10-2014  PA, tag emdna-V10-00-44
+- add LEPTS
+
 25-10-2014  MK, tag emdna-V10-00-43
 - remove useless G4VITScheduler
 

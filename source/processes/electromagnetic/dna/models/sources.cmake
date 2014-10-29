@@ -68,6 +68,18 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNAOneStepSolvatationModel.hh
         G4DNAScreenedRutherfordElasticModel.hh
         G4DNATransformElectronModel.hh
+        G4LEPTSAttachmentModel.hh
+        G4LEPTSDissociationModel.hh
+        G4LEPTSElasticModel.hh
+        G4LEPTSIonisationModel.hh
+        G4LEPTSPositroniumModel.hh
+        G4LEPTSRotExcitationModel.hh
+        G4LEPTSVibExcitationModel.hh
+        G4VLEPTSModel.hh
+        G4LEPTSDiffXS.hh
+        G4LEPTSDistribution.hh
+        G4LEPTSElossDistr.hh
+        G4LEPTSExcitationModel.hh
     SOURCES
         G4DNABornAngle.cc
         G4DNABornExcitationModel.cc
@@ -88,7 +100,20 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
         G4DNAOneStepSolvatationModel.cc
         G4DNAScreenedRutherfordElasticModel.cc
         G4DNATransformElectronModel.cc
-    GRANULAR_DEPENDENCIES
+        G4LEPTSElossDistr.cc
+        G4LEPTSAttachmentModel.cc
+        G4LEPTSDissociationModel.cc
+        G4LEPTSElasticModel.cc
+        G4LEPTSDistribution.cc
+        G4LEPTSIonisationModel.cc
+        G4LEPTSPositroniumModel.cc
+        G4LEPTSRotExcitationModel.cc
+        G4LEPTSVibExcitationModel.cc
+        G4VLEPTSModel.cc
+        G4LEPTSExcitationModel.cc
+        G4LEPTSDiffXS.cc
+
+     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
         G4cuts
@@ -121,4 +146,5 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-models
 )
 
 # List any source specific properties here
+
 

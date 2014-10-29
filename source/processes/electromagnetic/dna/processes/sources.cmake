@@ -56,12 +56,15 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-processes
         G4DNABrownianTransportation.hh
         G4DNAChargeDecrease.hh
         G4DNAChargeIncrease.hh
+        G4DNADissociation.hh
         G4DNAElastic.hh
         G4DNAElectronSolvatation.hh
         G4DNAExcitation.hh
         G4DNAIonisation.hh
         G4DNAWaterDissociationDisplacer.hh
         G4DNAMolecularDissociation.hh
+        G4DNAPositronium.hh
+        G4DNARotExcitation.hh
         G4DNASecondOrderReaction.hh
         G4DNAVibExcitation.hh
     SOURCES
@@ -69,11 +72,14 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-processes
         G4DNABrownianTransportation.cc
         G4DNAChargeDecrease.cc
         G4DNAChargeIncrease.cc
+        G4DNADissociation.cc
         G4DNAElastic.cc
         G4DNAElectronSolvatation.cc
         G4DNAExcitation.cc
         G4DNAIonisation.cc
         G4DNAMolecularDissociation.cc
+        G4DNAPositronium.cc
+        G4DNARotExcitation.cc
         G4DNAWaterDissociationDisplacer.cc
         G4DNASecondOrderReaction.cc
         G4DNAVibExcitation.cc

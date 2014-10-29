@@ -27,6 +27,7 @@
 
 #include "G4DNAElastic.hh"
 #include "G4SystemOfUnits.hh"
+#include "G4Positron.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -48,7 +49,7 @@ G4DNAElastic::~G4DNAElastic()
 
 G4bool G4DNAElastic::IsApplicable(const G4ParticleDefinition& p)
 {
-  return (&p == G4Electron::Electron());
+  return (&p == G4Electron::Electron() || &p == G4Positron::Positron());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
