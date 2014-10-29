@@ -637,7 +637,9 @@ bool G4UIQt::AddViewerTabFromFile(
     return false;
   }
 
-  std::ifstream file(fileName.c_str());
+  G4UImanager* UI = G4UImanager::GetUIpointer();
+  if(UI==NULL) return 0;
+  std::ifstream file(G4String(UI->GetMacroSearchPath()+fileName.c_str()).data());
   if (file) {
     
     std::string content( (std::istreambuf_iterator<char>(file) ),
@@ -647,7 +649,7 @@ bool G4UIQt::AddViewerTabFromFile(
     text->setAcceptRichText (true);
     text->setContentsMargins(5,5,5,5);
     text->setText(QString("<pre>")+content.c_str()+"</pre>");
-
+    text->setReadOnly(true);
     fViewerTabWidget->addTab(text,title.c_str());
   } else {
     return false;
@@ -737,6 +739,7 @@ const std::string& text)
     fStartPage = new QTextEdit();
     fStartPage->setAcceptRichText (true);
     fStartPage->setContentsMargins(5,5,5,5);
+    fStartPage->setReadOnly(true);
   }
   fStartPage->setText(fDefaultViewerFirstPageHTMLText.c_str());
 }
@@ -1102,9 +1105,9 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
 
   if (std::string(aIconFile) == "user_icon") {
     // try to open a file
-    pix = QPixmap(aFileName);
+    G4UImanager* UImanager = G4UImanager::GetUIpointer();
+    pix = QPixmap(G4String(UImanager->GetMacroSearchPath()+aFileName).data());
     if (pix.isNull()) {
-      G4UImanager* UImanager = G4UImanager::GetUIpointer();
       G4int verbose = UImanager->GetVerboseLevel();
       
       if (verbose >= 2) {
@@ -4025,6 +4028,8 @@ void G4UIDockWidget::closeEvent(QCloseEvent *aEvent) {
   
   //prevent from closing
   aEvent->ignore();
+  // hide them instead
+  hide();
 }
 
 #endif

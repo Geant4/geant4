@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29th October 2014  Laurent Garnier (interfaces-V10-00-16 retagged interfaces-V10-00-17)
+- G4UIQt : 
+  o For all methods who need a file, instead of getting the file from current path,
+    look for it in MacroPath
+  o Set viewer text tab "read only"
+  o When closing a dock panel, hide it instead of removing it. Prevent from null
+    pointer exception
+
 22th October 2014  Laurent Garnier (interfaces-V10-00-15)
 - G4UIQt : 
   o Remove viewer size parameter (it was no longer used)
