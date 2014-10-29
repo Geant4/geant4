@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
+ Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -382,7 +382,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=11.99s Real=29.29s Sys=0s
+  User=11.63s Real=11.76s Sys=0s
 Thicknesses(mm)= 1.57423  1  1  
 Bins(R/R0)=      0.00738313  0  0  
  ----------------------------------------------------------

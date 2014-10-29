@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
+ Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -412,7 +412,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=24.35s Real=61.37s Sys=0s
+  User=24.09s Real=24.36s Sys=0.01s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -943,7 +943,7 @@ Index : 2     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=4.82s Real=10.71s Sys=0s
+  User=4.76s Real=4.9s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1216,7 +1216,7 @@ Index : 3     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=2.72s Real=5.78s Sys=0s
+  User=2.44s Real=2.49s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1379,7 +1379,7 @@ Index : 3     used in the geometry : No
 Run terminated.
 Run Summary
   Number of events processed : 16
-  User=0.82s Real=2.29s Sys=0s
+  User=0.68s Real=0.67s Sys=0s
 #
 #  .....end C(12,6)++............
 #
@@ -1660,7 +1660,7 @@ Index : 4     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 4
-  User=52.63s Real=118.69s Sys=0s
+  User=51.7s Real=53.44s Sys=0.01s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

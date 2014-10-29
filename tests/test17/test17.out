@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
+ Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -563,7 +563,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.57s Real=7.64s Sys=0s
+  User=2.63s Real=2.63s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -606,7 +606,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=4.17s Real=10.05s Sys=0s
+  User=3.96s Real=3.97s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for anti_proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -989,7 +989,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=0.11s Real=0.22s Sys=0s
+  User=0.11s Real=0.12s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for C12 with Ekin = 6 MeV p= 366.244 MeV/c
@@ -1384,7 +1384,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.28s Real=13.57s Sys=0s
+  User=5.1s Real=5.15s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c
@@ -1773,7 +1773,7 @@ Index : 1     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=5.34s Real=12.5s Sys=0s
+  User=4.61s Real=4.71s Sys=0s
  ================== run summary =====================
 
  end of Run TotNbofEvents = 1000 for proton with Ekin = 0.5 MeV p= 30.6353 MeV/c

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-patch-02    (13-June-2014)
+ Geant4 version Name: geant4-10-00-patch-03    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -429,7 +429,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.95s Real=2.06s Sys=0.02s
+  User=1.14s Real=1.16s Sys=0.01s
 #
 # deuteron at 1 GeV/nucleon on H
 #
@@ -970,7 +970,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.68s Real=1.85s Sys=0s
+  User=0.41s Real=0.41s Sys=0s
 #
 #
 # deuteron at 200 MeV in U
@@ -1025,7 +1025,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.12s Sys=0s
+  User=0.03s Real=0.03s Sys=0s
 #
 # deuteron at 200 MeV/nucleon on H
 #
@@ -1133,7 +1133,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.1s Sys=0s
+  User=0.02s Real=0.01s Sys=0s
 #
 #  .....end deuteron.............
 #
@@ -1189,7 +1189,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0.04s Real=0.05s Sys=0s
 #
 # alpha at 1 GeV/nucleon on H
 #
@@ -1297,7 +1297,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.01s Real=0.02s Sys=0s
+  User=0.05s Real=0.06s Sys=0s
 #
 # deuteron at 200 MeV/nucleon in U
 #
@@ -1405,7 +1405,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0.01s Sys=0s
 #
 # alpha at 200 MeV/nucleon on Silicon
 #
@@ -1459,7 +1459,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 #  .....end alpha............
 #
@@ -1516,7 +1516,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on H
 #
@@ -1571,7 +1571,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0s Sys=0s
+  User=0s Real=0.01s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Silicon
 #
@@ -1623,22 +1623,10 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 14 starts.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : had012
-      issued by : G4HadronicProcess:CheckResult()
-Warning: Bad energy non-conservation detected, will re-sample the interaction
- Process / Model: ionInelastic / G4WilsonAbrasion
- Primary: C12 (1000060120), E= 11904.7, target nucleus (14,28)
- E(initial - final) = -1604.34 MeV.
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.05s Real=0.13s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 1 GeV/nucleon on Water
 #
@@ -1914,22 +1902,10 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 ### Run 15 starts.
-
--------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : had012
-      issued by : G4HadronicProcess:CheckResult()
-Warning: Bad energy non-conservation detected, will re-sample the interaction
- Process / Model: ionInelastic / G4WilsonAbrasion
- Primary: C12 (1000060120), E= 11314.6, target nucleus (8,16)
- E(initial - final) = -2447.19 MeV.
-
-*** This is just a warning message. ***
--------- WWWW -------- G4Exception-END --------- WWWW -------
-
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0.03s Real=0.06s Sys=0s
+  User=0.02s Real=0.03s Sys=0s
 #
 #
 # C(12,6)++ at 200 MeV in U
@@ -1990,7 +1966,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 20
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 #
 # C(12,6)++ at 200 MeV/nucleon on H
 #
