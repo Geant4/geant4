@@ -59,7 +59,6 @@ class G4VFermiBreakUp;
 class G4VEvaporation;
 class G4VEvaporationChannel;
 class G4FermiFragmentsPool;
-class G4NistManager;
 
 class G4ExcitationHandler 
 {
@@ -77,7 +76,7 @@ private:
   
 public:
 
-  G4ReactionProductVector * BreakItUp(const G4Fragment &theInitialState);
+  G4ReactionProductVector * BreakItUp(const G4Fragment &theInitialState) const;
 
   void SetEvaporation(G4VEvaporation* ptr);
 
@@ -125,20 +124,11 @@ private:
   G4double minExcitation;
 
   G4IonTable* theTableOfIons;
-  G4NistManager* nist;
 
   G4int OPTxs;
   G4bool useSICB;
   G4bool isEvapLocal;
-
-  // list of fragments to store final result   
-  std::vector<G4Fragment*> theResults;
-
-  // list of fragments to apply PhotonEvaporation 
-  std::vector<G4Fragment*> thePhotoEvapList;
-
-  // list of fragments to apply Evaporation or Fermi Break-Up
-  std::vector<G4Fragment*> theEvapList;          
+  
 };
 
 inline G4VEvaporation* G4ExcitationHandler::GetEvaporation()

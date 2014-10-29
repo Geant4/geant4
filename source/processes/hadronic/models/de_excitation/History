@@ -14,16 +14,6 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-27 Sept 2014 Vladimir Ivanchenko (hadr-deex-V10-00-14)
-----------------------------------------------------------
-- G4FermiFragmentsPool - added method IfApplicable() for fast check
-    if FermiBreakUp is applicable to a given excited fragment
-- G4EvaporationChannel, G4Evaporation, G4GEMChannel, G4GEMProbability,
-  G4VEvaporationChannel,  G4ExcitationHandler - optimized code 
-    reducing number of new/delete of intermediate objects, for that
-    slightly modified interface to evaporation channel; cleanup
-    logic and implementation
-
 26 Sept 2014 Vladimir Ivanchenko (hadr-deex-V10-00-13)
 ----------------------------------------------------------
 - G4ExcitationHandler - fixed problem in isomere production providing

@@ -72,11 +72,6 @@ public:
   // but not included in this vector
   virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
 
-  // return true if vector of emitted fragments updated
-  // initial fragment is modified but not included in this vector
-  virtual G4bool 
-  BreakUpChain(G4FragmentVector* theResult, G4Fragment* theNucleus);
-
   // old method initial fragment is not modified, its copy included 
   // in the list of emitted fragments
   virtual G4FragmentVector * BreakUp(const G4Fragment & theNucleus) = 0;

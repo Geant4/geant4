@@ -58,8 +58,3 @@ G4FragmentVector* G4VEvaporationChannel::BreakUpFragment(G4Fragment*)
 {
   return 0;
 }
-
-G4bool G4VEvaporationChannel::BreakUpChain(G4FragmentVector*, G4Fragment*)
-{
-  return false;
-}

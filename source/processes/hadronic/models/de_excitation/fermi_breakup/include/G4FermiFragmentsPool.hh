@@ -49,8 +49,6 @@ public:
 
   ~G4FermiFragmentsPool();
 
-  G4bool IsApplicable(G4int Z, G4int A, G4double mass) const;
-
   const std::vector<const G4FermiConfiguration*>* 
   GetConfigurationList(G4int Z, G4int A, G4double mass) const;
 
