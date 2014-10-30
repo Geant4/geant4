@@ -5,6 +5,9 @@
                        Package History file
                        --------------------
 
+30 Oct 2014 - M. Karamitros - tag wholeNuclearDNA-V10-00-05
+- Add missing GNUmakefile
+
 22 Oct 2014 - M. Karamitros - tag wholeNuclearDNA-V10-00-04
 - Change tag name (previous name: dnageometry)
 - Adapt CMakeLists.txt to the new example name
