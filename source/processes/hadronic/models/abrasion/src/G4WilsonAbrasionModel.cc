@@ -637,7 +637,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
   if (fragmentP !=NULL)
   {
     G4ReactionProductVector *products = NULL;
-    if (fragmentP->GetZ() != fragmentP->GetA())
+    if (fragmentP->GetZ_asInt() != fragmentP->GetA_asInt())
       products = theExcitationHandler->BreakItUp(*fragmentP);
     else
       products = theExcitationHandlerx->BreakItUp(*fragmentP);      
@@ -674,7 +674,7 @@ G4HadFinalState *G4WilsonAbrasionModel::ApplyYourself (
   if (fragmentT != NULL)
   {
     G4ReactionProductVector *products = NULL;
-    if (fragmentT->GetZ() != fragmentT->GetA())
+    if (fragmentT->GetZ_asInt() != fragmentT->GetA_asInt())
       products = theExcitationHandler->BreakItUp(*fragmentT);
     else
       products = theExcitationHandlerx->BreakItUp(*fragmentT);      
