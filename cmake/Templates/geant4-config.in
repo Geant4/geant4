@@ -164,9 +164,13 @@ fi
 
 # - USolids
 have_usolids="@G4_BUILTWITH_USOLIDS@"
+have_internal_usolids="@G4_BUILTWITH_BUILTIN_USOLIDS@"
 feature_list="${feature_list} usolids[${have_usolids}]"
 if test "x${have_usolids}" = "xyes" ; then
   cflags="-DG4GEOM_USE_USOLIDS ${cflags}"
+fi
+if test "x${have_internal_usolids}" = "xyes" ; then
+  libs="${libs} -lG4geomUSolids"
 fi
 
 # - G3toG4

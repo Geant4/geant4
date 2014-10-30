@@ -13,7 +13,9 @@
 #  ZLIB    - Control use of internal G4zlib, or locate external ZLIB
 #  GDML    - Requires external XercesC
 #  G3TOG4  - UNIX only
-#  USOLIDS - Allow use of USolids classes in geometry
+#  USOLIDS - Allow use of USolids classes in geometry, using
+#            internal Usolids by default, plus option to use system
+#            version
 
 #-----------------------------------------------------------------------
 # Find required CLHEP package
@@ -145,17 +147,40 @@ if(UNIX)
 endif()
 
 #-----------------------------------------------------------------------
-# Optional support for use of USolids classes for geometry
+# Optional replacement
 # - Advanced option only
 # - If enabled, require
 #   1) Global Compile definition G4GEOM_USE_USOLIDS (also exported)
-#   2) Global add of geometry/solids/usolids/include to include path
-option(GEANT4_USE_USOLIDS "EXPERIMENTAL: Allow use of USolids geometry classes" OFF)
-mark_as_advanced(GEANT4_USE_USOLIDS)
+#   2) Use internal USolids by default, otherwise searching for system
+#      install
+option(GEANT4_USE_USOLIDS "EXPERIMENTAL: Replace Geant4 solids with USolids equivalents" OFF)
+option(GEANT4_USE_SYSTEM_USOLIDS "Use system USolids library" OFF)
+mark_as_advanced(GEANT4_USE_USOLIDS GEANT4_USE_SYSTEM_USOLIDS)
 
+# - G4USolids setup
 if(GEANT4_USE_USOLIDS)
   add_definitions(-DG4GEOM_USE_USOLIDS)
-  include_directories(${PROJECT_SOURCE_DIR}/source/geometry/solids/usolids/include)
-  GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Building support for USolids geometry classes (EXPERIMENTAL)")
 endif()
+
+# - Internal or external USolids
+if(GEANT4_USE_SYSTEM_USOLIDS)
+  find_package(USolids REQUIRED)
+else()
+  set(USolids_FOUND TRUE)
+  set(GEANT4_USE_BUILTIN_USOLIDS TRUE)
+  set(USOLIDS_INCLUDE_DIRS ${PROJECT_SOURCE_DIR}/source/externals/usolids/include)
+
+  if(BUILD_SHARED_LIBS)
+    set(USOLIDS_LIBRARIES G4geomUSolids)
+  else()
+    set(EXPAT_LIBRARIES G4geomUSolids-static)
+  endif()
+  # Include dirs here because of the large number of G4 users
+  # of solids
+  # Resolve once we use Modern INTERFACE_INCLUDES
+  include_directories(${USOLIDS_INCLUDE_DIRS})
+endif()
+
+GEANT4_ADD_FEATURE(GEANT4_USE_USOLIDS "Replacing Geant4 solids with USolids equivalents (EXPERIMENTAL)")
+GEANT4_ADD_FEATURE(GEANT4_USE_SYSTEM_USOLIDS "Using system USolids library")
 

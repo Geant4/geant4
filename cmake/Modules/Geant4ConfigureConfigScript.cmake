@@ -141,6 +141,12 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS AND UNIX)
     set(G4_BUILTWITH_USOLIDS "no")
   endif()
 
+  if(GEANT4_USE_SYSTEM_USOLIDS)
+    set(G4_BUILTWITH_BUILTIN_USOLIDS "no")
+  else()
+    set(G4_BUILTWITH_BUILTIN_USOLIDS "yes")
+  endif()
+
   # - Qt
   if(GEANT4_USE_QT)
     set(G4_BUILTWITH_QT "yes")

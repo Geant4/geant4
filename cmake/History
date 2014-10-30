@@ -30,6 +30,34 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+30th October 2014 - Ben Morgan cmake-V10-00-31)(INTERNAL)
+- Modules/Geant4OptionalComponents.cmake : Update USolids configuration
+  to decouple GEANT4_USE_USOLIDS and GEANT4_USE_SYSTEM_USOLIDS
+  options.
+  - GEANT4_USE_USOLIDS ON means that Geant4 solids are replaced with
+    USolids equivalents, OFF means Geant4 solids and USolids are available
+  - A USolids lib must ALWAYS be availble, so GEANT4_USE_SYSTEM_USOLIDS
+    simply switches between these.
+- Templates/Geant4Config.cmake.in : decouple GEANT4_USE_USOLIDS and 
+  GEANT4_USE_SYSTEM_USOLIDS
+- Templates/geant4-config.in : decouple GEANT4_USE_USOLIDS and 
+  GEANT4_USE_SYSTEM_USOLIDS
+
+30th October 2014 - Ben Morgan (cmake-V10-00-30)(INTERNAL)
+- Support builtin/system USolids library
+- Modules/Geant4OptionalComponents.cmake : Update USolids configuration
+  use internal G4geomUSolids by default if USolids support requested.
+  Add dependent option to allow system USolids to be searched for.
+  This assumes that USolids will supply a "USolidsConfig.cmake" file
+- Modules/Geant4BuildProjectConfig.cmake : Update to export USolids
+  settings as required.
+- Templates/Geant4Config.cmake.in : Update to provide new USolids
+  component and relevant variables and settings
+- Modules/Geant4ConfigureConfigScript.cmake : Update to export
+  USolids settings as required
+- Templates/geant4-config.in : Update to support USolids builtin/system
+  switch.
+
 23rd October 2014 - Ben Morgan (cmake-V10-00-29)
 - Templates/geant4-config.in : Add command line arguments to report
   C++ standard compiled against and TLS model used if multithreading
