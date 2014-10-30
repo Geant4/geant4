@@ -22,6 +22,10 @@ endif
 SUBDIRS :=
 SUBLIBS :=
 
+ifdef G4LIB_USE_USOLIDS
+  SUBDIRS += usolids
+  SUBLIBS += G4geomUSolids
+endif
 ifdef G4LIB_USE_CLHEP
   SUBDIRS += clhep
   SUBLIBS += G4clhep

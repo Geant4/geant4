@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30-October-2014: B.Morgan (externals-V10-00-05)
+- Update build of USolids library to ensure it is built for
+  the default global mode.
+
+29-October-2014: G.Cosmo (externals-V10-00-04)
+- Moved module from source/geometry/solids to source/externals.
+  Adapted scripts for optional external USolids library build.
+
 17-June-2014: G.Cosmo (externals-V10-00-03)
 - Updated to CLHEP-2.2.0.0: fixes for compilation warnings on clang compiler
   for RanshiEngine.cc and MTwistEngine.cc.

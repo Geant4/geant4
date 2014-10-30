@@ -1,0 +1,49 @@
+//
+// ********************************************************************
+// * This Software is part of the AIDA Unified Solids Library package *
+// * See: https://aidasoft.web.cern.ch/USolids                        *
+// ********************************************************************
+//
+// $Id:$
+//
+// --------------------------------------------------------------------
+//
+// UGenericPolycone.icc
+//
+// Implementation of inline methods of UGenericPolycone
+//
+// 19.10.13 Tatiana Nikitina
+//          Created from original implementation in Geant4
+// --------------------------------------------------------------------
+
+inline
+double UGenericPolycone::GetStartPhi() const
+{
+  return startPhi;
+}
+
+inline
+double UGenericPolycone::GetEndPhi() const
+{
+  return endPhi;
+}
+
+inline
+bool UGenericPolycone::IsOpen() const
+{
+  return phiIsOpen;
+}
+
+
+inline
+int UGenericPolycone::GetNumRZCorner() const
+{
+  return numCorner;
+}
+
+inline
+UPolyconeSideRZ UGenericPolycone::GetCorner(int index) const
+{
+  return corners[index];
+}
+
