@@ -14,7 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+30 October 2014 V.Ivanchenko (hadr-cross-V10-00-16)
+---------------------------------------------------
+- added new interface class G4VCrossSectionRatio 
+
 17 October 2014 A.Dotti (hadr-cross-V10-00-15)
+---------------------------------------------------
 - Fixing data-races in G4Chips{Neutron,Proton}ElasticXS as
   retported by DRD
 
