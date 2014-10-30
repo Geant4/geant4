@@ -17,6 +17,7 @@
 
 # List external includes needed.
 include_directories(${CLHEP_INCLUDE_DIRS})
+include_directories(${USOLIDS_INCLUDE_DIRS})
 
 # Need XercesC
 include_directories(${XERCESC_INCLUDE_DIRS})
@@ -31,7 +32,6 @@ include_directories(${CMAKE_SOURCE_DIR}/source/geometry/navigation/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/Boolean/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/CSG/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/specific/include)
-include_directories(${CMAKE_SOURCE_DIR}/source/geometry/solids/usolids/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/geometry/volumes/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPGeometry/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/global/HEPNumerics/include)
@@ -112,7 +112,6 @@ GEANT4_DEFINE_MODULE(NAME G4gdml
         G4specsolids
         G4track
         G4tracking
-        G4geomUSolids
         G4volumes
     GLOBAL_DEPENDENCIES
         G4digits_hits

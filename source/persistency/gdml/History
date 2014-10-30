@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 October 2014 Gabriele Cosmo (gdml-V10-00-07)
+- Moved USolids module from geometry/solids to externals.
+
 18 July 2014 Gabriele Cosmo (gdml-V10-00-06)
 - Added implementation for import/export of Multi-Union (G4MultiUnion)
   structures.
