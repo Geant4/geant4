@@ -874,7 +874,14 @@ void G4UIQt::SecondaryLoop (
   Prompt("Session :"); // TO KEEP
 }
 
-
+#ifdef G4MULTITHREADED
+#include "G4Threading.hh"
+#include "G4AutoLock.hh"
+namespace {
+  G4Mutex ReceiveG4coutMutex = G4MUTEX_INITIALIZER;
+  G4Mutex ReceiveG4cerrMutex = G4MUTEX_INITIALIZER;
+}
+#endif
 
 /**
    Receive a cout from Geant4. We have to display it in the cout zone
@@ -887,6 +894,10 @@ G4int G4UIQt::ReceiveG4cout (
 {
   if (!aString) return 0;
   
+#ifdef G4MULTITHREADED
+  G4AutoLock al(&ReceiveG4coutMutex);
+#endif
+
   QStringList newStr;
   
   // Add to string
@@ -928,6 +939,9 @@ G4int G4UIQt::ReceiveG4cerr (
 {
   if (!aString) return 0;
 
+#ifdef G4MULTITHREADED
+  G4AutoLock al(&ReceiveG4cerrMutex);
+#endif
   QStringList newStr;
 
   // Add to string
