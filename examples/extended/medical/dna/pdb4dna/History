@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+30.10.2014 M.K                  tag pdb4dna-V10-00-02
+-----------------------------------------------------
+- Add missing GNUmakefile
+
 23.10.2014 M.K                  tag pdb4dna-V10-00-01
 -----------------------------------------------------
 - try to solve FPE error
