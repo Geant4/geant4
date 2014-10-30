@@ -42,6 +42,7 @@
 //  20120928  M. Kelsey -- Add GetMeanLifeTime() here, instead of in base.
 //  20121004  K. Genser -- defined two argument constructor with defaults
 //  20121016  K. Genser -- Reverting to use one argument c'tor
+//  20140818  K. Genser -- Labeled tracks using G4PhysicsModelCatalog
 //
 //------------------------------------------------------------------------
 

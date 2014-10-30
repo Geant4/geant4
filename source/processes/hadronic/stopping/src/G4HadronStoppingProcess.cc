@@ -44,6 +44,7 @@
 //  20120914  M. Kelsey -- Pass subType in base ctor, remove enable flags
 //  20121004  K. Genser -- use G4HadronicProcessType in the constructor
 //  20121016  K. Genser -- Reverting to use one argument c'tor
+//  20140818  K. Genser -- Labeled tracks using G4PhysicsModelCatalog
 //
 //------------------------------------------------------------------------
 
