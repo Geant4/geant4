@@ -48,5 +48,3 @@ endif
 ifdef G4GEOM_USE_UTUBS
   CPPFLAGS += -DG4GEOM_USE_UTUBS
 endif
-
-CPPFLAGS += -I$(G4BASE)/geometry/solids/usolids/include

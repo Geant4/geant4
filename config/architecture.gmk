@@ -179,6 +179,29 @@ ifndef CLHEP_LIB_DIR
   CLHEP_LIB_DIR     := $(CLHEP_BASE_DIR)/lib
 endif
 
+# USolids path, etc.
+#
+ifndef USOLIDS_BASE_DIR
+  USOLIDS_BASE_DIR  := $(G4BASE)/externals/usolids
+  G4LIB_BUILD_USOLIDS := 1
+  G4LIB_USE_USOLIDS := 1
+endif
+ifndef G4LIB_USE_USOLIDS
+  ifndef USOLIDS_LIB
+    ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+      USOLIDS_LIB := usolids.lib
+    else
+      USOLIDS_LIB := usolids
+    endif
+  endif
+endif
+ifndef USOLIDS_INCLUDE_DIR
+  USOLIDS_INCLUDE_DIR := $(USOLIDS_BASE_DIR)/include
+endif
+ifndef USOLIDS_LIB_DIR
+  USOLIDS_LIB_DIR     := $(USOLIDS_BASE_DIR)/lib
+endif
+
 # Paths for G4 data
 #
 ifndef G4DATA
@@ -224,7 +247,7 @@ endif
 # Variables for implicit rules, etc., as suggested in GNU Make manual...
 #
 CPPFLAGS  += -Iinclude 
-CPPFLAGS  += -I$(CLHEP_INCLUDE_DIR)
+CPPFLAGS  += -I$(USOLIDS_INCLUDE_DIR) -I$(CLHEP_INCLUDE_DIR)
 
 # Positional qualifiers in action...
 #
@@ -236,19 +259,29 @@ ifndef LDFLAGS
   G4STATIC_MODE :=
   G4NOSTATIC_MODE :=
 endif
+ifndef LOADLIBS
+  LOADLIBS :=
+endif
 ifndef G4LIB_USE_CLHEP
   ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
     LDFLAGS   += -link $(LIB_PATH)$(CLHEP_LIB_DIR)
-    LOADLIBS  := $(CLHEP_LIB)
+    LOADLIBS  += $(CLHEP_LIB)
   else
     LDFLAGS   += -L$(CLHEP_LIB_DIR)
-    LOADLIBS  := -l$(CLHEP_LIB)
+    LOADLIBS  += -l$(CLHEP_LIB)
   endif
-else
-  LOADLIBS :=
+endif
+ifndef G4LIB_USE_USOLIDS
   ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
-    LDFLAGS  += -link $(LIB_PATH)$(G4INSTALL)/lib
+    LDFLAGS   += -link $(LIB_PATH)$(USOLIDS_LIB_DIR)
+    LOADLIBS  += $(USOLIDS_LIB)
+  else
+    LDFLAGS   += -L$(USOLIDS_LIB_DIR)
+    LOADLIBS  += -l$(USOLIDS_LIB)
   endif
+endif
+ifneq (,$(findstring WIN32-VC,$(G4SYSTEM)))
+  LDFLAGS  += -link $(LIB_PATH)$(G4INSTALL)/lib
 endif
 ifeq (,$(findstring WIN32-VC,$(G4SYSTEM)))
   ifndef G4LIB_USE_EXPAT

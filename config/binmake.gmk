@@ -150,7 +150,6 @@ ifndef INCFLAGS
               -I$(G4BASE)/geometry/solids/CSG/include \
               -I$(G4BASE)/geometry/solids/specific/include \
               -I$(G4BASE)/geometry/solids/Boolean/include \
-              -I$(G4BASE)/geometry/solids/usolids/include \
               -I$(G4BASE)/geometry/divisions/include \
               -I$(G4BASE)/geometry/volumes/include \
               -I$(G4BASE)/geometry/navigation/include \
@@ -250,6 +249,10 @@ ifdef GLOBALLIBS
              -lG4graphics_reps \
              -lG4intercoms \
              -lG4global
+
+  ifdef G4LIB_USE_USOLIDS
+    LDLIBS2 += -lG4geomUSolids
+  endif
 
   ifdef G4LIB_USE_CLHEP
     LDLIBS2 += -lG4clhep

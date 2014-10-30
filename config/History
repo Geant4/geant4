@@ -16,6 +16,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29th October 2014   Gabriele Cosmo  (config-V10-00-11/10)
+- Moved geometry/solids/usolids module to externals.
+  Adapted scripts for optional external USolids library build.
+- Withdrawn changes made to Darwin-clang.gmk in previous tag.
+
+11th October 2014   Michael Kelsey   (config-V10-00-09)
+- Darwin-clang.gmk: added references to core G4 library list for linking
+  shared libraries, needed for applications with G4EXLIB.
+
 17th September 2014   Gabriele Cosmo  (config-V10-00-08)
 - Added flags in geomconf.gmk for added USolids shapes UExtrudedSolid,
   UGenericTrap and UTrap.

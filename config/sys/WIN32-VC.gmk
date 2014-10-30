@@ -77,6 +77,9 @@ ifeq ($(G4SYSTEM),WIN32-VC)
 #  Note that a DLL must be fully linked. You should NOT have undefined 
 #  symbols as output of the link command.
 #
+  ifdef G4LIB_USE_USOLIDS
+    GLOBLIBS += libG4geomUSolids.lib
+  endif
   ifdef G4LIB_USE_CLHEP
     GLOBLIBS += libG4clhep.lib
   endif
@@ -96,6 +99,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     link.exe /nologo /dll /out:$(G4LIBDIR)/$(name).dll \
              $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
              $(LIB_PATH)$(G4LIBDIR) $(GLOBLIBS) \
+             $(LIB_PATH)$(USOLIDS_LIB_DIR) $(USOLIDS_LIB) \
              $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
              $(INTYLIBS) $(GDMLLIBS) $(ANALYSISLIBS) $(UI32LIBS)
   endef
@@ -115,6 +119,7 @@ ifeq ($(G4SYSTEM),WIN32-VC)
     link.exe /nologo /dll /out:$(G4LIBDIR)/$(name).dll \
              $(G4LIBDIR)/lib$(name).exp $(G4LIBDIR)/lib$(name).a \
              $(LIB_PATH)$(G4LIBDIR) $(GLOBLIBS) \
+             $(LIB_PATH)$(USOLIDS_LIB_DIR) $(USOLIDS_LIB) \
              $(LIB_PATH)$(CLHEP_LIB_DIR) $(CLHEP_LIB) \
              $(INTYLIBS) $(GDMLLIBS) $(ANALYSISLIBS) $(UI32LIBS)
   endef
