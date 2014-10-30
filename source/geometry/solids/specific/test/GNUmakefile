@@ -23,7 +23,6 @@ include $(G4INSTALL)/config/architecture.gmk
 #            -I$(G4BASE)/geometry/solids/CSG/include \
 #            -I$(G4BASE)/geometry/solids/specific/include \
 #            -I$(G4BASE)/geometry/solids/Boolean/include \
-#            -I$(G4BASE)/geometry/solids/usolids/include \
 #            -I$(G4BASE)/geometry/management/include \
 #            -I$(G4BASE)/materials/include \
 #            -I$(G4BASE)/global/management/include \

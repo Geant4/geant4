@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 29, 2014  Gabriele Cosmo                geometry-V10-00-01/00
+----------------------------
+- Moved solids/usolids module to source/externals.
+- Groups tags geommng-V10-00-05 and geomsolids-V10-00-02, on top of
+  geant4-10-00-ref-08.
+
 Nov 7, 2013   Gabriele Cosmo                geometry-V09-06-03
 ----------------------------
 - Groups tags geom-usolids-V09-06-04, geom-specific-V09-06-26,

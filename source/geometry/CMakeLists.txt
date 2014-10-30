@@ -35,7 +35,6 @@ if(NOT GEANT4_BUILD_GRANULAR_LIBS)
             solids/Boolean/sources.cmake
             solids/CSG/sources.cmake
             solids/specific/sources.cmake
-            solids/usolids/sources.cmake
             volumes/sources.cmake
 )
 endif()

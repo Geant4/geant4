@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October, 29th, 2014,  G.Cosmo           -  geomsolids-V10-00-02
+- Moved usolids module to source/externals.
+
 September, 17th, 2014,  G.Cosmo         -  geomsolids-V10-00-01
 - Includes tags on top of geomsolids-V10-00-00: geom-usolids-V10-00-16,
   geom-csg-V10-00-06, geom-bool-V10-00-06 and geom-specific-V10-00-11.

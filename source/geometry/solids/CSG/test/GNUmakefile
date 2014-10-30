@@ -20,14 +20,13 @@ include $(G4INSTALL)/config/architecture.gmk
 #INCFLAGS := -I$(G4BASE)/geometry/management/include \
 #            -I$(G4BASE)/geometry/solids/CSG/include \
 #            -I$(G4BASE)/geometry/solids/specific/include \
-#            -I$(G4BASE)/geometry/solids/usolids/include \
 #            -I$(G4BASE)/global/management/include \
 #            -I$(G4BASE)/global/HEPRandom/include \
 #            -I$(G4BASE)/global/HEPNumerics/include \
 #            -I$(G4BASE)/global/HEPGeometry/include \
 #            -I$(G4BASE)/graphics_reps/include
 #
-#LDLIBS   := -lG4csg -lG4specsolids -lG4geomUSolids -lG4geometrymng \
+#LDLIBS   := -lG4csg -lG4specsolids -lG4geometrymng \
 #            -lG4graphics_reps \
 #            -lG4intercoms \
 #            -lG4hepnumerics -lG4globman

@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+October 29, 2014 G.Cosmo                   geommng-V10-00-05
+- Moved G4USolid bridge class from internal USolids module.
+
 October 3, 2014 G.Cosmo                    geommng-V10-00-04
 - Moved constructor for partial voxels refinements from protected to public.
 

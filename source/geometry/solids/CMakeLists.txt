@@ -14,4 +14,3 @@
 add_subdirectory(Boolean)
 add_subdirectory(CSG)
 add_subdirectory(specific)
-add_subdirectory(usolids)
