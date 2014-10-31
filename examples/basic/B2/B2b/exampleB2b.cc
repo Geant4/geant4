@@ -103,7 +103,6 @@ int main(int argc,char** argv)
     }
   else
     {  // interactive mode : define UI session
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
       if (ui->IsGUI()) {
         UImanager->ApplyCommand("/control/execute init_vis.mac");
         UImanager->ApplyCommand("/control/execute gui.mac");
