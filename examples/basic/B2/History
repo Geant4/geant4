@@ -15,9 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-31/11/13 L. Garnier (exampleB2-V10-00-02)
+31/11/13 L. Garnier (exampleB2-V10-00-02 - exampleB2-V10-00-03)
  exampleB2b :
   - Fix a warning (perhaps a crash)
+  - Fix a warning "'ui' may be used uninitialized in this function"
 
 31/11/13 L. Garnier (exampleB2-V10-00-01)
  exampleB2a/exampleB2b : 

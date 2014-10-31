@@ -51,7 +51,7 @@
 
 int main(int argc,char** argv)
 {
-  G4UIExecutive* ui;
+  G4UIExecutive* ui = NULL;
   if (argc==1) {
     // interactive mode : define UI session
     ui = new G4UIExecutive(argc, argv);
