@@ -44,7 +44,7 @@ public:
 
   virtual ~G4StableFermiFragment();
 
-  virtual G4FragmentVector * GetFragment(const G4LorentzVector & aMomentum) const;
+  virtual void FillFragment(G4FragmentVector*, const G4LorentzVector & aMomentum) const;
   
 private:
 

@@ -274,15 +274,13 @@ void G4FermiFragmentsPool::Initialise()
       G4int A2 = fragment_pool[j]->GetA();
       G4int Z = Z1 + Z2;
       G4int A = A1 + A2;
-      if(Z < maxZ && A < maxA) {
-        if(IsAvailable(Z, A)){
-	  newvec[0] = fragment_pool[i];
-	  newvec[1] = fragment_pool[j];
-	  if(!IsExist(Z, A, newvec)) { 
-	    const G4FermiConfiguration* conf = new G4FermiConfiguration(newvec);
-	    list2[A].push_back(conf); 
-            ++counter;
-	  }
+      if(Z < maxZ && A < maxA && IsAvailable(Z, A)) {
+	newvec[0] = fragment_pool[i];
+	newvec[1] = fragment_pool[j];
+	if(!IsExist(Z, A, newvec)) { 
+	  const G4FermiConfiguration* conf = new G4FermiConfiguration(newvec);
+	  list2[A].push_back(conf); 
+	  ++counter;
 	}
       }
     }
@@ -322,7 +320,7 @@ void G4FermiFragmentsPool::Initialise()
 	G4int A2 = fragment_pool[j]->GetA();
 	G4int Z = Z1 + Z2;
 	G4int A = A1 + A2;
-	if(Z < maxZ && A < maxA) {
+	if(Z < maxZ && A < maxA && IsAvailable(Z, A)) {
 	  newvec[0] = (*vec2)[0];
 	  newvec[1] = (*vec2)[1];
 	  newvec[2] = fragment_pool[j];
@@ -372,7 +370,7 @@ void G4FermiFragmentsPool::Initialise()
 	G4int A2 = fragment_pool[j]->GetA();
 	G4int Z = Z1 + Z2;
 	G4int A = A1 + A2;
-	if(Z < maxZ && A < maxA) {
+	if(Z < maxZ && A < maxA && IsAvailable(Z, A)) {
 	  newvec[0] = (*vec3)[0];
 	  newvec[1] = (*vec3)[1];
 	  newvec[2] = (*vec3)[2];
@@ -401,7 +399,7 @@ void G4FermiFragmentsPool::Initialise()
 	  const std::vector<const G4VFermiFragment*>* vec2 = conf2->GetFragmentList(); 
 	  G4int Z = Z1 + Z2;
 	  G4int A = A1 + A2;
-	  if(Z < maxZ && A < maxA) {
+	  if(Z < maxZ && A < maxA && IsAvailable(Z, A)) {
 	    newvec[0] = (*vec1)[0];
 	    newvec[1] = (*vec1)[1];
 	    newvec[2] = (*vec2)[0];

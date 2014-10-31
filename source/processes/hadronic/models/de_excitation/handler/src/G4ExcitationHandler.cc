@@ -127,7 +127,7 @@ void G4ExcitationHandler::SetParameters()
 G4ReactionProductVector * 
 G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 {	
-  //  G4cout << "@@@@@@@@@@ Start G4Excitation Handler @@@@@@@@@@@@@" << G4endl;
+  //G4cout << "@@@@@@@@@@ Start G4Excitation Handler @@@@@@@@@@@@@" << G4endl;
   // Variables existing until end of method
   G4Fragment * theInitialStatePtr = new G4Fragment(theInitialState);
   //G4cout << theInitialState << G4endl;  

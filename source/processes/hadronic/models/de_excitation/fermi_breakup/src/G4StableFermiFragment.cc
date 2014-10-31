@@ -39,13 +39,9 @@ G4StableFermiFragment::G4StableFermiFragment(G4int anA, G4int aZ, G4int Pol, G4d
 
 G4StableFermiFragment::~G4StableFermiFragment()
 {}
-
-G4FragmentVector * 
-G4StableFermiFragment::GetFragment(const G4LorentzVector & aMomentum) const
+ 
+void G4StableFermiFragment::FillFragment(G4FragmentVector* theResult,
+					 const G4LorentzVector & aMomentum) const
 {
-  G4FragmentVector * theResult = new G4FragmentVector;
-
   theResult->push_back(new G4Fragment(A,Z,aMomentum));
-  
-  return theResult;
 }

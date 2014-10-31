@@ -54,7 +54,15 @@ private:
   
 public:
 
-  virtual G4FragmentVector * GetFragment(const G4LorentzVector & aMomentum) const = 0;
+  virtual 
+  void FillFragment(G4FragmentVector*, const G4LorentzVector & aMomentum) const = 0;
+
+  inline G4FragmentVector * GetFragment(const G4LorentzVector & aMomentum) const
+  {
+    G4FragmentVector* vec = new G4FragmentVector();
+    FillFragment(vec, aMomentum);
+    return vec;
+  }
 
   inline G4int GetA(void) const 
   {

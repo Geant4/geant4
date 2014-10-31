@@ -90,7 +90,7 @@ G4FragmentVector* G4FermiBreakUp::BreakItUp(const G4Fragment &theNucleus)
 }
 
 void G4FermiBreakUp::BreakFragment(G4FragmentVector* theResult, 
-				     G4Fragment* theNucleus)
+				   G4Fragment* theNucleus)
 {
   // Calculate Momenta of K fragments
   G4double M = theNucleus->GetMomentum().m();
@@ -98,6 +98,7 @@ void G4FermiBreakUp::BreakFragment(G4FragmentVector* theResult,
     SelectConfiguration(theNucleus->GetZ_asInt(), 
 			theNucleus->GetA_asInt(), M);
 
+  // should never happen
   if(!conf) { 
     theResult->push_back(theNucleus);
     return; 
@@ -111,41 +112,32 @@ void G4FermiBreakUp::BreakFragment(G4FragmentVector* theResult,
     return; 
   }
 
-  G4ThreeVector boostVector = theNucleus->GetMomentum().boostVector();  
-  std::vector<G4LorentzVector*>* mom = 0;
+  G4LorentzVector fourMomentum = theNucleus->GetMomentum();
 
   // one unstable fragment
   if(1 == nn) {
-    mom = new std::vector<G4LorentzVector*>;
-    G4LorentzVector* lv = 
-      new G4LorentzVector(0.0, 0.0, 0.0, (*conf)[0]->GetTotalEnergy()); 
-    mom->push_back(lv);
+    (*conf)[0]->FillFragment(theResult, fourMomentum);
 
-    // Fermi BreakUp
+    // normal case
   } else {
+    G4ThreeVector boostVector = fourMomentum.boostVector();  
     massRes.clear();
     for(size_t i=0; i<nn; ++i) {
       massRes.push_back( (*conf)[i]->GetTotalEnergy() );
     }
-    mom = thePhaseSpace->Decay(M, massRes);
-  }
-  size_t nmom = mom->size();  
+    std::vector<G4LorentzVector*>* mom = thePhaseSpace->Decay(M, massRes);
 
-  // Go back to the Lab Frame
-  for (size_t j=0; j<nmom; ++j) {
-    G4LorentzVector* FourMomentum = (*mom)[j];
-    
-    // Lorentz boost
-    FourMomentum->boost(boostVector);
-      
-    G4FragmentVector* fragments = (*conf)[j]->GetFragment(*FourMomentum);
- 
-    size_t nfrag = fragments->size();
-    for (size_t k=0; k<nfrag; ++k) { theResult->push_back((*fragments)[k]); }
-    delete fragments;
-    delete (*mom)[j];
+    //  size_t nmom = mom->size();  
+    // G4cout << "nmom= " << nmom << G4endl;
+
+    // Go back to the Lab Frame
+    for (size_t j=0; j<nn; ++j) {    
+      (*mom)[j]->boost(boostVector); 
+      (*conf)[j]->FillFragment(theResult, *((*mom)[j]));
+      delete (*mom)[j];
+    }
+    delete mom;
   }
-  delete mom;
 }
 
 const std::vector<const G4VFermiFragment*>* 

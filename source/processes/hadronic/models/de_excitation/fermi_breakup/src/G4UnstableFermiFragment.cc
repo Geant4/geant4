@@ -44,8 +44,8 @@ G4UnstableFermiFragment::G4UnstableFermiFragment(G4int anA, G4int aZ,
 G4UnstableFermiFragment::~G4UnstableFermiFragment()
 {}
 
-G4FragmentVector * 
-G4UnstableFermiFragment::GetFragment(const G4LorentzVector& aMomentum) const
+void G4UnstableFermiFragment::FillFragment(G4FragmentVector* theResult,
+					   const G4LorentzVector& aMomentum) const
 {
   const G4FermiPhaseSpaceDecay* thePhaseSpace
     = G4FermiFragmentsPool::Instance()->GetFermiPhaseSpaceDecay();
@@ -54,7 +54,6 @@ G4UnstableFermiFragment::GetFragment(const G4LorentzVector& aMomentum) const
 
   G4ThreeVector Beta = aMomentum.boostVector();
 
-  G4FragmentVector * theResult = new G4FragmentVector;
   size_t N = P->size();
 
   for (size_t i=0; i<N; ++i)
@@ -66,6 +65,4 @@ G4UnstableFermiFragment::GetFragment(const G4LorentzVector& aMomentum) const
       delete v;
     }
   delete P;
-  
-  return theResult;
 }
