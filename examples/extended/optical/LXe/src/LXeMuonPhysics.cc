@@ -89,8 +89,8 @@ void LXeMuonPhysics::ConstructProcess()
   G4MuPairProduction* fMuMinusPairProduction =
     new G4MuPairProduction();
 
-  G4MuonMinusCaptureAtRest* fMuMinusCaptureAtRest =
-    new G4MuonMinusCaptureAtRest();
+  G4MuonMinusCapture* fMuMinusCaptureAtRest =
+    new G4MuonMinusCapture();
 
   G4ProcessManager * pManager = 0;
 
