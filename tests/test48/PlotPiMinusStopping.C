@@ -34,17 +34,82 @@ int         SymbModel[2]     = { 8, 21 };
 
 
 
+/*
 const int NVersions = 4;
-// new color-coding array
-// the oldest model is the last one, and is always marked with black
-// EXPAND the array when needed !
-int ColorVersion[4] = { 7, kGreen, kRed, kBlack };
-// older color-coding - oldest version comes first, newest comes last
-// int ColorVersion[4] = { kBlack, kRed, kGreen, kMagenta };
-std::string Versions[4] = { "geant4-09-06-b01", "geant4-09-05-p01", "geant4-09-05-ref02+tagMK", "geant4-09-04-ref10" };
+//std::string Versions[4] = { "geant4-09-06-p02", "geant4-09-06-p03", "geant4-10-00", "geant4-10-00-p01" };
+//int ColorVersion[5] = { kRed, kGreen, 7, kBlack, 14 };
+// std::string Versions[4] = { "geant4-10-00-p01", "geant4-10-00-ref03", "geant4-10-00-ref04", "geant4-10-00-ref05" };
+std::string Versions[4] = { "geant4-09-06-p03", "geant4-10-00-p01", "geant4-10-00-p02", "geant4-10-01-b01" };
+// int ColorVersion[3] = { kBlack, 14, kYellow };
+int ColorVersion[5] = { kRed, kGreen, 7, kBlack, 14 };
+// int ColorVersion[5] = { kRed, kMagenta, 7, kBlack, 14 };
+// int ColorVersion[6] = { kGreen, kRed, kMagenta, 7, kBlack, 14 };
+*/
 
- 
-static int isExpReadLoaded = 0;
+#include "../test23/shared-root-macros/REGRESSION_TEST.h"
+
+
+// static int isExpReadLoaded = 0;
+
+#include "../test48/ReadExpData.C"
+#include "../test23/shared-root-macros/Chi2Calc.C"
+
+#ifndef G4VAL_PLOTPIMINUSSTOPPING_C
+#define G4VAL_PLOTPIMINUSSTOPPING_C
+/*
+void PlotPiMinusStopping()
+{
+
+   plotPiMinusSummary2("C");
+   plotPiMinusSummary2("N");
+   plotPiMinusSummary2("O");
+   plotPiMinusSummary2("Al");
+   plotPiMinusSummary2("Cu");
+   plotPiMinusSummary2("Ta");
+   plotPiMinusSummary2("Pb");
+   
+   return;
+
+}
+*/
+/*
+void PlotPiMinusStoppingRegre()
+{
+
+   plotPiMinusRegressionSummary2( "C", "BertiniPreCo" );
+   plotPiMinusRegressionSummary2( "N", "BertiniPreCo" );
+   plotPiMinusRegressionSummary2( "O", "BertiniPreCo" );
+   plotPiMinusRegressionSummary2( "Al", "BertiniPreCo" );
+   plotPiMinusRegressionSummary2( "Cu", "BertiniPreCo" );
+   plotPiMinusRegressionSummary2( "Ta", "BertiniPreCo" );
+   plotPiMinusRegressionSummary2( "Pb", "BertiniPreCo" );
+
+   return;
+
+}
+*/
+double calcChi2Madey( std::string target, std::string model, int& NDF )
+{
+
+   double chi2 = 0.;
+//   int NDF = 0;
+
+   std::string histofile = "piminus" + target + model;
+   histofile += ".root";
+
+   std::cout << "About to open file: " << histofile << std::endl;
+
+   TFile* f = new TFile( histofile.c_str() );
+   TH1F* hi = (TH1F*)f->Get("NvsT");
+   
+   TGraphErrors* gdata = getMadeyAsGraph(target);
+
+   chi2 = Chi2( gdata, hi, NDF );
+
+   std::cout << " chi2/NDF = " << (chi2/NDF) << " for model " << model << std::endl;
+
+
+}
 
 void plotPiMinusDataAndRegression( std::string target )
 {
@@ -52,11 +117,11 @@ void plotPiMinusDataAndRegression( std::string target )
    TCanvas *myc = new TCanvas("myc","",800,600);
    myc->Divide(2,1);
    
-   if ( isExpReadLoaded <= 0 )
-   {
-      gROOT->LoadMacro("ReadExpData.C");
-      isExpReadLoaded = 1;
-   }
+   //   if ( isExpReadLoaded <= 0 )
+   //   {
+   //      gROOT->LoadMacro("ReadExpData.C");
+   //      isExpReadLoaded = 1;
+   //   }
 
    readMadey();
    
@@ -77,11 +142,11 @@ void plotPiMinusDataAndRegression( std::string target )
 void plotPiMinusAll()
 {
 
-   if ( isExpReadLoaded <= 0 )
-   {
-      gROOT->LoadMacro("ReadExpData.C");
-      isExpReadLoaded = 1;
-   }
+  //   if ( isExpReadLoaded <= 0 )
+  //   {
+  //      gROOT->LoadMacro("ReadExpData.C");
+  //      isExpReadLoaded = 1;
+  //   }
 
    readMadey();
 
@@ -100,11 +165,11 @@ void plotPiMinusAll()
 void plotPiMinus( std::string target )
 {
 
-   if ( isExpReadLoaded <= 0 )
-   {
-      gROOT->LoadMacro("ReadExpData.C");
-      isExpReadLoaded = 1;
-   }
+  //   if ( isExpReadLoaded <= 0 )
+  //   {
+  //      gROOT->LoadMacro("ReadExpData.C");
+  //      isExpReadLoaded = 1;
+  //   }
 
    readMadey();
 
@@ -121,11 +186,11 @@ void plotPiMinus( std::string target )
 void plotPiMiBertiniRegression( std::string target )
 {
 
-   if ( isExpReadLoaded <= 0 )
-   {
-      gROOT->LoadMacro("ReadExpData.C");
-      isExpReadLoaded = 1;
-   }
+  //   if ( isExpReadLoaded <= 0 )
+  //   {
+  //      gROOT->LoadMacro("ReadExpData.C");
+  //      isExpReadLoaded = 1;
+  //   }
 
    readMadey();
    
@@ -137,7 +202,7 @@ void plotPiMiBertiniRegression( std::string target )
    myc->cd(1);
    gPad->SetLogx();
 //   gPad->SetLogy();
-   drawPiMinusMC2DataRegression( target, "Bertini" );
+   drawPiMinusMC2DataRegression( target, "BertiniPreCo" );
 
    myc->cd(2);
    gPad->SetLogx();
@@ -153,11 +218,11 @@ void plotPiMinusRegressionSummary2( std::string target, std::string model )
 {
    
    
-   if ( isExpReadLoaded <= 0 )
-   {
-      gROOT->LoadMacro("ReadExpData.C");
-      isExpReadLoaded = 1;
-   }
+  //   if ( isExpReadLoaded <= 0 )
+  //   {
+  //      gROOT->LoadMacro("ReadExpData.C");
+  //      isExpReadLoaded = 1;
+  //   }
    
    readMadey();
    
@@ -172,8 +237,12 @@ void plotPiMinusRegressionSummary2( std::string target, std::string model )
    
    myc->cd(2);
    gPad->SetLogx();
+   gPad->SetLogy();
    drawPiMinusMC2DataRegression( target, model );
    
+   std::string output = "pim-" + target + "-Bert-regre.gif";
+   myc->Print( output.c_str() );
+
    myc->cd();
    
    return;
@@ -183,11 +252,11 @@ void plotPiMinusRegressionSummary2( std::string target, std::string model )
 void plotPiMinusSummary2( std::string target )
 {
 
-   if ( isExpReadLoaded <= 0 )
-   {
-      gROOT->LoadMacro("ReadExpData.C");
-      isExpReadLoaded = 1;
-   }
+  //   if ( isExpReadLoaded <= 0 )
+  //   {
+  //      gROOT->LoadMacro("ReadExpData.C");
+  //      isExpReadLoaded = 1;
+  //   }
 
    readMadey();
 
@@ -202,9 +271,21 @@ void plotPiMinusSummary2( std::string target )
 
    myc->cd(2);
    gPad->SetLogx(1);
+   gPad->SetLogy();
    drawPiMinusMC2Data( target );
    
    myc->cd();
+
+   for ( int i=0; i<NModelsMesons; ++i )
+     {
+       double chi2 = 0.;
+       int NDF = 0;
+       chi2 = calcChi2Madey( target, ModelsMesons[i], NDF );
+     }
+   
+   
+   std::string output = "pim-" + target + "-models.gif";
+   myc->Print( output.c_str() );
    
    return;   
 
@@ -213,11 +294,11 @@ void plotPiMinusSummary2( std::string target )
 void plotPiMinusSummary4( std::string target )
 {
 
-   if ( isExpReadLoaded <= 0 )
-   {
-      gROOT->LoadMacro("ReadExpData.C");
-      isExpReadLoaded = 1;
-   }
+  //   if ( isExpReadLoaded <= 0 )
+  //   {
+  //      gROOT->LoadMacro("ReadExpData.C");
+  //      isExpReadLoaded = 1;
+  //   }
 
    readMadey();
    
@@ -246,6 +327,14 @@ void plotPiMinusSummary4( std::string target )
 void drawPiMinus( std::string target )
 {
       
+ 
+   TGraphErrors* gr1 = getMadeyAsGraph(target);
+   if ( !gr1 ) 
+   {
+      return;
+   }
+    
+  /*
    int TargetID = findTarget( target );
          
    if ( TargetID == -1 || TargetID >= NTargetsMadey )
@@ -253,6 +342,7 @@ void drawPiMinus( std::string target )
       std::cout << " Invalid Target: " << target << std::endl;
       return;
    }
+   */
    
    TH1F* hi[NModelsMesons];
       
@@ -260,7 +350,8 @@ void drawPiMinus( std::string target )
    double ymax = -1. ;
    for ( int m=0; m<NModelsMesons; m++ )
    {
-      std::string histofile = "piminus" + TargetsMadey[TargetID] + ModelsMesons[m];
+     //      std::string histofile = "piminus" + TargetsMadey[TargetID] + ModelsMesons[m];
+      std::string histofile = "piminus" + target + ModelsMesons[m];
       histofile += ".root";
 
       std::cout << "About to open file: " << histofile << std::endl;
@@ -285,7 +376,9 @@ void drawPiMinus( std::string target )
    
    // std::cout << " ymin= " << ymin << " ymax= " << ymax << std::endl;
    
-   TLegend* leg = new TLegend(0.6, 0.70, 0.9, 0.9);
+//   TLegend* leg = new TLegend(0.55, 0.70, 0.9, 0.9);
+   TLegend* leg = new TLegend(0.1, 0.20, 0.6, 0.4);
+   leg->SetTextSize(0.04);
    
    for ( int m=0; m<NModelsMesons; m++ )
    {
@@ -296,9 +389,11 @@ void drawPiMinus( std::string target )
       leg->AddEntry( hi[m], ModelsMesons[m].c_str(), "L" );
    }
       
-   TGraph*  gr1 = new TGraphErrors(NPointsMadey,KENeut,Value[TargetID],0,Error[TargetID]);
-   gr1->SetMarkerColor(4);  gr1->SetMarkerStyle(22);
-   gr1->SetMarkerSize(1.6);
+   //   TGraphErrors*  gr1 = new TGraphErrors(NPointsMadey,KENeut,Value[TargetID],0,Error[TargetID]);
+   //gr1->SetMarkerColor(4);  gr1->SetMarkerStyle(22);
+   //gr1->SetMarkerSize(1.6);
+   //
+   //    TGraphError* gr1 = getMadeyAsGraph( target );
    gr1->Draw("p");
    
    leg->AddEntry( gr1, "exp.data", "p");
@@ -343,6 +438,7 @@ void drawPiMinusMC2Data( std::string target )
    gr1->SetMarkerSize(1.6);
    gr1->GetXaxis()->SetTitle("Kinetic energy of secondary neutron (MeV)");
    gr1->GetYaxis()->SetTitle("MC/Data (Number of neutrons per MeV)");
+   gr1->GetYaxis()->SetRangeUser(0.2,5.);
 
 
    TH1F* hi[NModelsMesons];
@@ -401,16 +497,20 @@ void drawPiMinusMC2Data( std::string target )
       
    }
 
-   gr1->GetYaxis()->SetRangeUser(ymin-0.1, ymax+0.2);  
+//   gr1->GetYaxis()->SetRangeUser(ymin-0.1, ymax+0.2);  
+   gr1->GetYaxis()->SetRangeUser(0.2, 5.);  
    gr1->Draw("apl");    
    
    for ( int m=0; m<NModelsMesons; m++ )
    {
-      gr[m]->GetYaxis()->SetRangeUser( ymin-0.1, ymax+0.2 );
+//      gr[m]->GetYaxis()->SetRangeUser( ymin-0.1, ymax+0.2 );
+      gr[m]->GetYaxis()->SetRangeUser( 0.2, 5. );
       gr[m]->Draw("lpsame");
    }
   
-   TLegend* leg = new TLegend(0.6, 0.70, 0.9, 0.9);   
+   TLegend* leg = new TLegend(0.45, 0.70, 0.95, 0.9);  
+//   TLegend* leg = new TLegend(0.1, 0.20, 0.6, 0.4);  
+   leg->SetTextSize(0.04); 
    
    for ( int m=0; m<NModelsMesons; m++ )
    {
@@ -460,6 +560,7 @@ void drawPiMinusMC2DataRegression( std::string target, std::string model )
    gr1->SetMarkerSize(1.6);
    gr1->GetXaxis()->SetTitle("Kinetic energy of secondary neutron (MeV)");
    gr1->GetYaxis()->SetTitle("MC/Data (Number of neutrons per MeV)");
+   gr1->GetYaxis()->SetRangeUser(0.2,5.);
 
 
    TH1F* hi[NVersions];
@@ -473,16 +574,27 @@ void drawPiMinusMC2DataRegression( std::string target, std::string model )
 
    for ( int iver=0; iver<NVersions; iver++ )
    {
-      std::string histofile = "";
-//      if ( iver == 0 )
-//      {
-//         histofile = "piminus" + target + model;
-//      }
-//      else
-//      {
-         histofile = Versions[iver] + "/" + "piminus" + target + model;
-//      }
-      histofile += ".root";
+//      std::string histofile = "";
+// //      if ( iver == 0 )
+// //      {
+// //         histofile = "piminus" + target + model;
+// //      }
+// //      else
+// //      {
+//         histofile = Versions[iver] + "/" + "piminus" + target + model;
+// //      }
+//      histofile += ".root";
+
+      std::string location = "";
+      if ( Versions[iver] == CurrentVersion || Versions[iver] == "." )
+      {
+         location = "";
+      }
+      else
+      {
+         location = regre_test_dir + "/test48/" + Versions[iver] + "/";
+      }
+      std::string histofile = location + "piminus" + target + model + ".root"; 
       
       std::cout << "MC2Data Regression, histofile: " << histofile << std::endl;
       
@@ -533,16 +645,20 @@ void drawPiMinusMC2DataRegression( std::string target, std::string model )
       }
       
    }
-   gr1->GetYaxis()->SetRangeUser(ymin-0.1, ymax+0.2);  
+//   gr1->GetYaxis()->SetRangeUser(ymin-0.1, ymax+0.2);  
+   gr1->GetYaxis()->SetRangeUser(0.2, 5.);  
    gr1->Draw("apl");    
    
    for ( int iver=0; iver<NVersions; iver++ )
    {
-      gr[iver]->GetYaxis()->SetRangeUser( ymin-0.1, ymax+0.2 );
+//      gr[iver]->GetYaxis()->SetRangeUser( ymin-0.1, ymax+0.2 );
+      gr[iver]->GetYaxis()->SetRangeUser( 0.2, 5. );
       gr[iver]->Draw("lpsame");
    }
   
-   TLegend* leg = new TLegend(0.6, 0.70, 0.9, 0.9);   
+   TLegend* leg = new TLegend(0.45, 0.70, 0.95, 0.9);  
+//   TLegend* leg = new TLegend(0.1, 0.20, 0.6, 0.4);  
+   leg->SetTextSize(0.04); 
    
    for ( int iver=0; iver<NVersions; iver++ )
    {
@@ -560,11 +676,11 @@ void drawPiMinusMC2DataRegression( std::string target, std::string model )
 void plotPiMinusRegression( std::string target="C", std::string model="CHIPS" )
 {
 
-   if ( isExpReadLoaded <= 0 )
-   {
-      gROOT->LoadMacro("ReadExpData.C");
-      isExpReadLoaded = 1;
-   }
+  //   if ( isExpReadLoaded <= 0 )
+  //   {
+  //      gROOT->LoadMacro("ReadExpData.C");
+  //      isExpReadLoaded = 1;
+  //   }
 
    readMadey();
    
@@ -582,11 +698,11 @@ void plotPiMinusRegressionAllTargets( std::string model="CHIPS" )
 {
 
    
-   if ( isExpReadLoaded <= 0 )
-   {
-      gROOT->LoadMacro("ReadExpData.C");
-      isExpReadLoaded = 1;
-   }
+  //   if ( isExpReadLoaded <= 0 )
+  //   {
+  //      gROOT->LoadMacro("ReadExpData.C");
+  //      isExpReadLoaded = 1;
+  //   }
 
    readMadey();
    
@@ -623,24 +739,37 @@ void drawPiMinusRegression( std::string target="C", std::string model="CHIPS" )
    double ymax = -1.;
    for ( int iver=0; iver<NVersions; iver++ )
    {
-      std::string histofile = "";
-//      if ( iver == 0 )
-//      {
-//         histofile = "piminus" + target + model;
-//      }
-//      else
-//      {
-         histofile = Versions[iver] + "/" + "piminus" + target + model;
-//      }
-      histofile += ".root";
+
+//      std::string histofile = "";
+// //      if ( iver == 0 )
+// //      {
+// //         histofile = "piminus" + target + model;
+// //      }
+// //      else
+// //      {
+//         histofile = Versions[iver] + "/" + "piminus" + target + model;
+// //      }
+//      histofile += ".root";
       
+      std::string location = "";
+      if ( Versions[iver] == CurrentVersion || Versions[iver] == "." )
+      {
+         location = "";
+      }
+      else
+      {
+         location = regre_test_dir + "/test48/" + Versions[iver] + "/";
+      }
+      std::string histofile = location + "piminus" + target + model + ".root"; 
+
       std::cout << " Regression, histofile: " << histofile << std::endl;
       
       TFile* f = new TFile( histofile.c_str() );
       hi[iver] = (TH1F*)f->Get("NvsT");
       hi[iver]->SetStats(0);
       hi[iver]->SetLineColor(ColorVersion[iver]);
-      hi[iver]->SetLineWidth(2);
+//      hi[iver]->SetLineWidth(2);
+      hi[iver]->SetLineWidth(6-iver);
       hi[iver]->GetXaxis()->SetTitle("Kinetic energy of secondary neutron (MeV)");
       hi[iver]->GetYaxis()->SetTitle("Number of neutrons per MeV");
       int nx = hi[iver]->GetNbinsX();
@@ -656,8 +785,9 @@ void drawPiMinusRegression( std::string target="C", std::string model="CHIPS" )
    }
    // std::cout << " ymin= " << ymin << " ymax= " << ymax << std::endl;
    
-   TLegend* leg = new TLegend(0.6, 0.70, 0.9, 0.9);
-   leg->SetTextSize(0.017);
+//   TLegend* leg = new TLegend(0.5, 0.70, 0.99, 0.9);
+   TLegend* leg = new TLegend(0.1, 0.20, 0.6, 0.4);
+   leg->SetTextSize(0.04);
    
    for ( int iver=0; iver<NVersions; iver++ )
    {
@@ -683,6 +813,7 @@ void drawPiMinusRegression( std::string target="C", std::string model="CHIPS" )
    
 }
 
+/*
 void setStyle() 
 {
 
@@ -697,4 +828,6 @@ void setStyle()
   return;
 
 }
+*/
 
+#endif

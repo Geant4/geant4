@@ -48,6 +48,9 @@ TestStoppingHisto::~TestStoppingHisto()
 
 void TestStoppingHisto::Init()
 {
+  
+  TH1::SetDefaultSumw2();
+
   if ( fBeam == "pi-" )
     {
       ptag = "piminus";
@@ -229,13 +232,33 @@ void TestStoppingHisto::InitHistoGeneral()
    
   fHisto.push_back( new TH1F( "NSecondaries", fHistoTitle.c_str(), 25, 0., 25. ) );       // 0
   fHisto.push_back( new TH1F( "NChargedSecondaries", fHistoTitle.c_str(), 25, 0., 25. ) );// 1
-  fHisto.push_back( new TH1F( "NPions", fHistoTitle.c_str(), 15, 0., 15. ) );             // 2
+
+   double bins_npions[] = { 0.5, 1.5, 2.5, 3.5, 4.5, 5.5, 6.5, 7.5, 8.5, 9.5, 10.5 };
+   int    nbins_npions = sizeof(bins_npions) / sizeof(double) - 1;
+    
+//  fHisto.push_back( new TH1F( "NPions", fHistoTitle.c_str(), 15, 0., 15. ) );             // 2
+  fHisto.push_back( new TH1F( "NPions", fHistoTitle.c_str(), nbins_npions, bins_npions ) );             // 2
+    
   fHisto.push_back( new TH1F( "NChargesPions", fHistoTitle.c_str(), 15, 0., 15. ) ) ;     // 3
   fHisto.push_back( new TH1F( "NPi0s", fHistoTitle.c_str(), 15, 0., 15. ) );              // 4
   fHisto.push_back( new TH1F( "NGammas", fHistoTitle.c_str(), 15, 0., 15. ) );            // 5
   fHisto.push_back( new TH1F( "NNeutrons", fHistoTitle.c_str(), 10, -1., 9. ) );          // 6
   fHisto.push_back( new TH1F( "ChargedSecondaryMomentum", fHistoTitle.c_str(), 50,0.,1.));// 7
-  fHisto.push_back( new TH1F( "ChargedPionMomentum", fHistoTitle.c_str(), 50, 0., 1. ) ); // 8
+
+  // this is actually the binning for the pbar+H
+  // we'll probably need to factor out the pbar part into a separate utility
+  //
+  //... although it should be the same as 50 bins from 0. to 1., the "standard way"
+  //
+  int nbins_mom_pions = 50;
+  double bins_mom_pions[51] ;
+  for ( int i=0; i<51; ++i )
+  {
+      bins_mom_pions[i] = 0.02*i;
+  }
+  // fHisto.push_back( new TH1F( "ChargedPionMomentum", fHistoTitle.c_str(), 50, 0., 1. ) ); // 8
+  fHisto.push_back( new TH1F( "ChargedPionMomentum", fHistoTitle.c_str(), nbins_mom_pions, bins_mom_pions ) ); // 8
+  
   fHisto.push_back( new TH1F( "PDGIDSecondaries", fHistoTitle.c_str(), 5000, 0., 5000.)); // 9;
   fHisto.push_back( new TH1F( "ChargeOfSecondary", fHistoTitle.c_str(), 30, -15., 15.));  //10;
   fHisto.push_back( new TH1F( "NElectrons",  fHistoTitle.c_str(), 15, 0., 15. ) );        //11

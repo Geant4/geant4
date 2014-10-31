@@ -133,15 +133,16 @@ else()
   #  changes when a source is added or removed then the generated build
   #  system cannot know when to ask CMake to regenerate.
   
-  file(GLOB TEST48_FILES RELATIVE ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/test48.*capture 
+  file(GLOB TEST48_FILES RELATIVE ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/test48.*minus* 
                                                         ${PROJECT_SOURCE_DIR}/ctest48-picapture-Pb.config
                                                         ${PROJECT_SOURCE_DIR}/*.C
                                                         ${PROJECT_SOURCE_DIR}/antiproton/*.dat
                                                         ${PROJECT_SOURCE_DIR}/kminus/*.dat
                                                         ${PROJECT_SOURCE_DIR}/muminus/*.dat
                                                         ${PROJECT_SOURCE_DIR}/piminus/*.dat
-                                                        test48.kaon
-                                                        test48.sigma
+                                                        test48.antiproton
+							${PROJECT_SOURCE_DIR}/batch/*.sh
+							${PROJECT_SOURCE_DIR}/g4val-upload-scripts/generate*.sh
                                                         README
                                                         )
   

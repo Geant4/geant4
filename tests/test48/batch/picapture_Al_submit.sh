@@ -1,13 +1,28 @@
 #!/usr/bin/env bash
 #
 
-APP_ENV=/home-cluck/yarba_j/work/test-central-geant4.9.6.b01/tests/test48/batch/g4setup.sh
+#APP_ENV=/home-cluck/yarba_j/work/test-central-geant4.9.6.b01/tests/test48/batch/g4setup.sh
+#source ${APP_ENV}
+#PBS_WORK_DIR=${G4WORKDIR}
+#cd ${PBS_WORK_DIR}
 
-source ${APP_ENV}
+source /products/setup
+setup root v5_34_01 -q "e2:prof"
 
-PBS_WORK_DIR=${G4WORKDIR}
+# setup G4 datasets
+#
+source /home/g4p/pbs/g4-had-validation/env-setup/g4-datasets-setup.sh
 
-cd ${PBS_WORK_DIR}
+# setup workdir
+#
+if [ "x" == "x$G4WORKDIR" ] ; then
+G4WORKDIR=${PBS_O_WORKDIR}/.. 
+else
+    echo "Variable says: $G4WORKDIR"
+    echo "Variable PBS_O_WORKDIR says: $PBS_O_WORKDIR"
+fi
+
+cd ${G4WORKDIR}
 
 # JobID=1
 JobID=${PBS_ARRAYID}
@@ -30,4 +45,4 @@ printf "// --- \n#generator \nBertiniPreCo \n#run \n#generator \nCHIPS \n#run \n
 printf "#exit\n" >> piminus.Al.${JobID}
 
 
-${G4EXE}/test48 piminus.Al.${JobID}
+./test48 piminus.Al.${JobID}

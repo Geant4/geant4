@@ -110,7 +110,9 @@ int main(int argc, char** argv) {
   G4int  jobid = -1;
   // Choose the Random engine
   //
-  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
+  CLHEP::RanecuEngine* erndm = new CLHEP::RanecuEngine();
+  CLHEP::HepRandom::setTheEngine( erndm );
+//  CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
   CLHEP::HepRandom::setTheSeed(myseed);
 
   // Track
@@ -148,7 +150,7 @@ int main(int argc, char** argv) {
   // physics needs to be initialized before the 1st use of particle table,
   // because it constructs particles - otherwise the table is just empty
   //
-  TestStoppingPhysics*   phys = new TestStoppingPhysics(verbose); // leak?
+  TestStoppingPhysics*   phys = new TestStoppingPhysics(verbose); // leak? - fixed
   // we need to get verbose from the inp file...
 
   G4GenericIon* gion = G4GenericIon::GenericIon();
@@ -174,8 +176,11 @@ int main(int argc, char** argv) {
   lFrame->SetRegion(rFrame);
   rFrame->AddRootLogicalVolume(lFrame);
 
-  G4TrackingManager* trackManager = new G4TrackingManager;
-
+    G4Navigator* nav = new G4Navigator(); // FIXME leak - fixed: deleted at the end of the job
+    nav->SetWorldVolume(pFrame);
+    G4TouchableHandle touch(nav->CreateTouchableHistory());
+    
+  G4TrackingManager* trackManager = new G4TrackingManager; // deleted at the end of the job
 
   // ---- Read input file
   G4cout << "Available commands are: " << G4endl;
@@ -342,21 +347,27 @@ int main(int argc, char** argv) {
     cross_sec /= millibarn;
 
 
+/* move out of the loop over configs
+
     G4Navigator* nav = new G4Navigator(); // FIXME leak
     nav->SetWorldVolume(pFrame);
     G4TouchableHandle touch(nav->CreateTouchableHistory());
-    
+*/    
     if(!G4StateManager::GetStateManager()->SetNewState(G4State_Idle))
       G4cout << "G4StateManager PROBLEM! " << G4endl;
 
     G4Track* gTrack;
-    gTrack = new G4Track(&dParticle,aTime,aPosition);
-    gTrack->SetTouchableHandle(touch);
+    gTrack = new G4Track(&dParticle,aTime,aPosition); // this may look like a leak but an attempt
+                                                      // to delete gTrack messes something up
+						      // at a higher level in the G4 infrastructure
+    gTrack->SetTouchableHandle(touch); // the touch is defined before the loop over configs,
+                                       // where the navigator is intantiated
+				       // NOTE: I thought this darn stuff was needed by CHIPS only
+				       //       but maybe it's needed also for something else...
 
     // Step
-
     G4Step *step; 
-    step = new G4Step(); // FIXME leak
+    step = new G4Step(); // FIXME leak =- fixed: deleted at the end of the loop
     step->InitializeStep(gTrack);
     step->GetPreStepPoint()->SetMaterial(material);// we somehow still need it
     step->SetStepLength(theStep);
@@ -397,7 +408,7 @@ int main(int argc, char** argv) {
     
     for (G4int iter=0; iter<nevt; ++iter) {
 
-      if(verbose>=0 and iter == 1000*(iter/1000))  
+      if(verbose>=0 and iter == 50000*(iter/50000))  
         G4cout << "### " << iter << "-th event start " << G4endl;
 
       G4double e0 = energy-mass;
@@ -416,7 +427,7 @@ int main(int argc, char** argv) {
       
       aChange = proc->AtRestDoIt(*gTrack,*step);
       
-      if(verbose>=0 and iter == 1000*(iter/1000)) 
+      if(verbose>=0 and iter == 50000*(iter/50000)) 
         G4cout << "##### " << iter << "-th event  #####" << G4endl;
       else if (verbose>=1) 
         G4cout << "##### " << iter << "-th event  #####" << G4endl;
@@ -424,7 +435,7 @@ int main(int argc, char** argv) {
       // loop over secondaries and cleanup
       G4int nsecnd = aChange->GetNumberOfSecondaries();
 
-      if(verbose>=0 and iter == 1000*(iter/1000)) 
+      if(verbose>=0 and iter == 50000*(iter/50000)) 
         G4cout << "##### " << nsecnd << " nsecondaries #####" << G4endl;
       else if (verbose>=1)
         G4cout << "##### " << nsecnd << " nsecondaries #####" << G4endl;
@@ -466,7 +477,7 @@ int main(int argc, char** argv) {
 
           G4int nssecnd = secondaries->size();
 
-          if(verbose>=0 and iter == 1000*(iter/1000)) 
+          if(verbose>=0 and iter == 50000*(iter/50000)) 
             G4cout << "##### " << nssecnd 
                    << " nsecondaries ##### of " << sName << G4endl;
           else if (verbose>=1)
@@ -520,17 +531,23 @@ int main(int argc, char** argv) {
     // write out histo's (per run/test)
     //    
     histo.Write(nevt); 
+    
+    delete step; // cleanup G4Step instantiated at the beginning of the loop over configs
 
   }
 
   //G4cout << " mate "  << mate << G4endl;
   //delete mate;
-  //G4cout << " fin  "  << fin  << G4endl;
+  
   delete fin;
-  //G4cout << " phys "  << phys << G4endl;
+  
+  delete nav;
+  
   delete phys;
 
   delete trackManager;
+  
+  delete erndm;
 
   G4cout << "###### End of test #####" << G4endl;
 }

@@ -64,7 +64,7 @@
 //
 // (what remains of the) traditional stopping code
 //
-#include "G4MuonMinusCaptureAtRest.hh"
+//#include "G4MuonMinusCaptureAtRest.hh"
 #include "G4AntiNeutronAnnihilationAtRest.hh"
 
 //
@@ -109,7 +109,7 @@ TestStoppingPhysics::TestStoppingPhysics(G4int verbose):
 #if defined (USE_MUCAPTURE)
   theMuonMinusCaptureConstructor(new G4MuonMinusCapturePhysics(verbose)),
 #endif
-  theProcess(0), verboseLevel(verbose)
+  theProcess(0), theProcessMan(0), verboseLevel(verbose)
 {
 
   //G4DecayPhysics pDecayPhysics;
@@ -144,6 +144,7 @@ TestStoppingPhysics::~TestStoppingPhysics()
   //delete theDeExcitation;
   //delete thePreCompound;
   if ( theProcess )                     delete theProcess;
+  if ( theProcessMan)                   delete theProcessMan;
 #if defined (USE_MUCAPTURE)
   if ( theMuonMinusCaptureConstructor ) delete theMuonMinusCaptureConstructor;
 #endif
@@ -162,24 +163,30 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
 
   if(theProcess) delete theProcess;
   theProcess = 0;
+  if ( theProcessMan) delete theProcessMan;
+  theProcessMan = 0;
 
-  G4ProcessManager* man = 0;
+//  G4ProcessManager* man = 0;
     
   if (part_name == "anti_proton")   
   {
-     man = new G4ProcessManager(G4AntiProton::AntiProton());
+//     man = new G4ProcessManager(G4AntiProton::AntiProton());
+     theProcessMan = new G4ProcessManager(G4AntiProton::AntiProton());
   }
   else if (part_name == "anti_neutron") 
   {
-     man = new G4ProcessManager(G4AntiNeutron::AntiNeutron());
+//     man = new G4ProcessManager(G4AntiNeutron::AntiNeutron());
+     theProcessMan = new G4ProcessManager(G4AntiNeutron::AntiNeutron());
   }
   else if (part_name == "pi-") 
   {
-     man = new G4ProcessManager(G4PionMinus::PionMinus());
+//     man = new G4ProcessManager(G4PionMinus::PionMinus());
+     theProcessMan = new G4ProcessManager(G4PionMinus::PionMinus());
   }
   else if (part_name == "kaon-")  
   {
-     man = new G4ProcessManager(G4KaonMinus::KaonMinus());
+//     man = new G4ProcessManager(G4KaonMinus::KaonMinus());
+     theProcessMan = new G4ProcessManager(G4KaonMinus::KaonMinus());
   }
   else if (part_name == "mu-")  
   {
@@ -221,11 +228,13 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
 
     // does the above cover objects in  G4MuAtomTable ??? does it need to ???
     theMuonMinusCaptureConstructor->ConstructProcess();
-    man = G4MuonMinus::MuonMinus()->GetProcessManager();
+//    man = G4MuonMinus::MuonMinus()->GetProcessManager();
+    theProcessMan = G4MuonMinus::MuonMinus()->GetProcessManager();
 
 #else
 
-    man = new G4ProcessManager(G4MuonMinus::MuonMinus());
+//    man = new G4ProcessManager(G4MuonMinus::MuonMinus());
+    theProcessMan = new G4ProcessManager(G4MuonMinus::MuonMinus());
 	 
     if (verboseLevel>1){   // use verboseLevel to suppress compilation warning
 	    G4cout <<"TestStoppingPhysics::GetProcess() not using new mucapture"<<G4endl;
@@ -235,10 +244,12 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
   }
   else if ( part_name == "sigma-" )
   {
-     man = new G4ProcessManager(G4SigmaMinus::SigmaMinus());
+//     man = new G4ProcessManager(G4SigmaMinus::SigmaMinus());
+     theProcessMan = new G4ProcessManager(G4SigmaMinus::SigmaMinus());
   }
 
-  if(!man) return 0;
+//  if(!man) return 0;
+  if(!theProcessMan) return 0;
 
   G4cout << part_name 
          << gen_name 
@@ -264,7 +275,8 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
 
       if (gen_name == "stopping" )
       {
-          theProcess = new G4MuonMinusCaptureAtRest();
+	//   theProcess = new G4MuonMinusCaptureAtRest();
+          theProcess = new G4MuonMinusCapture();
       }
       else if ( gen_name == "captureUpdate" )
       {
@@ -349,7 +361,8 @@ G4VProcess* TestStoppingPhysics::GetProcess(const G4String& gen_name,
            << " generator is unkown - no hadron production" << G4endl;
   }
   
-  man->AddRestProcess(theProcess);
+//  man->AddRestProcess(theProcess);
+  theProcessMan->AddRestProcess(theProcess);
 
   G4cout <<  " Model <"
          << gen_name << "> is initialized"

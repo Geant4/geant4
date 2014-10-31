@@ -15,7 +15,19 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Januar 17, 2014 G.Folger (test48-v10-00-00)
+October 30, 2014 V.Ivanchenko (test48-V10-00-02)
+- Comment out old G4MuonMinusCaptureAtRest which is on the way to
+    be removed
+
+October 28, 2014 Julia Yarba (test48-V10-00-01)
+- Restructured analysis scripts
+- Added various scripts for the procedure's automation 
+- Updated CMakeList.txt to allow copy ovre necessary scripts 
+  to the work/build area
+- Requires co-working tag(s):
+                               test23-V10-00-09
+
+January 17, 2014 G.Folger (test48-v10-00-00)
 - fix compilation warning (clang33) on unused data member in 
   TestStoppingPhysics
   

@@ -41,6 +41,7 @@
 #include "globals.hh"
 
 class G4VProcess;
+class G4ProcessManager;
 #if defined (USE_MUCAPTURE) 
 class G4MuonMinusCapturePhysics;
 #endif
@@ -63,7 +64,8 @@ private:
   G4MuonMinusCapturePhysics* theMuonMinusCaptureConstructor;
 #endif
 
-  G4VProcess* theProcess;
+  G4VProcess*       theProcess;
+  G4ProcessManager* theProcessMan;
 
   G4int verboseLevel;
 

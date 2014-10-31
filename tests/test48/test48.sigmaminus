@@ -2,7 +2,7 @@
 -1
 #rad
 #events
-100000
+1000000
 //--------Proton_processes
 #particle
 sigma-

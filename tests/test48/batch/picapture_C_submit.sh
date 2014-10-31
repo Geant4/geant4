@@ -1,13 +1,24 @@
 #!/usr/bin/env bash
 #
 
-APP_ENV=/home-cluck/yarba_j/work/test-central-geant4.9.6.b01/tests/test48/batch/g4setup.sh
+source /products/setup
+setup root v5_34_01 -q "e2:prof"
 
-source ${APP_ENV}
+# setup G4 datasets
+#
+source /home/g4p/pbs/g4-had-validation/env-setup/g4-datasets-setup.sh
 
-PBS_WORK_DIR=${G4WORKDIR}
+# setup workdir
+#
+if [ "x" == "x$G4WORKDIR" ] ; then
+G4WORKDIR=${PBS_O_WORKDIR}/.. 
+else
+    echo "Variable says: $G4WORKDIR"
+    echo "Variable PBS_O_WORKDIR says: $PBS_O_WORKDIR"
+fi
 
-cd ${PBS_WORK_DIR}
+cd ${G4WORKDIR}
+
 
 # JobID=1
 JobID=${PBS_ARRAYID}

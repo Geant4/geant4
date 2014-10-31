@@ -1,19 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
-<!--
-    Document   : insert_g4test.xml
-    Created on : October 31, 2011, 05:19 PM
-    Author     : adotti
-    Description: xml description to upload geant 4 test into database
--->
 <testslist>
-
 
     <tests>
         <testdes>test48</testdes>
-        <g4version>geant4-9.6-b01</g4version>
-        <observable>kinetic energy of secondary neutrons</observable>
-        <reaction>pi- on C</reaction>
+        <g4version>geant4-10.00-p01</g4version>
+        <observable>kinetic energy of secondary neutron</observable>
+        <reaction>capture pi- on C</reaction>
+        <beam>pi-</beam>
+	<beammomentum>0.0 MeV</beammomentum>
+	<beamenergy></beamenergy>
+        <target>C</target>
+        <secondary>neutron</secondary>
+        <status>public</status>
         <score>
             <type>expert</type>
             <value>passed</value>  
@@ -22,33 +20,30 @@
         <taglist>
             <tag>
                 <name>Model</name>
-                <value>Bertini: 4.9.6-b01,4.9.5-ref02,4.9.5.p01,4.9.4-ref10</value>
-            </tag>  
+                <value>Bertini</value>
+            </tag>
+            <tag>              
+                <name>Regression testing:</name>
+                <value>geant 4 versions: g4-9-6-p02,g4-9-6-p03,g4-10.00,g4-10.00-p01</value>
+            </tag>             
 	    <tag>
 	       <name>Comment</name>
 	       <value>Bertini is using PreCompound to handle evaporation</value>
 	    </tag>             
-	    <tag>
-	       <name>Comment</name>
-	       <value>4.9.5-ref02 patched with tag hadr-casc-V09-05-05</value>
-	    </tag>             
-            <tag>
-                <name>Particle</name>
-                <value>pi-</value>
-            </tag>       
-            <tag>
-                <name>Target</name>
-                <value>C</value>
-            </tag>
-
         </taglist>    
     </tests>
-    
+
     <tests>
         <testdes>test48</testdes>
-        <g4version>geant4-9.6-b01</g4version>
-        <observable>kinetic energy of secondary neutrons</observable>
-        <reaction>pi- on N</reaction>
+        <g4version>geant4-10.00-p01</g4version>
+        <observable>kinetic energy of secondary neutron</observable>
+        <reaction>capture pi- on N</reaction>
+        <beam>pi-</beam>
+	<beammomentum>0.0 MeV</beammomentum>
+	<beamenergy></beamenergy>
+        <target>N</target>
+        <secondary>neutron</secondary>
+        <status>public</status>
         <score>
             <type>expert</type>
             <value>passed</value>  
@@ -57,33 +52,30 @@
         <taglist>
             <tag>
                 <name>Model</name>
-                <value>Bertini: 4.9-b01,4.9.5-ref02,4.9.5.p01,4.9.4-ref10</value>
-            </tag>  
+                <value>Bertini</value>
+            </tag>
+            <tag>              
+                <name>Regression testing:</name>
+                <value>geant 4 versions: g4-9-6-p02,g4-9-6-p03,g4-10.00,g4-10.00-p01</value>
+            </tag>             
 	    <tag>
 	       <name>Comment</name>
 	       <value>Bertini is using PreCompound to handle evaporation</value>
 	    </tag>             
-	    <tag>
-	       <name>Comment</name>
-	       <value>4.9.5-ref02 patched with tag hadr-casc-V09-05-05</value>
-	    </tag>             
-            <tag>
-                <name>Particle</name>
-                <value>pi-</value>
-            </tag>       
-            <tag>
-                <name>Target</name>
-                <value>N</value>
-            </tag>
-
         </taglist>    
     </tests>
-    
+
     <tests>
         <testdes>test48</testdes>
-        <g4version>geant4-9.6-b01</g4version>
-        <observable>kinetic energy of secondary neutrons</observable>
-        <reaction>pi- on O</reaction>
+        <g4version>geant4-10.00-p01</g4version>
+        <observable>kinetic energy of secondary neutron</observable>
+        <reaction>capture pi- on O</reaction>
+        <beam>pi-</beam>
+	<beammomentum>0.0 MeV</beammomentum>
+	<beamenergy></beamenergy>
+        <target>O</target>
+        <secondary>neutron</secondary>
+        <status>public</status>
         <score>
             <type>expert</type>
             <value>passed</value>  
@@ -92,33 +84,30 @@
         <taglist>
             <tag>
                 <name>Model</name>
-                <value>Bertini: 4.9.6-b01,4.9.5-ref02,4.9.5.p01,4.9.4-ref10</value>
-            </tag>  
+                <value>Bertini</value>
+            </tag>
+            <tag>              
+                <name>Regression testing:</name>
+                <value>geant 4 versions: g4-9-6-p02,g4-9-6-p03,g4-10.00,g4-10.00-p01</value>
+            </tag>             
 	    <tag>
 	       <name>Comment</name>
 	       <value>Bertini is using PreCompound to handle evaporation</value>
 	    </tag>             
-	    <tag>
-	       <name>Comment</name>
-	       <value>4.9.5-ref02 patched with tag hadr-casc-V09-05-05</value>
-	    </tag>             
-            <tag>
-                <name>Particle</name>
-                <value>pi-</value>
-            </tag>       
-            <tag>
-                <name>Target</name>
-                <value>O</value>
-            </tag>
-
         </taglist>    
     </tests>
 
     <tests>
         <testdes>test48</testdes>
-        <g4version>geant4-9.6-b01</g4version>
-        <observable>kinetic energy of secondary neutrons</observable>
-        <reaction>pi- on Al</reaction>
+        <g4version>geant4-10.00-p01</g4version>
+        <observable>kinetic energy of secondary neutron</observable>
+        <reaction>capture pi- on Al</reaction>
+        <beam>pi-</beam>
+	<beammomentum>0.0 MeV</beammomentum>
+	<beamenergy></beamenergy>
+        <target>Al</target>
+        <secondary>neutron</secondary>
+        <status>public</status>
         <score>
             <type>expert</type>
             <value>passed</value>  
@@ -127,33 +116,30 @@
         <taglist>
             <tag>
                 <name>Model</name>
-                <value>Bertini: 4.9.6-b01,4.9.5-ref02,4.9.5.p01,4.9.4-ref10</value>
-            </tag>  
+                <value>Bertini</value>
+            </tag>
+            <tag>              
+                <name>Regression testing:</name>
+                <value>geant 4 versions: g4-9-6-p02,g4-9-6-p03,g4-10.00,g4-10.00-p01</value>
+            </tag>             
 	    <tag>
 	       <name>Comment</name>
 	       <value>Bertini is using PreCompound to handle evaporation</value>
 	    </tag>             
-	    <tag>
-	       <name>Comment</name>
-	       <value>4.9.5-ref02 patched with tag hadr-casc-V09-05-05</value>
-	    </tag>             
-            <tag>
-                <name>Particle</name>
-                <value>pi-</value>
-            </tag>       
-            <tag>
-                <name>Target</name>
-                <value>Al</value>
-            </tag>
-
         </taglist>    
     </tests>
-    
+
     <tests>
         <testdes>test48</testdes>
-        <g4version>geant4-9.6-b01</g4version>
-        <observable>kinetic energy of secondary neutrons</observable>
-        <reaction>pi- on Cu</reaction>
+        <g4version>geant4-10.00-p01</g4version>
+        <observable>kinetic energy of secondary neutron</observable>
+        <reaction>capture pi- on Cu</reaction>
+        <beam>pi-</beam>
+	<beammomentum>0.0 MeV</beammomentum>
+	<beamenergy></beamenergy>
+        <target>Cu</target>
+        <secondary>neutron</secondary>
+        <status>public</status>
         <score>
             <type>expert</type>
             <value>passed</value>  
@@ -162,33 +148,30 @@
         <taglist>
             <tag>
                 <name>Model</name>
-                <value>Bertini: 4.9.6-b01,4.9.5-ref02,4.9.5.p01,4.9.4-ref10</value>
-            </tag>  
+                <value>Bertini</value>
+            </tag>
+            <tag>              
+                <name>Regression testing:</name>
+                <value>geant 4 versions: g4-9-6-p02,g4-9-6-p03,g4-10.00,g4-10.00-p01</value>
+            </tag>             
 	    <tag>
 	       <name>Comment</name>
 	       <value>Bertini is using PreCompound to handle evaporation</value>
 	    </tag>             
-	    <tag>
-	       <name>Comment</name>
-	       <value>4.9.5-ref02 patched with tag hadr-casc-V09-05-05</value>
-	    </tag>             
-            <tag>
-                <name>Particle</name>
-                <value>pi-</value>
-            </tag>       
-            <tag>
-                <name>Target</name>
-                <value>Cu</value>
-            </tag>
-
         </taglist>    
     </tests>
-    
+
     <tests>
         <testdes>test48</testdes>
-        <g4version>geant4-9.6-b01</g4version>
-        <observable>kinetic energy of secondary neutrons</observable>
-        <reaction>pi- on Ta</reaction>
+        <g4version>geant4-10.00-p01</g4version>
+        <observable>kinetic energy of secondary neutron</observable>
+        <reaction>capture pi- on Ta</reaction>
+        <beam>pi-</beam>
+	<beammomentum>0.0 MeV</beammomentum>
+	<beamenergy></beamenergy>
+        <target>Ta</target>
+        <secondary>neutron</secondary>
+        <status>public</status>
         <score>
             <type>expert</type>
             <value>passed</value>  
@@ -197,33 +180,30 @@
         <taglist>
             <tag>
                 <name>Model</name>
-                <value>Bertini: 4.9.6-b01,4.9.5-ref02,4.9.5.p01,4.9.4-ref10</value>
-            </tag>  
+                <value>Bertini</value>
+            </tag>
+            <tag>              
+                <name>Regression testing:</name>
+                <value>geant 4 versions: g4-9-6-p02,g4-9-6-p03,g4-10.00,g4-10.00-p01</value>
+            </tag>             
 	    <tag>
 	       <name>Comment</name>
 	       <value>Bertini is using PreCompound to handle evaporation</value>
 	    </tag>             
-	    <tag>
-	       <name>Comment</name>
-	       <value>4.9.5-ref02 patched with tag hadr-casc-V09-05-05</value>
-	    </tag>             
-            <tag>
-                <name>Particle</name>
-                <value>pi-</value>
-            </tag>       
-            <tag>
-                <name>Target</name>
-                <value>Ta</value>
-            </tag>
-
         </taglist>    
     </tests>
 
     <tests>
         <testdes>test48</testdes>
-        <g4version>geant4-9.6-b01</g4version>
-        <observable>kinetic energy of secondary neutrons</observable>
-        <reaction>pi- on Pb</reaction>
+        <g4version>geant4-10.00-p01</g4version>
+        <observable>kinetic energy of secondary neutron</observable>
+        <reaction>capture pi- on Pb</reaction>
+        <beam>pi-</beam>
+	<beammomentum>0.0 MeV</beammomentum>
+	<beamenergy></beamenergy>
+        <target>Pb</target>
+        <secondary>neutron</secondary>
+        <status>public</status>
         <score>
             <type>expert</type>
             <value>passed</value>  
@@ -232,218 +212,18 @@
         <taglist>
             <tag>
                 <name>Model</name>
-                <value>Bertini: 4.9.6-b01,4.9.5-ref02,4.9.5.p01,4.9.4-ref10</value>
-            </tag>  
+                <value>Bertini</value>
+            </tag>
+            <tag>              
+                <name>Regression testing:</name>
+                <value>geant 4 versions: g4-9-6-p02,g4-9-6-p03,g4-10.00,g4-10.00-p01</value>
+            </tag>             
 	    <tag>
 	       <name>Comment</name>
 	       <value>Bertini is using PreCompound to handle evaporation</value>
 	    </tag>             
-	    <tag>
-	       <name>Comment</name>
-	       <value>4.9.5-ref02 patched with tag hadr-casc-V09-05-05</value>
-	    </tag>             
-            <tag>
-                <name>Particle</name>
-                <value>pi-</value>
-            </tag>       
-            <tag>
-                <name>Target</name>
-                <value>Pb</value>
-            </tag>
-
         </taglist>    
     </tests>
 
-
-    <tests>
-        <testdes>test48</testdes>
-        <g4version>geant4-9.6-b01</g4version>
-        <observable>kinetic energy of secondary neutrons</observable>
-        <reaction>pi- on C</reaction>
-        <score>
-            <type>expert</type>
-            <value>passed</value>  
-        </score>
-        <imageblob>pim-C-CHIPS-regre.gif</imageblob>
-        <taglist>
-            <tag>
-                <name>Model</name>
-                <value>CHIPS: 4.9.6-b01,4.9.5-ref02,4.9.5.p01,4.9.4-ref10</value>
-            </tag>  
-            <tag>
-                <name>Particle</name>
-                <value>pi-</value>
-            </tag>       
-            <tag>
-                <name>Target</name>
-                <value>C</value>
-            </tag>
-
-        </taglist>    
-    </tests>
-    
-    <tests>
-        <testdes>test48</testdes>
-        <g4version>geant4-9.6-b01</g4version>
-        <observable>kinetic energy of secondary neutrons</observable>
-        <reaction>pi- on N</reaction>
-        <score>
-            <type>expert</type>
-            <value>passed</value>  
-        </score>
-        <imageblob>pim-N-CHIPS-regre.gif</imageblob>
-        <taglist>
-            <tag>
-                <name>Model</name>
-                <value>CHIPS: 4.9-b01,4.9.5-ref02,4.9.5.p01,4.9.4-ref10</value>
-            </tag>  
-            <tag>
-                <name>Particle</name>
-                <value>pi-</value>
-            </tag>       
-            <tag>
-                <name>Target</name>
-                <value>N</value>
-            </tag>
-
-        </taglist>    
-    </tests>
-    
-    <tests>
-        <testdes>test48</testdes>
-        <g4version>geant4-9.6-b01</g4version>
-        <observable>kinetic energy of secondary neutrons</observable>
-        <reaction>pi- on O</reaction>
-        <score>
-            <type>expert</type>
-            <value>passed</value>  
-        </score>
-        <imageblob>pim-O-CHIPS-regre.gif</imageblob>
-        <taglist>
-            <tag>
-                <name>Model</name>
-                <value>CHIPS: 4.9.6-b01,4.9.5-ref02,4.9.5.p01,4.9.4-ref10</value>
-            </tag>  
-            <tag>
-                <name>Particle</name>
-                <value>pi-</value>
-            </tag>       
-            <tag>
-                <name>Target</name>
-                <value>O</value>
-            </tag>
-
-        </taglist>    
-    </tests>
-
-    <tests>
-        <testdes>test48</testdes>
-        <g4version>geant4-9.6-b01</g4version>
-        <observable>kinetic energy of secondary neutrons</observable>
-        <reaction>pi- on Al</reaction>
-        <score>
-            <type>expert</type>
-            <value>passed</value>  
-        </score>
-        <imageblob>pim-Al-CHIPS-regre.gif</imageblob>
-        <taglist>
-            <tag>
-                <name>Model</name>
-                <value>CHIPS: 4.9.6-b01,4.9.5-ref02,4.9.5.p01,4.9.4-ref10</value>
-            </tag>  
-            <tag>
-                <name>Particle</name>
-                <value>pi-</value>
-            </tag>       
-            <tag>
-                <name>Target</name>
-                <value>Al</value>
-            </tag>
-
-        </taglist>    
-    </tests>
-    
-    <tests>
-        <testdes>test48</testdes>
-        <g4version>geant4-9.6-b01</g4version>
-        <observable>kinetic energy of secondary neutrons</observable>
-        <reaction>pi- on Cu</reaction>
-        <score>
-            <type>expert</type>
-            <value>passed</value>  
-        </score>
-        <imageblob>pim-Cu-CHIPS-regre.gif</imageblob>
-        <taglist>
-            <tag>
-                <name>Model</name>
-                <value>CHIPS: 4.9.6-b01,4.9.5-ref02,4.9.5.p01,4.9.4-ref10</value>
-            </tag>  
-            <tag>
-                <name>Particle</name>
-                <value>pi-</value>
-            </tag>       
-            <tag>
-                <name>Target</name>
-                <value>Cu</value>
-            </tag>
-
-        </taglist>    
-    </tests>
-    
-    <tests>
-        <testdes>test48</testdes>
-        <g4version>geant4-9.6-b01</g4version>
-        <observable>kinetic energy of secondary neutrons</observable>
-        <reaction>pi- on Ta</reaction>
-        <score>
-            <type>expert</type>
-            <value>passed</value>  
-        </score>
-        <imageblob>pim-Ta-CHIPS-regre.gif</imageblob>
-        <taglist>
-            <tag>
-                <name>Model</name>
-                <value>CHIPS: 4.9.6-b01,4.9.5-ref02,4.9.5.p01,4.9.4-ref10</value>
-            </tag>  
-            <tag>
-                <name>Particle</name>
-                <value>pi-</value>
-            </tag>       
-            <tag>
-                <name>Target</name>
-                <value>Ta</value>
-            </tag>
-
-        </taglist>    
-    </tests>
-
-    <tests>
-        <testdes>test48</testdes>
-        <g4version>geant4-9.6-b01</g4version>
-        <observable>kinetic energy of secondary neutrons</observable>
-        <reaction>pi- on Pb</reaction>
-        <score>
-            <type>expert</type>
-            <value>passed</value>  
-        </score>
-        <imageblob>pim-Pb-CHIPS-regre.gif</imageblob>
-        <taglist>
-            <tag>
-                <name>Model</name>
-                <value>CHIPS: 4.9.6-b01,4.9.5-ref02,4.9.5.p01,4.9.4-ref10</value>
-            </tag>  
-            <tag>
-                <name>Particle</name>
-                <value>pi-</value>
-            </tag>       
-            <tag>
-                <name>Target</name>
-                <value>Pb</value>
-            </tag>
-
-        </taglist>    
-    </tests>
-    
-    
 
 </testslist>

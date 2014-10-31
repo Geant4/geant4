@@ -1,0 +1,99 @@
+//parsing of this file is very fragile
+//make sure #line is immediately followed by its data
+#verbose
+-1
+#rad
+#events
+1000000
+//--------muon_processes
+#particle
+mu-
+#position(mm)
+0. 0. 0.
+#direction
+0. 0. 1.
+//--------
+#momentum(MeV/c)
+0.0
+// ---
+#material
+Al
+#generator
+stopping
+#run
+#generator
+captureUpdate
+#run
+// ---
+#material
+Si
+#generator
+stopping
+#run
+#generator
+captureUpdate
+#run
+// ---
+#material
+Ca
+#generator
+stopping
+#run
+#generator
+captureUpdate
+#run
+// ---
+#material
+Fe
+#generator
+stopping
+#run
+#generator
+captureUpdate
+#run
+// ---
+#material
+Ag
+#generator
+stopping
+#run
+#generator
+captureUpdate
+#run
+// ---
+#material
+I
+#generator
+stopping
+#run
+#generator
+captureUpdate
+#run
+// ---
+#material
+Au
+#generator
+stopping
+#run
+#generator
+captureUpdate
+#run
+// ---
+#material
+Pb
+#generator
+stopping
+#run
+#generator
+captureUpdate
+#run
+// ---
+#material
+S
+#generator
+stopping
+#run
+#generator
+captureUpdate
+#run
+#exit

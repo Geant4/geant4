@@ -28,7 +28,7 @@ vs experimental data.
    EXPERIMENTAL DATA SETS
 
 We currently use experimental data (table) for stopped pi- from this paper:
--- R.Madey et al., Phys.Rev.C25, 2050 (1982)
+-- R.Madey et al., Phys.Rev.C25, 3050 (1982)
 
 For pbar annihilation, there's a large volume of materials, incl. from LEAR
 (Crystal Barrel), as well as much earlier data from 70's and 80's.
@@ -44,6 +44,10 @@ for validation, from these papers:
 -- K.Larson et al., Phys.Rev.D47,799(1993) (K-)
 -- M.Goossens et al., in in Low and Intermediate energy kaon physics,
    ed.E.Ferrari and G.Violini (Riedel, Holland, 1980), p.243 (Sigma-)
+   
+For mu- capture, we're using data from 
+-- P.Singer, Springer Tracts in Modern Physics, 71, 39 (1974)
+-- R.M.Sundelin et al., Phys.Rev.Lett, Vol.20, Number 21, 1198 (1968)
 
    OBSERVABLES OF THE TEST
 
@@ -77,6 +81,7 @@ test48.picapture - pi- case
 test48.kaon - K- case
 test48.sigma - Sigma- case
 test48.apcapture - antiproton case
+test48.mucapture - muon case
 
 The target in the pi- example is C (other targets are: N, O, Al, Cu, Ta, Pb).
 The model is BertiniPreCo.
@@ -93,10 +98,11 @@ really matter because there'd be no excited nuclei.
 The pbar application runs FTF model for pbar annihilation on H.
 
 Example usage:
-> $G4EXE/test48 test48.picapture
-> $G4EXE/test48 test48.apcapture
-> $G4EXE/test48 test48.kaon
-> $G4EXE/test48 test48.sigma
+> ./test48 test48.picapture
+> ./test48 test48.apcapture
+> ./test48 test48.kaon
+> ./test48 test48.sigma
+> ./test48 test48.mucapture
 
 The output will be in a form of a Root histogram file. 
 For each beam/target/model combination there will be a separate output.
