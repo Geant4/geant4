@@ -123,13 +123,13 @@ void G4HadronPhysicsNuBeam::CreateModels()
   //
   tpdata->theFTFPPro=new G4FTFPProtonBuilder(QuasiElastic);
   tpdata->thePro->RegisterMe(tpdata->theFTFPPro);
-  tpdata->theFTFPPro->SetMinEnergy(7.*GeV);
+  tpdata->theFTFPPro->SetMinEnergy(3.*GeV);
   tpdata->theFTFPPro->SetMaxEnergy(101.*GeV);
   // 
   // standard Bertini builder, but the validity limit in energy has been moved higher
   //
   tpdata->thePro->RegisterMe(tpdata->theBertiniPro=new G4BertiniProtonBuilder);
-  tpdata->theBertiniPro->SetMaxEnergy(10.*GeV);
+  tpdata->theBertiniPro->SetMaxEnergy(3.5*GeV);
 
   // this one has energy ranges different from FTFP_BERT,
   // namely, Bertini is extended up to 10GeV, and FTFP starts at 7GeV
@@ -137,9 +137,9 @@ void G4HadronPhysicsNuBeam::CreateModels()
   tpdata->thePiK=new G4PiKBuilder;
   tpdata->theFTFPPiK=new G4FTFPPiKBuilder(QuasiElastic);
   tpdata->thePiK->RegisterMe(tpdata->theFTFPPiK);
-  tpdata->theFTFPPiK->SetMinEnergy(7.*GeV);
+  tpdata->theFTFPPiK->SetMinEnergy(3.*GeV);
   tpdata->thePiK->RegisterMe(tpdata->theBertiniPiK=new G4BertiniPiKBuilder);
-  tpdata->theBertiniPiK->SetMaxEnergy(10.*GeV);
+  tpdata->theBertiniPiK->SetMaxEnergy(3.5*GeV);
   
   // this is "standard" and is the same as in FTFP_BERT
   //  

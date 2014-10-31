@@ -68,12 +68,14 @@ G4VHadronPhysics::G4VHadronPhysics(const G4String& aName, G4int verb)
 
 G4VHadronPhysics::~G4VHadronPhysics() 
 {
-  G4int n = builders->size();
-  if(n > 0) {
-    for(G4int i=0; i<n; i++) {delete (*builders)[i];}
-  }
-  delete builders;
-}                                     
+    if ( builders ) {
+        G4int n = builders->size();
+        if(n > 0) {
+            for(G4int i=0; i<n; i++) {delete (*builders)[i];}
+        }
+        delete builders;
+    }
+}
 
 void G4VHadronPhysics::ConstructParticle()
 {
