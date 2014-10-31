@@ -9,6 +9,9 @@ $Id$
                       Category History file
                       ---------------------
 
+30.10.2014 - V.Ivanchenko (DMX-V10-00-08)
+             use correct mu- stopping process
+
 11.10.2014 - M. Asai (DMX-V10-00-07)
 	     Replace obsolete G4ParticleTable::GetIon() with G4IonTable::GetIon().
 
