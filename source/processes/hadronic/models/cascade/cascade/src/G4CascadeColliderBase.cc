@@ -38,6 +38,7 @@
 //		before instantiating CheckBalance; change explosion() to
 //		use reference, add validateOutput() w/G4Fragment
 // 20130622  Move fragment-handling functions to G4CascadeDeexciteBase
+// 20140930  Change name from "const char*" to "const G4String"
 
 #include "G4CascadeColliderBase.hh"
 #include "G4CascadeCheckBalance.hh"
@@ -54,7 +55,7 @@ using namespace G4InuclSpecialFunctions;
 
 // Constructor and destructor
 
-G4CascadeColliderBase::G4CascadeColliderBase(const char* name, G4int verbose)
+G4CascadeColliderBase::G4CascadeColliderBase(const G4String& name, G4int verbose)
   : G4VCascadeCollider(name, verbose), balance(0) {
   if (G4CascadeParameters::checkConservation())
     balance = new G4CascadeCheckBalance(name);

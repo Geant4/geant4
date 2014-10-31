@@ -155,6 +155,7 @@
 // 20130925  M. Kelsey -- Eliminate unnecessary use of pow() in integrals
 // 20131001  M. Kelsey -- Move QDinterp object to data member, thread local
 // 20140116  M. Kelsey -- Move all envvar parameters to const data members
+// 20141001  M. Kelsey -- Change sign of "dv" in boundaryTransition
 
 #include "G4NucleiModel.hh"
 #include "G4PhysicalConstants.hh"
@@ -913,6 +914,9 @@ generateParticleFate(G4CascadParticle& cparticle,
     }
     
     EPCoutput.reset();
+    // Pass current (A,Z) configuration for possible recoils
+    G4int massNumberCurrent = protonNumberCurrent+neutronNumberCurrent;
+    theEPCollider->setNucleusState(massNumberCurrent, protonNumberCurrent);
     theEPCollider->collide(&bullet, &target, EPCoutput);
     
     // If collision failed, exit loop over partners
@@ -1115,15 +1119,16 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   G4double pr = pos.dot(mom.vect()) / r;
   
   G4int next_zone = cparticle.movingInsideNuclei() ? zone - 1 : zone + 1;
-  
-  G4double dv = getPotential(type,zone) - getPotential(type, next_zone);
+
+  // NOTE:  dv is the height of the wall seen by the particle  
+  G4double dv = getPotential(type,next_zone) - getPotential(type,zone);
   if (verboseLevel > 3) {
     G4cout << "Potentials for type " << type << " = " 
 	   << getPotential(type,zone) << " , "
   	   << getPotential(type,next_zone) << G4endl;
   }
 
-  G4double qv = dv * dv - 2.0 * dv * mom.e() + pr * pr;
+  G4double qv = dv * dv + 2.0 * dv * mom.e() + pr * pr;
   
   G4double p1r;
   

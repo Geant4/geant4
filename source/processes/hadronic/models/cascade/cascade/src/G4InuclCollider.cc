@@ -62,6 +62,7 @@
 // 20111003  M. Kelsey -- Prepare for gamma-N interactions by checking for
 //		final-state tables instead of particle "isPhoton()"
 // 20130621  M. Kelsey -- Pass G4Fragment to de-excitation modules directly
+// 20140929  M. Kelsey -- Make PreCompound the default de-excitation
 
 #include "G4InuclCollider.hh"
 #include "G4CascadeChannelTables.hh"
@@ -80,7 +81,7 @@ G4InuclCollider::G4InuclCollider()
   : G4CascadeColliderBase("G4InuclCollider"),
     theElementaryParticleCollider(new G4ElementaryParticleCollider),
     theIntraNucleiCascader(new G4IntraNucleiCascader),
-    theDeexcitation(new G4CascadeDeexcitation) {}
+    theDeexcitation(new G4PreCompoundDeexcitation) {}
 
 G4InuclCollider::~G4InuclCollider() {
   delete theElementaryParticleCollider;

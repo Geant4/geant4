@@ -48,6 +48,7 @@
 // 20121002  M. Kelsey -- Add strangeness check (useful for Omega- beam)
 // 20130620  Address Coverity complaint about missing copy actions
 // 20130621  Add interface to take G4Fragment input instead of G4InuclNuclei.
+// 20140930  Change name from "const char*" to "const G4String"
 
 #include "G4VCascadeCollider.hh"
 #include "globals.hh"
@@ -65,13 +66,13 @@ class G4CascadeCheckBalance : public G4VCascadeCollider {
 public:
   static const G4double tolerance;	// Don't do floating zero!
 
-  explicit G4CascadeCheckBalance(const char* owner="G4CascadeCheckBalance");
+  explicit G4CascadeCheckBalance(const G4String& owner="G4CascadeCheckBalance");
 
   G4CascadeCheckBalance(G4double relative, G4double absolute,
-			const char* owner="G4CascadeCheckBalance");
+			const G4String& owner="G4CascadeCheckBalance");
   virtual ~G4CascadeCheckBalance() {};
 
-  void setOwner(const char* owner) { setName(owner); }
+  void setOwner(const G4String& owner) { setName(owner); }
 
   void setLimits(G4double relative, G4double absolute) {
     setRelativeLimit(relative);

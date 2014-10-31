@@ -99,6 +99,7 @@
 // 20130804  M. Kelsey -- Fix bug #1513 -- "(Z=1)" in boolean expression
 // 20140116  M. Kelsey -- Move statics to const data members to avoid weird
 //		interactions with MT.
+// 20140929  M. Kelsey -- Explicitly call useCascadeDeexcitation() in ctor
 
 #include <cmath>
 #include <iostream>
@@ -148,7 +149,11 @@ G4CascadeInterface::G4CascadeInterface(const G4String& name)
   SetEnergyMomentumCheckLevels(5*perCent, 10*MeV);
   balance->setLimits(5*perCent, 10*MeV/GeV);	// Bertini internal units
   this->SetVerboseLevel(G4CascadeParameters::verbose());
-  if (G4CascadeParameters::usePreCompound()) usePreCompoundDeexcitation();
+
+  if (G4CascadeParameters::usePreCompound())
+    usePreCompoundDeexcitation();
+  else
+    useCascadeDeexcitation();
 }
 
 G4CascadeInterface::~G4CascadeInterface() {

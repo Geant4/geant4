@@ -32,6 +32,7 @@
 // 20130421  M. Kelsey -- Add flag for CHECK_ECONS, replacing #ifdef's
 // 20130702  M. Kelsey -- Add flag to use N-body phase-space generator
 // 20140311  G. Cosmo -- Implement standard (non-const) singleton pattern
+// 20141030  M. Kelsey -- Add flag to enable direct pi-N absorption
 
 #ifndef G4CascadeParameters_hh
 #define G4CascadeParameters_hh 1
@@ -52,6 +53,7 @@ public:
   static G4bool checkConservation()   { return Instance()->CHECK_ECONS; }
   static G4bool usePreCompound()      { return Instance()->USE_PRECOMPOUND; }
   static G4bool doCoalescence()       { return Instance()->DO_COALESCENCE; }
+  static G4bool piNAbsorption()	      { return Instance()->PIN_ABSORPTION; }
   static G4bool showHistory()         { return Instance()->SHOW_HISTORY; }
   static G4bool use3BodyMom()	      { return Instance()->USE_3BODYMOM; }
   static G4bool usePhaseSpace()       { return Instance()->USE_PHASESPACE; }
@@ -79,6 +81,7 @@ private:	// Environment variable values, null pointers mean not set
   const char* G4CASCADE_CHECK_ECONS;
   const char* G4CASCADE_USE_PRECOMPOUND;
   const char* G4CASCADE_DO_COALESCENCE;
+  const char* G4CASCADE_PIN_ABSORPTION;
   const char* G4CASCADE_SHOW_HISTORY;
   const char* G4CASCADE_USE_3BODYMOM;
   const char* G4CASCADE_USE_PHASESPACE;
@@ -102,6 +105,7 @@ private:	// Environment variable values, null pointers mean not set
   G4bool CHECK_ECONS;
   G4bool USE_PRECOMPOUND;
   G4bool DO_COALESCENCE;
+  G4bool PIN_ABSORPTION;
   G4bool SHOW_HISTORY;
   G4bool USE_3BODYMOM;
   G4bool USE_PHASESPACE;

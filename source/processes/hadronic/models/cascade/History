@@ -15,6 +15,52 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+30 October 2014  M. Kelsey (hadr-casc-V10-00-13)
+------------------------------------------------
+- G4CascadeParameters, G4CascadeParamMessenger:  Add flag to enable
+  absorbing pion on a single nucleon.  See G4EPCollider below for details.
+
+- G4ElementaryParticleCollider:  Add support for absorbing a pion with a
+  single nucleon (via a charge exchange interaction, e.g. pi- p -> n), with
+  momentum conservation handled by recoiling against the nucleus.  This is
+  intended to improve the match to data for pi- capture.
+
+- G4NucleiModel.cc:  In boundaryTransition(), switch sign of "dv" so that
+  particle sees a barrier (next_zone potential > current potential) as
+  positive.  In generateParticleFate(), pass (A,Z) to EPCollider for
+  possible nuclear-recoil calculations.
+
+- G4CascadeCheckBalance.cc:  Per V.Ivantchenko, use G4Fragment::GetZ_asInt(),
+  GetZ_asInt().  Should have been done long ago.
+
+1 October 2014  M. Kelsey (hadr-casc-V10-00-12)
+-----------------------------------------------
+- G4CascadeCheckBalance:  Change ctor arg from "const char*" to "const
+  G4String&" to avoid memory deallocation problems.
+
+- G4CascadeColliderBase:  Change ctor arg from "const char*" to "const
+  G4String&" to avoid memory deallocation problems.
+
+- G4CascadeInterface.cc:  Call both usePreCompoundDeexcitation() and
+  useCascadeDeexcitation() in ctor, with if-else.
+
+- G4CascadeParameters.cc:  Make PreCompound, phase space, trailing effect,
+  and light-ion clustering active by default.  User must set envvars to "0"
+  to disable.
+
+- G4InuclCollider.cc:  Make PreCompound the default in ctor.
+
+- G4VCascadeCollider:  Change ctor arg from "const char*" to "const
+  G4String&" to avoid memory deallocation problems.
+
+- G4VCascadeDeexcitation.hh:  Change ctor arg from "const char*" to "const
+  G4String&" to avoid memory deallocation problems.
+
+27 June 2014  M. Kelsey (hadr-casc-V10-00-11)
+---------------------------------------------
+- G4CascadeFinalStateAlgorithm.cc:  Address bug #1558, using ".c_str()" in
+  diagnostic outputs, to avoid IBM XL compiler error.
+
 23 May 2014  M. Kelsey (hadr-casc-V10-00-10)
 --------------------------------------------
 - G4InuclNuclei.cc:  Avoid FPE in setExcitationEnergy() for zero Ekin.  This

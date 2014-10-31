@@ -54,6 +54,8 @@
 // 20130508  D. Wright -- Add muon capture, with absorption on quasideuterons
 // 20130620  Address Coverity complaint about missing copy actions
 // 20130628  Add function to split dibaryon into particle_kinds list
+// 20141009  M. Kelsey -- Add pion absorption by single nucleons, with
+//		nuclear recoil.  Improves pi- capture performance.
 
 #ifndef G4ELEMENTARY_PARTICLE_COLLIDER_HH
 #define G4ELEMENTARY_PARTICLE_COLLIDER_HH
@@ -77,6 +79,10 @@ public:
   void collide(G4InuclParticle* bullet, G4InuclParticle* target,
 	       G4CollisionOutput& output);
 
+  void setNucleusState(G4int a, G4int z) {	// Nucleus to use for recoil
+    nucleusA = a; nucleusZ = z;
+  }
+
 private:
   G4int generateMultiplicity(G4int is, G4double ekin) const;
 
@@ -86,13 +92,22 @@ private:
 			     G4InuclElementaryParticle* particle1,
 			     G4InuclElementaryParticle* particle2); 
 
+  // Pion (or photon) absorption on a dibaryon
   void generateSCMpionAbsorption(G4double etot_scm,
 				 G4InuclElementaryParticle* particle1,
 				 G4InuclElementaryParticle* particle2); 
 
+  // Muon absorption on a dibaryon (with outgoing neutrino)
   void generateSCMmuonAbsorption(G4double etot_scm,
 				 G4InuclElementaryParticle* particle1,
 				 G4InuclElementaryParticle* particle2); 
+
+  // Pion absorption on a single nucleon (charge exchange)
+  void generateSCMpionNAbsorption(G4double etot_scm,
+				  G4InuclElementaryParticle* particle1,
+				  G4InuclElementaryParticle* particle2); 
+
+  G4bool pionNucleonAbsorption(G4double ekin) const;
 
   G4bool splitQuasiDeuteron(G4int qdtype); 	// Fill kinds with NN components
 
@@ -108,6 +123,9 @@ private:
   std::vector<G4double> masses;
   std::vector<G4double> masses2;
   std::vector<G4int> particle_kinds;
+
+  // Nuclear environment (to do pion-nucleon absorption)
+  G4int nucleusA, nucleusZ;
 
 private:
   // Copying of modules is forbidden

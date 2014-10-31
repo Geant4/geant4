@@ -30,6 +30,7 @@
 // 20130621  M. Kelsey -- Add flag for CHECK_ECONS, replacing #ifdef's; add
 //		flag to use three-body momentum parametrizations
 // 20130703  M. Kelsey -- Add flag for USE_PHASESPACE
+// 20141030  M. Kelsey -- Add flag to enable direct pi-N absorption
 
 #ifndef G4CascadeParamMessenger_hh
 #define G4CascadeParamMessenger_hh
@@ -71,6 +72,7 @@ private:
   G4UIcmdWithABool*	balanceCmd;
   G4UIcmdWithABool*     usePreCoCmd;
   G4UIcmdWithABool*     doCoalCmd;
+  G4UIcmdWithABool*     piNAbsCmd;
   G4UIcmdWithABool*     historyCmd;
   G4UIcmdWithABool*     use3BodyCmd;
   G4UIcmdWithABool*     usePSCmd;

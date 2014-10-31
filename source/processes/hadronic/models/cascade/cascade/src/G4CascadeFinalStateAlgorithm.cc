@@ -40,6 +40,7 @@
 //		from first to last, while three-body starts with the last.
 // 20130702  M. Kelsey: Copy phase-space algorithm from Kopylov; use if
 //		runtime envvar G4CASCADE_USE_PHASESPACE is set
+// 20140627  BUG FIX:  Use ".c_str()" in diagnostics to avoid IBM XL error.
 
 #include "G4CascadeFinalStateAlgorithm.hh"
 #include "G4CascadeParameters.hh"
@@ -149,8 +150,8 @@ void G4CascadeFinalStateAlgorithm::ChooseGenerators(G4int is, G4int fs) {
   }
 
   if (GetVerboseLevel()>1) {
-    G4cout << " " << (momDist?momDist->GetName():"") << " "
-	   << (angDist?angDist->GetName():"") << G4endl;
+    G4cout << " " << (momDist?momDist->GetName().c_str():"") << " "
+	   << (angDist?angDist->GetName().c_str():"") << G4endl;
   }
 }
 
