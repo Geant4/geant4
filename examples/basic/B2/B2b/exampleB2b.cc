@@ -43,19 +43,22 @@
 
 #include "Randomize.hh"
 
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
 
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {
+  G4UIExecutive* ui;
+  if (argc==1) {
+    // interactive mode : define UI session
+    ui = new G4UIExecutive(argc, argv);
+  }
   // Choose the Random engine
+  // Add data flags
+//  system("/Users/garnier/temp/geant4.sh");
 
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
   
@@ -83,13 +86,11 @@ int main(int argc,char** argv)
 
   runManager->Initialize();
   
-#ifdef G4VIS_USE
   // Initialize visualization
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
-#endif
 
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
@@ -102,18 +103,15 @@ int main(int argc,char** argv)
     }
   else
     {  // interactive mode : define UI session
-#ifdef G4UI_USE
       G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
+      if (ui->IsGUI()) {
         UImanager->ApplyCommand("/control/execute init_vis.mac");
-#else
+        UImanager->ApplyCommand("/control/execute gui.mac");
+      } else {
         UImanager->ApplyCommand("/control/execute init.mac");
-#endif
-      if (ui->IsGUI())
-         UImanager->ApplyCommand("/control/execute gui.mac");
+      }
       ui->SessionStart();
       delete ui;
-#endif
     }
 
   // Job termination
@@ -121,9 +119,7 @@ int main(int argc,char** argv)
   // owned and deleted by the run manager, so they should not be deleted
   // in the main() program !
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete runManager;
 
   return 0;

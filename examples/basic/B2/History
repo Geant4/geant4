@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31/11/13 L. Garnier (exampleB2-V10-00-01)
+ exampleB2a/exampleB2b : 
+  - Remove old G4UI_USE/G4VIS_USE
+  - Move G4UIExecutive at the beginning of main() 
+
 02 December 2013 Ivana Hrivnacova 
 - Fixed gui.mac:
   corrected wireframe parameter, removed run2.mac from gui 
