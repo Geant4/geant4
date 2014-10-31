@@ -188,7 +188,7 @@ void G4OpenGLStoredViewer::DrawDisplayLists () {
             }
           }
           if (isPicking) glLoadName(po.fPickName);
-          if (c != fOldDisplayListColor) {
+          if ((iPO == 0) || (c != fOldDisplayListColor)) {
             fOldDisplayListColor = c;
             if (transparency_enabled) {
               glColor4d(c.GetRed(),c.GetGreen(),c.GetBlue(),c.GetAlpha());

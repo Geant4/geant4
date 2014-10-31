@@ -90,6 +90,11 @@ class G4OpenGLQtViewer: public QObject, virtual public G4OpenGLViewer {
 public:
   G4OpenGLQtViewer (G4OpenGLSceneHandler& scene);
   virtual ~G4OpenGLQtViewer ();
+#ifdef G4MULTITHREADED
+  void SwitchToVisSubThread();
+  void SwitchToMasterThread();
+#endif
+
 private:
   G4OpenGLQtViewer (const G4OpenGLQtViewer&);
   G4OpenGLQtViewer& operator= (const G4OpenGLQtViewer&);

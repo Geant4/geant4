@@ -418,6 +418,7 @@ void G4VisManager::RegisterMessengers () {
   RegisterMessenger(new G4VisCommandSceneAddDate);
   RegisterMessenger(new G4VisCommandSceneAddDigis);
   RegisterMessenger(new G4VisCommandSceneAddEventID);
+  RegisterMessenger(new G4VisCommandSceneAddExtent);
   RegisterMessenger(new G4VisCommandSceneAddFrame);
   RegisterMessenger(new G4VisCommandSceneAddHits);
   RegisterMessenger(new G4VisCommandSceneAddLine);
@@ -2236,11 +2237,12 @@ G4bool G4VisManager::IsValidView () {
     G4bool successful = fpScene -> AddWorldIfEmpty (warn);
     if (!successful || fpScene -> IsEmpty ()) {        // If still empty...
       if (fVerbosity >= errors) {
-	G4cerr << "ERROR: G4VisManager::IsViewValid ():";
+	G4cerr << "ERROR: G4VisManager::IsValidView ():";
 	G4cerr <<
 	  "\n  Attempt at some drawing operation when scene is empty."
 	  "\n  Maybe the geometry has not yet been defined."
 	  "  Try /run/initialize."
+          "\n  Or use \"/vis/scene/add/extent\"."
 	       << G4endl;
       }
       isValid = false;

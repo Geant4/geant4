@@ -66,7 +66,7 @@ G4VViewer* G4XXXFile::CreateViewer(G4VSceneHandler& scene,
     }
   }
   else {
-    G4cout <<
+    G4cerr <<
       "G4XXXFile::CreateViewer: ERROR: null pointer on new G4XXXFileViewer."
 	   << G4endl;
   }

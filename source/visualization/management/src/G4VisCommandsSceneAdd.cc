@@ -321,7 +321,7 @@ void G4VisCommandSceneAddAxes::SetNewValue (G4UIcommand*, G4String newValue) {
     if (pScene->GetExtent().GetExtentRadius() <= 0.) {
       if (verbosity >= G4VisManager::errors) {
         G4cerr
-        << "ERROR: Scene has no extent - not properly established."
+  << "ERROR: Scene has no extent. Add volumes or use \"/vis/scene/add/extent\"."
         << G4endl;
       }
       return;
@@ -660,6 +660,104 @@ void G4VisCommandSceneAddEventID::EventID::operator()
     sceneHandler.EndPrimitives2D();
   }
 }
+
+////////////// /vis/scene/add/extent ///////////////////////////////////////
+
+G4VisCommandSceneAddExtent::G4VisCommandSceneAddExtent () {
+  fpCommand = new G4UIcommand("/vis/scene/add/extent", this);
+  fpCommand -> SetGuidance
+  ("Adds a dummy model with given extent to the current scene."
+   "\nThis can be used to provide an extent to the scene even if"
+   "\nno other models with extent are available. For example,"
+   "\neven if there is no geometry.");
+  G4bool omitable;
+  G4UIparameter* parameter;
+  parameter = new G4UIparameter ("xmin", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("xmax", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("ymin", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("ymax", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("zmin", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommand -> SetParameter (parameter);
+  parameter = new G4UIparameter ("zmax", 'd', omitable = true);
+  parameter -> SetDefaultValue (0.);
+  fpCommand -> SetParameter (parameter);
+  parameter =  new G4UIparameter ("unit", 's', omitable = true);
+  parameter -> SetDefaultValue ("m");
+  fpCommand -> SetParameter (parameter);
+}
+
+G4VisCommandSceneAddExtent::~G4VisCommandSceneAddExtent () {
+  delete fpCommand;
+}
+
+G4String G4VisCommandSceneAddExtent::GetCurrentValue (G4UIcommand*) {
+  return "";
+}
+
+void G4VisCommandSceneAddExtent::SetNewValue (G4UIcommand*, G4String newValue)
+{
+  G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
+  G4bool warn(verbosity >= G4VisManager::warnings);
+
+  G4Scene* pScene = fpVisManager->GetCurrentScene();
+  if (!pScene) {
+    if (verbosity >= G4VisManager::errors) {
+      G4cerr <<	"ERROR: No current scene.  Please create one." << G4endl;
+    }
+    return;
+  }
+
+  G4double xmin, xmax, ymin, ymax, zmin, zmax;
+  G4String unitString;
+  std::istringstream is(newValue);
+  is >> xmin >> xmax >> ymin >> ymax >> zmin >> zmax >> unitString;
+  G4double unit = G4UIcommand::ValueOf(unitString);
+  xmin *= unit; xmax *= unit;
+  ymin *= unit; ymax *= unit;
+  zmin *= unit; zmax *= unit;
+
+  G4VisExtent visExtent(xmin, xmax, ymin, ymax, zmin, zmax);
+  Extent* extent = new Extent(xmin, xmax, ymin, ymax, zmin, zmax);
+  G4VModel* model =
+  new G4CallbackModel<G4VisCommandSceneAddExtent::Extent>(extent);
+  model->SetType("Extent");
+  model->SetGlobalTag("Extent");
+  model->SetGlobalDescription("Extent: " + newValue);
+  model->SetExtent(visExtent);
+  const G4String& currentSceneName = pScene -> GetName ();
+  G4bool successful = pScene -> AddRunDurationModel (model, warn);
+  if (successful) {
+    if (verbosity >= G4VisManager::confirmations) {
+      G4cout << "A benign model with extent "
+      << visExtent
+      << " has been added to scene \""
+	     << currentSceneName << "\"."
+	     << G4endl;
+    }
+  }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
+  UpdateVisManagerScene (currentSceneName);
+}
+
+G4VisCommandSceneAddExtent::Extent::Extent
+(G4double xmin, G4double xmax,
+ G4double ymin, G4double ymax,
+ G4double zmin, G4double zmax):
+fExtent(xmin,xmax,ymin,ymax,zmin,zmax)
+{}
+
+void G4VisCommandSceneAddExtent::Extent::operator()
+(G4VGraphicsScene&, const G4Transform3D&)
+{}
 
 ////////////// /vis/scene/add/frame ///////////////////////////////////////
 
@@ -1192,7 +1290,7 @@ void G4VisCommandSceneAddLogo::SetNewValue (G4UIcommand*, G4String newValue) {
     if (pScene->GetExtent().GetExtentRadius() <= 0.) {
       if (verbosity >= G4VisManager::errors) {
         G4cerr
-        << "ERROR: Scene has no extent - not properly established."
+  << "ERROR: Scene has no extent. Add volumes or use \"/vis/scene/add/extent\"."
         << G4endl;
       }
       return;
@@ -1782,7 +1880,7 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
     if (pScene->GetExtent().GetExtentRadius() <= 0.) {
       if (verbosity >= G4VisManager::errors) {
         G4cerr
-        << "ERROR: Scene has no extent - not properly established."
+  << "ERROR: Scene has no extent. Add volumes or use \"/vis/scene/add/extent\"."
         << G4endl;
       }
       return;

@@ -4152,7 +4152,11 @@ void G4OpenGLQtViewer::updateSceneTreeComponentTreeWidgetInfos() {
   G4UImanager* UI = G4UImanager::GetUIpointer();
   G4UIcommandTree * commandTreeTop = UI->GetTree();
   G4UIcommandTree* path = commandTreeTop->FindCommandTree("/vis/viewer/set/");
-  
+
+  if (!path) {
+    return;
+  }
+
   // clear old table
   if ((path->GetCommandEntry()-fTreeWidgetInfosIgnoredCommands) != fSceneTreeComponentTreeWidgetInfos->rowCount()) {
     fSceneTreeComponentTreeWidgetInfos->clear();
@@ -4533,6 +4537,17 @@ QString G4OpenGLQtViewer::GetCommandParameterList (
   }
   return txt;
 }
+
+#ifdef G4MULTITHREADED
+void G4OpenGLQtViewer::SwitchToVisSubThread()
+{
+  fWindow->makeCurrent();
+}
+
+void G4OpenGLQtViewer::SwitchToMasterThread()
+{
+}
+#endif
 
 
 /*

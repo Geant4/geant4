@@ -26,7 +26,18 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
-22th October 2014  Laurent Garnier  (visman-V10-00-19 require greps-V10-00-08)
+30th October 2014  John Allison  (visman-V10-00-21)
+- G4VisManager.cc, G4VisCommandsSceneAdd.cc, G4Scene.cc:
+  o Added informationals about /vis/scene/add/extent.
+
+29th October 2014  John Allison  (visman-V10-00-20)
+- Added /vis/scene/add/extent.
+  o Adds a dummy model with given extent to the current scene.
+    This can be used to provide an extent to the scene even if
+    no other models with extent are available. For example,
+    even if there is no geometry.
+
+22nd October 2014  Laurent Garnier  (visman-V10-00-19 require greps-V10-00-08)
 - G4VSceneHandler.cc, G4ViewParameters.cc
   o Change contant in .cc nSegmentsMin by GetMinLineSegmentsPerCircle() in the G4VisAttribute
 

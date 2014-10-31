@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+30th October 2014  Laurent Garnier (opengl-V10-00-21)
+- Tagged
+
+27th October 2014  Laurent Garnier
+G4OpenGLStoredViewer
+  o Solve DEV-170 bug, introduced 4th september
+G4OpenGLQtViewer
+  o Add SwitchToVisSubThread() and SwitchToMasterThread() functions
+
 24th October 2014  Laurent Garnier (opengl-V10-00-20 require interfaces-V10-00-15)
 G4OpenGLImmediateSceneHandler, G4OpenGLSceneHandler :
   o Improvements for OpenGL VBO

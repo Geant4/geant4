@@ -151,6 +151,25 @@ private:
   G4UIcommand* fpCommand;
 };
 
+class G4VisCommandSceneAddExtent: public G4VVisCommandScene {
+public:
+  G4VisCommandSceneAddExtent ();
+  virtual ~G4VisCommandSceneAddExtent ();
+  G4String GetCurrentValue (G4UIcommand* command);
+  void SetNewValue (G4UIcommand* command, G4String newValue);
+private:
+  G4VisCommandSceneAddExtent (const G4VisCommandSceneAddExtent&);
+  G4VisCommandSceneAddExtent& operator = (const G4VisCommandSceneAddExtent&);
+  struct Extent {
+    Extent(G4double xmin, G4double xmax,
+           G4double ymin, G4double ymax,
+           G4double zmin, G4double zmax);
+    void operator()(G4VGraphicsScene&, const G4Transform3D&);
+    G4VisExtent fExtent;
+  };
+  G4UIcommand* fpCommand;
+};
+
 class G4VisCommandSceneAddFrame: public G4VVisCommandScene {
 public:
   G4VisCommandSceneAddFrame ();

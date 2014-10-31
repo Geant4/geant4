@@ -24,6 +24,36 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+30th October 2014  Laurent Garnier (vis-V10-00-10 - vis-V10-00-11)
+- visexternal-V10-00-03
+- opengl-V10-00-21
+
+30th October 2014  John Allison
+- visman-V10-00-21: Added informationals about /vis/scene/add/extent.
+
+29th October 2014  John Allison
+- visman-V10-00-20: Added /vis/scene/add/extent.
+  o Adds a dummy model with given extent to the current scene.
+    This can be used to provide an extent to the scene even if
+    no other models with extent are available. For example,
+    even if there is no geometry.
+
+22nd October 2014  John Allison  (vis-MT-branchpoint-00)
+- A tag made on the trunk from which vis-MT-branch-00 has been made.
+
+22nd October 2014  John Allison
+- modeling-V10-00-08: Get appropriate run manager in MT mode.
+- opengl-V10-00-19: Some developments by Laurent.
+
+1st October 2014  John Allison
+- visman-V10-00-18:
+  o G4VisManager: Split out some code in sequential version of EndOfEvent
+    in preparation for re-use in multi-threading mode.
+  o G4VisManager.cc and G4VSceneHandler.cc: Minor code improvements (Laurent).
+
+14th Aug 2014  John Allison  (vis-V10-00-09)
+- visman-V10-00-17: Changed default text size to 12 pixels.
+
 11th Aug 2014  John Allison  (vis-V10-00-08)
 - Re-tagged.  Needs greps-V10-00-06.
 

@@ -24,6 +24,9 @@ committal in the CVS repository !
 History file for visualization/Tree sub-category
 ------------------------------------------------
 
+7th October 2014  Laurent Garnier  (vistree-V10-00-01)
+- Change a message from G4cout to G4cerr
+
 15th November 2013  John Allison  (vistree-V09-06-01)
 - Some changes as suggested by PVS.
 

@@ -17,18 +17,24 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-2 July 2014 Laurent Garnier (visexternal-V10-00-02)
+30th October 2014 Laurent Garnier  (visexternal-V10-00-03)
+- Tagged
+
+1st October 2014 Laurent Garnier 
+- Geant4_gl2ps : Minor change for OpenGL2
+
+2nd July 2014 Laurent Garnier (visexternal-V10-00-02)
 - Retagged
 
-2 July 2014 Laurent Garnier (visexternal-V10-00-01)
+2nd July 2014 Laurent Garnier (visexternal-V10-00-01)
 - add setExportImageFormat(format) method
 - change default options for generation gl2ps files
  o allow transparency on volumes (for pdf)
 
-8 April 2014 Laurent Garnier (visexternal-V10-00-00)
+8th April 2014 Laurent Garnier (visexternal-V10-00-00)
 - Fix a bad text in G4OpenGL2PSAction
 
-20 Sept 2013 Laurent Garnier
+20th Sept 2013 Laurent Garnier
 - add #ifdef statement in in gl2ps.h to prevent having gl2ps AND Wt driver
 
 3rd June 2013  John Allison (visexternal-V09-06-04)
