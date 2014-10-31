@@ -24,8 +24,8 @@ c1.cd(1);
   gStyle->SetOptStat(000000);
   
   // All
-  ntuple0->Draw("flagProcess","","B");
-  ntuple0->SetFillColor(2);
+  ntuple->Draw("flagProcess","","B");
+  ntuple->SetFillColor(2);
   
   // Elastic
   ntuple->Draw("flagProcess","flagProcess==11","same");
