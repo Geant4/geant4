@@ -124,6 +124,7 @@ GEANT4_DEFINE_MODULE(NAME G4geometrymng
         G4intercoms
         G4materials
     LINK_LIBRARIES
+        ${USOLIDS_LIBRARIES}
 )
 
 # List any source specific properties here

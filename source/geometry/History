@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 31, 2014  Gabriele Cosmo                geometry-V10-00-02
+----------------------------
+- Fixed internal link dependency on USolids module in CMake scripts.
+
 Oct 29, 2014  Gabriele Cosmo                geometry-V10-00-01/00
 ----------------------------
 - Moved solids/usolids module to source/externals.
