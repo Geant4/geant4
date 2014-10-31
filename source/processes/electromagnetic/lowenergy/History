@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31.10.2014 G4MicroElecInelasticModel from M. Raine, tag emlowen-V10-00-21
+           -change in angular generator, to use G4DeltaAngle model
+
 28.10.2014 G4MicroElecInelastic and G4MicroElecInelasticModel from M. Raine, tag emlowen-V10-00-20
            - better treatment of GenericIon
            - MT compatibility improved
