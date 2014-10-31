@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+31 October 2014  V.Ivanchenko  (test16-V10-00-00)
+------------------------------------------------
+- Fixed energy range for ion inelastic
+
 22 October 2013  Dennis Wright  (test16-V09-06-03)
 --------------------------------------------------
 - remove all LEP, HEP models

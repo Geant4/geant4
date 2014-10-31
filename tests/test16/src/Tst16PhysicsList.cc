@@ -303,7 +303,7 @@ void Tst16PhysicsList::ConstructHad()
   // Inelastic hadronic model for ions
   G4BinaryLightIonReaction* binaryCascade = new G4BinaryLightIonReaction;
   binaryCascade->SetMinEnergy(0.0);
-  binaryCascade->SetMaxEnergy(110*MeV);
+  binaryCascade->SetMaxEnergy(10*GeV);
 
   theParticleIterator->reset();
   while ((*theParticleIterator)()) {
