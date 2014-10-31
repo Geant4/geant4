@@ -9,6 +9,9 @@ $Id$
                           History file
                           ------------
 
+30.10.2014   V.Ivanchenko, Tag gammaraytel-V10-00-08
+             Use correct mu- stopping process
+
 10.09.2014   G.Cosmo, Tag gammaraytel-V10-00-07
              Corrected compilation error in GammaRayTelIonPhysics.cc
              for missing inclusion of units header.
