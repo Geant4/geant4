@@ -4,6 +4,12 @@ $Id$
 History file for test/test202 subdirectory
 ------------------------------------------------
 
+30th October 2014 Laurent Garnier (test202-V10-00-34)
+- Remove "file(MAKE_DIRECTORY [OGLIX-reference])"
+
+23th October 2014 Laurent Garnier (test202-V10-00-33)
+- Fix new default text size to 10 (previous was 12) in visTest-VisAdd_0.eps
+
 1st September 2014 Laurent Garnier (test202-V10-00-32)
 - Fix new default text size to 10 (previous was 12)
 

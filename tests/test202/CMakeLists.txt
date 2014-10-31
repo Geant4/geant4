@@ -13,7 +13,6 @@ configure_file(OGLIX.mac OGLIX.mac COPYONLY) # this file local too
 configure_file(xvfb.sh xvfb.sh COPYONLY) # this file local too
 
 # OGLIX-reference directory
-file(MAKE_DIRECTORY [OGLIX-reference])
 configure_file(OGLIX-reference/visTest-DrawVolume_0.eps OGLIX-reference/visTest-DrawVolume_0.eps  COPYONLY) # this file local too
 configure_file(OGLIX-reference/visTest-VisAdd_0.eps OGLIX-reference/visTest-VisAdd_0.eps  COPYONLY) # this file local too
 configure_file(OGLIX-reference/visTest-VisSet_0.eps OGLIX-reference/visTest-VisSet_0.eps  COPYONLY) # this file local too
