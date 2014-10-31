@@ -59,7 +59,7 @@ void FCALSteppingVerbose::StepInfo()
 {
   CopyState();
   
-  G4int prec = G4cout.precision(3);
+  std::streamsize prec = G4cout.precision(3);
 
   if( verboseLevel >= 1 ){
     if( verboseLevel >= 4 ) VerboseTrack();
@@ -150,7 +150,7 @@ void FCALSteppingVerbose::TrackingStarted()
 {
 
   CopyState();
-G4int prec = G4cout.precision(3);
+  std::streamsize prec = G4cout.precision(3);
   if( verboseLevel > 0 ){
 
     G4cout << std::setw( 5) << "Step#"      << " "

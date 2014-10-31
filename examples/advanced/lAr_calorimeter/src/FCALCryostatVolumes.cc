@@ -70,9 +70,8 @@ G4LogicalVolume * FCALCryostatVolumes::Construct()
   // construction of materials
   //-----------------------------
   
-  FCALMaterialConsultant * FCALMaterials = new FCALMaterialConsultant();
-
-  FCALMaterials->construct();
+  FCALMaterialConsultant * FCALMaterials = 
+    FCALMaterialConsultant::GetInstance();
 
 
 //-----------------------------------------

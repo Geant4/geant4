@@ -72,14 +72,15 @@ FCALTestbeamSetup::~FCALTestbeamSetup() {}
 
 G4VPhysicalVolume * FCALTestbeamSetup::Construct()
 {
-  G4int i;
+  G4int i=0;
 
   //-----------------------------
   // construction of materials
   //-----------------------------
-  
-  FCALMaterialConsultant * FCALMaterials = new FCALMaterialConsultant();
-  FCALMaterials->construct();
+  G4cout << "Constructing materials...";
+  FCALMaterialConsultant* 
+    FCALMaterials = FCALMaterialConsultant::GetInstance();
+  G4cout << "... done" << G4endl;
 
   //-------------------
   // Experimental Hall 

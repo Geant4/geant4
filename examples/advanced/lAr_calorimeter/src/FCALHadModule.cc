@@ -107,9 +107,9 @@ G4LogicalVolume * FCALHadModule::Construct()
   // construction of materials
   //-----------------------------
   
-  FCALMaterialConsultant * FCALMaterials = new FCALMaterialConsultant();
-  FCALMaterials->construct();
-
+  FCALMaterialConsultant * FCALMaterials = 
+    FCALMaterialConsultant::GetInstance();
+ 
   G4VisAttributes * ColorOfTungsten = new G4VisAttributes(G4Colour(.5,.5,.5));
   G4VisAttributes * ColorOfCopper =new G4VisAttributes(G4Colour(0.58,0.15,0.05));
   G4VisAttributes * ColorOfLarg = new  G4VisAttributes(G4Colour(0.,0.,1.));

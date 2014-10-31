@@ -9,6 +9,11 @@ $Id$
                       Category History file
                       ---------------------
 
+31.10.2014 - L.Pandola Tag (lAr_calorimeter-V10-00-04)
+             Changed interface of FCALMaterialConsultant to avoid multiple 
+              definition of materials
+	     Fix casting warning in FCALSteppingVerbose.cc (seen on Win)
+
 16.10.2014 - A.Dotti Tag (lAr_calorimeter-V10-00-02, lAr_calorimeter-V10-00-03)
              Bug fixing for clang warnings	     
 

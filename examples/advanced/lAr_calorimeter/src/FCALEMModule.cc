@@ -104,8 +104,8 @@ G4LogicalVolume * FCALEMModule::Construct()
   //-----------------------------
   // construction of materials
   //----------------------------- 
-  FCALMaterialConsultant * FCALMaterials = new FCALMaterialConsultant();
-  FCALMaterials->construct();
+  FCALMaterialConsultant *FCALMaterials = 
+    FCALMaterialConsultant::GetInstance();
 
   G4VisAttributes * ColorOfEMModule = new G4VisAttributes(G4Colour(1.,0.,0.5));
 //  G4VisAttributes * ColorOfLArg = new G4VisAttributes(G4Colour(0.,0.,1.));

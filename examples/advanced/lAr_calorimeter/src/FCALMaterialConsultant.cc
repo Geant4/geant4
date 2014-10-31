@@ -252,7 +252,7 @@ FCALMaterialConsultant::FCALMaterialConsultant()
 
 }
 
-FCALMaterialConsultant * FCALMaterialConsultant::construct()
+FCALMaterialConsultant * FCALMaterialConsultant::GetInstance()
 {
   if (theFCALMaterialConsultant == NULL) {
     theFCALMaterialConsultant = new FCALMaterialConsultant();
