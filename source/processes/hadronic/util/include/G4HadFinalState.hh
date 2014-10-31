@@ -47,35 +47,52 @@ class G4HadFinalState
 public:
   G4HadFinalState();
 
-  G4int GetNumberOfSecondaries() const;
+  inline
+  G4int GetNumberOfSecondaries() const           { return theSecs.size(); }
   void SetEnergyChange(G4double anEnergy);
-  G4double GetEnergyChange() const;
-  void SetMomentumChange(const G4ThreeVector& aV);
-  void SetMomentumChange(G4double x, G4double y, G4double z) ;
-  const G4ThreeVector& GetMomentumChange() const;
-  void AddSecondary(G4DynamicParticle* aP);
-  void AddSecondary(const G4HadSecondary& aHS) { theSecs.push_back(aHS); }
-  void SetStatusChange(G4HadFinalStateStatus aS);
-  G4HadFinalStateStatus GetStatusChange() const;
+  inline
+  G4double GetEnergyChange() const               { return theEnergy; }
+  inline
+  void SetMomentumChange(const G4ThreeVector& aV){ theDirection=aV; }
+  void SetMomentumChange(G4double x, G4double y, G4double z);
+  inline
+  const G4ThreeVector& GetMomentumChange() const { return theDirection; }
+  inline
+  void AddSecondary(G4DynamicParticle* aP, G4int mod=-1) {
+    theSecs.push_back(G4HadSecondary(aP, theW, mod));
+  };
+  inline
+  void AddSecondary(const G4HadSecondary& aHS)   { theSecs.push_back(aHS); }
+  inline
+  void SetStatusChange(G4HadFinalStateStatus aS) { theStat=aS; }
+  inline
+  G4HadFinalStateStatus GetStatusChange() const  { return theStat; }
   void Clear();
-  const G4LorentzRotation& GetTrafoToLab() const;
-  void SetTrafoToLab(const G4LorentzRotation & aT);
-  void SetWeightChange(G4double aW);
-  G4double GetWeightChange() const;
+  inline
+  const G4LorentzRotation& GetTrafoToLab() const { return theT; }
+  inline
+  void SetTrafoToLab(const G4LorentzRotation & aT) { theT = aT; }
+  inline
+  void SetWeightChange(G4double aW)              { theW=aW; }
+  inline
+  G4double GetWeightChange() const               { return theW; }
   G4HadSecondary* GetSecondary(size_t i);
   const G4HadSecondary* GetSecondary(size_t i) const;
-  void SetLocalEnergyDeposit(G4double aE);
-  G4double GetLocalEnergyDeposit() const;
-  void SecondariesAreStale();		// Deprecated; not needed for values
-  void ClearSecondaries();
+  inline
+  void SetLocalEnergyDeposit(G4double aE)        { theEDep=aE; }
+  inline
+  G4double GetLocalEnergyDeposit() const         { return theEDep;}
+  //  void SecondariesAreStale();    // Deprecated; not needed for values
+  inline
+  void ClearSecondaries()                        { theSecs.clear(); }
 
   // Concatenate lists efficiently
   void AddSecondaries(const std::vector<G4HadSecondary>& addSecs);
-
+  inline
   void AddSecondaries(const G4HadFinalState& addHFS) {
     AddSecondaries(addHFS.theSecs);
   }
-
+  inline
   void AddSecondaries(const G4HadFinalState* addHFS) {
     if (addHFS) AddSecondaries(addHFS->theSecs);
   }

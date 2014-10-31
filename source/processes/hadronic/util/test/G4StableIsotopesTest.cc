@@ -23,20 +23,28 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-#include "G4HadSecondary.hh"
-#include "G4DynamicParticle.hh"
-#include "G4HadronicException.hh"
+//
+// $Id$
+//
+#include "G4ios.hh"
+#include <fstream>
+#include <iomanip>
+#include "G4StableIsotopes.hh"
 
-G4HadSecondary::G4HadSecondary(G4DynamicParticle * aT, G4double aWeight, 
-			       G4int mod) :
-  theP(aT), theWeight(aWeight), theTime(-1), theCreatorModel(mod)
+main()
 {
-  if(aT->GetKineticEnergy()<0)
-  {
-    throw G4HadronicException(__FILE__, __LINE__, 
-    "ATTEMPTING TO CREATE A SECONDARY WITH NEGATIVE KINETIC ENERGY.");
-  }
+   G4StableIsotopes theIso;
+   for (int Z=1; Z<92; Z++)
+   {
+     G4int protonCount = theIso.GetProtonCount(Z);
+     G4String theName = theIso.GetName(Z);
+     for (G4int i=0; i<theIso.GetNumberOfIsotopes(Z); i++)
+     {
+       G4int nucleons = theIso.GetIsotopeNucleonCount(theIso.GetFirstIsotope(Z)+i);
+       G4double fracInPercent=theIso.GetAbundance(theIso.GetFirstIsotope(Z)+i);
+       G4cout << nucleons << " " << fracInPercent << " " << protonCount << " " << theName << G4endl;
+     }
+     G4cout << G4endl;
+   }
+   G4cout << G4endl;
 }
-
-G4HadSecondary::~G4HadSecondary()
-{}

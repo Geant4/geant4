@@ -42,6 +42,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator = 0;
     kineticEnergy(0.0),
     timeOfFlight(0.0),
     side(0),
+    theCreatorModel(-1),
     NewlyAdded(false),
     MayBeKilled(true)
   {
@@ -62,6 +63,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator = 0;
     kineticEnergy = 0.0;
     (aParticleDefinition->GetPDGEncoding()<0) ? timeOfFlight=-1.0 : timeOfFlight=1.0;
     side = 0;
+    theCreatorModel = -1;
     NewlyAdded = false;
     MayBeKilled = true;
   }
@@ -79,6 +81,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator = 0;
     kineticEnergy = right.kineticEnergy;
     timeOfFlight = right.timeOfFlight;
     side = right.side;
+    theCreatorModel = right.theCreatorModel;
     NewlyAdded = right.NewlyAdded;
     MayBeKilled = right.MayBeKilled;
   }
@@ -97,6 +100,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator = 0;
       kineticEnergy = right.kineticEnergy;
       timeOfFlight = right.timeOfFlight;
       side = right.side;
+      theCreatorModel = right.theCreatorModel;
       NewlyAdded = right.NewlyAdded;
       MayBeKilled = right.MayBeKilled;
     }
@@ -116,6 +120,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator = 0;
     kineticEnergy = right.GetKineticEnergy();
     (right.GetDefinition()->GetPDGEncoding()<0) ? timeOfFlight=-1.0 : timeOfFlight=1.0;
     side = 0;
+    theCreatorModel = -1;
     NewlyAdded = false;
     MayBeKilled = true;
     return *this;
@@ -134,6 +139,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator = 0;
     kineticEnergy = right.GetKineticEnergy();
     (right.GetDefinition()->GetPDGEncoding()<0) ? timeOfFlight=-1.0 : timeOfFlight=1.0;
     side = 0;
+    theCreatorModel = -1;
     NewlyAdded = false;
     MayBeKilled = true;
     return *this;
@@ -190,6 +196,7 @@ G4ThreadLocal G4Allocator<G4ReactionProduct> *aRPAllocator = 0;
     mass = 0.0;
     timeOfFlight = 0.0;
     side = 0;
+    theCreatorModel = -1;
     NewlyAdded = false;
     SetPositionInNucleus( 0.0, 0.0, 0.0 );
     formationTime = 0.0;
