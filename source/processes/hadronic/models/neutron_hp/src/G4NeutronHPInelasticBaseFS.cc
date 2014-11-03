@@ -176,8 +176,7 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 {
 
 // prepare neutron
-   if ( theResult.Get() == NULL ) theResult.Put( new G4HadFinalState );
-  theResult.Get()->Clear();
+  theResult.Clear();
   G4double eKinetic = theTrack.GetKineticEnergy();
   const G4HadProjectile *incidentParticle = &theTrack;
   G4ReactionProduct theNeutron( incidentParticle->GetDefinition() );
@@ -239,9 +238,9 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
       aPart->SetDefinition(aSec->GetDefinition());
       aPart->SetMomentum(aSec->GetMomentum());
       delete aSec;
-      theResult.Get()->AddSecondary(aPart);     
+      theResult.AddSecondary(aPart);     
     }   
-    theResult.Get()->SetStatusChange(stopAndKill);
+    theResult.SetStatusChange(stopAndKill);
 
     //TK120607
     //Final momentum check should be done before return
@@ -272,33 +271,6 @@ void G4NeutronHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
   if(theEnergyAngData != 0)
   {
     tmpHadrons = theEnergyAngData->Sample(eKinetic);
-
-      //141017 Fix BEGIN 
-      //Adjust A and Z in the case of miss much between selected data and target nucleus 
-      if ( tmpHadrons != NULL ) {
-         G4int sumA = 0;
-         G4int sumZ = 0;
-         G4int maxA = 0;
-         G4int jAtMaxA = 0;
-         for ( G4int j = 0 ; j != (G4int)tmpHadrons->size() ; j++ ) {
-            if ( tmpHadrons->at(j)->GetDefinition()->GetBaryonNumber() > maxA ) {
-               maxA = tmpHadrons->at(j)->GetDefinition()->GetBaryonNumber(); 
-               jAtMaxA = j; 
-            }
-            sumA += tmpHadrons->at(j)->GetDefinition()->GetBaryonNumber();
-            sumZ += G4int( tmpHadrons->at(j)->GetDefinition()->GetPDGCharge() + eps );
-         }
-         G4int dA = (G4int)theBaseA + incidentParticle->GetDefinition()->GetBaryonNumber() - sumA;
-         G4int dZ = (G4int)theBaseZ + G4int( incidentParticle->GetDefinition()->GetPDGCharge() + eps ) - sumZ;
-         if ( dA < 0 || dZ < 0 ) {
-            G4int newA = tmpHadrons->at(jAtMaxA)->GetDefinition()->GetBaryonNumber() + dA ;
-            G4int newZ = G4int( tmpHadrons->at(jAtMaxA)->GetDefinition()->GetPDGCharge() + eps ) + dZ;
-            G4ParticleDefinition* pd = G4IonTable::GetIonTable()->GetIon ( newZ , newA );
-            tmpHadrons->at( jAtMaxA )->SetDefinition( pd );
-         }
-      }
-      //141017 Fix END
-
   }
   else if(theAngularDistribution!= 0)
   {
@@ -518,7 +490,7 @@ if ( (G4int)(theBaseZ+eps) == 4 && (G4int)(theBaseA+eps) == 9 )
     theSec = new G4DynamicParticle;    
     theSec->SetDefinition(tmpHadrons->operator[](i)->GetDefinition());
     theSec->SetMomentum(tmpHadrons->operator[](i)->GetMomentum());
-    theResult.Get()->AddSecondary(theSec); 
+    theResult.AddSecondary(theSec); 
     delete tmpHadrons->operator[](i);
   }
   if(thePhotons != 0)
@@ -528,7 +500,7 @@ if ( (G4int)(theBaseZ+eps) == 4 && (G4int)(theBaseA+eps) == 9 )
       theSec = new G4DynamicParticle;    
       theSec->SetDefinition(thePhotons->operator[](i)->GetDefinition());
       theSec->SetMomentum(thePhotons->operator[](i)->GetMomentum());
-      theResult.Get()->AddSecondary(theSec); 
+      theResult.AddSecondary(theSec); 
       delete thePhotons->operator[](i);
     }
   }
@@ -545,5 +517,5 @@ if ( (G4int)(theBaseZ+eps) == 4 && (G4int)(theBaseA+eps) == 9 )
    adjust_final_state ( init_4p_lab ); 
 
 // clean up the primary neutron
-  theResult.Get()->SetStatusChange(stopAndKill);
+  theResult.SetStatusChange(stopAndKill);
 }

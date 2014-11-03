@@ -64,7 +64,6 @@ class G4NeutronHPFission : public G4HadronicInteraction
    public:
       G4int GetVerboseLevel() const;
       void SetVerboseLevel( G4int );
-      void BuildPhysicsTable(const G4ParticleDefinition&);
 
   private:
   
@@ -74,11 +73,11 @@ class G4NeutronHPFission : public G4HadronicInteraction
   
   G4double * xSec;
   //G4NeutronHPChannel * theFission;
-      std::vector<G4NeutronHPChannel*>* theFission;
+      std::vector<G4NeutronHPChannel*> theFission;
   G4String dirName;
   G4int numEle;
   // static G4String theNames[3];
-      //void addChannelForNewElement();
+      void addChannelForNewElement();
 };
 
 #endif

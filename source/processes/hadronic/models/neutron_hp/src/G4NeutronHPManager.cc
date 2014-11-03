@@ -29,35 +29,18 @@
 // 121031 First implementation done by T. Koi (SLAC/PPA)
 
 #include "G4NeutronHPManager.hh"
-#include "G4NeutronHPThreadLocalManager.hh"
 #include "G4NeutronHPMessenger.hh"
 #include "G4HadronicException.hh"
 
-//G4ThreadLocal G4NeutronHPManager* G4NeutronHPManager::instance = NULL;
-G4NeutronHPManager* G4NeutronHPManager::instance = G4NeutronHPManager::GetInstance();
+G4ThreadLocal G4NeutronHPManager* G4NeutronHPManager::instance = NULL;
 
 G4NeutronHPManager::G4NeutronHPManager()
-//:RWB(NULL),
-:verboseLevel(1)
+:RWB(NULL),verboseLevel(1)
 ,USE_ONLY_PHOTONEVAPORATION(false)
 ,SKIP_MISSING_ISOTOPES(false)
 ,NEGLECT_DOPPLER(false)
 ,DO_NOT_ADJUST_FINAL_STATE(false)
 ,PRODUCE_FISSION_FRAGMENTS(false)
-,theElasticCrossSections(NULL)
-,theCaptureCrossSections(NULL)
-,theInelasticCrossSections(NULL)
-,theFissionCrossSections(NULL)
-,theElasticFSs(NULL)
-,theInelasticFSs(NULL)
-,theCaptureFSs(NULL)
-,theFissionFSs(NULL)
-,theTSCoherentCrossSections(NULL)
-,theTSIncoherentCrossSections(NULL)
-,theTSInelasticCrossSections(NULL)
-,theTSCoherentFinalStates(NULL)
-,theTSIncoherentFinalStates(NULL)
-,theTSInelasticFinalStates(NULL)
 {
    messenger = new G4NeutronHPMessenger( this );
    if ( getenv( "G4NEUTRONHP_DO_NOT_ADJUST_FINAL_STATE" ) ) DO_NOT_ADJUST_FINAL_STATE = true;
@@ -66,37 +49,27 @@ G4NeutronHPManager::G4NeutronHPManager()
    if ( getenv( "G4NEUTRONHP_SKIP_MISSING_ISOTOPES" ) ) SKIP_MISSING_ISOTOPES = true;
    if ( getenv( "G4NEUTRONHP_PRODUCE_FISSION_FRAGMENTS" ) ) PRODUCE_FISSION_FRAGMENTS = true;
 }
-
 G4NeutronHPManager::~G4NeutronHPManager()
 {
    delete messenger;
 }
-
 void G4NeutronHPManager::OpenReactionWhiteBoard()
 {
-//   if ( RWB != NULL ) {
-//      G4cout << "Warning: G4NeutronHPReactionWhiteBoard is tried doubly opening" << G4endl;
-//      RWB = new G4NeutronHPReactionWhiteBoard();
-//   }
-//   
-//   RWB = new G4NeutronHPReactionWhiteBoard();
-   G4NeutronHPThreadLocalManager::GetInstance()->OpenReactionWhiteBoard();
+   if ( RWB != NULL ) {
+      G4cout << "Warning: G4NeutronHPReactionWhiteBoard is tried doubly opening" << G4endl;
+      RWB = new G4NeutronHPReactionWhiteBoard();
+   }
+   
+   RWB = new G4NeutronHPReactionWhiteBoard();
 }
-
 G4NeutronHPReactionWhiteBoard* G4NeutronHPManager::GetReactionWhiteBoard()
 {
-   //if ( RWB == NULL ) {
-   //   G4cout << "Warning: try to access G4NeutronHPReactionWhiteBoard before opening" << G4endl;
-   //   RWB = new G4NeutronHPReactionWhiteBoard();
-   //}
-   //return RWB; 
-   return G4NeutronHPThreadLocalManager::GetInstance()->GetReactionWhiteBoard();
+   if ( RWB == NULL ) {
+      G4cout << "Warning: try to access G4NeutronHPReactionWhiteBoard before opening" << G4endl;
+      RWB = new G4NeutronHPReactionWhiteBoard();
+   }
+   return RWB; 
 }
-void G4NeutronHPManager::CloseReactionWhiteBoard()
-{
-   G4NeutronHPThreadLocalManager::GetInstance()->CloseReactionWhiteBoard();
-}
-
 #include "zlib.h"
 #include <fstream>
 void G4NeutronHPManager::GetDataStream( G4String filename , std::istringstream& iss ) 

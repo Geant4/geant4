@@ -42,7 +42,6 @@
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
 #include "G4NeutronHPManager.hh"
-#include "G4Threading.hh"
 
 G4NeutronHPCaptureData::G4NeutronHPCaptureData()
 :G4VCrossSectionDataSet("NeutronHPCaptureXS")
@@ -123,11 +122,6 @@ void G4NeutronHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
       onFlightDB = false;
    }
   
-   if ( G4Threading::IsWorkerThread() ) {
-      theCrossSections = G4NeutronHPManager::GetInstance()->GetCaptureCrossSections();
-      return;
-   }
-
   size_t numberOfElements = G4Element::GetNumberOfElements();
   // G4cout << "CALLED G4NeutronHPCaptureData::BuildPhysicsTable "<<numberOfElements<<G4endl;
    // TKDB
@@ -151,8 +145,6 @@ void G4NeutronHPCaptureData::BuildPhysicsTable(const G4ParticleDefinition& aP)
       Instance()->MakePhysicsVector((*theElementTable)[i], this);
      theCrossSections->push_back(physVec);
   }
-
-   G4NeutronHPManager::GetInstance()->RegisterCaptureCrossSections( theCrossSections );
 }
 
 void G4NeutronHPCaptureData::DumpPhysicsTable(const G4ParticleDefinition& aP)

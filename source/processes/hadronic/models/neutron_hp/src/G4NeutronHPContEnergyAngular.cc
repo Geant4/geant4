@@ -50,8 +50,7 @@ G4ReactionProduct * G4NeutronHPContEnergyAngular::Sample(G4double anEnergy, G4do
      theAngular[0].SetPrimary(GetNeutron());
      result = theAngular[0].Sample(anEnergy, massCode, targetMass, 
                                   theAngularRep, theInterpolation);
-     //currentMeanEnergy = theAngular[0].MeanEnergyOfThisInteraction();
-     currentMeanEnergy.Put( theAngular[0].MeanEnergyOfThisInteraction() );
+     currentMeanEnergy = theAngular[0].MeanEnergyOfThisInteraction();
    }
    else
    {
@@ -69,8 +68,7 @@ G4ReactionProduct * G4NeutronHPContEnergyAngular::Sample(G4double anEnergy, G4do
      theAngular[it].SetPrimary(GetNeutron());
      result = theAngular[it].Sample(anEnergy, massCode, targetMass, 
                                     theAngularRep, theInterpolation);
-     //currentMeanEnergy = theAngular[it].MeanEnergyOfThisInteraction();
-     currentMeanEnergy.Put( theAngular[it].MeanEnergyOfThisInteraction() );
+     currentMeanEnergy = theAngular[it].MeanEnergyOfThisInteraction();
    }
    return result;
 }
@@ -79,15 +77,15 @@ G4double G4NeutronHPContEnergyAngular::
 MeanEnergyOfThisInteraction()
 {
    G4double result(0);
-   if(currentMeanEnergy.Get()<-1)
+   if(currentMeanEnergy<-1)
    {
      throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPContEnergyAngular: Logical error in Product class");
    }
    else
    {
-     result = currentMeanEnergy.Get();
+     result = currentMeanEnergy;
    }
-   currentMeanEnergy.Put( -2 );
+   currentMeanEnergy = -2;
    return result;
 }
 

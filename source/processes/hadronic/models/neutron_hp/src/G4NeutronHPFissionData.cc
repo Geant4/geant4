@@ -41,7 +41,6 @@
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
 #include "G4NeutronHPManager.hh"
-#include "G4Threading.hh"
 
 G4NeutronHPFissionData::G4NeutronHPFissionData()
 :G4VCrossSectionDataSet("NeutronHPFissionXS")
@@ -118,12 +117,6 @@ void G4NeutronHPFissionData::BuildPhysicsTable(const G4ParticleDefinition& aP)
 
   if(&aP!=G4Neutron::Neutron()) 
      throw G4HadronicException(__FILE__, __LINE__, "Attempt to use NeutronHP data for particles other than neutrons!!!");  
-
-   if ( G4Threading::IsWorkerThread() ) {
-      theCrossSections = G4NeutronHPManager::GetInstance()->GetFissionCrossSections();
-      return;
-   }
-
   size_t numberOfElements = G4Element::GetNumberOfElements();
   //theCrossSections = new G4PhysicsTable( numberOfElements );
    // TKDB
@@ -142,7 +135,6 @@ void G4NeutronHPFissionData::BuildPhysicsTable(const G4ParticleDefinition& aP)
       Instance()->MakePhysicsVector((*theElementTable)[i], this);
     theCrossSections->push_back(physVec);
   }
-   G4NeutronHPManager::GetInstance()->RegisterFissionCrossSections( theCrossSections );
 }
 
 void G4NeutronHPFissionData::DumpPhysicsTable(const G4ParticleDefinition& aP)

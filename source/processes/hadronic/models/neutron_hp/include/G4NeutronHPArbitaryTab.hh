@@ -65,7 +65,6 @@ class G4NeutronHPArbitaryTab : public G4VNeutronHPEDis
       theData >> currentEnergy;
       theDistFunc[i].SetLabel(currentEnergy*CLHEP::eV);
       theDistFunc[i].Init(theData, CLHEP::eV);
-      theDistFunc[i].IntegrateAndNormalise();
       //************************************************************************
       //EMendoza:
       //ThinOut() assumes that the data is linear-linear, what is false:

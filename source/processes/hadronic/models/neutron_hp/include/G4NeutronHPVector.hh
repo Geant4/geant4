@@ -40,10 +40,8 @@
 #include "G4InterpolationManager.hh"
 #include "G4NeutronHPInterpolator.hh"
 #include "G4NeutronHPHash.hh"
-#include "G4Threading.hh"
 #include <cmath>
 #include <vector>
-
 
 #if defined WIN32-VC
    #include <float.h>

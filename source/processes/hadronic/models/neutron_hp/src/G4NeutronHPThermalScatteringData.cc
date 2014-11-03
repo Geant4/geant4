@@ -48,14 +48,10 @@
 #include "G4SystemOfUnits.hh"
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
-
-#include "G4Threading.hh"
+//#include "G4NeutronHPData.hh"
 
 G4NeutronHPThermalScatteringData::G4NeutronHPThermalScatteringData()
 :G4VCrossSectionDataSet("NeutronHPThermalScatteringData")
-,coherent(NULL)
-,incoherent(NULL)
-,inelastic(NULL)
 {
 // Upper limit of neutron energy 
    emax = 4*eV;
@@ -70,6 +66,8 @@ G4NeutronHPThermalScatteringData::G4NeutronHPThermalScatteringData()
    indexOfThermalElement.clear(); 
 
    names = new G4NeutronHPThermalScatteringNames();
+
+   //BuildPhysicsTable( *G4Neutron::Neutron() );
 }
 
 G4NeutronHPThermalScatteringData::~G4NeutronHPThermalScatteringData()
@@ -128,50 +126,45 @@ void G4NeutronHPThermalScatteringData::clearCurrentXSData()
    std::map< G4int , std::map< G4double , G4NeutronHPVector* >* >::iterator it;
    std::map< G4double , G4NeutronHPVector* >::iterator itt;
 
-   if ( coherent != NULL ) {
-   for ( it = (*coherent).begin() ; it != (*coherent).end() ; it++ )
+   for ( it = coherent.begin() ; it != coherent.end() ; it++ )
+   {
+      if ( it->second != NULL )
       {
-         if ( it->second != NULL )
+         for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
          {
-            for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
-            {
-               delete itt->second;
-            }
+            delete itt->second;
          }
-         delete it->second;
       }
-      (*coherent).clear();
+      delete it->second;
    }
 
-   if ( incoherent != NULL ) {
-      for ( it = (*incoherent).begin() ; it != (*incoherent).end() ; it++ )
-      {
-         if ( it->second != NULL )
-         { 
-            for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
-            {
-               delete itt->second;
-            }
+   for ( it = incoherent.begin() ; it != incoherent.end() ; it++ )
+   {
+      if ( it->second != NULL )
+      { 
+         for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
+         {
+            delete itt->second;
          }
-         delete it->second;
       }
-      (*incoherent).clear();
+      delete it->second;
    }
 
-   if ( inelastic != NULL ) {
-      for ( it = (*inelastic).begin() ; it != (*inelastic).end() ; it++ )
+   for ( it = inelastic.begin() ; it != inelastic.end() ; it++ )
+   {
+      if ( it->second != NULL )
       {
-         if ( it->second != NULL )
+         for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
          {
-            for ( itt = it->second->begin() ; itt != it->second->end() ; itt++ )
-            {
-               delete itt->second;
-            }
+            delete itt->second;
          }
-         delete it->second; 
       }
-      (*inelastic).clear();
+      delete it->second; 
    }
+
+   coherent.clear();
+   incoherent.clear();
+   inelastic.clear();
 
 }
 
@@ -218,9 +211,7 @@ void G4NeutronHPThermalScatteringData::BuildPhysicsTable(const G4ParticleDefinit
 
    //std::map < std::pair < G4Material* , const G4Element* > , G4int > dic;   
    dic.clear();   
-
-   if ( !G4Threading::IsWorkerThread() ) clearCurrentXSData();
-
+   clearCurrentXSData();
    std::map < G4String , G4int > co_dic;   
 
    //Searching Nist Materials
@@ -310,55 +301,38 @@ void G4NeutronHPThermalScatteringData::BuildPhysicsTable(const G4ParticleDefinit
    //   G4cout << "NDL file name " << it->first << ", internal thermal scattering id " << it->second << G4endl;
    //}
 
-   G4NeutronHPManager* hpmanager = G4NeutronHPManager::GetInstance(); 
 
-   coherent = hpmanager->GetThermalScatteringCoherentCrossSections();
-   incoherent = hpmanager->GetThermalScatteringIncoherentCrossSections();
-   inelastic = hpmanager->GetThermalScatteringInelasticCrossSections();
+   // Read Cross Section Data files
 
-   if ( !G4Threading::IsWorkerThread() ) {
+   G4String dirName;
+   if ( !getenv( "G4NEUTRONHPDATA" ) ) 
+      throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
+   G4String baseName = getenv( "G4NEUTRONHPDATA" );
 
-      if ( coherent == NULL ) coherent = new std::map< G4int , std::map< G4double , G4NeutronHPVector* >* >;
-      if ( incoherent == NULL ) incoherent = new std::map< G4int , std::map< G4double , G4NeutronHPVector* >* >;
-      if ( inelastic == NULL ) inelastic = new std::map< G4int , std::map< G4double , G4NeutronHPVector* >* >;
+   dirName = baseName + "/ThermalScattering";
 
-      // Read Cross Section Data files
+   G4String ndl_filename;
+   G4String full_name;
 
-      G4String dirName;
-      if ( !getenv( "G4NEUTRONHPDATA" ) ) 
-         throw G4HadronicException(__FILE__, __LINE__, "Please setenv G4NEUTRONHPDATA to point to the neutron cross-section files.");
-      G4String baseName = getenv( "G4NEUTRONHPDATA" );
+   for ( std::map < G4String , G4int >::iterator it = co_dic.begin() ; it != co_dic.end() ; it++ )  
+   {
+      ndl_filename = it->first;
+      G4int ts_ID = it->second;
 
-      dirName = baseName + "/ThermalScattering";
+      // Coherent
+      full_name = dirName + "/Coherent/CrossSection/" + ndl_filename; 
+      std::map< G4double , G4NeutronHPVector* >*  coh_amapTemp_EnergyCross = readData( full_name );
+      coherent.insert ( std::pair < G4int , std::map< G4double , G4NeutronHPVector* >* > ( ts_ID , coh_amapTemp_EnergyCross ) );
 
-      G4String ndl_filename;
-      G4String full_name;
+      // Incoherent
+      full_name = dirName + "/Incoherent/CrossSection/" + ndl_filename; 
+      std::map< G4double , G4NeutronHPVector* >*  incoh_amapTemp_EnergyCross = readData( full_name );
+      incoherent.insert ( std::pair < G4int , std::map< G4double , G4NeutronHPVector* >* > ( ts_ID , incoh_amapTemp_EnergyCross ) );
 
-      for ( std::map < G4String , G4int >::iterator it = co_dic.begin() ; it != co_dic.end() ; it++ )  
-      {
-         ndl_filename = it->first;
-         G4int ts_ID = it->second;
-
-         // Coherent
-         full_name = dirName + "/Coherent/CrossSection/" + ndl_filename; 
-         std::map< G4double , G4NeutronHPVector* >*  coh_amapTemp_EnergyCross = readData( full_name );
-         (*coherent).insert ( std::pair < G4int , std::map< G4double , G4NeutronHPVector* >* > ( ts_ID , coh_amapTemp_EnergyCross ) );
-
-         // Incoherent
-         full_name = dirName + "/Incoherent/CrossSection/" + ndl_filename; 
-         std::map< G4double , G4NeutronHPVector* >*  incoh_amapTemp_EnergyCross = readData( full_name );
-         (*incoherent).insert ( std::pair < G4int , std::map< G4double , G4NeutronHPVector* >* > ( ts_ID , incoh_amapTemp_EnergyCross ) );
-
-         // Inelastic
-         full_name = dirName + "/Inelastic/CrossSection/" + ndl_filename; 
-         std::map< G4double , G4NeutronHPVector* >*  inela_amapTemp_EnergyCross = readData( full_name );
-         (*inelastic).insert ( std::pair < G4int , std::map< G4double , G4NeutronHPVector* >* > ( ts_ID , inela_amapTemp_EnergyCross ) );
-
-      }
-
-      hpmanager->RegisterThermalScatteringCoherentCrossSections( coherent );
-      hpmanager->RegisterThermalScatteringIncoherentCrossSections( incoherent );
-      hpmanager->RegisterThermalScatteringInelasticCrossSections( inelastic );
+      // Inelastic
+      full_name = dirName + "/Inelastic/CrossSection/" + ndl_filename; 
+      std::map< G4double , G4NeutronHPVector* >*  inela_amapTemp_EnergyCross = readData( full_name );
+      inelastic.insert ( std::pair < G4int , std::map< G4double , G4NeutronHPVector* >* > ( ts_ID , inela_amapTemp_EnergyCross ) );
 
    }
 
@@ -456,9 +430,9 @@ G4double G4NeutronHPThermalScatteringData::GetCrossSection( const G4DynamicParti
 
    G4double aT = aM->GetTemperature();
 
-   G4double Xcoh = GetX ( aP , aT , (*coherent).find(ts_id)->second );
-   G4double Xincoh = GetX ( aP , aT , (*incoherent).find(ts_id)->second );
-   G4double Xinela = GetX ( aP , aT , (*inelastic).find(ts_id)->second );
+   G4double Xcoh = GetX ( aP , aT , coherent.find(ts_id)->second );
+   G4double Xincoh = GetX ( aP , aT , incoherent.find(ts_id)->second );
+   G4double Xinela = GetX ( aP , aT , inelastic.find(ts_id)->second );
 
    result = Xcoh + Xincoh + Xinela;
 
@@ -473,7 +447,7 @@ G4double G4NeutronHPThermalScatteringData::GetInelasticCrossSection( const G4Dyn
    G4double result = 0;
    G4int ts_id = getTS_ID( aM , anE );
    G4double aT = aM->GetTemperature();
-   result = GetX ( aP , aT , (*inelastic).find( ts_id )->second );
+   result = GetX ( aP , aT , inelastic.find( ts_id )->second );
    return result;
 }
 
@@ -482,7 +456,7 @@ G4double G4NeutronHPThermalScatteringData::GetCoherentCrossSection( const G4Dyna
    G4double result = 0;
    G4int ts_id = getTS_ID( aM , anE );
    G4double aT = aM->GetTemperature();
-   result = GetX ( aP , aT , (*coherent).find( ts_id )->second );
+   result = GetX ( aP , aT , coherent.find( ts_id )->second );
    return result;
 }
 
@@ -491,7 +465,7 @@ G4double G4NeutronHPThermalScatteringData::GetIncoherentCrossSection( const G4Dy
    G4double result = 0;
    G4int ts_id = getTS_ID( aM , anE );
    G4double aT = aM->GetTemperature();
-   result = GetX ( aP , aT , (*incoherent).find( ts_id )->second );
+   result = GetX ( aP , aT , incoherent.find( ts_id )->second );
    return result;
 }
 

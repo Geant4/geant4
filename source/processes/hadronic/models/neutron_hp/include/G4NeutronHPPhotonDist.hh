@@ -51,8 +51,6 @@
 #include "G4Gamma.hh"
 #include "G4InterpolationManager.hh"
 
-#include "G4Cache.hh"
-
 class G4NeutronHPPhotonDist
 {
 public:
@@ -84,8 +82,7 @@ public:
      distribution = 0;
      probs = 0;
      partials = 0;
-     //actualMult = 0;
-     actualMult.Put( NULL );
+     actualMult = 0;
 
      theLevelEnergies = 0;
      theTransitionProbabilities = 0;
@@ -123,7 +120,7 @@ public:
         delete [] partials;
      }
 
-     //delete [] actualMult;
+     delete [] actualMult;
 
      // delete theLevelEnergies;
      // delete theTransitionProbabilities;
@@ -179,8 +176,7 @@ private:
    G4NeutronHPVector *  probs; // probabilities for the partial distributions.
    G4NeutronHPPartial ** partials; // the partials, parallel to the above
 
-   //G4int * actualMult;
-   G4Cache< std::vector<G4int>* > actualMult;
+   G4int * actualMult;
    
     // for transition prob arrays start
    G4int theInternalConversionFlag;

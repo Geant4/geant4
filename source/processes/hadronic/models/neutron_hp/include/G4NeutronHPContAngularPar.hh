@@ -38,24 +38,15 @@
 #include "G4NeutronHPInterpolator.hh"
 #include "G4InterpolationManager.hh"
 
-#include "G4Cache.hh" 
-
 class G4NeutronHPContAngularPar
 {
-
-   struct toBeCached {
-      G4bool fresh;
-      G4double currentMeanEnergy;
-      G4double remaining_energy; 
-   };
-
   public:
   
   G4NeutronHPContAngularPar()
   {
     theAngular = 0;
-    //currentMeanEnergy = -2;
-    //fresh = true;
+    currentMeanEnergy = -2;
+     fresh = true;
   }
   ~G4NeutronHPContAngularPar()
   {
@@ -119,16 +110,16 @@ class G4NeutronHPContAngularPar
   G4double MeanEnergyOfThisInteraction()
   {
     G4double result;
-    if( fCache.Get()->currentMeanEnergy<-1)
+    if(currentMeanEnergy<-1)
     {
       return 0;
       // throw G4HadronicException(__FILE__, __LINE__, "G4NeutronHPContAngularPar: Logical error in Product class");
     }
     else
     {
-      result = fCache.Get()->currentMeanEnergy;
+      result = currentMeanEnergy;
     }
-    fCache.Get()->currentMeanEnergy = -2;
+    currentMeanEnergy = -2;
     return result;
   }
   
@@ -156,25 +147,13 @@ class G4NeutronHPContAngularPar
   G4ReactionProduct * theTarget;
   G4ReactionProduct * thePrimary;
   
-  //G4double currentMeanEnergy;
+  G4double currentMeanEnergy;
 
 //080718
-   private:
-      //G4bool fresh; 
-      //G4double remaining_energy; // represent energy rest of cascade chain
-
-   private:
-      G4Cache< toBeCached* > fCache;
-      void cacheInit() {
-         toBeCached* val = new toBeCached;
-         val->currentMeanEnergy = -2;
-         val->remaining_energy = 0;
-         val->fresh=true;
-         fCache.Put( val );
-      };
    public:
-      void ClearHistories(){ 
-         if ( fCache.Get() == NULL ) cacheInit();
-         fCache.Get()->fresh = true; };
+      void ClearHistories(){ fresh = true; };
+   private:
+      G4bool fresh; 
+      G4double remaining_energy; // represent energy rest of cascade chain
 };
 #endif

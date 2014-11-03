@@ -45,7 +45,7 @@ G4HadFinalState * G4NeutronHP3NPInelasticFS::ApplyYourself(const G4HadProjectile
   G4NeutronHPInelasticBaseFS::BaseApply(theTrack, theDefs, 4);
   
 // return the result
-   return theResult.Get();
+   return &theResult;
 }
 
 void G4NeutronHP3NPInelasticFS::

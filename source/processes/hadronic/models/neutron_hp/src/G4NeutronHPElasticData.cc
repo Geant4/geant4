@@ -41,7 +41,7 @@
 #include "G4Neutron.hh"
 #include "G4ElementTable.hh"
 #include "G4NeutronHPData.hh"
-#include "G4Threading.hh"
+#include "G4NeutronHPManager.hh"
 
 G4NeutronHPElasticData::G4NeutronHPElasticData()
 :G4VCrossSectionDataSet("NeutronHPElasticXS")
@@ -56,6 +56,7 @@ G4NeutronHPElasticData::G4NeutronHPElasticData()
 
    theCrossSections = 0;
    onFlightDB = true;
+// BuildPhysicsTable( *G4Neutron::Neutron() );
 }
    
 G4NeutronHPElasticData::~G4NeutronHPElasticData()
@@ -122,11 +123,6 @@ void G4NeutronHPElasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
       onFlightDB = false;
    }
 
-   if ( G4Threading::IsWorkerThread() ) {
-      theCrossSections = G4NeutronHPManager::GetInstance()->GetElasticCrossSections();
-      return;
-   }
-
   size_t numberOfElements = G4Element::GetNumberOfElements();
 // TKDB
    //if ( theCrossSections == 0 ) theCrossSections = new G4PhysicsTable( numberOfElements );
@@ -144,8 +140,6 @@ void G4NeutronHPElasticData::BuildPhysicsTable(const G4ParticleDefinition& aP)
       Instance()->MakePhysicsVector((*theElementTable)[i], this);
     theCrossSections->push_back(physVec);
   }
-
-   G4NeutronHPManager::GetInstance()->RegisterElasticCrossSections(theCrossSections);
 }
 
 void G4NeutronHPElasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)
@@ -206,7 +200,6 @@ void G4NeutronHPElasticData::DumpPhysicsTable(const G4ParticleDefinition& aP)
 G4double G4NeutronHPElasticData::
 GetCrossSection(const G4DynamicParticle* aP, const G4Element*anE, G4double aT)
 {
-
   G4double result = 0;
   G4bool outOfRange;
   G4int index = anE->GetIndex();

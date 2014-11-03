@@ -137,10 +137,6 @@
       }
     }
     G4bool result = HasDataInAnyFinalState();
-
-    //To avoid issuing hash by worker threads
-    if ( result ) theChannelData->Hash();
-
     return result;
   }
   

@@ -220,8 +220,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
 {
 
 // prepare neutron
-   if ( theResult.Get() == NULL ) theResult.Put( new G4HadFinalState );
-   theResult.Get()->Clear();
+    theResult.Clear();
     G4double eKinetic = theTrack.GetKineticEnergy();
     const G4HadProjectile *incidentParticle = &theTrack;
     G4ReactionProduct theNeutron( incidentParticle->GetDefinition() );
@@ -420,33 +419,6 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
     else if(theEnergyAngData[it] != 0) // MF6  
     {
       theParticles = theEnergyAngData[it]->Sample(eKinetic);
-
-      //141017 Fix BEGIN
-      //Adjust A and Z in the case of miss much between selected data and target nucleus 
-      if ( theParticles != NULL ) {
-         G4int sumA = 0;
-         G4int sumZ = 0;
-         G4int maxA = 0;
-         G4int jAtMaxA = 0;
-         for ( G4int j = 0 ; j != (G4int)theParticles->size() ; j++ ) {
-            if ( theParticles->at(j)->GetDefinition()->GetBaryonNumber() > maxA ) {
-               maxA = theParticles->at(j)->GetDefinition()->GetBaryonNumber(); 
-               jAtMaxA = j; 
-            }
-            sumA += theParticles->at(j)->GetDefinition()->GetBaryonNumber();
-            sumZ += G4int( theParticles->at(j)->GetDefinition()->GetPDGCharge() + eps );
-         }
-         G4int dA = (G4int)theBaseA + incidentParticle->GetDefinition()->GetBaryonNumber() - sumA;
-         G4int dZ = (G4int)theBaseZ + G4int( incidentParticle->GetDefinition()->GetPDGCharge() + eps ) - sumZ;
-         if ( dA < 0 || dZ < 0 ) {
-            G4int newA = theParticles->at(jAtMaxA)->GetDefinition()->GetBaryonNumber() + dA ;
-            G4int newZ = G4int( theParticles->at(jAtMaxA)->GetDefinition()->GetPDGCharge() + eps ) + dZ;
-            G4ParticleDefinition* pd = G4IonTable::GetIonTable()->GetIon ( newZ , newA );
-            theParticles->at( jAtMaxA )->SetDefinition( pd );
-         }
-      }
-      //141017 Fix END
-
     }
     else
     {
@@ -649,7 +621,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
       theSec = new G4DynamicParticle;   
       theSec->SetDefinition(aHadron.GetDefinition());
       theSec->SetMomentum(aHadron.GetMomentum());
-      theResult.Get()->AddSecondary(theSec);    
+      theResult.AddSecondary(theSec);    
  
  	aHadron.Lorentz(aHadron, theTarget);
         G4ReactionProduct theResidual;   
@@ -674,7 +646,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
         theSec = new G4DynamicParticle;   
         theSec->SetDefinition(theResidual.GetDefinition());
         theSec->SetMomentum(theResidual.GetMomentum()-totalPhotonMomentum);
-        theResult.Get()->AddSecondary(theSec);    
+        theResult.AddSecondary(theSec);    
     }
     else
     {
@@ -683,7 +655,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
         theSec = new G4DynamicParticle; 
         theSec->SetDefinition(theParticles->operator[](i0)->GetDefinition());
         theSec->SetMomentum(theParticles->operator[](i0)->GetMomentum());
-        theResult.Get()->AddSecondary(theSec); 
+        theResult.AddSecondary(theSec); 
         delete theParticles->operator[](i0); 
       } 
       delete theParticles;
@@ -708,7 +680,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
         theSec = new G4DynamicParticle;   
         theSec->SetDefinition(theResidual.GetDefinition());
         theSec->SetMomentum(theResidual.GetMomentum());
-        theResult.Get()->AddSecondary(theSec);  
+        theResult.AddSecondary(theSec);  
       }  
     }
     if(thePhotons!=0)
@@ -721,7 +693,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
         theSec->SetDefinition( thePhotons->operator[](i)->GetDefinition() );
         //But never cause real effect at least with G4NDL3.13 TK
         theSec->SetMomentum(thePhotons->operator[](i)->GetMomentum());
-        theResult.Get()->AddSecondary(theSec); 
+        theResult.AddSecondary(theSec); 
         delete thePhotons->operator[](i);
       }
 // some garbage collection
@@ -736,7 +708,7 @@ void G4NeutronHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrack
    adjust_final_state ( init_4p_lab ); 
 
 // clean up the primary neutron
-    theResult.Get()->SetStatusChange(stopAndKill);
+    theResult.SetStatusChange(stopAndKill);
 }
 
 
