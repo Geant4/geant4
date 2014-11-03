@@ -9,6 +9,9 @@ $Id: History,v 1.24 2010-11-18 11:48:21 allison Exp $
                        Package History file
                        --------------------
 
+1 November 2014 - L. Garnier from M. Raine - microelectronics-V10-00-03
+  - Fix a warning "'ui' may be used uninitialized in this function"
+
 31 October 2014 - L. Garnier from M. Raine - microelectronics-V10-00-02
      o Remove Qt driver function, should be protect by some compilation flag
 
