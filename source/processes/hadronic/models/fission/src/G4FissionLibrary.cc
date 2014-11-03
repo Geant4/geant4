@@ -61,14 +61,12 @@
 //
 
 #include "G4FissionLibrary.hh"
-#include "G4NeutronHPManager.hh"
 #include "G4SystemOfUnits.hh"
 
 G4FissionLibrary::G4FissionLibrary()
   : G4NeutronHPFinalState(), theIsotope(0), targetMass(0.0)
 {
   hasXsec = false;
-  fe=0;
 }
 
 G4FissionLibrary::~G4FissionLibrary()
@@ -96,9 +94,7 @@ void G4FissionLibrary::Init (G4double A, G4double Z, G4int M, G4String & dirName
     hasXsec = false;
     return;
   }
-  //std::ifstream theData(filename, std::ios::in);
-  std::istringstream theData(std::ios::in);
-  G4NeutronHPManager::GetInstance()->GetDataStream(filename,theData);
+  std::ifstream theData(filename, std::ios::in);
 
   // here it comes
   G4int infoType, dataType;
@@ -136,14 +132,12 @@ void G4FissionLibrary::Init (G4double A, G4double Z, G4int M, G4String & dirName
     }
   }
   targetMass = theFinalStateNeutrons.GetTargetMass();
-  //theData.close();
+  theData.close();
 }
 
 G4HadFinalState* G4FissionLibrary::ApplyYourself(const G4HadProjectile & theTrack)
 {  
-
-  if ( theResult.Get() == NULL ) theResult.Put( new G4HadFinalState );
-  theResult.Get()->Clear();
+  theResult.Clear();
 
   // prepare neutron
   G4double eKinetic = theTrack.GetKineticEnergy();
@@ -180,14 +174,14 @@ G4HadFinalState* G4FissionLibrary::ApplyYourself(const G4HadProjectile & theTrac
   {
     G4DynamicParticle * it = new G4DynamicParticle;
     it->SetDefinition(G4Neutron::Neutron());
-    it->SetKineticEnergy(fe->getNeutronEnergy(i)*MeV);
+    it->SetKineticEnergy(getneng_(&i)*MeV);
     momentum = it->GetTotalMomentum();
-    G4ThreeVector temp(momentum*fe->getNeutronDircosu(i), 
-                       momentum*fe->getNeutronDircosv(i), 
-                       momentum*fe->getNeutronDircosw(i));
+    G4ThreeVector temp(momentum*getndircosu_(&i), 
+                       momentum*getndircosv_(&i), 
+                       momentum*getndircosw_(&i));
     it->SetMomentum( temp );
-//    it->SetGlobalTime(fe->getNeutronAge(i)*second);
-    theResult.Get()->AddSecondary(it);
+//    it->SetGlobalTime(getnage_(&i)*second);
+    theResult.AddSecondary(it);
 //    G4cout <<"G4FissionLibrary::ApplyYourself: energy of prompt neutron " << i << " = " << it->GetKineticEnergy()<<G4endl;
   }
 
@@ -196,20 +190,20 @@ G4HadFinalState* G4FissionLibrary::ApplyYourself(const G4HadProjectile & theTrac
   {
     G4ReactionProduct * thePhoton = new G4ReactionProduct;
     thePhoton->SetDefinition(G4Gamma::Gamma());
-    thePhoton->SetKineticEnergy(fe->getPhotonEnergy(i)*MeV);
+    thePhoton->SetKineticEnergy(getpeng_(&i)*MeV);
     momentum = thePhoton->GetTotalMomentum();
-    G4ThreeVector temp(momentum*fe->getPhotonDircosu(i), 
-                       momentum*fe->getPhotonDircosv(i), 
-                       momentum*fe->getPhotonDircosw(i));
+    G4ThreeVector temp(momentum*getpdircosu_(&i), 
+                       momentum*getpdircosv_(&i), 
+                       momentum*getpdircosw_(&i));
     thePhoton->SetMomentum( temp );
     thePhoton->Lorentz(*thePhoton, -1.*theTarget);
     
     G4DynamicParticle * it = new G4DynamicParticle;
     it->SetDefinition(thePhoton->GetDefinition());
     it->SetMomentum(thePhoton->GetMomentum());
-//    it->SetGlobalTime(fe->getPhotonAge(i)*second);
+//    it->SetGlobalTime(getpage_(&i)*second);
 //    G4cout <<"G4FissionLibrary::ApplyYourself: energy of prompt photon " << i << " = " << it->GetKineticEnergy()<<G4endl;
-    theResult.Get()->AddSecondary(it);
+    theResult.AddSecondary(it);
     delete thePhoton;  
   }
 //  G4cout <<"G4FissionLibrary::ApplyYourself: Number of secondaries = "<<theResult.GetNumberOfSecondaries()<< G4endl;
@@ -218,11 +212,11 @@ G4HadFinalState* G4FissionLibrary::ApplyYourself(const G4HadProjectile & theTrac
 
   // finally deal with local energy depositions.
   G4double eDepByFragments = theEnergyRelease.GetFragmentKinetic();
-  theResult.Get()->SetLocalEnergyDeposit(eDepByFragments);
+  theResult.SetLocalEnergyDeposit(eDepByFragments);
 //   G4cout << "G4FissionLibrary::local energy deposit" << eDepByFragments<<G4endl;
   // clean up the primary neutron
-  theResult.Get()->SetStatusChange(stopAndKill);
-  return theResult.Get();
+  theResult.SetStatusChange(stopAndKill);
+  return &theResult;
 }
 
 void G4FissionLibrary::SampleMult(const G4HadProjectile & theTrack, G4int* nPrompt,
@@ -234,21 +228,19 @@ void G4FissionLibrary::SampleMult(const G4HadProjectile & theTrack, G4int* nProm
    delayedNeutronMulti = theFinalStateNeutrons.GetDelayed(eKinetic); // delayed nubar from Geant
 
    G4double time = theTrack.GetGlobalTime()/second;
-   G4double totalNeutronMulti = theFinalStateNeutrons.GetMean(eKinetic);
    if(delayedNeutronMulti==0&&promptNeutronMulti==0) {
      // no data for prompt and delayed neutrons in Geant
      // but there is perhaps data for the total neutron multiplicity, in which case 
      // we use it for prompt neutron emission
-     if (fe != 0) delete fe;
-     fe = new G4fissionEvent(theIsotope, time, totalNeutronMulti, eKinetic);
+     G4double totalNeutronMulti = theFinalStateNeutrons.GetMean(eKinetic);
+     genfissevt_(&theIsotope, &time, &totalNeutronMulti, &eKinetic);
    } else {
      // prompt nubar != 0 || delayed nubar != 0
-     if (fe != 0) delete fe;
-     fe = new G4fissionEvent(theIsotope, time, promptNeutronMulti, eKinetic);
+     genfissevt_(&theIsotope, &time, &promptNeutronMulti, &eKinetic);
    }
-   *nPrompt = fe->getNeutronNu();
+   *nPrompt = getnnu_();
    if (*nPrompt == -1) *nPrompt = 0; // the fission library libFission.a has no data for neutrons
-   *gPrompt = fe->getPhotonNu();
+   *gPrompt = getpnu_();
    if (*gPrompt == -1) *gPrompt = 0; // the fission library libFission.a has no data for gammas
 }
 

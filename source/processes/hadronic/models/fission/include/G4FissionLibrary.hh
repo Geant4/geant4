@@ -72,7 +72,6 @@
 #include "G4Nucleus.hh"
 #include "Randomize.hh"
 #include "G4LLNLFission.hh"
-#include "G4fissionEvent.hh"
 
 class G4FissionLibrary : public G4NeutronHPFinalState
 {
@@ -87,8 +86,7 @@ class G4FissionLibrary : public G4NeutronHPFinalState
   G4NeutronHPFinalState * New() ;
 
   private:
-  G4fissionEvent* fe;
-  G4int theIsotope; // used to call G4fissionEvent
+  G4int theIsotope; // used to call genfissevt_
   G4double targetMass;
   void SampleMult(const G4HadProjectile & theTrack, G4int* nPrompt,
                                    G4int* gPrompt, G4double eKinetic);

@@ -138,7 +138,6 @@ class G4FissLib : public G4HadronicInteraction
   
     G4HadFinalState* ApplyYourself(const G4HadProjectile& aTrack,
                                    G4Nucleus& aTargetNucleus);
-    const std::pair<G4double, G4double> GetFatalEnergyCheckLevels() const;
 
   private:
     G4FissionLibrary theLibrary;
