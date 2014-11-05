@@ -38,11 +38,7 @@
 /// \brief Main program of the pdb4dna example
 
 #include "DetectorConstruction.hh"
-#include "EventAction.hh"
 #include "PhysicsList.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "SteppingAction.hh"
 #include "ActionInitialization.hh"
 
 #ifdef G4MULTITHREADED

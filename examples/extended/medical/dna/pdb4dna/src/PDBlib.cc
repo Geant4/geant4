@@ -37,9 +37,14 @@
 /// \file PDBlib.cc
 /// \brief Implementation file for PDBlib class
 
+//define if the program is running with Geant4
+#define GEANT4
+
 #include "PDBlib.hh"
+#ifdef GEANT4
 //Specific to Geant4, globals.hh is used for G4cout
 #include "globals.hh"
+#endif
 #include <fstream>
 #include <iostream>
 #include <limits>
@@ -47,6 +52,7 @@
 #include <sstream>
 #include <string>
 #include <stdlib.h>
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -73,8 +79,11 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
   infile.open(filename.c_str());
   if (!infile)
   {
-    //Specific to Geant4, use std::cout instead
+#ifdef GEANT4
     G4cout<<"PDBlib::load >> file "<<filename<<" not found !!!!"<<G4endl;
+#else
+    cout << "PDBlib::load >> file "<<filename<<" not found !!!!"<<endl;
+#endif
   }
   else
   {
@@ -108,22 +117,35 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
     double minGlobZ,maxGlobZ;
     double minGlobX,maxGlobX;
     double minGlobY,maxGlobY;
+    double minX,maxX,minY,maxY,minZ,maxZ; //Sort of 'mother volume' box
+
+#ifdef GEANT4
+    minGlobZ=-2000000000;
+    minGlobX=-2000000000;
+    minGlobY=-2000000000;
+    maxGlobZ=2000000000;
+    maxGlobX=2000000000;
+    maxGlobY=2000000000;
+    minX=-2000000000;
+    minY=-2000000000;
+    minZ=-2000000000;
+    maxX=2000000000;
+    maxY=2000000000;
+    maxZ=2000000000;
+#else
     minGlobZ=numeric_limits<double>::min();
     minGlobX=numeric_limits<double>::min();
     minGlobY=numeric_limits<double>::min();
     maxGlobZ=numeric_limits<double>::max();
     maxGlobX=numeric_limits<double>::max();
     maxGlobY=numeric_limits<double>::max();
-
-    /////////////////////////////////
-    double minX,maxX,minY,maxY,minZ,maxZ; //Sort of 'mother volume' box
     minX=numeric_limits<double>::min();
     minY=numeric_limits<double>::min();
     minZ=numeric_limits<double>::min();
     maxX=numeric_limits<double>::max();
     maxY=numeric_limits<double>::max();
     maxZ=numeric_limits<double>::max();
-    /////////////////////////////////
+#endif
 
     int lastResSeq=-1;
     int resSeq=0;
@@ -155,7 +177,11 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
         infile.close();
         infile.open(filename.c_str());
         //Specific to Geant4, use std::cout instead
+#ifdef GEANT4
         G4cout<<"PDBlib::load >> No header found !!!!"<<G4endl;
+#else
+        cout<<"PDBlib::load >> No header found !!!!"<<endl;
+#endif
       }
 
     }
@@ -179,7 +205,11 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
       if ((sLine.substr(0,6)).compare("SEQRES") == 0)
       {
         //Create list of molecule here
+#ifdef GEANT4
         if (verbose > 1) G4cout << sLine << G4endl;
+#else
+        if (verbose > 1) cout << sLine << endl;
+#endif
       }
 
       //Coordinate section
@@ -233,6 +263,20 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
         moleculeOld->fMaxGlobY = maxGlobY;
         moleculeOld->fMinGlobY = minGlobY;
 
+#ifdef GEANT4
+        minGlobZ=-2000000000;
+        minGlobX=-2000000000;
+        minGlobY=-2000000000;
+        maxGlobZ=2000000000;
+        maxGlobX=2000000000;
+        maxGlobY=2000000000;
+        minX=-2000000000;
+        minY=-2000000000;
+        minZ=-2000000000;
+        maxX=2000000000;
+        maxY=2000000000;
+        maxZ=2000000000;
+#else
         minGlobZ=numeric_limits<double>::min();
         minGlobX=numeric_limits<double>::min();
         minGlobY=numeric_limits<double>::min();
@@ -245,6 +289,7 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
         maxX=numeric_limits<double>::max();
         maxY=numeric_limits<double>::max();
         maxZ=numeric_limits<double>::max();
+#endif
 
         nbAtom=0;
         numAtomInRes=0;
@@ -300,8 +345,13 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
         }
         else
         {
+#ifdef GEANT4
           G4cout << "Element not recognized : " << element << G4endl;
           G4cout << "Stop now" << G4endl;
+#else
+          cout << "Element not recognized : " << element << endl;
+          cout << "Stop now" << endl;
+#endif
           exit(1);
         }
 
@@ -368,7 +418,11 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
         //treatment for residues:
         if (residueOld == NULL)
         {
+#ifdef GEANT4
           if (verbose>2) G4cout << "residueOld == NULL"<<G4endl;
+#else
+          if (verbose>2) cout << "residueOld == NULL"<<endl;
+#endif
           AtomicOld->fNumInRes=0;
           residueOld = new Residue(resName,resSeq);
           residueOld->SetFirst(AtomicOld);

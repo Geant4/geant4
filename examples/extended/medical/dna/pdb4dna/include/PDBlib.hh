@@ -44,6 +44,9 @@
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+#ifndef PDBlib_h
+#define PDBlib_h 1
+
 #include "PDBbarycenter.hh"
 #include "PDBmolecule.hh"
 #include <vector>
@@ -93,5 +96,7 @@ private:
   //! Number of nucleotid per strand
   int fNbNucleotidsPerStrand;
 };
+
+#endif
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

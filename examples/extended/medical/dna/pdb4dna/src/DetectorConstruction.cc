@@ -295,44 +295,6 @@ void DetectorConstruction::AtomisticView(G4LogicalVolume* worldLV,
 {
   CheckMaterials();
 
-  double minminX,minminY,minminZ;//minimum minimorum
-  double maxmaxX,maxmaxY,maxmaxZ;//maximum maximorum
-  minminX=numeric_limits<double>::max();
-  minminY=numeric_limits<double>::max();
-  minminZ=numeric_limits<double>::max();
-  maxmaxX=numeric_limits<double>::min();
-  maxmaxY=numeric_limits<double>::min();
-  maxmaxZ=numeric_limits<double>::min();
-  Molecule *moleculeListTempSauv=moleculeListTemp;
-  while (moleculeListTempSauv)
-  {
-    if (minminX > moleculeListTempSauv->fMaxGlobX)
-    {
-      minminX = moleculeListTempSauv->fMaxGlobX;
-    }
-    if (minminY > moleculeListTempSauv->fMaxGlobY)
-    {
-      minminY = moleculeListTempSauv->fMaxGlobY;
-    }
-    if (minminZ > moleculeListTempSauv->fMaxGlobZ)
-    {
-      minminZ = moleculeListTempSauv->fMaxGlobZ;
-    }
-    if (maxmaxX < moleculeListTempSauv->fMinGlobX)
-    {
-      maxmaxX = moleculeListTempSauv->fMinGlobX;
-    }
-    if (maxmaxY < moleculeListTempSauv->fMinGlobY)
-    {
-      maxmaxY = moleculeListTempSauv->fMinGlobY;
-    }
-    if (maxmaxZ < moleculeListTempSauv->fMinGlobZ)
-    {
-      maxmaxZ = moleculeListTempSauv->fMinGlobZ;
-    }
-    moleculeListTempSauv=moleculeListTempSauv->GetNext();
-  }//end of while (moleculeListTempSauv)
-
   // All solids are defined for different color attributes :
   G4double sphereSize  = atomSizeFactor*1*angstrom;
   G4VSolid* atomS_H = new G4Orb("Sphere", sphereSize*1.2);
