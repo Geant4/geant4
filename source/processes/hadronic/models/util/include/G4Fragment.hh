@@ -121,7 +121,11 @@ public:
   // computation of mass for any Z and A
   inline G4double ComputeGroundStateMass(G4int Z, G4int A) const;
 
+  inline G4int GetCreatorModelType() const;
+  inline void SetCreatorModelType(G4int value);
+
   // obsolete methods
+  
   inline G4double GetZ() const;
   inline G4double GetA() const;
   inline void SetZ(G4double value);
@@ -183,8 +187,9 @@ private:
   
   G4ThreeVector theAngularMomentum;
 
-  // Exciton model data members
-  
+  G4int creatorModel;
+
+  // Exciton model data members  
   G4int numberOfParticles;
   
   G4int numberOfCharged;
@@ -194,7 +199,6 @@ private:
   G4int numberOfChargedHoles;
 
   // Gamma evaporation data members
-
   G4int numberOfShellElectrons;
 
   const G4ParticleDefinition * theParticleDefinition;
@@ -228,6 +232,7 @@ inline void G4Fragment::CalculateExcitationEnergy()
 {
   theExcitationEnergy = theMomentum.mag() - theGroundStateMass;
   if(theExcitationEnergy < 0.0) { ExcitationEnergyWarning(); }
+  if(theExcitationEnergy < CLHEP::keV) { isStable = true; }
 }
 	 
 inline void G4Fragment::CalculateGroundStateMass() 
@@ -382,6 +387,16 @@ inline G4int G4Fragment::GetNumberOfElectrons() const
 inline void G4Fragment::SetNumberOfElectrons(G4int value)
 {
   numberOfShellElectrons = value;
+}
+
+inline G4int G4Fragment::GetCreatorModelType() const
+{
+  return creatorModel;
+}
+
+inline void G4Fragment::SetCreatorModelType(G4int value)
+{
+  creatorModel = value;
 }
 
 inline 
