@@ -2,8 +2,12 @@
  Testing with stepper number    3
               voxel optimisation      On
               Propagator safety optim On
+ Setting up field of type: Cached Quadropole field, 20T/meter, cache=1cm
+Over-riding  PropagatorInField to use Multi Locator. ( In the unit test code. ) 
  Using default values for  Min Eps = 5e-05 and  MaxEps = 0.001
  Test with no voxels
+ Setting up field of type: Cached Quadropole field, 20T/meter, cache=1cm
+Over-riding  PropagatorInField to use Multi Locator. ( In the unit test code. ) 
 
 
 Test PropagateMagField: ***********************
@@ -23,9 +27,9 @@ Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z   Delta|N|  Del
     9         0   107.944   82.1475         0  0.913015  0.407926   1.1e-16     -0.34      1280      1280        50        World 
    10         0  -258.034   210.532         0 -0.571511 -0.820594         0      -1.2      2560      2560        50        World 
    11         0  -513.125   1013.82         0 -0.996717 0.0809631         0       0.9      5120      5120   324.184        World 
-   12         0   360.053   1947.38         0 -0.223041  0.974809  -1.1e-16      0.89   7857.81     10240   488.883        World 
-   13         0  -7.89252      5000         0 -0.232004  0.972715         0   -0.0021     20480     20480         0 Big Target 2 
- Cached field: 0x608720
+   12         0   360.053   1947.38         0 -0.223041  0.974809         0      0.89   7857.81     10240   488.883        World 
+   13         0  -7.89252      5000         0 -0.232004  0.972715  -1.1e-16   -0.0021     20480     20480         0 Big Target 2 
+ Cached field: 
    Number of calls:        107136
    Number of evaluations : 10664
 
@@ -48,11 +52,13 @@ Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z   Delta|N|  Del
    11   478.951   1114.14  -29.6458 -0.0173121 -0.587913  0.808739   1.1e-16      0.31     790.6      5120   542.978        World 
    12   539.632       550   511.641 -0.0298999 -0.575354  0.817358         0    0.0086   47.1752     10240         0    Target 4a 
    13   538.519   522.564       550  0.358223 -0.484705  0.797958  -1.1e-16    -0.019   16609.3     20480         0        World 
- Cached field: 0x608720
+ Cached field: 
    Number of calls:        117334
    Number of evaluations : 16437
 Set Driver verbosity to -1
  Test with full voxels
+ Setting up field of type: Cached Quadropole field, 20T/meter, cache=1cm
+Over-riding  PropagatorInField to use Multi Locator. ( In the unit test code. ) 
 
 
 Test PropagateMagField: ***********************
@@ -72,9 +78,9 @@ Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z   Delta|N|  Del
     9         0   107.944   82.1475         0  0.913015  0.407926   1.1e-16     -0.34      1280      1280         0        World 
    10         0  -258.034   210.532         0 -0.571511 -0.820594         0      -1.2      2560      2560         0        World 
    11         0  -513.125   1013.82         0 -0.996717 0.0809631         0       0.9      5120      5120         0        World 
-   12         0   360.053   1947.38         0 -0.223041  0.974809  -1.1e-16      0.89   7857.81     10240   152.043        World 
-   13         0  -7.89252      5000         0 -0.232004  0.972715         0   -0.0021     20480     20480         0 Big Target 2 
- Cached field: 0x608720
+   12         0   360.053   1947.38         0 -0.223041  0.974809         0      0.89   7857.81     10240   152.043        World 
+   13         0  -7.89252      5000         0 -0.232004  0.972715  -1.1e-16   -0.0021     20480     20480         0 Big Target 2 
+ Cached field: 
    Number of calls:        224470
    Number of evaluations : 27101
 
@@ -97,13 +103,15 @@ Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z   Delta|N|  Del
    11   478.951   1114.14  -29.6458 -0.0173121 -0.587913  0.808739   1.1e-16      0.31     790.6      5120   29.6458        World 
    12   539.632       550   511.641 -0.0298999 -0.575354  0.817358         0    0.0086   47.1752     10240         0    Target 4a 
    13   538.519   522.564       550  0.358223 -0.484705  0.797958  -1.1e-16    -0.019   16609.3     20480         0        World 
- Cached field: 0x608720
+ Cached field: 
    Number of calls:        234668
    Number of evaluations : 32874
 
 ----------------------------------------------------------
 Test with more accurate parameters 
  Setting values for Min Eps = 2.5e-08 and MaxEps = 0.001
+ Setting up field of type: Cached Quadropole field, 20T/meter, cache=1cm
+Over-riding  PropagatorInField to use Multi Locator. ( In the unit test code. ) 
 
 
 Test PropagateMagField: ***********************
@@ -125,7 +133,7 @@ Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z   Delta|N|  Del
    11         0  -530.878   906.218         0   -0.7781  0.628141   1.1e-16       1.6      5120      5120         0        World 
    12         0   203.694   1802.78         0  0.236767  0.971566         0      0.34   9087.79     10240   17.0675        World 
    13         0  -30.1864      5000         0  0.796359  0.604824  -2.2e-16     -0.37     20480     20480         0 Big Target 2 
- Cached field: 0x608720
+ Cached field: 
    Number of calls:        492400
    Number of evaluations : 43816
 
@@ -147,11 +155,13 @@ Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z   Delta|N|  Del
    10   130.295   2044.77   1138.93  0.155516 -0.851238  0.501207  -3.3e-16      0.96      2560      2560   49.9467        World 
    11   479.659   1112.25  -31.4939 -0.0147794 -0.593114  0.804983         0       0.3   784.192      5120   31.4939        World 
    12   541.001       550    502.64 -0.030357 -0.577729  0.815664         0     0.011   58.4381     10240         0    Target 4a 
-   13   539.683   515.793       550  0.266098 -0.681743 -0.681483   1.1e-16      -1.5     20480     20480         0        World 
- Cached field: 0x608720
+   13   539.683   515.793       550  0.266098 -0.681742 -0.681483   1.1e-16      -1.5     20480     20480         0        World 
+ Cached field: 
    Number of calls:        619807
    Number of evaluations : 53300
  Now test with optimisation off
+ Setting up field of type: Cached Quadropole field, 20T/meter, cache=1cm
+Over-riding  PropagatorInField to use Multi Locator. ( In the unit test code. ) 
 
 
 Test PropagateMagField: ***********************
@@ -173,7 +183,7 @@ Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z   Delta|N|  Del
    11         0  -530.878   906.218         0   -0.7781  0.628141   1.1e-16       1.6      5120      5120   356.218        World 
    12         0   203.694   1802.78         0  0.236767  0.971566         0      0.34   9087.79     10240   1252.78        World 
    13         0  -30.1864      5000         0  0.796359  0.604824  -2.2e-16     -0.37     20480     20480         0 Big Target 2 
- Cached field: 0x608720
+ Cached field: 
    Number of calls:        877539
    Number of evaluations : 64242
 
@@ -195,7 +205,7 @@ Step#     X(mm)     Y(mm)     Z(mm)      N_x       N_y       N_z   Delta|N|  Del
    10   130.295   2044.77   1138.93  0.155516 -0.851238  0.501207  -3.3e-16      0.96      2560      2560   1494.77        World 
    11   479.659   1112.25  -31.4939 -0.0147794 -0.593114  0.804983         0       0.3   784.192      5120   562.255        World 
    12   541.001       550    502.64 -0.030357 -0.577729  0.815664         0     0.011   58.4381     10240         0    Target 4a 
-   13   539.683   515.793       550  0.266098 -0.681743 -0.681483   1.1e-16      -1.5     20480     20480         0        World 
- Cached field: 0x608720
+   13   539.683   515.793       550  0.266098 -0.681742 -0.681483   1.1e-16      -1.5     20480     20480         0        World 
+ Cached field: 
    Number of calls:        1004946
    Number of evaluations : 73726

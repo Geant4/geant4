@@ -56,6 +56,8 @@
 
 #include "G4UniformMagField.hh"
 
+#include "G4ChordFinder.hh"
+
 #include "G4ios.hh"
 #include <iomanip>
 
@@ -296,15 +298,26 @@ G4PropagatorInField*  SetupPropagator( G4int type)
 //  The method is now obsolete -- as propagator in Field has this method,
 //    in order to message the correct field manager's chord finder.
 //
-void  ObsoleteSetChargeMomentumMass(G4double charge, G4double MomentumXc, G4double Mass)
+void  SetChargeMomentumMass( G4ChordFinder* pChordFinder, 
+                             G4double charge, G4double MomentumXc, G4double Mass)
 {
-    G4ChordFinder*  pChordFinder; 
 
-    pChordFinder= G4TransportationManager::GetTransportationManager()->
-		   GetFieldManager()->GetChordFinder();
+    // G4ChordFinder*  pChordFinder= 0; 
+    G4EquationOfMotion* equation= 0;
 
-    pChordFinder->SetChargeMomentumMass(
-		      charge,                    // charge in e+ units
+    //  pChordFinder= G4TransportationManager::GetTransportationManager()->
+    //		   GetFieldManager()->GetChordFinder();
+
+    G4MagInt_Driver* driver= pChordFinder->GetIntegrationDriver();
+
+    G4MagIntegratorStepper* stepper= driver->GetStepper(); 
+    equation = stepper->GetEquationOfMotion(); 
+
+// equation GetEquationOfMotion(); 
+
+    G4ChargeState chargeSt(charge, 0.0, 0.5 ); // Assume M-dipole=0, spin=0.5
+    equation->SetChargeMomentumMass(
+                      chargeSt, 
 		      MomentumXc,   // Momentum in Mev/c ?
                       Mass );
 }
@@ -336,7 +349,10 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int ) // type
     G4PropagatorInField *pMagFieldPropagator= 
                             transportMgr->GetPropagatorInField(); 
       
-    pMagFieldPropagator->SetChargeMomentumMass(  
+    // pMagFieldPropagator->SetChargeMomentumMass(  
+    SetChargeMomentumMass(  
+                            pMagFieldPropagator, 
+                            // chargeSt, 
 			    +1.,                    // charge in e+ units
 			    0.1*GeV,                // Momentum in Mev/c ?
 			    0.105658387*GeV );
@@ -382,7 +398,8 @@ G4bool testG4PropagatorInField(G4VPhysicalVolume *pTopNode, G4int ) // type
                   ( std::sqrt( momentum_val*momentum_val + rest_mass * rest_mass ) 
 		    + rest_mass );
        G4double labTof= 10.0*ns, properTof= 0.1*ns;
-       pMagFieldPropagator->SetChargeMomentumMass(
+       // pMagFieldPropagator->SetChargeMomentumMass(
+       SetChargeMomentumMass( pMagFieldPropagator, 
 		      +1,                    // charge in e+ units
                       momentum_val, 
                       rest_mass);

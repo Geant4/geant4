@@ -35,41 +35,6 @@
 
 #include "G4ChargeState.hh"
 
-G4ChargeState::G4ChargeState(G4double charge,
-                             G4double magnetic_dipole_moment,
-                             G4double spin,
-                             G4double electric_dipole_moment,
-                             G4double magnetic_charge)
-{
-   fCharge         = charge;
-   fSpin           = spin;
-   fMagn_dipole    = magnetic_dipole_moment;
-   fElec_dipole    = electric_dipole_moment;
-   fMagneticCharge = magnetic_charge;
-}
-
-G4ChargeState::G4ChargeState( const G4ChargeState& right )
-{
-  fCharge         = right.fCharge;
-  fSpin           = right.fSpin;
-  fMagn_dipole    = right.fMagn_dipole;
-  fElec_dipole    = right.fElec_dipole;
-  fMagneticCharge = right.fMagneticCharge;
-}
-
-G4ChargeState& G4ChargeState::operator = ( const G4ChargeState& right )
-{
-  if (&right == this) return *this;
-
-  fCharge         = right.fCharge;
-  fSpin           = right.fSpin;
-  fMagn_dipole    = right.fMagn_dipole;
-  fElec_dipole    = right.fElec_dipole;
-  fMagneticCharge = right.fMagneticCharge;
-
-  return *this;
-}
-
 void G4ChargeState::SetChargeSpinMoments(G4double charge,
                                          G4double spin,
                                          G4double magnetic_dipole_moment,

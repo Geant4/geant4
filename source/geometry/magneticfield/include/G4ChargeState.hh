@@ -45,14 +45,14 @@ class  G4ChargeState  // Charge & moments
 {
    public:  // without description
 
-     G4ChargeState(G4double charge,
-                   G4double magnetic_dipole_moment,
-                   G4double pdgSpin, 
-                   G4double electric_dipole_moment = 0.0,
-                   G4double magnetic_charge = 0.0);
+     inline G4ChargeState(G4double charge,
+                          G4double magnetic_dipole_moment,
+                          G4double pdgSpin, 
+                          G4double electric_dipole_moment = 0.0,
+                          G4double magnetic_charge = 0.0);
 
-     G4ChargeState( const G4ChargeState& right );
-     G4ChargeState& operator = ( const G4ChargeState& right );
+     inline G4ChargeState( const G4ChargeState& right );
+     inline G4ChargeState& operator = ( const G4ChargeState& right );
 
      void SetChargeSpinMoments(G4double charge,
                                G4double pdgSpin,  
@@ -116,6 +116,43 @@ class  G4ChargeState  // Charge & moments
      G4double fElec_dipole;
      G4double fMagneticCharge;  // for magnetic monopole
 };
+
+// Inline methods implementation
+
+inline G4ChargeState::G4ChargeState(G4double charge,
+                             G4double magnetic_dipole_moment,
+                             G4double spin,
+                             G4double electric_dipole_moment,
+                             G4double magnetic_charge)
+{
+   fCharge         = charge;
+   fSpin           = spin;
+   fMagn_dipole    = magnetic_dipole_moment;
+   fElec_dipole    = electric_dipole_moment;
+   fMagneticCharge = magnetic_charge;
+}
+
+inline G4ChargeState::G4ChargeState( const G4ChargeState& right )
+{
+  fCharge         = right.fCharge;
+  fSpin           = right.fSpin;
+  fMagn_dipole    = right.fMagn_dipole;
+  fElec_dipole    = right.fElec_dipole;
+  fMagneticCharge = right.fMagneticCharge;
+}
+
+inline G4ChargeState& G4ChargeState::operator = ( const G4ChargeState& right )
+{
+  if (&right == this) return *this;
+
+  fCharge         = right.fCharge;
+  fSpin           = right.fSpin;
+  fMagn_dipole    = right.fMagn_dipole;
+  fElec_dipole    = right.fElec_dipole;
+  fMagneticCharge = right.fMagneticCharge;
+
+  return *this;
+}
 
 inline void G4ChargeState::SetChargeMdm(G4double charge, G4double mag_dipole_moment)
 { 

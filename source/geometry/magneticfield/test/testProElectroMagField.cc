@@ -233,6 +233,8 @@ G4VPhysicalVolume* BuildGeometry()
 
 G4UniformElectricField myElectricField(10.*kilovolt/cm, 0., 0.); 
 
+G4EqMagElectricField *fEquation = 0;
+
 
 G4FieldManager* SetupField(G4int type)
 {
@@ -241,7 +243,8 @@ G4FieldManager* SetupField(G4int type)
 
     //    G4Mag_UsualEqRhs *fEquation = new G4Mag_UsualEqRhs(&myMagField); 
 
-    G4EqMagElectricField *fEquation = new G4EqMagElectricField(&myElectricField);
+    // G4EqMagElectricField *
+    fEquation = new G4EqMagElectricField(&myElectricField);
  
     G4MagIntegratorStepper *pStepper;
 
@@ -295,16 +298,18 @@ G4PropagatorInField*  SetupPropagator( G4int type)
 //  The method is now obsolete -- as propagator in Field has this method,
 //    in order to message the correct field manager's chord finder.
 //
-void  ObsoleteSetChargeMomentumMass(G4double charge, G4double MomentumXc, G4double Mass)
+void  SetChargeMomentumMass(G4double charge, G4double MomentumXc, G4double Mass)
 {
    G4FieldManager fieldMgr;
 
-   fieldMgr= G4TransportationManager::GetTransportationManager()->
-              GetFieldManager(); 
+   // fieldMgr= G4TransportationManager::GetTransportationManager()->
+   //          GetFieldManager(); 
+
+   static G4ChargeState* chargeState= new G4ChargeState ( charge, 0, 0 );  // no Mag Dip Moment
 
     // pMagFieldPropagator->set_magnetic_field();
-    fieldMgr->SetChargeMomentumMass(
-		      charge,                    // charge in e+ units
+   fEquation->SetChargeMomentumMass(
+		      chargeState,  // charge in e+ units
 		      MomentumXc,   // Momentum in Mev/c ?
                       Mass );
 }
