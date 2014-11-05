@@ -88,7 +88,7 @@ void Run::EndOfRun()
   G4int nEvt = GetNumberOfEvent();
   G4double norm = nEvt;
   if(nEvt > 0) { norm = 1.0/norm; }
-  //G4cout << "nEvt = " << nEvt << " norm = " << norm << G4endl;   
+
   fTotStepGas  *= norm;
   fTotCluster  *= norm;
   fMeanCluster *= norm;
@@ -146,9 +146,9 @@ void Run::EndOfRun()
   fAnalysisManager->ScaleH1(1,norm);
   fAnalysisManager->ScaleH1(2,norm);
   fAnalysisManager->ScaleH1(3,0.1);
-  fAnalysisManager->SetH1Ascii(1,true);
-  fAnalysisManager->SetH1Ascii(2,true);
-  fAnalysisManager->SetH1Ascii(3,true);
+  //  fAnalysisManager->SetH1Ascii(1,true);
+  //  fAnalysisManager->SetH1Ascii(2,true);
+  //  fAnalysisManager->SetH1Ascii(3,true);
  
   G4cout << " ================== run end ==========================" << G4endl;
 }
