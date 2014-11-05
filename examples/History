@@ -1,4 +1,4 @@
-$Id: History 69230 2013-04-23 14:40:59Z gcosmo $
+$Id: History 85757 2014-11-05 10:07:06Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -17,7 +17,31 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-26th August 2014  Gabriele Cosmo (examples-V10-00-08)
+5th November 2014  Gabriele Cosmo (examples-V10-00-09)
+- Updated reference outputs according to reference tag geant4-10-00-ref-09.
+- Includes tags: amsEcal-V10-00-07, brachy-V10-00-00, ccal-V10-00-02,
+                 ChargeExchangeMC-V10-00-01, dnageometry-V10-00-02,
+                 gammaraytel-V10-00-08, hadrontherapy-V10-00-08,
+                 human_phantom-V10-00-01, iort_therapy-V10-00-00,
+                 lAr_calorimeter-V10-00-04, microelectronics-V10-00-03,
+                 microbeam-V10-00-06, nanobeam-V10-00-06, purmag-V10-00-02,
+                 radioprotection-V10-00-01, DMX-V10-00-08, exampleB2-V10-00-03,
+                 exampleB5-V10-00-01, testem0-V10-00-00, testem1-V10-00-11,
+                 testem2-V10-00-08, testem3-V10-00-16, testem4-V10-00-03,
+                 testem5-V10-00-12, testem7-V10-00-02, testem8-V10-00-05,
+                 testem11-V10-00-04, testem12-V10-00-04, testem13-V10-00-03,
+                 testem14-V10-00-04, testem16-V10-00-04, testem17-V10-00-00,
+                 exerrprop-V10-00-00, particleGunExample-V10-00-05,
+                 exgps-V10-00-07, channelingExample-V10-00-15,
+                 monopole-V10-00-00, phononExample-V10-00-03, chem1-V10-00-02,
+                 fieldex04-V10-00-10, g3tog4Tests-V10-00-02, hadr06-V10-00-07,
+                 chem2-V10-00-02, chem3-V10-00-02, dnaphysics-V10-00-03,
+                 microdosimetry-V10-00-01, pdb4dna-V10-00-02, DICOM-V10-00-04,
+                 wholeNuclearDNA-V10-00-05, LXe-V10-00-07, OpNovice-V10-00-06,
+                 WLS-V10-00-04, expol01-V10-00-00, rdecay02-V10-00-03,
+                 exampleRE06-V10-00-01
+
+26th September 2014  Gabriele Cosmo (examples-V10-00-08)
 - Updated reference outputs according to reference tag geant4-10-00-ref-08.
 - Includes tags: gammaraytel-V10-00-07, testem1-V10-00-08, testem2-V10-00-06,
                  testem3-V10-00-11, testem4-V10-00-01, testem5-V10-00-10,
