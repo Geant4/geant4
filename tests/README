@@ -1,4 +1,4 @@
-$Id: README 83936 2014-09-23 13:48:54Z gcosmo $
+$Id: README 85711 2014-11-04 13:43:12Z gunter $
 -------------------------------------------------------------------
 
      =========================================================
@@ -62,7 +62,7 @@ test34 ## Shower parameterisation with 'gflash'.
 test35 ## Hadronic Generator test versus HARP data 3 GeV < E < 13 GeV (not for stt).
 test36 ## EM XTR processes
 test37 ## Sandia data, electron beam in semi-infinite media (not for stt).
-test38 ## Free slot
+test38 ## Physics Lists: User extensible physics lists factory
 test39 ## Free slot
 test40 ## Benchmark test for e.m. shower development from single primary
 test41 ## MUSCAT experiment for multiple-scattering validation (not for stt).
