@@ -1,4 +1,4 @@
-$Id: README 77949 2013-11-29 21:19:29Z ihrivnac $
+$Id: README 85751 2014-11-05 09:43:53Z gcosmo $
 -------------------------------------------------------------------
 
      =========================================================
@@ -135,9 +135,6 @@ Advanced level examples
  dnageometry
    - Setup of a realistic nucleus model of a cell, including chromosomes,
      in combination with Geant4-DNA physics
- dnaphysics
-   - Simulation of track structures in liquid water using the Geant4-DNA
-     physics processes and models
  eRosita
    - Simplified eROSITA X-ray telescope setup for instrumental background
      simulations for fluorescence measurements.
@@ -163,15 +160,17 @@ Advanced level examples
  microbeam
    - Simulation of the cellular irradiation beam line installed on the AIFIRA
      electrostatic accelerator facility located at CENBG, France
- microdosimetry
-   - Simulation of DNA physics processes with track of a 10 keV Helium+
-     (positive charge is +e) particle in liquid water.
+ microelectronics
+   - Simulating tracks of a 5 MeV proton in silicon.
  nanobeam
    - Simulation of the beam optics of the nanobeam line installed on the AIFIRA
      electrostatic accelerator facility located at CENBG, France.
  purging_magnet
    - Simulation of electrons traveling through a 3D magnetic field of a
      strong purging magnet used for treatment head in a medical environment
+ radioprotection
+   - Modeling a simplified diamond microdosimeter for radioprotection
+     applications in space environments.
  underground_physics
    - Setup of an underground dark matter experiment
  xray_fluorescence
