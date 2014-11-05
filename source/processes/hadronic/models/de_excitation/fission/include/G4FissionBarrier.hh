@@ -55,7 +55,9 @@ private:
   
   inline G4double SellPlusPairingCorrection(G4int Z, G4int N)
   { 
-    return SPtr->GetShellPlusPairingZ(Z) + SPtr->GetShellPlusPairingN(N); 
+    G4double res = 0.0;
+    SPtr->GetPairingCorrection(N,Z,res);
+    return res; 
   }
 
   G4FissionBarrier(const G4FissionBarrier & right);

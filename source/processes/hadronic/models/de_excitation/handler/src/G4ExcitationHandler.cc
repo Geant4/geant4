@@ -232,7 +232,8 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 	theFermiModel->BreakFragment(&results, frag);
         size_t nsec = results.size();
 	//G4cout << "FermiBreakUp Nsec= " << nsec << G4endl;
-	// if initial fragment returned unchanged try to evaporate it
+	// FBU takes care to delete input fragment or add it to the results
+	// results may be excited - photo-evaporation should be applied
 	if(0 < nsec) {
           for(size_t j=0; j<nsec; ++j) {
 	    exEnergy = results[j]->GetExcitationEnergy();
@@ -243,7 +244,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 	}
       }
     }
-    // apply Evaporation in another case
+    // apply Evaporation, residual nucleus is always added to the results
     theEvaporation->BreakFragment(&results, frag); 
     size_t nsec = results.size();
     //G4cout << "Evaporation Nsec= " << nsec << G4endl;
@@ -299,20 +300,9 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
     //G4cout << *iList << G4endl;
     exEnergy = (*iList)->GetExcitationEnergy();
 
-    // only hot fragments
+    // photon de-excitation only for hot fragments
     if(exEnergy > minExcitation) {  
-      theTempResult = thePhotonEvaporation->BreakUpFragment(*iList);	  
-      size_t nsec = theTempResult->size();
-      //G4cout << "Nproducts= " << nsec << G4endl;  
-	  
-      // if there is a gamma emission then
-      if (nsec > 0) {
-	G4FragmentVector::iterator j;
-	for (j = theTempResult->begin(); j != theTempResult->end(); ++j) {
-	  theResults.push_back(*j); 
-	}
-      }
-      delete theTempResult;
+      thePhotonEvaporation->BreakUpChain(&theResults, *iList);
     }
 
     // priamry fragment is kept

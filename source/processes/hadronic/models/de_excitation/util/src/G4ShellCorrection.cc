@@ -49,3 +49,25 @@ G4ShellCorrection* G4ShellCorrection::GetInstance()
   }
   return theInstance;
 }   
+
+G4CameronTruranHilfShellCorrections* 
+G4ShellCorrection::GetCameronTruranHilfShellCorrections()
+{
+  return &theCameronTruranHilfShellCorrections;
+}
+
+G4CameronShellPlusPairingCorrections*
+G4ShellCorrection::GetCameronShellPlusPairingCorrections()
+{
+  return &theCameronShellPlusPairingCorrections;
+}
+ 
+G4double G4ShellCorrection::GetShellCorrection(G4int A, G4int Z) const 
+{
+  G4double shellCorr = 0.0;
+  G4int N = A - Z;
+  if(!theCookShellCorrections.GetShellCorrection(N,Z,shellCorr)) {
+    theCameronGilbertShellCorrections.GetShellCorrection(N,Z,shellCorr);
+  }    
+  return shellCorr;
+}

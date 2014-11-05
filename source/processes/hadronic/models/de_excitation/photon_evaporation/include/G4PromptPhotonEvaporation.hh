@@ -62,13 +62,17 @@ public:
 
   virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
 
-  // one photon emission
+  // one photon or e- emission
   virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
 
-  // full fragment de-excitation by photon emission
+  // returns "false", emitted gamma and e- are added to the results
+  virtual G4bool 
+  BreakUpChain(G4FragmentVector* theResult, G4Fragment* theNucleus);
+
+  // emitted gamma and e- are added to the results
   virtual G4FragmentVector* BreakUpFragment(G4Fragment* theNucleus);
 
-  // obsolete method
+  // emitted gamma, e-, and residual fragment are added to the results
   virtual G4FragmentVector* BreakUp(const G4Fragment& theNucleus);
 
   inline void SetVerboseLevel(G4int verbose);

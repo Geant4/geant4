@@ -138,6 +138,7 @@ void G4FermiBreakUp::BreakFragment(G4FragmentVector* theResult,
     }
     delete mom;
   }
+  delete theNucleus;
 }
 
 const std::vector<const G4VFermiFragment*>* 

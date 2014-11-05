@@ -59,98 +59,63 @@
 #include "G4Fragment.hh"      
 #include "G4ConstantLevelDensityParameter.hh"
 
-//
-// Constructor
-//
-
 G4ContinuumGammaDeexcitation::G4ContinuumGammaDeexcitation()
-  : _nucleusZ(0), _nucleusA(0), _levelManager(0)
-{}
+  : nucleusZ(0), nucleusA(0), levelManager(0), ctransition(0)
+{
+  store = G4NuclearLevelStore::GetInstance();
+}
 
 G4ContinuumGammaDeexcitation::~G4ContinuumGammaDeexcitation() 
 {}
 
-G4VGammaTransition* G4ContinuumGammaDeexcitation::CreateTransition()
+G4bool G4ContinuumGammaDeexcitation::CanDoTransition(G4Fragment* nucleus) 
 {
-  G4Fragment* nucleus = GetNucleus();
   G4int Z = nucleus->GetZ_asInt();
   G4int A = nucleus->GetA_asInt();
   G4double excitation = nucleus->GetExcitationEnergy();
 
-  if (_nucleusA != A || _nucleusZ != Z)
-  {
-    _levelManager = G4NuclearLevelStore::GetInstance()->GetManager(Z,A);
-    _nucleusA = A;
-    _nucleusZ = Z;
+  if (Z < 2 || A < 3 || excitation <= _tolerance) {
+    if (_verbose > 1) { 
+      G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition fails; Z= " << Z
+	     << " A= " << A << " Eex(meV)= " << excitation << G4endl;
+    }
+    return false;
   }
 
+  if (nucleusA != A || nucleusZ != Z) {
+    levelManager = store->GetManager(Z,A);
+    nucleusA = A;
+    nucleusZ = Z;
+  }
+  if(!levelManager) { return false; }
+
   if (_verbose > 1) {
-    G4cout << "G4ContinuumGammaDeexcitation::CreateTransition "
+    G4cout << "G4ContinuumGammaDeexcitation: "
 	   << " Z= " << Z << "  A= " << A << " Eex= " << excitation
-	   << "  "  << _levelManager
 	   << G4endl;
   }
-  G4VGammaTransition* gt = 
-    new G4ContinuumGammaTransition(_levelManager,Z,A,excitation,_verbose );
-
-  return gt;
-}
-    
-
-G4bool G4ContinuumGammaDeexcitation::CanDoTransition() 
-{
-  //JMQ: far too small, creating sometimes continuum gammas instead 
-  //     of the right discrete ones (when excitation energy is slightly 
-  //     over maximum discrete  energy): changed
-  //  G4double tolerance = 10*eV;
-  static const G4double tolerance = CLHEP::keV;
-
-  if (_transition == 0) 
-    {
-      if (_verbose > 0) {
-	G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition - Null transition "
-	       << G4endl;
-      }
-      return false;
+  if (excitation <= levelManager->MaxLevelEnergy() + _tolerance) {
+    if (_verbose > 0) {
+      G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition -  Excitation " 
+	     << excitation << " below max discrete level " 
+	     << levelManager->MaxLevelEnergy() << G4endl;
     }
+    return false;
+  }
 
-  G4Fragment* nucleus = GetNucleus();
-  G4double excitation = nucleus->GetExcitationEnergy();
+  if(!ctransition) {
+    ctransition = 
+      new G4ContinuumGammaTransition(levelManager,Z,A,excitation,_verbose);
+    _transition = ctransition;
+  } else {
+    ctransition->Update(levelManager,Z,A,excitation);
+  }
 
-  if (_nucleusZ < 2 || _nucleusA < 3)
-    {
-      if (_verbose > 1) { 
-	G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition - n/p/H"
-	       << G4endl;
-      }
-      return false;
-    }
-
-  if (excitation <= tolerance) 
-    {
-      if (_verbose > 1) { 
-	G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition -  Excitation "
-	       << excitation/CLHEP::keV << " keV is too small"
-	       << G4endl;
-      }
-      return false;
-    }
-  if (excitation <= (_levelManager->MaxLevelEnergy() + tolerance)) 
-    {  
-      if (_verbose > 0) {
-	G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition -  Excitation " 
-	       << excitation << " below max discrete level " 
-	       << _levelManager->MaxLevelEnergy() << G4endl;
-      }
-      return false;
-    }
-  
   if (_verbose > 1) {
-    G4cout <<"G4ContinuumGammaDeexcitation::CanDoTransition - CanDo" 
-	   << " Eex(keV)= " << excitation/CLHEP::keV 
-	   << " Emax(keV)= " << _levelManager->MaxLevelEnergy()/CLHEP::keV 
-	   << " Z= " << _nucleusZ << " A= " << _nucleusA
-	   << G4endl;
+    G4cout <<"G4ContinuumGammaDeexcitation::CanDoTransition: " 
+	   << " Eex(MeV)= " << excitation 
+	   << " Emax(MeV)= " << levelManager->MaxLevelEnergy()
+	   << " Z= " << Z << " A= " << A << G4endl;
   }
   return true;
 }

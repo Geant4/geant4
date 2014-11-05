@@ -44,39 +44,16 @@ public:
 
   ~G4CameronTruranHilfPairingCorrections();
 
-  inline 
-  G4double GetPairingCorrection(G4int A, G4int Z) const
+  inline G4bool GetPairingCorrection(G4int N, G4int Z, G4double& result) const
   {
-    return GetPairingZ(Z) + GetPairingN(A-Z);
-  }
-
-  inline 
-  G4double GetPairingZ(G4int Z) const 
-  {
-    G4double res = 0.0;
-    if (IsInTableThisZ(Z)) { res = PairingZTable[Z-ZTableMin]; }
+    G4bool res = false;
+    if(Z >= ZTableMin && Z <= ZTableMax && N >= NTableMin && N <= NTableMax) { 
+      result = PairingZTable[Z-ZTableMin] + PairingNTable[N-NTableMin];
+      res = true; 
+    }
     return res;
   }
-
-  inline 
-  G4bool IsInTableThisZ(G4int Z) const 
-  {
-    return ( Z >= ZTableMin && Z <= ZTableMax );
-  }
-
-  inline 
-  G4double GetPairingN(G4int N) const 
-  {
-    G4double res = 0.0;
-    if (IsInTableThisN(N)) { res = PairingNTable[N-NTableMin]; }
-    return res;
-  }
-
-  G4bool IsInTableThisN(G4int N) const 
-  {
-    return ( N >= NTableMin && N <= NTableMax );
-  }
-
+  
   enum  { ZTableSize = 93, NTableSize = 146, ZTableMin = 10, ZTableMax = 102,
 	  NTableMin = 10, NTableMax = 155 };
 private:

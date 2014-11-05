@@ -82,8 +82,6 @@ private:
   G4bool operator==(const G4EvaporationChannel & right) const;
   G4bool operator!=(const G4EvaporationChannel & right) const;
 
-	// Data Members
-	// ************
 private:
 
   // This data member define the channel. 

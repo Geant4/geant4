@@ -55,30 +55,26 @@
 #include "G4Fragment.hh"
 
 class G4NuclearLevelManager;
+class G4NuclearLevelStore;
+class G4DiscreteGammaTransition;
 
 class G4ContinuumGammaDeexcitation : public G4VGammaDeexcitation
 {
 public:
 
-  // Constructor
   G4ContinuumGammaDeexcitation();
 
-  // Destructor
   virtual ~G4ContinuumGammaDeexcitation();
 
-  // Functions
-
-public:
-
-  virtual G4VGammaTransition* CreateTransition();
-
-  virtual G4bool CanDoTransition();
+  virtual G4bool CanDoTransition(G4Fragment* aNucleus);
 
 private:
 
-  G4int _nucleusZ;
-  G4int _nucleusA;  
-  G4NuclearLevelManager * _levelManager;
+  G4int nucleusZ;
+  G4int nucleusA;  
+  G4NuclearLevelStore*   store;
+  G4NuclearLevelManager* levelManager;
+  G4ContinuumGammaTransition* ctransition; 
 };
 
 #endif

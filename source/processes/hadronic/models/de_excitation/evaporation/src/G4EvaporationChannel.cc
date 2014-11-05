@@ -155,26 +155,12 @@ G4Fragment* G4EvaporationChannel::EmittedFragment(G4Fragment* theNucleus)
 
 G4FragmentVector * G4EvaporationChannel::BreakUp(const G4Fragment & theNucleus)
 {
-  G4double EvaporatedEnergy = SampleKineticEnergy(theNucleus) + EvaporatedMass;
-
-  G4ThreeVector momentum(IsotropicVector
-                         (std::sqrt((EvaporatedEnergy - EvaporatedMass)*
-                                    (EvaporatedEnergy + EvaporatedMass))));
-  
-  G4LorentzVector EvaporatedMomentum(momentum,EvaporatedEnergy);
-  G4LorentzVector ResidualMomentum = theNucleus.GetMomentum();
-  EvaporatedMomentum.boost(ResidualMomentum.boostVector());
-  
-  G4Fragment * EvaporatedFragment = new G4Fragment(theA,theZ,EvaporatedMomentum);
-  ResidualMomentum -= EvaporatedMomentum;
-
-  G4Fragment * ResidualFragment = new G4Fragment(ResidualA, ResidualZ, ResidualMomentum);
- 
-  G4FragmentVector * theResult = new G4FragmentVector;
-  
-  theResult->push_back(EvaporatedFragment);
-  theResult->push_back(ResidualFragment);
-  return theResult; 
+  G4FragmentVector * theResult = new G4FragmentVector();
+  G4Fragment* frag0 = new G4Fragment(theNucleus);
+  G4Fragment* frag1 = EmittedFragment(frag0);
+  if(frag1) { theResult->push_back(frag1); }
+  theResult->push_back(frag0);
+  return theResult;
 } 
 
 ///////////////////////////////////////////

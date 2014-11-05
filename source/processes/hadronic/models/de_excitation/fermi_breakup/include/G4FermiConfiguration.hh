@@ -39,7 +39,7 @@
 class G4FermiConfiguration 
 {
 public:
-  // Constructors
+
   G4FermiConfiguration(const std::vector<const G4VFermiFragment*>&);
 
   ~G4FermiConfiguration();

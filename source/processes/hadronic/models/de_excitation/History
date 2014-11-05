@@ -14,19 +14,27 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-31 Sept 2014 Vladimir Ivanchenko (hadr-deex-V10-00-16)
+03 Nov 2014 Vladimir Ivanchenko (hadr-deex-V10-00-18)
+----------------------------------------------------------
+- Fixed build problem 
+
+03 Nov 2014 Vladimir Ivanchenko (hadr-deex-V10-00-17)
+----------------------------------------------------------
+- Cleanup and redesign of photon evaporation
+
+31 Oct 2014 Vladimir Ivanchenko (hadr-deex-V10-00-16)
 ----------------------------------------------------------
 - Improved design of FermiBreakUp and fix decays of "unstable" Fermi
     fragments
 
-29 Sept 2014 Vladimir Ivanchenko (hadr-deex-V10-00-15)
+29 Oct 2014 Vladimir Ivanchenko (hadr-deex-V10-00-15)
 ----------------------------------------------------------
 - G4FermiBreakUp, G4FermiFragmentsPool, G4VEvaporation, 
   G4ExcitationHandler, G4Evaporation, G4EvaporationChannel, G4GEMChannel, 
   G4UnstableFragmentBreakUp, G4VEvaporationChannel
     further reduced memory churn
 
-27 Sept 2014 Vladimir Ivanchenko (hadr-deex-V10-00-14)
+27 Oct 2014 Vladimir Ivanchenko (hadr-deex-V10-00-14)
 ----------------------------------------------------------
 - G4FermiFragmentsPool - added method IfApplicable() for fast check
     if FermiBreakUp is applicable to a given excited fragment
@@ -36,17 +44,17 @@ code and to keep track of all tags.
     slightly modified interface to evaporation channel; cleanup
     logic and implementation
 
-26 Sept 2014 Vladimir Ivanchenko (hadr-deex-V10-00-13)
+26 Oct 2014 Vladimir Ivanchenko (hadr-deex-V10-00-13)
 ----------------------------------------------------------
 - G4ExcitationHandler - fixed problem in isomere production providing
     energy non-concervation on level of 1 MeV
 
-25 Sept 2014 Vladimir Ivanchenko (hadr-deex-V10-00-12)
+25 Oct 2014 Vladimir Ivanchenko (hadr-deex-V10-00-12)
 ----------------------------------------------------------
 - G4ExcitationHandler, G4Evaporation, G4PhotonEvaporation - added 
     protection against abnormal fragments 
 
-25 Sept 2014 Vladimir Ivanchenko (hadr-deex-V10-00-11)
+25 Oct 2014 Vladimir Ivanchenko (hadr-deex-V10-00-11)
 ----------------------------------------------------------
 - G4FermiFragmentsPool - is made pure static singletone, all methods
     and data const in run time, no decay of exotic states

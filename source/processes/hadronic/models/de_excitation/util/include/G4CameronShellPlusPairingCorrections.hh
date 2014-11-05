@@ -43,20 +43,14 @@ public:
   G4CameronShellPlusPairingCorrections();
 
   ~G4CameronShellPlusPairingCorrections();
-  
-  inline
-  G4double GetShellPlusPairingZ(G4int Z) const 
+
+  inline G4bool GetPairingCorrection(G4int N, G4int Z, G4double& result) const
   {
-    G4double res = 0.0;
-    if (Z <= TableSize && Z > 1) { res = SPZTable[Z-1]; }
-    return res;
-  }
-  
-  inline
-  G4double GetShellPlusPairingN(G4int N) const 
-  {
-    G4double res = 0.0;
-    if (N <= TableSize && N > 0) { res = SPNTable[N-1]; }
+    G4bool res = false;
+    if(Z <= TableSize && N <= TableSize) { 
+      result = SPZTable[Z-1] + SPNTable[N-1];
+      res = true; 
+    }
     return res;
   }
   

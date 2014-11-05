@@ -77,39 +77,30 @@ public:
 
   virtual ~G4VGammaDeexcitation();
 
-  virtual G4VGammaTransition * CreateTransition() = 0;
-  virtual G4bool CanDoTransition() = 0;
-
-  // Single gamma transition
-  G4FragmentVector * DoTransition();
+  virtual G4bool CanDoTransition(G4Fragment* aNucleus) = 0;
 
   // Chain of gamma transitions
-  G4FragmentVector * DoChain();
+  void DoChain(G4FragmentVector*, G4Fragment* nucleus);
 
-  G4Fragment * GenerateGamma();
+  G4Fragment * GenerateGamma(G4Fragment* nucleus);
 
-  inline G4Fragment* GetNucleus();
+  inline void SetVerboseLevel(G4int verbose){ _verbose = verbose; };
 
-  inline void SetNucleus(G4Fragment* nucleus);
-
-  inline void SetVerboseLevel(G4int verbose);
-
-  inline void Initialize();
+  //inline void Initialise();
 
   inline void SetEO(G4ElectronOccupancy eo) { _electronO = eo; };
-  inline void SetVaccantSN( G4int val ) { _vSN = val;};
+  inline void SetVaccantSN( G4int val )     { _vSN = val;};
   
-  inline G4ElectronOccupancy GetEO() { return _electronO; };    
-  inline G4int GetVacantSN() {return _vSN;};
+  inline G4ElectronOccupancy GetEO()        { return _electronO; };    
+  inline G4int GetVacantSN()                { return _vSN;};
 
-  inline void SetTimeLimit(G4double value) { fTimeLimit = value; }
+  inline void SetTimeLimit(G4double value)  { _timeLimit = value; }
 
 protected:
 
-  void Update();
-
-  G4VGammaTransition* _transition; // Owned pointer
+  G4VGammaTransition* _transition; 
   G4int _verbose;
+  G4double _tolerance;  
 
 private:
 
@@ -118,36 +109,11 @@ private:
   G4bool operator == (const G4VGammaDeexcitation & right) const;
   G4bool operator != (const G4VGammaDeexcitation & right) const;
 
-  G4Fragment* _nucleus;
   G4ElectronOccupancy _electronO;
   G4int _vSN;
-  G4double fTimeLimit;
+  G4double _timeLimit;
 
 };
-
-inline G4Fragment* G4VGammaDeexcitation::GetNucleus() 
-{
-  return _nucleus; 
-}
-
-inline void G4VGammaDeexcitation::SetNucleus(G4Fragment* nucleus)
-{
-  _nucleus = nucleus;
-}
-
-inline void G4VGammaDeexcitation::SetVerboseLevel(G4int verbose)
-{
-  _verbose = verbose;
-}
-
-inline void G4VGammaDeexcitation::Initialize()
-{
-  if (_transition != 0) { delete _transition; }
-  _transition = CreateTransition();
-  if (_transition != 0) {
-    _transition->SetEnergyFrom(_nucleus->GetExcitationEnergy());
-  }
-}
 
 #endif
 

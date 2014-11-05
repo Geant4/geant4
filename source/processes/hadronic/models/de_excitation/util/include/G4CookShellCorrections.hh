@@ -44,38 +44,14 @@ public:
 
   ~G4CookShellCorrections();
 
-  inline
-  G4double GetShellCorrection(G4int A, G4int Z) const 
+  inline G4bool GetShellCorrection(G4int N, G4int Z, G4double& result) const
   {
-    return GetShellZ(Z) + GetShellN(A-Z); 
-  }
-
-  inline
-  G4double GetShellZ(G4int Z) const 
-  {
-    G4double res = 0.0;
-    if (IsInTableThisZ(Z)) { res = ShellZTable[Z-ZTableMin]; }
+    G4bool res = false;
+    if(Z >= ZTableMin && Z <= ZTableMax && N >= NTableMin && N <= NTableMax) { 
+      result = ShellZTable[Z-ZTableMin] + ShellNTable[N-NTableMin];
+      res = true; 
+    }
     return res;
-  }
-
-  inline
-  G4bool IsInTableThisZ(G4int Z) const 
-  {
-    return ( Z >= ZTableMin && Z <= ZTableMax );
-  }
-  
-  inline
-  G4double GetShellN(G4int N) const 
-  {
-    G4double res = 0.0;
-    if (IsInTableThisN(N)) { res = ShellNTable[N-NTableMin]; }
-    return res;
-  }
-    
-  inline
-  G4bool IsInTableThisN(G4int N) const 
-  {
-    return( N >= NTableMin && N <= NTableMax );
   }
   
   enum  { ZTableSize = 68, NTableSize = 118, ZTableMin = 28, ZTableMax = 95,

@@ -143,26 +143,12 @@ G4Fragment* G4GEMChannel::EmittedFragment(G4Fragment* theNucleus)
 
 G4FragmentVector * G4GEMChannel::BreakUp(const G4Fragment & theNucleus)
 {
-  G4double evKineticEnergy = SampleKineticEnergy(theNucleus);
-  G4double evEnergy = evKineticEnergy + EvaporatedMass;
-  
-  G4ThreeVector momentum(
-    IsotropicVector(std::sqrt(evKineticEnergy*(evKineticEnergy+2.0*EvaporatedMass))));
-    
-  G4LorentzVector evMomentum(momentum, evEnergy);
-  G4ThreeVector boost = theNucleus.GetMomentum().boostVector();
-  evMomentum.boost(boost);
-  G4Fragment * EvaporatedFragment = new G4Fragment(A, Z, evMomentum);
-
-  // And now the residual nucleus 
-  G4LorentzVector ResidualMomentum = theNucleus.GetMomentum() - evMomentum;	
-  G4Fragment* ResidualFragment = 
-    new G4Fragment(ResidualA, ResidualZ, ResidualMomentum);
-    
-  G4FragmentVector* theResult = new G4FragmentVector;
-  theResult->push_back(EvaporatedFragment);
-  theResult->push_back(ResidualFragment);
-  return theResult; 
+  G4FragmentVector * theResult = new G4FragmentVector();
+  G4Fragment* frag0 = new G4Fragment(theNucleus);
+  G4Fragment* frag1 = EmittedFragment(frag0);
+  if(frag1) { theResult->push_back(frag1); }
+  theResult->push_back(frag0);
+  return theResult;
 } 
 
 G4double G4GEMChannel::SampleKineticEnergy(const G4Fragment & fragment)

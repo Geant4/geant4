@@ -38,7 +38,7 @@
 
 #include "G4VGammaTransition.hh"
 
-G4VGammaTransition::G4VGammaTransition():_verbose(0) 
+G4VGammaTransition::G4VGammaTransition() 
 {}
 
 G4VGammaTransition::~G4VGammaTransition() 

@@ -58,13 +58,10 @@ G4E1Probability::G4E1Probability():G4VEmissionProbability()
 G4E1Probability::~G4E1Probability()
 {}
 
-// Calculate the emission probability
-//
 
 G4double G4E1Probability::EmissionProbDensity(const G4Fragment& frag, 
 					      G4double gammaE)
 {
-
   // Calculate the probability density here
 
   // From nuclear fragment properties and the excitation energy, calculate

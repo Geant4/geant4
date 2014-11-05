@@ -76,75 +76,47 @@
 G4VGammaDeexcitation::G4VGammaDeexcitation(): _transition(0), _verbose(0),
 					      _electronO (0), _vSN(-1)
 { 
-  _nucleus = 0;
-  fTimeLimit = DBL_MAX;
+  _tolerance = 10*CLHEP::keV;
+  _timeLimit = DBL_MAX;
 }
 
 G4VGammaDeexcitation::~G4VGammaDeexcitation()
 { 
-  if (_transition != 0) { delete _transition; }
+  delete _transition; 
 }
 
-G4FragmentVector* G4VGammaDeexcitation::DoTransition()
-{
-  Initialize();
-  G4FragmentVector* products = new G4FragmentVector();
- 
-  if (CanDoTransition())
-    {
-      G4Fragment* gamma = GenerateGamma();
-      if (gamma != 0) { products->push_back(gamma); }
-    }
- 
-  if (_verbose > 1) {
-    G4cout << "G4VGammaDeexcitation::DoTransition - Transition deleted " << G4endl;
-  }
- 
-  return products;
-}
-
-G4FragmentVector* G4VGammaDeexcitation::DoChain()
+void G4VGammaDeexcitation::DoChain(G4FragmentVector* products, 
+				   G4Fragment* nucleus)
 {
   if (_verbose > 1) { G4cout << "G4VGammaDeexcitation::DoChain" << G4endl; }
-  const G4double tolerance = CLHEP::keV;
-
-  Initialize();
-  G4FragmentVector* products = new G4FragmentVector();
   
-  while (CanDoTransition())
-    {      
-      _transition->SetEnergyFrom(_nucleus->GetExcitationEnergy());
-      G4Fragment* gamma = GenerateGamma();
-      if (gamma != 0) 
-	{
-	  products->push_back(gamma);
-	  //G4cout << "Eex(keV)= " << _nucleus->GetExcitationEnergy()/keV << G4endl;
-	  if(_nucleus->GetExcitationEnergy() <= tolerance) { break; }
-	  Update();
-	}
-    } 
+  while (CanDoTransition(nucleus)) {      
+    _transition->SetEnergyFrom(nucleus->GetExcitationEnergy());
+    G4Fragment* gamma = GenerateGamma(nucleus);
+    if (gamma) {
+      products->push_back(gamma);
+      //G4cout << "Eex(keV)= " << _nucleus->GetExcitationEnergy()/keV << G4endl;
+      if(nucleus->GetExcitationEnergy() <= _tolerance) { break; }
+    }
+  } 
   
   if (_verbose > 1) {
-    G4cout << "G4VGammaDeexcitation::DoChain - Transition deleted, end of chain " << G4endl;
+    G4cout << "G4VGammaDeexcitation::DoChain - end" << G4endl;
   }
-  
-  return products;
 }
 
-G4Fragment* G4VGammaDeexcitation::GenerateGamma()
+G4Fragment* G4VGammaDeexcitation::GenerateGamma(G4Fragment* aNucleus)
 {
-  // 23/04/10 V.Ivanchenko rewrite complitely
-  G4double eGamma = 0.;
-  
-  if (_transition) {
-    _transition->SelectGamma();  // it can be conversion electron too
-    eGamma = _transition->GetGammaEnergy(); 
-    //G4cout << "G4VGammaDeexcitation::GenerateGamma - Egam(MeV)= " 
-    //	   << eGamma << G4endl; 
-    if(eGamma <= 0.0) { return 0; }
-  } else { return 0; }
+  G4Fragment * thePhoton = 0;
+  if(!CanDoTransition(aNucleus)) { return thePhoton; }
 
-  G4double excitation = _nucleus->GetExcitationEnergy() - eGamma;
+  _transition->SelectGamma();  // it can be conversion electron too
+  G4double eGamma = _transition->GetGammaEnergy(); 
+  //G4cout << "G4VGammaDeexcitation::GenerateGamma - Egam(MeV)= " 
+  //	   << eGamma << G4endl; 
+  if(eGamma <= 0.0) { return thePhoton; }
+
+  G4double excitation = aNucleus->GetExcitationEnergy() - eGamma;
   if(excitation < 0.0) { excitation = 0.0; } 
   if (_verbose > 1) 
     {
@@ -156,8 +128,8 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   G4double gammaTime = _transition->GetGammaCreationTime();
   
   // Do complete Lorentz computation 
-  G4LorentzVector lv = _nucleus->GetMomentum();
-  G4double Mass = _nucleus->GetGroundStateMass() + excitation;
+  G4LorentzVector lv = aNucleus->GetMomentum();
+  G4double Mass = aNucleus->GetGroundStateMass() + excitation;
 
   // select secondary
   G4ParticleDefinition* gamma = G4Gamma::Gamma();
@@ -171,7 +143,8 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
     gamma = G4Electron::Electron(); 
     _vSN = dtransition->GetOrbitNumber();   
     _electronO.RemoveElectron(_vSN);
-    lv += G4LorentzVector(0.0,0.0,0.0,CLHEP::electron_mass_c2 - dtransition->GetBondEnergy());
+    lv += G4LorentzVector(0.0,0.0,0.0,
+			  CLHEP::electron_mass_c2 - dtransition->GetBondEnergy());
   }
 
   G4double cosTheta = 1. - 2. * G4UniformRand(); 
@@ -182,9 +155,9 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   G4LorentzVector Gamma4P;
 
   //G4cout << "Egamma= " << eGamma << " Mass= " << eMass << " t= " << gammaTime
-  //	 << " tlim= " << fTimeLimit << G4endl;
+  //	 << " tlim= " << _timeLimit << G4endl;
 
-  if(gammaTime > fTimeLimit) {
+  if(gammaTime > _timeLimit) {
     // shortcut for long lived levels
     // not correct position of stopping ion gamma emission
     // 4-momentum balance is breaked
@@ -219,44 +192,20 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma()
   }
 
   // modified primary fragment 
-  gammaTime += _nucleus->GetCreationTime();
+  gammaTime += aNucleus->GetCreationTime();
 
-  _nucleus->SetMomentum(lv);
-  _nucleus->SetCreationTime(gammaTime);
+  aNucleus->SetMomentum(lv);
+  aNucleus->SetCreationTime(gammaTime);
 
   // e- is not produced
-  if(eTransition && !dtransition->GetICM()) { return 0; }
+  if(eTransition && !dtransition->GetICM()) { return thePhoton; }
 
   // gamma or e- are produced
-  G4Fragment * thePhoton = new G4Fragment(Gamma4P,gamma);
+  thePhoton = new G4Fragment(Gamma4P,gamma);
   thePhoton->SetCreationTime(gammaTime);
 
   //G4cout << "G4VGammaDeexcitation::GenerateGamma : " << thePhoton << G4endl;
-  //G4cout << "       Left nucleus: " << _nucleus << G4endl;
+  //G4cout << "       Left nucleus: " << aNucleus << G4endl;
   return thePhoton;
 }
 
-void G4VGammaDeexcitation::Update()
-{
-  if (_transition !=  0) 
-    { 
-      delete _transition;
-      _transition = 0;
-      if (_verbose > 1) {
-	G4cout << "G4VGammaDeexcitation::Update - Transition deleted " << G4endl;
-      }
-    }
-  
-  _transition = CreateTransition();
-  if (_transition != 0) 
-    {
-      _transition->SetEnergyFrom(_nucleus->GetExcitationEnergy());
-      // if ( _vSN != -1) (dynamic_cast <G4DiscreteGammaTransition*> (_transition))->SetICM(false);
-      // the above line is commented out for bug fix #952. It was intruduced for reason that
-      // the k-shell electron is most likely one to be kicked out and there is no time for 
-      // the atom to deexcite before the next IC. But this limitation is causing other problems as 
-      // reported in #952
-    }
-  
-  return;
-}

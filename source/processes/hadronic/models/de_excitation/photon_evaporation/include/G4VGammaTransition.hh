@@ -70,11 +70,6 @@ private:
   const G4VGammaTransition& operator=(const G4VGammaTransition &right);
   G4bool operator==(const G4VGammaTransition &right) const;
   G4bool operator!=(const G4VGammaTransition &right) const;
-  
-protected:
-
-  G4int _verbose;
-
 };
 
 

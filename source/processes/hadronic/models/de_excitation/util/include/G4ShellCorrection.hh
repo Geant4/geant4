@@ -54,31 +54,11 @@ public:
 
   ~G4ShellCorrection();
 
-  inline G4CameronTruranHilfShellCorrections* 
-  GetCameronTruranHilfShellCorrections()
-  {
-    return &theCameronTruranHilfShellCorrections;
-  }
+  G4CameronTruranHilfShellCorrections* GetCameronTruranHilfShellCorrections();
 
-  inline G4CameronShellPlusPairingCorrections*
-  GetCameronShellPlusPairingCorrections()
-  {
-    return &theCameronShellPlusPairingCorrections;
-  }
+  G4CameronShellPlusPairingCorrections* GetCameronShellPlusPairingCorrections();
 
-  inline 
-  G4double GetShellCorrection(G4int A, G4int Z) const 
-  {
-    G4double SCorrection = 0.0;
-    if (theCookShellCorrections.IsInTableThisN(A-Z) || 
-	theCookShellCorrections.IsInTableThisZ(Z)) {
-      SCorrection = theCookShellCorrections.GetShellCorrection(A,Z);
-    } else if (theCameronGilbertShellCorrections.IsInTableThisN(A-Z) || 
-	       theCameronGilbertShellCorrections.IsInTableThisZ(Z)) {
-      SCorrection = theCameronGilbertShellCorrections.GetShellCorrection(A,Z);
-    }    
-    return SCorrection;
-  }
+  G4double GetShellCorrection(G4int A, G4int Z) const;
 
 private:
 

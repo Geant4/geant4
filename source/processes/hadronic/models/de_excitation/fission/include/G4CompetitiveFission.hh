@@ -64,6 +64,8 @@ public:
 
   virtual G4FragmentVector * BreakUp(const G4Fragment &theNucleus);
 
+  virtual G4Fragment* EmittedFragment(G4Fragment* theNucleus);
+
   virtual G4double GetEmissionProbability(G4Fragment* theNucleus);
 
   inline void SetFissionBarrier(G4VFissionBarrier * aBarrier)
@@ -116,6 +118,7 @@ private:
   G4VLevelDensityParameter * theLevelDensityPtr;
   G4double LevelDensityParameter;
 
+  G4PairingCorrection* pairingCorrection;
   //  --------------------
 
   // Sample AtomicNumber of Fission products
