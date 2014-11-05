@@ -72,7 +72,6 @@
 #include "G4PhysicsLogVector.hh"
 #include "G4ParticleChangeForRadDecay.hh"
 #include "G4IonTable.hh"
-
 #include "G4BetaFermiFunction.hh"
 #include "G4PhotonEvaporation.hh"
 
@@ -278,6 +277,7 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
                   FatalException, ed);
     }
   }
+
   if (products == 0) {
     G4ExceptionDescription ed;
     ed << " Parent nucleus " << *parent_name << " was not decayed " << G4endl;
@@ -337,29 +337,39 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
         // The fragment vector from photon evaporation contains the list of
         // evaporated gammas, some of which may have been replaced by conversion
         // electrons.  The last element is the residual nucleus.
-        G4FragmentVector* gammas = deexcitation->BreakUp(nucleus);  // Evaporate only one photon
-        G4int nGammas = gammas->size() - 1;
+        // Note: try photoEvapProducts as a name instead of gammas
+        G4FragmentVector* gammas = deexcitation->BreakUp(nucleus);
+        G4int nFrags = G4int(gammas->size());
+        G4double eOrGammaEnergy = 0.0;
+
+        if (nFrags < 1 || nFrags > 3) {
+          G4ExceptionDescription ed;
+          ed << nFrags << " fragments.  Only 1, 2 or 3 allowed. " << G4endl;
+          G4Exception("G4NuclearDecayChannel::DecayIt()","HAD_RDM_012",
+                      FatalException, ed);
+        } else if (nFrags > 1) {
+          // Add gamma/e- to the decay product. The angular distribution of this 
+          // particle is assumed to be isotropic
+          G4Fragment* eOrGamma;
+          G4DynamicParticle* eOrGammaDyn;
+          for (G4int i = 0; i < nFrags - 1; i++) {
+            eOrGamma = gammas->operator[](i);
+            eOrGammaDyn = new G4DynamicParticle(eOrGamma->GetParticleDefinition(),
+                                                eOrGamma->GetMomentum() );
+            eOrGammaDyn->SetProperTime(eOrGamma->GetCreationTime() );
+            products->PushProducts(eOrGammaDyn);
+            eOrGammaEnergy += eOrGamma->GetMomentum().e();
+          }
+        } 
+
         G4double finalDaughterExcitation =
-                             gammas->operator[](nGammas)->GetExcitationEnergy();
-        // Go through each gamma/e- and add it to the decay product.  The
-        // angular distribution of the gammas is isotropic, and the residual
-        // nucleus is assumed not to have suffered any recoil as a result of
-        // this de-excitation.
-        G4double Egamma = 0.0;
-        for (G4int ig = 0; ig < nGammas; ig++) {
-          G4DynamicParticle* theGammaRay =
-            new G4DynamicParticle(gammas->operator[](ig)->GetParticleDefinition(),
-                                  gammas->operator[](ig)->GetMomentum());
-          theGammaRay -> SetProperTime(gammas->operator[](ig)->GetCreationTime());
-          products->PushProducts (theGammaRay);
-          Egamma = (gammas->operator[](ig)->GetMomentum()).e();
-        }
+                            gammas->operator[](nFrags-1)->GetExcitationEnergy();
         if (finalDaughterExcitation <= 1.0*keV) finalDaughterExcitation = 0;
 
         // Get new ion with excitation energy reduced by emitted gamma energy
         daughterIon =
              theIonTable->GetIon(daughterZ, daughterA, finalDaughterExcitation);
-        daughterMomentum.setE(daughterMomentum.e() - Egamma);
+        daughterMomentum.setE(daughterMomentum.e() - eOrGammaEnergy);
 
         // Delete/reset variables associated with the gammas.
         while (!gammas->empty() ) {
@@ -367,9 +377,8 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
           gammas->pop_back();
         }
         delete gammas;
-
       } // end if decayMode == 0
-
+ 
       G4ThreeVector const daughterMomentum1(static_cast<const G4LorentzVector> (daughterMomentum));
       dynamicDaughter = new G4DynamicParticle(daughterIon, daughterMomentum1);  
       products->PushProducts(dynamicDaughter);
@@ -528,7 +537,8 @@ G4DecayProducts* G4NuclearDecayChannel::BetaDecayIt()
   G4double daughtermomentum[3];
   G4double daughterenergy[3];
   // Use the histogram distribution to generate the beta energy
-    daughterenergy[0] = Qtransition*RandomEnergy->shoot(G4Random::getTheEngine());
+  // 0 = electron, 1 = daughter, 2 = neutrino
+  daughterenergy[0] = Qtransition*RandomEnergy->shoot(G4Random::getTheEngine());
   daughtermomentum[0] = std::sqrt(daughterenergy[0]*(daughterenergy[0] + 2.*daughtermass[0]) );
 
   // neutrino energy distribution is flat within the kinematical limits
@@ -568,11 +578,12 @@ G4DecayProducts* G4NuclearDecayChannel::BetaDecayIt()
   phi  = twopi*G4UniformRand()*rad;
   sinphi = std::sin(phi);
   cosphi = std::cos(phi);
+// electron chosen isotropically
   G4ParticleMomentum direction0(sintheta*cosphi,sintheta*sinphi,costheta);
   G4DynamicParticle * daughterparticle
       = new G4DynamicParticle( G4MT_daughters[0], direction0*daughtermomentum[0]);
   products->PushProducts(daughterparticle);
-    
+  // cos of angle between electron and neutrino
   costhetan = (daughtermomentum[1]*daughtermomentum[1]-
                daughtermomentum[2]*daughtermomentum[2]-
                daughtermomentum[0]*daughtermomentum[0])/
@@ -593,7 +604,7 @@ G4DecayProducts* G4NuclearDecayChannel::BetaDecayIt()
   daughterparticle = new G4DynamicParticle(G4MT_daughters[2],
                           direction2*(daughtermomentum[2]/direction2.mag()));
   products->PushProducts(daughterparticle);
-    
+  // daughter nucleus p = - (p_e + p_nu )
   daughterparticle =
     new G4DynamicParticle(G4MT_daughters[1],
                          (direction0*daughtermomentum[0] +

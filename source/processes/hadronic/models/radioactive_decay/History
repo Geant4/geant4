@@ -14,6 +14,27 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+04 November 2014 Dennis Wright radioactive_decay-V10-00-10
+----------------------------------------------------------
+- G4NuclearDecayChannel::DecayIt: allow up to three fragments from
+  G4PhotoEvaporation::BreakUp.  This fixes the exception seen when there is
+  more than one gamma
+ 
+03 November 2014 Dennis Wright radioactive_decay-V10-00-09
+----------------------------------------------------------
+- added new class G4AlphaDecay to streamline inheritance chain and use Q to
+    calculate decay product energies
+- G4RadioactiveDecay.cc: use G4AlphaDecay instead of G4AlphaDecayChannel
+
+- G4NuclearDecayChannel.cc: check number of gammas returned from 
+    G4PhotoEvaporation and take different action in each case of 0, 1, or 2 
+    gammas
+
+21 October 2014  Dennis Wright radioactive_decay-V10-00-08
+----------------------------------------------------------
+- G4RadioactiveDecay dtor: add delete dkmap to fix memory leak
+- G4RadioactiveDecay.hh : set size of decayWindows to 100 to fix array overrun
+   
 13 October 2014  Dennis Wright radioactive_decay-V10-00-07
 ----------------------------------------------------------
 - G4NuclearDecayChannel, G4BetaDecayCorrections, G4RadioactiveDecay: made 

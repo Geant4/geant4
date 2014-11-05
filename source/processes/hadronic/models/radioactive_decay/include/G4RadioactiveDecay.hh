@@ -301,7 +301,7 @@ class G4RadioactiveDecay : public G4VRestDiscreteProcess
 
     // for the radioactivity tables
     std::vector<G4RadioactivityTable*> theRadioactivityTables;
-    G4int decayWindows[99];
+    G4int decayWindows[100];
     static const G4double levelTolerance;
 
     //User define radioactive decay data files replacing some files in the G4RADECAY database

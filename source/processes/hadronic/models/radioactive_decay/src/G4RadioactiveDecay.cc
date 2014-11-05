@@ -110,6 +110,7 @@
 #include "G4LshellECDecayChannel.hh"
 #include "G4MshellECDecayChannel.hh"
 #include "G4AlphaDecayChannel.hh"
+#include "G4AlphaDecay.hh"
 #include "G4ProtonDecayChannel.hh"
 #include "G4VDecayChannel.hh"
 #include "G4RadioactiveDecayMode.hh"
@@ -218,7 +219,8 @@ G4RadioactiveDecay::~G4RadioactiveDecay()
   for (DecayTableMap::iterator i = dkmap->begin(); i != dkmap->end(); i++) {
     delete i->second;
   }
-  dkmap->clear(); 
+  dkmap->clear();
+  delete dkmap;
 }
 
 
@@ -964,10 +966,14 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
                 break;
 
               case Alpha:
-            	  if (modeFirstRecord[6]) {
+            	if (modeFirstRecord[6]) {
                   modeFirstRecord[6] = false;
                   modeTotalBR[6] = b;
                 } else {
+                  G4AlphaDecay* anAlphaChannel =
+                     new G4AlphaDecay(&theParentNucleus, b, c*MeV, a*MeV);
+//                  anAlphaChannel->DumpInfo();
+/* 
                   G4AlphaDecayChannel* anAlphaChannel =
                      new G4AlphaDecayChannel(GetVerboseLevel(),
                                              &theParentNucleus,
@@ -975,6 +981,7 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
                   anAlphaChannel->SetICM(applyICM);
                   anAlphaChannel->SetARM(applyARM);
                   anAlphaChannel->SetHLThreshold(halflifethreshold);
+*/
                   theDecayTable->Insert(anAlphaChannel);
                   modeSumBR[6] += b;
                 }
@@ -1037,9 +1044,12 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
     G4double theBR = 0.0;
     for (G4int i = 0; i < theDecayTable->entries(); i++) {
       theChannel = theDecayTable->GetDecayChannel(i);
-      theNuclearDecayChannel = static_cast<G4NuclearDecayChannel*>(theChannel);
-      theDecayMode = theNuclearDecayChannel->GetDecayMode();
-
+      if (theChannel->GetKinematicsName() == "alpha decay") {
+        theDecayMode = Alpha;        
+      } else {
+        theNuclearDecayChannel = static_cast<G4NuclearDecayChannel*>(theChannel);
+        theDecayMode = theNuclearDecayChannel->GetDecayMode();
+      }
       if (theDecayMode != IT) {
 	theBR = theChannel->GetBR();
 	theChannel->SetBR(theBR*modeTotalBR[theDecayMode]/modeSumBR[theDecayMode]);
@@ -1069,7 +1079,6 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
   }
 
   if (theDecayTable && GetVerboseLevel() > 1) {
-    G4cout << "G4RadioactiveDecay::LoadDecayTable()" << G4endl;
     theDecayTable->DumpInfo();
   }
 
@@ -1158,7 +1167,8 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
   G4ITDecayChannel* theITChannel = 0;
   G4BetaMinusDecayChannel *theBetaMinusChannel = 0;
   G4BetaPlusDecayChannel *theBetaPlusChannel = 0;
-  G4AlphaDecayChannel *theAlphaChannel = 0;
+//   G4AlphaDecayChannel *theAlphaChannel = 0; 
+  G4AlphaDecay* theAlphaChannel = 0;
   G4ProtonDecayChannel *theProtonChannel = 0;
   G4RadioactiveDecayMode theDecayMode;
   G4double theBR = 0.0;
@@ -1263,9 +1273,14 @@ G4RadioactiveDecay::AddDecayRateTable(const G4ParticleDefinition& theParentNucle
 
           case 6:
             // Decay mode is alpha.
+/*
             theAlphaChannel = new G4AlphaDecayChannel(GetVerboseLevel(),
                                                       aParentNucleus,
                                                       brs[6], 0.*MeV, 0.*MeV);
+*/
+            theAlphaChannel = new G4AlphaDecay(aParentNucleus, brs[6], 0.*MeV,
+                                               0.*MeV);
+
             theDecayTable->Insert(theAlphaChannel);
             break;
 
@@ -1486,7 +1501,6 @@ G4RadioactiveDecay::DecayIt(const G4Track& theTrack, const G4Step&)
 
   fParticleChangeForRadDecay.Initialize(theTrack);
   const G4DynamicParticle* theParticle = theTrack.GetDynamicParticle();
-
   const G4ParticleDefinition* theParticleDef = theParticle->GetDefinition();
 
   // First check whether RDM applies to the current logical volume

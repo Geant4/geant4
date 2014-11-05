@@ -52,6 +52,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/track/include)
 include(Geant4MacroDefineModule)
 GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
     HEADERS
+        G4AlphaDecay.hh
         G4AlphaDecayChannel.hh
         G4BetaDecayCorrections.hh
         G4BetaDecayType.hh
@@ -75,6 +76,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_radioactivedecay
         G4UIcmdWithNucleusLimits.hh
         G4UserLimitsForRD.hh
     SOURCES
+        G4AlphaDecay.cc
         G4BetaDecayCorrections.cc
         G4BetaDecayType.cc
         G4BetaFermiFunction.cc
