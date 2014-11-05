@@ -40,7 +40,7 @@
 template <class G4ReplicaData> G4ThreadLocal
 G4ReplicaData* G4GeomSplitter<G4ReplicaData>::offset = 0;
 G4PVRManager G4PVReplica::subInstanceManager;
-// This new field helps to use the class G4PVRManager.
+  // Helping in the use of the class G4PVRManager.
 
 G4PVReplica::G4PVReplica( const G4String& pName,
                                 G4LogicalVolume* pLogical,
@@ -49,7 +49,8 @@ G4PVReplica::G4PVReplica( const G4String& pName,
                           const G4int nReplicas,
                           const G4double width,
                           const G4double offset )
-  : G4VPhysicalVolume(0, G4ThreeVector(), pName, pLogical, pMother), fRegularVolsId(0)
+  : G4VPhysicalVolume(0, G4ThreeVector(), pName, pLogical, pMother),
+    fRegularVolsId(0)
 {
 
   instanceID = subInstanceManager.CreateSubInstance();
@@ -231,8 +232,6 @@ G4int G4PVReplica::GetMultiplicity() const
   return fnReplicas;
 }
 
-
-
 void G4PVReplica::GetReplicationData( EAxis& axis,
                                       G4int& nReplicas,
                                       G4double& width,
@@ -261,22 +260,12 @@ void   G4PVReplica::SetRegularStructureId( G4int Code )
   fRegularVolsId= Code; 
 } 
 
-
-
-
-
-//
-
-// ********************************************************************
-// GetSubInstanceManager
-//
 // Returns the private data instance manager.
-// *******************************************************************
+//
 const G4PVRManager& G4PVReplica::GetSubInstanceManager()
 {
   return subInstanceManager;
 }
-
 
 // This method is similar to the constructor. It is used by each worker
 // thread to achieve the same effect as that of the master thread exept
@@ -291,12 +280,12 @@ void G4PVReplica::InitialiseWorker(G4PVReplica *pMasterObject)
   subInstanceManager.SlaveCopySubInstanceArray();
   G4MT_copyNo = -1;
 
-  //This call causes "self-assignment" of the input paramters
-  //Issue reported by DRD since TerminateWorker below can be called
-  //at the same time by another thread
-  //What we need here is the splic-class component of this funciton
-  //that is copied here
-  //CheckAndSetParameters (faxis, fnReplicas, fwidth, foffset);
+  // This call causes "self-assignment" of the input paramters
+  // Issue reported by DRD since TerminateWorker below can be called
+  // at the same time by another thread
+  // What we need here is the splic-class component of this funciton
+  // that is copied here
+  // CheckAndSetParameters (faxis, fnReplicas, fwidth, foffset);
 
   // Create rotation matrix for phi axis case & check axis is valid
   //
@@ -336,6 +325,3 @@ void G4PVReplica::TerminateWorker(G4PVReplica* /*pMasterObject*/)
     delete GetRotation();
   }
 }
-
-
-

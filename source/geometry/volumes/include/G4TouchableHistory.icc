@@ -33,6 +33,30 @@
 extern G4GEOM_DLL G4ThreadLocal G4Allocator<G4TouchableHistory> *aTouchableHistoryAllocator;
 
 inline
+G4TouchableHistory::G4TouchableHistory()
+  : frot(G4RotationMatrix()),
+    ftlate(G4ThreeVector(0.,0.,0.)),
+    fhistory()
+{ 
+   G4VPhysicalVolume* pPhysVol=0;
+   fhistory.SetFirstEntry(pPhysVol);
+}
+
+inline
+G4TouchableHistory::G4TouchableHistory( const G4NavigationHistory &history )
+  : fhistory(history)
+{ 
+  G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
+  ftlate = tf.NetTranslation();
+  frot = tf.NetRotation();
+}
+
+inline
+G4TouchableHistory::~G4TouchableHistory()
+{ 
+}
+
+inline
 void  G4TouchableHistory::UpdateYourself( G4VPhysicalVolume*   pPhysVol,
                                     const G4NavigationHistory* pHistory ) 
 { 

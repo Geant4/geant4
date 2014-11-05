@@ -187,12 +187,6 @@ class G4PVReplica : public G4VPhysicalVolume
       // This method is similar to the destructor. It is used by each worker
       // thread to achieve the partial effect as that of the master thread.
 
-  protected:
-
-    EAxis faxis;
-    G4int fnReplicas;
-    G4double fwidth,foffset;
- 
   private:
 
     void CheckAndSetParameters(const EAxis pAxis, const G4int nReplicas,
@@ -200,6 +194,12 @@ class G4PVReplica : public G4VPhysicalVolume
     G4PVReplica(const G4PVReplica&);
     G4PVReplica& operator=(const G4PVReplica&);
 
+  protected:
+
+    EAxis faxis;
+    G4int fnReplicas;
+    G4double fwidth,foffset;
+ 
   private:
 
     G4int fRegularStructureCode; 

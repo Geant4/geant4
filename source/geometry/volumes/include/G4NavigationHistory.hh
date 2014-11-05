@@ -51,6 +51,7 @@
 #include "G4AffineTransform.hh"
 #include "G4VPhysicalVolume.hh"
 #include "G4NavigationLevel.hh"
+#include "G4NavigationHistoryPool.hh"
 #include "G4Allocator.hh"
 
 class G4NavigationHistory
@@ -61,16 +62,16 @@ class G4NavigationHistory
   friend std::ostream&
   operator << (std::ostream &os, const G4NavigationHistory &h);
 
-  G4NavigationHistory();
+  inline G4NavigationHistory();
     // Constructor: sizes history lists & resets histories.
 
-  ~G4NavigationHistory();
+  inline ~G4NavigationHistory();
     // Destructor.
 
-  G4NavigationHistory(const G4NavigationHistory &h);
+  inline G4NavigationHistory(const G4NavigationHistory &h);
     // Copy constructor.
 
-  G4NavigationHistory& operator=(const G4NavigationHistory &h);
+  inline G4NavigationHistory& operator=(const G4NavigationHistory &h);
     // Assignment operator.
 
   inline void Reset();

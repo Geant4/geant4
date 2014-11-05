@@ -56,26 +56,26 @@ class G4NavigationLevel
 
  public:  // with description
 
-   G4NavigationLevel(G4VPhysicalVolume*       newPtrPhysVol,
-                     const G4AffineTransform& newT,
-                     EVolume                  newVolTp,
-                     G4int                    newRepNo= -1);
+   inline G4NavigationLevel(G4VPhysicalVolume*       newPtrPhysVol,
+                            const G4AffineTransform& newT,
+                            EVolume                  newVolTp,
+                            G4int                    newRepNo= -1);
 
-   G4NavigationLevel(G4VPhysicalVolume*       newPtrPhysVol,
-                     const G4AffineTransform& levelAbove,
-                     const G4AffineTransform& relativeCurrent,
-                     EVolume                  newVolTp,
-                     G4int                    newRepNo= -1);
+   inline G4NavigationLevel(G4VPhysicalVolume*       newPtrPhysVol,
+                            const G4AffineTransform& levelAbove,
+                            const G4AffineTransform& relativeCurrent,
+                            EVolume                  newVolTp,
+                            G4int                    newRepNo= -1);
      // As the previous constructor, but instead of giving Transform, give 
      // the AffineTransform to the level above and the current level's 
      // Transform relative to that.
 
-   G4NavigationLevel();
-   G4NavigationLevel( const G4NavigationLevel& );
+   inline G4NavigationLevel();
+   inline G4NavigationLevel( const G4NavigationLevel& );
 
-   ~G4NavigationLevel();
+   inline ~G4NavigationLevel();
 
-   G4NavigationLevel& operator=(const G4NavigationLevel &right);
+   inline G4NavigationLevel& operator=(const G4NavigationLevel &right);
 
    inline G4VPhysicalVolume*       GetPhysicalVolume() const;
    inline const G4AffineTransform* GetTransformPtr() const ;  // New

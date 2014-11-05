@@ -170,14 +170,6 @@ G4bool G4PVPlacement::IsMany() const
 }
 
 // ----------------------------------------------------------------------
-// GetCopyNo
-//
-G4int G4PVPlacement::GetCopyNo() const
-{
-  return fcopyNo;
-}
-
-// ----------------------------------------------------------------------
 // SetCopyNo
 //
 void G4PVPlacement::SetCopyNo(G4int newCopyNo)

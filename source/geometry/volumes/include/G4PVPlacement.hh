@@ -122,7 +122,8 @@ class G4PVPlacement : public G4VPhysicalVolume
     virtual ~G4PVPlacement();
       // Default destructor.
 
-    G4int GetCopyNo() const;
+    inline G4int GetCopyNo() const  { return fcopyNo; }
+
     void  SetCopyNo(G4int CopyNo);
       // Gets and sets the copy number of the volume.
 
