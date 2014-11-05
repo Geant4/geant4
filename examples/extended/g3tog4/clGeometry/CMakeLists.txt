@@ -24,23 +24,10 @@ include(${Geant4_USE_FILE})
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${PROJECT_SOURCE_DIR}/../../common/userActions/include
-                    ${PROJECT_SOURCE_DIR}/../../common/primaryGenerator/include
                     ${Geant4_INCLUDE_DIR})
 file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
 file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
 
-#----------------------------------------------------------------------------
-# Get examples sources from common and shared
-#
-list(APPEND sources 
-  # uncomment the line below to include HBOOK analysis
-  ${PROJECT_SOURCE_DIR}/../../common/userActions/src/ExG4EventAction01.cc
-  ${PROJECT_SOURCE_DIR}/../../common/userActions/src/ExG4EventAction01Messenger.cc
-  ${PROJECT_SOURCE_DIR}/../../common/userActions/src/ExG4RunAction01.cc
-  ${PROJECT_SOURCE_DIR}/../../common/userActions/src/ExG4RunAction01Messenger.cc
-  ${PROJECT_SOURCE_DIR}/../../common/primaryGenerator/src/ExG4PrimaryGeneratorAction01.cc)
-  
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
