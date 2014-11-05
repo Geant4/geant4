@@ -17,25 +17,29 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-October 24, 2014 J. Apostolakis A. Dotti (global-V10-00-39,-40)
-- Adding template class G4TWorkspacePool
+November 5, 2014 A.Dotti (global-V10-00-41)
+- Added missing GLOB_DLL specification for DLL import/export to
+  G4CacheDetails specialization of cache reference for double.
 
-October 24, 2014 A. Dotti (global-V10-00-38)
-- Introduced G4Threading enum to hold thread IDs constants
+October 24, 2014 J.Apostolakis A.Dotti (global-V10-00-39,-40)
+- Adding template class G4TWorkspacePool.
+
+October 24, 2014 A.Dotti (global-V10-00-38)
+- Introduced G4Threading enum to hold thread IDs constants.
 - G4MTcoutDestination now supports special non-worker threads for
   which the ID makes no sense.
 
-October 16, 2014 A. Dotti (global-V10-00-37)
-- Fixing G4ThreadLocalSingleton destructor
+October 16, 2014 A.Dotti (global-V10-00-37)
+- Fixed G4ThreadLocalSingleton destructor.
 
-October 16, 2014 A. Dotti (global-V10-00-36)
-- Introduced G4MUTEXDESTROY macro
+October 16, 2014 A.Dotti (global-V10-00-36)
+- Introduced G4MUTEXDESTROY macro.
 
-October 9, 2014 A. Dotti (global-V10-00-35)
+October 9, 2014 A.Dotti (global-V10-00-35)
 - Adding methods G4MTcoutDestination::GetPrefixString() and
   G4MTcoutDestination::GetFullPrefixString() that return the
   thread cout identification prefix respectively without and
-  with thread ID. Requested by visualization
+  with thread ID. Requested by visualization.
 
 September 23, 2014 G.Cosmo (global-V10-00-34)
 - Use G4Exp, G4Log and G4Pow to speedup G4JTPolynomialSolver.
