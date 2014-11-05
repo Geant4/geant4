@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-08    (26-September-2014)
+ Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -123,7 +123,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0.01s Real=0s Sys=0.01s
 
  ======================== run summary ======================
  The run was 1 Co60 of 0 eV 
@@ -184,7 +184,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=4.85s Real=4.86s Sys=0s
+  User=3.72s Real=3.73s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -245,7 +245,7 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=12s Real=12.04s Sys=0s
+  User=8.88s Real=8.91s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 

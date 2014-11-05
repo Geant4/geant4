@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-08    (26-September-2014)
+ Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -68,7 +68,6 @@ The cross section for GammaConversionToMuons is artificially increased by the Cr
 /tracking/verbose 1
 #
 /run/beamOn 5
-G4eeToHadrons::InitialiseProcess verbose= 1
 #####G4eeToTwoPiModel####
 G4eeToHadronsModel::Initialise: 
 CM System: emin(MeV)= 279.14 epeak(MeV)= 775.5 emax(MeV)= 4521
@@ -94,7 +93,7 @@ GammaToMuPair:  gamma->mu+mu- Bethe Heitler process, SubType= 15
 AnnihiToMuPair:  e+e->mu+mu- annihilation, atomic e- at rest, SubType=.6
         threshold at 43.6931 GeV good description up to 1000 TeV for all Z.
 
-ee2hadr:   for  e+, integral: 1     SubType= 7
+ee2hadr:   for  e+, integral: 1     SubType= 7  BuildTable= 0
       e+ annihilation into hadrons active from 76.2411 GeV to 19999.5 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
          eeToHadrons :  Emin=        0 eV    Emax=       10 TeV

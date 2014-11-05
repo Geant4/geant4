@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-08    (26-September-2014)
+ Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -385,7 +385,7 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=0.69s Real=0.69s Sys=0s
+  User=0.74s Real=0.74s Sys=0s
 
  The run is 10000 proton of 10 MeV through 10 m   of Molybdenum98 (density: 10.28 g/cm3 )
 
@@ -404,7 +404,13 @@ Run Summary
 
    List of nuclear reactions: 
 
-            proton + Mo98 --> N gamma + alpha + Nb95:      12   Q =  3.5015 MeV
+            proton + Mo98 --> N gamma + alpha + Nb95:       5   Q =  3.5405 MeV
+   proton + Mo98 --> N gamma + alpha + Nb95[120.782]:       1   Q =  3.4197 MeV
+    proton + Mo98 --> N gamma + alpha + Nb95[13.783]:       2   Q =  3.5276 MeV
+    proton + Mo98 --> N gamma + alpha + Nb95[18.091]:       1   Q =  3.5224 MeV
+   proton + Mo98 --> N gamma + alpha + Nb95[193.894]:       1   Q =  3.3466 MeV
+    proton + Mo98 --> N gamma + alpha + Nb95[24.915]:       1   Q =  3.5156 MeV
+    proton + Mo98 --> N gamma + alpha + Nb95[84.538]:       1   Q =   3.456 MeV
           proton + Mo98 --> N gamma + neutron + Tc98:    2248   Q = -2.4727 MeV
            proton + Mo98 --> N gamma + proton + Mo98:       8   Q = -9.4158e-07 eV 
                      proton + Mo98 --> proton + Mo98:    7732   Q = 2.0168e-06 eV 
@@ -413,14 +419,20 @@ Run Summary
 
  List of generated particles:
            Mo98:    7740  Emean =  31.564 keV	( 5.8076 eV  --> 405.17 keV)
-           Nb95:      12  Emean =  553.16 keV	( 120.33 keV --> 792.57 keV)
+           Nb95:       5  Emean =  478.41 keV	( 120.33 keV --> 792.57 keV)
+  Nb95[120.782]:       1  Emean =  733.89 keV	( 733.89 keV --> 733.89 keV)
+   Nb95[13.783]:       2  Emean =  752.37 keV	( 747.73 keV --> 757 keV)
+   Nb95[18.091]:       1  Emean =  414.91 keV	( 414.91 keV --> 414.91 keV)
+  Nb95[193.894]:       1  Emean =  725.14 keV	( 725.14 keV --> 725.14 keV)
+   Nb95[24.915]:       1  Emean =  537.76 keV	( 537.76 keV --> 537.76 keV)
+   Nb95[84.538]:       1  Emean =  329.42 keV	( 329.42 keV --> 329.42 keV)
            Tc98:    2248  Emean =  116.41 keV	( 7.3013 keV --> 282.14 keV)
           alpha:      12  Emean =   8.634 MeV	( 7.8708 MeV --> 9.7325 MeV)
           gamma:   14078  Emean =   970.2 keV	( 11.049 keV --> 6.5424 MeV)
         neutron:    2248  Emean =  1.3677 MeV	( 15.309 keV --> 7.2623 MeV)
          proton:       8  Emean =  7.1637 MeV	( 4.7346 MeV --> 9.604 MeV)
 
-   Momentum balance: Pmean = 0.0092673 eV 	( 8.7613e-07 eV  --> 0.5197 eV ) 
+   Momentum balance: Pmean = 0.0092672 eV 	( 8.7613e-07 eV  --> 0.5197 eV ) 
 
 
 --------- Ranecu engine status ---------

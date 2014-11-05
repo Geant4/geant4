@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-08    (26-September-2014)
+ Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -74,13 +74,13 @@ G4AdjointPhysicsList::SetCuts:CutLength : 10 um
 *** Sponsored by: ESA/ESTEC contract contract 21435/08/NL/AT ***
 ****************************************************************
 
-compt:   for  gamma    SubType= 13
-      Lambda table from 100 eV  to 1 MeV in 28 bins, spline: 1
+compt:   for  gamma    SubType= 13  BuildTable= 1
+      Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
       LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        Klein-Nishina :  Emin=        0 eV    Emax=       10 TeV
 
-phot:   for  gamma    SubType= 12
+phot:   for  gamma    SubType= 12  BuildTable= 0
       LambdaPrime table from 200 keV to 10 TeV in 54 bins 
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
        PhotoElectric :  Emin=        0 eV    Emax=       10 TeV   AngularGenSauterGavrila
@@ -92,14 +92,14 @@ msc:   for e-    SubType= 10
 
 eIoni:   for  e-    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
         MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
 
 eBrem:   for  e-    SubType= 3
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       LPM flag: 1 for E > 1 GeV
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
              eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
@@ -112,7 +112,7 @@ msc:   for proton    SubType= 10
 
 hIoni:   for  proton    SubType= 2
       dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
-      Lambda tables from threshold to 10 TeV in 77 bins, spline: 1
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
       finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
                Bragg :  Emin=        0 eV    Emax=        2 MeV
@@ -173,7 +173,7 @@ Index : 4     used in the geometry : Yes
 ### Run 0 start.
 
 -------- WWWW ------- G4Exception-START -------- WWWW -------
-*** G4Exception : Analysis_W009
+*** G4Exception : Analysis_W012
       issued by : G4VFileManager::SetHistoDirectoryName()
 Cannot set Histo directory name as its value was already used.
 *** This is just a warning message. ***
@@ -383,25 +383,22 @@ nb event 430000
 nb event 435000
 nb event 440000
 nb event 445000
-nb event 450000
-nb event 455000
-nb event 460000
 1%  Precision reached!
 Run terminated.
 Run Summary
-  Run Aborted after 462675 events processed.
-  User=666.98s Real=669.84s Sys=0.14s
+  Run Aborted after 449720 events processed.
+  User=643.78s Real=646.36s Sys=0.11s
 Results of reverse/adjoint simulation!
-normalised edep [MeV] = 0.00160407
-error[MeV] = 1.60404e-05
+normalised edep [MeV] = 0.00158921
+error[MeV] = 1.58921e-05
 
 ----> Histogram Tree is saved in adjoint_sim.root
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 20
+Total navigation history collections cleaned: 19
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 1
-Dynamic pools deleted: 11 / Total memory freed: 0.038 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.037 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

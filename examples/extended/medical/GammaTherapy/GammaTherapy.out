@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-08    (26-September-2014)
+ Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -215,29 +215,29 @@ Index : 5     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=10.21s Real=10.24s Sys=0s
+  User=10.66s Real=10.71s Sys=0s
 RunAction: End of run actions are started
 Histo: End of run actions are started
 ========================================================
 Number of events                             10000
-Average number of e-                         32.96
-Average number of gamma                      19.59
-Average number of e+                         0.7687
-Average number of steps in the phantom       11.66
-Average number of e- steps in the target     18.12
-Average number of g  produced in the target  18.76
-Average number of e- produced in the target  20.96
-Average number of g produced in the phantom  0.4921
-Average number of e- produced in the phantom 5.899
-Total fGamma fluence in front of the phantom 8.009 MeV 
+Average number of e-                         33.29
+Average number of gamma                      19.61
+Average number of e+                         0.7745
+Average number of steps in the phantom       12.02
+Average number of e- steps in the target     17.99
+Average number of g  produced in the target  18.73
+Average number of e- produced in the target  20.89
+Average number of g produced in the phantom  0.5205
+Average number of e- produced in the phantom 6.067
+Total fGamma fluence in front of the phantom 7.931 MeV 
 ========================================================
 
 
 #
 G4 kernel has come to Quit state.
-Total navigation history collections cleaned: 21
+Total navigation history collections cleaned: 26
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 10 of which, static: 0
-Dynamic pools deleted: 10 / Total memory freed: 0.052 Mb
+Dynamic pools deleted: 10 / Total memory freed: 0.057 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

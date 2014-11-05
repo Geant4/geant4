@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-08    (26-September-2014)
+ Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -400,33 +400,33 @@ EventAction: Event # 90 started
 Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.53s Real=0.53s Sys=0s
+  User=0.39s Real=0.39s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ========================================================
 Beam particle                        proton
 Beam Energy(MeV)                     3000
 Number of events                     100
-Average energy deposit (MeV)         62.47   RMS(MeV) 47.34
-Average number of steps              228.2
-Average number of gamma              1.78
-Average number of e-                 4.05
-Average number of e+                 0.01
-Average number of neutrons           1.01
-Average number of protons            1.11
+Average energy deposit (MeV)         64.45   RMS(MeV) 56.69
+Average number of steps              230.6
+Average number of gamma              1.85
+Average number of e-                 3.87
+Average number of e+                 0.03
+Average number of neutrons           1.12
+Average number of protons            1.02
 Average number of antiprotons        0
-Average number of pi+ & pi-          0.22
-Average number of pi0                0.14
+Average number of pi+ & pi-          0.37
+Average number of pi0                0.19
 Average number of kaons              0
 Average number of muons              0
-Average number of deuterons+tritons  0.12
-Average number of He3+alpha          0.08
-Average number of ions               0.48
-Average number of forward neutrons   0.07
+Average number of deuterons+tritons  0.17
+Average number of He3+alpha          0.32
+Average number of ions               0.57
+Average number of forward neutrons   0.15
 Average number of reflected neutrons 0.88
 Average number of leaked neutrons    0.02
-Average number of proton leak        0.33
-Average number of pion leak          0.2
+Average number of proton leak        0.46
+Average number of pion leak          0.36
 ========================================================
 
 #
@@ -434,6 +434,6 @@ G4 kernel has come to Quit state.
 Total navigation history collections cleaned: 14
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 12 of which, static: 0
-Dynamic pools deleted: 12 / Total memory freed: 0.032 Mb
+Dynamic pools deleted: 12 / Total memory freed: 0.052 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)
