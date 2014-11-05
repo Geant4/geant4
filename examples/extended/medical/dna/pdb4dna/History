@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+05.11.2014 M.K                  tag pdb4dna-V10-00-04
+-----------------------------------------------------
+- add CommandLineParser
+- select visu + gui by command line
+
 04.11.2014 M.K                  tag pdb4dna-V10-00-03
 -----------------------------------------------------
 - try to solve FPE error

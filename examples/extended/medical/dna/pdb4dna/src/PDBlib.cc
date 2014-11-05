@@ -158,7 +158,11 @@ Molecule * PDBlib::Load( const string &filename,unsigned short int &isDNA,
     //Number of TER
     int ter=0;
     //Number of TER (chain) max for this file
+#ifdef GEANT4
+    int terMax=2000000000;
+#else
     int terMax=numeric_limits<int>::max();
+#endif
     if (!infile.eof())
     {
       getline(infile, sLine);
@@ -668,12 +672,23 @@ void PDBlib::ComputeBoundingVolumeParams(Molecule *moleculeListTemp,
 {
   double minminX,minminY,minminZ;    //minimum minimorum
   double maxmaxX,maxmaxY,maxmaxZ;    //maximum maximorum
+
+#ifdef GEANT4
+  minminX=2000000000;
+  minminY=2000000000;
+  minminZ=2000000000;
+  maxmaxX=-2000000000;
+  maxmaxY=-2000000000;
+  maxmaxZ=-2000000000;
+#else
   minminX=numeric_limits<double>::max();
   minminY=numeric_limits<double>::max();
   minminZ=numeric_limits<double>::max();
   maxmaxX=numeric_limits<double>::min();
   maxmaxY=numeric_limits<double>::min();
   maxmaxZ=numeric_limits<double>::min();
+#endif
+
 
   while (moleculeListTemp)
   {
@@ -792,7 +807,12 @@ unsigned short int PDBlib::ComputeMatchEdepDNA(Barycenter *BarycenterList,
     residueListTemp = moleculeListTemp->GetFirst();
 
     int j = 0;//Residue number
+
+#ifdef GEANT4
+    int j_save=2000000000;//Saved res. number if match found
+#else
     int j_save = numeric_limits<int>::max();//Saved res. number if match found
+#endif
 
     while (residueListTemp)
     {
@@ -845,7 +865,13 @@ unsigned short int PDBlib::ComputeMatchEdepDNA(Barycenter *BarycenterList,
             }
 
             smallestDist=distEdepAtom;
-            if (j_save == numeric_limits<int>::max()) j_save = j;
+
+#ifdef GEANT4
+            int j_max_value=2000000000;
+#else
+            int j_max_value = numeric_limits<int>::max();
+#endif
+            if (j_save == j_max_value) j_save = j;
             matchFound = 1;
           }
           AtomTemp=AtomTemp->GetNext();

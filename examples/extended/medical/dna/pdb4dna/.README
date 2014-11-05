@@ -69,11 +69,15 @@ Notes: \n
 [1] is mandatory for visualization and simulation. \n
 [2] is needed for simulation. \n
 
-\section pdb4dna_s4 How to run the example. 
+\section pdb4dna_s4 How to run the example.
+
+To get help, run:
+
+> $pdb4dna(.exe) -h
 
 In interactive mode, run:
 
-> pdb4dna(.exe)
+> pdb4dna(.exe) -gui
 
 "1ZBB.pdb" is the default file and it should be placed into same directory as the executable.
 You can download it here: \n
@@ -81,13 +85,7 @@ http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&s
 
 In batch mode , run:
 
-> pdb4dna(.exe) -m pdb4dna.in
-
-or
-
-> pdb4dna(.exe) -m pdb4dna.in [-t numberOfThreads]
-
-if G4MULTITHREADED is defined. \n
+> $pdb4dna(.exe) [-mac pdb4dna.in] [-mt numberofThreads] \n
 
 To get visualization, make sure to uncomment the #/control/execute vis.mac line in the macro.
 

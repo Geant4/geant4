@@ -59,43 +59,24 @@
 #include "G4UIExecutive.hh"
 #endif
 
+#include "CommandLineParser.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void PrintUsage()
-{
-  G4cerr << " Usage: " << G4endl;
-  G4cerr << " pdb4dna [-m macro] [-t nThreads]" << G4endl;
-  G4cerr << "   note: -t option is available only for multi-threaded mode."
-      << G4endl;
-}
+using namespace G4DNAPARSER;
+CommandLineParser* parser(0);
+
+void Parse(int& argc, char** argv);
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {
-  // Evaluate arguments
+  //////////
+  // Parse options given in commandLine
   //
-  if ( argc > 5 ) {
-    PrintUsage();
-    return 1;
-  }
-
-  G4String macro;
-#ifdef G4MULTITHREADED
-  G4int nThreads = 0;
-#endif
-  for ( G4int i=1; i<argc; i=i+2 ) {
-    if      ( G4String(argv[i]) == "-m" ) macro = argv[i+1];
-#ifdef G4MULTITHREADED
-    else if ( G4String(argv[i]) == "-t" ) {
-      nThreads = G4UIcommand::ConvertToInt(argv[i+1]);
-    }
-#endif
-    else {
-      PrintUsage();
-      return 1;
-    }
-  }
+  Parse(argc, argv);
 
   // Set the Seed
   CLHEP::RanecuEngine defaultEngine(1234567);
@@ -105,24 +86,47 @@ int main(int argc,char** argv)
   //
   CLHEP::HepRandom::setTheEngine(new CLHEP::RanecuEngine);
 
-  // Construct the default run manager
+  //////////
+  // Construct the run manager according to whether MT is activated or not
   //
-#ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
-  if ( nThreads > 0 ) { 
-    runManager->SetNumberOfThreads(nThreads);
-  }  
-#else
-  G4RunManager * runManager = new G4RunManager;
-#endif
+  G4RunManager* runManager(0);
+  Command* commandLine(0);
 
+  if ((commandLine = parser->GetCommandIfActive("-mt")))
+  {
+#ifdef G4MULTITHREADED
+
+    runManager= new G4MTRunManager;
+
+    if(commandLine->GetOption().empty())
+    {
+      ((G4MTRunManager*)runManager)->SetNumberOfThreads(1);
+    }
+    else
+    {
+      int nThreads = G4UIcommand::ConvertToInt(commandLine->GetOption());
+      ((G4MTRunManager*)runManager)->SetNumberOfThreads(nThreads);
+    }
+#else
+    G4cout << "WARNING : the -mt command line option has not effect since you "
+        "seam to have compile Geant4 without the G4MULTITHREADED flag"
+           << G4endl;
+    runManager = new G4RunManager();
+
+#endif
+  }
+  else
+  {
+    runManager = new G4RunManager;
+  }
+  
   // Set user classes
   //
   runManager->SetUserInitialization(new DetectorConstruction());
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserInitialization(new ActionInitialization());
 
-  // Initialize G4 kernel
+  // Initialize G4 keRnel
   //
   // runManager->Initialize();
 
@@ -135,25 +139,49 @@ int main(int argc,char** argv)
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if ( macro.size() ) {
+  if ((commandLine = parser->GetCommandIfActive("-mac")) ) {
     // batch mode
     G4String command = "/control/execute ";
-    UImanager->ApplyCommand(command+macro);
+    UImanager->ApplyCommand(command+commandLine->GetOption());
   }
   else
-  {  // interactive mode : define UI session
-#ifdef G4UI_USE
-    G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-    UImanager->ApplyCommand("/control/execute init_vis.mac");
-#else
+  {
     UImanager->ApplyCommand("/control/execute init.mac");
-#endif
-    if (ui->IsGUI())
-      UImanager->ApplyCommand("/control/execute gui.mac");
-    ui->SessionStart();
-    delete ui;
-#endif
+ 
+    // interactive mode : define UI session
+    if ((commandLine = parser->GetCommandIfActive("-gui")))
+    {
+      G4UIExecutive* ui = new G4UIExecutive(argc, argv,
+                                            commandLine->GetOption());
+
+      if(parser->GetCommandIfActive("-novis") == 0) 
+      // visualization is used by default
+      {
+        if ((commandLine = parser->GetCommandIfActive("-vis")))
+        // select a visualization driver if needed (e.g. HepFile)
+        {
+          UImanager->ApplyCommand(G4String("/vis/open ")+commandLine->GetOption()); 
+        } 
+        else
+        // by default OGL is used
+        {
+          UImanager->ApplyCommand("/vis/open OGL 600x600-0+0");
+        }
+        UImanager->ApplyCommand("/control/execute vis.mac");
+      }
+      if (ui->IsGUI())
+        UImanager->ApplyCommand("/control/execute gui.mac");
+      ui->SessionStart();
+      delete ui;
+    }
+   else
+   {
+     if ((commandLine = parser->GetCommandIfActive("-vis")))
+     {
+        UImanager->ApplyCommand(G4String("/vis/open ")+commandLine->GetOption());
+        UImanager->ApplyCommand("/control/execute vis.mac"); 
+     }
+   }
   }
 
   // Job termination
@@ -167,3 +195,54 @@ int main(int argc,char** argv)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....
+
+void Parse(int& argc, char** argv)
+{
+  //////////
+  // Parse options given in commandLine
+  //
+  parser = CommandLineParser::GetParser();
+#ifdef G4UI_USE
+  parser->AddCommand(
+      "-gui", Command::OptionNotCompulsory,
+      "Select geant4 UI or just launch a geant4 terminal session", "qt");
+#endif
+  parser->AddCommand("-mac", Command::WithOption, "Give a mac file to execute",
+                     "pdb4dna.in");
+// You cann your own command, as for instance:
+//  parser->AddCommand("-seed", Command::WithOption,
+//                     "Give a seed value in argument to be tested", "seed");
+// it is then up to you to manage this option
+  parser->AddCommand("-mt", Command::OptionNotCompulsory,
+                     "Launch in MT mode (events computed in parallel)",
+                     "2");
+
+  parser->AddCommand("-vis", Command::WithOption, "Select a visualization driver",
+                     "OGL 600x600-0+0");
+
+
+  parser->AddCommand("-novis", Command::WithoutOption, "Deactivate visualization when using GUI");
+
+
+  //////////
+  // If -h or --help is given in option : print help and exit
+  //
+  if (parser->Parse(argc, argv) != 0) // help is being printed
+  {
+    // if you are using ROOT, create a TApplication in this condition in order
+    // to print the help from ROOT as well
+    CommandLineParser::DeleteInstance();
+    std::exit(0);
+  }
+
+  ///////////
+  // Kill application if wrong argument in command line
+  //
+  if (parser->CheckIfNotHandledOptionsExists(argc, argv))
+  {
+    // if you are using ROOT, you should initialise your TApplication
+    // before this condition
+    abort();
+  }
+}
+

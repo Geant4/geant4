@@ -5,7 +5,7 @@
 #
 # Use this open statement to create an OpenGL view:
 #/vis/open OGLIQt 600x600-0+0
-/vis/open OGL 600x600-0+0
+# the selection of the driver is done through command line
 
 #
 # Use this open statement to create an OpenInventor view:
