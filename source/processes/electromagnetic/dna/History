@@ -14,6 +14,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+03-11-2014 MK, tag emdna-V10-00-50
+- correct track creation by G4MoleculeGunMessenger
+
+03-11-2014 MK, tag emdna-V10-00-49
+- Remove useless classes
+- Correct a bug in G4MoleculeGun
+
 28-10-2014  PA, tag emdna-V10-00-48
 - correct compilation warnings
 

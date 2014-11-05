@@ -26,12 +26,14 @@ G4MoleculeGun::~G4MoleculeGun()
 
 void G4MoleculeGun::DefineTracks()
 {
+  fpMessenger->DefineTracks(this);
+
   for (size_t i = 0; i < fTracks.size(); i++)
   {
     PushTrack(fTracks[i]);
   }
 
-  fpMessenger->DefineTracks(this);
+  fTracks.clear();
 }
 
 void G4MoleculeGun::AddMolecule(const G4String& name,
