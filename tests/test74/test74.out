@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-08    (26-September-2014)
+ Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -71,21 +71,21 @@ p_G4MicroElecInelastic
 /gun/energy 10000 eV
 /run/beamOn 1
 
-e-_G4MicroElecElastic:   for  e-    SubType= 51
+e-_G4MicroElecElastic:   for  e-    SubType= 51  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
 MicroElecElasticModel :  Emin=        0 eV    Emax=      100 MeV
 
-e-_G4MicroElecInelastic:   for  e-    SubType= 53
+e-_G4MicroElecInelastic:   for  e-    SubType= 53  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-MicroElecInelasticModel :  Emin=        0 eV    Emax=      100 MeV
+MicroElecInelasticModel :  Emin=        0 eV    Emax=      100 MeV   deltaVI
 
-p_G4MicroElecInelastic:   for  proton    SubType= 53
+p_G4MicroElecInelastic:   for  proton    SubType= 53  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-MicroElecInelasticModel :  Emin=        0 eV    Emax=       10 GeV
+MicroElecInelasticModel :  Emin=        0 eV    Emax=       10 GeV   deltaVI
 
-ion_G4MicroElecInelastic:   for  GenericIon    SubType= 53
+ion_G4MicroElecInelastic:   for  GenericIon    SubType= 53  BuildTable= 0
       ===== EM models for the G4Region  DefaultRegionForTheWorld ======
-MicroElecInelasticModel :  Emin=        0 eV    Emax=       10 TeV
+MicroElecInelasticModel :  Emin=        0 eV    Emax=       10 GeV   deltaVI
 
 ========= Table of registered couples ==============================
 
@@ -102,11 +102,11 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.25s Real=0.26s Sys=0s
+  User=0.27s Real=0.27s Sys=0s
 
  The run consists of 1 e- of 10 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
- Process calls frequency --->	e-_G4MicroElecElastic = 1993	e-_G4MicroElecInelastic = 394
+ Process calls frequency --->	e-_G4MicroElecElastic = 2071	e-_G4MicroElecInelastic = 388
  Total transfered energy (keV)=10
 
 #
@@ -129,11 +129,11 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.59s Real=0.58s Sys=0s
+  User=0.73s Real=0.73s Sys=0s
 
  The run consists of 1 proton of 100 keV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
- Process calls frequency --->	p_G4MicroElecInelastic = 1427	e-_G4MicroElecElastic = 12423	e-_G4MicroElecInelastic = 913
+ Process calls frequency --->	p_G4MicroElecInelastic = 1387	e-_G4MicroElecElastic = 12378	e-_G4MicroElecInelastic = 934
  Total transfered energy (keV)=100
 
 #
@@ -157,11 +157,11 @@ Index : 0     used in the geometry : Yes
 Run terminated.
 Run Summary
   Number of events processed : 1
-  User=31.48s Real=31.74s Sys=0.04s
+  User=35.24s Real=35.42s Sys=0.03s
 
  The run consists of 1 Ca48 of 4.8 MeV through 1 m   of G4_Si (density: 2.33 g/cm3 )
 
- Process calls frequency --->	ion_G4MicroElecInelastic = 68244	e-_G4MicroElecElastic = 571711	e-_G4MicroElecInelastic = 43767
+ Process calls frequency --->	ion_G4MicroElecInelastic = 68497	e-_G4MicroElecElastic = 570835	e-_G4MicroElecInelastic = 43620
  Total transfered energy (keV)=4800
 
 #
