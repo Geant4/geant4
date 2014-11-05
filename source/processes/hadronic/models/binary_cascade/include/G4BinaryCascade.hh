@@ -176,7 +176,8 @@ private:
 		  	  	  	  	   G4KineticTrackVector * products);
   void DebugApplyCollision(G4CollisionInitialState * collision,
                            G4KineticTrackVector *products);
-  G4bool DebugEpConservation(const G4HadProjectile & aTrack, G4ReactionProductVector* products);
+  G4bool DebugFinalEpConservation(const G4HadProjectile & aTrack, G4ReactionProductVector* products);
+  G4bool DebugEpConservation(const G4String where);
   G4bool CheckChargeAndBaryonNumber(G4String where);
 
 private:

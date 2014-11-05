@@ -479,7 +479,6 @@ G4ThreeVector G4RKPropagation::GetMomentumTransfer() const
 G4bool G4RKPropagation::FieldTransport(G4KineticTrack * kt, const G4double timeStep)
 //----------------------------------------------------------------------------
 {
-   theMomentumTranfer=G4ThreeVector(0,0,0);
    //    G4cout <<"Stepper input"<<kt->GetTrackingMomentum()<<G4endl;
    // create the integrator stepper
    //    G4Mag_EqRhs * equation = mapIter->second;
@@ -521,7 +520,7 @@ G4bool G4RKPropagation::FieldTransport(G4KineticTrack * kt, const G4double timeS
   	   << G4endl;
     */
 
-   // Correct for momentum ( thus energy) transfered to nucleus, boost particle into moving nuclues frame.
+   // Correct for momentum ( thus energy) transfered to nucleus, boost particle into moving nucleus frame.
    G4ThreeVector MomentumTranfer = kt->GetTrackingMomentum().vect() - track.GetMomentum();
    G4ThreeVector boost= MomentumTranfer / std::sqrt (MomentumTranfer.mag2() +sqr(theNucleus->GetMass()));
 

@@ -13,6 +13,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+4-November 2014 Gunter Folger    had-binary-V10-00-10
+- remove left over use of SetA/SetZ.
+- Binary cascade: improve handling of destroyed nucleus solving issues with
+    light nuclei in BinaryLightIonReaction, like He in H. 
+    final state in case target nucleus is destroyed made to conserve 
+	 energy and momentum, taking into account momentum transfered to nucleus,
+	  and finally forcing conservation.	 
+- BinaryLightIonreaction: handle currentA/Z consistant with list of spectators.
+    added optional debugging output.
+	 	  
 2 June 2014 Gunter Folger        had-binary-V10-00-09
 - G4NeutronField, G4ProtonField: add static cast to correct 
   compilation warning.
