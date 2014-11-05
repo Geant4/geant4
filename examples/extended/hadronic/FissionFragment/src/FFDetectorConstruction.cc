@@ -54,6 +54,11 @@ G4VPhysicalVolume* FFDetectorConstruction::
 Construct()
 {
     G4ThreeVector position;
+#ifdef NDEBUG
+    G4bool const overlapChecking = false;
+#else
+    G4bool const overlapChecking = true;
+#endif // NDEBUG
     
     //
     // Create the world
@@ -77,7 +82,7 @@ Construct()
                             NULL,                       // no mother volume
                             false,                      // no boolean ops
                             0,                          // copy number
-                            true);                      // check for overlaps
+                            overlapChecking);           // check for overlaps
     
     //
     // Create the graphite pile that the subcritical assembly rests on.
@@ -101,7 +106,7 @@ Construct()
                       logicalWorld,                     // the mother volume
                       false,                            // no boolean ops
                       0,                                // copy number
-                      true);                            // check for overlaps
+                      overlapChecking);                 // check for overlaps
     
     //
     // Create the tank
@@ -129,7 +134,7 @@ Construct()
                       logicalWorld,                     // the mother volume
                       false,                            // no boolean ops
                       0,                                // copy number
-                      true);                            // check for overlaps
+                      overlapChecking);                 // check for overlaps
     // Top 3 inches are air
     const G4double tankAirH = 3.0 * inch;
     G4Tubs* const solidTankAir
@@ -152,7 +157,7 @@ Construct()
                       logicalTank,                      // the mother volume
                       false,                            // no boolean ops
                       0,                                // copy number
-                      true);                            // check for overlaps
+                      overlapChecking);                 // check for overlaps
     // Fill remaining area with water
     const G4double tankH2OH = (tankH - (tankAirH + tankWallThickness));
     G4Tubs* const solidTankH2O
@@ -176,7 +181,7 @@ Construct()
                       logicalTank,                      // the mother volume
                       false,                            // no boolean ops
                       0,                                // copy number
-                      true);                            // check for overlaps
+                      overlapChecking);                 // check for overlaps
     
     //
     // Fuel plates
@@ -219,7 +224,7 @@ Construct()
                       logicalPlate,                     // the mother volume
                       false,                            // no boolean ops
                       0,                                // copy number
-                      true);                            // check for overlaps
+                      overlapChecking);                 // check for overlaps
     // The plate will be centered in the z-direction within the water
     // Simulate a subcritical assembly loading within a radius of 12 inches
     bool placeMe;
@@ -258,14 +263,17 @@ Construct()
                                -y,
                                logicalPlate,
                                logicalTankH2O);
-                PlaceFuelPlate(-x,
-                               y,
-                               logicalPlate,
-                               logicalTankH2O);
-                PlaceFuelPlate(-x,
-                               -y,
-                               logicalPlate,
-                               logicalTankH2O);
+                if(x > 0.0)
+                {
+                    PlaceFuelPlate(-x,
+                                   y,
+                                   logicalPlate,
+                                   logicalTankH2O);
+                    PlaceFuelPlate(-x,
+                                   -y,
+                                   logicalPlate,
+                                   logicalTankH2O);
+                }
             }
         }
     }
@@ -300,7 +308,7 @@ Construct()
                       logicalTankH2O,                   // the mother volume
                       false,                            // no boolean ops
                       0,                                // copy number
-                      true);                            // check for overlaps
+                      overlapChecking);                 // check for overlaps
     
     //
     // Detector Tower
@@ -326,7 +334,7 @@ Construct()
                       logicalWorld,                     // the mother volume
                       false,                            // no boolean ops
                       0,                                // copy number
-                      true);                            // check for overlaps
+                      overlapChecking);                 // check for overlaps
     // Create the detector shell
     G4double shellR = 0.3 * inch;
     G4double shellH = 6.5 * inch;
@@ -350,7 +358,7 @@ Construct()
                       logicalPoly,                      // the mother volume
                       false,                            // no boolean ops
                       0,                                // copy number
-                      true);                            // check for overlaps
+                      overlapChecking);                 // check for overlaps
     // Create the BF3 detector
     G4double BF3R = 0.2 * inch;
     G4double BF3H = 6.0 * inch;
@@ -374,7 +382,7 @@ Construct()
                       logicalShell,                     // the mother volume
                       false,                            // no boolean ops
                       0,                                // copy number
-                      true);                            // check for overlaps
+                      overlapChecking);                 // check for overlaps
     
     return physicalWorld;
 }

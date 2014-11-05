@@ -176,7 +176,13 @@ int main(int argc, char* argv[])
     }
     
     // Set the Random engine
-    G4Random::setTheEngine(new CLHEP::MTwistEngine());
+    // A seed of 62737819 produced a maximum number of 67 events on the
+    // author's system before timing out the nightly test
+    const G4long seed = 62737819;
+#ifndef NDEBUG
+    G4cout << "MT RNG Seed: " << seed << G4endl;
+#endif // NDEBUG
+    G4Random::setTheEngine(new CLHEP::MTwistEngine(seed));
 
 // The 'runManger' type must be declared here at initialization to provide for
 // 'SetNumberOfThreads()' method required for multithreading
@@ -233,7 +239,7 @@ int main(int argc, char* argv[])
     delete visManager;
 #endif
     delete runManager;
-
+    
     return 0;
 }
 

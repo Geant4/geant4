@@ -42,6 +42,9 @@ public:
     
 private:
 // Fields
+#ifndef NDEBUG
+    G4long fEventNumber;
+#endif // NDEBUG
     G4VPhysicalVolume* fH2OPhysical;
     G4VPhysicalVolume* fNeutronPhysical;
     G4Tubs* fNeutronSolid;

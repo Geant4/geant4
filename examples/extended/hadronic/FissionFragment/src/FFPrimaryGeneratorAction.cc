@@ -41,6 +41,9 @@
 FFPrimaryGeneratorAction::
 FFPrimaryGeneratorAction()
 :   G4VUserPrimaryGeneratorAction(),
+#ifndef NDEBUG
+    fEventNumber(0),
+#endif // NDEBUG
     fH2OPhysical(NULL),
     fNeutronPhysical(NULL),
     fNeutronSolid(NULL),
@@ -55,6 +58,9 @@ FFPrimaryGeneratorAction()
 void FFPrimaryGeneratorAction::
 GeneratePrimaries(G4Event* event)
 {
+#ifndef NDEBUG
+    G4cout << "Shooting event " << ++fEventNumber << G4endl;
+#endif // NDEBUG
     const G4ThreeVector sourceCenter = GetNeutronSourceCenter();
     
     // Sample the neutron source location
@@ -68,14 +74,18 @@ GeneratePrimaries(G4Event* event)
     G4ThreeVector location(randomLocation.x() + sourceCenter.x(),
                            randomLocation.y() + sourceCenter.y(),
                            randomLocation.z() + sourceCenter.z());
-    //G4cout << "Emission Location: r: " << location << G4endl;
+#ifndef NDEBUG
+    G4cout << "Emission Location: r: " << location << G4endl;
+#endif // NDEBUG
     
     // Sample the neutron emission direction
     G4ThreeVector direction;
     direction.setRThetaPhi(1.0,
                            std::acos(G4UniformRand() * 2 - 1),
                            (G4UniformRand() * 2 - 1) * 180 * deg);
-    //G4cout << "Emission Direction: r: " << direction << G4endl;
+#ifndef NDEBUG
+    G4cout << "Emission Direction: r: " << direction << G4endl;
+#endif // NDEBUG
     
     // Load the event
     fParticleGun->SetParticlePosition(location);
