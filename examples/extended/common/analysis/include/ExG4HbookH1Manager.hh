@@ -37,6 +37,7 @@
 
 #include "G4VH1Manager.hh"
 #include "G4HnInformation.hh"
+#include "ExG4HbookBaseHnManager.hh"
 #include "globals.hh"
 
 #include <tools/hbook/h1>
@@ -199,6 +200,7 @@ class ExG4HbookH1Manager : public G4VH1Manager
 
     // data members
     //
+    ExG4HbookBaseHnManager fBaseToolsManager;
     ExG4HbookFileManager*  fFileManager;
     G4int fH1HbookIdOffset;
     std::vector<tools::hbook::h1*>  fH1Vector;            

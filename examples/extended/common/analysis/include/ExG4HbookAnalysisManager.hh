@@ -41,6 +41,7 @@
 #include <tools/hbook/wfile>
 #include <tools/hbook/h1>
 #include <tools/hbook/h2>
+#include <tools/hbook/p1>
 #include <tools/hbook/wntuple>
 
 #include <vector>
@@ -53,14 +54,21 @@
 class ExG4HbookAnalysisManager;
 
 namespace G4Hbook {
-
   typedef tools::hbook::h1  G4AnaH1;
+  typedef tools::hbook::h1  G4H1;
+  typedef tools::hbook::h2  G4AnaH2;
+  typedef tools::hbook::h2  G4H2;
+  typedef tools::hbook::p1  G4P1;
+  typedef tools::hbook::wntuple  G4Ntuple; 
   typedef ExG4HbookAnalysisManager G4AnalysisManager; 
 } 
 
 class ExG4HbookFileManager;
 class ExG4HbookH1Manager;
 class ExG4HbookH2Manager;
+class ExG4HbookH3DummyManager;
+class ExG4HbookP1Manager;
+class ExG4HbookP2DummyManager;
 class ExG4HbookNtupleManager;
 
 /// HBook Analysis manager
@@ -140,10 +148,13 @@ class ExG4HbookAnalysisManager : public G4VAnalysisManager
     //
     void Reset();
    
-    ExG4HbookH1Manager*    fH1Manager;
-    ExG4HbookH2Manager*    fH2Manager;
-    ExG4HbookNtupleManager* fNtupleManager;
-    ExG4HbookFileManager*   fFileManager;
+    ExG4HbookH1Manager*      fH1Manager;
+    ExG4HbookH2Manager*      fH2Manager;
+    ExG4HbookH3DummyManager* fH3Manager;
+    ExG4HbookP1Manager*      fP1Manager;
+    ExG4HbookP2DummyManager* fP2Manager;
+    ExG4HbookNtupleManager*  fNtupleManager;
+    ExG4HbookFileManager*    fFileManager;
 };
 
 #include "ExG4HbookAnalysisManager.icc"

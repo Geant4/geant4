@@ -36,6 +36,9 @@
 #include "ExG4HbookFileManager.hh"
 #include "ExG4HbookH1Manager.hh"
 #include "ExG4HbookH2Manager.hh"
+#include "ExG4HbookH3DummyManager.hh"
+#include "ExG4HbookP1Manager.hh"
+#include "ExG4HbookP2DummyManager.hh"
 #include "ExG4HbookNtupleManager.hh"
 #include "G4AnalysisManagerState.hh"
 #include "G4UnitsTable.hh"
@@ -72,6 +75,9 @@ ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()
  : G4VAnalysisManager("Hbook", true),
    fH1Manager(0),
    fH2Manager(0),
+   fH3Manager(0),
+   fP1Manager(0),
+   fP2Manager(0),
    fNtupleManager(0),
    fFileManager(0)
 {
@@ -98,18 +104,25 @@ ExG4HbookAnalysisManager::ExG4HbookAnalysisManager()
   // Create managers
   fH1Manager = new ExG4HbookH1Manager(fState);
   fH2Manager = new ExG4HbookH2Manager(fState);
+  fH3Manager = new ExG4HbookH3DummyManager(fState);
+  fP1Manager = new ExG4HbookP1Manager(fState);
+  fP2Manager = new ExG4HbookP2DummyManager(fState);
   fNtupleManager = new ExG4HbookNtupleManager(fState);
   fFileManager = new ExG4HbookFileManager(fState);
   
   // Set managers to base class
   SetH1Manager(fH1Manager);
   SetH2Manager(fH2Manager);
+  SetH3Manager(fH3Manager);
+  SetP1Manager(fP1Manager);
+  SetP2Manager(fP2Manager);
   SetNtupleManager(fNtupleManager);
   SetFileManager(fFileManager);
   
   // Set file manager to component managers
   fH1Manager->SetFileManager(fFileManager);
   fH2Manager->SetFileManager(fFileManager);
+  fP1Manager->SetFileManager(fFileManager);
   fNtupleManager->SetFileManager(fFileManager);
   
   // Initialize HBOOK :
@@ -134,6 +147,7 @@ void ExG4HbookAnalysisManager::Reset()
 
   fH1Manager->Reset();
   fH2Manager->Reset();
+  fP1Manager->Reset();
   fNtupleManager->Reset();
 }  
  
@@ -163,6 +177,9 @@ G4bool ExG4HbookAnalysisManager::OpenFileImpl(const G4String& fileName)
 
   // Create h2 histrograms if any is booked
   fH2Manager->CreateH2sFromBooking();
+
+  // Create p1 profiles if any is booked
+  fP1Manager->CreateP1sFromBooking();
 
   // Create ntuples if they are booked
   fNtupleManager->CreateNtuplesFromBooking();

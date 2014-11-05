@@ -36,6 +36,7 @@
 #define ExG4HbookH2Manager_h 1
 
 #include "G4VH2Manager.hh"
+#include "ExG4HbookBaseHnManager.hh"
 #include "globals.hh"
 
 #include <tools/hbook/h2>
@@ -194,6 +195,7 @@ class ExG4HbookH2Manager : public G4VH2Manager
 
     // data members
     //
+    ExG4HbookBaseHnManager fBaseToolsManager;
     ExG4HbookFileManager*  fFileManager;
     G4int fH2HbookIdOffset;
     std::vector<tools::hbook::h2*>  fH2Vector;            

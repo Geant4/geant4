@@ -16,6 +16,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+03/11/2014 I. Hrivnacova (excommon-analysis-V10-00-03)
+- Updated for changes in analysis category
+- Implemented P1 manager
+- Added H3 and P2 dummy managers (now removed from Geant4 kernel)
+- Fixed applying units
+- Applied new exception classification
+
 17/06/2014 I. Hrivnacova (excommon-analysis-V10-00-02)
 - Fixed problems reported by Davide Mancusi:
   - Moving tools/hbook/*.f files in examples/extended/common/analysis/src 

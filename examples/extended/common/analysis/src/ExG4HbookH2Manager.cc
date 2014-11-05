@@ -47,6 +47,7 @@ const G4int ExG4HbookH2Manager::fgkDefaultH2HbookIdOffset = 100;
 //_____________________________________________________________________________
 ExG4HbookH2Manager::ExG4HbookH2Manager(const G4AnalysisManagerState& state)
  : G4VH2Manager(state),
+   fBaseToolsManager("H2"),
    fFileManager(0),
    fH2HbookIdOffset(-1),
    fH2Vector(),
@@ -87,7 +88,7 @@ void ExG4HbookH2Manager::SetH2HbookIdOffset()
       G4ExceptionDescription description;
       description << "H2 will be defined in HBOOK with ID = G4_firstHistoId + 1";
       G4Exception("ExG4HbookH2Manager::SetH1HbookIdOffset",
-                  "Analysis_W011", JustWarning, description);
+                  "Analysis_W013", JustWarning, description);
     }              
   }
 }  
@@ -121,7 +122,7 @@ void ExG4HbookH2Manager::CreateH2sFromBooking()
 
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL3() ) 
-      fState.GetVerboseL3()->Message("create from booking", "h2", info->fName);
+      fState.GetVerboseL3()->Message("create from booking", "h2", info->GetName());
 #endif
 
     // Create h2
@@ -134,7 +135,7 @@ void ExG4HbookH2Manager::CreateH2sFromBooking()
 #ifdef G4VERBOSE
     if ( fState.GetVerboseL3() ) { 
       G4ExceptionDescription description;
-      description << " name : " << info->fName << " hbook index : " << hbookIndex; 
+      description << " name : " << info->GetName() << " hbook index : " << hbookIndex; 
       fState.GetVerboseL3()->Message("create from booking", "h2", description);
     }  
 #endif
@@ -170,7 +171,7 @@ h2_booking*  ExG4HbookH2Manager::GetH2Booking(G4int id, G4bool warn) const
       G4ExceptionDescription description;
       description << "      " << "histo " << id << " does not exist.";
       G4Exception("G4HbookAnalysisManager::GetH2Booking()",
-                  "Analysis_W007", JustWarning, description);
+                  "Analysis_W011", JustWarning, description);
     }
     return 0;         
   }
@@ -205,7 +206,7 @@ tools::hbook::h2*  ExG4HbookH2Manager::GetH2InFunction(G4int id,
       inFunction += functionName;
       G4ExceptionDescription description;
       description << "      " << "histogram " << id << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
     }
     return 0;         
   }
@@ -351,37 +352,43 @@ G4bool ExG4HbookH2Manager::SetH2(G4int id,
     G4ExceptionDescription description;
     description << "      " << "histogram " << id << " does not exist.";
     G4Exception("G4HbookAnalysisManager::SetH2()",
-                "Analysis_W007", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return false;
   }
 
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "SetH2");
+  G4HnInformation* hnInfo = fHnManager->GetHnInformation(id, "SetH2");
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) 
-    fState.GetVerboseL4()->Message("configure", "H2", info->fName);
+    fState.GetVerboseL4()->Message("configure", "H2", hnInfo->GetName());
 #endif
 
-  // Keep new parameters in booking & information
+  // Keep new parameters in booking
   G4double xunit = GetUnitValue(xunitName);
   G4double yunit = GetUnitValue(yunitName);
   G4Fcn xfcn = GetFunction(xfcnName);
   G4Fcn yfcn = GetFunction(yfcnName);
 
   h2Booking->fNxbins = nxbins;
-  h2Booking->fXmin = xfcn(xmin);
-  h2Booking->fXmax = xfcn(xmax);
+  h2Booking->fXmin = xfcn(xmin/xunit);
+  h2Booking->fXmax = xfcn(xmax/xunit);
   h2Booking->fNybins = nybins;
-  h2Booking->fYmin = yfcn(ymin);
-  h2Booking->fYmax = yfcn(ymax);
+  h2Booking->fYmin = yfcn(ymin/yunit);
+  h2Booking->fYmax = yfcn(ymax/yunit);
   
-  info->fXUnitName = xunitName;
-  info->fYUnitName = yunitName;
-  info->fXFcnName = xfcnName;
-  info->fYFcnName = yfcnName;
-  info->fXUnit = xunit;
-  info->fYUnit = yunit;
-  info->fXFcn = xfcn;
-  info->fYFcn = yfcn;
+  // Keep new parameters in information
+  G4HnDimensionInformation* xInfo 
+    = hnInfo->GetHnDimensionInformation(G4HnInformation::kX);
+  xInfo->fUnitName = xunitName;
+  xInfo->fFcnName = xfcnName;
+  xInfo->fUnit = xunit;
+  xInfo->fFcn = xfcn;
+    
+  G4HnDimensionInformation* yInfo 
+    = hnInfo->GetHnDimensionInformation(G4HnInformation::kY);
+  yInfo->fUnitName = yunitName;
+  yInfo->fFcnName = yfcnName;
+  yInfo->fUnit = yunit;
+  yInfo->fFcn = yfcn;
   fHnManager->SetActivation(id, true); 
 
   G4String newTitle(h2Booking->fTitle);
@@ -392,8 +399,8 @@ G4bool ExG4HbookH2Manager::SetH2(G4int id,
   // Re-configure histogram if it was already defined
   if ( fH2Vector.size() ) {
     tools::hbook::h2* h2 = GetH2(id);
-    h2->configure(nxbins, xfcn(xmin), xfcn(xmax), 
-                  nybins, yfcn(ymin), yfcn(ymax));
+    h2->configure(nxbins, xfcn(xmin/xunit), xfcn(xmax/xunit), 
+                  nybins, yfcn(ymin/yunit), yfcn(ymax/yunit));
   }  
   
   return true;
@@ -436,14 +443,21 @@ G4bool ExG4HbookH2Manager::FillH2(G4int id,
 
   if ( fState.GetIsActivation() && ( ! fHnManager->GetActivation(id) ) ) return false; 
 
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "FillH2");
-  h2->fill(info->fXFcn(xvalue/info->fXUnit), 
-           info->fYFcn(yvalue/info->fYUnit), weight);
+  G4HnDimensionInformation* xInfo 
+    = fHnManager->GetHnDimensionInformation(id, G4HnInformation::kX, "FillH2");
+  G4HnDimensionInformation* yInfo 
+    = fHnManager->GetHnDimensionInformation(id, G4HnInformation::kY, "FillH2");
+  h2->fill(xInfo->fFcn(xvalue/xInfo->fUnit), 
+           yInfo->fFcn(yvalue/yInfo->fUnit), weight);
 #ifdef G4VERBOSE
   if ( fState.GetVerboseL4() ) {
     G4ExceptionDescription description;
     description << " id " << id 
-                << " xvalue " << xvalue << " yvalue " << yvalue;
+                << " xvalue " << xvalue 
+                << " xfcn(xvalue/xunit) " <<  xInfo->fFcn(xvalue/xInfo->fUnit) 
+                << " yvalue " << yvalue
+                << " yfcn(yvalue/yunit) " <<  yInfo->fFcn(yvalue/yInfo->fUnit) 
+                << " weight " << weight;
     fState.GetVerboseL4()->Message("fill", "H2", description);
   }  
 #endif
@@ -466,7 +480,7 @@ G4int  ExG4HbookH2Manager::GetH2Id(const G4String& name, G4bool warn) const
       G4String inFunction = "ExG4HbookH2Manager::GetH2Id";
       G4ExceptionDescription description;
       description << "      " << "histogram " << name << " does not exist.";
-      G4Exception(inFunction, "Analysis_W007", JustWarning, description);
+      G4Exception(inFunction, "Analysis_W011", JustWarning, description);
     }
     return -1;         
   }
@@ -479,7 +493,7 @@ G4int ExG4HbookH2Manager::GetH2Nxbins(G4int id) const
   tools::hbook::h2* h2 = GetH2InFunction(id, "GetH2NXbins");
   if ( ! h2 ) return 0;
   
-  return h2->axis_x().bins();
+  return fBaseToolsManager.GetNbins(h2->axis_x());
 }  
 
 //_____________________________________________________________________________
@@ -490,8 +504,7 @@ G4double ExG4HbookH2Manager::GetH2Xmin(G4int id) const
   tools::hbook::h2* h2 = GetH2InFunction(id, "GetH2Xmin");
   if ( ! h2 ) return 0;
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2Xmin");
-  return info->fXFcn(h2->axis_x().lower_edge()*info->fXUnit);
+  return fBaseToolsManager.GetMin(h2->axis_x());
 }  
 
 //_____________________________________________________________________________
@@ -500,8 +513,7 @@ G4double ExG4HbookH2Manager::GetH2Xmax(G4int id) const
   tools::hbook::h2* h2 = GetH2InFunction(id, "GetH2Xmax");
   if ( ! h2 ) return 0;
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2Xmax");
-  return info->fXFcn(h2->axis_x().upper_edge()*info->fXUnit);
+  return fBaseToolsManager.GetMin(h2->axis_x());
 }  
 
 //_____________________________________________________________________________
@@ -510,18 +522,7 @@ G4double ExG4HbookH2Manager::GetH2XWidth(G4int id) const
   tools::hbook::h2* h2 = GetH2InFunction(id, "GetH2XWidth", true, false);
   if ( ! h2 ) return 0;
   
-  G4int nbins = h2->axis_x().bins();
-  if ( ! nbins ) {
-    G4ExceptionDescription description;
-    description << "    nbins = 0 (for h1 id = " << id << ").";
-    G4Exception("ExG4HbookH2Manager::GetH2Width",
-                "Analysis_W014", JustWarning, description);
-    return 0;
-  }              
-  
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2XWidth");
-  return ( info->fXFcn(h2->axis_x().upper_edge()) 
-           - info->fXFcn(h2->axis_x().lower_edge()))*info->fXUnit/nbins;
+  return fBaseToolsManager.GetWidth(h2->axis_x());
 }  
 
 //_____________________________________________________________________________
@@ -530,7 +531,7 @@ G4int ExG4HbookH2Manager::GetH2Nybins(G4int id) const
   tools::hbook::h2* h2 = GetH2InFunction(id, "GetH2NYbins");
   if ( ! h2 ) return 0;
   
-  return h2->axis_y().bins();
+  return fBaseToolsManager.GetNbins(h2->axis_y());
 }  
 
 //_____________________________________________________________________________
@@ -541,8 +542,7 @@ G4double ExG4HbookH2Manager::GetH2Ymin(G4int id) const
   tools::hbook::h2* h2 = GetH2InFunction(id, "GetH2Ymin");
   if ( ! h2 ) return 0;
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2Ymin");
-  return info->fYFcn(h2->axis_y().lower_edge()*info->fYUnit);
+  return fBaseToolsManager.GetMin(h2->axis_y());
 }  
 
 //_____________________________________________________________________________
@@ -551,8 +551,7 @@ G4double ExG4HbookH2Manager::GetH2Ymax(G4int id) const
   tools::hbook::h2* h2 = GetH2InFunction(id, "GetH2Ymax");
   if ( ! h2 ) return 0;
   
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2Ymax");
-  return info->fYFcn(h2->axis_y().upper_edge()*info->fYUnit);
+  return fBaseToolsManager.GetMax(h2->axis_y());
 }  
 
 //_____________________________________________________________________________
@@ -561,18 +560,7 @@ G4double ExG4HbookH2Manager::GetH2YWidth(G4int id) const
   tools::hbook::h2* h2 = GetH2InFunction(id, "GetH2YWidth", true, false);
   if ( ! h2 ) return 0;
   
-  G4int nbins = h2->axis_y().bins();
-  if ( ! nbins ) {
-    G4ExceptionDescription description;
-    description << "    nbins = 0 (for h1 id = " << id << ").";
-    G4Exception("ExG4HbookH2Manager::GetH2Width",
-                "Analysis_W014", JustWarning, description);
-    return 0;
-  }              
-  
-  G4HnInformation* info = fHnManager->GetHnInformation(id, "GetH2YWidth");
-  return ( info->fYFcn(h2->axis_y().upper_edge()) 
-           - info->fYFcn(h2->axis_y().lower_edge()))*info->fYUnit/nbins;
+  return fBaseToolsManager.GetWidth(h2->axis_y());
 }  
 
 //_____________________________________________________________________________
@@ -583,7 +571,7 @@ G4bool ExG4HbookH2Manager::SetH2Title(G4int id, const G4String& title)
     G4ExceptionDescription description;
     description << "      " << "histogram " << id << " does not exist.";
     G4Exception("G4HbookAnalysisManager::SetH2Title()",
-                "Analysis_W007", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return false;
   }
 
@@ -597,8 +585,7 @@ G4bool ExG4HbookH2Manager::SetH2XAxisTitle(G4int id, const G4String& title)
   tools::hbook::h2* h2 = GetH2InFunction(id, "SetH2XAxisTitle");
   if ( ! h2 ) return false;
   
-  h2->add_annotation(tools::hbook::key_axis_x_title(), title);
-  return true;
+  return fBaseToolsManager.SetAxisTitle(*h2, ExG4HbookBaseHnManager::kX, title);
 }  
 
 //_____________________________________________________________________________
@@ -607,8 +594,7 @@ G4bool ExG4HbookH2Manager::SetH2YAxisTitle(G4int id, const G4String& title)
   tools::hbook::h2* h2 = GetH2InFunction(id, "SetH2YAxisTitle");
   if ( ! h2 ) return false;
   
-  h2->add_annotation(tools::hbook::key_axis_x_title(), title);
-  return true;  
+  return fBaseToolsManager.SetAxisTitle(*h2, ExG4HbookBaseHnManager::kY, title);
 }  
 
 //_____________________________________________________________________________
@@ -617,8 +603,7 @@ G4bool ExG4HbookH2Manager::SetH2ZAxisTitle(G4int id, const G4String& title)
   tools::hbook::h2* h2 = GetH2InFunction(id, "SetH2ZAxisTitle");
   if ( ! h2 ) return false;
   
-  h2->add_annotation(tools::hbook::key_axis_z_title(), title);
-  return true;  
+  return fBaseToolsManager.SetAxisTitle(*h2, ExG4HbookBaseHnManager::kZ, title);
 }  
 
 //_____________________________________________________________________________
@@ -629,7 +614,7 @@ G4String ExG4HbookH2Manager::GetH2Title(G4int id) const
     G4ExceptionDescription description;
     description << "      " << "histogram " << id << " does not exist.";
     G4Exception("G4HbookAnalysisManager::GetH2Title()",
-                "Analysis_W007", JustWarning, description);
+                "Analysis_W011", JustWarning, description);
     return "";
   }
   
@@ -643,17 +628,7 @@ G4String ExG4HbookH2Manager::GetH2XAxisTitle(G4int id) const
   tools::hbook::h2* h2 = GetH2InFunction(id, "GetH2XAxisTitle");
   if ( ! h2 ) return "";
   
-  G4String title;
-  G4bool result = h2->annotation(tools::hbook::key_axis_x_title(), title);
-  if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "    Failed to get x_axis title for h2 id = " << id << ").";
-    G4Exception("ExG4HbookH2Manager::GetH2XAxisTitle",
-                "Analysis_W014", JustWarning, description);
-    return "";
-  }
-  
-  return title;              
+  return fBaseToolsManager.GetAxisTitle(*h2, ExG4HbookBaseHnManager::kX);
 } 
 
 //_____________________________________________________________________________
@@ -662,17 +637,7 @@ G4String ExG4HbookH2Manager::GetH2YAxisTitle(G4int id) const
   tools::hbook::h2* h2 = GetH2InFunction(id, "GetH2YAxisTitle");
   if ( ! h2 ) return "";
   
-  G4String title;
-  G4bool result = h2->annotation(tools::hbook::key_axis_y_title(), title);
-  if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "    Failed to get y_axis title for h2 id = " << id << ").";
-    G4Exception("ExG4HbookH2Manager::GetH2YAxisTitle",
-                "Analysis_W014", JustWarning, description);
-    return "";
-  }
-  
-  return title;              
+  return fBaseToolsManager.GetAxisTitle(*h2, ExG4HbookBaseHnManager::kY);
 }  
 
 //_____________________________________________________________________________
@@ -681,17 +646,7 @@ G4String ExG4HbookH2Manager::GetH2ZAxisTitle(G4int id) const
   tools::hbook::h2* h2 = GetH2InFunction(id, "GetH2ZAxisTitle");
   if ( ! h2 ) return "";
   
-  G4String title;
-  G4bool result = h2->annotation(tools::hbook::key_axis_z_title(), title);
-  if ( ! result ) {
-    G4ExceptionDescription description;
-    description << "    Failed to get z_axis title for h2 id = " << id << ").";
-    G4Exception("ExG4HbookH2Manager::GetH2ZAxisTitle",
-                "Analysis_W014", JustWarning, description);
-    return "";
-  }
-  
-  return title;              
+  return fBaseToolsManager.GetAxisTitle(*h2, ExG4HbookBaseHnManager::kZ);
 }  
 
 //_____________________________________________________________________________
@@ -702,7 +657,7 @@ G4bool ExG4HbookH2Manager::SetH2HbookIdOffset(G4int offset)
     description 
       << "Cannot set H2HbookIdOffset as some H2 histogramms already exist.";
     G4Exception("G4HbookAnalysisManager::SetH2HbookIdOffset()",
-                 "Analysis_W009", JustWarning, description);
+                 "Analysis_W013", JustWarning, description);
     return false;             
   }
 
@@ -710,7 +665,7 @@ G4bool ExG4HbookH2Manager::SetH2HbookIdOffset(G4int offset)
     G4ExceptionDescription description;
     description << "The first histogram HBOOK id must be >= 1.";
     G4Exception("G4HbookAnalysisManager::SetH1HbookIdOffset()",
-                 "Analysis_W009", JustWarning, description);
+                 "Analysis_W013", JustWarning, description);
     return false;             
   }
   
