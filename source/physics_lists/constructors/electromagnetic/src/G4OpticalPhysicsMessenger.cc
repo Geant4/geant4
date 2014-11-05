@@ -188,20 +188,24 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command,
     G4String pn;
     G4int flag;
     is >> pn >> flag;
-    if  ( newValue == "Cerenkov" )        {
+    if  ( pn == "Cerenkov" )        {
         fSelectedProcessIndex = kCerenkov;
-    } else if ( newValue == "Scintillation" ) {
+    } else if ( pn == "Scintillation" ) {
         fSelectedProcessIndex = kScintillation;
-    } else if ( newValue == "OpAbsorption" )  {
+    } else if ( pn == "OpAbsorption" )  {
         fSelectedProcessIndex = kAbsorption;
-    } else if ( newValue == "OpRayleigh" )    {
+    } else if ( pn == "OpRayleigh" )    {
         fSelectedProcessIndex = kRayleigh;
-    } else if ( newValue == "OpMieHG" )       {
+    } else if ( pn == "OpMieHG" )       {
         fSelectedProcessIndex = kMieHG;
-    } else if ( newValue == "OpBoundary" )    {
+    } else if ( pn == "OpBoundary" )    {
         fSelectedProcessIndex = kBoundary;
-    } else if ( newValue == "OpWLS" )         {
+    } else if ( pn == "OpWLS" )         {
         fSelectedProcessIndex = kWLS;
+    } else {
+        G4ExceptionDescription msg;
+        msg << "Not allowed process name: "<<pn<<" (UI: "<<newValue<<")";
+        G4Exception("G4OpticalPhysicsMessenger::SetNewValue(...)","Optical001",FatalException,pn);
     }
     fOpticalPhysics->Configure(fSelectedProcessIndex,flag);
   }
@@ -211,20 +215,24 @@ void G4OpticalPhysicsMessenger::SetNewValue(G4UIcommand* command,
       G4String pn;
       G4int flag;
       is >> pn >> flag;
-      if ( newValue == "Cerenkov" )        {
+      if ( pn == "Cerenkov" )        {
         fSelectedProcessIndex = kCerenkov;
-      } else if ( newValue == "Scintillation" ) {
+      } else if ( pn == "Scintillation" ) {
         fSelectedProcessIndex = kScintillation;
-      } else if ( newValue == "OpAbsorption" )  {
+      } else if ( pn == "OpAbsorption" )  {
         fSelectedProcessIndex = kAbsorption;
-      } else if ( newValue == "OpRayleigh" )    {
+      } else if ( pn == "OpRayleigh" )    {
         fSelectedProcessIndex = kRayleigh;
-      } else if ( newValue == "OpMieHG" )       {
+      } else if ( pn == "OpMieHG" )       {
         fSelectedProcessIndex = kMieHG;
-      } else if ( newValue == "OpBoundary" )    {
+      } else if ( pn == "OpBoundary" )    {
         fSelectedProcessIndex = kBoundary;
-      } else if ( newValue == "OpWLS" )         {
+      } else if ( pn == "OpWLS" )         {
         fSelectedProcessIndex = kWLS;
+      } else {
+          G4ExceptionDescription msg;
+          msg << "Not allowed process name: "<<pn<<" (UI: "<<newValue<<")";
+          G4Exception("G4OpticalPhysicsMessenger::SetNewValue(...)","Optical001",FatalException,pn);
       }
       fOpticalPhysics->SetTrackSecondariesFirst(fSelectedProcessIndex,flag);
   }
