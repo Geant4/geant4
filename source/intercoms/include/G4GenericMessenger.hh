@@ -67,16 +67,16 @@ public:
     Command& SetStates(G4ApplicationState s0, G4ApplicationState s1, G4ApplicationState s2, G4ApplicationState s3) {command->AvailableForStates(s0,s1,s2,s3); return *this;}
     Command& SetStates(G4ApplicationState s0, G4ApplicationState s1, G4ApplicationState s2, G4ApplicationState s3, G4ApplicationState s4) {command->AvailableForStates(s0,s1,s2,s3,s4); return *this;}
     Command& SetRange(const G4String& range) {command->SetRange(range.c_str()); return *this;}
-    Command& SetGuidance(const G4String& s) { command->SetGuidance(s); return *this; }
+    Command& SetGuidance(const G4String& s0) { command->SetGuidance(s0); return *this; }
     Command& SetUnit(const G4String&, UnitSpec = UnitDefault);
     Command& SetUnitCategory(const G4String& u) {return SetUnit(u, UnitCategory);}
     Command& SetDefaultUnit(const G4String& u) {return SetUnit(u, UnitDefault);}
     Command& SetParameterName(const G4String&, G4bool, G4bool =false);
     Command& SetDefaultValue(const G4String&);
     Command& SetCandidates(const G4String&);
-    Command& SetToBeBroadcasted(G4bool s) { command->SetToBeBroadcasted(s); return *this; }
-    Command& SetToBeFlushed(G4bool s) { command->SetToBeFlushed(s); return *this; }
-    Command& SetWorkerThreadOnly(G4bool s) { command->SetWorkerThreadOnly(s); return *this; }
+    Command& SetToBeBroadcasted(G4bool s0) { command->SetToBeBroadcasted(s0); return *this; }
+    Command& SetToBeFlushed(G4bool s0) { command->SetToBeFlushed(s0); return *this; }
+    Command& SetWorkerThreadOnly(G4bool s0) { command->SetWorkerThreadOnly(s0); return *this; }
     
     G4UIcommand* command;
     const std::type_info* type;

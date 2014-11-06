@@ -16,6 +16,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
+05 November, 2014  Robert Hatcher  (intercoms-V10-00-15)
+- Rename a few inline method parameter names from 's' to 's0' 
+  to avoid a clash with CLHEP global 's'
+
 23 October, 2014 A. Dotti (intercoms-V10-00-14)
 - Add G4cout support for generic (non worker) threads via new method:
   G4UImanger::SetUpForSpecialThread(G4String prefix)
