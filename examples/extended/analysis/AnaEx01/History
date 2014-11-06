@@ -15,6 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-11-14 I. Hrivnacova (AnaEx01-V10-00-04)
+- Including shared directory directly in the example
+  to avoid out-of-project sources
+  - based on analysisShared-V10-00-00 
+- Adding utility scripts for GNUmake build (much simpler replacement
+  for scripts from common) \
+  - basen on analysisScripts-V10-00-00 
+- Moved implementation of G4AnalysisManager for hbook from 
+  extended/common/analysis in hbook sub-directory  
+
 13-08-14 mma (AnaEx01-V10-00-03)
 - update Readme and .Readme again
 

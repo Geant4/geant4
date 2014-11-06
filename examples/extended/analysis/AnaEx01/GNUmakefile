@@ -11,24 +11,32 @@ ifndef G4INSTALL
   G4INSTALL = ../../..
 endif
 
+# HBOOK support
+#
+#### G4_USE_HBOOK := true
+
 .PHONY: setup clean_setup all
 all: hbook lib bin
 
 setup:
-	@echo "Copying files from common"
-	../../common/scripts/copy_files.sh
-
+	@echo "Copying files from shared and hbook"
+	@./scripts/copy_files.sh shared
+ifdef G4_USE_HBOOK
+	@./scripts/copy_files.sh hbook
+endif
+        
 clean_setup:
-	@echo "Removing files copied from common"
-	../../common/scripts/clean_files.sh
+	@echo "Removing files copied from shared and hbook"
+	@./scripts/clean_files.sh shared
+ifdef G4_USE_HBOOK
+	@./scripts/clean_files.sh hbook
+endif
 
-# HBOOK support
-#
-#### G4_USE_HBOOK := true
-include GNUmakefile.tools_hbook
+include hbook/GNUmakefile.tools_hbook
 
 include $(G4INSTALL)/config/binmake.gmk
 
+CPPFLAGS += -I./shared/include
 
 visclean:
 	rm -f g4*.prim g4*.eps g4*.wrl

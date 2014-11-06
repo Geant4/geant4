@@ -8,6 +8,7 @@ ifdef G4_USE_HBOOK
 include $(G4INSTALL)/config/architecture.gmk
 
 CPPFLAGS += -DG4_USE_HBOOK
+CPPFLAGS += -I./hbook/include
 EXTRALIBS += $(G4TMPDIR)/exe/close.o $(G4TMPDIR)/exe/setpawc.o $(G4TMPDIR)/exe/setntuc.o
 EXTRALIBS += -L${CERNLIB}/lib  -lpacklib -lmathlib -lgfortran -lcrypt -lkernlib 
 
@@ -20,28 +21,28 @@ else
 	@(mv *.o  $(G4TMPDIR)/exe);    
 endif
 
-close.o : src/close.f
+close.o : hbook/src/close.f
 	@echo Compiling close.f
 ifdef CPPVERBOSE
-	$(FC) -c src/close.f
+	$(FC) -c hbook/src/close.f
 else
-	@$(FC) -c src/close.f
+	@$(FC) -c hbook/src/close.f
 endif
 
-setpawc.o : src/setpawc.f
+setpawc.o : hbook/src/setpawc.f
 	@echo Compiling setpawc.f
 ifdef CPPVERBOSE
-	$(FC) -c src/setpawc.f
+	$(FC) -c hbook/src/setpawc.f
 else
-	@$(FC) -c src/setpawc.f
+	@$(FC) -c hbook/src/setpawc.f
 endif
 
-setntuc.o : src/setntuc.f
+setntuc.o : hbook/src/setntuc.f
 	@echo Compiling setntuc.f
 ifdef CPPVERBOSE
-	$(FC) -c src/setntuc.f
+	$(FC) -c hbook/src/setntuc.f
 else
-	@$(FC) -c src/setntuc.f
+	@$(FC) -c hbook/src/setntuc.f
 endif
 
 else

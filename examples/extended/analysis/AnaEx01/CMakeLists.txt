@@ -24,27 +24,17 @@ include(${Geant4_USE_FILE})
 # Locate sources and headers for this project
 #
 include_directories(${PROJECT_SOURCE_DIR}/include 
-                    ${PROJECT_SOURCE_DIR}/../shared/include 
+                    ${PROJECT_SOURCE_DIR}/shared/include 
                     ${Geant4_INCLUDE_DIR})
-file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc)
-file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh)
-
-#----------------------------------------------------------------------------
-# Get examples sources from common and shared
-#
-list(APPEND sources 
-  ${PROJECT_SOURCE_DIR}/../shared/src/ActionInitialization.cc
-  ${PROJECT_SOURCE_DIR}/../shared/src/DetectorConstruction.cc
-  ${PROJECT_SOURCE_DIR}/../shared/src/DetectorMessenger.cc
-  ${PROJECT_SOURCE_DIR}/../shared/src/EventAction.cc
-  ${PROJECT_SOURCE_DIR}/../shared/src/PrimaryGeneratorAction.cc
-  ${PROJECT_SOURCE_DIR}/../shared/src/RunAction.cc
-  ${PROJECT_SOURCE_DIR}/../shared/src/SteppingAction.cc)
+file(GLOB sources ${PROJECT_SOURCE_DIR}/src/*.cc
+                  ${PROJECT_SOURCE_DIR}/shared/src/*.cc)
+file(GLOB headers ${PROJECT_SOURCE_DIR}/include/*.hh
+                  ${PROJECT_SOURCE_DIR}/shared/include/*.hh)
 
 #----------------------------------------------------------------------------
 # Find HBOOK (optional package)
 #
-set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/../../common/analysis/cmake ${CMAKE_MODULE_PATH})
+set(CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/hbook/cmake ${CMAKE_MODULE_PATH})
 find_package(HBOOK QUIET)
 if(NOT HBOOK_FOUND)
   message(STATUS "G4 Examples: HBOOK package not found. --> g4tools/hbook analysis disabled")  
@@ -59,16 +49,18 @@ endif()
 
 if (HBOOK_FOUND)
   enable_language(Fortran)
-  include_directories(
-       ${PROJECT_SOURCE_DIR}/../../common/analysis/include)
-  file(GLOB add_sources ${PROJECT_SOURCE_DIR}/../../common/analysis/src/*.cc)
-  file(GLOB fortran_sources ${PROJECT_SOURCE_DIR}/../../common/analysis/src/*.f)
+  include_directories(${PROJECT_SOURCE_DIR}/hbook/include)
+  file(GLOB add_sources ${PROJECT_SOURCE_DIR}/hbook/src/*.cc)
+  file(GLOB fortran_sources ${PROJECT_SOURCE_DIR}/hbook/src/*.f)
+  file(GLOB add_headers ${PROJECT_SOURCE_DIR}/hbook/include/*.hh)
 endif()       
 
 #----------------------------------------------------------------------------
 # Add the executable, and link it to the Geant4 libraries
 #
-add_executable(AnaEx01 AnaEx01.cc ${sources} ${fortran_sources} ${headers})
+add_executable(AnaEx01 AnaEx01.cc 
+               ${sources} ${add_sources} ${fortran_sources} 
+               ${headers} ${add_headers})
 target_link_libraries(AnaEx01 ${Geant4_LIBRARIES} ${HBOOK_LIBRARIES})
 
 #----------------------------------------------------------------------------

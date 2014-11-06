@@ -5,10 +5,15 @@
 
 /*! \page ExampleAnaEx01 Example AnaEx01
 
+ Examples AnaEx01, AnaEx02 and AnaEx03 show the usage of histogram and tuple 
+ manipulations using G4Analysis, ROOT and AIDA compliant systems on the same
+ scenario. All analysis manipulations (histo booking, filling, saving histos 
+ in a file, etc...) are located in one class : HistoManager, implementation of 
+ which is different in each example. All the other classes are same in all 
+ three examples.
+ 
  This example shows the usage of histogram and tuple manipulations using 
- G4Analysis system. All analysis manipulations 
- (histo booking, filling, saving histos in a file, etc...) 
- are located in one class : HistoManager.
+ G4Analysis system.
  
  The example is an adaptation of examples/novice/N03. It describes a simple 
  sampling calorimeter setup.
@@ -96,8 +101,15 @@
  
 \section AnaEx01_s6 Using hbook format
  
- Need a special treatement : the Cern Library must be installed and the
- environment variable CERNLIB correctly set. Then, *before* compiling,
- activate G4_USE_HBOOK in GNUmakefile and  g4hbook.hh in HistoManager.hh
+ This example provides the implementation of G4AnalysisManager for
+ Hbook in hbook directory. As this package requires CERNLIB libraries, 
+ its compilation is optional. To build it, the following environment variables
+ must be defined:
+\verbatim      
+G4_USE_HBOOK = 1
+CERNLIB = path to the CERNLIB installation
+\endverbatim
+ 
+ Then, *before* compiling, activate g4hbook.hh in HistoManager.hh
 
 */
