@@ -114,3 +114,18 @@ $Id$
  See the files README.AIDA and README.OpenScientist for more indications 
  how to use this system to visualize and handle histogram files.
   
+      
+ 7- How to build
+ --------------- 
+
+ An additional step is needed when building the example with GNUmake
+ due to using the extra shared directory: 
+  % cd path_to_AnaEx03/AnaEx03
+  % gmake setup
+  % gmake
+
+ This will copy the files from shared in the example include and src;
+ to remove these files:
+  % gmake clean_setup
+ 
+  

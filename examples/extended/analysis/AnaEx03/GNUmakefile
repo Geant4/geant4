@@ -16,11 +16,11 @@ all: lib bin
 
 setup:
 	@echo "Copying files from shared"
-	@./scripts/copy_files.sh shared
+	@./shared/scripts/copy_files.sh shared
 
 clean_setup:
 	@echo "Removing files copied from shared"
-	@./scripts/clean_files.sh shared
+	@./shared/scripts/clean_files.sh shared
 
 #### G4ANALYSIS_USE := true
 

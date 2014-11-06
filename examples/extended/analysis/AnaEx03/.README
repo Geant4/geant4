@@ -114,4 +114,20 @@
  for more indications how to use this system to visualize and handle 
  histogram files.
   
+\section AnaEx02_s7 How to build
+
+ An additional step is needed when building the example with GNUmake
+ due to using the extra shared directory: 
+\verbatim      
+% cd path_to_AnaEx03/AnaEx03
+% gmake setup
+% gmake
+\endverbatim
+
+ This will copy the files from shared in the example include and src;
+ to remove these files:
+\verbatim      
+% gmake clean_setup
+\endverbatim
+ 
 */
