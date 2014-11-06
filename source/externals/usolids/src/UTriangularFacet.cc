@@ -135,6 +135,15 @@ void UTriangularFacet::CopyFrom(const UTriangularFacet& rhs)
     fVertices = new vector<UVector3>(3);
     for (int i = 0; i < 3; ++i)(*fVertices)[i] = (*rhs.fVertices)[i];
   }
+  fIsDefined = rhs.fIsDefined;
+  fSurfaceNormal = rhs.fSurfaceNormal;
+  fA = rhs.fA; fB = rhs.fB; fC = rhs.fC;
+  fE1 = rhs.fE1;
+  fE2 = rhs.fE2;
+  fDet = rhs.fDet;
+  fArea = rhs.fArea; 
+  fRadius = rhs.fRadius;
+  fSqrDist = rhs.fSqrDist;
 }
 
 UTriangularFacet::UTriangularFacet(const UTriangularFacet& rhs) : VUFacet(rhs)

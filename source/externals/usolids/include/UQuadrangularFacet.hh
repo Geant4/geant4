@@ -41,7 +41,6 @@
 #include "VUFacet.hh"
 #include "UTriangularFacet.hh"
 #include "UVector3.hh"
-#include "UQuadrangularFacet.hh"
 
 class UQuadrangularFacet : public VUFacet
 {

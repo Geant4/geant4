@@ -16,7 +16,13 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-October 30, 2014, B.Morgan                geom-usolids-V10-00-21
+
+November 6, 2014  T.Nikitina              geom-usolids-V10-00-22
+- Minor fixes of errors reported by Coverity and unit tests in 
+  UTubs,UCons, UTrap, UTet, UTriangular/QuadrangularFacet.
+- Fixed algorithm for Extent() in UTrap.
+
+October 30, 2014  B.Morgan                geom-usolids-V10-00-21
 - Updated CMakeLists.txt to ensure library is built/installed
   in global mode.
 

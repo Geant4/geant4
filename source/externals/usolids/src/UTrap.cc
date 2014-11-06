@@ -76,6 +76,8 @@ UTrap::UTrap(const std::string& pName,
   fTalpha2 = std::tan(pAlp2);
 
   MakePlanes();
+  fCubicVolume=0.;
+  fSurfaceArea=0.;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -89,6 +91,8 @@ UTrap::UTrap(const std::string& pName,
   : VUSolid(pName)
 {
   SetPlanes(pt);
+  fCubicVolume=0.;
+  fSurfaceArea=0.;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -187,6 +191,8 @@ UTrap::UTrap(const std::string& pName,
     UUtils::Exception("UTrap::UTrap()", "GeomSolids0002",
                       FatalError, 1, message.str().c_str());
   }
+  fCubicVolume=0.;
+  fSurfaceArea=0.;
 }
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -284,6 +290,8 @@ UTrap::UTrap(const std::string& pName,
     UUtils::Exception("UTrap::UTrap()", "GeomSolids0002",
                       FatalErrorInArguments, 1, message.str().c_str());
   }
+  fCubicVolume=0.;
+  fSurfaceArea=0.;
 }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -383,6 +391,8 @@ UTrap::UTrap(const std::string& pName,
     UUtils::Exception("UTrap::UTrap()", "GeomSolids0002",
                       FatalErrorInArguments, 1, message.str().c_str());
   }
+  fCubicVolume=0.;
+  fSurfaceArea=0.;
 }
 
 ///////////////////////////////////////////////////////////////////////////
@@ -397,6 +407,8 @@ UTrap::UTrap(const std::string& pName)
     fDy2(1.), fDx3(1.), fDx4(1.), fTalpha2(0.)
 {
   MakePlanes();
+  fCubicVolume=0.;
+  fSurfaceArea=0.;
 }
 
 
@@ -425,6 +437,8 @@ UTrap::UTrap(const UTrap& rhs)
     fPlanes[i].c = rhs.fPlanes[i].c;
     fPlanes[i].d = rhs.fPlanes[i].d;
   }
+  fCubicVolume=rhs.fCubicVolume;
+  fSurfaceArea=rhs.fSurfaceArea;
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -464,7 +478,8 @@ UTrap& UTrap::operator = (const UTrap& rhs)
     fPlanes[i].c = rhs.fPlanes[i].c;
     fPlanes[i].d = rhs.fPlanes[i].d;
   }
-
+  fCubicVolume=rhs.fCubicVolume;
+  fSurfaceArea=rhs.fSurfaceArea;
   return *this;
 }
 
@@ -805,7 +820,7 @@ VUSolid::EnumInside UTrap::Inside(const UVector3& p) const
 bool UTrap::Normal(const UVector3& p, UVector3& aNormal) const
 {
   int i, noSurfaces = 0;
-  double dist, distz, distx, disty, distmx, distmy, safe = UUtils::Infinity();
+  double dist, distz, distx, disty, distmx, distmy, safe = UUtils::kInfinity;
   double delta    = 0.5 * VUSolid::Tolerance();
   UVector3 norm, sumnorm(0., 0., 0.);
 
@@ -885,7 +900,7 @@ bool UTrap::Normal(const UVector3& p, UVector3& aNormal) const
 
 UVector3 UTrap::ApproxSurfaceNormal(const UVector3& p) const
 {
-  double safe = UUtils::Infinity(), Dist, safez;
+  double safe = UUtils::kInfinity, Dist, safez;
   int i, imin = 0;
   for (i = 0; i < 4; i++)
   {
@@ -917,7 +932,7 @@ UVector3 UTrap::ApproxSurfaceNormal(const UVector3& p) const
 
 ////////////////////////////////////////////////////////////////////////////
 //
-// Calculate distance to shape from outside - return UUtils::Infinity() if no intersection
+// Calculate distance to shape from outside - return UUtils::kInfinity if no intersection
 //
 // ALGORITHM:
 // For each component, calculate pair of minimum and maximum intersection
@@ -945,7 +960,7 @@ double UTrap::DistanceToIn(const UVector3& p,
     }
     else
     {
-      return snxt = UUtils::Infinity();
+      return snxt = UUtils::kInfinity;
     }
   }
   else if (v.z < 0)
@@ -958,7 +973,7 @@ double UTrap::DistanceToIn(const UVector3& p,
     }
     else
     {
-      return snxt = UUtils::Infinity();
+      return snxt = UUtils::kInfinity;
     }
   }
   else
@@ -966,11 +981,11 @@ double UTrap::DistanceToIn(const UVector3& p,
     if (std::fabs(p.z) < fDz - 0.5 * VUSolid::Tolerance()) // Inside was <=fDz
     {
       smin = 0;
-      smax = UUtils::Infinity();
+      smax = UUtils::kInfinity;
     }
     else
     {
-      return snxt = UUtils::Infinity();
+      return snxt = UUtils::kInfinity;
     }
   }
 
@@ -986,7 +1001,7 @@ double UTrap::DistanceToIn(const UVector3& p,
       //
       if (Comp >= 0)   // was >0
       {
-        return snxt = UUtils::Infinity() ;
+        return snxt = UUtils::kInfinity ;
       }
       else
       {
@@ -999,7 +1014,7 @@ double UTrap::DistanceToIn(const UVector3& p,
           }
           else
           {
-            return snxt = UUtils::Infinity();
+            return snxt = UUtils::kInfinity;
           }
         }
       }
@@ -1020,7 +1035,7 @@ double UTrap::DistanceToIn(const UVector3& p,
           }
           else
           {
-            return snxt = UUtils::Infinity();
+            return snxt = UUtils::kInfinity;
           }
         }
       }
@@ -1106,7 +1121,7 @@ double UTrap::DistanceToOut(const UVector3& p, const UVector3&  v, UVector3&    
   }
   else
   {
-    snxt = UUtils::Infinity();
+    snxt = UUtils::kInfinity;
   }
 
   //
@@ -1530,14 +1545,72 @@ UVector3 UTrap::GetPointOnSurface() const
 
 void UTrap::Extent(UVector3& aMin, UVector3& aMax) const
 {
+ //Z axis
   aMin.z = -fDz;
   aMax.z = fDz;
-  double min12 = 0, min34 = 0;
-  if (fDx1 > fDx2)
-    min12 = fDx2;
-  if (fDx3 > fDx4)
-    min34 = fDx3;
-  aMax.x = (min12 < min34) ? min12 : min34;
-  aMin.x = -aMax.x;
-  aMax.y = (fDy1 > fDy2) ? fDy1 : fDy2;
+  
+  double temp[8] ;     // some points for intersection with zMin/zMax
+  UVector3 pt[8];   // vertices after translation
+    
+  //X axis
+  pt[0]=UVector3(-fDz*fTthetaCphi-fDy1*fTalpha1-fDx1,
+                        -fDz*fTthetaSphi-fDy1,-fDz);
+  pt[1]=UVector3(-fDz*fTthetaCphi-fDy1*fTalpha1+fDx1,
+                       -fDz*fTthetaSphi-fDy1,-fDz);
+  pt[2]=UVector3(-fDz*fTthetaCphi+fDy1*fTalpha1-fDx2,
+                        -fDz*fTthetaSphi+fDy1,-fDz);
+  pt[3]=UVector3(-fDz*fTthetaCphi+fDy1*fTalpha1+fDx2,
+                        -fDz*fTthetaSphi+fDy1,-fDz);
+  pt[4]=UVector3(+fDz*fTthetaCphi-fDy2*fTalpha2-fDx3,
+                        fDz*fTthetaSphi-fDy2,+fDz);
+  pt[5]=UVector3(fDz*fTthetaCphi-fDy2*fTalpha2+fDx3,
+                        fDz*fTthetaSphi-fDy2,+fDz);
+  pt[6]=UVector3(fDz*fTthetaCphi+fDy2*fTalpha2-fDx4,
+                        fDz*fTthetaSphi+fDy2,+fDz);
+  pt[7]=UVector3(fDz*fTthetaCphi+fDy2*fTalpha2+fDx4,
+                        fDz*fTthetaSphi+fDy2,+fDz);
+
+  temp[0] = pt[0].x+(pt[4].x-pt[0].x)
+      *(aMin.z-pt[0].z)/(pt[4].z-pt[0].z) ;
+  temp[1] = pt[0].x+(pt[4].x-pt[0].x)
+      *(aMax.z-pt[0].z)/(pt[4].z-pt[0].z) ;
+  temp[2] = pt[2].x+(pt[6].x-pt[2].x)
+      *(aMin.z-pt[2].z)/(pt[6].z-pt[2].z) ;
+  temp[3] = pt[2].x+(pt[6].x-pt[2].x)
+      *(aMax.z-pt[2].z)/(pt[6].z-pt[2].z) ;
+  temp[4] = pt[3].x+(pt[7].x-pt[3].x)
+      *(aMin.z-pt[3].z)/(pt[7].z-pt[3].z) ;
+  temp[5] = pt[3].x+(pt[7].x-pt[3].x)
+      *(aMax.z-pt[3].z)/(pt[7].z-pt[3].z) ;
+  temp[6] = pt[1].x+(pt[5].x-pt[1].x)
+      *(aMin.z-pt[1].z)/(pt[5].z-pt[1].z) ;
+  temp[7] = pt[1].x+(pt[5].x-pt[1].x)
+      *(aMax.z-pt[1].z)/(pt[5].z-pt[1].z) ;
+      
+  aMax.x =  - std::fabs(fDz*fTthetaCphi) - fDx1 - fDx2 -fDx3 - fDx4 ;
+  aMin.x = -aMax.x ;
+
+  for(int i = 0 ; i < 8 ; i++ )
+  {
+    if( temp[i] > aMax.x) aMax.x = temp[i] ;
+    if( temp[i] < aMin.x) aMin.x = temp[i] ;
+  }                                            
+  //Y axis
+  temp[0] = pt[0].y+(pt[4].y-pt[0].y)*(aMin.z-pt[0].z)
+                       /(pt[4].z-pt[0].z) ;
+  temp[1] = pt[0].y+(pt[4].y-pt[0].y)*(aMax.z-pt[0].z)
+                       /(pt[4].z-pt[0].z) ;
+  temp[2] = pt[2].y+(pt[6].y-pt[2].y)*(aMin.z-pt[2].z)
+                       /(pt[6].z-pt[2].z) ;
+  temp[3] = pt[2].y+(pt[6].y-pt[2].y)*(aMax.z-pt[2].z)
+                       /(pt[6].z-pt[2].z) ;
+
+  aMax.y = - std::fabs(fDz*fTthetaSphi) - fDy1 - fDy2 ;
+  aMin.y = -aMax.y ;
+  
+  for( int i = 0 ; i < 4 ; i++ )
+  {
+    if( temp[i] > aMax.y ) aMax.y = temp[i] ;
+    if( temp[i] < aMin.y ) aMin.y = temp[i] ;
+  }
 }

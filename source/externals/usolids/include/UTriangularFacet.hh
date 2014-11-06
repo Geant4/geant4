@@ -38,7 +38,6 @@
 #include "VUFacet.hh"
 #include "UVector3.hh"
 #include "UTessellatedGeometryAlgorithms.hh"
-#include "UTriangularFacet.hh"
 
 class UTriangularFacet : public VUFacet
 {

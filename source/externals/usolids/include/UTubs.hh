@@ -82,7 +82,7 @@ class UTubs : public VUSolid
     inline double Capacity();
     inline double SurfaceArea();
 
-    inline VUSolid::EnumInside Inside(const UVector3& p) const;
+    VUSolid::EnumInside Inside(const UVector3& p) const;
 
     bool Normal(const UVector3& p, UVector3& normal) const;
 
