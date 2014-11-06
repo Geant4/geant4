@@ -14,25 +14,17 @@ $Id$
   This module is going to be enhanced in future. Currently it provides 
   the following sets of classes:
 
-  - analysis
-    - ExG4HbookAnalysisManager - the analysis manager class for HBOOK
-      As this class requires CERNLIB libraries, its compilation
-      is optional. To build it, the following environment variables
-      must be defined:
-      G4_USE_HBOOK = 1
-      CERNLIB = path to the CERNLIB installation
-  
-  - detectorConstruction
+  - Detector construction classes
     - two simple detector construction classes with a messenger
   
-  - physicsList
+  - Physics list classes
     - ExG4PhysicsList00 - physics list with geantino and chargedgeantino only
   
-  - primaryGenerator
+  - Primary generator classes
     - two simple primary generator classes (with G4ParticleGun and
       G4ParticleGeneralSource)
   
-  - userActions:
+  - User action classes:
     - event action and run action classes with messengers
 
 

@@ -41,7 +41,8 @@
 
 const G4String ExG4RunAction01::fgkDefaultRndmFileName = "run0.rndm";
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExG4RunAction01::ExG4RunAction01()
   : G4UserRunAction(),
     fMessenger(this),
@@ -54,13 +55,15 @@ ExG4RunAction01::ExG4RunAction01()
 /// Standard constructor
 }
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 ExG4RunAction01::~ExG4RunAction01()
 {
 /// Destructor
 }
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void ExG4RunAction01::BeginOfRunAction(const G4Run* run)
 { 
   if ( fVerboseLevel > 0 ) { 
@@ -70,8 +73,8 @@ void ExG4RunAction01::BeginOfRunAction(const G4Run* run)
   // read Rndm status
   if ( fReadRndm ) {
     G4cout << "\n---> rndm status restored from file: " << fRndmFileName << G4endl;
-    CLHEP::HepRandom::restoreEngineStatus(fRndmFileName);
-    CLHEP::HepRandom::showEngineStatus();
+    G4Random::restoreEngineStatus(fRndmFileName);
+    G4Random::showEngineStatus();
   }   
 
   // automatic (time-based) random seeds for each run
@@ -87,8 +90,8 @@ void ExG4RunAction01::BeginOfRunAction(const G4Run* run)
     time_t systime = time(NULL);
     seeds[0] = (long) systime;
     seeds[1] = (long) (systime*G4UniformRand());
-    CLHEP::HepRandom::setTheSeeds(seeds);
-    CLHEP::HepRandom::showEngineStatus();
+    G4Random::setTheSeeds(seeds);
+    G4Random::showEngineStatus();
   }
   
   // save Rndm status
@@ -96,8 +99,8 @@ void ExG4RunAction01::BeginOfRunAction(const G4Run* run)
     G4int runNumber = run->GetRunID();
     std::ostringstream fileName;
     fileName << "run" << runNumber << ".rndm";
-    CLHEP::HepRandom::saveEngineStatus(fileName.str().c_str()); 
-    CLHEP::HepRandom::showEngineStatus();
+    G4Random::saveEngineStatus(fileName.str().c_str()); 
+    G4Random::showEngineStatus();
   }  
   
   if ( G4VVisManager::GetConcreteInstance() )  {
@@ -105,7 +108,8 @@ void ExG4RunAction01::BeginOfRunAction(const G4Run* run)
   }  
 }
 
-//_____________________________________________________________________________
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void ExG4RunAction01::EndOfRunAction(const G4Run* run)
 {
   // save Rndm status
@@ -113,11 +117,13 @@ void ExG4RunAction01::EndOfRunAction(const G4Run* run)
     G4int runNumber = run->GetRunID();
     std::ostringstream fileName;
     fileName << "run" << runNumber << "end.rndm";
-    CLHEP::HepRandom::saveEngineStatus(fileName.str().c_str()); 
-    CLHEP::HepRandom::showEngineStatus();
+    G4Random::saveEngineStatus(fileName.str().c_str()); 
+    G4Random::showEngineStatus();
   }     
 
   if ( G4VVisManager::GetConcreteInstance() ) {
     G4UImanager::GetUIpointer()->ApplyCommand("/vis/viewer/update");
   }
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -11,16 +11,6 @@
   This module is going to be enhanced in future. Currently it provides 
   the following sets of classes:
 
-  - \ref extended_common_analysis :
-    - ExG4HbookAnalysisManager - the analysis manager class for HBOOK
-      As this class requires CERNLIB libraries, its compilation
-      is optional. To build it, the following environment variables
-      must be defined:
-\verbatim      
-G4_USE_HBOOK = 1
-CERNLIB = path to the CERNLIB installation
-\endverbatim
-  
   - \ref extended_common_detectorConstruction :
     - two simple detector construction classes with a messenger
   
