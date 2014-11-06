@@ -292,6 +292,8 @@ tools::waxml::ntuple* G4XmlNtupleManager::GetNtuple(G4int ntupleId) const
   G4XmlNtupleDescription* ntupleDescription
     = GetNtupleInFunction(ntupleId, "GetNtuple");
     
+  if ( ! ntupleDescription ) return 0; 
+    
   return ntupleDescription->fNtuple;
 }  
 
