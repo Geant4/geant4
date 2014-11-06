@@ -39,6 +39,7 @@
 //
 
 #include "G4ios.hh"
+#include <iomanip>
 
 #include "G4PhysicsConstructorRegistry.hh"
 #include "G4VPhysicsConstructor.hh"
@@ -92,11 +93,11 @@ void G4PhysicsConstructorRegistry::Register(G4VPhysicsConstructor* p)
 
 void G4PhysicsConstructorRegistry::DeRegister(G4VPhysicsConstructor* p)
 {
-  if(!p) return;
+  if ( !p ) return;
   size_t n = physConstr.size(); 
-  if(n > 0) {
+  if ( n > 0 ) {
     for (size_t i=0; i<n; ++i) {
-      if(physConstr[i] == p) {
+      if ( physConstr[i] == p ) {
         physConstr[i] = 0;
 	return;
       }
@@ -128,4 +129,36 @@ G4VPhysicsConstructor* G4PhysicsConstructorRegistry::GetPhysicsConstructor(const
       G4Exception("G4PhysicsConstructorRegistry::GetPhysicsConstructor", "PhysicsList001", FatalException, ED);
       return 0;
     }
+}
+
+G4bool G4PhysicsConstructorRegistry::IsKnownPhysicsConstructor(const G4String& name)
+{
+  return ( factories.find(name) != factories.end() );
+}
+
+
+std::vector<G4String> G4PhysicsConstructorRegistry::AvailablePhysicsConstructors() const
+{
+  std::vector<G4String> avail;
+  std::map<G4String,G4VBasePhysConstrFactory*>::const_iterator itr;
+  for ( itr = factories.begin(); itr != factories.end(); ++itr ) {
+    avail.push_back(itr->first);
+  }
+
+  return avail;
+}
+
+void G4PhysicsConstructorRegistry::PrintAvailablePhysicsConstructors() const
+{
+  std::vector<G4String> avail = AvailablePhysicsConstructors();
+  G4cout << "G4VPhysicsConstructors in G4PhysicsConstructorRegistry are:"
+         << G4endl;
+  if ( avail.empty() ) G4cout << "... no registered processes" << G4endl;
+  else {
+    size_t n = avail.size();
+    for (size_t i=0; i<n; ++i ) {
+      G4cout << " [" << std::setw(3) << i << "] "
+             << " \"" << avail[i] << "\"" << G4endl;
+    }
+  }
 }

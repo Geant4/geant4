@@ -60,6 +60,14 @@ public:
 #define G4_DECLARE_PHYSCONSTR_FACTORY(physics_constructor) \
   const G4PhysicsConstructorFactory<physics_constructor>& physics_constructor##Factory = G4PhysicsConstructorFactory<physics_constructor>(#physics_constructor)
 
+// support for phys constructors defined within a namespace
+// a bit tricky due to cpp macro expansion and the use of "::"
+// use  G4_DECLARE_PHYSCONSTR_FACTORY_NS( myns::MyProc, myns, MyProc )  // without trailing ";"
+#define G4_DECLARE_PHYSCONSTR_FACTORY_NS( physics_constructor, nsname, pcbase )  \
+  namespace nsname { \
+    const G4PhysicsConstructorFactory<physics_constructor>& pcbase##Factory = G4PhysicsConstructorFactory<physics_constructor>(#physics_constructor); \
+  }
+
 #define G4_REFERENCE_PHYSCONSTR_FACTORY(physics_constructor) \
   class physics_constructor; \
   extern const G4PhysicsConstructorFactory<physics_constructor>& physics_constructor##Factory; \

@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+04-Nov-2014, Robert Hatcher             (phys-ctor-fact-V10-00-01)
+- Add macro for declaring phys constructors in a namespace to factory.
+- Methods for G4PhysicsConstructorRegistry to report known constructors.
+
 29-Jan-2014, Gunter Folger              (phys-ctor-fact-V10-00-00)
 - Removed electromagnetic/dna, cascade/{evaporation,utils}, and
    isotope_production from sources.cmake
