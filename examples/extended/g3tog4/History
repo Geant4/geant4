@@ -15,7 +15,13 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 4th, 2014  I.Hrivnacova (g3tog4Tests-V10-00-04)
+---------------------------
+- Add the whole common directory via svn:externals property;
+  in this tag based on excommon-V10-00-05
+
 November 3rd, 2014  I.Hrivnacova (g3tog4Tests-V10-00-03)
+---------------------------
 - Added classes from common via svn:externals property;
   updated CMake and GNUmake files and documentation
 
