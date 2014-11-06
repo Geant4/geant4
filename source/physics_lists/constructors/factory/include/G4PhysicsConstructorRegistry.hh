@@ -75,12 +75,6 @@ public:
   void AddFactory(G4String, G4VBasePhysConstrFactory*);
 
   G4VPhysicsConstructor* GetPhysicsConstructor(const G4String& name);
-
-  G4bool IsKnownPhysicsConstructor(const G4String& name);
-
-  std::vector<G4String> AvailablePhysicsConstructors() const;
-
-  void PrintAvailablePhysicsConstructors() const;
     
 private:
 
