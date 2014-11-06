@@ -16,6 +16,10 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+6 November 2014 - Davide Mancusi (hadr-abla-V10-00-02)
+--------------------------------------------------
+- Fix a Coverity warning.
+
 22 May 2014 - Davide Mancusi (hadr-abla-V10-00-01)
 --------------------------------------------------
 - Fix some Coverity warnings.
