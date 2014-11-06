@@ -61,6 +61,9 @@
 #include "G4MuonRadiativeDecayChannelWithSpin.hh"
 
 #include "G4SystemOfUnits.hh"
+#include "G4AutoDelete.hh"
+
+G4ThreadLocal F04StepMax* F04PhysicsList::fStepMaxProcess = 0;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -105,7 +108,6 @@ F04PhysicsList::F04PhysicsList(G4String physName) : G4VModularPhysicsList()
     RegisterPhysics(new F04ExtraPhysics());
     RegisterPhysics(new G4OpticalPhysics());
 
-    fStepMaxProcess = new F04StepMax();
     fMaxChargedStep = DBL_MAX;
 }
 
@@ -115,7 +117,7 @@ F04PhysicsList::~F04PhysicsList()
 {
     delete fMessenger;
 
-    delete fStepMaxProcess;
+    //delete fStepMaxProcess;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -147,6 +149,9 @@ void F04PhysicsList::ConstructProcess()
 {
     G4VModularPhysicsList::ConstructProcess();
 
+    fStepMaxProcess = new F04StepMax();
+    G4AutoDelete::Register(fStepMaxProcess);
+    
     G4DecayWithSpin* decayWithSpin = new G4DecayWithSpin();
 
     G4ProcessTable* processTable = G4ProcessTable::GetProcessTable();

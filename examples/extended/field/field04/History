@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 5, 2014 A.Dotti -  (fieldex04-V10-00-11)
+- Bug fixing for shared process
+
 October 28, 2014 A. Dotti - (fieldex04-V10-00-10)
 - Proting to new optical phsyics processes API 
   (no statics), requires: xrays-V10-00-06, op-V10-00-09, 

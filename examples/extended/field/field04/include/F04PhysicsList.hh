@@ -72,7 +72,7 @@ private:
     G4double fCutForPositron;
 
     G4double fMaxChargedStep;
-    F04StepMax* fStepMaxProcess;
+    static G4ThreadLocal F04StepMax* fStepMaxProcess;
 
     F04PhysicsListMessenger* fMessenger;
 
