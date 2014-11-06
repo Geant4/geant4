@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file common/analysis/src/ExG4HbookP1Manager.cc
+/// \file hbook/src/ExG4HbookP1Manager.cc
 /// \brief Implementation of the ExG4HbookP1Manager class
 
 // Author: Ivana Hrivnacova, 03/11/2014  (ivana@ipno.in2p3.fr)

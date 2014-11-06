@@ -112,4 +112,20 @@ CERNLIB = path to the CERNLIB installation
  
  Then, *before* compiling, activate g4hbook.hh in HistoManager.hh
 
+\section AnaEx01_s7 How to build
+
+ An additional step is needed when building the example with GNUmake
+ due to using the extra shared directory: 
+\verbatim      
+% cd path_to_AnaEx01/AnaEx01
+% gmake setup
+% gmake
+\endverbatim
+
+ This will copy the files from shared in the example include and src;
+ to remove these files:
+\verbatim      
+% gmake clean_setup
+\endverbatim
+ 
 */

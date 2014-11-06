@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file common/analysis/src/ExG4HbookAnalysisManager.cc
+/// \file hbook/src/ExG4HbookAnalysisManager.cc
 /// \brief Implementation of the ExG4HbookAnalysisManager class
 
 // Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)

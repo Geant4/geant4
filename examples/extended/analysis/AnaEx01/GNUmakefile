@@ -20,16 +20,16 @@ all: hbook lib bin
 
 setup:
 	@echo "Copying files from shared and hbook"
-	@./scripts/copy_files.sh shared
+	@./shared/scripts/copy_files.sh shared
 ifdef G4_USE_HBOOK
-	@./scripts/copy_files.sh hbook
+	@./shared/scripts/copy_files.sh hbook
 endif
         
 clean_setup:
 	@echo "Removing files copied from shared and hbook"
-	@./scripts/clean_files.sh shared
+	@./shared/scripts/clean_files.sh shared
 ifdef G4_USE_HBOOK
-	@./scripts/clean_files.sh hbook
+	@./shared/scripts/clean_files.sh hbook
 endif
 
 include hbook/GNUmakefile.tools_hbook

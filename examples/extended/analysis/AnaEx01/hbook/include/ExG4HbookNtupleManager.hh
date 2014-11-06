@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file common/analysis/include/ExG4HbookNtupleManager.hh
+/// \file hbook/include/ExG4HbookNtupleManager.hh
 /// \brief Definition of the ExG4HbookNtupleManager class
 
 // Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)

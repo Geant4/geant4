@@ -25,6 +25,10 @@
 //
 // $Id: ExG4HbookAnalysisManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
+/// \file hbook/include/ExG4HbookAnalysisManager.icc
+/// \brief Inline functions of the ExG4HbookAnalysisManager class
+
+
 #include "ExG4HbookH1Manager.hh"
 #include "ExG4HbookH2Manager.hh"
 #include "ExG4HbookNtupleManager.hh"

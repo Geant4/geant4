@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file common/analysis/include/ExG4HbookH1Manager.hh
+/// \file hbook/include/ExG4HbookH1Manager.hh
 /// \brief Definition of the ExG4HbookH1Manager class
 
 // Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)

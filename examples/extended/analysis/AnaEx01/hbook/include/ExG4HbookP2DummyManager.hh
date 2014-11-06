@@ -25,8 +25,8 @@
 //
 // $Id: ExG4HbookP2DummyManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
-// Manager class for P2 with dummy implementation. 
-// It will just issue warnings. 
+/// \file hbook/include/ExG4HbookP2DummyManager.hh
+/// \brief Definition of the ExG4HbookP2DummyManager class
 
 // Author: Ivana Hrivnacova, 24/07/2014  (ivana@ipno.in2p3.fr)
 
@@ -40,6 +40,10 @@ namespace histo {
 class h3d; 
 }
 }
+
+/// Manager class for P2 with dummy implementation. 
+///
+/// It will just issue warnings. 
 
 class ExG4HbookP2DummyManager : public G4VP2Manager
 {

@@ -25,6 +25,9 @@
 //
 // $Id: G4HnInformation.hh 66310 2012-12-17 11:56:35Z ihrivnac $
 
+/// \file hbook/include/ExG4HbookNtupleDescription.hh
+/// \brief Definition of the ExG4HbookNtupleDescription structure
+
 // Author: Ivana Hrivnacova, 04/07/2012  (ivana@ipno.in2p3.fr)
 
 #ifdef G4_USE_HBOOK
@@ -37,7 +40,7 @@
 
 #include <map>
 
-// Structure containing the information related to one Hbook ntuple
+/// Structure containing the information related to one Hbook ntuple
 
 struct ExG4HbookNtupleDescription
 {

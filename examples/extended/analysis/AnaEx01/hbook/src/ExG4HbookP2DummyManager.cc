@@ -25,6 +25,9 @@
 //
 // $Id$
 
+/// \file hbook/src/ExG4HbookP2DummyManager.cc
+/// \brief Implementation of the ExG4HbookP2DummyManager class
+\
 // Author: Ivana Hrivnacova, 03/11/2014  (ivana@ipno.in2p3.fr)
 
 #include "ExG4HbookP2DummyManager.hh"

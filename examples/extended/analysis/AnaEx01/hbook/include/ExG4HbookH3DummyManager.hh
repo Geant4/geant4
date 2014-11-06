@@ -25,8 +25,8 @@
 //
 // $Id: ExG4HbookH3DummyManager.hh 70604 2013-06-03 11:27:06Z ihrivnac $
 
-// Manager class for H3 for managers with dummy implementation. 
-// It will just issue warnings. 
+/// \file hbook/include/ExG4HbookH3DummyManager.hh
+/// \brief Definition of the ExG4HbookH3DummyManager class
 
 // Author: Ivana Hrivnacova, 03/11/2014  (ivana@ipno.in2p3.fr)
 
@@ -46,6 +46,10 @@ namespace histo {
 class h3d; 
 }
 }
+
+/// Manager class for H3 with dummy implementation. 
+///
+/// It will just issue warnings. 
 
 class ExG4HbookH3DummyManager : public G4VH3Manager
 {

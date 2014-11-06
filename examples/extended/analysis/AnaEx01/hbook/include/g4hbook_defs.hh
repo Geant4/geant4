@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file common/analysis/include/g4hbook_defs.hh
+/// \file hbook/include/g4hbook_defs.hh
 /// \brief Definition of the G4Hbook analysis typedefs
 
 // Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)

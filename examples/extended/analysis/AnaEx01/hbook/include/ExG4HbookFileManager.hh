@@ -25,7 +25,7 @@
 //
 // $Id$
 //
-/// \file common/analysis/include/ExG4HbookFileManager.hh
+/// \file hbook/include/ExG4HbookFileManager.hh
 /// \brief Definition of the ExG4HbookFileManager class
 
 // Author: Ivana Hrivnacova, 15/06/2011  (ivana@ipno.in2p3.fr)
@@ -40,7 +40,7 @@
 
 #include <tools/hbook/wfile>
 
-/// The manager for HBook file operations.
+/// Manager class for HBook file operations.
 ///
 /// The class implements the G4VFileManager manager for HBook.
 /// It is provided separately from geant4/source/analysis in order
