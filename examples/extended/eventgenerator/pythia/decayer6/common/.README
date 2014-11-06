@@ -1,0 +1,28 @@
+//$Id$
+
+///\file "common/.README"
+///\brief Common classes README page
+
+/*! \page Examples_common Category "common"
+
+  In order to reduce code duplication and to reduce the number of variants of 
+  the code of same kind, we define a set of common classes which
+  can be reused in "feature" examples demonstrating just a particular feature.
+  This module is going to be enhanced in future. Currently it provides 
+  the following sets of classes:
+
+  - \ref extended_common_detectorConstruction :
+    - two simple detector construction classes with a messenger
+  
+  - \ref extended_common_physicsList :
+    - ExG4PhysicsList00 - physics list with geantino and chargedgeantino only
+  
+  - \ref extended_common_primaryGenerator :
+    - two simple primary generator classes (with G4ParticleGun and
+      G4ParticleGeneralSource)
+  
+  - \ref extended_common_userActions :
+    - event action and run action classes with messengers
+
+*/
+

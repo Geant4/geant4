@@ -80,7 +80,8 @@
  
  %  pythia6_decayer pythia6_decayer.in
    
- The list of classes used from common:
+ This example uses the user action classes from the extended examples common 
+ repository available in common subdirectory, see below their complete list.
 
  ExG4DetectorConstruction01
  ExG4DetectorConstruction01Messenger
