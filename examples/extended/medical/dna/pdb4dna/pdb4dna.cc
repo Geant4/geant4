@@ -48,16 +48,9 @@
 #endif
 
 #include "G4UImanager.hh"
-
 #include "Randomize.hh"
-
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
-
-#ifdef G4UI_USE
 #include "G4UIExecutive.hh"
-#endif
 
 #include "CommandLineParser.hh"
 
@@ -130,65 +123,70 @@ int main(int argc,char** argv)
   //
   // runManager->Initialize();
 
-#ifdef G4VIS_USE
   // Initialize visualization
   G4VisManager* visManager = new G4VisExecutive;
   visManager->Initialize();
-#endif
 
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4UIExecutive* ui(0);
+ 
+  // interactive mode : define UI session
+  if ((commandLine = parser->GetCommandIfActive("-gui")))
+  {
+    ui = new G4UIExecutive(argc, argv,
+                           commandLine->GetOption());
 
-  if ((commandLine = parser->GetCommandIfActive("-mac")) ) {
-    // batch mode
+    if(parser->GetCommandIfActive("-novis") == 0) 
+    // visualization is used by default
+    {
+      if ((commandLine = parser->GetCommandIfActive("-vis")))
+      // select a visualization driver if needed (e.g. HepFile)
+      {
+        UImanager->ApplyCommand(G4String("/vis/open ")+
+                                commandLine->GetOption());
+      } 
+      else
+      // by default OGL is used
+      {
+        UImanager->ApplyCommand("/vis/open OGL 600x600-0+0");
+      }
+      UImanager->ApplyCommand("/control/execute vis.mac");
+    }
+    if (ui->IsGUI())
+      UImanager->ApplyCommand("/control/execute gui.mac");
+  }
+  else 
+  // to be use visualization file (= store the visualization into
+  // an external file:
+  // ASCIITree ;  DAWNFILE ; HepRepFile ; VRML(1,2)FILE ; gMocrenFile ...
+  {
+    if ((commandLine = parser->GetCommandIfActive("-vis")))
+    {
+      UImanager->ApplyCommand(G4String("/vis/open ")+
+                              commandLine->GetOption());
+      UImanager->ApplyCommand("/control/execute vis.mac"); 
+    }
+  }
+
+  if ((commandLine = parser->GetCommandIfActive("-mac")))
+  { 
     G4String command = "/control/execute ";
-    UImanager->ApplyCommand(command+commandLine->GetOption());
+    UImanager->ApplyCommand(command + commandLine->GetOption());
   }
   else
   {
     UImanager->ApplyCommand("/control/execute init.mac");
- 
-    // interactive mode : define UI session
-    if ((commandLine = parser->GetCommandIfActive("-gui")))
-    {
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv,
-                                            commandLine->GetOption());
+  }
 
-      if(parser->GetCommandIfActive("-novis") == 0) 
-      // visualization is used by default
-      {
-        if ((commandLine = parser->GetCommandIfActive("-vis")))
-        // select a visualization driver if needed (e.g. HepFile)
-        {
-          UImanager->ApplyCommand(G4String("/vis/open ")+commandLine->GetOption()); 
-        } 
-        else
-        // by default OGL is used
-        {
-          UImanager->ApplyCommand("/vis/open OGL 600x600-0+0");
-        }
-        UImanager->ApplyCommand("/control/execute vis.mac");
-      }
-      if (ui->IsGUI())
-        UImanager->ApplyCommand("/control/execute gui.mac");
-      ui->SessionStart();
-      delete ui;
-    }
-   else
-   {
-     if ((commandLine = parser->GetCommandIfActive("-vis")))
-     {
-        UImanager->ApplyCommand(G4String("/vis/open ")+commandLine->GetOption());
-        UImanager->ApplyCommand("/control/execute vis.mac"); 
-     }
-   }
+  if ((commandLine = parser->GetCommandIfActive("-gui")))
+  {
+    ui->SessionStart();
+    delete ui;
   }
 
   // Job termination
-
-#ifdef G4VIS_USE
   delete visManager;
-#endif
   delete runManager;
 
   return 0;
@@ -202,27 +200,36 @@ void Parse(int& argc, char** argv)
   // Parse options given in commandLine
   //
   parser = CommandLineParser::GetParser();
-#ifdef G4UI_USE
-  parser->AddCommand(
-      "-gui", Command::OptionNotCompulsory,
-      "Select geant4 UI or just launch a geant4 terminal session", "qt");
-#endif
-  parser->AddCommand("-mac", Command::WithOption, "Give a mac file to execute",
+
+  parser->AddCommand("-gui",
+                     Command::OptionNotCompulsory,
+                    "Select geant4 UI or just launch a geant4 terminal session",
+                    "qt");
+   
+  parser->AddCommand("-mac",
+                     Command::WithOption,  
+                     "Give a mac file to execute",
                      "pdb4dna.in");
+
 // You cann your own command, as for instance:
-//  parser->AddCommand("-seed", Command::WithOption,
+//  parser->AddCommand("-seed", 
+//                     Command::WithOption,
 //                     "Give a seed value in argument to be tested", "seed");
 // it is then up to you to manage this option
+
   parser->AddCommand("-mt", Command::OptionNotCompulsory,
                      "Launch in MT mode (events computed in parallel)",
                      "2");
 
-  parser->AddCommand("-vis", Command::WithOption, "Select a visualization driver",
+  parser->AddCommand("-vis",
+                     Command::WithOption,
+                     "Select a visualization driver",
                      "OGL 600x600-0+0");
 
 
-  parser->AddCommand("-novis", Command::WithoutOption, "Deactivate visualization when using GUI");
-
+  parser->AddCommand("-novis",
+                     Command::WithoutOption,
+                     "Deactivate visualization when using GUI");
 
   //////////
   // If -h or --help is given in option : print help and exit
