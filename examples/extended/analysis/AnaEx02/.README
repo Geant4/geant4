@@ -5,12 +5,16 @@
 
 /*! \page ExampleAnaEx02 Example AnaEx02
 
+ Examples AnaEx01, AnaEx02 and AnaEx03 show the usage of histogram and tuple 
+ manipulations using G4Analysis, ROOT and AIDA compliant systems on the same
+ scenario. All analysis manipulations (histo booking, filling, saving histos 
+ in a file, etc...) are located in one class : HistoManager, implementation of 
+ which is different in each example. All the other classes are same in all 
+ three examples.
+ 
  This example shows the usage of histogram and tuple manipulations using 
- ROOT system. All analysis manipulations (histo booking, filling, saving 
- histos in a file, etc...) are located in one class : HistoManager. 
- Please install ROOT before building this example: 
+ ROOT system. Please install ROOT before building this example: 
  http://root.cern.ch
-
 
  The example is an adaptation of examples/novice/N03. It describes a simple 
  sampling calorimeter setup.
@@ -51,7 +55,21 @@
    The particle's type and the physic processes which will be available
    in this example are set in the FTFP_BERT physics list.
 
-\section AnaEx02_s3 An event : PrimaryGeneratorAction
+\section AnaEx02_s3 Action Initialization
+
+   A newly introduced class, ActionInitialization, 
+   instantiates and registers to Geant4 kernel all user action classes 
+   which are defined thread-local and a run action class
+   which is defined both thread-local and global.
+   
+   The thread-local action classes are defined in 
+     ActionInitialization::Build() 
+   and  the global run action class is defined in 
+     ActionInitialization::BuildForMaster().
+   Note that ActionInitialization::Build() is also used to 
+   instatiate user action clasess in sequential mode.
+
+\section AnaEx02_s4 An event : PrimaryGeneratorAction
  
  The primary kinematic consists of a single particle which hits the
  calorimeter perpendicular to the input face. The type of the particle
@@ -59,7 +77,7 @@
  be changed via the G4 build-in commands of ParticleGun class.
 
 
-\section AnaEx02_s4 Histograms
+\section AnaEx02_s5 Histograms
 
  To produce histograms, ROOT system must be installed
   

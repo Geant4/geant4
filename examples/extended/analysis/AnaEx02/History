@@ -15,6 +15,14 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-11-14 I. Hrivnacova (AnaEx02-V10-00-03)
+- Including shared directory directly in the example
+  to avoid out-of-project sources
+  - based on analysisShared-V10-00-00 
+- Adding utility scripts for GNUmake build (much simpler replacement
+  for scripts from common) \
+  - basen on analysisScripts-V10-00-00 
+
 13-08-14 mma (AnaEx02-V10-00-02)
 - update Readme and .Readme again
 
