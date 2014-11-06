@@ -14,6 +14,16 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+5-Nov-2014 V. Uzhinsky    (had-hadronization-V10-00-11)
+ - Redoing tag had-hadronization-V10-00-10 because it was done in src directory
+   instead of top directory - hadronization.
+
+3-Nov-2014 V. Uzhinsky    (had-hadronization-V10-00-10)
+- G4ExcitedStringDecay.cc Restoration of the initial string system is addded 
+  for a correct repeatition of calculations in the case when hadronization is fault.
+
+- G4LundStringFragmentation.cc Fragmentation functions for qq -> B are set as 
+  f(z)~ Const for all baryons.
 
 20-Oct-2014 A.Ribon        (had-hadronization-V10-00-09) 
 - G4VLongitudinalStringDecay.cc : mixing between the vector mesons

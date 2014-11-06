@@ -243,6 +243,26 @@ G4KineticTrackVector *G4ExcitedStringDecay::FragmentStrings(const G4ExcitedStrin
   G4cout<<"End of the Hadronization (G4ExcitedStringDecay)"<<G4endl;
 #endif
 
+  for ( unsigned int astring=0; astring < theStrings->size(); astring++) // Uzhi 24 Oct. 2014
+  {
+   if ( theStrings->operator[](astring)->IsExcited() )
+   {
+    Ptmp=theStrings->operator[](astring)->GetLeftParton()->Get4Momentum();
+    Ptmp.transform( toLab);
+    theStrings->operator[](astring)->GetLeftParton()->Set4Momentum(Ptmp);
+
+    Ptmp=theStrings->operator[](astring)->GetRightParton()->Get4Momentum();
+    Ptmp.transform( toLab);
+    theStrings->operator[](astring)->GetRightParton()->Set4Momentum(Ptmp);
+   }
+   else
+   {
+    Ptmp=theStrings->operator[](astring)->GetKineticTrack()->Get4Momentum();
+    Ptmp.transform( toLab);
+    theStrings->operator[](astring)->GetKineticTrack()->Set4Momentum(Ptmp);
+   }
+  }                                                                      // Uzhi 24 Oct. 2014
+
   return theResult;
 }
 

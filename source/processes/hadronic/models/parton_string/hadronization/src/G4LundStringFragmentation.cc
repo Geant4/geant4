@@ -935,6 +935,7 @@ G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax,
 
 	   zOfMaxyf=alund*Mt2/(alund*Mt2 + 1.);
 	   maxYf=(1-zOfMaxyf)/zOfMaxyf * std::exp(-alund*Mt2/zOfMaxyf);
+
 	   do
 	   {
 		z = zmin + G4UniformRand()*(zmax-zmin);
@@ -947,6 +948,7 @@ G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax,
 
 	if(std::abs(PDGEncodingOfDecayParton) > 1000)         // Uzhi Sept. 2014
 	{
+/*
          if(HadronEncoding < 3000)
          {
 	    maxYf=(zmax-zmin);
@@ -960,8 +962,9 @@ G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax,
          }
          else
          {            // Strange baryons
+*/
 	    z = zmin + G4UniformRand()*(zmax-zmin);
-         }
+//         }
 	}
 
 	return z;
