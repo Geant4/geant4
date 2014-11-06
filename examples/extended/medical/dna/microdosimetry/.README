@@ -18,7 +18,7 @@ a. Centre d'Etudes Nucleaires de Bordeaux-Gradignan  \n
 b. G4AI Ltd, UK \n
 * e-mail:incerti@cenbg.in2p3.fr  \n
 
-\section microdosimetry_s1  INTRODUCTION.                                                    
+\section microdosimetry_s1  INTRODUCTION                                                   
                                                                        
 The microdosimetry example simulates the track of a 5 MeV proton in liquid water. 
 Geant4 standard EM models are used in the World volume while Geant4-DNA models
@@ -28,6 +28,7 @@ This example is provided by the Geant4-DNA collaboration.
 
 These processes and models are further described at:
 http://geant4-dna.org
+B
 
 Any report or published results obtained using the Geant4-DNA software shall 
 cite the following Geant4-DNA collaboration publication: \n
@@ -37,7 +38,7 @@ We also suggest these other references related to this example: \n
 Nucl. Instrum. and Meth. B 273 (2012) 95-97 \n
 Prog. Nucl. Sci. Tec. 2 (2011) 898-903 \n
 
-\section microdosimetry_s2 GEOMETRY SET-UP.
+\section microdosimetry_s2 GEOMETRY SET-UP
  
 The geometry is a 1 mm side cube (World) made of liquid water containing a smaller cubic Target volume of liquid
 water, which dimensions are twenty times smaller than the dimensions of the World volume.
@@ -51,15 +52,20 @@ The code can be compiled with cmake.
 It works in MT mode.
 
 \section microdosimetry_s4 HOW TO RUN THE EXAMPLE                                         
-
 In interactive mode, run:
 
-./microdosimetry
+./microdosimetry -mt 4 -root myRootFile.mac
 
-The macro microdosimetry.mac is executed by default. 
+The macro microdosimetry.in is executed by default.
 
-To get visualization, make sure to uncomment the #/control/execute vis.mac
- line in the macro (not recommended).
+To get visualization:
+
+./microdosimetry -gui
+( OGL used by default)
+
+or you may use your own visualization driver, for instance:
+./microdosimetry -vis "DAWNFILE"
+The geometry will be printed into a file.
 
 \section microdosimetry_s5 PHYSICS
 
@@ -73,7 +79,7 @@ below a chosen energy threshold, set in the Physics list.
 
 Look at the PhyscisList.cc file.
 
-\section microdosimetry_s6 SIMULATION OUTPUT AND RESULT ANALYZIS                                    
+\section microdosimetry_s6 SIMULATION OUTPUT AND RESULT ANALYSIS                                    
 
 The output results consists in a microdosimetry.root file, containing for each simulation step:
 - the type of particle for the current step

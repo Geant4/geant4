@@ -41,7 +41,8 @@ Prog. Nucl. Sci. Tec. 2 (2011) 898-903
 The geometry is a 1 mm side cube (World) made of liquid water containing a smaller cubic Target volume of liquid
 water, which dimensions are twenty times smaller than the dimensions of the World volume.
 
----->2. SET-UP 
+
+6--->2. SET-UP 
                                                                         
 Make sure G4LEDATA points to the low energy electromagnetic libraries.
 
@@ -53,12 +54,18 @@ It works in MT mode.
 
 In interactive mode, run:
 
-./microdosimetry
+./microdosimetry -mt 4 -root myRootFile.mac
 
-The macro microdosimetry.mac is executed by default. 
+The macro microdosimetry.in is executed by default. 
 
-To get visualization, make sure to uncomment the #/control/execute vis.mac
- line in the macro (not recommended).
+To get visualization:
+
+./microdosimetry -gui
+( OGL used by default)
+
+or you may use your own visualization driver, for instance:
+./microdosimetry -vis "DAWNFILE"
+The geometry will be printed into a file.
 
 ---->4. PHYSICS
 
@@ -71,8 +78,9 @@ A simple electron capture process is also provided in order to kill electrons
 below a chosen energy threshold, set in the Physics list.
 
 Look at the PhyscisList.cc file.
+A
 
----->5. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
+---->5. SIMULATION OUTPUT AND RESULT ANALYSIS                                    
 
 The output results consists in a microdosimetry.root file, containing for each simulation step:
 - the type of particle for the current step

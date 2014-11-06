@@ -40,13 +40,16 @@
 #include "G4RunManager.hh"
 #include "Analysis.hh"
 #include "G4Threading.hh"
+#include "CommandLineParser.hh"
+
+using namespace G4DNAPARSER;
 
 void PrintNParticles(std::map<const G4ParticleDefinition*, int>& container);
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction() : G4UserRunAction(),
-      fpTrackingAction(0), fInitialized(0), fDebug(false)
+      fpTrackingAction(0), fInitialized(0), fDebug(true)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -66,7 +69,12 @@ void RunAction::BeginOfRunAction(const G4Run* run)
   // Please note, in the example provided with the Geant4 X beta version,
   // this RunAction class were not used by the master thread.
 
-  if(isMaster) // WARNING : in sequential mode, isMaster == true
+
+  bool sequential = (G4RunManager::GetRunManager()->GetRunManagerType() == 
+                     G4RunManager::sequentialRM);
+
+  if(isMaster && sequential == false )
+  // WARNING : in sequential mode, isMaster == true
   {
     BeginMaster(run);
   }
@@ -77,7 +85,11 @@ void RunAction::BeginOfRunAction(const G4Run* run)
 
 void RunAction::EndOfRunAction(const G4Run* run)
 {
-  if(isMaster)
+
+  bool sequential = (G4RunManager::GetRunManager()->GetRunManagerType() == 
+                     G4RunManager::sequentialRM);
+
+  if(isMaster && sequential == false)
   {
     EndMaster(run);
   }
@@ -91,25 +103,15 @@ void RunAction::EndOfRunAction(const G4Run* run)
 
 void RunAction::BeginMaster(const G4Run* run)
 {
-  bool sequential = (G4RunManager::GetRunManager()->GetRunManagerType() ==
-      G4RunManager::sequentialRM);
-
   if(fDebug)
   {
+    bool sequential = (G4RunManager::GetRunManager()->GetRunManagerType() == 
+                       G4RunManager::sequentialRM);
     G4cout << "===================================" << G4endl;
     if(!sequential)
       G4cout << "================ RunAction::BeginMaster" << G4endl;
     PrintRunInfo(run);
     G4cout << "===================================" << G4endl;
-  }
-
-  if(sequential)
-  {
-    if(fInitialized == false)  InitializeWorker(run);
-    // Note: fpTrackingAction could be used as a flag for
-    // initialization instead
-
-    CreateHistogram();
   }
 }
 
@@ -117,28 +119,22 @@ void RunAction::BeginMaster(const G4Run* run)
 
 void RunAction::BeginWorker(const G4Run* run)
 {
-  if(fDebug)
+  if (fDebug)
   {
     G4cout << "===================================" << G4endl;
     G4cout << "================ RunAction::BeginWorker" << G4endl;
     PrintRunInfo(run);
     G4cout << "===================================" << G4endl;
   }
-  if(fInitialized == false)  InitializeWorker(run);
+  if(fInitialized == false) InitializeWorker(run);
 
   CreateHistogram();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void RunAction::EndMaster(const G4Run* run)
+void RunAction::EndMaster(const G4Run*)
 {
-  bool sequential = (G4RunManager::GetRunManager()->GetRunManagerType() ==
-      G4RunManager::sequentialRM);
-  if(sequential)
-  {
-    EndWorker(run);
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -227,9 +223,13 @@ void RunAction::CreateHistogram()
   // The choice of analysis technology is done via selection of a namespace
   // in Analysis.hh
 
+  CommandLineParser* parser = CommandLineParser::GetParser();
+  Command* command(0);
+  if((command = parser->GetCommandIfActive("-root"))==0) return;
+
   G4cout << "##### Create analysis manager " << "  " << this << G4endl;
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if(!analysisManager->IsActive()) {return; }
+//  if(!analysisManager->IsActive()) {return; }
 
   G4cout << "Using " << analysisManager->GetType() <<
       " analysis manager" << G4endl;
@@ -241,8 +241,15 @@ void RunAction::CreateHistogram()
   analysisManager->SetVerboseLevel(1);
 
   // Open an output file
-
-  G4String fileName = "microdosimetry";
+  G4String fileName;
+  if(command->GetOption().empty() == false)
+  {
+    fileName = command->GetOption();
+  }
+  else
+  {
+   fileName = "microdosimetry.mac";
+  }
   analysisManager->OpenFile(fileName);
 
   // Creating ntuple
@@ -263,15 +270,19 @@ void RunAction::CreateHistogram()
 
 void RunAction::WriteHistogram()
 {
+  CommandLineParser* parser = CommandLineParser::GetParser();
+  Command* commandLine(0);
+  if((commandLine = parser->GetCommandIfActive("-root"))==0) return;
+
   // print histogram statistics
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-  if(!analysisManager->IsActive()) {return; }
+//  if(!analysisManager->IsActive()) {return; }
 
   // save histograms
   //
   analysisManager->Write();
-  analysisManager->CloseFile();
+//  analysisManager->CloseFile();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

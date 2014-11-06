@@ -44,6 +44,9 @@
 #include "G4SteppingManager.hh"
 #include "G4VTouchable.hh"
 #include "G4VPhysicalVolume.hh"
+#include "CommandLineParser.hh"
+
+using namespace G4DNAPARSER;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -142,8 +145,8 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
   else if (processName=="helium_G4DNAIonisation")  flagProcess =31;
   else if (processName=="helium_G4DNAChargeIncrease")  flagProcess =32;
 
-  else if (processName=="hIoni")      flagProcess =33;
-  else if (processName=="eIoni")      flagProcess =34;
+  else if (processName=="hIoni")  flagProcess =33;
+  else if (processName=="eIoni")  flagProcess =34;
 
   if (processName!="Transportation")
   {
@@ -154,9 +157,13 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     yp=step->GetPostStepPoint()->GetPosition().y()/nanometer;
     zp=step->GetPostStepPoint()->GetPosition().z()/nanometer;
 
+    CommandLineParser* parser = CommandLineParser::GetParser();
+    Command* command(0);
+    if((command = parser->GetCommandIfActive("-root"))==0) return;
+
     // get analysis manager
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
-    if(!analysisManager->IsActive()) {return; }
+//    if(!analysisManager->IsActive()) {return; }
 
     // fill ntuple
     analysisManager->FillNtupleDColumn(0, flagParticle);

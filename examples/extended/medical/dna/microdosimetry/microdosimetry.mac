@@ -1,7 +1,7 @@
 #/control/execute vis.mac
 /tracking/verbose 0 
 /gun/particle proton
-/gun/energy 5 MeV
+/gun/energy 50 MeV
 #/run/numberOfThreads 2 #if MT is activated
 /run/initialize
 /run/beamOn 2

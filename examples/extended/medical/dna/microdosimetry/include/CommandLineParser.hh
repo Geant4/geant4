@@ -24,66 +24,80 @@
 // ********************************************************************
 //
 // This example is provided by the Geant4-DNA collaboration
-// Any report or published results obtained using the Geant4-DNA software 
+// Any report or published results obtained using the Geant4-DNA software
 // shall cite the following Geant4-DNA collaboration publication:
 // Med. Phys. 37 (2010) 4692-4708
+// J. Comput. Phys. 274 (2014) 841-882
 // The Geant4-DNA web site is available at http://geant4-dna.org
 //
-// $ID$
-/// \file ActionInitialization.cc
-/// \brief Implementation of the ActionInitialization class
+// Author: Mathieu Karamitros
+//
+// $Id$
+//
+/// \file CommandLineParser.hh
+/// \brief Definition of the CommandLineParser class
 
-#include "ActionInitialization.hh"
-#include "PrimaryGeneratorAction.hh"
-#include "RunAction.hh"
-#include "SteppingAction.hh"
-#include "DetectorConstruction.hh"
-#include "TrackingAction.hh"
-#include "G4RunManager.hh"
+#ifndef COMMANDLINEPARSER_HH
+#define COMMANDLINEPARSER_HH
 
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#include "globals.hh"
+#include <map>
 
-ActionInitialization::ActionInitialization()
-: G4VUserActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-ActionInitialization::~ActionInitialization()
-{}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ActionInitialization::BuildForMaster() const
+namespace G4DNAPARSER
 {
- // In MT mode, to be clearer, the RunAction class for the master thread might
- // be different than the one used for the workers.
- // This RunAction will be called before and after starting the
- // workers.
- // For more details, please refer to :
- //https://twiki.cern.ch/twiki/bin/view/Geant4/Geant4MTForApplicationDevelopers
- //
+class Command
+{
+public:
+  enum Type
+  {
+    WithOption,
+    WithoutOption,
+    OptionNotCompulsory
+  };
 
-  SetUserAction(new RunAction());
+  const G4String& GetOption() {return fOption;}
+  Command::Type GetType() {return fType;}
+  G4bool IsActive() {return fActive;}
+  const G4String& GetDescription() {return fDescription;}
+  const G4String& GetOptionName() {return fOptionName;}
+
+private:
+  friend class CommandLineParser;
+  Type fType;
+  G4String fOption;
+  G4bool fActive;
+  G4String fDescription;
+  G4String fOptionName;
+
+  Command(Type, const G4String &description = "",
+          const G4String &optionName ="optionName");
+  ~Command(){;}
+};
+
+class CommandLineParser
+{
+    static CommandLineParser* fpInstance;
+    std::map<G4String, Command*> fCommandMap;
+    G4bool fOptionsWereSetup;
+    G4int fMaxMarkerLength;
+    G4int fMaxOptionNameLength;
+    G4int fVerbose;
+
+public:
+    static CommandLineParser* GetParser();
+    CommandLineParser();
+    ~CommandLineParser();
+    static void DeleteInstance();
+    int Parse(int& argc, char **argv);
+    void PrintHelp();
+    bool CheckIfNotHandledOptionsExists(int& argc, char** argv);
+    void CorrectRemainingOptions(int& argc, char **argv);
+    void AddCommand(const G4String & marker,Command::Type,
+                    const G4String& description = "",
+                    const G4String& optionName = "");
+    Command* FindCommand(const G4String &marker);
+    Command* GetCommandIfActive(const G4String &marker);
+    G4bool WereOptionsSetup(){return fOptionsWereSetup;}
+};
 }
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void ActionInitialization::Build() const
-{
-  // G4cout << "Build for = "
-  // << G4RunManager::GetRunManager()->GetRunManagerType()
-  // << G4endl;
-
-  SetUserAction(new PrimaryGeneratorAction);
-
-  TrackingAction* trackingAction = new TrackingAction();
-  SetUserAction(trackingAction);
-
-  RunAction* runAction= new RunAction();
-  SetUserAction(runAction);
-
-  SetUserAction(new SteppingAction());
-}  
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+#endif // PARSER_HH
