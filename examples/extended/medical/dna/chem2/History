@@ -14,6 +14,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06.11.2014 M.K                  tag chem2-V10-00-03
+-----------------------------------------------------
+- Select GUI+vis driver from command line
+
 24.10.2014 M.K                  tag chem2-V10-00-02
 -----------------------------------------------------
 - G4ITTimeStepper --> G4VScheduler

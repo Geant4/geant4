@@ -48,10 +48,7 @@
 #include "G4DNAChemistryManager.hh"
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
-
-#ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
-#endif
 
 #include "CommandLineParser.hh"
 
@@ -87,7 +84,6 @@ int main(int argc, char** argv)
   if ((commandLine = parser->GetCommandIfActive("-mt")))
   {
 #ifdef G4MULTITHREADED
-
     runManager= new G4MTRunManager;
 
     if(commandLine->GetOption().empty())
@@ -138,44 +134,68 @@ int main(int argc, char** argv)
   // Initialize G4 kernel
   runManager->Initialize();
 
-  // Get the pointer to the User Interface manager
-  G4UImanager* UImanager = G4UImanager::GetUIpointer();
-
-#ifdef G4VIS_USE
   // Initialize visualization
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
   visManager->Initialize();
-#endif
 
+  // Get the pointer to the User Interface manager
+  G4UImanager* UImanager = G4UImanager::GetUIpointer();
+  G4UIExecutive* ui(0);
+
+  // interactive mode : define UI session
+  if ((commandLine = parser->GetCommandIfActive("-gui")))
+  {
+    ui = new G4UIExecutive(argc, argv, 
+                           commandLine->GetOption());
+
+    if(ui->IsGUI())
+       UImanager->ApplyCommand("/control/execute gui.mac");
+
+    if(parser->GetCommandIfActive("-novis") == 0)
+    // visualization is used by default
+    {
+      if((commandLine = parser->GetCommandIfActive("-vis")))
+      // select a visualization driver if needed (e.g. HepFile)
+      {
+        UImanager->ApplyCommand(G4String("/vis/open ")+
+                                commandLine->GetOption());
+      }
+      else
+      // by default OGL is used
+      {
+        UImanager->ApplyCommand("/vis/open OGL 800x600-0+0");
+      }
+      UImanager->ApplyCommand("/control/execute vis.mac");
+    }
+  }
+  else
+  // to be use visualization file (= store the visualization into
+  // an external file:
+  // ASCIITree ;  DAWNFILE ; HepRepFile ; VRML(1,2)FILE ; gMocrenFile ...
+  {
+    if ((commandLine = parser->GetCommandIfActive("-vis")))
+    {
+      UImanager->ApplyCommand(G4String("/vis/open ")+commandLine->GetOption());
+      UImanager->ApplyCommand("/control/execute vis.mac");
+    }
+  }
+ 
   if ((commandLine = parser->GetCommandIfActive("-mac")))
   {
-    // batch mode
     G4String command = "/control/execute ";
-    G4String fileName = argv[1];
     UImanager->ApplyCommand(command + commandLine->GetOption());
   }
   else
   {
-    // interactive mode : define UI session
-#ifdef G4UI_USE
-    if ((commandLine = parser->GetCommandIfActive("-gui")))
-    {
-      G4UIExecutive* ui = new G4UIExecutive(argc, argv);
-#ifdef G4VIS_USE
-      UImanager->ApplyCommand("/control/execute vis.mac");
-#endif
-      ui->SessionStart();
-      delete ui;
-    }
-    else
-    {
-      UImanager->ApplyCommand("/control/execute beam.in");
-    }
-#else
-      UImanager->ApplyCommand("/control/execute beam.in");
-#endif
+    UImanager->ApplyCommand("/control/execute beam.in");
+  }
+
+  if ((commandLine = parser->GetCommandIfActive("-gui")))
+  {
+    ui->SessionStart();
+    delete ui;
   }
 
   // Job termination
@@ -183,10 +203,7 @@ int main(int argc, char** argv)
   // owned and deleted by the run manager, so they should not be deleted
   // in the main() program !
 
-#ifdef G4VIS_USE
   delete visManager;
-#endif
-
   delete runManager;
 
   CommandLineParser::DeleteInstance();
@@ -200,22 +217,40 @@ void Parse(int& argc, char** argv)
   // Parse options given in commandLine
   //
   parser = CommandLineParser::GetParser();
-#ifdef G4UI_USE
-  parser->AddCommand(
-      "-gui", Command::OptionNotCompulsory,
-      "Select geant4 UI or just launch a geant4 terminal session", "qt");
-#endif
-  parser->AddCommand("-mac", Command::WithOption, "Give a mac file to execute",
+  
+  parser->AddCommand("-gui", 
+                     Command::OptionNotCompulsory,
+                    "Select geant4 UI or just launch a geant4 terminal session",
+                    "qt");
+  
+  parser->AddCommand("-mac", 
+                     Command::WithOption, 
+                     "Give a mac file to execute",
                      "macFile.mac");
+
 // You cann your own command, as for instance:
-//  parser->AddCommand("-seed", Command::WithOption,
+//  parser->AddCommand("-seed", 
+//                     Command::WithOption,
 //                     "Give a seed value in argument to be tested", "seed");
 // it is then up to you to manage this option
-  parser->AddCommand("-mt", Command::OptionNotCompulsory,
+
+  parser->AddCommand("-mt", 
+                     Command::OptionNotCompulsory,
                      "Launch in MT mode (events computed in parallel,"
-                     " NOT RECOMMANDED WITH CHEMISTRY)");
-  parser->AddCommand("-chemOFF", Command::WithoutOption,
+                     " NOT RECOMMANDED WITH CHEMISTRY)", "2");
+
+  parser->AddCommand("-chemOFF", 
+                     Command::WithoutOption,
                      "Deactivate chemistry");
+
+  parser->AddCommand("-vis",
+                     Command::WithOption,
+                     "Select a visualization driver",
+                     "OGL 600x600-0+0");
+
+  parser->AddCommand("-novis",
+                     Command::WithoutOption,
+                     "Deactivate visualization when using GUI");
 
   //////////
   // If -h or --help is given in option : print help and exit
