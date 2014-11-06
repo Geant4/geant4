@@ -55,6 +55,11 @@ LXeMuonPhysics::~LXeMuonPhysics() {}
 #include "G4MuonMinus.hh"
 #include "G4NeutrinoMu.hh"
 #include "G4AntiNeutrinoMu.hh"
+#include "G4Neutron.hh"
+#include "G4Proton.hh"
+#include "G4PionZero.hh"
+#include "G4PionPlus.hh"
+#include "G4PionMinus.hh"
 
 void LXeMuonPhysics::ConstructParticle()
 {
@@ -63,6 +68,12 @@ void LXeMuonPhysics::ConstructParticle()
   G4MuonMinus::MuonMinusDefinition();
   G4NeutrinoMu::NeutrinoMuDefinition();
   G4AntiNeutrinoMu::AntiNeutrinoMuDefinition();
+  //These are needed for the mu- capture
+    G4Neutron::Neutron();
+    G4Proton::Proton();
+    G4PionMinus::PionMinus();
+    G4PionZero::PionZero();
+    G4PionPlus::PionPlus();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

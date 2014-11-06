@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 4, 2014 A. Dotti  (LXe-V10-00-08)
+- Add Proton and Neutron and pions to local Mu physics list
+  needed for mu- capture at rest process
+
 October 30, 2014 A. Dotti  (LXe-V10-00-07)
 - Use correct mu- stopping process
 
