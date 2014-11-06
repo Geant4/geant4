@@ -46,6 +46,7 @@
 #include "G4PhysicalVolumeStore.hh"
 #include "G4LogicalVolumeStore.hh"
 #include "G4SolidStore.hh"
+#include "G4NistManager.hh"
 
 #include "G4FieldManager.hh"
 #include "G4TransportationManager.hh"
@@ -261,12 +262,17 @@ G4VPhysicalVolume* DetectorConstruction::ConstructVolumes()
 
 void DetectorConstruction::SetMaterial(const G4String& materialChoice)
 {
-    // search the material by its name
-    G4Material* pttoMaterial = G4Material::GetMaterial(materialChoice);
-    if (pttoMaterial) {
-        myMaterial = pttoMaterial;
-        G4RunManager::GetRunManager()->PhysicsHasBeenModified();
-    }
+  // search the material by its name
+  G4Material* pttoMaterial =
+    G4NistManager::Instance()->FindOrBuildMaterial(materialChoice);
+
+  if(pttoMaterial && myMaterial != pttoMaterial) {
+    myMaterial = pttoMaterial;
+    if(logicEcal)  { logicEcal->SetMaterial(myMaterial); }
+    if(logicRing)  { logicRing->SetMaterial(myMaterial); }
+    if(logicSlice) { logicSlice->SetMaterial(myMaterial); }
+    G4RunManager::GetRunManager()->PhysicsHasBeenModified();
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

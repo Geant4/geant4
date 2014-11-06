@@ -55,7 +55,7 @@ PhysicsList::PhysicsList() : G4VModularPhysicsList()
 
   pMessenger = new PhysicsListMessenger(this);
 
-  SetVerboseLevel(1);
+  SetVerboseLevel(0);
 
   // EM physics only
   RegisterPhysics( new G4EmStandardPhysics(verboseLevel));

@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+05-11-14 V.Ivanchenko (test40-V10-00-02)
+- DetectorConstruction and PhysicsList minor cleanup
+
 11-01-14 V.Ivanchenko (test40-V10-00-01)
 - RunAction - fixed bug for the case when Geant4 is compiled for MT
     but is runned sequentially
