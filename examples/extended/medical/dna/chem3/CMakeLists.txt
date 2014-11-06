@@ -40,7 +40,7 @@ target_link_libraries(${PROJECT_NAME} ${Geant4_LIBRARIES} )
 # relies on these scripts being in the current working directory.
 #
         
-file(GLOB MAC_FILES ${PROJECT_SOURCE_DIR}/*.mac ${PROJECT_SOURCE_DIR}/*.in)
+file(GLOB MAC_FILES ${PROJECT_SOURCE_DIR}/*.mac ${PROJECT_SOURCE_DIR}/*.loop ${PROJECT_SOURCE_DIR}/*.in)
 
 foreach(_script ${MAC_FILES})
   configure_file(

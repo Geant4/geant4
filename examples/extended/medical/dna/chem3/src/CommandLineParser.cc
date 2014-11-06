@@ -129,6 +129,8 @@ int CommandLineParser::Parse(int& argc, char **argv)
     fOptionsWereSetup = true;
     command->fActive = true;
 
+    G4String marker(argv[i]);
+
     if (strcmp(argv[i], "-h") != 0 && strcmp(argv[i], "--help") != 0)
     {
       argv[i] = null;
@@ -137,6 +139,13 @@ int CommandLineParser::Parse(int& argc, char **argv)
     if (command->fType == Command::WithOption)
     {
       if (fVerbose) G4cout << "WithOption" << G4endl;
+
+      if(i+1 > firstArgc || argv[i+1]==0 || argv[i+1][0]=='-')
+      {
+        G4cerr << "An command line option is missing for "
+               << marker << G4endl;
+        abort();
+      }
 
       command->fOption = (const char*) strdup(argv[i+1]);
       argv[i+1] = null;
