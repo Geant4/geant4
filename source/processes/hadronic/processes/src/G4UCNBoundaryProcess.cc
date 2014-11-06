@@ -70,9 +70,7 @@ G4UCNBoundaryProcess::G4UCNBoundaryProcess(const G4String& processName,
   : G4VDiscreteProcess(processName, type)
 {
 
-  if ( verboseLevel > 0) {
-     G4cout << GetProcessName() << " is created " << G4endl;
-  }
+  if (verboseLevel > 0) G4cout << GetProcessName() << " is created " << G4endl;
 
   SetProcessSubType(fUCNBoundary);
 
@@ -101,6 +99,7 @@ G4UCNBoundaryProcess::G4UCNBoundaryProcess(const G4String& processName,
   aMRDiffuseReflection = bMRDiffuseReflection = 0;
   nSnellTransmit = mSnellTransmit = 0;
   aMRDiffuseTransmit = 0;
+  ftheta_o = fphi_o = 0;
 }
 
 G4UCNBoundaryProcess::~G4UCNBoundaryProcess()
@@ -462,13 +461,6 @@ G4double G4UCNBoundaryProcess::GetMeanFreePath(const G4Track&,
   return DBL_MAX;
 }
 
-G4bool G4UCNBoundaryProcess::High(G4double Energy, G4double FermiPotDiff)
-{
-  // Returns true for Energy > Fermi Potential Difference
-
-  return (Energy > FermiPotDiff);    
-}
-
 G4bool G4UCNBoundaryProcess::Loss(G4double pUpScatter,
                                   G4double theVelocityNormal,
                                   G4double FermiPot)
@@ -605,12 +597,9 @@ G4ThreeVector G4UCNBoundaryProcess::MRreflectHigh(G4double pDiffuse,
 
   G4double Enormal = Energy * (costheta*costheta);
 
-  G4double pSpecular;
-
-  if ( Enormal > FermiPot )
-     pSpecular = Reflectivity(FermiPot,Enormal)*
+//  G4double pSpecular = Reflectivity(Enormal,FermiPot)*
+  G4double pSpecular = Reflectivity(FermiPot,Enormal)*
                                          (1.-pDiffuse-pDiffuseTrans-pLoss);
-  else pSpecular = 0.;
 
   G4ThreeVector NewMomentum;
 
@@ -740,11 +729,16 @@ G4ThreeVector G4UCNBoundaryProcess::MRDiffRefl(G4ThreeVector Normal,
              GetMRProbability(theta_i, Energy, FermiPot, theta_o, phi_o)/
              (1.5*aMaterialPropertiesTable2->
                               GetMRMaxProbability(theta_i, Energy)) > 1) {
-            G4cout << "Wahrscheinlichkeitsueberschreitung!" << G4endl;
+            G4cout << "MRMax Wahrscheinlichkeitsueberschreitung!" << G4endl;
             G4cout << aMaterialPropertiesTable2->
                    GetMRProbability(theta_i, Energy, FermiPot, theta_o, phi_o)/
                    (1.5*aMaterialPropertiesTable2->
                                GetMRMaxProbability(theta_i, Energy)) << G4endl;
+            aMaterialPropertiesTable2->
+               SetMRMaxProbability(theta_i, Energy,
+                                   aMaterialPropertiesTable2->
+                                    GetMRProbability(theta_i, Energy, 
+                                                     FermiPot, theta_o, phi_o));
         }
   }
 
@@ -801,11 +795,31 @@ G4ThreeVector G4UCNBoundaryProcess::MRDiffTrans(G4ThreeVector Normal,
     // Box over distribution is increased by 50% to ensure no value is above
 
     if (1.5*G4UniformRand()*
-        aMaterialPropertiesTable2->GetMRMaxTransProbability(theta_i, Energy)/pDiffuseTrans <=
         aMaterialPropertiesTable2->
-         GetMRTransProbability(theta_i,Energy,FermiPot,theta_o,phi_o)/pDiffuseTrans)
+          GetMRMaxTransProbability(theta_i, Energy)/pDiffuseTrans <=
+        aMaterialPropertiesTable2->
+          GetMRTransProbability(theta_i,Energy,FermiPot,theta_o,phi_o)/
+                                                          pDiffuseTrans)
 
         accepted=true;
+
+    // For the case that the box is nevertheless exceeded
+
+    if(aMaterialPropertiesTable2->
+        GetMRTransProbability(theta_i, Energy, FermiPot, theta_o, phi_o)/
+        (1.5*aMaterialPropertiesTable2->
+                         GetMRMaxTransProbability(theta_i, Energy)) > 1) {
+        G4cout << "MRMaxTrans Wahrscheinlichkeitsueberschreitung!" << G4endl;
+        G4cout << aMaterialPropertiesTable2->
+               GetMRTransProbability(theta_i, Energy, FermiPot, theta_o, phi_o)/
+               (1.5*aMaterialPropertiesTable2->
+                           GetMRMaxTransProbability(theta_i, Energy)) << G4endl;
+        aMaterialPropertiesTable2->
+           SetMRMaxTransProbability(theta_i, Energy,
+                               aMaterialPropertiesTable2->
+                                GetMRTransProbability(theta_i, Energy,
+                                                 FermiPot, theta_o, phi_o));
+    }
   }
 
   // Creates vector in the local coordinate system of the reflection

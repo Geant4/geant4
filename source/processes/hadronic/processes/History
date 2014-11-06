@@ -16,6 +16,15 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+05 November 2014 Peter Gumplinger (hadr-proc-V10-00-04)
+-------------------------------------------------------
+- fix Coverity error in G4UCNBoundaryProcess.cc
+
+09 October 2014 Peter Gumplinger (hadr-proc-V10-00-03)
+------------------------------------------------------
+- make method 'High' inline in G4UCNBoundaryProcess
+- SetMRMaxProbability and SetMRMaxTransProbability during simulation
+
 01 August 2014 Alberto Ribon (hadr-proc-V10-00-02)
 --------------------------------------------------
 - G4HadronElasticProcess : replaced the old method of G4EnergyRangeManager
@@ -23,6 +32,7 @@ code and to keep track of all tags.
   G4HadronicInteraction::IsApplicable). 
 
 27 June 2014 Peter Gumplinger (hadr-proc-V10-00-01)
+---------------------------------------------------
 - fix bug in call to Reflectivity in MRreflectHigh:
   (1) the arguments were wrong/reversed - Reflectivity(Energy, FermiPot)
       should read Reflectivity(FermiPot,Energy)

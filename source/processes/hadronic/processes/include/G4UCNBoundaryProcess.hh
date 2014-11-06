@@ -229,4 +229,12 @@ G4UCNBoundaryProcessStatus G4UCNBoundaryProcess::GetStatus() const
   return theStatus;
 }
 
+inline G4bool
+G4UCNBoundaryProcess::High(G4double Energy, G4double FermiPotDiff)
+{
+  // Returns true for Energy > Fermi Potential Difference
+
+  return (Energy > FermiPotDiff);
+}
+
 #endif /* G4UCNBOUNDARYPROCESS_HH */
