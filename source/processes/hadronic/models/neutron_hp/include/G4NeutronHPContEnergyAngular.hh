@@ -37,6 +37,8 @@
 #include "G4NeutronHPContAngularPar.hh"
 #include "G4InterpolationManager.hh"
 
+#include "G4Cache.hh"
+
 // we will need one of these per product.
 
 class G4NeutronHPContEnergyAngular : public G4VNeutronHPEnergyAngular
@@ -46,7 +48,7 @@ class G4NeutronHPContEnergyAngular : public G4VNeutronHPEnergyAngular
   G4NeutronHPContEnergyAngular()
   {
     theAngular = 0;
-    currentMeanEnergy = -2;
+    currentMeanEnergy.Put( -2 );
   }
   
   ~G4NeutronHPContEnergyAngular()
@@ -81,7 +83,8 @@ G4ReactionProduct * Sample(G4double anEnergy, G4double massCode, G4double mass);
   G4InterpolationManager theManager; // knows the interpolation between stores
   G4NeutronHPContAngularPar * theAngular;
   
-  G4double currentMeanEnergy;
+  //G4double currentMeanEnergy;
+  G4Cache<G4double> currentMeanEnergy;
 
    public:
       void ClearHistories(); 

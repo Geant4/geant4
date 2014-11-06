@@ -122,7 +122,7 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
     {
       G4double en = aHadron.GetTotalMomentum();
       G4ReactionProduct boosted;
-      boosted.Lorentz(theNeutron, theTarget);
+      boosted.Lorentz( *fCache.Get().theNeutron, *fCache.Get().theTarget);
       G4double kineticEnergy = boosted.GetKineticEnergy();
       G4double cosTh = 0.0; 
       //********************************************************************
@@ -149,7 +149,7 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
     else if(frameFlag == 2) // costh in CMS
     {
       G4ReactionProduct boostedN;
-      boostedN.Lorentz(theNeutron, theTarget);
+      boostedN.Lorentz( *fCache.Get().theNeutron, *fCache.Get().theTarget);
       G4double kineticEnergy = boostedN.GetKineticEnergy();
 
       G4double cosTh = 0.0; 
@@ -247,7 +247,7 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
       // aHadron.GetKineticEnergy() is actually the residual kinetic energy in CMS (or target frame)
       // kineticEnergy is incident neutron kinetic energy  in CMS (or target frame)  
       G4double QValue = aHadron.GetKineticEnergy() - kineticEnergy;
-      G4double A1     =   theTarget.GetMass()/boostedN.GetMass(); 
+      G4double A1     =   fCache.Get().theTarget->GetMass()/boostedN.GetMass(); 
       G4double A1prim =   aHadron.GetMass()/ boostedN.GetMass();
       G4double kinE   = (A1+1-A1prim)/(A1+1)/(A1+1)*(A1*kineticEnergy+(1+A1)*QValue);
       G4double totalE = kinE + aHadron.GetMass();
@@ -261,7 +261,7 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
 
       // get trafo from Target rest frame to CMS
       G4ReactionProduct boostedT;
-      boostedT.Lorentz(theTarget, theTarget);
+      boostedT.Lorentz(*fCache.Get().theTarget, *fCache.Get().theTarget);
       
       G4ThreeVector the3Neutron = boostedN.GetMomentum();
       G4double nEnergy = boostedN.GetTotalEnergy();
@@ -283,7 +283,7 @@ void G4NeutronHPAngular::SampleAndUpdate(G4ReactionProduct & aHadron)
     {
       throw G4HadronicException(__FILE__, __LINE__, "Tried to sample non isotropic neutron angular");
     }
-  aHadron.Lorentz(aHadron, -1.*theTarget); 
+  aHadron.Lorentz(aHadron, -1.*(*fCache.Get().theTarget)); 
 //  G4cout << aHadron.GetMomentum()<<" ";
 //  G4cout << aHadron.GetTotalMomentum()<<G4endl;
 }

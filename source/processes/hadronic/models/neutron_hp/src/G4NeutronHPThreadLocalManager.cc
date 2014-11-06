@@ -23,35 +23,46 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// neutron_hp -- source file
-// J.P. Wellisch, Nov-1996
-// A prototype of the low energy neutron transport model.
-//
-#include "G4NeutronHP3NInelasticFS.hh"
-#include "G4Nucleus.hh"
-#include "G4Alpha.hh"
+// Class Description
+// Manager of NetronHP
+// 
+// 121031 First implementation done by T. Koi (SLAC/PPA)
 
-G4HadFinalState * G4NeutronHP3NInelasticFS::ApplyYourself(const G4HadProjectile & theTrack)
+#include "G4NeutronHPThreadLocalManager.hh"
+#include "G4NeutronHPReactionWhiteBoard.hh"
+#include "G4HadronicException.hh"
+
+G4ThreadLocal G4NeutronHPThreadLocalManager* G4NeutronHPThreadLocalManager::instance = NULL;
+
+G4NeutronHPThreadLocalManager::G4NeutronHPThreadLocalManager()
+:RWB(NULL)
 {
-// these are the particle types in the final state
-
-  G4ParticleDefinition * theDefs[3];
-  theDefs[0] = G4Neutron::Neutron();
-  theDefs[1] = G4Neutron::Neutron();
-  theDefs[2] = G4Neutron::Neutron();
-  
-// fill the final state  
-  G4NeutronHPInelasticBaseFS::BaseApply(theTrack, theDefs, 3);
-  
-// return the result
-   return theResult.Get();
+;
 }
 
-void G4NeutronHP3NInelasticFS::
-Init (G4double A, G4double Z, G4int M, G4String & dirName, G4String & aFSType)
+G4NeutronHPThreadLocalManager::~G4NeutronHPThreadLocalManager()
 {
-   G4NeutronHPInelasticBaseFS::Init(A, Z, M, dirName, aFSType);
-   G4double ResidualA = A-2;
-   G4double ResidualZ = Z;
-   G4NeutronHPInelasticBaseFS::InitGammas(ResidualA, ResidualZ);
+;
+}
+void G4NeutronHPThreadLocalManager::OpenReactionWhiteBoard()
+{
+   if ( RWB != NULL ) {
+      G4cout << "Warning: G4NeutronHPReactionWhiteBoard is tried doubly opening" << G4endl;
+      RWB = new G4NeutronHPReactionWhiteBoard();
+   }
+   
+   RWB = new G4NeutronHPReactionWhiteBoard();
+}
+G4NeutronHPReactionWhiteBoard* G4NeutronHPThreadLocalManager::GetReactionWhiteBoard()
+{
+   if ( RWB == NULL ) {
+      G4cout << "Warning: try to access G4NeutronHPReactionWhiteBoard before opening" << G4endl;
+      RWB = new G4NeutronHPReactionWhiteBoard();
+   }
+   return RWB; 
+}
+void G4NeutronHPThreadLocalManager::CloseReactionWhiteBoard()
+{  
+   delete RWB; 
+   RWB=NULL;
 }

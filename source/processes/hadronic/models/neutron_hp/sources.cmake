@@ -165,6 +165,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_neu_hp
     G4VNeutronHPEnergyAngular.hh
     G4NeutronHPBGGNucleonInelasticXS.hh
     G4NeutronHPManager.hh
+    G4NeutronHPThreadLocalManager.hh
     G4NeutronHPReactionWhiteBoard.hh
     G4NeutronHPMessenger.hh
 ### Fission Fragment Generator - start
@@ -292,6 +293,7 @@ GEANT4_DEFINE_MODULE(NAME G4had_neu_hp
     G4NeutronHPWattSpectrum.cc
     G4NeutronHPBGGNucleonInelasticXS.cc
     G4NeutronHPManager.cc
+    G4NeutronHPThreadLocalManager.cc
     G4NeutronHPReactionWhiteBoard.cc
     G4NeutronHPMessenger.cc
 ### Fission Fragment Generator - start
