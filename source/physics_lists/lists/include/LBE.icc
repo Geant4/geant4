@@ -69,7 +69,7 @@
 #include "G4StoppingPhysics.hh"
 
 // Constructor /////////////////////////////////////////////////////////////
-template<class T> TLBE<T>::TLBE(G4int ver) :T() 
+template<class T> TLBE<T>::TLBE() :T() 
 {
 
   G4DataQuestionaire it(photon, lowenergy, neutron, radioactive);
@@ -87,7 +87,7 @@ template<class T> TLBE<T>::TLBE(G4int ver) :T()
 
   stoppingPhysics = new G4StoppingPhysics;
 
-  VerboseLevel = ver;
+  VerboseLevel = 1;
   OpVerbLevel = 0;
 
   this->SetVerboseLevel(VerboseLevel);

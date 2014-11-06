@@ -13,17 +13,6 @@ introduced in the code and keeptrack of all tags.
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-05-Nov-2014, Robert Hatcher             (phys-lists-V10-00-10)
-- Fixed overload ambiguity complaint from Visual Studio 12,
-  and tag at the right level
-- cowork with tag "phys-ctor-fact-V10-00-01" and "intercoms-V10-00-15"
-
-04-Nov-2014, Robert Hatcher             (phys-lists-V10-00-09)
-- Add g4alt::G4PhysListFactory as user extensible list factory;
-   work done via G4PhysListRegistry and G4PhysListStamper classes.
-- Modify LBE list ctor to accept ver(bosity) as optional arg
-   in the same manner as other physics lists.
-- cowork with tag "phys-ctor-fact-V10-00-01"
 
 15-Oct-2014, Alex Howard           (phys-lists-V10-00-08)
 - Increased cuts in LBE physics list to 1 micrometer (from 1 nanometer).
