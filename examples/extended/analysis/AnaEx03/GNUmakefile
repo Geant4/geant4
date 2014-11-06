@@ -15,12 +15,12 @@ endif
 all: lib bin
 
 setup:
-	@echo "Copying files from common"
-	../../common/scripts/copy_files.sh
+	@echo "Copying files from shared"
+	@./scripts/copy_files.sh shared
 
 clean_setup:
-	@echo "Removing files copied from common"
-	../../common/scripts/clean_files.sh
+	@echo "Removing files copied from shared"
+	@./scripts/clean_files.sh shared
 
 #### G4ANALYSIS_USE := true
 

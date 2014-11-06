@@ -7,10 +7,15 @@ $Id$
 
                             AnaEx03
                             -------
+ Examples AnaEx01, AnaEx02 and AnaEx03 show the usage of histogram and tuple 
+ manipulations using G4Analysis, ROOT and AIDA compliant systems on the same
+ scenario. All analysis manipulations (histo booking, filling, saving histos 
+ in a file, etc...) are located in one class : HistoManager, implementation of 
+ which is different in each example. All the other classes are same in all 
+ three examples.
+ 
  This example shows the usage of histogram and tuple manipulations using 
- an AIDA compliant system. All analysis manipulations 
- (attaching an AIDA implementation, histo booking, filling, saving 
- histos in a file, etc...) are located in one class : HistoManager.
+ an AIDA compliant system. 
  
  The example is an adaptation of examples/novice/N03. It describes a simple 
  sampling calorimeter setup.
@@ -50,7 +55,22 @@ $Id$
    The particle's type and the physic processes which will be available
    in this example are set in the FTFP_BERT physics list.
  
- 3- An event : PrimaryGeneratorAction
+ 3- Action Initialization
+ ------------------------
+
+   A newly introduced class, ActionInitialization, 
+   instantiates and registers to Geant4 kernel all user action classes 
+   which are defined thread-local and a run action class
+   which is defined both thread-local and global.
+   
+   The thread-local action classes are defined in 
+     ActionInitialization::Build() 
+   and  the global run action class is defined in 
+     ActionInitialization::BuildForMaster().
+   Note that ActionInitialization::Build() is also used to 
+   instatiate user action clasess in sequential mode.
+  
+ 4- An event : PrimaryGeneratorAction
  ------------------------------------
  
  The primary kinematic consists of a single particle which hits the
@@ -58,7 +78,7 @@ $Id$
  and its energy are set in the PrimaryGeneratorAction class, and can
  be changed via the G4 build-in commands of ParticleGun class.
 
- 4- Histograms
+ 5- Histograms
  ------------- 
  To produce histograms, at least one of the AIDA implementations should be 
  available. See the file InstallAida.txt
@@ -88,7 +108,7 @@ $Id$
  Note that, by default, histograms are disabled. To activate them, uncomment
  the flag G4ANALYSIS_USE in GNUmakefile, *before* compilation.
   
- 5- OpenScientist
+ 6- OpenScientist
  ----------------
 
  See the files README.AIDA and README.OpenScientist for more indications 
