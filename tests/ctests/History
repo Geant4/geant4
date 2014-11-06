@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-30 -- 05 November 2014 Mathieu Karamitros
+- update command line options of pdb4dna
+
 ctests-V10-00-29 -- 30 October 2014 Michael Kelsey
 - retag because of incorrect CDash rejection.  No changes.
 

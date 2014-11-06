@@ -270,7 +270,7 @@ GEANT4_ADD_TEST(example-ext-medical-dna-wholeNuclearDNA
 
 GEANT4_ADD_TEST(example-ext-medical-dna-pdb4dna
                 COMMAND ${BINDIR}/pdb4dna
-                        -m ${DNA_EXAMPLE_SRC_DIR}/pdb4dna/pdb4dna.in
+                        -mac ${DNA_EXAMPLE_SRC_DIR}/pdb4dna/pdb4dna.in -mt
                 BUILD ${DNA_EXAMPLE_SRC_DIR}/pdb4dna)
 
 GEANT4_ADD_TEST(example-ext-optical-opnovice 

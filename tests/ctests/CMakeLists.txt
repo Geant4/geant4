@@ -437,7 +437,7 @@ set(DNA_EXAMPLE_BIN_DIR ${CMAKE_BINARY_DIR}/examples/extended/medical/dna)
 
 GEANT4_ADD_TEST(example-ext-medical-dna-pdb4dna
                 COMMAND ${DNA_EXAMPLE_BIN_DIR}/pdb4dna/pdb4dna
-                        -m ${DNA_EXAMPLE_SOURCE_DIR}/pdb4dna/pdb4dna.in
+                        -mac ${DNA_EXAMPLE_SOURCE_DIR}/pdb4dna/pdb4dna.in -mt
                 SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/pdb4dna
                 BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/pdb4dna
                 BUILD pdb4dna ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
