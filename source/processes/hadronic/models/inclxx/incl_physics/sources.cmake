@@ -80,6 +80,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLDecayAvatar.hh
         G4INCLPiNToMultiPionsChannel.hh
         G4INCLNuclearPotentialEnergyIsospin.hh
+        G4INCLAvatarDumpAction.hh
         G4INCLCoulombDistortion.hh
         G4INCLClusteringModelNone.hh
         G4INCLPhaseSpaceKopylov.hh
@@ -149,6 +150,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_inclxx_physics
         G4INCLDecayAvatar.cc
         G4INCLNuclearDensity.cc
         G4INCLClusterDecay.cc
+        G4INCLAvatarDumpAction.cc
         G4INCLCrossSectionsMultiPions.cc
         G4INCLPiNToDeltaChannel.cc
         G4INCLCoulombNonRelativistic.cc

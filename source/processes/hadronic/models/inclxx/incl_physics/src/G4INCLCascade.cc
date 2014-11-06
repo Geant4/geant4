@@ -66,6 +66,9 @@
 
 #include "G4INCLBinaryCollisionAvatar.hh"
 
+#include "G4INCLCascadeAction.hh"
+#include "G4INCLAvatarDumpAction.hh"
+
 #include <cstring>
 #include <cstdlib>
 #include <numeric>
@@ -125,7 +128,10 @@ namespace G4INCL {
     // finding schemes and even to support things like curved
     // trajectories in the future.
     propagationModel = new StandardPropagationModel(theConfig->getLocalEnergyBBType(),theConfig->getLocalEnergyPiType());
-    cascadeAction = new CascadeAction();
+    if(theConfig->getCascadeActionType() == AvatarDumpActionType)
+      cascadeAction = new AvatarDumpAction();
+    else
+      cascadeAction = new CascadeAction();
     cascadeAction->beforeRunAction(theConfig);
 
     theGlobalInfo.cascadeModel = theConfig->getVersionString();

@@ -166,7 +166,6 @@ namespace G4INCL {
        * stable particles.
        *
        * \param particles list of particles to (possibly) generate decays for
-       * \param isDeltaFixed whether the delta has to be given a fixed width
        */
       void generateDecays(const ParticleList &particles);
 

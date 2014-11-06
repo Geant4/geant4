@@ -35,102 +35,36 @@
 
 #include "globals.hh"
 
-#ifndef G4INCLConfigEnums_hh
-#define G4INCLConfigEnums_hh
+/** \file G4INCLAvatarDumpAction.hh
+ * \brief Alternative CascadeAction for dumping avatars
+ *
+ * \date 15th October 2014
+ * \author Davide Mancusi
+ */
+
+#ifndef G4INCLAVATARDUMPACTION_HH
+#define G4INCLAVATARDUMPACTION_HH 1
+
+#include "G4INCLCascadeAction.hh"
+#include <fstream>
 
 namespace G4INCL {
 
-  // Enumerator for Pauli-blocking algorithms
-  enum PauliType {
-    StatisticalPauli,
-    StrictPauli,
-    StrictStatisticalPauli,
-    GlobalPauli,
-    NoPauli
-  };
+  class AvatarDumpAction : public CascadeAction {
 
-  // Enumerator for Coulomb-distortion algorithms
-  enum CoulombType {
-    NonRelativisticCoulomb,
-    NoCoulomb
-  };
+    public:
+      AvatarDumpAction();
+      virtual ~AvatarDumpAction();
 
-  // Enumerator for potential types
-  enum PotentialType {
-    IsospinEnergySmoothPotential,
-    IsospinEnergyPotential,
-    IsospinPotential,
-    ConstantPotential
-  };
+      virtual void beforeCascadeUserAction(IPropagationModel *);
+      virtual void afterAvatarUserAction(IAvatar *avatar, Nucleus *nucleus, FinalState *);
+      virtual void afterCascadeUserAction(Nucleus *);
 
-  // Enumerator for local-energy types
-  enum LocalEnergyType {
-    AlwaysLocalEnergy,
-    FirstCollisionLocalEnergy,
-    NeverLocalEnergy
-  };
+    private:
+      std::ofstream *oFile;
+      G4int eventCounter;
 
-  // Enumerator for de-excitation types
-  enum DeExcitationType {
-    DeExcitationNone
-#ifdef INCL_DEEXCITATION_ABLAXX
-    , DeExcitationABLAv3p
-#endif
-#ifdef INCL_DEEXCITATION_ABLA07
-    , DeExcitationABLA07
-#endif
-#ifdef INCL_DEEXCITATION_SMM
-    , DeExcitationSMM
-#endif
-#ifdef INCL_DEEXCITATION_GEMINIXX
-    , DeExcitationGEMINIXX
-#endif
-  };
-
-  // Enumerator for cluster-algorithm types
-  enum ClusterAlgorithmType {
-    IntercomparisonClusterAlgorithm,
-    NoClusterAlgorithm
-  };
-
-  // Enumerator for separation-energy types
-  enum SeparationEnergyType {
-    INCLSeparationEnergy,
-    RealSeparationEnergy,
-    RealForLightSeparationEnergy
-  };
-
-  // Enumerator for Fermi-momentum types
-  enum FermiMomentumType {
-    ConstantFermiMomentum,
-    ConstantLightFermiMomentum,
-    MassDependentFermiMomentum
-  };
-
-  // Enumerator for RNG
-  enum RNGType {
-    RanecuType,
-    Ranecu3Type
-  };
-
-  // Enumerator for Cross-Section parametrizations
-  enum CrossSectionsType {
-    INCL46CrossSections,
-    MultiPionsCrossSections
-  };
-
-  // Enumerator for phase-space generator
-  enum PhaseSpaceGeneratorType {
-    KopylovType,
-    RauboldLynchType
-  };
-
-  // Enumerator for cascade actions
-  enum CascadeActionType {
-    DefaultActionType,
-    AvatarDumpActionType
   };
 
 }
-
-#endif
+#endif // G4INCLAVATARDUMPACTION_HH

@@ -90,7 +90,7 @@ namespace G4INCL {
     fermiMomentum = -1.;
     cutNN = 1910.;
 #ifdef INCL_DEEXCITATION_FERMI_BREAKUP
-    maxMassFermiBreakUp = 18;
+    maxMassFermiBreakUp = 16;
 #endif
     rpCorrelationCoefficient = 1.;
     rpCorrelationCoefficientProton = 1.;
@@ -100,6 +100,8 @@ namespace G4INCL {
     refraction=false;
     phaseSpaceGenerator = "Raubold-Lynch";
     phaseSpaceGeneratorType = RauboldLynchType;
+    cascadeAction = "default";
+    cascadeActionType = DefaultActionType;
     randomNumberGenerator = "Ranecu";
     rngType = RanecuType;
     autosaveFrequency = 10000;

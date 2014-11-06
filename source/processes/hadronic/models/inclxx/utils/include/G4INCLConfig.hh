@@ -304,6 +304,12 @@ namespace G4INCL {
     /// \brief Set the phase-space-generator type
     void setPhaseSpaceGeneratorType(PhaseSpaceGeneratorType const p) { phaseSpaceGeneratorType=p; }
 
+    /// \brief Get the cascade-action type
+    CascadeActionType getCascadeActionType() const { return cascadeActionType; }
+
+    /// \brief Set the cascade-action type
+    void setCascadeActionType(CascadeActionType const c) { cascadeActionType=c; }
+
     /// \brief Get the autosave frequency
     unsigned int getAutosaveFrequency() const { return autosaveFrequency; }
 
@@ -420,6 +426,9 @@ namespace G4INCL {
 
     std::string crossSectionsString;
     CrossSectionsType crossSectionsType;
+
+    std::string cascadeAction;
+    CascadeActionType cascadeActionType;
 
     friend class ::ConfigParser;
   };
