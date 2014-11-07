@@ -30,16 +30,11 @@
 //
 //                      ==========>      WEB LINK   <==========
 //
+//                     http://www.lns.infn.it/link/Hadrontherapy
 //
 //                      ==========>    MAIN AUTHORS <==========
 //
-//                       G.A.P. Cirrone(a)*, F.Romano(a)
-//
-//
-//                      ====> ACTUALLY CONTRIBUTING AUTHORS <==
-//
-//                       A. Tramontana (a,f)
-//
+//                       G.A.P. Cirrone(a)*, F.Romano(a), A. Tramontana (a,f)
 //
 //                      ==========>   PAST AUTHORS  <==========
 //

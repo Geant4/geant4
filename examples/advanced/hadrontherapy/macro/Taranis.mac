@@ -1,3 +1,9 @@
+# A: Tramontana
+# tramontana@lns.infn.it
+#
+# Macro file recommended for the use with laser-driven beam line and built-in physic list.
+# This macro uses the physics list already contained in the Geant4 distribution
+
 #######################
 # Set of the verboses # 
 #######################

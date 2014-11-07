@@ -22,13 +22,7 @@
 // * use  in  resulting  scientific  publications,  and indicate your *
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
-//
-// Hadrontherapy development is supported by the
-// Italian Institute for Nuclear Physics (INFN)
-// in the framework of the MC-INFN Project
-//
-// Contact persons: Pablo Cirrone (INFN-LNS)    - pablo.cirrone@lns.infn.it
-//                  Francesco Romano (INFN-LNS) - francesco.romano@lns.infn.it
+
 //
 #include "HadrontherapyGeometryMessenger.hh"
 #include "HadrontherapyGeometryController.hh"

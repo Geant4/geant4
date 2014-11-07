@@ -22,12 +22,7 @@ Institute in the framework of the MC-INFN Group
              =========================================================
 ==========>    MAIN AUTHORS <==========
 
-   G.A.P. Cirrone(a)*, F.Romano(a), G.Cuttone(a), L. Pandola(a)
-
-
-====> ACTUALLY CONTRIBUTING AUTHORS <==
-
-   A. Tramontana (a,f)
+   G.A.P. Cirrone(a)*, F.Romano(a), G.Cuttone(a), L. Pandola(a), A. Tramontana (a,f)
 
 
 ==========>   PAST AUTHORS  <==========
@@ -48,7 +43,7 @@ A.Lechner(d), S.E.Mazzaglia(a),  M.G.Pia(e), G.Russo(a), M.Russo(a), A.Varisano(
 HADRONTHERAPY:
 WHAT IT IS, WHAT IT DOES AND WHAT IT WILL PROVIDE
 'hadrontherapy' is a Geant4-based application specifically developed to address typical needs related to the proton and ion therapy. 
-Its first release was in 2004. At that time 'hadrontherapy' was only capable to simulate a well specified proton therapy facility: the passive transport beam line installed at  Laboratori Nazionali del Sud (INFN) in Catania, Italy.
+Its first release was in 2004. At that time 'hadrontherapy' was only capable to simulate a well specified proton therapy facility: the passive transport beam line installed at Laboratori Nazionali del Sud (INFN) in Catania, Italy.
 
 Today Hadrontontherapy, except that it is in continuous development, is more flexible and show many additional capabilities as respect the past.
 Its geometrical set-up, for example, is now completely interchangeable permitting a simple switch between different geometrical configurations, which all share the same phantom (sensible detector) with the related features.
@@ -61,9 +56,9 @@ The configurations are:
 
 	- Passive carbon beam line, which is the simulation of the transport beam line at LNS-INFN of Catania for experiments with carbon ion beams. It is simulated in PassiveCarbonBeamLine.cc;
 
-	- Laser-driven beam line, which is the simulation of a beam line for the focusing, the handling and the transport of a laser-driven beam line, a Faraday Cup is the eligible detector for this class. It is simulated in LaserDrivenBeamLine.cc;
+	- Laser-driven beam line, which is the simulation of a beam line for the focusing, the handling and the transport of a laser-driven beam, a Faraday Cup is the eligible detector for this class. It is simulated in LaserDrivenBeamLine.cc;
 	
-	both in PassiveProtonBeamLine.cc in PassiveCarbonBeamLine.cc the user can change the geometrical characteristics of beam line elements.
+	in PassiveProtonBeamLine.cc, in PassiveCarbonBeamLine.cc and in LaserDrivenBeamLine.cc the user can change the geometrical characteristics of beam line elements.
 	Alternatively the user can use the macro file.
 
 
@@ -90,9 +85,10 @@ Currently this folders structure is in development and reference data as well as
 
 Description of the \macro folder
 
-In the example directory, inside the "macro" folder different macro files are provided. In particular two macro files are related to the different beam lines with proton and carbon beams: hadron_therapy.mac and carbon_beamline.mac.
+In the example directory, inside the "macro" folder different macro files are provided. In particular three macro files are related to the different beam lines: hadron_therapy.mac, carbon_beamline.mac and laserDrivenBeamline.mac.
 The hadron_therapy.mac permits to run a simulation with the whole proton passive beam line installed in Catania.
 The carbon_beamline.mac excludes all the elements (moving the origin of the ion beam close to the water phantom) and reproduce a simple passive beam line for the use with carbon beams.
+The laserDrivenBeamline.mac simulates a tipycal laser-driven proton spectrum as input for a beam line made of a quadrupoles system and an energy selector. 
 
 DOWNLOAD AND INSTALLATION
 
@@ -113,7 +109,7 @@ The idea of 'hadrontherapy' is to provide a tool useful for Users interested in 
 
 The main component of the simulation is the phantom, a box that can be filled with different material and where the score of different information (at moment  the dose deposited in voxels) can be performed. A more complete description of the phantom is given in the next subsection.
 
-At the moment the 'hadrontherapy' example include the simulation of passive beam lines.
+At the moment the 'hadrontherapy' example includes the simulation of passive beam lines.
 In the next future an ActiveProtonBeamLine.cc will be provided for the simulation of the active scanning treatment modality.
 Moreover the possibility to add a very simple set-up (a beam, a phantom where collect the informations and some simple component) will be also provided.
 
@@ -354,27 +350,46 @@ It is possible to use ROOT data analysis package directly for the production of 
 In the last version, anyway, this functionality must be implemented by User. This can be accomplished by setting an ad-hoc environment variable (i.e. G4ANALYSIS_USE_ROOT) to 1, adding in the code lines to create outputs with the ROOT libraries and recompiling the application.
 In this case you must have the ROOT framework installed in your machine.
 
+
+
+LASER DRIVEN PROTON BEAMLINE
+
+Nowadays a big effort is being devoted for optically accelerated charged particles. There are several ion acceleration regimes that are being discussed in literature, but up to now the most experimentally investigated is the Target Normal Sheath Acceleration (TNSA) one.
+The beam transport and focusing as well as the energy selection of these laser produced beams represents one of the critical points in order to make such kind of beams suitable for clinical applications. In fact, in contrast to conventional accelerators, the beams produced by high intensity laser-matter interaction are typically characterized by a wide angular divergence (for example ± 25 degrees) and a 100 % energy spread. 
+Moreover due to the high current, conventional dosimetric system cannot be used during the experimental sections (saturation issues) and for this reason the faraday cup detector has been proposed as the elegible absolute dosimetric device. 
+
+The following is the description of the elements of the laser-driven beam line. This line is completely simulated inside this class.
+
+The main elements are:
+
+    * The QUADRUPOLES SYSTEM: made of four quadrupoles, to focus/defocus protons with different energy;   
+    * The COLLIMATORS: placed along the beam line to collimate the beam;
+    * The ENERGY SELECTOR SYSTEM: made of four dipoles, that provide the spatial separation of charged particles with different energies;
+    * The FARADAY CUP: that provide the charge measurement and the distribution of the secondary electrons;
+   
+The user has the possibility to vary, via messenger, many characteristics of the beam line elements (i.e. their position along the beam line, their thickness, etc.).
+
+ - LaserDriven/EnergySelector/Disable -> to disable the Energy Selector 
+
+ - LaserDriven/EnergySelector/FirstCollimator/Radius <value> -> to set the Radius of the first collimator
+ - LaserDriven/EnergySelector/FirstCollimator/thickness <value> -> to set the Thickness of the first collimator
+ - LaserDriven/EnergySelector/FirstCollimator/zPosizion <value> -> to set the position of the first collimator hole along the radial plane
+
+ - LaserDriven/EnergySelector/SecondCollimator/Radius <value> -> to set the Radius of the second collimator
+ - LaserDriven/EnergySelector/SecondCollimator/thickness <value> -> to set the Thickness of the second collimator
+ - LaserDriven/EnergySelector/SecondCollimator/zPosizion <value> -> to set the position of the second collimator hole along the radial plane
+
+ - LaserDriven/EnergySelector/Slit/thickness <value> -> to set the Thickness of the slit, maximum value 10mm for geometric constrain
+ - LaserDriven/EnergySelector/Slit/HoleDimensionY <value> -> to set the Y dimension of the Slit Hole
+ - LaserDriven/EnergySelector/Slit/HoleDimensionZ <value> -> to set the Z dimension of the Slit Hole
+ - LaserDriven/EnergySelector/Slit/HolePositionZ <value> -> to set the Slit hole position in the Z direction as respect the Slit body center
+
+ - /LaserDriven/Quadrupoles/DisableQuad -> to disable the Quadrupole system
+
+
 FUTURE CHALLENGES AND USERS' REQUESTS
 
 This is a list of future components that will be added in 'hadrontherapy' and of main Users requests that we hope to fulfill in the next future.
-
-
-
-LASER DRIVEN PROTON BEAMLINE->QUADRUPOLE and ENERGY SELECTOR SYSTEM
-
-
-
-
-
-
-
-NEW DETECTOR-> FARADAY CUP
-
-A Faraday cup has been simulated in order to predict the dose in an alternative way to the conventional water phantom. The 
-
-
-
-What is in progress:
 
 - A module for the simulation of an active beam line will be provided.
 The Korean Group of the Proton therapy center, National Cancer Center is developing this.

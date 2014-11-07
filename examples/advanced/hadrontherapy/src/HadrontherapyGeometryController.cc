@@ -26,10 +26,7 @@
 // Hadrontherapy development is supported by the
 // Italian Institute for Nuclear Physics (INFN)
 // in the framework of the MC-INFN Project
-//
-// Contact persons: Pablo Cirrone (INFN-LNS)    - pablo.cirrone@lns.infn.it
-//                  Francesco Romano (INFN-LNS) - francesco.romano@lns.infn.it
-//
+
 #include "HadrontherapyGeometryController.hh"
 #include "HadrontherapyDetectorConstruction.hh"
 #include "HadrontherapyInteractionParameters.hh"
