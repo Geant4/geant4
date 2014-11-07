@@ -27,6 +27,8 @@
 //080721 Create adjust_final_state method by T. Koi
 //080801 Residual reconstruction with theNDLDataA,Z (A, Z, and momentum are adjusted) by T. Koi
 //101110 Set lower limit for gamma energy(1keV) by T. Koi
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 
 #include "G4ParticleHPFinalState.hh"
 

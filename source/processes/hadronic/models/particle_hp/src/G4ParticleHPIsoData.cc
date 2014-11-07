@@ -28,6 +28,8 @@
 //
 //080901 Avoiding troubles which caused by G4PhysicsVecotor of length 0 by T. Koi
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPIsoData.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4ParticleHPDataUsed.hh"

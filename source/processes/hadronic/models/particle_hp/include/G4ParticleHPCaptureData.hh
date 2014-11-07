@@ -29,6 +29,8 @@
 // 080428 Add bool onFlightDB by T. Koi
 // 091118 Add Ignore and Enable On Flight Doppler Broadening methods by T. Koi
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #ifndef G4ParticleHPCaptureData_h
 #define G4ParticleHPCaptureData_h 1
 

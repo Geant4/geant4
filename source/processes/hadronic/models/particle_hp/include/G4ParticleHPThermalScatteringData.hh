@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #ifndef G4ParticleHPThermalScatteringData_h
 #define G4ParticleHPThermalScatteringData_h 1
 

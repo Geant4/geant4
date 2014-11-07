@@ -35,6 +35,8 @@
 // 07-07-06 Allow _nat_ final state even for isotoped cross sections by T. Koi
 // 08-09-01 Add protection that deuteron data do not selected for hydrogen and so on by T. Koi
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPNames.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4SandiaTable.hh"

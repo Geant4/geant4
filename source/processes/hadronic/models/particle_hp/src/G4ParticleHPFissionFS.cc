@@ -29,6 +29,8 @@
 //
 // 12-Apr-06 fix in delayed neutron and photon emission without FS data by T. Koi
 // 07-Sep-11 M. Kelsey -- Follow change to G4HadFinalState interface
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 
 #include "G4ParticleHPFissionFS.hh"
 #include "G4PhysicalConstants.hh"

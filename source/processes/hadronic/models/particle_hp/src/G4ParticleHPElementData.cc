@@ -29,6 +29,8 @@
 //
 // 02-08-06 Modified Harmonise to reslove cross section trouble at high-end. T. KOI
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPElementData.hh"
 
   G4ParticleHPElementData::G4ParticleHPElementData()

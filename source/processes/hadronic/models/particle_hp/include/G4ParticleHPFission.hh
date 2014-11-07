@@ -28,6 +28,8 @@
  // Hadronic Process: High Precision low E neutron tracking
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
  // Builds and has the Cross-section data for one material.
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
   
 #ifndef G4ParticleHPFission_h
 #define G4ParticleHPFission_h 1

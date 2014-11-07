@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleHPProduct.hh,v 1.1 2013/02/20 17:35:03 arce Exp $
-// GEANT4 tag $Name: GAMOS-04-01-00 $
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPProduct_h
 #define G4ParticleHPProduct_h 1
@@ -77,17 +76,11 @@ class G4ParticleHPProduct
   {
     aDataFile >> theMassCode>>theMass>>theIsomerFlag>>theDistLaw
               >> theGroundStateQValue>>theActualStateQValue;
-    if( getenv("G4PHPTESTALLISOT") )     G4cout << " G4ParticleHPProduct :: Init MassCode " << theMassCode << " " << theMass << G4endl;// GDEB
     if( getenv("G4PHPTEST") )     G4cout << " G4ParticleHPProduct :: Init MassCode " << theMassCode << " " << theMass << " theActualStateQValue " << theActualStateQValue << G4endl;// GDEB
     if( getenv("G4PHPTEST") )     G4cout << " G4ParticleHPProduct :: Init theActualStateQValue " << theActualStateQValue << G4endl;// GDEB
     theGroundStateQValue*= CLHEP::eV;
     theActualStateQValue*= CLHEP::eV;
     theYield.Init(aDataFile, CLHEP::eV);
-    if( getenv("G4PHPTESTALLISOT") )  {
-      if( theDistLaw != 1 ) {
-	G4cerr << " G4PHPTESTALLISOT theDistLaw " << theDistLaw << G4endl;
-      }
-    }
     if(theDistLaw==0)
     {
       // distribution not known, use E-independent, isotropic angular distribution
@@ -188,8 +181,7 @@ class G4ParticleHPProduct
   G4double GetMassCode(){return theMassCode;};
   G4double GetMass(){return theMass;};
 
-     public:
-//GAMOSWIN private:
+   private:
    
    // data members
 

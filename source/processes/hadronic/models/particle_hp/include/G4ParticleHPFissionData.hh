@@ -24,8 +24,9 @@
 // ********************************************************************
 //
 //
-//
 // 080417 Add IsZAApplicable method (return false) by T. Koi
+//
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPFissionData_h
 #define G4ParticleHPFissionData_h 1

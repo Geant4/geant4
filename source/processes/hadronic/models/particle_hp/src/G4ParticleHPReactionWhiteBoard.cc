@@ -26,7 +26,8 @@
 // Class Description
 // Keep Information about current reaction
 // 121031 First implementation done by T. Koi (SLAC/PPA)
-
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPReactionWhiteBoard.hh"
 
 G4ParticleHPReactionWhiteBoard::G4ParticleHPReactionWhiteBoard()

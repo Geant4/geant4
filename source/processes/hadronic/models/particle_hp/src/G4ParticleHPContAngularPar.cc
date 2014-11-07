@@ -36,7 +36,8 @@
 // 080801 Fix div0 error wiht G4FPE and memory leak by T. Koi
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 //
-
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPContAngularPar.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
@@ -57,12 +58,13 @@
 #include <set>
  
 G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* projectile)
-{  //GAMOS
+{  
   theAngular = 0;
   currentMeanEnergy = -2;
   fresh = true;
   adjustResult = true;
   if ( getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
+  adjustResult = true;//GDEB
 
   theMinEner = DBL_MAX;
   theMaxEner = -DBL_MAX;
@@ -73,13 +75,11 @@ G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* pr
   { 
     adjustResult = true;
     if ( getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) adjustResult = false;
+    adjustResult = true;//GDEB
 
     theProjectile = projectile;
 
     aDataFile >> theEnergy >> nEnergies >> nDiscreteEnergies >> nAngularParameters;
-    if( getenv("G4PHPTESTALLISOT") ) {
-      if( nDiscreteEnergies != 0 ) G4cout << " NDISCRETEENERGIES " << nDiscreteEnergies << G4endl; //GDEB
-    }
     if( getenv("G4PHPTEST") )
  G4cout << this << " G4ParticleHPContAngularPar::Init( " << theEnergy << " " << nEnergies << " " << nDiscreteEnergies << " " << nAngularParameters << G4endl; //GDEB
     theEnergy *= eV;
@@ -140,12 +140,6 @@ G4ParticleHPContAngularPar::G4ParticleHPContAngularPar( G4ParticleDefinition* pr
     G4int it(0);
     G4double fsEnergy(0);
     G4double cosTh(0);
-
-    if( getenv("G4PHPTESTALLISOT") )  {
-      if( angularRep != 2 ) {// check only the first one, as all have the same interpolation scheme
-	G4cerr << " G4PHPTESTALLISOT angularRep  = " << angularRep << G4endl;
-      }
-    }
 
    if( angularRep == 1 )
    {

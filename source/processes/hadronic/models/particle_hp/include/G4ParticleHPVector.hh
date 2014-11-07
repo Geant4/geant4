@@ -23,10 +23,13 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
 // 070606 fix with Valgrind by T. Koi
 // 080409 Fix div0 error with G4FPE by T. Koi
 // 080811 Comment out unused method SetBlocked and SetBuffered
 //        Add required cleaning up in CleanUp by T. Koi
+//
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPVector_h
 #define G4ParticleHPVector_h 1

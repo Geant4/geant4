@@ -23,6 +23,9 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #ifndef G4ParticleHPReactionWhiteBoard_h
 #define G4ParticleHPReactionWhiteBoard_h 1
 

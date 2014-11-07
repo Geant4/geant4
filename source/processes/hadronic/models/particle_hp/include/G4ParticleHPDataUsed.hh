@@ -25,6 +25,8 @@
 //
 // 070625 add natural abundance (nat) flag by T. Koi 
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #ifndef G4ParticleHPDataUsed_h
 #define G4ParticleHPDataUsed_h 1
 

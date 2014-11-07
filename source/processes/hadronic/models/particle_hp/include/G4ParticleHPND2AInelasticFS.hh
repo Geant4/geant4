@@ -24,8 +24,7 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleHPND2AInelasticFS.hh,v 1.1 2013/02/20 17:34:59 arce Exp $
-// GEANT4 tag $Name: GAMOS-04-01-00 $
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPND2AInelasticFS_h
 #define G4ParticleHPND2AInelasticFS_h 1

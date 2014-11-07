@@ -32,6 +32,8 @@
 // 110505 protection for object is created but not initialized
 // 110510 delete above protection with more coordinated work to other classes 
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPAngular.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"

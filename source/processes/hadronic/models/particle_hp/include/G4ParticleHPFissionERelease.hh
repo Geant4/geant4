@@ -24,8 +24,9 @@
 // ********************************************************************
 //
 //
-//
 // 070606 fix for Valgrind by T. Koi
+//
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPFissionERelease_h
 #define G4ParticleHPFissionERelease_h 1

@@ -32,6 +32,8 @@
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 // 101111 Add Special treatment for Be9(n,2n)Be8(2a) case by T. Koi
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPInelasticBaseFS.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4Nucleus.hh"
@@ -120,7 +122,7 @@ void G4ParticleHPInelasticBaseFS::Init (G4double A, G4double Z, G4int M, G4Strin
   while (theData >> infoType)
   {
     theData >> dataType;
-    //-  G4cout << " DATA TYPE " << dataType << G4endl;
+
     if(dummy==INT_MAX) theData >> dummy >> dummy;
     if(dataType==3) 
     {
@@ -186,9 +188,9 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
   theResult.Clear();
   G4double eKinetic = theTrack.GetKineticEnergy();
   const G4HadProjectile *hadProjectile = &theTrack;
-  G4ReactionProduct reactionProduct( const_cast<G4ParticleDefinition *>(hadProjectile->GetDefinition()) );
-  reactionProduct.SetMomentum( hadProjectile->Get4Momentum().vect() );
-  reactionProduct.SetKineticEnergy( eKinetic );
+  G4ReactionProduct incidReactionProduct( const_cast<G4ParticleDefinition *>(hadProjectile->GetDefinition()) );
+  incidReactionProduct.SetMomentum( hadProjectile->Get4Momentum().vect() );
+  incidReactionProduct.SetKineticEnergy( eKinetic );
 
 // prepare target
   G4double targetMass;
@@ -212,14 +214,14 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 
   G4Nucleus aNucleus;
   G4ReactionProduct theTarget; 
-  G4ThreeVector neuVelo = (1./hadProjectile->GetDefinition()->GetPDGMass())*reactionProduct.GetMomentum();
+  G4ThreeVector neuVelo = (1./hadProjectile->GetDefinition()->GetPDGMass())*incidReactionProduct.GetMomentum();
   theTarget = aNucleus.GetBiasedThermalNucleus( targetMass, neuVelo, theTrack.GetMaterial()->GetTemperature());
 
   theTarget.SetDefinition( G4IonTable::GetIonTable()->GetIon( G4int(theBaseZ), G4int(theBaseA) , 0.0 ) );
 
 // prepare energy in target rest frame
   G4ReactionProduct boosted;
-  boosted.Lorentz(reactionProduct, theTarget);
+  boosted.Lorentz(incidReactionProduct, theTarget);
   eKinetic = boosted.GetKineticEnergy();
   G4double orgMomentum = boosted.GetMomentum().mag();
   
@@ -234,7 +236,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
       aPhaseMass+=theDefs[ii]->GetPDGMass();
     }
     thePhaseSpaceDistribution.Init(aPhaseMass, nDef);
-    thePhaseSpaceDistribution.SetProjectileRP(&reactionProduct);
+    thePhaseSpaceDistribution.SetProjectileRP(&incidReactionProduct);
     thePhaseSpaceDistribution.SetTarget(&theTarget);
     for(ii=0; ii<nDef; ii++) 
     {
@@ -268,18 +270,18 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
   if(theAngularDistribution!=0) 
   {
     theAngularDistribution->SetTarget(theTarget);
-    theAngularDistribution->SetProjectileRP(reactionProduct);
+    theAngularDistribution->SetProjectileRP(incidReactionProduct);
   }
   else if(theEnergyAngData!=0)
   {
     theEnergyAngData->SetTarget(theTarget);
-    theEnergyAngData->SetProjectileRP(reactionProduct);
+    theEnergyAngData->SetProjectileRP(incidReactionProduct);
   }
   
   G4ReactionProductVector * tmpHadrons = 0;
-  G4int ii, dummy;
+  G4int ii = 0, dummy;
   unsigned int i;
-  //-  G4cout << " theEnergyAngData RUN " << theEnergyAngData << G4endl;//GDEB
+
   if(theEnergyAngData != 0)
   {
     tmpHadrons = theEnergyAngData->Sample(eKinetic);
@@ -339,11 +341,11 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 	  {
 	    G4double mass1 = theDefs[0]->GetPDGMass();
 	    G4double mass2 = theDefs[1]->GetPDGMass();
-	    G4double mn = theProjectile->GetPDGMass();
+	    G4double massn = theProjectile->GetPDGMass();
 	    G4int z1 = static_cast<G4int>(theBaseZ+eps-theDefs[0]->GetPDGCharge()-theDefs[1]->GetPDGCharge());
 	    G4int a1 = static_cast<G4int>(theBaseA+eps)-theDefs[0]->GetBaryonNumber()-theDefs[1]->GetBaryonNumber();
 	    G4double concreteMass = G4NucleiProperties::GetNuclearMass(a1, z1);
-	    G4double availableEnergy = eKinetic+mn+localMass-mass1-mass2-concreteMass;
+	    G4double availableEnergy = eKinetic+massn+localMass-mass1-mass2-concreteMass;
 	    // available kinetic energy in CMS (non relativistic)
 	    G4double emin = availableEnergy+mass1+mass2 - std::sqrt((mass1+mass2)*(mass1+mass2)+orgMomentum*orgMomentum);
 	    G4double p1=std::sqrt(2.*mass2*emin);
@@ -370,8 +372,8 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 	  aHadron->SetTotalEnergy( std::sqrt(aHadron->GetMass()*aHadron->GetMass()
 	                              +bufferedDirection.mag2()) );
 	  aHadron->SetMomentum(bufferedDirection);
-          aHadron->Lorentz(*aHadron, -1.*(theTarget+reactionProduct)); 
-#ifdef G4PHPDEBUG
+          aHadron->Lorentz(*aHadron, -1.*(theTarget+incidReactionProduct)); 
+#ifdef G4PHPDEBUG                     
 	    if(getenv("G4ParticleHPDebug"))
 	  {
 	    G4cout << " G4ParticleHPInelasticBaseFS "<<aHadron->GetTotalEnergy()<<" "<<aHadron->GetMomentum()<<G4endl;
@@ -396,7 +398,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
   {
     // the photon distributions are in the Nucleus rest frame.
     G4ReactionProduct boosted_tmp;
-    boosted_tmp.Lorentz(reactionProduct, theTarget);
+    boosted_tmp.Lorentz(incidReactionProduct, theTarget);
     G4double anEnergy = boosted_tmp.GetKineticEnergy();
     thePhotons = theFinalStatePhotons->GetPhotons(anEnergy);
     if(thePhotons!=0)
@@ -411,9 +413,14 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
   else if(theEnergyAngData!=0)
   {
 
-    // PA130927: do not create photons to adjust binding energy
+   // PA130927: do not create photons to adjust binding energy
     G4bool bAdjustPhotons = true;
+#ifdef PHP_AS_HP 
+    bAdjustPhotons = true; 
+#else
     if ( getenv( "G4PHP_DO_NOT_ADJUST_FINAL_STATE" ) ) bAdjustPhotons = false;
+#endif
+ 
     if( bAdjustPhotons ) {
       G4double theGammaEnergy = theEnergyAngData->GetTotalMeanEnergy();
       G4double anEnergy = boosted.GetKineticEnergy();
@@ -488,7 +495,7 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 	    {
 	      theOtherPhotons = theGammas.GetDecayGammas(iLevel);
 #ifdef G4PHPDEBUG
-	      if( getenv("G4ParticleHPDebug"))  G4cout << ii << " G4ParticleHPInelasticBaseFS::BaseApply adding gamma from level " << iLevel << theOtherPhotons->operator[](ii)->GetKineticEnergy() << G4endl;
+	      if( getenv("G4ParticleHPDebug"))  G4cout << " G4ParticleHPInelasticBaseFS::BaseApply adding gamma from level " << iLevel << theOtherPhotons->operator[](ii)->GetKineticEnergy() << G4endl;
 #endif
 	    }
 	  else
@@ -506,7 +513,8 @@ void G4ParticleHPInelasticBaseFS::BaseApply(const G4HadProjectile & theTrack,
 		{
 		  thePhotons->push_back(theOtherPhotons->operator[](iii));
 #ifdef G4PHPDEBUG
-		  if( getenv("G4ParticleHPDebug"))  G4cout << iii << " G4ParticleHPInelasticBaseFS::BaseApply adding gamma " << theOtherPhotons->operator[](iii)->GetKineticEnergy() << G4endl;
+	  if( getenv("G4ParticleHPDebug"))
+	        G4cout << iii << " G4ParticleHPInelasticBaseFS::BaseApply adding gamma " << theOtherPhotons->operator[](iii)->GetKineticEnergy() << G4endl;
 #endif
 		}
 	      delete theOtherPhotons; 

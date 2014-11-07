@@ -28,6 +28,8 @@
 // 25-08-06 New Final State type (refFlag==3 , Legendre (Low Energy) + Probability (High Energy) )
 //          is added by T. KOI
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #ifndef G4ParticleHPElasticFS_h
 #define G4ParticleHPElasticFS_h 1
 

@@ -27,6 +27,8 @@
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
 //
+// P. Arce, Dec-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHP2N2AInelasticFS.hh"
 #include "G4Nucleus.hh"
 #include "G4Neutron.hh"

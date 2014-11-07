@@ -24,15 +24,14 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleHPElementData.hh,v 1.1 2013/02/20 17:34:50 arce Exp $
-// GEANT4 tag $Name: GAMOS-04-01-00 $
-//
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
  // Builds and has the Cross-section data for one material.
 //
 // 080520 Delete unnecessary dependencies by T. Koi
  
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #ifndef G4ParticleHPElementData_h
 #define G4ParticleHPElementData_h 1
 #include "globals.hh"

@@ -29,6 +29,8 @@
 //
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPCapture.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4SystemOfUnits.hh"

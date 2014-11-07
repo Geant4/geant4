@@ -24,12 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleHPInelasticData.hh,v 1.1 2013/02/20 17:34:55 arce Exp $
-// GEANT4 tag $Name: GAMOS-04-01-00 $
-//
 // 080417 Add IsZAApplicable method (return false) by T. Koi
 // 080428 Add bool onFlightDB by T. Koi
 // 091118 Add Ignore and Enable On Flight Doppler Broadening methods by T. Koi
+//
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPInelasticData_h
 #define G4ParticleHPInelasticData_h 1

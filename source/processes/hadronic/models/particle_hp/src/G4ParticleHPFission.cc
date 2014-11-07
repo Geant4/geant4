@@ -30,6 +30,8 @@
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
 // 08-08-06 delete unnecessary and harmed declaration; Bug Report[857]
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPFission.hh"
 #include "G4SystemOfUnits.hh"
 

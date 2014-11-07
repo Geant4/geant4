@@ -23,7 +23,10 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+//
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
+//
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPThermalBoost_h
 #define G4ParticleHPThermalBoost_h

@@ -38,6 +38,8 @@
 
 // 15-Nov-06 First implementation is done by T. Koi (SLAC/SCCS)
 // 070625 implement clearCurrentXSData to fix memory leaking by T. Koi
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 
 #include <list>
 #include <algorithm>

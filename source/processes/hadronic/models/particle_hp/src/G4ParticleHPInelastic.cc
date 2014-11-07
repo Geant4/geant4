@@ -37,6 +37,8 @@
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard (and T. Koi)
 // 081203 limit maximum trial for creating final states add protection for 1H isotope case by T. Koi
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPInelastic.hh"
 #include "G4SystemOfUnits.hh"
 

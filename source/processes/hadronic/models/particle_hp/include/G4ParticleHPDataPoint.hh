@@ -25,6 +25,8 @@
 //
 //
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #ifndef G4ParticleHPDataPoint_h
 #define G4ParticleHPDataPoint_h 1
 

@@ -26,7 +26,8 @@
 // neutron_hp -- source file
 // J.P. Wellisch, Nov-1996
 // A prototype of the low energy neutron transport model.
-
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPMadlandNixSpectrum.hh"
 #include "G4SystemOfUnits.hh"
 

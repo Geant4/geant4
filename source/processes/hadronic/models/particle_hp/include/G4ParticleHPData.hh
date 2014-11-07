@@ -29,7 +29,8 @@
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
  // Has the Cross-section data for all materials.
- 
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #ifndef G4ParticleHPData_h
 #define G4ParticleHPData_h 1
 #include "globals.hh"

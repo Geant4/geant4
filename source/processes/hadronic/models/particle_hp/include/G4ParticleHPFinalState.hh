@@ -24,11 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleHPFinalState.hh,v 1.1 2013/02/20 17:34:52 arce Exp $
-// GEANT4 tag $Name: GAMOS-04-01-00 $
-//
 // 080721 Create adjust_final_state method by T. Koi  
 // 080801 Introduce theNDLDataA,Z which has A and Z of NDL data by T. Koi
+//
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPFinalState_h
 #define G4ParticleHPFinalState_h
@@ -90,6 +89,7 @@ public:
   void     SetA_Z(G4double anA, G4double aZ, G4int aM=0) {theBaseA = anA; theBaseZ = aZ; theBaseM=aM; };
   G4double GetZ() { return theBaseZ; };
   G4double GetN() { return theBaseA; };
+  G4double GetA() { return theBaseA; }; 
   G4int GetM() { return theBaseM; };
 
   void SetAZMs(G4double anA, G4double aZ, G4int aM, G4ParticleHPDataUsed used) 
@@ -99,8 +99,7 @@ public:
   void SetProjectile( G4ParticleDefinition* projectile ) {
     theProjectile = projectile; }
 
-   public:
-//GAMOSWIN  protected:
+protected:
   
   G4bool hasXsec;
   G4bool hasFSData;

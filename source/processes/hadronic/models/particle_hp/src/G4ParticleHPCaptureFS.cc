@@ -33,6 +33,8 @@
 // 101203 Bugzilla/Geant4 Problem 1155 Lack of residual in some case 
 // 110430 Temporary solution in the case of being MF6 final state in Capture reaction (MT102)
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPCaptureFS.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4PhysicalConstants.hh"
@@ -67,7 +69,7 @@
     G4ThreeVector neutronVelocity = 1./G4Neutron::Neutron()->GetPDGMass()*theNeutron.GetMomentum();
     G4double temperature = theTrack.GetMaterial()->GetTemperature();
     theTarget = aNucleus.GetBiasedThermalNucleus(targetMass, neutronVelocity, temperature);
-    theTarget.SetDefinition( G4IonTable::GetIonTable()->GetIon( G4int(theBaseZ), G4int(theBaseA) , 0.0 ) );  //TESTPHP
+   theTarget.SetDefinition( G4IonTable::GetIonTable()->GetIon( G4int(theBaseZ), G4int(theBaseA) , 0.0 ) );  //TESTPHP
 
 // go to nucleus rest system
     theNeutron.Lorentz(theNeutron, -1*theTarget);

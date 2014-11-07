@@ -24,13 +24,11 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleHPInelastic.hh,v 1.1 2013/02/20 17:34:54 arce Exp $
-// GEANT4 tag $Name: GAMOS-04-01-00 $
-//
  // Hadronic Process: High Precision low E neutron tracking
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
  // Builds and has the Cross-section data for one material.
- 
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #ifndef G4ParticleHPInelastic_h
 #define G4ParticleHPInelastic_h 1
 
@@ -101,8 +99,7 @@ class G4ParticleHPInelastic : public G4HadronicInteraction
       G4int GetVerboseLevel() const;
       void SetVerboseLevel( G4int );
 
-public:
-//GAMOSWIN protected:
+protected:
   
   G4double * xSec;
   //G4ParticleHPChannelList * theInelastic; // one List per element

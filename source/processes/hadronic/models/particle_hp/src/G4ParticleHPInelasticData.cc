@@ -34,6 +34,8 @@
 //        from GetCrossSection to BuildPhysicsTable by T. Koi
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPInelasticData.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4Neutron.hh"

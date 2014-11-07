@@ -35,6 +35,8 @@
 //        modified by T. Koi.
 // 080901 bug fix of too many secnodaries production in nd reactinos by T. Koi
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPProduct.hh" 
 #include "G4Poisson.hh"
 #include "G4Proton.hh"
@@ -51,7 +53,9 @@ G4int G4ParticleHPProduct::GetMultiplicity(G4double anEnergy )
   multi = G4int(mean+0.0001);
   //if(theMassCode==0) multi = G4Poisson(mean); // @@@@gammas. please X-check this
   //080718
-  //-  if ( theMassCode == 0 )  MUST BE DONE FOR ALL PARTICLES
+#ifdef PHP_AS_HP
+  if ( theMassCode == 0 ) // DELETE THIS: IT MUST BE DONE FOR ALL PARTICLES
+#endif
   { 
      if ( G4int ( mean ) == mean )
      {
@@ -59,11 +63,12 @@ G4int G4ParticleHPProduct::GetMultiplicity(G4double anEnergy )
      }
      else
      {
-       if( theMultiplicityMethod == G4HPMultiPoisson ) {
-  //GAMOS
+#ifdef PHP_AS_HP
 	 multi = G4Poisson ( mean ); 
-	 
-if( getenv("G4PHPTEST") )  G4cout << " MULTIPLICITY MULTIPLIED " << multi << " " << theMassCode << G4endl;
+#else 
+       if( theMultiplicityMethod == G4HPMultiPoisson ) {
+	 multi = G4Poisson ( mean ); 	 
+	 if( getenv("G4PHPTEST") )  G4cout << " MULTIPLICITY MULTIPLIED " << multi << " " << theMassCode << G4endl;
        } else { // if( theMultiplicityMethod == G4HPMultiBetweenInts ) {
 	 G4double radnf = CLHEP::RandFlat::shoot();
 	 G4int imulti = G4int(mean);
@@ -71,6 +76,7 @@ if( getenv("G4PHPTEST") )  G4cout << " MULTIPLICITY MULTIPLIED " << multi << " "
 	 //	 G4cout << theMass << " multi " << multi << " mean " << mean 
 	 //		<< " radnf " << radnf << " mean-imulti " << mean-imulti << G4endl;
        }
+#endif
 	//       multi = int(mean);
 	//       if( CLHEP::RandFlat::shoot() > mean-multi ) multi++;
      }
@@ -106,9 +112,8 @@ G4ReactionProductVector * G4ParticleHPProduct::Sample(G4double anEnergy, G4int m
 #endif
     tmp = theDist->Sample(anEnergy, theMassCode, theMass);
     if(tmp != 0) { result->push_back(tmp); }
-#ifdef G4PHPDEBUG
-    if( getenv("G4ParticleHPDebug") && tmp != 0 ) 
-      G4cout << multi << " " << i << " @@@ G4ParticleHPProduct::Sample " << tmp->GetDefinition()->GetParticleName() << " E= " << tmp->GetKineticEnergy() << G4endl;
+#ifndef G4PHPDEBUG //GDEB
+    if( getenv("G4ParticleHPDebug") && tmp != 0 )   G4cout << multi << " " << i << " @@@ G4ParticleHPProduct::Sample " << tmp->GetDefinition()->GetParticleName() << " E= " << tmp->GetKineticEnergy() << G4endl; 
 #endif
   }
   if(multi == 0) 
@@ -125,8 +130,6 @@ G4ReactionProductVector * G4ParticleHPProduct::Sample(G4double anEnergy, G4int m
   if(tmp != 0) { result->push_back(tmp); }
   }
   */
-  G4ReactionProduct* seco = (*result)[0];
-if( getenv("G4PHPTEST") )  G4cout << " G4ParticleHPPRoduct dir cos theta " << cos(seco->GetMomentum().theta()) << G4endl;
 
   return result;
 }

@@ -29,6 +29,8 @@
 //
 // 13-Jan-06 fix in Sample by T. Koi
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPPartial.hh"  
 #include "G4ParticleHPInterpolator.hh"
 #include "Randomize.hh"

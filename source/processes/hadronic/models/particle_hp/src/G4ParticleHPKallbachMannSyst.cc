@@ -29,6 +29,8 @@
 //
 // 080801 Protect div0 error, when theCompundFraction is 1 by T. Koi
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPKallbachMannSyst.hh" 
 #include "G4SystemOfUnits.hh"
 #include "Randomize.hh" 

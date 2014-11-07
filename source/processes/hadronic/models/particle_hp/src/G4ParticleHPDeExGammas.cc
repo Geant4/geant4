@@ -29,11 +29,14 @@
 //
 // 080801 Prohibit level transition to oneself by T. Koi
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPDeExGammas.hh"
 #include "G4SystemOfUnits.hh"
 
 void G4ParticleHPDeExGammas::Init(std::istream & aDataFile)
 {
+  //  G4cout << this << "ExGammas Init LEVEL " << G4endl; //GDEB
   G4ParticleHPGamma ** theGammas = new G4ParticleHPGamma * [50];
   G4int nGammas = 0;
   G4int nBuff = 50;
@@ -74,6 +77,7 @@ void G4ParticleHPDeExGammas::Init(std::istream & aDataFile)
     currentE = nextE;
   }
 
+  //  G4cout << this << "LEVEL " << nLevels << G4endl; //GDEB
   // Build the levels
 
   theLevels = new G4ParticleHPLevel[nLevels];

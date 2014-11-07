@@ -24,7 +24,6 @@
 // ********************************************************************
 //
 //
-//
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
 //
@@ -33,7 +32,8 @@
 // 070615 fix memory leaking by T. Koi
 // 080625 fix memory leaking by T. Koi
 //
- 
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #ifndef G4ParticleHPPhotonDist_h
 #define G4ParticleHPPhotonDist_h 1
 #include "globals.hh"

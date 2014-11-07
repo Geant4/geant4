@@ -24,13 +24,13 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleHPChannelList.hh,v 1.1 2013/02/20 17:34:47 arce Exp $
-// GEANT4 tag $Name: GAMOS-04-01-00 $
 //
  // Hadronic Process: Very Low Energy Neutron X-Sections
  // original by H.P. Wellisch, TRIUMF, 14-Feb-97
  // Builds and has the Cross-section data for one material.
  
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #ifndef G4ParticleHPChannelList_h
 #define G4ParticleHPChannelList_h 1
 
@@ -95,8 +95,7 @@ class G4ParticleHPChannelList
   void DumpInfo();
 
 
-public: 
-//GAMOSWIN private:
+private:
 
   static G4ThreadLocal G4int trycounter;
   G4ParticleHPChannel ** theChannels;

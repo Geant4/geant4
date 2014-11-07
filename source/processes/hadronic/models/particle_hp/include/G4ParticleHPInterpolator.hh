@@ -24,9 +24,10 @@
 // ********************************************************************
 //
 //
-//
 // 080809 Change interpolation scheme of "histogram", now using LinearLinear
 //        For multidimensional interpolations By T. Koi
+//
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPInterpolator_h
 #define G4ParticleHPInterpolator_h 1

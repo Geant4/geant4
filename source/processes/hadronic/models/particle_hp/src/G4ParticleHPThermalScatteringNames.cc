@@ -34,6 +34,8 @@
 // Class Description - End
 
 // 15-Nov-06 First implementation is done by T. Koi (SLAC/SCCS)
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 
 #include "G4ParticleHPThermalScatteringNames.hh"
 #include "G4Neutron.hh"

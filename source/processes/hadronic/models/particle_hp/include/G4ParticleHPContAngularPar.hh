@@ -24,10 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id: G4ParticleHPContAngularPar.hh,v 1.1 2013/02/20 17:34:47 arce Exp $
-// GEANT4 tag $Name: GAMOS-04-01-00 $
 //
 // 080718 Add ClearHistories method and related class member
+//
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPContAngularPar_h
 #define G4ParticleHPContAngularPar_h 1
@@ -55,7 +55,7 @@ class G4ParticleHPContAngularPar
     theMaxEner = -DBL_MAX;
   }
 
-  G4ParticleHPContAngularPar(G4ParticleDefinition* projectile); //GAMOS
+  G4ParticleHPContAngularPar(G4ParticleDefinition* projectile); 
 
   ~G4ParticleHPContAngularPar()
   {

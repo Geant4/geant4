@@ -14,14 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
-25 September 2014 Tatsumi Koi   (hadr-hpp-V10-00-04)
+6 November 2014 Pedro Arce   (hadr-hpp-V10-00-05)
 ---------------------------------------------------
--Change G4ParticleTable::GetParticleTable()->GetIon(,,) 
-     to G4IonTable::GetIonTable()->GetIon(,,);
-	src/G4ParticleHPFissionFS.cc
-	src/G4ParticleHPEnAngCorrelation.cc
-	src/G4ParticleHPCaptureFS.cc
-
+- Code cleanup
+- Compilation flag PHP_AS_HP for comparison with neutron_hp
 
 4 August 2014 Tatsumi Koi   (hadr-hpp-V10-00-03)
 ---------------------------------------------------

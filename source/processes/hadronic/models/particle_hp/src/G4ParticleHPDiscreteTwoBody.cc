@@ -31,6 +31,8 @@
 //080709 Bug fix Sampling Legendre expansion by T. Koi   
 //101110 Bug fix in MF=6, LAW=2 case; contribution from E. Mendoza, D. Cano-Ott (CIEMAT)
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPDiscreteTwoBody.hh"
 #include "G4Gamma.hh"
 #include "G4Electron.hh"

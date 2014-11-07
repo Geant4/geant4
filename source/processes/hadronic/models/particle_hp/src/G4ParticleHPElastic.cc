@@ -30,6 +30,8 @@
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
 // 080319 Compilation warnings - gcc-4.3.0 fix by T. Koi
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPElastic.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4ParticleHPElasticFS.hh"

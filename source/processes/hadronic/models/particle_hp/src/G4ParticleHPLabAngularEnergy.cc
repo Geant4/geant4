@@ -29,6 +29,8 @@
 //
 // 080808 Bug fix in serching mu bin and index for theBuff2b by T. Koi
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPLabAngularEnergy.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"

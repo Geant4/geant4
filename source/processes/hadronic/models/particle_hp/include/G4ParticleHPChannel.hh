@@ -34,6 +34,8 @@
 //
 // 080520 Delete unnecessary dependencies by T. Koi
  
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #ifndef G4ParticleHPChannel_h
 #define G4ParticleHPChannel_h 1
 #include "globals.hh"
@@ -160,6 +162,10 @@ public:
 
   G4String GetFSType() const {
     return theFSType;
+  }
+
+  G4ParticleHPFinalState ** GetFinalStates() const {
+    return theFinalStates; 
   }
   
 private:

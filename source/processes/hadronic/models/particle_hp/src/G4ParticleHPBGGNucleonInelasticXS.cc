@@ -40,6 +40,8 @@
 //
 // -------------------------------------------------------------------
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 
 #include "G4ParticleHPBGGNucleonInelasticXS.hh"
 #include "G4SystemOfUnits.hh"

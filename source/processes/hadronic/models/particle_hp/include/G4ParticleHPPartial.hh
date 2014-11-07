@@ -24,8 +24,9 @@
 // ********************************************************************
 //
 //
-//
 // 070618 Comment out unused private member leaking by T. Koi
+//
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPPartial_h
 #define G4ParticleHPPartial_h 1

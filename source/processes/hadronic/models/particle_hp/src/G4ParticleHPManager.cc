@@ -27,7 +27,8 @@
 // Manager of NetronHP
 // 
 // 121031 First implementation done by T. Koi (SLAC/PPA)
-
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPManager.hh"
 #include "G4HadronicException.hh"
 

@@ -24,6 +24,7 @@
 // ********************************************************************
 //
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPDeExGammas_h
 #define G4ParticleHPDeExGammas_h 1
@@ -89,6 +90,7 @@ class G4ParticleHPDeExGammas
   
   inline G4ParticleHPLevel * GetLevel(G4int i)
   {
+    if(getenv("G4PHPTEST")) G4cout << this << " GetLEVEL " << i << " n " << nLevels << G4endl;
     if(i>nLevels-1) return 0;
     return theLevels+i;
   }

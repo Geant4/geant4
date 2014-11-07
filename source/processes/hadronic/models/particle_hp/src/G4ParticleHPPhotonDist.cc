@@ -41,7 +41,8 @@
 // 101111 Change warning message for "repFlag == 2 && isoFlag != 1" case 
 //
 // there is a lot of unused (and undebugged) code in this file. Kept for the moment just in case. @@
-
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include <numeric>
 
 #include "G4ParticleHPPhotonDist.hh"

@@ -29,6 +29,8 @@
 //
 // 100413 Fix bug in incidence energy by T. Koi  
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPEnAngCorrelation.hh"
 #include "G4LorentzRotation.hh"
 #include "G4LorentzVector.hh"
@@ -142,10 +144,10 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
 
   for(i=0; i<nProducts; i++)
   {
-    if( nParticles[i] == 0 ) continue;
+    //-    if( nParticles[i] == 0 ) continue;
     it = theProducts[i].Sample(anEnergy,nParticles[i]); 
     G4double aMeanEnergy = theProducts[i].MeanEnergyOfThisInteraction();
-    if( getenv("G4PHPTEST") ) G4cout << " EnAnG energy sampled " << it->operator[](0)->GetKineticEnergy() << " aMeanEnergy " << aMeanEnergy << G4endl; // GDEB
+    //    if( getenv("G4PHPTEST") ) G4cout << " EnAnG energy sampled " << it->operator[](0)->GetKineticEnergy() << " aMeanEnergy " << aMeanEnergy << G4endl; // GDEB
     if(aMeanEnergy>0)
     {
       theTotalMeanEnergy += aMeanEnergy;
@@ -165,7 +167,7 @@ G4ReactionProductVector * G4ParticleHPEnAngCorrelation::Sample(G4double anEnergy
     if( getenv("G4PHPTEST") )	G4cout << " G4particleHPEnAngCorrelation COS THETA " <<  cos(it->operator[](ii)->GetMomentum().theta()) << G4endl;
 	it->operator[](ii)->SetMomentum(pTmp1.vect());
 	it->operator[](ii)->SetTotalEnergy(pTmp1.e());
-	    if( getenv("G4PHPTEST") ) G4cout << " G4particleHPEnAngCorrelation COS THETA after toLab " <<  cos(it->operator[](ii)->GetMomentum().theta()) << G4endl;
+	if( getenv("G4PHPTEST") ) G4cout << " G4particleHPEnAngCorrelation COS THETA after toLab " <<  cos(it->operator[](ii)->GetMomentum().theta()) << G4endl;
 
 	if(frameFlag==1) // target rest //TK 100413 should be LAB?
 	{

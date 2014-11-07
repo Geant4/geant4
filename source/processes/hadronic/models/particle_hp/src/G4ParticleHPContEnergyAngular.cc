@@ -1,4 +1,3 @@
-#define INTERPOLATE_SECO
 //
 // ********************************************************************
 // * License and Disclaimer                                           *
@@ -30,6 +29,7 @@
 //
 // 080721 To be "ClearHistories" effective, the selection scheme of angular distribution is modified by T. Koi
 //
+// P. Arce, Dec-2014 Conversion neutron_hp to particle_hp
 //
 #include "G4ParticleHPContEnergyAngular.hh"
 
@@ -41,10 +41,13 @@ G4ReactionProduct * G4ParticleHPContEnergyAngular::Sample(G4double anEnergy, G4d
    for(i=0;i<nEnergy;i++)
    {
      it = i;
-     //     if(theAngular[i].GetEnergy()>anEnergy) break;
-     if(theAngular[i].GetEnergy()>=anEnergy) break; //GAMOS
+#ifdef PHP_AS_HP 
+     if(theAngular[i].GetEnergy()>anEnergy) break;
+#else
+     if(theAngular[i].GetEnergy()>=anEnergy) break;
+#endif
    }
-if( getenv("G4PHPTEST") )    G4cout << i << " G4ParticleHPContEnergyAngular dataE " << theAngular[i].GetEnergy() << " > " << anEnergy << " it_theAngular " << it << " interpolation " << theInterpolation << G4endl; //GDEB
+   if( getenv("G4PHPTEST") )    G4cout << i << " G4ParticleHPContEnergyAngular dataE " << theAngular[i].GetEnergy() << " > " << anEnergy << " it_theAngular " << it << " interpolation " << theInterpolation << G4endl; //GDEB
    G4double targetMass = GetTarget()->GetMass();
    if(it==0)
    {
@@ -68,8 +71,15 @@ if( getenv("G4PHPTEST") )    G4cout << i << " G4ParticleHPContEnergyAngular data
      //if(random<offset/deltaE) it--;
      //--- create new 
      //     if( theManager.GetScheme(0) != LINLIN ) {  // asserted in G4ParticleHPContEnergyAngular::init there is only one range
-#ifdef INTERPOLATE_SECO
-     if( getenv("G4PHPTEST") )     G4cout << i << " G4ParticleHPContEnergyAngular To BUILDBYINTERPOLATION " << it << " : " << theAngular[it].GetEnergy()<< " , " << theAngular[it].GetNEnergies() << " " << it-1 << " : " << theAngular[it-1].GetEnergy()<< " : " << theAngular[it-1].GetNEnergies() << G4endl; //GDEB
+#ifdef PHP_AS_HP
+     theAngular[it].SetTarget(GetTarget());
+     theAngular[it].SetTargetCode(theTargetCode);
+     theAngular[it].SetPrimary(GetProjectileRP());
+     result = theAngular[it].Sample(anEnergy, massCode, targetMass, 
+				    theAngularRep, theInterpolation);
+     currentMeanEnergy = theAngular[it].MeanEnergyOfThisInteraction(); 
+#else
+    if( getenv("G4PHPTEST") )     G4cout << i << " G4ParticleHPContEnergyAngular To BUILDBYINTERPOLATION " << it << " : " << theAngular[it].GetEnergy()<< " , " << theAngular[it].GetNEnergies() << " " << it-1 << " : " << theAngular[it-1].GetEnergy()<< " : " << theAngular[it-1].GetNEnergies() << G4endl; //GDEB
 
      G4ParticleHPContAngularPar * angular = new  G4ParticleHPContAngularPar(theProjectile );
      
@@ -84,15 +94,10 @@ if( getenv("G4PHPTEST") )    G4cout << i << " G4ParticleHPContEnergyAngular data
      currentMeanEnergy = angular->MeanEnergyOfThisInteraction();
 
      delete angular;
-#else      
-     theAngular[it].SetTarget(GetTarget());
-     theAngular[it].SetTargetCode(theTargetCode);
-     theAngular[it].SetPrimary(GetProjectileRP());
-     result = theAngular[it].Sample(anEnergy, massCode, targetMass, 
-				    theAngularRep, theInterpolation);
-     currentMeanEnergy = theAngular[it].MeanEnergyOfThisInteraction(); 
 #endif
    }
+
+   //      G4cout << " 0 0 @@@ G4ParticleHPContEnergyAngular::Sample " << result->GetDefinition()->GetParticleName() << " E= " << result->GetKineticEnergy() << G4endl;//GDEB
 
    return result;
 }

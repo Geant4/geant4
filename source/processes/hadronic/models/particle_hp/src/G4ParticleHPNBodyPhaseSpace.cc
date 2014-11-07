@@ -25,6 +25,8 @@
 //
 //
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPNBodyPhaseSpace.hh"
 #include "G4PhysicalConstants.hh"
 #include "Randomize.hh"

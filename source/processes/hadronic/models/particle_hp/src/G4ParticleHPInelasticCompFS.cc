@@ -43,6 +43,8 @@
 // 101111 add safty for _nat_ data case in Binary reaction, but break conservation  
 // 110430 add Reaction Q value and break up flag (MF3::QI and LR)
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPInelasticCompFS.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4Nucleus.hh"
@@ -231,9 +233,9 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
     theResult.Clear();
     G4double eKinetic = theTrack.GetKineticEnergy();
     const G4HadProjectile *hadProjectile = &theTrack;
-    G4ReactionProduct reactionProduct( const_cast<G4ParticleDefinition *>(hadProjectile->GetDefinition()) ); // reactionProduct
-    reactionProduct.SetMomentum( hadProjectile->Get4Momentum().vect() );
-    reactionProduct.SetKineticEnergy( eKinetic );
+    G4ReactionProduct incidReactionProduct( const_cast<G4ParticleDefinition *>(hadProjectile->GetDefinition()) ); // incidReactionProduct
+    incidReactionProduct.SetMomentum( hadProjectile->Get4Momentum().vect() );
+    incidReactionProduct.SetKineticEnergy( eKinetic );
 
 // prepare target
     G4int i;
@@ -255,9 +257,9 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
 //        targetMass = theFinalStatePhotons[50]->GetTargetMass();
     G4ReactionProduct theTarget; 
     G4Nucleus aNucleus;
-    G4ThreeVector neuVelo = (1./hadProjectile->GetDefinition()->GetPDGMass())*reactionProduct.GetMomentum();
+    G4ThreeVector neuVelo = (1./hadProjectile->GetDefinition()->GetPDGMass())*incidReactionProduct.GetMomentum();
     theTarget = aNucleus.GetBiasedThermalNucleus( targetMass, neuVelo, theTrack.GetMaterial()->GetTemperature());
-    theTarget.SetDefinition( G4IonTable::GetIonTable()->GetIon( G4int(theBaseZ), G4int(theBaseA) , 0.0 ) ); 
+    theTarget.SetDefinition( G4IonTable::GetIonTable()->GetIon( G4int(theBaseZ), G4int(theBaseA) , 0.0 ) );  //XX
 
 // prepare the residual mass
     G4double residualMass=0;
@@ -268,7 +270,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
 
 // prepare energy in target rest frame
     G4ReactionProduct boosted;
-    boosted.Lorentz(reactionProduct, theTarget);
+    boosted.Lorentz(incidReactionProduct, theTarget);
     eKinetic = boosted.GetKineticEnergy();
 //    G4double momentumInCMS = boosted.GetTotalMomentum();
   
@@ -276,13 +278,13 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
     G4int it = SelectExitChannel( eKinetic );
    
 // set target and neutron in the relevant exit channel
-    InitDistributionInitialState(reactionProduct, theTarget, it);    
+    InitDistributionInitialState(incidReactionProduct, theTarget, it);    
 
     G4ReactionProductVector * thePhotons = 0;
     G4ReactionProductVector * theParticles = 0;
     G4ReactionProduct aHadron;
     aHadron.SetDefinition(aDefinition); // what if only cross-sections exist ==> Na 23 11 @@@@    
-    G4double availableEnergy = reactionProduct.GetKineticEnergy() + reactionProduct.GetMass() - aHadron.GetMass() +
+    G4double availableEnergy = incidReactionProduct.GetKineticEnergy() + incidReactionProduct.GetMass() - aHadron.GetMass() +
                              (targetMass - residualMass)*theProjectile->GetPDGMass();
 //080730c
     if ( availableEnergy < 0 )
@@ -304,7 +306,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
       aHadron.SetKineticEnergy(availableEnergy*residualMass*theProjectile->GetPDGMass()/
                                (aHadron.GetMass()+residualMass*theProjectile->GetPDGMass()));
 
-      //aHadron.SetMomentum(theProjectile.GetMomentum()*(1./theProjectile.GetTotalMomentum())*
+      //aHadron.SetMomentum(incidReactionProduct.GetMomentum()*(1./incidReactionProduct.GetTotalMomentum())*
       //                  std::sqrt(aHadron.GetTotalEnergy()*aHadron.GetTotalEnergy()-
       //                            aHadron.GetMass()*aHadron.GetMass()));
 
@@ -313,12 +315,12 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
       G4double p = 0.0;
       if ( p2 > 0.0 ) p = std::sqrt( p ); 
 
-      aHadron.SetMomentum(reactionProduct.GetMomentum()*(1./reactionProduct.GetTotalMomentum())*p );
+      aHadron.SetMomentum(incidReactionProduct.GetMomentum()*(1./incidReactionProduct.GetTotalMomentum())*p );
 
     }
     else
     {
-      while( iLevel!=-1 && theGammas.GetLevel(iLevel) == 0 ) { iLevel--; }
+      while ( iLevel!=-1 && theGammas.GetLevel(iLevel) == 0 ) { iLevel--; }
     }
 
 
@@ -374,7 +376,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
            iLevel = 0;
            G4bool find = false;
            G4int imaxEx = 0;
-           while( theGammas.GetLevel(iLevel+1) == 0 ) 
+           while( theGammas.GetLevel(iLevel+1) != 0 ) 
            { 
               G4double maxEx = 0.0;
               if ( maxEx < theGammas.GetLevel(iLevel)->GetLevelEnergy() ) 
@@ -449,7 +451,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
        // the photon distributions are in the Nucleus rest frame.
        // TK residual rest frame
       G4ReactionProduct boosted_tmp;
-      boosted_tmp.Lorentz(reactionProduct, theTarget);
+      boosted_tmp.Lorentz(incidReactionProduct, theTarget);
       G4double anEnergy = boosted_tmp.GetKineticEnergy();
       thePhotons = theFinalStatePhotons[it]->GetPhotons(anEnergy);
       G4double aBaseEnergy = theFinalStatePhotons[it]->GetLevelEnergy();
@@ -646,7 +648,7 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
       
       //080612TK contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #6
       //theResidual.SetMomentum(-1.*aHadron.GetMomentum());
-      G4ThreeVector incidentNeutronMomentum = reactionProduct.GetMomentum();
+      G4ThreeVector incidentNeutronMomentum = incidReactionProduct.GetMomentum();
       theResidual.SetMomentum(incidentNeutronMomentum - aHadron.GetMomentum());
       
       theResidual.Lorentz(theResidual, -1.*theTarget);
@@ -693,10 +695,10 @@ void G4ParticleHPInelasticCompFS::CompositeApply(const G4HadProjectile & theTrac
 
         //080612TK contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #4
         //theResidual.SetMomentum(-1.*totalMomentum);
-	//G4ThreeVector incidentNeutronMomentum = reactionProduct.GetMomentum();
+	//G4ThreeVector incidentNeutronMomentum = incidReactionProduct.GetMomentum();
         //theResidual.SetMomentum(incidentNeutronMomentum - aHadron.GetMomentum());
 //080717 TK Comment still do NOT include photon's mometum which produce by thePhotons
-        theResidual.SetMomentum( reactionProduct.GetMomentum() + theTarget.GetMomentum() - totalMomentum );
+        theResidual.SetMomentum( incidReactionProduct.GetMomentum() + theTarget.GetMomentum() - totalMomentum );
 
         theSec = new G4DynamicParticle;   
         theSec->SetDefinition(theResidual.GetDefinition());
@@ -790,9 +792,11 @@ void G4ParticleHPInelasticCompFS::two_body_reaction ( G4DynamicParticle* proj, G
    G4double gamma = AA/(A+1-AA)*beta;
    G4double E3 = AA/std::pow((1+A),2)*(beta*beta+1+2*beta*mu)*E1;
    G4double omega3 = (1+beta*mu)/std::sqrt(beta*beta+1+2*beta*mu);
+   if ( omega3 > 1.0 ) omega3 = 1.0;
 
    G4double E4 = (A+1-AA)/std::pow((1+A),2)*(gamma*gamma+1-2*gamma*mu)*E1;
    G4double omega4 = (1-gamma*mu)/std::sqrt(gamma*gamma+1-2*gamma*mu);
+   if ( omega4 > 1.0 ) omega4 = 1.0;
 
    hadron->SetKineticEnergy ( E3 );
    

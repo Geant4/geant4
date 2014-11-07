@@ -29,6 +29,8 @@
 //
 // 080612 SampleDiscreteTwoBody contribution from Benoit Pirard and Laurent Desorgher (Univ. Bern) #3
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPLegendreStore.hh"
 #include "G4ParticleHPVector.hh"
 #include "G4ParticleHPInterpolator.hh"

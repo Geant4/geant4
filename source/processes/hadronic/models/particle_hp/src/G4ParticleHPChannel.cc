@@ -31,6 +31,8 @@
 // 071031 bug fix T. Koi on behalf of A. Howard 
 // 081203 bug fix in Register method by T. Koi
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include <stdlib.h>
 
 #include "G4ParticleHPChannel.hh"

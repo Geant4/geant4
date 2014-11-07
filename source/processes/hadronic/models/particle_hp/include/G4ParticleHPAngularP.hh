@@ -24,7 +24,8 @@
 // ********************************************************************
 //
 //
-// $Id$
+//
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPAngularP_h
 #define G4ParticleHPAngularP_h 1

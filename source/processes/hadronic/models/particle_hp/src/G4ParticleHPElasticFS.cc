@@ -31,6 +31,8 @@
 //          is added by T. KOI
 // 080904 Add Protection for negative energy results in very low energy ( 1E-6 eV ) scattering by T. Koi
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPElasticFS.hh"
 #include "G4ParticleHPManager.hh"
 
@@ -203,7 +205,7 @@ void G4ParticleHPElasticFS::Init (G4double A, G4double Z, G4int M, G4String & di
     G4Nucleus aNucleus;
     G4ThreeVector neuVelo = (1./incidentParticle->GetDefinition()->GetPDGMass())*theNeutron.GetMomentum();
     theTarget = aNucleus.GetBiasedThermalNucleus( targetMass, neuVelo, theTrack.GetMaterial()->GetTemperature());
-    //t    theTarget.SetDefinition( G4ParticleTable::GetParticleTable()->GetIon( G4int(theBaseZ), G4int(theBaseA) , 0.0 ) );  //TESTPHP
+    //t    theTarget.SetDefinition( G4IonTable::GetIonTable()->GetIon( G4int(theBaseZ), G4int(theBaseA) , 0.0 ) );  //TESTPHP
 //     G4cout << "Nucleus-test"<<" "<<targetMass<<" ";
 //     G4cout << theTarget.GetMomentum().x()<<" ";
 //     G4cout << theTarget.GetMomentum().y()<<" ";
@@ -394,8 +396,6 @@ G4cout << "after " <<  ( n4p.e() - n4p.m() ) / eV<< G4endl;
     }
     else
     {
-      //theRecoil->SetDefinition(G4ParticleTable::GetParticleTable()
-      //                         ->FindIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0, static_cast<G4int>(theBaseZ)));
       theRecoil->SetDefinition(G4IonTable::GetIonTable()
                                ->GetIon(static_cast<G4int>(theBaseZ), static_cast<G4int>(theBaseA), 0 ));
     }

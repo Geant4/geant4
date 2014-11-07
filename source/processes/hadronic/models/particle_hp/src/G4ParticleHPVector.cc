@@ -30,6 +30,8 @@
 // 070523 bug fix for G4FPE_DEBUG on by A. Howard ( and T. Koi)
 // 080808 bug fix in Sample() and GetXsec() by T. Koi
 //
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPVector.hh"
 #include "G4SystemOfUnits.hh"
 

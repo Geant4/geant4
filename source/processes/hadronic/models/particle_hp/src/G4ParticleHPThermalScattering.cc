@@ -40,7 +40,8 @@
 // 070625 Fix memory leaking at destructor by T. Koi 
 // 081201 Fix memory leaking at destructor by T. Koi 
 // 100729 Add model name in constructor Problem #1116
-
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPThermalScattering.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4SystemOfUnits.hh"

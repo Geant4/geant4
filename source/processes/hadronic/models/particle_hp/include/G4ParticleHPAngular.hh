@@ -24,9 +24,10 @@
 // ********************************************************************
 //
 //
-// $Id$
 //
 // 070613 fix memory leaking by T. Koi
+//
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4ParticleHPAngular_h
 #define G4ParticleHPAngular_h 1

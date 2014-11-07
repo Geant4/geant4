@@ -31,8 +31,9 @@
 // 071002 enable cross section dump by T. Koi
 // 081024 G4NucleiPropertiesTable:: to G4NucleiProperties::
 // 081124 Protect invalid read which caused run time errors by T. Koi
-// 100729 Add safty for 0 lenght cross sections by T. Koi
-
+// 100729 Add safty for 0 lenght cross sections by T. Ko
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
+//
 #include "G4ParticleHPFissionData.hh"
 #include "G4ParticleHPManager.hh"
 #include "G4SystemOfUnits.hh"

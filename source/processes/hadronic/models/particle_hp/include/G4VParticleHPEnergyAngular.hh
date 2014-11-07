@@ -24,10 +24,9 @@
 // ********************************************************************
 //
 //
-// $Id: G4VParticleHPEnergyAngular.hh,v 1.1 2013/02/20 17:35:09 arce Exp $
-// GEANT4 tag $Name: GAMOS-04-01-00 $
-//
 // 080718 Add ClearHistories() method by T. Koi
+//
+// P. Arce, June-2014 Conversion neutron_hp to particle_hp
 //
 #ifndef G4VParticleHPEnergyAngular_h
 #define G4VParticleHPEnergyAngular_h 1
