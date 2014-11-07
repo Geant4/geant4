@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 14, 2014, M. Verderi
+- Adapt to evolved biasing generic scheme
+- requires proc-biasgen-V10-00-00 and proc-biasmng-V10-00-00
+- tag : GB02-V10-00-00
+
 Nov 29, 2013, I. Hrivnacova
 - Added GNUmakefile, .README
 

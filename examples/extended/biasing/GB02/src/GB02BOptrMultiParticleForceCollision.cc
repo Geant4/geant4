@@ -76,6 +76,16 @@ ProposeNonPhysicsBiasingOperation(const G4Track* track,
   else                    return 0;
 }
 
+G4VBiasingOperation*
+GB02BOptrMultiParticleForceCollision::
+ProposeFinalStateBiasingOperation(const G4Track* track,
+                                  const G4BiasingProcessInterface* callingProcess)
+{
+  if ( fCurrentOperator ) return fCurrentOperator->
+                            GetProposedFinalStateBiasingOperation(track, callingProcess);
+  else                    return 0;
+}
+
 
 void GB02BOptrMultiParticleForceCollision::StartTracking( const G4Track* track )
 {
