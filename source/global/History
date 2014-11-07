@@ -17,7 +17,7 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-November 7, 2014 G.Cosmo (global-V10-00-42)
+November 7, 2014 G.Cosmo (global-V10-00-43/42)
 - Coherent use of 'thread_local' keyword for c++11, when supported.
 - Updated dates and tag-ID for release 10.1.
 
