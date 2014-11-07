@@ -17,9 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-7th November 2014  Laurent Garnier (interfaces-V10-00-19)
+7th November 2014  Laurent Garnier (interfaces-V10-00-19 - interfaces-V10-00-20)
 - G4UIQt.cc
   o Fix G4Vis thread number in G4Cout
+  o Set focus on command line at the beggining
+  o Better fix for the "Recreate help tree each time we create a new viewer"
 
 5th November 2014  Laurent Garnier
 - G4UIQt.cc:

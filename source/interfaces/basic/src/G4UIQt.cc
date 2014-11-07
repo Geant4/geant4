@@ -798,6 +798,10 @@ G4UIsession* G4UIQt::SessionStart (
   #else
       fMainWindow->setVisible(true);
   #endif
+
+  // Focus on command line
+  fCommandArea->setFocus();
+  
   interactorManager->DisableSecondaryLoop (); // TO KEEP
   if ((QApplication*)interactorManager->GetMainInteractor())
     ((QApplication*)interactorManager->GetMainInteractor())->exec();
