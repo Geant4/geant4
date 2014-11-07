@@ -69,6 +69,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4HadronCaptureProcess.hh
         G4HadronElasticProcess.hh
         G4HadronFissionProcess.hh
+        G4He3InelasticProcess.hh
         G4IonInelasticProcess.hh
         G4KaonMinusInelasticProcess.hh
         G4KaonPlusInelasticProcess.hh
@@ -113,6 +114,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_proc
         G4HadronCaptureProcess.cc
         G4HadronElasticProcess.cc
         G4HadronFissionProcess.cc
+        G4He3InelasticProcess.cc
         G4IonInelasticProcess.cc
         G4KaonMinusInelasticProcess.cc
         G4KaonPlusInelasticProcess.cc

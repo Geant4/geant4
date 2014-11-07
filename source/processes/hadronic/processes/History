@@ -16,6 +16,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+07 November 2014 Tatsumi Koi (hadr-proc-V10-00-05)
+--------------------------------------------------
+- Add G4He3InelasticProcess
+
 05 November 2014 Peter Gumplinger (hadr-proc-V10-00-04)
 -------------------------------------------------------
 - fix Coverity error in G4UCNBoundaryProcess.cc
