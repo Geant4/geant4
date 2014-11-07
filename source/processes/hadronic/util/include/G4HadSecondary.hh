@@ -39,14 +39,14 @@ public:
   G4HadSecondary(G4DynamicParticle * aT, G4double aWeight = 1, G4int mod=-1);
   ~G4HadSecondary();
 
-  inline G4DynamicParticle * GetParticle() {return theP;}
+  inline G4DynamicParticle * GetParticle()   {return theP;}
   inline const G4DynamicParticle* GetParticle() const {return theP;}
-  inline G4double GetWeight() const {return theWeight;}
-  inline void SetWeight(G4double aW){theWeight= aW;}
-  inline void SetTime(G4double aT) {theTime = aT;}
-  inline G4double GetTime() const {return theTime;}
+  inline G4double GetWeight() const          {return theWeight;}
+  inline void SetWeight(G4double aW)         {theWeight= aW;}
+  inline void SetTime(G4double aT)           {theTime = aT;}
+  inline G4double GetTime() const            {return theTime;}
   inline void SetCreatorModelType(G4int idx) {theCreatorModel = idx;}
-  inline G4double GetCreatorModelType() const {return theCreatorModel;}
+  inline G4int GetCreatorModelType() const   {return theCreatorModel;}
     
 private:
   
