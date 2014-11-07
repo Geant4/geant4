@@ -18,6 +18,10 @@ committal in the CVS repository !
      ----------------------------------------------------------
 
 November 11th, 2014 M.Verderi
+- fix Coverity bugs
+- proc-biasgen-V10-00-01
+
+November 11th, 2014 M.Verderi
 - Introduce anticipated call to PostStepGPIL of wrapped processes
   by G4BiasingProcessInterface. This allows to collect all
   physics cross-sections at the first call to biasing operator.

@@ -100,6 +100,7 @@ G4BiasingProcessInterface::~G4BiasingProcessInterface()
 {
   if ( fPhysicalInteractionLaw  != 0   ) delete fPhysicalInteractionLaw;
   if ( fOccurenceBiasingParticleChange ) delete fOccurenceBiasingParticleChange;
+  if ( fParticleChange                 ) delete fParticleChange;
   if ( fDummyParticleChange            ) delete fDummyParticleChange;
 }
 

@@ -42,7 +42,10 @@ G4BOptnForceCommonTruncatedExp::G4BOptnForceCommonTruncatedExp(G4String name)
 }
 
 G4BOptnForceCommonTruncatedExp::~G4BOptnForceCommonTruncatedExp()
-{}
+{
+  if ( fCommonTruncatedExpLaw ) delete fCommonTruncatedExpLaw;
+  if ( fForceFreeFlightLaw )    delete fForceFreeFlightLaw;
+}
 
 const G4VBiasingInteractionLaw* G4BOptnForceCommonTruncatedExp::ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*       callingProcess, 
 												       G4ForceCondition&                proposeForceCondition )

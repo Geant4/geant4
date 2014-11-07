@@ -37,7 +37,9 @@ G4BOptnForceFreeFlight::G4BOptnForceFreeFlight(G4String name)
 }
 
 G4BOptnForceFreeFlight::~G4BOptnForceFreeFlight()
-{}
+{
+  if ( fForceFreeFlightInteractionLaw ) delete fForceFreeFlightInteractionLaw;
+}
 
 const G4VBiasingInteractionLaw* G4BOptnForceFreeFlight::ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*, G4ForceCondition& proposeForceCondition )
 {
