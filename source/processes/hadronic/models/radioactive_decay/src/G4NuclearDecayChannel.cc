@@ -342,9 +342,9 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
         G4int nFrags = G4int(gammas->size());
         G4double eOrGammaEnergy = 0.0;
 
-        if (nFrags < 1 || nFrags > 3) {
+        if (nFrags < 1) {
           G4ExceptionDescription ed;
-          ed << nFrags << " fragments.  Only 1, 2 or 3 allowed. " << G4endl;
+          ed << nFrags << " No fragments produced by photon evaporation. " << G4endl;
           G4Exception("G4NuclearDecayChannel::DecayIt()","HAD_RDM_012",
                       FatalException, ed);
         } else if (nFrags > 1) {
@@ -460,7 +460,6 @@ G4DecayProducts* G4NuclearDecayChannel::DecayIt(G4double)
     }
   } // Parent nucleus decayed
   /*
-
     if (atomDeex && aZ > 5 && aZ < 100) {  // only applies to 5< Z <100 
       // Retrieve the corresponding identifier and binding energy of the selected shell
       const G4AtomicTransitionManager* transitionManager = G4AtomicTransitionManager::Instance();

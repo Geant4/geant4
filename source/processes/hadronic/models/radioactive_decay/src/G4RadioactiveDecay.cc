@@ -109,7 +109,7 @@
 #include "G4KshellECDecayChannel.hh"
 #include "G4LshellECDecayChannel.hh"
 #include "G4MshellECDecayChannel.hh"
-#include "G4AlphaDecayChannel.hh"
+// #include "G4AlphaDecayChannel.hh"
 #include "G4AlphaDecay.hh"
 #include "G4ProtonDecayChannel.hh"
 #include "G4VDecayChannel.hh"
@@ -980,8 +980,8 @@ G4RadioactiveDecay::LoadDecayTable(const G4ParticleDefinition& theParentNucleus)
                                              b, c*MeV, a*MeV);
                   anAlphaChannel->SetICM(applyICM);
                   anAlphaChannel->SetARM(applyARM);
-                  anAlphaChannel->SetHLThreshold(halflifethreshold);
 */
+                  anAlphaChannel->SetHLThreshold(halflifethreshold);
                   theDecayTable->Insert(anAlphaChannel);
                   modeSumBR[6] += b;
                 }

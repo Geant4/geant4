@@ -45,7 +45,8 @@
 G4AlphaDecay::G4AlphaDecay(const G4ParticleDefinition* theParentNucleus,
                            const G4double& branch, const G4double& Qvalue,
                            const G4double& excitationE)
- : G4VDecayChannel("alpha decay"), transitionQ(Qvalue), daughterEx(excitationE)
+ : G4VDecayChannel("alpha decay"), transitionQ(Qvalue), daughterEx(excitationE),
+   halflifeThreshold(nanosecond)
 {
   SetParent(theParentNucleus);  // Store name of parent nucleus, delete G4MT_parent 
   SetBR(branch);
@@ -62,7 +63,7 @@ G4AlphaDecay::G4AlphaDecay(const G4ParticleDefinition* theParentNucleus,
 
 G4AlphaDecay::G4AlphaDecay(const G4AlphaDecay& right)
  : G4VDecayChannel(right), transitionQ(right.transitionQ),
-   daughterEx(right.daughterEx)
+   daughterEx(right.daughterEx), halflifeThreshold(right.halflifeThreshold)
 {}
 
 

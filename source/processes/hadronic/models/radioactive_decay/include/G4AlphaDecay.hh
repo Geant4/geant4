@@ -52,11 +52,15 @@ class G4AlphaDecay : public G4VDecayChannel
 
     virtual G4DecayProducts* DecayIt(G4double);
 
+    void SetHLThreshold(G4double HLT) {halflifeThreshold = HLT;}
+    G4double GetHLThreshold() {return halflifeThreshold;}
+
     void DumpInfo();
 
   private:
     const G4double transitionQ;
     const G4double daughterEx;
+    G4double halflifeThreshold;  // for variance reduction mode
 };
 #endif
 

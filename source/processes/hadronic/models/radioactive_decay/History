@@ -14,6 +14,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ---------------------------------------------------------
 
+06 November 2014 Dennis Wright radioactive_decay-V10-00-11
+----------------------------------------------------------
+- G4NuclearDecayChannel: remove upper limit on number of gammas produced by
+  G4PhotoEvaporation.  Fixes exception.
+
 04 November 2014 Dennis Wright radioactive_decay-V10-00-10
 ----------------------------------------------------------
 - G4NuclearDecayChannel::DecayIt: allow up to three fragments from
