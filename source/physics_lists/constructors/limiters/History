@@ -14,6 +14,11 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-Nov-2014, Marc Verderi  (phys-ctor-limiters-V10-00-04)
+-  G4GenericBiasingPhysics : fix bug of PhysicsBias(...) which was not
+   taking into account the vector of processes passed, but biasing all
+   physics processes.
+
 05-Aug-2014, Vladimir Ivanchenko        (phys-ctor-limiters-V10-00-03)
 - G4NeurtonTrackingCut - register G4NeutronKiller in 
     G4HadronicProcessStore - improved log and process deleted at exit
