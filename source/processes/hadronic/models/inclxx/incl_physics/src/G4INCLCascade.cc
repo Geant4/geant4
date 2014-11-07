@@ -541,11 +541,8 @@ namespace G4INCL {
     nucleus->finalizeProjectileRemnant(propagationModel->getCurrentTime());
 
     // Subtract the angular momentum of the projectile remnant
-    ParticleList const &outgoing = nucleus->getStore()->getOutgoingParticles();
-// assert(outgoing.size()==0 || outgoing.size()==1);
-    for(ParticleIter i=outgoing.begin(), e=outgoing.end(); i!=e; ++i) {
-      theCNSpin -= (*i)->getAngularMomentum();
-    }
+// assert(nucleus->getStore()->getOutgoingParticles().empty());
+    theCNSpin -= theProjectileRemnant->getAngularMomentum();
 
     // Compute the excitation energy of the CN
     const G4double theCNMass = ParticleTable::getTableMass(theCNA,theCNZ);
