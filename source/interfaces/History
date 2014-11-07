@@ -17,6 +17,25 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7th November 2014  Laurent Garnier (interfaces-V10-00-19)
+- G4UIQt.cc
+  o Fix G4Vis thread number in G4Cout
+
+5th November 2014  Laurent Garnier
+- G4UIQt.cc:
+  o Recreate help tree each time we create a new viewer
+- G4UIWt.cc: 
+  o Remove a warning
+
+31th October 2014  Laurent Garnier
+- G4UIQt.cc:
+  o Use FindMacroPath() instead of GetMacroSearchPath()
+  o Display G4Exception warning messages in G4cerr
+  o Fix a problem with Wt include names on case sensitive systems
+  o Try to fix the fact that the cout widget does not update in real
+    time when run in progress. Do not totally fix this, but update
+    is more frequent now.
+
 30th October 2014  John Allison (interfaces-V10-00-18)
 - G4UIQt.cc: Added a mutex in ReceiveG4cout and ReceiveG4cerr.
 

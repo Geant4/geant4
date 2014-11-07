@@ -261,7 +261,6 @@ private:
   void FilterAllOutputTextArea();
   QString FilterOutput(const G4UIOutputString&,const QString&,const QString&);
   G4String GetThreadPrefix();
-
 private:
 
   QMainWindow * fMainWindow;

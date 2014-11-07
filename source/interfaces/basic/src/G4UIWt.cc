@@ -41,13 +41,13 @@
 #include "G4Wt.hh"
 
 #include <Wt/WLabel>
-#include <Wt/WLineedit>
-#include <Wt/WTextarea>
-#include <Wt/Wmessagebox>
-#include <Wt/Wlayout>
-#include <Wt/Wradiobutton>
-#include <Wt/Wbuttongroup>
-#include <Wt/Wcombobox>
+#include <Wt/WLineEdit>
+#include <Wt/WTextArea>
+#include <Wt/WMessageBox>
+#include <Wt/WLayout>
+#include <Wt/WRadioButton>
+#include <Wt/WButtonGroup>
+#include <Wt/WComboBox>
 #include <Wt/WVBoxLayout>
 #include <Wt/WHBoxLayout>
 #include <Wt/WGridLayout>
@@ -434,8 +434,8 @@ Wt::WTabWidget* G4UIWt::GetSceneTreeComponentsTBWidget(
 bool G4UIWt::AddTabWidget(
                           Wt::WWidget* aWidget
                           ,Wt::WString name
-                          ,int width
-                          ,int height
+                          ,int /* width */
+                          ,int /* height */
                           )
 {
 /*

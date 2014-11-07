@@ -77,7 +77,6 @@
 #include <qtoolbar.h>
 #include <qfiledialog.h>
 #include <qdesktopwidget.h>
-#include <qmessagebox.h>
 #include <qtablewidget.h>
 
 #include <stdlib.h>
@@ -207,6 +206,9 @@ G4UIQt::G4UIQt (
   
   // set last focus on command line
   fCommandArea->setFocus(Qt::TabFocusReason);
+
+  // add some tips
+  AddTabWidget(fStartPage,"Useful tips");
 
   // Set not visible until session start
  #if QT_VERSION < 0x040200
@@ -586,7 +588,6 @@ QWidget* G4UIQt::CreateViewerWidget(){
 #endif
     connect(fViewerTabWidget, SIGNAL(currentChanged ( int ) ), SLOT(UpdateTabWidget(int)));
   }
-  AddTabWidget(fStartPage,"Useful tips");
 
 // set the QGLWidget size policy
   QSizePolicy policy = QSizePolicy(QSizePolicy::Preferred,QSizePolicy::Preferred);
@@ -639,7 +640,7 @@ bool G4UIQt::AddViewerTabFromFile(
 
   G4UImanager* UI = G4UImanager::GetUIpointer();
   if(UI==NULL) return 0;
-  std::ifstream file(G4String(UI->GetMacroSearchPath()+fileName.c_str()).data());
+  std::ifstream file(UI->FindMacroPath(fileName.c_str()).data());
   if (file) {
     
     std::string content( (std::istreambuf_iterator<char>(file) ),
@@ -724,6 +725,10 @@ bool G4UIQt::AddTabWidget(
  #else
    fViewerTabWidget->setLastTabCreated(fViewerTabWidget->currentIndex());
  #endif
+
+  // Not the good solution, but ensure that the help tree is correctly build when launching a viewer
+  // It should be done by a notification when adding a command, but that's nit done yet (Geant4.10.1)
+  FillHelpTree();
 
   return true;
 }
@@ -898,6 +903,12 @@ G4int G4UIQt::ReceiveG4cout (
   G4AutoLock al(&ReceiveG4coutMutex);
 #endif
 
+  // Try to be smart :
+  // "*** This is just a warning message. ***"
+  if (aString.contains("*** This is just a warning message. ***")) {
+    return ReceiveG4cerr(aString);
+  }
+
   QStringList newStr;
   
   // Add to string
@@ -917,9 +928,8 @@ G4int G4UIQt::ReceiveG4cout (
   fCoutTBTextArea->setTextColor(Qt::black);
   fCoutTBTextArea->append(result);
   fCoutTBTextArea->setTextColor(previousColor);
-
-  fCoutTBTextArea->verticalScrollBar()->setSliderPosition(fCoutTBTextArea->verticalScrollBar()->maximum());
-  fCoutTBTextArea->repaint();
+  fCoutTBTextArea->ensureCursorVisible ();
+  qApp->processEvents();
 
 #ifdef G4MULTITHREADED
   UpdateCoutThreadFilter();
@@ -972,8 +982,8 @@ G4int G4UIQt::ReceiveG4cerr (
   fCoutTBTextArea->setTextColor(Qt::red);
   fCoutTBTextArea->append(result);
   fCoutTBTextArea->setTextColor(previousColor);
-  fCoutTBTextArea->verticalScrollBar()->setSliderPosition(fCoutTBTextArea->verticalScrollBar()->maximum());
-  fCoutTBTextArea->repaint();
+  fCoutTBTextArea->ensureCursorVisible ();
+  qApp->processEvents();
 
   if (QString(aString.data()).trimmed() != "") {
     fLastErrMessage = aString;
@@ -992,6 +1002,9 @@ G4String G4UIQt::GetThreadPrefix() {
   if(UI==NULL) return "";
   if (UI->GetThreadCout() != NULL) {
     threadPrefix = UI->GetThreadCout()->GetFullPrefixString().data();
+    if (UI->GetThreadCout()->GetPrefixString() == G4String("G4VIS")) {
+      return "G4VIS";
+    }
   }
 #endif
   return threadPrefix;
@@ -1120,7 +1133,7 @@ void G4UIQt::AddIcon(const char* aLabel, const char* aIconFile, const char* aCom
   if (std::string(aIconFile) == "user_icon") {
     // try to open a file
     G4UImanager* UImanager = G4UImanager::GetUIpointer();
-    pix = QPixmap(G4String(UImanager->GetMacroSearchPath()+aFileName).data());
+    pix = QPixmap(UImanager->FindMacroPath(aFileName).data());
     if (pix.isNull()) {
       G4int verbose = UImanager->GetVerboseLevel();
       
