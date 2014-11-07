@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06/11/14 I. Hrivnacova (excommon-V10-00-06)
+- Fixed CMakeLists.txt for removal of analysis directory
+
 05/11/14 I. Hrivnacova (excommon-V10-00-05)
 - Restoring back GNUmakefile (lost with previous update)
 

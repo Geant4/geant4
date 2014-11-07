@@ -56,8 +56,3 @@ endforeach()
 #
 install(TARGETS testCommon DESTINATION bin)
 install(TARGETS common DESTINATION lib)
-
-# process subdirectories
-# (to be removed after migration to new structure)
-add_subdirectory(analysis)
-
