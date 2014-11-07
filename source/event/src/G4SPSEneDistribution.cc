@@ -732,8 +732,8 @@ void G4SPSEneDistribution::LogInterpolation()
 	i = 1;
     
     //AG:  *Should* be the first use of these two arrays
-    if ( Arb_ezero ) delete[] Arb_ezero;
-    if ( Arb_Const ) delete[] Arb_Const;
+    if ( Arb_ezero ) { delete[] Arb_ezero; Arb_ezero = 0; }
+    if ( Arb_Const ) { delete[] Arb_Const; Arb_Const = 0; }
     Arb_alpha = new G4double [1024];
     Arb_Const = new G4double [1024];
     Arb_alpha_Const_flag = true;
@@ -873,8 +873,8 @@ void G4SPSEneDistribution::ExpInterpolation()
 	i = 1;
     
     //AG: Should be first use...
-    if ( Arb_ezero ) delete[] Arb_ezero;
-    if ( Arb_Const ) delete[] Arb_Const;
+    if ( Arb_ezero ) { delete[] Arb_ezero; Arb_ezero = 0; }
+    if ( Arb_Const ) { delete[] Arb_Const; Arb_Const = 0; }
     Arb_ezero = new G4double [1024];
     Arb_Const = new G4double [1024];
     Arb_ezero_flag = true;
