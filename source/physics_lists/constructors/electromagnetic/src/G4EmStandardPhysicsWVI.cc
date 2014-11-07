@@ -111,7 +111,11 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmStandardPhysicsWVI);
 G4EmStandardPhysicsWVI::G4EmStandardPhysicsWVI(G4int ver)
   : G4VPhysicsConstructor("G4EmStandardWVI"), verbose(ver)
 {
-  G4EmParameters::Instance()->SetVerbose(verbose);
+  G4EmParameters* param = G4EmParameters::Instance();
+  param->SetVerbose(verbose);
+  param->SetLatDisplacementBeyondSafety(true);
+  param->SetMuHadLateralDisplacement(false);
+  param->ActivateAngularGeneratorForIonisation(true);
   SetPhysicsType(bElectromagnetic);
 }
 

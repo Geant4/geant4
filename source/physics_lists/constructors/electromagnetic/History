@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7-Nov-2014, V.Ivanchenko (phys-ctor-em-V10-00-21)
+- Use G4EmParameters used in low-energy constructors
+
 4-Nov-2014, A.Dotti (phys-ctor-em-V10-00-20)
 - Fix bug appearing in LXe boundscheck test. Actually it is a
   serious bug that can also make program crash.

@@ -126,6 +126,8 @@ G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver)
   param->SetMaxEnergy(10*TeV);
   param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
+  //param->SetMuHadLateralDisplacement(false);
+  param->SetLatDisplacementBeyondSafety(true);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -141,6 +143,8 @@ G4EmStandardPhysics_option4::G4EmStandardPhysics_option4(G4int ver,
   param->SetMaxEnergy(10*TeV);
   param->SetNumberOfBinsPerDecade(20);
   param->ActivateAngularGeneratorForIonisation(true);
+  //param->SetMuHadLateralDisplacement(false);
+  // param->SetLatDisplacementBeyondSafety(true);
   SetPhysicsType(bElectromagnetic);
 }
 
@@ -401,7 +405,7 @@ void G4EmStandardPhysics_option4::ConstructProcess()
 
       G4hMultipleScattering* pmsc = new G4hMultipleScattering();
       G4hIonisation* hIoni = new G4hIonisation();
-      hIoni->SetStepFunction(0.2, 50*um);
+      hIoni->SetStepFunction(0.1, 20*um);
 
       ph->RegisterProcess(pmsc, particle);
       ph->RegisterProcess(hIoni, particle);
