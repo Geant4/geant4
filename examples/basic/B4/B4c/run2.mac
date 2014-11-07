@@ -3,6 +3,9 @@
 # To be run preferably in batch, without graphics:
 # % exampleB4[a,b,c,d] run2.mac
 #
+#/run/numberOfWorkers 4
+/run/initialize
+#
 # Default kinemtics: 
 # electron 50 MeV in direction (0.,0.,1.)
 # 1000 events

@@ -15,6 +15,16 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06/11/14 I. Hrivnacova
+- Finalized modifications in previous tag (01):
+  - Removed G4UI_USE/G4VIS_USE tests and init.mac macro (not needed)
+  - Moved G4UIExecutive at the beginning of main() in all examples
+  - Perform run initialization in macros instead of main()
+
+04/11/14 L. Garnier (exampleB3-V10-00-01)
+- Remove old G4UI_USE/G4VIS_USE
+- Move G4UIExecutive at the beginning of main() 
+
 29/10/13 I. Hrivnacova (exampleB3-V09-06-06)
 - Removed SetNumberOfThreads(4) from main (use Geant4 default)
 - Updated README

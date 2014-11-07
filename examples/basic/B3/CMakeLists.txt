@@ -47,7 +47,6 @@ set(EXAMPLEB3_SCRIPTS
   debug.mac
   exampleB3.in
   exampleB3.out
-  init.mac
   init_vis.mac
   run1.mac
   run2.mac

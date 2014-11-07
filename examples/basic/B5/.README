@@ -211,6 +211,14 @@
    automatically merged in a single output file, while the ntuple is written
    in files per thread.
 
+\section B5_s8 BUILD OPTIONS
+  
+  This example can be built with excluding use of visualization and/or
+  Geant4 user interface using G4VIS_USE and G4UI_USE compiler options.
+  These options are defined with Geant4 configuration, they are not set
+  when Geant4 libraries were built with G4VIS_NONE or G4UI_NONE option
+  respectively.
+
 <hr>
 
 The following paragraphs are common to all basic examples
@@ -273,11 +281,14 @@ The following paragraphs are common to all basic examples
 
 \section B5_B USER INTERFACES
  
-   The user command interface is set via the G4UIExecutive class
-   in the main() function in exampleB5.cc 
-   The selection of the user command interface is then done automatically 
-   according to the Geant4 configuration or it can be done explicitly via 
-   the third argument of the G4UIExecutive constructor (see exampleB4a.cc). 
+  This example can be built with excluding visualization and/or
+  Geant4 user interface via G4VIS_USE and G4UI_USE compiler options 
+  (see exampleB5.cc).
+  These options are defined by default with Geant4 configuration;
+  they can switched off at compilation time via the CMake options 
+  G4VIS_NONE or G4UI_NONE or via the environment variables of the 
+  same name if using GNUmake build.
+
    
 \section B5_C HOW TO RUN
 

@@ -49,7 +49,6 @@ set(EXAMPLEB4D_SCRIPTS
   icons.mac
   gui.mac
   run.png
-  init.mac
   init_vis.mac
   run1.mac
   run2.mac

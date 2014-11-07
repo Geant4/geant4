@@ -15,12 +15,18 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-31/11/13 L. Garnier (exampleB2-V10-00-02 - exampleB2-V10-00-03)
+06/11/14 I. Hrivnacova
+- Finalized modifications in previous tags (02, 03):
+  - Removed G4UI_USE/G4VIS_USE tests and init.mac macro (not needed)
+  - Moved G4UIExecutive at the beginning of main() in all examples
+  - Perform run initialization in macros instead of main()
+
+31/10/14 L. Garnier (exampleB2-V10-00-02 - exampleB2-V10-00-03)
  exampleB2b :
   - Fix a warning (perhaps a crash)
   - Fix a warning "'ui' may be used uninitialized in this function"
 
-31/11/13 L. Garnier (exampleB2-V10-00-01)
+31/10/14 L. Garnier (exampleB2-V10-00-01)
  exampleB2a/exampleB2b : 
   - Remove old G4UI_USE/G4VIS_USE
   - Move G4UIExecutive at the beginning of main() 

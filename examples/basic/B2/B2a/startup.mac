@@ -1,8 +1,6 @@
-# Macro file for the initialization phase of example B5
-# when running in interactive mode with visualization
+# Macro file for the pre-initialization phase of example B2
 #
 # Set some default verbose
-#
 /control/verbose 2
 /control/saveHistory
 /run/verbose 2
@@ -12,6 +10,3 @@
 #
 # Initialize kernel
 /run/initialize
-#
-# Visualization setting
-/control/execute vis.mac

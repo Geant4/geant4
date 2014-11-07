@@ -44,34 +44,32 @@
 #include "Randomize.hh"
 
 #include "G4VisExecutive.hh"
-
 #include "G4UIExecutive.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 int main(int argc,char** argv)
 {
-  G4UIExecutive* ui = NULL;
-  if (argc==1) {
-    // interactive mode : define UI session
+  // Detect interactive mode (if no arguments) and define UI session
+  //
+  G4UIExecutive* ui = 0;
+  if ( argc == 1 ) {
     ui = new G4UIExecutive(argc, argv);
   }
-  // Choose the Random engine
-  // Add data flags
-//  system("/Users/garnier/temp/geant4.sh");
 
+  // Choose the Random engine
   G4Random::setTheEngine(new CLHEP::RanecuEngine);
   
   // Construct the default run manager
-  
+  //
 #ifdef G4MULTITHREADED
-  G4MTRunManager * runManager = new G4MTRunManager;
+  G4MTRunManager* runManager = new G4MTRunManager;
 #else
-  G4RunManager * runManager = new G4RunManager;
+  G4RunManager* runManager = new G4RunManager;
 #endif
 
   // Set mandatory initialization classes
-
+  //
   runManager->SetUserInitialization(new B2bDetectorConstruction());
 
   G4VModularPhysicsList* physicsList = new FTFP_BERT;
@@ -79,14 +77,10 @@ int main(int argc,char** argv)
   runManager->SetUserInitialization(physicsList);
     
   // Set user action classes
-
   runManager->SetUserInitialization(new B2ActionInitialization());
   
-  // Initialize G4 kernel
-
-  runManager->Initialize();
-  
   // Initialize visualization
+  //
   G4VisManager* visManager = new G4VisExecutive;
   // G4VisExecutive can take a verbosity argument - see /vis/verbose guidance.
   // G4VisManager* visManager = new G4VisExecutive("Quiet");
@@ -95,23 +89,23 @@ int main(int argc,char** argv)
   // Get the pointer to the User Interface manager
   G4UImanager* UImanager = G4UImanager::GetUIpointer();
 
-  if (argc!=1)   // batch mode
-    {
-      G4String command = "/control/execute ";
-      G4String fileName = argv[1];
-      UImanager->ApplyCommand(command+fileName);
+  // Process macro or start UI session
+  //
+  if ( ! ui ) {
+    // barch mode
+    G4String command = "/control/execute ";
+    G4String fileName = argv[1];
+    UImanager->ApplyCommand(command+fileName);
+  }
+  else {  
+    // interactive mode
+    UImanager->ApplyCommand("/control/execute init_vis.mac");
+    if (ui->IsGUI()) {
+      UImanager->ApplyCommand("/control/execute gui.mac");
     }
-  else
-    {  // interactive mode : define UI session
-      if (ui->IsGUI()) {
-        UImanager->ApplyCommand("/control/execute init_vis.mac");
-        UImanager->ApplyCommand("/control/execute gui.mac");
-      } else {
-        UImanager->ApplyCommand("/control/execute init.mac");
-      }
-      ui->SessionStart();
-      delete ui;
-    }
+    ui->SessionStart();
+    delete ui;
+  }
 
   // Job termination
   // Free the store: user actions, physics_list and detector_description are
@@ -120,8 +114,6 @@ int main(int argc,char** argv)
 
   delete visManager;
   delete runManager;
-
-  return 0;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo.....

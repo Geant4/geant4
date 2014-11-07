@@ -49,10 +49,9 @@ set(EXAMPLEB2A_SCRIPTS
   icons.mac
   gui.mac
   run.png
-  init.mac
-  init_vis.mac
   run1.mac
   run2.mac
+  init_vis.mac
   vis.mac
   )
 

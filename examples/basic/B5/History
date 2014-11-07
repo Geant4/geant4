@@ -15,6 +15,12 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 November 2014 Ivana Hrivnacova
+- Moved G4UIExecutive at the beginning of main() in all examples
+- Perform run initialization in macros instead of main()
+- Added BUILD OPTIONS section in README explaining meaning of
+  G4UI_USE/G4VIS_USE options in main
+
 27 Oct 2014 Davide Mancusi (exampleB5-V10-00-01)
 - Switch off primary randomization in gui.mac (needed for the /gun/ UI commands
   to work)

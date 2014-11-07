@@ -1,8 +1,0 @@
-# Macro file for the initialization phase of example B4
-# when running in interactive mode without visualization
-#
-# Set some default verbose
-#
-/control/verbose 2
-/control/saveHistory
-/run/verbose 2
