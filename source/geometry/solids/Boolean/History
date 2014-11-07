@@ -20,6 +20,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ November 7, 2014  G.Cosmo               geom-bool-V10-00-09
+ - Fixed Coverity defects in G4UMultiUnion::CreatePolyhedron() for
+   memory leaks.
+
  October 3, 2014  G.Cosmo                geom-bool-V10-00-08
  - Avoid polyhedron deletion (and therefore mutexing) in CreatePolyhedron
    for G4DisplacedSolid, as not necessary.

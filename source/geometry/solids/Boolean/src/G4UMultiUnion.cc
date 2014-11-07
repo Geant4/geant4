@@ -104,6 +104,7 @@ G4Polyhedron* G4UMultiUnion::CreatePolyhedron() const
   G4RotationMatrix rot0=(*transform0).getRotation();
   const  G4ThreeVector transl0 = (*transform0).getTranslation();
   G4DisplacedSolid dispSolidA("placedA",solidA,&rot0,transl0);
+  delete transform0;
 
   G4Polyhedron* top = new G4Polyhedron(*dispSolidA.GetPolyhedron());
     
@@ -116,6 +117,7 @@ G4Polyhedron* G4UMultiUnion::CreatePolyhedron() const
     G4DisplacedSolid dispSolidB("placedB",solidB,&rot,transl);
     G4Polyhedron* operand = dispSolidB.GetPolyhedron();
     processor.push_back (operation, *operand);
+    delete transform;
   }
    
   if (processor.execute(*top)) { return top; }
