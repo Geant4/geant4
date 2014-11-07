@@ -106,6 +106,8 @@ tools::aida::ntuple* G4XmlRNtupleManager::GetNtuple(G4int ntupleId) const
 {
   G4XmlRNtupleDescription* rntupleDescription
     = GetNtupleInFunction(ntupleId, "GetRNtuple");
+
+  if ( ! rntupleDescription ) return 0; 
     
   return rntupleDescription->fNtuple;  
 }  

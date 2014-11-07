@@ -17,6 +17,9 @@ committal in the SVN repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 06, 2014 I. Hrivnacova (analysis-V10-00-40)
+- Fixed Coverity defect also in Csv, Root ntuple and Xml rntuple managers
+
 November 05, 2014 I. Hrivnacova (analysis-V10-00-39)
 - Fixed Coverity defect in G4XmlNtupleManager
 

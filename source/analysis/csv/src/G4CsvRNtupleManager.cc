@@ -106,7 +106,9 @@ tools::rcsv::ntuple* G4CsvRNtupleManager::GetNtuple(G4int ntupleId) const
 {
   G4CsvRNtupleDescription* rntupleDescription
     = GetNtupleInFunction(ntupleId, "GetNtuple");
-    
+
+  if ( ! rntupleDescription ) return 0; 
+
   return rntupleDescription->fNtuple;  
 }  
 
