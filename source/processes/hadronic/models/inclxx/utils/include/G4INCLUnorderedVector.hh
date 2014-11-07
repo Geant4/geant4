@@ -70,6 +70,7 @@ namespace G4INCL {
         using std::vector<T>::operator[];
         using std::vector<T>::reserve;
         using std::vector<T>::resize;
+        using std::vector<T>::at;
         using typename std::vector<T>::iterator;
         using typename std::vector<T>::reverse_iterator;
         using typename std::vector<T>::const_iterator;
