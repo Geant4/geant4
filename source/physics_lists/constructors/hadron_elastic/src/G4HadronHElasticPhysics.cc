@@ -75,6 +75,8 @@
 #include "G4ComponentGGNuclNuclXsc.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 
+#include "G4LMsdGenerator.hh"
+
 // factory
 #include "G4PhysicsConstructorFactory.hh"
 //
@@ -209,9 +211,7 @@ void G4HadronHElasticPhysics::ConstructProcess() {
       }
       if ( fDiffraction ) {
 	fLMsdGenerator = new G4LMsdGenerator("LMsdDiffraction");
-	fLMsdChannel = new G4LMsdChannel;
-	fLMsdGenerator->SetLMsdChannel(fLMsdChannel);
-     }
+      }
 
     } else if ( pname == "neutron" ) {   
       G4HadronElasticProcess* hel = new G4HadronElasticProcess();

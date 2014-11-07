@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07-Nov-2014, V. Ivanchenko          (phys-ctor-helastic-V10-00-07)
+- G4HadronHElasticPhysics V. Grichine removed G4LDsdChannel
+
 15-Oct-2014, V. Ivanchenko          (phys-ctor-helastic-V10-00-06)
 - G4HadronHElasticPhysics V. Grichine activates diffraction 
     dissociation process

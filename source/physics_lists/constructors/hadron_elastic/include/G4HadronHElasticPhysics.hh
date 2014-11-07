@@ -41,8 +41,8 @@
 
 #include "globals.hh"
 #include "G4VPhysicsConstructor.hh"
-#include "G4LMsdGenerator.hh"
-#include "G4LMsdChannel.hh"
+
+class G4LMsdGenerator;
 
 class G4HadronHElasticPhysics : public G4VPhysicsConstructor
 {
@@ -71,7 +71,6 @@ private:
   G4int    verbose;
   G4bool fDiffraction;
   G4LMsdGenerator* fLMsdGenerator;
-  G4LMsdChannel* fLMsdChannel;
   static G4ThreadLocal G4bool   wasActivated;
 };
 
