@@ -91,6 +91,7 @@ namespace G4INCL {
     cutNN = 1910.;
 #ifdef INCL_DEEXCITATION_FERMI_BREAKUP
     maxMassFermiBreakUp = 16;
+    maxChargeFermiBreakUp = 8;
 #endif
     rpCorrelationCoefficient = 1.;
     rpCorrelationCoefficientProton = 1.;

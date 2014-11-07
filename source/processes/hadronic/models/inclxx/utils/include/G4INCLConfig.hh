@@ -251,6 +251,10 @@ namespace G4INCL {
     G4int getMaxMassFermiBreakUp() const {
       return maxMassFermiBreakUp;
     }
+
+    G4int getMaxChargeFermiBreakUp() const {
+      return maxChargeFermiBreakUp;
+    }
 #endif
 
     /// \brief Get the r-p correlation coefficient
@@ -405,6 +409,7 @@ namespace G4INCL {
 
 #ifdef INCL_DEEXCITATION_FERMI_BREAKUP
     G4int maxMassFermiBreakUp;
+    G4int maxChargeFermiBreakUp;
 #endif
 
     G4double rpCorrelationCoefficient;
