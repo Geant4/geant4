@@ -64,9 +64,6 @@ private:
   G4BiasingOperationManager();
   static G4VectorCache<G4VBiasingOperation*> fBiasingOperationVector;
   static G4MapCache<G4VBiasingOperation*,std::size_t > fBiasingOperationIDtoPointerMap;
-  //static G4BiasingOperationManager*                                          fInstance;
-  //static std::vector< G4VBiasingOperation* >                      fBiasingOperationVector;
-  //static std::map   < G4VBiasingOperation*, std::size_t > fBiasingOperationIDtoPointerMap;
 };
 
 #endif
