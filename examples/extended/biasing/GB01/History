@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Oct 14, 2014, M. Verderi
+- Adapt to MT
+- Adapt to evolved generic biasing scheme
+- tag : GB01-V10-00-00
+
 Nov 29, 2013, I. Hrivnacova
 - Added GNUmakefile, .README
 

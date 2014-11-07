@@ -59,6 +59,8 @@ public:
   GB01BOptrChangeCrossSection(G4String particleToBias, G4String name = "ChangeXS");
   virtual ~GB01BOptrChangeCrossSection();
   
+  // -- method called at beginning of run:
+  virtual void StartRun();
   
 private:
   // -----------------------------

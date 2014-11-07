@@ -48,6 +48,7 @@ public:
 public:
   
   virtual G4VPhysicalVolume* Construct();
+  virtual void     ConstructSDandField();
 
 };
 
