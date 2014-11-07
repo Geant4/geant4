@@ -46,6 +46,7 @@ GEANT4_DEFINE_MODULE(NAME G4biasing_gen
     HEADERS
         G4BiasingHelper.hh
         G4BiasingProcessInterface.hh
+        G4BiasingProcessSharedData.hh
         G4BOptnChangeCrossSection.hh
         G4BOptnCloning.hh
         G4BOptnForceCommonTruncatedExp.hh

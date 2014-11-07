@@ -49,6 +49,8 @@
 //
 //--------------------------------------------------------------------
 //   Initial version                         Sep. 2013 M. Verderi
+//   Use of "shared data" class              Sep. 2014 M. Verderi
+
 
 #ifndef G4BiasingProcessInterface_h
 #define G4BiasingProcessInterface_h
@@ -56,6 +58,7 @@
 #include "globals.hh"
 #include "G4VProcess.hh"
 #include "G4Cache.hh"
+#include "G4BiasingProcessSharedData.hh"
 
 class G4VBiasingInteractionLaw;
 class G4InteractionLawPhysical;
@@ -88,15 +91,31 @@ public:
   // -- Helper methods:
   // ------------------
   // -- Current step and previous step biasing operator, if any:
-  G4VBiasingOperator*              GetCurrentBiasingOperator()  const {return             fCurrentBiasingOperator; }
-  G4VBiasingOperator*             GetPreviousBiasingOperator()  const {return            fPreviousBiasingOperator; }
+  G4VBiasingOperator*              GetCurrentBiasingOperator()  const {return   fSharedData-> fCurrentBiasingOperator; }
+  G4VBiasingOperator*             GetPreviousBiasingOperator()  const {return   fSharedData->fPreviousBiasingOperator; }
   // -- current and previous operation:
+  G4VBiasingOperation*  GetCurrentNonPhysicsBiasingOperation() const { return         fNonPhysicsBiasingOperation; }
+  G4VBiasingOperation* GetPreviousNonPhysicsBiasingOperation() const { return fPreviousNonPhysicsBiasingOperation; }
   G4VBiasingOperation*   GetCurrentOccurenceBiasingOperation() const { return          fOccurenceBiasingOperation; }
   G4VBiasingOperation*  GetPreviousOccurenceBiasingOperation() const { return  fPreviousOccurenceBiasingOperation; }
   G4VBiasingOperation*  GetCurrentFinalStateBiasingOperation() const { return         fFinalStateBiasingOperation; }
   G4VBiasingOperation* GetPreviousFinalStateBiasingOperation() const { return fPreviousFinalStateBiasingOperation; }
-  G4VBiasingOperation*  GetCurrentNonPhysicsBiasingOperation() const { return         fNonPhysicsBiasingOperation; }
-  G4VBiasingOperation* GetPreviousNonPhysicsBiasingOperation() const { return fPreviousNonPhysicsBiasingOperation; }
+  
+  // -- Lists of processes cooperating under a same particle type/G4ProcessManager.
+  // -- The vector ordering is:
+  // --   - random, before first "run/beamOn"
+  // --   - that of the PostStepGetPhysicalInteractionLength() once "/run/beamOn" has been issued
+  const std::vector< const G4BiasingProcessInterface* >&           GetBiasingProcessInterfaces() const
+  {return fSharedData->          fPublicBiasingProcessInterfaces;}
+  const std::vector< const G4BiasingProcessInterface* >&    GetPhysicsBiasingProcessInterfaces() const
+  {return fSharedData->   fPublicPhysicsBiasingProcessInterfaces;}
+  const std::vector< const G4BiasingProcessInterface* >& GetNonPhysicsBiasingProcessInterfaces() const
+  {return fSharedData->fPublicNonPhysicsBiasingProcessInterfaces;}
+
+  // -- Get shared data for this process:
+  const G4BiasingProcessSharedData* GetSharedData() const { return fSharedData; }
+  // -- Get shared data associated to a G4ProcessManager:
+  static const G4BiasingProcessSharedData* GetSharedData( const G4ProcessManager* );
   
 
 
@@ -186,17 +205,16 @@ public:
 
 
 private:
-  // ---- Setup first/last flags:
-  void       SetUpFirstLastFlags();
-  void  ResetForUnbiasedTracking();
+  // ---- Internal utility methods:
+  void        SetUpFirstLastFlags();
+  void   ResetForUnbiasedTracking();
+  void ReorderBiasingVectorAsGPIL();
 
   G4Track*                                               fCurrentTrack;
   G4double                                           fPreviousStepSize;
   G4double                                         fCurrentMinimumStep;
   G4double                                             fProposedSafety;
 
-  G4VBiasingOperator*                              fCurrentBiasingOperator;
-  G4VBiasingOperator*                             fPreviousBiasingOperator;
   G4VBiasingOperation*                          fOccurenceBiasingOperation;
   G4VBiasingOperation*                         fFinalStateBiasingOperation;
   G4VBiasingOperation*                         fNonPhysicsBiasingOperation;
@@ -236,32 +254,34 @@ private:
     // -- for that is provided. Should be of pure internal usage.
     return 4*firstLast + 2*GPILDoIt + physAll;
   }
-  // -- TO DO : let some common operation be done only once, by the first
-  // -- process in GPIL. Nothing done yet, may help to reduce overhead.
-  // -- For example each process instance fetch for the current operator,
-  // -- which could be done once, and with pointer shared.
-  // -- Idea is to have a class containing the data members shared among
-  // -- the instances.
-  // -- Could make these shared data members shared only per particle type
-  // -- (at present, with a single static, any instance of a process shares
-  // -- its members with any other instance, regardless of particle type.)
-  G4bool                                                    fIamFirstGPIL;
+  // -- method used to anticipate stepping manager calls to PostStepGPIL
+  // -- of wrapped processes : this method calls wrapped process PostStepGPIL
+  // -- and caches results for PostStepGPIL and condition.
+  void InvokeWrappedProcessPostStepGPIL( const G4Track&               track,
+					 G4double          previousStepSize,
+					 G4ForceCondition*        condition );
+  // -- the instance being "firstGPIL" does work shared by other instances:
+  G4bool                                                   fIamFirstGPIL;
 
 
   // -- MUST be **thread local**:
-  static G4Cache<G4bool>                                     fResetInteractionLaws;
-  static G4Cache<G4bool>                                              fCommonStart;
-  static G4Cache<G4bool>                                                fCommonEnd;
+  static G4Cache<G4bool>                           fResetInteractionLaws;
+  static G4Cache<G4bool>                                    fCommonStart;
+  static G4Cache<G4bool>                                      fCommonEnd;
   
-  // -- Maintain lists of interfaces attached to a same particle (ie
-  // -- to a same G4ProcessManager ).
-  // -- This is used when biasing operations in different processes need to
-  // -- cooperate (like for knowing the total cross-section for example).
-  std::vector< G4BiasingProcessInterface* >*             fCoInterfaces;
-  // -- thread local:
-  static G4MapCache< const G4ProcessManager*, 
-		     std::vector< G4BiasingProcessInterface* > > fManagerInterfaceMap;
   const G4ProcessManager* fProcessManager;
+
+
+  // -- the data shared among processes attached to a same process manager:
+  G4BiasingProcessSharedData*                         fSharedData;
+  // -- thread local:
+  // -- Map between process managers and shared data. This map is made of
+  // -- pointers of G4BiasingSharedData instead of objects themselves :
+  // -- each process needs to keep a valid pointer of a shared data object
+  // -- but a map of object will make pointers invalid when map is increaded.
+  static G4MapCache< const G4ProcessManager*, 
+		     G4BiasingProcessSharedData* > fSharedDataMap;
+
   
 };
 

@@ -27,7 +27,6 @@
 #include "Randomize.hh"
 #include "G4Track.hh"
 
-//#include "G4Exception.hh"
 
 G4ILawTruncatedExp::G4ILawTruncatedExp(G4String name)
   : G4VBiasingInteractionLaw(name),
@@ -82,8 +81,8 @@ G4double G4ILawTruncatedExp::ComputeNonInteractionProbabilityAt(G4double distanc
       // -- return limit case of null cross-section:
       return 1.0 - distance / fMaximumDistance;
     }
-  G4double   num = 1.0 - std::exp( -fCrossSection*distance);
-  G4double denum = 1.0 - std::exp( -fCrossSection*fMaximumDistance);
+  G4double   num = 1.0 - std::exp( -fCrossSection*distance         );
+  G4double denum = 1.0 - std::exp( -fCrossSection*fMaximumDistance );
   return 1.0 - num/denum;
 }
 

@@ -39,6 +39,7 @@
 //
 // ---------------------------------------------------------------
 //   Initial version                         Nov. 2013 M. Verderi
+//
 #ifndef G4ParticleChangeForOccurenceBiasing_hh
 #define G4ParticleChangeForOccurenceBiasing_hh 1
 

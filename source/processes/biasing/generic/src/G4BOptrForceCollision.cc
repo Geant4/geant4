@@ -40,16 +40,16 @@
 
 #include "G4SystemOfUnits.hh"
 
+
 G4BOptrForceCollision::G4BOptrForceCollision(G4String particleName, G4String name)
   : G4VBiasingOperator(name),
-    fFirstProcess(0),   fLastProcess(0),
     fSetup(true)
 {
   fSharedForceInteractionOperation = new G4BOptnForceCommonTruncatedExp("SharedForceInteraction");
   fCloningOperation                = new G4BOptnCloning("Cloning");
-  fParticle = G4ParticleTable::GetParticleTable()->FindParticle(particleName);
+  fParticleToBias = G4ParticleTable::GetParticleTable()->FindParticle(particleName);
   
-  if ( fParticle == 0 )
+  if ( fParticleToBias == 0 )
     {
       G4ExceptionDescription ed;
       ed << " Particle `" << particleName << "' not found !" << G4endl;
@@ -60,15 +60,16 @@ G4BOptrForceCollision::G4BOptrForceCollision(G4String particleName, G4String nam
     }
 }
 
+
 G4BOptrForceCollision::G4BOptrForceCollision(const G4ParticleDefinition* particle, G4String name)
   : G4VBiasingOperator(name),
-    fFirstProcess(0),   fLastProcess(0),
     fSetup(true)
 {
   fSharedForceInteractionOperation = new G4BOptnForceCommonTruncatedExp("SharedForceInteraction");
   fCloningOperation                = new G4BOptnCloning("Cloning");
-  fParticle                        = particle;
+  fParticleToBias                  = particle;
 }
+
 
 G4BOptrForceCollision::~G4BOptrForceCollision()
 {
@@ -80,27 +81,32 @@ G4BOptrForceCollision::~G4BOptrForceCollision()
 }
 
 
-G4VBiasingOperation* G4BOptrForceCollision::ProposeOccurenceBiasingOperation(const G4Track* track, const G4BiasingProcessInterface* callingProcess)
+void G4BOptrForceCollision::StartRun()
 {
-  if ( track->GetDefinition() != fParticle ) return 0;
-
   // -- start by remembering processes under biasing, and create needed biasing operations:
-  // -- ( Might consider moving this in a less called method. )
   if ( fSetup )
     {
-      if ( ( fFirstProcess == 0 ) && ( callingProcess->GetIsFirstPostStepGPILInterface() ) ) fFirstProcess = callingProcess;
-      if ( fLastProcess == 0 )
+      const G4ProcessManager* processManager = fParticleToBias->GetProcessManager();
+      const G4BiasingProcessSharedData* sharedData =
+	G4BiasingProcessInterface::GetSharedData( processManager );
+      if (sharedData ) // -- sharedData tested, as is can happen a user attaches an operator to a volume but without defined BiasingProcessInterface processes.
 	{
-	  fProcesses.push_back(callingProcess);
-	  G4String operationName = "FreeFlight-"+callingProcess->GetWrappedProcess()->GetProcessName();
-	  fFreeFlightOperations[callingProcess] = new G4BOptnForceFreeFlight(operationName);
-	  if ( callingProcess->GetIsLastPostStepGPILInterface() )
+	  for ( size_t i = 0 ; i < (sharedData->GetPhysicsBiasingProcessInterfaces()).size(); i++ )
 	    {
-	      fLastProcess = callingProcess;
-	      fSetup = false;
+	      const G4BiasingProcessInterface* wrapperProcess =
+		(sharedData->GetPhysicsBiasingProcessInterfaces())[i];
+	      G4String operationName = "FreeFlight-"+wrapperProcess->GetWrappedProcess()->GetProcessName();
+	      fFreeFlightOperations[wrapperProcess] = new G4BOptnForceFreeFlight(operationName);
 	    }
 	}
+      fSetup = false;
     }
+}
+
+
+G4VBiasingOperation* G4BOptrForceCollision::ProposeOccurenceBiasingOperation(const G4Track* track, const G4BiasingProcessInterface* callingProcess)
+{
+  if ( track->GetDefinition() != fParticleToBias ) return 0;
   
   
   // -- Send force interaction operation to the callingProcess:
@@ -115,8 +121,13 @@ G4VBiasingOperation* G4BOptrForceCollision::ProposeOccurenceBiasingOperation(con
       // -- would require an other cloning before, if one wants to conserve
       // -- the weight.]
       if ( fSharedForceInteractionOperation->GetInteractionOccured() ) return 0;
+
+      // -- Remember if this calling process is the first of the physics wrapper in
+      // -- the PostStepGPIL loop (using default argument of method below):
+      G4bool isFirstPhysGPIL = callingProcess-> GetIsFirstPostStepGPILInterface();
       
-      if ( callingProcess == fFirstProcess )
+      // -- [*first process*] Initialize or update force interaction operation:
+      if ( isFirstPhysGPIL )
 	{
 	  // -- first step of cloned track, initialize the forced interaction operation:
 	  if ( track->GetCurrentStepNumber() == 1 ) fSharedForceInteractionOperation->Initialize( track );
@@ -140,27 +151,36 @@ G4VBiasingOperation* G4BOptrForceCollision::ProposeOccurenceBiasingOperation(con
 	    }
 	}
       
-      // -- Sanity check : it may happen in limit cases that distance to out is zero,
-      // -- weight would be infinite in this case. Abort forced interaction.
+      // -- [*all processes*] Sanity check : it may happen in limit cases that distance to
+      // -- out is zero, weight would be infinite in this case: abort forced interaction.
       if ( fSharedForceInteractionOperation->GetMaximumDistance() < DBL_MIN ) return 0;
       
-      // -- conditions to apply forced interaction are met, set up physics:
-      // -- Collects well-defined cross-sections...
+      // -- [* first process*] collect cross-sections and sample force law to determine interaction length
+      // -- and winning process:
+      if ( isFirstPhysGPIL )
+	{
+	  // -- collect cross-sections:
+	  // -- ( Remember that the first of the G4BiasingProcessInterface triggers the update
+	  // --   of these cross-sections )
+	  const G4BiasingProcessSharedData* sharedData = callingProcess->GetSharedData();
+	  for ( size_t i = 0 ; i < (sharedData->GetPhysicsBiasingProcessInterfaces()).size() ; i++ )
+	    {
+	      const G4BiasingProcessInterface* wrapperProcess = ( sharedData->GetPhysicsBiasingProcessInterfaces() )[i];
+	      G4double interactionLength = wrapperProcess->GetWrappedProcess()->GetCurrentInteractionLength();
+	      // -- keep only well defined cross-section (*§*):
+	      if ( interactionLength < DBL_MAX/10. )
+		fSharedForceInteractionOperation->AddCrossSection( wrapperProcess->GetWrappedProcess(),  1.0/interactionLength );
+	    }
+	  // -- sample the shared law (interaction length, and winning process:
+	  if ( fSharedForceInteractionOperation->GetNumberOfSharing() > 0 ) fSharedForceInteractionOperation->Sample();
+	}
+      
+      // -- [*all processes*] Send operation, after sanity check (same criterium than (*§*) !):
       G4double      currentInteractionLength =  callingProcess->GetWrappedProcess()->GetCurrentInteractionLength();
       G4VBiasingOperation* operationToReturn = 0;
-      if ( currentInteractionLength < DBL_MAX/10. )
-	{
-	  fSharedForceInteractionOperation->AddCrossSection( callingProcess->GetWrappedProcess(), 1.0/currentInteractionLength );
-	  operationToReturn = fSharedForceInteractionOperation;
-	}
-      // -- ... if current process is the last one, cross-section collection is finished.
-      // -- Operation is ready to sample the force interaction law and to randomly select
-      // -- the process to be applied.
-      if ( ( callingProcess == fLastProcess ) &&
-	   ( fSharedForceInteractionOperation->GetCommonTruncatedExpLaw()->GetNumberOfSharing() > 0 ) )
-	fSharedForceInteractionOperation->Sample();
-      
-      // -- back to current process (last one or not), if meaningful cross section, bias it returning the force operation:
+      if ( currentInteractionLength < DBL_MAX/10. )  operationToReturn = fSharedForceInteractionOperation;
+
+
       return operationToReturn;
 
     } // -- end of " if ( GetBirthOperation( track ) == fCloningOperation ) "
@@ -193,7 +213,9 @@ G4VBiasingOperation* G4BOptrForceCollision::ProposeOccurenceBiasingOperation(con
   // -- ** ?? ** Incorrect here in case of flight interrupted by a *physics process*. Ie case
   // -- ** ?? ** of a subset of physics processes forced is not treated correctly here ** ?? **
   else if ( callingProcess->GetPreviousOccurenceBiasingOperation() == fFreeFlightOperations[callingProcess] )
-    return fFreeFlightOperations[callingProcess];
+    {
+      return fFreeFlightOperations[callingProcess];
+    }
   
   // -- other cases here: particle appearing in the volume by some
   // -- previous interaction : we decide to not bias these.
@@ -203,9 +225,9 @@ G4VBiasingOperation* G4BOptrForceCollision::ProposeOccurenceBiasingOperation(con
 
 
 G4VBiasingOperation* G4BOptrForceCollision::ProposeNonPhysicsBiasingOperation(const G4Track* track,
-									      const G4BiasingProcessInterface*)
+									      const G4BiasingProcessInterface* /* callingProcess */)
 {
-  if ( track->GetDefinition() != fParticle ) return 0;
+  if ( track->GetDefinition() != fParticleToBias ) return 0;
   
   // -- bias only tracks entering the volume.
   // -- A "cloning" is done:
@@ -225,13 +247,22 @@ G4VBiasingOperation* G4BOptrForceCollision::ProposeNonPhysicsBiasingOperation(co
 }
 
 
+G4VBiasingOperation* G4BOptrForceCollision::ProposeFinalStateBiasingOperation(const G4Track*, const G4BiasingProcessInterface* callingProcess)
+{
+  // -- Propose at final state generation the same operation which was proposed at GPIL level,
+  // -- (which is either the force free flight or the force interaction operation).
+  // -- count on the process interface to collect this operation:
+  return callingProcess->GetCurrentOccurenceBiasingOperation();
+}
+
+
 void G4BOptrForceCollision::StartTracking( const G4Track* )
 {
   fPreviousOperationApplied = 0;
 }
 
 
-void G4BOptrForceCollision::ExitBiasing( const G4Track* track, const G4BiasingProcessInterface* )
+void G4BOptrForceCollision::ExitBiasing( const G4Track* track, const G4BiasingProcessInterface* /*callingProcess*/ )
 {
   fPreviousOperationApplied = 0;
   // -- clean-up track for what happens with this operator:

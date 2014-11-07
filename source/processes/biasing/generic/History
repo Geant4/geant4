@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 11th, 2014 M.Verderi
+- Introduce anticipated call to PostStepGPIL of wrapped processes
+  by G4BiasingProcessInterface. This allows to collect all
+  physics cross-sections at the first call to biasing operator.
+- Adaptation to change of G4VBiasingOperation (suppression of
+  DenyProcessPostStepDoIt(...) ).
+- tag : proc-biasgen-V10-00-00 .
+
+
 October 10th, 2013  A.Howard
 - Subdirectory and history file created.
 

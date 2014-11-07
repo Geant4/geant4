@@ -39,7 +39,7 @@
 //    change for making this uninteracting flight,
 //    cumulatedWeightChange.
 //    When the track reaches the current volume boundary, its
-//    weight is restore with value :
+//    weight is restored with value :
 //            initialWeight * cumulatedWeightChange
 //
 //---------------------------------------------------------------
@@ -49,7 +49,9 @@
 
 #include "G4VBiasingOperation.hh"
 #include "G4ForceCondition.hh"
+#include "G4ParticleChange.hh" // -- §§ should add a dedicated "weight change only" particle change
 class G4ILawForceFreeFlight;
+
 
 class G4BOptnForceFreeFlight : public G4VBiasingOperation {
 public:
@@ -62,20 +64,17 @@ public:
   // -- Methods from G4VBiasingOperation interface:
   // -------------------------------------------
   // -- Used:
-  virtual const G4VBiasingInteractionLaw* ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface* );
-  virtual G4ForceCondition                                ProposeForceCondition( const G4ForceCondition ) {return Forced;}
+  virtual const G4VBiasingInteractionLaw* ProvideOccurenceBiasingInteractionLaw( const G4BiasingProcessInterface*, G4ForceCondition& );
   virtual G4bool                                        DenyProcessPostStepDoIt( const G4BiasingProcessInterface*, const G4Track*, const G4Step*, G4double& );
   virtual void                                                      AlongMoveBy( const G4BiasingProcessInterface*, const G4Step*, G4double );
+  virtual G4VParticleChange*                             ApplyFinalStateBiasing( const G4BiasingProcessInterface*, const G4Track*, const G4Step*, G4bool&);
 
   // -- Unused:
-  virtual G4VParticleChange*                       ApplyFinalStateBiasing( const G4BiasingProcessInterface*,
-									   const G4Track*,
-									   const G4Step*  ) {return 0;}
   virtual G4double                               DistanceToApplyOperation( const G4Track*,
 									   G4double,
-									   G4ForceCondition*) {return DBL_MAX;}
+									   G4ForceCondition*)  {return DBL_MAX;}
   virtual G4VParticleChange*                    GenerateBiasingFinalState( const G4Track*,
-									   const G4Step*  ) {return 0;}
+									   const G4Step*    )  {return 0;}
 
 
 public:
@@ -91,6 +90,7 @@ public:
 private:
   G4ILawForceFreeFlight* fForceFreeFlightInteractionLaw;
   G4double fCumulatedWeightChange, fInitialTrackWeight;
+  G4ParticleChange fParticleChange;
 };
 
 #endif
