@@ -14,6 +14,10 @@ modifications introduced in the code and keep track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06/11/2014 - I.Hrivnacova (p6decayer-V10-00-03)
+-------------------------
+- Fixed CMakeLists.txt in common (excommon-V10-00-06)
+
 05/11/2014 - I.Hrivnacova (p6decayer-V10-00-02)
 -------------------------
 - Added common directory via svn:externals property;
