@@ -58,6 +58,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4LEnpData.hh
         G4LEpp.hh
         G4LEppData.hh
+        G4LMsdGenerator.hh
         G4NuclNuclDiffuseElastic.hh
     SOURCES
         G4AntiNuclElastic.cc
@@ -70,6 +71,7 @@ GEANT4_DEFINE_MODULE(NAME G4hadronic_coherent_elastic
         G4hhElastic.cc
         G4LEnp.cc
         G4LEpp.cc
+        G4LMsdGenerator.cc
         G4NuclNuclDiffuseElastic.cc
     GRANULAR_DEPENDENCIES
         G4baryons
