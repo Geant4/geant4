@@ -133,7 +133,7 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   pinAffinityCmd->SetRange("pinAffinity > 0 || pinAffinity < 0");
   pinAffinityCmd->AvailableForStates(G4State_PreInit);
 
-  evModCmd = new G4UIcmdWithAnInteger("/run/eventModulo",this);
+  evModCmd = new G4UIcommand("/run/eventModulo",this);
   evModCmd->SetGuidance("Set the event modulo for dispatching events to worker threads"); 
   evModCmd->SetGuidance("i.e. each worker thread is ordered to simulate N events and then");
   evModCmd->SetGuidance("comes back to G4MTRunManager for next set.");
@@ -141,11 +141,33 @@ G4RunMessenger::G4RunMessenger(G4RunManager * runMgr)
   evModCmd->SetGuidance("   N = int( sqrt( number_of_events / number_of_threads ) )");
   evModCmd->SetGuidance("The value N may affect on the computing performance in particular");
   evModCmd->SetGuidance("if N is too small compared to the total number of events.");
+  evModCmd->SetGuidance("The second parameter seedOnce specifies how frequently each worker");
+  evModCmd->SetGuidance("thread is seeded by the random number sequence contrally managed");
+  evModCmd->SetGuidance("by the master G4MTRunManager.");
+  evModCmd->SetGuidance(" - If seedOnce is set to 0 (default), seeds that are centrally managed");
+  evModCmd->SetGuidance("   by G4MTRunManager are set for every event of every worker thread.");
+  evModCmd->SetGuidance("   This option guarantees event reproducability regardless of number");
+  evModCmd->SetGuidance("   of threads.");
+  evModCmd->SetGuidance(" - If seedOnce is set to 1, seeds are set only once for the first");
+  evModCmd->SetGuidance("   event of each run of each worker thread. Event reproducability is");
+  evModCmd->SetGuidance("   guaranteed only if the same number of worker threads are used.");
+  evModCmd->SetGuidance("   On the other hand, this option offers better computing performance");
+  evModCmd->SetGuidance("   in particular for applications with relatively small primary");
+  evModCmd->SetGuidance("   particle energy and large number of events."); 
+  evModCmd->SetGuidance(" - If seedOnce is set to 2, seeds are set only for the first event of");
+  evModCmd->SetGuidance("   group of N events. This option is reserved for the future use when");
+  evModCmd->SetGuidance("   Geant4 allows number of threads to be dynatically changed during an");
+  evModCmd->SetGuidance("   event loop.");
   evModCmd->SetGuidance("This command is valid only for multi-threaded mode.");
   evModCmd->SetGuidance("This command is ignored if it is issued in sequential mode.");
-  evModCmd->SetParameterName("nev",true);
-  evModCmd->SetDefaultValue(0);
-  evModCmd->SetRange("nev>=0");
+  G4UIparameter* emp1 = new G4UIparameter("N",'i',true);
+  emp1->SetDefaultValue(0);
+  emp1->SetParameterRange("N >= 0");
+  evModCmd->SetParameter(emp1);
+  G4UIparameter* emp2 = new G4UIparameter("seedOnce",'i',true);
+  emp2->SetDefaultValue(0);
+  emp2->SetParameterRange("seedOnce >= 0 && seedOnce <=2");
+  evModCmd->SetParameter(emp2);
   evModCmd->SetToBeBroadcasted(false);
   evModCmd->AvailableForStates(G4State_PreInit,G4State_Idle);
 
@@ -384,22 +406,22 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
   }
   else if ( command == pinAffinityCmd )
   {
-	    G4RunManager::RMType rmType = runManager->GetRunManagerType();
-	    if( rmType==G4RunManager::masterRM )
-	    {
-	      static_cast<G4MTRunManager*>(runManager)->SetPinAffinity(
-	    		  pinAffinityCmd->GetNewIntValue(newValue) );
-	    }
-	    else if ( rmType==G4RunManager::sequentialRM )
-	    {
-	      G4cout<<"*** /run/pinAffinity command is issued in sequential mode."
-	            <<"\nCommand is ignored."<<G4endl;
-	    }
-	    else
-	    {
-	      G4Exception("G4RunMessenger::ApplyNewCommand","Run0901",FatalException,
-	      "/run/pinAffinity command is issued to local thread.");
-	    }
+    G4RunManager::RMType rmType = runManager->GetRunManagerType();
+    if( rmType==G4RunManager::masterRM )
+    {
+      static_cast<G4MTRunManager*>(runManager)->SetPinAffinity(
+    		  pinAffinityCmd->GetNewIntValue(newValue) );
+    }
+    else if ( rmType==G4RunManager::sequentialRM )
+    {
+      G4cout<<"*** /run/pinAffinity command is issued in sequential mode."
+            <<"\nCommand is ignored."<<G4endl;
+    }
+    else
+    {
+      G4Exception("G4RunMessenger::ApplyNewCommand","Run0901",FatalException,
+      "/run/pinAffinity command is issued to local thread.");
+    }
 
   }
   else if( command==evModCmd)
@@ -407,7 +429,13 @@ void G4RunMessenger::SetNewValue(G4UIcommand * command,G4String newValue)
     G4RunManager::RMType rmType = runManager->GetRunManagerType();
     if( rmType==G4RunManager::masterRM )
     {
-      static_cast<G4MTRunManager*>(runManager)->SetEventModulo(evModCmd->GetNewIntValue(newValue));
+      G4int nevMod = 0;
+      G4int sOnce = 0;
+      const char* nv = (const char*)newValue;
+      std::istringstream is(nv);
+      is >> nevMod >> sOnce;
+      static_cast<G4MTRunManager*>(runManager)->SetEventModulo(nevMod);
+      G4MTRunManager::SetSeedOncePerCommunication(sOnce);
     }
     else if ( rmType==G4RunManager::sequentialRM )
     {
@@ -508,6 +536,18 @@ G4String G4RunMessenger::GetCurrentValue(G4UIcommand * command)
     {
       cv = "0";
     }
+  }
+  else if( command==evModCmd)
+  {
+    G4RunManager::RMType rmType = runManager->GetRunManagerType();
+    if( rmType==G4RunManager::masterRM )
+    {
+      cv = evModCmd->ConvertToString(
+       static_cast<G4MTRunManager*>(runManager)->GetEventModulo() )
+       + " " + evModCmd->ConvertToString(G4MTRunManager::SeedOncePerCommunication());
+    }
+    else if ( rmType==G4RunManager::sequentialRM )
+    { G4cout<<"*** /run/eventModulo command is valid only in MT mode."<<G4endl; }
   }
   
   return cv;

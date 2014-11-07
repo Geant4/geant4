@@ -67,6 +67,7 @@ G4WorkerRunManager::G4WorkerRunManager() : G4RunManager(workerRM) {
     if(masterScM) G4ScoringManager::GetScoringManager(); //TLS instance for a worker
 
     eventLoopOnGoing = false;
+    runIsSeeded = false;
     nevModulo = -1;
     currEvID = -1;
     workerContext = 0;
@@ -213,6 +214,8 @@ void G4WorkerRunManager::DoEventLoop(G4int n_event, const char* macroFile , G4in
     // Reset random number seeds queue
     while(seedsQueue.size()>0)
     { seedsQueue.pop(); }
+    // for each run, worker should receive at least one set of random number seeds.
+    runIsSeeded = false; 
 
     // Event loop
     eventLoopOnGoing = true;
@@ -255,8 +258,12 @@ void G4WorkerRunManager::ProcessOneEvent(G4int i_event)
 G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
 {
   G4Event* anEvent = new G4Event(i_event);
-  long s1, s2;
+  long s1 = 0;
+  long s2 = 0;
   long s3 = 0;
+  G4bool eventHasToBeSeeded = true;
+  if(G4MTRunManager::SeedOncePerCommunication()==1 && runIsSeeded)
+  { eventHasToBeSeeded = false; }
 
   if(i_event<0)
   {
@@ -264,14 +271,15 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
     if(nevM==1)
     {
       eventLoopOnGoing = G4MTRunManager::GetMasterRunManager()
-                       ->SetUpAnEvent(anEvent,s1,s2,s3);
+                       ->SetUpAnEvent(anEvent,s1,s2,s3,eventHasToBeSeeded);
+      runIsSeeded = true;
     }
     else
     {
       if(nevModulo<=0)
       {
         G4int nevToDo = G4MTRunManager::GetMasterRunManager()
-                         ->SetUpNEvents(anEvent,&seedsQueue);
+                         ->SetUpNEvents(anEvent,&seedsQueue,eventHasToBeSeeded);
         if(nevToDo==0)
         { eventLoopOnGoing = false; }
         else
@@ -282,10 +290,11 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
       }
       else
       {
+        if(G4MTRunManager::SeedOncePerCommunication()>0) eventHasToBeSeeded = false;
         anEvent->SetEventID(++currEvID);
         nevModulo--;
       }
-      if(eventLoopOnGoing)
+      if(eventLoopOnGoing && eventHasToBeSeeded)
       {
         s1 = seedsQueue.front(); seedsQueue.pop();
         s2 = seedsQueue.front(); seedsQueue.pop();
@@ -298,7 +307,7 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
       return 0;
     }
   }
-  else
+  else if(eventHasToBeSeeded)
   {
     //Need to reseed random number generator
     G4RNGHelper* helper = G4RNGHelper::GetInstance();
@@ -306,8 +315,13 @@ G4Event* G4WorkerRunManager::GenerateEvent(G4int i_event)
     s2 = helper->GetSeed(i_event*2+1);
   }
 
-  long seeds[3] = { s1, s2, 0 };
-  G4Random::setTheSeeds(seeds,-1);
+  if(eventHasToBeSeeded) 
+  {
+    long seeds[3] = { s1, s2, 0 };
+    G4Random::setTheSeeds(seeds,-1);
+    runIsSeeded = true;
+////G4cout<<"Event "<<currEvID<<" is seeded with { "<<s1<<", "<<s2<<" }"<<G4endl;
+  }
 
   if(storeRandomNumberStatusToG4Event==1 || storeRandomNumberStatusToG4Event==3)
   {
@@ -368,10 +382,10 @@ void G4WorkerRunManager::RunTermination()
 
 void G4WorkerRunManager::TerminateEventLoop()
 {
-    if(verboseLevel>0)
+    if(verboseLevel>0 && !fakeRun)
     {
         timer->Stop();
-        G4cout << "Run terminated." << G4endl;
+        G4cout << "Thread-local run terminated." << G4endl;
         G4cout << "Run Summary" << G4endl;
         if(runAborted)
         { G4cout << "  Run Aborted after " << numberOfEventProcessed << " events processed." << G4endl; }

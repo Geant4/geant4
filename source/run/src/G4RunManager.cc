@@ -368,7 +368,8 @@ void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_selec
     if(runAborted) break;
   }
 
-  TerminateEventLoop();
+  // For G4MTRunManager, TerminateEventLoop() is invoked after all threads are finished.
+  if(runManagerType==sequentialRM) TerminateEventLoop();
 }
 
 void G4RunManager::InitializeEventLoop(G4int n_event,const char* macroFile,G4int n_select)
@@ -409,10 +410,10 @@ void G4RunManager::TerminateOneEvent()
 
 void G4RunManager::TerminateEventLoop()
 {
-  if(verboseLevel>0)
+  if(verboseLevel>0 && !fakeRun)
   {
     timer->Stop();
-    G4cout << "Run terminated." << G4endl;
+    G4cout << " Run terminated." << G4endl;
     G4cout << "Run Summary" << G4endl;
     if(runAborted)
     { G4cout << "  Run Aborted after " << numberOfEventProcessed << " events processed." << G4endl; }

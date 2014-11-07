@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 6th, 2014 M.Asai (run-V10-00-37)
+- Fix unnecessary print-out incorrectly added with run-V10-00-31.
+
+November 6th, 2014 M.Asai (run-V10-00-36)
+- In MT mode, a new option of setting random number seeds only once
+  per run per worker thread is introduced. 
+
 October 27th, 2014 M.Asai (run-V10-00-35)
 - Introduced /run/useMaximumLogicalCores UI command.
 

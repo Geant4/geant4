@@ -46,6 +46,7 @@
 G4ScoringManager* G4MTRunManager::masterScM = 0;
 G4MTRunManager::masterWorlds_t G4MTRunManager::masterWorlds = G4MTRunManager::masterWorlds_t();
 G4MTRunManager* G4MTRunManager::fMasterRM = 0;
+G4int G4MTRunManager::seedOncePerCommunication = 0;
 
 namespace {
  G4Mutex cmdHandlingMutex = G4MUTEX_INITIALIZER;
@@ -315,7 +316,27 @@ void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile, G
     if ( InitializeSeeds(n_event) == false && n_event>0 )
     {
         G4RNGHelper* helper = G4RNGHelper::GetInstance();
-        nSeedsFilled = n_event;
+        switch(seedOncePerCommunication)
+        {
+         case 0:
+          nSeedsFilled = n_event;
+          break;
+         case 1:
+          nSeedsFilled = nworkers;
+          break;
+         case 2:
+          nSeedsFilled = n_event/eventModulo + 1;
+          break;
+         default:
+          G4ExceptionDescription msgd;
+          msgd << "Parameter value <" << seedOncePerCommunication
+               << "> of seedOncePerCommunication is invalid. It is reset to 0." ;
+          G4Exception("G4MTRunManager::InitializeEventLoop()",
+                  "Run10036", JustWarning, msgd);
+          seedOncePerCommunication = 0;
+          nSeedsFilled = n_event;
+        }
+
         // Generates up to nSeedsMax seed pairs only.
         if(nSeedsFilled>nSeedsMax) nSeedsFilled=nSeedsMax;
         masterRNGEngine->flatArray(nSeedsPerEvent*nSeedsFilled,randDbl); 
@@ -341,7 +362,19 @@ void G4MTRunManager::InitializeEventLoop(G4int n_event, const char* macroFile, G
 void G4MTRunManager::RefillSeeds()
 {
   G4RNGHelper* helper = G4RNGHelper::GetInstance();
-  G4int nFill = numberOfEventToBeProcessed - nSeedsFilled;
+  G4int nFill = 0;
+  switch(seedOncePerCommunication)
+  {
+   case 0:
+    nFill = numberOfEventToBeProcessed - nSeedsFilled;
+    break;
+   case 1:
+    nFill = nworkers - nSeedsFilled;
+    break;
+   case 2:
+   default:
+    nFill = (numberOfEventToBeProcessed - nSeedsFilled*eventModulo)/eventModulo + 1;
+  }
   // Generates up to nSeedsMax seed pairs only.
   if(nFill>nSeedsMax) nFill=nSeedsMax;
   masterRNGEngine->flatArray(nSeedsPerEvent*nFill,randDbl); 
@@ -362,7 +395,6 @@ void G4MTRunManager::RunTermination()
   G4RunManager::TerminateEventLoop();
   G4RunManager::RunTermination();
 }
-
 
 void G4MTRunManager::ConstructScoringWorlds()
 {
@@ -456,26 +488,29 @@ void G4MTRunManager::MergeRun(const G4Run* localRun)
   if(currentRun) currentRun->Merge(localRun); 
 }
 
-G4bool G4MTRunManager::SetUpAnEvent(G4Event* evt,long& s1,long& s2,long& s3)
+G4bool G4MTRunManager::SetUpAnEvent(G4Event* evt,long& s1,long& s2,long& s3,G4bool reseedRequired)
 {
   G4AutoLock l(&setUpEventMutex);
   if( numberOfEventProcessed < numberOfEventToBeProcessed )
   {
     evt->SetEventID(numberOfEventProcessed);
-    G4RNGHelper* helper = G4RNGHelper::GetInstance();
-    G4int idx_rndm = nSeedsPerEvent*nSeedsUsed;
-    s1 = helper->GetSeed(idx_rndm);
-    s2 = helper->GetSeed(idx_rndm+1);
-    if(nSeedsPerEvent==3) s3 = helper->GetSeed(idx_rndm+2);
+    if(reseedRequired)
+    {
+      G4RNGHelper* helper = G4RNGHelper::GetInstance();
+      G4int idx_rndm = nSeedsPerEvent*nSeedsUsed;
+      s1 = helper->GetSeed(idx_rndm);
+      s2 = helper->GetSeed(idx_rndm+1);
+      if(nSeedsPerEvent==3) s3 = helper->GetSeed(idx_rndm+2);
+      nSeedsUsed++;
+      if(nSeedsUsed==nSeedsFilled) RefillSeeds();
+    }
     numberOfEventProcessed++;
-    nSeedsUsed++;
-    if(nSeedsUsed==nSeedsFilled) RefillSeeds();
     return true;
   }
   return false;
 }
 
-G4int G4MTRunManager::SetUpNEvents(G4Event* evt, G4SeedsQueue* seedsQueue)
+G4int G4MTRunManager::SetUpNEvents(G4Event* evt, G4SeedsQueue* seedsQueue,G4bool reseedRequired)
 {
   G4AutoLock l(&setUpEventMutex);
   if( numberOfEventProcessed < numberOfEventToBeProcessed && !runAborted )
@@ -484,15 +519,20 @@ G4int G4MTRunManager::SetUpNEvents(G4Event* evt, G4SeedsQueue* seedsQueue)
     if(numberOfEventProcessed + nev > numberOfEventToBeProcessed)
     { nev = numberOfEventToBeProcessed - numberOfEventProcessed; }
     evt->SetEventID(numberOfEventProcessed);
-    G4RNGHelper* helper = G4RNGHelper::GetInstance();
-    for(int i=0;i<nev;i++)
+    if(reseedRequired)
     {
-      seedsQueue->push(helper->GetSeed(nSeedsPerEvent*nSeedsUsed));
-      seedsQueue->push(helper->GetSeed(nSeedsPerEvent*nSeedsUsed+1));
-      if(nSeedsPerEvent==3)
-        seedsQueue->push(helper->GetSeed(nSeedsPerEvent*nSeedsUsed+2));
-      nSeedsUsed++;
-      if(nSeedsUsed==nSeedsFilled) RefillSeeds();
+      G4RNGHelper* helper = G4RNGHelper::GetInstance();
+      G4int nevRnd = nev;
+      if(seedOncePerCommunication>0) nevRnd = 1;
+      for(int i=0;i<nevRnd;i++)
+      {
+        seedsQueue->push(helper->GetSeed(nSeedsPerEvent*nSeedsUsed));
+        seedsQueue->push(helper->GetSeed(nSeedsPerEvent*nSeedsUsed+1));
+        if(nSeedsPerEvent==3)
+          seedsQueue->push(helper->GetSeed(nSeedsPerEvent*nSeedsUsed+2));
+        nSeedsUsed++;
+        if(nSeedsUsed==nSeedsFilled) RefillSeeds();
+      }
     }
     numberOfEventProcessed += nev;
     return nev;

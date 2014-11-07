@@ -92,6 +92,7 @@ public:
 
 protected:
     G4bool eventLoopOnGoing;
+    G4bool runIsSeeded;
     G4int nevModulo;
     G4int currEvID;
     G4SeedsQueue seedsQueue;
