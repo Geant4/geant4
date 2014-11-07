@@ -72,12 +72,10 @@ G4OpWLS::G4OpWLS(const G4String& processName, G4ProcessType type)
 
   theIntegralTable = NULL;
 
-
-  WLSTimeGeneratorProfile = new G4WLSTimeGeneratorProfileDelta("WLSTimeGeneratorProfileDelta");
+  WLSTimeGeneratorProfile = 
+          new G4WLSTimeGeneratorProfileDelta("WLSTimeGeneratorProfileDelta");
  
-  if (verboseLevel>0) {
-    G4cout << GetProcessName() << " is created " << G4endl;
-  }
+  if (verboseLevel>0) G4cout << GetProcessName() << " is created " << G4endl;
 }
 
 ////////////////
@@ -90,6 +88,7 @@ G4OpWLS::~G4OpWLS()
     theIntegralTable->clearAndDestroy();
     delete theIntegralTable;
   }
+  delete WLSTimeGeneratorProfile;
 }
 
 ////////////

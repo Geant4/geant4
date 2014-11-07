@@ -16,6 +16,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+06 November 2014 P. Gumplinger (op-V10-00-10)
+- fix Coverity error in G4OpWLS.cc
+
 27 October 2014 A. Dotti (op-V10-00-09)
 - Address problem #1675, this requires re engineering of 
   all UI commands related to optical processes and created
