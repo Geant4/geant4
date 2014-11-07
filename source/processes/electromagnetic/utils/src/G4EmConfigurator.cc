@@ -91,7 +91,7 @@ void G4EmConfigurator::SetExtraEmModel(const G4String& particleName,
 	   << " Emax(MeV)= " << emax/MeV
 	   << G4endl;
   }
-  if(mod || fm) {
+  if(mod) {
     models.push_back(mod);
     flucModels.push_back(fm);
     emax = std::min(emax, mod->HighEnergyLimit());

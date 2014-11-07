@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+07 November 14: V.Ivant (emutils-V10-00-44)
+- G4LossTableMananger, G4EmConfigurator - fixed minor Coverity reports
+
 28 October 14: V.Ivant (emutils-V10-00-43)
 - removed old commented code
 

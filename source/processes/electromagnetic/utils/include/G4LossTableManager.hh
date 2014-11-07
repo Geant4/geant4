@@ -340,7 +340,6 @@ private:
   G4bool subCutoffFlag;
   G4bool integral;
   G4bool integralActive;
-  G4bool buildCSDARange;
   G4bool stepFunctionActive;
   G4bool isMaster;
 
