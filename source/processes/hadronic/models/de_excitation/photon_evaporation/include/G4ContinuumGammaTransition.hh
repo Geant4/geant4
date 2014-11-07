@@ -93,6 +93,9 @@ private:
   G4double excitation;
   G4double eGamma;
   G4double gammaCreationTime;
+  G4double energyGDR2;
+  G4double widthGDR;
+  G4double widthGDR2;
 
   std::vector<G4double> sampleArray;
 

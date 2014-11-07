@@ -58,7 +58,9 @@
 #include "G4Pow.hh"
 #include "G4Log.hh"
 
-static const G4double normC = 1.0 / (CLHEP::pi*CLHEP::hbarc*CLHEP::pi*CLHEP::hbarc);
+static const G4double normC = CLHEP::millibarn/
+  (CLHEP::pi*CLHEP::hbarc*CLHEP::pi*CLHEP::hbarc);
+static const G4double factor = 5;
 
 G4ContinuumGammaTransition::G4ContinuumGammaTransition(
                             const G4NuclearLevelManager* manager,
@@ -101,10 +103,11 @@ void G4ContinuumGammaTransition::Update(const G4NuclearLevelManager* manager,
   // Energy range for photon generation; upper limit is defined 5*Gamma(GDR) from GDR peak
   // Giant Dipole Resonance energy
   G4double energyGDR = (40.3 / g4pow->powZ(nucleusA,0.2) ) * MeV;
+  energyGDR2 = energyGDR*energyGDR;
   // Giant Dipole Resonance width
-  G4double widthGDR = 0.30 * energyGDR;
+  widthGDR = 0.30 * energyGDR;
+  widthGDR2 = widthGDR*widthGDR;
   // Extend 
-  static const G4double factor = 5;
   eMax = energyGDR + factor * widthGDR;
   if (eMax > excitation) { eMax = excitation; }
 }
@@ -170,7 +173,6 @@ void G4ContinuumGammaTransition::SelectGamma()
     G4cout << "*---*---* G4ContinuumTransition: gammaCreationTime = "
 	   << gammaCreationTime/second << G4endl;
   }
-  return;  
 }
 
 G4double G4ContinuumGammaTransition::GetGammaEnergy()
@@ -193,9 +195,9 @@ void G4ContinuumGammaTransition::SetEnergyFrom(G4double energy)
 G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
 {
   G4double theProb = 0.0;
-  G4double U = std::max(0.0, excitation - e);
+  G4double U = excitation - e;
 
-  if(e < 0.0 || excitation < 0.0) { return theProb; }
+  if(U < 0.0) { return theProb; }
 
   G4double aLevelDensityParam = 
     ldPar.LevelDensityParameter(nucleusA,nucleusZ,excitation);
@@ -213,36 +215,30 @@ G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
   // Define constants for the photoabsorption cross-section (the reverse
   // process of our de-excitation)
 
-  //  G4double sigma0 = 2.5 * nucleusA * millibarn;  
   G4double sigma0 = 2.5 * nucleusA;  
-
-  G4double Egdp = (40.3 /g4pow->powZ(nucleusA,0.2) )*MeV;
-  G4double GammaR = 0.30 * Egdp;
  
-  G4double numerator = sigma0 * e*e * GammaR*GammaR;
-  G4double denominator = (e*e - Egdp*Egdp)* (e*e - Egdp*Egdp) + GammaR*GammaR*e*e;
+  G4double e2 = e*e;
+  G4double numerator = sigma0 * e2 * widthGDR2;
+  G4double denominator = (e2 - energyGDR2)* (e2 - energyGDR2) + widthGDR2*e2;
   //  if (denominator < 1.0e-9) denominator = 1.0e-9;
 
-  G4double sigmaAbs = numerator/denominator ; 
+  G4double sigmaAbs = numerator/denominator; 
 
   if(verbose > 2) {
-    G4cout << ".. " << Egdp << " .. " << GammaR 
-	   << " .. " << normC << " .. " << sigmaAbs  
-	   << " .. " << e*e << " .. " << coeff
+    G4cout << "E_GDR(MeV)= " << sqrt(energyGDR2) << " W_GDR(MeV)= " << widthGDR 
+	   << " normC= " << normC << " sigAbs= " << sigmaAbs  
+	   << " E(MeV)= " << e << " coeff= " << coeff
 	   << G4endl;
   }
 
-  //  theProb = normC * sigmaAbs * e*e * levelDensAft/levelDensBef;
-  theProb = sigmaAbs * e*e * coeff;
+  theProb = normC *sigmaAbs * e2 * coeff;
 
   return theProb;
 }
 
 G4double G4ContinuumGammaTransition::GammaTime()
 {
-
-  G4double GammaR = 0.30 * (40.3 /g4pow->powZ(nucleusA,0.2) )*MeV;
-  G4double tau = hbar_Planck/GammaR;
+  G4double tau = hbar_Planck/widthGDR;
   G4double creationTime = -tau*G4Log(G4UniformRand());
 
   return creationTime;
