@@ -173,7 +173,7 @@ else()
   if(BUILD_SHARED_LIBS)
     set(USOLIDS_LIBRARIES G4geomUSolids)
   else()
-    set(EXPAT_LIBRARIES G4geomUSolids-static)
+    set(USOLIDS_LIBRARIES G4geomUSolids-static)
   endif()
   # Include dirs here because of the large number of G4 users
   # of solids

@@ -30,7 +30,12 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
-30th October 2014 - Ben Morgan cmake-V10-00-31)(INTERNAL)
+07th November 2014 - Ben Morgan (cmake-V10-00-32)
+- Modules/Geant4OptionalComponents.cmake : BUGFIX: Failures of static 
+  builds traced to typo in USolids settings in static mode where
+  EXPAT_LIBRARIES was overwritten. Correct typo.
+
+30th October 2014 - Ben Morgan (cmake-V10-00-31)(INTERNAL)
 - Modules/Geant4OptionalComponents.cmake : Update USolids configuration
   to decouple GEANT4_USE_USOLIDS and GEANT4_USE_SYSTEM_USOLIDS
   options.
