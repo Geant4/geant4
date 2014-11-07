@@ -37,13 +37,14 @@
   #if ( defined(__MACH__) && defined(__clang__) && defined(__x86_64__) ) || \
       ( defined(__linux__) && defined(__clang__) )
     #if (defined (G4USE_STD11) && __has_feature(cxx_thread_local))
-      #  define G4ThreadLocalStatic static __thread
+      #  define G4ThreadLocalStatic static thread_local
       #  define G4ThreadLocal thread_local
     #else
       #  define G4ThreadLocalStatic static __thread
       #  define G4ThreadLocal __thread
     #endif
-  #elif ( defined(__MACH__) && defined(__GNUC__) && __GNUC__>=4 && __GNUC_MINOR__>=7 )
+  #elif ( (defined(__linux__) || defined(__MACH__)) && \
+          defined(__GNUC__) && __GNUC__>=4 && __GNUC_MINOR__<9 )
     #if defined (G4USE_STD11)
       #  define G4ThreadLocalStatic static __thread
       #  define G4ThreadLocal thread_local
@@ -51,9 +52,10 @@
       #  define G4ThreadLocalStatic static __thread
       #  define G4ThreadLocal __thread
     #endif
-  #elif defined(__linux__)
-    #if ( defined (G4USE_STD11) && defined(__GNUC__) && __GNUC__>=4 && __GNUC_MINOR__>=7 )
-      #  define G4ThreadLocalStatic static __thread
+  #elif ( (defined(__linux__) || defined(__MACH__)) && \
+          defined(__GNUC__) && __GNUC__>=4 && __GNUC_MINOR__>=9 )
+    #if defined (G4USE_STD11)
+      #  define G4ThreadLocalStatic static thread_local
       #  define G4ThreadLocal thread_local
     #else
       #  define G4ThreadLocalStatic static __thread
@@ -61,7 +63,7 @@
     #endif
   #elif defined(_AIX)
     #if defined (G4USE_STD11)
-      #  define G4ThreadLocalStatic static __thread
+      #  define G4ThreadLocalStatic static thread_local
       #  define G4ThreadLocal thread_local
     #else
       #  define G4ThreadLocalStatic static __thread

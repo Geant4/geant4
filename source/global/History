@@ -17,8 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 7, 2014 G.Cosmo (global-V10-00-42)
+- Coherent use of 'thread_local' keyword for c++11, when supported.
+- Updated dates and tag-ID for release 10.1.
+
+November 6, 2014 V.Ivantchenko
+- G4StatDouble: corrected use 'const' interface for Add() method.
+
 November 5, 2014 A.Dotti (global-V10-00-41)
-- Added missing GLOB_DLL specification for DLL import/export to
+- Added missing G4GLOB_DLL specification for DLL import/export to
   G4CacheDetails specialization of cache reference for double.
 
 October 24, 2014 J.Apostolakis A.Dotti (global-V10-00-39,-40)
