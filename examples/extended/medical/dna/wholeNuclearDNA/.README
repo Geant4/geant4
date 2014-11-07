@@ -1,9 +1,9 @@
 //$Id$
------------------------------------------
-///\file "medical/dna/wholenucleardna/.README"
-///\brief ExampleWholeNuclearDNA README page
 
-/*! \page ExampleWholeNuclearDNA Example wholenucleardna
+///\file "medical/dna/wholeNuclearDNA/.README"
+///\brief Example wholeNuclearDNA README page
+
+/*! \page ExampleWholeNuclearDNA Example wholeNuclearDNA
 
      =========================================================
                     Geant4 - wholenucleardna example
@@ -26,7 +26,7 @@ shall cite the following Geant4-DNA collaboration publications:
 [2] Med. Phys. 37 (2010) 4692-4708
 
 
-\section wholenucleardna_s1 INTRODUCTION.
+\section wholenucleardna_s1 INTRODUCTION
 
 The wholenucleardna example offers the basic tools to simulate the track structure 
 of different charge particles within a
@@ -46,7 +46,7 @@ level, the Geant4-DNA physics processes and models are used.
 These processes and models are further described at:
 http://geant4-dna.org
 
-\section wholenucleardna_s2 GEOMETRY SET-UP.
+\section wholenucleardna_s2 GEOMETRY SET-UP
  
 As indicated in the introduction, the whole DNA molecule contained in a human 
 cell with 5 different compaction levels is described in this geometry. In order 
@@ -74,7 +74,7 @@ The code can be compiled with gmake.
 
 In interactive mode, run:
 
-> $G4WORDIR/bin/$G4SYSTEM/wholenucleardna
+> wholenucleardna
 
 The macro wholenucleardna.mac is executed by default. A proton of 0.1 MeV is shot. 
 This energy has been chosen because only a few minutes are needed for the proton 
@@ -92,7 +92,7 @@ structure is extremely long.
 This example uses the Geant4-DNA processes, using the G4EmDNAPhysics constructor 
 as in the dnaphysics example.
 
-\section wholenucleardna_s6 SIMULATION OUTPUT AND RESULT ANALYZIS
+\section wholenucleardna_s6 SIMULATION OUTPUT AND RESULT ANALYSIS
 
 The output results consist in a wholenucleardna.root file, containing only the 
 information about the energy transfers located in the backbone region of the DNA 
@@ -119,7 +119,6 @@ file plot.C; to do so :
 The naming scheme on the displayed ROOT plots can be seen in the 
 SteppingAction.cc file.
 
--------------------------------------------------------------------------
-
+*/
 
 

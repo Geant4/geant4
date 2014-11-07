@@ -5,6 +5,9 @@
                        Package History file
                        --------------------
 
+6 November 2014 - I. Hrivnacova
+- Fixes in README files
+
 1 November 2014 - tag dnaphysics-V10-00-03 - M. Karamitros
 - Copy plot.C to bin directory
 

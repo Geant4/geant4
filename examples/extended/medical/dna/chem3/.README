@@ -3,7 +3,7 @@
 ///\file "medical/dna/chem3/.README"
 ///\brief ExampleChem3 README page
 
-/*! \page ExampleChem3 Example Chem3
+/*! \page ExampleChem3 Example chem3
 
 \section Chem3_s1 General description
   
@@ -34,19 +34,19 @@
   The chemistry module is triggered in the StackingAction class when all 
   physical tracks have been processed.
 
- \section Chem3_s4 HOW TO START ?
+ \section Chem3_s5 HOW TO START ?
 
   Run the example from this directory.
   The user interface will be launched. Continue using /run/beamOn 1 command.
 
-\section Chem3_s5 OUTPUT 	
+\section Chem3_s6 OUTPUT 	
 
   Physics initialization and the defined reaction table are printed.
   G4ITStepManager processes the chemical stage time step after time step.
   Chemical reactions are printed.
   In the GUI window a cummulative trajectory of the chemical species is drawn.
   
-\section Chem3_s5 TIME EVOLUTION VISUALIZATION
+\section Chem3_s7 TIME EVOLUTION VISUALIZATION
 
   User can start a visualization of the chemical track evolution in time and 
   space using /control/execute movie.mac.

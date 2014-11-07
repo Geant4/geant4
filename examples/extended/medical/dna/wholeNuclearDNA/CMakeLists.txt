@@ -40,6 +40,34 @@ target_link_libraries(${PROJECT_NAME} ${Geant4_LIBRARIES} )
 # build microdosimetry. This is so that we can run the executable directly because it
 # relies on these scripts being in the current working directory.
 #
+set(dnageometry_SCRIPTS
+    wholenucleardna.in 
+    vis.mac 
+    chromo1.dat 
+    chromo2.dat 
+    chromo3.dat 
+    chromo4.dat 
+    chromo5.dat 
+    chromo6.dat 
+    chromo7.dat 
+    chromo8.dat 
+    chromo9.dat 
+    chromo10.dat 
+    chromo11.dat 
+    chromo12.dat 
+    chromo13.dat 
+    chromo14.dat 
+    chromo15.dat 
+    chromo16.dat 
+    chromo17.dat 
+    chromo18.dat 
+    chromo19.dat 
+    chromo20.dat 
+    chromo21.dat 
+    chromo22.dat 
+    chromoX.dat 
+    chromoY.dat 
+  )
 
 file(GLOB SCRIPTS ${PROJECT_SOURCE_DIR}/*.mac 
                     ${PROJECT_SOURCE_DIR}/*.in

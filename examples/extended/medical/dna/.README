@@ -1,18 +1,18 @@
 //$Id$
 
 ///\file "medical/dna/.README"
-///\brief ExamplesDNA README page
+///\brief Examples dna README page
 
-/*! \page ExamplesDNA  Category dna
+/*! \page Examples_dna  Category "dna"
 
 This directory contains a set of dna examples.
 
 \section dna_s0 Physics
-   - \link ExampleDNAPhysics  DNAPhysics \endlink  
+   - \link ExampleDnaphysics dnaphysics \endlink  
    The dnaphysics example shows how to simulate track structures in liquid water
 using the Geant4-DNA physics processes and models.
 
-   - \link ExampleMicrodosimetry  Microdosimetry \endlink   
+   - \link ExampleMicrodosimetry  microdosimetry \endlink   
    The microdosimetry example simulates the track of a 5 MeV proton in liquid water. 
 Geant4 standard EM models are used in the World volume while Geant4-DNA models
 are used in a Target volume, declared as a Region.
@@ -23,8 +23,8 @@ are used in a Target volume, declared as a Region.
    - \link ExampleChem3  chem3 \endlink   Activate the full interactivity with the chemistry module.
 
 \section dna_s2 Geometry   
-   - \link ExampleWholeNuclearDNA  wholenucleardna \endlink   Description of the full nucleus
-   - \link ExamplePDBDNA  pdbdna \endlink   Usage of the Protein Data Bank (PDB) file format to build geometries
+   - \link ExampleWholeNuclearDNA  wholeNuclearDNA \endlink   Description of the full nucleus
+   - \link ExamplePdb4dna  pdb4dna \endlink   Usage of the Protein Data Bank (PDB) file format to build geometries
    
 
 See the README page inside each example for more detail.

@@ -1,9 +1,13 @@
      =========================================================
- 		      Geant4 - dnageometry example
+ 		      Geant4 - wholeNuclearDNA example
      =========================================================
 
                        Package History file
                        --------------------
+
+06 Nov 2014 - I. Hrivnacova
+- Added copying macros and data files in build directory
+- Fixes in README
 
 30 Oct 2014 - M. Karamitros - tag wholeNuclearDNA-V10-00-05
 - Add missing GNUmakefile

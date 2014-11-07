@@ -1,10 +1,10 @@
 //$Id$
 
 ///\file "medical/dna/dnaphysics/.README"
-///\brief ExampleDNAPhysics README page
+///\brief Example dnaphysics README page
 
 
-/*! \page ExampleDNAPhysics Example dnaphysics
+/*! \page ExampleDnaphysics Example dnaphysics
      =========================================================
  		  Geant4 - dnaphysics example
      =========================================================
@@ -33,7 +33,7 @@ Any report or published results obtained using the Geant4-DNA software shall
 cite the following Geant4-DNA collaboration publication: \n
 Med. Phys. 37 (2010) 4692-4708 \n
 
-\section dnaphysics_s2 GEOMETRY SET-UP.
+\section dnaphysics_s2 GEOMETRY SET-UP
  
 The geometry is a 100-micron side cube (World) made of liquid water (G4_WATER
 material). Particles are shot from the center of the volume.
@@ -69,7 +69,7 @@ This example shows:
 - how to count and save occurrences of processes
 (look at the SteppingAction.cc file)
 
-\section dnaphysics_s6 SIMULATION OUTPUT AND RESULT ANALYZIS                                    
+\section dnaphysics_s6 SIMULATION OUTPUT AND RESULT ANALYSIS                                    
 
 The output results consists in a dna.root file, containing for each simulation step:
 - the type of particle for the current step

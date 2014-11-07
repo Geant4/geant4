@@ -62,7 +62,7 @@ This example shows:
 - how to count and save occurrences of processes
 (look at the SteppingAction.cc file)
 
----->5. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
+---->5. SIMULATION OUTPUT AND RESULT ANALYSIS                                    
 
 The output results consists in a dna.root file, containing for each simulation step:
 - the type of particle for the current step

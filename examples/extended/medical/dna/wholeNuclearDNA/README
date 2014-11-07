@@ -51,7 +51,7 @@ The code can be compiled with gmake.
 
 In interactive mode, run:
 
-> $G4WORDIR/bin/$G4SYSTEM/wholenucleardna
+> wholenucleardna
 
 The macro wholenucleardna.mac is executed by default. A proton of 0.1 MeV is shot. This energy has been chosen because only a few minutes are needed for the proton to lose all its energy and thus the event to finish. Nevertheless, one should keep in mind that for this energy, protons do not traverse the whole cell nucleus width. 
 
@@ -62,7 +62,7 @@ We would like to warn the users that the time to visualize the whole DNA structu
 
 This example uses the Geant4-DNA processes, using the G4EmDNAPhysics constructor as in the dnaphysics example.
 
----->5. SIMULATION OUTPUT AND RESULT ANALYZIS                                    
+---->5. SIMULATION OUTPUT AND RESULT ANALYSIS                                    
 
 The output results consist in a wholenucleardna.root file, containing only the information about the energy transfers located in the backbone region of the DNA double helix. Both strands are distinguished with different flags (1 or 2):
 - the type of particle for the current step

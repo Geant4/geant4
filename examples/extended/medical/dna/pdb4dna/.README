@@ -3,7 +3,7 @@
 ///\file "medical/dna/pdb4dna/.README"
 ///\brief Examplepdb4dna README page
 
-/*! \page Examplepdb4dna Example pdb4dna
+/*! \page ExamplePdb4dna Example pdb4dna
 
      =========================================================
  		  Geant4 - PDB4DNA example
@@ -36,6 +36,7 @@ Before a computation, user loads a PDB file and generates a target volume (the b
 
 \section pdb4dna_s3 Some main features
 
+\verbatim
 | MESSENGER LIST |
 -----------------------------------------------------------------
 [1] Load a PDB file (The default atoms visualization is done by sphere that are parametrized with the van der Waals radius). \n
@@ -68,16 +69,17 @@ Spheres are linked by cylinders
 Notes: \n
 [1] is mandatory for visualization and simulation. \n
 [2] is needed for simulation. \n
+\endverbatim
 
 \section pdb4dna_s4 How to run the example.
 
 To get help, run:
 
-> $pdb4dna(.exe) -h
+> ./pdb4dna(.exe) -h
 
 In interactive mode, run:
 
-> pdb4dna(.exe) -gui
+> ./pdb4dna(.exe) -gui
 
 "1ZBB.pdb" is the default file and it should be placed into same directory as the executable.
 You can download it here: \n
@@ -85,7 +87,7 @@ http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&s
 
 In batch mode , run:
 
-> $pdb4dna(.exe) [-mac pdb4dna.in] [-mt numberofThreads] \n
+> ./pdb4dna(.exe) [-mac pdb4dna.in] [-mt numberofThreads] \n
 
 To get visualization, make sure to uncomment the #/control/execute vis.mac line in the macro.
 
@@ -125,4 +127,4 @@ Y. Perrot (physics and simulation referee) at perrot@clermont.in2p3.fr
  Michel Maire (G4AI) for /extended/geometry/transforms example,
  Laurent Garnier (LAL, Orsay, France) for Qt visualisation.
 
-
+*/

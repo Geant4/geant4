@@ -5,7 +5,7 @@ $Id$
      Geant4 - an Object-Oriented Toolkit for Simulation in HEP
      =========================================================
 
-                      Ctests History file
+                      pdb4dna History file
                       ---------------------
 This file should be used by G4 developers and category coordinators
 to briefly summarize all major modifications introduced in the code
@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+06.11.2014 I.Hrivnacova                             
+-----------------------------------------------------
+- Fixes in README files
+
 05.11.2014 M.K                  tag pdb4dna-V10-00-05
 -----------------------------------------------------
 - order of parsing changed. The goal: one can both 

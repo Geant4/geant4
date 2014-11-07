@@ -14,6 +14,10 @@ densities so that it can be used by GEANT4. It serves also to create
 a GEANT4 geometry based on the DICOM file information using the 
 G4PhantomParameterisation. 
 
+dna
+---
+Set of examples using the Geant4-DNA physics processes and models.
+
 electronScattering   
 electronScattering2   
 --------------------
@@ -39,6 +43,7 @@ GammaTherapy
 ------------
 
 This example demonstrates a gamma therapy application.
+
 
      
 

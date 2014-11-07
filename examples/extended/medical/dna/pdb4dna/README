@@ -69,11 +69,11 @@ Notes:
 
 To get help, run:
 
-> $pdb4dna(.exe) -h
+> ./pdb4dna(.exe) -h
 
 In interactive mode, run:
 
-> $pdb4dna(.exe) -gui
+> ./pdb4dna(.exe) -gui
 
 "1ZBB.pdb" is the default file and it should be placed into same directory as the executable.
 You can download it here:
@@ -81,7 +81,7 @@ http://www.rcsb.org/pdb/download/downloadFile.do?fileFormat=pdb&compression=NO&s
 
 In batch mode , run:
 
-> $pdb4dna(.exe) [-mac pdb4dna.in] [-mt numberofThreads]
+> ./pdb4dna(.exe) [-mac pdb4dna.in] [-mt numberofThreads]
 
 To get visualization, make sure to uncomment the #/control/execute vis.mac line in the macro.
 
