@@ -921,7 +921,7 @@ G4double G4LundStringFragmentation::GetLightConeZ(G4double zmin, G4double zmax,
 		G4double Px, G4double Py)
 {
 	G4double Mass = pHadron->GetPDGMass();
-	G4int HadronEncoding=std::abs(pHadron->GetPDGEncoding());
+//	G4int HadronEncoding=std::abs(pHadron->GetPDGEncoding());
 
 	G4double Mt2 = Px*Px + Py*Py + Mass*Mass;
 

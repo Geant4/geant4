@@ -14,6 +14,9 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+6-Nov-2014 V. Uzhinsky    (had-hadronization-V10-00-12)
+ - Warning message is erased.
+
 5-Nov-2014 V. Uzhinsky    (had-hadronization-V10-00-11)
  - Redoing tag had-hadronization-V10-00-10 because it was done in src directory
    instead of top directory - hadronization.
