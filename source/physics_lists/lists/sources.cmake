@@ -142,15 +142,9 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         FTFP_INCLXX_HP.hh
 	Shielding.hh
 	Shielding.icc
-        G4PhysListRegistry.hh
-        G4PhysListStamper.hh
-        G4PhysListFactoryAlt.hh
     SOURCES
         G4PhysListFactory.cc
         QBBC.cc
-        G4PhysListRegistry.cc
-        G4PhysListFactoryAlt.cc
-        G4RegisterPhysLists.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
