@@ -150,6 +150,8 @@ class UPolyhedra : public UVCSGfaceted
     UPolyhedra& operator=(const UPolyhedra& source);
     // Copy constructor and assignment operator.
 
+    void Extent(UVector3& aMin, UVector3& aMax) const;
+
   protected:  // without description
 
     inline void SetOriginalParameters();
@@ -173,8 +175,7 @@ class UPolyhedra : public UVCSGfaceted
                                 UVector3 p2) const;
     UVector3 GetPointOnSurfaceCorners() const;
 
-    void Extent(UVector3& aMin, UVector3& aMax) const;
-
+    
   protected:  // without description
 
     int   fNumSides;      // Number of sides

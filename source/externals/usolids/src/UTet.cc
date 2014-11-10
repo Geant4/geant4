@@ -630,12 +630,12 @@ std::vector<UVector3> UTet::GetVertices() const
 void UTet::Extent(UVector3& aMin, UVector3& aMax) const
 {
   // Returns the full 3D cartesian extent of the solid.
-  aMin.x = -fDx;
-  aMax.x = fDx;
-  aMin.y = -fDy;
-  aMax.y = fDy;
-  aMin.z = -fDz;
-  aMax.z = fDz;
+  aMin.x = fXMin;
+  aMax.x = fXMax;
+  aMin.y = fYMin;
+  aMax.y = fYMax;
+  aMin.z = fZMin;
+  aMax.z = fZMax;
 }
 //______________________________________________________________________________
 void UTet::GetParametersList(int, double* aArray) const

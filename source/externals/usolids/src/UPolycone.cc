@@ -835,7 +835,7 @@ double UPolycone::Capacity()
   }
   else
   {
-    for (int i = 0; i < fMaxSection; i++)
+    for (int i = 0; i < fMaxSection+1; i++)
     {
       UPolyconeSection& section = fSections[i];
       fCubicVolume += section.solid->Capacity();
@@ -879,7 +879,7 @@ double UPolycone::SurfaceArea()
 
       Area *= 0.5 * (endPhi - startPhi);
 
-      if (startPhi == 0. && endPhi == 2 * UUtils::kPi)
+      if (fOriginalParameters->fOpeningAngle < 2 * UUtils::kPi)
       {
         Area += std::fabs(fOriginalParameters->fZValues[i + 1]
                           - fOriginalParameters->fZValues[i]) *
