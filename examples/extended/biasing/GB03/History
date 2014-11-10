@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 9, 2014, I. Hrivnacova
+- Added GNUmakefile
+- tag GB03-V10-00-02
+
 Nov 8, 2014, I. Hrivnacova
 - Added .README, files descriptions and separators
 - tag GB03-V10-00-01
