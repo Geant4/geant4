@@ -60,10 +60,10 @@ class G4LMsdGenerator : public G4HadronicInteraction
 
   private:
 
-  // G4LMsdGenerator(const G4LMsdGenerator &right);
-  // const G4LMsdGenerator & operator=(const G4LMsdGenerator &right);
-  // int operator == (const G4LMsdGenerator &right) const;
-  // int operator != (const G4LMsdGenerator &right) const;
+  G4LMsdGenerator(const G4LMsdGenerator &right);
+  const G4LMsdGenerator & operator=(const G4LMsdGenerator &right);
+  int operator == (const G4LMsdGenerator &right) const;
+  int operator != (const G4LMsdGenerator &right) const;
 
   public:
 

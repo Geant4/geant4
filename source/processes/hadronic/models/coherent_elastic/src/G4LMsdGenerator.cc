@@ -39,7 +39,7 @@
 #include "G4HadFinalState.hh"
 #include "G4KineticTrack.hh"
 #include "G4KineticTrackVector.hh"
-
+#include "G4Log.hh"
 
 
 G4LMsdGenerator::G4LMsdGenerator(const G4String& name)
@@ -57,9 +57,9 @@ G4LMsdGenerator::~G4LMsdGenerator()
 void G4LMsdGenerator::ModelDescription(std::ostream& outFile) const
 {
   outFile << GetModelName() <<" consists of a " 
-		  << " string model and a stage to de-excite the excited nuclear fragment."
-		  << "\n<p>"
-		  << "The string model simulates the interaction of\n"
+	  << " string model and a stage to de-excite the excited nuclear fragment."
+	  << "\n<p>"
+	  << "The string model simulates the interaction of\n"
           << "an incident hadron with a nucleus, forming \n"
           << "excited strings, decays these strings into hadrons,\n"
           << "and leaves an excited nucleus. \n"
@@ -220,7 +220,7 @@ G4double G4LMsdGenerator::SampleMx(const G4HadProjectile* aParticle)
     if( rand >= fProbMx[i][1] ) break;
   }
   if(i <= 0)       Mx = fProbMx[0][0];
-  else if(i >= 60) Mx = fProbMx[59][0];
+  else if(i >= 59) Mx = fProbMx[59][0];
   else             Mx = fProbMx[i][0];
 
   if ( Mx <=  1.45 )   
@@ -262,19 +262,19 @@ G4double G4LMsdGenerator::SampleT(const G4HadProjectile* aParticle, G4double Mx)
   G4double t=0., b=0.;
   G4int i;
 
-  for( i = 0; i < 23; i++)
+  for( i = 0; i < 23; ++i)
   {
     if( Mx <= fMxBdata[i][0] ) break;
   }
   if( i <= 0 )       b = fMxBdata[0][1];
-  else if( i >= 23 ) b = fMxBdata[23][1];
+  else if( i >= 22 ) b = fMxBdata[22][1];
   else               b = fMxBdata[i][1];
 
   G4double rand = G4UniformRand();
 
-  t = -std::log(rand)/b;
+  t = -G4Log(rand)/b;
 
-  t /= CLHEP::GeV*CLHEP::GeV; // in G4 internal units
+  t /= (CLHEP::GeV*CLHEP::GeV); // in G4 internal units
 
   G4double massX  = Mx/CLHEP::GeV;
   G4double massP  = aParticle->GetDefinition()->GetPDGMass();
