@@ -36,8 +36,6 @@
 GB01BOptrChangeCrossSection::GB01BOptrChangeCrossSection(G4String particleName,
                                                          G4String         name)
   : G4VBiasingOperator(name),
-    fFirstProcess(0), 
-    fLastProcess(0),
     fSetup(true)
 {
   fParticleToBias = G4ParticleTable::GetParticleTable()->FindParticle(particleName);

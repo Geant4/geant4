@@ -17,7 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Oct 14, 2014, M. Verderi
+Nov 09, 2014, M. Verderi
+- Fix compilation warnings in GB01BOptrChangeCrossSection.
+- GB01-V10-00-01
+
+Nov 07, 2014, M. Verderi
 - Adapt to MT
 - Adapt to evolved generic biasing scheme
 - tag : GB01-V10-00-00
