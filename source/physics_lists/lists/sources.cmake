@@ -81,6 +81,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lepto_n
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/neutron_hp/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/particle_hp/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
@@ -142,9 +143,17 @@ GEANT4_DEFINE_MODULE(NAME G4phys_lists
         FTFP_INCLXX_HP.hh
 	Shielding.hh
 	Shielding.icc
+        G4PhysListRegistry.hh
+        G4PhysListStamper.hh
+        G4PhysListFactoryAlt.hh
+        QGSP_BIC_AllHP.hh
+        QGSP_BIC_AllHP.icc
     SOURCES
         G4PhysListFactory.cc
         QBBC.cc
+        G4PhysListRegistry.cc
+        G4PhysListFactoryAlt.cc
+        G4RegisterPhysLists.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

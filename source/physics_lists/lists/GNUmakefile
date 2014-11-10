@@ -93,6 +93,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/lend/include \
             -I$(G4BASE)/processes/hadronic/models/lepto_nuclear/include \
             -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
+            -I$(G4BASE)/processes/hadronic/models/particle_hp/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/diffraction/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/hadronization/include \
             -I$(G4BASE)/processes/hadronic/models/parton_string/management/include \

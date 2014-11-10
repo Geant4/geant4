@@ -61,7 +61,7 @@ template<class T>
 class TLBE: public T
 {
 public:
-  TLBE();
+  TLBE(G4int ver = 1);
   ~TLBE();
   //  virtual ~TLBE();
 
