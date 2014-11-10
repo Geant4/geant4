@@ -102,7 +102,7 @@ G4Molecule* G4MoleculeTable::CreateMoleculeModel(const G4String& name,
   return molecule;
 }
 
-G4MoleculeDefinition* G4MoleculeTable::GetMoleculeDefinition(const G4String& name)
+G4MoleculeDefinition* G4MoleculeTable::GetMoleculeDefinition(const G4String& name, bool mustExist)
 {
   MoleculeDefTable::iterator it = fMoleculeDefTable.find(name);
   G4MoleculeDefinition* definition(0);
@@ -110,10 +110,14 @@ G4MoleculeDefinition* G4MoleculeTable::GetMoleculeDefinition(const G4String& nam
   {
     definition = it->second;
   }
-  else
+  else if(mustExist)
   {
-    // exception ?
-    return 0;
+    // exception
+    G4ExceptionDescription description;
+    description << "The molecule defintion " << name
+                << " was NOT recorded in the table" << G4endl;
+    G4Exception("G4MoleculeTable::CreateMoleculeModel", "MOLECULE_DEFINITION_NOT_CREATED",
+                FatalException, description);
   }
   return definition;
 }
@@ -137,7 +141,7 @@ void G4MoleculeTable::RecordMoleculeModel(const G4String& name,
   }
 }
 
-G4Molecule* G4MoleculeTable::GetMoleculeModel(const G4String& name)
+G4Molecule* G4MoleculeTable::GetMoleculeModel(const G4String& name, bool mustExist)
 {
   MoleculeTable::iterator it = fMoleculeTable.find(name);
   G4Molecule* molecule(0);
@@ -145,10 +149,14 @@ G4Molecule* G4MoleculeTable::GetMoleculeModel(const G4String& name)
   {
     molecule = it->second;
   }
-  else
+  else if(mustExist)
   {
     // exception
-    return 0;
+    G4ExceptionDescription description;
+    description << "The molecule model " << name
+                << " was already recorded in the table" << G4endl;
+    G4Exception("G4MoleculeTable::CreateMoleculeModel", "MODEL_ALREADY_CREATED",
+                FatalException, description);
   }
   return molecule;
 }

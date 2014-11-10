@@ -14,6 +14,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+08-11-2014, MK, tag emdna-V10-00-51
+- Add an exception in G4MoleculeTable::GetModel/GetDefinition
+when the asked item is not found
+
 03-11-2014 MK, tag emdna-V10-00-50
 - correct track creation by G4MoleculeGunMessenger
 

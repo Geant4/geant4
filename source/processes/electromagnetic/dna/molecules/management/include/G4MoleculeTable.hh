@@ -44,8 +44,8 @@ public:
 
   void RecordMoleculeModel(const G4String& name, G4Molecule*);
 
-  G4MoleculeDefinition* GetMoleculeDefinition(const G4String&);
-  G4Molecule* GetMoleculeModel(const G4String&);
+  G4MoleculeDefinition* GetMoleculeDefinition(const G4String&, bool mustExist = true);
+  G4Molecule* GetMoleculeModel(const G4String&, bool mustExist = true);
 
   void Insert(G4MoleculeDefinition*);
   G4MoleculeDefinitionIterator GetDefintionIterator()
