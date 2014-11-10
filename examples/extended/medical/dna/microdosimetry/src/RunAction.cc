@@ -49,7 +49,7 @@ void PrintNParticles(std::map<const G4ParticleDefinition*, int>& container);
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 RunAction::RunAction() : G4UserRunAction(),
-      fpTrackingAction(0), fInitialized(0), fDebug(true)
+      fpTrackingAction(0), fInitialized(0), fDebug(false)
 {}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

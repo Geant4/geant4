@@ -9,6 +9,9 @@ $Id: History 73136 2013-08-19 14:28:09Z sincerti $
                        Package History file
                        --------------------
 
+08 Nov 2014 - M.Karamitros - microdosimetry-V10-00-03
+- Clean command line options
+
 06 Nov 2014 - M.Karamitros - microdosimetry-V10-00-02
 - Check analysis manager is actived removed
 - Select gui + vis from command line option 

@@ -79,27 +79,20 @@ int main(int argc,char** argv)
   G4MTRunManager* runManager= new G4MTRunManager;
   if ((commandLine = parser->GetCommandIfActive("-mt")))
   {
-    if(commandLine->GetOption().empty())
+    int nThreads = 2;
+    if(commandLine->GetOption() == "NMAX")
     {
-      runManager->SetNumberOfThreads(2);
+     nThreads = G4Threading::G4GetNumberOfCores();
     }
     else
     {
-      int nThreads = 2;
-      if(commandLine->GetOption() == "NMAX")
-      {
-       nThreads = G4Threading::G4GetNumberOfCores();
-      }
-      else
-      {
-       nThreads = G4UIcommand::ConvertToInt(commandLine->GetOption());
-      }
-      G4cout << "===== Microdosimetry is started with "
-         << runManager->GetNumberOfThreads()
-         << " threads =====" << G4endl;
- 
-      runManager->SetNumberOfThreads(nThreads);
+     nThreads = G4UIcommand::ConvertToInt(commandLine->GetOption());
     }
+    G4cout << "===== Microdosimetry is started with "
+       << runManager->GetNumberOfThreads()
+       << " threads =====" << G4endl;
+ 
+    runManager->SetNumberOfThreads(nThreads);
   }
 #else
   G4RunManager* runManager = new G4RunManager();
@@ -215,13 +208,9 @@ void Parse(int& argc, char** argv)
 // it is then up to you to manage this option
 
   parser->AddCommand("-mt",
-                     Command::OptionNotCompulsory,
-                     "Launch in MT mode (events computed in parallel,"
-                     " NOT RECOMMANDED WITH CHEMISTRY)", "2");
-
-  parser->AddCommand("-chemOFF",
-                     Command::WithoutOption,
-                     "Deactivate chemistry");
+                     Command::WithOption,
+                     "Launch in MT mode (events computed in parallel)", 
+                     "2");
 
   parser->AddCommand("-vis",
                      Command::WithOption,
