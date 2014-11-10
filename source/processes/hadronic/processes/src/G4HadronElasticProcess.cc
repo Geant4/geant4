@@ -44,9 +44,12 @@
 #include "G4ProductionCutsTable.hh"
 #include "G4HadronicException.hh"
 #include "G4HadronicDeprecate.hh"
+#include "G4HadronicInteraction.hh"
+#include "G4VCrossSectionRatio.hh"
 
 G4HadronElasticProcess::G4HadronElasticProcess(const G4String& pName)
-  : G4HadronicProcess(pName, fHadronElastic), isInitialised(false)
+  : G4HadronicProcess(pName, fHadronElastic), isInitialised(false),
+    fDiffraction(0), fDiffractionRatio(0)
 {
   AddDataSet(new G4HadronElasticDataSet);
   lowestEnergy = 1.*keV;
@@ -123,8 +126,49 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
   // Initialize the hadronic projectile from the track
   //  G4cout << "track " << track.GetDynamicParticle()->Get4Momentum()<<G4endl;
   G4HadProjectile theProj(track);
-
   G4HadronicInteraction* hadi = 0;
+  G4HadFinalState* result = 0;
+
+  if(fDiffraction) {
+    G4double ratio = 
+      fDiffractionRatio->ComputeRatio(part, kineticEnergy,
+				      targNucleus->GetZ_asInt(),
+				      targNucleus->GetA_asInt());
+    // diffraction is chosen
+    if(ratio > 0.0 && G4UniformRand() < ratio) {
+      try
+	{
+	  result = fDiffraction->ApplyYourself(theProj, *targNucleus);
+	}
+      catch(G4HadronicException aR)
+	{
+	  G4ExceptionDescription ed;
+	  aR.Report(ed);
+	  ed << "Call for " << fDiffraction->GetModelName() << G4endl;
+	  ed << "Target element "<< elm->GetName()<<"  Z= " 
+	     << targNucleus->GetZ_asInt() 
+	     << "  A= " << targNucleus->GetA_asInt() << G4endl;
+	  DumpState(track,"ApplyYourself",ed);
+	  ed << " ApplyYourself failed" << G4endl;
+	  G4Exception("G4HadronElasticProcess::PostStepDoIt", "had006", 
+		      FatalException, ed);
+	}
+      // Check the result for catastrophic energy non-conservation
+      result = CheckResult(theProj, *targNucleus, result);
+
+      result->SetTrafoToLab(theProj.GetTrafoToLab());
+      ClearNumberOfInteractionLengthLeft();
+
+      FillResult(result, track);
+
+      if (epReportLevel != 0) {
+	CheckEnergyMomentumConservation(track, *targNucleus);
+      }
+      return theTotalResult;
+    }
+  }      
+
+  // ordinary elastic scattering
   try
     {
       hadi = ChooseHadronicInteraction( theProj, *targNucleus, material, elm );
@@ -155,7 +199,6 @@ G4HadronElasticProcess::PostStepDoIt(const G4Track& track,
 	   << " A= " << targNucleus->GetA_asInt() << G4endl; 
   }
 
-  G4HadFinalState* result = 0;
   try
     {
       result = hadi->ApplyYourself( theProj, *targNucleus);
@@ -280,3 +323,11 @@ G4HadronElasticProcess::SetLowestEnergyNeutron(G4double val)
   G4HadronicDeprecate("G4HadronElasticProcess::SetLowestEnergyNeutron()");
 }
 
+void G4HadronElasticProcess::SetDiffraction(G4HadronicInteraction* hi, 
+					    G4VCrossSectionRatio* xsr)
+{
+  if(hi && xsr) {
+    fDiffraction = hi;
+    fDiffractionRatio = xsr;
+  }
+}

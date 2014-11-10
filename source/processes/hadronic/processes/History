@@ -16,6 +16,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+10 November 2014 Vladimir Ivanchenko (hadr-proc-V10-00-06)
+--------------------------------------------------
+- G4HadronElasticProcess - added low-mass difrection option
+
 07 November 2014 Tatsumi Koi (hadr-proc-V10-00-05)
 --------------------------------------------------
 - Add G4He3InelasticProcess
