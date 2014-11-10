@@ -18,6 +18,9 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+07 November 14: V.Ivanchenko (emstand-V10-00-50)
+- G4GoudsmitSaundersonMscModel - fixed displacement computation
+
 27 October 14: V.Ivanchenko (emstand-V10-00-49)
 - G4GoudsmitSaundersonMscModel - fixed rare division by zero
 

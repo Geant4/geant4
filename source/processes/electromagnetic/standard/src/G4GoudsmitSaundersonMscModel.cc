@@ -267,7 +267,7 @@ G4GoudsmitSaundersonMscModel::SampleScattering(const G4ThreeVector& oldDirection
       G4ThreeVector newDirection1(sinTheta1*cos(phi1),sinTheta1*sin(phi1),cosTheta1);
 
       fDisplacement.set(0.0, 0.0, -0.5*zPathLength);
-      fDisplacement += zPathLength*newDirection1;     
+      fDisplacement += 0.5*zPathLength*newDirection1;     
 
       // Sample second substep scattering angle
       SampleCosineTheta(0.5*lambdan,scrA,cosTheta2,sinTheta2);
