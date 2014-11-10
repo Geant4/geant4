@@ -98,6 +98,9 @@ This example illustrates how to bias process cross-sections in this scheme.
 
 Illustrates a force collision scheme similar to the MCNP one.
 
+\link ExampleGB03 Example GB03  \endlink
+
+Illustrates geometry based biasing.
 
 \section biasing_s3 Reverse MonteCarlo Technique example
 

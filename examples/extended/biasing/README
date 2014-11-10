@@ -104,6 +104,10 @@ Example GB02:
 
 Illustrates a force collision scheme similar to the MCNP one.
 
+Example GB03:
+=============
+
+Illustrates geometry based biasing.
 
  ___________________________________________________________________________
 

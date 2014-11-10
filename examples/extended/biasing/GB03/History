@@ -1,0 +1,28 @@
+$Id: History 70477 2013-05-31 08:35:08Z ahoward $
+-------------------------------------------------------------------
+
+     =========================================================
+     Geant4 - an Object-Oriented Toolkit for Simulation in HEP
+     =========================================================
+
+                      Category History file
+                      ---------------------
+This file should be used by G4 developers and category coordinators
+to briefly summarize all major modifications introduced in the code
+and keep track of all category-tags.
+It DOES NOT substitute the  CVS log-message one should put at every
+committal in the CVS repository !
+
+     ----------------------------------------------------------
+     * Reverse chronological order (last date on top), please *
+     ----------------------------------------------------------
+
+Nov 8, 2014, I. Hrivnacova
+- Added .README, files descriptions and separators
+- tag GB03-V10-00-01
+
+Nov 7, 2014, M. Verderi
+- Creation
+- tag GB03-V10-00-00
+
+
