@@ -30,6 +30,9 @@
  * Created on June 21, 2013, 13:58 MST
  */
 
+#ifndef G4WendtFissionFragmentGenerator_h
+#define G4WendtFissionFragmentGenerator_h 1
+
 #include <map>
 
 #include "G4HadFinalState.hh"
@@ -58,3 +61,4 @@ private:
     G4int Verbosity_;
 
 };
+#endif

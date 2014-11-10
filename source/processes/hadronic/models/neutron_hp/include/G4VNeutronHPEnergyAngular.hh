@@ -45,6 +45,7 @@ class G4VNeutronHPEnergyAngular
       G4ReactionProduct* theNeutron;
       G4ReactionProduct* theTarget;
       G4ReactionProduct* theCMS;
+      toBeCached() : theNeutron(NULL),theTarget(NULL),theCMS(NULL) {};
    };
 
   public:
@@ -54,6 +55,8 @@ class G4VNeutronHPEnergyAngular
     //theTarget = 0;
     //theNeutron = 0;
     theQValue=0;
+      toBeCached val;
+      fCache.Put( val );
   }
   virtual ~G4VNeutronHPEnergyAngular(){}
   

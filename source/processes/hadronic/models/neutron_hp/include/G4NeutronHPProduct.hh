@@ -54,12 +54,15 @@ class G4NeutronHPProduct
       G4ReactionProduct* theNeutron;
       G4ReactionProduct* theTarget;
       G4int theCurrentMultiplicity;
+      toBeCached() : theNeutron(NULL),theTarget(NULL) {};
    };
 
   public:
   G4NeutronHPProduct()
   {
     theDist = 0;
+      toBeCached val;
+      fCache.Put( val );
   }
   ~G4NeutronHPProduct()
   {

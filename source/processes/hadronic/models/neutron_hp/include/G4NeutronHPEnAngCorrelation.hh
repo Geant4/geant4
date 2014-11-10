@@ -46,6 +46,7 @@ class G4NeutronHPEnAngCorrelation
       G4ReactionProduct* theNeutron;
       G4ReactionProduct* theTarget;
       G4double theTotalMeanEnergy;
+      toBeCached() : theNeutron(NULL),theTarget(NULL) {};
    };
 
   public:
@@ -53,6 +54,8 @@ class G4NeutronHPEnAngCorrelation
   {
     theProducts = 0;
     inCharge = false;
+    toBeCached val;
+    fCache.Put( val );
     fCache.Get().theTotalMeanEnergy = -1.;
   }
   ~G4NeutronHPEnAngCorrelation()

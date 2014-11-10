@@ -14,6 +14,16 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+8 November 2014 Tatsumi Koi   (hadr-hpn-V10-00-31)
+Fix problem on single threading mode
+	include/G4NeutronHPEnAngCorrelation.hh
+	include/G4NeutronHPProduct.hh
+	include/G4NeutronHPAngular.hh
+	include/G4VNeutronHPEnergyAngular.hh
+Fix missing "ifndef/define/endif"
+	include/G4WendtFissionFragmentGenerator.hh
+
+
 31 October 2014 Tatsumi Koi   (hadr-hpn-V10-00-30)
 Fix reproducibility on multithreading mode
 	include/G4NeutronHPEnAngCorrelation.hh

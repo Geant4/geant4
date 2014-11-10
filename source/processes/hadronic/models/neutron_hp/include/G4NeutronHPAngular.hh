@@ -46,6 +46,7 @@ class G4NeutronHPAngular
    struct toBeCached {
       const G4ReactionProduct* theNeutron;
       const G4ReactionProduct* theTarget;
+      toBeCached() : theNeutron(NULL),theTarget(NULL) {};
    };
 
     public:
@@ -59,6 +60,8 @@ class G4NeutronHPAngular
 // TKDB
       theCoefficients = 0;
       theProbArray = 0;
+      toBeCached val;
+      fCache.Put( val );
   } 
 
   ~G4NeutronHPAngular()
