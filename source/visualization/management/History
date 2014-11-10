@@ -26,6 +26,10 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+8th November 2014  John Allison  (visman-V10-00-23)
+- G4Scene.cc, G4VisManager.cc: Fixed spelling mistake in message.
+- G4ViewParameters.icc: Fixed win7-vc12 compiler warnings.
+
 30th October 2014  John Allison  (visman-V10-00-21)
 - G4VisManager.cc, G4VisCommandsSceneAdd.cc, G4Scene.cc:
   o Added informationals about /vis/scene/add/extent.

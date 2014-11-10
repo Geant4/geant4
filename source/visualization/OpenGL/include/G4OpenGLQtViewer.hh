@@ -169,13 +169,13 @@ protected:
   GetPrivateVisAttributesModifiers() const;
 
 protected:
-  QGLWidget* fWindow;
-  QWidget* fGLWindow;
+  QWidget* fGLWidget;
   bool hasPendingEvents();
   void savePPMToTemp();
   int fRecordFrameNumber;
 
   bool fHasToRepaint;
+  bool fUpdateGLLock;
   bool fQGLWidgetInitialiseCompleted;
   bool fPaintEventLock;
 
@@ -202,6 +202,8 @@ private:
                                  int currentPVPOIndex);
   void setCheckComponent(QTreeWidgetItem* item,bool check);
   void initSceneTreeComponent();
+  void initViewerPropertiesComponent();
+  void initPickingComponent();
   bool parseAndCheckVisibility(QTreeWidgetItem * treeNode,int POindex);
   QTreeWidgetItem* createTreeWidgetItem(const PVPath& fullPath,
                                      const QString& name,
@@ -289,10 +291,11 @@ private:
   QTreeWidget* fSceneTreeComponentTreeWidget;
   // This is only use to hold the old "expand" value, see file:///Developer/Documentation/Qt/html/qtreewidgetitem.html#setExpanded 
   QTreeWidget* fOldSceneTreeComponentTreeWidget;
-  QSplitter* fSceneTreeWidget;
+  QWidget* fSceneTreeWidget;
   bool fPVRootNodeCreate;
-  QLineEdit* fHelpLine;
+  QLineEdit* fFilterOutput;
   QString fFileSavePath;
+  QPushButton* fSceneTreeViewerButton;
   QPushButton* fViewerPropertiesButton;
   QPushButton* fViewerPickingButton;
   int fNbRotation ;
@@ -301,6 +304,7 @@ private:
   QDialog* fShortcutsDialog;
   QTableWidget *fSceneTreeComponentTreeWidgetInfos;
   QWidget* fSceneTreeComponentPickingInfos;
+  QWidget* fSceneTreeViewerInfos;
   QScrollArea* fSceneTreeComponentPickingScrollArea;
   int fTreeWidgetInfosIgnoredCommands;
   QPushButton * fSceneTreeButtonApply;
@@ -371,6 +375,7 @@ private Q_SLOTS :
   void processLookForFinished();
   void processEncodeStdout();
   void sceneTreeComponentItemChanged(QTreeWidgetItem* item, int id);
+  void toggleSceneTreeViewerInfos();
   void toggleSceneTreeComponentTreeWidgetInfos();
   void toggleSceneTreeComponentPickingInfos();
   void toggleSceneTreeComponentPickingCout(int);

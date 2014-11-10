@@ -108,6 +108,7 @@ class G4OpenGLViewer: virtual public G4VViewer {
 
 public:
   void ClearView  ();
+  void ClearViewWithoutFlush ();
 //////////////////////////////Vectored PostScript production functions///
   bool printEPS();
   virtual bool exportImage(std::string name="", int width=-1, int height=-1);

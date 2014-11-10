@@ -147,7 +147,7 @@ void G4Scene::CalculateExtent ()
 	   "visman0202", JustWarning,
 	   "Scene has no extent.  Please activate or add something."
 	   "\nThe camera needs to have something to point at!"
-           "\nAdd a volume. (You may need \"/run/initialise\".)"
+           "\nAdd a volume. (You may need \"/run/initialize\".)"
            "\nOr use \"/vis/scene/add/extent\"."
 	   "\n\"/vis/scene/list\" to see list of models.");
   }

@@ -36,6 +36,7 @@
 
 #include "G4OpenGLStoredSceneHandler.hh"
 #include "G4ios.hh"
+#include "G4Threading.hh"
 
 #include <qapplication.h>
 
@@ -55,6 +56,7 @@ G4OpenGLStoredQtViewer::G4OpenGLStoredQtViewer
   setFocusPolicy(Qt::StrongFocus); // enable keybord events
   fHasToRepaint = false;
   fPaintEventLock = false;
+  fUpdateGLLock = false;
 
   resize(fVP.GetWindowSizeHintX(),fVP.GetWindowSizeHintY());
 
@@ -183,7 +185,9 @@ G4bool G4OpenGLStoredQtViewer::TOSelected(size_t)
 }
 
 void G4OpenGLStoredQtViewer::DrawView () {  
-  updateQWidget();
+  if (G4Threading::G4GetThreadId() == G4Threading::MASTER_ID) {
+    updateQWidget();
+  }
 }
 
 void G4OpenGLStoredQtViewer::ComputeView () {
@@ -351,6 +355,10 @@ void G4OpenGLStoredQtViewer::paintEvent(QPaintEvent *) {
     return;
   }
   if ( fHasToRepaint) {
+    // Will really update the widget by calling CGLFlushDrawable
+    // The widget's rendering context will become the current context and initializeGL()
+    // will be called if it hasn't already been called.
+    // Copies the back buffer of a double-buffered context to the front buffer.
     updateGL();
   }
 }
@@ -406,10 +414,19 @@ void G4OpenGLStoredQtViewer::contextMenuEvent(QContextMenuEvent *e)
 }
 
 void G4OpenGLStoredQtViewer::updateQWidget() {
+  if (fUpdateGLLock) {
+    return;
+  }
+  fUpdateGLLock = true;
   fHasToRepaint= true;
+  // Will really update the widget by calling CGLFlushDrawable
+  // The widget's rendering context will become the current context and initializeGL()
+  // will be called if it hasn't already been called.
+  // Copies the back buffer of a double-buffered context to the front buffer.
   updateGL();
   updateSceneTreeComponentTreeWidgetInfos();
   fHasToRepaint= false;
+  fUpdateGLLock = false;
 }
 
 void G4OpenGLStoredQtViewer::ShowView (
@@ -423,8 +440,9 @@ void G4OpenGLStoredQtViewer::ShowView (
   ClearView();
   DrawView();
   activateWindow();
-  glFlush();
-
+  //  glFlush(); // NO NEED and as drawView will already cause a flush
+  // that could do a double flush
+  
 }
 
 

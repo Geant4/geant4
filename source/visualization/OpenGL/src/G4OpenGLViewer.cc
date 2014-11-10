@@ -230,23 +230,30 @@ void G4OpenGLViewer::InitializeGLView ()
 }  
 
 void G4OpenGLViewer::ClearView () {
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::ClearView\n");
+  ClearViewWithoutFlush();
+  glFlush();
+}
+
+
+void G4OpenGLViewer::ClearViewWithoutFlush () {
+  // Ready for clear ?
+  // See : http://lists.apple.com/archives/mac-opengl/2012/Jul/msg00038.html
+#if GL_EXT_framebuffer_object
+//  if ( glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_UNDEFINED) {
+//    return;
+//  }
 #endif
+  
   glClearColor (background.GetRed(),
-		background.GetGreen(),
-		background.GetBlue(),
-		1.);
+                background.GetGreen(),
+                background.GetBlue(),
+                1.);
   glClearDepth (1.0);
-  //Below line does not compile with Mesa includes. 
-  //glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); 
+  //Below line does not compile with Mesa includes.
+  //glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glClear (GL_COLOR_BUFFER_BIT);
   glClear (GL_DEPTH_BUFFER_BIT);
   glClear (GL_STENCIL_BUFFER_BIT);
-#ifdef G4DEBUG_VIS_OGL
-  printf("G4OpenGLViewer::ClearView flush\n");
-#endif
-  glFlush ();
 }
 
 

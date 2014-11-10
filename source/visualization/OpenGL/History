@@ -17,6 +17,46 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+7th November 2014  Laurent Garnier  (opengl-V10-00-22 - opengl-V10-00-23)
+- G4OpenGLQtViewer:
+ o Fix the "invalid drawable" warning in Qt
+ o Set the scene tree / viewer properties / picking open at the beggining
+ o Move "search" at the top of scene tree component
+ o Fix a problem with Picking composant, it was impossible to disable it. 
+ o Add viewer properties and picking for Immediate mode
+ o Fix a possible problem for fSceneHandler.GetScene()
+ o Hide picking infos at the beggining
+ o open all scene tree items
+- G4OpenGLStoredQtViewer:
+ o Remove ClearView() : Cause the ugly window problem
+
+- G4OpenGLViewer:
+ o Fix glCheckFramebufferStatus problem by #ifdef GL_VERSION_3
+
+6th November 2014  Laurent Garnier
+- G4OpenGLQtViewer :
+ o Rename fWindow by fGLWidget and avoid problems for users using an
+   external Qt Application (and external Main Window)
+ o Remove resizing GLwidget *before* it was attached in the ui. This
+   will prevent from a early repainting
+ o Fix warnings
+- G4OpenGLViewer :
+  o Add ClearViewWithoutFlush() function
+- G4OpenGLStoredQtViewer/G4OpenGLImmediateQtViewer : 
+  o Add a protection in case vis is called in another thread than main thread
+- G4OpenGLStoredQtViewer:
+  o Fix ugly window at beginning
+
+G4OpenGLWtViewer
+  o Fix a problem with Wt include names on case sensitive systems
+
+5th November 2014  Laurent Garnier
+- G4OpenGLQtViewer: 
+ o Rename fWindow by fGLWidget and avoid problems for users using an external
+   Qt Application (and external Main Window)
+ o Remove resizing GLwidget *before* it was attached in the ui. This will prevent
+   from a early repainting
+
 30th October 2014  Laurent Garnier (opengl-V10-00-21)
 - Tagged
 

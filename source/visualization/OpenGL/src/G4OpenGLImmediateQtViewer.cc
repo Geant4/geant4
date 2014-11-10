@@ -36,6 +36,7 @@
 #include "G4OpenGLImmediateSceneHandler.hh"
 
 #include "G4ios.hh"
+#include "G4Threading.hh"
 
 #include <qapplication.h>
 #include <qevent.h>
@@ -144,7 +145,9 @@ void G4OpenGLImmediateQtViewer::initializeGL () {
 
 
 void  G4OpenGLImmediateQtViewer::DrawView() {
-  updateQWidget();
+  if (G4Threading::G4GetThreadId() == G4Threading::MASTER_ID) {
+    updateQWidget();
+  }
 }
 
 

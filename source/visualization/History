@@ -24,6 +24,14 @@ committal in the CVS repository !
 History file for visualization category
 ---------------------------------------
 
+8th November 2014  John Allison  (vis-V10-00-14)
+- visman-V10-00-23:
+  o Fixed spelling mistake in messages.
+  o Fixed win7-vc12 compiler warnings.
+
+7th November 2014  Laurent Garnier (vis-V10-00-12 - vis-V10-00-13)
+- opengl-V10-00-22 - opengl-V10-00-23
+
 30th October 2014  Laurent Garnier (vis-V10-00-10 - vis-V10-00-11)
 - visexternal-V10-00-03
 - opengl-V10-00-21

@@ -53,8 +53,8 @@
 #include "G4UIWt.hh"
 #include "G4UImanager.hh"
 #include "G4UIcommandTree.hh"
-#include <WT/WHBoxLayout>
-#include <WT/WApplication>
+#include <Wt/WHBoxLayout>
+#include <Wt/WApplication>
 #include <Wt/WTime>
 
 

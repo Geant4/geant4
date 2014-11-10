@@ -666,7 +666,7 @@ void G4VisManager::BeginDraw (const G4Transform3D& objectTransform)
   fDrawGroupNestingDepth++;
   if (fDrawGroupNestingDepth > 1) {
     G4Exception
-      ("G4VSceneHandler::BeginDraw",
+      ("G4VisManager::BeginDraw",
        "visman0008", JustWarning,
        "Nesting detected. It is illegal to nest Begin/EndDraw."
        "\n Ignored");
@@ -703,7 +703,7 @@ void G4VisManager::BeginDraw2D (const G4Transform3D& objectTransform)
   fDrawGroupNestingDepth++;
   if (fDrawGroupNestingDepth > 1) {
     G4Exception
-      ("G4VSceneHandler::BeginDraw2D",
+      ("G4VisManager::BeginDraw2D",
        "visman0009", JustWarning,
        "Nesting detected. It is illegal to nest Begin/EndDraw2D."
        "\n Ignored");
