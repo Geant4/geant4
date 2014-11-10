@@ -30,6 +30,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+
+22nd October 2014 - Gunter Folger (cmake-V10-00-33)
+- Modules/Geant4DatasetDefinitions.cmake: RadioactiveDecay4.2
+
 07th November 2014 - Ben Morgan (cmake-V10-00-32)
 - Modules/Geant4OptionalComponents.cmake : BUGFIX: Failures of static 
   builds traced to typo in USolids settings in static mode where
