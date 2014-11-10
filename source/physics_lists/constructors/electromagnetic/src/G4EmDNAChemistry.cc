@@ -120,6 +120,7 @@ void G4EmDNAChemistry::ConstructMolecule()
   G4MoleculeTable::Instance()->CreateMoleculeModel("H",
                                                    G4Hydrogen::Definition());
   G4MoleculeTable::Instance()->CreateMoleculeModel("H2", G4H2::Definition());
+  G4MoleculeTable::Instance()->CreateMoleculeModel("H2O2", G4H2O2::Definition());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -128,17 +129,12 @@ void G4EmDNAChemistry::ConstructDissociationChannels()
 {
   //-----------------------------------
   //Create the dynamic objects
-  G4Molecule * H3O = new G4Molecule(G4H3O::Definition());
-  G4Molecule * OH = new G4Molecule(G4OH::Definition());
-  G4Molecule * e_aq = new G4Molecule(G4Electron_aq::Definition());
-
-  G4Molecule * H = new G4Molecule(G4Hydrogen::Definition());
-  G4Molecule * H2 = new G4Molecule(G4H2::Definition());
-
-  G4Molecule* OHm = new G4Molecule(G4OH::Definition());
-  OHm->AddElectron(3);
-  OHm->SetMass(17.0079 * g / Avogadro * c_squared);
-  OHm->SetDiffusionCoefficient(5.0e-9 * (m2 / s));
+  G4Molecule* OH = G4MoleculeTable::Instance()->GetMoleculeModel("OH");
+  G4Molecule* OHm = G4MoleculeTable::Instance()->GetMoleculeModel("OHm");
+  G4Molecule* e_aq = G4MoleculeTable::Instance()->GetMoleculeModel("e_aq");
+  G4Molecule* H2 = G4MoleculeTable::Instance()->GetMoleculeModel("H2");
+  G4Molecule* H3O = G4MoleculeTable::Instance()->GetMoleculeModel("H3Op");
+  G4Molecule* H = G4MoleculeTable::Instance()->GetMoleculeModel("H");
 
   //-------------------------------------
   //Define the decay channels
@@ -367,16 +363,13 @@ void G4EmDNAChemistry::ConstructDissociationChannels()
 void G4EmDNAChemistry::ConstructReactionTable(G4DNAMolecularReactionTable*
                                               theReactionTable)
 {
-  G4Molecule* OHm = new G4Molecule(G4OH::Definition());
-  OHm->AddElectron(3);
-  OHm->SetMass(17.0079 * g / Avogadro * c_squared);
-  OHm->SetDiffusionCoefficient(5.0e-9 * (m2 / s));
-  G4Molecule* OH = new G4Molecule(G4OH::Definition());
-  G4Molecule* e_aq = new G4Molecule(G4Electron_aq::Definition());
-  G4Molecule* H = new G4Molecule(G4Hydrogen::Definition());
-  G4Molecule* H3Op = new G4Molecule(G4H3O::Definition());
-  G4Molecule* H2O2 = new G4Molecule(G4H2O2::Definition());
-  G4Molecule* H2 = new G4Molecule(G4H2::Definition());
+  G4Molecule* OH = G4MoleculeTable::Instance()->GetMoleculeModel("OH");
+  G4Molecule* e_aq = G4MoleculeTable::Instance()->GetMoleculeModel("e_aq");
+  G4Molecule* H2 = G4MoleculeTable::Instance()->GetMoleculeModel("H2");
+  G4Molecule* H3Op = G4MoleculeTable::Instance()->GetMoleculeModel("H3Op");
+  G4Molecule* OHm = G4MoleculeTable::Instance()->GetMoleculeModel("OHm");
+  G4Molecule* H2O2 =  G4MoleculeTable::Instance()->GetMoleculeModel("H2O2");
+  G4Molecule* H = G4MoleculeTable::Instance()->GetMoleculeModel("H");
 
   //------------------------------------------------------------------
   // e_aq + e_aq + 2H2O -> H2 + 2OH-
