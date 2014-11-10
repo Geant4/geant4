@@ -17,6 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-34 08 November 2014 Ivana Hrivnacova
+- Disabled wholeNuclearDNA in GNUmake test (as it requires many data files)
+ 
+ctests-V10-00-33 08 November 2014 Ivana Hrivnacova
+- Added copying data files for DICOM and pdb4dna examples in GNUmake test
+
+ctests-V10-00-32 08 November 2014 Mathieu Karamitros
+- Correct execution of microdosimetry
+
+ctests-V10-00-31 08 November 2014 Ivana Hrivnacova
+- Added new extended biasing/GB03 example
+
 ctests-V10-00-30 -- 05 November 2014 Mathieu Karamitros
 - update command line options of pdb4dna
 

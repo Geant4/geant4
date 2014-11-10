@@ -149,18 +149,15 @@ GEANT4_ADD_TEST(example-ext-analysis-b1con COMMAND ${BINDIR}/exampleB1Con ${SRCD
                                 BUILD ${SRCDIR}/extended/analysis/B1Con)
 
 
-GEANT4_ADD_TEST(example-ext-biasing-b01 COMMAND ${BINDIR}/exampleB01 
-                                        BUILD ${SRCDIR}/extended/biasing/B01)
-GEANT4_ADD_TEST(example-ext-biasing-b02 COMMAND ${BINDIR}/exampleB02 
-                                        BUILD ${SRCDIR}/extended/biasing/B02)
-GEANT4_ADD_TEST(example-ext-biasing-b03 COMMAND ${BINDIR}/exampleB03 
-                                        BUILD ${SRCDIR}/extended/biasing/B03)
-GEANT4_ADD_TEST(example-ext-biasing-gb01 
-                COMMAND ${BINDIR}/exampleGB01 ${SRCDIR}/extended/biasing/GB01/exampleGB01.in
-                BUILD ${SRCDIR}/extended/biasing/GB01)
-GEANT4_ADD_TEST(example-ext-biasing-gb02 
-                COMMAND ${BINDIR}/exampleGB02 ${SRCDIR}/extended/biasing/GB02/exampleGB02.in 
-                BUILD ${SRCDIR}/extended/biasing/GB02)
+foreach(_i 01 02 03) 
+  GEANT4_ADD_TEST(example-ext-biasing-b${_i} COMMAND ${BINDIR}/exampleB${_i} 
+                                        BUILD ${SRCDIR}/extended/biasing/B${_i})
+endforeach()
+foreach(_i 01 02 03) 
+  GEANT4_ADD_TEST(example-ext-biasing-gb${_i} 
+                COMMAND ${BINDIR}/exampleGB${_i} ${SRCDIR}/extended/biasing/GB${_i}/exampleGB${_i}.in
+                BUILD ${SRCDIR}/extended/biasing/GB${_i})
+endforeach()
 GEANT4_ADD_TEST(example-ext-biasing-reversemc01 COMMAND ${BINDIR}/exampleRMC01 ${SRCDIR}/extended/biasing/ReverseMC01/run_adjoint_simulation_electron.g4mac  
                                         BUILD ${SRCDIR}/extended/biasing/ReverseMC01)
 foreach(_i 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18)
@@ -223,6 +220,7 @@ foreach(_i 00 01 02 03 04 05)
 endforeach()
 GEANT4_ADD_TEST(example-ext-medical-dicom 
                 COMMAND ${BINDIR}/DICOM ${SRCDIR}/extended/medical/DICOM/run.mac
+                PRECMD  ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/examples/extended/medical/DICOM/Data.dat Data.dat
                 BUILD ${SRCDIR}/extended/medical/DICOM)
 #GEANT4_ADD_TEST(example-ext-medical-electronScattering 
 #                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/medical/electronScattering/electronScattering
@@ -252,7 +250,7 @@ GEANT4_ADD_TEST(example-ext-medical-dna-dnaphysics
                 BUILD ${DNA_EXAMPLE_SRC_DIR}/dnaphysics)
  
 GEANT4_ADD_TEST(example-ext-medical-dna-microdosimetry
-                COMMAND ${BINDIR}/microdosimetry ${DNA_EXAMPLE_SRC_DIR}/microdosimetry/microdosimetry.in
+                COMMAND ${BINDIR}/microdosimetry -mac ${DNA_EXAMPLE_SRC_DIR}/microdosimetry/microdosimetry.in
                 BUILD ${DNA_EXAMPLE_SRC_DIR}/microdosimetry)
 
 foreach(_i 1 2 3)                
@@ -263,14 +261,15 @@ GEANT4_ADD_TEST(example-ext-medical-dna-chem${_i}
                 BUILD ${DNA_EXAMPLE_SRC_DIR}/chem${_i})
 endforeach()
 
-GEANT4_ADD_TEST(example-ext-medical-dna-wholeNuclearDNA
-                COMMAND ${BINDIR}/wholeNuclearDNA
-                        ${DNA_EXAMPLE_SRC_DIR}/wholeNuclearDNA/wholeNuclearDNA.in
-                BUILD ${DNA_EXAMPLE_SRC_DIR}/wholeNuclearDNA)
+#GEANT4_ADD_TEST(example-ext-medical-dna-wholeNuclearDNA
+#                COMMAND ${BINDIR}/wholeNuclearDNA
+#                        ${DNA_EXAMPLE_SRC_DIR}/wholeNuclearDNA/wholeNuclearDNA.in
+#                BUILD ${DNA_EXAMPLE_SRC_DIR}/wholeNuclearDNA)
 
 GEANT4_ADD_TEST(example-ext-medical-dna-pdb4dna
                 COMMAND ${BINDIR}/pdb4dna
                         -mac ${DNA_EXAMPLE_SRC_DIR}/pdb4dna/pdb4dna.in -mt
+                PRECMD  ${CMAKE_COMMAND} -E copy ${DNA_EXAMPLE_SRC_DIR}/pdb4dna/1ZBB.pdb 1ZBB.pdb
                 BUILD ${DNA_EXAMPLE_SRC_DIR}/pdb4dna)
 
 GEANT4_ADD_TEST(example-ext-optical-opnovice 

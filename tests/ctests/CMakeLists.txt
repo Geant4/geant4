@@ -111,33 +111,21 @@ GEANT4_ADD_TEST(example-ext-analysis-b1con
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/analysis/B1Con
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/analysis/B1Con
                 BUILD exampleB1Con PROJECT B1Con ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-GEANT4_ADD_TEST(example-ext-biasing-b01 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/B01/exampleB01
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/B01
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/B01
-                BUILD exampleB01 PROJECT B01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-GEANT4_ADD_TEST(example-ext-biasing-b02 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/B02/exampleB02
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/B02
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/B02
-                BUILD exampleB02 PROJECT B02)
-GEANT4_ADD_TEST(example-ext-biasing-b03 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/B03/exampleB03
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/B03
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/B03
-                BUILD exampleB03 PROJECT B03 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-GEANT4_ADD_TEST(example-ext-biasing-gb01 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB01/exampleGB01
-                        ${CMAKE_SOURCE_DIR}/examples/extended/biasing/GB01/exampleGB01.in
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/GB01
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB01
-                BUILD exampleGB01 PROJECT GB01project ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
-GEANT4_ADD_TEST(example-ext-biasing-gb02 
-                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB02/exampleGB02
-                        ${CMAKE_SOURCE_DIR}/examples/extended/biasing/GB02/exampleGB02.in
-                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/GB02
-                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB02
-                BUILD exampleGB02 PROJECT GB02project ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+foreach(_i 01 02 03)
+  GEANT4_ADD_TEST(example-ext-biasing-b${_i} 
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/B${_i}/exampleB${_i}
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/B${_i}
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/B${_i}
+                BUILD exampleB${_i} PROJECT B${_i} ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+endforeach()
+foreach(_i 01 02 03)
+  GEANT4_ADD_TEST(example-ext-biasing-gb${_i} 
+                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB${_i}/exampleGB${_i}
+                        ${CMAKE_SOURCE_DIR}/examples/extended/biasing/GB${_i}/exampleGB${_i}.in
+                SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/biasing/GB${_i}
+                BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB${_i}
+                BUILD exampleGB${_i} PROJECT GB${_i}project ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
+endforeach()
 GEANT4_ADD_TEST(example-ext-biasing-reversemc01 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/ReverseMC01/exampleRMC01
                         ${CMAKE_SOURCE_DIR}/examples/extended/biasing/ReverseMC01/run_adjoint_simulation_electron.mac
@@ -458,7 +446,7 @@ GEANT4_ADD_TEST(example-ext-medical-dna-dnaphysics
                  
 GEANT4_ADD_TEST(example-ext-medical-dna-microdosimetry 
                 COMMAND ${DNA_EXAMPLE_BIN_DIR}/microdosimetry/microdosimetry 
-                        ${DNA_EXAMPLE_SOURCE_DIR}/microdosimetry/microdosimetry.in
+                        -mac ${DNA_EXAMPLE_SOURCE_DIR}/microdosimetry/microdosimetry.in
                 SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/microdosimetry
                 BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/microdosimetry
                 BUILD microdosimetry ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
