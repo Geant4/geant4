@@ -491,10 +491,10 @@ void G4RunManager::RunTermination()
       G4Event* evt = *evItr;
       if(evt)
       {
-        if(evt->GetNumberOfGrips()==0)
+        if(evt->GetNumberOfGrips()==0) 
         {
           previousEvents->erase(evItr);
-          delete evt; 
+          if(!(evt->ToBeKept())) delete evt; 
         }
         else
         { evItr++; }

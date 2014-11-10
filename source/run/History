@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 8th, 2014 M.Asai (run-V10-00-39 -40)
+- Further fix of logic at G4RunManager::RunTermination() for keeping
+  events  
+
+November 7th, 2014 A.Dotti (run-V10-00-38)
+- Fix logic at G4RunManager::RunTermination() for keeping events  
+
 November 6th, 2014 M.Asai (run-V10-00-37)
 - Fix unnecessary print-out incorrectly added with run-V10-00-31.
 
