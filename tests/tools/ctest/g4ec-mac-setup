@@ -1,0 +1,216 @@
+#!/usr/bin/env bash 
+
+# common setup of environment.
+
+if [ $# -ne 1 ] ; then
+   echo "Error, wrong number of arguments"
+   echo " argument required: compiler, i.e. gcc or clang"
+   exit 1
+else
+   compiler=$1
+fi
+
+IsNotInPath() {
+  package=$1
+  rc=`echo ${PATH} | grep  $package | wc -l`
+  return $rc
+}
+
+Identify_Compiler() {
+  echo $1
+  cid=`$1 --version | head -1`
+  cc_version=""
+  if echo $cid | grep GCC > /dev/null ; then
+     # using gcc/g++
+	  cc_version=`echo $cid | awk '{ print $1 }' | awk -F\- '{ print $NF }'`
+	  export CC=gcc
+          export CXX=g++
+
+  elif echo $cid | grep clang > /dev/null ; then
+     # using clang/clang++
+	  cc_version=`echo $cid | awk '{ print $NF }' | sed -e"s/svn)//"`
+	  export CC=clang
+          export CXX=clang++
+  fi
+  cc_version=`echo ${cc_version} | tr -d '.'`
+}
+
+Identify_OS() {
+   macvers=`sw_vers | grep ProductVersion | awk '{print $2}'`
+   macvers=`echo $macvers | awk -F\. '{print $1$2}'`
+}
+
+Identify_OS
+echo $macvers
+lcgbase=x86_64-mac${macvers}
+
+Identify_Compiler $compiler
+
+export CONFIG=mac${macvers}-${CC}${cc_version}
+
+
+lcg="${lcgbase}-${CC}${cc_version}"
+lcgopt="${lcg}-opt" 
+
+lcgext="/ec/externals"
+lcgapp="/afs/cern.ch/sw/lcg/app/releases"
+lcgcontrib="/afs/cern.ch/sw/lcg/contrib"
+lcgexperim="/afs/cern.ch/sw/lcg/experimental"
+
+[ -z ${rootlcg} ] && rootlcg=${lcgopt}
+
+#---Xerces-C-------------------------------------------------------
+if [ -z "${XERCESC_ROOT_DIR}" ] ; then
+  [ -z "${XERCESC_VERSION}" ] && XERCESC_VERSION=3.1.1 || true     
+  XercesC_dir=${lcgext}/xerces-c-${XERCESC_VERSION}/${lcgopt}
+
+   # if no XercesC, look in experimental
+  if [ ! -d $XercesC_dir -a \
+       -d ${lcgexperim}/XercesC/${XERCESC_VERSION}/${lcgopt} ] ; then
+	 XercesC_dir=${lcgexperim}/XercesC/${XERCESC_VERSION}/${lcgopt} 
+  fi
+
+    #if no XercesC, look in "lcgext" using XercesC from other version of OS/cc
+  if [ ! -d $XercesC_dir ] ; then 
+    dir=`ls -t ${lcgext}/xerces-c-${XERCESC_VERSION}/x86_64-mac*-${CC}*-opt | head -1`
+    if [ -n "$dir" -a -d $dir ] ; then
+	    XercesC_dir=$dir
+	 fi 
+  fi
+
+  if [ -d $XercesC_dir ] ; then
+    export XERCESC_ROOT_DIR=${XercesC_dir}
+    export LD_LIBRARY_PATH=${XercesC_dir}/lib:${LD_LIBRARY_PATH}
+    echo "Using XercesC from $XercesC_dir"
+  else
+    echo "XercesC not found in $XercesC_dir"
+  fi
+  unset XercesC_dir
+fi
+
+#---CLHEP----------------------------------------------------------
+if [ -z "${CLHEP_ROOT_DIR}" ] ; then
+  CLHEP_ROOT_DIR=${lcgext}/clhep/2.1.4.1/${lcgopt}
+  if [ -d ${CLHEP_ROOT_DIR} ] ; then
+    export CLHEP_ROOT_DIR
+    export LD_LIBRARY_PATH=${CLHEP_ROOT_DIR}/lib:${LD_LIBRARY_PATH}
+    Use_CLHEP="-DGEANT4_USE_SYSTEM_CLHEP=ON\;-DCLHEP_ROOT_DIR=${CLHEP_ROOT_DIR}"
+    echo "Using system CLHEP from ${CLHEP_ROOT_DIR}"
+  else
+    unset CLHEP_ROOT_DIR
+    Use_CLHEP="-DGEANT4_USE_SYSTEM_CLHEP=OFF"
+    echo "Using internal CLHEP"
+  fi
+fi
+
+#---Qt-------------------------------------------------------------
+if [ -z "${QTDIR}" ] ; then
+   QTDIR=${lcgext}/qt/4.6.3p2/${lcgopt}
+   if [ -d ${QTDIR} ] ; then
+     Use_QT="ON" 
+     export QTDIR
+     echo "Using QT from ${QTDIR}"
+   else
+     Use_QT="OFF"
+     unset QTDIR
+     echo "Not using QT"
+   fi
+fi
+
+#---GCCXML--------------------------------------------------------
+if  IsNotInPath  gccxml ; then
+   gccxmlDir=${lcgext}/gccxml/0.9.0_20110825/${lcgopt}/bin
+   if [ -d ${gccxmlDir} ] ; then 
+     export PATH=${gccxmlDir}:${PATH}
+   fi
+   unset gccxmlDir 
+fi
+
+
+whichroot()
+{
+     v_root=`ls -dt1 ${1}/ROOT/${2}.[0-9][0-9]/${rootlcg} 2>/dev/null | head -1`
+	  v_root=`echo $v_root | sed -e "s=${1}/ROOT/==" | sed -e "s=/${rootlcg}=="`
+     # structure differs between lcg/app and lcg/experimental
+     root=${1}/ROOT/${v_root}/${rootlcg}/root/bin/thisroot.sh
+	  [ -r ${root} ] && true || root=${1}/ROOT/${v_root}/${rootlcg}/bin/thisroot.sh
+}
+
+#---ROOT-----------------------------------------------------------
+if [ -z "${ROOTSYS}" ] ; then
+  #  find latest root
+     whichroot ${lcgapp}     5.34
+  if [ ! -r ${root} ] ; then
+     whichroot ${lcgexperim} 5.34
+  fi	  
+  if [ -r ${root} ] ; then
+    echo "Setting up root using $root"
+    . ${root}
+  else
+    echo no root setup script found.
+  fi
+   unset root
+fi
+
+#---Python--------------------------------------------------------
+#Needed for PhysicsChecks: python compatible with ROOT
+if  IsNotInPath Python ; then
+  pythonDir=${lcgext}/Python/2.6.5p2/${rootlcg}/bin
+  if [ -d ${pythonDir} ] ; then
+    export PATH=${lcgext}/Python/2.6.5p2/${rootlcg}/bin:${PATH}
+    export LD_LIBRARY_PATH=${lcgext}/Python/2.6.5p2/${rootlcg}/lib:${LD_LIBRARY_PATH}
+  fi
+  unset pythonDir
+fi
+#-----------------------------------------------------------------
+
+#echo $PATH | wc -c
+
+test -n "$VERSION_BENCHMARKS" && echo "Using benchmarks tag: $VERSION_BENCHMARKS"
+ 
+
+if [ -z "$MODE" ]; then
+  export MODE=nightly
+fi
+if [ -z "$WORKDIR" ]; then 
+  WORKDIR=/ec/G4-builds
+fi
+if [ -z "$VERSION" ]; then 
+  export VERSION=g4tags-dev
+fi
+
+if [ -z "$BUILDTYPE" ]; then
+   PLATFORM=${WORKDIR}/${MODE}/${CONFIG}
+else
+   PLATFORM=${WORKDIR}/${MODE}/${CONFIG}-${BUILDTYPE}
+fi
+
+export SOURCE=${PLATFORM}/${VERSION}
+export BINARY=${PLATFORM}/build
+
+
+#
+#default, to be modified for non default buildtypes
+#
+  export G4_XOPTS="-DGEANT4_USE_G3TOG4=ON;\
+-DGEANT4_USE_QT=${Use_QT};\
+-DGEANT4_USE_RAYTRACER_X11=ON;\
+${Use_CLHEP}"
+
+
+case "${BUILDTYPE}" in 
+
+   staticlibs)
+	   export G4_XOPTS="-DBUILD_STATIC_LIBS=ON;-DBUILD_SHARED_LIBS=OFF"
+	   ;;
+   MT)
+	   export G4_XOPTS="${G4_XOPTS};-DGEANT4_BUILD_MULTITHREADED=ON"
+	   ;;
+   MTmax)
+	   export G4_XOPTS="${G4_XOPTS};-DGEANT4_BUILD_MULTITHREADED=ON"
+	   export G4FORCENUMBEROFTHREADS="max"
+	   ;;
+esac
+
+echo $G4_XOPTS
+

@@ -6,7 +6,8 @@
 import MySQLdb
 import time, sys, re, os
 
-host     = 'g4dbsrv.cern.ch'
+host     = 'dbod-g4-tags.cern.ch'
+port     = 5500
 user     = 'g4tagsro'
 passwd   = 'read'
 dbname   = 'geant4tags'
@@ -16,12 +17,14 @@ specialcases = ({'regex':'.*-gmk-.*', 'switch':'GNUmakefile', 'path':''},
                 {'regex':'.*-cmk-.*', 'switch':'CMakeLists.txt', 'path':''},
                 {'regex':'benchmarks-V.*', 'switch':'', 'path':'geant4/benchmarks'},
                 {'regex':'Configure-.*', 'switch':'Configure', 'path':''})
-smallstatus = {'selected':'S', 'proposed':'P', 'accepted':'A'}
+smallstatusProposed = {'selected':'S', 'proposed':'P', 'accepted':'A'}
+smallstatusSelected = {'selected':'S', 'accepted':'A'}
+smallstatusAccepted = {'accepted':'A'}
 updatesections = ('Configure', 'config', 'examples', 'source', 'tests','environments', 'cmake')
 
 #-----------------------------------------------------------------------------------------------
 def gettaglist(slot, proposed=False):
-  db = MySQLdb.connect( host=host, user=user, passwd=passwd, db=dbname)
+  db = MySQLdb.connect( host=host, port=port, user=user, passwd=passwd, db=dbname)
   cursor = db.cursor(MySQLdb.cursors.DictCursor)
   cursor.execute("select * from g4t_devlines where slot='%s' and status=1" % slot )
   devline = cursor.fetchone()
@@ -90,10 +93,10 @@ def gettaglist(slot, proposed=False):
       if key in oldkey : del pathes[oldkey]
     #---Add current tag with key----------------------------------------------------------------
     pathes[key] = tag
-  tags = pathes.values()
-  tags.sort(key=lambda t:t['date'])
+  testing_tags = pathes.values()
+  testing_tags.sort(key=lambda t:t['date'])
   #---Loop over tags and format correctly the outpout------------------------------------------
-  for tag in tags:
+  for tag in testing_tags:
     s +=  "%s %-8s %-40s %-50s %s\n"%(smallstatus[tag['status']], tag['repository'], tag['name'], tag['path'].replace(tag['repository'],'.'), tag['file'])
   #---Additional details of the tag lists------------------------------------------------------
   s +=  "\n\n# Details about the taglists assigned to tested development line: \n\n"
@@ -111,8 +114,15 @@ if __name__ == '__main__' :
     print "Content-type: text/plain\n\n"
     if form.has_key('devline') :  devline = form['devline'].value
     else:                         devline = 'g4tags-dev'
-    if form.has_key('proposed') : proposed = form['proposed'].value.lower() in ('true','ok','1','true','yes')
-    else:                         proposed = False
+    if form.has_key('proposed') : 
+       proposed = form['proposed'].value.lower() in ('true','ok','1','true','yes')
+       smallstatus = smallstatusProposed
+    elif form.has_key('accepted'):
+       accepted = form['accepted'].value.lower() in ('true','ok','1','true','yes')
+       smallstatus = smallstatusAccepted
+    else:
+       proposed = False
+       smallstatus = smallstatusSelected
     print gettaglist(devline, proposed)  
   except :
     print gettaglist(len(sys.argv) > 1 and sys.argv[1] or 'g4tags-dev')

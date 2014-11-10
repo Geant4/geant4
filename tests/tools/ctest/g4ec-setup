@@ -14,7 +14,12 @@ fi
 
 THIS=$(dirname $0)
 #---Update Scripts-------------------------------------------------
-[ -r /usr/bin/lockfile ] &&lockfile -l 60 ${THIS}/svn_update.lock
-svn update ${THIS}
-[ -r  ${THIS}/svn_update.lock ] && rm -f ${THIS}/svn_update.lock
 
+[ -r /usr/bin/lockfile ] && lockfile -l 60 ${THIS}/svn_update.lock \
+                         || echo "no lockfile utility in /usr/bin"
+								 
+svn update ${THIS}
+
+if test -r  ${THIS}/svn_update.lock ; then
+   rm -f ${THIS}/svn_update.lock
+fi

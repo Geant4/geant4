@@ -4,12 +4,6 @@
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
 
-IsNotInPath() {
-  package=$1
-  rc=`echo ${PATH} | grep  $package | wc -l`
-  return $rc
-}
-
 if [ $# -ne 2 ] ; then
    echo "Error, wrong number of arguments"
    echo " arguments lcgplatform, e.g x86_64-slc5 and compiler version, e.g 4.3"
@@ -23,171 +17,13 @@ echo $0
 
 CtestDir=$(dirname $0)
 
+# use common setup for environment
 
-lcg="${lcgbase}-gcc`echo ${gccver} | awk -F. '{ printf"%d%d",$1,$2 }'`"
-lcgopt="${lcg}-opt" 
+. ${CtestDir}/g4ec-slc-setup ${lcgbase} ${gccver}
 
-lcgext="/afs/cern.ch/sw/lcg/external"
-lcgapp="/afs/cern.ch/sw/lcg/app/releases"
-lcgcontrib="/afs/cern.ch/sw/lcg/contrib"
-
-[ -z ${rootlcg} ] && rootlcg=${lcgopt}
-
-#---Xerces-C-------------------------------------------------------
-if [ -z "${XERCESC_ROOT_DIR}" ] ; then
-  XercesC_dir=${lcgext}/XercesC/3.1.1p2/${lcgopt}
-  if [ -d $XercesC_dir ] ; then
-    export XERCESC_ROOT_DIR=${XercesC_dir}
-    export LD_LIBRARY_PATH=${XercesC_dir}/lib:${LD_LIBRARY_PATH}
-    echo "Using XercesC from $XercesC_dir"
-  fi
-  unset XercesC_dir
+if [ "${RESET_SOURCE}" = "yes" ]; then
+  rm -rf ${SOURCE}
 fi
-
-#---Inventor--------------------------------------------------------
-if  IsNotInPath coin3d ; then
-  Inventor=${lcgext}/coin3d/3.1.3.p1/${lcgopt}
-  if [ -d $Inventor ] ; then 
-    export PATH=${Inventor}/bin:${PATH}
-    export LD_LIBRARY_PATH=${lcgext}/lib:${LD_LIBRARY_PATH}
-    echo "Using Inventor in $Inventor"
-  fi
-  unset Inventor  
-fi
-
-#---CLHEP----------------------------------------------------------
-if [ -z "${CLHEP_ROOT_DIR}" ] ; then
-  CLHEP_ROOT_DIR=${lcgext}/clhep/2.1.3.1/${lcgopt}
-  if [ -d ${CLHEP_ROOT_DIR} ] ; then
-    export CLHEP_ROOT_DIR
-    export LD_LIBRARY_PATH=${CLHEP_ROOT_DIR}/lib:${LD_LIBRARY_PATH}
-    Use_system_CLHEP="ON"
-    echo "Using system CLHEP from ${CLHEP_ROOT_DIR}"
-  else
-    unset CLHEP_ROOT_DIR
-    Use_system_CLHEP=="OFF"
-    echo "Using internal CLHEP"
-  fi
-fi
-
-#---Qt-------------------------------------------------------------
-if [ -z "${QTDIR}" ] ; then
-   QTDIR=${lcgext}/qt/4.6.3p2/${lcgopt}
-   if [ -d ${QTDIR} ] ; then
-     Use_QT="ON" 
-     export QTDIR
-     echo "Using QT from ${QTDIR}"
-   else
-     Use_QT="OFF"
-     unset QTDIR
-     echo "Not using QT"
-   fi
-fi
-
-#---CMake----------------------------------------------------------
-if  IsNotInPath CMake ; then
-   export PATH=${lcgext}/CMake/2.8.6/${lcgopt}/bin:${PATH}
-fi
-
-#---GCCXML--------------------------------------------------------
-if  IsNotInPath  gccxml ; then
-   gccxmlDir=${lcgext}/gccxml/0.9.0_20110825/${lcgopt}/bin
-   if [ -d ${gccxmlDir} ] ; then 
-     export PATH=${gccxmlDir}:${PATH}
-   fi
-   unset gccxmlDir 
-fi
-
-#---ROOT-----------------------------------------------------------
-if [ -z "${ROOTSYS}" ] ; then
-  root=${lcgapp}/ROOT/5.34.07/${rootlcg}/root/bin/thisroot.sh
-  if [ -r ${root} ] ; then
-    echo "Setting up root using $root"
-    . ${root}
-  else
-    echo no such root setup script: ${root}
-  fi
-   unset root
-fi
-
-#---Python--------------------------------------------------------
-#Needed for PhysicsChecks: python compatible with ROOT
-if  IsNotInPath Python ; then
-  pythonDir=${lcgext}/Python/2.6.5p2/${rootlcg}/bin
-  if [ -d ${pythonDir} ] ; then
-    export PATH=${lcgext}/Python/2.6.5p2/${rootlcg}/bin:${PATH}
-    export LD_LIBRARY_PATH=${lcgext}/Python/2.6.5p2/${rootlcg}/lib:${LD_LIBRARY_PATH}
-  fi
-  unset pythonDir
-fi
-#-----------------------------------------------------------------
-
-#---Compiler------------------------------------------------------
-if [ -z "${CXX}" ] ; then
-  if IsNotInPath "gcc/$gccver" ; then
-    gcc_dir=${lcgcontrib}/gcc/${gccver}/${lcgopt}
-    echo Try gcc from $gcc_dir
-    if [ -d $gcc_dir ] ; then
-      export PATH=${gcc_dir}/bin:${PATH}
-      export LD_LIBRARY_PATH=${gcc_dir}/lib64:${LD_LIBRARY_PATH}
-      echo "Using g++ from $gcc_dir"
-    else
-      echo "Using g++:"
-      gcc --version | head -1
-    fi 
-    unset gcc_dir    
-  fi
-fi
-
-#echo $PATH | wc -c
-
-test -n "$VERSION_BENCHMARKS" && echo "Using benchmarks tag: $VERSION_BENCHMARKS"
- 
-
-if [ x$MODE = x ]; then
-  export MODE=nightly
-fi
-if [ x$WORKDIR = x ]; then 
-  WORKDIR=/ec/G4-build 
-fi
-if [ x$VERSION = x ]; then 
-  export VERSION=g4tags-dev
-fi
-
-if [ x$BUILDTYPE = x ]; then
-   PLATFORM=${WORKDIR}/${MODE}/${CONFIG}
-else
-   PLATFORM=${WORKDIR}/${MODE}/${CONFIG}-${BUILDTYPE}
-fi
-
-export SOURCE=${PLATFORM}/${VERSION}
-export BINARY=${PLATFORM}/build
-
-
-#
-#default, to be modified for non default buildtypes
-#
-  export G4_XOPTS="-DGEANT4_USE_G3TOG4=ON;\
--DGEANT4_USE_OPENGL_X11=ON;\
--DGEANT4_USE_QT=${Use_QT};\
--DGEANT4_USE_RAYTRACER_X11=ON;\
--DGEANT4_USE_SYSTEM_CLHEP=${Use_system_CLHEP};\
--DCLHEP_ROOT_DIR=${CLHEP_ROOT_DIR};\
--DGEANT4_USE_XM=ON"
-
-
-case "${BUILDTYPE}" in 
-
-   staticlibs)
-	export G4_XOPTS="-DBUILD_STATIC_LIBS=ON;-DBUILD_SHARED_LIBS=OFF"
-	;;
-   MT)
-	export G4_XOPTS="${G4_XOPTS};-DGEANT4_BUILD_MULTITHREADED=ON"
-	;;
-esac
-
-echo $G4_XOPTS
-
 
 if [ ! -d "${SOURCE}" ]; then
   ${CtestDir}/g4tagsvn.py update -c ${VERSION} -d ${SOURCE} -q

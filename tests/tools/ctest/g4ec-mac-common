@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+#------------------------------------------------------------------
+
+if [ $# -ne 1 ] ; then
+   echo "Error, wrong number of arguments"
+   echo " argument required: compiler, i.e. gcc or clang"
+   exit 1
+fi
+
+ulimit -c 1000000
+
+THIS=$(dirname $0)
+
+. ${THIS}/g4ec-mac-setup $1
+
+if [ "${RESET_SOURCE}" = "yes" ]; then
+  rm -rf ${SOURCE}
+fi
+
+if [ ! -d "${SOURCE}" ]; then 
+  ${THIS}/g4tagsvn.py update -c ${VERSION} -d ${SOURCE} -q
+fi
+
+ctest -V -S ${THIS}/g4${MODE}.cmake
+
+

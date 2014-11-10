@@ -17,5 +17,35 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+10-11-2014, Gunter Folger           testtools-ctest-V10-00-04
+- for GNUmake builds, update to use dataset RadioactiveDecay4.2 
+   g4ec-{slc5-gcc43-gmake,slc6-gcc48-gmake-vg,g4ec-mac107-gcc42-gmake}
+	
+7-11-2014, Gunter Folger           testtools-ctest-V10-00-03
+- update dataset for GNUmake builds
+   g4ec-{slc5-gcc43-gmake,slc6-gcc48-gmake-vg,g4ec-mac107-gcc42-gmake}
+
+6-11-2014, Gunter Folger           testtools-ctest-V10-00-02
+- g4tagsvn.py: setting of --ignore-ancestry made to depend on svn version;
+   the option must be used for version >=1.7, but not for <=1.6      
+- switch slc6/gcc49 to use 4.9 ( curently linked to 4.9.1) instead 
+   of explicit 4.9.0 
+
+30-10-2014, Andrea Dotti
+-  g4tagsvn.py: add option to checkout only accepted tags
+
+15-08-2014, Gunter Folger
+-  reveert back to cmake 2.8.9
+
+14-08-2014, Gunter Folger          
+- g4ec-slc-setup: switch to use CMake 3.0.0 
+
+30-06-2014, Gunter Folger          testtools-ctest-V10-00-01
+- ctest setup as used for 10.1.beta01, and 10.0.ref06
+
+09-12-2013, Gunter Folger          testtools-ctest-V10-00-00
+- ctest setup as used for 10.0
+    (History file itsself in tag is old)
+
 25-6-2013, Gunter Folger              testtools-ctest-V09-06-00
 - ctest setup as used for 10.0.beta

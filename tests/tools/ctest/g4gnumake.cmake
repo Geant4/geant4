@@ -21,6 +21,13 @@ if(NOT $ENV{VERSION} STREQUAL "g4tags-dev")
   set(CTEST_BUILD_NAME $ENV{VERSION}-${CTEST_BUILD_NAME})
 endif()
 
+
+if(DEFINED ENV{WITH_MEMCHECK})
+  set(WITH_MEMCHECK TRUE)
+  find_program(CTEST_MEMORYCHECK_COMMAND NAMES valgrind)
+  set(CTEST_MEMORYCHECK_COMMAND_OPTIONS "--track-origins=yes")
+endif()
+
 set(CTEST_SOURCE_DIRECTORY "$ENV{SOURCE}")
 set(CTEST_BINARY_DIRECTORY "$ENV{BINARY}")
 set(CTEST_DASHBOARD_ROOT "$ENV{BINARY}/dashboard")
@@ -49,6 +56,8 @@ set(CTEST_CUSTOM_MAXIMUM_FAILED_TEST_OUTPUT_SIZE "100000")
 set(CTEST_CUSTOM_MAXIMUM_PASSED_TEST_OUTPUT_SIZE "10000")
 
 set($ENV{LC_MESSAGES} "en_EN")
+set(CTEST_CUSTOM_WARNING_EXCEPTION ${CTEST_CUSTOM_WARNING_EXCEPTION}
+		  "note: variable tracking size limit exceeded with -fvar-tracking-assignments")
 
 #---Configure tests. Some of them require some files to be copied-----------
 configure_file(${CTEST_SOURCE_DIRECTORY}/tests/ctests/GNUMakeTestfile.cmake ${CTEST_BINARY_DIRECTORY}/CTestTestfile.cmake COPYONLY)
@@ -61,8 +70,11 @@ ctest_update(SOURCE ${CTEST_SOURCE_DIRECTORY} )
 ctest_configure(BUILD ${CTEST_BINARY_DIRECTORY} )
 ctest_build(BUILD ${CTEST_SOURCE_DIRECTORY}/source)
 ctest_test(PARALLEL_LEVEL ${ncpu})
+
+if (WITH_MEMCHECK AND CTEST_MEMORYCHECK_COMMAND)
+   set(CTEST_TEST_TIMEOUT 3500)
+   ctest_memcheck(PARALLEL_LEVEL ${ncpu} 
+			  INCLUDE "example-(bas|ext)"
+			  EXCLUDE "-build$")
+endif (WITH_MEMCHECK AND CTEST_MEMORYCHECK_COMMAND)
 ctest_submit()
-
-
-
-

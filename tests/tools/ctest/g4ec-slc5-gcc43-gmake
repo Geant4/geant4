@@ -49,20 +49,24 @@ export G4LIB_USE_GRANULAR=1
 export G4LIB_USE_CLHEP=1
 
 #---Data libraries environment variables--------------------------
-export G4_DATA_DIR=${WORKDIR}/data
-export G4LEVELGAMMADATA=${G4_DATA_DIR}/PhotonEvaporation2.3
-export G4LEDATA=${G4_DATA_DIR}/G4EMLOW6.32
-export G4RADIOACTIVEDATA=${G4_DATA_DIR}/RadioactiveDecay3.6
-export G4NEUTRONHPDATA=${G4_DATA_DIR}/G4NDL4.2
+#export G4_DATA_DIR=/cvmfs/geant4.cern.ch/share/data
+export G4_DATA_DIR=/afs/cern.ch/sw/geant4/releases/share/data
+export G4LEVELGAMMADATA=${G4_DATA_DIR}/PhotonEvaporation3.1
+export G4LEDATA=${G4_DATA_DIR}/G4EMLOW6.41
+export G4RADIOACTIVEDATA=${G4_DATA_DIR}/RadioactiveDecay4.2
+export G4NEUTRONHPDATA=${G4_DATA_DIR}/G4NDL4.5
 export G4PIIDATA=${G4_DATA_DIR}/G4PII1.3
-export G4NEUTRONXSDATA=${G4_DATA_DIR}/G4NEUTRONXS1.3
+export G4NEUTRONXSDATA=${G4_DATA_DIR}/G4NEUTRONXS1.4
 export G4SAIDXSDATA=${G4_DATA_DIR}/G4SAIDDATA1.1
 export G4REALSURFACEDATA=${G4_DATA_DIR}/RealSurface1.0
 
 export LD_LIBRARY_PATH=${G4LIB}/${G4SYSTEM}:${LD_LIBRARY_PATH}
 
+if [ "${RESET_SOURCE}" = "yes" ]; then
+  rm -rf ${SOURCE}
+fi
+
 if [ ! -d "${SOURCE}" ]; then 
-  #rm -rf ${SOURCE}
   ${THIS}/g4tagsvn.py checkout -c ${VERSION} -d ${SOURCE} -q
 fi
 

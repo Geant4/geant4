@@ -9,7 +9,7 @@ export CXXFLAGS=-DG4FPE_DEBUG
 
 CONFIG=slc5-gcc47
 
-rootlcg=x86_64-slc5-gcc46-opt
+#rootlcg=x86_64-slc5-gcc46-opt
 
 . ${THIS}/g4ec-slc-common x86_64-slc5 4.7
 

@@ -1,0 +1,71 @@
+#!/usr/bin/env bash 
+
+
+#------------------------------------------------------------------
+export LC_CTYPE=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+#---Compiler------------------------------------------------------
+. /afs/cern.ch/sw/IntelSoftware/linux/all-setup.sh
+export CC=icc
+export CXX=icc
+#-----------------------------------------------------------------
+
+THIS=$(dirname $0)
+
+Identify_OS() {
+   if test -x /usr/bin/lsb_release ; then 
+       OSvers=`lsb_release  -rs | awk -F\. '{print $1}'`
+   elif test -r /etc/issue ; then
+       OSvers=`cat /etc/issue | awk 'NR==1 { print substr($(NF-1),1,1) }'`
+   else
+        OSvers="undef"
+   fi	
+}
+
+Identify_Compiler() {
+  echo $1
+  cid=`$1 --version | head -1`
+  cc_version=""
+  if echo $cid | grep GCC > /dev/null ; then
+     # using gcc/g++
+	  cc_name=gcc
+	  cc_version=`echo $cid | awk '{ print $3 }' | awk -F. '{ print $1$2 }'`
+
+  elif echo $cid | grep clang > /dev/null ; then
+     # using clang/clang++
+	  cc_name=clang
+	  cc_version=`echo $cid | awk '{ print $3 }' | awk -F. '{ print $1$2 }'`
+	  export CC=clang
+          export CXX=clang++
+  elif echo $cid | grep icc > /dev/null ; then
+     #using icc
+	  cc_name=icc
+	  cc_version=`echo $cid | awk '{ print $3 }' | awk -F. '{ print $1 }'`		 
+  fi
+  cc_version=`echo ${cc_version} | tr -d '.'`
+}
+
+Identify_OS
+Identify_Compiler $CXX
+
+CONFIG=slc${OSvers}-${cc_name}${cc_version}
+
+
+lcgarch=x86_64-slc
+
+case ${OSvers} in
+  5) gccvers=4.3
+     ;;
+  6) gccvers=4.6  # 4.8 were nice, but not complete in lcg
+    . /afs/cern.ch/sw/lcg/experimental/ROOT/5.34.05/x86_64-slc6-gcc44-opt/bin/thisroot.sh
+     ;;
+  *) echo "Error: Unknown version of slc ${OSvers}!"
+     exit 1
+	  ;;	  
+esac
+
+echo $LD_LIBRARY_PATH
+
+. ${THIS}/g4ec-slc-common x86_64-slc${OSvers} ${gccvers}
+
+

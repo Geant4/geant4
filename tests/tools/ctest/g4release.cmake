@@ -11,8 +11,8 @@ ctest_configure(BUILD   ${CTEST_BINARY_DIRECTORY}
                 SOURCE  ${CTEST_SOURCE_DIRECTORY}
                 OPTIONS "${CTEST_CONFIG_OPTIONS}")
 ctest_build(BUILD ${CTEST_BINARY_DIRECTORY})
-#ctest_test(PARALLEL_LEVEL ${ncpu} INCLUDE_LABEL "Nightly")
-ctest_test(PARALLEL_LEVEL ${ncpu} )
+ctest_test(PARALLEL_LEVEL ${ncpu} INCLUDE_LABEL "Nightly")
+#ctest_test(PARALLEL_LEVEL ${ncpu} )
 ctest_submit()
 
 

@@ -1,14 +1,19 @@
 #!/usr/bin/env bash
 #------------------------------------------------------------------
 
-CONFIG=mac107-gcc42
+CONFIG=mac109-clang33
 
 #---Xerces-C-------------------------------------------------------
-export XERCESC_ROOT_DIR=/build/externals/xerces-c-3.1.1p2/x86_64-mac107-gcc42-opt
+export XERCESC_ROOT_DIR=/ec/externals/xerces-c-3.1.1/x86_64-mac109-clang33-opt
 export DYLD_LIBRARY_PATH=${XERCESC_ROOT_DIR}/lib:${DYLD_LIBRARY_PATH}
+
+#---Clang Compiler---------------------------------------------------
+export CC=clang
+export CXX=clang++
 
 #-----------------------------------------------------------------
 THIS=$(dirname $0)
+
 
 if [ x$MODE = x ]; then
   export MODE=nightly
@@ -28,11 +33,27 @@ fi
 
 export SOURCE=${PLATFORM}/${VERSION}
 export BINARY=${PLATFORM}/build
+#
+#default, to be modified for non default buildtypes
+#
 
-#---Remove 'old' BINARY -------------------------------------------
-if [ `date -r \`stat -f%B ${BINARY}\` +%Y%m%d` != `date  +%Y%m%d` ]; then
-  rm -rf ${BINARY}
-fi
+  export G4_XOPTS="-DGEANT4_USE_G3TOG4=ON;\
+-DGEANT4_USE_RAYTRACER_X11=ON;"
+
+
+case "${BUILDTYPE}" in 
+
+   staticlibs)
+	   export G4_XOPTS="-DBUILD_STATIC_LIBS=ON;-DBUILD_SHARED_LIBS=OFF"
+	   ;;
+   MT)
+	   export G4_XOPTS="${G4_XOPTS};-DGEANT4_BUILD_MULTITHREADED=ON"
+	   ;;
+   MTmax)
+	   export G4_XOPTS="${G4_XOPTS};-DGEANT4_BUILD_MULTITHREADED=ON"
+	   export G4FORCENUMBEROFTHREADS="max"
+	   ;;
+esac
 
 if [ "${RESET_SOURCE}" = "yes" ]; then
   rm -rf ${SOURCE}
@@ -43,5 +64,4 @@ if [ ! -d "${SOURCE}" ]; then
 fi
 
 ctest -V -S ${THIS}/g4${MODE}.cmake
-
 

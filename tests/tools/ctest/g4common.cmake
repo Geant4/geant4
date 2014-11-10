@@ -36,7 +36,10 @@ if(WIN32)
   if(tag MATCHES x64)
     set(win64 " Win64")
   endif()
-  if(tag MATCHES vc11)
+  # be4 adding a new generator, make sure that cmake knows about this....
+  if(tag MATCHES vc12)
+    set(CTEST_CMAKE_GENERATOR "Visual Studio 12${win64}")
+  elseif(tag MATCHES vc11)
     set(CTEST_CMAKE_GENERATOR "Visual Studio 11${win64}")
   elseif(tag MATCHES vc10)
     set(CTEST_CMAKE_GENERATOR "Visual Studio 10${win64}")
@@ -91,10 +94,20 @@ else()
   set(CTEST_CUSTOM_WARNING_EXCEPTION ${CTEST_CUSTOM_WARNING_EXCEPTION}
         "warning: ignoring return value of"
         "clang: warning: argument unused" 
-	"warning: declaration of 'tokType' shadows a member of")
+        "include/xercesc/util/regx/Token.hpp"
+		  "note: variable tracking size limit exceeded with -fvar-tracking-assignments")
 endif()
+#	     "warning: declaration of 'tokType' shadows a member of"
 
-set(CTEST_TEST_TIMEOUT 1500)
+message( "CTEST_TIMEOUT =x$ENV{CTEST_TIMEOUT}x")
+if("$ENV{CTEST_TIMEOUT}" STREQUAL "")
+  # use default value
+   set(CTEST_TEST_TIMEOUT 1500)
+else()
+   message( "Setting timelimit from environment to $ENV{CTEST_TIMEOUT}" )
+   set(CTEST_TEST_TIMEOUT $ENV{CTEST_TIMEOUT})
+endif()
+#set(CTEST_TEST_TIMEOUT 1500)
 
 if("$ENV{VERSION}" STREQUAL "g4tags-dev")
   set(CTEST_NOTES_FILES ${CTEST_SOURCE_DIRECTORY}/gettags.txt)

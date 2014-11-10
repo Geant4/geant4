@@ -1,13 +1,23 @@
 #!/usr/bin/env python
 import sys, os, shutil,re
+import subprocess as sb
+import string
 
 if sys.platform == 'win32':
   cern_svn_repos = 'https://svn.cern.ch/reps'
-  extra_options = '--ignore-ancestry'
+elif sys.platform == 'darwin':
+  cern_svn_repos = 'svn+ssh://svn.cern.ch/reps'
 else :
   cern_svn_repos = 'svn+ssh://svn.cern.ch/reps'
-  extra_options = ''
 
+#--ignore-ancestry must be used with svn version 1.7 or higher
+svn_version=sb.Popen(["svn", "--version","--quiet"],stdout=sb.PIPE ).communicate()[0]
+svnver=string.split(svn_version,'.')
+if int(svnver[0]) > 1 or int(svnver[1]) > 6 :
+  extra_options = '--ignore-ancestry'
+else:
+  extra_options = ''
+  
 replace_dot_with_geant4 = lambda str:str.replace(".", "geant4",1)
 remove_dot_slash = lambda str:str.replace("./", "",1)
 def get_tag(path):
@@ -16,7 +26,7 @@ def get_tag(path):
   else : return ''
 
 #--------------------------------------------------------------------------------------------------
-def g4svn_update(devline, destdir, quiet, proposed):
+def g4svn_update(devline, destdir, quiet, proposed , accepted):
   if not os.path.exists(destdir):
     try :
       os.makedirs(destdir)
@@ -77,6 +87,7 @@ def g4svn_update(devline, destdir, quiet, proposed):
   #---Get the current list of tags ------------------------------------------------------------------
   import urllib
   if proposed : tags_url = "http://lcgapp.cern.ch/spi/cgi-bin/g4tags.py?devline=%s;proposed=true" % devline
+  elif accepted :  tags_url = "http://lcgapp.cern.ch/spi/cgi-bin/g4tags.py?devline=%s;accepted=true" % devline
   else        : tags_url = "http://lcgapp.cern.ch/spi/cgi-bin/g4tags.py?devline=%s" % devline
   taglist = urllib.urlopen(tags_url).read()
   used_tags = open('gettags.txt', 'w')
@@ -323,6 +334,8 @@ if __name__ == "__main__":
                       help="don't print status messages to stdout")
     parser.add_option("-p", "--proposed", action='store_true', dest="proposed", default=False,
                       help="add the proposed tags in addtion")
+    parser.add_option("-a", "--accepted", action='store_true', dest="accepted", default=False,
+                      help="add *ONLY* accepted tags")
     parser.add_option("", "--non-interactive", action='store_true', dest="interactive", default=False,
                       help="to please CTest!!!")
     parser.add_option("-r", "--revision", dest="revision", default=None,
@@ -334,7 +347,7 @@ if __name__ == "__main__":
     fl = FileLock(os.path.join(options.dest,'tagsvn_update'), timeout=1000)
     try:
       fl.acquire()
-      g4svn_update(options.config, options.dest, options.quiet, options.proposed)
+      g4svn_update(options.config, options.dest, options.quiet, options.proposed, options.accepted)
     finally:
       fl.release()
   else:

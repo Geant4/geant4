@@ -1,9 +1,8 @@
 @echo off  
 rem ---Compiler------------------------------------------------------
-call "%VS90COMNTOOLS%\..\..\vc\vcvarsall" amd64
-set Platform=X64
+call "%VS120COMNTOOLS%\..\..\vc\vcvarsall"
 rem ---Xerces-C------------------------------------------------------
-set XERCESC_ROOT_DIR=D:\sw\lcg\external\XercesC\3.1.1p1\x86_64-windows-vc9
+set XERCESC_ROOT_DIR=D:\sw\lcg\external\XercesC\3.1.1\x86-windows-vc10
 set PATH=%XERCESC_ROOT_DIR%\bin;%PATH%
 
 rem ---Define basic config parameters--------------------------------
@@ -11,7 +10,7 @@ set THIS=%~d0%~p0
 if NOT DEFINED MODE    set MODE=nightly
 if NOT DEFINED WORKDIR set WORKDIR=D:/build/cdash
 if NOT DEFINED VERSION set VERSION=g4tags-dev
-set CONFIG=x64-win7-vc9
+set CONFIG=x86-win7-vc12
 set SOURCE=%WORKDIR%/%MODE%/%CONFIG%/%VERSION%
 set BINARY=%WORKDIR%/%MODE%/%CONFIG%/build
 

@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+
+THIS=$(dirname $0)
+
+#---Enable FPE  & bounds checking---------------------------------------------------
+
+export CXXFLAGS="-DG4FPE_DEBUG -D_GLIBCXX_DEBUG"
+
+export CTEST_TIMEOUT=3000
+
+#add cmake from gcc46, not yet build for 48
+export PATH="/afs/cern.ch/sw/lcg/external/CMake/2.8.8/x86_64-slc6-gcc46-opt/bin:${PATH}"
+
+#--disable external CLHEP:
+export CLHEP_ROOT_DIR="-"
+export Use_CLHEP="-DGEANT4_USE_SYSTEM_CLHEP=OFF"
+#--
+
+#use Xercesc 3.1.1p1 from ...experimental....
+XERCESC_VERSION=3.1.1p1
+
+
+CONFIG=slc6-gcc48
+
+. ${THIS}/g4ec-slc-common x86_64-slc6 4.8
+
+

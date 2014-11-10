@@ -1,4 +1,10 @@
 #!/usr/bin/env bash
+
+CONFIG=ubuntu12-gcc46
+
+#---Enable FPE -----------------------------------------------------
+export CXXFLAGS=-DG4FPE_DEBUG
+
 #------------------------------------------------------------------
 export LC_CTYPE=en_US.UTF-8
 export LC_ALL=en_US.UTF-8
@@ -16,20 +22,32 @@ THIS=$(dirname $0)
 if [ x$MODE = x ]; then
   export MODE=nightly
 fi
-if [ x$WORKDIR = x ]; then
-  WORKDIR=/build/cdash/G4 
+if [ x$WORKDIR = x ]; then 
+  WORKDIR=/ec/G4-builds
 fi
 if [ x$VERSION = x ]; then 
   export VERSION=g4tags-dev
 fi
 
-#---Enable FPE -----------------------------------------------------
-export CXXFLAGS=-DG4FPE_DEBUG
+if [ x$BUILDTYPE = x ]; then
+   PLATFORM=${WORKDIR}/${MODE}/${CONFIG}
+else
+   PLATFORM=${WORKDIR}/${MODE}/${CONFIG}-${BUILDTYPE}
+fi
 
-CONFIG=ubuntu12-gcc46
+export SOURCE=${PLATFORM}/${VERSION}
+export BINARY=${PLATFORM}/build
 
-export SOURCE=${WORKDIR}/${MODE}/${VERSION}
-export BINARY=${WORKDIR}/${MODE}/${CONFIG}
+  export G4_XOPTS="-DGEANT4_USE_G3TOG4=ON;\
+-DGEANT4_USE_OPENGL_X11=ON;\
+-DGEANT4_USE_QT=ON;\
+-DGEANT4_USE_RAYTRACER_X11=ON;\
+${Use_CLHEP};\
+-DGEANT4_USE_XM=ON"
+
+if [ "${RESET_SOURCE}" = "yes" ]; then
+  rm -rf ${SOURCE}
+fi
 
 if [ ! -d "${SOURCE}" ]; then
   ${THIS}/g4tagsvn.py update -c ${VERSION} -d ${SOURCE} -q

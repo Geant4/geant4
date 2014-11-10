@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+
+THIS=$(dirname $0)
+
+#---Enable FPE ---------------------------------------------------
+#export CXXFLAGS=-DG4FPE_DEBUG
+
+CONFIG=slc6-clang33
+
+#use root compiled with gcc46
+#rootlcg=x86_64-slc6-gcc46-opt
+
+.  /afs/cern.ch/sw/lcg/external/llvm/3.3/x86_64-slc6/setup.sh
+
+export CXX=/afs/cern.ch/sw/lcg/external/llvm/3.3/x86_64-slc6/bin/clang++
+export CC=/afs/cern.ch/sw/lcg/external/llvm/3.3/x86_64-slc6/bin/clang
+
+. ${THIS}/g4ec-slc-common x86_64-slc6 4.7
