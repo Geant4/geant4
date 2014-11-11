@@ -17,6 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 10, 2014, M. Verderi
+- update exampleGB03.out
+- tag GB03-V10-00-04
+
+Nov 10, 2014, M. Verderi
+- Typo in GB03BOptnSplitOrKillOnBoundary: GetApplyProbabilty()
+  (missing "i" : Probability())
+- tag GB03-V10-00-03
+
 Nov 9, 2014, I. Hrivnacova
 - Added GNUmakefile
 - tag GB03-V10-00-02

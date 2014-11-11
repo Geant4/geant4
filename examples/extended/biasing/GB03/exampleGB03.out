@@ -792,22 +792,12 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
      100.00          0k         1       10         10         0.00    Calor
- Starting run with splitting factor = 2, and probability for applying the technique 1. 
+GB03BOptrGeometryBasedBiasing : starting run with splitting factor = 2, and probability for applying the technique 1 . 
 ### Run 0 starts.
- Starting run with splitting factor = 2, and probability for applying the technique 1. 
- Starting run with splitting factor = 2, and probability for applying the technique 1. 
- Starting run with splitting factor = 2, and probability for applying the technique 1. 
- Starting run with splitting factor = 2, and probability for applying the technique 1. 
- Starting run with splitting factor = 2, and probability for applying the technique 1. 
- Starting run with splitting factor = 2, and probability for applying the technique 1. 
- Starting run with splitting factor = 2, and probability for applying the technique 1. 
- Starting run with splitting factor = 2, and probability for applying the technique 1. 
- Starting run with splitting factor = 2, and probability for applying the technique 1. 
- Starting run with splitting factor = 2, and probability for applying the technique 1. 
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=2.58s Real=2.58s Sys=0s
+  User=2.58s Real=2.59s Sys=0s
 
 Region <DefaultRegionForTheWorld> --  -- appears in <World> world volume
  This region is in the mass world.
@@ -862,22 +852,12 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Percent     Memory      Heads    Nodes   Pointers    Total CPU    Volume
     -------   --------     ------   ------   --------   ----------    ----------
      100.00          0k         1       20         20         0.00    Calor
- Starting run with splitting factor = 2, and probability for applying the technique 0.5. 
+GB03BOptrGeometryBasedBiasing : starting run with splitting factor = 2, and probability for applying the technique 0.5 . 
 ### Run 1 starts.
- Starting run with splitting factor = 2, and probability for applying the technique 0.5. 
- Starting run with splitting factor = 2, and probability for applying the technique 0.5. 
- Starting run with splitting factor = 2, and probability for applying the technique 0.5. 
- Starting run with splitting factor = 2, and probability for applying the technique 0.5. 
- Starting run with splitting factor = 2, and probability for applying the technique 0.5. 
- Starting run with splitting factor = 2, and probability for applying the technique 0.5. 
- Starting run with splitting factor = 2, and probability for applying the technique 0.5. 
- Starting run with splitting factor = 2, and probability for applying the technique 0.5. 
- Starting run with splitting factor = 2, and probability for applying the technique 0.5. 
- Starting run with splitting factor = 2, and probability for applying the technique 0.5. 
 Run terminated.
 Run Summary
   Number of events processed : 10
-  User=1.98s Real=1.98s Sys=0s
+  User=1.98s Real=1.99s Sys=0.01s
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

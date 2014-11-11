@@ -44,7 +44,7 @@ GB03BOptrGeometryBasedBiasing::GB03BOptrGeometryBasedBiasing()
   
   // -- Define messengers:
   fSplittingFactorMessenger = 
-    new G4GenericMessenger(this, "/GB03/biasing/","My step control" );
+    new G4GenericMessenger(this, "/GB03/biasing/","Biasing control" );
   
   G4GenericMessenger::Command& splittingFactorCmd = 
     fSplittingFactorMessenger->DeclareProperty("setSplittingFactor", fSplittingFactor,
@@ -52,7 +52,7 @@ GB03BOptrGeometryBasedBiasing::GB03BOptrGeometryBasedBiasing()
   splittingFactorCmd.SetStates(G4State_Idle);
   
   fApplyProbabilityMessenger = 
-    new G4GenericMessenger(this, "/GB03/biasing/","My step control" );
+    new G4GenericMessenger(this, "/GB03/biasing/","Biasing control" );
   
   G4GenericMessenger::Command& applyProbCmd = 
     fApplyProbabilityMessenger->DeclareProperty("setApplyProbability", fApplyProbability,
@@ -75,9 +75,9 @@ void GB03BOptrGeometryBasedBiasing::StartRun()
 {
   fSplitAndKillOperation->SetSplittingFactor ( fSplittingFactor  );
   fSplitAndKillOperation->SetApplyProbability( fApplyProbability );
-  G4cout << " Starting run with splitting factor = " << fSplittingFactor
+  G4cout << GetName() << " : starting run with splitting factor = " << fSplittingFactor
          << ", and probability for applying the technique " << fApplyProbability
-         << ". " << G4endl;
+         << " . " << G4endl;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

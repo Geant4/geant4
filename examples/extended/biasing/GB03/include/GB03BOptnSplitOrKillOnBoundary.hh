@@ -95,8 +95,8 @@ public:
   void SetApplyProbability( G4double proba )
   { fApplyProbability = proba; }
   
-  G4int    GetSplittingFactor() const { return fSplittingFactor; }
-  G4double GetApplyProbabilty() const { return fApplyProbability; }
+  G4int    GetSplittingFactor()  const { return fSplittingFactor;  }
+  G4double GetApplyProbability() const { return fApplyProbability; }
   
 private:
   G4ParticleChange            fParticleChange;
