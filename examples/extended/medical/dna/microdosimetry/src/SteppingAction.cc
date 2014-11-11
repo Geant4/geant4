@@ -159,7 +159,7 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
 
     CommandLineParser* parser = CommandLineParser::GetParser();
     Command* command(0);
-    if((command = parser->GetCommandIfActive("-root"))==0) return;
+    if((command = parser->GetCommandIfActive("-out"))==0) return;
 
     // get analysis manager
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();

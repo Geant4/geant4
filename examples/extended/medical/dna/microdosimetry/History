@@ -9,6 +9,18 @@ $Id: History 73136 2013-08-19 14:28:09Z sincerti $
                        Package History file
                        --------------------
 
+10 Nov 2014 - M. Karamitros - microdosimetry-V10-00-06
+- Correct the check on the output file command line option
+
+10 Nov 2014 - M. Karamitros - microdosimetry-V10-00-05
+- Following Laurent's development: add a tab in the Qt interface 
+displaying the README
+
+10 Nov 2014 - M. Karamitros - microdosimetry-V10-00-04
+- CommandLine updated
+- Default output file's name corrected
+- remove microdosmietry.mac
+
 08 Nov 2014 - M.Karamitros - microdosimetry-V10-00-03
 - Clean command line options
 

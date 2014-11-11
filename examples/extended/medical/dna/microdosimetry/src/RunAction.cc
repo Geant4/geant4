@@ -225,7 +225,7 @@ void RunAction::CreateHistogram()
 
   CommandLineParser* parser = CommandLineParser::GetParser();
   Command* command(0);
-  if((command = parser->GetCommandIfActive("-root"))==0) return;
+  if((command = parser->GetCommandIfActive("-out"))==0) return;
 
   G4cout << "##### Create analysis manager " << "  " << this << G4endl;
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
@@ -248,7 +248,7 @@ void RunAction::CreateHistogram()
   }
   else
   {
-   fileName = "microdosimetry.mac";
+   fileName = command->GetDefaultOption();
   }
   analysisManager->OpenFile(fileName);
 
@@ -272,7 +272,7 @@ void RunAction::WriteHistogram()
 {
   CommandLineParser* parser = CommandLineParser::GetParser();
   Command* commandLine(0);
-  if((commandLine = parser->GetCommandIfActive("-root"))==0) return;
+  if((commandLine = parser->GetCommandIfActive("-out"))==0) return;
 
   // print histogram statistics
   //

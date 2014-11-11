@@ -51,6 +51,7 @@
 #include "DetectorConstruction.hh"
 #include "PhysicsList.hh"
 #include "CommandLineParser.hh"
+#include "G4UIQt.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -172,6 +173,10 @@ int main(int argc,char** argv)
 
   if ((commandLine = parser->GetCommandIfActive("-gui")))
   {
+    G4UIQt* UIQt = static_cast<G4UIQt*> (UImanager->GetG4UIWindow());
+    if ( UIQt) {
+      UIQt->AddViewerTabFromFile("README", "README from "+ G4String(argv[0]));
+    }
     ui->SessionStart();
     delete ui;
   }
@@ -221,10 +226,10 @@ void Parse(int& argc, char** argv)
                      Command::WithoutOption,
                      "Deactivate visualization when using GUI");
 
-  parser->AddCommand("-root",
-        Command::OptionNotCompulsory,
-                     "Output root files", 
-                     "microdosimetry.mac");
+  parser->AddCommand("-out",
+                     Command::OptionNotCompulsory,
+                     "Output files", 
+                     argv[0]);
 
   //////////
   // If -h or --help is given in option : print help and exit
