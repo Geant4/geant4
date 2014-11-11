@@ -656,7 +656,7 @@ G4ReactionProductVector * G4BinaryCascade::Propagate(
     thePrimaryEscape = true;
 
     #ifdef debug_BIC_return
-    G4cout << "return @end, all ok "<< G4endl;
+    G4cout << "BIC: return @end, all ok "<< G4endl;
     //G4cout << "  return products " << products << G4endl;
     #endif
 
@@ -1121,11 +1121,11 @@ G4ReactionProductVector * G4BinaryCascade::ProductsAddPrecompound(G4ReactionProd
          G4LorentzVector pProduct((*j)->GetMomentum(),(*j)->GetTotalEnergy());
          pPreco+= pProduct;
 #ifdef debug_BIC_Propagate_finals
-         G4cout << " pProduct be4 boost " <<pProduct << G4endl;
+         G4cout << "BIC: pProduct be4 boost " <<pProduct << G4endl;
 #endif
          pProduct *= precompoundLorentzboost;
 #ifdef debug_BIC_Propagate_finals
-         G4cout << " pProduct aft boost " <<pProduct << G4endl;
+         G4cout << "BIC: pProduct aft boost " <<pProduct << G4endl;
 #endif
          pSumPreco += pProduct;
          (*j)->SetTotalEnergy(pProduct.e());
