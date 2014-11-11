@@ -42,7 +42,6 @@
 #include "RunAction.hh"
 #include "EventAction.hh"
 #include "SteppingAction.hh"
-#include "HistoManager.hh"
 
 #ifdef G4VIS_USE
 #include "G4VisExecutive.hh"
@@ -74,13 +73,11 @@ int main(int argc,char** argv) {
    G4VisManager* visManager = 0;
 #endif
     
-  HistoManager*  histo = new HistoManager();
-      
   // set user action classes
   RunAction* run;  
-  runManager->SetUserAction(run = new RunAction(det,prim,histo)); 
+  runManager->SetUserAction(run = new RunAction(det,prim)); 
   runManager->SetUserAction(new EventAction(run));
-  runManager->SetUserAction(new SteppingAction(det,prim,run,histo));
+  runManager->SetUserAction(new SteppingAction(det,prim,run));
    
   // get the pointer to the User Interface manager 
     G4UImanager* UImanager = G4UImanager::GetUIpointer();  
@@ -108,7 +105,6 @@ int main(int argc,char** argv) {
 #ifdef G4VIS_USE
   delete visManager;
 #endif
-  delete histo; 
   delete runManager;
 
   return 0;

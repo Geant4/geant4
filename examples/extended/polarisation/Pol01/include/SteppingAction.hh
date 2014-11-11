@@ -40,24 +40,22 @@
 class DetectorConstruction;
 class PrimaryGeneratorAction;
 class RunAction;
-class HistoManager;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class SteppingAction : public G4UserSteppingAction
 {
-  public:
-    SteppingAction(DetectorConstruction*, PrimaryGeneratorAction*, RunAction*,
-                   HistoManager*);
-   ~SteppingAction();
+public:
 
-    void UserSteppingAction(const G4Step*);
+  SteppingAction(DetectorConstruction*, PrimaryGeneratorAction*, RunAction*);
+  virtual ~SteppingAction();
+
+  virtual void UserSteppingAction(const G4Step*);
     
-  private:
-    DetectorConstruction*   detector;
-    PrimaryGeneratorAction* primary;
-    RunAction*              runAction;
-    HistoManager*           histoManager;
+private:
+  DetectorConstruction*   detector;
+  PrimaryGeneratorAction* primary;
+  RunAction*              runAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

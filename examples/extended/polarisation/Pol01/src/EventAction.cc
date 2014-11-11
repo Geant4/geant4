@@ -32,43 +32,29 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 #include "EventAction.hh"
-
-#include "EventActionMessenger.hh"
-
 #include "G4Event.hh"
-#include "G4UnitsTable.hh"
 #include "RunAction.hh"
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-EventAction::EventAction(RunAction * ra)
-  :printModulo(10000),eventMessenger(0),runAction(ra)
-{
-  eventMessenger = new EventActionMessenger(this);
-}
+EventAction::EventAction(RunAction * ra) : runAction(ra)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 EventAction::~EventAction()
-{
-  delete eventMessenger;
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void EventAction::BeginOfEventAction(const G4Event* evt)
-{
- G4int evtNb = evt->GetEventID();
- 
- //printing survey
- if (evtNb%printModulo == 0) 
-    G4cout << "\n---> Begin of Event: " << evtNb << G4endl;
-}
+void EventAction::BeginOfEventAction(const G4Event*)
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void EventAction::EndOfEventAction(const G4Event*)
 {
-  if (runAction) runAction->EventFinished(); 
+  runAction->EventFinished(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

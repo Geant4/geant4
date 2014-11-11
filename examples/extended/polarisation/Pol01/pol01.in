@@ -10,9 +10,10 @@
 /testem/det/setSizeZ 1.75 mm
 /testem/phys/addPhysics polarized
 #/testem/phys/addPhysics standard
-/testem/event/printModulo 5000
+/run/printProgress 5000
 #
 /run/initialize
+/run/setCut 0.1 mm
 #
 /polarization/manager/verbose 1
 /polarization/volume/set theBox 0. 0. 0.08

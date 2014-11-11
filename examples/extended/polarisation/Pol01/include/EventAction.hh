@@ -35,28 +35,22 @@
 #define EventAction_h 1
 
 #include "G4UserEventAction.hh"
-#include "globals.hh"
 
-class EventActionMessenger;
 class RunAction;
+
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 class EventAction : public G4UserEventAction
 {
-  public:
-    EventAction(RunAction *);
-   ~EventAction();
+public:
+  EventAction(RunAction *);
+  virtual ~EventAction();
 
-  public:
-    void BeginOfEventAction(const G4Event*);
-    void   EndOfEventAction(const G4Event*);
+  virtual void BeginOfEventAction(const G4Event*);
+  virtual void EndOfEventAction(const G4Event*);
     
-    void SetPrintModulo(G4int val) {printModulo = val;};
-               
-  private:
-    G4int                 printModulo;                    
-    EventActionMessenger* eventMessenger;
-    RunAction*            runAction;
+private:
+  RunAction*            runAction;
 };
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
