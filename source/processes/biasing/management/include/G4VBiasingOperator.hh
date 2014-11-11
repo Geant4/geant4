@@ -355,6 +355,8 @@ public:
   ~G4BiasingOperatorStateNotifier();
 public:
   G4bool Notify(G4ApplicationState requestedState);
+private:
+  G4ApplicationState fPreviousState;
 };
 
 #endif

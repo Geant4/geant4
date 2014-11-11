@@ -208,17 +208,21 @@ void G4VBiasingOperator::OperationApplied( const G4BiasingProcessInterface*, G4B
 
 G4BiasingOperatorStateNotifier::G4BiasingOperatorStateNotifier()
 : G4VStateDependent()
-{}
+{
+  fPreviousState =  G4State_PreInit;
+}
 
 G4BiasingOperatorStateNotifier::~G4BiasingOperatorStateNotifier()
 {}
 
 G4bool G4BiasingOperatorStateNotifier::Notify( G4ApplicationState requestedState )
 {
-  if ( requestedState == G4State_GeomClosed )
+  if ( ( fPreviousState == G4State_Idle ) && ( requestedState == G4State_GeomClosed ) )
     {
       for ( size_t i = 0 ; i < G4VBiasingOperator::fOperators.Size() ; i++ ) G4VBiasingOperator::fOperators[i]->StartRun();
     }
+
+  fPreviousState = requestedState;
   
   return true;
 }

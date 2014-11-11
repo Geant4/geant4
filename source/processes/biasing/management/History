@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 10th, 2014 M. Verderi
+- Fix G4BiasingOperatorStateNotifier::Notify(...) to detect
+  start of run.
+- tag : proc-biasmng-V10-00-01
+
 November 7th, 2014 M. Verderi
 - G4VBiasingOperation : suppression of DenyProcessPostStepDoIt(...)
   as redondant and special case of ApplyFinalStateBiasing(...).
