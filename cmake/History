@@ -31,8 +31,14 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
-22nd October 2014 - Gunter Folger (cmake-V10-00-33)
+11th November 2014 - Gunter Folger (cmake-V10-00-34)
+- Modules/Geant4DatasetDefinitions.cmake: update md5sum 
+   for G4EMLOW6.21 after correction of files access permissions. 
+
+10th November 2014 - Gunter Folger (cmake-V10-00-33)
 - Modules/Geant4DatasetDefinitions.cmake: RadioactiveDecay4.2
+   and update md5sum for G4EMLOW6.21 after correction of files 
+	access permissions. 
 
 07th November 2014 - Ben Morgan (cmake-V10-00-32)
 - Modules/Geant4OptionalComponents.cmake : BUGFIX: Failures of static 
