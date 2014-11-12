@@ -58,7 +58,7 @@
 #include "G4Pow.hh"
 #include "G4Log.hh"
 
-static const G4double normC = CLHEP::millibarn/
+static const G4double normC = 3*CLHEP::millibarn/
   (CLHEP::pi*CLHEP::hbarc*CLHEP::pi*CLHEP::hbarc);
 static const G4double factor = 5;
 
@@ -100,7 +100,8 @@ void G4ContinuumGammaTransition::Update(const G4NuclearLevelManager* manager,
   maxLevelE = levelManager->MaxLevelEnergy() + eTolerance;
   minLevelE = levelManager->MinLevelEnergy();
 
-  // Energy range for photon generation; upper limit is defined 5*Gamma(GDR) from GDR peak
+  // Energy range for photon generation; 
+  // upper limit is defined 5*Gamma(GDR) from GDR peak
   // Giant Dipole Resonance energy
   G4double energyGDR = (40.3 / g4pow->powZ(nucleusA,0.2) ) * MeV;
   energyGDR2 = energyGDR*energyGDR;

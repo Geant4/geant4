@@ -71,11 +71,6 @@ G4NuclearLevelStore::~G4NuclearLevelStore()
   MapForHEP::iterator j;
   for (j = managersForHEP.begin(); j != managersForHEP.end(); ++j)
     { delete j->second; }
-  if(userFiles) {
-    std::map<G4int, G4String>::iterator k;
-    for (k = theUserDataFiles.begin(); k != theUserDataFiles.end(); ++k)
-      { delete k->second; }
-  }
 }
 
 void 
