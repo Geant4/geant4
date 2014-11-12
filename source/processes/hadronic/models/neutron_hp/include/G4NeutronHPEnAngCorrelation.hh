@@ -46,7 +46,7 @@ class G4NeutronHPEnAngCorrelation
       G4ReactionProduct* theNeutron;
       G4ReactionProduct* theTarget;
       G4double theTotalMeanEnergy;
-      toBeCached() : theNeutron(NULL),theTarget(NULL) {};
+      toBeCached() : theNeutron(NULL),theTarget(NULL), theTotalMeanEnergy(-1.0) {};
    };
 
   public:
