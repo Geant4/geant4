@@ -809,10 +809,4 @@ namespace G4INCL {
   };
 }
 
-#ifndef NDEBUG
-// Force instantiation of all the std::vector<Particle*> methods for debugging
-// purposes
-template class std::vector<G4INCL::Particle*>;
-#endif
-
 #endif /* PARTICLE_HH_ */
