@@ -31,6 +31,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
 
      ----------------------------------------------------------
 
+12th November 2014 - Ben Morgan (cmake-V10-00-35)
+- Modules/Geant4LibraryBuildOptions.cmake: Remove GEANT4_BUILD_TPMALLOC
+  as this is no longer required
+
 11th November 2014 - Gunter Folger (cmake-V10-00-34)
 - Modules/Geant4DatasetDefinitions.cmake: update md5sum 
    for G4EMLOW6.21 after correction of files access permissions. 

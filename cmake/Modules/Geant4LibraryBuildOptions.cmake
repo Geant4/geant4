@@ -80,18 +80,6 @@ endif()
 
 geant4_add_feature(GEANT4_BUILD_MULTITHREADED "Build multithread enabled libraries")
 
-# - G4TPMALLOC
-# Only usable when Multithreading is enabled and we are not on WIN32
-# If it is enabled, add the global definition "G4TPMALLOC"
-cmake_dependent_option(GEANT4_BUILD_TPMALLOC "Build multithread optimized malloc library" OFF "GEANT4_BUILD_MULTITHREADED;NOT WIN32" OFF)
-
-if(GEANT4_BUILD_TPMALLOC)
-  add_definitions(-DG4TPMALLOC)
-endif()
-
-mark_as_advanced(GEANT4_BUILD_TPMALLOC)
-geant4_add_feature(GEANT4_BUILD_TPMALLOC "Build multithread optimized malloc library")
-
 # - G4_STORE_TRAJECTORY
 # ON by default, switching off can improve performance. Needs to be on
 # for visualization to work fully. Mark as advanced because most users
