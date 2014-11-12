@@ -146,10 +146,10 @@ void RunAction::BookHisto()
   G4int nbins = 120;
   for(int i=0; i<12; ++i) {
     G4int j = i - i/4*4;
-    if(0==j) { vmin = 0.; vmax = 12.*MeV; }
+    if(0==j)      { vmin = 0.; vmax = 12.*MeV; }
     else if(1==j) { vmin = -1.; vmax = 1.; }
     else if(2==j) { vmin = 0.; vmax = pi; }
-    else if(3==j) { vmin = -1.; vmax = 1.; }
+    else          { vmin = -1.5; vmax = 1.5; }
     G4int ih = fAnalysisManager->CreateH1(id[i],title[i],nbins,vmin,vmax);
     fAnalysisManager->SetH1Activation(ih, false);
   }

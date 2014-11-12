@@ -16,6 +16,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-11-14 V.Ivanchenko (expol01-V10-00-02)
+- RunAction - fixed compillation at gcc 4.1
+
 11-11-14 V.Ivanchenko (expol01-V10-00-01)
 - Several updates for the unification of the example: use standard 
   physics builder from physics_list sub-package; removed local 
