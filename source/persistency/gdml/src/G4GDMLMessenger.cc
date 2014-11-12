@@ -104,9 +104,6 @@ void G4GDMLMessenger::SetNewValue(G4UIcommand* command, G4String newValue)
   if( command == ClearCmd )
   { 
     myParser->Clear();
-    G4GeometryManager::GetInstance()->OpenGeometry();
-    G4PhysicalVolumeStore::Clean();
-    G4LogicalVolumeStore::Clean();
-    G4SolidStore::Clean();
+    G4RunManager::GetRunManager()->ReinitializeGeometry(true);
   }  
 }

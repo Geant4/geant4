@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+11 November 2014 Makoto Asai (gdml-V10-00-09)
+- G4GDMLMessenger - /persistency/gdml/clear now invokes G4RunManager to
+  cleanly deletes entire geometry.
+
 10 November 2014 Witold Pokorski (gdml-V10-00-08)
 - Correction to G4GDMLReadMaterials::MixtureRead() to revert order of
   reading (first elements then materials) for mixtures by fraction;
