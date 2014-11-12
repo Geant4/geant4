@@ -1130,7 +1130,7 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
 
   G4double qv = dv * dv + 2.0 * dv * mom.e() + pr * pr;
   
-  G4double p1r;
+  G4double p1r = 0.;
   
   if (verboseLevel > 3) {
     G4cout << " type " << type << " zone " << zone << " next " << next_zone
@@ -1144,7 +1144,8 @@ void G4NucleiModel::boundaryTransition(G4CascadParticle& cparticle) {
   } else {		// transition
     if (verboseLevel > 3) G4cout << " passes thru boundary" << G4endl;
     p1r = std::sqrt(qv);
-    if(pr < 0.0) p1r = -p1r;
+    if (pr < 0.0) p1r = -p1r;
+
     cparticle.updateZone(next_zone);
     cparticle.resetReflection();
   }

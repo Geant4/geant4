@@ -15,6 +15,19 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+11 November 2014  M. Kelsey (hadr-casc-V10-00-14)
+-------------------------------------------------
+- G4CascadeParameters.cc:  Revert default changes in V10-00-12 tag:  turn
+  off phase-space, trailing-effect, and PreCompound.
+
+- G4InuclCollider.cc:  Replace G4Fragment::GetA() with GetA_asInt().
+
+- G4ElementaryParticleCollider.cc:  Improve optional pion-nucleon
+  absorption.  NOTE:  This is DISABLED by default; used for studies of pion
+  stopping.
+
+- G4NucleiModel.cc:  Initialize local p1r variable in declaration.
+
 30 October 2014  M. Kelsey (hadr-casc-V10-00-13)
 ------------------------------------------------
 - G4CascadeParameters, G4CascadeParamMessenger:  Add flag to enable

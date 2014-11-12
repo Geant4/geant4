@@ -63,6 +63,8 @@
 //		final-state tables instead of particle "isPhoton()"
 // 20130621  M. Kelsey -- Pass G4Fragment to de-excitation modules directly
 // 20140929  M. Kelsey -- Make PreCompound the default de-excitation
+// 20141111  M. Kelsey -- Revert default use of PreCompound; replace
+//		G4Fragment::GetA() call with GetA_asInt().
 
 #include "G4InuclCollider.hh"
 #include "G4CascadeChannelTables.hh"
@@ -306,7 +308,7 @@ void G4InuclCollider::rescatter(G4InuclParticle* bullet,
 
 void G4InuclCollider::deexcite(const G4Fragment& fragment,
 			       G4CollisionOutput& globalOutput) {
-  if (fragment.GetA() <= 1) return;	// Nothing real to be de-excited
+  if (fragment.GetA_asInt() <= 1) return;	// Nothing real to be de-excited
 
   if (verboseLevel) G4cout << " >>> G4InuclCollider::deexcite" << G4endl;
 

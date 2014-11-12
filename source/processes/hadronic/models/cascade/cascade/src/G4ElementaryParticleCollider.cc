@@ -516,13 +516,15 @@ G4ElementaryParticleCollider::generateSCMpionNAbsorption(G4double etot_scm,
 
   // Get outgoing nucleon type using charge exchange
   // Proton code is 1, neutron code is 2, so 3-# swaps them
-  G4int ntype = 3 - (particle2->nucleon() ? type2 : type1);
-  particle_kinds.push_back(ntype);
+  G4int ntype = (particle2->nucleon() ? type2 : type1);
+  G4int outType = 3 - ntype;
+  particle_kinds.push_back(outType);
 
   fillOutgoingMasses();
 
-  // Get mass of residual nucleus
-  G4double mRecoil = G4InuclNuclei::getNucleiMass(nucleusA, nucleusZ);
+  // Get mass of residual nucleus (2-ntype = 1 for proton, 0 for neutron)
+  G4double mRecoil =
+    G4InuclNuclei::getNucleiMass(nucleusA-1, nucleusZ-(2-ntype));
   G4double mRecoil2 = mRecoil*mRecoil;
 
   // Recompute Ecm to include nucleus (for recoil kinematics)
@@ -538,14 +540,20 @@ G4ElementaryParticleCollider::generateSCMpionNAbsorption(G4double etot_scm,
   G4LorentzVector mom1 = generateWithRandomAngles(pmod, masses[0]);
 
   if (verboseLevel > 3) {
-    G4cout << " outgoing type " << ntype << " recoiling on nuclear mass "
-	   << mRecoil << " a " << a << " pmod(SCM) " << pmod << G4endl;
+    G4cout << " outgoing type " << outType << " recoiling on nuclear mass "
+	   << mRecoil << " a " << a << " p(SCM) " << pmod << " Ekin "
+	   << mom1.e()-masses[0] << G4endl;
   }
 
   // Nuclear recoil four momentum, for boosting back
   G4LorentzVector mom2;
   mom2.setVectM(-mom1.vect(), mRecoil);
-  //*** mom1.boost(-mom2.boostVector());
+  mom1.boost(-mom2.boostVector());
+
+  if (verboseLevel > 3) {
+    G4cout << " after nuclear recoil p " << mom1.rho() << " Ekin "
+	   << mom1.e()-masses[0] << G4endl;
+  }
 
   // Fill only the ejected nucleon
   particles[0].fill(mom1, particle_kinds[0], G4InuclParticle::EPCollider);

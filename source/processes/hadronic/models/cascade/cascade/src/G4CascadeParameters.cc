@@ -35,6 +35,8 @@
 // 20140929  M. Kelsey -- Enable some parameters as default true (must be set
 //		'0' for false): PreCompound, phase-space, clustering,
 //		trailing effect
+// 20141111  M. Kelsey -- Revert defaults for PreCompound, phase-space,
+//		and trailing effect.
 
 #include "G4CascadeParameters.hh"
 #include "G4CascadeParamMessenger.hh"
@@ -87,14 +89,14 @@ G4CascadeParameters::G4CascadeParameters()
 void G4CascadeParameters::Initialize() {
   VERBOSE_LEVEL = (G4CASCADE_VERBOSE ? atoi(G4CASCADE_VERBOSE) : 0);
   CHECK_ECONS = (0!=G4CASCADE_CHECK_ECONS);
-  USE_PRECOMPOUND = (0==G4CASCADE_USE_PRECOMPOUND ||
+  USE_PRECOMPOUND = (0!=G4CASCADE_USE_PRECOMPOUND &&
 		     G4CASCADE_USE_PRECOMPOUND[0]!='0');
   DO_COALESCENCE = (0==G4CASCADE_DO_COALESCENCE ||
 		    G4CASCADE_DO_COALESCENCE[0]!='0');
   PIN_ABSORPTION = (0!=G4CASCADE_PIN_ABSORPTION);
   SHOW_HISTORY = (0!=G4CASCADE_SHOW_HISTORY);
   USE_3BODYMOM = (0!=G4CASCADE_USE_3BODYMOM);
-  USE_PHASESPACE = (0==G4CASCADE_USE_PHASESPACE ||
+  USE_PHASESPACE = (0!=G4CASCADE_USE_PHASESPACE &&
 		    G4CASCADE_USE_PHASESPACE[0]!='0');
   RANDOM_FILE = (G4CASCADE_RANDOM_FILE ? G4CASCADE_RANDOM_FILE : "");
   BEST_PAR = (0!=G4NUCMODEL_USE_BEST);
@@ -106,7 +108,7 @@ void G4CascadeParameters::Initialize() {
   RADIUS_ALPHA = (G4NUCMODEL_RAD_ALPHA ? strtod(G4NUCMODEL_RAD_ALPHA,0)
 		  : (BEST_PAR?0.84:0.70));
   RADIUS_TRAILING = ((G4NUCMODEL_RAD_TRAILING ? strtod(G4NUCMODEL_RAD_TRAILING,0)
-		      : 0.7) * RADIUS_SCALE);
+		      : 0.) * RADIUS_SCALE);
   FERMI_SCALE = ((G4NUCMODEL_FERMI_SCALE ? strtod(G4NUCMODEL_FERMI_SCALE,0)
 		  : (BEST_PAR?0.685:(1.932/OLD_RADIUS_UNITS))) * RADIUS_SCALE);
   XSEC_SCALE = (G4NUCMODEL_XSEC_SCALE ? strtod(G4NUCMODEL_XSEC_SCALE,0)
