@@ -9,6 +9,11 @@ $Id: History 73136 2013-08-19 14:28:09Z sincerti $
                        Package History file
                        --------------------
 
+12 Nov 2014 - M. Karamitros - microdosimetry-V10-00-07
+- Add a ifdef G4UI_USE_QT to avoid compilation error on ctest
+- Copy README to bin directory
+- Only create the vis viewer in the main
+
 10 Nov 2014 - M. Karamitros - microdosimetry-V10-00-06
 - Correct the check on the output file command line option
 

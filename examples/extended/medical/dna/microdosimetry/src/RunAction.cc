@@ -282,7 +282,7 @@ void RunAction::WriteHistogram()
   // save histograms
   //
   analysisManager->Write();
-//  analysisManager->CloseFile();
+  analysisManager->CloseFile();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

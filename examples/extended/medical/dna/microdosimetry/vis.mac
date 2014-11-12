@@ -1,5 +1,6 @@
 # Use this open statement to create an OpenGL view:
-/vis/open OGL 600x400-0+0
+#/vis/open OGL 600x400-0+0
+# WARNING= A viewer is created in the main function of this program
 #
 # Use this open statement to create a .prim file suitable for
 # viewing in DAWN:

@@ -173,10 +173,12 @@ int main(int argc,char** argv)
 
   if ((commandLine = parser->GetCommandIfActive("-gui")))
   {
+#ifdef G4UI_USE_QT
     G4UIQt* UIQt = static_cast<G4UIQt*> (UImanager->GetG4UIWindow());
     if ( UIQt) {
       UIQt->AddViewerTabFromFile("README", "README from "+ G4String(argv[0]));
     }
+#endif
     ui->SessionStart();
     delete ui;
   }
