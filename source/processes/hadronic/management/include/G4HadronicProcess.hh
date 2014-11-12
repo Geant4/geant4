@@ -174,11 +174,6 @@ public:
   inline void MultiplyCrossSectionBy(G4double factor)
   { aScaleFactor = factor; }
 
-  //Request destructor to de-register this from
-  //process store.
-  //This should be called only by kernel.
-  //inline void SetDeRegisterFlag( G4bool val )
-  //{ deRegister = val; }
 protected:
 
   void DumpState(const G4Track&, const G4String&, G4ExceptionDescription&);
@@ -197,7 +192,7 @@ protected:
   // Check the result for catastrophic energy non-conservation
   G4HadFinalState* CheckResult(const G4HadProjectile& thePro,
 			       const G4Nucleus& targetNucleus, 
-			       G4HadFinalState* result) const;
+			       G4HadFinalState* result);
 
   // Check 4-momentum balance
   void CheckEnergyMomentumConservation(const G4Track&, const G4Nucleus&);

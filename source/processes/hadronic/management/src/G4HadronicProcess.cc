@@ -309,7 +309,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
     }
 
     // Check the result for catastrophic energy non-conservation
-    result = CheckResult(thePro,targetNucleus, result);
+    CheckResult(thePro, targetNucleus, result);
 
     if(reentryCount>100) {
       G4ExceptionDescription ed;
@@ -459,7 +459,6 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
   }
 
   aR->Clear();
-  return;
 }
 
 void G4HadronicProcess::BiasCrossSectionByFactor(G4double aScale)
@@ -484,7 +483,9 @@ void G4HadronicProcess::BiasCrossSectionByFactor(G4double aScale)
     }
 }
 
-G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,const G4Nucleus &aNucleus, G4HadFinalState * result) const
+G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,
+						const G4Nucleus &aNucleus, 
+						G4HadFinalState * result)
 {
    // check for catastrophic energy non-conservation, to re-sample the interaction
 
@@ -517,7 +518,8 @@ G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,con
       std::pair<G4double, G4double> checkLevels = theModel->GetFatalEnergyCheckLevels();	// (relative, absolute)
       if (std::abs(deltaE) > checkLevels.second && std::abs(deltaE) > checkLevels.first*aPro.GetKineticEnergy()){
          // do not delete result, this is a pointer to a data member;
-         result=0;
+	 result->Clear();
+         result = 0;
          G4ExceptionDescription desc;
          desc << "Warning: Bad energy non-conservation detected, will "
               << (epReportLevel<0 ? "abort the event" :	"re-sample the interaction") << G4endl
