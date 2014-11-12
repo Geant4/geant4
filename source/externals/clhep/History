@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12 November 2014 - G.Cosmo
+- Moved operators 'operator()(int)' in Hep3Vector to be inline and
+  removed printout to improve CPU performance.
+  Patch provided by S.Wenzel/CERN.
+
 17 June 2014 - G.Cosmo
 - Updated to CLHEP-2.2.0.0:
   * Random (L.Garren <garren@fnal.gov>)

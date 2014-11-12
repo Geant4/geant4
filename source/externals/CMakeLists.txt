@@ -40,11 +40,3 @@ endif()
 if(NOT GEANT4_USE_SYSTEM_ZLIB)
     add_subdirectory(zlib)
 endif()
-
-#----------------------------------------------------------------------------
-# Use of tpmalloc (and memoryprotection?) only for MT build
-#
-#if(GEANT4_BUILD_MULTITHREADED)
-#    add_subdirectory(tpmalloc)
-#    add_subdirectory(memoryprotection)
-#endif()

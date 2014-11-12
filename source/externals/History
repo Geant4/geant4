@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-November-2014: G.Cosmo (externals-V10-00-06)
+- Removed unused 'tpmalloc' and 'memoryprotection' modules.
+- Update to CLHEP Hep3Vector to move operators 'operator()(int)' to be
+  inline and removed printout to improve CPU performance.
+
 30-October-2014: B.Morgan (externals-V10-00-05)
 - Update build of USolids library to ensure it is built for
   the default global mode.
