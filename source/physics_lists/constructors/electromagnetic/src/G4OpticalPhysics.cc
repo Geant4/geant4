@@ -310,7 +310,7 @@ void G4OpticalPhysics::ConstructProcess()
   G4Cerenkov* CerenkovProcess = new G4Cerenkov();
   CerenkovProcess->SetMaxNumPhotonsPerStep(fMaxNumPhotons);
   CerenkovProcess->SetMaxBetaChangePerStep(fMaxBetaChange);
-  CerenkovProcess->SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[fCerenkov]);
+  CerenkovProcess->SetTrackSecondariesFirst(fProcessTrackSecondariesFirst[kCerenkov]);
   UIhelpers::buildCommands(CerenkovProcess);
   OpProcesses[kCerenkov] = CerenkovProcess;
 
