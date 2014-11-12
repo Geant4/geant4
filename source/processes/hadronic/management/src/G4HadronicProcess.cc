@@ -182,6 +182,8 @@ void G4HadronicProcess::BuildPhysicsTable(const G4ParticleDefinition& p)
 G4double G4HadronicProcess::
 GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
 {
+  //G4cout << "GetMeanFreePath " << aTrack.GetDefinition()->GetParticleName()
+  //	 << " Ekin= " << aTrack.GetKineticEnergy() << G4endl;
   try
   {
     theLastCrossSection = aScaleFactor*
@@ -199,12 +201,15 @@ GetMeanFreePath(const G4Track &aTrack, G4double, G4ForceCondition *)
   }
   G4double res = DBL_MAX;
   if( theLastCrossSection > 0.0 ) { res = 1.0/theLastCrossSection; }
+  //G4cout << "         xsection= " << res << G4endl;
   return res;
 }
 
 G4VParticleChange*
 G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 {
+  //G4cout << "PostStepDoIt " << aTrack.GetDefinition()->GetParticleName()
+  //	 << " Ekin= " << aTrack.GetKineticEnergy() << G4endl;
   // if primary is not Alive then do nothing
   theTotalResult->Clear();
   theTotalResult->Initialize(aTrack);
@@ -243,7 +248,8 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
 
   // Next check for illegal track status
   //
-  if (aTrack.GetTrackStatus() != fAlive && aTrack.GetTrackStatus() != fSuspend) {
+  if (aTrack.GetTrackStatus() != fAlive && 
+      aTrack.GetTrackStatus() != fSuspend) {
     if (aTrack.GetTrackStatus() == fStopAndKill ||
         aTrack.GetTrackStatus() == fKillTrackAndSecondaries ||
         aTrack.GetTrackStatus() == fPostponeToNextEvent) {
@@ -334,6 +340,7 @@ G4HadronicProcess::PostStepDoIt(const G4Track& aTrack, const G4Step&)
   if (epReportLevel != 0) {
     CheckEnergyMomentumConservation(aTrack, targetNucleus);
   }
+  //G4cout << "PostStepDoIt done " << G4endl;
   return theTotalResult;
 }
 
@@ -384,8 +391,8 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
     theTotalResult->ProposeEnergy( 0.0 );
     if(aT.GetParticleDefinition()->GetProcessManager()
        ->GetAtRestProcessVector()->size() > 0)
-         { aParticleChange.ProposeTrackStatus(fStopButAlive); }
-    else { aParticleChange.ProposeTrackStatus(fStopAndKill); }
+         { theTotalResult->ProposeTrackStatus(fStopButAlive); }
+    else { theTotalResult->ProposeTrackStatus(fStopAndKill); }
 
     // primary is not killed apply rotation and Lorentz transformation
   } else  {
@@ -407,6 +414,9 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
     if(newE < 0.0) { newE = 0.0; }
     theTotalResult->ProposeEnergy( newE );
   }
+  //G4cout << "FillResult: Efinal= " << efinal << " status= " 
+  //	 << theTotalResult->GetTrackStatus() 
+  //	 << "  fKill= " << fStopAndKill << G4endl;
 
   // check secondaries: apply rotation and Lorentz transformation
   G4int nSec = aR->GetNumberOfSecondaries();
@@ -434,7 +444,7 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
       G4double newWeight = weight*aR->GetSecondary(i)->GetWeight();
 	// G4cout << "#### ParticleDebug "
 	// <<GetProcessName()<<" "
-	// <<aR->GetSecondary(i)->GetParticle()->GetDefinition()->GetParticleName()<<" "
+	//<<aR->GetSecondary(i)->GetParticle()->GetDefinition()->GetParticleName()<<" "
 	// <<aScaleFactor<<" "
 	// <<XBiasSurvivalProbability()<<" "
 	// <<XBiasSecondaryWeight()<<" "
@@ -452,7 +462,8 @@ G4HadronicProcess::FillResult(G4HadFinalState * aR, const G4Track & aT)
           DumpState(aT,"Secondary has zero energy",ed);
           ed << "Secondary " << track->GetDefinition()->GetParticleName()
              << G4endl;
-          G4Exception("G4HadronicProcess::FillResults", "had011", JustWarning,ed);
+          G4Exception("G4HadronicProcess::FillResults", "had011", 
+		      JustWarning,ed);
         }
       }
     }
@@ -471,7 +482,8 @@ void G4HadronicProcess::BiasCrossSectionByFactor(G4double aScale)
       (it != "PositronNuclear") )
     {
       G4ExceptionDescription ed;
-      G4Exception("G4HadronicProcess::BiasCrossSectionByFactor", "had009", FatalException, ed,
+      G4Exception("G4HadronicProcess::BiasCrossSectionByFactor", "had009", 
+		  FatalException, ed,
 		  "Cross-section biasing available only for gamma and electro nuclear reactions.");
     }
   if(aScale<100)
@@ -487,52 +499,59 @@ G4HadFinalState* G4HadronicProcess::CheckResult(const G4HadProjectile & aPro,
 						const G4Nucleus &aNucleus, 
 						G4HadFinalState * result)
 {
-   // check for catastrophic energy non-conservation, to re-sample the interaction
+  // check for catastrophic energy non-conservation
+  // to re-sample the interaction
 
-   G4HadronicInteraction * theModel = GetHadronicInteraction();
-   G4double nuclearMass(0);
-   if (theModel){
+  G4HadronicInteraction * theModel = GetHadronicInteraction();
+  G4double nuclearMass(0);
+  if (theModel) {
 
-      // Compute final-state total energy
-      G4double finalE(0.);
-      G4int nSec = result->GetNumberOfSecondaries();
+    // Compute final-state total energy
+    G4double finalE(0.);
+    G4int nSec = result->GetNumberOfSecondaries();
 
-      nuclearMass = G4NucleiProperties::GetNuclearMass(aNucleus.GetA_asInt(),
-                                                       aNucleus.GetZ_asInt());
-      if (result->GetStatusChange() != stopAndKill) {
-       	// Interaction didn't complete, returned "do nothing" state          => reset nucleus
-        //  or  the primary survived the interaction (e.g. electro-nuclear ) => keep  nucleus
-         finalE=result->GetLocalEnergyDeposit() +
-		aPro.GetDefinition()->GetPDGMass() + result->GetEnergyChange();
-         if( nSec == 0 ){
-            // Since there are no secondaries, there is no recoil nucleus.
-            // To check energy balance we must neglect the initial nucleus too.
-            nuclearMass=0.0;
-         }
+    nuclearMass = G4NucleiProperties::GetNuclearMass(aNucleus.GetA_asInt(),
+						     aNucleus.GetZ_asInt());
+    if (result->GetStatusChange() != stopAndKill) {
+      // Interaction didn't complete, returned "do nothing" state 
+      // and reset nucleus or the primary survived the interaction 
+      // (e.g. electro-nuclear ) => keep  nucleus
+      finalE=result->GetLocalEnergyDeposit() +
+	aPro.GetDefinition()->GetPDGMass() + result->GetEnergyChange();
+      if( nSec == 0 ){
+	// Since there are no secondaries, there is no recoil nucleus.
+	// To check energy balance we must neglect the initial nucleus too.
+	nuclearMass=0.0;
       }
-      for (G4int i = 0; i < nSec; i++) {
-         finalE += result->GetSecondary(i)->GetParticle()->GetTotalEnergy();
-      }
-      G4double deltaE= nuclearMass +  aPro.GetTotalEnergy() -  finalE;
+    }
+    for (G4int i = 0; i < nSec; i++) {
+      finalE += result->GetSecondary(i)->GetParticle()->GetTotalEnergy();
+    }
+    G4double deltaE= nuclearMass +  aPro.GetTotalEnergy() -  finalE;
 
-      std::pair<G4double, G4double> checkLevels = theModel->GetFatalEnergyCheckLevels();	// (relative, absolute)
-      if (std::abs(deltaE) > checkLevels.second && std::abs(deltaE) > checkLevels.first*aPro.GetKineticEnergy()){
-         // do not delete result, this is a pointer to a data member;
-	 result->Clear();
-         result = 0;
-         G4ExceptionDescription desc;
-         desc << "Warning: Bad energy non-conservation detected, will "
-              << (epReportLevel<0 ? "abort the event" :	"re-sample the interaction") << G4endl
-              << " Process / Model: " <<  GetProcessName()<< " / " << theModel->GetModelName() << G4endl
-              << " Primary: " << aPro.GetDefinition()->GetParticleName()
-              << " (" << aPro.GetDefinition()->GetPDGEncoding() << "),"
-              << " E= " <<  aPro.Get4Momentum().e()
-              << ", target nucleus (" << aNucleus.GetZ_asInt() << ","<< aNucleus.GetA_asInt() << ")" << G4endl
-              << " E(initial - final) = " << deltaE << " MeV." << G4endl;
-         G4Exception("G4HadronicProcess:CheckResult()", "had012", epReportLevel<0 ? EventMustBeAborted : JustWarning,desc);
-      }
-   }
-   return result;
+    std::pair<G4double, G4double> checkLevels = 
+      theModel->GetFatalEnergyCheckLevels();	// (relative, absolute)
+    if (std::abs(deltaE) > checkLevels.second && 
+	std::abs(deltaE) > checkLevels.first*aPro.GetKineticEnergy()){
+      // do not delete result, this is a pointer to a data member;
+      result->Clear();
+      result = 0;
+      G4ExceptionDescription desc;
+      desc << "Warning: Bad energy non-conservation detected, will "
+	   << (epReportLevel<0 ? "abort the event" :  "re-sample the interaction") << G4endl
+	   << " Process / Model: " <<  GetProcessName()<< " / " 
+	   << theModel->GetModelName() << G4endl
+	   << " Primary: " << aPro.GetDefinition()->GetParticleName()
+	   << " (" << aPro.GetDefinition()->GetPDGEncoding() << "), "
+	   << " E= " <<  aPro.Get4Momentum().e()
+	   << ", target nucleus (" << aNucleus.GetZ_asInt() << ", "
+	   << aNucleus.GetA_asInt() << ")" << G4endl
+	   << " E(initial - final) = " << deltaE << " MeV." << G4endl;
+      G4Exception("G4HadronicProcess:CheckResult()", "had012", 
+		  epReportLevel<0 ? EventMustBeAborted : JustWarning,desc);
+    }
+  }
+  return result;
 }
 
 void
