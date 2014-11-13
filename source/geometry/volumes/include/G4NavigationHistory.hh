@@ -62,13 +62,13 @@ class G4NavigationHistory
   friend std::ostream&
   operator << (std::ostream &os, const G4NavigationHistory &h);
 
-  inline G4NavigationHistory();
+  G4NavigationHistory();
     // Constructor: sizes history lists & resets histories.
 
-  inline ~G4NavigationHistory();
+  ~G4NavigationHistory();
     // Destructor.
 
-  inline G4NavigationHistory(const G4NavigationHistory &h);
+  G4NavigationHistory(const G4NavigationHistory &h);
     // Copy constructor.
 
   inline G4NavigationHistory& operator=(const G4NavigationHistory &h);

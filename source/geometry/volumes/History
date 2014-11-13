@@ -17,8 +17,15 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 13th, 2014 G.Cosmo               - geomvol-V10-00-08
+- Restored constructors/destructor for G4TouchableHistory - derived class
+  to be not inline.
+- Restored also non-inline constructors/destructors for G4NavigationHistory
+  and G4NavigationLevel (the last apparently responsible for crashes on SLC5
+  in the allocation).
+
 November 3rd, 2014 G.Cosmo                - geomvol-V10-00-07
-- Moved constructors, desctructors and assignment operators for
+- Moved constructors, destructors and assignment operators for
   G4NavigationHistory, G4NavigationLevel, G4NavigationLevelRep and
   G4TouchableHistory to be inline, for CPU optimisation
   (courtesy of S.Wenzel).

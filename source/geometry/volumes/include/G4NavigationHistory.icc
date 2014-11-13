@@ -55,36 +55,6 @@ void G4NavigationHistory::operator delete(void *aHistory)
 }
 
 inline
-G4NavigationHistory::G4NavigationHistory()
-  : fStackDepth(0)
-{
-  fNavHistory = G4NavigationHistoryPool::GetInstance()->GetNewLevels();
-  Clear();
-}
-
-inline
-G4NavigationHistory::G4NavigationHistory(const G4NavigationHistory &h)
-{
-  fNavHistory = G4NavigationHistoryPool::GetInstance()->GetLevels();
-  if( GetMaxDepth() != h.GetMaxDepth() )
-  {
-    fNavHistory->resize( h.GetMaxDepth() );
-  }
-
-  for ( G4int ilev=h.fStackDepth; ilev>=0; --ilev )
-  { 
-    (*fNavHistory)[ilev] = (*h.fNavHistory)[ilev];
-  }
-  fStackDepth=h.fStackDepth;
-}
-
-inline
-G4NavigationHistory::~G4NavigationHistory()
-{
-  G4NavigationHistoryPool::GetInstance()->DeRegister(fNavHistory);
-}
-
-inline
 G4NavigationHistory&
 G4NavigationHistory::operator=(const G4NavigationHistory &h)
 {

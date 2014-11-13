@@ -38,6 +38,33 @@
 
 G4ThreadLocal G4Allocator<G4NavigationHistory> *aNavigHistoryAllocator = 0;
 
+G4NavigationHistory::G4NavigationHistory()
+  : fStackDepth(0)
+{
+  fNavHistory = G4NavigationHistoryPool::GetInstance()->GetNewLevels();
+  Clear();
+}
+
+G4NavigationHistory::G4NavigationHistory(const G4NavigationHistory &h)
+{
+  fNavHistory = G4NavigationHistoryPool::GetInstance()->GetLevels();
+  if( GetMaxDepth() != h.GetMaxDepth() )
+  {
+    fNavHistory->resize( h.GetMaxDepth() );
+  }
+
+  for ( G4int ilev=h.fStackDepth; ilev>=0; --ilev )
+  { 
+    (*fNavHistory)[ilev] = (*h.fNavHistory)[ilev];
+  }
+  fStackDepth=h.fStackDepth;
+}
+
+G4NavigationHistory::~G4NavigationHistory()
+{
+  G4NavigationHistoryPool::GetInstance()->DeRegister(fNavHistory);
+}
+
 std::ostream&
 operator << (std::ostream& os, const G4NavigationHistory& nav)
 {

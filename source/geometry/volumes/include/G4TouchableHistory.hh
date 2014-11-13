@@ -55,13 +55,16 @@ class G4TouchableHistory : public G4VTouchable
 
  public:  // with description
 
-  inline G4TouchableHistory( const G4NavigationHistory& history );
-  inline G4TouchableHistory(); 
+  G4TouchableHistory(); 
     // The default constructor produces a touchable-history of 
     // 'zero-depth', ie an "unphysical" and not very unusable one.
     // It is for initialisation only.  
 
-  inline ~G4TouchableHistory();
+  G4TouchableHistory( const G4NavigationHistory& history );
+    // Copy constructor
+
+  ~G4TouchableHistory();
+    // Destructor
 
   inline G4VPhysicalVolume* GetVolume( G4int depth=0 ) const;
   inline G4VSolid* GetSolid( G4int depth=0 ) const;

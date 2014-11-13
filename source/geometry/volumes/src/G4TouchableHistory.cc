@@ -35,6 +35,27 @@
 
 G4ThreadLocal G4Allocator<G4TouchableHistory> *aTouchableHistoryAllocator = 0;
 
+G4TouchableHistory::G4TouchableHistory()
+  : frot(G4RotationMatrix()),
+    ftlate(G4ThreeVector(0.,0.,0.)),
+    fhistory()
+{ 
+   G4VPhysicalVolume* pPhysVol=0;
+   fhistory.SetFirstEntry(pPhysVol);
+}
+
+G4TouchableHistory::G4TouchableHistory( const G4NavigationHistory &history )
+  : fhistory(history)
+{ 
+  G4AffineTransform tf(fhistory.GetTopTransform().Inverse());
+  ftlate = tf.NetTranslation();
+  frot = tf.NetRotation();
+}
+
+G4TouchableHistory::~G4TouchableHistory()
+{ 
+}
+
 const G4ThreeVector&
 G4TouchableHistory::GetTranslation(G4int depth) const
 { 
