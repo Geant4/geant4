@@ -72,6 +72,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/inclxx/
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lepto_nuclear/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/neutron_hp/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/particle_hp/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
@@ -102,6 +103,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4HadronPhysicsINCLXX.hh
         G4HadronPhysicsShielding.hh
         G4VHadronPhysics.hh
+        G4HadronPhysicsQGSP_BIC_AllHP.hh 
     SOURCES
         G4HadronInelasticQBBC.cc
         G4HadronPhysicsFTF_BIC.cc
@@ -118,6 +120,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_hinelastic
         G4HadronPhysicsINCLXX.cc
         G4HadronPhysicsShielding.cc
         G4VHadronPhysics.cc
+        G4HadronPhysicsQGSP_BIC_AllHP.cc 
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
