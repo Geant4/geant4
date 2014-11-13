@@ -3,7 +3,7 @@
 # GNUmakefile for examples module.  Gabriele Cosmo, 06/04/98.
 # --------------------------------------------------------------
 
-name := exampleGB02
+name := exampleGB04
 G4TARGET := $(name)
 G4EXLIB := true
 

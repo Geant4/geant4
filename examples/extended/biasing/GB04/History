@@ -17,6 +17,8 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-Nov 12, 2014, M. Verderi
-- creation
-- tag : GB04-V10-00-00
+Nov 13, 2014, G. Cosmo  (GB04-V10-00-01)
+- Corrected GNUmakefile to point to correct main() translation unit.
+
+Nov 12, 2014, M. Verderi  (GB04-V10-00-00)
+- Created.
