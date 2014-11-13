@@ -55,6 +55,7 @@ CPPFLAGS += -I$(G4BASE)/global/management/include \
             -I$(G4BASE)/processes/hadronic/models/theo_high_energy/include \
             -I$(G4BASE)/processes/hadronic/models/lend/include \
             -I$(G4BASE)/processes/hadronic/models/neutron_hp/include \
+            -I$(G4BASE)/processes/hadronic/models/particle_hp/include \
             -I$(G4BASE)/processes/hadronic/util/include \
             -I$(G4BASE)/materials/include
 

@@ -52,6 +52,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/util/in
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/coherent_elastic/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/neutron_hp/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/particle_hp/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/util/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/materials/include)
 
@@ -69,6 +70,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_helastic
         G4HadronElasticPhysicsXS.hh
         G4HadronHElasticPhysics.hh
         G4IonElasticPhysics.hh
+        G4HadronElasticPhysicsPHP.hh
     SOURCES
         G4ChargeExchangePhysics.cc
         G4HadronDElasticPhysics.cc
@@ -78,6 +80,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_ctor_helastic
         G4HadronElasticPhysicsXS.cc
         G4HadronHElasticPhysics.cc
         G4IonElasticPhysics.cc
+        G4HadronElasticPhysicsPHP.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons
