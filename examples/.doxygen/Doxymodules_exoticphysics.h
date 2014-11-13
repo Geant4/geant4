@@ -70,17 +70,20 @@
  *  @{
  */
 
-/** @defgroup extended_exoticphysics_channeling channeling
- *  Exotic physics example channeling
- *  @ingroup extended_exoticphysics
- *  @{
- */
+/** @} */
 
 /** @defgroup extended_exoticphysics_ucn ucn
  *  Exotic physics example ucn
  *  @ingroup extended_exoticphysics
  *  @{
  */
+
+  class ExUCNActionInitialization {};
+  class ExUCNDetectorConstruction {};
+  class ExUCNExtraPhysics {};
+  class ExUCNPhysicsList {};
+  class ExUCNPrimaryGeneratorAction {};
+  class ExUCNRunAction {};
 
 /** @} */
 
@@ -90,13 +93,13 @@
  *  @{
  */
 
+  class XActionInitialization {};
   class XAluminumElectrodeHit {};
   class XAluminumElectrodeSensitivity {};
   class XDetectorConstruction {};
   class XPhononStackingAction {};
   class XPhysicsList {};
   class XPrimaryGeneratorAction {};
-
 
 /** @} */
 

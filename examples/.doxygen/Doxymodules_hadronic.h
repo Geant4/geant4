@@ -10,6 +10,19 @@
  *  @{
  */
 
+/** @defgroup extended_hadronic_FissionFragment FissionFragment
+ *  Hadronic example FissionFragment
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+  class FFActionInitialization {};
+  class FFDetectorConstruction {};
+  class FFPrimaryGeneratorAction {};
+  class FFRunAction {};
+
+/** @} */
+
 /** @defgroup extended_hadronic_Hadr00 Hadr00
  *  The shared hadronic classes have their
  *  <a href="../html_Hadr00/html/index.html">standalone documentation </a>
@@ -56,6 +69,15 @@
 /** @} */
 
 /** @defgroup extended_hadronic_Hadr05 Hadr05
+ *  The shared hadronic classes have their
+ *  <a href="../html_Hadr05/html/index.html">standalone documentation </a>
+ *  @ingroup extended_hadronic
+ *  @{
+ */
+
+/** @} */
+
+/** @defgroup extended_hadronic_Hadr06 Hadr06
  *  The shared hadronic classes have their
  *  <a href="../html_Hadr05/html/index.html">standalone documentation </a>
  *  @ingroup extended_hadronic
