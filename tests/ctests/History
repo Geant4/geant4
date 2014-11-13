@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-35 12 November 2014 Marc Verderi
+- Added new extended biasing/GB04 example
+
 ctests-V10-00-34 08 November 2014 Ivana Hrivnacova
 - Disabled wholeNuclearDNA in GNUmake test (as it requires many data files)
  

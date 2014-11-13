@@ -153,7 +153,7 @@ foreach(_i 01 02 03)
   GEANT4_ADD_TEST(example-ext-biasing-b${_i} COMMAND ${BINDIR}/exampleB${_i} 
                                         BUILD ${SRCDIR}/extended/biasing/B${_i})
 endforeach()
-foreach(_i 01 02 03) 
+foreach(_i 01 02 03 04) 
   GEANT4_ADD_TEST(example-ext-biasing-gb${_i} 
                 COMMAND ${BINDIR}/exampleGB${_i} ${SRCDIR}/extended/biasing/GB${_i}/exampleGB${_i}.in
                 BUILD ${SRCDIR}/extended/biasing/GB${_i})

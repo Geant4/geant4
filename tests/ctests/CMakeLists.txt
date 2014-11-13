@@ -118,7 +118,7 @@ foreach(_i 01 02 03)
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/biasing/B${_i}
                 BUILD exampleB${_i} PROJECT B${_i} ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 endforeach()
-foreach(_i 01 02 03)
+foreach(_i 01 02 03 04)
   GEANT4_ADD_TEST(example-ext-biasing-gb${_i} 
                 COMMAND ${CMAKE_BINARY_DIR}/examples/extended/biasing/GB${_i}/exampleGB${_i}
                         ${CMAKE_SOURCE_DIR}/examples/extended/biasing/GB${_i}/exampleGB${_i}.in
