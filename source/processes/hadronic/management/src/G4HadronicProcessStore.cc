@@ -55,6 +55,7 @@
 #include "G4ProcessManager.hh"
 #include "G4Electron.hh"
 #include "G4Proton.hh"
+#include "G4ParticleTable.hh"
 #include "G4HadronicInteractionRegistry.hh"
 #include "G4CrossSectionDataSetRegistry.hh"
 #include "G4HadronicEPTestMessenger.hh"
@@ -116,6 +117,8 @@ G4HadronicProcessStore::G4HadronicProcessStore()
   n_extra= 0;
   currentProcess  = 0;
   currentParticle = 0;
+  theGenericIon = 
+    G4ParticleTable::GetParticleTable()->FindParticle("GenericIon");
   verbose = 1;
   buildTableStart = true;
   theEPTestMessenger = new G4HadronicEPTestMessenger(this);
@@ -837,30 +840,39 @@ G4HadronicProcess* G4HadronicProcessStore::FindProcess(
 {
   bool isNew = false;
   G4HadronicProcess* hp = 0;
+  localDP.SetDefinition(part);
 
   if(part != currentParticle) {
-    isNew = true;
-    currentParticle = part;
-    localDP.SetDefinition(part);
-  } else if(!currentProcess) {
-    isNew = true;
-  } else if(subType == currentProcess->GetProcessSubType()) {
-    hp = currentProcess;
-  } else {
-    isNew = true;
+    const G4ParticleDefinition* p = part;
+    if(p->GetBaryonNumber() > 4 && p->GetParticleType() == "nucleus") {
+      p = theGenericIon;
+    }
+    if(p !=  currentParticle) { 
+      isNew = true;
+      currentParticle = p;
+    }
   }
-
+  if(!isNew) { 
+    if(!currentProcess) {
+      isNew = true;
+    } else if(subType == currentProcess->GetProcessSubType()) {
+      hp = currentProcess;
+    } else {
+      isNew = true;
+    }
+  }
   if(isNew) {
     std::multimap<PD,HP,std::less<PD> >::iterator it;
-    for(it=p_map.lower_bound(part); it!=p_map.upper_bound(part); ++it) {
-      if(it->first == part && subType == (it->second)->GetProcessSubType()) {
+    for(it=p_map.lower_bound(currentParticle); 
+	it!=p_map.upper_bound(currentParticle); ++it) {
+      if(it->first == currentParticle && 
+	 subType == (it->second)->GetProcessSubType()) {
 	hp = it->second;
 	break;
       }
     }  
     currentProcess = hp;
   }
-
   return hp;
 }
 

@@ -244,6 +244,7 @@ private:
   // cache
   HP   currentProcess;
   PD   currentParticle;
+  PD   theGenericIon;
 
   G4DynamicParticle localDP;
 
