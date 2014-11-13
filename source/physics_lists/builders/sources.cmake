@@ -74,6 +74,7 @@ include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lend/in
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/lepto_nuclear/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/management/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/neutron_hp/include)
+include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/particle_hp/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/diffraction/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/hadronization/include)
 include_directories(${CMAKE_SOURCE_DIR}/source/processes/hadronic/models/parton_string/management/include)
@@ -142,7 +143,7 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4QGSBinaryPionBuilder.hh
         G4QGSBinaryProtonBuilder.hh
         G4QGSBuilder.hh
-	G4QGSPLundStrFragmProtonBuilder.hh
+        G4QGSPLundStrFragmProtonBuilder.hh
         G4QGSPNeutronBuilder.hh
         G4QGSPPiKBuilder.hh
         G4QGSPPionBuilder.hh
@@ -156,7 +157,25 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4VPionBuilder.hh
         G4VProtonBuilder.hh
         TheoModelFactory.hh
-    SOURCES
+        G4AlphaBuilder.hh
+        G4AlphaPHPBuilder.hh
+        G4BinaryAlphaBuilder.hh
+        G4BinaryDeuteronBuilder.hh
+        G4BinaryHe3Builder.hh
+        G4BinaryTritonBuilder.hh
+        G4DeuteronBuilder.hh
+        G4DeuteronPHPBuilder.hh
+        G4He3Builder.hh
+        G4He3PHPBuilder.hh
+        G4NeutronPHPBuilder.hh
+        G4ProtonPHPBuilder.hh
+        G4TritonBuilder.hh
+        G4TritonPHPBuilder.hh
+        G4VAlphaBuilder.hh
+        G4VDeuteronBuilder.hh
+        G4VHe3Builder.hh
+        G4VTritonBuilder.hh
+     SOURCES
         G4AntiBarionBuilder.cc
         G4BertiniKaonBuilder.cc
         G4BertiniNeutronBuilder.cc
@@ -212,6 +231,24 @@ GEANT4_DEFINE_MODULE(NAME G4phys_builders
         G4VPiKBuilder.cc
         G4VPionBuilder.cc
         G4VProtonBuilder.cc
+        G4AlphaBuilder.cc
+        G4AlphaPHPBuilder.cc
+        G4BinaryAlphaBuilder.cc
+        G4BinaryDeuteronBuilder.cc
+        G4BinaryHe3Builder.cc
+        G4BinaryTritonBuilder.cc
+        G4DeuteronBuilder.cc
+        G4DeuteronPHPBuilder.cc
+        G4He3Builder.cc
+        G4He3PHPBuilder.cc
+        G4NeutronPHPBuilder.cc
+        G4ProtonPHPBuilder.cc
+        G4TritonBuilder.cc
+        G4TritonPHPBuilder.cc
+        G4VAlphaBuilder.cc
+        G4VDeuteronBuilder.cc
+        G4VHe3Builder.cc
+        G4VTritonBuilder.cc
     GRANULAR_DEPENDENCIES
         G4baryons
         G4bosons

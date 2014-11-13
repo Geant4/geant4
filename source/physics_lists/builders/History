@@ -14,6 +14,12 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+12-Nov-2014, G.Folger               (phys-builders-V10-00-07)
+- remove reference to G4INCLXXPiKBuilder.{hh,cc} from sources.cmake
+ 
+07-Nov-2014, P. Arce          (phys-builders-V10-00-06)
+- Add builders for particle_hp physics list
+
 15-October-2014, Gabriele Cosmo		(phys-builders-V10-00-05)
 - Added dependency to 'de_excitation/fission' module in GNUMakefile
   and sources.cmake, now required by INCLXX.
