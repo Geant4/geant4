@@ -86,8 +86,8 @@ of biasing. Complementary approach to the modular physics lists of B01 and B02
  ___________________________________________________________________________
 
 
-            Generic biasing examples GB01, GB02
-            ------------------------------------
+            Generic biasing examples GB01, GB02, GB03, GB04
+            -----------------------------------------------
 
 These examples illustrate the usage of a biasing scheme implemented since
 version Geant4 10.0.
@@ -104,10 +104,19 @@ Example GB02:
 
 Illustrates a force collision scheme similar to the MCNP one.
 
+
 Example GB03:
 =============
 
 Illustrates geometry based biasing.
+
+
+Example GB04:
+=============
+
+Illustrates a bremsstrahlung splitting.
+
+
 
  ___________________________________________________________________________
 
