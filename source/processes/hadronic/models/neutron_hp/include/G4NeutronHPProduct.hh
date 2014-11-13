@@ -54,7 +54,7 @@ class G4NeutronHPProduct
       G4ReactionProduct* theNeutron;
       G4ReactionProduct* theTarget;
       G4int theCurrentMultiplicity;
-      toBeCached() : theNeutron(NULL),theTarget(NULL) {};
+      toBeCached() : theNeutron(NULL),theTarget(NULL),theCurrentMultiplicity(-1) {};
    };
 
   public:

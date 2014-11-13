@@ -47,6 +47,7 @@ class G4NeutronHPContAngularPar
       G4bool fresh;
       G4double currentMeanEnergy;
       G4double remaining_energy; 
+      toBeCached():fresh(true),currentMeanEnergy(-2),remaining_energy(0){};
    };
 
   public:
@@ -54,6 +55,7 @@ class G4NeutronHPContAngularPar
   G4NeutronHPContAngularPar()
   {
     theAngular = 0;
+    fCache.Put(NULL);
     //currentMeanEnergy = -2;
     //fresh = true;
   }
