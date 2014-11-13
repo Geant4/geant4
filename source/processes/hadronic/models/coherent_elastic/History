@@ -14,6 +14,10 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+12 November 2014 - V.Ivanchenko (hadr-cohe-V10-00-19)
+-----------------------------------------------------------------
+- G4LMsdGenerator - added pions and kaons (V.Grichine)
+
 08 November 2014 - V.Ivanchenko (hadr-cohe-V10-00-18)
 -----------------------------------------------------------------
 - G4LMsdGenerator - fixed read out of the boundary

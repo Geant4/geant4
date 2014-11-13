@@ -79,7 +79,21 @@ G4LMsdGenerator::IsApplicable( const G4HadProjectile& aTrack,
   if( ( aTrack.GetDefinition() == G4Proton::Proton() || 
 	aTrack.GetDefinition() == G4Neutron::Neutron()  ) && 
         targetNucleus.GetA_asInt() >= 1 &&
-        aTrack.GetKineticEnergy() > 750*CLHEP::MeV )   
+      aTrack.GetKineticEnergy() > 1540*CLHEP::MeV ) //  750*CLHEP::MeV )   
+  {
+    applied = true;
+  }
+  else if( ( aTrack.GetDefinition() == G4PionPlus::PionPlus() || 
+	     aTrack.GetDefinition() == G4PionMinus::PionMinus()  ) && 
+             targetNucleus.GetA_asInt() >= 1 &&
+           aTrack.GetKineticEnergy() > 2340*CLHEP::MeV )    
+  {
+    applied = true;
+  }
+  else if( ( aTrack.GetDefinition() == G4KaonPlus::KaonPlus() || 
+	     aTrack.GetDefinition() == G4KaonMinus::KaonMinus()  ) && 
+             targetNucleus.GetA_asInt() >= 1 &&
+             aTrack.GetKineticEnergy() > 1980*CLHEP::MeV ) 
   {
     applied = true;
   }
@@ -224,38 +238,110 @@ G4double G4LMsdGenerator::SampleMx(const G4HadProjectile* aParticle)
   else             Mx = fProbMx[i][0];
 
   if ( Mx <=  1.45 )   
-  {
-    Mx = 1.44;
-    
-    if( aParticle->GetDefinition() == G4Proton::Proton() )        
-    fPDGencoding = 12212;
+  {   
+    if( aParticle->GetDefinition() == G4Proton::Proton() )
+    {        
+      Mx = 1.44;
+      fPDGencoding = 12212;
+    }
     else if( aParticle->GetDefinition() == G4Neutron::Neutron() ) 
-    fPDGencoding = 12112;
+    {
+      Mx = 1.44;
+      fPDGencoding = 12112;
+    }
+    else if( aParticle->GetDefinition() == G4PionPlus::PionPlus() ) 
+    {
+      Mx = 1.3;
+      fPDGencoding = 100211;
+    }
+    else if( aParticle->GetDefinition() == G4PionMinus::PionMinus() ) 
+    {
+      Mx = 1.3;
+      fPDGencoding = -100211;
+    }
+    else if( aParticle->GetDefinition() == G4KaonPlus::KaonPlus() ) 
+    {
+      Mx = 1.27;
+      fPDGencoding = 10323;
+    }
+    else if( aParticle->GetDefinition() == G4KaonMinus::KaonMinus() ) 
+    {
+      Mx = 1.27;
+      fPDGencoding = -10323;
+    }
   }
   else if ( Mx <=  1.55 ) 
-  {
-    Mx = 1.52;
-    
-    if( aParticle->GetDefinition() == G4Proton::Proton() )        
-    fPDGencoding = 2124;
+  {   
+    if( aParticle->GetDefinition() == G4Proton::Proton() ) 
+    {       
+      Mx = 1.52;
+      fPDGencoding = 2124;
+    }
     else if( aParticle->GetDefinition() == G4Neutron::Neutron() ) 
-    fPDGencoding = 1214;
+    {
+      Mx = 1.52;
+      fPDGencoding = 1214;
+    }
+    else if( aParticle->GetDefinition() == G4PionPlus::PionPlus() ) 
+    {
+      Mx = 1.45;
+      fPDGencoding = 10211;
+    }
+    else if( aParticle->GetDefinition() == G4PionMinus::PionMinus() ) 
+    {
+      Mx = 1.45;
+      fPDGencoding = -10211;
+    }
+    else if( aParticle->GetDefinition() == G4KaonPlus::KaonPlus() ) 
+    {
+      Mx = 1.46;
+      fPDGencoding = 100321;
+    }
+    else if( aParticle->GetDefinition() == G4KaonMinus::KaonMinus() ) 
+    {
+      Mx = 1.46;
+      fPDGencoding = -100321;
+    }
   }
   else                    
-  {
-    Mx = 1.68;
-    
-    if( aParticle->GetDefinition() == G4Proton::Proton() )        
-    fPDGencoding = 12216;
+  {    
+    if( aParticle->GetDefinition() == G4Proton::Proton() ) 
+    {       
+      Mx = 1.68;
+      fPDGencoding = 12216;
+    }
     else if( aParticle->GetDefinition() == G4Neutron::Neutron() ) 
-    fPDGencoding = 12116;
+    {
+      Mx = 1.68;
+      fPDGencoding = 12116;
+    }
+    else if( aParticle->GetDefinition() == G4PionPlus::PionPlus() ) 
+    {
+      Mx = 1.8;
+      fPDGencoding = 9010211;
+    }
+    else if( aParticle->GetDefinition() == G4PionMinus::PionMinus() ) 
+    {
+      Mx = 1.8;
+      fPDGencoding = -9010211;
+    }
+    else if( aParticle->GetDefinition() == G4KaonPlus::KaonPlus() ) 
+    {
+      Mx = 1.83;
+      fPDGencoding = 9010321;
+    }
+    else if( aParticle->GetDefinition() == G4KaonMinus::KaonMinus() ) 
+    {
+      Mx = 1.83;
+      fPDGencoding = -9010321;
+    }
   }  
   return Mx;
 }
 
 ////////////////////////////////////// 
 //
-// Samole t with kinematic limitations of Mx and Tkin
+// Sample t with kinematic limitations of Mx and Tkin
 
 G4double G4LMsdGenerator::SampleT(const G4HadProjectile* aParticle, G4double Mx)                          
 {
