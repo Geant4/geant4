@@ -42,6 +42,7 @@
 #include "globals.hh"
 #include "G4FTFParameters.hh"
 #include "G4ThreeVector.hh"
+#include "G4SampleResonance.hh"   // Uzhi 2014
 
 class G4VSplitableHadron;
 class G4ExcitedString;

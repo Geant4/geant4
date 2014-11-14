@@ -105,6 +105,16 @@ void G4DiffractiveSplitableHadron::SplitUp() {
 
   Parton[0] = new G4Parton( stringStart );
   Parton[1] = new G4Parton( stringEnd );
+
+/*                                        // Inversion of a string
+  if ( G4UniformRand() < 1.75 ) {  //0.75
+    Parton[0] = new G4Parton( stringStart );
+    Parton[1] = new G4Parton( stringEnd );
+  } else {
+    Parton[0] = new G4Parton( stringEnd );
+    Parton[1] = new G4Parton( stringStart );
+  }
+*/
   PartonIndex = -1;
 }
 
@@ -154,13 +164,22 @@ void G4DiffractiveSplitableHadron::ChooseStringEnds( G4int PDGcode, G4int* aEnd,
   G4int absPDGcode = std::abs( PDGcode );
 
   if ( absPDGcode < 1000 ) {  //--------------------  Meson -------------
-    G4int heavy = absPDGcode/100;
-    G4int light = (absPDGcode % 100)/10;
-    //G4int anti = std::pow( -1 , std::max( heavy, light ) );
-    G4int anti = 1 - 2*( std::max( heavy, light ) % 2 );
-    if (PDGcode < 0 ) anti *= -1;
-    heavy *= anti;
-    light *= -1 * anti;
+    G4int heavy(0), light(0);
+    if(!((absPDGcode == 111)||(absPDGcode == 221)||(absPDGcode == 331)))
+    {                          // Ordinary mesons =======================
+     heavy = absPDGcode/100;
+     light = (absPDGcode % 100)/10;
+     //G4int anti = std::pow( -1 , std::max( heavy, light ) );
+     G4int anti = 1 - 2*( std::max( heavy, light ) % 2 );
+     if (PDGcode < 0 ) anti *= -1;
+     heavy *= anti;
+     light *= -1 * anti;
+    } 
+    else 
+    {                         // Pi0, Eta, Eta' =======================
+     if( G4UniformRand() < 0.5 ) {heavy = 1; light = -1;}
+     else                        {heavy = 2; light = -2;}
+    }
     if ( G4UniformRand() < 0.5 ) {
       *aEnd = heavy;
       *bEnd = light;

@@ -31,17 +31,11 @@
 //      GEANT 4 class implemetation file
 //
 //      ---------------- G4FTFAnnihilation --------------
-//             by Gunter Folger, October 1998.
-//        diffractive Excitation used by strings models
-//             Take a projectile and a target
-//             excite the projectile and target
-//  Essential changed by V. Uzhinsky in November - December 2006
-//  in order to put it in a correspondence with original FRITIOF
-//  model. Variant of FRITIOF with nucleon de-excitation is implemented.
-//  Other changes by V.Uzhinsky in May 2007 were introduced to fit
-//  meson-nucleon interactions. Additional changes by V. Uzhinsky
-//  were introduced in December 2006. They treat diffraction dissociation
-//  processes more exactly.
+//                by V. Uzhinsky, Spring 2011.
+//                Take a projectile and a target
+//        make annihilation or re-orangement of quarks and anti-quarks.
+//     Ideas of Quark-Gluon-String model my A. Capella and A.B. Kaidalov
+//                       are implemented.
 // ---------------------------------------------------------------------
 
 #include "globals.hh"
@@ -71,7 +65,7 @@
 
 //============================================================================
 
-//#define debugFTFannih
+//efine debugFTFannih
 
 
 //============================================================================
@@ -99,7 +93,7 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
   G4LorentzVector Pprojectile = projectile->Get4Momentum();
   G4int ProjectilePDGcode = projectile->GetDefinition()->GetPDGEncoding();
   if ( ProjectilePDGcode > 0 ) {
-    target->SetStatus( 2 );
+    target->SetStatus( 3 );                                      // 2->3   Uzhi Oct 2014
     return false;
   } 
   //G4double M0projectile = Pprojectile.mag();  
@@ -191,37 +185,37 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
 
   } 
 
-  if ( ProjectilePDGcode == -2212 && ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) { 
+  if        ((ProjectilePDGcode == -2212 || ProjectilePDGcode == -2214)&& ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) { 
     X_b *= 5.0; X_c *= 5.0; X_d *= 6.0;  // Pbar P
-  } else if ( ProjectilePDGcode == -2212 && ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
+  } else if ((ProjectilePDGcode == -2212 || ProjectilePDGcode == -2214)&& ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
     X_b *= 4.0; X_c *= 4.0; X_d *= 4.0;  // Pbar N
-  } else if ( ProjectilePDGcode == -2112 && ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) {
+  } else if ((ProjectilePDGcode == -2112 || ProjectilePDGcode == -2114)&& ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) {
     X_b *= 4.0; X_c *= 4.0; X_d *= 4.0;  // NeutrBar P
-  } else if ( ProjectilePDGcode == -2112 && ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
+  } else if ((ProjectilePDGcode == -2112 || ProjectilePDGcode == -2114)&& ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
     X_b *= 5.0; X_c *= 5.0; X_d *= 6.0;  // NeutrBar N
-  } else if ( ProjectilePDGcode == -3122 && ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) {
+  } else if ((ProjectilePDGcode == -3122 || ProjectilePDGcode == -3124)&& ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) {
     X_b *= 3.0; X_c *= 3.0; X_d *= 2.0;  // LambdaBar P
-  } else if ( ProjectilePDGcode == -3122 && ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
+  } else if ((ProjectilePDGcode == -3122 || ProjectilePDGcode == -3124)&& ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
     X_b *= 3.0; X_c *= 3.0; X_d *= 2.0;  // LambdaBar N
-  } else if ( ProjectilePDGcode == -3112 && ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) {
+  } else if ((ProjectilePDGcode == -3112 || ProjectilePDGcode == -3114)&& ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) {
     X_b *= 2.0; X_c *= 2.0; X_d *= 0.0;  // Sigma-Bar P
-  } else if ( ProjectilePDGcode == -3112 && ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
+  } else if ((ProjectilePDGcode == -3112 || ProjectilePDGcode == -3114)&& ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
     X_b *= 4.0; X_c *= 4.0; X_d *= 2.0;  // Sigma-Bar N
-  } else if ( ProjectilePDGcode == -3212 && ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) {
+  } else if ((ProjectilePDGcode == -3212 || ProjectilePDGcode == -3214)&& ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) {
     X_b *= 3.0; X_c *= 3.0; X_d *= 2.0;  // Sigma0Bar P
-  } else if ( ProjectilePDGcode == -3212 && ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
+  } else if ((ProjectilePDGcode == -3212 || ProjectilePDGcode == -3214)&& ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
     X_b *= 3.0; X_c *= 3.0; X_d *= 2.0;  // Sigma0Bar N
-  } else if ( ProjectilePDGcode == -3222 && ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) {
+  } else if ((ProjectilePDGcode == -3222 || ProjectilePDGcode == -3224)&& ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) {
     X_b *= 4.0; X_c *= 4.0; X_d *= 2.0;  // Sigma+Bar P
-  } else if ( ProjectilePDGcode == -3222 && ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
+  } else if ((ProjectilePDGcode == -3222 || ProjectilePDGcode == -3224)&& ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
     X_b *= 2.0; X_c *= 2.0; X_d *= 0.0;  // Sigma+Bar N
-  } else if ( ProjectilePDGcode == -3312 && ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) {
+  } else if ((ProjectilePDGcode == -3312 || ProjectilePDGcode == -3314)&& ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) {
     X_b *= 1.0; X_c *= 1.0; X_d *= 0.0;  // Xi-Bar P
-  } else if ( ProjectilePDGcode == -3312 && ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
+  } else if ((ProjectilePDGcode == -3312 || ProjectilePDGcode == -3314)&& ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
     X_b *= 2.0; X_c *= 2.0; X_d *= 0.0;  // Xi-Bar N
-  } else if ( ProjectilePDGcode == -3322 && ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) {
+  } else if ((ProjectilePDGcode == -3322 || ProjectilePDGcode == -3324)&& ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) {
     X_b *= 2.0; X_c *= 2.0; X_d *= 0.0;  // Xi0Bar P
-  } else if ( ProjectilePDGcode == -3322 && ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
+  } else if ((ProjectilePDGcode == -3322 || ProjectilePDGcode == -3324)&& ( TargetPDGcode == 2112 || TargetPDGcode == 2114 ) ) {
     X_b *= 1.0; X_c *= 1.0; X_d *= 0.0;  // Xi0Bar N
   } else if ( ProjectilePDGcode == -3334 && ( TargetPDGcode == 2212 || TargetPDGcode == 2214 ) ) {
     X_b *= 0.0; X_c *= 0.0; X_d *= 0.0;  // Omega-Bar P
@@ -590,9 +584,9 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
       projectile->SetFirstParton( DQ );
       projectile->SetSecondParton( Anti_DQ );
       projectile->SetStatus( 0 );
-      target->SetStatus( 3 );  // The target nucleon has annihilated
-      Pprojectile.setPx( 0.0 );  // VU Mar1
-      Pprojectile.setPy( 0.0 );  // VU Mar1
+      target->SetStatus( 4 );  // The target nucleon has annihilated 3->4 Uzhi Oct 2014
+      Pprojectile.setPx( 0.0 );
+      Pprojectile.setPy( 0.0 );
       Pprojectile.setPz( 0.0 );
       Pprojectile.setE( SqrtS );
       Pprojectile.transform( toLab );
@@ -900,9 +894,9 @@ G4bool G4FTFAnnihilation::Annihilate( G4VSplitableHadron* projectile,
       projectile->SetFirstParton( LeftQ );
       projectile->SetSecondParton( LeftAQ );
       projectile->SetStatus( 0 );
-      target->SetStatus( 3 );  // The target nucleon has annihilated
-      Pprojectile.setPx( 0.0 );  // VU Mar1
-      Pprojectile.setPy( 0.0 );  // Vu Mar1
+      target->SetStatus( 4 );  // The target nucleon has annihilated 3->4 Uzhi Oct 2014
+      Pprojectile.setPx( 0.0 );
+      Pprojectile.setPy( 0.0 );
       Pprojectile.setPz( 0.0 );
       Pprojectile.setE( SqrtS );
       Pprojectile.transform( toLab );

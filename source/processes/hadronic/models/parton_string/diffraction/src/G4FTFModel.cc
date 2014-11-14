@@ -53,7 +53,7 @@
 #include "G4ParticleDefinition.hh"
 #include "G4ParticleTable.hh"
 #include "G4IonTable.hh"
-
+#include "G4KineticTrack.hh"                                     // Uzhi Oct 2014
 
 //============================================================================
 
@@ -450,8 +450,8 @@ void G4FTFModel::ReggeonCascade() {
           targetSplitable = new G4DiffractiveSplitableHadron( *Neighbour ); 
 
           Neighbour->Hit( targetSplitable );
-          targetSplitable->SetTimeOfCreation( CreationTime );
-          targetSplitable->SetStatus( 2 );     
+          targetSplitable->SetTimeOfCreation( CreationTime ); 
+          targetSplitable->SetStatus( 3 );                       // 2->3  Uzhi Oct 2014
         }
       }
     }
@@ -495,7 +495,7 @@ void G4FTFModel::ReggeonCascade() {
 
           Neighbour->Hit( projectileSplitable );
           projectileSplitable->SetTimeOfCreation( CreationTime );
-          projectileSplitable->SetStatus( 2 );     
+          projectileSplitable->SetStatus( 3 );                   // 2->3  Uzhi Oct 2014
         }
       }
     }
@@ -891,13 +891,13 @@ G4bool G4FTFModel::ExciteParticipants() {
 
           } else {
 
+            Successfull = theElastic->ElasticScattering( projectile, target, theParameters )
+                          &&  Successfull; 
+//                          ||  Successfull; 
             #ifdef debugBuildString
             G4cout << "FTF excitation Non Successfull -> Elastic scattering " 
                    << Successfull << G4endl;
             #endif
-
-            Successfull = theElastic->ElasticScattering( projectile, target, theParameters )
-                          ||  Successfull; 
           }
         } else { // The inelastic interactition was rejected -> elastic scattering
 
@@ -2127,22 +2127,45 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
       //G4cout << "primaries[ahadron] " << primaries[ahadron] << G4endl;
       //if ( primaries[ahadron]->GetStatus() <= 1 ) isProjectile=true;
       FirstString = 0; SecondString = 0;
-      theExcitation->CreateStrings( primaries[ ahadron ], isProjectile, 
-                                    FirstString, SecondString, theParameters );
+//      theExcitation->CreateStrings( primaries[ ahadron ], isProjectile,            // Uzhi Oct 2014
+//                                    FirstString, SecondString, theParameters );    // Uzhi Oct 2014
+      if ( primaries[ahadron]->GetStatus() <= 1 )                                    // Uzhi Oct 2014 start
+      {
+       theExcitation->CreateStrings( primaries[ ahadron ], isProjectile, 
+                                     FirstString, SecondString, theParameters );
+      }
+      else if(primaries[ahadron]->GetStatus() == 2)
+      {
+       G4LorentzVector ParticleMomentum=primaries[ahadron]->Get4Momentum();
+       G4KineticTrack* aTrack=new G4KineticTrack(
+                                  primaries[ahadron]->GetDefinition(),
+                                  primaries[ahadron]->GetTimeOfCreation(),
+                                  primaries[ahadron]->GetPosition(),   //FirstString->GetPosition(),
+                                  ParticleMomentum);
+       FirstString=new G4ExcitedString(aTrack); SecondString=0; 
+      }
+      else {G4cout<<"Something wrong in FTF Model Build String" << G4endl;}          // Uzhi Oct 2014 end
+
       if ( FirstString  != 0 ) strings->push_back( FirstString );
       if ( SecondString != 0 ) strings->push_back( SecondString );
 
       #ifdef debugBuildString
-      G4cout << "FirstString & SecondString? " << FirstString << " " << SecondString << G4endl
-             << "Quarks on the FirstString ends " << FirstString->GetRightParton()->GetPDGcode()
+      G4cout << "FirstString & SecondString? " << FirstString << " " << SecondString << G4endl;
+      if(FirstString->IsExcited())
+      {
+       G4cout<< "Quarks on the FirstString ends " << FirstString->GetRightParton()->GetPDGcode()
              << " " << FirstString->GetLeftParton()->GetPDGcode() << G4endl;
+      } else {G4cout<<"Kinetic track is stored"<<G4endl;}
       #endif
 
     }
 
     #ifdef debugBuildString
-    G4cout << "Check 1 string " << strings->operator[](0)->GetRightParton()->GetPDGcode() 
-           << " " << strings->operator[](0)->GetLeftParton()->GetPDGcode() << G4endl << G4endl;
+    if(FirstString->IsExcited())
+    {
+     G4cout << "Check 1 string " << strings->operator[](0)->GetRightParton()->GetPDGcode() 
+            << " " << strings->operator[](0)->GetLeftParton()->GetPDGcode() << G4endl << G4endl;
+    }
     #endif
 
     std::for_each( primaries.begin(), primaries.end(), DeleteVSplitableHadron() );
@@ -2161,7 +2184,7 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
       G4cout << "Nucleon #, status, intCount " << ahadron << " "
              << TheInvolvedNucleonsOfProjectile[ ahadron ]->GetSplitableHadron()->GetStatus() 
              << " " << TheInvolvedNucleonsOfProjectile[ ahadron ]->GetSplitableHadron()
-                       ->GetSoftCollisionCount();
+                       ->GetSoftCollisionCount()<<G4endl;
       #endif
 
       G4VSplitableHadron* aProjectile = 
@@ -2298,6 +2321,19 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
       FirstString = 0; SecondString = 0;
       theExcitation->CreateStrings( aNucleon, isProjectile,
                                     FirstString, SecondString, theParameters );
+
+      if(SecondString == 0)                                      // Uzhi Oct 2014 start
+      {
+       G4LorentzVector ParticleMomentum=aNucleon->Get4Momentum();
+       G4KineticTrack* aTrack=new G4KineticTrack(
+                                  aNucleon->GetDefinition(),
+                                  aNucleon->GetTimeOfCreation(),
+                                  FirstString->GetPosition(),
+                                  ParticleMomentum);
+       delete FirstString;
+       FirstString=new G4ExcitedString(aTrack);
+      };                                                         // Uzhi Oct 2014 end
+
       if ( FirstString  != 0 ) strings->push_back( FirstString );
       if ( SecondString != 0 ) strings->push_back( SecondString );
 
@@ -2310,17 +2346,30 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
       // A nucleon was considered as a participant but due to annihilation
       // its interactions were skipped. It will be returned to nucleus
       // at low energies energies.
-      aNucleon->SetStatus( 4 );
+      aNucleon->SetStatus( 5 );                                  // 4->5  Uzhi Oct 2014
       // ????????? delete aNucleon;
 
       #ifdef debugBuildString
       G4cout << "4 case A string is not build" << G4endl;
       #endif
 
-    } else if ( aNucleon->GetStatus() == 2 ) { // A nucleon was involved in Reggeon cascading
+    } else if(( aNucleon->GetStatus() == 2 )||   // A nucleon took part in quark exchange       Uzhi Oct 2014
+              ( aNucleon->GetStatus() == 3 )  ){ // A nucleon was involved in Reggeon cascading
       FirstString = 0; SecondString = 0;
       theExcitation->CreateStrings( aNucleon, isProjectile, 
                                     FirstString, SecondString, theParameters );
+
+      if(SecondString == 0)                                      // Uzhi Oct 2014 start
+      {
+       G4LorentzVector ParticleMomentum=aNucleon->Get4Momentum();
+       G4KineticTrack* aTrack=new G4KineticTrack(
+                                  aNucleon->GetDefinition(),
+                                  aNucleon->GetTimeOfCreation(),
+                                  aNucleon->GetPosition(), //FirstString->GetPosition(),
+                                  ParticleMomentum);
+       FirstString=new G4ExcitedString(aTrack);
+      };                                                         // Uzhi Oct 2014 end
+
       if ( FirstString  != 0 ) strings->push_back( FirstString );
       if ( SecondString != 0 ) strings->push_back( SecondString );
 
@@ -2856,7 +2905,7 @@ CheckKinematics( const G4double sValue,                 // input parameter
     G4double nucleonY = 0.5 * std::log( (e + pz)/(e - pz) ); 
 
     #ifdef debugPutOnMassShell
-    G4cout << "i nY pY nY-AY AY " << i << " " << nucleonY << " " << projectileY 
+    G4cout << "i nY pY nY-AY AY " << i << " " << nucleonY << " " << projectileY <<G4endl;
     #endif
 
     if ( std::abs( nucleonY - nucleusY ) > 2  ||  

@@ -14,6 +14,17 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+14-Nov-2014 V. Uzhinsky    (hadr-string-diff-V10-00-08)
+- Bug connected with annihilations of anti-delta isobars is erased. Now
+  G4FTFAnnihilation can treat the processes.
+  A fine tuning of parameters for Pi+P interactions is done.
+
+ 7-Nov-2014 V. Uzhinsky    (hadr-string-diff-V10-00-07)
+- Compilation bug is fixed for the tuned FTF model.
+
+ 6-Nov-2014 V. Uzhinsky    (hadr-string-diff-V10-00-06)
+- Tuned FTF model.
+
  2-Oct-2014 V. Uzhinsky    (hadr-string-diff-V10-00-05)
 -  Bug is fixed in G4DiffractiveSplitableHadron.cc where baryons are subdivided
    into quark and diquark. Suppresion of uu-diquark in proton is also introduced.
