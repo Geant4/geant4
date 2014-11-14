@@ -52,6 +52,12 @@
 #include "G4INCLAllocationPool.hh"
 #include <string>
 
+#if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
+// Force instantiation of all the std::vector<IAvatar*> methods for debugging
+// purposes
+template class std::vector<G4INCL::IAvatar*>;
+#endif
+
 namespace G4INCL {
 
   enum AvatarType {SurfaceAvatarType,
@@ -100,11 +106,5 @@ namespace G4INCL {
   typedef UnorderedVector<IAvatar*>::iterator IAvatarMutableIter;
 
 }
-
-#ifndef NDEBUG
-// Force instantiation of all the std::vector<IAvatar*> methods for debugging
-// purposes
-template class std::vector<G4INCL::IAvatar*>;
-#endif
 
 #endif /* IAVATAR_HH_ */
