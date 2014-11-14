@@ -14,6 +14,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 	 
+14-10-14 mma (exhadr03-V10-00-08)
+- particleCount : corrections for MT
+	 
 06-10-14 mma (exhadr03-V10-00-07)
 - nThreads as third argument in main
 	 	 

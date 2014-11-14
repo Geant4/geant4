@@ -36,6 +36,7 @@
 #include "PrimaryGeneratorAction.hh"
 #include "HistoManager.hh"
 
+#include "G4ProcessTable.hh"
 #include "G4HadronicProcessStore.hh"
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
@@ -76,12 +77,13 @@ void Run::SetTargetXXX(G4bool flag)
 
 void Run::CountProcesses(const G4VProcess* process) 
 {
-  std::map<const G4VProcess*,G4int>::iterator it = fProcCounter.find(process);
+  G4String procName = process->GetProcessName();
+  std::map<G4String,G4int>::iterator it = fProcCounter.find(procName);
   if ( it == fProcCounter.end()) {
-    fProcCounter[process] = 1;
+    fProcCounter[procName] = 1;
   }
   else {
-    fProcCounter[process]++; 
+    fProcCounter[procName]++; 
   }
 }                 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -168,21 +170,22 @@ void Run::Merge(const G4Run* run)
   fSumTrack2 += localRun->fSumTrack2;    
 
   
-  //maps
-  std::map<const G4VProcess*,G4int>::const_iterator itp;
+  //map: processes count
+  std::map<G4String,G4int>::const_iterator itp;
   for ( itp = localRun->fProcCounter.begin();
         itp != localRun->fProcCounter.end(); ++itp ) {
 
-    const G4VProcess* process = itp->first;
+    G4String procName = itp->first;
     G4int localCount = itp->second;
-    if ( fProcCounter.find(process) == fProcCounter.end()) {
-      fProcCounter[process] = localCount;
+    if ( fProcCounter.find(procName) == fProcCounter.end()) {
+      fProcCounter[procName] = localCount;
     }
     else {
-      fProcCounter[process] += localCount;
+      fProcCounter[procName] += localCount;
     }  
   }
       
+  //map: nuclear channels
   std::map<G4String,NuclChannel>::const_iterator itc;
   for (itc = localRun->fNuclChannelMap.begin(); 
        itc != localRun->fNuclChannelMap.end(); ++itc) {
@@ -200,6 +203,7 @@ void Run::Merge(const G4Run* run)
     }   
   } 
         
+  //map: particles count
   std::map<G4String,ParticleData>::const_iterator itn;
   for (itn = localRun->fParticleDataMap.begin(); 
        itn != localRun->fParticleDataMap.end(); ++itn) {
@@ -252,9 +256,9 @@ void Run::EndOfRun(G4bool print)
   //
   G4cout << "\n Process calls frequency:" << G4endl;  
   G4int survive = 0;
-  std::map<const G4VProcess*,G4int>::iterator it;    
+  std::map<G4String,G4int>::iterator it;    
   for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
-     G4String procName = it->first->GetProcessName();
+     G4String procName = it->first;
      G4int    count    = it->second;
      G4cout << "\t" << procName << "= " << count;
      if (procName == "Transportation") survive = count;
@@ -300,12 +304,14 @@ void Run::EndOfRun(G4bool print)
   G4cout << "\n Verification: "
          << "crossSections from G4HadronicProcessStore:";
   
-  G4HadronicProcessStore* store = G4HadronicProcessStore::Instance();  
+  G4ProcessTable* processTable  = G4ProcessTable::GetProcessTable();
+  G4HadronicProcessStore* store = G4HadronicProcessStore::Instance();
   G4double sumc1 = 0.0, sumc2 = 0.0; 
   if (material->GetNumberOfElements() == 1) {
     const G4Element* element = material->GetElement(0);
     for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
-      const G4VProcess* process = it->first;
+      G4String procName = it->first;
+      G4VProcess* process = processTable->FindProcess(procName, fParticle);
       G4double xs1 =
       store->GetCrossSectionPerVolume(fParticle,fEkin,process,material);
       G4double massSigma = xs1/density;
@@ -313,7 +319,6 @@ void Run::EndOfRun(G4bool print)
       G4double xs2 =
       store->GetCrossSectionPerAtom(fParticle,fEkin,process,element,material);
       sumc2 += xs2;
-      G4String procName = process->GetProcessName();    
       G4cout << "\n" << std::setw(20) << procName << "= "
              << G4BestUnit(massSigma, "Surface/Mass") << "\t"
              << G4BestUnit(xs2, "Surface");
@@ -324,12 +329,12 @@ void Run::EndOfRun(G4bool print)
            << G4BestUnit(sumc2, "Surface") << G4endl;  
   } else {
     for (it = fProcCounter.begin(); it != fProcCounter.end(); it++) {
-      const G4VProcess* process = it->first;
+      G4String procName = it->first;
+      G4VProcess* process = processTable->FindProcess(procName, fParticle);
       G4double xs =
       store->GetCrossSectionPerVolume(fParticle,fEkin,process,material);
       G4double massSigma = xs/density;
       sumc1 += massSigma;
-      G4String procName = process->GetProcessName();    
       G4cout << "\n" << std::setw(20)  << procName << "= " 
              << G4BestUnit(massSigma, "Surface/Mass");
     }             
@@ -339,7 +344,7 @@ void Run::EndOfRun(G4bool print)
               
  //nuclear channel count
  //
- G4cout << "\n   List of nuclear reactions: \n" << G4endl; 
+ G4cout << "\n List of nuclear reactions: \n" << G4endl; 
  std::map<G4String,NuclChannel>::iterator ic;               
  for (ic = fNuclChannelMap.begin(); ic != fNuclChannelMap.end(); ic++) { 
     G4String name    = ic->first;

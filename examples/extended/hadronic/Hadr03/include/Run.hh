@@ -89,7 +89,7 @@ class Run : public G4Run
     G4ParticleDefinition* fParticle;
     G4double              fEkin;
         
-    std::map<const G4VProcess*,G4int> fProcCounter;            
+    std::map<G4String,G4int> fProcCounter;            
     
     G4int fTotalCount;      //all processes counter
     G4int fGammaCount;      //nb of events with gamma
