@@ -46,6 +46,14 @@
 
 namespace CLHEP {
 
+  //
+  //
+  //
+  static const double     pi  = 3.14159265358979323846;
+  static const double  twopi  = 2*pi;
+  static const double halfpi  = pi/2;
+  static const double     pi2 = pi*pi;
+
   // 
   // Length [L]
   //
@@ -105,7 +113,7 @@ namespace CLHEP {
   //
   static const double radian      = 1.;                  
   static const double milliradian = 1.e-3*radian;
-  static const double degree = (3.14159265358979323846/180.0)*radian;
+  static const double degree = (pi/180.0)*radian;
 
   static const double   steradian = 1.;
   

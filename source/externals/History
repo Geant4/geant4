@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14-November-2014: G.Cosmo (externals-V10-00-07)
+- Updated to CLHEP-2.2.0.3: moved definition of pi into SystemOfUnits.h
+  so that its hard-coded value is not defined twice.
+
 12-November-2014: G.Cosmo (externals-V10-00-06)
 - Removed unused 'tpmalloc' and 'memoryprotection' modules.
 - Update to CLHEP Hep3Vector to move operators 'operator()(int)' to be

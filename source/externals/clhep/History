@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14 November 2014 - G.Cosmo
+- Updated to CLHEP-2.2.0.3:
+  * Units (L.Garren <garren@fnal.gov>)
+    o Moved definition of pi into SystemOfUnits.h so that its hard-coded
+      value is not defined twice.
+
 12 November 2014 - G.Cosmo
 - Moved operators 'operator()(int)' in Hep3Vector to be inline and
   removed printout to improve CPU performance.
