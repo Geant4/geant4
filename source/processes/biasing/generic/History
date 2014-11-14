@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 13th, 2014 M.Verderi
+- Tentative fix of crach in optimized mode
+  missing initialization in second constructor of G4BiasingProcessInterface.
+- proc-biasgen-V10-00-02
+
 November 11th, 2014 M.Verderi
 - fix Coverity bugs
 - proc-biasgen-V10-00-01

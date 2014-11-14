@@ -82,6 +82,9 @@ G4BiasingProcessInterface::G4BiasingProcessInterface(G4VProcess* wrappedProcess,
     fSharedData                     ( 0                  )
 {
   for (G4int i = 0 ; i < 8 ; i++)  fFirstLastFlags[i] = false;
+  fResetInteractionLaws.Put( true );
+  fCommonStart.Put(true);
+  fCommonEnd.Put(true);
   
   SetProcessSubType(fWrappedProcess->GetProcessSubType());
 
