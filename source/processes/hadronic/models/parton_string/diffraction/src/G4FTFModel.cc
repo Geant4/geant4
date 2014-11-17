@@ -2242,7 +2242,7 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
                << " the interaction was skipped." << G4endl;
         #endif
 
-      } else if ( aProjectile->GetStatus() == 2 ) {
+      } else if ( (aProjectile->GetStatus() == 2) || (aProjectile->GetStatus() == 3) ) {    // Uzhi Nov. 2014
         // Nucleon which was involved in the Reggeon cascading
 
         #ifdef debugBuildString
@@ -2287,7 +2287,7 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
 
     #ifdef debugBuildString
     G4cout << "Nucleon #, status, intCount " << aNucleon << " " << ahadron << " "
-           << aNucleon->GetStatus() << " " << aNucleon->GetSoftCollisionCount();
+           << aNucleon->GetStatus() << " " << aNucleon->GetSoftCollisionCount()<<G4endl;;
     #endif
 
     if ( aNucleon->GetStatus() == 0 ) { // A nucleon took part in non-diffractive interaction
@@ -2310,7 +2310,7 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
       if ( SecondString != 0 ) strings->push_back( SecondString );
 
       #ifdef debugBuildString
-      G4cout << "2 case A string is build, nucleon was excited." << G4endl;
+      G4cout << " 2 case A string is build, nucleon was excited." << G4endl;
       #endif
 
     } else if ( aNucleon->GetStatus() == 1  &&  aNucleon->GetSoftCollisionCount() == 0  &&
