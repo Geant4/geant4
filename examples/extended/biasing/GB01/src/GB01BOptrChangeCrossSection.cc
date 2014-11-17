@@ -33,6 +33,8 @@
 
 #include "Randomize.hh"
 
+#include "G4InteractionLawPhysical.hh"
+
 GB01BOptrChangeCrossSection::GB01BOptrChangeCrossSection(G4String particleName,
                                                          G4String         name)
   : G4VBiasingOperator(name),
@@ -161,8 +163,14 @@ GB01BOptrChangeCrossSection::ProposeOccurenceBiasingOperation(const G4Track*    
         }
       else
         {
+          // -- update the 'interaction length' and underneath 'number of interaction lengths'
+          // -- for past step  (this takes into accout the previous step cross-section value)
           operation->UpdateForStep( callingProcess->GetPreviousStepSize() );
+          // -- update the cross-section value:
           operation->SetBiasedCrossSection( XStransformation * analogXS );
+          // -- forces recomputation of the 'interaction length' taking into account above
+          // -- new cross-section value [tricky : to be improved]
+          operation->UpdateForStep( 0.0 );
         }
     }
   

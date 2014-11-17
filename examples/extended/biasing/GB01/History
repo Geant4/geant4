@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 14, 2014, M. Verderi
+- Fix in GB01BOptrChangeCrossSection, which was not properly using the
+  new cross-section value in case of an UpdateForStep(...). A trick
+  is used with operation->UpdateForStep( 0.0 ) to make it working.
+- GB01-V10-00-02
+
 Nov 09, 2014, M. Verderi
 - Fix compilation warnings in GB01BOptrChangeCrossSection.
 - GB01-V10-00-01
