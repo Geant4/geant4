@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 14, 2014, I. Hrivnacova (GB04-V10-00-02)
+- Added files descriptions
+- Coding guidelines (data member names, separators)
+
 Nov 13, 2014, G. Cosmo  (GB04-V10-00-01)
 - Corrected GNUmakefile to point to correct main() translation unit.
 

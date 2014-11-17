@@ -23,6 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
+/// \file GB04PrimaryGeneratorAction.cc
+/// \brief Implementation of the GB04PrimaryGeneratorAction class
+
 #include "GB04PrimaryGeneratorAction.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -36,30 +41,33 @@
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB04PrimaryGeneratorAction::GB04PrimaryGeneratorAction()
+ : G4VUserPrimaryGeneratorAction(),
+   fParticleGun(0)
 {
   G4int n_particle = 1;
-  particleGun  = new G4ParticleGun(n_particle);
+  fParticleGun  = new G4ParticleGun(n_particle);
 
   // default particle kinematic
   G4ParticleTable* particleTable = G4ParticleTable::GetParticleTable();
   G4String particleName;
   G4ParticleDefinition* particle = particleTable->FindParticle(particleName="e-");
-  particleGun->SetParticleDefinition(particle);
-  particleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
-  particleGun->SetParticleEnergy(100.*MeV);
-  particleGun->SetParticlePosition(G4ThreeVector(0.,0.,-100*cm));
+  fParticleGun->SetParticleDefinition(particle);
+  fParticleGun->SetParticleMomentumDirection(G4ThreeVector(0.,0.,1.));
+  fParticleGun->SetParticleEnergy(100.*MeV);
+  fParticleGun->SetParticlePosition(G4ThreeVector(0.,0.,-100*cm));
+}
+
+GB04PrimaryGeneratorAction::~GB04PrimaryGeneratorAction()
+{
+  delete fParticleGun;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-GB04PrimaryGeneratorAction::~GB04PrimaryGeneratorAction()
-{
-  delete particleGun;
-}
-
-
 void GB04PrimaryGeneratorAction::GeneratePrimaries(G4Event* anEvent)
 {
-  particleGun->GeneratePrimaryVertex(anEvent);
+  fParticleGun->GeneratePrimaryVertex(anEvent);
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 

@@ -23,11 +23,18 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
+/// \file GB04BOptrBremSplitting.cc
+/// \brief Implementation of the GB04BOptrBremSplitting class
+
 #include "GB04BOptrBremSplitting.hh"
 #include "GB04BOptnBremSplitting.hh"
 
 #include "G4BiasingProcessInterface.hh"
 #include "G4GenericMessenger.hh"
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB04BOptrBremSplitting::GB04BOptrBremSplitting()
 : G4VBiasingOperator("BremSplittingOperator"),
@@ -103,3 +110,5 @@ ProposeFinalStateBiasingOperation(const G4Track* track,
   // -- Return the brem. splitting operation:
   return fBremSplittingOperation;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

@@ -23,6 +23,11 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
+/// \file GB04DetectorConstruction.cc
+/// \brief Implementation of the GB04DetectorConstruction class
+
 #include "GB04DetectorConstruction.hh"
 #include "G4SystemOfUnits.hh"
 
@@ -97,6 +102,7 @@ G4VPhysicalVolume* GB04DetectorConstruction::Construct()
   return physiWorld;
 }
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 void GB04DetectorConstruction::ConstructSDandField()
 {
@@ -113,3 +119,5 @@ void GB04DetectorConstruction::ConstructSDandField()
          << " to logical volume " << logicTest->GetName()
          << G4endl;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

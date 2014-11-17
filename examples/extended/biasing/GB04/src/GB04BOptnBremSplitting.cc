@@ -23,12 +23,17 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
+// $Id$
+//
+/// \file GB04BOptnBremSplitting.cc
+/// \brief Implementation of the GB04BOptnBremSplitting class
 
 #include "GB04BOptnBremSplitting.hh"
 #include "G4BiasingProcessInterface.hh"
 
 #include "G4ParticleChangeForLoss.hh"
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB04BOptnBremSplitting::GB04BOptnBremSplitting(G4String name)
 : G4VBiasingOperation(name),
@@ -36,6 +41,8 @@ GB04BOptnBremSplitting::GB04BOptnBremSplitting(G4String name)
   fParticleChange()
 {
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 GB04BOptnBremSplitting::~GB04BOptnBremSplitting()
 {
@@ -130,3 +137,5 @@ ApplyFinalStateBiasing( const G4BiasingProcessInterface* callingProcess,
   // -- we are done:
   return &fParticleChange;
 }
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
