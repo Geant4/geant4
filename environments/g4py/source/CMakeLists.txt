@@ -1,14 +1,15 @@
 # - add libs components
 
-set (G4MODULES_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/Geant4 )
-
+set(G4MODULES_INSTALL_DIR ${CMAKE_INSTALL_LIBDIR}/Geant4)
 
 include_directories (
   ${PYTHON_INCLUDE_PATH}
-  ${BOOST_INCLUDE_DIRS}
+  ${Boost_INCLUDE_DIRS}
   ${PROJECT_SOURCE_DIR}/source/boost
   ${GEANT4_INCLUDE_DIR}
 )
+
+link_directories (${GEANT4_LIBRARY_DIR} ${Boost_LIBRARY_DIRS})
 
 add_subdirectory(global)
 add_subdirectory(interface)

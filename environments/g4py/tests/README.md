@@ -13,20 +13,20 @@ Basic tests
 
 | Test   | Description |
 |:------:|-------------
-|test00  | hallo world (K.M)
-|test01  | simple class wrapping (K.M)
-|test02  | simple inheritance (K.M)
-|test03  | singleton w/o public constructor (K.M) <br> can NOT be compiled.
-|test04  | call policies (K.M)
-|test05  | function overloading & default arguments (K.M)
-|test06  | python inheritance from base class (K.M)
-|test07  | enums (K.M)
-|test08  | static member function (K.M)
-|test09  | operators (K.M)
-|test10  | call by-reference (K.M)
-|test11  | no_init (K.M)
-|test12  | indexing a STL vector (K.M)                                
-|test13  | test for a list argument/return (K.M)
+|test00  | hallo world
+|test01  | simple class wrapping
+|test02  | simple inheritance
+|test03  | singleton w/o public constructor <br> can NOT be compiled.
+|test04  | call policies
+|test05  | function overloading & default arguments
+|test06  | python inheritance from base class
+|test07  | enums
+|test08  | static member function
+|test09  | operators
+|test10  | call by-reference
+|test11  | no_init
+|test12  | indexing a STL vector
+|test13  | test for a list argument/return
 
 
 Function tests
@@ -34,11 +34,12 @@ Function tests
 
 | Test   | Description |
 |:------:|-------------
-|gtest01 | user application (K.M)
-|gtest02 | test for using site-module packages (K.M)
-|gtest03 | test for EZsim package (K.M)
-|gtest04 | test for getting command tree and command information (K.M)
-|gtest05 | test for constructing CSG geometries in Python (K.M)
-|gtest06 | test for constructing/visualizing boolean geoemtries (K.M)
-|gtest07 | test for checking overlapped geometries (K.M)
+|gtest01 | user application
+|gtest02 | test for using site-module packages
+|gtest03 | test for EZsim package
+|gtest04 | test for getting command tree and command information
+|gtest05 | test for constructing CSG geometries in Python
+|gtest06 | test for constructing/visualizing boolean geoemtries
+|gtest07 | test for checking overlapped geometries
+
 

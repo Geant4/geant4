@@ -25,9 +25,13 @@ include(SetInstallPath)
 find_package(Geant4 REQUIRED)
 find_package(PythonInterp REQUIRED)
 find_package(PythonLibs REQUIRED)
-find_package(Boost 1.36.0)
+find_package(Boost)
 find_package(XercesC)
 find_package(ROOT)
+
+if(NOT GEANT4_FOUND)
+  message(FATAL_ERROR "NOT Found Geant4.")
+endif()
 
 #------------------------------------------------------------------------------
 # parameters for building
@@ -45,12 +49,6 @@ endif()
 message(STATUS "CMAKE_BUILD_TYPE: ${CMAKE_BUILD_TYPE}")
 message(STATUS "CMAKE_CXX_COMPILER: ${CMAKE_CXX_COMPILER}")
 
-# compiler flags
-if(CMAKE_COMPILER_IS_GNUCXX)
-  set(CMAKE_CXX_FLAGS
-      "-Wwrite-strings -Wno-variadic-macros -Wno-long-long -ansi -pipe -ftemplate-depth-255 -finline-functions -fpermissive -DBOOST_PYTHON_DYNAMIC_LIB")
-endif()
-
 message(STATUS "CMAKE_INSTALL_PREFIX: ${CMAKE_INSTALL_PREFIX}")
 message(STATUS "--------------------------------------------------------")
 
@@ -63,7 +61,8 @@ add_subdirectory(source)
 add_subdirectory(site-modules)
 
 # examples
-#add_subdirectory(examples EXCLUDE_FROM_ALL)
+add_subdirectory(examples)
 
 # tests
-#add_subdirectory(tests EXCLUDE_FROM_ALL)
+add_subdirectory(tests EXCLUDE_FROM_ALL)
+

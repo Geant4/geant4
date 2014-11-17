@@ -11,6 +11,11 @@ Geant4Py is a Geant4-Python bridge.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+15 Nov. 2014 K. Murakami
+ - complete migration to cmake for building library. (GNUmakefiles removed)
+ - update for 10.1 release, following changes of class interface.
+ - linker problem of OSX was fixed. (OSX Yosemite tested)
+
 May 25 2014 Koichi Murakami
  - remove IsGeneric() method in pyG4Polyone.cc because that method is removed.
    (bug-id 1544)

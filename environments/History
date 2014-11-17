@@ -18,6 +18,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+envs-V10-00-03 / 15 Nov. 2014 K. Murakami
+- complete migration to cmake for building library. (GNUmakefiles removed)
+- update for 10.1 release, following changes of class interface.
+- linker problem of OSX was fixed. (OSX Yosemite tested)
+
 envs-V10-00-02 / May 25 2014 Koichi Murakami
  - pyG4EllipticalCone.cc, add missing return in CreateEllipticalCone() method.
 

@@ -191,112 +191,74 @@ body .highlight pre, pre{background-color:#f8f8f8;border:1px solid #ccc;font-siz
 body pre code, pre tt{background-color:transparent;border:none;}
 </style></head>
 <body>
-<h1>Geant4Py</h1>
+<h1 id="toc_0">Geant4Py</h1>
 
 <p><em>A set of python modules for using Geant4</em></p>
 
-<h2>System Requirements</h2>
+<h2 id="toc_1">System Requirements</h2>
 
-<h3>Python</h3>
+<h3 id="toc_2">CMake</h3>
+
+<p>Building system is migrated to CMake system.</p>
+
+<h3 id="toc_3">Python</h3>
 
 <p>Python2.x and Python 3.x (experimental)</p>
 
-<h3>Geant4</h3>
+<h3 id="toc_4">Boost</h3>
 
-<p>built with CMake</p>
+<p>Boost_Python is needed.</p>
 
-<h3>CLHEP</h3>
-
-<p>use Geant4-CLHEP</p>
-
-<h3>(Optional)</h3>
+<h3 id="toc_5">(Optional)</h3>
 
 <p>ROOT for histogramming/analysis</p>
 
-<h2>How to Install</h2>
+<h3 id="toc_6">Tested Platforms</h3>
 
-<p>There is a configuration script for building the package.</p>
+<ul>
+<li>CentOS6 (RH6 clones)</li>
+<li>OSX Yosemite</li>
+</ul>
 
-<pre><code># ./configure --help
-`configure&#39; configures Geant4Py to adapt to many kinds of systems.
+<h2 id="toc_7">How to Install</h2>
 
-Usage:  ./configure SYSTEM [OPTION]... [VAR=VALUE]...
+<p>Before building library, <em>GEANT4_INSTALL</em> environment variable should be set.</p>
 
-SYSTEM: System type (see Supported Arhitectures)
-
-Options:
-  -h, --help                Display this help and exit
-
-Installation directories:
-  --prefix=PREFIX           Installation prefix  [./]
-  --libdir=DIR              Python modules dir [PREFIX/lib]
-
-Fine tuning of the library path:
-  --with-g4install-dir=DIR  Geant4 installed dir
-
-  --with-python-incdir=DIR  Python header dir [/usr/include/python(2.#)],
-                            (location of pyconfig.h)
-  --with-python-libdir=DIR  Python library dir [/usr/lib(64)]
-  --with-python3            Use Python3
-
- --with-boost-incdir=DIR   BOOST-C++ header dir [/usr/include],
-                            (location of boost/)
- --with-boost-libdir=DIR   BOOST-C++ library dir [/usr/lib]
- --with-boost-python-lib=LIB library name of libboost_python.so [boost_python]
-
- --with-extra-dir=DIR      Install path for extra packages [/usr/local]
-
- --with-xercesc-incdir=DIR Xerces-C header dir [/usr/include]
- --with-xercesc-libdir=DIR Xerces-C library dir [/usr/lib(64)]
-
-Enable/disable options: prefix with either --enable- or --disable-
-  openglx      OpenGLX support    [auto]
-  openglxm     OpenGLXm support   [disable]
-  raytracerx   RayTracerX support [disable]
-
-Supported Architectures:
-  linux           for Linux gcc (32bit)
-  linux64         for Linux gcc (64bit)
-  linuxx8664gcc   for Linux gcc (64bit)
-  macosx          for Apple OS X with gcc
+<pre><code># export GEANT4_INSTALL=&lt;Geant4 install path&gt; (zsh, bash)
+# setenv GEANT4_INSTALL &lt;Geant4 install path&gt; (csh)
+(G4 install path is the path specified by &quot;CMAKE_INSTALL_PREFIX&quot; when building Geant4) 
 </code></pre>
 
-<p>For example,</p>
+<p>then</p>
 
-<pre><code># ./configure linux64 -with-g4install-dir=&lt;geant4 install path with CMake&gt;
-</code></pre>
-
-<p>The configuration script will create config/config.gmk, 
-which describes your environment.</p>
-
-<p>After executing the <code>configure</code> script, then </p>
-
-<pre><code># make
+<pre><code># mkdir build
+# cd build
+# cmake ..   
+# make
 # make install
 </code></pre>
 
-<h2>How to Use:</h2>
+<p>If you want to run the testing component,</p>
+
+<pre><code># cd build/tests
+# make; make install
+</code></pre>
+
+<p>By default, g4py is installed in &lt;g4py&gt;/lib(64) directory.</p>
+
+<h2 id="toc_8">How to Use:</h2>
 
 <p>Some environment variables are required at run time.</p>
 
-<h3><em>PYTHONPATH</em></h3>
+<h3 id="toc_9"><em>PYTHONPATH</em></h3>
 
-<p>Python module search directories, given by a colon-separated list of directories. 
-Practically, <code>$(INSTALL_PATH)/lib</code> is ok.</p>
+<p>Python module search directories, given by a colon-separated list of directories, like</p>
 
-<h3><em>LD_LIBRARY_PATH</em></h3>
+<pre><code># export PYTHONPATH=&lt;g4py&gt;/lib64:&lt;g4py&gt;/examples:&lt;g4py&gt;/tests  (zsh, bash)
+# setenv PYTHONPATH &lt;g4py&gt;/lib64:&lt;g4py&gt;/examples:&lt;g4py&gt;/tests (csh)
+</code></pre>
 
-<p>Additional shared library path to be searched.</p>
-
-<p>Some libraries paths are already specified via <em>-rpath</em> linker option, 
-so these paths do not have to be added to <em>LD_LIBRARY_PATH</em>.</p>
-
-<ul>
-<li>Geant4</li>
-<li>boost-python library</li>
-<li>$(INSTALL_PATH)/lib</li>
-<li>$(G4PY_EXLIB_LIBDIR) specified in a module makefile.</li>
-</ul>
+<h3 id="toc_10">Getting started</h3>
 
 <p>You can import Geant4Py modules in Python just like</p>
 
