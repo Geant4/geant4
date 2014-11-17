@@ -18,6 +18,10 @@ committal in the CVS repository !
 
      ----------------------------------------------------------
 
+15 November 14: V.Ivanchenko (emstand-V10-00-51)
+- G4PEEffectFluoModel - make internal array per material and 
+    not per materialCutsCouple allowing model be used in unit tests 
+
 07 November 14: V.Ivanchenko (emstand-V10-00-50)
 - G4GoudsmitSaundersonMscModel - fixed displacement computation
 
