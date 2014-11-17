@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 14, 2014 - J.Apostolakis (geomnav-V10-00-13,14)
+---------------------------------
+- G4Navigator: Corrections for Exit Normal.
+
 October 20, 2014 - G.Cosmo (geomnav-V10-00-12)
 --------------------------
 - Leave out changes in G4FieldPropagation.cc laying on the trunk...
