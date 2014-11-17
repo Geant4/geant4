@@ -132,7 +132,7 @@ class G4PrimaryTransformer;
 #include "G4Event.hh"
 #include "G4EventManager.hh"
 #include "globals.hh"
-#include <vector>
+#include <list>
 #include <algorithm>
 
 class G4RunManager
@@ -261,6 +261,7 @@ public: // with description
 
   protected:
     void CleanUpPreviousEvents();
+    void CleanUpUnnecessaryEvents(G4int keepNEvents);
     void StackPreviousEvent(G4Event* anEvent);
 
   public:
@@ -303,7 +304,7 @@ public: // with description
 
     G4Run* currentRun;
     G4Event* currentEvent;
-    std::vector<G4Event*>* previousEvents;
+    std::list<G4Event*>* previousEvents;
     G4int n_perviousEventsToBeStored;
     G4int numberOfEventToBeProcessed;
 
@@ -524,7 +525,11 @@ public: // with description
     inline const G4Event* GetPreviousEvent(G4int i) const
     {
       if(i>=1 && i<=n_perviousEventsToBeStored)
-      { return (*previousEvents)[i-1]; }
+      {
+        std::list<G4Event*>::iterator itr = previousEvents->begin();
+        for(G4int j=1;j<i;j++) { itr++; }
+        return *itr;
+      }
       return 0;
     }
     //  Returns the pointer to the "i" previous event. This method is availavle for

@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 14th, 2014 M.Asai (run-V10-00-41)
+- Fix Coverity defects related to keeping events.
+
 November 8th, 2014 M.Asai (run-V10-00-39 -40)
 - Further fix of logic at G4RunManager::RunTermination() for keeping
   events  
