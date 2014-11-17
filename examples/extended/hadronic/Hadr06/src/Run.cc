@@ -146,6 +146,8 @@ void Run::Merge(const G4Run* run)
   //
   fEnergyDeposit   += localRun->fEnergyDeposit;  
   fEnergyDeposit2  += localRun->fEnergyDeposit2;
+  fEnergyFlow      += localRun->fEnergyFlow;
+  fEnergyFlow2     += localRun->fEnergyFlow2;
       
   //map: processes count
   std::map<G4String,G4int>::const_iterator itp;
