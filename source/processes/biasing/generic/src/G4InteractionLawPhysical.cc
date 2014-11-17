@@ -86,6 +86,7 @@ G4double G4InteractionLawPhysical::SampleInteractionLength()
 G4double G4InteractionLawPhysical::UpdateInteractionLengthForStep(G4double       truePathLength)
 {
   fNumberOfInteractionLength -= truePathLength*fCrossSection;
+  
   if ( fNumberOfInteractionLength < 0 ) 
     {
       G4ExceptionDescription ed;
@@ -96,5 +97,5 @@ G4double G4InteractionLawPhysical::UpdateInteractionLengthForStep(G4double      
 		  ed);
       fNumberOfInteractionLength = 0.;
     }
-  return  fNumberOfInteractionLength;
+  return  fNumberOfInteractionLength/fCrossSection;
 }

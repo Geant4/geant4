@@ -17,6 +17,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 14th, 2014 M.Verderi
+- Serious fix in G4InteractionLawPhysical::
+  UpdateInteractionLengthForStep(...)
+- proc-biasgen-V10-00-03
+
 November 13th, 2014 M.Verderi
 - Tentative fix of crach in optimized mode
   missing initialization in second constructor of G4BiasingProcessInterface.
