@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+14.11.2014 G4MicroElecInelasticModel from M. Raine, tag emlowen-V10-00-22
+           - fix of loop
+
 31.10.2014 G4MicroElecInelasticModel from M. Raine, tag emlowen-V10-00-21
            -change in angular generator, to use G4DeltaAngle model
 

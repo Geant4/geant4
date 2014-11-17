@@ -584,7 +584,7 @@ G4double G4MicroElecInelasticModel::RandomizeEjectedElectronEnergy(G4ParticleDef
     {
       secondaryElectronKineticEnergy = G4UniformRand() * (maximumEnergyTransfer-SiStructure.Energy(shell));
       
-    } while(G4UniformRand()*crossSectionMaximum >=
+    } while(G4UniformRand()*crossSectionMaximum >
             DifferentialCrossSection(particleDefinition, k/eV,(secondaryElectronKineticEnergy+SiStructure.Energy(shell))/eV,shell));
     return secondaryElectronKineticEnergy;
   }
