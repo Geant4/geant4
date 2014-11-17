@@ -94,14 +94,13 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
 {
   // Define list of couples
   theCoupleTable = G4ProductionCutsTable::GetProductionCutsTable();
-  size_t numOfCouples = theCoupleTable->GetTableSize();
+  G4int numOfCouples = theCoupleTable->GetTableSize();
 
   // needed for unit tests
-  if(0 == numOfCouples) { numOfCouples = 1; }
-
-  activeDeexcitationMedia.resize(numOfCouples, false);
-  activeAugerMedia.resize(numOfCouples, false);
-  activePIXEMedia.resize(numOfCouples, false);
+  G4int nn = std::max(numOfCouples, 1);
+  activeDeexcitationMedia.resize(nn, false);
+  activeAugerMedia.resize(nn, false);
+  activePIXEMedia.resize(nn, false);
   activeZ.resize(93, false);
 
   // check if deexcitation is active for the given run
@@ -127,39 +126,36 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   G4RegionStore* regionStore = G4RegionStore::GetInstance();
   for(size_t j=0; j<nRegions; ++j) {
     const G4Region* reg = regionStore->GetRegion(activeRegions[j], false);
-    const G4ProductionCuts* rpcuts = reg->GetProductionCuts();
-    if(0 < verbose) {
-      G4cout << "          " << activeRegions[j] << G4endl;  
-    }
-  
-    for(size_t i=0; i<numOfCouples; ++i) {
-      const G4MaterialCutsCouple* couple =
-	theCoupleTable->GetMaterialCutsCouple(i);
-      if (couple->GetProductionCuts() == rpcuts) {
-	activeDeexcitationMedia[i] = deRegions[j];
-	activeAugerMedia[i] = AugerRegions[j];
-	activePIXEMedia[i] = PIXERegions[j];
-	const G4Material* mat = couple->GetMaterial();
-	const G4ElementVector* theElementVector = 
-	  mat->GetElementVector();
-	G4int nelm = mat->GetNumberOfElements();
-	if(deRegions[j]) {
-	  for(G4int k=0; k<nelm; ++k) {
-	    G4int Z = G4lrint(((*theElementVector)[k])->GetZ());
-	    if(Z > 5 && Z < 93) { 
-	      activeZ[Z] = true;
-	      //G4cout << "!!! Active de-excitation Z= " << Z << G4endl;  
-	    }
-	  }
+    if(reg && 0 < numOfCouples) {
+      const G4ProductionCuts* rpcuts = reg->GetProductionCuts();
+      if(0 < verbose) {
+	G4cout << "          " << activeRegions[j] << G4endl;  
+      }
+      for(G4int i=0; i<numOfCouples; ++i) {
+	const G4MaterialCutsCouple* couple =
+	  theCoupleTable->GetMaterialCutsCouple(i);
+	if (couple->GetProductionCuts() == rpcuts) {
+	  activeDeexcitationMedia[i] = deRegions[j];
+	  activeAugerMedia[i] = AugerRegions[j];
+	  activePIXEMedia[i] = PIXERegions[j];
 	}
       }
+    }
+  }
+  G4int nelm = G4Element::GetNumberOfElements();
+  G4cout << nelm << G4endl;
+  for(G4int k=0; k<nelm; ++k) {
+    G4int Z = G4lrint((*(G4Element::GetElementTable()))[k]->GetZ());
+    if(Z > 5 && Z < 93) { 
+      activeZ[Z] = true;
+      //G4cout << "!!! Active de-excitation Z= " << Z << G4endl;  
     }
   }
 
   // Initialise derived class
   InitialiseForNewRun();
 
-  if(0 < verbose && flagPIXE) {
+  if(1 < verbose && flagPIXE) {
     G4cout << "### ===  PIXE model for hadrons: " << namePIXE
 	   << "  " <<  IsPIXEActive()
 	   << G4endl;  
