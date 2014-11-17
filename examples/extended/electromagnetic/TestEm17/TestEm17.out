@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4MT version Name: geant4-09-06-ref-02    (18-January-2013)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -13,18 +13,14 @@
 
 ***** Table : Nb of materials = 7 *****
 
- Material: galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 113427275.267 pc 
-                       Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
-
-   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
-         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
-         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+ Material: galactic    density:  0.000 kg/m3   RadL: 204727512.315 pc   Nucl.Int.Length: 114561548.020 pc   Imean:  19.200 eV   temperature:   2.73 K  pressure:   0.00 atm
+   --->  Element: galactic ( )   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:     1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:     2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.680 m  
-                       Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
-
+ Material:      Air    density:  1.290 mg/cm3  RadL: 285.161 m    Nucl.Int.Length: 662.904 m    Imean:  85.703 eV   temperature: 273.15 K  pressure:   1.00 atm
    --->  Element: Nitrogen (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
          --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
          --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
@@ -37,9 +33,7 @@
           ElmMassFraction:  30.00 %  ElmAbundance  27.29 % 
 
 
- Material:    CaCO3    density:  2.800 g/cm3   RadL:   8.581 cm   Nucl.Int.Length:  34.749 cm 
-                       Imean: 123.236 eV 
-
+ Material:    CaCO3    density:  2.800 g/cm3   RadL:   8.581 cm   Nucl.Int.Length:  34.767 cm   Imean: 123.236 eV 
    --->  Element: Calcium (Ca)   Z = 20.0   N =  40.1   A =  40.08 g/mole
          --->  Isotope:  Ca40   Z = 20   N =  40   A =  39.96 g/mole   abundance:  96.94 %
          --->  Isotope:  Ca42   Z = 20   N =  42   A =  41.96 g/mole   abundance:   0.65 %
@@ -61,46 +55,38 @@
           ElmMassFraction:  47.96 %  ElmAbundance  60.00 % 
 
 
- Material:   Carbon    density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.387 cm 
-                       Imean:  81.000 eV 
-
-   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
-         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
-         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+ Material:   Carbon    density:  2.265 g/cm3   RadL:  18.850 cm   Nucl.Int.Length:  35.407 cm   Imean:  81.000 eV 
+   --->  Element: Carbon ( )   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:    12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:    13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.999 cm 
-                       Imean: 286.000 eV 
-
-   --->  Element: Fe (Fe)   Z = 26.0   N =  55.8   A =  55.85 g/mole
-         --->  Isotope:  Fe54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
-         --->  Isotope:  Fe56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
-         --->  Isotope:  Fe57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
-         --->  Isotope:  Fe58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
+ Material:     Iron    density:  7.870 g/cm3   RadL:   1.759 cm   Nucl.Int.Length:  16.969 cm   Imean: 286.000 eV 
+   --->  Element: Iron ( )   Z = 26.0   N =  55.8   A =  55.85 g/mole
+         --->  Isotope:    54   Z = 26   N =  54   A =  53.94 g/mole   abundance:   5.84 %
+         --->  Isotope:    56   Z = 26   N =  56   A =  55.93 g/mole   abundance:  91.75 %
+         --->  Isotope:    57   Z = 26   N =  57   A =  56.94 g/mole   abundance:   2.12 %
+         --->  Isotope:    58   Z = 26   N =  58   A =  57.93 g/mole   abundance:   0.28 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:      Tin    density:  7.310 g/cm3   RadL:   1.206 cm   Nucl.Int.Length:  23.531 cm 
-                       Imean: 488.000 eV 
-
-   --->  Element: Sn (Sn)   Z = 50.0   N = 118.7   A = 118.70 g/mole
-         --->  Isotope: Sn112   Z = 50   N = 112   A = 111.90 g/mole   abundance:   0.97 %
-         --->  Isotope: Sn114   Z = 50   N = 114   A = 113.90 g/mole   abundance:   0.66 %
-         --->  Isotope: Sn115   Z = 50   N = 115   A = 114.90 g/mole   abundance:   0.34 %
-         --->  Isotope: Sn116   Z = 50   N = 116   A = 115.90 g/mole   abundance:  14.54 %
-         --->  Isotope: Sn117   Z = 50   N = 117   A = 116.90 g/mole   abundance:   7.68 %
-         --->  Isotope: Sn118   Z = 50   N = 118   A = 117.90 g/mole   abundance:  24.22 %
-         --->  Isotope: Sn119   Z = 50   N = 119   A = 118.90 g/mole   abundance:   8.59 %
-         --->  Isotope: Sn120   Z = 50   N = 120   A = 119.90 g/mole   abundance:  32.58 %
-         --->  Isotope: Sn122   Z = 50   N = 122   A = 121.90 g/mole   abundance:   4.63 %
-         --->  Isotope: Sn124   Z = 50   N = 124   A = 123.91 g/mole   abundance:   5.79 %
+ Material:      Tin    density:  7.310 g/cm3   RadL:   1.206 cm   Nucl.Int.Length:  23.491 cm   Imean: 488.000 eV 
+   --->  Element: Tin ( )   Z = 50.0   N = 118.7   A = 118.70 g/mole
+         --->  Isotope:   112   Z = 50   N = 112   A = 111.90 g/mole   abundance:   0.97 %
+         --->  Isotope:   114   Z = 50   N = 114   A = 113.90 g/mole   abundance:   0.66 %
+         --->  Isotope:   115   Z = 50   N = 115   A = 114.90 g/mole   abundance:   0.34 %
+         --->  Isotope:   116   Z = 50   N = 116   A = 115.90 g/mole   abundance:  14.54 %
+         --->  Isotope:   117   Z = 50   N = 117   A = 116.90 g/mole   abundance:   7.68 %
+         --->  Isotope:   118   Z = 50   N = 118   A = 117.90 g/mole   abundance:  24.22 %
+         --->  Isotope:   119   Z = 50   N = 119   A = 118.90 g/mole   abundance:   8.59 %
+         --->  Isotope:   120   Z = 50   N = 120   A = 119.90 g/mole   abundance:  32.58 %
+         --->  Isotope:   122   Z = 50   N = 122   A = 121.90 g/mole   abundance:   4.63 %
+         --->  Isotope:   124   Z = 50   N = 124   A = 123.91 g/mole   abundance:   5.79 %
           ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
 
 
- Material:       HI    density:  2.800 g/cm3   RadL:   3.049 cm   Nucl.Int.Length:  60.880 cm 
-                       Imean: 462.393 eV 
-
+ Material:       HI    density:  2.800 g/cm3   RadL:   3.049 cm   Nucl.Int.Length:  60.873 cm   Imean: 462.393 eV 
    --->  Element: Hydrogen (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
          --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
          --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
@@ -117,8 +103,8 @@
 /testem/det/setMat Iron
 /testem/det/setSize 1 m
 #
-/testem/phys/addPhysics emstandard_opt0
-/run/setCut 1 mm
+/testem/phys/addPhysics standard
+/testem/phys/setCuts 1 mm
 #
 /run/initialize
 userDetector->Construct() start.
@@ -126,15 +112,119 @@ userDetector->Construct() start.
  The Box is 1 m   of Iron
 Iron is registered to the default region.
 physicsList->Construct() start.
+physicsList->Construct() start.
 physicsList->CheckParticleList() start.
 physicsList->setCut() start.
+PhysicsList::SetCuts:CutLength : 1 mm 
 #
 /gun/particle mu+
 /gun/energy 10 TeV
 #
-/run/printProgress 1000
+/testem/event/printModulo 1000
 #
 /run/beamOn 10000
+
+hIoni:   for  proton    SubType= 2
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=        2 MeV
+          BetheBloch :  Emin=        2 MeV   Emax=     1000 PeV
+
+hBrems:   for  proton    SubType= 3
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=     1000 PeV
+
+hPairProd:   for  proton    SubType= 4
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=     1000 PeV
+
+muIoni:   for  mu+    SubType= 2
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=     1000 PeV
+
+muBrems:   for  mu+    SubType= 3
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=     1000 PeV
+
+muPairProd:   for  mu+    SubType= 4
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=     1000 PeV
+
+muIoni:   for  mu-    SubType= 2
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      finalRange(mm)= 1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=      200 keV
+          BetheBloch :  Emin=      200 keV   Emax=        1 GeV
+        MuBetheBloch :  Emin=        1 GeV   Emax=     1000 PeV
+
+muBrems:   for  mu-    SubType= 3
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+              MuBrem :  Emin=        0 eV    Emax=     1000 PeV
+
+muPairProd:   for  mu-    SubType= 4
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+          muPairProd :  Emin=        0 eV    Emax=     1000 PeV
+
+hIoni:   for  pi+    SubType= 2
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               Bragg :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=     1000 PeV
+
+hBrems:   for  pi+    SubType= 3
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=     1000 PeV
+
+hPairProd:   for  pi+    SubType= 4
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=     1000 PeV
+
+hIoni:   for  pi-    SubType= 2
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            ICRU73QO :  Emin=        0 eV    Emax=  297.505 keV
+          BetheBloch :  Emin=  297.505 keV   Emax=     1000 PeV
+
+hBrems:   for  pi-    SubType= 3
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+               hBrem :  Emin=        0 eV    Emax=     1000 PeV
+
+hPairProd:   for  pi-    SubType= 4
+      dE/dx and range tables from 100 eV  to 1000 PeV in 160 bins
+      Lambda tables from threshold to 1000 PeV in 160 bins, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+           hPairProd :  Emin=        0 eV    Emax=     1000 PeV
 
 Region <DefaultRegionForTheWorld> --  -- appears in <Iron> world volume
  This region is in the mass world.
@@ -151,7 +241,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  20.6438 keV    e-  1.29592 MeV    e+  1.21169 MeV proton 100 keV
@@ -165,40 +255,48 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
-### Run 0 starts.
 ### Run 0 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
  Current couple of seeds = 9876, 54321
 ----------------------------------------
---> Event 0 starts.
+Start Run processing.
 
 ---> Begin of Event: 0
---> Event 1000 starts.
---> Event 2000 starts.
---> Event 3000 starts.
---> Event 4000 starts.
---> Event 5000 starts.
---> Event 6000 starts.
---> Event 7000 starts.
---> Event 8000 starts.
---> Event 9000 starts.
+
+---> Begin of Event: 1000
+
+---> Begin of Event: 2000
+
+---> Begin of Event: 3000
+
+---> Begin of Event: 4000
+
+---> Begin of Event: 5000
+
+---> Begin of Event: 6000
+
+---> Begin of Event: 7000
+
+---> Begin of Event: 8000
+
+---> Begin of Event: 9000
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.36s Real=4.39s Sys=0.01s
+  User=2.9s Real=2.93s Sys=0s
 
  The run consists of 10000 mu+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	muIoni : 462331	muPairProd : 63528	muBrems : 636	CoulombScat : 5663
+ Number of process calls --->	muIoni : 462991	muPairProd : 63893	muBrems : 647
 
- Simulation: total CrossSection = 0.53216 /cm	 MeanFreePath = 1.8791 cm 	 massicCrossSection = 0.067619 cm2/g
+ Simulation: total CrossSection = 0.52753 /cm	 MeanFreePath = 1.8956 cm 	 massicCrossSection = 0.067031 cm2/g
  Theory:     total CrossSection = 0.53938 /cm	 MeanFreePath = 1.854 cm 	 massicCrossSection = 0.068536 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2008814643, 184536882
+ Current couple of seeds = 1783091211, 617365115
 ----------------------------------------
 #
 /gun/particle pi+
@@ -219,7 +317,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  20.6438 keV    e-  1.29592 MeV    e+  1.21169 MeV proton 100 keV
@@ -228,39 +326,47 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-### Run 1 starts.
 ### Run 1 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 2008814643, 184536882
+ Current couple of seeds = 1783091211, 617365115
 ----------------------------------------
---> Event 0 starts.
+Start Run processing.
 
 ---> Begin of Event: 0
---> Event 1000 starts.
---> Event 2000 starts.
---> Event 3000 starts.
---> Event 4000 starts.
---> Event 5000 starts.
---> Event 6000 starts.
---> Event 7000 starts.
---> Event 8000 starts.
---> Event 9000 starts.
+
+---> Begin of Event: 1000
+
+---> Begin of Event: 2000
+
+---> Begin of Event: 3000
+
+---> Begin of Event: 4000
+
+---> Begin of Event: 5000
+
+---> Begin of Event: 6000
+
+---> Begin of Event: 7000
+
+---> Begin of Event: 8000
+
+---> Begin of Event: 9000
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=4.55s Real=4.59s Sys=0.01s
+  User=2.75s Real=2.76s Sys=0s
 
  The run consists of 10000 pi+ of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 433951	hPairProd : 59640	CoulombScat : 5532	hBrems : 370
+ Number of process calls --->	hIoni : 433975	hPairProd : 59698	hBrems : 353
 
- Simulation: total CrossSection = 0.49949 /cm	 MeanFreePath = 2.002 cm 	 massicCrossSection = 0.063468 cm2/g
+ Simulation: total CrossSection = 0.49403 /cm	 MeanFreePath = 2.0242 cm 	 massicCrossSection = 0.062773 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1574244970, 1420150899
+ Current couple of seeds = 759122171, 619493205
 ----------------------------------------
 #
 /gun/particle proton
@@ -281,7 +387,7 @@ Region <DefaultRegionForParallelWorld> --  -- is not associated to any world.
 
 ========= Table of registered couples ==============================
 
-Index : 0     used in the geometry : Yes
+Index : 0     used in the geometry : Yes     recalculation needed : No 
  Material : Iron
  Range cuts        :  gamma  1 mm     e-  1 mm     e+  1 mm  proton 1 mm 
  Energy thresholds :  gamma  20.6438 keV    e-  1.29592 MeV    e+  1.21169 MeV proton 100 keV
@@ -290,39 +396,47 @@ Index : 0     used in the geometry : Yes
 
 ====================================================================
 
-### Run 2 starts.
 ### Run 2 start.
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1574244970, 1420150899
+ Current couple of seeds = 759122171, 619493205
 ----------------------------------------
---> Event 0 starts.
+Start Run processing.
 
 ---> Begin of Event: 0
---> Event 1000 starts.
---> Event 2000 starts.
---> Event 3000 starts.
---> Event 4000 starts.
---> Event 5000 starts.
---> Event 6000 starts.
---> Event 7000 starts.
---> Event 8000 starts.
---> Event 9000 starts.
+
+---> Begin of Event: 1000
+
+---> Begin of Event: 2000
+
+---> Begin of Event: 3000
+
+---> Begin of Event: 4000
+
+---> Begin of Event: 5000
+
+---> Begin of Event: 6000
+
+---> Begin of Event: 7000
+
+---> Begin of Event: 8000
+
+---> Begin of Event: 9000
 Run terminated.
 Run Summary
   Number of events processed : 10000
-  User=3.72s Real=3.83s Sys=0s
+  User=2.48s Real=2.48s Sys=0s
 
  The run consists of 10000 proton of 10 TeV through 1 m   of Iron (density: 7.9 g/cm3 )
 
- Number of process calls --->	hIoni : 434125	hPairProd : 34066	CoulombScat : 5548	hBrems : 10
+ Number of process calls --->	hIoni : 434995	hPairProd : 34062	hBrems : 9
 
- Simulation: total CrossSection = 0.47375 /cm	 MeanFreePath = 2.1108 cm 	 massicCrossSection = 0.060197 cm2/g
+ Simulation: total CrossSection = 0.46907 /cm	 MeanFreePath = 2.1319 cm 	 massicCrossSection = 0.059602 cm2/g
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0
- Current couple of seeds = 1606888756, 1920299008
+ Current couple of seeds = 1671530062, 1223717994
 ----------------------------------------
 #
 G4 kernel has come to Quit state.
@@ -330,15 +444,9 @@ UserDetectorConstruction deleted.
 UserPhysicsList deleted.
 UserRunAction deleted.
 UserPrimaryGenerator deleted.
-RunManager is deleting RunManagerKernel.
 EventManager deleted.
-Units table cleared.
-Total navigation history collections cleaned: 6
-================== Deleting memory pools ===================
-Number of memory pools allocated: 9 of which, static: 0
-Dynamic pools deleted: 9 / Total memory freed: 0.056 Mb
-============================================================
-G4Allocator objects are deleted.
 UImanager deleted.
+Units table cleared.
 StateManager deleted.
-RunManagerKernel is deleted. Good bye :)
+RunManagerKernel is deleted.
+RunManager is deleted.
