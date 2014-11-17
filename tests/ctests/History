@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-37 16 November 2014 Ivana Hrivnacova
+- Added Hadr06 in GNUmake test
+
+ctests-V10-00-36 14 November 2014 Mathieu Karamitros
+- Add PRECMD to GEANT4_ADD_TEST
+
 ctests-V10-00-35 12 November 2014 Marc Verderi
 - Added new extended biasing/GB04 example
 
