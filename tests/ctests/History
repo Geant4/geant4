@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-38 18 November 2014 Gunter Folger
+- Attempt to correct adding of PRECMD
+
 ctests-V10-00-37 16 November 2014 Ivana Hrivnacova
 - Added Hadr06 in GNUmake test
 
