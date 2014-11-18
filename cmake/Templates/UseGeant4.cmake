@@ -14,6 +14,8 @@
 # include directories to those of the directory in which this file is
 # included.
 #
+# Header paths are added to include_directories as SYSTEM type directories
+#
 # The recommended Geant4 compiler flags are also prepended to
 # CMAKE_CXX_FLAGS but duplicated flags are NOT removed. This permits
 # client of UseGeant4 to override Geant4's recommended flags if required
@@ -32,7 +34,7 @@
 # We need to set the compile definitions and include directories
 #
 add_definitions(${Geant4_DEFINITIONS})
-include_directories(${Geant4_INCLUDE_DIRS})
+include_directories(AFTER SYSTEM ${Geant4_INCLUDE_DIRS})
 
 #-----------------------------------------------------------------------
 # Because Geant4 is sensitive to the compiler flags, let's set the base

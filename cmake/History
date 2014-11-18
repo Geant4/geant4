@@ -30,6 +30,10 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+18th November 2014 - Ben Morgan (cmake-V10-00-36)
+- Templates/UseGeant4.cmake : Include Geant4 headers as SYSTEM and after
+  other headers. This is to help to suppress warnings when user has
+  more stringent compiler settings than us.
 
 12th November 2014 - Ben Morgan (cmake-V10-00-35)
 - Modules/Geant4LibraryBuildOptions.cmake: Remove GEANT4_BUILD_TPMALLOC
