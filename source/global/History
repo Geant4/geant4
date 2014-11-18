@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 18, 2014 G.Cosmo (global-V10-00-44)
+- G4FPEDetection.hh: added call to 'sigfillset' to clear any signals
+  before any use of sigset_t in InvalidOperationDetection() for both
+  MacOS and Linux, as suggested in specifications.
+
+November 17, 2014 M.Kelsey
+- G4FPEDetection.hh: restrict FPE trapping to GCC only, excluding CLang.
+  Addresses problem with Qt generating an apparent FPE deep inside its
+  code with MacOSX CLang builds.
+
 November 7, 2014 G.Cosmo (global-V10-00-43/42)
 - Coherent use of 'thread_local' keyword for c++11, when supported.
 - Updated dates and tag-ID for release 10.1.
