@@ -539,6 +539,12 @@ void G4GDMLReadSolids::
 MultiUnionNodeRead(const xercesc::DOMElement* const unionNodeElement,
                    G4MultiUnion* const multiUnionSolid)
 {
+#if !defined(G4GEOM_USE_USOLIDS)
+   G4Exception("G4GDMLReadSolids::MultiUnionNodeRead()",
+               "InvalidSetup", FatalException,
+               "Installation with USolids primitives required!");
+   return;
+#endif
    G4String name;
    G4String solid;
    G4ThreeVector position(0.0,0.0,0.0);
@@ -607,6 +613,12 @@ MultiUnionNodeRead(const xercesc::DOMElement* const unionNodeElement,
 void G4GDMLReadSolids::
 MultiUnionRead(const xercesc::DOMElement* const unionElement)
 {
+#if !defined(G4GEOM_USE_USOLIDS)
+   G4Exception("G4GDMLReadSolids::MultiUnionRead()",
+               "InvalidSetup", FatalException,
+               "Installation with USolids primitives required!");
+   return;
+#endif
    G4String name;
 
    const xercesc::DOMNamedNodeMap* const attributes

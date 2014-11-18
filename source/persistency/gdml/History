@@ -17,9 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 November 2014 Makoto Asai (gdml-V10-00-10)
+- Issue exception when attempting to load multi-union structures
+  without USolids.
+
 11 November 2014 Makoto Asai (gdml-V10-00-09)
-- G4GDMLMessenger - /persistency/gdml/clear now invokes G4RunManager to
-  cleanly deletes entire geometry.
+- G4GDMLMessenger: /persistency/gdml/clear now invokes G4RunManager to
+  cleanly delete entire geometry.
 
 10 November 2014 Witold Pokorski (gdml-V10-00-08)
 - Correction to G4GDMLReadMaterials::MixtureRead() to revert order of
