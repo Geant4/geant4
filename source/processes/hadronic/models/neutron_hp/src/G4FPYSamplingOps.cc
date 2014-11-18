@@ -608,6 +608,11 @@ G4FFG_SAMPLING_FUNCTIONLEAVE__
                     #endif
                 }
 
+                #if defined WIN32-VC
+                //TK modified to avoid problem caused by QNAN
+		    if ( Container != Container) Container = 0;
+                #endif
+
                 // Add up the weighted area
                 ErfContainer += Container;
                 AdjustedErfContainer += Container * i;

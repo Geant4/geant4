@@ -164,10 +164,10 @@ LogarithmicLinear(G4double x, G4double x1, G4double x2, G4double y1, G4double y2
 inline G4double G4NeutronHPInterpolator::
 LogarithmicLogarithmic(G4double x, G4double x1, G4double x2, G4double y1, G4double y2) const
 {
+  if(x==0) return y1+y2/2.;
+  else if(x1==0) return y1;
+  else if(x2==0) return y2;
   G4double result;
-  if(x==0) result = y1+y2/2.;
-  else if(x1==0) result = y1;
-  else if(x2==0) result = y2;
   if(y1==0||y2==0) result = 0;
   else 
   {
