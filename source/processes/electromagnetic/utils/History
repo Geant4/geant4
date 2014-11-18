@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+18 November 14: V.Ivant (emutils-V10-00-46)
+- G4VAtomDeexcitation - fixed printout at initialisation 
+    (minor problem was introduced in the previous tag) 
+
 15 November 14: V.Ivant (emutils-V10-00-45)
 - G4VAtomDeexcitation - changed initialisation allowing to work in 
     unit tests

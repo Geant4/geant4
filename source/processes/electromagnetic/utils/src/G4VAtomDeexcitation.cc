@@ -143,7 +143,7 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
     }
   }
   G4int nelm = G4Element::GetNumberOfElements();
-  G4cout << nelm << G4endl;
+  //G4cout << nelm << G4endl;
   for(G4int k=0; k<nelm; ++k) {
     G4int Z = G4lrint((*(G4Element::GetElementTable()))[k]->GetZ());
     if(Z > 5 && Z < 93) { 
@@ -155,7 +155,7 @@ void G4VAtomDeexcitation::InitialiseAtomicDeexcitation()
   // Initialise derived class
   InitialiseForNewRun();
 
-  if(1 < verbose && flagPIXE) {
+  if(0 < verbose && flagPIXE) {
     G4cout << "### ===  PIXE model for hadrons: " << namePIXE
 	   << "  " <<  IsPIXEActive()
 	   << G4endl;  
