@@ -41,11 +41,10 @@
 
 #include "G4LevelManager.hh"
 #include "G4LevelReader.hh"
-#include "G4SystemOfUnits.hh"
 
 G4LevelManager::G4LevelManager(G4int Z, G4int A, G4LevelReader& reader,
 			       const G4String& filename) 
-  : theZ(Z),theA(A),fEdiffMax(100*keV)
+  : theZ(Z),theA(A)
 { 
   reader.FillLevels(Z, A, &fLevel, filename);
   nLevels = fLevel.size();

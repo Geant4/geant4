@@ -58,8 +58,8 @@
 #include "G4Pow.hh"
 #include "G4Log.hh"
 
-static const G4double normC = 3*CLHEP::millibarn/
-  (CLHEP::pi*CLHEP::hbarc*CLHEP::pi*CLHEP::hbarc);
+//static const G4double normC = CLHEP::millibarn/
+//  (CLHEP::pi*CLHEP::hbarc*CLHEP::pi*CLHEP::hbarc);
 static const G4double factor = 5;
 
 G4ContinuumGammaTransition::G4ContinuumGammaTransition(
@@ -68,7 +68,7 @@ G4ContinuumGammaTransition::G4ContinuumGammaTransition(
 {
   nBins = 100;
   verbose = verb;
-  eMin = 0.001 * MeV;
+  eMin = keV;
   eMax =  maxLevelE = minLevelE = eGamma = gammaCreationTime = 0.0;
   sampleArray.resize(nBins+1,0.0);
   g4pow = G4Pow::GetInstance();
@@ -227,12 +227,12 @@ G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
 
   if(verbose > 2) {
     G4cout << "E_GDR(MeV)= " << sqrt(energyGDR2) << " W_GDR(MeV)= " << widthGDR 
-	   << " normC= " << normC << " sigAbs= " << sigmaAbs  
+	   << " sigAbs= " << sigmaAbs  
 	   << " E(MeV)= " << e << " coeff= " << coeff
 	   << G4endl;
   }
 
-  theProb = normC *sigmaAbs * e2 * coeff;
+  theProb = sigmaAbs * e2 * coeff;
 
   return theProb;
 }

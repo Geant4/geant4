@@ -141,7 +141,7 @@ G4double G4E1Probability::EmissionProbability(const G4Fragment& frag,
   // Need to integrate EmissionProbDensity from lowerLim to upperLim 
   // and multiply by factor 3 (?!)
 
-  G4double integ = 3.0 * EmissionIntegration(frag,lowerLim,upperLim);
+  G4double integ = EmissionIntegration(frag,lowerLim,upperLim);
 
   return integ;
 

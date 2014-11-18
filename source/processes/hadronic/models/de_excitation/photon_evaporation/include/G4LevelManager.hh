@@ -80,7 +80,6 @@ private:
   G4int    nLevels;
   G4int    theZ;
   G4int    theA;
-  G4double fEdiffMax;
 };
 
 inline G4int G4LevelManager::NumberOfLevels() const
@@ -97,14 +96,11 @@ inline const G4NucLevel*
 G4LevelManager::NearestLevel(G4double energy) const
 {   
   const G4NucLevel* p = 0;
-  if(energy < fLevel[nLevels-1]->LevelEnergy() + fEdiffMax) {
-    for(G4int i=nLevels-1; i>=0; --i) {
-      p = fLevel[i];
-      G4double lEnergy = p->LevelEnergy();
-      if(0 == i || energy > lEnergy) { break; }
-      if(lEnergy - energy <= 0.5*(lEnergy - fLevel[i-1]->LevelEnergy()))  
-	{ break; }
-    }
+  for(G4int i=nLevels-1; i>=0; --i) {
+    p = fLevel[i];
+    G4double lEnergy = p->LevelEnergy();
+    if(0 == i || energy >= lEnergy ||
+       lEnergy - energy <= energy - fLevel[i-1]->LevelEnergy()) { break; }
   }
   return p;
 }

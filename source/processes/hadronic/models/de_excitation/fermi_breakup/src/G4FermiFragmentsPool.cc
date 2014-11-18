@@ -56,7 +56,8 @@ G4FermiFragmentsPool* G4FermiFragmentsPool::theInstance = 0;
 G4FermiFragmentsPool* G4FermiFragmentsPool::Instance()
 {
   if(0 == theInstance) {
-    theInstance = new G4FermiFragmentsPool();
+    static G4FermiFragmentsPool instance;
+    theInstance = &instance;
   }
   return theInstance;
 }
@@ -145,21 +146,21 @@ void G4FermiFragmentsPool::Initialise()
   fragment_pool.push_back(new G4StableFermiFragment( 10, 4,  1,  6.179300*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 10, 4,  5,  6.263300*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  7,  0.00*MeV )); 
-  fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  3,  0.7183500*MeV )); 
-  fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  1,  1.740150*MeV )); 
-  fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  3,  2.154300*MeV )); 
-  fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  5,  3.587100*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  3,  0.7183800*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  1,  1.740050*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  3,  2.154270*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  5,  3.587130*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 10, 6,  3,  0.00*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 10, 6,  5,  3.353600*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  4,  0.00*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  2,  2.124693*MeV )); 
-  fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  6,  4.444890*MeV )); 
-  fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  4,  5.020310*MeV )); 
-  fragment_pool.push_back(new G4StableFermiFragment( 11, 5, 8,  6.742900*MeV )); 
-  fragment_pool.push_back(new G4StableFermiFragment( 11, 5, 2,  6.791800*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  6,  4.444980*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  4,  5.020300*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  8,  6.741850*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  2,  6.791800*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  6,  7.285510*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  4,  7.977840*MeV )); 
-  fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  6,  8.560300*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  6,  8.560100*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 11, 6,  4,  0.00*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 11, 6,  2,  2.00*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 11, 6,  6,  4.318800*MeV )); 
