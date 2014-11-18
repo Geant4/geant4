@@ -595,6 +595,6 @@ void G4INCLXXInterface::ModelDescription(std::ostream& outFile) const {
      << "pion (idem) and light-ion projectiles (up to A=18, ~10A MeV to 1A GeV).\n"
      << "Most tests involved target nuclei close to the stability valley, with\n"
      << "numbers between 4 and 250.\n\n"
-     << "Reference: A. Boudard et al., Phys. Rev. C87 (2013) 014606\n\n";
+     << "Reference: D. Mancusi et al., Phys. Rev. C90 (2014) 054602\n\n";
 }
 

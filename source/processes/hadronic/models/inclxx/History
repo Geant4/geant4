@@ -16,6 +16,13 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+18 November 2014 - Davide Mancusi (hadr-inclxx-V10-00-23, -24)
+---------------------------------------------------------------
+- INCL++ v5.2.7.3
+  o Bump tweak version number for consistency with stand-alone code. No
+    changes.
+  o Update reference in G4INCLXXInterface::ModelDescription().
+
 12 November 2014 - Davide Mancusi (hadr-inclxx-V10-00-21, -22)
 ---------------------------------------------------------------
 - INCL++ v5.2.7.2
