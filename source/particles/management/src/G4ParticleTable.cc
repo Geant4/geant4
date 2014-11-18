@@ -296,7 +296,7 @@ void G4ParticleTable::DeleteAllParticles()
 
   // delete all particles 
   G4PTblDicIterator *piter = fIterator; 
-  piter -> reset();
+  piter -> reset(false);
   while( (*piter)() ){
 #ifdef G4VERBOSE
     if (verboseLevel>2){
