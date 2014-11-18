@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+17-Nov-2014, I. Hrivnacova (phys-ctor-em-V10-00-24)
+- Improved printing in G4OpticalPhysics::PrintStatistics()
+
 12-Nov-2014, A. Dotti (phys-ctor-em-V10-00-23)
 - Use of the correct enumerator.
 

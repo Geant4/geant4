@@ -104,14 +104,24 @@ void G4OpticalPhysics::PrintStatistics() const
       if ( i == kCerenkov ) {
         G4cout << "    Max number of photons per step: " << fMaxNumPhotons << G4endl;
         G4cout << "    Max beta change per step:       " << fMaxBetaChange << G4endl;
-        if ( fProcessTrackSecondariesFirst[kCerenkov] ) G4cout << "  Track secondaries first:  activated" << G4endl;
+        if ( fProcessTrackSecondariesFirst[kCerenkov] ) {
+          G4cout << "    Track secondaries first:  activated" << G4endl;
+        }
+        else {  
+          G4cout << "    Track secondaries first:  inactivated" << G4endl;
+        }
       }
       if ( i == kScintillation ) {
         if (fScintillationByParticleType)
         G4cout << "    Scintillation by Particle Type:  activated " << G4endl;
         G4cout << "    Yield factor: "  << fYieldFactor << G4endl;
         G4cout << "    ExcitationRatio: " << fExcitationRatio << G4endl;
-        if ( fProcessTrackSecondariesFirst[kScintillation] ) G4cout << "  Track secondaries first:  activated" << G4endl;
+        if ( fProcessTrackSecondariesFirst[kScintillation] ) {
+          G4cout << "    Track secondaries first:  activated" << G4endl;
+        }
+        else {  
+          G4cout << "    Track secondaries first:  inactivated" << G4endl;
+        }
       }
       if ( i == kWLS ) {
         G4cout << "     WLS process time profile: " << fProfile << G4endl;
