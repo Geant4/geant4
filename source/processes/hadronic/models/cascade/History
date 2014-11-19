@@ -15,6 +15,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+18 November 2014  M. Kelsey (hadr-casc-V10-00-15)
+-------------------------------------------------
+- G4CascadeInterface.cc:  Fix possible infinite-loop condition where (nTries
+  >= maxTries) and momentum balance fails, by regrouping conditions in
+  retryInelasticNucleus().
+
 11 November 2014  M. Kelsey (hadr-casc-V10-00-14)
 -------------------------------------------------
 - G4CascadeParameters.cc:  Revert default changes in V10-00-12 tag:  turn

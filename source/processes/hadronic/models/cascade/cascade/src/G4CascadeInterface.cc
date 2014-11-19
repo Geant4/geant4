@@ -733,16 +733,15 @@ G4bool G4CascadeInterface::retryInelasticNucleus() const {
 	 << G4endl;
 #endif
 
-  return ( ((numberOfTries < maximumTries) &&
-	    (npart != 0) &&
+  return ( (numberOfTries < maximumTries) &&
+	   ( ((npart != 0) &&
 #ifdef G4CASCADE_COULOMB_DEV
-	    (coulombBarrierViolation() && npart+nfrag > 2)
+	      (coulombBarrierViolation() && npart+nfrag > 2)
 #else
-	    (npart+nfrag < 3 && firstOut == bullet->getDefinition())
+	      (npart+nfrag < 3 && firstOut == bullet->getDefinition())
 #endif
-	    )
 #ifndef G4CASCADE_SKIP_ECONS
-	   || (!balance->okay())
+	      ) || (!balance->okay()) )
 #endif
 	   );
 }
