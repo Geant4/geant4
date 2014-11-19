@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+- 18 Nov. 2014 Makoto Asai (particles-V10-00-27)
+- Fix G4IonTable to delete thread-local string objects.
+
 - 17 Nov. 2014 Makoto Asai (particles-V10-00-26)
 - Fix G4ParticleTable to make sure all dynamically created ions to
   be deleted at the end of the program.

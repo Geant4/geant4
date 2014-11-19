@@ -959,16 +959,18 @@ G4bool G4IonTable::GetNucleusByEncoding(G4int encoding,
   return true;
 }
 
+#include "G4AutoDelete.hh"
 /////////////////
 const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4double E) const 
 {
   static G4ThreadLocal G4String *pname = 0;
-  if (!pname)  { pname = new G4String(""); }
+  if (!pname)  { pname = new G4String(""); G4AutoDelete::Register(pname); }
   G4String &name = *pname;
 
   static G4ThreadLocal std::ostringstream* os = 0;
   if ( ! os ) {
     os = new std::ostringstream();
+    G4AutoDelete::Register(os); 
     os->setf(std::ios::fixed);
     os->precision(3);
   }
@@ -992,7 +994,7 @@ const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4int L, G4double E) co
 {
   if (L==0) return GetIonName(Z, A, E); 
   static G4ThreadLocal G4String *pname = 0;
-  if (!pname)  { pname = new G4String(""); }
+  if (!pname)  { pname = new G4String(""); G4AutoDelete::Register(pname); }
   G4String &name = *pname;
   name = "";
   for (int i =0; i<L; i++){
@@ -1006,12 +1008,13 @@ const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4int L, G4double E) co
 const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4int lvl) const 
 {
   static G4ThreadLocal G4String *pname = 0;
-  if (!pname)  { pname = new G4String(""); }
+  if (!pname)  { pname = new G4String(""); G4AutoDelete::Register(pname); }
   G4String &name = *pname;
 
   static G4ThreadLocal std::ostringstream* os = 0;
   if ( ! os ) {
     os = new std::ostringstream();
+    G4AutoDelete::Register(os);
     os->setf(std::ios::fixed);
   }
 
@@ -1044,7 +1047,7 @@ const G4String& G4IonTable::GetIonName(G4int Z, G4int A, G4int L, G4int lvl) con
 {
   if (L==0) return GetIonName(Z, A, lvl); 
   static G4ThreadLocal G4String *pname = 0;
-  if (!pname)  { pname = new G4String(""); }
+  if (!pname)  { pname = new G4String(""); G4AutoDelete::Register(pname); }
   G4String &name = *pname;
   for (int i =0; i<L; i++){
     name +="L";
