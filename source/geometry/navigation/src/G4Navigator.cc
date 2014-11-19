@@ -80,7 +80,9 @@ G4Navigator::G4Navigator()
 // ********************************************************************
 //
 G4Navigator::~G4Navigator()
-{ delete fpVoxelSafety; }
+{
+  delete fpVoxelSafety;
+}
 
 // ********************************************************************
 // ResetHierarchyAndLocate
@@ -139,7 +141,6 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
     globalDirection=*pGlobalDirection;
   }
 
-
 #ifdef G4VERBOSE
   if( fVerbose > 2 )
   {
@@ -156,6 +157,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
     G4cout.precision(oldcoutPrec);
   }
 #endif
+
   G4int noLevelsExited=0 ;
   G4int noLevelsEntered= 0;
 
@@ -184,15 +186,12 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
         {
           fLastLocatedPointLocal = localPoint;
           fLocatedOutsideWorld = true;
-
           fBlockedPhysicalVolume = 0;   // to be sure
           fBlockedReplicaNo = -1;
           fEntering = false;            // No longer 
           fEnteredDaughter = false; 
           fExitedMother = true;      // ??
           
-          // G4cout << " RESET fBlockedPhysicalVolume=0 for step exiting world." << G4endl;
-
           return 0;           // Have exited world volume
         }
         // A fix for the case where a volume is "entered" at an edge
@@ -200,7 +199,10 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
         //  - This stops it from exiting further volumes and cycling
         //  - However ReplicaNavigator treats this case itself
         //
-        assert( fBlockedPhysicalVolume!=0 );  // Expect to be on edge => on surface
+        // assert( fBlockedPhysicalVolume!=0 );
+
+        // Expect to be on edge => on surface
+        //
         if ( fLocatedOnEdge && (VolumeType(fBlockedPhysicalVolume)!=kReplica ))
         { 
           fExiting= false;
@@ -210,7 +212,7 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       else
         if ( fEntering )
         {
-          assert( fBlockedPhysicalVolume!=0 );
+          // assert( fBlockedPhysicalVolume!=0 );
 
           noLevelsEntered++;   // count the first level entered too
 
@@ -385,7 +387,8 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
             {
               // The first transformation was done by the sub-navigator
               //
-              const G4RotationMatrix* mRot=fBlockedPhysicalVolume->GetRotation();
+              const G4RotationMatrix* mRot =
+                    fBlockedPhysicalVolume->GetRotation();
               if( mRot )
               { 
                 fGrandMotherExitNormal *= (*mRot).inverse();
@@ -514,7 +517,9 @@ G4Navigator::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
         const G4RotationMatrix* mRot = enteredPhysical->GetRotation();
         if( mRot )
         { 
-          //  Go deeper =move 'down'  in the hierarcy -- apply direct rotation, not inverse
+          // Go deeper, i.e. move 'down' in the hierarchy
+          // Apply direct rotation, not inverse
+          //
           fGrandMotherExitNormal *= (*mRot);
           fChangedGrandMotherRefFrame= true;
         }
@@ -1034,7 +1039,8 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   fEnteredDaughter = fEntering;   // I expect to enter a volume in this Step
   fExitedMother = fExiting;
 
-  fStepEndPoint = pGlobalpoint + std::min(Step,pCurrentProposedStepLength) * pDirection;
+  fStepEndPoint = pGlobalpoint
+                + std::min(Step,pCurrentProposedStepLength) * pDirection;
   fLastStepEndPointLocal = fLastLocatedPointLocal + Step * localDirection; 
 
   if( fExiting )
@@ -1279,12 +1285,16 @@ void G4Navigator::SetupHierarchy()
         pParam->ComputeTransformation(replicaNo, current);
 
         G4TouchableHistory *pTouchable= 0;
-        if( pParam->IsNested() ) {
+        if( pParam->IsNested() )
+        {
            pTouchable= new G4TouchableHistory( fHistory );
-           pTouchable->MoveUpHistory();           // move up to the parent level 
-                                                  // Adequate only if Nested at the Branch level (last)
+           pTouchable->MoveUpHistory(); // Move up to the parent level 
+             // Adequate only if Nested at the Branch level (last)
            // To extend to other cases:  
-           // pTouchable->MoveUpHistory(cdepth-i-1); // move to the parent level of *Current* level                       // Could replace this line and constructor with a revised c-tor for History( levels to drop)
+           // pTouchable->MoveUpHistory(cdepth-i-1);
+             // Move to the parent level of *Current* level
+             // Could replace this line and constructor with a revised
+             // c-tor for History(levels to drop)
         }
         // Set up the correct solid and material in Logical Volume
         //
@@ -1393,7 +1403,7 @@ G4ThreeVector G4Navigator::GetLocalExitNormal( G4bool* valid )
               else // if( inSideIt == kInside ) 
               {
                 message << "Point is Inside. " << G4endl
-                        << "  Safety (from inside) = " << safety << G4endl;              
+                        << "  Safety (from inside) = " << safety << G4endl;
               }
               G4Exception("G4Navigator::GetLocalExitNormal()", "GeomNav1001",
                           JustWarning, message);
@@ -1504,6 +1514,7 @@ G4Navigator::GetMotherToDaughterTransform( G4VPhysicalVolume *pEnteringPhysVol,
                            pEnteringPhysVol->GetTranslation()).Invert(); 
 }
 
+
 // ********************************************************************
 // GetLocalExitNormalAndCheck
 //
@@ -1512,8 +1523,8 @@ G4Navigator::GetMotherToDaughterTransform( G4VPhysicalVolume *pEnteringPhysVol,
 // checks the current point against expected 'local' value.
 // ********************************************************************
 //
-G4ThreeVector G4Navigator::
-GetLocalExitNormalAndCheck( 
+G4ThreeVector
+G4Navigator::GetLocalExitNormalAndCheck( 
 #ifdef G4DEBUG_NAVIGATION
                            const G4ThreeVector& ExpectedBoundaryPointGlobal,
 #else
@@ -1558,44 +1569,54 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
  
   usingStored=
    fCalculatedExitNormal &&
-     (  ( fLastTriedStepComputation && fExiting) // Just calculated it - no locate in between
-        ||
+     (  ( fLastTriedStepComputation && fExiting) // Just calculated it
+        ||                                       // No locate in between
          (!fLastTriedStepComputation
-          && (IntersectPointGlobal-fStepEndPoint).mag2()<(10.0*kCarTolerance*kCarTolerance)
-        )  // Calculated it 'just' before & then called locate - but it did not move position
+          && (IntersectPointGlobal-fStepEndPoint).mag2()
+             < (10.0*kCarTolerance*kCarTolerance)
+        )  // Calculated it 'just' before & then called locate
+           // but it did not move position
       );
   
   if( usingStored )
   {
-    // This was computed in last call to ComputeStep -- and only if it arrived at boundary
+    // This was computed in last call to ComputeStep
+    // and only if it arrived at boundary
     //
     globalNormal = fExitNormalGlobalFrame; 
     G4double  normMag2 = globalNormal.mag2(); 
-    if( fabs ( normMag2 - 1.0 ) < perMillion ) {
-       // Value is good 
+    if( fabs ( normMag2 - 1.0 ) < perMillion )  // Value is good 
+    {
        *pNormalCalculated = true; // ComputeStep always computes it if Exiting
                                   // (fExiting==true)
-    }else{
+    }
+    else
+    {
        G4ExceptionDescription message;
 
-       message << " ERROR> Expected normal-global-frame to valid (unit vector) " 
+       message << " ERROR> Expected normal-global-frame to valid (unit vector) "
                << "  - but |normal| = "  << std::sqrt(normMag2)
                << "  - and |normal|^ = "  << normMag2
                << " which differs from 1.0 by " << normMag2 - 1.0 << G4endl
-               << "   n = " << fExitNormalGlobalFrame << G4endl; 
-       message << "=============================================================" << G4endl;
-       G4int  oldVerbose = fVerbose; 
+               << "   n = " << fExitNormalGlobalFrame << G4endl;
+       message << "============================================================"
+               << G4endl;
+       G4int oldVerbose = fVerbose; 
        fVerbose=4; 
        message << "   State of Navigator: " << G4endl;
-       message << *this << G4endl;       // PrintState();
+       message << *this << G4endl;
        fVerbose = oldVerbose; 
-       message << "==============================================================" << G4endl;
+       message << "============================================================"
+               << G4endl;
 
-       G4Exception("G4Navigator::GetGlobalExitNormal()", "GeomNav0003",JustWarning, message,
-                   "Value obtained from stored global-normal is not a unit vector.");
+       G4Exception("G4Navigator::GetGlobalExitNormal()",
+                   "GeomNav0003",JustWarning, message,
+              "Value obtained from stored global-normal is not a unit vector.");
 
        // (Re)Compute it now -- as either it was not computed, or it is wrong.
-       localNormal = GetLocalExitNormalAndCheck(IntersectPointGlobal,&validNormal);
+       //
+       localNormal = GetLocalExitNormalAndCheck(IntersectPointGlobal,
+                                                &validNormal);
        *pNormalCalculated = fCalculatedExitNormal;
 
        G4AffineTransform localToGlobal = GetLocalToGlobalTransform();
@@ -1651,15 +1672,11 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
   }
 
 #ifdef G4DEBUG_NAVIGATION
-  // Temporary extra checks
-     // if( fLastTriedStepComputation && fExiting)
-     
   if( usingStored )
   {
     G4ThreeVector globalNormAgn; 
-    // const G4double globalNormal; 
 
-    localNormal = GetLocalExitNormalAndCheck( IntersectPointGlobal, &validNormal);
+    localNormal= GetLocalExitNormalAndCheck(IntersectPointGlobal, &validNormal);
     
     G4AffineTransform localToGlobal = GetLocalToGlobalTransform();
     globalNormAgn = localToGlobal.TransformAxis( localNormal );
@@ -1812,7 +1829,8 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
                                             fHistory, pMaxLength);
     }
     
-    if (keepState)  {
+    if (keepState)
+    {
       RestoreSavedState();
       // This now overwrites the values of the Safety 'sphere' (correction)
     }
@@ -1838,44 +1856,29 @@ G4double G4Navigator::ComputeSafety( const G4ThreeVector &pGlobalpoint,
 }
 
 
-static void PrintReportExperimentalFeature()
-{
-  G4cout << "************************************************************************"
-    << G4endl;
-  G4cout << "** Using new G4Navigator::RecheckDistanceToCurrentBoundary() method. ** "
-    << G4endl;
-  G4cout << "   This is an *experimental* feature, as of May 2014, " << G4endl
-    << "   for use together with in-developments of EM scattering. " << G4endl;
-  G4cout << "   Please check results, by comparing to runs without this feature. "
-    << G4endl;
-  G4cout << "************************************************************************"
-    << G4endl;
-}
-
-
-// #define G4GEOM_FEATURE_COMPLETENESS  1
-//  To check that the feature works with all types of geometry - or warn otherwise
-//     Currently it fails with exception if it detects a replica
+// ********************************************************************
+// RecheckDistanceToCurrentBoundary
 //
-
-G4bool G4Navigator::RecheckDistanceToCurrentBoundary(
-                     const G4ThreeVector &aDisplacedGlobalPoint,
-                     const G4ThreeVector &aNewDirection,
-                     const G4double ProposedMove,
-                     G4double *prDistance,
-                     G4double *prNewSafety) const
 // Trial method for checking potential displacement for MS
 // Check position aDisplacedGlobalpoint, to see whether it is in the 
 // current volume (mother).
 // If in mother, check distance to boundary along aNewDirection.
 // If in entering daughter, check distance back to boundary. 
 // NOTE:
-// Can be called only after ComputeStep is called - before ReLocation
+// Can be called only after ComputeStep() is called - before ReLocation
 // Deals only with current volume (and potentially entered)
 // Caveats
-// First VERSION:  Does not consider daughter volumes if it remained in mother
-//   neither for checking whether it has exited current (mother) volume,
-//   nor for determining distance to exit this (mother) volume.
+// First VERSION: Does not consider daughter volumes if it remained in mother
+//       neither for checking whether it has exited current (mother) volume,
+//       nor for determining distance to exit this (mother) volume.
+// ********************************************************************
+//
+G4bool G4Navigator::RecheckDistanceToCurrentBoundary(
+                     const G4ThreeVector &aDisplacedGlobalPoint,
+                     const G4ThreeVector &aNewDirection,
+                     const G4double ProposedMove,
+                     G4double *prDistance,
+                     G4double *prNewSafety) const
 {
   G4ThreeVector localPosition  = ComputeLocalPoint(aDisplacedGlobalPoint);
   G4ThreeVector localDirection = ComputeLocalAxis(aNewDirection);
@@ -1886,19 +1889,13 @@ G4bool G4Navigator::RecheckDistanceToCurrentBoundary(
   // Check against mother solid
   G4VPhysicalVolume  *motherPhysical = fHistory.GetTopVolume();
   G4LogicalVolume *motherLogical = motherPhysical->GetLogicalVolume();
-
-  static G4ThreadLocal bool reportExperimentalFeature= false;
-  if( !reportExperimentalFeature){
-    PrintReportExperimentalFeature();
-    reportExperimentalFeature= true;
-  }
   
 #ifdef CHECK_ORDER_OF_METHODS
-  if( ! fLastTriedStepComputation ){
-     G4Exception("G4Navigator::RecheckDistanceToCurrentBoundary()", "GeomNav0001",
-                 FatalException, 
-    "Method Must be called after ComputeStep() - before any subsequent call to LocateMethod."
-        );
+  if( ! fLastTriedStepComputation )
+  {
+     G4Exception("G4Navigator::RecheckDistanceToCurrentBoundary()",
+                 "GeomNav0001", FatalException, 
+     "Method must be called after ComputeStep(), before call to LocateMethod.");
   }
 #endif
 
@@ -1908,20 +1905,18 @@ G4bool G4Navigator::RecheckDistanceToCurrentBoundary(
 
   if( fEnteredDaughter )
   {
-     if( motherLogical->CharacteriseDaughters() ==kReplica )
-     return false;
-
+     if( motherLogical->CharacteriseDaughters() ==kReplica )  { return false; }
 
      // Track arrived at boundary of a daughter volume at 
      //   the last call of ComputeStep().
      // In case the proposed displaced point is inside this daughter,
      //   it must backtrack at least to the entry point.
-
      // NOTE: No check is made against other daughter volumes.  It is 
      //   assumed that the proposed displacement is small enough that 
      //   this is not needed.
 
      // Must check boundary of current daughter
+     //
      G4VPhysicalVolume *candPhysical= fBlockedPhysicalVolume; 
      G4LogicalVolume *candLogical= candPhysical->GetLogicalVolume();
      G4VSolid        *candSolid=   candLogical->GetSolid();
@@ -1933,44 +1928,56 @@ G4bool G4Navigator::RecheckDistanceToCurrentBoundary(
      G4ThreeVector dgDirection= nextLevelTrf.TransformAxis(localDirection);
      locatedDaug = candSolid->Inside(dgPosition);
 
-     if( locatedDaug == kInside ){
-         // Reverse direction - and find first exit. ( Is it valid?)
-         // Must backtrack
+     if( locatedDaug == kInside )
+     {
+        // Reverse direction - and find first exit. ( Is it valid?)
+        // Must backtrack
         G4double distanceBackOut = 
           candSolid->DistanceToOut(dgPosition,
                                    - dgDirection,  // Reverse direction
                                    true, &validExitNormal, &exitNormal);
         daughterStep= - distanceBackOut;
-         // No check is made whether the particle could have arrived at 
-         // at this location without encountering another volume or 
-         // a different psurface of the current volume
+          // No check is made whether the particle could have arrived at 
+          // at this location without encountering another volume or 
+          // a different psurface of the current volume
         if( prNewSafety )
+        {
            daughterSafety= candSolid->DistanceToOut(dgPosition);
-     }else{
-        if( locatedDaug == kOutside ){
-           // See whether it still intersects it.
+        }
+     }
+     else
+     {
+        if( locatedDaug == kOutside )
+        {
+            // See whether it still intersects it
+            //
             daughterStep=  candSolid->DistanceToIn(dgPosition,
-                                                dgDirection);
+                                                   dgDirection);
            if( prNewSafety )
+           {
               daughterSafety= candSolid->DistanceToIn(dgPosition);
+           }
         }
         else
         {
-           // The point remains on the surface of candidate solid.
+           // The point remains on the surface of candidate solid
+           //
            daughterStep= 0.0;
            daughterSafety= 0.0; 
         }
      }
+
      //  If trial point is in daughter (or on its surface) we have the
-     //    answer, the rest is not relevant.
-     if( locatedDaug != kOutside ){
+     //  answer, the rest is not relevant
+     //
+     if( locatedDaug != kOutside )
+     {
         *prDistance= daughterStep;
-        if( prNewSafety )
-           *prNewSafety= daughterSafety;
+        if( prNewSafety )  { *prNewSafety= daughterSafety; }
         return true;
      }
      // If ever extended, so that some type of mother cut daughter, 
-     //   this would change
+     // this would change
   }
 
   G4VSolid *motherSolid= motherLogical->GetSolid();
@@ -1983,44 +1990,47 @@ G4bool G4Navigator::RecheckDistanceToCurrentBoundary(
   {
      EInside locatedMoth = motherSolid->Inside(localPosition);
 
-     if( locatedMoth == kInside ){
-         motherSafety= motherSolid->DistanceToOut(localPosition);
-        if( ProposedMove >= motherSafety ){
-          motherStep= motherSolid->DistanceToOut(localPosition,
-                             localDirection,
+     if( locatedMoth == kInside )
+     {
+        motherSafety= motherSolid->DistanceToOut(localPosition);
+        if( ProposedMove >= motherSafety )
+        {
+           motherStep= motherSolid->DistanceToOut(localPosition,
+                                                  localDirection,
                              true, &validExitNormal, &exitNormal);
-        }else{
-          motherStep= ProposedMove;
         }
-     }else if( locatedMoth == kOutside){
+        else
+        {
+           motherStep= ProposedMove;
+        }
+     }
+     else if( locatedMoth == kOutside)
+     {
         motherSafety= motherSolid->DistanceToIn(localPosition);
-        if( ProposedMove >= motherSafety ){
+        if( ProposedMove >= motherSafety )
+        {
             motherStep= - motherSolid->DistanceToIn(localPosition,
-                                                -localDirection);
+                                                   -localDirection);
         }
-     }else{
+     }
+     else
+     {
         motherSafety= 0.0; 
         *prDistance= 0.0;  //  On surface - no move // motherStep;
-        if( prNewSafety )
-           *prNewSafety= motherSafety; 
+        if( prNewSafety )  { *prNewSafety= motherSafety; }
         return false;
      }
-
-
   }
   else
   {
-#ifdef G4GEOM_FEATURE_COMPLETENESS
-     G4Exception("G4Navigator::RecheckDistanceToCurrentBoundary()", "GeomNav0001",
-                 FatalException, "Method NOT Available (yet) for replicated volumes.");
-#endif 
      return false;
   }
  
   *prDistance=  std::min( motherStep, daughterStep ); 
   if( prNewSafety )
-     *prNewSafety= std::min( motherSafety, daughterSafety ); 
- 
+  {
+     *prNewSafety= std::min( motherSafety, daughterSafety );
+  }
   return true;
 }
 
