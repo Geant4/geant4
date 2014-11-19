@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 18, 2014 - J.Apostolakis (geomnav-V10-00-15)
+---------------------------------
+- G4ErrorPropagationNavigator   Added GetGlobalExitNormal method and first implementation - 
+    to correspond to update of Navigator interface in Geant4 9.5
+    * Fixes problem report 1679
+- G4Navigator: Small fix to calculation of stored step endpoint - for steps that do not hit a boundary. 
+- Fixed GNUmakefile in test
+
 November 14, 2014 - J.Apostolakis (geomnav-V10-00-13,14)
 ---------------------------------
 - G4Navigator: Corrections for Exit Normal.

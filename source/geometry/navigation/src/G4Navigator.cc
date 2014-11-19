@@ -1034,7 +1034,7 @@ G4double G4Navigator::ComputeStep( const G4ThreeVector &pGlobalpoint,
   fEnteredDaughter = fEntering;   // I expect to enter a volume in this Step
   fExitedMother = fExiting;
 
-  fStepEndPoint = pGlobalpoint + Step * pDirection; 
+  fStepEndPoint = pGlobalpoint + std::min(Step,pCurrentProposedStepLength) * pDirection;
   fLastStepEndPointLocal = fLastLocatedPointLocal + Step * localDirection; 
 
   if( fExiting )
@@ -1554,22 +1554,19 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
 {
   G4bool         validNormal;
   G4ThreeVector  localNormal, globalNormal;
-#ifdef G4DEBUG_NAVIGATION
-  G4bool         usingStored = false;
-#endif
-
-  if( fCalculatedExitNormal &&
+  G4bool         usingStored;
+ 
+  usingStored=
+   fCalculatedExitNormal &&
      (  ( fLastTriedStepComputation && fExiting) // Just calculated it - no locate in between
         ||
          (!fLastTriedStepComputation
           && (IntersectPointGlobal-fStepEndPoint).mag2()<(10.0*kCarTolerance*kCarTolerance)
         )  // Calculated it 'just' before & then called locate - but it did not move position
-      )
-    )
+      );
+  
+  if( usingStored )
   {
-#ifdef G4DEBUG_NAVIGATION
-    usingStored= true;
-#endif
     // This was computed in last call to ComputeStep -- and only if it arrived at boundary
     //
     globalNormal = fExitNormalGlobalFrame; 
@@ -1597,9 +1594,6 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
        G4Exception("G4Navigator::GetGlobalExitNormal()", "GeomNav0003",JustWarning, message,
                    "Value obtained from stored global-normal is not a unit vector.");
 
-#ifdef G4DEBUG_NAVIGATION
-       usingStored = false; 
-#endif
        // (Re)Compute it now -- as either it was not computed, or it is wrong.
        localNormal = GetLocalExitNormalAndCheck(IntersectPointGlobal,&validNormal);
        *pNormalCalculated = fCalculatedExitNormal;
@@ -1662,8 +1656,8 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
      
   if( usingStored )
   {
-    G4double globNormAgn; 
-    const G4double globalNormal; 
+    G4ThreeVector globalNormAgn; 
+    // const G4double globalNormal; 
 
     localNormal = GetLocalExitNormalAndCheck( IntersectPointGlobal, &validNormal);
     
