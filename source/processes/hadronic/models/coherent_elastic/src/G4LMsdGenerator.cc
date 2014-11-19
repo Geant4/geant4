@@ -42,13 +42,17 @@
 #include "G4KineticTrackVector.hh"
 #include "G4Log.hh"
 
+
 G4LMsdGenerator::G4LMsdGenerator(const G4String& name)
-  : G4HadronicInteraction(name),fPDGencoding(0)
+    : G4HadronicInteraction(name)
+
 {
+  // theParticleChange = new G4HadFinalState;
 }
 
 G4LMsdGenerator::~G4LMsdGenerator()
 {
+  // delete theParticleChange;
 }
 
 void G4LMsdGenerator::ModelDescription(std::ostream& outFile) const
@@ -76,7 +80,7 @@ G4LMsdGenerator::IsApplicable( const G4HadProjectile& aTrack,
   if( ( aTrack.GetDefinition() == G4Proton::Proton() || 
 	aTrack.GetDefinition() == G4Neutron::Neutron()  ) && 
         targetNucleus.GetA_asInt() >= 1 &&
-        aTrack.GetKineticEnergy() > 1540*CLHEP::MeV ) //  750*CLHEP::MeV )   
+        aTrack.GetKineticEnergy() > 1800*CLHEP::MeV ) //  750*CLHEP::MeV )   
   {
     applied = true;
   }
@@ -121,8 +125,7 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
   G4int Z = targetNucleus.GetZ_asInt();
 
   G4double plab = aParticle->GetTotalMomentum();
-
-  // Scattered dissociated particle referred to axis of incident particle
+  G4double plab2 = plab*plab;
   
   const G4ParticleDefinition* theParticle = aParticle->GetDefinition();
   G4double partMass = theParticle->GetPDGMass();
@@ -130,17 +133,40 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
   G4double oldE = partMass + eTkin;
 
   G4double targMass   = G4NucleiProperties::GetNuclearMass(A, Z);
+  G4double targMass2   = targMass*targMass;
+
   G4LorentzVector partLV = aParticle->Get4Momentum();
+
+  G4double sumE = oldE + targMass;
+  G4double sumE2 = sumE*sumE;
    
   G4ThreeVector p1     = partLV.vect();
+  // G4cout<<"p1 = "<<p1<<G4endl;
   G4ParticleMomentum p1unit = p1.unit();
 
   G4double Mx = SampleMx(aParticle); // in GeV
-  G4double t  = SampleT(aParticle, Mx);
+  G4double t  = SampleT( Mx);
 
   Mx *= CLHEP::GeV;
 
-  if( oldE > Mx) plab = std::sqrt(oldE*oldE-Mx*Mx);
+  G4double Mx2 = Mx*Mx;
+
+  // equation for q|| based on sum-E-P and new invariant mass
+
+  G4double B = sumE2 + targMass2 - Mx2 - plab2;
+
+  G4double a = 4*(plab2 - sumE2);
+  G4double b = 4*plab*B;
+  G4double c = B*B - 4*sumE2*targMass2;
+  G4double det2 = b*b - 4*a*c;
+  G4double qLong,  det, eRetard; // , x2, x3, e2;
+
+  if( det2 >= 0.) 
+  {
+    det = std::sqrt(det2);
+    qLong = (-b - det)/2./a;
+    eRetard = std::sqrt((plab-qLong)*(plab-qLong)+Mx2);
+  }
   else 
   {
     theParticleChange.SetEnergyChange(eTkin);
@@ -149,16 +175,36 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
   }
   theParticleChange.SetStatusChange(stopAndKill);
 
-  G4ThreeVector pTarg = p1 - plab*p1unit;
+  plab -= qLong;
 
-  G4double eTarg = std::sqrt( targMass*targMass + pTarg.mag2() );
+  G4ThreeVector pRetard = plab*p1unit;
 
-  G4double plabnew = std::sqrt(plab*plab+t);
+  G4ThreeVector pTarg = p1 - pRetard; 
+
+  G4double eTarg = std::sqrt( targMass2 + pTarg.mag2()); // std::sqrt( targMass*targMass + pTarg.mag2() );
+
+  G4LorentzVector lvRetard(pRetard, eRetard);
+  G4LorentzVector lvTarg(pTarg, eTarg);
+   
+  lvTarg += lvRetard; // sum LV
+
+  G4ThreeVector bst = lvTarg.boostVector();
+
+  lvRetard.boost(-bst); // to CNS
+
+  G4ThreeVector pCMS   = lvRetard.vect();
+  G4double momentumCMS = pCMS.mag();
+  G4double tMax        = 4.0*momentumCMS*momentumCMS;
+
+  if( t > tMax ) t = tMax*G4UniformRand();
+
+  G4double cost = 1. - 2.0*t/tMax;
+  
+
   G4double phi  = G4UniformRand()*CLHEP::twopi;
-  G4double cost = plab/plabnew;    // 1. - 2.0*t/tmax;
   G4double sint;
 
-  if( cost > 1.0 || cost < -1.0 )
+  if( cost > 1.0 || cost < -1.0 ) // 
   {
     cost = 1.0;
     sint = 0.0;    
@@ -169,26 +215,16 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
   }    
   G4ThreeVector v1( sint*std::cos(phi), sint*std::sin(phi), cost);
 
-  v1.rotateUz(p1unit);
+  v1 *= momentumCMS;
+  
+  G4LorentzVector lvRes( v1.x(),v1.y(),v1.z(), std::sqrt( momentumCMS*momentumCMS + Mx2));
 
-  v1 *= plabnew; 
+  lvRes.boost(bst); // to LS
 
-  // p1unit *= plab;
+  lvTarg -= lvRes;
 
-  G4ThreeVector targP = p1 - v1;
+  G4double eRecoil =  lvTarg.e() - targMass;
 
-  G4double targE = std::sqrt( targMass*targMass + targP.mag2() );
-
-  G4double newE = oldE + eTarg - targE; // partMass + targMass + eTkin - targE;
-
-  G4LorentzVector partLVnew( v1.x(), v1.y(), v1.z(), newE );
-
-  G4double eRecoil =  targE - targMass;
-
-  G4LorentzVector targLV( targP.x(), targP.y(), targP.z(), targE );
-
-  // G4cout<<"excited mass = "<<partLVnew.mag()<<"; recoil mass = "<<targLV.mag()<<G4endl;
- 
   if( eRecoil > 100.*CLHEP::MeV ) // add recoil nucleus
   {
     G4ParticleDefinition * recoilDef = 0;
@@ -203,43 +239,33 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
       recoilDef = 
 	G4ParticleTable::GetParticleTable()->GetIonTable()->GetIon( Z, A, 0.0 );
     }
-    G4DynamicParticle * aSec = new G4DynamicParticle( recoilDef, targLV);
+    G4DynamicParticle * aSec = new G4DynamicParticle( recoilDef, lvTarg);
     theParticleChange.AddSecondary(aSec);
   } 
   else if( eRecoil > 0.0 ) 
   {
     theParticleChange.SetLocalEnergyDeposit( eRecoil );
   }
-  // dissociated particle decay products
-
-  // G4cout<<fPDGencoding<<", ";
 
   G4ParticleDefinition* ddPart = G4ParticleTable::GetParticleTable()->
                                  FindParticle(fPDGencoding);
-  
-  G4DynamicParticle * aNew = new G4DynamicParticle( ddPart,partLVnew);
-  theParticleChange.AddSecondary(aNew);
 
-  // G4cout<<fPDGencoding<<", "<<ddPart->GetParticleName()<<", "<<ddPart->GetPDGMass()<<G4endl;
+  // G4cout<<fPDGencoding<<", "<<ddPart->GetParticleName()<<", "<<ddPart->GetPDGMass()<<" MeV; lvRes = "<<lvRes<<G4endl;
 
-  /*
-  G4KineticTrack* ddkt = new G4KineticTrack( ddPart, 0., G4ThreeVector(0.,0.,0.), partLVnew);
+  G4KineticTrack ddkt( ddPart, 0., G4ThreeVector(0.,0.,0.), lvRes);
+  G4KineticTrackVector* ddktv = ddkt.Decay();
 
-  G4KineticTrackVector* ddktv = new G4KineticTrackVector(); 
-  // ddkt.Decay(); // decay resonance
-
-  ddktv->push_back(ddkt);
 
   for( unsigned int i = 0; i < ddktv->size(); i++ ) // add products to partchange
   {
     G4DynamicParticle * aNew = 
       new G4DynamicParticle( ddktv->operator[](i)->GetDefinition(),
-			     ddktv->operator[](i)->Get4Momentum());
+                            ddktv->operator[](i)->Get4Momentum());
+    // G4cout<<"       "<<i<<", "<<aNew->GetDefinition()->GetParticleName()<<", "<<aNew->Get4Momentum()<<G4endl;
+
     theParticleChange.AddSecondary(aNew);
     delete ddktv->operator[](i);
   } 
-  delete ddktv;
-  */
   return &theParticleChange;
 }
 
@@ -367,7 +393,8 @@ G4double G4LMsdGenerator::SampleMx(const G4HadProjectile* aParticle)
 //
 // Sample t with kinematic limitations of Mx and Tkin
 
-G4double G4LMsdGenerator::SampleT(const G4HadProjectile* aParticle, G4double Mx)                          
+G4double G4LMsdGenerator::SampleT(  // const G4HadProjectile* aParticle, 
+G4double Mx)                          
 {
   G4double t=0., b=0.;
   G4int i;
@@ -386,19 +413,7 @@ G4double G4LMsdGenerator::SampleT(const G4HadProjectile* aParticle, G4double Mx)
 
   t *= (CLHEP::GeV*CLHEP::GeV); // in G4 internal units
 
-  G4double massX  = Mx/CLHEP::GeV;
-  G4double massP  = aParticle->GetDefinition()->GetPDGMass();
-  G4double deltaM = massX - massP;
-  G4double eTkin  = aParticle->GetKineticEnergy();
-  G4double deltaT = eTkin - deltaM;
-  G4double tMax = 2.*CLHEP::proton_mass_c2*deltaT + deltaT*deltaT;
- 
-  if( t <= tMax) return t;
-  else
-  {
-    t = tMax*G4UniformRand();
-    return t;
-  }
+  return t;
 }
 
 

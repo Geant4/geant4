@@ -53,19 +53,19 @@
 class G4LMsdGenerator : public G4HadronicInteraction 
 
 {
-public:
+  public:
 
   G4LMsdGenerator(const G4String& name = "LMsdGenerator");
   ~G4LMsdGenerator();
 
-private:
+  private:
 
   G4LMsdGenerator(const G4LMsdGenerator &right);
   const G4LMsdGenerator & operator=(const G4LMsdGenerator &right);
   int operator == (const G4LMsdGenerator &right) const;
   int operator != (const G4LMsdGenerator &right) const;
 
-public:
+  public:
 
   G4bool IsApplicable(const G4HadProjectile & thePrimary, 
                                         G4Nucleus & theNucleus);
@@ -74,11 +74,14 @@ public:
                                         G4Nucleus & theNucleus);
 
   G4double SampleMx(const G4HadProjectile* aParticle );
-  G4double SampleT(const G4HadProjectile* aParticle, G4double Mx );
+
+  G4double SampleT( G4double Mx );
 
   void ModelDescription(std::ostream& outFile) const;
 
-private: 
+  private: 
+
+  // G4ParticleDefinition* fParticle;
 
   G4int fPDGencoding;
 
