@@ -195,10 +195,10 @@ public: // With description
   // Note: Qt Rich text format could be used, see link for example :
   // https://qt-project.org/doc/qt-4.8/richtext-html-subset.html#table-cell-attributes
 
-  inline G4UIDockWidget* GetCoutWidget() {
-    return fCoutDockWidget;
+  inline QWidget* GetCoutWidget() {
+    return fCoutDockWidget->widget();
   };
-  // Return the G4cout widget
+  // Return the G4cout widget with filters
 
   inline G4UIDockWidget* GetUserInterfaceWidget() {
     return fUIDockWidget;
@@ -210,6 +210,16 @@ public: // With description
   }
   // return the viewer widget including all viewers
 
+  inline QWidget* GetHistoryWidget() {
+    return fHistoryTBWidget;
+  }
+  // return the history widget
+  
+  inline QWidget* GetHelpWidget() {
+    return fHelpTBWidget;
+  }
+  // return the help widget
+  
   bool AddViewerTab(QWidget* w, std::string title);
   // Add a new tab in the viewer, could be used to add your own component
   

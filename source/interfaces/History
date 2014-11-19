@@ -17,11 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-7th November 2014  Laurent Garnier (interfaces-V10-00-19 - interfaces-V10-00-20)
+19th November 2014  Laurent Garnier (interfaces-V10-00-22)
+- G4UIQt.cc
+  o Add public methods
+  o Fix a public method return type
+
+7th November 2014  Laurent Garnier (interfaces-V10-00-19 - interfaces-V10-00-20 - interfaces-V10-00-21)
 - G4UIQt.cc
   o Fix G4Vis thread number in G4Cout
   o Set focus on command line at the beggining
   o Better fix for the "Recreate help tree each time we create a new viewer"
+  o Fix qt warning "QObject::connect: Cannot queue arguments of type 'QTextCursor'"
 
 5th November 2014  Laurent Garnier
 - G4UIQt.cc:

@@ -207,6 +207,10 @@ G4UIQt::G4UIQt (
   // set last focus on command line
   fCommandArea->setFocus(Qt::TabFocusReason);
 
+  // Allow QTextCursor to be called by another thread :
+  // http://qt-project.org/doc/qt-4.8/qmetatype.html#qRegisterMetaType
+  qRegisterMetaType<QTextCursor>("QTextCursor");
+  
   // add some tips
   AddTabWidget(fStartPage,"Useful tips");
 
