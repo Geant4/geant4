@@ -55,6 +55,9 @@
 #if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
 // Force instantiation of all the std::vector<IAvatar*> methods for debugging
 // purposes
+namespace G4INCL {
+  class IAvatar;
+}
 template class std::vector<G4INCL::IAvatar*>;
 #endif
 

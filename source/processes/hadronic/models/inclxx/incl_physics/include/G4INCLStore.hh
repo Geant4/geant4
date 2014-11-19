@@ -56,6 +56,10 @@
 #if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
 // Force instantiation of all the std::multimap<Particle*,IAvatar*> methods for
 // debugging purposes
+namespace G4INCL {
+  class Particle;
+  class IAvatar;
+}
 template class std::multimap<G4INCL::Particle*, G4INCL::IAvatar*>;
 #endif
 

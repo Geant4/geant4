@@ -16,6 +16,11 @@ code and to keep track of all tags.
    * Please list in reverse chronological order (last date on top)
    ---------------------------------------------------------------
 
+19 November 2014 - Davide Mancusi (hadr-inclxx-V10-00-25)
+---------------------------------------------------------------
+- INCL++ v5.2.8
+  o Fix a compilation error in Debug mode.
+
 18 November 2014 - Davide Mancusi (hadr-inclxx-V10-00-23, -24)
 ---------------------------------------------------------------
 - INCL++ v5.2.7.3

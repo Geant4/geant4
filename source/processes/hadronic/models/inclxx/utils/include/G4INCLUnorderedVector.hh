@@ -46,14 +46,16 @@
 #define G4INCLUNORDEREDVECTOR_HH_
 
 #include <vector>
+#include <algorithm>
 
 #if !defined(NDEBUG) && !defined(INCLXX_IN_GEANT4_MODE)
 // Force instantiation of all the std::vector<Particle*> methods for debugging
 // purposes
+namespace G4INCL {
+  class Particle;
+}
 template class std::vector<G4INCL::Particle*>;
 #endif
-
-#include <algorithm>
 
 namespace G4INCL {
 
