@@ -1786,7 +1786,7 @@ void G4VisManager::EndOfRun ()
           G4cout << "Drawing event " << (*i)->GetEventID() << G4endl;
         }
         fTransientsDrawnThisEvent = false;
-        if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
+        fpSceneHandler->SetTransientsDrawnThisEvent(false);
         fpSceneHandler->DrawEvent(*i);
       }
       if (fpScene->GetRefreshAtEndOfRun()) {

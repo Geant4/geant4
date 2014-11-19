@@ -26,6 +26,19 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+19th November 2014  John Allison  (visman-V10-00-26)
+- G4VisCommandsSceneAdd.cc: Fixed compiler warnings.
+
+17th November 2014  John Allison  (visman-V10-00-25)
+- G4VisCommandsGeometrySet.cc, G4VisCommandsSceneAdd.cc and G4VisManager.cc:
+  o Fixes for Coverity warnings.
+
+11th November 2014  John Allison  (visman-V10-00-24)
+- G4VisCommandsSceneAdd.cc: /vis/scene/add/scale:
+  o Added full list of parameters to GlobalDescription of scale model.
+    This is so that scales with different parameters can be added to a
+    scene without being caught in the “model already exists” trap.
+
 8th November 2014  John Allison  (visman-V10-00-23)
 - G4Scene.cc, G4VisManager.cc: Fixed spelling mistake in message.
 - G4ViewParameters.icc: Fixed win7-vc12 compiler warnings.

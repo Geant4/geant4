@@ -1172,6 +1172,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
 
   if (successful) {
 
+    G4bool axesSuccessful = false;
     if (axes) {
       const G4double radius = model->GetExtent().GetExtentRadius();
       const G4double axisLengthMax = radius / 2.;
@@ -1181,7 +1182,7 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
       else if (2.*axisLength < axisLengthMax) axisLength *= 2.;
       const G4double axisWidth = axisLength / 20.;
       G4VModel* axesModel = new G4AxesModel(0.,0.,0.,axisLength,axisWidth);
-      pScene -> AddRunDurationModel (axesModel, warn);
+      axesSuccessful = pScene -> AddRunDurationModel (axesModel, warn);
     }
 
 //    if (verbosity >= G4VisManager::warnings) {
@@ -1202,8 +1203,17 @@ void G4VisCommandSceneAddLogicalVolume::SetNewValue (G4UIcommand*,
       G4cout << " voxels and with";
       if (!readout) G4cout << "out";
       G4cout << " readout geometry,"
-	     << "\n  has been added to scene \"" << currentSceneName << "\"."
-	     << G4endl;
+	     << "\n  has been added to scene \"" << currentSceneName << "\".";
+      if (axes) {
+        if (axesSuccessful) {
+          G4cout <<
+          "\n  Axes have also been added at the origin of local cooordinates.";
+        } else {
+          G4cout <<
+          "\n  Axes have not been added for some reason possibly stated above.";
+        }
+      }
+      G4cout << G4endl;
     }
   }
   else {
@@ -2010,13 +2020,12 @@ void G4VisCommandSceneAddScale::SetNewValue (G4UIcommand*, G4String newValue) {
   G4Scale scale(length, annotation, scaleDirection,
 		false, xmid, ymid, zmid,
                 fCurrentTextSize);
-  G4VisAttributes* pVisAttr = new G4VisAttributes(G4Colour(red, green, blue));
-  // Created of the heap because it needs a long lifetime.  This is a
-  // mess.  The model determines the life but the vis atttributes are
-  // associated with the scale.  There's no way of knowing when to
-  // delete the vis atttributes!!!
-  scale.SetVisAttributes(pVisAttr);
+  G4VisAttributes visAttr(G4Colour(red, green, blue));
+  scale.SetVisAttributes(visAttr);
   G4VModel* model = new G4ScaleModel(scale);
+  G4String globalDescription = model->GetGlobalDescription();
+  globalDescription += " (" + newValue + ")";
+  model->SetGlobalDescription(globalDescription);
 
   // Now figure out the extent...
   //
@@ -2637,6 +2646,7 @@ void G4VisCommandSceneAddUserAction::AddVisAction
     }
     G4cout << G4endl;
   }
+  else G4VisCommandsSceneAddUnsuccessful(verbosity);
 }
 
 ////////////// /vis/scene/add/volume ///////////////////////////////////////

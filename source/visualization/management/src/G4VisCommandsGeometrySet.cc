@@ -83,8 +83,13 @@ void G4VVisCommandGeometrySet::SetLVVisAtts
   pLV->SetVisAttributes(newVisAtts);
   if (verbosity >= G4VisManager::confirmations) {
     G4cout << "\nLogical Volume \"" << pLV->GetName()
-	   << "\": setting vis attributes:\nwas: " << *oldVisAtts
-	   << "\nnow: " << *newVisAtts
+	   << "\": setting vis attributes:";
+    if (oldVisAtts) {
+      G4cout << "\nwas: " << *oldVisAtts;
+    } else {
+      G4cout << "\n(no old attributes)";
+    }
+    G4cout << "\nnow: " << *newVisAtts
 	   << G4endl;
   }
   if (requestedDepth < 0 || depth < requestedDepth) {
