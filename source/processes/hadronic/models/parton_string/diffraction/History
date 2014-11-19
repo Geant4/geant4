@@ -14,6 +14,13 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+19-Nov-2014 V. Uzhinsky    (hadr-string-diff-V10-00-10)
+- 2 bugs are fixed. The first one was connected with multiple quark exchanges in hA interactions
+  accompanated by string excitations. A status of such hadrons was not set in a right manner.
+  The second bug was in the determination of anti-alpha particle 4-momentum at stopping (at low
+  energy). All changes were marked "Uzhi 18 Nov. 2014".
+
+
 15-Nov-2014 V. Uzhinsky    (hadr-string-diff-V10-00-09)
 - Bug is fixed. It was connected with missing of treating of involved nucleons
   of a projectile nucleus in FTFmodel (Case5 instead of Case 4).

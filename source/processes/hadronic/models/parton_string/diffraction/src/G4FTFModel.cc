@@ -1828,6 +1828,7 @@ G4bool G4FTFModel::AdjustNucleons( G4VSplitableHadron* SelectedAntiBaryon,
       ProjectileResidual4Momentum = Ptmp;
 
       // New target nucleon
+      Ptmp.setPx( 0.0 ); Ptmp.setPy( 0.0 ); Ptmp.setPz( 0.0 );    // Uzhi 18 Nov. 2014
       Ptmp.setE( TNucleonMass );
       Ptarget = Ptmp; Ptarget.transform( toLab );
       SelectedTargetNucleon->Set4Momentum( Ptarget );

@@ -516,6 +516,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
       ProjectileDiffStateMinMass    = M0projectile + 220.0*MeV;  //220 MeV=m_pi+80 MeV 
       ProjectileNonDiffStateMinMass = M0projectile + 220.0*MeV;  //220 MeV=m_pi+80 MeV
 
+M0target = MtestTr;                                                                   // Uzhi 18 Nov. 2014
       if ( MtestTr > Ptarget.mag() ) {M0target = MtestTr;}
       else 
       {
@@ -703,11 +704,13 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
       if(attempts >= 50) return false; // ==============================
 
       if ( MtestPr >= Pprojectile.mag() ) {M0projectile = MtestPr;}
+      else if (projectile->GetStatus() != 0  ) {M0projectile = MtestPr;}        // Uzhi 18 Nov. 2014
       M0projectile2 = M0projectile * M0projectile;
       ProjectileDiffStateMinMass =    M0projectile + 220.0*MeV;  //220 MeV=m_pi+80 MeV
       ProjectileNonDiffStateMinMass = M0projectile + 220.0*MeV;  //220 MeV=m_pi+80 MeV
 
       if ( MtestTr >= Ptarget.mag()     ) {M0target = MtestTr;}
+      else if (target->GetStatus() != 0 ) {M0target = MtestTr;}                 // Uzhi 18 Nov. 2014
       M0target2 = M0target * M0target;
       TargetDiffStateMinMass    = M0target + 220.0*MeV;          //220 MeV=m_pi+80 MeV;    
       TargetNonDiffStateMinMass = M0target + 220.0*MeV;          //220 MeV=m_pi+80 MeV; 
@@ -741,8 +744,8 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
     Ptarget.setPz(    -PZcms );
     Ptarget.setE( std::sqrt( M0target2 + PZcms2 ) );
 
-    projectile->SetStatus(2);                                    // Uzhi Oct 2014
-    target->SetStatus(2);                                        // Uzhi Oct 2014
+    if(projectile->GetStatus() != 0 ) projectile->SetStatus(2);                                    // Uzhi 18 Nov. 2014
+    if(target->GetStatus()     != 0 ) target->SetStatus(2);                                        // Uzhi 18 Nov. 2014
 
     #ifdef debugFTFexictation
     G4cout << "Proj Targ and Proj+Targ in CMS" << G4endl << Pprojectile << G4endl << Ptarget
@@ -1075,7 +1078,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
              << G4endl << ( Ptarget - Qmomentum ).mag2() << " "
              << TargetNonDiffStateMinMass2 << G4endl;
       G4cout<<"To continue - enter any integer"<<G4endl;
-      G4int Uzhi; G4cin >> Uzhi;
+//      G4int Uzhi; G4cin >> Uzhi;
       #endif
 
     } while ( ( Pprojectile + Qmomentum ).mag2() <  ProjectileNonDiffStateMinMass2  ||  //No double Diffraction

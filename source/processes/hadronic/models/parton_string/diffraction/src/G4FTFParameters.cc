@@ -686,21 +686,21 @@ G4FTFParameters::G4FTFParameters( const G4ParticleDefinition* particle,
  //SetTarMinNonDiffMass( 1.1 );        // GeV
  //SetProbabilityOfTarDiff( 0.0 );     // 0.85*std::pow( s/GeV/GeV, -0.5 ) ); // 40/32 X-dif/X-inel
 
- //SetAveragePt2( 0.3 );               // GeV^2
+//SetAveragePt2( 0.0 );               // GeV^2   0.3
  //------------------------------------
- //SetProbabilityOfElasticScatt( 1.0, 0.0);                            //(Xtotal, Xelastic);
+//SetProbabilityOfElasticScatt( 1.0, 1.0);                            //(Xtotal, Xelastic);
  //SetProbabilityOfProjDiff( 1.0*0.62*std::pow( s/GeV/GeV, -0.51 ) );  // 0->1
  //SetProbabilityOfTarDiff( 4.0*0.62*std::pow( s/GeV/GeV, -0.51 ) );   // 2->4
  //SetAveragePt2( 0.3 );                                               // (0.15)
- //SetAvaragePt2ofElasticScattering( 0.0 );
+//SetAvaragePt2ofElasticScattering( 0.0 );
 
  //SetMaxNumberOfCollisions( Plab, 6.0 ); //(4.0*(Plab + 0.01), Plab); // 6.0 );
  //SetAveragePt2( 0.15 );
 // G4cout << "Cnd " << GetCofNuclearDestruction() << G4endl;
-//SetCofNuclearDestruction( 0.75 );                                    // (0.2) // (0.4)   0.5               
+//SetCofNuclearDestruction( 0.0 );                                    // (0.2) // (0.4)   0.5               
 //SetExcitationEnergyPerWoundedNucleon( 0.0*MeV );                    // (75.0*MeV) 
-//SetDofNuclearDestruction( 0.5 );                                     // 0.3
- //SetPt2ofNuclearDestruction( 0.0*GeV*GeV );                          // (0.168*GeV*GeV) 
+//SetDofNuclearDestruction( 0.0 );                                     // 0.3 0.5
+//SetPt2ofNuclearDestruction( 0.0*GeV*GeV );                          // (0.168*GeV*GeV) 
  //G4cout << "Pt2 " << GetPt2ofNuclearDestruction()/GeV/GeV << G4endl;
  //G4int Uzhi; G4cin >> Uzhi;
 
