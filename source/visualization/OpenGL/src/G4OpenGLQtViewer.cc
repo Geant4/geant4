@@ -138,37 +138,35 @@ void G4OpenGLQtViewer::CreateMainWindow (
         fWinSize_y = fVP.GetWindowSizeHintY();
 
         isTabbedView = fUiQt->AddTabWidget((QWidget*)fGLWidget,name);
-        fUISceneTreeComponentsTBWidget = fUiQt->GetSceneTreeComponentsTBWidget();
-
-        // activate scene tree
-        fUiQt->GetViewersWidget()->setCurrentWidget(fUISceneTreeComponentsTBWidget);
-
-        // initialize scene tree / viewer properties / picking
-        fSceneTreeWidget = new QWidget();
-        QVBoxLayout* layoutSceneTree = new QVBoxLayout();
-        fSceneTreeWidget->setStyleSheet ("padding: 0px ");
-
-        fSceneTreeWidget->setLayout(layoutSceneTree);
-        fSceneTreeWidget->layout()->setContentsMargins(5,5,5,5);
-
-        if (fUISceneTreeComponentsTBWidget != NULL) {
-          fUISceneTreeComponentsTBWidget->addTab(fSceneTreeWidget,QString(GetName().data()));
-        }
-
-        // not available for Immediate mode
-        if (dynamic_cast<G4OpenGLStoredQtViewer*> (this)) {
-          initSceneTreeComponent();
-          toggleSceneTreeViewerInfos();
-        }
-        
-        initViewerPropertiesComponent();
-        initPickingComponent();
-        
-        // activate them
-        toggleSceneTreeComponentTreeWidgetInfos();
-        
-        isTabbedView = true;
       }
+      fUISceneTreeComponentsTBWidget = fUiQt->GetSceneTreeComponentsTBWidget();
+      
+      // activate scene tree
+      fUiQt->GetViewersWidget()->setCurrentWidget(fUISceneTreeComponentsTBWidget);
+      
+      // initialize scene tree / viewer properties / picking
+      fSceneTreeWidget = new QWidget();
+      QVBoxLayout* layoutSceneTree = new QVBoxLayout();
+      fSceneTreeWidget->setStyleSheet ("padding: 0px ");
+      
+      fSceneTreeWidget->setLayout(layoutSceneTree);
+      fSceneTreeWidget->layout()->setContentsMargins(5,5,5,5);
+      
+      if (fUISceneTreeComponentsTBWidget != NULL) {
+        fUISceneTreeComponentsTBWidget->addTab(fSceneTreeWidget,QString(GetName().data()));
+      }
+      
+      // not available for Immediate mode
+      if (dynamic_cast<G4OpenGLStoredQtViewer*> (this)) {
+        initSceneTreeComponent();
+        toggleSceneTreeViewerInfos();
+      }
+      
+      initViewerPropertiesComponent();
+      initPickingComponent();
+      
+      // activate them
+      toggleSceneTreeComponentTreeWidgetInfos();
     }
   }
 #ifdef G4DEBUG_VIS_OGL
@@ -179,12 +177,12 @@ void G4OpenGLQtViewer::CreateMainWindow (
 
   if (!isTabbedView) { // we have to do a dialog
 
-    QWidget *myParent = getParentWidget();
+    QWidget *glDialogWidget = getParentWidget();
 #ifdef G4DEBUG_VIS_OGL
     printf("G4OpenGLQtViewer::CreateMainWindow :: getParent OK \n");
 #endif
-    if (myParent != NULL) {
-      glWidget->setParent(myParent);  
+    if (glDialogWidget != NULL) {
+      glWidget->setParent(glDialogWidget);
     }
     QHBoxLayout *mainLayout = new QHBoxLayout();
     
@@ -194,7 +192,7 @@ void G4OpenGLQtViewer::CreateMainWindow (
     if (fGLWidget->inherits("QMainWindow")) {
       fGLWidget->setWindowTitle( name);
     }
-    fGLWidget->setLayout(mainLayout);
+    glDialogWidget->setLayout(mainLayout);
 
     
     //useful for MACOSX, we have to compt the menuBar height
@@ -205,11 +203,12 @@ void G4OpenGLQtViewer::CreateMainWindow (
     if (fVP.GetWindowAbsoluteLocationHintY(QApplication::desktop()->height())< offset) {
       YPos = offset;
     }
+    glDialogWidget->resize(getWinWidth(), getWinHeight());
 #ifdef G4DEBUG_VIS_OGL
     printf("G4OpenGLQtViewer::CreateMainWindow :: resizing to %d %d \n",getWinWidth(), getWinHeight());
 #endif
-    fGLWidget->move(fVP.GetWindowAbsoluteLocationHintX(QApplication::desktop()->width()),YPos);
-    fGLWidget->show();
+    glDialogWidget->move(fVP.GetWindowAbsoluteLocationHintX(QApplication::desktop()->width()),YPos);
+    glDialogWidget->show();
   }
 
   if(!fGLWidget) return;
@@ -2513,7 +2512,7 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
   // G4UImanager::GetUIpointer();
   
   bool found = false;
-  
+  QDialog* dialog = NULL;
   // create window
   if (((QApplication*)interactorManager->GetMainInteractor())) {
     // look for the main window
@@ -2522,7 +2521,7 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
     for (int i=0; i < wl.size(); i++) {
       widget = wl.at(i);
       if ((found== false) && (widget->inherits("QMainWindow"))) {
-        fGLWidget = new QDialog(widget,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
+        dialog = new QDialog(widget,Qt::WindowTitleHint | Qt::WindowSystemMenuHint | Qt::WindowMinMaxButtonsHint);
         found = true;
       }
     }
@@ -2531,19 +2530,19 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
 #ifdef G4DEBUG_VIS_OGL
       printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist, but not found\n");
 #endif
-      fGLWidget = new QDialog();
+      dialog = new QDialog();
     }
   } else {
 #ifdef G4DEBUG_VIS_OGL
     printf("G4OpenGLQtViewer::CreateMainWindow case Qapp exist\n");
 #endif
-    fGLWidget = new QDialog();
+    dialog= new QDialog();
 #ifdef G4DEBUG_VIS_OGL
     printf("G4OpenGLQtViewer::GetParentWidget fGLWidget\n");
 #endif
   }
   if (found) {
-    return fGLWidget;
+    return dialog;
   } else {
     return NULL;
   }

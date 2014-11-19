@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19th November 2014  Laurent Garnier  (opengl-V10-00-25)
+- G4OpenGLQtViewer: Allow viewer properties/picking/scene tree to be accessible
+  from an external application
+
+18th November 2014  Laurent Garnier  (opengl-V10-00-24)
+- G4OpenGLQtViewer: Fix JIRA DEV-173 about using external application 
+
 7th November 2014  Laurent Garnier  (opengl-V10-00-22 - opengl-V10-00-23)
 - G4OpenGLQtViewer:
  o Fix the "invalid drawable" warning in Qt
