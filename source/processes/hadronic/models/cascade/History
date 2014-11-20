@@ -15,6 +15,11 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+19 November 2014  M. Kelsey (hadr-casc-V10-00-16)
+-------------------------------------------------
+- G4CascadeInterface.cc:  Fix parentheses in retryInelasticNucleus()
+  expression for conditional-compilation flag (does not affect defaults).
+
 18 November 2014  M. Kelsey (hadr-casc-V10-00-15)
 -------------------------------------------------
 - G4CascadeInterface.cc:  Fix possible infinite-loop condition where (nTries

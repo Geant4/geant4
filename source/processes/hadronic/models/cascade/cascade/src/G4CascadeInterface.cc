@@ -740,10 +740,12 @@ G4bool G4CascadeInterface::retryInelasticNucleus() const {
 #else
 	      (npart+nfrag < 3 && firstOut == bullet->getDefinition())
 #endif
+             )
 #ifndef G4CASCADE_SKIP_ECONS
-	      ) || (!balance->okay()) )
+	     || (!balance->okay())
 #endif
-	   );
+           )
+	 );
 }
 
 
