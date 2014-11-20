@@ -14,6 +14,14 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+19-Nov-2014 V. Uzhinsky    (hadr-string-diff-V10-00-11)
+- Bug connected with abnormal stable meson masses is fixed. Change of masses of particles in
+  quark-exchange processes is improved.
+
+  A problem of energy/momentum non-conservation in Xi- nucleus interactions is partly solved.
+  Energy/momentum is now conserved, but an acurate treatment of minimal difractive masses of
+  strange particles is needed. 
+
 19-Nov-2014 V. Uzhinsky    (hadr-string-diff-V10-00-10)
 - 2 bugs are fixed. The first one was connected with multiple quark exchanges in hA interactions
   accompanated by string excitations. A status of such hadrons was not set in a right manner.

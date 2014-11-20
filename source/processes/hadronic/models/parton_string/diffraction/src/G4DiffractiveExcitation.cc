@@ -141,10 +141,14 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
   if ( M0projectile > ProjectileDiffStateMinMass ) {                               // Uzhi Oct 2014
     ProjectileDiffStateMinMass    = M0projectile + 220.0*MeV;
     ProjectileNonDiffStateMinMass = M0projectile + 220.0*MeV;
+    if(absProjectilePDGcode > 3000) {                          // Strange baryon   // Uzhi Nov. 2014              
+      ProjectileDiffStateMinMass    += 140.0*MeV;                                  // Uzhi Nov. 2014
+      ProjectileNonDiffStateMinMass += 140.0*MeV;                                  // Uzhi Nov. 2014
+    }                                                                              // Uzhi Nov. 2014
   }
 
-  G4double MminTarget(0.);                                             // Uzhi Oct. 2014
-  MminTarget = BrW.GetMinimumMass(target->GetDefinition());            // Uzhi Oct. 2014
+  G4double MminTarget(0.);                                                         // Uzhi Oct. 2014
+  MminTarget = BrW.GetMinimumMass(target->GetDefinition());                        // Uzhi Oct. 2014
   if ( M0target < MminTarget ) 
   {
     PutOnMassShell = true;
@@ -157,6 +161,10 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
   if ( M0target > TargetDiffStateMinMass ) {                                       // Uzhi Oct 2014
     TargetDiffStateMinMass    = M0target + 220.0*MeV;
     TargetNonDiffStateMinMass = M0target + 220.0*MeV;
+    if(absTargetPDGcode > 3000) {                          // Strange baryon       // Uzhi Nov. 2014              
+      TargetDiffStateMinMass    += 140.0*MeV;                                      // Uzhi Nov. 2014
+      TargetNonDiffStateMinMass += 140.0*MeV;                                      // Uzhi Nov. 2014
+    }                                                                              // Uzhi Nov. 2014
   };
 
   #ifdef debugFTFexictation
@@ -498,7 +506,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
       }  // End of while(attempts < 50)//===============================
 
       if(attempts >= 50) return false; // ==============================
-
+/*
       if ( MtestPr > Pprojectile.mag() ) {M0projectile = MtestPr;}
       else 
       {
@@ -507,6 +515,10 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
             M0projectile = MtestPr;
         }
       }
+*/
+      if ( MtestPr >= Pprojectile.mag() ) {M0projectile = MtestPr;}                            // Uzhi 18 Nov. 2014
+      else if (projectile->GetStatus() != 0  ) {M0projectile = MtestPr;}                       // Uzhi 18 Nov. 2014
+
 
       #ifdef debugFTFexictation
       G4cout << "M0projectile After check " << M0projectile << G4endl;
@@ -516,16 +528,19 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
       ProjectileDiffStateMinMass    = M0projectile + 220.0*MeV;  //220 MeV=m_pi+80 MeV 
       ProjectileNonDiffStateMinMass = M0projectile + 220.0*MeV;  //220 MeV=m_pi+80 MeV
 
-M0target = MtestTr;                                                                   // Uzhi 18 Nov. 2014
+      if ( MtestTr >= Ptarget.mag()     ) {M0target = MtestTr;}                                // Uzhi 18 Nov. 2014
+      else if (target->GetStatus() != 0 ) {M0target = MtestTr;}                                // Uzhi 18 Nov. 2014
+/*
+M0target = MtestTr;                                                                            // Uzhi 18 Nov. 2014
       if ( MtestTr > Ptarget.mag() ) {M0target = MtestTr;}
       else 
       {
-        if ( std::abs( MtestTr - M0target )      // target->GetDefinition()->GetPDGMass() ) Uzhi Oct. 2014
+        if ( std::abs( MtestTr - M0target )             // target->GetDefinition()->GetPDGMass() ) Uzhi Oct. 2014
              < 140.0*MeV ) {
             M0target = MtestTr;
         }
       }
-
+*/
       M0target2 = M0target * M0target;
 
       #ifdef debugFTFexictation
