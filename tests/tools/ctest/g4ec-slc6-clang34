@@ -10,6 +10,9 @@ CONFIG=slc6-clang34
 #use Xercesc 3.1.1p1 from ...experimental....
 XERCESC_VERSION=3.1.1p1
 
+#run without root
+export ROOTSYS="/"
+
 Clang_dir=/afs/cern.ch/sw/lcg/external/llvm/3.4/x86_64-slc6-gcc48-opt
 
 # as clang was built with 4.8, we need the libs for this

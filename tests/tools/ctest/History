@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+19-11-2014, Gunter Folger           testtools-ctest-V10-00-05
+- do not use root for slc6-clang34; linking fails with missing symbols
+    e.g.: .../root/lib/libCore.so: undefined reference to `std::__detail::_List_node_base::_M_unhook()@GLIBCXX_3.4.15'
+
 10-11-2014, Gunter Folger           testtools-ctest-V10-00-04
 - for GNUmake builds, update to use dataset RadioactiveDecay4.2 
    g4ec-{slc5-gcc43-gmake,slc6-gcc48-gmake-vg,g4ec-mac107-gcc42-gmake}
