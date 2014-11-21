@@ -56,13 +56,11 @@
 #include "globals.hh"
 #include "G4PhysicsTable.hh"
 #include "G4TablesForExtrapolator.hh"
-//#include "G4DataVector.hh"
 #include "G4Log.hh"
 
 class G4ParticleDefinition;
 class G4Material;
 class G4MaterialCutsCouple;
-//class G4ProductionCuts;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
@@ -128,6 +126,8 @@ public:
 private:
 
   void Initialisation();
+
+  void BuildTables();
 
   G4bool SetupKinematics(const G4ParticleDefinition*, const G4Material*, 
 			 G4double kinEnergy);

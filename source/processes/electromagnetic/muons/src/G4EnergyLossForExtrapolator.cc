@@ -97,7 +97,7 @@ G4EnergyLossForExtrapolator::EnergyAfterStep(G4double kinEnergy,
 					     const G4Material* mat, 
 					     const G4ParticleDefinition* part)
 {
-  if(!tables) { Initialisation(); }
+  if(0 == nmat) { Initialisation(); }
   G4double kinEnergyFinal = kinEnergy;
   if(SetupKinematics(part, mat, kinEnergy)) {
     G4double step = TrueStepLength(kinEnergy,stepLength,mat,part);
@@ -122,7 +122,7 @@ G4EnergyLossForExtrapolator::EnergyBeforeStep(G4double kinEnergy,
 					      const G4Material* mat, 
 					      const G4ParticleDefinition* part)
 {
-  if(!tables) { Initialisation(); }
+  if(0 == nmat) { Initialisation(); }
   G4double kinEnergyFinal = kinEnergy;
 
   if(SetupKinematics(part, mat, kinEnergy)) {
@@ -148,11 +148,14 @@ G4EnergyLossForExtrapolator::TrueStepLength(G4double kinEnergy,
 					    const G4ParticleDefinition* part)
 {
   G4double res = stepLength;
-  if(!tables) { Initialisation(); }
+  if(0 == nmat) { Initialisation(); }
+  //G4cout << "## G4EnergyLossForExtrapolator::TrueStepLength L= " << res 
+  //	 <<  "  " << part->GetParticleName() << G4endl;
   if(SetupKinematics(part, mat, kinEnergy)) {
     if(part == electron || part == positron) {
       G4double x = stepLength*
 	ComputeValue(kinEnergy, GetPhysicsTable(fMscElectron), idxMscElectron);
+      //G4cout << " x= " << x << G4endl;
       if(x < 0.2)         { res *= (1.0 + 0.5*x + x*x/3.0); }
       else if(x < 0.9999) { res = -G4Log(1.0 - x)*stepLength/x; }
       else                { res = ComputeRange(kinEnergy,part); }
@@ -170,7 +173,7 @@ G4EnergyLossForExtrapolator::SetupKinematics(const G4ParticleDefinition* part,
 					     const G4Material* mat, 
 					     G4double kinEnergy)
 {
-  if(!tables) { Initialisation(); }
+  if(0 == nmat) { Initialisation(); }
   if(!part || !mat || kinEnergy < keV) { return false; }
   G4bool flag = false;
   if(part != currentParticle) {
@@ -298,12 +301,8 @@ G4EnergyLossForExtrapolator::ComputeEnergy(G4double range,
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
-#include "G4AutoLock.hh"
-namespace { G4Mutex G4EnergyLossForExtrapolatorMutex = G4MUTEX_INITIALIZER; }
-
 void G4EnergyLossForExtrapolator::Initialisation()
 {
-  G4AutoLock l(&G4EnergyLossForExtrapolatorMutex);
   if(verbose>1) {
     G4cout << "### G4EnergyLossForExtrapolator::Initialisation" << G4endl;
   }
@@ -318,9 +317,24 @@ void G4EnergyLossForExtrapolator::Initialisation()
   muonMinus= G4MuonMinus::MuonMinus();
 
   nmat = G4Material::GetNumberOfMaterials();
-
   currentParticleName = "";
+  if(!tables) { BuildTables(); }
+}
 
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
+
+#include "G4AutoLock.hh"
+namespace { G4Mutex G4EnergyLossForExtrapolatorMutex = G4MUTEX_INITIALIZER; }
+
+void G4EnergyLossForExtrapolator::BuildTables()
+{
+  G4AutoLock l(&G4EnergyLossForExtrapolatorMutex);
+
+  if(verbose>1) {
+    G4cout << "### G4EnergyLossForExtrapolator::BuildTables for "
+	   << nmat << " materials Nbins= " << nbins 
+	   << " Emin(MeV)= " << emin << "  Emax(MeV)= " << emax << G4endl;
+  }
   tables = new G4TablesForExtrapolator(verbose, nbins, emin, emax);
 }
 

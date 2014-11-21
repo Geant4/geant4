@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20 November 14: V.Ivanchenko (emmuons-V10-00-03)
+- G4EnergyLossForExtrapolator - fixed tread safety - correct 
+    initialisation per thread
+
 24 October 14: V.Ivanchenko (emmuons-V10-00-02)
 - G4TablesForExtrapolator - a new class which store EM tables 
     shared between threads
