@@ -500,7 +500,7 @@ G4VParticleChange* G4ForwardXrayTR::PostStepDoIt(const G4Track& aTrack,
   // No TR photons ?!
 
   if (     iMat == jMat
-      || (    (fMatIndex1 >= 0 && fMatIndex1 >= 0)
+      || (    (fMatIndex1 >= 0 && fMatIndex2 >= 0)
            && ( iMat != fMatIndex1 && iMat != fMatIndex2 )
            && ( jMat != fMatIndex1 && jMat != fMatIndex2 )  )
 

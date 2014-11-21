@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 Nov 14: V.Ivanchenko (xrays-V10-00-07)
+- G4ForwardXrayTR - fixed Coverity report (V.Grichine)
+
 27 Oct 14: A.Dotti (xrays-V10-00-06)
 - Address problem #1675, this requires re engineering of 
   all UI commands related to optical processes and created
