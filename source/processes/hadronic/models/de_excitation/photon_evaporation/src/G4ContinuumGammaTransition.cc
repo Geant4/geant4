@@ -61,6 +61,7 @@
 //static const G4double normC = CLHEP::millibarn/
 //  (CLHEP::pi*CLHEP::hbarc*CLHEP::pi*CLHEP::hbarc);
 static const G4double factor = 5;
+static const G4double tolerance = 2*CLHEP::keV;
 
 G4ContinuumGammaTransition::G4ContinuumGammaTransition(
                             const G4NuclearLevelManager* manager,
@@ -85,19 +86,10 @@ void G4ContinuumGammaTransition::Update(const G4NuclearLevelManager* manager,
   nucleusZ = Z;
   nucleusA = A;
   excitation = exc;
-  G4double eTolerance = 0.;
-  G4int lastButOne = levelManager->NumberOfLevels() - 2;
-  if (lastButOne >= 0)
-    {
-      eTolerance = (levelManager->MaxLevelEnergy() -
-		    levelManager->GetLevel(lastButOne)->Energy());
-      if (eTolerance < 0.) eTolerance = 0.;
-    }
-  
   eGamma = 0.;
   gammaCreationTime = 0.;
 
-  maxLevelE = levelManager->MaxLevelEnergy() + eTolerance;
+  maxLevelE = levelManager->MaxLevelEnergy();
   minLevelE = levelManager->MinLevelEnergy();
 
   // Energy range for photon generation; 
@@ -155,17 +147,14 @@ void G4ContinuumGammaTransition::SelectGamma()
 	   << "   finalExcitation = " << finalExcitation << G4endl;
   }
   //  if (finalExcitation < 0)
-  if(finalExcitation < minLevelE/2.)
+  if(finalExcitation <= 0.5*minLevelE || finalExcitation <= tolerance)
     {
       eGamma = excitation;
-      finalExcitation = 0.;
     }
-  
-  if (finalExcitation < maxLevelE && finalExcitation > 0.) 
+  else   
     {
-      G4double levelE = levelManager->NearestLevel(finalExcitation)->Energy();
-      G4double diff = finalExcitation - levelE;
-      eGamma = eGamma + diff;
+      finalExcitation = levelManager->NearestLevel(finalExcitation)->Energy();
+      eGamma = excitation - finalExcitation;
     }  
 
   gammaCreationTime = GammaTime();

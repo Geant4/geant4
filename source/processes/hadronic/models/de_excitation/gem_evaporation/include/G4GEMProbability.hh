@@ -60,6 +60,8 @@ public:
 
   G4double EmissionProbability(const G4Fragment & fragment, G4double anEnergy);
 
+  void Dump() const;
+
   inline G4int GetZ_asInt(void) const;
 	
   inline G4int GetA_asInt(void) const;
@@ -115,9 +117,6 @@ private:
   // Coulomb Barrier
   const G4VCoulombBarrier * theCoulombBarrierPtr;
   
-  // Normalization
-  //  G4double Normalization;
-
 protected:
 
   G4double fPlanck;

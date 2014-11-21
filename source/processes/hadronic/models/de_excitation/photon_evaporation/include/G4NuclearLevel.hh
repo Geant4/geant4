@@ -120,6 +120,8 @@ public:
 
   void PrintAll() const;  
 
+  void PrintLevels() const;  
+
   G4bool operator==(const G4NuclearLevel &right) const;
   G4bool operator!=(const G4NuclearLevel &right) const;
   G4bool operator<(const G4NuclearLevel &right) const;

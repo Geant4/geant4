@@ -301,7 +301,7 @@ void G4FermiFragmentsPool::Initialise()
  	G4cout << "("<<a1<<","<<z1<<")("<<a2<<","<<z2<<") % "; 
       }
       G4cout<<G4endl;
-      G4cout<<"-------------------------------------------------------------------------"
+      G4cout<<"----------------------------------------------------------------"
 	    << G4endl;
     }
   }
@@ -315,7 +315,8 @@ void G4FermiFragmentsPool::Initialise()
     for(size_t idx=0; idx<nz; ++idx) {
       const G4FermiConfiguration* conf2 = (list2[A1])[idx];
       G4int Z1 = conf2->GetZ();
-      const std::vector<const G4VFermiFragment*>* vec2 = conf2->GetFragmentList(); 
+      const std::vector<const G4VFermiFragment*>* vec2 = 
+	conf2->GetFragmentList(); 
       for(G4int j=0; j<nfrag; ++j) {
 	G4int Z2 = fragment_pool[j]->GetZ();
 	G4int A2 = fragment_pool[j]->GetA();
@@ -348,10 +349,10 @@ void G4FermiFragmentsPool::Initialise()
 	G4int z2=(*vec)[1]->GetZ();
 	G4int a3=(*vec)[2]->GetA();
 	G4int z3=(*vec)[2]->GetZ();
- 	G4cout << "("<<a1<<","<<z1<<")("<<a2<<","<<z2<<")("<<a3<<","<<z3<<") % "; 
+ 	G4cout << "("<<a1<<","<<z1<<")("<<a2<<","<<z2<<")("<<a3<<","<<z3<<") % ";
       }
       G4cout<<G4endl;
-      G4cout<<"-------------------------------------------------------------------------"
+      G4cout<<"----------------------------------------------------------------"
 	    << G4endl;
     }
   }
@@ -365,7 +366,8 @@ void G4FermiFragmentsPool::Initialise()
     for(size_t idx=0; idx<nz; ++idx) {
       const G4FermiConfiguration* conf3 = (list3[A1])[idx];
       G4int Z1 = conf3->GetZ();
-      const std::vector<const G4VFermiFragment*>* vec3 = conf3->GetFragmentList(); 
+      const std::vector<const G4VFermiFragment*>* vec3 = 
+	conf3->GetFragmentList(); 
       for(G4int j=0; j<nfrag; ++j) {
 	G4int Z2 = fragment_pool[j]->GetZ();
 	G4int A2 = fragment_pool[j]->GetA();
@@ -391,13 +393,15 @@ void G4FermiFragmentsPool::Initialise()
     for(size_t id1=0; id1<nz1; ++id1) {
       const G4FermiConfiguration* conf1 = (list2[A1])[id1];
       G4int Z1 = conf1->GetZ();
-      const std::vector<const G4VFermiFragment*>* vec1 = conf1->GetFragmentList(); 
+      const std::vector<const G4VFermiFragment*>* vec1 = 
+	conf1->GetFragmentList(); 
       for(G4int A2=2; A2<maxA; ++A2) {
 	size_t nz2 = list2[A2].size();
 	for(size_t id2=0; id2<nz2; ++id2) {
 	  const G4FermiConfiguration* conf2 = (list2[A2])[id2];
 	  G4int Z2 = conf2->GetZ();
-	  const std::vector<const G4VFermiFragment*>* vec2 = conf2->GetFragmentList(); 
+	  const std::vector<const G4VFermiFragment*>* vec2 = 
+	    conf2->GetFragmentList(); 
 	  G4int Z = Z1 + Z2;
 	  G4int A = A1 + A2;
 	  if(Z < maxZ && A < maxA && IsAvailable(Z, A)) {
@@ -406,7 +410,8 @@ void G4FermiFragmentsPool::Initialise()
 	    newvec[2] = (*vec2)[0];
 	    newvec[3] = (*vec2)[1];
 	    if(!IsExist(Z, A, newvec)) { 
-	      const G4FermiConfiguration* conf4 = new G4FermiConfiguration(newvec);
+	      const G4FermiConfiguration* conf4 = 
+		new G4FermiConfiguration(newvec);
 	      list4[A].push_back(conf4);
 	      ++counter;
 	    }
@@ -437,7 +442,7 @@ void G4FermiFragmentsPool::Initialise()
 	       <<a4<<","<<z4<<") % "; 
       }
       G4cout<<G4endl;
-      G4cout<<"-------------------------------------------------------------------------"
+      G4cout<<"----------------------------------------------------------------"
 	    << G4endl;
     }
     G4cout << "Total number: " << tot << G4endl;
@@ -535,7 +540,8 @@ G4FermiFragmentsPool::GetConfigurationList(G4int Z, G4int A, G4double mass) cons
 	    <<A<<"   Z= "<<Z<<"   E*= "<< ExEn<<" MeV"<<G4endl;
       size_t size_vector_conf = v->size();
       for(size_t jc=0; jc<size_vector_conf; ++jc) {     
-	const std::vector<const G4VFermiFragment*>* v_frag = (*v)[jc]->GetFragmentList();
+	const std::vector<const G4VFermiFragment*>* v_frag = 
+	  (*v)[jc]->GetFragmentList();
 	size_t size_vector_fragments = v_frag->size();
 	G4cout<<size_vector_fragments<<"-body configuration "<<jc+1<<": ";
 	for(size_t jf=0;jf<size_vector_fragments;++jf){
@@ -545,7 +551,7 @@ G4FermiFragmentsPool::GetConfigurationList(G4int Z, G4int A, G4double mass) cons
 	  G4cout<<"(a="<<af<<", z="<<zf<<", ex="<<ex<<")  ";
 	}
 	G4cout<<G4endl;
-	G4cout<<"-----------------------------------------------------"<<G4endl;    
+	G4cout<<"-----------------------------------------------------"<<G4endl;
       }
     }
     return v; 
@@ -653,4 +659,24 @@ G4FermiFragmentsPool::GetFragment(G4int Z, G4int A) const
     }
   }
   return f;
+}
+
+void G4FermiFragmentsPool::DumpFragment(const G4VFermiFragment* f) const
+{
+  if(f) {
+    G4cout << "Z= " << f->GetZ() << " A= " << f->GetA() 
+	   << " Mass(GeV)= " << f->GetFragmentMass()/GeV
+	   << " Eexc(MeV)= " << f->GetExcitationEnergy() << G4endl;
+  }
+}
+
+void G4FermiFragmentsPool::Dump() const
+{
+  G4cout << "##### List of Fragments in the Fermi Fragment Pool #####" 
+	 << G4endl;
+  G4int nfrag = fragment_pool.size();
+  for(G4int i=0; i<nfrag; ++i) {
+    DumpFragment(fragment_pool[i]);
+  }
+  G4cout << G4endl;
 }

@@ -76,7 +76,7 @@
 G4VGammaDeexcitation::G4VGammaDeexcitation(): _transition(0), _verbose(0),
 					      _electronO (0), _vSN(-1)
 { 
-  _tolerance = 10*CLHEP::keV;
+  _tolerance = 2*CLHEP::keV;
   _timeLimit = DBL_MAX;
 }
 
@@ -117,7 +117,7 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma(G4Fragment* aNucleus)
   if(eGamma <= 0.0) { return thePhoton; }
 
   G4double excitation = aNucleus->GetExcitationEnergy() - eGamma;
-  if(excitation < 0.0) { excitation = 0.0; } 
+  if(excitation <= _tolerance) { excitation = 0.0; } 
   if (_verbose > 1) 
     {
       G4cout << "G4VGammaDeexcitation::GenerateGamma - Edeexc(MeV)= " << eGamma 

@@ -58,6 +58,8 @@
 #include "G4ios.hh"
 #include "G4HadronicException.hh"
 #include "G4HadTmpUtil.hh"
+#include "G4NucleiProperties.hh"
+#include "G4PhysicalConstants.hh"
 
 G4NuclearLevelManager::G4NuclearLevelManager(G4int Z, G4int A, 
 					     const G4String& filename) :
@@ -97,8 +99,7 @@ const G4NuclearLevel* G4NuclearLevelManager::GetLevel(G4int i) const {
 }
 
 const G4NuclearLevel* 
-G4NuclearLevelManager::NearestLevel(G4double energy, 
-				    G4double eDiffMax) const 
+G4NuclearLevelManager::NearestLevel(G4double energy, G4double) const 
 {
   if (NumberOfLevels() <= 0) return 0;
 
@@ -107,13 +108,13 @@ G4NuclearLevelManager::NearestLevel(G4double energy,
   //G4cout << "G4NuclearLevelManager::NearestLevel E(MeV)= " 
   //	 << energy/MeV << " dEmax(MeV)= " << eDiffMax/MeV << G4endl;
   
-  G4double diff = 9999. * GeV;
-  for (unsigned int i=0; i<_levels->size(); i++)
+  G4double diff = 1.e+10;
+  for (unsigned int i=0; i<_levels->size(); ++i)
     {
       G4double e = GetLevel(i)->Energy();
-      G4double eDiff = std::abs(e - energy);
+      G4double eDiff = std::fabs(e - energy);
       //G4cout << i << ".   eDiff(MeV)= " << eDiff/MeV << G4endl;
-      if (eDiff < diff && eDiff <= eDiffMax)
+      if (eDiff <= diff)
 	{ 
 	  diff = eDiff; 
 	  iNear = i;
@@ -356,8 +357,25 @@ void G4NuclearLevelManager::PrintAll()
 	 << G4endl << "Lowest level is at energy " << MinLevelEnergy()
 	 << " MeV " << G4endl;
     
-  for (G4int i=0; i<nLevels; i++)
+  for (G4int i=0; i<nLevels; ++i) {
     GetLevel(i)->PrintAll();
+  }
+}
+
+void G4NuclearLevelManager::PrintLevels()
+{
+  G4int nLevels = NumberOfLevels();
+  G4double efermi = G4NucleiProperties::GetNuclearMass(_nucleusA-1, _nucleusZ)
+    + neutron_mass_c2 -
+    G4NucleiProperties::GetNuclearMass(_nucleusA, _nucleusZ);
+
+  G4cout << "Z= " << _nucleusZ << " A= " << _nucleusA
+	 << "  " << nLevels << " levels" 
+	 << "  Efermi(MeV)= " << efermi << G4endl;
+    
+  for (G4int i=0; i<nLevels; ++i) {
+    GetLevel(i)->PrintLevels();
+  }
 }
 
 G4NuclearLevelManager::G4NuclearLevelManager(const G4NuclearLevelManager &right)

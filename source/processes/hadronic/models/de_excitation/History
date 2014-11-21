@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+20 Nov 2014 Vladimir Ivanchenko (hadr-deex-V10-00-23)
+----------------------------------------------------------
+- G4NuclearLevelStore Makoto Asai redesign the class to enshure that
+    the same level is not uploaded twice running in MT mode 
+- G4FermiFragmentsPool - added DumpFragment() and Dump() methods
+- G4VEvaporationChannel, G4GEMChannel, G4GEMProbability - added Dump()
+    method
+- G4NuclearLevelManager, G4NuclearLevel - added DumpLevels() method
+- G4ContinuumGammaTransition, G4VGammaDeexcitation - coherently use
+    the same energy tolarence 2 keV
+
 17 Nov 2014 Vladimir Ivanchenko (hadr-deex-V10-00-22)
 ----------------------------------------------------------
 - G4ContinuumGammaTransition - removed normC factor which has no effect

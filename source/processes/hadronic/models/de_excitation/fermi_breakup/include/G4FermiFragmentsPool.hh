@@ -61,6 +61,10 @@ public:
   G4int GetMaxZ() const;
 
   G4int GetMaxA() const;
+
+  void DumpFragment(const G4VFermiFragment* f) const;
+
+  void Dump() const;
   
 private:
 

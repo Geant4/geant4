@@ -66,3 +66,6 @@ G4bool G4VEvaporationChannel::BreakUpChain(G4FragmentVector*, G4Fragment*)
 {
   return false;
 }
+
+void G4VEvaporationChannel::Dump() const
+{}

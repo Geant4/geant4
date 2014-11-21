@@ -253,7 +253,7 @@ G4double G4GEMChannel::SampleKineticEnergy(const G4Fragment & fragment)
 } 
 
 G4ThreeVector G4GEMChannel::IsotropicVector(const G4double Magnitude)
-    // Samples a isotropic random vectorwith a magnitud given by Magnitude.
+    // Samples a isotropic random vectorwith a magnitude given by Magnitude.
     // By default Magnitude = 1.0
 {
   G4double CosTheta = 1.0 - 2.0*G4UniformRand();
@@ -263,6 +263,11 @@ G4ThreeVector G4GEMChannel::IsotropicVector(const G4double Magnitude)
 		       Magnitude*std::sin(Phi)*SinTheta,
 		       Magnitude*CosTheta);
   return Vector;
+}
+
+void G4GEMChannel::Dump() const
+{
+  theEvaporationProbabilityPtr->Dump();
 }
 
 

@@ -87,6 +87,8 @@ public:
 
   virtual G4double GetEmissionProbability(G4Fragment* theNucleus) = 0;
 
+  virtual void Dump() const;
+
   inline G4String GetName() const {return Name;}
   inline void SetName(const G4String & aName) { Name = aName;}
 

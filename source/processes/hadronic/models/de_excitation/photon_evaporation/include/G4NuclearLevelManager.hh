@@ -81,13 +81,15 @@ public:
   const G4NuclearLevel* GetLevel(G4int i) const;
 
   const G4NuclearLevel* NearestLevel(G4double energy,
-				     G4double eDiffMax=9999.*CLHEP::GeV) const;
+				     G4double eDiffMax=1.e+8) const;
 
   const G4NuclearLevel* LowestLevel() const;
   const G4NuclearLevel* HighestLevel() const;
 
   G4double MinLevelEnergy() const;
   G4double MaxLevelEnergy() const;
+
+  void PrintLevels();
 
   void PrintAll();
   

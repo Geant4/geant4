@@ -51,6 +51,7 @@
 
 #include "G4GEMProbability.hh"
 #include "G4PairingCorrection.hh"
+#include "G4NucleiProperties.hh"
 #include "G4PhysicalConstants.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Log.hh"
@@ -254,4 +255,27 @@ G4double G4GEMProbability::I3(G4double s0, G4double sx)
   p2 *= G4Exp(sx-s0);
   
   return p1-p2; 
+}
+
+void G4GEMProbability::Dump() const
+{
+  G4double mass = G4NucleiProperties::GetNuclearMass(theA, theZ);
+  G4double efermi = 0.0;
+  if(theA > 1) { 
+    efermi = G4NucleiProperties::GetNuclearMass(theA-1, theZ)
+      + neutron_mass_c2 - mass;
+  }
+  G4int nlev = ExcitEnergies.size();
+  G4cout << "GEM: List of Excited States for Isotope Z= " 
+	 << theZ << " A= " << theA << " Nlevels= " << nlev 
+	 << " Efermi(MeV)= " << efermi
+	 << G4endl;
+  for(G4int i=0; i< nlev; ++i) {
+    G4cout << "Z= " << theZ << " A= " << theA 
+	   << " Mass(GeV)= " << mass/GeV
+	   << " Eexc(MeV)= " << ExcitEnergies[i]
+	   << " Time(ns)= " <<  ExcitLifetimes[i]/ns 
+	   << G4endl;
+  }
+  G4cout << G4endl;
 }

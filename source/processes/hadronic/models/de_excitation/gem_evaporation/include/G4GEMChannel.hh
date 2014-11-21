@@ -42,7 +42,6 @@
 #include "G4NucleiProperties.hh"
 #include "Randomize.hh"
 #include "G4ParticleTable.hh"
-//#include "G4IonTable.hh"
 
 class G4Pow;
 class G4PairingCorrection;
@@ -64,31 +63,22 @@ public:
 
   virtual G4FragmentVector * BreakUp(const G4Fragment & theNucleus);
 
+  virtual void Dump() const;
+
   inline void SetLevelDensityParameter(G4VLevelDensityParameter * aLevelDensity)
   {
     if (MyOwnLevelDensity) { delete theLevelDensityPtr; }
     theLevelDensityPtr = aLevelDensity;
     MyOwnLevelDensity = false;
   }
-  /*
-  inline G4double GetMaximalKineticEnergy(void) const
-  { return MaximalKineticEnergy; }
-  */
-private: 
-  /*
-  // Calculate Binding Energy for separate fragment from nucleus
-  G4double CalcBindingEnergy(G4int anA, G4int aZ);
 
-  // Calculate maximal kinetic energy that can be carried by fragment (in MeV)
-  G4double CalcMaximalKineticEnergy(G4double U);
-  */
+private: 
+
   // Samples fragment kinetic energy.
   G4double SampleKineticEnergy(const G4Fragment & fragment);
 
   // This has to be removed and put in Random Generator
   G4ThreeVector IsotropicVector(G4double Magnitude  = 1.0);
-
-private:
 
   G4GEMChannel(const G4GEMChannel & right);  
   const G4GEMChannel & operator=(const G4GEMChannel & right);

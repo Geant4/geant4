@@ -35,6 +35,8 @@
 // 06-01-2012 V. Ivanchenko - added nuclear level data structure for 
 //               usage in HEP where internal conversion is neglected;
 //               cleanup the code; new method GetLevelManager  
+// 19-11-2014 M. Asai - protection against reading the same file from
+//               more than one worker threads
 
 #ifndef G4NuclearLevelStore_hh 
 #define G4NuclearLevelStore_hh 1
@@ -83,8 +85,16 @@ private:
   G4String      dirName;
 
   static G4ThreadLocal G4NuclearLevelStore* theInstance;
+#ifdef G4MULTITHREADED
+  static G4NuclearLevelStore* theShadowInstance;
+#endif
 
   G4bool userFiles;
   std::map<G4int, G4String> theUserDataFiles;
+
+#ifdef G4MULTITHREADED
+public:
+  static G4Mutex nuclearLevelStoreMutex;
+#endif
 };
 #endif
