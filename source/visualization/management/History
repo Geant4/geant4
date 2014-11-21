@@ -26,6 +26,10 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+21st November 2014  John Allison  (visman-V10-00-28)
+- G4VisManager.cc: Reset event reviewing flag at end of run in MT mode.
+- G4VisCommandsViewerSet.cc: Fix bug affecting file-writing viewers.
+
 20th November 2014  John Allison  (visman-V10-00-27)
 - G4ViewParameters.icc: Another go at fixing win7-vc12 compiler warnings.
 

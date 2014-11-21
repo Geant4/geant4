@@ -562,8 +562,8 @@ void G4VisCommandsViewerSet::SetNewValue
 	  << currentViewer->GetName() << " is NOT auto-refesh by default"
 	  << "\n  so cannot be set to auto-refresh."
 	  << G4endl;
-	return;
       }
+      return;
     }
     vp.SetAutoRefresh(autoRefresh);
     if (verbosity >= G4VisManager::confirmations) {

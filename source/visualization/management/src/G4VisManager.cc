@@ -1807,6 +1807,7 @@ void G4VisManager::EndOfRun ()
       }
     }
   }
+  fEventRefreshing = false;
 }
 
 // End of multithreaded versions of Begin/EndOfRun/Event.
