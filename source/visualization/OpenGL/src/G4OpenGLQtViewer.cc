@@ -2551,11 +2551,14 @@ QWidget *G4OpenGLQtViewer::getParentWidget()
 
 void G4OpenGLQtViewer::initSceneTreeComponent(){
   
+  QGroupBox *groupBox = new QGroupBox("");
+  QVBoxLayout *vbox = new QVBoxLayout;
+  
   fSceneTreeViewerButton = new QPushButton("Scene tree");
   fSceneTreeViewerButton->setStyleSheet ("text-align: left; padding: 5px; border:0px; ");
   fSceneTreeViewerButton->setIcon(*fTreeIconClosed);
   
-  fSceneTreeWidget->layout()->addWidget(fSceneTreeViewerButton);
+  vbox->addWidget(fSceneTreeViewerButton);
   connect(fSceneTreeViewerButton,SIGNAL(clicked()),this, SLOT(toggleSceneTreeViewerInfos()));
   
   fSceneTreeViewerInfos = new QWidget();
@@ -2591,10 +2594,10 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
 #endif
 
   coutButtonWidget->setLayout(layoutCoutTBButtons);
-  fSceneTreeViewerInfos->layout()->addWidget(coutButtonWidget);
+  vLayout->addWidget(coutButtonWidget);
   
   // reduce margins
-  fSceneTreeViewerInfos->layout()->setContentsMargins(5,5,5,5);
+  vLayout->setContentsMargins(5,5,5,5);
 
 
   fSceneTreeComponentTreeWidget = new QTreeWidget();
@@ -2607,7 +2610,7 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   //   data(1) : copy number
   //   data(2) : g4color
 
-  fSceneTreeViewerInfos->layout()->addWidget(fSceneTreeComponentTreeWidget);
+  vLayout->addWidget(fSceneTreeComponentTreeWidget);
 
   connect(fSceneTreeComponentTreeWidget,SIGNAL(itemChanged(QTreeWidgetItem*, int)),SLOT(sceneTreeComponentItemChanged(QTreeWidgetItem*, int)));
   connect(fSceneTreeComponentTreeWidget,SIGNAL(itemSelectionChanged ()),SLOT(sceneTreeComponentSelected()));
@@ -2619,11 +2622,11 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   QHBoxLayout *helpLayout = new QHBoxLayout();
 
   QWidget* depthWidget = new QWidget();
-  QGroupBox *groupBox = new QGroupBox("",depthWidget);
-  QHBoxLayout *groupBoxLayout = new QHBoxLayout();
+  QWidget *showBox = new QWidget(depthWidget);
+  QHBoxLayout *showBoxLayout = new QHBoxLayout();
 
   // reduce margins
-  groupBoxLayout->setContentsMargins(5,5,5,5);
+  showBoxLayout->setContentsMargins(5,5,5,5);
 
   QLabel *zero = new QLabel();
   zero->setText("Show all");          
@@ -2636,21 +2639,24 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
   // set a minimum size
   fSceneTreeDepthSlider->setMinimumWidth (40);
 
-  groupBoxLayout->addWidget(zero);
-  groupBoxLayout->addWidget(fSceneTreeDepthSlider);
-  groupBoxLayout->addWidget(one);
+  showBoxLayout->addWidget(zero);
+  showBoxLayout->addWidget(fSceneTreeDepthSlider);
+  showBoxLayout->addWidget(one);
 
-  groupBox->setLayout(groupBoxLayout);
+  showBox->setLayout(showBoxLayout);
 
-  helpLayout->addWidget(groupBox);
+  helpLayout->addWidget(showBox);
   helpWidget->setLayout(helpLayout);
   helpLayout->setContentsMargins(0,0,0,0);
 
-  fSceneTreeViewerInfos->layout()->addWidget(helpWidget);
+  vLayout->addWidget(helpWidget);
   QSizePolicy vPolicy = fSceneTreeViewerInfos->sizePolicy();
   vPolicy.setVerticalStretch(4);
 
-  fSceneTreeWidget->layout()->addWidget(fSceneTreeViewerInfos);
+  vbox->addWidget(fSceneTreeViewerInfos);
+
+  groupBox->setLayout(vbox);
+  fSceneTreeWidget->layout()->addWidget(groupBox);
   
   connect( fSceneTreeDepthSlider, SIGNAL( valueChanged(int) ), this, SLOT( changeDepthInSceneTree(int) ) );
   fTreeItemModels.clear();
@@ -2666,20 +2672,23 @@ void G4OpenGLQtViewer::initSceneTreeComponent(){
 void G4OpenGLQtViewer::initViewerPropertiesComponent() {
   
   // add properties
-  
+  QGroupBox *groupBox = new QGroupBox("");
+  QVBoxLayout *vbox = new QVBoxLayout;
   fViewerPropertiesButton = new QPushButton("Viewer properties");
   fViewerPropertiesButton->setStyleSheet ("text-align: left; padding: 5px; border:0px; ");
   fViewerPropertiesButton->setIcon(*fTreeIconClosed);
   
-  fSceneTreeWidget->layout()->addWidget(fViewerPropertiesButton);
+  vbox->addWidget(fViewerPropertiesButton);
   connect(fViewerPropertiesButton,SIGNAL(clicked()),this, SLOT(toggleSceneTreeComponentTreeWidgetInfos()));
   
   // add properties content
   fSceneTreeComponentTreeWidgetInfos = new QTableWidget();
   fSceneTreeComponentTreeWidgetInfos->setVisible(false);
   fSceneTreeComponentTreeWidgetInfos->setStyleSheet ("padding: 0px ");
+  vbox->addWidget(fSceneTreeComponentTreeWidgetInfos);
 
-  fSceneTreeWidget->layout()->addWidget(fSceneTreeComponentTreeWidgetInfos);
+  groupBox->setLayout(vbox);
+  fSceneTreeWidget->layout()->addWidget(groupBox);
   QSizePolicy vPolicy = fSceneTreeComponentTreeWidgetInfos->sizePolicy();
   vPolicy.setVerticalStretch(4);
   
@@ -2691,6 +2700,9 @@ void G4OpenGLQtViewer::initViewerPropertiesComponent() {
 
 void G4OpenGLQtViewer::initPickingComponent(){
   
+  QGroupBox *groupBox = new QGroupBox("");
+  QVBoxLayout *vbox = new QVBoxLayout;
+
   // add picking infos
   QWidget *pickingInfoWidget = new QWidget();
   QHBoxLayout *pickingInfoLayout = new QHBoxLayout();
@@ -2716,7 +2728,7 @@ void G4OpenGLQtViewer::initPickingComponent(){
   pickingInfoWidget->setStyleSheet ("padding-left: 0px; border:0px;");
   pickingInfoWidget->setLayout(pickingInfoLayout);
   
-  fSceneTreeWidget->layout()->addWidget(pickingInfoWidget);
+  vbox->addWidget(pickingInfoWidget);
   connect(fViewerPickingButton,SIGNAL(clicked()),this, SLOT(toggleSceneTreeComponentPickingInfos()));
 
   // add picking content
@@ -2736,8 +2748,10 @@ void G4OpenGLQtViewer::initPickingComponent(){
   
   QSizePolicy vPolicy = fSceneTreeComponentPickingInfos->sizePolicy();
   vPolicy.setVerticalStretch(4);
+  vbox->addWidget(fSceneTreeComponentPickingScrollArea);
 
-  fSceneTreeWidget->layout()->addWidget(fSceneTreeComponentPickingScrollArea);
+  groupBox->setLayout(vbox);
+  fSceneTreeWidget->layout()->addWidget(groupBox);
   connect( fFilterOutput, SIGNAL( textEdited ( const QString &) ), this, SLOT(changeSearchSelection()));
   
 }

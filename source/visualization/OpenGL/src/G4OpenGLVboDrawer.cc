@@ -30,6 +30,8 @@
 // G4OpenGLWtViewer : Class to provide Vertex Buffer Object (VBO) specific
 //                     functionality for OpenGL > 2.0 in GEANT4
 //
+
+#include "G4OpenGLViewer.hh"
 #ifdef G4OPENGL_VERSION_2
 
 #define G4DEBUG_VIS_OGL 1
@@ -42,7 +44,6 @@
 #include "G4OpenGLImmediateQtViewer.hh"
 #endif
 
-#include "G4OpenGLViewer.hh"
 
 //////////////////////////////////////////////////////////////////////////////
 G4OpenGLVboDrawer::G4OpenGLVboDrawer (G4OpenGLViewer* viewer,

@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20th November 2014  Laurent Garnier  (opengl-V10-00-26)
+- G4OpenGLVboDrawer: 
+ o Fix a compilation issue with Wt driver
+- G4OpenGLStoredQtViewer/G4OpenGLImmediatedQtViewer :
+ o Avoid recursive repaints
+- G4OpenGLQtViewer : 
+ o Fix some minor GUI visual issues
+
 19th November 2014  Laurent Garnier  (opengl-V10-00-25)
 - G4OpenGLQtViewer: Allow viewer properties/picking/scene tree to be accessible
   from an external application
