@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21th November 2014  Laurent Garnier  (opengl-V10-00-27)
+- G4OpenGLStoredQtViewer/G4OpenGLImmediatedQtViewer :
+ o Avoid repainting problems by disable recursive repaints (from last commit)
+
 20th November 2014  Laurent Garnier  (opengl-V10-00-26)
 - G4OpenGLVboDrawer: 
  o Fix a compilation issue with Wt driver

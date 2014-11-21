@@ -209,7 +209,7 @@ void G4OpenGLImmediateQtViewer::paintGL()
   updateToolbarAndMouseContextMenu();
 
   if (fPaintEventLock) {
-    return ;
+//    return ;
   }
   if (!fQGLWidgetInitialiseCompleted) {
     fQGLWidgetInitialiseCompleted= true;

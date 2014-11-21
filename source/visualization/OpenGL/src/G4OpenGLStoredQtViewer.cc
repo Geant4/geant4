@@ -298,7 +298,7 @@ void G4OpenGLStoredQtViewer::paintGL()
   printf("G4OpenGLStoredQtViewer::paintGL \n");
 #endif
   if (fPaintEventLock) {
-    return ;
+//    return ;
   }
   fPaintEventLock = true;
   if ((getWinWidth() == 0) && (getWinHeight() == 0)) {
