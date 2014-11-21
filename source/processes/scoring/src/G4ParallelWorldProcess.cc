@@ -76,6 +76,11 @@ G4ParallelWorldProcess(const G4String& processName,G4ProcessType theType)
   fTransportationManager->GetNavigatorForTracking()->SetPushVerbosity(false);
   fPathFinder = G4PathFinder::GetInstance();
 
+  fGhostWorldName = "** NotDefined **";
+  fGhostWorld = 0;
+  fGhostSafety = 0.;
+  fOnBoundary = false;
+
   G4ParallelWorldProcessStore::GetInstance()->SetParallelWorld(this,processName);
 
   if (verboseLevel>0)

@@ -63,6 +63,10 @@ G4ParallelWorldScoringProcess(const G4String& processName,G4ProcessType theType)
   fTransportationManager = G4TransportationManager::GetTransportationManager();
   fPathFinder = G4PathFinder::GetInstance();
 
+  fGhostWorld = 0;
+  fGhostSafety = 0.;
+  fOnBoundary = false;
+
   if (verboseLevel>0)
   {
     G4cout << GetProcessName() << " is created " << G4endl;
