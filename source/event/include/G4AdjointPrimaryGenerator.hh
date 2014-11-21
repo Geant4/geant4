@@ -99,6 +99,9 @@ class G4AdjointPrimaryGenerator
     G4PhysicsOrderedFreeVector* theAccumulatedDepthVector;
     //G4PhysicsOrderedFreeVector* theAccumulatedCSDepthVector;
 
+    //Disable copy constructor and assignement operator
+    G4AdjointPrimaryGenerator(const G4AdjointPrimaryGenerator&);
+    G4AdjointPrimaryGenerator& operator=(const G4AdjointPrimaryGenerator&);
 
 
 

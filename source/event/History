@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 20th, 2014 A.Dotti (event-V10-00-19 and -20)
+- Coverity fixes for G4Adjoint* classes
+
+November 20th, 2014 A.Dotti (event-V10-00-18)
+- Coverity fixes for G4SPSEneDistribution
+
 November 6th, 2014 A.Dotti (event-V10-00-17)
 - Coverity fixes for G4SPSEneDistribution
 

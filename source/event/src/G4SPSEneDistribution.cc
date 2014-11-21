@@ -1361,8 +1361,8 @@ void G4SPSEneDistribution::GenerateCdgEnergies() {
 	// G4double spind[2] = {1.4, 2.3};
 	// G4double ene_line[3] = {1., 18., 1E6};
 	G4double rndm, rndm2;
-	G4double ene_line[3];
-	G4double omalpha[2];
+	G4double ene_line[3]={0,0,0};
+	G4double omalpha[2]={0,0};
     threadLocal_t& params = threadLocalData.Get();
 	if (params.Emin < 18 * keV && params.Emax < 18 * keV)
     {
@@ -1412,6 +1412,7 @@ void G4SPSEneDistribution::GenUserHistEnergies()
 		G4int ii;
 		G4int maxbin = G4int(UDefEnergyH.GetVectorLength());
 		G4double bins[1024], vals[1024], sum;
+		for ( ii = 0 ; ii<1024 ; ++ii ) { bins[ii]=0; vals[ii]=0; }
 		sum = 0.;
 
 		if ((EnergySpec == false) && (threadLocalData.Get().particle_definition == NULL))
