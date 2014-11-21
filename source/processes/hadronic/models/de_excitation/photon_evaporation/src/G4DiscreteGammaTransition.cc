@@ -74,7 +74,7 @@
 #include "G4Pow.hh"
 #include "G4Log.hh"
 
-static const G4double tolerance = 10*CLHEP::keV;
+//static const G4double tolerance = 10*CLHEP::keV;
 
 G4DiscreteGammaTransition::G4DiscreteGammaTransition(
   const G4NuclearLevel* level, G4int Z, G4int verb)
@@ -109,13 +109,18 @@ void G4DiscreteGammaTransition::SelectGamma()
 	  { break; }
       }
     }
-    /*     
-	   G4cout << "Elevel(MeV)= " << aLevel->Energy()/MeV
-	   << " Etran(MeV)= " << (aLevel->GammaEnergies())[iGamma]/MeV
-	   << " Eexc(MeV)= " << excitation/MeV << G4endl;
+    /*
+    G4cout << "Elevel(MeV)= " << aLevel->Energy()
+	   << " Etran(MeV)= " << (aLevel->GammaEnergies())[iGamma]
+	   << " Eexc(MeV)= " << excitation << G4endl;
     */
-    gammaEnergy = (aLevel->GammaEnergies())[iGamma];
-            
+    // VI 2014: initial excitation energy may be not exactly energy of the level
+    //          final excitation energy is always energy of some level or zero
+    //          transition to the ground state should be always exact excitation 
+    if(nGammas == iGamma+1) {  gammaEnergy = excitation; }
+    else { gammaEnergy = (aLevel->GammaEnergies())[iGamma] 
+	+ excitation - aLevel->Energy();
+    }
     //JMQ: 
     //1)If chosen gamma energy is close enough to excitation energy, 
     //  the later is used instead for gamma dacey to gs (it guarantees 
@@ -125,9 +130,9 @@ void G4DiscreteGammaTransition::SelectGamma()
       
     // VI: remove fake photons - applied only for the last transition
     //     do not applied on each transition
-    if(std::fabs(excitation - gammaEnergy) < tolerance) { 
-      gammaEnergy = excitation;
-    }
+    //if(std::fabs(excitation - gammaEnergy) < tolerance) { 
+    //  gammaEnergy = excitation;
+    //}
 
     //  JMQ: Warning: the following check is needed to avoid loops:
     //  Due essentially to missing nuclear levels in data files, it is
@@ -141,13 +146,14 @@ void G4DiscreteGammaTransition::SelectGamma()
     //          I leave this for a later revision.
 
     // VI: the check has no sence and we make this very simple
-    if (gammaEnergy < tolerance) { 
-      gammaEnergy = excitation; 
-    }
-
-    //G4cout << "G4DiscreteGammaTransition::SelectGamma: " << gammaEnergy 
-    //	     << " icm: " << icm << G4endl;
-
+    //if (gammaEnergy < tolerance) { 
+    //  gammaEnergy = excitation; 
+    //}
+    /*
+    G4cout << "G4DiscreteGammaTransition::SelectGamma: " << gammaEnergy 
+	   << " Eexc= " << excitation
+	   << " icm: " << icm << G4endl;
+    */
     // now decide whether Internal Coversion electron should be emitted instead
     if (icm) {
       G4double random = G4UniformRand();

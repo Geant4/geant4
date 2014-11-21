@@ -74,7 +74,7 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition(G4Fragment* nucleus)
   G4int A = nucleus->GetA_asInt();
   G4double excitation = nucleus->GetExcitationEnergy();
 
-  if (Z < 2 || A < 3 || excitation <= _tolerance) {
+  if (excitation <= _tolerance) {
     if (_verbose > 1) { 
       G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition fails; Z= " << Z
 	     << " A= " << A << " Eex(meV)= " << excitation << G4endl;
@@ -87,14 +87,13 @@ G4bool G4ContinuumGammaDeexcitation::CanDoTransition(G4Fragment* nucleus)
     nucleusA = A;
     nucleusZ = Z;
   }
-  if(!levelManager) { return false; }
 
   if (_verbose > 1) {
     G4cout << "G4ContinuumGammaDeexcitation: "
 	   << " Z= " << Z << "  A= " << A << " Eex= " << excitation
 	   << G4endl;
   }
-  if (excitation <= levelManager->MaxLevelEnergy() + _tolerance) {
+  if (levelManager && excitation <= levelManager->MaxLevelEnergy() + _tolerance) {
     if (_verbose > 0) {
       G4cout << "G4ContinuumGammaDeexcitation::CanDoTransition -  Excitation " 
 	     << excitation << " below max discrete level " 

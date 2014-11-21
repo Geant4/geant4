@@ -350,6 +350,7 @@ G4ExcitationHandler::BreakItUp(const G4Fragment & theInitialState)
 
       // fragment
       eexc = (*iList)->GetExcitationEnergy();
+      if(eexc < minExcitation) { eexc = 0.0; }
       theKindOfFragment = theTableOfIons->GetIon(theFragmentZ,theFragmentA,eexc);
       /*      	
 	G4cout << "### Find ion Z= " << theFragmentZ << " A= " << theFragmentA
@@ -458,7 +459,12 @@ void G4ExcitationHandler::SetMinEForMultiFrag(G4double anE)
 void G4ExcitationHandler::ModelDescription(std::ostream& outFile) const
 {
     outFile << "G4ExcitationHandler description\n"
-            << "\n";
+            << "This class samples de-excitation of excited nucleus using\n"
+            << "Fermi Break-up model for light fragments (Z < 9, A < 17), "
+	    << "evaporation, fission, and photo-evaporation models. Evaporated\n"
+	    << "particle may be proton, neutron, and other light fragment \n"
+	    << "(Z < 13, A < 29). During photon evaporation produced gamma \n"
+	    << "or electrons due to internal conversion \n";
 }
 
 

@@ -35,11 +35,11 @@
 G4N13GEMProbability::G4N13GEMProbability() :
   G4GEMProbability(13,7,1.0/2.0) // A,Z,Spin
 {
-  ExcitEnergies.push_back(2365.3*keV);
+  ExcitEnergies.push_back(2364.9*keV);
   ExcitSpins.push_back(1.0/2.0);
   ExcitLifetimes.push_back(fPlanck/(33*keV));
 
-  ExcitEnergies.push_back(3511*keV);
+  ExcitEnergies.push_back(3502*keV);
   ExcitSpins.push_back(3.0/2.0);
   ExcitLifetimes.push_back(fPlanck/(66*keV));
 
@@ -91,7 +91,7 @@ G4N13GEMProbability::G4N13GEMProbability() :
   ExcitSpins.push_back(5.0/2.0);
   ExcitLifetimes.push_back(fPlanck/(430*keV));
 
-  ExcitEnergies.push_back(11700*keV);
+  ExcitEnergies.push_back(11740*keV);
   ExcitSpins.push_back(5.0/2.0);
   ExcitLifetimes.push_back(fPlanck/(115*keV));
 
@@ -115,11 +115,11 @@ G4N13GEMProbability::G4N13GEMProbability() :
   ExcitSpins.push_back(3.0/2.0);
   ExcitLifetimes.push_back(fPlanck/(6500*keV));
 
-  ExcitEnergies.push_back(14040*keV);
+  ExcitEnergies.push_back(14050*keV);
   ExcitSpins.push_back(3.0/2.0);
   ExcitLifetimes.push_back(fPlanck/(155*keV));
 
-  ExcitEnergies.push_back(15065.1*keV);
+  ExcitEnergies.push_back(15064.6*keV);
   ExcitSpins.push_back(3.0/2.0);
   ExcitLifetimes.push_back(fPlanck/(1.10*keV));
 

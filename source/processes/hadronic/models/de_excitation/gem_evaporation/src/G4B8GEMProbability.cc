@@ -35,7 +35,7 @@
 G4B8GEMProbability::G4B8GEMProbability() :
   G4GEMProbability(8,5,2.0) // A,Z,Spin
 {
-    ExcitEnergies.push_back(778.08*keV);
+    ExcitEnergies.push_back(769.5*keV);
     ExcitSpins.push_back(0.0);
     ExcitLifetimes.push_back(fPlanck/(40.0*keV));
     

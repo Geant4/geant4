@@ -70,6 +70,8 @@
 #include "G4E1Probability.hh"
 #include "G4NuclearLevelStore.hh"
 
+static const G4double tolerance = 2*CLHEP::keV;
+
 G4PhotonEvaporation::G4PhotonEvaporation(const G4String & aName,
 					 G4EvaporationChannelType timeType)
   : G4VEvaporationChannel(aName, timeType),
@@ -109,7 +111,7 @@ G4Fragment* G4PhotonEvaporation::EmittedFragment(G4Fragment* aNucleus)
   //G4cout << "G4PhotonEvaporation::EmittedFragment" << G4endl;
   G4Fragment* gamma = contDeexcitation->GenerateGamma(aNucleus);
   if(gamma) { 
-    if (verbose > 0) {
+    if (verbose > 1) {
       G4cout << "G4PhotonEvaporation::EmittedFragment continium deex: "   
 	     << gamma << G4endl;
       G4cout << "   Residual: " << nucleus << G4endl;
@@ -119,7 +121,7 @@ G4Fragment* G4PhotonEvaporation::EmittedFragment(G4Fragment* aNucleus)
     // Do one photon emission by the discrete deexcitation 
     gamma = discrDeexcitation->GenerateGamma(aNucleus);
     if(gamma) { 
-      if (verbose > 0) {
+      if (verbose > 1) {
 	G4cout << "G4PhotonEvaporation::EmittedFragment discrete deex: "   
 	       << gamma << G4endl;
         G4cout << "   Residual: " << nucleus << G4endl;
@@ -137,14 +139,14 @@ G4bool G4PhotonEvaporation::BreakUpChain(G4FragmentVector* products,
   // one continues emission is not excluded
   G4Fragment* gamma = contDeexcitation->GenerateGamma(aNucleus);
   if(gamma) { 
-    if (verbose > 0) {
+    if (verbose > 1) {
       G4cout << "G4PhotonEvaporation::EmittedFragment continium deex: "   
 	     << gamma << G4endl;
-      G4cout << "   Residual: " << nucleus << G4endl;
+      G4cout << "   Residual: " << aNucleus << G4endl;
     }
     products->push_back(gamma);
   }
-  // main emission is discrete
+  // main emissions are discrete
   discrDeexcitation->DoChain(products, aNucleus);
   return false;
 }
@@ -183,12 +185,9 @@ G4PhotonEvaporation::GetEmissionProbability(G4Fragment* theNucleus)
   G4double prob = 0.0;
   G4int Z = theNucleus->GetZ_asInt();
   G4int A = theNucleus->GetA_asInt();
-  if(0 < Z && Z < A) {
-    if(G4NuclearLevelStore::GetInstance()->GetManager(Z,A)) {
-      nucleus = theNucleus;
-      prob = 
-	probAlgorithm->EmissionProbability(*nucleus, nucleus->GetExcitationEnergy());
-    }
+  G4double eexc = theNucleus->GetExcitationEnergy();
+  if(0 < Z && Z < A && eexc > tolerance) {
+    prob = probAlgorithm->EmissionProbability(*theNucleus, eexc);
   }
   return prob;
 }
@@ -200,7 +199,6 @@ G4PhotonEvaporation::SetEmissionStrategy(G4VEmissionProbability * alg)
   probAlgorithm = alg;
   myOwnProbAlgorithm = false;
 }
-
 
 void G4PhotonEvaporation::SetVerboseLevel(G4int verb)
 {

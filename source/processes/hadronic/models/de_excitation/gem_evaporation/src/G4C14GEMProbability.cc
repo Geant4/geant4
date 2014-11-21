@@ -36,11 +36,11 @@ G4C14GEMProbability::G4C14GEMProbability() :
   G4GEMProbability(14,6,0.0) // A,Z,Spin
 {
 
-  ExcitEnergies.push_back(6094.2*keV);
+  ExcitEnergies.push_back(6093.8*keV);
   ExcitSpins.push_back(1.0);
   ExcitLifetimes.push_back(7e-15*s);
 
-  ExcitEnergies.push_back(6589.8*keV);
+  ExcitEnergies.push_back(6589.4*keV);
   ExcitSpins.push_back(0.0);
   ExcitLifetimes.push_back(0.4e-12*s);
 
@@ -48,7 +48,7 @@ G4C14GEMProbability::G4C14GEMProbability() :
   ExcitSpins.push_back(3.0);
   ExcitLifetimes.push_back(67e-12*s);
 
-  ExcitEnergies.push_back(6902.3*keV);
+  ExcitEnergies.push_back(6902.6*keV);
   ExcitSpins.push_back(0.0);
   ExcitLifetimes.push_back(25e-15*s);
 

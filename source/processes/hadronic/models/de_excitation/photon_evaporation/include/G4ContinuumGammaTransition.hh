@@ -88,7 +88,6 @@ private:
 
   G4double eMin;
   G4double eMax;
-  G4double maxLevelE;
   G4double minLevelE;
   G4double excitation;
   G4double eGamma;

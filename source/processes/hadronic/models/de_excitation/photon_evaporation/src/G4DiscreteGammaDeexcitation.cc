@@ -76,7 +76,7 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition(G4Fragment* nucleus)
   G4int A = nucleus->GetA_asInt();
   G4double excitation = nucleus->GetExcitationEnergy();
 
-  if (Z < 2 || A < 3 || excitation <= _tolerance) {
+  if(excitation <= _tolerance) {
     if (_verbose > 1) { 
       G4cout << "G4DiscreteGammaDeexcitation::CanDoTransition fails; Z= " << Z
 	     << " A= " << A << " Eex(meV)= " << excitation/MeV << G4endl;
@@ -103,8 +103,8 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition(G4Fragment* nucleus)
   // long lived level	
   if (!level || (level->HalfLife() > maxhl && !rdm) ) { return false; }
 
-  if (_verbose > 0) {
-    G4cout << "G4DiscreteGammaDeexcitation::CreateTransition - Elevel(MeV)= " 
+  if (_verbose > 1) {
+    G4cout << "G4DiscreteGammaDeexcitation: Elevel(MeV)= " 
 	   << level->Energy()/MeV << ", Eex(MeV)= " << excitation << G4endl;
   }
   if(!_transition) {
@@ -114,11 +114,12 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition(G4Fragment* nucleus)
   } else {
     dtransition->Update(level,Z);
   }
+  dtransition->SetEnergyFrom(excitation);
   
-  if (_verbose > 0) {
-    G4cout << "G4DiscreteGammaDeexcitation::CanDoTransition - Eex(MeV)= " 
+  if (_verbose > 1) {
+    G4cout << "CanDoTransition done: Eex(MeV)= " 
 	   << excitation/MeV << ", level enrgies: Emin(MeV)= " 
-	   << levelManager->MinLevelEnergy()/MeV << " Emax(MeV)"
+	   << levelManager->MinLevelEnergy()/MeV << " Emax(MeV)= "
 	   << levelManager->MaxLevelEnergy()/MeV << G4endl;
   }
   return true;

@@ -151,7 +151,7 @@ void G4FermiFragmentsPool::Initialise()
   fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  3,  2.154270*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 10, 5,  5,  3.587130*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 10, 6,  3,  0.00*MeV )); 
-  fragment_pool.push_back(new G4StableFermiFragment( 10, 6,  5,  3.353600*MeV )); 
+  fragment_pool.push_back(new G4StableFermiFragment( 10, 6,  5,  3.353700*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  4,  0.00*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  2,  2.124693*MeV )); 
   fragment_pool.push_back(new G4StableFermiFragment( 11, 5,  6,  4.444980*MeV )); 

@@ -80,7 +80,7 @@ G4C12GEMProbability::G4C12GEMProbability() :
   ExcitSpins.push_back(1.0);
   ExcitLifetimes.push_back(fPlanck/(42*eV));
 
-  ExcitEnergies.push_back(16106.7*keV);
+  ExcitEnergies.push_back(16105.8*keV);
   ExcitSpins.push_back(2.0);
   ExcitLifetimes.push_back(fPlanck/(5.2*keV));
 

@@ -72,7 +72,7 @@ G4C11GEMProbability::G4C11GEMProbability() :
   ExcitSpins.push_back(5.0/2.0);
   ExcitLifetimes.push_back(fPlanck/(15.2*eV));
 
-  ExcitEnergies.push_back(8655*keV);
+  ExcitEnergies.push_back(8699*keV);
   ExcitSpins.push_back(7.0/2.0);
   ExcitLifetimes.push_back(fPlanck/(9*keV));
 
@@ -84,7 +84,7 @@ G4C11GEMProbability::G4C11GEMProbability() :
   ExcitSpins.push_back(5.0/2.0);
   ExcitLifetimes.push_back(fPlanck/(500*keV));
 
-  ExcitEnergies.push_back(9.65E+3*keV);
+  ExcitEnergies.push_back(9.645E+3*keV);
   ExcitSpins.push_back(3.0/2.0);
   ExcitLifetimes.push_back(fPlanck/(210*keV));
 

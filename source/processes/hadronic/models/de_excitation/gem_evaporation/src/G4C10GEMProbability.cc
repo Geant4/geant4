@@ -36,7 +36,7 @@ G4C10GEMProbability::G4C10GEMProbability() :
   G4GEMProbability(10,6,0.0) // A,Z,Spin
 {
 
-  ExcitEnergies.push_back(3353.6*keV);
+  ExcitEnergies.push_back(3353.7*keV);
   ExcitSpins.push_back(2.0);
   ExcitLifetimes.push_back(107.0e-15*s);
 

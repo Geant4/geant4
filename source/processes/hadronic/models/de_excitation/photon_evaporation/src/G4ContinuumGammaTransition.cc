@@ -70,7 +70,7 @@ G4ContinuumGammaTransition::G4ContinuumGammaTransition(
   nBins = 100;
   verbose = verb;
   eMin = keV;
-  eMax =  maxLevelE = minLevelE = eGamma = gammaCreationTime = 0.0;
+  eMax = minLevelE = eGamma = gammaCreationTime = 0.0;
   sampleArray.resize(nBins+1,0.0);
   g4pow = G4Pow::GetInstance();
   Update(manager, Z, A, exc);
@@ -89,9 +89,10 @@ void G4ContinuumGammaTransition::Update(const G4NuclearLevelManager* manager,
   eGamma = 0.;
   gammaCreationTime = 0.;
 
-  maxLevelE = levelManager->MaxLevelEnergy();
-  minLevelE = levelManager->MinLevelEnergy();
-
+  minLevelE = DBL_MAX;
+  if(levelManager) { 
+    minLevelE = std::max(0.5*levelManager->MinLevelEnergy(), tolerance);
+  }
   // Energy range for photon generation; 
   // upper limit is defined 5*Gamma(GDR) from GDR peak
   // Giant Dipole Resonance energy
@@ -146,16 +147,14 @@ void G4ContinuumGammaTransition::SelectGamma()
     G4cout << "*---*---* G4ContinuumTransition: eGamma = " << eGamma
 	   << "   finalExcitation = " << finalExcitation << G4endl;
   }
-  //  if (finalExcitation < 0)
-  if(finalExcitation <= 0.5*minLevelE || finalExcitation <= tolerance)
-    {
-      eGamma = excitation;
-    }
-  else   
-    {
-      finalExcitation = levelManager->NearestLevel(finalExcitation)->Energy();
-      eGamma = excitation - finalExcitation;
-    }  
+
+  if(finalExcitation <= minLevelE) {
+    eGamma = excitation;
+
+  } else {
+    finalExcitation = levelManager->NearestLevel(finalExcitation)->Energy();
+    eGamma = excitation - finalExcitation;
+  }  
 
   gammaCreationTime = GammaTime();
 
@@ -175,12 +174,10 @@ G4double G4ContinuumGammaTransition::GetGammaCreationTime()
   return gammaCreationTime;
 }
 
-
 void G4ContinuumGammaTransition::SetEnergyFrom(G4double energy)
 {
-  if (energy > 0.) excitation = energy;
+  excitation = energy;
 }
-
 
 G4double G4ContinuumGammaTransition::E1Pdf(G4double e)
 {

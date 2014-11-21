@@ -95,9 +95,9 @@ void G4VGammaDeexcitation::DoChain(G4FragmentVector* products,
     G4Fragment* gamma = GenerateGamma(nucleus);
     if (gamma) {
       products->push_back(gamma);
-      //G4cout << "Eex(keV)= " << _nucleus->GetExcitationEnergy()/keV << G4endl;
-      if(nucleus->GetExcitationEnergy() <= _tolerance) { break; }
     }
+    //G4cout << "Eex(MeV)= " << nucleus->GetExcitationEnergy() << G4endl;
+    if(nucleus->GetExcitationEnergy() <= _tolerance) { break; }
   } 
   
   if (_verbose > 1) {
@@ -111,16 +111,17 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma(G4Fragment* aNucleus)
   if(!CanDoTransition(aNucleus)) { return thePhoton; }
 
   _transition->SelectGamma();  // it can be conversion electron too
-  G4double eGamma = _transition->GetGammaEnergy(); 
-  //G4cout << "G4VGammaDeexcitation::GenerateGamma - Egam(MeV)= " 
-  //	   << eGamma << G4endl; 
-  if(eGamma <= 0.0) { return thePhoton; }
+  G4double etrans = _transition->GetGammaEnergy(); 
+  //G4cout << "G4VGammaDeexcitation::GenerateGamma - Etrans(MeV)= " 
+  //	 << etrans << G4endl; 
+  if(etrans <= 0.0) { return thePhoton; }
 
-  G4double excitation = aNucleus->GetExcitationEnergy() - eGamma;
+  // final excitation
+  G4double excitation = aNucleus->GetExcitationEnergy() - etrans;
   if(excitation <= _tolerance) { excitation = 0.0; } 
   if (_verbose > 1) 
     {
-      G4cout << "G4VGammaDeexcitation::GenerateGamma - Edeexc(MeV)= " << eGamma 
+      G4cout << "G4VGammaDeexcitation::GenerateGamma - Edeexc(MeV)= " << etrans 
 	     << " ** left Eexc(MeV)= " << excitation
 	     << G4endl;
     }
@@ -161,6 +162,7 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma(G4Fragment* aNucleus)
     // shortcut for long lived levels
     // not correct position of stopping ion gamma emission
     // 4-momentum balance is breaked
+    G4double eGamma = aNucleus->GetExcitationEnergy() - excitation;
     G4double e = eGamma + eMass;
     G4double mom = std::sqrt(eGamma*(eGamma + 2*eMass));
     Gamma4P.set(mom * sinTheta * std::cos(phi),

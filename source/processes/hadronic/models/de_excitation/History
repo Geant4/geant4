@@ -14,6 +14,18 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+21 Nov 2014 Vladimir Ivanchenko (hadr-deex-V10-00-24)
+----------------------------------------------------------
+- G4ContinuumGammaTransition, G4ContinuumGammaDeexcitation,
+  G4DiscreteGammaDeexcitation, G4DiscreteGammaTransition,
+  G4VGammaDeexcitation - cleanup selection of continues or discrete 
+    transition
+- G4FermiFragmentPool further cleanup values of excitations
+- G4ExcitationHandler - added Description for documentation
+- GEN probabilities - verified and level energies using gamma
+    level data
+- G4PhotonEvaporation - improved computation of probability
+
 20 Nov 2014 Vladimir Ivanchenko (hadr-deex-V10-00-23)
 ----------------------------------------------------------
 - G4NuclearLevelStore Makoto Asai redesign the class to enshure that

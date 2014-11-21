@@ -43,7 +43,7 @@ G4Li6GEMProbability::G4Li6GEMProbability() :
   ExcitSpins.push_back(0.0);
   ExcitLifetimes.push_back(fPlanck/(8.2*eV));
 
-  ExcitEnergies.push_back(4310.0*keV);
+  ExcitEnergies.push_back(4312.0*keV);
   ExcitSpins.push_back(2.0);
   ExcitLifetimes.push_back(fPlanck/(1.7*MeV));
 
