@@ -937,7 +937,6 @@ G4int G4UIQt::ReceiveG4cout (
   fCoutTBTextArea->append(result);
   fCoutTBTextArea->setTextColor(previousColor);
   fCoutTBTextArea->ensureCursorVisible ();
-  qApp->processEvents();
 
 #ifdef G4MULTITHREADED
   UpdateCoutThreadFilter();
@@ -991,7 +990,6 @@ G4int G4UIQt::ReceiveG4cerr (
   fCoutTBTextArea->append(result);
   fCoutTBTextArea->setTextColor(previousColor);
   fCoutTBTextArea->ensureCursorVisible ();
-  qApp->processEvents();
 
   if (QString(aString.data()).trimmed() != "") {
     fLastErrMessage = aString;

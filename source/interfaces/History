@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20th November 2014  Laurent Garnier (interfaces-V10-00-23)
+- G4UIQt.cc
+  o Fix recursive calls caused by qApp->processEvent() in some cases (cms.gdml) 
+
 19th November 2014  Laurent Garnier (interfaces-V10-00-22)
 - G4UIQt.cc
   o Add public methods
