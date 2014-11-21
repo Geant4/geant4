@@ -201,7 +201,7 @@ class G4CoupledTransportation : public G4VProcess
      G4ParticleChangeForTransport fParticleChange;
        // New ParticleChange
 
-     G4double endpointDistance;
+     G4double fEndpointDistance;
 
 
   // Thresholds for looping particles: 

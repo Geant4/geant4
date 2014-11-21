@@ -17,17 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 21st 2014, J.Apostolakis transport-V10-00-06
+--------------------------------- (corrected version of transport-V10-00-04)
+- Added initialization of G4CoupledTransportation data members (fixes Coverity issue 15280)
+  Renamed data member, to make its name canonical.
+     
 October 15th 2014, M.Asai transport-V10-00-05
 -------------------------
 - G4CoupledTransportation is reverted to transport-V10-00-03.
 - G4Transportation and G4CoupledTransportation : made data member
   fUseMagneticMoment and its set method EnableUseMagneticMoment()
   static.
-
-June  20th 2014, J.Apostolakis transport-V10-00-04
-------------------------------
-- Added initialization of G4CoupledTransportation data members (fixes Coverity issue 15280)
-  Renamed data member, to make its name canonical.
 
 May   27st 2014, V.Ivanchenko transport-V10-00-03
 ------------------------------
