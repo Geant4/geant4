@@ -57,6 +57,7 @@ G4RTMessenger* G4RTMessenger::GetInstance
 G4RTMessenger::G4RTMessenger(G4TheRayTracer* p1)
 {
   theDefaultTracer = p1;
+  theTracer = theDefaultTracer;
 
   rayDirectory = new G4UIdirectory("/vis/rayTracer/");
   rayDirectory->SetGuidance("RayTracer commands.");

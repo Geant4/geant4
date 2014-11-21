@@ -63,10 +63,18 @@ G4TheRayTracer::G4TheRayTracer(G4VFigureFileMaker* figMaker,
   theScanner = scanner;
   if(!theScanner) theScanner = new G4RTSimpleScanner;
   theRayShooter = new G4RayShooter();
+  theUserEventAction = 0;
+  theUserStackingAction = 0;
+  theUserTrackingAction = 0;
+  theUserSteppingAction = 0;
   theRayTracerEventAction = 0;
   theRayTracerStackingAction = 0;
   theRayTracerTrackingAction = 0;
   theRayTracerSteppingAction = 0;
+  colorR = 0;
+  colorG = 0;
+  colorB = 0;
+
   theMessenger = G4RTMessenger::GetInstance(this);
   theEventManager = G4EventManager::GetEventManager();
 

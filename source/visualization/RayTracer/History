@@ -24,6 +24,9 @@ committal in the CVS repository !
 History file for Ray Tracer category
 ---------------------------------------
 
+20th November 2014  Makoto Asai (raytracer-V10-00-00)
+- Fixes for Coverity.
+
 15th November 2013  John Allison (raytracer-V09-06-07)
 - Some changes as suggested by PVS.
 - Fixes for Coverity.
