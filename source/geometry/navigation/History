@@ -16,7 +16,11 @@ committal in the CVS repository !
      ----------------------------------------------------------
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
-
+November 20, 2014 - J.Apostolakis (geomnav-V10-00-17)
+---------------------------------
+- G4ErrorPropagationNavigator: fix to make normal a unit vector,
+    and fix for Coverity issue, to protect against null 'target'.
+    
 November 19, 2014 - G.Cosmo (geomnav-V10-00-16)
 ---------------------------
 - Some code cleanup in G4Navigator source.

@@ -172,13 +172,15 @@ GetGlobalExitNormal(const G4ThreeVector& point, G4bool* valid)
       distance = target->GetDistanceFromPoint(point);
     }
   }
-  if( distance > kCarTolerance )
+  
+  if( distance > kCarTolerance   // Not reached the target.
+     || (!target) )
+            //  If a target does not exist, this seems the best we can do
   {
     normal= G4Navigator::GetGlobalExitNormal(point, valid);
   }
   else
   {
-    // target->GetType();
     switch( target->GetType() )
     {
       case G4ErrorTarget_GeomVolume:
@@ -188,20 +190,24 @@ GetGlobalExitNormal(const G4ThreeVector& point, G4bool* valid)
       case G4ErrorTarget_TrkL:
         normal= G4ThreeVector( 0.0, 0.0, 0.0);
         *valid= false;
-        G4Exception("G4ErrorPropagationNavigator::GetGlobalExitNormal", "Geometry:003", JustWarning, "Unexpected value of Target type");
+        G4Exception("G4ErrorPropagationNavigator::GetGlobalExitNormal",
+                    "Geometry1003",
+                    JustWarning, "Unexpected value of Target type");
         break;
       case G4ErrorTarget_PlaneSurface:
       case G4ErrorTarget_CylindricalSurface:
         const G4ErrorSurfaceTarget* surfaceTarget=
           static_cast<const G4ErrorSurfaceTarget*>(target);
-        normal= surfaceTarget->GetTangentPlane(point).normal();
+        normal= surfaceTarget->GetTangentPlane(point).normal().unit();
         *valid= true;
         break;
 
 //      default:
 //        normal= G4ThreeVector( 0.0, 0.0, 0.0);
 //        *valid= false;
-//        G4Exception("G4ErrorPropagationNavigator::GetGlobalExitNormal", "Geometry:003", FatalException, "Impossible value of Target type");
+//        G4Exception("G4ErrorPropagationNavigator::GetGlobalExitNormal",
+//                    "Geometry:003",
+//                    FatalException, "Impossible value of Target type");
 //        exit(1);
 //        break;
     }
