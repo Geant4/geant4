@@ -26,6 +26,9 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+20th November 2014  John Allison  (visman-V10-00-27)
+- G4ViewParameters.icc: Another go at fixing win7-vc12 compiler warnings.
+
 19th November 2014  John Allison  (visman-V10-00-26)
 - G4VisCommandsSceneAdd.cc: Fixed compiler warnings.
 
