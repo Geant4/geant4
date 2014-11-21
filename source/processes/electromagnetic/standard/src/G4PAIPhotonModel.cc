@@ -144,6 +144,10 @@ G4PAIPhotonModel::~G4PAIPhotonModel()
   {
         delete fPAIplasmonTable;
   }
+  if( fProtonEnergyVector )
+  {
+        delete fProtonEnergyVector;
+  }
 }
 
 ///////////////////////////////////////////////////////////////////////////////
