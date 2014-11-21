@@ -50,6 +50,7 @@
 class G4Step;
 class G4TouchableHistory;
 class G4HCofThisEvent;
+class Run;
 
 class TargetSD : public G4VSensitiveDetector
 {
@@ -65,6 +66,8 @@ public: // Without description
   virtual void PrintAll();
 
 private:
+
+  Run* fRun;
 
 };
 

@@ -15,6 +15,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+20-11-14 V.Ivant (testem8-V10-00-07)
+- DetectorConstruction, TargetSD - attempt to fix crash at 
+    destruction in MT mode
+
 03-11-14 V.Ivant (testem8-V10-00-06)
 - TestEm8.in - reduce statistics to 1000
 

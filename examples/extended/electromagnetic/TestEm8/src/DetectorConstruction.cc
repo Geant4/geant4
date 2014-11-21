@@ -101,7 +101,7 @@ DetectorConstruction::DetectorConstruction()
 DetectorConstruction::~DetectorConstruction()
 { 
   delete fDetectorMessenger;
-  delete fGasDetectorCuts;
+  //delete fGasDetectorCuts;
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -312,8 +312,7 @@ G4VPhysicalVolume* DetectorConstruction::Construct()
 void DetectorConstruction::ConstructSDandField()
 {  
   fTargetSD = new TargetSD("GasSD");
-  (G4SDManager::GetSDMpointer())->AddNewDetector( fTargetSD );
-  fLogicDet->SetSensitiveDetector(fTargetSD);
+  SetSensitiveDetector(fLogicDet, fTargetSD); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
