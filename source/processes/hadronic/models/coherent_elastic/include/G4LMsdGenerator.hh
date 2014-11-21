@@ -26,7 +26,7 @@
 //
 // $Id$
 //
-// Vladimir Grichine Oct 2014 
+// Author: Vladimir Grichine, ~25 October 2014 
 //
 // Class Description
 // Final state production model for theoretical models of hadron inelastic
@@ -40,7 +40,14 @@
 // in case there is no residual nucleus. 
 // Class Description - End
 //
+// History:
 //
+// ~25.10.14 V. Grichine: p and kinematics tests
+// 20.11.14 V. Grichine: n, pi+-, K+- added
+//
+//
+
+
 
 #ifndef G4LMsdGenerator_h
 #define G4LMsdGenerator_h 1

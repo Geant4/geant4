@@ -47,6 +47,8 @@ G4LMsdGenerator::G4LMsdGenerator(const G4String& name)
     : G4HadronicInteraction(name)
 
 {
+  fPDGencoding = 0;
+
   // theParticleChange = new G4HadFinalState;
 }
 
@@ -265,7 +267,9 @@ G4LMsdGenerator::ApplyYourself( const G4HadProjectile& aTrack,
 
     theParticleChange.AddSecondary(aNew);
     delete ddktv->operator[](i);
-  } 
+  }
+  delete ddktv;
+  
   return &theParticleChange;
 }
 
@@ -367,25 +371,34 @@ G4double G4LMsdGenerator::SampleMx(const G4HadProjectile* aParticle)
     }
     else if( aParticle->GetDefinition() == G4PionPlus::PionPlus() ) 
     {
-      Mx = 1.8;
-      fPDGencoding = 9010211;
+      // Mx = 1.67;
+      // fPDGencoding = 10215;
+      Mx = 1.45;
+      fPDGencoding = 10211;
     }
     else if( aParticle->GetDefinition() == G4PionMinus::PionMinus() ) 
     {
-      Mx = 1.8;
-      fPDGencoding = -9010211;
+      // Mx = 1.67; // f0 problems->4pi vmg 20.11.14
+      // fPDGencoding = -10215;
+      Mx = 1.45;
+      fPDGencoding = -10211;
     }
     else if( aParticle->GetDefinition() == G4KaonPlus::KaonPlus() ) 
     {
-      Mx = 1.83;
-      fPDGencoding = 9010321;
+      Mx = 1.68;
+      fPDGencoding = 30323;
     }
     else if( aParticle->GetDefinition() == G4KaonMinus::KaonMinus() ) 
     {
-      Mx = 1.83;
-      fPDGencoding = -9010321;
+      Mx = 1.68;
+      fPDGencoding = -30323;
     }
-  }  
+  } 
+  if(fPDGencoding == 0)
+  {
+      Mx = 1.44;
+      fPDGencoding = 12212;   
+  } 
   return Mx;
 }
 
