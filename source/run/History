@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 20th, 2014 M.Asai, A.Dotti (run-V10-00-42)
+- Fix coverity defects
+- Fix for G4RunManager in case macroFile in beamOn is " "
+
 November 14th, 2014 M.Asai (run-V10-00-41)
 - Fix Coverity defects related to keeping events.
 

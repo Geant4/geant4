@@ -70,7 +70,11 @@ G4ThreadLocal G4AdjointSimManager* G4AdjointSimManager::instance = 0;
 G4AdjointSimManager::G4AdjointSimManager():
    fUserRunAction(0), fUserEventAction(0),fUserPrimaryGeneratorAction(0),
    fUserTrackingAction(0), fUserSteppingAction(0), fUserStackingAction(0),
-   theAdjointRunAction(0), theAdjointEventAction(0)
+   theAdjointRunAction(0), theAdjointEventAction(0),
+   adjoint_tracking_mode(false),last_ekin(0),last_ekin_nuc(0),
+   last_cos_th(0),last_fwd_part_PDGEncoding(0),last_fwd_part_index(0),
+   last_weight(0), ID_of_last_particle_that_reach_the_ext_source(0),
+   nb_evt_of_last_run(0),area_of_the_adjoint_source(0),theAdjointPrimaryWeight(0)
 { 
  //Create adjoint actions;
  //----------------------

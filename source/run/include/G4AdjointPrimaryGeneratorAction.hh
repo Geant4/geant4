@@ -141,6 +141,9 @@ class G4AdjointPrimaryGeneratorAction : public G4VUserPrimaryGeneratorAction
     G4ParticleDefinition* fwd_ion;
     G4ParticleDefinition* adj_ion;
     G4String ion_name;
+    //disable copy constructor and assignement operator
+    G4AdjointPrimaryGeneratorAction(const G4AdjointPrimaryGeneratorAction&);
+    G4AdjointPrimaryGeneratorAction& operator=(const G4AdjointPrimaryGeneratorAction&);
 };
 #endif
 

@@ -267,6 +267,7 @@ void G4RunManager::BeamOn(G4int n_event,const char* macroFile,G4int n_select)
   if(cond)
   {
     numberOfEventToBeProcessed = n_event;
+    numberOfEventProcessed = 0;
     ConstructScoringWorlds();
     RunInitialization();
     DoEventLoop(n_event,macroFile,n_select);
@@ -310,11 +311,15 @@ G4bool G4RunManager::ConfirmBeamOnCondition()
 void G4RunManager::RunInitialization()
 {
   if(!(kernel->RunInitialization(fakeRun))) return;
-  if(fakeRun) return;
+
+  runAborted = false;
+  numberOfEventProcessed = 0;
 
   CleanUpPreviousEvents();
   if(currentRun) delete currentRun;
   currentRun = 0;
+
+  if(fakeRun) return;
 
   if(fGeometryHasBeenDestroyed) G4ParallelWorldProcessStore::GetInstance()->UpdateWorlds();
 
@@ -350,9 +355,6 @@ void G4RunManager::RunInitialization()
       }
       StoreRNGStatus(fileN);
   }
-
-  runAborted = false;
-  numberOfEventProcessed = 0;
 }
 
 void G4RunManager::DoEventLoop(G4int n_event,const char* macroFile,G4int n_select)

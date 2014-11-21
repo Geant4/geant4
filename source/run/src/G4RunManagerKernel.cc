@@ -193,6 +193,8 @@ numberOfParallelWorld(0),geometryNeedsToBeClosed(true),
             = G4RegionStore::GetInstance()->GetRegion("DefaultRegionForParallelWorld", true);
         break;
      default:   
+        defaultRegion = 0;
+        defaultRegionForParallelWorld = 0;
         G4ExceptionDescription msgx;
         msgx<<" This type of RunManagerKernel can only be used in mult-threaded applications.";
         G4Exception("G4RunManagerKernel::G4RunManagerKernel(G4bool)","Run0035",FatalException,msgx);
