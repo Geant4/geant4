@@ -122,6 +122,7 @@ G4EnergyLossForExtrapolator::EnergyBeforeStep(G4double kinEnergy,
 					      const G4Material* mat, 
 					      const G4ParticleDefinition* part)
 {
+  //G4cout << "G4EnergyLossForExtrapolator::EnergyBeforeStep" << G4endl;
   if(0 == nmat) { Initialisation(); }
   G4double kinEnergyFinal = kinEnergy;
 
@@ -318,7 +319,7 @@ void G4EnergyLossForExtrapolator::Initialisation()
 
   nmat = G4Material::GetNumberOfMaterials();
   currentParticleName = "";
-  if(!tables) { BuildTables(); }
+  BuildTables(); 
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
@@ -330,12 +331,14 @@ void G4EnergyLossForExtrapolator::BuildTables()
 {
   G4AutoLock l(&G4EnergyLossForExtrapolatorMutex);
 
-  if(verbose>1) {
-    G4cout << "### G4EnergyLossForExtrapolator::BuildTables for "
-	   << nmat << " materials Nbins= " << nbins 
-	   << " Emin(MeV)= " << emin << "  Emax(MeV)= " << emax << G4endl;
+  if(!tables) {
+    if(verbose > 0) {
+      G4cout << "### G4EnergyLossForExtrapolator::BuildTables for "
+	     << nmat << " materials Nbins= " << nbins 
+	     << " Emin(MeV)= " << emin << "  Emax(MeV)= " << emax << G4endl;
+    }
+    tables = new G4TablesForExtrapolator(verbose, nbins, emin, emax);
   }
-  tables = new G4TablesForExtrapolator(verbose, nbins, emin, emax);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....

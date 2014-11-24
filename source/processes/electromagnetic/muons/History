@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+21 November 14: V.Ivanchenko (emmuons-V10-00-04)
+- G4EnergyLossForExtrapolator - fixed problem of thread safe 
+    initialisation
+
 20 November 14: V.Ivanchenko (emmuons-V10-00-03)
 - G4EnergyLossForExtrapolator - fixed tread safety - correct 
     initialisation per thread
