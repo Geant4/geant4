@@ -115,6 +115,12 @@ G4hhElastic::G4hhElastic( G4ParticleDefinition* target, G4ParticleDefinition* pr
   lowestEnergyLimit    = 0.0*keV;  
   plabLowLimit         = 20.0*MeV;
 
+  fRhoReIm=fSigmaTot=fOptRatio=fSpp=fPcms=fInTkin=0.;
+  theProton   = G4Proton::Proton();
+  theNeutron  = G4Neutron::Neutron();
+  thePionPlus = G4PionPlus::PionPlus();
+  thePionMinus= G4PionMinus::PionMinus();
+
   fTarget      = target;
   fProjectile  = projectile;
   fMassTarg   = fTarget->GetPDGMass();
@@ -152,6 +158,9 @@ G4hhElastic::G4hhElastic( G4ParticleDefinition* target, G4ParticleDefinition* pr
   lowEnergyLimitHE = 0.0*GeV;  
   lowestEnergyLimit= 0.0*keV;  
   plabLowLimit     = 20.0*MeV;
+
+  fRhoReIm=fSigmaTot=fOptRatio=fSpp=fPcms=fInTkin=0.;
+
 
   fTarget = target; // later vmg
   fProjectile = projectile;
@@ -306,7 +315,7 @@ G4double G4hhElastic::SampleInvariantT( const G4ParticleDefinition* aParticle, G
                                                G4int, G4int )
 {
   G4int iTkin, iTransfer;
-  G4double t, t1, t2, E1, E2, W, W1, W2, position, m1 = aParticle->GetPDGMass();
+  G4double t, t2, position, m1 = aParticle->GetPDGMass();
   G4double Tkin = std::sqrt(m1*m1+p*p) - m1;
 
   if( aParticle == G4Proton::Proton() || aParticle == G4Neutron::Neutron() )
@@ -375,7 +384,8 @@ G4double G4hhElastic::SampleInvariantT( const G4ParticleDefinition* aParticle, G
 
     t2  = GetTransfer(iTkin, iTransfer, position);
     return t2;
-
+    /*
+    G4double t1, E1, E2, W, W1, W2;
     // G4cout<<"t2 = "<<t2<<G4endl;
 
     E2 = fEnergyVector->GetLowEdgeEnergy(iTkin);
@@ -408,6 +418,7 @@ G4double G4hhElastic::SampleInvariantT( const G4ParticleDefinition* aParticle, G
     W2 = (Tkin - E1)*W;
 
     t = W1*t1 + W2*t2;
+    */
   }
   return t;
 }
