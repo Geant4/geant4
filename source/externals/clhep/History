@@ -17,6 +17,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24 November 2014 - G.Cosmo
+- Updated to CLHEP-2.2.0.4:
+  * Utility (L.Garren <garren@fnal.gov>)
+    o memory.h: fixed a type mismatch (compilation warning on Windows/VC9).
+  * Random (L.Garren <garren@fnal.gov>)
+    o RanshiEngine.cc: use a pragma to ignore aggressive 32bit compiler
+      warnings.
+  * Vector (L.Garren <garren@fnal.gov>)
+    o ThreeVector.icc: inline Hep3Vector::operator () (int i), following
+      patch included in Geant4 on November 12th below.
+
 14 November 2014 - G.Cosmo
 - Updated to CLHEP-2.2.0.3:
   * Units (L.Garren <garren@fnal.gov>)

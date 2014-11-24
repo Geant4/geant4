@@ -17,6 +17,14 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-November-2014: G.Cosmo (externals-V10-00-08)
+- Updated to CLHEP-2.2.0.4:
+  o Fixed a type mismatch in Utility/memory.h,
+    reported as compilation warning on Windows/VC9.
+  o Use pragma in RanshiEngine.cc to ignore aggressive 32bit gcc compiler
+    warnings.
+  o Synchronised inlining of Hep3Vector::operator () (int i).
+
 14-November-2014: G.Cosmo (externals-V10-00-07)
 - Updated to CLHEP-2.2.0.3: moved definition of pi into SystemOfUnits.h
   so that its hard-coded value is not defined twice.

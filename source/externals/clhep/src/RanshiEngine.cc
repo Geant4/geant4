@@ -30,6 +30,7 @@
 //                  getState() for anonymous restores           12/27/04    
 // M. Fischler    - State-saving using only ints, for portability 4/12/05
 // L. Garren      - use explicit 32bit mask to avoid compiler warnings  6/6/2014  
+// L. Garren      - adding pragma for 32bit gcc 4.9 11/20/2014  
 //
 // =======================================================================
 
@@ -39,6 +40,14 @@
 
 #include <string.h>	// for strcmp
 #include <iostream>
+
+// don't generate warnings about agressive loop optimization
+#if defined __GNUC__ 
+  #if __GNUC__ > 3 && __GNUC_MINOR__ > 8
+    #pragma GCC diagnostic push
+    #pragma GCC diagnostic ignored "-Waggressive-loop-optimizations"
+  #endif
+#endif
 
 namespace CLHEP {
 
@@ -338,3 +347,9 @@ bool RanshiEngine::getState (const std::vector<unsigned long> & v) {
 }
 
 }  // namespace CLHEP
+
+#if defined __GNUC__ 
+  #if __GNUC__ > 3 && __GNUC_MINOR__ > 8
+    #pragma GCC diagnostic pop
+  #endif
+#endif

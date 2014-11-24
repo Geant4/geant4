@@ -18,31 +18,6 @@ namespace CLHEP {
 
 // x, y, z
 
-inline double Hep3Vector::operator () (int i) const {
-  switch(i) {
-  case X:
-    return x();
-  case Y:
-    return y();
-  case Z:
-    return z();
-  }
-  return 0.;
-}
-
-inline double & Hep3Vector::operator () (int i) {
-  static double foo;
-  switch(i) {
-  case X:
-    return dx;
-  case Y:
-    return dy;
-  case Z:
-    return dz;
-  }
-  return foo;
-}
-
 inline double & Hep3Vector::operator[] (int i)       { return operator()(i); }
 inline double   Hep3Vector::operator[] (int i) const { return operator()(i); }
 
@@ -62,6 +37,31 @@ inline void Hep3Vector::set(double x1, double y1, double z1) {
   dx = x1; 
   dy = y1; 
   dz = z1; 
+}
+
+inline double Hep3Vector::operator () (int i) const {
+  switch(i) {
+  case X:
+    return x();
+  case Y:
+    return y();
+  case Z:
+    return z();
+  }
+  return 0.;
+}
+
+inline double & Hep3Vector::operator () (int i) {
+  static double dummy;
+  switch(i) {
+  case X:
+    return dx;
+  case Y:
+    return dy;
+  case Z:
+    return dz;
+  }
+  return dummy;
 }
 
 // --------------
