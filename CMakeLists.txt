@@ -32,6 +32,13 @@ if(POLICY CMP0022)
   cmake_policy(SET CMP0022 OLD)
 endif()
 
+# If Policy CMP0042 exists, use OLD to prefer the use of install names
+# instead of the new @rpath default. This is temporary to suppress warnings
+# on newer CMake versions.
+if(POLICY CMP0042)
+  cmake_policy(SET CMP0042 OLD)
+endif()
+
 # If Policy CMP0043 exists, use OLD because Geant4 still needs
 # to support Geant4 =< 2.8.12.
 # This relates to the use of generator expressions to set COMPILE_DEFINITIONS
