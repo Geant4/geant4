@@ -37,9 +37,11 @@
 //		trailing effect
 // 20141111  M. Kelsey -- Revert defaults for PreCompound, phase-space,
 //		and trailing effect.
+// 20141121  Use G4AutoDelete to avoid end-of-thread memory leaks
 
 #include "G4CascadeParameters.hh"
 #include "G4CascadeParamMessenger.hh"
+#include "G4AutoDelete.hh"
 #include <stdlib.h>
 #include <iostream>
 using std::endl;
@@ -50,7 +52,11 @@ using std::endl;
 G4CascadeParameters* G4CascadeParameters::fpInstance = 0;
 
 const G4CascadeParameters* G4CascadeParameters::Instance() {
-  if (!fpInstance) fpInstance = new G4CascadeParameters;
+  if (!fpInstance) {
+    fpInstance = new G4CascadeParameters;
+    G4AutoDelete::Register(fpInstance);
+  }
+
   return fpInstance;
 }
 

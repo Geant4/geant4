@@ -39,8 +39,10 @@
 // 20111007  M. Kelsey -- Add new gamma-n and gamma-p tables.
 // 20130129  M. Kelsey -- Drop load-on-demand interfaces, fill in ctor
 // 20130429  M. Kelsey -- Change instance to thread-local pointer.
+// 20141121  Use G4AutoDelete to avoid end-of-thread memory leaks
 
 #include "G4CascadeChannelTables.hh"
+#include "G4AutoDelete.hh"
 #include "G4CascadeChannel.hh"
 #include "G4CascadeGamNChannel.hh"
 #include "G4CascadeGamPChannel.hh"
@@ -87,7 +89,11 @@ using namespace G4InuclParticleNames;
 G4ThreadLocal G4CascadeChannelTables* G4CascadeChannelTables::theInstance = 0;
 
 const G4CascadeChannelTables& G4CascadeChannelTables::instance() {
-  if (!theInstance) theInstance = new G4CascadeChannelTables;
+  if (!theInstance) {
+    theInstance = new G4CascadeChannelTables;
+    G4AutoDelete::Register(theInstance);
+  }
+
   return *theInstance;
 }
 

@@ -69,7 +69,7 @@ G4PreCompoundDeexcitation::G4PreCompoundDeexcitation()
   theDeExcitation = static_cast<G4PreCompoundModel*>(p);
   if (!theDeExcitation) {
     theExcitationHandler = new G4ExcitationHandler;
-    theDeExcitation = new G4PreCompoundModel;
+    theDeExcitation = new G4PreCompoundModel(theExcitationHandler);
   }
 }
 

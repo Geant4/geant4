@@ -33,8 +33,10 @@
 // 20130307  M. Kelsey -- Add verbosity interface
 // 20130422  M. Kelsey -- Add three-body distributions, for temporary use
 // 20130619  Change singleton instance to be thread-local, to avoid collisions.
+// 20141121  Use G4AutoDelete to avoid end-of-thread memory leaks
 
 #include "G4TwoBodyAngularDist.hh"
+#include "G4AutoDelete.hh"
 #include "G4GamP2NPipAngDst.hh"
 #include "G4GamP2PPi0AngDst.hh"
 #include "G4GammaNuclAngDst.hh"
@@ -59,7 +61,11 @@ using namespace G4InuclParticleNames;
 G4ThreadLocal G4TwoBodyAngularDist* G4TwoBodyAngularDist::theInstance = 0;
 
 const G4TwoBodyAngularDist* G4TwoBodyAngularDist::GetInstance() {
-  if (!theInstance) theInstance = new G4TwoBodyAngularDist;
+  if (!theInstance) {
+    theInstance = new G4TwoBodyAngularDist;
+    G4AutoDelete::Register(theInstance);
+  }
+
   return theInstance;
 }
 
