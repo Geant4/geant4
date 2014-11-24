@@ -40,8 +40,8 @@
 #include "G4ITSafetyHelper.hh"
 #include "G4PVPlacement.hh"
 
-G4ThreadLocal G4ITTransportationManager* G4ITTransportationManager::fpInstance(
-    0);
+G4ThreadLocal G4ITTransportationManager*
+G4ITTransportationManager::fpInstance(0);
 
 G4ITTransportationManager::G4ITTransportationManager()
 {
@@ -105,7 +105,7 @@ void G4ITTransportationManager::Initialize()
   {
     fWorlds.push_back(*it);
   }
-  fpSafetyHelper = new G4ITSafetyHelper;
+  fpSafetyHelper = new G4ITSafetyHelper();
 }
 
 G4ITTransportationManager* G4ITTransportationManager::GetTransportationManager()

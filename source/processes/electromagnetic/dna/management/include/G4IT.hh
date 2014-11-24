@@ -77,7 +77,8 @@ extern G4DLLEXPORT G4ThreadLocal G4Allocator<G4IT> *aITAllocator;
 extern G4DLLIMPORT G4ThreadLocal G4Allocator<G4IT> *aITAllocator;
 #endif
 
-class G4TrackListNode;
+template<class OBJECT> class G4FastListNode;
+typedef G4FastListNode<G4Track> G4TrackListNode;
 
 /**
  * G4IT is a interface which allows the inheriting object :
@@ -153,11 +154,11 @@ public:
     return &fTrackingInformation;
   }
 
-  inline G4TrackListNode* GetTrackListNode()
+  inline G4TrackListNode* GetListNode()
   {
     return fpTrackNode;
   }
-  inline void SetTrackListNode(G4TrackListNode* node)
+  inline void SetListNode(G4TrackListNode* node)
   {
     fpTrackNode = node;
   }

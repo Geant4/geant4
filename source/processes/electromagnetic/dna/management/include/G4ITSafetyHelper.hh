@@ -54,89 +54,92 @@ class G4PathFinder;
 
 class G4ITSafetyHelper : public G4TrackStateDependent<G4ITSafetyHelper>
 {
-public: // with description
-	G4ITSafetyHelper();
-	~G4ITSafetyHelper();
-	//
-	// Constructor and destructor
+public:
+  // with description
+  G4ITSafetyHelper();
+  ~G4ITSafetyHelper();
+  //
+  // Constructor and destructor
 
-	G4double CheckNextStep( const G4ThreeVector& position,
-			const G4ThreeVector& direction,
-			const G4double currentMaxStep,
-			G4double& newSafety );
-	//
-	// Return linear step for mass geometry
+  G4double CheckNextStep(const G4ThreeVector& position,
+                         const G4ThreeVector& direction,
+                         const G4double currentMaxStep,
+                         G4double& newSafety);
+  //
+  // Return linear step for mass geometry
 
-	G4double ComputeSafety( const G4ThreeVector& pGlobalPoint,
-			G4double maxRadius=DBL_MAX );   // Radius of interest
-	//
-	// Return safety for all geometries.
-	//
-	//  The 2nd argument is the radius of your interest (e.g. maximum displacement )
-	//    Giving this you can reduce the average computational cost.
-	//  If the second argument is not given, this is the real isotropic safety
+  G4double ComputeSafety(const G4ThreeVector& pGlobalPoint, G4double maxRadius =
+      DBL_MAX); // Radius of interest
+  //
+  // Return safety for all geometries.
+  //
+  //  The 2nd argument is the radius of your interest (e.g. maximum displacement )
+  //    Giving this you can reduce the average computational cost.
+  //  If the second argument is not given, this is the real isotropic safety
 
-	void Locate(const G4ThreeVector& pGlobalPoint,
-			const G4ThreeVector& direction);
-	//
-	// Locate the point for all geometries
+  void Locate(const G4ThreeVector& pGlobalPoint,
+      const G4ThreeVector& direction);
+  //
+  // Locate the point for all geometries
 
-	void ReLocateWithinVolume(const G4ThreeVector& pGlobalPoint );
-	//
-	// Relocate the point in the volume of interest
+  void ReLocateWithinVolume(const G4ThreeVector& pGlobalPoint );
+  //
+  // Relocate the point in the volume of interest
 
-	inline void EnableParallelNavigation(G4bool parallel);
-	//
-	//  To have parallel worlds considered, must be true.
-	//  Alternative is to use single (mass) Navigator directly
+  inline void EnableParallelNavigation(G4bool parallel);
+  //
+  //  To have parallel worlds considered, must be true.
+  //  Alternative is to use single (mass) Navigator directly
 
-	void InitialiseNavigator();
-	//
-	// Check for new navigator for tracking, and reinitialise pointer
+  void InitialiseNavigator();
+  //
+  // Check for new navigator for tracking, and reinitialise pointer
 
-	G4int SetVerboseLevel( G4int lev ) { G4int oldlv= fVerbose; fVerbose= lev; return oldlv; }
+  G4int SetVerboseLevel( G4int lev )
+  { G4int oldlv= fVerbose; fVerbose= lev; return oldlv;}
 
-	inline G4VPhysicalVolume* GetWorldVolume();
-	inline void SetCurrentSafety(G4double val, const G4ThreeVector& pos);
+  inline G4VPhysicalVolume* GetWorldVolume();
+  inline void SetCurrentSafety(G4double val, const G4ThreeVector& pos);
 
 public: // without description
 
-	void InitialiseHelper();
+  void InitialiseHelper();
 
 private:
 
-	G4PathFinder* fpPathFinder;
-	G4ITNavigator*  fpMassNavigator;
-	G4int         fMassNavigatorId;
+  G4PathFinder* fpPathFinder;
+  G4ITNavigator* fpMassNavigator;
+  G4int fMassNavigatorId;
 
-	G4bool        fUseParallelGeometries;
-	// Flag whether to use PathFinder or single (mass) Navigator directly
-	G4bool fFirstCall;
-	// Flag of first call
-	G4int         fVerbose;
-	// Whether to print warning in case of move outside safety
+  G4bool fUseParallelGeometries;
+  // Flag whether to use PathFinder or single (mass) Navigator directly
+  G4bool fFirstCall;
+  // Flag of first call
+  G4int fVerbose;
+  // Whether to print warning in case of move outside safety
 
 public:
-	// State used during tracking -- for optimisation
-	class State
-	{
-		friend class G4ITSafetyHelper;
-		G4ThreeVector fLastSafetyPosition;
-		G4double      fLastSafety;
+  // State used during tracking -- for optimisation
+  class State
+  {
+    friend class G4ITSafetyHelper;
+    G4ThreeVector fLastSafetyPosition;
+    G4double fLastSafety;
 
-	public:
-		State() :
-			fLastSafetyPosition(0.0,0.0,0.0),
-			fLastSafety(0.0)
-		{}
+  public:
+    State() :
+    fLastSafetyPosition(0.0,0.0,0.0),
+    fLastSafety(0.0)
+    {}
 
-		virtual ~State(){}
-	};
+    virtual ~State()
+    {}
+  };
 
-	// const G4double  fRecomputeFactor;
-	// parameter for further optimisation:
-	// if ( move < fact*safety )  do fast recomputation of safety
-	// End State (tracking)
+  // const G4double  fRecomputeFactor;
+  // parameter for further optimisation:
+  // if ( move < fact*safety )  do fast recomputation of safety
+  // End State (tracking)
 };
 
 RegisterTrackState(G4ITSafetyHelper, G4ITSafetyHelper::State)
@@ -146,20 +149,19 @@ RegisterTrackState(G4ITSafetyHelper, G4ITSafetyHelper::State)
 inline
 void G4ITSafetyHelper::EnableParallelNavigation(G4bool parallel)
 {
-	fUseParallelGeometries = parallel;
-} 
+  fUseParallelGeometries = parallel;
+}
 
-inline
-G4VPhysicalVolume* G4ITSafetyHelper::GetWorldVolume()
+inline G4VPhysicalVolume* G4ITSafetyHelper::GetWorldVolume()
 {
-	return fpMassNavigator->GetWorldVolume();
+  return fpMassNavigator->GetWorldVolume();
 }
 
 inline
 void G4ITSafetyHelper::SetCurrentSafety(G4double val, const G4ThreeVector& pos)
 {
-	fpTrackState->fLastSafety = val;
-	fpTrackState->fLastSafetyPosition = pos;
+  fpTrackState->fLastSafety = val;
+  fpTrackState->fLastSafetyPosition = pos;
 }
 
 #endif

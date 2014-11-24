@@ -44,7 +44,6 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-
 #ifndef G4ITBROWNIANTRANSPORTATION_H
 #define G4ITBROWNIANTRANSPORTATION_H
 
@@ -59,56 +58,67 @@ class G4SafetyHelper;
 class G4DNABrownianTransportation : public G4ITTransportation
 {
 public:
-	G4DNABrownianTransportation(const G4String& aName =  "DNABrownianTransportation",
-	                            G4int verbosityLevel= 0);
-	G4IT_ADD_CLONE(G4VITProcess,G4DNABrownianTransportation)
-	virtual ~G4DNABrownianTransportation();
-	G4DNABrownianTransportation(const G4DNABrownianTransportation& other);
-	G4DNABrownianTransportation& operator=(const G4DNABrownianTransportation& other);
+  G4DNABrownianTransportation(const G4String& aName =
+      "DNABrownianTransportation",
+                              G4int verbosityLevel = 0);
+  G4IT_ADD_CLONE(G4VITProcess,G4DNABrownianTransportation)
+  virtual ~G4DNABrownianTransportation();
+  G4DNABrownianTransportation(const G4DNABrownianTransportation& other);
+  G4DNABrownianTransportation& operator=(const G4DNABrownianTransportation& other);
 
-	virtual void BuildPhysicsTable(const G4ParticleDefinition&);
+  virtual void BuildPhysicsTable(const G4ParticleDefinition&);
 
-	virtual void StartTracking(G4Track* aTrack);
+  virtual void StartTracking(G4Track* aTrack);
 
-	virtual void ComputeStep(const G4Track&,
-			const G4Step&,
-			const double,
-			double&) ;
+  virtual void ComputeStep(const G4Track&,
+                           const G4Step&,
+                           const double,
+                           double&);
 
-	virtual G4double AlongStepGetPhysicalInteractionLength( const G4Track& /*track*/,
-			G4double /*previousStepSize*/,
-			G4double /*currentMinimumStep*/,
-			G4double& /*currentSafety*/,
-			G4GPILSelection* /*selection*/);
-	virtual G4VParticleChange* PostStepDoIt( const G4Track& track, const G4Step& ) ;
+  virtual G4double AlongStepGetPhysicalInteractionLength(const G4Track& /*track*/,
+                                                         G4double /*previousStepSize*/,
+                                                         G4double /*currentMinimumStep*/,
+                                                         G4double& /*currentSafety*/,
+                                                         G4GPILSelection* /*selection*/);
+  virtual G4VParticleChange* PostStepDoIt(const G4Track& track, const G4Step&);
 
-	virtual G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&);
+  virtual G4VParticleChange* AlongStepDoIt(const G4Track& track, const G4Step&);
 
 protected:
-	void Diffusion(const G4Track& track);
 
-	//________________________________________________________________
-	// Process information
-	struct G4ITBrownianState : public G4ITTransportationState
-	{
-	public :
-		G4ITBrownianState();
-		virtual ~G4ITBrownianState(){;}
-		virtual G4String GetType()
-		{
-			return "G4ITBrownianState";
-		}
+  G4double ComputeGeomLimit(const G4Track& track,
+                            G4double& presafety,
+                            G4double limit);
 
-		G4bool  fPathLengthWasCorrected;
-		G4bool fTimeStepReachedLimit;
-	};
+  void Diffusion(const G4Track& track);
 
+  //________________________________________________________________
+  // Process information
+  struct G4ITBrownianState : public G4ITTransportationState
+  {
+  public:
+    G4ITBrownianState();
+    virtual ~G4ITBrownianState()
+    {
+      ;
+    }
+    virtual G4String GetType()
+    {
+      return "G4ITBrownianState";
+    }
 
-	G4bool fUseMaximumTimeBeforeReachingBoundary;
-	G4Material* fNistWater ;
+    G4bool fPathLengthWasCorrected;
+    G4bool fTimeStepReachedLimit;
+    G4bool fComputeLastPosition;
+  };
 
-	// Water density table
-	const std::vector<G4double>* fpWaterDensity;
+  G4bool fUseMaximumTimeBeforeReachingBoundary;
+  G4Material* fNistWater;
+
+  G4bool fForceLimitOnMinTimeSteps;
+
+  // Water density table
+  const std::vector<G4double>* fpWaterDensity;
 };
 
 #endif // G4ITBROWNIANTRANSPORTATION_H

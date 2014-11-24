@@ -46,6 +46,7 @@ public:
 
   G4MoleculeDefinition* GetMoleculeDefinition(const G4String&, bool mustExist = true);
   G4Molecule* GetMoleculeModel(const G4String&, bool mustExist = true);
+  G4Molecule* GetMoleculeModel(G4int id);
 
   void Insert(G4MoleculeDefinition*);
   G4MoleculeDefinitionIterator GetDefintionIterator()
@@ -64,9 +65,12 @@ protected:
   static G4MoleculeTable* fpgMoleculeTable;
   typedef std::map<G4String, G4MoleculeDefinition*> MoleculeDefTable;
   typedef std::map<G4String, G4Molecule*> MoleculeTable;
+  typedef std::map<G4int, G4Molecule*> MoleculeTablePerID;
+  // TODO: replace with sets
 
   MoleculeDefTable fMoleculeDefTable;
   MoleculeTable fMoleculeTable;
+  MoleculeTablePerID fMoleculeTablePerID;
 };
 
 #endif /* G4MOLECULETABLE_HH_ */

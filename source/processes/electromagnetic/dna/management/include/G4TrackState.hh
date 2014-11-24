@@ -66,31 +66,31 @@ protected:
 };
 
 template<class T>
-class G4TrackStateID : public G4VTrackStateID
-{
-public:
-  static int GetID()
+  class G4TrackStateID : public G4VTrackStateID
   {
-    return fID;
-  }
+  public:
+    static int GetID()
+    {
+      return fID;
+    }
 
-private:
-  static int Create()
-  {
-    fID = fgLastID;
-    fgLastID++;
-    return fID;
-  }
+  private:
+    static int Create()
+    {
+      fID = fgLastID;
+      fgLastID++;
+      return fID;
+    }
 
-  G4TrackStateID()
-  {
-  }
-  ~G4TrackStateID()
-  {
-    ;
-  }
-  static int fID;
-};
+    G4TrackStateID()
+    {
+    }
+    ~G4TrackStateID()
+    {
+      ;
+    }
+    static int fID;
+  };
 
 template<class T>
   int G4TrackStateID<T>::fID = G4TrackStateID<T>::Create();
@@ -113,98 +113,102 @@ typedef G4shared_ptr<G4VTrackState> G4VTrackStateHandle;
 //class RegisterState : public TrackStateDependent
 //{
 //public:
-//	typedef typename TrackStateDependent::State TrackState;
+//  typedef typename TrackStateDependent::State TrackState;
 //};
 
-template<class T>
-  struct type_wrapper
-  {
-    typedef T type;
-  };
+#ifndef TYPE_WRAPPER
+#define TYPE_WRAPPER
+template < typename T>
+struct type_wrapper
+{
+   typedef T type;
+};
+#endif
 
 //!
-template<class T> class G4TrackStateDependent;
+template<class T>
+  class G4TrackStateDependent;
 
 template<class T>
-class G4TrackStateBase : public G4VTrackState
-{
-  //friend class type_wrapper<T>::type; // works with gcc
-  typedef type_wrapper<T> traits_type;
-  /*
-   #ifdef WIN32
-   friend typename traits_type::type;
-   #elif defined(__clang__)
-   friend T;
-   #else
-   //        friend class traits_type::type;
-   friend class type_wrapper<T>::type;
-   #endif
-   */
-  friend class G4TrackStateDependent<T> ; //!
-
-public:
-  virtual ~G4TrackStateBase()
+  class G4TrackStateBase : public G4VTrackState
   {
-  }
+    //friend class type_wrapper<T>::type; // works with gcc
+    typedef type_wrapper<T> traits_type;
+    /*
+     #ifdef WIN32
+     friend typename traits_type::type;
+     #elif defined(__clang__)
+     friend T;
+     #else
+     //        friend class traits_type::type;
+     friend class type_wrapper<T>::type;
+     #endif
+     */
+    friend class G4TrackStateDependent<T> ; //!
 
-  virtual int GetID()
-  {
-    return G4TrackStateID<T>::GetID();
-  }
+  public:
+    virtual ~G4TrackStateBase()
+    {
+    }
 
-  static int ID()
-  {
-    return G4TrackStateID<T>::GetID();
-  }
+    virtual int GetID()
+    {
+      return G4TrackStateID<T>::GetID();
+    }
 
-  G4TrackStateBase() :
-      G4VTrackState()
-  {
-  }
+    static int ID()
+    {
+      return G4TrackStateID<T>::GetID();
+    }
 
-protected:
+    G4TrackStateBase() :
+        G4VTrackState()
+    {
+    }
 
-};
+  protected:
+
+  };
 
 template<class T>
-class G4TrackState : public G4TrackStateBase<T>
-{
-  //	friend class type_wrapper<T>::type; // works with gcc
-
-  typedef type_wrapper<T> traits_type;
-  /*
-   #ifdef WIN32
-   friend typename traits_type::type;
-   #elif defined(__clang__)
-   friend T;
-   #else
-   friend class type_wrapper<T>::type;
-   //friend class traits_type::type;
-   #endif
-   */
-  friend class G4TrackStateDependent<T> ; //!
-public:
-  virtual ~G4TrackState()
+  class G4TrackState : public G4TrackStateBase<T>
   {
-  }
+    //  friend class type_wrapper<T>::type; // works with gcc
 
-  virtual int GetID()
-  {
-    return G4TrackStateID<T>::GetID();
-  }
+    typedef type_wrapper<T> traits_type;
+    /*
+     #ifdef WIN32
+     friend typename traits_type::type;
+     #elif defined(__clang__)
+     friend T;
+     #else
+     friend class type_wrapper<T>::type;
+     //friend class traits_type::type;
+     #endif
+     */
+    friend class G4TrackStateDependent<T> ; //!
+  public:
+    virtual ~G4TrackState()
+    {
+    }
 
-  static int ID()
-  {
-    return G4TrackStateID<T>::GetID();
-  }
+    virtual int GetID()
+    {
+      return G4TrackStateID<T>::GetID();
+    }
 
-  G4TrackState() :
-      G4TrackStateBase<T>()
-  {
-  }
+    static int ID()
+    {
+      return G4TrackStateID<T>::GetID();
+    }
 
-protected:
-};
+    G4TrackState() :
+        G4TrackStateBase<T>()
+    {
+    }
+
+  protected:
+  };
 
 class G4TrackStateManager
 {
@@ -230,16 +234,16 @@ public:
   }
 
   template<class T>
-  G4VTrackStateHandle GetTrackState(T* adress) const
-  {
-    std::map<void*, G4VTrackStateHandle>::const_iterator it =
-        fMultipleTrackStates.find((void*) adress);
-    if (it == fMultipleTrackStates.end())
+    G4VTrackStateHandle GetTrackState(T* adress) const
     {
-      return G4VTrackStateHandle();
+      std::map<void*, G4VTrackStateHandle>::const_iterator it =
+          fMultipleTrackStates.find((void*) adress);
+      if (it == fMultipleTrackStates.end())
+      {
+        return G4VTrackStateHandle();
+      }
+      return it->second;
     }
-    return it->second;
-  }
   void SetTrackState(G4VTrackStateHandle state)
   {
     fTrackStates[state->GetID()] = state;
@@ -270,7 +274,7 @@ public:
   }
 
   virtual void NewTrackState() = 0;
-  virtual void LoadTrackState(const G4TrackStateManager&) = 0;
+  virtual void LoadTrackState(G4TrackStateManager&) = 0;
   virtual void SaveTrackState(G4TrackStateManager&) = 0;
   virtual G4VTrackStateHandle GetTrackState() const = 0;
   virtual G4VTrackStateHandle PopTrackState() = 0;
@@ -280,102 +284,112 @@ public:
 #define G4TrackStateHandle(T) G4shared_ptr<G4TrackState<T> >
 
 template<class OriginalType>
-G4shared_ptr<G4VTrackState> ConvertToAbstractTrackState(G4shared_ptr<G4TrackState<OriginalType> > state)
-{
+  G4shared_ptr<G4VTrackState> ConvertToAbstractTrackState(G4shared_ptr<G4TrackState<OriginalType> > state)
+  {
 
-  G4shared_ptr<G4VTrackState> output = CLHEP::dynamic_pointer_cast<G4VTrackState>(state);
-  return output;
-}
+    G4shared_ptr<G4VTrackState> output = CLHEP::dynamic_pointer_cast<G4VTrackState>(state);
+    return output;
+  }
 
 template<class FinalType>
-G4shared_ptr<G4TrackState<FinalType> > ConvertToConcreteTrackState(G4VTrackStateHandle state)
-{
+  G4shared_ptr<G4TrackState<FinalType> > ConvertToConcreteTrackState(G4VTrackStateHandle state)
+  {
 
-  G4shared_ptr<G4TrackState<FinalType> > output = CLHEP::dynamic_pointer_cast<G4TrackState<FinalType> >(state);
-  return output;
-}
+    G4shared_ptr<G4TrackState<FinalType> > output = CLHEP::dynamic_pointer_cast<G4TrackState<FinalType> >(state);
+    return output;
+  }
 
 //!
 template<class T>
-class G4TrackStateDependent : public G4VTrackStateDependent
-{
-public:
-  typedef T ClassType;
-  typedef G4TrackState<T> StateType;
-  typedef G4shared_ptr<StateType> StateTypeHandle;
-
-  virtual ~G4TrackStateDependent()
-  { ;}
-  virtual void SetTrackState(CLHEP::shared_ptr<StateType> state)
+  class G4TrackStateDependent : public G4VTrackStateDependent
   {
-    fpTrackState = state;
-  }
+  public:
+    typedef T ClassType;
+    typedef G4TrackState<T> StateType;
+    typedef G4shared_ptr<StateType> StateTypeHandle;
 
-  virtual G4VTrackStateHandle PopTrackState()
-  {
-    G4VTrackStateHandle output = CLHEP::dynamic_pointer_cast<G4VTrackState>(fpTrackState);
-    fpTrackState.reset();
-    return output;
-  }
+    virtual ~G4TrackStateDependent()
+    { ;}
+    virtual void SetTrackState(CLHEP::shared_ptr<StateType> state)
+    {
+      fpTrackState = state;
+    }
 
-  virtual G4VTrackStateHandle GetTrackState() const
-  {
-    G4VTrackStateHandle output = CLHEP::dynamic_pointer_cast<G4VTrackState>(fpTrackState);
-    return output;
-  }
+    virtual G4VTrackStateHandle PopTrackState()
+    {
+      G4VTrackStateHandle output = CLHEP::dynamic_pointer_cast<G4VTrackState>(fpTrackState);
+      fpTrackState.reset();
+      return output;
+    }
 
-  virtual StateTypeHandle GetConcreteTrackState() const
-  {
-    return fpTrackState;
-  }
+    virtual G4VTrackStateHandle GetTrackState() const
+    {
+      G4VTrackStateHandle output = CLHEP::dynamic_pointer_cast<G4VTrackState>(fpTrackState);
+      return output;
+    }
 
-  virtual void LoadTrackState(const G4TrackStateManager& manager)
-  {
-    fpTrackState = ConvertToConcreteTrackState<ClassType>(manager.GetTrackState(this));
-  }
+    virtual StateTypeHandle GetConcreteTrackState() const
+    {
+      return fpTrackState;
+    }
 
-  virtual void SaveTrackState(G4TrackStateManager& manager)
-  {
-    manager.SetTrackState(this, ConvertToAbstractTrackState(fpTrackState));
-  }
+    virtual void LoadTrackState(G4TrackStateManager& manager)
+    {
+      fpTrackState = ConvertToConcreteTrackState<ClassType>(manager.GetTrackState(this));
+      if(fpTrackState == 0)
+      {
+        NewTrackState();
+        SaveTrackState(manager);
+      }
+    }
 
-  virtual void NewTrackState()
-  {
-    fpTrackState = StateTypeHandle(new StateType());
-  }
+    virtual void SaveTrackState(G4TrackStateManager& manager)
+    {
+      manager.SetTrackState(this, ConvertToAbstractTrackState(fpTrackState));
+    }
 
-  virtual void ResetTrackState()
-  {
-    fpTrackState.reset();
-  }
+    virtual void NewTrackState()
+    {
+      fpTrackState = StateTypeHandle(new StateType());
+    }
 
-protected:
-  G4TrackStateDependent()
-  : G4VTrackStateDependent()
-  { ;}
+    virtual StateTypeHandle CreateTrackState() const
+    {
+      return StateTypeHandle(new StateType());
+    }
 
-  StateTypeHandle fpTrackState;
-};
+    virtual void ResetTrackState()
+    {
+      fpTrackState.reset();
+    }
+
+  protected:
+    G4TrackStateDependent()
+    : G4VTrackStateDependent()
+    { ;}
+
+    StateTypeHandle fpTrackState;
+  };
 
 #define RegisterTrackState(CLASS,STATE) \
-		template<> \
-		class G4TrackState<CLASS> : public G4TrackStateBase<CLASS>, public STATE \
-		{ \
-	typedef STATE State; \
-	friend class G4TrackStateDependent<CLASS>;  \
-		public: \
-		G4TrackState() : G4TrackStateBase<CLASS>(),STATE(){}\
-		virtual ~G4TrackState(){}\
-		virtual int GetID()\
-		{\
-			return  G4TrackStateID<CLASS>::GetID();\
-		}\
-		static int ID()\
-		{\
-			return  G4TrackStateID<CLASS>::GetID();\
-		}\
-		protected:\
-		};\
+    template<> \
+    class G4TrackState<CLASS> : public G4TrackStateBase<CLASS>, public STATE \
+    { \
+  typedef STATE State; \
+  friend class G4TrackStateDependent<CLASS>;  \
+    public: \
+    G4TrackState() : G4TrackStateBase<CLASS>(),STATE(){}\
+    virtual ~G4TrackState(){}\
+    virtual int GetID()\
+    {\
+      return  G4TrackStateID<CLASS>::GetID();\
+    }\
+    static int ID()\
+    {\
+      return  G4TrackStateID<CLASS>::GetID();\
+    }\
+    protected:\
+    };\
 
 
 #endif /* G4TRACKSTATE_HH_ */

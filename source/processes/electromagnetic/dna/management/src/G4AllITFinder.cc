@@ -57,7 +57,6 @@ void G4AllITFinder::DeleteInstance()
     delete fpInstance;
     fpInstance = 0;
   }
-
 }
 
 G4AllITFinder::~G4AllITFinder()

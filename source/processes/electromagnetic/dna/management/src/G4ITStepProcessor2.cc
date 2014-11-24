@@ -612,7 +612,7 @@ void G4ITStepProcessor::FindTransportationStep()
 
     if(physicalStep >= DBL_MAX)
     {
-    	G4cout << "£ £ £ £ £ £ 2) Setting stop and kill for " << GetIT(fpTrack)->GetName() << G4endl;
+    	G4cout << "---- 2) Setting stop and kill for " << GetIT(fpTrack)->GetName() << G4endl;
 
         fpTrack -> SetTrackStatus(fStopAndKill) ;
         return ;

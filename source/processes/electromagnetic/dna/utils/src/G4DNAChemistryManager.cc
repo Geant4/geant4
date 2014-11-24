@@ -128,7 +128,17 @@ void G4DNAChemistryManager::Clear()
   }
   if (fpUserChemistryList)
   {
-    delete fpUserChemistryList;
+    if(fpUserChemistryList->IsPhysicsConstructor() == false)
+    {
+      delete fpUserChemistryList;
+    }
+    else
+    {
+//      G4cout << "G4DNAChemistryManager will not delete the chemistry list "
+//          "since it inherits from G4VPhysicsConstructor and it is then "
+//          "expected to be the responsability to the G4VModularPhysics to handle "
+//          "the chemistry list." << G4endl;
+    }
     fpUserChemistryList = 0;
   }
 
@@ -229,6 +239,12 @@ void G4DNAChemistryManager::Gun(G4ITGun* gun, bool physicsTableToBuild)
 
 void G4DNAChemistryManager::InitializeMaster()
 {
+  if(G4Threading::IsWorkerThread()
+  && G4Threading::IsMultithreadedApplication())
+  {
+    return;
+  }
+
   if (fMasterInitialized == false)
   {
     G4VScheduler::Instance(); // initialize the time stepper

@@ -13,15 +13,8 @@
 #include "G4VITTrackHolder.hh"
 #include <iostream>
 
-using namespace std;
-
-typedef int Key;
-
-class G4ITScheduler;
-
-class PriorityList
+class PriorityList : public G4TrackList::Watcher
 {
-  friend class G4ITTrackHolder;
 public:
   enum Type
   {
@@ -31,48 +24,47 @@ public:
     Undefined = -1
   };
 
-  PriorityList() :
-      fpMainList(0), fpWaitingList(0)
-  {
-  }
+  PriorityList();
+  PriorityList(const PriorityList& right);
+  virtual ~PriorityList();
 
-  PriorityList(const PriorityList& right) :
-      fpMainList(right.fpMainList), fpWaitingList(right.fpWaitingList)
-  {
-  }
+  virtual void NotifyDeletingList(G4TrackList* __list);
 
-  ~PriorityList()
-  {
-    if (fpMainList) delete fpMainList;
-    if (fpWaitingList) delete fpWaitingList;
-  }
+  void NewMainList(G4TrackList* __list, G4TrackManyList& allMainList);
 
-  G4TrackList* GetMainList()
+  G4TrackList* NewMainList(G4TrackManyList& allMainList);
+
+  void PushToMainList(G4Track* __track, G4TrackManyList& allMainList);
+
+  void TransferToMainList(G4TrackList*& __list, G4TrackManyList& allMainList);
+
+  void PushToListOfSecondaries(G4Track* __track,
+                               G4TrackManyList& listOfAllSecondaries);
+
+  void PushToWaitingList(G4Track* __track);
+
+  void TransferSecondariesToMainList();
+
+  void PushToMainList(G4Track* track);
+
+  void MergeWithMainList(G4TrackList* trackList);
+
+  inline G4TrackList* GetMainList()
   {
     return fpMainList;
   }
 
-  G4TrackList* NewMainList(G4TrackManyList& allMainList)
+  inline G4TrackList* GetSecondariesList()
   {
-    G4TrackList* trackList = new G4TrackList();
-    fpMainList = trackList;
-    allMainList.Add(trackList);
-    return fpMainList;
+    return &fSecondaries;
   }
 
-  void PushToMainList(G4Track* track)
+  inline void SetWaitingList(G4TrackList* __list)
   {
-    if (fpMainList == 0) fpMainList = new G4TrackList();
-    fpMainList->push_back(track);
+    fpWaitingList = __list;
   }
 
-  void MergeWithMainList(G4TrackList* trackList)
-  {
-    if (fpMainList == 0) fpMainList = new G4TrackList();
-    trackList->transferTo(trackList);
-  }
-
-  G4TrackList* Get(Type type)
+  inline G4TrackList* Get(Type type)
   {
     switch (type)
     {
@@ -90,6 +82,8 @@ public:
     }
     return 0;
   }
+
+  int GetNTracks();
 
 private:
   G4TrackList* fpMainList;
@@ -109,150 +103,100 @@ class G4ITTrackHolder : public G4VITTrackHolder
    */
 
   static G4ThreadLocal G4ITTrackHolder* fgInstance;
-
+  static G4ITTrackHolder* fgMasterInstance;
   friend class G4ITScheduler;
 
 public:
+  //----- typedefs -----
+  typedef int Key; //TODO
+  typedef std::map<Key, PriorityList*> MapOfPriorityLists;
+  typedef std::map<double, std::map<Key, G4TrackList*> > MapOfDelayedLists;
+
+  //----- Access singletons + constructors/destructors-----
 
   static G4ITTrackHolder* Instance();
+  static G4ITTrackHolder* MasterInstance();
 
   G4ITTrackHolder();
   virtual
   ~G4ITTrackHolder();
 
   //----- Time of the next set of tracks -----
-  inline double GetNextTime();
+  inline double GetNextTime()
+  {
+    if (fDelayedList.empty()) return DBL_MAX;
+    return fDelayedList.begin()->first;
+  }
 
+  //----- Add new tracks to the list -----
   virtual void Push(G4Track*);
+  static void PushToMaster(G4Track*);
 
-  void Clear();
+  //----- Operations between lists -----
 
-  inline void PuskToKill(G4Track* track)
+  inline void PushToKill(G4Track* track)
   {
     fToBeKilledList.push_back(track);
   }
-  void PushFront(G4Track*, PriorityList::Type type);
+
   bool MergeNextTimeToMainList(double& time);
   void MergeSecondariesWithMainList();
+  void MoveMainToWaitingList();
 
-  // ----- To call at the end of the step
+  // ----- To call at the end of the step -----
   void KillTracks();
+  void Clear();
 
-  typedef std::map<Key, PriorityList*> MapOfLists;
-  typedef std::map<double, std::map<Key, G4TrackList*> > MapOfDelayedLists;
+  // ----- Add a watcher to a specific track list -----
+  // comment: to stop watching, just call StopWatching from your watcher class
+  bool AddWatcher(int,
+      G4TrackList::Watcher*,
+      PriorityList::Type = PriorityList::MainList);
 
-  std::map<Key, PriorityList*>& GetLists()
-  {
-    return fLists;
-  }
-
-  MapOfDelayedLists& GetDelayedLists()
-  {
-    return fDelayedList;
-  }
-
-  bool MainListsNOTEmpty()
-  {
-    return CheckMapIsNOTEmpty(fLists, PriorityList::MainList);
-  }
-
-  bool SecondaryListsNOTEmpty()
-  {
-    return CheckMapIsNOTEmpty(fLists, PriorityList::SecondariesList);
-  }
-
-  void MoveMainToWaitingList()
-  {
-    MapOfLists::iterator it = fLists.begin();
-    MapOfLists::iterator end = fLists.end();
-    for (; it != end; it++)
-    {
-      if (PriorityList* lists = it->second)
-      {
-        lists->fpWaitingList = lists->fpMainList;
-      }
-    }
-    fAllMainList.clear();
-  }
-
-  bool DelayListsNOTEmpty()
-  {
-    MapOfDelayedLists::iterator __it = fDelayedList.begin();
-    MapOfDelayedLists::iterator __end = fDelayedList.end();
-    for (; __it != __end; __it++)
-    {
-      std::map<Key, G4TrackList*>& mapOfLists = __it->second;
-      if (mapOfLists.empty() == false)
-      {
-        std::map<Key, G4TrackList*>::iterator it = mapOfLists.begin();
-        std::map<Key, G4TrackList*>::iterator end = mapOfLists.end();
-        for (; it != end; it++)
-        {
-          if (G4TrackList* mainList = it->second)
-          {
-            if (!(mainList->empty())) return true;
-          }
-        }
-      }
-    }
-    return false;
-  }
-
-  bool CheckMapIsNOTEmpty(MapOfLists& mapOfLists, PriorityList::Type type)
-  {
-    MapOfLists::iterator it = mapOfLists.begin();
-    MapOfLists::iterator end = mapOfLists.end();
-    for (; it != end; it++)
-    {
-      if (PriorityList* lists = it->second)
-      {
-        if (G4TrackList* mainList = lists->Get(type))
-        {
-          if (!(mainList->empty())) return true;
-        }
-      }
-    }
-    return false;
-  }
-
-  G4TrackManyList* GetMainList()
+  // ----- Access track lists -----
+  inline MapOfPriorityLists& GetLists()
+  { return fLists;}
+  PriorityList* GetPriorityList(Key);
+  G4TrackList* GetMainList(Key);
+  inline G4TrackManyList* GetMainList()
   {
     return &fAllMainList;
   }
 
-  G4TrackManyList* GetSecondariesList()
+  inline G4TrackManyList* GetSecondariesList()
   {
     return &fAllSecondariesList;
   }
 
-  virtual size_t GetNTracks()
+  inline MapOfDelayedLists& GetDelayedLists()
   {
-    size_t nTracks(0);
-    nTracks += fAllMainList.size();
-    nTracks += fAllSecondariesList.size();
-
-    MapOfDelayedLists::iterator delayedmap_it = fDelayedList.begin();
-    MapOfDelayedLists::iterator delayedmap_end = fDelayedList.end();
-
-    for (; delayedmap_it != delayedmap_end; delayedmap_it++)
-    {
-      std::map<Key, G4TrackList*>::iterator it = delayedmap_it->second.begin();
-      std::map<Key, G4TrackList*>::iterator end = delayedmap_it->second.end();
-
-      for (; it != end; it++)
-      {
-        if (it->second) nTracks += it->second->size();
-      }
-    }
-
-    return nTracks;
+    return fDelayedList;
   }
+
+  virtual size_t GetNTracks();
+
+  // ----- Check track lists are NOT empty -----
+  // comment: checking NOT empty faster than checking IS empty
+  inline bool MainListsNOTEmpty()
+  {
+    return CheckMapIsNOTEmpty(fLists, PriorityList::MainList);
+  }
+
+  inline bool SecondaryListsNOTEmpty()
+  {
+    return CheckMapIsNOTEmpty(fLists, PriorityList::SecondariesList);
+  }
+
+  bool DelayListsNOTEmpty();
+
+  bool CheckMapIsNOTEmpty(MapOfPriorityLists& mapOfLists,
+      PriorityList::Type type);
 
 protected:
   void AddTrackID(G4Track* track);
   void _PushTrack(G4Track* track);
   void PushTo(G4Track*, PriorityList::Type);
-  void PushDelayed(G4Track* track, const G4double& globalTime);
+  void PushDelayed(G4Track* track);
 
 protected:
   std::map<Key, PriorityList*> fLists;
@@ -268,11 +212,5 @@ protected:
   G4TrackManyList fAllMainList;
   G4TrackManyList fAllSecondariesList;
 };
-
-inline double G4ITTrackHolder::GetNextTime()
-{
-  if (fDelayedList.empty()) return DBL_MAX;
-  return fDelayedList.begin()->first;
-}
 
 #endif /* G4MIMOLECULARTRACKS_HH_ */

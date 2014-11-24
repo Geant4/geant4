@@ -47,5 +47,6 @@
 #ifndef G4MoleculeFinder_hh
 #define G4MoleculeFinder_hh 1
 #include "G4ITFinder.hh"
+#include "G4Molecule.hh"
 typedef G4ITFinder<G4Molecule> G4MoleculeFinder;
 #endif

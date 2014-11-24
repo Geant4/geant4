@@ -134,7 +134,7 @@ void G4ITNavigator2::SetGeometricallyLimitedStep()
 inline
 void G4ITNavigator2::ResetStackAndState()
 {
-	fpNavigatorState->fHistory.Reset();
+  fpNavigatorState->fHistory.Reset();
   ResetState();
 }
 

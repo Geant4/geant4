@@ -56,6 +56,7 @@
 #include "G4NistManager.hh"
 #include "G4DNAMolecularMaterial.hh"
 #include "G4ITNavigator.hh"
+#include "G4ITSafetyHelper.hh" // Not used yet
 
 using namespace std;
 
@@ -101,20 +102,22 @@ G4DNABrownianTransportation::G4DNABrownianTransportation(const G4String& aName,
 {
 
   fpState.reset(new G4ITBrownianState());
-  // G4cout << fpState->GetType() << G4endl;
-  //assert(fpBrownianState);
-  //G4cout << fpBrownianState->GetType() << G4endl;
-//	assert(fTransportationState);
-//	G4cout << fTransportationState->GetType() << G4endl;
-//	assert(fpBrownianState.get() == fTransportationState.get());
-  assert(fpState);
 
   //ctor
   SetProcessSubType(61);
-  fUseMaximumTimeBeforeReachingBoundary = true;
-  //	fUseMaximumTimeBeforeReachingBoundary = false;
+
   fNistWater = G4NistManager::Instance()->FindOrBuildMaterial("G4_WATER");
   fpWaterDensity = 0;
+
+
+  fUseMaximumTimeBeforeReachingBoundary = true;
+  fForceLimitOnMinTimeSteps = true;
+
+  // Once the small distances sent back from the navigator system are understood
+  // and corrected, the above flag should be put by default
+//  fUseMaximumTimeBeforeReachingBoundary = false;
+//  fForceLimitOnMinTimeSteps = false;
+
   //	fMinTimeStep = 100*picosecond;
 }
 
@@ -123,21 +126,20 @@ G4DNABrownianTransportation::~G4DNABrownianTransportation()
   ;
 }
 
-G4DNABrownianTransportation::G4DNABrownianTransportation(
-    const G4DNABrownianTransportation& right) :
+G4DNABrownianTransportation::G4DNABrownianTransportation(const G4DNABrownianTransportation& right) :
     G4ITTransportation(right)
 {
   //copy ctor
   SetProcessSubType(61);
   fUseMaximumTimeBeforeReachingBoundary = right
       .fUseMaximumTimeBeforeReachingBoundary;
+  fForceLimitOnMinTimeSteps = right.fForceLimitOnMinTimeSteps;
   fNistWater = right.fNistWater;
   fpWaterDensity = right.fpWaterDensity;
   //fMinTimeStep = right.fMinTimeStep;
 }
 
-G4DNABrownianTransportation& G4DNABrownianTransportation::operator=(
-    const G4DNABrownianTransportation& rhs)
+G4DNABrownianTransportation& G4DNABrownianTransportation::operator=(const G4DNABrownianTransportation& rhs)
 {
   if (this == &rhs) return *this; // handle self assignment
   //assignment operator
@@ -160,8 +162,7 @@ void G4DNABrownianTransportation::StartTracking(G4Track* track)
   G4ITTransportation::StartTracking(track);
 }
 
-void G4DNABrownianTransportation::BuildPhysicsTable(
-    const G4ParticleDefinition& particle)
+void G4DNABrownianTransportation::BuildPhysicsTable(const G4ParticleDefinition& particle)
 {
   if (verboseLevel > 0)
   {
@@ -171,7 +172,10 @@ void G4DNABrownianTransportation::BuildPhysicsTable(
   }
   // Initialize water density pointer
   fpWaterDensity = G4DNAMolecularMaterial::Instance()->
-      GetDensityTableFor(G4Material::GetMaterial("G4_WATER"));
+  GetDensityTableFor(G4Material::GetMaterial("G4_WATER"));
+
+  fpSafetyHelper->InitialiseHelper();
+  G4ITTransportation::BuildPhysicsTable(particle);
 }
 
 void G4DNABrownianTransportation::ComputeStep(const G4Track& track,
@@ -204,9 +208,8 @@ void G4DNABrownianTransportation::ComputeStep(const G4Track& track,
     {
 
       G4ExceptionDescription exceptionDescription;
-      exceptionDescription
-          << "ComputeStep is called while the track has"
-          "the minimum interaction time";
+      exceptionDescription << "ComputeStep is called while the track has"
+                           "the minimum interaction time";
       exceptionDescription << " so it should not recompute a timeStep ";
       G4Exception("G4DNABrownianTransportation::ComputeStep",
                   "G4DNABrownianTransportation001", FatalErrorInArgument,
@@ -238,12 +241,23 @@ void G4DNABrownianTransportation::ComputeStep(const G4Track& track,
       spaceStep = sqrt(x*x + y*y + z*z);
     }
 
-    //        State(fTransportEndPosition).set(x + track.GetPosition().x(),
-    //                                         y + track.GetPosition().y(),
-    //                                         z + track.GetPosition().z());
+    if(fUseMaximumTimeBeforeReachingBoundary == false ||
+        fForceLimitOnMinTimeSteps == false)
+    {
+      if(spaceStep > State(endpointDistance))
+      {
+        State(fGeometryLimitedStep) = true;
+        spaceStep = State(endpointDistance);
+      }
+    }
 
     State(fTransportEndPosition)= spaceStep*step.GetPostStepPoint()->
-        GetMomentumDirection() + track.GetPosition();
+    GetMomentumDirection() + track.GetPosition();
+
+//    G4cout << "!!! Final position:"
+//    << G4BestUnit(State(fTransportEndPosition), "Length")
+//    << "  --- time step = " << G4BestUnit(timeStep, "Time")
+//    << G4endl;
   }
   else
   {
@@ -260,14 +274,14 @@ void G4DNABrownianTransportation::ComputeStep(const G4Track& track,
   if (fVerboseLevel > 1)
   {
     G4cout << GREEN_ON_BLUE << "G4ITBrownianTransportation::ComputeStep() : "
-           << " trackID : " << track.GetTrackID() << " : Molecule name: "
-           << molecule->GetName()
-           << G4endl
-           << "Diffusion length : "
-           << G4BestUnit(spaceStep, "Length")
-           << " within time step : " << G4BestUnit(timeStep,"Time")
-           << RESET
-           << G4endl<< G4endl;
+    << " trackID : " << track.GetTrackID() << " : Molecule name: "
+    << molecule->GetName()
+    << G4endl
+    << "Diffusion length : "
+    << G4BestUnit(spaceStep, "Length")
+    << " within time step : " << G4BestUnit(timeStep,"Time")
+    << RESET
+    << G4endl<< G4endl;
   }
 #endif
 }
@@ -284,15 +298,17 @@ G4VParticleChange* G4DNABrownianTransportation::PostStepDoIt(const G4Track& trac
 
     if ( State(fCurrentTouchableHandle)->GetVolume() == 0)
     {
-      #ifdef G4VERBOSE
-      if(fVerboseLevel)
+#ifdef G4VERBOSE
+      if (fVerboseLevel)
       {
-        G4cout << "Track position : " << track.GetPosition() / nanometer
-               << " [nm]" << " Track ID : " << track.GetTrackID() << G4endl;
+        G4cout << "Track position : "
+        << track.GetPosition() / nanometer<< " [nm]"
+        << " Track ID : " << track.GetTrackID() << G4endl;
         G4cout << "G4DNABrownianTransportation will killed the track because "
-            "State(fCurrentTouchableHandle)->GetVolume() == 0"<< G4endl;
+        "State(fCurrentTouchableHandle)->GetVolume() == 0"
+        << G4endl;
       }
-      #endif
+#endif
       killTrack = true;
     }
   }
@@ -313,10 +329,10 @@ G4VParticleChange* G4DNABrownianTransportation::PostStepDoIt(const G4Track& trac
   if (fVerboseLevel > 1)
   {
     G4cout << GREEN_ON_BLUE << "G4ITBrownianTransportation::PostStepDoIt() :"
-           << " trackID : " << track.GetTrackID() << " Molecule name: "
-           << GetMolecule(track)->GetName() << G4endl;
-    G4cout<< "Diffusion length : "<< G4BestUnit(step.GetStepLength(),"Length")
-        <<" within time step : "
+    << " trackID : " << track.GetTrackID() << " Molecule name: "
+    << GetMolecule(track)->GetName() << G4endl;
+    G4cout << "Diffusion length : "
+    << G4BestUnit(step.GetStepLength(), "Length") <<" within time step : "
     << G4BestUnit(step.GetDeltaTime(),"Time") << "\t"
     << " Current global time : " << G4BestUnit(track.GetGlobalTime(),"Time")
     << RESET
@@ -341,12 +357,12 @@ void G4DNABrownianTransportation::Diffusion(const G4Track& track)
   // DEBUG
   if (fVerboseLevel > 1)
   {
-    G4cout << GREEN_ON_BLUE << setw(18)
-           << "G4DNABrownianTransportation::Diffusion :" << setw(8)
-           << GetIT(track)->GetName() << "\t trackID:" << track.GetTrackID()
-           << "\t" << " Global Time = "
-           << G4BestUnit(track.GetGlobalTime(), "Time") << RESET
-           << G4endl<< G4endl;
+    G4cout << GREEN_ON_BLUE
+    << setw(18) << "G4DNABrownianTransportation::Diffusion :" << setw(8)
+    << GetIT(track)->GetName() << "\t trackID:" << track.GetTrackID()
+    << "\t" << " Global Time = "
+    << G4BestUnit(track.GetGlobalTime(), "Time") << RESET
+    << G4endl<< G4endl;
   }
 #endif
 
@@ -355,14 +371,14 @@ void G4DNABrownianTransportation::Diffusion(const G4Track& track)
 
   G4double waterDensity = (*fpWaterDensity)[material->GetIndex()];
 
-  if(waterDensity == 0.0)
+  if (waterDensity == 0.0)
   //  if (material == nistwater || material->GetBaseMaterial() == nistwater)
   {
     G4cout << "A track is outside water material : trackID"
-        << track.GetTrackID()
-        << " (" << GetMolecule(track)->GetName() <<")" << G4endl;
-    G4cout << "Local Time : "<< (track.GetLocalTime()) /s<<G4endl;
-    G4cout<< "Step Number :" << track.GetCurrentStepNumber() <<G4endl;
+    << track.GetTrackID() << " (" << GetMolecule(track)->GetName() <<")"
+    << G4endl;
+    G4cout << "Local Time : " << (track.GetLocalTime()) / s << G4endl;
+    G4cout << "Step Number :" << track.GetCurrentStepNumber() << G4endl;
 
     fParticleChange.ProposeEnergy(0.);
     fParticleChange.ProposeTrackStatus(fStopAndKill); //(fStopButAlive);
@@ -442,27 +458,45 @@ void G4DNABrownianTransportation::Diffusion(const G4Track& track)
   return;// &fParticleChange is the final returned object
 }
 
-G4double
-G4DNABrownianTransportation::
-AlongStepGetPhysicalInteractionLength(const G4Track& track,
-                                      G4double previousStepSize,
-                                      G4double currentMinimumStep,
-                                      G4double& currentSafety,
-                                      G4GPILSelection* selection)
+G4double G4DNABrownianTransportation::ComputeGeomLimit(const G4Track& track,
+                                                       G4double& presafety,
+                                                       G4double limit)
+{
+  G4double res = DBL_MAX;
+  if(track.GetVolume() != fpSafetyHelper->GetWorldVolume())
+  {
+    G4TrackStateManager& trackStateMan = GetIT(track)->GetTrackingInfo()
+    ->GetTrackStateManager();
+    fpSafetyHelper->LoadTrackState(trackStateMan);
+    res = fpSafetyHelper->CheckNextStep(
+        track.GetStep()->GetPreStepPoint()->GetPosition(),
+        track.GetMomentumDirection(),
+        limit, presafety);
+    fpSafetyHelper->ResetTrackState();
+  }
+  return res;
+}
+
+G4double G4DNABrownianTransportation::AlongStepGetPhysicalInteractionLength(const G4Track& track,
+                                                                            G4double previousStepSize,
+                                                                            G4double currentMinimumStep,
+                                                                            G4double& currentSafety,
+                                                                            G4GPILSelection* selection)
 {
   G4double geometryStepLength =
       G4ITTransportation::AlongStepGetPhysicalInteractionLength(
           track, previousStepSize, currentMinimumStep, currentSafety,
           selection);
 
+  assert(State(endpointDistance) == geometryStepLength);
+
   G4double diffusionCoefficient = GetMolecule(track)->GetDiffusionCoefficient();
-//  G4double diffusionCoefficient = GetITBrownianObject(track)->
-//                  GetDiffusionCoefficient(track.GetMaterial());
+
+  State(fComputeLastPosition) = false;
 
   if (State(fGeometryLimitedStep))
   {
-    geometryStepLength = currentSafety;
-    bool computeLastPosition = false;
+    State(fTimeStepReachedLimit) = false;
 
     // 99 % of the space step distribution is lower than
     // d_99 = 8 * sqrt(D*t)
@@ -471,59 +505,89 @@ AlongStepGetPhysicalInteractionLength(const G4Track& track,
     if (fUseMaximumTimeBeforeReachingBoundary)
     {
       State(theInteractionTimeLeft) = (geometryStepLength * geometryStepLength)
-          / (16 * diffusionCoefficient);
-      //					(64 * diffusionCoefficient);
-      computeLastPosition = true;
+          / (8 * diffusionCoefficient);
+      State(fComputeLastPosition) = true;
     }
-    else // Will use a random time
+    else
+    // Will use a random time - this is precise but long to compute in certain
+    // circumstances (many particles - small volumes)
     {
       State(theInteractionTimeLeft) = 1 / (4 * diffusionCoefficient)
           * pow(geometryStepLength / InvErfc(G4UniformRand()),2);
+//      G4cout << "Current Position: "
+//      << G4BestUnit(track.GetPosition(), "Length")
+//      << G4endl;
+//      G4cout << "Proposed Position: "
+//      << G4BestUnit(State(fTransportEndPosition), "Length")
+//      << G4endl;
+//      G4cout << "-- geometryStepLength :"
+//      << G4BestUnit(geometryStepLength,"Length")
+//      << " --  currentSafety :"
+//      << G4BestUnit(currentSafety,"Length")
+//      << " --  currentMinimumStep :"
+//      << G4BestUnit(currentMinimumStep,"Length")
+//      << " -- time : "
+//      << G4BestUnit(State(theInteractionTimeLeft), "Time")
+//      << G4endl;
+
+//      double spaceStep = DBL_MAX;
+//      double geomlimit = DBL_MAX;
+//      double presafety = DBL_MAX;
+//      geomlimit = ComputeGeomLimit(track, presafety, spaceStep);
+//
+//      G4cout << "CheckNextStep: " << G4BestUnit(geomlimit, "Length") << G4endl;
+//
+//      G4cout << G4endl;
+
+//      if(State(fTransportEndPosition).x() / nm < 90) abort();
     }
 
-    double minTimeStepAllowed =
-        G4VScheduler::Instance()->GetLimitingTimeStep();
+    double minTimeStepAllowed = G4VScheduler::Instance()->GetLimitingTimeStep();
     double currentMinTimeStep = G4VScheduler::Instance()->GetTimeStep();
 
-    if (State(theInteractionTimeLeft) < minTimeStepAllowed && State(
-        theInteractionTimeLeft)
-        < currentMinTimeStep)
+    if (fForceLimitOnMinTimeSteps && State(theInteractionTimeLeft)
+        < minTimeStepAllowed
+        && State(theInteractionTimeLeft) < currentMinTimeStep)
     {
       State(theInteractionTimeLeft) = minTimeStepAllowed;
       State(fTimeStepReachedLimit) = true;
-      computeLastPosition = true;
-    }
-    else
-    {
-      State(fTimeStepReachedLimit) = false;
+      State(fComputeLastPosition) = true;
     }
 
-    if (computeLastPosition)
-    {
-      double spaceStep = DBL_MAX;
-
-      G4double x = G4RandGauss::shoot(0,sqrt(2*diffusionCoefficient*
-                                             State(theInteractionTimeLeft)));
-      G4double y = G4RandGauss::shoot(0,sqrt(2*diffusionCoefficient*
-                                             State(theInteractionTimeLeft)));
-      G4double z = G4RandGauss::shoot(0,sqrt(2*diffusionCoefficient*
-                                             State(theInteractionTimeLeft)));
-
-      spaceStep = sqrt(x*x + y*y + z*z);
-
-      //			if( spaceStep < State(endpointDistance))
-      {
-        State(endpointDistance) = spaceStep;
-        // Calculate final position
-        //
-        State(fTransportEndPosition) = track.GetPosition()+spaceStep*
-            track.GetMomentumDirection();
-      }
-      //else if(spaceStep < State(endpointDistance)+fLinearNavigator->)
-    }
+//    if (State(fComputeLastPosition))
+//    {
+//      double spaceStep = DBL_MAX;
+//
+//      G4double x = G4RandGauss::shoot(
+//          0, sqrt(2 * diffusionCoefficient * State(theInteractionTimeLeft)));
+//      G4double y = G4RandGauss::shoot(
+//          0, sqrt(2 * diffusionCoefficient * State(theInteractionTimeLeft)));
+//      G4double z = G4RandGauss::shoot(
+//          0, sqrt(2 * diffusionCoefficient * State(theInteractionTimeLeft)));
+//
+//      spaceStep = sqrt(x * x + y * y + z * z);
+//
+//      if (fForceLimitOnMinTimeSteps == false
+//          && spaceStep > State(endpointDistance))
+//      {
+//        spaceStep = State(endpointDistance);
+//      }
+//      else
+//      {
+//        State(endpointDistance) = spaceStep;
+//      }
+//
+//      // Calculate final position
+//      //
+//      State(fTransportEndPosition) = track.GetPosition()
+//          + spaceStep * track.GetMomentumDirection();
+//    }
 
     State(fCandidateEndGlobalTime) =
         track.GetGlobalTime() + State(theInteractionTimeLeft);
+
+    State(fEndGlobalTimeComputed) = true; // MK: ADDED ON 20/11/2014
+
     State(fPathLengthWasCorrected) = false;
   }
   else
@@ -554,14 +618,45 @@ G4DNABrownianTransportation::AlongStepDoIt(const G4Track& track,
   mem_first = MemoryUsage();
 #endif
 
+  if (GetIT(track)->GetTrackingInfo()->IsLeadingStep()
+      && State(fComputeLastPosition))
+  {
+    double spaceStep = DBL_MAX;
+
+    G4double diffusionCoefficient = GetMolecule(track)->GetDiffusionCoefficient();
+    G4double x = G4RandGauss::shoot(
+        0, sqrt(2 * diffusionCoefficient * State(theInteractionTimeLeft)));
+    G4double y = G4RandGauss::shoot(
+        0, sqrt(2 * diffusionCoefficient * State(theInteractionTimeLeft)));
+    G4double z = G4RandGauss::shoot(
+        0, sqrt(2 * diffusionCoefficient * State(theInteractionTimeLeft)));
+
+    spaceStep = sqrt(x * x + y * y + z * z);
+
+    if (fForceLimitOnMinTimeSteps == false
+        && spaceStep > State(endpointDistance))
+    {
+      spaceStep = State(endpointDistance);
+    }
+    else
+    {
+      State(endpointDistance) = spaceStep;
+    }
+
+    // Calculate final position
+    //
+    State(fTransportEndPosition) = track.GetPosition()
+        + spaceStep * track.GetMomentumDirection();
+  }
+
   G4ITTransportation::AlongStepDoIt(track, step);
 
 #ifdef DEBUG_MEM
   MemStat mem_intermediaire = MemoryUsage();
   mem_diff = mem_intermediaire-mem_first;
   G4cout << "\t\t\t >> || MEM || After calling G4ITTransportation::"
-      "AlongStepDoIt for "<< track.GetTrackID() << ", diff is : "
-      << mem_diff << G4endl;
+  "AlongStepDoIt for "<< track.GetTrackID() << ", diff is : "
+  << mem_diff << G4endl;
 #endif
 
   Diffusion(track);
@@ -570,8 +665,8 @@ G4DNABrownianTransportation::AlongStepDoIt(const G4Track& track,
   mem_intermediaire = MemoryUsage();
   mem_diff = mem_intermediaire-mem_first;
   G4cout << "\t\t\t >> || MEM || After calling G4DNABrownianTransportation::"
-      "Diffusion for "<< track.GetTrackID() << ", diff is : "
-      << mem_diff << G4endl;
+  "Diffusion for "<< track.GetTrackID() << ", diff is : "
+  << mem_diff << G4endl;
 #endif
 
   return &fParticleChange;

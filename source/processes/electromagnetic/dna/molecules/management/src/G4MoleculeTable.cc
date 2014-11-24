@@ -59,46 +59,23 @@ G4Molecule* G4MoleculeTable::CreateMoleculeModel(const G4String& name,
                                                  int charge,
                                                  double diffusion_coefficient)
 {
-  MoleculeTable::iterator it = fMoleculeTable.find(name);
-  G4Molecule* molecule(0);
-  if (it == fMoleculeTable.end())
-  {
-    molecule = new G4Molecule(molDef, charge);
-    if (diffusion_coefficient != -1) molecule->SetDiffusionCoefficient(
-        diffusion_coefficient);
-    fMoleculeTable[name] = molecule;
-  }
-  else
-  {
-    // exception
-    G4ExceptionDescription description;
-    description << "The molecule model " << name
-                << " was already recorded in the table" << G4endl;
-    G4Exception("G4MoleculeTable::CreateMoleculeModel", "MODEL_ALREADY_CREATED",
-                FatalException, description);
-  }
+
+  G4Molecule* molecule = new G4Molecule(molDef, charge);
+  if (diffusion_coefficient != -1) molecule->SetDiffusionCoefficient(
+      diffusion_coefficient);
+
+  RecordMoleculeModel(name, molecule);
+
   return molecule;
 }
 
 G4Molecule* G4MoleculeTable::CreateMoleculeModel(const G4String& name,
                                                  G4MoleculeDefinition* molDef)
 {
-  MoleculeTable::iterator it = fMoleculeTable.find(name);
-  G4Molecule* molecule(0);
-  if (it == fMoleculeTable.end())
-  {
-    molecule = new G4Molecule(molDef);
-    fMoleculeTable[name] = molecule;
-  }
-  else
-  {
-    // exception
-    G4ExceptionDescription description;
-    description << "The molecule model " << name
-                << " was already recorded in the table" << G4endl;
-    G4Exception("G4MoleculeTable::CreateMoleculeModel", "MODEL_ALREADY_CREATED",
-                FatalException, description);
-  }
+
+  G4Molecule* molecule = new G4Molecule(molDef);
+  RecordMoleculeModel(name, molecule);
+
   return molecule;
 }
 
@@ -126,16 +103,31 @@ void G4MoleculeTable::RecordMoleculeModel(const G4String& name,
                                           G4Molecule* molecule)
 {
   MoleculeTable::iterator it = fMoleculeTable.find(name);
-  if (it == fMoleculeTable.end())
+
+  G4int id = molecule->GetMoleculeID();
+  MoleculeTablePerID::iterator it_perID = fMoleculeTablePerID.find(id);
+
+  if (it == fMoleculeTable.end() && it_perID == fMoleculeTablePerID.end())
   {
     fMoleculeTable[name] = molecule;
+    fMoleculeTablePerID[id] = molecule;
   }
-  else
+  else if(it != fMoleculeTable.end())
   {
     // exception
     G4ExceptionDescription description;
     description << "The molecule model " << name
                 << " was already recorded in the table" << G4endl;
+    G4Exception("G4MoleculeTable::CreateMoleculeModel", "MODEL_ALREADY_CREATED",
+                FatalException, description);
+  }
+  else if(it != fMoleculeTable.end())
+  {
+    // exception
+    G4ExceptionDescription description;
+    description << "The molecule model " << name
+                << " was already recorded per ID (" << id<<") in the table"
+                << G4endl;
     G4Exception("G4MoleculeTable::CreateMoleculeModel", "MODEL_ALREADY_CREATED",
                 FatalException, description);
   }
@@ -157,6 +149,22 @@ G4Molecule* G4MoleculeTable::GetMoleculeModel(const G4String& name, bool mustExi
                 << " was already recorded in the table" << G4endl;
     G4Exception("G4MoleculeTable::CreateMoleculeModel", "MODEL_ALREADY_CREATED",
                 FatalException, description);
+  }
+  return molecule;
+}
+
+G4Molecule* G4MoleculeTable::GetMoleculeModel(G4int id)
+{
+  MoleculeTablePerID::iterator it = fMoleculeTablePerID.find(id);
+  G4Molecule* molecule(0);
+  if (it != fMoleculeTablePerID.end())
+  {
+    molecule = it->second;
+  }
+  else
+  {
+    // exception
+    return 0;
   }
   return molecule;
 }

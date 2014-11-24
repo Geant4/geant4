@@ -11,13 +11,174 @@
 #include "G4IT.hh"
 #include "G4Track.hh"
 #include "G4UnitsTable.hh"
+#include "G4AutoLock.hh"
+
+using namespace std;
+
+PriorityList::PriorityList() :
+    G4TrackList::Watcher(), fpMainList(0), fpWaitingList(0)
+{
+}
+
+PriorityList::PriorityList(const PriorityList& right) :
+    G4TrackList::Watcher(),
+    fpMainList(right.fpMainList),
+    fpWaitingList(right.fpWaitingList)
+{
+}
+
+PriorityList::~PriorityList()
+{
+  if (fpMainList)
+  {
+    delete fpMainList;
+    fpMainList = 0;
+  }
+  if (fpWaitingList)
+  {
+    delete fpWaitingList;
+    fpWaitingList = 0;
+  }
+}
+
+void PriorityList::NotifyDeletingList(G4TrackList* __list)
+{
+  if (__list == fpMainList)
+  {
+    fpMainList = 0;
+    StopWatching(fpMainList);
+  }
+  else if (__list == fpWaitingList)
+  {
+    fpWaitingList = 0;
+    StopWatching(fpWaitingList);
+  }
+}
+
+void PriorityList::NewMainList(G4TrackList* __list,
+                               G4TrackManyList& allMainList)
+{
+  fpMainList = __list;
+  allMainList.Add(__list);
+  Watch(fpMainList);
+}
+
+G4TrackList* PriorityList::NewMainList(G4TrackManyList& allMainList)
+{
+  G4TrackList* trackList = new G4TrackList();
+  NewMainList(trackList, allMainList);
+  return fpMainList;
+}
+
+void PriorityList::PushToMainList(G4Track* __track,
+                                  G4TrackManyList& allMainList)
+{
+  if (fpMainList == 0)
+  {
+    NewMainList(allMainList);
+  }
+  fpMainList->push_back(__track);
+}
+
+void PriorityList::TransferToMainList(G4TrackList*& __list,
+                                      G4TrackManyList& allMainList)
+{
+  if (fpMainList)
+  {
+    __list->transferTo(fpMainList);
+    delete __list;
+    __list = 0;
+  }
+  else
+  {
+    NewMainList(__list, allMainList);
+  }
+}
+
+void PriorityList::PushToListOfSecondaries(G4Track* __track,
+                                           G4TrackManyList& listOfAllSecondaries)
+{
+  //      if (priorityList->fSecondaries.empty())
+  if (fSecondaries.GetListNode())
+  {
+    listOfAllSecondaries.Add(&fSecondaries);
+  }
+  fSecondaries.push_back(__track);
+}
+
+void PriorityList::PushToWaitingList(G4Track* __track)
+{
+  if (fpWaitingList == 0)
+  {
+    fpWaitingList = new G4TrackList();
+  }
+  fpWaitingList->push_back(__track);
+}
+
+void PriorityList::TransferSecondariesToMainList()
+{
+  fSecondaries.transferTo(fpMainList);
+}
+
+void PriorityList::PushToMainList(G4Track* track)
+{
+  if (fpMainList == 0) fpMainList = new G4TrackList();
+  fpMainList->push_back(track);
+}
+
+void PriorityList::MergeWithMainList(G4TrackList* trackList)
+{
+  if (fpMainList == 0) fpMainList = new G4TrackList();
+  trackList->transferTo(trackList);
+}
+
+int PriorityList::GetNTracks()
+{
+  int nTracks = 0;
+
+  if (fpMainList)
+  {
+    nTracks += fpMainList->size();
+  }
+
+  if (fpWaitingList)
+  {
+    nTracks += fpWaitingList->size();
+  }
+
+  nTracks += fSecondaries.size();
+
+  return nTracks;
+}
+
+//=============================================================================
+// G4ITTrackHolder
+//=============================================================================
 
 G4ThreadLocal G4ITTrackHolder* G4ITTrackHolder::fgInstance(0);
+G4ITTrackHolder* G4ITTrackHolder::fgMasterInstance(0);
+
+G4Mutex creationOfTheMasterInstance;
+G4Mutex pushToTheMasterInstance;
 
 G4ITTrackHolder* G4ITTrackHolder::Instance()
 {
-  if (fgInstance == 0) new G4ITTrackHolder();
+  if (fgInstance == 0)
+  {
+    fgInstance = new G4ITTrackHolder();
+  }
   return fgInstance;
+}
+
+G4ITTrackHolder* G4ITTrackHolder::MasterInstance()
+{
+  G4AutoLock lock(&creationOfTheMasterInstance);
+  if (fgMasterInstance == 0)
+  {
+    fgMasterInstance = new G4ITTrackHolder();
+  }
+  lock.unlock();
+  return fgMasterInstance;
 }
 
 G4ITTrackHolder::G4ITTrackHolder() :
@@ -28,8 +189,7 @@ G4ITTrackHolder::G4ITTrackHolder() :
   fVerbose = 0;
 
   fPostActivityGlobalTime = -1;
-//  fPreActivityGlobalTime = -1;7
-  fgInstance = this;
+//  fPreActivityGlobalTime = -1;
 }
 
 G4ITTrackHolder::~G4ITTrackHolder()
@@ -63,8 +223,8 @@ G4ITTrackHolder::~G4ITTrackHolder()
     fDelayedList.clear();
   }
 
-  fAllMainList.clear();
-  fAllSecondariesList.clear();
+  fAllMainList.RemoveLists();
+  fAllSecondariesList.RemoveLists();
   fNbTracks = -1;
 }
 
@@ -89,8 +249,11 @@ G4ITTrackHolder::~G4ITTrackHolder()
  */
 bool G4ITTrackHolder::MergeNextTimeToMainList(double& time)
 {
-//  G4cout << "G4MIMolecularTracks::MergeNextTimeToMainList" << G4endl;
-  if (fDelayedList.empty()) return false;
+//  G4cout << "G4ITTrackHolder::MergeNextTimeToMainList" << G4endl;
+  if (fDelayedList.empty())
+  {
+    return false;
+  }
 
 //  G4cout << "fDelayedList.size = " << fDelayedList.size() <<G4endl;
 
@@ -119,25 +282,34 @@ bool G4ITTrackHolder::MergeNextTimeToMainList(double& time)
       }
       right_listUnion = it_listUnion->second;
     }
-    if (right_listUnion->fpMainList == 0)
+
+    if (it->second == 0) continue;
+
+    /*
+     if (right_listUnion->GetMainList() == 0)
+     {
+     //      right_listUnion->fpMainList = new G4TrackList();
+     //      if(it->second)
+     //      {
+     right_listUnion->NewMainList(it->second, fAllMainList);
+     //      }
+     }
+     else
+     {
+     right_listUnion->TransferToMainList(it->second);
+     delete it->second;
+     }*/
+
+    right_listUnion->TransferToMainList(it->second, fAllMainList);
+
+    if (output == false)
     {
-      right_listUnion->fpMainList = new G4TrackList();
-      fAllMainList.Add(right_listUnion->fpMainList);
+      if (right_listUnion->GetMainList()->size())
+      {
+        output = true;
+      }
     }
-//    cout << it->second << endl;
-//    cout << right_listUnion->fpMainList << endl;
-
-//    G4cout << "Transfering : "
-//        << GetIT(*(it->second->begin()))->GetName()
-//        << G4endl;
-//    G4cout << "At time : "
-//            << fDelayedList.begin()->first
-//            << G4endl;
-
-    it->second->transferTo(right_listUnion->fpMainList);
-
-    if (output == false && right_listUnion->fpMainList->size()) output = true;
-    delete it->second;
+    it->second = 0;
   }
 
   if (output) time = fDelayedList.begin()->first;
@@ -152,12 +324,12 @@ void G4ITTrackHolder::MergeSecondariesWithMainList()
 
   for (; it != end; it++)
   {
-    if (it->second->fpMainList == 0)
+    if (it->second->GetMainList() == 0)
     {
       it->second->NewMainList(fAllMainList);
     }
 
-    it->second->fSecondaries.transferTo(it->second->fpMainList);
+    it->second->TransferSecondariesToMainList();
   }
 }
 
@@ -209,46 +381,17 @@ void G4ITTrackHolder::PushTo(G4Track* track, PriorityList::Type type)
   {
     case PriorityList::MainList:
     {
-      G4TrackList* trackList = 0;
-
-      if (priorityList->fpMainList == 0)
-      {
-        trackList = priorityList->NewMainList(fAllMainList);
-      }
-      else
-      {
-        trackList = priorityList->fpMainList;
-      }
-
-      trackList->push_back(track);
+      priorityList->PushToMainList(track, fAllMainList);
       break;
     }
     case PriorityList::SecondariesList:
     {
-      if (priorityList->fSecondaries.empty())
-      {
-        fAllSecondariesList.Add(&priorityList->fSecondaries);
-      }
-
-      priorityList->fSecondaries.push_back(track);
+      priorityList->PushToListOfSecondaries(track, fAllSecondariesList);
       break;
     }
     case PriorityList::WaitingList:
     {
-      G4TrackList* trackList = 0;
-
-      if (priorityList->fpWaitingList == 0)
-      {
-        trackList = new G4TrackList();
-        priorityList->fpWaitingList = trackList;
-      }
-      else
-      {
-        trackList = priorityList->fpWaitingList;
-      }
-
-      trackList->push_back(track);
-
+      priorityList->PushToWaitingList(track);
       return;
       break;
     }
@@ -260,79 +403,6 @@ void G4ITTrackHolder::PushTo(G4Track* track, PriorityList::Type type)
     }
   }
 }
-//_________________________________________________________________________
-void G4ITTrackHolder::PushFront(G4Track* track, PriorityList::Type type)
-{
-  int moleculeID = GetIT(track)->GetITSubType();
-  std::map<Key, PriorityList*>::iterator it = fLists.find(moleculeID);
-
-  PriorityList* priorityList(0);
-
-  if (it == fLists.end())
-  {
-    priorityList = new PriorityList();
-    fLists[moleculeID] = priorityList;
-  }
-  else
-  {
-    priorityList = it->second;
-  }
-
-  switch (type)
-  {
-    case PriorityList::MainList:
-    {
-      G4TrackList* trackList = 0;
-
-      if (priorityList->fpMainList == 0)
-      {
-        trackList = priorityList->NewMainList(fAllMainList);
-      }
-      else
-      {
-        trackList = priorityList->fpMainList;
-      }
-
-      trackList->push_front(track);
-      break;
-    }
-    case PriorityList::SecondariesList:
-    {
-      if (priorityList->fSecondaries.empty())
-      {
-        fAllSecondariesList.Add(&priorityList->fSecondaries);
-      }
-      priorityList->fSecondaries.push_front(track);
-      break;
-    }
-    case PriorityList::WaitingList:
-    {
-      G4TrackList* trackList = 0;
-
-      if (priorityList->fpWaitingList == 0)
-      {
-        trackList = new G4TrackList();
-        priorityList->fpWaitingList = trackList;
-      }
-      else
-      {
-        trackList = priorityList->fpWaitingList;
-      }
-
-      trackList->push_front(track);
-
-      return;
-      break;
-    }
-
-    default:
-    {
-      return;
-      break;
-    }
-  }
-}
-
 //_________________________________________________________________________
 
 void G4ITTrackHolder::_PushTrack(G4Track* track)
@@ -399,7 +469,7 @@ void G4ITTrackHolder::_PushTrack(G4Track* track)
     // otherwise, it will be pushed to the delayed track list.
     if (fMainListHaveBeenSet == false)
     {
-      PushDelayed(track, globalTime);
+      PushDelayed(track);
     }
     else
     {
@@ -409,7 +479,7 @@ void G4ITTrackHolder::_PushTrack(G4Track* track)
       }
       else
       {
-        PushDelayed(track, globalTime);
+        PushDelayed(track);
       }
     }
   }
@@ -469,7 +539,7 @@ void G4ITTrackHolder::_PushTrack(G4Track* track)
 
 //_________________________________________________________________________
 
-void G4ITTrackHolder::PushDelayed(G4Track* track, const G4double& globalTime)
+void G4ITTrackHolder::PushDelayed(G4Track* track)
 {
 #ifdef G4VERBOSE
   if (fVerbose > 5)
@@ -480,6 +550,8 @@ void G4ITTrackHolder::PushDelayed(G4Track* track, const G4double& globalTime)
 
   int moleculeID = GetIT(track)->GetITSubType();
   //  std::map<int, PriorityList>::iterator it = fLists.find(moleculeID);
+
+  G4double globalTime = track->GetGlobalTime();
 
   std::map<double, std::map<Key, G4TrackList*> >::iterator it_delayed =
   fDelayedList.find(globalTime);
@@ -550,7 +622,7 @@ void G4ITTrackHolder::KillTracks()
   {
     G4cout << "*** G4ITStepManager::KillTracks , step #"
 //           << G4MIWorldEngine::Instance()->GetScheduler()->GetNbSteps()
-           << G4VScheduler::Instance()->GetNbSteps() << " ***" << G4endl;
+    << G4VScheduler::Instance()->GetNbSteps() << " ***" << G4endl;
     G4cout << "Nb of tracks to kill "<< fToBeKilledList.size() << G4endl;
     G4cout << setw(25) << left << "#Name"
     << setw(25) << "track ID"<< G4endl;
@@ -574,11 +646,16 @@ void G4ITTrackHolder::KillTracks()
 
 void G4ITTrackHolder::Clear()
 {
+  fAllMainList.ClearLists();
+  fAllSecondariesList.ClearLists();
+//  fAllMainList.RemoveLists();
+//  fAllSecondariesList.RemoveLists();
+
   std::map<Key, PriorityList*>::iterator it = fLists.begin();
 
   for (; it != fLists.end(); it++)
   {
-    delete it->second;
+    if (it->second) delete it->second;
     it->second = 0;
   }
   fLists.clear();
@@ -591,15 +668,140 @@ void G4ITTrackHolder::Clear()
 
     for (; it2 != it1->second.end(); it2++)
     {
-      delete it2->second;
+      if (it2->second) delete it2->second;
       it2->second = 0;
     }
   }
 
   fDelayedList.clear();
 
-  fAllMainList.clear();
-  fAllSecondariesList.clear();
+//  fAllMainList.ClearLists();
+//  fAllSecondariesList.ClearLists();
+  fAllMainList.RemoveLists();
+  fAllSecondariesList.RemoveLists();
+  KillTracks();
 
   fNbTracks = -1;
+}
+
+PriorityList* G4ITTrackHolder::GetPriorityList(Key i)
+{
+  std::map<Key, PriorityList*>::iterator it = fLists.find(i);
+  if (it == fLists.end()) return 0;
+  return it->second;
+}
+
+G4TrackList* G4ITTrackHolder::GetMainList(G4int i)
+{
+  PriorityList* priorityList = GetPriorityList(i);
+  if (priorityList)
+  {
+    return priorityList->GetMainList();
+  }
+  return 0;
+}
+
+bool G4ITTrackHolder::AddWatcher(Key id,
+                                 G4TrackList::Watcher* watcher,
+                                 PriorityList::Type type)
+{
+  std::map<Key, PriorityList*>::iterator it = fLists.find(id);
+  if (it == fLists.end()) return false;
+
+  G4TrackList* trackList = it->second->Get(type);
+  if (trackList == 0) return false;
+  trackList->AddWatcher(watcher);
+  return true;
+}
+
+void G4ITTrackHolder::PushToMaster(G4Track* track)
+{
+  G4ITTrackHolder* trackHolder = MasterInstance();
+
+  G4AutoLock lock(&pushToTheMasterInstance);
+  trackHolder->PushDelayed(track);
+  lock.unlock();
+}
+
+size_t G4ITTrackHolder::GetNTracks()
+{
+  size_t nTracks(0);
+  nTracks += fAllMainList.size();
+  nTracks += fAllSecondariesList.size();
+
+  //    G4cout << "nTracks = " << nTracks << G4endl;
+
+  MapOfDelayedLists::iterator delayedmap_it = fDelayedList.begin();
+  MapOfDelayedLists::iterator delayedmap_end = fDelayedList.end();
+
+  for (; delayedmap_it != delayedmap_end; delayedmap_it++)
+  {
+    std::map<Key, G4TrackList*>::iterator it = delayedmap_it->second.begin();
+    std::map<Key, G4TrackList*>::iterator end = delayedmap_it->second.end();
+
+    for (; it != end; it++)
+    {
+      if (it->second) nTracks += it->second->size();
+    }
+  }
+
+  //    G4cout << "nTracks = " << nTracks << G4endl;
+
+  return nTracks;
+}
+
+void G4ITTrackHolder::MoveMainToWaitingList()
+{
+  MapOfPriorityLists::iterator it = fLists.begin();
+  MapOfPriorityLists::iterator end = fLists.end();
+  for (; it != end; it++)
+  {
+    if (PriorityList* lists = it->second)
+    {
+      lists->SetWaitingList(lists->GetMainList());
+      //TODO
+    }
+  }
+  fAllMainList.RemoveLists();
+}
+
+bool G4ITTrackHolder::DelayListsNOTEmpty()
+{
+  MapOfDelayedLists::iterator __it = fDelayedList.begin();
+  MapOfDelayedLists::iterator __end = fDelayedList.end();
+  for (; __it != __end; __it++)
+  {
+    std::map<Key, G4TrackList*>& mapOfLists = __it->second;
+    if (mapOfLists.empty() == false)
+    {
+      std::map<Key, G4TrackList*>::iterator it = mapOfLists.begin();
+      std::map<Key, G4TrackList*>::iterator end = mapOfLists.end();
+      for (; it != end; it++)
+      {
+        if (G4TrackList* mainList = it->second)
+        {
+          if (!(mainList->empty())) return true;
+        }
+      }
+    }
+  }
+  return false;
+}
+
+bool G4ITTrackHolder::CheckMapIsNOTEmpty(MapOfPriorityLists& mapOfLists,
+                                         PriorityList::Type type)
+{
+  MapOfPriorityLists::iterator it = mapOfLists.begin();
+  MapOfPriorityLists::iterator end = mapOfLists.end();
+  for (; it != end; it++)
+  {
+    if (PriorityList* lists = it->second)
+    {
+      if (G4TrackList* trackList = lists->Get(type))
+      {
+        if (!(trackList->empty())) return true;
+      }
+    }
+  }
+  return false;
 }

@@ -42,6 +42,8 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
     HEADERS
         AddClone_def.hh
         G4AllITFinder.hh
+        G4FastList.hh
+        G4FastList.icc
         G4ITBox.hh
         G4IT.hh
         G4ITGun.hh
@@ -75,6 +77,8 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4KDNode.hh
         G4KDTree.hh
         G4KDTreeResult.hh
+        G4ManyFastLists.hh
+        G4ManyFastLists.icc
         G4MemStat.hh
         G4ReferenceCast.hh
         G4memory.hh

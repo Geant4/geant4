@@ -14,6 +14,34 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+24-11-2014, MK, tag emdna-V10-00-58
+- G4FastList: remove all friend declarations
+
+22-11-2014, MK, tag emdna-V10-00-57
+- Another attempt to compile G4FastList on all platforms
+
+22-11-2014, MK, tag emdna-V10-00-56
+- Attempt to compile G4FastList on all platforms
+
+21-11-2014, MK, tag emdna-V10-00-55
+- Attempt to compile G4FastList with clang
+
+21-11-2014, MK, tag emdna-V10-00-54
+- Put back G4DNABrownianTransportation::fUseMaximumTimeBeforeReachingBoundary
+to true as long as the small distances to boundaries sent back by the navigator 
+are not understood
+- Update G4ITNavigator2 to the G4Navigator of John
+
+21-11-2014, MK, tag emdna-V10-00-53
+- Attempt to solve the 'No track found' bug by using G4FastList and 
+G4ManyFastLists - A 'list watcher' is added
+- G4DNABrownianTransportation::fUseMaximumTimeBeforeReachingBoundary
+is false by default --> uses the random time computation for crossing 
+boundaries
+
+20-11-2014, SI, tag emdna-V10-00-52
+- Improved error message for missing data in PW elastic model
+
 08-11-2014, MK, tag emdna-V10-00-51
 - Add an exception in G4MoleculeTable::GetModel/GetDefinition
 when the asked item is not found

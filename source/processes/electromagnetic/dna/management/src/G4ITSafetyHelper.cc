@@ -39,155 +39,158 @@
 #include "G4PathFinder.hh"
 #include "globals.hh"
 
-G4ITSafetyHelper::G4ITSafetyHelper()
-:
-	G4TrackStateDependent<G4ITSafetyHelper>(),
-	fUseParallelGeometries(false),     // By default, one geometry only
-	fFirstCall(true),
-	fVerbose(0)
+G4ITSafetyHelper::G4ITSafetyHelper() :
+    G4TrackStateDependent<G4ITSafetyHelper>(), fUseParallelGeometries(false), // By default, one geometry only
+    fFirstCall(true), fVerbose(0)
 // fRecomputeFactor(0.0)
 {
-	fpPathFinder= 0; //  Cannot initialise this yet - a loop results
+  fpPathFinder = 0; //  Cannot initialise this yet - a loop results
 
-	// Initialization of the Navigator pointer is postponed, and must
-	// be undertaken by another class calling InitialiseHelper()
-	//
-	fpMassNavigator= 0;
-	fMassNavigatorId= -1;
+  // Initialization of the Navigator pointer is postponed, and must
+  // be undertaken by another class calling InitialiseHelper()
+  //
+  fpMassNavigator = 0;
+  fMassNavigatorId = -1;
 }
 
 void G4ITSafetyHelper::InitialiseNavigator()
 {
-	fpPathFinder= G4PathFinder::GetInstance();
+  fpPathFinder = G4PathFinder::GetInstance();
 
-	G4ITTransportationManager* pTransportMgr= G4ITTransportationManager::GetTransportationManager();
+  G4ITTransportationManager* pTransportMgr =
+      G4ITTransportationManager::GetTransportationManager();
 
-	fpMassNavigator = pTransportMgr->GetNavigatorForTracking();
+  fpMassNavigator = pTransportMgr->GetNavigatorForTracking();
 
-	// Check
-	//
-	G4VPhysicalVolume* worldPV = fpMassNavigator->GetWorldVolume();
-	if( worldPV == 0 )
-	{
-		G4Exception("G4ITSafetyHelper::InitialiseNavigator",
-				"InvalidNavigatorWorld", FatalException,
-				"Found that existing tracking Navigator has NULL world");
-	}
+  if(fpMassNavigator == 0) abort();
 
-	// fMassNavigatorId = pTransportMgr->ActivateNavigator( fpMassNavigator );
+  // Check
+  //
+  G4VPhysicalVolume* worldPV = fpMassNavigator->GetWorldVolume();
+  if (worldPV == 0)
+  {
+    G4Exception("G4ITSafetyHelper::InitialiseNavigator",
+                "InvalidNavigatorWorld", FatalException,
+                "Found that existing tracking Navigator has NULL world");
+  }
+
+  // fMassNavigatorId = pTransportMgr->ActivateNavigator( fpMassNavigator );
 }
 
 void G4ITSafetyHelper::InitialiseHelper()
 {
-	NewTrackState();
-	if (fFirstCall) { InitialiseNavigator(); }
-	fFirstCall = false;
+  NewTrackState();
+  if (fFirstCall)
+  {
+    InitialiseNavigator();
+  }
+  fFirstCall = false;
 }
 
 G4ITSafetyHelper::~G4ITSafetyHelper()
 {
 }
 
-G4double   
-G4ITSafetyHelper::CheckNextStep(const G4ThreeVector &position,
-		const G4ThreeVector &direction,
-		const G4double currentMaxStep,
-		G4double& newSafety )
-{  
-	// Distance in the Mass geometry
-	//
-	G4double linstep = fpMassNavigator->CheckNextStep( position,
-			direction,
-			currentMaxStep,
-			newSafety);
-	fpTrackState->fLastSafetyPosition = position;
-	fpTrackState->fLastSafety         = newSafety;
-
-	// TO-DO: Can replace this with a call to PathFinder
-	//        giving id of Mass Geometry --> this avoid doing the work twice
-
-	return linstep;
-}
-
-G4double G4ITSafetyHelper::ComputeSafety( const G4ThreeVector& position, G4double maxLength )
+G4double G4ITSafetyHelper::CheckNextStep(const G4ThreeVector &position,
+                                         const G4ThreeVector &direction,
+                                         const G4double currentMaxStep,
+                                         G4double& newSafety)
 {
-	G4double newSafety;
+  // Distance in the Mass geometry
+  //
+  G4double linstep = fpMassNavigator->CheckNextStep(position, direction,
+                                                    currentMaxStep, newSafety);
+  fpTrackState->fLastSafetyPosition = position;
+  fpTrackState->fLastSafety = newSafety;
 
-	// Only recompute (calling Navigator/PathFinder) if 'position'
-	// is  *not* the safety location and has moved 'significantly'
-	//
-	G4double moveLengthSq = (position-fpTrackState->fLastSafetyPosition).mag2();
-	if(   (moveLengthSq > 0.0 ) )
-	{
-		if( !fUseParallelGeometries )
-		{
-			// Safety for mass geometry
-			newSafety = fpMassNavigator->ComputeSafety(position, maxLength, true);
-		}
-		else
-		{
-			// Safety for all geometries
-			newSafety = fpPathFinder->ComputeSafety(position);
-		}
+  // TODO: Can replace this with a call to PathFinder
+  //        giving id of Mass Geometry --> this avoid doing the work twice
 
-		// We can only store a 'true' safety - one that was not restricted by maxLength
-		if( newSafety < maxLength )
-		{
-			fpTrackState->fLastSafety= newSafety;
-			fpTrackState->fLastSafetyPosition = position;
-		}
-	}
-	else
-	{
-		// return last value if position is not (significantly) changed
-		//
-		// G4double moveLength = 0;
-		// if( moveLengthSq > 0.0 ) { moveLength= std::sqrt(moveLengthSq); }
-		newSafety = fpTrackState->fLastSafety; // -moveLength;
-	}
-	return newSafety;
+  return linstep;
 }
 
-void G4ITSafetyHelper::ReLocateWithinVolume( const G4ThreeVector &newPosition )
+G4double G4ITSafetyHelper::ComputeSafety(const G4ThreeVector& position,
+                                         G4double maxLength)
+{
+  G4double newSafety;
+
+  // Only recompute (calling Navigator/PathFinder) if 'position'
+  // is  *not* the safety location and has moved 'significantly'
+  //
+  G4double moveLengthSq = (position - fpTrackState->fLastSafetyPosition).mag2();
+  if ((moveLengthSq > 0.0))
+  {
+    if (!fUseParallelGeometries)
+    {
+      // Safety for mass geometry
+      newSafety = fpMassNavigator->ComputeSafety(position, maxLength, true);
+    }
+    else
+    {
+      // Safety for all geometries
+      newSafety = fpPathFinder->ComputeSafety(position);
+    }
+
+    // We can only store a 'true' safety - one that was not restricted by maxLength
+    if (newSafety < maxLength)
+    {
+      fpTrackState->fLastSafety = newSafety;
+      fpTrackState->fLastSafetyPosition = position;
+    }
+  }
+  else
+  {
+    // return last value if position is not (significantly) changed
+    //
+    // G4double moveLength = 0;
+    // if( moveLengthSq > 0.0 ) { moveLength= std::sqrt(moveLengthSq); }
+    newSafety = fpTrackState->fLastSafety; // -moveLength;
+  }
+  return newSafety;
+}
+
+void G4ITSafetyHelper::ReLocateWithinVolume(const G4ThreeVector &newPosition)
 {
 #ifdef G4VERBOSE
-	if( fVerbose > 0 ) {
-		// There is an opportunity - and need - to check whether the proposed move is safe
-		G4ThreeVector moveVec= newPosition -  fpTrackState->fLastSafetyPosition;
-		if( moveVec.mag2() > sqr( fpTrackState->fLastSafety) )
-		{
-			// A problem exists - we are proposing to move outside 'Safety Sphere'
-			G4ExceptionDescription ed;
-			ed << " Safety Sphere:  Radius = " <<  fpTrackState->fLastSafety;
-			ed << " Center   = " <<  fpTrackState->fLastSafetyPosition << G4endl;
-			ed << " New Location :  Move   = " << moveVec.mag2();
-			ed << " Position = " << newPosition << G4endl;
-			G4Exception("G4ITSafetyHelper::ReLocateWithinVolume", "GeomNav999", JustWarning,
-					"Unsafe Move> Asked to relocate beyond 'Safety sphere'.");
-		}
-	}
+  if (fVerbose > 0)
+  {
+    // There is an opportunity - and need - to check whether the proposed move is safe
+    G4ThreeVector moveVec = newPosition - fpTrackState->fLastSafetyPosition;
+    if (moveVec.mag2() > sqr(fpTrackState->fLastSafety))
+    {
+      // A problem exists - we are proposing to move outside 'Safety Sphere'
+      G4ExceptionDescription ed;
+      ed << " Safety Sphere:  Radius = " << fpTrackState->fLastSafety;
+      ed << " Center   = " << fpTrackState->fLastSafetyPosition << G4endl;
+      ed << " New Location :  Move   = " << moveVec.mag2();
+      ed << " Position = " << newPosition << G4endl;
+      G4Exception("G4ITSafetyHelper::ReLocateWithinVolume", "GeomNav999",
+                  JustWarning,
+                  "Unsafe Move> Asked to relocate beyond 'Safety sphere'.");
+    }
+  }
 #endif
 
-	if( !fUseParallelGeometries )
-	{
-		fpMassNavigator->LocateGlobalPointWithinVolume( newPosition );
-	}
-	else
-	{
-		fpPathFinder->ReLocate( newPosition );
-	}
+  if (!fUseParallelGeometries)
+  {
+    fpMassNavigator->LocateGlobalPointWithinVolume(newPosition);
+  }
+  else
+  {
+    fpPathFinder->ReLocate(newPosition);
+  }
 }
 
-void  G4ITSafetyHelper::Locate( const G4ThreeVector& newPosition,
-		const G4ThreeVector& newDirection)
+void G4ITSafetyHelper::Locate(const G4ThreeVector& newPosition,
+                              const G4ThreeVector& newDirection)
 {
-	if( !fUseParallelGeometries)
-	{
-		fpMassNavigator->LocateGlobalPointAndSetup(newPosition, &newDirection,
-				true, false);
-	}
-	else
-	{
-		fpPathFinder->Locate( newPosition, newDirection );
-	}
+  if (!fUseParallelGeometries)
+  {
+    fpMassNavigator->LocateGlobalPointAndSetup(newPosition, &newDirection, true,
+                                               false);
+  }
+  else
+  {
+    fpPathFinder->Locate(newPosition, newDirection);
+  }
 }

@@ -25,30 +25,51 @@ class G4DNAMolecularReactionTable;
 class G4VITStepModel;
 class G4MoleculeDefinition;
 
-class G4VUserChemistryList {
+class G4VPhysicsContructor;
+
+class G4VUserChemistryList
+{
 public:
-	G4VUserChemistryList();
-	virtual ~G4VUserChemistryList();
+  G4VUserChemistryList();
+  virtual ~G4VUserChemistryList();
 
-	////////////////////////////////
-	// to be called from PhysicsList
+  // If your user class also inherits from G4VPhysicsConstructor,
+  // please put this flag to true
+  virtual bool IsPhysicsConstructor()
+  {
+    if((G4VPhysicsContructor*)(this)) return true;
+    return false;
+  }
 
-	virtual void ConstructMolecule(){;} // PhysicsList::ConstructParticle
-	virtual void ConstructProcess(){;}  // PhysicsList::ConstructProcess
+  ////////////////////////////////
+  // to be called from PhysicsList
 
-	/////////////
+  virtual void ConstructMolecule()
+  {
+    ;
+  } // PhysicsList::ConstructParticle
+  virtual void ConstructProcess()
+  {
+    ;
+  } // PhysicsList::ConstructProcess
 
-	virtual void ConstructDissociationChannels() {;}
-	virtual void ConstructReactionTable(G4DNAMolecularReactionTable* reactionTable) = 0;
-	virtual void ConstructTimeStepModel(G4DNAMolecularReactionTable* reactionTable) = 0;
+  /////////////
 
-	void BuildPhysicsTable();
+  virtual void ConstructDissociationChannels()
+  {
+    ;
+  }
+  virtual void ConstructReactionTable(G4DNAMolecularReactionTable* reactionTable) = 0;
+  virtual void ConstructTimeStepModel(G4DNAMolecularReactionTable* reactionTable) = 0;
+
+  void BuildPhysicsTable();
 
 protected:
-	void RegisterTimeStepModel(G4VITStepModel* timeStepModel, double startingTime = 0);
-	void BuildPhysicsTable(G4MoleculeDefinition*);
+  void RegisterTimeStepModel(G4VITStepModel* timeStepModel,
+                             double startingTime = 0);
+  void BuildPhysicsTable(G4MoleculeDefinition*);
 
-	int verboseLevel;
+  int verboseLevel;
 };
 
 #endif /* G4VUSERCHEMISTRYLIST_HH_ */

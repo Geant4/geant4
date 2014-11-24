@@ -910,6 +910,7 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
       }
     }
 
+    // Handle PostStep processes sending back time steps rather than space length
     if (proposedTimeStep < fTimeStep)
     {
       if (fPostStepAtTimeDoItProcTriggered < fpProcessInfo->MAXofPostStepLoops)

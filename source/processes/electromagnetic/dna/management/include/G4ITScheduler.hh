@@ -54,7 +54,6 @@
 
 #include "globals.hh"
 
-#include "G4TrackList.hh"
 #include "G4ITModelHandler.hh"
 #include "G4ITStepStatus.hh"
 #include "G4ITTrackHolder.hh"
