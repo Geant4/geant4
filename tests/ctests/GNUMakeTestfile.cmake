@@ -226,9 +226,10 @@ foreach(_i 00 01 02 03 04 05 06)
                   COMMAND ${BINDIR}/Hadr${_i} ${SRCDIR}/extended/hadronic/Hadr${_i}/hadr${_i}.in
                   BUILD ${SRCDIR}/extended/hadronic/Hadr${_i})
 endforeach()
+
+configure_file(${CTEST_SOURCE_DIRECTORY}/examples/extended/medical/DICOM/Data.dat ${CTEST_BINARY_DIRECTORY}/examples/extended/medical/DICOM/Data.dat)
 GEANT4_ADD_TEST(example-ext-medical-dicom 
                 COMMAND ${BINDIR}/DICOM ${SRCDIR}/extended/medical/DICOM/run.mac
-                PRECMD  ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/examples/extended/medical/DICOM/Data.dat Data.dat
                 BUILD ${SRCDIR}/extended/medical/DICOM)
 #GEANT4_ADD_TEST(example-ext-medical-electronScattering 
 #                COMMAND ${CMAKE_BINARY_DIR}/examples/extended/medical/electronScattering/electronScattering
@@ -274,10 +275,10 @@ endforeach()
 #                        ${DNA_EXAMPLE_SRC_DIR}/wholeNuclearDNA/wholeNuclearDNA.in
 #                BUILD ${DNA_EXAMPLE_SRC_DIR}/wholeNuclearDNA)
 
+configure_file(${CTEST_SOURCE_DIRECTORY}examples/extended/medical/dna/pdb4dna/pdb4dna.in ${CTEST_BINARY_DIRECTORY}examples/extended/medical/dna/pdb4dna/pdb4dna.in)
 GEANT4_ADD_TEST(example-ext-medical-dna-pdb4dna
                 COMMAND ${BINDIR}/pdb4dna
                         -mac ${DNA_EXAMPLE_SRC_DIR}/pdb4dna/pdb4dna.in -mt
-                PRECMD  ${CMAKE_COMMAND} -E copy ${DNA_EXAMPLE_SRC_DIR}/pdb4dna/1ZBB.pdb 1ZBB.pdb
                 BUILD ${DNA_EXAMPLE_SRC_DIR}/pdb4dna)
 
 GEANT4_ADD_TEST(example-ext-optical-opnovice 

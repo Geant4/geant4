@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-40 21 November 2014 Gunter Folger
+- Attempt to copy files without PRECMD, using configure_file()
+
 ctests-V10-00-39 19 November 2014 Gunter Folger
 - 2nd Attempt to correct adding of PRECMD
 
