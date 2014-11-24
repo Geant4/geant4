@@ -17,7 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-18 November 2014 Makoto Asai (gdml-V10-00-10)
+24 November 2014 Gabriele Cosmo (gdml-V10-00-11)
+- Fixed typo in G4GDMLWriteSolids::BooleanWrite() for the case of repeated
+  displacements of the reference solid in the same Boolean operation (issue
+  reported by ATLAS).
+
+18 November 2014 Gabriele Cosmo (gdml-V10-00-10)
 - Issue exception when attempting to load multi-union structures
   without USolids.
 
