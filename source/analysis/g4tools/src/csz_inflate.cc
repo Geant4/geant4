@@ -371,8 +371,7 @@ static void csz__WriteData(int);
 #ifndef CHECK_EOF
 #  define NEEDBITS(n) {while(k<(n)){b|=((ulg)NEXTBYTE)<<k;k+=8;}}
 #else
-#  define NEEDBITS(n) {while(k<(n)){if(ibufcnt-- <= 0)return 1;\
-    b|=((ulg) *ibufptr++)<<k;k+=8;}}
+#  define NEEDBITS(n) {while(k<(n)){if(ibufcnt-- <= 0)return 1;b|=((ulg) *ibufptr++)<<k;k+=8;}}
 #endif                      /* Piet Plomp:  change "return 1" to "break" */
 
 #define DUMPBITS(n) {b>>=(n);k-=(n);}
@@ -936,6 +935,8 @@ int csz__Inflate_dynamic()
     return i;                   /* incomplete code set */
   }
 
+/*G.Barrand : to quiet Coverity : */
+#define NEEDBITS_free_tl(n) {while(k<(n)){if(ibufcnt-- <= 0){csz__huft_free(tl);return 1;} b|=((ulg) *ibufptr++)<<k;k+=8;}}
 
   /* read in literal and distance code lengths */
   n = nl + nd;
@@ -943,7 +944,7 @@ int csz__Inflate_dynamic()
   i = l = 0;
   while ((unsigned)i < n)
   {
-    NEEDBITS((unsigned)bl)
+    NEEDBITS_free_tl((unsigned)bl)
     j = (td = tl + ((unsigned)b & m))->b;
     DUMPBITS(j)
     j = td->v.n;
@@ -951,7 +952,7 @@ int csz__Inflate_dynamic()
       ll[i++] = l = j;          /* save last length in l */
     else if (j == 16)           /* repeat last length 3 to 6 times */
     {
-      NEEDBITS(2)
+      NEEDBITS_free_tl(2)
       j = 3 + ((unsigned)b & 3);
       DUMPBITS(2)
       if ((unsigned)i + j > n) {
@@ -963,7 +964,7 @@ int csz__Inflate_dynamic()
     }
     else if (j == 17)           /* 3 to 10 zero length codes */
     {
-      NEEDBITS(3)
+      NEEDBITS_free_tl(3)
       j = 3 + ((unsigned)b & 7);
       DUMPBITS(3)
       if ((unsigned)i + j > n){
@@ -976,7 +977,7 @@ int csz__Inflate_dynamic()
     }
     else                        /* j == 18: 11 to 138 zero length codes */
     {
-      NEEDBITS(7)
+      NEEDBITS_free_tl(7)
       j = 11 + ((unsigned)b & 0x7f);
       DUMPBITS(7)
       if ((unsigned)i + j > n) {
