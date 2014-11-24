@@ -14,6 +14,10 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-Nov-2014, V. Ivanchenko    (phys-ctor-helastic-V10-00-09)
+- G4HadronHElasticPhysics - corrected addition of low-mass
+    diffraction
+
 07-Nov-2014, P. Arce          (phys-ctor-helastic-V10-00-08)
 - Add G4HadronElasticPhysicsPHP for particle_hp physics list
 

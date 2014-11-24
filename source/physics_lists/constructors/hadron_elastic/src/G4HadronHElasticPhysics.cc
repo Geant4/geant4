@@ -76,6 +76,7 @@
 #include "G4CrossSectionDataSetRegistry.hh"
 
 #include "G4LMsdGenerator.hh"
+#include "G4DiffElasticRatio.hh"
 
 // factory
 #include "G4PhysicsConstructorFactory.hh"
@@ -84,15 +85,15 @@ G4_DECLARE_PHYSCONSTR_FACTORY( G4HadronHElasticPhysics );
 
 G4ThreadLocal G4bool G4HadronHElasticPhysics::wasActivated = false;
 
-
 G4HadronHElasticPhysics::G4HadronHElasticPhysics( G4int ver, G4bool diffraction)
-  : G4VPhysicsConstructor( "hElastic_BEST" ), verbose( ver ), fDiffraction(diffraction) 
+  : G4VPhysicsConstructor( "hElastic_BEST" ), verbose( ver ), 
+    fDiffraction(diffraction) 
 {
   if ( verbose > 1 ) { 
-    G4cout << "### G4HadronHElasticPhysics: " << GetPhysicsName() << G4endl; 
+    G4cout << "### G4HadronHElasticPhysics: " << GetPhysicsName() 
+	   << "  low-mass diffraction: " << fDiffraction << G4endl; 
   }
 }
-
 
 G4HadronHElasticPhysics::~G4HadronHElasticPhysics() {}
 
@@ -154,6 +155,13 @@ void G4HadronHElasticPhysics::ConstructProcess() {
   G4VCrossSectionDataSet* theComponentGGNuclNuclData = 
     new G4CrossSectionElastic( new G4ComponentGGNuclNuclXsc() );
 
+  G4LMsdGenerator* diffGen = 0;
+  G4DiffElasticRatio* diffRatio = 0;
+  if(fDiffraction) {
+    diffGen = new G4LMsdGenerator("LMsdDiffraction");
+    diffRatio = new G4DiffElasticRatio();
+  }
+
   aParticleIterator->reset();
   while( (*aParticleIterator)() ) {
 
@@ -205,12 +213,10 @@ void G4HadronHElasticPhysics::ConstructProcess() {
       hel->RegisterMe( chipsH );  // Use Chips only for Hydrogen element
       hel->RegisterMe( protonDiffuseElastic );
       pmanager->AddDiscreteProcess( hel );
+      if(fDiffraction) { hel->SetDiffraction(diffGen, diffRatio); }
       if ( verbose > 1 ) {
 	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
 	       << " added for " << particle->GetParticleName() << G4endl;
-      }
-      if ( fDiffraction ) {
-	fLMsdGenerator = new G4LMsdGenerator("LMsdDiffraction");
       }
 
     } else if ( pname == "neutron" ) {   
@@ -223,6 +229,7 @@ void G4HadronHElasticPhysics::ConstructProcess() {
       hel->RegisterMe( chipsH );  // Use Chips only for Hydrogen element
       hel->RegisterMe( neutronDiffuseElastic );
       pmanager->AddDiscreteProcess( hel );
+      if(fDiffraction) { hel->SetDiffraction(diffGen, diffRatio); }
       if ( verbose > 1 ) {
 	G4cout << "### HadronElasticPhysics: " 
 	       << hel->GetProcessName()
@@ -239,6 +246,7 @@ void G4HadronHElasticPhysics::ConstructProcess() {
       hel->RegisterMe( chipsH );  // Use Chips only for Hydrogen element
       hel->RegisterMe( pionMinusDiffuseElastic );
       pmanager->AddDiscreteProcess( hel );
+      if(fDiffraction) { hel->SetDiffraction(diffGen, diffRatio); }
       if ( verbose > 1 ) {
 	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
 	       << " added for " << particle->GetParticleName() << G4endl;
@@ -254,6 +262,7 @@ void G4HadronHElasticPhysics::ConstructProcess() {
       pionPlusDiffuseElastic->SetMinEnergy( elimitDiffuse );
       hel->RegisterMe( pionPlusDiffuseElastic );
       pmanager->AddDiscreteProcess( hel );
+      if(fDiffraction) { hel->SetDiffraction(diffGen, diffRatio); }
       if ( verbose > 1 ) {
 	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
 	       << " added for " << particle->GetParticleName() << G4endl;
@@ -274,6 +283,7 @@ void G4HadronHElasticPhysics::ConstructProcess() {
       }
       hel->RegisterMe( chips1 );
       pmanager->AddDiscreteProcess( hel );
+      if(fDiffraction) { hel->SetDiffraction(diffGen, diffRatio); }
       if ( verbose > 1 ) {
 	G4cout << "### HadronElasticPhysics: " << hel->GetProcessName()
 	       << " added for " << particle->GetParticleName() << G4endl;
