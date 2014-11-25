@@ -12,8 +12,10 @@ Double_t scale;
 	
 c1 = new TCanvas ("c1","",20,20,1000,500);
 
+system ("rm -rf wholeNuclearDNA.root");
+system ("hadd wholeNuclearDNA.root wholeNuclearDNA_*.root");
 
-TFile f("dnageometry.root"); 
+TFile f("wholeNuclearDNA.root"); 
 
 TNtuple* ntuple;
 ntuple = (TNtuple*)f->Get("ntuple"); 

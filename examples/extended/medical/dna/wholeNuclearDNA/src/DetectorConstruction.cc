@@ -128,6 +128,17 @@ void DetectorConstruction::LoadChromosome(const char* filename,
 
 G4VPhysicalVolume* DetectorConstruction::ConstructDetector()
 {
+  if(fBuildBases == false && fBuildChromatineFiber == false)
+  {
+   G4cout <<"======================================================" << G4endl;
+   G4cout <<"WARNING from DetectorConstruction::ConstructDetector:" << G4endl;
+   G4cout << "As long as the flags fBuildBases and fBuildChromatineFiber are "
+       "false, the output root file will be empty" << G4endl;
+   G4cout << "This is intended for fast computation, display, testing ..."
+          << G4endl;
+   G4cout <<"======================================================" << G4endl;
+  }
+
   G4String name;
 
   /***************************************************************************/

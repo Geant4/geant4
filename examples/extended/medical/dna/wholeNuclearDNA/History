@@ -5,6 +5,19 @@
                        Package History file
                        --------------------
 
+24 Nov 2014 - M. Karamitros - tag wholeNuclearDNA-V10-00-07
+- Add beamOn 2
+- Correct plot.C to handle mt mode
+- Add a warning if the DetectorConstruction::fBuildBases is not on
+  ==> outfile is then empty
+- Homogenize the command line "-out" with other dna examples
+
+10 Nov 2014 - M. Karamitros - tag wholeNuclearDNA-V10-00-06
+- Copy missing plot.C in the bin directory
+- Create histogram only if needed
+- Add GUI+vis selection via command line 
+  (just as other dna examples)
+
 06 Nov 2014 - I. Hrivnacova
 - Added copying macros and data files in build directory
 - Fixes in README

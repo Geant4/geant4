@@ -70,8 +70,9 @@ set(dnageometry_SCRIPTS
   )
 
 file(GLOB SCRIPTS ${PROJECT_SOURCE_DIR}/*.mac 
-                    ${PROJECT_SOURCE_DIR}/*.in
-                    ${PROJECT_SOURCE_DIR}/*.dat
+                  ${PROJECT_SOURCE_DIR}/*.in
+                  ${PROJECT_SOURCE_DIR}/*.dat
+                  ${PROJECT_SOURCE_DIR}/*.C 
                     )
 
 foreach(_script ${SCRIPTS})

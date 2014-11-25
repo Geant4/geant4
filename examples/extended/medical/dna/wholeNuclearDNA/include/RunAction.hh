@@ -57,9 +57,9 @@ public:
 private:
 
   /////////////////
-  // Histogramming
+  // Ntuple & Histogramming
   //
-  void CreateHistogram();
+  void CreateNtuple();
   void WriteNtuple();
 
   /////////////////

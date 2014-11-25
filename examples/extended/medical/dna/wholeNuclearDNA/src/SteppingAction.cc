@@ -45,6 +45,9 @@
 #include <G4Track.hh>
 
 #include "Analysis.hh"
+#include "CommandLineParser.hh"
+
+using namespace G4DNAPARSER;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -133,6 +136,13 @@ void SteppingAction::UserSteppingAction(const G4Step* step)
     xp = step->GetPostStepPoint()->GetPosition().x() / nanometer;
     yp = step->GetPostStepPoint()->GetPosition().y() / nanometer;
     zp = step->GetPostStepPoint()->GetPosition().z() / nanometer;
+
+    // The lines below could be put upper to gain time in the simulation
+    // Added here for testing that all the retrieve information are 
+    // correctly working
+    CommandLineParser* parser = CommandLineParser::GetParser();
+    Command* command(0);
+    if((command = parser->GetCommandIfActive("-out"))==0) return;
 
     // get analysis manager
     G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();

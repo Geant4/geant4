@@ -62,6 +62,9 @@ allows the primary particle to be either inside the cell nucleus, either not far
 from the entrance surface so its energy loss before the cell nucleus entrance is
 negligible. 
 
+WARNING: By default, the bases are not built. To build the whole geometry, set the 
+flag fBuildBases in DetectorConstruction to true.
+
 \section wholenucleardna_s3 SET-UP 
                                                                         
 Make sure G4LEDATA points to the low energy electromagnetic data files.
@@ -72,20 +75,25 @@ The code can be compiled with gmake.
 
 \section wholenucleardna_s4 HOW TO RUN THE EXAMPLE
 
+In normal mode, without interactivity:
+
+> wholeNuclearDNA
+
 In interactive mode, run:
 
-> wholenucleardna
+> wholeNuclearDNA -gui -out
 
-The macro wholenucleardna.mac is executed by default. A proton of 0.1 MeV is shot. 
-This energy has been chosen because only a few minutes are needed for the proton 
-to lose all its energy and thus the event to finish. Nevertheless, one should 
-keep in mind that for this energy, protons do not traverse the whole cell 
-nucleus width. 
+The -gui option launches a user interface for interactivity
+The -out option create a root file (can be changed for other format). This option may also take argument to set the name of the file (name of the application by default):
 
-Visualization (DAWN) is not activated by default in wholenucleardna.mac. 
-To get visualization, make sure to uncomment the #/control/execute vis.mac.
-We would like to warn the users that the time to visualize the whole DNA 
-structure is extremely long.
+> wholeNuclearDNA -gui -out MyFile
+
+The macro wholenucleardna.in is executed by default. A proton of 0.1 MeV is shot. This energy has been chosen because only a few minutes are needed for the proton to lose all its energy and thus the event to finish. Nevertheless, one should keep in mind that for this energy, protons do not traverse the whole cell nucleus width.
+
+Visualization (DAWN) is not activated by default in wholenucleardna.mac. To get visualization, make sure to uncomment the #/control/execute vis.mac.
+We would like to warn the users that the time to visualize the whole DNA structure is extremely long.
+
+To build the whole geometry, set the flag fBuildBases in DetectorConstruction to true.
 
 \section wholenucleardna_s5 PHYSICS
 

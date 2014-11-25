@@ -3,4 +3,4 @@
 /gun/particle proton
 /gun/energy 0.1 MeV
 #/run/initialize
-/run/beamOn 1
+/run/beamOn 2
