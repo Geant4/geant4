@@ -39,6 +39,7 @@
 
 #if defined(WIN32)
     //
+	#define WIN32_LEAN_AND_MEAN
     #define NOMINMAX      // avoid redefinition of min() and max()
     #include <windows.h>
     #undef pascal         // trick to overcome redefinition of 'pascal'
@@ -49,6 +50,7 @@
     #undef small
     #undef ABSOLUTE
     #undef RELATIVE
+	#undef GetObject
 #endif // WIN32
 
 #endif //windefs_hh
