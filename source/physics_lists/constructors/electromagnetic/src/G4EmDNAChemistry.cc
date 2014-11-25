@@ -42,6 +42,10 @@
 #include "G4DNAAttachment.hh"
 #include "G4DNAVibExcitation.hh"
 
+#include "G4DNAElastic.hh"
+#include "G4DNAChampionElasticModel.hh"
+#include "G4DNAScreenedRutherfordElasticModel.hh"
+
 #include "G4DNAMolecularDissociation.hh"
 #include "G4DNABrownianTransportation.hh"
 #include "G4DNAMolecularReactionTable.hh"
@@ -66,9 +70,6 @@
 #include "G4PhysicsListHelper.hh"
 #include "G4BuilderType.hh"
 
-// factory
-#include "G4PhysicsConstructorFactory.hh"
-
 #include "G4DNAMolecularStepByStepModel.hh"
 #include "G4DNASmoluchowskiReactionModel.hh"
 
@@ -80,9 +81,18 @@
 #include "G4MolecularConfiguration.hh"
 /****/
 
+// factory
+#include "G4PhysicsConstructorFactory.hh"
+
+G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAChemistry);
+
+#include "G4Threading.hh"
+
 G4EmDNAChemistry::G4EmDNAChemistry() :
     G4VUserChemistryList()
 {
+  G4DNAChemistryManager::Instance()->SetChemistryActivation(true);
+  G4DNAChemistryManager::Instance()->SetChemistryList(this);
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -430,10 +440,15 @@ void G4EmDNAChemistry::ConstructReactionTable(G4DNAMolecularReactionTable*
 
 void G4EmDNAChemistry::ConstructProcess()
 {
+  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
+
+  //===============================================================
+  // Extend vibrational to low energy
+  // Anyway, solvation of electrons is taken into account from 7.4 eV
+  // So below this threshold, for now, no accurate modeling is done
+  //
   G4VProcess* process = G4ProcessTable::GetProcessTable()->FindProcess(
       "e-_G4DNAVibExcitation", "e-");
-
-  G4PhysicsListHelper* ph = G4PhysicsListHelper::GetPhysicsListHelper();
 
   if (process)
   {
@@ -447,11 +462,40 @@ void G4EmDNAChemistry::ConstructProcess()
     }
   }
 
+  //===============================================================
+  // Modify elastic scattering models to avoid killing electrons
+  // at low energy
+  //
+  process = G4ProcessTable::GetProcessTable()->FindProcess(
+      "e-_G4DNAElastic", "e-");
+
+  if (process)
+  {
+    G4DNAElastic* vibExcitation = (G4DNAElastic*) process;
+    G4VEmModel* model = vibExcitation->EmModel();
+
+    if(G4DNAChampionElasticModel* championMod =
+        dynamic_cast<G4DNAChampionElasticModel*>(model))
+    {
+      championMod->SetKillBelowThreshold(-1);
+    }
+    else if(G4DNAScreenedRutherfordElasticModel* screenRutherfordMod =
+            dynamic_cast<G4DNAScreenedRutherfordElasticModel*>(model))
+    {
+      screenRutherfordMod->SetKillBelowThreshold(-1);
+    }
+  }
+
+  //===============================================================
   // *** Electron Solvatation ***
+  //
   ph->RegisterProcess(
       new G4DNAElectronSolvatation("e-_G4DNAElectronSolvatation"),
       G4Electron::Definition());
 
+  //===============================================================
+  // Define processes for molecules
+  //
   G4MoleculeTable* theMoleculeTable = G4MoleculeTable::Instance();
   G4MoleculeDefinitionIterator iterator =
       theMoleculeTable->GetDefintionIterator();
@@ -462,8 +506,8 @@ void G4EmDNAChemistry::ConstructProcess()
 
     if (moleculeDef != G4H2O::Definition())
     {
-      //	G4cout << "Brownian motion added for : "
-      //	<< moleculeDef->GetName() << G4endl;
+      // G4cout << "Brownian motion added for : "
+      //        << moleculeDef->GetName() << G4endl;
       G4DNABrownianTransportation* brown = new G4DNABrownianTransportation();
       //   brown->SetVerboseLevel(4);
       ph->RegisterProcess(brown, moleculeDef);
@@ -482,6 +526,8 @@ void G4EmDNAChemistry::ConstructProcess()
      * EM Physics builders
      */
   }
+
+  G4DNAChemistryManager::Instance()->Initialize();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

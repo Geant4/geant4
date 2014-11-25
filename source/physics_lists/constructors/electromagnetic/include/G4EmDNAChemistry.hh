@@ -7,19 +7,24 @@
 
 class G4DNAMolecularReactionTable;
 
-class G4EmDNAChemistry : public G4VUserChemistryList
+class G4EmDNAChemistry : public G4VUserChemistryList,
+                         public G4VPhysicsConstructor
 {
 
-public :
-    G4EmDNAChemistry();
-    virtual ~G4EmDNAChemistry();
+public:
+  G4EmDNAChemistry();
+  virtual ~G4EmDNAChemistry();
 
-    virtual void ConstructMolecule();
-    virtual void ConstructProcess();
+  virtual void ConstructParticle()
+  {
+    ConstructMolecule();
+  }
+  virtual void ConstructMolecule();
+  virtual void ConstructProcess();
 
-    virtual void ConstructDissociationChannels();
-    virtual void ConstructReactionTable(G4DNAMolecularReactionTable* reactionTable);
-    virtual void ConstructTimeStepModel(G4DNAMolecularReactionTable* reactionTable);
+  virtual void ConstructDissociationChannels();
+  virtual void ConstructReactionTable(G4DNAMolecularReactionTable* reactionTable);
+  virtual void ConstructTimeStepModel(G4DNAMolecularReactionTable* reactionTable);
 
 };
 

@@ -14,6 +14,16 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24-Nov-2014, M. Karamitros (phys-ctor-em-V10-00-26)
+- G4EmDNAChemistry: initialization procedure of the chemistry reviewed
+G4DNAChemistryManager::Instance()->Initialize() is called from
+G4EmDNAChemistry::ConstructProcess.
+- Elastic scattering models are extended to low energies to avoid killing the 
+electrons --> should be converted into a solvated electron
+
+21-Nov-2014, M. Karamitros (phys-ctor-em-V10-00-25)
+- Transfer initialization of chemistry from user code to geant4 code
+
 17-Nov-2014, I. Hrivnacova (phys-ctor-em-V10-00-24)
 - Improved printing in G4OpticalPhysics::PrintStatistics()
 
