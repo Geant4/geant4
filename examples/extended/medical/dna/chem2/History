@@ -14,6 +14,11 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24.11.2014 M.K                  tag chem2-V10-00-04
+-----------------------------------------------------
+- Retag before release
+- Initialization of chemistry applications is simplified
+
 06.11.2014 I.Hrivnacova                             
 -----------------------------------------------------
 - Fixes in .README

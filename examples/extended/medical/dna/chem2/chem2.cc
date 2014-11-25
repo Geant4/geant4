@@ -78,35 +78,30 @@ int main(int argc, char** argv)
   //////////
   // Construct the run manager according to whether MT is activated or not
   //
-  G4RunManager* runManager(0);
   Command* commandLine(0);
 
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager= new G4MTRunManager;
   if ((commandLine = parser->GetCommandIfActive("-mt")))
   {
-#ifdef G4MULTITHREADED
-    runManager= new G4MTRunManager;
-
-    if(commandLine->GetOption().empty())
+    int nThreads = 2;
+    if(commandLine->GetOption() == "NMAX")
     {
-      ((G4MTRunManager*)runManager)->SetNumberOfThreads(1);
+     nThreads = G4Threading::G4GetNumberOfCores();
     }
     else
     {
-      int nThreads = G4UIcommand::ConvertToInt(commandLine->GetOption());
-      ((G4MTRunManager*)runManager)->SetNumberOfThreads(nThreads);
+     nThreads = G4UIcommand::ConvertToInt(commandLine->GetOption());
     }
-#else
-    G4cout << "WARNING : the -mt command line option has not effect since you "
-        "seam to have compile Geant4 without the G4MULTITHREADED flag"
-           << G4endl;
-    runManager = new G4RunManager();
+    G4cout << "===== Chem2 is started with "
+       << runManager->GetNumberOfThreads()
+       << " threads =====" << G4endl;
 
+    runManager->SetNumberOfThreads(nThreads);
+  }
+#else
+  G4RunManager* runManager = new G4RunManager();
 #endif
-  }
-  else
-  {
-    runManager = new G4RunManager;
-  }
 
   //////////
   // Activate or not the chemistry module (activated by default)
@@ -115,11 +110,6 @@ int main(int argc, char** argv)
   {
     G4DNAChemistryManager::Instance()->SetChemistryActivation(false);
   }
-  else
-  {
-    // chemistry activated by default
-    G4DNAChemistryManager::Instance()->SetChemistryActivation(true);
-  }
 
   //////////
   // Set mandatory user initialization classes
@@ -127,8 +117,6 @@ int main(int argc, char** argv)
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserInitialization(detector);
-
-  G4DNAChemistryManager::Instance()->InitializeMaster();
   runManager->SetUserInitialization(new ActionInitialization());
 
   // Initialize G4 kernel
@@ -234,10 +222,12 @@ void Parse(int& argc, char** argv)
 //                     "Give a seed value in argument to be tested", "seed");
 // it is then up to you to manage this option
 
+#ifdef G4MULTITHREADED
   parser->AddCommand("-mt", 
-                     Command::OptionNotCompulsory,
+                     Command::WithOption,
                      "Launch in MT mode (events computed in parallel,"
                      " NOT RECOMMANDED WITH CHEMISTRY)", "2");
+#endif
 
   parser->AddCommand("-chemOFF", 
                      Command::WithoutOption,
