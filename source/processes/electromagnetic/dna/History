@@ -14,6 +14,17 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+24-11-2014, MK, tag emdna-V10-00-60
+- Remove a useless but also fatal (when chemistry is not activated) exception
+
+24-11-2014, MK, tag emdna-V10-00-59
+- Enhance doxygen comments in G4DNABrownianTransportation
+- Remove useless verbose
+- Try to compile on all platforms
+- Correct initialization of G4DNAChemistryManager
+- Simplify initialization of chemistry from user applications
+  Just registering constructor is enough to initialized the chemistry
+
 24-11-2014, MK, tag emdna-V10-00-58
 - G4FastList: remove all friend declarations
 

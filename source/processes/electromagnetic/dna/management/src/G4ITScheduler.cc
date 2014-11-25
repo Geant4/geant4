@@ -1357,8 +1357,16 @@ void G4ITScheduler::DoIt()
       << setw(15) << track->GetTrackID()
       << std::setprecision(3)
       << setw(35) << G4String(G4BestUnit(track->GetPosition(), "Length" ))
-      << setw(25) << "---"
-      << setw(25) << track->GetVolume()->GetName();
+      << setw(25) << "---";
+
+      if(track->GetVolume())
+      {
+        G4cout << setw(25) << track->GetVolume()->GetName();
+      }
+      else
+      {
+        G4cout << setw(25) << "OutOfWorld";
+      }
       if(track->GetStep()->GetPostStepPoint()->GetProcessDefinedStep())
       {
         G4cout << setw(22)

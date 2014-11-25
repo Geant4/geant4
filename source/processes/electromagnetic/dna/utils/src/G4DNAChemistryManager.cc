@@ -66,6 +66,28 @@ G4Mutex chemManExistence;
 G4DNAChemistryManager::G4DNAChemistryManager() :
     G4UImessenger(), G4VStateDependent(), fActiveChemistry(false)
 {
+//==============================================================================
+/* M.K: 24/11/2014
+ * The following exception ends also the application when the chemistry is not
+ * activated -- since the activation of the chemistry module is checked through
+ * G4DNAChemistryManager on the threads only
+ * TODO: find a solution to this
+ * solution: put the activation flag static, so that it can be modified without
+ * the need to create the singleton when the singleton is created, check
+ * whether the chemistry is activated if the singleton is created from a thread
+ * and the chemsitry is activated then ends with this exception.
+ */
+//  if(G4Threading::IsWorkerThread()
+//  && G4Threading::IsMultithreadedApplication())
+//  {
+//    G4Exception("G4DNAChemistryManager::G4DNAChemistryManager",
+//                "G4DNAChemistryManager_MASTER_CREATION",
+//                FatalException,
+//                "The chemistry manager should be initialized on the master "
+//                "thread only");
+//  }
+//==============================================================================
+
   fpExcitationLevel = 0;
   fpIonisationLevel = 0;
   fWriteFile = false;
@@ -134,10 +156,10 @@ void G4DNAChemistryManager::Clear()
     }
     else
     {
-//      G4cout << "G4DNAChemistryManager will not delete the chemistry list "
-//          "since it inherits from G4VPhysicsConstructor and it is then "
-//          "expected to be the responsability to the G4VModularPhysics to handle "
-//          "the chemistry list." << G4endl;
+//   G4cout << "G4DNAChemistryManager will not delete the chemistry list "
+//       "since it inherits from G4VPhysicsConstructor and it is then "
+//       "expected to be the responsability to the G4VModularPhysics to handle"
+//       " the chemistry list." << G4endl;
     }
     fpUserChemistryList = 0;
   }
@@ -237,11 +259,35 @@ void G4DNAChemistryManager::Gun(G4ITGun* gun, bool physicsTableToBuild)
   G4VScheduler::Instance()->SetGun(gun);
 }
 
+void G4DNAChemistryManager::Initialize()
+{
+  if(G4Threading::IsWorkerThread()
+  && G4Threading::IsMultithreadedApplication())
+  {
+    InitializeThread();
+    return;
+  }
+  else if (G4Threading::IsWorkerThread() == false
+  && G4Threading::IsMultithreadedApplication())
+  {
+    InitializeMaster();
+    return;
+  }
+  else if (G4Threading::IsMultithreadedApplication() == false)
+  {
+    InitializeMaster();
+    InitializeThread();
+    return;
+  }
+
+}
+
 void G4DNAChemistryManager::InitializeMaster()
 {
   if(G4Threading::IsWorkerThread()
   && G4Threading::IsMultithreadedApplication())
   {
+    InitializeThread();
     return;
   }
 

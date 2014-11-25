@@ -72,9 +72,9 @@ G4MolecularConfiguration::GetManager()
 G4MolecularConfiguration::
 G4MolecularConfigurationManager::~G4MolecularConfigurationManager()
 {
-  G4cout << "Does G4AllocatorList exists= ";
-  G4cout << (G4AllocatorList::GetAllocatorListIfExist() ? "true":"false")
-      << G4endl;
+//  G4cout << "Does G4AllocatorList exists= ";
+//  G4cout << (G4AllocatorList::GetAllocatorListIfExist() ? "true":"false")
+//      << G4endl;
 
   G4MolecularConfigurationManager::MolecularConfigurationTable::iterator it1;
   std::map<G4ElectronOccupancy, G4MolecularConfiguration*, comparator>::iterator it2;

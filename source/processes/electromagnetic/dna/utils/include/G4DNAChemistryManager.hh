@@ -100,7 +100,8 @@ public:
    */
   static void DeleteInstance();
 
-  void InitializeMaster();
+  void Initialize();
+
   inline void ForceMasterReinitialization();
   inline void TagThreadForReinitialization();
 
@@ -124,7 +125,7 @@ public:
    */
   void CloseFile();
   inline G4bool IsChemistryActivated();
-  inline void SetChemistryActivation(G4bool);
+  void SetChemistryActivation(G4bool);
 
   inline void SetChemistryList(G4VUserChemistryList*);
   inline void Deregister(G4VUserChemistryList*);
@@ -182,6 +183,7 @@ protected:
   G4DNAWaterExcitationStructure* GetExcitationLevel();
   G4DNAWaterIonisationStructure* GetIonisationLevel();
   void InitializeFile();
+  void InitializeMaster();
   void InitializeThread();
 
   G4DNAChemistryManager();

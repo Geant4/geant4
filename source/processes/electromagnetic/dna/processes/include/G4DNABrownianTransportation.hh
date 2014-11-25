@@ -51,8 +51,35 @@
 
 class G4SafetyHelper;
 
-/* \brief { The transportation method implemented is the one from
- *         Ermak-McCammon : J. Chem. Phys. 69, 1352 (1978)}
+/* \brief {The transportation method implemented is the one from
+ *         Ermak-McCammon : J. Chem. Phys. 69, 1352 (1978).
+ *         To compute time and space intervals to reach a volume boundary,
+ *         there are two alternative methods proposed by this process.
+ *         Currently by default, the accurate method is disabled because the
+ *         navigation system may return very small space distances which do not
+ *         correspond to the actual distance to the next boundary and therefore
+ *         slows down the entire simulation. As a consequence, the second method
+ *         is used. Once the navigation will return accurate distances to the
+ *         next boundaries, the first and accurate method will be reactivated.
+ *
+ *         The method currently used selects a minimum distance to the next
+ *         boundary using to the following formula:
+ *         t_min = (geometryStepLength * geometryStepLength) / (8 * diffusionCoefficient);
+ *
+ *         Currently if the minimum time step reaches the lower time limit defined by the user
+ *         in G4ITScheduler, the minimum user time step is selected. As a consequence, the
+ *         Brownian object may jump over volume boundaries and therefore forbidden materials.
+ *         This is something to take into account when you set up your simulation.
+ *
+ *         The first and accurate method can randomly compute the time to the
+ *         next boundary using the following formula:
+ *         t_random = 1 / (4 * diffusionCoefficient)* pow(geometryStepLength / InvErfc(G4UniformRand()),2);
+ *         At each diffusion step, the direction of the particle is selected randomly.
+ *         For now, the geometryStepLength corresponds to the distance to the
+ *         nearest boundary along the direction selected randomly.
+ *
+ *         This method is currently deactivated by default for the reason mentionned earlier.
+ *         }
  */
 
 class G4DNABrownianTransportation : public G4ITTransportation
