@@ -81,6 +81,13 @@ G4hhElastic::G4hhElastic()
   lowestEnergyLimit= 0.0*keV;  
   plabLowLimit     = 20.0*MeV;
 
+  fRhoReIm=fSigmaTot=fOptRatio=fSpp=fPcms=0.0;
+  fInTkin=0;
+  theProton   = G4Proton::Proton();
+  theNeutron  = G4Neutron::Neutron();
+  thePionPlus = G4PionPlus::PionPlus();
+  thePionMinus= G4PionMinus::PionMinus();
+
   fTarget  = G4Proton::Proton();
   fProjectile  = 0;
   fHadrNuclXsc = new G4HadronNucleonXsc();
@@ -115,7 +122,8 @@ G4hhElastic::G4hhElastic( G4ParticleDefinition* target, G4ParticleDefinition* pr
   lowestEnergyLimit    = 0.0*keV;  
   plabLowLimit         = 20.0*MeV;
 
-  fRhoReIm=fSigmaTot=fOptRatio=fSpp=fPcms=fInTkin=0.;
+  fRhoReIm=fSigmaTot=fOptRatio=fSpp=fPcms=0.0;
+  fInTkin=0;
   theProton   = G4Proton::Proton();
   theNeutron  = G4Neutron::Neutron();
   thePionPlus = G4PionPlus::PionPlus();
@@ -159,8 +167,8 @@ G4hhElastic::G4hhElastic( G4ParticleDefinition* target, G4ParticleDefinition* pr
   lowestEnergyLimit= 0.0*keV;  
   plabLowLimit     = 20.0*MeV;
 
-  fRhoReIm=fSigmaTot=fOptRatio=fSpp=fPcms=fInTkin=0.;
-
+  fRhoReIm=fSigmaTot=fOptRatio=fSpp=fPcms=0.0;
+  fInTkin=0;
 
   fTarget = target; // later vmg
   fProjectile = projectile;
@@ -170,7 +178,7 @@ G4hhElastic::G4hhElastic( G4ParticleDefinition* target, G4ParticleDefinition* pr
   thePionMinus= G4PionMinus::PionMinus();
 
   fTarget  = G4Proton::Proton(); // later vmg
-  // fProjectile  = 0;
+  fProjectile  = 0;
   fMassTarg   = fTarget->GetPDGMass();
   fMassProj   = fProjectile->GetPDGMass();
   fMassSum2   = (fMassTarg+fMassProj)*(fMassTarg+fMassProj);
