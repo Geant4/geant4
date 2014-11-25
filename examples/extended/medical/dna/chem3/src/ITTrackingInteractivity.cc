@@ -47,6 +47,7 @@
 #include "G4EventManager.hh"
 #include "G4Event.hh"
 #include "G4VSteppingVerbose.hh"
+#include "G4VisManager.hh"
 
 class G4Trajectory_Lock
 {
@@ -83,21 +84,13 @@ ITTrackingInteractivity::ITTrackingInteractivity()
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
-void ITTrackingInteractivity::Initialize()
-{
-  G4TrackingManager* trackingManager =
-      G4EventManager::GetEventManager()->GetTrackingManager();
-  fStoreTrajectory = trackingManager->GetStoreTrajectory();
-  fVerboseLevel = trackingManager->GetVerboseLevel();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
 ITTrackingInteractivity::~ITTrackingInteractivity()
 {
   G4EventManager* eventManager =
       G4EventManager::GetEventManager();
 
+  if (eventManager)
+  {
   G4UserTrackingAction* std_trackAct =
       eventManager->GetUserTrackingAction();
   if(fpUserTrackingAction != std_trackAct && fpUserTrackingAction)
@@ -107,6 +100,29 @@ ITTrackingInteractivity::~ITTrackingInteractivity()
       eventManager->GetUserSteppingAction();
   if(fpUserSteppingAction != std_stepAct && fpUserSteppingAction)
     delete fpUserSteppingAction;
+  }
+  else
+  {
+    if(fpUserSteppingAction)
+    {
+      delete fpUserSteppingAction;
+    }
+    
+    if(fpUserTrackingAction)
+    {
+      delete fpUserTrackingAction;
+    }
+  }
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
+void ITTrackingInteractivity::Initialize()
+{
+  G4TrackingManager* trackingManager = 
+    G4EventManager::GetEventManager()->GetTrackingManager();
+  fStoreTrajectory = trackingManager->GetStoreTrajectory();
+  fVerboseLevel = trackingManager->GetVerboseLevel();
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -127,7 +143,7 @@ void ITTrackingInteractivity::StartTracking(G4Track* track)
   if( fpUserTrackingAction != 0 ) {
     fpUserTrackingAction->PreUserTrackingAction(track);
   }
-#ifdef G4_STORE_TRAJECTORY
+//#ifdef G4_STORE_TRAJECTORY
   G4TrackingInformation* trackingInfo = GetIT(track)->GetTrackingInfo();
   G4Trajectory_Lock* trajectory_lock =
       trackingInfo->GetTrajectory_Lock();
@@ -147,7 +163,7 @@ void ITTrackingInteractivity::StartTracking(G4Track* track)
     }
     trajectory_lock->fpTrajectory = trajectory;
   }
-#endif
+//#endif
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -213,7 +229,7 @@ void ITTrackingInteractivity::EndTracking(G4Track* track)
     fpUserTrackingAction->PostUserTrackingAction(track);
   }
 
-#ifdef G4_STORE_TRAJECTORY
+//#ifdef G4_STORE_TRAJECTORY
   G4TrackingInformation* trackingInfo =
       GetIT(track)->GetTrackingInfo();
   G4Trajectory_Lock* trajectory_lock =
@@ -231,21 +247,27 @@ void ITTrackingInteractivity::EndTracking(G4Track* track)
 #endif
       G4TrackStatus istop = track->GetTrackStatus();
 
-      if(trajectory&&(istop!=fStopButAlive)&&(istop!=fSuspend))
+      if (trajectory && (istop != fStopButAlive) && (istop != fSuspend))
       {
-        G4Event* currentEvent =
-            G4EventManager::GetEventManager()->
-            GetNonconstCurrentEvent();
+        G4Event* currentEvent = G4EventManager::GetEventManager()
+            ->GetNonconstCurrentEvent();
 
-        G4TrajectoryContainer* trajectoryContainer =
-            currentEvent->GetTrajectoryContainer();
-
-        if(!trajectoryContainer)
+        if (currentEvent)
         {
-          trajectoryContainer = new G4TrajectoryContainer;
-          currentEvent->SetTrajectoryContainer(trajectoryContainer);
+          G4TrajectoryContainer* trajectoryContainer = currentEvent
+              ->GetTrajectoryContainer();
+
+          if (!trajectoryContainer)
+          {
+            trajectoryContainer = new G4TrajectoryContainer;
+            currentEvent->SetTrajectoryContainer(trajectoryContainer);
+          }
+          trajectoryContainer->insert(trajectory);
         }
-        trajectoryContainer->insert(trajectory);
+        else
+        {
+          fTrajectories.push_back(trajectory);
+        }
       }
     }
     // Destruct the trajectory if it was created
@@ -256,5 +278,14 @@ void ITTrackingInteractivity::EndTracking(G4Track* track)
     delete trajectory_lock;
     trackingInfo->SetTrajectory_Lock(0);
   }
-#endif
+//#endif
+}
+
+void ITTrackingInteractivity::Finalize()
+{
+  for (std::vector<G4VTrajectory*>::iterator it = fTrajectories.begin();
+      it != fTrajectories.end(); it++)
+  {
+    G4VisManager::GetConcreteInstance()->Draw(**it);
+  }
 }

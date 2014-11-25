@@ -38,13 +38,12 @@
 #include "PhysicsList.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4EmDNAChemistry.hh"
-#include "G4DNAChemistryManager.hh"
 #include "G4PhysicsConstructorRegistry.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
-: G4VModularPhysicsList(),  fpChemList(new G4EmDNAChemistry())
+: G4VModularPhysicsList()
 {
   double currentDefaultCut   = 1.*nanometer;
 
@@ -57,8 +56,7 @@ PhysicsList::PhysicsList()
 
   // EM physics  
   RegisterConstructor("G4EmDNAPhysics");
-
-  G4DNAChemistryManager::Instance()->SetChemistryList(fpChemList);
+  RegisterConstructor("G4EmDNAChemistry");
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -75,20 +73,3 @@ void PhysicsList::RegisterConstructor(const G4String& name)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::ConstructParticle()
-{
-  G4VModularPhysicsList::ConstructParticle();
-  fpChemList->ConstructMolecule();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::ConstructProcess()
-{
-  G4VModularPhysicsList::ConstructProcess();
-
-  // Contruct processes of the chemistry list
-  //
-  fpChemList->ConstructProcess();
-}

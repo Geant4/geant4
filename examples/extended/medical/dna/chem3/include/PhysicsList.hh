@@ -44,13 +44,6 @@ class PhysicsList : public G4VModularPhysicsList
 public:
   PhysicsList();
   virtual ~PhysicsList();
-
-  virtual void ConstructParticle();
-  virtual void ConstructProcess();
-
   void RegisterConstructor(const G4String& name);
-
-private:
-  G4EmDNAChemistry* fpChemList;
 };
 #endif

@@ -49,7 +49,7 @@
 #include "G4UImanager.hh"
 #include "G4UIExecutive.hh"
 #include "G4VisExecutive.hh"
-
+#include "G4UIQt.hh"
 #include "CommandLineParser.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -78,35 +78,30 @@ int main(int argc, char** argv)
   //////////
   // Construct the run manager according to whether MT is activated or not
   //
-  G4RunManager* runManager(0);
   Command* commandLine(0);
 
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager= new G4MTRunManager;
   if ((commandLine = parser->GetCommandIfActive("-mt")))
   {
-#ifdef G4MULTITHREADED
-    runManager= new G4MTRunManager;
-
-    if(commandLine->GetOption().empty())
+    int nThreads = 2;
+    if(commandLine->GetOption() == "NMAX")
     {
-      ((G4MTRunManager*)runManager)->SetNumberOfThreads(1);
+     nThreads = G4Threading::G4GetNumberOfCores();
     }
     else
     {
-      int nThreads = G4UIcommand::ConvertToInt(commandLine->GetOption());
-      ((G4MTRunManager*)runManager)->SetNumberOfThreads(nThreads);
+     nThreads = G4UIcommand::ConvertToInt(commandLine->GetOption());
     }
-#else
-    G4cout << "WARNING : the -mt command line option has not effect since you "
-        "seam to have compile Geant4 without the G4MULTITHREADED flag"
-           << G4endl;
-    runManager = new G4RunManager();
+    G4cout << "===== Chem3 is started with "
+       << runManager->GetNumberOfThreads()
+       << " threads =====" << G4endl;
 
+    runManager->SetNumberOfThreads(nThreads);
+  }
+#else
+  G4RunManager* runManager = new G4RunManager();
 #endif
-  }
-  else
-  {
-    runManager = new G4RunManager;
-  }
 
   //////////
   // Activate or not the chemistry module (activated by default)
@@ -115,11 +110,6 @@ int main(int argc, char** argv)
   {
     G4DNAChemistryManager::Instance()->SetChemistryActivation(false);
   }
-  else
-  {
-    // chemistry activated by default
-    G4DNAChemistryManager::Instance()->SetChemistryActivation(true);
-  }
 
   //////////
   // Set mandatory user initialization classes
@@ -127,8 +117,6 @@ int main(int argc, char** argv)
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserInitialization(detector);
-
-  G4DNAChemistryManager::Instance()->InitializeMaster();
   runManager->SetUserInitialization(new ActionInitialization());
 
   // Initialize G4 kernel
@@ -147,20 +135,18 @@ int main(int argc, char** argv)
   // interactive mode : define UI session
   if ((commandLine = parser->GetCommandIfActive("-gui")))
   {
-    ui = new G4UIExecutive(argc, argv, 
-                           commandLine->GetOption());
+    ui = new G4UIExecutive(argc, argv, commandLine->GetOption());
 
-    if(ui->IsGUI())
-       UImanager->ApplyCommand("/control/execute gui.mac");
+    if (ui->IsGUI()) UImanager->ApplyCommand("/control/execute gui.mac");
 
-    if(parser->GetCommandIfActive("-novis") == 0)
+    if (parser->GetCommandIfActive("-novis") == 0)
     // visualization is used by default
     {
-      if((commandLine = parser->GetCommandIfActive("-vis")))
+      if ((commandLine = parser->GetCommandIfActive("-vis")))
       // select a visualization driver if needed (e.g. HepFile)
       {
-        UImanager->ApplyCommand(G4String("/vis/open ")+
-                                commandLine->GetOption());
+        UImanager->ApplyCommand(
+            G4String("/vis/open ") + commandLine->GetOption());
       }
       else
       // by default OGL is used
@@ -177,11 +163,12 @@ int main(int argc, char** argv)
   {
     if ((commandLine = parser->GetCommandIfActive("-vis")))
     {
-      UImanager->ApplyCommand(G4String("/vis/open ")+commandLine->GetOption());
+      UImanager->ApplyCommand(
+          G4String("/vis/open ") + commandLine->GetOption());
       UImanager->ApplyCommand("/control/execute vis.mac");
     }
   }
- 
+
   if ((commandLine = parser->GetCommandIfActive("-mac")))
   {
     G4String command = "/control/execute ";
@@ -194,6 +181,12 @@ int main(int argc, char** argv)
 
   if ((commandLine = parser->GetCommandIfActive("-gui")))
   {
+#ifdef G4UI_USE_QT
+    G4UIQt* UIQt = static_cast<G4UIQt*> (UImanager->GetG4UIWindow());
+    if ( UIQt) {
+      UIQt->AddViewerTabFromFile("README", "README from "+ G4String(argv[0]));
+    }
+#endif
     ui->SessionStart();
     delete ui;
   }
@@ -217,15 +210,12 @@ void Parse(int& argc, char** argv)
   // Parse options given in commandLine
   //
   parser = CommandLineParser::GetParser();
-  
-  parser->AddCommand("-gui", 
-                     Command::OptionNotCompulsory,
-                    "Select geant4 UI or just launch a geant4 terminal session",
-                    "qt");
-  
-  parser->AddCommand("-mac", 
-                     Command::WithOption, 
-                     "Give a mac file to execute",
+
+  parser->AddCommand(
+      "-gui", Command::OptionNotCompulsory,
+      "Select geant4 UI or just launch a geant4 terminal session", "qt");
+
+  parser->AddCommand("-mac", Command::WithOption, "Give a mac file to execute",
                      "macFile.mac");
 
 // You cann your own command, as for instance:
@@ -234,22 +224,20 @@ void Parse(int& argc, char** argv)
 //                     "Give a seed value in argument to be tested", "seed");
 // it is then up to you to manage this option
 
-  parser->AddCommand("-mt", 
-                     Command::OptionNotCompulsory,
+#ifdef G4MULTITHREADED
+  parser->AddCommand("-mt", Command::WithOption,
                      "Launch in MT mode (events computed in parallel,"
-                     " NOT RECOMMANDED WITH CHEMISTRY)", "2");
+                     " NOT RECOMMANDED WITH CHEMISTRY)",
+                     "2");
+#endif
 
-  parser->AddCommand("-chemOFF", 
-                     Command::WithoutOption,
+  parser->AddCommand("-chemOFF", Command::WithoutOption,
                      "Deactivate chemistry");
 
-  parser->AddCommand("-vis",
-                     Command::WithOption,
-                     "Select a visualization driver",
-                     "OGL 600x600-0+0");
+  parser->AddCommand("-vis", Command::WithOption,
+                     "Select a visualization driver", "OGL 600x600-0+0");
 
-  parser->AddCommand("-novis",
-                     Command::WithoutOption,
+  parser->AddCommand("-novis", Command::WithoutOption,
                      "Deactivate visualization when using GUI");
 
   //////////

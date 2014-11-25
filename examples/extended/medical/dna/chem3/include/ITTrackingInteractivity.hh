@@ -39,6 +39,9 @@
 #define ITTRACKINGINTERACTIVITY_HH
 
 #include "G4ITTrackingInteractivity.hh"
+#include <vector>
+
+class G4VTrajectory;
 
 /*
  * This class should be modified only by advanced users
@@ -48,6 +51,7 @@ class ITTrackingInteractivity : public G4ITTrackingInteractivity
   G4UserTrackingAction* fpUserTrackingAction;
   G4UserSteppingAction* fpUserSteppingAction;
   int fStoreTrajectory;
+  std::vector<G4VTrajectory*> fTrajectories;
 
 public:
   ITTrackingInteractivity();
@@ -57,6 +61,7 @@ public:
   virtual void StartTracking(G4Track*);
   virtual void AppendStep(G4Track* track, G4Step* step);
   virtual void EndTracking(G4Track*);
+  virtual void Finalize();
 
   void SetUserAction(G4UserTrackingAction*);
   inline G4UserTrackingAction* GetUserTrackingAction();
