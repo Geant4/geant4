@@ -747,10 +747,10 @@ void G4RunManagerKernel::CheckRegions()
     {
       if(region->IsInMassGeometry())
       {
-        G4cerr << "Warning : Region <" << region->GetName()
+        G4cout << "Warning : Region <" << region->GetName()
              << "> does not have specific production cuts," << G4endl
              << "even though it appears in the current tracking world." << G4endl;
-        G4cerr << "Default cuts are used for this region." << G4endl;
+        G4cout << "Default cuts are used for this region." << G4endl;
       }
 
       if(region->IsInMassGeometry()||region->IsInParallelGeometry())

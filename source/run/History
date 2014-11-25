@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 24th, 2014 M.Asai (run-V10-00-43)
+- Fix G4VUserPhysicsList.cc to alternate the cut value for the
+  region that shared the default cut value.
+
 November 20th, 2014 M.Asai, A.Dotti (run-V10-00-42)
 - Fix coverity defects
 - Fix for G4RunManager in case macroFile in beamOn is " "

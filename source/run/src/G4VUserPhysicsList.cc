@@ -501,6 +501,14 @@ void G4VUserPhysicsList::SetParticleCuts( G4double cut, const G4String& particle
   }
 
   G4ProductionCuts* pcuts = region->GetProductionCuts();
+  if(region!=(*(G4RegionStore::GetInstance()))[0] &&
+     pcuts==G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts())
+  { // This region had no unique cuts yet but shares the default cuts.
+    // Need to create a new object before setting the value.
+    pcuts = new G4ProductionCuts(
+     *(G4ProductionCutsTable::GetProductionCutsTable()->GetDefaultProductionCuts()));
+    region->SetProductionCuts(pcuts);
+  }
   pcuts->SetProductionCut(cut,particleName);
 #ifdef G4VERBOSE
   if (verboseLevel>2){      
