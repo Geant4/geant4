@@ -44,9 +44,7 @@ RunAction::~RunAction()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 void RunAction::BeginOfRunAction(const G4Run*)
-{
-   G4DNAChemistryManager::Instance()->InitializeMaster();
-}
+{}
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 

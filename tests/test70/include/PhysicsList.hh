@@ -44,14 +44,6 @@ public:
 
   PhysicsList();
   virtual ~PhysicsList();
-
-public:
-  // Construct particle and physics
-  void ConstructParticle();
-  void ConstructProcess();
-
-private:
-  G4EmDNAChemistry* fpChemList;
 };
 
 #endif

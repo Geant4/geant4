@@ -34,56 +34,25 @@
 #include "G4UnitsTable.hh"
 #include "G4EmDNAChemistry.hh"
 #include "G4EmDNAPhysics.hh"
-//#include "G4ITScheduler.hh"
-#include "G4DNAChemistryManager.hh"
-#include "G4DNAMolecularStepByStepModel.hh"
-#include "G4DNASmoluchowskiReactionModel.hh"
 
 using namespace std;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList() :
-    G4VModularPhysicsList(), fpChemList(0)
+    G4VModularPhysicsList()
 {
   defaultCutValue = 1 * nanometer;
 
   SetVerboseLevel(1);
   RegisterPhysics(new G4EmDNAPhysics());
-
-  if (G4DNAChemistryManager::Instance()->IsChemistryActivated())
-  {
-    fpChemList = new G4EmDNAChemistry();
-    G4DNAChemistryManager::Instance()->SetChemistryList(fpChemList);
-  }
+  RegisterPhysics(new G4EmDNAChemistry());
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
 
 PhysicsList::~PhysicsList()
 {
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo....
-
-void PhysicsList::ConstructParticle()
-{
-  if (G4DNAChemistryManager::Instance()->IsChemistryActivated())
-  {
-    fpChemList->ConstructMolecule();
-  }
-  G4VModularPhysicsList::ConstructParticle();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::ConstructProcess()
-{
-  G4VModularPhysicsList::ConstructProcess();
-  if (G4DNAChemistryManager::Instance()->IsChemistryActivated())
-  {
-    fpChemList->ConstructProcess();
-  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

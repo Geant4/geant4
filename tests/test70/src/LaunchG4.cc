@@ -148,8 +148,6 @@ void LaunchG4::Initialize(G4bool chemistryFlag)
   fpRunManager->SetUserInitialization(new PhysicsList());
   fpRunManager->SetUserInitialization(new ActionInitialization());
 
-  G4DNAChemistryManager::Instance()->InitializeMaster();
-
   // Initialize G4 kernel
   fpRunManager->Initialize();
 }
