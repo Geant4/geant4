@@ -143,7 +143,10 @@ void RunAction::EndWorker(const G4Run* run)
 {
   if(fDebug)
   {
+    G4cout << "===================================" << G4endl;
+    G4cout << "================ RunAction::EndWorker" << G4endl;
     PrintRunInfo(run);
+    G4cout << "===================================" << G4endl;
   }
 
   G4int nofEvents = run->GetNumberOfEvent();
@@ -248,7 +251,7 @@ void RunAction::CreateHistogram()
   }
   else
   {
-   fileName = command->GetDefaultOption();
+   fileName = "microdosimetry";
   }
   analysisManager->OpenFile(fileName);
 
@@ -283,6 +286,12 @@ void RunAction::WriteHistogram()
   //
   analysisManager->Write();
   analysisManager->CloseFile();
+
+  if(fDebug)
+  {
+    G4cout << "================ ROOT FILES HAVE BEEN WRITTEN"
+           << G4endl;
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

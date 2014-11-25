@@ -41,7 +41,7 @@ target_link_libraries(microdosimetry ${Geant4_LIBRARIES} )
 #
 file(GLOB MAC_FILES ${PROJECT_SOURCE_DIR}/*.mac 
                     ${PROJECT_SOURCE_DIR}/*.in
-                    ${PROJECT_SOURCE_DIR}/plot.C
+                    ${PROJECT_SOURCE_DIR}/*.C
                     ${PROJECT_SOURCE_DIR}/README
                     )
 

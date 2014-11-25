@@ -52,20 +52,21 @@ It works in MT mode.
 
 ---->3. HOW TO RUN THE EXAMPLE                                         
 
-In interactive mode, run:
+Normal mode, run:
 
-./microdosimetry -mt 4 -root myRootFile.mac
+./microdosimetry -mt 4 -out myRootFile
 
-The macro microdosimetry.in is executed by default. 
+The macro microdosimetry.in is executed by default to select another one:
 
-To get visualization:
+./microdosimetry -mac myMacro.mac
+
+To get visualization and interactivity:
 
 ./microdosimetry -gui
 ( OGL used by default)
 
 or you may use your own visualization driver, for instance:
 ./microdosimetry -vis "DAWNFILE"
-The geometry will be printed into a file.
 
 ---->4. PHYSICS
 

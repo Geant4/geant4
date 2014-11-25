@@ -191,6 +191,27 @@ int main(int argc,char** argv)
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
+void GetNameAndPathOfExecutable(char** argv,
+                                G4String& executable,
+                                G4String& path)
+{
+  // Get the last position of '/'
+  std::string aux(argv[0]);
+
+  // get '/' or '\\' depending on unix/mac or windows.
+#if defined(_WIN32) || defined(WIN32)
+  int pos = aux.rfind('\\');
+#else
+  int pos = aux.rfind('/');
+#endif
+
+  // Get the path and the name
+  path = aux.substr(0, pos + 1);
+  executable = aux.substr(pos + 1);
+}
+
+//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
+
 void Parse(int& argc, char** argv)
 {
   //////////
@@ -214,10 +235,12 @@ void Parse(int& argc, char** argv)
 //                     "Give a seed value in argument to be tested", "seed");
 // it is then up to you to manage this option
 
+#ifdef G4MULTITHREADED
   parser->AddCommand("-mt",
                      Command::WithOption,
                      "Launch in MT mode (events computed in parallel)", 
                      "2");
+#endif
 
   parser->AddCommand("-vis",
                      Command::WithOption,
@@ -228,10 +251,14 @@ void Parse(int& argc, char** argv)
                      Command::WithoutOption,
                      "Deactivate visualization when using GUI");
 
+  G4String exec;
+  G4String path;
+  GetNameAndPathOfExecutable(argv,exec, path);
+
   parser->AddCommand("-out",
                      Command::OptionNotCompulsory,
                      "Output files", 
-                     argv[0]);
+                     exec);
 
   //////////
   // If -h or --help is given in option : print help and exit
