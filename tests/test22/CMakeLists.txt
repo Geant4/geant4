@@ -6,6 +6,13 @@ include_directories( ${PROJECT_SOURCE_DIR}/include
                      ${PROJECT_SOURCE_DIR}/src )
 
 #--- Library of common code ---
+# If Policy CMP0042 exists, use OLD to prefer the use of install names
+# instead of the new @rpath default. This is temporary to suppress warnings
+# on newer CMake versions.
+if(POLICY CMP0042)
+  cmake_policy(SET CMP0042 OLD)
+endif()
+
 file( GLOB test22_common_sources ${PROJECT_SOURCE_DIR}/src/*.cc 
                                  ${PROJECT_SOURCE_DIR}/src/*.icc )
 file( GLOB test22_common_headers ${PROJECT_SOURCE_DIR}/include/*.hh )
