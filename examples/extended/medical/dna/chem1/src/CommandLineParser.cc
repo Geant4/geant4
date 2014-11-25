@@ -44,6 +44,8 @@ using namespace std;
 using namespace G4DNAPARSER;
 
 CommandLineParser* CommandLineParser::fpInstance(0);
+G4String Command::fNoOption = "NoOption";
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -101,15 +103,24 @@ void CommandLineParser::DeleteInstance()
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 Command::Command(Command::Type commandType,
-                 const G4String& description,
-                 const G4String& optionName)
+                 const G4String& description)
 {
   fType = commandType;
   fDescription = description;
-  fOptionName = optionName;
-  fOption = "";
   fActive = false;
 }
+
+CommandWithOption::CommandWithOption(Command::Type commandType,
+                 const G4String& description,
+                 const G4String& defaultOption,
+                 const G4String& optionName) : 
+Command(commandType, description)
+{
+  fDefaultOption = defaultOption;
+  fOptionName = optionName;
+  fOption = "";
+}
+
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -147,7 +158,7 @@ int CommandLineParser::Parse(int& argc, char **argv)
         abort();
       }
 
-      command->fOption = (const char*) strdup(argv[i+1]);
+      command->SetOption( (const char*) strdup(argv[i+1]) );
       argv[i+1] = null;
       i++;
     }
@@ -172,7 +183,7 @@ int CommandLineParser::Parse(int& argc, char **argv)
               G4cout << "facultative option is : " << buffer << G4endl;
             }
 
-            command->fOption = (const char*) strdup(argv[i+1]);
+            command->SetOption( (const char*) strdup(argv[i+1]) );
             argv[i+1] = null;
             i++;
             continue;
@@ -183,7 +194,7 @@ int CommandLineParser::Parse(int& argc, char **argv)
       if(fVerbose)
       G4cout << "Option not set" << G4endl;
 
-      command->fOption = "";
+      command->SetOption("");
     }
   }
   CorrectRemainingOptions(argc, argv);
@@ -229,9 +240,9 @@ void CommandLineParser::PrintHelp()
         toPrint += ", -h";
       }
 
-      if (command->GetOptionName() != "")
+      if (command->GetDefaultOption() != "")
       {
-        toPrint += " \"" + command->GetOptionName() + "\"";
+        toPrint += " \"" + command->GetDefaultOption() + "\"";
       }
 
       G4cout << toPrint;
@@ -263,14 +274,30 @@ void CommandLineParser::CorrectRemainingOptions(int& argc, char **argv)
 void CommandLineParser::AddCommand(const G4String& marker,
                                    Command::Type type,
                                    const G4String& description,
+                                   const G4String& defaultOption,
                                    const G4String& optionName)
 {
   // G4cout << "Add command : "<< marker << G4endl;
-  Command* command = new Command(type, description, optionName);
+  
+  Command* command = 0;
+  switch(type)
+  {
+ case Command::WithoutOption:
+        command = new Command(type, description);
+        break;
+        
+        default:
+        command = new CommandWithOption(type, 
+                                        description, 
+                                        defaultOption, 
+                                        optionName);
+        if ((int) defaultOption.length() > fMaxOptionNameLength)
+          fMaxOptionNameLength = defaultOption.length();
+        break;
+  }
+
   if ((int) marker.length() > fMaxMarkerLength) fMaxMarkerLength =
       marker.length();
-  if ((int) optionName.length() > fMaxOptionNameLength) fMaxOptionNameLength =
-      optionName.length();
   fCommandMap.insert(make_pair(marker, command));
 }
 

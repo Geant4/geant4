@@ -38,7 +38,7 @@
 #include "ActionInitialization.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "StackingAction.hh"
-#include "G4DNAChemistryManager.hh"
+//#include "G4DNAChemistryManager.hh"
 //#include "G4VScheduler.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -60,7 +60,7 @@ void ActionInitialization::BuildForMaster() const
 
 void ActionInitialization::Build() const
 {
-  PrimaryGeneratorAction* primGenAction = new PrimaryGeneratorAction;
+  PrimaryGeneratorAction* primGenAction = new PrimaryGeneratorAction();
   SetUserAction(primGenAction);
   SetUserAction(new StackingAction());
 

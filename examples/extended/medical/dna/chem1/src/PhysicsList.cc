@@ -38,13 +38,12 @@
 #include "PhysicsList.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4EmDNAChemistry.hh"
-#include "G4DNAChemistryManager.hh"
 #include "G4PhysicsConstructorRegistry.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
 PhysicsList::PhysicsList()
-: G4VModularPhysicsList(), fpChemList(new G4EmDNAChemistry())
+: G4VModularPhysicsList()
 {
   double currentDefaultCut   = 1.*nanometer;
 
@@ -57,9 +56,16 @@ PhysicsList::PhysicsList()
 
   // EM physics  
   RegisterConstructor("G4EmDNAPhysics");
+  RegisterConstructor("G4EmDNAChemistry");
 
-  G4DNAChemistryManager::Instance()->SetChemistryList(fpChemList);
-  // G4DNAChemistryManager will manage the pointer of the user chemistry list
+  // ==========================================================================
+  // Note to the participants of the Geant4-DNA tutorial - November 2014
+  // The command :
+  // G4DNAChemistryManager::Instance()->SetChemistryList(fpChemList);
+  // is now moved to the constructor of G4EmDNAChemistry
+  // This means that G4EmDNAChemistry is registering itself has the chemistry
+  // list to use when RegisterConstructor("G4EmDNAChemistry") is called
+  // ==========================================================================
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -76,27 +82,3 @@ void PhysicsList::RegisterConstructor(const G4String& name)
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::ConstructParticle()
-{
-  G4VModularPhysicsList::ConstructParticle();
-  fpChemList->ConstructMolecule();
-}
-
-//....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
-
-void PhysicsList::ConstructProcess()
-{
-  G4VModularPhysicsList::ConstructProcess();
-
-  // Contruct processes of the chemistry list
-  /*
-   * WARNING:
-   * The instruction below should be called *AFTER*
-   * G4VModularPhysicsList::ConstructProcess()
-   * which defines physics processes
-   * In G4EmDNAChemistry::ConstructProcess, the vibrational excitation
-   * model is extended only if this one has been defined.
-   */
-  fpChemList->ConstructProcess();
-}

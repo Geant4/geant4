@@ -14,6 +14,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+24.12.2014 M.K                  tag chem1-V10-00-04
+-----------------------------------------------------
+- Retag before release
+
 06.11.2014 I.Hrivnacova                             
 -----------------------------------------------------
 - Fixes in .README

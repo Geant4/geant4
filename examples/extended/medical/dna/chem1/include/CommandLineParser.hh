@@ -55,23 +55,52 @@ public:
     OptionNotCompulsory
   };
 
-  const G4String& GetOption() {return fOption;}
+  virtual const G4String& GetOption() { return fNoOption;}
   Command::Type GetType() {return fType;}
   G4bool IsActive() {return fActive;}
   const G4String& GetDescription() {return fDescription;}
-  const G4String& GetOptionName() {return fOptionName;}
+  virtual const G4String& GetOptionName() { return fNoOption;}
+  virtual const G4String& GetDefaultOption() { return fNoOption;}
+
+  virtual void SetOption(const G4String&){;}
+  virtual void SetOptionName(const G4String&){;}
+  virtual void SetDefaultOption(const G4String&){;}
+
+protected:
+  friend class CommandLineParser;
+  Type fType;
+  G4bool fActive;
+  G4String fDescription;
+  static G4String fNoOption;
+
+  Command(Type, 
+          const G4String &description = "");
+  virtual ~Command(){;}
+};
+
+class CommandWithOption : public Command
+{
+public:
+  virtual const G4String& GetOption() {return fOption;}
+  virtual const G4String& GetOptionName() {return fOptionName;}
+  virtual const G4String& GetDefaultOption() { return fDefaultOption;}
+
+  virtual void SetOption(const G4String& in_op){ fOption = in_op;}
+  virtual void SetOptionName(const G4String& in_op){ fOptionName = in_op;}
+  virtual void SetDefaultOption(const G4String& in_op){ fDefaultOption = in_op;}
 
 private:
   friend class CommandLineParser;
-  Type fType;
-  G4String fOption;
-  G4bool fActive;
-  G4String fDescription;
-  G4String fOptionName;
-
-  Command(Type, const G4String &description = "",
+  CommandWithOption(Type,
+          const G4String &description = "",
+          const G4String &defaultOption = "",
           const G4String &optionName ="optionName");
-  ~Command(){;}
+
+  virtual ~CommandWithOption(){;}
+
+  G4String fOption;
+  G4String fDefaultOption;
+  G4String fOptionName;
 };
 
 class CommandLineParser
@@ -94,6 +123,7 @@ public:
     void CorrectRemainingOptions(int& argc, char **argv);
     void AddCommand(const G4String & marker,Command::Type,
                     const G4String& description = "",
+                    const G4String& defaultOption = "",
                     const G4String& optionName = "");
     Command* FindCommand(const G4String &marker);
     Command* GetCommandIfActive(const G4String &marker);
