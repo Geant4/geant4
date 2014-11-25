@@ -39,7 +39,7 @@
 #include "G4Tokenizer.hh"
 
 G4GMocrenMessenger::G4GMocrenMessenger()
-  : suffix (""), geometry(true), solids(true), invisibles(true),
+  : suffix (""), geometry(true), pointAttributes(false), solids(true), invisibles(true),
     kgMocrenVolumeName("gMocrenVolume"),
     kgMocrenScoringMeshName("gMocrenScoringMesh"),
     kDrawVolumeGrid(false) {

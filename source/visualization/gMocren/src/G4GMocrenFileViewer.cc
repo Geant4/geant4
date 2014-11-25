@@ -68,7 +68,13 @@ G4GMocrenFileViewer::G4GMocrenFileViewer (G4GMocrenFileSceneHandler& sceneHandle
   std::strncpy( kG4GddViewer, "gMocren", 8);
   if( getenv( "G4GMocrenFile_VIEWER" ) != NULL ) {
     char * env = getenv( "G4GMocrenFile_VIEWER" );
-    std::strncpy( kG4GddViewer, env, std::strlen(env));
+    int len = std::strlen(env);
+    if(len >= 2048) {
+      G4Exception("G4GMocrenFileViewer::G4GMocrenFileViewer(*)",
+                  "gMocren1000", FatalException,
+                  "Invalid length of string set in G4GMocrenFile_VIEWER");
+    }
+    std::strncpy( kG4GddViewer, env, len);
     //std::strcpy( kG4GddViewer, getenv( "G4GMocrenFile_VIEWER" ) ) ;				
   } 
 
@@ -82,7 +88,13 @@ G4GMocrenFileViewer::G4GMocrenFileViewer (G4GMocrenFileSceneHandler& sceneHandle
     std::strncpy( kG4GddViewerInvocation, kG4GddViewer, std::strlen(kG4GddViewer));
     std::strncat( kG4GddViewerInvocation, " ", 1);
     const char * gddfname = kSceneHandler.GetGddFileName();
-    std::strncat( kG4GddViewerInvocation, gddfname, std::strlen(gddfname) );
+    int len = std::strlen(gddfname);
+    if(len >= 2048) {
+      G4Exception("G4GMocrenFileViewer::G4GMocrenFileViewer(*)",
+                  "gMocren1001", FatalException,
+                  "Invalid length of the GDD file name");
+    }
+    std::strncat( kG4GddViewerInvocation, gddfname, len );
   }
 
 }
@@ -165,10 +177,16 @@ void G4GMocrenFileViewer::ShowView( void )
 	//std::strcpy( kG4GddViewerInvocation, "" );
       } else {
 
-	std::strncpy( kG4GddViewerInvocation, kG4GddViewer, std::strlen(kG4GddViewer));
-	std::strncat( kG4GddViewerInvocation, " ", 1);
-	const char * gddfname = kSceneHandler.GetGddFileName();
-	std::strncat( kG4GddViewerInvocation, gddfname, std::strlen(gddfname));
+        std::strncpy( kG4GddViewerInvocation, kG4GddViewer, std::strlen(kG4GddViewer));
+        std::strncat( kG4GddViewerInvocation, " ", 1);
+        const char * gddfname = kSceneHandler.GetGddFileName();
+        int len = std::strlen(gddfname);
+        if(len >= 2048) {
+          G4Exception("G4GMocrenFileViewer::ShowView()",
+                      "gMocren1002", FatalException,
+                      "Invalid length of the GDD file name");
+        }
+        std::strncat( kG4GddViewerInvocation, gddfname, len);
       }
 
     }

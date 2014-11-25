@@ -20,6 +20,10 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
+25th Nobember 2014  Akinori Kimura (gMocren-V10-00-02)
+- G4GMocrenFileSceneHandler.cc, G4GMocrenFileViewer.cc, G4GMocrenMessenger.cc:
+  fixed STRING_OVERFLOW checks according to COVERITY
+
 5th June 2014  Laurent Garnier  (gMocren-V10-00-01)
 - G4GMocrenFile.cc: FIX Problem 1585 - Memory leak in G4GMocrenFile.cc
 
