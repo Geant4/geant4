@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
      
+24.11.2014 M.K                  tag pdb4dna-V10-00-06
+-----------------------------------------------------
+- Retag before release
+     
 06.11.2014 I.Hrivnacova                             
 -----------------------------------------------------
 - Fixes in README files

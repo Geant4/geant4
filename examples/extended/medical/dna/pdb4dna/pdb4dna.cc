@@ -51,7 +51,7 @@
 #include "Randomize.hh"
 #include "G4VisExecutive.hh"
 #include "G4UIExecutive.hh"
-
+#include "G4UIQt.hh"
 #include "CommandLineParser.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -82,36 +82,30 @@ int main(int argc,char** argv)
   //////////
   // Construct the run manager according to whether MT is activated or not
   //
-  G4RunManager* runManager(0);
   Command* commandLine(0);
 
+#ifdef G4MULTITHREADED
+  G4MTRunManager* runManager= new G4MTRunManager;
   if ((commandLine = parser->GetCommandIfActive("-mt")))
   {
-#ifdef G4MULTITHREADED
-
-    runManager= new G4MTRunManager;
-
-    if(commandLine->GetOption().empty())
+    int nThreads = 2;
+    if(commandLine->GetOption() == "NMAX")
     {
-      ((G4MTRunManager*)runManager)->SetNumberOfThreads(1);
+     nThreads = G4Threading::G4GetNumberOfCores();
     }
     else
     {
-      int nThreads = G4UIcommand::ConvertToInt(commandLine->GetOption());
-      ((G4MTRunManager*)runManager)->SetNumberOfThreads(nThreads);
+     nThreads = G4UIcommand::ConvertToInt(commandLine->GetOption());
     }
-#else
-    G4cout << "WARNING : the -mt command line option has not effect since you "
-        "seam to have compile Geant4 without the G4MULTITHREADED flag"
-           << G4endl;
-    runManager = new G4RunManager();
+    G4cout << "===== PDB4DNA is started with "
+       << runManager->GetNumberOfThreads()
+       << " threads =====" << G4endl;
 
+    runManager->SetNumberOfThreads(nThreads);
+  }
+#else
+  G4RunManager* runManager = new G4RunManager();
 #endif
-  }
-  else
-  {
-    runManager = new G4RunManager;
-  }
   
   // Set user classes
   //
@@ -181,6 +175,12 @@ int main(int argc,char** argv)
 
   if ((commandLine = parser->GetCommandIfActive("-gui")))
   {
+#ifdef G4UI_USE_QT
+    G4UIQt* UIQt = static_cast<G4UIQt*> (UImanager->GetG4UIWindow());
+    if ( UIQt) {
+      UIQt->AddViewerTabFromFile("README", "README from "+ G4String(argv[0]));
+    }
+#endif
     ui->SessionStart();
     delete ui;
   }
@@ -217,9 +217,11 @@ void Parse(int& argc, char** argv)
 //                     "Give a seed value in argument to be tested", "seed");
 // it is then up to you to manage this option
 
-  parser->AddCommand("-mt", Command::OptionNotCompulsory,
+#ifdef G4MULTITHREADED
+  parser->AddCommand("-mt", Command::WithOption,
                      "Launch in MT mode (events computed in parallel)",
                      "2");
+#endif
 
   parser->AddCommand("-vis",
                      Command::WithOption,
