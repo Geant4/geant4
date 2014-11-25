@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-41 25 November 2014 Mathieu Karamitros
+- Remove useless -mt flag for dna examples
+
 ctests-V10-00-40 21 November 2014 Gunter Folger
 - Attempt to copy files without PRECMD, using configure_file()
 

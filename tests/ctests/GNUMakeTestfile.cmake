@@ -266,19 +266,19 @@ foreach(_i 1 2 3)
 # flag -mt always ON if G4MULTITHREADED is not defined, it will
 # run in sequential mode 
 GEANT4_ADD_TEST(example-ext-medical-dna-chem${_i}
-                COMMAND ${BINDIR}/chem${_i} -mac ${DNA_EXAMPLE_SRC_DIR}/chem${_i}/beam.in -mt
+                COMMAND ${BINDIR}/chem${_i} -mac ${DNA_EXAMPLE_SRC_DIR}/chem${_i}/beam.in
                 BUILD ${DNA_EXAMPLE_SRC_DIR}/chem${_i})
 endforeach()
 
 #GEANT4_ADD_TEST(example-ext-medical-dna-wholeNuclearDNA
 #                COMMAND ${BINDIR}/wholeNuclearDNA
-#                        ${DNA_EXAMPLE_SRC_DIR}/wholeNuclearDNA/wholeNuclearDNA.in
+#                        -mac ${DNA_EXAMPLE_SRC_DIR}/wholeNuclearDNA/wholeNuclearDNA.in
 #                BUILD ${DNA_EXAMPLE_SRC_DIR}/wholeNuclearDNA)
 
 configure_file(${CTEST_SOURCE_DIRECTORY}examples/extended/medical/dna/pdb4dna/pdb4dna.in ${CTEST_BINARY_DIRECTORY}examples/extended/medical/dna/pdb4dna/pdb4dna.in)
 GEANT4_ADD_TEST(example-ext-medical-dna-pdb4dna
                 COMMAND ${BINDIR}/pdb4dna
-                        -mac ${DNA_EXAMPLE_SRC_DIR}/pdb4dna/pdb4dna.in -mt
+                        -mac ${DNA_EXAMPLE_SRC_DIR}/pdb4dna/pdb4dna.in
                 BUILD ${DNA_EXAMPLE_SRC_DIR}/pdb4dna)
 
 GEANT4_ADD_TEST(example-ext-optical-opnovice 

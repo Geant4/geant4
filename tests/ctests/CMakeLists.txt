@@ -425,14 +425,14 @@ set(DNA_EXAMPLE_BIN_DIR ${CMAKE_BINARY_DIR}/examples/extended/medical/dna)
 
 GEANT4_ADD_TEST(example-ext-medical-dna-pdb4dna
                 COMMAND ${DNA_EXAMPLE_BIN_DIR}/pdb4dna/pdb4dna
-                        -mac ${DNA_EXAMPLE_SOURCE_DIR}/pdb4dna/pdb4dna.in -mt
+                        -mac ${DNA_EXAMPLE_SOURCE_DIR}/pdb4dna/pdb4dna.in
                 SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/pdb4dna
                 BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/pdb4dna
                 BUILD pdb4dna ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
 
 GEANT4_ADD_TEST(example-ext-medical-dna-wholeNuclearDNA
-                COMMAND ${DNA_EXAMPLE_BIN_DIR}/wholeNuclearDNA/wholeNuclearDNA
-                        ${DNA_EXAMPLE_SOURCE_DIR}/wholeNuclearDNA/wholeNuclearDNA.in
+                COMMAND ${DNA_EXAMPLE_BIN_DIR}/wholeNuclearDNA/wholeNuclearDNA 
+                        -mac ${DNA_EXAMPLE_SOURCE_DIR}/wholeNuclearDNA/wholeNuclearDNA.in
                 SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/wholeNuclearDNA
                 BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/wholeNuclearDNA
                 BUILD wholeNuclearDNA ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
@@ -457,7 +457,6 @@ foreach(_i 1 2 3)
 GEANT4_ADD_TEST(example-ext-medical-dna-chem${_i}
                 COMMAND ${DNA_EXAMPLE_BIN_DIR}/chem${_i}/chem${_i} 
                         -mac ${DNA_EXAMPLE_SOURCE_DIR}/chem${_i}/beam.in 
-                        -mt
                 SOURCE_DIR ${DNA_EXAMPLE_SOURCE_DIR}/chem${_i}
                 BINARY_DIR ${DNA_EXAMPLE_BIN_DIR}/chem${_i}
                 BUILD chem${_i} ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
