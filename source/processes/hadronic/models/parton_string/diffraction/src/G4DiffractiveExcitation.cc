@@ -452,7 +452,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
 
        if(SqrtS-M0target < MminProjectile) continue;
 
-       MtestPr = BrW.SampleMass(TestParticle,DBL_MAX);  //SqrtS-M0target);                     // Uzhi Nov. 2014 
+       MtestPr = BrW.SampleMass(TestParticle, 1.0e20);  //SqrtS-M0target);                     // Uzhi Nov. 2014 
 //            G4ParticleTable::GetParticleTable()->FindParticle( NewProjCode )->GetPDGMass();  // Uzhi 2014 
 
        #ifdef debugFTFexictation
