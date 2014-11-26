@@ -132,7 +132,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
   if ( M0projectile < MminProjectile ) 
   {
     PutOnMassShell = true;
-    M0projectile = BrW.SampleMass(projectile->GetDefinition(),SqrtS-M0target);   // Uzhi Oct. 2014
+    M0projectile = BrW.SampleMass(projectile->GetDefinition(),projectile->GetDefinition()->GetPDGMass() + 5.0*projectile->GetDefinition()->GetPDGWidth());
   }
 
   G4double M0projectile2 = M0projectile * M0projectile;
@@ -152,7 +152,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
   if ( M0target < MminTarget ) 
   {
     PutOnMassShell = true;
-    M0target = BrW.SampleMass(target->GetDefinition(),SqrtS-M0projectile);         // Uzhi Oct. 2014
+    M0target = BrW.SampleMass(target->GetDefinition(),target->GetDefinition()->GetPDGMass() + 5.0*target->GetDefinition()->GetPDGWidth());
   }
 
   G4double M0target2 = M0target * M0target; 
@@ -452,7 +452,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
 
        if(SqrtS-M0target < MminProjectile) continue;
 
-       MtestPr = BrW.SampleMass(TestParticle, 1.0e20);  //SqrtS-M0target);                     // Uzhi Nov. 2014 
+       MtestPr = BrW.SampleMass(TestParticle, TestParticle->GetPDGMass() + 5.0*TestParticle->GetPDGWidth());
 //            G4ParticleTable::GetParticleTable()->FindParticle( NewProjCode )->GetPDGMass();  // Uzhi 2014 
 
        #ifdef debugFTFexictation
@@ -500,7 +500,7 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
 
        if(SqrtS-MtestPr < MminTarget) continue;
       
-       MtestTr = BrW.SampleMass(TestParticle,SqrtS-MtestPr);        // Uzhi Oct 2014
+       MtestTr = BrW.SampleMass(TestParticle,TestParticle->GetPDGMass() + 5.0*TestParticle->GetPDGWidth());
 
        if(SqrtS > MtestPr+MtestTr) break;
       }  // End of while(attempts < 50)//===============================
@@ -701,7 +701,7 @@ M0target = MtestTr;                                                             
 
        if(SqrtS-M0target < MminProjectile) continue;
 
-       MtestPr = BrW.SampleMass(TestParticle,SqrtS-M0target); 
+       MtestPr = BrW.SampleMass(TestParticle,TestParticle->GetPDGMass() + 5.0*TestParticle->GetPDGWidth()); 
 
 //     --------------------------------------------------------------------------------- Targ 
        TestParticle = G4ParticleTable::GetParticleTable()->FindParticle( NewTargCode );
@@ -711,7 +711,7 @@ M0target = MtestTr;                                                             
 
        if(SqrtS-MtestPr < MminTarget) continue;
 
-       MtestTr = BrW.SampleMass(TestParticle,SqrtS-MtestPr);                     // Uzhi Oct 2014
+       MtestTr = BrW.SampleMass(TestParticle,TestParticle->GetPDGMass() + 5.0*TestParticle->GetPDGWidth());
 
        if(SqrtS > MtestPr+MtestTr) break;
       }  // End of while(attempts < 50)//===============================
@@ -1357,7 +1357,8 @@ void G4DiffractiveExcitation::CreateStrings( G4VSplitableHadron* hadron,
     if ( absPDGcode < 1000 ) {  // meson
       if ( isProjectile ) { // Projectile
         if ( end->GetDefinition()->GetPDGEncoding() > 0 ) {  // A quark on the end
-          FirstString  = new G4ExcitedString( end   , Ganti_quark, +1 );
+          
+FirstString  = new G4ExcitedString( end   , Ganti_quark, +1 );
           SecondString = new G4ExcitedString( Gquark, start      , +1 );
           Ganti_quark->Set4Momentum( PkinkQ1 );
           Gquark->Set4Momentum( PkinkQ2 );

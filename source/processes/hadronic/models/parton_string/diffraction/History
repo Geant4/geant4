@@ -15,6 +15,13 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26-Nov-2014 A. Ribon       (hadr-string-diff-V10-00-14)
+- G4DiffractiveExcitation : use pole mass + 5*width as maximum mass for
+                            resonances.
+
+26-Nov-2014 A. Ribon       (hadr-string-diff-V10-00-13)
+- G4FTFModel : fixed a memory leak detected in test13.
+
 26-Nov-2014 A. Ribon       (hadr-string-diff-V10-00-12)
 - G4DiffractiveExcitation : replaced DBL_MAX with a very large mass, to avoid
                             computations with DBL_MAX.

@@ -2143,6 +2143,7 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
                                   primaries[ahadron]->GetTimeOfCreation(),
                                   primaries[ahadron]->GetPosition(),   //FirstString->GetPosition(),
                                   ParticleMomentum);
+       if (FirstString) delete FirstString;
        FirstString=new G4ExcitedString(aTrack); SecondString=0; 
       }
       else {G4cout<<"Something wrong in FTF Model Build String" << G4endl;}          // Uzhi Oct 2014 end
@@ -2368,7 +2369,8 @@ G4ExcitedStringVector* G4FTFModel::BuildStrings() {
                                   aNucleon->GetTimeOfCreation(),
                                   aNucleon->GetPosition(), //FirstString->GetPosition(),
                                   ParticleMomentum);
-       FirstString=new G4ExcitedString(aTrack);
+      delete FirstString; 
+      FirstString=new G4ExcitedString(aTrack);
       };                                                         // Uzhi Oct 2014 end
 
       if ( FirstString  != 0 ) strings->push_back( FirstString );
