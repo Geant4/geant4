@@ -36,7 +36,9 @@
 
 #include "G4OpenGLStoredSceneHandler.hh"
 #include "G4ios.hh"
+#ifdef G4MULTITHREADED
 #include "G4Threading.hh"
+#endif
 
 #include <qapplication.h>
 
@@ -184,10 +186,14 @@ G4bool G4OpenGLStoredQtViewer::TOSelected(size_t)
   return true;
 }
 
-void G4OpenGLStoredQtViewer::DrawView () {  
+void G4OpenGLStoredQtViewer::DrawView () {
+#ifdef G4MULTITHREADED
   if (G4Threading::G4GetThreadId() == G4Threading::MASTER_ID) {
     updateQWidget();
   }
+#else
+  updateQWidget();
+#endif
 }
 
 void G4OpenGLStoredQtViewer::ComputeView () {

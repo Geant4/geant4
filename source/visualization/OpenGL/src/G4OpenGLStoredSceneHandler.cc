@@ -433,8 +433,9 @@ end_of_display_list_reuse_test:
     glLoadIdentity();
     G4OpenGLTransform3D oglt (fObjectTransformation);
     glMultMatrixd (oglt.GetGLMatrix ());
-    glDisable(GL_DEPTH_TEST);  // But see parent scene handler!!  In
-    glDisable (GL_LIGHTING);   // some cases, we need to re-iterate this.
+    glDisable (GL_LIGHTING);
+  } else {
+    glEnable (GL_LIGHTING);
   }
 
   return true;

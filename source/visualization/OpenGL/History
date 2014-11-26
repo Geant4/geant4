@@ -17,7 +17,18 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
-21th November 2014  Laurent Garnier  (opengl-V10-00-27)
+25th November 2014  Laurent Garnier  (opengl-V10-00-28)
+- G4OpenGLStoredQtViewer/G4OpenGLImmediatedQtViewer :
+  Fix refresh problem due to a bad threading management
+
+25th November 2014  John Allison
+- G4OpenGLQtViewer.cc:
+  o Fixes hidden marker field in Qt viewer properties.
+- G4OpenGLStoredSceneHandler.cc:
+  o Fixes a bug whereby hidden markers are not respected if 2D objects
+    are drawn.
+
+21st November 2014  Laurent Garnier  (opengl-V10-00-27)
 - G4OpenGLStoredQtViewer/G4OpenGLImmediatedQtViewer :
  o Avoid repainting problems by disable recursive repaints (from last commit)
 

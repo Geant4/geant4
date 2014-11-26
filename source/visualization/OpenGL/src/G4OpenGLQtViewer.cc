@@ -4307,9 +4307,9 @@ void G4OpenGLQtViewer::updateSceneTreeComponentTreeWidgetInfos() {
 
     } else if(commandTmp->GetCommandName() == "hiddenMarker") {
       if (fVP.IsMarkerNotHidden()) {
-        params = "True";
-      } else {
         params = "False";
+      } else {
+        params = "True";
       }
 
     } else if(commandTmp->GetCommandName() == "lightsMove") {
