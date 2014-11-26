@@ -9,6 +9,9 @@ ifndef G4INSTALL
 endif
 
 GLOBLIBS = libG4intercoms.lib libG4global.lib
+ifdef G4LIB_BUILD_EXPAT
+  GLOBLIBS += libG4expat.lib
+endif
 ifdef G4LIB_BUILD_ZLIB
   GLOBLIBS += libG4zlib.lib
 endif
