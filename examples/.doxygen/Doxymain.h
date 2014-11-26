@@ -33,8 +33,8 @@ examples are also used as "acceptance"-tests for the release process.
 See more on each examples category pages:
 - \ref README_basic
 - \ref README_extended
-- <a href="http://geant4advancedexampleswg.wikispaces.com/ExamplesDocumentation">
-  Advanced Examples </a>
+- <a href="https://twiki.cern.ch/twiki/bin/view/Geant4/AdvancedExamples">
+  <b>Advanced Examples </b></a>
 
 The previous set of examples oriented to novice users, <b>"novice"</b>,
 has been refactored in "basic" and "extended" examples sets in Geant4 10.0.
