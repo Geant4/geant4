@@ -72,6 +72,10 @@ G4ExcitedString::G4ExcitedString(G4KineticTrack * track)
 G4ExcitedString::~G4ExcitedString()
 {
   std::for_each(thePartons.begin(), thePartons.end(), DeleteParton());
+  if ( theTrack ) {
+    delete theTrack;
+    theTrack=0;
+  }
 }
 
 

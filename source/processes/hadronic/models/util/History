@@ -15,6 +15,9 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+26 November 2014 Alberto Ribon  (hadr-mod-util-V10-00-16)
+- G4ExcitedString : fixed a memory leak.
+
 04 October 2014 Vladimir Ivanchenko  (hadr-mod-util-V10-00-15)
 - G4Fragment - added model type
 
