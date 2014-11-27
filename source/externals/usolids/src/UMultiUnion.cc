@@ -938,8 +938,20 @@ std::ostream& UMultiUnion::StreamInfo(std::ostream& os) const
      << "                *** Dump for solid - " << GetName() << " ***\n"
      << "                ===================================================\n"
      << " Solid type: UMultiUnion\n"
-     << " Parameters: \n"
-     << "             \n"
+     << " Parameters: \n";
+     int numNodes = fSolids.size();
+     for (int i = 0 ; i < numNodes ; ++i)
+     {
+      VUSolid& solid = *fSolids[i];
+      solid.StreamInfo(os);
+      const UTransform3D& transform = fTransformObjs[i];
+      os<<" Translation is " <<transform.fTr<<" \n";
+      os<<" Rotation is :"<<" \n";
+      for(int j = 0; j < 3; j++ )
+	os<<" "<<transform.fRot[j*3]<<" "<<transform.fRot[1+j*3]<<" "<<transform.fRot[2+j*3]<<"\n";
+     }
+
+  os << "             \n"
      << "-----------------------------------------------------------\n";
   os.precision(oldprc);
 

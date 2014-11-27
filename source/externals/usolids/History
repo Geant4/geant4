@@ -17,6 +17,9 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 27, 2014 T.Nikitina              geom-usolids-V10-00-25
+- Improved dump in StreamInfo() for UMultiUnion.
+
 November 27, 2014 G.Cosmo                 geom-usolids-V10-00-24
 - Removed 'inline' specification for pure virtual function StreamInfo()
   in VUSolid base class.
