@@ -138,14 +138,11 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma(G4Fragment* aNucleus)
   G4DiscreteGammaTransition* dtransition = 
     dynamic_cast <G4DiscreteGammaTransition*> (_transition);
 
-  G4bool eTransition = false;
   if (dtransition && !( dtransition->IsAGamma()) ) {
-    eTransition = true; 
     gamma = G4Electron::Electron(); 
     _vSN = dtransition->GetOrbitNumber();   
     _electronO.RemoveElectron(_vSN);
-    lv += G4LorentzVector(0.0,0.0,0.0,
-			  CLHEP::electron_mass_c2 - dtransition->GetBondEnergy());
+    lv += G4LorentzVector(0.0,0.0,0.0,CLHEP::electron_mass_c2);
   }
 
   G4double cosTheta = 1. - 2. * G4UniformRand(); 
@@ -181,7 +178,7 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma(G4Fragment* aNucleus)
     G4ThreeVector bst  = lv.boostVector();
 
     G4double GammaEnergy = 0.5*((Ecm - Mass)*(Ecm + Mass) + eMass*eMass)/Ecm;
-    if(GammaEnergy <= eMass) { return 0; }
+    if(GammaEnergy < eMass) { GammaEnergy = eMass; }
 
     G4double mom = std::sqrt((GammaEnergy - eMass)*(GammaEnergy + eMass));
     Gamma4P.set(mom * sinTheta * std::cos(phi),
@@ -198,9 +195,6 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma(G4Fragment* aNucleus)
 
   aNucleus->SetMomentum(lv);
   aNucleus->SetCreationTime(gammaTime);
-
-  // e- is not produced
-  if(eTransition && !dtransition->GetICM()) { return thePhoton; }
 
   // gamma or e- are produced
   thePhoton = new G4Fragment(Gamma4P,gamma);

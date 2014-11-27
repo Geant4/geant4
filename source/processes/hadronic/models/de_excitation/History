@@ -14,6 +14,12 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 Nov 2014 Vladimir Ivanchenko (hadr-deex-V10-00-26)
+----------------------------------------------------------
+- G4DiscreteGammaDeexcitation, G4DiscreteGammaTransition fixed
+    internal conversion for the case when transition energy is 
+    nearly electron bound energy
+
 25 Nov 2014 Makoto Asai (hadr-deex-V10-00-25)
 ----------------------------------------------------------
 - G4NuclearLevelManager - remove unnecessary data members to reduce
