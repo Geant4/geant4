@@ -1593,10 +1593,11 @@ G4Navigator::GetGlobalExitNormal(const G4ThreeVector& IntersectPointGlobal,
     else
     {
        G4ExceptionDescription message;
-
-       message << " ERROR> Expected normal-global-frame to valid (unit vector) "
-               << "  - but |normal| = "  << std::sqrt(normMag2)
-               << "  - and |normal|^ = "  << normMag2
+       message.precision(10); 
+       message << " WARNING> Expected normal-global-frame to be valid, "
+               << " i.e. a unit vector!" << G4endl
+               << "  - but |normal|   = "  << std::sqrt(normMag2)
+               << "  - and |normal|^2 = "  << normMag2 << G4endl
                << " which differs from 1.0 by " << normMag2 - 1.0 << G4endl
                << "   n = " << fExitNormalGlobalFrame << G4endl;
        message << "============================================================"

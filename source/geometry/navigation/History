@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+November 27, 2014 - G.Cosmo (geomnav-V10-00-19)
+---------------------------
+- Added protection in G4ReplicaNavigation::DistanceToOutRad() for potential
+  rare cases of negative value to sqrt() in equation calculation for rmin/rmax
+  intersection.
+- Improved warning printout in G4Navigator::GetGlobalExitNormal().
+
 November 20, 2014 - J.Apostolakis (geomnav-V10-00-18, 17)
 ---------------------------------
 - G4ErrorPropagationNavigator: fix to make normal a unit vector,
