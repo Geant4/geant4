@@ -17,6 +17,13 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+ctests-V10-00-43 26 November 2014 Gunter Folger
+- GNUMakeTestfile.cmake: disable 2 tests which need files copied to the 
+  example directory in the build directory tree.
+
+ctests-V10-00-42 26 November 2014 Gunter Folger
+- RE01: drop no longer needed comparison of error output to a reference.
+
 ctests-V10-00-41 25 November 2014 Mathieu Karamitros
 - Remove useless -mt flag for dna examples
 

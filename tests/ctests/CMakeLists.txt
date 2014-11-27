@@ -349,7 +349,6 @@ GEANT4_ADD_TEST(example-ext-runandevent-re01
                         ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE01/sample.in
                 ERROR sample.err
                 PRECMD  ${CMAKE_COMMAND} -E copy ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE01/pythia_event.data pythia_event.data
-                POSTCMD ${CMAKE_COMMAND} -E compare_files sample.err ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE01/sample.err
                 SOURCE_DIR ${CMAKE_SOURCE_DIR}/examples/extended/runAndEvent/RE01
                 BINARY_DIR ${CMAKE_BINARY_DIR}/examples/extended/runAndEvent/RE01
                 BUILD RE01 ENVIRONMENT ${GEANT4_TEST_ENVIRONMENT})
