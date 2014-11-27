@@ -59,6 +59,7 @@ RunAction::RunAction()
 RunAction::~RunAction()
 {
   if ( TestWrite ) delete G4AnalysisManager::Instance();  
+  if ( TestRead ) delete G4AnalysisReader::Instance();  
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
@@ -216,7 +217,7 @@ void RunAction::TestReading() const
   analysisReader->SetFileName(fFileName);
     
   if ( TestH1 ) {
-     G4int h1Id = analysisReader->ReadH1(G4String("Edep"));
+     G4int h1Id = analysisReader->ReadH1("Edep");
      if ( h1Id >= 0 ) {
        G4H1* h1 = analysisReader->GetH1(h1Id);
        if ( h1 ) {

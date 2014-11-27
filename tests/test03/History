@@ -15,6 +15,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+26 Nov 2014, Ivana Hrivnacova (test03-V10-00-06)
+ - Added deleting of G4AnalysisReader in RunAction destructor
+
 22 Oct 2014, Ivana Hrivnacova (test03-V10-00-05)
   - Activated reading Csv ntuple
 
