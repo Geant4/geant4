@@ -14,6 +14,9 @@ code and to keep track of all tags.
      ---------------------------------------------------------------
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
+27-Nov-2014 V. Uzhinsky    (hadr-string-diff-V10-00-15)
+- Charge non-conservation is erased for meson-nucleus interactions
+  in G4Diffractive Excitation. It was caused by quark exchange.
 
 26-Nov-2014 A. Ribon       (hadr-string-diff-V10-00-14)
 - G4DiffractiveExcitation : use pole mass + 5*width as maximum mass for

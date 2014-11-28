@@ -110,7 +110,7 @@ void G4FTFParticipants::GetList( const G4ReactionProduct& thePrimary,
 
     G4double xyradius;                          
     xyradius = theNucleus->GetOuterRadius() + deltaxy; // Range of impact parameter sampling
-                                                        
+                                                  
     do {  // while ( theInteractions.size() == 0 )
 
       std::pair< G4double, G4double > theImpactParameter;

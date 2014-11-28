@@ -437,10 +437,25 @@ G4bool G4DiffractiveExcitation::ExciteParticipants( G4VSplitableHadron*    proje
          NewProjCode += 2;                         // Excited meson 
          ProjExcited = true;
        }
-       if ( aProjQ1 != aProjQ2 ) NewProjCode *= ( ProjectilePDGcode / absProjectilePDGcode );
+//       if ( aProjQ1 != aProjQ2 ) NewProjCode *= ( ProjectilePDGcode / absProjectilePDGcode ); // Uzhi 27 Nov. 2014
+// Uzhi 27 Nov. 2014
+       G4int Qquarks=0;
+       if     ( aProjQ1 == 1 ) {Qquarks -= ProjQ1;}
+       else if( aProjQ1 == 2 ) {Qquarks += ProjQ1;}
+       else                    {Qquarks -= ProjQ1/aProjQ1;}
+
+       if     ( aProjQ2 == 1 ) {Qquarks -= ProjQ2;}
+       else if( aProjQ2 == 2 ) {Qquarks += ProjQ2;}
+       else                    {Qquarks -= ProjQ2/aProjQ2;}
+
+       if( Qquarks < 0 ) NewProjCode *=(-1);
+// Uzhi 27 Nov. 2014
 
        #ifdef debugFTFexictation
        G4cout << "NewProjCode +2 or 0 " << NewProjCode << G4endl;
+       G4cout<<"+++++++++++++++++++++++++++++++++++++++"<<G4endl;
+       G4cout<<ProjQ1<<" "<<ProjQ2<<" "<<Qquarks<<G4endl;
+       G4cout<<"+++++++++++++++++++++++++++++++++++++++"<<G4endl;
        #endif
 
 //     --------------------------------------------------------------------------------- Proj 
