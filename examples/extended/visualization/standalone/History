@@ -16,6 +16,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th November 2014  John Allison  (exam-ext-vis-standalone-V10-00-01)
+- README: Mention /vis/scene/add/extent.
+
 27th March 2013  John Allison  (exam-ext-vis-standalone-V09-06-01)
 - Added separators between functions.
 - Removed standalone.g4m.
