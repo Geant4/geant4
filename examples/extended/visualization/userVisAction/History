@@ -16,6 +16,9 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+27th November 2014  John Allison  (exam-ext-vis-UVA-V10-00-02)
+- README: Mention /vis/scene/add/extent.
+
 22st April March 2014  John Allison  (exam-ext-vis-UVA-V10-00-00)
 - Migrated to 10.0.  Multi-thread compliant.
 - Based on examples/basic/B1.
