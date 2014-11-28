@@ -91,7 +91,7 @@ of biasing. Complementary approach to the modular physics lists of B01 and B02
 
 These examples illustrate the usage of a biasing scheme implemented since
 version Geant4 10.0.
-The scheme is meant to be extensible, not limited to these two examples.
+The scheme is meant to be extensible, not limited to these four examples.
 
 Example GB01:
 =============
