@@ -42,7 +42,8 @@
 //
 //        21 Nov. 2001, Fan Lei (flei@space.qinetiq.com)
 //              i) added G4int _nucleusZ initialise it through the constructor
-//              ii) modified SelectGamma() to allow the generation of conversion e-
+//              ii) modified SelectGamma() to allow the generation of 
+//                  conversion e-
 //              iii) added #include G4AtomicShells.hh
 //      
 //        09 Sep. 2002, Fan Lei  (flei@space.qinetiq.com)
@@ -50,18 +51,20 @@
 //              electron or gamma in SelectGamma()
 //
 //        19 April 2010, J. M. Quesada. 
-//              Corrections added for taking into account mismatch between tabulated 
-//              gamma energies and level energy differences (fake photons eliminated) 
+//              Corrections added for taking into account mismatch between 
+//              tabulated gamma energies and level energy differences 
+//              (fake photons eliminated) 
 //
 //        9 May 2010, V.Ivanchenko
-//              Removed unphysical corretions of gamma energy; fixed default particle 
-//              as gamma; do not subtract bounding energy in case of electron emmision
+//              Removed unphysical corretions of gamma energy; fixed default 
+//              particle as gamma; do not subtract bounding energy in case of 
+//              electron emmision
 //
 //	  3 November 2011, L. Desorgher
 //		Extend the use of the code for Z>100 by not calling 
 //              G4AtomicShells::GetBindingEnergy for Z>100
-//		For Z>100 the binding energy is set to 0, the atomic relaxation is 
-//              not simulated in G4RadDecay
+//		For Z>100 the binding energy is set to 0 and atomic 
+//              relaxation is not simulated in G4RadDecay
 //
 // -------------------------------------------------------------------
 
@@ -101,10 +104,10 @@ void G4DiscreteGammaTransition::SelectGamma()
       G4double random = G4UniformRand();
       
       //G4cout << "G4DiscreteGammaTransition::SelectGamma  N= " 
-      //       << nGammas << " rand= " << random << G4endl;
+      //	     << nGammas << " rand= " << random << G4endl;
       for(iGamma=0; iGamma<nGammas; ++iGamma) {
 	//G4cout << iGamma << "  prob= " 
-	//	   << (aLevel->GammaCumulativeProbabilities())[iGamma] << G4endl;
+	//   << (aLevel->GammaCumulativeProbabilities())[iGamma] << G4endl;
 	if(random <= (aLevel->GammaCumulativeProbabilities())[iGamma])
 	  { break; }
       }
@@ -116,11 +119,15 @@ void G4DiscreteGammaTransition::SelectGamma()
     */
     // VI 2014: initial excitation energy may be not exactly energy of the level
     //          final excitation energy is always energy of some level or zero
-    //          transition to the ground state should be always exact excitation 
-    if(nGammas == iGamma+1) {  gammaEnergy = excitation; }
-    else { gammaEnergy = (aLevel->GammaEnergies())[iGamma] 
-	+ excitation - aLevel->Energy();
-    }
+    //          transition to the ground state should be always equal to
+    //          the excitation energy 
+    gammaEnergy = (aLevel->GammaEnergies())[iGamma] 
+      + excitation - aLevel->Energy();
+
+    // this check is needed to remove cases when nucleaus is left in 
+    // slightly excited state which will require very low energy
+    // gamma emission 
+    if(excitation <= gammaEnergy + tolerance) { gammaEnergy = excitation; }
     //JMQ: 
     //1)If chosen gamma energy is close enough to excitation energy, 
     //  the later is used instead for gamma dacey to gs (it guarantees 
@@ -145,11 +152,9 @@ void G4DiscreteGammaTransition::SelectGamma()
     //          design.
     //          I leave this for a later revision.
 
-    // VI: the check has no sence and we make this very simple
-    //if (gammaEnergy < tolerance) { 
-    //  gammaEnergy = excitation; 
-    //}
-    /*
+    // VI: the check is needed to remove very low-energy gamma
+    if (gammaEnergy < tolerance) { gammaEnergy = excitation; }
+    /*    
     G4cout << "G4DiscreteGammaTransition::SelectGamma: " << gammaEnergy 
 	   << " Eexc= " << excitation
 	   << " icm: " << icm << G4endl;
@@ -202,7 +207,7 @@ void G4DiscreteGammaTransition::SelectGamma()
 	  if (nucleusZ <=100) {
 	    bondE = G4AtomicShells::GetBindingEnergy(nucleusZ, iShell);
 	  }
-	  if (verbose > 0) {
+	  if (verbose > 1) {
 	    G4cout << "G4DiscreteGammaTransition: nucleusZ = " <<nucleusZ 
 		   << " , iShell = " << iShell  
 		   << " , Shell binding energy = " << bondE/keV
@@ -226,6 +231,8 @@ void G4DiscreteGammaTransition::SelectGamma()
     gammaCreationTime = 0.;      
     if(tau > 0.0) {  gammaCreationTime = -tau*G4Log(G4UniformRand()); }
   }
+  //G4cout << "G4DiscreteGammaTransition end nGamma= " << nGammas
+  //	 << "  Egamma= " << gammaEnergy << G4endl;
 }
 
 G4double G4DiscreteGammaTransition::GetGammaEnergy()

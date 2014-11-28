@@ -90,16 +90,18 @@ void G4VGammaDeexcitation::DoChain(G4FragmentVector* products,
 {
   if (_verbose > 1) { G4cout << "G4VGammaDeexcitation::DoChain" << G4endl; }
   
-  while (CanDoTransition(nucleus)) {      
-    _transition->SetEnergyFrom(nucleus->GetExcitationEnergy());
-    G4Fragment* gamma = GenerateGamma(nucleus);
-    if (gamma) {
-      products->push_back(gamma);
-    }
-    //G4cout << "Eex(MeV)= " << nucleus->GetExcitationEnergy() << G4endl;
-    if(nucleus->GetExcitationEnergy() <= _tolerance) { break; }
-  } 
-  
+  if(CanDoTransition(nucleus)) { 
+    for(size_t i=0; i<100; ++i) {      
+      _transition->SetEnergyFrom(nucleus->GetExcitationEnergy());
+      G4Fragment* gamma = GenerateGamma(nucleus);
+      if (gamma) { products->push_back(gamma); }
+      else { break; } 
+      //G4cout << i << ".  Egamma(MeV)= " << gamma->GetMomentum().e() 
+      //	     << "; new Eex(MeV)= " << nucleus->GetExcitationEnergy() 
+      //       << G4endl;
+      if(nucleus->GetExcitationEnergy() <= _tolerance) { break; }
+    } 
+  }
   if (_verbose > 1) {
     G4cout << "G4VGammaDeexcitation::DoChain - end" << G4endl;
   }
@@ -119,12 +121,11 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma(G4Fragment* aNucleus)
   // final excitation
   G4double excitation = aNucleus->GetExcitationEnergy() - etrans;
   if(excitation <= _tolerance) { excitation = 0.0; } 
-  if (_verbose > 1) 
-    {
-      G4cout << "G4VGammaDeexcitation::GenerateGamma - Edeexc(MeV)= " << etrans 
-	     << " ** left Eexc(MeV)= " << excitation
-	     << G4endl;
-    }
+  if (_verbose > 1) {
+    G4cout << "G4VGammaDeexcitation::GenerateGamma - Edeexc(MeV)= " << etrans 
+	   << " ** left Eexc(MeV)= " << excitation
+	   << G4endl;
+  }
 
   G4double gammaTime = _transition->GetGammaCreationTime();
   
@@ -151,10 +152,10 @@ G4Fragment* G4VGammaDeexcitation::GenerateGamma(G4Fragment* aNucleus)
 
   G4double eMass = gamma->GetPDGMass();
   G4LorentzVector Gamma4P;
-
-  //G4cout << "Egamma= " << eGamma << " Mass= " << eMass << " t= " << gammaTime
-  //	 << " tlim= " << _timeLimit << G4endl;
-
+  /*
+  G4cout << " Mass= " << eMass << " t= " << gammaTime
+  	 << " tlim= " << _timeLimit << G4endl;
+  */
   if(gammaTime > _timeLimit) {
     // shortcut for long lived levels
     // not correct position of stopping ion gamma emission

@@ -14,6 +14,14 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+27 Nov 2014 Vladimir Ivanchenko (hadr-deex-V10-00-27)
+----------------------------------------------------------
+- G4DiscreteGammaDeexcitation, G4DiscreteGammaTransition return
+    back checks on transition energy to avoid having very low-energy
+    gamma in final state
+- G4VGammaDeexcitation - removed not needed extra call to
+    CanDoTransition() inside DoChain() method
+ 
 27 Nov 2014 Vladimir Ivanchenko (hadr-deex-V10-00-26)
 ----------------------------------------------------------
 - G4DiscreteGammaDeexcitation, G4DiscreteGammaTransition fixed

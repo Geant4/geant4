@@ -93,7 +93,7 @@ G4bool G4DiscreteGammaDeexcitation::CanDoTransition(G4Fragment* nucleus)
      excitation > levelManager->MaxLevelEnergy() + _tolerance) { return false; }
 
   if (_verbose > 1) {
-    G4cout << "G4DiscreteGammaDeexcitation: "
+    G4cout << "G4DiscreteGammaDeexcitation::CanDoTransition "
 	   << " Z= " << Z << "  A= " << A << " Eex= " << excitation
 	   << G4endl;
   }

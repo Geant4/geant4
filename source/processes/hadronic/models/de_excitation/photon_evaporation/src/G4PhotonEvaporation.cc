@@ -114,7 +114,7 @@ G4Fragment* G4PhotonEvaporation::EmittedFragment(G4Fragment* aNucleus)
     if (verbose > 1) {
       G4cout << "G4PhotonEvaporation::EmittedFragment continium deex: "   
 	     << gamma << G4endl;
-      G4cout << "   Residual: " << nucleus << G4endl;
+      G4cout << "   Residual: " << aNucleus << G4endl;
     }
   } else {
 
@@ -124,7 +124,7 @@ G4Fragment* G4PhotonEvaporation::EmittedFragment(G4Fragment* aNucleus)
       if (verbose > 1) {
 	G4cout << "G4PhotonEvaporation::EmittedFragment discrete deex: "   
 	       << gamma << G4endl;
-        G4cout << "   Residual: " << nucleus << G4endl;
+        G4cout << "   Residual: " << aNucleus << G4endl;
       }
     }
   }
