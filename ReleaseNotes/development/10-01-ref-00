@@ -26,10 +26,12 @@ Major development/fixes included since the last development tag are:
 
 Summarised, the list of changes is the following:
 
-cmake                                            cmake-V10-00-36
+cmake                                            cmake-V10-00-37
 -----
 - Include Geant4 headers as SYSTEM and after other headers.
-- Fixed typo in settings for USolids static build.
+- Fixed typo in settings for USolids static build and corrected export of
+  USolids system headers so that these are exported whether or not USolids
+  are used.
 - Removed not used settings for tpmalloc module.
 - Updated data sets to RadioactiveDecay-4.2.
 
@@ -271,7 +273,7 @@ processes/hadronic
 - models/coherent_elastic (hadr-cohe-V10-00-24)
   o Added G4LMsdGenerator class for low mass single diffraction dissociation.
   o G4hhElastic: fixed Coverity defects and cleanup constructors.
-- models/de_excitation (hadr-deex-V10-00-27)
+- models/de_excitation (hadr-deex-V10-00-29)
   o Cleanup and redesign of photon evaporation.
   o G4NuclearLevelStore fixed wrong deletion of user data at exit.
     Addressing problem report #1684.
@@ -281,6 +283,11 @@ processes/hadronic
   o G4FermiFragmentPool: fixed memory leak at destruction; fixed energy
     or several excited levels to be the same in the gamma level database.
     Added DumpFragment() and Dump() methods. Cleanup values of excitations.
+  o G4FermiBreakUp: fixed value of const coefficient to probability
+    of a decay channel.
+  o G4VGammaDeexcitation, G4PhotonEvaporation: propagate vacant shell number
+    after internal convertion allowing to enable  atomic de-excitation in
+    radioactive decay.
   o G4ContinuumGammaTransition, G4ContinuumGammaDeexcitation,
     G4DiscreteGammaDeexcitation, G4DiscreteGammaTransition,
     G4VGammaDeexcitation: cleanup selection of continuous or discrete 
@@ -346,11 +353,12 @@ processes/hadronic
     G4DiffractiveExcitation, caused by quark exchange.
   o G4DiffractiveExcitation: use pole mass + 5*width as maximum mass for
     resonances, to avoid cases of energy/momentum non-conservation.
-- models/parton_string/hadronization (had-hadronization-V10-00-12)
+- models/parton_string/hadronization (had-hadronization-V10-00-13)
   o G4ExcitedStringDecay: restored initial string system for correct
     calculations in the case when hadronization is fault.
   o G4LundStringFragmentation: set fragmentation functions for qq -> B
-    as f(z)~ Const for all baryons.
+    as f(z)~ Const for all baryons, and fixed charged baryon number
+    conservation for K-nucleus interactions.
 - models/radioactive_decay (radioactive_decay-V10-00-11)
   o G4NuclearDecayChannel: removed upper limit on number of gammas produced
     by G4PhotoEvaporation. In DecayIt(), allow up to three fragments from
@@ -398,7 +406,7 @@ run                                              run-V10-00-43
   per run per worker thread. 
 - Fixed Coverity defects.
 
-visualization                                    vis-V10-00-14
+visualization                                    vis-V10-00-15
 -------------
 - management (visman-V10-00-28):
   o G4VisManager: reset event reviewing flag at end of run in MT mode.
@@ -437,11 +445,13 @@ examples                                         examples-V10-01-00
   as 'wholeNuclearDNA'.
 - advanced/hadrontherapy (hadrontherapy-V10-00-09)
   o Updated README.
-- basic (exbasic-V10-00-00)
+- basic (exbasic-V10-00-01)
   o Removed G4UI_USE/G4VIS_USE conditionals from B1-B4 examples and
     init.mac macro, no longer needed.
   o Moved G4UIExecutive at the beginning of main() in all examples.
   o Perform run initialization in macros instead of main().
+  o Use G4endl instead of \n in G4cout; this makes each new line in the
+    output on threads preceded with "G4WTN >".
 - extended/analysis/AnaEx01 (AnaEx01-V10-00-05)
   o Updated for moving script in 'shared'.
   o Moved implementation of G4AnalysisManager for hbook from 
@@ -459,7 +469,7 @@ examples                                         examples-V10-01-00
 - extended/biasing/GB01 (GB01-V10-00-02)
   o Fix in GB01BOptrChangeCrossSection, which was not properly using the
     new cross-section value in case of an UpdateForStep().
-- extended/biasing/GB03 (GB03-V10-00-04)
+- extended/biasing/GB03 (GB03-V10-00-05)
   o New example illustrating the use of generic biasing classes to
     implement a technique near to "geometry importance biasing".
 - extended/biasing/GB04 (GB04-V10-00-03)

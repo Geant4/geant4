@@ -1156,6 +1156,11 @@ please refer to the corresponding History files provided in most packages):
         energy.</LI>
     <LI>G4VGammaDeexcitation: removed not needed extra call to CanDoTransition()
         inside DoChain() method.</LI>
+    <LI>G4FermiBreakUp: fixed value of const coefficient to probability
+        of a decay channel.</LI>
+    <LI>G4VGammaDeexcitation, G4PhotonEvaporation: propagate vacant shell number
+        after internal convertion allowing to enable  atomic de-excitation in
+        radioactive decay.</LI>
     <LI>GEN probabilities: verified and level energies using gamma level data.</LI>
     <LI>Fixed probability computation in G4ContinuumGammaTransition,
         G4PhotonEvaporation and G4E1Probability.</LI>
@@ -1360,7 +1365,8 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4ExcitedStringDecay: restored initial string system for correct
         calculations in the case when hadronization is fault.</LI>
     <LI>G4LundStringFragmentation: set fragmentation functions for qq -> B
-        as f(z)~ Const for all baryons.</LI>
+        as f(z)~ Const for all baryons and fixed charged baryon number
+        conservation for K-nucleus interactions.</LI>
     <LI>Some code cleanup.</LI>
     </UL></LI>
 <LI><B>Pre-equilibrium</B>
