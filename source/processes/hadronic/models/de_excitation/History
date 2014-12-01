@@ -14,6 +14,17 @@ code and to keep track of all tags.
      * Please list in reverse chronological order (last date on top)
      ---------------------------------------------------------------
 
+01 Dec 2014 Vladimir Ivanchenko (hadr-deex-V10-00-29)
+----------------------------------------------------------
+- G4VGammaDeexcitation, G4PhotonEvaporation - propagate vacant
+    shell number after internal convertion allowing to enable 
+    atomic de-excitation in radioactive decay 
+
+28 Nov 2014 Vladimir Ivanchenko (hadr-deex-V10-00-28)
+----------------------------------------------------------
+- G4FermiBreakUp - fixed value of const coefficient to probability
+    of a decay channel
+
 27 Nov 2014 Vladimir Ivanchenko (hadr-deex-V10-00-27)
 ----------------------------------------------------------
 - G4DiscreteGammaDeexcitation, G4DiscreteGammaTransition return

@@ -109,6 +109,7 @@ G4PhotonEvaporation::~G4PhotonEvaporation()
 G4Fragment* G4PhotonEvaporation::EmittedFragment(G4Fragment* aNucleus)
 {
   //G4cout << "G4PhotonEvaporation::EmittedFragment" << G4endl;
+  vShellNumber = -1;
   G4Fragment* gamma = contDeexcitation->GenerateGamma(aNucleus);
   if(gamma) { 
     if (verbose > 1) {
@@ -121,6 +122,7 @@ G4Fragment* G4PhotonEvaporation::EmittedFragment(G4Fragment* aNucleus)
     // Do one photon emission by the discrete deexcitation 
     gamma = discrDeexcitation->GenerateGamma(aNucleus);
     if(gamma) { 
+      vShellNumber = discrDeexcitation->GetVacantSN();
       if (verbose > 1) {
 	G4cout << "G4PhotonEvaporation::EmittedFragment discrete deex: "   
 	       << gamma << G4endl;
