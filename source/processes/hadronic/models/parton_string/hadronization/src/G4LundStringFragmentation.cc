@@ -473,7 +473,7 @@ void G4LundStringFragmentation::SetMinimalStringMass(const G4FragmentingString  
         if(Number_of_quarks==3)
         { 
           if(Number_of_squarks==0) {EstimatedMass += 740.*MeV;} // 700 Uzhi July 2014
-          if(Number_of_squarks==1) {EstimatedMass += 640.*MeV;}
+          if(Number_of_squarks==1) {EstimatedMass += 740.*MeV;} // 740 Uzhi Nov 2014
           if(Number_of_squarks==2) {EstimatedMass += 400.*MeV;}        
           if(Number_of_squarks==3) {EstimatedMass += 382.*MeV;}
         }
