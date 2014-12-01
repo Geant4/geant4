@@ -26,6 +26,19 @@ committal in the CVS repository !
 History file for visualization management sub-category
 ------------------------------------------------------
 
+28th November 2014  John Allison  (visman-V10-00-30)
+- G4VSceneHandler.cc, G4VisCommands.cc, G4VisCommandsScene.cc,
+  G4VisCommandsSceneAdd.cc:
+  o Get correct run manager in MT mode:
+  G4RunManager* runManager = G4RunManager::GetRunManager();
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsMultithreadedApplication())
+  { runManager = G4MTRunManager::GetMasterRunManager(); }
+#endif
+
+28th November 2014  John Allison  (visman-V10-00-29)
+- G4VisManager.cc: Fixed Coverity warning.
+
 21st November 2014  John Allison  (visman-V10-00-28)
 - G4VisManager.cc: Reset event reviewing flag at end of run in MT mode.
 - G4VisCommandsViewerSet.cc: Fix bug affecting file-writing viewers.

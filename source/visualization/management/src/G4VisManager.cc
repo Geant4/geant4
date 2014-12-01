@@ -1739,7 +1739,7 @@ void G4VisManager::EndOfRun ()
         eorModels = tmpEorModels;
 
         fTransientsDrawnThisEvent = false;
-        if (fpSceneHandler) fpSceneHandler->SetTransientsDrawnThisEvent(false);
+        fpSceneHandler->SetTransientsDrawnThisEvent(false);
         fpSceneHandler->DrawEvent(*i);
         // ShowView guarantees the view comes to the screen.  No action
         // is taken for passive viewers like OGL*X (without picking enabled),

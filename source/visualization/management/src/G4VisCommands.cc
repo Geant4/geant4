@@ -36,6 +36,9 @@
 #include "G4UIcmdWithAString.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4RunManager.hh"
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#endif
 #include "G4Run.hh"
 #include "G4UIsession.hh"
 #include "G4Trajectory.hh"
@@ -245,6 +248,10 @@ void G4VisCommandReviewKeptEvents::SetNewValue (G4UIcommand*, G4String newValue)
   G4VisManager::Verbosity verbosity = fpVisManager->GetVerbosity();
 
   G4RunManager* runManager = G4RunManager::GetRunManager();
+#ifdef G4MULTITHREADED
+  if(G4Threading::IsMultithreadedApplication())
+  { runManager = G4MTRunManager::GetMasterRunManager(); }
+#endif
   const G4Run* run = runManager? runManager->GetCurrentRun(): 0;
   const std::vector<const G4Event*>* events = run? run->GetEventVector(): 0;
   size_t nKeptEvents = events? events->size(): 0;

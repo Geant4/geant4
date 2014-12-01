@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/gMocren sub-category
 ---------------------------------------------------
 
+29th Nobember 2014  Akinori Kimura (gMocren-V10-00-03)
+- G4GMocrenFileSceneHandler.cc, G4GMocrenFileViewer.cc: fixed warnings according to COVERITY
+
 25th Nobember 2014  Akinori Kimura (gMocren-V10-00-02)
 - G4GMocrenFileSceneHandler.cc, G4GMocrenFileViewer.cc, G4GMocrenMessenger.cc:
   fixed STRING_OVERFLOW checks according to COVERITY

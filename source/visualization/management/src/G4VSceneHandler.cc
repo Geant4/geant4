@@ -78,6 +78,9 @@
 #include "Randomize.hh"
 #include "G4StateManager.hh"
 #include "G4RunManager.hh"
+#ifdef G4MULTITHREADED
+#include "G4MTRunManager.hh"
+#endif
 #include "G4Run.hh"
 #include "G4Transform3D.hh"
 #include "G4AttHolder.hh"
@@ -575,6 +578,10 @@ void G4VSceneHandler::ProcessScene () {
     } else {
 
       G4RunManager* runManager = G4RunManager::GetRunManager();
+#ifdef G4MULTITHREADED
+      if(G4Threading::IsMultithreadedApplication())
+      { runManager = G4MTRunManager::GetMasterRunManager(); }
+#endif
       if (runManager) {
 	const G4Run* run = runManager->GetCurrentRun();
 	const std::vector<const G4Event*>* events =

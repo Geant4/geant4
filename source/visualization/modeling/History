@@ -20,6 +20,9 @@ committal in the CVS repository !
 History file for visualization/modeling
 ---------------------------------------
 
+28th November 2014  John Allison  (modeling-V10-00-12)
+- G4TrajectoriesModel.cc: Tidied.
+
 29th October 2014  Makoto Asai (modeling-V10-00-11)
 - G4TrajectoriesModel.cc: Further fix.
 

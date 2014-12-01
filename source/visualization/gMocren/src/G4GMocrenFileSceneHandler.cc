@@ -140,7 +140,7 @@ G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(G4GMocrenFile& system,
   } else {
     const char * env = std::getenv("G4GMocrenFile_DEST_DIR");
     int len = std::strlen(env);
-    if(len >= 2048) {
+    if(len >= 256) {
       G4Exception("G4GMocrenFileSceneHandler::G4GMocrenFileSceneHandler(*)",
                   "gMocren1000", FatalException,
                   "Invalid length of string set in G4GMocrenFile_DEST_DIR");
