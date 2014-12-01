@@ -5,7 +5,7 @@
 
 /*! \page ExampleGB03 Example GB03
 
-\section Geometry based biasing
+\section ExampleGB03_s1 Geometry based biasing
 
 This example illustrates a use of generic biasing classes to implement a
 technique near to "geometry importance biasing".

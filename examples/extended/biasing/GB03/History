@@ -17,6 +17,10 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+Nov 29, 2014, I. Hrivnacova
+- Fixed .README
+- tag GB03-V10-00-05
+
 Nov 10, 2014, M. Verderi
 - update exampleGB03.out
 - tag GB03-V10-00-04
