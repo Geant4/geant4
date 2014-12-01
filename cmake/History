@@ -30,6 +30,11 @@ add this in the documentation for the changed file as [BUGFIX #BUGNUMBER].
      * Reverse chronological order (last date on top), please *
 
      ----------------------------------------------------------
+01st December 2014 - Ben Morgan (cmake-V10-00-37)
+- Modules/Geant4BuildProjectConfig.cmake: Correct export of USolids
+  system headers so that these are exported whether or not USolids
+  are used to replace G4 solids.
+
 18th November 2014 - Ben Morgan (cmake-V10-00-36)
 - Templates/UseGeant4.cmake : Include Geant4 headers as SYSTEM and after
   other headers. This is to help to suppress warnings when user has
