@@ -252,12 +252,14 @@ G4VPhysicalVolume* B4DetectorConstruction::DefineVolumes()
   //
   // print parameters
   //
-  G4cout << "\n------------------------------------------------------------"
-         << "\n---> The calorimeter is " << nofLayers << " layers of: [ "
-         << absoThickness/mm << "mm of " << absorberMaterial->GetName() 
-         << " + "
-         << gapThickness/mm << "mm of " << gapMaterial->GetName() << " ] " 
-         << "\n------------------------------------------------------------\n";
+  G4cout
+    << G4endl 
+    << "------------------------------------------------------------" << G4endl
+    << "---> The calorimeter is " << nofLayers << " layers of: [ "
+    << absoThickness/mm << "mm of " << absorberMaterial->GetName() 
+    << " + "
+    << gapThickness/mm << "mm of " << gapMaterial->GetName() << " ] " << G4endl
+    << "------------------------------------------------------------" << G4endl;
   
   //                                        
   // Visualization attributes

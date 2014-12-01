@@ -120,18 +120,24 @@ void B1RunAction::EndOfRunAction(const G4Run* run)
   //  
   if (IsMaster()) {
     G4cout
-     << "\n--------------------End of Global Run-----------------------";
+     << G4endl
+     << "--------------------End of Global Run-----------------------";
   }
   else {
     G4cout
-     << "\n--------------------End of Local Run------------------------";
+     << G4endl
+     << "--------------------End of Local Run------------------------";
   }
   
   G4cout
-     << "\n The run consists of " << nofEvents << " "<< runCondition
-     << "\n Dose in scoring volume : " 
+     << G4endl
+     << " The run consists of " << nofEvents << " "<< runCondition
+     << G4endl
+     << " Dose in scoring volume : " 
      << G4BestUnit(dose,"Dose") << " +- " << G4BestUnit(rmsDose,"Dose")
-     << "\n------------------------------------------------------------\n"
+     << G4endl
+     << "------------------------------------------------------------"
+     << G4endl
      << G4endl;
 }
 

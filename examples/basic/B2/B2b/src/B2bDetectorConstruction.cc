@@ -234,9 +234,11 @@ G4VPhysicalVolume* B2bDetectorConstruction::DefineVolumes()
                         fCheckOverlaps); // checking overlaps 
 
   G4cout << "There are " << NbOfChambers << " chambers in the tracker region. "
-         << "\nThe chambers are " << chamberWidth/cm << " cm of " 
-         << fChamberMaterial->GetName() << "\nThe distance between chamber is "
-         << chamberSpacing/cm << " cm" << G4endl;
+         << G4endl
+         << "The chambers are " << chamberWidth/cm << " cm of "
+         << fChamberMaterial->GetName() << G4endl
+         << "The distance between chamber is " << chamberSpacing/cm << " cm" 
+         << G4endl;
 
   // Visualization attributes
 
@@ -307,10 +309,14 @@ void B2bDetectorConstruction::SetTargetMaterial(G4String materialName)
      if ( pttoMaterial ) {
         fTargetMaterial = pttoMaterial;
         if (fLogicTarget) fLogicTarget->SetMaterial(fTargetMaterial);
-        G4cout << "\n----> The target is made of " << materialName << G4endl;
+        G4cout
+          << G4endl 
+          << "----> The target is made of " << materialName << G4endl;
      } else {
-        G4cout << "\n-->  WARNING from SetTargetMaterial : "
-               << materialName << " not found" << G4endl;
+        G4cout
+          << G4endl 
+          << "-->  WARNING from SetTargetMaterial : "
+          << materialName << " not found" << G4endl;
      }
   }
 }
@@ -328,10 +334,14 @@ void B2bDetectorConstruction::SetChamberMaterial(G4String materialName)
      if ( pttoMaterial ) {
         fChamberMaterial = pttoMaterial;
         if (fLogicChamber) fLogicChamber->SetMaterial(fChamberMaterial);
-        G4cout << "\n----> The chambers are made of " << materialName << G4endl;
+        G4cout
+          << G4endl 
+          << "----> The chambers are made of " << materialName << G4endl;
      } else {
-        G4cout << "\n-->  WARNING from SetChamberMaterial : "
-               << materialName << " not found" << G4endl;
+        G4cout
+          << G4endl
+          << "-->  WARNING from SetChamberMaterial : "
+          << materialName << " not found" << G4endl;
      }
   }
 }

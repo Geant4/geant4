@@ -116,12 +116,12 @@ void B4bRunAction::EndOfRunAction(const G4Run* /*aRun*/)
   //
   G4AnalysisManager* analysisManager = G4AnalysisManager::Instance();
   if ( analysisManager->GetH1(1) ) {
-    G4cout << "\n ----> print histograms statistic ";
+    G4cout << G4endl << " ----> print histograms statistic ";
     if(isMaster) {
-      G4cout << "for the entire run \n" << G4endl; 
+      G4cout << "for the entire run " << G4endl << G4endl; 
     }
     else {
-      G4cout << "for the local thread \n" << G4endl; 
+      G4cout << "for the local thread " << G4endl << G4endl; 
     }
     
     G4cout << " EAbs : mean = " 

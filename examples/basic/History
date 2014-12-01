@@ -16,6 +16,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29/11/14 I. Hrivnacova (exbasic-V10-00-01)
+- Use G4endl instead of \n in G4cout;
+  this makes each new line in the output on threads preceded with
+  G4WTN >
+
 06/11/14 I. Hrivnacova (exbasic-V10-00-00)
 - Removed G4UI_USE/G4VIS_USE tests from B1-B4 examples and
   init.mac macro (not needed)

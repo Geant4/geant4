@@ -87,7 +87,7 @@ void B5EventAction::EndOfEventAction(const G4Event* event)
     if (!hce) 
     {
         G4ExceptionDescription msg;
-        msg << "No hits collection of this event found.\n"; 
+        msg << "No hits collection of this event found." << G4endl; 
         G4Exception("B5EventAction::EndOfEventAction()",
                     "B5Code001", JustWarning, msg);
         return;
@@ -116,7 +116,7 @@ void B5EventAction::EndOfEventAction(const G4Event* event)
     if ( (!hHC1) || (!hHC2) || (!dHC1) || (!dHC2) || (!ecHC) || (!hcHC) ) 
     {
         G4ExceptionDescription msg;
-        msg << "Some of hits collections of this event not found.\n"; 
+        msg << "Some of hits collections of this event not found." << G4endl; 
         G4Exception("B5EventAction::EndOfEventAction()",
                     "B5Code001", JustWarning, msg);
         return;

@@ -15,6 +15,11 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+29 November 2014 Ivana Hrivnacova
+- Use G4endl instead of \n in G4cout;
+  this makes each new line in the output on threads preceded with
+  G4WTN >
+
 06 November 2014 Ivana Hrivnacova
 - Moved G4UIExecutive at the beginning of main() in all examples
 - Perform run initialization in macros instead of main()
