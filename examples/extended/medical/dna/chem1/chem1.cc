@@ -104,37 +104,11 @@ int main(int argc, char** argv)
 #endif
 
   //////////
-  // Activate or not the chemistry module (activated by default)
-  //
-  if ((commandLine = parser->GetCommandIfActive("-chemOFF")))
-  {
-    G4DNAChemistryManager::Instance()->SetChemistryActivation(false);
-  }
-  // ===========================================================================
-  // Note: the following lines are not needed since the chemistry is activated
-  // by default as soon as the object G4EmDNAChemistry is built
-//  else
-//  {
-//    // chemistry activated by default
-//    G4DNAChemistryManager::Instance()->SetChemistryActivation(true);
-//  }
-  // ===========================================================================
-
-  //////////
   // Set mandatory user initialization classes
   //
   DetectorConstruction* detector = new DetectorConstruction;
   runManager->SetUserInitialization(new PhysicsList);
   runManager->SetUserInitialization(detector);
-
-  // ===========================================================================
-  // Note to the participants of the Geant4-DNA tutorial - November 2014
-  // The command :
-  // G4DNAChemistryManager::Instance()->InitializeMaster();
-  // is now moved to the chemistry list (ie G4EmDNAChemistry::ConstructProcess)
-  // and is not needed anymore in the main.cc
-  // ===========================================================================
-
   runManager->SetUserInitialization(new ActionInitialization());
 
   // Initialize G4 kernel

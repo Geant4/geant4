@@ -39,6 +39,9 @@
 #include "G4SystemOfUnits.hh"
 #include "G4EmDNAChemistry.hh"
 #include "G4PhysicsConstructorRegistry.hh"
+#include "CommandLineParser.hh"
+
+using namespace G4DNAPARSER;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,16 +59,11 @@ PhysicsList::PhysicsList()
 
   // EM physics  
   RegisterConstructor("G4EmDNAPhysics");
-  RegisterConstructor("G4EmDNAChemistry");
 
-  // ==========================================================================
-  // Note to the participants of the Geant4-DNA tutorial - November 2014
-  // The command :
-  // G4DNAChemistryManager::Instance()->SetChemistryList(fpChemList);
-  // is now moved to the constructor of G4EmDNAChemistry
-  // This means that G4EmDNAChemistry is registering itself has the chemistry
-  // list to use when RegisterConstructor("G4EmDNAChemistry") is called
-  // ==========================================================================
+  if(CommandLineParser::GetParser()->GetCommandIfActive("-chemOFF")==0)
+  {
+    RegisterConstructor("G4EmDNAChemistry");
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
