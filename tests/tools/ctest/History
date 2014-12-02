@@ -17,6 +17,16 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+2-12-2014,  Gunter Folger           testtools-ctest-V10-00-07
+- revert back to internal CLHEP for release. 
+
+28-11-2014, Gunter Folger        --no tag--
+- use installed CLHEP for in g4ec-x86-win7-vc12.bat (r87314)
+
+27-11-2014, Gunter Folger           testtools-ctest-V10-00-06
+- use CLHEP 2.2.0.4 for Mac
+- use latest available for given compiler for QT4 on slc
+
 19-11-2014, Gunter Folger           testtools-ctest-V10-00-05
 - do not use root for slc6-clang34; linking fails with missing symbols
     e.g.: .../root/lib/libCore.so: undefined reference to `std::__detail::_List_node_base::_M_unhook()@GLIBCXX_3.4.15'

@@ -73,11 +73,14 @@ if [ -z "${CLHEP_ROOT_DIR}" ] ; then
     echo "Using internal CLHEP"
   fi
 fi
-
+whichQT()
+{
+	QTDIR=`ls -td ${lcgext}/qt/${1}*/${lcgopt} | head -1`
+}
 #---Qt-------------------------------------------------------------
 if [ -z "${QTDIR}" ] ; then
-   QTDIR=${lcgext}/qt/4.6.3p2/${lcgopt}
-   if [ -d ${QTDIR} ] ; then
+   whichQT 4
+   if [ -n "${QTDIR}" -a -d ${QTDIR} ] ; then
      Use_QT="ON" 
      export QTDIR
      echo "Using QT from ${QTDIR}"
@@ -86,6 +89,8 @@ if [ -z "${QTDIR}" ] ; then
      unset QTDIR
      echo "Not using QT"
    fi
+else
+   echo "Using QT from ${QTDIR}"
 fi
 
 #---CMake----------------------------------------------------------

@@ -81,6 +81,7 @@ if [ -z "${XERCESC_ROOT_DIR}" ] ; then
   if [ -d $XercesC_dir ] ; then
     export XERCESC_ROOT_DIR=${XercesC_dir}
     export LD_LIBRARY_PATH=${XercesC_dir}/lib:${LD_LIBRARY_PATH}
+	 export DYLD_LIBRARY_PATH=${XercesC_dir}/lib:${DYLD_LIBRARY_PATH}
     echo "Using XercesC from $XercesC_dir"
   else
     echo "XercesC not found in $XercesC_dir"
@@ -90,10 +91,11 @@ fi
 
 #---CLHEP----------------------------------------------------------
 if [ -z "${CLHEP_ROOT_DIR}" ] ; then
-  CLHEP_ROOT_DIR=${lcgext}/clhep/2.1.4.1/${lcgopt}
+  CLHEP_ROOT_DIR=${lcgext}/clhep/2.2.0.4/${lcgopt}
   if [ -d ${CLHEP_ROOT_DIR} ] ; then
     export CLHEP_ROOT_DIR
     export LD_LIBRARY_PATH=${CLHEP_ROOT_DIR}/lib:${LD_LIBRARY_PATH}
+	 export DYLD_LIBRARY_PATH=${CLHEP_ROOT_DIR}/lib:${DYLD_LIBRARY_PATH}
     Use_CLHEP="-DGEANT4_USE_SYSTEM_CLHEP=ON\;-DCLHEP_ROOT_DIR=${CLHEP_ROOT_DIR}"
     echo "Using system CLHEP from ${CLHEP_ROOT_DIR}"
   else
@@ -159,6 +161,7 @@ if  IsNotInPath Python ; then
   if [ -d ${pythonDir} ] ; then
     export PATH=${lcgext}/Python/2.6.5p2/${rootlcg}/bin:${PATH}
     export LD_LIBRARY_PATH=${lcgext}/Python/2.6.5p2/${rootlcg}/lib:${LD_LIBRARY_PATH}
+	 export DYLD_LIBRARY_PATH=${lcgext}/Python/2.6.5p2/${rootlcg}/lib:${DYLD_LIBRARY_PATH}
   fi
   unset pythonDir
 fi
