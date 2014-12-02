@@ -104,6 +104,7 @@
 // 20141009  M. Kelsey -- Add pion absorption by single nucleons, with
 //		nuclear recoil.  Improves pi- capture performance.
 // 20141030  M. Kelsey -- Check flag for whether to do pi-N absorption
+// 20141201  M. Kelsey -- Check for null vector return from G4GDecay3
 
 #include "G4ElementaryParticleCollider.hh"
 #include "G4CascadeChannel.hh"
@@ -479,6 +480,14 @@ G4ElementaryParticleCollider::generateSCMmuonAbsorption(G4double etot_scm,
 
   G4GDecay3 breakup(etot_scm, masses[0], masses[1], masses[2]);
   std::vector<G4ThreeVector> theMomenta = breakup.GetThreeBodyMomenta();
+
+  if (theMomenta.empty()) {
+    G4cerr << " generateSCMmuonAbsorption: GetThreeBodyMomenta() failed"
+	   << " for " << type2 << " dibaryon" << G4endl;
+    particle_kinds.clear();
+    masses.clear();
+    return;
+  }
 
   for (size_t i=0; i<3; i++) {
     scm_momentums[i].setVectM(theMomenta[i], masses[i]);
