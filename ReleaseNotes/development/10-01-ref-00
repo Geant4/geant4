@@ -63,10 +63,13 @@ externals                                        externals-V10-00-08
     and removed printout to improve CPU performance.
   o Moved definition of pi into SystemOfUnits.h so that its hard-coded
     value is not defined twice.
-- USolids (geom-usolids-V10-00-25):
+- USolids (geom-usolids-V10-00-26):
   o UPolyhedra: moved Extent() from protected to public.
   o UPolycone: correction in Capacity() for iteration over the number of
     sections and in SurfaceArea() for the case opening-angle is less than 2*pi.
+    Fixes in InsideSection() for openPhi when StartPhi is negative,
+    in Init() for Polycone defined from ZPlane[0]>ZPlane[N],
+    and in DistanceToOut() for points starting on internal surface.
   o UTet: fixed approximation in Extent().
   o Minor fixes of errors reported by Coverity and unit tests in 
     UTubs,UCons, UTrap, UTet, UTriangular/QuadrangularFacet.
