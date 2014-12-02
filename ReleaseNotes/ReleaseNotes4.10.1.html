@@ -197,7 +197,23 @@ Please see the corresponding details in
 
 <B>Electromagnetic physics</B>
 <UL>
-<LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
+<LI>A new model class G4LowEWentzelVIModel is introduced for low-energy
+    electron elastic scattering.</LI>
+<LI>Low-energy cross-section for water has been added for the low-energy
+    Livermore photoelectric model.</LI>
+<LI>A new User Interface command for the disabling the use of production
+    thresholds in atomic deexcitation has been introduced:
+    <TT>/process/em/deexcitationIgnoreCut true/false</TT>.</LI>
+<LI>An alternative set of data files for the simulation of atomic fluorescence
+    lines is also provided in this release.</LI>.
+<LI>In Geant4-DNA physics, added ionisation model from Rudd for
+    B, Be, Li and Si ions. An alternative physics constructor
+    G4EmDNAPhysics_option1 including the G4LowEWentzelVIModel has been also
+    introduced. G4DNAIonisation and G4DNARuddIonisationExtendedModel have been
+    updated for G4GenericIon usage.</LI>
+<LI>Classes for the simulation of water radiolysis have been introduced for
+    Geant4-DNA chemistry.
+    See details at <A HREF="http://geant4-dna.org">Geant4-DNA project site</A></LI>
 </UL>
 
 <B>Hadronic physics</B>
@@ -371,7 +387,7 @@ please refer to the corresponding History files provided in most packages):
 </UL>
 
 <A NAME="digits-notes">
-<H3><I>Digitization & Hits</I></H3></A>
+<H3><I>Digitization &amp; Hits</I></H3></A>
 <UL>
 <LI>Added Merge() methods to G4ScoringManager and G4VScoringMesh, needed
     for multi-threading.</LI>
@@ -402,15 +418,15 @@ please refer to the corresponding History files provided in most packages):
         switch to use angular generator interface.</LI>
     <LI>Switched to DNAion for Si in G4DNAGenericIonsManager.</LI>
     <LI>Added Si to G4DNARuddIonisationExtendedModel.
-        Updated G4DNAIonisation and G4DNARuddIonisationExtendModel for
+        Updated G4DNAIonisation and G4DNARuddIonisationExtendedModel for
         G4GenericIon usage.</LI>
     <LI>Avoid usage of molecule iterators as pointers.</LI>
     <LI>Removed obsolete class for electron excitation.</LI>
     <LI>Get rid of obsolete 'register' keyword in code.</LI>
     <LI>Added G4ITStepManager class and related messenger.</LI>
     <LI>Added LEPTS model classes.</LI>
-    <LI>Renamed classes: G4ITTimeStepper-->G4VScheduler;
-        G4ITStepManager-->G4ITScheduler; G4ITStepManager-->G4ITSchedulerMessenger.
+    <LI>Renamed classes: G4ITTimeStepper--&gt;G4VScheduler;
+        G4ITStepManager--&gt;G4ITScheduler; G4ITStepManager--&gt;G4ITSchedulerMessenger.
         Removed G4AllITManager G4ITManager and G4VITScheduler classes.
         Added G4ITFinder and G4VITTrackHolder. Implemented G4ITTrackHolder.
         Code cleanup.</LI>
@@ -443,14 +459,12 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4LivermorePhotoElectricModel: added low-energy cross-section for water.</LI>
     <LI>G4IonParametrisedLossModel, G4LivermoreIonisationModel: added
         G4DeltaAngle generator for angular distribution.</LI>
-    <LI>Added new class for ionisation cross-section model from Miranda et al.
-        Updated G4empCrossSection and G4UAtomicDeexcitation accordingly.</LI>
     <LI>Make G4AtomicTransitionManager become pure singleton shared between
         threads, with all run time methods const; Initialise() method to be
         called in the beginning of the run.
         Adapted classes accordingly.</LI>
     <LI>Changed Livermore, LivemorePolarized, LivemoreModified and Penelope Compton
-        to unify the treatment for energy < LowEnergyLimit(). Null cross-section
+        to unify the treatment for energy &lt; LowEnergyLimit(). Null cross-section
         and no change in the gamma state.</LI>
     <LI>LivermorePhotoElectricModel: keep cross-section const below lowest shell
         energy (as in Penelope model).</LI>
@@ -770,7 +784,7 @@ please refer to the corresponding History files provided in most packages):
         Added ConstProperty "SURFACEROUGHNESS". If set, the reflectivity at
         dielectric_dielectric surface is angular dependent and calculated from:
         <TT>exp(-pow((4*pi*theSurfaceroughness*Rindex1*cost1/wavelength),2))</TT>
-        for <TT>Rindex1 > Rindex2</TT>.</LI>
+        for <TT>Rindex1 &gt; Rindex2</TT>.</LI>
     <LI>G4OpRayleigh process now calculates the Rayleigh scattering length for
         more materials than just Water (although the Water default is kept).
         To do this the user would need to specify the ISOTHERMAL_COMPRESSIBILITY
@@ -926,7 +940,7 @@ please refer to the corresponding History files provided in most packages):
 <A NAME="greps-notes">
 <H3><I>Graphical Representations</I></H3></A>
 <UL>
-<LI>Introduced operator<< for const reference G4AttDefs map.
+<LI>Introduced operator&lt;&lt;() for const reference G4AttDefs map.
     Deprecated const pointer equivalent.</LI>
 <LI>G4Scale: added annotation size; set default annotation size to 12 pixels.</LI>
 <LI>G4VisAttributes: added fMinLineSegmentsPerCircle parameter.</LI>
@@ -1061,45 +1075,32 @@ please refer to the corresponding History files provided in most packages):
         G4PimP2PimPAngDst, G4Pi0P2Pi0PAngDst and G4PimP2Pi0NAngDst.
         Below 2.6 GeV, distributions taken from SAID phase shift calculations
         with Coulomb phase removed. Above 2.6 GeV, taken from data.</LI>
-    <LI>G4NucleiModel, G4CascadeCoalescence, G4CascadeInterface: moved static
-        members which use envvars into const data, and initialize them in ctors.</LI>
-    <LI>G4PreCompoundDeexcitation: attempt to use shared instance of
-        PreCompound by fetching from hadronic registry.</LI>
-    <LI>G4ElementaryParticleCollider: added support for absorbing a pion with a
-        single nucleon (via a charge exchange interaction, e.g. pi- p -> n), with
-        momentum conservation handled by recoiling against the nucleus. This is
-        intended to improve the match to data for pi- capture.
-        G4CascadeParameters, G4CascadeParamMessenger: added flag to enable such
-        feature.
-        In muon absorption, check return from G4GDecay3 for null vector; report
-        no-collision status and return.</LI>
-    <LI>G4NucleiModel: in boundaryTransition(), switch sign of "dv" so that
-        particle sees a barrier (next_zone potential > current potential) as
+    <LI>G4CascadeInterface: Fix possible infinite-loop condition where
+        (nTries &gt;= maxTries) and momentum balance fails.  Configure
+        PreCompound vs. BERT-internal de-excitation explicitly in ctor based
+        on envvar flag.</LI>
+    <LI>G4ElementaryParticleCollider: Protect against rare failure of
+        G4GDecay3 by checking for null vector return.  Add support for
+        absorbing a pion with a single nucleon (via a charge exchange
+        interaction, e.g. pi- p -&gt; n), with momentum conservation handled
+        by recoiling against the nucleus. This is intended to improve the
+        match to data for pi- capture.  Pion-nucleon absorption is disabled
+        by default, with an envvar/macro flag to enable.</LI>
+    <LI>G4CascadeFinalStateAlgorithm:  Use ".c_str()" in diagnostic outputs,
+        to avoid IBM/xlC compiler error. Addressing problem report
+        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1558"
+        >#1558</A>.</LI>
+    <LI>G4NucleiModel: In boundaryTransition(), switch sign of "dv" so that
+        particle sees a barrier (next_zone potential &gt; current potential) as
         positive.  In generateParticleFate(), pass (A,Z) to EPCollider for
         possible nuclear-recoil calculations.</LI>
-    <LI>G4CascadeCheckBalance: use G4Fragment::GetZ_asInt(), GetZ_asInt().
-        G4CascadeCheckBalance, G4CascadeColliderBase, G4VCascadeCollider,
-        G4VCascadeDeexcitation: changed constructors argument from "const char*"
+    <LI>G4PreCompoundDeexcitation: Use shared instance of
+        PreCompound by fetching from hadronic registry; register
+        G4ExcitationHandler properly if local instance required.</LI>
+    <LI>Change several constructors' argument from "const char*"
         to "const G4String&" to avoid memory deallocation problems.</LI>
-    <LI>G4CascadeParameters: make light-ion clustering active by default.
-        User must set envvars to "0" to disable.</LI>
-    <LI>G4CascadeInterface: conditionally call usePreCompoundDeexcitation() or
-        useCascadeDeexcitation() from constructor.</LI>
-    <LI>G4InuclCollider: make PreCompound the default in ctor.</LI>
-    <LI>G4CascadeFinalStateAlgorithm:  using ".c_str()" in diagnostic outputs,
-        to avoid IBM/xlC compiler error. Addressing problem report
-        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1558">#1558</A>.</LI>
-    <LI>G4CascadeInterface: fixed possible infinite-loop condition where
-        (nTries >= maxTries) and momentum balance fails.
-    <LI>G4PreCompoundDeexcitation: fixed memory leak on exit by passing
-        excitation handler through to PreCompound.</LI>
-    <LI>Adopt G4AutoDelete for all singleton classes to avoid end-of-job memory
-        leaks (G4CascadeChannelTables, G4CascadeParameters, G4MultiBodyMomentumDist
-        and G4TwoBodyAngularDist).</LI>
-    <LI>G4InuclCollider: replaced G4Fragment::GetA() with GetA_asInt().</LI>
-    <LI>G4ElementaryParticleCollider: improved optional pion-nucleon absorption
-        (disabled by default; used for studies of pion stopping).</LI>
-    <LI>G4NucleiModel: initialize local variable in declaration.</LI>
+    <LI>Internal improvements for multithreading, to avoid static
+        initializers, and to use G4AutoDelete for all singletons.</LI>
     </UL></LI>
 <LI><B>Binary Cascade</B>
     <UL>
@@ -1112,7 +1113,7 @@ please refer to the corresponding History files provided in most packages):
     <LI>BinaryLightIonReaction: handle currentA/Z consistently with list of
         spectators. Added optional debugging output.</LI>
     <LI>BinaryLightReaction: momentum correction wrong in case of no Fragment,
-        but primary projectile nucleon(s) in final state (ex. d + Pb -> X, where
+        but primary projectile nucleon(s) in final state (ex. d + Pb -&gt; X, where
         neutron or proton of deuteron did not interact).</LI>
     </UL></LI>
 <LI><B>De-excitation</B>
@@ -1151,8 +1152,6 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4FermiFragmentPool: fixed memory leak at destruction; fixed energy
         or several excited levels to be the same in the gamma level database.
         Added DumpFragment() and Dump() methods. Cleanup values of excitations.</LI>
-    <LI>G4FermiBreakUp: fixed value of const coefficient to probability
-        of a decay channel.</LI>
     <LI>G4ContinuumGammaTransition, G4ContinuumGammaDeexcitation,
         G4DiscreteGammaDeexcitation, G4DiscreteGammaTransition,
         G4VGammaDeexcitation: cleanup selection of continuous or discrete 
@@ -1162,6 +1161,8 @@ please refer to the corresponding History files provided in most packages):
         energy.</LI>
     <LI>G4VGammaDeexcitation: removed not needed extra call to CanDoTransition()
         inside DoChain() method.</LI>
+    <LI>G4FermiBreakUp: fixed value of const coefficient to probability
+        of a decay channel.</LI>
     <LI>GEN probabilities: verified and level energies using gamma level data.</LI>
     <LI>Fixed probability computation in G4ContinuumGammaTransition,
         G4PhotonEvaporation and G4E1Probability.</LI>
@@ -1315,13 +1316,13 @@ please refer to the corresponding History files provided in most packages):
         results for hadron-nucleus, nucleus-nucleus, anti_baryon-nucleus and
         light anti_ion-nucleus interactions.</LI>
     <LI>Re-tuned parameters of G4LundStringFragmentation; fragmentation function
-        F(qq->B+anti-quark) set to Z^2. Fix for anti-diquark-diquark strings.</LI>
+        F(qq-&gt;B+anti-quark) set to Z^2. Fix for anti-diquark-diquark strings.</LI>
     <LI>G4DiffractiveSplitableHadron: setting to zero the probability of
         (uu)-diquark, based on Instantons theory.</LI>
     <LI>Code cleanup in G4InteractionContent, G4VParticipants, G4VSplitableHadron.
         Added debugging option in G4VPartonStringModel.</LI>
     <LI>Re-tuned parameters of G4LundStringFragmentation; fragmentation function
-        F(qq->B+anti-quark) set to Z^2. Fix for anti-diquark-diquark strings.</LI>
+        F(qq-&gt;B+anti-quark) set to Z^2. Fix for anti-diquark-diquark strings.</LI>
     <LI>Fixed bug in G4DiffractiveSplitableHadron where baryons are subdivided
         into quark and diquark. Introduced supression of uu-diquark in proton;
         di-quarks with identical quarks are now suppressed on 50 % (probability
@@ -1365,7 +1366,7 @@ please refer to the corresponding History files provided in most packages):
         resonances, to avoid cases of energy/momentum non-conservation.</LI>
     <LI>G4ExcitedStringDecay: restored initial string system for correct
         calculations in the case when hadronization is fault.</LI>
-    <LI>G4LundStringFragmentation: set fragmentation functions for qq -> B
+    <LI>G4LundStringFragmentation: set fragmentation functions for qq -&gt; B
         as f(z)~ Const for all baryons and fixed charged baryon number
         conservation for K-nucleus interactions.</LI>
     <LI>Some code cleanup.</LI>
@@ -1489,7 +1490,7 @@ please refer to the corresponding History files provided in most packages):
     <LI>Display G4Exception warning messages in G4cerr an fixed G4Vis
         thread number in G4cout.</LI>
     <LI>Use FindMacroPath() instead of GetMacroSearchPath().</LI>
-    <LI>Fixed recursive calls caused by qApp->processEvent().</LI>
+    <LI>Fixed recursive calls caused by qApp-&gt;processEvent().</LI>
     <LI>Fixed a problem with Wt include names on case sensitive systems.</LI>
     <LI>Attempted fix for the cout widget not updating in real time when run
         progresses; update is more frequent now.</LI>
@@ -1769,7 +1770,7 @@ please refer to the corresponding History files provided in most packages):
 </UL>
 
 <A NAME="track-notes">
-<H3><I>Track & Tracking</I></H3></A>
+<H3><I>Track &amp; Tracking</I></H3></A>
 <UL>
 <LI>Corrections in G4AdjointSteppingAction and G4AdjointTrackingAction
     to have the treatment of adjoint and forward tracks in the same event.</LI>
