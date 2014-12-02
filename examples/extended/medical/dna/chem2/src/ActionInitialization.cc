@@ -40,7 +40,7 @@
 #include "StackingAction.hh"
 #include "G4DNAChemistryManager.hh"
 #include "TimeStepAction.hh"
-#include "G4VScheduler.hh"
+#include "G4Scheduler.hh"
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -61,14 +61,14 @@ void ActionInitialization::Build() const
   SetUserAction(primGenAction);
   SetUserAction(new StackingAction());
 
-  // Set optional user action classes
-  bool chemistryFlag =
-      G4DNAChemistryManager::Instance()->IsChemistryActivated();
-
   // Chemistry part
-  if(chemistryFlag){
-    G4VScheduler::Instance()->SetVerbose(1);
-//    G4VScheduler::Instance()->SetMaxNbSteps(10);
-    G4VScheduler::Instance()->SetUserAction(new TimeStepAction());
+  if(G4DNAChemistryManager::IsActivated()){
+    G4Scheduler::Instance()->SetVerbose(1);
+    G4Scheduler::Instance()->SetUserAction(new TimeStepAction());
+
+    //==========================================================================
+    // G4Scheduler::Instance()->SetMaxNbSteps(10);
+    // You may decide to stop the simulation after N steps
+    //==========================================================================
   }
 }  

@@ -39,6 +39,9 @@
 #include "G4SystemOfUnits.hh"
 #include "G4EmDNAChemistry.hh"
 #include "G4PhysicsConstructorRegistry.hh"
+#include "CommandLineParser.hh"
+
+using namespace G4DNAPARSER;
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......
 
@@ -56,7 +59,11 @@ PhysicsList::PhysicsList()
 
   // EM physics  
   RegisterConstructor("G4EmDNAPhysics");
-  RegisterConstructor("G4EmDNAChemistry");
+
+  if(CommandLineParser::GetParser()->GetCommandIfActive("-chemOFF")==0)
+  {
+    RegisterConstructor("G4EmDNAChemistry");
+  }
 }
 
 //....oooOO0OOooo........oooOO0OOooo........oooOO0OOooo........oooOO0OOooo......

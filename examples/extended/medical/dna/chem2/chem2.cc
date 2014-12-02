@@ -104,14 +104,6 @@ int main(int argc, char** argv)
 #endif
 
   //////////
-  // Activate or not the chemistry module (activated by default)
-  //
-  if ((commandLine = parser->GetCommandIfActive("-chemOFF")))
-  {
-    G4DNAChemistryManager::Instance()->SetChemistryActivation(false);
-  }
-
-  //////////
   // Set mandatory user initialization classes
   //
   DetectorConstruction* detector = new DetectorConstruction;

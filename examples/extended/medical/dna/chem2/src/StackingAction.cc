@@ -51,7 +51,7 @@ void StackingAction::NewStage()
 {
   if(stackManager->GetNTotalTrack() == 0)
   {
-    G4cout << "Chemistry started" << G4endl;
+    G4cout << "Physics stage ends" << G4endl;
     G4DNAChemistryManager::Instance()->Run(); // starts chemistry
   }
 }
