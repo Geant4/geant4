@@ -140,7 +140,7 @@ re-compilation) and a re-compilation of user applications is required.
 <B>Electromagnetic and optical physics</B>
 <P> </P>
 <UL>
-<LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
+<LI>The data file G4EMLOW6.41 should be used.</LI>
 </UL>
 
 <P> </P>
@@ -197,15 +197,24 @@ Please see the corresponding details in
 
 <B>Electromagnetic physics</B>
 <UL>
+<LI>G4EmParameters class and updated set of UI commands allowing 
+    easy definition of EM parameters both in sequential and 
+    multi-threaded modes.</LI>
+<LI>A new option "DisplacementBeyongBoundary" for simulation of 
+    multiple scattering diplacement at geometry boundary is available.</LI>
+<LI>G4SynchrotronRadiation process is now applicable for all
+    charged particles.</LI>
+<LI>High energy processes G4GammaConversionToMuons and G4eeToHadrons
+    are ready for production.</LI>
 <LI>A new model class G4LowEWentzelVIModel is introduced for low-energy
     electron elastic scattering.</LI>
 <LI>Low-energy cross-section for water has been added for the low-energy
     Livermore photoelectric model.</LI>
-<LI>A new User Interface command for the disabling the use of production
+<LI>A new User Interface command to disable production
     thresholds in atomic deexcitation has been introduced:
     <TT>/process/em/deexcitationIgnoreCut true/false</TT>.</LI>
 <LI>An alternative set of data files for the simulation of atomic fluorescence
-    lines is also provided in this release.</LI>.
+    lines is also provided in this release.</LI>
 <LI>In Geant4-DNA physics, added ionisation model from Rudd for
     B, Be, Li and Si ions. An alternative physics constructor
     G4EmDNAPhysics_option1 including the G4LowEWentzelVIModel has been also
@@ -248,7 +257,11 @@ Please see the corresponding details in
 
 <B>Electromagnetic physics</B>
 <UL>
-<LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
+<LI>All internal physics tables are shared between threads, thus
+    reducing contribution of electromagnetic physics to total
+    memory per thread.</LI>
+<LI>Code cleanup providing slight speedup (about a few percent)
+    of electromagnetic simulation.</LI>
 </UL>
 
 <B>Hadronic physics</B>
@@ -450,30 +463,32 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4GammaConversionToMuons: added protection against infinite loop at the
         reaction threshold; removed G4ThreadLocal variables; introduced G4Exp,
         G4Log and NIST functions; added counters limiting do/while loops.</LI>
-    <LI>Use G4EmParameters in G4eeToHadrons, G4hBremsstrahlung, G4hPairProduction, 
-        G4hhIonisation and G4mplIonisation.</LI>
+    <LI>G4GammaConversionToMuons: added protection against infinite loop at the
+        reaction threshold; removed G4ThreadLocal variables; introduced G4Exp,
+        G4Log and NIST functions; added counters limiting do/while loops.</LI>
+    <LI>G4eeToHadrons, G4eeToHadronsModel,G4eeToHadronsMultiModel: revision
+        and cleanup of code.</LI>
     </UL></LI>
 <LI><B>Low Energy</B>
     <UL>
     <LI>Added new model class G4LowEWentzelVIModel.</LI>
-    <LI>G4LivermorePhotoElectricModel: added low-energy cross-section for water.</LI>
+    <LI>G4LivermorePhotoElectricModel: added low-energy cross-section 
+        for water, make cross section const below first ionisation 
+        potential for all elements/materials.</LI>
     <LI>G4IonParametrisedLossModel, G4LivermoreIonisationModel: added
         G4DeltaAngle generator for angular distribution.</LI>
     <LI>Make G4AtomicTransitionManager become pure singleton shared between
         threads, with all run time methods const; Initialise() method to be
         called in the beginning of the run.
         Adapted classes accordingly.</LI>
-    <LI>Changed Livermore, LivemorePolarized, LivemoreModified and Penelope Compton
-        to unify the treatment for energy &lt; LowEnergyLimit(). Null cross-section
+    <LI>Changed Livermore, LivemorePolarized, LivemoreModified and 
+        Penelope Compton to unify the treatment for energy &lt; 
+        LowEnergyLimit(). Null cross-section
         and no change in the gamma state.</LI>
-    <LI>LivermorePhotoElectricModel: keep cross-section const below lowest shell
-        energy (as in Penelope model).</LI>
     <LI>G4LivermorePhotoElectricModel, G4LivermoreGammaConversionModel,
         G4LivermoreRayleighModel, G4LivermoreComptonModel,
         G4IonParameterisedLossModel: added proper deletion of G4PhysicsVectors
         at the end of run.</LI>
-    <LI>Removed unused code for atomic deexcitation.</LI>
-    <LI>Restored deletion of physics-vectors at destruction.</LI>
     <LI>Use cumulated cross-sections in G4MicroElecElasticModel; use
         LinLinInterpolate() instead of LinLog(); better treatment of GenericIon
         in G4MicroElecInelastic and G4MicroElecInelasticModel; improved MT
@@ -493,8 +508,6 @@ please refer to the corresponding History files provided in most packages):
         threads. Imported data from G4EnergyLossForExtrapolator.</LI>
     <LI>Use G4EmParameters in G4MuPairProductionModel, G4MuBremsstrahlungModel and
        G4MuIonisation.</LI>
-    <LI>Fixed problem of thread safety in initialisation in
-        G4EnergyLossForExtrapolator.</LI>
     </UL></LI>
 <LI><B>Polarisation</B>
     <UL>
@@ -516,27 +529,33 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4WentzelOKandVIxSection, G4WentzelVIRelXSection, G4WentzelVIModel,
         G4WentzelVIRelModel, G4eCoulombScatteringModel,
         G4hCoulombScatteringModel: added Boolean flag to identify in
-        physics-list if multiple and single scattering are combined or not.</LI>
+        physics-list if multiple and single scattering are combined or not;
+        make consistent definition
+        of min and max scattering angle for single scattering mode.
+        </LI>
     <LI>G4WentzelOKandVIxSection: fixed initialisation for low-energy model
         (this model is not combined with single scattering); fixed small
         inaccuracy for sampling.</LI>
-    <LI>G4WentzelVIModel, G4WentzelVIRelModel, G4WentzelOKandVIxSection, 
-        G4eCoulombScatteringModel: revised and make consistent definition
-        of min and max scattering angle for single scattering mode.
-        Small optimisation to address some CPU penalty.
-        Removed unused class members</LI>
     <LI>G4WentzelVIModel: changed single scattering factor from 1.5 to 1.25.
-        Added possibility to compute second momentum. Code cleanup.</LI>
+        Added possibility to compute second momentum; added more accurate 
+        transition to single scattering mode;
+        define single scattering mode before transformation from true to geometry
+        step length to avoid many small steps for very low-energy particles;
+        Refinements of lateral displacement.</LI>
     <LI>G4BraggModel, G4BraggIonModel: added spin correction.</LI>
     <LI>G4UniversalFluctuations: adapted code to allow for vectorised use of
         random engine for CPU performance improvement; no change to algorithms.</LI>
     <LI>G4UrbanMscModel: modified ComputeGeomPathLength() method to provide one
-        single return statement for easier printouts.
+        single return statement for easier printouts;
         Modification in order to improve timing by 1-14%, depending on the
-        setup and cut. Made correction to improve efficiency in 'UseSafety'
-        mode. Code cleanup.</LI>
+        setup and cut; made correction to improve efficiency in 'UseSafety'
+        mode; fixed numerical problem for the case when range is nearly
+        truePathLength; refinements of lateral displacement;
+        added new step limit type UseSafetyPlus;
+        corrections to improve CPU in the use of random numbers.</LI>
     <LI>G4DeltaAngle: added implementation of SampleDirectionForShell() virtual
-        method; improved sampling.</LI>
+        method; improved sampling; added check on length of do/while loop;
+        comment out warning happens frequently for low-energy e-.</LI>
     <LI>G4eCoulombScatteringModel, G4hCoulombScatteringModel,
         G4IonCoulombScatteringModel: updated initialisation of vector of cuts;
         cut for recoil can be changed via '/run/setCut' command.</LI>
@@ -548,49 +567,31 @@ please refer to the corresponding History files provided in most packages):
         added protection to do/while loop; added check on secondary energy of both
         gamma and electron using internal limit.</LI>
     <LI>G4HeatedKleinNishinaCompton: use inheritance from G4KleinNishinaCompton.</LI>
-    <LI>G4WentzelVIModel: added more accurate transition to single scattering mode.
-        Define single scattering mode before transformation from true to geometry
-        step length to avoid many small steps for very low-energy particles.</LI>
-    <LI>G4UrbanMscModel: fixed numerical problem for the case when range is nearly
-        truePathLength.</LI>
-    <LI>G4WentzelOKandVIxSection: return back to method of 10.0 for single
-        scattering sampling.</LI>
     <LI>G4IonCoulombScatteringModel: fix for non-initialised data (Coverity report).</LI>
     <LI>G4ASTARStopping, G4PSTARStopping, G4BraggModel, G4BraggIonModel: restore
         functionality to access NIST stopping data via chemical formula and not
         only by material name.</LI>
     <LI>G4ASTARStopping, G4ESTARStopping, G4PSTARStopping, G4WaterStopping:
-        reduced memory churn by using static data. Delete physics vectors at
-        destruction.</LI>
-    <LI>G4ASTARStopping, G4PSTARStopping changed interface to be always const
+        reduced memory churn by using static data; delete physics vectors at
+        destruction; changed interface to be always const
         at run time (shared among threads).</LI>
     <LI>G4BraggModel, G4BraggIonModel: use static pointer to G4*STARStopping
         classes, which are initialized once.</LI>
-    <LI>G4PAIModel: updated sampling of delta electron energy.</LI>
-    <LI>G4DeltaAngle: added check on length of do/while loop.</LI>
-    <LI>G4PAIxSection, G4PAIPhotData, G4PAIPhotModel: proper deletion at
-        destruction.</LI>
-    <LI>G4PAIModelData: proper deletion of physics vectors at destruction; use
-        Spline interpolation; fixed sampling of delta-electrons.</LI>
+    <LI>G4PAIxSection, G4PAIPhotData, G4PAIPhotModel, G4PAIModelData: proper 
+        deletion at destruction; use
+        spline interpolation; fixed sampling of delta-electrons.</LI>
+    <LI>Fixed memory leak in G4PAIxSection.</LI>
     <LI>G4PairProductionRelModel, G4eBremsstrahlungRelModel: added protection
         at initialisation for the case when user artificially reduces high
         energy limit of the model. Addressing problem report
         <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1670">#1670</A>.</LI>
-    <LI>Fixed memory leak in G4PAIxSection.</LI>
-    <LI>G4WentzelOKandVIxSection: fixed sampling in single scattering.</LI>
-    <LI>Refinements of lateral displacement in G4WentzelVIModel and
-        G4UrbanMscModel.</LI>
-    <LI>G4UrbanMscModel: added new step limit type UseSafetyPlus;
-        corrections to improve CPU in the use of random numbers.</LI>
     <LI>G4PEEffectFluoModel: fixed threshold cross section.</LI>
     <LI>G4GoudsmitSaundersonMscModel: fixed rare division by zero.</LI>
-    <LI>Use G4EmParameterisation at initialisation in G4eIonisation,
+    <LI>Use G4EmParameters at initialisation in G4eIonisation,
         G4hIonisation, G4ionIonisation, G4eBremsstrahlung, G4GammaConversion,
-        G4ComptonScattering and G4PhotoElectricEffect.</LI>
-    <LI>Use G4EmParameters in G4CoulombScattering, G4WentzelVIModel,
+        G4ComptonScattering, G4PhotoElectricEffect, G4CoulombScattering, 
+        G4WentzelVIModel,
         G4WentzelOKandVIxSection and G4WentzelVIRelXSection.</LI>
-    <LI>G4DeltaAngle: comment out warning happens frequently for low-energy
-        e-.</LI>
     <LI>G4GoudsmitSaundersonMscModel: fixed displacement computation.</LI>
     <LI>G4PEEffectFluoModel: make internal array per material and not per
         materialCutsCouple, allowing model to be used in unit tests.</LI>
@@ -600,10 +601,11 @@ please refer to the corresponding History files provided in most packages):
     <UL>
     <LI>G4VMultipleScattering: added possibility to build extra table for a
         model. Minor cleanup for post-safety computation.
-        Introduced mechanism of displacement at geometry boundary default.</LI>
+        Introduced optional mechanism of displacement at geometry boundary.</LI>
     <LI>G4VEmModel, G4VEmFluctuationModel: defined different pattern to access
-        to random generator for sequential and MT modes in order to save CPU
-        in derived classes.</LI>
+        to random generator for sequential and MT modes to avoid compillation
+        problems; random generator pointer become available to derive
+        model classes in order to save CPU.</LI>
     <LI>G4EmCorrections, G4EmElementSelector, G4VEmModel, G4VEmProcess,
         G4VEnergyLossProcess, G4VMultipleScattering, G4ionEffectiveCharge:
         general cleanup including: removed old commented code; use std::min
@@ -619,7 +621,8 @@ please refer to the corresponding History files provided in most packages):
         threshold.</LI>
     <LI>G4EnergyLossMessenger, G4EmProcessOption: added extra flag and UI
         command "/process/em/deexcitationIgnoreCut" allowing to disable check
-        on production threshold by deexcitation module.</LI>
+        on production threshold by deexcitation module; added interface methods and
+        UI command '/process/msc/DisplacementBeyondSafety'.</LI>
     <LI>G4VEnergyLossProcess, G4VEmProcess, G4VMultipleScattering: fix for
         cases of crash in G4WrapperProcess in sequential mode.
         Addressing problem report
@@ -627,15 +630,13 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4EmSaturation: updated class design, VisibleEnergyDeposition() method
         become virtual allowing application of user alternative algorithms.
         Added protection to throw exception if e- or proton are not defined
-        when used in VisibleEnergyDeposition(). Do not instantiate G4Electron
-        and G4Proton by default in InitialiseBirksCoefficient().
-        Moved check on existence of e- and proton from run time to
+        when used in VisibleEnergyDeposition(); do not instantiate G4Electron
+        and G4Proton by default in InitialiseBirksCoefficient();
+        moved check on existence of e- and proton from run time to
         initialisation (i.e. it is now done only once).</LI>
-    <LI>G4EmProcessOptions, G4EnergyLossMessenger: added interface methods and
-        UI command '/process/msc/DisplacementBeyondSafety'.</LI>
     <LI>G4LossTableManager: helper classes are instantiated only if user
-        requests via access method.
-        Minor change to modifiers. Changed initialisation of G4EmSaturation
+        requests via access method;
+        changed initialisation of G4EmSaturation
         class to work in MT mode.</LI>
     <LI>G4LossTableManager, G4VEnergyLossProcess, G4VEmProcess: improved
         initialisation; moved modifiers for parameters from inline to source
@@ -648,7 +649,10 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4VAtomDeexcitation: if de-excitation options are defined for the 
         world G4Region, propagate these options to all G4Regions.</LI>
     <LI>G4VEmProcess, G4VEnergyLossProcess: fixed model type definition
-        for secondary particle production (fluorescence, PIXE, splitting).</LI>
+        for secondary particle production (fluorescence, PIXE, splitting);
+        set step limit to DBL_MAX if
+        selected model is inactive at such energy - addressing problem report
+        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1674">#1674</A>.</LI>
     <LI>G4EmParameters, G4EmParametersMessenger: new classes for keeping EM
         parameters static for run time.</LI>
     <LI>G4VEmProcess, G4VEnergyLossProcess, G4VMultipleScattering,
@@ -657,16 +661,8 @@ please refer to the corresponding History files provided in most packages):
         <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1670">#1670</A>.
     <LI>G4MscStepLimitType, G4EnergyLossMessenger: added new step limit type,
         UseSafetyPlus for multiple-scattering.</LI>
-    <LI>G4VMultipleScattering: coherent definition of lateral displacement flag.
-        Fixed displacement at boundary algorithm.</LI>
-    <LI>G4VEmProcess: fixed definition of integral option.</LI>
-    <LI>G4VEmProcess, G4VEnergyLossProcess: improved printout at initialisation,
-        added extra initialisation.</LI>
     <LI>G4VEmProcess, G4VEmModel: added access methods for target element and
         isotope.</LI>
-    <LI>G4VEmProcess, G4VEnergyLossProcess: set step limit to DBL_MAX if
-        selected model is inactive at such energy. Addressing problem report
-        <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1674">#1674</A>.</LI>
     <LI>G4EmConfigurator: set high energy activation limit for a new model not
         more than high energy limit (needed for DNA models).</LI>
     <LI>Fixed Coverity defects.</LI>
@@ -1042,8 +1038,7 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4HadronStoppingProcess: replaced old method of G4EnergyRangeManager
         (still there but deprecated) with new one (which uses IsApplicable()
         from G4HadronicInteraction).
-        Use G4PhysicsModelCatalog to label tracks.
-        Avoid using 'deRegister' flag (fixing Coverity report).</LI>
+        Use G4PhysicsModelCatalog to label tracks.</LI>
     <LI>Removed obsolete classes G4MuonMinusCaptureAtRest, G4StopElementSelector
         and G4MuMinusCaptureCascade.</LI>
     </UL></LI>
@@ -1121,25 +1116,29 @@ please refer to the corresponding History files provided in most packages):
     </UL></LI>
 <LI><B>De-excitation</B>
     <UL>
-    <LI>Added ModelDescription() to G4ExcitationHandler.</LI>
     <LI>G4NuclearLevelStore: use G4ThreadLocalSingleton pattern providing proper
         deletion of photon evaporation classes at the end of run.</LI>
     <LI>Improved design of FermiBreakUp and fixed decays of "unstable" Fermi
-        fragments.</LI>
-    <LI>Reduced memory churn in several classes. Optimized code reducing number
+        fragments;
+        reduced memory churn in several classes; optimized code reducing number
         of new/delete of intermediate objects; for that, slightly modified
-        interface to evaporation channel; cleanup logic and implementation.
+        interface to evaporation channel; cleanup logic and implementation;
         G4FermiConfigurationList: reduced memory churn by reusing vectors which
         are members of the class; improved and verified computation of
-        probabilities; made public methods const.
+        probabilities; made public methods const;
         G4FermiConfiguration, G4UnstableFermiFragment: removed unused members;
         made all methods const.</LI>
     <LI>G4FermiFragmentsPool: made pure singleton class, all methods and data
         const at run time, no decay of exotic states. Added method IfApplicable()
-        for fast check if FermiBreakUp is applicable to a given excited fragment.</LI>
+        for fast check if FermiBreakUp is applicable to a given excited fragment;
+        fixed energy
+        or several excited levels to be the same in the gamma level database;
+        added DumpFragment() and Dump() methods.</LI>
+    <LI>Removed obsolete class G4FermiConfigurationList.</LI>
     <LI>G4ExcitationHandler: fixed problem in isomere production providing
-        energy non-conservation on level of 1 MeV.
-        Added protection against abnormal fragments.</LI>
+        energy non-conservation on level of 1 MeV;
+        added protection against abnormal fragments; 
+        added ModelDescription() for automatic documentation.</LI>
     <LI>Introduced an INCL++-specific fission level-density parameter class; set
         af/an parameter for INCL++ to 1.02 for all nuclei.
         Moved theChannels and theChannelFactory to the base class, since they
@@ -1152,32 +1151,23 @@ please refer to the corresponding History files provided in most packages):
         Ensure that the same level is not uploaded twice running in MT mode.</LI>
     <LI>G4NuclearLevelManager: removed unnecessary data members to reduce
         memory consumption.</LI>
-    <LI>G4FermiFragmentPool: fixed memory leak at destruction; fixed energy
-        or several excited levels to be the same in the gamma level database.
-        Added DumpFragment() and Dump() methods. Cleanup values of excitations.</LI>
     <LI>G4ContinuumGammaTransition, G4ContinuumGammaDeexcitation,
         G4DiscreteGammaDeexcitation, G4DiscreteGammaTransition,
         G4VGammaDeexcitation: cleanup selection of continuous or discrete 
-        transition.</LI>
+        transition; fixed computation of probabilities.</LI>
     <LI>G4DiscreteGammaDeexcitation, G4DiscreteGammaTransition: fixed internal
         conversion for the case when transition energy is nearly electron bound
         energy.</LI>
     <LI>G4VGammaDeexcitation: removed not needed extra call to CanDoTransition()
         inside DoChain() method.</LI>
-    <LI>G4FermiBreakUp: fixed value of const coefficient to probability
-        of a decay channel.</LI>
-    <LI>GEN probabilities: verified and level energies using gamma level data.</LI>
-    <LI>Fixed probability computation in G4ContinuumGammaTransition,
-        G4PhotonEvaporation and G4E1Probability.</LI>
-    <LI>G4B10GEMProbability, G4B11GEMProbability: changed nuclear level energies
-        to be the same as in the gamma level database.</LI>
     <LI>G4ContinuumGammaTransition, G4VGammaDeexcitation: coherently use same
         energy tolerance of 2 keV.</LI>
+    <LI>GEN probabilities: verified and level energies using gamma level data.</LI>
+    <LI>G4B10GEMProbability, G4B11GEMProbability: changed nuclear level energies
+        to be the same as in the gamma level database.</LI>
     <LI>G4VEvaporationChannel, G4GEMChannel, G4GEMProbability: added Dump()
         method. Added DumpLevels() method to G4NuclearLevelManager and
         G4NuclearLevel.</LI>
-    <LI>G4ExcitationHandler: added Description for documentation.</LI>
-    <LI>Removed obsolete class G4FermiConfigurationList.</LI>
     </UL></LI>
 <LI><B>Elastic scattering</B>
     <UL>
@@ -1616,7 +1606,7 @@ please refer to the corresponding History files provided in most packages):
             cleanup gamma and e- models instantiation.</LI>
         <LI>Added G4EmLEPTSPhysics and G4EmDNAChemistry constructors.</LI>
         <LI>Added G4EmStandardPhysicsSS, G4EmStandardPhysicsWVI constructors.</LI>
-        <LI>Use G4EmParameters used in all standard constructors.</LI>
+        <LI>Use G4EmParameters used in all EM constructors.</LI>
         <LI>G4EmStandardPhysics_option3,4: use G4GeneratorBS angular generator
             for bremsstrahlung.</LI>
         <LI>G4EmStandardPhysics_option4: use RangeFactor = 0.02 (instead of 0.01);
@@ -1624,7 +1614,6 @@ please refer to the corresponding History files provided in most packages):
         <LI>Re-engineered UI commands related to optical processes and created
             in G4OpticalPhysics. Addressing problem report
             <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1675">#1675</A>.</LI>
-        <LI>Use G4EmParameters used in low-energy constructors.</LI>
         <LI>Fixed bug responsible for bounds-checking failures in optical tests.
             Improved printing in G4OpticalPhysics::PrintStatistics().</LI>
         <LI>Reviewed initialisation of chemistry in DNA constructors and extended
@@ -1950,7 +1939,6 @@ please refer to the corresponding History files provided in most packages):
     <LI>Added sigmadiff_cumulated_ionisation_e_born_hp.dat and
         sigmadiff_cumulated_ionisation_p_born_hp.dat.</LI>
     <LI>Updated electron inelastic files for Si (microelec).</LI>
-    <LI>Added cross-section shell data by Miranda et al. (2014).</LI>
     <LI>Added sigma_ionisation_(b,be,li)_rudd.dat, sigma_ionisation_p_rudd.dat
         (up to 1 GeV), sigma_ionisation_si_rudd.dat and fluor_Bearden data to
         dna module.</LI>
