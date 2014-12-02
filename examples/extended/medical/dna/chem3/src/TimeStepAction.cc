@@ -36,9 +36,10 @@
 /// \brief Implementation of the TimeStepAction class
 
 #include "TimeStepAction.hh"
+
+#include <G4Scheduler.hh>
 #include "G4UnitsTable.hh"
 #include "G4SystemOfUnits.hh"
-#include "G4ITScheduler.hh"
 //#include "G4Molecule.hh"
 
 TimeStepAction::TimeStepAction() : G4UserTimeStepAction()

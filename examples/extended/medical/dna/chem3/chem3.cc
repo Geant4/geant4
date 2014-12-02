@@ -80,7 +80,7 @@ int main(int argc, char** argv)
   //
   Command* commandLine(0);
 
-#ifdef G4MULTITHREADED
+#ifdef G4MULTITHREADED_POPO
   G4MTRunManager* runManager= new G4MTRunManager;
   if ((commandLine = parser->GetCommandIfActive("-mt")))
   {
@@ -102,14 +102,6 @@ int main(int argc, char** argv)
 #else
   G4RunManager* runManager = new G4RunManager();
 #endif
-
-  //////////
-  // Activate or not the chemistry module (activated by default)
-  //
-  if ((commandLine = parser->GetCommandIfActive("-chemOFF")))
-  {
-    G4DNAChemistryManager::Instance()->SetChemistryActivation(false);
-  }
 
   //////////
   // Set mandatory user initialization classes

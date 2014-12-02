@@ -37,7 +37,6 @@
 
 #include "ActionInitialization.hh"
 
-#include "G4VScheduler.hh"
 #include "PrimaryGeneratorAction.hh"
 #include "RunAction.hh"
 #include "SteppingAction.hh"
@@ -56,8 +55,10 @@
 
 #include "G4Threading.hh"
 
-// chemistery
 #include "TrackingAction.hh"
+
+// chemistry
+#include "G4Scheduler.hh"
 #include "StackingAction.hh"
 #include "TimeStepAction.hh"
 #include "ITTrackingInteractivity.hh"
@@ -96,30 +97,28 @@ void ActionInitialization::Build() const
   SetUserAction(primGenAction);
 
   // Set optional user action classes
-  bool chemistryFlag =
-      G4DNAChemistryManager::Instance()->IsChemistryActivated();
   SetUserAction(new RunAction());
   SetUserAction(new TrackingAction());
   SetUserAction(new SteppingAction());
   SetUserAction(new StackingAction());
 
   // chemistry part
-  if(chemistryFlag){
-    G4VScheduler::Instance()->SetUserAction(new TimeStepAction());
+  if(G4DNAChemistryManager::IsActivated()){
+    G4Scheduler::Instance()->SetUserAction(new TimeStepAction());
 
     // Uncomment and set to stop chemistry stage after:
     // ...given number of time steps
-    //G4VScheduler::Instance()->SetMaxNbSteps(1000);
+    //G4Scheduler::Instance()->SetMaxNbSteps(1000);
 
     // ...OR reaching this time
-    G4VScheduler::Instance()->SetEndTime(100*nanosecond);
+    G4Scheduler::Instance()->SetEndTime(100*nanosecond);
 
-    G4VScheduler::Instance()->SetVerbose(1);
+    G4Scheduler::Instance()->SetVerbose(1);
 
     ITTrackingInteractivity* itInteractivity = new ITTrackingInteractivity();
     itInteractivity->SetUserAction(new ITSteppingAction);
     itInteractivity->SetUserAction(new ITTrackingAction);
-    G4VScheduler::Instance()->SetInteractivity(itInteractivity);
+    G4Scheduler::Instance()->SetInteractivity(itInteractivity);
   }
 /*
   // To output the pre-chemical stage
