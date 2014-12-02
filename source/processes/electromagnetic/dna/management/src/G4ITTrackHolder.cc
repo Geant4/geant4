@@ -5,13 +5,14 @@
  *      Author: kara
  */
 
-#include <G4ITScheduler.hh>
+#include <G4Scheduler.hh>
 #include <G4VScheduler.hh>
 #include "G4ITTrackHolder.hh"
 #include "G4IT.hh"
 #include "G4Track.hh"
 #include "G4UnitsTable.hh"
 #include "G4AutoLock.hh"
+#include "G4Threading.hh"
 
 using namespace std;
 
@@ -166,6 +167,13 @@ G4ITTrackHolder* G4ITTrackHolder::Instance()
   if (fgInstance == 0)
   {
     fgInstance = new G4ITTrackHolder();
+    if(G4Threading::IsWorkerThread() == false || 
+       G4Threading::IsMultithreadedApplication() == false 
+    ) 
+    {
+      fgMasterInstance = fgInstance;
+    }
+    
   }
   return fgInstance;
 }
@@ -350,9 +358,9 @@ void G4ITTrackHolder::Push(G4Track* track)
   {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription
-        << "G4ITStepManager::PushTrack : You are trying to push tracks while the "
+        << "G4ITTrackHolder::PushTrack : You are trying to push tracks while the "
         "ITStepManager is running";
-    G4Exception("G4ITStepManager::PushTrack", "ITStepManager012",
+    G4Exception("G4ITTrackHolder::PushTrack", "ITStepManager012",
                 FatalErrorInArgument, exceptionDescription);
   }
   _PushTrack(track);
@@ -414,7 +422,7 @@ void G4ITTrackHolder::_PushTrack(G4Track* track)
         << "You are trying to push a non-existing track (track pointer is null)"
         << G4endl;
 
-    G4Exception("G4ITStepManager::_PushTrack", "ITStepManager014",
+    G4Exception("G4ITTrackHolder::_PushTrack", "ITStepManager014",
                 FatalErrorInArgument, exceptionDescription);
   }
 
@@ -426,7 +434,7 @@ void G4ITTrackHolder::_PushTrack(G4Track* track)
     AddTrackID(track);
   }
 
-  double currentGlobalTime = G4ITScheduler::Instance()->GetGlobalTime();
+  double currentGlobalTime = G4Scheduler::Instance()->GetGlobalTime();
 
 #ifdef G4VERBOSE
   if (fVerbose > 5)
@@ -442,7 +450,7 @@ void G4ITTrackHolder::_PushTrack(G4Track* track)
   }
 #endif
 
-  if (G4ITScheduler::Instance()->IsRunning() == false)
+  if (G4Scheduler::Instance()->IsRunning() == false)
   {
     if (globalTime < currentGlobalTime)
     {
@@ -459,7 +467,7 @@ void G4ITTrackHolder::_PushTrack(G4Track* track)
       << "(ITStepManager is not yet running)"
       << G4endl;
 
-      G4Exception("G4ITStepManager::_PushTrack", "ITStepManager014",
+      G4Exception("G4ITTrackHolder::_PushTrack", "ITStepManager014",
                   FatalErrorInArgument, exceptionDescription);
     }
 
@@ -486,7 +494,7 @@ void G4ITTrackHolder::_PushTrack(G4Track* track)
   else // Is running
   {
     double timeDifference = globalTime - currentGlobalTime;
-    double timeTolerance = G4ITScheduler::Instance()->GetTimeTolerance();
+    double timeTolerance = G4Scheduler::Instance()->GetTimeTolerance();
 
     if (timeDifference < -1 * timeTolerance)
     {
@@ -503,7 +511,7 @@ void G4ITTrackHolder::_PushTrack(G4Track* track)
       << "(ITStepManager is running)"
       << G4endl;
 
-      G4Exception("G4ITStepManager::_PushTrack", "ITStepManager015",
+      G4Exception("G4ITTrackHolder::_PushTrack", "ITStepManager015",
                   FatalErrorInArgument, exceptionDescription);
     }
 
@@ -530,7 +538,7 @@ void G4ITTrackHolder::_PushTrack(G4Track* track)
       << "(ITStepManager is running)"
       << G4endl;
 
-      G4Exception("G4ITStepManager::_PushTrack", "ITStepManager016",
+      G4Exception("G4ITTrackHolder::_PushTrack", "ITStepManager016",
                   FatalErrorInArgument, exceptionDescription);
       // PushDelayed(track, globalTime);
     }
@@ -620,7 +628,7 @@ void G4ITTrackHolder::KillTracks()
 #ifdef G4VERBOSE
   if (fVerbose > 5)
   {
-    G4cout << "*** G4ITStepManager::KillTracks , step #"
+    G4cout << "*** G4ITTrackHolder::KillTracks , step #"
 //           << G4MIWorldEngine::Instance()->GetScheduler()->GetNbSteps()
     << G4VScheduler::Instance()->GetNbSteps() << " ***" << G4endl;
     G4cout << "Nb of tracks to kill "<< fToBeKilledList.size() << G4endl;

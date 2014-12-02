@@ -292,8 +292,8 @@ protected:
   G4double fDynMass;
   G4int fDynCharge;
   G4int fMoleculeID;
-  mutable G4String fFormatedName; // mutable allowed this member to be changed in const methods
-  mutable G4String fName; // mutable allowed this member to be changed in const methods
+  /*mutable*/ G4String fFormatedName;
+  /*mutable*/ G4String fName;
 };
 
 inline const G4MoleculeDefinition* G4MolecularConfiguration::GetDefinition() const

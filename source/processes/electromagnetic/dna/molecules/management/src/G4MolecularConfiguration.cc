@@ -264,6 +264,16 @@ G4MolecularConfiguration::G4MolecularConfiguration(const G4MoleculeDefinition* m
   fDynDiffusionCoefficient = fMoleculeDefinition->GetDiffusionCoefficient();
   fDynVanDerVaalsRadius = fMoleculeDefinition->GetVanDerVaalsRadius();
   fDynDecayTime = fMoleculeDefinition->GetDecayTime();
+
+  fName = fMoleculeDefinition->GetName();
+  fName += "^";
+  fName += G4UIcommand::ConvertToString(fDynCharge);
+
+  fFormatedName = fMoleculeDefinition->GetFormatedName();
+  fFormatedName += "^";
+  fFormatedName += "{";
+  fFormatedName += G4UIcommand::ConvertToString(fDynCharge);
+  fFormatedName += "}";
 }
 
 G4MolecularConfiguration::G4MolecularConfiguration(const G4MoleculeDefinition* moleculeDef,
@@ -281,6 +291,16 @@ G4MolecularConfiguration::G4MolecularConfiguration(const G4MoleculeDefinition* m
   fDynDiffusionCoefficient = fMoleculeDefinition->GetDiffusionCoefficient();
   fDynVanDerVaalsRadius = fMoleculeDefinition->GetVanDerVaalsRadius();
   fDynDecayTime = fMoleculeDefinition->GetDecayTime();
+
+  fName = fMoleculeDefinition->GetName();
+  fName += "^";
+  fName += G4UIcommand::ConvertToString(fDynCharge);
+
+  fFormatedName = fMoleculeDefinition->GetFormatedName();
+  fFormatedName += "^";
+  fFormatedName += "{";
+  fFormatedName += G4UIcommand::ConvertToString(fDynCharge);
+  fFormatedName += "}";
 }
 
 G4MolecularConfiguration::~G4MolecularConfiguration()
@@ -425,27 +445,27 @@ G4MolecularConfiguration* G4MolecularConfiguration::MoveOneElectron(G4int orbitT
 
 const G4String& G4MolecularConfiguration::GetName() const
 {
-  if (fName.isNull())
-  {
-    fName = fMoleculeDefinition->GetName();
-    fName += "^";
-    // fName+= "{";
-    fName += G4UIcommand::ConvertToString(fDynCharge);
-    // fName+= "}";
-  }
+//  if (fName.isNull())
+//  {
+//    fName = fMoleculeDefinition->GetName();
+//    fName += "^";
+//    // fName+= "{";
+//    fName += G4UIcommand::ConvertToString(fDynCharge);
+//    // fName+= "}";
+//  }
   return fName;
 }
 
 const G4String& G4MolecularConfiguration::GetFormatedName() const
 {
-  if (fFormatedName.isNull())
-  {
-    fFormatedName = fMoleculeDefinition->GetFormatedName();
-    fFormatedName += "^";
-    fFormatedName += "{";
-    fFormatedName += G4UIcommand::ConvertToString(fDynCharge);
-    fFormatedName += "}";
-  }
+//  if (fFormatedName.isNull())
+//  {
+//    fFormatedName = fMoleculeDefinition->GetFormatedName();
+//    fFormatedName += "^";
+//    fFormatedName += "{";
+//    fFormatedName += G4UIcommand::ConvertToString(fDynCharge);
+//    fFormatedName += "}";
+//  }
   return fFormatedName;
 }
 

@@ -15,15 +15,11 @@
 
 G4VUserChemistryList::G4VUserChemistryList()
 {
-  // TODO Auto-generated constructor stub
-
   verboseLevel = 1;
 }
 
 G4VUserChemistryList::~G4VUserChemistryList()
 {
-  // TODO Auto-generated destructor stub
-
   G4DNAChemistryManager* chemMan = G4DNAChemistryManager::GetInstanceIfExists();
   if (chemMan)
   {
@@ -48,7 +44,6 @@ void G4VUserChemistryList::BuildPhysicsTable()
   while (iterator())
   {
     G4MoleculeDefinition* moleculeDef = iterator.value();
-    G4cout << moleculeDef->GetName() << G4endl;
     BuildPhysicsTable(moleculeDef);
   }
 }
@@ -99,14 +94,21 @@ void G4VUserChemistryList::BuildPhysicsTable(G4MoleculeDefinition* moleculeDef)
     G4cout << "G4VUserChemistryList::BuildPhysicsTable %%%%%% "
            << moleculeDef->GetParticleName() << G4endl;
     G4cout << " ProcessManager : " << pManager
-        << " ProcessManagerShadow : " << pManagerShadow << G4endl;
+           << " ProcessManagerShadow : " << pManagerShadow << G4endl;
     for(G4int iv1=0;iv1<pVector->size();iv1++)
-    { G4cout << "  " << iv1 << " - " << (*pVector)[iv1]->GetProcessName() << G4endl;}
-    G4cout << "--------------------------------------------------------------" << G4endl;
+    {
+      G4cout << "  " << iv1 << " - " << (*pVector)[iv1]->GetProcessName()
+          << G4endl;
+    }
+    G4cout << "--------------------------------------------------------------"
+        << G4endl;
     G4ProcessVector* pVectorShadow = pManagerShadow->GetProcessList();
 
     for(G4int iv2=0;iv2<pVectorShadow->size();iv2++)
-    { G4cout << "  " << iv2 << " - " << (*pVectorShadow)[iv2]->GetProcessName() << G4endl;}
+    {
+      G4cout << "  " << iv2 << " - " << (*pVectorShadow)[iv2]->GetProcessName()
+      << G4endl;
+    }
   }
 #endif
   for (G4int j = 0; j < pVector->size(); ++j)

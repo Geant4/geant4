@@ -536,9 +536,25 @@ void G4ITStepProcessor::SetInitialStep()
 
   if (!fpTrack->GetTouchableHandle())
   {
+    //==========================================================================
+    // Create navigator state and Locate particle in geometry
+    //==========================================================================
+/*
+    fpNavigator->NewNavigatorStateAndLocate(fpTrack->GetPosition(),
+                                            fpTrack->GetMomentumDirection());
+
+    fpITrack->GetTrackingInfo()->
+        SetNavigatorState(fpNavigator->GetNavigatorState());
+*/
+    fpNavigator->NewNavigatorState();
+    fpITrack->GetTrackingInfo()->
+        SetNavigatorState(fpNavigator->GetNavigatorState());
+
     G4ThreeVector direction = fpTrack->GetMomentumDirection();
     fpNavigator->LocateGlobalPointAndSetup(fpTrack->GetPosition(), &direction,
                                            false, false); // was false, false
+  
+
     fpState->fTouchableHandle = fpNavigator->CreateTouchableHistory();
 
     fpTrack->SetTouchableHandle(fpState->fTouchableHandle);
@@ -548,11 +564,43 @@ void G4ITStepProcessor::SetInitialStep()
   {
     fpState->fTouchableHandle = fpTrack->GetTouchableHandle();
     fpTrack->SetNextTouchableHandle(fpState->fTouchableHandle);
+
+    //==========================================================================
+    // Create OR set navigator state
+    //==========================================================================
+
+    if(fpITrack->GetTrackingInfo()->GetNavigatorState())
+    {
+      fpNavigator->SetNavigatorState(fpITrack->GetTrackingInfo()->
+                                     GetNavigatorState());
+      fpITrack->GetTrackingInfo()->SetNavigatorState(
+        fpNavigator->GetNavigatorState());
+    }
+    else
+    {
+     fpNavigator->NewNavigatorState(*((G4TouchableHistory*)fpState->
+                                         fTouchableHandle()));
+     fpITrack->GetTrackingInfo()->SetNavigatorState(
+        fpNavigator->GetNavigatorState());
+    }
+
     G4VPhysicalVolume* oldTopVolume =
         fpTrack->GetTouchableHandle()->GetVolume();
+
+    //==========================================================================
+    // Locate particle in geometry
+    //==========================================================================
+
+//    G4VPhysicalVolume* newTopVolume =
+//        fpNavigator->LocateGlobalPointAndSetup(
+//            fpTrack->GetPosition(),
+//            &fpTrack->GetMomentumDirection(),
+//            true, false);
+
     G4VPhysicalVolume* newTopVolume = fpNavigator->ResetHierarchyAndLocate(
         fpTrack->GetPosition(), fpTrack->GetMomentumDirection(),
         *((G4TouchableHistory*) fpTrack->GetTouchableHandle()()));
+
     if (newTopVolume != oldTopVolume || oldTopVolume->GetRegularStructureId()
         == 1)
     {
@@ -595,7 +643,9 @@ void G4ITStepProcessor::SetInitialStep()
     // If the track is a primary, stop processing
     if (fpTrack->GetParentID() == 0)
     {
-      G4cerr << "ERROR - G4ITStepProcessor::SetInitialStep()" << G4endl<< "        Primary particle starting at - "
+      G4cerr << "ERROR - G4ITStepProcessor::SetInitialStep()"
+          << G4endl
+          << "        Primary particle starting at - "
       << fpTrack->GetPosition()
       << " - is outside of the world volume." << G4endl;
       G4Exception("G4ITStepProcessor::SetInitialStep()", "ITStepProcessor0011",
@@ -637,10 +687,6 @@ void G4ITStepProcessor::InitDefineStep()
         (G4ITStepProcessorState_Lock*) fpState);
 
     SetupMembers();
-    fpNavigator->NewNavigatorState();
-    fpITrack->GetTrackingInfo()->SetNavigatorState(
-        fpNavigator->GetNavigatorState());
-
     SetInitialStep();
   }
   else
@@ -683,7 +729,11 @@ void G4ITStepProcessor::InitDefineStep()
     fpTrack->SetTouchableHandle(fpTrack->GetNextTouchableHandle());
     fpState->fTouchableHandle = fpTrack->GetTouchableHandle();
     fpTrack->SetNextTouchableHandle(fpState->fTouchableHandle);
-    G4VPhysicalVolume* oldTopVolume =
+    
+    
+    //! ADDED BACK
+/*
+        G4VPhysicalVolume* oldTopVolume =
         fpTrack->GetTouchableHandle()->GetVolume();
     fpNavigator->SetNavigatorState(
         fpITrack->GetTrackingInfo()->GetNavigatorState());
@@ -691,8 +741,8 @@ void G4ITStepProcessor::InitDefineStep()
     G4VPhysicalVolume* newTopVolume = fpNavigator->ResetHierarchyAndLocate(
         fpTrack->GetPosition(), fpTrack->GetMomentumDirection(),
         *((G4TouchableHistory*) fpTrack->GetTouchableHandle()()));
-
-//        G4VPhysicalVolume* newTopVolume=
+        
+        //        G4VPhysicalVolume* newTopVolume=
 //                fpNavigator->LocateGlobalPointAndSetup( fpTrack->GetPosition(),
 //                                                      &fpTrack->GetMomentumDirection(),
 //                                                      true, false);
@@ -706,6 +756,14 @@ void G4ITStepProcessor::InitDefineStep()
       fpTrack->SetTouchableHandle(fpState->fTouchableHandle);
       fpTrack->SetNextTouchableHandle(fpState->fTouchableHandle);
     }
+    
+*/
+    //! ADDED BACK
+
+    //==========================================================================
+    // Only reset navigator state + reset volume hierarchy (internal)
+    // No need to relocate
+    //==========================================================================
 
     fpNavigator->SetNavigatorState(
         fpITrack->GetTrackingInfo()->GetNavigatorState());
@@ -733,7 +791,7 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
   {
     fpITrack->GetTrackingInfo()->SetNavigatorState(
         fpNavigator->GetNavigatorState());
-    fpNavigator->SetNavigatorState(0);
+    fpNavigator->ResetNavigatorState();
     return GetAtRestIL();
   }
 
@@ -919,7 +977,7 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
         {
           (fpState->fSelectedPostStepDoItVector)[fPostStepAtTimeDoItProcTriggered] =
               NotForced;
-          //                    (fpState->fSelectedPostStepDoItVector)[fPostStepDoItProcTriggered] = InActivated;
+          // (fpState->fSelectedPostStepDoItVector)[fPostStepDoItProcTriggered] = InActivated;
 
           fpState->fStepStatus = fPostStepDoItProc;
           fpStep->GetPostStepPoint()->SetProcessDefinedStep(
@@ -961,7 +1019,7 @@ void G4ITStepProcessor::DoDefinePhysicalStepLength()
 
   fpITrack->GetTrackingInfo()->SetNavigatorState(
       fpNavigator->GetNavigatorState());
-  fpNavigator->SetNavigatorState(0);
+  fpNavigator->ResetNavigatorState();
 }
 
 //______________________________________________________________________________

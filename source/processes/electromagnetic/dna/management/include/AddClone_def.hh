@@ -44,7 +44,6 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-
 #ifndef ADDClone_DEF
 #define ADDClone_DEF
 

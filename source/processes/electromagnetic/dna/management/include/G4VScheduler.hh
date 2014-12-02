@@ -35,8 +35,7 @@ public:
 
   virtual void SetGun(G4ITGun*){;}
 
-  virtual void Process()
-  {;}
+  virtual void Process();
 
   virtual G4bool IsRunning(){ return false; }
 
@@ -68,7 +67,7 @@ public:
   virtual G4double GetGlobalTime() const {return -1;}
 
   virtual void SetUserAction(G4UserTimeStepAction*) {;}
-  virtual G4UserTimeStepAction* GetUserReactionAction() const {return 0;}
+  virtual G4UserTimeStepAction* GetUserTimeStepAction() const {return 0;}
 
   virtual void SetInteractivity(G4ITTrackingInteractivity*){;}
   virtual G4ITTrackingInteractivity* GetInteractivity() {return 0;}

@@ -208,7 +208,7 @@ template<class OBJECT>
   };
 
 /**
- * G4FastList is used by G4ITStepManager to save
+ * G4FastList is used by G4TrackHolder to save
  * G4IT tracks only. Its advantage lies to a fast
  * search of a track in this list.
  */

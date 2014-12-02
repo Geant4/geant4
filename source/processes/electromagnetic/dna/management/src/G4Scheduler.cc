@@ -23,7 +23,7 @@
 // * acceptance of all terms of the Geant4 Software license.          *
 // ********************************************************************
 //
-// $Id: G4ITScheduler.cc 60494 2012-07-12 14:49:30Z gcosmo $
+// $Id: G4Scheduler.cc 60494 2012-07-12 14:49:30Z gcosmo $
 //
 // Author: Mathieu Karamitros (kara (AT) cenbg . in2p3 . fr)
 //
@@ -34,8 +34,8 @@
 // -------------------------------------------------------------------
 
 #include <G4AllITFinder.hh>
-#include <G4ITScheduler.hh>
-#include <G4ITSchedulerMessenger.hh>
+#include <G4Scheduler.hh>
+#include <G4SchedulerMessenger.hh>
 
 #include "G4SystemOfUnits.hh"
 #include "G4ITModelProcessor.hh"
@@ -52,6 +52,8 @@
 #include "G4ITStepStatus.hh"
 #include "G4ITGun.hh"
 #include "G4StateManager.hh"
+#include "G4Timer.hh"
+#include <sstream>
 
 //#define DEBUG_MEM 1
 #define DEBUG_MEM_STEPPING
@@ -64,11 +66,26 @@ using namespace G4MemStat;
 using G4MemStat::MemStat;
 #endif
 
+//COLOR FOR DEBUGING
 //#define USE_COLOR 1
+
+#ifdef USE_COLOR
+#define RED  "\033[0;31m"
+#define LIGHT_RED  "\33[1;31m"
+#define GREEN "\033[32;40m"
+#define GREEN_ON_BLUE "\033[1;32;44m"
+#define RESET_COLOR "\033[0m"
+#else
+#define RED  ""
+#define LIGHT_RED  ""
+#define GREEN ""
+#define GREEN_ON_BLUE ""
+#define RESET_COLOR ""
+#endif
 
 using namespace std;
 
-G4ThreadLocal G4ITScheduler* G4ITScheduler::fgStepManager(0);
+G4ThreadLocal G4Scheduler* G4Scheduler::fgScheduler(0);
 
 class IosFlagSaver
 {
@@ -82,8 +99,8 @@ public:
     ios.flags(f);
   }
 
-  //    IosFlagSaver(const IosFlagSaver &rhs) = delete;
-  //    IosFlagSaver& operator= (const IosFlagSaver& rhs) = delete;
+  // IosFlagSaver(const IosFlagSaver &rhs) = delete;
+  // IosFlagSaver& operator= (const IosFlagSaver& rhs) = delete;
 
 private:
   std::ostream& ios;
@@ -98,20 +115,20 @@ template<typename T>
   }
 //_________________________________________________________________________
 
-G4ITScheduler* G4ITScheduler::Instance()
+G4Scheduler* G4Scheduler::Instance()
 {
-  if (fgStepManager == 0) fgStepManager = new G4ITScheduler();
-  return fgStepManager;
+  if (fgScheduler == 0) fgScheduler = new G4Scheduler();
+  return fgScheduler;
 }
 //_________________________________________________________________________
 
-G4bool G4ITScheduler::Notify(G4ApplicationState requestedState)
+G4bool G4Scheduler::Notify(G4ApplicationState requestedState)
 {
   if (requestedState == G4State_Quit)
   {
     if (fVerbose >= 4)
     {
-      G4cout << "G4ITScheduler received G4State_Quit" << G4endl;
+      G4cout << "G4Scheduler received G4State_Quit" << G4endl;
     }
     Clear();
     //DeleteInstance();
@@ -120,24 +137,25 @@ G4bool G4ITScheduler::Notify(G4ApplicationState requestedState)
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::DeleteInstance()
+void G4Scheduler::DeleteInstance()
 {
-  if (fgStepManager)
+  if (fgScheduler)
   {
-    delete fgStepManager;
+    delete fgScheduler;
   }
 }
 //_________________________________________________________________________
 
-G4ITScheduler::G4ITScheduler() :
+G4Scheduler::G4Scheduler() :
     G4VScheduler(), G4VStateDependent(),
     fTrackContainer((G4ITTrackHolder&)*G4ITTrackHolder::Instance())
 {
   Create();
 }
 
-void G4ITScheduler::Create()
+void G4Scheduler::Create()
 {
+  fUseDefaultTimeSteps = true;
   fUserUpperTimeLimit = -1;
   fpGun = 0;
   fContinue = true;
@@ -194,31 +212,31 @@ void G4ITScheduler::Create()
   fTmpEndTime = -1.;
   fTmpGlobalTime = -1.;
 
-  fSteppingMsg = new G4ITSchedulerMessenger(this);
+  fSteppingMsg = new G4SchedulerMessenger(this);
 
   G4ITTypeManager::Instance()->ReserveRessource();
 }
 
 //_________________________________________________________________________
 
-G4ITScheduler::~G4ITScheduler()
+G4Scheduler::~G4Scheduler()
 {
 
   if (fSteppingMsg) // is used as a flag to know whether the manager was cleared
   {
     Clear();
   }
-  fgStepManager = 0;
+  fgScheduler = 0;
 
 //  if (fVerbose >= 1)
 //  {
-//    G4cout << "G4ITScheduler is being deleted. Bye :) !" << G4endl;
+//    G4cout << "G4Scheduler is being deleted. Bye :) !" << G4endl;
 //  }
 }
 
-void G4ITScheduler::Clear()
+void G4Scheduler::Clear()
 {
-//  if (fVerbose) G4cout << "*** G4ITScheduler is being cleared ***" << G4endl;
+//  if (fVerbose) G4cout << "*** G4Scheduler is being cleared ***" << G4endl;
 
   if(fSteppingMsg)
   {
@@ -259,7 +277,7 @@ void G4ITScheduler::Clear()
 
 //_________________________________________________________________________
 
-void G4ITScheduler::ClearList()
+void G4Scheduler::ClearList()
 {
 //  if (fNbTracks == 0) return;
 
@@ -271,14 +289,14 @@ void G4ITScheduler::ClearList()
 }
 
 //_________________________________________________________________________
-void G4ITScheduler::RegisterModel(G4VITStepModel* model, double time)
+void G4Scheduler::RegisterModel(G4VITStepModel* model, double time)
 {
   fpModelHandler->RegisterModel(model, time);
 }
 
 //_________________________________________________________________________
 
-void G4ITScheduler::Initialize()
+void G4Scheduler::Initialize()
 {
   if (fpStepProcessor)
   {
@@ -321,7 +339,7 @@ void G4ITScheduler::Initialize()
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::Reset()
+void G4Scheduler::Reset()
 {
   fStartTime = 0;
   fUserUpperTimeLimit = -1;
@@ -341,13 +359,13 @@ void G4ITScheduler::Reset()
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::Process()
+void G4Scheduler::Process()
 {
 
 #ifdef G4VERBOSE
   if (fVerbose)
   {
-    G4cout << "*** G4ITScheduler starts processing " << G4endl;
+    G4cout << "*** G4Scheduler starts processing " << G4endl;
     if(fVerbose > 2)
     G4cout << "___________________________________________"
     "___________________________" << G4endl;
@@ -356,12 +374,13 @@ void G4ITScheduler::Process()
 
   if (fInitialized == false) Initialize();
 
-  //    fpTrackingManager->Initialize();
+  // fpTrackingManager->Initialize();
   fpModelProcessor->Initialize();
   fpStepProcessor->Initialize();
 
-  //    fpMasterModelProcessor->Initialize();
-  //    fpMasterStepProcessor->Initialize();
+  // TODO
+  // fpMasterModelProcessor->Initialize();
+  // fpMasterStepProcessor->Initialize();
 
   if (fpGun) fpGun->DefineTracks();
 
@@ -370,47 +389,65 @@ void G4ITScheduler::Process()
   // ___________________
   fRunning = true;
   Reset();
+
   if (fpUserTimeStepAction) fpUserTimeStepAction->StartProcessing();
 
 #ifdef G4VERBOSE
   G4bool trackFound = false;
 #endif
 
+  //===========================================================================
+  // By default, before the G4Scheduler is launched, the tracks are pushed to
+  // the delayed lists
+  //===========================================================================
+
   if(fTrackContainer.DelayListsNOTEmpty())
   {
     fStartTime = fTrackContainer.GetNextTime();
 #ifdef G4VERBOSE
     trackFound = true;
+    G4Timer localtimer;
+    if(fVerbose>1)
+    {
+      localtimer.Start();
+    }
 #endif
     SynchronizeTracks();
+#ifdef G4VERBOSE
+    if(fVerbose>1)
+    {
+      localtimer.Stop();
+      G4cout << "G4Scheduler: process time= "<< localtimer << G4endl;
+    }
+#endif
   }
 
-  //---------------------------------
-  // TODO: This could be removed ?
-  if(fTrackContainer.MainListsNOTEmpty()
-      && (fMaxSteps == -1 ? true : fNbSteps < fMaxSteps)
-      && fContinue == true)
-//  if (fpMainList && fpMainList->empty() == false)
-  {
-#ifdef G4VERBOSE
-    trackFound = true;
-#endif
-    DoProcess();
-  }
-  //---------------------------------
+//  //---------------------------------
+//  // TODO: This could be removed ?
+//  if(fTrackContainer.MainListsNOTEmpty()
+//      && (fMaxSteps == -1 ? true : fNbSteps < fMaxSteps)
+//      && fGlobalTime < fEndTime
+//      && fContinue == true)
+//{
+//#ifdef G4VERBOSE
+//    trackFound = true;
+//#endif
+//    DoProcess();
+//}
+//  //---------------------------------
 
 #ifdef G4VERBOSE
   if(fVerbose)
   {
     if(trackFound)
     {
-      G4cout << "*** G4ITScheduler ends at time : "
+      G4cout << "*** G4Scheduler ends at time : "
       << G4BestUnit(fGlobalTime,"Time") << G4endl;
       G4cout << "___________________________________" << G4endl;
     }
     else
     {
-      G4cout << "*** G4ITScheduler did not start because no "
+      G4cout << "*** G4Scheduler did not start because no "
       "track was found to be processed"<< G4endl;
       G4cout << "___________________________________" << G4endl;
     }
@@ -431,7 +468,7 @@ void G4ITScheduler::Process()
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::SynchronizeTracks()
+void G4Scheduler::SynchronizeTracks()
 {
 //  if(fTrackContainer.WaitingListsNOTEmpty())
 //   {
@@ -439,38 +476,37 @@ void G4ITScheduler::SynchronizeTracks()
 //    exceptionDescription
 //        << "There is a waiting track list (fpWaitingList != 0).";
 //    exceptionDescription
-//        << " When G4ITScheduler::SynchronizeTracks() is called, ";
+//        << " When G4Scheduler::SynchronizeTracks() is called, ";
 //    exceptionDescription
 //        << "no more tracks should remain in the fpWaitingList.";
-//    G4Exception("G4ITScheduler::SynchronizeTracks", "ITScheduler002",
+//    G4Exception("G4Scheduler::SynchronizeTracks", "ITScheduler002",
 //                FatalErrorInArgument, exceptionDescription);
 //  }
 
   // Backup main list and time feature
   // Reminder : the main list here, should
   // have the biggest global time
+  //  fTrackContainer.MoveMainToWaitingList();
+  // TODO: not yet supported
 
-  fTrackContainer.MoveMainToWaitingList();
   fTmpGlobalTime = fGlobalTime;
   fTmpEndTime = fEndTime;
-
-//  std::map<double, std::map<Key, G4TrackList*> > delayed =
-//  fTrackContainer.GetDelayedLists();
 
   fGlobalTime = fTrackContainer.GetNextTime();
   G4double tmpGlobalTime = fGlobalTime;
   while(fTrackContainer.MergeNextTimeToMainList(tmpGlobalTime))
   {
-    assert(tmpGlobalTime == fGlobalTime);
+//    assert(tmpGlobalTime == fGlobalTime);
     fEndTime =  min(fTrackContainer.GetNextTime(), fTmpEndTime);
     DoProcess();
   }
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::DoProcess()
+void G4Scheduler::DoProcess()
 // We split it from the Process() method to avoid repeating code in SynchronizeTracks
 {
+  if (fpUserTimeStepAction) fpUserTimeStepAction->NewStage();
 
 #if defined (DEBUG_MEM) && defined (DEBUG_MEM_STEPPING)
   MemStat mem_first, mem_second, mem_diff;
@@ -501,7 +537,7 @@ void G4ITScheduler::DoProcess()
 #ifdef G4VERBOSE
   if (fWhyDoYouStop)
   {
-    G4cout << "G4ITScheduler has reached a stage: it might be"
+    G4cout << "G4Scheduler has reached a stage: it might be"
            " a transition or the end"
            << G4endl;
 
@@ -509,29 +545,29 @@ void G4ITScheduler::DoProcess()
 
     if(fGlobalTime >= fEndTime)
     {
-      G4cout << "== G4ITScheduler: I stop because I reached the final time : "
+      G4cout << "== G4Scheduler: I stop because I reached the final time : "
       << G4BestUnit(fEndTime,"Time") << " =="<< G4endl;
       normalStop = true;
     }
     if(fTrackContainer.MainListsNOTEmpty()  == false) // is empty
     {
-      G4cout << "G4ITScheduler: I stop because the current main list of tracks"
+      G4cout << "G4Scheduler: I stop because the current main list of tracks"
       "is empty"
       << G4endl;
       normalStop = true;
     }
     if(fMaxSteps == -1 ? false : fNbSteps >= fMaxSteps)
     {
-      G4cout << "G4ITScheduler: I stop because I reached the maximum allowed "
+      G4cout << "G4Scheduler: I stop because I reached the maximum allowed "
       "number of steps=" << fMaxSteps
       << G4endl;
       normalStop = true;
     }
     if(fContinue && normalStop == false)
     {
-      G4cout << "G4ITScheduler: It might be that I stop because "
+      G4cout << "G4Scheduler: It might be that I stop because "
       "I have been told so. You may check "
-      "member fContinue and usage of the method G4ITScheduler::Stop()."
+      "member fContinue and usage of the method G4Scheduler::Stop()."
       << G4endl;
     }
   }
@@ -545,13 +581,13 @@ void G4ITScheduler::DoProcess()
 
 #ifdef G4VERBOSE
   if (fVerbose > 2) G4cout
-      << "*** G4ITScheduler has finished processing a track list at time : "
+      << "*** G4Scheduler has finished processing a track list at time : "
       << G4BestUnit(fGlobalTime, "Time") << G4endl;
 #endif
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::Stepping()
+void G4Scheduler::Stepping()
 {
   IosFlagSaver iosfs(G4cout);
   fTimeStep = DBL_MAX;
@@ -569,12 +605,13 @@ void G4ITScheduler::Stepping()
   if (fVerbose > 2)
   {
 #ifdef USE_COLOR
-    G4cout << "\33[1;31m";
+    G4cout << LIGHT_RED;
 #endif
     G4cout << "*** Start Of Step N°" << fNbSteps + 1 << " ***" << G4endl;
-    G4cout << "Current Global time : " << G4BestUnit(fGlobalTime, "Time") <<G4endl;
+    G4cout << "Current Global time : " << G4BestUnit(fGlobalTime, "Time")
+           <<G4endl;
 #ifdef USE_COLOR
-    G4cout << "\33[0m";
+    G4cout << RESET_COLOR;
 #endif
   }
 #endif
@@ -595,8 +632,8 @@ void G4ITScheduler::Stepping()
     {
       G4ExceptionDescription exceptionDescription;
       exceptionDescription
-          << "You are asking to use user defined steps but you did not give any.";
-      G4Exception("G4ITScheduler::FindUserPreDefinedTimeStep",
+        << "You are asking to use user defined steps but you did not give any.";
+      G4Exception("G4Scheduler::FindUserPreDefinedTimeStep",
                   "ITScheduler004", FatalErrorInArgument,
                   exceptionDescription);
       return; // makes coverity happy
@@ -605,13 +642,13 @@ void G4ITScheduler::Stepping()
     if (fVerbose > 2)
     {
 #ifdef USE_COLOR
-      G4cout << "\33[1;31m";
+      G4cout << LIGHT_RED;
 #endif
       G4cout << "*** At time : " << G4BestUnit(fGlobalTime, "Time")
              << " the chosen user time step is : "
              << G4BestUnit(fDefinedMinTimeStep, "Time") << " ***" << G4endl;
 #ifdef USE_COLOR
-      G4cout << "\33[0m";
+      G4cout << RESET_COLOR;
 #endif
     }
 #endif
@@ -621,7 +658,7 @@ void G4ITScheduler::Stepping()
   {
     CalculateMinTimeStep(); // => at least N (N = nb of tracks) loops
   }
-  else
+  else if(fUseDefaultTimeSteps)
   {
     fTSTimeStep = fDefinedMinTimeStep;
   }
@@ -636,12 +673,12 @@ void G4ITScheduler::Stepping()
   if (fVerbose > 2)
   {
 #ifdef USE_COLOR
-    G4cout << "\33[1;31m";
+    G4cout << LIGHT_RED;
 #endif
     G4cout << "*** Time stepper returned : " << G4BestUnit(fTSTimeStep, "Time")
            << " ***" << G4endl;
 #ifdef USE_COLOR
-    G4cout << "\33[0m";
+    G4cout << RESET_COLOR;
 #endif
   }
 #endif
@@ -668,12 +705,12 @@ void G4ITScheduler::Stepping()
   if (fVerbose > 2)
   {
 #ifdef USE_COLOR
-    G4cout << "\33[1;31m";
+    G4cout << LIGHT_RED;
 #endif
     G4cout << "*** The minimum time returned by the processes is : "
            << G4BestUnit(fILTimeStep, "Time") << " ***" << G4endl;
 #ifdef USE_COLOR
-    G4cout << "\33[0m";
+    G4cout << RESET_COLOR;
 #endif
   }
 #endif
@@ -682,7 +719,8 @@ void G4ITScheduler::Stepping()
   mem_first = MemoryUsage();
 #endif
 
-  if (fILTimeStep <= fTSTimeStep) // Give the priority to the IL
+  if (fILTimeStep <= fTSTimeStep)
+    // Give the priority to the IL
   {
     fInteractionStep = true;
     fReactingTracks.clear(); // Give the priority to the IL
@@ -721,7 +759,7 @@ void G4ITScheduler::Stepping()
           << fMaxNZeroTimeStepsAllowed;
       exceptionDescription << ".";
 
-      G4Exception("G4ITScheduler::Stepping", "ITSchedulerNullTimeSteps",
+      G4Exception("G4Scheduler::Stepping", "ITSchedulerNullTimeSteps",
                   FatalErrorInArgument, exceptionDescription);
     }
   }
@@ -741,7 +779,8 @@ void G4ITScheduler::Stepping()
 #if defined (DEBUG_MEM) && defined (DEBUG_MEM_DETAILED_STEPPING)
   mem_second = MemoryUsage();
   mem_diff = mem_second-mem_first;
-  G4cout << "|| MEM || After LeadingTracks and UserPreTimeStepAction: " << mem_diff << G4endl;
+  G4cout << "|| MEM || After LeadingTracks and UserPreTimeStepAction: "
+         << mem_diff << G4endl;
 #endif
 
 #if defined (DEBUG_MEM) && defined (DEBUG_MEM_DETAILED_STEPPING)
@@ -759,11 +798,11 @@ void G4ITScheduler::Stepping()
     fTrackContainer.MergeSecondariesWithMainList();
     KillTracks();
   }
-  //    else
-  //    {
-  //        G4cout << "fTSTimeStep : " << fTSTimeStep << G4endl;
-  //        G4cout << "fILTimeStep : " << fILTimeStep << G4endl;
-  //    }
+  // else
+  // {
+  //   G4cout << "fTSTimeStep : " << fTSTimeStep << G4endl;
+  //   G4cout << "fILTimeStep : " << fILTimeStep << G4endl;
+  // }
 
 #if defined (DEBUG_MEM) && defined (DEBUG_MEM_DETAILED_STEPPING)
   mem_second = MemoryUsage();
@@ -801,52 +840,50 @@ void G4ITScheduler::Stepping()
 
   // End of step
 #ifdef G4VERBOSE
-  if (fVerbose)
-  {
-    if (fVerbose == 2)
+    if (fVerbose >= 2)
     {
 #ifdef USE_COLOR
-      G4cout << "\33[1;31m";
+      G4cout << LIGHT_RED;
 #endif
-      G4cout << "Step N°" << fNbSteps << "\t T= "
-             << G4BestUnit(fGlobalTime, "Time") << "\t dt= "
-             << G4BestUnit(fTimeStep, "Time") << G4endl;
-#ifdef USE_COLOR
-      G4cout << "\33[0m";
-#endif
-    }
-    if(fVerbose > 2)
-    {
-#ifdef USE_COLOR
-      G4cout << "\33[1;31m";
-#endif
-      G4cout << "*** End Of Step N°" << fNbSteps << " ***" << G4endl;
-      G4cout << "Previous global time : "
-      << G4BestUnit(fGlobalTime- fTimeStep, "Time")
-      << "\t Chosen time step :"
-      << G4BestUnit(fTimeStep,"Time")<<G4endl;
-      if(fReachedUserTimeLimit)
-      {
-        G4cout << "It has also reached the user time limit" << G4endl;
-      }
-      G4cout << "Next global time : "
-      << G4BestUnit(fGlobalTime,"Time") << G4endl;
-      G4cout << "______________________________________________________________________"<< G4endl;
-#ifdef USE_COLOR
-      G4cout << "\33[0m";
-#endif
-    }
 
-  }
+      G4String interactionType;
+      GetCollisionType(interactionType);
+
+      std::stringstream finalOutput;
+
+      finalOutput << "*** End of step N°" << fNbSteps
+             << "\t T_i= " << G4BestUnit(fGlobalTime-fTimeStep, "Time")
+             << "\t dt= " << G4BestUnit(fTimeStep, "Time")
+             << "\t T_f= " << G4BestUnit(fGlobalTime, "Time")
+             << "\t " << interactionType
+             << G4endl;
+
+      if(fVerbose>2)
+      {
+        if(fReachedUserTimeLimit)
+        {
+          finalOutput << "It has also reached the user time limit" << G4endl;
+        }
+        finalOutput << "_______________________________________________________________"
+            "_______"<< G4endl;
+      }
+
+      G4cout << finalOutput.str();
+
+#ifdef USE_COLOR
+      G4cout << RESET_COLOR;
+#endif
+    }
 #endif
 
 }
 //_________________________________________________________________________
 
-double G4ITScheduler::GetLimitingTimeStep() const
+double G4Scheduler::GetLimitingTimeStep() const
 {
   if (fpUserTimeSteps == 0) return fDefaultMinTimeStep;
-  if (fabs(fGlobalTime - fUserUpperTimeLimit) < fTimeTolerance) return fDefinedMinTimeStep;
+  if (fabs(fGlobalTime - fUserUpperTimeLimit) < fTimeTolerance)
+    return fDefinedMinTimeStep;
 
   map<double, double>::const_iterator it_fpUserTimeSteps_i = fpUserTimeSteps
       ->upper_bound(fGlobalTime);
@@ -903,7 +940,7 @@ double G4ITScheduler::GetLimitingTimeStep() const
 
 //_________________________________________________________________________
 
-void G4ITScheduler::FindUserPreDefinedTimeStep()
+void G4Scheduler::FindUserPreDefinedTimeStep()
 {
 
   if (fpUserTimeSteps == 0)
@@ -911,7 +948,7 @@ void G4ITScheduler::FindUserPreDefinedTimeStep()
     G4ExceptionDescription exceptionDescription;
     exceptionDescription
         << "You are asking to use user defined steps but you did not give any.";
-    G4Exception("G4ITScheduler::FindUserPreDefinedTimeStep",
+    G4Exception("G4Scheduler::FindUserPreDefinedTimeStep",
                 "ITScheduler004", FatalErrorInArgument, exceptionDescription);
     return; // makes coverity happy
   }
@@ -955,7 +992,7 @@ void G4ITScheduler::FindUserPreDefinedTimeStep()
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::CalculateMinTimeStep()
+void G4Scheduler::CalculateMinTimeStep()
 {
 
   if (fpModelProcessor == 0)
@@ -965,11 +1002,11 @@ void G4ITScheduler::CalculateMinTimeStep()
     exceptionDescription
         << "There is no G4ITModelProcessor to hande IT reaction. ";
     exceptionDescription
-        << "You probably did not initialize the G4ITScheduler. ";
+        << "You probably did not initialize the G4Scheduler. ";
     exceptionDescription
-        << "Just do G4ITScheduler::Instance()->Initialize(); ";
+        << "Just do G4Scheduler::Instance()->Initialize(); ";
     exceptionDescription << " but only after initializing the run manager.";
-    G4Exception("G4ITScheduler::CalculateMinStep", "ITScheduler005",
+    G4Exception("G4Scheduler::CalculateMinStep", "ITScheduler005",
                 FatalErrorInArgument, exceptionDescription);
     return; // makes coverity happy
   }
@@ -983,12 +1020,13 @@ void G4ITScheduler::CalculateMinTimeStep()
 #endif
 
   fpModelProcessor->InitializeStepper(fGlobalTime, fDefinedMinTimeStep);
-  //    fpMasterModelProcessor -> InitializeStepper(fGlobalTime, fDefinedMinTimeStep) ;
+  // TODO
+  // fpMasterModelProcessor -> InitializeStepper(fGlobalTime, fDefinedMinTimeStep) ;
 
 #if defined (DEBUG_MEM) && defined (DEBUG_MEM_DETAILED_STEPPING)
   mem_second = MemoryUsage();
   mem_diff = mem_second-mem_first;
-  G4cout << "\t || MEM || G4ITScheduler::CalculateMinTimeStep || After "
+  G4cout << "\t || MEM || G4Scheduler::CalculateMinTimeStep || After "
       "computing fpModelProcessor -> InitializeStepper, diff is : "
       << mem_diff
       << G4endl;
@@ -1008,7 +1046,7 @@ void G4ITScheduler::CalculateMinTimeStep()
     {
       G4ExceptionDescription exceptionDescription;
       exceptionDescription << "No track found.";
-      G4Exception("G4ITScheduler::CalculateMinStep", "ITScheduler006",
+      G4Exception("G4Scheduler::CalculateMinStep", "ITScheduler006",
                   FatalErrorInArgument, exceptionDescription);
       return; // makes coverity happy
     }
@@ -1038,13 +1076,13 @@ void G4ITScheduler::CalculateMinTimeStep()
 #if defined (DEBUG_MEM) && defined (DEBUG_MEM_DETAILED_STEPPING)
   mem_second = MemoryUsage();
   mem_diff = mem_second-mem_first;
-  G4cout << "\t || MEM || G4ITScheduler::CalculateMinTimeStep || "
+  G4cout << "\t || MEM || G4Scheduler::CalculateMinTimeStep || "
       "After looping on tracks, diff is : " << mem_diff << G4endl;
 #endif
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::ExtractTimeStepperData(G4ITModelProcessor* MP)
+void G4Scheduler::ExtractTimeStepperData(G4ITModelProcessor* MP)
 {
   G4Track* track = (G4Track*) MP->GetTrack();
   if (track == 0)
@@ -1080,7 +1118,7 @@ void G4ITScheduler::ExtractTimeStepperData(G4ITModelProcessor* MP)
          {
          G4ExceptionDescription exceptionDescription ;
          exceptionDescription << "No reactants were found by the time stepper.";
-         G4Exception("G4ITScheduler::ExtractTimeStepperData","ITScheduler007",
+         G4Exception("G4Scheduler::ExtractTimeStepperData","ITScheduler007",
          FatalErrorInArgument,exceptionDescription);
          continue ;
          }
@@ -1090,7 +1128,7 @@ void G4ITScheduler::ExtractTimeStepperData(G4ITModelProcessor* MP)
         fReactingTracks.clear();
         if (bool(reactants))
         {
-          // G4cout << "*** (1) G4ITScheduler::ExtractTimeStepperData insert
+          // G4cout << "*** (1) G4Scheduler::ExtractTimeStepperData insert
           //          reactants for " << GetIT(track)->GetName() << G4endl;
           // G4cout << "bool(reactants) = " << bool(reactants) << G4endl;
           // G4cout << reactants->size() << G4endl;
@@ -1108,14 +1146,14 @@ void G4ITScheduler::ExtractTimeStepperData(G4ITModelProcessor* MP)
          {
          G4ExceptionDescription exceptionDescription ;
          exceptionDescription << "No reactants were found by the time stepper.";
-         G4Exception("G4ITScheduler::ExtractTimeStepperData","ITScheduler008",
+         G4Exception("G4Scheduler::ExtractTimeStepperData","ITScheduler008",
          FatalErrorInArgument,exceptionDescription);
          continue ;
          }
          */
         if (bool(reactants))
         {
-          // G4cout << "*** (2) G4ITScheduler::ExtractTimeStepperData insert
+          // G4cout << "*** (2) G4Scheduler::ExtractTimeStepperData insert
           //          reactants for " << GetIT(track)->GetName() << G4endl;
           // G4cout << "bool(reactants) = " << bool(reactants) << G4endl;
           // G4cout << "trackA : " << GetIT(track)->GetName()
@@ -1141,7 +1179,7 @@ void G4ITScheduler::ExtractTimeStepperData(G4ITModelProcessor* MP)
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::ComputeInteractionLength()
+void G4Scheduler::ComputeInteractionLength()
 {
   G4TrackManyList* mainList = fTrackContainer.GetMainList();
   G4TrackManyList::iterator it = mainList ->begin();
@@ -1167,7 +1205,7 @@ void G4ITScheduler::ComputeInteractionLength()
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::ExtractILData(G4ITStepProcessor* SP)
+void G4Scheduler::ExtractILData(G4ITStepProcessor* SP)
 {
   G4Track* track = SP->GetTrack();
   if (!track)
@@ -1179,7 +1217,7 @@ void G4ITScheduler::ExtractILData(G4ITStepProcessor* SP)
   {
     fTrackContainer.GetMainList()->pop(track);
     EndTracking(track);
-    return;
+    //return;
   }
 
   if (IsInf(SP->GetInteractionTime()))
@@ -1192,36 +1230,15 @@ void G4ITScheduler::ExtractILData(G4ITStepProcessor* SP)
   {
     // G4cout << "!!!!!!!!!!!! TEMPS DIFFERENTS "
     //    << track->GetTrackID() << G4endl;
-    if(fLeadingTracks.empty() == false)
-    {
-      std::vector<G4Track*>::iterator fLeadingTracks_i =
-          fLeadingTracks.begin();
 
-      while(fLeadingTracks_i != fLeadingTracks.end())
-      {
-        G4Track* leading_track = *fLeadingTracks_i;
-        if(leading_track)
-        {
-          G4IT* ITrack = GetIT(leading_track);
-          if(ITrack)
-          {
-            ITrack->GetTrackingInfo()->SetLeadingStep(false);
-          }
-        }
-
-        fLeadingTracks_i++;
-        continue;
-      }
-
-      fLeadingTracks.clear();
-    }
-
-    // G4cout << "Will set leading step to true for time  :"
-    //        << SP -> GetInteractionTime() << " against fTimeStep : "
-    //        << fTimeStep << " the trackID is : " << track->GetTrackID()
-    //        << G4endl;
+    ResetLeadingTracks();
 
     fILTimeStep = SP -> GetInteractionTime();
+
+//    G4cout << "Will set leading step to true for time  :"
+//           << SP -> GetInteractionTime() << " against fTimeStep : "
+//           << G4BestUnit(fILTimeStep, "Time") << " the trackID is : " << track->GetTrackID()
+//           << G4endl;
 
     GetIT(track)->GetTrackingInfo()->SetLeadingStep(true);
     fLeadingTracks.push_back(track);
@@ -1246,7 +1263,7 @@ void G4ITScheduler::ExtractILData(G4ITStepProcessor* SP)
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::DoIt()
+void G4Scheduler::DoIt()
 
 // Call the process having the min step length or just propagate the track on the given time step
 
@@ -1260,7 +1277,10 @@ void G4ITScheduler::DoIt()
 #ifdef G4VERBOSE
   if (fVerbose > 3)
   {
-    G4cout << "*** G4ITScheduler::DoIt ***" << G4endl;
+#ifdef USE_COLOR
+      G4cout << LIGHT_RED;
+#endif
+    G4cout << "*** G4Scheduler::DoIt ***" << G4endl;
     G4cout << setw(18) << left << "#Name"
     << setw(15) << "trackID"
     << setw(35) << "Position"
@@ -1268,6 +1288,9 @@ void G4ITScheduler::DoIt()
     << setw(25) << "Post step volume"
     << setw(22) << "Process"
     << G4endl;
+#ifdef USE_COLOR
+      G4cout << RESET_COLOR;
+#endif
   }
 #endif
 
@@ -1288,15 +1311,21 @@ void G4ITScheduler::DoIt()
     {
       G4ExceptionDescription exceptionDescription;
       exceptionDescription << "No track was pop back the main track list.";
-      G4Exception("G4ITScheduler::DoIt", "ITScheduler009",
+      G4Exception("G4Scheduler::DoIt", "ITScheduler009",
           FatalErrorInArgument, exceptionDescription);
     }
 
 #ifdef DEBUG
+#ifdef USE_COLOR
+      G4cout << LIGHT_RED;
+#endif
     G4cout << "*DoIt* " << GetIT(track)->GetName()
             << " ID: " << track->GetTrackID()
             <<  " at time : " << track->GetGlobalTime()
             << G4endl;
+#ifdef USE_COLOR
+      G4cout << RESET_COLOR;
+#endif
 #endif
 //    G4TrackManyList::iterator next_it (it);
 //    next_it--;
@@ -1309,11 +1338,32 @@ void G4ITScheduler::DoIt()
     // PRE STEP VERBOSE
     if(fVerbose > 3)
     {
+      G4String volumeName;
+
+      G4TouchableHandle nextTouchable = track->GetNextTouchableHandle();
+      G4VPhysicalVolume* volume (0);
+
+      if(nextTouchable
+          && (volume = nextTouchable->GetVolume()))
+      {
+        volumeName = volume->GetName();
+
+        if(volume->IsParameterised() || volume->IsReplicated())
+        {
+          volumeName+=" ";
+          volumeName+=nextTouchable->GetReplicaNumber();
+        }
+      }
+      else
+      {
+        volumeName = "OutOfWorld";
+      }
+
       G4cout << setw(18) << left << GetIT(track)->GetName()
       << setw(15) << track->GetTrackID()
       << std::setprecision(3)
       << setw(35) << G4String(G4BestUnit(track->GetPosition(), "Length"))
-      << setw(25) << track->GetVolume()->GetName()
+      << setw(25) << volumeName
       << setw(25) << "---"
       << G4endl;
     }
@@ -1327,7 +1377,7 @@ void G4ITScheduler::DoIt()
     mem_first = MemoryUsage();
 #endif
 
-    //	G4cout << " G4ITScheduler::DoIt -- fTimeStep="
+    //	G4cout << " G4Scheduler::DoIt -- fTimeStep="
 //    << fTimeStep << G4endl;
     fpStepProcessor->Stepping(track, fTimeStep);
 
@@ -1359,9 +1409,21 @@ void G4ITScheduler::DoIt()
       << setw(35) << G4String(G4BestUnit(track->GetPosition(), "Length" ))
       << setw(25) << "---";
 
-      if(track->GetVolume())
+      G4TouchableHandle nextTouchable = track->GetNextTouchableHandle();
+      G4VPhysicalVolume* volume (0);
+
+      if(nextTouchable
+          && (volume = nextTouchable->GetVolume()))
       {
-        G4cout << setw(25) << track->GetVolume()->GetName();
+        G4String volumeName = volume->GetName();
+
+        if(volume->IsParameterised() || volume->IsReplicated())
+        {
+          volumeName+=" ";
+          volumeName+=nextTouchable->GetReplicaNumber();
+        }
+
+        G4cout << setw(25) << volumeName;
       }
       else
       {
@@ -1402,7 +1464,7 @@ void G4ITScheduler::DoIt()
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::ExtractDoItData(G4ITStepProcessor* SP)
+void G4Scheduler::ExtractDoItData(G4ITStepProcessor* SP)
 {
 
   G4Track* track = SP->GetTrack();
@@ -1448,7 +1510,7 @@ void G4ITScheduler::ExtractDoItData(G4ITStepProcessor* SP)
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::PushSecondaries(G4ITStepProcessor* SP)
+void G4Scheduler::PushSecondaries(G4ITStepProcessor* SP)
 {
   G4TrackVector* secondaries = SP->GetSecondaries();
   if (!secondaries || secondaries->empty())
@@ -1472,7 +1534,7 @@ void G4ITScheduler::PushSecondaries(G4ITStepProcessor* SP)
 
 //_________________________________________________________________________
 
-void G4ITScheduler::ComputeTrackReaction()
+void G4Scheduler::ComputeTrackReaction()
 {
   if (fReactingTracks.empty())
   {
@@ -1551,7 +1613,7 @@ void G4ITScheduler::ComputeTrackReaction()
                 << G4BestUnit(secondary->GetGlobalTime(),"Time")
                 << G4endl;
 
-            G4Exception("G4ITScheduler::ComputeInteractionBetweenTracks",
+            G4Exception("G4Scheduler::ComputeInteractionBetweenTracks",
                         "ITScheduler010", FatalErrorInArgument,
                         exceptionDescription);
           }
@@ -1598,7 +1660,7 @@ void G4ITScheduler::ComputeTrackReaction()
 
         exceptionDescription
             << "The ID of one of the reaction track was not setup.";
-        G4Exception("G4ITScheduler::ComputeInteractionBetweenTracks",
+        G4Exception("G4Scheduler::ComputeInteractionBetweenTracks",
                     "ITScheduler011", FatalErrorInArgument,
                     exceptionDescription);
       }
@@ -1637,7 +1699,7 @@ void G4ITScheduler::ComputeTrackReaction()
 
 //_________________________________________________________________________
 
-void G4ITScheduler::AddTrackID(G4Track* track)
+void G4Scheduler::AddTrackID(G4Track* track)
 {
   if (fNbTracks == 0) fNbTracks = -1;
   track->SetTrackID(fNbTracks);
@@ -1646,28 +1708,28 @@ void G4ITScheduler::AddTrackID(G4Track* track)
 
 //_________________________________________________________________________
 
-void G4ITScheduler::PushTrack(G4Track* track)
+void G4Scheduler::PushTrack(G4Track* track)
 {
   if (fRunning)
   {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription
-        << "G4ITScheduler::PushTrack : You are trying to push tracks while the "
+        << "G4Scheduler::PushTrack : You are trying to push tracks while the "
             "ITScheduler is running";
-    G4Exception("G4ITScheduler::PushTrack", "ITScheduler012",
+    G4Exception("G4Scheduler::PushTrack", "ITScheduler012",
                 FatalErrorInArgument, exceptionDescription);
   }
   fTrackContainer._PushTrack(track);
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::KillTracks()
+void G4Scheduler::KillTracks()
 {
   fTrackContainer.KillTracks();
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::ResetLeadingTracks()
+void G4Scheduler::ResetLeadingTracks()
 {
   if (fLeadingTracks.empty() == false)
   {
@@ -1695,23 +1757,23 @@ void G4ITScheduler::ResetLeadingTracks()
 
 //_________________________________________________________________________
 
-void G4ITScheduler::EndTracking(G4Track* trackToBeKilled)
+void G4Scheduler::EndTracking(G4Track* trackToBeKilled)
 {
   fpTrackingManager->EndTracking(trackToBeKilled);
   fTrackContainer.PushToKill(trackToBeKilled);
 }
 //_________________________________________________________________________
 
-void G4ITScheduler::EndTracking()
+void G4Scheduler::EndTracking()
 {
   if (fRunning)
   {
     G4ExceptionDescription exceptionDescription;
     exceptionDescription
-        << "End tracking is called while G4ITScheduler is still running."
+        << "End tracking is called while G4Scheduler is still running."
         << G4endl;
 
-    G4Exception("G4ITScheduler::EndTracking", "ITScheduler017",
+    G4Exception("G4Scheduler::EndTracking", "ITScheduler017",
                 FatalErrorInArgument, exceptionDescription);
   }
 
@@ -1742,7 +1804,7 @@ void G4ITScheduler::EndTracking()
 }
 
 //_________________________________________________________________________
-void G4ITScheduler::SetInteractivity(G4ITTrackingInteractivity* interactivity)
+void G4Scheduler::SetInteractivity(G4ITTrackingInteractivity* interactivity)
 {
   fpTrackingInteractivity = interactivity;
   if (fpTrackingManager) fpTrackingManager->SetInteractivity(
@@ -1750,14 +1812,14 @@ void G4ITScheduler::SetInteractivity(G4ITTrackingInteractivity* interactivity)
 }
 
 //_________________________________________________________________________
-void G4ITScheduler::ForceReinitialization()
+void G4Scheduler::ForceReinitialization()
 {
   fInitialized = false;
   Initialize();
 }
 
 //_________________________________________________________________________
-G4ITScheduler::G4ITScheduler(const G4ITScheduler&) :
+G4Scheduler::G4Scheduler(const G4Scheduler&) :
     G4VScheduler(), G4VStateDependent(),
 fTrackContainer((G4ITTrackHolder&)*G4ITTrackHolder::Instance())
 
@@ -1766,7 +1828,7 @@ fTrackContainer((G4ITTrackHolder&)*G4ITTrackHolder::Instance())
 }
 
 //_________________________________________________________________________
-G4ITScheduler& G4ITScheduler::operator=(const G4ITScheduler& right)
+G4Scheduler& G4Scheduler::operator=(const G4Scheduler& right)
 {
   if (this != &right)
   {
@@ -1775,7 +1837,25 @@ G4ITScheduler& G4ITScheduler::operator=(const G4ITScheduler& right)
   return *this;
 }
 
-size_t G4ITScheduler::GetNTracks()
+size_t G4Scheduler::GetNTracks()
 {
   return fTrackContainer.GetNTracks();
 }
+//_________________________________________________________________________
+
+void G4Scheduler::GetCollisionType(G4String& interactionType)
+{
+  switch(fITStepStatus)
+  {
+    case eInteractionWithMedium:
+      interactionType = "eInteractionWithMedium";
+      break;
+    case eCollisionBetweenTracks:
+      interactionType = "eCollisionBetweenTracks";
+      break;
+    default:
+      interactionType = "eCollisionBetweenTracks";
+      break;
+  }
+}
+

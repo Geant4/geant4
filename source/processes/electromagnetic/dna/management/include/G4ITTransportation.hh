@@ -207,7 +207,7 @@ protected:
     // A data member for this is problematic: it is useful only if it
     // can be initialised and updated -- and a scheme is not yet possible.
 
-    G4double endpointDistance;
+    G4double fEndPointDistance;
   };
 
   //________________________________________________________________

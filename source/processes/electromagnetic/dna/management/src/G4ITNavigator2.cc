@@ -50,7 +50,7 @@
 #include "G4GeometryTolerance.hh"
 #include "G4VPhysicalVolume.hh"
 
-#define G4DEBUG_NAVIGATION 1
+//#define G4DEBUG_NAVIGATION 1
 #include "G4VoxelSafety.hh"
 
 #define fHistory fpNavigatorState->fHistory
@@ -169,7 +169,8 @@ G4ITNavigator2::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
 
 #ifdef G4VERBOSE
   if( fVerbose > 2 )
-  {
+  { 
+    static int nCalls = 0;
     G4int oldcoutPrec = G4cout.precision(8);
     G4cout << "*** G4ITNavigator2::LocateGlobalPointAndSetup: ***" << G4endl;
     G4cout << "    Called with arguments: " << G4endl
@@ -181,6 +182,8 @@ G4ITNavigator2::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
       PrintState();
     }
     G4cout.precision(oldcoutPrec);
+    nCalls++;
+//    if(nCalls == 2) abort();
   }
 #endif
 
@@ -189,8 +192,7 @@ G4ITNavigator2::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
 
   if ( !relativeSearch )
   {
-    fpNavigatorState->Reset();
-  //  ResetStackAndState();
+    ResetStackAndState();
   }
   else
   {
@@ -452,7 +454,7 @@ G4ITNavigator2::LocateGlobalPointAndSetup( const G4ThreeVector& globalPoint,
   // o Positioned daughters & voxels
   // o Positioned daughters & no voxels
 
-  noResult = true;  // noResult should be renamed to 
+  noResult = true;  // noResult should be renamed to
                     // something like enteredLevel, as that is its meaning.
   do
   {
@@ -612,6 +614,7 @@ G4ITNavigator2::LocateGlobalPointWithinVolume(const G4ThreeVector& pGlobalpoint)
    //         or else the full step is no longer being taken
    assert( !fWasLimitedByGeometry );
 #endif
+  
    fLastLocatedPointLocal = ComputeLocalPoint(pGlobalpoint);
    fLastTriedStepComputation= false;
    fChangedGrandMotherRefFrame= false;  //  Frame for Exit Normal
@@ -703,6 +706,11 @@ void G4ITNavigator2::SetNavigatorState(G4ITNavigatorState_Lock2* navState)
 //    if(navState) RestoreSavedState();
 }
 
+void G4ITNavigator2::ResetNavigatorState()
+{
+  fpNavigatorState = 0;
+}
+
 void G4ITNavigator2::NewNavigatorState()
 {
     fpNavigatorState = new G4NavigatorState();
@@ -717,6 +725,24 @@ void G4ITNavigator2::NewNavigatorState()
     }
 
     fHistory.SetFirstEntry(fTopPhysical );
+    SetupHierarchy();
+}
+
+void G4ITNavigator2::NewNavigatorState(const G4TouchableHistory &h)
+{
+    fpNavigatorState = new G4NavigatorState();
+    if(fTopPhysical == 0)
+    {
+        G4ExceptionDescription exceptionDescription;
+        exceptionDescription << "No World Volume";
+
+        G4Exception("G4ITNavigator::NewNavigatorState",
+                    "NoWorldVolume",FatalException,exceptionDescription);
+        return;
+    }
+
+    fHistory = *h.GetHistory();
+    fLastTriedStepComputation= false;  // Redundant, but best
     SetupHierarchy();
 }
 
@@ -737,7 +763,7 @@ G4VPhysicalVolume* G4ITNavigator2::NewNavigatorStateAndLocate(const G4ThreeVecto
 
     fHistory.SetFirstEntry(fTopPhysical );
     SetupHierarchy();
-    return LocateGlobalPointAndSetup(p, &direction, true, false);
+    return LocateGlobalPointAndSetup(p, &direction, false, false);
 }
 
 // ********************************************************************
@@ -1083,6 +1109,9 @@ G4double G4ITNavigator2::ComputeStep( const G4ThreeVector &pGlobalpoint,
     fCalculatedExitNormal= calculatedExitNormal;
   }
 
+
+//  G4cout << " !!!! Step = " << Step << G4endl;
+
   // Remember last safety origin & value.
   //
   fPreviousSftOrigin = pGlobalpoint;
@@ -1333,6 +1362,11 @@ G4double G4ITNavigator2::CheckNextStep( const G4ThreeVector& pGlobalpoint,
   //
   *fpNavigatorState = savedState;
   //RestoreSavedState();
+  // NOTE: the state of the current subnavigator is NOT restored.
+  // ***> TODO: restore subnavigator state
+  //            if( last_located)       Need Position of last location
+  //            if( last_computed step) Need Endposition of last step
+  
 
   return step; 
 }
@@ -1345,9 +1379,6 @@ G4double G4ITNavigator2::CheckNextStep( const G4ThreeVector& pGlobalpoint,
 //
 void G4ITNavigator2::ResetState()
 {
-    G4Exception("G4ITNavigator::ResetState()",
-                "ResetState", FatalException,
-                "G4ITNavigator::ResetState() not supported");
   fWasLimitedByGeometry  = false;
   fEntering              = false;
   fExiting               = false;
@@ -1972,6 +2003,7 @@ G4double G4ITNavigator2::ComputeSafety( const G4ThreeVector &pGlobalpoint,
     *fpNavigatorState = *savedState;
     delete savedState;
     //  RestoreSavedState();
+    // This now overwrites the values of the Safety 'sphere' (correction)
   }
 
     // Remember last safety origin & value

@@ -62,8 +62,6 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITReactionChange.hh
         G4ITReactionTable.hh
         G4ITSafetyHelper.hh
-        G4ITScheduler.hh
-        G4ITSchedulerMessenger.hh
         G4ITStepProcessor.hh
         G4ITStepStatus.hh
         G4ITTrackHolder.hh
@@ -82,6 +80,8 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4MemStat.hh
         G4ReferenceCast.hh
         G4memory.hh
+        G4Scheduler.hh
+        G4SchedulerMessenger.hh
         G4TrackingInformation.hh
         G4TrackList.hh
         G4TrackState.hh
@@ -111,8 +111,6 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4ITReactionChange.cc
         G4ITReactionTable.cc
         G4ITSafetyHelper.cc
-        G4ITScheduler.cc
-        G4ITSchedulerMessenger.cc
         G4ITStepProcessor2.cc
         G4ITStepProcessor.cc
         G4ITTrackHolder.cc
@@ -126,6 +124,8 @@ GEANT4_DEFINE_MODULE(NAME G4emdna-man
         G4KDTree.cc
         G4KDTreeResult.cc
         G4MemStat.cc
+        G4Scheduler.cc
+        G4SchedulerMessenger.cc
         G4TrackingInformation.cc
         G4TrackList.cc
         G4TrackState.cc

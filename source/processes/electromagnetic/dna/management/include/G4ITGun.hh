@@ -22,15 +22,19 @@
 
 class G4Track;
 
-class G4ITGun {
+class G4ITGun
+{
 public:
-	G4ITGun();
-	virtual ~G4ITGun();
+  G4ITGun();
+  virtual ~G4ITGun();
 
-	virtual void DefineTracks(){;}
+  virtual void DefineTracks()
+  {
+    ;
+  }
 
 protected:
-	void PushTrack(G4Track*);
+  void PushTrack(G4Track*);
 };
 
 #endif /* G4MOLECULARGUN_HH_ */

@@ -31,42 +31,43 @@ class G4UIcmdWithADoubleAndUnit;
 class G4UIcmdWithAnInteger;
 class G4UIdirectory;
 
-class G4MoleculeGunMessenger : public G4UImessenger {
+class G4MoleculeGunMessenger : public G4UImessenger
+{
 public:
-	G4MoleculeGunMessenger();
-	virtual ~G4MoleculeGunMessenger();
+  G4MoleculeGunMessenger();
+  virtual ~G4MoleculeGunMessenger();
 
-	virtual void SetNewValue(G4UIcommand * command,G4String newValue);
-	virtual G4String GetCurrentValue(G4UIcommand * command);
-	void DefineTracks(G4MoleculeGun*);
+  virtual void SetNewValue(G4UIcommand * command, G4String newValue);
+  virtual G4String GetCurrentValue(G4UIcommand * command);
+  void DefineTracks(G4MoleculeGun*);
 
 protected:
-	G4UIdirectory* fpGunDir;
-	G4UIcmdWithAString* fpGunNewGunType;
+  G4UIdirectory* fpGunDir;
+  G4UIcmdWithAString* fpGunNewGunType;
 
-	struct MultipleGun : public G4UImessenger
-	{
-		MultipleGun(const G4String& name, G4MoleculeGunMessenger*);
-		virtual ~MultipleGun();
-		virtual void SetNewValue(G4UIcommand * command,G4String newValue);
-		virtual G4String GetCurrentValue(G4UIcommand * command);
-		void DefineTracks(G4MoleculeGun*);
+  struct MultipleGun : public G4UImessenger
+  {
+    MultipleGun(const G4String& name, G4MoleculeGunMessenger*);
+    virtual ~MultipleGun();
+    virtual void SetNewValue(G4UIcommand * command, G4String newValue);
+    virtual G4String GetCurrentValue(G4UIcommand * command);
+    void DefineTracks(G4MoleculeGun*);
 
-		G4UIdirectory* fpGunType;
-		G4UIcmdWithAString* fpGunMoleculeModel;
-		G4UIcmdWith3VectorAndUnit* fpGunPosition;
-		G4UIcmdWithADoubleAndUnit* fpGunTime;
-		G4UIcmdWithAnInteger* fpGunN;
+    G4UIdirectory* fpGunType;
+    G4UIcmdWithAString* fpGunMoleculeModel;
+    G4UIcmdWith3VectorAndUnit* fpGunPosition;
+    G4UIcmdWithADoubleAndUnit* fpGunTime;
+    G4UIcmdWithAnInteger* fpGunN;
 
-		G4String fMoleculeName;
-		G4ThreeVector fPosition;
-		G4double fTime;
-		G4int fNumber;
-	};
+    G4String fMoleculeName;
+    G4ThreeVector fPosition;
+    G4double fTime;
+    G4int fNumber;
+  };
 
-	MultipleGun* CreateNewType(const G4String& name);
+  MultipleGun* CreateNewType(const G4String& name);
 
-	std::vector<MultipleGun*> fMultipleGun;
+  std::vector<MultipleGun*> fMultipleGun;
 };
 
 #endif /* MOLECULEGUNMESSENGER_HH_ */

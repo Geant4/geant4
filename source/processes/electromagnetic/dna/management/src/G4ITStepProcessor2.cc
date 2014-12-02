@@ -175,10 +175,10 @@ void G4ITStepProcessor::DoStepping()
     else
     {
         fpNavigator->SetNavigatorState(fpITrack->GetTrackingInfo()->GetNavigatorState());
-        fpNavigator->ResetHierarchyAndLocate( fpTrack->GetPosition(),
-                                              fpTrack->GetMomentumDirection(),
-                                              *((G4TouchableHistory*)fpTrack->GetTouchableHandle()()) );
-        fpNavigator->SetNavigatorState(fpITrack->GetTrackingInfo()->GetNavigatorState());
+//        fpNavigator->ResetHierarchyAndLocate( fpTrack->GetPosition(),
+//                                              fpTrack->GetMomentumDirection(),
+//                                              *((G4TouchableHistory*)fpTrack->GetTouchableHandle()()) );
+//        fpNavigator->SetNavigatorState(fpITrack->GetTrackingInfo()->GetNavigatorState());
         // We reset the navigator state before checking for AtRest
         // in case a AtRest processe would use a navigator info
 
@@ -225,7 +225,6 @@ void G4ITStepProcessor::DoStepping()
                 // In case the track has NOT the minimum step length
                 // Given the final step time, the transportation
                 // will compute the final position of the particle
-
                 fpState->fStepStatus = fPostStepDoItProc;
                 fpStep->GetPostStepPoint()
                         ->SetProcessDefinedStep(fpTransportation);
@@ -290,8 +289,7 @@ void G4ITStepProcessor::DoStepping()
             }
         }
 
-        fpITrack->GetTrackingInfo()->SetNavigatorState(fpNavigator->GetNavigatorState());
-        fpNavigator->SetNavigatorState(0);
+        fpNavigator->ResetNavigatorState();
 
 #ifdef DEBUG_MEM
     mem_intermediaire = MemoryUsage();
@@ -571,7 +569,7 @@ void G4ITStepProcessor::FindTransportationStep()
     double physicalStep(0.) ;
 
     fpTransportation =  fpProcessInfo->fpTransportation;
-    //            dynamic_cast<G4ITTransportation*>((fpProcessInfo->fpAlongStepGetPhysIntVector)[MAXofAlongStepLoops-1]);
+    // dynamic_cast<G4ITTransportation*>((fpProcessInfo->fpAlongStepGetPhysIntVector)[MAXofAlongStepLoops-1]);
 
     if(!fpTrack)
     {

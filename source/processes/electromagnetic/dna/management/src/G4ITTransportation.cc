@@ -198,7 +198,7 @@ G4ITTransportation::G4ITTransportationState::G4ITTransportationState() :
   fPreviousSftOrigin = G4ThreeVector(0, 0, 0);
   fPreviousSafety = 0.0;
   fNoLooperTrials = false;
-  endpointDistance = -1;
+  fEndPointDistance = -1;
 }
 
 G4ITTransportation::G4ITTransportationState::~G4ITTransportationState()
@@ -260,7 +260,7 @@ AlongStepGetPhysicalInteractionLength(const G4Track& track,
   // --------------------------------------
   // Note: in case another process changes touchable handle
   //    it will be necessary to add here (for all steps)
-  State(fCurrentTouchableHandle) = track.GetTouchableHandle();
+  // State(fCurrentTouchableHandle) = track.GetTouchableHandle();
 
   // GPILSelection is set to defaule value of CandidateForSelection
   // It is a return value
@@ -338,16 +338,29 @@ AlongStepGetPhysicalInteractionLength(const G4Track& track,
     {
       //  Find whether the straight path intersects a volume
       //
+      // fLinearNavigator->SetNavigatorState(GetIT(track)->GetTrackingInfo()->GetNavigatorState());
       linearStepLength = fLinearNavigator->ComputeStep(startPosition,
                                                        startMomentumDir,
                                                        currentMinimumStep,
                                                        newSafety);
+
+//      G4cout << "linearStepLength : " <<  G4BestUnit(linearStepLength,"Length")
+//          << " | currentMinimumStep: " << currentMinimumStep
+//          << " | trackID: " << track.GetTrackID() << G4endl;
+
       // Remember last safety origin & value.
       //
       State(fPreviousSftOrigin) = startPosition;
       State(fPreviousSafety) = newSafety;
-      // fpSafetyHelper->SetCurrentSafety( newSafety, startPosition);
-
+      
+      G4TrackStateManager& trackStateMan = GetIT(track)->GetTrackingInfo()
+          ->GetTrackStateManager();
+      fpSafetyHelper->LoadTrackState(trackStateMan);
+      // fpSafetyHelper->SetTrackState(state);
+      fpSafetyHelper->SetCurrentSafety(newSafety,
+                                       State(fTransportEndPosition));
+      fpSafetyHelper->ResetTrackState();
+      
       // The safety at the initial point has been re-calculated:
       //
       currentSafety = newSafety;
@@ -364,7 +377,7 @@ AlongStepGetPhysicalInteractionLength(const G4Track& track,
         geometryStepLength = currentMinimumStep;
       }
     }
-    State(endpointDistance) = geometryStepLength;
+    State(fEndPointDistance) = geometryStepLength;
 
     // Calculate final position
     //
@@ -379,7 +392,7 @@ AlongStepGetPhysicalInteractionLength(const G4Track& track,
     State(fParticleIsLooping) = false;
     State(fMomentumChanged) = false;
     State(fEndGlobalTimeComputed) = true;
-    State(theInteractionTimeLeft) = State(endpointDistance)
+    State(theInteractionTimeLeft) = State(fEndPointDistance)
         / track.GetVelocity();
     State(fCandidateEndGlobalTime) = State(theInteractionTimeLeft)
         + track.GetGlobalTime();
@@ -574,7 +587,7 @@ AlongStepGetPhysicalInteractionLength(const G4Track& track,
   // Update the safety starting from the end-point,
   // if it will become negative at the end-point.
   //
-  if (currentSafety < State(endpointDistance))
+  if (currentSafety < State(fEndPointDistance))
   {
     // if( particleCharge == 0.0 )
     //    G4cout  << "  Avoiding call to ComputeSafety : charge = 0.0 " << G4endl;
@@ -587,6 +600,7 @@ AlongStepGetPhysicalInteractionLength(const G4Track& track,
       currentSafety = endSafety;
       State(fPreviousSftOrigin) = State(fTransportEndPosition);
       State(fPreviousSafety) = currentSafety;
+      
       /*
        G4VTrackStateHandle state =
        GetIT(track)->GetTrackingInfo()->GetTrackState(fpSafetyHelper);
@@ -602,7 +616,7 @@ AlongStepGetPhysicalInteractionLength(const G4Track& track,
       // Because the Stepping Manager assumes it is from the start point,
       //  add the StepLength
       //
-      currentSafety += State(endpointDistance);
+      currentSafety += State(fEndPointDistance);
 
 #ifdef G4DEBUG_TRANSPORT
       G4cout.precision(12);
@@ -610,13 +624,16 @@ AlongStepGetPhysicalInteractionLength(const G4Track& track,
       G4cout << "  Called Navigator->ComputeSafety at "
           << State(fTransportEndPosition)
           << "    and it returned safety= " << endSafety << G4endl;
-      G4cout << "  Adding endpoint distance " << State(endpointDistance)
+      G4cout << "  Adding endpoint distance " << State(fEndPointDistance)
              << "   to obtain pseudo-safety= " << currentSafety << G4endl;
 #endif
     }
   }
 
-  //    fParticleChange.ProposeTrueStepLength(geometryStepLength) ;
+  // fParticleChange.ProposeTrueStepLength(geometryStepLength) ;
+
+//  G4cout << "G4ITTransportation::AlongStepGetPhysicalInteractionLength = "
+//         << G4BestUnit(geometryStepLength,"Length") << G4endl;
 
   return geometryStepLength;
 }
@@ -860,8 +877,11 @@ G4VParticleChange* G4ITTransportation::PostStepDoIt(const G4Track& track,
   if (State(fGeometryLimitedStep))
   {
 
-//     G4cout << "Step is limited by geometry "
-//            <<  "track ID : " << track.GetTrackID() << G4endl;
+    if(fVerboseLevel)
+    {
+     G4cout << "Step is limited by geometry "
+            <<  "track ID : " << track.GetTrackID() << G4endl;
+    }
 
     // fCurrentTouchable will now become the previous touchable,
     // and what was the previous will be freed.
@@ -884,6 +904,7 @@ G4VParticleChange* G4ITTransportation::PostStepDoIt(const G4Track& track,
     //
     if ( State(fCurrentTouchableHandle)->GetVolume() == 0)
     {
+    //  abort();
 #ifdef G4VERBOSE
       if (fVerboseLevel > 0)
       {
@@ -933,6 +954,7 @@ G4VParticleChange* G4ITTransportation::PostStepDoIt(const G4Track& track,
   {
     // This serves only to move the Navigator's location
     //
+//    abort();
     fLinearNavigator->LocateGlobalPointWithinVolume(track.GetPosition());
 
     // The value of the track's current Touchable is retained.

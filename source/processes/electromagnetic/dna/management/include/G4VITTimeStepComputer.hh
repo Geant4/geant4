@@ -61,7 +61,7 @@
 typedef CLHEP::shared_ptr< std::vector<G4Track*> > G4TrackVectorHandle;
 
 /**
-  * Before stepping all tracks G4ITStepManager calls all the G4VITModel
+  * Before stepping all tracks G4Scheduler calls all the G4VITModel
   * which may contain a G4VITTimeStepper (optionnal).
   * G4VITTimeStepper returns what should be the next global time step.
   * Time step that will be used to step all tracks.

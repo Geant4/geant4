@@ -336,8 +336,8 @@ template<class OBJECT>
 template<class OBJECT>
   void G4FastListNode<OBJECT>::UnHook()
   {
-    G4FastListNode<OBJECT>* const __next_node = this->fpNext;
-    G4FastListNode<OBJECT>* const __prev_node = this->fpPrevious;
+    G4FastListNode<OBJECT>* __next_node = this->fpNext;
+    G4FastListNode<OBJECT>* __prev_node = this->fpPrevious;
 
     if (__prev_node)
     {

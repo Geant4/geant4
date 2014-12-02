@@ -25,8 +25,9 @@
 //
 // $Id$
 //
-// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
 
+// Author: Mathieu Karamitros, kara@cenbg.in2p3.fr
+//
 // The code is developed in the framework of the ESA AO7146
 //
 // We would be very happy hearing from you, send us your feedback! :)
@@ -60,6 +61,7 @@ class G4DNAWaterIonisationStructure;
 class G4Molecule;
 class G4VUserChemistryList;
 class G4UIcmdWithABool;
+class G4UIcmdWithoutParameter;
 class G4ITGun;
 
 enum ElectronicModification
@@ -70,7 +72,7 @@ enum ElectronicModification
 };
 
 /**
- *  THIS CLASS IS A PROTOTYPE
+ * WARNING: THIS CLASS IS A PROTOTYPE
  * G4DNAChemistryManager is called from the physics models.
  * It creates the water molecules and the solvated electrons and
  * and send them to G4ITStepManager to be treated in the chemistry stage.
@@ -84,23 +86,37 @@ enum ElectronicModification
 
 class G4DNAChemistryManager : public G4UImessenger, public G4VStateDependent
 {
-  virtual
-  ~G4DNAChemistryManager();
+protected:
+  virtual ~G4DNAChemistryManager();
 
 public:
-  static G4DNAChemistryManager*
-  Instance();
-  static G4DNAChemistryManager*
-  GetInstanceIfExists();
-
-  virtual G4bool Notify(G4ApplicationState requestedState);
+  //============================================================================
+  // STATIC METHODS
+  //============================================================================
+  static G4DNAChemistryManager* Instance();
+  static G4DNAChemistryManager* GetInstanceIfExists();
 
   /**
    * You should rather use DeleteInstance than the destructor of this class
    */
   static void DeleteInstance();
+  G4bool IsChemistryActivated();
+  void SetChemistryActivation(G4bool);
+  static G4bool IsActivated();
+  static void Activated(G4bool flag = true);
 
+  //============================================================================
+  // VIRTUAL METHODS
+  //============================================================================
+  virtual G4bool Notify(G4ApplicationState requestedState);
+  virtual void SetNewValue(G4UIcommand*, G4String);
+
+  //============================================================================
+  // INITIALIZATION AND FINALIZATION METHODS
+  //============================================================================
   void Initialize();
+  inline void SetChemistryList(G4VUserChemistryList*);
+  inline void Deregister(G4VUserChemistryList*);
 
   inline void ForceMasterReinitialization();
   inline void TagThreadForReinitialization();
@@ -108,28 +124,29 @@ public:
   void Run();
   void Clear();
   void Gun(G4ITGun*, bool physicsTableToBuild = true);
+  inline void ForceThreadReinitialization();
+  inline void ForceRebuildingPhysicsTable();
 
-  virtual void SetNewValue(G4UIcommand*, G4String);
-
+  //============================================================================
+  // FILE OPERATIONS
+  //============================================================================
   /**
    * Tells the chemMan to write into a file
    * the position and electronic state of the water molecule
    * and the position thermalized or not of the solvated electron
    */
-  void WriteInto(const G4String&,
-                 std::ios_base::openmode mode =
-                 std::ios_base::out);
+  void WriteInto(const G4String&, std::ios_base::openmode mode =
+      std::ios_base::out);
+  void AddEmptyLineInOuputFile();
 
   /**
    * Close the file specified with WriteInto
    */
   void CloseFile();
-  inline G4bool IsChemistryActivated();
-  void SetChemistryActivation(G4bool);
 
-  inline void SetChemistryList(G4VUserChemistryList*);
-  inline void Deregister(G4VUserChemistryList*);
-
+  //============================================================================
+  // PUSH MOLECULES
+  //============================================================================
   /**
    * Method used by DNA physics model to create a water molecule.
    * The ElectronicModification is a flag telling wheter the molecule
@@ -138,8 +155,8 @@ public:
    * of this molecule, for instance an electron.
    */
   void CreateWaterMolecule(ElectronicModification,
-                      G4int /*electronicLevel*/,
-                      const G4Track* /*theIncomingTrack*/);
+                           G4int /*electronicLevel*/,
+                           const G4Track* /*theIncomingTrack*/);
 
   /**
    * On the same idea as the previous method but for solvated electron.
@@ -147,37 +164,38 @@ public:
    * process.
    */
   void CreateSolvatedElectron(const G4Track* /*theIncomingTrack*/,
-                         G4ThreeVector* finalPosition = 0);
+                              G4ThreeVector* finalPosition = 0);
 
   /**
    * WARNING : In case chemistry is not activated, PushMolecule will take care
    * of deleting the transfered molecule.
-   * Before calling this method, it is also possible to check if the chemistry is activated
-   * through IsChemistryActived().
-   * This method will create the track corresponding to the transfered molecule and will be in charge
-   * of loading the new track to the system.
+   * Before calling this method, it is also possible to check if the chemistry
+   * is activated through IsChemistryActived().
+   * This method will create the track corresponding to the transfered molecule
+   * and will be in charge of loading the new track to the system.
    */
 
   void PushMolecule(G4Molecule*& molecule,
-               double time,
-               const G4ThreeVector& position,
-               int parentID);
+                    double time,
+                    const G4ThreeVector& position,
+                    int parentID);
 
   /**
    * WARNING : In case chemistry is not activated, PushMoleculeAtParentTimeAndPlace
    * will take care of deleting the transfered molecule.
-   * Before calling this method, it is also possible to check if the chemistry is activated
-   * through IsChemistryActived().
-   * This method will create the track corresponding to the transfered molecule and will be in charge
-   * of loading the new track to the system.
+   * Before calling this method, it is also possible to check if the chemistry
+   * is activated through IsChemistryActived().
+   * This method will create the track corresponding to the transfered molecule
+   * and will be in charge of loading the new track to the system.
    */
   void PushMoleculeAtParentTimeAndPlace(G4Molecule*& molecule,
-                                   const G4Track* /*theIncomingTrack*/);
+                                        const G4Track* /*theIncomingTrack*/);
 
-  void AddEmptyLineInOuputFile();
 
-  inline void ForceThreadReinitialization();
-  inline void ForceRebuildingPhysicsTable();
+  inline void SetVerbose(G4int verbose)
+  {
+    fVerbose = verbose;
+  }
 
 protected:
   G4DNAWaterExcitationStructure* GetExcitationLevel();
@@ -191,8 +209,10 @@ protected:
 private:
   G4UIdirectory* fpChemDNADirectory;
   G4UIcmdWithABool* fpActivateChem;
+  G4UIcmdWithoutParameter* fpRunChem;
 
   static G4DNAChemistryManager* fgInstance;
+//  static bool fActiveChemistry;
   bool fActiveChemistry;
   G4bool fFileInitialized;
   G4bool fWriteFile;
@@ -209,6 +229,8 @@ private:
   G4bool fPhysicsTableBuilt;
 
   G4bool fGeometryClosed;
+
+  G4int fVerbose;
 };
 
 inline void G4DNAChemistryManager::ForceRebuildingPhysicsTable()
@@ -216,24 +238,13 @@ inline void G4DNAChemistryManager::ForceRebuildingPhysicsTable()
   fPhysicsTableBuilt = false;
 }
 
-inline G4bool G4DNAChemistryManager::IsChemistryActivated()
-{
-  return fActiveChemistry;
-}
-
-inline void G4DNAChemistryManager::SetChemistryActivation(G4bool flag)
-{
-  fActiveChemistry = flag;
-}
-
-inline void
-G4DNAChemistryManager::SetChemistryList(G4VUserChemistryList* chemistryList)
+inline void G4DNAChemistryManager::SetChemistryList(G4VUserChemistryList* chemistryList)
 {
   fpUserChemistryList = chemistryList;
+  Activated();
 }
 
-inline void
-G4DNAChemistryManager::Deregister(G4VUserChemistryList* chemistryList)
+inline void G4DNAChemistryManager::Deregister(G4VUserChemistryList* chemistryList)
 {
   if (fpUserChemistryList == chemistryList) fpUserChemistryList = 0;
 }

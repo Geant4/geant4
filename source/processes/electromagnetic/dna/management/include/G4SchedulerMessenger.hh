@@ -52,28 +52,29 @@
 #ifndef G4ITSTEPPINGMESSENGER_H
 #define G4ITSTEPPINGMESSENGER_H
 
-class G4ITScheduler;
+class G4Scheduler;
 class G4UIdirectory;
 class G4UIcmdWithoutParameter;
 class G4UIcmdWithAnInteger;
 class G4UIcommand;
 class G4UIcmdWithADoubleAndUnit;
+class G4UIcmdWithABool;
 
 #include "G4UImessenger.hh"
 #include "globals.hh"
 
-class G4ITSchedulerMessenger: public G4UImessenger
+class G4SchedulerMessenger: public G4UImessenger
 {
   public:
-    G4ITSchedulerMessenger(G4ITScheduler* runMgr);
-    ~G4ITSchedulerMessenger();
+    G4SchedulerMessenger(G4Scheduler* runMgr);
+    ~G4SchedulerMessenger();
 
   public:
     void SetNewValue(G4UIcommand * command,G4String newValues);
     G4String GetCurrentValue(G4UIcommand * command);
 
   private:
-    G4ITScheduler * fITStepManager;
+    G4Scheduler * fScheduler;
 
   private: //commands
     G4UIdirectory*              fITDirectory;
@@ -85,6 +86,8 @@ class G4ITSchedulerMessenger: public G4UImessenger
     G4UIcmdWithoutParameter*    fInitCmd;
     G4UIcmdWithoutParameter*    fProcessCmd;
     G4UIcmdWithAnInteger*       fMaxNULLTimeSteps;
+    G4UIcmdWithoutParameter*    fWhyDoYouStop;
+    G4UIcmdWithABool*           fUseDefaultTimeSteps;
 };
 
 #endif // G4ITSTEPPINGMESSENGER_H

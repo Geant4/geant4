@@ -60,6 +60,7 @@ G4VITTrackHolder* G4VITTrackHolder::Instance()
 
 void G4VITTrackHolder::Push(G4Track* track)
 {
+  //abort();
   delete track;
 }
 

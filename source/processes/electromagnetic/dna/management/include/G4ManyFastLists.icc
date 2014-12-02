@@ -79,8 +79,8 @@ template<class OBJECT>
       HasReachedEnd();
     }
 
-    assert(fIterator.GetNode());
-    assert(fIterator.GetNode()->GetObject());
+//    assert(fIterator.GetNode());
+//    assert(fIterator.GetNode()->GetObject());
 
     return *this;
   }

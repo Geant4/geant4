@@ -104,7 +104,7 @@ class G4ITTrackHolder : public G4VITTrackHolder
 
   static G4ThreadLocal G4ITTrackHolder* fgInstance;
   static G4ITTrackHolder* fgMasterInstance;
-  friend class G4ITScheduler;
+  friend class G4Scheduler;
 
 public:
   //----- typedefs -----
@@ -191,6 +191,11 @@ public:
 
   bool CheckMapIsNOTEmpty(MapOfPriorityLists& mapOfLists,
       PriorityList::Type type);
+
+  inline void SetVerbose(int verbose)
+  {
+    fVerbose = verbose;
+  }
 
 protected:
   void AddTrackID(G4Track* track);

@@ -485,7 +485,7 @@ void G4DNAChampionElasticModel::SetKillBelowThreshold(G4double threshold)
   {
     G4cout<< "*** WARNING : the G4DNAChampionElasticModel class is not "
         "activated below 7.4 eV !" << G4endl;
-    G4cout<< "*** NOTE: if you are using G4EmDNAChemistry, do not worry for "
-        "this warning" << G4endl;
+    G4cout<< "*** NOTE: if you are using G4EmDNAChemistry, do not worry, this is"
+        " the expected behavior" << G4endl;
   }
 }

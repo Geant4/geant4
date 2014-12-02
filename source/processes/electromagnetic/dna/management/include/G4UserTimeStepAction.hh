@@ -59,7 +59,7 @@
 #include <vector>
 
 /**
- * G4UserTimeStepAction is used by G4ITStepManager.
+ * G4UserTimeStepAction is used by G4Scheduler.
  * - StartProcessing called before processing
  * - TimeStepAction called at every global step
  * - UserReactionAction called when a reaction occurs
@@ -74,10 +74,11 @@ public:
   virtual ~G4UserTimeStepAction();
 
   virtual void StartProcessing(){;}
+  virtual void NewStage(){;}
 
   /** In this method, the user can use :
-   * G4ITStepManager::Instance()->GetGlobalTime(), to know the current simulation time
-   * G4ITStepManager::Instance()->GetTimeStep(), to know the selected minimum time
+   * G4Scheduler::Instance()->GetGlobalTime(), to know the current simulation time
+   * G4Scheduler::Instance()->GetTimeStep(), to know the selected minimum time
    * WARNING : The call of this method happens before the call of DoIT methods
    */
   virtual void UserPreTimeStepAction(){;}

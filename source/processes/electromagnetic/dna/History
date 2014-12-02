@@ -14,6 +14,22 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------*
 
+01-12-2014, MK,  tag emdna-V10-00-63
+- Temporary fix for avoiding bad relocation of Brownian particles
+It slows the computation by forcing the Brownian particles to stop at the volumes' boundaries
+- Transform fStopAndAlive to fStopAndKill in G4DNABrownianTransportation
+  when the particle has reached a boundary
+
+28-11-2014, MK, tag emdna-V10-00-62
+- Retag
+
+28-11-2014, MK, tag emdna-V10-00-61
+- Fix chemistry initialization in standalone
+- Fix Brownian navigation
+- Some fixes related to scheduler
+- Rename macro commands to reflect usage of scheduler
+- Enhance comments
+
 24-11-2014, MK, tag emdna-V10-00-60
 - Remove a useless but also fatal (when chemistry is not activated) exception
 

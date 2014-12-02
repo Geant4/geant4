@@ -44,7 +44,6 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-
 #ifndef G4ITMODELMANAGER_H
 #define G4ITMODELMANAGER_H
 
@@ -53,25 +52,25 @@
 #include "G4VITStepModel.hh"
 
 /**
-  * G4ITModelManager chooses which model to use according
-  * to the global simulation time.
-  */
+ * G4ITModelManager chooses which model to use according
+ * to the global simulation time.
+ */
 class G4ITModelManager
 {
 
 public:
-    G4ITModelManager();
-    ~G4ITModelManager();
-    void Initialize();
-    G4ITModelManager(const G4ITModelManager& other);
-    G4ITModelManager& operator=(const G4ITModelManager& rhs);
-    void SetModel(G4VITStepModel* aModel, G4double startingTime);
-    G4VITStepModel* GetModel(const G4double globalTime);
+  G4ITModelManager();
+  ~G4ITModelManager();
+  void Initialize();
+  G4ITModelManager(const G4ITModelManager& other);
+  G4ITModelManager& operator=(const G4ITModelManager& rhs);
+  void SetModel(G4VITStepModel* aModel, G4double startingTime);
+  G4VITStepModel* GetModel(const G4double globalTime);
 
-protected :
-    typedef std::map<G4double /*startingTime*/, G4VITStepModel* /*aModel*/>  mapModels ;
-    mapModels fModels ;
-    G4bool fIsInitialized ;
+protected:
+  typedef std::map<G4double /*startingTime*/, G4VITStepModel* /*aModel*/> mapModels;
+  mapModels fModels;
+  G4bool fIsInitialized;
 };
 
 #endif // G4ITMODELMANAGER_H

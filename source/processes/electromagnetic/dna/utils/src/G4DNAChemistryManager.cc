@@ -38,7 +38,7 @@
 
 #include "G4DNAChemistryManager.hh"
 
-#include <G4VScheduler.hh>
+#include "G4Scheduler.hh"
 #include "G4SystemOfUnits.hh"
 #include "G4Molecule.hh"
 #include "G4VITTrackHolder.hh"
@@ -52,6 +52,7 @@
 #include "G4VUserChemistryList.hh"
 #include "G4AutoLock.hh"
 #include "G4UIcmdWithABool.hh"
+#include "G4UIcmdWithoutParameter.hh"
 #include "G4GeometryManager.hh"
 #include "G4StateManager.hh"
 #include "G4MoleculeFinder.hh"
@@ -62,31 +63,27 @@ G4DNAChemistryManager* G4DNAChemistryManager::fgInstance;
 G4ThreadLocal std::ofstream* G4DNAChemistryManager::fpgOutput_tl = 0;
 G4ThreadLocal G4bool* G4DNAChemistryManager::fpgThreadInitialized_tl = 0;
 G4Mutex chemManExistence;
+//bool G4DNAChemistryManager::fActiveChemistry = false;
 
 G4DNAChemistryManager::G4DNAChemistryManager() :
-    G4UImessenger(), G4VStateDependent(), fActiveChemistry(false)
+    G4UImessenger(), G4VStateDependent()
 {
 //==============================================================================
 /* M.K: 24/11/2014
- * The following exception ends also the application when the chemistry is not
- * activated -- since the activation of the chemistry module is checked through
- * G4DNAChemistryManager on the threads only
- * TODO: find a solution to this
- * solution: put the activation flag static, so that it can be modified without
- * the need to create the singleton when the singleton is created, check
- * whether the chemistry is activated if the singleton is created from a thread
- * and the chemsitry is activated then ends with this exception.
+ * To work properly, the chemistry manager should be created and initialized on
+ * the master thread only. If the static flag fActiveChemistry is on but the
+ * chemistry manager singleton
  */
-//  if(G4Threading::IsWorkerThread()
-//  && G4Threading::IsMultithreadedApplication())
+//==============================================================================
+
+//  if (/*fActiveChemistry &&*/ G4Threading::IsWorkerThread()
+//      && G4Threading::IsMultithreadedApplication())
 //  {
 //    G4Exception("G4DNAChemistryManager::G4DNAChemistryManager",
-//                "G4DNAChemistryManager_MASTER_CREATION",
-//                FatalException,
-//                "The chemistry manager should be initialized on the master "
-//                "thread only");
+//                "G4DNAChemistryManager_MASTER_CREATION", FatalException,
+//                "The chemistry manager should be created and initialized on the "
+//                "master thread only");
 //  }
-//==============================================================================
 
   fpExcitationLevel = 0;
   fpIonisationLevel = 0;
@@ -95,11 +92,14 @@ G4DNAChemistryManager::G4DNAChemistryManager() :
   fMasterInitialized = false;
   fpChemDNADirectory = new G4UIdirectory("/process/em/dna/chem/");
   fpActivateChem = new G4UIcmdWithABool("/process/em/dna/chem/activate", this);
+  fpRunChem = new G4UIcmdWithoutParameter("/process/em/dna/chem/run", this);
   fBuildPhysicsTable = false;
   fGeometryClosed = false;
   fPhysicsTableBuilt = false;
   fForceThreadReinitialization = false;
   fFileInitialized = false;
+  fVerbose = 0;
+  fActiveChemistry = false;
 }
 
 G4DNAChemistryManager*
@@ -154,13 +154,13 @@ void G4DNAChemistryManager::Clear()
     {
       delete fpUserChemistryList;
     }
-    else
-    {
+//    else
+//    {
 //   G4cout << "G4DNAChemistryManager will not delete the chemistry list "
 //       "since it inherits from G4VPhysicsConstructor and it is then "
 //       "expected to be the responsability to the G4VModularPhysics to handle"
 //       " the chemistry list." << G4endl;
-    }
+//    }
     fpUserChemistryList = 0;
   }
 
@@ -175,6 +175,12 @@ void G4DNAChemistryManager::Clear()
     fpActivateChem = 0;
   }
 
+  if(fpRunChem)
+  {
+    delete fpRunChem;
+    fpRunChem = 0;
+  }
+
   G4DNAMolecularReactionTable::DeleteInstance();
   //G4MoleculeHandleManager::DeleteInstance();
   G4MolecularConfiguration::DeleteManager();
@@ -183,7 +189,8 @@ void G4DNAChemistryManager::Clear()
 
 void G4DNAChemistryManager::DeleteInstance()
 {
-  G4cout << "G4DNAChemistryManager::DeleteInstance" << G4endl;
+  //G4cout << "G4DNAChemistryManager::DeleteInstance" << G4endl;
+
   G4AutoLock lock(&chemManExistence);
 
   if(fgInstance)
@@ -204,6 +211,7 @@ G4bool G4DNAChemistryManager::Notify(G4ApplicationState requestedState)
 {
   if (requestedState == G4State_Quit)
   {
+    if(fVerbose)
     G4cout << "G4DNAChemistryManager::Notify ---> received G4State_Quit"
            << G4endl;
     //DeleteInstance();
@@ -222,7 +230,11 @@ void G4DNAChemistryManager::SetNewValue(G4UIcommand* command, G4String value)
 {
   if (command == fpActivateChem)
   {
-    SetChemistryActivation(fpActivateChem->GetNewBoolValue(value));
+    Activated(G4UIcmdWithABool::GetNewBoolValue(value));
+  }
+  else if (command == fpRunChem)
+  {
+    Run();
   }
 }
 
@@ -248,7 +260,7 @@ void G4DNAChemistryManager::Run()
                   description);
     }
 
-    G4VScheduler::Instance()->Process();
+    G4Scheduler::Instance()->Process();
     CloseFile();
   }
 }
@@ -256,27 +268,40 @@ void G4DNAChemistryManager::Run()
 void G4DNAChemistryManager::Gun(G4ITGun* gun, bool physicsTableToBuild)
 {
   fBuildPhysicsTable = physicsTableToBuild;
-  G4VScheduler::Instance()->SetGun(gun);
+  G4Scheduler::Instance()->SetGun(gun);
 }
 
 void G4DNAChemistryManager::Initialize()
 {
-  if(G4Threading::IsWorkerThread()
-  && G4Threading::IsMultithreadedApplication())
+  //===========================================================================
+  // MT MODE
+  //===========================================================================
+  if(G4Threading::IsMultithreadedApplication())
   {
-    InitializeThread();
-    return;
+    //==========================================================================
+    // ON WORKER THREAD
+    //==========================================================================
+    if(G4Threading::IsWorkerThread())
+    {
+      InitializeThread(); // Will create and initialize G4ITScheduler
+      return;
+    }
+    //==========================================================================
+    // ON MASTER THREAD
+    //==========================================================================
+    else
+    {
+      InitializeMaster();
+      return;
+    }
   }
-  else if (G4Threading::IsWorkerThread() == false
-  && G4Threading::IsMultithreadedApplication())
+  //===========================================================================
+  // IS NOT IN MT MODE
+  //===========================================================================
+  else
   {
     InitializeMaster();
-    return;
-  }
-  else if (G4Threading::IsMultithreadedApplication() == false)
-  {
-    InitializeMaster();
-    InitializeThread();
+    // In this case: InitializeThread is called when Run() is called
     return;
   }
 
@@ -284,16 +309,16 @@ void G4DNAChemistryManager::Initialize()
 
 void G4DNAChemistryManager::InitializeMaster()
 {
-  if(G4Threading::IsWorkerThread()
-  && G4Threading::IsMultithreadedApplication())
-  {
-    InitializeThread();
-    return;
-  }
-
   if (fMasterInitialized == false)
   {
-    G4VScheduler::Instance(); // initialize the time stepper
+    if(fVerbose)
+    {
+     G4cout << "G4DNAChemistryManager::InitializeMaster() is called" << G4endl;
+    }
+
+    G4Scheduler::Instance(); 
+    // creates a concrete object of the scheduler 
+    // and track container
 
     if (fpUserChemistryList)
     {
@@ -321,11 +346,30 @@ void G4DNAChemistryManager::InitializeThread()
   {
     if (fpUserChemistryList)
     {
+      if(fVerbose)
+      {
+        G4cout << "G4DNAChemistryManager::InitializeThread() is called"
+               << G4endl;
+      }
+
       if (fBuildPhysicsTable && fPhysicsTableBuilt == false)
       {
+        if(fVerbose)
+        {
+          G4cout << "G4DNAChemistryManager: Build the physics tables for "
+              "molecules."
+                 << G4endl;
+        }
+
         fpUserChemistryList->BuildPhysicsTable();
         if (fGeometryClosed == false)
         {
+          if(fVerbose)
+          {
+            G4cout << "G4DNAChemistryManager: Close geometry"
+                   << G4endl;
+          }
+
           G4GeometryManager* geomManager = G4GeometryManager::GetInstance();
           // G4cout << "Start closing geometry." << G4endl;
           geomManager->OpenGeometry();
@@ -337,7 +381,8 @@ void G4DNAChemistryManager::InitializeThread()
       }
       fpUserChemistryList->ConstructTimeStepModel(
           G4DNAMolecularReactionTable::GetReactionTable());
-      G4VScheduler::Instance()->Initialize();
+      G4Scheduler::Instance()->Initialize();
+
       fpgThreadInitialized_tl = new G4bool(true);
     }
     else
@@ -361,6 +406,12 @@ void G4DNAChemistryManager::InitializeFile()
     return;
   }
 
+  if(fVerbose)
+  {
+    G4cout << "G4DNAChemistryManager::InitializeFile() is called"
+           << G4endl;
+  }
+
   *fpgOutput_tl << std::setprecision(6) << std::scientific;
   *fpgOutput_tl << setw(11) << left << "#Parent ID" << setw(10) << "Molecule"
                 << setw(14) << "Elec Modif" << setw(13) << "Energy (eV)"
@@ -377,13 +428,47 @@ void G4DNAChemistryManager::InitializeFile()
   fFileInitialized = true;
 }
 
+G4bool G4DNAChemistryManager::IsActivated()
+{
+  return Instance()->fActiveChemistry;
+}
+
+void G4DNAChemistryManager::Activated(G4bool flag)
+{
+  Instance()->fActiveChemistry = flag;
+}
+
+G4bool G4DNAChemistryManager::IsChemistryActivated()
+{
+  return fActiveChemistry;
+}
+
+void G4DNAChemistryManager::SetChemistryActivation(G4bool flag)
+{
+  fActiveChemistry = flag;
+}
+
 void G4DNAChemistryManager::WriteInto(const G4String& output,
                                       ios_base::openmode mode)
 {
+  if (fVerbose)
+  {
+    G4cout << "G4DNAChemistryManager: Write chemical stage into "
+           << output.data() << G4endl;
+  }
+
   fpgOutput_tl = new std::ofstream();
   fpgOutput_tl->open(output.data(), mode);
   fWriteFile = true;
   fFileInitialized = false;
+}
+
+void G4DNAChemistryManager::AddEmptyLineInOuputFile()
+{
+  if (fWriteFile)
+  {
+    *fpgOutput_tl << G4endl;
+  }
 }
 
 void G4DNAChemistryManager::CloseFile()
@@ -392,6 +477,10 @@ void G4DNAChemistryManager::CloseFile()
 
   if (fpgOutput_tl->is_open())
   {
+    if (fVerbose)
+    {
+      G4cout << "G4DNAChemistryManager: Close File" << G4endl;
+    }
     fpgOutput_tl->close();
   }
 }
@@ -476,9 +565,10 @@ void G4DNAChemistryManager::CreateWaterMolecule(ElectronicModification modificat
     H2OTrack -> SetParentID(theIncomingTrack->GetTrackID());
     H2OTrack -> SetTrackStatus(fStopButAlive);
     H2OTrack -> SetKineticEnergy(0.);
-
     G4VITTrackHolder::Instance()->Push(H2OTrack);
   }
+//  else
+//	abort();
 }
 
 void G4DNAChemistryManager::CreateSolvatedElectron(const G4Track* theIncomingTrack,
@@ -592,13 +682,5 @@ void G4DNAChemistryManager::PushMoleculeAtParentTimeAndPlace(G4Molecule*& molecu
   {
     delete molecule;
     molecule = 0;
-  }
-}
-
-void G4DNAChemistryManager::AddEmptyLineInOuputFile()
-{
-  if (fWriteFile)
-  {
-    *fpgOutput_tl << G4endl;
   }
 }

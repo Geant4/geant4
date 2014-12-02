@@ -118,6 +118,8 @@ public:
   G4ITNavigatorState_Lock2* GetNavigatorState();
   void SetNavigatorState(G4ITNavigatorState_Lock2*);
   void NewNavigatorState();
+  void NewNavigatorState(const G4TouchableHistory &h);
+  void ResetNavigatorState();
   G4VPhysicalVolume* NewNavigatorStateAndLocate(const G4ThreeVector &p,
                                                 const G4ThreeVector &direction);
   void CheckNavigatorState() const;
@@ -427,7 +429,9 @@ public:
     G4NavigatorState& operator=(const G4NavigatorState& );
     G4NavigatorState& operator=(const G4SaveNavigatorState& );
 
-    void Reset();
+    void ResetState();
+    void ResetStack();
+    void ResetStackAndState();
 
     G4NavigationHistory fHistory;
     // Transformation and history of the current path
@@ -543,10 +547,9 @@ public:
     G4int sLastStepWasZero;
 
     // !>
-    G4bool sLocatedOnEdge;
-    G4bool sWasLimitedByGeometry;
-    G4bool sPushed;
-    G4int sNumberZeroSteps;
+//    G4bool sLocatedOnEdge;
+//    G4bool sPushed;
+//    G4int sNumberZeroSteps;
     // <!
 
     //  Potentially relevant
@@ -554,6 +557,8 @@ public:
     G4bool sLocatedOutsideWorld;
     G4ThreeVector sLastLocatedPointLocal;
     G4bool sEnteredDaughter, sExitedMother;
+    G4bool sWasLimitedByGeometry;
+
     G4ThreeVector sPreviousSftOrigin;
     G4double sPreviousSafety;
   };
@@ -593,7 +598,8 @@ if(fpNavigatorState == 0) \
     exceptionDescription << "The navigator state is NULL. "; \
     exceptionDescription << "Either NewNavigatorStateAndLocate was not called "; \
     exceptionDescription << "or the provided navigator state was already NULL."; \
-    G4Exception((G4String("G4Navigator")+G4String(__FUNCTION__)).c_str(),"NavigatorStateNotValid",FatalException,exceptionDescription); \
+    G4Exception((G4String("G4Navigator")+G4String(__FUNCTION__)).c_str(),\
+                "NavigatorStateNotValid",FatalException,exceptionDescription); \
 }
 
 #include "G4ITNavigator2.icc"

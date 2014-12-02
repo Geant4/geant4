@@ -44,7 +44,6 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-
 #ifndef G4ITModelHandler_H
 #define G4ITModelHandler_H
 
@@ -53,64 +52,72 @@
 #include "G4ITModelManager.hh"
 
 /**
-  * G4ITModelHandler holds for two IT types the corresponding model manager
-  */
+ * G4ITModelHandler holds for two IT types the corresponding model manager
+ */
 class G4ITModelHandler
 {
 public:
-    G4ITModelHandler();
-    G4ITModelHandler(const G4ITModelHandler& other);
-    G4ITModelHandler& operator=(const G4ITModelHandler& rhs);
+  G4ITModelHandler();
+  G4ITModelHandler(const G4ITModelHandler& other);
+  G4ITModelHandler& operator=(const G4ITModelHandler& rhs);
 
-    /** Default destructor */
-    ~G4ITModelHandler();
+  /** Default destructor */
+  ~G4ITModelHandler();
 
-    void Initialize();
+  void Initialize();
 
-    // Register a model at a starting time (time1)
-    // if a second model is registered at a later time (time2);
-    // the second model will be considered from
-    // time2 to the end of simulation
-    void RegisterModel(G4VITStepModel* aModel, const G4double globalTime);
+  // Register a model at a starting time (time1)
+  // if a second model is registered at a later time (time2);
+  // the second model will be considered from
+  // time2 to the end of simulation
+  void RegisterModel(G4VITStepModel* aModel, const G4double globalTime);
 
-    // Model applying for type 1 and type 2
-    inline G4ITModelManager* GetModelManager(G4ITType, G4ITType);
-    void              SetModel(G4ITType, G4ITType, G4VITStepModel* aModel, G4double startingTime);
-    G4VITStepModel*       GetModel(G4ITType, G4ITType, const G4double globalTime);
+  // Model applying for type 1 and type 2
+  inline G4ITModelManager* GetModelManager(G4ITType, G4ITType);
+  void SetModel(G4ITType,
+                G4ITType,
+                G4VITStepModel* aModel,
+                G4double startingTime);
+  G4VITStepModel* GetModel(G4ITType, G4ITType, const G4double globalTime);
 
-    //
-    inline const std::vector<std::vector<G4ITModelManager*> >* GetAllModelManager()
-    {
-        return &fModelManager;
-    }
+  //
+  inline const std::vector<std::vector<G4ITModelManager*> >* GetAllModelManager()
+  {
+    return &fModelManager;
+  }
 
-    inline bool GetTimeStepComputerFlag() {return fTimeStepComputerFlag;}
-    inline bool GetReactionProcessFlag() {return fReactionProcessFlag;}
+  inline bool GetTimeStepComputerFlag()
+  {
+    return fTimeStepComputerFlag;
+  }
+  inline bool GetReactionProcessFlag()
+  {
+    return fReactionProcessFlag;
+  }
 
 protected:
-    G4bool fIsInitialized;
-    std::vector<std::vector<G4ITModelManager*> > fModelManager ;
+  G4bool fIsInitialized;
+  std::vector<std::vector<G4ITModelManager*> > fModelManager;
 
-    G4bool fTimeStepComputerFlag; // Set true if a computer is registered
-    G4bool fReactionProcessFlag; // Set true if a reaction process is registered
+  G4bool fTimeStepComputerFlag; // Set true if a computer is registered
+  G4bool fReactionProcessFlag; // Set true if a reaction process is registered
 };
 
-inline
-G4ITModelManager* G4ITModelHandler::GetModelManager(G4ITType type1, G4ITType type2)
+inline G4ITModelManager* G4ITModelHandler::GetModelManager(G4ITType type1,
+                                                           G4ITType type2)
 {
-    if(fModelManager.empty())
-    {
-        return 0;
-    }
+  if (fModelManager.empty())
+  {
+    return 0;
+  }
 
-    if((int) fModelManager.size() < type1) return 0;
+  if ((int) fModelManager.size() < type1) return 0;
 
-    std::vector<G4ITModelManager*>* v = &(fModelManager.at(type1));
+  std::vector<G4ITModelManager*>* v = &(fModelManager.at(type1));
 
-    if((int) v->size() < type2) return 0;
+  if ((int) v->size() < type2) return 0;
 
-    return v->at(type2);
+  return v->at(type2);
 }
-
 
 #endif // G4ITModelHandler_H

@@ -44,8 +44,8 @@
 // J. Comput. Phys. 274 (2014) 841-882
 // Prog. Nucl. Sci. Tec. 2 (2011) 503-508 
 
-#ifndef G4ITStepManager_h
-#define G4ITStepManager_h
+#ifndef G4Scheduler_h
+#define G4Scheduler_h
 
 #include <G4VScheduler.hh>
 #include <vector>
@@ -64,7 +64,7 @@ class G4ITModelProcessor;
 class G4ITStepProcessor;
 class G4Track;
 class G4UserTimeStepAction;
-class G4ITSchedulerMessenger;
+class G4SchedulerMessenger;
 class G4ITTrackingInteractivity;
 class G4ITGun;
 
@@ -72,15 +72,15 @@ class G4ITGun;
  * G4ITStepManager enables to synchronize in time
  * the step of tracks.
  */
-class G4ITScheduler :
+class G4Scheduler :
     public G4VScheduler,
     public G4VStateDependent
 {
 protected:
-  virtual ~G4ITScheduler();
+  virtual ~G4Scheduler();
 
 public:
-  static G4ITScheduler* Instance();
+  static G4Scheduler* Instance();
   /** DeleteInstance should be used instead
    * of the destructor
    */
@@ -133,7 +133,11 @@ public:
   inline G4double GetPreviousTimeStep() const;
   inline G4double GetGlobalTime() const;
   inline void SetUserAction(G4UserTimeStepAction*);
-  inline G4UserTimeStepAction* GetUserReactionAction() const;
+  inline G4UserTimeStepAction* GetUserTimeStepAction() const;
+
+  // To use with transportation only, no reactions
+  inline void UseDefaultTimeSteps(G4bool);
+  inline G4bool AreDefaultTimeStepsUsed();
 
   inline G4bool GetComputeTimeStepFlag() const;
 
@@ -152,6 +156,8 @@ public:
   inline G4ITTrackingInteractivity* GetInteractivity();
 
   virtual size_t GetNTracks();
+
+  void GetCollisionType(G4String& interactionType);
 
 protected:
 
@@ -182,14 +188,14 @@ protected:
   void ResetLeadingTracks();
 
 private:
-  G4ITScheduler();
+  G4Scheduler();
   void Create();
-  G4ITScheduler(const G4ITScheduler&);
-  G4ITScheduler& operator=(const G4ITScheduler&);
+  G4Scheduler(const G4Scheduler&);
+  G4Scheduler& operator=(const G4Scheduler&);
 
-  G4ITSchedulerMessenger* fSteppingMsg;
+  G4SchedulerMessenger* fSteppingMsg;
 
-  static G4ThreadLocal G4ITScheduler* fgStepManager;
+  static G4ThreadLocal G4Scheduler* fgScheduler;
   int fVerbose;
   bool fWhyDoYouStop;
   bool fInitialized;
@@ -255,155 +261,167 @@ private:
 
   G4ITGun* fpGun;
   G4bool fContinue;
+  G4bool fUseDefaultTimeSteps;
 };
 
-inline bool G4ITScheduler::IsInitialized()
+inline bool G4Scheduler::IsInitialized()
 {
   return fInitialized;
 }
 
-inline G4ITModelHandler* G4ITScheduler::GetModelHandler()
+inline G4ITModelHandler* G4Scheduler::GetModelHandler()
 {
   return fpModelHandler;
 }
 
-inline void G4ITScheduler::SetEndTime(const double __endtime)
+inline void G4Scheduler::SetEndTime(const double __endtime)
 {
   fEndTime = __endtime;
 }
 
 inline
-void G4ITScheduler::SetTimeSteps(std::map<double, double>* steps)
+void G4Scheduler::SetTimeSteps(std::map<double, double>* steps)
 {
   fUsePreDefinedTimeSteps = true;
   fpUserTimeSteps = steps;
 }
 
-inline void G4ITScheduler::AddTimeStep(double startingTime, double timeStep)
+inline void G4Scheduler::AddTimeStep(double startingTime, double timeStep)
 {
   if (fpUserTimeSteps == 0)
   {
     fpUserTimeSteps = new std::map<double, double>();
+    fUsePreDefinedTimeSteps = true;
   }
 
   (*fpUserTimeSteps)[startingTime] = timeStep;
 }
 
-inline G4int G4ITScheduler::GetNbSteps() const
+inline G4int G4Scheduler::GetNbSteps() const
 {
   return fNbSteps;
 }
 
-inline void G4ITScheduler::SetMaxNbSteps(G4int maxSteps)
+inline void G4Scheduler::SetMaxNbSteps(G4int maxSteps)
 {
   fMaxSteps = maxSteps;
 }
 
-inline G4int G4ITScheduler::GetMaxNbSteps() const
+inline G4int G4Scheduler::GetMaxNbSteps() const
 {
   return fMaxSteps;
 }
 
-inline G4double G4ITScheduler::GetStartTime() const
+inline G4double G4Scheduler::GetStartTime() const
 {
   return fStartTime;
 }
 
-inline G4double G4ITScheduler::GetEndTime() const
+inline G4double G4Scheduler::GetEndTime() const
 {
   return fEndTime;
 }
 
-inline G4double G4ITScheduler::GetTimeStep() const
+inline G4double G4Scheduler::GetTimeStep() const
 {
   return fTimeStep;
 }
 
-inline void G4ITScheduler::SetDefaultTimeStep(double timeStep)
+inline void G4Scheduler::SetDefaultTimeStep(double timeStep)
 {
   fDefaultMinTimeStep = timeStep;
 }
 
-inline G4double G4ITScheduler::GetGlobalTime() const
+inline G4double G4Scheduler::GetGlobalTime() const
 {
   return fGlobalTime;
 }
 
 inline
-void G4ITScheduler::SetUserAction(G4UserTimeStepAction* userITAction)
+void G4Scheduler::SetUserAction(G4UserTimeStepAction* userITAction)
 {
   fpUserTimeStepAction = userITAction;
 }
 
-inline G4UserTimeStepAction* G4ITScheduler::GetUserReactionAction() const
+inline G4UserTimeStepAction* G4Scheduler::GetUserTimeStepAction() const
 {
   return fpUserTimeStepAction;
 }
 
-inline void G4ITScheduler::SetVerbose(int verbose)
+inline void G4Scheduler::SetVerbose(int verbose)
 {
   fVerbose = verbose;
 }
 
-inline int G4ITScheduler::GetVerbose() const
+inline int G4Scheduler::GetVerbose() const
 {
   return fVerbose;
 }
 
 inline
-void G4ITScheduler::SetMaxZeroTimeAllowed(int maxTimeStepAllowed)
+void G4Scheduler::SetMaxZeroTimeAllowed(int maxTimeStepAllowed)
 {
   fMaxNZeroTimeStepsAllowed = maxTimeStepAllowed;
 }
 
-inline int G4ITScheduler::GetMaxZeroTimeAllowed() const
+inline int G4Scheduler::GetMaxZeroTimeAllowed() const
 {
   return fMaxNZeroTimeStepsAllowed;
 }
 
-inline void G4ITScheduler::SetTimeTolerance(double time)
+inline void G4Scheduler::SetTimeTolerance(double time)
 {
   fTimeTolerance = time;
 }
 
-inline double G4ITScheduler::GetTimeTolerance() const
+inline double G4Scheduler::GetTimeTolerance() const
 {
   return fTimeTolerance;
 }
 
-inline G4double G4ITScheduler::GetPreviousTimeStep() const
+inline G4double G4Scheduler::GetPreviousTimeStep() const
 {
   return fPreviousTimeStep;
 }
 
-inline G4ITStepStatus G4ITScheduler::GetStatus() const
+inline G4ITStepStatus G4Scheduler::GetStatus() const
 {
   return fITStepStatus;
 }
 
-inline void G4ITScheduler::Stop()
+inline void G4Scheduler::Stop()
 {
   fContinue = false;
 }
 
-inline G4ITTrackingInteractivity* G4ITScheduler::GetInteractivity()
+inline G4ITTrackingInteractivity* G4Scheduler::GetInteractivity()
 {
   return fpTrackingInteractivity;
 }
 
-inline void G4ITScheduler::SetGun(G4ITGun* gun)
+inline void G4Scheduler::SetGun(G4ITGun* gun)
 {
   fpGun = gun;
 }
 
-inline G4bool G4ITScheduler::GetComputeTimeStepFlag() const
+inline G4bool G4Scheduler::GetComputeTimeStepFlag() const
 {
   return fComputeTimeStep;
 }
 
-inline void G4ITScheduler::WhyDoYouStop()
+inline void G4Scheduler::WhyDoYouStop()
 {
   fWhyDoYouStop = true;
+}
+
+inline void G4Scheduler::UseDefaultTimeSteps(G4bool flag)
+{
+  fUseDefaultTimeSteps = flag;
+}
+
+inline G4bool G4Scheduler::AreDefaultTimeStepsUsed()
+{
+  return (fUseDefaultTimeSteps == false && fUsePreDefinedTimeSteps == false);
 }
 
 #endif

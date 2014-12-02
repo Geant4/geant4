@@ -31,73 +31,95 @@
 // -----------
 //
 // -------------------------------------------------------------------
-#include <G4ITScheduler.hh>
-#include <G4ITSchedulerMessenger.hh>
+#include <G4Scheduler.hh>
+#include <G4SchedulerMessenger.hh>
 
 #include "G4UIdirectory.hh"
 #include "G4UIcmdWithoutParameter.hh"
 #include "G4UIcmdWithAnInteger.hh"
 #include "G4UIcmdWithADoubleAndUnit.hh"
+#include "G4UIcmdWithABool.hh"
 #include "G4UIcommand.hh"
 #include "G4UIparameter.hh"
 #include "G4UImanager.hh"
 #include "G4ios.hh"
 
-G4ITSchedulerMessenger::G4ITSchedulerMessenger(G4ITScheduler * stepMgr) :
-    fITStepManager(stepMgr)
+G4SchedulerMessenger::G4SchedulerMessenger(G4Scheduler * stepMgr) :
+    fScheduler(stepMgr)
 {
-  fITDirectory = new G4UIdirectory("/IT/");
-  fITDirectory->SetGuidance("IT control commands.");
+  fITDirectory = new G4UIdirectory("/scheduler/");
+  fITDirectory->SetGuidance("Control commands for the time scheduler "
+      "(dna chemistry applications).");
 
   // Set end time
-  fEndTime = new G4UIcmdWithADoubleAndUnit("/IT/endTime", this);
-  fEndTime->SetGuidance("Set end time");
+  fEndTime = new G4UIcmdWithADoubleAndUnit("/scheduler/endTime", this);
+  fEndTime->SetGuidance("Set time at which the simulation must stop.");
   fEndTime->AvailableForStates(G4State_PreInit, G4State_Idle);
   fEndTime->SetUnitCategory("Time");
   fEndTime->SetDefaultUnit("picosecond");
   fEndTime->SetDefaultValue(1);
 
   // Set time tolerance
-  fTimeTolerance = new G4UIcmdWithADoubleAndUnit("/IT/timeTolerance", this);
-  fTimeTolerance->SetGuidance("Set time tolerance");
+  fTimeTolerance = new G4UIcmdWithADoubleAndUnit("/scheduler/timeTolerance",
+                                                 this);
+  fTimeTolerance->SetGuidance("This command aims at resolving issues related to"
+      " floating points. If two time events are separated by less than the "
+      "selected tolerance, they are assumed to belong to the same time step.");
   fTimeTolerance->AvailableForStates(G4State_PreInit, G4State_Idle);
   fTimeTolerance->SetUnitCategory("Time");
   fTimeTolerance->SetDefaultUnit("picosecond");
   fTimeTolerance->SetDefaultValue(1);
 
   // Initialize
-  fInitCmd = new G4UIcmdWithoutParameter("/IT/initialize", this);
-  fInitCmd->SetGuidance("Initialize G4ITStepManager.");
+  fInitCmd = new G4UIcmdWithoutParameter("/scheduler/initialize", this);
+  fInitCmd->SetGuidance("Initialize G4Scheduler. This is done "
+      "for standalone application only (no physics).");
   fInitCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   // Set Max Null time Step
-  fMaxNULLTimeSteps = new G4UIcmdWithAnInteger("/IT/maxNullTimeSteps", this);
-  fMaxNULLTimeSteps->SetGuidance("Set Max Null time Step");
+  fMaxNULLTimeSteps = new G4UIcmdWithAnInteger("/scheduler/maxNullTimeSteps",
+                                               this);
+  fMaxNULLTimeSteps->SetGuidance("Set maximum allowed zero time steps. After this "
+      "threshold, the simulation is stopped.");
   fMaxNULLTimeSteps->SetParameterName("numberOfNullTimeSteps", true);
   fMaxNULLTimeSteps->SetDefaultValue(10);
   fMaxNULLTimeSteps->SetRange("numberOfNullTimeSteps >=0 ");
 
-  fMaxStepNumber = new G4UIcmdWithAnInteger("/IT/maxStepsNumber", this);
+  fMaxStepNumber = new G4UIcmdWithAnInteger("/scheduler/maxStepNumber", this);
+  fMaxStepNumber->SetGuidance("Set the maximum number of time steps. After this "
+      "threshold, the simulation is stopped.");
   fMaxStepNumber->SetParameterName("maximumNumberOfSteps", true);
   fMaxStepNumber->SetDefaultValue(-1);
 
   // Beam On
-  fProcessCmd = new G4UIcmdWithoutParameter("/IT/process", this);
-  fProcessCmd->SetGuidance("Process track stacked in G4ITStepManager");
+  fProcessCmd = new G4UIcmdWithoutParameter("/scheduler/process", this);
+  fProcessCmd->SetGuidance("Process stacked tracks in G4Scheduler. This is done "
+      "for standalone application only (no physics).");
   fProcessCmd->AvailableForStates(G4State_PreInit, G4State_Idle);
 
   // Verbose
-  fVerboseCmd = new G4UIcmdWithAnInteger("/IT/verbose", this);
-  fVerboseCmd->SetGuidance("Set the Verbose level of G4ITStepManager.");
+  fVerboseCmd = new G4UIcmdWithAnInteger("/scheduler/verbose", this);
+  fVerboseCmd->SetGuidance("Set the Verbose level of G4Scheduler.");
   fVerboseCmd->SetGuidance(" 0 : Silent (default)");
   fVerboseCmd->SetGuidance(" 1 : Display reactions");
   fVerboseCmd->SetGuidance(" 2 ");
   fVerboseCmd->SetParameterName("level", true);
   fVerboseCmd->SetDefaultValue(1);
   //  fVerboseCmd->SetRange("level >=0 && level <=4");
+
+  fWhyDoYouStop = new G4UIcmdWithoutParameter("/scheduler/whyDoYouStop",this);
+  fWhyDoYouStop->SetGuidance("Will print information on why the scheduler is "
+      "stopping the process");
+
+  fUseDefaultTimeSteps = new G4UIcmdWithABool("/scheduler/useDefaultTimeSteps",
+                                              this);
+  fUseDefaultTimeSteps->SetGuidance("Let the G4 processes decided for the next "
+      "time step interval. This command would be interesting if no reaction has "
+      "been set and if one will want to track down Brownian objects. "
+      "NB: This command gets in conflicts with the declaration of time steps.");
 }
 
-G4ITSchedulerMessenger::~G4ITSchedulerMessenger()
+G4SchedulerMessenger::~G4SchedulerMessenger()
 {
   delete fTimeTolerance;
   delete fITDirectory;
@@ -107,71 +129,85 @@ G4ITSchedulerMessenger::~G4ITSchedulerMessenger()
   delete fMaxStepNumber;
   delete fProcessCmd;
   delete fVerboseCmd;
+  delete fWhyDoYouStop;
+  delete fUseDefaultTimeSteps;
 }
 
-void G4ITSchedulerMessenger::SetNewValue(G4UIcommand * command,
+void G4SchedulerMessenger::SetNewValue(G4UIcommand * command,
                                          G4String newValue)
 {
   if (command == fProcessCmd)
   {
-    fITStepManager->Process();
+    fScheduler->Process();
   }
   else if (command == fEndTime)
   {
-    fITStepManager->SetEndTime(fEndTime->GetNewDoubleValue(newValue));
+    fScheduler->SetEndTime(fEndTime->GetNewDoubleValue(newValue));
   }
   else if (command == fTimeTolerance)
   {
-    fITStepManager->SetTimeTolerance(
+    fScheduler->SetTimeTolerance(
         fTimeTolerance->GetNewDoubleValue(newValue));
   }
   else if (command == fVerboseCmd)
   {
-    fITStepManager->SetVerbose(fVerboseCmd->GetNewIntValue(newValue));
+    fScheduler->SetVerbose(fVerboseCmd->GetNewIntValue(newValue));
   }
   else if (command == fInitCmd)
   {
-    fITStepManager->Initialize();
+    fScheduler->Initialize();
   }
   else if (command == fMaxNULLTimeSteps)
   {
-    fITStepManager->SetMaxZeroTimeAllowed(
+    fScheduler->SetMaxZeroTimeAllowed(
         fMaxNULLTimeSteps->GetNewIntValue(newValue));
   }
   else if (command == fMaxStepNumber)
   {
-    fITStepManager->SetMaxNbSteps(fMaxStepNumber->GetNewIntValue(newValue));
+    fScheduler->SetMaxNbSteps(fMaxStepNumber->GetNewIntValue(newValue));
+  }
+  else if (command == fWhyDoYouStop)
+  {
+    fScheduler->WhyDoYouStop();
+  }
+  else if (command == fUseDefaultTimeSteps)
+  {
+    fScheduler->UseDefaultTimeSteps(fUseDefaultTimeSteps->GetNewBoolValue(newValue));
   }
 }
 
-G4String G4ITSchedulerMessenger::GetCurrentValue(G4UIcommand * command)
+G4String G4SchedulerMessenger::GetCurrentValue(G4UIcommand * command)
 {
   G4String cv;
 
   if (command == fVerboseCmd)
   {
-    cv = fVerboseCmd->ConvertToString(fITStepManager->GetVerbose());
+    cv = fVerboseCmd->ConvertToString(fScheduler->GetVerbose());
   }
   else if (command == fEndTime)
   {
-    cv = fEndTime->ConvertToString(fITStepManager->GetEndTime());
+    cv = fEndTime->ConvertToString(fScheduler->GetEndTime());
   }
   else if (command == fTimeTolerance)
   {
-    cv = fTimeTolerance->ConvertToString(fITStepManager->GetTimeTolerance());
+    cv = fTimeTolerance->ConvertToString(fScheduler->GetTimeTolerance());
   }
   else if (command == fInitCmd)
   {
-    cv = fInitCmd->ConvertToString(fITStepManager->IsInitialized());
+    cv = fInitCmd->ConvertToString(fScheduler->IsInitialized());
   }
   else if (command == fMaxNULLTimeSteps)
   {
     cv = fMaxNULLTimeSteps->ConvertToString(
-        fITStepManager->GetMaxZeroTimeAllowed());
+        fScheduler->GetMaxZeroTimeAllowed());
   }
   else if (command == fMaxStepNumber)
   {
-    cv = fMaxStepNumber->ConvertToString(fITStepManager->GetMaxNbSteps());
+    cv = fMaxStepNumber->ConvertToString(fScheduler->GetMaxNbSteps());
+  }
+  else if (command == fUseDefaultTimeSteps)
+  {
+    cv = fUseDefaultTimeSteps->ConvertToString(fScheduler->AreDefaultTimeStepsUsed());
   }
 
   return cv;

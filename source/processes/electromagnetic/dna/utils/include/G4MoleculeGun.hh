@@ -31,17 +31,24 @@ class G4MoleculeGunMessenger;
 class G4MoleculeGun : public G4ITGun
 {
 public:
-	G4MoleculeGun();
-	virtual ~G4MoleculeGun();
+  G4MoleculeGun();
+  virtual ~G4MoleculeGun();
 
-	virtual void DefineTracks();
-	void AddMolecule(const G4String& name, const G4ThreeVector& position, double time = 0);
-	void AddNMolecules(size_t n, const G4String& name, const G4ThreeVector& position, double time = 0);
+  virtual void DefineTracks();
+  void AddMolecule(const G4String& name,
+                   const G4ThreeVector& position,
+                   double time = 0);
+  void AddNMolecules(size_t n,
+                     const G4String& name,
+                     const G4ThreeVector& position,
+                     double time = 0);
 
 protected:
-	G4Track* BuildTrack(const G4String& name, const G4ThreeVector& position, double time = 0);
-	std::vector<G4Track*> fTracks;
-	G4MoleculeGunMessenger* fpMessenger;
+  G4Track* BuildTrack(const G4String& name,
+                      const G4ThreeVector& position,
+                      double time = 0);
+  std::vector<G4Track*> fTracks;
+  G4MoleculeGunMessenger* fpMessenger;
 
 };
 
