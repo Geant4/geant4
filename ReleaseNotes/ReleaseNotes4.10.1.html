@@ -202,6 +202,9 @@ Please see the corresponding details in
 
 <B>Hadronic physics</B>
 <UL>
+<LI>In this release, mass width is taken into account in decays of short-lived
+    hadrons. Daughter hadrons have dynamical mass according to Breit-Wigner
+    distribution.</LI>
 <LI>ADD-TEXT HERE !!!!!!!!!!!!!!!!!!!!!!!!!</LI>
 </UL>
 
@@ -416,6 +419,8 @@ please refer to the corresponding History files provided in most packages):
     <LI>Avoid use of std::map at the application level in TimeStepAction.</LI>
     <LI>Simplified initialization of chemistry from user applications; just
         registering constructor is enough to initialize the chemistry.</LI>
+    <LI>Transform fStopAndAlive to fStopAndKill in G4DNABrownianTransportation
+        when the particle has reached a boundary.</LI>
     <LI>Updated G4ITNavigator2 to recent developments in G4Navigator.</LI>
     <LI>Fixed bug in G4MoleculeGun and corrected track creation by
         G4MoleculeGunMessenger.</LI>
@@ -1065,7 +1070,9 @@ please refer to the corresponding History files provided in most packages):
         momentum conservation handled by recoiling against the nucleus. This is
         intended to improve the match to data for pi- capture.
         G4CascadeParameters, G4CascadeParamMessenger: added flag to enable such
-        feature.</LI>
+        feature.
+        In muon absorption, check return from G4GDecay3 for null vector; report
+        no-collision status and return.</LI>
     <LI>G4NucleiModel: in boundaryTransition(), switch sign of "dv" so that
         particle sees a barrier (next_zone potential > current potential) as
         positive.  In generateParticleFate(), pass (A,Z) to EPCollider for
@@ -1074,17 +1081,14 @@ please refer to the corresponding History files provided in most packages):
         G4CascadeCheckBalance, G4CascadeColliderBase, G4VCascadeCollider,
         G4VCascadeDeexcitation: changed constructors argument from "const char*"
         to "const G4String&" to avoid memory deallocation problems.</LI>
-    <LI>G4CascadeParameters: make PreCompound, phase space, trailing effect,
-        and light-ion clustering active by default. User must set envvars to "0"
-        to disable.</LI>
+    <LI>G4CascadeParameters: make light-ion clustering active by default.
+        User must set envvars to "0" to disable.</LI>
     <LI>G4CascadeInterface: conditionally call usePreCompoundDeexcitation() or
         useCascadeDeexcitation() from constructor.</LI>
     <LI>G4InuclCollider: make PreCompound the default in ctor.</LI>
     <LI>G4CascadeFinalStateAlgorithm:  using ".c_str()" in diagnostic outputs,
         to avoid IBM/xlC compiler error. Addressing problem report
         <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1558">#1558</A>.</LI>
-    <LI>G4CascadeParameters: reverted changes from previous tag: turn off
-        phase-space, trailing-effect, and PreCompound.</LI>
     <LI>G4CascadeInterface: fixed possible infinite-loop condition where
         (nTries >= maxTries) and momentum balance fails.
     <LI>G4PreCompoundDeexcitation: fixed memory leak on exit by passing
@@ -1147,6 +1151,8 @@ please refer to the corresponding History files provided in most packages):
     <LI>G4FermiFragmentPool: fixed memory leak at destruction; fixed energy
         or several excited levels to be the same in the gamma level database.
         Added DumpFragment() and Dump() methods. Cleanup values of excitations.</LI>
+    <LI>G4FermiBreakUp: fixed value of const coefficient to probability
+        of a decay channel.</LI>
     <LI>G4ContinuumGammaTransition, G4ContinuumGammaDeexcitation,
         G4DiscreteGammaDeexcitation, G4DiscreteGammaTransition,
         G4VGammaDeexcitation: cleanup selection of continuous or discrete 
@@ -1156,11 +1162,6 @@ please refer to the corresponding History files provided in most packages):
         energy.</LI>
     <LI>G4VGammaDeexcitation: removed not needed extra call to CanDoTransition()
         inside DoChain() method.</LI>
-    <LI>G4FermiBreakUp: fixed value of const coefficient to probability
-        of a decay channel.</LI>
-    <LI>G4VGammaDeexcitation, G4PhotonEvaporation: propagate vacant shell number
-        after internal convertion allowing to enable  atomic de-excitation in
-        radioactive decay.</LI>
     <LI>GEN probabilities: verified and level energies using gamma level data.</LI>
     <LI>Fixed probability computation in G4ContinuumGammaTransition,
         G4PhotonEvaporation and G4E1Probability.</LI>
@@ -1532,18 +1533,16 @@ please refer to the corresponding History files provided in most packages):
 <H3><I>Particles</I></H3></A>
 <UL>
 <LI>Updated particle properties to PDG-2014.</LI>
-<LI>Added G4Exception in G4ElectronOccupancy::AddElectron().</LI>
 <LI>Compute life time from mass width for pi0 and sigma0.
     Addressing problem report
     <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1570">#1570</A>.</LI>
 <LI>Fix in G4ExcitedMesonConstructor (missing pi + eta mode in DecayTable).</LI>
-<LI>G4PhaseSpaceDecayChannel takes in to account mass width of daughter
+<LI>Added new constructor with dynamical mass in G4DynamicParticle.
+    G4PhaseSpaceDecayChannel takes in to account mass width of daughter
     particles and gives the dynamical mass according to Breit-Wigner
     distribution. Added daughters_width in G4VDecayChannel.
     Addressing problem report
     <A HREF="http://bugzilla-geant4.kek.jp/show_bug.cgi?id=1629">#1629</A>.</LI>
-<LI>Fixed bug for mass width in G4VDecayChannelFillDaughters.</LI>
-<LI>Added new constructor in G4DynamicParticle.</LI>
 <LI>Introducing PrepareNuclideTable() method in G4IonTable to allow creating
     G4NuclideTable object without preloading any ions.</LI>
 <LI>Removed unused class G4IsomerTable; G4NuclideTable is now used.</LI>
@@ -1554,7 +1553,6 @@ please refer to the corresponding History files provided in most packages):
 <LI>Fix in G4ParticleTable to make sure all dynamically created ions are
     deleted at the end of the program. Fixed G4IonTable to delete thread-local
     string objects.</LI>
-<LI>Fixed Coverity defects.</LI>
 </UL>
 
 <A NAME="pers-notes">
