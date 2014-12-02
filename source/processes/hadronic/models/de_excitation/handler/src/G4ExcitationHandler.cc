@@ -104,7 +104,6 @@ G4ExcitationHandler::G4ExcitationHandler():
   results.resize(30,0);
   theEvapList.resize(30,0);
   thePhotoEvapList.resize(10,0);
-  G4cout << "### New Excitation handler" << G4endl;
 }
 
 G4ExcitationHandler::~G4ExcitationHandler()
