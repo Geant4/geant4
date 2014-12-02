@@ -158,7 +158,7 @@ physics_lists
 - builders (phys-builders-V10-00-07):
   o Added builders for particle_hp physics list.
   o Updated CMake scripts.
-- constructors/electromagnetic (phys-ctor-em-V10-00-26):
+- constructors/electromagnetic (phys-ctor-em-V10-00-27):
   o Use G4EmParameters used in low-energy constructors.
   o Fixed bug responsible for bounds-checking failures in optical tests.
     Improved printing in G4OpticalPhysics::PrintStatistics().
@@ -196,13 +196,17 @@ processes/biasing
     DenyProcessPostStepDoIt().
   o Fix in G4BiasingOperatorStateNotifier::Notify() to detect start of run.
 
-processes/electromagnetic/dna                    emdna-V10-00-60
+processes/electromagnetic/dna                    emdna-V10-00-63
 -----------------------------
 - Simplified initialization of chemistry from user applications; just
   registering constructor is enough to initialize the chemistry.
 - Updated G4ITNavigator2 to recent developments in G4Navigator.
 - Fixed bug in G4MoleculeGun and corrected track creation by
   G4MoleculeGunMessenger.
+- Fixes in chemistry initialization in standalone and Brownian navigation.
+  Some fixes related to the scheduler. Transform fStopAndAlive to fStopAndKill
+  in G4DNABrownianTransportation when the particle has reached a boundary.
+- Renamed macro commands to reflect usage of scheduler
 - Improved error message for missing data in PW elastic model.
 - Removed obsolete classes.
 
@@ -256,9 +260,8 @@ processes/hadronic
   o BinaryLightReaction: momentum correction wrong in case of no Fragment,
     but primary projectile nucleon(s) in final state (ex. d + Pb -> X, where
     neutron or proton of deuteron did not interact).
-- models/cascade (hadr-casc-V10-00-18)
-  o G4CascadeParameters: reverted changes from previous tag: turn off
-    phase-space, trailing-effect, and PreCompound.
+- models/cascade (hadr-casc-V10-00-19)
+  o G4CascadeParameters: turn off phase-space, trailing-effect and PreCompound.
   o G4CascadeInterface: fixed possible infinite-loop condition where
     (nTries >= maxTries) and momentum balance fails.
   o G4PreCompoundDeexcitation: fixed memory leak on exit by passing
@@ -269,11 +272,13 @@ processes/hadronic
   o G4InuclCollider: replaced G4Fragment::GetA() with GetA_asInt().
   o G4ElementaryParticleCollider: improved optional pion-nucleon absorption
     (disabled by default; used for studies of pion stopping).
+    In muon absorption, check return from G4GDecay3 for null vector; report
+    no-collision status and return.
   o G4NucleiModel: initialize local variable in declaration.
 - models/coherent_elastic (hadr-cohe-V10-00-24)
   o Added G4LMsdGenerator class for low mass single diffraction dissociation.
   o G4hhElastic: fixed Coverity defects and cleanup constructors.
-- models/de_excitation (hadr-deex-V10-00-29)
+- models/de_excitation (hadr-deex-V10-00-28)
   o Cleanup and redesign of photon evaporation.
   o G4NuclearLevelStore fixed wrong deletion of user data at exit.
     Addressing problem report #1684.
@@ -285,9 +290,6 @@ processes/hadronic
     Added DumpFragment() and Dump() methods. Cleanup values of excitations.
   o G4FermiBreakUp: fixed value of const coefficient to probability
     of a decay channel.
-  o G4VGammaDeexcitation, G4PhotonEvaporation: propagate vacant shell number
-    after internal convertion allowing to enable  atomic de-excitation in
-    radioactive decay.
   o G4ContinuumGammaTransition, G4ContinuumGammaDeexcitation,
     G4DiscreteGammaDeexcitation, G4DiscreteGammaTransition,
     G4VGammaDeexcitation: cleanup selection of continuous or discrete 
@@ -507,10 +509,10 @@ examples                                         examples-V10-01-00
   o Added energy-flow in Run::Merge().
 - extended/medical (exMedical-V10-00-00)
   o Updated README and documentation.
-- extended/medical/dna/chem1 (chem1-V10-00-04)
+- extended/medical/dna/chem1 (chem1-V10-00-06)
   o Select GUI+vis driver from command line.
-- extended/medical/dna/chem2 (chem2-V10-00-04)
-- extended/medical/dna/chem3 (chem3-V10-00-05)
+- extended/medical/dna/chem2 (chem2-V10-00-05)
+- extended/medical/dna/chem3 (chem3-V10-00-06)
   o Select GUI+vis driver from command line.
   o Simplified initialization of chemistry.
 - extended/medical/dna/dnaphysics (dnaphysics-V10-00-04)
@@ -553,7 +555,7 @@ tests                                            tests-V10-01-00
   o Updated CMake scripts to remove policy warnings.
 - tests/test40 (test40-V10-00-02)
   o Minor cleanup to DetectorConstruction and PhysicsList.
-- tests/test70 (test70-V10-00-09)
+- tests/test70 (test70-V10-00-10)
   o Removed initialisation of chemistry.
 - tests/test202 (test202-V10-00-34)
   o Fixed new default text size to 10 (previous was 12).
