@@ -91,7 +91,6 @@ G4_DECLARE_PHYSCONSTR_FACTORY(G4EmDNAChemistry);
 G4EmDNAChemistry::G4EmDNAChemistry() :
     G4VUserChemistryList()
 {
-  G4DNAChemistryManager::Instance()->SetChemistryActivation(true);
   G4DNAChemistryManager::Instance()->SetChemistryList(this);
 }
 

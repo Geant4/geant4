@@ -14,6 +14,9 @@ introduced in the code and keeptrack of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28-Nov-2014, M. Karamitros (phys-ctor-em-V10-00-27)
+- G4EmDNAChemistry: remove useless activation line
+
 24-Nov-2014, M. Karamitros (phys-ctor-em-V10-00-26)
 - G4EmDNAChemistry: initialization procedure of the chemistry reviewed
 G4DNAChemistryManager::Instance()->Initialize() is called from
