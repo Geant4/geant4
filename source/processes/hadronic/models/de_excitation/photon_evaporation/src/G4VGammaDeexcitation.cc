@@ -110,7 +110,6 @@ void G4VGammaDeexcitation::DoChain(G4FragmentVector* products,
 G4Fragment* G4VGammaDeexcitation::GenerateGamma(G4Fragment* aNucleus)
 {
   G4Fragment * thePhoton = 0;
-  _vSN = -1;
   if(!CanDoTransition(aNucleus)) { return thePhoton; }
 
   _transition->SelectGamma();  // it can be conversion electron too
