@@ -49,7 +49,7 @@ G4FermiBreakUp::G4FermiBreakUp()
   thePool = G4FermiFragmentsPool::Instance(); 
   g4pow = G4Pow::GetInstance();
   Coef = 0.6*(CLHEP::elm_coupling/r0)/g4pow->Z13(1+G4int(Kappa));
-  ConstCoeff = g4pow->powN(r0/hbarc,3)*Kappa*std::sqrt(2.0/pi)/3.0;
+  ConstCoeff = g4pow->powN(r0/hbarc,3)*Kappa/(6.0*pi*pi);
 
   thePhaseSpace = thePool->GetFermiPhaseSpaceDecay();
 
