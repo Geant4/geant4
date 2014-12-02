@@ -17,6 +17,12 @@ committal in the CVS repository !
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+December 02, 2014 T.Nikitina              geom-usolids-V10-00-26
+- Fixes in UPolycone: 
+  InsideSection() for openPhi when StartPhi is negative,
+  Init() for Polycone defined from ZPlane[0]>ZPlane[N],
+  DistanceToOut() for points starting on internal surface.
+
 November 27, 2014 T.Nikitina              geom-usolids-V10-00-25
 - Improved dump in StreamInfo() for UMultiUnion.
 
