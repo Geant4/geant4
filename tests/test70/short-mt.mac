@@ -1,6 +1,6 @@
 /tracking/verbose 0
-#/IT/maxStepsNumber 3
-/IT/verbose 0
-/IT/endTime 10 nanosecond
-/IT/timeTolerance 0.1 picosecond
+#/scheduler/maxStepsNumber 3
+/scheduler/verbose 0
+/scheduler/endTime 10 nanosecond
+/scheduler/timeTolerance 0.1 picosecond
 /run/beamOn 4

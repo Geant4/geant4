@@ -12,6 +12,10 @@ track of all tags.
      * Reverse chronological order (last date on top), please *
      ----------------------------------------------------------
 
+28.11.2014 M.K                  tag test70-V10-00-10
+-----------------------------------------------------
+- Update to last dna version : rename G4ITScheduler --> G4Scheduler
+
 24.11.2014 M.K                  tag test70-V10-00-09
 -----------------------------------------------------
 - Update to last dna version : remove initialization of chemistry
