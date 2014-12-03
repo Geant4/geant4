@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -48,7 +48,6 @@ G4PhysListFactory::GetReferencePhysList <FTFP_BERT>  EMoption= 0
 
 
 
-### New Excitation handler
 ### Adding tracking cuts for neutron  TimeCut(ns)= 10000  KinEnergyCut(MeV)= 0
 /process/em/workerVerbose 0
 /gun/particle proton
@@ -745,10 +744,10 @@ Index : 1     used in the geometry : Yes
 ### Run 0 start
 --> Event 0 starts.
 EventAction: Event # 0 started
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10
-  User=0.16s Real=0.16s Sys=0s
+  User=0.15s Real=0.15s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started
 ### Fill Cross Sections for proton off Al
@@ -1560,6 +1559,6 @@ G4 kernel has come to Quit state.
 Total navigation history collections cleaned: 7
 ================== Deleting memory pools ===================
 Number of memory pools allocated: 11 of which, static: 0
-Dynamic pools deleted: 11 / Total memory freed: 0.039 Mb
+Dynamic pools deleted: 11 / Total memory freed: 0.042 Mb
 ============================================================
 RunManagerKernel is deleted. Good bye :)

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -503,10 +503,10 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 ----------------------------------------
 --> Event 0 starts.
 --> Event 50 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100
-  User=5.87s Real=5.9s Sys=0s
+  User=5.65s Real=5.67s Sys=0.01s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 
@@ -958,10 +958,10 @@ Index : 2     used in the geometry : Yes
 ----------------------------------------
 --> Event 0 starts.
 --> Event 50 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100
-  User=4.92s Real=4.94s Sys=0s
+  User=4.83s Real=4.83s Sys=0s
 
 ------------------------------------------------------------
       material   Edep       RMS         sqrt(E0(GeV))*rmsE/Emean     total tracklen 

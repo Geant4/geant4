@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -461,10 +461,10 @@ Index : 7     used in the geometry : Yes
 ### PrimaryGeneratorAction::GeneratePrimaries ##########
 ### e-  E(MeV)= 1000
 ########################################################
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.61s Real=2.61s Sys=0s
+  User=2.28s Real=2.28s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 0
 =================================================================
@@ -571,10 +571,10 @@ Index : 7     used in the geometry : Yes
 ### PrimaryGeneratorAction::GeneratePrimaries ##########
 ### mu-  E(MeV)= 2e+04
 ########################################################
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1000
-  User=3.72s Real=3.74s Sys=0s
+  User=3.77s Real=3.78s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 1
 =================================================================
@@ -1048,10 +1048,10 @@ Index : 7     used in the geometry : Yes
 ### PrimaryGeneratorAction::GeneratePrimaries ##########
 ### e-  E(MeV)= 1000
 ########################################################
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100
-  User=1.94s Real=1.96s Sys=0s
+  User=1.92s Real=1.93s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 2
 =================================================================
@@ -1528,25 +1528,25 @@ Index : 7     used in the geometry : Yes
 ### PrimaryGeneratorAction::GeneratePrimaries ##########
 ### e-  E(MeV)= 1000
 ########################################################
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100
-  User=2.29s Real=2.29s Sys=0s
+  User=2.69s Real=2.69s Sys=0s
 RunAction: End of run actions are started
 HistoManager: End of run actions are started   RunID# 3
 =================================================================
 Number of events             100
-Average number of e-         170.5
-Average number of gamma      374.4
-Average number of e+         47.48
-Average number of steps      1960
-Edep 1x1 =                   0.8384 +- 0.003867  res=  4.613 %   100
-Edep 3x3 =                   0.9584 +- 0.003131  res=  3.267 %   100
-Edep 5x5 =                   0.9802 +- 0.003078  res=  3.14 %   100
+Average number of e-         169.7
+Average number of gamma      519.7
+Average number of e+         47.14
+Average number of steps      2098
+Edep 1x1 =                   0.8308 +- 0.003802  res=  4.576 %   100
+Edep 3x3 =                   0.9555 +- 0.003624  res=  3.793 %   100
+Edep 5x5 =                   0.9767 +- 0.003585  res=  3.67 %   100
 ===========  Ratios without trancating ===========================
-  E1/E9  =                   0.8748 +- 0.00305
-  E1/E25 =                   0.8554 +- 0.003267
-  E9/E25 =                   0.9777 +- 0.001044
+  E1/E9  =                   0.8696 +- 0.002771
+  E1/E25 =                   0.8508 +- 0.002863
+  E9/E25 =                   0.9783 +- 0.0009687
 Beam Energy                  1 GeV
 ==================================================================
 

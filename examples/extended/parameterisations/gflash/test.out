@@ -9,7 +9,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -359,7 +359,7 @@ WARNING: Scene "none" not found.
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.03
+Internal Real Elapsed Time is: 0.02
 Internal System Elapsed Time: 0
 Internal GetUserElapsed Time: 0.02
 ******************************************
@@ -431,7 +431,7 @@ Internal GetUserElapsed Time: 0.02
 ******************************************
 Internal Real Elapsed Time is: 0.02
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.02
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 5  -----
   11847 hits are stored in ExGflashHitsCollection 
@@ -443,9 +443,9 @@ Internal GetUserElapsed Time: 0.02
 
 
 ******************************************
-Internal Real Elapsed Time is: 0.03
+Internal Real Elapsed Time is: 0.01
 Internal System Elapsed Time: 0
-Internal GetUserElapsed Time: 0.02
+Internal GetUserElapsed Time: 0.01
 ******************************************
  ------ ExGflashEventAction::End of event nr. 6  -----
   11946 hits are stored in ExGflashHitsCollection 
@@ -498,11 +498,11 @@ WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 number of event = 10
 Graphics systems deleted.
 Visualization Manager deleting...
-Internal Real Elapsed Time /event is: 0.0244444
+Internal Real Elapsed Time /event is: 0.0211111
 Total navigation history collections cleaned: 8
 
 ******************************************
-Total Real Elapsed Time is: 1.02
-Total System Elapsed Time: 0
-Total GetUserElapsed Time: 1
+Total Real Elapsed Time is: 0.96
+Total System Elapsed Time: 0.01
+Total GetUserElapsed Time: 0.94
 ******************************************

@@ -1,0 +1,277 @@
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+*** WARNING : the G4DNAChampionElasticModel class is not activated below 7.4 eV !
+*** NOTE: if you are using G4EmDNAChemistry, do not worry, this is the expected behavior
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  OpenGLImmediateX (OGLIX)
+  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLStoredX (OGLSX)
+  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+
+phot:   for  gamma    SubType= 12  BuildTable= 0
+      LambdaPrime table from 200 keV to 10 TeV in 54 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermorePhElectric :  Emin=        0 eV    Emax=        1 GeV   AngularGenSauterGavrila  FluoActive
+       PhotoElectric :  Emin=        1 GeV   Emax=       10 TeV   AngularGenSauterGavrila  FluoActive
+
+compt:   for  gamma    SubType= 13  BuildTable= 1
+      Lambda table from 100 eV  to 1 MeV, 7 bins per decade, spline: 1
+      LambdaPrime table from 1 MeV to 10 TeV in 49 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+    LivermoreCompton :  Emin=        0 eV    Emax=        1 GeV  FluoActive
+       Klein-Nishina :  Emin=        1 GeV   Emax=       10 TeV
+
+conv:   for  gamma    SubType= 14  BuildTable= 1
+      Lambda table from 1.022 MeV to 10 TeV, 20 bins per decade, spline: 1
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+ LivermoreConversion :  Emin=        0 eV    Emax=        1 GeV
+        BetheHeitler :  Emin=        1 GeV   Emax=       80 GeV
+     BetheHeitlerLPM :  Emin=       80 GeV   Emax=       10 TeV
+
+Rayl:   for  gamma    SubType= 11  BuildTable= 1
+      Lambda table from 100 eV  to 100 keV, 7 bins per decade, spline: 0
+      LambdaPrime table from 100 keV to 10 TeV in 56 bins 
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+   LivermoreRayleigh :  Emin=        0 eV    Emax=        1 GeV   CullenGenerator
+   LivermoreRayleigh :  Emin=        1 GeV   Emax=       10 TeV   CullenGenerator
+
+e-_G4DNAElastic:   for  e-    SubType= 51  BuildTable= 0
+ Total cross sections computed from DNAChampionElasticModel model
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAChampionElasticModel :  Emin=        0 eV    Emax=        1 MeV
+
+e-_G4DNAExcitation:   for  e-    SubType= 52  BuildTable= 0
+ Total cross sections computed from DNABornExcitationModel
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNABornExcitationModel :  Emin=        0 eV    Emax=        1 MeV
+
+e-_G4DNAIonisation:   for  e-    SubType= 53  BuildTable= 0
+ Total cross sections computed from DNABornIonisationModel
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNABornIonisationModel :  Emin=        0 eV    Emax=        1 MeV   deltaBorn  FluoActive
+
+e-_G4DNAVibExcitation:   for  e-    SubType= 54  BuildTable= 0
+ Total cross sections computed from DNASancheExcitationModel
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNASancheExcitationModel :  Emin=        0 eV    Emax=      100 eV 
+
+e-_G4DNAAttachment:   for  e-    SubType= 55  BuildTable= 0
+ Total cross sections computed from DNAMeltonAttachmentModel
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMeltonAttachmentModel :  Emin=        0 eV    Emax=       13 eV 
+
+e-_G4DNAElectronSolvatation:   for  e-    SubType= 58  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNASancheSolvatationModel :  Emin=        0 eV    Emax=     8.22 eV 
+
+msc:   for e+    SubType= 10
+      RangeFactor= 0.04, stepLimitType: 3, latDisplacement: 1, skin= 1, geomFactor= 2.5
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            UrbanMsc :  Emin=        0 eV    Emax=       10 TeV  Table with 77 bins Emin=    100 eV    Emax=     10 TeV
+
+### ===  Deexcitation model UAtomDeexcitation is activated for 1 region:
+          DefaultRegionForTheWorld
+
+eIoni:   for  e+    SubType= 2
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      finalRange(mm)= 0.1, dRoverRange= 0.2, integral: 1, fluct: 1, linLossLimit= 0.01
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+        MollerBhabha :  Emin=        0 eV    Emax=       10 TeV
+
+eBrem:   for  e+    SubType= 3
+      dE/dx and range tables from 100 eV  to 10 TeV in 77 bins
+      Lambda tables from threshold to 10 TeV, 7 bins per decade, spline: 1
+      LPM flag: 1 for E > 1 GeV
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+             eBremSB :  Emin=        0 eV    Emax=        1 GeV   DipBustGen
+            eBremLPM :  Emin=        1 GeV   Emax=       10 TeV   DipBustGen
+
+annihil:   for  e+, integral: 1     SubType= 5  BuildTable= 0
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+            eplus2gg :  Emin=        0 eV    Emax=       10 TeV
+
+proton_G4DNAExcitation:   for  proton    SubType= 52  BuildTable= 0
+ Total cross sections computed from DNAMillerGreenExcitationModel and DNABornExcitationModel models
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      500 keV
+DNABornExcitationModel :  Emin=      500 keV   Emax=      100 MeV
+
+proton_G4DNAIonisation:   for  proton    SubType= 53  BuildTable= 0
+ Total cross sections computed from DNARuddIonisationModel and DNABornIonisationModel models
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNARuddIonisationModel :  Emin=        0 eV    Emax=      500 keV   deltaRudd  FluoActive
+DNABornIonisationModel :  Emin=      500 keV   Emax=      100 MeV   deltaBorn  FluoActive
+
+proton_G4DNAChargeDecrease:   for  proton    SubType= 56  BuildTable= 0
+ Total cross sections computed from DNADingfelderChargeDecreaseModel model
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      100 MeV
+
+GenericIon_G4DNAIonisation:   for  GenericIon    SubType= 53  BuildTable= 0
+ Total cross sections computed from DNARuddIonisationExtendedModel
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNARuddIonisationExtendedModel :  Emin=        0 eV    Emax=        1 TeV   deltaRudd  FluoActive
+
+alpha_G4DNAExcitation:   for  alpha    SubType= 52  BuildTable= 0
+ Total cross sections computed from DNAMillerGreenExcitationModel
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNAMillerGreenExcitationModel :  Emin=        0 eV    Emax=      400 MeV
+
+alpha_G4DNAIonisation:   for  alpha    SubType= 53  BuildTable= 0
+ Total cross sections computed from DNARuddIonisationModel
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNARuddIonisationModel :  Emin=        0 eV    Emax=      400 MeV   deltaRudd  FluoActive
+
+alpha_G4DNAChargeDecrease:   for  alpha    SubType= 56  BuildTable= 0
+ Total cross sections computed from DNADingfelderChargeDecreaseModel model
+      ===== EM models for the G4Region  DefaultRegionForTheWorld ======
+DNADingfelderChargeDecreaseModel :  Emin=        0 eV    Emax=      400 MeV
+End of tracking primary particle, its final energy is :0.025 eV 
+Physics stage ends
+Number of chemical species involved in reactions = 6
+Reaction                                  Reaction Rate [dm3/(mol*s)]   Interaction Range for chosen reaction model [nm]
+----------------------------------------------------------------------------------------------------------------------------
+H3O^1 + e_aq^1 -> H^0                     2.11e+10                      0.200589
+----------------------------------------------------------------------------------------------------------------------------
+H3O^1 + OH^-1 -> No product               1.43e+11                      1.34973
+----------------------------------------------------------------------------------------------------------------------------
+OH^0 + e_aq^1 -> OH^-1                    2.95e+10                      0.506256
+----------------------------------------------------------------------------------------------------------------------------
+OH^0 + OH^0 -> H2O2^0                     4.4e+09                       0.207651
+----------------------------------------------------------------------------------------------------------------------------
+OH^0 + H^0 -> No product                  1.44e+10                      0.194167
+----------------------------------------------------------------------------------------------------------------------------
+e_aq^1 + e_aq^1 -> OH^-1 + OH^-1 + H_2^0  5e+09                         0.134838
+----------------------------------------------------------------------------------------------------------------------------
+e_aq^1 + H^0 -> OH^-1 + H_2^0             2.65e+10                      0.294265
+----------------------------------------------------------------------------------------------------------------------------
+e_aq^1 + H2O2^0 -> OH^-1 + OH^0           1.41e+10                      0.295745
+----------------------------------------------------------------------------------------------------------------------------
+H^0 + H^0 -> H_2^0                        1.2e+10                       0.226528
+----------------------------------------------------------------------------------------------------------------------------
+DNAMolecularStepByStepModel will be used
+*** G4Scheduler starts processing 
+At time :       1 ps  Reaction : OH^-1 (-114) + H3O^1 (-218) -> No product
+At time : 8.99724 ps  Reaction : e_aq^1 (-87) + H3O^1 (-124) -> H^0 (-226)
+At time : 10.0972 ps  Reaction : OH^0 (-171) + OH^0 (-201) -> H2O2^0 (-227)
+At time : 14.0972 ps  Reaction : e_aq^1 (-51) + H3O^1 (-188) -> H^0 (-228)
+At time : 21.9372 ps  Reaction : e_aq^1 (-86) + OH^0 (-125) -> OH^-1 (-229)
+At time : 27.9372 ps  Reaction : e_aq^1 (-64) + OH^0 (-199) -> OH^-1 (-230)
+At time : 27.9372 ps  Reaction : OH^-1 (-230) + H3O^1 (-136) -> No product
+At time : 30.9372 ps  Reaction : e_aq^1 (-103) + OH^0 (-203) -> OH^-1 (-231)
+At time : 34.0715 ps  Reaction : H3O^1 (-120) + OH^-1 (-231) -> No product
+At time : 37.4824 ps  Reaction : e_aq^1 (-111) + OH^0 (-121) -> OH^-1 (-232)
+At time : 48.5306 ps  Reaction : OH^0 (-115) + OH^0 (-219) -> H2O2^0 (-233)
+At time : 53.5306 ps  Reaction : e_aq^1 (-50) + OH^0 (-211) -> OH^-1 (-234)
+At time : 57.0762 ps  Reaction : e_aq^1 (-48) + OH^0 (-149) -> OH^-1 (-235)
+At time : 57.0762 ps  Reaction : H3O^1 (-148) + OH^-1 (-235) -> No product
+At time : 98.7426 ps  Reaction : OH^0 (-159) + OH^0 (-161) -> H2O2^0 (-236)
+At time : 111.743 ps  Reaction : OH^0 (-183) + OH^0 (-207) -> H2O2^0 (-237)
+At time : 187.107 ps  Reaction : OH^0 (-145) + OH^0 (-215) -> H2O2^0 (-238)
+At time : 190.107 ps  Reaction : e_aq^1 (-77) + OH^0 (-133) -> OH^-1 (-239)
+At time : 199.107 ps  Reaction : H3O^1 (-168) + OH^-1 (-229) -> No product
+At time : 217.107 ps  Reaction : e_aq^1 (-34) + H3O^1 (-150) -> H^0 (-240)
+At time : 217.107 ps  Reaction : e_aq^1 (-58) + e_aq^1 (-90) -> OH^-1 (-241) + OH^-1 (-242) + H_2^0 (-243)
+At time : 226.107 ps  Reaction : OH^0 (-153) + OH^0 (-155) -> H2O2^0 (-244)
+At time : 254.429 ps  Reaction : e_aq^1 (-45) + H^0 (-228) -> OH^-1 (-245) + H_2^0 (-246)
+At time : 311.147 ps  Reaction : OH^-1 (-232) + H3O^1 (-176) -> No product
+At time : 337.266 ps  Reaction : H3O^1 (-210) + OH^-1 (-234) -> No product
+At time : 368.318 ps  Reaction : OH^-1 (-242) + H3O^1 (-162) -> No product
+At time : 536.774 ps  Reaction : e_aq^1 (-41) + H2O2^0 (-238) -> OH^-1 (-247) + OH^0 (-248)
+At time : 557.774 ps  Reaction : H3O^1 (-152) + OH^-1 (-247) -> No product
+At time : 949.404 ps  Reaction : H3O^1 (-164) + OH^-1 (-241) -> No product
+At time : 1.05038 ns  Reaction : e_aq^1 (-67) + H3O^1 (-198) -> H^0 (-249)
+At time : 1.10428 ns  Reaction : e_aq^1 (-76) + H3O^1 (-126) -> H^0 (-250)
+At time : 1.14428 ns  Reaction : e_aq^1 (-36) + OH^0 (-143) -> OH^-1 (-251)
+At time : 1.29736 ns  Reaction : e_aq^1 (-40) + H3O^1 (-158) -> H^0 (-252)
+At time : 1.54736 ns  Reaction : e_aq^1 (-52) + H3O^1 (-216) -> H^0 (-253)
+At time : 1.55736 ns  Reaction : e_aq^1 (-56) + OH^0 (-165) -> OH^-1 (-254)
+At time : 1.56736 ns  Reaction : e_aq^1 (-61) + OH^0 (-141) -> OH^-1 (-255)
+At time : 1.59736 ns  Reaction : e_aq^1 (-89) + OH^0 (-167) -> OH^-1 (-256)
+At time : 1.61736 ns  Reaction : e_aq^1 (-37) + OH^0 (-151) -> OH^-1 (-257)
+At time : 1.84092 ns  Reaction : OH^0 (-135) + OH^0 (-197) -> H2O2^0 (-258)
+At time : 1.85092 ns  Reaction : e_aq^1 (-69) + e_aq^1 (-94) -> OH^-1 (-259) + OH^-1 (-260) + H_2^0 (-261)
+At time : 1.88092 ns  Reaction : OH^-1 (-255) + H3O^1 (-196) -> No product
+At time : 1.90092 ns  Reaction : e_aq^1 (-47) + H3O^1 (-214) -> H^0 (-262)
+At time : 2.12736 ns  Reaction : H^0 (-250) + OH^0 (-223) -> No product
+At time : 2.31721 ns  Reaction : H3O^1 (-134) + OH^-1 (-259) -> No product
+At time : 2.45738 ns  Reaction : H3O^1 (-128) + OH^-1 (-239) -> No product
+At time : 2.66265 ns  Reaction : OH^0 (-248) + OH^0 (-163) -> H2O2^0 (-263)
+At time : 3.82795 ns  Reaction : H^0 (-253) + OH^0 (-191) -> No product
+At time : 4.52103 ns  Reaction : OH^-1 (-260) + H3O^1 (-224) -> No product
+At time :  5.4369 ns  Reaction : e_aq^1 (-53) + H3O^1 (-194) -> H^0 (-264)
+At time : 8.18225 ns  Reaction : e_aq^1 (-42) + H3O^1 (-208) -> H^0 (-265)
+At time : 8.65737 ns  Reaction : e_aq^1 (-80) + H3O^1 (-206) -> H^0 (-266)
+At time : 10.6162 ns  Reaction : e_aq^1 (-68) + H^0 (-249) -> OH^-1 (-267) + H_2^0 (-268)
+At time : 10.7162 ns  Reaction : e_aq^1 (-66) + H2O2^0 (-236) -> OH^-1 (-269) + OH^0 (-270)
+At time : 17.0322 ns  Reaction : e_aq^1 (-32) + H2O2^0 (-237) -> OH^-1 (-271) + OH^0 (-272)
+At time : 17.2322 ns  Reaction : e_aq^1 (-102) + OH^0 (-169) -> OH^-1 (-273)
+At time : 17.5322 ns  Reaction : e_aq^1 (-59) + e_aq^1 (-46) -> OH^-1 (-274) + OH^-1 (-275) + H_2^0 (-276)
+At time : 18.0322 ns  Reaction : OH^-1 (-251) + H3O^1 (-182) -> No product
+At time : 18.6322 ns  Reaction : e_aq^1 (-95) + e_aq^1 (-225) -> OH^-1 (-277) + OH^-1 (-278) + H_2^0 (-279)
+At time : 19.0322 ns  Reaction : OH^0 (-272) + OH^0 (-195) -> H2O2^0 (-280)
+At time : 20.3322 ns  Reaction : e_aq^1 (-110) + H3O^1 (-202) -> H^0 (-281)
+At time : 20.7322 ns  Reaction : H^0 (-252) + OH^0 (-193) -> No product
+At time : 27.0765 ns  Reaction : e_aq^1 (-100) + OH^0 (-123) -> OH^-1 (-282)
+At time :  37.127 ns  Reaction : OH^-1 (-273) + H3O^1 (-172) -> No product
+At time :  47.432 ns  Reaction : OH^0 (-119) + OH^0 (-185) -> H2O2^0 (-283)
+At time : 58.4148 ns  Reaction : OH^-1 (-269) + H3O^1 (-178) -> No product
+At time : 60.5782 ns  Reaction : H3O^1 (-132) + OH^-1 (-245) -> No product
+At time : 72.1621 ns  Reaction : OH^-1 (-278) + H3O^1 (-180) -> No product
+*** G4Scheduler ends at time : 100 ns 
+___________________________________
+Seed used :9876
+Graphics systems deleted.
+Visualization Manager deleting...
+Total navigation history collections cleaned: 399

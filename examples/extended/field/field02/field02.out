@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -4830,10 +4830,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  Ne
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng  NextVolu   Process
     0      0 fm      0 fm      0 fm     50 MeV     0 eV      0 fm      0 fm      World   initStep
     1      0 fm    -20 cm   2.22 cm   2.05 GeV  39.9 keV  20.5 cm   20.5 cm OutOfWorldTransportation
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100
-  User=0.07s Real=0.09s Sys=0.01s
+  User=0.08s Real=0.12s Sys=0.01s
 WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 Graphics systems deleted.
 Visualization Manager deleting...

@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -120,10 +120,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     0      0 fm      0 fm      0 fm  0.349 eV      0 eV      0 fm      0 fm      World   initStep
 
  end of event      0 : Co60 ---> Ni60[2505.766]
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0.01s
+  User=0.01s Real=0s Sys=0s
 
  ======================== run summary ======================
  The run was 1 Co60 of 0 eV 
@@ -181,10 +181,10 @@ Index : 0     used in the geometry : Yes
  end of event  80000 : Co60 ---> Ni60[2505.766]
 
  end of event  90000 : Co60 ---> Ni60[2505.766]
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=3.72s Real=3.73s Sys=0s
+  User=4.04s Real=4.06s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -223,29 +223,29 @@ Index : 0     used in the geometry : Yes
 
 ### Run 2 starts.
 
- end of event      0 : Co60 ---> Ni60[2505.766] ---> Ni60[1332.518] ---> Ni60
+ end of event      0 : Co60 ---> Ni60[2505.766] ---> Ni60
 
- end of event  10000 : Co60 ---> Ni60[2505.766] ---> Ni60[1332.518] ---> Ni60
+ end of event  10000 : Co60 ---> Ni60[2505.766] ---> Ni60
 
- end of event  20000 : Co60 ---> Ni60[2505.766] ---> Ni60[1332.518] ---> Ni60
+ end of event  20000 : Co60 ---> Ni60[2505.766] ---> Ni60
 
- end of event  30000 : Co60 ---> Ni60[2505.766] ---> Ni60[1332.518] ---> Ni60
+ end of event  30000 : Co60 ---> Ni60[2505.766] ---> Ni60
 
- end of event  40000 : Co60 ---> Ni60[2505.766] ---> Ni60[1332.518] ---> Ni60
+ end of event  40000 : Co60 ---> Ni60[2505.766] ---> Ni60
 
- end of event  50000 : Co60 ---> Ni60[2505.766] ---> Ni60[1332.518] ---> Ni60
+ end of event  50000 : Co60 ---> Ni60[2505.766] ---> Ni60
 
- end of event  60000 : Co60 ---> Ni60[2505.766] ---> Ni60[1332.518] ---> Ni60
+ end of event  60000 : Co60 ---> Ni60[2505.766] ---> Ni60
 
- end of event  70000 : Co60 ---> Ni60[2505.766] ---> Ni60[1332.518] ---> Ni60
+ end of event  70000 : Co60 ---> Ni60[2505.766] ---> Ni60
 
- end of event  80000 : Co60 ---> Ni60[2505.766] ---> Ni60[1332.518] ---> Ni60
+ end of event  80000 : Co60 ---> Ni60[2505.766] ---> Ni60
 
- end of event  90000 : Co60 ---> Ni60[2505.766] ---> Ni60[1332.518] ---> Ni60
-Run terminated.
+ end of event  90000 : Co60 ---> Ni60[2505.766] ---> Ni60
+ Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=8.88s Real=8.91s Sys=0s
+  User=9.55s Real=9.59s Sys=0s
 
  ======================== run summary ======================
  The run was 100000 Co60 of 0 eV 
@@ -253,21 +253,20 @@ Run Summary
 
  Nb of generated particles: 
 
-           Ni60:  100000  Emean = 0.4487 eV 	( 0 eV  --> 26.89 eV )
-  Ni60[1332.518]:   99996  Emean = 0.4487 eV 	( 0 eV  --> 26.89 eV )
-  Ni60[2158.836]:      12  Emean =  0.274 eV 	( 0.004256 eV  --> 0.9952 eV )
-  Ni60[2505.766]:   99870  Emean = 0.4383 eV 	( 0 eV  --> 3.735 eV )
-      anti_nu_e:  100000  Emean =  223.2 keV	( 3.204 keV --> 1.487 MeV)
-             e-:  100022  Emean =  96.73 keV	( 1.578 eV  --> 1.391 MeV)
-          gamma:  199856  Emean =  1.253 MeV	( 346.9 keV --> 2.159 MeV)
+           Ni60:  100000  Emean = 0.4472 eV 	( 0 eV  --> 25.61 eV )
+  Ni60[1332.518]:     141  Emean =  7.495 eV 	( 0.0006112 eV  --> 25.62 eV )
+  Ni60[2505.766]:   99859  Emean = 0.4373 eV 	( 0 eV  --> 3.792 eV )
+      anti_nu_e:  100000  Emean =  223.4 keV	( 1.05 keV --> 1.461 MeV)
+             e-:  100032  Emean =  96.78 keV	( 6.009 eV  --> 1.371 MeV)
+          gamma:  199842  Emean =  1.253 MeV	( 8.333 keV --> 1.341 MeV)
 
-   Ekin Total (Q): mean =  941.7 keV	( 318.1 keV --> 2.159 MeV)
+   Ekin Total (Q): mean =  1.412 MeV	( 318.1 keV --> 2.506 MeV)
 
-   Momentum balance (excluding gamma desexcitation): mean =    126 eV 	( 0 eV  --> 1.763 MeV)
+   Momentum balance (excluding gamma desexcitation): mean =    274 eV 	( 0 eV  --> 1.771 MeV)
 
-   Total time of life : mean =   7.59 y    half-life =  5.261 y     ( 17.07 min --> 112.4 y  )
+   Total time of life : mean =  7.612 y    half-life =  5.276 y     ( 21.98 min --> 87.74 y  )
 
-   Activity of Co60 = 4.193e+13 Bq/g   (1133 Ci/g) 
+   Activity of Co60 = 4.181e+13 Bq/g   (1130 Ci/g) 
 
 Graphics systems deleted.
 Visualization Manager deleting...

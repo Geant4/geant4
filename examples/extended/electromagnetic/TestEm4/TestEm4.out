@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -137,10 +137,10 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
 --> Event 70000 starts.
 --> Event 80000 starts.
 --> Event 90000 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100000
-  User=2.79s Real=2.81s Sys=0s
+  User=2.21s Real=2.21s Sys=0s
 
 --------- Ranecu engine status ---------
  Initial seed (index) = 0

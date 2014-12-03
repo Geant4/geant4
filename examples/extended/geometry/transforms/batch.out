@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -86,10 +86,10 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
     1    1.3 cm    7.5 mm      0 fm      1 eV      0 eV    1.5 cm    1.5 cm      World   Transportation
     2    3.9 cm   2.25 cm      0 fm      1 eV      0 eV      3 cm    4.5 cm        Trd   Transportation
     3   4.33 cm    2.5 cm      0 fm      1 eV      0 eV      5 mm      5 cm      World   OutOfWorld
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0.01s Real=0s Sys=0s
+  User=0s Real=0s Sys=0s
 G4 kernel has come to Quit state.
 UserDetectorConstruction deleted.
 UserPhysicsList deleted.

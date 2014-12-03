@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -189,7 +189,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm    100 TeV     0 eV      0 fm      0 fm       Iron   initStep
     1   -249 m       0 fm      0 fm      0 eV      0 eV   57.4 cm   57.4 cm       Iron   GammaToMuPair
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 5
   User=0s Real=0s Sys=0s
@@ -294,7 +294,7 @@ Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    
 Step#      X         Y         Z        KineE    dEStep   StepLeng  TrakLeng    Volume     Process
     0   -250 m       0 fm      0 fm      1 TeV     0 eV      0 fm      0 fm       Iron   initStep
     1   -250 m       0 fm      0 fm      0 eV      0 eV   10.4 cm   10.4 cm       Iron   AnnihiToMuPair
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 5
   User=0s Real=0s Sys=0s

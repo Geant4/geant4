@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -99,36 +99,6 @@ G4SmoothTrajectoryPoint:
 /vis/scene/notifyHandlers scene-0
 /vis/scene/endOfEventAction accumulate
 /vis/viewer/set/autoRefresh true
-/vis/viewer/refresh
-G4ASCIITreeSceneHandler::BeginModeling: writing to G4 standard output (G4cout)
-#  Set verbosity with "/vis/ASCIITree/verbose <verbosity>":
-#    <  10: - does not print daughters of repeated placements, does not repeat replicas.
-#    >= 10: prints all physical volumes.
-#  The level of detail is given by verbosity%10:
-#  for each volume:
-#    >=  0: physical volume name.
-#    >=  1: logical volume name (and names of sensitive detector and readout geometry, if any).
-#    >=  2: solid name and type.
-#    >=  3: volume and density.
-#    >=  5: daughter-subtracted volume and mass.
-#  and in the summary at the end of printing:
-#    >=  4: daughter-included mass of top physical volume(s) in scene to depth specified.
-#  Note: by default, culling is switched off so all volumes are seen.
-#  Note: the mass calculation takes into account daughters, which can be time consuming.  If you want the mass of a particular subtree to a particular depth:
-#    /vis/open ATree
-#    /vis/ASCIITree/verbose 14
-#    /vis/scene/create
-#    /vis/scene/add/volume <subtree-physical-volume> ! <depth>
-#    /vis/sceneHandler/attach
-#    /vis/viewer/flush
-#  Now printing with verbosity 0
-#  Format is: PV:n
-#  Abbreviations: PV = Physical Volume,     LV = Logical Volume,
-#                 SD = Sensitive Detector,  RO = Read Out Geometry.
-  "world":0
-    "my tube":1
-      "sphere":1
-G4ASCIITreeSceneHandler::EndModeling
 /vis/verbose warnings
 Visualization verbosity changed to warnings (3)
 /gun/particle gamma
@@ -180,71 +150,13 @@ G4GeometryManager::ReportVoxelStats -- Voxel Statistics
     Total memory consumed for geometry optimisation:   0 kByte
     Total CPU time elapsed for geometry optimisation: 0 seconds
 /vis/scene/notifyHandlers scene-0
-G4ASCIITreeSceneHandler::BeginModeling: writing to G4 standard output (G4cout)
-#  Set verbosity with "/vis/ASCIITree/verbose <verbosity>":
-#    <  10: - does not print daughters of repeated placements, does not repeat replicas.
-#    >= 10: prints all physical volumes.
-#  The level of detail is given by verbosity%10:
-#  for each volume:
-#    >=  0: physical volume name.
-#    >=  1: logical volume name (and names of sensitive detector and readout geometry, if any).
-#    >=  2: solid name and type.
-#    >=  3: volume and density.
-#    >=  5: daughter-subtracted volume and mass.
-#  and in the summary at the end of printing:
-#    >=  4: daughter-included mass of top physical volume(s) in scene to depth specified.
-#  Note: by default, culling is switched off so all volumes are seen.
-#  Note: the mass calculation takes into account daughters, which can be time consuming.  If you want the mass of a particular subtree to a particular depth:
-#    /vis/open ATree
-#    /vis/ASCIITree/verbose 14
-#    /vis/scene/create
-#    /vis/scene/add/volume <subtree-physical-volume> ! <depth>
-#    /vis/sceneHandler/attach
-#    /vis/viewer/flush
-#  Now printing with verbosity 0
-#  Format is: PV:n
-#  Abbreviations: PV = Physical Volume,     LV = Logical Volume,
-#                 SD = Sensitive Detector,  RO = Read Out Geometry.
-  "world":0
-    "my tube":1
-      "sphere":1
-G4ASCIITreeSceneHandler::EndModeling
 ### Run 0 starts.
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 10
   User=0s Real=0s Sys=0s
 WARNING: 10 events have been kept for refreshing and/or reviewing.
   "/vis/reviewKeptEvents" to review them.
-G4ASCIITreeSceneHandler::BeginModeling: writing to G4 standard output (G4cout)
-#  Set verbosity with "/vis/ASCIITree/verbose <verbosity>":
-#    <  10: - does not print daughters of repeated placements, does not repeat replicas.
-#    >= 10: prints all physical volumes.
-#  The level of detail is given by verbosity%10:
-#  for each volume:
-#    >=  0: physical volume name.
-#    >=  1: logical volume name (and names of sensitive detector and readout geometry, if any).
-#    >=  2: solid name and type.
-#    >=  3: volume and density.
-#    >=  5: daughter-subtracted volume and mass.
-#  and in the summary at the end of printing:
-#    >=  4: daughter-included mass of top physical volume(s) in scene to depth specified.
-#  Note: by default, culling is switched off so all volumes are seen.
-#  Note: the mass calculation takes into account daughters, which can be time consuming.  If you want the mass of a particular subtree to a particular depth:
-#    /vis/open ATree
-#    /vis/ASCIITree/verbose 14
-#    /vis/scene/create
-#    /vis/scene/add/volume <subtree-physical-volume> ! <depth>
-#    /vis/sceneHandler/attach
-#    /vis/viewer/flush
-#  Now printing with verbosity 0
-#  Format is: PV:n
-#  Abbreviations: PV = Physical Volume,     LV = Logical Volume,
-#                 SD = Sensitive Detector,  RO = Read Out Geometry.
-  "world":0
-    "my tube":1
-      "sphere":1
-G4ASCIITreeSceneHandler::EndModeling
 Graphics systems deleted.
 Visualization Manager deleting...
 G4 kernel has come to Quit state.

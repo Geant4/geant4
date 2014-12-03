@@ -4,7 +4,7 @@
         ############################################
 
 *************************************************************
- Geant4 version Name: geant4-10-00-ref-09    (31-October-2014)
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
                       Copyright : Geant4 Collaboration
                       Reference : NIM A 506 (2003), 250-303
                             WWW : http://cern.ch/geant4
@@ -445,10 +445,10 @@ Step#          X             Y             Z    Direction x      dir y      dir 
     1          0 fm    1.01183 m     21.9895 m           0 8.81272e-13          1      500 MeV0.0038748 eV    1.58938 m     1.58938 m       World  Transportation
     2          0 fm    1.01183 m     21.9905 m           0 -0.00197661   0.999998      500 MeV2.43793e-06 eV          1 mm    1.59038 m    Absorber  Transportation
     3          0 fm    1.01172 m          22 m           0 -0.0207544   0.999785      500 MeV2.31622e-05 eV    9.50075 mm    1.59988 m  OutOfWorld  Transportation
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
-  User=0s Real=0.01s Sys=0s
+  User=0s Real=0s Sys=0s
 WARNING: command "/vis/viewer/update" could not be applied: no current viewer.
 
 ========= Table of registered couples ==============================
@@ -478,7 +478,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
     1          0 fm    50.6432 cm    21.9895 m           0 1.17455e-09          1      250 MeV0.0018303 eV    79.5502 cm    79.5502 cm      World  Transportation
     2          0 fm     50.643 cm    21.9905 m           0 -0.0039492   0.999992      250 MeV2.30082e-06 eV          1 mm    79.6502 cm   Absorber  Transportation
     3          0 fm    50.6214 cm         22 m           0 -0.0414666    0.99914      250 MeV2.18647e-05 eV    9.50301 mm    80.6005 cm OutOfWorld  Transportation
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -511,7 +511,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
     1          0 fm    40.5352 cm    21.9895 m           0 -2.18033e-09          1      200 MeV0.00143689 eV    63.6725 cm    63.6725 cm      World  Transportation
     2          0 fm    40.5349 cm    21.9905 m           0 -0.00493399   0.999988      200 MeV2.2567e-06 eV          1 mm    63.7725 cm   Absorber  Transportation
     3          0 fm    40.5079 cm         22 m           0 -0.0518069   0.998657      200 MeV2.14492e-05 eV    9.50471 mm     64.723 cm OutOfWorld  Transportation
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -544,7 +544,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
     1          0 fm     20.319 cm    21.9895 m           0  9.914e-09          1      100 MeV0.00067661 eV    31.9171 cm    31.9171 cm      World  Transportation
     2          0 fm    20.3185 cm    21.9905 m           0 -0.00984297   0.999952      100 MeV2.11993e-06 eV    1.00002 mm    32.0171 cm   Absorber  Transportation
     3          0 fm    20.2645 cm         22 m           0  -0.103352   0.994645      100 MeV2.0179e-05 eV    9.51883 mm     32.969 cm OutOfWorld  Transportation
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -577,7 +577,7 @@ Step#          X             Y             Z    Direction x      dir y      dir 
     1          0 fm    10.2108 cm    21.9895 m           0 -7.69214e-09          1       50 MeV0.000318171 eV    16.0391 cm    16.0391 cm      World  Transportation
     2          0 fm    10.2098 cm    21.9905 m           0 -0.0195872   0.999808       50 MeV1.98385e-06 eV    1.00006 mm    16.1391 cm   Absorber  Transportation
     3          0 fm    10.1016 cm         22 m           0  -0.205667   0.978622       50 MeV1.89951e-05 eV     9.5755 mm    17.0966 cm OutOfWorld  Transportation
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -611,7 +611,7 @@ WARNING: Scene "none" not found.
 Step#          X             Y             Z    Direction x      dir y      dir z      KineE     dEStep   StepLeng  TrakLeng    Volume     Process
     0          0 fm          0 fm    21.9895 m           0          0         -1      500 MeV     0 eV          0 fm          0 fm      World    initStep
     1          0 fm          0 fm        -22 m           0          0         -1      500 MeV0.107243 eV    43.9895 m     43.9895 m  OutOfWorld  Transportation
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 1
   User=0s Real=0s Sys=0s
@@ -652,7 +652,7 @@ WARNING: Scene "none" not found.
 ---> Begin of Event: 80
 
 ---> Begin of Event: 90
-Run terminated.
+ Run terminated.
 Run Summary
   Number of events processed : 100
   User=0.01s Real=0s Sys=0s

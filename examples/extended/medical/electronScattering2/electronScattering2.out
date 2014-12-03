@@ -1,0 +1,456 @@
+Starting run with
+Macro File    : /ec/G4-builds/release/slc6-gcc49-RelWithDebInfo/10-01-ref-00_branch/examples/extended/medical/electronScattering2/electronScattering2.in
+Starting Seed : 1
+Output File   : output.csv
+
+        ############################################
+        !!! WARNING - FPE detection is activated !!!
+        ############################################
+
+*************************************************************
+ Geant4 version Name: geant4-10-01-ref-00    (5-December-2014)
+                      Copyright : Geant4 Collaboration
+                      Reference : NIM A 506 (2003), 250-303
+                            WWW : http://cern.ch/geant4
+*************************************************************
+
+### NIST DataBase for Materials is used
+### NIST DataBase for Elements is used
+
+***** Table : Nb of materials = 11 *****
+
+ Material:    G4_He    density:  0.166 kg/m3   RadL:   5.671 km   Nucl.Int.Length:   3.343 km 
+                       Imean:  41.800 eV   temperature: 273.15 K  pressure:   1.00 atm
+
+   --->  Element: He (He)   Z =  2.0   N =   4.0   A =   4.00 g/mole
+         --->  Isotope:   He3   Z =  2   N =   3   A =   3.02 g/mole   abundance:   0.00 %
+         --->  Isotope:   He4   Z =  2   N =   4   A =   4.00 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material:    G4_Be    density:  1.848 g/cm3   RadL:  35.276 cm   Nucl.Int.Length:  39.449 cm 
+                       Imean:  63.700 eV 
+
+   --->  Element: Be (Be)   Z =  4.0   N =   9.0   A =   9.01 g/mole
+         --->  Isotope:   Be9   Z =  4   N =   9   A =   9.01 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material:    G4_Al    density:  2.699 g/cm3   RadL:   8.896 cm   Nucl.Int.Length:  38.877 cm 
+                       Imean: 166.000 eV 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material:    G4_Ti    density:  4.540 g/cm3   RadL:   3.560 cm   Nucl.Int.Length:  27.971 cm 
+                       Imean: 233.000 eV 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material:    G4_Ta    density: 16.654 g/cm3   RadL:   4.094 mm   Nucl.Int.Length:  11.885 cm 
+                       Imean: 718.000 eV 
+
+   --->  Element: Ta (Ta)   Z = 73.0   N = 181.0   A = 180.95 g/mole
+         --->  Isotope: Ta180   Z = 73   N = 180   A = 179.95 g/mole   abundance:   0.01 %
+         --->  Isotope: Ta181   Z = 73   N = 181   A = 180.95 g/mole   abundance:  99.99 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material:   G4_AIR    density:  1.205 mg/cm3  RadL: 303.921 m    Nucl.Int.Length: 710.137 m  
+                       Imean:  85.700 eV   temperature: 273.15 K  pressure:   1.00 atm
+
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:   0.01 %  ElmAbundance   0.02 % 
+
+   --->  Element: N (N)   Z =  7.0   N =  14.0   A =  14.01 g/mole
+         --->  Isotope:   N14   Z =  7   N =  14   A =  14.00 g/mole   abundance:  99.63 %
+         --->  Isotope:   N15   Z =  7   N =  15   A =  15.00 g/mole   abundance:   0.37 %
+          ElmMassFraction:  75.53 %  ElmAbundance  78.44 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  23.18 %  ElmAbundance  21.07 % 
+
+   --->  Element: Ar (Ar)   Z = 18.0   N =  40.0   A =  39.95 g/mole
+         --->  Isotope:  Ar36   Z = 18   N =  36   A =  35.97 g/mole   abundance:   0.34 %
+         --->  Isotope:  Ar38   Z = 18   N =  38   A =  37.96 g/mole   abundance:   0.06 %
+         --->  Isotope:  Ar40   Z = 18   N =  40   A =  39.96 g/mole   abundance:  99.60 %
+          ElmMassFraction:   1.28 %  ElmAbundance   0.47 % 
+
+
+ Material: G4_MYLAR    density:  1.400 g/cm3   RadL:  28.536 cm   Nucl.Int.Length:  55.960 cm 
+                       Imean:  78.700 eV 
+
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction:  62.50 %  ElmAbundance  45.45 % 
+
+   --->  Element: H (H)   Z =  1.0   N =   1.0   A =   1.01 g/mole
+         --->  Isotope:    H1   Z =  1   N =   1   A =   1.01 g/mole   abundance:  99.99 %
+         --->  Isotope:    H2   Z =  1   N =   2   A =   2.01 g/mole   abundance:   0.01 %
+          ElmMassFraction:   4.20 %  ElmAbundance  36.36 % 
+
+   --->  Element: O (O)   Z =  8.0   N =  16.0   A =  16.00 g/mole
+         --->  Isotope:   O16   Z =  8   N =  16   A =  15.99 g/mole   abundance:  99.76 %
+         --->  Isotope:   O17   Z =  8   N =  17   A =  17.00 g/mole   abundance:   0.04 %
+         --->  Isotope:   O18   Z =  8   N =  18   A =  18.00 g/mole   abundance:   0.20 %
+          ElmMassFraction:  33.30 %  ElmAbundance  18.18 % 
+
+
+ Material:     G4_C    density:  2.180 g/cm3   RadL:  19.586 cm   Nucl.Int.Length:  36.768 cm 
+                       Imean:  81.000 eV 
+
+   --->  Element: C (C)   Z =  6.0   N =  12.0   A =  12.01 g/mole
+         --->  Isotope:   C12   Z =  6   N =  12   A =  12.00 g/mole   abundance:  98.93 %
+         --->  Isotope:   C13   Z =  6   N =  13   A =  13.00 g/mole   abundance:   1.07 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material:    G4_Cu    density:  8.920 g/cm3   RadL:   1.442 cm   Nucl.Int.Length:  15.646 cm 
+                       Imean: 322.000 eV 
+
+   --->  Element: Cu (Cu)   Z = 29.0   N =  63.6   A =  63.55 g/mole
+         --->  Isotope:  Cu63   Z = 29   N =  63   A =  62.93 g/mole   abundance:  69.17 %
+         --->  Isotope:  Cu65   Z = 29   N =  65   A =  64.93 g/mole   abundance:  30.83 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material:    G4_Au    density: 19.300 g/cm3   RadL:   3.348 mm   Nucl.Int.Length:  10.550 cm 
+                       Imean: 790.000 eV 
+
+   --->  Element: Au (Au)   Z = 79.0   N = 197.0   A = 196.97 g/mole
+         --->  Isotope: Au197   Z = 79   N = 197   A = 196.97 g/mole   abundance: 100.00 %
+          ElmMassFraction: 100.00 %  ElmAbundance 100.00 % 
+
+
+ Material:  TiAlloy    density:  4.420 g/cm3   RadL:   3.727 cm   Nucl.Int.Length:  28.396 cm 
+                       Imean: 228.544 eV 
+
+   --->  Element: Ti (Ti)   Z = 22.0   N =  47.9   A =  47.87 g/mole
+         --->  Isotope:  Ti46   Z = 22   N =  46   A =  45.95 g/mole   abundance:   8.25 %
+         --->  Isotope:  Ti47   Z = 22   N =  47   A =  46.95 g/mole   abundance:   7.44 %
+         --->  Isotope:  Ti48   Z = 22   N =  48   A =  47.95 g/mole   abundance:  73.72 %
+         --->  Isotope:  Ti49   Z = 22   N =  49   A =  48.95 g/mole   abundance:   5.41 %
+         --->  Isotope:  Ti50   Z = 22   N =  50   A =  49.94 g/mole   abundance:   5.18 %
+          ElmMassFraction:  90.00 %  ElmAbundance  86.20 % 
+
+   --->  Element: Al (Al)   Z = 13.0   N =  27.0   A =  26.98 g/mole
+         --->  Isotope:  Al27   Z = 13   N =  27   A =  26.98 g/mole   abundance: 100.00 %
+          ElmMassFraction:   6.00 %  ElmAbundance  10.20 % 
+
+   --->  Element: V (V)   Z = 23.0   N =  51.0   A =  50.94 g/mole
+         --->  Isotope:   V50   Z = 23   N =  50   A =  49.95 g/mole   abundance:   0.25 %
+         --->  Isotope:   V51   Z = 23   N =  51   A =  50.94 g/mole   abundance:  99.75 %
+          ElmMassFraction:   4.00 %  ElmAbundance   3.60 % 
+
+
+
+Visualization Manager instantiating with verbosity "warnings (3)"...
+Visualization Manager initialising...
+Registering graphics systems...
+
+You have successfully registered the following graphics systems.
+Current available graphics systems are:
+  ASCIITree (ATree)
+  DAWNFILE (DAWNFILE)
+  G4HepRep (HepRepXML)
+  G4HepRepFile (HepRepFile)
+  OpenGLImmediateX (OGLIX)
+  OpenGLImmediateXm (OGLI, OGLIXm)
+  OpenGLStoredX (OGLSX)
+  OpenGLStoredXm (OGL, OGLS, OGLSXm)
+  RayTracer (RayTracer)
+  RayTracerX (RayTracerX)
+  VRML1FILE (VRML1FILE)
+  VRML2FILE (VRML2FILE)
+  gMocrenFile (gMocrenFile)
+
+Registering model factories...
+
+You have successfully registered the following model factories.
+Registered model factories:
+  generic
+  drawByCharge
+  drawByParticleID
+  drawByOriginVolume
+  drawByAttribute
+
+Registered filter factories:
+  chargeFilter
+  particleFilter
+  originVolumeFilter
+  attributeFilter
+
+You have successfully registered the following user vis actions.
+Run Duration User Vis Actions: none
+End of Event User Vis Actions: none
+End of Run User Vis Actions: none
+
+Some /vis commands (optionally) take a string to specify colour.
+Available colours:
+  black, blue, brown, cyan, gray, green, grey, magenta, red, white, yellow
+
+PhysicsList::AddPhysicsList: <emstandard_opt0>
+G4SDManager::AddNewCollection : the collection <MyDetector/cell flux> is registered at 1
+G4SDManager::AddNewCollection : the collection <MyDetector/e cell flux> is registered at 2
+G4SDManager::AddNewCollection : the collection <MyDetector/population> is registered at 3
+G4SDManager::AddNewCollection : the collection <MyDetector/e population> is registered at 4
+New sensitive detector <MyDetector> is registored at /
+New sensitive detector <MyDetector> is registored at /
+ G4PhysicsListHelper::AddTransportation()--- G4CoupledTransportation is used 
+New sensitive detector <MyDetector> is registored at /
+New sensitive detector <MyDetector> is registored at /
+### Run 0 starts.
+--> Event 0 starts.
+Number of Events Processed:20000
+  Radius cell flux e cell flux population e population 
+       0     1.5918     1.2735          5          4 
+       1    0.63669    0.63669          6          6 
+       2      1.146     1.0187         18         16 
+       3    0.77313    0.77313         17         17 
+       4    0.84906    0.84906         24         24 
+       5     1.0475     1.0475         32         32 
+       6     1.0041    0.95509         41         39 
+       7    0.80476    0.80476         34         34 
+       8    0.67225    0.57862         35         30 
+       9    0.89103    0.85753         53         51 
+      10    0.86416    0.86416         57         57 
+      11    0.87318    0.80397         61         56 
+      12    0.93618    0.91072         73         71 
+      13      0.908    0.83726         77         71 
+      14    0.87817    0.81231         78         72 
+      15    0.77524    0.74441         75         72 
+      16    0.73333    0.71403         76         74 
+      17     1.0042    0.94053        108        101 
+      18    0.86051    0.79167        100         92 
+      19    0.79998    0.74284         96         89 
+      20    0.87771    0.83889        113        108 
+      21    0.84298    0.79856        104         98 
+      22    0.81378     0.7784        115        110 
+      23    0.88487     0.8239        128        119 
+      24    0.90205    0.84357        138        129 
+      25    0.96513    0.89646        154        143 
+      26    0.72739    0.66731        121        111 
+      27    0.85586    0.82691        146        141 
+      28     0.7569    0.70104        134        124 
+      29    0.72629    0.68307        127        119 
+      30    0.70296    0.68208        126        122 
+      31    0.73508    0.70475        145        139 
+      32    0.85322    0.79932        174        163 
+      33    0.70694    0.68318        148        143 
+      34    0.78849    0.74234        167        157 
+      35     0.8012    0.78775        173        170 
+      36    0.72876     0.6938        167        159 
+      37    0.80783    0.73987        189        173 
+      38    0.67227    0.65159        161        156 
+      39    0.74898    0.72076        186        179 
+      40    0.72267    0.70695        184        180 
+      41    0.67273    0.65738        174        170 
+      42    0.55099    0.53225        147        142 
+      43    0.74927    0.71998        204        196 
+      44    0.58185    0.54606        162        152 
+      45      0.713      0.692        202        196 
+      46    0.61329    0.57561        179        168 
+      47    0.56605    0.55263        168        164 
+      48      0.622    0.59244        187        178 
+      49    0.62614    0.59395        187        177 
+      50    0.64869    0.62661        202        195 
+      51    0.63208    0.60733        201        193 
+      52    0.60567    0.58746        196        190 
+      53    0.54347    0.51964        181        173 
+      54     0.5847    0.55254        186        175 
+      55    0.59145     0.5771        205        200 
+      56    0.54445    0.51343        193        182 
+      57    0.57651    0.53771        208        194 
+      58    0.57579    0.55672        192        185 
+      59    0.45356    0.43481        167        160 
+      60    0.54432    0.53115        201        196 
+      61    0.52175     0.5062        198        192 
+      62     0.5053     0.4798        198        188 
+      63    0.48987    0.46979        196        188 
+      64    0.46579    0.45343        188        183 
+      65    0.54285    0.52581        220        213 
+      66    0.48244    0.46566        201        194 
+      67     0.4441    0.43229        186        181 
+      68    0.48915    0.47285        210        203 
+      69    0.46425    0.45278        189        184 
+      70    0.44871    0.43062        191        183 
+      71    0.42838      0.415        188        182 
+      72    0.41468    0.40369        187        182 
+      73     0.3863    0.36676        178        169 
+      74    0.48301    0.47016        159        153 
+      75    0.39176    0.38331        183        179 
+      76    0.39495    0.37618        190        181 
+      77    0.39613     0.3879        186        182 
+      78    0.32924    0.31908        162        157 
+      79    0.32766    0.32565        163        162 
+      80    0.34099    0.32513        172        164 
+      81    0.38333     0.3565        187        181 
+      82    0.32891    0.31923        168        163 
+      83    0.28186     0.2704        146        140 
+      84    0.29771    0.27882        158        148 
+      85    0.27893    0.27333        150        147 
+      86    0.29899    0.28423        162        154 
+      87    0.31927    0.30832        166        160 
+      88    0.29421    0.27976        162        154 
+      89    0.30081    0.28832        169        162 
+      90    0.25099     0.2457        143        140 
+      91    0.26025    0.24977        150        144 
+      92    0.26133    0.25094        145        139 
+      93    0.28071    0.27217        162        157 
+      94    0.23964    0.22103        139        128 
+      95    0.23577    0.22573        139        133 
+      96    0.24318    0.23656        146        142 
+      97    0.21028    0.20865        127        126 
+      98    0.23516    0.22705        145        140 
+      99    0.25996    0.25513        155        152 
+     100    0.20994      0.202        132        127 
+     101    0.22622    0.22465        143        142 
+     102     0.2034    0.19249        129        122 
+     103    0.21688    0.21225        135        132 
+     104    0.19205    0.18745        124        121 
+     105    0.17427     0.1667        115        110 
+     106    0.18429    0.18129        113        111 
+     107    0.17446    0.16256        117        109 
+     108    0.14795    0.14648         97         96 
+     109    0.17441    0.16857        119        115 
+     110    0.16705    0.15982        115        110 
+     111     0.1549    0.15059        108        105 
+     112    0.15496    0.14501        109        102 
+     113    0.17326    0.15219        116        108 
+     114     0.1175     0.1147         84         82 
+     115     0.1683    0.16276        117        113 
+     116    0.16575    0.16164        118        115 
+     117    0.14662    0.14253        107        104 
+     118    0.14548    0.14143        105        102 
+     119     0.1366    0.13258        102         99 
+     120    0.11956    0.11558         90         87 
+     121    0.11858    0.11331         90         86 
+     122     0.1282    0.12558         97         95 
+     123   0.097241   0.097241         75         75 
+     124    0.11494    0.11108         87         84 
+     125    0.11227    0.10972         88         86 
+     126    0.11405    0.11025         86         83 
+     127   0.084176   0.080409         67         64 
+     128    0.10485    0.10236         82         80 
+     129   0.089035   0.084089         72         68 
+     130   0.073272   0.072045         60         59 
+     131   0.084958   0.077653         70         64 
+     132    0.10724    0.10482         70         68 
+     133   0.090386   0.085584         75         71 
+     134   0.080324   0.079128         67         66 
+     135   0.069804   0.067439         59         57 
+     136    0.07326   0.070913         61         59 
+     137   0.066873   0.065704         52         51 
+     138   0.070268   0.056718         52         49 
+     139   0.070127   0.067829         61         59 
+     140   0.062783   0.061642         55         54 
+     141   0.056637   0.055504         50         49 
+     142   0.072039   0.065283         64         58 
+     143   0.061397   0.059163         54         52 
+     144   0.039972   0.037753         36         34 
+     145   0.058425    0.05622         53         51 
+     146    0.05038   0.047095         46         43 
+     147   0.047883    0.04462         44         41 
+     148   0.057266   0.055106         53         51 
+     149   0.051543   0.048323         48         45 
+     150   0.041035   0.039969         37         36 
+     151    0.04544   0.044381         41         40 
+     152   0.049471   0.047365         47         45 
+     153   0.034463   0.034463         30         30 
+     154   0.051502   0.048384         49         46 
+     155   0.043464   0.042431         42         41 
+     156   0.052448   0.050397         51         49 
+     157   0.027532   0.026513         27         26 
+     158   0.042603   0.042603         42         42 
+     159   0.035266   0.034259         35         34 
+     160   0.048336   0.039069         44         39 
+     161   0.029856   0.029856         30         30 
+     162   0.028573   0.028573         28         28 
+     163   0.029509    0.02656         30         27 
+     164   0.033951   0.033951         34         34 
+     165   0.031076   0.030105         32         31 
+     166   0.042746   0.039849         44         41 
+     167   0.025924   0.024964         27         26 
+     168   0.033328   0.031418         33         31 
+     169   0.022791   0.020892         24         22 
+     170   0.022984    0.02204         24         23 
+     171   0.029323    0.02651         29         26 
+     172   0.028986   0.026177         30         27 
+     173   0.027231   0.027231         25         25 
+     174   0.033928   0.033928         35         35 
+     175   0.024577   0.020185         23         22 
+     176   0.025708   0.023884         28         26 
+     177   0.020881   0.019609         22         21 
+     178   0.022516   0.019857         23         22 
+     179     0.0259     0.0259         28         28 
+     180   0.030235    0.02553         32         28 
+     181   0.024867   0.023092         28         26 
+     182     0.0215   0.020617         25         24 
+     183   0.026162   0.023813         29         27 
+     184   0.024514   0.023642         26         25 
+     185   0.016554   0.015685         16         15 
+     186    0.01772   0.016856         20         19 
+     187    0.02781    0.02609         31         29 
+     188   0.022572   0.021565         25         24 
+     189   0.020248   0.016967         20         17 
+     190   0.018804   0.017102         22         20 
+     191   0.026238   0.025395         27         26 
+     192   0.016084   0.014675         17         16 
+     193   0.016683   0.015849         20         19 
+     194   0.027754   0.019726         31         23 
+     195   0.021137   0.021137         24         24 
+     196   0.020825   0.020825         25         25 
+     197   0.019185   0.015887         22         19 
+     198    0.01802   0.010745         20         13 
+     199   0.021452   0.017256         26         21 
+     200   0.018546   0.013823         22         17 
+     201   0.014706   0.012292         16         13 
+     202   0.028887   0.020896         34         26 
+     203  0.0086225  0.0060192         10          7 
+     204  0.0092602  0.0059824         11          7 
+     205   0.013672  0.0067566         14          6 
+     206  0.0081144  0.0044235          9          5 
+     207  0.0079018  0.0025142          9          3 
+     208   0.004467  0.0016343          5          2 
+     209  0.0059319  0.0035557          7          4 
+     210  0.0098748  0.0032511         11          3 
+     211  0.0074352  0.0024203          9          3 
+     212   0.011517   0.005213         13          6 
+     213  0.0093688  0.0045014         11          5 
+     214   0.017406  0.0078093         21          9 
+     215   0.011519  0.0039644         14          5 
+     216   0.012767   0.005147         16          6 
+     217  0.0084272  0.0044866          9          5 
+     218   0.009652  0.0026716         12          3 
+     219   0.010649  0.0037793         12          4 
+     220   0.011128   0.006995         12          7 
+     221   0.012268  0.0077565         15          9 
+     222  0.0085724  0.0054076         11          7 
+     223    0.01177  0.0061125         14          7 
+     224  0.0075731  0.0024467         10          3 
+     225    0.01186  0.0071842         13          7 
+     226   0.010348  0.0055725          9          3 
+     227  0.0080279  0.0015207         10          2 
+     228   0.018659   0.012094         17          9 
+     229  0.0061625  0.0034594          8          4 
+     230  0.0081946  0.0037208         10          5 
+     231  0.0074257  0.0048959          6          3 
+     232  0.0067719  0.0028997          8          3 
+Graphics systems deleted.
+Visualization Manager deleting...
+Total navigation history collections cleaned: 13
